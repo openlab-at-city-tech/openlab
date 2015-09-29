@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
-     jQuery(".jlk").on("click", function(e){
+     jQuery(document).on("click", ".jlk", function(e){
           e.preventDefault();
           var task = jQuery(this).attr("data-task");
           var post_id = jQuery(this).attr("data-post_id");
@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
           
           jQuery.ajax({
                type : "post",
+               async : false,
                dataType : "json",
                url : wtilp.ajax_url,
                data : {action: "wti_like_post_process_vote", task : task, post_id : post_id, nonce: nonce},

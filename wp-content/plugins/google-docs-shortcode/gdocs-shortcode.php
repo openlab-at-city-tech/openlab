@@ -4,8 +4,8 @@ Plugin Name: Google Docs Shortcode
 Plugin URI: https://github.com/cuny-academic-commons/google-docs-shortcode
 Description: Easily embed a Google Doc into your blog posts
 Author: r-a-y
-Author URI: http://buddypress.org/community/members/r-a-y/
-Version: 0.2
+Author URI: http://profiles.wordpress.org/r-a-y
+Version: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function ray_google_docs_shortcode( $atts ) {
 	global $content_width;
 
-	extract( shortcode_atts( array(
+	$r = shortcode_atts( array(
 		'link'     => false,
 
 		// dimensions
@@ -38,30 +38,31 @@ function ray_google_docs_shortcode( $atts ) {
 		                     // preset dimensions are as follows: small (480x389), medium (960x749), large (1440x1109)
 		                     // to set custom size, set the 'width' and 'height' params instead
 
-	), $atts ) );
+	), $atts );
 
 	// if no link or link is not from Google Docs, stop now!
-	if ( ! $link || strpos( $link, '://docs.google.com' ) === false )
+	if ( ! $r['link'] || strpos( $r['link'], '://docs.google.com' ) === false ) {
 		return;
+	}
 
 	$type = $extra = false;
 
 	// set the doc type by looking at the URL
 
 	// document
-	if ( strpos( $link, '/document/' ) !== false ) {
+	if ( strpos( $r['link'], '/document/' ) !== false ) {
 		$type = 'doc';
 
 	// presentation
-	} elseif ( strpos( $link, '/presentation/' ) !== false || strpos( $link, '/present/' ) !== false ) {
+	} elseif ( strpos( $r['link'], '/presentation/' ) !== false || strpos( $r['link'], '/present/' ) !== false ) {
 		$type = 'presentation';
 
 	// form
-	} elseif ( strpos( $link, '/forms/' ) !== false || strpos( $link, 'form?formkey' ) !== false ) {
+	} elseif ( strpos( $r['link'], '/forms/' ) !== false || strpos( $r['link'], 'form?formkey' ) !== false ) {
 		$type = 'form';
 
 	// spreadsheet
-	} elseif ( strpos( $link, '/spreadsheet/' ) !== false ) {
+	} elseif ( strpos( $r['link'], '/spreadsheets/' ) !== false || strpos( $r['link'], '/spreadsheet/' ) !== false ) {
 		$type = 'spreadsheet';
 
 	// nada!
@@ -72,37 +73,55 @@ function ray_google_docs_shortcode( $atts ) {
 	// add query args depending on doc type
 	switch ( $type ) {
 		case 'doc' :
-			if ( (int) $seamless === 1 )
-				$link = add_query_arg( 'embedded', 'true', $link );
+			if ( (int) $r['seamless'] === 1 ) {
+				$r['link'] = add_query_arg( 'embedded', 'true', $r['link'] );
+			}
 
 			break;
 
 		case 'presentation' :
+			$is_old_doc = strpos( $r['link'], '/present/' ) !== false || strpos( $r['link'], '?id=' ) !== false;
+
 			// alter the link so we're in embed mode
 			// (older docs)
-			$link = str_replace( '/view', '/embed', $link );
+			$r['link'] = str_replace( '/view', '/embed', $r['link'] );
 
 			// alter the link so we're in embed mode
-			$link = str_replace( 'pub?', 'embed?', $link );
+			$r['link'] = str_replace( 'pub?', 'embed?', $r['link'] );
 
 			// dimensions
-			switch ( $size ) {
+			switch ( $r['size'] ) {
 				case 'medium' :
-					$width  = 960;
-					$height = 749;
+					$r['width']  = 960;
+
+					if ( $is_old_doc ) {
+						$r['height'] = 749;
+					} else {
+						$r['height'] = 559;
+					}
 
 					break;
 
 				case 'large' :
-					$width  = 1440;
-					$height = 1109;
+					$r['width']  = 1440;
+
+					if ( $is_old_doc ) {
+						$r['height'] = 1109;
+					} else {
+						$r['height'] = 839;
+					}
 
 					break;
 
 				case 'small' :
 				default :
-					$width  = 480;
-					$height = 389;
+					$r['width']  = 480;
+
+					if ( $is_old_doc ) {
+						$r['height'] = 389;
+					} else {
+						$r['height'] = 299;
+					}
 
 					break;
 			}
@@ -117,12 +136,12 @@ function ray_google_docs_shortcode( $atts ) {
 
 		case 'form' :
 			// new form format
-			if ( strpos( $link, '/forms/' ) !== false ) {
-				$link = str_replace( 'viewform', 'viewform?embedded=true', $link );
+			if ( strpos( $r['link'], '/forms/' ) !== false ) {
+				$r['link'] = str_replace( 'viewform', 'viewform?embedded=true', $r['link'] );
 
 			// older form format
 			} else {
-				$link = str_replace( 'viewform?', 'embeddedform?', $link );
+				$r['link'] = str_replace( 'viewform?', 'embeddedform?', $r['link'] );
 			}
 
 			// extra iframe args
@@ -134,7 +153,7 @@ function ray_google_docs_shortcode( $atts ) {
 			break;
 
 		case 'spreadsheet' :
-			$link = add_query_arg( 'widget', 'true', $link );
+			$r['link'] = add_query_arg( 'widget', 'true', $r['link'] );
 
 			// extra iframe args
 			// i'm aware that these are non-standard attributes in XHTML / HTML5,
@@ -147,13 +166,13 @@ function ray_google_docs_shortcode( $atts ) {
 	}
 
 	// set width
-	$width = ' width="' . esc_attr( $width ) . '"';
+	$r['width'] = ' width="' . esc_attr( $r['width'] ) . '"';
 
 	// set height
-	$height = ' height="' . esc_attr( $height ) . '"';
+	$r['height'] = ' height="' . esc_attr( $r['height'] ) . '"';
 
 	// finally, embed the google doc!
-	$output = '<iframe id="gdoc-' . md5( $link ) . '" class="gdocs_shortcode gdocs_' . esc_attr( $type ) . '" src="' .  esc_url( $link ) . '"' . $width . $height . $extra . '></iframe>';
+	$output = '<iframe id="gdoc-' . md5( $r['link'] ) . '" class="gdocs_shortcode gdocs_' . esc_attr( $type ) . '" src="' .  esc_url( $r['link'] ) . '"' . $r['width'] . $r['height'] . $extra . '></iframe>';
 
 	return apply_filters( 'ray_google_docs_shortcode_output', $output, $type );
 }

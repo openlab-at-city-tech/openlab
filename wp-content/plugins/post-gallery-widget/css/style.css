@@ -2,25 +2,20 @@
 CSS for the gallery widget
 */
 #pgw-gallery-medium {
-	float: left;
 	margin: 0px 0 0;
 	position: relative;
 }
 #pgw-gallery-large {
-	float: left;
 	margin: 0px 0 0;
 	position: relative;
 }
 #pgw-gallery-full {
-	float: left;
 	margin: 0px 0 0;
 	position: relative;
 }
 
 .slideshow {
-/*	position: relative;
-	overflow: hidden;
-/**/	margin: auto;
+	margin: auto;
 	text-align: left;
 	width: 100%;
 }
@@ -42,7 +37,11 @@ CSS for the gallery widget
 	z-index: 99;
 	display: block;
 }
-
+#pgw-gallery-medium .slideshow div span h2.pgw-overlay,
+#pgw-gallery-large .slideshow div span h2.pgw-overlay,
+#pgw-gallery-full .slideshow div span h2.pgw-overlay {
+	color: #fff;
+}
 #pgw-gallery-medium .slideshow div span {
 	padding: 3px 5px 5px;
 }
@@ -64,19 +63,17 @@ CSS for the gallery widget
 #pgw-prev, #pgw-next {
 	background: none;
 	display: block;
-	height: 100%;
-	left: 0;
-	position: absolute;
-	text-indent: -9999em;
+	float: left;
+	margin: 5px;
 	outline: none;
-	top: 0;
-	z-index: 5;
+	position: relative;
+	text-indent: -9999em;
 	width: 40px;
+	z-index: 99;
 }
 
 #pgw-next {
-	left: auto;
-	right: 0;
+	float: right;
 }
 
 #pgw-next:hover {

@@ -18,7 +18,7 @@ if(!GFCommon::current_user_can_any(array("gravityforms_edit_forms", "gravityform
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <meta http-equiv="Imagetoolbar" content="No" />
-        <title><?php _e("Form Preview", "gravityforms") ?></title>
+        <title><?php esc_html_e("Form Preview", "gravityforms") ?></title>
         <link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/reset.css' type='text/css' />
         <link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/preview.css' type='text/css' />
         <link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/forms.css' type='text/css' />
@@ -27,8 +27,9 @@ if(!GFCommon::current_user_can_any(array("gravityforms_edit_forms", "gravityform
 	        table#input_ids {
 	        	width: 99%;
 	        	margin: 0 auto!important;
+                max-width: 500px;
 	        }
-	        table#input_ids caption#input_id_caption { 
+	        table#input_ids caption#input_id_caption {
 	        	color: #333!important; font-weight: bold;
 	        	padding: 1em 0 .5em 0;
 	        }

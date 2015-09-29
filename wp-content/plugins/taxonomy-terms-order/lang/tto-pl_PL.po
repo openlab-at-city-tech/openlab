@@ -1,0 +1,188 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Order and Taxonomy Terms Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-23 13:26+0100\n"
+"PO-Revision-Date: 2013-08-28 09:31+0100\n"
+"Last-Translator: Mateusz Czardybon <mateusz@czar-net.com>\n"
+"Language-Team: \n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
+"esc_attr_x:1,2c\n"
+"X-Poedit-Basepath: ../\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: taxonomy-terms-order.php:88
+msgid "Taxonomy Terms Order"
+msgstr "Sortowanie taksonomii"
+
+#: taxonomy-terms-order.php:114 taxonomy-terms-order.php:116
+#: include/interface.php:19
+msgid "Taxonomy Order"
+msgstr "Sortowanie taksonomii"
+
+#: include/interface.php:52 include/options.php:57
+msgid ""
+"Did you find this plugin useful? Please support our work with a donation or "
+"write an article about this plugin in your blog with a link to our site"
+msgstr ""
+"Podoba Ci się ta wtyczka i uważasz, że jest przydatna? Wesprzyj naszą pracę "
+"dotacją lub napisz artykuł o naszej wtyczce na Twojej stronie z odnośnikiem "
+"do naszej strony"
+
+#: include/interface.php:53 include/options.php:58
+msgid ""
+"Did you know there is available a more advanced version of this plug-in?"
+msgstr "Czy wiesz, że jest dostępna bardziej rozbudowana wersja tej wtyczki?"
+
+#: include/interface.php:53 include/options.php:58
+msgid "Read more"
+msgstr "Czytaj więcej"
+
+#: include/interface.php:54 include/options.php:59
+msgid "Check our"
+msgstr "Sprawdź naszą wtyczkę"
+
+#: include/interface.php:54 include/options.php:59
+msgid "plugin which allow to custom sort all posts, pages, custom post types"
+msgstr ""
+", dzięki której będziesz mógł dowolnie sortować wszystkie wpisy, strony i "
+"wpisy własnego typu"
+
+#: include/interface.php:60
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr "Ta wtyczka wygama do działania javascript."
+
+#: include/interface.php:96
+msgid "Taxonomies"
+msgstr "Taksonomie"
+
+#: include/interface.php:100
+msgid "Taxonomy Title"
+msgstr "Tytuł taksonomii"
+
+#: include/interface.php:100
+msgid "Total  Posts"
+msgstr "Wszystkie wpisy"
+
+#: include/interface.php:150
+msgid "Update"
+msgstr "Zaktualizuj"
+
+#: include/interface.php:199
+msgid "Items Order Updates"
+msgstr "Kolejność elementów zaktualizowana"
+
+#: include/options.php:16
+msgid "Settings Saved"
+msgstr "Ustawienia zapisane"
+
+#: include/options.php:24
+msgid "General Settings"
+msgstr "Ustawienia ogólne"
+
+#: include/options.php:64
+msgid "General"
+msgstr "Ogólne"
+
+#: include/options.php:69
+msgid "Minimum Level to use this plugin"
+msgstr "Minimalny poziom uprawnień, aby używać tej wtyczki"
+
+#: include/options.php:72
+msgid "Subscriber"
+msgstr "Subskrybent"
+
+#: include/options.php:73
+msgid "Contributor"
+msgstr "Współpracownik"
+
+#: include/options.php:74
+msgid "Author"
+msgstr "Autor"
+
+#: include/options.php:75
+msgid "Editor"
+msgstr "Redaktor"
+
+#: include/options.php:76
+msgid "Administrator"
+msgstr "Administrator"
+
+#: include/options.php:83
+msgid "Auto Sort"
+msgstr "Sortowanie automatyczne"
+
+#: include/options.php:86
+msgid "OFF"
+msgstr "WYŁĄCZONE"
+
+#: include/options.php:87
+msgid "ON"
+msgstr "ZAŁĄCZONE"
+
+#: include/options.php:88
+msgid "global setting"
+msgstr "ustawienie globalne"
+
+#: include/options.php:93
+msgid "Admin Sort"
+msgstr "Sortowanie na zapleczu"
+
+#: include/options.php:97
+msgid "This will change the order of terms within the admin interface"
+msgstr ""
+"Załączenie tej opcji powoduje zmienę sortowania również na stronach zaplecza"
+
+#: include/options.php:105
+msgid "Autosort OFF"
+msgstr "Sortowanie automatyczne WYŁĄCZONE"
+
+#: include/options.php:106
+msgid ""
+"No query will be changed, the terms will appear in the original order. To "
+"retrieve the terms in the required order you must use the term_order on the "
+"orderby parameter"
+msgstr ""
+"Zapytania do bazy nie będą zmieniane i wszystkie taksonomie zostaną "
+"wyświetlone według ich orygilanych koleności. Jeśli chcesz pobrać z bazy "
+"taksonomie uwzględniająć ich sortowanie, musisz parametru orderby z "
+"wartością term_order"
+
+#: include/options.php:114
+msgid "See more info on the get_terms usage"
+msgstr "Przeczytaj jak używać funcji get_terms() klikając"
+
+#: include/options.php:114
+msgid "here"
+msgstr "tutaj"
+
+#: include/options.php:116
+msgid "Autosort ON"
+msgstr "Sortowanie automatyczne ZAŁĄCZONE"
+
+#: include/options.php:117
+msgid ""
+"The queries will be updated, all terms will appear in the order you manually "
+"defined. This is recommended if you don't want to change any theme code to "
+"apply the terms order"
+msgstr ""
+"Zapytania do bazy będą aktualizowane i wszystkie taksonomie będą wyświetlane "
+"zgodnie z kolejnoscią która zostanie ustawiona na zapleczu. Jest to sposób "
+"polecany, jeśli chcesz aby w Twoim motywie działało sortowanie taksonomii "
+"bez zmian w jego kodzie"
+
+#: include/options.php:127
+msgid "Save Settings"
+msgstr "Zapisz ustawienia"

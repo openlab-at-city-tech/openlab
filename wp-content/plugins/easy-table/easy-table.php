@@ -4,7 +4,7 @@ Plugin Name: Easy Table
 Plugin URI: http://takien.com/
 Description: Create table in post, page, or widget in easy way.
 Author: Takien
-Version: 1.5.2
+Version: 1.5.3
 Author URI: http://takien.com/
 */
 
@@ -106,7 +106,7 @@ function __construct(){
 private function easy_table_base($return){
 	$easy_table_base = Array(
 				'name' 			=> 'Easy Table',
-				'version' 		=> '1.5.2',
+				'version' 		=> '1.5.3',
 				'plugin-domain'	=> 'easy-table'
 	);
 	return $easy_table_base[$return];
@@ -345,7 +345,8 @@ ai head, text to shown in the table head row, default is No.
 			* Add attribute for each cell
 			* @since 0.5
 			*/
-			preg_match('/\['.$this->option('attrtag').' ([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)/',$cell,$matchattr);
+			//preg_match('/\['.$this->option('attrtag').' ([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)/',$cell,$matchattr);
+			preg_match('/\['.$this->option('attrtag').' ([^\\]]*)/',$cell,$matchattr);
 			$attr = isset($matchattr[1]) ? $matchattr[1] : '';
 				/**
 				* extract $attr value
@@ -952,7 +953,7 @@ no,head1,head2,head3,head4
 [/table]	';
 $tableexample = $defaulttableexample;
 if(isset($_POST['test-easy-table'])){
-	$tableexample = $_POST['easy-table-test-area'];
+	$tableexample = strip_tags($_POST['easy-table-test-area'],'<p><a><img>');
 }
 
 if(isset($_POST['test-easy-table-reset'])){
@@ -1074,53 +1075,7 @@ col4,col5,col6
 	</div>
 
 <?php elseif($_GET['gettab'] == 'support') : ?>
-<p><?php _e('I have tried to make this plugin can be used as easy as possible and documentation as complete as possible. However it is also possible that you are still confused. Therefore feel free to ask. I would be happy to answer.','easy-table');?></p>
-<p><?php _e('You can use this discussion to get support, request feature or reporting bug.','easy-table');?></p>
-<p><a target="_blank" href="http://takien.com/plugins/easy-table"><?php _e('Before you ask something, make sure you have read documentation here!','easy-table');?></a></p>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-/* <![CDATA[ */
-    var disqus_url = 'http://takien.com/1126/easy-table-is-the-easiest-way-to-create-table-in-wordpress.php';
-    var disqus_identifier = '1126 http://takien.com/?p=1126';
-    var disqus_container_id = 'disqus_thread';
-    var disqus_domain = 'disqus.com';
-    var disqus_shortname = 'takien';
-    var disqus_title = "Easy Table is The Easiest Way to Create Table in WordPress";
-        var disqus_config = function () {
-        var config = this; 
-        config.callbacks.preData.push(function() {
-            // clear out the container (its filled for SEO/legacy purposes)
-            document.getElementById(disqus_container_id).innerHTML = '';
-        });
-                config.callbacks.onReady.push(function() {
-            // sync comments in the background so we don't block the page
-            DISQUS.request.get('?cf_action=sync_comments&post_id=1126');
-        });
-                    };
-    var facebookXdReceiverPath = 'http://takien.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
-/* ]]> */
-</script>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-    var DsqLocal = {
-        'trackbacks': [
-        ],
-        'trackback_url': "http:\/\/takien.com\/1126\/easy-table-is-the-easiest-way-to-create-table-in-wordpress.php\/trackback"    };
-/* ]]> */
-</script>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
-    dsq.async = true;
-        dsq.src = 'http' + '://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.72';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-/* ]]> */
-</script>
+<p>To ask question, please visit this plugin support on WordPress.org</p>
 <?php elseif ($_GET['gettab'] == 'about') : ?>
 <?php
 require_once(ABSPATH.'wp-admin/includes/plugin-install.php');

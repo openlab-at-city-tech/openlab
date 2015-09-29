@@ -16,7 +16,7 @@ class GFDirectory_Admin {
 		$settings = GFDirectory::get_settings();
 
 		add_action('admin_notices', array(&$this, 'gf_warning'));
-		add_filter('gform_pre_render',array(&$this, 'show_field_ids'));
+		add_filter('gform_pre_render',array( 'GFDirectory_Admin', 'show_field_ids'));
 
 		//creates a new Settings page on Gravity Forms' settings screen
         if(GFDirectory::has_access("gravityforms_directory")){
@@ -68,7 +68,7 @@ class GFDirectory_Admin {
 		}
 	}
 
-    private function directory_update_bulk($leads, $approved, $form_id) {
+    static private function directory_update_bulk($leads, $approved, $form_id) {
     	global $_gform_directory_approvedcolumn;
 
     	if(empty($leads) || !is_array($leads)) { return false; }
@@ -90,9 +90,9 @@ class GFDirectory_Admin {
 
 		if(!GFDirectory::is_gravityforms_installed()) {
 			if(file_exists(WP_PLUGIN_DIR.'/gravityforms/gravityforms.php')) {
-				$message .= __(sprintf('%sGravity Forms is installed but not active. %sActivate Gravity Forms%s to use the Gravity Forms Directory & Addons plugin.%s', '<p>', '<a href="'.wp_nonce_url(admin_url('plugins.php?action=activate&plugin=gravityforms/gravityforms.php'), 'activate-plugin_gravityforms/gravityforms.php').'" style="font-weight:strong;">', '</a>', '</p>'), 'gravity-forms-addons');
+				$message .= sprintf(esc_html__('%sGravity Forms is installed but not active. %sActivate Gravity Forms%s to use the Gravity Forms Directory & Addons plugin.%s', 'gravity-forms-addons'), '<p>', '<a href="'.wp_nonce_url(admin_url('plugins.php?action=activate&plugin=gravityforms/gravityforms.php'), 'activate-plugin_gravityforms/gravityforms.php').'" style="font-weight:strong;">', '</a>', '</p>');
 			} else {
-				$message = sprintf(__('%sGravity Forms cannot be found%s
+				$message = sprintf(esc_html__('%sGravity Forms cannot be found%s
 
 				The %sGravity Forms plugin%s must be installed and activated for the Gravity Forms Addons plugin to work.
 
@@ -116,7 +116,7 @@ class GFDirectory_Admin {
 
 	public function add_activation_notice() {
 #		if(!get_option("gf_addons_settings")) {
-			$message = __(sprintf('Congratulations - the Gravity Forms Directory & Addons plugin has been installed. %sGo to the settings page%s to read usage instructions and configure the plugin default settings. %sGo to settings page%s', '<a href="'.admin_url('admin.php?page=gf_settings&addon=Directory+%26+Addons&viewinstructions=true').'">', '</a>', '<p class="submit"><a href="'.admin_url('admin.php?page=gf_settings&addon=Directory+%26+Addons&viewinstructions=true').'" class="button button-secondary">', '</a></p>'), 'gravity-forms-addons');
+			$message = sprintf(esc_html__('Congratulations - the Gravity Forms Directory & Addons plugin has been installed. %sGo to the settings page%s to read usage instructions and configure the plugin default settings. %sGo to settings page%s', 'gravity-forms-addons'), '<a href="'.admin_url('admin.php?page=gf_settings&addon=Directory+%26+Addons&viewinstructions=true').'">', '</a>', '<p class="submit"><a href="'.admin_url('admin.php?page=gf_settings&addon=Directory+%26+Addons&viewinstructions=true').'" class="button button-secondary">', '</a></p>');
 			set_transient('kws_gf_activation_notice', $message, 60*60);
 #		}
 	}
@@ -145,7 +145,7 @@ class GFDirectory_Admin {
 		}
 	}
 
-	private function add_edit_js($edit_forms = false, $settings = array()) {
+	static private function add_edit_js($edit_forms = false, $settings = array()) {
 	?>
 		<script>
 			// Edit link for Gravity Forms entries
@@ -180,7 +180,7 @@ class GFDirectory_Admin {
 					var editLink = $(this).parents('tr').find('.column-title a').attr('href');
 					editLink = editLink + '&screen_mode=edit';
 					//alert();
-					$(this).after('<span class="edit">| <a title="<?php _e("Edit this entry", "gravity-forms-addons"); ?>" href="'+editLink+'"><?php _e("Edit", "gravity-forms-addons"); ?></a></span>');
+					$(this).after('<span class="edit">| <a title="<?php echo esc_js( __("Edit this entry", "gravity-forms-addons") ); ?>" href="'+editLink+'"><?php echo esc_js( __("Edit", "gravity-forms-addons")); ?></a></span>');
 				});
 				<?php
 			}
@@ -189,8 +189,12 @@ class GFDirectory_Admin {
 				?>
 				// Changed from :contains('Delete') to :last-child for future-proofing
 				$(".row-actions .trash").each(function() {
-					var formID = $(this).parents('tr').find('.column-id').text();;
-					$(this).after('<span class="edit"> | <a title="<?php _e("View form field IDs", "gravity-forms-addons"); ?>" href="<?php echo plugins_url("field-ids.php", __FILE__); ?>?id='+formID+'&amp;show_field_ids=true&amp;width=600&amp;height=800&amp;TB_iframe=true" class="thickbox form_ids"><?php _e("IDs", "gravity-forms-addons"); ?></a></span>');
+					var formID = $(this).parents('tr').find('.column-id').text();
+
+					var title = '<?php echo esc_js(__( "Fields for Form ID %s", "gravity-forms-addons") ); ?>';
+					title = title.replace( '%s', formID );
+
+					$(this).after('<span class="edit"> | <a title="'+title+'" href="<?php echo plugins_url("field-ids.php", __FILE__); ?>?id='+formID+'&amp;show_field_ids=true&amp;TB_iframe=true&amp;height=295&amp;width=370" class="thickbox form_ids"><?php echo esc_js( __("IDs", "gravity-forms-addons") ); ?></a></span>');
 				});
 				<?php } ?>
 			});
@@ -198,17 +202,19 @@ class GFDirectory_Admin {
 		<?php
 	}
 
-	function show_field_ids($form = array()) {
+	static function show_field_ids($form = array()) {
 		if(isset($_REQUEST['show_field_ids'])) {
 		$form = RGFormsModel::get_form_meta($_GET["id"]);
 		$form = RGFormsModel::add_default_properties($form);
 
 		echo <<<EOD
 		<style>
+
 			#input_ids th, #input_ids td { border-bottom:1px solid #999; padding:.25em 15px; }
 			#input_ids th { border-bottom-color: #333; font-size:.9em; background-color: #464646; color:white; padding:.5em 15px; font-weight:bold;  }
 			#input_ids { background:#ccc; margin:0 auto; font-size:1.2em; line-height:1.4; width:100%; border-collapse:collapse;  }
 			#input_ids strong { font-weight:bold; }
+			#input_ids caption,
 			#preview_hdr { display:none;}
 			#input_ids caption { color:white!important;}
 		</style>
@@ -247,7 +253,7 @@ EOD;
 			jQuery('document').ready(function($) {
 
 
-			    jQuery('#select_gf_directory_form .datepicker').each(
+			    $('#select_gf_directory_form .datepicker').each(
 			    	function (){
 				    	if($.fn.datepicker) {
 				            var element = jQuery(this);
@@ -289,12 +295,17 @@ EOD;
 					return;
 				});
 
-				jQuery('a.kws_gf_advanced_settings').click(function(e) {  e.preventDefault(); jQuery('#kws_gf_advanced_settings').toggle(); return false; });
+				// Toggle advanced settings
+				$('a.kws_gf_advanced_settings').click(function(e) {
+					e.preventDefault();
+					$('#kws_gf_advanced_settings').toggle();
+					return false;
+				});
 
 				function InsertGFDirectory(){
 					var directory_id = jQuery("#add_directory_id").val();
 					if(directory_id == ""){
-						alert("<?php _e("Please select a form", "gravity-forms-addons") ?>");
+						alert("<?php echo esc_js( __("Please select a form", "gravity-forms-addons") ); ?>");
 						jQuery('#add_directory_id').focus();
 						return false;
 					}
@@ -329,14 +340,14 @@ EOD;
 			<div class="wrap">
 				<div>
 					<div style="padding:15px 15px 0 15px;">
-						<h3 style="color:#5A5A5A!important; font-family:Georgia,Times New Roman,Times,serif!important; font-size:1.8em!important; font-weight:normal!important;"><?php _e("Insert A Directory", "gravity-forms-addons"); ?></h3>
+						<h2><?php esc_html_e("Insert A Directory", "gravity-forms-addons"); ?></h2>
 						<span>
-							<?php _e("Select a form below to add it to your post or page.", "gravity-forms-addons"); ?>
+							<?php esc_html_e("Select a form below to add it to your post or page.", "gravity-forms-addons"); ?>
 						</span>
 					</div>
 					<div style="padding:15px 15px 0 15px;">
 						<select id="add_directory_id">
-							<option value="">  <?php _e("Select a Form", "gravity-forms-addons"); ?>  </option>
+							<option value="">  <?php esc_html_e("Select a Form", "gravity-forms-addons"); ?>  </option>
 							<?php
 								$forms = RGFormsModel::get_forms(1, "title");
 								foreach($forms as $form){
@@ -346,7 +357,7 @@ EOD;
 								}
 							?>
 						</select> <br/>
-						<div style="padding:8px 0 0 0; font-size:11px; font-style:italic; color:#5A5A5A"><?php _e("This form will be the basis of your directory.", "gravity-forms-addons"); ?></div>
+						<div style="padding:8px 0 0 0; font-size:11px; font-style:italic; color:#5A5A5A"><?php esc_html_e("This form will be the basis of your directory.", "gravity-forms-addons"); ?></div>
 					</div>
 						<?php
 
@@ -355,7 +366,7 @@ EOD;
 						?>
 					<div class="submit">
 						<input type="submit" class="button-primary" style="margin-right:15px;" value="Insert Directory" id="insert_gf_directory" />
-						<a class="button button-secondary" style="color:#bbb;" href="#" onclick="tb_remove(); return false;"><?php _e("Cancel", "gravity-forms-addons"); ?></a>
+						<a class="button button-secondary" style="color:#bbb;" href="#" onclick="tb_remove(); return false;"><?php esc_html_e("Cancel", "gravity-forms-addons"); ?></a>
 					</div>
 				</div>
 			</div>
@@ -370,22 +381,22 @@ EOD;
 		$defaults = GFDirectory::directory_defaults();
 
 		$standard = array(
-				array('text', 'page_size'  ,  20, __( "Number of entries to show at once. Use <code>0</code> to show all entries.", 'gravity-forms-addons')),
+				array('text', 'page_size'  ,  20, sprintf( esc_html__( "Number of entries to show at once. Use %s0%s to show all entries.", 'gravity-forms-addons'), '<code>', '</code>') ),
 				array('select', 'directoryview' , array(
-						array('value' => 'table', 'label' => __( "Table", 'gravity-forms-addons')),
-						array('value' => 'ul', 'label'=> __( "Unordered List", 'gravity-forms-addons')),
-						array('value' => 'dl', 'label' => __( "Definition List", 'gravity-forms-addons')),
-					), __( "Format for directory listings (directory view)", 'gravity-forms-addons')
+						array('value' => 'table', 'label' => esc_html__( "Table", 'gravity-forms-addons')),
+						array('value' => 'ul', 'label'=> esc_html__( "Unordered List", 'gravity-forms-addons')),
+						array('value' => 'dl', 'label' => esc_html__( "Definition List", 'gravity-forms-addons')),
+					), esc_html__( "Format for directory listings (directory view)", 'gravity-forms-addons')
 				),
 				array('select','entryview' , array(
-						array('value' =>'table', 'label' => __( "Table", 'gravity-forms-addons')),
-						array('value' =>'ul', 'label'=>__( "Unordered List", 'gravity-forms-addons')),
-						array('value' => 'dl', 'label' => __( "Definition List", 'gravity-forms-addons')),
-					), __( "Format for single entries (single entry view)", 'gravity-forms-addons')
+						array('value' =>'table', 'label' => esc_html__( "Table", 'gravity-forms-addons')),
+						array('value' =>'ul', 'label'=>esc_html__( "Unordered List", 'gravity-forms-addons')),
+						array('value' => 'dl', 'label' => esc_html__( "Definition List", 'gravity-forms-addons')),
+					), esc_html__( "Format for single entries (single entry view)", 'gravity-forms-addons')
 				),
-				array('checkbox',  'search'  ,  true, __( "Show the search field", 'gravity-forms-addons')),
-				array('checkbox', 'smartapproval' , true, __("Automatically convert directory into Approved-only when an Approved field is detected.", 'gravity-forms-addons')),
-				array('checkbox', 'approved' , false, __("(If Smart Approval above is not enabled) Show only entries that have been Approved (have a field in the form that is an Admin-only checkbox with a value of 'Approved'). <span class='description'><strong>Note:</strong> This will hide entries that have not been explicitly approved.</span>", 'gravity-forms-addons')),
+				array('checkbox',  'search'  ,  true, esc_html__( "Show the search field", 'gravity-forms-addons')),
+				array('checkbox', 'smartapproval' , true, esc_html__("Automatically convert directory into Approved-only when an Approved field is detected.", 'gravity-forms-addons')),
+				array('checkbox', 'approved' , false, sprintf( esc_html__("(If Smart Approval above is not enabled) Show only entries that have been Approved (have a field in the form that is an Admin-only checkbox with a value of 'Approved'). %sNote:%s This will hide entries that have not been explicitly approved.%s", 'gravity-forms-addons'), "<span class='description'><strong>", "</strong>", "</span>" ) ),
 			  );
 		if(!$js) {
 			echo '<ul>';
@@ -401,96 +412,94 @@ EOD;
 		}
 
 			$content = array(
-			        array('checkbox', 'entry' ,  true, __("If there's a displayed Entry ID column, add link to each full entry", 'gravity-forms-addons')),
-					array('checkbox',  'wpautop'  ,  true, __( "Convert bulk paragraph text to paragraphs (using the WordPress function <code><a href='http://codex.wordpress.org/Function_Reference/wpautop'>wpautop()</a></code>)", 'gravity-forms-addons')),
-					array('checkbox',  'getimagesize'  ,  false, __( "Calculate image sizes (Warning: this may slow down the directory loading speed!)", 'gravity-forms-addons')),
+			        array('checkbox', 'entry' ,  true, esc_html__("If there's a displayed Entry ID column, add link to each full entry", 'gravity-forms-addons')),
+					#array('checkbox',  'wpautop'  ,  true, sprintf( esc_html__( "Convert bulk paragraph text to paragraphs (using the WordPress function %s)", 'gravity-forms-addons'), "<code><a href='http://codex.wordpress.org/Function_Reference/wpautop'>wpautop()</a></code>" )),
+					array('checkbox',  'getimagesize'  ,  false, esc_html__( "Calculate image sizes (Warning: this may slow down the directory loading speed!)", 'gravity-forms-addons')),
 					array('radio'	, 'postimage' , array(
-							array('label' =>'<img src="'.GFCommon::get_base_url().'/images/doctypes/icon_image.gif" /> Show image icon', 'value'=>'icon', 'default'=>'1'),
-							array('label' => __('Show full image', 'gravity-forms-addons'), 'value'=>'image')
-						), __("How do you want images to appear in the directory?", 'gravity-forms-addons')
+							array('label' =>'<img src="'.GFCommon::get_base_url().'/images/doctypes/icon_image.gif" /> '.esc_html__('Show image icon', 'gravity-forms-addons'), 'value'=>'icon', 'default'=>'1'),
+							array('label' => esc_html__('Show full image', 'gravity-forms-addons'), 'value'=>'image')
+						), esc_html__("How do you want images to appear in the directory?", 'gravity-forms-addons')
 					),
-					array('checkbox', 'fulltext' , true, __("Show full content of a textarea or post content field, rather than an excerpt", 'gravity-forms-addons')),
+					#array('checkbox', 'fulltext' , true, esc_html__("Show full content of a textarea or post content field, rather than an excerpt", 'gravity-forms-addons')),
 
-					array('date', 'start_date' ,  false, __('Start date (in <code>YYYY-MM-DD</code> format)', 'gravity-forms-addons')),
-					array('date', 'end_date' ,  false, __('End date (in <code>YYYY-MM-DD</code> format)', 'gravity-forms-addons')),
+					array('date', 'start_date' ,  false, sprintf( esc_html__('Start date (in %sYYYY-MM-DD%s format)', 'gravity-forms-addons'), '<code>', '</code>') ),
+					array('date', 'end_date' ,  false, sprintf( esc_html__('End date (in %sYYYY-MM-DD%s format)', 'gravity-forms-addons'), '<code>', '</code>') ),
 			);
 
 			$administration = array(
-				array('checkbox', 'showadminonly' ,  false, __("Show Admin-Only columns <span class='description'>(in Gravity Forms, Admin-Only fields are defined by clicking the Advanced tab on a field in the Edit Form view, then editing Visibility > Admin Only)</span>", 'gravity-forms-addons')),
-				array('checkbox', 'useredit' , false, __("Allow logged-in users to edit entries they created. Will add an 'Edit Your Entry' field to the Single Entry View.", 'gravity-forms-addons')),
-				array('checkbox', 'limituser' , false, __("Display entries only the the creator of the entry (users will not see other people's entries).", 'gravity-forms-addons')),
-				array('checkbox', 'adminedit' , false, __(sprintf('Allow %sadministrators%s to edit all entries. Will add an \'Edit Your Entry\' field to the Single Entry View.','<strong>', '</strong>'), 'gravity-forms-addons')),
+				array('checkbox', 'showadminonly' ,  false, sprintf( esc_html__("Show Admin-Only columns %s(in Gravity Forms, Admin-Only fields are defined by clicking the Advanced tab on a field in the Edit Form view, then editing Visibility > Admin Only)%s", 'gravity-forms-addons'), "<span class='description'>", "</span>" ) ),
+				array('checkbox', 'useredit' , false, esc_html__("Allow logged-in users to edit entries they created. Will add an 'Edit Your Entry' field to the Single Entry View.", 'gravity-forms-addons')),
+				array('checkbox', 'limituser' , false, esc_html__("Display entries only the the creator of the entry (users will not see other people's entries).", 'gravity-forms-addons')),
+				array('checkbox', 'adminedit' , false, sprintf(esc_html__('Allow %sadministrators%s to edit all entries. Will add an \'Edit Your Entry\' field to the Single Entry View.', 'gravity-forms-addons'),'<strong>', '</strong>')),
 			);
 
+			$style_label = esc_html_x( 'Style %d', 'Lightbox style', 'gravity-forms-addons' );
+
 			$lightbox = array(
-				#array('checkbox',  'lightbox'  ,  true, __( sprintf("Show images in a %slightbox%s", '<a href="http://en.wikipedia.org/wiki/Lightbox_(JavaScript)" target="_blank">', '</a>'), 'gravity-forms-addons')),
+
 				array('radio'	, 'lightboxstyle' ,
 					array(
-						array('label' =>'Style 1 <a href="http://www.jacklmoore.com/colorbox/example1/" target="_blank">See example</a>', 'value'=>'1'),
-						array('label' =>'Style 2 <a href="http://www.jacklmoore.com/colorbox/example2/" target="_blank">See example</a>', 'value'=>'2'),
-						array('label' =>'Style 3 <a href="http://www.jacklmoore.com/colorbox/example3/" target="_blank">See example</a>', 'value'=>'3','default'=>'1'),
-						array('label' =>'Style 4 <a href="http://www.jacklmoore.com/colorbox/example4/" target="_blank">See example</a>', 'value'=>'4'),
-						array('label' =>'Style 5 <a href="http://www.jacklmoore.com/colorbox/example5/" target="_blank">See example</a>', 'value'=>'5')
+						array('label' => sprintf( $style_label, 1 ) .' <a href="http://www.jacklmoore.com/colorbox/example1/" target="_blank">See example</a>', 'value'=>'1'),
+						array('label' => sprintf( $style_label, 2 ) .' <a href="http://www.jacklmoore.com/colorbox/example2/" target="_blank">See example</a>', 'value'=>'2'),
+						array('label' =>sprintf( $style_label, 3 ) .' <a href="http://www.jacklmoore.com/colorbox/example3/" target="_blank">See example</a>', 'value'=>'3','default'=>'1'),
+						array('label' =>sprintf( $style_label, 4 ) .' <a href="http://www.jacklmoore.com/colorbox/example4/" target="_blank">See example</a>', 'value'=>'4'),
+						array('label' =>sprintf( $style_label, 5 ) .' <a href="http://www.jacklmoore.com/colorbox/example5/" target="_blank">See example</a>', 'value'=>'5')
 					), "What style should the lightbox use?"
 				),
 				array('checkboxes'	, 'lightboxsettings' ,
 					array(
-						array('label' => __('Images', 'gravity-forms-addons'), 'value'=>'images', 'default' => '1'),
-						array('label' => __( "Entry Links (Open entry details in lightbox)"), 'value'=>'entry'),
-						array('label' => __('Website Links (non-entry)', 'gravity-forms-addons'), 'value'=>'urls')
-					), __("Set what type of links should be loaded in the lightbox", 'gravity-forms-addons')
+						array('label' => esc_html__('Images', 'gravity-forms-addons'), 'value'=>'images', 'default' => '1'),
+						array('label' => esc_html__( "Entry Links (Open entry details in lightbox)"), 'value'=>'entry'),
+						array('label' => esc_html__('Website Links (non-entry)', 'gravity-forms-addons'), 'value'=>'urls')
+					), esc_html__("Set what type of links should be loaded in the lightbox", 'gravity-forms-addons')
 				),
-				#array('checkbox',  'entrylightbox' ,  false, __( "Open entry details in lightbox (defaults to lightbox settings)", 'gravity-forms-addons'))
 			);
 
 			$formatting = array(
-				array('checkbox', 'jstable' ,  false, __('Use the TableSorter jQuery plugin to sort the table?', 'gravity-forms-addons')),
-				array('checkbox', 'titleshow'  ,  true, __("<strong>Show a form title?</strong> By default, the title will be the form title.", 'gravity-forms-addons')),
-				array('checkbox', 'showcount'  ,  true, __("Do you want to show 'Displaying 1-19 of 19'?", 'gravity-forms-addons')),
-				array('checkbox', 'thead'  ,  true, __("Show the top heading row (<code>&lt;thead&gt;</code>)", 'gravity-forms-addons')),
-				array('checkbox', 'tfoot'  ,  true, __("Show the bottom heading row (<code>&lt;tfoot&gt;</code>)", 'gravity-forms-addons')),
-				array('checkbox', 'pagelinksshowall'  ,  true, __("Show each page number (eg: <a>1</a> <a>2</a> <a>3</a> <a>4</a> <a>5</a> <a>6</a> <a>7</a> <a>8</a>) instead of summary (eg: <a>1</a> <a>2</a> <a>3</a> ... <a>8</a> <a>&raquo;</a>)", 'gravity-forms-addons')),
-		#		array('checkbox', 'showrowids'  ,  true, __("Show the row ids, which are the entry IDs, in the HTML; eg: <code>&lt;tr id=&quot;lead_row_565&quot;&gt;</code>", 'gravity-forms-addons')),
-		#		array('checkbox', 'icon'  ,  false, __("Show the GF icon as it does in admin? <img src=\"". GFCommon::get_base_url()."/images/gravity-title-icon-32.png\" />", 'gravity-forms-addons')),
-		#		array('checkbox', 'searchtabindex'  ,  false, __("Adds tabindex='' to the search field", 'gravity-forms-addons')),
-				array('checkbox', 'jssearch' ,  true, __("Use JavaScript for sorting (otherwise, <em>links</em> will be used for sorting by column)", 'gravity-forms-addons')),
-				array('checkbox', 'dateformat' ,  false, __("Override the options from Gravity Forms, and use standard PHP date formats", 'gravity-forms-addons')),
+				array('checkbox', 'jstable' ,  false, esc_html__('Use the TableSorter jQuery plugin to sort the table?', 'gravity-forms-addons')),
+				array('checkbox', 'titleshow'  ,  true, '<strong>'.esc_html__('Show a form title?', 'gravity-forms-addons').'</strong> '.esc_html__("By default, the title will be the form title.", 'gravity-forms-addons')),
+				array('checkbox', 'showcount'  ,  true, esc_html__("Do you want to show 'Displaying 1-19 of 19'?", 'gravity-forms-addons')),
+				array('checkbox', 'thead'  ,  true, sprintf( esc_html__("Show the top heading row (%s&lt;thead&gt;%s)", 'gravity-forms-addons'), '<code>', '</code>' ) ),
+				array('checkbox', 'tfoot'  ,  true, sprintf( esc_html__("Show the bottom heading row (%s&lt;tfoot&gt;%s)", 'gravity-forms-addons'), '<code>', '</code>' ) ),
+				array('checkbox', 'pagelinksshowall'  ,  true, esc_html__("Show each page number (eg: 1 2 3 4 5 6 7 8) instead of summary (eg: 1 2 3 ... 8 &raquo;)", 'gravity-forms-addons')),
+				array('checkbox', 'jssearch' ,  true, sprintf( esc_html__("Use JavaScript for sorting (otherwise, %slinks%s will be used for sorting by column)", 'gravity-forms-addons'), '<em>', '</em>' ) ),
+				array('checkbox', 'dateformat' ,  false, esc_html__("Override the options from Gravity Forms, and use standard PHP date formats", 'gravity-forms-addons')),
 			);
 
 			$links = array(
-				array('checkbox', 'linkemail'  ,  true, __("Convert email fields to email links", 'gravity-forms-addons')),
-				array('checkbox', 'linkwebsite'  ,  true, __("Convert URLs to links", 'gravity-forms-addons')),
-				array('checkbox', 'truncatelink' ,  false, __("Show more simple links for URLs (strip <code>http://</code>, <code>www.</code>, etc.)", 'gravity-forms-addons')),	#'truncatelink' => false,
-				array('checkbox', 'linknewwindow'  ,  false, __("<strong>Open links in new window?</strong> (uses <code>target='_blank'</code>)", 'gravity-forms-addons')),
-				array('checkbox', 'nofollowlinks'  ,  false, __("<strong>Add <code>nofollow</code> to all links</strong>, including emails", 'gravity-forms-addons')),
+				array('checkbox', 'linkemail'  ,  true, esc_html__("Convert email fields to email links", 'gravity-forms-addons')),
+				array('checkbox', 'linkwebsite'  ,  true, esc_html__("Convert URLs to links", 'gravity-forms-addons')),
+				array('checkbox', 'truncatelink' ,  false, sprintf( esc_html__("Show more simple links for URLs (strip %shttp://%s, %swww.%s, etc.)", 'gravity-forms-addons'), '<code>', '</code>', '<code>', '</code>' ) ),	#'truncatelink' => false,
+				array('checkbox', 'linknewwindow'  ,  false, sprintf( esc_html__("%sOpen links in new window?%s (uses %s)", 'gravity-forms-addons'), '<strong>', '</strong>', "<code>target='_blank'</code>" ) ),
+				array('checkbox', 'nofollowlinks'  ,  false, sprintf( esc_html__("%sAdd %snofollow%s to all links%s, including emails", 'gravity-forms-addons'),  '<strong>', '<code>', '</code>', '</strong>' ) ),
 			);
 
 			$address = array(
-				array('checkbox', 'appendaddress'  ,  false, __("Add the formatted address as a column at the end of the table", 'gravity-forms-addons')),
-				array('checkbox',  'hideaddresspieces'  ,  false, __( "Hide the pieces that make up an address (Street, City, State, ZIP, Country, etc.)", 'gravity-forms-addons'))
+				array('checkbox', 'appendaddress'  ,  false, esc_html__("Add the formatted address as a column at the end of the table", 'gravity-forms-addons')),
+				array('checkbox',  'hideaddresspieces'  ,  false, esc_html__( "Hide the pieces that make up an address (Street, City, State, ZIP, Country, etc.)", 'gravity-forms-addons'))
 			);
 
 			$entry = array(
-				array('text',  'entrytitle' ,  __('Entry Detail', 'gravity-forms-addons'), __( "Title of entry lightbox window", 'gravity-forms-addons')),
-				array('text',  'entrydetailtitle', __('Entry Detail Table Caption', 'gravity-forms-addons'), __( "The text displayed at the top of the entry details. Use <code>%%formtitle%%</code> and <code>%%leadid%%</code> as variables that will be replaced.", 'gravity-forms-addons')),
-				array('text',  'entrylink' ,  __('View entry details', 'gravity-forms-addons'), __( "Link text to show full entry", 'gravity-forms-addons')),
-				array('text',  'entryth' ,  __('More Info', 'gravity-forms-addons'), __( "Entry ID column title", 'gravity-forms-addons')),
-				array('text',  'entryback' ,  __('&larr; Back to directory', 'gravity-forms-addons'), __( "The text of the link to return to the directory view from the single entry view.", 'gravity-forms-addons')),
-				array('checkbox',  'entryonly' ,  true, __( "When viewing full entry, show entry only? Otherwise, show entry with directory below", 'gravity-forms-addons')),
-				array('checkbox',  'entryanchor' ,  true, __( "When returning to directory view from single entry view, link to specific anchor row?", 'gravity-forms-addons')),
+				array('text',  'entrytitle' ,  esc_html__('Entry Detail', 'gravity-forms-addons'), esc_html__( "Title of entry lightbox window", 'gravity-forms-addons')),
+				array('text',  'entrydetailtitle', sprintf(esc_html__('Entry Detail Table Caption', 'gravity-forms-addons'), esc_html__( "The text displayed at the top of the entry details. Use %s%%%%formtitle%%%%%s and %s%%%%leadid%%%%%s as variables that will be replaced.", 'gravity-forms-addons'), '<code>', '</code>', '<code>', '</code>' ) ),
+				array('text',  'entrylink' ,  esc_html__('View entry details', 'gravity-forms-addons'), esc_html__( "Link text to show full entry", 'gravity-forms-addons')),
+				array('text',  'entryth' ,  esc_html__('More Info', 'gravity-forms-addons'), esc_html__( "Entry ID column title", 'gravity-forms-addons')),
+				array('text',  'entryback' ,  esc_html__('&larr; Back to directory', 'gravity-forms-addons'), esc_html__( "The text of the link to return to the directory view from the single entry view.", 'gravity-forms-addons')),
+				array('checkbox',  'entryonly' ,  true, esc_html__( "When viewing full entry, show entry only? Otherwise, show entry with directory below", 'gravity-forms-addons')),
+				array('checkbox',  'entryanchor' ,  true, esc_html__( "When returning to directory view from single entry view, link to specific anchor row?", 'gravity-forms-addons')),
 			);
 
 		$fieldsets = array(
-			__('Content Settings', 'gravity-forms-addons') => $content,
-			__('Administration of Entries', 'gravity-forms-addons') =>$administration,
-			__('Lightbox Options', 'gravity-forms-addons')=>$lightbox,
-			__('Formatting Options', 'gravity-forms-addons')=>$formatting,
-			__('Link Settings', 'gravity-forms-addons')=>$links,
-			__('Address Options', 'gravity-forms-addons')=>$address
+			esc_html__('Content Settings', 'gravity-forms-addons') => $content,
+			esc_html__('Administration of Entries', 'gravity-forms-addons') =>$administration,
+			esc_html__('Lightbox Options', 'gravity-forms-addons')=>$lightbox,
+			esc_html__('Formatting Options', 'gravity-forms-addons')=>$formatting,
+			esc_html__('Link Settings', 'gravity-forms-addons')=>$links,
+			esc_html__('Address Options', 'gravity-forms-addons')=>$address
 		);
 
 		if(!$js) {
-			echo '<a href="#kws_gf_advanced_settings" class="kws_gf_advanced_settings">'.__('Show advanced settings', 'gravity-forms-addons').'</a>';
+			echo '<a href="#kws_gf_advanced_settings" class="kws_gf_advanced_settings">'.esc_html__('Show advanced settings', 'gravity-forms-addons').'</a>';
 			echo '<div style="display:none;" id="kws_gf_advanced_settings">';
 			echo "<h2 style='margin:0; padding:0; font-weight:bold; font-size:1.5em; margin-top:1em;'>Single-Entry View</h2>";
 			echo '<span class="howto">These settings control whether users can view each entry as a separate page or lightbox. Single entries will show all data associated with that entry.</span>';
@@ -503,8 +512,8 @@ EOD;
 
 			echo '<div class="hr-divider label-divider"></div>';
 
-			echo "<h2 style='margin:0; padding:0; font-weight:bold; font-size:1.5em; margin-top:1em;'>".__('Directory View', 'gravity-forms-addons')."</h2>";
-			echo '<span class="howto">'.__('These settings affect how multiple entries are shown at once.', 'gravity-forms-addons').'</span>';
+			echo "<h2 style='margin:0; padding:0; font-weight:bold; font-size:1.5em; margin-top:1em;'>".esc_html__('Directory View', 'gravity-forms-addons')."</h2>";
+			echo '<span class="howto">'.esc_html__('These settings affect how multiple entries are shown at once.', 'gravity-forms-addons').'</span>';
 
 			foreach($fieldsets as $title => $fieldset) {
 				echo "<fieldset><legend><h3 style='padding-top:1em; padding-bottom:.5em; margin:0;'>{$title}</h3></legend>";
@@ -515,8 +524,8 @@ EOD;
 				echo '</ul></fieldset>';
 				echo '<div class="hr-divider label-divider"></div>';
 			}
-			echo "<h2 style='margin:0; padding:0; font-weight:bold; font-size:1.5em; margin-top:1em;'>".__('Additional Settings', 'gravity-forms-addons')."</h2>";
-			echo '<span class="howto">'.__('These settings affect both the directory view and single entry view.', 'gravity-forms-addons').'</span>';
+			echo "<h2 style='margin:0; padding:0; font-weight:bold; font-size:1.5em; margin-top:1em;'>".esc_html__('Additional Settings', 'gravity-forms-addons')."</h2>";
+			echo '<span class="howto">'.esc_html__('These settings affect both the directory view and single entry view.', 'gravity-forms-addons').'</span>';
 			echo '<ul style="padding: 0 15px 0 15px; width:100%;">';
 		} else {
 			foreach($entry as $o) {
@@ -530,24 +539,24 @@ EOD;
 				}
 			}
 		}
-	$advanced = array(
-			array('text', 'tableclass' ,  'gf_directory widefat', __( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
-			array('text', 'tablestyle' ,  '', __( "inline CSS for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
-			array('text', 'rowclass' ,  '', __( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
-			array('text', 'rowstyle' ,  '', __( "Inline CSS for all <tbody><tr>'s, <ul><li>'s, or <dl><dt>'s", 'gravity-forms-addons')),
-			array('text', 'valign' ,  'baseline', __("Vertical align for table cells", 'gravity-forms-addons')),
-			array('text', 'sort' ,  'date_created', __( "Use the input ID ( example: 1.3 or 7 or ip)", 'gravity-forms-addons')),
-			array('text', 'dir' ,  'DESC', __("Sort in ascending order (<code>ASC</code> or descending (<code>DESC</code>)", 'gravity-forms-addons')),
-			array('text', 'startpage'  ,  1, __( "If you want to show page 8 instead of 1", 'gravity-forms-addons')),
-			array('text', 'pagelinkstype'  ,  'plain', __( "Type of pagination links. <code>plain</code> is just a string with the links separated by a newline character. The other possible values are either <code>array</code> or <code>list</code>.", 'gravity-forms-addons')),
-			array('text', 'titleprefix'  ,  'Entries for ', __( "Default GF behavior is 'Entries : '", 'gravity-forms-addons')),
-			array('text', 'tablewidth'  ,  '100%', __( "Set the 'width' attribute for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
-			array('text', 'datecreatedformat'  ,  get_option('date_format').' \a\t '.get_option('time_format'), __( "Use <a href='http://php.net/manual/en/function.date.php' target='_blank'>standard PHP date formats</a>", 'gravity-forms-addons')),
-			array('checkbox', 'credit'  ,  true, __( "Give credit to the plugin creator (who has spent over 200 hours on this free plugin!) with a link at the bottom of the directory", 'gravity-forms-addons'))
+		$advanced = array(
+			array('text', 'tableclass' ,  'gf_directory widefat', esc_html__( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
+			array('text', 'tablestyle' ,  '', esc_html__( "inline CSS for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
+			array('text', 'rowclass' ,  '', esc_html__( "Class for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
+			array('text', 'rowstyle' ,  '', esc_html__( "Inline CSS for all <tbody><tr>'s, <ul><li>'s, or <dl><dt>'s", 'gravity-forms-addons')),
+			array('text', 'valign' ,  'baseline', esc_html__("Vertical align for table cells", 'gravity-forms-addons')),
+			array('text', 'sort' ,  'date_created', esc_html__( "Use the input ID ( example: 1.3 or 7 or ip)", 'gravity-forms-addons')),
+			array('text', 'dir' ,  'DESC', sprintf( esc_html__("Sort in ascending order (%sASC%s or descending (%sDESC%s)", 'gravity-forms-addons'), '<code>', '</code>', '<code>', '</code>' ) ),
+			array('text', 'startpage'  ,  1, esc_html__( "If you want to show page 8 instead of 1", 'gravity-forms-addons')),
+			array('text', 'pagelinkstype'  ,  'plain', sprintf( esc_html__( "Type of pagination links. %splain%s is just a string with the links separated by a newline character. The other possible values are either %sarray%s or %slist%s.", 'gravity-forms-addons'), '<code>', '</code>', '<code>', '</code>', '<code>', '</code>' ) ),
+			array('text', 'titleprefix'  ,  'Entries for ', esc_html__( "Default GF behavior is 'Entries : '", 'gravity-forms-addons')),
+			array('text', 'tablewidth'  ,  '100%', esc_html__( "Set the 'width' attribute for the <table>, <ul>, or <dl>", 'gravity-forms-addons')),
+			array('text', 'datecreatedformat'  ,  get_option('date_format').' \a\t '.get_option('time_format'), sprintf( esc_html__( "Use %sstandard PHP date formats%s", 'gravity-forms-addons'), "<a href='http://php.net/manual/en/function.date.php' target='_blank'>", '</a>' ) ),
+			array('checkbox', 'credit'  ,  true, esc_html__( "Give credit to the plugin creator (who has spent over 300 hours on this free plugin!) with a link at the bottom of the directory", 'gravity-forms-addons'))
 			);
 		if(!$js) {
 			foreach($advanced as $o) {
-				self::make_field($o[0], $o[1], maybe_serialize($o[2]), esc_html($o[3]), $defaults);
+				self::make_field($o[0], $o[1], maybe_serialize($o[2]), $o[3], $defaults);
 			}
 			echo '</ul></fieldset></div>';
 		} else {
@@ -564,7 +573,7 @@ EOD;
 		$idLabel = '';
 		if(GFDirectory::is_gravity_page('gf_settings')){
 			$id = 'gf_addons_directory_defaults['.$id.']';
-			$idLabel = " <span style='color:#868686'>(".__(sprintf('%s', "<pre style='display:inline'>{$rawid}</pre>"), 'gravity-forms-addons').")</span>";
+			$idLabel = " <span style='color:#868686'>(<pre style='display:inline'>{$rawid}</pre>)</span>";
 		}
 		$checked = '';
 		$label = str_replace('&lt;code&gt;', '<code>', str_replace('&lt;/code&gt;', '</code>', $label));
@@ -609,7 +618,7 @@ EOD;
 								<input type="hidden" value="0" name="'.$name.'" />';
 					}
 					$output .= '
-							<input type="'.$inputtype.'"'.$checked.' value="'.$value.'" id="gf_settings_'.$id_opt.'" name="'.$name.'" /> '.$opt['label']." <span style='color:#868686'>(".__(sprintf('%s', "<pre style='display:inline'>".sanitize_title($opt['value'])."</pre>"), 'gravity-forms-addons').")</span>".'
+							<input type="'.$inputtype.'"'.$checked.' value="'.$value.'" id="gf_settings_'.$id_opt.'" name="'.$name.'" /> '.$opt['label']." <span style='color:#868686'>(<pre style='display:inline'>".sanitize_title($opt['value'])."</pre>)</span>".'
 						</label>
 					</li>'."\n";
 				}
@@ -697,18 +706,7 @@ EOD;
 
 	public function add_form_button() {
 
-		$output = '
-			<style>
-			.gfdirectory_media_icon {
-                background:url('.plugins_url( '/images/editor-icon.gif', __FILE__).') no-repeat top left;
-	            display: inline-block;
-	            height: 16px;
-	            margin: 0 2px 0 0;
-	            vertical-align: text-top;
-	            width: 16px;
-            }
-            </style>
-            <a href="#TB_inline?width=640&inlineId=select_gf_directory" class="thickbox button select_gf_directory gform_media_link" id="add_gform" title="' . __("Add a Gravity Forms Directory", 'gravity-forms-addons') . '"><span class="gfdirectory_media_icon "></span> ' . __("Add Directory", "gravityforms") . '</a>';
+		$output = '<a href="#TB_inline?width=640&amp;inlineId=select_gf_directory" class="thickbox button select_gf_directory gform_media_link" id="add_gform" title="' . esc_attr__("Add a Gravity Forms Directory", 'gravity-forms-addons') . '"><span class="dashicons dashicons-welcome-widgets-menus" style="line-height: 26px;"></span> ' . esc_html__("Add Directory", "gravityforms") . '</a>';
 
 		echo $output;
 	}
@@ -718,7 +716,7 @@ EOD;
         // Adding submenu if user has access
         $permission = GFDirectory::has_access("gravityforms_directory");
         if(!empty($permission))
-            $menus[] = array("name" => "gf_settings&addon=Directory+%26+Addons", "label" => __("Directory &amp; Addons", "gravity-forms-addons"), "callback" =>  array(&$this, "settings_page"), "permission" => $permission);
+            $menus[] = array("name" => "gf_settings&amp;addon=Directory+%26+Addons", "label" => esc_html__("Directory & Addons", "gravity-forms-addons"), "callback" =>  array(&$this, "settings_page"), "permission" => $permission);
 
         return $menus;
     }
@@ -737,7 +735,7 @@ EOD;
             	"version" => GFDirectory::get_version(),
             	"saved" => true
             );
-            $message = __('Settings saved.', 'gravity-forms-addons');
+            $message = esc_html__('Settings saved.', 'gravity-forms-addons');
             update_option("gf_addons_settings", $settings);
         } else {
            $settings = GFDirectory::get_settings();
@@ -749,44 +747,6 @@ EOD;
             .ol-decimal li { list-style: decimal!important; }
             .form-table label { font-size: 1em!important; margin: .4em 0; display: block;}
             li.setting-container { border: none!important; }
-            #kws_gf_donate {
-				float: left;
-				width: 95%;
-				border: 1px solid #ccc;
-				padding: 10px 2.5%;
-				color: #333;
-				margin: 0;
-				margin-bottom: 10px;
-				background: #fff;
-				text-align: center;
-				<?php echo isset($_GET['viewinstructions']) ? 'display:none;' : ''; ?>
-			}
-			#kws_gf_donate div.aligncenter {
-				max-width: 700px;
-				margin: 0 auto;
-				float: none;
-			}
-			#kws_gf_donate * { text-align: left;}
-			#kws_gf_donate h3 {
-				margin: 0;
-				margin-top: 10px;
-			}
-			#kws_gf_donate .email {
-				padding: 5px;
-				font-size: 15px;
-				line-height: 20px;
-				margin-bottom: 10px;
-			}
-			#kws_gf_donate .button-primary {
-				display:block; float:left; margin:5px 0; text-align:center;
-			}
-			#kws_gf_donate img {
-				max-width: 100%;
-				margin: 0 auto 10px;
-				display: block;
-				text-align: center;
-			}
-
         </style>
         <script>
         	jQuery('document').ready(function($) {
@@ -815,20 +775,18 @@ EOD;
 
 				$('#kws_gf_instructions_button').click(function(e) {
 					e.preventDefault();
-					visible = $('#kws_gf_instructions').is(':visible');
-					if(!visible) { $('#kws_gf_donate').slideUp(150); }
+
 					$('#kws_gf_instructions').slideToggle(function() {
-						var $this = $(this);
 						var $that = $('#kws_gf_instructions_button');
 						$that.text(function() {
-							if(visible) {
-								$('#kws_gf_donate').slideDown(100);
-								return '<?php _e('Hide Instructions', 'gravity-forms-addons'); ?>';
+							if($('#kws_gf_instructions').is(":visible")) {
+								return '<?php echo esc_js(__('Hide Directory Instructions', 'gravity-forms-addons') ); ?>';
 							} else {
-								return '<?php _e('View Directory Instructions', 'gravity-forms-addons'); ?>';
+								return '<?php echo esc_js(__('View Directory Instructions', 'gravity-forms-addons') ); ?>';
 							}
 						});
 					});
+
 					return false;
 				});
 
@@ -840,7 +798,7 @@ EOD;
 		<?php
 			if($plugin_page !== 'gf_settings') {
 
-				echo '<h2>'.__('Gravity Forms Directory Add-on',"gravity-forms-addons").'</h2>';
+				echo '<h2>'.esc_html__('Gravity Forms Directory Add-on',"gravity-forms-addons").'</h2>';
 			}
 			if($message) {
 				echo "<div class='fade below-h2 updated' id='message'>".wpautop($message)."</div>";
@@ -848,22 +806,16 @@ EOD;
 
 		// if you must, you can filter this out...
 		if(apply_filters('kws_gf_show_donate_box', true)) {
+			include( plugin_dir_path( __FILE__ ) . '/gravityview-info.php' );
+		} // End donate box
+
 		?>
-		<div id="kws_gf_donate">
-			<div class="aligncenter">
-				<a href="https://katz.co/gravityview/" title="<?php esc_attr_e( 'Go to GravityView Website', 'gravity-forms-addons' ); ?>" class="aligncenter"><img src= "<?php echo plugins_url( '/images/GravityView.png', __FILE__ ); ?>" alt="GravityView Logo" /></a>
-				<h3><?php _e('Better, simpler, and landing soon.', 'gravity-forms-addons'); ?></h3>
-				<p><?php _e('A brand-new Directory plugin is almost ready, and we need testers. Sign up below for early access.'); ?></p>
-				<iframe id='prefinery_iframe_inline' allowTransparency='true' width='100%' height='300' scrolling='no' frameborder='0' src="https://kws.prefinery.com/betas/4444/testers/new?display=inline&amp;version=2"></iframe>
-			</div>
-		</div>
-		<div class="clear"></div>
-		<?php } // End donate box ?>
-		<p class="submit"><span style="padding-right:.5em;" class="description"><?php _e('Need help getting started?', 'gravity-forms-addons'); ?></span> <a href="#" class="button button-secondary" id="kws_gf_instructions_button"><?php
+
+		<p class="submit"><span style="padding-right:.5em;" class="description"><?php esc_html_e('Need help getting started?', 'gravity-forms-addons'); ?></span> <a href="#" class="button button-secondary" id="kws_gf_instructions_button"><?php
 			if(!empty($settings['saved']) && !isset($_REQUEST['viewinstructions'])) {
-				_e('View Directory Instructions', 'gravity-forms-addons');
+				esc_html_e('View Directory Instructions', 'gravity-forms-addons');
 			} else {
-				_e('Hide Directory Instructions', 'gravity-forms-addons');
+				esc_html_e('Hide Directory Instructions', 'gravity-forms-addons');
 			}
 		?></a></p>
 
@@ -872,33 +824,33 @@ EOD;
 				<div class="alignright" style="margin:1em 1.2em;">
 					<iframe width="400" height="255" src="http<?php echo is_ssl() ? 's' : '';?>://www.youtube.com/embed/PMI7Jb-RP2I?hd=1" frameborder="0" allowfullscreen></iframe>
 				</div>
-				<h3 style="padding-top:1em;"><?php _e('To integrate a form with Directory:', 'gravity-forms-addons'); ?></h3>
+				<h3 style="padding-top:1em;"><?php esc_html_e('To integrate a form with Directory:', 'gravity-forms-addons'); ?></h3>
 				<ol class="ol-decimal">
-					<li><?php _e('Go to the post or page where you would like to add the directory.', 'gravity-forms-addons'); ?></li>
-					<li><?php _e('Click the "Add Directory" button above the content area.', 'gravity-forms-addons'); ?></li>
-					<li><?php _e('Choose a form from the drop-down menu and configure settings as you would like them.', 'gravity-forms-addons'); ?></li>
-					<li><?php _e('Click "Insert Directory". A "shortcode" should appear in the content editor that looks similar to <code style="font-size:1em;">[directory form="#"]</code>', 'gravity-forms-addons'); ?></li>
-					<li><?php _e('Save the post or page', 'gravity-forms-addons'); ?></li>
+					<li><?php esc_html_e('Go to the post or page where you would like to add the directory.', 'gravity-forms-addons'); ?></li>
+					<li><?php esc_html_e('Click the "Add Directory" button above the content area.', 'gravity-forms-addons'); ?></li>
+					<li><?php esc_html_e('Choose a form from the drop-down menu and configure settings as you would like them.', 'gravity-forms-addons'); ?></li>
+					<li><?php printf( esc_html__('Click "Insert Directory". A "shortcode" should appear in the content editor that looks similar to %s[directory form="#"]%s', 'gravity-forms-addons'), '<code style="font-size:1em;">', '</code>' ); ?></li>
+					<li><?php esc_html_e('Save the post or page', 'gravity-forms-addons'); ?></li>
 				</ol>
 
-				<h4><?php _e('Configuring Fields &amp; Columns', "gravity-forms-addons"); ?></h4>
+				<h4><?php esc_html_e('Configuring Fields & Columns', "gravity-forms-addons"); ?></h4>
 
-				<?php echo wpautop(__('When editing a form, click on a field to expand the field. Next, click the "Directory" tab. There, you will find options to:',"gravity-forms-addons")); ?>
+				<?php echo wpautop(esc_html__('When editing a form, click on a field to expand the field. Next, click the "Directory" tab. There, you will find options to:',"gravity-forms-addons")); ?>
 
 		        <ul class="ul-square">
-				        <li><?php _e("Choose whether you would like the field to be a link to the Single Entry View;", "gravity-forms-addons"); ?></li>
-				        <li><?php _e("Hide the field in Directory View; and", "gravity-forms-addons"); ?></li>
-				        <li><?php _e("Hide the field in Single Entry View", "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e("Choose whether you would like the field to be a link to the Single Entry View;", "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e("Hide the field in Directory View; and", "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e("Hide the field in Single Entry View", "gravity-forms-addons"); ?></li>
 				</ul>
 
-				<h4><?php _e('Configuring Column Visibility &amp; Order', "gravity-forms-addons"); ?></h4>
+				<h4><?php esc_html_e('Configuring Column Visibility & Order', "gravity-forms-addons"); ?></h4>
 
-				<?php echo wpautop(__('When editing a form in Gravity Forms, click the link near the top-center of the page named "Directory Columns"',"gravity-forms-addons")); ?>
+				<?php echo wpautop(esc_html__('When editing a form in Gravity Forms, click the link near the top-center of the page named "Directory Columns"',"gravity-forms-addons")); ?>
 
 		        <ol class="ol-decimal">
-				        <li><?php _e('When editing a form in Gravity Forms, click the link near the top-center of the page named "Directory Columns"', "gravity-forms-addons"); ?></li>
-				        <li><?php _e('Drag and drop columns from the right ("Hidden Columns") side to the left ("Visible Columns") side.', "gravity-forms-addons"); ?></li>
-				        <li><?php _e('Click the "Save" button', "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e('When editing a form in Gravity Forms, click the link near the top-center of the page named "Directory Columns"', "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e('Drag and drop columns from the right ("Hidden Columns") side to the left ("Visible Columns") side.', "gravity-forms-addons"); ?></li>
+				        <li><?php esc_html_e('Click the "Save" button', "gravity-forms-addons"); ?></li>
 				</ol>
 
 			</div>
@@ -909,16 +861,16 @@ EOD;
             <?php wp_nonce_field("update", "gf_directory_update") ?>
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="gf_addons_directory"><?php _e("Gravity Forms Directory", "gravity-forms-addons"); ?></label> </th>
+                    <th scope="row"><label for="gf_addons_directory"><?php esc_html_e("Gravity Forms Directory", "gravity-forms-addons"); ?></label> </th>
                     <td>
-                        <label for="gf_addons_directory" class="howto"><input type="checkbox" id="gf_addons_directory" name="gf_addons_directory" <?php checked($settings["directory"]); ?> /> <?php _e('Enable Gravity Forms Directory capabilities', 'gravity-forms-addons'); ?></label>
+                        <label for="gf_addons_directory" class="howto"><input type="checkbox" id="gf_addons_directory" name="gf_addons_directory" <?php checked($settings["directory"]); ?> /> <?php esc_html_e('Enable Gravity Forms Directory capabilities', 'gravity-forms-addons'); ?></label>
                     </td>
                 </tr>
                 <tr id="directory_settings_row">
                 	<th scope="row"></th>
                 	<td>
-                		<h2 style="margin-bottom:0; padding-bottom:0;"><?php _e("Directory Default Settings", "gravity-forms-addons"); ?></h2>
-                		<h3><?php _e("These defaults can be over-written when inserting a directory.", "gravity-forms-addons"); ?></h3>
+                		<h2 style="margin-bottom:0; padding-bottom:0;"><?php esc_html_e("Directory Default Settings", "gravity-forms-addons"); ?></h2>
+                		<h3><?php esc_html_e("These defaults can be over-written when inserting a directory.", "gravity-forms-addons"); ?></h3>
 
                 		<?php
                 		self::make_popup_options(false);
@@ -927,27 +879,27 @@ EOD;
                 	</td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="gf_addons_referrer"><?php _e("Add Referrer Data to Emails", "gravity-forms-addons"); ?></label> </th>
+                    <th scope="row"><label for="gf_addons_referrer"><?php esc_html_e("Add Referrer Data to Emails", "gravity-forms-addons"); ?></label> </th>
                     <td>
-                        <label for="gf_addons_referrer"><input type="checkbox" id="gf_addons_referrer" name="gf_addons_referrer" <?php checked($settings["referrer"]); ?> /> <?php _e("Adds referrer data to entries, including the path the user took to get to the form before submitting.", 'gravity-forms-addons'); ?></label>
+                        <label for="gf_addons_referrer"><input type="checkbox" id="gf_addons_referrer" name="gf_addons_referrer" <?php checked($settings["referrer"]); ?> /> <?php esc_html_e("Adds referrer data to entries, including the path the user took to get to the form before submitting.", 'gravity-forms-addons'); ?></label>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="gf_addons_modify_admin"><?php _e("Modify Gravity Forms Admin", "gravity-forms-addons"); ?></label> </th>
+                    <th scope="row"><label for="gf_addons_modify_admin"><?php esc_html_e("Modify Gravity Forms Admin", "gravity-forms-addons"); ?></label> </th>
                     <td>
                        <ul>
-	                        <li><label for="gf_addons_modify_admin_expand"><input type="checkbox" id="gf_addons_modify_admin_expand" name="gf_addons_modify_admin[expand]" <?php checked(isset($settings["modify_admin"]['expand'])); ?> /> <?php _e("Show option to expand Form Editor Field boxes", "gravity-forms-addons"); ?></label></li>
+	                        <li><label for="gf_addons_modify_admin_expand"><input type="checkbox" id="gf_addons_modify_admin_expand" name="gf_addons_modify_admin[expand]" <?php checked(isset($settings["modify_admin"]['expand'])); ?> /> <?php esc_html_e("Show option to expand Form Editor Field boxes", "gravity-forms-addons"); ?></label></li>
 
-	                        <li><label for="gf_addons_modify_admin_toggle"><input type="checkbox" id="gf_addons_modify_admin_toggle" name="gf_addons_modify_admin[toggle]" <?php checked(isset($settings["modify_admin"]['toggle'])); ?> /> <?php _e('When clicking Form Editor Field boxes, toggle open and closed instead of "accordion mode" (closing all except the clicked box).', "gravity-forms-addons"); ?></label></li>
+	                        <li><label for="gf_addons_modify_admin_toggle"><input type="checkbox" id="gf_addons_modify_admin_toggle" name="gf_addons_modify_admin[toggle]" <?php checked(isset($settings["modify_admin"]['toggle'])); ?> /> <?php esc_html_e('When clicking Form Editor Field boxes, toggle open and closed instead of "accordion mode" (closing all except the clicked box).', "gravity-forms-addons"); ?></label></li>
 
-	                        <li><label for="gf_addons_modify_admin_edit"><input type="checkbox" id="gf_addons_modify_admin_edit" name="gf_addons_modify_admin[edit]" <?php checked(isset($settings["modify_admin"]['edit'])); ?> /> <?php _e(sprintf("Makes possible direct editing of entries from %sEntries list view%s", '<a href="'.admin_url('admin.php?page=gf_entries').'">', '</a>'), "gravity-forms-addons"); ?></label></li>
+	                        <li><label for="gf_addons_modify_admin_edit"><input type="checkbox" id="gf_addons_modify_admin_edit" name="gf_addons_modify_admin[edit]" <?php checked(isset($settings["modify_admin"]['edit'])); ?> /> <?php printf( esc_html__("Makes possible direct editing of entries from %sEntries list view%s", "gravity-forms-addons") , '<a href="'.admin_url('admin.php?page=gf_entries').'">', '</a>'); ?></label></li>
 
-	                        <li><label for="gf_addons_modify_admin_ids"><input type="checkbox" id="gf_addons_modify_admin_ids" name="gf_addons_modify_admin[ids]" <?php checked(isset($settings["modify_admin"]['ids'])); ?> /> <?php _e(sprintf("Adds a link in the Forms list view to view form IDs", '<a href="'.admin_url('admin.php?page=gf_edit_forms').'">', '</a>'), "gravity-forms-addons"); ?></label></li>
+	                        <li><label for="gf_addons_modify_admin_ids"><input type="checkbox" id="gf_addons_modify_admin_ids" name="gf_addons_modify_admin[ids]" <?php checked(isset($settings["modify_admin"]['ids'])); ?> /> <?php printf( esc_html__("Adds a link in the Forms list view to view form IDs", "gravity-forms-addons"), '<a href="'.admin_url('admin.php?page=gf_edit_forms').'">', '</a>'); ?></label></li>
                       </ul>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" ><input type="submit" name="gf_addons_submit" class="button-primary button-large button-mega" value="<?php _e("Save Settings", "gravity-forms-addons") ?>" /></td>
+                    <td colspan="2" ><input type="submit" name="gf_addons_submit" class="button-primary button-large button-mega" value="<?php esc_attr_e("Save Settings", "gravity-forms-addons") ?>" /></td>
                 </tr>
             </table>
         </form>

@@ -1,4 +1,41 @@
 jQuery(function($) {
+    var BrowserDetect = {
+        init: function () {
+            this.browser = this.searchString(this.dataBrowser) || "Other";
+            this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
+        },
+
+        searchString: function (data) {
+            for (var i=0 ; i < data.length ; i++)   
+            {
+                var dataString = data[i].string;
+                this.versionSearchString = data[i].subString;
+
+                if (dataString.indexOf(data[i].subString) != -1)
+                {
+                    return data[i].identity;
+                }
+            }
+        },
+
+        searchVersion: function (dataString) {
+            var index = dataString.indexOf(this.versionSearchString);
+            if (index == -1) return;
+            return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+        },
+
+        dataBrowser: 
+        [
+            { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome" },
+            { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer" },
+            { string: navigator.userAgent, subString: "Firefox", identity: "Firefox" },
+            { string: navigator.userAgent, subString: "Safari",  identity: "Safari" },
+            { string: navigator.userAgent, subString: "Opera",   identity: "Opera" }
+        ]
+
+    };
+    BrowserDetect.init();
+
     function URLToArray() {
         var url = $(location).attr('href');
         var request = {};
@@ -29,17 +66,19 @@ jQuery(function($) {
         order = 'DESC',
         pagenavi_box = filter_bar.find('#dwqa_filter_posts_per_page'),
         posts_per_page = 10,
-        filter_plus = getURLParameter('status');
+        filter_plus = getURLParameter('status'),
+        nonce = filter_bar.find('#_filter_wpnonce').val(),
+        category_select = $('.filter-bar #dwqa-filter-by-category'),
+        category = getURLParameter(dwqa.question_category_rewrite),
+        tag_select = $('.filter-bar #dwqa-filter-by-tags'),
+        tags = getURLParameter(dwqa.question_tag_rewrite),
+        paged = getURLParameter('paged'),
+        search_form = $('.dwqa-search-form'),
+        title = null;
+
     filter_plus = filter_plus ? filter_plus : 'all',
-    nonce = filter_bar.find('#_filter_wpnonce').val(),
-    category_select = $('.filter-bar #dwqa-filter-by-category'),
-    category = getURLParameter(dwqa.question_category_rewrite),
-    tag_select = $('.filter-bar #dwqa-filter-by-tags'),
-    tags = getURLParameter(dwqa.question_tag_rewrite),
-    paged = getURLParameter('paged'),
-    paged = paged ? paged : $('#dwqa-paged').val(),
-    search_form = $('.dwqa-search-form'),
-    title = null, tags = 'null';
+    paged = paged ? paged : $('#dwqa-paged').val();
+    tags = tags ? tags : 0;
 
     var get_filter_args = function() {
         posts_per_page = pagenavi_box.val();
@@ -49,14 +88,17 @@ jQuery(function($) {
             category = category_select.val();
         }
 
-        if (tag_select.is('ul')) {
-            tags = parseInt(tag_select.data('selected')) > 0 ? tag_select.data('selected') : 0;
-        } else {
-            tags = tag_select.val();
+        if( tag_select.length > 0 ) {
+            if ( tag_select.is('ul') ) {
+                tags = parseInt(tag_select.data('selected')) > 0 ? tag_select.data('selected') : 0;
+            } else {
+                tags = tag_select.val();
+            }
         }
 
         title = search_form.find('.dwqa-search-input').val();
-        if (($.browser.version == "9.0" || $.browser.version == "8.0") && title == search_form.find('.dwqa-search-input').attr('placeholder')) {
+
+        if (( BrowserDetect.browser == 'Explorer' && (BrowserDetect.version == 9 || BrowserDetect.version == 8)) && title == search_form.find('.dwqa-search-input').attr('placeholder')) {
             title = '';
         }
     }
@@ -71,7 +113,6 @@ jQuery(function($) {
             $filter.abort();
         }
         $url_args = URLToArray();
-
         if (filter_plus != 'all') {
             $url_args['status'] = filter_plus;
         } else {
@@ -99,16 +140,18 @@ jQuery(function($) {
         } else {
             delete($url_args['paged']);
         }
-
         var $paramString = '';
-        for (var i in $url_args) {
-            if (!i) {
-                continue;
+        
+        if( $url_args ) {
+            for (var i in $url_args) {
+                if (!i) {
+                    continue;
+                }
+                $paramString += '&' + i + '=' + $url_args[i];
             }
-            $paramString += '&' + i + '=' + $url_args[i];
-        }
-        if ($paramString.substring(0, 1) == '&') {
-            $paramString = $paramString.substring(1, $paramString.length);
+            if ($paramString.substring(0, 1) == '&') {
+                $paramString = $paramString.substring(1, $paramString.length);
+            }
         }
         $.ajax({
             url: dwqa.ajax_url,
@@ -163,12 +206,11 @@ jQuery(function($) {
             .always(function() {
                 container.find('.loading').hide();
             });
-
     }
 
     var offset = 1;
 
-    if (filter_plus != 'all' || category != 'all' || tags != 0) {
+    if (filter_plus != 'all' || category != 'all' || tags != 0 ) {
         start_filter();
     }
 
@@ -225,11 +267,13 @@ jQuery(function($) {
         filter_bar.find('.filter-by-category').removeClass('open');
 
         category = 'all';
+        
+        filter_bar.find('.filter-by-category .category-list li').removeClass('selected');
+        $(this).addClass('selected');
         if ($(this).data('cat')) {
             category = $(this).data('cat');
         }
         category_select.data('selected', category);
-
         start_filter();
 
     });
@@ -249,11 +293,12 @@ jQuery(function($) {
         filter_bar.find('.filter-by-tags').removeClass('open');
 
         tags = 0;
+        filter_bar.find('.filter-by-tags .category-list li').removeClass('selected');
+        $(this).addClass('selected');
         if ($(this).data('cat')) {
             tags = $(this).data('cat');
         }
         tag_select.data('selected', tags);
-
         start_filter();
 
     });

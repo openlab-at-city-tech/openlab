@@ -1,11 +1,11 @@
 === WTI Like Post ===
 Contributors: webtechideas
-Contributor's website: http://www.webtechideas.com/
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.com/thanks/
+Contributor's website: http://www.webtechideas.in/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.in/thanks/
 Tags: wp like post,wordpress like post,wp like page,wordpress like page,wplikepost,wplikepage,wti,webtechideas,wp vote page,wp vote post,wordpress vote page,wordpress vote post,thumbs up, thumbs down, most liked posts, recently liked posts
-Requires at least: 3.6
-Tested up to: 3.9.1
-Stable tag: 1.4.2
+Requires at least: 3.8
+Tested up to: 4.2.2
+Stable tag: 1.4.3
 
 A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO version is also available.
 
@@ -14,10 +14,10 @@ A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO 
 WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts.
 
 = PRO Features =
-1. Functionality for getting automatic plugin updates as a standard wordpress plugin update process.
+1. Ability to change your vote even if multiple voting is disabled.
 2. Action hook available for successful voting so that you can attach any functionality like sending thank you mail to user. There are 2 other hooks available for further customizing the message you see on page load and ajax call.
 3. Functionality for viewing like, unlike, total counts for individual post on admin Most Liked Posts screen. You can also view users who voted for each of them. This works only when logged in users are allowed to vote.
-4. Buddypress activity integration to show activity updates when a user likes and dislikes any content.
+4. Buddypress activity integration to show activity updates when a user likes and dislikes any standard or custom post. There will not be option to like/dislike any BuddyPress activity.
 5. Functionality for highlighting the like/unlike icon on successful voting and page load.
 6. Compatible with multisite set up.
 7. Can be used with custom post types. You can show most liked posts based on custom post types using shortcode and widget.
@@ -41,7 +41,7 @@ WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) f
 25. Most Liked/Unliked Category Posts widget to show posts liked/unliked on the specific category page.
 26. Functionality to show post excerpt, thumbnail on all the available widgets.
 
-**PRO Plugin URL:** http://www.webtechideas.com/product/wti-like-post-pro/ PRO manual is available for downloading on the last section of the page.
+**PRO Plugin URL:** http://www.webtechideas.in/product/wti-like-post-pro/ PRO manual is available for downloading on the last section of the page.
 
 **PRO Plugin Demo URL:** http://demowp.webtechideas.com/
 
@@ -70,9 +70,9 @@ WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) f
 20. Widgets to show most liked posts and recently liked posts
 21. Option to save plugin settings and table even after plugin uninstallation which will make upgradation smooth
 
-**Plugin URL:** http://www.webtechideas.com/wti-like-post-plugin/ Plugin manual is available for downloading on the last page of the plugin url.
+**Plugin URL:** http://www.webtechideas.in/wti-like-post-plugin/ Plugin manual is available for downloading on the last page of the plugin url.
 
-**Author's Blog:** <a href="http://www.webtechideas.com/" target="_blank">Webtechideas</a>
+**Author's Blog:** <a href="http://www.webtechideas.in/" target="_blank">Webtechideas</a>
 
 **Author's Other Plugins:** <a href="http://wordpress.org/extend/plugins/wti-contact-back/" target="_blank">WTI Contact Back</a>
 
@@ -143,7 +143,7 @@ Yes apart from post title, you can use settings in the widgets section whether t
 Yes, you can do this. (PRO Version).
 
 = Can I sort the posts by like/unlike count as a normal blog page? =
-Yes, this is possible. This plugin (PRO Version) stores like/unlike count in terms of post meta, using that you can sort the posts. There is an example <a href="http://www.webtechideas.com/sorting-posts-by-meta-key-and-value/" target="_blank">here</a> for the same showing on category page.
+Yes, this is possible. This plugin (PRO Version) stores like/unlike count in terms of post meta, using that you can sort the posts. There is an example <a href="http://www.webtechideas.in/sorting-posts-by-meta-key-and-value/" target="_blank">here</a> for the same showing on category page.
 
 = Can I use text instead of like/unlike images? =
 Yes, this is also possible (PRO Version). Using this you can provide more meaningful message to the user which may not conveyed using images.
@@ -164,6 +164,11 @@ Yes, you can use this plugin against wordpress pages. You need to enable this fe
 In total there are 6 styles available. If you still need a different one, then place thumbs up/down images of same file name and same size.
 
 == Changelog ==
+
+= 1.4.3 =
+* Modified ajax functionality
+* Functionality to store user id for votes if logged in
+* Fixed issue as reported
 
 = 1.4.2 =
 * Fixed issue with voting period more than 1 day

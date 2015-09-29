@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 3.9.1
-Stable tag: 1.5.9
+Tested up to: 4.2.1
+Stable tag: 1.5.11
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -35,6 +35,7 @@ It is very hard to continue development and support for this plugin without cont
   - Theme Templates
   - Languages (WPML or QTranslate)
   - URL
+  - Shortcode
   - Front page
   - Single post pages
   - Attachment pages
@@ -65,6 +66,7 @@ It is very hard to continue development and support for this plugin without cont
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
   - URL on starting with URL, ending on URL or exact match
+  - Shortcode on value match
   - Front page on first page
   - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags, Custom Taxonomies and/or Individual posts
   - Pages on Page Title and Custom Taxonomies, including inheritance from hierarchical parents
@@ -85,8 +87,8 @@ It is very hard to continue development and support for this plugin without cont
 	- BuddyPress Group Hierarchy
 	- QTranslate
 	- Pods
-  - WP MultiLingual (WPML)
-  - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
+	- WP MultiLingual (WPML)
+	- WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
 
 * Language files provided:
 	- Brazil Portuguese (pt_BR) by [Renato Tavares](http://www.renatotavares.com)
@@ -95,7 +97,8 @@ It is very hard to continue development and support for this plugin without cont
 	- Danish (da_DK) by Morten Nalholm
 	- French (fr_FR) by Alexis Nomine
 	- German (de_DE) by Daniel Bihler
-	- Lithuanian (lt_LT) by Liudas Ališauskas
+	- Japanese (ja) by chacomv
+	- Lithuanian (lt_LT) by Liudas Aliï¿½auskas
 	- Portuguese (pt_PT) by Pedro Nave
 	- Serbo-Croatian (sr_RS) by [Borisa Djuraskovic](http://www.webhostinghub.com/)
 	- Spanish (es_ES) by Eduardo Larequi
@@ -119,7 +122,7 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/dynamic-wid
 1. A properly working WordPress site (doh!).
 2. Your theme must have at least one dynamic sidebar.
 3. Your theme must call `wp_head()`.
-4. Minimum of PHP version 5.2.7, PHP 5.3 is highly recommended. 
+4. Minimum of PHP version 5.2.7, PHP 5.3 is highly recommended.
 
 = My hoster is (still) using PHP4 =
 
@@ -185,11 +188,22 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Changelog ==
 
+= Version 1.5.11 =
+
+* Added Shortcode matching support by request of Nathan Wright of NW Consulting who made a financial contribution to make this feature possible.
+* Fixed a possible vulnerability in the DW settings found by Mike Esptein
+
+= Version 1.5.10 =
+
+* Added Japanese language file (locale: ja) - Arigato chacomv!
+* Added security preventing calling scripts creatively
+* Added detection of QTranslate-X
+
 = Version 1.5.9 =
 
 * Added support for IP range
-* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made 
-* Bugfix for Single Post Catregory is saved wrong 
+* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made
+* Bugfix for Single Post Catregory is saved wrong
 * Bugfix for Strict warning notice in author_module.php at line 42
 
 = Version 1.5.8 =
@@ -219,7 +233,7 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Bugfix for Warning: Declaration of DW_CustomPost::registerOption() should be compatible with DWModule::registerOption($dwoption)
 * Bugfix for WPML category fails to follow the rules with the help and financial support by [Advancis](http://advancis.net/).
 * Changed the taxonomy terms tree to use 'lazy loading' by request of Rick Anderson from [Build Your Own Business Website](http://www.byobwebsite.com/) who made a financial contribution to make this possible.
-* Moved minimum PHP version up to 5.2.7 because of a PHP bug in lower versions not exposing all class properties while in the right scope. Thanks Sébastien for finding out!
+* Moved minimum PHP version up to 5.2.7 because of a PHP bug in lower versions not exposing all class properties while in the right scope. Thanks Sï¿½bastien for finding out!
 
 = Version 1.5.4 =
 

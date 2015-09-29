@@ -2,9 +2,11 @@
 /**
  * Pages Module
  *
- * @version $Id: pages_module.php 938061 2014-06-24 21:17:14Z qurl $
+ * @version $Id: pages_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Page extends DWModule {
 		protected static $info;

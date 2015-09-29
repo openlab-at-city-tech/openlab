@@ -27,65 +27,65 @@
 ?>
 
 <div class="gde-support-warn">
-	<p><strong><?php _e('Most support questions have already been answered. Please review these pages before asking for support:', 'gde'); ?></strong></p>
+	<p><strong><?php _e('Most support questions have already been answered. Please review these pages before asking for support:', 'google-document-embedder'); ?></strong></p>
 	<ul style="list-style-type:square; padding-left:25px;line-height:1em;">
-		<li><a href="<?php echo $pdata['PluginURI']; ?>/notes/">Google Doc Embedder <?php _e('Help', 'gde'); ?></a></li>
-		<li><a href="<?php echo GDE_WP_URL; ?>faq/"><?php _e('Plugin FAQ', 'gde'); ?></a></li>
+		<li><a href="<?php echo $pdata['PluginURI']; ?>/notes/">Google Doc Embedder <?php _e('Help', 'google-document-embedder'); ?></a></li>
+		<li><a href="<?php echo GDE_WP_URL; ?>faq/"><?php _e('Plugin FAQ', 'google-document-embedder'); ?></a></li>
 	</ul>
 </div>
 <br clear="both" />
 
 <form action="<?php echo GDE_PLUGIN_URL;?>libs/lib-formsubmit.php" id="debugForm">
 
-<h3><?php _e('Support Request', 'gde'); ?></h3>
-<p><?php _e("Requests sent from this form are handled by an actual human, so please don't send test messages or other spam.", 'gde'); ?></p>
+<h3><?php _e('Support Request', 'google-document-embedder'); ?></h3>
+<p><?php _e("Requests sent from this form are handled by an actual human, so please don't send test messages or other spam.", 'google-document-embedder'); ?></p>
 
 <table class="form-table">
 <tr valign="top">
-	<th scope="row"><label for="sender_name" id="name_label"><?php _e('Your Name', 'gde'); ?></label></th>
+	<th scope="row"><label for="sender_name" id="name_label"><?php _e('Your Name', 'google-document-embedder'); ?></label></th>
 	<td><input size="25" name="name" id="sender_name" value="<?php echo $name; ?>" type="text"></td>
 </tr>
 <tr valign="top">
-	<th scope="row"><label for="sender" id="sender_label"><?php _e('Your E-mail', 'gde'); ?>*</label></th>
+	<th scope="row"><label for="sender" id="sender_label"><?php _e('Your E-mail', 'google-document-embedder'); ?>*</label></th>
 	<td>
 		<input size="25" name="email" id="sender" value="<?php echo $email; ?>" type="text">
-		<div id="err_email" class="err" style="color:red;font-weight:bold;display:none;"><?php _e('A valid email address is required.', 'gde'); ?></div>
+		<div id="err_email" class="err" style="color:red;font-weight:bold;display:none;"><?php _e('A valid email address is required.', 'google-document-embedder'); ?></div>
 	</td>
 </tr>
 <tr valign="top">
-	<th scope="row"><label for="sc" id="sc_label"><?php _e('Shortcode', 'gde'); ?></label></th>
+	<th scope="row"><label for="sc" id="sc_label"><?php _e('Shortcode', 'google-document-embedder'); ?></label></th>
 	<td>
 		<input size="50" name="shortcode" id="sc" value="" type="text" placeholder="[gview file=&quot;...&quot;]"><br/>
-		<em><?php _e("If you're having a problem getting a specific document to work, paste the shortcode you're trying to use here.", 'gde'); ?></em>
+		<em><?php _e("If you're having a problem getting a specific document to work, paste the shortcode you're trying to use here.", 'google-document-embedder'); ?></em>
 	</td>
 </tr>
 <tr valign="top">
-	<th scope="row"><label for="url" id="url_label"><?php _e('URL', 'gde'); ?></label></th>
+	<th scope="row"><label for="url" id="url_label"><?php _e('URL', 'google-document-embedder'); ?></label></th>
 	<td>
 		<input size="50" name="url" id="url" value="" type="text" placeholder="http://..."><br/>
-		<em><?php _e("Paste the full web address of a page where I should be able to see the problem occurring.", 'gde'); ?></em>
+		<em><?php _e("Paste the full web address of a page where I should be able to see the problem occurring.", 'google-document-embedder'); ?></em>
 	</td>
 </tr>
 <tr valign="top">
-	<th scope="row"><label for="msg" id="msg_label"><?php _e('Message', 'gde'); ?>*</label></th>
+	<th scope="row"><label for="msg" id="msg_label"><?php _e('Message', 'google-document-embedder'); ?>*</label></th>
 	<td>
 		<textarea name="message" id="msg" style="width:75%;min-height:50px;"></textarea>
 	</td>
 </tr>
 <tr valign="top">
-	<th scope="row"><?php _e('Message Options', 'gde'); ?></th>
+	<th scope="row"><?php _e('Message Options', 'google-document-embedder'); ?></th>
 	<td>
-		<input type="checkbox" name="senddb" id="senddb" checked="checked"> <label for="senddb" id="senddb_label"><?php _e('Send debug information', 'gde'); ?></label>
-		<span id="dbinfo-show">(<a href="javascript:void(0);" id="ta_toggleon"><?php _e('View', 'gde'); ?></a>)<br/></span>
-		<span id="dbinfo-hide" style="display: none;">(<a href="javascript:void(0);" id="ta_toggleoff"><?php _e('Hide', 'gde'); ?></a>)<br/></span>
-		<input type="checkbox" name="cc" id="cc"> <label for="cc" id="cc_label"><?php _e('Send me a copy', 'gde'); ?></label>
+		<input type="checkbox" name="senddb" id="senddb" checked="checked"> <label for="senddb" id="senddb_label"><?php _e('Send debug information', 'google-document-embedder'); ?></label>
+		<span id="dbinfo-show">(<a href="javascript:void(0);" id="ta_toggleon"><?php _e('View', 'google-document-embedder'); ?></a>)<br/></span>
+		<span id="dbinfo-hide" style="display: none;">(<a href="javascript:void(0);" id="ta_toggleoff"><?php _e('Hide', 'google-document-embedder'); ?></a>)<br/></span>
+		<input type="checkbox" name="cc" id="cc"> <label for="cc" id="cc_label"><?php _e('Send me a copy', 'google-document-embedder'); ?></label>
 	</td>
 </tr>
 <tr>
 	<td colspan="2">
 	<div id="debugblock" style="display:none;">
-	<p><strong><?php _e('Debug Information', 'gde'); ?>:</strong><br/>
-	<?php _e('Note: Profile and settings export and diagnostic log (if present) will be attached.', 'gde'); ?></p>
+	<p><strong><?php _e('Debug Information', 'google-document-embedder'); ?>:</strong><br/>
+	<?php _e('Note: Profile and settings export and diagnostic log (if present) will be attached.', 'google-document-embedder'); ?></p>
 	<textarea name="debug" id="debugtxt" style="width:100%;min-height:200px;font-family:monospace;" readonly="readonly">
 <?php
 
@@ -159,14 +159,14 @@
 	</div>
 
 	<div id="debugwarn" style="display:none;color:red;font-weight:bold;">
-		<p><?php _e("I'm less likely to be able to help you if you do not include debug information.", 'gde'); ?></p>
+		<p><?php _e("I'm less likely to be able to help you if you do not include debug information.", 'google-document-embedder'); ?></p>
 	</div>
-	<input id="debugsend" class="button-primary" type="submit" value="<?php _e('Send Request', 'gde'); ?>" name="submit">
+	<input id="debugsend" class="button-primary" type="submit" value="<?php _e('Send Request', 'google-document-embedder'); ?>" name="submit">
 	<span id="formstatus" style="padding-left:20px;display:none;">
 		<img src="<?php echo GDE_PLUGIN_URL;?>img/in-proc.gif" alt="">
 	</span>
-	<span id="doneconfirm" style="display: none;"> <?php _e('Request Sent', 'gde'); ?></span>
-	<span id="failconfirm" style="display: none;"> <?php _e('Delivery failed. You can manually send this information to wpp@tnw.org for help.', 'gde'); ?></span>
+	<span id="doneconfirm" style="display: none;"> <?php _e('Request Sent', 'google-document-embedder'); ?></span>
+	<span id="failconfirm" style="display: none;"> <?php _e('Delivery failed. You can manually send this information to wpp@tnw.org for help.', 'google-document-embedder'); ?></span>
 	</td>
 </tr>
 </table>

@@ -3,8 +3,7 @@ Contributors: Nsp Code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order
 Requires at least: 2.8
-Tested up to: 3.9
-Stable tag: 1.3.6
+Tested up to: 4.3
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
 
@@ -49,8 +48,32 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 
 == Change Log ==
 
+= 1.4.6.1 =
+  - Translation textdomain fix - thanks to Pedro Mendonça
+  - Portuguese localization update - Pedro Mendonça
+
+= 1.4.4 =
+  - User role switch from deprecated user_level to capabilities 
+  - Taxonomy sort for media
+  - Admin Options update
+
+= 1.4.2 =
+  - Iranian Language (eydaaad@gmail.com) 
+  - Admin css updates.
+
+= 1.4.1 = 
+  - Polish Language(Pozdrawiam - www.difreo.pl/   ;   Mateusz - www.czar-net.com   )  
+
+= 1.4.0 = 
+ - Hungarian Language(Adam Laki - http://codeguide.hu/)
+ - Ukrainian translation (Michael Yunat - http://getvoip.com)
+ - Czech translation
+
+= 1.3.7 = 
+ - Brazilian Portuguese Language (Rafael Forcadell - www.rafaelforcadell.com.br)
+
 = 1.3.6 =
- - Traditional Chineze Language (Thanks to Danny http://sofree.cc)
+ - Traditional Chineze Language (Danny - http://sofree.cc)
  - Minor admin styling
    
 = 1.3.4 =
@@ -68,7 +91,7 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 
 = 1.2.7 = 
  - Localisation Implement, Dutch and Romanian.
- Many thanks to Anja Fokker  http://www.werkgroepen.net/
+ - Many thanks to Anja Fokker  http://www.werkgroepen.net/
 
  
 == Upgrade Notice ==
@@ -78,5 +101,5 @@ Make sure you get the latest version
 
 == Localization ==
 
-Available in English, Dutch, French, Deutch, Slovak, Japanese, Traditional Chineze and Romanian
+Available in English, Dutch, French, Deutch, Slovak, Japanese, Traditional Chineze, Brazilian Portuguese, Hungarian, Ukrainian, Czech and Romanian
 Whant to contribute with a translation to your language? Please use the attached to.pot file 

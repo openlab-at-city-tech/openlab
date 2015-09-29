@@ -2,9 +2,11 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 939272 2014-06-26 19:44:38Z qurl $
+ * @version $Id: dynwid_admin_edit.php 1218814 2015-08-12 06:37:21Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	// Plugins support
 	DW_BP::detect();
@@ -379,16 +381,16 @@ div.settingbox {
 		$DW_Browser = new DW_Browser();
 		$DW_Browser->admin();
 	}
-	
+
 	if ( array_key_exists('ip', $DW->dwoptions) ) {
 		$DW_IP = new DW_IP();
 		$DW_IP->admin();
-	}	
+	}
 
 	if ( array_key_exists('device', $DW->dwoptions) ) {
 		$DW_Device = new DW_Device();
 		$DW_Device->admin();
-	}	
+	}
 
 	if ( array_key_exists('tpl', $DW->dwoptions) ) {
 		$DW_Tpl = new DW_Tpl();
@@ -397,6 +399,11 @@ div.settingbox {
 
 	if ( array_key_exists('url', $DW->dwoptions) ) {
 		$DW_URL = new DW_URL();
+		$DW_URL->admin();
+	}
+
+	if ( array_key_exists('shortcode', $DW->dwoptions) ) {
+		$DW_URL = new DW_Shortcode();
 		$DW_URL->admin();
 	}
 

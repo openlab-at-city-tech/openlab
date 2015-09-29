@@ -1,80 +1,136 @@
 <?php
-/*
-Plugin Name: Gravity Forms Change Entry Creator Add-on
-Plugin URI: http://katz.co/gravity-forms-addons/
-Description: This simple addon allows users with Entry-editing capabilities to change who a <a href="http://katz.si/gravityforms" rel="nofollow">Gravity Forms</a> lead is assigned to.
-Author: Katz Web Services, Inc.
-Version: 3.6.1.2
-Author URI: http://www.katzwebservices.com
 
-Copyright 2014 Katz Web Services, Inc. (email: info@katzwebservices.com)
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+if( class_exists( 'KWS_GF_Change_Lead_Creator' ) ) {
+    return;
+}
 
 
-add_action("gform_entry_info", 'kws_gf_change_entry_creator_form', 10, 2);
+/**
+ * @since 3.6.2
+ */
+class KWS_GF_Change_Lead_Creator {
 
-// If this is already custom-added from katz.co
-if(!function_exists('kws_gf_change_entry_creator_form')) {
-function kws_gf_change_entry_creator_form($form_id, $lead) {
-    if(GFCommon::current_user_can_any("gravityforms_edit_entries")) {
+    function __construct() {
 
-        //@since 3.5.3 - filter possible creators
-        $users = apply_filters( 'kws_gf_entry_creator_users', '', $form_id );
-
-        if( empty( $users ) ) {
-        	$count = count_users();
-        	if( !empty( $count['total_users'] ) && $count['total_users'] > (int)apply_filters( 'kws_gf_entry_creator_max_users', 300 ) )
-	        	$users = get_users( 'role=administrator' );
-	        else
-	        	$users = get_users();
-		}
-
-        $output = '<label for="change_created_by">';
-        $output .= __('Change Entry Creator:', 'gravity-forms-addons');
-        $output .= '</label>
-        <select name="created_by" id="change_created_by" class="widefat">';
-        foreach($users as $user) {
-            $output .= '<option value="'. $user->ID .'"'. selected( $lead['created_by'], $user->ID, false ).'>'.$user->display_name.' ('.$user->user_nicename.')</option>';
-        }
-        $output .= '</select>';
-        $output .= '<input name="originally_created_by" value="'.$lead['created_by'].'" type="hidden" />';
-        echo $output;
+        add_action('plugins_loaded', array($this, 'load'));
     }
-}
-}
 
-add_action("gform_after_update_entry", 'kws_gf_update_entry_creator', 10, 2);
-if(!function_exists('kws_gf_update_entry_creator')) {
-function kws_gf_update_entry_creator($form, $leadid) {
-        global $current_user;
+    /**
+     * @since  3.6.3
+     * @return void
+     */
+    function load() {
 
-    if(GFCommon::current_user_can_any("gravityforms_edit_entries")) {
+        // Does GF exist? Can the user edit entries?
+        if( !class_exists('GFCommon') ) {
+            return;
+        }
+
+        if( !GFCommon::current_user_can_any("gravityforms_edit_entries") ) {
+            return;
+        }
+
+        // If screen mode isn't set, then we're in the wrong place.
+        if( empty( $_REQUEST['screen_mode'] ) ) {
+            return;
+        }
+
+        // Now, no validation is required in the methods; let's hook in.
+        add_action('admin_init', array( &$this, 'set_screen_mode' ) );
+
+        add_action("gform_entry_info", array( &$this, 'add_select' ), 10, 2);
+
+        add_action("gform_after_update_entry", array( &$this, 'update_entry_creator' ), 10, 2);
+
+    }
+
+    /**
+     * Allows for edit links to work with a link instead of a form (GET instead of POST)
+     * @return [type] [description]
+     */
+    function set_screen_mode() {
+
+        if( !empty( $_REQUEST["screen_mode"] ) ) {
+            $_POST["screen_mode"] = esc_attr( $_REQUEST["screen_mode"] );
+        }
+
+    }
+
+    /**
+     * When the entry creator is changed, add a note to the entry
+     * @param  array $form   GF entry array
+     * @param  int $leadid Lead ID
+     * @return void
+     */
+    function update_entry_creator($form, $leadid) {
+            global $current_user;
+
         // Update the entry
-        $created_by = rgpost('created_by');
+        $created_by = intval( rgpost('created_by') );
+
         RGFormsModel::update_lead_property($leadid, 'created_by', $created_by);
 
         // If the creator has changed, let's add a note about who it used to be.
         $originally_created_by = rgpost('originally_created_by');
+
         if($originally_created_by !== $created_by) {
-            $originally_created_by_user_data = get_userdata($originally_created_by);
-            $created_by_user_data =  get_userdata($created_by);
+
             $user_data = get_userdata($current_user->ID);
-            RGFormsModel::add_note($leadid, $current_user->ID, $user_data->display_name, sprintf(__('Changed lead creator from %s to %s', 'gravity-forms-addons'), $originally_created_by_user_data->display_name.' (ID #'.$originally_created_by_user_data->ID.')', $created_by_user_data->display_name.' (ID #'.$created_by_user_data->ID.')'));
+
+            $user_format = __('%s (ID #%d)', 'gravity-view');
+
+            $original_name = $created_by_name = esc_attr__( 'No User', 'gravity-view');
+
+            if( !empty( $originally_created_by ) ) {
+                $originally_created_by_user_data = get_userdata($originally_created_by);
+                $original_name = sprintf( $user_format, $originally_created_by_user_data->display_name, $originally_created_by_user_data->ID );
+            }
+
+            if( !empty( $created_by ) ) {
+                $created_by_user_data =  get_userdata($created_by);
+                $created_by_name = sprintf( $user_format, $created_by_user_data->display_name, $created_by_user_data->ID );
+            }
+
+            RGFormsModel::add_note($leadid, $current_user->ID, $user_data->display_name, sprintf(__('Changed lead creator from %s to %s', 'gravity-forms-addons'), $original_name, $created_by_name ) );
         }
+
     }
+
+    /**
+     * Output the select to change the entry creator
+     * @param int $form_id GF Form ID
+     * @param array $lead    GF lead array
+     * @return void
+     */
+    function add_select($form_id, $lead) {
+
+        if( rgpost('screen_mode') !== 'edit' ) {
+            return;
+        }
+
+        /**
+         * There are issues with too many users where it breaks the select. We try to keep it at a reasonable number.
+         * @link   texthttp://codex.wordpress.org/Function_Reference/get_users
+         * @var  array Settings array
+         */
+        $get_users_settings = apply_filters( 'gravityview_change_entry_creator_user_parameters', array( 'number' => 300 ) );
+
+        $users = get_users( $get_users_settings );
+
+        $output = '<label for="change_created_by">';
+        $output .= esc_html__('Change Entry Creator:', 'gravity-forms-addons');
+        $output .= '</label>
+        <select name="created_by" id="change_created_by" class="widefat">';
+        $output .= '<option value=""> &mdash; '.esc_attr__( 'No User', 'gravity-view').' &mdash; </option>';
+        foreach($users as $user) {
+            $output .= '<option value="'. $user->ID .'"'. selected( $lead['created_by'], $user->ID, false ).'>'.esc_attr( $user->display_name.' ('.$user->user_nicename.')' ).'</option>';
+        }
+        $output .= '</select>';
+        $output .= '<input name="originally_created_by" value="'.$lead['created_by'].'" type="hidden" />';
+        echo $output;
+
+    }
+
 }
-}
+
+new KWS_GF_Change_Lead_Creator;

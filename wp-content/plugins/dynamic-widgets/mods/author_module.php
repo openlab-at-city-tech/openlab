@@ -2,9 +2,11 @@
 /**
  * Author Module
  *
- * @version $Id: author_module.php 938420 2014-06-25 11:18:19Z qurl $
+ * @version $Id: author_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Author extends DWModule {
 		protected static $except = 'Except the author(s)';

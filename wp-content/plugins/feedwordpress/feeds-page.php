@@ -901,7 +901,7 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 					$feed_version = '';
 				endif;
 				?>
-					<form<?php print $form_class; ?> action="<?php $this->form_action('syndication.php'); ?>" method="post">
+					<form<?php print $form_class; ?> action="<?php print $this->form_action('syndication.php'); ?>" method="post">
 					<div class="inside"><?php FeedWordPressCompatibility::stamp_nonce('feedwordpress_switchfeed'); ?>
 
 					<?php
@@ -1034,7 +1034,7 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 						
 						print "<h4>".__("HTTP Transport").":</h4>\n";
 						print "<ol>\n";
-						print "<li>".FeedWordPress::val($transport)."</li>\n";
+						print "<li>".MyPHP::val($transport)."</li>\n";
 						print "</ol>\n";
 					endif;
 					
@@ -1069,9 +1069,9 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 		$alt = $params['alt'];
 		
 		?>
-		<form action="<?php $this->form_action(); ?>" method="post">
+		<form action="<?php print $this->form_action('syndication.php'); ?>" method="post">
 		<div class="inside"><?php
-			FeedWordPressCompatibility::stamp_nonce($this->dispatch);
+			FeedWordPressCompatibility::stamp_nonce('feedwordpress_feeds');
 		?>
 		<fieldset class="alt"
 		<?php if (!$alt): ?>style="margin: 1.0em 3.0em; font-size: smaller;"<?php endif; ?>>

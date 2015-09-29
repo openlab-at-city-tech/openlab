@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	abstract class DWModule {
 		protected static $classname;
 		protected static $info = FALSE;
@@ -71,7 +73,7 @@
 		 */
 		protected static function getClassName() {
 			// $classname = get_called_class();
-			$classname = get_class($this);
+			$classname = get_class();
 			return $classname;
 		}
 
@@ -204,7 +206,9 @@
 		 * @param string $name Name of module
 		 */
 		public static function mkGUI($type, $title, $question, $info, $except = FALSE, $list = FALSE, $name = NULL) {
-			$DW = &$GLOBALS['DW'];
+			/** @var $DW DynWid */
+			global $DW;
+
 			$widget_id = $GLOBALS['widget_id'];
 
 			if (! is_null($name) ) {
@@ -227,7 +231,8 @@
 		 * @param array $dwoption Name and title of module
 		 */
 		public static function registerOption($dwoption) {
-			$DW = &$GLOBALS['DW'];
+			/** @var $DW DynWid */
+			global $DW;
 
 			// For some reason when a widget is just added to the sidebar $dwoption is not an array
 			if ( is_array($dwoption) ) {
@@ -243,7 +248,8 @@
 		 * @param array $plugin Name and default value statuc of plugin
 		 */
 		public static function registerPlugin($plugin) {
-			$DW = &$GLOBALS['DW'];
+			/** @var $DW DynWid */
+			global $DW;
 
 			foreach ( $plugin as $key => $value ) {
 				if (! isset($DW->$key) ) {
@@ -259,7 +265,9 @@
 		 * @param string $type Type of module
 		 */
 		public static function save($name, $type = 'simple') {
-			$DW = &$GLOBALS['DW'];
+			/** @var $DW DynWid */
+			global $DW;
+
 			$widget_id = $GLOBALS['widget_id'];
 
 			switch ( $type ) {
@@ -282,7 +290,9 @@
 		}
 
 		public static function childSave($name) {
-			$DW = &$GLOBALS['DW'];
+			/** @var $DW DynWid */
+			global $DW;
+
 			$widget_id = $GLOBALS['widget_id'];
 
 			$act = $name . '_act';
@@ -292,27 +302,27 @@
 			// Workaround for lazy taxonomy tree
 			if ( isset($_POST[$act]) && isset($_POST[$child_act]) ) {
 				if (! is_array($_POST[$act]) ) {
-	
+
 					if ( substr($_POST[$act], 0, 1) == ',' ) {
 						$_POST[$act] = substr($_POST[$act], 1);
 					}
 					$t = explode(',', $_POST[$act]);
 					$t = array_unique($t);
-	
+
 					if ( substr($_POST[$child_act], 0, 1) == ',' ) {
 						$_POST[$child_act] = substr($_POST[$child_act], 1);
 					}
 					$t_childs = explode(',', $_POST[$child_act]);
 					$t_childs = array_unique($t_childs);
-	
+
 				} else {
 					$t = $_POST[$act];
 					$t_childs = $_POST[$child_act];
 				}
-	
+
 				if ( count($t) > 0 && count($t_childs) > 0 ) {
 					$DW->addChilds($widget_id, $dwtype, $_POST[$name], $t, $t_childs);
-				}				
+				}
 			}
 
 		}

@@ -2,9 +2,11 @@
 /**
  * dynwid_worker.php - The worker does the actual work.
  *
- * @version $Id: dynwid_worker.php 939272 2014-06-26 19:44:38Z qurl $
+ * @version $Id: dynwid_worker.php 1218814 2015-08-12 06:37:21Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	$DW->message('Worker START');
 	$DW->message('WhereAmI = ' . $DW->whereami);
@@ -12,7 +14,7 @@
 	// Registering Custom Post Type & Custom Taxonomy to $DW (object overload)
 	include(DW_MODULES . 'custompost_module.php');
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
-	
+
 	// Device
 	$DW->device = ( wp_is_mobile() ) ? 'mobile' : 'desktop';
 	$DW->message('Device = ' . $DW->device);
@@ -57,7 +59,7 @@
         		$$m = TRUE;
         	}
 
-					// First run > The defaults
+			 // First run > The defaults
           foreach ( $opt as $condition ) {
             if ( empty($condition->name) && $condition->value == '0' && $condition->maintype == $DW->whereami ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
@@ -102,43 +104,43 @@
           	}
 
             // Date exceptions
-						if (! $date ) {
-							$dates = array();
-							foreach ( $opt as $condition ) {
-								if ( $condition->maintype == 'date' ) {
-									switch ( $condition->name ) {
-										case 'date_start':
-											$date_start = $condition->value;
-											break;
+			if (! $date ) {
+				$dates = array();
+				foreach ( $opt as $condition ) {
+					if ( $condition->maintype == 'date' ) {
+						switch ( $condition->name ) {
+							case 'date_start':
+								$date_start = $condition->value;
+								break;
 
-										case 'date_end':
-											$date_end = $condition->value;
-											break;
-									}
-								}
-							}
-							$now = current_time('timestamp', 0);
-							if (! empty($date_end) ) {
-								@list($date_end_year, $date_end_month, $date_end_day) = explode('-', $date_end);
-								if ( mktime(23, 59, 59, $date_end_month, $date_end_day, $date_end_year) > $now ) {
-									$date = TRUE;
-									$DW->message('End date is in the future, sets Date to TRUE (rule EDT1)');
-									if (! empty($date_start) ) {
-										@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
-										if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > $now ) {
-											$date = FALSE;
-											$DW->message('From date is in the future, sets Date to FALSE (rule EDT2)');
-										}
-									}
-								}
-							} else if (! empty($date_start) ) {
-								@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
-								if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) < $now ) {
-									$date = TRUE;
-									$DW->message('From date is in the past, sets Date to TRUE (rule EDT3)');
-								}
+							case 'date_end':
+								$date_end = $condition->value;
+								break;
+						}
+					}
+				}
+				$now = current_time('timestamp', 0);
+				if (! empty($date_end) ) {
+					@list($date_end_year, $date_end_month, $date_end_day) = explode('-', $date_end);
+					if ( mktime(23, 59, 59, $date_end_month, $date_end_day, $date_end_year) > $now ) {
+						$date = TRUE;
+						$DW->message('End date is in the future, sets Date to TRUE (rule EDT1)');
+						if (! empty($date_start) ) {
+							@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+							if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > $now ) {
+								$date = FALSE;
+								$DW->message('From date is in the future, sets Date to FALSE (rule EDT2)');
 							}
 						}
+					}
+				} else if (! empty($date_start) ) {
+					@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+					if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) < $now ) {
+						$date = TRUE;
+						$DW->message('From date is in the past, sets Date to TRUE (rule EDT3)');
+					}
+				}
+			}
 
           	// WPML
           	if ( isset($wpml) && isset($curlang) ) {
@@ -174,8 +176,8 @@
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
-							} else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
-								(bool) $device_tmp = $condition->value;
+	            } else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
+					(bool) $device_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
           		} else if ( $condition->maintype == 'day' && $condition->name == date('N', current_time('timestamp', 0)) ) {
@@ -223,14 +225,33 @@
           		} else if ( $condition->maintype == 'ip' && $condition->name == 'ip' && ! is_null($DW->ip_address) ) {
           			$ips =  unserialize($condition->value);
           			$other_ip = ( $ip ) ? FALSE : TRUE;
-          			
+
           			foreach ( $ips as $range ) {
-						if ( $DW->IPinRange($DW->ip_address, $range) ) {
-							$ip_tmp = $other_ip;
-							break;
+							if ( $DW->IPinRange($DW->ip_address, $range) ) {
+								$ip_tmp = $other_ip;
+								break;
+							}
 						}
+	            } else if ( $condition->maintype == 'shortcode' && $condition->name == 'shortcode' ) {
+						$shortcode_match = unserialize($condition->value);
+						$other_shortcode = ( $shortcode ) ? FALSE : TRUE;
+
+						$return = do_shortcode( $shortcode_match['value'] );
+
+		            switch ( $shortcode_match['operator'] ) {
+			            case '!=':
+				            if ( $return != $shortcode_match['match'] ) {
+					            $shortcode_tmp = $other_shortcode;
+				            }
+				            break;
+
+			            default:
+				            if ( $return == $shortcode_match['match'] ) {
+					            $shortcode_tmp = $other_shortcode;
+				            }
+		            }
+
 					}
-          		}
           	}
 
           	if ( isset($browser_tmp) && $browser_tmp != $browser ) {
@@ -238,11 +259,12 @@
           		$browser = $browser_tmp;
           	}
           	unset($browser_tmp);
-			
-						if ( isset($device_tmp) && $device_tmp != $device ) {
-							$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
-							$device = $device_tmp;
-						}
+
+			if ( isset($device_tmp) && $device_tmp != $device ) {
+				$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
+				$device = $device_tmp;
+			}
+			unset($device_tmp);
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
           		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
@@ -272,8 +294,14 @@
           		$DW->message('Exception triggered for ip, sets display to ' . ( ($ip_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EIP1)');
           		$ip = $ip_tmp;
           	}
-          	unset($ip_tmp, $other_ip);			
-			
+          	unset($ip_tmp, $other_ip);
+
+			if ( isset($shortcode_tmp) && $shortcode_tmp != $shortcode ) {
+          		$DW->message('Exception triggered for shortcode, sets display to ' . ( ($shortcode_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ESTC1)');
+          		$shortcode = $shortcode_tmp;
+          	}
+          	unset($shortcode_tmp);
+
             // For debug messages
             $e = ( isset($other) && $other ) ? 'TRUE' : 'FALSE';
 
@@ -309,17 +337,17 @@
               				}
               			}
 
-             				if ( $condition->name != 'default' ) {
-             					switch ( $condition->maintype ) {
-             						case $m:
-             							$act_tax[$t][ ] = $condition->name;
-             							break;
+						if ( $condition->name != 'default' ) {
+							switch ( $condition->maintype ) {
+								case $m:
+									$act_tax[$t][ ] = $condition->name;
+									break;
 
-             						case $m . '-childs':
-             							$act_tax_childs[$t][ ] = $condition->name;
-             							break;
-             					} // END switch
-             				}
+								case $m . '-childs':
+									$act_tax_childs[$t][ ] = $condition->name;
+									break;
+							} // END switch
+						}
               		} // END $opt
               	} // END object_taxonomies
 
@@ -330,18 +358,18 @@
                   $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP1)');
                 } else if ( count($act_tax) > 0 ) {
                 	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term
-									foreach ( $term as $t ) {
-										if ( isset($act_tax[$t->taxonomy]) && is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
-											$display = $other;
-											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP3)');
-											break;
-										}
-										$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-										if ( isset($act_tax_childs[$t->taxonomy]) && is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
-											$display = $other;
-											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP4)');
-										}
-									}
+					foreach ( $term as $t ) {
+						if ( isset($act_tax[$t->taxonomy]) && is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP3)');
+							break;
+						}
+						$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+						if ( isset($act_tax_childs[$t->taxonomy]) && is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP4)');
+						}
+					}
                 }
                 unset($act_custom, $act_childs, $act_tax);
               } // END count($act)
@@ -385,121 +413,122 @@
               // no custom post type
               switch ( $DW->whereami ) {
                 case 'single':
-                	$post = $GLOBALS['post'];
-                  $act_author = array();
-                  $act_category = array();
-                	$act_category_childs = array();
-                  $act_post = array();
-                  $act_tag = array();
-                  $post_category = array();
-                  $post_tag = array();
+					$post = $GLOBALS['post'];
+					$act_author = array();
+					$act_category = array();
+					$act_category_childs = array();
+					$act_post = array();
+					$act_tag = array();
+					$post_category = array();
+					$post_tag = array();
 
-                  // Get the categories from the post
-                  $categories = get_the_category();
-                  foreach ( $categories as $category ) {
-                    $id =  $category->cat_ID;
-                    if ( $DW->wpml ) {
-                      $id = DW_WPML::getID($id, 'tax_category');
-                    }
-                    $post_category[ ] = $id;
-                  }
+					// Get the categories from the post
+					$categories = get_the_category();
+					foreach ( $categories as $category ) {
+						$id =  $category->cat_ID;
+						if ( $DW->wpml ) {
+							$id = DW_WPML::getID($id, 'tax_category');
+						}
+						$post_category[ ] = $id;
+					}
 
-                  // Get the tags form the post
-                  if ( has_tag() ) {
-                    $tags = get_the_tags();
-                    
-                    /* For some reason WP reports the post has tags, but then returns not an array with tags. 
-                    Maybe because it's not in the loop anymore? */
-                    if (! is_array($tags) ) {
-                    	$tags = array();
-                    }
-                    
-                    foreach ( $tags as $tag ) {
-                      $post_tag[ ] = $tag->term_id;
-                    }
-                  } else {
-                    $tags = array();
-                  }
+					// Get the tags form the post
+					if ( has_tag() ) {
+						$tags = get_the_tags();
 
-                  // Split out the conditions
-                  foreach ( $opt as $condition ) {
-                    if ( $condition->name != 'default' ) {
-                      switch ( $condition->maintype ) {
-                        case 'single-author':
-                          $act_author[ ] = $condition->name;
-                          break;
+						/* For some reason WP reports the post has tags, but then returns not an array with tags.
+						Maybe because it's not in the loop anymore? */
+						if (! is_array($tags) ) {
+							$tags = array();
+						}
 
-                        case 'single-category':
-                          $act_category[ ] = $condition->name;
-                          break;
+						foreach ( $tags as $tag ) {
+							$post_tag[ ] = $tag->term_id;
+						}
+					} else {
+						$tags = array();
+					}
 
-                        case 'single-category-childs':
-                        	$act_category_childs[ ] = $condition->name;
-                        	break;
+					// Split out the conditions
+					foreach ( $opt as $condition ) {
+						if ( $condition->name != 'default' ) {
+							switch ( $condition->maintype ) {
+								case 'single-author':
+								$act_author[ ] = $condition->name;
+								break;
 
-                        case 'single-tag':
-                          $act_tag[ ] = $condition->name;
-                          break;
+							case 'single-category':
+								$act_category[ ] = $condition->name;
+								break;
 
-                        case 'single-post':
-                          $act_post[ ] = $condition->name;
-                          break;
-                      } // END switch
-                    }
-                  }
+							case 'single-category-childs':
+								$act_category_childs[ ] = $condition->name;
+								break;
 
-                  /* Author AND Category */
-                  if ( count($act_author) > 0 && count($act_category) > 0 ) {
-                    // Use of array_intersect to be sure one value in both arrays returns true
-                  	if ( in_array($post->post_author, $act_author) ) {
-                  		if ( (bool) array_intersect($post_category, $act_category) ) {
-            	          $display = $other;
-              	        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
-                  		} else if ( count($act_category_childs) > 0 ) {
-												$parents = $DW->getPostCatParents($post_category);
-                  			if ( (bool) array_intersect($act_category_childs, $parents) ) {
-                  				$display = $other;
-                  				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES6)');
-                  			}
-                  		}
-                  	}
-                    /* Only Author */
-                  } else if ( count($act_author) > 0 && count($act_category == 0) ) {
-                    if ( in_array($post->post_author, $act_author) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');
-                    }
-                    /* Only Category */
-                  } else if ( count($act_author) == 0 && count($act_category) > 0 ) {
-                    if ( (bool) array_intersect($post_category, $act_category) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES3)');
-                    } else if ( count($act_category_childs) > 0 ) {
-                    	$parents = $DW->getPostCatParents($post_category);
-                    	if ( (bool) array_intersect($act_category_childs, $parents) ) {
-                    		$display = $other;
-                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES7)');
-                    	}
-                    }
-                    /* None or individual checked - individual is not included in the $opt */
-                  } else {
-                  	$DW->message('Looking for tags, individual posts or taxonomies');
-                    /* Tags */
-                    if ( count($act_tag) > 0 ) {
-                      if ( (bool) array_intersect($post_tag, $act_tag) ) {
-                        $display = $other;
-                        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES4)');
-                      }
-                    }
-                    /* Posts */
-                    if ( count($act_post) > 0 ) {
-                      if ( in_array($post->ID, $act_post) ) {
-                        $display = $other;
-                        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES5)');
-                      }
-                    }
+							case 'single-tag':
+								$act_tag[ ] = $condition->name;
+								break;
 
-                    // Taxonomies
+							case 'single-post':
+								$act_post[ ] = $condition->name;
+								break;
+							} // END switch
+						}
+					}
+
+					/* Author AND Category */
+					if ( count($act_author) > 0 && count($act_category) > 0 ) {
+						// Use of array_intersect to be sure one value in both arrays returns true
+						if ( in_array($post->post_author, $act_author) ) {
+							if ( (bool) array_intersect($post_category, $act_category) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
+							} else if ( count($act_category_childs) > 0 ) {
+								$parents = $DW->getPostCatParents($post_category);
+								if ( (bool) array_intersect($act_category_childs, $parents) ) {
+									$display = $other;
+									$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES6)');
+								}
+							}
+						}
+					/* Only Author */
+					} else if ( count($act_author) > 0 && count($act_category == 0) ) {
+						if ( in_array($post->post_author, $act_author) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');
+						}
+						/* Only Category */
+					} else if ( count($act_author) == 0 && count($act_category) > 0 ) {
+						if ( (bool) array_intersect($post_category, $act_category) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES3)');
+						} else if ( count($act_category_childs) > 0 ) {
+							$parents = $DW->getPostCatParents($post_category);
+							if ( (bool) array_intersect($act_category_childs, $parents) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES7)');
+							}
+						}
+					/* None or individual checked - individual is not included in the $opt */
+					} else {
+						$DW->message('Looking for tags, individual posts or taxonomies');
+						/* Tags */
+						if ( count($act_tag) > 0 ) {
+							if ( (bool) array_intersect($post_tag, $act_tag) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES4)');
+							}
+						}
+
+						/* Posts */
+						if ( count($act_post) > 0 ) {
+							if ( in_array($post->ID, $act_post) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES5)');
+							}
+						}
+
+						// Taxonomies
 		                $act_tax = array();
 		              	$act_tax_childs = array();
 		              	foreach ( get_object_taxonomies('post') as $t ) {
@@ -512,17 +541,17 @@
 		              				}
 		              			}
 
-		             				if ( $condition->name != 'default' ) {
-		             					switch ( $condition->maintype ) {
-		             						case $m:
-		             							$act_tax[$t][ ] = $condition->name;
-		             							break;
+								if ( $condition->name != 'default' ) {
+									switch ( $condition->maintype ) {
+										case $m:
+											$act_tax[$t][ ] = $condition->name;
+											break;
 
-		             						case $m . '-childs':
-		             							$act_tax_childs[$t][ ] = $condition->name;
-		             							break;
-		             					} // END switch
-		             				}
+										case $m . '-childs':
+											$act_tax_childs[$t][ ] = $condition->name;
+											break;
+									} // END switch
+								}
 		              		} // END $opt
 		              	} // END object_taxonomies
 
@@ -530,183 +559,184 @@
 
 		              	if ( count($act_tax) > 0 ) {
 		                	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term
-											foreach ( $term as $t ) {
-												if ( isset($act_tax[$t->taxonomy]) && is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
-													$display = $other;
-													$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESTX1)');
-													break;
-												}
-												$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-												if ( isset($act_tax_childs[$t->taxonomy]) && is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
-													$display = $other;
-													$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESTX2)');
-												}
-											}
+							foreach ( $term as $t ) {
+								if ( isset($act_tax[$t->taxonomy]) && is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
+									$display = $other;
+									$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESTX1)');
+									break;
+								}
+								$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+								if ( isset($act_tax_childs[$t->taxonomy]) && is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
+									$display = $other;
+									$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESTX2)');
+								}
+							}
 		                }
 		                unset($act_tax, $act_tax_childs);
-                  }
-                  break;
+					}
+					break;
 
                 case 'front-page':
                 	if ( count($act) > 0 ) {
                 		$pagenr = ( get_query_var('paged') == 0 ) ? 1 : get_query_var('paged');
-                  	if ( in_array($pagenr, $act) ) {
-                  		$display = $other;
-                    	$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EFP1)');
-                    }
-                  }
+						if ( in_array($pagenr, $act) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EFP1)');
+						}
+					}
                 	break;
 
                 case 'home':
-                  if ( count($act) > 0 ) {
-                    $home_id = get_option('page_for_posts');
-                  	$DW->message('ID = ' . $home_id);
-                    if ( $DW->wpml ) {
-                      $home_id = DW_WPML::getID($home_id);
-                      $DW->message('WPML ObjectID: ' . $home_id);
-                    }
+					if ( count($act) > 0 ) {
+						$home_id = get_option('page_for_posts');
+						$DW->message('ID = ' . $home_id);
+						if ( $DW->wpml ) {
+						  $home_id = DW_WPML::getID($home_id);
+						  $DW->message('WPML ObjectID: ' . $home_id);
+						}
 
-                    if ( in_array($home_id, $act) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EH1)');
-                    }
-                  }
-                  break;
+						if ( in_array($home_id, $act) ) {
+						  $display = $other;
+						  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EH1)');
+						}
+					}
+					break;
 
                 case 'page':
-                  if ( count($act) > 0 ) {
-                  	$act_page = array();
-                  	$act_childs = array();
+					if ( count($act) > 0 ) {
+						$act_page = array();
+						$act_childs = array();
 
-                    $post = $GLOBALS['post'];
-                    $id = $post->ID;
-                  	$DW->message('ID = ' . $id);
+						$post = $GLOBALS['post'];
+						$id = $post->ID;
+						$DW->message('ID = ' . $id);
 
-		                $page_act_tax = array();
-		              	$page_act_tax_childs = array();
+						$page_act_tax = array();
+						$page_act_tax_childs = array();
 
-                    if ( $DW->wpml ) {
-                      $id = DW_WPML::getID($id);
-                      $DW->message('WPML ObjectID: ' . $id);
-                    }
+						if ( $DW->wpml ) {
+							$id = DW_WPML::getID($id);
+							$DW->message('WPML ObjectID: ' . $id);
+						}
 
-                  	foreach ( $opt as $condition ) {
-                  		if ( $condition->name != 'default' ) {
-                  			switch ( $condition->maintype ) {
-                  				case 'page':
-                  					$act_page[ ] = $condition->name;
-                  					break;
+						foreach ( $opt as $condition ) {
+							if ( $condition->name != 'default' ) {
+								switch ( $condition->maintype ) {
+									case 'page':
+										$act_page[ ] = $condition->name;
+										break;
 
-                  				case 'page-childs':
-                  					$act_childs[ ] = $condition->name;
-                  					break;
-                  			}
-                  		}
-                  	}
+									case 'page-childs':
+										$act_childs[ ] = $condition->name;
+										break;
+								}
+							}
+						}
 
-                    if ( in_array($id, $act_page) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
-                    } else if ( count($act_childs) > 0 ) {
-                    	$parents = $DW->getParents('page', array(), $id);
-                    	if ( (bool) array_intersect($act_childs, $parents) ) {
-                    		$display = $other;
-                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP2)');
-                    	}
-                    } else {
-                    	$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
-		              		if (! is_wp_error($term) && count($term) > 0 ) {
-												foreach ( get_object_taxonomies($DW->whereami) as $t ) {
-		              				$m = $DW->whereami . '-tax_' . $t;
-		              				foreach ( $opt as $condition ) {
-		              					if ( $condition->maintype == $m ) {
-		              						if (! key_exists($t, $page_act_tax) ) {
-		              							$page_act_tax[$t] = array();
-		              							$page_act_tax_childs[$t] = array();
-		              						}
-		              					}
+						if ( in_array($id, $act_page) ) {
+							$display = $other;
+							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
+						} else if ( count($act_childs) > 0 ) {
+							$parents = $DW->getParents('page', array(), $id);
 
-		              					if ( $condition->name != 'default' ) {
-		              						switch ( $condition->maintype ) {
-		              							case $m:
-		              								$page_act_tax[$t][ ] = $condition->name;
-		              								break;
-		              							case $m . '-childs':
-		              								$page_act_tax_childs[$t][ ] = $condition->name;
-		              								break;
-		              						} // END switch
-		              					}
-
-		              				} // END $opt
-		              			}
-
-		              		} // END count($term)
-		              	}
-
-										if ( isset($term) && ! is_wp_error($term) && ! empty($term) ) {
-	                  	foreach ( $term as $t ) {
-	                  		if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
-	                  			$display = $other;
-	                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP3)');
-	                  			break;
-	                  		}
-	                  		$page_parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-	                  		if ( isset($page_act_tax_childs[$t->taxonomy]) && is_array($page_act_tax_childs[$t->taxonomy]) && (bool) array_intersect($page_act_tax_childs[$t->taxonomy], $page_parents) ) {
-	                  			$display = $other;
-	                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP4)');
-	                  		}
-	                  	}
+							if ( (bool) array_intersect($act_childs, $parents) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP2)');
+							}
+						} else {
+							$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
+							if (! is_wp_error($term) && count($term) > 0 ) {
+								foreach ( get_object_taxonomies($DW->whereami) as $t ) {
+									$m = $DW->whereami . '-tax_' . $t;
+									foreach ( $opt as $condition ) {
+										if ( $condition->maintype == $m ) {
+											if (! key_exists($t, $page_act_tax) ) {
+												$page_act_tax[$t] = array();
+												$page_act_tax_childs[$t] = array();
+											}
 										}
 
-                  }
-                  break;
+										if ( $condition->name != 'default' ) {
+											switch ( $condition->maintype ) {
+												case $m:
+													$page_act_tax[$t][ ] = $condition->name;
+													break;
+												case $m . '-childs':
+													$page_act_tax_childs[$t][ ] = $condition->name;
+													break;
+											} // END switch
+										}
+
+									} // END $opt
+								}
+
+							} // END count($term)
+						}
+
+						if ( isset($term) && ! is_wp_error($term) && ! empty($term) ) {
+							foreach ( $term as $t ) {
+								if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
+									$display = $other;
+									$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP3)');
+									break;
+								}
+								$page_parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+								if ( isset($page_act_tax_childs[$t->taxonomy]) && is_array($page_act_tax_childs[$t->taxonomy]) && (bool) array_intersect($page_act_tax_childs[$t->taxonomy], $page_parents) ) {
+									$display = $other;
+									$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP4)');
+								}
+							}
+						}
+
+					}
+					break;
 
                 case 'author':
-                  if ( count($act) > 0 && is_author($act) ) {
-                    $display = $other;
-                    $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EA1)');
-                  }
-                  break;
+					if ( count($act) > 0 && is_author($act) ) {
+						$display = $other;
+						$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EA1)');
+					}
+					break;
 
                 case 'category':
-                  if ( count($act) > 0 ) {
-                  	$act_cat = array();
-                  	$act_childs = array();
+					if ( count($act) > 0 ) {
+						$act_cat = array();
+						$act_childs = array();
 
-                    $id = get_query_var('cat');
-                    $DW->message('CatID: ' . $id);
+						$id = get_query_var('cat');
+						$DW->message('CatID: ' . $id);
 
-					if ( DW_WPML::detect(FALSE) ) {					
-                      $id = DW_WPML::getID($id, 'tax_category');
-                      $DW->message('WPML ObjectID: ' . $id);
-                    }
+						if ( DW_WPML::detect(FALSE) ) {
+						  $id = DW_WPML::getID($id, 'tax_category');
+						  $DW->message('WPML ObjectID: ' . $id);
+						}
 
-                  	foreach ( $opt as $condition ) {
-                  		if ( $condition->name != 'default' ) {
-                  			switch ( $condition->maintype ) {
-                  				case 'category':
-                  					$act_cat[ ] = $condition->name;
-                  					break;
+						foreach ( $opt as $condition ) {
+							if ( $condition->name != 'default' ) {
+								switch ( $condition->maintype ) {
+									case 'category':
+										$act_cat[ ] = $condition->name;
+										break;
 
-                  				case 'category-childs':
-                  					$act_childs[ ] = $condition->name;
-                  					break;
-                  			}
-                  		}
-                  	}
+									case 'category-childs':
+										$act_childs[ ] = $condition->name;
+										break;
+								}
+							}
+						}
 
-                    if ( in_array($id, $act_cat) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC1)');
-                    } else if ( count($act_childs) > 0 ) {
-                    	$parents = $DW->getTaxParents('category', array(), $id);
-                    	if ( (bool) array_intersect($act_childs, $parents) ) {
-                    		$display = $other;
-                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC2)');
-                    	}
-                    }
-                  }
-                  break;
+						if ( in_array($id, $act_cat) ) {
+						  $display = $other;
+						  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC1)');
+						} else if ( count($act_childs) > 0 ) {
+							$parents = $DW->getTaxParents('category', array(), $id);
+							if ( (bool) array_intersect($act_childs, $parents) ) {
+								$display = $other;
+								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC2)');
+							}
+						}
+					}
+					break;
 
               	case 'tag':
               		if ( count($act) > 0 ) {
@@ -803,31 +833,31 @@
               			}
               		}
               		break;
-              } // END switch ( $DW->whereami )
-            } // END if/else ( $DW->custom_post_type )
-          } /* END if ( count($opt) > 0 ) */
+            } // END switch ( $DW->whereami )
+        } // END if/else ( $DW->custom_post_type )
+    } /* END if ( count($opt) > 0 ) */
 
-					if ( $display ) {
-						foreach ( $DW->overrule_maintype as $mt ) {
-							if (! $$mt ) {
-        				$display = FALSE;
-								break;
-							}
-						}
-					}
+	if ( $display ) {
+		foreach ( $DW->overrule_maintype as $mt ) {
+			if (! $$mt ) {
+		$display = FALSE;
+				break;
+			}
+		}
+	}
 
-          if (! $display ) {
-            $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
-          	if ( DW_OLD_METHOD ) {
-          		unset($DW->registered_widgets[$widget_id]);
-          	} else {
-          		unset($sidebars[$sidebar_id][$widget_key]);
-          		if (! isset($DW->removelist[$sidebar_id]) ) {
-          			$DW->removelist[$sidebar_id] = array();
-          		}
-          		$DW->removelist[$sidebar_id][ ] = $widget_key;
-          	}
-          }
+	if (! $display ) {
+		$DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
+		if ( DW_OLD_METHOD ) {
+			unset($DW->registered_widgets[$widget_id]);
+		} else {
+			unset($sidebars[$sidebar_id][$widget_key]);
+			if (! isset($DW->removelist[$sidebar_id]) ) {
+				$DW->removelist[$sidebar_id] = array();
+			}
+			$DW->removelist[$sidebar_id][ ] = $widget_key;
+		}
+	}
         } // END if ( in_array($widget_id, $DW->dynwid_list) )
 
       } // END foreach ( $widgets as $widget_id )

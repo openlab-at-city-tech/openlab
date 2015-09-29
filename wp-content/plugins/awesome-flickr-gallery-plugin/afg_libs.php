@@ -3,7 +3,7 @@
 define('BASE_URL', plugins_url() . '/' . basename(dirname(__FILE__)));
 define('SITE_URL', site_url());
 define('DEBUG', false);
-define('VERSION', '3.3.5');
+define('VERSION', '3.5.3');
 
 $afg_sort_order_map = array(
     'default' => 'Default',
@@ -18,6 +18,7 @@ $afg_sort_order_map = array(
 $afg_slideshow_map = array(
     'default' => 'Default',
     'colorbox' => 'Colorbox',
+    'swipebox' => 'Swipebox (Touch Enabled)',
     'disable' => 'No Slideshow',
     'flickr' => 'Link to Flickr Photo page',
     'none' => 'No Slideshow and No Link',
@@ -109,6 +110,33 @@ $afg_text_color_map = array(
     'White' => 'Black',
 );
 
+$afg_cache_refresh_interval_map = array(
+	'6h' => '6 Hours',
+	'12h' => '12 Hours',
+	'1d' => '1 Day',
+	'3d' => '3 Days',
+	'1w' => '1 Week',
+);
+
+function afg_get_cache_refresh_interval_secs ($interval)
+{
+	if ($interval == '6h') {
+		return 6 * 60 * 60;
+	}
+	else if ($interval == '12h') {
+		return 12 * 60 * 60;
+	}
+	else if ($interval == '1d') {
+		return 24 * 60 * 60;
+	}
+	else if ($interval == '3d') {
+		return 3 * 24 * 60 * 60;
+	}
+	else if ($interval == '1w') {
+		return 7 * 24 * 60 * 60;
+	}
+}
+
 function afg_get_sets_groups_galleries (&$photosets_map, &$groups_map, &$galleries_map, $user_id) {
     global $pf;
 
@@ -163,9 +191,8 @@ function create_afgFlickr_obj() {
     $pf->setToken(get_option('afg_flickr_token'));
 }
 
-function afg_error() {
-    global $pf;
-    return "<h3>Awesome Flickr Gallery Error - $pf->error_msg</h3>";
+function afg_error($error_msg) {
+    return "<h3>Awesome Flickr Gallery Error - $error_msg</h3>";
 }
 
 function date_taken_cmp_newest($a, $b) {
@@ -220,11 +247,11 @@ function afg_get_photo_url($farm, $server, $pid, $secret, $size) {
     if ($size == 'NULL') {
         $size = '';
     }
-    return "http://farm$farm.static.flickr.com/$server/{$pid}_$secret$size.jpg";
+    return "https://farm$farm.static.flickr.com/$server/{$pid}_$secret$size.jpg";
 }
 
 function afg_get_photo_page_url($pid, $uid) {
-    return "http://www.flickr.com/photos/$uid/$pid";
+    return "https://www.flickr.com/photos/$uid/$pid";
 }
 
 function afg_generate_version_line() {
@@ -318,12 +345,12 @@ function afg_generate_gallery_settings_table() {
 
         <tr id='afg_custom_size_block' style='display:none'>
         <td>Custom Width</td>
-        <td><input type='text' maxlength='3' name='afg_custom_size' id='afg_custom_size' onblur='verifyCustomSizeBlank()' value='100'><font color='red'>*</font> (in px)
+        <td><input type='text' maxlength='3' name='afg_custom_size' id='afg_custom_size' onblur='verifyCustomSizeBlank()' value='100'>* (in px)
         &nbsp;Square? <input type='checkbox' id='afg_custom_size_square' name='afg_custom_size_square' value='true'>
         </td>
         <td class='afg-help'>Fill in the exact width for the photos (min 50, max 500).  Height of the photos will be adjusted
         accordingly to maintain aspect ratio of the photo. Enable <b>Square</b> to crop
-        the photo to a square aspect ratio.</td>
+        the photo to a square aspect ratio.<br />Warning: Custom photo sizes may not work with your webhost, please use built-in sizes, it's more reliable and faster too.</td>
         </tr>
 
         <tr>

@@ -4,7 +4,7 @@
  * Plugin URI: http://dynamic-widgets.com/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.9
+ * Version: 1.5.11
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -15,8 +15,8 @@
  *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
- * @version $Id: dynamic-widgets.php 949624 2014-07-16 12:56:39Z qurl $
- * @copyright 2014 Jacco Drabbe
+ * @version $Id: dynamic-widgets.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @copyright 2015 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
  * Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
@@ -33,6 +33,8 @@
  * Thanks to Advancis (http://advancis.net/) for the help and financial contribution to find and fix a WPML category bug.
  * Thanks to Borisa Djuraskovic for the contribution of the Serbo-Croatian (sr_RS) languages files.
  * Thanks to Leon Juranic from DefenseCode to run it's scanner over the source code and finding a few vulnerabilities.
+ * Thanks to Nathan Wright of NW Consulting for the financial contribution to implement the shortcode filter feature.
+ * Thanks to Mike Epstein to find a vulnerability in the DW settings.
  *
  *
  * WPML Plugin support via API
@@ -62,37 +64,40 @@
  * Using vars				$pod_page_exists > mods/pods_module.php, dynwid_worker.php
 **/
 
-  // Constants
-  define('DW_CLASSES', dirname(__FILE__) . '/' . 'classes/');
-  define('DW_DEBUG', FALSE);
-  define('DW_DB_TABLE', 'dynamic_widgets');
-  define('DW_L10N_DOMAIN', 'dynamic-widgets');
-  define('DW_LIST_LIMIT', 20);
-  define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_OLD_METHOD', get_option('dynwid_old_method'));
-  define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
-  define('DW_MINIMUM_PHP', '5.2.7');
-  define('DW_MINIMUM_WP', '3.0');
-  define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
-  define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
-  define('DW_TIME_LIMIT', 86400);				// 1 day
-  define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.9');
+	defined('ABSPATH') or die("No script kiddies please!");
+
+	// Constants
+	define('DW_CLASSES', dirname(__FILE__) . '/' . 'classes/');
+	define('DW_DEBUG', FALSE);
+	define('DW_DB_TABLE', 'dynamic_widgets');
+	define('DW_L10N_DOMAIN', 'dynamic-widgets');
+	define('DW_LIST_LIMIT', 20);
+	define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
+	define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+	define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
+	define('DW_MINIMUM_PHP', '5.2.7');
+	define('DW_MINIMUM_WP', '3.0');
+	define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
+	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
+	define('DW_TIME_LIMIT', 86400);				// 1 day
+	define('DW_URL_AUTHOR', 'http://www.qurl.nl');
+	define('DW_VERSION', '1.5.11');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
 	// Classes - only PHP5
-  if ( version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=') ) {
-  	 require_once(dirname(__FILE__) . '/dynwid_class.php');
-  }
+	if ( version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=') ) {
+		require_once(dirname(__FILE__) . '/dynwid_class.php');
+	}
 
-  // Functions
+	// Functions
 	/**
 	 * dynwid_activate() Activate the plugin
 	 * @since 1.3.3
 	 */
 	function dynwid_activate() {
-		$wpdb = $GLOBALS['wpdb'];
+		global $wpdb;
+
 		$dbtable = $wpdb->prefix . DW_DB_TABLE;
 
 		$query = "CREATE TABLE IF NOT EXISTS " . $dbtable . " (
@@ -175,9 +180,9 @@
    */
 	function dynwid_add_admin_custom_box() {
 		$args = array(
-							'public'   => TRUE,
-							'_builtin' => FALSE
-						);
+			'public'   => TRUE,
+			'_builtin' => FALSE
+		);
 
 		$post_types = get_post_types($args, 'objects', 'and');
 		foreach ( array_keys($post_types) as $type ) {
@@ -198,337 +203,356 @@
   		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
   			$dw_help = dynwid_contextual_help_text('edit');
   		} else {
-				$dw_help = dynwid_contextual_help_text('overview');
+			$dw_help = dynwid_contextual_help_text('overview');
   		}
 
-			$args = array(	'id'	=> 'dw_help_tab',
-											'title'	=> 'Dynamic Widgets',
-											'content'	=> $dw_help
-										);
+			$args = array(
+				'id'	=> 'dw_help_tab',
+				'title'	=> 'Dynamic Widgets',
+				'content'	=> $dw_help
+			);
 			$screen->add_help_tab($args);
 		}
 	}
 
-  /**
-   * dynwid_add_admin_menu() Add plugin link to admin menu
-   * @since 1.0
-   */
-  function dynwid_add_admin_menu() {
-  	global $dw_admin_screen;
+	/**
+	* dynwid_add_admin_menu() Add plugin link to admin menu
+	* @since 1.0
+	*/
+	function dynwid_add_admin_menu() {
+		/** @var $DW DynWid */
+		global $DW, $dw_admin_screen;
 
-    $DW = &$GLOBALS['DW'];
+		$dw_admin_screen = add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_admin_page');
 
-    $dw_admin_screen = add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_admin_page');
+		if ( $DW->enabled ) {
+			add_action('admin_print_styles-' . $dw_admin_screen, 'dynwid_add_admin_styles');
+			add_action('admin_print_scripts-' . $dw_admin_screen, 'dynwid_add_admin_scripts');
 
-  	if ( $DW->enabled ) {
-  		add_action('admin_print_styles-' . $dw_admin_screen, 'dynwid_add_admin_styles');
-  		add_action('admin_print_scripts-' . $dw_admin_screen, 'dynwid_add_admin_scripts');
-
-  		// Contextual help
-  		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
-  			$dw_help = dynwid_contextual_help_text('edit');
-  		} else {
+			// Contextual help
+			if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
+			   $dw_help = dynwid_contextual_help_text('edit');
+			} else {
 				$dw_help = dynwid_contextual_help_text('overview');
-  		}
+			}
 
-  		// Since WP 3.3 contextual help is handled different
-  		if ( version_compare($GLOBALS['wp_version'], '3.3', '>=') ) {
-  			add_action('load-' . $dw_admin_screen, 'dynwid_add_admin_help_tab');
-  		} else {
-  			add_contextual_help($dw_admin_screen, $dw_help);
-  		}
+			// Since WP 3.3 contextual help is handled different
+			if ( version_compare($GLOBALS['wp_version'], '3.3', '>=') ) {
+			   add_action('load-' . $dw_admin_screen, 'dynwid_add_admin_help_tab');
+			} else {
+			   add_contextual_help($dw_admin_screen, $dw_help);
+			}
 
-  		// Only show meta box in posts panel when there are widgets enabled.
-  		$opt = $DW->getOpt('%','individual');
-  		if ( count($opt) > 0 ) {
-  			add_meta_box('dynwid', __('Dynamic Widgets', DW_L10N_DOMAIN), 'dynwid_add_post_control', 'post', 'side', 'low');
-  		}
-  	}
-  }
-
-  /**
-   * dynwid_add_admin_scripts() Enqueue jQuery UI scripts to admin page
-   * @since 1.3
-   */
-  function dynwid_add_admin_scripts() {
-  	$DW = &$GLOBALS['DW'];
-
-  	/*
-  		BuddyPress doing an overall JS enqueue (BAD!)
-  		Workaround fixing a js error with ui.accordion freezing the screen
-  			- dtheme-ajax-js is used in BP default theme
-  			- bp-js is used in BP Compatibility Plugin
-  	*/
-  	if ( wp_script_is('dtheme-ajax-js') ) {
-  		wp_deregister_script('dtheme-ajax-js');
-  	}
-  	if ( wp_script_is('bp-js') ) {
-  		wp_deregister_script('bp-js');
-  	}
-
-    wp_enqueue_script('jquery');
-  	wp_enqueue_script('jquery-ui-core');
-  	if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
-  		wp_enqueue_script('jquery-ui-widget');
-  		// wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
-  		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.8.7.js', array('jquery-ui-widget'));
-  	} else {
-  		//  wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
-  		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.7.3.js', array('jquery-ui-core'));
-  	}
+			// Only show meta box in posts panel when there are widgets enabled.
+			$opt = $DW->getOpt('%','individual');
+			if ( count($opt) > 0 ) {
+			   add_meta_box('dynwid', __('Dynamic Widgets', DW_L10N_DOMAIN), 'dynwid_add_post_control', 'post', 'side', 'low');
+			}
+		}
 	}
 
-  /**
-   * dynwid_add_admin_styles() Enqueue CSS to admin page
-   * @since 1.3
-   */
-  function dynwid_add_admin_styles() {
-    $DW = &$GLOBALS['DW'];
+	/**
+	* dynwid_add_admin_scripts() Enqueue jQuery UI scripts to admin page
+	* @since 1.3
+	*/
+	function dynwid_add_admin_scripts() {
+		/** @var $DW DynWid */
+		global $DW;
 
-  	if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
-    	wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
-  	} else {
-  		wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.7.3.custom.css');
-  	}
-  }
+		/*
+		BuddyPress doing an overall JS enqueue (BAD!)
+		Workaround fixing a js error with ui.accordion freezing the screen
+		   - dtheme-ajax-js is used in BP default theme
+		   - bp-js is used in BP Compatibility Plugin
+		*/
+		if ( wp_script_is('dtheme-ajax-js') ) {
+			wp_deregister_script('dtheme-ajax-js');
+		}
 
-  /**
-   * dynwid_add_plugin_actions() Add settings link in WP plugin overview
-   * @param array $all
-   * @return array
-   * @since 1.0
-   */
-  function dynwid_add_plugin_actions($all) {
-    $links = array();
-	  $links[ ] = '<a href="themes.php?page=dynwid-config">' . __('Settings') . '</a>';
+		if ( wp_script_is('bp-js') ) {
+			wp_deregister_script('bp-js');
+		}
 
-    return array_merge($links, $all);
-  }
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jquery-ui-core');
 
-  /**
-   * dynwid_add_post_control() Add control widget to post screen
-   * @since 1.2
-   */
-  function dynwid_add_post_control() {
-    $post = $GLOBALS['post'];
-    $DW = &$GLOBALS['DW'];
+		if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
+			wp_enqueue_script('jquery-ui-widget');
+			// wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
+			wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.8.7.js', array('jquery-ui-widget'));
+		} else {
+			//  wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
+			wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.7.3.js', array('jquery-ui-core'));
+		}
+	}
 
-    $post_type = get_post_type($post->ID);
-    if ( $post_type == 'post') {
-    	$post_type = 'single';
-    	$maintype = 'single-post';
-    } else {
-    	$maintype = $post_type . '-post';
-  	}
+	/**
+	* dynwid_add_admin_styles() Enqueue CSS to admin page
+	* @since 1.3
+	*/
+	function dynwid_add_admin_styles() {
+		/** @var $DW DynWid */
+		global $DW;
 
-    $opt = $DW->getOpt('%','individual');
-    echo '<strong>' . __('Apply exception rule to widgets:', DW_L10N_DOMAIN) . '</strong><br /><br />';
-    foreach ( $opt as $widget ) {
-      $single_condition = '1';
-      $checked = '';
-      $opt_single = $DW->getOpt($widget->widget_id, $post_type);
+		if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
+		   wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
+		} else {
+		   wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.7.3.custom.css');
+		}
+	}
 
-      // loop through the opts to see if we have a match
-      foreach ( $opt_single as $widget_opt ) {
-        if ( $widget_opt->maintype == 'single' ) {
-          $single_condition = $widget_opt->value;
-        }
-        if ( $widget_opt->maintype == $maintype && $widget_opt->name == $post->ID ) {
-          $checked = ' checked="checked"';
-        }
-      }
+	/**
+	* dynwid_add_plugin_actions() Add settings link in WP plugin overview
+	* @param array $all
+	* @return array
+	* @since 1.0
+	*/
+	function dynwid_add_plugin_actions($all) {
+		$links = array();
+		$links[ ] = '<a href="themes.php?page=dynwid-config">' . __('Settings') . '</a>';
 
-      $default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
-      echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
-    }
-  }
+		return array_merge($links, $all);
+	}
 
-  /**
-   * dynwid_add_tag_page() Add row to WP tags admin
-   * @since 1.2
-   */
-  function dynwid_add_tag_page() {
-    $DW = &$GLOBALS['DW'];
+	/**
+	* dynwid_add_post_control() Add control widget to post screen
+	* @since 1.2
+	*/
+	function dynwid_add_post_control() {
+		/** @var $DW DynWid */
+		global $DW, $post;
 
-    // Only show dynwid row when there are widgets enabled
-    $opt = $DW->getOpt('%','individual');
-    if ( count($opt) > 0 ) {
+		$post_type = get_post_type($post->ID);
+		if ( $post_type == 'post') {
+			$post_type = 'single';
+			$maintype = 'single-post';
+		} else {
+			$maintype = $post_type . '-post';
+		}
 
-      echo '<tr class="form-field">';
-      echo '<th scope="row" valign="top"><label for="dynamic-widgets">' . __('Dynamic Widgets', DW_L10N_DOMAIN) . '</label></th>';
-      echo '<td>';
-      foreach ( $opt as $widget ) {
-        $single_condition = '1';
-        $checked = '';
-        $opt_single = $DW->getOpt($widget->widget_id, 'single');
+		$opt = $DW->getOpt('%','individual');
+		echo '<strong>' . __('Apply exception rule to widgets:', DW_L10N_DOMAIN) . '</strong><br /><br />';
 
-        // loop through the opts to see if we have a match
-        foreach ( $opt_single as $widget_opt ) {
-          if ( $widget_opt->maintype == 'single' ) {
-            $single_condition = $widget_opt->value;
-          }
-          if ( $widget_opt->maintype == 'single-tag' && $widget_opt->name == $_GET['tag_ID'] ) {
-            $checked = ' checked="checked"';
-          }
-        }
+		foreach ( $opt as $widget ) {
+			$single_condition = '1';
+			$checked = '';
+			$opt_single = $DW->getOpt($widget->widget_id, $post_type);
 
-        $default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
-        echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget->widget_id . '" name="dw-single-tag[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . ' (' . __('Default', DW_L10N_DOMAIN) . ': ' . $default . ')</label><br />';
+			// loop through the opts to see if we have a match
+			foreach ( $opt_single as $widget_opt ) {
+				if ( $widget_opt->maintype == 'single' ) {
+					$single_condition = $widget_opt->value;
+				}
 
-      } // END foreach opt
-      echo '</td>';
-      echo '</tr>';
-    }
-  }
+				if ( $widget_opt->maintype == $maintype && $widget_opt->name == $post->ID ) {
+					$checked = ' checked="checked"';
+				}
+			}
 
-  /**
-   * dynwid_add_widget_control() Preparation for callback hook into WP widgets admin
-   * @since 1.2
-   */
-  function dynwid_add_widget_control() {
-    $DW = &$GLOBALS['DW'];
+			$default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
+			echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
+		}
+	}
 
-    /*
-      Hooking into the callback of the widgets by moving the existing callback to wp_callback
-      and setting callback with own callback function.
-      We need the widget_id registered in params also for calling own callback.
-    */
-    foreach ( $DW->registered_widgets as $widget_id => $widget ) {
-      if ( array_key_exists($widget_id, $DW->registered_widget_controls) ) {
-        $DW->registered_widget_controls[$widget_id]['wp_callback'] = $DW->registered_widget_controls[$widget_id]['callback'];
-        $DW->registered_widget_controls[$widget_id]['callback'] = 'dynwid_widget_callback';
+	/**
+	* dynwid_add_tag_page() Add row to WP tags admin
+	* @since 1.2
+	*/
+	function dynwid_add_tag_page() {
+		/** @var $DW DynWid */
+		global $DW;
 
-        /*
-          In odd cases params and/or params[0] seems not to be an array. Bugfix for:
-          Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php
-        */
+		// Only show dynwid row when there are widgets enabled
+		$opt = $DW->getOpt('%','individual');
+		if ( count($opt) > 0 ) {
 
-        /* Fixing params */
-        if (! is_array($DW->registered_widget_controls[$widget_id]['params']) ) {
-          $DW->registered_widget_controls[$widget_id]['params'] = array();
-        }
+			echo '<tr class="form-field">';
+			echo '<th scope="row" valign="top"><label for="dynamic-widgets">' . __('Dynamic Widgets', DW_L10N_DOMAIN) . '</label></th>';
+			echo '<td>';
 
-        if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
-          $DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
-        // Fixing params[0]
-        } else if (! is_array($DW->registered_widget_controls[$widget_id]['params'][0]) ) {
-          $DW->registered_widget_controls[$widget_id]['params'][0] = array('widget_id' => $widget_id);
-        } else {
-          $DW->registered_widget_controls[$widget_id]['params'][0]['widget_id'] = $widget_id;
-        }
-      }
-    }
+			foreach ( $opt as $widget ) {
+				$single_condition = '1';
+				$checked = '';
+				$opt_single = $DW->getOpt($widget->widget_id, 'single');
 
-    // Notifying user when options are saved and returned to ./wp-admin/widgets.php
-    if ( isset($_GET['dynwid_save']) && $_GET['dynwid_save'] == 'yes' ) {
-      add_action('sidebar_admin_page', 'dynwid_add_widget_page');
-    }
-  }
+				// loop through the opts to see if we have a match
+				foreach ( $opt_single as $widget_opt ) {
+					if ( $widget_opt->maintype == 'single' ) {
+						$single_condition = $widget_opt->value;
+					}
 
-  /**
-   * dynwid_add_widget_page() Save success message for WP widgets admin
+					if ( $widget_opt->maintype == 'single-tag' && $widget_opt->name == $_GET['tag_ID'] ) {
+						$checked = ' checked="checked"';
+					}
+				}
+
+				$default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
+				echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget->widget_id . '" name="dw-single-tag[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . ' (' . __('Default', DW_L10N_DOMAIN) . ': ' . $default . ')</label><br />';
+
+			} // END foreach opt
+
+			echo '</td>';
+			echo '</tr>';
+		}
+	}
+
+	/**
+	* dynwid_add_widget_control() Preparation for callback hook into WP widgets admin
+	* @since 1.2
+	*/
+	function dynwid_add_widget_control() {
+		/** @var $DW DynWid */
+		global $DW;;
+
+		/*
+		Hooking into the callback of the widgets by moving the existing callback to wp_callback
+		and setting callback with own callback function.
+		We need the widget_id registered in params also for calling own callback.
+		*/
+		foreach ( $DW->registered_widgets as $widget_id => $widget ) {
+			if ( array_key_exists($widget_id, $DW->registered_widget_controls) ) {
+				$DW->registered_widget_controls[$widget_id]['wp_callback'] = $DW->registered_widget_controls[$widget_id]['callback'];
+				$DW->registered_widget_controls[$widget_id]['callback'] = 'dynwid_widget_callback';
+
+				/*
+				 In odd cases params and/or params[0] seems not to be an array. Bugfix for:
+				 Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php
+				*/
+
+				/* Fixing params */
+				if (! is_array($DW->registered_widget_controls[$widget_id]['params']) ) {
+					$DW->registered_widget_controls[$widget_id]['params'] = array();
+				}
+
+				if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
+					$DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
+					// Fixing params[0]
+				} else if (! is_array($DW->registered_widget_controls[$widget_id]['params'][0]) ) {
+					$DW->registered_widget_controls[$widget_id]['params'][0] = array('widget_id' => $widget_id);
+				} else {
+					$DW->registered_widget_controls[$widget_id]['params'][0]['widget_id'] = $widget_id;
+				}
+			}
+		}
+
+		// Notifying user when options are saved and returned to ./wp-admin/widgets.php
+		if ( isset($_GET['dynwid_save']) && $_GET['dynwid_save'] == 'yes' ) {
+			add_action('sidebar_admin_page', 'dynwid_add_widget_page');
+		}
+	}
+
+	/**
+	* dynwid_add_widget_page() Save success message for WP widgets admin
 	 * @since 1.2
-   */
-  function dynwid_add_widget_page() {
-    $DW = &$GLOBALS['DW'];
+	*/
+	function dynwid_add_widget_page() {
+		/** @var $DW DynWid */
+		global $DW;;
 
-    $name = strip_tags($DW->getName($_GET['widget_id']));
+		$name = strip_tags($DW->getName($_GET['widget_id']));
 		$lead = __('Dynamic Widgets Options saved', DW_L10N_DOMAIN);
-  	$msg = __('for', DW_L10N_DOMAIN) . ' ' .  $name;
+		$msg = __('for', DW_L10N_DOMAIN) . ' ' .  $name;
 
-  	DWMessageBox::create($lead, $msg);
-  }
+		DWMessageBox::create($lead, $msg);
+	}
 
-  /**
-   * dynwid_admin_dump() Dump function
-   * @since 1.0
-   */
-  function dynwid_admin_dump() {
-    $DW = &$GLOBALS['DW'];
+	/**
+	* dynwid_admin_dump() Dump function
+	* @since 1.0
+	*/
+	function dynwid_admin_dump() {
+		/** @var $DW DynWid */
+		global $DW;
 
-    header('Content-Description: File Transfer');
-    header('Content-Disposition: attachment; filename=dynwid_dump_' . date('Ymd') . '.txt' );
-    header('Content-Type: text/plain');
+		header('Content-Description: File Transfer');
+		header('Content-Disposition: attachment; filename=dynwid_dump_' . date('Ymd') . '.txt' );
+		header('Content-Type: text/plain');
 
-    $DW->dump();
-    die();
-  }
+		$DW->dump();
+		die();
+	}
 
-  /**
-   * dynwid_admin_page() Admin pages
-   * @since 1.0
-   */
-  function dynwid_admin_page() {
-    $DW = &$GLOBALS['DW'];
-    require_once(dirname(__FILE__) . '/dynwid_admin.php');
-  }
+	/**
+	* dynwid_admin_page() Admin pages
+	* @since 1.0
+	*/
+	function dynwid_admin_page() {
+		/** @var $DW DynWid */
+		global $DW;;
+
+		require_once( dirname(__FILE__) . '/dynwid_admin.php' );
+	}
 
 	/**
 	 * dynwid_admin_wpec_dump() Dump WPEC rules function for upgrade to 3.8
 	 * @since 1.4.0
 	 */
-  function dynwid_admin_wpec_dump() {
-  	$DW = &$GLOBALS['DW'];
-  	$wpdb = &$GLOBALS['wpdb'];
-  	$dump = array();
+	function dynwid_admin_wpec_dump() {
+		$DW = &$GLOBALS['DW'];
+		$wpdb = &$GLOBALS['wpdb'];
+		$dump = array();
 
 		$opt = $DW->getOpt('%', 'wpsc');
 
-  	$categories = array();
-  	$table = WPSC_TABLE_PRODUCT_CATEGORIES;
-  	$fields = array('id', 'name');
-  	$query = "SELECT " . implode(', ', $fields) . " FROM " . $table . " WHERE active = '1' ORDER BY name";
-  	$results = $wpdb->get_results($query);
-  	foreach ( $results as $myrow ) {
-  		$categories[$myrow->id] = $myrow->name;
-  	}
+		$categories = array();
+		$table = WPSC_TABLE_PRODUCT_CATEGORIES;
+		$fields = array('id', 'name');
+		$query = "SELECT " . implode(', ', $fields) . " FROM " . $table . " WHERE active = '1' ORDER BY name";
+		$results = $wpdb->get_results($query);
 
-  	foreach ( $opt as $widget ) {
-  		$id = $widget->widget_id;
-  		if (! array_key_exists($id, $dump) ) {
-  			$dump[$id] = array( 'name' => strip_tags($DW->getName($widget->widget_id)) );
-  		}
+		foreach ( $results as $myrow ) {
+		   $categories[$myrow->id] = $myrow->name;
+		}
 
-  		if ( $widget->name == 'default' ) {
-  			$dump[$id]['default'] = ( $widget->value == '0' ? 'No' : 'Yes' );
-  		} else {
-  			$v = $widget->name;
-  			$dump[$id][ ] = $categories[$v];
-  		}
-  	}
+		foreach ( $opt as $widget ) {
+		   $id = $widget->widget_id;
 
-  	header('Content-Description: File Transfer');
-  	header('Content-Disposition: attachment; filename=dynwid_wpec_dump_' . date('Ymd') . '.txt' );
-  	header('Content-Type: text/plain');
+		   if (! array_key_exists($id, $dump) ) {
+		      $dump[$id] = array( 'name' => strip_tags($DW->getName($widget->widget_id)) );
+		   }
 
-  	foreach ( $dump as $widget ) {
-  		echo 'Widget: ' . $widget['name'] . "\r\n";
-  		echo 'Default set to ' . $widget['default'] . "\r\n";
-  		if ( count($widget) > 2 ) {
-  			echo 'Categories ticked: ' . "\r\n";
-  			foreach ( $widget as $k => $v ) {
-  				if ( is_int($k) ) {
-  					echo "\t" . $v . "\r\n";
-  				}
-	  		}
-  		}
-  		echo "\r\n";
-  	}
+		   if ( $widget->name == 'default' ) {
+		      $dump[$id]['default'] = ( $widget->value == '0' ? 'No' : 'Yes' );
+		   } else {
+		      $v = $widget->name;
+		      $dump[$id][ ] = $categories[$v];
+		   }
+		}
 
-  	die();
-  }
+		header('Content-Description: File Transfer');
+		header('Content-Disposition: attachment; filename=dynwid_wpec_dump_' . date('Ymd') . '.txt' );
+		header('Content-Type: text/plain');
 
-  /**
-   * dynwid_contextual_help_text() Actual text to place into the contextual help screen
-   * @param string $screen
-   * @return string
-   * @since 1.5.0
-   *
-   */
-  function dynwid_contextual_help_text($screen) {
-  	$DW = &$GLOBALS['DW'];
+		foreach ( $dump as $widget ) {
+			echo 'Widget: ' . $widget['name'] . "\r\n";
+			echo 'Default set to ' . $widget['default'] . "\r\n";
 
-  	// Contextual help
+			if ( count($widget) > 2 ) {
+			   echo 'Categories ticked: ' . "\r\n";
+			   foreach ( $widget as $k => $v ) {
+			      if ( is_int($k) ) {
+			         echo "\t" . $v . "\r\n";
+			      }
+			   }
+			}
+
+			echo "\r\n";
+		}
+
+		die();
+	}
+
+	/**
+	* dynwid_contextual_help_text() Actual text to place into the contextual help screen
+	* @param string $screen
+	* @return string
+	* @since 1.5.0
+	*
+	*/
+	function dynwid_contextual_help_text($screen) {
+		$DW = &$GLOBALS['DW'];
+
+		// Contextual help
 		if ( $screen == 'edit' ) {
 			$dw_help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The \'<em>Yes</em>\' selection', DW_L10N_DOMAIN) . ')'  . '<br />';
 			$dw_help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.<br />';
@@ -542,110 +566,111 @@
 		}
 
 		return $dw_help;
-  }
+	}
 
-  /**
-   * dynwid_disabled_add_admin_menu() Menu entry for disabled page.
-   * @since 1.5.6.1
-   *
-   */
+	/**
+	* dynwid_disabled_add_admin_menu() Menu entry for disabled page.
+	* @since 1.5.6.1
+	*
+	*/
 	function dynwid_disabled_add_admin_menu() {
 		add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_disabled_page');
 	}
 
-  /**
-   * dynwid_disabled_page() Error boxes to show in admin when DW can not be initialised due to not meeting sysreq.
-   * @since 1.5b1
-   *
-   */
-  function dynwid_disabled_page() {
-  	// As the DWMessagebox class is not loaded, we can not use it
-  	$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
-  	$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
+	/**
+	* dynwid_disabled_page() Error boxes to show in admin when DW can not be initialised due to not meeting sysreq.
+	* @since 1.5b1
+	*
+	*/
+	function dynwid_disabled_page() {
+		// As the DWMessagebox class is not loaded, we can not use it
+		$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
+		$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
 
-  	if (! $php ) {
-  		echo '<div class="error" id="message"><p>';
-  		_e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
-  		echo ' ' . DW_MINIMUM_PHP . '.';
-  		echo '</p></div>';
-  	}
+		if (! $php ) {
+		   echo '<div class="error" id="message"><p>';
+		   _e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
+		   echo ' ' . DW_MINIMUM_PHP . '.';
+		   echo '</p></div>';
+		}
 
-  	if (! $wp ) {
-  		echo '<div class="error" id="message"><p>';
-  		_e('<b>ERROR</b> Your host is running a too low version of WordPress. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
-  		echo ' ' . DW_MINIMUM_WP . '.';
-  		echo '</p></div>';
-  	}
-  }
+		if (! $wp ) {
+		   echo '<div class="error" id="message"><p>';
+		   _e('<b>ERROR</b> Your host is running a too low version of WordPress. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
+		   echo ' ' . DW_MINIMUM_WP . '.';
+		   echo '</p></div>';
+		}
+	}
 
-  /**
-   * dynwid_filter_init() Init of the worker
-   * @since 1.3.5
-   */
-  function dynwid_filter_init() {
-  	$DW = &$GLOBALS['DW'];
-  	require(dirname(__FILE__) . '/dynwid_init_worker.php');
-  }
+	/**
+	* dynwid_filter_init() Init of the worker
+	* @since 1.3.5
+	*/
+	function dynwid_filter_init() {
+		$DW = &$GLOBALS['DW'];
+		require(dirname(__FILE__) . '/dynwid_init_worker.php');
+	}
 
-  /**
-   * dynwid_filter_widgets() Worker
-   * @since 1.3.5
-   */
-  function dynwid_filter_widgets() {
-  	$DW = &$GLOBALS['DW'];
+	/**
+	* dynwid_filter_widgets() Worker
+	* @since 1.3.5
+	*/
+	function dynwid_filter_widgets() {
+		$DW = &$GLOBALS['DW'];
 
-  	dynwid_filter_init();
-  	if ( DW_OLD_METHOD ) {
-  		dynwid_worker($DW->sidebars);
-  	} else {
-  		add_filter('sidebars_widgets', 'dynwid_worker');
- 		}
-  }
+		dynwid_filter_init();
+		if ( DW_OLD_METHOD ) {
+		   dynwid_worker($DW->sidebars);
+		} else {
+		   add_filter('sidebars_widgets', 'dynwid_worker');
+		}
+	}
 
-  /**
-   * dynwid_init() Init of the plugin
-   * @since 1.0
-   */
-  function dynwid_init() {
-  	$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
-  	$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
+	/**
+	* dynwid_init() Init of the plugin
+	* @since 1.0
+	*/
+	function dynwid_init() {
+		$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
+		$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
 
-  	if ( $php && $wp ) {
-  		$GLOBALS['DW'] = new dynWid();
-  		$DW = &$GLOBALS['DW'];
-  		$DW->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
+		if ( $php && $wp ) {
+		   $GLOBALS['DW'] = new dynWid();
+		   $DW = &$GLOBALS['DW'];
+		   $DW->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
-  		if ( is_admin() ) {
-  			if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
-  				require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
-  			}
+		   if ( is_admin() ) {
+		      if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
+		         require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
+		      }
 
-  			load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
-  			add_action('admin_menu', 'dynwid_add_admin_menu');
+		      load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
+		      add_action('admin_menu', 'dynwid_add_admin_menu');
 
-  			if ( $DW->enabled ) {
-  				add_action('add_meta_boxes', 'dynwid_add_admin_custom_box');
-  				add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
-  				add_action('edited_term', 'dynwid_save_tagdata');
-  				add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
-  				add_action('save_post', 'dynwid_save_postdata');
-  				add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+		      if ( $DW->enabled ) {
+		         add_action('add_meta_boxes', 'dynwid_add_admin_custom_box');
+		         add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
+		         add_action('edited_term', 'dynwid_save_tagdata');
+		         add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
+		         add_action('save_post', 'dynwid_save_postdata');
+		         add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+			      // add_action('widgets_admin_page', 'dynwid_widgets_admin_page');
 
-  				// AJAX calls
-  				add_action('wp_ajax_term_tree', 'dynwid_term_tree');
-  			}
-  		} else {
-  			if ( $DW->enabled ) {
-  				add_action('wp_head', 'dynwid_filter_widgets');
-  			}
-  		}
-  	} else {
-  		if ( is_admin() ) {
-  			// Show errors in the admin page
-  			add_action('admin_menu', 'dynwid_disabled_add_admin_menu');
-  		}
-  	}
-  }
+		         // AJAX calls
+		         add_action('wp_ajax_term_tree', 'dynwid_term_tree');
+		      }
+		   } else {
+		      if ( $DW->enabled ) {
+		         add_action('wp_head', 'dynwid_filter_widgets');
+		      }
+		   }
+		} else {
+		   if ( is_admin() ) {
+		      // Show errors in the admin page
+		      add_action('admin_menu', 'dynwid_disabled_add_admin_menu');
+		   }
+		}
+	}
 
 	/**
 	 * dynwid_install() Installation
@@ -670,7 +695,7 @@
 	 * @since 1.2
 	 */
 	function dynwid_save_postdata($post_id) {
-	  $DW = &$GLOBALS['DW'];
+		global $DW;
 
 	  if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] != 'autosave' ) {
 	  	$post_id = ( isset($_POST['post_ID']) && ! empty($_POST['post_ID']) ) ? intval($_POST['post_ID']) : 0;
@@ -791,9 +816,8 @@
 	 * @return void
 	 */
 	function dynwid_term_tree() {
+		global $DW;
 		include_once(DW_MODULES . 'custompost_module.php');
-
-		$DW = &$GLOBALS['DW'];
 
 		$id = ( isset($_POST['id']) && ! empty($_POST['id']) ) ? sanitize_text_field( $_POST['id'] ) : 0;
 		$name = ( isset($_POST['name']) && ! empty($_POST['name']) ) ? sanitize_text_field( $_POST['name'] ) : '';
@@ -818,10 +842,11 @@
 	 * @since 1.0
 	 */
 	function dynwid_uninstall() {
-		$wpdb = $GLOBALS['wpdb'];
-	  $dbtable = $wpdb->prefix . DW_DB_TABLE;
+		global $wpdb;
 
-    // Housekeeping
+		$dbtable = $wpdb->prefix . DW_DB_TABLE;
+
+		// Housekeeping
 		delete_option('dynwid_housekeeping_lastrun');
 		delete_option('dynwid_old_method');
 		delete_option('dynwid_version');
@@ -829,14 +854,18 @@
 		$query = "DROP TABLE IF EXISTS " . $dbtable;
 		$wpdb->query($query);
 
-	  $plugin = plugin_basename(__FILE__);
+		$plugin = plugin_basename(__FILE__);
 
-	  /* Shamelessly ripped from /wp-admin/plugins.php */
-    deactivate_plugins($plugin);
-	  update_option('recently_activated', array($plugin => time()) + (array) get_option('recently_activated'));
-	  wp_redirect('plugins.php?deactivate=true&plugin_status=' . $status . '&paged=' . $page);
+		/* Shamelessly ripped from /wp-admin/plugins.php */
+		deactivate_plugins($plugin);
+		update_option('recently_activated', array($plugin => time()) + (array) get_option('recently_activated'));
+		wp_redirect('plugins.php?deactivate=true&plugin_status=' . $status . '&paged=' . $page);
 
-    die();
+      die();
+	}
+
+	function dynwid_widgets_admin_page() {
+		add_thickbox();
 	}
 
 	/**
@@ -844,64 +873,74 @@
 	 * @since 1.2
 	 */
 	function dynwid_widget_callback() {
-	  $DW = &$GLOBALS['DW'];
+		global $DW;
 
- 		$DW->loadModules();
-  	$DW->getModuleName();
+		$DW->loadModules();
+		$DW->getModuleName();
 
-	  $args = func_get_args();
-	  $widget_id = $args[0]['widget_id'];
-	  $wp_callback = $DW->registered_widget_controls[$widget_id]['wp_callback'];
+		$args = func_get_args();
+		$widget_id = $args[0]['widget_id'];
+		$wp_callback = $DW->registered_widget_controls[$widget_id]['wp_callback'];
 
-	  // Calling original callback first
-    call_user_func_array($wp_callback, $args);
+		// Calling original callback first
+		call_user_func_array($wp_callback, $args);
 
-	  // Now adding the dynwid text & link
-	  echo '<p>' . __('Dynamic Widgets', DW_L10N_DOMAIN) . ': ';
+		// Now adding the dynwid text & link
+		echo '<p>' . __('Dynamic Widgets', DW_L10N_DOMAIN) . ': ';
 
 		if ( array_key_exists($widget_id, $DW->registered_widgets) ) {
 			echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=widgets.php' . '">';
+			// echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="' . admin_url( 'themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&TB_iframe=true&width=&height=' ) . '" class="thickbox">';
 			echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
 			echo '</a>';
-		  if ( $DW->hasOptions($widget_id) ) {
-		    $s = array();
-		    $opt = $DW->getOpt($widget_id, NULL);
-		    foreach ( $opt as $widget ) {
-		      $type = $widget->maintype;
-		      if ( $type != 'individual' && substr($type, -6) != 'childs' && ! preg_match('/.*-tax_.*/', $type) ) {
-		        $single = array('single-author', 'single-category', 'single-tag', 'single-post');
-		        if ( in_array($type, $single) ) {
-		          $type = 'single';
-		        }
-		        if (! in_array($type, $s) ) {
-		          $s[ ] = $type;
-		        }
-		      }
-		    }
 
-		    $last = count($s) - 1;
-		    $string = '';
-		    for ( $i = 0; $i < $last; $i++ ) {
-		      $type = $s[$i];
-		      if (! empty($DW->dwoptions[$type]) ) {
-		        $string .= $DW->dwoptions[$type];
+			if ( $DW->hasOptions($widget_id) ) {
+				$s = array();
+				$opt = $DW->getOpt($widget_id, NULL);
+
+				foreach ( $opt as $widget ) {
+					$type = $widget->maintype;
+
+					if ( $type != 'individual' && substr($type, -6) != 'childs' && ! preg_match('/.*-tax_.*/', $type) ) {
+						$single = array('single-author', 'single-category', 'single-tag', 'single-post');
+
+						if ( in_array($type, $single) ) {
+							$type = 'single';
+						}
+
+						if (! in_array($type, $s) ) {
+						   $s[ ] = $type;
+						}
 					}
-		    	$string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
-		    }
-		    $type = $s[$last];
-		    if ( isset($DW->dwoptions[$type]) ) {
-		    	$string .= $DW->dwoptions[$type];
-		    }
+				}
 
-		    $output  = '<br /><small>';
-		    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);
-	      $output .= ' ' . $string . '.</small>';
-		    echo $output;
-		  }
-	  } else {
+				$last = count($s) - 1;
+				$string = '';
+
+				for ( $i = 0; $i < $last; $i++ ) {
+					$type = $s[$i];
+					if (! empty($DW->dwoptions[$type]) ) {
+						$string .= $DW->dwoptions[$type];
+					}
+
+					$string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
+				}
+
+				$type = $s[$last];
+				if ( isset($DW->dwoptions[$type]) ) {
+					$string .= $DW->dwoptions[$type];
+				}
+
+				$output  = '<br /><small>';
+				$output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);
+				$output .= ' ' . $string . '.</small>';
+				echo $output;
+			}
+		} else {
 		  echo '<em>' . __('Save the widget first', DW_L10N_DOMAIN) . '...</em>';
 		}
-	  echo '</p>';
+
+		echo '</p>';
 	}
 
 	/**
@@ -930,10 +969,10 @@
 		return $sidebars;
 	}
 
-  // Hooks
-  add_action('admin_action_dynwid_dump', 'dynwid_admin_dump');
-  add_action('admin_action_wpec_dump', 'dynwid_admin_wpec_dump');
-  add_action('admin_action_dynwid_uninstall', 'dynwid_uninstall');
-  add_action('init', 'dynwid_init');
-  register_activation_hook(__FILE__, 'dynwid_install');
+	// Hooks
+	add_action('admin_action_dynwid_dump', 'dynwid_admin_dump');
+	add_action('admin_action_wpec_dump', 'dynwid_admin_wpec_dump');
+	add_action('admin_action_dynwid_uninstall', 'dynwid_uninstall');
+	add_action('init', 'dynwid_init');
+	register_activation_hook(__FILE__, 'dynwid_install');
 ?>

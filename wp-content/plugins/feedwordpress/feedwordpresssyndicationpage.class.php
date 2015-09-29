@@ -70,6 +70,47 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		return ($this->visibility_toggle() == 'N');
 	}
 
+	/**
+	 * sanitize_ids: Protect id numbers from untrusted sources (POST array etc.)
+	 * from possibility of SQLi attacks. Runs everything through an intval filter
+	 * and then for good measure through esc_sql()
+	 *
+	 * @param array $link_ids An array of one or more putative link IDs
+	 * @return array 
+	 */
+	public function sanitize_ids_sql ($link_ids) {
+		$link_ids = array_map(
+			'esc_sql',
+			array_map(
+				'intval',
+				$link_ids
+			)
+		);
+		return $link_ids;
+	} /* FeedWordPressSyndicationPage::sanitize_ids_sql () */
+
+	/**
+	 * requested_link_ids_sql ()
+	 *
+	 * @return string An SQL list literal containing the link IDs, sanitized
+	 * 		and escaped for direct use in MySQL queries.
+	 *
+	 * @uses sanitize_ids_sql()
+	 */
+	public function requested_link_ids_sql () {
+		// Multiple link IDs passed in link_ids[]=... . . .
+		$link_ids = (isset($_REQUEST['link_ids']) ? $_REQUEST['link_ids'] : array());
+		
+		// Or single in link_id=...
+		if (isset($_REQUEST['link_id'])) : array_push($link_ids, $_REQUEST['link_id']); endif;
+
+		// Filter for safe use in MySQL queries.
+		$link_ids = $this->sanitize_ids_sql($link_ids);
+		
+		// Convert to MySQL list literal.
+		return "('".implode("', '", $link_ids)."')";	
+	} /* FeedWordPressSyndicationPage::requested_link_ids_sql () */
+	
 	function updates_requested () {
 		global $wpdb;
 
@@ -84,9 +125,14 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 		if ($fwp_update_invoke != 'get') :
 			if (is_array(MyPHP::post('link_ids'))
 			and (MyPHP::post('action')==FWP_UPDATE_CHECKED)) :
+				// Get single link ID or multiple link IDs from REQUEST parameters
+				// if available. Sanitize values for MySQL.
+				$link_list = $this->requested_link_ids_sql();
+				
+				// $link_list has previously been sanitized for html by self::requested_link_ids_sql
 				$targets = $wpdb->get_results("
 				SELECT * FROM $wpdb->links
-				WHERE link_id IN (".implode(",",$_POST['link_ids']).")
+				WHERE link_id IN ${link_list}
 				");
 				if (is_array($targets)) :
 					foreach ($targets as $target) :
@@ -649,17 +695,48 @@ class FeedWordPressSyndicationPage extends FeedWordPressAdminPage {
 
 	function bleg_box ($page, $box = NULL) {
 		?>
+<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */</script>
+
 <div class="donation-form">
-<h4>Keep FeedWordPress improving</h4>
+<h4>Consider a Donation to FeedWordPress</h4>
 <form action="https://www.paypal.com/cgi-bin/webscr" accept-charset="UTF-8" method="post"><div>
 <p><a href="http://feedwordpress.radgeek.com/">FeedWordPress</a> makes syndication
 simple and empowers you to stream content from all over the web into your
-WordPress hub. That's got to be worth a few lattes. If you're finding FWP useful,
+WordPress hub. If you&#8217;re finding FWP useful,
 <a href="http://feedwordpress.radgeek.com/donate/">a modest gift</a>
 is the best way to support steady progress on development, enhancements,
 support, and documentation.</p>
-<div class="donate">
-<input type="hidden" name="business" value="commerce@radgeek.com"  />
+
+<div class="donate" style="vertical-align: middle">
+
+<div id="flattr-paypal">
+
+<div style="display: inline-block; vertical-align: middle; ">
+<a class="FlattrButton" style="display:none;"   href="http://feedwordpress.radgeek.com/"></a>
+<noscript>
+<a href="http://flattr.com/thing/1380856/FeedWordPress" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+</noscript>
+<div>via Flattr</div>
+
+</div> <!-- style="display: inline-block" -->
+
+<div class="hovered-component" style="display: inline-block; vertical-align: bottom">
+<a href="bitcoin:<?php print esc_attr(FEEDWORDPRESS_BLEG_BTC); ?>"><img src="<?php print esc_url(WP_PLUGIN_URL.'/'.FeedWordPress::path('btc-qr-64px.png')); ?>" alt="Donate" /></a>
+<div><a href="bitcoin:<?php print esc_attr(FEEDWORDPRESS_BLEG_BTC); ?>">via bitcoin<span class="hover-on pop-over" style="background-color: #ddffdd; padding: 5px; color: black; border-radius: 5px;">bitcoin:<?php print esc_html(FEEDWORDPRESS_BLEG_BTC); ?></span></a></div>
+</div>
+
+<div style="display: inline-block; vertical-align: bottom">
+<input type="image" name="submit" src="<?php print esc_url(WP_PLUGIN_URL.'/'.FeedWordPress::path('paypal-donation-64px.png')); ?>" alt="Donate through PayPal" />
+<input type="hidden" name="business" value="distro.to.feedback@radgeek.com"  />
 <input type="hidden" name="cmd" value="_xclick"  />
 <input type="hidden" name="item_name" value="FeedWordPress donation"  />
 <input type="hidden" name="no_shipping" value="1"  />
@@ -667,9 +744,14 @@ support, and documentation.</p>
 <input type="hidden" name="currency_code" value="USD" />
 <input type="hidden" name="notify_url" value="http://feedwordpress.radgeek.com/ipn/donation"  />
 <input type="hidden" name="custom" value="1"  />
-<input type="image" name="submit" src="https://www.paypal.com/en_GB/i/btn/btn_donate_SM.gif" alt="Donate through PayPal" />
-</div>
-</div></form>
+<div>via PayPal</div>
+</div> <!-- style="display: inline-block" -->
+
+</div> <!-- id="flattr-paypal" -->
+</div> <!-- class="donate" -->
+
+</div> <!-- class="donation-form" -->
+</form>
 
 <p>You can make a gift online (or
 <a href="http://feedwordpress.radgeek.com/donation">set up an automatic
@@ -702,10 +784,11 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 		if (MyPHP::post('submit')==FWP_CANCEL_BUTTON) :
 			return true; // Continue without further ado.
 		endif;
-		
-		$link_ids = (isset($_REQUEST['link_ids']) ? $_REQUEST['link_ids'] : array());
-		if (isset($_REQUEST['link_id'])) : array_push($link_ids, $_REQUEST['link_id']); endif;
-	
+
+		// Get single link ID or multiple link IDs from REQUEST parameters
+		// if available. Sanitize values for MySQL.		
+		$link_list = $this->requested_link_ids_sql();
+
 		if (MyPHP::post('confirm')=='Delete'):
 			if ( is_array(MyPHP::post('link_action')) ) :
 				$actions = MyPHP::post('link_action');
@@ -799,9 +882,10 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 	
 			return true; // Continue on to Syndicated Sites listing
 		else :
+			// $link_list has previously been sanitized for html by self::requested_link_ids_sql
 			$targets = $wpdb->get_results("
 				SELECT * FROM $wpdb->links
-				WHERE link_id IN (".implode(",",$link_ids).")
+				WHERE link_id IN ${link_list}
 				");
 	?>
 	<form action="<?php print $this->form_action(); ?>" method="post">
@@ -871,9 +955,10 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 		// If this is a POST, validate source and user credentials
 		FeedWordPressCompatibility::validate_http_request(/*action=*/ 'feedwordpress_feeds', /*capability=*/ 'manage_links');
 	
-		$link_ids = (isset($_REQUEST['link_ids']) ? $_REQUEST['link_ids'] : array());
-		if (isset($_REQUEST['link_id'])) : array_push($link_ids, $_REQUEST['link_id']); endif;
-	
+		// Get single link ID or multiple link IDs from REQUEST parameters
+		// if available. Sanitize values for MySQL.
+		$link_list = $this->requested_link_ids_sql();
+
 		if (MyPHP::post('confirm')=='Undelete'):
 			if ( is_array(MyPHP::post('link_action')) ) :
 				$actions = MyPHP::post('link_action');
@@ -920,9 +1005,10 @@ regular donation</a>) using an existing PayPal account or any major credit card.
 	
 			return true; // Continue on to Syndicated Sites listing
 		else :
+			// $link_list has previously been sanitized for html by self::requested_link_ids_sql
 			$targets = $wpdb->get_results("
 				SELECT * FROM $wpdb->links
-				WHERE link_id IN (".implode(",",$link_ids).")
+				WHERE link_id IN ${link_list}
 				");
 	?>
 	<form action="<?php print $this->form_action(); ?>" method="post">
@@ -1023,10 +1109,7 @@ function fwp_dashboard_update_if_requested ($object) {
 		echo "</ul>\n";
 
 		if (!is_null($tdelta)) :
-			$mesg = array();
-			if (isset($delta['new'])) : $mesg[] = ' '.$tdelta['new'].' new posts were syndicated'; endif;
-			if (isset($delta['updated'])) : $mesg[] = ' '.$tdelta['updated'].' existing posts were updated'; endif;
-			echo "<p>Update complete.".implode(' and', $mesg)."</p>";
+			echo "<p><strong>Update complete.</strong>".fwp_update_set_results_message($delta)."</p>";
 			echo "\n"; flush();
 		endif;
 		echo "</div> <!-- class=\"updated\" -->\n";

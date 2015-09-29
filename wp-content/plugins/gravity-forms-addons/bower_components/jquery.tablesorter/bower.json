@@ -1,7 +1,8 @@
 {
   "name": "tablesorter",
-  "version": "2.15.12",
+  "version": "2.15.14",
   "dependencies": {
     "jquery": ">=1.2.6"
-  }
+  },
+  "main": "js/jquery.tablesorter.js"
 }

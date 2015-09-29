@@ -26,7 +26,7 @@ class GFDirectorySelectColumns{
 
 	$form_id = $_GET["id"];
 	if(empty($form_id)){
-		echo __("Oops! We could not locate your form. Please try again.", "gravity-forms-addons");
+		echo esc_html__("Oops! We could not locate your form. Please try again.", "gravity-forms-addons");
 		exit;
 	}
 
@@ -154,26 +154,26 @@ class GFDirectorySelectColumns{
 			$columns = GFDirectory::get_grid_columns($form_id);
 			$field_ids = array_keys($columns);
 			#$form = RGFormsModel::get_form_meta($form_id);
-			array_push($form["fields"],array("id" => "id" , "label" => __("Entry Id", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "date_created" , "label" => __("Entry Date", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "ip" , "label" => __("User IP", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "source_url" , "label" => __("Source Url", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "payment_status" , "label" => __("Payment Status", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "transaction_id" , "label" => __("Transaction Id", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "payment_amount" , "label" => __("Payment Amount", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "payment_date" , "label" => __("Payment Date", "gravity-forms-addons")));
-			array_push($form["fields"],array("id" => "created_by" , "label" => __("User", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "id" , "label" => esc_html__("Entry Id", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "date_created" , "label" => esc_html__("Entry Date", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "ip" , "label" => esc_html__("User IP", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "source_url" , "label" => esc_html__("Source Url", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "payment_status" , "label" => esc_html__("Payment Status", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "transaction_id" , "label" => esc_html__("Transaction Id", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "payment_amount" , "label" => esc_html__("Payment Amount", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "payment_date" , "label" => esc_html__("Payment Date", "gravity-forms-addons")));
+			array_push($form["fields"],array("id" => "created_by" , "label" => esc_html__("User", "gravity-forms-addons")));
 
 			$form = self::get_selectable_entry_meta($form);
 			?>
 			<div class="panel-instructions">
-				<p><?php _e("Drag &amp; drop to order and select which columns are displayed in the Gravity Forms Directory.", "gravity-forms-addons") ?></p>
-				<p><?php echo sprintf(__("Embed the Directory on a post or a page using %s ", "gravity-forms-addons"), '<code>[directory form="'.$_GET['id'].'"]</code>'); ?></p>
+				<p><?php esc_html_e("Drag & drop to order and select which columns are displayed in the Gravity Forms Directory.", "gravity-forms-addons") ?></p>
+				<p><?php echo sprintf( esc_html__("Embed the Directory on a post or a page using %s ", "gravity-forms-addons"), '<code>[directory form="'.$_GET['id'].'"]</code>'); ?></p>
 			</div>
 			<div class="clear"></div>
 			<div class="gcolumn_wrapper">
 				<div class="gcolumn_container_left">
-					<div class="gform_select_column_heading"><?php _e("Visible Columns", "gravity-forms-addons"); ?></div>
+					<div class="gform_select_column_heading"><?php esc_html_e("Visible Columns", "gravity-forms-addons"); ?></div>
 					<ul id="sortable_selected" class="sortable_connected">
 						<?php
 						foreach($columns as $field_id => $field_info){
@@ -188,7 +188,7 @@ class GFDirectorySelectColumns{
 				<div class="column-arrow-mid"></div>
 
 				<div class="gcolumn_container_right" id="available_column">
-					<div class="gform_select_column_heading"> <?php _e("Hidden Columns", "gravity-forms-addons"); ?></div>
+					<div class="gform_select_column_heading"> <?php esc_html_e("Hidden Columns", "gravity-forms-addons"); ?></div>
 					<ul id="sortable_available" class="sortable_connected">
 						<?php
 
@@ -227,8 +227,8 @@ class GFDirectorySelectColumns{
 			</div>
 
 			<div class="panel-buttons">
-				<input type="button" value="  <?php _e("Save", "gravity-forms-addons"); ?>  " class="button-primary" onclick="SelectColumns();"/>&nbsp;
-				<input type="button" value="<?php _e("Cancel", "gravity-forms-addons"); ?>" class="button" onclick="self.parent.tb_remove();"/>
+				<input type="button" value="<?php esc_attr_e("Save", "gravity-forms-addons"); ?>  " class="button-primary" onclick="SelectColumns();"/>&nbsp;
+				<input type="button" value="<?php esc_html_e("Cancel", "gravity-forms-addons"); ?>" class="button" onclick="self.parent.tb_remove();"/>
 			</div>
 		</div>
 		</body>

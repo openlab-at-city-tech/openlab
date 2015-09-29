@@ -24,8 +24,8 @@ if ( !class_exists('afgFlickr') ) {
         var $secret;
 
         var $rest_endpoint = 'https://api.flickr.com/services/rest/';
-        var $upload_endpoint = 'https://api.flickr.com/services/upload/';
-        var $replace_endpoint = 'https://api.flickr.com/services/replace/';
+        var $upload_endpoint = 'https://up.flickr.com/services/upload/';
+        var $replace_endpoint = 'https://up.flickr.com/services/replace/';
         var $req;
         var $response;
         var $parsed_response;
@@ -227,7 +227,7 @@ if ( !class_exists('afgFlickr') ) {
                 }
                 $data = implode('&', $data);
 
-                $fp = @pfsockopen($matches[1], 80);
+                $fp = @pfsockopen('ssl://'.$matches[1], 443);
                 if (!$fp) {
                     die('Could not connect to the web service');
                 }

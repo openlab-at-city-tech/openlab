@@ -1,6 +1,6 @@
 edButtons[edButtons.length] =
 new edButton('ed_h1'
-	,'GDE'
+	,'GDE' /* LANGGDE */
 	,'[gview file="'
 	,'"]'
 	,'1'

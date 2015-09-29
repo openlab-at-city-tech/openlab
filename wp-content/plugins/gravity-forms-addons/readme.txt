@@ -1,21 +1,21 @@
 === Gravity Forms Directory ===
-Tags: gravity forms, gravity form, forms, gravity, form, crm, directory, business, business directory, list, listings, sort, submissions, table, tables, member, contact, contacts, directorypress, business directory, directory plugin, wordpress directory, classifieds, captcha, cforms, contact, contact form, contact form 7, contact forms, CRM, email, enhanced wp contact form, feedback, form, forms, gravity, gravity form, gravity forms, secure form, simplemodal contact form, wp contact form, widget
+Tags: gravity forms, gravity form, forms, gravity, form, directory, business, business directory, directorypress, classifieds, cforms, formidable, gravityview
 Requires at least: 3.3
-Tested up to: 3.8.2
-Stable tag: 3.6.1.2
+Tested up to: 4.2.2
+Stable tag: 3.7.2
 Contributors: katzwebdesign, katzwebservices
 License: GPLv2 or later
-Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms%20Addons&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
+Donate link: https://gravityview.co
 
 Add directory capabilities and other functionality to the great Gravity Forms plugin.
 
 == Description ==
 
-> #### [GravityView](https://gravityview.co/) is landing soon.
-> 
-> We're getting ready to release a totally re-written version of the Directory plugin!
+> #### [GravityView](https://gravityview.co/) is the best way to display Gravity Forms entries
 >
-> [Sign up for email updates](https://gravityview.co/) to learn when it's released.
+> We set out to make a better Directory plugin, and we did it: GravityView is a brand-new plugin that takes displaying your form entries to the next level. It is easier, more powerful and more customizable than the Directory plugin. If you like the Directory plugin, you'll *love* GravityView.
+> 
+> [Check out GravityView](https://gravityview.co/) or [try a demo](http://demo.gravityview.co) today!
 
 ### Turn Gravity Forms into a Directory plugin
 
@@ -109,6 +109,10 @@ To enable a field as a search filter, view "How do I add a field as a Directory 
 1. Click the "Directory" tab
 1. Check the box that says "Use this field as a search filter"
 1. Click "Update Form" to save the form
+
+= How can I translate the plugin? =
+
+The plugin is fully translatable. [Go here to contribute a translation](https://www.transifex.com/projects/p/gravity-forms-directory/) and we will include it in the next update!
 
 = How do I turn off lightbox grouping? =
 Add the following to your theme's `functions.php` file:
@@ -220,7 +224,47 @@ To fix this issue, add this to your theme's `functions.php` file:
 
 <code>add_filter('kws_gf_display_all_fields', create_function('$content', 'return "";') );</code>
 
+= I don't want the values to be formatted =
+
+Since 3.6.3, the Directory plugin displays formatted values (like currency). To disable that, add the code below to your theme's `functions.php` file:
+
+`add_filter('kws_gf_directory_format_value', '__return_false' );`
+
+
 == Changelog ==
+
+= 3.7.2 on May 29 =
+* Fixed: Security issue with `add_query_arg()` function. **Please update!** [Learn about the issue](https://make.wordpress.org/plugins/2015/04/20/fixing-add_query_arg-and-remove_query_arg-usage/)
+* Fixed: Conflict with the Directory tab in the Form Editor when using Gravity Forms 1.9+
+
+= 3.7 and 3.7.1 on December 17 = 
+* Fixed: Add `load_plugin_textdomain()` for translations
+* Fixed: Restored single entry links
+* Fixed: Displaying IP address, other default entry values
+* Fixed: HTML links are no longer displayed as text
+* Fixed: Restored respecting settings for image upload formatting
+* Fixed: Lightboxes no longer work for non-image files
+	- Added `kws_gf_directory_image_extensions` filter to modify what image formats to support
+* Added: Improved support for multiple file uploads
+* Modified: Added support for future Business Hours field
+* Modified: Refactored code; created `render_image_link()` method to render images
+
+= 3.6.3 (on October 3, 2014) =
+* Modified: Values now using Gravity Forms formatting by default. Most field types won't change, but some will look different, including pricing fields
+* Modified: Removed `wpautop` and `fulltext` parameters - full text, styled using paragraphs is always used
+* Fixed: "Too Few Arguments" PHP warning [reported here](https://wordpress.org/support/topic/php-error-107)
+* Fixed: Error on activating the plugin, [reported here](https://wordpress.org/support/topic/fatal-error-wp-get-current-user-capabilitiesphp)
+
+= 3.6.2 (on September 25, 2014) =
+* Added: Translation files - the plugin's now fully translation-ready. [Go here to contribute a translation](https://www.transifex.com/projects/p/gravity-forms-directory/)
+* Fixed: Solved PHP warnings ([see here](https://wordpress.org/support/topic/php-warning-38))
+* Fixed: Made IDs lightbox fit inside Gravity Forms' defined height/width settings on Forms page
+* Fixed: Sanitize usernames in Change Entry Creator
+* Fixed: Don't load lead approval scripts on single entry screen
+* Modified: Improved security for editing entries by improving nonce generation
+* Modified: Rewrote Change Entry Creator as class
+* Modified: Include the Change Entry Creator in core plugin
+* Tweak: Switched to dashicon for insert button icon
 
 = 3.6.1.1 & 3.6.1.2 (April 10th, 2014) =
 * Fixed: Post Image wasn't showing on the single entry view.
@@ -506,6 +550,35 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 
 
 == Upgrade Notice ==
+
+= 3.7 and 3.7.1 on December 17 = 
+* Fixed: Add `load_plugin_textdomain()` for translations
+* Fixed: Restored single entry links
+* Fixed: Displaying IP address, other default entry values
+* Fixed: HTML links are no longer displayed as text
+* Fixed: Restored respecting settings for image upload formatting
+* Fixed: Lightboxes no longer work for non-image files
+	- Added `kws_gf_directory_image_extensions` filter to modify what image formats to support
+* Added: Improved support for multiple file uploads
+* Modified: Added support for future Business Hours field
+* Modified: Refactored code; created `render_image_link()` method to render images
+
+= 3.6.3 (on October 3, 2014) =
+* Modified: Values now using Gravity Forms formatting by default. Most field types won't change, but some will look different, including pricing fields
+* Modified: Removed `wpautop` and `fulltext` parameters - full text, styled using paragraphs is always used
+* Fixed: "Too Few Arguments" PHP warning [reported here](https://wordpress.org/support/topic/php-error-107)
+* Fixed: Error on activating the plugin, [reported here](https://wordpress.org/support/topic/fatal-error-wp-get-current-user-capabilitiesphp)
+
+= 3.6.2 (September 25, 2014) =
+* Added: Translation files - to contribute a translation, please go here.
+* Fixed: Solved PHP warnings ([see here](https://wordpress.org/support/topic/php-warning-38))
+* Fixed: Made IDs lightbox fit inside Gravity Forms' defined height/width settings on Forms page
+* Fixed: Sanitize usernames in Change Entry Creator
+* Fixed: Don't load lead approval scripts on single entry screen
+* Modified: Improved security for editing entries by improving nonce generation
+* Modified: Rewrote Change Entry Creator as class
+* Modified: Include the Change Entry Creator in core plugin
+* Tweak: Switched to dashicon for insert button icon
 
 = 3.6.1.1 & 3.6.1.2 (April 10th, 2014) =
 * Fixed: Post Image wasn't showing on the single entry view.

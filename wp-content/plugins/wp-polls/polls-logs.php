@@ -129,12 +129,12 @@ if(!empty($_POST['do'])) {
 	<h3><?php echo $poll_question; ?></h3>
 	<p>
 		<?php printf(_n('There are a total of <strong>%s</strong> recorded vote for this poll.', 'There are a total of <strong>%s</strong> recorded votes for this poll.', $poll_totalrecorded, 'wp-polls'), number_format_i18n($poll_totalrecorded)); ?><br />
-		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is casted by registered users', '<strong>&raquo;</strong> <strong>%s</strong> votes are casted by registered users', $poll_registered, 'wp-polls'), number_format_i18n($poll_registered)); ?><br />
-		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is casted by comment authors', '<strong>&raquo;</strong> <strong>%s</strong> votes are casted by comment authors', $poll_comments, 'wp-polls'), number_format_i18n($poll_comments)); ?><br />
-		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is casted by guests', '<strong>&raquo;</strong> <strong>%s</strong> votes are casted by guests', $poll_guest, 'wp-polls'), number_format_i18n($poll_guest)); ?>
+		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is cast by registered users', '<strong>&raquo;</strong> <strong>%s</strong> votes are cast by registered users', $poll_registered, 'wp-polls'), number_format_i18n($poll_registered)); ?><br />
+		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is cast by comment authors', '<strong>&raquo;</strong> <strong>%s</strong> votes are cast by comment authors', $poll_comments, 'wp-polls'), number_format_i18n($poll_comments)); ?><br />
+		<?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is cast by guests', '<strong>&raquo;</strong> <strong>%s</strong> votes are cast by guests', $poll_guest, 'wp-polls'), number_format_i18n($poll_guest)); ?>
 	</p>
 </div>
-<?php if($poll_totalrecorded > 0) { ?>
+<?php if($poll_totalrecorded > 0 && apply_filters( 'poll_log_show_log_filter', true )) { ?>
 <div class="wrap">
 	<h3><?php _e('Filter Poll\'s Logs', 'wp-polls') ?></h3>
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -152,7 +152,7 @@ if(!empty($_POST['do'])) {
 									if($poll_answers_data) {
 										foreach($poll_answers_data as $data) {
 											$polla_id = intval($data->polla_aid);
-											$polla_answers = stripslashes(strip_tags(htmlspecialchars($data->polla_answers)));
+											$polla_answers = stripslashes( strip_tags( esc_attr( $data->polla_answers ) ) );
 											if($polla_id  == $users_voted_for) {
 												echo '<option value="'.$polla_id .'" selected="selected">'.$polla_answers.'</option>';
 											} else {
@@ -246,9 +246,9 @@ if(!empty($_POST['do'])) {
 									if($poll_voters) {
 										foreach($poll_voters as $pollip_user) {
 											if($pollip_user == $what_user_voted) {
-												echo '<option value="'.stripslashes(htmlspecialchars($pollip_user)).'" selected="selected">'.stripslashes(htmlspecialchars($pollip_user)).'</option>';
+												echo '<option value="' . stripslashes( esc_attr( $pollip_user ) ) . '" selected="selected">' . stripslashes( esc_attr( $pollip_user ) ) . '</option>';
 											} else {
-												echo '<option value="'.stripslashes(htmlspecialchars($pollip_user)).'">'.stripslashes(htmlspecialchars($pollip_user)).'</option>';
+												echo '<option value="' . stripslashes( esc_attr( $pollip_user ) ) . '">' . stripslashes( esc_attr( $pollip_user ) ) . '</option>';
 											}
 										}
 									}
@@ -265,7 +265,7 @@ if(!empty($_POST['do'])) {
 					&nbsp;
 				<?php } // End if($poll_multiple > -1) ?>
 			</td>
-			<td align="center"><input type="button" value="<?php _e('Clear Filter', 'wp-polls'); ?>" onclick="self.location.href = '<?php echo htmlspecialchars($base_page); ?>&amp;mode=logs&amp;id=<?php echo $poll_id; ?>';" class="button" /></td>
+			<td align="center"><input type="button" value="<?php _e('Clear Filter', 'wp-polls'); ?>" onclick="self.location.href = '<?php echo esc_attr( $base_page ); ?>&amp;mode=logs&amp;id=<?php echo $poll_id; ?>';" class="button" /></td>
 		</tr>
 	</table>
 </div>
@@ -323,7 +323,7 @@ if(!empty($_POST['do'])) {
 				} else {
 					foreach($poll_ips as $poll_ip) {
 						$pollip_aid = intval($poll_ip->pollip_aid);
-						$pollip_user = stripslashes($poll_ip->pollip_user);
+						$pollip_user = apply_filters( 'poll_log_secret_ballot', stripslashes($poll_ip->pollip_user) );
 						$pollip_ip = $poll_ip->pollip_ip;
 						$pollip_host = $poll_ip->pollip_host;
 						$pollip_date = mysql2date(sprintf(__('%s @ %s', 'wp-polls'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_ip->pollip_timestamp));
@@ -381,7 +381,7 @@ if(!empty($_POST['do'])) {
 		<?php if($poll_logs_count) { ?>
 			<strong><?php _e('Are You Sure You Want To Delete Logs For This Poll Only?', 'wp-polls'); ?></strong><br /><br />
 			<input type="checkbox" id="delete_logs_yes" name="delete_logs_yes" value="yes" />&nbsp;<label for="delete_logs_yes"><?php _e('Yes', 'wp-polls'); ?></label><br /><br />
-			<input type="button" name="do" value="<?php _e('Delete Logs For This Poll Only', 'wp-polls'); ?>" class="button" onclick="delete_this_poll_logs(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to delete poll logs for this poll \'%s\' ONLY. This action is not reversible.', 'wp-polls')), htmlspecialchars($poll_question)); ?>', '<?php echo wp_create_nonce('wp-polls_delete-poll-logs'); ?>');" />
+			<input type="button" name="do" value="<?php _e('Delete Logs For This Poll Only', 'wp-polls'); ?>" class="button" onclick="delete_this_poll_logs(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to delete poll logs for this poll \'%s\' ONLY. This action is not reversible.', 'wp-polls')), esc_attr( $poll_question ) ); ?>', '<?php echo wp_create_nonce('wp-polls_delete-poll-logs'); ?>');" />
 		<?php
 			} else {
 				_e('No poll logs available for this poll.', 'wp-polls');

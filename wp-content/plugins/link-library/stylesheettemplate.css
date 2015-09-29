@@ -160,3 +160,34 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
 .LinksInCat {
     display:none;
 }
+
+.allcatalphafilterlinkedletter, .catalphafilterlinkedletter, .catalphafilteremptyletter, .catalphafilterselectedletter, .allcatalphafilterselectedletter {
+	width: 16px;
+	height: 30px;
+	float:left;
+	margin-right: 6px;
+	text-align: center;
+}
+
+.allcatalphafilterlinkedletter, .allcatalphafilterselectedletter {
+	width: 40px;
+}
+
+.catalphafilterlinkedletter {
+	background-color: #aaa;
+	color: #444;
+}
+
+.catalphafilteremptyletter {
+	background-color: #ddd;
+	color: #fff;
+}
+
+.catalphafilterselectedletter {
+	background-color: #558C89;
+	color: #fff;
+}
+
+.catalphafilter {
+	padding-bottom: 30px;
+}

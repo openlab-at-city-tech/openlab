@@ -4,11 +4,11 @@
 require_once('../libs/lib-bootstrap.php');
 
 if ( isset( $_GET['a'] ) && $_GET['a'] == "fs" ) {
-	$tip = __('View in full screen', 'gde');
+	$tip = __('View in full screen', 'google-document-embedder');
 	$func = "gdeFullScreen";
 	$ico = "openFullScreenButtonIcon";
 } else {
-	$tip = __('Open in new window', 'gde');
+	$tip = __('Open in new window', 'google-document-embedder');
 	$func = "gdeNewWin";
 	$ico = "openInViewerButtonIcon";
 }

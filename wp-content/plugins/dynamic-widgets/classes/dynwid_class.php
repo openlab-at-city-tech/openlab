@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class dynWid {
 		private $dbtable;
 		public  $device;
@@ -34,6 +36,8 @@
 		 *
 		 */
 		public function __construct() {
+			global $wpdb;
+
 			if ( is_user_logged_in() ) {
 				$this->userrole = $GLOBALS['current_user']->roles;
 			} else {
@@ -48,7 +52,7 @@
 			$this->ip_address = $this->getIP();
 
 			// DB init
-			$this->wpdb = $GLOBALS['wpdb'];
+			$this->wpdb = $wpdb;
 			$this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
 			$query = "SHOW TABLES LIKE '" . $this->dbtable . "'";
 			$result = $this->wpdb->get_var($query);
@@ -115,18 +119,38 @@
 		 * @param array $dates Dates
 		 */
 		public function addDate($widget_id, $dates) {
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'date',
+				'name'			=> 'default',
+				'value'			=> '0'
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
                     ('" . $widget_id . "', 'date', 'default', '0')";
 			$this->wpdb->query($query);
+			*/
 
 			foreach ( $dates as $name => $date ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'date',
+					'name'			=> $name,
+					'value'			=> $date
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
                     ('" . esc_sql($widget_id) . "', 'date', '" . esc_sql($name) . "', '" . esc_sql($date) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 		}
 
@@ -139,21 +163,81 @@
 		 */
 		public function addIPs($widget_id, $default, $ips) {
 			$value = serialize($ips);
+
 			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'ip',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'ip', 'default', '0')";
 				$this->wpdb->query($query);
+				*/
 			}
 
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'ip',
+				'name'			=> 'ip',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'ip', 'ip', '" . $value . "')";
 			$this->wpdb->query($query);
-		}		
-		
+			*/
+		}
+
+		public function addShortcode($widget_id, $default, $value, $match, $operator) {
+			$value = array( 'value' => $value, 'match' => $match, 'operator' => $operator );
+			$value = serialize($value);
+
+			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'shortcode',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
+				$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'shortcode', 'default', '0')";
+				$this->wpdb->query($query);
+				*/
+			}
+
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'shortcode',
+				'name'			=> 'shortcode',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
+			$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'shortcode', 'shortcode', '" . $value . "')";
+			$this->wpdb->query($query);
+			*/
+		}
+
 		/**
 		 * dynWid::addUrls() Saves url options
 		 *
@@ -164,18 +248,38 @@
 		public function addUrls($widget_id, $default, $urls) {
 			$value = serialize($urls);
 			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'url',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'url', 'default', '0')";
 				$this->wpdb->query($query);
+				*/
 			}
 
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'url',
+				'name'			=> 'url',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'url', 'url', '" . $value . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		/**
@@ -210,7 +314,8 @@
 			$post_types = array_merge( $types, array('single-post', 'single-tag') );
 
 			if ( in_array($maintype, $post_types) ) {
-				$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "' AND name = 'default'";
+				$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = %s AND maintype = %s AND name = %s";
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype, 'default');
 				$count = $this->wpdb->get_var($query);
 				if ( $count > 0 ) {
 					$insert = FALSE;
@@ -218,18 +323,38 @@
 			}
 
 			if ( $insert ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> $maintype,
+					'name'			=> 'default',
+					'value'			=> $opt_default
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', 'default', '" . esc_sql($opt_default) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 			foreach ( $act as $option ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> $maintype,
+					'name'			=> $option,
+					'value'			=> $opt_act
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($option) . "', '" . esc_sql($opt_act) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 		}
 
@@ -241,11 +366,20 @@
 		 * @param integer $value Default setting
 		 */
 		public function addSingleOption($widget_id, $maintype, $value = '0') {
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> $maintype,
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, value)
                   VALUES
                     ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($value) . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		/**
@@ -297,10 +431,14 @@
 		 * @param string $name Name of option
 		 */
 		public function deleteOption($widget_id, $maintype, $name = '') {
-			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype ."'";
+			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = %s AND maintype = %s";
 			if (! empty($name) ) {
-				$query .= " AND name = '" . $name . "'";
+				$query .= " AND name = %s";
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype, $name);
+			} else {
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype);
 			}
+
 			$this->wpdb->query($query);
 		}
 
@@ -407,7 +545,7 @@
 			}
 
 			$query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                  WHERE  maintype LIKE '" . $whereami . "%'";
+                     WHERE  maintype LIKE '" . esc_sql($whereami) . "%'";
 
 			if ( count($this->overrule_maintype) > 0 ) {
 				$query .= " OR maintype IN ";
@@ -466,17 +604,17 @@
 			}
 
 			$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                 WHERE widget_id LIKE '" . $widget_id . "'
-                   AND maintype LIKE '" . $maintype . "%'
+                 WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                   AND maintype LIKE '" . esc_sql($maintype) . "%'
                  ORDER BY maintype, name";
 			$results = new DWOpts($this->wpdb->get_results($query), $maintype);
 			return $results;
 		}
-		
+
 		private function getIP() {
 			$ip = $_SERVER['REMOTE_ADDR'];
 			$this->message( 'Raw IP: ' . $ip );
-			
+
 			return ( strstr($ip, '.') !== FALSE ) ? $ip : NULL;
 		}
 
@@ -507,6 +645,7 @@
 			DWModule::registerOption(DW_QT::$option);
 			DWModule::registerOption(DW_Role::$option);
 			DWModule::registerOption(DW_Search::$option);
+			DWModule::registerOption(DW_Shortcode::$option);
 			DWModule::registerOption(DW_Single::$option);
 			DWModule::registerOption(DW_Tag::$option);
 			DWModule::registerOption(DW_Tpl::$option);
@@ -564,8 +703,8 @@
 
 			if ( $admin ) {
 				$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND maintype LIKE '" . $maintype . "%'
+                  WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                    AND maintype LIKE '" . esc_sql($maintype) . "%'
                   ORDER BY maintype, name";
 
 			} else {
@@ -573,14 +712,14 @@
 					$maintype = 'page';
 				}
 				$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%'";
+                  WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                    AND (maintype LIKE '" . esc_sql($maintype) . "%'";
 
 				if ( count($this->overrule_maintype) > 0 ) {
 					$query .= " OR maintype IN (";
 					$q = array();
 					foreach ( $this->overrule_maintype as $omt ) {
-						$q[ ] = "'" . $omt . "'";
+						$q[ ] = "'" . esc_sql($omt) . "'";
 					}
 					$query .= implode(', ', $q);
 					$query .= ")";
@@ -622,7 +761,7 @@
 		 * @param string $type Type
 		 * @param array $arr
 		 * @param integer $id Child ID
-		 * @return
+		 * @return array
 		 */
 		public function getParents($type, $arr, $id) {
 			if ( $type == 'page' ) {
@@ -646,7 +785,7 @@
 		 * @param string $tax_name Taxonomy name
 		 * @param array $arr
 		 * @param integer $id Child ID
-		 * @return
+		 * @return array
 		 */
 		public function getTaxParents($tax_name, $arr, $id) {
 			$obj = get_term_by('id', $id, $tax_name);
@@ -679,7 +818,7 @@
 				return $prefix;
 			}
 
-			return;
+			return '';
 		}
 
 		/**
@@ -690,8 +829,9 @@
 		 */
 		public function hasOptions($widget_id) {
 			$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . "
-                  WHERE widget_id = '" . $widget_id . "' AND
-                        maintype != 'individual'";
+                  WHERE widget_id = %s AND
+                        maintype != %s";
+			$query = $this->wpdb->prepare($query, $widget_id, 'individual');
 			$count = $this->wpdb->get_var($query);
 
 			if ( $count > 0 ) {
@@ -723,25 +863,25 @@
 		 * @param $ip string IP address
 		 * @param $range string IP range
 		 * @return boolean
-		 */		
+		 */
 		public function IPinRange($ip, $range) {
 		 /* Copyright 2008: Paul Gregg <pgregg@pgregg.com>
 		  * 10 January 2008
 		  * Version: 1.2
 		  *
 		  * Source website: http://www.pgregg.com/projects/php/ip_in_range/
-		  * Version 1.2			
+		  * Version 1.2
 		  */
-		 	
+
 		  if ( strpos($range, '/') !== FALSE ) {
 				// $range is in IP/NETMASK format
 				list($range, $netmask) = explode('/', $range, 2);
-				
+
 				if ( strpos($netmask, '.') !== FALSE ) {
 				  // $netmask is a 255.255.0.0 format
 				  $netmask = str_replace('*', '0', $netmask);
 				  $netmask_dec = ip2long($netmask);
-				  
+
 				  return ( (ip2long($ip) & $netmask_dec) == (ip2long($range) & $netmask_dec) );
 				} else {
 				  // $netmask is a CIDR size block
@@ -750,16 +890,16 @@
 				  while ( count($x) < 4 ) {
 						$x[ ] = '0';
 				  }
-				  
+
 				  list( $a, $b, $c, $d ) = $x;
 				  $range = sprintf( "%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d );
 				  $range_dec = ip2long($range);
 				  $ip_dec = ip2long($ip);
-		
+
 				  // Use math to create it
 				  $wildcard_dec = pow( 2, (32-$netmask) ) - 1;
 				  $netmask_dec = ~ $wildcard_dec;
-		
+
 				  return ( ($ip_dec & $netmask_dec) == ($range_dec & $netmask_dec) );
 				}
 		  } else {
@@ -770,7 +910,7 @@
 				  $upper = str_replace('*', '255', $range);
 				  $range = "$lower-$upper";
 				}
-		
+
 				if ( strpos($range, '-') !== FALSE ) { // A-B format
 				  list( $lower, $upper ) = explode('-', $range, 2);
 				  $lower_dec = (float) sprintf( "%u", ip2long($lower) );
@@ -778,17 +918,17 @@
 				  $ip_dec = (float) sprintf( "%u",ip2long($ip) );
 				  return ( ($ip_dec >= $lower_dec) && ($ip_dec <= $upper_dec) );
 				}
-				
+
 				// last resort
 				if ( substr($range, -3) != '/32' ) {
 					$range .= '/32';
 					return $this->IPinRange($ip, $range);
 				}
-		
+
 				$this->message('Range argument is not in 1.2.3.4/24 or 1.2.3.4/255.255.255.0 format');
 				return FALSE;
 		  }
-	
+
 		}
 		/**
 		 * dynWid::loadModules() Full load of all modules
@@ -839,15 +979,18 @@
 			include_once(DW_MODULES . 'day_module.php');
 			include_once(DW_MODULES . 'week_module.php');
 			include_once(DW_MODULES . 'role_module.php');
+			include_once(DW_MODULES . 'shortcode_module.php');
 			include_once(DW_MODULES . 'tpl_module.php');
 			include_once(DW_MODULES . 'url_module.php');
 			include_once(DW_MODULES . 'device_module.php');
 			include_once(DW_MODULES . 'ip_module.php');
+
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
 			DW_Day::checkOverrule('DW_Day');
 			DW_Week::checkOverrule('DW_Week');
 			DW_Role::checkOverrule('DW_Role');
+			DW_Shortcode::checkOverrule('DW_Shortcode');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
 			DW_URL::checkOverrule('DW_Device');
@@ -868,7 +1011,8 @@
 		 * @param string $widget_id ID of the widget
 		 */
 		public function resetOptions($widget_id) {
-			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
+			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = %s";
+			$query = $this->wpdb->prepare($query, $widget_id);
 			$this->wpdb->query($query);
 		}
 	}

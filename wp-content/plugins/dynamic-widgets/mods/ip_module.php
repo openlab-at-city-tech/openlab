@@ -6,12 +6,14 @@
  * @version $Id$
  * @copyright 2014 Jacco Drabbe
  */
- 
+
+	defined('ABSPATH') or die("No script kiddies please!");
+
  	class DW_IP extends DWModule {
 		public static $option = array( 'ip' => 'IP Address' );
 		protected static $overrule = TRUE;
 		protected static $type = 'custom';
-		
+
 		public static function admin() {
 			$DW = $GLOBALS['DW'];
 
@@ -19,7 +21,7 @@
 
 			$ip_yes_selected = 'checked="checked"';
 			$opt_ip = $DW->getOpt($GLOBALS['widget_id'], 'ip');
-			
+
 			foreach ( $opt_ip as $opt ) {
 				if ( $opt->name == 'default' ) {
 					$ip_no_selected = $ip_yes_selected;
@@ -38,7 +40,7 @@
 		Works only with IPv4, not IPv6! No checks are performed for overlapping addresses, invalid ranges, etc.<br />
 		Separate IP (ranges) on each line.<br />
 		<br />
-		IP format notation can be... 
+		IP format notation can be...
 		<div style="position:relative;left:20px;">
 		<ul>
 			<li>single IP: 192.168.1.1</li>
@@ -59,6 +61,6 @@
 
 </div><!-- end dynwid_conf -->
 <?php
-		}		
+		}
 	}
 ?>

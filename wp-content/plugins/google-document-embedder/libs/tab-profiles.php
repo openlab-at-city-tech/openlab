@@ -17,7 +17,7 @@
 		
 		// check profile table health
 		if ( ! $healthy ) {
-			echo "<p>" . gde_show_error( __('Unable to load profile settings. Please re-activate GDE and if the problem persists, request help using the "Support" tab.', 'gde') ) . "</p>\n";
+			echo "<p>" . gde_show_error( __('Unable to load profile settings. Please re-activate GDE and if the problem persists, request help using the "Support" tab.', 'google-document-embedder') ) . "</p>\n";
 		} else {
 			$profiles = gde_get_profiles();
 			
@@ -31,26 +31,26 @@
 				<thead>
 					<tr>
 						<th id="proid" class="manage-column column-proid" scope="col">
-							<span><?php _e('ID', 'gde'); ?></span>
+							<span><?php _e('ID', 'google-document-embedder'); ?></span>
 						</th>
 						<th id="proname" class="manage-column column-name" scope="col">
-							<span><?php _e('Name', 'gde'); ?></span>
+							<span><?php _e('Name', 'google-document-embedder'); ?></span>
 						</th>
 						<th id="description" class="manage-column column-description" scope="col">
-							<span><?php _e('Description', 'gde'); ?></span>
+							<span><?php _e('Description', 'google-document-embedder'); ?></span>
 						</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 						<th class="manage-column column-proid" scope="col">
-							<span><?php _e('ID', 'gde'); ?></span>
+							<span><?php _e('ID', 'google-document-embedder'); ?></span>
 						</th>
 						<th class="manage-column column-name" scope="col">
-							<span><?php _e('Name', 'gde'); ?></span>
+							<span><?php _e('Name', 'google-document-embedder'); ?></span>
 						</th>
 						<th class="manage-column column-description" scope="col">
-							<span><?php _e('Description', 'gde'); ?></span>
+							<span><?php _e('Description', 'google-document-embedder'); ?></span>
 						</th>
 					</tr>
 				</tfoot>
@@ -80,7 +80,7 @@
 							<?php echo $p['profile_name']; ?>
 						</td>
 						<td class="description column-description">
-							<?php _e($p['profile_desc'], 'gde'); ?>
+							<?php _e($p['profile_desc'], 'google-document-embedder'); ?>
 						</td>
 					</tr>
 <?php
@@ -89,7 +89,7 @@
 				</tbody>
 			</table>
 			
-			<?php $tmp = __('Reset Profiles', 'gde'); // not implemented yet ?>
+			<?php $tmp = __('Reset Profiles', 'google-document-embedder'); // not implemented yet ?>
 			
 		</div>
 	</div>
@@ -97,16 +97,16 @@
 		<div class="col-wrap">
 			<div class="form-wrap">
 				<?php gde_help_link( GDE_PROOPT_URL, 'right' ); ?>
-				<h3 class="gde-fix-h3"><?php _e('Add New Profile', 'gde'); ?></h3>
+				<h3 class="gde-fix-h3"><?php _e('Add New Profile', 'google-document-embedder'); ?></h3>
 				<form action="" method="post">
 				<?php wp_nonce_field('create-new-profile', '_profiles_new'); ?>
 					<div class="form-field">
-						<label for="profile-name"><?php _e('Name', 'gde'); ?></label>
+						<label for="profile-name"><?php _e('Name', 'google-document-embedder'); ?></label>
 						<input id="profile-name" type="text" style="width:45%;" value="" name="profile-name">
-						<p><?php _e('The name (or ID number) is used to select the profile via the shortcode. It is all lowercase and contains only letters, numbers, and hyphens.', 'gde'); ?></p>
+						<p><?php _e('The name (or ID number) is used to select the profile via the shortcode. It is all lowercase and contains only letters, numbers, and hyphens.', 'google-document-embedder'); ?></p>
 					</div>
 					<div class="form-field">
-						<label for="parent"><?php _e('Parent', 'gde'); ?></label>
+						<label for="parent"><?php _e('Parent', 'google-document-embedder'); ?></label>
 						<select id="parent" class="postform" name="parent">
 <?php
 	foreach ($profiles as $p) {
@@ -114,15 +114,15 @@
 	}
 ?>
 						</select>
-						<p><?php _e('Select which profile to use as a starting point.', 'gde'); ?></p>
+						<p><?php _e('Select which profile to use as a starting point.', 'google-document-embedder'); ?></p>
 					</div>
 					<div class="form-field">
-						<label for="profile-description"><?php _e('Description', 'gde'); ?></label>
+						<label for="profile-description"><?php _e('Description', 'google-document-embedder'); ?></label>
 						<textarea id="profile-description" cols="25" rows="3" name="description"></textarea>
-						<p><?php _e("Describe the profile's purpose, for your own reference (optional).", 'gde'); ?></p>
+						<p><?php _e("Describe the profile's purpose, for your own reference (optional).", 'google-document-embedder'); ?></p>
 					</div>
 					<p class="submit">
-						<input id="profile-submit" class="button" type="submit" value="<?php _e('Add New Profile', 'gde'); ?>" name="submit">
+						<input id="profile-submit" class="button" type="submit" value="<?php _e('Add New Profile', 'google-document-embedder'); ?>" name="submit">
 					</p>
 				</form>
 			</div>

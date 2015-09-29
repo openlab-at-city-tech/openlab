@@ -2,462 +2,784 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bestwebsoft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-17 12:13+0300\n"
-"PO-Revision-Date: 2014-01-17 12:13+0300\n"
+"POT-Creation-Date: 2015-09-17 16:00+0300\n"
+"PO-Revision-Date: 2015-09-17 16:00+0300\n"
 "Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
 "Language-Team: Marco <marco@blackstudio.it>\n"
-"Language: \n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: bws_functions.php:29
+#: bws_functions.php:53
+msgid "requires"
+msgstr ""
+
+#: bws_functions.php:31
+msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
+msgstr ""
+
+#: bws_functions.php:32
+msgid "Back to the WordPress"
+msgstr ""
+
 # @ bestwebsoft
-#: bws_menu.php:339
+#: bws_functions.php:34
+#, fuzzy
+msgid "Plugins page"
+msgstr "Plugin Pro"
+
+#: bws_functions.php:55
+msgid "or higher! We do not guarantee that our plugin will work correctly. Please upgrade to WordPress latest version."
+msgstr ""
+
+#: bws_functions.php:112
+msgid "It’s time to upgrade your"
+msgstr ""
+
+# @ captcha
+#: bws_functions.php:112
+#, fuzzy
+msgid "to"
+msgstr "due"
+
+# @ bestwebsoft
+#: bws_functions.php:112
+#, fuzzy
+msgid "version!"
+msgstr "Versione PHP"
+
+#: bws_functions.php:113
+msgid "Extend standard plugin functionality with new great options."
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:116
+#: bws_functions.php:513
+#, fuzzy
+msgid "Learn More"
+msgstr "Leggi tutto"
+
+#: bws_functions.php:133
+msgid "If you enjoy our plugin, please give it 5 stars on WordPress"
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:134
+#, fuzzy
+msgid "Rate the plugin"
+msgstr "Plugin attivi"
+
+# @ bestwebsoft
+#: bws_functions.php:137
+#, fuzzy
+msgid "If there is something wrong about it, please contact us"
+msgstr "Se hai domande, contattaci tramite"
+
+#: bws_functions.php:154
+#: bws_functions.php:190
+msgid "Wrong license key"
+msgstr ""
+
+#: bws_functions.php:184
+#: bws_functions.php:426
+#: bws_functions.php:477
+msgid "Something went wrong. Please try again later. If the error appears again, please contact us"
+msgstr ""
+
+#: bws_functions.php:184
+#: bws_functions.php:426
+#: bws_functions.php:477
+msgid "We are sorry for inconvenience."
+msgstr ""
+
+#: bws_functions.php:192
+msgid "This license key is bind to another site"
+msgstr ""
+
+#: bws_functions.php:194
+#: bws_functions.php:336
+msgid "Unfortunately, you have exceeded the number of available tries per day. Please, upload the plugin manually."
+msgstr ""
+
+#: bws_functions.php:196
+msgid "Unfortunately, Your license has expired. To continue getting top-priority support and plugin updates you should extend it in your"
+msgstr ""
+
+#: bws_functions.php:198
+msgid "Unfortunately, the Pro licence was already installed to this domain. The Pro Trial license can be installed only once."
+msgstr ""
+
+#: bws_functions.php:219
+#: bws_functions.php:241
+#: bws_functions.php:263
+msgid "Failed to download the zip archive. Please, upload the plugin manually"
+msgstr ""
+
+#: bws_functions.php:231
+msgid "Failed to open the zip archive. Please, upload the plugin manually"
+msgstr ""
+
+#: bws_functions.php:237
+msgid "Your server does not support either ZipArchive or Phar. Please, upload the plugin manually"
+msgstr ""
+
+#: bws_functions.php:244
+msgid "UploadDir is not writable. Please, upload the plugin manually"
+msgstr ""
+
+#: bws_functions.php:267
+msgid "Something went wrong. Try again later or upload the plugin manually. We are sorry for inconvenience."
+msgstr ""
+
+#: bws_functions.php:292
+msgid "Please, enter Your license key"
+msgstr ""
+
+#: bws_functions.php:309
+msgid "Congratulations! The Pro version of the plugin is successfully download and activated."
+msgstr ""
+
+#: bws_functions.php:311
+#: bws_functions.php:393
+msgid "Please, go to"
+msgstr ""
+
+#: bws_functions.php:311
+#: bws_functions.php:393
+msgid "the setting page"
+msgstr ""
+
+#: bws_functions.php:312
+#: bws_functions.php:394
+msgid "You will be redirected automatically in 5 seconds."
+msgstr ""
+
+#: bws_functions.php:317
+msgid "You can download and activate"
+msgstr ""
+
+#: bws_functions.php:319
+msgid "version of this plugin by entering Your license key."
+msgstr ""
+
+#: bws_functions.php:321
+#: bws_functions.php:362
+msgid "You can find your license key on your personal page Client area, by clicking on the link"
+msgstr ""
+
+#: bws_functions.php:323
+#: bws_functions.php:364
+msgid "(your username is the email you specify when purchasing the product)."
+msgstr ""
+
+# @ captcha
+#: bws_functions.php:327
+#: bws_functions.php:630
+#, fuzzy
+msgid "or"
+msgstr "quattro"
+
+#: bws_functions.php:327
+#, php-format
+msgid "Start Your Free %s-Day Trial Now"
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:333
+#: bws_functions.php:342
+#: bws_functions.php:372
+#: bws_functions.php:380
+#: bws_menu.php:693
+#: bws_menu.php:750
+#, fuzzy
+msgid "Activate"
+msgstr "Plugin attivi"
+
+#: bws_functions.php:359
+#: bws_functions.php:452
+#, php-format
+msgid "In order to continue using the plugin it is necessary to buy a %s license."
+msgstr ""
+
+#: bws_functions.php:360
+msgid "After that you can activate it by entering your license key."
+msgstr ""
+
+#: bws_functions.php:374
+msgid "Unfortunately, you have exceeded the number of available tries per day."
+msgstr ""
+
+#: bws_functions.php:391
+msgid "Congratulations! The Pro license of the plugin is successfully activated."
+msgstr ""
+
+#: bws_functions.php:432
+msgid "Wrong license key."
+msgstr ""
+
+#: bws_functions.php:434
+msgid "This license key is bind to another site."
+msgstr ""
+
+#: bws_functions.php:436
+msgid "This license key is valid, but Your license has expired. If you want to update our plugin in future, you should extend the license."
+msgstr ""
+
+#: bws_functions.php:438
+msgid "Unfortunately, you have exceeded the number of available tries."
+msgstr ""
+
+#: bws_functions.php:440
+msgid "Unfortunately, the Pro Trial licence was already installed to this domain. The Pro Trial license can be installed only once."
+msgstr ""
+
+#: bws_functions.php:444
+msgid "The Pro Trial license key is valid."
+msgstr ""
+
+#: bws_functions.php:446
+msgid "The license key is valid."
+msgstr ""
+
+#: bws_functions.php:449
+msgid "Your license will expire on"
+msgstr ""
+
+#: bws_functions.php:482
+msgid "Please, enter your license key"
+msgstr ""
+
+#: bws_functions.php:495
+msgid "If needed you can check if the license key is correct or reenter it in the field below. You can find your license key on your personal page - Client area - on our website"
+msgstr ""
+
+#: bws_functions.php:495
+msgid "(your username is the email you specify when purchasing the product). If necessary, please submit \"Lost your password?\" request."
+msgstr ""
+
+#: bws_functions.php:499
+msgid "Check license key"
+msgstr ""
+
+#: bws_functions.php:513
+msgid "WARNING: Illegal use notification"
+msgstr ""
+
+#: bws_functions.php:513
+msgid "You can use one license of the Pro plugin for one domain only. Please check and edit your license or domain if necessary using you personal Client Area. We strongly recommend you to solve the problem within 24 hours, otherwise the Pro plugin will be deactivated."
+msgstr ""
+
+#: bws_functions.php:521
+msgid "Notice: Your Pro Trial license has expired. To continue using the plugin you should buy a Pro license"
+msgstr ""
+
+#: bws_functions.php:523
+msgid "Your license has expired. To continue getting top-priority support and plugin updates you should extend it."
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:523
+#: bws_functions.php:576
+#: bws_menu.php:669
+#: bws_menu.php:691
+#: bws_menu.php:718
+#: bws_menu.php:748
+#: bws_menu.php:794
+#, fuzzy
+msgid "Learn more"
+msgstr "Leggi tutto"
+
+#: bws_functions.php:533
+#, php-format
+msgid "Notice: You are using the Pro Trial license of %s plugin."
+msgstr ""
+
+#: bws_functions.php:535
+msgid "Notice: You are using the Pro Trial license of plugin."
+msgstr ""
+
+#: bws_functions.php:538
+msgid "The Pro Trial license will expire on"
+msgstr ""
+
+#: bws_functions.php:576
+msgid "You license for"
+msgstr ""
+
+#: bws_functions.php:576
+msgid "expires on"
+msgstr ""
+
+#: bws_functions.php:576
+msgid "and you won't be granted TOP-PRIORITY SUPPORT or UPDATES."
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:626
+#, fuzzy
+msgid "Thank you for installing"
+msgstr "Grazie per averci contattato."
+
+#: bws_functions.php:627
+msgid "Let's get started"
+msgstr ""
+
+# @ bestwebsoft
+# @ captcha
+#: bws_functions.php:628
+#, fuzzy
+msgid "Configure Settings"
+msgstr "Impostazioni"
+
+#: bws_functions.php:631
+msgid "Add New"
+msgstr ""
+
+#: bws_functions.php:635
+msgid "Close notice"
+msgstr ""
+
+#: bws_functions.php:648
+msgid "Notice"
+msgstr ""
+
+#: bws_functions.php:648
+msgid "The plugin's settings have been changed."
+msgstr ""
+
+# @ default
+#: bws_functions.php:649
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+#: bws_functions.php:694
+msgid "Add BWS Plugins Shortcode"
+msgstr ""
+
+#: bws_functions.php:738
+msgid "Close"
+msgstr ""
+
+#: bws_functions.php:829
+msgid "Restore all plugin settings to defaults"
+msgstr ""
+
+#: bws_functions.php:831
+msgid "Restore settings"
+msgstr ""
+
+#: bws_functions.php:842
+msgid "Are you sure you want to restore all settings by default?"
+msgstr ""
+
+#: bws_functions.php:845
+msgid "Yes, restore all settings"
+msgstr ""
+
+#: bws_functions.php:846
+msgid "No, go back to the settings page"
+msgstr ""
+
+# @ bestwebsoft
+#: bws_functions.php:890
+#, fuzzy
+msgid "Plugin"
+msgstr "Plugin Pro"
+
+# @ bestwebsoft
+# @ captcha
+#: bws_functions.php:899
+#, fuzzy
+msgid "Shortcode settings"
+msgstr "Impostazioni"
+
+#: bws_functions.php:904
+msgid "The shortcode will be inserted"
+msgstr ""
+
+#: bws_functions.php:909
+msgid "Insert"
+msgstr ""
+
+# @ bestwebsoft
+#: bws_menu.php:506
 msgid "Not set"
 msgstr "Non impostato"
 
 # @ bestwebsoft
-#: bws_menu.php:341
-#: bws_menu.php:345
+#: bws_menu.php:508
+#: bws_menu.php:509
 msgid "On"
 msgstr "Abilitato"
 
 # @ bestwebsoft
-#: bws_menu.php:343
-#: bws_menu.php:347
+#: bws_menu.php:508
+#: bws_menu.php:509
 msgid "Off"
 msgstr "Disabilitato"
 
 # @ bestwebsoft
-#: bws_menu.php:351
-#: bws_menu.php:355
-#: bws_menu.php:359
-#: bws_menu.php:363
-#: bws_menu.php:367
-#: bws_menu.php:393
+#: bws_menu.php:510
+#: bws_menu.php:511
+#: bws_menu.php:512
+#: bws_menu.php:513
+#: bws_menu.php:514
+#: bws_menu.php:526
 msgid "N/A"
 msgstr "Non disponibile"
 
 # @ bestwebsoft
-#: bws_menu.php:365
+#: bws_menu.php:514
 msgid " Mb"
 msgstr "Mb"
 
 # @ bestwebsoft
-#: bws_menu.php:369
-#: bws_menu.php:373
-#: bws_menu.php:377
-#: bws_menu.php:388
+#: bws_menu.php:515
+#: bws_menu.php:516
+#: bws_menu.php:517
+#: bws_menu.php:522
 msgid "Yes"
 msgstr "Sì"
 
 # @ bestwebsoft
-#: bws_menu.php:371
-#: bws_menu.php:375
-#: bws_menu.php:379
-#: bws_menu.php:390
+#: bws_menu.php:515
+#: bws_menu.php:516
+#: bws_menu.php:517
+#: bws_menu.php:524
 msgid "No"
 msgstr "No"
 
 # @ bestwebsoft
-#: bws_menu.php:404
+#: bws_menu.php:534
 msgid "Operating System"
 msgstr "Sistema operativo"
 
 # @ bestwebsoft
-#: bws_menu.php:405
+#: bws_menu.php:535
 msgid "Server"
 msgstr "Server"
 
 # @ bestwebsoft
-#: bws_menu.php:406
+#: bws_menu.php:536
 msgid "Memory usage"
 msgstr "Utilizzo memoria"
 
 # @ bestwebsoft
-#: bws_menu.php:407
+#: bws_menu.php:537
 msgid "MYSQL Version"
 msgstr "Versione MYSQL"
 
 # @ bestwebsoft
-#: bws_menu.php:408
+#: bws_menu.php:538
 msgid "SQL Mode"
 msgstr "Modalità SQL"
 
 # @ bestwebsoft
-#: bws_menu.php:409
+#: bws_menu.php:539
 msgid "PHP Version"
 msgstr "Versione PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:410
+#: bws_menu.php:540
 msgid "PHP Safe Mode"
 msgstr "Safe Mode PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:411
+#: bws_menu.php:541
 msgid "PHP Allow URL fopen"
 msgstr "Consenti URL fopen PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:412
+#: bws_menu.php:542
 msgid "PHP Memory Limit"
 msgstr "Limite di memoria PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:413
+#: bws_menu.php:543
 msgid "PHP Max Upload Size"
 msgstr "Dimensione upload massima PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:414
+#: bws_menu.php:544
 msgid "PHP Max Post Size"
 msgstr "Dimensione massima Post PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:415
+#: bws_menu.php:545
 msgid "PHP Max Script Execute Time"
 msgstr "Tempo massimo di esecuzione PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:416
+#: bws_menu.php:546
 msgid "PHP Exif support"
 msgstr "Supporto Exif PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:417
+#: bws_menu.php:547
 msgid "PHP IPTC support"
 msgstr "Supporto IPTC PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:418
+#: bws_menu.php:548
 msgid "PHP XML support"
 msgstr "Supporto XML PHP"
 
 # @ bestwebsoft
-#: bws_menu.php:419
+#: bws_menu.php:549
 msgid "Site URL"
 msgstr "URL sito"
 
 # @ bestwebsoft
-#: bws_menu.php:420
+#: bws_menu.php:550
 msgid "Home URL"
 msgstr "URL home"
 
 # @ bestwebsoft
-#: bws_menu.php:421
+#: bws_menu.php:553
 msgid "WordPress Version"
 msgstr "Versione WordPress"
 
 # @ bestwebsoft
-#: bws_menu.php:422
+#: bws_menu.php:554
 msgid "WordPress DB Version"
 msgstr "Versione DB WordPress"
 
 # @ bestwebsoft
-#: bws_menu.php:423
+#: bws_menu.php:555
 msgid "Multisite"
 msgstr "Multisito"
 
 # @ bestwebsoft
-#: bws_menu.php:424
+#: bws_menu.php:556
 msgid "Active Theme"
 msgstr "Tema attivo"
 
 # @ bestwebsoft
-#: bws_menu.php:440
+#: bws_menu.php:571
 msgid "Please enter a valid email address."
 msgstr "Per favore inserisci un indirizzo e-mail valido."
 
 # @ bestwebsoft
-#: bws_menu.php:444
+#: bws_menu.php:575
 msgid "Email with system info is sent to "
 msgstr "Email con informazioni di sistema spedita a "
 
 # @ bestwebsoft
-#: bws_menu.php:448
+#: bws_menu.php:579
 msgid "Thank you for contacting us."
 msgstr "Grazie per averci contattato."
 
 # @ bestwebsoft
-#: bws_menu.php:476
+#: bws_menu.php:612
 msgid "Sorry, email message could not be delivered."
 msgstr "Spiacenti, il messaggio email non può essere inviato."
 
-#: bws_menu.php:488
-msgid "Switch to new interface"
+#: bws_menu.php:620
+msgid "Need help?"
+msgstr ""
+
+#: bws_menu.php:621
+msgid "Client area"
 msgstr ""
 
 # @ bestwebsoft
-#: bws_menu.php:495
-msgid "Pro plugins"
-msgstr "Plugin Pro"
-
-# @ bestwebsoft
-#: bws_menu.php:498
-#: bws_menu.php:524
-msgid "Activated plugins"
-msgstr "Plugin attivi"
-
-# @ bestwebsoft
-#: bws_menu.php:500
-#: bws_menu.php:508
-#: bws_menu.php:516
-#: bws_menu.php:526
-#: bws_menu.php:534
-#: bws_menu.php:542
-#: bws_menu.php:552
-#: bws_menu.php:559
-#: bws_menu.php:567
-msgid "Read more"
-msgstr "Leggi tutto"
-
-# @ bestwebsoft
-# @ captcha
-#: bws_menu.php:500
-#: bws_menu.php:526
-#: bws_menu.php:678
-#: bws_menu.php:706
-msgid "Settings"
-msgstr "Impostazioni"
-
-# @ bestwebsoft
-#: bws_menu.php:506
-#: bws_menu.php:532
-#: bws_menu.php:658
-msgid "Installed plugins"
-msgstr "Plugin installati"
-
-# @ bestwebsoft
-#: bws_menu.php:514
-#: bws_menu.php:540
-#: bws_menu.php:765
-msgid "Recommended plugins"
-msgstr "Plugin raccomandati"
-
-# @ bestwebsoft
-#: bws_menu.php:516
-msgid "Purchase"
-msgstr "Acquista"
-
-# @ bestwebsoft
-#: bws_menu.php:521
-msgid "Free plugins"
-msgstr "Plugin gratuiti"
-
-# @ bestwebsoft
-#: bws_menu.php:542
-#: bws_menu.php:567
-msgid "Download"
-msgstr "Scarica"
-
-# @ default
-#: bws_menu.php:542
-#: bws_menu.php:567
-#: bws_menu.php:867
-#, php-format
-msgid "Install %s"
-msgstr "Installa %s"
-
-# @ bestwebsoft
-#: bws_menu.php:542
-#: bws_menu.php:567
-msgid "Install now from wordpress.org"
-msgstr "Installa ora da wordpress.org"
-
-#: bws_menu.php:548
-msgid "Free themes"
-msgstr ""
-
-# @ bestwebsoft
-#: bws_menu.php:551
-#, fuzzy
-msgid "Activated theme"
-msgstr "Tema attivo"
-
-#: bws_menu.php:552
-#, php-format
-msgid "Customize &#8220;%s&#8221;"
-msgstr ""
-
-#: bws_menu.php:552
-msgid "Customize"
-msgstr ""
-
-# @ default
-#: bws_menu.php:557
-#, fuzzy
-msgid "Installed themes"
-msgstr "Installa %s"
-
-# @ bestwebsoft
-#: bws_menu.php:565
-#, fuzzy
-msgid "Recommended themes"
-msgstr "Plugin raccomandati"
-
-# @ bestwebsoft
-#: bws_menu.php:573
-msgid "If you have any questions, please contact us via"
-msgstr "Se hai domande, contattaci tramite"
-
-# @ bestwebsoft
-#: bws_menu.php:580
-#: bws_menu.php:648
-#: bws_menu.php:903
+#: bws_menu.php:622
+#: bws_menu.php:933
 msgid "System status"
 msgstr "Stato sistema"
 
 # @ bestwebsoft
-#: bws_menu.php:584
-#: bws_menu.php:906
-msgid "Environment"
-msgstr "Ambiente"
-
-# @ bestwebsoft
-#: bws_menu.php:595
-#: bws_menu.php:917
-msgid "Active Plugins"
-msgstr "Plugin attivi"
-
-# @ bestwebsoft
-#: bws_menu.php:606
-#: bws_menu.php:928
-msgid "Inactive Plugins"
-msgstr "Plugin inattivi"
-
-# @ bestwebsoft
-#: bws_menu.php:620
-#: bws_menu.php:942
-msgid "Send to support"
-msgstr "Invia al supporto"
-
-# @ bestwebsoft
 #: bws_menu.php:627
-#: bws_menu.php:949
-msgid "Send to custom email &#187;"
-msgstr "Invia a una email personalizzata &#187;"
-
-#: bws_menu.php:638
-msgid "Switch to old interface"
-msgstr ""
-
-# @ bestwebsoft
-#: bws_menu.php:644
 #, fuzzy
 msgid "Plugins"
 msgstr "Plugin Pro"
 
-#: bws_menu.php:646
+#: bws_menu.php:629
 msgid "Themes"
 msgstr ""
 
-#: bws_menu.php:652
+#: bws_menu.php:634
 msgid "All"
 msgstr ""
 
 # @ default
-#: bws_menu.php:653
+#: bws_menu.php:635
 #, fuzzy
 msgid "Installed"
 msgstr "Installa %s"
 
 # @ bestwebsoft
-#: bws_menu.php:654
+#: bws_menu.php:636
 #, fuzzy
 msgid "Recommended"
 msgstr "Plugin raccomandati"
 
 # @ bestwebsoft
-#: bws_menu.php:676
-#: bws_menu.php:704
-#: bws_menu.php:726
-#: bws_menu.php:754
-#: bws_menu.php:795
-#, fuzzy
-msgid "Learn more"
-msgstr "Leggi tutto"
-
-#: bws_menu.php:694
-#: bws_menu.php:744
-#: bws_menu.php:785
-msgid "Go"
-msgstr ""
-
-#: bws_menu.php:698
-#: bws_menu.php:748
-#: bws_menu.php:789
-msgid "DONATE"
-msgstr ""
+#: bws_menu.php:640
+msgid "Installed plugins"
+msgstr "Plugin installati"
 
 # @ bestwebsoft
-#: bws_menu.php:728
-#: bws_menu.php:756
+# @ captcha
+#: bws_menu.php:672
+#: bws_menu.php:721
+msgid "Settings"
+msgstr "Impostazioni"
+
+# @ bestwebsoft
+#: bws_menu.php:693
+#: bws_menu.php:750
 #, fuzzy
 msgid "Activate this plugin"
 msgstr "Plugin attivi"
 
+#: bws_menu.php:708
+#: bws_menu.php:738
+#: bws_menu.php:784
+msgid "Go"
+msgstr ""
+
+#: bws_menu.php:712
+#: bws_menu.php:742
+#: bws_menu.php:788
+msgid "DONATE"
+msgstr ""
+
 # @ bestwebsoft
-#: bws_menu.php:728
-#: bws_menu.php:756
-#, fuzzy
-msgid "Activate"
-msgstr "Plugin attivi"
+#: bws_menu.php:758
+msgid "Recommended plugins"
+msgstr "Plugin raccomandati"
 
 # @ default
-#: bws_menu.php:797
+#: bws_menu.php:796
 #, fuzzy
 msgid "Install now"
 msgstr "Installa %s"
 
-#: bws_menu.php:819
+#: bws_menu.php:817
 msgid "Try again"
 msgstr ""
 
-#: bws_menu.php:836
+#: bws_menu.php:835
 #, php-format
 msgid "Preview &#8220;%s&#8221;"
 msgstr ""
 
 # @ default
-#: bws_menu.php:867
+#: bws_menu.php:866
+#, php-format
+msgid "Install %s"
+msgstr "Installa %s"
+
+# @ default
+#: bws_menu.php:866
 #, fuzzy
 msgid "Install Now"
 msgstr "Installa %s"
 
-#: bws_menu.php:870
+#: bws_menu.php:869
 #, php-format
 msgid "Update to version %s"
 msgstr ""
 
-#: bws_menu.php:870
+#: bws_menu.php:869
 msgid "Update"
 msgstr ""
 
-#: bws_menu.php:877
+#: bws_menu.php:876
 #, php-format
 msgid "Preview %s"
 msgstr ""
 
-#: bws_menu.php:877
+#: bws_menu.php:876
 msgid "Preview"
 msgstr ""
 
-#: bws_menu.php:884
+#: bws_menu.php:882
+#: bws_menu.php:914
 #, php-format
 msgid "By %s"
 msgstr ""
 
-#: bws_menu.php:890
+#: bws_menu.php:888
 msgid "Details"
 msgstr ""
+
+# @ default
+#: bws_menu.php:920
+#, fuzzy
+msgid "Already Installed"
+msgstr "Installa %s"
+
+# @ bestwebsoft
+#: bws_menu.php:936
+msgid "Environment"
+msgstr "Ambiente"
+
+# @ bestwebsoft
+#: bws_menu.php:947
+msgid "Active Plugins"
+msgstr "Plugin attivi"
+
+# @ bestwebsoft
+#: bws_menu.php:960
+msgid "Inactive Plugins"
+msgstr "Plugin inattivi"
+
+# @ bestwebsoft
+#: bws_menu.php:976
+msgid "Send to support"
+msgstr "Invia al supporto"
+
+# @ bestwebsoft
+#: bws_menu.php:983
+msgid "Send to custom email &#187;"
+msgstr "Invia a una email personalizzata &#187;"
+
+# @ bestwebsoft
+#~ msgid "Pro plugins"
+#~ msgstr "Plugin Pro"
+# @ bestwebsoft
+#~ msgid "Activated plugins"
+#~ msgstr "Plugin attivi"
+# @ bestwebsoft
+#~ msgid "Read more"
+#~ msgstr "Leggi tutto"
+# @ bestwebsoft
+#~ msgid "Purchase"
+#~ msgstr "Acquista"
+# @ bestwebsoft
+#~ msgid "Free plugins"
+#~ msgstr "Plugin gratuiti"
+# @ bestwebsoft
+#~ msgid "Download"
+#~ msgstr "Scarica"
+# @ bestwebsoft
+#~ msgid "Install now from wordpress.org"
+#~ msgstr "Installa ora da wordpress.org"
+# @ bestwebsoft
+#, fuzzy
+#~ msgid "Activated theme"
+#~ msgstr "Tema attivo"
+
+# @ default
+#, fuzzy
+#~ msgid "Installed themes"
+#~ msgstr "Installa %s"
+
+# @ bestwebsoft
+#, fuzzy
+#~ msgid "Recommended themes"
+#~ msgstr "Plugin raccomandati"
 
 # @ default
 #, fuzzy
@@ -588,9 +910,6 @@ msgstr ""
 # @ captcha
 #~ msgid "CAPTCHA complexity level"
 #~ msgstr "Livello complessità CAPTCHA"
-# @ default
-#~ msgid "Save Changes"
-#~ msgstr "Salva le modifiche"
 # @ captcha
 #~ msgid "ERROR"
 #~ msgstr "ERRORE"
@@ -618,14 +937,8 @@ msgstr ""
 #~ msgid "one"
 #~ msgstr "uno"
 # @ captcha
-#~ msgid "two"
-#~ msgstr "due"
-# @ captcha
 #~ msgid "three"
 #~ msgstr "tre"
-# @ captcha
-#~ msgid "four"
-#~ msgstr "quattro"
 # @ captcha
 #~ msgid "five"
 #~ msgstr "cinque"
