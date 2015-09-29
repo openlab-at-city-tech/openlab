@@ -47,6 +47,11 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
     if ( isset($_GET['cat_id'] ) ) {
         $categoryid = intval( $_GET['cat_id'] );
+    } elseif ( isset( $_GET['catname'] ) ) {
+        $categoryterm = get_term_by( 'name', urldecode( $_GET['catname'] ), 'link_category' );
+	    $categoryid = $categoryterm->term_id;
+    } elseif ( $showonecatonly ) {
+	    $categoryid = $defaultsinglecat;
     }
 
     if ( !isset( $_GET['searchll'] ) || true == $showcatonsearchresults ) {
@@ -56,7 +61,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
         $output .= "<!-- Link Library Categories Output -->\n\n";
 
-        if ( true == $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
+        if ( $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
             $nonce = wp_create_nonce( 'link_library_ajax_refresh' );
 
             $output .= "<SCRIPT LANGUAGE=\"JavaScript\">\n";
@@ -94,7 +99,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 	    if ( $cat_letter_filter != 'no' ) {
 		    require_once plugin_dir_path( __FILE__ ) . 'render-link-library-alpha-filter.php';
-		    $result = RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $libraryoptions, $settings );
+		    $result = RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $libraryoptions, $settings, 'normal' );
 
 		    $currentcatletter = $result['currentcatletter'];
 
@@ -255,15 +260,24 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                             $cattext = "<a href='";
                         }
 
-                        if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
+                        /* if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
                             $cattext .= $cattargetaddress . '&catname=';
                         } elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
                             $cattext .= $cattargetaddress . '?catname=';
                         } elseif ( empty( $cattargetaddress ) ) {
                             $cattext .= '?catname=';
-                        }
+                        } */
 
-                        $cattext .= urlencode( $catname->name );
+	                    if ( !empty( $_GET ) ) {
+		                    $get_array = $_GET;
+	                    } else {
+		                    $get_array = array();
+	                    }
+
+	                    $get_array['catname'] = urlencode( $catname->name );
+	                    $get_query = add_query_arg( $get_array, $cattargetaddress );
+
+	                    $cattext .= $get_query;
 
                         if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
                             $cattext .= "'>";
@@ -358,11 +372,11 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 $output .= ( $catfront . $cattext . $catitem );
 
                 if ( 'table' == $flatlist ) {
-                    $catterminator = "	</td>\n";
+                    $catterminator = "</td>\n";
                 } elseif ( 'unordered' == $flatlist ) {
-                    $catterminator = "	</li>\n";
+                    $catterminator = "</li>\n";
                 } elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
-                    $catterminator = "	</option>\n";
+                    $catterminator = "</option>\n";
                 }
 
                 $output .= ( $catterminator );

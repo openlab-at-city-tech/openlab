@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 5.9.5.5
+Version: 5.9.10.3
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.ca/
 
@@ -219,9 +219,9 @@ class link_library_plugin {
 				link_visits bigint(20) DEFAULT '0',
 				link_reciprocal varchar(255) DEFAULT NULL,
 				link_submitter varchar(255) DEFAULT NULL,
-				link_submitter_name VARCHAR(128) NULL,
+				link_submitter_name VARCHAR(128) CHARACTER SET utf8 NULL,
 				link_submitter_email VARCHAR(128) NULL,
-				link_textfield TEXT NULL,
+				link_textfield TEXT CHARACTER SET utf8 NULL,
 				link_no_follow VARCHAR(1) NULL,
 				link_featured VARCHAR(1) NULL,
 				link_manual_updated VARCHAR(1) NULL,
