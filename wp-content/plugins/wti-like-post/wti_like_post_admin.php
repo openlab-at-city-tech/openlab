@@ -31,7 +31,7 @@ function WtiLikePostAdminContent() {
 	}
 ?>
 <div class="wrap">
-     <h2><?php echo __('WTI Like Post Options', 'wti-like-post');?></h2>
+     <h2><?php echo __('WTI Like Post', 'wti-like-post') . ' ' . $wti_like_post_db_version;?></h2>
      <br class="clear" />
 	
 	<div class="metabox-holder has-right-sidebar" id="poststuff">
@@ -42,9 +42,9 @@ function WtiLikePostAdminContent() {
 					<h3 class="hndle"><?php echo __('Support / Manual / Upgradation', 'wti-like-post'); ?></h3>
 					<div class="inside">
 						<p style="margin:15px 0px;"><?php echo __('For any suggestion / query / issue / requirement, please feel free to drop an email to', 'wti-like-post'); ?> <a href="mailto:support@webtechideas.com?subject=WTI Like Post">support@webtechideas.com</a>.</p>
-						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.com/wti-like-post-plugin/3/" target="_blank"><?php echo __('Lite Manual here', 'wti-like-post'); ?></a>.</p>
-						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.com/product/wti-like-post-pro/" target="_blank"><?php echo __('PRO Version here', 'wti-like-post'); ?></a> <?php echo __('for more advanced features', 'wti-like-post'); ?>.</p>
-						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.com/product/wti-like-post-pro/" target="_blank"><?php echo __('PRO Manual here', 'wti-like-post'); ?></a> <?php echo __('for a complete list of features', 'wti-like-post'); ?>.</p>
+						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.in/wti-like-post-plugin/3/" target="_blank"><?php echo __('Lite Manual here', 'wti-like-post'); ?></a>.</p>
+						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.in/product/wti-like-post-pro/" target="_blank"><?php echo __('PRO Version here', 'wti-like-post'); ?></a> <?php echo __('for more advanced features', 'wti-like-post'); ?>.</p>
+						<p style="margin:15px 0px;"><?php echo __('Get the', 'wti-like-post'); ?> <a href="http://www.webtechideas.in/product/wti-like-post-pro/" target="_blank"><?php echo __('PRO Manual here', 'wti-like-post'); ?></a> <?php echo __('for a complete list of features', 'wti-like-post'); ?>.</p>
 					</div>
 				</div>
 				
@@ -67,7 +67,7 @@ function WtiLikePostAdminContent() {
 								<input type="hidden" value="1" name="no_note" />
 								<input type="hidden" value="3FWGC6LFTMTUG" name="mrb" />
 								<input type="hidden" value="IC_Sample" name="bn" />
-								<input type="hidden" value="http://www.webtechideas.com/thanks/" name="return" />
+								<input type="hidden" value="http://www.webtechideas.in/thanks/" name="return" />
 								<input type="image" alt="Make payments with payPal - it's fast, free and secure!" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but11.gif" />
 							</form>
 						</p>
@@ -375,20 +375,33 @@ function WtiLikePostAdminContent() {
 			<h2><?php _e('Most Liked Posts', 'wti-like-post');?></h2>
 			<?php
 			// Getting the most liked posts
-			$query = "SELECT COUNT(post_id) AS total FROM `{$wpdb->prefix}wti_like_post` L JOIN {$wpdb->prefix}posts P ";
-			$query .= "ON L.post_id = P.ID WHERE value > 0";
+			$query = "SELECT COUNT(post_id) AS total
+					FROM `{$wpdb->prefix}wti_like_post` L JOIN {$wpdb->prefix}posts P
+					ON L.post_id = P.ID WHERE value > 0";
 			$post_count = $wpdb->get_var($query);
 	   
 			if ($post_count > 0) {
 	
 				// Pagination script
 				$limit = get_option('posts_per_page');
-				$current = max( 1, $_GET['paged'] );
+				
+				if ( isset( $_GET['paged'] ) ) {
+					$current = max( 1, $_GET['paged'] );
+				} else {
+					$current = 1;
+				}
+				
 				$total_pages = ceil($post_count / $limit);
 				$start = $current * $limit - $limit;
 				
-				$query = "SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L JOIN {$wpdb->prefix}posts P ";
-				$query .= "ON L.post_id = P.ID WHERE value > 0 GROUP BY post_id ORDER BY like_count DESC, post_title LIMIT $start, $limit";
+				$query = $wpdb->prepare(
+							"SELECT post_id, SUM(value) AS like_count, post_title
+							FROM `{$wpdb->prefix}wti_like_post` L JOIN {$wpdb->prefix}posts P 
+							ON L.post_id = P.ID WHERE value > 0 GROUP BY post_id
+							ORDER BY like_count DESC, post_title LIMIT %d, %d",
+							$start, $limit
+						);
+						
 				$result = $wpdb->get_results($query);
 				?>
 				<form method="post" action="<?php echo admin_url('options-general.php?page=WtiLikePostAdminMenu'); ?>" name="most_liked_posts_form" id="most_liked_posts_form">
@@ -503,7 +516,8 @@ add_action('save_post', 'WtiLikePostSaveData');
  */
 function WtiLikePostSaveData($post_id) {
      // Verify nonce
-     if (!wp_verify_nonce($_POST['wti_like_post_meta_box_nonce'], basename(__FILE__))) {
+     if ( empty( $_POST['wti_like_post_meta_box_nonce'] ) ||
+	     !wp_verify_nonce( $_POST['wti_like_post_meta_box_nonce'], basename(__FILE__) ) ) {
           return $post_id;
      }
     
@@ -525,27 +539,27 @@ function WtiLikePostSaveData($post_id) {
 	$excluded_posts = array();
 	
 	// Check whether this post/page is to be excluded
-	$exclude_post = $_POST['wti_exclude_post'];
+	$exclude_post = isset( $_POST['wti_exclude_post'] ) ? $_POST['wti_exclude_post'] : 0;
 	
 	// Get old excluded posts/pages
 	if (strlen(get_option('wti_like_post_excluded_posts')) > 0) {
 		$excluded_posts = explode(',', get_option('wti_like_post_excluded_posts'));
 	}
 	
-	if ($exclude_post == 1 && !in_array($_POST['ID'], $excluded_posts)) {
+	if ($exclude_post == 1 && !in_array($post_id, $excluded_posts)) {
 		// Add this post/page id to the excluded list
-		$excluded_posts[] = $_POST['ID'];
+		$excluded_posts[] = $post_id;
 		
 		if (!empty($excluded_posts)) {
 			// Since there are already excluded posts/pages, add this as a comma separated value
 			update_option('wti_like_post_excluded_posts', implode(',', $excluded_posts));
 		} else {
 			// Since there is no old excluded post/page, add this directly
-			update_option('wti_like_post_excluded_posts', $_POST['ID']);
+			update_option('wti_like_post_excluded_posts', $post_id);
 		}
 	} else if (!$exclude_post) {
 		// Check whether this id is already in the excluded list or not
-		$key = array_search($_POST['ID'], $excluded_posts);
+		$key = array_search($post_id, $excluded_posts);
 		
 		if ($key !== false) {
 			// Since this is already in the list, so exluded this
@@ -567,8 +581,8 @@ function WtiLikePostSaveData($post_id) {
 function WtiLikePostSetPluginMeta( $links, $file ) {
 	if ( strpos( $file, 'wti-like-post/wti_like_post.php' ) !== false ) {
 		$new_links = array(
-						'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.com/thanks/" target="_blank">' . __( 'Donate', 'wti-like-post' ) . '</a>',
-						'<a href="http://www.webtechideas.com/product/wti-like-post-pro/" target="_blank">' . __( 'PRO Version', 'wti-like-post' ) . '</a>',
+						'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.in/thanks/" target="_blank">' . __( 'Donate', 'wti-like-post' ) . '</a>',
+						'<a href="http://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">' . __( 'PRO Version', 'wti-like-post' ) . '</a>',
 						'<a href="http://support.webtechideas.com/forums/forum/wti-like-post-pro/" target="_blank">' . __( 'PRO Support Forum', 'wti-like-post' ) . '</a>',
 					);
 		
@@ -579,3 +593,51 @@ function WtiLikePostSetPluginMeta( $links, $file ) {
 }
 
 add_filter( 'plugin_row_meta', 'WtiLikePostSetPluginMeta', 10, 2 );
+
+/**
+ * Display a notice that can be dismissed
+ *
+ * @param none
+ * @return void
+ */
+add_action('admin_notices', 'WtiAdminNotice');
+
+function WtiAdminNotice() {
+	global $pagenow, $wti_like_post_db_version;
+	
+     if ( isset( $_GET['hide_wti_like_post_notify_author'] ) && true == $_GET['hide_wti_like_post_notify_author'] ) {
+		// Hide the notification
+		update_option( 'wti_like_post_lite_notify_author', 0 );
+	} else if ( isset( $_GET['send_wti_like_post_notify_author'] ) && true == $_GET['send_wti_like_post_notify_author'] ) {
+		// Check that the author has to be notified
+		$notify_author = get_option( 'wti_like_post_lite_notify_author', 1 );
+		
+		if ( $notify_author ) {
+			// Not yet notified, so notify the author now
+			$message = 'WTI Like Post Lite ' . $wti_like_post_db_version . ' is used on <a href="' . get_option( 'siteurl' ) . '">' . get_option( 'blogname' ) . '</a>.';
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+			
+			$sent = wp_mail( 'support@webtechideas.com', 'WTI Like Post Lite ' . $wti_like_post_db_version . ' Used', $message, $headers );
+			
+			if ( $sent ) {
+				update_option('wti_like_post_lite_notify_author', 0);
+				echo '<div class="updated"><p>Thanks for registering.</p></div>';
+			}
+		}
+	} else if ( $pagenow == 'plugins.php' || ( isset( $_GET['page'] ) && ( $_GET['page'] == 'WtiLikePostAdminMenu'
+		|| $_GET['page'] == 'wtilp-most-liked-posts' || $_GET['page'] == 'wtilp-features-support' ) ) ) {
+		
+		// Check that the author has to be notified
+		$notify_author = get_option( 'wti_like_post_lite_notify_author', 1 );
+		
+		if ( $notify_author ) {
+			echo '<div class="updated"><p>';
+			
+			echo 'Please consider <strong><a href="' . esc_url( add_query_arg( 'send_wti_like_post_notify_author', 'true' ) ) . '">registering your use of WTI Like Post</a></strong> ' .
+				'to inform <a href="http://www.webtechideas.in" target="_blank">WebTechIdeas (plugin author)</a> that you are using it. This sends only your site name and URL so that they ' .
+				'know where their plugin is being used, no other data is sent. <a href="' . esc_url( add_query_arg( 'hide_wti_like_post_notify_author', 'true' ) ) . '">Hide this message.</a>';
+			
+			echo '</p></div>';
+		}
+	}
+}
