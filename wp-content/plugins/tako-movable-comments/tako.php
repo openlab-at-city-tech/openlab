@@ -2,11 +2,11 @@
 /**
  * @package Tako Movable Comments
  * @author Ren Aysha
- * @version 1.0.5
+ * @version 1.0.6
  */
 /*
 Plugin Name: Tako Movable Comments
-Version: 1.0.5
+Version: 1.0.6
 Plugin URI: https://github.com/renettarenula/Tako/
 Author: Ren Aysha
 Author URI: http://twitter.com/RenettaRenula
@@ -46,7 +46,7 @@ class Tako
 	public function __construct() 
 	{
 		add_action( 'add_meta_boxes', array( &$this, 'tako_add_meta_box' ) );
-		add_filter( 'comment_save_pre', array( &$this, 'tako_save_meta_box' ) );
+		add_action( 'edit_comment', array( &$this, 'tako_save_meta_box' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'tako_load_scripts') );
 		add_action( 'wp_ajax_tako_chosen_post_type', array( &$this, 'tako_chosen_post_type_callback' ) );
 		add_action( 'admin_footer-edit-comments.php', array( &$this, 'tako_bulk_action_for_comments' ) );
