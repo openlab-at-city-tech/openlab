@@ -1,0 +1,175 @@
+# Copyright (C) 2012 Category Order and Taxonomy Terms Order
+# This file is distributed under the same license as the Category Order and Taxonomy Terms Order package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Order and Taxonomy Terms Order 1.2.7\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/taxonomy-terms-order\n"
+"POT-Creation-Date: 2012-03-04 23:32:48+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-05-22 13:17+0200\n"
+"Last-Translator: Michael Yunat <Michael.Yunat@gmail.com>\n"
+"Language-Team: http://getvoip.com/\n"
+"Language: uk_UA\n"
+"X-Generator: Poedit 1.6.5\n"
+
+#: include/interface.php:19
+msgid "Taxonomy Order"
+msgstr "Систематика Замовити"
+
+#: include/interface.php:52 include/options.php:57
+msgid ""
+"Did you found useful this plug-in? Please support our work with a donation "
+"or write an article about this plugin in your blog with a link to our site"
+msgstr ""
+"Чи знаєте ви знайдете корисну цей плагін? Ласка, підтримайте нашу роботу з "
+"пожертвуванням або написати статтю про це плагіні у вашому блозі з "
+"посиланням на нашому сайті"
+
+#: include/interface.php:53 include/options.php:58
+msgid ""
+"Did you know there is available a more advanced version of this plug-in?"
+msgstr "Чи знаєте ви, там є більше просунута версія цього плагіна?"
+
+#: include/interface.php:53 include/options.php:58
+msgid "Read more"
+msgstr "Детальніше"
+
+#: include/interface.php:54 include/options.php:59
+msgid "Check our"
+msgstr "Перевірте наш"
+
+#: include/interface.php:54 include/options.php:59
+msgid "plugin which allow to custom sort all posts, pages, custom post types"
+msgstr ""
+"плагін, який дозволить у звичай сортувати всі повідомлення, сторінки, "
+"призначені для користувача типи повідомлення"
+
+#: include/interface.php:60
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Цей плагін не може працювати без JavaScript, тому що це використовувати "
+"перетягування і AJAX."
+
+#: include/interface.php:96
+msgid "Taxonomies"
+msgstr "Таксономії"
+
+#: include/interface.php:100
+msgid "Taxonomy Title"
+msgstr "Систематика Назва"
+
+#: include/interface.php:100
+msgid "Total Posts"
+msgstr "Всього повідомлень"
+
+#: include/interface.php:150
+msgid "Update"
+msgstr "Оновлення"
+
+#: include/interface.php:199
+msgid "Items Order Updates"
+msgstr "Продукти Оновлення Замовити"
+
+#: include/options.php:16
+msgid "Settings Saved"
+msgstr "Налаштування Збережені"
+
+#: include/options.php:24
+msgid "General Settings"
+msgstr "Загальні налаштування"
+
+#: include/options.php:64
+msgid "General"
+msgstr "Загальний"
+
+#: include/options.php:69
+msgid "Minimum Level to use this plugin"
+msgstr "Мінімальний рівень використовувати цей плагін"
+
+#: include/options.php:72
+msgid "Subscriber"
+msgstr "Абонент"
+
+#: include/options.php:73
+msgid "Contributor"
+msgstr "Учасник"
+
+#: include/options.php:74
+msgid "Author"
+msgstr "Автор"
+
+#: include/options.php:75
+msgid "Editor"
+msgstr "Редактор"
+
+#: include/options.php:76
+msgid "Administrator"
+msgstr "Адміністратор"
+
+#: include/options.php:83
+msgid "Auto Sort"
+msgstr "Авто Сортувати"
+
+#: include/options.php:86
+msgid "OFF"
+msgstr "ВИКЛ"
+
+#: include/options.php:87
+msgid "ON"
+msgstr "НА"
+
+#: include/options.php:88
+msgid "global setting"
+msgstr "глобальний параметр"
+
+#: include/options.php:93
+msgid "Admin Sort"
+msgstr "Адмін Сортувати"
+
+#: include/options.php:97
+msgid "This will change the order of terms within the admin interface"
+msgstr "Це змінить порядок термінів в інтерфейс адміністратора"
+
+#: include/options.php:105
+msgid "Autosort OFF"
+msgstr "AutoSort ВИКЛ"
+
+#: include/options.php:106
+msgid ""
+"No query will be changed, the terms will appear in the original order. To "
+"retrieve the terms in the required order you must use the term_order on the "
+"orderby parameter"
+msgstr ""
+"Ні запит не буде змінений, умови з'являться в первісному порядку. Для "
+"отримання умови в обов'язковому порядку необхідно використовувати term_order "
+"на параметра OrderBy"
+
+#: include/options.php:114
+msgid "See more info on the get_terms usage"
+msgstr "Див докладніше на споживання get_terms"
+
+#: include/options.php:114
+msgid "here"
+msgstr "тут"
+
+#: include/options.php:116
+msgid "Autosort ON"
+msgstr "Autosort ПО"
+
+#: include/options.php:117
+msgid ""
+"The queries will be updated, all terms will appear in the order you manually "
+"defined. This is recommended if you don't want to change any theme code to "
+"apply the terms order"
+msgstr ""
+"Запити будуть оновлені, всі умови будуть з'являтися в тому порядку вручну "
+"визначені. Це рекомендується, якщо ви не хочете, щоб змінити будь-яку тему "
+"код для застосовувати порядок терміни"
+
+#: include/options.php:127
+msgid "Save Settings"
+msgstr "Зберегти налаштування"
