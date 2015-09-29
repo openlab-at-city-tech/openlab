@@ -42,7 +42,7 @@ if ( isset( $_GET['d'] ) ) {
 	
 	if ( ! $allowed || ! isset( $_GET['s'] ) ) {
 		// file blocked or not defined
-		wp_die( __('Direct access to this file is not permitted.', 'gde') );
+		wp_die( __('Direct access to this file is not permitted.', 'google-document-embedder') );
 	} else {
 		$code = $_GET['s'];
 	}
@@ -68,12 +68,12 @@ if ( ! empty( $data ) ) {
 		$contents = wp_remote_fopen( $url );
 	} else {
 		// code doesn't exist
-		wp_die( __('The requested file was not found.', 'gde') );
+		wp_die( __('The requested file was not found.', 'google-document-embedder') );
 	}
 
 if ( ! $contents || empty( $contents ) ) {
 	// got nothing of merit
-	wp_die( __('Unable to open the requested file. ', 'gde') );
+	wp_die( __('Unable to open the requested file. ', 'google-document-embedder') );
 } else {
 	global $gdetypes;
 	
@@ -89,11 +89,11 @@ if ( ! $contents || empty( $contents ) ) {
 		if ( array_key_exists( $ext, $gdetypes ) ) {
 			$type = $gdetypes[$ext];
 		} else {
-			wp_die( __('The document file type is not supported.', 'gde') );
+			wp_die( __('The document file type is not supported.', 'google-document-embedder') );
 		}
 	} else {
 		// file has no extension
-		wp_die( __('The document file type is not supported.', 'gde') );
+		wp_die( __('The document file type is not supported.', 'google-document-embedder') );
 	}
 	
 	// output document

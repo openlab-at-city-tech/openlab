@@ -14,7 +14,7 @@
 					}
 				)}
 			);
-			ed.addButton('gde', {
+			ed.addButton('gde', { /* LANGGDE */
 				title : 'Google Doc Embedder',
 				cmd : 'gde_cmd',
 				image : url + '/img/gde-button.png'
