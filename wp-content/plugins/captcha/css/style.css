@@ -17,33 +17,38 @@
 .cptch_block {
 	direction: ltr;
 }
+input.cptch_settings_input {
+    width: 252px;
+}
+.cptch_how_to_use {
+    float: right;
+}
 /*
-* styles help tooltips
-*/
-.cptch_help_box {
-    background-image: url("../images/tooltip_icons.png");
-    background-repeat: no-repeat;
-    cursor: pointer;
+ * RTL styles
+ */
+.rtl .cptch_how_to_use {
     float: left;
-    height: 29px;
-    position: relative;
-    margin: -3px 5px 3px;
-    width: 29px;
-    clear: none !important;
 }
-.cptch_hidden_help_text {
-    background: #F4F4F4;
-    border: 1px solid #DCDCDC;
-    border-radius: 4px;
-    left: 40px;
-    padding: 5px 10px;
-    position: absolute;
-    width: 240px;
-    line-height: 1.5;
+@media only screen and ( max-width: 480px ) {
+    .bws_help_box.cptch_thumb_block {
+        display: none;
+    }
 }
-.cptch_hidden_help_text:before {
-    content: url("../images/help.png");
-    left: -10px;
-    position: absolute;
-    top: 7px;
+/*
+* frontend styles
+*/
+.cptch_block label {
+    word-wrap: break-word;
+}
+.cptch_label:hover {
+    cursor: pointer;
+}
+form input.cptch_input {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.cptch_whitelist_message {
+    font-style: italic;
+    color: #008000;
+    font-weight: normal !important;
 }
