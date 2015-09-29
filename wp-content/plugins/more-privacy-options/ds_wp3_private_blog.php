@@ -2,7 +2,7 @@
 /*
 Plugin Name: More Privacy Options
 Plugin URI:	http://wordpress.org/extend/plugins/more-privacy-options/
-Version: 3.9.1.1
+Version: 4.1.1
 Description: Add more privacy(visibility) options to a WordPress Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
 Author: D. Sader
 Author URI: http://dsader.snowotherway.org/
@@ -88,8 +88,6 @@ Therefore, the code in this revision may make blogs more private, but somewhat m
 
 We'll see how the feedback trickles in on this issue. 
 
-Oh, and is it even necessary to show a robots.txt to spiders if the blog is private anyway?
-
 */
 
 class ds_more_privacy_options {
@@ -97,7 +95,12 @@ class ds_more_privacy_options {
 
 	function ds_more_privacy_options() {
 		global  $current_blog;
-
+		
+		if ( ! is_multisite() ) {
+			add_action( 'all_admin_notices', array( &$this, 'display_not_multisite_notice' ) );
+			return false;
+		}
+		
 		$this->l10n_prefix = 'more-privacy-options';
 
 		//------------------------------------------------------------------------//
@@ -107,7 +110,7 @@ class ds_more_privacy_options {
 			// Network->Settings
 				add_action( 'update_wpmu_options', array(&$this, 'sitewide_privacy_update'));
 				add_action( 'wpmu_options', array(&$this, 'sitewide_privacy_options_page'));
-
+			
 			// hooks into Misc Blog Actions in Network->Sites->Edit
 				add_action('wpmueditblogaction', array(&$this, 'wpmu_blogs_add_privacy_options'),-999);
 			// hooks into Blog Columns views Network->Sites
@@ -160,24 +163,25 @@ class ds_more_privacy_options {
 				 add_action('signup_blogform', array(&$this, 'add_privacy_options'));
 
 	}
+	function display_not_multisite_notice() {
+		
+		echo '<div class="error"><p>' . __( 'More Privacy Options is a plugin just for multisites, please deactivate it.', $this->l10n_prefix) . '</p></div>';
+
+	}
 	
 	function ds_localization_init() {
 				load_plugin_textdomain( $this->l10n_prefix, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 	}
 	
 	function ds_mail_super_admin() {
-		global $wpdb, $blogname, $current_blog;
-			$blog_id = $wpdb->blogid;
-			$blog_public_old = $current_blog->public;
+		global $blog_id;
 			$blog_public_new = get_blog_option($blog_id,'blog_public');
-			
-			$from_old = $this->ds_mail_super_admin_messages($blog_public_old);
-						
+									
 			$to_new = $this->ds_mail_super_admin_messages($blog_public_new);			
 
 			$email =  stripslashes( get_site_option('admin_email') );
-			$subject = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), http://'.$current_blog->domain.$current_blog->path . ', '. __('changed reading visibility setting from ', $this->l10n_prefix) . $from_old . __(' to ', $this->l10n_prefix) . $to_new;
-			$message = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), http://'.$current_blog->domain.$current_blog->path . ', '.__('changed reading visibility setting from ', $this->l10n_prefix) .$from_old. __(' to ', $this->l10n_prefix) .$to_new;
+			$subject = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), '.get_site_url( $blog_id ).', '. __('changed reading visibility setting to ', $this->l10n_prefix) . $to_new;
+			$message = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), '.get_site_url( $blog_id ).', '.__('changed reading visibility setting to ', $this->l10n_prefix) .$to_new;
 			$headers = 'Auto-Submitted: auto-generated';
  		wp_mail($email, $subject, $message, $headers);
 	}
@@ -200,7 +204,9 @@ class ds_more_privacy_options {
 			}
 	}	
 
-	function do_robots2() {
+	function do_robots() {
+		//https://wordpress.org/support/topic/robotstxt-too-restrictive-for-allow-search-engines/
+		
 		remove_action('do_robots', 'do_robots');
 
 		header( 'Content-Type: text/plain; charset=utf-8' );
@@ -215,43 +221,9 @@ class ds_more_privacy_options {
 			$site_url = parse_url( site_url() );
 			$path = ( !empty( $site_url['path'] ) ) ? $site_url['path'] : '';
 			$output .= "Disallow: $path/wp-admin/\n";
-			$output .= "Disallow: $path/wp-includes/\n";
 	}
 
 	echo apply_filters('robots_txt', $output, $public);
-	}
-	
-	
-	function do_robots() {
-		remove_action( 'do_robots', 'do_robots' );
-
-		header( 'Content-Type: text/plain; charset=utf-8' );
-
-		do_action( 'do_robotstxt' );
-
-		$output = "User-agent: *\n";
-		$public = get_option( 'blog_public' );
-		if ( '1' != $public ) {
-			$output .= "Disallow: /\n";
-		} else {
-			if ( WP_CONTENT_DIR ) {
-     			$dirs = pathinfo( WP_CONTENT_DIR );
-     			$dir = $dirs['basename'];
-			} else {
-     			$dir = 'wp-content';
-			}
-			$output .= "Disallow:\n";
-			$output .= "Disallow: /wp-admin\n";
-			$output .= "Disallow: /wp-includes\n";
-			$output .= "Disallow: /wp-login.php\n";
-			$output .= "Disallow: /$dir/plugins\n";
-			$output .= "Disallow: /$dir/cache\n";
-			$output .= "Disallow: /$dir/themes\n";
-			$output .= "Disallow: /trackback\n";
-			$output .= "Disallow: /comments\n";
-		}
-
-	      echo apply_filters('robots_txt', $output, $public);
 	}	
 
 	function noindex() {
@@ -260,6 +232,7 @@ class ds_more_privacy_options {
 
 		// If the blog is not public, tell robots to go away.
 		if ( '1' != get_option('blog_public') )
+		//		wp_no_robots();
 			echo "<meta name='robots' content='noindex,nofollow' />\n";
 	}
 
@@ -585,7 +558,7 @@ class ds_more_privacy_options {
 		echo '
 		<table class="form-table">
 		<tr valign="top"> 
-			<th scope="row">' . __('Site Visibility', $this->l10n_prefix) . '</th><td>';
+			<th scope="row">' . __('Network Visibility', $this->l10n_prefix) . '</th><td>';
 
 			$checked = ( $number == "-1" ) ? " checked=''" : "";
 		echo '<label><input type="radio" name="ds_sitewide_privacy" id="ds_sitewide_privacy" value="-1" ' . $checked . '/>
@@ -606,7 +579,6 @@ class ds_more_privacy_options {
 		update_site_option('ds_sitewide_privacy', $_POST['ds_sitewide_privacy']);
 	}
 }
-
 if (class_exists("ds_more_privacy_options")) {
 	$ds_more_privacy_options = new ds_more_privacy_options();	
 }
