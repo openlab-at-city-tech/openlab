@@ -3,8 +3,8 @@ Contributors: Charles Johnson
 Donate link: http://feedwordpress.radgeek.com/
 Tags: syndication, aggregation, feed, atom, rss
 Requires at least: 3.0
-Tested up to: 3.5.1
-Stable tag: 2013.0504
+Tested up to: 4.2.2
+Stable tag: 2015.0514
 
 FeedWordPress syndicates content from feeds you choose into your WordPress weblog. 
 
@@ -26,12 +26,12 @@ developed, originally, because I needed a more flexible replacement for
 [Feminist Blogs]: http://feministblogs.org/
 
 FeedWordPress is designed with flexibility, ease of use, and ease of
-configuration in mind. You'll need a working installation of WordPress or
-WordPress MU (version [3.0] or later), and also FTP or SFTP access to your web
-host. The ability to create cron jobs on your web host is helpful but not
-required. You *don't* need to tweak any plain-text configuration files and you
-*don't* need shell access to your web host to make it work. (Although, I should
-point out, web hosts that *don't* offer shell access are *bad web hosts*.)
+configuration in mind. You'll need a working installation of WordPress (version
+[3.0] or later), and also FTP or SFTP access to your web host. The ability to
+create cron jobs on your web host is helpful but not required. You *don't* need
+to tweak any plain-text configuration files and you *don't* need shell access
+to your web host to make it work. (Although, I should point out, web hosts that
+*don't* offer shell access are *bad web hosts*.)
 
   [WordPress]: http://wordpress.org/
   [WordPress MU]: http://mu.wordpress.org/
@@ -94,12 +94,78 @@ outs, see the documentation at the [FeedWordPress project homepage][].
 
 == Changelog ==
 
-= 2012.0504 =
+= 2015.0514 =
 
+*	IMPORTANT SECURITY UPDATE: This version includes two important fixes for
+	potential security vulnerabilities reported to me through support channels.
+	
+	The first is a common problem across several plugins due to an ambiguity in
+	the WordPress documentation and a change in	the behavior of WordPress's
+	built-in add_query_arg() and remove_query_arg() functions
+	which could, under certain low-probability conditions, allow for potential
+	XSS attack vectors. This fixes issue # 39
+	reported at <https://github.com/radgeek/feedwordpress/issues/39>
+	Thanks to github.com/quassy
+	
+	The second is a security vulnerability fixes a security vulnerability that
+	was reported to me privately (thanks to Adrián M. F.) which, under other
+	low-probability conditions, could allow for SQL insertion attacks by
+	a malicious user with access to login credentials, which would compromise
+	data security.
+
+	It is *IMPORTANT* and worth your while to upgrade FeedWordPress as soon as
+	possible in order to eliminate these vulnerabilities. If you have any
+	questions or if there is something blocking you from making the upgrade
+	which you need my help with, don't hesitate to get in touch.
+
+*	ADMIN UI BUGFIX: "Update Now" button in feeds setting pages should now work
+	once again instead of causing a PHP fatal error. See
+	<https://github.com/radgeek/feedwordpress/issues/46>
+	
+*	SEVERAL OTHER SMALL BUG FIXES. See <https://github.com/radgeek/feedwordpress/issues/32>
+	<https://github.com/radgeek/feedwordpress/issues/30>
+	<https://github.com/radgeek/feedwordpress/issues/29>
+	etc.
+
+= 2014.0805 =
+
+*	FILTERS AND ADD-ONS: A number of new hooks for filters and add-ons to
+	further customize the behavior of FWP have been added.
+
+* 	COMPATIBILITY/BUGFIX: Many users saw odd characters, especially "n,"
+	appearing in posts in versions of WordPress from 3.6 on, due to a change
+	in when the API expects HTML data for posts to be slashed and when it
+	does not. This has been fixed, so that the junk characters should no
+	longer appear, regardless of your version of WordPress.
+
+*	BUGFIX: A bug preventing FWP from saving categories assigned under
+	Syndication > Categories & Tags has been fixed.
+	
+*	BUGFIX: Post-editing related metaboxes should now show up when you edit
+	items of any post type, including custom types, not only normal WordPress
+	posts.
+	
+*	BUGFIX: A bug in the admin UI that caused the "Alternative Feeds" /
+	"Find Feeds" box to throw a permissions error has been fixed.
+	
+*	BUGFIX: A bug preventing proper mapping of categories and other terms in
+	2013.0504 has been fixed.
+	
+*	BUGFIX: A number of small fixes contributed through Github by Flynsarmy
+	should eliminate PHP warnings for many users on several methods that are
+	called as static methods within FeedWordPress.
+
+= 2013.0504 =
+	
 *	BUGFIX: PHP 5.4 compatibility -- includes some more extensive fixes to
 	compatibility issues with PHP 5.4's handling of global variables
 
-*	MODULE REORGANIZATION: Should ensures that all needed submodules will be
+*	DIAGNOSTICS: New diagnostics settings added to help track behavior of
+	terms (categories, post tags, etc.) for syndicated posts.
+
+= 2012.0504 =
+
+*	MODULE REORGANIZATION: Should ensure that all needed submodules will be
 	properly included regardless of whether you are installing from github,
 	from SVN, or from the WordPress plugins page. If you've been getting
 	fatal errors about required modules not being found, this release should
