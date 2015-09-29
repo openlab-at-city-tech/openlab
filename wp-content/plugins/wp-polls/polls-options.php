@@ -32,8 +32,8 @@ $id = (isset($_GET['id']) ? intval($_GET['id']) : 0);
 if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 	check_admin_referer('wp-polls_options');
 	$poll_bar_style = strip_tags(trim($_POST['poll_bar_style']));
-	$poll_bar_background = strip_tags(trim($_POST['poll_bar_bg']));
-	$poll_bar_border = strip_tags(trim($_POST['poll_bar_border']));
+	$poll_bar_background = substr( strip_tags( trim( $_POST['poll_bar_bg'] ) ), 0, 6 );
+	$poll_bar_border = substr( strip_tags( trim( $_POST['poll_bar_border'] ) ), 0, 6 );
 	$poll_bar_height = intval($_POST['poll_bar_height']);
 	$poll_bar = array('style' => $poll_bar_style, 'background' => $poll_bar_background, 'border' => $poll_bar_border, 'height' => $poll_bar_height);
 	$poll_ajax_style = array('loading' => intval($_POST['poll_ajax_style_loading']), 'fading' => intval($_POST['poll_ajax_style_fading']));
@@ -43,7 +43,7 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 	$poll_ans_result_sortorder = strip_tags(trim($_POST['poll_ans_result_sortorder']));
 	$poll_archive_perpage = intval($_POST['poll_archive_perpage']);
 	$poll_archive_displaypoll = intval($_POST['poll_archive_displaypoll']);
-	$poll_archive_url = strip_tags(trim($_POST['poll_archive_url']));
+	$poll_archive_url = esc_url_raw( strip_tags( trim( $_POST['poll_archive_url'] ) ) );
 	$poll_archive_show = intval($_POST['poll_archive_show']);
 	$poll_currentpoll = intval($_POST['poll_currentpoll']);
 	$poll_close = intval($_POST['poll_close']);
@@ -86,12 +86,12 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 	$text = '';
 	foreach($update_poll_queries as $update_poll_query) {
 		if($update_poll_query) {
-			$text .= '<font color="green">'.$update_poll_text[$i].' '.__('Updated', 'wp-polls').'</font><br />';
+			$text .= '<p style="color: green;">'.$update_poll_text[$i].' '.__('Updated', 'wp-polls').'</p>';
 		}
 		$i++;
 	}
 	if(empty($text)) {
-		$text = '<font color="red">'.__('No Poll Option Updated', 'wp-polls').'</font>';
+		$text = '<p style="color: red;">'.__('No Poll Option Updated', 'wp-polls').'</p>';
 	}
 	cron_polls_place();
 }
@@ -162,12 +162,12 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 		</tr>
 		<tr>
 			<th scope="row" valign="top"><?php _e('Poll Bar Background', 'wp-polls'); ?></th>
-			<td width="10%" dir="ltr">#<input type="text" id="poll_bar_bg" name="poll_bar_bg" value="<?php echo $pollbar['background']; ?>" size="6" maxlength="6" onblur="update_pollbar('background');" /></td>
+			<td width="10%" dir="ltr">#<input type="text" id="poll_bar_bg" name="poll_bar_bg" value="<?php echo esc_attr( $pollbar['background'] ); ?>" size="6" maxlength="6" onblur="update_pollbar('background');" /></td>
 			<td><div id="wp-polls-pollbar-bg" style="background-color: #<?php echo $pollbar['background']; ?>;"></div></td>
 		</tr>
 		<tr>
 			<th scope="row" valign="top"><?php _e('Poll Bar Border', 'wp-polls'); ?></th>
-			<td width="10%" dir="ltr">#<input type="text" id="poll_bar_border" name="poll_bar_border" value="<?php echo $pollbar['border']; ?>" size="6" maxlength="6" onblur="update_pollbar('border');" /></td>
+			<td width="10%" dir="ltr">#<input type="text" id="poll_bar_border" name="poll_bar_border" value="<?php echo esc_attr( $pollbar['border'] ); ?>" size="6" maxlength="6" onblur="update_pollbar('border');" /></td>
 			<td><div id="wp-polls-pollbar-border" style="background-color: #<?php echo $pollbar['border']; ?>;"></div></td>
 		</tr>
 		<tr>
@@ -316,7 +316,7 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 		</tr>
 		<tr>
 			<th scope="row" valign="top"><?php _e('Poll Archive URL:', 'wp-polls'); ?></th>
-			<td><input type="text" name="poll_archive_url" value="<?php echo get_option('poll_archive_url'); ?>" size="50" dir="ltr" /></td>
+			<td><input type="text" name="poll_archive_url" value="<?php echo esc_url( get_option( 'poll_archive_url' ) ); ?>" size="50" dir="ltr" /></td>
 		</tr>
 		<tr>
 			<th scope="row" valign="top"><?php _e('Display Poll Archive Link Below Poll?', 'wp-polls'); ?></th>
@@ -351,9 +351,9 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 								$poll_question = stripslashes($poll->pollq_question);
 								$poll_id = intval($poll->pollq_id);
 								if($poll_id == intval(get_option('poll_currentpoll'))) {
-									echo "<option value=\"$poll_id\" selected=\"selected\">$poll_question</option>\n";
+									echo '<option value="' . $poll_id . '" selected="selected">' . esc_attr( $poll_question ) . '</option>';
 								} else {
-									echo "<option value=\"$poll_id\">$poll_question</option>\n";
+									echo '<option value="' . $poll_id . '">' . esc_attr( $poll_question ) . '</option>';
 								}
 							}
 						}
