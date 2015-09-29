@@ -1,4 +1,4 @@
-/*! tableSorter 2.15+ widgets - updated 3/31/2014 (v2.15.12)
+/*! tableSorter 2.15+ widgets - updated 4/3/2014 (v2.15.13)
  *
  * Column Styles
  * Column Filters
@@ -851,7 +851,7 @@ ts.filter = {
 			c = table.config,
 			wo = c.widgetOptions,
 			columns = c.columns,
-			$tbodies = c.$tbodies,
+			$tbodies = c.$table.children('tbody'), // target all tbodies #568
 			// anyMatch really screws up with these types of filters
 			anyMatchNotAllowedTypes = [ 'range', 'notMatch',  'operators' ],
 			// parse columns after formatter, in case the class is added at that point
@@ -862,7 +862,7 @@ ts.filter = {
 			}).get();
 		if (c.debug) { time = new Date(); }
 		for (tbodyIndex = 0; tbodyIndex < $tbodies.length; tbodyIndex++ ) {
-			if ($tbodies.eq(tbodyIndex).hasClass(ts.css.info)) { continue; } // ignore info blocks, issue #264
+			if ($tbodies.eq(tbodyIndex).hasClass(c.cssInfoBlock || ts.css.info)) { continue; } // ignore info blocks, issue #264
 			$tbody = ts.processTbody(table, $tbodies.eq(tbodyIndex), true);
 			// skip child rows & widget added (removable) rows - fixes #448 thanks to @hempel!
 			$rows = $tbody.children('tr').not(c.selectorRemove);
@@ -1102,7 +1102,7 @@ ts.getFilters = function(table, getRaw, setFilters, skipFirst) {
 	var i, $filters, $column,
 		filters = false,
 		c = table ? $(table)[0].config : '',
-		wo = table ? c.widgetOptions : '';
+		wo = c ? c.widgetOptions : '';
 	if (getRaw !== true && wo && !wo.filter_columnFilters) {
 		return $(table).data('lastSearch');
 	}

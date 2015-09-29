@@ -26,7 +26,9 @@
 				$is_first_column = true;
 
 				foreach($field_ids as $field_id) {
-					$field = $columns[$field_id];
+
+					$field = RGFormsModel::get_field($form, $field_id);
+
 					$lightboxclass = '';
 
 					if(!empty($lightboxsettings['images'])) {
@@ -37,9 +39,22 @@
 						}
 					}
 
-					$value = isset($lead[$field_id]) ? $lead[$field_id] : '';
+					$value = RGFormsModel::get_lead_field_value($lead, $field);
+					$display_value = $value;
 
-					if(GFCommon::is_post_field($columns[$field_id])) {
+					/**
+					 * @since 3.6.3
+					 */
+					if( apply_filters('kws_gf_directory_format_value', true ) ) {
+						$display_value = GFCommon::get_lead_field_display($field, $value, $lead["currency"]);
+						$display_value = apply_filters("gform_entry_field_value", $display_value, $field, $lead, $form);
+					}
+
+					// `id`, `ip`, etc.
+					if( !is_numeric( $field_id ) ) {
+						$input_type = $field_id;
+					}
+					elseif( GFCommon::is_post_field($columns[$field_id])) {
 						$input_type = $field['type'];
 					} else {
 						$input_type = RGFormsModel::get_input_type($field);
@@ -47,18 +62,18 @@
 
 					switch($input_type){
 
+						case "business_hours":
+							$value = $display_value;
+							break;
+
 						case "address" :
 						case "radio" :
 						case "checkbox" :
 						case "name":
 							$value = "";
 
-							// If you want to display all checked responses
-							if(floatval($field_id) === floor(floatval($field_id))) {
-								$field = RGFormsModel::get_field($form, $field_id);
-								$value = RGFormsModel::get_lead_field_value($lead, $field);
-								$value = GFCommon::get_lead_field_display($field, $value, $lead["currency"]);
-							} else {
+							// Displaying just one input, not a complex field value
+							if(floatval($field_id) !== floor(floatval($field_id))) {
 								// We're appending this to the end.
 								if($input_type === 'address' && $appendaddress) {
 									$address['id'] = floor((int)$field_id);
@@ -83,54 +98,37 @@
 						break;
 
 						case "fileupload" :
+
+							// Multi-file uploads are stored as JSON array. Single images are URLs
+							$images = json_decode( $value, true );
+
+							// Only one image, not array of JSON-encoded images
+							if( !is_array( $images ) ) {
+								$images = array( $value );
+							}
+
+							$image_output = array();
+							foreach ( $images as $key => $url ) {
+								if(!empty($url)){
+									$image_output[] = GFDirectory::render_image_link( $url, $lead, $options );
+								}
+							}
+
+							if( sizeof( $image_output ) > 1 ) {
+								$value = '<ul><li>'.implode('</li><li>', $image_output).'</li></ul>';
+							} else {
+								$value = implode('', $image_output);
+							}
+
+							break;
 						case "post_image" :
+
 							$valueArray = explode("|:|", $value);
 
 							@list($url, $title, $caption, $description) = $valueArray;
-							$size = '';
-							if(!empty($url)){
-								//displaying thumbnail (if file is an image) or an icon based on the extension
-								 $icon = GFEntryList::get_icon_url($url);
-								 if(!preg_match('/icon\_image\.gif/ism', $icon)) {
-								 	$src = $icon;
-								 	if(!empty($getimagesize)) {
-										$size = @getimagesize($src);
-										$img = "<img src='$src' {$size[3]}/>";
-									} else {
-										$size = false;
-										$img = "<img src='$src' />";
-									}
-								 } else { // No thickbox for non-images please
-								 	switch(strtolower(trim($postimage))) {
-								 		case 'image':
-								 			$src = $url;
-								 			break;
-								 		case 'icon':
-								 		default:
-								 			$src = $icon;
-								 			break;
-								 	}
-								 	if(!empty($getimagesize)) {
-										$size = @getimagesize($src);
-									} else {
-										$size = false;
-									}
-								 }
-								 $img = array(
-								 	'src' => $src,
-								 	'size' => $size,
-								 	'title' => $title,
-								 	'caption' => $caption,
-								 	'description' => $description,
-								 	'url' => esc_attr($url),
-								 	'code' => isset($size[3]) ? "<img src='$src' {$size[3]} />" : "<img src='$src' />"
-								 );
-								 $img = apply_filters('kws_gf_directory_lead_image', apply_filters('kws_gf_directory_lead_image_'.$postimage, apply_filters('kws_gf_directory_lead_image_'.$lead['id'], $img)));
 
-								if(in_array('images', $lightboxsettings) || !empty($lightboxsettings['images'])) {
-									$lightboxclass .= ' rel="directory_all directory_images"';
-								}
-								$value = "<a href='{$url}'{$target}{$lightboxclass}>{$img['code']}</a>";
+							if(!empty($url)){
+								$value = GFDirectory::render_image_link( $url, $lead, $options, $title, $caption, $description );
 							}
 						break;
 
@@ -156,24 +154,10 @@
 						case "textarea" :
 						case "post_content" :
 						case "post_excerpt" :
-							if($fulltext) {
-								$long_text = $value = "";
-
-								if(isset($lead[$field_id]) && strlen($lead[$field_id]) >= GFORMS_MAX_FIELD_LENGTH) {
-								   $long_text = RGFormsModel::get_lead_field_value($lead, RGFormsModel::get_field($form, $field_id));
-								}
-								if(isset($lead[$field_id])) {
-									$value = !empty($long_text) ? $long_text : $lead[$field_id];
-								}
-
-							} else {
-								$value = esc_html($value);
-							}
-							if($wpautop) { $value = wpautop($value); };
+							$value = wpautop($value);
 						break;
 
 						case "post_category":
-							$value = GFCommon::get_lead_field_display($field, $lead[$field_id]);
 							$value = GFCommon::prepare_post_category_value($lead[$field_id], $field);
 						break;
 
@@ -182,7 +166,6 @@
 						break;
 
 						case "date" :
-							$field = RGFormsModel::get_field($form, $field_id);
 							if($dateformat) {
 								 $value = GFCommon::date_display($value, $dateformat);
 							 } else {
@@ -195,14 +178,16 @@
 						break;
 
 						case "list":
-							$field = RGFormsModel::get_field($form, $field_id);
 							$value = GFCommon::get_lead_field_display($field, $value);
 						break;
 
 						default:
-
 							$input_type = 'text';
-							if(is_email($value) && $linkemail) {$value = "<a href='mailto:$value'$nofollow>$value</a>"; }
+
+							if(is_email($value) && $linkemail) {
+								$value = "<a href='mailto:$value'$nofollow>$value</a>";
+							}
+
 							elseif(preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $value) && $linkwebsite) {
 								$href = $value;
 								if(!empty($lightboxsettings['images'])) {
@@ -218,7 +203,6 @@
 								}
 								$value = "<a href='{$href}'{$nofollow}{$target}{$linkClass}>{$value}</a>";
 							}
-							else { $value = esc_html($value); }
 					}
 					if($is_first_column) { echo "\n"; }
 					if($value !== NULL) {
@@ -232,6 +216,7 @@
 
 					 	$value = empty($value) ? '&nbsp;' : $value;
 
+					 	// If the current field is the ID
 						if(isset($entrylinkcolumns[floor($field_id)]) || isset($entrylinkcolumns['id']) && $input_type == 'id') {
 
 							if($input_type == 'id' && $entry) {
@@ -250,7 +235,8 @@
 						}
 
 					 	$value = apply_filters('kws_gf_directory_value', apply_filters('kws_gf_directory_value_'.$input_type, apply_filters('kws_gf_directory_value_'.$field_id, $value)));
-					 echo $value;
+
+					 	echo $value;
 
 					?></td><?php
 						echo "\n";

@@ -1,6 +1,6 @@
 /*!
  * tablesorter pager plugin
- * updated 3/31/2014 (v2.15.12)
+ * updated 4/10/2014 (v2.15.14)
  */
 /*jshint browser:true, jquery:true, unused:false */
 ;(function($) {
@@ -297,8 +297,10 @@
 					}
 					l = d.length;
 					if (d instanceof jQuery) {
-						// append jQuery object
-						c.$tbodies.eq(0).empty().append(d);
+						if (p.processAjaxOnInit) {
+							// append jQuery object
+							c.$tbodies.eq(0).empty().append(d);
+						}
 					} else if (l) {
 						// build table from array
 						for ( i = 0; i < l; i++ ) {
@@ -312,10 +314,9 @@
 						// add rows to first tbody
 						if (p.processAjaxOnInit) {
 							c.$tbodies.eq(0).html( tds );
-						} else {
-							p.processAjaxOnInit = true;
 						}
 					}
+					p.processAjaxOnInit = true;
 					// only add new header text if the length matches
 					if ( th && th.length === hl ) {
 						hsh = $t.hasClass('hasStickyHeaders');

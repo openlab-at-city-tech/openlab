@@ -1,4 +1,4 @@
-/* Pager widget (beta) for TableSorter 3/31/2014 (v2.15.12) */
+/* Pager widget (beta) for TableSorter 4/10/2014 (v2.15.14) */
 /*jshint browser:true, jquery:true, unused:false */
 ;(function($){
 "use strict";
@@ -486,8 +486,10 @@ tsp = ts.pager = {
 				}
 				l = d.length;
 				if (d instanceof jQuery) {
-					// append jQuery object
-					c.$tbodies.eq(0).empty().append(d);
+					if (wo.pager_processAjaxOnInit) {
+						// append jQuery object
+						c.$tbodies.eq(0).empty().append(d);
+					}
 				} else if (l) {
 					// build table from array
 					for ( i = 0; i < l; i++ ) {
@@ -501,10 +503,9 @@ tsp = ts.pager = {
 					// add rows to first tbody
 					if (wo.pager_processAjaxOnInit) {
 						c.$tbodies.eq(0).html( tds );
-					} else {
-						wo.pager_processAjaxOnInit = true;
 					}
 				}
+				wo.pager_processAjaxOnInit = true;
 				// only add new header text if the length matches
 				if ( th && th.length === hl ) {
 					hsh = $t.hasClass('hasStickyHeaders');

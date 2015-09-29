@@ -1,13 +1,17 @@
 <?php
 /*
-Plugin Name: Gravity Forms Directory & Addons
-Plugin URI: http://katz.co/gravity-forms-addons/
-Description: Turn <a href="http://katz.si/gravityforms" rel="nofollow">Gravity Forms</a> into a great WordPress directory...and more!
-Author: Katz Web Services, Inc.
-Version: 3.6.1.2
-Author URI: http://www.katzwebservices.com
+Plugin Name: 	Gravity Forms Directory & Addons
+Plugin URI: 	http://katz.co/gravity-forms-addons/
+Description: 	Turn <a href="http://katz.si/gravityforms">Gravity Forms</a> into a great WordPress directory...and more!
+Author: 		Katz Web Services, Inc.
+Version: 		3.7.2
+Author URI:		http://www.katzwebservices.com
+Text Domain:    gravity-forms-addons
+License:		GPLv2 or later
+License URI: 	http://www.gnu.org/licenses/gpl-2.0.html
+Domain Path:	/languages
 
-Copyright 2014 Katz Web Services, Inc.  (email: info@katzwebservices.com)
+Copyright 2015 Katz Web Services, Inc.  (email: info@katzwebservices.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,7 +36,7 @@ class GFDirectory {
 
 	private static $path = "gravity-forms-addons/gravity-forms-addons.php";
 	private static $slug = "gravity-forms-addons";
-	private static $version = "3.6.1.2";
+	private static $version = "3.7.2";
 	private static $min_gravityforms_version = "1.5";
 
 	public static function directory_defaults($args = array()) {
@@ -59,7 +63,7 @@ class GFDirectory {
 			'start_date' => '', // Added in 2.0
 			'end_date' => '', // Added in 2.0
 
-			'wpautop' => true, // Convert bulk paragraph text to...paragraphs
+			//'wpautop' => true, // Convert bulk paragraph text to...paragraphs. Deprecated 3.6.3
 			'page_size' => 20, // Number of entries to show at once
 			'startpage' => 1, // If you want to show page 8 instead of 1
 
@@ -71,7 +75,7 @@ class GFDirectory {
 			'next_text' => '&raquo;',
 			'prev_text' => '&laquo;',
 			'pagelinkstype' => 'plain', // 'plain' is just a string with the links separated by a newline character. The other possible values are either 'array' or 'list'.
-			'fulltext' => true, // If there's a textarea or post content field, show the full content or a summary?
+			//'fulltext' => true, // If there's a textarea or post content field, show the full content or a summary? Deprecated 3.6.3
 			'linkemail' => true, // Convert email fields to email mailto: links
 			'linkwebsite' => true, // Convert URLs to links
 			'linknewwindow' => false, // Open links in new window? (uses target="_blank")
@@ -144,6 +148,8 @@ class GFDirectory {
     //Plugin starting point. Will load appropriate files
     public static function init(){
 		global $current_user;
+
+		load_plugin_textdomain( 'gravity-forms-addons', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 		self::add_rewrite();
 
@@ -253,7 +259,7 @@ class GFDirectory {
 		} elseif(isset($_REQUEST['leadid']) && isset($_REQUEST['form'])) {
 			$link = wp_nonce_url(add_query_arg(array('leadid'=>(int)$_REQUEST['leadid'], 'form'=>(int)$_REQUEST['form']), $link), sprintf('view-%d-%d', $_REQUEST['leadid'], $_REQUEST['form']), 'view');
 		}
-		return $link;
+		return esc_url_raw( $link );
 	}
 
 	static public function directory_canonical($permalink, $sentPost = '', $leavename = '') {
@@ -261,7 +267,14 @@ class GFDirectory {
 		// This was messing up the wp menu links
 		if(did_action('wp_head')) { return $permalink; }
 
-		global $post; $post->permalink = $permalink; $url = add_query_arg(array());
+		global $post;
+
+		if( is_object( $post ) ) {
+			$post->permalink = $permalink;
+		}
+
+		$url = add_query_arg(array());
+
 		$sentPostID = is_object($sentPost) ? $sentPost->ID : $sentPost;
 		// $post->ID === $sentPostID is so that add_query_arg match doesn't apply to prev/next posts; just current
 		preg_match('/('.sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'\/([0-9]+)(?:\/|-)([0-9]+)\/?)/ism',$url, $matches);
@@ -271,7 +284,7 @@ class GFDirectory {
 			if($matches)  { $leadid = $matches[2]; $form = $matches[1]; }
 			else { $leadid = $_REQUEST['leadid']; $form = $_REQUEST['form']; }
 
-			return wp_nonce_url(add_query_arg(array('leadid' =>$leadid, 'form'=>$form), trailingslashit($permalink)), sprintf('view-%d-%d', $leadid, $form), 'view');
+			return esc_url_raw( wp_nonce_url(add_query_arg(array('leadid' =>$leadid, 'form'=>$form), trailingslashit($permalink)), sprintf('view-%d-%d', $leadid, $form), 'view') );
 		}
 		return $permalink;
 	}
@@ -312,8 +325,11 @@ class GFDirectory {
 
 			list($urlformid, $urlleadid) = self::get_form_and_lead_ids();
 			if(isset($_GET['edit']) && !empty($urlformid) && isset($urlleadid)) {
-				wp_enqueue_script('gform_gravityforms');
-				$kws_gf_scripts[] = 'gform_gravityforms';
+
+				$edit_scripts = array( 'jquery', 'gform_json', 'gform_placeholder', 'sack','plupload-all' );
+				wp_enqueue_script('gform_gravityforms', $edit_scripts );
+
+				$kws_gf_scripts[] = array_merge( $kws_gf_scripts, $edit_scripts );
 			}
     	}
     }
@@ -471,7 +487,7 @@ class GFDirectory {
 			(!empty($options['adminedit']) && self::has_access("gravityforms_directory")) === true)
 		) {
 			// Kick them out.
-			_e(sprintf('%sYou do not have permission to edit this form.%s', '<div class="error">', '</div>'), 'gravity-forms-addons');
+			printf( esc_html_e( '%sYou do not have permission to edit this form.%s', 'gravity-forms-addons') , '<div class="error">', '</div>');
 			return;
 		}
 
@@ -498,7 +514,7 @@ class GFDirectory {
 	    	}
 	    	if(!empty($validation_message)) {
 	        	$validation_message = '<ul>'.$validation_message.'</ul>';
-	        	_e(apply_filters('kws_gf_directory_lead_error_message', sprintf("%sThere were errors with the edit you made.%s%s", "<div class='error' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'><p>", "</p>", $validation_message.'</div>'), $lead, $Form), 'gravity-forms-addons');
+	        	echo esc_html( apply_filters('kws_gf_directory_lead_error_message', sprintf( __("%sThere were errors with the edit you made.%s%s", 'gravity-forms-addons'), "<div class='error' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'><p>", "</p>", $validation_message.'</div>'), $lead, $Form) );
 	    	}
 
 	    	// So the form submission always throws an error even though there's no problem.
@@ -510,20 +526,23 @@ class GFDirectory {
 	            $lead = RGFormsModel::get_lead($lead["id"]);
 
 	            do_action('kws_gf_directory_post_update_lead', $lead, $Form);
-	            _e(apply_filters('kws_gf_directory_lead_updated_message', sprintf("%sThe entry was successfully updated.%s", "<p class='updated' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'>", "</p>"), $lead, $Form), 'gravity-forms-addons');
+	           echo apply_filters('kws_gf_directory_lead_updated_message', sprintf( esc_html__("%sThe entry was successfully updated.%s", 'gravity-forms-addons'), "<p class='updated' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'>", "</p>"), $lead, $Form);
 	            return $lead;
             }
 		}
 
-		if((isset($_GET['edit']) && wp_verify_nonce($_GET['edit'], 'edit')) || !empty($validation_message)) {
+		if((isset($_GET['edit']) && wp_verify_nonce($_GET['edit'], 'edit'.$lead['id'].$Form["id"])) || !empty($validation_message)) {
+
+			// The ID of the form needs to be `gform_{form_id}` for the pluploader
 		?>
-			<form method="post" id="entry_form" enctype="multipart/form-data" action="<?php echo remove_query_arg(array('gf_search','sort','dir', 'pagenum', 'edit'), add_query_arg(array()));?>">
+			<form method="post" id="gform_<?php echo esc_attr( $Form['id'] ); ?>" enctype="multipart/form-data" action="<?php echo esc_url( remove_query_arg(array('gf_search','sort','dir', 'pagenum', 'edit'), add_query_arg(array())) );?>">
 		<?php
 	            wp_nonce_field('gforms_save_entry', 'gforms_save_entry');
 	    ?>
 	            <input type="hidden" name="action" id="action" value="update"/>
 	            <input type="hidden" name="screen_mode" id="screen_mode" value="edit" />
 	            <?php
+
 	            	$form_without_products = $Form;
                     $post_message_shown = false;
                     $product_fields = array();
@@ -533,7 +552,7 @@ class GFDirectory {
                            is_numeric($lead["post_id"]) && GFCommon::is_post_field($field)
                         ){
                             if(is_numeric($lead["post_id"]) && GFCommon::is_post_field($field) && !$message_shown ) {
-                                echo apply_filters('kws_gf_directory_edit_post_details_text', sprintf('You can edit post details from the %1$spost page%2$s.', '<a href="'.admin_url('post.php?action=edit&post='.$lead["post_id"]).'">', '</a>'), $field, $lead, $lead['post_id']);
+                                echo apply_filters('kws_gf_directory_edit_post_details_text', sprintf( esc_html__('You can edit post details from the %1$spost page%2$s.', 'gravity-forms-addons'), '<a href="'.admin_url('post.php?action=edit&post='.$lead["post_id"]).'">', '</a>'), $field, $lead, $lead['post_id']);
                                 $message_shown = true;
                             }
 
@@ -555,14 +574,14 @@ class GFDirectory {
 
 	            	require_once(GFCommon::get_base_path() . "/entry_detail.php");
 	            	GFEntryDetail::lead_detail_edit(apply_filters( 'kws_gf_directory_form_being_edited', $form_without_products, $lead), apply_filters( 'kws_gf_directory_lead_being_edited', $lead_without_products, $form_without_products));
-					_e('<input class="button-primary" type="submit" tabindex="4" value="'.apply_filters('kws_gf_directory_update_lead_button_text', __('Update Entry', 'gravity-forms-addons')).'" name="save" />');
+					echo '<input class="button-primary" type="submit" tabindex="4" value="'.esc_attr( apply_filters('kws_gf_directory_update_lead_button_text', __('Update Entry', 'gravity-forms-addons') ) ).'" name="save" />';
 				?>
 			</form>
 			<?php
 			do_action('kws_gf_directory_post_after_edit_lead_form', $lead, $Form);
 			return false;
 		} elseif((isset($_GET['edit']) && !wp_verify_nonce($_GET['edit'], 'edit'))) {
-			_e(apply_filters('kws_gf_directory_edit_access_error_message', sprintf("%sThe link to edit this entry is not valid; it may have expired.%s", "<p class='error' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'>", "</p>"), $lead, $Form), 'gravity-forms-addons');
+			echo apply_filters('kws_gf_directory_edit_access_error_message', sprintf( esc_html__("%sThe link to edit this entry is not valid; it may have expired.%s", 'gravity-forms-addons'), "<p class='error' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'>", "</p>"), $lead, $Form);
 		}
 
 		return $lead;
@@ -620,13 +639,13 @@ class GFDirectory {
 					$count = 0;
 					$has_product_fields = false;
 					$field_count = sizeof($Form["fields"]);
-
+					$display_value = '';
 					foreach($Form["fields"] as $field){
 
 						// Don't show fields defined as hide in single.
 						if(!empty($field['hideInSingle'])) {
 							if(self::has_access("gravityforms_directory")) {
-								echo "\n\t\t\t\t\t\t\t\t\t".'<!-- '.__(sprintf('(Admin-only notice) Field #%d not shown: "Hide This Field in Single Entry View" was selected.', $field['id']), 'gravity-forms-addons').' -->'."\n\n";
+								echo "\n\t\t\t\t\t\t\t\t\t".'<!-- '.sprintf(esc_html__('(Admin-only notice) Field #%d not shown: "Hide This Field in Single Entry View" was selected.', 'gravity-forms-addons'), $field['id']).' -->'."\n\n";
 							}
 							continue;
 						}
@@ -659,60 +678,9 @@ class GFDirectory {
 								$valueArray = explode("|:|", $value);
 
 								@list($url, $title, $caption, $description) = $valueArray;
-								$size = '';
+
 								if(!empty($url)){
-									//displaying thumbnail (if file is an image) or an icon based on the extension
-									$icon = GFEntryList::get_icon_url($url);
-									if(!preg_match('/icon\_image\.gif/ism', $icon)) {
-									 	$lightboxclass = '';
-									 	$src = $icon;
-									 	if(!empty($getimagesize)) {
-											$size = @getimagesize($src);
-											$img = "<img src='$src' {$size[3]}/>";
-										} else {
-											$size = false;
-											$img = "<img src='$src' />";
-										}
-									} else { // No thickbox for non-images please
-									 	switch(strtolower(trim($postimage))) {
-									 		case 'image':
-									 			$src = $url;
-									 			break;
-									 		case 'icon':
-									 		default:
-									 			$src = $icon;
-									 			break;
-									 	}
-									 	if(!empty($getimagesize)) {
-											$size = @getimagesize($src);
-										} else {
-											$size = false;
-										}
-									}
-									$img = array(
-									 	'src' => $src,
-									 	'size' => $size,
-									 	'title' => $title,
-									 	'caption' => $caption,
-									 	'description' => $description,
-									 	'url' => esc_attr($url),
-									 	'code' => isset($size[3]) ? "<img src='$src' {$size[3]} />" : "<img src='$src' />"
-									);
-									$img = apply_filters('kws_gf_directory_lead_image', apply_filters('kws_gf_directory_lead_image_'.$postimage, apply_filters('kws_gf_directory_lead_image_'.$lead['id'], $img)));
-
-									//lightbox class
-									$lightboxclass = '';
-				 					if(!empty($lightboxsettings['images'])) {
-										if(wp_script_is('colorbox', 'registered')) {
-											$lightboxclass = ' class="colorbox lightbox"';
-										} else if(wp_script_is('thickbox', 'registered')) {
-											$lightboxclass = ' class="thickbox lightbox"';
-										}
-									}
-									// link target
-									$target = ($linknewwindow && empty($lightboxsettings['images'])) ? ' target="_blank"' : '';
-
-									$value = $display_value = "<a href='{$url}'{$target}{$lightboxclass}>{$img['code']}</a>";
+									$value = $display_value = self::render_image_link( $url, $lead, $options, $title, $caption, $description );
 								}
 							break;
 
@@ -759,7 +727,7 @@ class GFDirectory {
                     if(!empty($products["products"])){
                         ?>
                         <tr>
-                            <td colspan="2" class="entry-view-field-name"><?php echo apply_filters("gform_order_label_{$Form["id"]}", apply_filters("gform_order_label", __("Order", "gravityforms"), $Form["id"]), $Form["id"]) ?></td>
+                            <td colspan="2" class="entry-view-field-name"><?php  echo apply_filters("gform_order_label_{$Form["id"]}", apply_filters("gform_order_label", __("Order", "gravityforms"), $Form["id"]), $Form["id"]) ?></td>
                         </tr>
                         <tr>
                             <td colspan="2" class="entry-view-field-value lastrow">
@@ -771,10 +739,10 @@ class GFDirectory {
                                           <col class="entry-products-col4">
                                     </colgroup>
                                     <thead>
-                                        <th scope="col"><?php echo apply_filters("gform_product_{$form_id}", apply_filters("gform_product", __("Product", "gravityforms"), $form_id), $form_id) ?></th>
-                                        <th scope="col" class="textcenter"><?php echo apply_filters("gform_product_qty_{$form_id}", apply_filters("gform_product_qty", __("Qty", "gravityforms"), $form_id), $form_id) ?></th>
-                                        <th scope="col"><?php echo apply_filters("gform_product_unitprice_{$form_id}", apply_filters("gform_product_unitprice", __("Unit Price", "gravityforms"), $form_id), $form_id) ?></th>
-                                        <th scope="col"><?php echo apply_filters("gform_product_price_{$form_id}", apply_filters("gform_product_price", __("Price", "gravityforms"), $form_id), $form_id) ?></th>
+                                        <th scope="col"><?php echo apply_filters("gform_product_{$Form['id']}", apply_filters("gform_product", __("Product", "gravityforms"), $Form['id']), $Form['id']) ?></th>
+                                        <th scope="col" class="textcenter"><?php echo apply_filters("gform_product_qty_{$Form['id']}", apply_filters("gform_product_qty", __("Qty", "gravityforms"), $Form['id']), $Form['id']) ?></th>
+                                        <th scope="col"><?php echo apply_filters("gform_product_unitprice_{$Form['id']}", apply_filters("gform_product_unitprice", __("Unit Price", "gravityforms"), $Form['id']), $Form['id']) ?></th>
+                                        <th scope="col"><?php echo apply_filters("gform_product_price_{$Form['id']}", apply_filters("gform_product_price", __("Price", "gravityforms"), $Form['id']), $Form['id']) ?></th>
                                     </thead>
                                     <tbody>
                                     <?php
@@ -834,7 +802,7 @@ class GFDirectory {
                                             <?php
                                             }
                                             ?>
-                                            <td class="textright grandtotal"><?php _e("Total", "gravityforms") ?></td>
+                                            <td class="textright grandtotal"><?php esc_html_e("Total", "gravityforms") ?></td>
                                             <td class="grandtotal_amount"><?php echo GFCommon::to_money($total, $lead["currency"])?></td>
                                         </tr>
                                     </tfoot>
@@ -860,8 +828,8 @@ class GFDirectory {
 
 					?>
 						<tr>
-							<th scope="row" class="entry-view-field-name"><?php _e(apply_filters('kws_gf_directory_edit_entry_th', "Edit"), "gravity-forms-addons"); ?></th>
-							<td class="entry-view-field-value useredit"><a href="<?php echo add_query_arg(array('edit' => wp_create_nonce('edit'))); ?>"><?php _e($editbuttontext); ?></a></td>
+							<th scope="row" class="entry-view-field-name"><?php echo esc_html( apply_filters('kws_gf_directory_edit_entry_th', __( "Edit", "gravity-forms-addons" ) ) ); ?></th>
+							<td class="entry-view-field-value useredit"><a href="<?php echo esc_url( add_query_arg(array('edit' => wp_create_nonce('edit'.$lead['id'].$Form["id"])))); ?>"><?php echo $editbuttontext; ?></a></td>
 						</tr>
 					<?php
 					}
@@ -904,7 +872,7 @@ class GFDirectory {
 
 		$formid = $leadid = null;
 
-		$url = isset($wp->request) ? $wp->request : add_query_arg(array());
+		$url = isset($wp->request) ? $wp->request : add_query_arg(array(), home_url() );
 
 		if(
 			// If permalinks is turned on
@@ -936,7 +904,7 @@ class GFDirectory {
 		$options = self::directory_defaults();
 
 		if(isset($_GET['edit'])) {
-			return '<p class="entryback"><a href="'.add_query_arg(array(), remove_query_arg(array('edit'))).'">'.esc_html(__(apply_filters('kws_gf_directory_edit_entry_cancel', "&larr; Cancel Editing"), "gravity-forms-addons")).'</a></p>';
+			return '<p class="entryback"><a href="'.esc_url( add_query_arg(array(), remove_query_arg(array('edit'))) ).'">'.esc_html(__(apply_filters('kws_gf_directory_edit_entry_cancel', "&larr; Cancel Editing"), "gravity-forms-addons")).'</a></p>';
 		}
 
 		list($formid, $leadid) = self::get_form_and_lead_ids();
@@ -963,6 +931,8 @@ class GFDirectory {
 				$href = preg_replace('/('.sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'\/(?:[0-9]+)(?:\/|-)(?:[0-9]+)\/?)/ism', '', $href);
 			}
         }
+
+		$href = esc_url_raw( $href );
 
         $url = parse_url(add_query_arg(array(), $href));
         if(!empty($url['query']) && !empty($permalink)) { $href .= '?'.$url['query']; }
@@ -1200,7 +1170,7 @@ class GFDirectory {
 		$first_item_index = $page_index * $page_size;
 		$link_params = array();
 		if(!empty($page_index)) { $link_params['pagenum'] = $page_index; }
-		$formaction = remove_query_arg(array('gf_search','sort','dir', 'pagenum', 'edit'), add_query_arg($link_params));
+		$formaction = esc_url_raw( remove_query_arg(array('gf_search','sort','dir', 'pagenum', 'edit'), add_query_arg($link_params)) );
 		$tableclass .= !empty($jstable) ? sprintf(' tablesorter tablesorter-%s', apply_filters('kws_gf_tablesorter_theme', 'blue', $form)) : '';
 		$title = $form["title"];
 		$sort_field_meta = RGFormsModel::get_field($form, $sort_field);
@@ -1300,7 +1270,7 @@ class GFDirectory {
 
 
 			$page_links = array(
-				'base' =>  @add_query_arg('pagenum','%#%'),// get_permalink().'%_%',
+				'base' =>  esc_url_raw( @add_query_arg('pagenum','%#%') ),// get_permalink().'%_%',
 				'format' => '&pagenum=%#%',
 				'add_args' => $args,
 				'prev_text' => $prev_text,
@@ -1398,7 +1368,7 @@ class GFDirectory {
 					?>
 					<p class="search-box">
 						<?php if( $search ) : ?>
-							<label class="hidden" for="lead_search"><?php _e("Search Entries:", "gravity-forms-addons"); ?></label>
+							<label class="hidden" for="lead_search"><?php esc_html_e("Search Entries:", "gravity-forms-addons"); ?></label>
 							<input type="text" name="gf_search" id="lead_search" value="<?php echo $search_query ?>"<?php if( $searchtabindex ) { echo ' tabindex="'.intval( $searchtabindex ).'"'; } ?> />
 						<?php endif; ?>
 						<?php
@@ -1406,7 +1376,7 @@ class GFDirectory {
 							echo !empty($_GET['p']) ? '<input name="p" type="hidden" value="'.esc_html( $_GET['p'] ).'" />' : '';
 							echo !empty($_GET['page_id']) ? '<input name="page_id" type="hidden" value="'.esc_html($_GET['page_id']).'" />' : '';
 						?>
-						<input type="submit" class="button" id="lead_search_button" value="<?php _e("Search", "gravity-forms-addons") ?>"<?php if($searchtabindex) { echo ' tabindex="'.intval($searchtabindex++).'"'; } ?> />
+						<input type="submit" class="button" id="lead_search_button" value="<?php esc_attr_e("Search", "gravity-forms-addons") ?>"<?php if($searchtabindex) { echo ' tabindex="'.intval($searchtabindex++).'"'; } ?> />
 					</p>
 				</form>
 
@@ -1593,7 +1563,93 @@ class GFDirectory {
 		return $content; // Return it!
 	}
 
+	/**
+	 * Render image link HTML
+	 *
+	 * @since  3.7
+	 * @param  [type] $url         [description]
+	 * @param  string $title       [description]
+	 * @param  string $caption     [description]
+	 * @param  string $description [description]
+	 * @return [type]              [description]
+	 */
+	static private function render_image_link( $url, $lead, $options, $title = '', $caption = '', $description = '' ) {
 
+		extract($options);
+
+		$target = ($linknewwindow && empty($lightboxsettings['images'])) ? ' target="_blank"' : '';
+
+		$size = false;
+	 	if( !empty( $options['getimagesize'] )) {
+			$size = @getimagesize( $url );
+		}
+
+		//displaying thumbnail (if file is an image) or an icon based on the extension
+		 $icon = GFEntryList::get_icon_url($url);
+		 if(!preg_match('/icon\_image\.gif/ism', $icon)) {
+		 	$src = $icon;
+		 	if(!empty($size)) {
+				$img = "<img src='$src' {$size[3]}/>";
+			} else {
+				$img = "<img src='$src' />";
+			}
+		 } else { // No thickbox for non-images please
+		 	switch( strtolower( trim( $options['postimage'] ) ) ) {
+		 		case 'image':
+		 			$src = $url;
+		 			break;
+		 		case 'icon':
+		 		default:
+		 			$src = $icon;
+		 			break;
+		 	}
+		 }
+		 $img = array(
+		 	'src' => $src,
+		 	'size' => $size,
+		 	'title' => $title,
+		 	'caption' => $caption,
+		 	'description' => $description,
+		 	'url' => esc_url_raw( $url ),
+		 	'code' => isset($size[3]) ? "<img src='$src' {$size[3]} />" : "<img src='$src' />"
+		 );
+		 $img = apply_filters('kws_gf_directory_lead_image', apply_filters('kws_gf_directory_lead_image_'.$options['postimage'], apply_filters('kws_gf_directory_lead_image_'.$lead['id'], $img)));
+
+		$lightboxclass = '';
+
+		if(!empty($lightboxsettings['images']) && self::is_image_file( $url ) ) {
+			if(wp_script_is('colorbox', 'registered')) {
+				$lightboxclass = ' class="colorbox lightbox"';
+			} else if(wp_script_is('thickbox', 'registered')) {
+				$lightboxclass = ' class="thickbox lightbox"';
+			}
+
+			if(in_array('images', $lightboxsettings) || !empty($lightboxsettings['images'])) {
+				$lightboxclass .= ' rel="directory_all directory_images"';
+			}
+		}
+
+		$value = "<a href='{$url}'{$target}{$lightboxclass}>{$img['code']}</a>";
+
+		$value = apply_filters( 'kws_gf_directory_render_image_link', $value, $url, $lead, $options, $title, $caption, $description );
+
+		return $value;
+	}
+
+	/**
+	 * Verify that the src URL matches image patterns.
+	 *
+	 *
+	 * @return boolean     True: matches pattern; False: does not match pattern.
+	 */
+	public static function is_image_file( $src ) {
+
+		$info = pathinfo( $src );
+
+		$image_exts = apply_filters('kws_gf_directory_image_extensions', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico' ));
+
+		return isset( $info['extension'] ) && in_array(strtolower( $info['extension'] ), $image_exts);
+	}
 
 	/**
 	 * render_search_dropdown function.
@@ -2367,7 +2423,7 @@ class GFDirectory {
 				if(isset($post->ID)) {
 					$url = get_permalink($post->ID);
 				} else {
-					$url = parse_url(add_query_arg(array()));
+					$url = parse_url(add_query_arg(array(), home_url()));
 					$url = $url['path'];
 				}
 				$href = trailingslashit($url).sanitize_title(apply_filters('kws_gf_directory_endpoint', 'entry')).'/'.$form_id.apply_filters('kws_gf_directory_endpoint_separator', '/').$lead_id.'/';
@@ -2387,7 +2443,7 @@ class GFDirectory {
 			}
 		}
 
-		$value = '<a href="'.$href.'"'.$linkClass.' title="'.$entrytitle.'">'.$entrylink.'</a>';
+		$value = '<a href="'. esc_url( $href ) .'"'.$linkClass.' title="'.$entrytitle.'">'.$entrylink.'</a>';
 		return $value;
 	}
 

@@ -14,6 +14,11 @@ p.taxoinput { float: left; margin: 1em 1em 1em 0; width: 22.2em; }
 p.taxoinput input { width: 100%; }
 td.taginput { width: 33%; vertical-align: top; }
 .clean-region th { text-indent: 2em; }
+#customfields th, #customfields td { vertical-align: top; }
+#customfields th { width: auto; }
+#customfields tbody th { text-align: center; }
+#customfields tbody th h4 { text-align: left; }
+tr.clone:nth-child(odd) th, tr.clone:nth-child(odd) td { background-color: #fff }
 body.settings_page_html-import #footer { display: none; }
 /* jQuery tabs */
 .ui-tabs-nav { margin: 0; padding: 0; }

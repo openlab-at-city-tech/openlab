@@ -122,11 +122,11 @@ $(function(){
 	QUnit.config.reorder = false;
 
 	var ts = $.tablesorter,
-		$table1 = $('.tester:eq(0)'),
-		$table2 = $('.tester:eq(1)'),
-		$table3 = $('.tester:eq(2)'),
-		$table4 = $('.tester:eq(3)'),
-		$table5 = $('.tester:eq(4)'), // empty table
+		$table1 = $('#table1'),
+		$table2 = $('#table2'),
+		$table3 = $('#table3'),
+		$table4 = $('#table4'),
+		$table5 = $('#table5'), // empty table
 		table1 = $table1[0],
 		table2 = $table2[0],
 		table3 = $table3[0],
@@ -230,6 +230,23 @@ $(function(){
 	c2 = table2.config;
 	c3 = table3.config;
 	c4 = table4.config;
+
+	/************************************************
+		Test column numbering
+	************************************************/
+	// later: include a table header with colspan & rowspan
+	test( "column numbering", function() {
+		expect(2);
+		var internalColumn = true,
+			dataColumn = true;
+		$table4.find('thead th').each(function(i){
+			var $this = $(this);
+			internalColumn = internalColumn && this.column === i;
+			dataColumn = dataColumn && $(this).attr('data-column') == i;
+		});
+		equal( internalColumn, true, "Correct internal column numbering" );
+		equal( dataColumn, true, "Correct data-column attribute numbering" );
+	});
 
 	/************************************************
 		check isDigit function
@@ -572,18 +589,23 @@ $(function(){
 	************************************************/
 	var zebra = function(){
 		t = true;
-		$table2.find('tbody tr').each(function(){
-			t = t ? $(this).hasClass('odd') || $(this).hasClass('even') : false;
+		var classes = ['odd','even'];
+		$table2.find('tbody tr').each(function(i){
+			t = t ? $(this).hasClass( classes[i%2] ) : false;
 		});
 		return t;
 	};
 
 	test( "apply zebra widget", function(){
-		expect(2);
+		expect(3);
 		equal( zebra(), false, 'zebra not applied' );
 		c2.widgets = [ 'zebra' ];
 		$table2.trigger('applyWidgets');
 		equal( zebra(), true, 'zebra is applied' );
+		$table2
+			.append('<tr><td>s</td><td>t</td><td>u</td><td>v</td></tr>')
+			.trigger('update');
+		equal( zebra(), true, 'zebra is applied after update' );
 	});
 
 	/************************************************
