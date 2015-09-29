@@ -3,6 +3,11 @@ if ( !defined('ABSPATH') && !defined('WP_UNINSTALL_PLUGIN') ) {
 	// Make sure not to call this file directly
 	exit();
 } else {
+		// Is Subscribe2 free active
+		if ( is_plugin_active( 'subscribe2_html/subscribe2.php' ) ) {
+		 return;
+		}
+
 	// Is this WordPressMU or not?
 	if ( isset($wpmu_version) || strpos($wp_version, 'wordpress-mu') ) {
 		$s2_mu = true;

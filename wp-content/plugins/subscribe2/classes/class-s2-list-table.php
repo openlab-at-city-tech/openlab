@@ -38,7 +38,7 @@ class Subscribe2_List_Table extends WP_List_Table {
 		} else {
 			global $mysubscribe2;
 			if ( '0' === $mysubscribe2->is_public($item['email']) ) {
-				return sprintf('<span style="color:#FF0000"><abbr title="' . $mysubscribe2->signup_ip($item['email']) . '">%1$s</abbr></span>', $item['email']);
+				return sprintf('<span style="color:#FF0000"><abbr title="' . htmlentities($mysubscribe2->signup_ip($item['email'])) . '">%1$s</abbr></span>', $item['email']);
 			} else {
 				return sprintf('<abbr title="' . $mysubscribe2->signup_ip($item['email']) . '">%1$s</abbr>', $item['email']);
 			}
