@@ -78,7 +78,7 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 			if ($personal) {
 				return $this->_use_personal_pages;
 			}
-			
+
 			return $this->_use_universal_pages;
 		}
 
@@ -122,9 +122,15 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 	 * @return string
 	 */
 	public function url() {
+		// Note as of API 2.0+ requests return a app scoped id and profile
+		// pages can be accessed via
+		// Currently this is used for the users who have connected to the
+		// app and the real ID is known.
+		// For now, facebook.com/app-scoped-id and facebook.com/user-id both
+		// redirect to the profile page.
 		$url = 'https://facebook.com/';
 		if ($this->has_user()) {
-			$url .= 'profile.php?id='.$this->_user->id;
+			$url .= $this->_user->id;
 		}
 
 		return $url;
@@ -137,7 +143,8 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 	 */
 	public function avatar() {
 		if ($this->has_user()) {
-			return 'https://graph.facebook.com/'.$this->_user->id.'/picture';
+			// 2.0+ does not required a token for pictures, unlike almost every other call
+			return 'https://graph.facebook.com/v2.3/'.$this->_user->id.'/picture';
 		}
 
 		return parent::_avatar();
@@ -235,7 +242,7 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 				$this->_pages->universal = array();
 			}
 		}
-		
+
 		return $this;
 	}
 
@@ -292,7 +299,7 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 		}
 		return array_merge($this->_pages->personal, $this->_pages->universal);
 	}
-	
+
 	/**
 	 * Get pages list from Facebook.
 	 *
@@ -322,7 +329,7 @@ final class Social_Service_Facebook_Account extends Social_Service_Account imple
 	 *
 	 * @return string
 	 */
-	public function child_account_avatar($child_account) {
+	public function child_account_avatar($child_account = null) {
 		$service = new Social_Service_Facebook;
 		return $service->page_image_url($child_account);
 	}
