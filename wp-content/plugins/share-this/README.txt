@@ -3,7 +3,7 @@ Tags:share, share this, sharethis, addthis, addtoany, share this, bookmark faceb
 
 Contributors:ShareThis
 Requires at least: 1.5
-Tested up to: 4.0
+Tested up to: 4.2.2
 Stable tag: trunk
 
 Social Charge your Content with ShareThis - features Social Analytics, CopyNShare, Open Graph Sharing, and the Hovering Bar!
@@ -61,6 +61,17 @@ More information about the [ShareThis plugin for WordPress](http://support.share
 5. Please refer this article for detailed instructions - [wordpress installation](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
 
 == Changelog ==
+7.0.22
+
+User will no longer see the selection of MultiPost/Direct Post widget option. By default, new users will get MultiPost Widget.
+
+7.0.21
+
+1. Added support for HTTPS Wordpress Admin Panel
+2. Removed Google Analytics Tracking from Configuration page
+3. Updated Sign-in workflow
+4. Works with wordpress 4.2.2
+
 7.0.20
 
 1. Removed ShareNow Widget from configuration section

@@ -216,8 +216,8 @@
 }
 
 #wp_st_savebutton{
-	background: #119966;
-	background: -moz-linear-gradient(top, #119966 0%, #056D2D 48%, #008553 100%);
+	background: #01bf01;
+	background: -moz-linear-gradient(top, #01bf01 0%, #056D2D 48%, #01bf01 100%);
     border: 1px solid #008855;
     border-radius: 4px 4px 4px 4px;
     color: white;
@@ -231,8 +231,8 @@
 	margin-top: 15px;
 	margin-left: 44%;
 	height : 29px;	
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#119966), color-stop(48%,#056D2D), color-stop(100%,#008553));
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#119966', endColorstr='#008553',GradientType=0 );
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#01bf01), color-stop(48%,#01bf01), color-stop(100%,#01bf01));
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01bf01', endColorstr='#008553',GradientType=0 );
 }	
 
 .wp_st_text{
@@ -774,4 +774,19 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	background: #FFF;
 	font-size: 18px;
 	text-align: left;
+}
+
+.step5SignInBtn{
+	cursor:pointer;
+	font-size: 15px;
+	background-color: #01bf01;
+	color: white;
+	width: 120px;
+	height: 24px;
+	display: block;
+	text-align: center;
+	margin-left: 44%;
+	margin-top: 15px;
+	border-radius: 4px;
+	padding-top: 5px;
 }

@@ -35,7 +35,8 @@ var st_socialPluginValues = {
 	foursquarefollow_textbox2 : "",
 	youtube_textbox : ""
 };
-	
+var win, signoutWin;
+
 function st_log() {
 	if (jQuery('#st_callesi').val() == 0) {
 		_gaq.push(['_trackEvent', 'WordPressPlugin', 'ClosedLoopBetaPublishers', st_publisherKey]);
@@ -50,6 +51,12 @@ function st_log() {
 }
 
 jQuery(document).ready(function(){
+	
+	//Disable GA logging for all the components from plugin.
+	window["ga-disable-UA-1645146-17"] = true;
+	window["ga-disable-UA-1645146-14"] = true;
+	window["ga-disable-UA-1645146-1"] = true;
+	
 	jQuery('.wrap').css({'background':'white', 'width':'1002px','padding':'10px','border-radius':'5px'});
 	
 	removeInterval();
@@ -90,6 +97,10 @@ jQuery(document).ready(function(){
 		jQuery('#st_widget').val(editCode);
 	});
 
+	jQuery("#winSignin").click(function() {
+		checkForLoginCredentials();
+		win = window.open("http://www.sharethis.com/external-login?pluginType=newPlugins", "newstframe","status=1,toolbar=0,width=640,height=395");
+	});
 });
 
 function toggleExpandCollapse(elem, displayDiv, classOn, classOff, cssOn, cssOff) {
@@ -111,21 +122,12 @@ function toggleExpandCollapse(elem, displayDiv, classOn, classOff, cssOn, cssOff
 }
 
 function st_signOut(pKey) {
-	jQuery('<iframe />', {
-		name: 'tempIframe',
-		id:   'tempIframe',
-		src: '//www.sharethis.com/account/signout.php'
-	}).appendTo('body');
-	jQuery('#tempIframe').css({'width': '1px', 'height': '1px', 'position': 'absolute', 'top': '-100px'});
+	signoutWin = window.open("http://www.sharethis.com/account/signout.php", "signoutwindow","status=no,toolbar=0,width=100,height=100");
 	jQuery('#st_pkey').val(pKey);
 	jQuery('#st_widget').val(jQuery('#st_widget').val().replace(/publisher:"(.*?)"/,'publisher:"'+pKey+'"'));
 	jQuery('#st_user_name').val('');
+	checkForLoginCredentials();
 	jQuery("#ak_sharethis").submit();
-	
-	//Once the signout is done then reload the page.
-	jQuery('#tempIframe').load(function() {
-		document.location.reload();
-	});
 }
 
 function setChannelServicesForBars(elemName, searchBarOptionRegex, barDivElement) {
@@ -630,12 +632,16 @@ function checkUserNameAndPubId(){
 	
 function updateUserLoginInfo(){
 	if(st_publisherKey.toLowerCase().indexOf("wp") == -1 && st_publisherKey != "" && st_publisherKey != "undefined"){
+		if(typeof(win) != "undefined")
+			win.close();
 		jQuery("#pbukeyContainer").show();
 		jQuery("#login_key").html(st_publisherKey);
-		jQuery("#loginFrame").hide();
+		//jQuery("#loginFrame").hide();
+		jQuery('#signInBlock').hide();
 		jQuery(".wp_st_login_message").show();
 	}else{
 		jQuery("#pbukeyContainer").hide();
+		jQuery('#signInBlock').show();
 	}
 	if(st_username != "" && st_username != "undefined"){
 		jQuery("#usernameContainer").show();
@@ -648,8 +654,11 @@ function updateUserLoginInfo(){
 }	
 	
 function checkForLoginCredentials(){
-	if(st_publisherKey=='' || st_publisherKey.toLowerCase().indexOf("wp") != -1 || st_publisherKey=='undefined'){
-		time_interval = setInterval(function(){  
+	if(typeof(signoutWin) != "undefined" || (st_publisherKey=='' || st_publisherKey.toLowerCase().indexOf("wp") != -1 || st_publisherKey=='undefined')){
+		time_interval = setInterval(function(){
+			if(typeof(win) != "undefined" && win.closed) {
+				clearInterval(time_interval);
+			}
 			getPublisherInfo();
 		},2000);	
 	}
@@ -659,25 +668,32 @@ function checkForLoginCredentials(){
 * JSONP Request called on closing the external-login iframe
 */
 function getPublisherInfo(){
+	var data = [];
+	data=["return=json","cb=parsePublisherInfo","service=getUserInfo", "from_memcache=false"];
+	data=data.join('&');
+	var apiUrl = (("https:" == document.location.protocol) ? "https://ws." : "http://wd.") + "sharethis.com/api/getApi.php?"+data;
+	
 	 jQuery.ajax({
-		url: '//www.sharethis.com/get-publisher-info.php?callback=?',
+		url: apiUrl,
 		type: "GET",
-		dataType: "jsonp",
-		jsonpCallback: "parsePublisherInfo"
+		dataType: "jsonp"
 	});
 }
 
 
 function parsePublisherInfo(response){ 
-	if(response.publisher_id == "" || response.publisher_id == "undefined"){
-	
+	if(response && "FAILURE" == response.status){
+		if(typeof(signoutWin) != "undefined") {
+			signoutWin.close();
+			document.location.reload();
+		}
 	}else{
-		st_publisherKey = response.publisher_id;
-		st_username = response.publisher_name;
+		st_publisherKey = response.data.pubkey;
+		st_username = response.data.name;
 		updateUserLoginInfo();
 		clearInterval(time_interval);
 	}
-}		
+}	
 	
 function checkHoverBar(){
 	if(st_selectedBarStyle == "hoverbarStyle"){
@@ -1186,7 +1202,7 @@ function updateDoNotHash()
 function getGlobalCNSConfig()
 {
 	try {
-		odjs((("https:" == document.location.protocol) ? "https://wd-edge.sharethis.com/button/getDefault.esi?cb=cnsCallback" : "http://wd-edge.sharethis.com/button/getDefault.esi?cb=cnsCallback"));
+		odjs((("https:" == document.location.protocol) ? "https://wd-edge.sharethis.com/button/cns.esi?cb=cnsCallback" : "http://wd-edge.sharethis.com/button/cns.esi?cb=cnsCallback"));
 	} catch(err){
 		cnsCallback(err);
 	}
@@ -1605,7 +1621,7 @@ function moveToNext(stepNumber){
 		if(isBtnBarSelected == true) {	
 			setNextValues("#st_step5",stepNumber);
 			jQuery(".wp_st_nextText").html("Almost Done : ");
-			checkForLoginCredentials();
+			//checkForLoginCredentials();
 		}
 	}else if(stepNumber == 5){
 		checkAdditionalOptions();
