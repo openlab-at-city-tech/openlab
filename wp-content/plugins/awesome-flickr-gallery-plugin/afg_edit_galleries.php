@@ -7,7 +7,7 @@ if (isset($_POST['afg_edit_gallery_name']) && $_POST['afg_edit_gallery_name']) {
     global $default_gallery_id;
     global $warning;
 
-    if ($_POST['afg_per_page_check']) $_POST['afg_per_page'] = '';
+    if (isset($_POST['afg_per_page_check']) && $_POST['afg_per_page_check']) $_POST['afg_per_page'] = '';
     else {
         if (!(ctype_digit($_POST['afg_per_page']) && (int)$_POST['afg_per_page'])) {
             $_POST['afg_per_page'] = '';

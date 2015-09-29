@@ -57,7 +57,7 @@ function afg_setup_options() {
     if (get_option('afg_credit_note') == '1' || get_option('afg_credit_note') == 'Yes') update_option('afg_credit_note', 'on');
     if (get_option('afg_credit_note') == '0') update_option('afg_credit_note', 'off');
     if (!get_option('afg_pagination')) update_option('afg_pagination', 'on');
-    if (get_option('afg_slideshow_option') == '' || get_option('afg_slideshow_option') == 'highslide') update_option('afg_slideshow_option', 'colorbox');
+    if (get_option('afg_slideshow_option') == '' || get_option('afg_slideshow_option') == 'highslide') update_option('afg_slideshow_option', 'swipebox');
     if (get_option('afg_custom_css') == '') update_option('afg_custom_css', '/* Start writing your custom CSS here */');
     if (get_option('afg_disable_slideshow')) update_option('afg_slideshow_option', 'disable');
 
@@ -96,6 +96,7 @@ function afg_get_all_options() {
         'afg_api_secret' => get_option('afg_api_secret'),
         'afg_flickr_token' => get_option('afg_flickr_token'),
         'afg_slideshow_option' => get_option('afg_slideshow_option'),
+    	'afg_cache_refresh_interval' => get_option('afg_cache_refresh_interval'),
     );
 }
 
@@ -155,6 +156,7 @@ function afg_admin_init() {
     register_setting('afg_settings_group', 'afg_custom_size_square');
     register_setting('afg_settings_group', 'afg_custom_css');
     register_setting('afg_settings_group', 'afg_sort_order');
+    register_setting('afg_settings_group', 'afg_cache_refresh_interval');
 
     // Register javascripts
     wp_register_script('edit-galleries-script', BASE_URL . '/js/afg_edit_galleries.js');
@@ -178,13 +180,17 @@ function upgrade_handler() {
     $galleries = get_option('afg_galleries');
     if ($galleries) {
         foreach ($galleries as &$gallery) {
-            if (!isset($gallery['slideshow_option']))
-                $gallery['slideshow_option'] = 'colorbox';
+            if (!isset($gallery['slideshow_option']) && $gallery['slideshow_option'] == 'highslide')
+                $gallery['slideshow_option'] = 'swipebox';
         }
         update_option('afg_galleries', $galleries);
     }
     unset($gallery);
 
+    $afg_cache_refresh_interval = get_option('afg_cache_refresh_interval');
+    if (!isset($afg_cache_refresh_interval)) {
+        update_option('afg_cache_refresh_interval', '1d');
+    }
 }
 
 upgrade_handler();
@@ -287,8 +293,8 @@ if ($_POST)
         echo "<input type='button' class='button-secondary' value='Grant Access' disabled=''";
     } ?>
                                </td>
-                               <td> <div class="afg-help"><b>ONLY</b> If you want to include your <b>Private Photos</b> in your galleries, enter your Flickr API Secret here and click Save Changes.
-                            </div></td>
+                               <td class="afg-help"><b>ONLY</b> If you want to include your <b>Private Photos</b> in your galleries, enter your Flickr API Secret here and click Save Changes.
+                            </td>
                         </tr>
         </table>
                         <table class='widefat afg-settings-box'>
@@ -307,7 +313,7 @@ if ($_POST)
 
                             <tr>
                               <td>Sort order of Photos</td>
-                              <td><select type='text' name='afg_sort_order' id='afg_sort_order'>
+                              <td><select name='afg_sort_order' id='afg_sort_order'>
                                     <?php echo afg_generate_options($afg_sort_order_map, get_option('afg_sort_order', 'flickr')); ?>
                               </select>
                               <td class="afg-help">Set the sort order of the photos as per your liking and forget about how photos are arranged on Flickr.</td>
@@ -357,7 +363,7 @@ if ($_POST)
                               <tr>
                                  <td>Slideshow Behavior</td>
                                  <td><select name='afg_slideshow_option'>
-                                       <?php echo afg_generate_options($afg_slideshow_map, get_option('afg_slideshow_option', 'colorbox')); ?>
+                                       <?php echo afg_generate_options($afg_slideshow_map, get_option('afg_slideshow_option', 'swipebox')); ?>
                                  </select></td>
                               </tr>
 
