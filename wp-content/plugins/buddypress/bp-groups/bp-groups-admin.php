@@ -1293,6 +1293,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 			$this->get_columns(),
 			array(),
 			$this->get_sortable_columns(),
+			$this->get_default_primary_column_name(),
 		);
 
 		return $this->_column_headers;
@@ -1315,7 +1316,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	public function display() {
 		$this->display_tablenav( 'top' ); ?>
 
-		<table class="<?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
+		<table class="wp-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
@@ -1474,6 +1475,37 @@ class BP_Groups_List_Table extends WP_List_Table {
 			'members'     => array( 'members', false ),
 			'last_active' => array( 'last_active', false ),
 		);
+	}
+
+	/**
+	 * Override WP_List_Table::row_actions().
+	 *
+	 * Basically a duplicate of the row_actions() method, but removes the
+	 * unnecessary <button> addition.
+	 *
+	 * @since 2.3.3
+	 * @access protected
+	 *
+	 * @param array $actions The list of actions
+	 * @param bool $always_visible Whether the actions should be always visible
+	 * @return string
+	 */
+	protected function row_actions( $actions, $always_visible = false ) {
+		$action_count = count( $actions );
+		$i = 0;
+
+		if ( !$action_count )
+			return '';
+
+		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
+		foreach ( $actions as $action => $link ) {
+			++$i;
+			( $i == $action_count ) ? $sep = '' : $sep = ' | ';
+			$out .= "<span class='$action'>$link$sep</span>";
+		}
+		$out .= '</div>';
+
+		return $out;
 	}
 
 	/**
@@ -1703,5 +1735,18 @@ class BP_Groups_List_Table extends WP_List_Table {
 		 * @param array  $item        The current group item in the loop.
 		 */
 		return apply_filters( 'bp_groups_admin_get_group_custom_column', '', $column_name, $item );
+	}
+
+	/**
+	 * Get name of default primary column
+	 *
+	 * @since BuddyPress (2.3.3)
+	 * @access protected
+	 *
+	 * @return string
+	 */
+	protected function get_default_primary_column_name() {
+		// comment column is mapped to Group's name
+		return 'comment';
 	}
 }
