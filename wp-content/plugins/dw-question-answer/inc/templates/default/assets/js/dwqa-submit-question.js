@@ -1,5 +1,42 @@
 jQuery(function($) {
-    if ($.browser.msie == true && parseInt($.browser.version) < 10) {
+    
+    var BrowserDetect = {
+        init: function () {
+            this.browser = this.searchString(this.dataBrowser) || "Other";
+            this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
+        },
+
+        searchString: function (data) {
+            for (var i=0 ; i < data.length ; i++)   
+            {
+                var dataString = data[i].string;
+                this.versionSearchString = data[i].subString;
+
+                if (dataString.indexOf(data[i].subString) != -1)
+                {
+                    return data[i].identity;
+                }
+            }
+        },
+
+        searchVersion: function (dataString) {
+            var index = dataString.indexOf(this.versionSearchString);
+            if (index == -1) return;
+            return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+        },
+
+        dataBrowser: 
+        [
+            { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome" },
+            { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer" },
+            { string: navigator.userAgent, subString: "Firefox", identity: "Firefox" },
+            { string: navigator.userAgent, subString: "Safari",  identity: "Safari" },
+            { string: navigator.userAgent, subString: "Opera",   identity: "Opera" }
+        ]
+
+    };
+    BrowserDetect.init();
+    if ( BrowserDetect.browser == 'Explorer' && parseInt(BrowserDetect.version) < 10) {
         $('[placeholder]').focus(function() {
             var input = $(this);
             if (input.val() == input.attr('placeholder')) {
@@ -53,13 +90,24 @@ jQuery(function($) {
         var username_signup = t.find('#user-name-signup');
         var password = t.find('#user-password');
         var username = t.find('#user-name');
+        var anonymous = t.find('#_dwqa_anonymous_email');
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+        if( anonymous.length > 0 ) {
+            if (!regex.test(anonymous.val()) || anonymous.val() == anonymous.attr('placeholder')) {
+                anonymous.closest('p').fadeIn('slow');
+                anonymous.addClass('required');
+                returnDefault(anonymous);
+                flag = false;
+            }
+
+        }
         if ($('#login-type').length > 0) {
             if ($('#login-type').val() == 'sign-up') {
                 username.attr('disabled', 'disabled');
                 password.attr('disabled', 'disabled');
                 username_signup.removeAttr('disabled');
                 username_signup.removeAttr('disabled');
-                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
                 if (!regex.test(email_field.val()) || email_field.val() == email_field.attr('placeholder')) {
                     email_field.closest('p').fadeIn('slow');
