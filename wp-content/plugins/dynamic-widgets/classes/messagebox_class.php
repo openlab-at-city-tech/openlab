@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DWMessageBox {
 		private static $leadtext;
 		private static $message;
@@ -32,15 +34,18 @@
 				case 'error':
 					$class = 'error';
 					break;
+
 				default:
 					$class = 'updated fade';
 			}
 
 			echo '<div class="' . $class . '" id="message">';
 			echo '<p>';
+
 			if (! empty(self::$leadtext) ) {
 				echo '<strong>' . self::$leadtext . '</strong> ';
 			}
+
 			echo self::$message;
 			echo '</p>';
 			echo '</div>';

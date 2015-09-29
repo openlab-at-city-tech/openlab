@@ -3,9 +3,11 @@
  * BP module
  * http://buddypress.org/
  *
- * @version $Id: bp_module.php 591091 2012-08-27 19:43:17Z qurl $
+ * @version $Id: bp_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_BP extends DWModule {
 		protected static $except = 'Except on the components pages';

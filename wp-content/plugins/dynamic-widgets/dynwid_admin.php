@@ -2,9 +2,11 @@
 /**
  * dynwid_admin.php - Startpage for admin
  *
- * @version $Id: dynwid_admin.php 937227 2014-06-23 15:10:15Z qurl $
+ * @version $Id: dynwid_admin.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 ?>
 
 <form id="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">

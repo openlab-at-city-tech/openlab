@@ -3,9 +3,11 @@
  * Date Module
  * Can't use DWOpts object because value = the actual date
  *
- * @version $Id: date_module.php 937227 2014-06-23 15:10:15Z qurl $
+ * @version $Id: date_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Date extends DWModule {
 		public static $option = array( 'date' => 'Date' );

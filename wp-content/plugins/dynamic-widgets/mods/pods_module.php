@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Pods extends DWModule {
 		protected static $except = 'Except the Pods pages';
 		public static $option = array( 'pods' => 'Pods pages' );
@@ -52,23 +54,23 @@
 			if ( function_exists('pods_api') ) {
 				$pod_page = pods_api()->load_page( array( 'id' => $id ) );
 				$pod_page_name = (! empty($pod_page) ) ? $pod_page['name'] : '';
-				
+
 				if (! empty($pod_page_name) && is_pod_page($pod_page_name) ) {
 					return TRUE;
 				}
-			} else { 
+			} else {
 				global $pod_page_exists;
-				
+
 				if ( is_int($id) ) {
 					$id = array($id);
 				}
-	
+
 				if ( in_array($pod_page_exists['id'], $id) ) {
 					return TRUE;
 				}
-				
+
 			}
-			
+
 			return FALSE;
 		}
 	}

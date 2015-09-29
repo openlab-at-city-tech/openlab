@@ -2,9 +2,11 @@
 /**
  * Template Module
  *
- * @version $Id: tpl_module.php 523481 2012-03-25 19:49:08Z qurl $
+ * @version $Id: tpl_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Tpl extends DWModule {
 		protected static $info = 'This options takes precedence above other options like Pages and/or Single Posts.';

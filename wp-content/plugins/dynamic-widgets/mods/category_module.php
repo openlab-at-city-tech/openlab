@@ -2,9 +2,11 @@
 /**
  * Category Module
  *
- * @version $Id: category_module.php 938226 2014-06-25 05:16:47Z qurl $
+ * @version $Id: category_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Category extends DWModule {
 		private static $except = 'Except the categories';

@@ -2,9 +2,11 @@
 /**
  * dynwid_init_worker.php
  *
- * @version $Id: dynwid_init_worker.php 939272 2014-06-26 19:44:38Z qurl $
+ * @version $Id: dynwid_init_worker.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	$DW->message('Dynamic Widgets INIT');
 	echo "\n" . '<!-- Dynamic Widgets by QURL - http://www.qurl.nl //-->' . "\n";

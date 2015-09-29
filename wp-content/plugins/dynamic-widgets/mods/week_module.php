@@ -2,9 +2,11 @@
 /**
  * Week Module
  *
- * @version $Id: week_module.php 580343 2012-08-01 17:34:38Z qurl $
+ * @version $Id: week_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2012 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Week extends DWModule {
 		protected static $info = 'Beware of double rules!';

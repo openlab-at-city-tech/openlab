@@ -6,12 +6,14 @@
  * @version $Id: date_module.php 437634 2011-09-13 19:19:13Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
- 
+
+	defined('ABSPATH') or die("No script kiddies please!");
+
  	class DW_URL extends DWModule {
 		public static $option = array( 'url' => 'URL' );
 		protected static $overrule = TRUE;
 		protected static $type = 'custom';
-		
+
 		public static function admin() {
 			$DW = $GLOBALS['DW'];
 
@@ -20,7 +22,7 @@
 			$url_yes_selected = 'checked="checked"';
 			$opt_url = $DW->getOpt($GLOBALS['widget_id'], 'url');
 			$prefix = $DW->getURLPrefix();
-			
+
 			foreach ( $opt_url as $opt ) {
 				if ( $opt->name == 'default' ) {
 					$url_no_selected = $url_yes_selected;
@@ -37,7 +39,7 @@
 <div>
 	<div id="url_info" class="infotext">
 		Separate URLs on each line.<br />
-		Use an asterisk ( * ) at the end of an URL as 'Starts with'.<br /> 
+		Use an asterisk ( * ) at the end of an URL as 'Starts with'.<br />
 		Use an asterisk at the start of an URL as 'Ends with'.<br />
 		Using an asterisk at the start and end of an url means 'Somewhere within'.<br />
 		Without any asterisk means 'Exact match'.<br />
@@ -55,6 +57,6 @@
 
 </div><!-- end dynwid_conf -->
 <?php
-		}		
+		}
 	}
 ?>

@@ -2,10 +2,12 @@
 /**
  * dynwid_admin_overview.php - Overview page
  *
- * @version $Id: dynwid_admin_overview.php 689417 2013-03-31 09:16:14Z qurl $
+ * @version $Id: dynwid_admin_overview.php 1218814 2015-08-12 06:37:21Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+ 
 	if ( isset($_GET['action']) ) {
 		switch ( $_GET['action'] ) {
 			case 'dynwid_set_method':
@@ -131,7 +133,7 @@
 	<form id="dynwid_method" action="" method="get">
 		<input type="hidden" name="page" value="dynwid-config" />
 		<input type="hidden" name="action" value="dynwid_set_method" />
-		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="jQuery('#dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
+		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ); ?> onchange="jQuery('#dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
 </form>
 </div>
 <br />
@@ -141,7 +143,7 @@
 <form action="" method="get">
 <input type="hidden" name="page" value="dynwid-config" />
 <input type="hidden" name="action" value="dynwid_set_page_limit" />
-<b><?php _e('Page limit', DW_L10N_DOMAIN) ?></b>: <input type="text" name="page_limit" value="<?php echo ( isset($_GET['page_limit']) ) ? $_GET['page_limit'] : DW_PAGE_LIMIT; ?>" style="width:50px" maxlength="4" /> <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" />
+<b><?php _e('Page limit', DW_L10N_DOMAIN) ?></b>: <input type="text" name="page_limit" value="<?php echo ( isset($_GET['page_limit']) ) ? intval( sanitize_text_field($_GET['page_limit']) ) : DW_PAGE_LIMIT; ?>" style="width:50px" maxlength="4" /> <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" />
 <br />
 <?php _e('The page limit sets the limit of number of pages to prevent a timeout when building the hierarchical tree. When the number of pages is above this limit, a flat list will be displayed which is less time consuming.', DW_L10N_DOMAIN); ?>
 <br />

@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DWOpts {
 		public  $act;
 		public  $checked = 'checked="checked"';

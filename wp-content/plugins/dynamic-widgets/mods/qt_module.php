@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_QT extends DWModule {
 		protected static $except = 'Except the languages';
 		protected static $info = 'Using this option can override all other options.';
@@ -33,7 +35,7 @@
 			$DW = $GLOBALS['DW'];
 			$DW->qt = FALSE;
 
-			if ( defined('QTRANS_INIT') ) {
+			if ( defined('QTRANS_INIT') || defined('QTRANSLATE_FILE') ) {
 				self::checkOverrule('DW_QT');
 				if ( $update ) {
 					$DW->qt = TRUE;
@@ -48,7 +50,7 @@
 
 			if ( self::detect(FALSE) ) {
 				$qtlang = get_option('qtranslate_default_language');
-				$curlang = qtrans_getLanguage();
+				$curlang = qtranxf_getLanguage();
 				$DW->message('QT language: ' . $curlang);
 
 				if ( $qtlang != $curlang ) {

@@ -3,9 +3,11 @@
  *	WPEC Module
  *  http://getshopped.org/
  *
- * @version $Id: wpec_module.php 523481 2012-03-25 19:49:08Z qurl $
+ * @version $Id: wpec_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_WPSC extends DWModule {
 		protected static $except = 'Except the categories';
@@ -40,7 +42,7 @@
 
 		public static function detectCategory() {
 			$DW = &$GLOBALS['DW'];
-			
+
 			if ( self::detect(FALSE) ) {
 				$wpsc_query = &$GLOBALS['wpsc_query'];
 
