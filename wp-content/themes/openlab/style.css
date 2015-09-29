@@ -994,7 +994,7 @@ h6,
 .h6 {
   font-family: inherit;
   font-weight: 600;
-  line-height: 1.1em;
+  line-height: 1.2em;
   color: inherit;
 }
 h1 small,
@@ -7428,7 +7428,6 @@ h1.entry-title {
   margin-bottom: 10px;
   margin-top: 18px;
   padding-bottom: 6px;
-  line-height: 140%;
   position: relative;
 }
 h1.entry-title .direct-toggle {
@@ -8164,7 +8163,7 @@ body .inline-visible-xs {
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
-  line-height: 1.1em;
+  line-height: 1.2em;
   text-decoration: none;
 }
 .home-page #cac-featured .cfcw-content:after {
@@ -8325,7 +8324,7 @@ body .inline-visible-xs {
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
-  margin-bottom: 9px;
+  margin-bottom: 7px;
 }
 .sidebar h2.sidebar-header {
   margin-top: 26px;
@@ -9045,8 +9044,6 @@ body.membership-requests .group-list {
 }
 #member-item-body .panel .panel-body h6 {
   margin: 7px 0 9px;
-  line-height: 1.2;
-  padding: 0 0 3px;
 }
 #member-item-body .panel .panel-body p,
 #member-item-body .panel .panel-body a {
