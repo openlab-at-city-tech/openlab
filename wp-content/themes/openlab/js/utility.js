@@ -181,6 +181,25 @@
         //custom select arrows
         $('.custom-select select').customSelect();
 
+        var selectDisplay = setInterval(checkDisplay, 50);
+        var protect = 0;
+
+        function checkDisplay() {
+
+            if ($('.customSelect').length) {
+                $('.custom-select').css('visibility', 'visible').hide().fadeIn(700);
+                clearInterval(selectDisplay);
+            }
+
+            protect++;
+
+            if (protect > 100) {
+                $('.custom-select').css('visibility', 'visible').hide().fadeIn(700);
+                clearInterval(selectDisplay);
+            }
+
+        }
+
         //printing page
         if ($('.print-page').length) {
             $('.print-page').on('click', function (e) {

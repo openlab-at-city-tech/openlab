@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $bp, $wp_query;
 $post_obj = $wp_query->get_queried_object();
 $group_type = openlab_page_slug_to_grouptype();
@@ -200,6 +200,10 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
             <input class="btn btn-primary" type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
             <input class="btn btn-default" type="button" value="Reset" onClick="window.location.href = '<?php echo $bp->root_domain ?>/<?php echo $group_slug; ?>/'">
         </form>
+
+        <script type='text/javascript'>(function ($) {
+                $('.custom-select').css('visibility', 'hidden');
+            })(jQuery);</script>
 
         <div class="archive-search">
             <h5 class="bold font-size font-14">Search</h5>
