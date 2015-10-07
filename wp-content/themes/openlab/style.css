@@ -994,7 +994,7 @@ h6,
 .h6 {
   font-family: inherit;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
   color: inherit;
 }
 h1 small,
@@ -8163,7 +8163,7 @@ body .inline-visible-xs {
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
-  line-height: 1.2;
+  line-height: 1.25;
   text-decoration: none;
 }
 .home-page #cac-featured .cfcw-content:after {
