@@ -187,14 +187,14 @@
         function checkDisplay() {
 
             if ($('.customSelect').length) {
-                $('.custom-select').css('visibility', 'visible').hide().fadeIn(700);
+                $('#sidebarCustomSelect').css('visibility', 'visible').hide().fadeIn(700);
                 clearInterval(selectDisplay);
             }
 
             protect++;
 
-            if (protect > 100) {
-                $('.custom-select').css('visibility', 'visible').hide().fadeIn(700);
+            if (protect > 1000) {
+                $('#sidebarCustomSelect').css('visibility', 'visible').hide().fadeIn(700);
                 clearInterval(selectDisplay);
             }
 
@@ -291,6 +291,8 @@
     });
 
     $(window).load(function () {
+        
+        $('html').removeClass('page-loading');
 
         //setting equal rows on homepage group list
         equal_row_height();

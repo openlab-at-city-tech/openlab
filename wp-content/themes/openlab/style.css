@@ -7832,6 +7832,9 @@ body .inline-visible-xs {
   width: 10%;
 }
 /**custom selects**/
+.page-loading #sidebarCustomSelect {
+  visibility: hidden;
+}
 .custom-select,
 .hidden-custom-select {
   position: relative;
