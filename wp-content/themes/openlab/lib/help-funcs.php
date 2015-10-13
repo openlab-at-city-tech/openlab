@@ -64,23 +64,23 @@ function openlab_help_loop() {
 	$prev_post = adjacent_post_link_plus( $adj_args, '', true );
 	$next_post = adjacent_post_link_plus( $adj_args, '', false );
 
-	$back_next_nav .= '<nav id="help-title-nav">';
+	$back_next_nav .= '<nav id="help-title-nav"><!--';
 
 	if ( $prev_post ) {
-		$back_next_nav .= '<span class="nav-previous">';
+		$back_next_nav .= '--><span class="nav-previous">';
 		$back_next_nav .=   '<span class="fa fa-chevron-circle-left"></span>';
 		$back_next_nav .=   sprintf( '<a href="%s">Back</a>', esc_url( get_permalink( $prev_post ) ) );
-		$back_next_nav .= '</span>';
+		$back_next_nav .= '</span><!--';
 	}
 
 	if ( $next_post ) {
-		$back_next_nav .= '<span class="nav-previous">';
+		$back_next_nav .= '--><span class="nav-previous">';
 		$back_next_nav .=    sprintf( '<a href="%s">Next</a>', esc_url( get_permalink( $next_post ) ) );
 		$back_next_nav .=    '<span class="nav-next fa fa-chevron-circle-right"></span>';
-		$back_next_nav .= '</span>';
+		$back_next_nav .= '</span><!--';
 	}
 
-	$back_next_nav .= '</nav><!-- #nav-single -->';
+	$back_next_nav .= '--></nav><!-- #nav-single -->';
 
         ?>
 

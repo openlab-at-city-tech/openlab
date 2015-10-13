@@ -2312,7 +2312,6 @@ body.membership-requests {
     }
 }
 #help-title-nav {
-    margin-left: 6px;
 
     .nav-previous {
         padding-right: 8px;
@@ -2333,9 +2332,14 @@ body.membership-requests {
     }
 
     .fa {
-        margin: 0 4px;
-        padding-left: 0;
+        padding: 0;
         vertical-align: middle;
+        &.fa-chevron-circle-left{
+            margin-right: 4px;
+        }
+        &.fa-chevron-circle-right{
+            margin-left: 4px;
+        }
     }
 }
 .help-title:first-of-type {

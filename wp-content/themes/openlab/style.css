@@ -9139,7 +9139,6 @@ body.membership-requests .group-list {
   text-decoration: underline;
 }
 #help-title-nav {
-  margin-left: 6px;
   /* Overrides */
 }
 #help-title-nav .nav-previous {
@@ -9157,9 +9156,14 @@ body.membership-requests .group-list {
   text-decoration: underline;
 }
 #help-title-nav .fa {
-  margin: 0 4px;
-  padding-left: 0;
+  padding: 0;
   vertical-align: middle;
+}
+#help-title-nav .fa.fa-chevron-circle-left {
+  margin-right: 4px;
+}
+#help-title-nav .fa.fa-chevron-circle-right {
+  margin-left: 4px;
 }
 .help-title:first-of-type {
   margin-top: 64px;
