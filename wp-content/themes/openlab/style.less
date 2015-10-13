@@ -426,7 +426,7 @@ h1.entry-title{
     position: relative;
     .direct-toggle{
         background: darken(@10gray,4.7%);
-        height: 48px;
+        height: 47px;
         border: none;
         color: @magenta;
         position: absolute;
@@ -943,7 +943,7 @@ body{
                 &#open-lab-login{
                     border-bottom: 13px solid darken(desaturate(@magenta,21%),8%);
                     h2{
-                        margin: 20px 0 18px;
+                        margin: 16px 0 14px;
                     }
                     #user-info{
                         margin-bottom: 23px;
@@ -1089,7 +1089,7 @@ body{
                     h2{
                         font-size: 24px;
                         font-weight: @normal;
-                        margin: 0 0 12px;
+                        margin: 0 0 6px;
                     }
                     p{
                         font-size: @font-size-h5;
@@ -1295,7 +1295,7 @@ body{
                 padding: 5px;
                 margin-bottom: 15px;
                 h4{
-                    margin: 15px auto 8px;
+                    margin: 12px auto 5px;
                     font-size: @font-size-base;
                 }
                 a{
@@ -1309,18 +1309,45 @@ body{
                 }
                 .item-avatar{
                     height: 0;
-                    padding-top: 100%;
                     position: relative;
+                    padding-top: 100%;
                     a{
                         position: absolute;
                         top: 0;
                         left: 0;
                         width: 100%;
                     }
+                    @media (max-width: @screen-xs-max){
+                        height: 100%;
+                        width: 100%;
+                        position: relative;
+                        max-width: 225px;
+                        max-height: 225px;
+                        padding-top: 0;
+                        margin: 0 auto;
+                        a{
+                            position: relative;
+                            height: 0;
+                            padding-top: 100%;
+                            width: 100%;
+                            top: auto;
+                            left: auto;
+                            img{
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                            }
+                        }
+                    }
                 }
                 .item-content-wrapper{
                     margin: 0 auto;
                     width: 88%;
+                    max-width: 225px;
+                    @media (max-width: @screen-xs-max){
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -1339,14 +1366,15 @@ body{
         &.sidebar-title,
         &.sidebar-header{
             font-weight: @bold;
-            margin-bottom: 7px;
+            margin-bottom: 4px;
         }
         &.sidebar-header{
             margin-top: 26px;
             &.top-sidebar-header{
+                margin-bottom: 6px;
                 margin-top: 20px;
                 &.group-single{
-                    margin-top: 21px;
+                    margin-top: 18px;
                 }
             }
         }
@@ -1561,7 +1589,7 @@ body{
             margin: 0 0 5px;
         }
         h2{
-            margin: 6px 0 12px;
+            margin: 6px 0;
             a{
                 // color: @80gray;
             }
@@ -1577,7 +1605,7 @@ body{
         }
         .info-line{
             font-size: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
         .item{
             @media (max-width: @screen-md-max){
@@ -1630,7 +1658,7 @@ body{
     .group-item-wrapper{
         height: 110px;
         h2{
-            margin: 10px 0 12px;
+            margin: 8px 0 10px;
         }
     }
 }
@@ -2189,7 +2217,7 @@ body.membership-requests {
         .panel-body{
             padding: 2%;
             h6{
-                margin: 7px 0 9px;
+                margin: 5px 0 7px;
             }
             p,
             a{
