@@ -91,6 +91,11 @@ function bp_docs_edit_doc_content() {
 			$content = $bp->bp_docs->current_post->post_content;
 		}
 
+		// Check $_POST for failed submissions.
+		if ( ! $content && isset( $_POST['doc_content'] ) ) {
+			$content = stripslashes( $_POST['doc_content'] );
+		}
+
 		return apply_filters( 'bp_docs_get_edit_doc_content', $content );
 	}
 
