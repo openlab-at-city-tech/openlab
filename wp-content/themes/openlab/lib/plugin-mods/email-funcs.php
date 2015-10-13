@@ -245,12 +245,11 @@ function openlab_ass_add_notice_to_notifications_page() {
 					<tr>
 						<td>&nbsp;</td>
 						<td>
-							<p><?php _e('To change the email notification settings for your groups:','bp-ass'); ?></p>
+							<p><?php _e('To change the email notification settings for your Courses, Projects, Clubs and Portfolio:','bp-ass'); ?></p>
                                                         <ol>
-                                                            <li>Find the group you would like to update via My &lt;Groups&gt</li>
-                                                            <li>Go to that group's profile page</li>
+                                                            <li>Visit the group's Profile page</li>
                                                             <li>In the sidebar, click "Membership"</li>
-                                                            <li>In the sub-menu, directly below the group name, select "Your Email Options"</li> 
+                                                            <li>Select "Your Email Options"</li>
                                                         </ol>
 
 							<?php if ( get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) : ?>
