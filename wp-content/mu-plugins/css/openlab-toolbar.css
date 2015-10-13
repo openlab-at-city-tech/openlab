@@ -7424,6 +7424,9 @@ button.oplb-bs .close {
     display: none;
   }
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-customize {
+  display: none;
+}
 .oplb-bs.navbar-default {
   background: transparent;
   border: none;
@@ -7795,6 +7798,9 @@ button.oplb-bs .close {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item {
     display: none;
   }
+}
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-customize {
+  display: none;
 }
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {

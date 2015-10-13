@@ -904,10 +904,11 @@ HTML;
             }
 
             $title = wp_html_excerpt( $blogname, 40, '&hellip;' );
+            $title_short = wp_html_excerpt( $blogname, 15, '&hellip;' );
 
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => '<span class="hidden-sm">'.$title.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
+                    'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
                         'class' => 'admin-bar-menu hidden-xs',
@@ -1191,11 +1192,12 @@ HTML;
                     return;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
+                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 10, '&hellip;' ));
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',
-                    'title' => $howdy,
+                    'title' => '<span class="hidden-sm">'.$howdy.'</span><span class="visible-sm">'.$howdy_short.'</span>',
                     'href' => $profile_url,
                     'meta' => array(
                         'class' => 'hidden-xs',
