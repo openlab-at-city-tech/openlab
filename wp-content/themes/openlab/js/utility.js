@@ -7,12 +7,15 @@
     var resizeTimer;
 
     OpenLab.utility = {
+        newMembers: {},
+        newMembersHTML: {},
         init: function () {
 
             if ($('.truncate-on-the-fly').length) {
                 OpenLab.utility.truncateOnTheFly(true);
             }
             OpenLab.utility.adjustLoginBox();
+
         },
         adjustLoginBox: function () {
             if ($('#user-info')) {
@@ -29,6 +32,31 @@
                 }
 
             }
+        },
+        setUpNewMembersBox: function (resize) {
+
+            if(resize){
+                OpenLab.utility.newMembers.html(OpenLab.utility.newMembersHTML);
+            } else {
+                OpenLab.utility.newMembers = $('#home-new-member-wrap');
+                OpenLab.utility.newMembersHTML = $('#home-new-member-wrap').html();
+            }
+
+            //this is for the new OpenLab members slider on the homepage
+            OpenLab.utility.newMembers.jCarouselLite({
+                btnNext: ".next",
+                btnPrev: ".prev",
+                vertical: false,
+                visible: 2,
+                auto: 4000,
+                speed: 200,
+            });
+
+            $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
+
+                OpenLab.utility.truncateOnTheFly(false, true);
+
+            });
         },
         truncateOnTheFly: function (onInit, loadDelay) {
             if (onInit === undefined) {
@@ -286,12 +314,16 @@
             OpenLab.utility.truncateOnTheFly();
             OpenLab.utility.adjustLoginBox();
 
+            if ($('#home-new-member-wrap').length) {
+                OpenLab.utility.setUpNewMembersBox(true);
+            }
+
         }, 250);
 
     });
 
     $(window).load(function () {
-        
+
         $('html').removeClass('page-loading');
 
         //setting equal rows on homepage group list
@@ -310,23 +342,9 @@
             });
         }
 
-        var newMembers = jQuery("#home-new-member-wrap");
-
-        //this is for the new OpenLab members slider on the homepage
-        newMembers.jCarouselLite({
-            btnNext: ".next",
-            btnPrev: ".prev",
-            vertical: false,
-            visible: 2,
-            auto: 4000,
-            speed: 200,
-        });
-
-        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
-
-            OpenLab.utility.truncateOnTheFly(false, true);
-
-        });
+        if ($('#home-new-member-wrap').length) {
+            OpenLab.utility.setUpNewMembersBox(false);
+        }
 
     });
 
