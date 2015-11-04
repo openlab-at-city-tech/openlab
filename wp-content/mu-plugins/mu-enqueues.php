@@ -65,6 +65,11 @@ function openlab_bp_js_dependencies( $deps ) {
 	$deps   = array_diff( $deps, $concat );
 	$deps[] = 'openlab-buddypress';
 
+	wp_deregister_script( 'bp-confirm' );
+	wp_localize_script( 'openlab-buddypress', 'BP_Confirm', array(
+		'are_you_sure' => __( 'Are you sure?', 'buddypress' ),
+	) );
+
 	return $deps;
 }
 add_filter( 'bp_core_get_js_dependencies', 'openlab_bp_js_dependencies' );
