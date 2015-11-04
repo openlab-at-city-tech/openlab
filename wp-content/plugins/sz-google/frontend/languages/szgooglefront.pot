@@ -1,0 +1,1483 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: szgoogle\n"
+"POT-Creation-Date: 2015-02-11 17:03-0500\n"
+"PO-Revision-Date: 2015-02-11 17:03-0500\n"
+"Last-Translator: Massimo <wordpress@otherplus.com>\n"
+"Language-Team: otherplus <wordpress@otherplus.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: getTranslate\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ../..\n"
+
+#: ../../classes/module/SZGoogleModulePlus.php:1452
+msgid "leave a Reply"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:70
+msgid "same language theme"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:71
+msgid "afrikaans"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:72
+msgid "amharic"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:73
+msgid "arabic"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:74
+msgid "basque"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:75
+msgid "bengali"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:76
+msgid "bulgarian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:77
+msgid "catalan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:78
+msgid "chinese (Hong Kong)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:79
+msgid "chinese (Simplified)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:80
+msgid "chinese (Traditional)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:81
+msgid "croatian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:82
+msgid "czech"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:83
+msgid "danish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:84
+msgid "dutch"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:85
+msgid "english (UK)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:86
+msgid "english (US)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:87
+msgid "estonian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:88
+msgid "filipino"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:89
+msgid "finnish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:90
+msgid "french"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:91
+msgid "french (Canadian)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:92
+msgid "galician"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:93
+msgid "german"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:94
+msgid "greek"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:95
+msgid "gujarati"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:96
+msgid "hebrew"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:97
+msgid "hindi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:98
+msgid "hungarian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:99
+msgid "icelandic"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:100
+msgid "indonesian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:101
+msgid "italian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:102
+msgid "japanese"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:103
+msgid "kannada"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:104
+msgid "korean"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:105
+msgid "latvian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:106
+msgid "lithuanian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:107
+msgid "malay"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:108
+msgid "malayalam"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:109
+msgid "marathi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:110
+msgid "norwegian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:111
+msgid "persian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:112
+msgid "polish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:113
+msgid "portuguese (Brazil)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:114
+msgid "portuguese (Portugal)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:115
+msgid "romanian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:116
+msgid "russian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:117
+msgid "serbian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:118
+msgid "slovak"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:119
+msgid "slovenian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:120
+msgid "spanish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:121
+msgid "spanish (Latin America)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:122
+msgid "swahili"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:123
+msgid "swedish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:124
+msgid "tamil"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:125
+msgid "telugu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:126
+msgid "thai"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:127
+msgid "turkish"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:128
+msgid "ukrainian"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:129
+msgid "urdu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:130
+msgid "vietnamese"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:131
+msgid "zulu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:152
+msgid "default time zone"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:153
+msgid "(GMT-11:00) Midway"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:154
+msgid "(GMT-11:00) Niue"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:155
+msgid "(GMT-11:00) Pago Pago"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:156
+msgid "(GMT-10:00) Hawaii Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:157
+msgid "(GMT-10:00) Rarotonga"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:158
+msgid "(GMT-10:00) Tahiti"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:159
+msgid "(GMT-09:30) Marquesas"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:160
+msgid "(GMT-09:00) Alaska Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:161
+msgid "(GMT-09:00) Gambier"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:162
+msgid "(GMT-08:00) Pacific Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:163
+msgid "(GMT-08:00) Pacific Time - Tijuana"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:164
+msgid "(GMT-08:00) Pacific Time - Vancouver"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:165
+msgid "(GMT-08:00) Pacific Time - Whitehorse"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:166
+msgid "(GMT-08:00) Pitcairn"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:167
+msgid "(GMT-07:00) Mountain Time - Dawson Creek"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:168
+msgid "(GMT-07:00) Mountain Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:169
+msgid "(GMT-07:00) Mountain Time - Edmonton"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:170
+msgid "(GMT-07:00) Mountain Time - Hermosillo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:171
+msgid "(GMT-07:00) Mountain Time - Chihuahua, Mazatlan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:172
+msgid "(GMT-07:00) Mountain Time - Arizona"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:173
+msgid "(GMT-07:00) Mountain Time - Yellowknife"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:174
+msgid "(GMT-06:00) Belize"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:175
+msgid "(GMT-06:00) Central Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:176
+msgid "(GMT-06:00) Costa Rica"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:177
+msgid "(GMT-06:00) El Salvador"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:178
+msgid "(GMT-06:00) Guatemala"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:179
+msgid "(GMT-06:00) Managua"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:180
+msgid "(GMT-06:00) Central Time - Mexico City"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:181
+msgid "(GMT-06:00) Central Time - Regina"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:182
+msgid "(GMT-06:00) Central Time - Tegucigalpa"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:183
+msgid "(GMT-06:00) Central Time - Winnipeg"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:184
+msgid "(GMT-06:00) Easter Island"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:185
+msgid "(GMT-06:00) Galapagos"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:186
+msgid "(GMT-05:00) Bogota"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:187
+msgid "(GMT-05:00) Cayman"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:188
+msgid "(GMT-05:00) Grand Turk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:189
+msgid "(GMT-05:00) Guayaquil"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:190
+msgid "(GMT-05:00) Havana"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:191
+msgid "(GMT-05:00) Eastern Time - Iqaluit"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:192
+msgid "(GMT-05:00) Jamaica"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:193
+msgid "(GMT-05:00) Lima"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:194
+msgid "(GMT-05:00) Eastern Time - Montreal"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:195
+msgid "(GMT-05:00) Nassau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:196
+msgid "(GMT-05:00) Eastern Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:197
+msgid "(GMT-05:00) Panama"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:198
+msgid "(GMT-05:00) Port-au-Prince"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:199
+msgid "(GMT-05:00) Rio Branco"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:200
+msgid "(GMT-05:00) Eastern Time - Toronto"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:201
+msgid "(GMT-04:30) Caracas"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:202
+msgid "(GMT-04:00) Antigua"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:203
+msgid "(GMT-04:00) Asuncion"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:204
+msgid "(GMT-04:00) Barbados"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:205
+msgid "(GMT-04:00) Boa Vista"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:206
+msgid "(GMT-04:00) Campo Grande"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:207
+msgid "(GMT-04:00) Cuiaba"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:208
+msgid "(GMT-04:00) Curacao"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:209
+msgid "(GMT-04:00) Guyana"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:210
+msgid "(GMT-04:00) Atlantic Time - Halifax"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:211
+msgid "(GMT-04:00) La Paz"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:212
+msgid "(GMT-04:00) Manaus"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:213
+msgid "(GMT-04:00) Martinique"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:214
+msgid "(GMT-04:00) Port of Spain"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:215
+msgid "(GMT-04:00) Porto Velho"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:216
+msgid "(GMT-04:00) Puerto Rico"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:217
+msgid "(GMT-04:00) Santiago"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:218
+msgid "(GMT-04:00) Santo Domingo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:219
+msgid "(GMT-04:00) Thule"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:220
+msgid "(GMT-04:00) Palmer"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:221
+msgid "(GMT-04:00) Bermuda"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:222
+msgid "(GMT-03:30) Newfoundland Time - St. Johns"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:223
+msgid "(GMT-03:00) Araguaina"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:224
+msgid "(GMT-03:00) Buenos Aires"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:225
+msgid "(GMT-03:00) Salvador"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:226
+msgid "(GMT-03:00) Belem"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:227
+msgid "(GMT-03:00) Cayenne"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:228
+msgid "(GMT-03:00) Fortaleza"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:229
+msgid "(GMT-03:00) Godthab"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:230
+msgid "(GMT-03:00) Maceio"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:231
+msgid "(GMT-03:00) Miquelon"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:232
+msgid "(GMT-03:00) Montevideo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:233
+msgid "(GMT-03:00) Paramaribo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:234
+msgid "(GMT-03:00) Recife"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:235
+msgid "(GMT-03:00) Sao Paulo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:236
+msgid "(GMT-03:00) Rothera"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:237
+msgid "(GMT-03:00) Stanley"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:238
+msgid "(GMT-02:00) Noronha"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:239
+msgid "(GMT-02:00) South Georgia"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:240
+msgid "(GMT-01:00) Scoresbysund"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:241
+msgid "(GMT-01:00) Azores"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:242
+msgid "(GMT-01:00) Cape Verde"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:243
+msgid "(GMT+00:00) Abidjan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:244
+msgid "(GMT+00:00) Accra"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:245
+msgid "(GMT+00:00) Bamako"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:246
+msgid "(GMT+00:00) Banjul"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:247
+msgid "(GMT+00:00) Bissau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:248
+msgid "(GMT+00:00) Casablanca"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:249
+msgid "(GMT+00:00) Conakry"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:250
+msgid "(GMT+00:00) Dakar"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:251
+msgid "(GMT+00:00) El Aaiun"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:252
+msgid "(GMT+00:00) Freetown"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:253
+msgid "(GMT+00:00) Lome"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:254
+msgid "(GMT+00:00) Monrovia"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:255
+msgid "(GMT+00:00) Nouakchott"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:256
+msgid "(GMT+00:00) Ouagadougou"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:257
+msgid "(GMT+00:00) Sao Tome"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:258
+msgid "(GMT+00:00) Danmarkshavn"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:259
+msgid "(GMT+00:00) Canary Islands"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:260
+msgid "(GMT+00:00) Faeroe"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:261
+msgid "(GMT+00:00) Reykjavik"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:262
+msgid "(GMT+00:00) St Helena"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:263
+msgid "(GMT+00:00) GMT (no daylight saving)"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:264
+msgid "(GMT+00:00) Dublin"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:265
+msgid "(GMT+00:00) Lisbon"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:266
+msgid "(GMT+00:00) London"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:267
+msgid "(GMT+01:00) Algiers"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:268
+msgid "(GMT+01:00) Bangui"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:269
+msgid "(GMT+01:00) Brazzaville"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:270
+msgid "(GMT+01:00) Ceuta"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:271
+msgid "(GMT+01:00) Douala"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:272
+msgid "(GMT+01:00) Kinshasa"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:273
+msgid "(GMT+01:00) Lagos"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:274
+msgid "(GMT+01:00) Libreville"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:275
+msgid "(GMT+01:00) Luanda"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:276
+msgid "(GMT+01:00) Malabo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:277
+msgid "(GMT+01:00) Ndjamena"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:278
+msgid "(GMT+01:00) Niamey"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:279
+msgid "(GMT+01:00) Porto-Novo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:280
+msgid "(GMT+01:00) Tunis"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:281
+msgid "(GMT+01:00) Windhoek"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:282
+msgid "(GMT+01:00) Amsterdam"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:283
+msgid "(GMT+01:00) Andorra"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:284
+msgid "(GMT+01:00) Central European Time - Belgrade"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:285
+msgid "(GMT+01:00) Berlin"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:286
+msgid "(GMT+01:00) Brussels"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:287
+msgid "(GMT+01:00) Budapest"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:288
+msgid "(GMT+01:00) Copenhagen"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:289
+msgid "(GMT+01:00) Gibraltar"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:290
+msgid "(GMT+01:00) Luxembourg"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:291
+msgid "(GMT+01:00) Madrid"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:292
+msgid "(GMT+01:00) Malta"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:293
+msgid "(GMT+01:00) Monaco"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:294
+msgid "(GMT+01:00) Oslo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:295
+msgid "(GMT+01:00) Paris"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:296
+msgid "(GMT+01:00) Central European Time - Prague"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:297
+msgid "(GMT+01:00) Rome"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:298
+msgid "(GMT+01:00) Stockholm"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:299
+msgid "(GMT+01:00) Tirane"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:300
+msgid "(GMT+01:00) Vienna"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:301
+msgid "(GMT+01:00) Warsaw"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:302
+msgid "(GMT+01:00) Zurich"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:303
+msgid "(GMT+02:00) Blantyre"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:304
+msgid "(GMT+02:00) Bujumbura"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:305
+msgid "(GMT+02:00) Cairo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:306
+msgid "(GMT+02:00) Gaborone"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:307
+msgid "(GMT+02:00) Harare"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:308
+msgid "(GMT+02:00) Johannesburg"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:309
+msgid "(GMT+02:00) Kigali"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:310
+msgid "(GMT+02:00) Lubumbashi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:311
+msgid "(GMT+02:00) Lusaka"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:312
+msgid "(GMT+02:00) Maputo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:313
+msgid "(GMT+02:00) Maseru"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:314
+msgid "(GMT+02:00) Mbabane"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:315
+msgid "(GMT+02:00) Tripoli"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:316
+msgid "(GMT+02:00) Amman"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:317
+msgid "(GMT+02:00) Beirut"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:318
+msgid "(GMT+02:00) Damascus"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:319
+msgid "(GMT+02:00) Gaza"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:320
+msgid "(GMT+02:00) Jerusalem"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:321
+msgid "(GMT+02:00) Nicosia"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:322
+msgid "(GMT+02:00) Athens"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:323
+msgid "(GMT+02:00) Bucharest"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:324
+msgid "(GMT+02:00) Chisinau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:325
+msgid "(GMT+02:00) Helsinki"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:326
+msgid "(GMT+02:00) Istanbul"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:327
+msgid "(GMT+02:00) Kiev"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:328
+msgid "(GMT+02:00) Riga"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:329
+msgid "(GMT+02:00) Sofia"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:330
+msgid "(GMT+02:00) Tallinn"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:331
+msgid "(GMT+02:00) Vilnius"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:332
+msgid "(GMT+03:00) Addis Ababa"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:333
+msgid "(GMT+03:00) Asmera"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:334
+msgid "(GMT+03:00) Dar es Salaam"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:335
+msgid "(GMT+03:00) Djibouti"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:336
+msgid "(GMT+03:00) Kampala"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:337
+msgid "(GMT+03:00) Khartoum"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:338
+msgid "(GMT+03:00) Mogadishu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:339
+msgid "(GMT+03:00) Nairobi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:340
+msgid "(GMT+03:00) Syowa"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:341
+msgid "(GMT+03:00) Aden"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:342
+msgid "(GMT+03:00) Baghdad"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:343
+msgid "(GMT+03:00) Bahrain"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:344
+msgid "(GMT+03:00) Kuwait"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:345
+msgid "(GMT+03:00) Qatar"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:346
+msgid "(GMT+03:00) Riyadh"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:347
+msgid "(GMT+03:00) Moscow-01 - Kaliningrad"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:348
+msgid "(GMT+03:00) Minsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:349
+msgid "(GMT+03:00) Antananarivo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:350
+msgid "(GMT+03:00) Comoro"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:351
+msgid "(GMT+03:00) Mayotte"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:352
+msgid "(GMT+03:30) Tehran"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:353
+msgid "(GMT+04:00) Baku"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:354
+msgid "(GMT+04:00) Dubai"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:355
+msgid "(GMT+04:00) Muscat"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:356
+msgid "(GMT+04:00) Tbilisi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:357
+msgid "(GMT+04:00) Yerevan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:358
+msgid "(GMT+04:00) Moscow+00"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:359
+msgid "(GMT+04:00) Moscow+00 - Samara"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:360
+msgid "(GMT+04:00) Mahe"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:361
+msgid "(GMT+04:00) Mauritius"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:362
+msgid "(GMT+04:00) Reunion"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:363
+msgid "(GMT+04:30) Kabul"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:364
+msgid "(GMT+05:00) Mawson"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:365
+msgid "(GMT+05:00) Aqtau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:366
+msgid "(GMT+05:00) Aqtobe"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:367
+msgid "(GMT+05:00) Ashgabat"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:368
+msgid "(GMT+05:00) Dushanbe"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:369
+msgid "(GMT+05:00) Karachi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:370
+msgid "(GMT+05:00) Tashkent"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:371
+msgid "(GMT+05:00) Kerguelen"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:372
+msgid "(GMT+05:00) Maldives"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:373
+msgid "(GMT+05:30) India Standard Time"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:374
+msgid "(GMT+05:30) Colombo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:375
+msgid "(GMT+05:45) Katmandu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:376
+msgid "(GMT+06:00) Vostok"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:377
+msgid "(GMT+06:00) Almaty"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:378
+msgid "(GMT+06:00) Bishkek"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:379
+msgid "(GMT+06:00) Dhaka"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:380
+msgid "(GMT+06:00) Thimphu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:381
+msgid "(GMT+06:00) Moscow+02 - Yekaterinburg"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:382
+msgid "(GMT+06:00) Chagos"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:383
+msgid "(GMT+06:30) Rangoon"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:384
+msgid "(GMT+06:30) Cocos"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:385
+msgid "(GMT+07:00) Davis"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:386
+msgid "(GMT+07:00) Bangkok"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:387
+msgid "(GMT+07:00) Hovd"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:388
+msgid "(GMT+07:00) Jakarta"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:389
+msgid "(GMT+07:00) Moscow+03 - Omsk, Novosibirsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:390
+msgid "(GMT+07:00) Phnom Penh"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:391
+msgid "(GMT+07:00) Hanoi"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:392
+msgid "(GMT+07:00) Vientiane"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:393
+msgid "(GMT+07:00) Christmas"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:394
+msgid "(GMT+08:00) Casey"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:395
+msgid "(GMT+08:00) Brunei"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:396
+msgid "(GMT+08:00) Choibalsan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:397
+msgid "(GMT+08:00) Hong Kong"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:398
+msgid "(GMT+08:00) Moscow+04 - Krasnoyarsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:399
+msgid "(GMT+08:00) Kuala Lumpur"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:400
+msgid "(GMT+08:00) Macau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:401
+msgid "(GMT+08:00) Makassar"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:402
+msgid "(GMT+08:00) Manila"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:403
+msgid "(GMT+08:00) China Time - Beijing"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:404
+msgid "(GMT+08:00) Singapore"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:405
+msgid "(GMT+08:00) Taipei"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:406
+msgid "(GMT+08:00) Ulaanbaatar"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:407
+msgid "(GMT+08:00) Western Time - Perth"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:408
+msgid "(GMT+09:00) Dili"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:409
+msgid "(GMT+09:00) Moscow+05 - Irkutsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:410
+msgid "(GMT+09:00) Jayapura"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:411
+msgid "(GMT+09:00) Pyongyang"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:412
+msgid "(GMT+09:00) Seoul"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:413
+msgid "(GMT+09:00) Tokyo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:414
+msgid "(GMT+09:00) Palau"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:415
+msgid "(GMT+09:30) Central Time - Adelaide"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:416
+msgid "(GMT+09:30) Central Time - Darwin"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:417
+msgid "(GMT+10:00) Dumont D&#39;Urville"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:418
+msgid "(GMT+10:00) Moscow+06 - Yakutsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:419
+msgid "(GMT+10:00) Eastern Time - Brisbane"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:420
+msgid "(GMT+10:00) Eastern Time - Hobart"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:421
+msgid "(GMT+10:00) Eastern Time - Melbourne, Sydney"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:422
+msgid "(GMT+10:00) Truk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:423
+msgid "(GMT+10:00) Guam"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:424
+msgid "(GMT+10:00) Port Moresby"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:425
+msgid "(GMT+10:00) Saipan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:426
+msgid "(GMT+11:00) Moscow+07 - Yuzhno-Sakhalinsk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:427
+msgid "(GMT+11:00) Efate"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:428
+msgid "(GMT+11:00) Guadalcanal"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:429
+msgid "(GMT+11:00) Kosrae"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:430
+msgid "(GMT+11:00) Noumea"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:431
+msgid "(GMT+11:00) Ponape"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:432
+msgid "(GMT+11:30) Norfolk"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:433
+msgid "(GMT+12:00) Moscow+08 - Petropavlovsk-Kamchatskiy"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:434
+msgid "(GMT+12:00) Moscow+08 - Magadan"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:435
+msgid "(GMT+12:00) Auckland"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:436
+msgid "(GMT+12:00) Fiji"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:437
+msgid "(GMT+12:00) Funafuti"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:438
+msgid "(GMT+12:00) Kwajalein"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:439
+msgid "(GMT+12:00) Majuro"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:440
+msgid "(GMT+12:00) Nauru"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:441
+msgid "(GMT+12:00) Tarawa"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:442
+msgid "(GMT+12:00) Wake"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:443
+msgid "(GMT+12:00) Wallis"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:444
+msgid "(GMT+13:00) Apia"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:445
+msgid "(GMT+13:00) Enderbury"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:446
+msgid "(GMT+13:00) Fakaofo"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:447
+msgid "(GMT+13:00) Tongatapu"
+msgstr ""
+
+#: ../../classes/common/SZGoogleCommon.php:448
+msgid "(GMT+14:00) Kiritimati"
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionYoutubeVideo.php:297
+msgid "youtube URL string specified is not valid."
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionYoutubeVideo.php:372
+msgid "youtube video"
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionYoutubeLink.php:78
+msgid "channel youtube"
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionAuthenticatorLogin.php:41
+msgid "If you don't use Authenticator leave this field empty."
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionAuthenticatorLogin.php:41
+msgid "google authenticator code"
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionAuthenticatorLogin.php:99
+msgid "<strong>ERROR</strong>: Authenticator code is incorrect."
+msgstr ""
+
+#: ../../classes/action/SZGoogleActionYoutubePlaylist.php:233
+msgid "youtube playlist specified is not valid."
+msgstr ""
