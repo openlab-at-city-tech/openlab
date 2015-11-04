@@ -19,6 +19,9 @@ openlabdev
 php_error.log
 debug.log
 
+# Grunt
+node_modules
+
 # Misc exclusions
 *.bak
 PHP_errors.log
@@ -33,6 +36,9 @@ wp-content/plugins/custom-anti-spam/cas_*
 wp-content/plugins/cac-featured-content/cache/*
 !wp-content/plugins/cac-featured-content/cache/index.html
 bb-config.php
+\.cac-major-update.json
+*config.rb
+*.log
 
 .svn
 wp-admin/error_log
