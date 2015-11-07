@@ -7414,6 +7414,15 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form .forgetmenot label {
+  line-height: 21px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form #sidebar-wp-submit {
+  margin-bottom: 5px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form .lost-pw {
+  line-height: 24px;
+}
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-submenu {
     background: #fff;
