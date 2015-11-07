@@ -11,15 +11,20 @@ if ( !function_exists( 'wp_editor' ) ) {
 
 ?>
 
-<?php do_action( 'template_notices' ) ?>
+<div class="doc-content img-rounded edit-doc">
 
-<div class="doc-content img-rounded">
-
-<div id="idle-warning" style="display:none">
+<form action="" method="post" class="form-group form-panel" id="doc-form">
+    
+    <div class="panel panel-default">
+    <div class="panel-heading"><?php _e('New Doc', 'bp-docs'); ?></div>
+    <div class="panel-body">
+        
+    <?php do_action( 'template_notices' ) ?>
+    
+    <div id="idle-warning" style="display:none">
 	<p><?php _e( 'You have been idle for <span id="idle-warning-time"></span>', 'bp-docs' ) ?></p>
-</div>
-
-<form action="" method="post" class="form-group" id="doc-form">
+    </div>
+    
     <div class="doc-header">
 	<?php if ( bp_docs_is_existing_doc() ) : ?>
 		<input type="hidden" id="existing-doc-id" value="<?php the_ID() ?>" />
@@ -131,6 +136,9 @@ if ( !function_exists( 'wp_editor' ) ) {
 
 
         <div style="clear: both"> </div>
+    </div>
+    
+    </div>
     </div>
 </form>
 

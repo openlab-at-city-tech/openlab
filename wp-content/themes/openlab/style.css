@@ -8850,6 +8850,10 @@ body.membership-requests .group-list {
     width: 100%;
   }
 }
+.doc-content.edit-doc {
+  border: none;
+  padding: 0;
+}
 .doc-content .wp-switch-editor {
   padding: 0 8px;
   text-decoration: none;
