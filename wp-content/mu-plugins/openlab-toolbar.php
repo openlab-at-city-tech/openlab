@@ -1221,13 +1221,13 @@ HTML;
                     return;
 
             if ( $current_user->display_name !== $current_user->user_login )
-                    $user_login = "<br /><span class='username'>{$current_user->user_login}</span>";
+                    $user_login = "<span class='username'>{$current_user->user_login}</span>";
 
             // avatar
             $user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $current_user->display_name.'"/></a></div></div>' ;
 
             // name link
-            $user_info .= '<div class="col-sm-16"><p class="item-title"><a href="' . $profile_url . '"><span class="display-name">'.$current_user->display_name.$user_login.'</a></p>';
+            $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span><a href="' . $profile_url . '">'.$user_login.'</a></p>';
 
             // accept/reject buttons
             $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></p></div></div>';
