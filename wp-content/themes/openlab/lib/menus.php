@@ -593,7 +593,7 @@ function openlab_filter_subnav_home($subnav_item) {
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
         $site_link = '<li id="site-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '" id="site">' . $group_label . ' Site</a></li>';
 
-        if ((openlab_is_portfolio() && openlab_is_my_portfolio()) || (!openlab_is_portfolio() && groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) || $bp->is_item_admin || is_super_admin()) {
+        if ($group_site_settings['is_local'] && ((openlab_is_portfolio() && openlab_is_my_portfolio()) || (!openlab_is_portfolio() && groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) || $bp->is_item_admin || is_super_admin())) {
 
             $site_link .= '<li id="site-admin-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . 'wp-admin/" id="site-admin">Site Dashboard</a></li>';
         }
@@ -859,11 +859,11 @@ function openlab_group_admin_tabs($group = false) {
         <?php endif ?>
 
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
-         
+
         <?php if ($group_type == "portfolio") : ?>
-            <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+               <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-            <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+               <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>
@@ -906,7 +906,7 @@ function openlab_group_membership_tabs($group = false) {
     <?php if (bp_group_is_member() && openlab_is_admin_truly_member()): ?>
         --><li<?php if ($bp->current_action == 'notifications') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/notifications"><?php _e('Your Email Options', 'buddypress'); ?></a></li><!--
     <?php endif; ?>
- -->
+    -->
     <?php
 }
 
@@ -929,7 +929,7 @@ function openlab_docs_tabs() {
         <?php $doc_obj = bp_docs_get_current_doc(); ?>
         --><li class="current-menu-item"><?php echo $doc_obj->post_title; ?></li><!--
     <?php endif; ?>
-        -->
+    -->
     <?php
 }
 
@@ -962,8 +962,8 @@ function openlab_forum_tabs() {
 
     <li <?php echo (!bp_action_variable() ? 'class="current-menu-item"' : ''); ?> ><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/forum/">Discussion</a></li><!--
     <?php if (bp_action_variable() == 'topic'): ?>
-    --><li class="current-menu-item hyphenate"><span><?php bbp_topic_title() ?></span></li><!--
-        <?php endif; ?>
+        --><li class="current-menu-item hyphenate"><span><?php bbp_topic_title() ?></span></li><!--
+            <?php endif; ?>
     -->
     <?php
 }

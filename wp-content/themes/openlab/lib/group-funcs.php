@@ -1387,7 +1387,7 @@ function openlab_bp_group_site_pages() {
                     <li class="portfolio-site-link">
                         <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
                     </li>
-                    <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                    <?php if ($group_site_settings['is_local'] && ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()))) : ?>
                         <li class="portfolio-dashboard-link">
                             <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($group_site_settings['site_url'])) . 'wp-admin/">Site Dashboard</a>'; ?>
                         </li>
@@ -1430,7 +1430,7 @@ function openlab_get_group_site_settings($group_id) {
 
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
-
+    
     if ($site_id) {
         $site_url = get_blog_option($site_id, 'siteurl');
         $is_local = true;
