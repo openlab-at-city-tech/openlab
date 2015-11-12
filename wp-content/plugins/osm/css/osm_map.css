@@ -1,0 +1,117 @@
+/* OSM-plugin css file                                        */
+/* wp-osm-plugin.HanBlog.Net                                  */
+/* note: there is also some style information in the php-file */
+
+
+.entry .olMapViewport img{
+  max-width: none !important; 
+  max-height: none !important;
+  vertical-align: none !important;
+}
+
+.OSM_Map img { 
+  max-width: none !important; 
+  max-height: none !important; 
+  vertical-align: none;
+}
+
+.olTileImage {
+  max-width: none !important; 
+  max-height: none !important;
+  vertical-align: none !important;
+}
+   
+.olControlAttribution {
+  bottom: 0 !important;
+}
+
+div.olControlMousePosition {
+  bottom: 1em !important;
+}
+
+.olPopupContent
+{
+    /*padding-top:10px;
+    padding-bottom:10px;
+    padding-right:10px;
+    padding-left:10px;*/
+    padding: 0 0 0 0;
+    border: #fff solid;
+    border-width: 10px 10px;
+
+    white-space:nowrap;
+}
+
+/* pink tiles at openseamap */
+.olImageLoadError {
+display: none !important;
+}
+
+
+
+/* +++ metabox tabs +++ */
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+ 
+/*----- metabox tabs Links -----*/
+/* Clearfix */
+.tab-links:after {
+   display:block;
+   clear:both;
+   content:'';
+}
+ 
+.tab-links li {
+  margin:0px 5px;
+  float:left;
+  list-style:none;
+  text-decoration:none;
+}
+ 
+.tab-links a {
+  padding:3px 6px;
+  display:inline-block;
+  border-radius:3px 3px 0px 0px;
+  background:#FFFFFF;
+  transition:all linear 0.15s;
+  text-decoration:none;
+}
+ 
+.tab-links a:hover {
+  background:#FFFFFF;
+  text-decoration:none;
+}
+ 
+li.active a {
+  border: 1px solid #D8D8D8;
+  background:#FFFFFF;
+  border-bottom: none;
+  color: black;
+}
+
+li.active a:hover {
+  border: 1px solid #D8D8D8;
+  background:#FFFFFF;
+  border-bottom: none;
+}
+
+ 
+/*----- Content of metabox tabs -----*/
+.tab-content {
+  margin: -14px 0px 0px 0px; 
+  padding:15px;
+  border-radius:3px;
+  border: 1px solid #D8D8D8;
+  background:#fff;
+}
+ 
+.tab {
+  display:none;
+}
+
+.tab.active {
+  display:block;
+}
+/* --- metabox tabs --- */
