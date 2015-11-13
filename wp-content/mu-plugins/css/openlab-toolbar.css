@@ -6984,6 +6984,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar a {
   text-shadow: none !important;
 }
+.oplb-bs #wpadminbar .bold {
+  font-weight: 700;
+}
 .oplb-bs #wpadminbar .fa {
   font-size: 14px;
   line-height: 1;
