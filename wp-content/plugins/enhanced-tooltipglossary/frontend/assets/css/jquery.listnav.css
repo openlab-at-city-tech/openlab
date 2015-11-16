@@ -1,0 +1,20 @@
+.listNav { margin:0 0 10px; position:relative;padding-top:12px}
+.ln-letters { overflow:hidden; }
+.ln-letters a { font-size:0.7em; display:block; float:left; padding:2px 6px; border:1px solid silver; border-right:none; text-decoration:none; }
+.ln-letters a.ln-last { border-right:1px solid silver; }
+.ln-letters a:hover,
+.ln-letters a.ln-selected { background-color:#eaeaea; }
+.ln-letters a.ln-disabled { color:#ccc; }
+.ln-letter-count { text-align:center; font-size:0.7em; line-height:1; margin-bottom:3px; color:#336699; }
+
+.tiles { width:650px; clear: both; overflow: hidden }
+.tiles ul {list-style-type:none;margin:0;}
+.tiles ul li { float:left; }
+.tiles ul a { display:block; text-align:center; min-width:85px; width:85px; word-wrap:break-word;border:1px solid silver; padding:10px; margin:0 10px 10px 0; text-decoration:none; white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.tiles ul a:hover { background-color:#eee;z-index:0;white-space:normal;width:auto; }
+
+ul.pageNumbers {font-size:12px;clear:both;}
+ul.pageNumbers li {display:inline-block; border:solid 1px silver; border-right:none; padding:3px 5px;list-style-type:none;margin:0;line-height:1;background-color:#fff;}
+ul.pageNumbers li.selected, ul.pageNumbers li:hover {background-color:#ccc;}
+ul.pageNumbers li+li {border-right:solid 1px silver;}
+ul.pageNumbers li a {text-decoration:none}

@@ -1,0 +1,244 @@
+#tt {position:absolute; display:block;z-index:1500;}
+#tttop {display:block; height:5px; margin-left:5px;}
+#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:white}
+#ttbot {display:block; height:5px; margin-left:5px;}
+
+.cminds_settings_description .button.cmtt-cleanup-button{
+    color: #A00;
+}
+.cminds_settings_description .button.cmtt-cleanup-button:hover{
+    color: #F00;
+}
+
+ul#glossaryList{padding: 0; margin: 0}
+div.glossary-container > ul.pageNumbers {padding-top: 20px;}
+
+span.glossaryLink, a.glossaryLink {text-decoration:none !important; border-bottom: dotted 1px;}
+a.glossaryLink:hover {text-decoration:none !important;}
+#glossary-categories {float: right; margin: 0}
+.mobile-link{margin: 10px; font-size: 14pt}
+.mobile-link:before{content: "Term link: "}
+.glossary_synonyms{margin-bottom: 1em; font-style: italic}
+h4.glossary_related_title {margin-bottom:0px;}
+ul.glossary_related {margin-top:0;}
+div.glossary_synonyms {margin:10px 0;}
+div.glossary_synonyms_title {margin: 10px 0;}
+.glossary_top_filter {clear: both; overflow: hidden; margin-bottom: 10px;}
+.glossary_top_filter .left {}
+.glossary_top_filter .right {float: right;}
+.cmtt_Glossary-replacement-add {border: 1px solid #CCC;border-radius: 5px;background: #EEE;margin-top: 30px;padding-bottom: 12px;}
+.glossary_loading {background: url('images/ajax-loader.gif') no-repeat center center;background-color: #DDD;position: absolute;width: 100%;height: 100%;opacity: 0.5;display: none;}
+.glossary_replacements_list tr:hover {background-color: #EEE;}
+.glossary_replacements_list th {font-weight: bold;}
+
+.red-glossary-third-party .block {border: 1px solid grey;border-radius: 13px;padding: 20px;margin-bottom: 5px;}
+.red-glossary-third-party .block h3 {padding-top: 0px; margin-top: 0px;}
+
+.glossarySettingsTabs .block {border: 1px solid grey;border-radius: 13px;padding: 20px;margin-bottom: 5px;}
+.glossarySettingsTabs .block h3 {padding-top: 0px; margin-top: 0px;}
+
+#glossary-exclude-box label.blocklabel,
+#glossary-disable-box label.blocklabel{display: block}
+
+.floated-form-table{
+    clear: none;
+}
+
+.floated-form-table tr{
+    float: left;
+    width: 49%;
+    clear: none;
+}
+
+.floated-form-table tr.whole-line{
+    width: 99%;
+}
+
+.glossarySettingsTabs table th{
+    position: relative;
+    padding-right: 25px;
+}
+
+div.cmtt_field_help{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url('images/help.png');
+    cursor: pointer;
+    margin: 0 -20px 0 0;
+    float: right;
+}
+
+div.cmtt_field_help:hover{
+    background-image: url('images/help_hover.png');
+}
+
+div.cmtt_help{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url('images/help.png');
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+div.cmtt_help:hover{
+    background-image: url('images/help_hover.png');
+}
+
+.cm-showhide-handle{ cursor: pointer;}
+
+/* PRO PLUS ONLY */
+.glossary-container{ position: relative}
+.glossary-search-clear{margin-left: 1em; cursor: pointer}
+
+/*THIRD PARTY*/
+#tt .mobile-link a.glossaryLinkMain{color: #fff}
+#tt div.glossary_mw_dictionary{color: #fff}
+#tt div.mw-thesaurus-container{color: #fff}
+#tt h1,#tt h2,#tt h3,#tt h4{color: #fff}
+
+div.mw-dictionary-container{margin-top: 1em}
+div.mw-thesaurus-container{margin-top: 2em;}
+div.glossary_mw_dictionary,
+div.glossary_mw_wikipedia {font-size: 14pt; margin: 0.5em 0 0.5em 0;}
+div.mw-group{margin: 0.5em 0 0.5em 0}
+div.mw-group .group-title{ font-size: 12pt; margin-top: 0.5em; margin-bottom: 0.5em}
+div.mw-group .term {margin-top: 0.3em}
+div.mw-group div.term-number {float: left; font-weight: bold}
+div.mw-group div.dd {margin: 0 0 0 1.5em;}
+div.mw-group dd {margin: 0 0 0 1.5em;}
+div.mw-group .type-vt {margin-left: 1em}
+div.mw-group .sn {margin-left: 2em; margin-right: 0.5em}
+div.mw-group .prdiv {margin-left: 0.5em}
+div.mw-group .prdiv + .sn {margin-left: 0.5em;}
+#tt span.example:before{content: "<"}
+#tt span.example:after{content: ">"}
+span.definition {margin-left: 0.5em}
+div.mw-group.mw-definitnion { font-family: monospace; border: 1px #ccc solid; border-radius: 5px; display: block;padding: 10px;}
+div.scnt {margin-top: 1em}
+.progress-indicator {stop:0; right:0; width:100%; height:100%; position:absolute; text-align:center; /* IE filter */ filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50); -moz-opacity:0.5;/* Mozilla extension */ -khtml-opacity:0.5;  /* Safari/Conqueror extension */ opacity:0.5; /* CSS3 */ z-index:1000; background-color:white; display:none;}
+.progress-indicator img {margin-top:75px;}
+
+.cmtt-post-format-icon:before{font: 200 14px/1 dashicons;position: relative;left: -5px;}
+.cmtt-post-format-icon.cmtt-post-format-audio:before {content: '\f127';}
+
+.cmtt-audio-shortcode {
+    margin: 10px;
+}
+.cmtt-audio-player.cmtt-limited {
+    float: left;
+}
+.cmtt-audio-player.cmtt-limited .cmtt-audio-shortcode .mejs-controls > *:not(.mejs-playpause-button) {
+    display: none !important;
+}
+
+.cmtt-audio-player.cmtt-limited .cmtt-audio-shortcode.mejs-container{
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+}
+.cmtt-audio-player.cmtt-limited .cmtt-audio-shortcode .mejs-controls{
+    width: auto !important;
+    background: none !important;
+    position: initial !important;
+}
+.cmtt-audio-player .cmtt-audio-shortcode .mejs-controls{
+    position: initial !important;
+}
+
+.cmtt-glossary-tag.selected{
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.cmtt-woocommerce-product-container{
+    padding: 10px;
+    padding: 0.2em;
+}
+.cmtt-woocommerce-product-image-container{
+    float: left;
+    padding: 5px 10px 10px 0px;
+}
+.cmtt-woocommerce-product-description{
+    padding-bottom: 10px;
+    padding-bottom: 1em;
+    display: block;
+}
+.cmtt-woocommerce-product-desc-container {
+    min-width: 275px;
+}
+.cmtt-woocommerce-product-name {
+    font-weight: 600;
+}
+
+.cmtt-woocommerce-product-button-container{
+    float: right;
+}
+.cmtt-woocommerce-product-price ins{
+    background: none;
+}
+
+.cmtt-post-tags a{
+    cursor: pointer;
+}
+
+.server-info-table td:nth-child(3) {}
+.server-info-table span {color: green; font-weight: bold;}
+.server-info-table strong {color: red; font-weight: bold;}
+
+.cmtt-social-box {
+    margin-bottom: 10px;
+}
+
+.cmtt-social-box .sharetitle {
+    float: left;
+    border-right: 1px solid #D2D2D2;
+    padding: 3px 10px 2px 0px;
+    margin: 0 10px 0 0;
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+.cmtt-social-box .sharetwitter {
+    float: left;
+    width: 90px;
+    border-right: 1px solid #D2D2D2;
+    margin: 0 15px 0 0;
+    padding: 3px 0 2px;
+    height: 25px;
+}
+
+.cmtt-social-box .sharefb {
+    width: 120px;
+    float: left;
+    border-right: 1px solid #D2D2D2;
+    padding: 3px 0 2px;
+    height: 25px;
+}
+
+.cmtt-social-box .sharegplus {
+    float: left;
+    width: 120px;
+    padding: 3px 0 2px;
+    border-right: 1px solid #D2D2D2;
+    height: 25px;
+    margin: 0 0px 0 15px;
+}
+
+.cmtt-social-box .sharelinkedin {
+    float: left;
+    width: 120px;
+    margin: 0 0px 0 15px;
+    padding: 3px 0 2px;
+    border-right: 0px solid #D2D2D2;
+    height: 25px;
+}
+
+select#cmtt_glossaryID{
+    max-width: 350px;
+}
+
+div.cminds_settings_description{
+    max-width: 55%;
+}
