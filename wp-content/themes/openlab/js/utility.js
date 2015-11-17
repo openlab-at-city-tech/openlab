@@ -152,15 +152,21 @@
 
         // Workshop fields on Contact Us
         function toggle_workshop_meeting_items() {
-            var contact_us_topic = document.getElementById('contact-us-topic');
-
             if (!!contact_us_topic) {
                 if ('Request a Workshop / Meeting' == contact_us_topic.value) {
-                    jQuery('#workshop-meeting-items').slideDown('fast');
+                    $workshop_meeting_items.slideDown('fast');
                 } else {
-                    jQuery('#workshop-meeting-items').slideUp('fast');
+                    $workshop_meeting_items.slideUp('fast');
                 }
             }
+        }
+
+        function toggle_other_details() {
+                if ( 'Other (please specify)' == $reason_for_request.val() ) {
+                        $other_details.slideDown( 'fast' );
+                } else {
+                        $other_details.slideUp( 'fast' );
+                }
         }
 
         // + button on Related Links List Settings
@@ -170,10 +176,19 @@
             create_new_related_link_field();
         });
 
+        var contact_us_topic = document.getElementById('contact-us-topic');
+        $workshop_meeting_items = jQuery( '#workshop-meeting-items' );
         jQuery('#contact-us-topic').on('change', function () {
             toggle_workshop_meeting_items();
         });
         toggle_workshop_meeting_items();
+
+        $other_details = jQuery( '#other-details' );
+        $reason_for_request = jQuery( '#reason-for-request' );
+        $reason_for_request.on( 'change', function() {
+                toggle_other_details();
+        } );
+        toggle_other_details();
 
         jQuery('#wds-accordion-slider').easyAccordion({
             autoStart: true,
