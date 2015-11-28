@@ -77,3 +77,34 @@ function openlab_bp_js_dependencies( $deps ) {
 	return $deps;
 }
 add_filter( 'bp_core_get_js_dependencies', 'openlab_bp_js_dependencies' );
+
+/**
+ * Concatenate styles on main site.
+ */
+function openlab_css_concat() {
+	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+		return;
+	}
+
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
+	// Dequeues.
+
+	// Achievements.
+	wp_dequeue_style( 'dpa-default-achievements' );
+
+	// bbPress.
+	wp_dequeue_style( 'bbp-default' );
+
+	// Contact Form 7.
+	wp_dequeue_style( 'contact-form-7' );
+
+	// Post Gallery Widget.
+	wp_dequeue_style( 'pgw-cycle' );
+
+	// Enqueue concatentated styles.
+	wp_enqueue_style( 'openlab-root-blog-css', content_url( 'css/root-blog-styles.css' ) );
+}
+add_action( 'wp_print_styles', 'openlab_css_concat', 0 );

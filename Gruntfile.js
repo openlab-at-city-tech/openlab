@@ -3,10 +3,10 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat: {
-            options: {
-                separator: ';'
-            },
             buddypress: {
+                options: {
+                    separator: ';'
+                },
                 src: [
 			'wp-content/plugins/buddypress/bp-core/js/confirm.min.js',
 			'wp-content/plugins/buddypress/bp-core/js/widget-members.min.js',
@@ -17,6 +17,9 @@ module.exports = function (grunt) {
                 dest: 'wp-content/js/buddypress.js'
             },
 	    smoothscroll: {
+                options: {
+                    separator: ';'
+                },
 		src: [
 			'wp-content/mu-plugins/js/jquery-smooth-scroll/jquery.smooth-scroll.min.js',
 			'wp-content/mu-plugins/js/jquery-custom-select/jquery.customSelect.min.js',
@@ -26,8 +29,20 @@ module.exports = function (grunt) {
 			'wp-content/mu-plugins/js/openlab/openlab.theme.fixes.js',
 		],
 		dest: 'wp-content/js/smoothscroll.js'
+	    },
+	    rootblogcss: {
+                options: {
+                    separator: "\n"
+                },
+		src: [
+			'wp-content/plugins/achievements/templates/achievements/css/achievements.css',
+			'wp-content/plugins/bbpress/templates/default/css/bbpress.css',
+			'wp-content/plugins/contact-form-7/includes/css/styles.css',
+			'wp-content/plugins/post-gallery-widget/css/style.css'
+		],
+		dest: 'wp-content/css/root-blog-styles.css'
 	    }
-        },
+        }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.registerTask('default', ['concat']);
