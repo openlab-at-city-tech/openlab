@@ -104,6 +104,13 @@ function openlab_css_concat() {
 	// Post Gallery Widget.
 	wp_dequeue_style( 'pgw-cycle' );
 
+	// BuddyPress.
+	wp_dequeue_style( 'bp-legacy-css' );
+	wp_dequeue_style( 'bp-mentions-css' );
+
+	// BuddyPress Group Email Subscription.
+	wp_dequeue_style( 'activity-subscription-style' );
+
 	// Enqueue concatentated styles.
 	wp_enqueue_style( 'openlab-root-blog-css', content_url( 'css/root-blog-styles.css' ) );
 }

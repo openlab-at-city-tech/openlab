@@ -39,7 +39,10 @@ module.exports = function (grunt) {
 			'wp-content/plugins/bbpress/templates/default/css/bbpress.css',
 			'wp-content/plugins/contact-form-7/includes/css/styles.css',
 			'wp-content/plugins/post-gallery-widget/css/style.css',
-			'wp-content/plugins/cac-featured-content/css/cfcw-default.css'
+			'wp-content/plugins/cac-featured-content/css/cfcw-default.css',
+			'wp-content/plugins/buddypress/bp-templates/bp-legacy/css/buddypress.min.css',
+			'wp-content/plugins/buddypress/bp-activity/css/mentions.min.css',
+			'wp-content/plugins/buddypress-group-email-subscription/css/bp-activity-subscription-css.css'
 		],
 		dest: 'wp-content/css/root-blog-styles.css'
 	    }
