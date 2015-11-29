@@ -108,3 +108,14 @@ function openlab_css_concat() {
 	wp_enqueue_style( 'openlab-root-blog-css', content_url( 'css/root-blog-styles.css' ) );
 }
 add_action( 'wp_print_styles', 'openlab_css_concat', 0 );
+
+/**
+ * Dequeue late-loaded styles.
+ *
+ * Styles loaded here are concatenated in root-blog-styles.css.
+ */
+function openlab_css_late_load_dequeue() {
+	// CAC Featured Content.
+	wp_dequeue_style( 'cfcw-default-styles' );
+}
+add_action( 'wp_print_footer_scripts', 'openlab_css_late_load_dequeue', 0 );
