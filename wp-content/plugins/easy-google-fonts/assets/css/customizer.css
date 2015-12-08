@@ -1,0 +1,700 @@
+/**
+ * WordPress Administration Theme Customizer Screen
+ * Interface CSS Styles.
+ *
+ * NOTE: Please take care when adding styles to this
+ * stylesheet to ensure that you dont affect the live
+ * site preview. This stylesheet is only designed to 
+ * style the custom controls on the customizer screen
+ * therefore specifity should be used as appropriate
+ * to ensure no conflicts with the live site preview.
+ *
+ * @package   Easy_Google_Fonts
+ * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
+ * @license   GPL-2.0+
+ * @link      http://wordpress.org/plugins/easy-google-fonts/
+ * @copyright Copyright (c) 2015, Titanium Themes
+ * @version   1.3.9
+ * 
+ */
+.accordion-section-content a {
+	outline: none!important;
+}
+
+.accordion-section-content select {
+	width: 100%;
+}
+
+.egf-clear {
+	clear: both;
+}
+
+/**
+ * 1. Font title, reset, description
+ * ======================================
+ */
+.egf-font-control-title {
+	margin-bottom: 5px;
+}
+
+.egf-font-control-title .customize-control-title {
+	float: left;
+	width: 185px;
+}
+
+.egf-reset-font {
+	float: right;
+	font-weight: bold;
+	line-height: 24px;
+	display: none;
+}
+
+.egf-active .egf-reset-font {
+	display: block;
+}
+
+.customize-control-description.egf-control-description {
+	margin-bottom: 12px;
+}
+
+/**
+ * 2. Font control toggle
+ * ======================================
+ */
+.egf-font-toggle-trigger {
+	float: left;
+	display: block;
+	position: relative;
+	cursor: pointer;
+	background: #FFFFFF;
+	border: 1px solid #DDDDDD;
+}
+
+.egf-trigger-content {
+	overflow: hidden;
+	float: left;
+	min-width: 30px;
+	height: 16px;
+	line-height: 16px;
+	margin-right: 20px;
+	padding: 4px 5px;
+	border: 2px solid #FFFFFF;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.egf-trigger-label{
+	color: #333;
+	background: #FFFFFF;
+	display: none;
+	max-width: 200px;
+}
+
+.egf-dropdown-arrow {
+	position: absolute;
+	top: 4px;
+	bottom: 0;
+	right: 2px;
+	width: 20px;
+}
+
+.egf-dropdown-arrow:after {
+	content: "\f140";
+	font: normal 20px/1 'dashicons';
+	speak: none;
+	display: block;
+	padding: 0;
+	text-indent: 0;
+	text-align: center;
+	position: relative;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration: none !important;
+	color: #333;
+}
+
+.egf-active .egf-dropdown-arrow:after {
+	content: "\f143";
+}
+
+/**
+ * 3. Font Properties and Tabs
+ * ======================================
+ */
+.egf-active .egf-font-properties {
+	display: block;
+}
+
+.egf-font-properties {
+	display: none;
+	margin-top: 10px;
+}
+
+/* Tabs */
+.egf-customizer-tabs ul {
+	border-bottom: 1px solid #DFDFDF;	
+	float: left;
+	width: 100%;
+	margin-left: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.egf-customizer-tabs ul li {
+	border-color: transparent;
+	border-color: rgba(0, 0, 0, 0);
+	border-style: solid;
+	border-width: 1px 1px 0;
+	color: #999999;
+	float: left;
+	margin: 0;
+	padding: 3px 8px;
+	cursor: pointer;
+	outline: none!important;
+}
+
+.egf-customizer-tabs ul li.selected {
+	background: none repeat scroll 0 0 #EEEEEE;
+	border-color: #DFDFDF;
+	border-radius: 2px 2px 0 0;
+	color: #777777;
+	margin-bottom: -1px;
+	padding-bottom: 4px;
+	font-weight: bold;
+}
+
+.egf-font-properties {
+	display: none;
+	padding-bottom: 5px;
+}
+
+.egf-font-content {
+	display: none;
+	padding: 8px;
+	padding-top: 12px;
+	font-size: 13px;
+}
+
+.egf-font-properties.selected,
+.egf-font-content.selected {
+	display: block;
+}
+
+.egf-font-content .customize-control-title, 
+.egf-font-content select {
+	font-size: 13px;
+}
+
+/**
+ * 3. Font Control Fields: Styles
+ * ======================================
+ */
+.egf-font-content.font-styles .customize-control-title {
+	margin-bottom: 4px;
+}
+
+.egf-font-subsets, 
+.egf-font-family, 
+.egf-font-weight, 
+.egf-text-decoration,
+.chosen-container {
+	margin-bottom: 8px;
+}
+
+.egf-font-weight {
+	text-transform: capitalize;
+}
+
+/* Chosen Styles */
+.egf-font-content .chosen-container-single .chosen-single {
+	border-radius: 0px;
+	height: 28px;
+	background: #FFF;
+	border-color: #DDDDDD;
+	line-height: 28px;
+	-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.06);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.06);
+}
+
+.egf-font-content .chosen-container-single .chosen-single div {
+	top: 2px;
+	right: -2px;
+}
+
+.egf-font-content .chosen-container .chosen-drop {
+	border-color: #D2D2D2;
+}
+
+/**
+ * 4. Font Control Fields: Appearance
+ * ======================================
+ */
+
+/* Background & Color Controls
+----------------------------------*/
+.egf-font-color-container,
+.egf-background-color-container {
+	margin-bottom: 5px;
+}
+
+.egf-font-color-container input.wp-color-picker,
+.egf-background-color-container input.wp-color-picker,
+.egf-border-top-controls input.wp-color-picker,
+.egf-border-bottom-controls input.wp-color-picker,
+.egf-border-left-controls input.wp-color-picker,
+.egf-border-right-controls input.wp-color-picker {
+	width: 65px;
+	-webkit-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
+	height: 24px;
+}
+.egf-font-color-container .wp-picker-clear,
+.egf-font-color-container .wp-picker-default,
+.egf-background-color-container .wp-picker-clear,
+.egf-background-color-container .wp-picker-default 
+.egf-border-top-controls .wp-picker-clear,
+.egf-border-top-controls .wp-picker-default,
+.egf-border-bottom-controls .wp-picker-clear,
+.egf-border-bottom-controls .wp-picker-default,
+.egf-border-left-controls .wp-picker-clear,
+.egf-border-left-controls .wp-picker-default,
+.egf-border-right-controls .wp-picker-clear,
+.egf-border-right-controls .wp-picker-default {
+	-webkit-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
+}
+
+.egf-font-control .wp-picker-container .ui-widget-content {
+    border: medium none;
+}
+
+.egf-font-control .wp-picker-container .iris-picker {
+	border-color: transparent;
+	background: transparent;
+	margin-left: -11px;
+}
+
+.egf-font-content.font-positioning,
+.egf-font-content-fullwidth {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+/**
+ * 5. Font Control Fields: Positioning
+ * ======================================
+ */
+.margin-slider,
+.padding-slider {
+	margin-bottom: 20px;
+}
+
+.egf-margin-top-slider, 
+.egf-margin-bottom-slider, 
+.egf-margin-left-slider {
+	margin-bottom: 12px;
+}
+
+.egf-padding-top-slider, 
+.egf-padding-bottom-slider, 
+.egf-padding-left-slider {
+	margin-bottom: 12px;
+}
+
+.egf-border-radius-top-left-slider,
+.egf-border-radius-top-right-slider,
+.egf-border-radius-bottom-left-slider {
+	margin-bottom: 12px;
+}
+
+.egf-border-top-controls,
+.egf-border-bottom-controls,
+.egf-border-left-controls,
+.egf-border-right-controls {
+	display: none;
+}
+
+.egf-border-top-controls.selected,
+.egf-border-bottom-controls.selected,
+.egf-border-left-controls.selected,
+.egf-border-right-controls.selected {
+	display: block;
+}
+
+.egf-switch-border-control {
+	margin-bottom: 15px;
+}
+
+.egf-border-style {
+	margin-bottom: 12px;
+}
+
+.egf-border-top-controls .egf-font-slider-control,
+.egf-border-bottom-controls .egf-font-slider-control,
+.egf-border-left-controls .egf-font-slider-control,
+.egf-border-right-controls .egf-font-slider-control {
+	margin-bottom: 6px;
+}
+
+/**
+ * 6. jQuery UI Slider
+ * ======================================
+ */
+
+/* Fields: Slider
+----------------------------------*/
+.egf-font-size-slider,
+.egf-line-height-slider {
+	margin-bottom: 10px;
+}
+
+.egf-slider {
+	margin-top: 3px;
+}
+
+.egf-slider {
+	width: 100%;
+	float: left;
+	margin-top: 12px;
+	margin-bottom: 5px;
+}
+
+.egf-slider-title {
+	display: inline-block;
+	position: relative;
+	max-width: 120px;
+	line-height: 1.5;
+	float: left;
+	font-weight: bold;
+}
+
+.egf-font-slider-display {
+	margin-left: 10px;
+	float:right;
+	line-height: 1.5;
+	font-weight: bold;
+}
+
+.egf-font-slider-clear {
+	font-size: 11px;
+	line-height: 1;
+	margin-top: 2px;
+}
+
+.egf-font-control .ui-slider {
+	position: relative;
+	text-align: left;
+}
+.egf-font-control .ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 1.2em;
+	height: 1.2em;
+	cursor: pointer;
+	-webkit-box-shadow: inset 0 1px 1px rgba(255,255,255,0.5);
+	-moz-box-shadow: inset 0 1px 1px rgba(255,255,255,0.5);
+	box-shadow: inset 0 1px 1px rgba(255,255,255,0.5);
+}
+
+.egf-font-control .ui-slider .ui-slider-handle.ui-state-hover {
+	border-color: #BBBBBB;
+}
+
+.egf-font-control .ui-slider .ui-slider-range {
+	position: absolute;
+	z-index: 1;
+	font-size: .7em;
+	display: block;
+	border: 0;
+	background-position: 0 0;
+}
+
+/* Interaction states
+----------------------------------*/
+.egf-font-control .ui-state-default,
+.egf-font-control .ui-widget-content .ui-state-default,
+.egf-font-control .ui-widget-header .ui-state-default {
+	border: 1px solid #d3d3d3;
+	background: #F5F5F5;
+
+	background-image: -webkit-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -moz-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -o-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -ms-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: linear-gradient(to top, #EEEEEE, #F5F5F5);
+	font-weight: normal;
+	color: #555555;
+}
+
+
+.egf-font-control .ui-state-default a,
+.egf-font-control .ui-state-default a:link,
+.egf-font-control .ui-state-default a:visited {
+	color: #555555;
+	text-decoration: none;
+}
+.egf-font-control .ui-state-hover,
+.egf-font-control .ui-widget-content .ui-state-hover,
+.egf-font-control .ui-widget-header .ui-state-hover,
+.egf-font-control .ui-state-focus,
+.egf-font-control .ui-widget-content .ui-state-focus,
+.egf-font-control .ui-widget-header .ui-state-focus {
+	border: 1px solid #CFCFCF;
+	background: #EEEEEE;
+	background-image: -webkit-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -moz-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -o-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: -ms-linear-gradient(to top, #EEEEEE, #F5F5F5);
+	background-image: linear-gradient(to top, #EEEEEE, #F5F5F5);	
+	font-weight: normal;
+	color: #212121;
+}
+.egf-font-control .ui-state-hover a,
+.egf-font-control .ui-state-hover a:hover,
+.egf-font-control .ui-state-hover a:link,
+.egf-font-control .ui-state-hover a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+.egf-font-control .ui-state-active,
+.egf-font-control .ui-widget-content .ui-state-active,
+.egf-font-control .ui-widget-header .ui-state-active {
+	border: 1px solid #BBBBBB;
+	background: #EEEEEE;
+	font-weight: normal;
+	color: #212121;
+}
+.egf-font-control .ui-state-active a,
+.egf-font-control .ui-state-active a:link,
+.egf-font-control .ui-state-active a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+
+/* Interaction Cues
+----------------------------------*/
+.egf-font-control .ui-state-highlight,
+.egf-font-control .ui-widget-content .ui-state-highlight,
+.egf-font-control .ui-widget-header .ui-state-highlight {
+	border: 1px solid #fcefa1;
+	background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
+	color: #363636;
+}
+.egf-font-control .ui-state-highlight a,
+.egf-font-control .ui-widget-content .ui-state-highlight a,
+.egf-font-control .ui-widget-header .ui-state-highlight a {
+	color: #363636;
+}
+.egf-font-control .ui-state-error,
+.egf-font-control .ui-widget-content .ui-state-error,
+.egf-font-control .ui-widget-header .ui-state-error {
+	border: 1px solid #cd0a0a;
+	background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
+	color: #cd0a0a;
+}
+.egf-font-control .ui-state-error a,
+.egf-font-control .ui-widget-content .ui-state-error a,
+.egf-font-control .ui-widget-header .ui-state-error a {
+	color: #cd0a0a;
+}
+.egf-font-control .ui-state-error-text,
+.egf-font-control .ui-widget-content .ui-state-error-text,
+.egf-font-control .ui-widget-header .ui-state-error-text {
+	color: #cd0a0a;
+}
+.egf-font-control .ui-priority-primary,
+.egf-font-control .ui-widget-content .ui-priority-primary,
+.egf-font-control .ui-widget-header .ui-priority-primary {
+	font-weight: bold;
+}
+.egf-font-control .ui-priority-secondary,
+.egf-font-control .ui-widget-content .ui-priority-secondary,
+.egf-font-control .ui-widget-header .ui-priority-secondary {
+	opacity: .7;
+	filter:Alpha(Opacity=70);
+	font-weight: normal;
+}
+.egf-font-control .ui-state-disabled,
+.egf-font-control .ui-widget-content .ui-state-disabled,
+.egf-font-control .ui-widget-header .ui-state-disabled {
+	opacity: .35;
+	filter:Alpha(Opacity=35);
+	background-image: none;
+}
+
+/* Component containers
+----------------------------------*/
+.egf-font-control .ui-widget {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.1em;
+}
+.egf-font-control .ui-widget .ui-widget {
+	font-size: 1em;
+}
+.egf-font-control .ui-widget input,
+.egf-font-control .ui-widget select,
+.egf-font-control .ui-widget textarea,
+.egf-font-control .ui-widget button {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1em;
+}
+.egf-font-control .ui-widget-content {
+	border: 1px solid #dfdfdf;
+	color: #222222;
+}
+.egf-font-control .ui-widget-content a {
+	color: #222222;
+}
+.egf-font-control .ui-widget-header {
+	border: 1px solid #aaaaaa;
+	background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+	color: #222222;
+	font-weight: bold;
+}
+.egf-font-control .ui-widget-header a {
+	color: #222222;
+}
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.egf-font-control .ui-corner-all,
+.egf-font-control .ui-corner-top,
+.egf-font-control .ui-corner-left,
+.egf-font-control .ui-corner-tl {
+	border-top-left-radius: 2px;
+}
+
+.egf-font-control .ui-corner-all,
+.egf-font-control .ui-corner-top,
+.egf-font-control .ui-corner-right,
+.egf-font-control .ui-corner-tr {
+	border-top-right-radius: 2px;
+}
+
+.egf-font-control .ui-corner-all,
+.egf-font-control .ui-corner-bottom,
+.egf-font-control .ui-corner-left,
+.egf-font-control .ui-corner-bl {
+	border-bottom-left-radius: 2px;
+}
+
+.egf-font-control .ui-corner-all,
+.egf-font-control .ui-corner-bottom,
+.egf-font-control .ui-corner-right,
+.egf-font-control .ui-corner-br {
+	border-bottom-right-radius: 2px;
+}
+
+
+/* Overlays */
+.egf-font-control .ui-widget-overlay {
+	background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+	opacity: .3;
+	filter: Alpha(Opacity=30);
+}
+.egf-font-control .ui-widget-shadow {
+	margin: -8px 0 0 -8px;
+	padding: 8px;
+	background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+	opacity: .3;
+	filter: Alpha(Opacity=30);
+	border-radius: 8px;
+}
+
+
+/* For IE8 - See #6727 */
+.egf-font-control .ui-slider.ui-state-disabled .ui-slider-handle,
+.egf-font-control .ui-slider.ui-state-disabled .ui-slider-range {
+	filter: inherit;
+}
+
+.egf-font-control .ui-slider-horizontal {
+	height: .8em;
+	background: #FFFFFF;
+}
+.egf-font-control .ui-slider-horizontal .ui-slider-handle {
+	top: -.3em;
+	margin-left: -.6em;
+}
+.egf-font-control .ui-slider-horizontal .ui-slider-range {
+	top: 0;
+	height: 100%;
+}
+.egf-font-control .ui-slider-horizontal .ui-slider-range-min {
+	left: 0;
+}
+.egf-font-control .ui-slider-horizontal .ui-slider-range-max {
+	right: 0;
+}
+
+/* Fields: Font Positioning Tab
+----------------------------------*/
+.egf-font-toggle {
+	border: 1px solid #DDDDDD;
+	margin-bottom: 6px;
+}
+
+.egf-font-toggle .customize-control-title.inner-control-title {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin: 0;
+	padding: 8px;
+}
+
+.egf-font-toggle .customize-control-title.inner-control-title:hover {
+	background: #F5F5F5;
+	cursor: pointer;
+}
+
+.egf-font-toggle .customize-control-title.inner-control-title:after {
+	float: right;
+ 	position: absolute;
+    right: 10px;
+    top: 2px;
+    z-index: 1;
+    background: none repeat scroll 0 center rgba(0, 0, 0, 0);
+    border: 0 none;
+    content: "\f140";
+    display: block;
+    font: 400 20px/1 dashicons;
+    padding: 0;
+    position: relative;
+    right: 0;
+    text-align: center;
+    text-decoration: none !important;
+    text-indent: 0;
+    color: #AAAAAA;
+}
+
+.egf-font-toggle .customize-control-title.inner-control-title:hover:after {
+	color: #555555;
+}
+
+.egf-font-toggle.selected .customize-control-title.inner-control-title {
+	background: #F5F5F5;
+}
+
+.egf-font-toggle.selected .customize-control-title.inner-control-title:after {
+	color: #555555;
+	content: "\f142";
+	font: 400 20px/1 dashicons;
+}
+
+.toggle-section-content {
+	padding: 10px 15px;
+	border-top: 1px solid #DDDDDD;
+	display: none;
+}
+
+.egf-font-toggle.selected .toggle-section-content {
+	display: block;
+	background-color: #FBFBFB;
+}

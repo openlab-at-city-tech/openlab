@@ -1,0 +1,444 @@
+msgid ""
+msgstr "MIME-Version: 1.0\n"
+
+#. Name.
+msgid "Easy Google Fonts"
+msgstr ""
+
+#. Short description.
+msgid "Adds google fonts to any theme without coding and integrates with the WordPress Customizer automatically for a realtime live preview."
+msgstr ""
+
+#. Screenshot description.
+msgid "Plugin Overview."
+msgstr ""
+
+#. Screenshot description.
+msgid "Before and After."
+msgstr ""
+
+#. Screenshot description.
+msgid "Live Customizer Font Control Preview - Font Styles Tab."
+msgstr ""
+
+#. Screenshot description.
+msgid "Choose from over 600+ Google Fonts and preview them instantly without refreshing the page."
+msgstr ""
+
+#. Screenshot description.
+msgid "Change font color in realtime."
+msgstr ""
+
+#. Screenshot description.
+msgid "Create your own font controls for your theme."
+msgstr ""
+
+#. Screenshot description.
+msgid "Manage any CSS Selector with your custom font controls."
+msgstr ""
+
+#. Screenshot description.
+msgid "Your custom control is instantly available for real time preview in the customizer. No coding required!"
+msgstr ""
+
+#. Screenshot description.
+msgid "View and manage all of your custom controls in the admin area."
+msgstr ""
+
+#. Found in description header.
+msgid "What does this plugin do?"
+msgstr ""
+
+#. Found in description header.
+msgid "Plugin Features"
+msgstr ""
+
+#. Found in description header.
+msgid "Who is this Plugin ideal for?"
+msgstr ""
+
+#. Found in description header.
+msgid "Developer Features"
+msgstr ""
+
+#. Found in description list item.
+msgid "This plugin allows you to <strong>take full control of your theme's typography</strong> in any WordPress theme (no coding required)."
+msgstr ""
+
+#. Found in description list item.
+msgid "It allows you to <strong>choose from over 600+ google fonts</strong> and font variants to insert into your website without coding."
+msgstr ""
+
+#. Found in description list item.
+msgid "Allows you to <strong>preview font changes on your website in realtime</strong> using the WordPress Customizer."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Create Unlimited Custom Font Controls:</strong> Create custom font controls in the admin area that are instantly available in the Customizer preview."
+msgstr ""
+
+#. Found in description list item.
+msgid "Allows you to preview what your theme will look like with the new google fonts before you save any changes."
+msgstr ""
+
+#. Found in description list item.
+msgid "Allows you to <strong>create your own font controls and rules</strong> in the admin area (no coding required)."
+msgstr ""
+
+#. Found in description list item.
+msgid "Allows you to easily change the look of your website with the click of a button."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Automatically enqueues all stylesheets for your chosen google fonts</strong>."
+msgstr ""
+
+#. Found in description list item.
+msgid "Allows you to add google fonts to your theme without editing the themes main stylesheet which allows you to update your theme without losing your custom google fonts."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Live Customizer Preview:</strong> Preview google fonts without refreshing the page in real time right in the WordPress Customizer."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Over 600+ Google Fonts</strong> to choose from as well as a list of default system fonts."
+msgstr ""
+
+#. Found in description list item.
+msgid "Works with any WordPress Theme. No coding required."
+msgstr ""
+
+#. Found in description list item.
+msgid "Automatic Background Updates: Updates the google fonts list with the latest fonts automatically once."
+msgstr ""
+
+#. Found in description list item.
+msgid "Translation Ready: MO and PO files are included."
+msgstr ""
+
+#. Found in description list item.
+msgid "Seamless WordPress Integration: Uses the WordPress customizer for the live preview and has a white label admin area that looks like it is a part of WordPress."
+msgstr ""
+
+#. Found in description list item.
+msgid "Custom WordPress Customizer Control: One of a kind control only available with this plugin."
+msgstr ""
+
+#. Found in description list item.
+msgid "Anyone who is looking for an easy way to use google fonts in their theme without coding."
+msgstr ""
+
+#. Found in description list item.
+msgid "Theme Authors: you can use this plugin to add custom google webfonts to your theme."
+msgstr ""
+
+#. Found in description list item.
+msgid "Great for use on client projects or for use on existing websites."
+msgstr ""
+
+#. Found in description list item.
+msgid "People that are happy with their theme but want an easy way to change the typography."
+msgstr ""
+
+#. Found in description list item.
+msgid "Anyone with basic knowledge of CSS Selectors (in order to add custom font rules)."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Cross Browser and Backwards Browser Compatible</strong> (Tested in all major browsers)."
+msgstr ""
+
+#. Found in description list item.
+msgid "Already tested and works in WordPress 4.1."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Uses Action Hooks and Filters:</strong> For advanced integration."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Seamless WordPress Integration:</strong>  Live preview is integrated into the WordPress Customizer and the settings page follows core WordPress design guidelines."
+msgstr ""
+
+#. Found in description list item.
+msgid "Uses the WordPress <strong>Options API</strong> to store and retrieve options."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Highly Secure:</strong> Checks user permissions, uses nonces and the WordPress Security API."
+msgstr ""
+
+#. Found in description list item.
+msgid "Uses the Screen Options API and Ajax to allow you to easily show/hide metaboxes on the admin page."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Rock solid, Robust Code:</strong> handcoded, tested and beautifully formatted in Sublime Text."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Uses WP Ajax</strong> for an enhanced admin experience."
+msgstr ""
+
+#. Found in description list item.
+msgid "Fully Commented Source Code."
+msgstr ""
+
+#. Found in description list item.
+msgid "Strong Usability Testing."
+msgstr ""
+
+#. Found in description list item.
+msgid "<strong>Enhanced Performance:</strong> Will only load a particular google font (using wp_enqueue_script()) once and uses the <strong>Transients API</strong> in the admin area."
+msgstr ""
+
+#. Found in description paragraph.
+msgid "<strong>Our new WordPress theme is almost ready!</strong> Want to know when we launch? Awesome! <a href=\"http://www.titaniumthemes.com\">Visit our website</a> and enter your details and we will e-mail you as soon as we are ready :)"
+msgstr ""
+
+#. Found in description paragraph, faq paragraph.
+msgid "For a quick video demo please view the <a href=\"https://vimeo.com/77878709\">vimeo screencast</a>."
+msgstr ""
+
+#. Found in description paragraph.
+msgid "<a href=\"https://twitter.com/titaniumthemes\">Follow us on twitter!</a>"
+msgstr ""
+
+#. Found in description paragraph, remaining content paragraph.
+msgid "If you have found this plugin useful please <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=28M8NWPHVQNYU\">donate here</a>"
+msgstr ""
+
+#. Found in description paragraph.
+msgid "A simple and easy way to add custom google fonts to any WordPress theme without coding. This plugin integrates with the WordPress Customizer so you can preview google fonts on your site in realtime. It's compatible with any theme."
+msgstr ""
+
+#. Found in description paragraph.
+msgid "It also allows you to create custom theme specific font controls in the admin settings area to control particular css selectors. Once created, these custom font controls are instantly available in the customizer no coding required!"
+msgstr ""
+
+#. Found in description paragraph.
+msgid "<strong>Please note:</strong> We are currently working on producing in-depth documentation for theme developers which will be available shortly."
+msgstr ""
+
+#. Found in installation list item.
+msgid "From your WordPress Admin Dashboard go to: Plugins &gt; Add New"
+msgstr ""
+
+#. Found in installation list item.
+msgid "Search for \"Easy Google Fonts\""
+msgstr ""
+
+#. Found in installation list item.
+msgid "Locate the \"Easy Google Fonts\" plugin by Titanium Themes and click the Install Now button."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Activate the plugin labeled \"Easy Google Fonts\"."
+msgstr ""
+
+#. Found in installation list item.
+msgid "You're done!"
+msgstr ""
+
+#. Found in installation paragraph.
+msgid "This section describes how to install the plugin and get it working."
+msgstr ""
+
+#. Found in installation paragraph.
+msgid "e.g."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Updated the appearance in the customizer for the new changes in WordPress 3.4"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Addressed potential security issue on the plugin admin page - Hardened security and escaped any attributes passed via the URL throughout the plugin."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now added support for arabic and telegu and devangari subsets."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Updated JSON decode when parsing fonts for servers running an older version of PHP."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Addressed issue on certain servers where a 400 error was being returned when making a http request to google."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Removed esc_url_raw() as it was causing a 404 error when fetching the stylesheet from google."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Implemented font search to make it easier to browse google fonts (using the chosen js plugin)."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Implemented border controls."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Implemented border radius controls."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Completely rewritten the control javascript to utilise the new customizer js api (using backbone and underscore templates)."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Preview performance enhancement: Completely rewritten the preview javascript to utilise the new customizer js api."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Performance update: Each font control now only registers one setting per control."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Performance update: The functionality for each font control is lazy loaded to increase the customizer load speed."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "All settings for each font controls are handled by json objects (removed any hidden inputs and json2 library dependancy)."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added patch for WordPress 4.1"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "The code is going to be rewritten in Backbone for future releases."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now combining all of the font requests from google fonts in a single http request."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Introducing Panels: A new customizer feature in WordPress 4.0 that makes it easier to manage alot of font controls. Our plugin creates a new panel called Typography. "
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Google fonts are now separated into the following categories to make them easier to navigate: Serif, Sans Serif, Display, Handwriting, Monospace."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now the plugin keeps font state when user switches page in customizer."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now there is a separate section for default and custom font controls."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Improved the help tab in the admin area to help people obtain a google api key."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Synchronised Force Styles between the Manage Font Controls and the Edit Font Controls Screen"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed issue with the font weights not showing up for the customizer control."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "The plugin now checks and handles occurances where theme developers have removed all default controls."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Changed order of style outputs"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Futher UI Improvements"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Critical Update: Made the plugin WordPress 3.9 compatible"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Performance tuned the plugin"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Removed recursion during runtime."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Updated local font list"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Performance enhancement for older browsers implemented. Safe to upgrade."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Big Update: Complete Rewrite of Plugin"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "New controls: Background Color, Margin, Padding and Display."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added Subset support."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Introduced a large amount of actions and filters for theme developers."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Big performance enhancement. The old version used to register 32 settings per control, this is now down to 3."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Lightning fast customizer loading times, under 1 second."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Rewrote the plugin into classes and views to make it more managable for future development."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Rewrote the plugin into classes."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "MO/PO language files now included."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Full google fonts transient integration."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "First plugin release."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"= 1.1.1=\n"
+"* 3.8 Admin integration"
+msgstr ""
+
+#. Found in remaining content header.
+msgid "Credits and Donation"
+msgstr ""
+
+#. Found in remaining content list item.
+msgid "<a href=\"http://aehlke.github.io/tag-it/\">Tag-it jQuery plugin</a> by Alex Ehlke. (Used in the admin settings page)"
+msgstr ""
+
+#. Found in remaining content list item.
+msgid "Chip Bennet's Oenology Theme. Alot of inspiration for best practices and WordPress Customizer integration taken from this theme."
+msgstr ""
+
+#. Found in remaining content list item.
+msgid "Otherwise, this plugin has been entirely written from scratch in Sublime Text by Titanium Themes with some code taken solely from WordPress core."
+msgstr ""
