@@ -1,0 +1,1038 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-30 14:40-0800\n"
+"PO-Revision-Date: 2015-04-30 14:40-0800\n"
+"Last-Translator: Plugin Author <donotreply@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_attr_e;esc_attr__;esc_html_e;esc_html__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../mappress.php:119
+msgid "Version"
+msgstr "Version"
+
+#: ../mappress.php:127
+msgid "Documentation"
+msgstr "Documentation"
+
+#: ../mappress.php:128
+msgid "Support"
+msgstr "Support"
+
+#: ../mappress.php:131
+msgid "Upgrade to MapPress Pro"
+msgstr ""
+
+#: ../mappress.php:333
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr ""
+
+#: ../mappress.php:338
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr ""
+
+#: ../mappress.php:343
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr ""
+
+#: ../mappress.php:554
+msgid "Bicycling"
+msgstr ""
+
+#: ../mappress.php:555
+msgid "Bike"
+msgstr ""
+
+#: ../mappress.php:556
+msgid "One of the addresses could not be found."
+msgstr ""
+
+#: ../mappress.php:557
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr ""
+
+#: ../mappress.php:558
+msgid "Unknown error, unable to return directions.  Status code = "
+msgstr ""
+
+#: ../mappress.php:559
+#: ../mappress_poi.php:244
+#: ../mappress_settings.php:131
+#: ../pro/mappress_widget.php:106
+msgid "Directions"
+msgstr ""
+
+#: ../mappress.php:560
+msgid "Error reading KML file"
+msgstr ""
+
+#: ../mappress.php:561
+msgid "Loading..."
+msgstr ""
+
+#: ../mappress.php:562
+msgid "No matching address"
+msgstr ""
+
+#: ../mappress.php:563
+msgid "Unable to get your location"
+msgstr ""
+
+#: ../mappress.php:564
+#: ../mappress_settings.php:316
+msgid "Traffic"
+msgstr ""
+
+#: ../mappress.php:565
+msgid "Transit"
+msgstr ""
+
+#: ../mappress.php:566
+#: ../mappress_poi.php:293
+#: ../mappress_settings.php:311
+#: ../mappress_settings.php:399
+#: ../pro/mappress_widget.php:122
+msgid "Zoom"
+msgstr ""
+
+#: ../mappress.php:571
+#: ../mappress_controls.php:156
+msgid "Add"
+msgstr ""
+
+#: ../mappress.php:572
+msgid "Click & drag to move"
+msgstr ""
+
+#: ../mappress.php:573
+msgid "Click to change"
+msgstr ""
+
+#: ../mappress.php:574
+#: ../mappress_controls.php:141
+#: ../mappress_map.php:467
+msgid "Delete"
+msgstr ""
+
+#: ../mappress.php:575
+msgid "Delete this POI?"
+msgstr ""
+
+#: ../mappress.php:576
+msgid "Delete this map?"
+msgstr ""
+
+#: ../mappress.php:577
+msgid "Please save the map first"
+msgstr ""
+
+#: ../mappress.php:578
+msgid "Shape"
+msgstr ""
+
+#: ../mappress.php:579
+msgid "Untitled"
+msgstr ""
+
+#: ../mappress_controls.php:203
+msgid "New"
+msgstr ""
+
+#: ../mappress_controls.php:205
+#: ../forms/map_editor_infobox.php:39
+#: ../forms/map_media.php:47
+#: ../pro/mappress_icons.php:53
+msgid "Cancel"
+msgstr ""
+
+#: ../mappress_map.php:115
+msgid "Map not found"
+msgstr ""
+
+#: ../mappress_map.php:465
+msgid "Edit"
+msgstr ""
+
+#: ../mappress_map.php:466
+#: ../forms/map_media.php:48
+msgid "Insert into post"
+msgstr ""
+
+#: ../mappress_map.php:492
+msgid "Show map"
+msgstr ""
+
+#: ../mappress_map.php:504
+#: ../mappress_settings.php:391
+#: ../forms/map_editor.php:25
+msgid "Center map"
+msgstr ""
+
+#: ../mappress_map.php:513
+#: ../mappress_settings.php:392
+msgid "Reset map"
+msgstr ""
+
+#: ../mappress_map.php:522
+#: ../mappress_settings.php:390
+msgid "Bigger map"
+msgstr ""
+
+#: ../mappress_map.php:523
+msgid "Smaller map"
+msgstr ""
+
+#: ../mappress_poi.php:209
+#: ../mappress_settings.php:400
+msgid "Directions to"
+msgstr ""
+
+#: ../mappress_poi.php:211
+#: ../mappress_settings.php:401
+msgid "Directions from"
+msgstr ""
+
+#: ../mappress_settings.php:128
+msgid "Basic Settings"
+msgstr ""
+
+#: ../mappress_settings.php:129
+msgid "Post types"
+msgstr ""
+
+#: ../mappress_settings.php:130
+msgid "Automatic map display"
+msgstr ""
+
+#: ../mappress_settings.php:133
+msgid "Map Controls"
+msgstr ""
+
+#: ../mappress_settings.php:134
+msgid "Draggable"
+msgstr ""
+
+#: ../mappress_settings.php:135
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: ../mappress_settings.php:136
+msgid "Scroll wheel zoom"
+msgstr ""
+
+#: ../mappress_settings.php:137
+msgid "Map Types"
+msgstr ""
+
+#: ../mappress_settings.php:138
+msgid "Map controls"
+msgstr ""
+
+#: ../mappress_settings.php:140
+msgid "Map Settings"
+msgstr ""
+
+#: ../mappress_settings.php:141
+msgid "Map links"
+msgstr ""
+
+#: ../mappress_settings.php:142
+msgid "Map alignment"
+msgstr ""
+
+#: ../mappress_settings.php:143
+msgid "Open first POI"
+msgstr ""
+
+#: ../mappress_settings.php:145
+msgid "POI Settings"
+msgstr ""
+
+#: ../mappress_settings.php:146
+msgid "POI links"
+msgstr ""
+
+#: ../mappress_settings.php:147
+msgid "Tooltips"
+msgstr ""
+
+#: ../mappress_settings.php:148
+msgid "Default zoom"
+msgstr ""
+
+#: ../mappress_settings.php:151
+msgid "Mashups"
+msgstr ""
+
+#: ../mappress_settings.php:152
+msgid "Icons"
+msgstr ""
+
+#: ../mappress_settings.php:153
+msgid "Styled Maps"
+msgstr ""
+
+#: ../mappress_settings.php:154
+msgid "Geocoding"
+msgstr ""
+
+#: ../mappress_settings.php:157
+msgid "Localization"
+msgstr ""
+
+#: ../mappress_settings.php:158
+msgid "Language"
+msgstr ""
+
+#: ../mappress_settings.php:159
+msgid "Country"
+msgstr ""
+
+#: ../mappress_settings.php:160
+msgid "Directions server"
+msgstr ""
+
+#: ../mappress_settings.php:161
+msgid "Directions units"
+msgstr ""
+
+#: ../mappress_settings.php:163
+msgid "Miscellaneous"
+msgstr ""
+
+#: ../mappress_settings.php:164
+msgid "Map sizes"
+msgstr ""
+
+#: ../mappress_settings.php:165
+msgid "Scripts"
+msgstr ""
+
+#: ../mappress_settings.php:166
+msgid "CSS"
+msgstr ""
+
+#: ../mappress_settings.php:216
+msgid "Use the settings below to automatically create maps from custom fields."
+msgstr ""
+
+#: ../mappress_settings.php:222
+msgid "Posts"
+msgstr ""
+
+#: ../mappress_settings.php:223
+msgid "Pages"
+msgstr ""
+
+#: ../mappress_settings.php:235
+msgid "country code"
+msgstr ""
+
+#: ../mappress_settings.php:237
+#, php-format
+msgid "Enter a %s to use when searching (leave blank for USA)"
+msgstr ""
+
+#: ../mappress_settings.php:244
+msgid "Enter a google server URL for directions/printing"
+msgstr ""
+
+#: ../mappress_settings.php:249
+msgid "(Default)"
+msgstr ""
+
+#: ../mappress_settings.php:249
+msgid "Metric (kilometers)"
+msgstr ""
+
+#: ../mappress_settings.php:249
+msgid "Imperial (miles)"
+msgstr ""
+
+#: ../mappress_settings.php:254
+msgid "Enable map dragging with the mouse"
+msgstr ""
+
+#: ../mappress_settings.php:258
+msgid "Enable zoom with the mouse scroll wheel"
+msgstr ""
+
+#: ../mappress_settings.php:262
+msgid "Enable keyboard panning and zooming"
+msgstr ""
+
+#: ../mappress_settings.php:268
+msgid "language"
+msgstr ""
+
+#: ../mappress_settings.php:270
+#, php-format
+msgid "Use a specific %s for map controls and geocoding"
+msgstr ""
+
+#: ../mappress_settings.php:278
+#: ../mappress_settings.php:284
+#: ../mappress_settings.php:378
+#: ../mappress_settings.php:432
+msgid "Default"
+msgstr ""
+
+#: ../mappress_settings.php:279
+msgid "Horizontal"
+msgstr ""
+
+#: ../mappress_settings.php:280
+msgid "Dropdown"
+msgstr ""
+
+#: ../mappress_settings.php:285
+msgid "Small"
+msgstr ""
+
+#: ../mappress_settings.php:286
+msgid "Large"
+msgstr ""
+
+#: ../mappress_settings.php:287
+msgid "Android"
+msgstr ""
+
+#: ../mappress_settings.php:298
+msgid "Open initially"
+msgstr ""
+
+#: ../mappress_settings.php:300
+#: ../mappress_settings.php:302
+#: ../mappress_settings.php:304
+msgid "Checked initially"
+msgstr ""
+
+#: ../mappress_settings.php:306
+msgid "Control"
+msgstr ""
+
+#: ../mappress_settings.php:306
+msgid "Enable"
+msgstr ""
+
+#: ../mappress_settings.php:306
+msgid "Style"
+msgstr ""
+
+#: ../mappress_settings.php:309
+msgid "Map types"
+msgstr ""
+
+#: ../mappress_settings.php:310
+msgid "Pan"
+msgstr ""
+
+#: ../mappress_settings.php:312
+msgid "Street view"
+msgstr ""
+
+#: ../mappress_settings.php:313
+msgid "Scale"
+msgstr ""
+
+#: ../mappress_settings.php:314
+msgid "Overview map"
+msgstr ""
+
+#: ../mappress_settings.php:315
+msgid "Public transit"
+msgstr ""
+
+#: ../mappress_settings.php:317
+msgid "Bike routes"
+msgstr ""
+
+#: ../mappress_settings.php:324
+msgid "Road map"
+msgstr ""
+
+#: ../mappress_settings.php:325
+#: ../pro/mappress_widget.php:140
+msgid "Satellite"
+msgstr ""
+
+#: ../mappress_settings.php:326
+#: ../pro/mappress_widget.php:141
+msgid "Terrain"
+msgstr ""
+
+#: ../mappress_settings.php:327
+#: ../pro/mappress_widget.php:139
+msgid "Hybrid"
+msgstr ""
+
+#: ../mappress_settings.php:340
+#: ../pro/mappress_pro_settings.php:260
+#: ../pro/mappress_widget.php:108
+msgid "Google"
+msgstr ""
+
+#: ../mappress_settings.php:341
+#: ../pro/mappress_widget.php:107
+msgid "Inline"
+msgstr ""
+
+#: ../mappress_settings.php:342
+#: ../pro/mappress_widget.php:109
+msgid "None"
+msgstr ""
+
+#: ../mappress_settings.php:349
+msgid "Automatically open the first POI when a map is displayed"
+msgstr ""
+
+#: ../mappress_settings.php:354
+#: ../mappress_settings.php:363
+msgid "Show control"
+msgstr ""
+
+#: ../mappress_settings.php:358
+#: ../mappress_settings.php:367
+msgid "Enabled by default"
+msgstr ""
+
+#: ../mappress_settings.php:371
+msgid "Show POI titles as a \"tooltip\" on mouse-over"
+msgstr ""
+
+#: ../mappress_settings.php:379
+#: ../pro/mappress_widget.php:114
+msgid "Center"
+msgstr ""
+
+#: ../mappress_settings.php:380
+msgid "Left"
+msgstr ""
+
+#: ../mappress_settings.php:381
+msgid "Right"
+msgstr ""
+
+#: ../mappress_settings.php:409
+msgid "Default zoom for POIs entered by lat/lng"
+msgstr ""
+
+#: ../mappress_settings.php:415
+msgid "Top of post"
+msgstr ""
+
+#: ../mappress_settings.php:416
+msgid "Bottom of post"
+msgstr ""
+
+#: ../mappress_settings.php:417
+msgid "No automatic display"
+msgstr ""
+
+#: ../mappress_settings.php:424
+#, php-format
+msgid "Load %s"
+msgstr ""
+
+#: ../mappress_settings.php:428
+msgid "Output scripts in footer"
+msgstr ""
+
+#: ../mappress_settings.php:432
+msgid "Width"
+msgstr ""
+
+#: ../mappress_settings.php:432
+msgid "Height"
+msgstr ""
+
+#: ../mappress_settings.php:443
+msgid "Enter sizes in px or %"
+msgstr ""
+
+#: ../mappress_settings.php:453
+msgid "Rate it 5 Stars"
+msgstr ""
+
+#: ../mappress_settings.php:455
+#, php-format
+msgid "%s on WordPress.org"
+msgstr ""
+
+#: ../mappress_settings.php:456
+msgid "Thanks for your support!"
+msgstr ""
+
+#: ../mappress_settings.php:483
+msgid "MapPress"
+msgstr ""
+
+#: ../mappress_settings.php:484
+msgid "Easy Google Maps"
+msgstr ""
+
+#: ../mappress_settings.php:533
+msgid "Like this plugin?"
+msgstr ""
+
+#: ../mappress_settings.php:535
+msgid "Sample Map"
+msgstr ""
+
+#: ../mappress_settings.php:554
+msgid "Save Changes"
+msgstr ""
+
+#: ../mappress_settings.php:555
+msgid "Reset Defaults"
+msgstr ""
+
+#: ../mappress_updater.php:19
+msgid "Settings"
+msgstr ""
+
+#: ../mappress_updater.php:41
+msgid "download it now"
+msgstr ""
+
+#: ../mappress_updater.php:46
+#, php-format
+msgid "A PRO Version update is available for manual installation: %s"
+msgstr ""
+
+#: ../forms/map_editor.php:5
+msgid "Add POI"
+msgstr ""
+
+#: ../forms/map_editor.php:11
+msgid "My location"
+msgstr ""
+
+#: ../forms/map_editor.php:26
+msgid "Click map for lat/lng: "
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:20
+msgid "Color"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:22
+#: ../forms/map_editor_infobox.php:23
+msgid "Opacity"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:24
+msgid "Line"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:25
+msgid "Weight"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:33
+msgid "Visual"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:33
+msgid "HTML"
+msgstr ""
+
+#: ../forms/map_editor_infobox.php:38
+#: ../forms/map_media.php:46
+msgid "Save"
+msgstr ""
+
+#: ../forms/map_media.php:11
+msgid "Maps for This Post"
+msgstr ""
+
+#: ../forms/map_media.php:12
+msgid "New Map"
+msgstr ""
+
+#: ../forms/map_media.php:22
+msgid "Map ID"
+msgstr ""
+
+#: ../forms/map_media.php:27
+msgid "Map Title"
+msgstr ""
+
+#: ../forms/map_media.php:32
+msgid "Size"
+msgstr ""
+
+#: ../pro/mappress_geocoders.php:53
+msgid "No results, check that a geocoder is configured"
+msgstr ""
+
+#: ../pro/mappress_geocoders.php:86
+#, php-format
+msgid "Invalid status: %s, address: %s"
+msgstr ""
+
+#: ../pro/mappress_geocoders.php:95
+#: ../pro/mappress_geocoders.php:159
+#, php-format
+msgid "No results for address: %s"
+msgstr ""
+
+#: ../pro/mappress_geocoders.php:155
+#, php-format
+msgid "Error: %s %s"
+msgstr ""
+
+#: ../pro/mappress_icons.php:52
+msgid "Use default icon"
+msgstr ""
+
+#: ../pro/mappress_pro.php:161
+msgid "Automatic"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:14
+msgid "POI list"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:15
+msgid "Use DataTables"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:17
+msgid "InfoWindow type"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:19
+msgid "Default icon"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:20
+msgid "Custom icons directory"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:21
+msgid "Icon scaling"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:23
+msgid "Mashup POI title"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:24
+msgid "Mashup POI body"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:25
+msgid "Mashup POI click"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:26
+msgid "Link title"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:27
+msgid "Mashup Thumbnails"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:28
+msgid "Thumbnail Size"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:29
+msgid "Automatic icons"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:31
+msgid "Styled maps"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:32
+msgid "Default style"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:34
+msgid "Geocoder(s)"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:35
+msgid "Geocoding fields"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:37
+msgid "API key (optional)"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:38
+msgid "Force resize"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:149
+msgid "Key"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:149
+msgid "Value"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:149
+#: ../pro/mappress_pro_settings.php:281
+msgid "Icon"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:154
+msgid "Show a list of POIs under each map"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:159
+#, php-format
+msgid "Show the POI list as a sortable %s"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:163
+msgid "POI title"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:163
+msgid "Post title"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:168
+msgid "POI body"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:168
+msgid "Address"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:168
+msgid "Post excerpt"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:173
+msgid "Link POI titles to the underlying post"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:177
+msgid "Open the POI"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:177
+msgid "Go directly to the post"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:192
+msgid "Google InfoWindow"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:193
+msgid "InfoBox"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:199
+msgid "Show featured image thumbnails in mashup POIs"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:207
+msgid "Use existing size: "
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:210
+msgid "or resize to (px): "
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:224
+msgid "styled maps"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:225
+msgid "styled maps wizard"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:227
+#, php-format
+msgid "Enter JSON for %s from Google's %s"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:236
+msgid "Style name"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:250
+msgid "No styles have been defined yet"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:261
+msgid "Nominatim"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:273
+msgid "Address Line 1"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:274
+msgid "Address Line 2"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:275
+msgid "Address Line 3"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:276
+msgid "Address Line 4"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:277
+msgid "Address Line 5"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:278
+msgid "Address Line 6"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:279
+msgid "Latitude"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:280
+msgid "Longitude"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:282
+msgid "Title"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:283
+msgid "Body"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:284
+msgid "Map Zoom"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:287
+#: ../pro/mappress_widget.php:138
+msgid "Map"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:287
+msgid "Custom Field"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:296
+msgid "Overwrite existing maps when updating"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:301
+msgid "usage tracking"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:302
+#, php-format
+msgid "API keys is needed only for premium services or %s"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:310
+msgid "Permanently resize existing maps"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:312
+#, php-format
+msgid "from %s to %s"
+msgstr ""
+
+#: ../pro/mappress_pro_settings.php:313
+msgid "Force Resize"
+msgstr ""
+
+#: ../pro/mappress_widget.php:76
+msgid "Widget title"
+msgstr ""
+
+#: ../pro/mappress_widget.php:81
+msgid "Map size"
+msgstr ""
+
+#: ../pro/mappress_widget.php:87
+msgid "Show"
+msgstr ""
+
+#: ../pro/mappress_widget.php:88
+msgid "Current posts"
+msgstr ""
+
+#: ../pro/mappress_widget.php:89
+msgid "Hide if empty"
+msgstr ""
+
+#: ../pro/mappress_widget.php:91
+msgid "All posts"
+msgstr ""
+
+#: ../pro/mappress_widget.php:92
+msgid "Custom query"
+msgstr ""
+
+#: ../pro/mappress_widget.php:95
+msgid "Learn about queries"
+msgstr ""
+
+#: ../pro/mappress_widget.php:100
+msgid "Show POI list"
+msgstr ""
+
+#: ../pro/mappress_widget.php:102
+msgid "Link POIs to posts"
+msgstr ""
+
+#: ../pro/mappress_widget.php:135
+msgid "Map type"
+msgstr ""
+
+#: ../pro/mappress_widget.php:149
+msgid "Other Settings"
+msgstr ""
+
+#: ../pro/mappress_widget.php:152
+msgid "Example: traffic=\"false\" maplinks=\"\""
+msgstr ""
+
+#: ../templates/map_directions.php:3
+msgid "By car"
+msgstr ""
+
+#: ../templates/map_directions.php:4
+msgid "Public Transit"
+msgstr ""
+
+#: ../templates/map_directions.php:5
+msgid "Walking"
+msgstr ""
+
+#: ../templates/map_directions.php:16
+msgid "Swap start and end"
+msgstr ""
+
+#: ../templates/map_directions.php:29
+msgid "Get Directions"
+msgstr ""
+
+#: ../templates/map_directions.php:30
+msgid "Print"
+msgstr ""
+
+#: ../templates/map_directions.php:31
+msgid "Close"
+msgstr ""
+
+#: ../templates/map_poi_list.php:5
+msgid "Location"
+msgstr ""
+
+#~ msgid "Contact"
+#~ msgstr "Contact"
