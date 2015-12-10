@@ -13,6 +13,11 @@ module.exports = function (grunt) {
 			'wp-content/plugins/buddypress/bp-core/js/jquery-query.min.js',
 			'wp-content/plugins/buddypress/bp-core/js/jquery-cookie.min.js',
 			'wp-content/plugins/buddypress/bp-core/js/jquery-scroll-to.min.js',
+			'wp-content/plugins/buddypress-group-documents/js/general.js',
+			'wp-content/plugins/buddypress-group-email-subscription/bp-activity-subscription.js',
+			'wp-content/plugins/buddypress/bp-core/js/jquery.caret.min.js',
+			'wp-content/plugins/buddypress/bp-core/js/jquery.atwho.min.js',
+			'wp-content/plugins/buddypress/bp-activity/js/mentions.min.js'
 		],
                 dest: 'wp-content/js/buddypress.js'
             },

@@ -79,6 +79,43 @@ function openlab_bp_js_dependencies( $deps ) {
 add_filter( 'bp_core_get_js_dependencies', 'openlab_bp_js_dependencies' );
 
 /**
+ * Dequeue scripts for BP plugins.
+ *
+ * The scripts are concatenated with openlab-buddypress.
+ */
+function openlab_bp_js_concat() {
+	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+		return;
+	}
+
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
+	wp_dequeue_script( 'bp-group-documents' );
+	wp_dequeue_script( 'bp-activity-subscription-js' );
+}
+add_action( 'wp_print_scripts', 'openlab_bp_js_concat', 0 );
+
+/**
+ * Dequeue late-loaded scripts that would normally print to the footer.
+ *
+ * Concatenated in openlab-buddypress.
+ */
+function openlab_js_late_load_dequeue() {
+	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+		return;
+	}
+
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
+	wp_dequeue_script( 'bp-mentions' );
+}
+add_action( 'wp_print_footer_scripts', 'openlab_js_late_load_dequeue', 0 );
+
+/**
  * Concatenate styles on main site.
  */
 function openlab_css_concat() {
