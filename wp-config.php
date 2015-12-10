@@ -22,6 +22,9 @@ if ( !defined( 'DB_NAME' ) ) {
 	include( dirname( __FILE__ ) . '/env.php' );
 }
 
+// Version of the OpenLab. Used for asset versioning and cache busting.
+define( 'OL_VERSION', '1.6.4' );
+
 require __DIR__ . '/db-settings.php';
 
 /** Database Charset to use in creating database tables. */

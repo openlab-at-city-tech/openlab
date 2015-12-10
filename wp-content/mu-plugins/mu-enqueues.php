@@ -5,6 +5,38 @@
  * Keeping this all in once place
  */
 
+/**
+ * Add a custom version to the querystring for cache busting on OL version updates.
+ */
+function openlab_asset_ver( $tag, $handle, $src = '' ) {
+	// 'style_loader_tag' doesn't pass a src, so we sniff it from the tag.
+	if ( ! $src ) {
+		preg_match( '/href\=\'([^\']+)\'/', $tag, $src_matches );
+		if ( $src_matches ) {
+			$src = $src_matches[1];
+		}
+	}
+
+	$_src = parse_url( $src );
+	if ( $_src['query'] ) {
+		wp_parse_str( $_src['query'], $vars );
+		foreach ( $vars as $k => &$v ) {
+			if ( 'ver' !== $k ) {
+				continue;
+			}
+
+			$v .= '-' . OL_VERSION;
+		}
+
+		$new_path_and_query = add_query_arg( $vars, $_src['path'] );
+		$tag = str_replace( $_src['path'] . '?' . $_src['query'], $new_path_and_query, $tag );
+	}
+
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'openlab_asset_ver', 10, 3 );
+add_filter( 'style_loader_tag', 'openlab_asset_ver', 10, 2 );
+
 function openlab_mu_enqueue() {
 
     //google plus one
