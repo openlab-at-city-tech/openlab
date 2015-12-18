@@ -30,11 +30,11 @@ class GFDirectory_EditForm {
 	// From gravityforms.php
 	public static function process_exterior_pages(){
 		if(rgempty("gf_page", $_GET))
-            return;
+            {return;}
 
         //ensure users are logged in
         if(!is_user_logged_in())
-            auth_redirect();
+            {auth_redirect();}
 
         switch(rgget("gf_page")){
             case "directory_columns" :
@@ -103,7 +103,7 @@ class GFDirectory_EditForm {
 			$formID = $_GET['id'];
 		} else {
 			if( class_exists('RGFormsModel') ) {
-				$forms = RGFormsModel::get_forms(null, "title");
+				$forms = RGFormsModel::get_forms(NULL, "title");
 				$formID = $forms[0]->id;
 			}
 		}
@@ -137,7 +137,7 @@ class GFDirectory_EditForm {
 			//$formID = RGForms::get("id");
 
 	        if(empty($formID)) {
-		        $forms = RGFormsModel::get_forms(null, "title");
+		        $forms = RGFormsModel::get_forms(NULL, "title");
 	            $formID = $forms[0]->id;
 	        }
 
@@ -157,7 +157,9 @@ class GFDirectory_EditForm {
 		        mysack.setVar( "form_id", formID);
 		        mysack.setVar( "approved", approved);
 		        mysack.encVar( "cookie", document.cookie, false );
-		        mysack.onError = function() { console.log('<?php echo esc_js(__("Ajax error while setting lead approval", "gravity-forms-addons")) ?>' )};
+		        mysack.onError = function() {
+		            console.log('<?php echo esc_js(__("Ajax error while setting lead approval", "gravity-forms-addons")) ?>' );
+		        };
 		        mysack.runAJAX();
 
 		        return true;
@@ -175,7 +177,8 @@ class GFDirectory_EditForm {
                 jQuery(messageBox).prependTo(container).slideDown();
 
                 if(messageClass == 'updated')
-                    messageTimeout = setTimeout(function(){ hideMessage(container, false); }, 10000);
+                    {messageTimeout = setTimeout(function(){ hideMessage(container, false); }, 10000);
+}
 
             }
 
@@ -184,9 +187,10 @@ class GFDirectory_EditForm {
                 var messageBox = jQuery(container).find('.message');
 
                 if(messageQueued)
-                    jQuery(messageBox).remove();
-                else
-                    jQuery(messageBox).slideUp(function(){ jQuery(this).remove(); });
+                    {jQuery(messageBox).remove();
+}else
+                    {jQuery(messageBox).slideUp(function(){ jQuery(this).remove(); });
+}
 
             }
 
@@ -243,8 +247,11 @@ class GFDirectory_EditForm {
 					});
 		    	}
 
-		    	$('td:has(img[src*="star"])').after('<td><a href="#" class="toggleApproved" title="'+approveTitle+'">X</a></td>');
-		    	$('th.check-column:eq(1)').after('<th class="manage-column column-cb check-column"><a href="<?php echo esc_url( add_query_arg(array('sort' => $_gform_directory_approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" style="text-align:center; margin:0 auto; display:block;" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
+				// Add the header column
+		    	$('thead th.check-column:eq(1), tfoot th.check-column:eq(1)').after('<th class="manage-column column-cb check-column"><a href="<?php echo esc_url( add_query_arg(array('sort' => $_gform_directory_approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" style="text-align:center; margin:0 auto; display:block;" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
+
+				// Add to each row
+		    	$('tbody td:has(img[src*="star"]), tbody th:has(img[src*="star"])').after('<td><a href="#" class="toggleApproved" title="'+approveTitle+'">X</a></td>');
 
 		    	$('tr:has(input.lead_approved)').addClass('lead_approved').find('a.toggleApproved').prop('title', unapproveTitle).text('O');
 
@@ -498,19 +505,19 @@ class GFDirectory_EditForm {
 				array(
 					'class' => 'button',
 					'value' => esc_attr__('Approved', 'gravity-forms-addons'),
-					'onclick' => "StartAddField('directoryapproved');"
+					'onclick' => "StartAddField('directoryapproved');",
 				),
 				array(
 					'class' => 'button',
 					'value' => esc_attr__('Entry Link', 'gravity-forms-addons'),
-					'onclick' => "StartAddField('entrylink');"
+					'onclick' => "StartAddField('entrylink');",
 				),
 				array(
 					'class' => 'button',
 					'value' => esc_attr__('User Edit Link', 'gravity-forms-addons'),
-					'onclick' => "StartAddField('usereditlink');"
-				)
-			)
+					'onclick' => "StartAddField('usereditlink');",
+				),
+			),
 		);
 
 		array_push($field_groups, $directory_fields);
