@@ -4,19 +4,7 @@ function gfapiCalculateSig(stringToSign, privateKey) {
     return encodeURIComponent(base64);
 }
 
-
-function gfapiToggleSettings(enabled) {
-    jQuery("#gaddon-setting-row-public_key").toggle(enabled);
-    jQuery("#gaddon-setting-row-private_key").toggle(enabled);
-    jQuery("#gaddon-setting-row-impersonate_account").toggle(enabled);
-    jQuery("#gaddon-setting-row-developer_tools").toggle(enabled);
-    jQuery("#gaddon-setting-row-qrcode").toggle(enabled);
-}
-
 jQuery(document).ready(function () {
-
-    var enabled = jQuery("#enabled").prop("checked");
-    gfapiToggleSettings(enabled);
 
     jQuery("#gfwebapi-qrbutton").click(function () {
         jQuery("#gfwebapi-qrcode-container").toggle();
@@ -29,7 +17,7 @@ jQuery(document).ready(function () {
 
     jQuery("#public_key, #private_key").on("keyup", function () {
         jQuery("#gfwebapi-qrcode-container").html("The keys have changes. Please save the changes and try again.")
-    })
+    });
 
     jQuery("#gfapi-url-builder-button").click(function (e) {
         e.preventDefault();
@@ -90,4 +78,4 @@ jQuery(document).ready(function () {
         return false;
     });
 
-})
+});

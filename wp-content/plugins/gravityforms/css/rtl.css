@@ -1,13 +1,14 @@
+
 /*
 ----------------------------------------------------------------
 
 rtl.css
 Gravity Forms RTL Language Support
 http://www.gravityforms.com
-updated: May 7, 2013 10:52 PM
+updated: February 24, 2014 7:49 AM
 
 Gravity Forms is a Rocketgenius project
-copyright 2013 Rocketgenius Inc.
+copyright 2013-2014 Rocketgenius Inc.
 http: //www.rocketgenius.com
 this may not be redistributed without the
 express written permission of the author.
@@ -27,7 +28,7 @@ to no.
 
 html[dir="rtl"] .gform_wrapper *,
 html[dir="rtl"] .gform_wrapper form,
-html[dir="rtl"] .gform_wrapper .gform_body, 
+html[dir="rtl"] .gform_wrapper .gform_body,
 html[dir="rtl"] .gform_wrapper ul li,
 html[dir="rtl"] .gform_wrapper ul li.gfield,
 html[dir="rtl"] .gform_wrapper ul li.gfield.gfield_html,
@@ -98,12 +99,12 @@ html[dir="rtl"] .gform_wrapper.recaptchatable #recaptcha_response_field {
     position: static !important;
 }
 
-html[dir="rtl"] .gform_wrapper .chzn-container-multi ul.chzn-choices li.search-choice {
+html[dir="rtl"] .gform_wrapper .chosen-container-multi ul.chosen-choices li.search-choice {
 	float: right !important;
 	margin: 3px 5px 3px 0 !important;
 }
 
-html[dir="rtl"] .gform_wrapper .chzn-container ul.chzn-choices li.search-field {
+html[dir="rtl"] .gform_wrapper .chosen-container ul.chosen-choices li.search-field {
 	float: right !important;
 }
 
@@ -264,14 +265,14 @@ body .gform_wrapper.gf_rtl_wrapper .recaptchatable #recaptcha_response_field {
     position: static !important;
 }
 
-body.rtl .gform_wrapper .chzn-container-multi ul.chzn-choices li.search-choice,
-body .gform_wrapper.gf_rtl_wrapper .chzn-container-multi ul.chzn-choices li.search-choice {
+body.rtl .gform_wrapper .chosen-container-multi ul.chosen-choices li.search-choice,
+body .gform_wrapper.gf_rtl_wrapper .chosen-container-multi ul.chosen-choices li.search-choice {
 	float: right !important;
 	margin: 3px 5px 3px 0 !important;
 }
 
-body.rtl .gform_wrapper .chzn-container ul.chzn-choices li.search-field,
-body .gform_wrapper.gf_rtl_wrapper .chzn-container ul.chzn-choices li.search-field {
+body.rtl .gform_wrapper .chosen-container ul.chosen-choices li.search-field,
+body .gform_wrapper.gf_rtl_wrapper .chosen-container ul.chosen-choices li.search-field {
 	float: right !important;
 }
 
@@ -368,21 +369,21 @@ body .gform_wrapper.gf_rtl_wrapper .gform_wrapper .gf_step {
 	margin: 0 0 10px 10px !important;
 }
 
-html[dir="rtl"] .gform_wrapper .chzn-container .chzn-results li.active-result,
-body.rtl .gform_wrapper .chzn-container .chzn-results li.active-result,
-body .gform_wrapper.gf_rtl_wrapper .chzn-container .chzn-results li.active-result {
+html[dir="rtl"] .gform_wrapper .chosen-container .chosen-results li.active-result,
+body.rtl .gform_wrapper .chosen-container .chosen-results li.active-result,
+body .gform_wrapper.gf_rtl_wrapper .chosen-container .chosen-results li.active-result {
 	padding-right: 24px !important;
 }
 
-html[dir="rtl"] .gform_wrapper .chzn-container-multi .chzn-choices .search-choice .search-choice-close,
-body.rtl .gform_wrapper .chzn-container-multi .chzn-choices .search-choice .search-choice-close,
-body .gform_wrapper.gf_rtl_wrapper .chzn-container-multi .chzn-choices .search-choice .search-choice-close {
+html[dir="rtl"] .gform_wrapper .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+body.rtl .gform_wrapper .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+body .gform_wrapper.gf_rtl_wrapper .chosen-container-multi .chosen-choices .search-choice .search-choice-close {
 	right: 5px !important;
 }
 
-html[dir="rtl"] .gform_wrapper .chzn-container-multi ul.chzn-choices li.search-choice span,
-body.rtl .gform_wrapper .chzn-container-multi ul.chzn-choices li.search-choice span,
-body .gform_wrapper.gf_rtl_wrapper .gform_wrapper .chzn-container-multi ul.chzn-choices li.search-choice span {
+html[dir="rtl"] .gform_wrapper .chosen-container-multi ul.chosen-choices li.search-choice span,
+body.rtl .gform_wrapper .chosen-container-multi ul.chosen-choices li.search-choice span,
+body .gform_wrapper.gf_rtl_wrapper .gform_wrapper .chosen-container-multi ul.chosen-choices li.search-choice span {
 	display: block;
 	margin-right: 19px !important;
 }
@@ -402,6 +403,10 @@ html[dir="rtl"] div#preview_hdr div:first-child {
 	background-position: right center !important;
 	padding-left: 10px !important;
 	padding-right: 26px !important;
+}
+
+html[dir="rtl"] .gform_wrapper .gf_invisible {
+    left: auto; right: -9999px;
 }
 
 /* Admin RTL support ----------------------------------------------------*/
@@ -508,7 +513,6 @@ html[dir="rtl"] body.wp-admin .gform_tabs li.active a {
 html[dir="rtl"] body.wp-admin a.tooltip,
 html[dir="rtl"] body.wp-admin a.tooltip_left,
 html[dir="rtl"] body.wp-admin a.tooltip_bottomleft {
-	text-indent: 9000px;
 	overflow: hidden;
 }
 

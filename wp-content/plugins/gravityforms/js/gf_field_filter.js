@@ -28,32 +28,58 @@
 
     function setUpFilters(filters) {
         var i;
+
+        $container.on('change', '.gform-filter-field', function(){
+            changeField(this);
+        });
+        $container.on('click', '#gform-no-filters', function(e){
+			if($('.gform-field-filter').length == 0){
+				addNewFieldFilter(this);
+			}
+			$(this).remove();
+        });
+        $container.on('click', '.gform-add', function(){
+			addNewFieldFilter(this);
+        });
+        $container.on('click', '.gform-remove', function(){
+            removeFieldFilter(this);
+        });
+
+        $container.on('change', '.gform-filter-operator', function(){
+            changeOperator(this, this.value);
+        });
+
         if (typeof filters == 'undefined' || filters.length == 0){
             displayNoFiltersMessage();
             return;
         }
 
-        if(mode != "off")
+        if(mode != "off"){
             $("#gform-field-filters").append(getFilterMode(mode));
+        }
 
         for (i = 0; i < filters.length; i++) {
             $("#gform-field-filters").append(getNewFilterRow());
         }
+
+
         $(".gform-filter-field").each(function (i) {
             var fieldId = filters[i].field;
             jQuery(this).val(fieldId);
-            jQuery(this).change();
+            changeField(this);
         });
         $(".gform-filter-operator").each(function (i) {
             var operator = filters[i].operator;
             jQuery(this).val(operator);
-            jQuery(this).change();
+            changeOperator(this, this.value);
         });
+
         $(".gform-filter-value").each(function (i) {
             var value = filters[i].value;
             jQuery(this).val(value);
             jQuery(this).change();
         });
+
         maybeMakeResizable()
     }
 
@@ -68,7 +94,7 @@
     function getFilterFields() {
         var i, j, key, val, label, question, options, disabled = "", numRows,
             select = [];
-        select.push("<select class='gform-filter-field' name='f[]' onchange='gfFilterUI.changeField(this)'>");
+        select.push("<select class='gform-filter-field' name='f[]' >");
         for (i = 0; i < settings.length; i++) {
             key = settings[i].key;
             if (settings[i].group) {
@@ -94,12 +120,25 @@
         return select.join('');
     }
 
-    gfFilterUI.changeField = function (fieldSelect) {
-        var filter = getFilter(fieldSelect.value)
+    function changeOperator (operatorSelect) {
+        var $select = $(operatorSelect);
+        var $fieldSelect = $select.siblings('.gform-filter-field');
+        var filter = getFilter($fieldSelect.val());
         if (filter) {
-            $(fieldSelect).siblings(".gform-filter-value").replaceWith(getFilterValues(filter));
-            $(fieldSelect).siblings(".gform-filter-type").val(filter.type);
-            $(fieldSelect).siblings(".gform-filter-operator").replaceWith(getFilterOperators(filter));
+            $select.siblings(".gform-filter-value").replaceWith(getFilterValues(filter, operatorSelect.value));
+        }
+        setDisabledFields();
+        if(window['gformInitDatepicker']) {gformInitDatepicker();}
+    }
+
+    function changeField (fieldSelect) {
+        var filter = getFilter(fieldSelect.value);
+        if (filter) {
+            var $select = $(fieldSelect);
+            $select.siblings(".gform-filter-value").replaceWith(getFilterValues(filter));
+            $select.siblings(".gform-filter-type").val(filter.type);
+            $select.siblings(".gform-filter-operator").replaceWith(getFilterOperators(filter));
+            $select.siblings(".gform-filter-operator").change();
         }
         setDisabledFields();
     }
@@ -119,26 +158,40 @@
         if (filter) {
             for (i = 0; i < filter.operators.length; i++) {
                 operator = filter.operators[i];
-                str += "<option value='{0}'>{1}</option>".format(operator, gf_vars[operatorStrings[operator]] );
+                str += '<option value="{0}">{1}</option>'.format(operator, gf_vars[operatorStrings[operator]] );
             }
         }
         str += "</select>";
         return str;
     }
 
-    function getFilterValues (filter) {
-        var i, val, text, str, options = "";
-        str = "<input type='text' value='' name='v[]' class='gform-filter-value' />";
+    function getFilterValues (filter, selectedOperator) {
+        var i, val, text, str, options = "", placeholder, cssClass, supporterOperators;
+        cssClass = 'gform-filter-value';
 
-        if (filter) {
-            if (filter.values) {
-                for (i = 0; i < filter.values.length; i++) {
-                    val = filter.values[i].value;
-                    text = filter.values[i].text;
-                    options += "<option value='{0}'>{1}</option>".format(val, text);
-                }
-                str = "<select name='v[]' class='gform-filter-value'>{0}</select>".format(options);
+        if ( filter && typeof filter.cssClass != 'undefined' ) {
+            cssClass += ' ' + filter.cssClass;
+        }
+
+        if ( filter && filter.values && selectedOperator != 'contains' ) {
+
+            if ( typeof filter.placeholder != 'undefined' ){
+                options += '<option value="">{0}</option>'.format(filter.placeholder);
             }
+
+            for (i = 0; i < filter.values.length; i++) {
+                val = filter.values[i].value;
+                text = filter.values[i].text;
+                if ( filter.values[i].operators && $.inArray( selectedOperator, filter.values[i].operators ) === -1 ) {
+                    continue;
+                }
+                options += '<option value="{0}">{1}</option>'.format(val, text);
+            }
+            str = "<select name='v[]' class='{0}'>{1}</select>".format(cssClass, options);
+        } else {
+            placeholder = ( filter && typeof filter.placeholder != 'undefined' ) ? "placeholder='{0}'".format(filter.placeholder) : '';
+
+            str = "<input type='text' value='' name='v[]' class='{0}' {1}/>".format(cssClass, placeholder);
         }
 
         return str;
@@ -166,8 +219,8 @@
         if(!allowMultiple)
             return str;
 
-        str += "<img class='gform-add' onclick='gfFilterUI.addNewFieldFilter(this)' src='{0}/add.png' alt='{1}' title='{2}'>".format(imagesURL, gf_vars.addFieldFilter, gf_vars.addFieldFilter);
-        str += "<img class='gform-remove' onclick='gfFilterUI.removeFieldFilter(this)' src='" + imagesURL + "/remove.png' alt='" + gf_vars.removeFieldFilter + "' title='" + gf_vars.removeFieldFilter + "'>";
+        str += "<img class='gform-add' src='{0}/add.png' alt='{1}' title='{2}'>".format(imagesURL, gf_vars.addFieldFilter, gf_vars.addFieldFilter);
+        str += "<img class='gform-remove' src='" + imagesURL + "/remove.png' alt='" + gf_vars.removeFieldFilter + "' title='" + gf_vars.removeFieldFilter + "'>";
         return str;
     }
 
@@ -201,7 +254,7 @@
 
     function displayNoFiltersMessage () {
         var str = "";
-        str += "<div id='gform-no-filters' onclick='gfFilterUI.addNewFieldFilter(this);jQuery(this).remove();' >" + gf_vars.addFieldFilter;
+        str += "<div id='gform-no-filters' >" + gf_vars.addFieldFilter;
         str += "<img class='gform-add' src='{0}/add.png' alt='{1}' title='{2}'></div>".format(imagesURL, gf_vars.addFieldFilter, gf_vars.addFieldFilter);
         $("#gform-field-filters").html(str);
         if(isResizable){
@@ -239,7 +292,7 @@
         $filterRow.after(getFilterMode());
     }
 
-    gfFilterUI.addNewFieldFilter = function (el) {
+    function addNewFieldFilter (el) {
         var $el, $filterRow;
         $el = $(el);
         if($el.is("img"))
@@ -248,14 +301,17 @@
             $filterRow = $el;
 
         $filterRow.after(getNewFilterRow());
-        $filterRow.next("div").find(".gform-filter-field").change();
-        if ($(".gform-field-filter").length == 1)
+        $filterRow.next("div")
+            .find(".gform-filter-field").change()
+            .find(".gform-filter-operator").change();
+        if ($(".gform-field-filter").length == 1){
             addFilterMode($filterRow);
+        }
 
         maybeMakeResizable();
     }
 
-    gfFilterUI.removeFieldFilter = function (img) {
+    function removeFieldFilter (img) {
         $(img).parent().remove();
         if ($(".gform-field-filter").length == 0)
             displayNoFiltersMessage();

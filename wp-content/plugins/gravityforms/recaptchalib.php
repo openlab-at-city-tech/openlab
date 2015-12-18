@@ -106,7 +106,7 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false, $lang='en')
 {
 	if ($pubkey == null || $pubkey == '') {
-		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
+		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin'>https://www.google.com/recaptcha/admin</a>");
 	}
 
 	if ($use_ssl) {
@@ -134,11 +134,14 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false, $lang='en
 /**
  * A ReCaptchaResponse is returned from recaptcha_check_answer()
  */
+if( ! class_exists( 'ReCaptchaResponse' )){
+
 class ReCaptchaResponse {
-        var $is_valid;
-        var $error;
+	var $is_valid;
+	var $error;
 }
 
+}
 
 /**
   * Calls an HTTP POST function to verify if the user's guess was correct
@@ -152,7 +155,7 @@ class ReCaptchaResponse {
 function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array())
 {
 	if ($privkey == null || $privkey == '') {
-		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
+		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin'>https://www.google.com/recaptcha/admin</a>");
 	}
 
 	if ($remoteip == null || $remoteip == '') {
