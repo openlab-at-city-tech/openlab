@@ -9,12 +9,19 @@ function openlab_hide_plugins( $plugins ) {
 	$network_admin_only = array();
 
 	$super_admin_only = array(
+		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
 		'bbpress/bbpress.php',
+		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
+		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
+		'p3-profiler/p3-profiler.php',
+		'query-monitor/query-monitor.php',
+		'slideshare/slideshare.php',
 		'social/social.php',
+		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
 	);
 
