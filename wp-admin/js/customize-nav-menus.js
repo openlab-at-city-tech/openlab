@@ -1132,7 +1132,11 @@
 					}
 				});
 				if ( settingValue ) {
-					element.set( settingValue[ property ] );
+					if ( ( property === 'classes' || property === 'xfn' ) && _.isArray( settingValue[ property ] ) ) {
+						element.set( settingValue[ property ].join( ' ' ) );
+					} else {
+						element.set( settingValue[ property ] );
+					}
 				}
 			});
 
@@ -1866,6 +1870,9 @@
 						priority = 10;
 
 					control.isSorting = false;
+
+					// Reset horizontal scroll position when done dragging.
+					control.$sectionContent.scrollLeft( 0 );
 
 					_.each( menuItemContainerIds, function( menuItemContainerId ) {
 						var menuItemId, menuItemControl, matches;
