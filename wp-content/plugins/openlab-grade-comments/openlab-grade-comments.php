@@ -65,7 +65,12 @@ function olgc_insert_comment( $comment_id, $comment ) {
 	}
 
 	// Private
-	if ( ! empty( $_POST['olgc-private-comment'] ) ) {
+	$is_private = ! empty( $_POST['olgc-private-comment'] );
+	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
+		$is_private = (bool) get_comment_meta( $comment->comment_parent, 'olgc_is_private', true );
+	}
+
+	if ( $is_private ) {
 		update_comment_meta( $comment_id, 'olgc_is_private', '1' );
 	}
 
