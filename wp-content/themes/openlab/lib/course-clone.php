@@ -677,7 +677,7 @@ class Openlab_Clone_Course_Site {
 				wp_delete_post( $sp->ID, true );
 			}
 		}
-                
+
                 // Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
 		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
@@ -687,16 +687,16 @@ class Openlab_Clone_Course_Site {
 
 	protected function get_source_group_admins() {
 		if ( empty( $this->source_group_admins ) ) {
-			$g = groups_get_group(array(
-                        'group_id' => $this->source_group_id,
-                        'populate_extras' => true,
-                            ));
+			$g = groups_get_group( array(
+				'group_id' => $this->source_group_id,
+				'populate_extras' => true,
+			) );
 			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
 		}
 
 		return $this->source_group_admins;
 	}
-        
+
         /**
 	 * Copy a file, or recursively copy a folder and its contents
 	 *
