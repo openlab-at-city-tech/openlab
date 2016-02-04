@@ -662,7 +662,7 @@ class Openlab_Clone_Course_Site {
 		// - if it's not by an admin, delete
 		switch_to_blog( $this->site_id );
 
-		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status FROM {$wpdb->posts}" );
+		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
@@ -674,9 +674,18 @@ class Openlab_Clone_Course_Site {
 					wp_update_post( $post_arr );
 				}
 			} else {
-				wp_delete_post( $sp->ID, true );
+				// Non-teachers have their stuff deleted.
+				if ( 'attachment' === $sp->post_type ) {
+					// Will delete the file as well.
+					wp_delete_attachment( $sp->ID, true );
+				} else {
+					wp_delete_post( $sp->ID, true );
+				}
 			}
 		}
+
+		// Replace the site URL in all post content.
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = replace( post_content, %s, %s )", get_blog_option( $this->source_site_id, 'home' ), get_option( 'home' ) ) );
 
                 // Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
