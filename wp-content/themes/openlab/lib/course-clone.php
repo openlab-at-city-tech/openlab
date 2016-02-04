@@ -429,7 +429,7 @@ class Openlab_Clone_Course_Group {
 		$group = groups_get_group( array( 'group_id' => $this->group_id ) );
 
 		// Set the default forum status
-		switch ($group->status) {
+		switch ( $group->status ) {
 			case 'hidden' :
 				$status = bbp_get_hidden_status_id();
 				break;
