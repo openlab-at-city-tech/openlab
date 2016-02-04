@@ -9207,6 +9207,10 @@ body.membership-requests .group-list {
 #sidebar.type-help .sidebar-wrapper .sidebar-block {
   border-top: 1px solid #bbbbbb;
 }
+input.help-search {
+  width: 100%;
+  margin-bottom: 8px;
+}
 #help-tags .btn-primary {
   background: #999999;
   border-color: #999999;

@@ -16,10 +16,10 @@ wp_nav_menu($args);
 ?>
 </div>
 
-<h2 class="sidebar-help-title help-tags-title">Search Help</h2>
+<h2 class="sidebar-help-title help-search-title">Search Help</h2>
 <div class="sidebar-block padded-block">
-<div id="help-tags-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
-<div id="help-tags">
+<div id="help-search-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
+<div id="help-search">
     <form method="get" action="<?php echo esc_url( openlab_get_help_search_url() ); ?>">
 	    <input type="text" name="help-search" class="help-search" />
 	    <input class="btn btn-default btn-block btn-primary" type="submit" value="Search" />
