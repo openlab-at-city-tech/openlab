@@ -451,6 +451,8 @@ class Openlab_Clone_Course_Group {
 				'post_content' => $sftk->post_content,
 				'post_title' => $sftk->post_title,
 				'post_date' => $sftk->post_date,
+			), array(
+				'forum_id' => $forum_id,
 			) );
 		}
 
