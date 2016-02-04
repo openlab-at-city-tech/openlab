@@ -440,3 +440,39 @@ function openlab_glossary_cats_loop() {
 }
 
 //end openlab_help_loop()
+
+/**
+ * Get the URL for the OpenLab Help Search results page.
+ */
+function openlab_get_help_search_url() {
+	$posts = get_posts( array(
+		'post_type' => 'help',
+		'name' => 'search',
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+		'numposts' => 1,
+	) );
+
+	$url = '';
+	if ( $posts ) {
+		$url = get_permalink( $posts[0] );
+	}
+
+	return $url;
+}
+
+/**
+ * Tell WordPress to load help-search.php when on the Help Search page.
+ *
+ * No native support in template hierarchy for specific posts from a CPT, and it's too big a pain
+ * to use page templates in the UI.
+ */
+function openlab_set_help_search_page_template( $template ) {
+	$q = get_queried_object();
+	if ( 'help' === $q->post_type && 'search' === $q->post_name ) {
+		$template = locate_template( 'help-search.php' );
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'openlab_set_help_search_page_template' );
