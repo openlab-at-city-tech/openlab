@@ -54,18 +54,8 @@ add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 
  * Catch and save values after comment submit.
  */
 function olgc_insert_comment( $comment_id, $comment ) {
-	// User has permission
-	if ( ! olgc_is_instructor() ) {
-		return;
-	}
-
-	// User intended to do this
-	if ( ! wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) ) {
-		return;
-	}
-
 	// Private
-	$is_private = ! empty( $_POST['olgc-private-comment'] );
+	$is_private = olgc_is_instructor() && ! empty( $_POST['olgc-private-comment'] );
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
 		$is_private = (bool) get_comment_meta( $comment->comment_parent, 'olgc_is_private', true );
 	}
@@ -75,7 +65,7 @@ function olgc_insert_comment( $comment_id, $comment ) {
 	}
 
 	// Grade
-	if ( ! empty( $_POST['olgc-add-a-grade'] ) && ! empty( $_POST['olgc-grade'] ) ) {
+	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && ! empty( $_POST['olgc-grade'] ) ) {
 		$grade = wp_unslash( $_POST['olgc-grade'] );
 		update_comment_meta( $comment_id, 'olgc_grade', $grade );
 	}
