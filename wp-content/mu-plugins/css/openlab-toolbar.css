@@ -7439,6 +7439,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-customize {
   display: none;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-tribe-events {
+  display: none;
+}
 .oplb-bs.navbar-default {
   background: transparent;
   border: none;
