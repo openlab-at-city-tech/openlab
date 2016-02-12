@@ -14,13 +14,13 @@ function openlab_conditional_body_classes($classes) {
         $classes[] = 'content-sidebar';
     }
 
-    $group_archives = array('people','courses','projects','clubs','portfolios');
-    if ( isset( $post->post_name ) && in_array( $post->post_name,$group_archives ) ) {
+    $group_archives = array('people', 'courses', 'projects', 'clubs', 'portfolios');
+    if (isset($post->post_name) && in_array($post->post_name, $group_archives)) {
         $classes[] = 'group-archive-page';
     }
 
     $about_page_obj = get_page_by_path('about');
-    $my_group_pages = array('my-courses','my-clubs','my-projects');
+    $my_group_pages = array('my-courses', 'my-clubs', 'my-projects');
 
     if (( isset($post->post_name) && in_array($post->post_name, $group_archives) ) ||
             bp_is_single_item() ||
@@ -66,7 +66,7 @@ add_filter('bp_get_the_profile_field_value', 'openlab_filter_profile_fields', 10
 
 function openlab_filter_profile_fields($value, $type) {
     global $field;
-    $truncate_link_candidates = array('Website','LinkedIn Profile Link','Facebook Profile Link','Google Scholar profile');
+    $truncate_link_candidates = array('Website', 'LinkedIn Profile Link', 'Facebook Profile Link', 'Google Scholar profile');
     if (in_array($field->name, $truncate_link_candidates)) {
         $args = array(
             'ending' => __('&hellip;', 'buddypress'),
