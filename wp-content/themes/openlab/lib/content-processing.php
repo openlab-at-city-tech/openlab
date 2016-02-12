@@ -118,28 +118,46 @@ function cuny_add_links_wp_trim_excerpt($text) {
     return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
 }
 
-function openlab_get_menu_count_mup($count, $pull_right = ' pull-right'){
+function openlab_get_menu_count_mup($count, $pull_right = ' pull-right') {
 
-    if($count < 1){
+    if ($count < 1) {
         return '';
-    }else{
-        return '<span class="mol-count count-'.$count.$pull_right.'">'.$count.'</span>';
+    } else {
+        return '<span class="mol-count count-' . $count . $pull_right . '">' . $count . '</span>';
     }
-
 }
 
-function openlab_not_empty($content){
-    if($content && !ctype_space($content) && $content !== ''){
+function openlab_not_empty($content) {
+    if ($content && !ctype_space($content) && $content !== '') {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function openlab_sidebar_cleanup($content){
-    
-    $content = preg_replace('/<iframe.*?\/iframe>/i','', $content);
-    $content = strip_tags($content,'<br><i><em><b><strong><a><img>');
-    
+function openlab_sidebar_cleanup($content) {
+
+    $content = preg_replace('/<iframe.*?\/iframe>/i', '', $content);
+    $content = strip_tags($content, '<br><i><em><b><strong><a><img>');
+
     return $content;
 }
+
+/*
+ * This function lets us customize status messages
+ * uses filter: bp_core_render_message_content
+ */
+function openlab_process_status_messages($message, $type) {
+    
+    //invite anyone page
+    if(bp_current_action() === 'invite-anyone'){
+        if(trim($message) === '<p>Group invites sent.</p>'){
+            $message = '<p>Your invitation was sent!</p>';
+        }
+        
+    }
+
+    return $message;
+}
+
+add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
