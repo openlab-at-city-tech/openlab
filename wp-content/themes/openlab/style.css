@@ -8726,10 +8726,10 @@ input#group-request-send {
   height: 98px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.moderators {
-  height: 107px;
+  height: 342px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members {
-  height: 330px;
+  height: 342px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;
