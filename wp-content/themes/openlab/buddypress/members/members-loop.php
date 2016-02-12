@@ -24,8 +24,10 @@
 						<span class="update"> - <?php bp_member_latest_update( 'length=10' ) ?></span>
 
 					<?php endif; ?>
-
-				<div class="timestamp"><span class="fa fa-undo"></span> <?php bp_member_last_active() ?></div>
+                                 
+                                <?php if (bp_current_action() !== 'my-friends'): ?>
+                                    <div class="timestamp"><span class="fa fa-undo"></span> <?php bp_member_last_active() ?></div>
+                                <?php endif;?>
                                 <?php do_action( 'bp_directory_members_actions' ); ?>
 
 				<?php do_action( 'bp_directory_members_item' ) ?>
