@@ -8640,6 +8640,12 @@ input#group-request-send {
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
 }
+#current-group-site ul {
+  padding-left: 32px;
+}
+#current-group-site ul li {
+  padding-left: 6px;
+}
 @media (max-width: 767px) {
   .group-header-content {
     margin-top: 21px;
