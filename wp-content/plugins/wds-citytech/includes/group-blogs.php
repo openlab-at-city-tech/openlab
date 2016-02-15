@@ -455,10 +455,8 @@ function wds_bp_group_meta() {
                             $group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
                         }
                         ?>
-                        <p>This <?php echo openlab_get_group_type_label() ?> is currently associated with the site <?php echo $group_site_text ?>. 
-                        <p id="change-group-site">
-                        <ul><li><?php echo $group_site_url_out ?> <a class="button underline confirm" href="<?php echo wp_nonce_url(bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/unlink-site/', 'unlink-site') ?>" id="change-group-site-toggle" />Unlink</a></li></ul>
-                        </p>
+                        <p>This <?php echo openlab_get_group_type_label() ?> is currently associated with the site <?php echo $group_site_text ?></p>
+                        <ul id="change-group-site"><li><?php echo $group_site_url_out ?> <a class="button underline confirm" href="<?php echo wp_nonce_url(bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/unlink-site/', 'unlink-site') ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
                     </div>
 

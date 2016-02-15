@@ -8640,10 +8640,14 @@ input#group-request-send {
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
 }
-#current-group-site ul {
-  padding-left: 32px;
+#current-group-site p {
+  margin-bottom: 9px;
 }
-#current-group-site ul li {
+#current-group-site #change-group-site {
+  padding-left: 34px;
+  margin-top: 0;
+}
+#current-group-site #change-group-site li {
   padding-left: 6px;
 }
 @media (max-width: 767px) {
