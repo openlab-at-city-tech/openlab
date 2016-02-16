@@ -688,6 +688,8 @@ class Openlab_Clone_Course_Site {
 						'post_status' => 'draft',
 					);
 					wp_update_post( $post_arr );
+
+					wp_update_comment_count_now( $sp->ID );
 				}
 			} else {
 				// Non-teachers have their stuff deleted.
