@@ -703,7 +703,14 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Replace the site URL in all post content.
-		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_content = replace( post_content, %s, %s )", get_blog_option( $this->source_site_id, 'home' ), get_option( 'home' ) ) );
+                // For some reason a regular MySQL query is not working.
+                $source_site_url = get_blog_option( $this->source_site_id, 'home' );
+                $this_site_url = get_option( 'home' );
+                foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
+                        $post = get_post( $post_id );
+                        $post->post_content = str_replace( $source_site_url, $this_site_url, $post->post_content );
+                        wp_update_post( $post );
+                }
 
 		restore_current_blog();
 	}
