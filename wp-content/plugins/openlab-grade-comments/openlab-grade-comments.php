@@ -105,6 +105,23 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 add_filter( 'get_comment_text', 'olgc_add_private_info_to_comment_text', 100, 2 ); // Late to avoid kses
 
 /**
+ * Add a "Private" label to the Reply button on reply comments.
+ *
+ * @param array      $args    Arguments passed to `comment_reply_link()`.
+ * @param WP_Comment $comment Comment object.
+ */
+function olgc_add_private_label_to_comment_reply_link( $args, $comment ) {
+	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
+	if ( $is_private ) {
+		$args['reply_text']    = '(Private) ' . $args['reply_text'];
+		$args['reply_to_text'] =  '(Private) ' . $args['reply_to_text'];
+	}
+
+	return $args;
+}
+add_filter( 'comment_reply_link_args', 'olgc_add_private_label_to_comment_reply_link', 10, 2 );
+
+/**
  * Ensure that private comments are only included for the proper users.
  */
 function olgc_filter_private_comments( $clauses, $comment_query ) {
