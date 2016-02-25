@@ -7,63 +7,70 @@
  */
 function olur_report_callbacks() {
 	$callbacks = array(
-		/*
 		// Users.
 		'User' => array(
-			'Students' => array( 'type' => 'student' ),
-			'Faculty'  => array( 'type' => 'faculty' ),
-			'Staff'    => array( 'type' => 'staff' ),
-			'Alumni'   => array( 'type' => 'alumni' ),
-			'Other'    => array( 'type' => 'other' ),
-			'Total'    => array( 'type' => 'total' ),
+			'Students' => array( 'label' => 'Students', 'type' => 'student' ),
+			'Faculty'  => array( 'label' => 'Faculty', 'type' => 'faculty' ),
+			'Staff'    => array( 'label' => 'Staff', 'type' => 'staff' ),
+			'Alumni'   => array( 'label' => 'Alumni', 'type' => 'alumni' ),
+			'Other'    => array( 'label' => 'Other', 'type' => 'other' ),
+			'Total'    => array( 'label' => 'Total', 'type' => 'total' ),
 		),
 
 		// Groups.
 		'Group' => array(
-			'Courses (Public)'  => array( 'type' => 'course', 'status' => 'public' ),
-			'Courses (Private)' => array( 'type' => 'course', 'status' => 'private' ),
-			'Courses (Hidden)'  => array( 'type' => 'course', 'status' => 'hidden' ),
+			array( 'label' => 'Courses (Public)', 'type' => 'course', 'status' => 'public' ),
+			array( 'label' => 'Courses (Private)', 'type' => 'course', 'status' => 'private' ),
+			array( 'label' => 'Courses (Hidden)', 'type' => 'course', 'status' => 'hidden' ),
 			'',
 
-			'Clubs (Public)'  => array( 'type' => 'club', 'status' => 'public' ),
-			'Clubs (Private)' => array( 'type' => 'club', 'status' => 'private' ),
-			'Clubs (Hidden)'  => array( 'type' => 'club', 'status' => 'hidden' ),
+			array( 'label' => 'Clubs (Public)', 'type' => 'club', 'status' => 'public' ),
+			array( 'label' => 'Clubs (Private)', 'type' => 'club', 'status' => 'private' ),
+			array( 'label' => 'Clubs (Hidden)', 'type' => 'club', 'status' => 'hidden' ),
 
 			'',
 
-			'Projects (Public)'  => array( 'type' => 'project', 'status' => 'public' ),
-			'Projects (Private)' => array( 'type' => 'project', 'status' => 'private' ),
-			'Projects (Hidden)'  => array( 'type' => 'project', 'status' => 'hidden' ),
+			array( 'label' => 'Projects (Public)', 'type' => 'project', 'status' => 'public' ),
+			array( 'label' => 'Projects (Private)', 'type' => 'project', 'status' => 'private' ),
+			array( 'label' => 'Projects (Hidden)', 'type' => 'project', 'status' => 'hidden' ),
 		),
 
 		// Portfolios.
 		'Portfolio' => array(
-			'Student ePortfolios (Public)'  => array( 'type' => 'student', 'status' => 'public' ),
-			'Student ePortfolios (Private)' => array( 'type' => 'student', 'status' => 'private' ),
-			'Student ePortfolios (Hidden)'  => array( 'type' => 'student', 'status' => 'hidden' ),
+			array( 'label' => 'Student ePortfolios (Public)', 'type' => 'student', 'status' => 'public' ),
+			array( 'label' => 'Student ePortfolios (Private)', 'type' => 'student', 'status' => 'private' ),
+			array( 'label' => 'Student ePortfolios (Hidden)', 'type' => 'student', 'status' => 'hidden' ),
 
 			'',
 
-			'Faculty Portfolios (Public)'  => array( 'type' => 'faculty', 'status' => 'public' ),
-			'Faculty Portfolios (Private)' => array( 'type' => 'faculty', 'status' => 'private' ),
-			'Faculty Portfolios (Hidden)'  => array( 'type' => 'faculty', 'status' => 'hidden' ),
+			array( 'label' => 'Faculty Portfolios (Public)', 'type' => 'faculty', 'status' => 'public' ),
+			array( 'label' => 'Faculty Portfolios (Private)', 'type' => 'faculty', 'status' => 'private' ),
+			array( 'label' => 'Faculty Portfolios (Hidden)', 'type' => 'faculty', 'status' => 'hidden' ),
 
 			'',
 
-			'Staff Portfolios (Public)'  => array( 'type' => 'staff', 'status' => 'public' ),
-			'Staff Portfolios (Private)' => array( 'type' => 'staff', 'status' => 'private' ),
-			'Staff Portfolios (Hidden)'  => array( 'type' => 'staff', 'status' => 'hidden' ),
+			array( 'label' => 'Staff Portfolios (Public)', 'type' => 'staff', 'status' => 'public' ),
+			array( 'label' => 'Staff Portfolios (Private)', 'type' => 'staff', 'status' => 'private' ),
+			array( 'label' => 'Staff Portfolios (Hidden)', 'type' => 'staff', 'status' => 'hidden' ),
 		),
-		*/
 
 		// User activity.
 		'UserActivity' => array(
 			'New Avatar',
-			'Students' => array( 'member_type' => 'student', 'component' => 'profile', 'type' => 'new_avatar' ),
-			'Faculty'  => array( 'member_type' => 'faculty', 'component' => 'profile', 'type' => 'new_avatar' ),
-			'Staff'    => array( 'member_type' => 'staff', 'component' => 'profile', 'type' => 'new_avatar' ),
-			'Alumni'   => array( 'member_type' => 'alumni', 'component' => 'profile', 'type' => 'new_avatar' ),
-			'Other'    => array( 'member_type' => 'other', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Students', 'member_type' => 'student', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Faculty', 'member_type' => 'faculty', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Staff', 'member_type' => 'staff', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Alumni', 'member_type' => 'alumni', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Other', 'member_type' => 'other', 'component' => 'profile', 'type' => 'new_avatar' ),
+
+			'',
+			'Created New Site',
+			array( 'label' => 'Students', 'member_type' => 'student', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'label' => 'Faculty', 'member_type' => 'faculty', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'label' => 'Staff', 'member_type' => 'staff', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'label' => 'Alumni', 'member_type' => 'alumni', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'label' => 'Other', 'member_type' => 'other', 'component' => 'blogs', 'type' => 'new_blog' ),
+
 		),
 	);
 
@@ -134,13 +141,15 @@ function olur_generate_report_data( $start, $end ) {
 		$counter->set_start( $start );
 		$counter->set_end( $end );
 
-		foreach ( $queries as $query_label => $query ) {
-			// If the query label is a string, use it to populate a full row.
+		foreach ( $queries as $query ) {
+			// If the query is a string, use it to populate a full row.
 			// Used for blank rows and other labels.
 			if ( ! is_array( $query ) ) {
 				$data[] = array( $query );
 			} else {
-				$counter->set_label( $query_label );
+				$counter->set_label( $query['label'] );
+				unset( $query['label'] );
+
 				$counter->query( $query );
 
 				$data[] = $counter->format_results_for_csv();
