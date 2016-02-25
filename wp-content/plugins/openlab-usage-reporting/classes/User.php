@@ -8,11 +8,7 @@ class User implements Counter {
 	public function query( $query ) {
 		global $wpdb;
 
-		$retval = array(
-			'results' => array(),
-			'label' => $this->get_label( $query ),
-		);
-
+		// @todo "total"
 		$user_type = $query['type'];
 
 		$counts = array(
@@ -33,12 +29,8 @@ class User implements Counter {
 		// Created
 		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered >= %s AND user_registered < %s", $this->start, $this->end ) );
 
-		$retval['results'] = array_map( 'intval', $counts );
+		$counts = array_map( 'intval', $counts );
 
-		return $retval;
-	}
-
-	public function get_label( $query ) {
-		return 'user_' . $query['type'] . '_counts';
+		return $this->format_results( $counts );
 	}
 }

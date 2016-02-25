@@ -8,11 +8,6 @@ class Group implements Counter {
 	public function query( $query ) {
 		global $wpdb;
 
-		$retval = array(
-			'results' => array(),
-			'label' => $this->get_label( $query ),
-		);
-
 		$group_type = $query['type'];
 		$group_status = $query['status'];
 
@@ -40,16 +35,6 @@ class Group implements Counter {
 		// Created
 		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) AND status IN ({$status_sql}) AND date_created >= %s AND date_created < %s", $this->start, $this->end ) );
 
-		$retval['results'] = array_map( 'intval', $counts );
-
-		return $retval;
-	}
-
-	public function get_label( $query ) {
-		return sprintf(
-			'group_%s_%s_counts',
-			$query['type'],
-			$query['status']
-		);
+		return $this->format_results( array_map( 'intval', $counts ) );
 	}
 }

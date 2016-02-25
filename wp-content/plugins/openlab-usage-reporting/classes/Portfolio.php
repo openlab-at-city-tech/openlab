@@ -8,11 +8,6 @@ class Portfolio implements Counter {
 	public function query( $query ) {
 		global $wpdb;
 
-		$retval = array(
-			'results' => array(),
-			'label' => $this->get_label( $query ),
-		);
-
 		$user_type = $query['type'];
 		$group_status = $query['status'];
 
@@ -41,30 +36,6 @@ class Portfolio implements Counter {
 		// Created
 		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.user_id AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created >= %s AND g.date_created < %s", $this->start, $this->end ) );
 
-		$retval['results'] = array_map( 'intval', $counts );
-
-		return $retval;
-	}
-
-	public function get_label( $query ) {
-		switch ( $query['type'] ) {
-			case 'student' :
-				$label = 'student_eportfolio';
-			break;
-
-			case 'faculty' :
-				$label = 'faculty_portfolio';
-			break;
-
-			case 'staff' :
-				$label = 'staff_portfolio';
-			break;
-		}
-
-		return sprintf(
-			'group_%s_%s_counts',
-			$label,
-			$query['status']
-		);
+		return $this->format_results( array_map( 'intval', $counts ) );
 	}
 }
