@@ -22,13 +22,13 @@ function olur_report_callbacks() {
 			'Courses (Public)'  => array( 'type' => 'course', 'status' => 'public' ),
 			'Courses (Private)' => array( 'type' => 'course', 'status' => 'private' ),
 			'Courses (Hidden)'  => array( 'type' => 'course', 'status' => 'hidden' ),
-			'' => array(),
+			'',
 
 			'Clubs (Public)'  => array( 'type' => 'club', 'status' => 'public' ),
 			'Clubs (Private)' => array( 'type' => 'club', 'status' => 'private' ),
 			'Clubs (Hidden)'  => array( 'type' => 'club', 'status' => 'hidden' ),
 
-			'' => array(),
+			'',
 
 			'Projects (Public)'  => array( 'type' => 'project', 'status' => 'public' ),
 			'Projects (Private)' => array( 'type' => 'project', 'status' => 'private' ),
@@ -41,13 +41,13 @@ function olur_report_callbacks() {
 			'Student ePortfolios (Private)' => array( 'type' => 'student', 'status' => 'private' ),
 			'Student ePortfolios (Hidden)'  => array( 'type' => 'student', 'status' => 'hidden' ),
 
-			array(),
+			'',
 
 			'Faculty Portfolios (Public)'  => array( 'type' => 'faculty', 'status' => 'public' ),
 			'Faculty Portfolios (Private)' => array( 'type' => 'faculty', 'status' => 'private' ),
 			'Faculty Portfolios (Hidden)'  => array( 'type' => 'faculty', 'status' => 'hidden' ),
 
-			array(),
+			'',
 
 			'Staff Portfolios (Public)'  => array( 'type' => 'staff', 'status' => 'public' ),
 			'Staff Portfolios (Private)' => array( 'type' => 'staff', 'status' => 'private' ),
@@ -123,12 +123,15 @@ function olur_generate_report_data( $start, $end ) {
 		$counter->set_end( $end );
 
 		foreach ( $queries as $query_label => $query ) {
-			// Empty arrays are blank rows.
-			if ( empty( $query ) ) {
-				$data[] = array();
+			// If the query label is a string, use it to populate a full row.
+			// Used for blank rows and other labels.
+			if ( ! is_array( $query ) ) {
+				$data[] = array( $query );
 			} else {
 				$counter->set_label( $query_label );
-				$data[] = $counter->query( $query );
+				$counter->query( $query );
+
+				$data[] = $counter->format_results_for_csv();
 			}
 		}
 

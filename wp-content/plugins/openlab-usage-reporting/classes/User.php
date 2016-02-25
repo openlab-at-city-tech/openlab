@@ -29,8 +29,7 @@ class User implements Counter {
 		// Created
 		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered >= %s AND user_registered < %s", $this->start, $this->end ) );
 
-		$counts = array_map( 'intval', $counts );
-
-		return $this->format_results( $counts );
+		$this->counts = array_map( 'intval', $counts );
+		return $this->counts;
 	}
 }

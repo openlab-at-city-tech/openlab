@@ -35,6 +35,7 @@ class Group implements Counter {
 		// Created
 		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) AND status IN ({$status_sql}) AND date_created >= %s AND date_created < %s", $this->start, $this->end ) );
 
-		return $this->format_results( array_map( 'intval', $counts ) );
+		$this->counts = array_map( 'intval', $counts );
+		return $this->counts;
 	}
 }

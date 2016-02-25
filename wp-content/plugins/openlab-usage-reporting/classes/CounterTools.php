@@ -6,6 +6,7 @@ trait CounterTools {
 	protected $start;
 	protected $end;
 	protected $label;
+	protected $counts;
 
 	public function set_start( $start ) {
 		$this->start = $start;
@@ -19,9 +20,8 @@ trait CounterTools {
 		$this->label = $label;
 	}
 
-	protected function format_results( $results ) {
-		$retval = array( $this->label );
-		$retval = array_merge( $retval, $results );
+	public function format_results_for_csv() {
+		$retval = array_merge( array( $this->label ), $this->counts );
 		return $retval;
 	}
 }
