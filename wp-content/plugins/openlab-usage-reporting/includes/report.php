@@ -8,38 +8,44 @@
 function olur_report_callbacks() {
 	$callbacks = array(
 		// Users.
-		'user_student_counts' => 'olur_user_student_counts',
-		'user_faculty_counts' => 'olur_user_faculty_counts',
-		'user_staff_counts'   => 'olur_user_staff_counts',
-		'user_alumni_counts'  => 'olur_user_alumni_counts',
-		'user_other_counts'   => 'olur_user_other_counts',
-		'user_total_counts'   => 'olur_user_total_counts',
+		'User' => array(
+			array( 'type' => 'student' ),
+			array( 'type' => 'faculty' ),
+			array( 'type' => 'staff' ),
+			array( 'type' => 'alumni' ),
+			array( 'type' => 'other' ),
+			array( 'type' => 'total' ),
+		),
 
 		// Groups.
-		'group_course_public_counts' => 'olur_group_course_public_counts',
-		'group_course_private_counts' => 'olur_group_course_private_counts',
-		'group_course_hidden_counts' => 'olur_group_course_hidden_counts',
+		'Group' => array(
+			array( 'type' => 'course', 'status' => 'public' ),
+			array( 'type' => 'course', 'status' => 'private' ),
+			array( 'type' => 'course', 'status' => 'hidden' ),
 
-		'group_club_public_counts' => 'olur_group_club_public_counts',
-		'group_club_private_counts' => 'olur_group_club_private_counts',
-		'group_club_hidden_counts' => 'olur_group_club_hidden_counts',
+			array( 'type' => 'club', 'status' => 'public' ),
+			array( 'type' => 'club', 'status' => 'private' ),
+			array( 'type' => 'club', 'status' => 'hidden' ),
 
-		'group_project_public_counts' => 'olur_group_project_public_counts',
-		'group_project_private_counts' => 'olur_group_project_private_counts',
-		'group_project_hidden_counts' => 'olur_group_project_hidden_counts',
+			array( 'type' => 'project', 'status' => 'public' ),
+			array( 'type' => 'project', 'status' => 'private' ),
+			array( 'type' => 'project', 'status' => 'hidden' ),
+		),
 
-		'group_student_eportfolio_public_counts' => 'olur_group_student_eportfolio_public_counts',
-		'group_student_eportfolio_private_counts' => 'olur_group_student_eportfolio_private_counts',
-		'group_student_eportfolio_hidden_counts' => 'olur_group_student_eportfolio_hidden_counts',
+		// Portfolios.
+		'Portfolio' => array(
+			array( 'type' => 'student', 'status' => 'public' ),
+			array( 'type' => 'student', 'status' => 'private' ),
+			array( 'type' => 'student', 'status' => 'hidden' ),
 
-		'group_faculty_portfolio_public_counts' => 'olur_group_faculty_portfolio_public_counts',
-		'group_faculty_portfolio_private_counts' => 'olur_group_faculty_portfolio_private_counts',
-		'group_faculty_portfolio_hidden_counts' => 'olur_group_faculty_portfolio_hidden_counts',
+			array( 'type' => 'faculty', 'status' => 'public' ),
+			array( 'type' => 'faculty', 'status' => 'private' ),
+			array( 'type' => 'faculty', 'status' => 'hidden' ),
 
-
-		'group_staff_portfolio_public_counts' => 'olur_group_staff_portfolio_public_counts',
-		'group_staff_portfolio_private_counts' => 'olur_group_staff_portfolio_private_counts',
-		'group_staff_portfolio_hidden_counts' => 'olur_group_staff_portfolio_hidden_counts',
+			array( 'type' => 'staff', 'status' => 'public' ),
+			array( 'type' => 'staff', 'status' => 'private' ),
+			array( 'type' => 'staff', 'status' => 'hidden' ),
+		),
 	);
 
 	return $callbacks;
@@ -56,7 +62,7 @@ function olur_generate_report( $start, $end ) {
 
 	$start_formatted = date( 'Y-m-d', strtotime( $start ) );
 	$end_formatted   = date( 'Y-m-d', strtotime( $end ) );
-	$filename = 'openlab-usage-' . date( 'Y-m-d', $start_formatted ) . '-through-' . $end_formatted . '.csv';
+	$filename = sprintf( 'openlab-usage-%s-through-%s.csv', $start_formatted, $end_formatted );
 
 	$title_row = array(
 		sprintf( 'OpenLab usage for the dates %s through %s', $start_formatted, $end_formatted ),
@@ -249,238 +255,16 @@ function olur_generate_report_data( $start, $end ) {
 	$data = array();
 	$callbacks = olur_report_callbacks();
 
-	foreach ( $callbacks as $cb_label => $cb ) {
-		$data[ $cb_label ] = call_user_func( $cb, $start, $end );
+	foreach ( $callbacks as $class_name => $queries ) {
+		$class_name = '\OLUR\\' . $class_name;
+		$counter = new $class_name;
+		$counter->set_start( $start );
+		$counter->set_end( $end );
+		foreach ( $queries as $query ) {
+			$results = $counter->query( $query );
+			$data[ $results['label'] ] = $results['results'];
+		}
 	}
 
 	return $data;
-}
-
-/** Callbacks ****************************************************************/
-
-function olur_user_counts( $start, $end, $user_type ) {
-	global $wpdb;
-
-	$counts = array(
-		'start'   => '',
-		'created' => '',
-		'deleted' => '',
-		'end'     => '',
-	);
-
-	$bp = buddypress();
-	$ut_subquery = $wpdb->prepare( "SELECT user_id FROM {$bp->profile->table_name_data} WHERE field_id = 7 AND value = %s", $user_type );
-
-	// Start
-	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered < %s", $start ) );
-
-	// End
-	$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered < %s", $end ) );
-
-	// Created
-	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered >= %s AND user_registered < %s", $start, $end ) );
-
-	return array_map( 'intval', $counts );
-}
-
-function olur_user_student_counts( $start, $end ) {
-	return olur_user_counts( $start, $end, 'Student' );
-}
-
-function olur_user_faculty_counts( $start, $end ) {
-	return olur_user_counts( $start, $end, 'Faculty' );
-}
-
-function olur_user_staff_counts( $start, $end ) {
-	return olur_user_counts( $start, $end, 'Staff' );
-}
-
-function olur_user_alumni_counts( $start, $end ) {
-	return olur_user_counts( $start, $end, 'Alumni' );
-}
-
-function olur_user_other_counts( $start, $end ) {
-	global $wpdb;
-
-	$counts = array(
-		'start'   => '',
-		'created' => '',
-		'deleted' => '',
-		'end'     => '',
-	);
-
-	$bp = buddypress();
-
-	// Note that this is for a NOT IN.
-	$student_subquery = "SELECT user_id FROM {$bp->profile->table_name_data} WHERE field_id = 7 AND value IN ('Student','Faculty','Staff','Alumni')";
-
-	// Start
-	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID NOT IN ({$student_subquery}) AND user_registered < %s", $start ) );
-
-	// End
-	$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID NOT IN ({$student_subquery}) AND user_registered < %s", $end ) );
-
-	// Created
-	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID NOT IN ({$student_subquery}) AND user_registered >= %s AND user_registered < %s", $start, $end ) );
-
-	return array_map( 'intval', $counts );
-}
-
-function olur_user_total_counts( $start, $end ) {
-	global $wpdb;
-
-	$counts = array(
-		'start'   => '',
-		'created' => '',
-		'deleted' => '',
-		'end'     => '',
-	);
-
-	$bp = buddypress();
-
-	// Start
-	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND user_registered < %s", $start ) );
-
-	// End
-	$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND user_registered < %s", $end ) );
-
-	// Created
-	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND user_registered >= %s AND user_registered < %s", $start, $end ) );
-
-	return array_map( 'intval', $counts );
-}
-
-function olur_group_course_public_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'course', 'public' );
-}
-
-function olur_group_course_private_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'course', 'private' );
-}
-
-function olur_group_course_hidden_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'course', 'hidden' );
-}
-
-function olur_group_club_public_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'club', 'public' );
-}
-
-function olur_group_club_private_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'club', 'private' );
-}
-
-function olur_group_club_hidden_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'club', 'hidden' );
-}
-
-function olur_group_project_public_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'project', 'public' );
-}
-
-function olur_group_project_private_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'project', 'private' );
-}
-
-function olur_group_project_hidden_counts( $start, $end ) {
-	return olur_group_counts( $start, $end, 'project', 'hidden' );
-}
-
-function olur_group_student_eportfolio_public_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'public', 'student' );
-}
-
-function olur_group_student_eportfolio_private_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'private', 'student' );
-}
-
-function olur_group_student_eportfolio_hidden_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'hidden', 'student' );
-}
-
-function olur_group_faculty_portfolio_public_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'public', 'faculty' );
-}
-
-function olur_group_faculty_portfolio_private_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'private', 'faculty' );
-}
-
-function olur_group_faculty_portfolio_hidden_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'hidden', 'faculty' );
-}
-
-function olur_group_staff_portfolio_public_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'public', 'staff' );
-}
-
-function olur_group_staff_portfolio_private_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'private', 'staff' );
-}
-
-function olur_group_staff_portfolio_hidden_counts( $start, $end ) {
-	return olur_portfolio_counts( $start, $end, 'hidden', 'staff' );
-}
-
-function olur_group_counts( $start, $end, $group_type, $group_status ) {
-	global $wpdb;
-
-	$counts = array(
-		'start'   => '',
-		'created' => '',
-		'deleted' => '',
-		'end'     => '',
-	);
-
-	$bp = buddypress();
-	$gt_subquery = $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = %s", $group_type );
-
-	$statuses = array();
-	foreach ( (array) $group_status as $status ) {
-		$statuses[] = $wpdb->prepare( '%s', $status );
-	}
-	$status_sql = implode( ', ', $statuses );
-
-	// Start
-	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) AND status IN ({$status_sql}) AND date_created < %s", $start ) );
-
-	// End
-	$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) AND status IN ({$status_sql}) AND date_created < %s", $end ) );
-
-	// Created
-	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) AND status IN ({$status_sql}) AND date_created >= %s AND date_created < %s", $start, $end ) );
-
-	return array_map( 'intval', $counts );
-}
-
-function olur_portfolio_counts( $start, $end, $group_status, $user_type ) {
-	global $wpdb;
-
-	$counts = array(
-		'start'   => '',
-		'created' => '',
-		'deleted' => '',
-		'end'     => '',
-	);
-
-	$bp = buddypress();
-	$gt_subquery = "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'portfolio'";
-	$ut_subquery = $wpdb->prepare( "SELECT p.user_id FROM {$bp->profile->table_name_data} p WHERE p.field_id = 7 AND p.value = %s", ucwords( $user_type ) );
-
-	$statuses = array();
-	foreach ( (array) $group_status as $status ) {
-		$statuses[] = $wpdb->prepare( '%s', $status );
-	}
-	$status_sql = implode( ', ', $statuses );
-
-	// Start
-	$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created < %s", $start ) );
-
-	// End
-	$counts['end']   = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created < %s", $end ) );
-
-	// Created
-	$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.user_id AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) AND g.status IN ({$status_sql}) AND g.date_created >= %s AND g.date_created < %s", $start, $end ) );
-
-	return array_map( 'intval', $counts );
 }
