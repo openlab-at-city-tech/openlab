@@ -54,7 +54,13 @@ function olur_report_callbacks() {
 function olur_generate_report( $start, $end ) {
 	$data = olur_generate_report_data( $start, $end );
 
-	$filename = 'openlab-usage-' . date( 'Y-m-d', strtotime( $start ) ) . '-through-' . date( 'Y-m-d', strtotime( $end ) ) . '.csv';
+	$start_formatted = date( 'Y-m-d', strtotime( $start ) );
+	$end_formatted   = date( 'Y-m-d', strtotime( $end ) );
+	$filename = 'openlab-usage-' . date( 'Y-m-d', $start_formatted ) . '-through-' . $end_formatted . '.csv';
+
+	$title_row = array(
+		sprintf( 'OpenLab usage for the dates %s through %s', $start_formatted, $end_formatted ),
+	);
 
 	$header_row = array(
 		0 => '',
@@ -221,6 +227,7 @@ function olur_generate_report( $start, $end ) {
 	header( 'Expires: 0' );
 	header( 'Pragma: public' );
 
+	fputcsv( $fh, $title_row );
 	fputcsv( $fh, $header_row );
 
 	foreach ( $data_rows as $data_row ) {
