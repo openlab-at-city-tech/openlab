@@ -18,7 +18,6 @@ class User implements Counter {
 		$counts = array(
 			'start'   => '',
 			'created' => '',
-			'deleted' => '',
 			'end'     => '',
 		);
 

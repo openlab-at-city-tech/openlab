@@ -19,7 +19,6 @@ class Group implements Counter {
 		$counts = array(
 			'start'   => '',
 			'created' => '',
-			'deleted' => '',
 			'end'     => '',
 		);
 

@@ -72,7 +72,6 @@ function olur_generate_report( $start, $end ) {
 		0 => '',
 		1 => 'Start #',
 		2 => '# Created',
-		3 => '# Deleted',
 		4 => 'End #',
 	);
 
