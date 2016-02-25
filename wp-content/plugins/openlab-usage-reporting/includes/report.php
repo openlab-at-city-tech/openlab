@@ -7,6 +7,7 @@
  */
 function olur_report_callbacks() {
 	$callbacks = array(
+		/*
 		// Users.
 		'User' => array(
 			'Students' => array( 'type' => 'student' ),
@@ -52,6 +53,17 @@ function olur_report_callbacks() {
 			'Staff Portfolios (Public)'  => array( 'type' => 'staff', 'status' => 'public' ),
 			'Staff Portfolios (Private)' => array( 'type' => 'staff', 'status' => 'private' ),
 			'Staff Portfolios (Hidden)'  => array( 'type' => 'staff', 'status' => 'hidden' ),
+		),
+		*/
+
+		// User activity.
+		'UserActivity' => array(
+			'New Avatar',
+			'Students' => array( 'member_type' => 'student', 'component' => 'profile', 'type' => 'new_avatar' ),
+			'Faculty'  => array( 'member_type' => 'faculty', 'component' => 'profile', 'type' => 'new_avatar' ),
+			'Staff'    => array( 'member_type' => 'staff', 'component' => 'profile', 'type' => 'new_avatar' ),
+			'Alumni'   => array( 'member_type' => 'alumni', 'component' => 'profile', 'type' => 'new_avatar' ),
+			'Other'    => array( 'member_type' => 'other', 'component' => 'profile', 'type' => 'new_avatar' ),
 		),
 	);
 
