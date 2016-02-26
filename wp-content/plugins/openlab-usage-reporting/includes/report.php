@@ -57,36 +57,36 @@ function olur_report_callbacks() {
 		// Activity.
 		'Activity' => array(
 
-			array( 'PROFILES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other' ),
+			array( 'PROFILES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users' ),
 			array( 'label' => 'New Avatar', 'component' => 'profile', 'type' => 'new_avatar' ),
 			array( 'label' => 'Profile Update', 'component' => 'xprofile', 'type' => 'updated_profile' ),
 
 			// @todo These are probably not accurate because of 'site_public'.
 			'',
-			array( 'SITES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
-			array( 'label' => 'New Site', 'component' => 'blogs', 'type' => 'new_blog' ),
-			array( 'label' => 'New Site Posts', 'component' => 'blogs', 'type' => 'new_blog_post' ),
-			array( 'label' => 'New Site Comments', 'component' => 'blogs', 'type' => 'new_blog_comment' ),
+			array( 'SITES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
+			array( 'label' => 'New Site', 'component' => 'groups', 'type' => 'new_blog' ),
+			array( 'label' => 'New Site Posts', 'component' => 'groups', 'type' => 'new_blog_post' ),
+			array( 'label' => 'New Site Comments', 'component' => 'groups', 'type' => 'new_blog_comment' ),
 
 			'',
-			array( 'GROUP FILES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'GROUP FILES', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
 			array( 'label' => 'Group File Created', 'component' => 'groups', 'type' => 'added_group_document' ),
 			array( 'label' => 'Group File Edited', 'component' => 'groups', 'type' => 'edited_group_document' ),
 			array( 'label' => 'Group File Deleted', 'component' => 'groups', 'type' => 'deleted_group_document' ),
 
 			'',
-			array( 'DISCUSSION FORUMS (since 2014)', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'DISCUSSION FORUMS (since 2014)', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
 			array( 'label' => 'New Topics', 'component' => 'groups', 'type' => 'bbp_topic_create' ),
 			array( 'label' => 'Replies', 'component' => 'groups', 'type' => 'bbp_reply_create' ),
 
 			'',
-			array( 'DOCS', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'DOCS', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
 			array( 'label' => 'New Doc', 'component' => 'groups', 'type' => 'bp_doc_created' ),
 			array( 'label' => 'Edit Doc', 'component' => 'groups', 'type' => 'bp_doc_edited' ),
 			array( 'label' => 'New Doc Comment', 'component' => 'groups', 'type' => 'bp_doc_comment' ),
 
 			'',
-			array( 'GROUP JOINS', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'GROUP JOINS', 'Total Instances', 'Total Unique Users', 'Students', 'Faculty', 'Staff', 'Alumni', 'Other Users', 'Groups', 'Courses', 'Clubs', 'Projects', 'ePortfolios', 'Portfolios' ),
 			array( 'label' => 'Joined Group', 'component' => 'groups', 'type' => 'joined_group' ),
 
 		),

@@ -22,21 +22,27 @@ class Activity implements Counter {
 			$counts[ $mt ] = $wpdb->get_var( "SELECT COUNT(DISTINCT a.user_id) FROM {$bp->activity->table_name} a JOIN {$bp->profile->table_name_data} xp ON xp.user_id = a.user_id WHERE $base_where $mt_where" );
 		}
 
-		$group_types = array( 'course', 'club', 'project' );
+		$group_types = array( 'course', 'club', 'project', 'eportfolio', 'portfolio' );
 
-		if ( 'blogs' === $query['component'] ) {
-			$gt_base = "SELECT COUNT(DISTINCT a.item_id) FROM {$bp->activity->table_name} a JOIN {$bp->groups->table_name_groupmeta} gm ON a.item_id = gm.meta_value JOIN {$bp->groups->table_name_groupmeta} gm2 ON gm.group_id = gm2.group_id WHERE $base_where AND gm.meta_key = 'wds_bp_group_site_id' AND gm2.meta_key = 'wds_group_type'";
-
-			$counts['items'] = $wpdb->get_var( "$gt_base AND gm2.meta_value IN ('course','club','project')" );
-			foreach ( $group_types as $gt ) {
-				$counts[ $gt ] = $wpdb->get_var( $wpdb->prepare( "$gt_base AND gm2.meta_value = %s", $gt ) );
-			}
-		} elseif ( 'groups' === $query['component'] ) {
+		// Heaven help us.
+		if ( 'groups' === $query['component'] ) {
 			$gt_base = "SELECT COUNT(DISTINCT a.item_id) FROM {$bp->activity->table_name} a JOIN {$bp->groups->table_name_groupmeta} gm ON a.item_id = gm.group_id WHERE $base_where AND gm.meta_key = 'wds_group_type'";
 
-			$counts['items'] = $wpdb->get_var( "$gt_base AND gm.meta_value IN ('course','club','project')" );
+			$counts['items'] = $wpdb->get_var( "$gt_base AND gm.meta_value IN ('course','club','project','portfolio')" );
 			foreach ( $group_types as $gt ) {
-				$counts[ $gt ] = $wpdb->get_var( $wpdb->prepare( "$gt_base AND gm.meta_value = %s", $gt ) );
+				$sql = $wpdb->prepare( "$gt_base AND gm.meta_value = %s", $gt );
+				if ( 'portfolio' === $gt ) {
+					$mt_where = $this->get_member_type_where_clause( array( 'faculty', 'staff' ) );
+					$sql = str_replace( 'WHERE', "JOIN {$bp->profile->table_name_data} xp ON a.user_id = xp.user_id WHERE", $sql );
+					$sql = "$sql $mt_where";
+				} elseif ( 'eportfolio' === $gt ) {
+					$mt_where = $this->get_member_type_where_clause( array( 'student', 'alumni' ) );
+					$sql = str_replace( 'WHERE', "JOIN {$bp->profile->table_name_data} xp ON a.user_id = xp.user_id WHERE", $sql );
+					$sql = str_replace( 'eportfolio', 'portfolio', $sql );
+					$sql = "$sql $mt_where";
+				}
+
+				$counts[ $gt ] = $wpdb->get_var( $sql );
 			}
 		}
 
@@ -48,20 +54,13 @@ class Activity implements Counter {
 		global $wpdb;
 
 		$clause = '';
-		if ( 'total' !== $member_type ) {
-			$clause = $wpdb->prepare( " AND field_id = 7 AND value = %s", ucwords( $member_type ) );
+		$member_types = (array) $member_type;
+		foreach ( $member_types as &$mt ) {
+			$mt = $wpdb->prepare( '%s', ucwords( $mt ) );
 		}
+		$member_types = implode( ',', $member_types );
 
-		return $clause;
-	}
-
-	protected function get_bloggroup_type_where_clause( $group_type ) {
-		global $wpdb;
-
-		$clause = '';
-		if ( 'total' !== $group_type ) {
-			$clause = $wpdb->prepare( " AND field_id = 7 AND value = %s", ucwords( $group_type ) );
-		}
+		$clause = " AND xp.field_id = 7 AND xp.value IN ({$member_types})";
 
 		return $clause;
 	}
