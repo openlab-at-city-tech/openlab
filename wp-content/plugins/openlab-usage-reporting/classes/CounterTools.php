@@ -24,15 +24,4 @@ trait CounterTools {
 		$retval = array_merge( array( $this->label ), $this->counts );
 		return $retval;
 	}
-
-	protected function get_member_type_where_clause( $member_type ) {
-		global $wpdb;
-
-		$clause = '';
-		if ( 'total' !== $member_type ) {
-			$clause = $wpdb->prepare( " AND field_id = 7 AND value = %s", ucwords( $member_type ) );
-		}
-
-		return $clause;
-	}
 }

@@ -54,22 +54,40 @@ function olur_report_callbacks() {
 			array( 'label' => 'Staff Portfolios (Hidden)', 'type' => 'staff', 'status' => 'hidden' ),
 		),
 
-		// User activity.
-		'UserActivity' => array(
-			'New Avatar',
-			array( 'label' => 'Students', 'member_type' => 'student', 'component' => 'profile', 'type' => 'new_avatar' ),
-			array( 'label' => 'Faculty', 'member_type' => 'faculty', 'component' => 'profile', 'type' => 'new_avatar' ),
-			array( 'label' => 'Staff', 'member_type' => 'staff', 'component' => 'profile', 'type' => 'new_avatar' ),
-			array( 'label' => 'Alumni', 'member_type' => 'alumni', 'component' => 'profile', 'type' => 'new_avatar' ),
-			array( 'label' => 'Other', 'member_type' => 'other', 'component' => 'profile', 'type' => 'new_avatar' ),
+		// Activity.
+		'Activity' => array(
+
+			array( 'PROFILES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other' ),
+			array( 'label' => 'New Avatar', 'component' => 'profile', 'type' => 'new_avatar' ),
+			array( 'label' => 'Profile Update', 'component' => 'xprofile', 'type' => 'updated_profile' ),
+
+			// @todo These are probably not accurate because of 'site_public'.
+			'',
+			array( 'SITES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'label' => 'New Site', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'label' => 'New Site Posts', 'component' => 'blogs', 'type' => 'new_blog_post' ),
+			array( 'label' => 'New Site Comments', 'component' => 'blogs', 'type' => 'new_blog_comment' ),
 
 			'',
-			'Created New Site',
-			array( 'label' => 'Students', 'member_type' => 'student', 'component' => 'blogs', 'type' => 'new_blog' ),
-			array( 'label' => 'Faculty', 'member_type' => 'faculty', 'component' => 'blogs', 'type' => 'new_blog' ),
-			array( 'label' => 'Staff', 'member_type' => 'staff', 'component' => 'blogs', 'type' => 'new_blog' ),
-			array( 'label' => 'Alumni', 'member_type' => 'alumni', 'component' => 'blogs', 'type' => 'new_blog' ),
-			array( 'label' => 'Other', 'member_type' => 'other', 'component' => 'blogs', 'type' => 'new_blog' ),
+			array( 'GROUP FILES', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'label' => 'Group File Created', 'component' => 'groups', 'type' => 'added_group_document' ),
+			array( 'label' => 'Group File Edited', 'component' => 'groups', 'type' => 'edited_group_document' ),
+			array( 'label' => 'Group File Deleted', 'component' => 'groups', 'type' => 'deleted_group_document' ),
+
+			'',
+			array( 'DISCUSSION FORUMS (since 2014)', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'label' => 'New Topics', 'component' => 'groups', 'type' => 'bbp_topic_create' ),
+			array( 'label' => 'Replies', 'component' => 'groups', 'type' => 'bbp_reply_create' ),
+
+			'',
+			array( 'DOCS', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'label' => 'New Doc', 'component' => 'groups', 'type' => 'bp_doc_created' ),
+			array( 'label' => 'Edit Doc', 'component' => 'groups', 'type' => 'bp_doc_edited' ),
+			array( 'label' => 'New Doc Comment', 'component' => 'groups', 'type' => 'bp_doc_comment' ),
+
+			'',
+			array( 'GROUP JOINS', 'Total Instances', '# Users', '# Students', '# Faculty', '# Staff', '# Alumni', '# Other', '# Groups', '# Courses', '# Clubs', '# Projects' ),
+			array( 'label' => 'Joined Group', 'component' => 'groups', 'type' => 'joined_group' ),
 
 		),
 	);
@@ -142,10 +160,10 @@ function olur_generate_report_data( $start, $end ) {
 		$counter->set_end( $end );
 
 		foreach ( $queries as $query ) {
-			// If the query is a string, use it to populate a full row.
+			// If the query doesn't have a label, it's a literal.
 			// Used for blank rows and other labels.
-			if ( ! is_array( $query ) ) {
-				$data[] = array( $query );
+			if ( ! isset( $query['label'] ) ) {
+				$data[] = (array) $query;
 			} else {
 				$counter->set_label( $query['label'] );
 				unset( $query['label'] );
