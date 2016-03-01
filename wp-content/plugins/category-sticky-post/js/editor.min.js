@@ -1,0 +1,1 @@
+(function(e){"use strict";e(function(){if(0==e("#post_is_sticky").length)return;e("#post_is_sticky").insertBefore("#categorydiv")})})(jQuery);

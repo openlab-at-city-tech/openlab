@@ -1,0 +1,1 @@
+(function(e){"use strict";e(function(){if(0===e(".post-title").length)return;e(".post-title > strong").each(function(){var t=e(this);e.get(ajaxurl,{action:"is_category_sticky_post",post_id:e(this).parent().prev().children("input").val()},function(e){"0"!==e&&t.append(e)})})})})(jQuery);
