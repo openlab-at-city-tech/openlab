@@ -16,6 +16,7 @@ class Group implements Counter {
 			'created' => '',
 			'end'     => '',
 			'activea' => '',
+			'activep' => 'N/A',
 		);
 
 		$bp = buddypress();
@@ -31,18 +32,18 @@ class Group implements Counter {
 		}
 
 		// Start
-		$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created < %s", $this->start ) );
+		$counts['start'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created < %s", $this->start ) );
 
 		// End
-		$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created < %s", $this->end ) );
+		$counts['end'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created < %s", $this->end ) );
 
 		// Created
-		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created >= %s AND date_created < %s", $this->start, $this->end ) );
+		$counts['created'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} WHERE id IN ({$gt_subquery}) {$status_sql} AND date_created >= %s AND date_created < %s", $this->start, $this->end ) );
 
 		// Active
-		$counts['activea'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name} g JOIN {$bp->activity->table_name} a ON a.item_id = g.id WHERE a.component = 'groups' AND g.id IN ({$gt_subquery}) {$status_sql} AND a.date_recorded >= %s AND a.date_recorded <= %s", $this->start, $this->end ) );
+		$counts['activea'] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name} g JOIN {$bp->activity->table_name} a ON a.item_id = g.id WHERE a.component = 'groups' AND g.id IN ({$gt_subquery}) {$status_sql} AND a.date_recorded >= %s AND a.date_recorded <= %s", $this->start, $this->end ) );
 
-		$this->counts = array_map( 'intval', $counts );
+		$this->counts = $counts;
 		return $this->counts;
 	}
 }

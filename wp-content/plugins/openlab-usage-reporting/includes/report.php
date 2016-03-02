@@ -124,6 +124,7 @@ function olur_generate_report( $start, $end ) {
 		2 => '# Created',
 		4 => 'End #',
 		5 => 'Actively Active',
+		6 => 'Passively Active',
 	);
 
 	$fh = @fopen( 'php://output', 'w' );
