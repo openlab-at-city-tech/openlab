@@ -21,14 +21,14 @@ class Portfolio implements Counter {
 		$gt_subquery = "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'portfolio'";
 		$ut_subquery = $wpdb->prepare( "SELECT p.user_id FROM {$bp->profile->table_name_data} p WHERE p.field_id = 7 AND p.value = %s", ucwords( $user_type ) );
 
-                $status_sql = '';
-                if ( $group_status && 'any' !== $group_status ) {
-                        $statuses = array();
-                        foreach ( (array) $group_status as $status ) {
-                                $statuses[] = $wpdb->prepare( '%s', $status );
-                        }
-                        $status_sql = "AND status IN (" . implode( ', ', $statuses ) . ")";
-                }
+		$status_sql = '';
+		if ( $group_status && 'any' !== $group_status ) {
+			$statuses = array();
+			foreach ( (array) $group_status as $status ) {
+				$statuses[] = $wpdb->prepare( '%s', $status );
+			}
+			$status_sql = "AND status IN ( " . implode( ', ', $statuses ) . " )";
+		}
 
 		// Start
 		$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) {$status_sql} AND g.date_created < %s", $this->start ) );

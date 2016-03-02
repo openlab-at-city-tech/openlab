@@ -9,16 +9,16 @@ class User implements Counter {
 		global $wpdb;
 
 		$user_type = $query['type'];
-                if ( 'total' === $user_type ) {
-                        $user_type = array( 'Student', 'Faculty', 'Staff', 'Alumni', 'Other' );
-                } else {
-                        $user_type = (array) $query['type'];
-                }
+		if ( 'total' === $user_type ) {
+			$user_type = array( 'Student', 'Faculty', 'Staff', 'Alumni', 'Other' );
+		} else {
+			$user_type = (array) $query['type'];
+		}
 
-                foreach ( $user_type as &$u ) {
-                        $u = $wpdb->prepare( '%s', $u );
-                }
-                $user_type_in = implode( ',', $user_type );
+		foreach ( $user_type as &$u ) {
+			$u = $wpdb->prepare( '%s', $u );
+		}
+		$user_type_in = implode( ',', $user_type );
 
 		$counts = array(
 			'start'   => '',
