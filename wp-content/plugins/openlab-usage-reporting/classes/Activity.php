@@ -14,9 +14,11 @@ class Activity implements Counter {
 
 		$base_where = $wpdb->prepare( "a.component = %s AND a.type = %s AND a.date_recorded >= %s AND a.date_recorded < %s", $query['component'], $query['type'], $this->start, $this->end );
 		$counts['events'] = $wpdb->get_var( "SELECT COUNT(*) FROM {$bp->activity->table_name} a WHERE $base_where" );
-		$counts['users'] = $wpdb->get_var( "SELECT COUNT(DISTINCT a.user_id) FROM {$bp->activity->table_name} a WHERE $base_where" );
 
 		$member_types = array( 'student', 'faculty', 'staff', 'alumni', 'other' );
+                $mt_where = $this->get_member_type_where_clause( $member_types );
+		$counts['users'] = $wpdb->get_var( "SELECT COUNT(DISTINCT a.user_id) FROM {$bp->activity->table_name} a JOIN {$bp->profile->table_name_data} xp ON xp.user_id = a.user_id WHERE $base_where $mt_where" );
+
 		foreach ( $member_types as $mt ) {
 			$mt_where = $this->get_member_type_where_clause( $mt );
 			$counts[ $mt ] = $wpdb->get_var( "SELECT COUNT(DISTINCT a.user_id) FROM {$bp->activity->table_name} a JOIN {$bp->profile->table_name_data} xp ON xp.user_id = a.user_id WHERE $base_where $mt_where" );
