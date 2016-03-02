@@ -24,6 +24,7 @@ class User implements Counter {
 			'start'   => '',
 			'created' => '',
 			'end'     => '',
+			'activea' => '',
 		);
 
 		$bp = buddypress();
@@ -31,13 +32,16 @@ class User implements Counter {
 		$ut_subquery = "SELECT user_id FROM {$bp->profile->table_name_data} WHERE field_id = 7 AND value IN ({$user_type_in})";
 
 		// Start
-		$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered < %s", $this->start ) );
+		$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} u WHERE u.deleted != 1 AND u.spam != 1 AND u.ID IN ({$ut_subquery}) AND u.user_registered < %s", $this->start ) );
 
 		// End
-		$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered < %s", $this->end ) );
+		$counts['end'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} u WHERE u.deleted != 1 AND u.spam != 1 AND u.ID IN ({$ut_subquery}) AND u.user_registered < %s", $this->end ) );
 
 		// Created
-		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered >= %s AND user_registered < %s", $this->start, $this->end ) );
+		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} u WHERE u.deleted != 1 AND u.spam != 1 AND u.ID IN ({$ut_subquery}) AND u.user_registered >= %s AND u.user_registered < %s", $this->start, $this->end ) );
+
+		// Active
+		$counts['activea'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT u.ID) FROM {$wpdb->users} u JOIN {$bp->activity->table_name} a ON a.user_id = u.ID WHERE u.deleted != 1 AND u.spam != 1 AND u.ID IN ({$ut_subquery}) AND a.date_recorded >= %s AND a.date_recorded <= %s", $this->start, $this->end ) );
 
 		$this->counts = array_map( 'intval', $counts );
 		return $this->counts;
