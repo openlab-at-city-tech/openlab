@@ -8,8 +8,17 @@ class User implements Counter {
 	public function query( $query ) {
 		global $wpdb;
 
-		// @todo "total"
 		$user_type = $query['type'];
+                if ( 'total' === $user_type ) {
+                        $user_type = array( 'Student', 'Faculty', 'Staff', 'Alumni', 'Other' );
+                } else {
+                        $user_type = (array) $query['type'];
+                }
+
+                foreach ( $user_type as &$u ) {
+                        $u = $wpdb->prepare( '%s', $u );
+                }
+                $user_type_in = implode( ',', $user_type );
 
 		$counts = array(
 			'start'   => '',
@@ -18,7 +27,8 @@ class User implements Counter {
 		);
 
 		$bp = buddypress();
-		$ut_subquery = $wpdb->prepare( "SELECT user_id FROM {$bp->profile->table_name_data} WHERE field_id = 7 AND value = %s", $user_type );
+
+		$ut_subquery = "SELECT user_id FROM {$bp->profile->table_name_data} WHERE field_id = 7 AND value IN ({$user_type_in})";
 
 		// Start
 		$counts['start'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE deleted != 1 AND spam != 1 AND ID IN ({$ut_subquery}) AND user_registered < %s", $this->start ) );
