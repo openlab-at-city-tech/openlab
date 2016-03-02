@@ -35,11 +35,11 @@ class Activity implements Counter {
 				$sql = $wpdb->prepare( "$gt_base AND gm.meta_value = %s", $gt );
 				if ( 'portfolio' === $gt ) {
 					$mt_where = $this->get_member_type_where_clause( array( 'faculty', 'staff' ) );
-					$sql = str_replace( 'WHERE', "JOIN {$bp->profile->table_name_data} xp ON a.user_id = xp.user_id WHERE", $sql );
+					$sql = str_replace( 'WHERE', "JOIN {$wpdb->usermeta} um ON um.meta_value = a.item_id JOIN {$bp->profile->table_name_data} xp ON um.user_id = xp.user_id WHERE um.meta_key = 'portfolio_group_id' AND", $sql );
 					$sql = "$sql $mt_where";
 				} elseif ( 'eportfolio' === $gt ) {
 					$mt_where = $this->get_member_type_where_clause( array( 'student', 'alumni' ) );
-					$sql = str_replace( 'WHERE', "JOIN {$bp->profile->table_name_data} xp ON a.user_id = xp.user_id WHERE", $sql );
+					$sql = str_replace( 'WHERE', "JOIN {$wpdb->usermeta} um ON um.meta_value = a.item_id JOIN {$bp->profile->table_name_data} xp ON um.user_id = xp.user_id WHERE um.meta_key = 'portfolio_group_id' AND", $sql );
 					$sql = str_replace( 'eportfolio', 'portfolio', $sql );
 					$sql = "$sql $mt_where";
 				}
