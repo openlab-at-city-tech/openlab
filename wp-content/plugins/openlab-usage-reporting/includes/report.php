@@ -22,17 +22,20 @@ function olur_report_callbacks() {
 			array( 'label' => 'Courses (Public)', 'type' => 'course', 'status' => 'public' ),
 			array( 'label' => 'Courses (Private)', 'type' => 'course', 'status' => 'private' ),
 			array( 'label' => 'Courses (Hidden)', 'type' => 'course', 'status' => 'hidden' ),
+			array( 'label' => 'Courses (Total)', 'type' => 'course', 'status' => 'any' ),
 			'',
 
 			array( 'label' => 'Clubs (Public)', 'type' => 'club', 'status' => 'public' ),
 			array( 'label' => 'Clubs (Private)', 'type' => 'club', 'status' => 'private' ),
 			array( 'label' => 'Clubs (Hidden)', 'type' => 'club', 'status' => 'hidden' ),
+			array( 'label' => 'Clubs (Total)', 'type' => 'club', 'status' => 'any' ),
 
 			'',
 
 			array( 'label' => 'Projects (Public)', 'type' => 'project', 'status' => 'public' ),
 			array( 'label' => 'Projects (Private)', 'type' => 'project', 'status' => 'private' ),
 			array( 'label' => 'Projects (Hidden)', 'type' => 'project', 'status' => 'hidden' ),
+			array( 'label' => 'Projects (Total)', 'type' => 'project', 'status' => 'any' ),
 		),
 
 		// Portfolios.
@@ -40,18 +43,21 @@ function olur_report_callbacks() {
 			array( 'label' => 'Student ePortfolios (Public)', 'type' => 'student', 'status' => 'public' ),
 			array( 'label' => 'Student ePortfolios (Private)', 'type' => 'student', 'status' => 'private' ),
 			array( 'label' => 'Student ePortfolios (Hidden)', 'type' => 'student', 'status' => 'hidden' ),
+			array( 'label' => 'Student ePortfolios (Total)', 'type' => 'student', 'status' => 'any' ),
 
 			'',
 
 			array( 'label' => 'Faculty Portfolios (Public)', 'type' => 'faculty', 'status' => 'public' ),
 			array( 'label' => 'Faculty Portfolios (Private)', 'type' => 'faculty', 'status' => 'private' ),
 			array( 'label' => 'Faculty Portfolios (Hidden)', 'type' => 'faculty', 'status' => 'hidden' ),
+			array( 'label' => 'Faculty Portfolios (Total)', 'type' => 'faculty', 'status' => 'any' ),
 
 			'',
 
 			array( 'label' => 'Staff Portfolios (Public)', 'type' => 'staff', 'status' => 'public' ),
 			array( 'label' => 'Staff Portfolios (Private)', 'type' => 'staff', 'status' => 'private' ),
 			array( 'label' => 'Staff Portfolios (Hidden)', 'type' => 'staff', 'status' => 'hidden' ),
+			array( 'label' => 'Staff Portfolios (Total)', 'type' => 'staff', 'status' => 'any' ),
 		),
 
 		// Activity.
