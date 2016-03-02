@@ -15,6 +15,7 @@ class Portfolio implements Counter {
 			'start'   => '',
 			'created' => '',
 			'end'     => '',
+			'activea' => '',
 		);
 
 		$bp = buddypress();
@@ -37,7 +38,10 @@ class Portfolio implements Counter {
 		$counts['end']   = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) {$status_sql} AND g.date_created < %s", $this->end ) );
 
 		// Created
-		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.user_id AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) {$status_sql} AND g.date_created >= %s AND g.date_created < %s", $this->start, $this->end ) );
+		$counts['created'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) {$status_sql} AND g.date_created >= %s AND g.date_created < %s", $this->start, $this->end ) );
+
+		// Active
+		$counts['activea'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name} g INNER JOIN {$wpdb->usermeta} um ON (g.id = um.meta_value AND um.meta_key = 'portfolio_group_id') JOIN {$bp->activity->table_name} a ON (g.id = a.item_id AND a.component = 'groups') WHERE g.id IN ({$gt_subquery}) AND um.user_id IN ({$ut_subquery}) {$status_sql} AND a.date_recorded >= %s AND a.date_recorded < %s", $this->start, $this->end ) );
 
 		$this->counts = array_map( 'intval', $counts );
 		return $this->counts;
