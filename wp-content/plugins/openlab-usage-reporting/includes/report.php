@@ -96,6 +96,17 @@ function olur_report_callbacks() {
 			array( 'label' => 'Joined Group', 'component' => 'groups', 'type' => 'joined_group' ),
 
 		),
+
+		// Friendships.
+		'Friend' => array(
+			array( 'FRIENDS (Confirmed/Pending)', 'Student', 'Faculty', 'Staff', 'Alumni', 'Other', 'Total' ),
+			array( 'label' => 'Student', 'type' => 'student' ),
+			array( 'label' => 'Faculty', 'type' => 'faculty' ),
+			array( 'label' => 'Staff', 'type' => 'staff' ),
+			array( 'label' => 'Alumni', 'type' => 'alumni' ),
+			array( 'label' => 'Other', 'type' => 'other' ),
+			array( 'label' => 'Total', 'type' => 'total' ),
+		),
 	);
 
 	return $callbacks;
