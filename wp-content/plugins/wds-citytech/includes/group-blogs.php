@@ -1316,3 +1316,12 @@ class OpenLab_GroupBlog_Template_Picker {
     }
 
 }
+
+/**
+ * Map "instructor" status to group administrator for wp-grade-comments.
+ */
+function openlab_olgc_is_instructor( $is ) {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	return groups_is_user_admin( get_current_user_id(), $group_id );
+}
+add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );

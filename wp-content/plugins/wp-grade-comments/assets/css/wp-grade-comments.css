@@ -1,0 +1,35 @@
+.olgc-checkboxes {
+	text-align: right;
+}
+
+.comment-form .olgc-checkboxes label {
+	display: inline;
+}
+
+#respond .olgc-checkboxes input[type="checkbox"] {
+	width: auto;
+}
+
+.olgc-grade-entry {
+	margin: 1em 0 0;
+}
+
+#respond .olgc-grade-entry label {
+	font-weight: bold;
+}
+
+#respond .olgc-grade-entry input {
+	width: 50px;
+}
+
+.olgc-grade-label {
+	font-weight: bold;
+}
+
+.olgc-privacy-description {
+	margin: 1em 0 0;
+	opacity: .6;
+	font-size: .9em;
+	font-style: italic;
+}
+
