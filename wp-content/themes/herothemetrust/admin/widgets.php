@@ -101,10 +101,19 @@ add_filter('widget_text', 'do_shortcode');
 
 class TTrust_Recent_Posts extends WP_Widget {
 
-	function TTrust_Recent_Posts() {
+
+	public function __construct(){
+
 		global $ttrust_theme_name, $ttrust_version, $options;
+
 		$widget_ops = array('classname' => 'ttrust_recent_posts', 'description' => __('Display recent posts from any category.', 'themetrust'));
-		$this->WP_Widget('ttrust_recent_posts', $ttrust_theme_name.' '.__('Recent Posts', 'themetrust'), $widget_ops);
+
+		parent::__construct(
+			'ttrust_recent_post_widget', // Base ID
+			$ttrust_theme_name.' '.__( 'Recent Posts', 'themetrust' ), // Name
+			$widget_ops // Args
+		);
+
 	}
 
 	function widget($args, $instance) {
@@ -200,14 +209,22 @@ register_widget('TTrust_Recent_Posts');
 /////////////////////////////////////////////////////////////////////*/
 
 class TTrust_Flickr extends WP_Widget {
- 
-	function TTrust_Flickr() {
+
+
+	public function __construct(){
+
 		global $ttrust_theme_name, $ttrust_version, $options;
-        $widget_ops = array('classname' => 'widget_ttrust_flickr', 'description' => 'Display flickr photos.');
-		$this->WP_Widget('ttrust_flickr', $ttrust_theme_name.' '.__('Flickr', 'themetrust'), $widget_ops);
-    
-    }
- 
+
+		$widget_ops = array('classname' => 'widget_ttrust_flickr', 'description' => __('Display flickr photos.', 'themetrust'));
+
+		parent::__construct(
+			'ttrust_flickr', // Base ID
+			$ttrust_theme_name.' '.__( 'Flickr', 'themetrust' ), // Name
+			$widget_ops // Args
+		);
+
+	}
+
     function widget($args, $instance) {
     
     	global $options;

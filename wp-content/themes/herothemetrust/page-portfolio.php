@@ -26,7 +26,7 @@ Template Name: Portfolio - filterable
 						<?php if (sizeof($skills) > 1) : // if there is more than one skill, show the filter nav?>	
 							<div class="filterWrap">
 							<ul id="filterNav" class="clearfix">
-								<li class="allBtn"><a href="#" data-filter="all" class="selected"><?php _e('All', 'themetrust'); ?></a></li>
+								<li class="allBtn"><a href="#" data-filter="*" class="selected"><?php _e('All', 'themetrust'); ?></a></li>
 
 								<?php
 								$j=1;					  
@@ -36,7 +36,7 @@ Template Name: Portfolio - filterable
 										$skill_slug = $skill->slug;				
 
 										$skill_slugs .= $skill_slug . ",";
-						  				$a = '<li><a href="#" data-filter="'.$skill_slug.'">';
+						  				$a = '<li><a href="#" data-filter=".'.$skill_slug.'">';
 										$a .= $skill->name;					
 										$a .= '</a></li>';
 										echo $a;
@@ -58,11 +58,11 @@ Template Name: Portfolio - filterable
 					else : // if not, use all the skills ?>
 						<div class="filterWrap">
 						<ul id="filterNav" class="clearfix">
-							<li class="allBtn"><a href="#" data-filter="all" class="selected"><?php _e('All', 'themetrust'); ?></a></li>
+							<li class="allBtn"><a href="#" data-filter="*" class="selected"><?php _e('All', 'themetrust'); ?></a></li>
 							<?php $j=1;
 							$skills = get_terms('skill');
 							foreach ($skills as $skill) {
-								$a = '<li><a href="#" data-filter="'.$skill->slug.'">';
+								$a = '<li><a href="#" data-filter=".'.$skill->slug.'">';
 						    	$a .= $skill->name;					
 								$a .= '</a></li>';
 								echo $a;
