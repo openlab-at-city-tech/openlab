@@ -100,7 +100,7 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics note" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
+                            <p class="ol-clone-description italics" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
                             </div>
                         </div>
 
