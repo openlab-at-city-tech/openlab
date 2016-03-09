@@ -1,0 +1,48 @@
+<wpml-config>
+  <custom-types>
+    <custom-type translate="1">project</custom-type>
+  </custom-types>
+  <taxonomies>
+    <taxonomy translate="1">skill</taxonomy>
+  </taxonomies>
+  <admin-texts>
+    <key name="hero">
+      <key name="logo"/>
+      <key name="ttrust_favicon"/>
+      <key name="ttrust_custom_css"/>
+      <key name="ttrust_color_accent"/>
+      <key name="ttrust_color_menu"/>
+      <key name="ttrust_color_menu_hover"/>
+      <key name="ttrust_color_btn"/>
+      <key name="ttrust_color_btn_hover"/>
+      <key name="ttrust_color_link"/>
+      <key name="ttrust_color_link_hover"/>
+      <key name="ttrust_heading_font"/>
+      <key name="ttrust_body_font"/>
+      <key name="ttrust_banner_main_font"/>
+      <key name="ttrust_banner_secondary_font"/>
+      <key name="ttrust_home_banner_img"/>
+      <key name="ttrust_color_banner_bkg"/>
+      <key name="ttrust_banner_text_primary"/>
+      <key name="ttrust_banner_text_secondary"/>
+      <key name="ttrust_banner_text_position"/>
+      <key name="ttrust_recent_projects_title"/>
+      <key name="ttrust_home_project_count"/>
+      <key name="ttrust_home_project_type"/>
+      <key name="ttrust_featured_pages_title"/>
+      <key name="ttrust_featured_pages_count"/>
+      <key name="ttrust_slideshow_delay"/>
+      <key name="ttrust_slideshow_effect"/>
+      <key name="ttrust_post_show_author"/>
+      <key name="ttrust_post_show_date"/>
+      <key name="ttrust_post_show_category"/>
+      <key name="ttrust_post_show_comments"/>
+      <key name="ttrust_post_featured_img_size"/>
+      <key name="ttrust_post_show_featured_image"/>
+      <key name="ttrust_blog_page"/>
+      <key name="ttrust_footer_left"/>
+      <key name="ttrust_footer_right"/>
+      <key name="ttrust_analytics"/>
+    </key>
+  </admin-texts>
+</wpml-config>
