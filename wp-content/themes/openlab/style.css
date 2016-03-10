@@ -8728,7 +8728,7 @@ input#group-request-send {
   font-weight: normal;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper {
-  height: 120px;
+  height: 105px;
   /* User name */
   /* "Email Status" and other secondary headers */
 }
@@ -8736,10 +8736,10 @@ input#group-request-send {
   height: 98px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.moderators {
-  height: 142px;
+  height: 147px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members {
-  height: 342px;
+  height: 318px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;

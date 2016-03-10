@@ -260,7 +260,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                         </div>
                                         <div class="col-md-15 col-xs-17">
                                             <p class="h5">
-                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="45" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="28" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
                                             </p>
                                             <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
 						<ul class="group-member-actions">
@@ -295,7 +295,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                             </div>
                                             <div class="col-md-15 col-xs-17">
                                                 <p class="h5">
-                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="45" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="28" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
                                             </p>
 
 					        <ul class="group-member-actions">
