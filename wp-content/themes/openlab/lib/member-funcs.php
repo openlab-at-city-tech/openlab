@@ -966,8 +966,6 @@ function openlab_trim_member_name($name) {
 
     if ($post->post_name == 'people' || $bp->current_action == 'members') {
         $trim_switch = true;
-    } else if ((isset($bp->action_variables[0]) && $bp->action_variables[0] == 'manage-members') || ($bp->current_action == 'members' && $bp->current_component == 'groups')) {
-        $trim_switch = true;
     }
 
     if ($trim_switch) {

@@ -8749,10 +8749,10 @@ input#group-request-send {
     height: 258px;
   }
 }
-.group-manage-members.group-list .group-item .group-item-wrapper h4 {
+.group-manage-members.group-list .group-item .group-item-wrapper p {
   margin: 10px 0 15px;
 }
-.group-manage-members.group-list .group-item .group-item-wrapper h4 a {
+.group-manage-members.group-list .group-item .group-item-wrapper p a {
   text-decoration: none;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper h5 {

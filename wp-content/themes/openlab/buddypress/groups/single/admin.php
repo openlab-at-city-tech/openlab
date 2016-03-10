@@ -259,9 +259,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                             <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                         </div>
                                         <div class="col-md-15 col-xs-17">
-                                            <h4>
-                                                <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
-                                            </h4>
+                                            <p class="h5">
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="45" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
+                                            </p>
                                             <?php if (count(bp_group_admin_ids(false, 'array')) > 1) : ?>
 						<ul class="group-member-actions">
 							<li><a class="confirm admin-demote-to-member admins" href="<?php bp_group_member_demote_link(bp_get_member_user_id()); ?>"><?php _e('Demote to Member', 'buddypress'); ?></a></li>
@@ -294,9 +294,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                                 <a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="Profile picture of <?php echo bp_get_member_name(); ?>"/></a>
                                             </div>
                                             <div class="col-md-15 col-xs-17">
-                                                <h4>
-                                                    <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
-                                                </h4>
+                                                <p class="h5">
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="45" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
+                                            </p>
 
 					        <ul class="group-member-actions">
                                                     <li><a href="<?php bp_group_member_promote_admin_link(array('user_id' => bp_get_member_user_id())); ?>" class="confirm mod-promote-to-admin" title="<?php _e('Promote to Admin', 'buddypress'); ?>"><?php _e('Promote to Admin', 'buddypress'); ?></a></li>
@@ -347,9 +347,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                                             <span class="italics"><?php if (bp_get_group_member_is_banned()) _e('(banned)', 'buddypress'); ?></span>
                                         </div>
                                         <div class="col-md-15 col-xs-17">
-                                            <h4>
-                                                <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
-                                            </h4>
+                                            <p class="h5">
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_member_permalink() ?>" data-basevalue="28" data-minvalue="20" data-basewidth="152"><?php bp_member_name(); ?></a><span class="original-copy hidden"><?php bp_member_name(); ?></span>
+                                            </p>
 
 					    <ul class="group-member-actions">
                                             <?php if (bp_get_group_member_is_banned()) : ?>
