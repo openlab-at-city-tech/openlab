@@ -8722,7 +8722,10 @@ input#group-request-send {
   }
 }
 .group-members.group-list .group-item-wrapper {
-  height: 95px;
+  height: 118px;
+}
+.group-members.group-list .group-item-wrapper p {
+  margin: 10px 0 7px;
 }
 .group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
   font-weight: normal;
