@@ -1325,3 +1325,78 @@ function openlab_olgc_is_instructor( $is ) {
 	return groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
+
+/**
+ * Show a notice on the dashboard of cloned course sites.
+ */
+function openlab_cloned_course_notice() {
+	global $current_blog;
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// Don't show for sites created before 2016-03-09.
+	$latest     = new DateTime( '2016-03-09' );
+	$registered = new DateTime( $current_blog->registered );
+	if ( $latest > $registered ) {
+		return;
+	}
+
+
+	// Allow dismissal.
+	if ( get_option( 'openlab-clone-notice-dismissed' ) ) {
+		return;
+	}
+
+	// Only show for cloned courses.
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! groups_get_groupmeta( $group_id, 'clone_source_group_id' ) ) {
+		return;
+	}
+
+	// Groan
+	$dismiss_url = $_SERVER['REQUEST_URI'];
+	$nonce = wp_create_nonce( 'ol_clone_dismiss' );
+	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
+	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
+
+	?>
+	<style type="text/css">
+		.ol-cloned-message {
+			position: relative;
+		}
+		.ol-cloned-message > p > span {
+			width: 80%;
+		}
+		.ol-clone-message-dismiss {
+			position: absolute;
+			right: 15px;
+		}
+	</style>
+	<div class="updated fade ol-cloned-message">
+		<p><span>Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="<?php echo admin_url( 'edit.php' ); ?>">Posts</a> and <a href="<?php echo admin_url( 'edit.php?post_type=page' ); ?>">Pages</a>. Custom menus will need to be reactivated via <a href="<?php echo admin_url( 'nav-menus.php' ); ?>">Appearance > Menus</a>.</span>
+		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'openlab_cloned_course_notice' );
+
+/**
+ * Catch cloned course notice dismissals.
+ */
+function openlab_catch_cloned_course_notice_dismissals() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( empty( $_GET['ol-clone-dismiss'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'ol_clone_dismiss' );
+
+	update_option( 'openlab-clone-notice-dismissed', 1 );
+}
+add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
