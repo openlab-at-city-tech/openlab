@@ -7619,7 +7619,7 @@ button.oplb-bs .close {
   font-weight: 400;
 }
 .oplb-bs#openlab-footer .cuny-logo {
-  max-width: 74px;
+  max-width: 74px !important;
 }
 .oplb-bs#openlab-footer p,
 .oplb-bs#openlab-footer a {

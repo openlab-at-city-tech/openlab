@@ -90,15 +90,21 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	 */
 	define ('K_PATH_FONTS', K_PATH_MAIN.'fonts/');
 
+        $upload_dir = wp_upload_dir();
+        $cache_dir = $upload_dir['basedir'] . '/tcpdf-cache';
+        if ( ! file_exists( $cache_dir ) ) {
+                wp_mkdir_p( $cache_dir );
+        }
+
 	/**
 	 * cache directory for temporary files (full path)
 	 */
-	define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
+	define( 'K_PATH_CACHE', $cache_dir );
 
 	/**
 	 * cache directory for temporary files (url path)
 	 */
-	define ('K_PATH_URL_CACHE', K_PATH_URL.'cache/');
+	define( 'K_PATH_URL_CACHE', $upload_dir['baseurl'] );
 
 	/**
 	 *images directory

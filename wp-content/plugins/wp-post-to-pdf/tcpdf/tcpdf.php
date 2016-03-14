@@ -7899,6 +7899,11 @@ class TCPDF {
 					curl_setopt($cs, CURLOPT_SSL_VERIFYPEER, false);
 					curl_setopt($cs, CURLOPT_SSL_VERIFYHOST, false);
 					curl_setopt($cs, CURLOPT_USERAGENT, 'TCPDF');
+
+                                        // Local files may need HTTP auth.
+                                        if ( false !== strpos( $file, $_SERVER['HTTP_HOST'] ) && ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) {
+                                                curl_setopt($cs, CURLOPT_USERPWD, $_SERVER['PHP_AUTH_USER'] . ':' . $_SERVER['PHP_AUTH_PW'] );
+                                        }
 					$imgdata = curl_exec($cs);
 					curl_close($cs);
 					if ($imgdata !== FALSE) {
