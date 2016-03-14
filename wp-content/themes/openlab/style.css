@@ -8747,11 +8747,6 @@ input#group-request-send {
 .group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;
 }
-@media (min-width: 992px) and (max-width: 1199px) {
-  .group-manage-members.group-list .group-item .group-item-wrapper {
-    height: 258px;
-  }
-}
 .group-manage-members.group-list .group-item .group-item-wrapper p {
   margin: 10px 0 15px;
 }
