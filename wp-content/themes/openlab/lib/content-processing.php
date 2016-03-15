@@ -5,8 +5,13 @@
 add_filter('body_class', 'openlab_conditional_body_classes');
 
 function openlab_conditional_body_classes($classes) {
-    global $post;
+    global $post, $wp_query;
     $classes[] = 'header-image';
+    
+    $query_vars = array();
+    if(isset($wp_query->query_vars)){
+        $query_vars = $wp_query->query_vars;
+    }
 
     if (is_front_page() || is_404()) {
         $classes[] = 'full-width-content';
@@ -29,6 +34,7 @@ function openlab_conditional_body_classes($classes) {
             ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
+            ( !empty($query_vars) && isset($query_vars['help_category'])) ||
             in_array($post->post_name, $my_group_pages)) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
