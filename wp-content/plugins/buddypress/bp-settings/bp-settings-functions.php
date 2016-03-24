@@ -1,13 +1,13 @@
 <?php
-
 /**
  * BuddyPress Settings Functions
  *
  * @package BuddyPress
  * @subpackage SettingsFunctions
+ * @since 1.5.0
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**

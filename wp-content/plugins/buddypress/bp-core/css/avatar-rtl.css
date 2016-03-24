@@ -1,26 +1,31 @@
-div.bp-avatar-status {
+div.bp-avatar-status,
+div.bp-cover-image-status {
 	clear: both;
 	margin: 1em 0;
 }
 
-div.bp-avatar-status p.updated {
+div.bp-avatar-status p.updated,
+div.bp-cover-image-status p.updated {
 	display: block;
 	padding: 10px 15px;
 }
 
-div.bp-avatar-status p.success {
+div.bp-avatar-status p.success,
+div.bp-cover-image-status p.success {
 	background-color: #efc;
 	border: 1px solid #591;
 	color: #250;
 }
 
-div.bp-avatar-status p.error {
+div.bp-avatar-status p.error,
+div.bp-cover-image-status p.error {
 	background-color: #fdc;
 	border: 1px solid #a00;
 	color: #800;
 }
 
-div.bp-avatar-status .bp-progress {
+div.bp-avatar-status .bp-progress,
+div.bp-cover-image-status .bp-progress {
 	background: none;
 	border: 1px solid #d1d1d1;
 	float: left;
@@ -33,7 +38,8 @@ div.bp-avatar-status .bp-progress {
 	width: 200px;
 }
 
-div.bp-avatar-status .bp-bar {
+div.bp-avatar-status .bp-bar,
+div.bp-cover-image-status .bp-bar {
 	background-color: #c3ff88;
 	width: 0;
 	height: 100%;
@@ -49,7 +55,9 @@ div.bp-avatar-status .bp-bar {
 	padding: 10px 15px;
 }
 
-#bp-uploader-warning, #bp-webcam-message p.warning {
+#buddypress p.warning,
+body.users_page_bp-profile-edit.modal-open #TB_ajaxContent p.warning,
+body.profile_page_bp-profile-edit.modal-open #TB_ajaxContent p.warning {
 	background-color: #ffd;
 	border: 1px solid #cb2;
 	color: #440;
@@ -138,6 +146,7 @@ div.bp-avatar-nav {
 }
 
 .drag-drop #drag-drop-area {
+	box-sizing: border-box;
 	display: table;
 	height: 100%;
 	width: 100%;
@@ -162,7 +171,15 @@ div.bp-avatar-nav {
 	text-align: center;
 }
 
-.drag-drop-inside p.drag-drop-info {margin-top: 0;}
+.drag-drop-inside p.drag-drop-info {
+	margin-top: 0;
+}
+
+@supports (-ms-accelerator:true) {
+	.drag-drop-inside p.drag-drop-info {
+		display: block;
+	}
+}
 
 #avatar-to-crop {
 	margin: 0 auto 20px ;

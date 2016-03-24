@@ -1,4 +1,4 @@
-/* globals bp, BP_Uploader, _, Backbone */
+/* global bp, BP_Uploader, _, Backbone */
 
 window.bp = window.bp || {};
 
@@ -15,6 +15,8 @@ window.bp = window.bp || {};
 
 	bp.Avatar = {
 		start: function() {
+			var self = this;
+
 			/**
 			 * Remove the bp-legacy UI
 			 *
@@ -34,25 +36,22 @@ window.bp = window.bp || {};
 			// Avatars are uploaded files
 			this.avatars = bp.Uploader.filesUploaded;
 
+			// The Avatar Attachment object.
+			this.Attachment = new Backbone.Model();
+
 			// Wait till the queue is reset
 			bp.Uploader.filesQueue.on( 'reset', this.cropView, this );
 
 			/**
 			 * In Administration screens we're using Thickbox
-			 * We need to make sure to reset the views if it's closed
+			 * We need to make sure to reset the views if it's closed or opened
 			 */
 			$( 'body.wp-admin' ).on( 'tb_unload', '#TB_window', function() {
-				// Reset to the uploader view
-				bp.Avatar.nav.trigger( 'bp-avatar-view:changed', 'upload' );
+				self.resetViews();
+			} );
 
-				// Reset to the uploader nav
-				_.each( bp.Avatar.navItems.models, function( model ) {
-					if ( model.id === 'upload' ) {
-						model.set( { active: 1 } );
-					} else {
-						model.set( { active: 0 } );
-					}
-				} );
+			$( 'body.wp-admin' ).on( 'click', '.bp-xprofile-avatar-user-edit', function() {
+				self.resetViews();
 			} );
 		},
 
@@ -119,6 +118,20 @@ window.bp = window.bp || {};
 			}
 		},
 
+		resetViews: function() {
+			// Reset to the uploader view
+			this.nav.trigger( 'bp-avatar-view:changed', 'upload' );
+
+			// Reset to the uploader nav
+			_.each( this.navItems.models, function( model ) {
+				if ( model.id === 'upload' ) {
+					model.set( { active: 1 } );
+				} else {
+					model.set( { active: 0 } );
+				}
+			} );
+		},
+
 		setupNav: function() {
 			var self = this,
 			    initView, activeView;
@@ -182,7 +195,7 @@ window.bp = window.bp || {};
 			}
 
 			// Display it
-	 		avatarStatus.inject( '.bp-avatar-status' );
+			avatarStatus.inject( '.bp-avatar-status' );
 		},
 
 		cropView: function() {
@@ -255,6 +268,20 @@ window.bp = window.bp || {};
 
 				// Inject the Delete nav
 				bp.Avatar.navItems.get( 'delete' ).set( { hide: 0 } );
+
+				/**
+				 * Set the Attachment object
+				 *
+				 * You can run extra actions once the avatar is set using:
+				 * bp.Avatar.Attachment.on( 'change:url', function( data ) { your code } );
+				 *
+				 * In this case data.attributes will include the url to the newly
+				 * uploaded avatar, the object and the item_id concerned.
+				 */
+				self.Attachment.set( _.extend(
+					_.pick( avatar.attributes, ['object', 'item_id'] ),
+					{ url: response.avatar, action: 'uploaded' }
+				) );
 
 			} ).fail( function( response ) {
 				var feedback = BP_Uploader.strings.default_error;
@@ -329,8 +356,22 @@ window.bp = window.bp || {};
 					$( this ).prop( 'src', response.avatar );
 				} );
 
-				 // Remove the Delete nav
-				 bp.Avatar.navItems.get( 'delete' ).set( { active: 0, hide: 1 } );
+				// Remove the Delete nav
+				bp.Avatar.navItems.get( 'delete' ).set( { active: 0, hide: 1 } );
+
+				/**
+				 * Reset the Attachment object
+				 *
+				 * You can run extra actions once the avatar is set using:
+				 * bp.Avatar.Attachment.on( 'change:url', function( data ) { your code } );
+				 *
+				 * In this case data.attributes will include the url to the gravatar,
+				 * the object and the item_id concerned.
+				 */
+				self.Attachment.set( _.extend(
+					_.pick( model.attributes, ['object', 'item_id'] ),
+					{ url: response.avatar, action: 'deleted' }
+				) );
 
 			} ).fail( function( response ) {
 				var feedback = BP_Uploader.strings.default_error;
