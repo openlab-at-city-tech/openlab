@@ -2,8 +2,8 @@
 Contributors: boonebgorges
 Tags: comments, grade, course, privacy
 Requires at least: 4.1
-Tested up to: 4.4
-Stable tag: 1.0.2
+Tested up to: 4.5
+Stable tag: 1.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,11 @@ This plugin was developed for the [https://openlab.citytech.cuny.edu](City Tech 
 3. Grades are visible on Dashboard > Posts.
 
 == Changelog ==
+
+= 1.1.0 =
+* Allow grade and privacy to be edited when editing comment via Dashboard.
+* Allow non-instructors to see their own grades on Dashboard > Posts.
+* Add a grade column to Dashboard > Comments, instead of showing grades in the comment content.
 
 = 1.0.2 =
 * Ensure that comment privacy is respected for trashed comments

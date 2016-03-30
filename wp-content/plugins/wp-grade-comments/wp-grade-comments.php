@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.0.2
+Version: 1.1.0
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -11,6 +11,10 @@ Text Domain: wp-grade-comments
 
 define( 'OLGC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OLGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+if ( is_admin() ) {
+	require OLGC_PLUGIN_DIR . '/includes/admin.php';
+}
 
 /**
  * Load textdomain.
@@ -106,8 +110,11 @@ add_action( 'wp_insert_comment', 'olgc_insert_comment', 10, 2 );
  * @return string
  */
 function olgc_add_private_info_to_comment_text( $text, $comment ) {
+	global $pagenow;
+
+	// Grade has its own column on edit-comments.php.
 	$grade = '';
-	if ( olgc_is_instructor() || olgc_is_author() ) {
+	if ( 'edit-comments.php' !== $pagenow && ( olgc_is_instructor() || olgc_is_author() ) ) {
 		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
 		if ( $grade ) {
 			$text .= '<div class="olgc-grade-display"><span class="olgc-grade-label">' . __( 'Grade (Private):', 'wp-grade-comments' ) . '</span> ' . esc_html( $grade ) . '</div>';
@@ -380,55 +387,3 @@ function olgc_prevent_private_comments_from_creating_bp_activity_items( $comment
 }
 add_action( 'comment_post', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
 add_action( 'edit_comment', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
-
-/** Admin ********************************************************************/
-
-/**
- * Add Grade column to wp-admin Posts list.
- *
- * @since 1.0.0
- *
- * @param array $columns Column info.
- */
-function olgc_add_grade_column( $columns ) {
-	if ( ! olgc_is_instructor() ) {
-		return $columns;
-	}
-
-	$columns['grade'] = __( 'Grade', 'wp-grade-comments' );
-	return $columns;
-}
-add_filter( 'manage_post_posts_columns', 'olgc_add_grade_column' );
-
-/**
- * Content of the Grade column.
- *
- * @since 1.0.0
- *
- * @param string $column_name Name of the current column.
- * @param int    $post_id     ID of the post for the current row.
- */
-function olgc_add_grade_column_content( $column_name, $post_id ) {
-	if ( ! olgc_is_instructor() ) {
-		return;
-	}
-
-	if ( 'grade' !== $column_name ) {
-		return;
-	}
-
-	// Find the first available grade on a post comment.
-	$comments = get_comments( array(
-		'post_id' => $post_id,
-	) );
-
-	foreach ( $comments as $comment ) {
-		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
-
-		if ( $grade ) {
-			echo esc_html( $grade );
-			break;
-		}
-	}
-}
-add_action( 'manage_post_posts_custom_column', 'olgc_add_grade_column_content', 10, 2 );
