@@ -719,6 +719,14 @@ function openlab_filter_subnav_nav_group_documents( $subnav_item ) {
 	} else {
 		//update "current" class to "current-menu-item" to unify site identification of current menu page
 		$subnav_item = str_replace( "current selected", "current-menu-item", $subnav_item );
+
+		// Add count. @todo Better caching.
+		$count = BP_Group_Documents::get_total( bp_get_current_group_id() );
+		if ( $count ) {
+			$span = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
+			$subnav_item = str_replace( '</a>', ' ' . $span . '</a>', $subnav_item );
+		}
+
 		return $subnav_item;
 	}
 }
