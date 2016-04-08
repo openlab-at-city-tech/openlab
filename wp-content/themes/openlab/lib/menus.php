@@ -868,7 +868,7 @@ function openlab_group_admin_tabs($group = false) {
         <?php endif; ?>
 
     <?php endif ?>
-    -->   
+    -->
     <?php
 }
 
