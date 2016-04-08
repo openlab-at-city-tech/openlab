@@ -709,20 +709,21 @@ function openlab_filter_subnav_docs($subnav_item) {
     return $new_item;
 }
 
-add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
-
-function openlab_filter_subnav_nav_group_documents($subnav_item) {
-    //no files if we're on the portfolio page
-    if (openlab_is_portfolio()) {
-        return '';
-    } else {
-
-        //update "current" class to "current-menu-item" to unify site identification of current menu page
-        $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-
-        return $subnav_item;
-    }
+/**
+ * Modify the Documents subnav item in group contexts.
+ */
+function openlab_filter_subnav_nav_group_documents( $subnav_item ) {
+	//no files if we're on the portfolio page
+	if ( openlab_is_portfolio() ) {
+		return '';
+	} else {
+		//update "current" class to "current-menu-item" to unify site identification of current menu page
+		$subnav_item = str_replace( "current selected", "current-menu-item", $subnav_item );
+		return $subnav_item;
+	}
 }
+add_filter( 'bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents' );
+
 
 add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 
