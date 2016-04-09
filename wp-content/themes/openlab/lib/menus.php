@@ -735,13 +735,15 @@ add_filter( 'bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_gro
 
 add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 
-function openlab_filter_subnav_forums($subnav_item) {
-    //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+/**
+ * Modify the Discussion subnav item in group contexts.
+ */
+function openlab_filter_subnav_forums( $subnav_item ) {
+	// update "current" class to "current-menu-item" to unify site identification of current menu page
+	$subnav_item = str_replace( 'current selected', 'current-menu-item', $subnav_item );
+	$subnav_item = str_replace( 'Forum', 'Discussion', $subnav_item );
 
-    $subnav_item = str_replace('Forum', 'Discussion', $subnav_item);
-
-    return $subnav_item;
+	return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
