@@ -27,14 +27,14 @@ $pag_page = isset( $_GET['hs-page'] ) ? intval( $_GET['hs-page'] ) : 1;
 				) ); ?>
 
 				<?php if ( $hq->have_posts() ) : ?>
-					<p>The following documents match the query <strong>"<?php echo esc_html( $help_search ); ?>"</strong>:</p>
+					<p>The following match the search term <strong>"<?php echo esc_html( $help_search ); ?>"</strong>:</p>
 
 					<div class="child-cat-container help-cat-block">
 						<ul>
 						<?php while ( $hq->have_posts() ) : ?>
 							<?php $hq->the_post(); ?>
 							<li>
-								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+								<h3 class="help-title no-margin no-margin-bottom"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 								<div class="help-search-excerpt">
 									<?php the_excerpt(); ?>
 								</div>
