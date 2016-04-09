@@ -124,9 +124,11 @@ function openlab_help_categories_menu( $items, $args ) {
 			if ( $help_cat->parent == 0 ) {
 				$help_classes = "help-cat menu-item";
 
+				$highlight_active_state = get_query_var( 'taxonomy' ) != 'help_tags' && empty( $_GET['help-search'] );
+
 				// see if this is the current menu item; if not, this could be a post,
 				// so we'll check against an array of cat ids for this post
-				if ( get_query_var( 'taxonomy' ) != 'help_tags' ) {
+				if ( $highlight_active_state ) {
 					if ( $parent_term !== false && $help_cat->term_id == $parent_term->term_id ) {
 						$help_classes .= " current-menu-item";
 					} else if ( $post->post_type == 'help' ) {
@@ -160,7 +162,7 @@ function openlab_help_categories_menu( $items, $args ) {
 					foreach ( $child_cats as $child_cat ) {
 
 						$child_classes = "help-cat menu-item";
-						if ( get_query_var( 'taxonomy' ) != 'help_tags' ) {
+						if ( $highlight_active_state ) {
 							if ( $current_term !== false && $child_cat->term_id == $current_term->term_id ) {
 								$child_classes .= " current-menu-item";
 							} else if ( $post->post_type == 'help' ) {
