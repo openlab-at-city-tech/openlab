@@ -42,22 +42,36 @@ $pag_page = isset( $_GET['hs-page'] ) ? intval( $_GET['hs-page'] ) : 1;
 						<?php endwhile; ?>
 						</ul>
 
-						<div class="help-search-pagination">
-						<?php
-						$add_args = array();
-						if ( ! empty( $help_search ) ) {
-							$add_args['help-search'] = urlencode( $help_search );
-						}
-
-						echo paginate_links( array(
-							'base' => add_query_arg( 'hs-page', '%#%', openlab_get_help_search_url() ),
-							'format' => '',
-							'current' => $pag_page,
-							'total' => $hq->max_num_pages,
-						) );
-						?>
-						</div>
 					</div><!-- .child-cat-container help-cat-block -->
+
+					<div class="pagination-links help-search-pagination">
+					<?php
+					$add_args = array();
+					if ( ! empty( $help_search ) ) {
+						$add_args['help-search'] = urlencode( $help_search );
+					}
+
+					$pag_links = paginate_links( array(
+						'base' => add_query_arg( 'hs-page', '%#%', openlab_get_help_search_url() ),
+						'format' => '',
+						'current' => $pag_page,
+						'total' => $hq->max_num_pages,
+						'type' => 'array',
+						'prev_text' => _x( '<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress' ),
+						'next_text' => _x( '<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress' ),
+						'mid_size' => 3,
+					) );
+
+					echo '<ul class="pagination page-numbers">';
+					foreach ( $pag_links as $pag_link ) {
+						printf(
+							'<li>%s</li>',
+							$pag_link
+						);
+					}
+					echo '</ul>';
+					?>
+					</div>
 
 				<?php else : ?>
 					<p>Sorry, no help documents were found matching the query <strong>"<?php echo esc_html( $help_search ); ?>"</strong>.</p>
