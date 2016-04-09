@@ -743,6 +743,25 @@ function openlab_filter_subnav_forums( $subnav_item ) {
 	$subnav_item = str_replace( 'current selected', 'current-menu-item', $subnav_item );
 	$subnav_item = str_replace( 'Forum', 'Discussion', $subnav_item );
 
+	// Add count.
+	$count = 0;
+	$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+	if ( $forum_ids ) {
+		// bbPress function bbp_get_forum_topic_count is broken. @todo fix or cache.
+		$topic_ids = get_posts( array(
+			'post_type' => bbp_get_topic_post_type(),
+			'post_parent' => $forum_ids[0],
+			'fields' => 'ids',
+			'posts_per_page' => -1,
+		) );
+		$count = count( $topic_ids );
+	}
+
+	if ( $count ) {
+		$span = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
+		$subnav_item = str_replace( '</a>', ' ' . $span . '</a>', $subnav_item );
+	}
+
 	return $subnav_item;
 }
 
