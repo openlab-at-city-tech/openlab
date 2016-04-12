@@ -17,6 +17,12 @@
             OpenLab.utility.adjustLoginBox();
 
         },
+        detectZoom: function () {
+
+            var zoom = detectZoom.zoom();
+            var device = detectZoom.device();
+
+        },
         adjustLoginBox: function () {
             if ($('#user-info')) {
 
@@ -35,7 +41,7 @@
         },
         setUpNewMembersBox: function (resize) {
 
-            if(resize){
+            if (resize) {
                 OpenLab.utility.newMembers.html(OpenLab.utility.newMembersHTML);
             } else {
                 OpenLab.utility.newMembers = $('#home-new-member-wrap');
@@ -340,6 +346,7 @@
     $(window).load(function () {
 
         $('html').removeClass('page-loading');
+        OpenLab.utility.detectZoom();
 
         //setting equal rows on homepage group list
         equal_row_height();
