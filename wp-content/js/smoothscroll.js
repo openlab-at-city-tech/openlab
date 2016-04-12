@@ -3418,16 +3418,20 @@ if (Hyphenator.isBookmarklet()) {
 
     OpenLab.nav = {
         backgroundCont: {},
+        backgroundTopStart: 0,
         plusHeight: 66,
         init: function () {
 
             OpenLab.nav.backgroundCont = $('#behind_menu_background');
+            
+            //get starting position of mobile menu background
+            OpenLab.nav.backgroundTopStart = OpenLab.nav.backgroundCont.css('top');
 
             OpenLab.nav.directToggleAction();
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
-            
+
             OpenLab.nav.hyphenateInit();
 
         },
@@ -3459,6 +3463,7 @@ if (Hyphenator.isBookmarklet()) {
             var directToggle = $('.direct-toggle');
 
             directToggle.on('click', function (e) {
+
                 directToggle.removeClass('active')
                 e.stopImmediatePropagation();
 
@@ -3470,7 +3475,7 @@ if (Hyphenator.isBookmarklet()) {
                     directToggle.removeClass('in-action');
                     thisElem.addClass('in-action');
 
-                    var thisTarget = $(this).data('target');
+                    var thisTarget = thisElem.data('target');
                     var thisTargetElem = $(thisTarget);
 
                     if (thisTargetElem.is(':visible')) {
@@ -3496,8 +3501,57 @@ if (Hyphenator.isBookmarklet()) {
                 }
             });
         },
-        hideNavMenu: function (thisElem, thisToggleTarget, thisAnchor) {
+        directToggleResizeHandler: function () {
+
+            //if there is no direct toggle, we're done
+            if (!$('.direct-toggle').length) {
+                return false;
+            }
+            
+            //reset mobile menu background position
+            OpenLab.nav.backgroundCont.css({
+                'top' : OpenLab.nav.backgroundTopStart
+            })
+
+            var directToggle = $('.direct-toggle');
+
+            directToggle.each(function () {
+                var thisElem = $(this);
+                var thisToggleTarget = thisElem.data('target');
+
+                if (!OpenLab.nav.isBreakpoint('xs') && !OpenLab.nav.isBreakpoint('xxs')) {
+                    //on background only elems, reset inline display value
+                    if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+                        $(thisToggleTarget).css({
+                            'display': ''
+                        });
+                    }
+                }
+
+                if (thisElem.hasClass('active')) {
+
+                    OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
+
+                }
+            });
+
+        },
+        hideNavMenu: function (thisElem, thisToggleTarget, thisAnchor, triggerBackgroundOnlyCheck) {
             var plusHeight = OpenLab.nav.plusHeight;
+            var backgroundOnly = false;
+
+            //handle missing arguments
+            if (typeof thisAnchor === 'undefined') {
+                var thisAnchor = false;
+            }
+            if (typeof triggerBackgroundOnlyCheck === 'undefined') {
+                var triggerBackgroundOnlyCheck = false;
+            }
+
+            //background only acheck
+            if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+                backgroundOnly = true;
+            }
 
             if (thisElem.attr('data-plusheight')) {
                 plusHeight = parseInt(thisElem.data('plusheight'));
@@ -3512,6 +3566,17 @@ if (Hyphenator.isBookmarklet()) {
             }, 50, function () {
                 $(this).hide();
             });
+
+            //if background only, we're done
+            if (backgroundOnly && triggerBackgroundOnlyCheck) {
+                thisElem.removeClass('in-action');
+                thisElem.removeClass('active');
+                $(thisToggleTarget).css({
+                    'display': ''
+                });
+                return false;
+            }
+
             $(thisToggleTarget).slideUp(700, function () {
                 thisElem.removeClass('in-action');
                 thisElem.removeClass('active');
@@ -3604,8 +3669,9 @@ if (Hyphenator.isBookmarklet()) {
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-            
+
             OpenLab.nav.hoverFixes();
+            OpenLab.nav.directToggleResizeHandler();
 
         }, 250);
 
