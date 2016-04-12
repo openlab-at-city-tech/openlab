@@ -1,9 +1,15 @@
 <?php
+/**
+ * BuddyPress - Members Single Messages Notice Loop
+ *
+ * @package BuddyPress
+ * @subpackage bp-legacy
+ */
 
 /**
  * Fires before the members notices loop.
  *
- * @since BuddyPress (1.2.0)
+ * @since 1.2.0
  */
 do_action( 'bp_before_notices_loop' ); ?>
 
@@ -26,7 +32,7 @@ do_action( 'bp_before_notices_loop' ); ?>
 	/**
 	 * Fires after the members notices pagination display.
 	 *
-	 * @since BuddyPress (1.2.0)
+	 * @since 1.2.0
 	 */
 	do_action( 'bp_after_notices_pagination' ); ?>
 	<?php
@@ -34,7 +40,7 @@ do_action( 'bp_before_notices_loop' ); ?>
 	/**
 	 * Fires before the members notice items.
 	 *
-	 * @since BuddyPress (1.2.0)
+	 * @since 1.2.0
 	 */
 	do_action( 'bp_before_notices' ); ?>
 
@@ -62,13 +68,13 @@ do_action( 'bp_before_notices_loop' ); ?>
 				/**
 				 * Fires inside the display of a member notice list item.
 				 *
-				 * @since BuddyPress (1.2.0)
+				 * @since 1.2.0
 				 */
 				do_action( 'bp_notices_list_item' ); ?>
 
 				<td width="10%">
 					<a class="button" href="<?php bp_message_activate_deactivate_link(); ?>" class="confirm"><?php bp_message_activate_deactivate_text(); ?></a>
-					<a class="button" href="<?php bp_message_notice_delete_link(); ?>" class="confirm" title="<?php esc_attr_e( "Delete Message", "buddypress" ); ?>">x</a>
+					<a class="button" href="<?php bp_message_notice_delete_link(); ?>" class="confirm" title="<?php esc_attr_e( "Delete Message", 'buddypress' ); ?>">x</a>
 				</td>
 			</tr>
 		<?php endwhile; ?>
@@ -79,7 +85,7 @@ do_action( 'bp_before_notices_loop' ); ?>
 	/**
 	 * Fires after the members notice items.
 	 *
-	 * @since BuddyPress (1.2.0)
+	 * @since 1.2.0
 	 */
 	do_action( 'bp_after_notices' ); ?>
 
@@ -96,6 +102,6 @@ do_action( 'bp_before_notices_loop' ); ?>
 /**
  * Fires after the members notices loop.
  *
- * @since BuddyPress (1.2.0)
+ * @since 1.2.0
  */
 do_action( 'bp_after_notices_loop' ); ?>

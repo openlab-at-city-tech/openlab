@@ -13,32 +13,12 @@ if ( defined( 'BP_VERSION' ) ) {
 	}
 }
 
-// Install is using BP 1.5
-// Need abstraction for BP 1.6
-if ( $bpges_bp_version < 1.6 ) {
-	require_once( dirname( __FILE__ ) . '/1.6-abstraction.php' );
-}
-
-// Install is using BP 1.2
-// Need abstraction for BP 1.5
-if ( $bpges_bp_version < 1.5 ) {
-
-	// Load the abstraction files, which define the necessary 1.5 functions
-	require_once( dirname( __FILE__ ) . '/1.5-abstraction.php' );
-
-	// Load the group extension in the legacy fashion
-	add_action( 'init', 'ass_activate_extension' );
-} else {
-	// Load the group extension in the proper fashion
-	bp_register_group_extension( 'Group_Activity_Subscription' );
-}
-
 require_once( dirname( __FILE__ ) . '/bp-activity-subscription-functions.php' );
 require_once( dirname( __FILE__ ) . '/bp-activity-subscription-digest.php' );
 
 class Group_Activity_Subscription extends BP_Group_Extension {
 
-	function group_activity_subscription() {
+	public function __construct() {
 		$this->name = __('Email Options', 'bp-ass');
 		$this->slug = 'notifications';
 
@@ -125,4 +105,22 @@ function ass_activate_extension() {
 	add_action( "wp", array( &$extension, "_register" ), 2 );
 }
 
-?>
+// Install is using BP 1.5
+// Need abstraction for BP 1.6
+if ( $bpges_bp_version < 1.6 ) {
+	require_once( dirname( __FILE__ ) . '/1.6-abstraction.php' );
+}
+
+// Install is using BP 1.2
+// Need abstraction for BP 1.5
+if ( $bpges_bp_version < 1.5 ) {
+
+	// Load the abstraction files, which define the necessary 1.5 functions
+	require_once( dirname( __FILE__ ) . '/1.5-abstraction.php' );
+
+	// Load the group extension in the legacy fashion
+	add_action( 'init', 'ass_activate_extension' );
+} else {
+	// Load the group extension in the proper fashion
+	bp_register_group_extension( 'Group_Activity_Subscription' );
+}

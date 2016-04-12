@@ -99,7 +99,7 @@ function openlab_bp_group_documents_display_content() {
 
                             <?php if (get_option('bp_group_documents_display_icons')) $document->icon(); ?>
 
-                            <a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo $document->name; ?>
+                            <a class="group-documents-title" id="group-document-link-<?php echo $document->id; ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
 
                                 <?php
                                 if (get_option('bp_group_documents_display_file_size')) {
@@ -111,7 +111,7 @@ function openlab_bp_group_documents_display_content() {
 
                             <?php
                             if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description) {
-                                echo '<br /><span class="group-documents-description">' . nl2br($document->description) . '</span>';
+                                echo '<br /><span class="group-documents-description">' . nl2br( stripslashes( $document->description ) ) . '</span>';
                             }
 
                             echo '</li>';

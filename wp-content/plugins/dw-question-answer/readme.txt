@@ -2,8 +2,8 @@
 Contributors: designwall, Farid-Gh, scheunemann, gciprian, Ahmet Kolcu, Astrotenko Roman, David Robles, Nidhal Naji, developez, markhall1971
 Tags: question, answer, support, quora, stackoverflow
 Requires at least: 3.0.1
-Tested up to: 4+
-Stable tag: 1.3.3
+Tested up to: 4.4.2
+Stable tag: 1.4.3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ DW Question and Answer is a WordPress plugin which builds a complete Question & 
 * Notification Email system
 * Instant search by keywords
 * 11+ languages supported
-* reCAPTCHA supported
+* Captcha supported
 * Shortcodes available
 * Private/ Public for Question and Answer
 * Questions / Answers follow function
@@ -29,15 +29,22 @@ DW Question and Answer is a WordPress plugin which builds a complete Question & 
 
 = Add-on for the plugin: =
 * Embed question and Social Sharing: [http://wordpress.org/plugins/dw-question-answer-embed-question/](http://wordpress.org/plugins/dw-question-answer-embed-question/)
+* DWQA Markdown: [https://www.designwall.com/wordpress/dwqa-extensions/dwqa-markdown/](https://www.designwall.com/wordpress/dwqa-extensions/dwqa-markdown/)
+* DWQA Leaderboard: [https://www.designwall.com/wordpress/dwqa-extensions/dwqa-leaderboard/](https://www.designwall.com/wordpress/dwqa-extensions/dwqa-leaderboard/)
+* DWQA Captcha: [https://www.designwall.com/wordpress/dwqa-extensions/dwqa-captcha/](https://www.designwall.com/wordpress/dwqa-extensions/dwqa-captcha/)
 
 = Documents and Support: =
 You can find [Documents](http://www.designwall.com/guide/dw-question-answer-plugin/) and more detailed information about DW Question and Answer plugin on [DesignWall.com](http://www.designwall.com/). 
 We provide support both on support forum on WordPress.org and our [support page](http://www.designwall.com/question/) on DesignWall.
 
+= Source =
+[Free for commercial use](https://www.iconfinder.com/icons/728992/configuration_control_dashboard_setting_speed_system_tool_icon#size=128)
+
 = Languages supported: =
 * English (default) 
 * Arabic (ar_AR) - by Nidhal Naji
 * Chinese (zh_CN) - by Jack Cai
+* Traditional Chinese ( zh_TW ) - by Andy ( im@andy-cheung.me )
 * French (fr_FR) - by [Kanzari Haithem](http://www.designwall.com/profile/kanzari/)
 * German (de_DE) - by [scheunemann](https://github.com/scheunemann)
 * Indonesian (id_ID) - by Ruby Aperta
@@ -55,6 +62,7 @@ We provide support both on support forum on WordPress.org and our [support page]
 * Italian ( it_IT ) - by [Alberto Lusoli](alberto.lusoli@gmail.com)
 * Croatian ( hr ) - by [Tammara Bugg](tammara.bugg@gmail.com)
 * Slovakia ( sk_SK ) - by [Mário Halás](majox21@gmail.com)
+* Norwegian ( nb_NO ) - by [Tobias Andersen](turbolego@gmail.com)
 
 The plugin is frequently updated and more and more features added based on all the feedback from our users. This means you are welcome to give us feedback and suggestion on how you would want to have in the plugin.
 Visit our [Github](https://github.com/designwall/dw-question-answer) project or follow us at [@designwall_com](https://twitter.com/designwall_com) to get update of our next release.
@@ -76,6 +84,97 @@ Visit our [Github](https://github.com/designwall/dw-question-answer) project or 
 5. Back-end settings
 
 == Changelog ==
+
+= 1.4.3.3 =
+Fix: Addressed some security issues
+
+= 1.4.3.2 =
+Quick fix
+
+= 1.4.3.1 =
+Quick fix and update some language file.
+
+= 1.4.3 =
+Tweak: Update language file
+Fix: Addressed some security issues
+
+= 1.4.2.3 =
+Fix: Addressed some security issues
+
+= 1.4.2.2 =
+Tweak: flush rewrite rule after active or upgrade plugin
+Fix: Fatal error in comment
+
+= 1.4.2.1 =
+* Quick fix
+
+= 1.4.2 =
+* Tweak: Update Language Files
+* New: Option show all answers on a single question page
+* New: Option show status icon on question list page
+* New: Add function pick best answer
+* Fix: Some string cannot translate
+* Fix: Fix losing data when saving changes.
+* Fix: Display name of person instead of anonymous in question and comment
+
+
+= 1.4.1 =
+* Tweak: Update Language Files
+* Tweak: Update Swedish Language Files
+* New: Display name of the person instead of Anonymous
+* Fix: Some string cannot translate
+* Fix: Widget issue
+* Fix: Improvement style for mobile and tablet
+
+= 1.4.0 =
+* New: Template Structure Updates
+* New: Core Performance Improvements
+* New: Add Questions Listing By Author page
+* New: Optimize Questions & Answers Editing
+* New: Add Breadcrumbs
+* New: Improve ‘Subscribe Question’ Feature
+* New: Simplify the question status
+
+= 1.3.8.1 =
+* Quick fix
+
+= 1.3.8 =
+* New: Extensions Page
+* New: Welcome Page
+* Fix: Rewrite Category and Tag
+* Fix: Page not found when submit question
+
+= 1.3.7.1 =
+* Remove Widget
+
+= 1.3.7 =
+* Tweak: Add Widget
+* New: Norwegian languages supported
+* New: Add function auto convert plaintext URL to HTML links
+* Fix: Facebook Comments Plugin issue
+* Fix: Remove white space in question title
+* Fix: Number of posts on DWQA Closed Widget
+
+= 1.3.6 =
+* New: Add extensions and license manager
+* Update: Auto load for older version of php
+* Fix: answered filter
+* Fix: wrong direct after update answer
+* Fix: Add template captcha, add fields captcha setting
+* Fix issues about recaptcha in ssl protocol
+
+= 1.3.5 =
+* Fix: Languages not working
+* Fix: Warning about rewrite settings
+
+= 1.3.4 =
+
+* New: Add upgrades database functions
+* New: Update Templates Directory
+* Fix: Buttons for tinymce 
+* Fix: Remove Widget warning
+* Fix: remove front of rewrite rule for question taxonomy
+* Fix: question archive url
 
 = 1.3.3 =
 

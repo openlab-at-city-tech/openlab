@@ -1483,3 +1483,9 @@ function openlab_custom_group_excerpts($excerpt, $group) {
 }
 
 add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 10, 2);
+
+/**
+ * Disable BuddyPress Cover Images for groups and users.
+ */
+add_filter( 'bp_disable_cover_image_uploads', '__return_true' );
+add_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );

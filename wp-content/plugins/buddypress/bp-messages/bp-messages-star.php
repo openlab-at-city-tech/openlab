@@ -2,15 +2,20 @@
 /**
  * Functions related to starring private messages.
  *
- * @since BuddyPress (2.3.0)
+ * @package BuddyPress
+ * @subpackage MessagesStar
+ * @since 2.3.0
  */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /** UTILITY **************************************************************/
 
 /**
  * Return the starred messages slug. Defaults to 'starred'.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @return string
  */
@@ -18,7 +23,7 @@ function bp_get_messages_starred_slug() {
 	/**
 	 * Filters the starred message slug.
 	 *
-	 * @since BuddyPress (2.3.0)
+	 * @since 2.3.0
 	 *
 	 * @param string
 	 */
@@ -28,10 +33,10 @@ function bp_get_messages_starred_slug() {
 /**
  * Function to determine if a message ID is starred.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @param  int $mid     The message ID. Please note that this isn't the message thread ID.
- * @param  int $user_id The user ID
+ * @param  int $user_id The user ID.
  * @return bool
  */
 function bp_messages_is_message_starred( $mid = 0, $user_id = 0 ) {
@@ -55,7 +60,7 @@ function bp_messages_is_message_starred( $mid = 0, $user_id = 0 ) {
 /**
  * Output the link or raw URL for starring or unstarring a message.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @param array $args See bp_get_the_message_star_action_link() for full documentation.
  */
@@ -65,7 +70,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 	/**
 	 * Return the link or raw URL for starring or unstarring a message.
 	 *
-	 * @since BuddyPress (2.3.0)
+	 * @since 2.3.0
 	 *
 	 * @param array $args {
 	 *     Array of arguments.
@@ -89,7 +94,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 	 */
 	function bp_get_the_message_star_action_link( $args = array() ) {
 
-		// Default user ID
+		// Default user ID.
 		$user_id = bp_displayed_user_id()
 			? bp_displayed_user_id()
 			: bp_loggedin_user_id();
@@ -107,47 +112,47 @@ function bp_the_message_star_action_link( $args = array() ) {
 			'title_star_thread'   => __( 'Star the first message in this thread',      'buddypress' ),
 		), 'messages_star_action_link' );
 
-		// Check user ID and determine base user URL
+		// Check user ID and determine base user URL.
 		switch ( $r['user_id'] ) {
 
-			// Current user
+			// Current user.
 			case bp_loggedin_user_id() :
 				$user_domain = bp_loggedin_user_domain();
 				break;
 
-			// Displayed user
+			// Displayed user.
 			case bp_displayed_user_id() :
 				$user_domain = bp_displayed_user_domain();
 				break;
 
-			// Empty or other
+			// Empty or other.
 			default :
 				$user_domain = bp_core_get_user_domain( $r['user_id'] );
 				break;
 		}
 
-		// Bail if no user domain was calculated
+		// Bail if no user domain was calculated.
 		if ( empty( $user_domain ) ) {
 			return '';
 		}
 
-		// Define local variables
+		// Define local variables.
 		$retval = $bulk_attr = '';
 
-		// thread ID
+		// Thread ID.
 		if ( (int) $r['thread_id'] > 0 ) {
 
-			// see if we're in the loop
+			// See if we're in the loop.
 			if ( bp_get_message_thread_id() == $r['thread_id'] ) {
 
-				// grab all message ids
+				// Grab all message ids.
 				$mids = wp_list_pluck( $GLOBALS['messages_template']->thread->messages, 'id' );
 
-				// make sure order is ASC
-				// order is DESC when used in the thread loop by default
+				// Make sure order is ASC.
+				// Order is DESC when used in the thread loop by default.
 				$mids = array_reverse( $mids );
 
-			// pull up the thread
+			// Pull up the thread.
 			} else {
 				$thread = new BP_Messages_Thread( $r['thread_id'] );
 				$mids   = wp_list_pluck( $thread->messages, 'id' );
@@ -157,7 +162,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 			$message_id = 0;
 			foreach ( $mids as $mid ) {
 
-				// try to find the first msg that is starred in a thread
+				// Try to find the first msg that is starred in a thread.
 				if ( true === bp_messages_is_message_starred( $mid ) ) {
 					$is_starred = true;
 					$message_id = $mid;
@@ -165,14 +170,14 @@ function bp_the_message_star_action_link( $args = array() ) {
 				}
 			}
 
-			// no star, so default to first message in thread
+			// No star, so default to first message in thread.
 			if ( empty( $message_id ) ) {
 				$message_id = $mids[0];
 			}
 
 			$message_id = (int) $message_id;
 
-			// nonce
+			// Nonce.
 			$nonce = wp_create_nonce( "bp-messages-star-{$message_id}" );
 
 			if ( true === $is_starred ) {
@@ -186,7 +191,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 
 			$title = $r["title_{$action}_thread"];
 
-		// message ID
+		// Message ID.
 		} else {
 			$message_id = (int) $r['message_id'];
 			$is_starred = bp_messages_is_message_starred( $message_id );
@@ -206,7 +211,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 		/**
 		 * Filters the star action URL for starring / unstarring a message.
 		 *
-		 * @since BuddyPress (2.3.0)
+		 * @since 2.3.0
 		 *
 		 * @param string $retval URL for starring / unstarring a message.
 		 * @param array  $r      Parsed link arguments. See $args in bp_get_the_message_star_action_link().
@@ -219,7 +224,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 		/**
 		 * Filters the star action link, including markup.
 		 *
-		 * @since BuddyPress (2.3.0)
+		 * @since 2.3.0
 		 *
 		 * @param string $retval Link for starring / unstarring a message, including markup.
 		 * @param array  $r      Parsed link arguments. See $args in bp_get_the_message_star_action_link().
@@ -230,7 +235,7 @@ function bp_the_message_star_action_link( $args = array() ) {
 /**
  * Save or delete star message meta according to a message's star status.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @param array $args {
  *     Array of arguments.
@@ -253,7 +258,7 @@ function bp_messages_star_set_action( $args = array() ) {
 		'bulk'       => false
 	) );
 
-	// Set thread ID
+	// Set thread ID.
 	if ( ! empty( $r['thread_id'] ) ) {
 		$thread_id = (int) $r['thread_id'];
 	} else {
@@ -263,14 +268,14 @@ function bp_messages_star_set_action( $args = array() ) {
 		return false;
 	}
 
-	// Check if user has access to thread
+	// Check if user has access to thread.
 	if( ! messages_check_thread_access( $thread_id, $r['user_id'] ) ) {
 		return false;
 	}
 
 	$is_starred = bp_messages_is_message_starred( $r['message_id'], $r['user_id'] );
 
-	// star
+	// Star.
 	if ( 'star' == $r['action'] ) {
 		if ( true === $is_starred ) {
 			return true;
@@ -278,9 +283,9 @@ function bp_messages_star_set_action( $args = array() ) {
 			bp_messages_add_meta( $r['message_id'], 'starred_by_user', $r['user_id'] );
 			return true;
 		}
-	// unstar
+	// Unstar.
 	} else {
-		// unstar one message
+		// Unstar one message.
 		if ( false === $r['bulk'] ) {
 			if ( false === $is_starred ) {
 				return true;
@@ -289,7 +294,7 @@ function bp_messages_star_set_action( $args = array() ) {
 				return true;
 			}
 
-		// unstar all messages in a thread
+		// Unstar all messages in a thread.
 		} else {
 			$thread = new BP_Messages_Thread( $thread_id );
 			$mids = wp_list_pluck( $thread->messages, 'id' );
@@ -310,7 +315,7 @@ function bp_messages_star_set_action( $args = array() ) {
 /**
  * Screen handler to display a user's "Starred" private messages page.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_screen() {
 	add_action( 'bp_template_content', 'bp_messages_star_content' );
@@ -318,7 +323,7 @@ function bp_messages_star_screen() {
 	/**
 	 * Fires right before the loading of the "Starred" messages box.
 	 *
-	 * @since BuddyPress (2.3.0)
+	 * @since 2.3.0
 	 */
 	do_action( 'bp_messages_screen_star' );
 
@@ -328,26 +333,26 @@ function bp_messages_star_screen() {
 /**
  * Screen content callback to display a user's "Starred" messages page.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_content() {
-	// add our message thread filter
+	// Add our message thread filter.
 	add_filter( 'bp_after_has_message_threads_parse_args', 'bp_messages_filter_starred_message_threads' );
 
-	// load the message loop template part
+	// Load the message loop template part.
 	bp_get_template_part( 'members/single/messages/messages-loop' );
 
-	// remove our filter
+	// Remove our filter.
 	remove_filter( 'bp_after_has_message_threads_parse_args', 'bp_messages_filter_starred_message_threads' );
 }
 
 /**
  * Filter message threads by those starred by the logged-in user.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @param  array $r Current message thread arguments.
- * @return array
+ * @return array $r Array of starred message threads.
  */
 function bp_messages_filter_starred_message_threads( $r = array() ) {
 	$r['box'] = 'starred';
@@ -364,7 +369,7 @@ function bp_messages_filter_starred_message_threads( $r = array() ) {
 /**
  * Action handler to set a message's star status for those not using JS.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_action_handler() {
 	if ( ! bp_is_user_messages() ) {
@@ -379,19 +384,19 @@ function bp_messages_star_action_handler() {
 		wp_die( "Oops!  That's a no-no!" );
 	}
 
-	// Check capability
+	// Check capability.
 	if ( ! is_user_logged_in() || ! bp_core_can_edit_settings() ) {
 		return;
 	}
 
-	// mark the star
+	// Mark the star.
 	bp_messages_star_set_action( array(
 		'action'     => bp_current_action(),
 		'message_id' => bp_action_variable(),
 		'bulk'       => (bool) bp_action_variable( 2 )
 	) );
 
-	// redirect back to previous screen
+	// Redirect back to previous screen.
 	$redirect = wp_get_referer() ? wp_get_referer() : bp_loggedin_user_domain() . bp_get_messages_slug();
 	bp_core_redirect( $redirect );
 	die();
@@ -401,7 +406,7 @@ add_action( 'bp_actions', 'bp_messages_star_action_handler' );
 /**
  * Bulk manage handler to set the star status for multiple messages.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_bulk_manage_handler() {
 	if ( empty( $_POST['messages_bulk_nonce' ] ) ) {
@@ -413,7 +418,7 @@ function bp_messages_star_bulk_manage_handler() {
 		return;
 	}
 
-	// Check capability
+	// Check capability.
 	if ( ! is_user_logged_in() || ! bp_core_can_edit_settings() ) {
 		return;
 	}
@@ -432,7 +437,7 @@ function bp_messages_star_bulk_manage_handler() {
 		case 'star' :
 			$count = count( $threads );
 
-			// if we're starring a thread, we only star the first message in the thread
+			// If we're starring a thread, we only star the first message in the thread.
 			foreach ( $threads as $thread ) {
 				$thread = new BP_Messages_thread( $thread );
 				$mids = wp_list_pluck( $thread->messages, 'id' );
@@ -474,7 +479,7 @@ add_action( 'bp_actions', 'bp_messages_star_bulk_manage_handler', 5 );
  *
  * The dashicons font is used for the star / unstar icon.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_enqueue_scripts() {
 	if ( ! bp_is_user_messages() ) {
@@ -488,7 +493,7 @@ add_action( 'bp_enqueue_scripts', 'bp_messages_star_enqueue_scripts' );
 /**
  * Add the "Add star" and "Remove star" options to the bulk management list.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  */
 function bp_messages_star_bulk_management_dropdown() {
 ?>
@@ -503,9 +508,9 @@ add_action( 'bp_messages_bulk_management_dropdown', 'bp_messages_star_bulk_manag
 /**
  * Add CSS class for the current message depending on starred status.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
- * @param  array $retval Current CSS classes
+ * @param  array $retval Current CSS classes.
  * @return array
  */
 function bp_messages_star_message_css_class( $retval = array() ) {
@@ -515,7 +520,7 @@ function bp_messages_star_message_css_class( $retval = array() ) {
 		$status = 'not-starred';
 	}
 
-	// add css class based on star status for the current message
+	// Add css class based on star status for the current message.
 	$retval[] = "message-{$status}";
 
 	return $retval;
