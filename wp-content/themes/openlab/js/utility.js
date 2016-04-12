@@ -168,11 +168,11 @@
         }
 
         function toggle_other_details() {
-                if ( 'Other (please specify)' == $reason_for_request.val() ) {
-                        $other_details.slideDown( 'fast' );
-                } else {
-                        $other_details.slideUp( 'fast' );
-                }
+            if ('Other (please specify)' == $reason_for_request.val()) {
+                $other_details.slideDown('fast');
+            } else {
+                $other_details.slideUp('fast');
+            }
         }
 
         // + button on Related Links List Settings
@@ -183,17 +183,17 @@
         });
 
         var contact_us_topic = document.getElementById('contact-us-topic');
-        $workshop_meeting_items = jQuery( '#workshop-meeting-items' );
+        $workshop_meeting_items = jQuery('#workshop-meeting-items');
         jQuery('#contact-us-topic').on('change', function () {
             toggle_workshop_meeting_items();
         });
         toggle_workshop_meeting_items();
 
-        $other_details = jQuery( '#other-details' );
-        $reason_for_request = jQuery( '#reason-for-request' );
-        $reason_for_request.on( 'change', function() {
-                toggle_other_details();
-        } );
+        $other_details = jQuery('#other-details');
+        $reason_for_request = jQuery('#reason-for-request');
+        $reason_for_request.on('change', function () {
+            toggle_other_details();
+        });
         toggle_other_details();
 
         jQuery('#wds-accordion-slider').easyAccordion({
