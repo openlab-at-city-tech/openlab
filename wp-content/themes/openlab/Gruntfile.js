@@ -8,7 +8,7 @@ module.exports = function (grunt) {
             },
             vendor: {
                 src: ['js/bootstrap.min.js',
-                    'js/jcarousellite.js',
+                    'node_modules/jcarousellite/jcarousellite.js',
                     'js/easyaccordion.js',
                     'js/jquery.easing.1.3.js',
                     'js/jquery.mobile.customized.min.js',

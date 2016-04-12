@@ -8259,7 +8259,10 @@ body .inline-visible-xs {
   padding-right: 0;
 }
 .home-page #new-members .new-members-wrapper #home-new-member-wrap {
-  max-width: 100%;
+  max-width: 350px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 }
 .home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member {
   width: 50%;

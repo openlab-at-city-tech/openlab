@@ -42,21 +42,24 @@
         setUpNewMembersBox: function (resize) {
 
             if (resize) {
-                OpenLab.utility.newMembers.html(OpenLab.utility.newMembersHTML);
+                //OpenLab.utility.newMembers.html(OpenLab.utility.newMembersHTML);
+                OpenLab.utility.newMembers.trigger('refreshCarousel', '[all]')
             } else {
                 OpenLab.utility.newMembers = $('#home-new-member-wrap');
                 OpenLab.utility.newMembersHTML = $('#home-new-member-wrap').html();
-            }
 
-            //this is for the new OpenLab members slider on the homepage
-            OpenLab.utility.newMembers.jCarouselLite({
-                btnNext: ".next",
-                btnPrev: ".prev",
-                vertical: false,
-                visible: 2,
-                auto: 4000,
-                speed: 200,
-            });
+                //this is for the new OpenLab members slider on the homepage
+                OpenLab.utility.newMembers.jCarouselLite({
+                    circular: true,
+                    btnNext: ".next",
+                    btnPrev: ".prev",
+                    vertical: false,
+                    visible: 2,
+                    auto: true,
+                    speed: 200,
+                    autoWidth: true,
+                });
+            }
 
             $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
 

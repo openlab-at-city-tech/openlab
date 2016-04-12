@@ -61,7 +61,7 @@ function openlab_load_scripts() {
             wp_enqueue_script('less-js');
         }
 
-        wp_register_script('vendor-js', $stylesheet_dir_uri . '/js/dist/vendor.js', array('jquery'), '1.67', true);
+        wp_register_script('vendor-js', $stylesheet_dir_uri . '/js/dist/vendor.js', array('jquery'), '1.68', true);
         wp_enqueue_script('vendor-js');
 
         $utility_deps = array('jquery');
