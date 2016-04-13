@@ -2262,3 +2262,8 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 	return $check;
 }
 add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
+
+/**
+ * Disable BP 2.5 rich-text emails.
+ */
+add_filter( 'bp_email_use_wp_mail', '__return_true' );
