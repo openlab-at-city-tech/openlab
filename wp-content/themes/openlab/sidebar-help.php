@@ -67,7 +67,7 @@ wp_nav_menu($args);
             $src = wp_get_attachment_image_src($attachment->ID, 'full');
 
             echo '<a href="' . bp_get_root_domain() . '/blog/help/contact-us">';
-            echo '<img class="img-responsive" src="' . $src[0] . '" />';
+            echo '<img alt="Contact Us" class="img-responsive" src="' . $src[0] . '" />';
             echo '</a>';
             echo '</div>';
 
