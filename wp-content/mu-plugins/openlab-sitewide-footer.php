@@ -122,7 +122,7 @@ function openlab_footer_markup($placeholder = NULL) {
                     <div class="col-sm-12 col-logos">
                         <h2>OPENLAB at City Tech: A place to learn, work, and share</h2>
                         <p class="semibold"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
-                            <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                            <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="City University of New York" border="0" /></a>OpenLab is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                     </div>
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
                     <div class="col-sm-8 col-links semibold">
@@ -152,7 +152,7 @@ function openlab_footer_markup($placeholder = NULL) {
                             <h2>OPENLAB at City Tech:<br /><span>A place to learn, work, and share</span></h2>
                             <p><span class="semibold">OpenLab</span> is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                             <p class="clearfix mobile-logos"><a class="pull-left" href="http://www.citytech.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="Ney York City College of Technology" border="0" /></a>
-                                <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="Ney York City College of Technology" border="0" /></a></p>
+                                <a class="pull-left" href="http://www.cuny.edu/" target="_blank"><img class="cuny-logo img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="City University of New York" border="0" /></a></p>
                         </div>
                         <div class="row-copyright">
                             <div class="col-sm-24">
