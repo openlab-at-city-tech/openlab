@@ -529,10 +529,11 @@ function cuny_student_profile() {
 
                     <ul id="member-list" class="inline-element-list">
 
-                        <?php for ($i = 0; $i < count($friend_ids); $i++) { ?>
-
+                        <?php foreach ($friend_ids as $friend_id) { ?>
+                            
                             <li class="inline-element">
-                                <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>">                                      <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                <a href="<?php echo bp_core_get_user_domain($friend_id) ?>">
+                                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname($friend_id); ?>"/>
                                 </a>
                             </li>
 
