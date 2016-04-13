@@ -688,7 +688,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -877,7 +877,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                               ?></p>
+                                                        <p><?php // bp_group_status_message()                                ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -895,7 +895,7 @@ function openlab_group_profile_activity_list() {
 }
 
 function openlab_get_group_activity_content($title, $content, $link) {
-	$markup = '';
+    $markup = '';
 
     if ($title !== '') {
         $markup = <<<HTML
@@ -1417,7 +1417,7 @@ function openlab_get_faculty_list() {
 
             array_push($faculty, bp_core_get_user_displayname($id));
         }
-        
+
         $faculty = array_unique($faculty);
 
         $faculty_list = implode(', ', $faculty);
@@ -1430,7 +1430,7 @@ function openlab_get_group_site_settings($group_id) {
 
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
-    
+
     if ($site_id) {
         $site_url = get_blog_option($site_id, 'siteurl');
         $is_local = true;
@@ -1487,5 +1487,5 @@ add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 
 /**
  * Disable BuddyPress Cover Images for groups and users.
  */
-add_filter( 'bp_disable_cover_image_uploads', '__return_true' );
-add_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );
+add_filter('bp_disable_cover_image_uploads', '__return_true');
+add_filter('bp_disable_group_cover_image_uploads', '__return_true');
