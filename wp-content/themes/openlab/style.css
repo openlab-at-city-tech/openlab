@@ -7835,6 +7835,11 @@ body .inline-visible-xs {
 .page-loading #sidebarCustomSelect {
   visibility: hidden;
 }
+@media (min-width: 768px) {
+  #sidebarCustomSelect {
+    min-height: 171px;
+  }
+}
 .custom-select,
 .hidden-custom-select {
   position: relative;
@@ -8626,6 +8631,12 @@ body .inline-visible-xs {
 }
 .filter .archive-search #search-submit {
   padding: 8px 3% 9px;
+}
+@media (max-width: 1199px) and (min-width: 768px) {
+  .filter .custom-select select {
+    width: 170% !important;
+    left: -70% !important;
+  }
 }
 /**group archives - widget error (no groups to display for a user) **/
 .widget-error {

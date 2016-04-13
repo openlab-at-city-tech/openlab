@@ -858,6 +858,11 @@ body{
 .page-loading #sidebarCustomSelect{
     visibility: hidden;
 }
+#sidebarCustomSelect{
+    @media (min-width: @screen-sm-min){
+        min-height: 171px;
+    }
+}
 .custom-select,
 .hidden-custom-select{
     option{
@@ -1684,6 +1689,14 @@ body{
         }
         #search-submit{
             padding: 8px 3% 9px;
+        }
+    }
+    @media (max-width: @screen-md-max) and (min-width: @screen-sm-min){
+        .custom-select{
+            select{
+                width: 170% !important;
+                left: -70% !important;
+            }
         }
     }
 }

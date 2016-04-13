@@ -148,7 +148,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     <div class="filter">
         <p>Narrow down your search using the filters or search box below.</p>
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
-            <div id="sidebarCustomSelect">
+            <div id="sidebarCustomSelect" class="custom-select-parent">
                 <div class="custom-select">
                     <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
