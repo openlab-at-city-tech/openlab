@@ -25,7 +25,7 @@ echo "</{$cfcw_view->title_element}>";
 
             <div class="col-xs-12 cfcw-image-wrapper">
                 <a href="<?php echo esc_url($cfcw_view->resource_link) ?>">
-                    <img src="<?php echo $cfcw_view->image_url ?>" alt="Thumbnail" class="img-responsive" />
+                    <img src="<?php echo $cfcw_view->image_url ?>" alt="In the Spotlight: <?php echo $cfcw_view->resource_title ?>" class="img-responsive" />
                 </a>
             </div>
 
