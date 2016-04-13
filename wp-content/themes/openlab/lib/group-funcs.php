@@ -844,7 +844,7 @@ function openlab_group_profile_activity_list() {
                                     ?>
                                     <li class="inline-element">
                                         <a href="<?php echo bp_group_member_domain() ?>">
-                                            <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                            <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $member->fullname; ?>"/>
                                         </a>
                                     </li>
                                 <?php endwhile; ?>
