@@ -3390,7 +3390,7 @@ fieldset[disabled] .oplb-bs .btn-default.active {
 .oplb-bs .btn-default:active,
 .oplb-bs .btn-default.active,
 .open > .dropdown-toggle.oplb-bs .btn-default {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #e6e6e6;
   border-color: #adadad;
 }
@@ -3467,7 +3467,7 @@ fieldset[disabled] .oplb-bs .btn-primary.active {
 .oplb-bs .btn-primary:active,
 .oplb-bs .btn-primary.active,
 .open > .dropdown-toggle.oplb-bs .btn-primary {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #2b2b2b;
   border-color: #191919;
 }
@@ -3544,7 +3544,7 @@ fieldset[disabled] .oplb-bs .btn-success.active {
 .oplb-bs .btn-success:active,
 .oplb-bs .btn-success.active,
 .open > .dropdown-toggle.oplb-bs .btn-success {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #449d44;
   border-color: #398439;
 }
@@ -3621,7 +3621,7 @@ fieldset[disabled] .oplb-bs .btn-info.active {
 .oplb-bs .btn-info:active,
 .oplb-bs .btn-info.active,
 .open > .dropdown-toggle.oplb-bs .btn-info {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #31b0d5;
   border-color: #269abc;
 }
@@ -3698,7 +3698,7 @@ fieldset[disabled] .oplb-bs .btn-warning.active {
 .oplb-bs .btn-warning:active,
 .oplb-bs .btn-warning.active,
 .open > .dropdown-toggle.oplb-bs .btn-warning {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #ec971f;
   border-color: #d58512;
 }
@@ -3775,7 +3775,7 @@ fieldset[disabled] .oplb-bs .btn-danger.active {
 .oplb-bs .btn-danger:active,
 .oplb-bs .btn-danger.active,
 .open > .dropdown-toggle.oplb-bs .btn-danger {
-  color: #2ea397;
+  color: #63dfd2;
   background-color: #c9302c;
   border-color: #ac2925;
 }
@@ -7073,7 +7073,7 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar > ul > li.hover > .ab-item,
 .oplb-bs #wpadminbar #wp-toolbar > ul > li:hover > .ab-item {
   background: #333;
-  color: #2ea397;
+  color: #63dfd2;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar > ul > li {
@@ -7109,7 +7109,7 @@ button.oplb-bs .close {
   text-decoration: none;
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
-  background: #2ea397;
+  background: #63dfd2;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
@@ -7191,7 +7191,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:focus {
-  color: #2ea397;
+  color: #49cabe;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
@@ -7249,7 +7249,7 @@ button.oplb-bs .close {
   height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .icon-bar {
-  background: #2ea397;
+  background: #63dfd2;
   height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger-mol .icon-bar {
@@ -7553,7 +7553,7 @@ button.oplb-bs .close {
   color: #999999;
 }
 .oplb-bs .search .search-trigger-wrapper:hover {
-  color: #2ea397;
+  color: #49cabe;
 }
 .oplb-bs .search .search-trigger-wrapper span {
   line-height: 4.5;
@@ -7570,7 +7570,7 @@ button.oplb-bs .close {
   z-index: 999999;
 }
 .oplb-bs .search .search-trigger-wrapper.search-live span {
-  color: #2ea397;
+  color: #49cabe;
 }
 @media (max-width: 767px) {
   .oplb-bs .search .search-trigger-wrapper span {
@@ -7756,7 +7756,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs #go-to-top {
-  background: rgba(46, 163, 151, 0.42);
+  background: rgba(73, 202, 190, 0.42);
   bottom: 5%;
   display: none;
   font-size: 13px;
