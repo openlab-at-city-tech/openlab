@@ -1633,6 +1633,8 @@ function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
 		$comment_content = $wpdb->get_var( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = '$comment_id' LIMIT 1" );
 		$comment_content = preg_replace( "/disabledupes\{.*\}disabledupes/", "", $comment_content );
 		$wpdb->query( "UPDATE $wpdb->comments SET comment_content = '" . $wpdb->escape( $comment_content ) . "' WHERE comment_ID = '$comment_id' LIMIT 1" );
+
+		clean_comment_cache( array( $comment_id ) );
 	}
 }
 add_action( 'comment_post', 'openlab_enable_duplicate_comments_comment_post', 1 );

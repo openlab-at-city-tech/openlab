@@ -362,10 +362,23 @@ add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
 /**
  * Make sure the comment-dupe data doesn't get saved in the comments activity
  */
-function openlab_pre_save_comment_activity( $content ) {
-	return preg_replace( "/disabledupes\{.*\}disabledupes/", "", $content );
+function openlab_pre_save_comment_activity( $activity ) {
+	$is_old_blog_comment = 'blogs' === $activity->component && 'new_blog_comment' === $activity->type;
+
+	// OMG
+	$is_new_blog_comment = false;
+	if ( 'activity' === $activity->component && 'activity_comment' === $activity->type ) {
+		$parent = bp_activity_get_specific( array( 'activity_ids' => array( $activity->secondary_item_id ) ) );
+		if ( $parent['activities'] ) {
+			$is_new_blog_comment = 'new_blog_post' === $parent['activities'][0]->type;
+		}
+	}
+
+	if ( $is_old_blog_comment || $is_new_blog_comment ) {
+		$activity->content = preg_replace( "/disabledupes\{.*\}disabledupes/", "", $activity->content );
+	}
 }
-add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
+add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
  * Auto-enable BuddyPress Docs for all group types
