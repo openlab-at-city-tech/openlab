@@ -112,16 +112,17 @@ blockquote {
             display: inline-block;
             margin-bottom: 0;
             border-right: 1px solid @80gray;
+            padding: 0 7px;
             a,
             span{
                 color: @black;
                 display: inline-block;
-                padding: 0 7px;
+                padding: 0;
             }
             &.no-link{
                 color: @aqua;
-                padding: 0 7px;
                 font-weight: @bold;
+                padding: 0;
             }
             &.current-menu-item,
             &:hover{
@@ -137,18 +138,12 @@ blockquote {
                 border-right: none;
             }
             .fa{
-                padding-left: 7px;
-                padding-right: 0;
+                padding-left: 0;
+                padding-right: 7px;
                 margin: 0;
             }
             &:first-child{
-                a{
-                    padding-left: 0;
-                }
-                .fa{
-                    padding-left: 0;
-                    padding-right: 7px;
-                }
+                padding-left: 0;
             }
             &.submenu-title{
                 &:hover,
@@ -164,9 +159,9 @@ blockquote {
             li{
                 display: block;
                 border-right: none;
+                padding: 0;
                 a{
                     border-right: none;
-                    padding: 0;
                     line-height: 185%;
                 }
                 .fa{
@@ -428,11 +423,10 @@ h1.entry-title{
     margin-bottom: 10px;
     margin-top: 18px;
     padding-bottom: 6px;
-    line-height: 140%;
     position: relative;
     .direct-toggle{
         background: darken(@10gray,4.7%);
-        height: 48px;
+        height: 47px;
         border: none;
         color: @magenta;
         position: absolute;
@@ -861,6 +855,14 @@ body{
     }
 }
 /**custom selects**/
+.page-loading #sidebarCustomSelect{
+    visibility: hidden;
+}
+#sidebarCustomSelect{
+    @media (min-width: @screen-sm-min){
+        min-height: 171px;
+    }
+}
 .custom-select,
 .hidden-custom-select{
     option{
@@ -946,7 +948,7 @@ body{
                 &#open-lab-login{
                     border-bottom: 13px solid darken(desaturate(@magenta,21%),8%);
                     h2{
-                        margin: 20px 0 18px;
+                        margin: 16px 0 14px;
                     }
                     #user-info{
                         margin-bottom: 23px;
@@ -1092,7 +1094,7 @@ body{
                     h2{
                         font-size: 24px;
                         font-weight: @normal;
-                        margin: 0 0 12px;
+                        margin: 0 0 6px;
                     }
                     p{
                         font-size: @font-size-h5;
@@ -1267,7 +1269,10 @@ body{
                 }
             }
             #home-new-member-wrap{
-                max-width: 100%;
+                max-width: 350px;
+                position: relative;
+                overflow: hidden;
+                width: 100%;
                 .home-new-member{
                     width: 50%;
                     height: 245px;
@@ -1298,7 +1303,7 @@ body{
                 padding: 5px;
                 margin-bottom: 15px;
                 h4{
-                    margin: 15px auto 8px;
+                    margin: 12px auto 5px;
                     font-size: @font-size-base;
                 }
                 a{
@@ -1311,11 +1316,46 @@ body{
                     }
                 }
                 .item-avatar{
+                    height: 0;
                     position: relative;
+                    padding-top: 100%;
+                    a{
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                    }
+                    @media (max-width: @screen-xs-max){
+                        height: 100%;
+                        width: 100%;
+                        position: relative;
+                        max-width: 225px;
+                        max-height: 225px;
+                        padding-top: 0;
+                        margin: 0 auto;
+                        a{
+                            position: relative;
+                            height: 0;
+                            padding-top: 100%;
+                            width: 100%;
+                            top: auto;
+                            left: auto;
+                            img{
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                            }
+                        }
+                    }
                 }
                 .item-content-wrapper{
                     margin: 0 auto;
                     width: 88%;
+                    max-width: 225px;
+                    @media (max-width: @screen-xs-max){
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -1334,14 +1374,15 @@ body{
         &.sidebar-title,
         &.sidebar-header{
             font-weight: @bold;
-            margin-bottom: 9px;
+            margin-bottom: 4px;
         }
         &.sidebar-header{
             margin-top: 26px;
             &.top-sidebar-header{
+                margin-bottom: 6px;
                 margin-top: 20px;
                 &.group-single{
-                    margin-top: 21px;
+                    margin-top: 18px;
                 }
             }
         }
@@ -1556,7 +1597,7 @@ body{
             margin: 0 0 5px;
         }
         h2{
-            margin: 6px 0 12px;
+            margin: 6px 0;
             a{
                 // color: @80gray;
             }
@@ -1572,7 +1613,7 @@ body{
         }
         .info-line{
             font-size: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
         .item{
             @media (max-width: @screen-md-max){
@@ -1625,7 +1666,7 @@ body{
     .group-item-wrapper{
         height: 110px;
         h2{
-            margin: 10px 0 12px;
+            margin: 8px 0 10px;
         }
     }
 }
@@ -1650,6 +1691,14 @@ body{
             padding: 8px 3% 9px;
         }
     }
+    @media (max-width: @screen-md-max) and (min-width: @screen-sm-min){
+        .custom-select{
+            select{
+                width: 170% !important;
+                left: -70% !important;
+            }
+        }
+    }
 }
 /**group archives - widget error (no groups to display for a user) **/
 .widget-error {
@@ -1667,6 +1716,18 @@ input#group-request-send {
 #group-action-wrapper{
     .link-btn{
         padding: 9px 12px;
+    }
+}
+#current-group-site{
+    p{
+        margin-bottom: 9px;
+    }
+    #change-group-site{
+        padding-left: 34px;
+        margin-top: 0;
+        li{
+            padding-left: 6px;
+        }
     }
 }
 .group-header-content{
@@ -1753,7 +1814,10 @@ input#group-request-send {
 .group-members{
     &.group-list{
         .group-item-wrapper{
-            height: 95px;
+            height: 118px;
+            p{
+                margin: 10px 0 7px; 
+            }
         }
     }
 }
@@ -1766,25 +1830,21 @@ input#group-request-send {
         }
         .group-item{
             .group-item-wrapper{
-                height: 120px;
+                height: 105px;
                 &.no-btn{
                     height: 98px;
                 }
                 &.moderators{
-                    height: 107px;
+                    height: 127px;
                 }
                 &.members{
-                    height: 300px;
+                    height: 318px;
                     .link-btn{
                         margin-right: 3px;
                     }
                 }
-                @media (min-width: @screen-md-min) and (max-width: @screen-md-max){
-                    height: 258px;
-                }
-
                 /* User name */
-                h4 {
+                p {
                     margin: 10px 0 15px;
                     a {
                         text-decoration: none;
@@ -1923,6 +1983,10 @@ body.membership-requests {
     }
 }
 .doc-content{
+    &.edit-doc{
+        border: none;
+        padding: 0;
+    }
     .wp-switch-editor{
         padding: 0 8px;
         text-decoration: none;
@@ -2184,9 +2248,7 @@ body.membership-requests {
         .panel-body{
             padding: 2%;
             h6{
-                margin: 7px 0 9px;
-                line-height: 1.2;
-                padding: 0 0 3px;
+                margin: 5px 0 7px;
             }
             p,
             a{
@@ -2216,6 +2278,17 @@ body.membership-requests {
         }
     }
 }
+.my-friends{
+    .group-list{
+        .group-item-wrapper{
+            .generic-button{
+                &.friendship-button{
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+}
 #friend-list{
     &.group-list{
         .group-item-wrapper{
@@ -2234,6 +2307,47 @@ body.membership-requests {
             @media (max-width: @screen-sm-max){
                 height: 130px;
             }
+        }
+    }
+}
+#settings-form{
+    .table{
+        thead{
+            tr{
+                th{
+                    border-width: 1px;
+                    padding: 4px 8px 4px 0;
+                    &.icon{
+                        display: none;
+                    }
+                }
+            }
+        }
+        tbody{
+            tr{
+                td{
+                    border: none;
+                    padding: 4px 8px 4px 0;
+                    &:first-child{
+                        display: none;
+                    }
+                }
+            }
+        }
+        .yes,
+        .no{
+            text-align: center;
+        }
+        .no{
+            padding-right: 7%;
+        }
+        .yes{
+            padding-right: 5%;
+        }
+    }
+    #group-email-settings{
+        .table{
+            margin-bottom: 0;
         }
     }
 }
@@ -2268,7 +2382,6 @@ body.membership-requests {
     }
 }
 #help-title-nav {
-    margin-left: 6px;
 
     .nav-previous {
         padding-right: 8px;
@@ -2289,9 +2402,14 @@ body.membership-requests {
     }
 
     .fa {
-        margin: 0 4px;
-        padding-left: 0;
+        padding: 0;
         vertical-align: middle;
+        &.fa-chevron-circle-left{
+            margin-right: 4px;
+        }
+        &.fa-chevron-circle-right{
+            margin-left: 4px;
+        }
     }
 }
 .help-title:first-of-type {
@@ -2303,6 +2421,10 @@ body.membership-requests {
             border-top: 1px solid @30gray;
         }
     }
+}
+input.help-search {
+    width: 100%;
+    margin-bottom: 8px;
 }
 #help-tags {
     .btn-primary {

@@ -18,8 +18,16 @@ class MostLikedPostsWidget extends WP_Widget
                $new_instance['title'] = __('Most Liked Posts', 'wti-like-post');
           }
 		
-		if ( $new_instance['time_range'] == '' ){
+		if ( $new_instance['time_range'] == '' ) {
                $new_instance['time_range'] = 'all';
+          }
+		
+		if ( empty( $new_instance['number']) ) {
+               $new_instance['number'] = 10;
+          }
+		
+		if ( !isset( $new_instance['show_count'] ) ) {
+               $new_instance['show_count'] = 0;
           }
 		
           return $new_instance;
@@ -27,6 +35,20 @@ class MostLikedPostsWidget extends WP_Widget
     
      function form($instance) {
           global $MostLikedPosts;
+		
+		/**
+		* Define the array of defaults
+		*/ 
+		$defaults = array(
+					'title' => __('Most Liked Posts', 'wti-like-post'),
+					'number' => 10,
+					'time_range' => 'all',
+					'show_count' => ''
+				);
+		
+		$instance = wp_parse_args( $instance, $defaults );
+		extract( $instance, EXTR_SKIP );
+		
 		$time_range_array = array(
 							'all' => __('All time', 'wti-like-post'),
 							'1' => __('Last one day', 'wti-like-post'),
@@ -43,11 +65,13 @@ class MostLikedPostsWidget extends WP_Widget
 						);
 		
 		$show_types = array('most_liked' => __('Most Liked', 'wti-like-post'), 'recent_liked' => __('Recently Liked', 'wti-like-post'));
+		
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
           ?>
 		<p>
                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'wti-like-post'); ?>:<br />
-               <input class="widefat" type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title'];?>" /></label>
-          </p>		
+               <input class="widefat" type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title;?>" /></label>
+          </p>
 		<p>
                <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show', 'wti-like-post'); ?>:<br />
                <input type="text" id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" style="width: 40px;" value="<?php echo $instance['number'];?>" /></label>
@@ -64,7 +88,7 @@ class MostLikedPostsWidget extends WP_Widget
 			</select>
           </p>
 		<p>
-               <label for="<?php echo $this->get_field_id('show_count'); ?>"><input type="checkbox" id="<?php echo $this->get_field_id('show_count'); ?>" name="<?php echo $this->get_field_name('show_count'); ?>" value="1" <?php if($instance['show_count'] == '1') echo 'checked="checked"'; ?> /> <?php _e('Show like count', 'wti-like-post'); ?></label>
+               <label for="<?php echo $this->get_field_id('show_count'); ?>"><input type="checkbox" id="<?php echo $this->get_field_id('show_count'); ?>" name="<?php echo $this->get_field_name('show_count'); ?>" value="1" <?php if(isset($instance['show_count']) && $instance['show_count'] == '1') echo 'checked="checked"'; ?> /> <?php _e('Show like count', 'wti-like-post'); ?></label>
           </p>
 		<input type="hidden" id="wti-most-submit" name="wti-submit" value="1" />	   
           <?php
@@ -85,6 +109,7 @@ class WtiMostLikedPosts
 		global $wpdb;
 		extract($args);
 	    
+		$where = '';
 		$title = $instance['title'];
 		$show_count = $instance['show_count'];
 		$time_range = $instance['time_range'];
@@ -111,9 +136,18 @@ class WtiMostLikedPosts
 			$where .= " AND date_time >= '$last_date'";
 		}
 		
-		//getting the most liked posts
-		$query = "SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P ";
-		$query .= "WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where GROUP BY post_id $order_by $limit";
+		// Getting the most liked posts
+		$query = "SELECT post_id, SUM(value) AS like_count, post_title
+				FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
+				WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0
+				$where GROUP BY post_id $order_by $limit";
+		
+		/*$query = $wpdb->prepare(
+					"SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
+					WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 %s GROUP BY post_id %s %d",
+					$where, $order_by, $limit
+				);*/
+		
 		$posts = $wpdb->get_results($query);
 
 		if ( count( $posts ) > 0 ) {
@@ -169,6 +203,17 @@ class RecentlyLikedPostsWidget extends WP_Widget
     
      function form($instance) {
           global $RecentlyLikedPosts;
+		
+		/**
+		* Define the array of defaults
+		*/ 
+		$defaults = array(
+					'title' => __('Recently Liked Posts', 'wti-like-post'),
+					'number' => 10
+				);
+		
+		$instance = wp_parse_args( $instance, $defaults );
+		extract( $instance, EXTR_SKIP );
           ?>
 		<p>
                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'wti-like-post'); ?>:<br />
@@ -207,15 +252,17 @@ class RecentlyLikedPosts
 		$widget_data .= '<ul class="wti-most-liked-posts wti-user-liked-posts">';
 	
 		$show_excluded_posts = get_option('wti_like_post_show_on_widget');
-		$excluded_post_ids = explode(',', get_option('wti_like_post_excluded_posts'));
+		$excluded_posts = get_option('wti_like_post_excluded_posts');
 		
-		if(!$show_excluded_posts && count($excluded_post_ids) > 0) {
-			$where = "AND post_id NOT IN (" . get_option('wti_like_post_excluded_posts') . ")";
+		if ( !$show_excluded_posts && !empty( $excluded_posts ) ) {
+			$where = "AND post_id NOT IN (" . $excluded_posts . ")";
 		}
 		
 		// Get the post IDs recently voted
-		$recent_ids = $wpdb->get_col("SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post`
-							    WHERE value > 0 $where GROUP BY post_id ORDER BY MAX(date_time) DESC");
+		$recent_ids = $wpdb->get_col(
+							"SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post`
+							WHERE value > 0 $where GROUP BY post_id ORDER BY MAX(date_time) DESC"
+						);
 
 		if(count($recent_ids) > 0) {
 			$where = "AND post_id IN(" . implode(",", $recent_ids) . ")";

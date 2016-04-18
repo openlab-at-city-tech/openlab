@@ -399,63 +399,75 @@ class Openlab_Clone_Course_Group {
 	}
 
         protected function migrate_topics() {
-            $source_group_admins = $this->get_source_group_admins();
-            $forum_ids = bbp_get_group_forum_ids($this->group_id);
-            // Should never happen, but just in case
-            // (without this, it returns all topics)
-            if (empty($forum_ids)) {
-                return;
-            }
-            $forum_id = $forum_ids[0];
-            // Get source topics
-            $source_forum_ids = bbp_get_group_forum_ids($this->source_group_id);
-            if (empty($source_forum_ids)) {
-                return;
-            }
-            $source_forum_id = $source_forum_ids[0];
-            if (!$source_forum_id) {
-                return;
-            }
-            $source_forum_topics = new WP_Query(array(
-                'post_type' => bbp_get_topic_post_type(),
-                'post_parent' => $source_forum_id,
-                'posts_per_page' => -1,
-                'author__in' => $source_group_admins,
-                    ));
-            $group = groups_get_group(array('group_id' => $this->group_id));
-            // Set the default forum status
-            switch ($group->status) {
-                case 'hidden' :
-                    $status = bbp_get_hidden_status_id();
-                    break;
-                case 'private' :
-                    $status = bbp_get_private_status_id();
-                    break;
-                case 'public' :
-                default :
-                    $status = bbp_get_public_status_id();
-                    break;
-            }
-            // Then post them
-            foreach ($source_forum_topics->posts as $sftk) {
-                bbp_insert_topic(array(
-                    'post_parent' => $forum_id,
-                    'post_status' => $status,
-                    'post_author' => $sftk->post_author,
-                    'post_content' => $sftk->post_content,
-                    'post_title' => $sftk->post_title,
-                    'post_date' => $sftk->post_date,
-                ));
-            }
-            return;
-            // rekey for better lookups
-            $source_forum_topics_keyed = array();
-            foreach ($source_forum_topics as $sft) {
-                if (!in_array($sft->post_author, $source_group_admins)) {
-                    continue;
-                }
-                $source_forum_topics_keyed[$sft->ID] = $sft;
-            }
+		$source_group_admins = $this->get_source_group_admins();
+		$forum_ids = bbp_get_group_forum_ids( $this->group_id );
+
+		// Should never happen, but just in case
+		// (without this, it returns all topics)
+		if ( empty( $forum_ids ) ) {
+			return;
+		}
+		$forum_id = $forum_ids[0];
+
+		// Get source topics
+		$source_forum_ids = bbp_get_group_forum_ids( $this->source_group_id );
+		if ( empty( $source_forum_ids ) ) {
+			return;
+		}
+
+		$source_forum_id = $source_forum_ids[0];
+		if ( ! $source_forum_id ) {
+			return;
+		}
+
+		$source_forum_topics = new WP_Query( array(
+			'post_type' => bbp_get_topic_post_type(),
+			'post_parent' => $source_forum_id,
+			'posts_per_page' => -1,
+			'author__in' => $source_group_admins,
+		) );
+		$group = groups_get_group( array( 'group_id' => $this->group_id ) );
+
+		// Set the default forum status
+		switch ( $group->status ) {
+			case 'hidden' :
+				$status = bbp_get_hidden_status_id();
+				break;
+			case 'private' :
+				$status = bbp_get_private_status_id();
+				break;
+			case 'public' :
+			default :
+				$status = bbp_get_public_status_id();
+				break;
+		}
+
+		// Then post them
+		foreach ( $source_forum_topics->posts as $sftk ) {
+			bbp_insert_topic( array(
+				'post_parent' => $forum_id,
+				'post_status' => $status,
+				'post_author' => $sftk->post_author,
+				'post_content' => $sftk->post_content,
+				'post_title' => $sftk->post_title,
+				'post_date' => $sftk->post_date,
+			), array(
+				'forum_id' => $forum_id,
+			) );
+		}
+
+		return;
+
+		// bbPress 1
+
+		// rekey for better lookups
+		$source_forum_topics_keyed = array();
+		foreach ($source_forum_topics as $sft) {
+			if (!in_array($sft->post_author, $source_group_admins)) {
+				continue;
+			}
+			$source_forum_topics_keyed[$sft->ID] = $sft;
+		}
 
                 // And their first posts
 		global $wpdb, $bp, $bbdb;
@@ -662,7 +674,11 @@ class Openlab_Clone_Course_Site {
 		// - if it's not by an admin, delete
 		switch_to_blog( $this->site_id );
 
-		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status FROM {$wpdb->posts}" );
+                // Copy over attachments. Whee!
+		$upload_dir = wp_upload_dir();
+		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+
+		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
@@ -672,31 +688,45 @@ class Openlab_Clone_Course_Site {
 						'post_status' => 'draft',
 					);
 					wp_update_post( $post_arr );
+
+					wp_update_comment_count_now( $sp->ID );
 				}
 			} else {
-				wp_delete_post( $sp->ID, true );
+				// Non-teachers have their stuff deleted.
+				if ( 'attachment' === $sp->post_type ) {
+					// Will delete the file as well.
+					wp_delete_attachment( $sp->ID, true );
+				} else {
+					wp_delete_post( $sp->ID, true );
+				}
 			}
 		}
-                
-                // Copy over attachments. Whee!
-		$upload_dir = wp_upload_dir();
-		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+
+		// Replace the site URL in all post content.
+                // For some reason a regular MySQL query is not working.
+                $source_site_url = get_blog_option( $this->source_site_id, 'home' );
+                $this_site_url = get_option( 'home' );
+                foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
+                        $post = get_post( $post_id );
+                        $post->post_content = str_replace( $source_site_url, $this_site_url, $post->post_content );
+                        wp_update_post( $post );
+                }
 
 		restore_current_blog();
 	}
 
 	protected function get_source_group_admins() {
 		if ( empty( $this->source_group_admins ) ) {
-			$g = groups_get_group(array(
-                        'group_id' => $this->source_group_id,
-                        'populate_extras' => true,
-                            ));
+			$g = groups_get_group( array(
+				'group_id' => $this->source_group_id,
+				'populate_extras' => true,
+			) );
 			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
 		}
 
 		return $this->source_group_admins;
 	}
-        
+
         /**
 	 * Copy a file, or recursively copy a folder and its contents
 	 *

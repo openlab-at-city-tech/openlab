@@ -5,7 +5,7 @@ Plugin URI: 	http://dublue.com/plugins/toc/
 Description: 	A powerful yet user friendly plugin that automatically creates a table of contents. Can also output a sitemap listing all pages and categories.
 Author: 		Michael Tran
 Author URI: 	http://dublue.com/
-Version: 		1507
+Version: 		1509
 License:		GPL2
 */
 
@@ -39,7 +39,7 @@ FOR CONSIDERATION:
 	- highlight target css
 */
 
-define( 'TOC_VERSION', '1505' );
+define( 'TOC_VERSION', '1509' );
 define( 'TOC_POSITION_BEFORE_FIRST_HEADING', 1 );
 define( 'TOC_POSITION_TOP', 2 );
 define( 'TOC_POSITION_BOTTOM', 3 );
@@ -431,11 +431,9 @@ if ( !class_exists( 'toc' ) ) :
 		{
 			$js_vars = array();
 			
-			
 			// register our CSS and scripts
-			wp_register_style( 'toc-screen', $this->path . '/screen.css', array(), TOC_VERSION );
-			wp_register_script( 'toc-front', $this->path . '/front.js', array('jquery'), TOC_VERSION, true );
-			
+			wp_register_style( 'toc-screen', $this->path . '/screen.min.css', array(), TOC_VERSION );
+			wp_register_script( 'toc-front', $this->path . '/front.min.js', array('jquery'), TOC_VERSION, true );
 			
 			// enqueue them!
 			if ( !$this->options['exclude_css'] ) wp_enqueue_style("toc-screen");
@@ -1115,6 +1113,9 @@ if ( !class_exists( 'toc' ) ) :
 			
 			if ( $title ) {
 				$return = trim( strip_tags($title) );
+
+				// convert accented characters to ASCII 
+				$return = remove_accents( $return );
 				
 				// replace newlines with spaces (eg when headings are split over multiple lines)
 				$return = str_replace( array("\r", "\n", "\n\r", "\r\n"), ' ', $return );
@@ -1567,7 +1568,7 @@ if ( !class_exists( 'toc_widget' ) ) :
 				'height' => 350, 
 				'id_base' => 'toc-widget'
 			);
-			$this->WP_Widget( 'toc-widget', 'TOC+', $widget_options, $control_options );
+			parent::__construct( 'toc-widget', 'TOC+', $widget_options, $control_options );
 		}
 		
 
@@ -1589,7 +1590,7 @@ if ( !class_exists( 'toc_widget' ) ) :
 				extract( $args );
 				
 				$items = $tic->extract_headings( $find, $replace, wptexturize($post->post_content) );
-				$title = apply_filters('widget_title', $instance['title'] );
+				$title = ( array_key_exists('title', $instance) ) ? apply_filters('widget_title', $instance['title']) : '';
 				if ( strpos($title, '%PAGE_TITLE%') !== false ) $title = str_replace( '%PAGE_TITLE%', get_the_title(), $title );
 				if ( strpos($title, '%PAGE_NAME%') !== false ) $title = str_replace( '%PAGE_NAME%', get_the_title(), $title );
 				$hide_inline = $toc_options['show_toc_in_widget_only'];

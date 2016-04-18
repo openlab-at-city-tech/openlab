@@ -1,7 +1,7 @@
-/* globals bp, plupload, BP_Uploader, _, JSON, Backbone */
+/* global bp, plupload, BP_Uploader, _, JSON, Backbone */
 
 window.wp = window.wp || {};
-window.bp = window.bp || window.wp;
+window.bp = window.bp || {};
 
 ( function( exports, $ ) {
 
@@ -10,6 +10,14 @@ window.bp = window.bp || window.wp;
 		return;
 	}
 
+	/**
+	 * Extend the bp global with what we need from the wp one.
+	 * and make sure previously defined BuddyPress attributes
+	 * are not removed (eg: bp.mentions)
+	 */
+	_.extend( bp, _.pick( wp, 'Backbone', 'ajax', 'template' ) );
+
+	// Init Models, Collections, Views and the BuddyPress Uploader
 	bp.Models      = bp.Models || {};
 	bp.Collections = bp.Collections || {};
 	bp.Views       = bp.Views || {};
@@ -56,11 +64,23 @@ window.bp = window.bp || window.wp;
 		 * @param {plupload.Uploader} uploader Uploader instance.
 		 */
 		this.uploader.bind( 'Init', function( uploader ) {
-			var container = $( '#' + self.params.defaults.container ),
+			var container    = $( '#' + self.params.defaults.container ),
 			    drop_element = $( '#' + self.params.defaults.drop_element );
 
 			if ( 'html4' === uploader.runtime ) {
 				uploader.settings.multipart_params.html4 = true;
+			}
+
+			/**
+			 * Avatars need to be cropped, by default we are using an original
+			 * max width of 450px, but there can be cases when this max width
+			 * is larger than the one of the Avatar UI (eg: on mobile). To avoid any
+			 * difficulties, we're adding a ui_available_width argument to the bp_params
+			 * object and set it according to the container width. This value will be
+			 * checked during the upload process to eventually adapt the resized avatar.
+			 */
+			if ( 'bp_avatar_upload' ===  uploader.settings.multipart_params.action ) {
+				 uploader.settings.multipart_params.bp_params.ui_available_width = container.width();
 			}
 
 			if ( uploader.features.dragdrop && ! self.params.browser.mobile ) {
@@ -303,8 +323,8 @@ window.bp = window.bp || window.wp;
 		defaults: _.pick( BP_Uploader.settings.defaults, 'container', 'drop_element', 'browse_button' ),
 
 		initialize: function() {
-			this.warning = null;
-			this.model = new Backbone.Model( this.defaults );
+			this.warnings = [];
+			this.model    = new Backbone.Model( this.defaults );
 			this.on( 'ready', this.initUploader );
 		},
 
@@ -319,20 +339,27 @@ window.bp = window.bp || window.wp;
 				return;
 			}
 
-			this.warning = new bp.Views.uploaderWarning( {
+			var warning = new bp.Views.uploaderWarning( {
 				value: message
 			} ).render();
 
-			this.$el.after( this.warning.el );
+			this.warnings.push( warning );
+
+			this.$el.after( warning.el );
 		},
 
 		resetWarning: function() {
-			if ( _.isNull( this.warning ) ) {
+			if ( 0 === this.warnings.length ) {
 				return;
 			}
 
-			this.warning.remove();
-			this.warning = null;
+			// Remove all warning views
+			_.each( this.warnings, function( view ) {
+				view.remove();
+			} );
+
+			// Reset Warnings
+			this.warnings = [];
 		}
 	} );
 
@@ -340,7 +367,6 @@ window.bp = window.bp || window.wp;
 	bp.Views.uploaderWarning = bp.View.extend( {
 		tagName: 'p',
 		className: 'warning',
-		id: 'bp-uploader-warning',
 
 		initialize: function() {
 			this.value = this.options.value;

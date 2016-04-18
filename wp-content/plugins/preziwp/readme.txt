@@ -2,8 +2,8 @@
 Contributors: boonebgorges, cuny-academic-commons
 Tags: prezi, shortcode
 Requires at least: 2.6
-Tested up to: 3.7.1
-Stable tag: 1.1
+Tested up to: 4.4.0
+Stable tag: 1.2
 
 Adds a Prezi shortcode to allow you to easily embed presentations into WordPress.
 
@@ -30,6 +30,10 @@ Optionally, you can provide height and width attributes:
 1. Sit back and watch the jack roll in
 
 == Changelog ==
+
+= 1.2 =
+* Improved localization
+* Compatibility with HTTPS
 
 = 1.1 =
 * Update for the latest Prezi embed format

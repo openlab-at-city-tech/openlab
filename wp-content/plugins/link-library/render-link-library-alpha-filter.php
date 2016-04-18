@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
-function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $libraryoptions, $settings ) {
+function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $searchmode ) {
 
 	global $wpdb;
 
@@ -50,14 +50,14 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 
 	$output = '<div class="catalphafilter">';
 
-	$output .= '<div class="catalphafiltertitle">' . __( 'Category Filter', 'link-library' ) . '</div>';
+	$output .= '<div class="catalphafiltertitle">' . $catfilterlabel . '</div>';
 
 	$currentcatletter = '';
-	if ( isset( $_GET['catletter'] ) ) {
+	if ( isset( $_GET['catletter'] ) && 'normal' == $searchmode ) {
 		if ( isset( $_GET['catletter'] ) && strlen( $_GET['catletter'] ) == 1 ) {
 			$currentcatletter = $_GET['catletter'];
 		}
-	} else {
+	} elseif ( 'normal' == $searchmode ) {
 		if ( $cat_letter_filter_autoselect ) {
 			if ( !empty( $catletters ) ) {
 				$currentcatletter = $catletters[0];
@@ -68,7 +68,10 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 	if ( isset( $_GET ) ) {
 		$incomingget = $_GET;
 		unset ( $incomingget['catletter'] );
+		unset ( $incomingget['searchll'] );
 	}
+
+	global $post;
 
 	foreach ( range('A', 'Z') as $letter ) {
 		if ( in_array( $letter, $catletters ) ) {
@@ -81,7 +84,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 
 			$argumentarray = array ( 'catletter' => urlencode($letter) );
 			$argumentarray = array_merge( $argumentarray, $incomingget );
-			$targetaddress = esc_url( add_query_arg( $argumentarray ) );
+			$targetaddress = esc_url( add_query_arg( $argumentarray, get_permalink( $post->ID ) ) );
 
 			$output .= '"><a href="' . $targetaddress . '">' . $letter . '</a></div>';
 		} else {
@@ -100,7 +103,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 
 		$argumentarray = array ( 'catletter' => '' );
 		$argumentarray = array_merge( $argumentarray, $incomingget );
-		$targetaddress = esc_url( add_query_arg( $argumentarray ) );
+		$targetaddress = esc_url( add_query_arg( $argumentarray, get_permalink( $post->ID ) ) );
 
 		$output .= '"><a href="' . $targetaddress . '">ALL</a></div>';
 	}

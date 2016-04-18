@@ -230,7 +230,7 @@ stlib_picker.addServiceLink = function(ul, key, value, before) {
 	imgProto = (document.location.protocol === "https:") ? "https://ws" : "http://w";
 		
 	if (before && before == true)
-		ul.prepend("<li id='st_li_" + key + "' class='stp_li'><img src="+imgProto+"'.sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
+		ul.prepend("<li id='st_li_" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 	else
 		ul.append("<li id='st_li_" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 }

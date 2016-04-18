@@ -263,7 +263,7 @@ function gde_overwrite_profile( $sourceid ) {
  * @return  void
  */
 function gde_import( $data ) {
-	$label = __('Import', 'gde');
+	$label = __('Import', 'google-document-embedder');
 	$status = array();
 	
 	echo '
@@ -274,67 +274,67 @@ function gde_import( $data ) {
 	
 	if ( isset( $data['profiles'] ) || isset( $data['profiles'] ) ) {
 		// full import
-		echo "<p>" . __('Performing full import...', 'gde') . "</p>\n";
+		echo "<p>" . __('Performing full import...', 'google-document-embedder') . "</p>\n";
 		
 		// profiles import
 		if ( isset( $data['profiles'] ) ) {
-			echo "<p>" . __('Importing profiles', 'gde');
+			echo "<p>" . __('Importing profiles', 'google-document-embedder');
 			
 			$success = gde_import_profiles( $data['profiles'] );
 			$total = count( $data['profiles'] );
 			echo " ($success/$total)... ";
 			if ( $success == $total ) {
-				echo __('done', 'gde') . ".</p>\n";
+				echo __('done', 'google-document-embedder') . ".</p>\n";
 			} else {
 				$status[] = "fail";
-				echo "<strong>" . __('failed', 'gde') . ".</strong></p>\n";
+				echo "<strong>" . __('failed', 'google-document-embedder') . ".</strong></p>\n";
 			}
 		}
 		
 		// settings import
 		if ( isset( $data['settings'] ) ) {
-			echo "<p>" . __('Importing settings', 'gde') . "... ";
+			echo "<p>" . __('Importing settings', 'google-document-embedder') . "... ";
 			if ( ! gde_import_settings( $data['settings'] ) ) {
 				$status[] = "fail";
-				echo "<strong>" . __('failed', 'gde') . ".</strong></p>\n";
+				echo "<strong>" . __('failed', 'google-document-embedder') . ".</strong></p>\n";
 			} else {
-				echo __('done', 'gde') . ".</p>\n";
+				echo __('done', 'google-document-embedder') . ".</p>\n";
 			}
 		}
 	} elseif ( isset( $data[0]['profile_id'] ) ) {
 		// profile import
-		echo "<p>" . __('Importing profiles', 'gde');
+		echo "<p>" . __('Importing profiles', 'google-document-embedder');
 		
 		$success = gde_import_profiles( $data );
 		$total = count( $data );
 		echo " ($success/$total)... ";
 		if ( $success == $total ) {
-			echo __('done', 'gde') . ".</p>\n";
+			echo __('done', 'google-document-embedder') . ".</p>\n";
 		} else {
 			$status[] = "fail";
-			echo "<strong>" . __('failed', 'gde') . ".</strong></p>\n";
+			echo "<strong>" . __('failed', 'google-document-embedder') . ".</strong></p>\n";
 		}
 	} elseif ( isset( $data['ed_disable'] ) ) {
 		// settings import
-		echo "<p>" . __('Importing settings... ', 'gde');
+		echo "<p>" . __('Importing settings... ', 'google-document-embedder');
 		
 		if ( ! gde_import_settings( $data ) ) {
 			$status[] = "fail";
-			echo "<strong>" . __('failed', 'gde') . ".</strong></p>\n";
+			echo "<strong>" . __('failed', 'google-document-embedder') . ".</strong></p>\n";
 		} else {
-			echo __('done', 'gde') . ".</p>\n";
+			echo __('done', 'google-document-embedder') . ".</p>\n";
 		}
 	} else {
-		echo "<p>" . __('Please select a valid export file to import.', 'gde') . "</p>\n";
+		echo "<p>" . __('Please select a valid export file to import.', 'google-document-embedder') . "</p>\n";
 	}
 	
 	if ( in_array( 'fail', $status ) ) {
-		echo "<p>" . __('All or part of the import failed. See above for information.', 'gde') . "</p>\n";
+		echo "<p>" . __('All or part of the import failed. See above for information.', 'google-document-embedder') . "</p>\n";
 	} else {
-		echo "<p>" . __('Import completed successfully.', 'gde') . "</p>\n";
+		echo "<p>" . __('Import completed successfully.', 'google-document-embedder') . "</p>\n";
 	}
 	
-	echo "<p><a href=''>" . __('Return to GDE Settings', 'gde') . "</a></p>\n";
+	echo "<p><a href=''>" . __('Return to GDE Settings', 'google-document-embedder') . "</a></p>\n";
 	echo "</div>\n";
 }
 
@@ -410,7 +410,7 @@ function gde_get_locale() {
 function gde_option_page() {
 	global $gde_settings_page, $gdeoptions;
 	
-	$gde_settings_page = add_options_page( 'GDE '.__('Settings', 'gde'), 'GDE '.__('Settings', 'gde'), 'manage_options', 'gde-settings', 'gde_options' );
+	$gde_settings_page = add_options_page( 'GDE '.__('Settings', 'google-document-embedder'), 'GDE '.__('Settings', 'google-document-embedder'), 'manage_options', 'gde-settings', 'gde_options' );
 	
 	// enable custom styles and settings jQuery
 	add_action( 'admin_print_styles', 'gde_admin_custom_css' );
@@ -419,7 +419,7 @@ function gde_option_page() {
 
 function gde_options() {
 	if (! current_user_can('manage_options') ) wp_die('You don\'t have access to this page.');
-	if (! user_can_access_admin_page()) wp_die( __('You do not have sufficient permissions to access this page', 'gde') );
+	if (! user_can_access_admin_page()) wp_die( __('You do not have sufficient permissions to access this page', 'google-document-embedder') );
 	
 	require( GDE_PLUGIN_DIR . 'options.php' );
 	add_action('in_admin_footer', 'gde_admin_footer');
@@ -429,7 +429,7 @@ function gde_options() {
 function gde_site_option_page() {
 	global $gde_global_page;
 
-	$gde_global_page = add_submenu_page( 'settings.php', 'GDE '.__('Settings', 'gde'), 'GDE '.__('Settings', 'gde'), 'manage_network_options', basename(__FILE__), 'gde_site_options' );
+	$gde_global_page = add_submenu_page( 'settings.php', 'GDE '.__('Settings', 'google-document-embedder'), 'GDE '.__('Settings', 'google-document-embedder'), 'manage_network_options', basename(__FILE__), 'gde_site_options' );
 
 	// enable custom styles and settings jQuery
 	//add_action( 'admin_print_styles', 'gde_admin_custom_css' );
@@ -438,7 +438,7 @@ function gde_site_option_page() {
 
 function gde_site_options() {
 	//if ( function_exists('current_user_can') && !current_user_can('manage_options') ) wp_die('You don\'t have access to this page.');
-	//if (! user_can_access_admin_page()) wp_die( __('You do not have sufficient permissions to access this page', 'gde') );
+	//if (! user_can_access_admin_page()) wp_die( __('You do not have sufficient permissions to access this page', 'google-document-embedder') );
 	
 	require( GDE_PLUGIN_DIR . 'site-options.php' );
 	add_action( 'in_admin_footer', 'gde_admin_footer' );
@@ -533,8 +533,8 @@ function gde_admin_custom_css( $hook ) {
 function gde_admin_footer() {
 	global $pdata;
 	
-	$plugin_str = __('plugin', 'gde');
-	$version_str = __('Version', 'gde');
+	$plugin_str = __('plugin', 'google-document-embedder');
+	$version_str = __('Version', 'google-document-embedder');
 	printf( '%1$s %2$s | %3$s %4$s<br />', $pdata['Title'], $plugin_str, $version_str, $pdata['Version'] );
 }
 
@@ -545,7 +545,7 @@ function gde_show_msg( $message, $error = false ) {
 
 // add additional links, for convenience
 function gde_actlinks( $links ) { 
-	$settings_link = '<a href="options-general.php?page=gde-settings">' . __('Settings', 'gde') . '</a>'; 
+	$settings_link = '<a href="options-general.php?page=gde-settings">' . __('Settings', 'google-document-embedder') . '</a>'; 
 	array_unshift( $links, $settings_link ); 
 	return $links; 
 }
@@ -569,14 +569,14 @@ function gde_admin_custom_js( $hook ) {
 			// internal use
 			'gde_url' => GDE_PLUGIN_URL,
 			// profiles tab
-			'delete' => __('This profile will be permanently deleted.', 'gde') . "\n\n" . __('Are you sure?', 'gde'),
-			'default' => __('Settings for this profile will overwrite the default profile.', 'gde') . "\n\n" . __('Are you sure?', 'gde'),
-			'reset' => __('Your profile list will be reset to its original state. All changes will be lost.', 'gde') . "\n\n" . __('Are you sure?', 'gde'),
+			'delete' => __('This profile will be permanently deleted.', 'google-document-embedder') . "\n\n" . __('Are you sure?', 'google-document-embedder'),
+			'default' => __('Settings for this profile will overwrite the default profile.', 'google-document-embedder') . "\n\n" . __('Are you sure?', 'google-document-embedder'),
+			'reset' => __('Your profile list will be reset to its original state. All changes will be lost.', 'google-document-embedder') . "\n\n" . __('Are you sure?', 'google-document-embedder'),
 			// advanced tab
-			'badimport' => __('Please select a valid export file to import.', 'gde'),
-			'warnimport' => __('Any settings or duplicate profile names in this import will overwrite the current values.', 'gde') . "\n\n" . __('Are you sure?', 'gde'),
+			'badimport' => __('Please select a valid export file to import.', 'google-document-embedder'),
+			'warnimport' => __('Any settings or duplicate profile names in this import will overwrite the current values.', 'google-document-embedder') . "\n\n" . __('Are you sure?', 'google-document-embedder'),
 			// support tab
-			'baddebug' => __('Please include a shortcode or message to request support.', 'gde')
+			'baddebug' => __('Please include a shortcode or message to request support.', 'google-document-embedder')
 			)
 		);
 	}
@@ -667,7 +667,7 @@ function gde_mce_addbuttons() {
 
 function gde_add_tinymce_plugin( $plugin_array ) {
 	// load the TinyMCE plugin
-	$plugin_array['gde'] = GDE_PLUGIN_URL . 'js/editor_plugin.js';
+	$plugin_array['google-document-embedder'] = GDE_PLUGIN_URL . 'js/editor_plugin.js';
 	return $plugin_array;
 }
 
@@ -712,7 +712,7 @@ function gde_warn_on_plugin_page( $plugin_file ) {
 		}
 		
 		if ( gde_is_beta() ) {
-			$message[] = __('You are running a pre-release version of Google Doc Embedder. Please watch this space for important updates.', 'gde');
+			$message[] = __('You are running a pre-release version of Google Doc Embedder. Please watch this space for important updates.', 'google-document-embedder');
 		} else {
 			$message = array();
 		}

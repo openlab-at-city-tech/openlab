@@ -19,10 +19,6 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 	$libraryoptions = wp_parse_args( $libraryoptions, ll_reset_options( 1, 'list', 'return' ) );
 	extract( $libraryoptions );
 
-	if ( empty( $searchlabel ) ) {
-		$searchlabel = __( 'Search', 'link-library' );
-	}
-
 	$output = '<form method="get" id="llsearch"';
 
 	if ( !empty( $searchresultsaddress ) ) {
@@ -31,11 +27,24 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 
 	$output .= ">\n";
 	$output .= "<div>\n";
-	$output .= "<input type='text' onfocus=\"this.value=''\" value='" . $searchlabel . "...' name='searchll' id='searchll' />";
+	$output .= "<input type='text' onfocus=\"this.value=''\" value='" . $searchfieldtext . "' name='searchll' id='searchll' />";
 	$output .= "<input type='hidden' value='" . get_the_ID() . "' name='page_id' id='page_id' />";
 	$output .= "<input type='submit' value='" . $searchlabel . "' />";
 	$output .= "</div>\n";
 	$output .= "</form>\n\n";
+
+	$output .= "<script type='text/javascript'>\n";
+	$output .= "jQuery(document).ready(function () {\n";
+	$output .= "\tjQuery('#llsearch').submit(function () {\n";
+	$output .= "\t\tif (jQuery('#searchll').val() == '" . $searchfieldtext . "') {\n";
+	$output .= "\t\t\treturn false;\n";
+	$output .= "\t\t}\n";
+	$output .= "\t\telse {\n";
+	$output .= "\t\t\treturn true;\n";
+	$output .= "\t\t}\n";
+	$output .= "\t});\n";
+	$output .= "});\n";
+	$output .= "</script>";
 
 	return $output;
 }

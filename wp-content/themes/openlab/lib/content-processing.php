@@ -5,8 +5,13 @@
 add_filter('body_class', 'openlab_conditional_body_classes');
 
 function openlab_conditional_body_classes($classes) {
-    global $post;
+    global $post, $wp_query;
     $classes[] = 'header-image';
+    
+    $query_vars = array();
+    if(isset($wp_query->query_vars)){
+        $query_vars = $wp_query->query_vars;
+    }
 
     if (is_front_page() || is_404()) {
         $classes[] = 'full-width-content';
@@ -14,13 +19,13 @@ function openlab_conditional_body_classes($classes) {
         $classes[] = 'content-sidebar';
     }
 
-    $group_archives = array('people','courses','projects','clubs','portfolios');
-    if ( isset( $post->post_name ) && in_array( $post->post_name,$group_archives ) ) {
+    $group_archives = array('people', 'courses', 'projects', 'clubs', 'portfolios');
+    if (isset($post->post_name) && in_array($post->post_name, $group_archives)) {
         $classes[] = 'group-archive-page';
     }
 
     $about_page_obj = get_page_by_path('about');
-    $my_group_pages = array('my-courses','my-clubs','my-projects');
+    $my_group_pages = array('my-courses', 'my-clubs', 'my-projects');
 
     if (( isset($post->post_name) && in_array($post->post_name, $group_archives) ) ||
             bp_is_single_item() ||
@@ -29,6 +34,7 @@ function openlab_conditional_body_classes($classes) {
             ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
+            ( !empty($query_vars) && isset($query_vars['help_category'])) ||
             in_array($post->post_name, $my_group_pages)) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
@@ -66,7 +72,7 @@ add_filter('bp_get_the_profile_field_value', 'openlab_filter_profile_fields', 10
 
 function openlab_filter_profile_fields($value, $type) {
     global $field;
-    $truncate_link_candidates = array('Website','LinkedIn Profile Link','Facebook Profile Link','Google Scholar profile');
+    $truncate_link_candidates = array('Website', 'LinkedIn Profile Link', 'Facebook Profile Link', 'Google Scholar profile');
     if (in_array($field->name, $truncate_link_candidates)) {
         $args = array(
             'ending' => __('&hellip;', 'buddypress'),
@@ -83,7 +89,7 @@ function openlab_filter_profile_fields($value, $type) {
 function openlab_http_check($link) {
     $http_check = strpos($link, "http");
 
-    if ($http_check == false) {
+    if ($http_check === false) {
         $link = "http://" . $link;
     }
 
@@ -118,28 +124,46 @@ function cuny_add_links_wp_trim_excerpt($text) {
     return apply_filters('new_wp_trim_excerpt', $text, $raw_excerpt);
 }
 
-function openlab_get_menu_count_mup($count, $pull_right = ' pull-right'){
+function openlab_get_menu_count_mup($count, $pull_right = ' pull-right') {
 
-    if($count < 1){
+    if ($count < 1) {
         return '';
-    }else{
-        return '<span class="mol-count count-'.$count.$pull_right.'">'.$count.'</span>';
+    } else {
+        return '<span class="mol-count count-' . $count . $pull_right . '">' . $count . '</span>';
     }
-
 }
 
-function openlab_not_empty($content){
-    if($content && !ctype_space($content) && $content !== ''){
+function openlab_not_empty($content) {
+    if ($content && !ctype_space($content) && $content !== '') {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function openlab_sidebar_cleanup($content){
-    
-    $content = preg_replace('/<iframe.*?\/iframe>/i','', $content);
-    $content = strip_tags($content,'<br><i><em><b><strong><a><img>');
-    
+function openlab_sidebar_cleanup($content) {
+
+    $content = preg_replace('/<iframe.*?\/iframe>/i', '', $content);
+    $content = strip_tags($content, '<br><i><em><b><strong><a><img>');
+
     return $content;
 }
+
+/*
+ * This function lets us customize status messages
+ * uses filter: bp_core_render_message_content
+ */
+function openlab_process_status_messages($message, $type) {
+    
+    //invite anyone page
+    if(bp_current_action() === 'invite-anyone'){
+        if(trim($message) === '<p>Group invites sent.</p>'){
+            $message = '<p>Your invitation was sent!</p>';
+        }
+        
+    }
+
+    return $message;
+}
+
+add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);

@@ -1,0 +1,21 @@
+<?php 
+/**
+ * Opening Padding Control Markup
+ *
+ * Outputs the opening html markup for the
+ * padding controls.
+ * 
+ * @package   Easy_Google_Fonts
+ * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
+ * @license   GPL-2.0+
+ * @link      http://wordpress.org/plugins/easy-google-fonts/
+ * @copyright Copyright (c) 2015, Titanium Themes
+ * @version   1.3.9
+ * 
+ */
+?>
+<div class="egf-font-toggle">
+	<div class="toggle-section-title">
+		<span class="customize-control-title inner-control-title"><?php _e( 'Padding', 'easy-google-fonts' ); ?></span>
+	</div>
+	<div class="toggle-section-content">

@@ -66,16 +66,6 @@ $activity_args = array(
                                 <?php echo openlab_get_custom_activity_action(); ?>
                             </div>
 
-                            <?php if (bp_activity_has_content()) : ?>
-                                <div class="activity-inner semibold hyphenate">
-                                    <p>
-                                        <?php echo openlab_sidebar_cleanup(bp_get_activity_content_body()); ?>
-                                    </p>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php do_action('bp_activity_entry_content') ?>
-
                         </div>
                     </div>
                 </div>

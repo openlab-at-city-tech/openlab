@@ -211,8 +211,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 		float: none;
 		overflow: hidden;
 	}
-	#buddypress #object-nav ul li:focus,
-	#buddypress #object-nav ul li:hover {
+	#buddypress #object-nav ul li:focus, #buddypress #object-nav ul li:hover {
 		background: #bebebe;
 	}
 	#buddypress #object-nav ul li span {
@@ -241,8 +240,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	#buddypress #item-body #subnav li.current {
 		background: #f1f1f1;
 	}
-	#buddypress #item-body #subnav li#activity-filter-select:focus,
-	#buddypress #item-body #subnav li#activity-filter-select:hover {
+	#buddypress #item-body #subnav li#activity-filter-select:focus, #buddypress #item-body #subnav li#activity-filter-select:hover {
 		background: none;
 	}
 	#buddypress #item-body #subnav li#activity-filter-select select {
@@ -424,14 +422,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	margin-bottom: 5px;
 }
 
-#buddypress form#whats-new-form textarea#whats-new {
-	width: 100%;
-}
-
-#buddypress form#whats-new-form #whats-new-content #whats-new-options[style] {
-	height: auto !important;
-}
-
 @media screen and (max-width: 594px) {
 	#buddypress form#whats-new-form #whats-new-content #whats-new-options {
 		display: flex;
@@ -611,8 +601,7 @@ body.activity-permalink #buddypress {
 	text-align: center;
 }
 
-#buddypress .activity .activity-comments .ac-form .ac-reply-cancel:focus,
-#buddypress .activity .activity-comments .ac-form .ac-reply-cancel:hover {
+#buddypress .activity .activity-comments .ac-form .ac-reply-cancel:focus, #buddypress .activity .activity-comments .ac-form .ac-reply-cancel:hover {
 	background: #ededed;
 }
 
@@ -782,9 +771,6 @@ body.activity-permalink #buddypress {
 		text-align: left;
 		width: 20%;
 	}
-	.bp-user #buddypress #item-header #item-header-avatar img {
-		margin: 0;
-	}
 	.bp-user #buddypress #item-header #item-header-content {
 		float: right;
 		width: 78%;
@@ -818,7 +804,7 @@ body.activity-permalink #buddypress {
 
 #group-settings-form .radio ul,
 #create-group-form .radio ul {
-	color: #777777;
+	color: #787878;
 }
 
 #group-settings-form #group-creation-previous,
@@ -1067,11 +1053,6 @@ body.activity-permalink #buddypress {
 	* @subsection 6.2.2.5 - Messaging
 	*------------------------------
 	*/
-#buddypress {
-	/* Read Single thread */
-	/* Sitewide Notices loop */
-}
-
 #buddypress table#message-threads {
 	border-left: 1px solid rgba(0, 0, 0, 0.2);
 	border-right: 1px solid rgba(0, 0, 0, 0.2);
@@ -1138,7 +1119,7 @@ body.activity-permalink #buddypress {
 }
 
 #buddypress table#message-threads tr td.thread-info a::after {
-	content: " –  " attr(title);
+	content: " – " attr(title);
 	font-size: 12px;
 	font-size: 0.75rem;
 }
@@ -1211,6 +1192,43 @@ body.activity-permalink #buddypress {
 	margin-left: 0;
 }
 
+#buddypress .acfb-holder {
+	list-style: none;
+	margin: 0;
+}
+
+#buddypress .acfb-holder li {
+	margin-left: 0;
+}
+
+#buddypress .acfb-holder li.friend-tab {
+	background: #edf7fa;
+	border: inherit;
+	margin-right: 0;
+	padding: 0.5em;
+}
+
+#buddypress .acfb-holder li.friend-tab span.p {
+	padding-left: 10px;
+}
+
+#buddypress .acfb-holder li.friend-tab span.p:focus, #buddypress .acfb-holder li.friend-tab span.p:hover {
+	color: #c82b2b;
+	cursor: pointer;
+}
+
+#buddypress .acfb-holder li.friend-tab a {
+	border-bottom: 0;
+	text-decoration: none;
+}
+
+#buddypress .acfb-holder li.friend-tab a img {
+	display: inline;
+	height: 20px;
+	vertical-align: middle;
+	width: 20px !important;
+}
+
 #buddypress #message-threads.sitewide-notices td {
 	width: 100%;
 }
@@ -1259,6 +1277,23 @@ body.activity-permalink #buddypress {
 	display: block;
 	line-height: initial;
 	text-indent: 0;
+}
+
+.bp-user .ac_results {
+	background: #eee;
+	padding-left: 10px;
+}
+
+.bp-user .ac_results ul {
+	margin: 0;
+}
+
+.bp-user .ac_results li {
+	margin: 10px 0;
+}
+
+.bp-user .ac_results li:focus, .bp-user .ac_results li:hover {
+	cursor: pointer;
 }
 
 /**
@@ -1459,11 +1494,3 @@ body.activity-permalink #buddypress {
 * @section 10.0 - Ajax Loading, Widgets, General classes
 *-------------------------------------------------------------------------------
 */
-#buddypress {
-	/* Auto Complete background */
-}
-
-#buddypress .acfb-holder li.friend-tab {
-	background: #9fd1e2;
-	border: inherit;
-}

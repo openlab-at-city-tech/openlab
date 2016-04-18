@@ -51,7 +51,7 @@ function GetWtiLikePost($arg = null) {
      } else {
           $title_text = explode('/', get_option('wti_like_post_title_text'));
           $title_text_like = $title_text[0];
-          $title_text_unlike = $title_text[1];
+          $title_text_unlike = isset( $title_text[1] ) ? $title_text[1] : '';
      }
      
      // Checking for excluded posts
@@ -72,21 +72,21 @@ function GetWtiLikePost($arg = null) {
           $wti_like_post .= "<div class='watch-position " . $alignment . "'>";
           
           $wti_like_post .= "<div class='action-like'>";
-          $wti_like_post .= "<a class='lbg-" . $style . " like-" . $post_id . " jlk' href='" . $ajax_like_link . "' data-task='like' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
+          $wti_like_post .= "<a class='lbg-" . $style . " like-" . $post_id . " jlk' href='javascript:void(0)' data-task='like' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
           $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_like, 'wti-like-post') . "' />";
           $wti_like_post .= "<span class='lc-" . $post_id . " lc'>" . $like_count . "</span>";
           $wti_like_post .= "</a></div>";
           
           if ($show_dislike) {
                $wti_like_post .= "<div class='action-unlike'>";
-               $wti_like_post .= "<a class='unlbg-" . $style . " unlike-" . $post_id . " jlk' href='" . $ajax_unlike_link . "' data-task='unlike' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
+               $wti_like_post .= "<a class='unlbg-" . $style . " unlike-" . $post_id . " jlk' href='javascript:void(0)' data-task='unlike' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
                $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_unlike, 'wti-like-post') . "' />";
                $wti_like_post .= "<span class='unlc-" . $post_id . " unlc'>" . $unlike_count . "</span>";
                $wti_like_post .= "</a></div> ";
           }
           
           $wti_like_post .= "</div> ";
-          $wti_like_post .= "<div class='status-" . $post_id . " status " . $alignment . "'>&nbsp;&nbsp;" . $msg . "</div>";
+          $wti_like_post .= "<div class='status-" . $post_id . " status " . $alignment . "'>" . $msg . "</div>";
           $wti_like_post .= "</div><div class='wti-clear'></div>";
      }
      
@@ -135,20 +135,35 @@ add_filter('the_content', 'PutWtiLikePost');
  * @return string
  */
 function GetWtiVotedMessage($post_id, $ip = null) {
-     global $wpdb;
+     global $wpdb, $wti_ip_address;
      $wti_voted_message = '';
      $voting_period = get_option('wti_like_post_voting_period');
      
      if (null == $ip) {
-          $ip = WtiGetRealIpAddress();
+          $ip = $wti_ip_address;
      }
      
-     $query = "SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post WHERE post_id = '$post_id' AND ip = '$ip'";
+     /*$query = $wpdb->prepare(
+                    "SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post
+                    WHERE post_id = %d AND ip = %s",
+                    $post_id, $ip
+               );*/
      
      if ($voting_period != 0 && $voting_period != 'once') {
           // If there is restriction on revoting with voting period, check with voting time
           $last_voted_date = GetWtiLastDate($voting_period);
-          $query .= " AND date_time >= '$last_voted_date'";
+          //$query .= " AND date_time >= '$last_voted_date'";
+          $query = $wpdb->prepare(
+                         "SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post
+                         WHERE post_id = %d AND ip = %s AND date_time >= %s",
+                         $post_id, $ip, $last_voted_date
+                    );
+     } else {
+          $query = $wpdb->prepare(
+                         "SELECT COUNT(id) AS has_voted FROM {$wpdb->prefix}wti_like_post
+                         WHERE post_id = %d AND ip = %s",
+                         $post_id, $ip
+                    );
      }
 
      $wti_has_voted = $wpdb->get_var($query);
@@ -170,8 +185,9 @@ add_shortcode('most_liked_posts', 'WtiMostLikedPostsShortcode');
 function WtiMostLikedPostsShortcode($args) {
      global $wpdb;
      $most_liked_post = '';
+     $where = '';
      
-     if ($args['limit']) {
+     if (isset($args['limit'])) {
           $limit = $args['limit'];
      } else {
           $limit = 10;
@@ -182,11 +198,12 @@ function WtiMostLikedPostsShortcode($args) {
           $where .= " AND date_time >= '$last_date'";
      }
      
-     // Getting the most liked posts
-     $query = "SELECT post_id, SUM(value) AS like_count, post_title FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P ";
-     $query .= "WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where GROUP BY post_id ORDER BY like_count DESC, post_title ASC LIMIT $limit";
-
-     $posts = $wpdb->get_results($query);
+     $posts = $wpdb->get_results(
+                              "SELECT post_id, SUM(value) AS like_count, post_title
+                              FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
+                              WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where
+                              GROUP BY post_id ORDER BY like_count DESC, post_title ASC LIMIT $limit"
+                         );
  
      if (count($posts) > 0) {
           $most_liked_post .= '<table class="most-liked-posts-table">';
@@ -224,23 +241,27 @@ add_shortcode('recently_liked_posts', 'WtiRecentlyLikedPostsShortcode');
 function WtiRecentlyLikedPostsShortcode($args) {
      global $wpdb;
      $recently_liked_post = '';
+     $where = '';
      
-     if ( $args['limit'] ) {
+     if ( isset( $args['limit'] ) ) {
           $limit = $args['limit'];
      } else {
           $limit = 10;
      }
      
      $show_excluded_posts = get_option('wti_like_post_show_on_widget');
+	$excluded_posts = trim( get_option('wti_like_post_excluded_posts') );
      $excluded_post_ids = explode(',', get_option('wti_like_post_excluded_posts'));
      
-     if ( !$show_excluded_posts && count( $excluded_post_ids ) > 0 ) {
-          $where = "AND post_id NOT IN (" . get_option('wti_like_post_excluded_posts') . ")";
+     if ( !$show_excluded_posts && !empty( $excluded_posts ) ) {
+          $where = "AND post_id NOT IN (" . $excluded_posts . ")";
      }
 
      // Get the post IDs recently voted
-     $recent_ids = $wpdb->get_col("SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post`
-                                  WHERE value > 0 $where GROUP BY post_id ORDER BY MAX(date_time) DESC");
+     $recent_ids = $wpdb->get_col(
+                              "SELECT DISTINCT(post_id) FROM `{$wpdb->prefix}wti_like_post`
+                              WHERE value > 0 $where GROUP BY post_id ORDER BY MAX(date_time) DESC"
+                         );
 
      if ( count( $recent_ids ) > 0 ) {
           $where = "AND post_id IN(" . implode(",", $recent_ids) . ")";
@@ -287,13 +308,7 @@ function WtiLikePostEnqueueScripts() {
 
      wp_enqueue_script( 'jquery' );
      wp_enqueue_script( 'wti_like_post_script' );
-}
-
-/**
- * Add the required stylesheet
- * @param void
- * @return void
- */
-function WtiLikePostAddHeaderLinks() {
-     echo '<link rel="stylesheet" type="text/css" href="' . plugins_url( 'css/wti_like_post.css', __FILE__) . '" media="screen" />';
+     
+     // Load css file
+     wp_enqueue_style( 'wti_like_post_script', plugins_url( 'css/wti_like_post.css', __FILE__ ) );
 }

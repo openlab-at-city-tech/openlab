@@ -1,0 +1,1052 @@
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Gravity Forms Directory\n"
+"POT-Creation-Date: 2014-12-17 22:24-0700\n"
+"PO-Revision-Date: 2014-12-18 05:24+0000\n"
+"Last-Translator: Zachary Katz <zack@katz.co>\n"
+"Language-Team: Bengali (India) (http://www.transifex.com/projects/p/gravity-forms-directory/language/bn_IN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bn_IN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: admin.php:52
+#, php-format
+msgid "%d entries"
+msgstr ""
+
+#: admin.php:52
+msgid "1 entry"
+msgstr ""
+
+#: admin.php:60
+#, php-format
+msgid "%s approved."
+msgstr ""
+
+#: admin.php:65
+#, php-format
+msgid "%s disapproved."
+msgstr ""
+
+#: admin.php:93
+#, php-format
+msgid ""
+"%sGravity Forms is installed but not active. %sActivate Gravity Forms%s to "
+"use the Gravity Forms Directory & Addons plugin.%s"
+msgstr ""
+
+#: admin.php:95
+#, php-format
+msgid ""
+"%sGravity Forms cannot be found%s\n"
+"\n"
+"\t\t\t\tThe %sGravity Forms plugin%s must be installed and activated for the Gravity Forms Addons plugin to work.\n"
+"\n"
+"\t\t\t\tIf you haven't installed the plugin, you can %3$spurchase the plugin here%4$s. If you have, and you believe this notice is in error, %5$sstart a topic on the plugin support forum%4$s.\n"
+"\n"
+"\t\t\t\t%6$s%7$sBuy Gravity Forms%4$s%8$s\n"
+"\t\t\t\t"
+msgstr ""
+
+#: admin.php:119
+#, php-format
+msgid ""
+"Congratulations - the Gravity Forms Directory & Addons plugin has been "
+"installed. %sGo to the settings page%s to read usage instructions and "
+"configure the plugin default settings. %sGo to settings page%s"
+msgstr ""
+
+#: admin.php:183
+msgid "Edit this entry"
+msgstr ""
+
+#: admin.php:183 edit-form.php:62 gravity-forms-addons.php:829
+msgid "Edit"
+msgstr ""
+
+#: admin.php:194
+#, php-format
+msgid "Fields for Form ID %s"
+msgstr ""
+
+#: admin.php:197
+msgid "IDs"
+msgstr ""
+
+#: admin.php:308
+msgid "Please select a form"
+msgstr ""
+
+#: admin.php:343
+msgid "Insert A Directory"
+msgstr ""
+
+#: admin.php:345
+msgid "Select a form below to add it to your post or page."
+msgstr ""
+
+#: admin.php:350
+msgid "Select a Form"
+msgstr ""
+
+#: admin.php:360
+msgid "This form will be the basis of your directory."
+msgstr ""
+
+#: admin.php:369 select_directory_columns.php:231
+msgid "Cancel"
+msgstr ""
+
+#: admin.php:384
+#, php-format
+msgid "Number of entries to show at once. Use %s0%s to show all entries."
+msgstr ""
+
+#: admin.php:386 admin.php:392
+msgid "Table"
+msgstr ""
+
+#: admin.php:387 admin.php:393
+msgid "Unordered List"
+msgstr ""
+
+#: admin.php:388 admin.php:394
+msgid "Definition List"
+msgstr ""
+
+#: admin.php:389
+msgid "Format for directory listings (directory view)"
+msgstr ""
+
+#: admin.php:395
+msgid "Format for single entries (single entry view)"
+msgstr ""
+
+#: admin.php:397
+msgid "Show the search field"
+msgstr ""
+
+#: admin.php:398
+msgid ""
+"Automatically convert directory into Approved-only when an Approved field is"
+" detected."
+msgstr ""
+
+#: admin.php:399
+#, php-format
+msgid ""
+"(If Smart Approval above is not enabled) Show only entries that have been "
+"Approved (have a field in the form that is an Admin-only checkbox with a "
+"value of 'Approved'). %sNote:%s This will hide entries that have not been "
+"explicitly approved.%s"
+msgstr ""
+
+#: admin.php:415
+msgid "If there's a displayed Entry ID column, add link to each full entry"
+msgstr ""
+
+#: admin.php:417
+msgid ""
+"Calculate image sizes (Warning: this may slow down the directory loading "
+"speed!)"
+msgstr ""
+
+#: admin.php:419
+msgid "Show image icon"
+msgstr ""
+
+#: admin.php:420
+msgid "Show full image"
+msgstr ""
+
+#: admin.php:421
+msgid "How do you want images to appear in the directory?"
+msgstr ""
+
+#: admin.php:425
+#, php-format
+msgid "Start date (in %sYYYY-MM-DD%s format)"
+msgstr ""
+
+#: admin.php:426
+#, php-format
+msgid "End date (in %sYYYY-MM-DD%s format)"
+msgstr ""
+
+#: admin.php:430
+#, php-format
+msgid ""
+"Show Admin-Only columns %s(in Gravity Forms, Admin-Only fields are defined "
+"by clicking the Advanced tab on a field in the Edit Form view, then editing "
+"Visibility > Admin Only)%s"
+msgstr ""
+
+#: admin.php:431
+msgid ""
+"Allow logged-in users to edit entries they created. Will add an 'Edit Your "
+"Entry' field to the Single Entry View."
+msgstr ""
+
+#: admin.php:432
+msgid ""
+"Display entries only the the creator of the entry (users will not see other "
+"people's entries)."
+msgstr ""
+
+#: admin.php:433
+#, php-format
+msgid ""
+"Allow %sadministrators%s to edit all entries. Will add an 'Edit Your Entry' "
+"field to the Single Entry View."
+msgstr ""
+
+#: admin.php:436
+#, php-format
+msgctxt "Lightbox style"
+msgid "Style %d"
+msgstr ""
+
+#: admin.php:451
+msgid "Images"
+msgstr ""
+
+#: admin.php:452
+msgid "Entry Links (Open entry details in lightbox)"
+msgstr ""
+
+#: admin.php:453
+msgid "Website Links (non-entry)"
+msgstr ""
+
+#: admin.php:454
+msgid "Set what type of links should be loaded in the lightbox"
+msgstr ""
+
+#: admin.php:459
+msgid "Use the TableSorter jQuery plugin to sort the table?"
+msgstr ""
+
+#: admin.php:460
+msgid "Show a form title?"
+msgstr ""
+
+#: admin.php:460
+msgid "By default, the title will be the form title."
+msgstr ""
+
+#: admin.php:461
+msgid "Do you want to show 'Displaying 1-19 of 19'?"
+msgstr ""
+
+#: admin.php:462
+#, php-format
+msgid "Show the top heading row (%s&lt;thead&gt;%s)"
+msgstr ""
+
+#: admin.php:463
+#, php-format
+msgid "Show the bottom heading row (%s&lt;tfoot&gt;%s)"
+msgstr ""
+
+#: admin.php:464
+msgid ""
+"Show each page number (eg: 1 2 3 4 5 6 7 8) instead of summary (eg: 1 2 3 "
+"... 8 &raquo;)"
+msgstr ""
+
+#: admin.php:465
+#, php-format
+msgid ""
+"Use JavaScript for sorting (otherwise, %slinks%s will be used for sorting by"
+" column)"
+msgstr ""
+
+#: admin.php:466
+msgid ""
+"Override the options from Gravity Forms, and use standard PHP date formats"
+msgstr ""
+
+#: admin.php:470
+msgid "Convert email fields to email links"
+msgstr ""
+
+#: admin.php:471
+msgid "Convert URLs to links"
+msgstr ""
+
+#: admin.php:472
+#, php-format
+msgid "Show more simple links for URLs (strip %shttp://%s, %swww.%s, etc.)"
+msgstr ""
+
+#: admin.php:473
+#, php-format
+msgid "%sOpen links in new window?%s (uses %s)"
+msgstr ""
+
+#: admin.php:474
+#, php-format
+msgid "%sAdd %snofollow%s to all links%s, including emails"
+msgstr ""
+
+#: admin.php:478
+msgid "Add the formatted address as a column at the end of the table"
+msgstr ""
+
+#: admin.php:479
+msgid ""
+"Hide the pieces that make up an address (Street, City, State, ZIP, Country, "
+"etc.)"
+msgstr ""
+
+#: admin.php:483
+msgid "Entry Detail"
+msgstr ""
+
+#: admin.php:483
+msgid "Title of entry lightbox window"
+msgstr ""
+
+#: admin.php:484
+msgid "Entry Detail Table Caption"
+msgstr ""
+
+#: admin.php:484
+#, php-format
+msgid ""
+"The text displayed at the top of the entry details. Use "
+"%s%%%%formtitle%%%%%s and %s%%%%leadid%%%%%s as variables that will be "
+"replaced."
+msgstr ""
+
+#: admin.php:485
+msgid "View entry details"
+msgstr ""
+
+#: admin.php:485
+msgid "Link text to show full entry"
+msgstr ""
+
+#: admin.php:486
+msgid "More Info"
+msgstr ""
+
+#: admin.php:486
+msgid "Entry ID column title"
+msgstr ""
+
+#: admin.php:487
+msgid "&larr; Back to directory"
+msgstr ""
+
+#: admin.php:487
+msgid ""
+"The text of the link to return to the directory view from the single entry "
+"view."
+msgstr ""
+
+#: admin.php:488
+msgid ""
+"When viewing full entry, show entry only? Otherwise, show entry with "
+"directory below"
+msgstr ""
+
+#: admin.php:489
+msgid ""
+"When returning to directory view from single entry view, link to specific "
+"anchor row?"
+msgstr ""
+
+#: admin.php:493
+msgid "Content Settings"
+msgstr ""
+
+#: admin.php:494
+msgid "Administration of Entries"
+msgstr ""
+
+#: admin.php:495
+msgid "Lightbox Options"
+msgstr ""
+
+#: admin.php:496
+msgid "Formatting Options"
+msgstr ""
+
+#: admin.php:497
+msgid "Link Settings"
+msgstr ""
+
+#: admin.php:498
+msgid "Address Options"
+msgstr ""
+
+#: admin.php:502
+msgid "Show advanced settings"
+msgstr ""
+
+#: admin.php:515
+msgid "Directory View"
+msgstr ""
+
+#: admin.php:516
+msgid "These settings affect how multiple entries are shown at once."
+msgstr ""
+
+#: admin.php:527
+msgid "Additional Settings"
+msgstr ""
+
+#: admin.php:528
+msgid "These settings affect both the directory view and single entry view."
+msgstr ""
+
+#: admin.php:543 admin.php:545
+msgid "Class for the <table>, <ul>, or <dl>"
+msgstr ""
+
+#: admin.php:544
+msgid "inline CSS for the <table>, <ul>, or <dl>"
+msgstr ""
+
+#: admin.php:546
+msgid "Inline CSS for all <tbody><tr>'s, <ul><li>'s, or <dl><dt>'s"
+msgstr ""
+
+#: admin.php:547
+msgid "Vertical align for table cells"
+msgstr ""
+
+#: admin.php:548
+msgid "Use the input ID ( example: 1.3 or 7 or ip)"
+msgstr ""
+
+#: admin.php:549
+#, php-format
+msgid "Sort in ascending order (%sASC%s or descending (%sDESC%s)"
+msgstr ""
+
+#: admin.php:550
+msgid "If you want to show page 8 instead of 1"
+msgstr ""
+
+#: admin.php:551
+#, php-format
+msgid ""
+"Type of pagination links. %splain%s is just a string with the links "
+"separated by a newline character. The other possible values are either "
+"%sarray%s or %slist%s."
+msgstr ""
+
+#: admin.php:552
+msgid "Default GF behavior is 'Entries : '"
+msgstr ""
+
+#: admin.php:553
+msgid "Set the 'width' attribute for the <table>, <ul>, or <dl>"
+msgstr ""
+
+#: admin.php:554
+#, php-format
+msgid "Use %sstandard PHP date formats%s"
+msgstr ""
+
+#: admin.php:555
+msgid ""
+"Give credit to the plugin creator (who has spent over 300 hours on this free"
+" plugin!) with a link at the bottom of the directory"
+msgstr ""
+
+#: admin.php:709
+msgid "Add a Gravity Forms Directory"
+msgstr ""
+
+#: admin.php:709
+msgid "Add Directory"
+msgstr ""
+
+#: admin.php:719
+msgid "Directory & Addons"
+msgstr ""
+
+#: admin.php:738
+msgid "Settings saved."
+msgstr ""
+
+#: admin.php:824 admin.php:891
+msgid "Hide Directory Instructions"
+msgstr ""
+
+#: admin.php:826 admin.php:889
+msgid "View Directory Instructions"
+msgstr ""
+
+#: admin.php:842
+msgid "Gravity Forms Directory Add-on"
+msgstr ""
+
+#: admin.php:853
+msgid "Go to the GravityView Website"
+msgstr ""
+
+#: admin.php:854
+msgid "Better, simpler, more powerful."
+msgstr ""
+
+#: admin.php:856
+msgid "A brand-new Directory plugin is here."
+msgstr ""
+
+#: admin.php:861
+#, php-format
+msgid ""
+"%sGravityView%s is the best way to display Gravity Forms entries on your "
+"website."
+msgstr ""
+
+#: admin.php:866
+msgid "Drag & Drop interface"
+msgstr ""
+
+#: admin.php:867
+msgid "Different layout types - display entries as a table or profiles"
+msgstr ""
+
+#: admin.php:868
+msgid "Preset templates make it easy to get started"
+msgstr ""
+
+#: admin.php:869
+msgid "Great support"
+msgstr ""
+
+#: admin.php:874
+#, php-format
+msgid ""
+"We re-wrote the Directory plugin from the ground up to be more simple and "
+"more powerful. If you like the Directory plugin, you&rsquo;ll %slove%s "
+"GravityView."
+msgstr ""
+
+#: admin.php:876
+msgid "Check out GravityView"
+msgstr ""
+
+#: admin.php:887
+msgid "Need help getting started?"
+msgstr ""
+
+#: admin.php:900
+msgid "To integrate a form with Directory:"
+msgstr ""
+
+#: admin.php:902
+msgid "Go to the post or page where you would like to add the directory."
+msgstr ""
+
+#: admin.php:903
+msgid "Click the \"Add Directory\" button above the content area."
+msgstr ""
+
+#: admin.php:904
+msgid ""
+"Choose a form from the drop-down menu and configure settings as you would "
+"like them."
+msgstr ""
+
+#: admin.php:905
+#, php-format
+msgid ""
+"Click \"Insert Directory\". A \"shortcode\" should appear in the content "
+"editor that looks similar to %s[directory form=\"#\"]%s"
+msgstr ""
+
+#: admin.php:906
+msgid "Save the post or page"
+msgstr ""
+
+#: admin.php:909
+msgid "Configuring Fields & Columns"
+msgstr ""
+
+#: admin.php:911
+msgid ""
+"When editing a form, click on a field to expand the field. Next, click the "
+"\"Directory\" tab. There, you will find options to:"
+msgstr ""
+
+#: admin.php:914
+msgid ""
+"Choose whether you would like the field to be a link to the Single Entry "
+"View;"
+msgstr ""
+
+#: admin.php:915
+msgid "Hide the field in Directory View; and"
+msgstr ""
+
+#: admin.php:916
+msgid "Hide the field in Single Entry View"
+msgstr ""
+
+#: admin.php:919
+msgid "Configuring Column Visibility & Order"
+msgstr ""
+
+#: admin.php:921 admin.php:924
+msgid ""
+"When editing a form in Gravity Forms, click the link near the top-center of "
+"the page named \"Directory Columns\""
+msgstr ""
+
+#: admin.php:925
+msgid ""
+"Drag and drop columns from the right (\"Hidden Columns\") side to the left "
+"(\"Visible Columns\") side."
+msgstr ""
+
+#: admin.php:926
+msgid "Click the \"Save\" button"
+msgstr ""
+
+#: admin.php:937
+msgid "Gravity Forms Directory"
+msgstr ""
+
+#: admin.php:939
+msgid "Enable Gravity Forms Directory capabilities"
+msgstr ""
+
+#: admin.php:945
+msgid "Directory Default Settings"
+msgstr ""
+
+#: admin.php:946
+msgid "These defaults can be over-written when inserting a directory."
+msgstr ""
+
+#: admin.php:955
+msgid "Add Referrer Data to Emails"
+msgstr ""
+
+#: admin.php:957
+msgid ""
+"Adds referrer data to entries, including the path the user took to get to "
+"the form before submitting."
+msgstr ""
+
+#: admin.php:961
+msgid "Modify Gravity Forms Admin"
+msgstr ""
+
+#: admin.php:964
+msgid "Show option to expand Form Editor Field boxes"
+msgstr ""
+
+#: admin.php:966
+msgid ""
+"When clicking Form Editor Field boxes, toggle open and closed instead of "
+"\"accordion mode\" (closing all except the clicked box)."
+msgstr ""
+
+#: admin.php:968
+#, php-format
+msgid "Makes possible direct editing of entries from %sEntries list view%s"
+msgstr ""
+
+#: admin.php:970
+msgid "Adds a link in the Forms list view to view form IDs"
+msgstr ""
+
+#: admin.php:975
+msgid "Save Settings"
+msgstr ""
+
+#: edit-form.php:50
+msgid "Go to Entry"
+msgstr ""
+
+#: edit-form.php:75
+msgid "Approved? (Admin-only)"
+msgstr ""
+
+#: edit-form.php:77
+msgid "Approved?"
+msgstr ""
+
+#: edit-form.php:84 edit-form.php:500
+msgid "Approved"
+msgstr ""
+
+#: edit-form.php:160
+msgid "Ajax error while setting lead approval"
+msgstr ""
+
+#: edit-form.php:201
+msgid "Approve"
+msgstr ""
+
+#: edit-form.php:201
+msgid "Disapprove"
+msgstr ""
+
+#: edit-form.php:203
+msgid "Entry not approved for directory viewing. Click to approve this entry."
+msgstr ""
+
+#: edit-form.php:204
+msgid "Entry approved for directory viewing. Click to disapprove this entry."
+msgstr ""
+
+#: edit-form.php:247
+msgid "Show entry in directory view?"
+msgstr ""
+
+#: edit-form.php:268
+msgid "Use As Link to Single Entry"
+msgstr ""
+
+#: edit-form.php:271
+msgid "Use this field as a link to single entry view"
+msgstr ""
+
+#: edit-form.php:275
+msgid "Single Entry Link Text"
+msgstr ""
+
+#: edit-form.php:276
+msgid ""
+"Note: it is a good idea to use required fields for links to single entries "
+"so there are no blank links."
+msgstr ""
+
+#: edit-form.php:279
+msgid "Use field values from entry"
+msgstr ""
+
+#: edit-form.php:281
+msgid "Use custom link text."
+msgstr ""
+
+#: edit-form.php:286
+msgid "Hide This Field in Directory View?"
+msgstr ""
+
+#: edit-form.php:289
+msgid "Hide this field in the directory view."
+msgstr ""
+
+#: edit-form.php:292
+msgid "Only visible to logged in users with the following role:"
+msgstr ""
+
+#: edit-form.php:294
+msgid "Any"
+msgstr ""
+
+#: edit-form.php:295
+msgid "Author or higher"
+msgstr ""
+
+#: edit-form.php:296
+msgid "Editor or higher"
+msgstr ""
+
+#: edit-form.php:297
+msgid "Administrator"
+msgstr ""
+
+#: edit-form.php:304
+msgid "Hide This Field in Single Entry View?"
+msgstr ""
+
+#: edit-form.php:307
+msgid "Hide this field in the single entry view."
+msgstr ""
+
+#: edit-form.php:311
+msgid "Directory Search Field"
+msgstr ""
+
+#: edit-form.php:314
+msgid "Use this field as a search filter"
+msgstr ""
+
+#: edit-form.php:325
+msgid "Modify Gravity Forms Directory Columns"
+msgstr ""
+
+#: edit-form.php:325
+msgid "Directory Columns"
+msgstr ""
+
+#: edit-form.php:343
+msgid "Directory"
+msgstr ""
+
+#: edit-form.php:481
+#, php-format
+msgid ""
+"%sLink to single entry using this field%sIf you would like to link to the "
+"single entry view using this link, check the box."
+msgstr ""
+
+#: edit-form.php:482
+#, php-format
+msgid ""
+"%sHide in Directory View%sIf checked, this field will not be shown in the "
+"directory view, even if it is visible in the %sDirectory Columns%s. If this "
+"field is Admin Only (set in the Advanced tab), it will be hidden in the "
+"directory view unless \"Show Admin-Only columns\" is enabled in the "
+"directory. Even if \"Show Admin-Only columns\" is enabled, checking this box"
+" will hide the column in the directory view."
+msgstr ""
+
+#: edit-form.php:482
+msgid "Modify Directory Columns"
+msgstr ""
+
+#: edit-form.php:483
+#, php-format
+msgid ""
+"%sHide in Single Entry View%sIf checked, this field will not be shown in the"
+" single entry view of the directory."
+msgstr ""
+
+#: edit-form.php:484
+#, php-format
+msgid ""
+"%sDirectory Search Field%sIf checked, add search fields to the Directory "
+"search form. If this field is a text field, a text search input will be "
+"added that will search only this field. Otherwise, the field choices will be"
+" used to populate a dropdown menu search input. Example: if the field has "
+"choices \"A\", \"B\", and \"C\", the search dropdown will have those items "
+"as choices in a dropdown search field."
+msgstr ""
+
+#: edit-form.php:505
+msgid "Entry Link"
+msgstr ""
+
+#: edit-form.php:510
+msgid "User Edit Link"
+msgstr ""
+
+#: field-ids.php:12
+msgid "You don't have adequate permission to preview forms."
+msgstr ""
+
+#: field-ids.php:21
+msgid "Form Preview"
+msgstr ""
+
+#: gravity-forms-addons.php:439
+msgid "Disapproved the lead"
+msgstr ""
+
+#: gravity-forms-addons.php:457
+msgid "Approved the lead"
+msgstr ""
+
+#: gravity-forms-addons.php:488
+#, php-format
+msgid "%sYou do not have permission to edit this form.%s"
+msgstr ""
+
+#: gravity-forms-addons.php:515
+#, php-format
+msgid "%sThere were errors with the edit you made.%s%s"
+msgstr ""
+
+#: gravity-forms-addons.php:527
+#, php-format
+msgid "%sThe entry was successfully updated.%s"
+msgstr ""
+
+#: gravity-forms-addons.php:553
+#, php-format
+msgid "You can edit post details from the %1$spost page%2$s."
+msgstr ""
+
+#: gravity-forms-addons.php:575
+msgid "Update Entry"
+msgstr ""
+
+#: gravity-forms-addons.php:582
+#, php-format
+msgid "%sThe link to edit this entry is not valid; it may have expired.%s"
+msgstr ""
+
+#: gravity-forms-addons.php:646
+#, php-format
+msgid ""
+"(Admin-only notice) Field #%d not shown: \"Hide This Field in Single Entry "
+"View\" was selected."
+msgstr ""
+
+#: gravity-forms-addons.php:728
+msgid "Order"
+msgstr ""
+
+#: gravity-forms-addons.php:740
+msgid "Product"
+msgstr ""
+
+#: gravity-forms-addons.php:741
+msgid "Qty"
+msgstr ""
+
+#: gravity-forms-addons.php:742
+msgid "Unit Price"
+msgstr ""
+
+#: gravity-forms-addons.php:743
+msgid "Price"
+msgstr ""
+
+#: gravity-forms-addons.php:803
+msgid "Total"
+msgstr ""
+
+#: gravity-forms-addons.php:822
+msgid "Edit Entry"
+msgstr ""
+
+#: gravity-forms-addons.php:824
+msgid "Edit Your Entry"
+msgstr ""
+
+#: gravity-forms-addons.php:1367
+msgid "Search Entries:"
+msgstr ""
+
+#: gravity-forms-addons.php:1375
+msgid "Search"
+msgstr ""
+
+#: gravity-forms-addons.php:1396 gravity-forms-addons.php:1536
+#, php-format
+msgid "Displaying %d - %d of %d"
+msgstr ""
+
+#: gravity-forms-addons.php:1831
+msgid "Settings"
+msgstr ""
+
+#: gravity-forms-addons.php:1870
+msgid "You don't have adequate permission to uninstall Directory Add-On."
+msgstr ""
+
+#: gravity-forms-addons.php:2315
+msgid "Map It"
+msgstr ""
+
+#: gravity-forms-addons.php:2700
+msgid "You don't have adequate permission to edit entries."
+msgstr ""
+
+#: gravity-forms-lead-creator.php:80
+#, php-format
+msgid "%s (ID #%d)"
+msgstr ""
+
+#: gravity-forms-lead-creator.php:82 gravity-forms-lead-creator.php:124
+msgid "No User"
+msgstr ""
+
+#: gravity-forms-lead-creator.php:94
+#, php-format
+msgid "Changed lead creator from %s to %s"
+msgstr ""
+
+#: gravity-forms-lead-creator.php:121
+msgid "Change Entry Creator:"
+msgstr ""
+
+#: select_directory_columns.php:29
+msgid "Oops! We could not locate your form. Please try again."
+msgstr ""
+
+#: select_directory_columns.php:143
+msgid "Ajax error while setting lead property"
+msgstr ""
+
+#: select_directory_columns.php:157
+msgid "Entry Id"
+msgstr ""
+
+#: select_directory_columns.php:158
+msgid "Entry Date"
+msgstr ""
+
+#: select_directory_columns.php:159
+msgid "User IP"
+msgstr ""
+
+#: select_directory_columns.php:160
+msgid "Source Url"
+msgstr ""
+
+#: select_directory_columns.php:161
+msgid "Payment Status"
+msgstr ""
+
+#: select_directory_columns.php:162
+msgid "Transaction Id"
+msgstr ""
+
+#: select_directory_columns.php:163
+msgid "Payment Amount"
+msgstr ""
+
+#: select_directory_columns.php:164
+msgid "Payment Date"
+msgstr ""
+
+#: select_directory_columns.php:165
+msgid "User"
+msgstr ""
+
+#: select_directory_columns.php:170
+msgid ""
+"Drag & drop to order and select which columns are displayed in the Gravity "
+"Forms Directory."
+msgstr ""
+
+#: select_directory_columns.php:171
+#, php-format
+msgid "Embed the Directory on a post or a page using %s "
+msgstr ""
+
+#: select_directory_columns.php:176
+msgid "Visible Columns"
+msgstr ""
+
+#: select_directory_columns.php:191
+msgid "Hidden Columns"
+msgstr ""
+
+#: select_directory_columns.php:230
+msgid "Save"
+msgstr ""
+
+#: template-row.php:265
+msgid "This search returned no results."
+msgstr ""
+
+#: template-row.php:267
+msgid "This form does not have any visible entries."
+msgstr ""
+
+#: template-row.php:269
+msgid "This form does not have any entries yet."
+msgstr ""

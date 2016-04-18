@@ -688,7 +688,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -844,7 +844,7 @@ function openlab_group_profile_activity_list() {
                                     ?>
                                     <li class="inline-element">
                                         <a href="<?php echo bp_group_member_domain() ?>">
-                                            <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                            <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $member->fullname; ?>"/>
                                         </a>
                                     </li>
                                 <?php endwhile; ?>
@@ -877,7 +877,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                               ?></p>
+                                                        <p><?php // bp_group_status_message()                                ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -895,7 +895,7 @@ function openlab_group_profile_activity_list() {
 }
 
 function openlab_get_group_activity_content($title, $content, $link) {
-	$markup = '';
+    $markup = '';
 
     if ($title !== '') {
         $markup = <<<HTML
@@ -1387,7 +1387,7 @@ function openlab_bp_group_site_pages() {
                     <li class="portfolio-site-link">
                         <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
                     </li>
-                    <?php if ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) : ?>
+                    <?php if ($group_site_settings['is_local'] && ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()))) : ?>
                         <li class="portfolio-dashboard-link">
                             <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($group_site_settings['site_url'])) . 'wp-admin/">Site Dashboard</a>'; ?>
                         </li>
@@ -1417,7 +1417,7 @@ function openlab_get_faculty_list() {
 
             array_push($faculty, bp_core_get_user_displayname($id));
         }
-        
+
         $faculty = array_unique($faculty);
 
         $faculty_list = implode(', ', $faculty);
@@ -1483,3 +1483,9 @@ function openlab_custom_group_excerpts($excerpt, $group) {
 }
 
 add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 10, 2);
+
+/**
+ * Disable BuddyPress Cover Images for groups and users.
+ */
+add_filter('bp_disable_cover_image_uploads', '__return_true');
+add_filter('bp_disable_group_cover_image_uploads', '__return_true');

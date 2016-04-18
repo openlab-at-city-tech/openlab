@@ -14,6 +14,10 @@
 #toplevel_page_bws_plugins .wp-submenu .wp-first-item {
     display: none;
 }
+.bws_info {
+    color: #888888;
+    font-size: 10px;
+}
 /*
 * styles for rate-support div on the settings page
 */
@@ -67,6 +71,7 @@ td.bws_pro_version_tooltip {
     margin: 5px 0;
     border: 1px solid #AAAAAA;
     max-width: 800px;
+    overflow: hidden;
 }
 .bws_table_bg { 
     background: #f8e268 url("../images/pattern.png");
@@ -118,6 +123,15 @@ table.bws_pro_version td {
 .bws_pro_version_tooltip .bws_info {
     float: left;
     padding-top: 10px;
+    font-size: 14px;
+    color: #444;
+}
+.bws_pro_version_tooltip .bws_pro_links {
+    float: right;
+}
+.bws_pro_version_tooltip .bws_trial_info {
+    padding-top: 10px;
+    display: inline-block;
 }
 div.bws_pro_version {
     padding: 5px 10px;
@@ -154,7 +168,7 @@ a.bws_plugin_pro_version {
     float: none;
 }
 /* #### Mobile Phones Portrait or Landscape #### */
-@media screen and (max-device-width: 640px) {
+@media screen and (max-device-width: 768px) {
     .bws_pro_version_tooltip {
         padding: 10px;
         text-align: center;
@@ -203,12 +217,12 @@ a.bws_plugin_pro_version {
     font-size: 12px;
     opacity: 0.7;
 }
-.bws_banner_on_plugin_page .button {
-    float: left;
+div.bws_banner_on_plugin_page .button {
+    float: right;
     border: none; 
     font-size: 14px;
-    margin: 18px 0 18px 16px;
-    padding: 14px 0;
+    margin: 18px 16px;
+    padding: 14px 29px;
     color: #FFF;
     text-shadow: none;
     font-weight: bold;
@@ -220,7 +234,6 @@ a.bws_plugin_pro_version {
     height: 50px;
     text-align: center;
     text-transform: uppercase;
-    width: 147px;
     box-shadow: none;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -231,9 +244,15 @@ a.bws_plugin_pro_version {
     background: #222;
     color: #FFF;
 }
-.bws_banner_on_plugin_page .icon {
-    float: right;
-    margin: 12px 8px 8px 0;
+div.bws_banner_on_plugin_page .icon {
+    float: left;
+    margin: 12px 8px 8px 12px;
+}
+.bws_banner_on_plugin_page .icon img {
+    max-width: 60px;
+}
+.bws_banner_on_plugin_page .text + .icon {
+    display: none;
 }
 .bws_banner_on_plugin_page .close_icon {
     float: right;
@@ -241,7 +260,7 @@ a.bws_plugin_pro_version {
     cursor: pointer;
 }
 /* #### Mobile Phones Portrait or Landscape #### */
-@media screen and (max-device-width: 640px) {
+@media screen and (max-device-width: 768px) {
     .bws_banner_on_plugin_page .text,
     .bws_banner_on_plugin_page .icon, 
     .bws_banner_on_plugin_page .button_div,
@@ -249,4 +268,94 @@ a.bws_plugin_pro_version {
         float: none;
         text-align: center;
     }
+    .bws_banner_on_plugin_page .icon {
+        position: relative;
+        left: 8px;
+    }
+}
+/* display shortcodes */
+span.bws_code {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+    font-size: 13px;
+    margin: 0 1px;
+    padding: 3px 5px 2px;
+}
+/*
+* styles help tooltips
+*/
+.bws_help_box {
+    background-image: url("../images/tooltip_icons.png");
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 28px;
+    position: relative;
+    margin: 3px 5px;
+    width: 28px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.bws_hidden_help_text {
+    background: #F4F4F4;
+    border: 1px solid #DCDCDC;
+    border-radius: 4px;
+    left: 40px;
+    padding: 5px 10px;
+    position: absolute;
+    width: auto;
+    line-height: 1.5;
+    display: none;
+}
+.bws_hidden_help_text:before {
+    content: url("../images/help.png");
+    left: -10px;
+    position: absolute;
+    top: 7px;
+    direction: ltr;
+}
+.bws_help_box:hover .bws_hidden_help_text {
+    display: block;
+    z-index: 1001;
+}
+/* RTL styles */
+.rtl .bws_hidden_help_text {
+    left: auto;
+    right: 40px;
+}
+.rtl .bws_hidden_help_text:before {
+    top: 0;
+    left: auto;
+    right: -10px;
+    -webkit-transform: rotate(180deg); /* Chrome y Safari */
+    -moz-transform: rotate(180deg); /* Firefox */
+    -o-transform: rotate(180deg); /* Opera */
+    transform: rotate(180deg);
+}
+
+/* bws shortcode insert */
+#bws_shortcode_popup_block h4 {
+    padding: 0;
+    line-height: 2.5;
+    text-transform: uppercase;
+}
+#bws_shortcode_content_bottom p {
+    font-style: italic;
+    color: #666;
+}
+#bws_shortcode_block {
+    background-color: #fdfdfd;
+    border: 1px solid #dfdfdf;
+    overflow: auto;
+    padding: 10px;
+}
+#bws_shortcode_display {
+    margin: 0 auto;
+}
+#bws_shortcode_content fieldset label {
+    margin-top: 5px;
+    display: inline-block;
+}
+#bws_shortcode_content .title {
+    margin-right: 5px;
+    margin-left: 5px;
+    line-height: 2.5;
 }

@@ -21,6 +21,9 @@
         a{
             text-shadow: none !important;
         }
+        .bold{
+            font-weight: 700;
+        }
         .fa {
             font-size: 14px;
             line-height: 1;
@@ -108,7 +111,7 @@
                         > a,
                         > .ab-item{
                             background: #333;
-                            color: #63dfd2;
+                            color: @cyan;
                         }
                     }
                     @media (max-width: @screen-xs-max){
@@ -144,7 +147,7 @@
                         padding: 6px 12px;
                         text-decoration: none;
                         &:hover{
-                            background: #63dfd2;
+                            background: @cyan;
                         }
                     }
                     @media (max-width: @screen-xs-max){
@@ -451,6 +454,17 @@
                     top: auto;
                     #sidebar-login-form{
                         padding: 3% 5%;
+                        .forgetmenot{
+                            label{
+                                line-height: 21px;
+                            }
+                        }
+                        #sidebar-wp-submit{
+                            margin-bottom: 5px;
+                        }
+                        .lost-pw{
+                            line-height: 24px;
+                        }
                     }
                 }
                 @media (max-width: @screen-xs-max){
@@ -463,6 +477,9 @@
                 @media (max-width: 767px){
                     display: none;
                 }
+            }
+            #wp-admin-bar-customize{
+                display: none;
             }
         }
     }
@@ -654,7 +671,7 @@
             font-weight: 400;
         }
         .cuny-logo{
-            max-width: 74px;
+            max-width: 74px !important;
         }
         p,
         a{
@@ -851,6 +868,9 @@
                             display: none;
                         }
                     }
+                }
+                #wp-admin-bar-customize{
+                    display: none;
                 }
 
             }

@@ -61,9 +61,16 @@ function openlab_load_scripts() {
             wp_enqueue_script('less-js');
         }
 
-        wp_register_script('vendor-js', $stylesheet_dir_uri . '/js/dist/vendor.js', array('jquery'));
+        wp_register_script('vendor-js', $stylesheet_dir_uri . '/js/dist/vendor.js', array('jquery'), '1.68', true);
         wp_enqueue_script('vendor-js');
-        wp_register_script( 'utility', $stylesheet_dir_uri . '/js/utility.js', array( 'jquery', 'hyphenator-js' ) );
+
+        $utility_deps = array('jquery');
+        if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
+            $utility_deps[] = 'hyphenator-js';
+        } else {
+            $utility_deps[] = 'openlab-smoothscroll';
+        }
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.67', true);
         wp_enqueue_script('utility');
     }
 }
@@ -80,15 +87,15 @@ function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '20130604', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8', 'all');
         wp_enqueue_style('main-styles');
     } else {
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '20130604', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8', 'all');
         wp_enqueue_style('main-styles');
     }
 
-    if ( isset( $post->post_type ) && $post->post_type == 'help' ) {
+    if (isset($post->post_type) && $post->post_type == 'help') {
         wp_register_style('print-styles', $stylesheet_dir_uri . '/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }
@@ -198,4 +205,4 @@ function openlab_post_value($key) {
 /**
  * Disable the new avatar upload interface introduced in BP 2.3.
  */
-add_filter( 'bp_avatar_is_front_edit', '__return_false' );
+add_filter('bp_avatar_is_front_edit', '__return_false');

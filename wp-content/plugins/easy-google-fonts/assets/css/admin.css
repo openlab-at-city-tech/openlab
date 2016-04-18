@@ -1,0 +1,410 @@
+/**
+ * WordPress Administration Custom Font Menu Settings 
+ * Interface CSS Styles.
+ *
+ * @package     WordPress
+ * @subpackage  WordPress_Google_Fonts
+ * @author      Sunny Johal - Titanium Themes
+ * @copyright   Copyright (c) 2014, Titanium Themes
+ * @version     1.3.7
+ * 
+ */
+/**
+ * Global Styles
+ */
+.clear, .clearfix {
+	clear: both;
+}
+
+.howto {
+    display: block;
+    font-style: italic;
+}
+textarea, input, select {
+    font-size: 14px;
+}
+#contextual-help-columns a {
+    outline: none !important;
+}
+
+/* Admin Dialog Styles */
+#message {
+    display: none;
+}
+
+.manage-controls {
+    overflow: hidden;
+    margin-top: 23px;
+    padding: 10px;
+    border: 1px solid #EEEEEE;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto;
+    -webkit-background-size: auto;
+    background: none repeat scroll 0 0 #FBFBFB;
+}
+
+.manage-controls form {
+    margin-bottom: 0;
+}
+
+.manage-controls select {
+    *height: 111;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.manage-controls.no-controls label {
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/**
+ * Edit Controls Screen
+ * ====================
+ *
+ * The following styles are used for the Edit
+ * Controls screen
+ *
+ * @version 1.1.1
+ * 
+ */
+
+/* Screen Dialog */
+#delete_message {
+
+}
+
+#update_message a {
+    color: #382b14;
+    text-decoration: underline;
+}
+
+.manage-controls {
+    overflow: hidden;
+    margin-top: 23px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    background: none repeat scroll 0 0 #FBFBFB;
+}
+
+.manage-controls form {
+    margin-bottom: 0;
+}
+
+.add-new-control-action {
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.manage-label {
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.manage-controls select {
+    *height: 111;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+#edit-controls-wrap {
+	margin-top: 23px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.control-edit {
+    background: #FFFFFF;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+
+/* Header and Footer */
+#edit-control-header,
+#edit-control-footer {
+    background: #F5F5F5;
+    line-height: 1.4em;
+	padding: 0 10px;
+}
+#edit-control-header {
+	border-bottom: 1px solid #DFDFDF;
+}
+
+#edit-control-footer {
+	border-top: 1px solid #FFFFFF;
+}
+
+#edit-control-footer .delete-action {
+	float: left;
+	margin-top: 6px;
+}
+
+#edit-control-footer .delete-action a {
+	margin: 4px 0;
+}
+
+#edit-control-header .publishing-action,
+#edit-control-footer .publishing-action {
+	float: right;
+	margin: 2px 0 1px;
+	text-align: right;
+	line-height: 23px;
+}
+
+.control-edit .major-publishing-actions {
+    clear: both;
+    padding: 3px 0 5px;	
+}
+
+.control-edit .spinner {
+    float: left;
+}
+
+.control-edit #post-body {
+    background: #FFFFFF;
+	border-bottom: 1px solid #DFDFDF;
+	padding: 0 10px 10px;
+}
+
+.control-edit #post-body-content {
+	float: none;
+}
+#control-force-styles {
+    margin-bottom: 10px;
+}
+/**
+ * Tag it Plugin
+ * =============
+ *
+ * The following styles are used for the Tag
+ * selection plugin.
+ *
+ * @version 1.1.1
+ * 
+ */
+ul.tagit {
+    padding: 1px 5px;
+    overflow: auto;
+    margin-left: inherit; /* usually we don't want the regular ul margins. */
+    margin-right: inherit;
+    margin-bottom: 30px;
+}
+ul.tagit li {
+    display: block;
+    float: left;
+    margin: 2px 5px 2px 0;
+}
+ul.tagit li.tagit-choice {    
+    position: relative;
+    line-height: inherit;
+}
+
+ul.tagit li.tagit-choice-read-only { 
+    padding: .2em .5em .2em .5em; 
+} 
+
+ul.tagit li.tagit-choice-editable { 
+    padding: .2em 18px .2em .5em; 
+} 
+
+ul.tagit li.tagit-new {
+    padding: .25em 4px .25em 0;
+}
+
+ul.tagit li.tagit-choice a.tagit-label {
+    cursor: pointer;
+    text-decoration: none;
+}
+ul.tagit li.tagit-choice .tagit-close {
+    cursor: pointer;
+    position: absolute;
+    right: .1em;
+    top: 50%;
+    margin-top: -8px;
+    line-height: 17px;
+}
+
+/* used for some custom themes that don't need image icons */
+ul.tagit li.tagit-choice .tagit-close .text-icon {
+    display: none;
+}
+
+ul.tagit li.tagit-choice input {
+    display: block;
+    float: left;
+    margin: 2px 5px 2px 0;
+}
+ul.tagit input[type="text"] {
+    -moz-box-sizing:    border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing:         border-box;
+
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: inherit;
+    background-color: inherit;
+    outline: none;
+}
+ul.tagit {
+    border: 1px solid #e8e8e8;
+    max-width: 100%;
+    background: inherit;
+}
+ul.tagit li.tagit-choice {
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border: 1px solid #CAD8F3;
+
+    background: none;
+    background-color: #DEE7F8;
+
+    font-weight: normal;
+}
+ul.tagit li.tagit-choice .tagit-label:not(a) {
+    color: #555;
+}
+ul.tagit li.tagit-choice a.tagit-close {
+    text-decoration: none;
+}
+ul.tagit li.tagit-choice .tagit-close {
+    right: .4em;
+}
+ul.tagit li.tagit-choice .ui-icon {
+    display: none;
+}
+ul.tagit li.tagit-choice .tagit-close .text-icon {
+    display: inline;
+    font-size: 16px;
+    line-height: 16px;
+    color: #444444;
+    color: rgba(0,0,0,0.5);
+    font-weight: bold;
+    
+}
+ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
+    background-color: #bbcef1;
+    border-color: #6d95e0;
+}
+ul.tagit li.tagit-choice a.tagLabel:hover,
+ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
+    color: #222;
+}
+ul.tagit input[type="text"] {
+    color: #333333;
+    color: rgba(0,0,0,0.6);
+    background: none;
+}
+.ui-widget {
+    font-size: 1.1em;
+}
+
+/**
+ * Manage Font Controls Page
+ * ==================================
+ *
+ * The following styles are used for the Manage
+ * Font Controls Screen.
+ *
+ * @version 1.1.1
+ * 
+ */
+.manage-controls .new-label {
+    display: none;
+}
+
+.manage-controls.control-dialog {
+    margin-bottom: 20px;
+}
+
+.manage-controls #create_new_control {
+    margin-left: 10px;
+}
+
+#font-controls-table.widefat {
+    max-width: 960px;
+}
+
+#font-controls-table tr.deleting {
+    background: #FF6666;
+}
+
+#font-controls-table tr.success {
+    background: #E0FFE1;
+}
+
+#font-controls-table .spinner {
+
+}
+
+#delete_all_controls {
+    margin-top: 10px;
+    color: #BC0B0B;
+    display: inline-block;
+}
+
+/**
+ * Advanced Font Controls Page
+ * ==================================
+ *
+ * The following styles are used for the Advanced
+ * Font Controls Screen.
+ *
+ * @version 1.1.1
+ * 
+ */
+#google-api-key {
+    width: 225px;
+}
+
+.manage-controls.manage-google-key {
+    width: 230px;
+    margin-bottom: 20px;
+}
+
+.manage-controls.manage-google-key.valid-key {
+    background: #dff0d8;
+    border-color: #d6e9c6;
+}
+.manage-controls.manage-google-key.valid-key p {
+    color: #468847;
+}
+
+.manage-controls.manage-google-key.valid-key .invalid-key {
+    display: none;
+}
+
+.manage-controls.manage-google-key.invalid-key .valid-key {
+    display: none;
+}
+
+.manage-controls.manage-google-key.loading {
+    width: 265px
+}
+.spinner.spinner-left {
+    float:left;
+}
+#save_api_key {
+    float: left;
+}
+
+.key-feedback {
+    margin-bottom: 0;
+}
+.key-feedback span {
+    display: block;
+}

@@ -14,15 +14,15 @@ class FeedWordPressPerformancePage extends FeedWordPressAdminPage {
 	function display () {
 		global $wpdb, $wp_db_version, $fwp_path;
 		global $fwp_post;
-		
+
 		if (FeedWordPress::needs_upgrade()) :
 			fwp_upgrade_page();
 			return;
 		endif;
-	
+
 		// If this is a POST, validate source and user credentials
 		FeedWordPressCompatibility::validate_http_request(/*action=*/ 'feedwordpress_performance', /*capability=*/ 'manage_options');
-	
+
 		if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST') :
 			$this->accept_POST($fwp_post);
 			do_action('feedwordpress_admin_page_performance_save', $fwp_post, $this);
@@ -41,7 +41,7 @@ class FeedWordPressPerformancePage extends FeedWordPressAdminPage {
 		$boxes_by_methods = array(
 			'performance_box' => __('Performance'),
 		);
-	
+
 		foreach ($boxes_by_methods as $method => $title) :
 			add_meta_box(
 				/*id=*/ 'feedwordpress_'.$method,
@@ -79,19 +79,11 @@ class FeedWordPressPerformancePage extends FeedWordPressAdminPage {
 			$feeds = (($N == 1) ? __("feed") : __("feeds"));
 			$this->updated = sprintf(__("Cleared %d cached %s from WordPress database."), $N, $feeds);
 		endif;
-		
-		if (isset($post['optimize_in'])) :
-			update_option('feedwordpress_optimize_in_clauses', true);
-			$this->updated = sprintf(__("Enabled optimizing inefficient IN clauses in SQL queries."));
-		elseif (isset($post['optimize_out'])) :
-			update_option('feedwordpress_optimize_in_clauses', false);
-			$this->updated = sprintf(__("Disabled optimizing inefficient IN clauses in SQL queries."));
-		endif;
+
 	} /* FeedWordPressPerformancePage::accept_POST () */
 
-	/*static*/ function performance_box ($page, $box = NULL) {
-		$optimize_in = get_option('feedwordpress_optimize_in_clauses', false);
-		
+	static function performance_box ($page, $box = NULL) {
+
 		// Hey ho, let's go...
 		?>
 <table class="editform" width="100%" cellspacing="2" cellpadding="5">
@@ -116,33 +108,6 @@ table. If you'd like to remove the index for any reason, you can do so here.</p>
 
 <?php endif; ?>
 
-<tr style="vertical-align: top">
-<th width="33%" scope="row">Optimize IN clauses:</th>
-<td width="67%"><?php if (!$optimize_in) : ?>
-<input class="button" type="submit" name="optimize_in" value="Optimize inefficient IN clauses in SQL queries" />
-
-<p><strong>Advanced setting.</strong> As of releases up to 3.3.2, WordPress
-still generates many SQL queries with an extremely inefficient use of the IN
-operator (for example, <code>SELECT user_id, meta_key, meta_value FROM
-wp_usermeta WHERE user_id IN (1)</code>). When there is only one item in the
-set, the IN operator is unnecessary; and inefficient, because it prevents SQL
-from making use of indexes on the table being queried. Activating this setting
-will cause these queries to get rewritten to use a simple equality operator when
-there is only one item in the set (for example, the example query above would be
-rewritten as <code>SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE
-user_id = 1</code>).</p>
-
-<p><strong>Note.</strong> This is an advanced setting, which affects WordPress's
-database queries at a very low level. The change should be harmless, but
-proceed with caution, and only if you are confident in your ability to restore
-your WordPress installation from backups if something important should stop
-working.</p>
-
-<?php else : ?>
-<input class="button" type="submit" name="optimize_out" value="Disable optimizing inefficient IN clauses" />
-<p>You can use this setting to disable any attempts by FeedWordPress to optimize
-or rewrite WordPress's SQL queries.</p>
-<?php endif; ?></td>
 </tr>
 
 </td>

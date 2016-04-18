@@ -1,5 +1,5 @@
 /**!
-* TableSorter 2.15.12 - Client-side table sorting with ease!
+* TableSorter 2.15.14 - Client-side table sorting with ease!
 * @requires jQuery v1.2.6+
 *
 * Copyright (c) 2007 Christian Bach
@@ -24,7 +24,7 @@
 
 			var ts = this;
 
-			ts.version = "2.15.12";
+			ts.version = "2.15.14";
 
 			ts.parsers = [];
 			ts.widgets = [];
@@ -290,7 +290,8 @@
 							c = $(b[k].rows[i]);
 							cols = [];
 							// if this is a child row, add it to the last row's children and continue to the next row
-							if (c.hasClass(tc.cssChildRow)) {
+							// ignore child row class, if it is the first row
+							if (c.hasClass(tc.cssChildRow) && i !== 0) {
 								tc.cache[k].row[tc.cache[k].row.length - 1] = tc.cache[k].row[tc.cache[k].row.length - 1].add(c);
 								// add "hasChild" class name to parent row
 								if (!c.prev().hasClass(tc.cssChildRow)) {
@@ -785,6 +786,7 @@
 						resortComplete($table, callback);
 					}, true]);
 				} else {
+					$table.trigger('applyWidgets');
 					resortComplete($table, callback);
 				}
 			}
@@ -891,7 +893,9 @@
 					// sort the table and append it to the dom
 					multisort(table);
 					appendToTable(table, init);
-					$table.trigger("sortEnd", this);
+					$table
+						.trigger("sortEnd", this)
+						.trigger('applyWidgets');
 					if (typeof callback === "function") {
 						callback(table);
 					}
@@ -1161,6 +1165,11 @@
 				$h = $t.find('thead:first'),
 				$r = $h.find('tr.' + ts.css.headerRow).removeClass(ts.css.headerRow + ' ' + c.cssHeaderRow),
 				$f = $t.find('tfoot:first > tr').children('th, td');
+				if (removeClasses === false && $.inArray('uitheme', c.widgets) >= 0) {
+					// reapply uitheme classes, in case we want to maintain appearance
+					$t.trigger('applyWidgetId', ['uitheme']);
+					$t.trigger('applyWidgetId', ['zebra']);
+				}
 				// remove widget added rows, just in case
 				$h.find('tr').not($r).remove();
 				// disable tablesorter
@@ -1169,12 +1178,12 @@
 					.unbind('sortReset update updateAll updateRows updateCell addRows updateComplete sorton appendCache updateCache applyWidgetId applyWidgets refreshWidgets destroy mouseup mouseleave keypress sortBegin sortEnd '.split(' ').join(c.namespace + ' '));
 				c.$headers.add($f)
 					.removeClass( [ts.css.header, c.cssHeader, c.cssAsc, c.cssDesc, ts.css.sortAsc, ts.css.sortDesc, ts.css.sortNone].join(' ') )
-					.removeAttr('data-column');
+					.removeAttr('data-column')
+					.removeAttr('aria-label')
+					.attr('aria-disabled', 'true');
 				$r.find(c.selectorSort).unbind('mousedown mouseup keypress '.split(' ').join(c.namespace + ' '));
 				ts.restoreHeaders(table);
-				if (removeClasses !== false) {
-					$t.removeClass(ts.css.table + ' ' + c.tableClass + ' tablesorter-' + c.theme);
-				}
+				$t.toggleClass(ts.css.table + ' ' + c.tableClass + ' tablesorter-' + c.theme, removeClasses === false);
 				// clear flag in case the plugin is initialized again
 				table.hasInitialized = false;
 				if (typeof callback === 'function') {

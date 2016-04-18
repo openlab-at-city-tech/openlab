@@ -2,8 +2,8 @@
 Contributors: conjur3r
 Tags: table of contents, indexes, toc, sitemap, cms, options, list, page listing, category listing
 Requires at least: 3.2
-Tested up to: 4.2.2
-Stable tag: 1507
+Tested up to: 4.3
+Stable tag: 1509
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,9 @@ Custom post types are supported, however, auto insertion works only when the_con
 * Dutch - [Renee](http://101themes.com/)
 * French - Jean-Michel Duriez
 * German - [Ben](http://blog.bmarwell.de/)
+* Greek - [Dimitrios Kaisaris](http://www.foodblostarter.com/)
+* Hebrew - [Ahrale](http://atar4u.com/)
+* Japanese - [シカマル](http://ja.gravatar.com/deerboy01)
 * Polish - [Jakub](http://notatki.4use.pl/)
 * Simplified Chinese - Jason
 * Slovak - Boris Gereg
@@ -112,6 +115,19 @@ I will never ask for any form of reward or compensation.  Helping others achieve
 
 
 == Changelog ==
+= 1509 =
+* Released: 4 September 2015
+* Added Hebrew translation thanks to [Ahrale](http://atar4u.com/)
+* Added Japaense translation thanks to [シカマル](http://ja.gravatar.com/deerboy01)
+* Added Greek translation thanks to [Dimitrios Kaisaris](http://www.foodblostarter.com/)
+* Updated jQuery Smooth Scroll 1.4.10 to 1.5.5
+* Supply both minified and unminified CSS and JS files, use minified versions.
+* Convert accented characters to ASCII in anchors.
+* Bump tested WordPress version to 4.3
+* Fixed: PHP notice introduced in WP 4.3
+* Fixed: javascript error with $.browser testing for Internet Explorer 7.
+* Plugin has moved to [GitHub](https://github.com/zedzedzed/table-of-contents-plus/) for better collaboration.
+* Help needed: preg_match_all failing with bad UTF8 characters producing no TOC. If you can help, please participate in this [issue](https://github.com/zedzedzed/table-of-contents-plus/issues/105).
 
 = 1507 =
 * Released: 5 July 2015

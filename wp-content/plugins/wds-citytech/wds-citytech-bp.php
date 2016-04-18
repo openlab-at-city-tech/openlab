@@ -362,10 +362,23 @@ add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
 /**
  * Make sure the comment-dupe data doesn't get saved in the comments activity
  */
-function openlab_pre_save_comment_activity( $content ) {
-	return preg_replace( "/disabledupes\{.*\}disabledupes/", "", $content );
+function openlab_pre_save_comment_activity( $activity ) {
+	$is_old_blog_comment = 'blogs' === $activity->component && 'new_blog_comment' === $activity->type;
+
+	// OMG
+	$is_new_blog_comment = false;
+	if ( 'activity' === $activity->component && 'activity_comment' === $activity->type ) {
+		$parent = bp_activity_get_specific( array( 'activity_ids' => array( $activity->secondary_item_id ) ) );
+		if ( $parent['activities'] ) {
+			$is_new_blog_comment = 'new_blog_post' === $parent['activities'][0]->type;
+		}
+	}
+
+	if ( $is_old_blog_comment || $is_new_blog_comment ) {
+		$activity->content = preg_replace( "/disabledupes\{.*\}disabledupes/", "", $activity->content );
+	}
 }
-add_filter( 'bp_blogs_activity_new_comment_content', 'openlab_pre_save_comment_activity' );
+add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
  * Auto-enable BuddyPress Docs for all group types
@@ -426,58 +439,3 @@ function openlab_force_doc_comments_open( $open, $post_id ) {
         return $open;
 }
 add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
-
-/**
- * Filter the signup activation email
- */
-function openlab_activation_email_content( $message ) {
-	// Swap 'key' with 'activationk', because Microsoft filters the URL
-	// param 'key'. Oy.
-	$message = str_replace( '?key=', '?activationk=', $message );
-
-        $message .= '
-If clicking the link does not work, try to copy the link, paste it into your browser, and press the enter key or go.';
-        return $message;
-}
-add_filter( 'bp_core_activation_signup_user_notification_message', 'openlab_activation_email_content' );
-
-function openlab_screen_activation() {
-	global $bp;
-
-	if ( !bp_is_current_component( 'activate' ) )
-		return false;
-
-	// Check if an activation key has been passed
-	if ( isset( $_GET['activationk'] ) ) {
-
-		// Activate the signup
-		$user = apply_filters( 'bp_core_activate_account', bp_core_activate_signup( $_GET['activationk'] ) );
-
-		// If there were errors, add a message and redirect
-		if ( !empty( $user->errors ) ) {
-			bp_core_add_message( $user->get_error_message(), 'error' );
-			bp_core_redirect( trailingslashit( bp_get_root_domain() . '/' . $bp->pages->activate->slug ) );
-		}
-
-		// Check for an uploaded avatar and move that to the correct user folder
-		if ( is_multisite() )
-			$hashed_key = wp_hash( $_GET['activationk'] );
-		else
-			$hashed_key = wp_hash( $user );
-
-		// Check if the avatar folder exists. If it does, move rename it, move
-		// it and delete the signup avatar dir
-		if ( file_exists( bp_core_avatar_upload_path() . '/avatars/signups/' . $hashed_key ) )
-			@rename( bp_core_avatar_upload_path() . '/avatars/signups/' . $hashed_key, bp_core_avatar_upload_path() . '/avatars/' . $user );
-
-		bp_core_add_message( __( 'Your account is now active!', 'buddypress' ) );
-
-		$bp->activation_complete = true;
-	}
-
-	bp_core_load_template( apply_filters( 'bp_core_template_activate', array( 'activate', 'registration/activate' ) ) );
-}
-remove_action( 'bp_screens', 'bp_core_screen_activation' );
-add_action( 'bp_screens', 'openlab_screen_activation' );
-
-

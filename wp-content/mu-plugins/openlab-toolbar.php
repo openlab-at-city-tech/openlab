@@ -158,6 +158,9 @@ class OpenLab_Admin_Bar {
 
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
                         add_action('admin_bar_menu',array($this,'add_custom_edit_menu'),80);
+                        
+                        //for cleanning up any plugin add ons
+                        add_action('wp_before_admin_bar_render',array($this,'adminbar_plugin_cleanup'), 9999);
         } else {
 			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
@@ -911,10 +914,11 @@ HTML;
             }
 
             $title = wp_html_excerpt( $blogname, 40, '&hellip;' );
+            $title_short = wp_html_excerpt( $blogname, 15, '&hellip;' );
 
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => '<span class="hidden-sm">'.$title.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
+                    'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
                         'class' => 'admin-bar-menu hidden-xs',
@@ -1019,6 +1023,17 @@ HTML;
                                 ) );
                         }
                 }
+        }
+        
+        /**
+         * Cleaning up any plugin addons to the admin bar
+         * @param type $wp_admin_bar
+         */
+        function adminbar_plugin_cleanup($wp_admin_bar){
+            global $wp_admin_bar;
+            
+            $wp_admin_bar->remove_menu('tribe-events');
+            
         }
 
     /**
@@ -1198,11 +1213,12 @@ HTML;
                     return;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
+                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 10, '&hellip;' ));
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',
-                    'title' => $howdy,
+                    'title' => '<span class="hidden-sm">'.$howdy.'</span><span class="visible-sm">'.$howdy_short.'</span>',
                     'href' => $profile_url,
                     'meta' => array(
                         'class' => 'hidden-xs',
@@ -1226,13 +1242,13 @@ HTML;
                     return;
 
             if ( $current_user->display_name !== $current_user->user_login )
-                    $user_login = "<br /><span class='username'>{$current_user->user_login}</span>";
+                    $user_login = "<span class='username'>{$current_user->user_login}</span>";
 
             // avatar
             $user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $current_user->display_name.'"/></a></div></div>' ;
 
             // name link
-            $user_info .= '<div class="col-sm-16"><p class="item-title"><a class="bold" href="' . $profile_url . '"><span class="display-name">'.$current_user->display_name.$user_login.'</a></p>';
+            $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span><a href="' . $profile_url . '">'.$user_login.'</a></p>';
 
             // accept/reject buttons
             $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></p></div></div>';
@@ -1345,8 +1361,8 @@ HTML;
             $openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
-            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome') );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome') );
+            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.8' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.8' );
         }
 
         function adminbar_special_body_class($classes){

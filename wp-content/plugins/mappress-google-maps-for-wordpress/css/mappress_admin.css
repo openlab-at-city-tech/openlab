@@ -1,0 +1,320 @@
+/*
+	-----------------------------------------------------------------------------------
+	Map list
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-m-panel {}
+
+.mapp-m-panel hr {
+	background-color: lightgray;		/* Some browsers used background color */
+	border: 0;
+	color: lightgray;					/* IE uses color */
+	height: 1px;
+}
+
+.mapp-m-map-list {
+	width: 100%;
+	height: 100%;
+	margin-top: 5px;
+	overflow: auto;
+}
+
+.mapp-m-actions {
+	visibility: hidden;
+}
+
+.mobile .mapp-m-actions {
+	visibility: visible;
+}
+
+tr:hover > td > .mapp-m-actions {
+	visibility: visible;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Map editor
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-e-edit-panel {
+	border-top: 1px solid lightgray;
+	margin-top: 5px;
+	white-space:nowrap;
+}
+
+table.mapp-e-editor {
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.mapp-searchbox {
+	display: block;
+	width: 100%;
+	max-width: 500px;
+}
+
+.mapp-searchbox input {
+	vertical-align: middle;
+	width: 100%;
+}
+
+.mapp-search-button, .mapp-geolocate-button {
+	background-repeat: no-repeat !important;
+	background-position: center center !important;
+	margin: 0 !important;
+	vertical-align: middle !important;
+}
+
+.mapp-search-button:before, #mappress .mapp-geolocate-button:before {
+	content: "XX";
+	visibility: hidden;
+}
+
+.mapp-search-button, .mapp-search-button:hover, .mapp-search-button:focus {
+	background-image: url('../images/search.png') !important;
+}
+
+.mapp-geolocate-button, .mapp-geolocate-button:hover, .mapp-geolocate-button:focus {
+	background-image: url('../images/geolocate-2x.png') !important;
+	background-size: 18px 18px !important;
+}
+
+.mapp-e-editor td {
+	vertical-align: top;
+}
+
+.mapp-e-top-toolbar {
+	font-size: 12px;
+	height: 20px;
+}
+
+.mapp-e-canvas {
+	width: 100%;
+	min-height: 200px;
+	border: 1px solid lightgray;
+}
+
+.mapp-e-poi-list {
+	cursor: move;
+	height: 370px;
+	overflow: auto;
+}
+
+.mapp-e-poi-list a {
+	text-decoration: none;
+}
+
+.mapp-e-poi-list td {
+	border-bottom: 1px solid lightgray;
+}
+
+.mapp-e-poi-list tr:nth-of-type(odd) {
+	background-color: rgb(252, 252, 252);
+}
+
+.mapp-e-actions {
+	visibility: hidden;
+}
+
+.mobile .mapp-e-actions {
+	visibility: visible;
+}
+
+tr:hover > td > .mapp-e-actions {
+	visibility: visible;
+}
+
+.mapp-e-icon {
+	vertical-align: top;
+	padding-right: 5px;
+	max-height: 24px;
+	max-width: 24px;
+}
+
+.mapp-e-infobox {
+	width: 475px;
+	height: 325px;
+}
+
+#mapp_e_poi_title {
+	width: 350px;
+	font-weight: bold;
+}
+
+/* Body as a textarea - also hard-coded into tinymce init */
+#mapp_e_poi_body {
+	width: 100%;
+	height:175px;
+}
+
+/* Links for visual / html tinymce - for some reason the cursor is not set correctly */
+#mapp_e_visual, #mapp_e_html {
+	cursor: pointer;
+}
+
+/* Border around tinyMCE editor (WP removes it).  mceLayout is for WP < 3.9 */
+.mapp-e-infobox .mce-panel, .mapp-e-infobox table.mceLayout {
+	border: 1px solid lightgray !important;
+}
+
+#mapp_e_poi_kml_url {
+	width: 350px;
+}
+
+
+/*
+	-----------------------------------------------------------------------------------
+	Settings
+	-----------------------------------------------------------------------------------
+*/
+.form-table table {
+	border-collapse: collapse;
+	width: auto;
+	height: auto;
+	border: 1px solid #dfdfdf;
+}
+
+.form-table table th {
+	font-weight: bold;
+	background-color: rgb(241, 241, 241);
+	width: auto;
+	height: auto;
+	border-bottom: 1px solid lightgray;
+	padding: 7px;
+}
+
+.form-table table td {
+	width: auto;
+	height: auto;
+	border-bottom: 1px solid lightgray;
+	vertical-align: top;
+	padding: 5px;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Icon Picker
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-iconpicker-toggle {
+	max-width: 24px;
+	max-height: 24px;
+	vertical-align: middle;
+}
+
+/* Panel */
+.mapp-iconpicker {
+	background-color: white;
+	border: 1px solid gray;
+	display: none;
+	height: 330px;
+	position: absolute;
+	width: 350px;
+	z-index: 100300;
+}
+
+.mapp-iconpicker-wrapper {
+	height: 275px;
+	margin: 5px 20px 0 0;
+	overflow: auto;
+	padding: 5px;
+	user-select: none;
+}
+
+.mapp-iconpicker-toolbar {
+	padding: 5px;
+	border-top: 1px solid lightgray;
+}
+
+.mapp-iconpicker .mapp-icon, .mapp-iconpicker .mapp-icon-sprite {
+	border: 2px solid white;
+	user-select: none;
+	margin: 0;
+}
+
+.mapp-iconpicker img.mapp-icon:hover, .mapp-iconpicker span.mapp-icon-sprite:hover {
+	border: 2px solid blue;
+}
+
+.mapp-iconpicker .mapp-icon { max-width: 32px; }
+.mapp-iconpicker .mapp-icon-sprite { display: inline-block; background: transparent url('../images/icons.png') no-repeat; width: 32px; height: 32px }
+
+
+/*
+	-----------------------------------------------------------------------------------
+	Color picker
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-colorpicker-toggle {
+	border: 1px solid lightgray;
+	cursor: pointer;
+	display: inline-block;
+	height: 20px;
+	margin: 1px;
+	vertical-align: middle;
+	width: 20px;
+}
+
+.mapp-colorpicker {
+	background-color: white;
+	border: 1px solid gray;
+	box-shadow: 5px 5px 10px #888;
+	display: none;
+	line-height: 1;
+	padding: 5px;
+	position: absolute;
+	width: 265px;
+	z-index: 100200;
+}
+
+.mapp-colorpicker span {
+	border: 2px solid lightgray;
+	display: inline-block;
+	height: 15px;
+	margin: 1px;
+	width: 15px;
+}
+
+.mapp-colorpicker span:hover {
+	border: 2px solid black;
+	height: 15px;
+	width: 15px;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Dropdown
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-dropdown {
+	display: inline-block;
+	position: relative;
+}
+
+.mapp-dropdown .mapp-dropdown-panel {
+	display: none;
+	position: absolute;
+	z-index: 160000;
+}
+
+
+.mapp-dropdown.mapp-open .mapp-dropdown-panel {
+	display: block;
+}
+
+.mapp-dropdown-backdrop {
+	display: none;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 159900;
+}
+

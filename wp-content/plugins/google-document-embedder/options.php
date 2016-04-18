@@ -10,9 +10,9 @@ if ( isset( $_POST['_general_default'] ) ) {
 	
 	if ( gde_form_to_profile( 1, $_POST ) ) {
 		// update successful
-		gde_show_msg( __('Default profile <strong>updated</strong>.', 'gde') );
+		gde_show_msg( __('Default profile <strong>updated</strong>.', 'google-document-embedder') );
 	} else {
-		gde_show_msg( __('Unable to update profile.', 'gde'), true );
+		gde_show_msg( __('Unable to update profile.', 'google-document-embedder'), true );
 	}
 } elseif ( isset( $_POST['_profiles_new'] ) ) {
 	// new profile creation
@@ -25,22 +25,22 @@ if ( isset( $_POST['_general_default'] ) ) {
 		
 		if ( ! preg_match( '/[\pL]/u', $name ) ) {
 			// profile name doesn't contain any letter - possible ID conflict
-			gde_show_msg( __('Profile name must contain at least one letter.', 'gde'), true );
+			gde_show_msg( __('Profile name must contain at least one letter.', 'google-document-embedder'), true );
 		} elseif ( gde_profile_name_exists( $name ) !== -1 ) {
 			// profile name is duplicate
-			gde_show_msg( __('Profile name already exists. Please choose another name.', 'gde'), true );
+			gde_show_msg( __('Profile name already exists. Please choose another name.', 'google-document-embedder'), true );
 		} elseif ( gde_profile_to_profile( $_POST['parent'], $name, stripslashes( $_POST['description'] ) ) ) {
 			// intercept and redirect to edit profile page
 			$lastid = gde_profile_name_exists( $name );
 			$_POST['action'] = "edit";
 			$_POST['profile'] = $lastid;
 			$noload = "gentab";
-			gde_show_msg( __('New profile <strong>created</strong>.', 'gde') );
+			gde_show_msg( __('New profile <strong>created</strong>.', 'google-document-embedder') );
 		} else {
-			gde_show_msg( __('Unable to create profile.', 'gde'), true );
+			gde_show_msg( __('Unable to create profile.', 'google-document-embedder'), true );
 		}
 	} else {
-		gde_show_msg( __('Unable to create profile.', 'gde'), true );
+		gde_show_msg( __('Unable to create profile.', 'google-document-embedder'), true );
 	}
 } elseif ( isset( $_POST['_profile_edit'] ) ) {
 	// profile edit
@@ -48,9 +48,9 @@ if ( isset( $_POST['_general_default'] ) ) {
 	
 	if ( gde_form_to_profile( $_POST['profile_id'], $_POST ) ) {
 		// update successful
-		gde_show_msg( __('Profile <strong>updated</strong>.', 'gde') );
+		gde_show_msg( __('Profile <strong>updated</strong>.', 'google-document-embedder') );
 	} else {
-		gde_show_msg( __('Unable to update profile.', 'gde'), true );
+		gde_show_msg( __('Unable to update profile.', 'google-document-embedder'), true );
 	}
 } elseif ( isset( $_POST['action'] ) && isset( $_POST['profile'] ) ) {
 	// profile row action
@@ -58,14 +58,14 @@ if ( isset( $_POST['_general_default'] ) ) {
 	if ( $_POST['action'] == "delete" ) {
 		$tabid = "protab";
 		if ( gde_delete_profile( $_POST['profile'] ) ) {
-			gde_show_msg( __('Profile <strong>deleted</strong>.', 'gde') );
+			gde_show_msg( __('Profile <strong>deleted</strong>.', 'google-document-embedder') );
 		} else {
-			gde_show_msg( __('Unable to delete profile.', 'gde'), true );
+			gde_show_msg( __('Unable to delete profile.', 'google-document-embedder'), true );
 		}
 	} elseif ( $_POST['action'] == "default" ) {
 		$tabid = "gentab";
 		if ( gde_overwrite_profile( $_POST['profile'] ) ) {
-			gde_show_msg( __('Default profile <strong>updated</strong>.', 'gde') );
+			gde_show_msg( __('Default profile <strong>updated</strong>.', 'google-document-embedder') );
 		}
 	} elseif ( $_POST['action'] == "edit" ) {
 		$tabid = "protab";
@@ -102,7 +102,7 @@ if ( isset( $_POST['_general_default'] ) ) {
 			if ( ! isset( $oldoptions['error_log'] ) || $oldoptions['error_log'] == "no" ) {
 				if ( ! gde_dx_log("Diagnostic logging enabled") ) {
 					// can't write to db - don't enable logging
-					gde_show_msg( __('Unable to enable diagnostic logging.', 'gde'), true );
+					gde_show_msg( __('Unable to enable diagnostic logging.', 'google-document-embedder'), true );
 					$gdeoptions[$k] = "no";
 				}
 			}
@@ -114,9 +114,9 @@ if ( isset( $_POST['_general_default'] ) ) {
 	
 	if ( update_option( 'gde_options', $gdeoptions ) ) {
 		// update successful
-		gde_show_msg( __('Settings <strong>updated</strong>.', 'gde') );
+		gde_show_msg( __('Settings <strong>updated</strong>.', 'google-document-embedder') );
 	} else {
-		gde_show_msg( __('Settings <strong>updated</strong>.', 'gde') );	// not true, but avoids confusion in case where no changes were made
+		gde_show_msg( __('Settings <strong>updated</strong>.', 'google-document-embedder') );	// not true, but avoids confusion in case where no changes were made
 		gde_dx_log('Settings update failed - maybe no changes');
 	}
 } elseif ( isset( $_POST['_advanced_import'] ) ) {
@@ -138,7 +138,7 @@ if ( isset( $_POST['_general_default'] ) ) {
 	
 	if ( ! $valid ) {
 		$tabid = "advtab";
-		gde_show_msg( __('Please select a valid export file to import.', 'gde'), true );
+		gde_show_msg( __('Please select a valid export file to import.', 'google-document-embedder'), true );
 	} else {
 		// process and import
 		$import = true;
@@ -165,7 +165,7 @@ if ( ! $import ) {
 
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
-	<h2>Google Doc Embedder <?php _e('Settings', 'gde'); ?></h2>
+	<h2>Google Doc Embedder <?php _e('Settings', 'google-document-embedder'); ?></h2>
 		
 	<div id="gdeadmintabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 		<ul class="nav-tab-wrapper ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
@@ -174,12 +174,12 @@ if ( ! $import ) {
 ?>
 			<li id="gentab" class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 				<a href="#general" class="nav-tab">
-					<span><?php _e('General', 'gde'); ?></span>
+					<span><?php _e('General', 'google-document-embedder'); ?></span>
 				</a>
 			</li>
 			<li id="protab" class="ui-state-default ui-corner-top">
 				<a href="#profiles" class="nav-tab">
-					<span><?php _e('Profiles', 'gde'); ?></span>
+					<span><?php _e('Profiles', 'google-document-embedder'); ?></span>
 				</a>
 			</li>
 <?php
@@ -187,12 +187,12 @@ if ( ! $import ) {
 ?>
 			<li id="gentab-reload" class="ui-state-default ui-corner-top">
 				<a href="#general" class="nav-tab">
-					<span><?php _e('General', 'gde'); ?></span>
+					<span><?php _e('General', 'google-document-embedder'); ?></span>
 				</a>
 			</li>
 			<li id="protab" class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 				<a href="#profiles" class="nav-tab">
-					<span><?php _e('Profiles', 'gde'); ?></span>
+					<span><?php _e('Profiles', 'google-document-embedder'); ?></span>
 				</a>
 			</li>
 <?php
@@ -200,12 +200,12 @@ if ( ! $import ) {
 ?>
 			<li id="advtab" class="ui-state-default ui-corner-top">
 				<a href="#advanced" class="nav-tab">
-					<span><?php _e('Advanced', 'gde'); ?></span>
+					<span><?php _e('Advanced', 'google-document-embedder'); ?></span>
 				</a>
 			</li>
 			<!--li id="suptab" class="ui-state-default ui-corner-top">
 				<a href="#support" class="nav-tab">
-					<span><?php _e('Support', 'gde'); ?></span>
+					<span><?php _e('Support', 'google-document-embedder'); ?></span>
 				</a>
 			</li-->
 		</ul>
@@ -346,7 +346,7 @@ function gde_profile_text( $option, $field, $class = '', $size = '', $enabled = 
 }
 
 function gde_help_link( $url, $float = '' ) {
-	$title = __('Help', 'gde');
+	$title = __('Help', 'google-document-embedder');
 	$img = GDE_PLUGIN_URL . "img/help.png";
 	
 	if ( ! empty( $float ) ) {
@@ -372,9 +372,9 @@ function gde_row_cb( $pid ) {
 function gde_row_actions( $pid ) {
 	$actions = array(
 		// action name	=>	arr ( label, class )
-		"edit"		=>	array( __('Edit', 'gde'), 'edit' ),
-		"delete"	=>	array( __('Delete', 'gde'), 'delete' ),
-		"default"	=>	array( __('Make Default', 'gde'), 'default' )
+		"edit"		=>	array( __('Edit', 'google-document-embedder'), 'edit' ),
+		"delete"	=>	array( __('Delete', 'google-document-embedder'), 'delete' ),
+		"default"	=>	array( __('Make Default', 'google-document-embedder'), 'default' )
 	);
 	
 	// protect default profile

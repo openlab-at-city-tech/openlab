@@ -2,9 +2,11 @@
 /**
  * dynwid_admin_save.php - Saving options to the database
  *
- * @version $Id: dynwid_admin_save.php 939272 2014-06-26 19:44:38Z qurl $
+ * @version $Id: dynwid_admin_save.php 1218814 2015-08-12 06:37:21Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
   // Security - nonce, etc.
   $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';
@@ -68,44 +70,44 @@
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
   }
-  
+
   // IP
   if ( $_POST['ip'] == 'no' && empty($_POST['ip_value']) ) {
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
-  }  
+  }
 
   // Removing already set options, but keeping individual rules
   $dbtable = $GLOBALS['wpdb']->prefix . DW_DB_TABLE;
   $query = "SELECT COUNT(1) AS total FROM "  . $dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = 'individual'";
   $count = $GLOBALS['wpdb']->get_var($query);
-  
+
   if ( $count > 0 && isset($_POST['individual']) && $_POST['individual'] == '1' ) {
   	$post_types = ( is_array($_POST['post_types']) ) ? $_POST['post_types'] : array();
   	$post_types = array_merge( array('single_post', 'single_tag'), $post_types );
-  	
+
   	foreach ( $post_types as $t ) {
  			$maintype = (! preg_match('/^single/', $t) ) ? $t . '-post' : $t;
-  		
+
   		$query = "SELECT name FROM " . $dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "'";
   		$results = $GLOBALS['wpdb']->get_results($query);
-  		
+
   		foreach ( $results as $row ) {
   			if ( is_numeric($row->name) ) {
   				$a = $maintype . '_act';
-  				
+
   				if (! is_array($_POST[$a]) ) {
   					$_POST[$a] = array();
   				}
-  				
+
   				$_POST[$a][ ] = $row->name;
   			}
   		}
 
   	}
-	
+
   }
-  
+
   $DW->resetOptions($widget_id);
 
   // Role
@@ -134,7 +136,7 @@
 
   // Browser
 	DWModule::save('browser', 'complex');
-	
+
 	// Device
 	DWModule::save('device', 'complex');
 
@@ -160,7 +162,7 @@
 			$DW->addUrls($widget_id, $_POST['url'], $urls);
 		}
 	}
-	
+
 	// IP
 	if (! empty($_POST['ip_value']) ) {
 		$ips = array();
@@ -179,7 +181,25 @@
 		if ( count($ips) > 0 ) {
 			$DW->addIPs($widget_id, $_POST['ip'], $ips);
 		}
-	}	
+	}
+
+	// Shortcode
+	if (! empty($_POST['shortcode_value']) ) {
+		$value = sanitize_text_field($_POST['shortcode_value']);
+		if (! empty($value) && substr($value, 0, 1) !== '[' && substr($value, strlen($value)-1) !== ']' ) {
+			$value = '[' . $value . ']';
+		}
+
+		$match = sanitize_text_field($_POST['shortcode_match']);
+		$operator = $_POST['shortcode_operator'];
+		if (! in_array($operator, array('=', '!=')) ) {
+			$operator = '=';
+		}
+
+		if (! empty($value) ) {
+			$DW->addShortcode($widget_id, $_POST['shortcode'], $value, $match, $operator);
+		}
+	}
 
   // Front Page
   DWModule::save('front-page', 'complex');

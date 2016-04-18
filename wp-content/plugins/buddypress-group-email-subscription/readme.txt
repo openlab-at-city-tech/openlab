@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 4.1.1 (BP 2.2.1)
-Stable tag: 3.5.1
+Tested up to: 4.4.2 (BP 2.4.3)
+Stable tag: 3.6.0
 
 == Description ==
 
@@ -57,6 +57,7 @@ TRANSLATORS
 - Farsi - Vahid Masoomi http://www.AzUni.ir
 - Lithuanian - Vincent G http://www.Host1Free.com
 - Danish - Morten Nalholm
+- Hebrew - Iggy Pritzker
 
 NOTE TO PLUGIN AUTHORS
 If your plugin posts updates to the standard BuddyPress activity stream, then group members who are subscribed via 3. Daily Digest and 5. All Email will get your updates automatically. However people subscribed as 2. Weekly Summary and 4. New Topic will not. If you feel some of your plugin's updates are very important and want to make sure all subscribed members receive them, you can filter 'ass_this_activity_is_important' and return TRUE when $type matches your activity. See the ass_this_activity_is_important() function in bp-activity-subscription-functions.phpfor more info.
@@ -88,9 +89,22 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 
 == Changelog ==
 
+= 3.6.0 =
+* Introduce `ass_generate_notification()`, a generic handler for sending notifications.
+* Add Hebrew translation.
+
+= 3.5.2 =
+* Adds a filter to control whether a specific user should receive immediate email notification of a given item.
+* Fixes bug that prevented users from saving the "No email" setting in some cases.
+* Reorders the way the group extension is bootstrapped.
+* Removes hardcoded reference to default group setting, in case this value is filtered by a plugin.
+* Fix incorrect group link in digest emails.
+
 = 3.5.1 =
 * Localization improvements
 * Fixes bug that could cause fatal error in some bbPress configurations
+* Fixes bug that caused incorrect links in some digest emails
+* Fixes bug that caused some email subscription settings not to be saved in some cases
 
 = 3.5 =
 * Fixes bug so that user no longer gets an email for their own group activity update

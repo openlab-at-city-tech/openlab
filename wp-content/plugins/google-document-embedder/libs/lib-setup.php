@@ -51,7 +51,7 @@ function gde_defaults( $type ) {
 	// define default profile(s)
 	$defpros = array(
 		"default" => array(
-			"desc"	=>	__('This is the default profile, used when no profile is specified.', 'gde'),
+			"desc"	=>	__('This is the default profile, used when no profile is specified.', 'google-document-embedder'),
 			"viewer"			=>	'standard',
 			"default_width"		=>	'100%',
 			"default_height"	=>	'500px',
@@ -70,13 +70,13 @@ function gde_defaults( $type ) {
 			"link_show"			=>	'all',
 			"link_mask"			=>	'no',
 			"link_block"		=>	'no',
-			"link_text"			=>	__('Download', 'gde') . ' (%TYPE, %SIZE)',
+			"link_text"			=>	__('Download', 'google-document-embedder') . ' (%TYPE, %SIZE)',
 			"link_pos"			=>	'below',
 			"link_force"		=>	'no',
 			"cache"				=>	'on'
 		),
 		"max-doc-security" => array(
-			"desc"	=>	__('Hide document location and text selection, prevent downloads', 'gde'),
+			"desc"	=>	__('Hide document location and text selection, prevent downloads', 'google-document-embedder'),
 			"viewer"			=>	'enhanced',
 			"default_width"		=>	'100%',
 			"default_height"	=>	'500px',
@@ -101,7 +101,7 @@ function gde_defaults( $type ) {
 			"cache"				=>	'on'
 		),
 		"dark" => array(
-			"desc"	=>	__('Dark-colored theme, example of custom CSS option', 'gde'),
+			"desc"	=>	__('Dark-colored theme, example of custom CSS option', 'google-document-embedder'),
 			"viewer"			=>	'enhanced',
 			"default_width"		=>	'100%',
 			"default_height"	=>	'500px',
@@ -120,7 +120,7 @@ function gde_defaults( $type ) {
 			"link_show"			=>	'all',
 			"link_mask"			=>	'no',
 			"link_block"		=>	'no',
-			"link_text"			=>	__('Download', 'gde') . ' (%TYPE, %SIZE)',
+			"link_text"			=>	__('Download', 'google-document-embedder') . ' (%TYPE, %SIZE)',
 			"link_pos"			=>	'below',
 			"link_force"		=>	'no',
 			"cache"				=>	'on'

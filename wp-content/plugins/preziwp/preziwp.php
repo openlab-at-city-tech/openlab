@@ -5,7 +5,7 @@ Plugin URI: http://teleogistic.net/code/wordpress/prezi-wp
 Author: Boone Gorges
 Author URI: http://boonebgorges.com
 Description: Adds a Prezi shortcode to allow you to easily embed presentations into WordPress.
-Version: 1.1
+Version: 1.2
 */
 
 class PreziWP {
@@ -44,9 +44,16 @@ class PreziWP {
 		$html  = '<div class="prezi-player">';
 		$html .= '<style type="text/css" media="screen">.prezi-player { width: '. $width . 'px; } .prezi-player-links { text-align: center; }</style>';
 
-		$html .= '<iframe src="http://prezi.com/embed/' . esc_attr( $id ) . '/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;features=undefined&amp;disabled_features=undefined" width="' . intval( $width ) . '" height="' . intval( $height ) . '" frameBorder="0"></iframe>';
+		$html .= '<iframe src="' . set_url_scheme( 'http://prezi.com/embed/' ) . esc_attr( $id ) . '/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;features=undefined&amp;disabled_features=undefined" width="' . intval( $width ) . '" height="' . intval( $height ) . '" frameBorder="0"></iframe>';
 
-		$html .= '<div class="prezi-player-links"><p><a title="' . __( 'View Original on Prezi', 'preziwp' ) . '" href="http://prezi.com/' . $id . '/">' . __( 'View Original</a> on <a href="http://prezi.com">Prezi</a>', 'preziwp' ) . '</p></div>';
+		$link = sprintf(
+			__( '<a title="%s" href="%s">View Original</a> on <a href="%s">Prezi</a>', 'preziwp' ),
+			esc_html__( 'View Original on Prezi', 'preziwp' ),
+			esc_url( set_url_scheme( 'http://prezi.com' . $id ) ),
+			esc_url( set_url_scheme( 'http://prezi.com' ) )
+		);
+
+		$html .= '<div class="prezi-player-links"><p>' . $link . '</p></div>';
 		$html .= '</div>';
 
 

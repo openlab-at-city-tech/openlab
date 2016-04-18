@@ -19,6 +19,9 @@
     <div id="topgroupinvite" class="panel panel-default">
         <div class="panel-heading semibold">Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></div>
         <div class="panel-body">
+            
+            <?php do_action('template_notices') ?>
+            
             <label><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></label>
 
             <ul class="first acfb-holder invite-search inline-element-list">

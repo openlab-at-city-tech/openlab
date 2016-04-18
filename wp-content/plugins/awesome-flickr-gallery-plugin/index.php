@@ -3,7 +3,7 @@
    Plugin Name: Awesome Flickr Gallery
    Plugin URI: http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin/
    Description: Awesome Flickr Gallery is a simple, fast and light plugin to create a gallery of your Flickr photos on your WordPress enabled website.  This plugin aims at providing a simple yet customizable way to create stunning Flickr gallery.
-   Version: 3.3.5
+   Version: 3.5.3
    Author: Ronak Gandhi
    Author URI: http://www.ronakg.com
    License: GPL2
@@ -27,7 +27,6 @@
 require_once('afgFlickr/afgFlickr.php');
 include_once('afg_admin_settings.php');
 include_once('afg_libs.php');
-include_once('afg_update.php');
 
 function afg_enqueue_cbox_scripts() {
     wp_enqueue_script('jquery');
@@ -35,8 +34,18 @@ function afg_enqueue_cbox_scripts() {
     wp_enqueue_script('afg_colorbox_js', BASE_URL . "/colorbox/mycolorbox.js" , array('jquery'));
 }
 
+function afg_enqueue_swipebox_scripts() {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('afg_swipebox_script', BASE_URL . "/swipebox/js/jquery.swipebox.min.js" , array('jquery'));
+    wp_enqueue_script('afg_swipebox_js', BASE_URL . "/swipebox/myswipebox.js" , array('jquery'));
+}
+
 function afg_enqueue_cbox_styles() {
     wp_enqueue_style('afg_colorbox_css', BASE_URL . "/colorbox/colorbox.css");
+}
+
+function afg_enqueue_swipebox_styles() {
+    wp_enqueue_style('afg_swipebox_css', BASE_URL . "/swipebox/css/swipebox.min.css");
 }
 
 function afg_enqueue_styles() {
@@ -44,8 +53,10 @@ function afg_enqueue_styles() {
 }
 
 $enable_colorbox = get_option('afg_slideshow_option') == 'colorbox';
+$enable_swipebox = get_option('afg_slideshow_option') == 'swipebox';
 
 if (!is_admin()) {
+    global $enable_colorbox, $enable_swipebox;
     /* Short code to load Awesome Flickr Gallery plugin.  Detects the word
      * [AFG_gallery] in posts or pages and loads the gallery.
      */
@@ -58,11 +69,21 @@ if (!is_admin()) {
             $enable_colorbox = true;
             break;
         }
+
+        if ($gallery['slideshow_option'] == 'swipebox') {
+            $enable_swipebox = true;
+            break;
+        }
     }
 
     if ($enable_colorbox) {
         add_action('wp_print_scripts', 'afg_enqueue_cbox_scripts');
         add_action('wp_print_styles', 'afg_enqueue_cbox_styles');
+    }
+
+    if ($enable_swipebox) {
+        add_action('wp_print_scripts', 'afg_enqueue_swipebox_scripts');
+        add_action('wp_print_styles', 'afg_enqueue_swipebox_styles');
     }
 
     add_action('wp_print_styles', 'afg_enqueue_styles');
@@ -106,6 +127,10 @@ function afg_display_gallery($atts) {
     else $url_separator = '&';
 
     $galleries = get_option('afg_galleries');
+    if (!isset($galleries) || array_key_exists($id, $galleries) == false) {
+        return afg_error("Gallery ID {$id} has been either deleted or not configured.");
+    }
+
     $gallery = $galleries[$id];
 
     $api_key = get_option('afg_api_key');
@@ -123,6 +148,7 @@ function afg_display_gallery($atts) {
     $credit_note = get_afg_option($gallery, 'credit_note');
     $gallery_width = get_afg_option($gallery, 'width');
     $pagination = get_afg_option($gallery, 'pagination');
+    $cache_refresh_interval = get_afg_option($gallery, 'cache_refresh_interval');
 
     if ($photo_size == 'custom') {
         $custom_size = get_afg_option($gallery, 'custom_size');
@@ -179,84 +205,89 @@ function afg_display_gallery($atts) {
 
     $extras = 'url_l, description, date_upload, date_taken, owner_name';
 
-    if (isset($photoset_id) && $photoset_id) {
-        $rsp_obj = $pf->photosets_getInfo($photoset_id);
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['photos'];
-    }
-    else if (isset($gallery_id) && $gallery_id) {
-        $rsp_obj = $pf->galleries_getInfo($gallery_id);
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['gallery']['count_photos']['_content'];
-    }
-    else if (isset($group_id) && $group_id) {
-        $rsp_obj = $pf->groups_pools_getPhotos($group_id, NULL, NULL, NULL, NULL, 1, 1);
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['photos']['total'];
-        if ($total_photos > 500) $total_photos = 500;
-        }
-    else if (isset($tags) && $tags) {
-        $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'tags'=>$tags, 'extras'=>$extras, 'per_page'=>1));
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['photos']['total'];
-    }
-    else if (isset($popular) && $popular) {
-        $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'sort'=>'interestingness-desc', 'extras'=>$extras, 'per_page'=>1));
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['photos']['total'];
-    }
-    else {
-        $rsp_obj = $pf->people_getInfo($user_id);
-        if ($pf->error_code) return afg_error();
-        $total_photos = $rsp_obj['photos']['count']['_content'];
+    if (!DEBUG) {
+	    $photos = get_transient('afg_id_' . $id);
     }
 
-    $photos = get_transient('afg_id_' . $id);
-    if (DEBUG)
-        $photos = NULL;
-
-    if ($photos == false || $total_photos != count($photos)) {
+    if ($photos === false) {
         $photos = array();
+
+        if (isset($photoset_id) && $photoset_id) {
+            $rsp_obj = $pf->photosets_getInfo($photoset_id);
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photos'];
+        }
+        else if (isset($gallery_id) && $gallery_id) {
+            $rsp_obj = $pf->galleries_getInfo($gallery_id);
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['gallery']['count_photos']['_content'];
+        }
+        else if (isset($group_id) && $group_id) {
+            $rsp_obj = $pf->groups_pools_getPhotos($group_id, NULL, NULL, NULL, NULL, 1, 1);
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photos']['total'];
+            if ($total_photos > 500) $total_photos = 500;
+            }
+        else if (isset($tags) && $tags) {
+            $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'tags'=>$tags, 'extras'=>$extras, 'per_page'=>1));
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photos']['total'];
+        }
+        else if (isset($popular) && $popular) {
+            $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'sort'=>'interestingness-desc', 'extras'=>$extras, 'per_page'=>1));
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photos']['total'];
+            if ($total_photos > 500) $total_photos = 500;
+        }
+        else {
+            $rsp_obj = $pf->people_getInfo($user_id);
+            if ($pf->error_code) return afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photos']['count']['_content'];
+        }
+
         for($i=1; $i<($total_photos/500)+1; $i++) {
+            $flickr_api = 'photos';
             if ($photoset_id) {
                 $flickr_api = 'photoset';
                 $rsp_obj_total = $pf->photosets_getPhotos($photoset_id, $extras, NULL, 500, $i);
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             else if ($gallery_id) {
-                $flickr_api = 'photos';
                 $rsp_obj_total = $pf->galleries_getPhotos($gallery_id, $extras, 500, $i);
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             else if ($group_id) {
-                $flickr_api = 'photos';
                 $rsp_obj_total = $pf->groups_pools_getPhotos($group_id, NULL, NULL, NULL, $extras, 500, $i);
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             else if ($tags) {
-                $flickr_api = 'photos';
                 $rsp_obj_total = $pf->photos_search(array('user_id'=>$user_id, 'tags'=>$tags, 'extras'=>$extras, 'per_page'=>500, 'page'=>$i));
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             else if ($popular) {
-                $flickr_api = 'photos';
                 $rsp_obj_total = $pf->photos_search(array('user_id'=>$user_id, 'sort'=>'interestingness-desc', 'extras'=>$extras, 'per_page'=>500, 'page'=>$i));
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             else {
-                $flickr_api = 'photos';
                 if (get_option('afg_flickr_token')) $rsp_obj_total = $pf->people_getPhotos($user_id, array('extras' => $extras, 'per_page' => 500, 'page' => $i));
                 else $rsp_obj_total = $pf->people_getPublicPhotos($user_id, NULL, $extras, 500, $i);
-                if ($pf->error_code) return afg_error();
+                if ($pf->error_code) return afg_error($pf->error_msg);
             }
             $photos = array_merge($photos, $rsp_obj_total[$flickr_api]['photo']);
         }
         if (!DEBUG)
-            set_transient('afg_id_' . $id, $photos, 60 * 60 * 24 * 3);
+            set_transient('afg_id_' . $id, $photos, afg_get_cache_refresh_interval_secs($cache_refresh_interval));
+    }
+    else {
+        $total_photos = count($photos);
     }
 
-    if (($total_photos % $per_page) == 0) $total_pages = (int)($total_photos / $per_page);
-    else $total_pages = (int)($total_photos / $per_page) + 1;
+    if (($total_photos % $per_page) == 0) {
+        $total_pages = (int)($total_photos / $per_page);
+    }
+    else {
+        $total_pages = (int)($total_photos / $per_page) + 1;
+    }
 
     if ($gallery_width == 'auto') $gallery_width = 100;
     $text_color = isset($afg_text_color_map[$bg_color])? $afg_text_color_map[$bg_color]: '';
@@ -283,6 +314,11 @@ function afg_display_gallery($atts) {
         if ($slideshow_option == 'colorbox') {
             $class = "class='afgcolorbox'";
             $rel = "rel='example4{$id}'";
+            $click_event = "";
+        }
+        else if ($slideshow_option == 'swipebox') {
+            $class = "class='swipebox'";
+            //$rel = "rel='gallery-{$id}'";
             $click_event = "";
         }
         else if ($slideshow_option == 'flickr') {
@@ -329,7 +365,7 @@ function afg_display_gallery($atts) {
             $photo_title_text = esc_attr($photo_title_text);
 
             if ($slideshow_option == 'flickr') {
-                $photo_page_url = "http://www.flickr.com/photos/" . $photo['owner'] . "/" . $photo['id'];
+                $photo_page_url = "https://www.flickr.com/photos/" . $photo['owner'] . "/" . $photo['id'];
             }
         }
 
@@ -367,7 +403,7 @@ function afg_display_gallery($atts) {
 
             if ($size_heading_map[$photo_size] && $photo_title == 'on') {
                 if ($group_id || $gallery_id)
-                    $owner_title = "- by <a href='http://www.flickr.com/photos/{$photo['owner']}/' target='_blank'>{$photo['ownername']}</a>";
+                    $owner_title = "- by <a href='https://www.flickr.com/photos/{$photo['owner']}/' target='_blank'>{$photo['ownername']}</a>";
                 else
                     $owner_title = '';
 

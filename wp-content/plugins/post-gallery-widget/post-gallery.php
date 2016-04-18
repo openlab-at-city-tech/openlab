@@ -4,7 +4,7 @@ Plugin Name: Rotating Post Gallery
 Plugin URI: http://wpmututorials.com/plugins/post-gallery-widget/
 Description: A Rotating Gallery Widget using a custom post type to create Gallery Posts.
 Author: Ron Rennick
-Version: 0.3
+Version: 0.3.1.1
 Author URI: http://ronandandrea.com/
 
 This plugin is a collaboration project with contributions from the CUNY Acedemic Commons (http://dev.commons.gc.cuny.edu/)
@@ -45,9 +45,9 @@ class PGW_Post_Type {
 		);
 
 	function  __construct() {
-		add_action( 'init', array( &$this, 'init' ) );
+		add_action( 'init', array( $this, 'init' ) );
 
-		load_plugin_textdomain( 'post-gallery-widget' );
+		load_plugin_textdomain( 'post-gallery-widget', false, '/languages/' );
 		$this->post_type['label'] = __( 'Gallery Posts', 'post-gallery-widget' );
 		$this->post_type['singular_label'] = __( 'Gallery Post', 'post-gallery-widget' );
 		$this->post_type['description'] = $this->post_type['singular_label'];
@@ -73,7 +73,7 @@ class PGW_Post_Type {
 		add_action( 'save_post', array( &$this, 'save_post' ), 12, 2 );
 	}
 
-	function query_posts( $num_posts = -1, $size = 'full', $order = false ) {
+	function query_posts( $num_posts = -1, $size = 'full', $order = false, $width = 0, $height = 0 ) {
 		if( !$order )
 			$order = 'date';
 		switch( $order ) {
@@ -116,6 +116,10 @@ class PGW_Post_Type {
 					next( $attachments );
 			}
 			$p->tag = wp_get_attachment_image( key( $attachments ), $size, false );
+			foreach( array( 'width', 'height' ) as $att ) {
+				if( $$att > 0 )
+					$p->tag = preg_replace( "|(\s{$att}=\")[0-9]+\"|", " {$att}=\"{$$att}\"", $p->tag );
+			}
 			$gallery[$index] = $p;
 		}
 		if( 'rand' == $order )
@@ -144,7 +148,7 @@ class PGW_Post_Type {
 			echo '<span style="padding:3px;">' . wp_get_attachment_image( $k, 'thumbnail', false ) . '</span>';
 		echo '</p>';
 	}
-	function menu_order_metabox() {
+	function menu_order_metabox() { 
 		global $post; ?>
 <p><strong><?php _e( 'Display Order', 'post-gallery-widget' ) ?></strong></p>
 <p><label class="screen-reader-text" for="menu_order"><?php _e( 'Display Order', 'post-gallery-widget' ); ?></label><input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr($post->menu_order) ?>" /></p>
@@ -179,7 +183,7 @@ class Rotating_Post_Widget extends WP_Widget {
 		$widget_ops = array( 'description' => __( 'Rotating Post Gallery Widget', 'post-gallery-widget' ) );
 		$this->WP_Widget( $this->id, __( 'Rotating Post Gallery Widget', 'post-gallery-widget' ), $widget_ops );
 		add_action( 'wp_head', array( &$this, 'wp_head' ), 1 );
-		//add_action( 'wp_footer', array( &$this, 'wp_footer' ), 2 );
+		add_action( 'wp_footer', array( &$this, 'wp_footer' ), 2 );
 	}
 
 	function widget( $args, $instance ) {
@@ -192,22 +196,26 @@ class Rotating_Post_Widget extends WP_Widget {
 		$num_posts = -1;
 		if( $instance['how_many'] > 0 )
 			$num_posts = $instance['how_many'];
+		foreach( array( 'wdith', 'height' ) as $att )
+			$instance[$att] -= 10;
+			
 		if( !empty( $pgw_post_type ) ) {
-			$posts = $pgw_post_type->query_posts( $num_posts, $instance['size'], $instance['order'] );
+			$posts = $pgw_post_type->query_posts( $num_posts, $instance['size'], $instance['order'], $instance['width'], $instance['height'] );
 			foreach( $posts as $p ) { ?>
 		<div class="slide<?php if( $first ) { echo ' first_slide'; } ?>">
 <?php				 echo apply_filters( 'pgw_image_markup', $p->tag ); ?>
-			<span><h2><?php echo $p->post_title; ?></h2>
+			<span><h2 class="pgw-overlay"><?php echo $p->post_title; ?></h2>
 				<p><?php echo $p->post_excerpt; ?><br /></p>
 			</span>
 		</div>
 <?php				$first = false;
 			}
 		}
+		$height = ( $instance['height'] > 0 ? ' style="' . esc_attr( 'height:' . $instance['height'] ) . 'px"' : '' );
 ?>
 				</div>
-				<a id="pgw-prev" href="#">Previous</a>
-				<a id="pgw-next" href="#">Next</a>
+				<a id="pgw-prev" href="#"<?php echo $height; ?>>Previous</a>
+				<a id="pgw-next" href="#"<?php echo $height; ?>>Next</a>
 				<div style="clear:both;"></div>
 			</div>
 <?php 		echo $after_widget;
@@ -216,7 +224,9 @@ class Rotating_Post_Widget extends WP_Widget {
 	}
 
  	function update( $new_instance, $old_instance ) {
-		$new_instance['how_many'] = intval( $new_instance['how_many'] );
+		$new_instance['how_many'] = (int)$new_instance['how_many'];
+		$new_instance['width'] = (int)$new_instance['width'];
+		$new_instance['height'] = (int)$new_instance['height'];
 		if( !in_array( $new_instance['size'], array_keys( $this->sizes ) ) )
 			$new_instance['size'] = 'full';
 		if( !in_array( $new_instance['order'], array_keys( $this->order ) ) )
@@ -226,16 +236,23 @@ class Rotating_Post_Widget extends WP_Widget {
 	}
 
 	function form( $instance ) { ?>
-		<p><label for="<?php echo $this->get_field_id( 'how_many' ); ?>"><?php _e( 'How many gallery posts:', 'post-gallery-widget' ) ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'how_many' ); ?>" name="<?php echo $this->get_field_name( 'how_many' ); ?>" value="<?php echo ( $instance['how_many'] > 0 ? esc_attr( $instance['how_many'] ) : '' ); ?>" /></p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php _e( 'Image Size:', 'post-gallery-widget' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'how_many' ); ?>"><?php _e( 'How many gallery posts:', 'post-gallery-widget' ) ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'how_many' ); ?>" name="<?php echo $this->get_field_name( 'how_many' ); ?>" value="<?php echo ( $instance['how_many'] > 0 ? esc_attr( $instance['how_many'] ) : '' ); ?>" />
+		</p><p>
+			<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php _e( 'Media Image Size:', 'post-gallery-widget' ); ?></label>
 			<select name="<?php echo $this->get_field_name( 'size' ); ?>" id="<?php echo $this->get_field_id( 'size' ); ?>" class="widefat">
 <?php		foreach( $this->sizes as $k => $v ) { ?>
 				<option value="<?php echo $k; ?>"<?php selected( $instance['size'], $k ); ?>><?php _e( $v ); ?></option>
 <?php		} ?>
 			</select>
-		</p>
+		</p><p>
+			<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e( 'Widget width:', 'post-gallery-widget' ) ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'width' ); ?>" name="<?php echo $this->get_field_name( 'width' ); ?>" value="<?php echo ( $instance['width'] > 0 ? esc_attr( $instance['width'] ) : '' ); ?>" />
+		</p><p>
+			<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e( 'Widget height:', 'post-gallery-widget' ) ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" value="<?php echo ( $instance['height'] > 0 ? esc_attr( $instance['height'] ) : '' ); ?>" />
+		</p><p>
 			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php _e( 'Post order:', 'post-gallery-widget' ); ?></label>
 			<select name="<?php echo $this->get_field_name( 'order' ); ?>" id="<?php echo $this->get_field_id( 'order' ); ?>" class="widefat">
 <?php		foreach( $this->order as $k => $v ) { ?>

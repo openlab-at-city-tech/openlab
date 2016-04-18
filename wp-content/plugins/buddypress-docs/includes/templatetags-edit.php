@@ -91,6 +91,11 @@ function bp_docs_edit_doc_content() {
 			$content = $bp->bp_docs->current_post->post_content;
 		}
 
+		// Check $_POST for failed submissions.
+		if ( ! $content && isset( $_POST['doc_content'] ) ) {
+			$content = stripslashes( $_POST['doc_content'] );
+		}
+
 		return apply_filters( 'bp_docs_get_edit_doc_content', $content );
 	}
 
@@ -216,12 +221,12 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 			ed.onInit.add(
 				function(ed) {
 					_initJQuery();
-					
+
 					// Set up listeners
 					jQuery(\'#\' + ed.id + \'_parent\').bind(\'mousemove\',function (evt){
 						_active(evt);
-					});	
-					
+					});
+
 					bp_docs_load_idle();
 
 					/* Hide rows 3+ */
@@ -236,7 +241,7 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 
 				}
 			);
-			
+
 			ed.onKeyDown.add(
 				function(ed) {
 					_active();
@@ -244,7 +249,7 @@ function bp_docs_add_idle_function_to_tinymce( $initArray ) {
 			);
 		}';
 	}
-	
+
 	return $initArray;
 }
 add_filter( 'tiny_mce_before_init', 'bp_docs_add_idle_function_to_tinymce' );

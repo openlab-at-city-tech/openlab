@@ -994,7 +994,7 @@ h6,
 .h6 {
   font-family: inherit;
   font-weight: 600;
-  line-height: 1.1em;
+  line-height: 1.25;
   color: inherit;
 }
 h1 small,
@@ -7089,17 +7089,18 @@ blockquote .h6 {
   display: inline-block;
   margin-bottom: 0;
   border-right: 1px solid #333333;
+  padding: 0 7px;
 }
 .nav.nav-inline li a,
 .nav.nav-inline li span {
   color: #000000;
   display: inline-block;
-  padding: 0 7px;
+  padding: 0;
 }
 .nav.nav-inline li.no-link {
   color: #49cabe;
-  padding: 0 7px;
   font-weight: 700;
+  padding: 0;
 }
 .nav.nav-inline li.current-menu-item,
 .nav.nav-inline li:hover {
@@ -7117,16 +7118,12 @@ blockquote .h6 {
   border-right: none;
 }
 .nav.nav-inline li .fa {
-  padding-left: 7px;
-  padding-right: 0;
-  margin: 0;
-}
-.nav.nav-inline li:first-child a {
-  padding-left: 0;
-}
-.nav.nav-inline li:first-child .fa {
   padding-left: 0;
   padding-right: 7px;
+  margin: 0;
+}
+.nav.nav-inline li:first-child {
+  padding-left: 0;
 }
 .nav.nav-inline li.submenu-title:hover,
 .nav.nav-inline li.submenu-title:active {
@@ -7141,10 +7138,10 @@ blockquote .h6 {
   .nav.nav-inline li {
     display: block;
     border-right: none;
+    padding: 0;
   }
   .nav.nav-inline li a {
     border-right: none;
-    padding: 0;
     line-height: 185%;
   }
   .nav.nav-inline li .fa {
@@ -7431,12 +7428,11 @@ h1.entry-title {
   margin-bottom: 10px;
   margin-top: 18px;
   padding-bottom: 6px;
-  line-height: 140%;
   position: relative;
 }
 h1.entry-title .direct-toggle {
   background: #d1d1d1;
-  height: 48px;
+  height: 47px;
   border: none;
   color: #ff5959;
   position: absolute;
@@ -7836,6 +7832,14 @@ body .inline-visible-xs {
   width: 10%;
 }
 /**custom selects**/
+.page-loading #sidebarCustomSelect {
+  visibility: hidden;
+}
+@media (min-width: 768px) {
+  #sidebarCustomSelect {
+    min-height: 171px;
+  }
+}
 .custom-select,
 .hidden-custom-select {
   position: relative;
@@ -7939,7 +7943,7 @@ body .inline-visible-xs {
   border-bottom: 13px solid #e94646;
 }
 .home-page .row-home-top .login .log-box#open-lab-login h2 {
-  margin: 20px 0 18px;
+  margin: 16px 0 14px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info {
   margin-bottom: 23px;
@@ -8082,7 +8086,7 @@ body .inline-visible-xs {
 .home-page .row-home-top .slider .camera_wrap .camera_content h2 {
   font-size: 24px;
   font-weight: 400;
-  margin: 0 0 12px;
+  margin: 0 0 6px;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_content p {
   font-size: 16px;
@@ -8167,7 +8171,7 @@ body .inline-visible-xs {
 }
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
-  line-height: 1.1em;
+  line-height: 1.25;
   text-decoration: none;
 }
 .home-page #cac-featured .cfcw-content:after {
@@ -8260,7 +8264,10 @@ body .inline-visible-xs {
   padding-right: 0;
 }
 .home-page #new-members .new-members-wrapper #home-new-member-wrap {
-  max-width: 100%;
+  max-width: 350px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 }
 .home-page #new-members .new-members-wrapper #home-new-member-wrap .home-new-member {
   width: 50%;
@@ -8291,7 +8298,7 @@ body .inline-visible-xs {
   margin-bottom: 15px;
 }
 .home-page .activity-list .activity-wrapper .activity-item h4 {
-  margin: 15px auto 8px;
+  margin: 12px auto 5px;
   font-size: 14px;
 }
 .home-page .activity-list .activity-wrapper .activity-item a {
@@ -8304,11 +8311,50 @@ body .inline-visible-xs {
   margin-bottom: 25px;
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
+  height: 0;
   position: relative;
+  padding-top: 100%;
+}
+.home-page .activity-list .activity-wrapper .activity-item .item-avatar a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    max-width: 225px;
+    max-height: 225px;
+    padding-top: 0;
+    margin: 0 auto;
+  }
+  .home-page .activity-list .activity-wrapper .activity-item .item-avatar a {
+    position: relative;
+    height: 0;
+    padding-top: 100%;
+    width: 100%;
+    top: auto;
+    left: auto;
+  }
+  .home-page .activity-list .activity-wrapper .activity-item .item-avatar a img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-content-wrapper {
   margin: 0 auto;
   width: 88%;
+  max-width: 225px;
+}
+@media (max-width: 767px) {
+  .home-page .activity-list .activity-wrapper .activity-item .item-content-wrapper {
+    width: 100%;
+  }
 }
 /**sidebar**/
 @media (max-width: 767px) {
@@ -8320,16 +8366,17 @@ body .inline-visible-xs {
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
-  margin-bottom: 9px;
+  margin-bottom: 4px;
 }
 .sidebar h2.sidebar-header {
   margin-top: 26px;
 }
 .sidebar h2.sidebar-header.top-sidebar-header {
+  margin-bottom: 6px;
   margin-top: 20px;
 }
 .sidebar h2.sidebar-header.top-sidebar-header.group-single {
-  margin-top: 21px;
+  margin-top: 18px;
 }
 .sidebar .cc-gloss {
   font-size: 11px;
@@ -8515,7 +8562,7 @@ body .inline-visible-xs {
   margin: 0 0 5px;
 }
 .group-list .group-item-wrapper h2 {
-  margin: 6px 0 12px;
+  margin: 6px 0;
 }
 .group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
@@ -8526,7 +8573,7 @@ body .inline-visible-xs {
 }
 .group-list .group-item-wrapper .info-line {
   font-size: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 @media (max-width: 1199px) {
   .group-list .group-item-wrapper .item {
@@ -8565,7 +8612,7 @@ body .inline-visible-xs {
   height: 110px;
 }
 #people-listing .group-item-wrapper h2 {
-  margin: 10px 0 12px;
+  margin: 8px 0 10px;
 }
 .filter {
   width: 93%;
@@ -8585,6 +8632,12 @@ body .inline-visible-xs {
 .filter .archive-search #search-submit {
   padding: 8px 3% 9px;
 }
+@media (max-width: 1199px) and (min-width: 768px) {
+  .filter .custom-select select {
+    width: 170% !important;
+    left: -70% !important;
+  }
+}
 /**group archives - widget error (no groups to display for a user) **/
 .widget-error {
   margin-top: 50px;
@@ -8600,6 +8653,16 @@ input#group-request-send {
 }
 #group-action-wrapper .link-btn {
   padding: 9px 12px;
+}
+#current-group-site p {
+  margin-bottom: 9px;
+}
+#current-group-site #change-group-site {
+  padding-left: 34px;
+  margin-top: 0;
+}
+#current-group-site #change-group-site li {
+  padding-left: 6px;
 }
 @media (max-width: 767px) {
   .group-header-content {
@@ -8673,13 +8736,16 @@ input#group-request-send {
   }
 }
 .group-members.group-list .group-item-wrapper {
-  height: 95px;
+  height: 118px;
+}
+.group-members.group-list .group-item-wrapper p {
+  margin: 10px 0 7px;
 }
 .group-manage-members.group-list.group-manage-requests .group-item .group-item-wrapper ul.group-member-actions {
   font-weight: normal;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper {
-  height: 120px;
+  height: 105px;
   /* User name */
   /* "Email Status" and other secondary headers */
 }
@@ -8687,23 +8753,18 @@ input#group-request-send {
   height: 98px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.moderators {
-  height: 107px;
+  height: 127px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members {
-  height: 300px;
+  height: 318px;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper.members .link-btn {
   margin-right: 3px;
 }
-@media (min-width: 992px) and (max-width: 1199px) {
-  .group-manage-members.group-list .group-item .group-item-wrapper {
-    height: 258px;
-  }
-}
-.group-manage-members.group-list .group-item .group-item-wrapper h4 {
+.group-manage-members.group-list .group-item .group-item-wrapper p {
   margin: 10px 0 15px;
 }
-.group-manage-members.group-list .group-item .group-item-wrapper h4 a {
+.group-manage-members.group-list .group-item .group-item-wrapper p a {
   text-decoration: none;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper h5 {
@@ -8810,6 +8871,10 @@ body.membership-requests .group-list {
   .doctable-panel.info-panel table td.title-cell {
     width: 100%;
   }
+}
+.doc-content.edit-doc {
+  border: none;
+  padding: 0;
 }
 .doc-content .wp-switch-editor {
   padding: 0 8px;
@@ -9039,9 +9104,7 @@ body.membership-requests .group-list {
   padding: 2%;
 }
 #member-item-body .panel .panel-body h6 {
-  margin: 7px 0 9px;
-  line-height: 1.2;
-  padding: 0 0 3px;
+  margin: 5px 0 7px;
 }
 #member-item-body .panel .panel-body p,
 #member-item-body .panel .panel-body a {
@@ -9062,6 +9125,9 @@ body.membership-requests .group-list {
     height: 221px;
   }
 }
+.my-friends .group-list .group-item-wrapper .generic-button.friendship-button {
+  margin-top: 8px;
+}
 #friend-list.group-list .group-item-wrapper {
   height: 101px;
 }
@@ -9078,6 +9144,33 @@ body.membership-requests .group-list {
   #friend-list.group-list .group-item-wrapper {
     height: 130px;
   }
+}
+#settings-form .table thead tr th {
+  border-width: 1px;
+  padding: 4px 8px 4px 0;
+}
+#settings-form .table thead tr th.icon {
+  display: none;
+}
+#settings-form .table tbody tr td {
+  border: none;
+  padding: 4px 8px 4px 0;
+}
+#settings-form .table tbody tr td:first-child {
+  display: none;
+}
+#settings-form .table .yes,
+#settings-form .table .no {
+  text-align: center;
+}
+#settings-form .table .no {
+  padding-right: 7%;
+}
+#settings-form .table .yes {
+  padding-right: 5%;
+}
+#settings-form #group-email-settings .table {
+  margin-bottom: 0;
 }
 /**help**/
 .col-help {
@@ -9107,7 +9200,6 @@ body.membership-requests .group-list {
   text-decoration: underline;
 }
 #help-title-nav {
-  margin-left: 6px;
   /* Overrides */
 }
 #help-title-nav .nav-previous {
@@ -9125,15 +9217,24 @@ body.membership-requests .group-list {
   text-decoration: underline;
 }
 #help-title-nav .fa {
-  margin: 0 4px;
-  padding-left: 0;
+  padding: 0;
   vertical-align: middle;
+}
+#help-title-nav .fa.fa-chevron-circle-left {
+  margin-right: 4px;
+}
+#help-title-nav .fa.fa-chevron-circle-right {
+  margin-left: 4px;
 }
 .help-title:first-of-type {
   margin-top: 64px;
 }
 #sidebar.type-help .sidebar-wrapper .sidebar-block {
   border-top: 1px solid #bbbbbb;
+}
+input.help-search {
+  width: 100%;
+  margin-bottom: 8px;
 }
 #help-tags .btn-primary {
   background: #999999;

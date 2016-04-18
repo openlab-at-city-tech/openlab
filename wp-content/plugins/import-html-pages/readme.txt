@@ -1,10 +1,12 @@
 === HTML Import 2 ===
 Contributors: sillybean
 Donate link: http://sillybean.net/code/wordpress/html-import-2/
+Text Domain: html_import
+Domain Path: /languages
 Tags: import, pages, static files, taxonomies, taxonomy, dreamweaver, Word, FrontPage
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 2.4
+Stable tag: 2.5.1
 
 Imports well-formed HTML files into WordPress pages. 
 
@@ -18,7 +20,7 @@ If importing pages, the directory hierarchy will be preserved. Directories conta
 
 As files are imported, the resulting IDs, permalinks, and titles will be displayed. On completion, the importer will provide a list of Apache redirects that can be used in your `.htaccess` file to seamlessly transfer visitors from the old file locations to the new WordPress permalinks. As of 2.0, if you change your permalink structure after you've imported your files, you can regenerate the redirects&mdash;the file's old URL is stored as a custom field in the imported post.
 
-Options in 2.0:
+Options:
 
 * import files into any post type (posts, pages, or custom post types set to `public`)
 * import linked media files (images, documents, etc.) to the media library
@@ -33,23 +35,17 @@ Options in 2.0:
 * set tags, categories, and custom taxonomies
 * choose status, author, and timestamp
 * use meta descriptions as excerpts
-* clean up imported HTML and strip unwanted tags and attributes
+* clean up imported HTML and strip unwanted tags and attributes in content and custom fields
 * fix internal links in imported files to match new permalinks
-
-New in 2.3:
-
 * import the entire file and generate the title from the filename 
 * preserve the original filename as the imported page's slug
 * choose the date from an HTML tag or Dreamweaver region (uses <a href="http://php.net/strtotime">strtotime()</a>; results may vary)
 * import additional HTML tags or Dreamweaver regions as custom fields
-
-New in 2.4:
-
 * option to remove imported title from within content area
 * fallbacks: if your chosen tag/area is empty or does not exist, the importer will select `<body>` for content and `<title>` for the title
 * use a custom field named 'post_tag' to import tags from a portion of the file
 
-See the <a href="http://stephanieleary.com/downloads/html-import/user-guide.html">User Guide</a> for details on all the options.
+See the <a href="http://stephanieleary.com/code/wordpress/html-import/html-import-2-user-guide/">User Guide</a> for details on all the options.
 
 == Installation ==
 
@@ -63,7 +59,7 @@ See the <a href="http://stephanieleary.com/downloads/html-import/user-guide.html
 
 You didn't find the right HTML tag that surrounds the content you wanted to import. Open up one of your old files in a browser and use its inspector (or Firebug) to select the content you want. Look for the tag that surrounds that content and find something unique about it. (An ID attribute is best, but anything <em>unique</em> will work. If it's a table cell, a unique width will do just fine.) The enter the tag name, the attribute name, and the attribute's value into the separate boxes in the Content section of the importer's options page.
 
-See the <a href="http://stephanieleary.com/downloads/html-import/user-guide.html">User Guide</a> for details and examples.
+See the <a href="http://stephanieleary.com/code/wordpress/html-import/html-import-2-user-guide/">User Guide</a> for details and examples.
 
 = Does this work on Windows servers? =
 
@@ -83,7 +79,7 @@ The importer will attempt to work around your server's `max_execution_time` sett
 
 `php_value max_execution_time 160`
 
-If that gets you further but still doesn't finish, just increase the number (it's in seconds). However, note that your host might get irritated with you for hogging the server's resources. If you have a _lot_ of files to import, it's best to install WordPress on your desktop (XAMPP for Windows and MAMP for Macs make it pretty easy) and do the heavy lifting there.
+If that gets you further but still doesn't finish, just increase the number (it's in seconds). However, note that your host might get irritated with you for hogging the server's resources. If you have a _lot_ of files to import, it's best to install WordPress on your desktop (XAMPP for Windows and MAMP for Macs make it pretty easy) and run the importer there instead of doing it on your live server.
 
 It's also quite possible that the script is trying to use more memory than your server allows. You can try to change that setting, too, in `.htaccess`:
 
@@ -93,23 +89,21 @@ It's also quite possible that the script is trying to use more memory than your 
 
 The skipped directory setting just tells the importer where to look for HTML files. Linked images will be imported no matter where they're located.
 
-== Upgrade Notice ==
+= Can I import files from another server? =
 
-= 2.0 =
-This version requires at least WP 3.0. Now handles linked images, single file uploads, and custom post types and taxonomies.
-= 2.0.1 =
-2.0 requires at least WP 3.0. Now handles linked images, single file uploads, and custom post types and taxonomies. 2.0.1 adds an option to set the page template for hierarchical post types.
-= 2.0.2 =
-Added some helpers to work around servers that do not support PHP's multibyte string functions.
-= 2.1 =
-Now includes an option to fix internal links.
-= 2.2 =
-Now imports media files other than images.
-= 2.3 =
-New features: import entire file, generate title from filename, preserve filename as slug, choose date from HTML, import custom fields.
+No. The files must be on the same server as your WordPress installation. I have no intention of ever making this plugin import files from URLs. You are welcome to fork the code if you want to add this feature.
 
 == Changelog ==
 
+= 2.5.1 =
+* Fixed warnings and notices related to the custom category walker.
+* Fixed bug where the page parent option displayed incorrectly in sites with no published pages.
+= 2.5 =
+* Custom fields can now allow the same HTML tags as content
+* Fixed a problem with some image paths
+* Made image and link searches case-insensitive (props <a href="https://profiles.wordpress.org/noamcleanforestsolutionscom/">Clean Forest Solutions</a>)
+* Fixed some incorrectly escaped options that would trigger translations on things that shouldn't be translated
+* Page template selections are now pre-selected when returning to the options page (props <a href="https://profiles.wordpress.org/lee-fent/">Lee Fent</a>)
 = 2.4 =
 * You can now specify more than one index filename (e.g. 'index.php, default.htm')
 * New option to remove the imported title from within the content area
@@ -201,5 +195,12 @@ Thanks to...
 
 1. Settings for files to import
 2. Content settings
-3. Importer screen
-4. Completed import: pages, rewrite rules, and images
+3. HTML cleanup options
+4. Title and metadata settings
+5. Alternative title specifications
+6. Custom field settings
+7. Category, tag, and taxonomy settings
+8. Import screen (directory/file selection)
+9. Completed import: pages, rewrite rules, and images
+10. Sample directory and file structure
+11. The same site, after the import (directory hierarchy preserved as parent/child pages)

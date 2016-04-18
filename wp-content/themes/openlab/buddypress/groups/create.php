@@ -100,7 +100,7 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics note" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
+                            <p class="ol-clone-description italics" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all documents, files, discussions and posts you've created. Posts will be set to "draft" mode. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@
 
                     <?php else : ?>
                         <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
-                        <input class="form-control" size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" />
+                        <input class="form-control" size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" required />
 
                     <?php endif ?>
                             </div>
@@ -141,7 +141,7 @@
                     <div class="panel panel-default">
                     <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></div>
                     <div class="panel-body">
-                    <textarea class="form-control" name="group-desc" id="group-desc"><?php bp_new_group_description() ?></textarea>
+                    <textarea class="form-control" name="group-desc" id="group-desc" required><?php bp_new_group_description() ?></textarea>
                     </div>
                     </div>
 

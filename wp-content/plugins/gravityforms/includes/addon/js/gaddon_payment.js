@@ -16,8 +16,6 @@ function loadBillingLength(setting_name){
         str += "<option value='" + i + "' " + selected + ">" + i + "</option>";
     }
     lengthField.html(str);
-
-
 }
 
 function cancel_subscription(entryId){
@@ -32,21 +30,17 @@ function cancel_subscription(entryId){
             entry_id:entryId,
             gaddon_cancel_subscription: gaddon_payment_strings.subscriptionCancelNonce},
         function(response){
-
             jQuery("#subscription_cancel_spinner").hide();
-            if(response == "1")
-            {
+            if(response == 1)
+            {   
                 jQuery("#gform_payment_status").html(gaddon_payment_strings.subscriptionCanceled);
                 jQuery("#cancelsub").hide();
             }
             else
-            {
+            {   
                 jQuery("#cancelsub").prop("disabled", false);
                 alert(gaddon_payment_strings.subscriptionError);
             }
         }
     );
-
-
-
 }

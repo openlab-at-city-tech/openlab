@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Browser extends DWModule {
 		protected static $except = 'Except the browser(s)';
 		protected static $info = 'Browser detection is never 100% accurate.';

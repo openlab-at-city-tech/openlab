@@ -169,7 +169,7 @@ function cuny_whos_online() {
                 <?php ?>
                 <div class="cuny-member">
                     <div class="item-avatar">
-                        <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                        <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $member->fullname; ?>"/></a>
                     </div>
                     <div class="cuny-member-info">
                         <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />

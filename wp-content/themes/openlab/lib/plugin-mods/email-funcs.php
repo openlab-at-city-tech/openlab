@@ -228,3 +228,40 @@ If you feel this service is being misused please speak to the website administra
 
 remove_action( 'bp_actions', 'ass_admin_notice', 1 );
 add_action( 'bp_actions', 'openlab_ass_admin_notice', 1 );
+
+// Add a notice at end of email notification about how to change group email subscriptions
+function openlab_ass_add_notice_to_notifications_page() {
+?>
+		<div id="group-email-settings">
+			<table class="notification-settings zebra">
+				<thead>
+					<tr>
+						<th class="icon">&nbsp;</th>
+						<th class="title"><?php _e( 'Individual Group Email Settings', 'bp-ass' ); ?></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<p><?php _e('To change the email notification settings for your Courses, Projects, Clubs and Portfolio:','bp-ass'); ?></p>
+                                                        <ol>
+                                                            <li>Visit the group's Profile page</li>
+                                                            <li>In the sidebar, click "Membership"</li>
+                                                            <li>Select "Your Email Options"</li>
+                                                        </ol>
+
+							<?php if ( get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) : ?>
+								<p><a href="<?php echo wp_nonce_url( add_query_arg( 'ass_unsubscribe', 'all' ), 'ass_unsubscribe_all' ); ?>"><?php _e( "Or set all your group's email options to No Email", 'bp-ass' ); ?></a></p>
+							<?php endif; ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+<?php
+}
+
+remove_action ( 'bp_notification_settings', 'ass_add_notice_to_notifications_page', 9000 );
+add_action( 'bp_notification_settings', 'openlab_ass_add_notice_to_notifications_page', 9000 );

@@ -2,9 +2,11 @@
 /**
  * Custom Post Type Module
  *
- * @version $Id: custompost_module.php 863947 2014-02-24 09:53:16Z qurl $
+ * @version $Id: custompost_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
+
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_CustomPost extends DWModule {
 		public static $plugin = array( 'custom_post_type' => FALSE, 'custom_taxonomy' => FALSE );

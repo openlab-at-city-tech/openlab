@@ -1,0 +1,177 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Order and Taxonomy Terms Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-06 17:32+0200\n"
+"PO-Revision-Date: 2015-02-27 14:16+0330\n"
+"Last-Translator: ای داد <eydaaad@gmail.com>\n"
+"Language-Team: Eydad <eydaaad@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e\n"
+"X-Poedit-Basepath: D:\\htdocs\\develop\\advanced_post_types_order\\wp-content"
+"\\plugins\\taxonomy-terms-order\\\n"
+"Language: fa_IR\n"
+"X-Generator: Poedit 1.6.8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: include/interface.php:19
+msgid "Taxonomy Order"
+msgstr "ترتیب طبقه‌بندی دسته‌ها"
+
+#: include/interface.php:52 include/options.php:57
+msgid ""
+"Did you found useful this plug-in? Please support our work with a donation "
+"or write an article about this plugin in your blog with a link to our site"
+msgstr ""
+"این افزونه را مفید میدانید؟ لطفاً از آن با اهدای مبلغ یا نوشتن مقاله‌ای در "
+"پایگاه خود (با درج پیوند به وبسایت ما) حمایت کنید."
+
+#: include/interface.php:53 include/options.php:58
+msgid ""
+"Did you know there is available a more advanced version of this plug-in?"
+msgstr "آیا میدانید که نسخه پیشرفته‌تری از این افزونه نیز موجود است؟"
+
+#: include/interface.php:53 include/options.php:58
+msgid "Read more"
+msgstr "ادامه مطلب"
+
+#: include/interface.php:54 include/options.php:59
+msgid "Check our"
+msgstr "بررسی نمایید"
+
+#: include/interface.php:54 include/options.php:59
+msgid "plugin which allow to custom sort all posts, pages, custom post types"
+msgstr ""
+"افزونه‌ای که به شما مرتب‌سازی دلخواه دسته‌های تمامی نوشته‌ها، برگه‌ها و ... را "
+"خواهد داد."
+
+#: include/interface.php:60
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"این افزونه بدون جاوااسکریپت بدرستی عمل نمی‌نماید، به این دلیل که از \"کشیدن و "
+"رها کردن\" و آژاکس استفاده می‌نماید."
+
+#: include/interface.php:96
+msgid "Taxonomies"
+msgstr "طبقه‌بندی‌ها"
+
+#: include/interface.php:100
+msgid "Taxonomy Title"
+msgstr "عنوان طبقه‌بندی‌ها"
+
+#: include/interface.php:100
+msgid "Total  Posts"
+msgstr "تمامی نوشته‌ها"
+
+#: include/interface.php:150
+msgid "Update"
+msgstr "به‌روز‌رسانی"
+
+#: include/interface.php:199
+msgid "Items Order Updates"
+msgstr "به‌روزرسانی ترتیب موارد"
+
+#: include/options.php:16
+msgid "Settings Saved"
+msgstr "تنظیمات ذخیره شد"
+
+#: include/options.php:24
+msgid "General Settings"
+msgstr "تنظیمات کلی"
+
+#: include/options.php:64
+msgid "General"
+msgstr "کلیات"
+
+#: include/options.php:69
+msgid "Minimum Level to use this plugin"
+msgstr "سطح حداقلی برای استفاده از این افزونه"
+
+#: include/options.php:72
+msgid "Subscriber"
+msgstr "مشترک"
+
+#: include/options.php:73
+msgid "Contributor"
+msgstr "مشارکت کننده"
+
+#: include/options.php:74
+msgid "Author"
+msgstr "نویسنده"
+
+#: include/options.php:75
+msgid "Editor"
+msgstr "ویرایشگر"
+
+#: include/options.php:76
+msgid "Administrator"
+msgstr "مدیر"
+
+#: include/options.php:83
+msgid "Auto Sort"
+msgstr "ترتیب اتوماتیک"
+
+#: include/options.php:86
+msgid "OFF"
+msgstr "خاموش"
+
+#: include/options.php:87
+msgid "ON"
+msgstr "روشن"
+
+#: include/options.php:88
+msgid "global setting"
+msgstr "تنظیمات جهانی"
+
+#: include/options.php:93
+msgid "Admin Sort"
+msgstr "ترتیب مدیریت"
+
+#: include/options.php:97
+msgid "This will change the order of terms within the admin interface"
+msgstr "این گزینه ترتیب را براساس طرح مدیریتی تنظیم می‌نماید."
+
+#: include/options.php:105
+msgid "Autosort OFF"
+msgstr "ترتیب اتوماتیک خاموش"
+
+#: include/options.php:106
+msgid ""
+"No query will be changed, the terms will appear in the original order. To "
+"retrieve the terms in the required order you must use the term_order on the "
+"orderby parameter"
+msgstr ""
+"هیچ کوئری ای تغییر داده نخواهد شد و موارد براساس ترتیب اصلی نمایش داده "
+"می‌شوند. برای بازیابی موارد براساس ترتیب مورد نیاز باید از term_order در "
+"order by parameter به صورت زیر استفاده نمایید"
+
+#: include/options.php:114
+msgid "See more info on the get_terms usage"
+msgstr "اطلاعات بیشتر در get_terms "
+
+#: include/options.php:114
+msgid "here"
+msgstr "اینجا"
+
+#: include/options.php:116
+msgid "Autosort ON"
+msgstr "ترتیب اتوماتیک روشن"
+
+#: include/options.php:117
+msgid ""
+"The queries will be updated, all terms will appear in the order you manually "
+"defined. This is recommended if you don't want to change any theme code to "
+"apply the terms order"
+msgstr ""
+"کوئری ها به روز شدند، تمامی موارد براساس ترتیب تعریف شده از سوی شما نشان "
+"داده خواهد شد. این امر به این دلیل توصیه می‌شود که کد پوسته تغییر داده نشود."
+
+#: include/options.php:127
+msgid "Save Settings"
+msgstr "ذخیره‌سازی تنظیمات"

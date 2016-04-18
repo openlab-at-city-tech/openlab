@@ -50,7 +50,7 @@ function openlab_main_menu($location = 'header') {
                     wp_nav_menu($args);
                     ?>
                     <div class="navbar-right search hidden-xs">
-                        <?php openlab_mu_site_wide_bp_search('desktop',$location); ?>
+                        <?php openlab_mu_site_wide_bp_search('desktop', $location); ?>
                     </div>
                 </div>
             </div>
@@ -69,6 +69,7 @@ function openlab_header_bar() {
 /*
  * Main menu in footer
  */
+
 function openlab_footer_bar() {
     openlab_main_menu('footer');
 }
@@ -86,10 +87,10 @@ function openlab_custom_menu_items($items, $menu) {
         $classes = '';
 
         if (is_user_logged_in()) {
-	    $class = '';
-	    if ( bp_is_my_profile() || bp_is_current_action( 'create' ) || is_page( 'my-courses' ) || is_page( 'my-projects' ) || is_page( 'my-clubs' ) ) {
-		    $class = 'class="current-menu-item"';
-	    }
+            $class = '';
+            if (bp_is_my_profile() || bp_is_current_action('create') || is_page('my-courses') || is_page('my-projects') || is_page('my-clubs')) {
+                $class = 'class="current-menu-item"';
+            }
             $opl_link = '<li ' . $class . '>';
             $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
             $opl_link .= '</li>';
@@ -132,3 +133,15 @@ function openlab_message_thread_excerpt_custom_size($message) {
 }
 
 add_filter('bp_get_message_thread_excerpt', 'openlab_message_thread_excerpt_custom_size');
+
+function openlab_loader_class() {
+    ?>
+
+    <script type="text/javascript">
+        document.documentElement.className = 'page-loading';
+    </script>
+
+    <?php
+}
+
+add_action('wp_head', 'openlab_loader_class', 999);

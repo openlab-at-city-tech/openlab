@@ -16,9 +16,4 @@
         </ul>
     </div>
 
-<?php elseif ('create' == bp_docs_current_view()) : ?>
-
-    <h2><?php _e('New Doc', 'bp-docs'); ?></h2>
-
-    <?php
- endif ?>
+<?php endif ?>

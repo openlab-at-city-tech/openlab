@@ -355,20 +355,46 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
             $output .= '<tr><th>' . $linkemaillabel . '</th><td><input type="text" name="ll_email" id="ll_email" value="' . ( isset( $_GET['addlinkemail'] ) ? esc_html( stripslashes( $_GET['addlinkemail'] ), '1' ) : '' ) . "\" /></td></tr>\n";
         }
 
-        if ( 'show' == $showlinksubmittername || 'required' == $showlinksubmittername ) {
+        if ( 'show' == $showlinksubmittername || 'required' == $showlinksubmittername || is_user_logged_in() ) {
             if ( empty( $linksubmitternamelabel ) ) {
                 $linksubmitternamelabel = __( 'Submitter Name', 'link-library' );
             }
 
-            $output .= '<tr><th>' . $linksubmitternamelabel . '</th><td><input type="text" name="ll_submittername" id="ll_submittername" value="' . ( isset( $_GET['addlinksubmitname'] ) ? esc_html( stripslashes( $_GET['addlinksubmitname'] ), '1' ) : '' ) . "\" /></td></tr>\n";
+	        $name_field_value = '';
+	        if ( isset( $_GET['ll_submittername'] ) ) {
+		        $name_field_value = esc_html( stripslashes( $_GET['ll_submittername'] ) );
+	        } elseif ( is_user_logged_in() ) {
+		        $user_data = wp_get_current_user();
+		        $name_field_value = $user_data->display_name;
+	        }
+
+            $output .= '<tr';
+
+	        if ( 'show' != $showlinksubmittername && 'required' != $showlinksubmittername ) {
+		        $output .= ' style="display:none"';
+	        }
+	        $output .= '><th>' . $linksubmitternamelabel . '</th><td><input type="text" name="ll_submittername" id="ll_submittername" value="' . $name_field_value . "\" /></td></tr>\n";
         }
 
-        if ( 'show' == $showaddlinksubmitteremail || 'required' == $showaddlinksubmitteremail) {
+        if ( 'show' == $showaddlinksubmitteremail || 'required' == $showaddlinksubmitteremail || is_user_logged_in()) {
             if ( empty( $linksubmitteremaillabel ) ) {
                 $linksubmitteremaillabel = __( 'Submitter E-mail', 'link-library' );
             }
 
-            $output .= '<tr><th>' . $linksubmitteremaillabel . '</th><td><input type="text" name="ll_submitteremail" id="ll_submitteremail" value="' . ( isset( $_GET['addlinksubmitemail'] ) ? esc_html( stripslashes( $_GET['addlinksubmitemail'] ), '1' ) : '' ). "\" /></td></tr>\n";
+	        $email_field_value = '';
+	        if ( isset( $_GET['ll_submitteremail'] ) ) {
+		        $email_field_value = esc_html( stripslashes( $_GET['ll_submitteremail'] ) );
+	        } elseif ( is_user_logged_in() ) {
+		        $user_data = wp_get_current_user();
+		        $email_field_value = $user_data->user_email;
+	        }
+
+	        $output .= '<tr';
+
+	        if ( 'show' != $showaddlinksubmitteremail && 'required' != $showaddlinksubmitteremail ) {
+		        $output .= ' style="display:none"';
+	        }
+	        $output .= '><th>' . $linksubmitteremaillabel . '</th><td><input type="text" name="ll_submitteremail" id="ll_submitteremail" value="' . $email_field_value . "\" /></td></tr>\n";
         }
 
         if ( 'show' == $showlinksubmittercomment || 'required' == $showlinksubmittercomment) {

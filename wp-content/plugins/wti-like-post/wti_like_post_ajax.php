@@ -1,11 +1,10 @@
 <?php
 function WtiLikePostProcessVote() {
-	global $wpdb;
+	global $wpdb, $wti_ip_address;
 	
 	// Get request data
 	$post_id = (int)$_REQUEST['post_id'];
 	$task = $_REQUEST['task'];
-	$ip = WtiGetRealIpAddress();
 	
 	// Check for valid access
 	if ( !wp_verify_nonce( $_REQUEST['nonce'], 'wti_like_post_vote_nonce' ) ) {
@@ -22,7 +21,7 @@ function WtiLikePostProcessVote() {
 			$error = 1;
 			$msg = get_option( 'wti_like_post_login_message' );
 		} else {
-			$has_already_voted = HasWtiAlreadyVoted( $post_id, $ip );
+			$has_already_voted = HasWtiAlreadyVoted( $post_id, $wti_ip_address );
 			$voting_period = get_option( 'wti_like_post_voting_period' );
 			$datetime_now = date( 'Y-m-d H:i:s' );
 			
@@ -39,7 +38,7 @@ function WtiLikePostProcessVote() {
 					$can_vote = true;
 				} else {
 					// Get the last date when the user had voted
-					$last_voted_date = GetWtiLastVotedDate( $post_id, $ip );
+					$last_voted_date = GetWtiLastVotedDate( $post_id, $wti_ip_address );
 					
 					// Get the bext voted date when user can vote
 					$next_vote_date = GetWtiNextVoteDate( $last_voted_date, $voting_period );
@@ -63,31 +62,39 @@ function WtiLikePostProcessVote() {
 			
 			if ( $task == "like" ) {
 				if ( $has_already_voted ) {
-					$query = "UPDATE {$wpdb->prefix}wti_like_post SET ";
-					$query .= "value = value + 1, ";
-					$query .= "date_time = '" . date( 'Y-m-d H:i:s' ) . "' ";
-					$query .= "WHERE post_id = '" . $post_id . "' AND ";
-					$query .= "ip = '$ip'";
+					$query = $wpdb->prepare(
+								"UPDATE {$wpdb->prefix}wti_like_post SET 
+								value = value + 1,
+								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+								user_id = %d WHERE post_id = %d AND ip = %s",
+								$user_id, $post_id, $wti_ip_address
+							);
 				} else {			
-					$query = "INSERT INTO {$wpdb->prefix}wti_like_post SET ";
-					$query .= "post_id = '" . $post_id . "', ";
-					$query .= "value = '1', ";
-					$query .= "date_time = '" . date( 'Y-m-d H:i:s' ) . "', ";
-					$query .= "ip = '$ip'";
+					$query = $wpdb->prepare(
+								"INSERT INTO {$wpdb->prefix}wti_like_post SET 
+								post_id = %d, value = '1',
+								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+								user_id = %d, ip = %s",
+								$post_id, $user_id, $wti_ip_address
+							);
 				}
 			} else {
 				if ( $has_already_voted ) {
-					$query = "UPDATE {$wpdb->prefix}wti_like_post SET ";
-					$query .= "value = value - 1, ";
-					$query .= "date_time = '" . date( 'Y-m-d H:i:s' ) . "' ";
-					$query .= "WHERE post_id = '" . $post_id . "' AND ";
-					$query .= "ip = '$ip'";
+					$query = $wpdb->prepare(
+								"UPDATE {$wpdb->prefix}wti_like_post SET 
+								value = value - 1,
+								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+								user_id = %d WHERE post_id = %d AND ip = %s",
+								$user_id, $post_id, $wti_ip_address
+							);
 				} else {
-					$query = "INSERT INTO {$wpdb->prefix}wti_like_post SET ";
-					$query .= "post_id = '" . $post_id . "', ";
-					$query .= "value = '-1', ";
-					$query .= "date_time = '" . date( 'Y-m-d H:i:s' ) . "', ";
-					$query .= "ip = '$ip'";
+					$query = $wpdb->prepare(
+								"INSERT INTO {$wpdb->prefix}wti_like_post SET 
+								post_id = %d, value = '-1',
+								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+								user_id = %d, ip = %s",
+								$post_id, $user_id, $wti_ip_address
+							);
 				}
 			}
 			

@@ -63,6 +63,15 @@ span.comment-link:after {
     border-radius: 6px;
     -webkit-border-radius: 6px;
 }
+.akismet-mshot {
+    position: absolute;
+    z-index: 100;
+}
+.akismet-mshot .mshot-image {
+    margin: 0;
+    height: 338px;
+    width: 450px;
+}
 h2.ak-header {
     padding: 30px;
     background: #649316 url('img/logo-full-2x.png') no-repeat 20px center;
@@ -340,9 +349,14 @@ h2.ak-header {
 	text-align: center;
 }
 
-.akismet-settings th.strictness {
+.akismet-settings th:first-child {
 	vertical-align: top;
 	padding-top: 15px;
+}
+
+.akismet-settings th.akismet-api-key {
+	vertical-align: middle;
+	padding-top: 0;
 }
 
 .akismet-settings input[type=text] {

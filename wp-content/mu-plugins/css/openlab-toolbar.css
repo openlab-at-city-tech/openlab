@@ -6984,6 +6984,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar a {
   text-shadow: none !important;
 }
+.oplb-bs #wpadminbar .bold {
+  font-weight: 700;
+}
 .oplb-bs #wpadminbar .fa {
   font-size: 14px;
   line-height: 1;
@@ -7414,6 +7417,15 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form .forgetmenot label {
+  line-height: 21px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form #sidebar-wp-submit {
+  margin-bottom: 5px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form .lost-pw {
+  line-height: 24px;
+}
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-submenu {
     background: #fff;
@@ -7423,6 +7435,9 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-updates {
     display: none;
   }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-customize {
+  display: none;
 }
 .oplb-bs.navbar-default {
   background: transparent;
@@ -7604,7 +7619,7 @@ button.oplb-bs .close {
   font-weight: 400;
 }
 .oplb-bs#openlab-footer .cuny-logo {
-  max-width: 74px;
+  max-width: 74px !important;
 }
 .oplb-bs#openlab-footer p,
 .oplb-bs#openlab-footer a {
@@ -7795,6 +7810,9 @@ button.oplb-bs .close {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab > .ab-item {
     display: none;
   }
+}
+.oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-customize {
+  display: none;
 }
 @media (max-width: 767px) {
   .oplb-bs.adminbar-manual-bootstrap #wpadminbar {

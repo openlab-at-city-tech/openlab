@@ -529,10 +529,11 @@ function cuny_student_profile() {
 
                     <ul id="member-list" class="inline-element-list">
 
-                        <?php for ($i = 0; $i < count($friend_ids); $i++) { ?>
-
+                        <?php foreach ($friend_ids as $friend_id) { ?>
+                            
                             <li class="inline-element">
-                                <a href="<?php echo bp_core_get_user_domain($friend_ids[$i]) ?>">                                      <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_ids[$i], 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/>
+                                <a href="<?php echo bp_core_get_user_domain($friend_id) ?>">
+                                    <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname($friend_id); ?>"/>
                                 </a>
                             </li>
 
@@ -965,8 +966,6 @@ function openlab_trim_member_name($name) {
     $trim_switch = false;
 
     if ($post->post_name == 'people' || $bp->current_action == 'members') {
-        $trim_switch = true;
-    } else if ((isset($bp->action_variables[0]) && $bp->action_variables[0] == 'manage-members') || ($bp->current_action == 'members' && $bp->current_component == 'groups')) {
         $trim_switch = true;
     }
 

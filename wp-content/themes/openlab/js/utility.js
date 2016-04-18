@@ -7,12 +7,24 @@
     var resizeTimer;
 
     OpenLab.utility = {
+        newMembers: {},
+        newMembersHTML: {},
+        protect: 0,
+        selectDisplay: {},
+        customSelectHTML: '',
         init: function () {
 
             if ($('.truncate-on-the-fly').length) {
                 OpenLab.utility.truncateOnTheFly(true);
             }
             OpenLab.utility.adjustLoginBox();
+
+        },
+        detectZoom: function () {
+
+            var zoom = detectZoom.zoom();
+            var device = detectZoom.device();
+
         },
         adjustLoginBox: function () {
             if ($('#user-info')) {
@@ -29,6 +41,34 @@
                 }
 
             }
+        },
+        setUpNewMembersBox: function (resize) {
+
+            if (resize) {
+                //OpenLab.utility.newMembers.html(OpenLab.utility.newMembersHTML);
+                OpenLab.utility.newMembers.trigger('refreshCarousel', '[all]')
+            } else {
+                OpenLab.utility.newMembers = $('#home-new-member-wrap');
+                OpenLab.utility.newMembersHTML = $('#home-new-member-wrap').html();
+
+                //this is for the new OpenLab members slider on the homepage
+                OpenLab.utility.newMembers.jCarouselLite({
+                    circular: true,
+                    btnNext: ".next",
+                    btnPrev: ".prev",
+                    vertical: false,
+                    visible: 2,
+                    auto: true,
+                    speed: 200,
+                    autoWidth: true,
+                });
+            }
+
+            $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
+
+                OpenLab.utility.truncateOnTheFly(false, true);
+
+            });
         },
         truncateOnTheFly: function (onInit, loadDelay) {
             if (onInit === undefined) {
@@ -111,6 +151,80 @@
                 thisElem.html('<span class="omission">' + thisOmission + '</span>');
             }
 
+        },
+        customSelects: function (resize) {
+            //custom select arrows
+            if (resize) {
+                $('.custom-select-parent').html(OpenLab.utility.customSelectHTML);
+                $('.custom-select select').customSelect();
+            } else {
+                OpenLab.utility.customSelectHTML = $('.custom-select-parent').html();
+                $('.custom-select select').customSelect();
+            }
+
+            OpenLab.utility.selectDisplay = setInterval(OpenLab.utility.checkDisplay, 50);
+
+        },
+        checkDisplay: function () {
+            if ($('.customSelect').length) {
+                OpenLab.utility.protect = 1000;
+            }
+
+            OpenLab.utility.protect++;
+
+            if (OpenLab.utility.protect > 1000) {
+                $('#sidebarCustomSelect').css({
+                    'visibility': 'visible',
+                    'opacity': 0
+                });
+                $('#sidebarCustomSelect').animate({
+                    opacity: 1
+                },700);
+                clearInterval(OpenLab.utility.selectDisplay);
+                OpenLab.utility.filterAjax();
+            }
+
+        },
+        filterAjax: function () {
+            //safety first
+            $('#school-select').unbind('change');
+
+            //ajax functionality for courses archive
+            $('#school-select').on('change', function () {
+                var school = $(this).val();
+                var nonce = $('#nonce-value').text();
+
+                //disable the dept dropdown
+                $('#dept-select').attr('disabled', 'disabled');
+                $('#dept-select').addClass('processing');
+                $('#dept-select').html('<option value=""></option>');
+
+                if (school == "") {
+                    document.getElementById("dept-select").innerHTML = "";
+                    return;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: ajaxurl,
+                    data:
+                            {
+                                action: 'openlab_ajax_return_course_list',
+                                school: school,
+                                nonce: nonce
+                            },
+                    success: function (data, textStatus, XMLHttpRequest)
+                    {
+                        $('#dept-select').removeAttr('disabled');
+                        $('#dept-select').removeClass('processing');
+                        $('#dept-select').html(data);
+                        $('.custom-select select').trigger('render');
+                    },
+                    error: function (MLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            });
         }
     };
 
@@ -124,14 +238,20 @@
 
         // Workshop fields on Contact Us
         function toggle_workshop_meeting_items() {
-            var contact_us_topic = document.getElementById('contact-us-topic');
-
             if (!!contact_us_topic) {
                 if ('Request a Workshop / Meeting' == contact_us_topic.value) {
-                    jQuery('#workshop-meeting-items').slideDown('fast');
+                    $workshop_meeting_items.slideDown('fast');
                 } else {
-                    jQuery('#workshop-meeting-items').slideUp('fast');
+                    $workshop_meeting_items.slideUp('fast');
                 }
+            }
+        }
+
+        function toggle_other_details() {
+            if ('Other (please specify)' == $reason_for_request.val()) {
+                $other_details.slideDown('fast');
+            } else {
+                $other_details.slideUp('fast');
             }
         }
 
@@ -142,10 +262,19 @@
             create_new_related_link_field();
         });
 
+        var contact_us_topic = document.getElementById('contact-us-topic');
+        $workshop_meeting_items = jQuery('#workshop-meeting-items');
         jQuery('#contact-us-topic').on('change', function () {
             toggle_workshop_meeting_items();
         });
         toggle_workshop_meeting_items();
+
+        $other_details = jQuery('#other-details');
+        $reason_for_request = jQuery('#reason-for-request');
+        $reason_for_request.on('change', function () {
+            toggle_other_details();
+        });
+        toggle_other_details();
 
         jQuery('#wds-accordion-slider').easyAccordion({
             autoStart: true,
@@ -178,9 +307,6 @@
             }
         });
 
-        //custom select arrows
-        $('.custom-select select').customSelect();
-
         //printing page
         if ($('.print-page').length) {
             $('.print-page').on('click', function (e) {
@@ -189,42 +315,6 @@
             });
         }
 
-        //ajax functionality for courses archive
-        $('#school-select').change(function () {
-            var school = $(this).val();
-            var nonce = $('#nonce-value').text();
-
-            //disable the dept dropdown
-            $('#dept-select').attr('disabled', 'disabled');
-            $('#dept-select').addClass('processing');
-            $('#dept-select').html('<option value=""></option>');
-
-            if (school == "") {
-                document.getElementById("dept-select").innerHTML = "";
-                return;
-            }
-
-            $.ajax({
-                type: 'GET',
-                url: ajaxurl,
-                data:
-                        {
-                            action: 'openlab_ajax_return_course_list',
-                            school: school,
-                            nonce: nonce
-                        },
-                success: function (data, textStatus, XMLHttpRequest)
-                {
-                    $('#dept-select').removeAttr('disabled');
-                    $('#dept-select').removeClass('processing');
-                    $('#dept-select').html(data);
-                    $('.custom-select select').trigger('render');
-                },
-                error: function (MLHttpRequest, textStatus, errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
-        });
         function clear_form() {
             document.getElementById('group_seq_form').reset();
         }
@@ -266,12 +356,21 @@
 
             OpenLab.utility.truncateOnTheFly();
             OpenLab.utility.adjustLoginBox();
+            OpenLab.utility.customSelects(true);
+
+            if ($('#home-new-member-wrap').length) {
+                OpenLab.utility.setUpNewMembersBox(true);
+            }
 
         }, 250);
 
     });
 
     $(window).load(function () {
+
+        $('html').removeClass('page-loading');
+        OpenLab.utility.detectZoom();
+        OpenLab.utility.customSelects(false);
 
         //setting equal rows on homepage group list
         equal_row_height();
@@ -289,23 +388,9 @@
             });
         }
 
-        var newMembers = jQuery("#home-new-member-wrap");
-
-        //this is for the new OpenLab members slider on the homepage
-        newMembers.jCarouselLite({
-            btnNext: ".next",
-            btnPrev: ".prev",
-            vertical: false,
-            visible: 2,
-            auto: 4000,
-            speed: 200,
-        });
-
-        $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
-
-            OpenLab.utility.truncateOnTheFly(false, true);
-
-        });
+        if ($('#home-new-member-wrap').length) {
+            OpenLab.utility.setUpNewMembersBox(false);
+        }
 
     });
 

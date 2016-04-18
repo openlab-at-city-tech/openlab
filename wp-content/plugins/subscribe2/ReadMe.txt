@@ -1,15 +1,24 @@
 === Subscribe2 ===
-Contributors: Dabelon, wenzhixue, tanaylakhani, MattyRob
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
+Contributors: Dabelon, wenzhixue, tanaylakhani
+Donate link: http://plugins.readygraph.com/donate/
 Tags: posts, subscription, email, subscribe, notify, notification
 Requires at least: 3.3
-Tested up to: 3.9.1
-Stable tag: 10.12
+Tested up to: 4.3
+Stable tag: 10.20.8
 License: GPL3
 
-Sends a list of subscribers an email notification when new posts are published to your blog. Automate user growth through ReadyGraph integration.
+Sends a list of subscribers emails when you publish new posts. Automate user growth and revenue with ReadyGraph integration.
 
 == Description ==
+
+Check official website for live demo http://plugins.readygraph.com/subscribe2/
+
+* [Live demo](http://plugins.readygraph.com/subscribe2/)
+
+* [More Description](http://plugins.readygraph.com/subscribe2/)
+
+* [Suggestion/comments](http://plugins.readygraph.com/subscribe2/)
+
 
 = Summary =
 Subscribe2 provides a comprehensive subscription management and email notification system for WordPress blogs that sends email notifications to a list of subscribers when you publish new content to your blog.
@@ -63,10 +72,33 @@ Track daily-new subscribers, daily invites, total traffic, and other key metrics
 
 ReadyGraph’s newsfeed is an optional overlay on your site where your users can engage with others in your community and recommend your content or products to each other.  It is like having a social network that engages users embedded on your site. Users can leave comments, ‘like’ comments left by other subscribers and ‘follow’ other subscribers.  Subscribers will receive automated email updates based on these actions.
 
+= Content Voting and Ranking =
+
+ReadyGraph allows your subscribers to vote on your latest content. The top content from our network of sites is then ranked on UserBase.com by the number of votes that it has received in the past 7 days.
+
+= Monetization Through Sponsored Units =
+
+Due to popular demand, we are excited to announce that we have now added a new layer onto the ReadyGraph product: monetization. For quality sites with enough users and traffic to qualify, we will enable you to earn revenue through a set of elegant, unobtrusive sponsorship units.The ad units will be shown occasionally (much of the time they won't be noticeable) and are highly targeted based on user interests. Most importantly, they can be turned off or on at any time. In addition to helping qualifying sites support themselves, this initiative will allow us to continue to put resources towards enhancing the free features we offer each and every site owner.  Sites qualify on the basis of quality and a minimum traffic threshold.  You can view, adjust, or opt out through your site monetization settings page.
+
+= Want To Grow Even Faster? =
+
+Try [ReadyGraph premium](https://readygraph.com/accounts/payment/) for free to get these advanced features:
+
+1.	Monthly Promotion to 10,000 New Users
+2.	Unlimited New Blog Post Emails
+3.	Unlimited Viral Email Invites
+4.	Unlimited Facebook Invites
+5.	Many more premium features added all the time
+
+[Get it here!](https://readygraph.com/accounts/payment/)
+
+
 If you have questions or concerns contact us anytime at [info@readygraph.com](mailto:info@readygraph.com)
 
 == Installation ==
 
+Installation Instruction and Configuration can also be found at [Installation Instruction and Configuration](http://plugins.readygraph.com/subscribe2/installation/)
+	
 = AUTOMATIC INSTALLATION =
 
 1. Log in to your WordPress blog and visit Plugins->Add New.
@@ -93,7 +125,7 @@ This token will automatically be replaced by dynamic subscription information an
 
 == Frequently Asked Questions ==
 
-[Visit FAQ site](http://subscribe2.wordpress.com/support/faqs/)
+For detailed FAQ and other support visit [http://plugins.readygraph.com/subscribe2/faq/](http://plugins.readygraph.com/subscribe2/faq/)
 
 = ReadyGraph FAQ =
 
@@ -110,6 +142,12 @@ After installing this plug-in, you can activate the ReadyGraph features by conne
 **How do I uninstall ReadyGraph?**
 
 You can deactivate the ReadyGraph features by navigating to the upper-right corner of the “ReadyGraph App” page, clicking the drop-down menu with your email address, and disconnecting your ReadyGraph account.
+
+**How do I reinstall ReadyGraph after I had deleted?**
+
+1. Get the latest plugin update/reinstall the plugin.
+2. Disable the plugin
+3. Enable the plugin
 
 **Can I delay the sign-up pop-up?**
 
@@ -130,6 +168,10 @@ You can contact us at info@readygraph.com. We appreciate all feedback.
 **I’m having problems with the latest version of the plug-in; can I switch back to an older version?**
 
 Yes, just navigate to the “Developers” tab on the wordpress.org plug-in page, and select the version that works for you.
+
+**Does this plugin help me earn revenue?**
+
+Due to popular demand, we are excited to announce that we have now added a new layer onto the ReadyGraph product: monetization. For quality sites with enough users and traffic to qualify, we will enable you to earn revenue through a set of elegant, unobtrusive sponsorship units.The ad units will be shown occasionally (much of the time they won't be noticeable) and are highly targeted based on user interests. Most importantly, they can be turned off or on at any time. In addition to helping qualifying sites support themselves, this initiative will allow us to continue to put resources towards enhancing the free features we offer each and every site owner.  Sites qualify on the basis of quality and a minimum traffic threshold.  You can view, adjust, or opt out through your site monetization settings page.
 
 = ACCOUNT QUESTIONS: =
 
@@ -193,10 +235,10 @@ If you have questions or concerns, contact us anytime at [info@readygraph.com](m
 
 
 == Screenshots ==
-1. The Subscribe2->Mail Subscribers admin page generated by the plugin.
-2. The Subscribe2->Subscribers admin page generated by the plugin.
-3. The Subscribe2->Subscriptions admin page generated by the plugin.
-4. The Subscribe2->Subscribe2 admin page generated by the plugin.
+1. The Subscribe2->Mail Subscribers admin page generated by the plugin. http://plugins.readygraph.com/subscribe2/screenshots/
+2. The Subscribe2->Subscribers admin page generated by the plugin. http://plugins.readygraph.com/subscribe2/screenshots/
+3. The Subscribe2->Subscriptions admin page generated by the plugin. http://plugins.readygraph.com/subscribe2/screenshots/
+4. The Subscribe2->Subscribe2 admin page generated by the plugin. http://plugins.readygraph.com/subscribe2/screenshots/
 
 == Changelog ==
 

@@ -3,12 +3,12 @@ Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: visibility, privacy, private blog, multisite, members only, network visibility, site visibility
 Requires at least: 3.7.1
-Tested up to: 3.9.1
+Tested up to: 4.3
 Stable tag: Trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add more privacy(visibility) options to a WordPress 3.8.1 Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
+Add more privacy(visibility) options to a WordPress Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
 
 == Description ==
 Adds three more levels of privacy(visibility) to the Settings-->Reading page.
@@ -64,10 +64,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 3.9.1.1 =
-* improvements to how wp-activate.php and robots.txt are handled on a private site.
+= 4.1.1 =
+* WP 4.3 OK, network settings save bugfix.
 
 
 == Upgrade Notice ==
-= 3.9.1.1 =
-* improvements to how wp-activate.php and robots.txt are handled on a private site.
+= 4.1.1 =
+* WP 4.3 OK, network settings save bugfix.

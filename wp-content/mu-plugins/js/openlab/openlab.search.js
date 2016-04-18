@@ -8,6 +8,7 @@
         var OpenLab = {};
     }
 
+    var legacyWidth = $(window).width();
     var resizeTimer;
 
     OpenLab.search = {
@@ -84,7 +85,10 @@
                 'visibility': ''
             });
             return dim;
-        }
+        },
+        isBreakpoint: function (alias) {
+            return $('.device-' + alias).is(':visible');
+        },
     }
 
     $(document).ready(function () {
@@ -98,8 +102,11 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
 
-            if ($('.search-trigger-wrapper.search-live').length) {
-                OpenLab.search.searchBarEventActions($('.search-trigger-wrapper.search-live').find('.search-trigger'));
+            if ($(this).width() != legacyWidth) {
+                legacyWidth = $(this).width();
+                if ($('.search-trigger-wrapper.search-live').length) {
+                    OpenLab.search.searchBarEventActions($('.search-trigger-wrapper.search-live').find('.search-trigger'));
+                }
             }
 
         }, 250);

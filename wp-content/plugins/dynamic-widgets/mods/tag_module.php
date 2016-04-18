@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Tag extends DWModule {
 		protected static $except = 'Except the tag(s)';
 		public static $option = array( 'tag'	=> 'Tag Pages' );
@@ -20,7 +22,7 @@
 			foreach ( $tags as $t ) {
 				$list[$t->term_id] = $t->name;
 			}
-			
+
 			self::mkGUI(self::$type, self::$option[self::$name], self::$question, FALSE, self::$except, $list);
 		}
 	}

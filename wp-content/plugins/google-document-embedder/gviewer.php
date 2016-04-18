@@ -2,13 +2,13 @@
 
 /*
 Plugin Name: Google Doc Embedder
-Plugin URI: http://www.davistribe.org/gde/
+Plugin URI: https://wordpress.org/plugins/google-document-embedder/
 Description: Lets you embed PDF, MS Office, TIFF, and many other file types in a web page using the Google Docs Viewer (no Flash or PDF browser plug-ins required).
-Author: Kevin Davis
-Author URI: http://www.davistribe.org/
-Text Domain: gde
+Author: Kevin Davis, Dan Lester
+Author URI: https://wordpress.org/plugins/google-document-embedder/
+Text Domain: google-document-embedder
 Domain Path: /languages/
-Version: 2.5.19
+Version: 2.5.21
 License: GPLv2
 */
 
@@ -75,7 +75,7 @@ function gde_do_shortcode( $atts ) {
 	// check profile table health
 	if ( ! $healthy ) {
 		delete_option('gde_db_version');
-		return gde_show_error( __('Unable to load profile settings', 'gde') );
+		return gde_show_error( __('Unable to load profile settings', 'google-document-embedder') );
 	}
 	
 	// handle global setting overrides - not active in this release
@@ -106,7 +106,7 @@ function gde_do_shortcode( $atts ) {
 		if ( ! $profile = gde_get_profiles( $term ) ) {
 			gde_dx_log("Loading default profile instead");
 			if ( ! $profile = gde_get_profiles( 1 ) ) {
-				return gde_show_error( __('Unable to load requested profile.', 'gde') );
+				return gde_show_error( __('Unable to load requested profile.', 'google-document-embedder') );
 			} else {
 				$pid = 1;
 			}
@@ -118,7 +118,7 @@ function gde_do_shortcode( $atts ) {
 		if ( ! $profile = gde_get_profiles( strtolower( $term ) ) ) {
 			gde_dx_log("Loading default profile instead");
 			if ( ! $profile = gde_get_profiles( 1 ) ) {
-				return gde_show_error( __('Unable to load requested profile.', 'gde') );
+				return gde_show_error( __('Unable to load requested profile.', 'google-document-embedder') );
 			} else {
 				$pid = 1;
 			}
@@ -177,7 +177,7 @@ function gde_do_shortcode( $atts ) {
 	
 	// check for missing required field
 	if ( ! $file ) {
-		return gde_show_error( __('File not specified, check shortcode syntax', 'gde') );
+		return gde_show_error( __('File not specified, check shortcode syntax', 'google-document-embedder') );
 	}
 	
 	// file validation
@@ -234,7 +234,7 @@ function gde_do_shortcode( $atts ) {
 		
 		// check for failed secure doc
 		if ( empty( $links[0] ) && empty( $links[1] ) ) {
-			$code = gde_show_error( __('Unable to secure document', 'gde') );
+			$code = gde_show_error( __('Unable to secure document', 'google-document-embedder') );
 		} else {
 		
 			// which viewer?
@@ -302,7 +302,7 @@ function gde_do_shortcode( $atts ) {
 				
 				// link text
 				if ( empty( $profile['link_text'] ) ) {
-					$profile['link_text'] = __('Download', 'gde');
+					$profile['link_text'] = __('Download', 'google-document-embedder');
 				}
 				
 				$dltext = str_replace( "%FILE", $fn, $profile['link_text'] );
@@ -387,7 +387,7 @@ function gde_activate( $network_wide ) {
 		gde_setup();
 	} else {
 		gde_dx_log("Table creation failed; setup halted");
-		wp_die( __("Setup wasn't able to create the required database tables.", 'gde') );
+		wp_die( __("Setup wasn't able to create the required database tables.", 'google-document-embedder') );
 	}
 }
 
@@ -417,7 +417,7 @@ function gde_deactivate() {
  */
 function gde_load() {
 	// localization
-	load_plugin_textdomain( 'gde', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'google-document-embedder', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 ?>

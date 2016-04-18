@@ -160,7 +160,6 @@ class Custom_Background {
 	 * @since 3.0.0
 	 */
 	public function take_action() {
-
 		if ( empty($_POST) )
 			return;
 
@@ -229,7 +228,7 @@ class Custom_Background {
 	public function admin_page() {
 ?>
 <div class="wrap" id="custom-background">
-<h2><?php _e( 'Custom Background' ); ?></h2>
+<h1><?php _e( 'Custom Background' ); ?></h1>
 
 <?php if ( current_user_can( 'customize' ) ) { ?>
 <div class="notice notice-info hide-if-no-customize">
@@ -312,6 +311,7 @@ class Custom_Background {
 </tr>
 <?php endif; ?>
 
+<?php if ( current_user_can( 'upload_files' ) ): ?>
 <tr>
 <th scope="row"><?php _e('Select Image'); ?></th>
 <td><form enctype="multipart/form-data" id="upload-form" class="wp-upload-form" method="post">
@@ -331,6 +331,7 @@ class Custom_Background {
 	</form>
 </td>
 </tr>
+<?php endif; ?>
 </tbody>
 </table>
 
@@ -409,7 +410,6 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 	 * @since 3.0.0
 	 */
 	public function handle_upload() {
-
 		if ( empty($_FILES) )
 			return;
 
@@ -486,6 +486,9 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 	 *
 	 * @since 3.4.0
 	 * @deprecated 3.5.0
+	 *
+	 * @param array $form_fields
+	 * @return array $form_fields
 	 */
 	public function attachment_fields_to_edit( $form_fields ) {
 		return $form_fields;
@@ -495,6 +498,9 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 	 *
 	 * @since 3.4.0
 	 * @deprecated 3.5.0
+	 *
+	 * @param array $tabs
+	 * @return array $tabs
 	 */
 	public function filter_upload_tabs( $tabs ) {
 		return $tabs;

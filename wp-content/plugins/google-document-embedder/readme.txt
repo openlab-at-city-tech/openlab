@@ -4,7 +4,7 @@ Tags: doc, docx, pdf, ppt, pptx, xls, office, powerpoint, google, document, embe
 Author URI: http://www.davistribe.org/code/
 Donate link: http://www.davistribe.org/gde/donate/
 Requires at least: 3.5
-Tested up to: 4.2
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -17,10 +17,10 @@ Google Doc Embedder lets you embed several types of files into your WordPress pa
 > <strong>NOTE: Recent changes by Google to their viewer mean that some other plugins may be more suitable in some cases:</strong><br>
 > 
 > * If you are able to store your files in Google Drive, try the [Google Drive Embedder plugin](http://wp-glogin.com/wpgoogledoctodrive). This will be faster to display, and more reliable.
-> * If you are looking for the ability to make it difficult to download the full PDF (the old 'enhanced mode'), please find out more about [our new plugin - PDF Embedder Secure](http://wp-pdf.com/secure/?utm_source=GDE%20Readme&utm_medium=wordpressorg&utm_campaign=Freemium).
-> * If this plugin works as you require then we will continue to support it assuming Google still provides the underlying Doc Viewer in its current form!
+> * To make it difficult for users to download the full PDF (the old 'enhanced mode'), please find out more about [our new plugin - PDF Embedder Secure](http://wp-pdf.com/secure/?utm_source=GDE%20Readme&utm_medium=wordpressorg&utm_campaign=Freemium).
+> * Mobile-friendly functionality for viewing PDFs is available in [PDF Embedder Premium](http://wp-pdf.com/premium/?utm_source=GDE%20Readme%20Premium&utm_medium=wordpressorg&utm_campaign=Freemium).
 > 
-> This plugin only works in "Standard Viewer" mode for the time being since the recent changes to Google Doc Viewer were incompatible with the "Enhanced Viewer" mode.
+> If this plugin works as you require then we will continue to support it assuming Google still provides the underlying Doc Viewer in its current form!
 
 = More about Google Doc Embedder =
 
@@ -121,14 +121,16 @@ Most likely, no. If your file requires a login to view - such as being saved in 
 be "publicly available." Please save the file in a publicly accessible location for best results.
 
 = What about private documents? =
-The file must be publically available, but there is no reason why you need to publish the location. With GDE you can hide the URL as well
-as block direct downloads of the file. In combination with robots.txt and other mechanisms for blocking search engines or file browsing on
-your site, the document can be effectively private to everyone but the viewer itself. You can also try the [Secure Documents](http://www.davistribe.org/gde/secure-docs/ "Secure Documents") feature for more robust document security.
+The file must be publicly available, but there is no reason why you need to publish the location beyond supplying it to the GDE plugin. 
+However, savvy users will be able to locate the URL and download the original file. 
+To make it difficult for users to download PDF files (the old 'enhanced mode' of GDE), please find out more about [our new plugin - PDF Embedder Secure](http://wp-pdf.com/secure/?utm_source=GDE%20FAQ&utm_medium=wordpressorg&utm_campaign=Freemium).
 
 = Does it work with files saved in Google Docs/Drive? =
 This plug-in utilizes the viewer from Google Docs in a standalone fashion. There is no direct integration with Google Docs and even those
 documents stored there and shared publicly do not embed reliably with their standalone viewer (ironically), so at this time that use is not
-supported by the plug-in. Please store your original documents somewhere on your web site in their native supported formats.
+supported by the plug-in.
+
+If you are able to store your files in Google Drive, you may want to try the [Google Drive Embedder plugin](http://wp-glogin.com/wpgoogledoctodrive). This will be faster to display, and more reliable in that case.
 
 = Does it work in Multisite environments? =
 The plugin works on network installs, though it must be activated on a per-site basis (not network activated). There are no multisite
@@ -148,6 +150,11 @@ More common questions are answered on the GDE web site [here](http://www.davistr
 == Changelog ==
 
 (E) Enhanced Viewer
+
+= 2.5.21 =
+
+Changed the name of text domain from 'gde' to 'google-document-embedder'. 
+This was needed so WordPress' new translation system works - text domain must match plugin slug. 
 
 = 2.5.19 =
 * Fixed potential XSS attack flaw - please update to this version.

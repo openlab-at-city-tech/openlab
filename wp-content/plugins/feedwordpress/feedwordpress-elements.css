@@ -330,7 +330,7 @@ table.twofer td.secondary { padding-left: 10px; width: 30%; }
 }
 #feedwordpress-admin-syndication .update-form.with-donation {
 	margin-right: 50%;
-	min-height: 255px;
+	min-height: 355px;
 }
 #feedwordpress-admin-syndication .donation-form,
 #feedwordpress-admin-syndication .donation-thanks {
@@ -468,4 +468,6 @@ table.twofer td.secondary { padding-left: 10px; width: 30%; }
 	padding: 10px;
 }
 
-
+.hovered-component .hover-on { display: none; }
+.hovered-component:hover .hover-on { display: inline; }
+.hovered-component:hover .hover-on.pop-over { display: block; position: absolute; }
