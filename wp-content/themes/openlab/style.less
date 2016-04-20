@@ -637,6 +637,13 @@ body{
             }
         }
     }
+    .focus{
+        width: auto;
+        height: auto;
+        margin: 0;
+        overflow: visible;
+        clip: auto;
+    }
     .mol-count,
     .site-visibility .fa{
         background: @magenta;
@@ -1039,6 +1046,7 @@ body{
             width: 67.5%;
             border-radius: @border-radius-right;
             max-height: 295px;
+            position: relative;
             @media (max-width: @screen-xs-max){
                 width: 100%;
                 float: none;
@@ -1075,42 +1083,6 @@ body{
                         }
                     }
                 }
-                .camera_content{
-                    background: rgba(99, 223, 210, 0.8);
-                    bottom: 0;
-                    color: @white;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    width: 47%;
-                    padding: 2.5%;
-                    a{
-                        color: inherit;
-                        &:hover,
-                            &:focus{
-                            text-decoration: none;
-                        }
-                    }
-                    h2{
-                        font-size: 24px;
-                        font-weight: @normal;
-                        margin: 0 0 6px;
-                    }
-                    p{
-                        font-size: @font-size-h5;
-                        font-weight: @normal;
-                    }
-                    h2,
-                    p{
-                        text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
-                    }
-                    @media (max-width: @screen-sm-max){
-                        width: 59%;
-                    }
-                    @media (max-width: @screen-xs-max){
-                        width: 72%;
-                    }
-                }
                 .camera_prev,
                 .camera_next{
                     background: transparent;
@@ -1133,6 +1105,63 @@ body{
                 .camera_prev{
                     left: auto;
                     right: 27%;
+                }
+            }
+            .camera_content{
+                background: rgba(99, 223, 210, 0.8);
+                bottom: 0;
+                color: @white;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 47%;
+                padding: 2.5%;
+                a{
+                    color: inherit;
+                    &:hover,
+                        &:focus{
+                        text-decoration: none;
+                    }
+                }
+                h2{
+                    font-size: 24px;
+                    font-weight: @normal;
+                    margin: 0 0 6px;
+                }
+                p{
+                    font-size: @font-size-h5;
+                    font-weight: @normal;
+                }
+                h2,
+                p{
+                    text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
+                }
+                @media (max-width: @screen-sm-max){
+                    width: 59%;
+                }
+                @media (max-width: @screen-xs-max){
+                    width: 72%;
+                }
+            }
+            .camera_wrap_sr{
+                ul{
+                    margin: 0;
+                    .camera_content{
+                        padding: 0;
+                        position: absolute;
+                        width: 1px;
+                        &:focus,
+                            &.focus{
+                            background: rgba(99, 223, 210, 1);
+                            bottom: 0;
+                            left: 50%;
+                            padding: 2.5%;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            width: 50%;
+                        }
+                    }
                 }
             }
         }

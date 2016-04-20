@@ -7,6 +7,7 @@
 function openlab_get_home_slider() {
     global $post;
     $slider_mup = '';
+    $slider_sr_mup = '';
 
     $slider_args = array(
         'post_type' => 'slider',
@@ -18,22 +19,25 @@ function openlab_get_home_slider() {
     $slider_query = new WP_Query($slider_args);
 
     if ($slider_query->have_posts()):
-        $slider_mup = '<div class="camera_wrap clearfix">';
+        $slider_mup = '<div class="camera_wrap clearfix" tabindex="-1" aria-hidden="true">';
+        $slider_sr_mup = '<div class="camera_wrap_sr" role="widget"><h2 class="sr-only">Slideshow Content</h2><ul class="list-unstyled">';
         while ($slider_query->have_posts()) : $slider_query->the_post();
             //if the featured image is not set, slider will not be added
             if (get_post_thumbnail_id()) {
-                
-                $img_obj = wp_get_attachment_image_src(get_post_thumbnail_id(),'front-page-slider');
-                
-                $slider_mup .= '<div data-src="'.$img_obj[0].'"><div class="fadeIn camera_content"><h2 class="regular">'.get_the_title().'</h2>'.get_the_content_with_formatting().'</div></div>';
+
+                $img_obj = wp_get_attachment_image_src(get_post_thumbnail_id(), 'front-page-slider');
+
+                $slider_mup .= '<div data-src="' . $img_obj[0] . '"><div class="fadeIn camera_content"><h2 class="regular">' . get_the_title() . '</h2>' . get_the_content_with_formatting() . '</div></div>';
+                $slider_sr_mup .= '<li class="sr-only sr-only-focusable camera_content" tabindex="0"><h2 class="regular">' . get_the_title() . '</h2>' . get_the_content_with_formatting() .'</li>';
             }
         endwhile;
         $slider_mup .= '</div>';
+        $slider_sr_mup .= '</ul></div>';
     endif;
 
     $post = $legacy;
 
-    return $slider_mup;
+    return $slider_mup.$slider_sr_mup;
 }
 
 /**

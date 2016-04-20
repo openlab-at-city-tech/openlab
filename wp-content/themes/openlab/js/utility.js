@@ -18,6 +18,7 @@
                 OpenLab.utility.truncateOnTheFly(true);
             }
             OpenLab.utility.adjustLoginBox();
+            OpenLab.utility.sliderFocusHandler();
 
         },
         detectZoom: function () {
@@ -41,6 +42,29 @@
                 }
 
             }
+        },
+        sliderFocusHandler: function () {
+
+            if ($('.camera_wrap_sr').length) {
+
+                $('.camera_wrap_sr .camera_content a').each(function () {
+
+                    var thisLink = $(this);
+                    thisLink.on('focus', function () {
+
+                        thisLink.closest('.camera_content').addClass('focus');
+
+                    });
+                    thisLink.on('blur', function () {
+
+                        thisLink.closest('.camera_content').removeClass('focus');
+
+                    });
+
+                });
+
+            }
+
         },
         setUpNewMembersBox: function (resize) {
 
@@ -179,7 +203,7 @@
                 });
                 $('#sidebarCustomSelect').animate({
                     opacity: 1
-                },700);
+                }, 700);
                 clearInterval(OpenLab.utility.selectDisplay);
                 OpenLab.utility.filterAjax();
             }
