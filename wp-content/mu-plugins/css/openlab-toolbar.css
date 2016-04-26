@@ -7478,11 +7478,11 @@ button.oplb-bs .close {
   right: 0;
   z-index: 210;
 }
-.oplb-bs .navbar-header h1 {
+.oplb-bs .navbar-header header {
   margin: 0;
   border-right: 1px solid #dddddd;
 }
-.oplb-bs .navbar-header h1 a {
+.oplb-bs .navbar-header header a {
   display: block;
   background: url('images/openlab_menu_logo.png') no-repeat;
   padding-top: 63px;
@@ -7491,11 +7491,11 @@ button.oplb-bs .close {
   overflow: hidden;
 }
 @media (max-width: 991px) {
-  .oplb-bs .navbar-header h1 {
+  .oplb-bs .navbar-header header {
     width: 136px;
     margin: 0;
   }
-  .oplb-bs .navbar-header h1 a {
+  .oplb-bs .navbar-header header a {
     width: 135px;
     background-size: 100%;
     background-position: 0 8px;
