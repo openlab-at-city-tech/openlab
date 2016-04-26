@@ -3423,7 +3423,7 @@ if (Hyphenator.isBookmarklet()) {
         init: function () {
 
             OpenLab.nav.backgroundCont = $('#behind_menu_background');
-            
+
             //get starting position of mobile menu background
             OpenLab.nav.backgroundTopStart = OpenLab.nav.backgroundCont.css('top');
 
@@ -3431,6 +3431,7 @@ if (Hyphenator.isBookmarklet()) {
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
+            OpenLab.nav.tabindexNormalizer();
 
             OpenLab.nav.hyphenateInit();
 
@@ -3452,6 +3453,19 @@ if (Hyphenator.isBookmarklet()) {
                     OpenLab.nav.fixHoverOnMobile($(this));
                 })
             }
+        },
+        tabindexNormalizer: function () {
+
+            //find tabindices in the adminbar greater than 1 and re-set
+            $('#wpadminbar [tabindex]').each(function () {
+
+                var thisElem = $(this);
+                if (parseInt(thisElem.attr('tabindex')) > 0) {
+                    thisElem.attr('tabindex', 0);
+                }
+
+            });
+
         },
         directToggleAction: function () {
 
@@ -3507,10 +3521,10 @@ if (Hyphenator.isBookmarklet()) {
             if (!$('.direct-toggle').length) {
                 return false;
             }
-            
+
             //reset mobile menu background position
             OpenLab.nav.backgroundCont.css({
-                'top' : OpenLab.nav.backgroundTopStart
+                'top': OpenLab.nav.backgroundTopStart
             })
 
             var directToggle = $('.direct-toggle');

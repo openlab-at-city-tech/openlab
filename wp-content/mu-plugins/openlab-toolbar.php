@@ -1294,14 +1294,14 @@ HTML;
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'bp-login',
 			'meta'	=> array(
-				'tabindex' => 101
+				'tabindex' => 0
 			)
 		) );
 
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'bp-register',
 			'meta'	=> array(
-				'tabindex' => 100
+				'tabindex' => 0
 			)
 		) );
 	}
@@ -1459,7 +1459,7 @@ function cac_adminbar_js() {
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
-		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
+		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="0" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
 

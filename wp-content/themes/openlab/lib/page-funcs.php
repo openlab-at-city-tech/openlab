@@ -57,16 +57,16 @@ function cuny_home_login() {
             <?php do_action('bp_before_sidebar_login_form') ?>
 
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="97" />
+                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="0" />
 
-                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="98" />
+                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="0" />
 
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
                         <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><?php _e('Keep me logged in', 'buddypress') ?></span>
                     </div>
-                    <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
+                    <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="0" />
                 </div>
                 <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
