@@ -330,56 +330,51 @@ jQuery(document).ready(function($){
 	}
 
 	/* AJAX validation for blog URLs */
-	$('form input[type="submit"]').click(function(e){
-                
-                var thisForm = $(this).closest('form');
-                
-                /* Don't hijack the wrong clicks */
-                if ( $(e.target).attr('name') != 'save' ) {
-                        return true;
-                }
-                
-                /* Don't validate if a different radio button is selected */
-                if ( 'new' == $('input[name=new_or_old]:checked').val() ) {
-                    var domain = $('input[name="blog[domain]"]');
-                } else if ('clone' == $('input[name=new_or_old]:checked').val()){
-                    var domain = $('input[name="clone-destination-path"]');
-                } else {
-                    return true;
-                }
-
+	$( 'input.domain-validate' ).blur( function(e){
 		// If "Set up a site" is not checked, there's no validation to do
-		if ( $( setuptoggle ).length && ! $(setuptoggle).is( ':checked' ) ) {
+		if ( $( setuptoggle ).length && ! $( setuptoggle ).is( ':checked' ) ) {
 			return true;
 		}
-                
-		e.preventDefault();
-		
 
-		var warn = $(domain).siblings('.ajax-warning');
-		if ( warn.length > 0 ) {
-			$(warn).remove();
+		var thisInput = $( this );
+                var thisForm = thisInput.closest('form');
+		var new_or_old = $( 'input[name=new_or_old]:checked' ).val();
+		var domain = false;
+
+                /* Don't validate if a different radio button is selected */
+		if ( 'clone-destination-path' === thisInput.attr( 'id' ) && 'clone' === new_or_old ) {
+			domain = thisInput.val();
+		} else if ( 'new-site-domain' === thisInput.attr( 'id' ) && 'new' === new_or_old ) {
+			domain = thisInput.val();
 		}
 
-		var path = $(domain).val();
+		if ( ! domain ) {
+			return true;
+		}
 
-		if ( 0 == path.length ) {
-			$(domain).after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
+		disable_gc_form();
+
+		var warn = thisInput.siblings('.ajax-warning');
+		if ( warn.length > 0 ) {
+			warn.remove();
+		}
+
+		if ( 0 == domain.length ) {
+			thisInput.after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
 			return false;
 		}
 
 		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
 			{
 				action: 'openlab_validate_groupblog_url_handler',
-				'path': path
+				'path': domain
 			},
-			function(response) {
+			function( response ) {
 				if ( 'exists' == response ) {
-					$(domain).after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
+					thisInput.after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
 					return false;
 				} else {
-					$(thisForm).append('<input type="hidden" name="save" value="1" />');
-					thisForm.submit();
+					enable_gc_form();
 					return true;
 				}
 			}

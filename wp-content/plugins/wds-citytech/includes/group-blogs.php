@@ -546,7 +546,7 @@ function wds_bp_group_meta() {
                                             <?php echo $current_site->domain . $current_site->path ?>
                                         </div>
                                         <div class="col-sm-13">
-                                            <input class="form-control" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
+                                            <input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
                                         </div>
                                         <input name="blog-id-to-clone" value="" type="hidden" />
                                     </div>
@@ -572,7 +572,7 @@ function wds_bp_group_meta() {
 						?>
 					</div>
                                         <div class="col-sm-13">
-						<input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
+						<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
 					</div>
                                 </div>
 
