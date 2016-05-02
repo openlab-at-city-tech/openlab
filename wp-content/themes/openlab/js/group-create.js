@@ -19,6 +19,14 @@ function showHide(id) {
 }
 
 jQuery(document).ready(function($){
+	var form = document.getElementById( 'create-group-form' ),
+		form_validated = false,
+		$form = $( form ),
+		$gc_submit = $( '#group-creation-create' ),
+		$required_fields;
+	
+	$required_fields = $form.find( 'input:required' );
+
 	function new_old_switch( noo ) {
 		var radioid = '#new_or_old_' + noo;
 		$(radioid).prop('checked','checked');
@@ -63,17 +71,13 @@ jQuery(document).ready(function($){
 	}
 
 	function disable_gc_form() {
-		var gc_submit = $('#group-creation-create');
-
-		$(gc_submit).attr('disabled', 'disabled');
-		$(gc_submit).fadeTo( 500, 0.2 );
+		$gc_submit.attr('disabled', 'disabled');
+		$gc_submit.fadeTo( 500, 0.2 );
 	}
 
 	function enable_gc_form() {
-		var gc_submit = $('#group-creation-create');
-
-		$(gc_submit).removeAttr('disabled');
-		$(gc_submit).fadeTo( 500, 1.0 );
+		$gc_submit.removeAttr('disabled');
+		$gc_submit.fadeTo( 500, 1.0 );
 	}
 
 	function mark_loading( obj ) {
@@ -329,38 +333,62 @@ jQuery(document).ready(function($){
 		});
 	}
 
-	/* AJAX validation for blog URLs */
-	$( 'input.domain-validate' ).blur( function(e){
+	$( '.domain-validate' ).on( 'change', function() {
+		form_validated = false;
+	} );
+
+	/**
+	 * Form validation.
+	 *
+	 * - Site URL is validated by AJAX.  
+	 * - Name and Description use native validation.
+	 */
+	validate_form = function( event ) {
+		event = ( event ? event : window.event );
+
+		if ( form_validated ) {
+			return true;
+		}
+
 		// If "Set up a site" is not checked, there's no validation to do
 		if ( $( setuptoggle ).length && ! $( setuptoggle ).is( ':checked' ) ) {
 			return true;
 		}
 
-		var thisInput = $( this );
-                var thisForm = thisInput.closest('form');
 		var new_or_old = $( 'input[name=new_or_old]:checked' ).val();
-		var domain = false;
+		var domain, $domain_field;
 
-                /* Don't validate if a different radio button is selected */
-		if ( 'clone-destination-path' === thisInput.attr( 'id' ) && 'clone' === new_or_old ) {
-			domain = thisInput.val();
-		} else if ( 'new-site-domain' === thisInput.attr( 'id' ) && 'new' === new_or_old ) {
-			domain = thisInput.val();
+		// Different fields require different validation.
+		switch ( new_or_old ) {
+			case 'old' :
+
+				// do something
+				break;
+
+			case 'clone' :
+				$domain_field = $( '#clone-destination-path' );
+				break;
+
+			case 'new' :
+				$domain_field = $( '#new-site-domain' );
+				break;
 		}
 
-		if ( ! domain ) {
+		if ( 'undefined' === typeof $domain_field ) {
 			return true;
 		}
 
-		disable_gc_form();
+		event.preventDefault();
 
-		var warn = thisInput.siblings('.ajax-warning');
+		domain = $domain_field.val();	
+
+		var warn = $domain_field.siblings( '.ajax-warning' );
 		if ( warn.length > 0 ) {
 			warn.remove();
 		}
 
 		if ( 0 == domain.length ) {
-			thisInput.after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
+			$domain_field.after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
 			return false;
 		}
 
@@ -371,13 +399,19 @@ jQuery(document).ready(function($){
 			},
 			function( response ) {
 				if ( 'exists' == response ) {
-					thisInput.after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
+					$domain_field.after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
 					return false;
 				} else {
-					enable_gc_form();
+					// We're done validating.
+					form_validated = true;		
+					$form.append( '<input name="save" value="1" type="hidden" />' );
+					$form.submit();
 					return true;
 				}
 			}
 		);
-	});
+	};
+
+	// Form validation.
+	form.onsubmit = validate_form;
 },(jQuery));
