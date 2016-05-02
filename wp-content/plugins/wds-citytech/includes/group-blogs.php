@@ -565,22 +565,15 @@ function wds_bp_group_meta() {
                                             <input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
                                             Create a new site:</label>
                                     </div>
-                                    <div class="col-sm-5 site-label">
-                                        <?php
-                                        $suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
-
-                                        if ( constant( "VHOST" ) == 'yes' ) :
-                                            ?>
-                                            <input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php $suggested_path ?>" />.<?php echo $current_site->domain; ?>
-                                            <?php
-                                        else:
-                                            echo $current_site->domain . $current_site->path
-                                            ?>
-                                        </div>
+					<div class="col-sm-5 site-label">
+						<?php
+						$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+						echo $current_site->domain . $current_site->path
+						?>
+					</div>
                                         <div class="col-sm-13">
-                                            <input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
-                                        <?php endif; ?>
-                                    </div>
+						<input class="form-control" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
+					</div>
                                 </div>
 
 							</div>
