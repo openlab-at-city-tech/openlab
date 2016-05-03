@@ -254,7 +254,7 @@ function cuny_home_square($type) {
                             <?php echo bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) ?>
                         </p>
                         <p class="see-more">
-                            <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More</a>
+                            <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More<span class="sr-only"> <?php echo bp_get_group_name() ?></span></a>
                         </p>
                         </div>
                         </div>
