@@ -7949,8 +7949,12 @@ body .inline-visible-xs {
 .home-page .row-home-top .login .log-box#open-lab-login {
   border-bottom: 13px solid #e94646;
 }
-.home-page .row-home-top .login .log-box#open-lab-login h2 {
+.home-page .row-home-top .login .log-box#open-lab-login h2,
+.home-page .row-home-top .login .log-box#open-lab-login h1 {
   margin: 16px 0 14px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login h1 {
+  padding-right: 5px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info {
   margin-bottom: 23px;
