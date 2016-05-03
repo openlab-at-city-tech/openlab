@@ -8596,7 +8596,8 @@ body .inline-visible-xs {
 .group-list .group-item-wrapper h5 {
   margin: 0 0 5px;
 }
-.group-list .group-item-wrapper h2 {
+.group-list .group-item-wrapper h2,
+.group-list .group-item-wrapper p.h2 {
   margin: 6px 0;
 }
 .group-list .group-item-wrapper a :not(.btn-primary) {
@@ -8661,7 +8662,7 @@ body .inline-visible-xs {
   width: 100%;
   margin-bottom: 5px;
 }
-.filter .archive-search h5 {
+.filter .archive-search h3 {
   margin-bottom: 7px;
 }
 .filter .archive-search #search-submit {
