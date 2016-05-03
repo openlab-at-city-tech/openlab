@@ -751,7 +751,7 @@ function openlab_group_profile_activity_list() {
                         <div class="col-sm-12">
                             <div class="recent-discussions">
                                 <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
+                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h2>
                                     <?php
                                     $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
@@ -899,10 +899,10 @@ function openlab_get_group_activity_content($title, $content, $link) {
 
     if ($title !== '') {
         $markup = <<<HTML
-                <h6 class="semibold">
+                <p class="semibold h6">
                     <span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">{$title}</span>
                     <span class="original-copy hidden">{$title}</span>
-                </h6>
+                </p>
 HTML;
     }
 
@@ -1256,7 +1256,7 @@ function openlab_show_site_posts_and_comments() {
             <div class="col-sm-12">
                 <div id="recent-course">
                     <div class="recent-posts">
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h2>
 
 
                         <?php foreach ($posts as $post) : ?>
