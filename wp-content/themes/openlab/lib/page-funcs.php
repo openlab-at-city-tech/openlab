@@ -230,7 +230,7 @@ function cuny_home_square($type) {
         <div class="col-sm-6 activity-list <?php echo $type; ?>-list">
             <div class="activity-wrapper">
                 <div class="title-wrapper">
-                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo site_url() . '/' . strtolower($type); ?>s"><?php echo ucfirst($type); ?>s<span class="fa fa-chevron-circle-right"></span></a></h2>
+                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo site_url() . '/' . strtolower($type); ?>s"><?php echo ucfirst($type); ?>s<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                 </div><!--title-wrapper-->
                 <?php
                 while (bp_groups()) : bp_the_group();
