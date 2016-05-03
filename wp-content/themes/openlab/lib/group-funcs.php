@@ -1146,7 +1146,7 @@ function openlab_current_directory_filters() {
 
     $markup = '';
     if (!empty($active_filters)) {
-        $markup .= '<span class="bread-crumb">';
+        $markup .= '<h2 class="font-14 regular margin0-0 current-filters"><span class="bread-crumb">';
 
         $filter_words = array();
         foreach ($active_filters as $ftype => $fvalue) {
@@ -1167,7 +1167,7 @@ function openlab_current_directory_filters() {
 
         $markup .= implode('<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>', $filter_words);
 
-        $markup .= '</span>';
+        $markup .= '</span></h2>';
     }
 
     echo $markup;

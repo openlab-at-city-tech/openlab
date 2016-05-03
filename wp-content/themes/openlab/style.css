@@ -7723,6 +7723,10 @@ body .group-header .bp-template-notice {
   padding: 6px 12px;
   text-align: left;
 }
+body .current-filters {
+  margin: 0;
+  font-size: 14px;
+}
 body .site-visibility .fa {
   margin: 0;
   background: #ffffff;
