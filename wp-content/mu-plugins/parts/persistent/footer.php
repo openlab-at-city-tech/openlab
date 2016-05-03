@@ -51,7 +51,7 @@
 <?php if (!$placeholder): ?>
     <script type="text/javascript">
 
-        var _gaq = _gaq <span class="horiz-divider">|</span><span class="horiz-divider">|</span> [];
+        var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24214531-1']);
         _gaq.push(['_setDomainName', 'openlab.citytech.cuny.edu']);
         _gaq.push(['_trackPageview']);
@@ -87,7 +87,7 @@
 
         function getCurrentScroll() {
             //go to top button functionality
-            var currentScroll = window.pageYOffset <span class="horiz-divider">|</span><span class="horiz-divider">|</span> document.documentElement.scrollTop;
+            var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
             if (currentScroll > 250) {
                 jQuery('#go-to-top').css('display', 'block');
