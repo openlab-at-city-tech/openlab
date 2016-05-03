@@ -525,7 +525,7 @@ function cuny_student_profile() {
 
                 <?php if ($friend_ids) { ?>
 
-                    <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
+                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
 
                     <ul id="member-list" class="inline-element-list">
 
@@ -602,10 +602,10 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
 
                                 <div class="activity-content col-sm-14 col-xs-16">
 
-                                    <h6 class="overflow-hidden">
+                                    <p class="overflow-hidden h6">
                                         <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?php echo bp_get_group_name(); ?></a>
                                         <span class="original-copy hidden"><?php echo bp_get_group_name() ?></span>
-                                    </h6>
+                                    </p>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
                                     <div class="truncate-wrapper overflow-hidden">

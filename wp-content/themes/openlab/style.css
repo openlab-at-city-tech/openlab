@@ -8745,7 +8745,9 @@ input#group-request-send {
 .group-activity-overview .panel .panel-body {
   padding: 3% 4%;
 }
-.group-activity-overview .panel .panel-body h6 {
+.group-activity-overview .panel .panel-body h6,
+.group-activity-overview .panel .panel-body .h6,
+.group-activity-overview .panel .panel-body p.h6 {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 14px;
@@ -9134,7 +9136,9 @@ body.membership-requests .group-list {
 #member-item-body .panel .panel-body {
   padding: 2%;
 }
-#member-item-body .panel .panel-body h6 {
+#member-item-body .panel .panel-body h6,
+#member-item-body .panel .panel-body .h6,
+#member-item-body .panel .panel-body p.h6 {
   margin: 5px 0 7px;
 }
 #member-item-body .panel .panel-body p,
