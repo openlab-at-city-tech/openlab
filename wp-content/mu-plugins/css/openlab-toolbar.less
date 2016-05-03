@@ -684,6 +684,7 @@
         }
         .footer-wrapper{
             margin: 0 auto;
+            width: 100%;
             @media (max-width: @screen-xs-max){
                 width: 95%;
             }
@@ -701,38 +702,55 @@
             display: inline-block;
             p{
                 color: #444;
+                float: right;
+                width: 72%;
             }
             a{
                 img{
                     padding-top: 5px;
                     margin-right: 15px;
                 }
+                &.citytech-logo{
+                    width: 12%;
+                }
+                &.cuny-logo{
+                    width: 14%;
+                }
+            }
+            h2{
+                span{
+                    vertical-align: middle;
+                    &:first-child{
+                        padding-right: 5px;
+                    }
+                }
             }
             @media (max-width: @screen-xs-max){
+                border-bottom: 1px solid @30gray;
+                padding: 0 0 18px;
+                margin-bottom: 20px;
                 h2{
-                    font-size: 17px;
                     span{
-                        font-size: 11px;
+                        display: block;
+                        font-size: 18px;
+                        &:last-child{
+                            font-size: 11px;
+                        }
+                    }
+                }
+                a{
+                    &.citytech-logo{
+                        width: 9%;
+                        min-width: 63px;
+                    }
+                    &.cuny-logo{
+                        min-width: 74px;
                     }
                 }
                 p{
                     font-size: 11px;
                     margin-bottom: 8px;
-                    &.mobile-logos{
-                        width: 67px;
-                        a{
-                            width: 49%;
-                            float: left;
-                            img{
-                                max-width: 100%;
-                                padding: 0;
-                                margin: 0;
-                            }
-                            &:first-child{
-                                padding-right: 10%;
-                            }
-                        }
-                    }
+                    width: 100%
                 }
             }
         }
@@ -743,14 +761,11 @@
                 font-weight: inherit;
             }
             @media (max-width: @screen-xs-max){
-                ul{
-                    padding: 0;
-                    margin: 0;
-                    list-style-type: none;
-                    li{
-                        margin-bottom: 0;
-                        line-height: 1.1;
-                    }
+                .horiz-divider{
+                    display: none;
+                }
+                a{
+                    display: block;
                 }
             }
         }
@@ -769,7 +784,7 @@
             }
             @media (max-width: @screen-xs-max){
                 margin-top: 20px;
-                margin-bottom: 40px;
+                margin-bottom: 24px;
             }
         }
         .horiz-bar-wrapper{
@@ -780,6 +795,9 @@
                 margin-left: 35%;
                 padding-top: 135px;
                 width: 1px;
+            }
+            @media (max-width: @screen-xs-max){
+                display: none;
             }
         }
         .row-copyright{
@@ -795,10 +813,14 @@
             @media (max-width: @screen-xs-max){
                 margin-bottom: 0;
                 p{
-                    border-bottom: 1px solid @30gray;
                     margin-bottom: 20px;
-                    padding-bottom: 20px;
                 }
+            }
+        }
+        @media (max-width: @screen-xs-max){
+            .row-footer,
+            .row-copyright{
+                margin: 0;
             }
         }
     }
