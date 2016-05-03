@@ -542,7 +542,7 @@ function cuny_student_profile() {
                     </ul>
                 <?php } else { ?>
 
-                    <h4 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h4>
+                    <h2 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h2>
 
                     <div id="message" class="info">
                         <p><?php bp_word_or_name(__("You haven't added any friend connections yet.", 'buddypress'), __("%s hasn't created any friend connections yet.", 'buddypress')) ?></p>
@@ -588,7 +588,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                     $href = $bp->displayed_user->domain . 'groups/?type=' . $type;
                 endif;
                 ?>
-                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
+                <h2 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h2>
                 <?php $x = 0; ?>
                 <?php while (bp_groups()) : bp_the_group(); ?>
 
