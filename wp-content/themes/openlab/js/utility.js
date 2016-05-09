@@ -124,7 +124,29 @@
                 var container_w = thisElem.parent().width();
 
                 if (thisElem.data('link')) {
-                    var thisOmission = '<a href="' + thisElem.data('link') + '">See More</a>';
+
+                    var omissionText = 'See More';
+
+                    //for screen reader only append
+                    //provides screen reader with addtional information in-link
+                    if (thisElem.data('includename')) {
+
+                        var nameTrunc = thisElem.data('includename');
+
+                        //if the groupname is truncated, let's use that
+                        var srprovider = thisElem.closest('.truncate-combo').find('[data-srprovider]');
+
+                        console.log('srprovider', srprovider);
+
+                        if (srprovider.length) {
+                            nameTrunc = srprovider.text();
+                        }
+
+                        omissionText = omissionText + ' <div class="sr-only sr-only-groupname">' + nameTrunc + '</div>';
+
+                    }
+
+                    var thisOmission = '<a href="' + thisElem.data('link') + '">' + omissionText + '</a>';
                 } else {
                     var thisOmission = '';
                 }
@@ -171,6 +193,14 @@
                     size: truncationValue,
                     omission: '<span class="omission">&hellip; ' + thisOmission + '</span>'
                 });
+
+                //if we have an included groupname in the screen reader only link text
+                //let's truncate it as well
+                if (thisElem.data('srprovider')) {
+                    var srLink = thisElem.closest('.truncate-combo').find('.sr-only-groupname');
+                    srLink.text(thisElem.text());
+                }
+
             } else {
                 thisElem.html('<span class="omission">' + thisOmission + '</span>');
             }

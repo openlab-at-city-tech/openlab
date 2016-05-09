@@ -600,16 +600,16 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                     <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
                                 </div>
 
-                                <div class="activity-content col-sm-14 col-xs-16">
+                                <div class="activity-content truncate-combo col-sm-14 col-xs-16">
 
                                     <p class="overflow-hidden h6">
-                                        <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?php echo bp_get_group_name(); ?></a>
+                                        <a class="font-size font-14 no-deco truncate-name truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143" data-srprovider="true"><?php echo bp_get_group_name(); ?></a>
                                         <span class="original-copy hidden"><?php echo bp_get_group_name() ?></span>
                                     </p>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
                                     <div class="truncate-wrapper overflow-hidden">
-                                        <p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity ?></p>
+                                        <p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink() ?>" data-includename="<?php echo bp_get_group_name(); ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity ?></p>
                                         <p class="original-copy hidden"><?php echo $activity ?></p>
                                     </div>
 
