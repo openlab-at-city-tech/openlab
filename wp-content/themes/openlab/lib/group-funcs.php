@@ -311,13 +311,18 @@ function openlab_groups_pagination_links() {
         'format' => '',
         'total' => ceil((int) $groups_template->total_group_count / (int) $groups_template->pag_num),
         'current' => $groups_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
+        'before_page_number' => '<span class="sr-only">Page</span>',
     ));
 
     $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+    //for screen reader only text - current page
+    $pagination = str_replace('current\'><span class="sr-only">Page', 'current\'><span class="sr-only">Current Page', $pagination);
+
     return $pagination;
 }
 
@@ -688,7 +693,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -877,7 +882,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                ?></p>
+                                                        <p><?php // bp_group_status_message()                                 ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
