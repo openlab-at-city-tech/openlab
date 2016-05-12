@@ -46,6 +46,12 @@ jQuery(document).ready(function($){
 					$(element).removeProp('disabled').removeClass('disabled');
                                     }
 				});
+                                
+                                //for external site note
+                                if ($(this).attr('id') === 'new_or_old_external'){
+                                    $('#check-note').removeClass('disabled-opt');
+                                }
+                                
 			} else {
 				$(thisid).find('input').each(function(index,element){
                                     if ($(element).attr('type') !== 'radio') {
@@ -59,6 +65,11 @@ jQuery(document).ready(function($){
 					$(element).prop('disabled','disabled').addClass('disabled');
                                     }
 				});
+                                
+                                //for external site note
+                                if ($(this).attr('id') === 'new_or_old_external'){
+                                    $('#check-note').addClass('disabled-opt');
+                                }
 			}
 		});
 
