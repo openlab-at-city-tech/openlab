@@ -357,6 +357,7 @@ HTML;
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'admin-bar-menu',
+                            'tabindex' => 0,
                         ),
 		) );
  	}
@@ -387,6 +388,7 @@ HTML;
 			'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
                         'meta'  => array(
                             'class' => 'visible-xs mobile-menu admin-bar-menu',
+                            'tabindex' => 0,
                         ),
 		) );
 
@@ -621,7 +623,7 @@ HTML;
                     'id' => 'friend-requests-title',
                     'title' => 'Friend Requests',
                     'meta' => array(
-                        'class' => 'submenu-title bold'
+                        'class' => 'submenu-title bold',
                     )
                 ));
 
@@ -743,6 +745,7 @@ HTML;
 			'title' => '<span class="toolbar-item-icon fa fa-envelope" aria-hidden="true"></span><span class="sr-only">Messages</span>' . $total_count,
                         'meta' => array(
                           'class' => 'hidden-xs',
+                          'tabindex' => 0,
                         ),
 		) );
 
@@ -821,6 +824,7 @@ HTML;
 			'title' => '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">Activity</span>',
                         'meta' => array(
                           'class' => 'hidden-xs',
+                          'tabindex' => 0,
                         ),
 		) );
 
@@ -915,6 +919,7 @@ HTML;
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
                         'class' => 'admin-bar-menu hidden-xs',
+                        'tabindex' => 0,
                     ),
             ) );
 
@@ -968,9 +973,12 @@ HTML;
                                 && ( $post_type_object->show_in_admin_bar ) )
                         {
                                 $wp_admin_bar->add_menu( array(
-                                        'id' => 'view',
-                                        'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View '.$post_label.'</span>',
-                                        'href' => get_permalink( $post->ID )
+                                    'id' => 'view',
+                                    'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View ' . $post_label . '</span>',
+                                    'href' => get_permalink($post->ID),
+                                    'meta' => array(
+                                        'tabindex' => 0
+                                    )
                                 ) );
                         } elseif ( 'edit-tags' == $current_screen->base
                                 && isset( $tag ) && is_object( $tag )
@@ -980,7 +988,10 @@ HTML;
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'view',
                                         'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View '.$post_label.'</span>',
-                                        'href' => get_term_link( $tag )
+                                        'href' => get_term_link( $tag ),
+                                        'meta' => array(
+                                            'tabindex' => 0
+                                        ),
                                 ) );
                         }
                 } else {
@@ -1000,6 +1011,7 @@ HTML;
                                         'href' => get_edit_post_link( $current_object->ID ),
                                         'meta' => array(
                                             'class' => 'hidden-xs',
+                                            'tabindex' => 0,
                                         )
                                 ) );
                         } elseif ( ! empty( $current_object->taxonomy )
@@ -1013,6 +1025,7 @@ HTML;
                                         'href' => get_edit_term_link( $current_object->term_id, $current_object->taxonomy ),
                                         'meta' => array(
                                             'class' => 'hidden-xs',
+                                            'tabindex' => 0,
                                         )
                                 ) );
                         }
@@ -1081,6 +1094,7 @@ HTML;
 		'meta'  => array(
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
                         'class' => 'mobile-no-hover admin-bar-menu',
+                        'tabindex' => 0,
 		),
 	) );
 
@@ -1145,6 +1159,7 @@ HTML;
             'meta' => array(
                 'title' => $update_data['title'],
                 'class' => 'mobile-no-hover',
+                'tabindex' => 0,
             ),
         ));
     }
@@ -1171,6 +1186,7 @@ HTML;
             'meta' => array(
                 'title' => $awaiting_title,
                 'class' => 'mobile-no-hover',
+                'tabindex' => 0,
                     ),
         ));
     }

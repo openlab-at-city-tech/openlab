@@ -3465,6 +3465,33 @@ if (Hyphenator.isBookmarklet()) {
                 }
 
             });
+            
+            //add tabindex to mol icon menus
+            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity').attr('tabindex', '0');
+
+            //active menupop for keyboard users
+            var adminbar = $('#wpadminbar');
+
+            adminbar.find('li.menupop').on('focus', function (e) {
+                
+                console.log('focusing');
+                
+                var el = $(this);
+
+                if (el.parent().is('#wp-admin-bar-root-default') && !el.hasClass('hover')) {
+                    e.preventDefault();
+                    adminbar.find('li.menupop.hover').removeClass('hover');
+                    el.addClass('hover');
+                } else if (!el.hasClass('hover')) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    el.addClass('hover');
+                } else if (!$(e.target).closest('div').hasClass('ab-sub-wrapper')) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    el.removeClass('hover');
+                }
+            });
 
         },
         directToggleAction: function () {
