@@ -19,6 +19,14 @@ function showHide(id) {
 }
 
 jQuery(document).ready(function($){
+	var form = document.getElementById( 'create-group-form' ),
+		form_validated = false,
+		$form = $( form ),
+		$gc_submit = $( '#group-creation-create' ),
+		$required_fields;
+	
+	$required_fields = $form.find( 'input:required' );
+
 	function new_old_switch( noo ) {
 		var radioid = '#new_or_old_' + noo;
 		$(radioid).prop('checked','checked');
@@ -38,6 +46,12 @@ jQuery(document).ready(function($){
 					$(element).removeProp('disabled').removeClass('disabled');
                                     }
 				});
+                                
+                                //for external site note
+                                if ($(this).attr('id') === 'new_or_old_external'){
+                                    $('#check-note').removeClass('disabled-opt');
+                                }
+                                
 			} else {
 				$(thisid).find('input').each(function(index,element){
                                     if ($(element).attr('type') !== 'radio') {
@@ -51,6 +65,11 @@ jQuery(document).ready(function($){
 					$(element).prop('disabled','disabled').addClass('disabled');
                                     }
 				});
+                                
+                                //for external site note
+                                if ($(this).attr('id') === 'new_or_old_external'){
+                                    $('#check-note').addClass('disabled-opt');
+                                }
 			}
 		});
 
@@ -63,17 +82,13 @@ jQuery(document).ready(function($){
 	}
 
 	function disable_gc_form() {
-		var gc_submit = $('#group-creation-create');
-
-		$(gc_submit).attr('disabled', 'disabled');
-		$(gc_submit).fadeTo( 500, 0.2 );
+		$gc_submit.attr('disabled', 'disabled');
+		$gc_submit.fadeTo( 500, 0.2 );
 	}
 
 	function enable_gc_form() {
-		var gc_submit = $('#group-creation-create');
-
-		$(gc_submit).removeAttr('disabled');
-		$(gc_submit).fadeTo( 500, 1.0 );
+		$gc_submit.removeAttr('disabled');
+		$gc_submit.fadeTo( 500, 1.0 );
 	}
 
 	function mark_loading( obj ) {
@@ -329,60 +344,85 @@ jQuery(document).ready(function($){
 		});
 	}
 
-	/* AJAX validation for blog URLs */
-	$('form input[type="submit"]').click(function(e){
-                
-                var thisForm = $(this).closest('form');
-                
-                /* Don't hijack the wrong clicks */
-                if ( $(e.target).attr('name') != 'save' ) {
-                        return true;
-                }
-                
-                /* Don't validate if a different radio button is selected */
-                if ( 'new' == $('input[name=new_or_old]:checked').val() ) {
-                    var domain = $('input[name="blog[domain]"]');
-                } else if ('clone' == $('input[name=new_or_old]:checked').val()){
-                    var domain = $('input[name="clone-destination-path"]');
-                } else {
-                    return true;
-                }
+	$( '.domain-validate' ).on( 'change', function() {
+		form_validated = false;
+	} );
 
-		// If "Set up a site" is not checked, there's no validation to do
-		if ( $( setuptoggle ).length && ! $(setuptoggle).is( ':checked' ) ) {
+	/**
+	 * Form validation.
+	 *
+	 * - Site URL is validated by AJAX.  
+	 * - Name and Description use native validation.
+	 */
+	validate_form = function( event ) {
+		event = ( event ? event : window.event );
+
+		if ( form_validated ) {
 			return true;
 		}
-                
-		e.preventDefault();
-		
 
-		var warn = $(domain).siblings('.ajax-warning');
-		if ( warn.length > 0 ) {
-			$(warn).remove();
+		// If "Set up a site" is not checked, there's no validation to do
+		if ( $( setuptoggle ).length && ! $( setuptoggle ).is( ':checked' ) ) {
+			return true;
 		}
 
-		var path = $(domain).val();
+		var new_or_old = $( 'input[name=new_or_old]:checked' ).val();
+		var domain, $domain_field;
 
-		if ( 0 == path.length ) {
-			$(domain).after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
+		// Different fields require different validation.
+		switch ( new_or_old ) {
+			case 'old' :
+
+				// do something
+				break;
+
+			case 'clone' :
+				$domain_field = $( '#clone-destination-path' );
+				break;
+
+			case 'new' :
+				$domain_field = $( '#new-site-domain' );
+				break;
+		}
+
+		if ( 'undefined' === typeof $domain_field ) {
+			return true;
+		}
+
+		event.preventDefault();
+
+		domain = $domain_field.val();	
+
+		var warn = $domain_field.siblings( '.ajax-warning' );
+		if ( warn.length > 0 ) {
+			warn.remove();
+		}
+
+		if ( 0 == domain.length ) {
+			$domain_field.after('<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>');
 			return false;
 		}
 
 		$.post( '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
 			{
 				action: 'openlab_validate_groupblog_url_handler',
-				'path': path
+				'path': domain
 			},
-			function(response) {
+			function( response ) {
 				if ( 'exists' == response ) {
-					$(domain).after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
+					$domain_field.after('<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>');
 					return false;
 				} else {
-					$(thisForm).append('<input type="hidden" name="save" value="1" />');
-					thisForm.submit();
+					// We're done validating.
+					form_validated = true;		
+					$form.append( '<input name="save" value="1" type="hidden" />' );
+					$form.submit();
 					return true;
 				}
 			}
 		);
-	});
+	};
+
+	// Form validation.
+	form.onsubmit = validate_form;
 },(jQuery));

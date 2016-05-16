@@ -17,7 +17,7 @@
         init: function () {
 
             OpenLab.nav.backgroundCont = $('#behind_menu_background');
-            
+
             //get starting position of mobile menu background
             OpenLab.nav.backgroundTopStart = OpenLab.nav.backgroundCont.css('top');
 
@@ -25,6 +25,7 @@
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
+            OpenLab.nav.tabindexNormalizer();
 
             OpenLab.nav.hyphenateInit();
 
@@ -46,6 +47,46 @@
                     OpenLab.nav.fixHoverOnMobile($(this));
                 })
             }
+        },
+        tabindexNormalizer: function () {
+
+            //find tabindices in the adminbar greater than 1 and re-set
+            $('#wpadminbar [tabindex]').each(function () {
+
+                var thisElem = $(this);
+                if (parseInt(thisElem.attr('tabindex')) > 0) {
+                    thisElem.attr('tabindex', 0);
+                }
+
+            });
+            
+            //add tabindex to mol icon menus
+            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity').attr('tabindex', '0');
+
+            //active menupop for keyboard users
+            var adminbar = $('#wpadminbar');
+
+            adminbar.find('li.menupop').on('focus', function (e) {
+                
+                console.log('focusing');
+                
+                var el = $(this);
+
+                if (el.parent().is('#wp-admin-bar-root-default') && !el.hasClass('hover')) {
+                    e.preventDefault();
+                    adminbar.find('li.menupop.hover').removeClass('hover');
+                    el.addClass('hover');
+                } else if (!el.hasClass('hover')) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    el.addClass('hover');
+                } else if (!$(e.target).closest('div').hasClass('ab-sub-wrapper')) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    el.removeClass('hover');
+                }
+            });
+
         },
         directToggleAction: function () {
 
@@ -101,10 +142,10 @@
             if (!$('.direct-toggle').length) {
                 return false;
             }
-            
+
             //reset mobile menu background position
             OpenLab.nav.backgroundCont.css({
-                'top' : OpenLab.nav.backgroundTopStart
+                'top': OpenLab.nav.backgroundTopStart
             })
 
             var directToggle = $('.direct-toggle');

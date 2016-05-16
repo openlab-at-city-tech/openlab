@@ -13,7 +13,7 @@ function cuny_home_login() {
     if (is_user_logged_in()) :
 
         echo '<div id="open-lab-login" class="log-box">';
-        echo '<h2 class="title">Welcome, ' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h2>';
+        echo '<h1 class="title inline-element semibold">Welcome,</h1><h2 class="title inline-element">' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h2>';
         do_action('bp_before_sidebar_me')
         ?>
 
@@ -57,16 +57,16 @@ function cuny_home_login() {
             <?php do_action('bp_before_sidebar_login_form') ?>
 
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="97" />
+                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="0" />
 
-                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="98" />
+                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="0" />
 
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
                         <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="99" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><?php _e('Keep me logged in', 'buddypress') ?></span>
                     </div>
-                    <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="100" />
+                    <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="0" />
                 </div>
                 <input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain(); ?>" />
 
@@ -92,9 +92,9 @@ function cuny_home_new_members() {
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
                     <a class="prev btn" href="#">
-                        <i class="fa fa-chevron-circle-left"></i></a>
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span class="sr-only">Previous New Members</span></a>
                     <a class="next btn" href="#">
-                        <i class="fa fa-chevron-circle-right"></i></a>
+                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></a>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>
@@ -230,7 +230,7 @@ function cuny_home_square($type) {
         <div class="col-sm-6 activity-list <?php echo $type; ?>-list">
             <div class="activity-wrapper">
                 <div class="title-wrapper">
-                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo site_url() . '/' . strtolower($type); ?>s"><?php echo ucfirst($type); ?>s<span class="fa fa-chevron-circle-right"></span></a></h2>
+                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo site_url() . '/' . strtolower($type); ?>s"><?php echo ucfirst($type); ?>s<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                 </div><!--title-wrapper-->
                 <?php
                 while (bp_groups()) : bp_the_group();
@@ -254,7 +254,7 @@ function cuny_home_square($type) {
                             <?php echo bp_create_excerpt($activity, 150, array('ending' => __('&hellip;', 'buddypress'), 'html' => false)) ?>
                         </p>
                         <p class="see-more">
-                            <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More</a>
+                            <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More<span class="sr-only"> <?php echo bp_get_group_name() ?></span></a>
                         </p>
                         </div>
                         </div>

@@ -96,44 +96,42 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                         </div>
                         </div>
                      </div>
-                        
+
             <?php endif; ?>
 
-            <?php /* "Related Links List Settings" - Course only for now */ ?>
-                    <?php if ('course' === $group_type) : ?>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Related Links List Settings</div>
-                            <div class="panel-body">
-                                <p>These settings enable or disable the related groups list display on your Course Profile.</p>
-                                <?php $related_links_list_enable = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_related_links_list_enable'); ?>
-                                <?php $related_links_list_heading = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_related_links_list_heading'); ?>
-                                <?php $related_links_list = openlab_get_group_related_links(bp_get_current_group_id(), 'edit'); ?>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" name="related-links-list-enable" id="related-links-list-enable" value="1" <?php checked($related_links_list_enable) ?> /> Enable related groups list</label>
-                                </div>
-                                <label for="related-links-list-heading">List Heading</label>
-                                <input name="related-links-list-heading" id="related-links-list-heading" class="form-control" type="text" value="<?php echo esc_attr($related_links_list_heading) ?>" />
-                                <ul class="related-links-edit-items inline-element-list">
-                                    <?php $rli = 1 ?>
-                                    <?php foreach ((array) $related_links_list as $rl) : ?>
-                                        <li class="form-inline label-combo row">
-                                            <div class="form-group col-sm-9">
-                                                <label for="related-links-<?php echo $rli ?>-name">Name</label> <input name="related-links[<?php echo $rli ?>][name]" id="related-links-<?php echo $rli ?>-name" class="form-control" value="<?php echo esc_attr($rl['name']) ?>" />
-                                            </div>
-                                            <div class="form-group col-sm-15">
-                                                <label for="related-links-<?php echo $rli ?>-url">URL</label> <input name="related-links[<?php echo $rli ?>][url]" id="related-links-<?php echo $rli ?>-url" class="form-control" value="<?php echo esc_attr($rl['url']) ?>" />
-                                                <?php /* Last item - show the plus button */ ?>
-                                                <?php if ($rli === count($related_links_list)) : ?>
-                                                    <a href="#" id="add-new-related-link">+</a>
-                                                <?php endif ?>
-                                            </div>
-                                        </li>
-                                        <?php $rli++ ?>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    <?php endif; ?>
+	<?php /* "Related Links List Settings" */ ?>
+	<div class="panel panel-default">
+		<div class="panel-heading">Related Links List Settings</div>
+		<div class="panel-body">
+			<p>These settings enable or disable the related groups list display on your <?php echo $group_label_uc; ?> profile.</p>
+			<?php $related_links_list_enable = groups_get_groupmeta( bp_get_current_group_id(), 'openlab_related_links_list_enable' ); ?>
+			<?php $related_links_list_heading = groups_get_groupmeta( bp_get_current_group_id(), 'openlab_related_links_list_heading' ); ?>
+			<?php $related_links_list = openlab_get_group_related_links( bp_get_current_group_id(), 'edit' ); ?>
+			<div class="checkbox">
+				<label><input type="checkbox" name="related-links-list-enable" id="related-links-list-enable" value="1" <?php checked( $related_links_list_enable ) ?> /> Enable related groups list</label>
+			</div>
+			<label for="related-links-list-heading">List Heading</label>
+			<input name="related-links-list-heading" id="related-links-list-heading" class="form-control" type="text" value="<?php echo esc_attr( $related_links_list_heading ) ?>" />
+			<ul class="related-links-edit-items inline-element-list">
+				<?php $rli = 1 ?>
+				<?php foreach ( (array) $related_links_list as $rl ) : ?>
+					<li class="form-inline label-combo row">
+						<div class="form-group col-sm-9">
+							<label for="related-links-<?php echo $rli ?>-name">Name</label> <input name="related-links[<?php echo $rli ?>][name]" id="related-links-<?php echo $rli ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ) ?>" />
+						</div>
+						<div class="form-group col-sm-15">
+							<label for="related-links-<?php echo $rli ?>-url">URL</label> <input name="related-links[<?php echo $rli ?>][url]" id="related-links-<?php echo $rli ?>-url" class="form-control" value="<?php echo esc_attr( $rl['url'] ) ?>" />
+							<?php /* Last item - show the plus button */ ?>
+							<?php if ( $rli === count( $related_links_list ) ) : ?>
+								<a href="#" id="add-new-related-link">+</a>
+							<?php endif ?>
+						</div>
+					</li>
+					<?php $rli++ ?>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</div>
 
             <?php if (!openlab_is_portfolio()) : ?>
                 <div class="panel panel-default">

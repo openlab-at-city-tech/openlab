@@ -525,7 +525,7 @@ function cuny_student_profile() {
 
                 <?php if ($friend_ids) { ?>
 
-                    <h4 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
+                    <h2 class="title activity-title"><a class="no-deco" href="<?php echo $bp->displayed_user->domain . $bp->friends->slug ?>"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?><span class="fa fa-chevron-circle-right font-size font-18" aria-hidden="true"></span></a></h2>
 
                     <ul id="member-list" class="inline-element-list">
 
@@ -542,7 +542,7 @@ function cuny_student_profile() {
                     </ul>
                 <?php } else { ?>
 
-                    <h4 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h4>
+                    <h2 class="title activity-title"><?php bp_word_or_name(__("My Friends", 'buddypress'), __("%s's Friends", 'buddypress')) ?></h2>
 
                     <div id="message" class="info">
                         <p><?php bp_word_or_name(__("You haven't added any friend connections yet.", 'buddypress'), __("%s hasn't created any friend connections yet.", 'buddypress')) ?></p>
@@ -588,7 +588,7 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                     $href = $bp->displayed_user->domain . 'groups/?type=' . $type;
                 endif;
                 ?>
-                <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right font-size font-18"></span></a></h4>
+                <h2 class="title activity-title"><a class="no-deco" href="<?php echo $href ?>"><?php echo $title; ?><span class="fa fa-chevron-circle-right font-size font-18" aria-hidden="true"></span></a></h2>
                 <?php $x = 0; ?>
                 <?php while (bp_groups()) : bp_the_group(); ?>
 
@@ -600,16 +600,16 @@ function cuny_profile_activty_block($type, $title, $last, $desc_length = 135) {
                                     <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></a>
                                 </div>
 
-                                <div class="activity-content col-sm-14 col-xs-16">
+                                <div class="activity-content truncate-combo col-sm-14 col-xs-16">
 
-                                    <h6 class="overflow-hidden">
-                                        <a class="font-size font-14 no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143"><?php echo bp_get_group_name(); ?></a>
+                                    <p class="overflow-hidden h6">
+                                        <a class="font-size font-14 no-deco truncate-name truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="34" data-minvalue="20" data-basewidth="143" data-srprovider="true"><?php echo bp_get_group_name(); ?></a>
                                         <span class="original-copy hidden"><?php echo bp_get_group_name() ?></span>
-                                    </h6>
+                                    </p>
 
                                     <?php $activity = strip_tags(bp_get_group_description()); ?>
                                     <div class="truncate-wrapper overflow-hidden">
-                                        <p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity ?></p>
+                                        <p class="truncate-on-the-fly hyphenate" data-link="<?php echo bp_get_group_permalink() ?>" data-includename="<?php echo bp_get_group_name(); ?>" data-basevalue="65" data-basewidth="143"><?php echo $activity ?></p>
                                         <p class="original-copy hidden"><?php echo $activity ?></p>
                                     </div>
 

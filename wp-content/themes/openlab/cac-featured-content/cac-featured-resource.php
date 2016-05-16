@@ -35,7 +35,7 @@ echo "</{$cfcw_view->title_element}>";
                 </p>
 
                 <p><?php echo bp_create_excerpt($cfcw_view->description, $cfcw_view->crop_length) ?></p>
-                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?></a></p>
+                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?><span class="sr-only"> <?php echo __('about this In the Spotlight', 'cac-featured-content') ?></span></a></p>
             </div>
 
         <?php else: ?>
@@ -46,7 +46,7 @@ echo "</{$cfcw_view->title_element}>";
                 </p>
 
                 <p><?php echo bp_create_excerpt($cfcw_view->description, $cfcw_view->crop_length) ?></p>
-                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?></a></p>
+                <p class="see-more"><a class="semibold" href="<?php echo esc_url($cfcw_view->resource_link) ?>"><?php echo __('See More', 'cac-featured-content') ?><span class="sr-only"> <?php echo __('about this In the Spotlight', 'cac-featured-content') ?></span></a></p>
             </div>
 
         <?php endif; ?>

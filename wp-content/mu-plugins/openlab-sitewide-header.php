@@ -13,7 +13,7 @@ function openlab_sitewide_header($location = 'header') {
     <div class="header-mobile-wrapper visible-xs">
         <div class="container-fluid">
             <div class="navbar-header clearfix">
-                <h1 class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></h1>
+                <header class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></header>
                 <div class="pull-right search">
                     <div class="search-trigger-wrapper">
                         <span class="fa fa-search search-trigger" data-mode="mobile" data-location="<?= $location ?>"></span>

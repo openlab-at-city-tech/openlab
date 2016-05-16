@@ -255,10 +255,10 @@ function openlab_group_archive() {
                             </div>
                             <div class="item col-xs-18">
 
-                                <h2 class="item-title">
+                                <p class="item-title h2">
                                     <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                     <span class="original-copy hidden"><?php bp_group_name() ?></span>
-                                </h2>
+                                </p>
                                 <?php
                                 //course group type
                                 if ($group_type == 'course'):
@@ -311,13 +311,18 @@ function openlab_groups_pagination_links() {
         'format' => '',
         'total' => ceil((int) $groups_template->total_group_count / (int) $groups_template->pag_num),
         'current' => $groups_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
+        'before_page_number' => '<span class="sr-only">Page</span>',
     ));
 
     $pagination = str_replace('page-numbers', 'page-numbers pagination', $pagination);
+
+    //for screen reader only text - current page
+    $pagination = str_replace('current\'><span class="sr-only">Page', 'current\'><span class="sr-only">Current Page', $pagination);
+
     return $pagination;
 }
 
@@ -688,7 +693,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -751,7 +756,7 @@ function openlab_group_profile_activity_list() {
                         <div class="col-sm-12">
                             <div class="recent-discussions">
                                 <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h4>
+                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h2>
                                     <?php
                                     $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
@@ -877,7 +882,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                ?></p>
+                                                        <p><?php // bp_group_status_message()                                 ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -899,10 +904,10 @@ function openlab_get_group_activity_content($title, $content, $link) {
 
     if ($title !== '') {
         $markup = <<<HTML
-                <h6 class="semibold">
+                <p class="semibold h6">
                     <span class="hyphenate truncate-on-the-fly" data-basevalue="80" data-minvalue="55" data-basewidth="376">{$title}</span>
                     <span class="original-copy hidden">{$title}</span>
-                </h6>
+                </p>
 HTML;
     }
 
@@ -1146,7 +1151,7 @@ function openlab_current_directory_filters() {
 
     $markup = '';
     if (!empty($active_filters)) {
-        $markup .= '<span class="bread-crumb">';
+        $markup .= '<h2 class="font-14 regular margin0-0 current-filters"><span class="bread-crumb">';
 
         $filter_words = array();
         foreach ($active_filters as $ftype => $fvalue) {
@@ -1167,7 +1172,7 @@ function openlab_current_directory_filters() {
 
         $markup .= implode('<span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>', $filter_words);
 
-        $markup .= '</span>';
+        $markup .= '</span></h2>';
     }
 
     echo $markup;
@@ -1256,7 +1261,7 @@ function openlab_show_site_posts_and_comments() {
             <div class="col-sm-12">
                 <div id="recent-course">
                     <div class="recent-posts">
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h2>
 
 
                         <?php foreach ($posts as $post) : ?>

@@ -7478,11 +7478,11 @@ button.oplb-bs .close {
   right: 0;
   z-index: 210;
 }
-.oplb-bs .navbar-header h1 {
+.oplb-bs .navbar-header header {
   margin: 0;
   border-right: 1px solid #dddddd;
 }
-.oplb-bs .navbar-header h1 a {
+.oplb-bs .navbar-header header a {
   display: block;
   background: url('images/openlab_menu_logo.png') no-repeat;
   padding-top: 63px;
@@ -7491,11 +7491,11 @@ button.oplb-bs .close {
   overflow: hidden;
 }
 @media (max-width: 991px) {
-  .oplb-bs .navbar-header h1 {
+  .oplb-bs .navbar-header header {
     width: 136px;
     margin: 0;
   }
-  .oplb-bs .navbar-header h1 a {
+  .oplb-bs .navbar-header header a {
     width: 135px;
     background-size: 100%;
     background-position: 0 8px;
@@ -7632,6 +7632,7 @@ button.oplb-bs .close {
 }
 .oplb-bs#openlab-footer .footer-wrapper {
   margin: 0 auto;
+  width: 100%;
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .footer-wrapper {
@@ -7652,36 +7653,49 @@ button.oplb-bs .close {
 }
 .oplb-bs#openlab-footer .col-logos p {
   color: #444;
+  float: right;
+  width: 72%;
 }
 .oplb-bs#openlab-footer .col-logos a img {
   padding-top: 5px;
   margin-right: 15px;
 }
+.oplb-bs#openlab-footer .col-logos a.citytech-logo {
+  width: 12%;
+}
+.oplb-bs#openlab-footer .col-logos a.cuny-logo {
+  width: 14%;
+}
+.oplb-bs#openlab-footer .col-logos h2 span {
+  vertical-align: middle;
+}
+.oplb-bs#openlab-footer .col-logos h2 span:first-child {
+  padding-right: 5px;
+}
 @media (max-width: 767px) {
-  .oplb-bs#openlab-footer .col-logos h2 {
-    font-size: 17px;
+  .oplb-bs#openlab-footer .col-logos {
+    border-bottom: 1px solid #bbbbbb;
+    padding: 0 0 18px;
+    margin-bottom: 20px;
   }
   .oplb-bs#openlab-footer .col-logos h2 span {
+    display: block;
+    font-size: 18px;
+  }
+  .oplb-bs#openlab-footer .col-logos h2 span:last-child {
     font-size: 11px;
+  }
+  .oplb-bs#openlab-footer .col-logos a.citytech-logo {
+    width: 9%;
+    min-width: 63px;
+  }
+  .oplb-bs#openlab-footer .col-logos a.cuny-logo {
+    min-width: 74px;
   }
   .oplb-bs#openlab-footer .col-logos p {
     font-size: 11px;
     margin-bottom: 8px;
-  }
-  .oplb-bs#openlab-footer .col-logos p.mobile-logos {
-    width: 67px;
-  }
-  .oplb-bs#openlab-footer .col-logos p.mobile-logos a {
-    width: 49%;
-    float: left;
-  }
-  .oplb-bs#openlab-footer .col-logos p.mobile-logos a img {
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
-  }
-  .oplb-bs#openlab-footer .col-logos p.mobile-logos a:first-child {
-    padding-right: 10%;
+    width: 100%;
   }
 }
 .oplb-bs#openlab-footer .col-links {
@@ -7692,14 +7706,11 @@ button.oplb-bs .close {
   font-weight: inherit;
 }
 @media (max-width: 767px) {
-  .oplb-bs#openlab-footer .col-links ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+  .oplb-bs#openlab-footer .col-links .horiz-divider {
+    display: none;
   }
-  .oplb-bs#openlab-footer .col-links ul li {
-    margin-bottom: 0;
-    line-height: 1.1;
+  .oplb-bs#openlab-footer .col-links a {
+    display: block;
   }
 }
 .oplb-bs#openlab-footer .col-share a {
@@ -7717,7 +7728,7 @@ button.oplb-bs .close {
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .col-share {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 }
 .oplb-bs#openlab-footer .horiz-bar-wrapper {
@@ -7729,6 +7740,11 @@ button.oplb-bs .close {
   margin-left: 35%;
   padding-top: 135px;
   width: 1px;
+}
+@media (max-width: 767px) {
+  .oplb-bs#openlab-footer .horiz-bar-wrapper {
+    display: none;
+  }
 }
 .oplb-bs#openlab-footer .row-copyright {
   margin-bottom: 100px;
@@ -7750,9 +7766,13 @@ button.oplb-bs .close {
     margin-bottom: 0;
   }
   .oplb-bs#openlab-footer .row-copyright p {
-    border-bottom: 1px solid #bbbbbb;
     margin-bottom: 20px;
-    padding-bottom: 20px;
+  }
+}
+@media (max-width: 767px) {
+  .oplb-bs#openlab-footer .row-footer,
+  .oplb-bs#openlab-footer .row-copyright {
+    margin: 0;
   }
 }
 .oplb-bs #go-to-top {

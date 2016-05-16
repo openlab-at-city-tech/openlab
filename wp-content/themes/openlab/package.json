@@ -1,7 +1,8 @@
 {
-  "name": "openlab",
+  "name": "openlab_ea",
   "version": "1.0.0",
   "main": "Gruntfile.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

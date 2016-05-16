@@ -145,8 +145,8 @@ class OpenLab_Admin_Bar {
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
 
-                        add_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 40 );
-                        add_action('admin_bar_menu',array($this,'add_custom_updates_menu'), 40);
+                        remove_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 50 );
+                        add_action('admin_bar_menu',array($this,'add_custom_updates_menu'), 50);
 
                         if (!is_network_admin() && !is_user_admin()) {
                             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
@@ -353,10 +353,11 @@ HTML;
 
  		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
+			'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
 			'href'  => bp_loggedin_user_domain(),
                         'meta'  => array(
                             'class' => 'admin-bar-menu',
+                            'tabindex' => 0,
                         ),
 		) );
  	}
@@ -384,9 +385,10 @@ HTML;
 //
             $wp_admin_bar->add_node( array(
 			'id'    => 'network-menu-mobile',
-			'title' => 'My OpenLab <span class="fa fa-caret-down"></span>',
+			'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
                         'meta'  => array(
                             'class' => 'visible-xs mobile-menu admin-bar-menu',
+                            'tabindex' => 0,
                         ),
 		) );
 
@@ -612,7 +614,7 @@ HTML;
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'invites',
-			'title' => '<span class="toolbar-item-icon fa fa-user"></span>' . $total_count,
+			'title' => '<span class="toolbar-item-icon fa fa-user" aria-hidden="true"></span><span class="sr-only">Invitations and Friend Requests</span>' . $total_count,
                         'meta' => array(
                           'class' => 'hidden-xs',
                         ),
@@ -628,7 +630,7 @@ HTML;
                     'id' => 'friend-requests-title',
                     'title' => 'Friend Requests',
                     'meta' => array(
-                        'class' => 'submenu-title bold'
+                        'class' => 'submenu-title bold',
                     )
                 ));
 
@@ -747,9 +749,10 @@ HTML;
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'messages',
-			'title' => '<span class="toolbar-item-icon fa fa-envelope"></span>' . $total_count,
+			'title' => '<span class="toolbar-item-icon fa fa-envelope" aria-hidden="true"></span><span class="sr-only">Messages</span>' . $total_count,
                         'meta' => array(
                           'class' => 'hidden-xs',
+                          'tabindex' => 0,
                         ),
 		) );
 
@@ -825,9 +828,10 @@ HTML;
 	function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu( array(
 			'id' => 'activity',
-			'title' => '<span class="toolbar-item-name fa fa-bullhorn"></span>',
+			'title' => '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">Activity</span>',
                         'meta' => array(
                           'class' => 'hidden-xs',
+                          'tabindex' => 0,
                         ),
 		) );
 
@@ -918,10 +922,11 @@ HTML;
 
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down"></span></span><span class="fa fa-desktop visible-sm"></span>',
+                    'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="fa fa-desktop visible-sm" aria-hidden="true"></span><span class="sr-only visible-sm">'.$title.'</span>',
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
                         'class' => 'admin-bar-menu hidden-xs',
+                        'tabindex' => 0,
                     ),
             ) );
 
@@ -961,11 +966,12 @@ HTML;
 
         function add_custom_edit_menu( $wp_admin_bar ) {
                 global $tag, $wp_the_query;
+                $post = get_post();
+                $post_label = str_replace(array('-','_'),' ', $post->post_type);
 
                 if ( is_admin() ) {
                         $current_screen = get_current_screen();
-                        $post = get_post();
-
+                        
                         if ( 'post' == $current_screen->base
                                 && 'add' != $current_screen->action
                                 && ( $post_type_object = get_post_type_object( $post->post_type ) )
@@ -974,9 +980,12 @@ HTML;
                                 && ( $post_type_object->show_in_admin_bar ) )
                         {
                                 $wp_admin_bar->add_menu( array(
-                                        'id' => 'view',
-                                        'title' => '<span class="fa fa-eye "></span>',
-                                        'href' => get_permalink( $post->ID )
+                                    'id' => 'view',
+                                    'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View ' . $post_label . '</span>',
+                                    'href' => get_permalink($post->ID),
+                                    'meta' => array(
+                                        'tabindex' => 0
+                                    )
                                 ) );
                         } elseif ( 'edit-tags' == $current_screen->base
                                 && isset( $tag ) && is_object( $tag )
@@ -985,8 +994,11 @@ HTML;
                         {
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'view',
-                                        'title' => '<span class="fa fa-eye "></span>',
-                                        'href' => get_term_link( $tag )
+                                        'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View '.$post_label.'</span>',
+                                        'href' => get_term_link( $tag ),
+                                        'meta' => array(
+                                            'tabindex' => 0
+                                        ),
                                 ) );
                         }
                 } else {
@@ -1002,10 +1014,11 @@ HTML;
                         {
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'edit',
-                                        'title' => '<span class="fa fa-pencil"></span>',
+                                        'title' => '<span class="fa fa-pencil" aria-hidden="true"></span><span class="sr-only">Edit '.$post_label.'</span>',
                                         'href' => get_edit_post_link( $current_object->ID ),
                                         'meta' => array(
                                             'class' => 'hidden-xs',
+                                            'tabindex' => 0,
                                         )
                                 ) );
                         } elseif ( ! empty( $current_object->taxonomy )
@@ -1015,10 +1028,11 @@ HTML;
                         {
                                 $wp_admin_bar->add_menu( array(
                                         'id' => 'edit',
-                                        'title' => '<span class="fa fa-pencil"></span>',
+                                        'title' => '<span class="fa fa-pencil aria-hidden="true"></span><span class="sr-only">Edit '.$post_label.'</span>',
                                         'href' => get_edit_term_link( $current_object->term_id, $current_object->taxonomy ),
                                         'meta' => array(
                                             'class' => 'hidden-xs',
+                                            'tabindex' => 0,
                                         )
                                 ) );
                         }
@@ -1078,7 +1092,7 @@ HTML;
 	if ( ! $actions )
 		return;
 
-	$title = '<span class="fa fa-plus-circle hidden-xs"></span><span class="ab-icon dashicon-icon visible-xs"></span>';
+	$title = '<span class="fa fa-plus-circle hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Add New</span>';
 
 	$wp_admin_bar->add_menu( array(
 		'id'    => 'new-content',
@@ -1087,6 +1101,7 @@ HTML;
 		'meta'  => array(
 			'title' => _x( 'Add New', 'admin bar menu group label' ),
                         'class' => 'mobile-no-hover admin-bar-menu',
+                        'tabindex' => 0,
 		),
 	) );
 
@@ -1117,13 +1132,13 @@ HTML;
 
         if (current_user_can('edit_published_posts') && $current_screen->base !== 'my-sites') {
 
-            $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard"></span>');
+            $title = (is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home" aria-hidden="true"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard" aria-hidden="true"></span>');
 
             $href = (is_admin() ? get_site_url() : admin_url());
 
             $wp_admin_bar->add_menu(array(
                 'id' => 'dashboard-link',
-                'title' => $title,
+                'title' => $title,'<span class="sr-only">Home</span>',
                 'href' => $href,
                 'meta' => array(
                     'title' => _x('Dashboard', 'admin bar menu group label'),
@@ -1140,9 +1155,9 @@ HTML;
             return;
 
         $title = '<span> ' . number_format_i18n($update_data['counts']['total']) . '</span>';
-        $title .= '<span class="screen-reader-text">' . $update_data['title'] . '</span>';
+        $title .= '<span class="sr-only">' . $update_data['title'] . '</span>';
 
-        $icon = '<span class="fa fa fa-cogs"></span>';
+        $icon = '<span class="fa fa fa-cogs" aria-hidden="true"></span>';
 
         $wp_admin_bar->add_menu(array(
             'id' => 'updates',
@@ -1151,6 +1166,7 @@ HTML;
             'meta' => array(
                 'title' => $update_data['title'],
                 'class' => 'mobile-no-hover',
+                'tabindex' => 0,
             ),
         ));
     }
@@ -1169,7 +1185,7 @@ HTML;
         $awaiting_count = openlab_admin_bar_counts(number_format_i18n($awaiting_mod),' sub-count');
         $awaiting_title = esc_attr(sprintf(_n('%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod), number_format_i18n($awaiting_mod)));
 
-        $icon = '<span class="fa fa-comment hidden-xs"></span><span class="ab-icon dashicon-icon visible-xs"></span>';
+        $icon = '<span class="fa fa-comment hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Comments</span>';
         $wp_admin_bar->add_menu(array(
             'id' => 'comments',
             'title' => $icon,
@@ -1177,6 +1193,7 @@ HTML;
             'meta' => array(
                 'title' => $awaiting_title,
                 'class' => 'mobile-no-hover',
+                'tabindex' => 0,
                     ),
         ));
     }
@@ -1301,14 +1318,14 @@ HTML;
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'bp-login',
 			'meta'	=> array(
-				'tabindex' => 101
+				'tabindex' => 0
 			)
 		) );
 
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'bp-register',
 			'meta'	=> array(
-				'tabindex' => 100
+				'tabindex' => 0
 			)
 		) );
 	}
@@ -1466,7 +1483,7 @@ function cac_adminbar_js() {
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 
-		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="100" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
+		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="0" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
 
 		$("#wp-admin-bar-bp-login").append(loginform);
 
