@@ -424,5 +424,7 @@ jQuery(document).ready(function($){
 	};
 
 	// Form validation.
-	form.onsubmit = validate_form;
+        if(form){
+            form.onsubmit = validate_form;
+        }
 },(jQuery));
