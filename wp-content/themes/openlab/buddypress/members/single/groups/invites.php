@@ -24,8 +24,8 @@
                             <?php do_action('bp_group_invites_item') ?>
 
                             <div class="action invite-member-actions">
-                                <a class="button accept btn btn-primary link-btn no-margin no-margin-top" href="<?php bp_group_accept_invite_link() ?>"><?php _e('Accept', 'buddypress') ?></a> &nbsp;
-                                <a class="button reject confirm btn btn-primary link-btn no-margin no-margin-top" href="<?php bp_group_reject_invite_link() ?>"><?php _e('Reject', 'buddypress') ?></a>
+                                <a class="button accept btn btn-primary link-btn no-margin no-margin-top" href="<?php bp_group_accept_invite_link() ?>"><?php _e('Accept', 'buddypress') ?><span class="sr-only"> invitation to <?php bp_group_name() ?></span></a> &nbsp;
+                                <a class="button reject confirm btn btn-primary link-btn no-margin no-margin-top" href="<?php bp_group_reject_invite_link() ?>"><?php _e('Reject', 'buddypress') ?><span class="sr-only"> invitation to <?php bp_group_name() ?></span></a>
 
                                 <?php do_action('bp_group_invites_item_action') ?>
 
