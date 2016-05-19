@@ -775,7 +775,7 @@ HTML;
 					$title .= '<p class="message-excerpt">' .bp_format_time( strtotime( $messages_template->thread->last_message_date ) ).'<br />';
 
 					// Message excerpt
-					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p></div></div>';
+					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More<span class="sr-only">'.bp_create_excerpt(bp_get_message_thread_subject(), 30).'</span></a></p></div></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'messages',
