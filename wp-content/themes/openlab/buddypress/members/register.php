@@ -4,7 +4,7 @@
  */
 ?>
 
-<div id="content" class="hfeed col-sm-18">
+<div class="col-sm-18">
     <?php openlab_registration_page(); ?>
 </div><!--content-->
 
