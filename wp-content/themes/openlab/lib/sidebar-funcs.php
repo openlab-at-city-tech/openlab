@@ -169,7 +169,7 @@ function openlab_member_sidebar_menu($mobile = false) {
     if (is_user_logged_in() && openlab_is_my_profile()) :
         ?>
 
-        <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+        <div id="item-buttons<?php echo ($mobile ? '-mobile' : '') ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
             <ul class="sidebar-nav clearfix">
 
@@ -179,11 +179,11 @@ function openlab_member_sidebar_menu($mobile = false) {
 
                 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
 
-                <li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
+                <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>">My <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
 
                 <?php else: ?>
 
-                <li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios">Create <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
+                <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>">Create <?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
 
                 <?php endif; ?>
 
@@ -236,7 +236,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
     <?php else : ?>
 
-        <div id="item-buttons" class="mol-menu sidebar-block <?php echo $classes; ?>">
+        <div id="item-buttons<?php echo ($mobile ? '-mobile' : '') ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
             <ul class="sidebar-nav clearfix">
 
@@ -244,7 +244,7 @@ function openlab_member_sidebar_menu($mobile = false) {
 
                 <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
 
-                <li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios"><?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
+                <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>"><?php echo (xprofile_get_field_data('Account Type', bp_displayed_user_id()) == 'Student' ? 'ePortfolio' : 'Portfolio') ?></a></li>
 
                 <?php endif; ?>
 
