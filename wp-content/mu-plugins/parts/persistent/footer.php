@@ -4,7 +4,7 @@
  */
 ?>
 
-<div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>">
+<div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>" <?php echo ($placeholder ? 'aria-hidden="true" tabindex="-1"' : ''); ?>>
     <div class="oplb-bs">
         <div class="footer-wrapper">
             <div class="container-fluid footer-desktop">
@@ -38,7 +38,9 @@
             </div>
         </div>
     </div>
-    <a class="visible-xs" id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
+    <?php if(!$placeholder): ?>
+        <a class="visible-xs" id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
+    <?php endif; ?>
 </div>
 <?php /**
  * Adds divs that can be used for client-side detection of bootstrap breakpoints
