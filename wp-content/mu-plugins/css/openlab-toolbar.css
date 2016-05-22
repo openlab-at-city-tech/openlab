@@ -7535,10 +7535,10 @@ button.oplb-bs .close {
     display: inline-block;
     vertical-align: top;
   }
-  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-terms {
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-terms-mobile {
     width: 50%;
   }
-  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-which {
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-which-mobile {
     width: 32%;
     height: 35px;
   }
@@ -7585,7 +7585,7 @@ button.oplb-bs .close {
     z-index: 1;
   }
 }
-.oplb-bs .search-mode-mobile #search-submit {
+.oplb-bs .search-mode-mobile #search-submit-mobile {
   height: 35px;
   padding: 0 3%;
   vertical-align: top;

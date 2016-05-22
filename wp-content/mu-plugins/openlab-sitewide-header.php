@@ -62,10 +62,10 @@ HTML;
 
     $mobile_mup .= <<<HTML
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
-    <form action="{$form_action}" method="post" id="search-form" class="form-inline">
+    <form action="{$form_action}" method="post" id="search-form-{$mode}" class="form-inline">
         <div class="form-group">
-        <input id="search-terms" class="form-control" type="text" name="search" placeholder="Search" />
-        <select id="search-which" name="search-which" class="form-control">
+        <input id="search-terms-{$mode}" class="form-control" type="text" name="search" placeholder="Search" />
+        <select id="search-which-{$mode}" name="search-which" class="form-control">
             <option value="members">People</option>
             <option value="courses">Courses</option>
             <option value="projects">Projects</option>
@@ -73,7 +73,7 @@ HTML;
             <option value="portfolios">Portfolios</option>
         </select>
 
-        <button class="btn btn-primary top-align" id="search-submit" type="submit"><i class="fa fa-search"></i></button>
+        <button class="btn btn-primary top-align" id="search-submit-{$mode}" type="submit"><i class="fa fa-search"></i></button>
         {$nonce}
         </div>
     </form><!-- #search-form -->
