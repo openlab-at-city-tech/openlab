@@ -67,7 +67,7 @@ function openlab_bp_mobile_sidebar($type) {
             $args = array(
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
-                'container_id' => 'about-menu',
+                'container_id' => 'about-mobile-menu',
                 'menu_class' => 'sidebar-nav clearfix'
             );
             echo '<div class="sidebar-block">';
