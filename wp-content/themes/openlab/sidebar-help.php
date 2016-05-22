@@ -22,7 +22,7 @@ wp_nav_menu($args);
 <div id="help-search">
     <form method="get" action="<?php echo esc_url( openlab_get_help_search_url() ); ?>">
 	    <input type="text" name="help-search" class="help-search" />
-	    <input class="btn btn-default btn-block btn-primary" type="submit" value="Search" />
+            <button class="btn btn-default btn-block btn-primary" type="submit">Search<span class="sr-only"> Help</span></button>
     </form>
     <div class="clearfloat"></div>
 </div>
