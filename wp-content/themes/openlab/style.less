@@ -1622,7 +1622,7 @@ body{
     &.mobile-enabled{
         @media (max-width: @screen-xs-max){
             position: static;
-            #portfolio-sidebar-widget{
+            .sidebar-widget-wrapper{
                 width: 95%;
                 margin: 0 auto;
             }
@@ -2493,9 +2493,12 @@ body.membership-requests {
     margin-top: 64px;
 }
 #sidebar.type-help {
-    .sidebar-wrapper {
+    #sidebar-menu-wrapper{
         .sidebar-block {
-            border-top: 1px solid @30gray;
+            @media (min-width: @screen-sm-min){
+                border-top: 1px solid @30gray;
+                margin-top: 0;
+            }
         }
     }
 }

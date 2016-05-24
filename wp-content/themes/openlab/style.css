@@ -8649,7 +8649,7 @@ body .inline-visible-xs {
   .sidebar.mobile-enabled {
     position: static;
   }
-  .sidebar.mobile-enabled #portfolio-sidebar-widget {
+  .sidebar.mobile-enabled .sidebar-widget-wrapper {
     width: 95%;
     margin: 0 auto;
   }
@@ -9422,8 +9422,11 @@ body.membership-requests .group-list {
 .help-title:first-of-type {
   margin-top: 64px;
 }
-#sidebar.type-help .sidebar-wrapper .sidebar-block {
-  border-top: 1px solid #bbbbbb;
+@media (min-width: 768px) {
+  #sidebar.type-help #sidebar-menu-wrapper .sidebar-block {
+    border-top: 1px solid #bbbbbb;
+    margin-top: 0;
+  }
 }
 input.help-search {
   width: 100%;

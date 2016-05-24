@@ -52,11 +52,6 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
 function openlab_bp_mobile_sidebar($type) {
 
     switch ($type) {
-        case 'actions':
-            echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix">';
-            openlab_group_sidebar(true);
-            echo '</div>';
-            break;
         case 'members':
             echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix">';
             openlab_member_sidebar_menu(true);
@@ -75,21 +70,6 @@ function openlab_bp_mobile_sidebar($type) {
             echo '</div>';
             echo '</div>';
             break;
-        case 'help':
-            echo '<div id="sidebar-mobile" class="sidebar clearfix mobile-dropdown">';
-            echo '<div class="sidebar-block">';
-
-            $args = array(
-                'theme_location' => 'helpmenu',
-                'container' => 'div',
-                'container_id' => 'help-menu',
-                'menu_class' => 'sidebar-nav clearfix',
-            );
-            wp_nav_menu($args);
-
-            echo '</div>';
-            echo '</div>';
-            break;
     }
 }
 
@@ -100,13 +80,13 @@ function openlab_group_sidebar($mobile = false) {
 
     if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
             ?>
-            <div class="sidebar-widget" id="portfolio-sidebar-widget">
+            <div class="sidebar-widget sidebar-widget-wrapper" id="portfolio-sidebar-widget">
                 <h2 class="sidebar-header group-single top-sidebar-header">
                     <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
                 </h2>
                 <?php openlab_bp_group_site_pages(); ?>
                 <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper">
-                    <div id="item-buttons" class="profile-nav sidebar-block">
+                    <div id="item-buttons" class="profile-nav sidebar-block clearfix">
                         <ul class="sidebar-nav clearfix">
                             <?php bp_get_options_nav(); ?>
                             <?php echo openlab_get_group_profile_mobile_anchor_links(); ?>

@@ -3590,7 +3590,7 @@ if (Hyphenator.isBookmarklet()) {
             }
 
             //background only acheck
-            if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+            if (thisElem.data('backgroundonly') && (thisElem.data('backgroundonly') === true || thisElem.data('backgroundonly') === 1)) {
                 backgroundOnly = true;
             }
 

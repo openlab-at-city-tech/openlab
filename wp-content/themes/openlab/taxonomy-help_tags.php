@@ -13,7 +13,7 @@ get_header(); ?>
                     <?php openlab_help_tags_loop(); ?>
                 </div>
             </div>
-            <?php openlab_bp_sidebar('help'); ?>
+            <?php openlab_bp_sidebar('help', false, ' mobile-enabled'); ?>
 	</div>
 <?php get_footer(); 
 /**end layout**/

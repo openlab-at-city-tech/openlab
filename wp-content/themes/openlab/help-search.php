@@ -5,7 +5,6 @@ $pag_page = isset( $_GET['hs-page'] ) ? intval( $_GET['hs-page'] ) : 1;
 
 <?php get_header(); ?>
 	<div id="content" class="hfeed row">
-		<?php openlab_bp_mobile_sidebar( 'help' ); ?>
 
 		<div class="col-sm-18 col-xs-24 col-help">
 			<div class="content-wrapper">
@@ -81,6 +80,6 @@ $pag_page = isset( $_GET['hs-page'] ) ? intval( $_GET['hs-page'] ) : 1;
 			</div><!-- .content-wrapper -->
 		</div>
 
-		<?php openlab_bp_sidebar('help'); ?>
+		<?php openlab_bp_sidebar('help', false, ' mobile-enabled'); ?>
 	</div>
 <?php get_footer();
