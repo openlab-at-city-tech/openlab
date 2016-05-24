@@ -8392,10 +8392,81 @@ body .inline-visible-xs {
   }
 }
 /**sidebar**/
+.mobile-dropdown {
+  background: transparent;
+  border-top: 9px solid #d1d1d1;
+  border-radius: 0;
+  display: none;
+  left: 0;
+  padding: 0 0 7px;
+  position: absolute;
+  right: 0;
+  top: 39px;
+  width: 100%;
+  z-index: 1;
+}
+.mobile-dropdown h2 {
+  margin: 12px 0;
+}
+.mobile-dropdown #sidebar-menu-wrapper {
+  margin: 0 auto;
+  width: 100%;
+}
+.mobile-dropdown .sidebar-block {
+  background: transparent;
+  border-top: none;
+  border-radius: 0;
+  margin: 0;
+}
+.mobile-dropdown .sidebar-block ul li a {
+  text-align: right;
+  width: 75%;
+  float: right;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.42);
+}
+.mobile-dropdown .sidebar-block ul li a .mol-count {
+  display: none;
+}
+.mobile-dropdown .sidebar-block ul.sidebar-nav li ul {
+  width: 75%;
+  float: right;
+}
+.mobile-dropdown .sidebar-block ul.sidebar-nav li ul li {
+  padding-right: 22px;
+}
+.mobile-dropdown .sidebar-block ul.sidebar-nav li ul li a {
+  border-left: none !important;
+  border-right: 1px solid #bbbbbb;
+  margin: 1px 0 0;
+  width: 100%;
+}
+.mobile-dropdown .sidebar-block ul.sidebar-nav > li:last-child {
+  padding-bottom: 15px;
+}
+.mobile-dropdown.type-groups {
+  background: #ffffff;
+  padding: 0 5%;
+}
+.mobile-dropdown.type-groups .filter {
+  background: #f0f0f0;
+  margin-bottom: 42px;
+  padding: 1% 4%;
+  width: 100%;
+}
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {
     width: 95%;
     margin: 0 auto;
+  }
+}
+.sidebar #sidebar-menu-wrapper .sidebar-block {
+  margin: 15px 0;
+  border-top: none;
+}
+@media (max-width: 767px) {
+  .sidebar #sidebar-menu-wrapper .sidebar-block {
+    margin: 0;
   }
 }
 .sidebar h2.sidebar-title,
@@ -8515,16 +8586,21 @@ body .inline-visible-xs {
     background: transparent;
     border-top: 9px solid #d1d1d1;
     border-radius: 0;
-    position: absolute;
-    top: 39px;
-    padding: 0 5% 20px;
     display: none;
-    z-index: 1;
-    width: 100%;
+    left: 0;
     padding: 0 0 7px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    width: 100%;
+    z-index: 1;
   }
   .sidebar.mobile-dropdown h2 {
     margin: 12px 0;
+  }
+  .sidebar.mobile-dropdown #sidebar-menu-wrapper {
+    margin: 0 auto;
+    width: 100%;
   }
   .sidebar.mobile-dropdown .sidebar-block {
     background: transparent;
@@ -8568,6 +8644,83 @@ body .inline-visible-xs {
     padding: 1% 4%;
     width: 100%;
   }
+}
+@media (max-width: 767px) {
+  .sidebar.mobile-enabled {
+    position: static;
+  }
+  .sidebar.mobile-enabled #portfolio-sidebar-widget {
+    width: 95%;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 767px) {
+  .mobile-enabled .sidebar-menu-wrapper {
+    background: transparent;
+    border-top: 9px solid #d1d1d1;
+    border-radius: 0;
+    display: none;
+    left: 0;
+    padding: 0 0 7px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    width: 100%;
+    z-index: 1;
+  }
+  .mobile-enabled .sidebar-menu-wrapper h2 {
+    margin: 12px 0;
+  }
+  .mobile-enabled .sidebar-menu-wrapper #sidebar-menu-wrapper {
+    margin: 0 auto;
+    width: 100%;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block {
+    background: transparent;
+    border-top: none;
+    border-radius: 0;
+    margin: 0;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul li a {
+    text-align: right;
+    width: 75%;
+    float: right;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.42);
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul li a .mol-count {
+    display: none;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul.sidebar-nav li ul {
+    width: 75%;
+    float: right;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul.sidebar-nav li ul li {
+    padding-right: 22px;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul.sidebar-nav li ul li a {
+    border-left: none !important;
+    border-right: 1px solid #bbbbbb;
+    margin: 1px 0 0;
+    width: 100%;
+  }
+  .mobile-enabled .sidebar-menu-wrapper .sidebar-block ul.sidebar-nav > li:last-child {
+    padding-bottom: 15px;
+  }
+  .mobile-enabled .sidebar-menu-wrapper.type-groups {
+    background: #ffffff;
+    padding: 0 5%;
+  }
+  .mobile-enabled .sidebar-menu-wrapper.type-groups .filter {
+    background: #f0f0f0;
+    margin-bottom: 42px;
+    padding: 1% 4%;
+    width: 100%;
+  }
+}
+.mobile-enabled .sidebar-wrapper {
+  width: 100%;
+  margin: 0 auto;
 }
 .sidebar-mobile-dropdown #sidebar-mobile {
   display: none;

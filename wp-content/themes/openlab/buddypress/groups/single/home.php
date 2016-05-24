@@ -3,9 +3,6 @@
  * Group single page
  *
  */
-
-openlab_bp_mobile_sidebar('actions');
-
 if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
         ?>
 
@@ -98,8 +95,9 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
 
         <?php do_action('bp_after_group_home_content'); ?>
 
-    <?php endwhile;
+    <?php
+    endwhile;
 endif;
 ?>
 
-<?php openlab_bp_sidebar('actions'); ?>
+<?php openlab_bp_sidebar('actions', false, ' mobile-enabled'); ?>
