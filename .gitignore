@@ -55,4 +55,4 @@ wp-config.php
 
 #hiding vendor files
 wp-content/themes/*/node_modules/
-/wp-content/themes/openlab/nbproject/private/
+wp-content/themes/*/nbproject/
