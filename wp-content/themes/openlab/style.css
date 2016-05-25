@@ -7346,6 +7346,27 @@ input[type="submit"] {
 .submenu .submenu-text {
   margin-right: 8px;
 }
+.submenu .submenu-text h2 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.42857143;
+  margin: 0;
+}
+.has-menu-items .submenu-text {
+  border-right: 1px solid #333333;
+  padding: 0 7px 0 0;
+  margin-right: 7px;
+}
+.has-menu-items.is-mol-menu .submenu-text {
+  color: #49cabe;
+}
+.has-menu-items.is-mol-menu .submenu-text a {
+  color: #49cabe;
+}
+.has-menu-items.is-mol-menu .submenu-text a.display-as-menu-item {
+  color: #000000;
+  font-weight: normal;
+}
 .wp-caption {
   max-width: 100%;
 }

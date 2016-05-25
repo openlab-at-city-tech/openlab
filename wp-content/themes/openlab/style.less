@@ -330,6 +330,31 @@ input[type="submit"]{
 .submenu{
     .submenu-text{
         margin-right: 8px;
+        h2{
+            font-size: @font-size-base;
+            font-weight: @bold;
+            line-height: @line-height-base;
+            margin: 0;
+        }
+    }
+}
+.has-menu-items{
+    .submenu-text{
+        border-right: 1px solid @80gray;
+        padding: 0 7px 0 0;
+        margin-right: 7px;
+    }
+    &.is-mol-menu{
+        .submenu-text{
+            color: @aqua;
+            a{
+                color: @aqua;
+                &.display-as-menu-item{
+                    color: @black;
+                    font-weight: normal;
+                }
+            }
+        }
     }
 }
 .wp-caption {

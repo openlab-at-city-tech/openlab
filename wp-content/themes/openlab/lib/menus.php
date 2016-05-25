@@ -67,127 +67,128 @@ add_action('bp_screens', 'openlab_modify_options_nav', 1);
  * @param type $args
  * @return string
  */
-function openlab_help_categories_menu( $items, $args ) {
-	global $post;
+function openlab_help_categories_menu($items, $args) {
+    global $post;
 
-	if ( $args->theme_location == 'helpmenu' ) {
-		$term = get_query_var( 'term' );
-		$parent_term = get_term_by( 'slug', $term, 'help_category' );
-		$current_term = false;
+    if ($args->theme_location == 'helpmenu') {
+        $term = get_query_var('term');
+        $parent_term = get_term_by('slug', $term, 'help_category');
+        $current_term = false;
 
-		if ( $parent_term == false ) {
-			$child_terms = get_the_terms( $post->ID, 'help_category' );
-			$term = array();
+        if ($parent_term == false) {
+            $child_terms = get_the_terms($post->ID, 'help_category');
+            $term = array();
 
-			if ( ! empty( $child_terms ) ) {
-				foreach ( $child_terms as $child_term ) {
-					$term[] = $child_term;
-				}
+            if (!empty($child_terms)) {
+                foreach ($child_terms as $child_term) {
+                    $term[] = $child_term;
+                }
 
-				$parent_term = get_term_by( 'id', $term[0]->parent, 'help_category' );
-				$current_term = get_term_by( 'id', $term[0]->term_id, 'help_category' );
-			}
-		}
+                $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
+                $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
+            }
+        }
 
-		//for child term archive pages
-		if ( $parent_term !== false && $parent_term->parent != 0 ) {
-			$current_term = $parent_term;
-			$parent_term = get_term_by( 'id', $current_term->parent, 'help_category' );
-		}
+        //for child term archive pages
+        if ($parent_term !== false && $parent_term->parent != 0) {
+            $current_term = $parent_term;
+            $parent_term = get_term_by('id', $current_term->parent, 'help_category');
+        }
 
-		$help_args = array(
-			'hide_empty' => false,
-			'orderby' => 'term_order',
-			'hide_empty' => false
-		);
-		$help_cats = get_terms( 'help_category', $help_args );
+        $help_args = array(
+            'hide_empty' => false,
+            'orderby' => 'term_order',
+            'hide_empty' => false
+        );
+        $help_cats = get_terms('help_category', $help_args);
 
-		// for post level identifying of current menu item
-		$post_cats_array = array();
+        // for post level identifying of current menu item
+        $post_cats_array = array();
 
-		if ( $post->post_type == 'help' ) {
-			$post_cats = get_the_terms( $post->id, 'help_category' );
+        if ($post->post_type == 'help') {
+            $post_cats = get_the_terms($post->id, 'help_category');
 
-			if ( $post_cats ) {
-				foreach ( $post_cats as $post_cat ) {
-					// no children cats in menu
-					if ( $post_cat->parent == 0 ) {
-						$post_cats_array[] = $post_cat->term_id;
-					}
-				}
-			}
-		}
+            if ($post_cats) {
+                foreach ($post_cats as $post_cat) {
+                    // no children cats in menu
+                    if ($post_cat->parent == 0) {
+                        $post_cats_array[] = $post_cat->term_id;
+                    }
+                }
+            }
+        }
 
-		$help_cat_list = "";
-		foreach ( $help_cats as $help_cat ) {
-			// eliminate children cats from the menu list
-			if ( $help_cat->parent == 0 ) {
-				$help_classes = "help-cat menu-item";
+        $help_cat_list = "";
+        foreach ($help_cats as $help_cat) {
+            // eliminate children cats from the menu list
+            if ($help_cat->parent == 0) {
+                $help_classes = "help-cat menu-item";
 
-				$highlight_active_state = get_query_var( 'taxonomy' ) != 'help_tags' && empty( $_GET['help-search'] );
+                $highlight_active_state = get_query_var('taxonomy') != 'help_tags' && empty($_GET['help-search']);
 
-				// see if this is the current menu item; if not, this could be a post,
-				// so we'll check against an array of cat ids for this post
-				if ( $highlight_active_state ) {
-					if ( $parent_term !== false && $help_cat->term_id == $parent_term->term_id ) {
-						$help_classes .= " current-menu-item";
-					} else if ( $post->post_type == 'help' ) {
-						if ( in_array( $help_cat->term_id, $post_cats_array ) ) {
-							$help_classes .= " current-menu-item";
-						}
-					}
-				}
+                // see if this is the current menu item; if not, this could be a post,
+                // so we'll check against an array of cat ids for this post
+                if ($highlight_active_state) {
+                    if ($parent_term !== false && $help_cat->term_id == $parent_term->term_id) {
+                        $help_classes .= " current-menu-item";
+                    } else if ($post->post_type == 'help') {
+                        if (in_array($help_cat->term_id, $post_cats_array)) {
+                            $help_classes .= " current-menu-item";
+                        }
+                    }
+                }
 
-				// a special case just for the glossary page
-				if ( $help_cat->name == "Help Glossary" ) {
-					$help_cat->name = "Glossary";
-				}
+                // a special case just for the glossary page
+                if ($help_cat->name == "Help Glossary") {
+                    $help_cat->name = "Glossary";
+                }
 
-				$help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link( $help_cat ) . '">' . $help_cat->name . '</a>';
+                $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a>';
 
-				// check for child terms
-				$child_cat_check = get_term_children( $help_cat->term_id, 'help_category' );
+                // check for child terms
+                $child_cat_check = get_term_children($help_cat->term_id, 'help_category');
 
-				// list child terms, if any
-				if ( count( $child_cat_check ) > 0 ) {
-					$help_cat_list .= '<ul>';
+                // list child terms, if any
+                if (count($child_cat_check) > 0) {
+                    $help_cat_list .= '<ul>';
 
-					$child_args = array(
-						'hide_empty' => false,
-						'orderby' => 'term_order',
-						'hide_empty' => false,
-						'parent' => $help_cat->term_id
-					);
-					$child_cats = get_terms( 'help_category', $child_args );
-					foreach ( $child_cats as $child_cat ) {
+                    $child_args = array(
+                        'hide_empty' => false,
+                        'orderby' => 'term_order',
+                        'hide_empty' => false,
+                        'parent' => $help_cat->term_id
+                    );
+                    $child_cats = get_terms('help_category', $child_args);
+                    foreach ($child_cats as $child_cat) {
 
-						$child_classes = "help-cat menu-item";
-						if ( $highlight_active_state ) {
-							if ( $current_term !== false && $child_cat->term_id == $current_term->term_id ) {
-								$child_classes .= " current-menu-item";
-							} else if ( $post->post_type == 'help' ) {
-								if ( in_array( $child_cat->term_id, $post_cats_array ) ) {
-									$child_classes .= " current-menu-item";
-								}
-							}
-						}
+                        $child_classes = "help-cat menu-item";
+                        if ($highlight_active_state) {
+                            if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
+                                $child_classes .= " current-menu-item";
+                            } else if ($post->post_type == 'help') {
+                                if (in_array($child_cat->term_id, $post_cats_array)) {
+                                    $child_classes .= " current-menu-item";
+                                }
+                            }
+                        }
 
-						$help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link( $child_cat ) . '">' . $child_cat->name . '</a></li>';
-					}
+                        $help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
+                    }
 
-					$help_cat_list .= '</ul>';
-				}
+                    $help_cat_list .= '</ul>';
+                }
 
-				$help_cat_list .= '</li>';
-			}
-		}
+                $help_cat_list .= '</li>';
+            }
+        }
 
-		$items = $items . $help_cat_list;
-	}
+        $items = $items . $help_cat_list;
+    }
 
-	return $items;
+    return $items;
 }
-add_filter( 'wp_nav_menu_items', 'openlab_help_categories_menu', 10, 2 );
+
+add_filter('wp_nav_menu_items', 'openlab_help_categories_menu', 10, 2);
 
 /**
  * For a single help post: get the primary term for that post
@@ -219,29 +220,43 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
 
     switch ($type) {
         case 'invitations':
-            $submenu_text = 'My Invitations: ';
+            $submenu_text = 'My Invitations<span aria-hidden="true">:</span> ';
             $menu = openlab_my_invitations_submenu();
             break;
         case 'friends':
-            $menu = openlab_my_friends_submenu(false);
+            $friends_menu = openlab_my_friends_submenu(false);
+
+            $menu = $friends_menu['menu'];
+            $submenu_text = $friends_menu['submenu_text'];
+
+            $width = 'col-sm-24 has-menu-items is-mol-menu';
+
             break;
         case 'messages':
-            $submenu_text = 'My Messages: ';
+            $submenu_text = 'My Messages<span aria-hidden="true">:</span> ';
             $menu = openlab_my_messages_submenu();
             break;
         case 'groups':
-            $menu = openlab_my_groups_submenu($opt_var);
-            $width = 'col-sm-19';
+            $group_menu = openlab_my_groups_submenu($opt_var);
+            $menu = $group_menu['menu'];
+            $submenu_text = $group_menu['submenu_text'];
+
+            $width = 'col-sm-19 is-mol-menu';
+
+            if ($menu !== '') {
+                $width .= ' has-menu-items group-item';
+            }
+
             break;
         default:
-            $submenu_text = 'My Settings: ';
+            $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_profile_settings_submenu();
     }
 
     $extras = openlab_get_submenu_extras();
 
     $submenu = '<div class="' . $width . '">';
-    $submenu .= '<div class="submenu"><div class="submenu-text pull-left bold">' . $submenu_text . '</div>' . $menu . $extras . '</div>';
+    $submenu .= '<div class="submenu"><div class="submenu-text pull-left bold"><h2>' . $submenu_text . '</h2></div>' . $extras . $menu . '</div>';
     $submenu .= '</div>';
 
     if ($row_wrapper) {
@@ -299,6 +314,9 @@ function openlab_profile_settings_submenu() {
 //sub-menus for my-<groups> pages
 function openlab_my_groups_submenu($group) {
     global $bp;
+    $menu_out = array();
+    $menu_list = array();
+
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
     $no_link = 'no-link';
@@ -309,44 +327,42 @@ function openlab_my_groups_submenu($group) {
     //get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());
 
+    $submenu_text = 'My ' . ucfirst($group) . 's';
+
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
     if ($group == "course") {
 
         //determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        $course_text = 'Create / Clone a ';
-
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
             //have to add extra conditional in here for submenus on editing pages
             if ($step_name == '') {
                 $menu_list = array(
-                    $group_link => $span_start . 'My ' . ucfirst($group) . 's' . $span_end,
-                    $create_link => $course_text . ucfirst($group),
+                    $create_link => 'Create / Clone a ' . ucfirst($group),
                 );
             } else {
+
+                $submenu_text = 'Create / Clone a ';
+
                 $menu_list = array(
-                    $group_link => $span_start . 'My ' . ucfirst($group) . 's' . $span_end,
-                    $create_link => $course_text . ucfirst($group),
                     $no_link => $step_name,
                 );
             }
-        } else {
-            $menu_list = array(
-                $group_link => $span_start . 'My ' . ucfirst($group) . 's' . $span_end,
-            );
         }
     } else {
         //have to add extra conditional in here for submenus on editing pages
         if ($step_name == '') {
             $menu_list = array(
-                $group_link => $span_start . 'My ' . ucfirst($group) . 's' . $span_end,
                 $create_link => 'Create a ' . ucfirst($group),
             );
         }
     }
 
-    return openlab_submenu_gen($menu_list);
+    $menu_out['menu'] = openlab_submenu_gen($menu_list);
+    $menu_out['submenu_text'] = $submenu_text;
+
+    return $menu_out;
 }
 
 function openlab_create_group_menu($grouptype) {
@@ -379,8 +395,8 @@ function openlab_create_group_menu($grouptype) {
 
     $menu_mup = <<<HTML
             <div class="submenu create-group-submenu">
+                <div class="submenu-text pull-left bold"><h2>{$title}</h2></div>
                 <ul class="nav nav-inline">
-                    <li class="submenu-item submenu-title bold">{$title}</li>
                     <li class="submenu-item item-create-clone-a-course current-menu-item bold">{$step_name}</li>
                 </ul>
             </div>
@@ -392,6 +408,8 @@ HTML;
 //sub-menus for my-friends pages
 function openlab_my_friends_submenu($count = true) {
     global $bp;
+    $menu_out = array();
+
     if (!$dud = bp_displayed_user_domain()) {
         $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
     }
@@ -413,7 +431,6 @@ function openlab_my_friends_submenu($count = true) {
 
     if ($bp->is_item_admin) {
         $menu_list = array(
-            $my_friends => 'My Friends',
             $friend_requests => 'Requests Received ' . $count_span,
                 //'#' => $page_identify,
         );
@@ -421,7 +438,16 @@ function openlab_my_friends_submenu($count = true) {
         return '';
     }
 
-    return openlab_submenu_gen($menu_list);
+    $submenu_class = 'no-deco';
+
+    if ($action !== 'my-friends') {
+        $submenu_class = 'display-as-menu-item';
+    }
+
+    $menu_out['menu'] = openlab_submenu_gen($menu_list);
+    $menu_out['submenu_text'] = '<a class="' . $submenu_class . '" href="' . $my_friends . '">My Friends</a>';
+
+    return $menu_out;
 }
 
 //sub-menus for my-messages pages
@@ -457,6 +483,10 @@ function openlab_my_invitations_submenu() {
 function openlab_submenu_gen($items, $timestamp = false) {
     global $bp, $post;
 
+    if (empty($items)) {
+        return '';
+    }
+
     //get $items length so we know how many menu items there are ( for tagging the "last-item" class )
     $item_count = count($items);
 
@@ -477,10 +507,6 @@ function openlab_submenu_gen($items, $timestamp = false) {
     $i = 1;
 
     $submenu_classes = 'nav nav-inline';
-
-    if ($bp->current_action == 'my-friends') {
-        $submenu_classes .= ' pull-left';
-    }
 
     $submenu = '<ul class="' . $submenu_classes . '"><!--';
 
@@ -714,25 +740,26 @@ function openlab_filter_subnav_docs($subnav_item) {
 /**
  * Modify the Documents subnav item in group contexts.
  */
-function openlab_filter_subnav_nav_group_documents( $subnav_item ) {
-	//no files if we're on the portfolio page
-	if ( openlab_is_portfolio() ) {
-		return '';
-	} else {
-		//update "current" class to "current-menu-item" to unify site identification of current menu page
-		$subnav_item = str_replace( "current selected", "current-menu-item", $subnav_item );
+function openlab_filter_subnav_nav_group_documents($subnav_item) {
+    //no files if we're on the portfolio page
+    if (openlab_is_portfolio()) {
+        return '';
+    } else {
+        //update "current" class to "current-menu-item" to unify site identification of current menu page
+        $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
 
-		// Add count. @todo Better caching.
-		$count = BP_Group_Documents::get_total( bp_get_current_group_id() );
-		if ( $count ) {
-			$span = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
-			$subnav_item = str_replace( '</a>', ' ' . $span . '</a>', $subnav_item );
-		}
+        // Add count. @todo Better caching.
+        $count = BP_Group_Documents::get_total(bp_get_current_group_id());
+        if ($count) {
+            $span = sprintf('<span class="mol-count pull-right count-%s gray">%s</span>', intval($count), esc_html(number_format_i18n($count)));
+            $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
+        }
 
-		return $subnav_item;
-	}
+        return $subnav_item;
+    }
 }
-add_filter( 'bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents' );
+
+add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
 
 
 add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
@@ -740,31 +767,31 @@ add_filter('bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums');
 /**
  * Modify the Discussion subnav item in group contexts.
  */
-function openlab_filter_subnav_forums( $subnav_item ) {
-	// update "current" class to "current-menu-item" to unify site identification of current menu page
-	$subnav_item = str_replace( 'current selected', 'current-menu-item', $subnav_item );
-	$subnav_item = str_replace( 'Forum', 'Discussion', $subnav_item );
+function openlab_filter_subnav_forums($subnav_item) {
+    // update "current" class to "current-menu-item" to unify site identification of current menu page
+    $subnav_item = str_replace('current selected', 'current-menu-item', $subnav_item);
+    $subnav_item = str_replace('Forum', 'Discussion', $subnav_item);
 
-	// Add count.
-	$count = 0;
-	$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
-	if ( $forum_ids ) {
-		// bbPress function bbp_get_forum_topic_count is broken. @todo fix or cache.
-		$topic_ids = get_posts( array(
-			'post_type' => bbp_get_topic_post_type(),
-			'post_parent' => $forum_ids[0],
-			'fields' => 'ids',
-			'posts_per_page' => -1,
-		) );
-		$count = count( $topic_ids );
-	}
+    // Add count.
+    $count = 0;
+    $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
+    if ($forum_ids) {
+        // bbPress function bbp_get_forum_topic_count is broken. @todo fix or cache.
+        $topic_ids = get_posts(array(
+            'post_type' => bbp_get_topic_post_type(),
+            'post_parent' => $forum_ids[0],
+            'fields' => 'ids',
+            'posts_per_page' => -1,
+        ));
+        $count = count($topic_ids);
+    }
 
-	if ( $count ) {
-		$span = sprintf( '<span class="mol-count pull-right count-%s gray">%s</span>', intval( $count ), esc_html( number_format_i18n( $count ) ) );
-		$subnav_item = str_replace( '</a>', ' ' . $span . '</a>', $subnav_item );
-	}
+    if ($count) {
+        $span = sprintf('<span class="mol-count pull-right count-%s gray">%s</span>', intval($count), esc_html(number_format_i18n($count)));
+        $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
+    }
 
-	return $subnav_item;
+    return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
@@ -893,9 +920,9 @@ function openlab_group_admin_tabs($group = false) {
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         <?php if ($group_type == "portfolio") : ?>
-               <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+                                                                                       <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-               <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+                                                                                       <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>
