@@ -7595,12 +7595,6 @@ button.oplb-bs .close {
   bottom: 0;
   right: 0;
   left: 0;
-  color: #333333;
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.42857;
-  padding-top: 30px;
-  background: #f0f0f0;
 }
 .oplb-bs#openlab-footer.placeholder {
   position: relative;
@@ -7631,7 +7625,13 @@ button.oplb-bs .close {
   text-shadow: none !important;
 }
 .oplb-bs#openlab-footer .footer-wrapper {
+  color: #333333;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857;
+  background: #f0f0f0;
   margin: 0 auto;
+  padding-top: 30px;
   width: 100%;
 }
 @media (max-width: 767px) {
@@ -7861,6 +7861,17 @@ body.adminbar-special {
   body.adminbar-special {
     padding-top: 110px;
   }
+}
+body .page-table {
+  display: table;
+  width: 100%;
+}
+body .page-table .page-table-row {
+  display: table-row;
+  height: 0;
+}
+body .page-table .page-table-row.expanded {
+  height: 100%;
 }
 /**behind menu background**/
 #behind_menu_background {

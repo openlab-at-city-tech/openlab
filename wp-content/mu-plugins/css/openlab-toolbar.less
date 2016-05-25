@@ -648,12 +648,6 @@
         bottom: 0;
         right: 0;
         left: 0;
-        color: #333333;
-        font-family: "Open Sans",Helvetica,Arial,sans-serif;
-        font-size: 14px;
-        line-height: 1.42857;
-        padding-top: 30px;
-        background: #f0f0f0;
         &.placeholder{
             position: relative;
             visibility: hidden;
@@ -683,7 +677,13 @@
             text-shadow: none !important;
         }
         .footer-wrapper{
+            color: #333333;
+            font-family: "Open Sans",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.42857;
+            background: #f0f0f0;
             margin: 0 auto;
+            padding-top: 30px;
             width: 100%;
             @media (max-width: @screen-xs-max){
                 width: 95%;
@@ -925,6 +925,17 @@ body{
         padding-top: 70px;
         @media (max-width: 767px){
             padding-top: 110px;
+        }
+    }
+    .page-table{
+        display: table;
+        width: 100%;
+        .page-table-row{
+            display: table-row;
+            height: 0;
+            &.expanded{
+                height: 100%;
+            }
         }
     }
 }

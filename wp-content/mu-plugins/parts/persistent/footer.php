@@ -4,7 +4,7 @@
  */
 ?>
 
-<div id="openlab-footer" class="oplb-bs<?php echo ($placeholder ? ' placeholder' : ''); ?>" <?php echo ($placeholder ? 'aria-hidden="true" tabindex="-1"' : ''); ?>>
+<div id="openlab-footer" class="oplb-bs <?php echo ($blog_id === 1 ? ' page-table-row' : '') ?><?php echo ($placeholder ? ' placeholder' : ''); ?>" <?php echo ($placeholder ? 'aria-hidden="true" tabindex="-1"' : ''); ?>>
     <div class="oplb-bs">
         <div class="footer-wrapper">
             <div class="container-fluid footer-desktop">
