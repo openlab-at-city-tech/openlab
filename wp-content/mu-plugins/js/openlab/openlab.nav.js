@@ -156,7 +156,7 @@
 
                 if (!OpenLab.nav.isBreakpoint('xs') && !OpenLab.nav.isBreakpoint('xxs')) {
                     //on background only elems, reset inline display value
-                    if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+                    if (thisElem.data('backgroundonly') && (thisElem.data('backgroundonly') === true || thisElem.data('backgroundonly') === 1)) {
                         $(thisToggleTarget).css({
                             'display': ''
                         });
