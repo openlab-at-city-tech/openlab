@@ -136,8 +136,6 @@
                         //if the groupname is truncated, let's use that
                         var srprovider = thisElem.closest('.truncate-combo').find('[data-srprovider]');
 
-                        console.log('srprovider', srprovider);
-
                         if (srprovider.length) {
                             nameTrunc = srprovider.text();
                         }

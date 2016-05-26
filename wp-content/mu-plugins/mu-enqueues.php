@@ -53,12 +53,20 @@ function openlab_mu_enqueue() {
 		wp_enqueue_script('hyphenator-js');
 		wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'), '', true);
 		wp_enqueue_script('openlab-search-js');
+                
 		wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), '', true);
 		wp_enqueue_script('openlab-nav-js');
+                wp_localize_script('openlab-nav-js', 'utilityVars', array(
+                    'loginForm' => openlab_get_loginform(),
+                ));
+                
 		wp_register_script('openlab-theme-fixes-js', plugins_url('js', __FILE__) . '/openlab/openlab.theme.fixes.js', array('jquery','twentyfourteen-script'), '', true);
 		wp_enqueue_script('openlab-theme-fixes-js');
 	} else {
 		wp_enqueue_script( 'openlab-smoothscroll', content_url( 'js/smoothscroll.js' ), array( 'jquery' ) );
+                wp_localize_script('openlab-smoothscroll', 'utilityVars', array(
+                    'loginForm' => openlab_get_loginform(),
+                ));
 	}
 }
 

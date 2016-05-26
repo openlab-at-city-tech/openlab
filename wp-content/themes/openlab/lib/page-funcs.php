@@ -435,7 +435,7 @@ function openlab_primary_skip_link() {
 
     if (is_user_logged_in()) {
         $target = '#wp-admin-bar-my-openlab';
-        $text = 'Adminbar';
+        $text = 'Admin Bar';
     } else {
         $target = '#wp-admin-bar-bp-login';
         $text = 'Login';
