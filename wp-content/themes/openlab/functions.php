@@ -70,7 +70,7 @@ function openlab_load_scripts() {
         } else {
             $utility_deps[] = 'openlab-smoothscroll';
         }
-        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.1', true);
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.2', true);
         wp_enqueue_script('utility');
     }
 }
@@ -87,11 +87,11 @@ function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.1', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.2', 'all');
         wp_enqueue_style('main-styles');
     } else {
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.1', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.2', 'all');
         wp_enqueue_style('main-styles');
     }
 
