@@ -8565,7 +8565,8 @@ body .inline-visible-xs {
   margin: 0;
   padding: 0px 0 7px;
   list-style-type: none;
-  background: rgba(255, 255, 255, 0.42);
+  background: rgba(239, 239, 239, 0.8);
+  border-radius: 0 0 4px 4px;
 }
 .sidebar .sidebar-block ul.sidebar-nav li {
   background: rgba(239, 239, 239, 0.8);
