@@ -7667,18 +7667,19 @@ body .skip-link {
   top: -1000em;
 }
 body .skip-link:focus {
-  background: #f0f0f0;
-  color: #49cabe;
+  background: #63dfd2 none repeat scroll 0 0;
+  color: #333333;
   display: block;
   font-size: 14px;
   font-weight: bold;
   height: auto;
-  left: 6px;
+  left: 0;
   line-height: normal;
+  outline: medium none;
+  padding: 12px 18px;
   position: absolute;
-  padding: 15px 23px 14px;
   text-decoration: none;
-  top: 7px;
+  top: 0;
   width: auto;
   z-index: 100000;
 }

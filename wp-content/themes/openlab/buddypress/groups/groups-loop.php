@@ -45,6 +45,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
 <?php $group_type = $filters['wds_group_type']; ?>
+<div id="openlab-main-content"></div>
 <div class="row">
 	  	<?php
 		if (openlab_is_my_profile()) {

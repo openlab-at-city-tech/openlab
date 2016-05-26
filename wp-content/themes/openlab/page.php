@@ -17,7 +17,7 @@
             <?php //my-<group> pages should not be displaying this ?>
             <?php if (!strstr(get_the_title(), 'My')): ?>
                 <div <?php post_class('col-sm-18 col-xs-24'); ?>>
-                    <div class="content-wrapper">
+                    <div id="openlab-main-content"  class="content-wrapper">
                         <h1 class="entry-title"><?php the_title(); ?>
                             <?php if ($postID == "49" || $parent == "49"): ?>
                                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">

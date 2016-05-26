@@ -7874,6 +7874,9 @@ body .page-table .page-table-row {
 body .page-table .page-table-row.expanded {
   height: 100%;
 }
+body .screen-reader-shortcut:focus {
+  top: 0;
+}
 /**behind menu background**/
 #behind_menu_background {
   display: none;
