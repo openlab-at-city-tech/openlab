@@ -3432,6 +3432,7 @@ if (Hyphenator.isBookmarklet()) {
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
             OpenLab.nav.tabindexNormalizer();
+            OpenLab.nav.focusActions();
 
             OpenLab.nav.hyphenateInit();
 
@@ -3465,17 +3466,17 @@ if (Hyphenator.isBookmarklet()) {
                 }
 
             });
-            
+
             //add tabindex to mol icon menus
-            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity').attr('tabindex', '0');
+            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity, #wp-admin-bar-my-account, #wp-admin-bar-top-logout', '#wp-admin-bar-bp-register', '#wp-admin-bar-bp-login').attr('tabindex', '0');
 
             //active menupop for keyboard users
             var adminbar = $('#wpadminbar');
 
             adminbar.find('li.menupop').on('focus', function (e) {
-                
+
                 console.log('focusing');
-                
+
                 var el = $(this);
 
                 if (el.parent().is('#wp-admin-bar-root-default') && !el.hasClass('hover')) {
@@ -3491,6 +3492,32 @@ if (Hyphenator.isBookmarklet()) {
                     e.preventDefault();
                     el.removeClass('hover');
                 }
+            });
+
+            adminbar.find('li.menupop').on('blur', function (e) {
+
+
+
+            });
+
+        },
+        focusActions: function () {
+
+            var skipToAdminbar = $('#skipToAdminbar');
+            var skipTarget = skipToAdminbar.attr('href');
+
+            skipToAdminbar.on('click', function () {
+                
+                console.log('go focus actions', skipTarget);
+
+                if (skipTarget === '#wp-admin-bar-bp-login') {
+                    $(skipTarget).find('> a').click();
+                } else if (skipTarget === '#wp-admin-bar-my-openlab') {
+                    $(skipTarget).addClass('hover');
+                    $('wp-admin-bar-my-openlab-default').focus();
+                }
+
+
             });
 
         },

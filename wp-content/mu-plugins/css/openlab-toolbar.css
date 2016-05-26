@@ -7108,7 +7108,8 @@ button.oplb-bs .close {
   padding: 6px 12px;
   text-decoration: none;
 }
-.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover,
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:focus {
   background: #63dfd2;
 }
 @media (max-width: 767px) {

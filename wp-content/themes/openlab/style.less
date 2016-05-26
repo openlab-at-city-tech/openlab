@@ -686,6 +686,26 @@ body{
             background: @70gray;
         }
     }
+    .skip-link{
+        position: absolute;
+        top: -1000em;
+        &:focus{
+            background: @5gray;
+            color: @aqua;
+            display: block;
+            font-size: @font-size-base;
+            font-weight: bold;
+            height: auto;
+            left: 6px;
+            line-height: normal;
+            position: absolute;
+            padding: 15px 23px 14px;
+            text-decoration: none;
+            top: 7px;
+            width: auto;
+            z-index: 100000;
+        }
+    }
     .bp-template-notice,
     .bbp-template-notice,
     #ubpfattach-message{

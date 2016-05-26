@@ -17,6 +17,8 @@
 
     <body <?php body_class(); ?>>
         
+        <?php echo openlab_primary_skip_link(); ?>
+        
         <div class="page-table">
             
         <div class="page-table-row expanded">

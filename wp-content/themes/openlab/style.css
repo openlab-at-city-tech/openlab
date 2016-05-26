@@ -7662,6 +7662,26 @@ body .mol-count.gray,
 body .site-visibility .fa.gray {
   background: #444444;
 }
+body .skip-link {
+  position: absolute;
+  top: -1000em;
+}
+body .skip-link:focus {
+  background: #f0f0f0;
+  color: #49cabe;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  height: auto;
+  left: 6px;
+  line-height: normal;
+  position: absolute;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 7px;
+  width: auto;
+  z-index: 100000;
+}
 body .bp-template-notice,
 body .bbp-template-notice,
 body #ubpfattach-message {
