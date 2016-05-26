@@ -7124,6 +7124,8 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
+  border: 1px solid #444444;
+  border-top: none;
   border-radius: 0 0 4px 4px;
   margin-top: 1px;
   width: 600%;
@@ -7140,6 +7142,14 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
   margin-bottom: 0;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li:last-child {
+  border-radius: 0 0 4px 4px;
+  border-bottom: none;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li:last-child a {
+  border-radius: 0 0 4px 4px;
+  border-bottom: none;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
   background: #b8e2df;
@@ -7213,6 +7223,9 @@ button.oplb-bs .close {
     padding: 6px 12px;
     float: none;
   }
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-top-secondary .menupop .ab-sub-wrapper {
+  right: -1px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered {
   margin: 0 auto;
@@ -7324,6 +7337,10 @@ button.oplb-bs .close {
     border-top: 9px solid #d1d1d1;
   }
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-invites .ab-sub-wrapper,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper {
+  left: -1px;
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
   min-width: 250px;
@@ -7402,18 +7419,30 @@ button.oplb-bs .close {
   border-right: 1px #666666 solid;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
-  border-right: 1px #666666 solid;
-  max-width: 70px;
+  background: transparent;
   position: relative;
+  max-width: 70px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login > a {
+  background: #000000;
+  border-right: 1px #666666 solid;
+  max-height: 49px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
+  background: transparent;
+  border: none;
   color: #333;
   width: 350% !important;
   left: -250%;
-  margin-top: 0;
+  margin-top: 1px;
+  top: auto;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper .ab-submenu {
+  background: #ffffff;
+  border: none;
+  border-radius: 0 0 4px 4px;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-  top: auto;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
@@ -7431,6 +7460,10 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-submenu {
     background: #fff;
   }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login.login-form-active .ab-submenu {
+  border: 1px solid #444444;
+  border-top: none;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-updates {

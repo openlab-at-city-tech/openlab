@@ -3447,10 +3447,19 @@ if (Hyphenator.isBookmarklet()) {
             $("#wp-admin-bar-bp-login").append(loginform);
 
             $("#wp-admin-bar-bp-login > a").click(function () {
+
+                if (!$(this).hasClass('login-click')) {
+                    $(this).closest('#wp-admin-bar-bp-login').addClass('login-form-active');
+                }
+
                 $(".ab-submenu #sidebar-login-form").toggle(400, function () {
                     $(".ab-submenu #sidebar-user-login").focus();
+                    if ($(this).hasClass('login-click')) {
+                        $(this).closest('#wp-admin-bar-bp-login').removeClass('login-form-active');
+                    }
+                    $(this).toggleClass("login-click");
                 });
-                $(this).toggleClass("login-click");
+
                 OpenLab.nav.blurActions();
                 return false;
             });
@@ -3529,7 +3538,7 @@ if (Hyphenator.isBookmarklet()) {
 
         },
         blurActions: function () {
-            
+
             var adminbar = $('#wpadminbar');
 
             //make sure the menu closes when we leave

@@ -163,6 +163,8 @@
             }
             .ab-sub-wrapper{
                 background: #fff;
+                border: 1px solid @70gray;
+                border-top: none;
                 border-radius: 0 0 4px 4px;
                 margin-top: 1px;
                 width: 600%;
@@ -176,6 +178,16 @@
                         font-size: 12px;
                         &:last-child{
                             margin-bottom: 0;
+                        }
+                    }
+                    li{
+                        &:last-child{
+                            border-radius: 0 0 4px 4px;
+                            border-bottom: none;
+                            a{
+                                border-radius: 0 0 4px 4px;
+                                border-bottom: none;
+                            }
                         }
                     }
                     .submenu-title{
@@ -255,6 +267,13 @@
                     }
                 }
             }
+            .ab-top-secondary{
+                .menupop{
+                    .ab-sub-wrapper{
+                        right: -1px;
+                    }
+                }
+            } 
             #wp-admin-bar-mobile-centered{
                 margin: 0 auto;
                 overflow: hidden;
@@ -371,6 +390,12 @@
                     }
                 }
             }
+            #wp-admin-bar-invites,
+            #wp-admin-bar-my-openlab{
+                .ab-sub-wrapper{
+                    left: -1px;
+                }
+            }
             #wp-admin-bar-my-account{
                 .ab-sub-wrapper{
                     width: 150%;
@@ -442,17 +467,29 @@
                 border-right: 1px #666666 solid;
             }
             #wp-admin-bar-bp-login{
-                border-right: 1px #666666 solid;
-                max-width: 70px;
+                background: transparent;
                 position: relative;
+                max-width: 70px;
+                > a{
+                    background: @black;
+                    border-right: 1px #666666 solid;
+                    max-height: 49px;
+                }
                 .ab-sub-wrapper{
+                    background: transparent;
+                    border: none;
                     color: #333;
                     width: 350% !important;
                     left: -250%;
-                    margin-top: 0;
-                    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-                    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    margin-top: 1px;
                     top: auto;
+                    .ab-submenu{
+                        background: @white;
+                        border: none;
+                        border-radius: 0 0 4px 4px;
+                        -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                        box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    }
                     #sidebar-login-form{
                         padding: 3% 5%;
                         .forgetmenot{
@@ -471,6 +508,12 @@
                 @media (max-width: @screen-xs-max){
                     .ab-submenu{
                         background: #fff;
+                    }
+                }
+                &.login-form-active{
+                    .ab-submenu{
+                        border: 1px solid @70gray;
+                        border-top: none;
                     }
                 }
             }
