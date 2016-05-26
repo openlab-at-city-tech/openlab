@@ -7733,10 +7733,10 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs#openlab-footer .col-links {
-  color: #797979;
+  color: #333333;
 }
 .oplb-bs#openlab-footer .col-links a {
-  color: #797979;
+  color: #333333;
   font-weight: inherit;
 }
 @media (max-width: 767px) {
@@ -7786,7 +7786,7 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .row-copyright p,
 .oplb-bs#openlab-footer .row-copyright span,
 .oplb-bs#openlab-footer .row-copyright a {
-  color: #797979;
+  color: #333333;
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .row-copyright p,
