@@ -27,8 +27,8 @@ module.exports = function (grunt) {
                 },
 		src: [
 			'wp-content/mu-plugins/js/jquery-smooth-scroll/jquery.smooth-scroll.min.js',
-			'wp-content/mu-plugins/js/jquery-custom-select/jquery.customSelect.min.js',
 			'wp-content/mu-plugins/js//hyphenator/hyphenator.js',
+                        'wp-content/mu-plugins/js/select2/select2.min.js',
 			'wp-content/mu-plugins/js/openlab/openlab.search.js',
 			'wp-content/mu-plugins/js/openlab/openlab.nav.js',
 			'wp-content/mu-plugins/js/openlab/openlab.theme.fixes.js',

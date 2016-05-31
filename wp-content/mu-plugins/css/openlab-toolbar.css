@@ -1,5 +1,7 @@
+@import "select2/select2.css";
 /* Toolbar / Top Nav */
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
+/**vendor**/
 .oplb-bs {
   /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
   /**import boostrap overrides**/

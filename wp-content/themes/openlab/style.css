@@ -7895,47 +7895,50 @@ body .inline-visible-xs {
 }
 .custom-select,
 .hidden-custom-select {
+  width: 100%;
   position: relative;
 }
 .custom-select option,
 .hidden-custom-select option {
   font-weight: 600;
 }
-.custom-select span.customSelect,
-.hidden-custom-select span.customSelect {
-  font: inherit;
-  background: #ffffff url('images/select-arrow-open.png') 96% center no-repeat;
-  border: 1px solid #dddddd;
-  padding: 8px 5%;
+.custom-select .select2-container,
+.hidden-custom-select .select2-container {
   width: 100%;
+}
+.custom-select .select2-container .select2-selection--single,
+.hidden-custom-select .select2-container .select2-selection--single {
+  border-color: #dddddd;
+  height: 38px;
+}
+.custom-select .select2-container .select2-selection--single .select2-selection__rendered,
+.hidden-custom-select .select2-container .select2-selection--single .select2-selection__rendered {
+  line-height: 38px;
   font-weight: 600;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
+  padding-left: 14px;
 }
-.custom-select span.customSelect.customSelectOpen,
-.hidden-custom-select span.customSelect.customSelectOpen {
-  background-image: url('images/select-arrow-close.png');
+.custom-select .select2-container .select2-selection--single .select2-selection__arrow,
+.hidden-custom-select .select2-container .select2-selection--single .select2-selection__arrow {
+  background: #f0f0f0;
+  border: 1px solid #999999;
+  height: 20px;
+  position: absolute;
+  right: 11px;
+  top: 9px;
+  width: 17px;
 }
-.custom-select span.customSelect.active-text,
-.hidden-custom-select span.customSelect.active-text {
-  color: #49cabe;
+.custom-select .select2-container .select2-selection--single .select2-selection__arrow b,
+.hidden-custom-select .select2-container .select2-selection--single .select2-selection__arrow b {
+  border-color: #999999 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
-.custom-select span.customSelect .customSelectInner,
-.hidden-custom-select span.customSelect .customSelectInner {
-  max-width: 90%;
-  min-width: 90%;
-  overflow: hidden;
-  white-space: nowrap;
+.select2-container--default.select2-container .select2-results__options li {
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 0;
+  padding-left: 8px;
 }
-@media (max-width: 767px) {
-  .custom-select span.customSelect .customSelectInner,
-  .hidden-custom-select span.customSelect .customSelectInner {
-    width: 100% !important;
-  }
+.select2-container--default.select2-container .select2-results__option--highlighted[aria-selected] {
+  background: #49cabe;
 }
 /**home page**/
 .home-page .btn,

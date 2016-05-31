@@ -922,33 +922,47 @@ body{
 }
 .custom-select,
 .hidden-custom-select{
+    width: 100%;
     option{
         font-weight: @semibold;
     }
     position: relative;
-    span.customSelect {
-        font: inherit;
-        background:#fff url('images/select-arrow-open.png') 96% center no-repeat;
-        border:1px solid @10gray;
-        padding: 8px 5%;
-        width:100%;
-        font-weight: @semibold;
-        .border-radius;
-        &.customSelectOpen{
-            background-image: url('images/select-arrow-close.png');
-        }
-        &.active-text{
-            color: @aqua;
-        }
-        .customSelectInner{
-            max-width: 90%;
-            min-width: 90%;
-            overflow: hidden;
-            white-space: nowrap;
-            @media(max-width: @screen-xs-max){
-                width: 100% !important;
+    .select2-container {
+        width: 100%;
+        .select2-selection--single{
+            border-color: @10gray;
+            height: 38px;
+            .select2-selection__rendered{
+                line-height: 38px;
+                font-weight: 600;
+                padding-left: 14px;
+            }
+            .select2-selection__arrow{
+                background: @5gray;
+                border: 1px solid @40gray;
+                height: 20px;
+                position: absolute;
+                right: 11px;
+                top: 9px;
+                width: 17px;
+                b{
+                    border-color: @40gray rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+                }
             }
         }
+    }
+}
+.select2-container--default.select2-container{
+    .select2-results__options{
+        li{
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 0;
+            padding-left: 8px;
+        }
+    }
+    .select2-results__option--highlighted[aria-selected] {
+        background: @aqua;
     }
 }
 /**home page**/

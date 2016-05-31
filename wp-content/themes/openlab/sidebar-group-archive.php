@@ -65,7 +65,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     } else {
         $dept_color = "active";
         $display_option_dept = ucwords(str_replace('-', ' ', $_GET['department']));
-        $display_option_dept = str_replace('And', '&amp;', $display_option_dept);
+        $display_option_dept = str_replace('And', '&', $display_option_dept);
         $option_value_dept = $_GET['department'];
     }
 
@@ -149,13 +149,13 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         <p>Narrow down your search using the filters or search box below.</p>
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
             <div id="sidebarCustomSelect" class="custom-select-parent">
-                <div class="custom-select">
-                    <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
+                <div class="custom-select" id="schoolSelect">
+                    <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
                         <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All</option>
                         <option value='tech' <?php selected('tech', $option_value_school) ?>>Technology &amp; Design</option>
                         <option value='studies' <?php selected('studies', $option_value_school) ?>>Professional Studies</option>
-                        <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts &amp; Sciences</option>
+                        <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts & Sciences</option>
                     </select>
                 </div>
 
