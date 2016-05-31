@@ -16,7 +16,7 @@ function openlab_sitewide_header($location = 'header') {
                 <header class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></header>
                 <div class="pull-right search">
                     <div class="search-trigger-wrapper">
-                        <span class="fa fa-search search-trigger" data-mode="mobile" data-location="<?= $location ?>"></span>
+                        <a class="search-trigger" data-mode="mobile" data-location="<?= $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Search OpenLab</span></a>
                     </div>
                 </div>
             </div>
@@ -52,13 +52,13 @@ function openlab_mu_site_wide_bp_search($mode = 'desktop', $location) {
 
         $mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
-    <span class="fa fa-search search-trigger" data-mode="desktop" data-location={$location}></span>
+    <a class="search-trigger" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Search OpenLab</span></a>
 </div>
 HTML;
     endif;
 
     $form_action = bp_search_form_action();
-    $nonce = wp_nonce_field( 'bp_search_form', '_bp_search_nonce', true, false );
+    $nonce = wp_nonce_field('bp_search_form', '_bp_search_nonce', true, false);
 
     $mobile_mup .= <<<HTML
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
@@ -86,28 +86,28 @@ HTML;
 add_action('init', 'openlab_mu_search_override', 1);
 
 function openlab_mu_search_override() {
-	global $bp;
-	if (isset($_POST['search']) && $_POST['search-which']) {
-		$nonce = isset( $_POST['_bp_search_nonce'] ) ? $_POST['_bp_search_nonce'] : '';
-		if ( ! wp_verify_nonce( $nonce, 'bp_search_form' ) ) {
-			return;
-		}
+    global $bp;
+    if (isset($_POST['search']) && $_POST['search-which']) {
+        $nonce = isset($_POST['_bp_search_nonce']) ? $_POST['_bp_search_nonce'] : '';
+        if (!wp_verify_nonce($nonce, 'bp_search_form')) {
+            return;
+        }
 
-		if ($_POST['search-which'] == "members") {
-			wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
-			exit();
-		} elseif ($_POST['search-which'] == "courses") {
-			wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
-			exit();
-		} elseif ($_POST['search-which'] == "projects") {
-			wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
-			exit();
-		} elseif ($_POST['search-which'] == "clubs") {
-			wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
-			exit();
-		} elseif ($_POST['search-which'] == "portfolios") {
-			wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
-			exit();
-		}
-	}
+        if ($_POST['search-which'] == "members") {
+            wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
+            exit();
+        } elseif ($_POST['search-which'] == "courses") {
+            wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
+            exit();
+        } elseif ($_POST['search-which'] == "projects") {
+            wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
+            exit();
+        } elseif ($_POST['search-which'] == "clubs") {
+            wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
+            exit();
+        } elseif ($_POST['search-which'] == "portfolios") {
+            wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
+            exit();
+        }
+    }
 }

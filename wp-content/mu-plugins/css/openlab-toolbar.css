@@ -7589,6 +7589,13 @@ button.oplb-bs .close {
 .oplb-bs .search .search-trigger-wrapper:hover {
   color: #49cabe;
 }
+.oplb-bs .search .search-trigger-wrapper .search-trigger {
+  display: block;
+  outline: none;
+}
+.oplb-bs .search .search-trigger-wrapper .search-trigger:focus {
+  outline: thin dotted;
+}
 .oplb-bs .search .search-trigger-wrapper span {
   line-height: 4.5;
 }
