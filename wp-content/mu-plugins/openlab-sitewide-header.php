@@ -16,7 +16,7 @@ function openlab_sitewide_header($location = 'header') {
                 <header class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></header>
                 <div class="pull-right search">
                     <div class="search-trigger-wrapper">
-                        <a class="search-trigger" data-mode="mobile" data-location="<?= $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Search OpenLab</span></a>
+                        <a class="search-trigger" data-mode="mobile" data-location="<?= $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Open Search</span></a>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@ function openlab_mu_site_wide_bp_search($mode = 'desktop', $location) {
 
         $mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
-    <a class="search-trigger" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Search OpenLab</span></a>
+    <a class="search-trigger" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Open Search</span></a>
 </div>
 HTML;
     endif;
@@ -64,6 +64,7 @@ HTML;
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form-{$mode}" class="form-inline">
         <div class="form-group">
+        <div class="sr-only">Search by People or Group Type</div>
         <input id="search-terms-{$mode}" class="form-control" type="text" name="search" placeholder="Search" />
         <select id="search-which-{$mode}" name="search-which" class="form-control">
             <option value="members">People</option>
