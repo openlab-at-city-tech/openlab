@@ -335,7 +335,7 @@ add_action( 'init', 'wds_default_theme' );
 //register.php -hook for new div to show account type fields
 add_action( 'bp_after_signup_profile_fields', 'wds__bp_after_signup_profile_fields' );
 function wds__bp_after_signup_profile_fields() {?>
-<div class="editfield"><div id="wds-account-type"></div></div>
+<div class="editfield"><div id="wds-account-type" aria-live="polite"></div></div>
 <?php
 }
 
