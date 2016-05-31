@@ -319,254 +319,284 @@ define( 'BP_AVATAR_FULL_HEIGHT', 225 );
  * @todo Why isn't BP_DISABLE_ADMIN_BAR defined somewhere like bp-custom.php?
  */
 function wds_default_theme() {
-	global $wpdb, $blog_id;
-	if ( $blog_id>1 ) {
-		define( 'BP_DISABLE_ADMIN_BAR', true );
-		$theme = get_option( 'template' );
-		if ( $theme == "bp-default" ) {
-			switch_theme( "twentyten", "twentyten" );
-			wp_redirect( home_url() );
-			exit();
-		}
-	}
+    global $wpdb, $blog_id;
+    if ($blog_id > 1) {
+        define('BP_DISABLE_ADMIN_BAR', true);
+        $theme = get_option('template');
+        if ($theme == "bp-default") {
+            switch_theme("twentyten", "twentyten");
+            wp_redirect(home_url());
+            exit();
+        }
+    }
 }
-add_action( 'init', 'wds_default_theme' );
+
+add_action('init', 'wds_default_theme');
 
 //register.php -hook for new div to show account type fields
-add_action( 'bp_after_signup_profile_fields', 'wds__bp_after_signup_profile_fields' );
-function wds__bp_after_signup_profile_fields() {?>
-<div class="editfield"><div id="wds-account-type" aria-live="polite"></div></div>
-<?php
+add_action('bp_after_signup_profile_fields', 'wds__bp_after_signup_profile_fields');
+
+function wds__bp_after_signup_profile_fields() {
+    ?>
+    <div class="editfield"><div id="wds-account-type" aria-live="polite"></div></div>
+    <?php
 }
 
+add_action('wp_head', 'wds_registration_ajax');
 
-add_action( 'wp_head', 'wds_registration_ajax' );
 function wds_registration_ajax() {
-	wp_print_scripts( array( 'sack' ) );
-	$sack = 'var isack = new sack( "'.get_bloginfo( 'wpurl' ).'/wp-admin/admin-ajax.php" );';
-	$loading = '<img src="'.get_bloginfo( 'template_directory' ).'/_inc/images/ajax-loader.gif">';?>
-	<?php
+    wp_print_scripts(array('sack'));
+    $sack = 'var isack = new sack( "' . get_bloginfo('wpurl') . '/wp-admin/admin-ajax.php" );';
+    $loading = '<img src="' . get_bloginfo('template_directory') . '/_inc/images/ajax-loader.gif">';
+    ?>
+    <?php
 }
-add_action( 'bp_after_registration_submit_buttons' , 'wds_load_default_account_type' );
+
+add_action('bp_after_registration_submit_buttons', 'wds_load_default_account_type');
+
 function wds_load_default_account_type() {
- 		    $return = '<script type="text/javascript">';
+    $return = '<script type="text/javascript">';
 
-		    $account_type = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
-		    $type = '';
-		    $selected_index = '';
+    $account_type = isset($_POST['field_7']) ? $_POST['field_7'] : '';
+    $type = '';
+    $selected_index = '';
 
-		    if ( $account_type == "Student" ) {
-			$type = "Student";
-			$selected_index = 1;
-		    }
-		    if ( $account_type == "Faculty" ) {
-			$type = "Faculty";
-			$selected_index = 2;
-		    }
-		    if ( $account_type == "Staff" ) {
-			$type = "Staff";
-			$selected_index = 3;
-		    }
+    if ($account_type == "Student") {
+        $type = "Student";
+        $selected_index = 1;
+    }
+    if ($account_type == "Faculty") {
+        $type = "Faculty";
+        $selected_index = 2;
+    }
+    if ($account_type == "Staff") {
+        $type = "Staff";
+        $selected_index = 3;
+    }
 
-		    if ( $type && $selected_index ) {
-			$return .=  'var select_box=document.getElementById( \'field_7\' );';
-			$return .=  'select_box.selectedIndex = ' . $selected_index . ';';
+    if ($type && $selected_index) {
+        $return .= 'var select_box=document.getElementById( \'field_7\' );';
+        $return .= 'select_box.selectedIndex = ' . $selected_index . ';';
 //			$return .= "wds_load_account_type( 'field_7','$type' );";
-		    }
-		    $return .= '</script>';
-		    echo $return;
-
+    }
+    $return .= '</script>';
+    echo $return;
 }
 
 function wds_load_account_type() {
-	$return = '';
+    $return = '';
 
-	$account_type = $_POST['account_type'];
-        $post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
+    $account_type = $_POST['account_type'];
+    $post_data = isset($_POST['post_data']) ? wp_unslash($_POST['post_data']) : array();
 
-	if ( $account_type ) {
-		$return .= '<div class="sr-only">'.$account_type.' selected.</div>'.wds_get_register_fields( $account_type, $post_data );
-	} else {
-		$return = "Please select an Account Type.";
-	}
-	$return = str_replace( "'","\'", $return );
-	die( $return );
+    if ($account_type) {
+        $return .= '<div class="sr-only">' . $account_type . ' selected.</div>' . wds_get_register_fields($account_type, $post_data);
+    } else {
+        $return = "Please select an Account Type.";
+    }
+    $return = str_replace("'", "\'", $return);
+    die($return);
 }
-add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );
-add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );
+
+add_action('wp_ajax_wds_load_account_type', 'wds_load_account_type');
+add_action('wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type');
 
 function wds_bp_profile_group_tabs() {
-	global $bp, $group_name;
-	if ( !$groups = wp_cache_get( 'xprofile_groups_inc_empty', 'bp' ) ) {
-		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
-		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
-	}
-	if ( empty( $group_name ) )
-		$group_name = bp_profile_group_name( false );
+    global $bp, $group_name;
+    if (!$groups = wp_cache_get('xprofile_groups_inc_empty', 'bp')) {
+        $groups = BP_XProfile_Group::get(array('fetch_fields' => true));
+        wp_cache_set('xprofile_groups_inc_empty', $groups, 'bp');
+    }
+    if (empty($group_name))
+        $group_name = bp_profile_group_name(false);
 
-	for ( $i = 0; $i < count( $groups ); $i++ ) {
-		if ( $group_name == $groups[$i]->name ) {
-			$selected = ' class="current"';
-		} else {
-			$selected = '';
-		}
-		$account_type = bp_get_profile_field_data( 'field=Account Type' );
-		if ( $groups[$i]->fields ) {
-			echo '<li' . $selected . '><a href="' . $bp->displayed_user->domain . $bp->profile->slug . '/edit/group/' . $groups[$i]->id . '">' . esc_attr( $groups[$i]->name ) . '</a></li>';
-		}
-	}
-	do_action( 'xprofile_profile_group_tabs' );
+    for ($i = 0; $i < count($groups); $i++) {
+        if ($group_name == $groups[$i]->name) {
+            $selected = ' class="current"';
+        } else {
+            $selected = '';
+        }
+        $account_type = bp_get_profile_field_data('field=Account Type');
+        if ($groups[$i]->fields) {
+            echo '<li' . $selected . '><a href="' . $bp->displayed_user->domain . $bp->profile->slug . '/edit/group/' . $groups[$i]->id . '">' . esc_attr($groups[$i]->name) . '</a></li>';
+        }
+    }
+    do_action('xprofile_profile_group_tabs');
 }
+
 //Group Stuff
-add_action( 'wp_head', 'wds_groups_ajax' );
+add_action('wp_head', 'wds_groups_ajax');
+
 function wds_groups_ajax() {
-	global $bp;
+    global $bp;
 
-	if ( ! bp_is_active( 'groups' ) ) {
-		return;
-	}
+    if (!bp_is_active('groups')) {
+        return;
+    }
 
-	wp_print_scripts( array( 'sack' ) );
-	$sack = 'var isack = new sack( "'.get_bloginfo( 'wpurl' ).'/wp-admin/admin-ajax.php" );';
-	$loading = '<img src="'.get_bloginfo( 'template_directory' ).'/_inc/images/ajax-loader.gif">';?>
-	<script type="text/javascript">
-		//<![CDATA[
-		function wds_load_group_type( id ) {
-			<?php echo $sack;?>
-			var select_box=document.getElementById( id );
-			var selected_index=select_box.selectedIndex;
-			var selected_value = select_box.options[selected_index].value;
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar( "action", "wds_load_group_type" );
-			isack.setVar( "group_type", selected_value );
-			isack.runAJAX();
-			return true;
-		}
+    wp_print_scripts(array('sack'));
+    $sack = 'var isack = new sack( "' . get_bloginfo('wpurl') . '/wp-admin/admin-ajax.php" );';
+    $loading = '<img src="' . get_bloginfo('template_directory') . '/_inc/images/ajax-loader.gif">';
+    ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        function wds_load_group_type(id) {
+    <?php echo $sack; ?>
+            var select_box = document.getElementById(id);
+            var selected_index = select_box.selectedIndex;
+            var selected_value = select_box.options[selected_index].value;
+            isack.execute = 1;
+            isack.method = 'POST';
+            isack.setVar("action", "wds_load_group_type");
+            isack.setVar("group_type", selected_value);
+            isack.runAJAX();
+            return true;
+        }
 
-		function wds_load_group_departments( id ) {
-			<?php $group= bp_get_current_group_id();
+        function wds_load_group_departments(id) {
+    <?php
+    $group = bp_get_current_group_id();
 
-                        //get group type
-                        if (!empty($_GET['type'])) {
-                            $group_type = $_GET['type'];
-                        } else {
-                            $group_type = 'club';
-                        }
+    //get group type
+    if (!empty($_GET['type'])) {
+        $group_type = $_GET['type'];
+    } else {
+        $group_type = 'club';
+    }
 
-			echo $sack;?>
-			var schools="0";
-			if ( document.getElementById( 'school_tech' ).checked ) {
-				schools=schools+","+document.getElementById( 'school_tech' ).value;
-			}
-			if ( document.getElementById( 'school_studies' ).checked ) {
-				schools=schools+","+document.getElementById( 'school_studies' ).value;
-			}
-			if ( document.getElementById( 'school_arts' ).checked ) {
-				schools=schools+","+document.getElementById( 'school_arts' ).value;
-			}
-			var group_type = jQuery( 'input[name="group_type"]' ).val();
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar( "action", "wds_load_group_departments" );
-			isack.setVar( "schools", schools );
-			isack.setVar( "group", "<?php echo $group;?>" );
-			isack.setVar( "is_group_create", "<?php echo intval( bp_is_group_create() ) ?>" );
-			isack.setVar( "group_type", "<?php echo $group_type; ?>");
-			isack.runAJAX();
-			return true;
-		}
-		//]]>
-	</script>
-	<?php
+    echo $sack;
+    ?>
+            var schools = "0";
+            if (document.getElementById('school_tech').checked) {
+                schools = schools + "," + document.getElementById('school_tech').value;
+            }
+            if (document.getElementById('school_studies').checked) {
+                schools = schools + "," + document.getElementById('school_studies').value;
+            }
+            if (document.getElementById('school_arts').checked) {
+                schools = schools + "," + document.getElementById('school_arts').value;
+            }
+            var group_type = jQuery('input[name="group_type"]').val();
+            isack.execute = 1;
+            isack.method = 'POST';
+            isack.setVar("action", "wds_load_group_departments");
+            isack.setVar("schools", schools);
+            isack.setVar("group", "<?php echo $group; ?>");
+            isack.setVar("is_group_create", "<?php echo intval(bp_is_group_create()) ?>");
+            isack.setVar("group_type", "<?php echo $group_type; ?>");
+            isack.runAJAX();
+            return true;
+        }
+        //]]>
+    </script>
+    <?php
 }
 
-add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' );
-add_action( 'wp_ajax_nopriv_wds_load_group_departments', 'wds_load_group_departments' );
+add_action('wp_ajax_wds_load_group_departments', 'wds_load_group_departments');
+add_action('wp_ajax_nopriv_wds_load_group_departments', 'wds_load_group_departments');
+
 function wds_load_group_departments() {
-	global $wpdb, $bp;
-	$group = $_POST['group'];
-	$schools = $_POST['schools'];
-	$group_type = $_POST['group_type'];
-	$is_group_create = ( bool ) $_POST['is_group_create'];
-	$schools = str_replace( "0,","", $schools );
-	$schools = explode( ",", $schools );
+    global $wpdb, $bp;
+    $group = $_POST['group'];
+    $schools = $_POST['schools'];
+    $group_type = $_POST['group_type'];
+    $is_group_create = (bool) $_POST['is_group_create'];
+    $schools = str_replace("0,", "", $schools);
+    $schools = explode(",", $schools);
 
+    $schools_list = '';
+    $schools_list_ary = array();
 
-	$departments_tech    = openlab_get_department_list( 'tech' );
-	$departments_studies = openlab_get_department_list( 'studies' );
-	$departments_arts    = openlab_get_department_list( 'arts' );
+    foreach ($schools as $school) {
+        switch ($school) {
+            case 'tech':
+                array_push($schools_list_ary, 'Technology and Design');
+                break;
+            case 'studies':
+                array_push($schools_list_ary, 'Professional Studies');
+                break;
+            case 'arts':
+                array_push($schools_list_ary, 'Arts and Sciences');
+                break;
+        }
+    }
 
-	// We want to prefill the School and Dept fields, which means we have
-	// to prefetch the dept field and figure out School backward
-	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
-		$account_type = strtolower( bp_get_profile_field_data( array(
-			'field' => 'Account Type',
-			'user_id' => bp_loggedin_user_id()
-		) ) );
-		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+    $schools_list = implode(', ', $schools_list_ary);
 
-		$wds_departments = (array) bp_get_profile_field_data( array(
-			'field' => $dept_field,
-			'user_id' => bp_loggedin_user_id()
-		) );
+    $departments_tech = openlab_get_department_list('tech');
+    $departments_studies = openlab_get_department_list('studies');
+    $departments_arts = openlab_get_department_list('arts');
 
-		foreach ( $wds_departments as $d ) {
-			if ( in_array( $d, $departments_tech ) )
-				$schools[] = 'tech';
+    // We want to prefill the School and Dept fields, which means we have
+    // to prefetch the dept field and figure out School backward
+    if ('portfolio' == strtolower($group_type) && $is_group_create) {
+        $account_type = strtolower(bp_get_profile_field_data(array(
+            'field' => 'Account Type',
+            'user_id' => bp_loggedin_user_id()
+                )));
+        $dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
-			if ( in_array( $d, $departments_studies ) )
-				$schools[] = 'studies';
+        $wds_departments = (array) bp_get_profile_field_data(array(
+                    'field' => $dept_field,
+                    'user_id' => bp_loggedin_user_id()
+                ));
 
-			if ( in_array( $d, $departments_arts ) )
-				$schools[] = 'art';
-		}
-	}
+        foreach ($wds_departments as $d) {
+            if (in_array($d, $departments_tech))
+                $schools[] = 'tech';
 
-	$departments = array();
-	if ( in_array( "tech", $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_tech );
-	}
-	if ( in_array( "studies", $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_studies );
-	}
-	if ( in_array( "arts", $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_arts );
-	}
-	sort( $departments );
+            if (in_array($d, $departments_studies))
+                $schools[] = 'studies';
 
-	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
-		$wds_departments = (array) bp_get_profile_field_data( array(
-			'field' => $dept_field,
-			'user_id' => bp_loggedin_user_id()
-		) );
-	} else {
-		$wds_departments = groups_get_groupmeta( $group, 'wds_departments' );
-		$wds_departments = explode( ",", $wds_departments );
-	}
+            if (in_array($d, $departments_arts))
+                $schools[] = 'art';
+        }
+    }
 
-	$return = '<div class="department-list-container">';
-	foreach ( $departments as $i => $value ) {
-		$checked = "";
-		if ( in_array( $value, $wds_departments ) ) {
-			$checked = "checked";
-		}
-		$return .= "<input type='checkbox' name='wds_departments[]' value='".$value."' ".$checked."> ".$value."<br>";
-	}
-	$return .= "</div>";
-	$return = str_replace( "'","\'", $return );
-	die( "document.getElementById( 'departments_html' ).innerHTML='$return'" );
+    $departments = array();
+    if (in_array("tech", $schools)) {
+        $departments = array_merge_recursive($departments, $departments_tech);
+    }
+    if (in_array("studies", $schools)) {
+        $departments = array_merge_recursive($departments, $departments_studies);
+    }
+    if (in_array("arts", $schools)) {
+        $departments = array_merge_recursive($departments, $departments_arts);
+    }
+    sort($departments);
+
+    if ('portfolio' == strtolower($group_type) && $is_group_create) {
+        $wds_departments = (array) bp_get_profile_field_data(array(
+                    'field' => $dept_field,
+                    'user_id' => bp_loggedin_user_id()
+                ));
+    } else {
+        $wds_departments = groups_get_groupmeta($group, 'wds_departments');
+        $wds_departments = explode(",", $wds_departments);
+    }
+
+    $return = '<div class="department-list-container"><div class="sr-only">' . $schools_list . ' selected</div>';
+    foreach ($departments as $i => $value) {
+        $checked = "";
+        if (in_array($value, $wds_departments)) {
+            $checked = "checked";
+        }
+        $return .= "<input type='checkbox' name='wds_departments[]' value='" . $value . "' " . $checked . "> " . $value . "<br>";
+    }
+    $return .= "</div>";
+    $return = str_replace("'", "\'", $return);
+    die("document.getElementById( 'departments_html' ).innerHTML='$return'");
 }
 
 /**
  * Get a list of schools
  */
 function openlab_get_school_list() {
-	return array(
-		'tech'       => 'Technology & Design',
-		'studies'    => 'Professional Studies',
-		'arts'       => 'Arts & Sciences'
-	);
+    return array(
+        'tech' => 'Technology & Design',
+        'studies' => 'Professional Studies',
+        'arts' => 'Arts & Sciences'
+    );
 }
 
 /**
@@ -574,362 +604,364 @@ function openlab_get_school_list() {
  *
  * @param str Optional. Leave out to get all departments
  */
-function openlab_get_department_list( $school = '', $label_type = 'full' ) {
+function openlab_get_department_list($school = '', $label_type = 'full') {
 
-	// Sanitize school name
-	$schools = openlab_get_school_list();
-	if ( isset( $schools[$school] ) ) {
-		$school = $school;
-	} else if ( in_array( $school, $schools ) ) {
-		$school = array_search( $school, $schools );
-	}
+    // Sanitize school name
+    $schools = openlab_get_school_list();
+    if (isset($schools[$school])) {
+        $school = $school;
+    } else if (in_array($school, $schools)) {
+        $school = array_search($school, $schools);
+    }
 
-	$all_departments = array(
-		'tech' => array(
-			'architectural-technology' => array(
-				'label' => 'Architectural Technology',
-			),
-                        'communication-design' => array(
-                                'label' => 'Communication Design',
-                        ),
-			'computer-engineering-technology' => array(
-				'label' => 'Computer Engineering Technology',
-			),
-			'computer-systems-technology' => array(
-				'label' => 'Computer Systems Technology',
-			),
-			'construction-management-and-civil-engineering-technology' => array(
-				'label' => 'Construction Management and Civil Engineering Technology',
-				'short_label' => 'Construction & Civil Engineering Tech',
-			),
-			'electrical-and-telecommunications-engineering-technology' => array(
-				'label' => 'Electrical and Telecommunications Engineering Technology',
-				'short_label' => 'Electrical & Telecom Engineering Tech',
-			),
-			'entertainment-technology' => array(
-				'label' => 'Entertainment Technology',
-			),
-			'environmental-control-technology' => array(
-				'label' => 'Environmental Control Technology',
-			),
-			'mechanical-engineering-technology' => array(
-				'label' => 'Mechanical Engineering Technology'
-			),
-		),
-		'studies' => array(
-			'business' => array(
-				'label' => 'Business',
-			),
-			'career-and-technology-teacher-education' => array(
-				'label' => 'Career and Technology Teacher Education',
-			),
-			'dental-hygiene' => array(
-				'label' => 'Dental Hygiene',
-			),
-			'health-services-administration' => array(
-				'label' => 'Health Services Administration',
-			),
-			'hospitality-management' => array(
-				'label' => 'Hospitality Management',
-			),
-			'human-services' => array(
-				'label' => 'Human Services',
-			),
-			'law-and-paralegal-studies' => array(
-				'label' => 'Law and Paralegal Studies',
-			),
-			'nursing' => array(
-				'label' => 'Nursing',
-			),
-			'radiologic-technology-and-medical-imaging' => array(
-				'label' => 'Radiologic Technology and Medical Imaging',
-			),
-			'restorative-dentistry' => array(
-				'label' => 'Restorative Dentistry',
-			),
-			'vision-care-technology' => array(
-				'label' => 'Vision Care Technology',
-			),
-		),
-		'arts' => array(
-			'african-american-studies' => array(
-				'label' => 'African American Studies',
-			),
-			'biological-sciences' => array(
-				'label' => 'Biological Sciences',
-			),
-                        'biomedical-informatics' => array(
-				'label' => 'Biomedical Informatics',
-			),
-			'chemistry' => array(
-				'label' => 'Chemistry',
-			),
-			'english' => array(
-				'label' => 'English',
-			),
-			'humanities' => array(
-				'label' => 'Humanities',
-			),
-			'library' => array(
-				'label' => 'Library',
-			),
-			'mathematics' => array(
-				'label' => 'Mathematics',
-			),
-                        'professional-and-technical-writing' => array(
-                                'label' => 'Professional and Technical Writing',
-                        ),
-			'physics' => array(
-				'label' => 'Physics',
-			),
-			'social-science' => array(
-				'label' => 'Social Science',
-			),
-		),
-	);
+    $all_departments = array(
+        'tech' => array(
+            'architectural-technology' => array(
+                'label' => 'Architectural Technology',
+            ),
+            'communication-design' => array(
+                'label' => 'Communication Design',
+            ),
+            'computer-engineering-technology' => array(
+                'label' => 'Computer Engineering Technology',
+            ),
+            'computer-systems-technology' => array(
+                'label' => 'Computer Systems Technology',
+            ),
+            'construction-management-and-civil-engineering-technology' => array(
+                'label' => 'Construction Management and Civil Engineering Technology',
+                'short_label' => 'Construction & Civil Engineering Tech',
+            ),
+            'electrical-and-telecommunications-engineering-technology' => array(
+                'label' => 'Electrical and Telecommunications Engineering Technology',
+                'short_label' => 'Electrical & Telecom Engineering Tech',
+            ),
+            'entertainment-technology' => array(
+                'label' => 'Entertainment Technology',
+            ),
+            'environmental-control-technology' => array(
+                'label' => 'Environmental Control Technology',
+            ),
+            'mechanical-engineering-technology' => array(
+                'label' => 'Mechanical Engineering Technology'
+            ),
+        ),
+        'studies' => array(
+            'business' => array(
+                'label' => 'Business',
+            ),
+            'career-and-technology-teacher-education' => array(
+                'label' => 'Career and Technology Teacher Education',
+            ),
+            'dental-hygiene' => array(
+                'label' => 'Dental Hygiene',
+            ),
+            'health-services-administration' => array(
+                'label' => 'Health Services Administration',
+            ),
+            'hospitality-management' => array(
+                'label' => 'Hospitality Management',
+            ),
+            'human-services' => array(
+                'label' => 'Human Services',
+            ),
+            'law-and-paralegal-studies' => array(
+                'label' => 'Law and Paralegal Studies',
+            ),
+            'nursing' => array(
+                'label' => 'Nursing',
+            ),
+            'radiologic-technology-and-medical-imaging' => array(
+                'label' => 'Radiologic Technology and Medical Imaging',
+            ),
+            'restorative-dentistry' => array(
+                'label' => 'Restorative Dentistry',
+            ),
+            'vision-care-technology' => array(
+                'label' => 'Vision Care Technology',
+            ),
+        ),
+        'arts' => array(
+            'african-american-studies' => array(
+                'label' => 'African American Studies',
+            ),
+            'biological-sciences' => array(
+                'label' => 'Biological Sciences',
+            ),
+            'biomedical-informatics' => array(
+                'label' => 'Biomedical Informatics',
+            ),
+            'chemistry' => array(
+                'label' => 'Chemistry',
+            ),
+            'english' => array(
+                'label' => 'English',
+            ),
+            'humanities' => array(
+                'label' => 'Humanities',
+            ),
+            'library' => array(
+                'label' => 'Library',
+            ),
+            'mathematics' => array(
+                'label' => 'Mathematics',
+            ),
+            'professional-and-technical-writing' => array(
+                'label' => 'Professional and Technical Writing',
+            ),
+            'physics' => array(
+                'label' => 'Physics',
+            ),
+            'social-science' => array(
+                'label' => 'Social Science',
+            ),
+        ),
+    );
 
-	// Lazy - I didn't feel like manually converting to key-value structure
-	$departments_sorted = array();
-	foreach ( $schools as $s_key => $s_label ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
+    // Lazy - I didn't feel like manually converting to key-value structure
+    $departments_sorted = array();
+    foreach ($schools as $s_key => $s_label) {
+        // Skip if we only want one school
+        if ($school && $s_key != $school) {
+            continue;
+        }
 
-		$departments_sorted[$s_key] = array();
-	}
+        $departments_sorted[$s_key] = array();
+    }
 
-	foreach ( $all_departments as $s_key => $depts ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
+    foreach ($all_departments as $s_key => $depts) {
+        // Skip if we only want one school
+        if ($school && $s_key != $school) {
+            continue;
+        }
 
-		foreach ( $depts as $dept_name => $dept ) {
-			if ( 'short' == $label_type ) {
-				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
-			} else {
-				$d_label = $dept['label'];
-			}
+        foreach ($depts as $dept_name => $dept) {
+            if ('short' == $label_type) {
+                $d_label = isset($dept['short_label']) ? $dept['short_label'] : $dept['label'];
+            } else {
+                $d_label = $dept['label'];
+            }
 
-			$departments_sorted[ $s_key ][ $dept_name ] = $d_label;
-		}
-	}
+            $departments_sorted[$s_key][$dept_name] = $d_label;
+        }
+    }
 
-	if ( $school ) {
-		$departments_sorted = $departments_sorted[$school];
-	}
+    if ($school) {
+        $departments_sorted = $departments_sorted[$school];
+    }
 
-	return $departments_sorted;
+    return $departments_sorted;
 }
 
-add_action( 'init', 'wds_new_group_type' );
+add_action('init', 'wds_new_group_type');
+
 function wds_new_group_type() {
-  if ( isset( $_GET['new'] ) && $_GET['new'] == "true" && isset( $_GET['type'] ) ) {
-	  global $bp;
-	  unset( $bp->groups->current_create_step );
-	  unset( $bp->groups->completed_create_steps );
+    if (isset($_GET['new']) && $_GET['new'] == "true" && isset($_GET['type'])) {
+        global $bp;
+        unset($bp->groups->current_create_step);
+        unset($bp->groups->completed_create_steps);
 
-	  setcookie( 'bp_new_group_id', false, time() - 1000, COOKIEPATH );
-	  setcookie( 'bp_completed_create_steps', false, time() - 1000, COOKIEPATH );
-	  setcookie( 'wds_bp_group_type', $_GET['type'], time() + 20000, COOKIEPATH );
-	  bp_core_redirect( $bp->root_domain . '/' . $bp->groups->slug . '/create/step/group-details/?type='.$_GET['type'] );
-  }
+        setcookie('bp_new_group_id', false, time() - 1000, COOKIEPATH);
+        setcookie('bp_completed_create_steps', false, time() - 1000, COOKIEPATH);
+        setcookie('wds_bp_group_type', $_GET['type'], time() + 20000, COOKIEPATH);
+        bp_core_redirect($bp->root_domain . '/' . $bp->groups->slug . '/create/step/group-details/?type=' . $_GET['type']);
+    }
 }
 
-add_action( 'wp_ajax_wds_load_group_type', 'wds_load_group_type' );
-add_action( 'wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type' );
-function wds_load_group_type( $group_type ) {
-	global $wpdb, $bp, $user_ID;
+add_action('wp_ajax_wds_load_group_type', 'wds_load_group_type');
+add_action('wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type');
 
-	$return = '';
+function wds_load_group_type($group_type) {
+    global $wpdb, $bp, $user_ID;
 
-	if ( $group_type ) {
-		$echo = true;
-		$return = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
-	} else {
-		$group_type = $_POST['group_type'];
-	}
+    $return = '';
 
-	$wds_group_school = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_school' );
-	$wds_group_school = explode( ",", $wds_group_school );
+    if ($group_type) {
+        $echo = true;
+        $return = '<input type="hidden" name="group_type" value="' . ucfirst($group_type) . '">';
+    } else {
+        $group_type = $_POST['group_type'];
+    }
 
-	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+    $wds_group_school = groups_get_groupmeta(bp_get_current_group_id(), 'wds_group_school');
+    $wds_group_school = explode(",", $wds_group_school);
 
-        $return = '<div class="panel panel-default">';
+    $account_type = xprofile_get_field_data('Account Type', bp_loggedin_user_id());
 
-	$return .= '<div class="panel-heading">School(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
-		$return .= ' <span class="required">(required)</span>';
-	}
-        $return .= '</div><div class="panel-body">';
-	$return .= '<table>';
+    $return = '<div class="panel panel-default">';
 
-		$return .= '<tr class="school-tooltip"><td colspan="2">';
+    $return .= '<div class="panel-heading">School(s)';
+    if (openlab_is_school_required_for_group_type($group_type) && ( 'staff' != strtolower($account_type) || is_super_admin(get_current_user_id()) )) {
+        $return .= ' <span class="required">(required)</span>';
+    }
+    $return .= '</div><div class="panel-body">';
+    $return .= '<table>';
 
-		// associated school/dept tooltip
-	switch ( $group_type ) {
-		case 'course' :
-			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
-			break;
-		case 'portfolio' :
-			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
-			break;
-		case 'project' :
-			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
-			break;
-		case 'club' :
-			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
-			break;
-	}
+    $return .= '<tr class="school-tooltip"><td colspan="2">';
 
-		$return .= '</td></tr>';
+    // associated school/dept tooltip
+    switch ($group_type) {
+        case 'course' :
+            $return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+            break;
+        case 'portfolio' :
+            $return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+            break;
+        case 'project' :
+            $return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
+            break;
+        case 'club' :
+            $return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
+            break;
+    }
 
-		$return .= '<tr><td class="school-inputs" colspan="2">';
+    $return .= '</td></tr>';
 
-	// If this is a Portfolio, we'll pre-check the school and department
-	// of the logged-in user
-	$checked_array = array( 'schools' => array(), 'departments' => array() );
-	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
-		$account_type = strtolower( bp_get_profile_field_data( array(
-			'field' => 'Account Type',
-			'user_id' => bp_loggedin_user_id()
-		) ) );
-		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+    $return .= '<tr><td class="school-inputs" colspan="2">';
 
-		$user_department = bp_get_profile_field_data( array(
-			'field'   => $dept_field,
-			'user_id' => bp_loggedin_user_id()
-		) );
+    // If this is a Portfolio, we'll pre-check the school and department
+    // of the logged-in user
+    $checked_array = array('schools' => array(), 'departments' => array());
+    if ('portfolio' == $group_type && bp_is_group_create()) {
+        $account_type = strtolower(bp_get_profile_field_data(array(
+            'field' => 'Account Type',
+            'user_id' => bp_loggedin_user_id()
+                )));
+        $dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
-		if ( $user_department ) {
-			$all_departments = openlab_get_department_list();
-			foreach ( $all_departments as $school => $depts ) {
-				if ( in_array( $user_department, $depts ) ) {
-					$checked_array['schools'][] = $school;
-					$checked_array['departments'][] = array_search( $user_department, $depts );
-					break;
-				}
-			}
-		}
-	} else {
-		foreach ( (array) $wds_group_school as $school ) {
-			$checked_array['schools'][] = $school;
-		}
-	}
+        $user_department = bp_get_profile_field_data(array(
+            'field' => $dept_field,
+            'user_id' => bp_loggedin_user_id()
+                ));
 
-	$onclick = 'onclick="wds_load_group_departments();"';
+        if ($user_department) {
+            $all_departments = openlab_get_department_list();
+            foreach ($all_departments as $school => $depts) {
+                if (in_array($user_department, $depts)) {
+                    $checked_array['schools'][] = $school;
+                    $checked_array['departments'][] = array_search($user_department, $depts);
+                    break;
+                }
+            }
+        }
+    } else {
+        foreach ((array) $wds_group_school as $school) {
+            $checked_array['schools'][] = $school;
+        }
+    }
 
-	$return.= '<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" '.$onclick.' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design</label>';
+    $onclick = 'onclick="wds_load_group_departments();"';
 
-	$return.= '<label><input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" '.$onclick.' '. checked( in_array( 'studies', $checked_array['schools'] ), true, false ) .'> Professional Studies</label>';
+    $return .= '<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" ' . $onclick . ' ' . checked(in_array('tech', $checked_array['schools']), true, false) . '> Technology & Design</label>';
 
-	$return.= '<label><input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" '.$onclick.' '. checked( in_array( 'arts', $checked_array['schools'] ), true, false ) .'> Arts & Sciences</label>';
+    $return .= '<label><input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" ' . $onclick . ' ' . checked(in_array('studies', $checked_array['schools']), true, false) . '> Professional Studies</label>';
 
-	$return .= '</td>';
-	$return .= '</tr>';
+    $return .= '<label><input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" ' . $onclick . ' ' . checked(in_array('arts', $checked_array['schools']), true, false) . '> Arts & Sciences</label>';
 
-        // For the love of Pete, it's not that hard to cast variables
-	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
+    $return .= '</td>';
+    $return .= '</tr>';
 
-	if ( bp_get_current_group_id() ) {
-		$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
-		$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(),  'wds_course_code' );
-		$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
-		$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
-		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
-		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
-	}
+    // For the love of Pete, it's not that hard to cast variables
+    $wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
 
-	$last_name= xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
+    if (bp_get_current_group_id()) {
+        $wds_faculty = groups_get_groupmeta(bp_get_current_group_id(), 'wds_faculty');
+        $wds_course_code = groups_get_groupmeta(bp_get_current_group_id(), 'wds_course_code');
+        $wds_section_code = groups_get_groupmeta(bp_get_current_group_id(), 'wds_section_code');
+        $wds_semester = groups_get_groupmeta(bp_get_current_group_id(), 'wds_semester');
+        $wds_year = groups_get_groupmeta(bp_get_current_group_id(), 'wds_year');
+        $wds_course_html = groups_get_groupmeta(bp_get_current_group_id(), 'wds_course_html');
+    }
 
-	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
-	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
+    $last_name = xprofile_get_field_data('Last Name', $bp->loggedin_user->id);
 
-	$return.= '<tr class="department-title">';
+    $faculty_name = bp_core_get_user_displayname(bp_loggedin_user_id());
+    $return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr($faculty_name) . '">';
 
-	$return .= '<td colspan="2" class="block-title italics">Department(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-		$return .= ' <span class="required">(required)</span>';
-	}
-	$return .= '</td></tr>';
-		$return.= '<tr class="departments"><td id="departments_html" colspan="2"></td>';
-	$return.= '</tr>';
+    $return .= '<tr class="department-title">';
 
-        $return .= '</table></div></div>';
+    $return .= '<td colspan="2" class="block-title italics">Department(s)';
+    if (openlab_is_school_required_for_group_type($group_type) && 'staff' != strtolower($account_type)) {
+        $return .= ' <span class="required">(required)</span>';
+    }
+    $return .= '</td></tr>';
+    $return .= '<tr class="departments"><td id="departments_html" colspan="2" aria-live="polite"></td>';
+    $return .= '</tr>';
 
-        if ( 'course' == $group_type ) {
+    $return .= '</table></div></div>';
+
+    if ('course' == $group_type) {
 
         $return .= '<div class="panel panel-default">';
         $return .= '<div class="panel-heading">Course Information</div>';
         $return .= '<div class="panel-body"><table>';
 
-		$return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
+        $return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
-		$return .= '<tr class="additional-field course-code-field">';
-		$return .= '<td class="additional-field-label">Course Code:</td>';
-		$return .= '<td><input class="form-control" type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
-		$return .= '</tr>';
+        $return .= '<tr class="additional-field course-code-field">';
+        $return .= '<td class="additional-field-label">Course Code:</td>';
+        $return .= '<td><input class="form-control" type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+        $return .= '</tr>';
 
-		$return .= '<tr class="additional-field section-code-field">';
-		$return .= '<td class="additional-field-label">Section Code:';
-		$return .= '<td><input class="form-control" type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
-		$return .= '</tr>';
+        $return .= '<tr class="additional-field section-code-field">';
+        $return .= '<td class="additional-field-label">Section Code:';
+        $return .= '<td><input class="form-control" type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+        $return .= '</tr>';
 
-		$return .= '<tr class="additional-field semester-field">';
-		$return .= '<td class="additional-field-label">Semester:';
-		$return .= '<td><select class="form-control" name="wds_semester">';
-		$return .= '<option value="">--select one--';
+        $return .= '<tr class="additional-field semester-field">';
+        $return .= '<td class="additional-field-label">Semester:';
+        $return .= '<td><select class="form-control" name="wds_semester">';
+        $return .= '<option value="">--select one--';
 
-		$checked = $Spring = $Summer = $Fall = $Winter = "";
+        $checked = $Spring = $Summer = $Fall = $Winter = "";
 
-		if ( $wds_semester == "Spring" ) {
-			$Spring = "selected";
-		} elseif ( $wds_semester == "Summer" ) {
-			$Summer = "selected";
-		} elseif ( $wds_semester == "Fall" ) {
-			$Fall   = "selected";
-		} elseif ( $wds_semester == "Winter" ) {
-			$Winter = "selected";
-		}
+        if ($wds_semester == "Spring") {
+            $Spring = "selected";
+        } elseif ($wds_semester == "Summer") {
+            $Summer = "selected";
+        } elseif ($wds_semester == "Fall") {
+            $Fall = "selected";
+        } elseif ($wds_semester == "Winter") {
+            $Winter = "selected";
+        }
 
-		$return .= '<option value="Spring" ' . $Spring . '>Spring';
-		$return .= '<option value="Summer" ' . $Summer . '>Summer';
-		$return .= '<option value="Fall" ' . $Fall . '>Fall';
-		$return .= '<option value="Winter" ' . $Winter . '>Winter';
-		$return .= '</select></td>';
-		$return .= '</tr>';
+        $return .= '<option value="Spring" ' . $Spring . '>Spring';
+        $return .= '<option value="Summer" ' . $Summer . '>Summer';
+        $return .= '<option value="Fall" ' . $Fall . '>Fall';
+        $return .= '<option value="Winter" ' . $Winter . '>Winter';
+        $return .= '</select></td>';
+        $return .= '</tr>';
 
-		$return .= '<tr class="additional-field year-field">';
-		$return .= '<td class="additional-field-label">Year:';
-		$return .= '<td><input class="form-control" type="text" name="wds_year" value="' . $wds_year . '"></td>';
-		$return .= '</tr>';
+        $return .= '<tr class="additional-field year-field">';
+        $return .= '<td class="additional-field-label">Year:';
+        $return .= '<td><input class="form-control" type="text" name="wds_year" value="' . $wds_year . '"></td>';
+        $return .= '</tr>';
 
-		$return .= '<tr class="additional-field additional-description-field">';
-		$return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
-		$return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
-		$return.= '</tr>';
+        $return .= '<tr class="additional-field additional-description-field">';
+        $return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
+        $return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
+        $return .= '</tr>';
 
-                $return.= '</table></div></div><!--.panel-->';
-	}
+        $return .= '</table></div></div><!--.panel-->';
+    }
 
-	$return.= '<script>wds_load_group_departments();</script>';
+    $return .= '<script>wds_load_group_departments();</script>';
 
-	if ( $echo ) {
-		return $return;
-	} else {
-		$return = str_replace( "'","\'", $return );
-		die( "document.getElementById( 'wds-group-type' ).innerHTML='$return'" );
-	}
+    if ($echo) {
+        return $return;
+    } else {
+        $return = str_replace("'", "\'", $return);
+        die("document.getElementById( 'wds-group-type' ).innerHTML='$return'");
+    }
 }
 
 /**
  * Are School and Department required for this group type?
  */
-function openlab_is_school_required_for_group_type( $group_type = '' ) {
-	$req_types = array( 'course', 'portfolio' );
+function openlab_is_school_required_for_group_type($group_type = '') {
+    $req_types = array('course', 'portfolio');
 
-	return in_array( $group_type, $req_types );
+    return in_array($group_type, $req_types);
 }
 
 /**
