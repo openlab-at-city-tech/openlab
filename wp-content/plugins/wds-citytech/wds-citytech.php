@@ -385,7 +385,7 @@ function wds_load_account_type() {
         $post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
 
 	if ( $account_type ) {
-		$return .= wds_get_register_fields( $account_type, $post_data );
+		$return .= '<div class="sr-only">'.$account_type.' selected.</div>'.wds_get_register_fields( $account_type, $post_data );
 	} else {
 		$return = "Please select an Account Type.";
 	}
