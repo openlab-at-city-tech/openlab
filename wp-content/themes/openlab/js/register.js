@@ -190,7 +190,6 @@ jQuery(document).ready(function ($) {
         var selected_account_type = $account_type_field.val();
 
         if (document.getElementById('signup_submit')) {
-            console.log('selected_account_type', selected_account_type);
             if (selected_account_type !== "") {
                 $('#signup_submit').removeAttr('disabled');
                 $('#signup_submit').val('Complete Sign Up');
