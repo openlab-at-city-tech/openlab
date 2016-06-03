@@ -21,7 +21,7 @@ window.wp = window.wp || {};
 						create_list_item( ui.item.value, ui.item.label );
 					}
 
-					$ac.val( '' );		
+					$ac.val( '' );
 					return false;
 				}
 			} );
@@ -29,7 +29,7 @@ window.wp = window.wp || {};
 			// Init existing items.
 			$existing = $.parseJSON( OL_Addl_Faculty_Existing );
 			$.each( $existing, function( k, v ) {
-				create_list_item( v.value, v.label );	
+				create_list_item( v.value, v.label );
 			} );
 
 			// Bind remove actions by delegation.
