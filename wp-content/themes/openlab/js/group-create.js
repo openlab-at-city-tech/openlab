@@ -57,12 +57,12 @@ jQuery(document).ready(function($){
 					$(element).removeProp('disabled').removeClass('disabled');
                                     }
 				});
-                                
+
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').removeClass('disabled-opt');
                                 }
-                                
+
 			} else {
 				$(thisid).find('input').each(function(index,element){
                                     if ($(element).attr('type') !== 'radio') {
@@ -76,7 +76,7 @@ jQuery(document).ready(function($){
 					$(element).prop('disabled','disabled').addClass('disabled');
                                     }
 				});
-                                
+
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').addClass('disabled-opt');
@@ -362,7 +362,7 @@ jQuery(document).ready(function($){
 	/**
 	 * Form validation.
 	 *
-	 * - Site URL is validated by AJAX.  
+	 * - Site URL is validated by AJAX.
 	 * - Name and Description use native validation.
 	 */
 	validate_form = function( event ) {
@@ -402,7 +402,7 @@ jQuery(document).ready(function($){
 
 		event.preventDefault();
 
-		domain = $domain_field.val();	
+		domain = $domain_field.val();
 
 		var warn = $domain_field.siblings( '.ajax-warning' );
 		if ( warn.length > 0 ) {
@@ -425,7 +425,7 @@ jQuery(document).ready(function($){
 					return false;
 				} else {
 					// We're done validating.
-					form_validated = true;		
+					form_validated = true;
 					$form.append( '<input name="save" value="1" type="hidden" />' );
 					$form.submit();
 					return true;
