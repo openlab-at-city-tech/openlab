@@ -254,6 +254,9 @@ input[type="submit"]{
 }
 .form-control{
     margin-bottom: 15px;
+    &.parsley-error {
+        margin-bottom: 0;
+    }
     &[type='file']{
         padding: 6px 12px;
     }
@@ -273,6 +276,11 @@ input[type="submit"]{
             display: inline-block;
         }
     }
+}
+.parsley-errors-list.filled {
+    padding-left: 0;
+    list-style-type: none;
+    font-weight: bold;
 }
 .notify-settings {
     .notify-members {

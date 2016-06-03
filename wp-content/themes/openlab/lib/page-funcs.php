@@ -296,14 +296,16 @@ function openlab_groups_filter_clause($sql) {
  *
  */
 function openlab_registration_page() {
-    do_action('bp_before_register_page')
+	do_action( 'bp_before_register_page' );
+
+	$ajaxurl = bp_core_ajax_url();
     ?>
 
     <div class="page" id="register-page">
 
         <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
 
-        <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
+        <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data" data-parsley-trigger="blur">
 
             <?php if ('request-details' == bp_get_current_signup_step()) : ?>
 
@@ -321,24 +323,83 @@ function openlab_registration_page() {
 
                             <?php /*                             * *** Basic Account Details ***** */ ?>
 
-                            <label for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
-                            <?php do_action('bp_signup_username_errors') ?>
-                            <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
+			    <div class="form-group">
+				    <label class="control-label" for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
+				    <?php do_action('bp_signup_username_errors') ?>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_username"
+					id="signup_username"
+					value="<?php bp_signup_username_value() ?>"
+					data-parsley-lowercase
+					data-parsley-nospecialchars
+					data-parsley-required
+					data-parsley-minlength="4"
+					data-parsley-remote="<?php echo add_query_arg( array(
+						'action' => 'openlab_unique_login_check',
+						'login' => '{value}',
+					), $ajaxurl ); ?>"
+					data-parsley-remote-message="That username is already taken."
+				    />
+			    </div>
 
-                            <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
-                            <?php do_action('bp_signup_email_errors') ?>
-                            <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value('signup_email') ?>" />
+			    <div class="form-group">
+				    <label class="control-label" for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
+				    <?php do_action('bp_signup_email_errors') ?>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_email"
+					id="signup_email"
+					value="<?php echo openlab_post_value('signup_email') ?>"
+					data-parsley-trigger="blur"
+					data-parsley-required
+					data-parsley-type="email"
+					data-parsley-group="email"
+				    />
 
-                            <label for="signup_email_confirm">Confirm Email Address (required)</label>
-                            <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="<?php echo openlab_post_value('signup_email_confirm') ?>" />
+				    <label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_email_confirm"
+					id="signup_email_confirm"
+					value="<?php echo openlab_post_value('signup_email_confirm') ?>"
+					data-parsley-trigger="blur"
+					data-parsley-required
+					data-parsley-type="email"
+					data-parsley-equalto="#signup_email"
+					data-parsley-equalto-message="Email addresses must match."
+					data-parsley-group="email"
+				    />
+			    </div>
 
-                            <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                            <?php do_action('bp_signup_password_errors') ?>
-                            <input class="form-control" type="password" name="signup_password" id="signup_password" value="" />
+			    <div class="form-group">
+				    <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+				    <?php do_action('bp_signup_password_errors') ?>
+				    <input
+					class="form-control"
+					type="password"
+					name="signup_password"
+					id="signup_password"
+					value=""
+					data-parsley-required
+				    />
 
-                            <label for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                            <?php do_action('bp_signup_password_confirm_errors') ?>
-                            <input class="form-control" type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
+				    <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+				    <?php do_action('bp_signup_password_confirm_errors') ?>
+				    <input
+					class="form-control"
+					type="password"
+					name="signup_password_confirm"
+					id="signup_password_confirm"
+					value=""
+					data-parsley-required
+					data-parsley-equalto="#signup_password"
+					data-parsley-equalto-message="Passwords must match."
+				    />
+			    </div>
 
                         </div><!-- #basic-details-section -->
                     </div>

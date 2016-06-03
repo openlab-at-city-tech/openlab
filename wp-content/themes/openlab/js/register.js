@@ -1,6 +1,39 @@
+// Parsley validation rules.
+
+window.Parsley.addValidator( 'lowercase', {
+	validateString: function( value ) {
+		return value === value.toLowerCase();
+	},
+	messages: {
+		en: 'This field supports lowercase letters only.'
+	}
+} );
+
+window.Parsley.addValidator( 'nospecialchars', {
+	validateString: function( value ) {
+		return ! value.match( /[^a-zA-Z0-9]/ );
+	},
+	messages: {
+		en: 'This field supports alphanumeric characters only.'
+	}
+} );
 jQuery(document).ready(function ($) {
+	var $signup_form = $( '#signup_form' );
+
+	$signup_form.parsley( {
+		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
+	} ).on( 'field:error', function() {
+		this.$element.parent( '.form-group' ).addClass( 'has-error' );
+	} ).on( 'field:success', function() {
+		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
+	} );
+
     $('#signup_email').on('blur', function (e) {
         var email = $(e.target).val().toLowerCase();
+	if ( ! email.length ) {
+		return;
+	}
+
         var emailtype = '';
         var $emaillabel = $('label[for="signup_email"] div');
         var $validationdiv = $('#validation-code');
