@@ -493,7 +493,7 @@ function openlab_registration_page() {
 
 function openlab_primary_skip_link() {
     $skip_link_out = '';
-    
+
     $content_target = '#openlab-main-content';
     $content_text = 'main content';
 
