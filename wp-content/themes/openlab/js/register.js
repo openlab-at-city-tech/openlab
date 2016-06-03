@@ -119,10 +119,10 @@ jQuery(document).ready(function ($) {
                         }
 
                         if (show_validation) {
-                            $validationdiv.show().find('input').focus();
+//                            $validationdiv.show().find('input').focus();
                         } else {
                             $validationdiv.hide();
-                            $emailconfirm.focus();
+ //                           $emailconfirm.focus();
                         }
 
                         set_account_type_fields();
@@ -131,7 +131,7 @@ jQuery(document).ready(function ($) {
         } else {
             $validationdiv.hide();
             $emaillabel.fadeOut();
-            $emailconfirm.focus();
+//            $emailconfirm.focus();
             set_account_type_fields();
         }
 
