@@ -19,12 +19,23 @@ function showHide(id) {
 }
 
 jQuery(document).ready(function($){
-	var form = document.getElementById( 'create-group-form' ),
+	var form,
+		form_type,
 		form_validated = false,
-		$form = $( form ),
+		$body = $( 'body' ),
 		$gc_submit = $( '#group-creation-create' ),
 		$required_fields;
-	
+
+	if ( $body.hasClass( 'group-admin' ) ) {
+		form_type = 'admin';
+		form = document.getElementById( 'group-settings-form' );
+	} else {
+		form_type = 'create';
+		form = document.getElementById( 'create-group-form' );
+	}
+
+	$form = $( form );
+
 	$required_fields = $form.find( 'input:required' );
 
 	function new_old_switch( noo ) {
