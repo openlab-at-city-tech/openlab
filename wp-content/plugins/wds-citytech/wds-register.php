@@ -8,7 +8,7 @@ function openlab_registration_avatars() {
 	if ( !bp_is_register_page() ) {
 		return;
 	}
-        
+
         if ( empty( $bp->avatar_admin ) ) {
 		$bp->avatar_admin = new stdClass;
 	}
@@ -158,7 +158,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
             $_POST[$pdk] = $pdv;
         }
     }
-    
+
     $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return="";
@@ -181,7 +181,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					}
 				}
 				$return.='</label>';
-                                
+
 				/*
 				$input_name = trim(bp_get_the_profile_field_input_name());
 				$return.="<br />Input field name: " . $input_name;
