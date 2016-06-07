@@ -3639,6 +3639,7 @@ if (Hyphenator.isBookmarklet()) {
 
         },
         hideNavMenu: function (thisElem, thisToggleTarget, thisAnchor, triggerBackgroundOnlyCheck) {
+            console.log('hiding nav Menu');
             var plusHeight = OpenLab.nav.plusHeight;
             var backgroundOnly = false;
 
@@ -3692,6 +3693,7 @@ if (Hyphenator.isBookmarklet()) {
             });
         },
         showNavMenu: function (thisElem, thisTargetElem) {
+            console.log('showing nav Menu');
             var plusHeight = OpenLab.nav.plusHeight;
 
             if (thisElem.attr('data-plusheight')) {
@@ -3727,7 +3729,7 @@ if (Hyphenator.isBookmarklet()) {
         backgroundAction: function () {
 
             OpenLab.nav.backgroundCont.on('click', function () {
-
+                console.log('background action initiated via click');
                 var thisElem = $(this);
                 var currentActiveButton = $('.direct-toggle.active');
                 var targetToClose = currentActiveButton.data('target');
