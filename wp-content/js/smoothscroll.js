@@ -3581,7 +3581,7 @@ if (Hyphenator.isBookmarklet()) {
                     var thisTargetElem = $(thisTarget);
 
                     if (thisTargetElem.is(':visible')) {
-
+                        console.log('closing hideNavMenu via directToggleAction #1');
                         OpenLab.nav.hideNavMenu(thisElem, thisTargetElem);
 
                     } else {
@@ -3591,7 +3591,7 @@ if (Hyphenator.isBookmarklet()) {
                             var thisToggleTarget = thisElem.data('target');
 
                             if ($(thisToggleTarget).is(':visible')) {
-
+                                console.log('closing hideNavMenu via directToggleAction #2');
                                 OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget);
 
                             }
@@ -3631,7 +3631,7 @@ if (Hyphenator.isBookmarklet()) {
                 }
 
                 if (thisElem.hasClass('active')) {
-
+                    console.log('closing hideNavMenu via directToggleResizeHandler');
                     OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
 
                 }
@@ -3729,11 +3729,10 @@ if (Hyphenator.isBookmarklet()) {
         backgroundAction: function () {
 
             OpenLab.nav.backgroundCont.on('click', function () {
-                console.log('background action initiated via click');
                 var thisElem = $(this);
                 var currentActiveButton = $('.direct-toggle.active');
                 var targetToClose = currentActiveButton.data('target');
-
+                console.log('closing hideNavMenu via backgroundAction');
                 OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose);
 
             });
@@ -3749,7 +3748,7 @@ if (Hyphenator.isBookmarklet()) {
                     var currentActiveButton = $('.direct-toggle.active');
                     var background = $('#behind_menu_background');
                     var targetToClose = currentActiveButton.data('target');
-
+                    console.log('closing hideNavMenu via mobileAnchorLinks');
                     OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose, thisAnchor);
 
                 });
