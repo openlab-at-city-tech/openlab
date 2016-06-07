@@ -3408,6 +3408,7 @@ if (Hyphenator.isBookmarklet()) {
     }
 
     var resizeTimer;
+    var windowWidth = $(window).width();
 
     OpenLab.nav = {
         backgroundCont: {},
@@ -3581,7 +3582,7 @@ if (Hyphenator.isBookmarklet()) {
                     var thisTargetElem = $(thisTarget);
 
                     if (thisTargetElem.is(':visible')) {
-                        console.log('closing hideNavMenu via directToggleAction #1');
+
                         OpenLab.nav.hideNavMenu(thisElem, thisTargetElem);
 
                     } else {
@@ -3591,7 +3592,7 @@ if (Hyphenator.isBookmarklet()) {
                             var thisToggleTarget = thisElem.data('target');
 
                             if ($(thisToggleTarget).is(':visible')) {
-                                console.log('closing hideNavMenu via directToggleAction #2');
+
                                 OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget);
 
                             }
@@ -3631,7 +3632,7 @@ if (Hyphenator.isBookmarklet()) {
                 }
 
                 if (thisElem.hasClass('active')) {
-                    console.log('closing hideNavMenu via directToggleResizeHandler');
+                    console.log('hiding menu via directToggleResizeHandler');
                     OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
 
                 }
@@ -3639,7 +3640,6 @@ if (Hyphenator.isBookmarklet()) {
 
         },
         hideNavMenu: function (thisElem, thisToggleTarget, thisAnchor, triggerBackgroundOnlyCheck) {
-            console.log('hiding nav Menu');
             var plusHeight = OpenLab.nav.plusHeight;
             var backgroundOnly = false;
 
@@ -3693,7 +3693,6 @@ if (Hyphenator.isBookmarklet()) {
             });
         },
         showNavMenu: function (thisElem, thisTargetElem) {
-            console.log('showing nav Menu');
             var plusHeight = OpenLab.nav.plusHeight;
 
             if (thisElem.attr('data-plusheight')) {
@@ -3729,10 +3728,11 @@ if (Hyphenator.isBookmarklet()) {
         backgroundAction: function () {
 
             OpenLab.nav.backgroundCont.on('click', function () {
+
                 var thisElem = $(this);
                 var currentActiveButton = $('.direct-toggle.active');
                 var targetToClose = currentActiveButton.data('target');
-                console.log('closing hideNavMenu via backgroundAction');
+
                 OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose);
 
             });
@@ -3748,7 +3748,7 @@ if (Hyphenator.isBookmarklet()) {
                     var currentActiveButton = $('.direct-toggle.active');
                     var background = $('#behind_menu_background');
                     var targetToClose = currentActiveButton.data('target');
-                    console.log('closing hideNavMenu via mobileAnchorLinks');
+
                     OpenLab.nav.hideNavMenu(currentActiveButton, targetToClose, thisAnchor);
 
                 });
@@ -3772,9 +3772,16 @@ if (Hyphenator.isBookmarklet()) {
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
+            
+            //checking to see if this is truly a resize event
+            if ($(window).width() != windowWidth) {
+                
+                windowWidth = $(window).width();
 
-            OpenLab.nav.hoverFixes();
-            OpenLab.nav.directToggleResizeHandler();
+                OpenLab.nav.hoverFixes();
+                OpenLab.nav.directToggleResizeHandler();
+
+            }
 
         }, 250);
 
