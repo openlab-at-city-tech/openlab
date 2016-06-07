@@ -72,6 +72,8 @@ function openlab_load_scripts() {
         }
         wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.2', true);
         wp_enqueue_script('utility');
+
+	wp_register_script( 'parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array( 'jquery' ) );
     }
 }
 
@@ -206,3 +208,35 @@ function openlab_post_value($key) {
  * Disable the new avatar upload interface introduced in BP 2.3.
  */
 add_filter('bp_avatar_is_front_edit', '__return_false');
+
+/**
+ * Generate data attributes for xprofile 'input' fields.
+ *
+ * Used for Parsely validation.
+ */
+function openlab_profile_field_input_attributes() {
+	$attributes = array();
+
+	switch ( bp_get_the_profile_field_name() ) {
+		case 'Name' :
+			$attributes[] = 'data-parsley-required';
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'First Name' :
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'Last Name' :
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'Account Type' :
+			$attributes[] = 'data-parsley-required';
+		break;
+	}
+
+	if ( $attributes ) {
+		return ' ' . implode( ' ', $attributes ) . ' ';
+	}
+}

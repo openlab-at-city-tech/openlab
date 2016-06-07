@@ -1,6 +1,39 @@
+// Parsley validation rules.
+
+window.Parsley.addValidator( 'lowercase', {
+	validateString: function( value ) {
+		return value === value.toLowerCase();
+	},
+	messages: {
+		en: 'This field supports lowercase letters only.'
+	}
+} );
+
+window.Parsley.addValidator( 'nospecialchars', {
+	validateString: function( value ) {
+		return ! value.match( /[^a-zA-Z0-9]/ );
+	},
+	messages: {
+		en: 'This field supports alphanumeric characters only.'
+	}
+} );
 jQuery(document).ready(function ($) {
+	var $signup_form = $( '#signup_form' );
+
+	$signup_form.parsley( {
+		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
+	} ).on( 'field:error', function() {
+		this.$element.parent( '.form-group' ).addClass( 'has-error' );
+	} ).on( 'field:success', function() {
+		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
+	} );
+
     $('#signup_email').on('blur', function (e) {
         var email = $(e.target).val().toLowerCase();
+	if ( ! email.length ) {
+		return;
+	}
+
         var emailtype = '';
         var $emaillabel = $('label[for="signup_email"] div');
         var $validationdiv = $('#validation-code');
@@ -86,10 +119,10 @@ jQuery(document).ready(function ($) {
                         }
 
                         if (show_validation) {
-                            $validationdiv.show().find('input').focus();
+//                            $validationdiv.show().find('input').focus();
                         } else {
                             $validationdiv.hide();
-                            $emailconfirm.focus();
+ //                           $emailconfirm.focus();
                         }
 
                         set_account_type_fields();
@@ -98,7 +131,7 @@ jQuery(document).ready(function ($) {
         } else {
             $validationdiv.hide();
             $emaillabel.fadeOut();
-            $emailconfirm.focus();
+//            $emailconfirm.focus();
             set_account_type_fields();
         }
 
@@ -190,7 +223,6 @@ jQuery(document).ready(function ($) {
         var selected_account_type = $account_type_field.val();
 
         if (document.getElementById('signup_submit')) {
-            console.log('selected_account_type', selected_account_type);
             if (selected_account_type !== "") {
                 $('#signup_submit').removeAttr('disabled');
                 $('#signup_submit').val('Complete Sign Up');

@@ -231,8 +231,6 @@
         },
         filterAjax: function () {
 
-            console.log('anything?');
-
             //safety first
             $('#schoolSelect select').off('select2:select');
 

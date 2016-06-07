@@ -8,7 +8,7 @@ function openlab_registration_avatars() {
 	if ( !bp_is_register_page() ) {
 		return;
 	}
-        
+
         if ( empty( $bp->avatar_admin ) ) {
 		$bp->avatar_admin = new stdClass;
 	}
@@ -158,7 +158,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
             $_POST[$pdk] = $pdv;
         }
     }
-    
+
     $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return="";
@@ -166,12 +166,12 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 	if ( bp_has_profile( 'exclude_groups=' . $exclude_groups ) ) : while ( bp_profile_groups() ) : bp_the_profile_group();
 		while ( bp_profile_fields() ) : bp_the_profile_field();
 
-			$return.='<div class="editfield">';
+			$return .= '<div class="editfield form-group">';
 			if ( 'textbox' == bp_get_the_profile_field_type() ) :
 				if(bp_get_the_profile_field_name()=="Name"){
-					$return.='<label for="'.bp_get_the_profile_field_input_name().'">Display Name';
+					$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">Display Name';
 				}else{
-					$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
+					$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
 				}
 				if ( bp_get_the_profile_field_is_required() ) {
 					if (bp_get_the_profile_field_name()=="First Name" || bp_get_the_profile_field_name()=="Last Name") {
@@ -181,7 +181,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					}
 				}
 				$return.='</label>';
-                                
+
 				/*
 				$input_name = trim(bp_get_the_profile_field_input_name());
 				$return.="<br />Input field name: " . $input_name;
@@ -189,7 +189,14 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 				$return .= "<br />Post Field 193: " . $_POST['field_193'];
 				$input_value = $_POST["{$input_name}"];
 				*/
-				$return.='<input class="form-control" type="text" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" value="'.bp_get_the_profile_field_edit_value().'" />';
+				$return .= '<input
+						class="form-control"
+						type="text"
+						name="' . bp_get_the_profile_field_input_name() . '"
+						id="' . bp_get_the_profile_field_input_name() . '"
+						value="' . bp_get_the_profile_field_edit_value() . '"
+						' . openlab_profile_field_input_attributes() . '
+						/>';
 			endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
 				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
@@ -201,7 +208,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 				$return.='</textarea>';
 			endif;
 			if ( 'selectbox' == bp_get_the_profile_field_type() ) :
-				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
+				$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
 				if ( bp_get_the_profile_field_is_required() ) :
 					$return.=' (required)';
 				endif;
@@ -209,8 +216,14 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 				//WDS ADDED $$$
 
 				$onchange = '';
-                                
-				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" '.$onchange.'>';
+
+				$return .= '<select
+						class="form-control"
+						name="' . bp_get_the_profile_field_input_name() . '"
+						id="' . bp_get_the_profile_field_input_name() . '" '.
+						$onchange .
+						openlab_profile_field_input_attributes() .
+						' >';
 					 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
 						$return .= '<option selected="selected" value=""> ---- </option>';
 					 }

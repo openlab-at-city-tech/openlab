@@ -58,8 +58,8 @@ function openlab_enqueue_frontend_scripts() {
 	}
 
         if ( bp_is_register_page() ) {
-                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery' ) );
-                
+                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery', 'parsley' ) );
+
                 wp_localize_script('openlab-registration', 'OLReg', array(
                     'post_data' => $_POST,
                     'account_type_field' => xprofile_get_field_id_from_name('Account Type '),
@@ -67,4 +67,4 @@ function openlab_enqueue_frontend_scripts() {
     }
 
 }
-add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts' );
+add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts', 20 );
