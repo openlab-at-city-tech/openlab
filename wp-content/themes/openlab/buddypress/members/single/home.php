@@ -2,7 +2,7 @@
 
     <?php openlab_bp_mobile_sidebar('members'); ?>
     <div class="col-sm-18 col-xs-24 members-single-home">
-        <div class="content-wrapper">
+        <div id="openlab-main-content" class="content-wrapper">
 
 <?php do_action( 'bp_before_member_body' );
 

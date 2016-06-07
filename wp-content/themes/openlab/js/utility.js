@@ -136,8 +136,6 @@
                         //if the groupname is truncated, let's use that
                         var srprovider = thisElem.closest('.truncate-combo').find('[data-srprovider]');
 
-                        console.log('srprovider', srprovider);
-
                         if (srprovider.length) {
                             nameTrunc = srprovider.text();
                         }
@@ -210,41 +208,37 @@
             //custom select arrows
             if (resize) {
                 $('.custom-select-parent').html(OpenLab.utility.customSelectHTML);
-                $('.custom-select select').customSelect();
+                $('.custom-select select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: "100%",
+                    escapeMarkup: function (text) {
+                        return text;
+                    }
+                });
             } else {
                 OpenLab.utility.customSelectHTML = $('.custom-select-parent').html();
-                $('.custom-select select').customSelect();
-            }
-
-            OpenLab.utility.selectDisplay = setInterval(OpenLab.utility.checkDisplay, 50);
-
-        },
-        checkDisplay: function () {
-            if ($('.customSelect').length) {
-                OpenLab.utility.protect = 1000;
-            }
-
-            OpenLab.utility.protect++;
-
-            if (OpenLab.utility.protect > 1000) {
-                $('#sidebarCustomSelect').css({
-                    'visibility': 'visible',
-                    'opacity': 0
+                $('.custom-select select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: "100%",
+                    escapeMarkup: function (text) {
+                        return text;
+                    }
                 });
-                $('#sidebarCustomSelect').animate({
-                    opacity: 1
-                }, 700);
-                clearInterval(OpenLab.utility.selectDisplay);
-                OpenLab.utility.filterAjax();
             }
+
+            OpenLab.utility.filterAjax();
 
         },
         filterAjax: function () {
+
             //safety first
-            $('#school-select').unbind('change');
+            $('#schoolSelect select').off('select2:select');
 
             //ajax functionality for courses archive
-            $('#school-select').on('change', function () {
+            $('#schoolSelect select').on('select2:select', function () {
+
+                console.log('changing');
+
                 var school = $(this).val();
                 var nonce = $('#nonce-value').text();
 

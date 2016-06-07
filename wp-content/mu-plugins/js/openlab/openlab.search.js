@@ -17,7 +17,8 @@
             //search
             if ($('.search-trigger-wrapper').length) {
                 OpenLab.search.searchBarLoadActions();
-                $('.search-trigger').on('click', function () {
+                $('.search-trigger').on('click', function (e) {
+                    e.preventDefault();
                     OpenLab.search.searchBarEventActions($(this));
                 });
             }

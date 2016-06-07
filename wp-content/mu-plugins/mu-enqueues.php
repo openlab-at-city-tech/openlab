@@ -47,18 +47,26 @@ function openlab_mu_enqueue() {
 	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 		wp_register_script('smoothscroll-js', plugins_url('js', __FILE__) . '/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array('jquery'), '', true);
 		wp_enqueue_script('smoothscroll-js');
-		wp_register_script('select-js', plugins_url('js', __FILE__) . '/jquery-custom-select/jquery.customSelect.min.js', array('jquery'), '', true);
+		wp_register_script('select-js', plugins_url('js', __FILE__) . '/select2/select2.min.js', array('jquery'), '', true);
 		wp_enqueue_script('select-js');
 		wp_register_script('hyphenator-js', plugins_url('js', __FILE__) . '/hyphenator/hyphenator.js', array('jquery') );
 		wp_enqueue_script('hyphenator-js');
 		wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'), '', true);
 		wp_enqueue_script('openlab-search-js');
-		wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), '', true);
+                
+		wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), '1.6.8.5', true);
 		wp_enqueue_script('openlab-nav-js');
+                wp_localize_script('openlab-nav-js', 'utilityVars', array(
+                    'loginForm' => openlab_get_loginform(),
+                ));
+                
 		wp_register_script('openlab-theme-fixes-js', plugins_url('js', __FILE__) . '/openlab/openlab.theme.fixes.js', array('jquery','twentyfourteen-script'), '', true);
 		wp_enqueue_script('openlab-theme-fixes-js');
 	} else {
-		wp_enqueue_script( 'openlab-smoothscroll', content_url( 'js/smoothscroll.js' ), array( 'jquery' ) );
+		wp_enqueue_script( 'openlab-smoothscroll', content_url( 'js/smoothscroll.js' ), array( 'jquery' ), '1.6.8.5' );
+                wp_localize_script('openlab-smoothscroll', 'utilityVars', array(
+                    'loginForm' => openlab_get_loginform(),
+                ));
 	}
 }
 

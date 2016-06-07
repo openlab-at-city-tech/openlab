@@ -19,7 +19,7 @@ function cuny_404() { ?>
 	<div class="post hentry">
 
 		<h1 class="entry-title">Page Not Found</h1>
-		<div class="entry-content">
+		<div id="openlab-main-content" class="entry-content">
 			<p>The page you requested could not be found. Please use the menu above to find the page you need.</p>
 
 		</div><!-- end .entry-content -->

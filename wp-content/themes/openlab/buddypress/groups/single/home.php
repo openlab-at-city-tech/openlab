@@ -3,15 +3,12 @@
  * Group single page
  *
  */
-
-openlab_bp_mobile_sidebar('actions');
-
 if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
         ?>
 
         <?php do_action('bp_before_group_home_content'); ?>
         <div class="col-sm-18 col-xs-24 groups-single-home">
-            <div class="content-wrapper">
+            <div id="openlab-main-content" class="content-wrapper">
 
                 <?php
                 do_action('bp_before_group_body');
@@ -98,8 +95,9 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
 
         <?php do_action('bp_after_group_home_content'); ?>
 
-    <?php endwhile;
+    <?php
+    endwhile;
 endif;
 ?>
 
-<?php openlab_bp_sidebar('actions'); ?>
+<?php openlab_bp_sidebar('actions', false, ' mobile-enabled'); ?>

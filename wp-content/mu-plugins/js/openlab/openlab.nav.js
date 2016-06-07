@@ -9,12 +9,15 @@
     }
 
     var resizeTimer;
+    var windowWidth = $(window).width();
 
     OpenLab.nav = {
         backgroundCont: {},
         backgroundTopStart: 0,
         plusHeight: 66,
         init: function () {
+
+            OpenLab.nav.loginformInit();
 
             OpenLab.nav.backgroundCont = $('#behind_menu_background');
 
@@ -26,9 +29,35 @@
             OpenLab.nav.mobileAnchorLinks();
             OpenLab.nav.hoverFixes();
             OpenLab.nav.tabindexNormalizer();
+            OpenLab.nav.focusActions();
+            OpenLab.nav.blurActions();
 
             OpenLab.nav.hyphenateInit();
 
+        },
+        loginformInit: function () {
+
+            var loginform = utilityVars.loginForm;
+
+            $("#wp-admin-bar-bp-login").append(loginform);
+
+            $("#wp-admin-bar-bp-login > a").click(function () {
+
+                if (!$(this).hasClass('login-click')) {
+                    $(this).closest('#wp-admin-bar-bp-login').addClass('login-form-active');
+                }
+
+                $(".ab-submenu #sidebar-login-form").toggle(400, function () {
+                    $(".ab-submenu #sidebar-user-login").focus();
+                    if ($(this).hasClass('login-click')) {
+                        $(this).closest('#wp-admin-bar-bp-login').removeClass('login-form-active');
+                    }
+                    $(this).toggleClass("login-click");
+                });
+
+                OpenLab.nav.blurActions();
+                return false;
+            });
         },
         hyphenateInit: function () {
             Hyphenator.config(
@@ -59,17 +88,18 @@
                 }
 
             });
-            
+
             //add tabindex to mol icon menus
-            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity').attr('tabindex', '0');
+            $('#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity, #wp-admin-bar-my-account, #wp-admin-bar-top-logout, #wp-admin-bar-bp-register, #wp-admin-bar-bp-login').attr('tabindex', '0');
+
+        },
+        focusActions: function () {
 
             //active menupop for keyboard users
             var adminbar = $('#wpadminbar');
 
             adminbar.find('li.menupop').on('focus', function (e) {
-                
-                console.log('focusing');
-                
+
                 var el = $(this);
 
                 if (el.parent().is('#wp-admin-bar-root-default') && !el.hasClass('hover')) {
@@ -85,6 +115,45 @@
                     e.preventDefault();
                     el.removeClass('hover');
                 }
+            });
+
+            var skipToAdminbar = $('#skipToAdminbar');
+            var skipTarget = skipToAdminbar.attr('href');
+
+            skipToAdminbar.on('click', function () {
+
+                if (skipTarget === '#wp-admin-bar-bp-login') {
+                    $(skipTarget).find('> a').click();
+                } else if (skipTarget === '#wp-admin-bar-my-openlab') {
+                    $(skipTarget).closest('.menupop').addClass('hover');
+                    $('wp-admin-bar-my-openlab-default').focus();
+                }
+
+            });
+
+        },
+        blurActions: function () {
+
+            var adminbar = $('#wpadminbar');
+
+            //make sure the menu closes when we leave
+            adminbar.find('.exit a').each(function () {
+
+                var actionEl = $(this);
+
+                actionEl.off('blur').on('blur', function (e) {
+                    var el = $(this);
+
+                    el.closest('.menupop').removeClass('hover');
+
+                    //special case for login button
+                    if (el.closest('#wp-admin-bar-bp-login').length) {
+                        el.closest('#wp-admin-bar-bp-login').find('> a').click();
+                    }
+
+                });
+
+
             });
 
         },
@@ -156,7 +225,7 @@
 
                 if (!OpenLab.nav.isBreakpoint('xs') && !OpenLab.nav.isBreakpoint('xxs')) {
                     //on background only elems, reset inline display value
-                    if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+                    if (thisElem.data('backgroundonly') && (thisElem.data('backgroundonly') === true || thisElem.data('backgroundonly') === 1)) {
                         $(thisToggleTarget).css({
                             'display': ''
                         });
@@ -164,7 +233,7 @@
                 }
 
                 if (thisElem.hasClass('active')) {
-
+                    console.log('hiding menu via directToggleResizeHandler');
                     OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
 
                 }
@@ -184,7 +253,7 @@
             }
 
             //background only acheck
-            if (thisElem.data('backgroundonly') && thisElem.data('backgroundonly') === true) {
+            if (thisElem.data('backgroundonly') && (thisElem.data('backgroundonly') === true || thisElem.data('backgroundonly') === 1)) {
                 backgroundOnly = true;
             }
 
@@ -304,9 +373,16 @@
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
+            
+            //checking to see if this is truly a resize event
+            if ($(window).width() != windowWidth) {
+                
+                windowWidth = $(window).width();
 
-            OpenLab.nav.hoverFixes();
-            OpenLab.nav.directToggleResizeHandler();
+                OpenLab.nav.hoverFixes();
+                OpenLab.nav.directToggleResizeHandler();
+
+            }
 
         }, 250);
 

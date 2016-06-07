@@ -528,7 +528,7 @@ function openlab_group_profile_header() {
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
     ?>
     <h1 class="entry-title group-title clearfix"><span class="profile-name hyphenate"><?php echo bp_group_name(); ?></span>
-        <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+        <button data-target="#sidebar-menu-wrapper" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -799,7 +799,7 @@ function openlab_group_profile_activity_list() {
                         <div class="col-sm-12">
                             <div id="recent-docs">
                                 <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h4>
+                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                                     <?php
                                     $docs_arg = Array("posts_per_page" => "3",
                                         "post_type" => "bp_doc",
@@ -837,7 +837,7 @@ function openlab_group_profile_activity_list() {
                         endif;
                         ?>
 
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                         <?php $member_arg = Array("exclude_admins_mods" => false); ?>
                         <?php if (bp_group_has_members($member_arg)) : ?>
 
@@ -1282,7 +1282,7 @@ function openlab_show_site_posts_and_comments() {
             <div class="col-sm-12">
                 <div id="recent-site-comments">
                     <div class="recent-posts">
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Comments<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Comments<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                         <?php if (!empty($comments)) : ?>
                             <?php foreach ($comments as $comment) : ?>
                                 <div class="panel panel-default">

@@ -70,8 +70,10 @@ function openlab_load_scripts() {
         } else {
             $utility_deps[] = 'openlab-smoothscroll';
         }
-        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.1', true);
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.2', true);
         wp_enqueue_script('utility');
+
+	wp_register_script( 'parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array( 'jquery' ) );
     }
 }
 
@@ -87,11 +89,11 @@ function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.1', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.2', 'all');
         wp_enqueue_style('main-styles');
     } else {
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.1', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.2', 'all');
         wp_enqueue_style('main-styles');
     }
 
@@ -206,3 +208,35 @@ function openlab_post_value($key) {
  * Disable the new avatar upload interface introduced in BP 2.3.
  */
 add_filter('bp_avatar_is_front_edit', '__return_false');
+
+/**
+ * Generate data attributes for xprofile 'input' fields.
+ *
+ * Used for Parsely validation.
+ */
+function openlab_profile_field_input_attributes() {
+	$attributes = array();
+
+	switch ( bp_get_the_profile_field_name() ) {
+		case 'Name' :
+			$attributes[] = 'data-parsley-required';
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'First Name' :
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'Last Name' :
+			$attributes[] = 'data-parsley-required';
+		break;
+
+		case 'Account Type' :
+			$attributes[] = 'data-parsley-required';
+		break;
+	}
+
+	if ( $attributes ) {
+		return ' ' . implode( ' ', $attributes ) . ' ';
+	}
+}

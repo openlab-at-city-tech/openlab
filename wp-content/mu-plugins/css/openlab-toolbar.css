@@ -1,5 +1,7 @@
+@import "select2/select2.css";
 /* Toolbar / Top Nav */
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
+/**vendor**/
 .oplb-bs {
   /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
   /**import boostrap overrides**/
@@ -7108,7 +7110,8 @@ button.oplb-bs .close {
   padding: 6px 12px;
   text-decoration: none;
 }
-.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover {
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:hover,
+.oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a:focus {
   background: #63dfd2;
 }
 @media (max-width: 767px) {
@@ -7123,6 +7126,8 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
+  border: 1px solid #444444;
+  border-top: none;
   border-radius: 0 0 4px 4px;
   margin-top: 1px;
   width: 600%;
@@ -7139,6 +7144,14 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
   margin-bottom: 0;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li:last-child {
+  border-radius: 0 0 4px 4px;
+  border-bottom: none;
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li:last-child a {
+  border-radius: 0 0 4px 4px;
+  border-bottom: none;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .submenu-title {
   background: #b8e2df;
@@ -7158,11 +7171,11 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a {
   color: #333;
   font-size: 12px;
-  text-decoration: underline;
+  text-decoration: none;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .menu-bottom-link a:focus {
-  color: #49cabe;
+  text-decoration: underline;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item {
   padding-bottom: 16px;
@@ -7212,6 +7225,9 @@ button.oplb-bs .close {
     padding: 6px 12px;
     float: none;
   }
+}
+.oplb-bs #wpadminbar #wp-toolbar .ab-top-secondary .menupop .ab-sub-wrapper {
+  right: -1px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-mobile-centered {
   margin: 0 auto;
@@ -7323,6 +7339,10 @@ button.oplb-bs .close {
     border-top: 9px solid #d1d1d1;
   }
 }
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-invites .ab-sub-wrapper,
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-openlab .ab-sub-wrapper {
+  left: -1px;
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
   min-width: 250px;
@@ -7401,18 +7421,30 @@ button.oplb-bs .close {
   border-right: 1px #666666 solid;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login {
-  border-right: 1px #666666 solid;
-  max-width: 70px;
+  background: transparent;
   position: relative;
+  max-width: 70px;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login > a {
+  background: #000000;
+  border-right: 1px #666666 solid;
+  max-height: 49px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
+  background: transparent;
+  border: none;
   color: #333;
   width: 350% !important;
   left: -250%;
-  margin-top: 0;
+  margin-top: 1px;
+  top: auto;
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper .ab-submenu {
+  background: #ffffff;
+  border: none;
+  border-radius: 0 0 4px 4px;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-  top: auto;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper #sidebar-login-form {
   padding: 3% 5%;
@@ -7430,6 +7462,10 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-submenu {
     background: #fff;
   }
+}
+.oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login.login-form-active .ab-submenu {
+  border: 1px solid #444444;
+  border-top: none;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-updates {
@@ -7535,10 +7571,10 @@ button.oplb-bs .close {
     display: inline-block;
     vertical-align: top;
   }
-  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-terms {
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-terms-mobile {
     width: 50%;
   }
-  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-which {
+  .oplb-bs .search .search-form-wrapper .form-group .form-control#search-which-mobile {
     width: 32%;
     height: 35px;
   }
@@ -7550,10 +7586,17 @@ button.oplb-bs .close {
   text-align: center;
   width: 30px;
   cursor: pointer;
-  color: #999999;
+  color: #444444;
 }
 .oplb-bs .search .search-trigger-wrapper:hover {
   color: #49cabe;
+}
+.oplb-bs .search .search-trigger-wrapper .search-trigger {
+  display: block;
+  outline: none;
+}
+.oplb-bs .search .search-trigger-wrapper .search-trigger:focus {
+  outline: thin dotted;
 }
 .oplb-bs .search .search-trigger-wrapper span {
   line-height: 4.5;
@@ -7585,7 +7628,7 @@ button.oplb-bs .close {
     z-index: 1;
   }
 }
-.oplb-bs .search-mode-mobile #search-submit {
+.oplb-bs .search-mode-mobile #search-submit-mobile {
   height: 35px;
   padding: 0 3%;
   vertical-align: top;
@@ -7595,12 +7638,6 @@ button.oplb-bs .close {
   bottom: 0;
   right: 0;
   left: 0;
-  color: #333333;
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.42857;
-  padding-top: 30px;
-  background: #f0f0f0;
 }
 .oplb-bs#openlab-footer.placeholder {
   position: relative;
@@ -7631,7 +7668,13 @@ button.oplb-bs .close {
   text-shadow: none !important;
 }
 .oplb-bs#openlab-footer .footer-wrapper {
+  color: #333333;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857;
+  background: #f0f0f0;
   margin: 0 auto;
+  padding-top: 30px;
   width: 100%;
 }
 @media (max-width: 767px) {
@@ -7699,10 +7742,10 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs#openlab-footer .col-links {
-  color: #797979;
+  color: #333333;
 }
 .oplb-bs#openlab-footer .col-links a {
-  color: #797979;
+  color: #333333;
   font-weight: inherit;
 }
 @media (max-width: 767px) {
@@ -7752,7 +7795,7 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .row-copyright p,
 .oplb-bs#openlab-footer .row-copyright span,
 .oplb-bs#openlab-footer .row-copyright a {
-  color: #797979;
+  color: #333333;
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .row-copyright p,
@@ -7861,6 +7904,20 @@ body.adminbar-special {
   body.adminbar-special {
     padding-top: 110px;
   }
+}
+body .page-table {
+  display: table;
+  width: 100%;
+}
+body .page-table .page-table-row {
+  display: table-row;
+  height: 0;
+}
+body .page-table .page-table-row.expanded {
+  height: 100%;
+}
+body .screen-reader-shortcut:focus {
+  top: 0;
 }
 /**behind menu background**/
 #behind_menu_background {

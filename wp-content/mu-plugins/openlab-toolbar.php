@@ -563,7 +563,7 @@ HTML;
 				'title'  => 'My Dashboard',
 				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item mobile-no-hover'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover exit'
                                 )
 			) );
 		}
@@ -885,7 +885,7 @@ HTML;
 			'title'  => '<span>See All Activity</span>',
 			'href'   => $link,
                         'meta' => array(
-                                'class' => 'menu-bottom-link'
+                                'class' => 'menu-bottom-link exit'
                             )
 		) );
 	}
@@ -1261,7 +1261,7 @@ HTML;
             $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span><a href="' . $profile_url . '">'.$user_login.'</a></p>';
 
             // accept/reject buttons
-            $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></p></div></div>';
+            $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <span class="exit"><a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></span></p></div></div>';
 
             $wp_admin_bar->add_node( array(
                     'parent' => 'my-account',
@@ -1371,8 +1371,8 @@ HTML;
             $openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
-            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.8' );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.8' );
+            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.9' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9' );
         }
 
         function adminbar_special_body_class($classes){
@@ -1466,33 +1466,21 @@ function cac_adminbar_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 
 /**
- * JS to toggle adminbar login form
- *
- * JS is inline to reduce a server request
+ * Moved login form so that is injected via a localized variable
+ * Allows for additional interaction in openlab.nav.js
+ * Moved markup to separate template for easier editing
  */
-function cac_adminbar_js() {
-	$request_uri = $_SERVER['REQUEST_URI'];
-?>
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-
-		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="0" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
-
-		$("#wp-admin-bar-bp-login").append(loginform);
-
-		$("#wp-admin-bar-bp-login > a").click(function(){
-			$(".ab-submenu #sidebar-login-form").toggle(400,function(){
-                            $(".ab-submenu #sidebar-user-login").focus();
-                        });
-			$(this).toggleClass("login-click");
-			return false;
-		});
-	});
-	</script>
-
-<?php
+function openlab_get_loginform(){
+    $form_out = '';
+    
+    $request_uri = $_SERVER['REQUEST_URI'];
+    
+    ob_start();
+    include(WPMU_PLUGIN_DIR . '/parts/persistent/loginform.php');
+    $form_out = ob_get_clean();
+    
+    return $form_out;
 }
-add_action( 'wp_footer', 'cac_adminbar_js', 999 );
 
 /**
  * The following functions wrap the admin bar in an 'oplb-bs' class to isolate bootstrap styles from the rest of the page

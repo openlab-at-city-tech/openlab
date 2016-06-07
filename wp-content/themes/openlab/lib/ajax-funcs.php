@@ -24,3 +24,21 @@ function openlab_ajax_return_course_list() {
 
 add_action( 'wp_ajax_nopriv_openlab_ajax_return_course_list', 'openlab_ajax_return_course_list' );
 add_action( 'wp_ajax_openlab_ajax_return_course_list', 'openlab_ajax_return_course_list' );
+
+function openlab_ajax_unique_login_check() {
+	if ( ! isset( $_GET['login'] ) ) {
+		status_header( 500 );
+		die();
+	}
+
+	$login = urldecode( wp_unslash( $_GET['login'] ) );
+
+	if ( username_exists( $login ) ) {
+		status_header( 400 );
+	} else {
+		status_header( 200 );
+	}
+
+	die();
+}
+add_action( 'wp_ajax_nopriv_openlab_unique_login_check', 'openlab_ajax_unique_login_check' );

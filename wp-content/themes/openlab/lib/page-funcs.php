@@ -153,10 +153,10 @@ function cuny_whos_online() {
     //print_r($rs);
     $ids = "9999999";
     foreach ((array) $rs as $r)
-        $ids.= "," . $r->user_id;
+        $ids .= "," . $r->user_id;
     $x = 0;
     if (bp_has_members('type=active&include=' . $ids)) :
-        $x+=1;
+        $x += 1;
         ?>
 
         <div class="avatar-block left-block-content clearfix">
@@ -256,177 +256,259 @@ function cuny_home_square($type) {
                         <p class="see-more">
                             <a class="semibold" href="<?php echo bp_get_group_permalink() ?>">See More<span class="sr-only"> <?php echo bp_get_group_name() ?></span></a>
                         </p>
-                        </div>
-                        </div>
-                    <?php
-                        $i++;
-                    endwhile;
-                    ?>
-                </div>
-            </div><!--activity-list-->
-
-            <?php
-        endif;
-
-        $meta_filter->remove_filters();
-    }
-
-    /**
-     * 	openlab_groups_filter_clause()
-     *
-     */
-    function openlab_groups_filter_clause($sql) {
-        global $openlab_group_type, $bp;
-
-        // Join to groupmeta table for group type
-        $ex = explode(" WHERE ", $sql);
-        $ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
-        $ex = implode(" WHERE ", $ex);
-
-        // Add the necessary where clause
-        $ex = explode(" AND ", $ex);
-        array_splice($ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords($openlab_group_type) . "' OR gt.meta_value = '" . strtolower($openlab_group_type) . "' )");
-        $ex = implode(" AND ", $ex);
-
-        return $ex;
-    }
-
-    /**
-     * 	Registration page layout
-     *
-     */
-    function openlab_registration_page() {
-        do_action('bp_before_register_page')
-        ?>
-
-        <div class="page" id="register-page">
-
-            <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
-
-            <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
-
-                <?php if ('request-details' == bp_get_current_signup_step()) : ?>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading semibold">Account Details</div>
-                        <div class="panel-body">
-
-                            <?php do_action('template_notices') ?>
-
-                            <p><?php _e('Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress') ?></p>
-                            <p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
-                            <?php do_action('bp_before_account_details_fields') ?>
-
-                            <div class="register-section" id="basic-details-section">
-
-                                <?php /*                                 * *** Basic Account Details ***** */ ?>
-
-                                <label for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
-                                <?php do_action('bp_signup_username_errors') ?>
-                                <input class="form-control" type="text" name="signup_username" id="signup_username" value="<?php bp_signup_username_value() ?>" />
-
-                                <label for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
-                                <?php do_action('bp_signup_email_errors') ?>
-                                <input class="form-control" type="text" name="signup_email" id="signup_email" value="<?php echo openlab_post_value('signup_email') ?>" />
-
-                                <label for="signup_email_confirm">Confirm Email Address (required)</label>
-                                <input class="form-control" type="text" name="signup_email_confirm" id="signup_email_confirm" value="<?php echo openlab_post_value('signup_email_confirm') ?>" />
-
-                                <label for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                                <?php do_action('bp_signup_password_errors') ?>
-                                <input class="form-control" type="password" name="signup_password" id="signup_password" value="" />
-
-                                <label for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
-                                <?php do_action('bp_signup_password_confirm_errors') ?>
-                                <input class="form-control" type="password" name="signup_password_confirm" id="signup_password_confirm" value="" />
-
-                            </div><!-- #basic-details-section -->
-                        </div>
-                    </div><!--.panel-->
-
-                    <?php do_action('bp_after_account_details_fields') ?>
-
-                    <?php /*                     * *** Extra Profile Details ***** */ ?>
-
-                    <?php if (bp_is_active('xprofile')) : ?>
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading semibold">Public Profile Details</div>
-                            <div class="panel-body">
-
-                                <?php do_action('bp_before_signup_profile_fields') ?>
-
-                                <div class="register-section" id="profile-details-section">
-
-                                    <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
-
-                                    <?php echo wds_get_register_fields('Base'); ?>
-
-                                    <?php do_action('bp_after_signup_profile_fields') ?>
-
-                                </div><!-- #profile-details-section -->
-                            </div>
-                        </div><!--.panel-->
-
-
-
-                    <?php endif; ?>
-
-                    <?php do_action('bp_before_registration_submit_buttons') ?>
-
-                    <p class="sign-up-terms">
-                        By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
-                    </p>
-
-                    <div class="submit">
-                        <input style="display:none;" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
                     </div>
+                </div>
+                <?php
+                $i++;
+            endwhile;
+            ?>
+        </div>
+        </div><!--activity-list-->
 
-                    <?php do_action('bp_after_registration_submit_buttons') ?>
+        <?php
+    endif;
 
-                    <?php wp_nonce_field('bp_new_signup') ?>
+    $meta_filter->remove_filters();
+}
 
-                <?php endif; // request-details signup step    ?>
+/**
+ * 	openlab_groups_filter_clause()
+ *
+ */
+function openlab_groups_filter_clause($sql) {
+    global $openlab_group_type, $bp;
 
-                <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
+    // Join to groupmeta table for group type
+    $ex = explode(" WHERE ", $sql);
+    $ex[0] .= ", " . $bp->groups->table_name_groupmeta . " gt";
+    $ex = implode(" WHERE ", $ex);
+
+    // Add the necessary where clause
+    $ex = explode(" AND ", $ex);
+    array_splice($ex, 1, 0, "g.status = 'public' AND gt.group_id = g.id AND gt.meta_key = 'wds_group_type' AND ( gt.meta_value = '" . ucwords($openlab_group_type) . "' OR gt.meta_value = '" . strtolower($openlab_group_type) . "' )");
+    $ex = implode(" AND ", $ex);
+
+    return $ex;
+}
+
+/**
+ * 	Registration page layout
+ *
+ */
+function openlab_registration_page() {
+	do_action( 'bp_before_register_page' );
+
+	$ajaxurl = bp_core_ajax_url();
+    ?>
+
+    <div class="page" id="register-page">
+
+        <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
+
+        <form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data" data-parsley-trigger="blur">
+
+            <?php if ('request-details' == bp_get_current_signup_step()) : ?>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading semibold">Account Details</div>
+                    <div class="panel-body">
+
+                        <?php do_action('template_notices') ?>
+
+                        <p><?php _e('Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress') ?></p>
+                        <p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
+                        <?php do_action('bp_before_account_details_fields') ?>
+
+                        <div class="register-section" id="basic-details-section">
+
+                            <?php /*                             * *** Basic Account Details ***** */ ?>
+
+			    <div class="form-group">
+				    <label class="control-label" for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
+				    <?php do_action('bp_signup_username_errors') ?>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_username"
+					id="signup_username"
+					value="<?php bp_signup_username_value() ?>"
+					data-parsley-lowercase
+					data-parsley-nospecialchars
+					data-parsley-required
+					data-parsley-minlength="4"
+					data-parsley-remote="<?php echo add_query_arg( array(
+						'action' => 'openlab_unique_login_check',
+						'login' => '{value}',
+					), $ajaxurl ); ?>"
+					data-parsley-remote-message="That username is already taken."
+				    />
+			    </div>
+
+			    <div class="form-group">
+				    <label class="control-label" for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
+				    <?php do_action('bp_signup_email_errors') ?>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_email"
+					id="signup_email"
+					value="<?php echo openlab_post_value('signup_email') ?>"
+					data-parsley-trigger="blur"
+					data-parsley-required
+					data-parsley-type="email"
+					data-parsley-group="email"
+				    />
+
+				    <label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
+				    <input
+					class="form-control"
+					type="text"
+					name="signup_email_confirm"
+					id="signup_email_confirm"
+					value="<?php echo openlab_post_value('signup_email_confirm') ?>"
+					data-parsley-trigger="blur"
+					data-parsley-required
+					data-parsley-type="email"
+					data-parsley-equalto="#signup_email"
+					data-parsley-equalto-message="Email addresses must match."
+					data-parsley-group="email"
+				    />
+			    </div>
+
+			    <div class="form-group">
+				    <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+				    <?php do_action('bp_signup_password_errors') ?>
+				    <input
+					class="form-control"
+					type="password"
+					name="signup_password"
+					id="signup_password"
+					value=""
+					data-parsley-required
+				    />
+
+				    <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+				    <?php do_action('bp_signup_password_confirm_errors') ?>
+				    <input
+					class="form-control"
+					type="password"
+					name="signup_password_confirm"
+					id="signup_password_confirm"
+					value=""
+					data-parsley-required
+					data-parsley-equalto="#signup_password"
+					data-parsley-equalto-message="Passwords must match."
+				    />
+			    </div>
+
+                        </div><!-- #basic-details-section -->
+                    </div>
+                </div><!--.panel-->
+
+                <?php do_action('bp_after_account_details_fields') ?>
+
+                <?php /*                 * *** Extra Profile Details ***** */ ?>
+
+                <?php if (bp_is_active('xprofile')) : ?>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading semibold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
+                        <div class="panel-heading semibold">Public Profile Details</div>
                         <div class="panel-body">
 
-                            <?php do_action('template_notices') ?>
+                            <?php do_action('bp_before_signup_profile_fields') ?>
 
-                            <?php if (bp_registration_needs_activation()) : ?>
-                                <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress') ?></p>
-                            <?php else : ?>
-                                <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress') ?></p>
-                            <?php endif; ?>
+                            <div class="register-section" id="profile-details-section">
 
+                                <p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
+
+                                <?php echo wds_get_register_fields('Base'); ?>
+
+                                <?php do_action('bp_after_signup_profile_fields') ?>
+
+                            </div><!-- #profile-details-section -->
                         </div>
                     </div><!--.panel-->
 
-                <?php endif; // completed-confirmation signup step    ?>
 
-                <?php do_action('bp_custom_signup_steps') ?>
 
-            </form>
+                <?php endif; ?>
 
-        </div>
+                <?php do_action('bp_before_registration_submit_buttons') ?>
 
-        <?php do_action('bp_after_register_page') ?>
+                <p class="sign-up-terms">
+                    By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
+                </p>
 
-        <?php do_action('bp_after_directory_activity_content') ?>
+                <div class="submit">
+                    <input disabled="true" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
+                </div>
 
-        <script type="text/javascript">
-            jQuery(document).ready(function () {
-                if (jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show'))
-                    jQuery('div#blog-details').toggle();
+                <?php do_action('bp_after_registration_submit_buttons') ?>
 
-                jQuery('input#signup_with_blog').click(function () {
-                    jQuery('div#blog-details').fadeOut().toggle();
-                });
+                <?php wp_nonce_field('bp_new_signup') ?>
+
+            <?php endif; // request-details signup step    ?>
+
+            <?php if ('completed-confirmation' == bp_get_current_signup_step()) : ?>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading semibold"><?php _e('Sign Up Complete!', 'buddypress') ?></div>
+                    <div class="panel-body">
+
+                        <?php do_action('template_notices') ?>
+
+                        <?php if (bp_registration_needs_activation()) : ?>
+                            <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address.', 'buddypress') ?></p>
+                        <?php else : ?>
+                            <p class="bp-template-notice updated no-margin no-margin-bottom"><?php _e('You have successfully created your account! Please log in using the username and password you have just created.', 'buddypress') ?></p>
+                        <?php endif; ?>
+
+                    </div>
+                </div><!--.panel-->
+
+            <?php endif; // completed-confirmation signup step    ?>
+
+            <?php do_action('bp_custom_signup_steps') ?>
+
+        </form>
+
+    </div>
+
+    <?php do_action('bp_after_register_page') ?>
+
+    <?php do_action('bp_after_directory_activity_content') ?>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            if (jQuery('div#blog-details').length && !jQuery('div#blog-details').hasClass('show'))
+                jQuery('div#blog-details').toggle();
+
+            jQuery('input#signup_with_blog').click(function () {
+                jQuery('div#blog-details').fadeOut().toggle();
             });
-        </script>
-        <?php
+        });
+    </script>
+    <?php
+}
+
+function openlab_primary_skip_link() {
+    $skip_link_out = '';
+
+    $content_target = '#openlab-main-content';
+    $content_text = 'main content';
+
+    if (is_user_logged_in()) {
+        $adminbar_target = '#wp-admin-bar-my-openlab';
+        $adminbar_text = 'admin bar';
+    } else {
+        $adminbar_target = '#wp-admin-bar-bp-login';
+        $adminbar_text = 'log in';
     }
 
+    $skip_link_out = <<<HTML
+            <a id="skipToContent" tabindex="0" class="sr-only sr-only-focusable skip-link" href="{$content_target}">Skip to {$content_text}</a>
+            <a id="skipToAdminbar" tabindex="0" class="sr-only sr-only-focusable skip-link" href="{$adminbar_target}">Skip to {$adminbar_text}</a>
+HTML;
+
+    return $skip_link_out;
+}

@@ -37,7 +37,7 @@ class Friend implements Counter {
 			$confirmed = $wpdb->get_var( "$mt_base_sql AND is_confirmed = 1" );
 			$pending   = $wpdb->get_var( "$mt_base_sql AND is_confirmed = 0" );
 
-			$count = sprintf( '%d/%d', $confirmed, $pending );
+			$count = sprintf( '%d | %d', $confirmed, $pending );
 		}
 
 		$this->counts = $counts;
