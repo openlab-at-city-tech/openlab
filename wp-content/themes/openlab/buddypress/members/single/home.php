@@ -38,7 +38,7 @@
 		// If nothing sticks, load a generic template
 		else :
 			bp_get_template_part( 'members/single/plugins'  );
-
+                
 		endif;
 
 		do_action( 'bp_after_member_body' ); ?>

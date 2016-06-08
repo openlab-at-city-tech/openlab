@@ -6,7 +6,7 @@
 
                 global $bp; ?>
 
-		<div id="single-course-body" class="plugins">
+		<div id="single-course-body" class="plugins action-<?php echo $bp->current_action ?> component-<?php echo $bp->current_component ?>">
                     <div class="row"><div class="col-md-24">
                         <div class="submenu">
 			<?php if ( $bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications' ) : ?>
@@ -30,8 +30,16 @@
                                     </div>
                                     <div class="group-count col-sm-7 pull-right"><?php echo openlab_get_files_count(); ?></div>
                                 </div>
+                            
+                            <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
+                                
+                                <div class="submenu-text pull-left bold">Calendar:</div>
+                                <ul class="nav nav-inline">
+                                    <?php bp_get_options_nav(buddypress()->groups->current_group->slug . '_events'); ?>
+                                </ul>
 
                             <?php else: ?>
+                                
                                 <ul class="nav nav-inline">
                                         <?php do_action( 'bp_group_plugin_options_nav' ); ?>
                                 </ul>
@@ -40,7 +48,7 @@
                         </div></div>
 
 			<div id="item-body">
-                            
+                                
                                 <?php do_action( 'bp_before_group_plugin_template' ); ?>
 
 				<?php do_action( 'bp_template_content' ); ?>

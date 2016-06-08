@@ -796,20 +796,51 @@ function openlab_filter_subnav_forums($subnav_item) {
 
 add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
 
-function openlab_filter_subnav_nav_invite_anyone($suvbnav_item) {
+function openlab_filter_subnav_nav_invite_anyone($subnav_item) {
     return "";
 }
 
 add_filter('bp_get_options_nav_nav-notifications', 'openlab_filter_subnav_nav_notifications');
 
-function openlab_filter_subnav_nav_notifications($suvbnav_item) {
+function openlab_filter_subnav_nav_notifications($subnav_item) {
     return "";
 }
 
 add_filter('bp_get_options_nav_request-membership', 'openlab_filter_subnav_nav_request_membership');
 
-function openlab_filter_subnav_nav_request_membership($suvbnav_item) {
+function openlab_filter_subnav_nav_request_membership($subnav_item) {
     return "";
+}
+
+add_filter('bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar');
+
+function openlab_filter_subnav_nav_calendar($subnav_item) {
+    $subnav_item = str_replace('Calendar', 'All Events', $subnav_item);
+    
+    //for some reason group events page is not registering this nav element as current
+    if(!bp_action_variable()){
+        $subnav_item = str_replace('<li','<li class="current-menu-item"', $subnav_item);
+    }
+
+    return $subnav_item;
+}
+
+add_filter('bp_get_options_nav_upcoming', 'openlab_filter_subnav_nav_upcoming');
+
+function openlab_filter_subnav_nav_upcoming($subnav_item){
+    
+    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+    
+    return $subnav_item;
+}
+
+add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
+
+function openlab_filter_subnav_nav_new_event($subnav_item){
+    
+    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+    
+    return $subnav_item;
 }
 
 //submenu navigation re-ordering
@@ -920,9 +951,9 @@ function openlab_group_admin_tabs($group = false) {
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         <?php if ($group_type == "portfolio") : ?>
-                                                                                       <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+                                                                                                   <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-                                                                                       <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+                                                                                                   <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>
