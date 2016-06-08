@@ -9487,6 +9487,9 @@ body.membership-requests .group-list {
 .action-events #post .postbox .inside {
   padding: 15px;
 }
+.action-events.event-detail #item-body > h4 {
+  display: none;
+}
 /**member profiles**/
 .profile-type {
   background: #f0f0f0;

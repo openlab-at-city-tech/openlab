@@ -1,9 +1,53 @@
 <?php
-
 /**
  * Calendar control
  * Hooks into Events Organiser and BuddyPress Event Organiser 
  */
+
+/**
+ * Right now there doesn't seem to be a good way to delineate the event detail screen from the other actions
+ * @return boolean
+ */
+function openlab_eo_is_event_detail_screen() {
+    if (!empty(buddypress()->action_variables) && !bp_is_action_variable('ical') && !bp_is_action_variable('upcoming', 0) && !bpeo_is_action('new') && !bpeo_is_action('edit')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Retrieving the event detail obj outside of the EO's loop
+ * This will, in most cases, be used in instances where the object has to exist
+ * EO and BP EO already have checks in place to handle non-existing event detail pages
+ * @return type
+ */
+function openlab_eo_get_single_event_query_obj() {
+    $obj_out = array();
+
+    // Set up query args
+    $query_args = array();
+    $query_args['suppress_filters'] = true;
+    $query_args['orderby'] = 'none';
+    $query_args['post_status'] = array('publish', 'pending', 'private', 'draft', 'future', 'trash');
+
+    // this is a draft with no slug
+    if (false !== strpos(bp_current_action(), 'draft-')) {
+        $query_args['post__in'] = (array) str_replace('draft-', '', bp_action_variable());
+
+        // use post slug
+    } else {
+        $query_args['name'] = bp_action_variable();
+    }
+
+    // query for the event
+    $event = eo_get_events($query_args);
+
+    $obj_out = $event[0];
+
+    return $obj_out;
+}
+
 function openlab_control_event_post_type($args) {
 
     $args['supports'] = array('title', 'editor', 'author', 'excerpt', 'custom-fields');
@@ -85,7 +129,9 @@ add_filter('eventorganiser_options', 'openlab_eventorganiser_custom_options');
  */
 function openlab_eventorganiser_custom_content_after_title() {
 
-    echo '<h3 class="outside-title"><span>Event Description</span></h3>';
+    if (bpeo_is_action('new') && bpeo_is_action('edit')) {
+        echo '<h3 class="outside-title"><span>Event Description</span></h3>';
+    }
 }
 
 add_action('edit_form_after_title', 'openlab_eventorganiser_custom_content_after_title');
@@ -99,6 +145,25 @@ add_filter('eventorganiser_register_taxonomy_event-category', false);
  * Remove Event Tags
  */
 add_filter('eventorganiser_register_taxonomy_event-tag', false);
+
+/**
+ * Remove plugin action for adding author
+ */
+remove_action('eventorganiser_additional_event_meta', 'bpeo_list_author');
+
+/**
+ * Custom markup for author listing on event detail page
+ */
+function openlab_bpeo_list_author() {
+    $event = get_post(get_the_ID());
+    $author_id = $event->post_author;
+
+    $base = __('<strong>Author:</strong> %s', 'bp-event-organiser');
+
+    echo sprintf('<li>' . wp_filter_kses($base) . '</li>', bp_core_get_user_displayname($author_id));
+}
+
+add_action('eventorganiser_additional_event_meta', 'openlab_bpeo_list_author', 5);
 
 /**
  * For custom Event Organiser meta boxes
@@ -188,7 +253,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-start-datetime-label">
-                    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?> 
+    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?> 
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-start-datetime-label">
@@ -210,7 +275,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-end-datetime-label">
-                    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?> 
+    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?> 
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-end-datetime-label">
@@ -230,7 +295,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                 <span>
                     <input type="checkbox" id="eo-all-day"  <?php checked($all_day); ?> name="eo_input[allday]" value="1"/>
                     <label for="eo-all-day">
-                        <?php esc_html_e('All day', 'eventorganiser'); ?>
+    <?php esc_html_e('All day', 'eventorganiser'); ?>
                     </label>
                 </span>
 
@@ -251,7 +316,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                 <select id="eo-event-recurrence" name="eo_input[schedule]">
                     <?php foreach ($recurrence_schedules as $value => $label) : ?>
                         <option value="<?php echo esc_attr($value) ?>" <?php selected($schedule, $value); ?>><?php echo esc_html($label); ?></option>
-                    <?php endforeach; ?>
+    <?php endforeach; ?>
                 </select>
             </div>
         </div>
@@ -260,7 +325,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
             <div class="eo-grid-4"></div>
             <div class="eo-grid-8 event-date">
                 <div id="eo-recurrence-frequency-wrapper">
-                    <?php esc_html_e('Repeat every', 'eventorganiser'); ?>
+    <?php esc_html_e('Repeat every', 'eventorganiser'); ?>
                     <label for="eo-recurrence-frequency" class="screen-reader-text"><?php esc_html_e('Recurrence frequency', 'eventorganiser'); ?></label> 
                     <input type="number" id="eo-recurrence-frequency" class="ui-widget-content ui-corner-all" name="eo_input[event_frequency]"  min="1" max="365" maxlength="4" size="4" value="<?php echo intval($frequency); ?>" /> 
                     <span id="eo-recurrence-schedule-label"></span>
@@ -294,17 +359,17 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="eo-days-of-month" role="group" aria-labelledby="eo-days-of-month-label">	
                         <label for="eo-by-month-day" >
                             <input type="radio" id="eo-by-month-day" name="eo_input[schedule_meta]" <?php checked($occurs_by, 'BYMONTHDAY'); ?> value="BYMONTHDAY=" /> 
-                            <?php esc_html_e('date of month', 'eventorganiser'); ?>
+    <?php esc_html_e('date of month', 'eventorganiser'); ?>
                         </label>
                         <label for="eo-by-day" >
                             <input type="radio" id="eo-by-day" name="eo_input[schedule_meta]"  <?php checked('BYMONTHDAY' != $occurs_by, true); ?> value="BYDAY=" />
-                            <?php esc_html_e('day of week', 'eventorganiser'); ?>
+    <?php esc_html_e('day of week', 'eventorganiser'); ?>
                         </label>
                     </div>
                 </div>
 
                 <div id="eo-schedule-last-date-wrapper" class="reoccurrence_label">
-                    <?php esc_html_e('until', 'eventorganiser'); ?>
+    <?php esc_html_e('until', 'eventorganiser'); ?>
                     <label id="eo-repeat-until-label" for="eo-schedule-last-date" class="screen-reader-text"><?php esc_html_e('Repeat this event until:', 'eventorganiser'); ?></label> 
                     <input class="ui-widget-content ui-corner-all" name="eo_input[schedule_end]" id="eo-schedule-last-date" size="10" maxlength="10" value="<?php echo $until->format($php_format); ?>"/>
                 </div>
@@ -316,10 +381,10 @@ function _eventorganiser_details_metabox_openlab_custom() {
 
         <div id="eo_occurrence_picker_row" class="eo-grid-row event-date">
             <div class="eo-grid-4">
-                <?php esc_html_e('Include/Exclude occurrences:', 'eventorganiser'); ?>
+    <?php esc_html_e('Include/Exclude occurrences:', 'eventorganiser'); ?>
             </div>
             <div class="eo-grid-8 event-date">
-                <?php submit_button(__('Show dates', 'eventorganiser'), 'hide-if-no-js eo_occurrence_toggle button small', 'eo_date_toggle', false); ?>
+    <?php submit_button(__('Show dates', 'eventorganiser'), 'hide-if-no-js eo_occurrence_toggle button small', 'eo_date_toggle', false); ?>
 
                 <div id="eo-occurrence-datepicker"></div>
                 <?php
@@ -359,7 +424,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                         <option><?php esc_html_e('Select a venue', 'eventorganiser'); ?></option>
                         <?php foreach ($venues as $venue) : ?>
                             <option <?php selected($venue->term_id, $venue_id); ?> value="<?php echo intval($venue->term_id); ?>"><?php echo esc_html($venue->name); ?></option>
-                        <?php endforeach; ?>
+        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -409,7 +474,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-        <?php endif; //endif venue's supported    ?>
+    <?php endif; //endif venue's supported       ?>
 
     </div>
     <?php

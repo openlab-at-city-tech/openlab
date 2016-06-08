@@ -58,14 +58,6 @@
 			<li><strong><?php echo esc_html( $tax->labels->singular_name ) ?>:</strong> <?php eo_venue_name(); ?></li>
 		<?php } ?>
 
-		<?php if ( get_the_terms( get_the_ID(), 'event-category' ) ) { ?>
-			<li><strong><?php esc_html_e( 'Categories', 'eventorganiser' ); ?>:</strong> <?php echo get_the_term_list( get_the_ID(),'event-category', '', ', ', '' ); ?></li>
-		<?php } ?>
-
-		<?php if ( get_the_terms( get_the_ID(), 'event-tag' ) && ! is_wp_error( get_the_terms( get_the_ID(), 'event-tag' ) ) ) { ?>
-			<li><strong><?php esc_html_e( 'Tags', 'eventorganiser' ); ?>:</strong> <?php echo get_the_term_list( get_the_ID(), 'event-tag', '', ', ', '' ); ?></li>
-		<?php } ?>
-
 		<?php if ( eo_recurs() ) {
 				//Event recurs - display dates.
 				$upcoming = new WP_Query(array(
