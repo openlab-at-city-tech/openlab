@@ -824,6 +824,19 @@ function openlab_filter_subnav_nav_request_membership($subnav_item) {
     return "";
 }
 
+add_filter('bp_get_options_nav_nav-events', 'openlab_filter_subnav_nav_events');
+
+function openlab_filter_subnav_nav_events($subnav_item) {
+    $subnav_item = str_replace('Events', 'Calendar', $subnav_item);
+
+    //for some reason group events page is not registering this nav element as current
+    if (bp_current_action() === 'events' || bp_current_component() === 'events') {
+        $subnav_item = str_replace('<li', '<li class="current-menu-item"', $subnav_item);
+    }
+
+    return $subnav_item;
+}
+
 add_filter('bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar');
 
 function openlab_filter_subnav_nav_calendar($subnav_item) {
