@@ -7,7 +7,10 @@
     $postID = $post->ID;
     $parent = $post->post_parent;
 
-    if ($postID == "49" || $parent == "49") {
+    $about_page_obj = get_page_by_path('about');
+    $calendar_page_obj = get_page_by_path('about/calendar');
+
+    if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID) {
         openlab_bp_mobile_sidebar('about');
     }
     ?>
@@ -19,7 +22,7 @@
                 <div <?php post_class('col-sm-18 col-xs-24'); ?>>
                     <div id="openlab-main-content"  class="content-wrapper">
                         <h1 class="entry-title"><?php the_title(); ?>
-                            <?php if ($postID == "49" || $parent == "49"): ?>
+                            <?php if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID): ?>
                                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                                     <span class="sr-only">Toggle navigation</span>
                                     <span class="icon-bar"></span>
@@ -40,7 +43,7 @@
 
     <?php
 //add the about-page sidebar to just the about page and any child about page
-    if ($postID == "49" || $parent == "49") {
+    if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID) {
         openlab_bp_sidebar('about');
     }
     ?>

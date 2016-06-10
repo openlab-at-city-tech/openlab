@@ -2,6 +2,16 @@ module.exports = function (grunt) {
     require('jit-grunt')(grunt);
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        htmlclean: {
+            options: {
+            },
+            deploy: {
+                expand: true,
+                cwd: 'parts/source/',
+                src: '**/*.php',
+                dest: 'parts/'
+            }
+        },
         concat: {
             options: {
                 separator: ';'
@@ -44,12 +54,20 @@ module.exports = function (grunt) {
                 options: {
                     nospawn: true
                 }
+            },
+            core: {
+                files: ['parts/source/**/*.php'], // which files to watch
+                tasks: ['htmlclean'],
+                options: {
+                    nospawn: true
+                }
             }
         }
     });
+    grunt.loadNpmTasks('grunt-htmlclean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['concat', 'less', 'watch']);
+    grunt.registerTask('default', ['concat', 'htmlclean', 'less', 'watch']);
 };

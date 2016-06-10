@@ -48,6 +48,11 @@ function openlab_eo_get_single_event_query_obj() {
     return $obj_out;
 }
 
+/**
+ * Custom control over what events provide for editing
+ * @param array $args
+ * @return string
+ */
 function openlab_control_event_post_type($args) {
 
     $args['supports'] = array('title', 'editor', 'author', 'excerpt', 'custom-fields');
@@ -69,6 +74,18 @@ function openlab_control_venue_taxonomy($event_category_args) {
 }
 
 add_filter('eventorganiser_register_taxonomy_event-venue', 'openlab_control_venue_taxonomy');
+
+function openlab_control_event_action_links($links){
+    global $post;
+    
+    if($post->post_type === 'event' && !bp_current_action()){
+        $links = array();
+    }
+    
+    return $links;
+}
+
+add_filter('bpeo_get_the_single_event_action_links', 'openlab_control_event_action_links');
 
 /**
  * Pointing to custom templates in OpenLab theme folder

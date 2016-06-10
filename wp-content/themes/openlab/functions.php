@@ -20,6 +20,9 @@ function openlab_core_setup() {
 add_action('after_setup_theme', 'openlab_core_setup');
 
 /* * creating a library to organize functions* */
+/**core**/
+require_once( STYLESHEETPATH . '/lib/core/page-control.php' );
+
 require_once( STYLESHEETPATH . '/lib/course-clone.php' );
 require_once( STYLESHEETPATH . '/lib/header-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/post-types.php' );

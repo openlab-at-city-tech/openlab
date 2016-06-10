@@ -25,13 +25,6 @@
 				<span itemprop="summary"><?php the_title() ?></span>
 			</a>
 		</h2>
-
-		<div class="eo-event-date"> 
-			<?php
-				//Formats the start & end date of the event
-				echo eo_format_event_occurrence();
-			?>
-		</div>
 			
 	</header><!-- .entry-header -->
 	

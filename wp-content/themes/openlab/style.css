@@ -9490,6 +9490,11 @@ body.membership-requests .group-list {
 .action-events.event-detail #item-body > h4 {
   display: none;
 }
+body.single-event #content .eo-event-meta,
+body.single-event #content .eo-event-venue-map {
+  float: none;
+  width: 100%;
+}
 /**member profiles**/
 .profile-type {
   background: #f0f0f0;

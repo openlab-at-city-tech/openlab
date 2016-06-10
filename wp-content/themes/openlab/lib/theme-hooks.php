@@ -19,6 +19,37 @@ function openlab_custom_the_content($content) {
 HTML;
     }
 
+    if ($post->post_type === 'page' && $post->post_name === 'calendar') {
+
+        $args = array(
+            'headerright' => 'prev next today month agendaWeek',
+            'defaultview' => 'agendaWeek',
+            'titleformatweek' => 'F j, Y',
+        );
+        
+        $link = eo_get_events_feed();
+        $menu_items = openlab_calendar_submenu();
+
+        ob_start();
+        include(locate_template('parts/pages/openlab-calendar.php'));
+        $content .= ob_get_clean();
+    }
+    
+    if($post->post_type === 'page' && $post->post_name === 'upcoming'){
+        
+        $args = array(
+            'event_start_after'=>'today',
+        );
+        
+        $events = eo_get_events($args);
+        $menu_items = openlab_calendar_submenu();
+        
+        ob_start();
+        include(locate_template('parts/pages/openlab-calendar-upcoming.php'));
+        $content .= ob_get_clean();
+        
+    }
+
     return $content;
 }
 
