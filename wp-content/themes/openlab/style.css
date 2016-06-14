@@ -8527,6 +8527,10 @@ body .inline-visible-xs {
     margin: 0;
   }
 }
+.sidebar #sidebar-menu-wrapper .sidebar-block:first-of-type {
+  border-top: 1px solid #bbbbbb;
+  margin-top: 0;
+}
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
@@ -8633,6 +8637,9 @@ body .inline-visible-xs {
 }
 .sidebar .sidebar-block ul.sidebar-sublinks li:last-child {
   margin-bottom: 0;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.group-event-activity li {
+  margin-bottom: 14px;
 }
 .sidebar .sidebar-block.padded-block {
   padding: 6%;

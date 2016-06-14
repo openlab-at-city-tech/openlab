@@ -1555,6 +1555,10 @@ body{
             @media (max-width: @screen-xs-max){
                 margin: 0;
             }
+            &:first-of-type{
+                border-top: 1px solid @30gray;
+                margin-top: 0;
+            }
         }
     }
     h2{
@@ -1671,6 +1675,11 @@ body{
                 margin-bottom: 10px;
                 &:last-child{
                     margin-bottom: 0;
+                }
+            }
+            &.group-event-activity{
+                li{
+                    margin-bottom: 14px;
                 }
             }
         }
