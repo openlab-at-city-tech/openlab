@@ -842,10 +842,7 @@ add_filter('bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar');
 function openlab_filter_subnav_nav_calendar($subnav_item) {
     $subnav_item = str_replace('Calendar', 'All Events', $subnav_item);
 
-    //for some reason group events page is not registering this nav element as current
-    if (!bp_action_variable()) {
-        $subnav_item = str_replace('<li', '<li class="current-menu-item"', $subnav_item);
-    }
+    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
 
     return $subnav_item;
 }

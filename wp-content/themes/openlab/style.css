@@ -9316,8 +9316,21 @@ body.membership-requests .group-list {
   }
 }
 /**event organiser**/
-.action-events #subnav {
+.action-events .submenu-row {
   display: none;
+}
+.action-events #item-body {
+  margin-top: 0;
+}
+.action-events #item-body h2,
+.action-events #item-body h3 {
+  margin-top: 0;
+}
+.action-events #item-body .submenu {
+  margin-bottom: 29px;
+}
+.action-events #item-body .submenu #single-event-name {
+  margin-left: -4px;
 }
 .action-events #post .postbox {
   margin-bottom: 20px;
