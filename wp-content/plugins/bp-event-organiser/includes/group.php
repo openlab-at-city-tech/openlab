@@ -285,7 +285,7 @@ function bpeo_group_event_meta_cap( $caps, $cap, $user_id, $args ) {
 	}
 
 	// Some caps do not expect a specific event to be passed to the filter.
-	$primitive_caps = array( 'read_events', 'read_private_events', 'edit_events', 'edit_others_events', 'publish_events', 'delete_events', 'delete_others_events', 'manage_event_categories' );
+	$primitive_caps = array( 'read_events', 'read_group_events', 'read_private_events', 'edit_events', 'edit_others_events', 'publish_events', 'delete_events', 'delete_others_events', 'manage_event_categories' );
 	if ( ! in_array( $cap, $primitive_caps ) ) {
 		$event = get_post( $args[0] );
 		if ( 'event' !== $event->post_type ) {
@@ -301,6 +301,37 @@ function bpeo_group_event_meta_cap( $caps, $cap, $user_id, $args ) {
 	}
 
 	switch ( $cap ) {
+		case 'read_group_events' :
+			// If on a group page, use already-queried data.
+			if ( groups_get_current_group() && $args[0] == bp_get_current_group_id() ) {
+				$group = groups_get_current_group();
+			} else {
+				$group = groups_get_group( array( 'group_id' => $args[0], 'populate_extras' => false ) );
+			}
+
+			// Public groups are open.
+			if ( 'public' === bp_get_group_status( $group  ) ) {
+				$caps = array( 'exist' );
+
+			// Private and hidden groups require checking member access.
+			} else {
+				$can_access = false;
+
+				// If on a group page, use already-queried data.
+				if ( bp_is_group() && $args[0] == bp_get_current_group_id() && isset( buddypress()->groups->current_group->is_user_member ) ) {
+					$can_access = buddypress()->groups->current_group->is_user_member;
+
+				} elseif ( groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+					$can_access = true;
+				}
+
+				if ( is_super_admin() || $can_access ) {
+					$caps = array( 'read' );
+				}
+			}
+
+			break;
+
 		case 'read_event' :
 			// we've already parsed this logic in bpeo_map_basic_meta_caps()
 			if ( 'exist' === $caps[0] ) {

@@ -150,7 +150,7 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 		$sub_nav[] = array_merge( array(
 			'name'            => __( 'Calendar', 'bp-event-organiser' ),
 			'slug'            => 'calendar',
-			'user_has_access' => buddypress()->groups->current_group->is_user_member,
+			'user_has_access' => current_user_can( 'read_group_events', bp_get_current_group_id() ),
 			'position'        => 0,
 			'link'            => bpeo_get_group_permalink(),
 		), $default_params );
@@ -158,7 +158,7 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 		$sub_nav[] = array_merge( array(
 			'name'            => __( 'Upcoming', 'bp-event-organiser' ),
 			'slug'            => 'upcoming',
-			'user_has_access' => buddypress()->groups->current_group->is_user_member,
+			'user_has_access' => current_user_can( 'read_group_events', bp_get_current_group_id() ),
 			'position'        => 0,
 			'link'            => bpeo_get_group_permalink() . 'upcoming/',
 		), $default_params );
@@ -177,6 +177,7 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 			), $default_params );
 		}
 
+		// @todo This should probably use a custom cap instead of membership check.
 		$sub_nav[] = array_merge( array(
 			'name'            => __( 'New Event', 'bp-event-organiser' ),
 			'slug'            => bpeo_get_events_new_slug(),
@@ -254,15 +255,15 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 			buddypress()->action_variables[] = 'calendar';
 		}
 
-	?>
+		// Use our template stack.
+		add_filter( 'eventorganiser_template_stack', 'bpeo_register_template_stack' );
 
-		<div class="item-list-tabs no-ajax" id="subnav" role="navigation">
-			<ul>
-				<?php bp_get_options_nav( buddypress()->groups->current_group->slug . '_events' ); ?>
-			</ul>
-		</div><!-- .item-list-tabs -->
+		// Load our template part.
+		eo_get_template_part( 'buddypress/groups/single/subnav-events' );
 
-	<?php
+		// Remove our template stack.
+		remove_filter( 'eventorganiser_template_stack', 'bpeo_register_template_stack' );
+
 		buddypress()->action_variables = $_action_variables;
 	}
 

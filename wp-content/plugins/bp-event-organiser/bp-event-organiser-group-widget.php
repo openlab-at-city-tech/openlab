@@ -1,11 +1,223 @@
 <?php
 /*
-Plugin Name: BP Event Organiser - Group Widget
-Description: Embed events from one of your groups that you are a member of with this widget.
+Plugin Name: BP Event Organiser - Group Shortcode and Widget
+Description: Embed events from one of your groups that you are a member of with a shortcode or a widget.
 Author: CUNY Academic Commons Team
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
+
+/** HELPERS **************************************************************/
+
+/**
+ * Get a user's public groups.
+ *
+ * @param  int   $user_id User ID
+ * @return array Array with group ID as key and group name as value.
+ */
+function bpeo_get_user_public_groups( $user_id = 0 ) {
+	$groups = groups_get_groups( array(
+		'user_id'           => ! empty( $user_id ) ? (int) $user_id : bp_loggedin_user_id(),
+		'per_page'          => null,
+		'page'              => null,
+		'update_meta_cache' => false,
+	) );
+
+	$retval = array();
+
+	foreach ( $groups['groups'] as $i => $group ) {
+		if ( 'public' !== $group->status ) {
+			continue;
+		}
+
+		$retval[ $group->id ] = apply_filters( 'bp_get_group_name', $group->name, $group );
+	}
+
+	unset( $groups );
+
+	return $retval;
+}
+
+/** SHORTCODE ************************************************************/
+
+/**
+ * Load Shortcake.
+ */
+function bpeo_load_shortcake() {
+	// Do not proceed if BuddyPress is not available.
+	if ( false === function_exists( 'buddypress' ) ) {
+		return;
+	}
+
+	// Check if Shortcake is installed. If not, bail.
+	$shortcode_ui = WP_PLUGIN_DIR . '/shortcode-ui/shortcode-ui.php';
+	if ( false === file_exists( $shortcode_ui ) ) {
+		return;
+	}
+
+	// Shortcake isn't activated on this site, so include it now.
+	if ( false === defined( 'SHORTCODE_UI_VERSION' ) ) {
+		require $shortcode_ui;
+	}
+
+	// Add our shortcode support.
+	add_action( 'init', 'bpeo_group_shortcode_init' );
+}
+add_action( 'plugins_loaded', 'bpeo_load_shortcake' );
+
+/**
+ * Shortcode initializer.
+ */
+function bpeo_group_shortcode_init() {
+	add_shortcode( 'bpeo-events', 'bpeo_group_events_shortcode' );
+
+	// Bail if no Shortcake.
+	if ( false === function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
+		return;
+	}
+
+	// BP Groupblog fallback support.
+	$group_id = function_exists( 'get_groupblog_group_id' ) ? get_groupblog_group_id( get_current_blog_id() ) : '';
+
+	// Query for logged-in user's groups.
+	$groups = bpeo_get_user_public_groups();
+
+	// Set up shortcake attributes.
+	if ( ! empty( $groups ) ) {
+		// Add placeholder.
+		$groups = array( '--' ) + $groups;
+
+		$attrs = array(
+			array(
+				'label'       => __( 'Group', 'bpeo-group-widget' ),
+				'attr'        => 'id',
+				'type'        => 'select',
+				'value'       => $group_id,
+				'options'     => $groups,
+				'description' => esc_html__( 'Select the group you want to display events for.', 'bpeo-group-widget' )
+			),
+
+			array(
+				'label'   => __( 'Embed Type', 'bpeo-group-widget' ),
+				'attr'    => 'type',
+				'type'    => 'select',
+				'value'   => 'list',
+				'options' => array(
+					'list'     => esc_html__( 'List of upcoming events', 'bpeo-group-widget' ),
+					'calendar' => esc_html__( 'Calendar from group', 'bpeo-group-widget' ),
+				),
+			),
+
+			array(
+				'label' => __( 'Width', 'bpeo-group-widget' ),
+				'attr'  => 'width',
+				'type'  => 'number',
+				'value' => $GLOBALS['content_width'],
+				'meta' => array(
+					'style' => 'width:75px'
+				),
+				'description' => __( "Enter width in pixels. Defaults to the current theme's width.", 'bpeo-group-widget' )
+			),
+
+			array(
+				'label' => __( 'Height', 'bpeo-group-widget' ),
+				'attr'  => 'height',
+				'type'  => 'number',
+				'value' => 300,
+				'meta' => array(
+					'style' => 'width:75px'
+				),
+				'description' => __( "Enter height in pixels.", 'bpeo-group-widget' )
+			)
+		);
+
+	// Abuse a Shortcake field to add some descriptive 'no group' message.
+	} else {
+		$attrs = array(
+			array(
+				'label' => __( "You are not a member of any groups.  Please join a group before attempting to embed a group's event list.", 'bpeo-group-widget' ),
+				'attr'  => 'placeholder',
+				'type'  => 'number',
+				'meta'  => array(
+					'style' => 'display:none'
+				),
+			)
+		);
+
+	}
+
+	/*
+	 * Shortcake support.
+	 */
+	shortcode_ui_register_for_shortcode(
+		'bpeo-events',
+		array(
+
+			'label'         => __( 'Group Events', 'bpeo-group-widget' ),
+			'listItemImage' => 'dashicons-calendar-alt',
+			'attrs'         => $attrs
+
+		)
+	);
+}
+
+/**
+ * Add shortcode for group events.
+ *
+ * @param  array $r Shortcode attributes.
+ * @return string
+ */
+function bpeo_group_events_shortcode( $r = array() ) {
+	global $content_width;
+
+	$r = shortcode_atts( array(
+		'id' => 0,
+
+		// Type.
+		'type' => 'list',
+
+		// Dimensions.
+		'width'  => ! empty( $content_width ) ? $content_width : '100%',
+		'height' => 300,   // default height is set to 300
+	), $r );
+
+	// BP Groupblog fallback support.
+	$group_id = empty( $r['id'] ) && function_exists( 'get_groupblog_group_id' ) ? get_groupblog_group_id( get_current_blog_id() ) : $r['id'];
+
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	$group = groups_get_group( array(
+		'group_id'        => $group_id,
+		'populate_extras' => false,
+	) );
+
+	// Sanity check!
+	if ( empty( $group ) ) {
+		return;
+	}
+
+	// Group calendar
+	if ( 'calendar' === $r['type'] ) {
+		$link = bp_get_group_permalink( $group ) . 'events/?embedded=true';
+
+	// Upcoming events
+	} else {
+		$link = bp_get_group_permalink( $group ) . 'events/upcoming/?embedded=true';
+	}
+
+	$height = ! empty( $r['height'] ) ? 'height="' . (int) $r['height'] . '"' : '';
+
+	return sprintf(
+		'<iframe src="%1$s" frameborder="0" width="%2$s"%3$s></iframe>',
+		esc_url( $link ),
+		esc_attr( $r['width'] ),
+		$height
+	);
+}
+
+/** WIDGET ***************************************************************/
 
 /**
  * Registers our widget with WordPress.
@@ -66,45 +278,26 @@ class BPEO_Group_Widget extends WP_Widget {
 		 */
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'My Events', 'bpeo-group-widget' ) : $instance['title'], $instance, $this->id_base );
 
-		$height = ! empty( $instance['height'] ) ? 'height="' . (int) $instance['height'] . '"' : '';
-
 		$group_id = ! empty( $instance['group_id'] ) ? (int) $instance['group_id'] : false;
 
 		// BP Groupblog fallback support
 		$group_id = empty( $group_id ) && function_exists( 'get_groupblog_group_id' ) ? get_groupblog_group_id( get_current_blog_id() ) : $group_id;
-
 		if ( empty( $group_id ) ) {
 			return;
-		}
-
-		$group = groups_get_group( array(
-		    'group_id' => $group_id,
-		    'populate_extras' => false,
-		) );
-
-		// Sanity check!
-		if ( empty( $group ) ) {
-			return;
-		}
-
-		// Group calendar
-		if ( 'calendar' === $instance['type'] ) {
-			$link = bp_get_group_permalink( $group ) . 'events/?embedded=true';
-
-		// Upcoming events
-		} else {
-			$link = bp_get_group_permalink( $group ) . 'events/upcoming/?embedded=true';
 		}
 
 		echo $args['before_widget'];
 		if ( $title ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
-	?>
 
-		<iframe src="<?php echo esc_url( $link ); ?>" frameborder="0" width="100%" <?php echo $height; ?>></iframe>
+		echo bpeo_group_events_shortcode( array(
+			'id'     => $group_id,
+			'type'   => $instance['type'],
+			'width'  => '100%',
+			'height' => $instance['height']
+		) );
 
-	<?php
 		echo $args['after_widget'];
 	}
 
@@ -159,16 +352,9 @@ class BPEO_Group_Widget extends WP_Widget {
 
 		$group_id = ! empty( $group_id ) ? $group_id : '';
 
-		$groups = groups_get_groups( array(
-			'type' => 'alphabetical',
-			'order' => 'ASC',
-			'user_id' => bp_loggedin_user_id(),
-			'per_page' => null,
-			'page' => null,
-			'update_meta_cache' => false,
-		) );
+		$groups = bpeo_get_user_public_groups();
 
-		if ( ! empty( $groups['groups'] ) ) {
+		if ( ! empty( $groups ) ) {
 	?>
 
 			<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'bpeo-group-widget' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
@@ -177,10 +363,8 @@ class BPEO_Group_Widget extends WP_Widget {
 			<select class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'group_id' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'group_id' ) ); ?>">
 				<option value="" <?php selected( $group_id, '' ); ?>><?php esc_html_e( '--- Select a group ---', 'bpeo-group-widget' ); ?></option>
 
-				<?php foreach ( $groups['groups'] as $i => $group ) : ?>
-					<?php if ( 'public' !== $group->status ) { continue; } ?>
-
-					<option value="<?php echo esc_attr( $group->id ); ?>" <?php selected( $group_id, $group->id ); ?>><?php echo esc_html( apply_filters( 'bp_get_group_name', $group->name ) ); ?></option>
+				<?php foreach ( $groups as $i => $group_name ) : ?>
+					<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $group_id, $i ); ?>><?php echo esc_html( $group->name ); ?></option>
 				<?php endforeach; ?>
 			</select></p>
 
