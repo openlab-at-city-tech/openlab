@@ -84,8 +84,10 @@ function openlab_group_sidebar($mobile = false) {
                 <h2 class="sidebar-header group-single top-sidebar-header">
                     <?php echo ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Materials'; ?>
                 </h2>
-                <?php openlab_bp_group_site_pages(); ?>
-                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper">
+                <div class="wrapper-block">
+                    <?php openlab_bp_group_site_pages(); ?>
+                </div>
+                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper wrapper-block">
                     <div id="item-buttons" class="profile-nav sidebar-block clearfix">
                         <ul class="sidebar-nav clearfix">
                             <?php bp_get_options_nav(); ?>

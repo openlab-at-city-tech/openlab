@@ -8527,10 +8527,6 @@ body .inline-visible-xs {
     margin: 0;
   }
 }
-.sidebar #sidebar-menu-wrapper .sidebar-block:first-of-type {
-  border-top: 1px solid #bbbbbb;
-  margin-top: 0;
-}
 .sidebar h2.sidebar-title,
 .sidebar h2.sidebar-header {
   font-weight: 700;
@@ -8554,6 +8550,10 @@ body .inline-visible-xs {
 }
 .sidebar.sidebar-inline .sidebar-header.top-sidebar-header {
   margin-top: 6px;
+}
+.sidebar .wrapper-block:first-of-type .sidebar-block {
+  margin: 0;
+  border-top: 1px solid #bbbbbb;
 }
 .sidebar .sidebar-block {
   background: #f0f0f0;
