@@ -693,7 +693,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -882,7 +882,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                  ?></p>
+                                                        <p><?php // bp_group_status_message()                                   ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -1497,7 +1497,7 @@ add_filter('bp_disable_group_cover_image_uploads', '__return_true');
 
 function openlab_get_group_activity_events_feed() {
     $events_out = '';
-    
+
     // Non-public groups shouldn't show this to non-members.
     $group = groups_get_current_group();
     if ('public' !== $group->status && empty($group->user_has_access)) {
@@ -1510,14 +1510,16 @@ function openlab_get_group_activity_events_feed() {
 
     $args = array(
         'event_start_after' => 'today',
+        'bp_group' => bp_get_current_group_id(),
     );
 
     $events = eo_get_events($args);
+    
     $menu_items = openlab_calendar_submenu();
 
     ob_start();
     include(locate_template('parts/sidebar/activity-events-feed.php'));
     $events_out .= ob_get_clean();
-    
+
     return $events_out;
 }
