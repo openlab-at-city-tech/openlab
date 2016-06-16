@@ -9328,6 +9328,9 @@ body.membership-requests .group-list {
 .action-events #item-body h3 {
   margin-top: 0;
 }
+.action-events #item-body > h3 {
+  display: none;
+}
 .action-events #item-body .admin-page-title {
   font-size: 14px;
   font-weight: 700;
@@ -9340,6 +9343,10 @@ body.membership-requests .group-list {
 }
 .action-events #item-body .eventorganiser-event-meta h4 {
   font-size: 14px;
+  font-weight: 700;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar h2 {
+  font-size: 24px;
   font-weight: 700;
 }
 .action-events #post #postdivrich {
