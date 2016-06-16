@@ -9338,6 +9338,10 @@ body.membership-requests .group-list {
 .action-events #item-body .submenu #single-event-name {
   margin-left: -4px;
 }
+.action-events #item-body .eventorganiser-event-meta h4 {
+  font-size: 14px;
+  font-weight: 700;
+}
 .action-events #post #postdivrich {
   margin-bottom: 40px;
 }
