@@ -9347,6 +9347,12 @@ body.membership-requests .group-list {
   font-size: 24px;
   font-weight: 700;
 }
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group {
+  margin: 0;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
+  margin-left: 5px;
+}
 .action-events #post #postdivrich {
   margin-bottom: 40px;
 }
