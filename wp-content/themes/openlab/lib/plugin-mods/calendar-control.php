@@ -75,13 +75,13 @@ function openlab_control_venue_taxonomy($event_category_args) {
 
 add_filter('eventorganiser_register_taxonomy_event-venue', 'openlab_control_venue_taxonomy');
 
-function openlab_control_event_action_links($links){
+function openlab_control_event_action_links($links) {
     global $post;
-    
-    if($post->post_type === 'event' && !bp_current_action()){
+
+    if ($post->post_type === 'event' && !bp_current_action()) {
         $links = array();
     }
-    
+
     return $links;
 }
 
@@ -104,13 +104,16 @@ function openlab_add_eventorganiser_custom_template_folder($stack) {
 add_filter('eventorganiser_template_stack', 'openlab_add_eventorganiser_custom_template_folder');
 
 /**
- * For now there are no events pages for members
- * Attempting to go to an events page will redirect to the member's profile page
+ * Redirects to control calendar page access
  * @param type $wp
  * @return type
  */
 function openlab_event_page_controller($wp) {
 
+    /**
+     * For now there are no events pages for members
+     * Attempting to go to an events page will redirect to the member's profile page
+     */
     if (strpos($wp->request, '/events') !== false && strpos($wp->request, 'members/') !== false) {
 
         $request_url = $wp->request;
@@ -119,6 +122,33 @@ function openlab_event_page_controller($wp) {
         if (is_array($redirect_url)) {
             wp_redirect(get_site_url() . '/' . $redirect_url[0]);
             exit;
+        } else {
+            wp_redirect(get_site_url());
+            exit;
+        }
+    }
+
+    /**
+     * Also controls access to new events interface - if a member is a non-admin and non-mod
+     * and the group calendar settings are set to only allow admins and mods the ability to
+     * create new events, then the member will be redirected
+     */
+    if (strpos($wp->request, '/events/') !== false && strpos($wp->request, '/new-event') !== false) {
+
+        $event_create_access = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_bpeo_event_create_access');
+
+        if ($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()) {
+
+            $request_url = $wp->request;
+            $redirect_url = explode('/new-event', $request_url);
+
+            if (is_array($redirect_url)) {
+                wp_redirect(get_site_url() . '/' . $redirect_url[0]);
+                exit;
+            } else {
+                wp_redirect(get_site_url());
+                exit;
+            }
         }
     }
 
@@ -270,7 +300,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-start-datetime-label">
-    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?> 
+                    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?> 
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-start-datetime-label">
@@ -292,7 +322,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-end-datetime-label">
-    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?> 
+                    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?> 
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-end-datetime-label">
@@ -312,7 +342,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                 <span>
                     <input type="checkbox" id="eo-all-day"  <?php checked($all_day); ?> name="eo_input[allday]" value="1"/>
                     <label for="eo-all-day">
-    <?php esc_html_e('All day', 'eventorganiser'); ?>
+                        <?php esc_html_e('All day', 'eventorganiser'); ?>
                     </label>
                 </span>
 
@@ -333,7 +363,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                 <select id="eo-event-recurrence" name="eo_input[schedule]">
                     <?php foreach ($recurrence_schedules as $value => $label) : ?>
                         <option value="<?php echo esc_attr($value) ?>" <?php selected($schedule, $value); ?>><?php echo esc_html($label); ?></option>
-    <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>
@@ -342,7 +372,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
             <div class="eo-grid-4"></div>
             <div class="eo-grid-8 event-date">
                 <div id="eo-recurrence-frequency-wrapper">
-    <?php esc_html_e('Repeat every', 'eventorganiser'); ?>
+                    <?php esc_html_e('Repeat every', 'eventorganiser'); ?>
                     <label for="eo-recurrence-frequency" class="screen-reader-text"><?php esc_html_e('Recurrence frequency', 'eventorganiser'); ?></label> 
                     <input type="number" id="eo-recurrence-frequency" class="ui-widget-content ui-corner-all" name="eo_input[event_frequency]"  min="1" max="365" maxlength="4" size="4" value="<?php echo intval($frequency); ?>" /> 
                     <span id="eo-recurrence-schedule-label"></span>
@@ -376,17 +406,17 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="eo-days-of-month" role="group" aria-labelledby="eo-days-of-month-label">	
                         <label for="eo-by-month-day" >
                             <input type="radio" id="eo-by-month-day" name="eo_input[schedule_meta]" <?php checked($occurs_by, 'BYMONTHDAY'); ?> value="BYMONTHDAY=" /> 
-    <?php esc_html_e('date of month', 'eventorganiser'); ?>
+                            <?php esc_html_e('date of month', 'eventorganiser'); ?>
                         </label>
                         <label for="eo-by-day" >
                             <input type="radio" id="eo-by-day" name="eo_input[schedule_meta]"  <?php checked('BYMONTHDAY' != $occurs_by, true); ?> value="BYDAY=" />
-    <?php esc_html_e('day of week', 'eventorganiser'); ?>
+                            <?php esc_html_e('day of week', 'eventorganiser'); ?>
                         </label>
                     </div>
                 </div>
 
                 <div id="eo-schedule-last-date-wrapper" class="reoccurrence_label">
-    <?php esc_html_e('until', 'eventorganiser'); ?>
+                    <?php esc_html_e('until', 'eventorganiser'); ?>
                     <label id="eo-repeat-until-label" for="eo-schedule-last-date" class="screen-reader-text"><?php esc_html_e('Repeat this event until:', 'eventorganiser'); ?></label> 
                     <input class="ui-widget-content ui-corner-all" name="eo_input[schedule_end]" id="eo-schedule-last-date" size="10" maxlength="10" value="<?php echo $until->format($php_format); ?>"/>
                 </div>
@@ -398,10 +428,10 @@ function _eventorganiser_details_metabox_openlab_custom() {
 
         <div id="eo_occurrence_picker_row" class="eo-grid-row event-date">
             <div class="eo-grid-4">
-    <?php esc_html_e('Include/Exclude occurrences:', 'eventorganiser'); ?>
+                <?php esc_html_e('Include/Exclude occurrences:', 'eventorganiser'); ?>
             </div>
             <div class="eo-grid-8 event-date">
-    <?php submit_button(__('Show dates', 'eventorganiser'), 'hide-if-no-js eo_occurrence_toggle button small', 'eo_date_toggle', false); ?>
+                <?php submit_button(__('Show dates', 'eventorganiser'), 'hide-if-no-js eo_occurrence_toggle button small', 'eo_date_toggle', false); ?>
 
                 <div id="eo-occurrence-datepicker"></div>
                 <?php
@@ -441,7 +471,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                         <option><?php esc_html_e('Select a venue', 'eventorganiser'); ?></option>
                         <?php foreach ($venues as $venue) : ?>
                             <option <?php selected($venue->term_id, $venue_id); ?> value="<?php echo intval($venue->term_id); ?>"><?php echo esc_html($venue->name); ?></option>
-        <?php endforeach; ?>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -491,10 +521,26 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-    <?php endif; //endif venue's supported       ?>
+        <?php endif; //endif venue's supported         ?>
 
     </div>
     <?php
     // create a custom nonce for submit verification later
     wp_nonce_field('eventorganiser_event_update_' . get_the_ID() . '_' . get_current_blog_id(), '_eononce');
 }
+
+/**
+ * Save calendar group settings
+ */
+function openlab_process_group_calendar_settings($group_id) {
+    if (!empty($_POST['openlab-bpeo-event-create-access'])) {
+
+        $access_level = sanitize_text_field($_POST['openlab-bpeo-event-create-access']);
+
+        groups_update_groupmeta($group_id, 'openlab_bpeo_event_create_access', $access_level);
+    } else {
+        groups_delete_groupmeta($group_id, 'openlab_bpeo_event_create_access');
+    }
+}
+
+add_action('groups_group_settings_edited', 'openlab_process_group_calendar_settings');
