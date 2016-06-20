@@ -1,9 +1,8 @@
 <div class="action-events">
 	<div id="item-body">
-        <div class="submenu">
+        <div class="submenu submenu-sitewide-calendar">
             <div class="submenu-text pull-left bold">Calendar:</div>
             <ul class="nav nav-inline">
-
                 <?php foreach ($menu_items as $item): ?>
                     <li id="<?php echo $item['slug'] ?>-groups-li" class="<?php echo $item['class'] ?>"><a href="<?php echo $item['link'] ?>"><?php echo $item['name'] ?></a></li>
                 <?php endforeach; ?>

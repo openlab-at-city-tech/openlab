@@ -7363,6 +7363,9 @@ input[type="submit"] {
   line-height: 1.42857143;
   margin: 0;
 }
+.submenu.submenu-sitewide-calendar {
+  margin-bottom: 34px;
+}
 .has-menu-items .submenu-text {
   border-right: 1px solid #333333;
   padding: 0 7px 0 0;
@@ -9326,6 +9329,10 @@ body.membership-requests .group-list {
 .action-events .submenu-row {
   display: none;
 }
+.action-events h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
 .action-events #item-body {
   margin-top: 0;
 }
@@ -9335,10 +9342,6 @@ body.membership-requests .group-list {
 }
 .action-events #item-body > h3 {
   display: none;
-}
-.action-events #item-body .admin-page-title {
-  font-size: 14px;
-  font-weight: 700;
 }
 .action-events #item-body .submenu {
   margin-bottom: 34px;
@@ -9359,6 +9362,9 @@ body.membership-requests .group-list {
 }
 .action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
   margin-left: 5px;
+}
+.action-events #item-body .eo-fullcalendar .fc-day-grid {
+  overflow-y: scroll;
 }
 .action-events #item-body .eo-fullcalendar .fc-time-grid-container {
   max-height: 527px;

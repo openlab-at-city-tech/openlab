@@ -1141,12 +1141,3 @@ function openlab_calendar_submenu() {
 
     return $links_out;
 }
-
-function openlab_bp_get_nav_menu_items($menus){
-    
-    echo '<pre>'.print_r($menus, true).'</pre>';
-    
-    return $menus;
-}
-
-add_filter('bp_get_nav_menu_items','openlab_bp_get_nav_menu_items');

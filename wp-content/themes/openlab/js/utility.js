@@ -19,9 +19,11 @@
             }
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
-
+            
             //EO Calendar JS filtering
-            wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering)
+            if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
+                wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering);
+            }
 
         },
         detectZoom: function () {
@@ -84,13 +86,13 @@
         calendarScrollBarPadding: function (view, element) {
 
             if (view.name === 'agendaWeek') {
-                
+
                 var width = OpenLab.utility.getScrollBarWidth();
-                
+
                 console.log('width', width);
-                
-                $('.eo-fullcalendar .fc-row.fc-widget-header').wrap( "<div class='fc-header-wrapper'></div>" );
-                
+
+                $('.eo-fullcalendar .fc-row.fc-widget-header').wrap("<div class='fc-header-wrapper'></div>");
+
                 $('.eo-fullcalendar .fc-day-grid, .eo-fullcalendar .fc-header-wrapper').css({
                     'border-right': width + 'px #f3f3f3 solid'
                 });

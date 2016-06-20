@@ -345,6 +345,9 @@ input[type="submit"]{
             margin: 0;
         }
     }
+    &.submenu-sitewide-calendar{
+        margin-bottom: 34px;
+    }
 }
 .has-menu-items{
     .submenu-text{
@@ -2370,6 +2373,10 @@ body.membership-requests {
     .submenu-row{
         display: none;
     }
+    h2{
+        font-size: 24px;
+        font-weight: 700;
+    }
     #item-body{
         margin-top: 0;
         h2,h3{
@@ -2377,10 +2384,6 @@ body.membership-requests {
         }
         > h3 {
             display: none;
-        }
-        .admin-page-title {
-            font-size: 14px;
-            font-weight: @bold;
         }
         .submenu{
             margin-bottom: 34px;
@@ -2406,6 +2409,9 @@ body.membership-requests {
                         margin-left: 5px;
                     }
                 }
+            }
+            .fc-day-grid{
+                overflow-y: scroll;
             }
             .fc-time-grid-container{
                 max-height: 527px;

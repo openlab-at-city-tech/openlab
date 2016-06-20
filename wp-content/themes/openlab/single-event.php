@@ -30,11 +30,11 @@ get_header();
 <div id="content" class="hfeed row">
 
     <div class="col-sm-18 col-xs-24">
-        
+
         <h1 class="entry-title">OpenLab Calendar: Event</h1>
 
-        <div class="row">
-            <div class="col-md-24">
+        <div class="action-events">
+            <div id="item-body">
                 <div class="submenu">
                     <div class="submenu-text pull-left bold">Calendar:</div>
                     <ul class="nav nav-inline">
@@ -45,15 +45,16 @@ get_header();
                         <li class="current-menu-item" id="single-event-name"><span><?php the_title(); ?></span></li>
                     </ul>
                 </div>
+
+                <?php while (have_posts()) : the_post(); ?>
+
+                    <?php the_content(); ?>
+
+                <?php endwhile; // end of the loop. ?>
+
             </div>
+
         </div>
-
-        <?php while (have_posts()) : the_post(); ?>
-
-            <?php the_content(); ?>
-
-        <?php endwhile; // end of the loop. ?>
-
     </div>
 
     <?php openlab_bp_sidebar('about'); ?>

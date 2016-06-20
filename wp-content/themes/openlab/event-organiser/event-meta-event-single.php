@@ -29,7 +29,7 @@
 	<hr>
 
 	<!-- Event details -->
-	<h4><?php _e( 'Event Details', 'eventorganiser' ); ?></h4>
+	<h3 class="font-size font-14"><?php _e( 'Event Details', 'eventorganiser' ); ?></h3>
 
 	<!-- Is event recurring or a single event -->
 	<?php if ( eo_recurs() ) :?>
