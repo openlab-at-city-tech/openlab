@@ -48,7 +48,9 @@ global $bp, $wp_query;
 
         <?php do_action('bp_before_group_plugin_template'); ?>
 
-        <?php do_action('bp_template_content'); ?>
+        <div class="entry-content">
+            <?php do_action('bp_template_content'); ?>
+        </div>
 
         <?php do_action('bp_after_group_plugin_template'); ?>
     </div><!-- #item-body -->
