@@ -1511,6 +1511,7 @@ function openlab_get_group_activity_events_feed() {
     $args = array(
         'event_start_after' => 'today',
         'bp_group' => bp_get_current_group_id(),
+        'numberposts' => 5,
     );
 
     $events = eo_get_events($args);
