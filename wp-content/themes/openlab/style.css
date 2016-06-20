@@ -7826,6 +7826,13 @@ body .inline-visible-xs {
     display: inline-block !important;
   }
 }
+body .scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px;
+}
 /**shortcodes**/
 .callout-list .row {
   margin-bottom: 34px;
@@ -9352,6 +9359,10 @@ body.membership-requests .group-list {
 }
 .action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
   margin-left: 5px;
+}
+.action-events #item-body .eo-fullcalendar .fc-time-grid-container {
+  max-height: 527px;
+  overflow: auto;
 }
 .action-events #post #postdivrich {
   margin-bottom: 40px;

@@ -20,6 +20,9 @@
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
 
+            //EO Calendar JS filtering
+            wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering)
+
         },
         detectZoom: function () {
 
@@ -64,6 +67,48 @@
                 });
 
             }
+
+        },
+        calendarFiltering: function (args, calendar) {
+
+            if (calendar.defaultview === 'agendaWeek') {
+                args.scrollTime = '08:00:00';
+                args.viewRender = function (view, element) {
+                    OpenLab.utility.calendarScrollBarPadding(view, element);
+                }
+            }
+
+            return args;
+
+        },
+        calendarScrollBarPadding: function (view, element) {
+
+            if (view.name === 'agendaWeek') {
+                
+                var width = OpenLab.utility.getScrollBarWidth();
+                
+                console.log('width', width);
+                
+                $('.eo-fullcalendar .fc-row.fc-widget-header').wrap( "<div class='fc-header-wrapper'></div>" );
+                
+                $('.eo-fullcalendar .fc-day-grid, .eo-fullcalendar .fc-header-wrapper').css({
+                    'border-right': width + 'px #f3f3f3 solid'
+                });
+
+            }
+
+        },
+        getScrollBarWidth: function () {
+
+            var scrollDiv = document.createElement("div");
+            scrollDiv.className = "scrollbar-measure";
+            document.body.appendChild(scrollDiv);
+
+            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+            document.body.removeChild(scrollDiv);
+
+            return scrollbarWidth;
 
         },
         setUpNewMembersBox: function (resize) {
