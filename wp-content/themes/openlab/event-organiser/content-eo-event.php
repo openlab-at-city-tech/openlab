@@ -1,5 +1,6 @@
-
-	<h2><?php the_title() ?></h2>
+        <?php if(bp_current_component() !== 'groups'): ?>
+            <h2 class="event-title"><?php the_title() ?></h2>
+        <?php endif; ?>
 
 	<?php the_content(); ?>
 

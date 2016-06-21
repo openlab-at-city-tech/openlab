@@ -9333,6 +9333,9 @@ body.membership-requests .group-list {
   font-size: 24px;
   font-weight: 700;
 }
+.action-events .entry-content > h3 {
+  display: none;
+}
 .action-events #item-body {
   margin-top: 0;
 }
