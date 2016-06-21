@@ -9329,6 +9329,9 @@ body.membership-requests .group-list {
 .action-events .submenu-row {
   display: none;
 }
+.action-events img {
+  max-width: 100%;
+}
 .action-events h2 {
   font-size: 24px;
   font-weight: 700;
