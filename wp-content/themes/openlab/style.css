@@ -9363,9 +9363,6 @@ body.membership-requests .group-list {
 .action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
   margin-left: 5px;
 }
-.action-events #item-body .eo-fullcalendar .fc-day-grid {
-  overflow-y: scroll;
-}
 .action-events #item-body .eo-fullcalendar .fc-time-grid-container {
   max-height: 527px;
   overflow: auto;

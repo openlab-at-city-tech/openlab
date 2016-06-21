@@ -37,13 +37,13 @@ get_header();
             <div id="item-body">
                 <div class="submenu">
                     <div class="submenu-text pull-left bold">Calendar:</div>
-                    <ul class="nav nav-inline">
+                    <ul class="nav nav-inline"><!--
                         <?php $menu_items = openlab_calendar_submenu(); ?>
                         <?php foreach ($menu_items as $item): ?>
-                            <li class="<?php echo $item['class'] ?>" id="<?php echo $item['slug'] ?>-groups-li"><a href="<?php echo $item['link'] ?>"><?php echo $item['name'] ?></a></li>
+                            --><li class="<?php echo $item['class'] ?>" id="<?php echo $item['slug'] ?>-groups-li"><a href="<?php echo $item['link'] ?>"><?php echo $item['name'] ?></a></li><!--
                         <?php endforeach; ?>
-                        <li class="current-menu-item" id="single-event-name"><span><?php the_title(); ?></span></li>
-                    </ul>
+                        --><li class="current-menu-item" id="single-event-name"><span><?php the_title(); ?></span></li><!--
+                    --></ul>
                 </div>
 
                 <?php while (have_posts()) : the_post(); ?>
