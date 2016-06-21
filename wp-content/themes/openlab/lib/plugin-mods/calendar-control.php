@@ -175,7 +175,7 @@ add_filter('eventorganiser_options', 'openlab_eventorganiser_custom_options');
  * Adds a title above the description box when editing an event
  */
 function openlab_eventorganiser_custom_content_after_title() {
-    
+
     if (bpeo_is_action('new') || bpeo_is_action('edit')) {
         echo '<h3 class="outside-title"><span class="font-size font-18">Event Description</span></h3>';
     }
@@ -544,3 +544,14 @@ function openlab_process_group_calendar_settings($group_id) {
 }
 
 add_action('groups_group_settings_edited', 'openlab_process_group_calendar_settings');
+
+function openlab_group_calendar_media_settings($settings, $post) {
+
+    if ($post->post_type === 'event') {
+        
+    }
+
+    return $settings;
+}
+
+add_filter('media_view_settings', 'openlab_group_calendar_media_settings', 10, 2);

@@ -19,6 +19,7 @@
             }
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
+            OpenLab.utility.eventValidation();
             
             //EO Calendar JS filtering
             if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -70,6 +71,31 @@
 
             }
 
+        },
+        eventValidation: function(){
+          
+          var eventPublish = $('.action-events #publish');
+          var groupMetaBox = $('#bp_event_organiser_metabox .inside');
+          
+          if(eventPublish.length){
+              
+              eventPublish.on('click', function(e){
+                 
+                  var groupSelection = $('#bp_event_organiser_metabox .select2-selection__rendered .select2-selection__choice');
+                  
+                  if(!groupSelection.length){
+                      e.preventDefault();
+                      
+                      var message = '<div class="bp-template-notice error">Events must be associated with at least one group.</div>';
+                      groupMetaBox.prepend(message);
+                  } else {
+                      groupMetaBox.find('.bp-template-notice').remove();
+                  }
+                  
+              });
+              
+          }
+            
         },
         calendarFiltering: function (args, calendar) {
 
