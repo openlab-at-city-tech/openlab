@@ -345,6 +345,9 @@ input[type="submit"]{
             margin: 0;
         }
     }
+    &.submenu-sitewide-calendar{
+        margin-bottom: 34px;
+    }
 }
 .has-menu-items{
     .submenu-text{
@@ -832,6 +835,13 @@ body{
         @media(max-width: @screen-xs-max){
             display: inline-block !important;
         }
+    }
+    .scrollbar-measure{
+        width: 100px;
+        height: 100px;
+        overflow: scroll;
+        position: absolute;
+        top: -9999px;
     }
 }
 /**shortcodes**/
@@ -1585,6 +1595,14 @@ body{
             }
         }
     }
+    .wrapper-block{
+        &:first-of-type{
+            .sidebar-block{
+                margin: 0;
+                border-top: 1px solid @30gray;
+            }
+        }
+    }
     .sidebar-block{
         background: @5gray;
         margin: 15px 0;
@@ -1671,6 +1689,11 @@ body{
                 margin-bottom: 10px;
                 &:last-child{
                     margin-bottom: 0;
+                }
+            }
+            &.group-event-activity{
+                li{
+                    margin-bottom: 14px;
                 }
             }
         }
@@ -2342,6 +2365,125 @@ body.membership-requests {
         }
         .pagination-viewing {
             display: none;
+        }
+    }
+}
+/**event organiser**/
+.action-events{
+    .submenu-row{
+        display: none;
+    }
+    img{
+        max-width: 100%;
+    }
+    h2{
+        font-size: 24px;
+        font-weight: 700;
+    }
+    .entry-content{
+        > h3{
+            display: none;
+        }
+    }
+    #item-body{
+        margin-top: 0;
+        h2,h3{
+            margin-top: 0;
+        }
+        > h3 {
+            display: none;
+        }
+        .submenu{
+            margin-bottom: 34px;
+            #single-event-name{
+                margin-left: -4px;
+            }
+        }
+        .eventorganiser-event-meta {
+            h4 {
+                font-size: 14px;
+                font-weight: @bold;
+            }
+        }
+        .eo-fullcalendar {
+            .fc-toolbar {
+                h2 {
+                    font-size: 24px;
+                    font-weight: @bold;
+                }
+                .fc-button-group{
+                    margin: 0;
+                    .fc-today-button{
+                        margin-left: 5px;
+                    }
+                }
+            }
+            .fc-time-grid-container{
+                max-height: 527px;
+                overflow: auto;
+            }
+        }
+    }
+    #post{
+        #postdivrich {
+            margin-bottom: 40px
+        }
+        .postbox{
+            .panel;
+            .panel-default;
+            margin-bottom: 40px;
+            h3.hndle{
+                .panel-heading;
+                font-size: 18px;
+                padding: 14px 12px;
+            }
+            .inside{
+                .panel-body;
+                font-size: 13.5px;
+                .eo-grid {
+                    padding-left: 10px;
+                }
+                label {
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+    &.event-detail{
+        #item-body{
+            > h4{
+                display: none;
+            }
+        }
+    }
+}
+body{
+    &.single-event{
+        #content{
+            .eo-event-meta, 
+            .eo-event-venue-map {
+                float: none;
+                width: 100%;
+            }
+        }
+    }
+}
+#ui-timepicker-div {
+    .ui-timepicker-table {
+        width: 100%;
+        font-size: .9em;
+        border-collapse: collapse;
+        margin: 0 0 .4em;
+        .ui-timepicker-hours,
+        .ui-timepicker-minutes {
+            padding: .2em;
+            .ui-timepicker {
+                td {
+                    a {
+                        width: auto;
+                    }
+                }
+            }
         }
     }
 }

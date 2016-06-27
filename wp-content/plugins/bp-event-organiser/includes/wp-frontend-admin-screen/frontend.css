@@ -1,0 +1,192 @@
+/**
+ * Truncated version of /wp-admin/css/common.css for the frontend.
+ */
+
+.hidden,
+.js .closed .inside,
+.js .hide-if-js,
+.no-js .hide-if-no-js,
+.js.wp-core-ui .hide-if-js,
+.js .wp-core-ui .hide-if-js,
+.no-js.wp-core-ui .hide-if-no-js,
+.no-js .wp-core-ui .hide-if-no-js {
+	display: none;
+}
+
+.screen-reader-text, .screen-reader-text span, .ui-helper-hidden-accessible {
+	border: 0 none;
+	clip: rect(0px, 0px, 0px, 0px);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.widget-top,
+.menu-item-handle,
+.widget-inside,
+.manage-menus,
+table.widefat,
+.stuffbox,
+p.popular-tags,
+.widgets-holder-wrap,
+.wp-editor-container,
+.popular-tags,
+.feature-filter,
+.imgedit-group,
+.comment-ays {
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.notice,
+div.updated,
+div.error {
+	background: #fff;
+	border-left: 4px solid #fff;
+	-webkit-box-shadow: 0 1px 1px 0 rgba( 0, 0, 0, 0.1 );
+	box-shadow: 0 1px 1px 0 rgba( 0, 0, 0, 0.1 );
+	margin-bottom: 2em;
+	padding: 1px 12px;
+}
+
+.notice p,
+div.updated p,
+div.error p,
+.form-table td .notice p {
+	margin: 0.5em 0;
+	padding: 2px;
+}
+
+.notice-success,
+div.updated {
+	 border-color: #7ad03a;
+}
+
+.notice-warning {
+	border-color: #ffba00;
+}
+
+.notice-error,
+div.error {
+	border-color: #dd3d36;
+}
+
+.notice-info {
+	border-color: #00a0d2;
+}
+
+.the-tagcloud {
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	line-height: 1.8em;
+	margin: 5px 0 10px;
+	padding: 8px;
+	word-spacing: 3px;
+}
+
+#post-status-display,
+#post-visibility-display {
+	font-weight: 600;
+}
+
+.misc-pub-section {
+	padding: 6px 10px 8px;
+}
+
+/* from /wp-admin/css/forms.css */
+
+.submitbox {
+	position: relative;
+}
+
+#misc-publishing-actions label[for="post_status"]:before {
+	content: '\f173';
+	display: inline-block;
+	font: normal 20px/1 'dashicons';
+	speak: none;
+	left: -1px;
+	padding: 0 5px 0 0;
+	position: relative;
+	top: 0;
+	text-decoration: none !important;
+	vertical-align: top;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/** overrides ***********************************************************/
+
+.postbox {
+	box-shadow: none;
+	border-radius: 3px;
+	margin-bottom: 2.5em;
+}
+
+.postbox .inside, .stuffbox .inside {
+	font-size: 13px;
+	line-height: 1.4em;
+	padding: 15px;
+}
+
+.postbox ul {
+	list-style: outside none none;
+	margin-bottom: 0;
+}
+
+.postbox ul li {
+	margin-left: 0;
+}
+
+#post .hndle {
+	background:#f7f7f7;
+	border-bottom: 1px solid #e5e5e5;
+	margin: 0 0 .4em;
+	padding: 8px 12px;
+}
+
+#post .wp-editor-tabs button {border-bottom-color:#e5e5e5;}
+
+#post .wp-editor-wrap button, #post .wp-editor-wrap input[type="button"] {padding-left:6px; padding-right:6px;}
+
+#post .tmce-active .switch-tmce, #post .html-active .switch-html {
+	background: #f5f5f5;
+	border-bottom-color: #f5f5f5;
+	color: #555;
+}
+
+#post .form-table .ui-datepicker select {height:auto;}
+
+#post .howto {
+	color: #666;
+	display: block;
+	font-style: italic;
+	margin: 0 0 6px;
+}
+
+#post p:last-child {margin-bottom:1em;}
+
+#titlediv #title {width:97%; margin-bottom:1em;}
+
+#titlediv #title-prompt-text {padding-top:5px;}
+
+#post .category-tabs {margin-bottom:0;}
+	#post .category-tabs li {margin:0;}
+
+#post .categorychecklist {margin:1.7em 0;}
+
+.handlediv {display:none;}
+
+.tagcloud-link {display: block; margin-top: .6em;}
+
+#major-publishing-actions, #minor-publishing-actions, #misc-publishing-actions p {margin-top: 1em;}
+
+#major-publishing-actions {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+	#delete-action a {color:#a00;}

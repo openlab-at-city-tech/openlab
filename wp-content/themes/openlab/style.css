@@ -6719,7 +6719,9 @@ button.close {
 .panel-body:before,
 .panel-body:after,
 .modal-footer:before,
-.modal-footer:after {
+.modal-footer:after,
+.action-events #post .postbox .inside:before,
+.action-events #post .postbox .inside:after {
   content: " ";
   display: table;
 }
@@ -6737,7 +6739,8 @@ button.close {
 .navbar-collapse:after,
 .pager:after,
 .panel-body:after,
-.modal-footer:after {
+.modal-footer:after,
+.action-events #post .postbox .inside:after {
   clear: both;
 }
 .center-block {
@@ -7360,6 +7363,9 @@ input[type="submit"] {
   line-height: 1.42857143;
   margin: 0;
 }
+.submenu.submenu-sitewide-calendar {
+  margin-bottom: 34px;
+}
 .has-menu-items .submenu-text {
   border-right: 1px solid #333333;
   padding: 0 7px 0 0;
@@ -7822,6 +7828,13 @@ body .inline-visible-xs {
   body .inline-visible-xs {
     display: inline-block !important;
   }
+}
+body .scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px;
 }
 /**shortcodes**/
 .callout-list .row {
@@ -8548,6 +8561,10 @@ body .inline-visible-xs {
 .sidebar.sidebar-inline .sidebar-header.top-sidebar-header {
   margin-top: 6px;
 }
+.sidebar .wrapper-block:first-of-type .sidebar-block {
+  margin: 0;
+  border-top: 1px solid #bbbbbb;
+}
 .sidebar .sidebar-block {
   background: #f0f0f0;
   margin: 15px 0;
@@ -8630,6 +8647,9 @@ body .inline-visible-xs {
 }
 .sidebar .sidebar-block ul.sidebar-sublinks li:last-child {
   margin-bottom: 0;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.group-event-activity li {
+  margin-bottom: 14px;
 }
 .sidebar .sidebar-block.padded-block {
   padding: 6%;
@@ -9304,6 +9324,264 @@ body.membership-requests .group-list {
   .sent-invites-panel .pagination-viewing {
     display: none;
   }
+}
+/**event organiser**/
+.action-events .submenu-row {
+  display: none;
+}
+.action-events img {
+  max-width: 100%;
+}
+.action-events h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+.action-events .entry-content > h3 {
+  display: none;
+}
+.action-events #item-body {
+  margin-top: 0;
+}
+.action-events #item-body h2,
+.action-events #item-body h3 {
+  margin-top: 0;
+}
+.action-events #item-body > h3 {
+  display: none;
+}
+.action-events #item-body .submenu {
+  margin-bottom: 34px;
+}
+.action-events #item-body .submenu #single-event-name {
+  margin-left: -4px;
+}
+.action-events #item-body .eventorganiser-event-meta h4 {
+  font-size: 14px;
+  font-weight: 700;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group {
+  margin: 0;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
+  margin-left: 5px;
+}
+.action-events #item-body .eo-fullcalendar .fc-time-grid-container {
+  max-height: 527px;
+  overflow: auto;
+}
+.action-events #post #postdivrich {
+  margin-bottom: 40px;
+}
+.action-events #post .postbox {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  border-color: #dddddd;
+  margin-bottom: 40px;
+}
+.action-events #post .postbox > .list-group {
+  margin-bottom: 0;
+}
+.action-events #post .postbox > .list-group .list-group-item {
+  border-width: 1px 0;
+  border-radius: 0;
+}
+.action-events #post .postbox > .list-group:first-child .list-group-item:first-child {
+  border-top: 0;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.action-events #post .postbox > .list-group:last-child .list-group-item:last-child {
+  border-bottom: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.action-events #post .postbox > .table,
+.action-events #post .postbox > .table-responsive > .table,
+.action-events #post .postbox > .panel-collapse > .table {
+  margin-bottom: 0;
+}
+.action-events #post .postbox > .table:first-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.action-events #post .postbox > .table:first-child > thead:first-child > tr:first-child td:first-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,
+.action-events #post .postbox > .table:first-child > tbody:first-child > tr:first-child td:first-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
+.action-events #post .postbox > .table:first-child > thead:first-child > tr:first-child th:first-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
+.action-events #post .postbox > .table:first-child > tbody:first-child > tr:first-child th:first-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {
+  border-top-left-radius: 3px;
+}
+.action-events #post .postbox > .table:first-child > thead:first-child > tr:first-child td:last-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,
+.action-events #post .postbox > .table:first-child > tbody:first-child > tr:first-child td:last-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
+.action-events #post .postbox > .table:first-child > thead:first-child > tr:first-child th:last-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
+.action-events #post .postbox > .table:first-child > tbody:first-child > tr:first-child th:last-child,
+.action-events #post .postbox > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {
+  border-top-right-radius: 3px;
+}
+.action-events #post .postbox > .table:last-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child {
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.action-events #post .postbox > .table:last-child > tbody:last-child > tr:last-child td:first-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,
+.action-events #post .postbox > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
+.action-events #post .postbox > .table:last-child > tbody:last-child > tr:last-child th:first-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
+.action-events #post .postbox > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {
+  border-bottom-left-radius: 3px;
+}
+.action-events #post .postbox > .table:last-child > tbody:last-child > tr:last-child td:last-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,
+.action-events #post .postbox > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
+.action-events #post .postbox > .table:last-child > tbody:last-child > tr:last-child th:last-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
+.action-events #post .postbox > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
+.action-events #post .postbox > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {
+  border-bottom-right-radius: 3px;
+}
+.action-events #post .postbox > .panel-body + .table,
+.action-events #post .postbox > .panel-body + .table-responsive {
+  border-top: 1px solid #dddddd;
+}
+.action-events #post .postbox > .table > tbody:first-child > tr:first-child th,
+.action-events #post .postbox > .table > tbody:first-child > tr:first-child td {
+  border-top: 0;
+}
+.action-events #post .postbox > .table-bordered,
+.action-events #post .postbox > .table-responsive > .table-bordered {
+  border: 0;
+}
+.action-events #post .postbox > .table-bordered > thead > tr > th:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr > th:first-child,
+.action-events #post .postbox > .table-bordered > tbody > tr > th:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr > th:first-child,
+.action-events #post .postbox > .table-bordered > tfoot > tr > th:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+.action-events #post .postbox > .table-bordered > thead > tr > td:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr > td:first-child,
+.action-events #post .postbox > .table-bordered > tbody > tr > td:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr > td:first-child,
+.action-events #post .postbox > .table-bordered > tfoot > tr > td:first-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+  border-left: 0;
+}
+.action-events #post .postbox > .table-bordered > thead > tr > th:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr > th:last-child,
+.action-events #post .postbox > .table-bordered > tbody > tr > th:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr > th:last-child,
+.action-events #post .postbox > .table-bordered > tfoot > tr > th:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+.action-events #post .postbox > .table-bordered > thead > tr > td:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr > td:last-child,
+.action-events #post .postbox > .table-bordered > tbody > tr > td:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr > td:last-child,
+.action-events #post .postbox > .table-bordered > tfoot > tr > td:last-child,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+  border-right: 0;
+}
+.action-events #post .postbox > .table-bordered > thead > tr:first-child > td,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr:first-child > td,
+.action-events #post .postbox > .table-bordered > tbody > tr:first-child > td,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr:first-child > td,
+.action-events #post .postbox > .table-bordered > thead > tr:first-child > th,
+.action-events #post .postbox > .table-responsive > .table-bordered > thead > tr:first-child > th,
+.action-events #post .postbox > .table-bordered > tbody > tr:first-child > th,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr:first-child > th {
+  border-bottom: 0;
+}
+.action-events #post .postbox > .table-bordered > tbody > tr:last-child > td,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr:last-child > td,
+.action-events #post .postbox > .table-bordered > tfoot > tr:last-child > td,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr:last-child > td,
+.action-events #post .postbox > .table-bordered > tbody > tr:last-child > th,
+.action-events #post .postbox > .table-responsive > .table-bordered > tbody > tr:last-child > th,
+.action-events #post .postbox > .table-bordered > tfoot > tr:last-child > th,
+.action-events #post .postbox > .table-responsive > .table-bordered > tfoot > tr:last-child > th {
+  border-bottom: 0;
+}
+.action-events #post .postbox > .table-responsive {
+  border: 0;
+  margin-bottom: 0;
+}
+.action-events #post .postbox > .panel-heading {
+  color: #333333;
+  background-color: #f5f5f5;
+  border-color: #dddddd;
+}
+.action-events #post .postbox > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: #dddddd;
+}
+.action-events #post .postbox > .panel-heading .badge {
+  color: #f5f5f5;
+  background-color: #333333;
+}
+.action-events #post .postbox > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: #dddddd;
+}
+.action-events #post .postbox h3.hndle {
+  color: #333333;
+  background-color: #f5f5f5;
+  border-color: #dddddd;
+  font-size: 18px;
+  padding: 14px 12px;
+}
+.action-events #post .postbox h3.hndle + .panel-collapse > .panel-body {
+  border-top-color: #dddddd;
+}
+.action-events #post .postbox h3.hndle .badge {
+  color: #f5f5f5;
+  background-color: #333333;
+}
+.action-events #post .postbox .inside {
+  padding: 15px;
+  font-size: 13.5px;
+}
+.action-events #post .postbox .inside .eo-grid {
+  padding-left: 10px;
+}
+.action-events #post .postbox .inside label {
+  font-weight: normal;
+}
+.action-events.event-detail #item-body > h4 {
+  display: none;
+}
+body.single-event #content .eo-event-meta,
+body.single-event #content .eo-event-venue-map {
+  float: none;
+  width: 100%;
+}
+#ui-timepicker-div .ui-timepicker-table {
+  width: 100%;
+  font-size: .9em;
+  border-collapse: collapse;
+  margin: 0 0 .4em;
+}
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-hours,
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-minutes {
+  padding: .2em;
+}
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-hours .ui-timepicker td a,
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-minutes .ui-timepicker td a {
+  width: auto;
 }
 /**member profiles**/
 .profile-type {

@@ -25,6 +25,7 @@ function openlab_conditional_body_classes($classes) {
     }
 
     $about_page_obj = get_page_by_path('about');
+    $calendar_page_obj = get_page_by_path('about/calendar');
     $my_group_pages = array('my-courses', 'my-clubs', 'my-projects');
 
     if (( isset($post->post_name) && in_array($post->post_name, $group_archives) ) ||
@@ -32,6 +33,7 @@ function openlab_conditional_body_classes($classes) {
             bp_is_user() ||
             ( isset($post->post_name) && $post->ID == $about_page_obj->ID ) ||
             ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
+            ( isset($post->post_parent) && $post->post_parent == $calendar_page_obj->ID ) ||
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
             ( !empty($query_vars) && isset($query_vars['help_category'])) ||
