@@ -48,7 +48,7 @@
                 }
 
                 $(".ab-submenu #sidebar-login-form").toggle(400, function () {
-                    $(".ab-submenu #sidebar-user-login").focus();
+                    $(".ab-submenu #dropdown-user-login").focus();
                     if ($(this).hasClass('login-click')) {
                         $(this).closest('#wp-admin-bar-bp-login').removeClass('login-form-active');
                     }

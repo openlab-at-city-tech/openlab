@@ -58,15 +58,15 @@ HTML;
     endif;
 
     $form_action = bp_search_form_action();
-    $nonce = wp_nonce_field('bp_search_form', '_bp_search_nonce', true, false);
+    $nonce = wp_create_nonce('bp_search_form');
 
     $mobile_mup .= <<<HTML
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
-    <form action="{$form_action}" method="post" id="search-form-{$mode}" class="form-inline">
+    <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
         <div class="sr-only">Search by People or Group Type</div>
-        <input id="search-terms-{$mode}" class="form-control" type="text" name="search" placeholder="Search" />
-        <select id="search-which-{$mode}" name="search-which" class="form-control">
+        <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="Search" />
+        <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
             <option value="members">People</option>
             <option value="courses">Courses</option>
             <option value="projects">Projects</option>
@@ -74,8 +74,8 @@ HTML;
             <option value="portfolios">Portfolios</option>
         </select>
 
-        <button class="btn btn-primary top-align" id="search-submit-{$mode}" type="submit"><i class="fa fa-search"></i></button>
-        {$nonce}
+        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i></button>
+        <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
         </div>
     </form><!-- #search-form -->
     </div>

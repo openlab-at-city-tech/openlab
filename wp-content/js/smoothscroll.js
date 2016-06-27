@@ -3317,7 +3317,7 @@ if (Hyphenator.isBookmarklet()) {
         },
         searchBarEventActions: function (searchTrigger) {
 
-            var select = $('.search-form-wrapper .hidden-custom-select select');
+            //var select = $('.search-form-wrapper .hidden-custom-select select');
             var adminBar = $('#wpadminbar');
             var mode = searchTrigger.data('mode');
             var location = searchTrigger.data('location');
@@ -3350,7 +3350,7 @@ if (Hyphenator.isBookmarklet()) {
                         searchTrigger.removeClass('in-action');
                     });
                 }
-                select.customSelect();
+                //select.customSelect();
             }
 
         },
@@ -3447,7 +3447,7 @@ if (Hyphenator.isBookmarklet()) {
                 }
 
                 $(".ab-submenu #sidebar-login-form").toggle(400, function () {
-                    $(".ab-submenu #sidebar-user-login").focus();
+                    $(".ab-submenu #dropdown-user-login").focus();
                     if ($(this).hasClass('login-click')) {
                         $(this).closest('#wp-admin-bar-bp-login').removeClass('login-form-active');
                     }
