@@ -3423,6 +3423,7 @@ if (Hyphenator.isBookmarklet()) {
             //get starting position of mobile menu background
             OpenLab.nav.backgroundTopStart = OpenLab.nav.backgroundCont.css('top');
 
+            OpenLab.nav.removeDefaultScreenReaderShortcut();
             OpenLab.nav.directToggleAction();
             OpenLab.nav.backgroundAction();
             OpenLab.nav.mobileAnchorLinks();
@@ -3555,6 +3556,11 @@ if (Hyphenator.isBookmarklet()) {
 
             });
 
+        },
+        removeDefaultScreenReaderShortcut: function(){
+          
+            $('#wpadminbar .screen-reader-shortcut').remove();
+            
         },
         directToggleAction: function () {
 
