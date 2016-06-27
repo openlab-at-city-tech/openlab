@@ -57,9 +57,11 @@ function cuny_home_login() {
             <?php do_action('bp_before_sidebar_login_form') ?>
 
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <input class="form-control" type="text" name="log" id="sidebar-user-login" class="input" value="" placeholder="Username" tabindex="0" />
-
-                <input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" placeholder="Password" tabindex="0" />
+                <label class="sr-only" for="log">Username</label>
+                <input class="form-control input" type="text" name="log" id="sidebar-user-login" value="" placeholder="Username" tabindex="0" />
+                
+                <label class="sr-only" for="pwd">Password</label>
+                <input class="form-control input" type="password" name="pwd" id="sidebar-user-pass" value="" placeholder="Password" tabindex="0" />
 
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
