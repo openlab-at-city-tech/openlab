@@ -47,6 +47,7 @@
     <?php echo openlab_create_group_menu($group_type); ?>
 
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
+        <div id="openlab-main-content"></div>
 
         <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel" enctype="multipart/form-data">
 
