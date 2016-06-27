@@ -9567,6 +9567,9 @@ body.membership-requests .group-list {
 .action-events #post .postbox .inside label {
   font-weight: normal;
 }
+.action-events #submitdiv {
+  display: none;
+}
 .action-events.event-detail #item-body > h4 {
   display: none;
 }

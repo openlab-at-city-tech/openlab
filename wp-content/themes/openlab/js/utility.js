@@ -25,6 +25,10 @@
             if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
                 wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering);
             }
+            
+            //BP EO Editor tweaks
+            //doing this client-side for now
+            OpenLab.utility.BPEOTweaks();
 
         },
         detectZoom: function () {
@@ -138,6 +142,17 @@
 
             return scrollbarWidth;
 
+        },
+        BPEOTweaks: function(){
+            
+            if($('#bp_event_organiser_metabox').length){
+                
+                var message = '<p class="howto">If a group selected is private, the event will not be displayed on the sitewide calendar.<p>';
+                
+                $('#bp_event_organiser_metabox .inside').append(message)
+                
+            }
+            
         },
         setUpNewMembersBox: function (resize) {
 
