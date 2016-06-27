@@ -183,6 +183,25 @@ function openlab_eventorganiser_custom_content_after_title() {
 
 add_action('edit_form_after_title', 'openlab_eventorganiser_custom_content_after_title');
 
+function openlab_manage_media_buttons($editor_id) {
+
+    if (bp_current_action() === 'events' && $editor_id === 'editor-content') {
+
+        $remove_button = <<<HTML
+                <script type="text/javascript">
+                jQuery(document).ready(function () { 
+                                
+                                jQuery('#wp-editor-content-media-buttons').remove();
+                
+                            });
+                </script>
+HTML;
+        echo $remove_button;
+    }
+}
+
+add_action('media_buttons', openlab_manage_media_buttons);
+
 /**
  * Remove Event Categories
  */
@@ -521,7 +540,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-        <?php endif; //endif venue's supported         ?>
+        <?php endif; //endif venue's supported           ?>
 
     </div>
     <?php
