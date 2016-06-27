@@ -505,7 +505,28 @@
                 playPause: false,
                 height: '295px',
                 navigation: false,
-                navigationHover: false
+                navigationHover: false,
+                onLoaded: function(){
+                    
+                    var cameraImages = $('.camera_wrap .camera_target');
+                    var cameraSource = $('.camera_src');
+                    
+                    //have to do this because on first load, the first image is not
+                    //actually 'loaded' per se
+                    if(!cameraImages.hasClass('fully-loaded')){
+                        
+                        cameraImages.addClass('fully-loaded');
+                        cameraImages.find('.cameraCont .cameraSlide_0 img').attr('alt', cameraSource.find('div').eq(0).data('alt'));
+                        
+                    } else {
+                        
+                        var currentImage = cameraImages.find('.cameraCont .cameracurrent');
+                        currentImage.find('img').attr('alt', cameraSource.find('div').eq(currentImage.index()).data('alt'));
+                        
+                        
+                    }
+                    
+                }
             });
         }
 

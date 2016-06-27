@@ -74,7 +74,7 @@ function openlab_load_scripts() {
         } else {
             $utility_deps[] = 'openlab-smoothscroll';
         }
-        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.3', true);
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.8.4', true);
         wp_enqueue_script('utility');
 
 	wp_register_script( 'parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array( 'jquery' ) );
