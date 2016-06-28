@@ -110,7 +110,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                         <p id="discussion-settings-tag">These settings determine who can create an event for your group calendar and for the site-wide calendar.</p>
                         <div class="row">
                             <div class="col-sm-23 col-sm-offset-1">
-                                <div class="radio">
+                                <div class="radio no-margin no-margin-all spaced-list">
                                     <label class="regular"><input type="radio" name="openlab-bpeo-event-create-access" value="members" <?php checked('members', $event_create_access) ?> /> <?php _e('Any group member may connect events to this group', 'buddypress') ?></label>
                                     <label class="regular"><input type="radio" name="openlab-bpeo-event-create-access" value="admin" <?php checked('admin', $event_create_access) ?> /> <?php _e('Only administrators and moderators may connect events to this group', 'buddypress') ?></label>
                                 </div>

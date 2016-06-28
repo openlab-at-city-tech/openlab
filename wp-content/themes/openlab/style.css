@@ -7586,6 +7586,9 @@ body .print-link a {
 body .inline-element {
   display: inline-block;
 }
+body .spaced-list label {
+  margin-bottom: 12px;
+}
 body .note {
   color: #999999;
 }

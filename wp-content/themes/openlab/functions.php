@@ -93,11 +93,11 @@ function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.4', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.8.5', 'all');
         wp_enqueue_style('main-styles');
     } else {
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.4', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.8.5', 'all');
         wp_enqueue_style('main-styles');
     }
 
