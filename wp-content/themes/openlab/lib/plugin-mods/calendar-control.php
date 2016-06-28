@@ -4,6 +4,17 @@
  * Hooks into Events Organiser and BuddyPress Event Organiser 
  */
 
+function openlab_custom_calendar_assets(){
+    
+    $key = 'AIzaSyCGRbaYYQ4ElKNeEEpghdcLtBiMRf6DshU';
+    
+    wp_deregister_script( 'eo_GoogleMap' );
+    wp_register_script( 'eo_GoogleMap', '//maps.googleapis.com/maps/api/js?key='.$key.'&sensor=false&language=' . substr( get_locale(), 0, 2 ) );
+    
+}
+
+add_action('wp_enqueue_scripts', 'openlab_custom_calendar_assets', 999);
+
 /**
  * Right now there doesn't seem to be a good way to delineate the event detail screen from the other actions
  * @return boolean
@@ -525,10 +536,10 @@ function _eventorganiser_details_metabox_openlab_custom() {
             </div>
 
             <div class="eo-grid-row venue_row <?php
-            if (!$venue_id) {
-                echo 'novenue';
-            }
-            ?>">
+        if (!$venue_id) {
+            echo 'novenue';
+        }
+                ?>">
                 <div class="eo-grid-4"></div>
                 <div class="eo-grid-8">
                     <div id="eventorganiser_venue_meta" style="display:none;">
@@ -540,7 +551,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-        <?php endif; //endif venue's supported           ?>
+        <?php endif; //endif venue's supported            ?>
 
     </div>
     <?php
