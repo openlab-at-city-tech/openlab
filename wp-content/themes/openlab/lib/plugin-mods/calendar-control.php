@@ -1,16 +1,15 @@
 <?php
+
 /**
  * Calendar control
  * Hooks into Events Organiser and BuddyPress Event Organiser 
  */
+function openlab_custom_calendar_assets() {
 
-function openlab_custom_calendar_assets(){
-    
     $key = 'AIzaSyDQrCvCLzpXoahl68dVJmfBxemu36CUsTM';
-    
-    wp_deregister_script( 'eo_GoogleMap' );
-    wp_register_script( 'eo_GoogleMap', '//maps.googleapis.com/maps/api/js?key='.$key.'&sensor=false&language=' . substr( get_locale(), 0, 2 ) );
-    
+
+    wp_deregister_script('eo_GoogleMap');
+    wp_register_script('eo_GoogleMap', '//maps.googleapis.com/maps/api/js?key=' . $key . '&sensor=false&language=' . substr(get_locale(), 0, 2));
 }
 
 add_action('wp_enqueue_scripts', 'openlab_custom_calendar_assets', 999);
@@ -89,8 +88,13 @@ add_filter('eventorganiser_register_taxonomy_event-venue', 'openlab_control_venu
 function openlab_control_event_action_links($links) {
     global $post;
 
+    //modifying links for sitewide calendar
+    //making sure back button goes back to sitewide calendar
+    //taking out actions links (there's some complicated issues there)
     if ($post->post_type === 'event' && !bp_current_action()) {
         $links = array();
+        $back_link = get_permalink(get_page_by_path('about/calendar'));
+        $links['back'] = "<a href='$back_link'>← Back</a>";
     }
 
     return $links;
@@ -551,7 +555,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-        <?php endif; //endif venue's supported            ?>
+        <?php endif; //endif venue's supported             ?>
 
     </div>
     <?php
