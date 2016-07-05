@@ -6,7 +6,7 @@
 
 function openlab_custom_calendar_assets(){
     
-    $key = 'AIzaSyCGRbaYYQ4ElKNeEEpghdcLtBiMRf6DshU';
+    $key = 'AIzaSyDQrCvCLzpXoahl68dVJmfBxemu36CUsTM';
     
     wp_deregister_script( 'eo_GoogleMap' );
     wp_register_script( 'eo_GoogleMap', '//maps.googleapis.com/maps/api/js?key='.$key.'&sensor=false&language=' . substr( get_locale(), 0, 2 ) );
