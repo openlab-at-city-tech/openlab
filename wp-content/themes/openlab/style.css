@@ -9595,6 +9595,11 @@ body.single-event #content .eo-event-venue-map {
 #ui-timepicker-div .ui-timepicker-table .ui-timepicker-minutes .ui-timepicker td a {
   width: auto;
 }
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-hours .ui-state-disabled,
+#ui-timepicker-div .ui-timepicker-table .ui-timepicker-minutes .ui-state-disabled {
+  width: auto;
+  text-align: center;
+}
 /**member profiles**/
 .profile-type {
   background: #f0f0f0;

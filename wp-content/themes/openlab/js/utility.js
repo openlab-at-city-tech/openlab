@@ -20,12 +20,12 @@
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
             OpenLab.utility.eventValidation();
-            
+
             //EO Calendar JS filtering
             if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
                 wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering);
             }
-            
+
             //BP EO Editor tweaks
             //doing this client-side for now
             OpenLab.utility.BPEOTweaks();
@@ -76,30 +76,58 @@
             }
 
         },
-        eventValidation: function(){
-          
-          var eventPublish = $('.action-events #publish');
-          var groupMetaBox = $('#bp_event_organiser_metabox .inside');
-          
-          if(eventPublish.length){
-              
-              eventPublish.on('click', function(e){
-                 
-                  var groupSelection = $('#bp_event_organiser_metabox .select2-selection__rendered .select2-selection__choice');
-                  
-                  if(!groupSelection.length){
-                      e.preventDefault();
-                      
-                      var message = '<div class="bp-template-notice error">Events must be associated with at least one group.</div>';
-                      groupMetaBox.prepend(message);
-                  } else {
-                      groupMetaBox.find('.bp-template-notice').remove();
-                  }
-                  
-              });
-              
-          }
-            
+        eventValidation: function () {
+
+            var eventPublish = $('.action-events #publish');
+            var groupMetaBox = $('#bp_event_organiser_metabox .inside');
+            var eventDetailMetaBox = $('#eventorganiser_detail .inside');
+
+            if (eventPublish.length) {
+
+                eventPublish.on('click', function (e) {
+
+                    //can't submit an event without a group selection
+                    var groupSelection = $('#bp_event_organiser_metabox .select2-selection__rendered .select2-selection__choice');
+
+                    if (!groupSelection.length) {
+                        e.preventDefault();
+
+                        var message = '<div class="bp-template-notice error">Events must be associated with at least one group.</div>';
+                        groupMetaBox.prepend(message);
+                    } else {
+                        groupMetaBox.find('.bp-template-notice').remove();
+                    }
+
+                    //can't submit an event if the end time is *before* the start time (or vice versa)
+                    var startTime = OpenLab.utility.convertTimeToNum(eventDetailMetaBox.find('#eo-start-time').val());
+                    var endTime = OpenLab.utility.convertTimeToNum(eventDetailMetaBox.find('#eo-end-time').val());
+
+                    if (startTime > endTime) {
+                        e.preventDefault();
+                        var message = '<div class="bp-template-notice error">Start Time must be earlier than the End Time.</div>';
+                        eventDetailMetaBox.prepend(message);
+                    } else {
+                        eventDetailMetaBox.find('.bp-template-notice').remove();
+                    }
+
+                });
+
+            }
+
+        },
+        convertTimeToNum: function (time) {
+            var hoursMinutes = time.split(/[.:]/);
+            var hours = parseInt(hoursMinutes[0], 10);
+
+            var partOfDay = 0;
+
+            if (hoursMinutes[1].indexOf('pm') !== -1) {
+                partOfDay = 12;
+            }
+
+            var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+
+            return partOfDay + hours + minutes / 60;
         },
         calendarFiltering: function (args, calendar) {
 
@@ -143,16 +171,16 @@
             return scrollbarWidth;
 
         },
-        BPEOTweaks: function(){
-            
-            if($('#bp_event_organiser_metabox').length){
-                
+        BPEOTweaks: function () {
+
+            if ($('#bp_event_organiser_metabox').length) {
+
                 var message = '<p class="howto">If a group selected is private, the event will not be displayed on the sitewide calendar.<p>';
-                
+
                 $('#bp_event_organiser_metabox .inside').append(message)
-                
+
             }
-            
+
         },
         setUpNewMembersBox: function (resize) {
 
@@ -521,26 +549,26 @@
                 height: '295px',
                 navigation: false,
                 navigationHover: false,
-                onLoaded: function(){
-                    
+                onLoaded: function () {
+
                     var cameraImages = $('.camera_wrap .camera_target');
                     var cameraSource = $('.camera_src');
-                    
+
                     //have to do this because on first load, the first image is not
                     //actually 'loaded' per se
-                    if(!cameraImages.hasClass('fully-loaded')){
-                        
+                    if (!cameraImages.hasClass('fully-loaded')) {
+
                         cameraImages.addClass('fully-loaded');
                         cameraImages.find('.cameraCont .cameraSlide_0 img').attr('alt', cameraSource.find('div').eq(0).data('alt'));
-                        
+
                     } else {
-                        
+
                         var currentImage = cameraImages.find('.cameraCont .cameracurrent');
                         currentImage.find('img').attr('alt', cameraSource.find('div').eq(currentImage.index()).data('alt'));
-                        
-                        
+
+
                     }
-                    
+
                 }
             });
         }
