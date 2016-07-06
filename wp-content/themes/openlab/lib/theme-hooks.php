@@ -180,3 +180,29 @@ function openlab_loader_class() {
 }
 
 add_action('wp_head', 'openlab_loader_class', 999);
+
+/**
+ * Custom MCE buttons when needed
+ * @param type $buttons
+ * @return type
+ */
+function openlab_mce_buttons($init, $editor) {
+
+    if (function_exists('bpeo_is_action')) {
+        if (bpeo_is_action('new') || bpeo_is_action('edit')) {
+            
+            if(isset($init['plugins'])){
+                $init['plugins'] .= ' image';
+            }
+            
+            if(isset($init['toolbar1'])){
+                $init['toolbar1'] .= ' image';
+            }
+            
+        }
+    }
+
+    return $init;
+}
+
+add_filter('tiny_mce_before_init', 'openlab_mce_buttons', 10, 2);
