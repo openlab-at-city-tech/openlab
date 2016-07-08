@@ -648,6 +648,16 @@ add_action( 'do_meta_boxes', 'bpeo_render_silent_checkbox', 10, 3 );
 /** Embed ********************************************************************/
 
 /**
+ * Loads our group events oEmbed component.
+ */
+function bpeo_group_setup_oembed() {
+	if ( version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) && function_exists( 'bp_rest_api_init' ) && true === apply_filters( 'bpeo_groups_enable_oembed', true ) ) {
+		$GLOBALS['buddypress_event_organiser']->group_oembed = new BPEO_Group_oEmbed_Extension;
+	}
+}
+add_action( 'bp_loaded', 'bpeo_group_setup_oembed' );
+
+/**
  * Should we load our override template for embedding group events?
  *
  * We only override if we're on a group events page and if '?embedded=true' is
@@ -692,15 +702,16 @@ function bpeo_groups_event_embed_override_template() {
 	// Register our template stack
 	bp_register_template_stack( 'bpeo_register_template_stack', 13 );
 
-	// Remove the admin bar while we're at it
-	add_filter( 'show_admin_bar', '__return_false' );
-	remove_action( 'wp_head', '_admin_bar_bump_cb' );
+	// Remove all actions from 'wp_head'.
+	remove_all_actions( 'wp_head' );
+	remove_all_actions( 'bp_head' );
 
-	// Remove emoji
-	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	// Add back some head hooks.
+	add_action( 'wp_head', 'wp_enqueue_scripts', 1 );
+	add_action( 'wp_head', 'wp_print_styles', 8 );
 
 	// Remove all assets
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 	add_action( 'wp_enqueue_scripts', 'bpeo_group_events_embed_remove_all_assets', 999 );
 
 	// Remove all footer hooks

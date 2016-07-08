@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: BP Event Organiser - Group Shortcode and Widget
+Plugin Name: Group Events Shortcode and Widget
 Description: Embed events from one of your groups that you are a member of with a shortcode or a widget.
 Author: CUNY Academic Commons Team
 License: GPLv2 or later
@@ -16,27 +16,77 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * @return array Array with group ID as key and group name as value.
  */
 function bpeo_get_user_public_groups( $user_id = 0 ) {
-	$groups = groups_get_groups( array(
-		'user_id'           => ! empty( $user_id ) ? (int) $user_id : bp_loggedin_user_id(),
-		'per_page'          => null,
-		'page'              => null,
-		'update_meta_cache' => false,
-	) );
+	$user_id = ! empty( $user_id ) ? (int) $user_id : bp_loggedin_user_id();
 
-	$retval = array();
-
-	foreach ( $groups['groups'] as $i => $group ) {
-		if ( 'public' !== $group->status ) {
-			continue;
-		}
-
-		$retval[ $group->id ] = apply_filters( 'bp_get_group_name', $group->name, $group );
+	if ( empty( $user_id ) ) {
+		return array();
 	}
 
-	unset( $groups );
+	// Piggyback off of existing 'bp_groups' cachegroup.
+	$retval = wp_cache_get( "{$user_id}:public", 'bp_groups' );
+
+	if ( false === $retval ) {
+		$groups = groups_get_groups( array(
+			'user_id'           => $user_id,
+			'per_page'          => null,
+			'page'              => null,
+			'update_meta_cache' => false,
+		) );
+
+		$retval = array();
+
+		foreach ( $groups['groups'] as $i => $group ) {
+			if ( 'public' !== $group->status ) {
+				continue;
+			}
+
+			$retval[ $group->id ] = apply_filters( 'bp_get_group_name', $group->name, $group );
+		}
+
+		unset( $groups );
+
+		wp_cache_set( "{$user_id}:public", $retval, 'bp_groups' );
+	}
 
 	return $retval;
 }
+
+/**
+ * Purge public group cache on group save.
+ *
+ * @param BP_Groups_Group $group
+ */
+function bpeo_purge_public_group_cache_on_group_save( $group ) {
+	$cache = wp_cache_get( $group->id, 'bp_groups' );
+
+	$delete = false;
+
+	// Delete on group name changes.
+	if ( ! empty( $cache ) && 'public' === $group->status && $group->name !== $cache->name ) {
+		$delete = true;
+	}
+
+	// Delete if group status changes to something other than 'public'.
+	if ( ! empty( $cache ) && 'public' !== $group->status && 'public' === $cache->status ) {
+		$delete = true;
+	}
+
+	if ( true === $delete ) {
+		wp_cache_delete( "{$group->id}:public", 'bp_groups' );
+	}
+}
+add_action( 'groups_group_after_save', 'bpeo_purge_public_group_cache' );
+
+/**
+ * Purge public group cache on any group member change.
+ *
+ * @param BP_Groups_Member $member
+ */
+function bpeo_purge_public_group_cache_on_group_member_change( $member ) {
+	wp_cache_delete( "{$member->user_id}:public", 'bp_groups' );
+}
+add_action( 'groups_member_after_save',    'bpeo_purge_public_group_cache_on_group_member_change' );
+add_action( 'groups_member_before_remove', 'bpeo_purge_public_group_cache_on_group_member_change' );
 
 /** SHORTCODE ************************************************************/
 
@@ -46,6 +96,17 @@ function bpeo_get_user_public_groups( $user_id = 0 ) {
 function bpeo_load_shortcake() {
 	// Do not proceed if BuddyPress is not available.
 	if ( false === function_exists( 'buddypress' ) ) {
+		return;
+	}
+
+	// Make sure groups component is active.
+	if ( false === bp_is_active( 'groups' ) ) {
+		return;
+	}
+
+	// Check if BPEO is registered on the root blog.
+	$active_plugins = get_blog_option( bp_get_root_blog_id(), 'active_plugins' );
+	if( false === in_array( 'bp-event-organiser/bp-event-organiser.php', $active_plugins, true ) ) {
 		return;
 	}
 
@@ -73,6 +134,11 @@ function bpeo_group_shortcode_init() {
 
 	// Bail if no Shortcake.
 	if ( false === function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
+		return;
+	}
+
+	// Only do Shortcake stuff in the admin area.
+	if ( false === defined( 'WP_NETWORK_ADMIN' ) ) {
 		return;
 	}
 

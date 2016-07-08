@@ -37,6 +37,12 @@ class BPEO_Frontend_Admin_Screen extends WP_Frontend_Admin_Screen {
 	 * Do stuff before saving.
 	 */
 	protected function before_save() {
+		// Initialize the EO errors global.
+		global $EO_Errors;
+		if ( ! is_wp_error( $EO_Errors ) ) {
+			$EO_Errors = new WP_Error();
+		}
+
 		// add EO save hook
 		add_action( 'save_post', 'eventorganiser_details_save' );
 	}

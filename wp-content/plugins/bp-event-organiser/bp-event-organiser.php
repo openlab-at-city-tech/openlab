@@ -58,6 +58,11 @@ function bpeo_include() {
 
 	if ( bp_is_active( 'groups' ) ) {
 		require( BPEO_PATH . 'includes/group.php' );
+
+		// oEmbed - Check if WP 4.4+ and BP 2.6+
+		if ( version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) && function_exists( 'bp_rest_api_init' ) && true === apply_filters( 'bpeo_groups_enable_oembed', true ) ) {
+			require( BPEO_PATH . 'includes/class.bpeo_group_oembed_extension.php' );
+		}
 	}
 }
 add_action( 'bp_include', 'bpeo_include' );
