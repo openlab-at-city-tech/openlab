@@ -9602,6 +9602,9 @@ body.single-event #content .eo-event-venue-map {
   float: none;
   width: 100%;
 }
+#ui-datepicker-div {
+  width: 18.2em;
+}
 #ui-timepicker-div .ui-timepicker-table {
   width: 100%;
   font-size: .9em;
