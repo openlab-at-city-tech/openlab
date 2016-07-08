@@ -8473,7 +8473,7 @@ body .scrollbar-measure {
     right: 0;
     top: 39px;
     width: 100%;
-    z-index: 1;
+    z-index: 10;
   }
   .mobile-dropdown h2 {
     margin: 12px 0;
@@ -8672,7 +8672,7 @@ body .scrollbar-measure {
     right: 0;
     top: 39px;
     width: 100%;
-    z-index: 1;
+    z-index: 10;
   }
   .sidebar.mobile-dropdown h2 {
     margin: 12px 0;
@@ -8745,7 +8745,7 @@ body .scrollbar-measure {
     right: 0;
     top: 39px;
     width: 100%;
-    z-index: 1;
+    z-index: 10;
   }
   .mobile-enabled .sidebar-menu-wrapper h2 {
     margin: 12px 0;
