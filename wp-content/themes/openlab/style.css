@@ -9364,6 +9364,27 @@ body.membership-requests .group-list {
 .action-events #item-body .submenu #single-event-name {
   margin-left: -4px;
 }
+.action-events #item-body .bpeo-upcoming-events li:before,
+.action-events #item-body .bpeo-upcoming-events li:after {
+  content: " ";
+  display: table;
+}
+.action-events #item-body .bpeo-upcoming-events li:after {
+  clear: both;
+}
+.action-events #item-body .bpeo-upcoming-events li:before,
+.action-events #item-body .bpeo-upcoming-events li:after {
+  content: " ";
+  display: table;
+}
+.action-events #item-body .bpeo-upcoming-events li:after {
+  clear: both;
+}
+@media (max-width: 767px) {
+  .action-events #item-body .bpeo-upcoming-events {
+    padding: 0;
+  }
+}
 .action-events #item-body .eventorganiser-event-meta h4 {
   font-size: 14px;
   font-weight: 700;

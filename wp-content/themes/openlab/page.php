@@ -21,7 +21,7 @@
             <?php if (!strstr(get_the_title(), 'My')): ?>
                 <div <?php post_class('col-sm-18 col-xs-24'); ?>>
                     <div id="openlab-main-content"  class="content-wrapper">
-                        <h1 class="entry-title"><?php the_title(); ?>
+                        <h1 class="entry-title"><span class="profile-name"><?php the_title(); ?></span>
                             <?php if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID): ?>
                                 <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
                                     <span class="sr-only">Toggle navigation</span>
