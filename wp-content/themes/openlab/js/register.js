@@ -224,12 +224,24 @@ jQuery(document).ready(function ($) {
 
         if (document.getElementById('signup_submit')) {
             if (selected_account_type !== "") {
-                $('#signup_submit').removeAttr('disabled');
+                $('#signup_submit').removeClass('btn-disabled');
                 $('#signup_submit').val('Complete Sign Up');
             } else {
-                $('#signup_submit').attr('disabled', 'true');
+                $('#signup_submit').addClass('btn-disabled');
                 $('#signup_submit').val('Enter Email Address To Continue');
             }
+            
+            $('#signup_submit').on('click',function(e){
+                
+                var thisElem = $(this);
+                
+                if(thisElem.hasClass('btn-disabled')){
+                    e.preventDefault();
+                    var message = 'Please Enter your Email Address To Continue';
+                    $('#submitSrMessage').text(message);
+                }
+                
+            });
 
             $.ajax(ajaxurl, {
                 data: {

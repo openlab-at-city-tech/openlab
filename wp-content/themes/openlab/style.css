@@ -7538,6 +7538,11 @@ body .no-margin.no-margin-all {
 body .btn-margin.btn-margin-top {
   margin-top: 20px;
 }
+body .btn-disabled {
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  box-shadow: none;
+}
 body .font-size.font-12 {
   font-size: 12px !important;
 }

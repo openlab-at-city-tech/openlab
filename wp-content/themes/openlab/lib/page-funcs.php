@@ -440,9 +440,11 @@ function openlab_registration_page() {
                 <p class="sign-up-terms">
                     By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
                 </p>
+                
+                <p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
 
                 <div class="submit">
-                    <input disabled="true" type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
+                    <input type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary btn-disabled" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
                 </div>
 
                 <?php do_action('bp_after_registration_submit_buttons') ?>
