@@ -304,6 +304,8 @@ function openlab_registration_page() {
     ?>
 
     <div class="page" id="register-page">
+        
+        <div id="openlab-main-content"></div>
 
         <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
 
