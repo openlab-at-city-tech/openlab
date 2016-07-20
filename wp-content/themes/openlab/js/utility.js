@@ -182,7 +182,7 @@
                 
                 bpeo_metabox.find('.inside .bp_event_organiser_desc').append(desc);
                 bpeo_metabox.find('.inside').append(message);
-                bpeo_metabox.find('h3.hndle span').text('Display');
+                bpeo_metabox.find('.hndle span').text('Display');
 
             }
 
