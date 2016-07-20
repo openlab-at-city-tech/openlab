@@ -569,7 +569,7 @@
         $('html').removeClass('page-loading');
         OpenLab.utility.detectZoom();
         OpenLab.utility.customSelects(false);
-        OpenLab.utility.venueDropdownControl();
+        //OpenLab.utility.venueDropdownControl();
 
         //setting equal rows on homepage group list
         equal_row_height();

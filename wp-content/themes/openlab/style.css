@@ -9596,8 +9596,10 @@ body.membership-requests .group-list {
 .action-events #post .postbox .inside label {
   font-weight: normal;
 }
-.action-events #post .eo-venue-input .ui-combobox-toggle {
-  display: none;
+.action-events #post .eo-venue-input {
+  /*.ui-combobox-toggle{
+                display: none;
+            }*/
 }
 .action-events #post .eo-venue-input .ui-button {
   min-height: 29px;
