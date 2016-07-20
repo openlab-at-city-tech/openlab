@@ -36,10 +36,10 @@ function openlab_eo_get_single_event_query_obj() {
     $obj_out = array();
 
     // Set up query args
-    $query_args = array();
+    $query_args                     = array();
     $query_args['suppress_filters'] = true;
-    $query_args['orderby'] = 'none';
-    $query_args['post_status'] = array('publish', 'pending', 'private', 'draft', 'future', 'trash');
+    $query_args['orderby']          = 'none';
+    $query_args['post_status']      = array('publish', 'pending', 'private', 'draft', 'future', 'trash');
 
     // this is a draft with no slug
     if (false !== strpos(bp_current_action(), 'draft-')) {
@@ -92,8 +92,8 @@ function openlab_control_event_action_links($links) {
     //making sure back button goes back to sitewide calendar
     //taking out actions links (there's some complicated issues there)
     if ($post->post_type === 'event' && !bp_current_action()) {
-        $links = array();
-        $back_link = get_permalink(get_page_by_path('about/calendar'));
+        $links         = array();
+        $back_link     = get_permalink(get_page_by_path('about/calendar'));
         $links['back'] = "<a href='$back_link'>← Back</a>";
     }
 
@@ -131,7 +131,7 @@ function openlab_event_page_controller($wp) {
      */
     if (strpos($wp->request, '/events') !== false && strpos($wp->request, 'members/') !== false) {
 
-        $request_url = $wp->request;
+        $request_url  = $wp->request;
         $redirect_url = explode('/events', $request_url);
 
         if (is_array($redirect_url)) {
@@ -154,7 +154,7 @@ function openlab_event_page_controller($wp) {
 
         if ($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()) {
 
-            $request_url = $wp->request;
+            $request_url  = $wp->request;
             $redirect_url = explode('/new-event', $request_url);
 
             if (is_array($redirect_url)) {
@@ -236,7 +236,7 @@ remove_action('eventorganiser_additional_event_meta', 'bpeo_list_author');
  * Custom markup for author listing on event detail page
  */
 function openlab_bpeo_list_author() {
-    $event = get_post(get_the_ID());
+    $event     = get_post(get_the_ID());
     $author_id = $event->post_author;
 
     $base = __('<strong>Author:</strong> %s', 'bp-event-organiser');
@@ -275,7 +275,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         $format = 'mm &ndash; dd &ndash; yyyy'; //Human form
     }
 
-    $is24 = eventorganiser_blog_is_24();
+    $is24        = eventorganiser_blog_is_24();
     $time_format = $is24 ? 'H:i' : 'g:ia';
 
     //Get the starting day of the week
@@ -285,18 +285,18 @@ function _eventorganiser_details_metabox_openlab_custom() {
     //Retrieve event details
     $schedule_arr = eo_get_event_schedule($post->ID);
 
-    $schedule = $schedule_arr['schedule'];
-    $start = $schedule_arr['start'];
-    $end = $schedule_arr['end'];
-    $all_day = $schedule_arr['all_day'];
-    $frequency = $schedule_arr['frequency'];
+    $schedule      = $schedule_arr['schedule'];
+    $start         = $schedule_arr['start'];
+    $end           = $schedule_arr['end'];
+    $all_day       = $schedule_arr['all_day'];
+    $frequency     = $schedule_arr['frequency'];
     $schedule_meta = $schedule_arr['schedule_meta'];
-    $occurs_by = $schedule_arr['occurs_by'];
-    $until = $schedule_arr['until'];
-    $include = $schedule_arr['include'];
-    $exclude = $schedule_arr['exclude'];
+    $occurs_by     = $schedule_arr['occurs_by'];
+    $until         = $schedule_arr['until'];
+    $include       = $schedule_arr['include'];
+    $exclude       = $schedule_arr['exclude'];
 
-    $venues = eo_get_venues();
+    $venues   = eo_get_venues();
     $venue_id = (int) eo_get_venue($post->ID);
 
     //$sche_once is used to disable date editing unless the user specifically requests it.
@@ -325,8 +325,8 @@ function _eventorganiser_details_metabox_openlab_custom() {
         echo '<div class="notice notice-success updated inline"><p>' . $notices . '</p></div>';
     }
 
-    $date_desc = sprintf(__('Enter date in %s format', 'eventorganiser'), $format);
-    $time_desc = $is24 ? __('Enter time in 24-hour hh colon mm format', 'eventorganiser') : __('Enter time in 12-hour hh colon mm am or pm format', 'eventorganiser');
+    $date_desc            = sprintf(__('Enter date in %s format', 'eventorganiser'), $format);
+    $time_desc            = $is24 ? __('Enter time in 24-hour hh colon mm format', 'eventorganiser') : __('Enter time in 12-hour hh colon mm am or pm format', 'eventorganiser');
     ?>
     <div class="meta-header"><p>Ensure dates are entered in mm-dd-yyyy format and times in 12 hour format</p></div>
     <div class="eo-grid <?php echo ( $sche_once ? 'onetime' : 'reoccurence' ); ?>">
@@ -390,8 +390,8 @@ function _eventorganiser_details_metabox_openlab_custom() {
             <div class="eo-grid-8 event-date">
                 <?php
                 $recurrence_schedules = array(
-                    'once' => __('none', 'eventorganiser'), 'daily' => __('daily', 'eventorganiser'), 'weekly' => __('weekly', 'eventorganiser'),
-                    'monthly' => __('monthly', 'eventorganiser'), 'yearly' => __('yearly', 'eventorganiser'), 'custom' => __('custom', 'eventorganiser'),
+                    'once'    => __('none', 'eventorganiser'), 'daily'   => __('daily', 'eventorganiser'), 'weekly'  => __('weekly', 'eventorganiser'),
+                    'monthly' => __('monthly', 'eventorganiser'), 'yearly'  => __('yearly', 'eventorganiser'), 'custom'  => __('custom', 'eventorganiser'),
                 );
                 ?>
                 <select id="eo-event-recurrence" name="eo_input[schedule]">
@@ -419,10 +419,10 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <ul class="eo-days-of-week" role="group" aria-labelledby="eo-days-of-week-label">	
                         <?php
                         for ($i = 0; $i <= 6; $i++) :
-                            $d = ($start_day + $i) % 7;
-                            $ical_d = $ical_days[$d];
-                            $day = $wp_locale->weekday_abbrev[$wp_locale->weekday[$d]];
-                            $fullday = $wp_locale->weekday[$d];
+                            $d             = ($start_day + $i) % 7;
+                            $ical_d        = $ical_days[$d];
+                            $day           = $wp_locale->weekday_abbrev[$wp_locale->weekday[$d]];
+                            $fullday       = $wp_locale->weekday[$d];
                             $schedule_days = ( is_array($schedule_meta) ? $schedule_meta : array() );
                             ?>
                             <li>
@@ -540,10 +540,10 @@ function _eventorganiser_details_metabox_openlab_custom() {
             </div>
 
             <div class="eo-grid-row venue_row <?php
-        if (!$venue_id) {
-            echo 'novenue';
-        }
-                ?>">
+            if (!$venue_id) {
+                echo 'novenue';
+            }
+            ?>">
                 <div class="eo-grid-4"></div>
                 <div class="eo-grid-8">
                     <div id="eventorganiser_venue_meta" style="display:none;">
@@ -589,3 +589,51 @@ function openlab_group_calendar_media_settings($settings, $post) {
 }
 
 add_filter('media_view_settings', 'openlab_group_calendar_media_settings', 10, 2);
+
+/**
+ * Saving some extra meta when inserting a venue
+ * This is not utilized yet, but will be, and I wanted to get it set up
+ * before users actually start entering venues
+ * @param type $venue_id
+ */
+function openlab_bpeo_extra_venue_meta($venue_id) {
+
+    if (!is_admin()) {
+
+        if (isset($_POST['post_ID'])) {
+
+            //check for legacy
+            $post_ids = get_metadata('eo_venue', $venue_id, '_postids', true);
+
+            if ($post_ids && !empty($post_ids)) {
+
+                $post_ids[] = $_POST['post_ID'];
+                $post_ids   = array_unique($post_ids);
+            } else {
+
+                $post_ids = array($_POST['post_ID']);
+            }
+
+            update_metadata('eo_venue', $venue_id, '_postids', $post_ids);
+        }
+
+        if (isset($_POST['user_ID'])) {
+
+            //check for legacy
+            $user_ids = get_metadata('eo_venue', $venue_id, '_userids', true);
+
+            if ($user_ids && !empty($user_ids)) {
+
+                $user_ids[] = $_POST['user_ID'];
+                $user_ids   = array_unique($user_ids);
+            } else {
+
+                $user_ids = array($_POST['user_ID']);
+            }
+
+            update_metadata('eo_venue', $venue_id, '_userids', $user_ids);
+        }
+    }
+}
+
+add_action('eventorganiser_save_venue', 'openlab_bpeo_extra_venue_meta');
