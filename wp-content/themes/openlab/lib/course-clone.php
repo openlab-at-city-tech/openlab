@@ -675,7 +675,7 @@ class Openlab_Clone_Course_Site {
 		// - if it's a nav item, change the GUID and the menu item URL meta
 		switch_to_blog( $this->site_id );
 
-		$source_site_url = get_blog_option( $this->site_id, 'home' );
+		$source_site_url = get_blog_option( $this->source_site_id, 'home' );
 		$dest_site_url = get_option( 'home' );
 
                 // Copy over attachments. Whee!
@@ -716,16 +716,15 @@ class Openlab_Clone_Course_Site {
 					)
 				);
 
-				$url = get_post_meta( $sp->ID, '_menu_item_object_id', true );
+				$url = get_post_meta( $sp->ID, '_menu_item_url', true );
 				if ( $url ) {
-					update_post_meta( $sp->ID, '_menu_item_object_id', str_replace( $source_site_url, $dest_site_url, $url ) );
+					update_post_meta( $sp->ID, '_menu_item_url', str_replace( $source_site_url, $dest_site_url, $url ) );
 				}
 			}
 		}
 
 		// Replace the site URL in all post content.
                 // For some reason a regular MySQL query is not working.
-                $source_site_url = get_blog_option( $this->source_site_id, 'home' );
                 $this_site_url = get_option( 'home' );
                 foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
                         $post = get_post( $post_id );

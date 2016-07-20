@@ -28,25 +28,25 @@ class SMTP
 {
     /**
      * The PHPMailer SMTP version number.
-     * @var string
+     * @type string
      */
-    const VERSION = '5.2.14';
+    const VERSION = '5.2.10';
 
     /**
      * SMTP line break constant.
-     * @var string
+     * @type string
      */
     const CRLF = "\r\n";
 
     /**
      * The SMTP port to use if one is not specified.
-     * @var integer
+     * @type integer
      */
     const DEFAULT_SMTP_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
-     * @var integer
+     * @type integer
      */
     const MAX_LINE_LENGTH = 998;
 
@@ -77,15 +77,15 @@ class SMTP
 
     /**
      * The PHPMailer SMTP Version number.
-     * @var string
+     * @type string
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.14';
+    public $Version = '5.2.10';
 
     /**
      * SMTP server port number.
-     * @var integer
+     * @type integer
      * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
      */
@@ -93,7 +93,7 @@ class SMTP
 
     /**
      * SMTP reply line ending.
-     * @var string
+     * @type string
      * @deprecated Use the `CRLF` constant instead
      * @see SMTP::CRLF
      */
@@ -107,7 +107,7 @@ class SMTP
      * * self::DEBUG_SERVER (`2`) Client commands and server responses
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
-     * @var integer
+     * @type integer
      */
     public $do_debug = self::DEBUG_OFF;
 
@@ -122,7 +122,7 @@ class SMTP
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
-     * @var string|callable
+     * @type string|callable
      */
     public $Debugoutput = 'echo';
 
@@ -130,7 +130,7 @@ class SMTP
      * Whether to use VERP.
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Info on VERP
-     * @var boolean
+     * @type boolean
      */
     public $do_verp = false;
 
@@ -139,26 +139,26 @@ class SMTP
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
-     * @var integer
+     * @type integer
      */
     public $Timeout = 300;
 
     /**
      * How long to wait for commands to complete, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
-     * @var integer
+     * @type integer
      */
     public $Timelimit = 300;
 
     /**
      * The socket for the server connection.
-     * @var resource
+     * @type resource
      */
     protected $smtp_conn;
 
     /**
      * Error information, if any, for the last SMTP command.
-     * @var array
+     * @type array
      */
     protected $error = array(
         'error' => '',
@@ -170,7 +170,7 @@ class SMTP
     /**
      * The reply the server sent to us for HELO.
      * If null, no HELO string has yet been received.
-     * @var string|null
+     * @type string|null
      */
     protected $helo_rply = null;
 
@@ -181,13 +181,13 @@ class SMTP
      * represents the server name. In case of HELO it is the only element of the array.
      * Other values can be boolean TRUE or an array containing extension options.
      * If null, no HELO/EHLO string has yet been received.
-     * @var array|null
+     * @type array|null
      */
     protected $server_caps = null;
 
     /**
      * The most recent reply received from the server.
-     * @var string
+     * @type string
      */
     protected $last_reply = '';
 
@@ -351,21 +351,20 @@ class SMTP
      * Perform SMTP authentication.
      * Must be run after hello().
      * @see hello()
-     * @param string $username The user name
-     * @param string $password The password
-     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
-     * @param string $realm The auth realm for NTLM
+     * @param string $username    The user name
+     * @param string $password    The password
+     * @param string $authtype    The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5)
+     * @param string $realm       The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
-     * @param null|OAuth $OAuth An optional OAuth instance (@see PHPMailerOAuth)
-     * @return bool True if successfully authenticated.* @access public
+     * @access public
+     * @return boolean True if successfully authenticated.
      */
     public function authenticate(
         $username,
         $password,
         $authtype = null,
         $realm = '',
-        $workstation = '',
-        $OAuth = null
+        $workstation = ''
     ) {
         if (!$this->server_caps) {
             $this->setError('Authentication is not allowed before HELO/EHLO');
@@ -674,11 +673,9 @@ class SMTP
     {
         $this->server_caps = array();
         $lines = explode("\n", $this->last_reply);
-
         foreach ($lines as $n => $s) {
-            //First 4 chars contain response code followed by - or space
             $s = trim(substr($s, 4));
-            if (empty($s)) {
+            if (!$s) {
                 continue;
             }
             $fields = explode(' ', $s);
@@ -688,20 +685,11 @@ class SMTP
                     $fields = $fields[0];
                 } else {
                     $name = array_shift($fields);
-                    switch ($name) {
-                        case 'SIZE':
-                            $fields = ($fields ? $fields[0] : 0);
-                            break;
-                        case 'AUTH':
-                            if (!is_array($fields)) {
-                                $fields = array();
-                            }
-                            break;
-                        default:
-                            $fields = true;
+                    if ($name == 'SIZE') {
+                        $fields = ($fields) ? $fields[0] : 0;
                     }
                 }
-                $this->server_caps[$name] = $fields;
+                $this->server_caps[$name] = ($fields ? $fields : true);
             }
         }
     }
@@ -751,15 +739,15 @@ class SMTP
      * Sets the TO argument to $toaddr.
      * Returns true if the recipient was accepted false if it was rejected.
      * Implements from rfc 821: RCPT <SP> TO:<forward-path> <CRLF>
-     * @param string $address The address the message is being sent to
+     * @param string $toaddr The address the message is being sent to
      * @access public
      * @return boolean
      */
-    public function recipient($address)
+    public function recipient($toaddr)
     {
         return $this->sendCommand(
             'RCPT TO',
-            'RCPT TO:<' . $address . '>',
+            'RCPT TO:<' . $toaddr . '>',
             array(250, 251)
         );
     }
@@ -778,9 +766,9 @@ class SMTP
 
     /**
      * Send a command to an SMTP server and check its return code.
-     * @param string $command The command name - not sent to the server
+     * @param string $command       The command name - not sent to the server
      * @param string $commandstring The actual command to send
-     * @param integer|array $expect One or more expected integer success codes
+     * @param integer|array $expect     One or more expected integer success codes
      * @access protected
      * @return boolean True on success.
      */
@@ -788,11 +776,6 @@ class SMTP
     {
         if (!$this->connected()) {
             $this->setError("Called $command without being connected");
-            return false;
-        }
-        //Reject line breaks in all commands
-        if (strpos($commandstring, "\n") !== false or strpos($commandstring, "\r") !== false) {
-            $this->setError("Command '$command' contained line breaks");
             return false;
         }
         $this->client_send($commandstring . self::CRLF);
@@ -998,9 +981,10 @@ class SMTP
         }
         while (is_resource($this->smtp_conn) && !feof($this->smtp_conn)) {
             $str = @fgets($this->smtp_conn, 515);
-            $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
-            $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
+            $this->edebug("SMTP -> get_lines(): \$data was \"$data\"", self::DEBUG_LOWLEVEL);
+            $this->edebug("SMTP -> get_lines(): \$str is \"$str\"", self::DEBUG_LOWLEVEL);
             $data .= $str;
+            $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
             // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
             if ((isset($str[3]) and $str[3] == ' ')) {
                 break;

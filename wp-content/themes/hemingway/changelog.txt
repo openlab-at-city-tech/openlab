@@ -1,0 +1,309 @@
+*** Hemingway Changelog ***
+
+
+Version 1.56 (2016-06-18)
+-------------------------
+- Added the new theme directory tags
+- Fixed video widget notice
+- Some PHP cleanup
+
+
+Version 1.55 (2016-03-12)
+-------------------------
+- Removed wp_title() from header.php
+
+
+Version 1.54 (2015-08-25)
+-------------------------
+- Fixed overflow bug with wp-caption
+- Added screen-reader-text styling
+
+
+Version 1.53 (2015-08-24)
+-------------------------
+- Fixed a floating bug with the single post navigation
+
+
+Version 1.52 (2015-08-11)
+-------------------------
+- Removed the title_tag fallback
+
+
+Version 1.51 (2015-08-11)
+-------------------------
+- Added a missing margin between the format-video post content and post meta on archive pages
+
+
+Version 1.50 (2015-08-11)
+-------------------------
+- Removed a add_shortcode() function from functions.php
+- Added title_tag() support
+- Fixed a busted sanitize_callback in functions.php
+
+
+Version 1.49 (2015-08-10)
+-------------------------
+- Added UTF-8 as charset in style.css
+- Updated widgets with PHP5 object constructors for WordPress 4.3
+- Removed meta fields for the video post format in order to comply with WordPress theme review guidelines (presentation vs. functionality)
+- Condensed functions.php and added the comment-reply script
+- ...as well as styling for the comment form when it is within .commentlist
+- Fixed so that the featured image is centered if it's smaller than the containing element
+- Fixed so that comments will be displayed on pages if there are comments, even if "Allow Comments" is not checked (the reply form is still hidden)
+- Fixed a bug with floating elements in the comments navigation
+- Fixed a styling error with the dropdown arrow in the main menu (one level deep)
+- Changed titles on single posts/pages from h2 to the h1 element
+
+
+Version 1.48 (2014-10-01)
+-------------------------
+- Added a width attribute in the inline style of images in posts (thanks, RavanH!)
+- Added styling of input elements of the email type to style.css (Ibid)
+
+
+Version 1.47 (2014-08-06)
+-------------------------
+- Added missing form/input elements to the custom accent color control
+- Added license information for screenshot.png
+
+
+Version 1.46 (2014-08-06)
+-------------------------
+- Fixed a clearing bug in .blog-menu
+- Optimized the CSS for brevity and browser compatibility
+- Improved the display of forms and inputs in the post-content
+- Improved the display of the comment form
+- Updated the Swedish translation, added missing namespaces
+
+
+Version 1.45 (2014-07-25)
+-------------------------
+- Fixed so that the header height is fixed, rather than relative to the width of the screen
+- Fixed a bug in functions.php which would prevent plugins from setting featured images
+- Added in some missing accent color elements
+- Fixed so that the "Comments are closed" message isn't displayed on pages with comments deactivated
+- Removed the default widgets that previously would've been displayed in no widgets had been entered
+
+
+Version 1.44 (2014-05-08)
+-------------------------
+- Added a query reset to template-archives.php to prevent the wrong comments from loading
+
+
+Version 1.43 (2014-05-06)
+-------------------------
+- Fixed so that the recent posts widgets only display published posts
+- Added a full width page template
+
+
+Version 1.42 (2014-04-13)
+-------------------------
+- Added support for editor styles
+
+
+Version 1.41 (2014-04-08)
+-------------------------
+- Fixed so that .widget_links is included in the custom accent color settings
+
+
+Version 1.40 (2014-03-31)
+-------------------------
+- Added a function for uploading a custom logo in place of the site title and description in the header
+- Fixed the styling of current-menu-item in the navigation
+
+
+Version 1.39 (2014-03-28)
+-------------------------
+- Fixed the styling of form elements
+
+
+Version 1.38 (2014-03-25)
+-------------------------
+- Fixed centering of .aligncenter images
+
+
+Version 1.37 (2014-03-24)
+-------------------------
+- Added anchor link "#comments" to comments.php
+– Fixed Google Fonts enqueue to avoid SSL issues
+– Fixed a developer notice on search.php and 404.php
+– Removed some superfluous lines from functions.php
+- Updated theme description and tags
+
+
+Version 1.35 (2014-03-20)
+-------------------------
+- Added a theme option for accent color
+
+
+Version 1.34 (2014-03-20)
+-------------------------
+- Fixed a video-widget bug
+
+
+Version 1.33 (2014-03-20)
+-------------------------
+- Fixed a bug where the site title in the header would be hidden if site description is empty
+
+
+Version 1.32 (2014-03-18)
+-------------------------
+- Fixed a bug displaying content.php as excerpts on archives
+
+
+Version 1.31 (2014-03-17)
+-------------------------
+- Hides blog-info div in header if both site title and site description are empty
+- Added title to changelog.txt
+
+
+Version 1.30 (2014-03-11)
+-------------------------
+- Fixed main-menu hover on tablets
+
+
+Version 1.28 (2014-02-24)
+-------------------------
+- Replaced the embeds in video-widget.php with WordPress built-in oEmbed function
+
+
+Version 1.27 (2014-02-24)
+-------------------------
+- Replaced the embeds in content-video.php and single.php with WordPress built-in oEmbed function
+
+
+Version 1.26 (2014-02-18)
+-------------------------
+- Fixed an issue with iframes
+
+
+Version 1.25 (2014-02-18)
+-------------------------
+- Fixed a bug with custom header images
+
+
+Version 1.24 (2014-02-18)
+-------------------------
+- Fixed a security glitch allowing users to enter js in the video post format url
+
+
+Version 1.23 (2014-02-17)
+-------------------------
+- Add max-width to .featured-media iframe
+
+
+Version 1.22 (2014-02-17)
+-------------------------
+- Fixed tag cloud styling
+
+
+Version 1.21 (2014-02-17)
+-------------------------
+- Fixed a bug in the condititional statement from the last update
+
+
+Version 1.20 (2014-02-17)
+-------------------------
+- Added condititional statement for blog-description to prevent empty h3 in header
+
+
+Version 1.19 (2014-02-17)
+-------------------------
+- Hidden img#wpstats smiley
+
+
+Version 1.18 (2014-02-17)
+-------------------------
+- Another update to the theme description (sorry, theme reviewers)
+
+
+Version 1.16 (2014-02-17)
+-------------------------
+- Minor change to the theme description
+
+
+Version 1.15 (2014-02-17)
+-------------------------
+- Added font-smoothing to bdoy to make sure that the WordPress.org theme demo renders the theme correctly
+
+
+Version 1.14 (2014-02-17)
+-------------------------
+- Fixed the meta tag to be HTML 5 compliant
+- Fixed so that placeholder widgets are shown if no widgets have been added
+
+
+Version 1.13 (2014-02-16)
+-------------------------
+- Added post thumbnail support for page and template-nosidebar
+
+
+Version 1.12 (2014-02-13)
+-------------------------
+- Fixed meta tag http-equiv
+
+
+Version 1.11 (2014-02-11)
+-------------------------
+- Added a Swedish translation
+
+
+Version 1.10 (2014-02-09)
+-------------------------
+- Fixed a styling issue with align-left and align-right @600px
+
+
+Version 1.09 (2014-02-09)
+-------------------------
+- Fixed alignment on post-nav-newer
+
+
+Version 1.08 (2014-02-05)
+-------------------------
+- Misc bug fixes
+
+
+Version 1.07 (2014-02-03)
+-------------------------
+- Misc bug fixes
+
+
+Version 1.06 (2014-02-03)
+-------------------------
+- More post-meta-bottom adjustments
+– Improved footer styling
+- Misc bug fixes
+
+
+Version 1.05 (2014-02-02)
+-------------------------
+- Cleaned up post-meta-bottom
+- Misc bug fixes
+
+
+Version 1.04 (2014-02-01)
+-------------------------
+- Fixed styling for the archive template
+- Cleaned up style.css, fixed section numbering
+– Misc bug fixes
+
+
+Version 1.03 (2014-01-31)
+-------------------------
+- Added larger screenshot.png to account for high DPI displays
+- Misc bug fixes
+
+
+Version 1.02 (2014-01-31)
+-------------------------
+- Added video post format
+- Added aside post format
+
+
+Version 1.01 (2014-01-31)
+-------------------------
+- Changed the theme description in style.css
+
+
+Version 1 (2014-01-31)
+-------------------------
