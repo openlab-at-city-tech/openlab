@@ -9,6 +9,11 @@
  * License: GPL2+
  */
 
+// WP version check.
+if ( version_compare( $GLOBALS['wp_version'], '4.4', '<' ) ) {
+	return;
+}
+
 /**
  * WP_REST_Controller class.
  */
