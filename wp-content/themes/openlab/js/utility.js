@@ -10,6 +10,7 @@
         newMembers: {},
         newMembersHTML: {},
         protect: 0,
+        uiCheck: {},
         selectDisplay: {},
         customSelectHTML: '',
         init: function () {
@@ -115,6 +116,34 @@
             }
 
         },
+        venueDropdownControl: function () {
+
+            var dropdownSelector = $('#venue_select');
+
+            OpenLab.utility.protect++;
+
+            if (dropdownSelector.length) {
+                
+                var comboBoxSelector = $('#venue_select.ui-combobox-input');
+                
+                if (comboBoxSelector.length) {
+                    
+                    clearInterval(OpenLab.utility.uiCheck);
+                    comboBoxSelector.on("autocompletesearch", function (event, ui) {
+
+                        event.preventDefault();
+
+                    });
+                } else {
+
+                    if (OpenLab.utility.protect < 2000) {
+                        OpenLab.utility.uiCheck = clearInterval(OpenLab.utility.venueDropdownControl(), 50);
+                    }
+
+                }
+            }
+
+        },
         convertTimeToNum: function (time) {
             var hoursMinutes = time.split(/[.:]/);
             var hours = parseInt(hoursMinutes[0], 10);
@@ -173,11 +202,16 @@
         },
         BPEOTweaks: function () {
 
-            if ($('#bp_event_organiser_metabox').length) {
+            var bpeo_metabox = $('#bp_event_organiser_metabox');
 
+            if (bpeo_metabox.length) {
+
+                var desc = ' <span class="bold">The event will appear in the sitewide calendar unless one or more of the groups selected is private.</span>';
                 var message = '<p class="howto">If a group selected is private, the event will not be displayed on the sitewide calendar.<p>';
 
-                $('#bp_event_organiser_metabox .inside').append(message)
+                bpeo_metabox.find('.inside .bp_event_organiser_desc').append(desc);
+                bpeo_metabox.find('.inside').append(message);
+                bpeo_metabox.find('.hndle span').text('Display');
 
             }
 
@@ -535,6 +569,7 @@
         $('html').removeClass('page-loading');
         OpenLab.utility.detectZoom();
         OpenLab.utility.customSelects(false);
+        //OpenLab.utility.venueDropdownControl();
 
         //setting equal rows on homepage group list
         equal_row_height();
