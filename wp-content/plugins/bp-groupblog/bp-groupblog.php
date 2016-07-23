@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8.11' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.12' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -608,7 +608,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
 
 		<p>
-			<input type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+			<label for="groupblog-create-new-no"><input type="radio" value="no" name="groupblog-create-new" id="groupblog-create-new-no" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 
 			<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
@@ -623,10 +623,11 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					endif;
 				} ?>
 			</select>
+			</label>
 		</p>
 
 		<p>
-			<input type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
+			<label for="groupblog-create-new-yes"><input type="radio" value="yes" name="groupblog-create-new" id="groupblog-create-new-yes" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></label></span>
 		</p>
 
 		<ul id="groupblog-details">
@@ -1191,6 +1192,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->save();
 	}
 
+	// Update the last_active flag for the group.
+	groups_update_last_activity( $group_id );
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 
