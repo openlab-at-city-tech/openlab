@@ -112,7 +112,7 @@ if (!class_exists('SZGoogleAdminTinyMCE'))
 				'sz-gplus-author'    => array('width'=>'430','height'=>'290','title'=>__('G+ Widget Author'    ,'sz-google')),
 				'sz-gplus-comments'  => array('width'=>'430','height'=>'270','title'=>__('G+ Widget Comments'  ,'sz-google')),
 				'sz-gplus-post'      => array('width'=>'430','height'=>'170','title'=>__('G+ Widget Post'      ,'sz-google')),
-				'sz-calendar'        => array('width'=>'430','height'=>'580','title'=>__('Calendar Widget'     ,'sz-google')),
+				'sz-calendar'        => array('width'=>'430','height'=>'610','title'=>__('Calendar Widget'     ,'sz-google')),
 				'sz-drive-embed'     => array('width'=>'430','height'=>'380','title'=>__('Drive Embed'         ,'sz-google')),
 				'sz-drive-viewer'    => array('width'=>'430','height'=>'270','title'=>__('Drive Viewer'        ,'sz-google')),
 				'sz-drive-save'      => array('width'=>'430','height'=>'350','title'=>__('Drive Save Button'   ,'sz-google')),

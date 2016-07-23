@@ -4,11 +4,10 @@ Plugin Name: Google for WordPress
 Plugin URI: https://otherplus.com/tech/wordpress-google/
 Description: Plugin to integrate <a href="http://google.com" target="_blank">Google's</a> products in <a href="http://wordpress.org" target="_blank">WordPress</a> with particular attention to the widgets provided by the social network Google+. Before using the plug-in <em>google for wordpress</em> pay attention to the options to be specified in the admin panel and enter all the parameters necessary for the proper functioning of the plugin. If you want to know the latest news and releases from the plug-in <a href="http://wordpress.org/plugins/wordpress-google/">google for wordpress</a> follow the <a href="https://plus.google.com/+wpitalyplus" target="_blank">official page</a> present in Google+ or subscribe to our community <a href="https://plus.google.com/communities/109254048492234113886" target="_blank">WP Italyplus</a> always present on Google+.
 Author: Massimo Della Rovere
-Version: 1.9.3
+Version: 1.9.4
 Author URI: https://plus.google.com/+MassimoDellaRovere
 License: GPLv2 or later
 Copyright 2012-2014 otherplus (email: wordpress@otherplus.com)
-
 Text Domain:sz-google
 Domain Path:/admin/languages
 */
@@ -38,7 +37,7 @@ if (!defined('ABSPATH')) die("Accesso diretto al file non permesso");
 
 define('SZ_PLUGIN_GOOGLE',true);
 define('SZ_PLUGIN_GOOGLE_MAIN',__FILE__);
-define('SZ_PLUGIN_GOOGLE_VERSION','1.9.3');
+define('SZ_PLUGIN_GOOGLE_VERSION','1.9.4');
 
 // Definition of some basic functions to be used in the plugin 
 // for calling special functions php which depend on the version
