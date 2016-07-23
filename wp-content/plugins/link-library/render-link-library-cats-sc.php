@@ -66,10 +66,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
             $output .= "<SCRIPT LANGUAGE=\"JavaScript\">\n";
             $output .= "var ajaxobject;\n";
-            $output .= "function showLinkCat ( _incomingID, _settingsID, _pagenumber ) {\n";
+            $output .= "function showLinkCat" . $settings . " ( _incomingID, _settingsID, _pagenumber ) {\n";
             $output .= "if (typeof(ajaxobject) != \"undefined\") { ajaxobject.abort(); }\n";
 
-            $output .= "\tjQuery('#contentLoading').toggle();" .
+            $output .= "\tjQuery('#contentLoading" . $settings . "').toggle();" .
                 "jQuery.ajax( {" .
                 "    type: 'POST', " .
                 "    url: '" . admin_url( 'admin-ajax.php' ) . "', " .
@@ -81,7 +81,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 "            linkresultpage: _pagenumber }, " .
                 "    success: function( data ){ " .
                 "            jQuery('#linklist" . $settings. "').html( data ); " .
-                "            jQuery('#contentLoading').toggle();\n" .
+                "            jQuery('#contentLoading" . $settings . "').toggle();\n" .
                 "            } } ); ";
             $output .= "}\n";
 
@@ -196,7 +196,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
                 // Display the category name
                 $countcat += 1;
-                if ( 'table' == $flatlist && ( ( 1 == $countcat % $num_columns ) || ( 1 == $num_columns ) ) ) {
+                if ( $num_columns > 0 && 'table' == $flatlist && ( ( 1 == $countcat % $num_columns ) || ( 1 == $num_columns ) ) ) {
                     $output .= "<tr>\n";
                 }
 
@@ -215,7 +215,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 if ( $showonecatonly ) {
                     if ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) {
                         if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-                            $cattext = "<a href='#' onClick=\"showLinkCat('" . $catname->term_id. "', '" . $settings . "', 1);return false;\" >";
+                            $cattext = "<a href='#' onClick=\"showLinkCat" . $settings . "('" . $catname->term_id. "', '" . $settings . "', 1);return false;\" >";
                         } elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
                             $cattext = $catname->term_id;
                         }
@@ -381,12 +381,12 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
                 $output .= ( $catterminator );
 
-                if ( 'table' == $flatlist and ( 0 == $countcat % $num_columns ) ) {
+                if ( $num_columns > 0 && 'table' == $flatlist and ( 0 == $countcat % $num_columns ) ) {
                     $output .= "</tr>\n";
                 }
             }
 
-            if ( 'table' == $flatlist and ( 3 == $countcat % $num_columns ) ) {
+            if ( $num_columns > 0 && 'table' == $flatlist and ( 3 == $countcat % $num_columns ) ) {
                 $output .= "</tr>\n";
             }
 
@@ -409,7 +409,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                     $loadingicon = '/icons/Ajax-loader.gif';
                 }
 
-                $output .= "<div class='contentLoading' id='contentLoading' style='display: none;'><img src='" . plugins_url( $loadingicon, __FILE__ ) . "' alt='Loading data, please wait...'></div>\n";
+                $output .= "<div class='contentLoading' id='contentLoading" . $settings . "' style='display: none;'><img src='" . plugins_url( $loadingicon, __FILE__ ) . "' alt='Loading data, please wait...'></div>\n";
             }
 
             if ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
@@ -418,7 +418,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
                 if ( $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
                     $output .= 'catidvar = document.catselect.catdropdown.options[document.catselect.catdropdown.selectedIndex].value;';
-                    $output .= "showLinkCat(catidvar, '" . $settings . "', 1);return false; }";
+                    $output .= "showLinkCat" . $settings . "(catidvar, '" . $settings . "', 1);return false; }";
                 } else {
                     $output .= "\t\tlocation=\n";
                     $output .= "document.catselect.catdropdown.options[document.catselect.catdropdown.selectedIndex].value }\n";

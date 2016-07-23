@@ -3,12 +3,13 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 5.9.10.3
+Version: 5.9.12.29
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.ca/
+Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2015 Yannick Lefebvre
+Copyright 2016 Yannick Lefebvre
 
 Translations:
 French Translation courtesy of Luc Capronnier
@@ -103,13 +104,14 @@ function link_library_modify_http_response( $plugins_response ) {
 class link_library_plugin {
 
 	//constructor of class, PHP4 compatible construction for backward compatibility
-	function link_library_plugin() {
+	function __construct() {
 
         // Functions to be called when plugin is activated and deactivated
         register_activation_hook( __FILE__, array( $this, 'll_install' ) );
         register_deactivation_hook( __FILE__, array( $this, 'll_uninstall' ) );
 	
 		$newoptions = get_option( 'LinkLibraryPP1', '' );
+		$genoptions = get_option( 'LinkLibraryGeneral', '' );
 
 		if ( empty( $newoptions ) ) {
             global $my_link_library_plugin_admin;
@@ -120,7 +122,10 @@ class link_library_plugin {
             }
 
 			ll_reset_options( 1, 'list', 'return_and_set' );
-			ll_reset_gen_settings( 'return_and_set' );
+
+			if ( empty( $genoptions ) ) {
+				ll_reset_gen_settings( 'return_and_set' );
+			}
 		}
         
 		// Add short codes
@@ -157,6 +162,10 @@ class link_library_plugin {
         add_action( 'wp_ajax_nopriv_link_library_ajax_update', array( $this, 'link_library_func') );
         add_action( 'wp_ajax_link_library_generate_image', array( $this, 'link_library_generate_image') );
         add_action( 'wp_ajax_nopriv_link_library_generate_image', array( $this, 'link_library_generate_image') );
+		add_action( 'wp_ajax_link_library_popup_content', array( $this, 'll_popup_content') );
+		add_action( 'wp_ajax_nopriv_link_library_popup_content', array( $this, 'll_popup_content') );
+
+        add_action( 'wp_enqueue_scripts', array( $this, 'll_register_script' ) );
 
 		// Load text domain for translation of admin pages and text strings
 		load_plugin_textdomain( 'link-library', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -356,6 +365,10 @@ class link_library_plugin {
             }
         }
     }
+
+    function ll_register_script() {
+        wp_register_script( 'form-validator', plugins_url( '/form-validator/jquery.form-validator.min.js' , __FILE__ ), array( 'jquery' ), '1.0.0', true );
+    }
     
     function db_prefix() {
 		global $wpdb;
@@ -492,16 +505,19 @@ class link_library_plugin {
     }
 
 	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '' ) {
-		$sitecontent = file_get_contents( $external_link );
+		$response = wp_remote_get( $external_link );
 
-		if ( strpos( $http_response_header[0], '200' ) ) {
-			if ( strpos( $sitecontent, $RecipCheckAddress ) === false ) {
+        if( is_wp_error( $response ) ) {
+            $response_code = $response->get_error_code();
+            if ( 'http_request_failed' == $response_code ) {
+                return 'error_403';
+            }
+        } elseif ( $response['response']['code'] == '200' ) {
+			if ( strpos( $response['body'], $RecipCheckAddress ) === false ) {
 				return 'exists_notfound';
-			} elseif ( strpos( $sitecontent, $RecipCheckAddress ) !== false ) {
+			} elseif ( strpos( $response['body'], $RecipCheckAddress ) !== false ) {
 				return 'exists_found';
 			}
-		} elseif ( strpos( $http_response_header[0], '403' ) ) {
-			return 'error_403';
 		}
 
 		return 'unreachable';
@@ -969,14 +985,15 @@ class link_library_plugin {
 		return $posts;
 	}
 
+	function ll_popup_content() {
+		require_once plugin_dir_path( __FILE__ ) . 'linkpopup.php';
+		link_library_popup_content( $this );
+	}
+
     function ll_template_redirect( $template ) {
 	    if ( !empty( $_POST['link_library_user_link_submission'] ) ) {
             require_once plugin_dir_path( __FILE__ ) . 'usersubmission.php';
             link_library_process_user_submission( $this );
-            return '';
-        } else if ( !empty( $_GET['link_library_popup_content'] ) ) {
-            require_once plugin_dir_path( __FILE__ ) . 'linkpopup.php';
-            link_library_popup_content( $this );
             return '';
         } else if ( !empty( $_GET['link_library_rss_preview'] ) ) {
             require_once plugin_dir_path( __FILE__ ) . 'rsspreview.php';

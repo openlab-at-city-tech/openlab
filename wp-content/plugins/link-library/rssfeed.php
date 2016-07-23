@@ -85,7 +85,7 @@ function link_library_generate_rss_feed () {
         }
     }
 
-	header( 'Content-Type: '. feed_content_type('rss-http') . '; charset=' . get_option('blog_charset') );
+	header( 'Content-Type: '. feed_content_type('rss') . '; charset=' . get_option('blog_charset') );
     print( $rss->getFeed() );
     exit;
 }

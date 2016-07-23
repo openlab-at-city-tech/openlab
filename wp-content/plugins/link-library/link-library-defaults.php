@@ -106,6 +106,8 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['rssfeedinline']                 = false;
 	$options['rssfeedinlinecontent']          = false;
 	$options['rssfeedinlinecount']            = 1;
+	$options['rssfeedinlinedayspublished']    = 0;
+	$options['rssfeedinlineskipempty']        = false;
 	$options['direction']                     = 'ASC';
 	$options['linkdirection']                 = 'ASC';
 	$options['linkorder']                     = 'name';
@@ -133,6 +135,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['imagepos']                      = 'beforename';
 	$options['imageclass']                    = '';
 	$options['emailnewlink']                  = false;
+	$options['emailsubmitter']                = false;
 	$options['showaddlinkrss']                = 'hide';
 	$options['showaddlinkdesc']               = 'hide';
 	$options['showaddlinkcat']                = 'hide';
@@ -151,7 +154,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['linkcustomcatlabel']            = __( 'User-submitted category', 'link-library' );
 	$options['linkcustomcatlistentry']        = __( 'User-submitted category (define below)', 'link-library' );
 	$options['searchlabel']                   = 'Search';
-	$options['dragndroporder']                = '1,2,3,4,5,6,7,8,9,10,11,12';
+	$options['dragndroporder']                = '1,2,3,4,5,6,7,8,9,10,11,12,13';
 	$options['showname']                      = true;
 	$options['cattargetaddress']              = '';
 	$options['displayweblink']                = 'false';
@@ -219,7 +222,15 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['beforefirstlink']                 = '';
 	$options['afterlastlink']                   = '';
 	$options['searchfieldtext']                 = __( 'Search...', 'link-library' );
+	$options['searchnoresultstext']             = __( 'No links found matching your search criteria', 'link-library' );
 	$options['catfilterlabel']                  = __( 'Category Filter', 'link-library' );
+	$options['addlinkdefaultcat']               = 'nodefaultcat';
+	$options['addlinkakismet']                  = false;
+	$options['current_user_links']              = false;
+	$options['showsubmittername']               = false;
+	$options['beforesubmittername']             = '';
+	$options['aftersubmittername']              = '';
+	$options['onereciprocaldomain']             = false;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -260,6 +271,7 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['thumbnailsize']               = '120x90';
 	$genoptions['thumbnailgenerator']          = 'robothumb';
 	$genoptions['survey2015']                  = false;
+	$genoptions['addlinkakismet']                  = false;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );
