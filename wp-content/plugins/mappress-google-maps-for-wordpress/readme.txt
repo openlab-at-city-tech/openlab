@@ -3,8 +3,8 @@ Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
 Tags: google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 3.5
-Tested up to: 4.3
-Stable tag: 2.43.4
+Tested up to: 4.9
+Stable tag: 2.43.10
 
 MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions in your blog.
 
@@ -64,6 +64,7 @@ Please [Contact me](http://wphostreviews.com/chris-contact) if you'd like to pro
 * Hungarian
 * Italian
 * Russian
+* Serbian - Ogi of firstsiteguide.com
 * Simplified Chinese
 * Spanish
 * Swedish
@@ -93,6 +94,48 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 4. Get directions from any map marker
 
 == Changelog ==
+
+2.43.10
+* Changed: show blank container while loading mashups instead of default map
+* Changed: no alerts for admins on missing map container
+* Changed: apply wpautop to POIs when they are saved (wpautop inserts html tags to format carriage returns)
+* Fixed: bug where mashups were limited to 10 POIs
+* Fixed: polys are now allowed again for mashups
+* Fixed: changed Mappress_Updater constructor for PHP 7
+
+2.43.9
+* Added: support for XHTML sites (must be running WP 4.5 or higher)
+* Added: server API key for geocoding
+* Fixed: debugging functions
+* Fixed: removed extra code for api key in geocoder
+* Fixed: removed anonymous functions to support hosts still running PHP 5.2
+
+2.43.8
+=
+* Added: API key checks updated to support Google policy change on 6/22/2016
+* Added: automatic icons can now be set by post type as well as by taxonomy
+* Changed: KML/KMZ overlays and polygons are no longer included in mashup results
+* Changed: map can now display in AJAX calls from other plugins (infinite scrollers, etc.)
+* Changed: new map loader for compatibility with plugins/themes that cause jQuery .ready errors
+* Changed: text domain changed for compatibility with WordPress language packs
+* Changed: support for translate.wordpress.org - language (.mo/.po) files renamed with new plugin slug for language packs
+* Changed: datatables support has been removed
+* Changed: widget now uses WP 4.3 constructor / anonymous function
+* Fixed: a Google API change broke 'my location' in directions and map editor
+
+2.43.7
+* Fixed: mashups ignoring mashupTitle="poi" and always showing post title (since 2.43.4)
+
+2.43.6
+=
+* Added: language support for mashup queries
+* Fixed: mashups with query="all" or "current" returned no results from 2.43.2
+* Fixed: AJAX error when adding autoicons
+* Fixed: thumbnail size is output as a style for better infobox sizing
+
+2.43.5
+=
+* Changed: restored 'adaptive' setting
 
 2.43.4
 =

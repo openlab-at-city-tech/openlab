@@ -4,7 +4,7 @@ class Mappress_Updater {
 		$pro_url = 'http://wphostreviews.com/account',
 		$plugin_name = 'mappress';
 
-	function Mappress_Updater($basename) {
+	function __construct($basename) {
 		$this->basename = $basename;
 
 		// Plugin actions
@@ -16,7 +16,7 @@ class Mappress_Updater {
 	}
 
 	function plugin_action_links($links, $file) {
-		$settings_link = "<a href='" . admin_url("options-general.php?page={$this->plugin_name}") . "'>" . __('Settings') . "</a>";
+		$settings_link = "<a href='" . admin_url("options-general.php?page={$this->plugin_name}") . "'>" . __('Settings', 'mappress-google-maps-for-wordpress') . "</a>";
 		array_unshift( $links, $settings_link );
 		return $links;
 	}
@@ -38,12 +38,12 @@ class Mappress_Updater {
 	}
 
 	function after_plugin_row_pro($value) {
-		$pro_link = "<a href='$this->pro_url'>" . __('download it now', 'mappress') . "</a>";
+		$pro_link = "<a href='$this->pro_url'>" . __('download it now', 'mappress-google-maps-for-wordpress') . "</a>";
 
 		echo '<tr class="plugin-update-tr">'
 			. '<td colspan="3" class="plugin-update">'
 			. '<div class="update-message">'
-			. sprintf(__("A PRO Version update is available for manual installation: %s", 'mappress'), $pro_link)
+			. sprintf(__("A PRO Version update is available for manual installation: %s", 'mappress-google-maps-for-wordpress'), $pro_link)
 			. '</div>'
 			. '</td></tr>';
 	}

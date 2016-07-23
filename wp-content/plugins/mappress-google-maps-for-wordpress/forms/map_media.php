@@ -8,8 +8,8 @@
 	<hr/>
 
 	<div id='mapp_m_list_panel' style='display:none'>
-		<b><?php _e('Maps for This Post', 'mappress')?></b>
-		<input class='button' type='button' id='mapp_m_add_map' value='<?php esc_attr_e('New Map', 'mappress')?>' />
+		<b><?php _e('Maps for This Post', 'mappress-google-maps-for-wordpress')?></b>
+		<input class='button' type='button' id='mapp_m_add_map' value='<?php esc_attr_e('New Map', 'mappress-google-maps-for-wordpress')?>' />
 		<div id='mapp_m_maplist'>
 			<?php echo Mappress_Map::get_map_list(); ?>
 		</div>
@@ -19,17 +19,17 @@
 		<div class='mapp-panel'>
 			<table>
 				<tr>
-					<td><?php _e('Map ID', 'mappress');?>:</td>
+					<td><?php _e('Map ID', 'mappress-google-maps-for-wordpress');?>:</td>
 					<td><span id='mapp_m_mapid'></span></td>
 				</tr>
 
 				<tr>
-					<td><?php _e('Map Title', 'mappress');?>:</td>
+					<td><?php _e('Map Title', 'mappress-google-maps-for-wordpress');?>:</td>
 					<td><input id='mapp_m_title' type='text' size='40' /></td>
 				</tr>
 
 				<tr>
-					<td><?php _e('Size', 'mappress');?>:</td>
+					<td><?php _e('Size', 'mappress-google-maps-for-wordpress');?>:</td>
 					<td>
 						<?php
 							$sizes = array();
@@ -43,9 +43,9 @@
 			</table>
 		</div>
 		<div>
-			<input class='button button-primary' type='button' id='mapp_m_save' value='<?php esc_attr_e('Save', 'mappress'); ?>' />
-			<input class='button' type='button' id='mapp_m_cancel' value='<?php esc_attr_e('Cancel', 'mappress'); ?>' />
-			<input class='button' type='button' id='mapp_m_insert' value='<?php esc_attr_e('Insert into post', 'mappress'); ?>' />
+			<input class='button button-primary' type='button' id='mapp_m_save' value='<?php esc_attr_e('Save', 'mappress-google-maps-for-wordpress'); ?>' />
+			<input class='button' type='button' id='mapp_m_cancel' value='<?php esc_attr_e('Cancel', 'mappress-google-maps-for-wordpress'); ?>' />
+			<input class='button' type='button' id='mapp_m_insert' value='<?php esc_attr_e('Insert into post', 'mappress-google-maps-for-wordpress'); ?>' />
 		</div>
 		<hr/>
 		<div id='mapp_m_editor'>

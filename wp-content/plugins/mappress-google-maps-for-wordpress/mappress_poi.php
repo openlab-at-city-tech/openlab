@@ -41,7 +41,7 @@ class Mappress_Poi extends Mappress_Obj {
 	*/
 	function geocode($auto=true) {
 		if (!class_exists('Mappress_Pro'))
-			return new WP_Error('geocode', 'MapPress Pro required for geocoding', 'mappress');
+			return new WP_Error('geocode', 'MapPress Pro required for geocoding');
 
 		// If point has a lat/lng then no geocoding
 		if (!empty($this->point['lat']) && !empty($this->point['lng'])) {
@@ -94,7 +94,7 @@ class Mappress_Poi extends Mappress_Obj {
 		$map = $this->map();
 
 		// Set title
-		if ($map->options->mashupTitle = 'post' && $this->postid) {
+		if ($map->options->mashupTitle == 'post' && $this->postid) {
 			$post = get_post($this->postid);
 			$this->title = $post->post_title;
 		}
@@ -102,10 +102,12 @@ class Mappress_Poi extends Mappress_Obj {
 		$style = ($this->postid) ? $map->options->mashupBody : 'poi';
 
 		// Set body
-		if ($map->options->mashupBody == 'post' && $this->postid)
-			$this->body = $this->get_post_excerpt();
-		else if ($map->options->mashupBody == 'address')
-			$this->body = $this->get_address();
+		if ($this->postid) {
+			if ($map->options->mashupBody == 'post')
+				$this->body = $this->get_post_excerpt();
+			else if ($map->options->mashupBody == 'address')
+				$this->body = $this->get_address();
+		}
 
 		// Set URL
 		if ($this->postid && ($map->options->mashupClick == 'post' || $map->options->mashupLink))
@@ -192,9 +194,9 @@ class Mappress_Poi extends Mappress_Obj {
 		// Directions (not available for shapes, kml)
 		if (empty($this->type)) {
 			if (in_array('directions_to', $links) && $map->options->directions != 'none')
-				$a[] = $this->get_directions_link(array('to' => $this, 'text' => __('Directions to', 'mappress')));
+				$a[] = $this->get_directions_link(array('to' => $this, 'text' => __('Directions to', 'mappress-google-maps-for-wordpress')));
 			if (in_array('directions_from', $links) && $map->options->directions != 'none')
-				$a[] = $this->get_directions_link(array('from' => $this, 'to' => '', 'text' => __('Directions from', 'mappress')));
+				$a[] = $this->get_directions_link(array('from' => $this, 'to' => '', 'text' => __('Directions from', 'mappress-google-maps-for-wordpress')));
 		}
 
 		// Zoom isn't available in poi list by default
@@ -227,7 +229,7 @@ class Mappress_Poi extends Mappress_Obj {
 			'from' => $map->options->from,
 			'to' => $map->options->to,
 			'focus' => true,
-			'text' => __('Directions', 'mappress')
+			'text' => __('Directions', 'mappress-google-maps-for-wordpress')
 		)));
 
 		// Convert objects to indexes, quote strings
@@ -276,7 +278,7 @@ class Mappress_Poi extends Mappress_Obj {
 	function get_zoom_link ($args = '') {
 		$map = $this->map();
 		extract(wp_parse_args($args, array(
-			'text' => __('Zoom', 'mappress'),
+			'text' => __('Zoom', 'mappress-google-maps-for-wordpress'),
 		)));
 
 		$i = array_search($this, $map->pois);
@@ -296,10 +298,11 @@ class Mappress_Poi extends Mappress_Obj {
 		if (!$this->postid || !$map->options->thumbs)
 			return '';
 
-		if (isset($args['size']))
-			$size = $args['size'];
-		else
-			$size = ($map->options->thumbSize) ? $map->options->thumbSize : array($map->options->thumbWidth, $map->options->thumbHeight);
+		$args = ($args) ? $args : array();
+		$size = ($map->options->thumbSize) ? $map->options->thumbSize : null;
+
+		if ($map->options->thumbWidth && $map->options->thumbHeight)
+			$args['style'] = "width: {$map->options->thumbWidth}px; height : {$map->options->thumbHeight}px;";
 
 		$html = get_the_post_thumbnail($this->postid, $size, $args);
 

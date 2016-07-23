@@ -7,6 +7,7 @@ class Mappress_Options extends Mappress_Obj {
 		$alignment,
 		$autoicons,
 		$apiKey,
+		$apiKeyServer,
 		$autodisplay = 'top',
 		$bicycling = false,
 		$bigWidth = '100%',
@@ -14,7 +15,6 @@ class Mappress_Options extends Mappress_Obj {
 		$connect,                       // Connect the pois: null | 'line'
 		$country,
 		$css = true,
-		$dataTables = false,     		// true | false | settings (defaults are: array('bFilter' => false, 'bPaginate' => false))
 		$defaultIcon,
 		$directions = 'google',         // inline | google | none
 		$directionsServer = 'https://maps.google.com',
@@ -65,9 +65,11 @@ class Mappress_Options extends Mappress_Obj {
 		$poiList = false,
 		$poiZoom = 15,					// Default zoom level for pois without a viewport (e.g. lat/lng pois)
 		$postTypes = array('post', 'page'),
+		$radius = 15,
 		$rotateControl = true,
 		$scaleControl = false,
 		$scrollwheel = false,
+		$search,
 		$size = 1,						// Index of default map size
 		$sizes = array(array('width' => 300, 'height' => 300), array('width' => 425, 'height' => 350), array('width' => 640, 'height' => 480)),
 		$sort = true,					// set false to disable initial sort and use saved order
@@ -126,46 +128,51 @@ class Mappress_Settings {
 	function admin_init() {
 		register_setting('mappress', 'mappress_options', array($this, 'set_options'));
 
-		add_settings_section('basic_settings', __('Basic Settings', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('postTypes', __('Post types', 'mappress'), array($this, 'set_post_types'), 'mappress', 'basic_settings');
-		add_settings_field('autodisplay', __('Automatic map display', 'mappress'), array($this, 'set_autodisplay'), 'mappress', 'basic_settings');
-		add_settings_field('directions', __('Directions', 'mappress'), array($this, 'set_directions'), 'mappress', 'basic_settings');
+		add_settings_section('basic_settings', __('Basic Settings', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+		add_settings_field('postTypes', __('Post types', 'mappress-google-maps-for-wordpress'), array($this, 'set_post_types'), 'mappress', 'basic_settings');
+		add_settings_field('autodisplay', __('Automatic map display', 'mappress-google-maps-for-wordpress'), array($this, 'set_autodisplay'), 'mappress', 'basic_settings');
+		add_settings_field('directions', __('Directions', 'mappress-google-maps-for-wordpress'), array($this, 'set_directions'), 'mappress', 'basic_settings');
 
-		add_settings_section('controls_settings', __('Map Controls', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('draggable', __('Draggable', 'mappress'), array($this, 'set_draggable'), 'mappress', 'controls_settings');
-		add_settings_field('keyboard', __('Keyboard shortcuts', 'mappress'), array($this, 'set_keyboard_shortcuts'), 'mappress', 'controls_settings');
-		add_settings_field('scrollwheel', __('Scroll wheel zoom', 'mappress'), array($this, 'set_scrollwheel'), 'mappress', 'controls_settings');
-		add_settings_field('mapTypeIds', __('Map Types', 'mappress'), array($this, 'set_map_type_ids'), 'mappress', 'controls_settings');
-		add_settings_field('mapControls', __('Map controls', 'mappress'), array($this, 'set_map_controls'), 'mappress', 'controls_settings');
+		add_settings_field('api_key', __('Browser API key', 'mappress-google-maps-for-wordpress'), array($this, 'set_api_key'), 'mappress', 'basic_settings');
 
-		add_settings_section('appearance_settings', __('Map Settings', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('mapLinks', __('Map links', 'mappress'), array($this, 'set_map_links'), 'mappress', 'appearance_settings');
-		add_settings_field('alignment', __('Map alignment', 'mappress'), array($this, 'set_alignment'), 'mappress', 'appearance_settings');
-		add_settings_field('initialOpenInfo', __('Open first POI', 'mappress'), array($this, 'set_initial_open_info'), 'mappress', 'appearance_settings');
+		if (class_exists('Mappress_Pro'))
+			add_settings_field('api_key_server', __('Server API key', 'mappress-google-maps-for-wordpress'), array($this, 'set_api_key_server'), 'mappress', 'basic_settings');
 
-		add_settings_section('poi_settings', __('POI Settings', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('poiLinks', __('POI links', 'mappress'), array($this, 'set_poi_links'), 'mappress', 'poi_settings');
-		add_settings_field('tooltips', __('Tooltips', 'mappress'), array($this, 'set_tooltips'), 'mappress', 'poi_settings');
-		add_settings_field('poi_zoom', __('Default zoom', 'mappress'), array($this, 'set_poi_zoom'), 'mappress', 'poi_settings');
+		add_settings_section('controls_settings', __('Map Controls', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+		add_settings_field('draggable', __('Draggable', 'mappress-google-maps-for-wordpress'), array($this, 'set_draggable'), 'mappress', 'controls_settings');
+		add_settings_field('keyboard', __('Keyboard shortcuts', 'mappress-google-maps-for-wordpress'), array($this, 'set_keyboard_shortcuts'), 'mappress', 'controls_settings');
+		add_settings_field('scrollwheel', __('Scroll wheel zoom', 'mappress-google-maps-for-wordpress'), array($this, 'set_scrollwheel'), 'mappress', 'controls_settings');
+		add_settings_field('mapTypeIds', __('Map Types', 'mappress-google-maps-for-wordpress'), array($this, 'set_map_type_ids'), 'mappress', 'controls_settings');
+		add_settings_field('mapControls', __('Map controls', 'mappress-google-maps-for-wordpress'), array($this, 'set_map_controls'), 'mappress', 'controls_settings');
+
+		add_settings_section('appearance_settings', __('Map Settings', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+		add_settings_field('mapLinks', __('Map links', 'mappress-google-maps-for-wordpress'), array($this, 'set_map_links'), 'mappress', 'appearance_settings');
+		add_settings_field('alignment', __('Map alignment', 'mappress-google-maps-for-wordpress'), array($this, 'set_alignment'), 'mappress', 'appearance_settings');
+		add_settings_field('initialOpenInfo', __('Open first POI', 'mappress-google-maps-for-wordpress'), array($this, 'set_initial_open_info'), 'mappress', 'appearance_settings');
+
+		add_settings_section('poi_settings', __('POI Settings', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+		add_settings_field('poiLinks', __('POI links', 'mappress-google-maps-for-wordpress'), array($this, 'set_poi_links'), 'mappress', 'poi_settings');
+		add_settings_field('tooltips', __('Tooltips', 'mappress-google-maps-for-wordpress'), array($this, 'set_tooltips'), 'mappress', 'poi_settings');
+		add_settings_field('poi_zoom', __('Default zoom', 'mappress-google-maps-for-wordpress'), array($this, 'set_poi_zoom'), 'mappress', 'poi_settings');
 
 		if (class_exists('Mappress_Pro')) {
-			add_settings_section('mashup_settings', __('Mashups', 'mappress'), array($this, 'section_settings'), 'mappress');
-			add_settings_section('icons_settings', __('Icons', 'mappress'), array($this, 'section_settings'), 'mappress');
-			add_settings_section('styled_maps_settings', __('Styled Maps', 'mappress'), array($this, 'section_settings'), 'mappress');
-			add_settings_section('geocoding_settings', __('Geocoding', 'mappress'), array($this, 'geocoding_section'), 'mappress');
+			add_settings_section('mashup_settings', __('Mashups', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+			add_settings_section('icons_settings', __('Icons', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+			add_settings_section('styled_maps_settings', __('Styled Maps', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+			add_settings_section('geocoding_settings', __('Geocoding', 'mappress-google-maps-for-wordpress'), array($this, 'geocoding_section'), 'mappress');
 		}
 
-		add_settings_section('localization_settings', __('Localization', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('language', __('Language', 'mappress'), array($this, 'set_language'), 'mappress', 'localization_settings');
-		add_settings_field('country', __('Country', 'mappress'), array($this, 'set_country'), 'mappress', 'localization_settings');
-		add_settings_field('directionsServer', __('Directions server', 'mappress'), array($this, 'set_directions_server'), 'mappress', 'localization_settings');
-		add_settings_field('directionsUnits', __('Directions units', 'mappress'), array($this, 'set_directions_units'), 'mappress', 'localization_settings');
+		add_settings_section('localization_settings', __('Localization', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+		add_settings_field('language', __('Language', 'mappress-google-maps-for-wordpress'), array($this, 'set_language'), 'mappress', 'localization_settings');
+		add_settings_field('country', __('Country', 'mappress-google-maps-for-wordpress'), array($this, 'set_country'), 'mappress', 'localization_settings');
+		add_settings_field('directionsServer', __('Directions server', 'mappress-google-maps-for-wordpress'), array($this, 'set_directions_server'), 'mappress', 'localization_settings');
+		add_settings_field('directionsUnits', __('Directions units', 'mappress-google-maps-for-wordpress'), array($this, 'set_directions_units'), 'mappress', 'localization_settings');
 
-		add_settings_section('misc_settings', __('Miscellaneous', 'mappress'), array($this, 'section_settings'), 'mappress');
-		add_settings_field('sizes', __('Map sizes', 'mappress'), array($this, 'set_sizes'), 'mappress', 'misc_settings');
-		add_settings_field('adaptive', __('Adaptive display', 'mappress'), array($this, 'set_adaptive'), 'mappress', 'misc_settings');
-		add_settings_field('footer', __('Scripts', 'mappress'), array($this, 'set_footer'), 'mappress', 'misc_settings');
-		add_settings_field('css', __('CSS', 'mappress'), array($this, 'set_css'), 'mappress', 'misc_settings');
+		add_settings_section('misc_settings', __('Miscellaneous', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
+
+		add_settings_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), array($this, 'set_sizes'), 'mappress', 'misc_settings');
+		add_settings_field('adaptive', __('Adaptive display', 'mappress-google-maps-for-wordpress'), array($this, 'set_adaptive'), 'mappress', 'misc_settings');
+		add_settings_field('css', __('CSS', 'mappress-google-maps-for-wordpress'), array($this, 'set_css'), 'mappress', 'misc_settings');
 	}
 
 	function set_options($input) {
@@ -176,6 +183,10 @@ class Mappress_Settings {
 			$options = new Mappress_Options();
 			return get_object_vars($this);
 		}
+
+		// Trim the api keys
+		$input['apiKey'] = (isset($input['apiKey'])) ? trim($input['apiKey']) : '';
+		$input['apiKeyServer'] = (isset($input['apiKeyServer'])) ? trim($input['apiKeyServer']) : '';
 
 		// Sizes
 		foreach( $input['sizes'] as &$size ) {
@@ -215,65 +226,64 @@ class Mappress_Settings {
 
 	function geocoding_section() {
 		echo "<p>";
-		echo __("Use the settings below to automatically create maps from custom fields.");
+		echo __("Use the settings below to automatically create maps from custom fields.", 'mappress-google-maps-for-wordpress');
 		echo "</p>";
 	}
 
 	function set_adaptive() {
-		echo self::checkbox($this->options->adaptive, 'mappress_options[adaptive]', __("Recenter maps when window is resized", 'mappress'));
+		echo self::checkbox($this->options->adaptive, 'mappress_options[adaptive]', __("Recenter maps when window is resized", 'mappress-google-maps-for-wordpress'));
+	}
+
+	function set_api_key() {
+		echo "<input type='text' size='50' name='mappress_options[apiKey]' value='{$this->options->apiKey}' />";
+		$helpurl = "<a href='http://wphostreviews.com/mappress-faq' target='_blank'>" . __('more info', 'mappress-google-maps-for-wordpress') . "</a>";
+		printf("<br/><i>%s (%s)</i>", __("Required to display maps", 'mappress-google-maps-for-wordpress'), $helpurl);
 	}
 
 	function set_post_types() {
-		$labels = array(
-			'post' => __('Posts', 'mappress'),
-			'page' => __('Pages', 'mappress'),
-		);
-
-		$custom_post_types = get_post_types(array('show_ui' => true, '_builtin' => false), 'objects');
-		foreach ($custom_post_types as $name => $type)
-			$labels[$name] = $type->label;
-		echo self::checkbox_list($this->options->postTypes, 'mappress_options[postTypes][]', $labels);
+		$post_types = Mappress_Controls::get_Post_types();
+		echo self::checkbox_list($this->options->postTypes, 'mappress_options[postTypes][]', $post_types);
 		return;
 	}
 
 	function set_country() {
 		$country = $this->options->country;
-		$cctld_link = '<a style="vertical-align:text-bottom" target="_blank" href="http://en.wikipedia.org/wiki/CcTLD#List_of_ccTLDs">' . __("country code", 'mappress') . '</a>';
+		$cctld_link = '<a style="vertical-align:text-bottom" target="_blank" href="http://en.wikipedia.org/wiki/CcTLD#List_of_ccTLDs">' . __("country code", 'mappress-google-maps-for-wordpress') . '</a>';
 
-		printf(__('Enter a %s to use when searching (leave blank for USA)', 'mappress'), $cctld_link);
+		printf(__('Enter a %s to use when searching (leave blank for USA)', 'mappress-google-maps-for-wordpress'), $cctld_link);
 		echo ": <input type='text' size='2' name='mappress_options[country]' value='$country' />";
 	}
 
 	function set_directions_server() {
 		$directions_server = $this->options->directionsServer;
 
-		echo __('Enter a google server URL for directions/printing', 'mappress');
+		echo __('Enter a google server URL for directions/printing', 'mappress-google-maps-for-wordpress');
 		echo ": <input type='text' size='20' name='mappress_options[directionsServer]' value='$directions_server' />";
 	}
 
 	function set_directions_units() {
-		$units = array('' => __('(Default)', 'mappress'), 0 => __('Metric (kilometers)', 'mappress'), 1 => __('Imperial (miles)', 'mappress'));
+		$units = array('' => __('(Default)', 'mappress-google-maps-for-wordpress'), 0 => __('Metric (kilometers)', 'mappress-google-maps-for-wordpress'), 1 => __('Imperial (miles)', 'mappress-google-maps-for-wordpress'));
 		echo self::dropdown($units, $this->options->directionsUnits, 'mappress_options[directionsUnits]');
 	}
 
 	function set_draggable() {
-		echo self::checkbox($this->options->draggable, 'mappress_options[draggable]', __('Enable map dragging with the mouse', 'mappress'));
+		echo self::checkbox($this->options->draggable, 'mappress_options[draggable]', __('Enable map dragging with the mouse', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_scrollwheel() {
-		echo self::checkbox($this->options->scrollwheel, 'mappress_options[scrollwheel]', __('Enable zoom with the mouse scroll wheel', 'mappress'));
+		echo self::checkbox($this->options->scrollwheel, 'mappress_options[scrollwheel]', __('Enable zoom with the mouse scroll wheel', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_keyboard_shortcuts() {
-		echo self::checkbox($this->options->keyboardShortcuts, 'mappress_options[keyboardShortcuts]', __('Enable keyboard panning and zooming', 'mappress'));
+		echo self::checkbox($this->options->keyboardShortcuts, 'mappress_options[keyboardShortcuts]', __('Enable keyboard panning and zooming', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_language() {
 		$language = $this->options->language;
 
-		$lang_link = '<a style="vertical-align:text-bottom" target="_blank" href="http://code.google.com/apis/maps/faq.html#languagesupport">' . __("language", 'mappress') . '</a>';
+		$lang_link = '<a style="vertical-align:text-bottom" target="_blank" href="http://code.google.com/apis/maps/faq.html#languagesupport">' . __("language", 'mappress-google-maps-for-wordpress') . '</a>';
 
-		printf(__('Use a specific %s for map controls and geocoding', 'mappress'), $lang_link);
+		printf(__('Use a specific %s for map controls and geocoding', 'mappress-google-maps-for-wordpress'), $lang_link);
 		echo ": <input type='text' size='2' name='mappress_options[language]' value='$language' />";
 
 	}
@@ -281,16 +291,16 @@ class Mappress_Settings {
 	function set_map_controls() {
 
 		$map_type_styles = array(
-			'0' => __('Default', 'mappress'),
-			'1' => __('Horizontal', 'mappress'),
-			'2' => __('Dropdown', 'mappress')
+			'0' => __('Default', 'mappress-google-maps-for-wordpress'),
+			'1' => __('Horizontal', 'mappress-google-maps-for-wordpress'),
+			'2' => __('Dropdown', 'mappress-google-maps-for-wordpress')
 		);
 
 		$zoom_styles = array(
-			'0' => __('Default', 'mappress'),
-			'1' => __('Small', 'mappress'),
-			'2' => __('Large', 'mappress'),
-			'4' => __('Android', 'mappress')
+			'0' => __('Default', 'mappress-google-maps-for-wordpress'),
+			'1' => __('Small', 'mappress-google-maps-for-wordpress'),
+			'2' => __('Large', 'mappress-google-maps-for-wordpress'),
+			'4' => __('Android', 'mappress-google-maps-for-wordpress')
 		);
 
 		$map_type_control = self::checkbox($this->options->mapTypeControl, 'mappress_options[mapTypeControl]');
@@ -301,36 +311,36 @@ class Mappress_Settings {
 		$streetview_control = self::checkbox($this->options->streetViewControl, 'mappress_options[streetViewControl]');
 		$scale_control = self::checkbox($this->options->scaleControl, 'mappress_options[scaleControl]');
 		$overview_map_control = self::checkbox($this->options->overviewMapControl, 'mappress_options[overviewMapControl]');
-		$overview_map_control_opened = self::checkbox($this->options->overviewMapControlOpened, 'mappress_options[overviewMapControlOpened]',  __('Open initially', 'mappress'));
+		$overview_map_control_opened = self::checkbox($this->options->overviewMapControlOpened, 'mappress_options[overviewMapControlOpened]',  __('Open initially', 'mappress-google-maps-for-wordpress'));
 		$transit = self::checkbox($this->options->transit, 'mappress_options[transit]');
-		$initial_transit = self::checkbox($this->options->initialTransit, 'mappress_options[initialTransit]', __('Checked initially', 'mappress'));
+		$initial_transit = self::checkbox($this->options->initialTransit, 'mappress_options[initialTransit]', __('Checked initially', 'mappress-google-maps-for-wordpress'));
 		$traffic = self::checkbox($this->options->traffic, 'mappress_options[traffic]');
-		$initial_traffic = self::checkbox($this->options->initialTraffic, 'mappress_options[initialTraffic]', __('Checked initially', 'mappress'));
+		$initial_traffic = self::checkbox($this->options->initialTraffic, 'mappress_options[initialTraffic]', __('Checked initially', 'mappress-google-maps-for-wordpress'));
 		$bicycling = self::checkbox($this->options->bicycling, 'mappress_options[bicycling]');
-		$initial_bicycling = self::checkbox($this->options->initialBicycling, 'mappress_options[initialBicycling]', __('Checked initially', 'mappress'));
+		$initial_bicycling = self::checkbox($this->options->initialBicycling, 'mappress_options[initialBicycling]', __('Checked initially', 'mappress-google-maps-for-wordpress'));
 
-		$headers = array(__('Control', 'mappress'), __('Enable'), __('Style', 'mappress'));
+		$headers = array(__('Control', 'mappress-google-maps-for-wordpress'), __('Enable', 'mappress-google-maps-for-wordpress'), __('Style', 'mappress-google-maps-for-wordpress'));
 		$rows = array();
 		$rows = array(
-			array(__('Map types', 'mappress'), $map_type_control, $map_type_control_style ),
-			array(__('Pan', 'mappress'), $pan_control, '' ),
-			array(__('Zoom', 'mappress'), $zoom_control, $zoom_control_style ),
-			array(__('Street view', 'mappress'), $streetview_control, '' ),
-			array(__('Scale', 'mappress'), $scale_control, '' ),
-			array(__('Overview map', 'mappress'), $overview_map_control, $overview_map_control_opened ),
-			array(__('Public transit', 'mappress'), $transit, $initial_transit ),
-			array(__('Traffic', 'mappress'), $traffic, $initial_traffic ),
-			array(__('Bike routes', 'mappress'), $bicycling, $initial_bicycling ),
+			array(__('Map types', 'mappress-google-maps-for-wordpress'), $map_type_control, $map_type_control_style ),
+			array(__('Pan', 'mappress-google-maps-for-wordpress'), $pan_control, '' ),
+			array(__('Zoom', 'mappress-google-maps-for-wordpress'), $zoom_control, $zoom_control_style ),
+			array(__('Street view', 'mappress-google-maps-for-wordpress'), $streetview_control, '' ),
+			array(__('Scale', 'mappress-google-maps-for-wordpress'), $scale_control, '' ),
+			array(__('Overview map', 'mappress-google-maps-for-wordpress'), $overview_map_control, $overview_map_control_opened ),
+			array(__('Public transit', 'mappress-google-maps-for-wordpress'), $transit, $initial_transit ),
+			array(__('Traffic', 'mappress-google-maps-for-wordpress'), $traffic, $initial_traffic ),
+			array(__('Bike routes', 'mappress-google-maps-for-wordpress'), $bicycling, $initial_bicycling ),
 		);
 		echo self::table($headers, $rows);
 	}
 
 	function set_map_type_ids() {
 		$labels = array(
-			'roadmap' => __('Road map', 'mappress'),
-			'satellite' => __('Satellite', 'mappress'),
-			'terrain' => __('Terrain', 'mappress'),
-			'hybrid' => __('Hybrid', 'mappress'),
+			'roadmap' => __('Road map', 'mappress-google-maps-for-wordpress'),
+			'satellite' => __('Satellite', 'mappress-google-maps-for-wordpress'),
+			'terrain' => __('Terrain', 'mappress-google-maps-for-wordpress'),
+			'hybrid' => __('Hybrid', 'mappress-google-maps-for-wordpress'),
 		);
 
 		foreach ($this->options->styles as $name => $json)
@@ -343,48 +353,48 @@ class Mappress_Settings {
 		$directions = $this->options->directions;
 
 		$directions_types = array(
-			'google' => __('Google', 'mappress'),
-			'inline' => __('Inline', 'mappress'),
-			'none' => __('None', 'mappress')
+			'google' => __('Google', 'mappress-google-maps-for-wordpress'),
+			'inline' => __('Inline', 'mappress-google-maps-for-wordpress'),
+			'none' => __('None', 'mappress-google-maps-for-wordpress')
 		);
 
 		echo self::radio($directions_types, $directions, 'mappress_options[directions]');
 	}
 
 	function set_initial_open_info() {
-		echo self::checkbox($this->options->initialOpenInfo, 'mappress_options[initialOpenInfo]', __('Automatically open the first POI when a map is displayed', 'mappress'));
+		echo self::checkbox($this->options->initialOpenInfo, 'mappress_options[initialOpenInfo]', __('Automatically open the first POI when a map is displayed', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_bicycling() {
 		echo self::checkbox($this->options->bicycling, 'mappress_options[bicycling]');
-		_e('Show control', 'mappress');
+		_e('Show control', 'mappress-google-maps-for-wordpress');
 
 		echo "&nbsp;&nbsp;";
 		echo self::checkbox($this->options->initialBicycling, 'mappress_options[initialBicycling]');
-		_e ('Enabled by default', 'mappress');
+		_e ('Enabled by default', 'mappress-google-maps-for-wordpress');
 	}
 
 	function set_traffic() {
 		echo self::checkbox($this->options->traffic, 'mappress_options[traffic]');
-		_e('Show control', 'mappress');
+		_e('Show control', 'mappress-google-maps-for-wordpress');
 
 		echo "&nbsp;&nbsp;";
 		echo self::checkbox($this->options->initialTraffic, 'mappress_options[initialTraffic]');
-		_e ('Enabled by default', 'mappress');
+		_e ('Enabled by default', 'mappress-google-maps-for-wordpress');
 	}
 
 	function set_tooltips() {
-		echo self::checkbox($this->options->tooltips, 'mappress_options[tooltips]', __('Show POI titles as a "tooltip" on mouse-over', 'mappress'));
+		echo self::checkbox($this->options->tooltips, 'mappress_options[tooltips]', __('Show POI titles as a "tooltip" on mouse-over', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_alignment() {
 		$image = "<img src='" . Mappress::$baseurl . "/images/%s' style='vertical-align:middle' />";
 
 		$alignments = array(
-			'' => __('Default', 'mappress'),
-			'center' => sprintf($image, 'justify_center.png') . __('Center', 'mappress'),
-			'left' => sprintf($image, 'justify_left.png') . __('Left', 'mappress'),
-			'right' => sprintf($image, 'justify_right.png') . __('Right', 'mappress')
+			'' => __('Default', 'mappress-google-maps-for-wordpress'),
+			'center' => sprintf($image, 'justify_center.png') . __('Center', 'mappress-google-maps-for-wordpress'),
+			'left' => sprintf($image, 'justify_left.png') . __('Left', 'mappress-google-maps-for-wordpress'),
+			'right' => sprintf($image, 'justify_right.png') . __('Right', 'mappress-google-maps-for-wordpress')
 		);
 
 		echo self::radio($alignments, $this->options->alignment, 'mappress_options[alignment]');
@@ -393,18 +403,18 @@ class Mappress_Settings {
 
 	function set_map_links() {
 		$labels = array(
-			'bigger' => __('Bigger map', 'mappress'),
-			'center' => __('Center map', 'mappress'),
-			'reset' => __('Reset map', 'mappress')
+			'bigger' => __('Bigger map', 'mappress-google-maps-for-wordpress'),
+			'center' => __('Center map', 'mappress-google-maps-for-wordpress'),
+			'reset' => __('Reset map', 'mappress-google-maps-for-wordpress')
 		);
 		echo self::checkbox_list($this->options->mapLinks, 'mappress_options[mapLinks][]', $labels);
 	}
 
 	function set_poi_links() {
 		$labels = array(
-			'zoom' => __('Zoom', 'mappress'),
-			'directions_to' => __('Directions to', 'mappress'),
-			'directions_from' => __('Directions from', 'mappress')
+			'zoom' => __('Zoom', 'mappress-google-maps-for-wordpress'),
+			'directions_to' => __('Directions to', 'mappress-google-maps-for-wordpress'),
+			'directions_from' => __('Directions from', 'mappress-google-maps-for-wordpress')
 		);
 		echo self::checkbox_list($this->options->poiLinks, 'mappress_options[poiLinks][]', $labels);
 	}
@@ -412,30 +422,26 @@ class Mappress_Settings {
 	function set_poi_zoom() {
 		for ($i = 1; $i <= 17; $i++)
 			$zooms[$i] = $i;
-		echo __("Default zoom for POIs entered by lat/lng", 'mappress') . ": ";
+		echo __("Default zoom for POIs entered by lat/lng", 'mappress-google-maps-for-wordpress') . ": ";
 		echo self::dropdown($zooms, $this->options->poiZoom, 'mappress_options[poiZoom]');
 	}
 
 	function set_autodisplay() {
 		$autos = array(
-			'top' => __('Top of post', 'mappress'),
-			'bottom' => __('Bottom of post', 'mappress'),
-			'none' => __('No automatic display', 'mappress')
+			'top' => __('Top of post', 'mappress-google-maps-for-wordpress'),
+			'bottom' => __('Bottom of post', 'mappress-google-maps-for-wordpress'),
+			'none' => __('No automatic display', 'mappress-google-maps-for-wordpress')
 		);
 
 		echo self::radio($autos, $this->options->autodisplay, "mappress_options[autodisplay]");
 	}
 
 	function set_css() {
-		echo self::checkbox($this->options->css, 'mappress_options[css]', sprintf(__("Load %s", 'mappress'), '<code>mappress.css</code>'));
-	}
-
-	function set_footer() {
-		echo self::checkbox($this->options->footer, 'mappress_options[footer]', __('Output scripts in footer', 'mapress'));
+		echo self::checkbox($this->options->css, 'mappress_options[css]', sprintf(__("Load %s", 'mappress-google-maps-for-wordpress'), '<code>mappress.css</code>'));
 	}
 
 	function set_sizes() {
-		$headers = array(__('Default', 'mappress'), __('Width', 'mappress'), __('Height', 'mappress'));
+		$headers = array(__('Default', 'mappress-google-maps-for-wordpress'), __('Width', 'mappress-google-maps-for-wordpress'), __('Height', 'mappress-google-maps-for-wordpress'));
 		$rows = array();
 
 		foreach($this->options->sizes as $i => $size) {
@@ -446,7 +452,7 @@ class Mappress_Settings {
 				"<input type='text' size='3' name='mappress_options[sizes][$i][height]' value='{$size['height']}' />"
 			);
 		}
-		echo __('Enter sizes in px or %', 'mappress') . ": <br/>";
+		echo __('Enter sizes in px or %', 'mappress-google-maps-for-wordpress') . ": <br/>";
 		echo self::table($headers, $rows);
 	}
 
@@ -456,10 +462,10 @@ class Mappress_Settings {
 	*
 	*/
 	function metabox_like() {
-		$rate_link = "<a href='http://wordpress.org/extend/plugins/mappress-easy-google-maps'>" . __('Rate it 5 Stars', 'mappress') . "</a>";
+		$rate_link = "<a href='http://wordpress.org/extend/plugins/mappress-easy-google-maps'>" . __('Rate it 5 Stars', 'mappress-google-maps-for-wordpress') . "</a>";
 		echo "<ul>";
-		echo "<li>" . sprintf(__('%s on WordPress.org', 'mappress'), $rate_link) . "</li>";
-		echo "<li>" . __('Thanks for your support!', 'mappress') . "</li>";
+		echo "<li>" . sprintf(__('%s on WordPress.org', 'mappress-google-maps-for-wordpress'), $rate_link) . "</li>";
+		echo "<li>" . __('Thanks for your support!', 'mappress-google-maps-for-wordpress') . "</li>";
 		echo "</ul>";
 	}
 
@@ -486,8 +492,8 @@ class Mappress_Settings {
 
 	function metabox_demo($object, $metabox) {
 		$poi = new Mappress_Poi(array(
-			"title" => sprintf("<a href='http://www.wphostreviews.com/mappress'>%s</a>", __("MapPress", 'mappress')),
-			"body" => __("Easy Google Maps", 'mappress'),
+			"title" => "<a href='http://www.wphostreviews.com/mappress'>MapPress</a>",
+			"body" => __("Easy Google Maps", 'mappress-google-maps-for-wordpress'),
 			"point" => array('lat' => 37.370157, 'lng' => -119.333496)
 		));
 		$pois = array($poi);
@@ -536,9 +542,9 @@ class Mappress_Settings {
 					<?php
 						// Output sidebar metaboxes
 						if (!class_exists('Mappress_Pro'))
-							add_meta_box('metabox_like', __('Like this plugin?', 'mappress'), array($this, 'metabox_like'), 'mappress_sidebar', 'side', 'core');
+							add_meta_box('metabox_like', __('Like this plugin?', 'mappress-google-maps-for-wordpress'), array($this, 'metabox_like'), 'mappress_sidebar', 'side', 'core');
 
-						add_meta_box('metabox_demo', __('Sample Map', 'mappress'), array($this, 'metabox_demo'), 'mappress_sidebar', 'side', 'core');
+						add_meta_box('metabox_demo', __('Sample Map', 'mappress-google-maps-for-wordpress'), array($this, 'metabox_demo'), 'mappress_sidebar', 'side', 'core');
 						do_meta_boxes('mappress_sidebar', 'side', null);
 					?>
 				</div>
@@ -557,8 +563,8 @@ class Mappress_Settings {
 							?>
 							<br/>
 
-							<input name='submit' type='submit' class='button-primary' value='<?php _e("Save Changes", 'mappress'); ?>' />
-							<input name='reset_defaults' type='submit' class='button' value='<?php _e("Reset Defaults", 'mappress'); ?>' />
+							<input name='submit' type='submit' class='button-primary' value='<?php _e("Save Changes", 'mappress-google-maps-for-wordpress'); ?>' />
+							<input name='reset_defaults' type='submit' class='button' value='<?php _e("Reset Defaults", 'mappress-google-maps-for-wordpress'); ?>' />
 						</form>
 					</div>
 				</div>
