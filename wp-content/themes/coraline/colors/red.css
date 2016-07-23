@@ -24,7 +24,7 @@ ins {
 input[type=text],
 input[type=email],
 textarea {
-	border: none;
+	border-color: #ffa48c;
 }
 
 /* Links */
@@ -34,12 +34,14 @@ a {
 a:visited {
 	color: #ffd2b7;
 }
+a:focus,
 a:hover {
 	color: #dcb39b;
 }
 h1 a, h2 a, h3 a {
 	color: #ffa48c;
 }
+h1 a:focus, h2 a:focus, h3 a:focus,
 h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #dcb39b;
 }
@@ -66,11 +68,14 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	background: #ffa48c;
 	color: #a20013;
 }
+#access li > a:focus,
 #access li:hover > a,
+#access ul ul :focus > a,
 #access ul ul :hover > a {
 	background: #ffa48c;
 	color: #a20013;
 }
+#access ul ul a:focus,
 #access ul ul a:hover {
 	background: #d58672 scroll;
 }
@@ -93,6 +98,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 }
 a.entry-format,
 a.entry-format:visited,
+a.entry-format:focus,
 a.entry-format:hover {
 	color: rgba(255,210,183,.5);
 }
@@ -107,6 +113,8 @@ a.entry-format:hover {
 .entry-info a {
 	color: #ffd1b6;
 }
+.entry-meta a:focus,
+.entry-info a:focus,
 .entry-meta a:hover,
 .entry-info a:hover {
 	color: #dcb39b;
@@ -122,6 +130,7 @@ a.entry-format:hover {
 .entry-info .comments-link a {
 	color: #e68d77;
 }
+.entry-info .comments-link a:focus,
 .entry-info .comments-link a:hover {
 	background: #770000;
 	background-image: -moz-linear-gradient(100% 100% 90deg, #520000, #770000);
@@ -162,7 +171,9 @@ a.entry-format:hover {
 	color: #ffd2b7;
 }
 .navigation a:visited:hover,
+.navigation a:visited:focus,
 .navigation a:active,
+.navigation a:focus,
 .navigation a:hover {
 	color: #dcb39b;
 }
@@ -185,6 +196,7 @@ a.entry-format:hover {
 #wp-calendar a:visited {
 	color: #ffd2b7;
 }
+#wp-calendar a:visited:focus,
 #wp-calendar a:visited:hover {
 	color: #dcb39b;
 }
@@ -204,6 +216,7 @@ a.entry-format:hover {
 #respond .form-allowed-tags {
 	color: #4b5071;
 }
+#comments .comment-meta a:focus,
 #comments .comment-meta a:hover {
 	color: #dcb39b;
 }
@@ -218,9 +231,7 @@ a.entry-format:hover {
 #colophon a {
 	color: #e68d77;
 }
+#colophon a:focus,
 #colophon a:hover {
 	color: #e68d77;
-}
-#colophon .generator-link {
-	background: url("../images/wordpress.png") no-repeat left center;
 }

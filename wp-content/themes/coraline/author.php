@@ -11,7 +11,7 @@ get_header(); ?>
 
 	<?php if ( have_posts() ) the_post(); ?>
 
-		<h1 class="page-title author"><?php printf( __( 'Author Archives: %s', 'coraline' ), "<span class='vcard'><a class='url fn n' href='" . get_author_posts_url( get_the_author_meta( 'ID' ) ) . "' rel='me'>" . get_the_author() . "</a></span>" ); ?></h1>
+		<h1 class="page-title author"><?php printf( __( 'Author Archives: %s', 'coraline' ), "<span class='vcard'><a class='url fn n' href='" . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . "' rel='me'>" . get_the_author() . "</a></span>" ); ?></h1>
 
 	<?php
 		rewind_posts();

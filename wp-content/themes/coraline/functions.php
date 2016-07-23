@@ -22,10 +22,8 @@ if ( ! function_exists( 'coraline_setup' ) ):
  *
  * @uses add_theme_support() To add support for post thumbnails and automatic feed links.
  * @uses register_nav_menus() To add support for navigation menus.
- * @uses add_custom_background() To add support for a custom background.
  * @uses add_editor_style() To style the visual editor.
  * @uses load_theme_textdomain() For translation/localization support.
- * @uses add_custom_image_header() To add support for a custom header.
  * @uses register_default_headers() To register the default custom header images provided with the theme.
  * @uses set_post_thumbnail_size() To set a custom post thumbnail size.
  *
@@ -56,6 +54,12 @@ function coraline_setup() {
 	register_nav_menus( array(
 		'primary' => __( 'Primary Navigation', 'coraline' ),
 	) );
+
+	/**
+	 * Add support for Eventbrite.
+	 * See: https://wordpress.org/plugins/eventbrite-api/
+	 */
+	add_theme_support( 'eventbrite' );
 }
 endif;
 
@@ -70,20 +74,10 @@ endif;
  * Hooks into the after_setup_theme action.
  */
 function coraline_register_custom_background() {
-	$args = array(
+	add_theme_support( 'custom-background', apply_filters( 'coraline_custom_background_args', array(
 		'default-color' => '',
 		'default-image' => '',
-	);
-
-	$args = apply_filters( 'coraline_custom_background_args', $args );
-
-	if ( function_exists( 'wp_get_theme' ) ) {
-		add_theme_support( 'custom-background', $args );
-	} else {
-		define( 'BACKGROUND_COLOR', $args['default-color'] );
-		define( 'BACKGROUND_IMAGE', $args['default-image'] );
-		add_custom_background();
-	}
+	) ) );
 }
 add_action( 'after_setup_theme', 'coraline_register_custom_background' );
 
@@ -219,7 +213,7 @@ function coraline_comment( $comment, $args, $depth ) {
 		case 'trackback' :
 	?>
 	<li class="post pingback">
-		<p><?php _e( 'Pingback:', 'coraline' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __( '(Edit)', 'coraline' ), ' ' ); ?></p>
+		<p><?php _e( 'Pingback:', 'coraline' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __( 'Edit', 'coraline' ), ' ' ); ?></p>
 	<?php
 			break;
 	endswitch;
@@ -334,9 +328,9 @@ function coraline_posted_on() {
 	printf( __( '<span class="%1$s">Posted on</span> %2$s ', 'coraline' ),
 		'meta-prep meta-prep-author',
 		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
-			get_permalink(),
+			esc_url( get_permalink() ),
 			esc_attr( get_the_time() ),
-			get_the_date()
+			esc_html( get_the_date() )
 		)
 	);
 }
@@ -495,6 +489,14 @@ function coraline_wp_title( $title, $sep ) {
 add_filter( 'wp_title', 'coraline_wp_title', 10, 2 );
 
 /**
+ * Change Eventbrite meta separators to pipes.
+ */
+function coraline_event_meta_separators() {
+	return ' | ';
+}
+add_filter( 'eventbrite_meta_separator', 'coraline_event_meta_separators' );
+
+/**
  * Adds support for a custom header image.
  */
 require( get_template_directory() . '/inc/custom-header.php' );
@@ -507,4 +509,5 @@ require_once ( get_template_directory() . '/inc/theme-options.php' );
 /**
  * Load Jetpack compatibility file.
  */
-require( get_template_directory() . '/inc/jetpack.compat.php' );
+if ( file_exists( get_template_directory() . '/inc/jetpack.php' ) )
+	require get_template_directory() . '/inc/jetpack.php';

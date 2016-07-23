@@ -24,7 +24,7 @@ ins {
 input[type=text],
 input[type=email],
 textarea {
-	border: none;
+	border-color: #b38970;
 }
 
 /* Links */
@@ -34,12 +34,14 @@ a {
 a:visited {
 	color: #ffd2b7;
 }
+a:focus,
 a:hover {
 	color: #dcb39b;
 }
 h1 a, h2 a, h3 a {
 	color: #f2d6bb;
 }
+h1 a:focus, h2 a:focus, h3 a:focus,
 h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #dcb39b;
 }
@@ -66,11 +68,14 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	background: #f2d6bb;
 	color: #9a7259;
 }
+#access li > a:focus,
 #access li:hover > a,
+#access ul ul :focus > a,
 #access ul ul :hover > a {
 	background: #f2d6bb;
 	color: #9a7259;
 }
+#access ul ul a:focus,
 #access ul ul a:hover {
 	background: #cab29b scroll;
 }
@@ -102,7 +107,9 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-info a {
 	color: #ffd1b6;
 }
+.entry-meta a:focus,
 .entry-meta a:hover,
+.entry-info a:focus,
 .entry-info a:hover {
 	color: #dcb39b;
 }
@@ -117,6 +124,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-info .comments-link a {
 	color: #ffecd0;
 }
+.entry-info .comments-link a:focus,
 .entry-info .comments-link a:hover {
 	background: #9a725a;
 	background-image: -moz-linear-gradient(100% 100% 90deg, #341600, #9a725a);
@@ -156,8 +164,10 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .navigation a:visited {
 	color: #ffd2b7;
 }
+.navigation a:visited:focus,
 .navigation a:visited:hover,
 .navigation a:active,
+.navigation a:focus,
 .navigation a:hover {
 	color: #dcb39b;
 }
@@ -180,6 +190,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #wp-calendar a:visited {
 	color: #ffd2b7;
 }
+#wp-calendar a:visited:focus,
 #wp-calendar a:visited:hover {
 	color: #dcb39b;
 }
@@ -199,6 +210,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #respond .form-allowed-tags {
 	color: #4b5071;
 }
+#comments .comment-meta a:focus,
 #comments .comment-meta a:hover {
 	color: #dcb39b;
 }
@@ -213,9 +225,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #colophon a {
 	color: #ffd2b7;
 }
+#colophon a:focus,
 #colophon a:hover {
 	color: #dcb39b;
-}
-#colophon .generator-link {
-	background: url("../images/wordpress.png") no-repeat left center;
 }

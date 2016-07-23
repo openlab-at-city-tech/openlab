@@ -1,5 +1,13 @@
 == Changelog ==
 
+= 1.5.1 - June 19 2015 =
+* Escaped all necessary inputs, URLs, etc.
+
+= 1.5 - November 27, 2014 =
+* Add support for the Eventbrite API plugin.
+* Numerous bug fixes.
+* Improved i18n text strings.
+
 = 1.4.1 - May 29 2013 =
 * Resolved merge conflict.
 

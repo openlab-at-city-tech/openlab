@@ -21,14 +21,14 @@ get_header(); ?>
 								$metadata = wp_get_attachment_metadata();
 								printf( __( '<span class="meta-prep meta-prep-entry-date">Published </span> <span class="entry-date"><abbr class="published" title="%1$s">%2$s</abbr></span>  at <a href="%3$s" title="Link to full-size image">%4$s &times; %5$s</a> in <a href="%6$s" title="Return to %7$s" rel="gallery">%7$s</a>', 'coraline' ),
 									esc_attr( get_the_time() ),
-									get_the_date(),
+									esc_html( get_the_date() ),
 									wp_get_attachment_url(),
 									$metadata['width'],
 									$metadata['height'],
-									get_permalink( $post->post_parent ),
-									get_the_title( $post->post_parent )
+									esc_url( get_permalink( $post->post_parent ) ),
+									esc_attr( get_the_title( $post->post_parent ) )
 								);
-	
+
 								edit_post_link( __( 'Edit', 'coraline' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' );
 
 							else :
@@ -77,7 +77,7 @@ get_header(); ?>
 		$next_attachment_url = wp_get_attachment_url();
 	}
 ?>
-								<a href="<?php echo $next_attachment_url; ?>" title="<?php echo esc_attr( get_the_title() ); ?>" rel="attachment"><?php
+								<a href="<?php echo esc_url( $next_attachment_url ); ?>" title="<?php echo esc_attr( get_the_title() ); ?>" rel="attachment"><?php
 								echo wp_get_attachment_image( get_the_ID(), 'coraline-image-template' );
 								?></a>
 							</div><!-- .attachment -->

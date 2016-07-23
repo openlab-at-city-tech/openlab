@@ -15,9 +15,10 @@
 }
 #coraline-layouts span {
 	display: block;
-	width: 136px;
+	width: 175px;
 }
 #coraline-layouts img {
+	display: block;
 	margin: 0 0 0 -2px;
 }
 .update-msg {

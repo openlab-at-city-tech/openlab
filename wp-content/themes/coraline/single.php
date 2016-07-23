@@ -24,7 +24,7 @@ get_header(); ?>
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 			<?php if ( 'standard' != $format ) : ?>
-				<a class="entry-format" href="<?php echo esc_url( get_post_format_link( get_post_format() ) ); ?>" title="<?php echo esc_attr( sprintf( __( 'All %s posts', 'coraline' ), get_post_format_string( get_post_format() ) ) ); ?>"><?php echo get_post_format_string( get_post_format() ); ?></a>
+				<a class="entry-format" href="<?php echo esc_url( get_post_format_link( get_post_format() ) ); ?>" title="<?php echo esc_attr( sprintf( __( 'All %s posts', 'coraline' ), get_post_format_string( get_post_format() ) ) ); ?>"><?php echo esc_html( get_post_format_string( get_post_format() ) ); ?></a>
 			<?php endif; ?>
 
 			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
@@ -45,7 +45,7 @@ get_header(); ?>
 			<?php if ( 'standard' != $format ) : ?>
 				<p class="format-entry-meta">
 					<?php coraline_posted_on(); coraline_posted_by(); ?>
-					<span class="comments-link"><?php comments_popup_link( __( '&rarr; Leave a comment', 'coraline' ), __( '&rarr; 1 Comment', 'coraline' ), __( '&rarr; % Comments', 'coraline' ) ); ?></span>
+					<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'coraline' ), __( '1 Comment', 'coraline' ), __( '% Comments', 'coraline' ) ); ?></span>
 				</p>
 			<?php endif; ?>
 				<?php coraline_posted_in(); ?>

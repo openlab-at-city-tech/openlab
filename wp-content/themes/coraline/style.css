@@ -1,18 +1,17 @@
 /*
 Theme Name: Coraline
-Theme URI: http://wordpress.org/extend/themes/coraline/
+Theme URI: https://wordpress.com/themes/coraline/
 Description: A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in "Asides" and "Gallery" categories, and has an optional full-width page template that removes the sidebar.
+Version: 1.5.2
 Author: Automattic
-Author URI: http://automattic.com/
-Version: 1.4.1
+Author URI: https://wordpress.com/themes/
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: black, blue, brown, pink, purple, red, white, dark, light, one-column, two-columns, three-columns, left-sidebar, right-sidebar, flexible-width, custom-background, custom-header, custom-menu, editor-style, theme-options, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, featured-image-header, featured-images, post-formats
+Tags: black, blue, brown, pink, purple, red, white, dark, light, one-column, two-columns, three-columns, left-sidebar, right-sidebar, fluid-layout, custom-background, custom-header, custom-menu, editor-style, theme-options, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, featured-image-header, featured-images, post-formats, dark, light, flexible-header
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
 */
-
 
 /* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
 -------------------------------------------------------------- */
@@ -35,7 +34,7 @@ fieldset, form, label, legend, caption, table, tbody, tfoot, thead, tr, th, td {
 }
 /* remember to define focus styles! */
 :focus {
-	outline: 0;
+	outline: 1px dotted black;
 }
 body {
 	background: #fff;
@@ -226,9 +225,9 @@ body.no-sidebars #primary {
 	margin: 0 0 0 -20.7%;
 }
 
-/* Full width content with no sidebar; used for attachment pages */
+/* Full width content with no sidebar; used for image attachment pages */
 .full-width #content,
-.attachment #content,
+.image-attachment #content,
 body.no-sidebars #content {
 	margin: 0 auto;
 	width: 100%;
@@ -319,8 +318,7 @@ strong {
 cite, em, i {
 	font-style: italic;
 }
-blockquote,
-.quote-caption {
+blockquote {
 	font-style: italic;
 	margin: 0 30px 1.7em;
 }
@@ -378,6 +376,7 @@ a:visited {
 	color: #333;
 }
 a:active,
+a:focus,
 a:hover {
 	color: #df0000;
 }
@@ -385,6 +384,8 @@ h1 a, h2 a, h3 a {
 	color: #000;
 	text-decoration: none;
 }
+
+h1 a:focus, h2 a:focus, h3 a:focus,
 h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #009900;
 }
@@ -464,14 +465,14 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	text-decoration: none;
 }
 #access ul ul {
-	-moz-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
-	-webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
-	box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow:    0 3px 3px rgba(0, 0, 0, 0.2);
+	box-shadow:         0 3px 3px rgba(0, 0, 0, 0.2);
 	display: none;
 	float: left;
 	font-weight: normal;
 	position: absolute;
-	top: 29px;
+	top: 100%;
 	left: 0;
 	text-transform: none;
 	z-index: 99999;
@@ -490,14 +491,18 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	min-width: 180px;
 	height: auto;
 }
+#access li > a:focus,
+#access ul ul :focus > a,
 #access li:hover > a,
 #access ul ul :hover > a {
 	background: #000;
 	color: #fff;
 }
+#access ul ul a:focus,
 #access ul ul a:hover {
 	background: #222;
 }
+#access ul li:focus > ul,
 #access ul li:hover > ul {
 	display: block;
 }
@@ -555,6 +560,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-meta a {
 	color: #888;
 }
+.entry-meta a:focus,
 .entry-meta a:hover {
 	color: #df0000;
 }
@@ -687,6 +693,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-info a {
 	color: #888;
 }
+.entry-info a:focus,
 .entry-info a:hover {
 	color: #df0000;
 }
@@ -702,6 +709,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	padding: 2px 10px;
 	text-decoration: none;
 }
+.entry-info .comments-link a:focus,
 .entry-info .comments-link a:hover {
 	background: #222;
 	background-image: -moz-linear-gradient(100% 100% 90deg, #111, #333);
@@ -757,8 +765,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #content img.size-full,
 #content img.size-medium,
 #content img.size-thumbnail,
-.entry-attachment img,
-.post-format-content img {
+.entry-attachment img {
 	max-width: 100%;
 	width: auto;
 	height: auto;
@@ -832,6 +839,7 @@ img.aligncenter {
 }
 a.entry-format,
 a.entry-format:visited,
+a.entry-format:focus,
 a.entry-format:hover {
 	color: rgba(0,0,0,.2);
 	display: inline-block;
@@ -857,8 +865,10 @@ a.entry-format:hover {
 .navigation a:visited {
 	color: #0060ff;
 }
+.navigation a:visited:focus,
 .navigation a:visited:hover,
 .navigation a:active,
+.navigation a:focus,
 .navigation a:hover {
 	color: #df0000;
 }
@@ -897,6 +907,7 @@ a.entry-format:hover {
 .widget-area ul ul a {
 	text-decoration: none;
 }
+.widget-area ul ul a:focus,
 .widget-area ul ul a:hover {
 	text-decoration: underline;
 }
@@ -964,14 +975,9 @@ a.entry-format:hover {
 #wp-calendar a:visited {
 	color: #0060ff;
 }
+#wp-calendar a:visited:focus,
 #wp-calendar a:visited:hover {
 	color: #df0000;
-}
-
-/* Flickr Widget (WP.com) */
-#flickr_badge_wrapper {
-	background-color: transparent !important;
-	border: none !important;
 }
 
 /* Cloud Widgets */
@@ -1040,6 +1046,7 @@ a.entry-format:hover {
 	color: #888;
 	font: 12px "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
 }
+#comments .comment-meta a:focus,
 #comments .comment-meta a:hover {
 	color: #df0000;
 }
@@ -1107,14 +1114,15 @@ a.entry-format:hover {
 	color: #888;
 	text-decoration: none;
 }
+#colophon a:focus,
 #colophon a:hover {
 	color: #df0000;
 }
 #colophon .generator-link {
-	background: url("images/wordpress.png") no-repeat left center;
+	background: url("images/wordpress.png") no-repeat right center;
 	display: inline-block;
-	margin: 0 0 0 3px;
-	padding-left: 20px;
+	margin: 0 3px 0 0;
+	padding-right: 20px;
 }
 #footer img#wpstats {
 	display: block;
@@ -1329,6 +1337,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-dark #infinite-footer .container .blog-info a {
 	color: #999;
 }
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-dark #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-dark #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-dark #infinite-footer .container .blog-credits a:hover {
 	color: #ccc;
@@ -1347,6 +1357,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-purple #infinite-footer .container .blog-info a {
 	color: #3a2c50;
 }
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-purple #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits a:hover,
 .infinite-scroll.neverending.color-purple #infinite-footer .container .blog-credits a {
@@ -1363,6 +1375,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-red #infinite-footer .container .blog-info a {
 	color: #ffa48c;
 }
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-red #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits a:hover,
 .infinite-scroll.neverending.color-red #infinite-footer .container .blog-credits a {
@@ -1379,6 +1393,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-pink #infinite-footer .container .blog-info a {
 	color: #502c36;
 }
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-pink #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits a:hover,
 .infinite-scroll.neverending.color-pink #infinite-footer .container .blog-credits a {
@@ -1395,6 +1411,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-blue #infinite-footer .container .blog-info a {
 	color: #2c3c50;
 }
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-blue #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits a:hover,
 .infinite-scroll.neverending.color-blue #infinite-footer .container .blog-credits a {
@@ -1411,6 +1429,8 @@ a.entry-format:hover {
 .infinite-scroll.neverending.color-brown #infinite-footer .container .blog-info a {
 	color: #f2d6bb;
 }
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-info a:focus,
+.infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits a:focus,
 .infinite-scroll.neverending.color-brown #infinite-footer .container .blog-info a:hover,
 .infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits a:hover,
 .infinite-scroll.neverending.color-brown #infinite-footer .container .blog-credits a {
@@ -1424,4 +1444,29 @@ a.entry-format:hover {
 */
 .infinity-end.neverending #footer {
 	display: block;
+}
+
+
+/* =Eventbrite
+-------------------------------------------------------------- */
+
+span.entry-format {
+	color: rgba(0,0,0,.2);
+	display: inline-block;
+	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 0 0 10px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.archive-eventbrite .nav-links {
+	text-align: center;
+}
+.archive-eventbrite .page-numbers {
+	padding: 10px;
+}
+.archive-eventbrite .page-numbers.current {
+	color: #000;
+	font-weight: bold;
 }
