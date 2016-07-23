@@ -183,9 +183,9 @@ function p2_page_number() {
 		return apply_filters( 'p2_get_page_number', $paged );
 	}
 
-function p2_media_buttons() {
+function p2_media_buttons( $ssl_compat=false ) {
 	// If we're using http and the admin is forced to https, bail.
-	if ( ! is_ssl() && ( force_ssl_admin() || get_user_option( 'use_ssl' ) )  ) {
+	if ( $ssl_compat && ! is_ssl() && ( force_ssl_admin() || get_user_option( 'use_ssl' ) )  ) {
 		return;
 	}
 
@@ -250,6 +250,10 @@ function p2_load_entry( $force_comments = true ) {
 }
 
 function p2_date_time_with_microformat( $type = 'post' ) {
-	$d = 'comment' == $type ? 'get_comment_time' : 'get_post_time';
-	return '<abbr title="'.$d( 'Y-m-d\TH:i:s\Z', true).'">'.sprintf( __( '%1$s <em>on</em> %2$s', 'p2' ),  $d(get_option( 'time_format' )), $d( get_option( 'date_format' ) ) ).'</abbr>';
+	$d = ( 'comment' == $type ) ? 'get_comment_time' : 'get_post_time';
+	$title = $d( 'Y-m-d\TH:i:s\Z', true);
+	$time = $d( get_option( 'time_format' ) );
+	$date = $d( get_option( 'date_format' ) );
+	$out = '<abbr title="' . $title . '">' . sprintf( __( '%1$s <em>on</em> %2$s', 'p2' ),  $time , $date ) . '</abbr>';
+	return apply_filters( 'p2_date_time_with_microformat', $out, $title, $time, $date );
 }

@@ -39,7 +39,7 @@ class P2Ajax_Read {
 			die(); // require 2 chars for matching
 
 		$tags = array();
-		$results = $wpdb->get_results( "SELECT name, count FROM $wpdb->term_taxonomy AS tt INNER JOIN $wpdb->terms AS t ON tt.term_id = t.term_id WHERE tt.taxonomy = 'post_tag' AND t.name LIKE ( '%". like_escape( $wpdb->escape( $term ) ) . "%' ) ORDER BY count DESC" );
+		$results = $wpdb->get_results( "SELECT name, count FROM $wpdb->term_taxonomy AS tt INNER JOIN $wpdb->terms AS t ON tt.term_id = t.term_id WHERE tt.taxonomy = 'post_tag' AND t.name LIKE ( '%". $wpdb->escape( $wpdb->esc_like( $term ) ) . "%' ) ORDER BY count DESC" );
 
 		foreach ( $results as $result ) {
 			$rterm = '/' . preg_quote( $term, '/' ) . '/i';

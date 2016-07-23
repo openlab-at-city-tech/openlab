@@ -2,16 +2,28 @@
 # This file is distributed under the same license as the P2 package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2014-06-01 17:21:11+0000\n"
+"PO-Revision-Date: 2015-06-06 06:39:29+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
 
+#. Theme Name of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "P2 Classic"
+msgstr "P2 Classic"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
 msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
+msgstr "وب‌نویسی با سرعت خیال. P2 یک وب‌نوشت عادی را به وب‌نوشتی فوق‌العاده تبدیل می‌کند. ویژگی‌هایی نظیر دیدگاه‌های درون‌خطی، فرستادن از راه صفحهٔ نخست، ویرایش درون‌متنی نوشته‌ها و دیدگاه‌ها، به‌روزرسانی‌های بی‌درنگ و بسیاری دیگر."
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -21,7 +33,7 @@ msgstr "&larr; %title"
 #: single.php:43
 msgctxt "Next post link"
 msgid "%title &rarr;"
-msgstr ""
+msgstr "%title &rarr;"
 
 #: tag.php:14
 msgid "Tagged: %s"
@@ -126,20 +138,20 @@ msgstr "دیدگاه‌های تازهٔ پی۲"
 
 #: inc/template-tags.php:80
 msgid "%1$s is discussing."
-msgstr ""
+msgstr "%1$s در حال گفتگو است."
 
 #: inc/template-tags.php:82
 msgid "%1$s and %2$s are discussing."
-msgstr ""
+msgstr "%1$s و %2$s در حال گفتگو هستند."
 
 #: inc/template-tags.php:87
 msgid "%1$s, %2$s, and %3$s are discussing."
-msgstr ""
+msgstr "%1$s، %2$s، و %3$s در حال گفتگو هستند."
 
 #: inc/template-tags.php:94
 msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
 msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
-msgstr[0] ""
+msgstr[0] "%1$s، %2$s، %3$s، و %4$d نفر دیگر در حال گفتگو هستند."
 
 #: inc/template-tags.php:175
 msgid "Hi, %s. %s"
@@ -191,7 +203,7 @@ msgstr "راه‌راه"
 
 #: inc/options-page.php:166
 msgid "Santa"
-msgstr ""
+msgstr "سانتا"
 
 #: inc/options-page.php:162
 msgid "Polka Dots"
@@ -219,7 +231,7 @@ msgstr "تصویر پس‌زمینه:"
 
 #: inc/options-page.php:134
 msgid "Hide comment threads by default on all non-single views"
-msgstr ""
+msgstr "نهفتن ریسه‌های دیدگاه به صورت پیش‌فرض برای همهٔ نمایش‌های تکی"
 
 #: inc/options-page.php:144
 msgid "Design Options"
@@ -263,7 +275,7 @@ msgstr "چه خبر؟"
 
 #: inc/js.php:156
 msgid "This field is required."
-msgstr ""
+msgstr "این زمینه لازم است."
 
 #: inc/options-page.php:16
 msgid "Theme Options"
@@ -271,11 +283,11 @@ msgstr "گزینه‌های پوسته"
 
 #: inc/js.php:152
 msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
-msgstr ""
+msgstr "آیا مطمئن هستید که می‌خواهید این دیدگاه را پاک کنید؟ محتوای آن حذف خواهد شد"
 
 #: inc/js.php:153
 msgid "Oops! Looks like you are not logged in."
-msgstr ""
+msgstr "اوپس! به نظر می‌رسد ثبت ورود نکرده‌اید."
 
 #: inc/js.php:154
 msgid "Please log in again"
@@ -285,7 +297,7 @@ msgstr "خواهشمندیم دوباره وارد شوید"
 msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
 msgstr "ووپس! انگار به کارساز متصل نیستید. پی۲ نتوانست به وردپرس متصل شود."
 
-#: inc/js.php:145 inc/template-tags.php:254
+#: inc/js.php:145 inc/template-tags.php:257
 msgid "%1$s <em>on</em> %2$s"
 msgstr "%1$s <em>در</em> %2$s"
 
@@ -305,7 +317,7 @@ msgstr "نمایش ریسه‌ها"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "در صورت ادامه، دیدگاه‌ها و نوشته‌های شما از بین خواهند رفت."
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "پنهان کردن ریسه‌ها"
 
@@ -409,31 +421,31 @@ msgstr "گزینگان"
 msgid "Post"
 msgstr "نوشته"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "صفحهٔ %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "با افتخار نیرو گرفته از %s."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "http://wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "نوشتهٔ تصویری"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "برای پاسخ دادن وارد شوید"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "نوشتهٔ ویدئویی"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "دیدگاه شما چشم به راه بررسی است."
 
@@ -445,47 +457,47 @@ msgstr "ستون کناری"
 msgid "Primary Menu"
 msgstr "گزینگان اصلی"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "نمایش/پنهان‌سازی راهنما"
 
-#: footer.php:32
+#: footer.php:38
 msgid "shift + esc"
-msgstr ""
+msgstr "shift + esc"
 
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "لغو"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "برو به بالا"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "رفتن به ورودی"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "نشان‌دادن/مخفی‌کردن دیدگاه‌ها"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "نوشتهٔ بعدی/دیدگاه بعدی"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "نوشتهٔ قبلی/دیدگاه قبلی"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "ایجاد نوشتهٔ تازه"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "پوسته: %1$s کاری از %2$s."
 
-#: entry.php:117
+#: attachment.php:127 entry.php:117
 msgid "Toggle Comments"
 msgstr "تغییر‌وضعیت دیدگاه‌ها"
 
@@ -497,20 +509,21 @@ msgstr "صفحه‌ها:"
 msgid "<br />Tags:"
 msgstr "<br />برچسب‌ها:"
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "بخش‌های لازم با %s نشانه‌گذاری شده‌اند"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "پاسخ"
 
-#: entry.php:18
+#: attachment.php:31 entry.php:18
 msgid "Posts by %1$s ( @%2$s )"
 msgstr "نوشته‌هایِ %1$s ( @%2$s )"
 
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "پایاپیوند"
 
@@ -524,7 +537,7 @@ msgstr "&larr; دیدگاه‌های پیشین"
 
 #: author.php:35
 msgid "Apologies, looks like this author does not have any posts."
-msgstr ""
+msgstr "پوزش، به نظر می‌رسد این نویسنده هیچ نوشته‌ای ندارد."
 
 #: author.php:40 index.php:54 search.php:39 tag.php:39
 msgid "&larr; Older posts"
@@ -534,7 +547,8 @@ msgstr "&larr; نوشته‌های پیشین"
 msgid "Newer posts &rarr;"
 msgstr "نوشته‌های تازه‌تر &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "میان‌بُرها"
 
@@ -547,24 +561,23 @@ msgstr "به‌روزرسانی‌های %s"
 msgid "Toggle Comment Threads"
 msgstr "تغییر وضعیت ریسه‌های دیدگاه‌ها"
 
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "دیدن پرونده:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(بیشتر ...)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "ویرایش"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "اندازهٔ کامل %s پیکسل است"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "پیوند به تصویر با اندازهٔ کامل"
 

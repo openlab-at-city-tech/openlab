@@ -2,16 +2,13 @@
 # This file is distributed under the same license as the P2 package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2014-06-01 17:21:11+0000\n"
+"PO-Revision-Date: 2015-07-22 16:09:08+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
-
-msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -128,10 +125,6 @@ msgstr "Freagraí Nua P2"
 msgid "%1$s is discussing."
 msgstr "Tá %1$s á phlé."
 
-#: inc/template-tags.php:82
-msgid "%1$s and %2$s are discussing."
-msgstr ""
-
 #: inc/template-tags.php:87
 msgid "%1$s, %2$s, and %3$s are discussing."
 msgstr "Tá %1$s, %2$s, agus %3$s dhá phlé."
@@ -221,10 +214,6 @@ msgstr "Do Rogha Datha"
 msgid "Background Image:"
 msgstr "Íomhá Chúlra:"
 
-#: inc/options-page.php:134
-msgid "Hide comment threads by default on all non-single views"
-msgstr ""
-
 #: inc/options-page.php:144
 msgid "Design Options"
 msgstr "Roghanna Deartha"
@@ -267,7 +256,7 @@ msgstr "Cé chaoi bhfuil an chraic?"
 
 #: inc/js.php:156
 msgid "This field is required."
-msgstr ""
+msgstr "Tá an réimse seo riachtanach."
 
 #: inc/options-page.php:16
 msgid "Theme Options"
@@ -289,7 +278,7 @@ msgstr "Logáil isteach arís, le do thoil"
 msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
 msgstr "Ab bu búna! Is cosúil nach bhfuil tú ceangailte leis an bhfreastálaí. Níor fhéad P2 ceangal le WordPress.com"
 
-#: inc/js.php:145 inc/template-tags.php:254
+#: inc/js.php:145 inc/template-tags.php:257
 msgid "%1$s <em>on</em> %2$s"
 msgstr "%1$s <em>ar</em> %2$s"
 
@@ -309,7 +298,7 @@ msgstr "Taispeáin na snáitheanna"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "Caillfear do chuid freagraí nó altanna má leanann tú ar aghaidh."
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "Folaigh na snáithe"
 
@@ -376,10 +365,6 @@ msgstr "Earráid: níl cead eagarthóireachta agat ar an alt."
 msgid "Error: not allowed to edit this comment."
 msgstr "Earráid: níl cead agat an freagra seo a athrú."
 
-#: inc/ajax-read.php:222
-msgid "Error: Unknown error occurred. Comment not posted."
-msgstr ""
-
 #: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
 #: inc/ajax.php:193
 msgid "Error: not logged in."
@@ -413,31 +398,31 @@ msgstr "Roghchlár"
 msgid "Post"
 msgstr "(Ailt)"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "Leathanach %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "Le cumhacht %s."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "https://wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "Alt Íomhá"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "Logáil Isteach le Freagairt"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "Alt Físeáin"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "Tá do fhreagra fós le ceadú."
 
@@ -449,47 +434,47 @@ msgstr "Taobh-Bharra"
 msgid "Primary Menu"
 msgstr "Príomhroghchlár"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "cúnamh ann/as"
 
-#: footer.php:32
+#: footer.php:38
 msgid "shift + esc"
 msgstr "shift + esc"
 
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "Cealaigh"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "barr"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "logáil isteach"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "freagraí ann/as"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "an chéad alt/fhreagra eile"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "an t-alt/freagra roimhe"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "scríobh alt nua"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "Téama: %1$s le %2$s."
 
-#: entry.php:117
+#: attachment.php:127 entry.php:117
 msgid "Toggle Comments"
 msgstr "Scoránaigh na Freagraí"
 
@@ -501,20 +486,21 @@ msgstr "Leathanaigh:"
 msgid "<br />Tags:"
 msgstr "<br>Clibeanna:"
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "Feicfidh tú an comhartha %s le hais gach réimse atá riachtanach"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "Freagra"
 
-#: entry.php:18
+#: attachment.php:31 entry.php:18
 msgid "Posts by %1$s ( @%2$s )"
 msgstr "Ailt le %1$s ( @%2$s )"
 
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "Buan-nasc"
 
@@ -538,7 +524,8 @@ msgstr "&larr; Chun Deiridh"
 msgid "Newer posts &rarr;"
 msgstr "Chun Tosaigh &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "Aicearraí méarchláir"
 
@@ -551,24 +538,23 @@ msgstr "Nuashonruithe ó %s"
 msgid "Toggle Comment Threads"
 msgstr "Scoránaigh na Snáithe Freagartha"
 
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "Breathnaigh ar chomhad:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(An chuid eile…)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "Eagar"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "%s picteilín atá san íomhá lánmhéide"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "Nasc leis an íomhá lánmhéide"
 

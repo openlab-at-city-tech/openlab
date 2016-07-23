@@ -7,11 +7,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
-
-msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -59,10 +56,6 @@ msgstr "Ἐνημερώσεις ἀπὸ τὸν μῆνα %s"
 #: index.php:47 single.php:35
 msgid "No posts yet!"
 msgstr "Δὲν ὑπάρχουν ἀκόμη ἄρθρα!"
-
-#: post-form.php:32
-msgid "Status Update"
-msgstr ""
 
 #: index.php:24
 msgid "Recent Updates"
@@ -124,23 +117,9 @@ msgstr "Τὶ νέα;"
 msgid "P2 Recent Comments"
 msgstr "Πρόσφατα σχόλια P2"
 
-#: inc/template-tags.php:80
-msgid "%1$s is discussing."
-msgstr ""
-
 #: inc/template-tags.php:82
 msgid "%1$s and %2$s are discussing."
 msgstr "Οἱ %1$s καὶ %2$s συζητοῦν."
-
-#: inc/template-tags.php:87
-msgid "%1$s, %2$s, and %3$s are discussing."
-msgstr ""
-
-#: inc/template-tags.php:94
-msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
-msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
-msgstr[0] ""
-msgstr[1] ""
 
 #: inc/template-tags.php:175
 msgid "Hi, %s. %s"
@@ -178,10 +157,6 @@ msgstr "Ἐμφάνιση πλαϊνῆς στήλης:"
 msgid "Hide the Sidebar"
 msgstr "Ἀποκρύψτε τὴν πλαϊνὴ στήλη"
 
-#: inc/options-page.php:177
-msgid "Post prompt:"
-msgstr ""
-
 #: inc/options-page.php:164
 msgid "Plaid"
 msgstr "Καρώ"
@@ -189,14 +164,6 @@ msgstr "Καρώ"
 #: inc/options-page.php:165
 msgid "Stripes"
 msgstr "Ρίγες"
-
-#: inc/options-page.php:166
-msgid "Santa"
-msgstr ""
-
-#: inc/options-page.php:162
-msgid "Polka Dots"
-msgstr ""
 
 #: inc/options-page.php:163
 msgid "Squares"
@@ -217,10 +184,6 @@ msgstr "Ἐπιλέξτε χρῶμα"
 #: inc/options-page.php:158
 msgid "Background Image:"
 msgstr "Εἰκόνα ὑποβάθρου"
-
-#: inc/options-page.php:134
-msgid "Hide comment threads by default on all non-single views"
-msgstr ""
 
 #: inc/options-page.php:144
 msgid "Design Options"
@@ -250,10 +213,6 @@ msgstr "Ρυθμίσεις P2"
 msgid "Functionality Options"
 msgstr "Ἐπιλογὲς λειτουργικότητος"
 
-#: inc/options-page.php:114
-msgid "Posting Access:"
-msgstr ""
-
 #: inc/options-page.php:95
 msgid "Options saved."
 msgstr "Οἱ ἐπιλογὲς ἀποθηκεύθηκαν."
@@ -261,10 +220,6 @@ msgstr "Οἱ ἐπιλογὲς ἀποθηκεύθηκαν."
 #: inc/options-page.php:68 inc/options-page.php:179
 msgid "Whatcha' up to?"
 msgstr "Τὶ συμβαίνει;"
-
-#: inc/js.php:156
-msgid "This field is required."
-msgstr ""
 
 #: inc/options-page.php:16
 msgid "Theme Options"
@@ -286,7 +241,7 @@ msgstr "Παρακαλοῦμε ξανασυνδεθῆτε"
 msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
 msgstr "Μᾶλλον δὲν ἔχετε συνδεθεῖ μὲ τὸν ἐξυπηρετητή. Τὸ P2 δὲν μποροῦσε νὰ συνδεθεῖ μὲ τὸ WordPress."
 
-#: inc/js.php:145 inc/template-tags.php:254
+#: inc/js.php:145 inc/template-tags.php:257
 msgid "%1$s <em>on</em> %2$s"
 msgstr "%1$s <em>στὶς</em> %2$s "
 
@@ -306,7 +261,7 @@ msgstr "Προβάλετε νήματα συζητήσεων"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "Τὰ σχόλια ἢ τὰ ἄρθρα σας θὰ χαθοῦν ἂν συνεχίσετε."
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "Ἀποκρύψτε νήματα συζητήσεων"
 
@@ -410,31 +365,31 @@ msgstr "Μενού"
 msgid "Post"
 msgstr "Ἀρθρο"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "Σελίδα %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "Λειτουργεῖ μὲ τὴν βοήθεια τοῦ %s."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "http://wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "Ἄρθρο μὲ εἰκόνα"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "Γιὰ νὰ ἀπαντήσετε, εἰσέλθετε στὸ WordPress"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "Ἄρθρο μὲ βίντεο"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "Τὸ σχόλιό σας περιμένει ἔλεγχο γιὰ ἐνδεχόμενες ἀκρότητες."
 
@@ -446,47 +401,47 @@ msgstr "Πλαϊνὴ στήλη"
 msgid "Primary Menu"
 msgstr "Πρωτεῦον μενού"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "προβάλετε/ἀποκρύψτε τὴν βοήθεια"
 
-#: footer.php:32
+#: footer.php:38
 msgid "shift + esc"
 msgstr "shift + esc"
 
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "Ἀκύρωση"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "πηγαίνετε στὴν κορυφή"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "πηγαίνετε στὴν ὀθόνη σύνδεσης"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "προβολή/ἀπόκρυψη σχολίων"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "ἑπόμενη ἀνάρτηση/ἑπόμενο σχόλιο"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "προηγούμενο ἄρθρο/προηγούμενο σχόλιο"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "δημιουργῆστε ἕνα νέο ἄρθρο"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "Θέμα: %1$s ἀπὸ τὸν/τὴν %2$s."
 
-#: entry.php:117
+#: attachment.php:127 entry.php:117
 msgid "Toggle Comments"
 msgstr "Ἀνοιγοκλεῖστε τὰ σχόλια"
 
@@ -498,20 +453,21 @@ msgstr "Σελίδες:"
 msgid "<br />Tags:"
 msgstr "<br />Ἐτικέττες: "
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "Τὰ ὑποχρεωτικὰ πεδία σημειώνονται μὲ %s"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "Ἀπάντηση"
 
-#: entry.php:18
+#: attachment.php:31 entry.php:18
 msgid "Posts by %1$s ( @%2$s )"
 msgstr "Ἄρθρα τοῦ/τῆς %1$s ( @%2$s )"
 
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "Μόνιμος σύνδεσμος"
 
@@ -535,7 +491,8 @@ msgstr "&larr; Παλαιότερα ἄρθρα"
 msgid "Newer posts &rarr;"
 msgstr "Νεότερα ἄρθρα &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
@@ -548,24 +505,23 @@ msgstr "Ἐνημερώσεις ἀπὸ τὸν/τὴν %s"
 msgid "Toggle Comment Threads"
 msgstr "Ἀνοιγοκλεῖστε νήματα σχολίων"
 
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "Δεῖτε τὸ ἀρχεῖο:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(Περισσότερα...)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "Ἐπεξεργασία"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "Τὸ κανονικὸ μέγεθος εἶναι %s εἰκονοψηφίδες (pixel)"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "Συνδεθῆτε μὲ τὴν εἰκόνα στὸ πλῆρες μέγεθός της"
 

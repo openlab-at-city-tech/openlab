@@ -7,11 +7,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
-
-msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -116,10 +113,6 @@ msgstr "Komentet e fundit me avatare."
 msgid "No avatar"
 msgstr "Pa avatar"
 
-#: inc/template-tags.php:175
-msgid "Whatcha up to?"
-msgstr ""
-
 #: inc/widgets/recent-comments.php:10
 msgid "P2 Recent Comments"
 msgstr "Komentet Më të Fundit P2"
@@ -127,10 +120,6 @@ msgstr "Komentet Më të Fundit P2"
 #: inc/template-tags.php:80
 msgid "%1$s is discussing."
 msgstr "%1$s po diskuton."
-
-#: inc/template-tags.php:82
-msgid "%1$s and %2$s are discussing."
-msgstr ""
 
 #: inc/template-tags.php:87
 msgid "%1$s, %2$s, and %3$s are discussing."
@@ -158,10 +147,6 @@ msgstr "Fshihe Tekstin"
 msgid "Update Options"
 msgstr "Mundësi Përditësimi"
 
-#: inc/options-page.php:180
-msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
-msgstr ""
-
 #: inc/options-page.php:184
 msgid "Post Titles:"
 msgstr "Tituj Postimesh:"
@@ -182,17 +167,9 @@ msgstr "Fshihe Anështyllën"
 msgid "Post prompt:"
 msgstr "Gati për postim:"
 
-#: inc/options-page.php:164
-msgid "Plaid"
-msgstr ""
-
 #: inc/options-page.php:165
 msgid "Stripes"
 msgstr "Shirita"
-
-#: inc/options-page.php:166
-msgid "Santa"
-msgstr ""
 
 #: inc/options-page.php:162
 msgid "Polka Dots"
@@ -201,10 +178,6 @@ msgstr "Me Pika"
 #: inc/options-page.php:163
 msgid "Squares"
 msgstr "Katrorë"
-
-#: inc/options-page.php:161
-msgid "Bubbles"
-msgstr ""
 
 #: inc/options-page.php:160
 msgid "None"
@@ -217,10 +190,6 @@ msgstr "Merrni një Ngjyrë"
 #: inc/options-page.php:158
 msgid "Background Image:"
 msgstr "Figurë Sfond:"
-
-#: inc/options-page.php:134
-msgid "Hide comment threads by default on all non-single views"
-msgstr ""
 
 #: inc/options-page.php:144
 msgid "Design Options"
@@ -258,10 +227,6 @@ msgstr "Hyrje për Postim:"
 msgid "Options saved."
 msgstr "Mundësitë u ruajtën."
 
-#: inc/options-page.php:68 inc/options-page.php:179
-msgid "Whatcha' up to?"
-msgstr ""
-
 #: inc/js.php:156
 msgid "This field is required."
 msgstr "Kjo fushë është e domosdoshme."
@@ -282,17 +247,9 @@ msgstr "Hmm! Duket se nuk keni bërë hyrjen."
 msgid "Please log in again"
 msgstr "Ju lutemi, rihyni"
 
-#: inc/js.php:155
-msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
-msgstr ""
-
-#: inc/js.php:145 inc/template-tags.php:254
+#: inc/js.php:145 inc/template-tags.php:257
 msgid "%1$s <em>on</em> %2$s"
 msgstr "%1$s <em>më</em> %2$s"
-
-#: inc/js.php:150
-msgid "After typing @, type a name or username to find a member of this site"
-msgstr ""
 
 #: inc/js.php:151
 msgid "No matches."
@@ -306,7 +263,7 @@ msgstr "Shfaqi rrjedhat"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "Komentet ose postimet tuaj do të humbin, nëse vazhdoni."
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "Fshihi rrjedhat"
 
@@ -410,31 +367,31 @@ msgstr "Menu"
 msgid "Post"
 msgstr "Postim"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "Faqe %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "Bazohet me krenari në %s."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "http://wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "Postim Figure"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "Që të Përgjigjeni, Hyni"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "Postim Video"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "Komenti juaj po pret moderimin."
 
@@ -446,47 +403,43 @@ msgstr "Anështyllë"
 msgid "Primary Menu"
 msgstr "Menuja Parësore"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "shfaq/fshih ndihmën"
 
-#: footer.php:32
-msgid "shift + esc"
-msgstr ""
-
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "Anuloje"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "shko në krye"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "kaloni te hyrja"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "shfaqi/fshihi komentet"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "postimi pasues/komenti pasues"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "postimi i mëparshëm/komenti i mëparshëm"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "hartoni postim të ri"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "Temë: %1$s nga %2$s."
 
-#: entry.php:117
+#: attachment.php:127 entry.php:117
 msgid "Toggle Comments"
 msgstr "Shfaq/Fshih Komentet"
 
@@ -498,20 +451,21 @@ msgstr "Faqe:"
 msgid "<br />Tags:"
 msgstr "<br />Etiketa:"
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "Fushat e domosdoshme shënohen si %s"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "Përgjigje"
 
-#: entry.php:18
+#: attachment.php:31 entry.php:18
 msgid "Posts by %1$s ( @%2$s )"
 msgstr "Postime nga %1$s ( @%2$s )"
 
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "Permalink"
 
@@ -535,7 +489,8 @@ msgstr "&larr; Postime Më të Vjetra"
 msgid "Newer posts &rarr;"
 msgstr "Postime Më të Reja &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "Shkurtore Tastiere"
 
@@ -548,24 +503,23 @@ msgstr "Përditësime prej %s"
 msgid "Toggle Comment Threads"
 msgstr "Shfaq/Fshih Rrjedha Komentesh"
 
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "Shihni kartelën:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(Më tepër ...)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "Përpunoni"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "Madhësia e plotë është %s piksela"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "Lidhje për te figura në madhësi të plotë"
 

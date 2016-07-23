@@ -1,16 +1,14 @@
 /*
 Theme Name: P2
-Theme URI: http://p2theme.com/
-Author: Automattic
-Author URI: http://theme.wordpress.com/
+Theme URI: https://wordpress.com/themes/p2/
 Description: Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more.
-Version: 1.5.5
+Version: 1.5.8
+Author: Automattic
+Author URI: https://wordpress.com/themes/
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: p2
 Tags: blue, custom-colors, two-columns, fixed-layout, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, custom-background, custom-header, custom-menu, post-formats, sticky-post, theme-options
-
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
 */
 
 /* The Reset ---------------------------------- */
@@ -135,8 +133,9 @@ blockquote + blockquote {
 	-webkit-border-radius: 14px;
 	-moz-border-radius: 14px;
 	border-radius: 12px;
-	height: 28px;
+	min-height: 28px;
 	padding: 0 10px;
+	max-width: 100%;
 }
 #main button {
 	margin: 10px 10px 0 0;
@@ -180,12 +179,27 @@ textarea.posttext {
 	height: 4em;
 }
 #wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="url"],
+#wrapper form input[type="email"],
+#wrapper form input[type="number"],
+#wrapper form input[type="search"],
+#wrapper form input[type="password"],
+.inlineediting input[type="text"],
+.inlineediting input[type="url"],
+.inlineediting input[type="email"],
+.inlineediting input[type="number"],
+.inlineediting input[type="search"],
+.inlineediting input[type="password"] {
 	border: solid;
 	border-width: 1px;
 	padding: 5px 7px;
 }
-.inlineediting input[type="text"] {
+.inlineediting input[type="text"],
+.inlineediting input[type="url"],
+.inlineediting input[type="email"],
+.inlineediting input[type="number"],
+.inlineediting input[type="search"],
+.inlineediting input[type="password"] {
 	width: 97.45%;
 }
 form#new_post {
@@ -608,10 +622,10 @@ h2 img {
 	margin-top: 5px;
 }
 #searchform #s {
-	width: 57%;
+	width: 90%;
 }
 #searchform #searchsubmit {
-	width: 30%;
+	width: auto;
 }
 .error404 #main #searchform div,
 .search #main #searchform div {
@@ -620,10 +634,6 @@ h2 img {
 .error404 #main #searchform #s,
 .search #main #searchform #s {
 	width: 33%;
-}
-.error404 #main #searchform #searchsubmit,
-.search #main #searchform #searchsubmit {
-	width: auto;
 }
 .error404 #main #searchform label,
 .search #main #searchform label {
@@ -695,8 +705,17 @@ img.alignleft {
 }
 .gallery {
 	display: block !important;
-	margin: 0 !important;
-	padding: 0 0 1.5em 0 !important;
+	margin: 0 0 1.5em !important;
+	padding: 0 0 0 0 !important;
+}
+.gallery:before,
+.gallery:after {
+  content: " ";
+  display: table;
+}
+
+.gallery:after {
+  clear: both;
 }
 body .gallery br {
 	display: none;
@@ -730,8 +749,23 @@ body .gallery br {
 .gallery-item {
 	display: inline-block !important;
 	padding-bottom: 1px;
-	margin: 0 auto !important;
-	float: none !important;
+	margin: 1em auto !important;
+}
+.gallery-item img {
+	width: 100%;
+	height: auto;
+}
+.gallery-columns-1 .gallery-item:nth-of-type(1n+1),
+.gallery-columns-2 .gallery-item:nth-of-type(2n+1),
+.gallery-columns-3 .gallery-item:nth-of-type(3n+1),
+.gallery-columns-4 .gallery-item:nth-of-type(4n+1),
+.gallery-columns-5 .gallery-item:nth-of-type(5n+1),
+.gallery-columns-6 .gallery-item:nth-of-type(6n+1),
+.gallery-columns-7 .gallery-item:nth-of-type(7n+1),
+.gallery-columns-8 .gallery-item:nth-of-type(8n+1),
+.gallery-columns-9 .gallery-item:nth-of-type(9n+1) {
+	margin-left: 0;
+	clear: left;
 }
 .wp-caption img {
 	margin: 0;
@@ -1117,7 +1151,17 @@ h3 {
 	color: #666;
 }
 #wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="url"],
+#wrapper form input[type="email"],
+#wrapper form input[type="number"],
+#wrapper form input[type="search"],
+#wrapper form input[type="password"],
+.inlineediting input[type="text"],
+.inlineediting input[type="url"],
+.inlineediting input[type="email"],
+.inlineediting input[type="number"],
+.inlineediting input[type="search"],
+.inlineediting input[type="password"] {
 	border-color: #d1d1d1;
 	background: #fafafa;
 	color: #666;
@@ -1151,13 +1195,8 @@ h3 {
 	background: linear-gradient(to bottom,  rgba(237,237,237,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
 }
 .disabled, .disabled:hover {
-	color: #eee !important;
-	background: #ddd !important;
-	border-color: #ccc;
-}
-.disabled, .disabled:hover {
-	color: #eee !important;
-	background: #ddd !important;
+	color: #eee;
+	background: #ddd;
 	border-color: #ccc;
 }
 #main .actions, #main .actions a, #main .actions a:link, #main .actions a:visited, #main .actions a:hover, #main .actions a:active,
@@ -1364,7 +1403,17 @@ h4, h5, h6 {
 	font-size: 13px;
 }
 #wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="url"],
+#wrapper form input[type="email"],
+#wrapper form input[type="number"],
+#wrapper form input[type="search"],
+#wrapper form input[type="password"],
+.inlineediting input[type="text"],
+.inlineediting input[type="url"],
+.inlineediting input[type="email"],
+.inlineediting input[type="number"],
+.inlineediting input[type="search"],
+.inlineediting input[type="password"] {
 	font-size: 13px;
 	line-height: 16px;
 }
