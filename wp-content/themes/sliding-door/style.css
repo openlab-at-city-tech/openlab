@@ -8,9 +8,9 @@ Author: Wayne Connor
 
 Author URI:http://macintoshhowto.com/about
 
-Version: 3.0.9
+Version: 3.2.4
 
-Tags: black, white, three-columns, fixed-width, custom-header, theme-options, threaded-comments, sticky-post, photoblogging
+Tags: black, white, three-columns, fixed-layout, custom-header, theme-options, threaded-comments, sticky-post, photoblogging
 License: GNU General Public License v2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This theme is licensed under the GPL.Use it to make something cool, have fun, and share what you've learned with others.*/
@@ -757,14 +757,14 @@ body.page .edit-link {
 
 #content img {
 	height: auto;
-	max-width: 500px;
+	max-width: 950px;
 	margin-top: 0;
 	margin-right: 0;
 	margin-bottom: 0;
 }
 
 #content .attachment img {
-	max-width: 900px;
+	max-width: 950px;
 }
 
 #content .alignleft,#content img.alignleft {

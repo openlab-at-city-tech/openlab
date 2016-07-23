@@ -10,7 +10,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 
 body {
-	background: url(images/background.jpg) no-repeat;
+	background: black none no-repeat;
 }
 
 p  {

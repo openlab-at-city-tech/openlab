@@ -58,10 +58,15 @@ v1.6	made the background of the slider the same as the page background (imagemen
 3.0.7   WC3 compliance fixes
 3.0.8	Change footer link to theme URI
 3.0.9   Fix visited link color, footer URL.
-
-	
-
-
+3.1		Change from dark screenshot to light
+3.1.1	Ubermenu integration 
+3.2		Urgent update  for FATAL ERROR! 
+        Wordpress have now added a function called get_the_post_thumbnail_url() to core which was defined in functions.php
+		Fix bug with walker definition in functions.php
+3.2.1	remove some depreciated functions and general update to comply with new wordpress changes
+3.2.2	replace TEMPLATEPATH with get_template_directory() as per wordpress check plugin	
+3.2.3	bigger screenshot and remove double textdomain as per themechecker plugin
+3.2.4   Better screenshot and allow for wider images
 
 **************************************************
 DESCRIPTION
