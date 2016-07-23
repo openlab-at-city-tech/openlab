@@ -48,10 +48,10 @@ final class _WP_Editors {
 	 *     @type int        $textarea_rows     Number rows in the editor textarea. Default 20.
 	 *     @type string|int $tabindex          Tabindex value to use. Default empty.
 	 *     @type string     $tabfocus_elements The previous and next element ID to move the focus to
-	 *                                         when pressing the Tab key in TinyMCE. Defualt ':prev,:next'.
+	 *                                         when pressing the Tab key in TinyMCE. Default ':prev,:next'.
 	 *     @type string     $editor_css        Intended for extra styles for both Visual and Text editors.
 	 *                                         Should include `<style>` tags, and can use "scoped". Default empty.
-	 *     @type string     $editor_class      Extra classes to add to the editor textarea elemen. Default empty.
+	 *     @type string     $editor_class      Extra classes to add to the editor textarea element. Default empty.
 	 *     @type bool       $teeny             Whether to output the minimal editor config. Examples include
 	 *                                         Press This and the Comment editor. Default false.
 	 *     @type bool       $dfw               Deprecated in 4.1. Since 4.3 used only to enqueue wp-fullscreen-stub.js for backwards compatibility.
@@ -147,7 +147,7 @@ final class _WP_Editors {
 		$editor_class = ' class="' . trim( esc_attr( $set['editor_class'] ) . ' wp-editor-area' ) . '"';
 		$tabindex = $set['tabindex'] ? ' tabindex="' . (int) $set['tabindex'] . '"' : '';
 		$default_editor = 'html';
-		$toolbar = $buttons = $autocomplete = '';
+		$buttons = $autocomplete = '';
 		$editor_id_attr = esc_attr( $editor_id );
 
 		if ( $set['drag_drop_upload'] ) {
@@ -251,7 +251,7 @@ final class _WP_Editors {
 			'<textarea' . $editor_class . $height . $tabindex . $autocomplete . ' cols="40" name="' . esc_attr( $set['textarea_name'] ) . '" ' .
 			'id="' . $editor_id_attr . '">%s</textarea></div>' );
 
-		// Prepare the content for the Visual or Text editor
+		// Prepare the content for the Visual or Text editor, only when TinyMCE is used (back-compat).
 		if ( self::$this_tinymce ) {
 			add_filter( 'the_editor_content', 'format_for_editor', 10, 2 );
 		}
@@ -261,9 +261,16 @@ final class _WP_Editors {
 		 *
 		 * @since 2.1.0
 		 *
-		 * @param string $content Default editor content.
+		 * @param string $content        Default editor content.
+		 * @param string $default_editor The default editor for the current user.
+		 *                               Either 'html' or 'tinymce'.
 		 */
 		$content = apply_filters( 'the_editor_content', $content, $default_editor );
+
+		// Remove the filter as the next editor on the same page may not need it.
+		if ( self::$this_tinymce ) {
+			remove_filter( 'the_editor_content', 'format_for_editor' );
+		}
 
 		// Back-compat for the `htmledit_pre` and `richedit_pre` filters
 		if ( 'html' === $default_editor && has_filter( 'htmledit_pre' ) ) {
@@ -296,8 +303,6 @@ final class _WP_Editors {
 	 */
 	public static function editor_settings($editor_id, $set) {
 		global $wp_version, $tinymce_version;
-
-		$first_run = false;
 
 		if ( empty(self::$first_init) ) {
 			if ( is_admin() ) {
@@ -351,7 +356,6 @@ final class _WP_Editors {
 
 				/** This filter is documented in wp-admin/includes/media.php */
 				$no_captions = (bool) apply_filters( 'disable_captions', '' );
-				$first_run = true;
 				$ext_plugins = '';
 
 				if ( $set['teeny'] ) {
@@ -404,7 +408,8 @@ final class _WP_Editors {
 						'wplink',
 						'wpdialogs',
 						'wptextpattern',
-						'wpview'
+						'wpview',
+						'wpembed',
 					);
 
 					if ( ! self::$has_medialib ) {
@@ -545,6 +550,7 @@ final class _WP_Editors {
 					'wpeditimage_disable_captions' => $no_captions,
 					'wpeditimage_html5_captions' => current_theme_supports( 'html5', 'caption' ),
 					'plugins' => implode( ',', $plugins ),
+					'wp_lang_attr' => get_bloginfo( 'language' )
 				);
 
 				if ( ! empty( $mce_external_plugins ) ) {
@@ -573,7 +579,7 @@ final class _WP_Editors {
 				 *
 				 * @since 2.1.0
 				 *
-				 * @param array $stylesheets Comma-delimited list of stylesheets.
+				 * @param string $stylesheets Comma-delimited list of stylesheets.
 				 */
 				$mce_css = trim( apply_filters( 'mce_css', implode( ',', $mce_css ) ), ' ,' );
 
@@ -596,10 +602,12 @@ final class _WP_Editors {
 			} else {
 				$mce_buttons = array( 'bold', 'italic', 'strikethrough', 'bullist', 'numlist', 'blockquote', 'hr', 'alignleft', 'aligncenter', 'alignright', 'link', 'unlink', 'wp_more', 'spellchecker' );
 
-				if ( $set['_content_editor_dfw'] ) {
-					$mce_buttons[] = 'dfw';
-				} else {
-					$mce_buttons[] = 'fullscreen';
+				if ( ! wp_is_mobile() ) {
+					if ( $set['_content_editor_dfw'] ) {
+						$mce_buttons[] = 'dfw';
+					} else {
+						$mce_buttons[] = 'fullscreen';
+					}
 				}
 
 				$mce_buttons[] = 'wp_adv';
@@ -771,6 +779,7 @@ final class _WP_Editors {
 
 		if ( in_array('wplink', self::$plugins, true) || in_array('link', self::$qt_buttons, true) ) {
 			wp_enqueue_script('wplink');
+			wp_enqueue_script( 'jquery-ui-autocomplete' );
 		}
 
 		if ( self::$old_dfw_compat ) {
@@ -927,7 +936,7 @@ final class _WP_Editors {
 
 			'Color' => __( 'Color' ),
 			'Custom color' => __( 'Custom color' ),
-			'Custom...' => _x( 'Custom...', 'label for custom color' ),
+			'Custom...' => _x( 'Custom...', 'label for custom color' ), // no ellipsis
 			'No color' => __( 'No color' ),
 
 			// Spelling, search/replace plugins
@@ -1029,11 +1038,14 @@ final class _WP_Editors {
 			'Toolbar Toggle' => __( 'Toolbar Toggle' ),
 			'Insert Read More tag' => __( 'Insert Read More tag' ),
 			'Insert Page Break tag' => __( 'Insert Page Break tag' ),
-			'Read more...' => __( 'Read more...' ), // Title on the placeholder inside the editor
+			'Read more...' => __( 'Read more...' ), // Title on the placeholder inside the editor (no ellipsis)
 			'Distraction-free writing mode' => __( 'Distraction-free writing mode' ),
 			'No alignment' => __( 'No alignment' ), // Tooltip for the 'alignnone' button in the image toolbar
 			'Remove' => __( 'Remove' ), // Tooltip for the 'remove' button in the image toolbar
 			'Edit ' => __( 'Edit' ), // Tooltip for the 'edit' button in the image toolbar
+			'Paste URL or type to search' => __( 'Paste URL or type to search' ), // Placeholder for the inline link dialog
+			'Apply'  => __( 'Apply' ), // Tooltip for the 'apply' button in the inline link dialog
+			'Link options'  => __( 'Link options' ), // Tooltip for the 'link options' button in the inline link dialog
 
 			// Shortcuts help modal
 			'Keyboard Shortcuts' => __( 'Keyboard Shortcuts' ),
@@ -1056,6 +1068,8 @@ final class _WP_Editors {
 				__( 'When starting a new paragraph with one of these formatting shortcuts followed by a space, the formatting will be applied automatically. Press Backspace or Escape to undo.' ),
 			'The following formatting shortcuts are replaced when pressing Enter. Press Escape or the Undo button to undo.' =>
 				__( 'The following formatting shortcuts are replaced when pressing Enter. Press Escape or the Undo button to undo.' ),
+			'The next group of formatting shortcuts are applied as you type or when you insert them around plain text in the same paragraph. Press Escape or the Undo button to undo.' =>
+				__( 'The next group of formatting shortcuts are applied as you type or when you insert them around plain text in the same paragraph. Press Escape or the Undo button to undo.' ),
 		);
 
 		/**
@@ -1388,37 +1402,36 @@ final class _WP_Editors {
 	 * @static
 	 */
 	public static function wp_link_dialog() {
-		$search_panel_visible = '1' == get_user_setting( 'wplink', '0' ) ? ' search-panel-visible' : '';
-
 		// display: none is required here, see #WP27605
 		?>
 		<div id="wp-link-backdrop" style="display: none"></div>
-		<div id="wp-link-wrap" class="wp-core-ui<?php echo $search_panel_visible; ?>" style="display: none">
+		<div id="wp-link-wrap" class="wp-core-ui" style="display: none" role="dialog" aria-labelledby="link-modal-title">
 		<form id="wp-link" tabindex="-1">
 		<?php wp_nonce_field( 'internal-linking', '_ajax_linking_nonce', false ); ?>
-		<div id="link-modal-title">
-			<?php _e( 'Insert/edit link' ) ?>
-			<button type="button" id="wp-link-close"><span class="screen-reader-text"><?php _e( 'Close' ); ?></span></button>
-	 	</div>
+		<h1 id="link-modal-title"><?php _e( 'Insert/edit link' ) ?></h1>
+		<button type="button" id="wp-link-close"><span class="screen-reader-text"><?php _e( 'Close' ); ?></span></button>
 		<div id="link-selector">
 			<div id="link-options">
-				<p class="howto"><?php _e( 'Enter the destination URL' ); ?></p>
+				<p class="howto" id="wplink-enter-url"><?php _e( 'Enter the destination URL' ); ?></p>
 				<div>
-					<label><span><?php _e( 'URL' ); ?></span><input id="wp-link-url" type="text" /></label>
+					<label><span><?php _e( 'URL' ); ?></span>
+					<input id="wp-link-url" type="text" aria-describedby="wplink-enter-url" /></label>
 				</div>
 				<div class="wp-link-text-field">
-					<label><span><?php _e( 'Link Text' ); ?></span><input id="wp-link-text" type="text" /></label>
+					<label><span><?php _e( 'Link Text' ); ?></span>
+					<input id="wp-link-text" type="text" /></label>
 				</div>
 				<div class="link-target">
-					<label><span>&nbsp;</span><input type="checkbox" id="wp-link-target" /> <?php _e( 'Open link in a new window/tab' ); ?></label>
+					<label><span></span>
+					<input type="checkbox" id="wp-link-target" /> <?php _e( 'Open link in a new tab' ); ?></label>
 				</div>
 			</div>
-			<p class="howto"><a href="#" id="wp-link-search-toggle"><?php _e( 'Or link to existing content' ); ?></a></p>
+			<p class="howto" id="wplink-link-existing-content"><?php _e( 'Or link to existing content' ); ?></p>
 			<div id="search-panel">
 				<div class="link-search-wrapper">
 					<label>
 						<span class="search-label"><?php _e( 'Search' ); ?></span>
-						<input type="search" id="wp-link-search" class="link-search-field" autocomplete="off" />
+						<input type="search" id="wp-link-search" class="link-search-field" autocomplete="off" aria-describedby="wplink-link-existing-content" />
 						<span class="spinner"></span>
 					</label>
 				</div>
@@ -1437,12 +1450,12 @@ final class _WP_Editors {
 					<div class="river-waiting">
 						<span class="spinner"></span>
 					</div>
-				</div>
-			</div>
+ 				</div>
+ 			</div>
 		</div>
 		<div class="submitbox">
 			<div id="wp-link-cancel">
-				<a class="submitdelete deletion" href="#"><?php _e( 'Cancel' ); ?></a>
+				<button type="button" class="button"><?php _e( 'Cancel' ); ?></button>
 			</div>
 			<div id="wp-link-update">
 				<input type="submit" value="<?php esc_attr_e( 'Add Link' ); ?>" class="button button-primary" id="wp-link-submit" name="wp-link-submit">

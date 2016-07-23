@@ -65,7 +65,7 @@ function wp_create_category( $cat_name, $parent = 0 ) {
  *
  * @param array $categories List of categories to create.
  * @param int   $post_id    Optional. The post ID. Default empty.
- * @return List of categories to create for the given post.
+ * @return array List of categories to create for the given post.
  */
 function wp_create_categories( $categories, $post_id = '' ) {
 	$cat_ids = array ();
@@ -93,9 +93,9 @@ function wp_create_categories( $categories, $post_id = '' ) {
  * @param array $catarr {
  *     Array of arguments for inserting a new category.
  *
- *     @type int        $cat_ID               Categoriy ID. A non-zero value updates an existing category.
+ *     @type int        $cat_ID               Category ID. A non-zero value updates an existing category.
  *                                            Default 0.
- *     @type string     $taxonomy             Taxonomy slug. Defualt 'category'.
+ *     @type string     $taxonomy             Taxonomy slug. Default 'category'.
  *     @type string     $cat_name             Category name. Default empty.
  *     @type string     $category_description Category description. Default empty.
  *     @type string     $category_nicename    Category nice (display) name. Default empty.

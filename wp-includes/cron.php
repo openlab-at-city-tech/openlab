@@ -18,13 +18,18 @@
  * @param int $timestamp Timestamp for when to run the event.
  * @param string $hook Action hook to execute when cron is run.
  * @param array $args Optional. Arguments to pass to the hook's callback function.
- * @return void|false
+ * @return false|void False when an event is not scheduled.
  */
 function wp_schedule_single_event( $timestamp, $hook, $args = array()) {
-	// don't schedule a duplicate if there's already an identical event due within 10 minutes of it
+	// Make sure timestamp is a positive integer
+	if ( ! is_numeric( $timestamp ) || $timestamp <= 0 ) {
+		return false;
+	}
+
+	// Don't schedule a duplicate if there's already an identical event due within 10 minutes of it
 	$next = wp_next_scheduled($hook, $args);
 	if ( $next && abs( $next - $timestamp ) <= 10 * MINUTE_IN_SECONDS ) {
-		return;
+		return false;
 	}
 
 	$crons = _get_cron_array();
@@ -67,9 +72,14 @@ function wp_schedule_single_event( $timestamp, $hook, $args = array()) {
  * @param string $recurrence How often the event should recur.
  * @param string $hook Action hook to execute when cron is run.
  * @param array $args Optional. Arguments to pass to the hook's callback function.
- * @return false|void False when does not schedule event.
+ * @return false|void False when an event is not scheduled.
  */
 function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array()) {
+	// Make sure timestamp is a positive integer
+	if ( ! is_numeric( $timestamp ) || $timestamp <= 0 ) {
+		return false;
+	}
+
 	$crons = _get_cron_array();
 	$schedules = wp_get_schedules();
 
@@ -100,9 +110,14 @@ function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array()) {
  * @param string $recurrence How often the event should recur.
  * @param string $hook Action hook to execute when cron is run.
  * @param array $args Optional. Arguments to pass to the hook's callback function.
- * @return false|void False when does not schedule event.
+ * @return false|void False when an event is not scheduled.
  */
 function wp_reschedule_event( $timestamp, $recurrence, $hook, $args = array() ) {
+	// Make sure timestamp is a positive integer
+	if ( ! is_numeric( $timestamp ) || $timestamp <= 0 ) {
+		return false;
+	}
+
 	$crons = _get_cron_array();
 	$schedules = wp_get_schedules();
 	$key = md5( serialize( $args ) );
@@ -146,8 +161,14 @@ function wp_reschedule_event( $timestamp, $recurrence, $hook, $args = array() ) 
  * Although not passed to a callback function, these arguments are used
  * to uniquely identify the scheduled event, so they should be the same
  * as those used when originally scheduling the event.
+ * @return false|void False when an event is not unscheduled.
  */
 function wp_unschedule_event( $timestamp, $hook, $args = array() ) {
+	// Make sure timestamp is a positive integer
+	if ( ! is_numeric( $timestamp ) || $timestamp <= 0 ) {
+		return false;
+	}
+
 	$crons = _get_cron_array();
 	$key = md5(serialize($args));
 	unset( $crons[$timestamp][$hook][$key] );
@@ -211,9 +232,11 @@ function wp_next_scheduled( $hook, $args = array() ) {
 }
 
 /**
- * Send request to run cron through HTTP request that doesn't halt page loading.
+ * Sends a request to run cron through HTTP request that doesn't halt page loading.
  *
  * @since 2.1.0
+ *
+ * @param int $gmt_time Optional. Unix timestamp. Default 0 (current time is used).
  */
 function spawn_cron( $gmt_time = 0 ) {
 	if ( ! $gmt_time )
@@ -248,7 +271,7 @@ function spawn_cron( $gmt_time = 0 ) {
 		return;
 
 	if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-		if ( ! empty( $_POST ) || defined( 'DOING_AJAX' ) ||  defined( 'XMLRPC_REQUEST' ) ) {
+		if ( 'GET' !== $_SERVER['REQUEST_METHOD'] || defined( 'DOING_AJAX' ) ||  defined( 'XMLRPC_REQUEST' ) ) {
 			return;
 		}
 
@@ -275,6 +298,7 @@ function spawn_cron( $gmt_time = 0 ) {
 	 * Filter the cron request arguments.
 	 *
 	 * @since 3.5.0
+	 * @since 4.5.0 The `$doing_wp_cron` parameter was added.
 	 *
 	 * @param array $cron_request_array {
 	 *     An array of cron request URL arguments.
@@ -289,6 +313,7 @@ function spawn_cron( $gmt_time = 0 ) {
 	 *         @type bool $sslverify Whether SSL should be verified for the request. Default false.
 	 *     }
 	 * }
+	 * @param string $doing_wp_cron The unix timestamp of the cron lock.
 	 */
 	$cron_request = apply_filters( 'cron_request', array(
 		'url'  => add_query_arg( 'doing_wp_cron', $doing_wp_cron, site_url( 'wp-cron.php' ) ),
@@ -296,10 +321,10 @@ function spawn_cron( $gmt_time = 0 ) {
 		'args' => array(
 			'timeout'   => 0.01,
 			'blocking'  => false,
-			/** This filter is documented in wp-includes/class-http.php */
+			/** This filter is documented in wp-includes/class-wp-http-streams.php */
 			'sslverify' => apply_filters( 'https_local_ssl_verify', false )
 		)
-	) );
+	), $doing_wp_cron );
 
 	wp_remote_post( $cron_request['url'], $cron_request['args'] );
 }

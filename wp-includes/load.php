@@ -8,6 +8,21 @@
  */
 
 /**
+ * Return the HTTP protocol sent by the server.
+ *
+ * @since 4.4.0
+ *
+ * @return string The HTTP protocol. Default: HTTP/1.0.
+ */
+function wp_get_server_protocol() {
+	$protocol = $_SERVER['SERVER_PROTOCOL'];
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+		$protocol = 'HTTP/1.0';
+	}
+	return $protocol;
+}
+
+/**
  * Turn register globals off.
  *
  * @since 2.1.0
@@ -111,13 +126,19 @@ function wp_check_php_mysql_versions() {
 
 	if ( version_compare( $required_php_version, $php_version, '>' ) ) {
 		wp_load_translations_early();
+
+		$protocol = wp_get_server_protocol();
+		header( sprintf( '%s 500 Internal Server Error', $protocol ), true, 500 );
 		header( 'Content-Type: text/html; charset=utf-8' );
 		die( sprintf( __( 'Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.' ), $php_version, $wp_version, $required_php_version ) );
 	}
 
-	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
+	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! extension_loaded( 'mysqlnd' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
 		wp_load_translations_early();
-		 header( 'Content-Type: text/html; charset=utf-8' );
+
+		$protocol = wp_get_server_protocol();
+		header( sprintf( '%s 500 Internal Server Error', $protocol ), true, 500 );
+		header( 'Content-Type: text/html; charset=utf-8' );
 		die( __( 'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.' ) );
 	}
 }
@@ -132,7 +153,6 @@ function wp_check_php_mysql_versions() {
 function wp_favicon_request() {
 	if ( '/favicon.ico' == $_SERVER['REQUEST_URI'] ) {
 		header('Content-Type: image/vnd.microsoft.icon');
-		header('Content-Length: 0');
 		exit;
 	}
 }
@@ -154,7 +174,7 @@ function wp_favicon_request() {
  * @global int $upgrading the unix timestamp marking when upgrading WordPress began.
  */
 function wp_maintenance() {
-	if ( !file_exists( ABSPATH . '.maintenance' ) || defined( 'WP_INSTALLING' ) )
+	if ( ! file_exists( ABSPATH . '.maintenance' ) || wp_installing() )
 		return;
 
 	global $upgrading;
@@ -171,9 +191,7 @@ function wp_maintenance() {
 
 	wp_load_translations_early();
 
-	$protocol = $_SERVER["SERVER_PROTOCOL"];
-	if ( 'HTTP/1.1' != $protocol && 'HTTP/1.0' != $protocol )
-		$protocol = 'HTTP/1.0';
+	$protocol = wp_get_server_protocol();
 	header( "$protocol 503 Service Unavailable", true, 503 );
 	header( 'Content-Type: text/html; charset=utf-8' );
 	header( 'Retry-After: 600' );
@@ -239,7 +257,8 @@ function timer_stop( $display = 0, $precision = 3 ) {
  * Set PHP error reporting based on WordPress debug settings.
  *
  * Uses three constants: `WP_DEBUG`, `WP_DEBUG_DISPLAY`, and `WP_DEBUG_LOG`.
- * All three can be defined in wp-config.php, and by default are set to false.
+ * All three can be defined in wp-config.php. By default, `WP_DEBUG` and
+ * `WP_DEBUG_LOG` are set to false, and `WP_DEBUG_DISPLAY` is set to true.
  *
  * When `WP_DEBUG` is true, all PHP notices are reported. WordPress will also
  * display internal notices: when a deprecated WordPress function, function
@@ -260,7 +279,7 @@ function timer_stop( $display = 0, $precision = 3 ) {
  * When `WP_DEBUG_LOG` is true, errors will be logged to debug.log in the content
  * directory.
  *
- * Errors are never displayed for XML-RPC requests.
+ * Errors are never displayed for XML-RPC, REST, and Ajax requests.
  *
  * @since 3.0.0
  * @access private
@@ -281,8 +300,10 @@ function wp_debug_mode() {
 	} else {
 		error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 	}
-	if ( defined( 'XMLRPC_REQUEST' ) )
-		ini_set( 'display_errors', 0 );
+
+	if ( defined( 'XMLRPC_REQUEST' ) || defined( 'REST_REQUEST' ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		@ini_set( 'display_errors', 0 );
+	}
 }
 
 /**
@@ -379,7 +400,13 @@ function wp_set_wpdb_vars() {
 
 	if ( is_wp_error( $prefix ) ) {
 		wp_load_translations_early();
-		wp_die( __( '<strong>ERROR</strong>: <code>$table_prefix</code> in <code>wp-config.php</code> can only contain numbers, letters, and underscores.' ) );
+		wp_die(
+			/* translators: 1: $table_prefix 2: wp-config.php */
+			sprintf( __( '<strong>ERROR</strong>: %1$s in %2$s can only contain numbers, letters, and underscores.' ),
+				'<code>$table_prefix</code>',
+				'<code>wp-config.php</code>'
+			)
+		);
 	}
 }
 
@@ -449,7 +476,7 @@ function wp_start_object_cache() {
 		wp_cache_init();
 
 	if ( function_exists( 'wp_cache_add_global_groups' ) ) {
-		wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache' ) );
+		wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache', 'networks', 'sites' ) );
 		wp_cache_add_non_persistent_groups( array( 'comment', 'counts', 'plugins' ) );
 	}
 }
@@ -464,12 +491,12 @@ function wp_start_object_cache() {
  */
 function wp_not_installed() {
 	if ( is_multisite() ) {
-		if ( ! is_blog_installed() && ! defined( 'WP_INSTALLING' ) ) {
+		if ( ! is_blog_installed() && ! wp_installing() ) {
 			nocache_headers();
 
 			wp_die( __( 'The site you have requested is not installed properly. Please contact the system administrator.' ) );
 		}
-	} elseif ( ! is_blog_installed() && ! defined( 'WP_INSTALLING' ) ) {
+	} elseif ( ! is_blog_installed() && ! wp_installing() ) {
 		nocache_headers();
 
 		require( ABSPATH . WPINC . '/kses.php' );
@@ -535,7 +562,7 @@ function wp_get_active_and_valid_plugins() {
 		array_unshift( $plugins, ABSPATH . 'my-hacks.php' );
 	}
 
-	if ( empty( $active_plugins ) || defined( 'WP_INSTALLING' ) )
+	if ( empty( $active_plugins ) || wp_installing() )
 		return $plugins;
 
 	$network_plugins = is_multisite() ? wp_get_active_network_plugins() : false;
@@ -736,13 +763,13 @@ function is_multisite() {
 }
 
 /**
- * Retrieve the current blog ID.
+ * Retrieve the current site ID.
  *
  * @since 3.1.0
  *
  * @global int $blog_id
  *
- * @return int Blog id
+ * @return int Site ID.
  */
 function get_current_blog_id() {
 	global $blog_id;
@@ -836,4 +863,35 @@ function wp_load_translations_early() {
 	}
 
 	$wp_locale = new WP_Locale();
+}
+
+/**
+ * Check or set whether WordPress is in "installation" mode.
+ *
+ * If the `WP_INSTALLING` constant is defined during the bootstrap, `wp_installing()` will default to `true`.
+ *
+ * @since 4.4.0
+ *
+ * @staticvar bool $installing
+ *
+ * @param bool $is_installing Optional. True to set WP into Installing mode, false to turn Installing mode off.
+ *                            Omit this parameter if you only want to fetch the current status.
+ * @return bool True if WP is installing, otherwise false. When a `$is_installing` is passed, the function will
+ *              report whether WP was in installing mode prior to the change to `$is_installing`.
+ */
+function wp_installing( $is_installing = null ) {
+	static $installing = null;
+
+	// Support for the `WP_INSTALLING` constant, defined before WP is loaded.
+	if ( is_null( $installing ) ) {
+		$installing = defined( 'WP_INSTALLING' ) && WP_INSTALLING;
+	}
+
+	if ( ! is_null( $is_installing ) ) {
+		$old_installing = $installing;
+		$installing = $is_installing;
+		return (bool) $old_installing;
+	}
+
+	return (bool) $installing;
 }

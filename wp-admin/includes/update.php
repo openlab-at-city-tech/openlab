@@ -203,7 +203,7 @@ function core_update_footer( $msg = '' ) {
 		return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), get_bloginfo( 'version', 'display' ), network_admin_url( 'update-core.php' ) );
 
 	case 'upgrade' :
-		return sprintf( '<strong>'.__( '<a href="%1$s">Get Version %2$s</a>' ).'</strong>', network_admin_url( 'update-core.php' ), $cur->current);
+		return '<strong><a href="' . network_admin_url( 'update-core.php' ) . '">' . sprintf( __( 'Get Version %s' ), $cur->current ) . '</a></strong>';
 
 	case 'latest' :
 	default :
@@ -231,7 +231,7 @@ function update_nag() {
 		return false;
 
 	if ( current_user_can('update_core') ) {
-		$msg = sprintf( __('<a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> is available! <a href="%2$s">Please update now</a>.'), $cur->current, network_admin_url( 'update-core.php' ) );
+		$msg = sprintf( __( '<a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> is available! <a href="%2$s" aria-label="Please update WordPress now">Please update now</a>.' ), $cur->current, network_admin_url( 'update-core.php' ) );
 	} else {
 		$msg = sprintf( __('<a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> is available! Please notify the site administrator.'), $cur->current );
 	}
@@ -254,7 +254,21 @@ function update_right_now_message() {
 			$msg .= '<a href="' . network_admin_url( 'update-core.php' ) . '" class="button" aria-describedby="wp-version">' . sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) ) . '</a> ';
 	}
 
-	$msg .= sprintf( '<span id="wp-version">' . __( 'WordPress %1$s running %2$s theme.' ) . '</span>', get_bloginfo( 'version', 'display' ), $theme_name );
+	/* translators: 1: version number, 2: theme name */
+	$content = __( 'WordPress %1$s running %2$s theme.' );
+
+	/**
+	 * Filter the text displayed in the 'At a Glance' dashboard widget.
+	 *
+	 * Prior to 3.8.0, the widget was named 'Right Now'.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param string $content Default text.
+	 */
+	$content = apply_filters( 'update_right_now_text', $content );
+
+	$msg .= sprintf( '<span id="wp-version">' . $content . '</span>', get_bloginfo( 'version', 'display' ), $theme_name );
 
 	echo "<p id='wp-version-message'>$msg</p>";
 }
@@ -288,7 +302,7 @@ function wp_plugin_update_rows() {
 	$plugins = get_site_transient( 'update_plugins' );
 	if ( isset($plugins->response) && is_array($plugins->response) ) {
 		$plugins = array_keys( $plugins->response );
-		foreach( $plugins as $plugin_file ) {
+		foreach ( $plugins as $plugin_file ) {
 			add_action( "after_plugin_row_$plugin_file", 'wp_plugin_update_row', 10, 2 );
 		}
 	}
@@ -324,11 +338,35 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		echo '<tr class="plugin-update-tr' . $active_class . '" id="' . esc_attr( $r->slug . '-update' ) . '" data-slug="' . esc_attr( $r->slug ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message">';
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
-			printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>.'), $plugin_name, esc_url($details_url), esc_attr($plugin_name), $r->new_version );
-		} elseif ( empty($r->package) ) {
-			printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>'), $plugin_name, esc_url($details_url), esc_attr($plugin_name), $r->new_version );
+			/* translators: 1: plugin name, 2: details URL, 3: accessibility text, 4: version number */
+			printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a>.' ),
+				$plugin_name,
+				esc_url( $details_url ),
+				/* translators: 1: plugin name, 2: version number */
+				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $plugin_name, $r->new_version ) ),
+				$r->new_version
+			);
+		} elseif ( empty( $r->package ) ) {
+			/* translators: 1: plugin name, 2: details URL, 3: accessibility text, 4: version number */
+			printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>' ),
+				$plugin_name,
+				esc_url( $details_url ),
+				/* translators: 1: plugin name, 2: version number */
+				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $plugin_name, $r->new_version ) ),
+				$r->new_version
+			);
 		} else {
-			printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a> or <a href="%5$s" class="update-link">update now</a>.' ), $plugin_name, esc_url( $details_url ), esc_attr( $plugin_name ), $r->new_version, wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $file, 'upgrade-plugin_' . $file ) );
+			/* translators: 1: plugin name, 2: details URL, 3: accessibility text, 4: version number, 5: update URL, 6: accessibility text */
+			printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a> or <a href="%5$s" class="update-link" aria-label="%6$s">update now</a>.' ),
+				$plugin_name,
+				esc_url( $details_url ),
+				/* translators: 1: plugin name, 2: version number */
+				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $plugin_name, $r->new_version ) ),
+				$r->new_version,
+				wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $file, 'upgrade-plugin_' . $file ),
+				/* translators: %s: plugin name */
+				esc_attr( sprintf( __( 'Update %s now' ), $plugin_name ) )
+			);
 		}
 		/**
 		 * Fires at the end of the update message container in each
@@ -401,7 +439,7 @@ function wp_theme_update_rows() {
 	if ( isset($themes->response) && is_array($themes->response) ) {
 		$themes = array_keys( $themes->response );
 
-		foreach( $themes as $theme ) {
+		foreach ( $themes as $theme ) {
 			add_action( "after_theme_row_$theme", 'wp_theme_update_row', 10, 2 );
 		}
 	}
@@ -417,19 +455,48 @@ function wp_theme_update_row( $theme_key, $theme ) {
 	$current = get_site_transient( 'update_themes' );
 	if ( !isset( $current->response[ $theme_key ] ) )
 		return false;
+
 	$r = $current->response[ $theme_key ];
+
+	$theme_name = $theme['Name'];
 
 	$details_url = add_query_arg( array( 'TB_iframe' => 'true', 'width' => 1024, 'height' => 800 ), $current->response[ $theme_key ]['url'] );
 
 	$wp_list_table = _get_list_table('WP_MS_Themes_List_Table');
 
-	echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
+	$active = $theme->is_allowed( 'network' ) ? ' active': '';
+
+	echo '<tr class="plugin-update-tr' . $active . '" id="' . esc_attr( $theme->get_stylesheet() . '-update' ) . '" data-slug="' . esc_attr( $theme->get_stylesheet() ) . '"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
 	if ( ! current_user_can('update_themes') ) {
-		printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>.'), $theme['Name'], esc_url($details_url), esc_attr($theme['Name']), $r->new_version );
+		/* translators: 1: theme name, 2: details URL, 3: accessibility text, 4: version number */
+		printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a>.'),
+			$theme_name,
+			esc_url( $details_url ),
+			/* translators: 1: theme name, 2: version number */
+			esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme_name, $r['new_version'] ) ),
+			$r['new_version']
+		);
 	} elseif ( empty( $r['package'] ) ) {
-		printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>'), $theme['Name'], esc_url($details_url), esc_attr($theme['Name']), $r['new_version'] );
+		/* translators: 1: theme name, 2: details URL, 3: accessibility text, 4: version number */
+		printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>' ),
+			$theme_name,
+			esc_url( $details_url ),
+			/* translators: 1: theme name, 2: version number */
+			esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme_name, $r['new_version'] ) ),
+			$r['new_version']
+		);
 	} else {
-		printf( __('There is a new version of %1$s available. <a href="%2$s" class="thickbox" title="%3$s">View version %4$s details</a> or <a href="%5$s">update now</a>.'), $theme['Name'], esc_url($details_url), esc_attr($theme['Name']), $r['new_version'], wp_nonce_url( self_admin_url('update.php?action=upgrade-theme&theme=') . $theme_key, 'upgrade-theme_' . $theme_key) );
+		/* translators: 1: theme name, 2: details URL, 3: accessibility text, 4: version number, 5: update URL, 6: accessibility text */
+		printf( __( 'There is a new version of %1$s available. <a href="%2$s" class="thickbox open-plugin-details-modal" aria-label="%3$s">View version %4$s details</a> or <a href="%5$s" class="update-link" aria-label="%6$s">update now</a>.' ),
+			$theme_name,
+			esc_url( $details_url ),
+			/* translators: 1: theme name, 2: version number */
+			esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme_name, $r['new_version'] ) ),
+			$r['new_version'],
+			wp_nonce_url( self_admin_url( 'update.php?action=upgrade-theme&theme=' ) . $theme_key, 'upgrade-theme_' . $theme_key ),
+			/* translators: %s: theme name */
+			esc_attr( sprintf( __( 'Update %s now' ), $theme_name ) )
+		);
 	}
 	/**
 	 * Fires at the end of the update message container in each
