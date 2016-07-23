@@ -13,7 +13,7 @@ class StaticHtmlOutput
 	/**
 	 * Plugin version
 	 */
-	const VERSION = '1.1.0';
+	const VERSION = '1.1.1';
 	
 	/**
 	 * The lookup key used to locate the options record in the wp_options table
