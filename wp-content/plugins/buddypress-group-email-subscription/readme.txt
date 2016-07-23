@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 2.9.1 (BP 1.2)
-Tested up to: 4.4.2 (BP 2.4.3)
-Stable tag: 3.6.0
+Tested up to: 4.4.2 (BP 2.5)
+Stable tag: 3.6.1
 
 == Description ==
 
@@ -48,11 +48,11 @@ TRANSLATORS
 - Japanese - http://buddypress.org/community/members/chestnut_jp/
 - Spanish - Williams Castillo, Gregor Gimmy
 - Italian - Stefano Russo
-- French - http://www.claudegagne-photo.com
+- French - http://www.claudegagne-photo.com, Sylvain Ghysens
 - Brazilian Portuguese - www.about.me/dennisaltermann (or www.congregacao.net)
 - Dutch - Anja werkgroepen.net/wordpress, Tim de Hoog
-- Swedish - Thomas Schneider
-- German - Peter Peterson, Thorsten Wollenhöfer
+- Swedish - Thomas Schneider, Joakim Hising
+- German - Peter Peterson, Thorsten Wollenhöfer, Jörg Lohrer
 - Russian - http://www.viaestvita.net/groups/
 - Farsi - Vahid Masoomi http://www.AzUni.ir
 - Lithuanian - Vincent G http://www.Host1Free.com
@@ -88,6 +88,13 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 3.6.1 =
+* Fix bug that could cause fatal error when sending digests in some cases.
+* Improve appearance of "Get email updates" link in directories when using Twenty* themes.
+* Add filter that enables JS/CSS assets to be loaded in custom locations.
+* Update Swedish translation.
+* Update German translation.
 
 = 3.6.0 =
 * Introduce `ass_generate_notification()`, a generic handler for sending notifications.
