@@ -82,7 +82,8 @@ function invite_anyone_admin_panel() {
 			),
 			'cloudsponge' => array(
 				'cloudsponge_enabled',
-				'cloudsponge_key'
+				'cloudsponge_key',
+				'cloudsponge_account_key',
 			),
 			'general-settings' => array(
 				'can_send_group_invites_email',
@@ -112,29 +113,13 @@ function invite_anyone_admin_panel() {
 	<div class="wrap">
 	<h2><?php _e( 'Invite Anyone', 'invite-anyone' ) ?></h2>
 
-    	<ul class="ia-tabs">
-    		<li<?php if ( 'general-settings' == $subpage ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo add_query_arg( 'subpage', 'general-settings', $url_base ) ?>"><?php _e( 'General Settings', 'invite-anyone' ) ?></a>
-    		</li>
-
-    		<li<?php if ( 'access-control' == $subpage ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo add_query_arg( 'subpage', 'access-control', $url_base ) ?>"><?php _e( 'Access Control', 'invite-anyone' ) ?></a>
-    		</li>
-
-    		<li<?php if ( 'cloudsponge' == $subpage ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo add_query_arg( 'subpage', 'cloudsponge', $url_base ) ?>"><?php _e( 'CloudSponge', 'invite-anyone' ) ?></a>
-    		</li>
-
-    		<li<?php if ( 'manage-invitations' == $subpage ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo add_query_arg( 'subpage', 'manage-invitations', $url_base ) ?>"><?php _e( 'Manage Invitations', 'invite-anyone' ) ?></a>
-    		</li>
-
-    		<li<?php if ( 'stats' == $subpage ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo add_query_arg( 'subpage', 'stats', $url_base ) ?>"><?php _e( 'Stats', 'invite-anyone' ) ?></a>
-    		</li>
-
-
-    	</ul>
+	<h2 class="nav-tab-wrapper">
+		<a class="nav-tab<?php if ( 'general-settings' === $subpage ) : ?> nav-tab-active<?php endif; ?>" href="<?php echo add_query_arg( 'subpage', 'general-settings', esc_url( $url_base ) ) ?>"><?php _e( 'General Settings', 'invite-anyone' ) ?></a>
+		<a class="nav-tab<?php if ( 'access-control' === $subpage ) : ?> nav-tab-active<?php endif; ?>" href="<?php echo add_query_arg( 'subpage', 'access-control', esc_url( $url_base ) ) ?>"><?php _e( 'Access Control', 'invite-anyone' ) ?></a>
+		<a class="nav-tab<?php if ( 'cloudsponge' === $subpage ) : ?> nav-tab-active<?php endif; ?>" href="<?php echo add_query_arg( 'subpage', 'cloudsponge', esc_url( $url_base ) ) ?>"><?php _e( 'CloudSponge', 'invite-anyone' ) ?></a>
+		<a class="nav-tab<?php if ( 'manage-invitations' === $subpage ) : ?> nav-tab-active<?php endif; ?>" href="<?php echo add_query_arg( 'subpage', 'manage-invitations', esc_url( $url_base ) ) ?>"><?php _e( 'Manage Invitations', 'invite-anyone' ) ?></a>
+		<a class="nav-tab<?php if ( 'stats' === $subpage ) : ?> nav-tab-active<?php endif; ?>" href="<?php echo add_query_arg( 'stats', 'general-settings', esc_url( $url_base ) ) ?>"><?php _e( 'Stats', 'invite-anyone' ) ?></a>
+	</h2>
 
     	<form action="<?php echo $form_action ?>" method="post">
 
@@ -404,21 +389,66 @@ function invite_anyone_settings_group_invite_visibility() {
 
 function invite_anyone_settings_cs_content() {
 
-	$options 	= invite_anyone_options();
-	$domain_key 	= !empty( $options['cloudsponge_key'] ) ? $options['cloudsponge_key'] : '';
+	$options = invite_anyone_options();
+	$domain_key = !empty( $options['cloudsponge_key'] ) ? $options['cloudsponge_key'] : '';
+	$account_key = !empty( $options['cloudsponge_account_key'] ) ? $options['cloudsponge_account_key'] : '';
+	// Trying to give to CloudSponge user email and name to pre populate signup
+	// form and reduce friction
+	$cloudsponge_params = '?utm_source=invite-anyone&utm_medium=partner&utm_campaign=integrator';
+	$cloudsponge_additional_params = '&email='.urlencode( wp_get_current_user()->user_email );
+	$display_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
+	if ( $display_name ){
+		$cloudsponge_additional_params .= '&name=' . urlencode( $display_name );
+	}
+	// A callback URL to create a friendly button to get back to WP
+	$protocol = is_ssl() ? 'https://' : 'http://';
+	$cloudsponge_additional_params .= '&callback=' . urlencode( $protocol. $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] );
+	// Landing to home
+	$cloudsponge_link = 'http://www.cloudsponge.com'.$cloudsponge_params;
+	// Landing on Signup Form
+	$cloudsponge_signup_link = 'http://cloudsponge.com/signup/invite-anyone' . $cloudsponge_params . $cloudsponge_additional_params;
+
+	// Include CloudSponge Snippet, so user can launch it clicking
+	// on `Test` button
+	wp_register_script( 'ia_cloudsponge', WP_PLUGIN_URL . '/invite-anyone/by-email/cloudsponge-js.js', array(), false, true );
+	$strings['account_key'] = $account_key;
+	$strings['domain_key'] = false;
+	wp_localize_script( 'ia_cloudsponge', 'ia_cloudsponge', $strings );
+	wp_enqueue_script( 'ia_cloudsponge' );
 
 ?>
 	<div class="cs">
-		<a href="http://www.cloudsponge.com/?utm_source=invite-anyone&utm_medium=partner&utm_campaign=integrator"><img class="cs-logo" src="<?php echo plugins_url( 'invite-anyone/images/cloudsponge_logo.png' ) ?>" /></a>
-
+		<img class="cs-logo" src="<?php echo plugins_url( 'invite-anyone/images/cloudsponge_logo.png' ) ?>" />
 		<div class="cs-explain">
-			<p><?php _e( '<a href="http://www.cloudsponge.com/?utm_source=invite-anyone&utm_medium=partner&utm_campaign=integrator">CloudSponge</a> is a cool service that gives your users easy and secure access to their address books (Facebook, LinkedIn, Gmail, Yahoo, and a number of other online and desktop email clients), so that they can more easily invite friends to your site. It#8217;s a great way to increase engagement on your site, by making it easier for them to invite new members. In order to enable CloudSponge support in Invite Anyone and BuddyPress, you\'ll need to <a href="http://www.cloudsponge.com/signup?utm_source=invite-anyone&utm_medium=partner&utm_campaign=integrator">register for a CloudSponge account</a>.', 'invite-anyone' ) ?></p>
-
-			<label for="invite_anyone[cloudsponge_enabled]"><input type="checkbox" name="invite_anyone[cloudsponge_enabled]" id="cloudsponge-enabled" <?php checked( $options['cloudsponge_enabled'], 'on' ) ?>/> <strong><?php _e( 'Enable CloudSponge?', 'invite-anyone' ) ?></strong></label>
+			<p><?php _e( 'CloudSponge is a cool service that gives your users easy and secure access to their address books (LinkedIn, Gmail, Yahoo, and a number of other online and desktop email clients), so that they can more easily invite friends to your site. It\'s a great way to increase engagement on your site, by making it easier for them to invite new members. In order to enable CloudSponge support in Invite Anyone and BuddyPress, you\'ll need to <a href="'.$cloudsponge_signup_link.'">register for a CloudSponge account</a>.', 'invite-anyone' ) ?></p>
+			<label for="invite_anyone[cloudsponge_enabled]"><input type="checkbox" name="invite_anyone[cloudsponge_enabled]" id="cloudsponge-enabled" <?php checked( $options['cloudsponge_enabled'], 'on' )  || checked( isset($_GET['cloudsponge-key']), true ) ?>/> <strong><?php _e( 'Enable CloudSponge?', 'invite-anyone' ) ?></strong></label>
 		</div>
 
 		<div class="cs-settings">
-			<label for="invite_anyone[cloudsponge_key]"><?php _e( 'CloudSponge Domain Key', 'invite-anyone' ) ?></label> <input type="text" id="cloudsponge-key" name="invite_anyone[cloudsponge_key]" value="<?php echo esc_html( $domain_key ) ?>" /> <span class="description"><?php _e( 'CloudSponge integration will not work without a valid domain key.', 'invite-anyone' ) ?></span>
+
+			<?php
+				if ( $domain_key ) {
+			?>
+					<label for="invite_anyone[cloudsponge_key]"><?php _e( 'CloudSponge Domain Key', 'invite-anyone' ) ?></label> <input type="text" id="cloudsponge-key" name="invite_anyone[cloudsponge_key]" value="<?php echo esc_html( $domain_key ) ?>" /> <span class="description"><?php _e( 'CloudSponge integration will not work without a valid CloudSponge Domain key.', 'invite-anyone' ) ?></span>
+			<?php
+				} else {
+			?>
+					<label for="invite_anyone[cloudsponge_key]"><?php _e( 'CloudSponge Key', 'invite-anyone' ) ?></label>
+					<input type="text" id="cloudsponge-key" name="invite_anyone[cloudsponge_account_key]" value="<?php if ( $account_key ) { echo esc_html( $account_key ); } else { echo esc_html( $_GET['cloudsponge-key'] ); } ?>" />
+					<?php if ( $account_key ) : ?>
+						<button id="test-cloudsponge-button" name="test-cloudsponge-button" type="button" onclick="csLaunch();"><?php _e( 'Test', 'invite-anyone' ); ?></button>
+					<?php endif; ?>
+
+					<?php if ( ! isset( $_GET['cloudsponge-key'] ) && ! $account_key ) : ?>
+						<span class="description"><?php _e( 'CloudSponge integration will not work without a valid CloudSponge Key.', 'invite-anyone' ) ?></span>
+					<?php elseif ( isset( $_GET['cloudsponge-key']) && !$account_key ) : ?>
+						<span class="description cs-warning"><?php _e( 'Please, click on <strong>Save Changes</strong> to save the key!', 'invite-anyone' ) ?></span>
+					<?php else : ?>
+						<span class="description"><?php _e( 'Click in the <strong>test</strong> button to test your integration.', 'invite-anyone' ) ?></span>
+					<?php endif; ?>
+			<?php
+				}
+			?>
 
 			<p class="description"><?php _e( 'When you use CloudSponge with Invite Anyone, part of your CloudSponge monthly payment goes to the author of Invite Anyone. This is a great way to support future development of the plugin. Thanks for your support!', 'invite-anyone' ) ?></p>
 		</div>
@@ -520,7 +550,7 @@ function invite_anyone_settings_mi_content() {
 				</th>
 
 				<td class="ia-inviter">
-					<?php echo bp_core_get_userlink( get_the_author_ID() ) ?>
+					<?php echo bp_core_get_userlink( get_the_author_meta( 'ID' ) ) ?>
 
 					<div class="row-actions">
 						<span class="edit"><a href="<?php echo add_query_arg( array( 'post' => get_the_ID(), 'action' => 'edit' ), admin_url( 'post.php' ) ) ?>"><?php _e( 'View Invitation', 'invite-anyone' ) ?></a></span>

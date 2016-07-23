@@ -427,26 +427,31 @@ add_action( 'wp', 'invite_anyone_catch_send' );
 function invite_anyone_catch_clear() {
 	global $bp;
 
-	$returned_data = isset( $_COOKIE['invite-anyone'] ) ? unserialize( stripslashes( $_COOKIE['invite-anyone'] ) ) : '';
-	if ( $returned_data ) {
-		// We'll take a moment nice and early in the loading process to get returned_data
-		$keys = array(
-			'error_message',
-			'error_emails',
-			'subject',
-			'message',
-			'groups',
-		);
+	if ( isset( $_COOKIE['invite-anyone'] ) ) {
+		$returned_data = unserialize( stripslashes( $_COOKIE['invite-anyone'] ) );
 
-		foreach ( $keys as $key ) {
-			$bp->invite_anyone->returned_data[ $key ] = null;
-			if ( isset( $returned_data[ $key ] ) ) {
-				$value = stripslashes_deep( $returned_data[ $key ] );
-				$bp->invite_anyone->returned_data[ $key ] = $value;
+		if ( $returned_data ) {
+			// We'll take a moment nice and early in the loading process to get returned_data
+			$keys = array(
+				'error_message',
+				'error_emails',
+				'subject',
+				'message',
+				'groups',
+			);
+
+			foreach ( $keys as $key ) {
+				$bp->invite_anyone->returned_data[ $key ] = null;
+				if ( isset( $returned_data[ $key ] ) ) {
+					$value = stripslashes_deep( $returned_data[ $key ] );
+					$bp->invite_anyone->returned_data[ $key ] = $value;
+				}
 			}
 		}
+
+		setcookie( 'invite-anyone', null, -1, '/' );
+
 	}
-	@setcookie( 'invite-anyone', '', time() - 3600, '/' );
 
 	if ( isset( $_GET['clear'] ) ) {
 		$clear_id = $_GET['clear'];
@@ -637,8 +642,7 @@ function invite_anyone_screen_one_content() {
 				<label for="invite-anyone-custom-subject"><?php _e( '(optional) Customize the subject line of the invitation email.', 'invite-anyone' ) ?></label>
 					<textarea name="invite_anyone_custom_subject" id="invite-anyone-custom-subject" rows="15" cols="10" ><?php echo invite_anyone_invitation_subject( $returned_subject ) ?></textarea>
 			<?php else : ?>
-				<label for="invite-anyone-custom-subject"><?php _e( 'Subject: <span class="disabled-subject">Subject line is fixed</span>', 'invite-anyone' ) ?></label>
-					<textarea name="invite_anyone_custom_subject" id="invite-anyone-custom-subject" rows="15" cols="10" disabled="disabled"><?php echo invite_anyone_invitation_subject( $returned_subject ) ?> </textarea>
+				<strong><?php _e( 'Subject:', 'invite-anyone' ) ?></strong> <?php echo invite_anyone_invitation_subject( $returned_subject ) ?>
 
 				<input type="hidden" id="invite-anyone-customised-subject" name="invite_anyone_custom_subject" value="<?php echo invite_anyone_invitation_subject() ?>" />
 			<?php endif; ?>
