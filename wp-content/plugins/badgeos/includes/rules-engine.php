@@ -108,8 +108,10 @@ function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $
 
 		// If the user just earned the badge, though, don't let them earn it again
 		// This prevents an infinite loop if the badge has no maximum earnings limit
-		if ( $last_activity >= time('-2 seconds') )
-			$return = false;
+		$minimum_time = time() - 2;
+		if ( $last_activity >= $minimum_time ) {
+		    $return = false;
+		}
 	}
 
 	// Return our eligibility status
@@ -232,12 +234,13 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 	// Get achievements that can be earned from completing this achievement
 	$dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
 
+    // See if a user has unlocked all achievements of a given type
+    badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
+
 	// Loop through each dependent achievement and see if it can be awarded
 	foreach ( $dependent_achievements as $achievement )
 		badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
 
-	// See if a user has unlocked all achievements of a given type
-	badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
 
 }
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
