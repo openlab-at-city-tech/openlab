@@ -1,5 +1,5 @@
 window.hypothesisConfig = function () {
   return {
-    showHighlights: true
+    showHighlights: false
   }
 }
