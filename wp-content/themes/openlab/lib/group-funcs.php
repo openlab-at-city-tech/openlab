@@ -173,6 +173,11 @@ function openlab_group_archive() {
         $department = str_replace("-", " ", $_GET['department']);
         $department = ucwords($department);
     }
+
+    if (!empty($_GET['cat'])) {
+        $categories = $_GET['cat'];
+    }
+
     if (!empty($_GET['semester'])) {
         $semester = str_replace("-", " ", $_GET['semester']);
         $semester = explode(" ", $semester);
@@ -229,6 +234,16 @@ function openlab_group_archive() {
         'meta_query' => $meta_query,
     );
 
+    if (!empty($categories) && 'cat_all' != strtolower($categories)) {
+        $group_args['tax_query'] = array(
+            array(
+                'taxonomy' => 'bp_group_categories',
+                'terms' => 1431,
+                'field' => 'term_id',
+            )
+        );
+    }
+    
     if (!empty($_GET['group_sequence'])) {
         $group_args['type'] = $_GET['group_sequence'];
     }
@@ -676,6 +691,15 @@ function cuny_group_single() {
                                 <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
                             </div>
 
+                            <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
+                                <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
+                                    <div class="table-row row">
+                                        <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Category</div>
+                                        <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
                             <?php if ($group_type == "portfolio"): ?>
 
                                 <div class="table-row row">
@@ -693,7 +717,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -882,7 +906,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                   ?></p>
+                                                        <p><?php // bp_group_status_message()                                           ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
@@ -1129,9 +1153,13 @@ function openlab_current_directory_filters() {
             break;
 
         case 'course' :
+
+            $filters = array('school', 'department', 'semester');
+            break;
+
         case 'club' :
         case 'project' :
-            $filters = array('school', 'department', 'semester');
+            $filters = array('school', 'department', 'cat', 'semester');
             break;
 
         case 'people' :
@@ -1515,7 +1543,7 @@ function openlab_get_group_activity_events_feed() {
     );
 
     $events = eo_get_events($args);
-    
+
     $menu_items = openlab_calendar_submenu();
 
     ob_start();

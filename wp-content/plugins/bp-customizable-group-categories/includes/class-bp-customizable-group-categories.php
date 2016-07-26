@@ -65,7 +65,7 @@ class Bp_Customizable_Group_Categories {
      * @var      string
      */
     public static $required_version = array(
-        'wp' => 4.4,
+        'wp' => 4.3,
         'bp' => 2.5,
     );
 
@@ -151,6 +151,25 @@ class Bp_Customizable_Group_Categories {
          * of the plugin.
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bp-customizable-group-categories-i18n.php';
+        
+        if (bp_is_active('groups')) {
+            /**
+             * Class for managing group taxonomies
+             * Ported from BP Groups Taxo
+             */
+            require_once plugin_dir_path(dirname(__FILE__)) . 'includes/imported/class-bp-groups-taxonomy.php';
+            
+            /**
+             * Class for managing group categories
+             * Ported from BP Groups Taxo
+             */
+            require_once plugin_dir_path(dirname(__FILE__)) . 'includes/imported/class-bp-groups-category.php';
+        }
+
+        /**
+         * Supporting term metadata in WordPress installs < 4.4
+         */
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/term-metadata/term-metadata.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.
@@ -162,6 +181,11 @@ class Bp_Customizable_Group_Categories {
          * side of the site.
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-bp-customizable-group-categories-public.php';
+        
+        /**
+         * Utility functions
+         */
+        require_once plugin_dir_path(dirname(__FILE__)).'includes/utility/bp-customizable-group-utility-functions.php';
 
         $this->loader = new Bp_Customizable_Group_Categories_Loader();
     }
@@ -279,15 +303,21 @@ class Bp_Customizable_Group_Categories {
      * @access   private
      */
     private function define_admin_hooks() {
-
+        
         if ($this->version_check() && $this->root_blog_check()) {
             $plugin_admin = new Bp_Customizable_Group_Categories_Admin($this->get_plugin_name(), $this->get_version());
-            
-            $this->loader->add_action('admin_menu', $plugin_admin, 'bp_groups_admin_submenu', 11);
+
+            $this->loader->add_action('admin_menu', $plugin_admin, 'bp_groups_admin_menu', 11);
             $this->loader->add_action('current_screen', $plugin_admin, 'set_current_screen', 10);
+            $this->loader->add_action('admin_init', $plugin_admin, 'register_post_type', 10);
+            
+            $this->loader->add_filter('get_edit_term_link', $plugin_admin, 'edit_term_link', 10, 4);
 
             $this->loader->add_action('bp_groups_admin_load', $plugin_admin, 'enqueue_styles');
             $this->loader->add_action('bp_groups_admin_load', $plugin_admin, 'enqueue_scripts');
+            
+            //ajax
+            $this->loader->add_action('wp_ajax_add-bp-customizable-category', $plugin_admin,'add_bp_customizable_category');
 
             // Filters
             add_filter('groups_forbidden_names', array($this, 'restrict_slug'), 1, 1);
@@ -344,11 +374,11 @@ class Bp_Customizable_Group_Categories {
             'show_in_menu' => false,
             'show_admin_column' => false,
             'query_var' => false,
-            'show_tagcloud' => true,
+            'show_tagcloud' => false,
             'rewrite' => array('slug' => $group_slug . '/tag', 'with_front' => false),
-            'update_count_callback' => array('BP_Groups_Terms', 'update_term_count'),
+            'update_count_callback' => array('BPCGC_Groups_Terms', 'update_term_count'),
         );
-        
+
         register_taxonomy('bp_group_categories', array('bp_group'), $args);
     }
 

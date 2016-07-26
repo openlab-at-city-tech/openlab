@@ -190,15 +190,14 @@ function openlab_mce_buttons($init, $editor) {
 
     if (function_exists('bpeo_is_action')) {
         if (bpeo_is_action('new') || bpeo_is_action('edit')) {
-            
-            if(isset($init['plugins'])){
+
+            if (isset($init['plugins'])) {
                 $init['plugins'] .= ' image';
             }
-            
-            if(isset($init['toolbar1'])){
+
+            if (isset($init['toolbar1'])) {
                 $init['toolbar1'] .= ' image';
             }
-            
         }
     }
 
@@ -206,3 +205,40 @@ function openlab_mce_buttons($init, $editor) {
 }
 
 add_filter('tiny_mce_before_init', 'openlab_mce_buttons', 10, 2);
+
+function openlab_group_creation_categories() {
+    $cats_out = '';
+
+    $group_type = filter_input(INPUT_GET, 'type');
+
+    $group_id = bp_get_new_group_id() ? bp_get_new_group_id() : bp_get_current_group_id();
+    $group_term_ids = array();
+
+    if (!empty($group_id)) {
+        $group_terms = bpcgc_get_group_selected_terms($group_id);
+
+        if (!empty($group_terms)) {
+            $group_term_ids = wp_list_pluck($group_terms, 'term_id');
+        }
+
+        if (!$group_type) {
+            $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
+        }
+    }
+
+    if ($group_type) {
+
+        $categories = bpcgc_get_terms_by_group_type($group_type);
+
+        if ($categories && !empty($categories)) {
+
+            ob_start();
+            include(locate_template('parts/forms/group-categories.php'));
+            $cats_out = ob_get_clean();
+        }
+    }
+
+    echo $cats_out;
+}
+
+add_action('openlab_group_creation_extra_meta', 'openlab_group_creation_categories');

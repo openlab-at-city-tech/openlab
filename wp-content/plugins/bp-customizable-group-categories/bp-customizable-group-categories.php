@@ -27,6 +27,19 @@ if (!defined('WPINC')) {
 }
 
 /**
+ * Constants
+ */
+if (!defined('CUSTOCG_BASE_FILE')) {
+    define('CUSTOCG_BASE_FILE', __FILE__);
+}
+if (!defined('CUSTOCG_BASE_DIR')) {
+    define('CUSTOCG_BASE_DIR', dirname(CUSTOCG_BASE_FILE));
+}
+if (!defined('CUSTOCG_PLUGIN_URL')) {
+    define('CUSTOCG_PLUGIN_URL', plugin_dir_url(__FILE__));
+}
+
+/**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-bp-customizable-group-categories-activator.php
  */

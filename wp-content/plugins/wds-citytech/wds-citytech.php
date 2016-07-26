@@ -578,7 +578,7 @@ function wds_load_group_departments() {
         $wds_departments = explode(",", $wds_departments);
     }
 
-    $return = '<div class="department-list-container"><div class="sr-only">' . $schools_list . ' selected</div>';
+    $return = '<div class="department-list-container checkbox-list-container"><div class="sr-only">' . $schools_list . ' selected</div>';
     foreach ($departments as $i => $value) {
         $checked = "";
         if (in_array($value, $wds_departments)) {
