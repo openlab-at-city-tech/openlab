@@ -34,6 +34,7 @@ function openlab_reorder_theme_selections( $themes ) {
 		'herothemetrust',
 		'twentyeleven',
 		'twentyfourteen',
+		'twentysixteen',
 		'twentythirteen',
 		'twentytwelve',
 	);
