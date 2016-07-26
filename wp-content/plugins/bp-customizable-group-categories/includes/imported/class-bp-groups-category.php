@@ -112,7 +112,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
             if (!empty($this->term)) {
                 $tax_query = new WP_Tax_Query(array(
                     array(
-                        'taxonomy' => 'bp_group_tags',
+                        'taxonomy' => 'bp_group_categories',
                         'terms' => $this->term->term_id,
                         'field' => 'term_id',
                     )
