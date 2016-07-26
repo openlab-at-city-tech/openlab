@@ -340,7 +340,7 @@ class Bp_Customizable_Group_Categories_Admin {
         $edit_form = false;
 
         ob_start();
-        include(CUSTOCG_BASE_DIR . '\parts\category-extra-fields.php');
+        include(CUSTOCG_BASE_DIR . '/parts/category-extra-fields.php');
         $fields_out = ob_get_clean();
 
         echo $fields_out;
@@ -368,7 +368,7 @@ class Bp_Customizable_Group_Categories_Admin {
         }
 
         ob_start();
-        include(CUSTOCG_BASE_DIR . '\parts\category-extra-fields.php');
+        include(CUSTOCG_BASE_DIR . '/parts/category-extra-fields.php');
         $fields_out = ob_get_clean();
 
         echo $fields_out;
