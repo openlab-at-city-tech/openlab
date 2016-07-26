@@ -31,13 +31,13 @@ class Bp_Customizable_Group_Categories_Activator {
      */
     public static function activate() {
         global $wpdb, $wp_current_db_version;
-        
-        if(!$wp_current_db_version){
+
+        if (!$wp_current_db_version) {
             $current_db_version = get_option('db_version');
         } else {
             $current_db_version = $wp_current_db_version;
         }
-       
+
 // Upgrade versions prior to 4.4.
         if ($current_db_version < 34978) {
 // If compatible termmeta table is found, use it, but enforce a proper index and update collation.
@@ -56,10 +56,17 @@ class Bp_Customizable_Group_Categories_Activator {
                 if (!empty($wpdb->collate))
                     $charset_collate .= " COLLATE $wpdb->collate";
 
-                $sql = "CREATE TABLE $wpdb->termmeta ( meta_id bigint(20) unsigned NOT NULL auto_increment, term_id bigint(20) unsigned NOT NULL default '0', meta_key varchar(255) default NULL, meta_value longtext, PRIMARY KEY  (meta_id), KEY term_id (term_id), KEY meta_key (meta_key($max_index_length))) $charset_collate;";
+                $sql = "CREATE TABLE $wpdb->termmeta (
+  meta_id bigint(20) unsigned NOT NULL auto_increment,
+  term_id bigint(20) unsigned NOT NULL default '0',
+  meta_key varchar(255) default NULL,
+  meta_value longtext,
+  PRIMARY KEY  (meta_id),
+  KEY term_id (term_id),
+  KEY meta_key (meta_key($max_index_length))
+) $charset_collate;";
 
-                require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-                dbDelta($sql);
+                $wpdb->query($sql);
             }
         }
     }
