@@ -66,7 +66,7 @@ class Bp_Customizable_Group_Categories_Activator {
   KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;";
 
-                $wpdb->query($sql);
+                $result = $wpdb->query($sql);
             }
         }
     }
