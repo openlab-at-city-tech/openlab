@@ -7886,7 +7886,7 @@ body .scrollbar-measure {
   border-bottom: 1px solid #dddddd;
 }
 /**form custom**/
-#departments_html .department-list-container {
+body form .checkbox-list-container {
   height: 120px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
@@ -7967,6 +7967,7 @@ body .scrollbar-measure {
   border-color: #999999 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
 .select2-container--default.select2-container .select2-results__options li {
+  background: #ffffff;
   font-weight: 600;
   line-height: 1;
   margin-bottom: 0;
