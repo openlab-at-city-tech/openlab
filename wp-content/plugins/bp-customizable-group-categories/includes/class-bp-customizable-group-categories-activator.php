@@ -56,7 +56,7 @@ class Bp_Customizable_Group_Categories_Activator {
                 if (!empty($wpdb->collate))
                     $charset_collate .= " COLLATE $wpdb->collate";
 
-                $sql = "CREATE TABLE $wpdb->termmeta (
+                $sql = "CREATE TABLE {$wpdb->prefix}termmeta (
   meta_id bigint(20) unsigned NOT NULL auto_increment,
   term_id bigint(20) unsigned NOT NULL default '0',
   meta_key varchar(255) default NULL,
