@@ -3,7 +3,7 @@
         <table>
             <tbody>
                 <tr class="school-tooltip">
-                    <td colspan="2"><p class="ol-tooltip">Pleasae select from the following categories. Including this information will make it easier for other to find your club.</p></td>
+                    <td colspan="2"><p class="ol-tooltip">Please select from the following categories. Including this information will make it easier for others to find your<?php echo ' '.$group_type; ?></p></td>
                 </tr>
                 <tr class="bp-categories">
                     <td colspan="2" id="bp_group_categories">
