@@ -259,9 +259,6 @@ function openlab_group_archive() {
     }
 
     if (bp_has_groups($group_args)) :
-        
-        //echo '<pre>' . print_r($groups_template, true) . '</pre>';
-        
         ?>
         <div class="row group-archive-header-row">
             <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">

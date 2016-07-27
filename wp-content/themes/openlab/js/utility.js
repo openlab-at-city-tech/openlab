@@ -123,11 +123,11 @@
             OpenLab.utility.protect++;
 
             if (dropdownSelector.length) {
-                
+
                 var comboBoxSelector = $('#venue_select.ui-combobox-input');
-                
+
                 if (comboBoxSelector.length) {
-                    
+
                     clearInterval(OpenLab.utility.uiCheck);
                     comboBoxSelector.on("autocompletesearch", function (event, ui) {
 
@@ -387,8 +387,6 @@
             //ajax functionality for courses archive
             $('#schoolSelect select').on('select2:select', function () {
 
-                console.log('changing');
-
                 var school = $(this).val();
                 var nonce = $('#nonce-value').text();
 
@@ -398,7 +396,11 @@
                 $('#dept-select').html('<option value=""></option>');
 
                 if (school == "" || school == "school_all") {
-                    document.getElementById("dept-select").innerHTML = "";
+                    var defaultOption = '<option value="dept_all" selected="selected">All Departments</option>';
+                    $('#dept-select').html(defaultOption);
+                    $('#dept-select').trigger('render');
+                    $('#select2-dept-select-container').text('All Departments');
+                    $('#select2-dept-select-container').attr('title', 'All Departments');
                     return;
                 }
 
@@ -417,7 +419,9 @@
                         $('#dept-select').removeAttr('disabled');
                         $('#dept-select').removeClass('processing');
                         $('#dept-select').html(data);
-                        $('.custom-select select').trigger('render');
+                        $('#dept-select').trigger('render');
+                        $('#select2-dept-select-container').text('All Departments');
+                        $('#select2-dept-select-container').attr('title', 'All Departments');
                     },
                     error: function (MLHttpRequest, textStatus, errorThrown) {
                         console.log(errorThrown);
