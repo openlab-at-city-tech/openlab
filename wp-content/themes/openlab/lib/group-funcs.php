@@ -234,13 +234,22 @@ function openlab_group_archive() {
         'meta_query' => $meta_query,
     );
 
-    if (!empty($categories) && 'cat_all' != strtolower($categories)) {
+    if (!empty($categories)) {
 
-        $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
+        if('cat_all' === strtolower($categories)){
+            
+            $terms = get_terms('bp_group_categories');
+            $term_ids = wp_list_pluck($terms, 'term_id');
+            
+        } else {
+            $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
+            $term_ids = $term_obj->term_id;
+        }
+        
         $group_args['tax_query'] = array(
             array(
                 'taxonomy' => 'bp_group_categories',
-                'terms' => $term_obj->term_id,
+                'terms' => $term_ids,
                 'field' => 'term_id',
             )
         );
@@ -249,7 +258,7 @@ function openlab_group_archive() {
     if (!empty($_GET['group_sequence'])) {
         $group_args['type'] = $_GET['group_sequence'];
     }
-
+    
     if (bp_has_groups($group_args)) :
         ?>
         <div class="row group-archive-header-row">

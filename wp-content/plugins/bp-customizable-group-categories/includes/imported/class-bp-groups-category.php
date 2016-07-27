@@ -105,15 +105,25 @@ if (!class_exists('BPCGC_Groups_Tag')) :
         public function parse_select($query = '', $sql_parts = array(), $args = array()) {
 
             if (!empty($_GET['cat'])) {
-                $cat_slug = filter_input(INPUT_GET,'cat');
-                $this->term = BPCGC_Groups_Terms::get_term_by('slug', $cat_slug);
+
+                $cat_slug = filter_input(INPUT_GET, 'cat');
+
+                if ($cat_slug === 'cat_all') {
+                    $terms = get_terms('bp_group_categories');
+                    $term_ids = wp_list_pluck($terms, 'term_id');
+                } else {
+                    $this->term = BPCGC_Groups_Terms::get_term_by('slug', $cat_slug);
+                    $term_ids = $this->term->term_id;
+                }
+            } else {
+                $term_ids = $this->term->term_id;
             }
 
-            if (!empty($this->term)) {
+            if (!empty($term_ids)) {
                 $tax_query = new WP_Tax_Query(array(
                     array(
                         'taxonomy' => 'bp_group_categories',
-                        'terms' => $this->term->term_id,
+                        'terms' => $term_ids,
                         'field' => 'term_id',
                     )
                 ));
@@ -143,6 +153,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
 
                 $query = join(' ', (array) $sql_parts);
             }
+
             return $query;
         }
 
@@ -171,6 +182,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
          * @since BP Groups Taxo (1.0.0)
          */
         public function total_group_count($count = 0) {
+            
             if (!empty($this->term->count)) {
                 $count = absint($this->term->count);
             }
