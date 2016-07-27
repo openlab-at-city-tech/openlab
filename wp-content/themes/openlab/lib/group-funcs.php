@@ -236,16 +236,15 @@ function openlab_group_archive() {
 
     if (!empty($categories)) {
 
-        if('cat_all' === strtolower($categories)){
-            
+        if ('cat_all' === strtolower($categories)) {
+
             $terms = get_terms('bp_group_categories');
             $term_ids = wp_list_pluck($terms, 'term_id');
-            
         } else {
             $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
             $term_ids = $term_obj->term_id;
         }
-        
+
         $group_args['tax_query'] = array(
             array(
                 'taxonomy' => 'bp_group_categories',
@@ -258,8 +257,11 @@ function openlab_group_archive() {
     if (!empty($_GET['group_sequence'])) {
         $group_args['type'] = $_GET['group_sequence'];
     }
-    
+
     if (bp_has_groups($group_args)) :
+        
+        //echo '<pre>' . print_r($groups_template, true) . '</pre>';
+        
         ?>
         <div class="row group-archive-header-row">
             <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">
@@ -728,7 +730,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -900,7 +902,7 @@ function openlab_group_profile_activity_list() {
 
                     </div>
 
-                <?php endif; //end of if $group != 'portfolio'           ?>
+                <?php endif; //end of if $group != 'portfolio'            ?>
 
             <?php else: ?>
                 <?php
@@ -914,13 +916,13 @@ function openlab_group_profile_activity_list() {
                 ?>
                 <?php /* The group is not visible, show the status message */ ?>
 
-                <?php // do_action( 'bp_before_group_status_message' )            ?>
+                <?php // do_action( 'bp_before_group_status_message' )             ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                            ?></p>
+                                                        <p><?php // bp_group_status_message()                                             ?></p>
                                                 </div>
                 -->
-                <?php // do_action( 'bp_after_group_status_message' )           ?>
+                <?php // do_action( 'bp_after_group_status_message' )            ?>
 
             <?php endif; ?>
 

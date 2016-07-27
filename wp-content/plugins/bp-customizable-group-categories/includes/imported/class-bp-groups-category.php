@@ -164,7 +164,23 @@ if (!class_exists('BPCGC_Groups_Tag')) :
          * @since BuddyPress Customizable Group Categories (1.0.0)
          */
         public function parse_total($query = '', $sql_parts = array(), $args = array()) {
-            if (!empty($this->term) && !empty($this->tax_query)) {
+
+            if (!empty($_GET['cat'])) {
+
+                $cat_slug = filter_input(INPUT_GET, 'cat');
+
+                if ($cat_slug === 'cat_all') {
+                    $terms = get_terms('bp_group_categories');
+                    $term_ids = wp_list_pluck($terms, 'term_id');
+                } else {
+                    $this->term = BPCGC_Groups_Terms::get_term_by('slug', $cat_slug);
+                    $term_ids = $this->term->term_id;
+                }
+            } else {
+                $term_ids = $this->term->term_id;
+            }
+
+            if (!empty($term_ids) && !empty($this->tax_query)) {
                 $sql_parts['select'] .= ', ' . implode(',', $this->tax_query['from']);
                 $sql_parts['where'] = array_merge($sql_parts['where'], $this->tax_query['where']);
 
@@ -182,7 +198,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
          * @since BP Groups Taxo (1.0.0)
          */
         public function total_group_count($count = 0) {
-            
+
             if (!empty($this->term->count)) {
                 $count = absint($this->term->count);
             }
