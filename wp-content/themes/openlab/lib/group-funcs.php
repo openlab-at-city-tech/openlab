@@ -699,7 +699,7 @@ function cuny_group_single() {
 
                             <?php
                             $wds_school = openlab_generate_school_name($group_id);
-                            $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+                            $wds_departments = openlab_generate_department_name($group_id);
                             ?> 
 
                             <?php if ($wds_school && !empty($wds_school)): ?>

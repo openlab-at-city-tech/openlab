@@ -171,21 +171,43 @@ function openlab_process_status_messages($message, $type) {
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
 
 function openlab_generate_school_name($group_id) {
-    $school_out = '';
+    $schools_out = '';
+    $school_out = array();
 
     $schools = groups_get_groupmeta($group_id, 'wds_group_school');
+    $schools_ary = explode(',', $schools);
 
-    switch ($schools) {
-        case "tech":
-            $school_out = "Technology & Design";
-            break;
-        case "studies":
-            $school_out = "Professional Studies";
-            break;
-        case "arts":
-            $school_out = "Arts & Sciences";
-            break;
+    if (!empty($schools_ary)) {
+
+        foreach ($schools_ary as $school) {
+            switch ($school) {
+                case "tech":
+                    $school_out[] = "Technology & Design";
+                    break;
+                case "studies":
+                    $school_out[] = "Professional Studies";
+                    break;
+                case "arts":
+                    $school_out[] = "Arts & Sciences";
+                    break;
+            }
+        }
+
+        $schools_out = implode(', ', $school_out);
     }
 
-    return $school_out;
+    return $schools_out;
+}
+
+function openlab_generate_department_name($group_id) {
+    $departments_out = '';
+
+    $departments = groups_get_groupmeta($group_id, 'wds_departments');
+    $departments_ary = explode(',', $departments);
+
+    if (!empty($departments_ary)) {
+        $departments_out = implode(', ', $departments_ary);
+    }
+
+    return $departments_out;
 }
