@@ -175,7 +175,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
                 <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
                 <div class="custom-select">
-                    <select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
+                    <select name="department processing" class="last-select <?php echo $dept_color; ?>-text" id="dept-select" <?php disabled('', $option_value_school) ?>>
                         <?php echo openlab_return_course_list($option_value_school, $option_value_dept); ?>
                     </select>
                 </div>

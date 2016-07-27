@@ -380,7 +380,7 @@ function openlab_delete_group() {
  */
 function openlab_return_course_list($school, $department) {
 
-    $list = '<option value="dept_all" ' . selected('', $department) . ' >All</option>';
+    $list = '<option value="dept_all" ' . selected('', $department) . ' >All Departments</option>';
 
     // Sanitize. If no value is found, don't return any
     // courses

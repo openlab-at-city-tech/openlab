@@ -397,7 +397,7 @@
                 $('#dept-select').addClass('processing');
                 $('#dept-select').html('<option value=""></option>');
 
-                if (school == "") {
+                if (school == "" || school == "school_all") {
                     document.getElementById("dept-select").innerHTML = "";
                     return;
                 }
@@ -413,6 +413,7 @@
                             },
                     success: function (data, textStatus, XMLHttpRequest)
                     {
+                        console.log('school', school);
                         $('#dept-select').removeAttr('disabled');
                         $('#dept-select').removeClass('processing');
                         $('#dept-select').html(data);
