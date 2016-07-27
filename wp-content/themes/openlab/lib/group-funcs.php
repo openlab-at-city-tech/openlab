@@ -235,15 +235,17 @@ function openlab_group_archive() {
     );
 
     if (!empty($categories) && 'cat_all' != strtolower($categories)) {
+
+        $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
         $group_args['tax_query'] = array(
             array(
                 'taxonomy' => 'bp_group_categories',
-                'terms' => 1431,
+                'terms' => $term_obj->term_id,
                 'field' => 'term_id',
             )
         );
     }
-    
+
     if (!empty($_GET['group_sequence'])) {
         $group_args['type'] = $_GET['group_sequence'];
     }
@@ -717,7 +719,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -906,7 +908,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )            ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                           ?></p>
+                                                        <p><?php // bp_group_status_message()                                            ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )           ?>
