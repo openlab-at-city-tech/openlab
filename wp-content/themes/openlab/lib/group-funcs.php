@@ -696,19 +696,43 @@ function cuny_group_single() {
                             <div class="table-row row">
                                 <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
                             </div>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
-                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
-                            </div>
+
+                            <?php
+                            $wds_school = openlab_generate_school_name($group_id);
+                            $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+                            ?> 
+
+                            <?php if ($wds_school && !empty($wds_school)): ?>
+
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">School</div>
+                                    <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
+                                </div>
+
+                            <?php endif; ?>
+                            
+                            <?php if ($wds_departments && !empty($wds_departments)): ?>
+
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">Department</div>
+                                    <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                </div>
+
+                            <?php endif; ?>
 
                             <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
                                 <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
                                     <div class="table-row row">
-                                        <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Category</div>
+                                        <div class="bold col-sm-7">Category</div>
                                         <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
                                     </div>
                                 <?php endif; ?>
                             <?php endif; ?>
+
+                            <div class="table-row row">
+                                <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
+                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
+                            </div>
 
                             <?php if ($group_type == "portfolio"): ?>
 
@@ -727,7 +751,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -916,7 +940,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )             ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                             ?></p>
+                                                        <p><?php // bp_group_status_message()                                                ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )            ?>

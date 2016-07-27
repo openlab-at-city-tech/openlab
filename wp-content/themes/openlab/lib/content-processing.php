@@ -7,9 +7,9 @@ add_filter('body_class', 'openlab_conditional_body_classes');
 function openlab_conditional_body_classes($classes) {
     global $post, $wp_query;
     $classes[] = 'header-image';
-    
+
     $query_vars = array();
-    if(isset($wp_query->query_vars)){
+    if (isset($wp_query->query_vars)) {
         $query_vars = $wp_query->query_vars;
     }
 
@@ -36,7 +36,7 @@ function openlab_conditional_body_classes($classes) {
             ( isset($post->post_parent) && $post->post_parent == $calendar_page_obj->ID ) ||
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
-            ( !empty($query_vars) && isset($query_vars['help_category'])) ||
+            (!empty($query_vars) && isset($query_vars['help_category'])) ||
             in_array($post->post_name, $my_group_pages)) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
@@ -155,17 +155,37 @@ function openlab_sidebar_cleanup($content) {
  * This function lets us customize status messages
  * uses filter: bp_core_render_message_content
  */
+
 function openlab_process_status_messages($message, $type) {
-    
+
     //invite anyone page
-    if(bp_current_action() === 'invite-anyone'){
-        if(trim($message) === '<p>Group invites sent.</p>'){
+    if (bp_current_action() === 'invite-anyone') {
+        if (trim($message) === '<p>Group invites sent.</p>') {
             $message = '<p>Your invitation was sent!</p>';
         }
-        
     }
 
     return $message;
 }
 
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
+
+function openlab_generate_school_name($group_id) {
+    $school_out = '';
+
+    $schools = groups_get_groupmeta($group_id, 'wds_group_school');
+
+    switch ($schools) {
+        case "tech":
+            $school_out = "Technology & Design";
+            break;
+        case "studies":
+            $school_out = "Professional Studies";
+            break;
+        case "arts":
+            $school_out = "Arts & Sciences";
+            break;
+    }
+
+    return $school_out;
+}
