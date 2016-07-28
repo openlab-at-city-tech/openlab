@@ -29,7 +29,7 @@
  * @todo increase dependancy on JS in future releases.
  * 
  * @since 1.2
- * @version 1.3.9
+ * @version 1.4.1
  *
  * =============================================================== */
 
@@ -50,7 +50,7 @@
 		 *     for the Font Controls Admin Screen.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.init = function() {
@@ -75,7 +75,7 @@
 		 *     interface.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.registerChange = function() {
@@ -90,7 +90,7 @@
 		 *     interface.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.unregisterChange = function() {
@@ -108,7 +108,7 @@
 		 * @param  {function} callback       - Function to run after a successful ajax request
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.createNewControl = function( controlName, processMethod, callback ) {
@@ -156,7 +156,7 @@
 		 * @param  {function} callback       - Function to run after a successful ajax request
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.saveControl = function( controlName, controlId, turnOn, processMethod, callback ) {
@@ -208,7 +208,7 @@
 		 * @param  {function} callback       - Function to run after a successful ajax request
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.deleteControl = function( controlId, processMethod, callback ) {
@@ -243,7 +243,7 @@
 		 * @param  {Function}   callback      - Function to execute after successful AJAX reequest.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.deleteAllControls = function( processMethod, callback ) {
@@ -279,7 +279,7 @@
 		 * @param  {Function}   callback      - Function to execute after successful AJAX reequest.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.forceControls = function( controlId, turnOn, processMethod, callback ) {
@@ -319,7 +319,7 @@
 			$.post( ajaxurl, dataObj, function() {
 				processMethod();
 			}).done( function() {
-				var redirectUrl = $( '#save_api_key' ).data( 'redirect-url' );
+				var redirectUrl = $( '#egf_save_api_key' ).data( 'redirect-url' );
 				callback( redirectUrl );
 			});			
 		};
@@ -331,7 +331,7 @@
 		 *     way to set placeholder text for input fields.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.setupInputWithDefaultTitle = function() {
@@ -377,7 +377,7 @@
 		 *     exist on the Edit Font Controls page.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.registerEditEvents = function() {
@@ -404,7 +404,8 @@
 
 				} else {
 					controlNameLabel.removeClass('form-invalid');
-					spinner.fadeIn(200);
+					spinner.toggleClass( "egf-visible", 200 );
+					// spinner.fadeIn(200);
 					api.createNewControl( controlNameInput.val(), false );
 				}
 
@@ -429,7 +430,8 @@
 				var callback      = function( newControlName ) {
 
 					// Fade out spinner and redirect user
-					spinner.fadeOut(200);
+					spinner.toggleClass( "egf-visible", 200 );
+					// spinner.fadeOut(200);
 					redirectUrl  += '&name=' + newControlName;
 					window.location = redirectUrl.replace( ' ', '+' );
 				};
@@ -442,7 +444,8 @@
 
 				controlNameLabel.removeClass('form-invalid');
 
-				spinner.fadeIn(100);
+				spinner.toggleClass( "egf-visible", 150 );
+				// spinner.fadeIn(100);
 				api.saveControl( controlName, controlId, forceStyles, processMethod, callback );
 				return false;
 
@@ -469,7 +472,8 @@
 				// Delete control now that we have gained user consent
 				if( confirmation ) {
 					if( controlId !== '0' ) {
-						spinner.fadeIn(200);
+						spinner.toggleClass( "egf-visible", 200 );
+						// spinner.fadeIn(200);
 						api.deleteControl( controlId, processMethod, callback );
 					} else {
 						callback();
@@ -486,7 +490,7 @@
 		 *     exist on the Manage Font Controls page.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 */
 		api.registerManagementEvents = function() {
 			
@@ -531,7 +535,8 @@
 
 				// Delete control now that we have gained user consent.
 				if( confirmation ) {
-					spinner.fadeIn();
+					spinner.toggleClass( "egf-visible", 200 );
+					// spinner.fadeIn();
 					row.addClass('deleting', 200);
 					api.deleteControl( controlId, processMethod, callback );
 				}
@@ -551,12 +556,14 @@
 
 				var processMethod = function() {};
 				var callback      = function() {
-					spinner.fadeOut(200);
+					spinner.toggleClass( "egf-visible", 200 );
+					// spinner.fadeOut(200);
 					row.addClass('success', 200);
 					row.removeClass('success', 300);
 				};
 
-				spinner.fadeIn();
+				spinner.toggleClass( "egf-visible", 200 );
+				// spinner.fadeIn();
 				api.forceControls( controlId, checked, processMethod, callback );
 
 			});
@@ -633,7 +640,7 @@
 		 *     exist on the Advanced page.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		api.registerAdvancedEvents = function() {
@@ -641,22 +648,24 @@
 			var container = $( '.manage-google-key' );
 			var spinner   = $( '.spinner' );
 			
-			$( '#google-api-key' ).on( 'change', function() {
+			$( '#egf-google-api-key' ).on( 'change', function() {
 				api.registerChange();
 			});
 
-			$( '#save_api_key' ).on( 'click', function() {
-				var apiKey      = $( '#google-api-key' ).val();
+			$( '#egf_save_api_key' ).on( 'click', function() {
+				var apiKey      = $( '#egf-google-api-key' ).val();
 				var redirectUrl = $(this).data( 'redirect-url' );
 
 				var processMethod = function() {};
 				var callback      = function( redirectUrl ) {
 					// Fade out spinner and redirect user
-					spinner.fadeOut(200);
+					spinner.toggleClass( "egf-visible", 200 );
+					// spinner.fadeOut(200);
 					window.location = redirectUrl;
 				};
 
-				spinner.fadeIn();
+				spinner.toggleClass( "egf-visible", 300 );
+				// spinner.fadeIn();
 
 				api.updateGoogleApiKey( apiKey, processMethod, callback );
 

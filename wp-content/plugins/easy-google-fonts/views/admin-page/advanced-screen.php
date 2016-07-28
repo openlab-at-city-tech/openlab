@@ -9,8 +9,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 ?>
@@ -18,7 +18,7 @@
 <p><?php _e( 'Please enter your google fonts api key in the box below and click the Save Google API Key button.', $this->plugin_slug ); ?></p>
 <div class="manage-controls manage-google-key <?php echo $validity; ?>">
 	<form enctype="multipart/form-data" method="get" action="" id="" autocomplete="off">
-		<input id="google-api-key" type="text" class="" value="<?php echo $api_key; ?>">
+		<input id="egf-google-api-key" type="text" class="" value="<?php echo $api_key; ?>">
 		<p class="key-feedback howto">
 			<span class="valid-key"><?php _e( 'Your Google API Key is valid and automatic font updates are enabled.', $this->plugin_slug ); ?></span>
 			<span class="invalid-key"><?php _e( 'Please enter a valid Google API Key', $this->plugin_slug ); ?></span>
@@ -47,7 +47,7 @@
 		'submit', 
 		false, 
 		array( 
-			'id' => 'save_api_key',
+			'id' => 'egf_save_api_key',
 			'data-redirect-url' => $this->advanced_url,
 		) 
 	); 

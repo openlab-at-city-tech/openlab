@@ -16,8 +16,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
@@ -57,7 +57,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		function __construct() {
@@ -79,7 +79,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_instance() {
@@ -98,7 +98,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_actions() {
@@ -117,7 +117,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_filters() {
@@ -131,7 +131,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * loaded yet.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function include_control_class() {
@@ -154,7 +154,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return [type]               [description]
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_font_control_type( $wp_customize ) {
@@ -172,7 +172,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array complete list of fonts
 		 *
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 */
 		public function customize_load_all_fonts() {
 			return EGF_Font_Utilities::get_all_fonts();
@@ -188,7 +188,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_controls_enqueue_scripts() {
@@ -241,7 +241,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_live_preview_scripts() {
@@ -276,7 +276,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_preview_styles() {
@@ -312,7 +312,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array $controls 	Control properties which will be enqueues as a JSON object on the page
 		 *
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_live_preview_l10n() {
@@ -323,14 +323,15 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 			foreach ( $font_controls as $key => $value ) {
 
 				$controls[ $key ] = array(
-					'id'           => $key,
-					'label'        => $value['title'],
-					'type'         => $value['type'],
-					'section'      => 'tt_font_typography',
-					'force_styles' => $value['properties']['force_styles'],
-					'json'         => array(),
-					'selector'     => $value['properties']['selector'],
-					'setting'      => array(
+					'id'             => $key,
+					'label'          => $value['title'],
+					'type'           => $value['type'],
+					'section'        => 'tt_font_typography',
+					'egf_properties' => $value['properties'],
+					'force_styles'   => $value['properties']['force_styles'],
+					'json'           => array(),
+					'selector'       => $value['properties']['selector'],
+					'setting'        => array(
 							'capability'           => 'edit_theme_options',
 							'id'                   => "tt_font_theme_options[{$key}]",
 							'default'              => $value['default'],
@@ -359,7 +360,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array $translations - String variables 
 		 *
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_control_l10n() {
@@ -389,7 +390,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * the font setting is being saved.
 		 * 
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_save_tt_font_theme_options() {
@@ -405,7 +406,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * saved.
 		 * 
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function customize_save_after() {
@@ -426,7 +427,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @param 	object	$wp_customize	Object that holds the customizer data
 		 * 
 		 * @since  1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_controls( $wp_customize ) {
@@ -435,7 +436,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 				return;
 			}
 
-			$tt_font_options = EGF_Register_Options::get_options( false );		
+			$tt_font_options = EGF_Register_Options::get_options( false );
 
 			// Get the array of option parameters
 			$option_parameters = EGF_Register_Options::get_option_parameters();
@@ -489,71 +490,110 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 			 *  
 			 */
 			$priority = 0;
-			foreach ( $option_parameters as $option_parameter ) {
+			foreach ( $option_parameters as $id => $option_parameter ) {
 
-				/**
-				 * Set Transport Method:
-				 * 
-				 * Default is to reload the iframe when the option is 
-				 * modified in the customizer. 
-				 * 
-				 * DEVELOPER NOTE: To change the transport type for each 
-				 * option modify the 'transport' value for the appropriate 
-				 * option in the $options array found in:
-				 * tt_font_get_option_parameters()
-				 * 
-				 */
-				$transport = empty( $option_parameter['transport'] ) ? 'refresh' : $option_parameter['transport'];
+				// error_log( $option_parameter['name'] );
+				// if ( empty( EGF_Register_Options::get_linked_controls( $option_parameter['name'] ) ) ) {
+				// 	error_log( 'this has no linked controls' );
+				// } else {
+				// 	error_log( 'this does have linked controls' );
+				// }
 
-				/**
-				 * Add Setting To Customizer:
-				 * 
-				 * Adds $option_parameter setting to customizer
-				 * further properties are registered below.
-				 * 
-				 */
-				$wp_customize->add_setting( 'tt_font_theme_options[' . $option_parameter['name'] . ']', array(
-					'default'        => $option_parameter['default'],
-					'type'           => 'option',
-					'transport'      => $transport,
-				) );
-
-				/**
-				 * Section Prefix:
-				 *
-				 * Add the 'tt_font_' prefix to prevent namespace
-				 * collisions. Removes the prefix if we are adding
-				 * this option to a default WordPress section.
-				 *  
-				 */
-				$prefix = empty( $option_parameter['wp_section'] ) ? 'tt_font_' : '' ;
+				// Add the setting.
+				$this->add_setting( $wp_customize, $option_parameter );
 
 				// Set control $priority
 				$priority += 20;
 
-				switch ( $option_parameter['type'] ) {
-					case 'font' :
-						$wp_customize->add_control( 
-							new EGF_Font_Control( 
-								$wp_customize, 
-								$option_parameter['name'], 
-								array(
-									'id'       => '',
-									'label'    => $option_parameter['title'],
-									'section'  => 'tt_font_' . $option_parameter['tab'],
-									'settings' => 'tt_font_theme_options['. $option_parameter['name'] . ']',
-									'priority' => $priority,
-									'option'   => $option_parameter,
-								)
-							) 
-						);
-						break;
+				// Add the control.
+				$this->add_control( $wp_customize, $option_parameter, $priority );
 
-					// Here in case we decide to implement 
-					// an additional lightweight control.
-					case 'font_basic':
-						break;
-				}
+			}
+		}
+
+		/**
+		 * Add Setting
+		 * 
+		 * @param [type] $wp_customize     [description]
+		 * @param [type] $option_parameter [description]
+		 *
+		 * @since 1.4.0
+		 * @version 1.4.1
+		 * 
+		 */
+		public function add_setting( $wp_customize, $option_parameter ) {
+			/**
+			 * Set Transport Method:
+			 * 
+			 * Default is to reload the iframe when the option is 
+			 * modified in the customizer. 
+			 * 
+			 * DEVELOPER NOTE: To change the transport type for each 
+			 * option modify the 'transport' value for the appropriate 
+			 * option in the $options array found in:
+			 * tt_font_get_option_parameters()
+			 * 
+			 */
+			$transport = empty( $option_parameter['transport'] ) ? 'refresh' : $option_parameter['transport'];
+
+			/**
+			 * Add Setting To Customizer:
+			 * 
+			 * Adds $option_parameter setting to 
+			 * the customizer.
+			 * 
+			 */
+			$wp_customize->add_setting( 'tt_font_theme_options[' . $option_parameter['name'] . ']', array(
+				'default'        => $option_parameter['default'],
+				'type'           => 'option',
+				'transport'      => $transport,
+			) );
+		}
+
+		/**
+		 * Add Control
+		 * 
+		 * @param [type]  $wp_customize     [description]
+		 * @param [type]  $option_parameter [description]
+		 * @param integer $priority         [description]
+		 *
+		 * @since 1.4.0
+		 * @version 1.4.1
+		 * 
+		 */
+		public function add_control( $wp_customize, $option_parameter, $priority = 10 ) {
+			/**
+			 * Section Prefix:
+			 *
+			 * Add the 'tt_font_' prefix to prevent namespace
+			 * collisions. Removes the prefix if we are adding
+			 * this option to a default WordPress section.
+			 *  
+			 */
+			$prefix = empty( $option_parameter['wp_section'] ) ? 'tt_font_' : '' ;
+
+			switch ( $option_parameter['type'] ) {
+				case 'font' :
+					$wp_customize->add_control( 
+						new EGF_Font_Control( 
+							$wp_customize, 
+							$option_parameter['name'], 
+							array(
+								'id'       => '',
+								'label'    => $option_parameter['title'],
+								'section'  => $prefix . $option_parameter['tab'],
+								'settings' => 'tt_font_theme_options['. $option_parameter['name'] . ']',
+								'priority' => $priority,
+								'option'   => $option_parameter,
+							)
+						) 
+					);
+					break;
+
+				// Here in case we decide to implement 
+				// an additional lightweight control.
+				case 'font_basic':
+					break;
 			}
 		}
 	}

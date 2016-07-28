@@ -2,29 +2,29 @@
 /**
  * Class: EGF_Register_Options
  *
- * This file defines the Options for this Theme. The theme options 
- * structure is heavily based on the theme options structure in Chip 
- * Bennett's Oenology Theme. We take the same stance as Automattic 
- * and exclusively use the Customizer for theme options instead of 
+ * This file defines the Options for this Theme. The theme options
+ * structure is heavily based on the theme options structure in Chip
+ * Bennett's Oenology Theme. We take the same stance as Automattic
+ * and exclusively use the Customizer for theme options instead of
  * creating theme option pages.
  *
  *  - Define Default Theme Options
  *  - Register/Initialize Theme Options
- * 
+ *
  *
  * @package   Easy_Google_Fonts_Admin
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
- * 
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
+ *
  */
 if ( ! class_exists( 'EGF_Register_Options' ) ) :
 	class EGF_Register_Options {
 		/**
 		 * Instance of this class.
-		 * 
+		 *
 		 * @var      object
 		 * @since    1.2
 		 *
@@ -33,7 +33,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Slug of the plugin screen.
-		 * 
+		 *
 		 * @var     null
 		 * @since   1.2
 		 *
@@ -42,7 +42,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Slug of the plugin screen.
-		 * 
+		 *
 		 * @var      string
 		 * @since    1.2
 		 *
@@ -51,31 +51,31 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Validation Flag
-		 * 
-		 * @var   boolean	
+		 *
+		 * @var   boolean
 		 * @since 1.2
-		 * 
+		 *
 		 */
 		public $validated;
 
 		/**
 		 * Validation Flag
-		 * 
-		 * @var   boolean	
+		 *
+		 * @var   boolean
 		 * @since 1.2
-		 * 
+		 *
 		 */
 		protected $default_options;
-		
+
 		/**
 		 * Constructor Function
-		 * 
-		 * Initialize the plugin by loading admin scripts & 
+		 *
+		 * Initialize the plugin by loading admin scripts &
 		 * styles and adding a settings page and menu.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		function __construct() {
 			/**
@@ -85,18 +85,18 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			$plugin = Easy_Google_Fonts::get_instance();
 			$this->plugin_slug = $plugin->get_plugin_slug();
 			$this->validated = false;
-			$this->register_actions();		
+			$this->register_actions();
 			$this->register_filters();
-		}	
+		}
 
 		/**
 		 * Return an instance of this class.
-		 * 
+		 *
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_instance() {
 
@@ -112,10 +112,10 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Register Custom Actions
 		 *
 		 * Add any custom actions in this function.
-		 * 
+		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function register_actions() {
 			add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -126,10 +126,10 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Register Custom Filters
 		 *
 		 * Add any custom filters in this function.
-		 * 
+		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function register_filters() {
 			add_filter( 'tt_font_get_option_parameters', array( $this, 'get_custom_option_parameters' ), 0 );
@@ -144,12 +144,12 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * @link http://codex.wordpress.org/Function_Reference/register_setting 	register_setting()
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function register_settings() {
-			register_setting( 
-				'tt_font_theme_options', 	
+			register_setting(
+				'tt_font_theme_options',
 				'tt_font_theme_options',
 				array( $this, 'validate_settings' )
 			);
@@ -157,7 +157,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Validate Settings
-		 * 
+		 *
 		 * @param  array $input - The array of settings
 		 * @return array $input - The array of settings after sanitization
 		 *
@@ -165,14 +165,14 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 *     of times this callback function is ran.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function validate_settings( $input ) {
-		
+
 			// Get default options
 			$all_options = array_merge( self::get_option_parameters(), self::get_custom_option_parameters( array() ) );
-		
+
 			// Array of whitelisted values
 			$whitelist   = array(
 					'subset',
@@ -217,14 +217,14 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			);
 
 			/**
-			 * Remove any values from $input that 
+			 * Remove any values from $input that
 			 * are not in the safe $whitelist array
 			 *
 			 * $option is the option name
 			 * $setting is all of the properties in the option
 			 *
 			 */
-			
+
 			foreach ( $input as $option => $setting ) {
 
 				if ( ! isset( $all_options[ $option ] )  ) {
@@ -242,11 +242,11 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 				}
 
 				// Convert setting into array if it is StdClass Object
-				
+
 				if ( is_object( $setting ) ) {
 					$setting = $this->object_to_array( $setting );
 				}
-				
+
 				if ( is_array( $setting ) ) {
 					// Remove blacklisted values if they exist
 					foreach ( $setting as $key => $value ) {
@@ -257,34 +257,34 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 				}
 
 				// Parse args with default
-				$input[ $option ] = wp_parse_args( $setting, $defaults );		
+				$input[ $option ] = wp_parse_args( $setting, $defaults );
 			}
 
 			/**
 			 * Specific Validation
 			 */
-			
+
 			// Set validated flag
 			$this->validated = true;
-	
+
 			return $input;
 		}
 
 		/**
 		 * Recursive Function: Object to Array
-		 * 
+		 *
 		 * @param  class $obj The object we want to convert
 		 * @return array $arr The object converted into an associative array
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function object_to_array( $obj ) {
 			$arrObj = is_object( $obj ) ? get_object_vars( $obj ) : $obj;
 
 			$arr = array();
-			
+
 			foreach ( $arrObj as $key => $val ) {
 				$val = ( is_array( $val ) || is_object( $val ) ) ? $this->object_to_array( $val ) : $val;
 				$arr[$key] = $val;
@@ -296,8 +296,8 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Add Settings Section
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function add_settings_section() {
 			$tabs = self::get_setting_tabs();
@@ -316,27 +316,27 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 						$section_title,								// $title
 						array( $this, 'settings_section_callback'),	// $callback
 						"tt_font_{$tab_name}_tab"					// $pageid
-					);				
+					);
 				}
-			}			
+			}
 		}
 
 		/**
 		 * Settings Section Callback
-		 * 
-		 * Call add_settings_section() for each Settings 
-		 * 
-		 * Loop through each Theme Font Settings page tab, and add 
-		 * a new section to the Theme Settings page for each 
+		 *
+		 * Call add_settings_section() for each Settings
+		 *
+		 * Loop through each Theme Font Settings page tab, and add
+		 * a new section to the Theme Settings page for each
 		 * section specified for each tab.
-		 * 
+		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public function settings_section_callback() {
 			$tabs = self::get_setting_tabs();
-			
+
 			foreach ( $tabs as $tab_name => $tab ) {
 				$tab_sections = $tab['sections'];
 				foreach ( $tab_sections as $section_name => $section ) {
@@ -345,21 +345,21 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 						<p><?php echo $section['description']; ?></p>
 						<?php
 					}
-				}				
+				}
 			}
 		}
 
 		/**
 		 * Separate Settings By Tab
-		 * 
-		 * Returns an array of tabs, each of which is an indexed 
+		 *
+		 * Returns an array of tabs, each of which is an indexed
 		 * array of settings included with the specified tab.
-		 * 
+		 *
 		 * @return	array	$settings_by_tab	array of arrays of settings by tab
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_settings_by_tab() {
 			// Get the list of settings page tabs
@@ -371,7 +371,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			// Loop through the array of tabs
 			foreach ( $tabs as $tab ) {
 
-				// Add an indexed array key to the settings-by-tab 
+				// Add an indexed array key to the settings-by-tab
 				// array for each tab name
 				$tab_name          = $tab['name'];
 				$settings_by_tab[] = $tab_name;
@@ -385,8 +385,8 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 				$option_tab  = $option_parameter['tab'];
 				$option_name = $option_parameter['name'];
 
-				/* 
-				 * Add an indexed array key to the settings-by-tab array 
+				/*
+				 * Add an indexed array key to the settings-by-tab array
 				 * for each setting associated with each tab
 				 */
 				$settings_by_tab[ $option_tab ][] = $option_name;
@@ -400,9 +400,9 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Get Setting Tabs
 		 *
 		 * Returns an array of tabs that will be used as sections
-		 * in the WordPress customizer. Theme authors can now hook 
-		 * into this array filter and add their own sections to 
-		 * group a set of controls. Subsection support within a 
+		 * in the WordPress customizer. Theme authors can now hook
+		 * into this array filter and add their own sections to
+		 * group a set of controls. Subsection support within a
 		 * section will be added in future versions.
 		 *
 		 * Custom Filters:
@@ -412,12 +412,12 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 *     - tt_font_custom_typography_description
 		 *     - tt_font_get_settings_page_tabs
 		 *
-		 * 
+		 *
 		 * @return array $tabs - Array of tabs with their properties
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_setting_tabs() {
 			// Tabs
@@ -452,7 +452,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 					)
 				),
 			);
-			
+
 			// Return tabs
 			return apply_filters( 'tt_font_get_settings_page_tabs', $tabs );
 		}
@@ -461,19 +461,19 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Get Panels
 		 *
 		 * Returns an array of panels that will be used as panels
-		 * in the WordPress customizer. Theme authors can now hook 
-		 * into this array filter and add their own panels in 
+		 * in the WordPress customizer. Theme authors can now hook
+		 * into this array filter and add their own panels in
 		 * the customizer.
 		 *
 		 * Custom Filters:
 		 *     - tt_font_get_panels
 		 *
-		 * 
+		 *
 		 * @return array $panels - Array of panels with their properties
 		 *
 		 * @since 1.3.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_panels() {
 			$panels = array(
@@ -496,12 +496,12 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			// return panels
 			return $panels;
 		}
-	
+
 		/**
 		 * Parse Font Controls
 		 *
 		 * Parses any font controls against a set of defaults using
-		 * wp_parse_args(). This allows developers to quickly add 
+		 * wp_parse_args(). This allows developers to quickly add
 		 * custom font controls without having to specify every
 		 * property each time.
 		 *
@@ -525,13 +525,13 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 *     - tt_font_border_min_range
 		 *     - tt_font_border_max_range
 		 *     - tt_font_border_step
-		 * 
+		 *
 		 * @param  array $args 		The properties of the current font control
 		 * @return array $control   The font control parsed with the default values
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function parse_font_control_array( $args ) {
 			$defaults = array(
@@ -566,7 +566,9 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 						'border_radius_min_range'  => apply_filters( 'tt_font_border_radius_min_range', 0 ),
 						'border_radius_max_range'  => apply_filters( 'tt_font_border_radius_max_range', 100 ),
 						'border_radius_step'       => apply_filters( 'tt_font_border_radius_step', 1 ),
-
+						'min_screen'               => array( 'amount' => '', 'unit' => 'px' ),
+						'max_screen'               => array( 'amount' => '', 'unit' => 'px' ),
+						'linked_control_id'        => false,
 					),
 				'default' => array(
 						'subset'                     => 'latin,all',
@@ -624,23 +626,23 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			// Parse complete control
 			$control = wp_parse_args( $args, $defaults );
 
-			return $control;			
+			return $control;
 		}
 
 		/**
 		 * Parse Customizer Panel
 		 *
 		 * Parse any panels against a set of defaults using
-		 * wp_parse_args(). This is to ensure that every 
+		 * wp_parse_args(). This is to ensure that every
 		 * panel property is populated in order for the
 		 * plugin to function correctly.
-		 * 
+		 *
 		 * @param  array $args [description]
 		 * @return array       [description]
 		 *
 		 * @since 1.0
 		 * @version 1.0
-		 * 
+		 *
 		 */
 		public static function parse_customizer_panel( $args ) {
 			$defaults = array(
@@ -660,26 +662,26 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Get Theme Font Option Parameters
-		 * 
-		 * Array that holds parameters for all default font options in this theme. 
-		 * The 'type' key is used to generate the proper form field markup and to 
-		 * sanitize the user-input data properly. The 'tab' key determines the 
-		 * Settings Page on which the option appears, and the 'section' tab 
-		 * determines the section of the Settings Page tab in which the option 
+		 *
+		 * Array that holds parameters for all default font options in this theme.
+		 * The 'type' key is used to generate the proper form field markup and to
+		 * sanitize the user-input data properly. The 'tab' key determines the
+		 * Settings Page on which the option appears, and the 'section' tab
+		 * determines the section of the Settings Page tab in which the option
 		 * appears.
 		 *
 		 * Custom Filters:
 		 *     - tt_font_get_option_parameters
-		 * 
+		 *
 		 * @return	array	$options	array of arrays of option parameters
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
-		 */		
+		 * @version 1.4.1
+		 *
+		 */
 		public static function get_option_parameters() {
 			$options = array(
-				
+
 				/**
 				 * Typography Tab Options
 				 *
@@ -688,8 +690,8 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 				 * Customizer
 				 *
 				 * @since 1.2
-				 * @version 1.3.9
-				 * 
+				 * @version 1.4.1
+				 *
 				 */
 				'tt_default_body' => array(
 					'name'        => 'tt_default_body',
@@ -753,25 +755,25 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		/**
 		 * Get Custom Theme Font Option Parameters
 		 *
-		 * This function converts custom controls 
-		 * in the admin section to the internal 
+		 * This function converts custom controls
+		 * in the admin section to the internal
 		 * font control.
-		 * 
-		 * Array that holds parameters for all custom font options in this theme. 
-		 * The 'type' key is used to generate the proper form field markup and to 
-		 * sanitize the user-input data properly. The 'tab' key determines the 
-		 * Settings Page on which the option appears, and the 'section' tab 
-		 * determines the section of the Settings Page tab in which the option 
+		 *
+		 * Array that holds parameters for all custom font options in this theme.
+		 * The 'type' key is used to generate the proper form field markup and to
+		 * sanitize the user-input data properly. The 'tab' key determines the
+		 * Settings Page on which the option appears, and the 'section' tab
+		 * determines the section of the Settings Page tab in which the option
 		 * appears.
 		 *
 		 * @uses EGF_Posttype::get_all_font_controls() defined in \includes\class-egf=posttype.php
-		 * 
+		 *
 		 * @return	array	$options	array of arrays of option parameters
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
-		 */		
+		 * @version 1.4.1
+		 *
+		 */
 		public static function get_custom_option_parameters( $options ) {
 			$query  = EGF_Posttype::get_all_font_controls();
 			$custom_options = array();
@@ -780,7 +782,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 				while( $query->have_posts() ) {
 
 					$query->the_post();
-					
+
 					// Extract font control properties
 					$control_id      = get_post_meta( get_the_ID(), 'control_id', true );
 					$selectors_array = get_post_meta( get_the_ID(), 'control_selectors', true );
@@ -790,7 +792,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 					if ( empty( $force_styles ) ) {
 						$force_styles = false;
 					}
-					
+
 					// Build selectors
 					$selectors = '';
 
@@ -804,8 +806,8 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 					while ( substr( $selectors, -1 ) == ',' ) {
 						$selectors = rtrim( $selectors, "," );
-					}				
-			
+					}
+
 					// Add control
 					if ( $control_id ) {
 						$custom_options[ $control_id ] = array(
@@ -825,7 +827,7 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 					}
 
 				} //endwhile
-				
+
 				// Reset the query globals
 				wp_reset_postdata();
 			}
@@ -840,44 +842,46 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 
 		/**
 		 * Theme Font Option Defaults
-		 * 
-		 * Returns an associative array that holds all of the default 
+		 *
+		 * Returns an associative array that holds all of the default
 		 * values for all of the theme font options.
-		 * 
+		 *
 		 * @return	array	$defaults	associative array of option defaults
-		 * 
+		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_option_defaults() {
-			
-			// Get the array that holds all theme font option parameters
+
+			// Get the array that holds all theme 
+			// font option parameters
 			$tt_font_parameters = self::get_option_parameters();
-			
-			// Initialize the array to hold the default values for 
-			// all the font options
+
+			// Initialize the array to hold the default 
+			// values for all of the font options
 			$tt_font_defaults = array();
-			
+
 			// Loop through the font option parameters array
 			foreach ( $tt_font_parameters as $tt_font_parameter ) {
-				
+
 				/*
 				 * Add an associative array key to the defaults array for each
 				 * option in the parameters array
-				 */ 
+				 */
 				$name                      = $tt_font_parameter['name'];
 				$tt_font_defaults[ $name ] = $tt_font_parameter['default'];
 			}
+
 			// Return the defaults array
-			return apply_filters( 'tt_font_option_defaults', $tt_font_defaults );	
+			return apply_filters( 'tt_font_option_defaults', $tt_font_defaults );
 		}
-		
+
 		/**
 		 * Get Theme Options
-		 * 
-		 * Array that holds all of the defined values for the current 
-		 * theme options. If the user has not specified a value for a 
+		 *
+		 * Array that holds all of the defined values for the current
+		 * theme options. If the user has not specified a value for a
 		 * given Theme option, then the option's default value is
 		 * used instead. This function uses the WordPress Transients API
 		 * in order to increase speed performance. Please make sure
@@ -888,12 +892,12 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 		 * Note: In order to refresh the transient that is set in this
 		 * function please visit the Customizer. This will automatically
 		 * refresh the transient.
-		 *  
+		 *
 		 * @return	array	$tt_font_options	current values for all Theme options
-		 * 
+		 *
 		 * @since 1.2
-		 * @version 1.3.9
-		 * 
+		 * @version 1.4.1
+		 *
 		 */
 		public static function get_options( $with_transient = true ) {
 			// Get the global customize variable
@@ -903,10 +907,10 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			$option_defaults = self::get_option_defaults();
 
 			$tt_font_options = array();
-			
+
 			// Check if a transient exists, if it doesn't or we are in customize mode then reset the transient
 			if ( ! $with_transient || isset( $wp_customize ) || false === ( $tt_font_options = get_transient( 'tt_font_theme_options' ) ) ) {
-				
+
 				// Delete transient if it exists
 				delete_transient( 'tt_font_theme_options' );
 
@@ -927,7 +931,41 @@ if ( ! class_exists( 'EGF_Register_Options' ) ) :
 			}
 
 			// Return the parsed array
-			return wp_parse_args( $tt_font_options, $option_defaults );	
+			return wp_parse_args( $tt_font_options, $option_defaults );
 		}
+
+		/**
+		 * Get Linked Controls
+		 *
+		 * Gets all of the controls linked to the control
+		 * with the id passed in the parameter. Will return
+		 * an array of linked control ids if applicable or
+		 * an empty array if no controls were found.
+		 *
+		 * Note: if you want to get top level controls then 
+		 * pass in false in the parameter.
+		 * 
+		 * @param  $linked_control_id 	id to check, boolean/string
+		 * @return $linked_controls 	array of linked control ids
+		 *
+		 * @since 1.4.0
+		 * @version 1.4.1
+		 * 
+		 */
+		public static function get_linked_controls( $linked_control_id = false ) {
+			$linked_controls   = array();
+			$option_parameters = self::get_option_parameters();
+			
+			// Add ids to $linked_controls.
+			foreach ( $option_parameters as $id => $option_parameter ) {
+				if ( $linked_control_id === $option_parameter['properties']['linked_control_id'] ) {
+					$linked_controls[] = $id;
+				}
+			}
+
+			return $linked_controls;
+		}
+
+
 	}
 endif;

@@ -10,8 +10,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 if ( ! class_exists( 'EGF_Frontend' ) ) :
@@ -42,7 +42,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		function __construct() {
@@ -62,7 +62,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_instance() {
@@ -84,7 +84,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * possible.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_actions() {
@@ -98,7 +98,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_filters() {
@@ -121,7 +121,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 *
 		 * @global $wp_customize
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function enqueue_stylesheets() {
@@ -237,41 +237,61 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * @link http://codex.wordpress.org/Function_Reference/add_action 	add_action()
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function output_styles() {
 			
 			global $wp_customize;
 
+			// Fetch options and transients.
 			$transient       = isset( $wp_customize ) ? false : true;
 			$options         = EGF_Register_Options::get_options( $transient );
 			$default_options = EGF_Register_Options::get_option_parameters();
-			?>
-			
-			<?php if ( ! isset( $wp_customize ) ) : ?>
-				<style id="tt-easy-google-font-styles" type="text/css">
-			<?php endif; ?>
 
-			<?php foreach ( $options as $key => $value ) : ?>
-				<?php
-					$force_styles = isset( $default_options[ $key ]['properties']['force_styles'] ) ? $default_options[ $key ]['properties']['force_styles'] : false;
-				?>
-				<?php if ( isset( $wp_customize ) && ! empty( $options[ $key ] ) ) : ?>
-					<?php echo $this->generate_customizer_css( $options[ $key ], $default_options[ $key ]['properties']['selector'], $key, $force_styles ); ?>
-				<?php else : ?>
-					<?php if ( ! empty( $default_options[ $key ] ) ) : ?>
-						<?php echo $default_options[ $key ]['properties']['selector']; ?> {
-							<?php echo $this->generate_css( $options[ $key ], $force_styles ); ?>
-						}
-					<?php endif; ?>			
-				<?php endif; ?>
-			<?php endforeach; ?>
-			
-			<?php if ( ! isset( $wp_customize ) ) : ?>
-				</style>
-			<?php endif; ?>
-			<?php
+			// @todo remove line
+			EGF_Register_Options::get_linked_controls();
+
+			// Output opening <style> tag if the 
+			// customizer isn't running.
+			if ( ! isset( $wp_customize ) ) {
+				echo '<style id="tt-easy-google-font-styles" type="text/css">';
+			}
+
+			/**
+			 * Loop through each font control and
+			 * output the selector and the css 
+			 * styles in the <head>.
+			 * 
+			 */
+			foreach ( $options as $key => $value ) {
+
+				// Check if css styles should be forced.
+				$force_styles = isset( $default_options[ $key ]['properties']['force_styles'] ) ? $default_options[ $key ]['properties']['force_styles'] : false;
+
+				// Echo css output in the <head>.
+				if ( isset( $wp_customize ) && ! empty( $options[ $key ] ) ) {
+					
+					// Output styles differently if the
+					// customizer is running.
+					echo $this->generate_customizer_css( $options[ $key ], $default_options[ $key ]['properties']['selector'], $key, $force_styles );
+				} elseif ( ! empty( $default_options[ $key ] ) ) {
+
+					// Output media query, selector and styles 
+					// for this font control.
+					echo $this->get_opening_media_query( $key );
+					echo $default_options[ $key ]['properties']['selector'] . " { ";
+					echo $this->generate_css( $options[ $key ], $force_styles );
+					echo "}\n";
+					echo $this->get_closing_media_query( $key );
+				}
+			}
+
+			// Output closing </style> tag if the 
+			// customizer isn't running.
+			if ( ! isset( $wp_customize ) ) {
+				echo '</style>';
+			}
 		}
 
 		/**
@@ -284,7 +304,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * @return string $output 	Inline styles
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function generate_css( $option, $force_styles = false ) {
@@ -325,7 +345,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 				// Handle all other options.
 				if ( $property['has_units'] ) {
 					$output .= "{$property['property']}: {$option[ $id ]['amount']}{$option[ $id ]['unit']}{$importance}; ";
-				} else if ( 'font-family' == $property['property'] ) {
+				} elseif ( 'font-family' == $property['property'] ) {
 					$output .= "{$property['property']}: '{$option[ $id ]}'{$importance}; ";
 				} else {
 					$output .= "{$property['property']}: {$option[ $id ]}{$importance}; ";
@@ -349,7 +369,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * @return string $output 	Inline styles
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function generate_customizer_css( $option, $selector, $id = '', $force_styles = false ) {
@@ -380,7 +400,9 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 				if ( ! empty( $property['is_border'] ) ) {
 
 					// Open <style> tag.
-					$output .= "<style id='tt-font-{$id}-{$property['property']}' type='text/css'>{$selector} {";
+					$output .= "<style id='tt-font-{$id}-{$property['property']}' type='text/css'>";
+					$output .= $this->get_opening_media_query( $id );
+					$output .= "{$selector} {";
 
 					// Output property.
 					$output .= "{$property['property']}: ";
@@ -390,30 +412,110 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 					$output .= "{$importance}; ";
 
 					// Close <style> tag.
-					$output .= "}</style>";
+					$output .= "}";
+					$output .= $this->get_closing_media_query( $id );
+					$output .= "</style>";
 
 					// Exit loop iteration.
 					continue;
 				}
 
 				// Open <style> tag.
-				$output .= "<style id='tt-font-{$id}-{$property['property']}' type='text/css'>{$selector} {";
+				$output .= "<style id='tt-font-{$id}-{$property['property']}' type='text/css'>";
+				$output .= $this->get_opening_media_query( $id );
+				$output .= "{$selector} {";
 
 				// Handle all other options.
 				if ( $property['has_units'] ) {
 					$output .= "{$property['property']}: {$option[ $key ]['amount']}{$option[ $key ]['unit']}{$importance}; ";
-				} else if ( 'font-family' == $property['property'] ) {
+				} elseif ( 'font-family' == $property['property'] ) {
 					$output .= "{$property['property']}: '{$option[ $key ]}'{$importance}; ";
 				} else {
 					$output .= "{$property['property']}: {$option[ $key ]}{$importance}; ";
 				}
 
 				// Close <style> tag.
-				$output .= "}</style>";
+				$output .= "}";
+				$output .= $this->get_closing_media_query( $id );
+				$output .= "</style>";
 			}
 
 			// Return output.
 			return $output;	
+		}
+
+		/**
+		 * Get Opening Media Query Markup
+		 *
+		 * Returns the opening media query markup or 
+		 * an empty string if this font control has 
+		 * no media query settings. 
+		 * 
+		 * @param  string $option_key 	Font control id
+		 * @return string $output 		The opening media query markup
+		 *
+		 * @since 1.4.0
+		 * @version 1.4.1
+		 * 
+		 */
+		public function get_opening_media_query( $option_key ) {
+			$output          = "";
+			$default_options = EGF_Register_Options::get_option_parameters();
+
+			if ( ! empty( $default_options[ $option_key ]['properties'] ) ) {
+
+				// Get the min and max properties for 
+				// this option.
+				$min_screen = $default_options[ $option_key ]['properties']['min_screen'];
+				$max_screen = $default_options[ $option_key ]['properties']['max_screen'];
+
+				// Return $output if this option has 
+				// no min and max value.
+				if ( empty( $min_screen['amount'] ) && empty( $max_screen['amount'] ) ) {
+					return $output;
+				}
+
+				// Build the $output.
+				$output .= "@media ";
+
+				// Append min-width value if applicable.
+				if ( ! empty( $min_screen['amount'] ) ) {
+					$output .= "(min-width: {$min_screen['amount']}{$min_screen['unit']})";
+				}
+
+				// Append 'and' keyword if min and max value exists.
+				if ( ! empty( $min_screen['amount'] ) && ! empty( $max_screen['amount'] ) ) {
+					$output .= " and ";
+				}
+
+				// Append max-width value if applicable.
+				if ( ! empty( $max_screen['amount'] ) ) {
+					$output .= "(max-width: {$max_screen['amount']}{$max_screen['unit']})";
+				}
+
+				$output .= " {\n\t";
+			}
+
+			return $output;
+		}
+
+		/**
+		 * Get Closing Media Query Markup
+		 *
+		 * Returns the closing media query markup or 
+		 * an empty string if this font control has 
+		 * no media query settings. 
+		 * 
+		 * @param  string $option_key 	Font control id
+		 * @return string $output 		The opening media query markup
+		 *
+		 * @since 1.4.0
+		 * @version 1.4.1
+		 * 
+		 */
+		public function get_closing_media_query( $option_key ) {
+			$media_query = $this->get_opening_media_query( $option_key );
+			return empty( $media_query ) ? "" : "}\n";
 		}
 
 		/**
@@ -427,7 +529,7 @@ if ( ! class_exists( 'EGF_Frontend' ) ) :
 		 * @return array $properties 	Array of settings with css properties.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_css_properties() {		

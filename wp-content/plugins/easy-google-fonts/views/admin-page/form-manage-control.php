@@ -9,11 +9,12 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 ?>
+
 <div class="manage-controls">
 	<form autocomplete="off" id="" action="" method="get" enctype="multipart/form-data">
 		<?php if ( $this->is_edit_screen() ) : ?>
@@ -30,7 +31,7 @@
 				or <a href="<?php echo $this->create_url; ?>"><?php _e( 'create a new font control', $this->plugin_slug ); ?></a>		
 			</span><!-- /add-new-control-action -->					
 		<?php elseif ( $this->is_create_screen() ) : ?>
-			<label><?php _e( 'Create a new Font Control.', $this->plugin_slug ); ?></label>
+			<label><?php _e( 'Create a new Font Control. ', $this->plugin_slug ); ?></label>
 		<?php endif; ?>
 	</form>	
 </div><!-- END .manage-controls -->

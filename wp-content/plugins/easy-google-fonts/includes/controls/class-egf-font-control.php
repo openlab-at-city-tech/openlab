@@ -16,8 +16,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2015, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control' ) ) :
@@ -30,7 +30,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @var string
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 */
 		public $type = 'egf_font';
 
@@ -41,7 +41,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @var array
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 */
 		public $statuses;
 
@@ -54,7 +54,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * instance.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		function __construct( $manager, $id, $args = array() ) {
@@ -80,7 +80,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @param mixed $callback
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function add_tab( $id, $label, $callback, $selected = false ) {
@@ -97,7 +97,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @param string $id
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function remove_tab( $id ) {
@@ -112,7 +112,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * rendered via JS on load.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function render_content() {
@@ -125,7 +125,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * of this font control.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function content_template() {
@@ -150,7 +150,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * JavaScript via JSON.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function to_json() {
@@ -181,7 +181,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @uses EGF_Font_Utilities::get_default_fonts() 	defined in includes\class-egf-font-utilities
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_style_controls() {
@@ -207,7 +207,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 *     - Letter Spacing
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_appearance_controls() {
@@ -231,7 +231,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 *     - Padding ( Top, Bottom, Left, Right )
 		 * 
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_positioning_controls() {
@@ -265,7 +265,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @return array - Key/value array of available subsets.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_subsets() {
@@ -302,7 +302,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @return array - Key/value array of available options.
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_text_decoration_options() {
@@ -323,7 +323,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @return [type] [description]
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_text_transform_options() {
@@ -343,7 +343,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @return [type] [description]
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_display_options() {
@@ -361,7 +361,7 @@ if ( ! class_exists( 'EGF_Font_Control' ) && class_exists( 'WP_Customize_Control
 		 * @return [type] [description]
 		 *
 		 * @since 1.3.4
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_border_style_options() {

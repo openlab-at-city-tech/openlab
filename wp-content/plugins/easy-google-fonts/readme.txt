@@ -2,9 +2,9 @@
 Contributors: sunny_johal, amit_kayasth
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=28M8NWPHVQNYU
 Tags: WordPress Google Fonts Plugin, Google Webfonts, Google Fonts WordPress, Typography, Webfonts, WordPress Webfonts, Fonts, WordPress Fonts, Theme Fonts, Theme Fonts Plugin
-Requires at least: 4.3
-Tested up to: 4.3
-Stable tag: 1.3.9
+Requires at least: 4.5
+Tested up to: 4.5
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,13 @@ e.g.
 9. View and manage all of your custom controls in the admin area.
 
 == Changelog ==
+= 1.4.1 - Urgent update =
+* Fixed issue where the plugin wasn't taking effect for screen sizes under 700px
+
+= 1.4.0 - Plugin update =
+* Now automatically removes white spaces added to the api key on the settings page.
+* Started rewriting part of the code for eventual media query support.
+
 = 1.3.9 - Stylesheet Update =
 * Updated the appearance in the customizer for the new changes in WordPress 3.4
 
