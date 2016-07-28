@@ -1,58 +1,46 @@
 (function($) {
 	$(document).ready( function() {
-		/* new version */
-		var product = $( '.bws_product' ),
+		var product = $( '.bws_product_box' ),
 			max = 0;
 		$( product ).each( function () {
-			if ( $( this ).outerHeight( true ) > max )
-				max = $( this ).outerHeight( true );
-		});
-		$( '.bws_product' ).css( 'height', max + 'px' );
+			if ( $( this ).height() > max )
+				max = $( this ).height();
+		});		
+		$( '.bws_product_box' ).css( 'height', max + 'px' );
 
-		var product_links = $( '.bws_product_links' );
-		max = 0;
-		$( product_links ).each( function () {
-			if ( $( this ).innerHeight() > max )
-				max = $( this ).innerHeight();
-		});
-		max = max - parseInt( $( '.bws_product_links' ).css( 'padding-top' ) ) - parseInt( $( '.bws_product_links' ).css( 'padding-bottom' ) );
-		$( '.bws_product_links' ).css( 'height', max + 'px' );		
-			
-		$( '.bws_product_box' ).hover( function() {
-			if ( $( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_description' ).length > 0 ) {
-				$( this ).children( '.bws_product' ).addClass( 'bws_product_pro' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_description' ).css( 'display', 'block' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_icon' ).css( 'display', 'none' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_button' ).css( 'display', 'inline-block' );
-			}
-		}, function() {			
-			if ( $( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_description' ).length > 0 ) {
-				$( this ).children( '.bws_product' ).removeClass( 'bws_product_pro' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_description' ).css( 'display', 'none' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_content' ).children( '.bws_product_icon' ).css( 'display', 'block' );
-				$( this ).children( '.bws_product' ).children( '.bws_product_button' ).css( 'display', 'none' );
-			}
-		});
+		if ( $( '.bws-filter' ).length ) {
+			var prvPos = $( '.bws-filter' ).offset().top;
+			var maxPos = prvPos + $( '.bws-products' ).outerHeight() - $( '.bws-filter' ).outerHeight();
 
-		/* old version */
-		if ( $( 'input[name="bwsmn_form_email"]' ).val() == '' ) {
-			$( '.bws_system_info_meta_box .inside' ).css( 'display', 'none' );
+			$( window ).scroll( function() {
+				if ( $( window ).width() > 580 ) {
+					var scrPos = Number( $( document ).scrollTop() ) + 40;
+					if ( scrPos > maxPos ) {
+						$( '.bws-filter' ).removeClass( 'bws_fixed' );
+					} else if ( scrPos > prvPos ) {
+						$( '.bws-filter' ).addClass( 'bws_fixed' );
+					} else {
+						$( '.bws-filter' ).removeClass( 'bws_fixed' );
+					}
+				}
+			});
 		}
-
-		$( '.bws_system_info_meta_box .hndle' ).click( function() {
-			if ( $( '.bws_system_info_meta_box .inside' ).is( ':visible' ) ) {
-				$( '.bws_system_info_meta_box .inside' ).css( 'display', 'none' );
+		$( '.bws-menu-item-icon' ).click( function() {
+			if ( $( this ).hasClass( 'bws-active' ) ) {
+				$( this ).removeClass( 'bws-active' );
+				$( '.bws-nav-tab-wrapper, .bws-help-links-wrapper' ).hide();
 			} else {
-				$( '.bws_system_info_meta_box .inside' ).css( 'display', 'block' );
-			}					
+				$( this ).addClass( 'bws-active' );
+				$( '.bws-nav-tab-wrapper, .bws-help-links-wrapper' ).css( 'display', 'inline-block' );
+			}
+		});
+		$( '.bws-filter-top h2' ).click( function() {
+			if ( $( '.bws-filter-top' ).hasClass( 'bws-opened' ) ) {
+				$( '.bws-filter-top' ).removeClass( 'bws-opened' );
+			} else {
+				$( '.bws-filter-top' ).addClass( 'bws-opened' );
+			}
 		});
 		
-		$( '.bws_system_info_meta_box .handlediv' ).click( function() {
-			if ( $( '.bws_system_info_meta_box .inside' ).is( ':visible' ) ) {
-				$( '.bws_system_info_meta_box .inside' ).css( 'display', 'none' );
-			} else {
-				$( '.bws_system_info_meta_box .inside' ).css( 'display', 'block' );
-			}					
-		});
 	});
 })(jQuery);

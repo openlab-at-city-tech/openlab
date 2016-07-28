@@ -1,10 +1,11 @@
+# Byrial Ole Jensen <byrial@vip.cybercity.dk>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 12:13+0300\n"
-"PO-Revision-Date: 2015-09-17 12:13+0300\n"
-"Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
+"POT-Creation-Date: 2016-06-06 17:23+0300\n"
+"PO-Revision-Date: 2016-06-06 17:23+0300\n"
+"Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: Bőm Tamás <tamas.bem@gmail.com>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -16,527 +17,1153 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: whitelist.php:58
-msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
-msgstr ""
-
-#: whitelist.php:62
-msgid "Add IP to whitelist"
-msgstr ""
-
-#: whitelist.php:67
-msgid "My IP"
-msgstr ""
-
-#: whitelist.php:74
-#: whitelist.php:84
-msgid "Allowed formats:"
-msgstr ""
-
-#: whitelist.php:75
-msgid "Allowed diapason:"
-msgstr ""
-
-#: whitelist.php:82
-msgid "Reason"
-msgstr ""
-
-#: whitelist.php:85
-msgid "Allowed separators for IPs: a comma"
-msgstr ""
-
-#: whitelist.php:85
-#: whitelist.php:86
-msgid "semicolon"
-msgstr ""
-
-#: whitelist.php:85
-msgid "ordinary space, tab, new line or carriage return"
-msgstr ""
-
-#: whitelist.php:86
-msgid "Allowed separators for reasons: a comma"
-msgstr ""
-
-#: whitelist.php:86
-msgid "tab, new line or carriage return"
-msgstr ""
-
-#: whitelist.php:93
-#: captcha.php:482
-msgid "Unlock premium options by upgrading to Pro version"
-msgstr ""
-
-#: whitelist.php:95
-#: captcha.php:484
-msgid "Learn More"
-msgstr ""
-
-#: whitelist.php:101
-msgid "Search IP"
-msgstr ""
-
-#: whitelist.php:132
-msgid "Nothing found"
-msgstr ""
-
-#: whitelist.php:132
-msgid "No IP in whitelist"
-msgstr ""
-
-#: whitelist.php:139
-msgid "IP address"
-msgstr ""
-
-#: whitelist.php:140
-msgid "Date added"
-msgstr ""
-
-#: whitelist.php:189
-#: whitelist.php:200
-msgid "Remove from whitelist"
-msgstr ""
-
-#: whitelist.php:266
-msgid "IP added in database successfully"
-msgstr ""
-
-#: whitelist.php:268
-#: whitelist.php:283
-#: whitelist.php:290
-msgid "Some errors occured"
-msgstr ""
-
-#: whitelist.php:270
-msgid "IP is allready in database"
-msgstr ""
-
-#: whitelist.php:273
-msgid "Invalid IP. See allowed formats"
-msgstr ""
-
-#: whitelist.php:288
-msgid "One IP was deleted successfully"
-msgstr ""
-
-#: whitelist.php:292
-msgid "You have not entered any value"
-msgstr ""
-
-#: whitelist.php:295
-msgid "You have not enterd any value in to the search form"
-msgstr ""
-
-#: whitelist.php:297
-msgid "Search results for"
-msgstr ""
-
-#: captcha.php:33
-#: captcha.php:377
-#, fuzzy
+#: captcha.php:33 captcha.php:469
 msgid "Captcha Settings"
-msgstr "Captcha opciók"
+msgstr "Captcha beállítások"
 
 #: captcha.php:33
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:148
-#, fuzzy
+#: captcha.php:184
 msgid "Please enter a CAPTCHA value."
-msgstr "Kérjük, töltse ki a CAPTCHA-t"
+msgstr "Kérjük, adja meg a CAPTCHA értékét."
 
-#: captcha.php:149
-#, fuzzy
+#: captcha.php:185
 msgid "Please enter a valid CAPTCHA value."
-msgstr "Kérjük, töltse ki a CAPTCHA-t"
+msgstr "Kérjük, adjon meg jó CAPTCHA-t"
 
-#: captcha.php:154
+#: captcha.php:186
+#, fuzzy
+msgid "Time limit is exhausted. Please enter CAPTCHA value again."
+msgstr "Kérjük, adja meg a CAPTCHA értékét."
+
+#: captcha.php:187
 msgid "You are in the white list"
 msgstr ""
 
-#: captcha.php:290
+#: captcha.php:203
+#, fuzzy
+msgid "Time limit is exhausted. Please reload CAPTCHA."
+msgstr "Kérjük, adja meg a CAPTCHA értékét."
+
+#: captcha.php:310
 msgid "Login form"
-msgstr "Bejelentkezés"
+msgstr "Bejelentkezés űrlap"
 
-#: captcha.php:291
-#: captcha.php:459
-#, fuzzy
+#: captcha.php:311
 msgid "Registration form"
-msgstr "Regisztráció"
+msgstr "Regisztrációs űrlap"
 
-#: captcha.php:292
-#, fuzzy
+#: captcha.php:312
 msgid "Reset Password form"
-msgstr "Elfelejtett jelszó"
+msgstr "Jelszó alaphelyzetbe állítás űrlapja"
 
-#: captcha.php:293
-#: captcha.php:460
+#: captcha.php:313
 msgid "Comments form"
-msgstr "Hozzászólások"
+msgstr "Hozzászólás űrlap"
 
-#: captcha.php:296
+#: captcha.php:316
 #, fuzzy
 msgid "in Comments form for registered users"
-msgstr "CAPTCHA regisztrált felhasználóknak"
+msgstr "CAPTCHA elrejtése a regisztrált felhasználók kommentjeihez"
 
-#: captcha.php:300
+#: captcha.php:320
 msgid "Plus (&#43;)"
-msgstr "Plus (&#43;)"
+msgstr "Plusz (&#43;)"
 
-#: captcha.php:300
+#: captcha.php:320
 msgid "Plus"
-msgstr "Plus (&#43;)"
+msgstr "Plusz (&#43;)"
 
-#: captcha.php:301
+#: captcha.php:321
 msgid "Minus (&minus;)"
 msgstr "Minusz (&minus;)"
 
-#: captcha.php:301
+#: captcha.php:321
 msgid "Minus"
 msgstr "Minusz"
 
-#: captcha.php:302
-#, fuzzy
+#: captcha.php:322
 msgid "Multiplication (&times;)"
-msgstr "Szorozzuk meg (&times;)"
+msgstr "Szorzás (&times;)"
 
-#: captcha.php:302
-#, fuzzy
+#: captcha.php:322
 msgid "Multiply"
-msgstr "Szorozzuk meg (&times;)"
+msgstr "Szorzás"
 
-#: captcha.php:307
+#: captcha.php:327
 msgid "Numbers"
 msgstr "Számok"
 
-#: captcha.php:308
+#: captcha.php:328
 msgid "Words"
 msgstr "Szavak"
 
-#: captcha.php:354
-#, fuzzy
-msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
-msgstr "Kérem válasszon egy pontot  a blokkoknak Aritmetikai intézkedéseknek és nehézségi fokát CAPTCHA-nak"
+#: captcha.php:329
+msgid "Images"
+msgstr ""
 
-#: captcha.php:358
+#: captcha.php:406
+msgid ""
+"Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+msgstr ""
+"Kérem válassza ki a blokkból a CAPTCHA Aritmetikai és Összetettségi szintjét"
+
+#: captcha.php:412
 #, fuzzy
+msgid "Please select one item in the block Enable image packages"
+msgstr ""
+"Kérem válassza ki a blokkból a CAPTCHA Aritmetikai és Összetettségi szintjét"
+
+#: captcha.php:442
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
 
-#: captcha.php:365
+#: captcha.php:454
 msgid "All plugin settings were restored."
 msgstr ""
 
-#: captcha.php:379
+#: captcha.php:471
 msgid "How to Use Step-by-step Instruction"
 msgstr ""
 
-#: captcha.php:382
-#: captcha.php:1433
-#: captcha.php:1446
-msgid "Settings"
-msgstr "Beállítások"
+#: captcha.php:474
+msgid "Basic"
+msgstr ""
 
-#: captcha.php:383
+#: captcha.php:475
+msgid "Advanced"
+msgstr ""
+
+#: captcha.php:476
+msgid "This setting is available in Pro version"
+msgstr ""
+
+#: captcha.php:476
+msgid "Packages"
+msgstr ""
+
+#: captcha.php:477
 msgid "Whitelist"
 msgstr ""
 
-#: captcha.php:384
-#: captcha.php:1447
-msgid "FAQ"
-msgstr "GYIK"
+#: captcha.php:478
+msgid "Custom code"
+msgstr ""
 
-#: captcha.php:385
+#: captcha.php:479
 msgid "Go PRO"
-msgstr ""
+msgstr "Váltás PRO-ra"
 
-#: captcha.php:387
-msgid "Notice:"
-msgstr ""
-
-#: captcha.php:387
-msgid "The plugin's settings have been changed. In order to save them please don't forget to click the 'Save Changes' button."
-msgstr ""
-
-#: captcha.php:397
-#: captcha.php:447
-#: captcha.php:455
-#: captcha.php:458
+#: captcha.php:495 captcha.php:498 includes/pro_banners.php:38
+#: includes/pro_banners.php:41
 #, fuzzy
 msgid "Enable CAPTCHA for"
-msgstr "Engedélyezze a CAPTCHA:"
+msgstr "Mire engedélyezi a CAPTCHA-t:"
 
-#: captcha.php:399
-#: captcha.php:521
-#: captcha.php:523
-msgid "Arithmetic actions for CAPTCHA"
-msgstr "Aritmetikai cselekvések a CAPTCHA-ban"
-
-#: captcha.php:424
-msgid "Activate"
+#: captcha.php:499
+msgid "WordPress default"
 msgstr ""
 
-#: captcha.php:434
-msgid "Download"
+#: captcha.php:505
+msgid "This option is available only for main blog"
 msgstr ""
 
-#: captcha.php:438
+#: captcha.php:520
 #, fuzzy
-msgid "If you would like to add Captcha to a custom form, please see"
-msgstr "Ha egy egyéni űrlapot szeretne létrehozni ehhez a pluginhoz, kérjük, lépjen kapcsolatba velünk <a href=\"Mailto:plugin@bestwebsoft.com\"> plugin@bestwebsoft.com </ a>, vagy töltse ki az űrlapot a oldal"
+msgid "Plugins"
+msgstr "Plugin-ek oldala"
 
-#: captcha.php:461
-msgid "\"Create a Group\" form"
+#: captcha.php:527 captcha.php:533
+msgid "You should"
 msgstr ""
 
-#: captcha.php:467
-#, fuzzy
-msgid "Enable CAPTCHA"
-msgstr "Engedélyezze a CAPTCHA:"
-
-#: captcha.php:475
-msgid "If you upgrade to Pro version all your settings will be saved."
+#: captcha.php:527 includes/whitelist.php:444
+msgid "activate"
 msgstr ""
 
-#: captcha.php:490
-#, fuzzy
-msgid "Hide CAPTCHA"
-msgstr "Engedélyezze a CAPTCHA:"
-
-#: captcha.php:497
-#, fuzzy
-msgid "Title for CAPTCHA in the form"
-msgstr "Címke CAPTCHA formájában"
-
-#: captcha.php:501
-msgid "Required symbol"
+#: captcha.php:527
+msgid "for network"
 msgstr ""
 
-#: captcha.php:507
-msgid "Error messages"
-msgstr ""
-
-#: captcha.php:509
-#, fuzzy
-msgid "If CAPTCHA field is empty"
-msgstr "Ez a CAPTCHA helytelen volt."
-
-#: captcha.php:510
-#, fuzzy
-msgid "If CAPTCHA is incorrect"
-msgstr "Ez a CAPTCHA helytelen volt."
-
-#: captcha.php:514
-msgid "Display for whitelisted IP"
-msgstr ""
-
-#: captcha.php:517
-msgid "If the IP is in the whitelist, then the indicated message will be displayed instead of the captcha."
+#: captcha.php:527 captcha.php:535
+msgid "to use this functionality"
 msgstr ""
 
 #: captcha.php:534
-#: captcha.php:536
-msgid "CAPTCHA complexity level"
+msgid "download"
 msgstr ""
 
-#: captcha.php:549
-msgid "Save Changes"
-msgstr "Változások mentése"
+#: captcha.php:547
+msgid "If you would like to add Captcha to a custom form, please see"
+msgstr "Ha egyéni űrlaphoz szeretne adni Capcha-t, kérjük, nézze meg"
 
-#: captcha.php:626
-#: captcha.php:641
-#: captcha.php:643
-#: captcha.php:650
-#: captcha.php:827
-#: captcha.php:835
-#: captcha.php:852
-#: captcha.php:860
-msgid "ERROR"
-msgstr "Hiba!!"
+#: captcha.php:555
+#, fuzzy
+msgid "Hide CAPTCHA"
+msgstr "Engedélyezze a CAPTCHA-t:"
 
-#: captcha.php:759
-#: captcha.php:765
-#: captcha.php:881
-#: captcha.php:889
+#: captcha.php:562
+msgid "Title"
+msgstr ""
+
+#: captcha.php:566
+msgid "Required symbol"
+msgstr "Kötelező szimbólum"
+
+#: captcha.php:572
+msgid "Show \"Reload\" button"
+msgstr ""
+
+#: captcha.php:578
+#, fuzzy
+msgid "Arithmetic actions"
+msgstr "Aritmetikai cselekvések a CAPTCHA-ban"
+
+#: captcha.php:581
+msgid "Arithmetic actions for CAPTCHA"
+msgstr "Aritmetikai cselekvések a CAPTCHA-ban"
+
+#: captcha.php:593 captcha.php:595
+msgid "Complexity"
+msgstr ""
+
+#: captcha.php:618
+msgid "Enable image packages"
+msgstr ""
+
+#: captcha.php:635
+msgid "Enlarge images on mouseover"
+msgstr ""
+
+#: captcha.php:645
+msgid "Enable time limit"
+msgstr ""
+
+#: captcha.php:651
+msgid "Set time limit"
+msgstr ""
+
+#: captcha.php:654
+msgid "seconds"
+msgstr ""
+
+#: captcha.php:660
+msgid "Notification messages"
+msgstr ""
+
+#: captcha.php:663 captcha.php:969 captcha.php:975 captcha.php:1176
+#: captcha.php:1192
 msgid "Error"
 msgstr ""
 
-#: captcha.php:759
-#: captcha.php:765
-#: captcha.php:881
-#: captcha.php:889
-#, fuzzy
-msgid "Click the BACK button on your browser, and try again."
-msgstr "Hiba: A megadott CAPTCHA kifejezés rossz. Nyomja meg a böngésző Vissza gombját, és próbálja újra."
+#: captcha.php:665
+msgid ""
+"This messages will be displayed, if the CAPTCHA answer has not passed the "
+"verification"
+msgstr ""
 
-#: captcha.php:913
-#: captcha.php:1217
+#: captcha.php:668
+#, fuzzy
+msgid "If the CAPTCHA field is empty"
+msgstr "Ha a CAPTCHA mező üres"
+
+#: captcha.php:669
+#, fuzzy
+msgid "If the CAPTCHA is incorrect"
+msgstr "Ha a CAPTCHA helytelen"
+
+#: captcha.php:670
+msgid "If the time limit is exhausted"
+msgstr ""
+
+#: captcha.php:672
+msgid "Info"
+msgstr ""
+
+#: captcha.php:674
+msgid "This messages will be displayed inside of the CAPTCHA"
+msgstr ""
+
+#: captcha.php:677
+msgid ""
+"If the user IP is added to the whitelist (this message will be displayed "
+"instead of the CAPTCHA)"
+msgstr ""
+
+#: captcha.php:678
+#, fuzzy
+msgid ""
+"If the time limit is exhausted (this message will be displayed above the "
+"CAPTCHA)"
+msgstr "Kérjük, adja meg a CAPTCHA értékét."
+
+#: captcha.php:685
+msgid "Save Changes"
+msgstr "Változások mentése"
+
+#: captcha.php:826 captcha.php:833 captcha.php:848 captcha.php:850
+#: captcha.php:858 captcha.php:1062 captcha.php:1070 captcha.php:1086
+#: captcha.php:1090 captcha.php:1099 captcha.php:1123 captcha.php:1133
+#: captcha.php:1151 captcha.php:1154 captcha.php:1162
+msgid "ERROR"
+msgstr "Hiba"
+
+#: captcha.php:969 captcha.php:975 captcha.php:1176 captcha.php:1192
+msgid "Click the BACK button on your browser, and try again."
+msgstr "Nyomja meg a böngésző Vissza gombját, és próbálja újra."
+
+#: captcha.php:1550
 msgid "zero"
 msgstr "nulla"
 
-#: captcha.php:914
-#: captcha.php:1218
-#: captcha.php:1390
+#: captcha.php:1551 captcha.php:1889
 msgid "one"
 msgstr "egy"
 
-#: captcha.php:915
-#: captcha.php:1219
+#: captcha.php:1552
 msgid "two"
 msgstr "kettő"
 
-#: captcha.php:916
-#: captcha.php:1220
+#: captcha.php:1553
 msgid "three"
 msgstr "három"
 
-#: captcha.php:917
-#: captcha.php:1221
+#: captcha.php:1554
 msgid "four"
 msgstr "négy"
 
-#: captcha.php:918
-#: captcha.php:1222
+#: captcha.php:1555
 msgid "five"
 msgstr "öt"
 
-#: captcha.php:919
-#: captcha.php:1223
-#: captcha.php:1390
+#: captcha.php:1556 captcha.php:1889
 msgid "six"
 msgstr "hat"
 
-#: captcha.php:920
-#: captcha.php:1224
-#: captcha.php:1378
-#: captcha.php:1384
+#: captcha.php:1557 captcha.php:1877 captcha.php:1883
 msgid "seven"
 msgstr "hét"
 
-#: captcha.php:921
-#: captcha.php:1225
-#: captcha.php:1381
+#: captcha.php:1558 captcha.php:1880
 msgid "eight"
 msgstr "nyolc"
 
-#: captcha.php:922
-#: captcha.php:1226
+#: captcha.php:1559
 msgid "nine"
 msgstr "kilenc"
 
-#: captcha.php:925
-#: captcha.php:1229
-msgid "eleven"
-msgstr "tizenegy"
-
-#: captcha.php:926
-#: captcha.php:1230
-msgid "twelve"
-msgstr "tizenkettő"
-
-#: captcha.php:927
-#: captcha.php:1231
-msgid "thirteen"
-msgstr "tizenhárom"
-
-#: captcha.php:928
-#: captcha.php:1232
-msgid "fourteen"
-msgstr "tizrnnégy"
-
-#: captcha.php:929
-#: captcha.php:1233
-msgid "fifteen"
-msgstr "tizenöt"
-
-#: captcha.php:930
-#: captcha.php:1234
-msgid "sixteen"
-msgstr "tizenhat"
-
-#: captcha.php:931
-#: captcha.php:1235
-msgid "seventeen"
-msgstr "tizenhét"
-
-#: captcha.php:932
-#: captcha.php:1236
-msgid "eighteen"
-msgstr "tizennyolc"
-
-#: captcha.php:933
-#: captcha.php:1237
-msgid "nineteen"
-msgstr "tizenkilenc"
-
-#: captcha.php:936
-#: captcha.php:1240
+#: captcha.php:1561
 msgid "ten"
 msgstr "tíz"
 
-#: captcha.php:937
-#: captcha.php:1241
+#: captcha.php:1562
+msgid "eleven"
+msgstr "tizenegy"
+
+#: captcha.php:1563
+msgid "twelve"
+msgstr "tizenkettő"
+
+#: captcha.php:1564
+msgid "thirteen"
+msgstr "tizenhárom"
+
+#: captcha.php:1565
+msgid "fourteen"
+msgstr "tizrnnégy"
+
+#: captcha.php:1566
+msgid "fifteen"
+msgstr "tizenöt"
+
+#: captcha.php:1567
+msgid "sixteen"
+msgstr "tizenhat"
+
+#: captcha.php:1568
+msgid "seventeen"
+msgstr "tizenhét"
+
+#: captcha.php:1569
+msgid "eighteen"
+msgstr "tizennyolc"
+
+#: captcha.php:1570
+msgid "nineteen"
+msgstr "tizenkilenc"
+
+#: captcha.php:1572
 msgid "twenty"
 msgstr "húsz(on)"
 
-#: captcha.php:938
-#: captcha.php:1242
+#: captcha.php:1573
+#, fuzzy
+msgid "twenty one"
+msgstr "húsz(on)"
+
+#: captcha.php:1574
+#, fuzzy
+msgid "twenty two"
+msgstr "húsz(on)"
+
+#: captcha.php:1575
+#, fuzzy
+msgid "twenty three"
+msgstr "húsz(on)"
+
+#: captcha.php:1576
+#, fuzzy
+msgid "twenty four"
+msgstr "húsz(on)"
+
+#: captcha.php:1577
+#, fuzzy
+msgid "twenty five"
+msgstr "húsz(on)"
+
+#: captcha.php:1578
+#, fuzzy
+msgid "twenty six"
+msgstr "húsz(on)"
+
+#: captcha.php:1579
+#, fuzzy
+msgid "twenty seven"
+msgstr "húsz(on)"
+
+#: captcha.php:1580
+#, fuzzy
+msgid "twenty eight"
+msgstr "húsz(on)"
+
+#: captcha.php:1581
+#, fuzzy
+msgid "twenty nine"
+msgstr "húsz(on)"
+
+#: captcha.php:1583
 msgid "thirty"
 msgstr "harminc"
 
-#: captcha.php:939
-#: captcha.php:1243
+#: captcha.php:1584
+#, fuzzy
+msgid "thirty one"
+msgstr "harminc"
+
+#: captcha.php:1585
+#, fuzzy
+msgid "thirty two"
+msgstr "harminc"
+
+#: captcha.php:1586
+#, fuzzy
+msgid "thirty three"
+msgstr "tizenhárom"
+
+#: captcha.php:1587
+#, fuzzy
+msgid "thirty four"
+msgstr "harminc"
+
+#: captcha.php:1588
+#, fuzzy
+msgid "thirty five"
+msgstr "harminc"
+
+#: captcha.php:1589
+#, fuzzy
+msgid "thirty six"
+msgstr "harminc"
+
+#: captcha.php:1590
+#, fuzzy
+msgid "thirty seven"
+msgstr "tizenhárom"
+
+#: captcha.php:1591
+#, fuzzy
+msgid "thirty eight"
+msgstr "harminc"
+
+#: captcha.php:1592
+#, fuzzy
+msgid "thirty nine"
+msgstr "harminc"
+
+#: captcha.php:1594
 msgid "forty"
 msgstr "negyven"
 
-#: captcha.php:940
-#: captcha.php:1244
+#: captcha.php:1595
+#, fuzzy
+msgid "forty one"
+msgstr "negyven"
+
+#: captcha.php:1596
+#, fuzzy
+msgid "forty two"
+msgstr "negyven"
+
+#: captcha.php:1597
+#, fuzzy
+msgid "forty three"
+msgstr "három"
+
+#: captcha.php:1598
+#, fuzzy
+msgid "forty four"
+msgstr "negyven"
+
+#: captcha.php:1599
+#, fuzzy
+msgid "forty five"
+msgstr "negyven"
+
+#: captcha.php:1600
+#, fuzzy
+msgid "forty six"
+msgstr "negyven"
+
+#: captcha.php:1601
+#, fuzzy
+msgid "forty seven"
+msgstr "hét"
+
+#: captcha.php:1602
+#, fuzzy
+msgid "forty eight"
+msgstr "nyolc"
+
+#: captcha.php:1603
+#, fuzzy
+msgid "forty nine"
+msgstr "negyven"
+
+#: captcha.php:1605
 msgid "fifty"
 msgstr "ötven"
 
-#: captcha.php:941
-#: captcha.php:1245
+#: captcha.php:1606
+#, fuzzy
+msgid "fifty one"
+msgstr "ötven"
+
+#: captcha.php:1607
+#, fuzzy
+msgid "fifty two"
+msgstr "ötven"
+
+#: captcha.php:1608
+#, fuzzy
+msgid "fifty three"
+msgstr "tizenöt"
+
+#: captcha.php:1609
+#, fuzzy
+msgid "fifty four"
+msgstr "ötven"
+
+#: captcha.php:1610
+#, fuzzy
+msgid "fifty five"
+msgstr "ötven"
+
+#: captcha.php:1611
+#, fuzzy
+msgid "fifty six"
+msgstr "ötven"
+
+#: captcha.php:1612
+#, fuzzy
+msgid "fifty seven"
+msgstr "tizenöt"
+
+#: captcha.php:1613
+#, fuzzy
+msgid "fifty eight"
+msgstr "nyolc"
+
+#: captcha.php:1614
+#, fuzzy
+msgid "fifty nine"
+msgstr "ötven"
+
+#: captcha.php:1616
 msgid "sixty"
 msgstr "hatvan"
 
-#: captcha.php:942
-#: captcha.php:1246
+#: captcha.php:1617
+#, fuzzy
+msgid "sixty one"
+msgstr "hatvan"
+
+#: captcha.php:1618
+#, fuzzy
+msgid "sixty two"
+msgstr "hatvan"
+
+#: captcha.php:1619
+#, fuzzy
+msgid "sixty three"
+msgstr "tizenhat"
+
+#: captcha.php:1620
+#, fuzzy
+msgid "sixty four"
+msgstr "hatvan"
+
+#: captcha.php:1621
+#, fuzzy
+msgid "sixty five"
+msgstr "hatvan"
+
+#: captcha.php:1622
+#, fuzzy
+msgid "sixty six"
+msgstr "hatvan"
+
+#: captcha.php:1623
+#, fuzzy
+msgid "sixty seven"
+msgstr "tizenhat"
+
+#: captcha.php:1624
+#, fuzzy
+msgid "sixty eight"
+msgstr "nyolc"
+
+#: captcha.php:1625
+#, fuzzy
+msgid "sixty nine"
+msgstr "hatvan"
+
+#: captcha.php:1627
 msgid "seventy"
 msgstr "hetven"
 
-#: captcha.php:943
-#: captcha.php:1247
+#: captcha.php:1628
+#, fuzzy
+msgid "seventy one"
+msgstr "hetven"
+
+#: captcha.php:1629
+#, fuzzy
+msgid "seventy two"
+msgstr "hetven"
+
+#: captcha.php:1630
+#, fuzzy
+msgid "seventy three"
+msgstr "tizenhét"
+
+#: captcha.php:1631
+#, fuzzy
+msgid "seventy four"
+msgstr "hetven"
+
+#: captcha.php:1632
+#, fuzzy
+msgid "seventy five"
+msgstr "hetven"
+
+#: captcha.php:1633
+#, fuzzy
+msgid "seventy six"
+msgstr "hetven"
+
+#: captcha.php:1634
+#, fuzzy
+msgid "seventy seven"
+msgstr "tizenhét"
+
+#: captcha.php:1635
+#, fuzzy
+msgid "seventy eight"
+msgstr "hetven"
+
+#: captcha.php:1636
+#, fuzzy
+msgid "seventy nine"
+msgstr "hetven"
+
+#: captcha.php:1638
 msgid "eighty"
 msgstr "nyolcvan"
 
-#: captcha.php:944
-#: captcha.php:1248
+#: captcha.php:1639
+#, fuzzy
+msgid "eighty one"
+msgstr "nyolcvan"
+
+#: captcha.php:1640
+#, fuzzy
+msgid "eighty two"
+msgstr "nyolcvan"
+
+#: captcha.php:1641
+#, fuzzy
+msgid "eighty three"
+msgstr "tizennyolc"
+
+#: captcha.php:1642
+#, fuzzy
+msgid "eighty four"
+msgstr "nyolcvan"
+
+#: captcha.php:1643
+#, fuzzy
+msgid "eighty five"
+msgstr "nyolcvan"
+
+#: captcha.php:1644
+#, fuzzy
+msgid "eighty six"
+msgstr "nyolcvan"
+
+#: captcha.php:1645
+#, fuzzy
+msgid "eighty seven"
+msgstr "tizennyolc"
+
+#: captcha.php:1646
+#, fuzzy
+msgid "eighty eight"
+msgstr "nyolcvan"
+
+#: captcha.php:1647
+#, fuzzy
+msgid "eighty nine"
+msgstr "nyolcvan"
+
+#: captcha.php:1649
 msgid "ninety"
 msgstr "kilencven"
 
-#: captcha.php:1031
-#: captcha.php:1336
-msgid "and"
-msgstr "és"
-
-#: captcha.php:1105
+#: captcha.php:1650
 #, fuzzy
+msgid "ninety one"
+msgstr "kilencven"
+
+#: captcha.php:1651
+#, fuzzy
+msgid "ninety two"
+msgstr "kilencven"
+
+#: captcha.php:1652
+#, fuzzy
+msgid "ninety three"
+msgstr "tizenkilenc"
+
+#: captcha.php:1653
+#, fuzzy
+msgid "ninety four"
+msgstr "kilencven"
+
+#: captcha.php:1654
+#, fuzzy
+msgid "ninety five"
+msgstr "kilencven"
+
+#: captcha.php:1655
+#, fuzzy
+msgid "ninety six"
+msgstr "kilencven"
+
+#: captcha.php:1656
+#, fuzzy
+msgid "ninety seven"
+msgstr "tizenkilenc"
+
+#: captcha.php:1657
+#, fuzzy
+msgid "ninety eight"
+msgstr "kilencven"
+
+#: captcha.php:1658
+#, fuzzy
+msgid "ninety nine"
+msgstr "kilencven"
+
+#: captcha.php:1724
 msgid "Encryption password is not set"
-msgstr "A jelszó dekódoló nincs beállítva"
+msgstr "A kódoló jelszó nincs beállítva"
 
-#: captcha.php:1125
-#, fuzzy
+#: captcha.php:1744
 msgid "Decryption password is not set"
 msgstr "A jelszó dekódoló nincs beállítva"
 
-#: captcha.php:1448
+#: captcha.php:2004 captcha.php:2017
+msgid "Settings"
+msgstr "Beállítások"
+
+#: captcha.php:2018
+msgid "FAQ"
+msgstr "GYIK"
+
+#: captcha.php:2019
 msgid "Support"
 msgstr "Támogatás"
 
+#: includes/whitelist.php:76
+msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
+msgstr ""
+
+#: includes/whitelist.php:88
+#, php-format
+msgid ""
+"With this option, CAPTCHA will not be displayed for IP-addresses from the "
+"whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:99 includes/whitelist.php:135
+msgid "Add IP to whitelist"
+msgstr ""
+
+#: includes/whitelist.php:102
+msgid "Load IP to whitelist"
+msgstr ""
+
+#: includes/whitelist.php:105
+#, php-format
+msgid ""
+"By click on this button, all IP-addresses from the whitelist of %s will be "
+"loaded to the whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:114
 #, fuzzy
-#~ msgid "Contact Form"
+msgid "Save changes"
+msgstr "Változások mentése"
+
+#: includes/whitelist.php:131
+msgid "My IP"
+msgstr ""
+
+#: includes/whitelist.php:139
+msgid "Allowed formats:"
+msgstr ""
+
+#: includes/whitelist.php:140
+msgid "Allowed diapason:"
+msgstr ""
+
+#: includes/whitelist.php:146
+msgid "Search IP"
+msgstr ""
+
+#: includes/whitelist.php:202
+msgid "Nothing found"
+msgstr ""
+
+#: includes/whitelist.php:202
+msgid "No IP in whitelist"
+msgstr ""
+
+#: includes/whitelist.php:209
+msgid "IP address"
+msgstr ""
+
+#: includes/whitelist.php:210
+msgid "Date added"
+msgstr ""
+
+#: includes/whitelist.php:264 includes/whitelist.php:273
+msgid "Remove from whitelist"
+msgstr ""
+
+#: includes/whitelist.php:352
+msgid "IP added to the whitelist successfully"
+msgstr ""
+
+#: includes/whitelist.php:354 includes/whitelist.php:376
+#: includes/whitelist.php:388
+msgid "Some errors occured"
+msgstr ""
+
+#: includes/whitelist.php:356
+msgid "IP is already in the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:359
+msgid "Invalid IP. See allowed formats"
+msgstr ""
+
+#: includes/whitelist.php:382
+msgid "One IP was deleted successfully"
+msgstr ""
+
+#: includes/whitelist.php:391
+msgid "You have not entered any value"
+msgstr ""
+
+#: includes/whitelist.php:394
+msgid "You have not entered any value in to the search form"
+msgstr ""
+
+#: includes/whitelist.php:396
+msgid "Search results for"
+msgstr ""
+
+#: includes/whitelist.php:410
+msgid "IP-address(es) successfully copied to the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:435
+msgid "use"
+msgstr ""
+
+#: includes/whitelist.php:435
+msgid "whitelist of"
+msgstr ""
+
+#: includes/whitelist.php:443 includes/whitelist.php:451
+#, php-format
+msgid "use whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:444
+#, php-format
+msgid "you should %s to use this functionality"
+msgstr ""
+
+#: includes/whitelist.php:452
+#, php-format
+msgid "you should install %s to use this functionality"
+msgstr ""
+
+#: includes/pro_banners.php:17
+msgid "This options is available in Pro version of plugin"
+msgstr ""
+
+#: includes/pro_banners.php:20
+msgid "Close"
+msgstr ""
+
+#: includes/pro_banners.php:26
+#, fuzzy
+msgid "Unlock premium options by upgrading to Pro version"
+msgstr "PRO verzióra bővítéssel hozzáfér a prémium paraméterekhez."
+
+#: includes/pro_banners.php:27
+msgid "Learn More"
+msgstr "Ismerjen meg többet"
+
+#: includes/pro_banners.php:44
+#, fuzzy
+msgid "Buddypress Registration form"
+msgstr "Regisztrációs űrlap"
+
+#: includes/pro_banners.php:45
+#, fuzzy
+msgid "Buddypress Comments form"
+msgstr "Hozzászólás űrlap"
+
+#: includes/pro_banners.php:46
+#, fuzzy
+msgid "Buddypress \"Create a Group\" form"
+msgstr "\"Csoport létrehozása\" űrlap"
+
+#: includes/pro_banners.php:47
+#, fuzzy
+msgid "WooCommerce login form"
+msgstr "Hozzászólás űrlap"
+
+#: includes/pro_banners.php:48
+#, fuzzy
+msgid "WooCommerce Register form"
+msgstr "Regisztrációs űrlap"
+
+#: includes/pro_banners.php:49
+#, fuzzy
+msgid "WooCommerce Lost Password form"
+msgstr "Elfelejtett jelszó űrlap"
+
+#: includes/pro_banners.php:50
+msgid "WooCommerce Checkout Billing form"
+msgstr ""
+
+#: includes/pro_banners.php:56
+msgid "If you upgrade to Pro version all your settings will be saved."
+msgstr "Ha Pro verzióra bővít, minden beállítása el lesz mentve."
+
+#: includes/pro_banners.php:67
+msgid "Use several packages at the same time"
+msgstr ""
+
+#: includes/pro_banners.php:70
+msgid ""
+"If this option is enabled, CAPTCHA will be use pictures from different "
+"packages at the same time"
+msgstr ""
+
+#: includes/pro_banners.php:81
+msgid "Reason"
+msgstr ""
+
+#: includes/pro_banners.php:83
+msgid "Allowed formats"
+msgstr ""
+
+#: includes/pro_banners.php:84
+msgid "Allowed separators for IPs: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:84 includes/pro_banners.php:85
+msgid "semicolon"
+msgstr ""
+
+#: includes/pro_banners.php:84
+msgid "ordinary space, tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:85
+msgid "Allowed separators for reasons: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:85
+msgid "tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:104
+msgid "If the package already exists"
+msgstr ""
+
+#: includes/pro_banners.php:106
+msgid "Skip it"
+msgstr ""
+
+#: includes/pro_banners.php:107
+msgid "Update the existed one"
+msgstr ""
+
+#: includes/pro_banners.php:108
+#, fuzzy
+msgid "Save it as new"
+msgstr "Változások mentése"
+
+#: includes/pro_banners.php:111
+msgid "Install Now"
+msgstr ""
+
+#: includes/pro_banners.php:112
+msgid "Browse packages"
+msgstr ""
+
+#: includes/pro_banners.php:123 includes/pro_banners.php:200
+msgid "Package"
+msgstr ""
+
+#: includes/pro_banners.php:126 includes/pro_banners.php:203
+msgid "Date"
+msgstr ""
+
+#: includes/package_loader.php:33 includes/package_loader.php:145
+msgid ""
+"Can not load images in to the \"uploads\" folder. Please, check your "
+"permissions."
+msgstr ""
+
+#: includes/package_loader.php:45
+msgid "File packages.txt not found. Package not saved."
+msgstr ""
+
+#: includes/package_loader.php:51
+msgid "Can not read data from packages.txt. Packages not saved."
+msgstr ""
+
+#: includes/package_loader.php:173
+msgid "Package successfully loaded."
+msgstr ""
+
+#~ msgid "and"
+#~ msgstr "és"
+
+#, fuzzy
+#~ msgid "Enable CAPTCHA"
+#~ msgstr "Engedélyezze a CAPTCHA-t:"
+
+#~ msgid "requires"
+#~ msgstr "megkívánja"
+
+#~ msgid ""
+#~ "or higher, that is why it has been deactivated! Please upgrade WordPress "
+#~ "and try again."
+#~ msgstr ""
+#~ "vagy magasabb, ezért lett kikapcsolva! Kérjük frissítse a WordPress-t és "
+#~ "próbálja újra."
+
+#~ msgid "Back to the WordPress"
+#~ msgstr "Vissza a WordPress-hez"
+
+#~ msgid "Wrong license key"
+#~ msgstr "Rossz licensz kulcs"
+
+#~ msgid ""
+#~ "Something went wrong. Try again later. If the error will appear again, "
+#~ "please, contact us <a href=http://support.bestwebsoft.com>BestWebSoft</"
+#~ "a>. We are sorry for inconvenience."
+#~ msgstr ""
+#~ "Valami elromlott. Később próbálja újra. Ha újra hiba jelentkezik, kérjük "
+#~ "vegye fel velünk a kapcsolatot <a href=http://support.bestwebsoft."
+#~ "com>BestWebSoft</a>. Elnézést a kényelmetlenségért."
+
+#~ msgid "This license key is bind to another site"
+#~ msgstr "A licensz kulcs másik oldalhoz tartozik"
+
+#~ msgid ""
+#~ "Unfortunately, you have exceeded the number of available tries per day. "
+#~ "Please, upload the plugin manually."
+#~ msgstr ""
+#~ "Sajnos elérte a napi lehetséges próba számot. Kérjük töltse fel kézzel a "
+#~ "plugin-t."
+
+#~ msgid ""
+#~ "Failed to download the zip archive. Please, upload the plugin manually"
+#~ msgstr ""
+#~ "Nem sikerült letölteni az arhivált zip-et. Kérjük, töltse fel a plugint "
+#~ "kézzel"
+
+#~ msgid "Failed to open the zip archive. Please, upload the plugin manually"
+#~ msgstr ""
+#~ "Az arhív zip kinyitása sikertelen. Kérjük töltse fel kézzel a plugin-t"
+
+#~ msgid ""
+#~ "Your server does not support either ZipArchive or Phar. Please, upload "
+#~ "the plugin manually"
+#~ msgstr ""
+#~ "A szervere vagy a ZipArchiv-ot vagy a Phar-t nem támogatja. Kérjük töltse "
+#~ "fel kézzel a plugin-t"
+
+#~ msgid "UploadDir is not writable. Please, upload the plugin manually"
+#~ msgstr "Az UploadDir nem írható. Kérjük töltse fel kézzel a plugin-t"
+
+#~ msgid ""
+#~ "Something went wrong. Try again later or upload the plugin manually. We "
+#~ "are sorry for inconvenience."
+#~ msgstr ""
+#~ "Valami elromlott. Próbálja később újra vagy töltse fel kézzel a plugin-t. "
+#~ "Elnézést a kényelmetlenségért."
+
+#~ msgid "Please, enter Your license key"
+#~ msgstr "Kérjük adja meg licensz kulcsát"
+
+#~ msgid "Notice:"
+#~ msgstr "Megjegyzés:"
+
+#~ msgid ""
+#~ "The plugin's settings have been changed. In order to save them please "
+#~ "don't forget to click the 'Save Changes' button."
+#~ msgstr ""
+#~ "A plugin paraméterei megváltoztak. Elmentésükhöz ne felejtsen kattintani "
+#~ "a \"Változások mentése\" gombra."
+
+#~ msgid "Contact form"
 #~ msgstr "CONTACT FORM-Plugin"
+
+#~ msgid "powered by"
+#~ msgstr "működteti"
 
 #~ msgid "Activate contact form"
 #~ msgstr "Kapcsolatfelvételi űrlap aktiválása"
@@ -544,20 +1171,75 @@ msgstr "Támogatás"
 #~ msgid "Download contact form"
 #~ msgstr "Töltse le a kapcsolatfelvételi űrlapot"
 
-#~ msgid "Register form"
-#~ msgstr "Regisztráció"
+#~ msgid "Subscriber"
+#~ msgstr "Feliratkozó"
 
-#~ msgid "Lost password form"
-#~ msgstr "Elfelejtett jelszó"
+#~ msgid "Go"
+#~ msgstr "Mehet"
 
-#, fuzzy
-#~ msgid "Plugins page"
-#~ msgstr "BWS Plugins"
+#~ msgid "Title for CAPTCHA in the form"
+#~ msgstr "Az űrlapon a CAPTCHA felirata"
 
-#, fuzzy
+#~ msgid "Error messages"
+#~ msgstr "Hibaüzenetek"
+
+#~ msgid "CAPTCHA complexity level"
+#~ msgstr "CAPTCHA összetettségi szint"
+
+#~ msgid "If you enjoy our plugin, please give it 5 stars on WordPress"
+#~ msgstr "Ha szereti használni a plugint, adjon 5 csillagot a WprdPress-en"
+
 #~ msgid "Rate the plugin"
-#~ msgstr "Ajánlott pluginek"
+#~ msgstr "Minősítse a plugin-t"
 
-#, fuzzy
+#~ msgid "If there is something wrong about it, please contact us"
+#~ msgstr ""
+#~ "Ha valami ezzel kapcsolatban nincs rendben, vegye fel velünk a kapcsolatot"
+
+#~ msgid ""
+#~ "Congratulations! The PRO version of the plugin is successfully download "
+#~ "and activated."
+#~ msgstr "Gratulálunk! A plugin PRO verziója sikeresen letöltve és aktiválva."
+
+#~ msgid "Please, go to"
+#~ msgstr "Kérjük menjen a"
+
+#~ msgid "the setting page"
+#~ msgstr "a beállítás oldal"
+
+#~ msgid "You will be redirected automatically in 5 seconds."
+#~ msgstr "5 másodpercen belül automatikusan átirányítjuk."
+
+#~ msgid "You can download and activate"
+#~ msgstr "Letöltheti és aktiválhatja a"
+
+#~ msgid "version of this plugin by entering Your license key."
+#~ msgstr "változatát a plugin-nak, ha megadja a licensz kulcsát."
+
+#~ msgid ""
+#~ "You can find your license key on your personal page Client area, by "
+#~ "clicking on the link"
+#~ msgstr ""
+#~ "A linkre kattintva megtalálhatja a licensz kulcsát a személyes oldalán az "
+#~ "Ügyfél részen"
+
+#~ msgid ""
+#~ "(your username is the email you specify when purchasing the product)."
+#~ msgstr ""
+#~ "(a termék megvásárlásakor megadott email címe lesz a felhasználóneve)."
+
+#~ msgid "Go!"
+#~ msgstr "Mehet!"
+
 #~ msgid "ERROR:"
-#~ msgstr "Hiba!!"
+#~ msgstr "Hiba:"
+
+#~ msgid ""
+#~ "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</"
+#~ "strong> version"
+#~ msgstr ""
+#~ "Itt az ideje, hogy bővítse a <strong>Captcha plugin</strong>-ját "
+#~ "<strong>PRO</strong> verzióra"
+
+#~ msgid "Extend standard plugin functionality with new great options"
+#~ msgstr "Bővítse a normál plugin lehetőségeit nagyszerű új paraméterekkel"

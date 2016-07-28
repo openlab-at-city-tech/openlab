@@ -1,123 +1,157 @@
 === Captcha by BestWebSoft ===
 Contributors: bestwebsoft
 Donate link: http://bestwebsoft.com/donate/
-Tags: add, anti, anti-spam, anti-spam security, antispam, antispam security, antispambot, arithmetic actions, blacklist, block spam, bot, bots, best captcha, best wordpress captcha, captcha, capcha, captha, catcha, captcha bank, captcha numbers, captcha plugin, captcha protection, captcha words, contact form with captcha, comment captcha, comment, comments, cpatcha, form, forms, form captcha, forgot password captcha, free, login, lost password, label, login captcha, match captcha, math actions, multiply, plugin, protect, protection, popular captcha, protection shield, register, registration, registration spam, register captcha, rest password captcha, registration captcha security, spam, secure, security, signup, signup spam, spam blocker, spam comments, spam filter, spambot, shield, simple captcha, spam control, spam protection, substract, text captcha, user registration spam, web form protection, wordpress captcha, wordpress protection, wordpress security loss password captcha, register captcha, wp captcha, wp plugin, wp plugins
+Tags: captcha, capcha, security, spam blocker, simple captcha, antispam, protection, text captcha, captcha numbers, captcha plugin, web form protection, captcha protection
 Requires at least: 3.8
-Tested up to: 4.3.1
-Stable tag: 4.1.5
+Tested up to: 4.5.3
+Stable tag: 4.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin allows you to implement super security captcha form into web forms. 
+#1 super security anti-spam captcha plugin for Wordpress forms.
 
 == Description ==
 
-The Captcha plugin allows you to implement a super security captcha form into web forms. It protects your website from spam by means of math logic, easily understood by human beings. You will not have to spend your precious time on annoying attempts to understand hard-to-read words, combinations of letters or pictures that make your eyes pop up. All you need is to do one of the three basic maths actions - add, subtract and multiply.
-This captcha can be used for login, registration, password recovery, comments forms.
-There is also a premium version of the plugin, allowing compatibility with BuddyPress (Registration form, Comments form, "Create a Group" form) and Contact Form 7.
+Captcha plugin is the best security solution that protects your Wordpress website forms from spam entries by means of math logic. It can be used for login, registration, password recovery, comments and popular contact forms.
 
-http://www.youtube.com/watch?v=jxrvHaCmQfg
+Users are required to complete the math equation before the form can be submitted. You can configure captcha complexity using three basic maths actions such as add, subtract and multiply. Stop spam now!
 
-<a href="http://www.youtube.com/watch?v=jsvc8FxxEnk" target="_blank">Captcha by BestWebSoft Video instruction on Installation</a>
+http://www.youtube.com/watch?v=nlcCKSxu_Kk
 
-<a href="http://wordpress.org/plugins/captcha/faq/" target="_blank">Captcha by BestWebSoft FAQ</a>
+= Free Features =
 
-<a href="http://support.bestwebsoft.com" target="_blank">Captcha by BestWebSoft Support</a>
+* Add captcha to:
+	* Login form
+	* Registration form
+	* Reset password form
+	* Comments form
+	* [Contact Form by BestWebSoft](https://wordpress.org/plugins/contact-form-plugin)
+	* Custom form
+* Enhance captcha protection with:
+	* Letters, numbers and images
+	* Simple math actions such as add, subtract and multiply
+* Hide captcha for:
+	* Registered users in comments form
+	* Whitelisted IP addresses
+* Set captcha submission time limit
+* Refresh captcha option
+* Image packages with hand-drawn digits
+* Edit captcha title and notifications
+* Merge IP addresses from [Limit Attempts by BestWebSoft](https://wordpress.org/plugins/limit-attempts/) plugin with Captcha whitelist
+* Add custom code via plugin settings page
+* Compatible with latest WordPress version
+* Incredibly simple settings for fast setup without modifying code
+* Detailed step-by-step documentations and videos
+* Multi-lingual (39+ languages) and RTL ready
+* 300+ ratings with a 5 star on Wordpress.org
 
-<a href="http://bestwebsoft.com/products/captcha/?k=2d2d85a3c277bf3489697c9a9ff2d352" target="_blank">Upgrade to Captcha Pro by BestWebSoft</a>
+> **Pro Features**
+>
+> All features from Free version included plus:
+> 
+> * Contact Form 7 compatible (since v 3.4)
+> * BuddyPress compatible: registration, comments and create a group forms
+> * WooCommerce compatible: login form
+> * [Subscriber by BestWebSoft](https://wordpress.org/plugins/subscriber/) compatible
+> * Use multisite network to configure sub websites
+> * Captcha submission time limit for separate forms
+> * Add and enable unlimited number of image packages at the same time
+> * Get answer to your support question within one business day
+> 
+> [Upgrade to Pro Now](http://bestwebsoft.com/products/captcha/?k=2d2d85a3c277bf3489697c9a9ff2d352)
 
-= Features =
+If you have a feature suggestion or idea you'd like to see in the plugin, we'd love to hear about it! [Suggest a Feature](http://support.bestwebsoft.com/hc/en-us/requests/new)
 
-* Supports standard WordPress forms: registration form, login form, reset password form and comments form.
-* Contact Form by BestWebSoft compatibility.
-* You can use letters and numbers in captcha or just one of these two things - either letters or numbers.
-* The basic math actions are used - add, subtract, multiply.
-* Ability to hide Captcha for whitelisted IP.
-* You can add a label to display captcha in the form.
+= Documentation & Videos =
 
-= Recommended Plugins =
+* [[Doc] How to Use](https://docs.google.com/document/d/11_TUSAjMjG7hLa53lmyTZ1xox03hNlEA4tRmllFep3I/edit)
+* [[Doc] Installation](https://docs.google.com/document/d/1DN2yYCvDyK2LqmbWw6xmUNLbb0awOVDZ_dOgIXod-Jw/)
+* [[Doc] Purchase, Installation & Configuration](https://docs.google.com/document/d/1HGnvyKzsJM1FEIWFkUQydw49ClsweOrlQHTgSKKIu3Q/)
+* [[Video] Purchase, Installation, Configuration Tutorial](https://www.youtube.com/watch?v=r0Noz2bYAq8)
+* [[Video] Instruction on Installation](https://www.youtube.com/watch?v=qsfLTcSo5Ok)
 
-The author of the Captcha also recommends the following plugins:
+= Help & Support =
 
-*  <a href="http://wordpress.org/plugins/limit-attempts/">Limit Attempts</a> - This plugin allows you to limit users' attempts to log in to your website, as well as create and edit black- and whitelists. This way, you will be able to manage access to your website and its content and protect it from spam and unwanted visitors.
-There is also a premium version of the plugin - <a href="http://bestwebsoft.com/products/limit-attempts/?k=c6b924d096b75a288daf0e49a58f93c2">Limited Attempts Pro</a>, with more useful features available. With the pro version, you recieve a possibility to add ranges of IP addresses or IP masks to black- and whitelists. Also, it is compatible with Captcha Pro plugin, so all functionality of Limit Attempts Pro can be apllied to all forms when Captcha Pro is activated.
-* <a href="http://wordpress.org/plugins/updater/">Updater</a> - This plugin updates WordPress core and the plugins to the recent versions. You can also use the auto mode or manual mode for updating and set email notifications.
-There is also a premium version of the plugin <a href="http://bestwebsoft.com/products/updater/?k=0864088de1701a5e104ffb77c6d7011c">Updater Pro</a> with more useful features available. It can make backup of all your files and database before updating. Also it can forbid some plugins or WordPress Core update.
+Visit our Help Center if you have any questions, our friendly Support Team is happy to help — <http://support.bestwebsoft.com/>
 
 = Translation =
 
 * Arabic (ar_AR) (thanks to Albayan Design Hani Aladoli)
-* Bangla (bn_BD) (thanks to <a href="mailto:mehdi.akram@gmail.com">SM Mehdi Akram</a>, www.shamokaldarpon.com)
-* Brazilian Portuguese (pt_BR) (thanks to <a href="mailto:brenojac@gmail.com">Breno Jacinto</a>, www.iconis.org.br)
-* Bulgarian (bg_BG) (thanks to <a href="mailto:paharaman@gmail.com">Nick</a>)
-* Catalan (ca) (thanks to <a href="mailto:psiete@gmail.com">Psiete</a>)
-* Chinese (zh_CN) (thanks to <a href="mailto:newbiesup@gmail.com">Newbiesup</a>, www.wpsites.org)
-* Taiwan (zh_TW) (thanks to <a href="mailto:hh3stuff@gmail.com">Henry H</a>)
-* Croatian (hr) (thanks to <a href="mailto:daniel@croteh.com">Daniel</a>)
-* Czech (cs_CZ) (thanks to <a href="mailto:crysman@seznam.cz">Crysman</a>)
+* Bangla (bn_BD) (thanks to [SM Mehdi Akram](mailto:mehdi.akram@gmail.com), www.shamokaldarpon.com)
+* Brazilian Portuguese (pt_BR) (thanks to [Breno Jacinto](mailto:brenojac@gmail.com), www.iconis.org.br)
+* Bulgarian (bg_BG) (thanks to [Nick](mailto:paharaman@gmail.com))
+* Catalan (ca) (thanks to [Psiete](mailto:psiete@gmail.com))
+* Chinese (zh_CN) (thanks to [Newbiesup](mailto:newbiesup@gmail.com), www.wpsites.org)
+* Taiwan (zh_TW) (thanks to [Henry H](mailto:hh3stuff@gmail.com))
+* Croatian (hr) (thanks to [Daniel](mailto:daniel@croteh.com))
+* Czech (cs_CZ) (thanks to [Crysman](mailto:crysman@seznam.cz))
 * Danish (da_DK) (thanks to Byrial Ole Jensed)
-* Dutch (nl_NL) (thanks to <a href="mailto:byrial@vip.cybercity.dk">Bart Duineveld</a>)
+* Dutch (nl_NL) (thanks to [Bart Duineveld](mailto:byrial@vip.cybercity.dk))
 * Estonian (et) (thanks to Ahto Tanner)
 * Greek (el) (thanks to Aris, www.paraxeno.net)
-* Farsi/Persian (fa_IR) (thanks to <a href="mailto:mostafaasadi73@gmail.com">Mostafa Asadi</a>, www.ma73.ir, <a href="mailto:Morteza.Gholami@Yahoo.Com">Morteza Gholami</a>)
+* Farsi/Persian (fa_IR) (thanks to [Mostafa Asadi](mailto:mostafaasadi73@gmail.com), www.ma73.ir, [Morteza Gholami](mailto:Morteza.Gholami@Yahoo.Com))
 * Finnish (fi) (thanks to Mikko Sederholm)
-* French (fr_FR) (thanks to Martel Benjamin, <a href="mailto:lcapronnier@yahoo.com">Capronnier luc</a>)
-* German (de_DE) (thanks to Thomas Hartung, <a href="mailto:lothar.schiborr@web.de">Lothar Schiborr</a>)
+* French (fr_FR) (thanks to Martel Benjamin, [Capronnier luc](mailto:lcapronnier@yahoo.com))
+* German (de_DE) (thanks to Thomas Hartung, [Lothar Schiborr](mailto:lothar.schiborr@web.de))
 * Hebrew (he_IL) (thanks to Sagive SEO)
-* Hindi (hi_IN) (thanks to <a href="mailto:ash.pr@outshinesolutions.com">Outshine Solutions</a>, www.outshinesolutions.com)
-* Hungarian (hu_HU) (thanks to Bőm Tamás)
+* Hindi (hi_IN) (thanks to [Outshine Solutions](mailto:ash.pr@outshinesolutions.com), www.outshinesolutions.com)
+* Hungarian (hu_HU) (thanks to [Peter Aprily](mailto:solarside09@gmail.com))
 * Japanese (ja) (thanks to Foken)
-* Indonesian (id_ID) (thanks to <a href="mailto:nasroel@al-badar.net">Nasrulhaq Muiz</a>, www.al-badar.net)
-* Italian (it_IT) (thanks to <a href="mailto:marco@blackstudio.it">Marco</a>)
-* Latvian (lv) (thanks to <a href="mailto:juris.o@gmail.com">Juris O</a>)
-* Lithuanian (lt_LT) (thanks to <a href="mailto:arnas.metal@gmail.com">Arnas</a>)
+* Indonesian (id_ID) (thanks to [Nasrulhaq Muiz](mailto:nasroel@al-badar.net), www.al-badar.net)
+* Italian (it_IT) (thanks to [Marco](mailto:marco@blackstudio.it))
+* Latvian (lv) (thanks to [Juris O](mailto:juris.o@gmail.com))
+* Lithuanian (lt_LT) (thanks to [Arnas](mailto:arnas.metal@gmail.com))
 * Norwegian (nb_NO) (thanks to Tore Hjartland)
 * Polish (pl_PL) (thanks to Krzysztof Opuchlik)
-* Portuguese (pt_PT) (thanks to <a href="mailto:jp.jp@sapo.pt">João Paulo Antunes</a>)
+* Portuguese (pt_PT) (thanks to [João Paulo Antunes](mailto:jp.jp@sapo.pt))
 * Romanian (ro_RO) (thanks to Ciprian)
 * Russian (ru_RU)
 * Serbian (sr_RS) (thanks to Radovan Georgijevic)
 * Slovak (sk_SK) (thanks to Branco Radenovich)
-* Slovenian (sl_SI) (thanks to <a href="mailto:uros.klopcic@gmail.com">Uroš Klopčič</a>, www.klopcic.net)
+* Slovenian (sl_SI) (thanks to [Uroš Klopčič](mailto:uros.klopcic@gmail.com), www.klopcic.net)
 * Spain (es_ES) (thanks to Iván García Cubero)
-* Swedish (sv_SE) (thanks to Christer Rönningborg, <a href="mailto:blittan@xbmc.org">Blittan</a>)
-* Tagalog (tl) (thanks to <a href="mailto:rjalali@languageconnect.net">Roozbeh Jalali</a>, www.languageconnect.net)
+* Swedish (sv_SE) (thanks to Christer Rönningborg, [Blittan](mailto:blittan@xbmc.org))
+* Tagalog (tl) (thanks to [Roozbeh Jalali](mailto:rjalali@languageconnect.net), www.languageconnect.net)
 * Turkish (tr_TR) (thanks to Can Atasever, www.canatasever.com)
 * Ukrainian (uk)
 * Vietnamese (vi_VN) (thanks to NDT Solutions)
 
-If you would like to create your own language pack or update the existing one, you can send <a href="http://codex.wordpress.org/Translating_WordPress" target="_blank">the text of PO and MO files</a> for <a href="http://support.bestwebsoft.com" target="_blank">BestWebSoft</a> and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO files  <a href="http://www.poedit.net/download.php" target="_blank">Poedit</a>.
+Some of these translations are not complete. We are constantly adding new features which should be translated. If you would like to create your own language pack or update the existing one, you can send [the text of PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [BestWebSoft](http://support.bestwebsoft.com/hc/en-us/requests/new) and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO [files Poedit](http://www.poedit.net/download.php).
 
-= Technical support =
+= Recommended Plugins =
 
-Dear users, our plugins are available for free download. If you have any questions or recommendations regarding the functionality of our plugins (existing options, new options, current issues), please feel free to contact us. Please note that we accept requests in English only. All messages in another languages won't be accepted.
+* [Limit Attempts](http://wordpress.org/plugins/limit-attempts/) - Limit rate of login attempts to Wordpress website and block IP addresses temporarily. Protect against brute force attacks. Restrict login by IP access using white- and blacklists. Advanced control of user activity.
+* [Updater](http://wordpress.org/plugins/updater/) - Automatically check and update WordPress core with all installed plugins to the latest versions. Manual mode, email notifications and backups of all your files and database before updating.
+* [Contact Form](http://bestwebsoft.com/products/contact-form/) - Add contact form to your WordPress website
 
-If you notice any bugs in the plugins, you can notify us about it and we'll investigate and fix the issue then. Your request should contain URL of the website, issues description and WordPress admin panel credentials.
-Moreover we can customize the plugin according to your requirements. It's a paid service (as a rule it costs $40, but the price can vary depending on the amount of the necessary changes and their complexity). Please note that we could also include this or that feature (developed for you) in the next release and share with the other users then. 
-We can fix some things for free for the users who provide translation of our plugin into their native language (this should be a new translation of a certain plugin, you can check available translations on the official plugin page).
+= Donate =
+
+Donations play an important role in supporting open-source projects. We greatly appreciate any donation you can make to help us continue further development of free products.
+
+[Donate Now](http://bestwebsoft.com/donate/)
 
 == Installation ==
 
 1. Upload the `captcha` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin via the 'Plugins' menu in WordPress.
-3. Plugin settings are located in "BWS Plugins" > "Captcha".
+3. Plugin settings are located in "BWS Panel" > "Captcha".
 
-<a href="https://docs.google.com/document/d/1DN2yYCvDyK2LqmbWw6xmUNLbb0awOVDZ_dOgIXod-Jw/edit" target="_blank">View a Step-by-step Instruction on Captcha Installation</a>.
+[View a Step-by-step Instruction on Captcha Installation](https://docs.google.com/document/d/1DN2yYCvDyK2LqmbWw6xmUNLbb0awOVDZ_dOgIXod-Jw/edit).
 
-http://www.youtube.com/watch?v=jsvc8FxxEnk
+http://www.youtube.com/watch?v=qsfLTcSo5Ok
 
 == Frequently Asked Questions ==
 
-= Missing CAPTCHA on the comment form? = 
+= Missing Captcha on the comment form? =
 
-You might have a theme where comments.php is not coded properly. 
+You might have a theme where comments.php is not coded properly.
 
-Wopdpress version matters. 
+Wopdpress version matters.
 
-(WP2 series) Your theme must have a tag `<?php do_action('comment_form', $post->ID); ?>` inside the file `/wp-content/themes/[your_theme]/comments.php`. 
+(WP2 series) Your theme must have a tag `<?php do_action('comment_form', $post->ID); ?>` inside the file `/wp-content/themes/[your_theme]/comments.php`.
 Most WP2 themes already have it. The best place to put this tag is before the comment textarea, you can move it up if it is below the comment textarea.
 
-(WP3 series) WP3 has a new function comment_form inside of `/wp-includes/comment-template.php`. 
+(WP3 series) WP3 has a new function comment_form inside of `/wp-includes/comment-template.php`.
 Your theme is probably not up-to-date to call that function from comments.php.
 WP3 theme does not need the code line `do_action('comment_form'`... inside of `/wp-content/themes/[your_theme]/comments.php`.
 Instead it uses a new function call inside of comments.php: `<?php comment_form(); ?>`
@@ -129,7 +163,7 @@ inside of `/wp-content/themes/[your_theme]/comments.php` (please check the Twent
 1. Install the Captcha plugin and activate it.
 2. Open the file with the form (where you would like to add captcha to).
 3. Find a place to insert the code for the captcha output.
-4. Insert the necessary lines: 
+4. Insert the necessary lines:
 
 `if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom() } ;`
 
@@ -137,11 +171,11 @@ If the form is HTML you should insert the line with the PHP tags:
 
 `<?php if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom(); } ?>`
 
-5. Then you should add the lines to the function of the entered data checking  
+5. Then you should add the lines to the function of the entered data checking
 
 `if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA."`
 
-or
+ or
 
 `<?php if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA." ?>`
 
@@ -154,34 +188,65 @@ It depends on the comments form. If the hook call by means of which captcha work
 Please find the file 'comments.php' in the theme and change position of the line `do_action( 'comment_form_after_fields' );` or any similar line - place it under the Submit button.
 In case there is no such hook in the comments file of your theme, then, unfortunately, this option is not available.
 
-= How to change a captcha title =
-
-You should go to the Settings page and change the value in the 'Title for CAPTCHA in the form' field.
-
-= During the settings saving I get the error: 'Please select one item in the block Arithmetic and Complexity for CAPTCHA'. What is this? =
-
-For stable work of the Captcha plugin you should select at least one item in the 'Arithmetic actions for CAPTCHA' block and select 'CAPTCHA complexity level' on the Settings page, because math expression should consist of at least 1 math sign and parts of math expression should be displayed like words or numbers or both of them.
-
 = I have some problems with the plugin's work. What Information should I provide to receive proper support? =
 
-Please make sure that the problem hasn't been discussed yet on our forum (<a href="http://support.bestwebsoft.com" target="_blank">http://support.bestwebsoft.com</a>). If no, please provide the following data along with your problem's description:
+Please make sure that the problem hasn't been discussed yet on our forum (<http://support.bestwebsoft.com>). If no, please provide the following data along with your problem's description:
 
 1. the link to the page where the problem occurs
 2. the name of the plugin and its version. If you are using a pro version - your order number.
 3. the version of your WordPress installation
-4. copy and paste into the message your system status report. Please read more here: <a href="https://docs.google.com/document/d/1Wi2X8RdRGXk9kMszQy1xItJrpN0ncXgioH935MaBKtc/edit" target="_blank">Instuction on System Status</a>
+4. copy and paste into the message your system status report. Please read more here: [Instruction on System Status](https://docs.google.com/document/d/1Wi2X8RdRGXk9kMszQy1xItJrpN0ncXgioH935MaBKtc/edit)
 
 == Screenshots ==
 
-1. Captcha Settings page.
-2. Captcha Whitelist.
-3. Comments form with Captcha.
-4. Registration form with Captcha.
-5. Lost password form with Captcha.
-6. Login form with Captcha.
-7. Contact form with Captcha.
+1. Login form with Captcha.
+2. Registration form with Captcha.
+3. Lost password form with Captcha.
+4. Comments form with Captcha.
+5. Contact form with Captcha.
+6. Captcha Basic Settings page.
+7. Captcha Advanced Settings page.
+8. Captcha Whitelist.
 
 == Changelog ==
+
+= V4.2.2 - 15.07.2016 =
+* Update : BWS panel section was updated.
+
+= V4.2.1 - 04.07.2016 =
+* Update : The French file has been updated.
+* Update : BWS panel section was updated.
+
+= V4.2.0 - 16.06.2016 =
+* NEW : A notice about Captcha's time limit expiration has been added.
+* Update : The appearance of the "Enable image packages" settings block has been updated.
+* Update : The French file has been updated.
+* Bugfix : The bug with the displaying of the whitelist pagination has been fixed.
+
+= V4.1.9 - 28.03.2016 =
+* Bugfix : Lower-case equivalents for all numbers have been changed.
+* New : Ability to add custom styles.
+
+= V4.1.8 - 01.02.2016 =
+* Bugfix : Captcha's work in the multisite registration form has been fixed.
+* Bugfix : SQL injection vulnerability has been fixed (thanks to www.ncsc.nl).
+* Bugfix : The bug of displaying captha error when adding a new user in the multisite has been fixed.
+* Update : The French language file has been updated.
+
+= V4.1.7 - 17.12.2015 =
+* Bugfix : Bug with the definition of type of images has been fixed.
+
+= V4.1.6 - 10.12.2015 =
+* New : Ability to use images in Captcha.
+* New : Ability to reload Captcha.
+* New : Ability to load list of IP from whitelist of Limit Attempts by BestWebSoft plugin to Captcha whitelist.
+* New : Ability to use whitelist of Limit Attempts by BestWebSoft plugin.
+* New : Ability to set time limit, after which the Captcha can not be passed.
+* Bugfix : Bug with Captcha reloading when forms data handled via ajax was fixed.
+* Bugfix : XSS vulnerability with displaying search results for Captcha whitelist was fixed (thanks to [Colette Chamberland](mailto:colette@wordfence.com)).
+* Bugfix : XSS vulnerability with user authentication was fixed (thanks to [Colette Chamberland](mailto:colette@wordfence.com)).
+* Update : Structure of plugin`s settings page was updated.
+* Update : The French and Hungarian language files were updated.
 
 = V4.1.5 - 18.09.2015 =
 * New : The whitelist functionality was expanded: Ability to add current IP to the whitelist.
@@ -260,7 +325,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : The French language file is updated.
 
 = V3.9.6 - 12.02.2014 =
-* Bugfix : Comflict with plugin Limit Login Attempts is fixed (a false login when logging out of the WP backend).
+* Bugfix : Conflict with plugin Limit Login Attempts is fixed (a false login when logging out of the WP backend).
 * Bugfix : We fixed displaying captcha in contact form.
 
 = V3.9.5 - 03.02.2014 =
@@ -275,7 +340,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : We updated all functionality for wordpress 3.8.
 
 = V3.9.2 - 10.12.2013 =
-* NEW : A notice when changing settings on the plugin's settings page was added. 
+* NEW : A notice when changing settings on the plugin's settings page was added.
 * Update : We updated all functionality for wordpress 3.8-RC1.
 
 = V3.9.1 - 29.11.2013 =
@@ -287,7 +352,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : BWS plugins section is updated.
 
 = V3.8.9 - 15.11.2013 =
-* Update : The French language file is updated. 
+* Update : The French language file is updated.
 * NEW : The Indonesian language file is added to the plugin.
 
 = V3.8.8 - 05.11.2013 =
@@ -304,7 +369,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : We updated all functionality for wordpress 3.7.
 
 = V3.8.5 - 17.10.2013 =
-* Update : The Italian language file is updated. 
+* Update : The Italian language file is updated.
 * NEW : The Catalan language file is added to the plugin.
 
 = V3.8.4 - 8.10.2013 =
@@ -313,13 +378,13 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 
 = V3.8.3 - 1.10.2013 =
 * Update : The Brazilian Portuguese language file is updated.
-* Update : The Ukrainian language file is updated. 
+* Update : The Ukrainian language file is updated.
 
 = V3.8.2 - 23.09.2013 =
 * Bugfix : Captcha protection is improved by changing hidden values in every session.
 
 = V3.8.1 - 13.09.2013 =
-* Update : The French language file is updated. 
+* Update : The French language file is updated.
 * Update : We updated all functionality for wordpress 3.6.1.
 
 = V3.8.0 - 06.09.2013 =
@@ -369,7 +434,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : BWS plugins section is updated.
 
 = V3.5 - 07.05.2013 =
-* Update : The Bulgarian language file is updated in the plugin. 
+* Update : The Bulgarian language file is updated in the plugin.
 * Update : The Brazilian Portuguese language file is updated in the plugin.
 
 = V3.4 - 18.04.2013 =
@@ -398,7 +463,7 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Update : We updated all functionality for wordpress 3.5.1.
 
 = V2.4.1 - 02.01.2013 =
-* Bugfix : call_user_func_array() bug is fixed. 
+* Bugfix : call_user_func_array() bug is fixed.
 
 = V2.4 - 21.12.2012 =
 * NEW : Romanian and Serbian and Slovak language files are added to the plugin.
@@ -409,11 +474,11 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * NEW : Chinese and Greek language files are added to the plugin.
 
 = V2.33 - 25.07.2012 =
-* Bugfix : Change settings bug was fixed. 
+* Bugfix : Change settings bug was fixed.
 
 = V2.32 - 24.07.2012 =
 * NEW : Arabic, Hungarian, Japanese language files are added to the plugin.
-* Bugfix : Cross Site Request Forgery bug was fixed. 
+* Bugfix : Cross Site Request Forgery bug was fixed.
 
 = V2.31 - 10.07.2012 =
 * NEW : Vietnamese language file is added to the plugin.
@@ -477,15 +542,15 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Bugfix : Impossible math operation bug was fixed.
 
 = V2.12 - 29.12.2011 =
-* Changed : BWS plugins section. 
+* Changed : BWS plugins section.
 * Bugfix : Displaying of numerals was fixed in the Dutch language
 
 = V2.11 - 27.12.2011 =
-* NEW : Danish language files are added to the plugin. 
-* Changed : All words were added to language file. 
+* NEW : Danish language files are added to the plugin.
+* Changed : All words were added to language file.
 
 = V2.10 - 07.12.2011 =
-* Bugfix : The bug of the captcha label section is fixed in this version. 
+* Bugfix : The bug of the captcha label section is fixed in this version.
 
 = V2.09 - 07.12.2011 =
 * Changed : +, -, * are changed to HTML Entity.
@@ -497,12 +562,12 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * NEW : Language files are added to the plugin.
 
 = V2.06 - 22.08.2011 =
-* Changed : BWS Plugin's menu section was fixed and right now it is consisted of 3 parts: activated, installed and recommended plugins. 
-* Bugfix : Positioning bug in admin menu is fixed. 
+* Changed : BWS Plugin's menu section was fixed and right now it is consisted of 3 parts: activated, installed and recommended plugins.
+* Bugfix : Positioning bug in admin menu is fixed.
 
 = V2.05 =
-* Changed : BWS Plugin's menu section was fixed and right now it is consisted from 2 parts: installed and recommended plugins. 
-* Bugfix : Icons displaying is fixed. 
+* Changed : BWS Plugin's menu section was fixed and right now it is consisted from 2 parts: installed and recommended plugins.
+* Bugfix : Icons displaying is fixed.
 * Bugfix : Misalignment of math transaction is fixed.
 
 = V2.04 =
@@ -531,6 +596,27 @@ Please make sure that the problem hasn't been discussed yet on our forum (<a hre
 * Select functionality of mathematical actions and level of their difficulty are implemented.
 
 == Upgrade Notice ==
+
+= V4.2.2 =
+Usability improved.
+
+= V4.2.1 =
+The French file has been updated. BWS panel section was updated.
+
+= V4.2.0 =
+A notice about Captcha's time limit expiration has been added. The appearance of the "Enable image packages" settings block has been updated. The French file has been updated. The bug with the displaying of the whitelist pagination has been fixed.
+
+= V4.1.9 =
+Lower-case equivalents for all numbers have been changed. Ability to add custom styles.
+
+= V4.1.8 =
+Captcha's work in the multisite registration form was fixed. SQL injection vulnerability was fixed. The bug of displaying captha error when adding a new user in the multisite is fixed. The French language file is updated.
+
+= V4.1.7 =
+Bug with the definition of type of images has been fixed.
+
+= V4.1.6 =
+Ability to use images in Captcha. Ability to reload Captcha. Ability to load list of IP from whitelist of Limit Attempts by BestWebSoft plugin to Captcha whitelist. Ability to use whitelist of Limit Attempts by BestWebSoft plugin. Ability to set time limit, after which the Captcha can not be passed. Bug with Captcha reloading when forms data handled via ajax was fixed. XSS vulnerability with displaying search results for Captcha whitelist was fixed (thanks to Colette Chamberland). XSS vulnerability with user authentication was fixed (thanks to Colette Chamberland). Structure of plugin`s settings page was updated. The French and Hungarian language files were updated.
 
 = V4.1.5 =
 The whitelist functionality was expanded: Ability to add current IP to the whitelist. The whitelist functionality was expanded: If the IP is in the whitelist, then the indicated message will be displayed instead of the captcha. We updated all functionality for wordpress 4.3.1. The French language file is updated. We fixed SQL injection vulnerability.
@@ -590,7 +676,7 @@ We fixed error related to custom plugins folder.
 Plugin optimization is done. The French language file is updated.
 
 = V3.9.6 =
-Comflict with plugin Limit Login Attempts is fixed (a false login when logging out of the WP backend). We fixed displaying captcha in contact form.
+Conflict with plugin Limit Login Attempts is fixed (a false login when logging out of the WP backend). We fixed displaying captcha in contact form.
 
 = V3.9.5 =
 We updated all functionality for wordpress 3.8.1. Changed filter for captcha in the login form.
@@ -629,7 +715,7 @@ The Italian language file is updated. The Catalan language file is added to the 
 The duplicate style is removed. BWS plugins section is updated.
 
 = V3.8.3 =
-The Brazilian Portuguese language file is updated. The Ukrainian language file is updated. 
+The Brazilian Portuguese language file is updated. The Ukrainian language file is updated.
 
 = V3.8.2 =
 Captcha protection is improved by changing hidden values in every session.
@@ -686,7 +772,7 @@ The English language is updated in the plugin.
 The bug related to add Captcha in Contact Form for multisiting was fixed.
 
 = V3.1 =
-The Bulgarian language file ix added to the plugin.
+The Bulgarian language file is added to the plugin.
 
 = V3.0 =
 Display bug was fixed.
@@ -701,7 +787,7 @@ The Estonian language file is added to the plugin.
 The Lithuanian language file was is to the plugin. We updated all functionality for wordpress 3.5.1.
 
 = V2.4.1 =
-call_user_func_array() bug was fixed. 
+call_user_func_array() bug was fixed.
 
 = V2.4 =
 Romanian and Serbian and Slovak language files are added to the plugin. We updated the coding logic of Captcha. We updated all functionality for wordpress 3.5.
@@ -710,10 +796,10 @@ Romanian and Serbian and Slovak language files are added to the plugin. We updat
 Chinese and Greek language files are added to the plugin.
 
 = V2.33 =
-Change settings bug was fixed. 
+Change settings bug was fixed.
 
 = V2.32 =
-Arabic, Hungarian, Japanese language files are added to the plugin. Cross Site Request Forgery bug was fixed. 
+Arabic, Hungarian, Japanese language files are added to the plugin. Cross Site Request Forgery bug was fixed.
 
 = V2.31 =
 Vietnamese language file is added to the plugin. We updated Hebrew language file. We updated all functionality for wordpress 3.4.1.

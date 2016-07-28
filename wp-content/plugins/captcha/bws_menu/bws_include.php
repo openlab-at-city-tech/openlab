@@ -1,7 +1,6 @@
 <?php
 /*
 * Get latest version
-* Version: 1.0.0
 */
 
 if ( ! function_exists ( 'bws_include_init' ) ) {

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bestwebsoft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 16:00+0300\n"
-"PO-Revision-Date: 2015-09-17 16:02+0300\n"
+"POT-Creation-Date: 2016-07-14 15:18+0300\n"
+"PO-Revision-Date: 2016-07-14 15:19+0300\n"
 "Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
 "Language-Team: bestwebsoft.com <http://support.bestwebsoft.com>\n"
 "Language: ru_RU\n"
@@ -16,646 +16,1000 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: bws_functions.php:29
-#: bws_functions.php:53
+#: bws_functions.php:38 bws_menu.php:282 bws_menu.php:328
+msgid "Plugins"
+msgstr "Плагіни"
+
+#: bws_functions.php:39 bws_menu.php:283 bws_menu.php:579
+msgid "Themes"
+msgstr "Теми"
+
+#: bws_functions.php:40
+msgid "System Status"
+msgstr "Системна інформація"
+
+#: bws_functions.php:75 bws_functions.php:101
 msgid "requires"
 msgstr "потребує"
 
-#: bws_functions.php:31
-msgid "or higher, that is why it has been deactivated! Please upgrade WordPress and try again."
-msgstr "чи вище, тому його було деактивовано! Будь ласка оновіть WordPress та спробуйте ще раз."
+#: bws_functions.php:77
+msgid ""
+"or higher, that is why it has been deactivated! Please upgrade WordPress and "
+"try again."
+msgstr ""
+"чи вище, тому його було деактивовано! Будь ласка оновіть WordPress та "
+"спробуйте ще раз."
 
-#: bws_functions.php:32
+#: bws_functions.php:78
 msgid "Back to the WordPress"
 msgstr "Повернутися на WordPress на"
 
-#: bws_functions.php:34
+#: bws_functions.php:80
 msgid "Plugins page"
 msgstr "Сторінку Плагінів"
 
-#: bws_functions.php:55
-msgid "or higher! We do not guarantee that our plugin will work correctly. Please upgrade to WordPress latest version."
-msgstr "чи вище! Ми не гарантуємо, що наш плагін буде працювати правильно. Будь ласка, оновіть WordPress до останньої версії."
+#: bws_functions.php:103
+msgid ""
+"or higher! We do not guarantee that our plugin will work correctly. Please "
+"upgrade to WordPress latest version."
+msgstr ""
+"чи вище! Ми не гарантуємо, що наш плагін буде працювати правильно. Будь "
+"ласка, оновіть WordPress до останньої версії."
 
-#: bws_functions.php:112
-msgid "It’s time to upgrade your"
-msgstr "Настав час модернізувати Ваш"
+#: bws_functions.php:118
+msgid "Thank you for installing"
+msgstr "Дякуємо, що встановили"
 
-#: bws_functions.php:112
-msgid "to"
-msgstr "до"
+#: bws_functions.php:119
+msgid "Let's get started"
+msgstr "Розпочнемо"
 
-#: bws_functions.php:112
-msgid "version!"
-msgstr "версії!"
+#: bws_functions.php:120 bws_functions.php:153 bws_menu.php:525
+#: bws_menu.php:527
+msgid "Settings"
+msgstr "Налаштування"
 
-#: bws_functions.php:113
-msgid "Extend standard plugin functionality with new great options."
-msgstr "Розширює можливості стандартного функціоналу плагіна."
-
-#: bws_functions.php:116
-#: bws_functions.php:513
-msgid "Learn More"
-msgstr "Дізнатись більше"
-
-#: bws_functions.php:133
-msgid "If you enjoy our plugin, please give it 5 stars on WordPress"
-msgstr "Якщо вам сподобався плагін, будь ласка, поставте нам 5 зірочок на WordPress"
-
-#: bws_functions.php:134
-msgid "Rate the plugin"
-msgstr "Оцінити плагін"
-
-#: bws_functions.php:137
-msgid "If there is something wrong about it, please contact us"
-msgstr "Якщо щось не так, будь ласка, повідомте нам"
-
-#: bws_functions.php:154
-#: bws_functions.php:190
-msgid "Wrong license key"
-msgstr "Невірний ключ ліцензії"
-
-#: bws_functions.php:184
-#: bws_functions.php:426
-#: bws_functions.php:477
-msgid "Something went wrong. Please try again later. If the error appears again, please contact us"
-msgstr "Щось не так, спробуйте пізніше. Якщо помилка повториться, будь ласка, повідомте нам"
-
-#: bws_functions.php:184
-#: bws_functions.php:426
-#: bws_functions.php:477
-msgid "We are sorry for inconvenience."
-msgstr "Просимо вибачення за незручності."
-
-#: bws_functions.php:192
-msgid "This license key is bind to another site"
-msgstr "Цей ліцензійний ключ прив'язано до іншого сайту"
-
-#: bws_functions.php:194
-#: bws_functions.php:336
-msgid "Unfortunately, you have exceeded the number of available tries per day. Please, upload the plugin manually."
-msgstr "На жаль, ви перевищили кількість доступних спроб на день. Будь ласка, завантажте плагін вручну"
-
-#: bws_functions.php:196
-msgid "Unfortunately, Your license has expired. To continue getting top-priority support and plugin updates you should extend it in your"
-msgstr "На жаль, ваша ліцензія скінчилась. Для того, щоб і надалі отримувати першочергову техпідтримку і оновлення, будь ласка, продовжте ліцензію"
-
-#: bws_functions.php:198
-msgid "Unfortunately, the Pro licence was already installed to this domain. The Pro Trial license can be installed only once."
-msgstr "На жаль, Pro ліцензія уже використовувалась на цьому домені.  Тріал Pro версії плагіну можна використати лише один раз."
-
-#: bws_functions.php:219
-#: bws_functions.php:241
-#: bws_functions.php:263
-msgid "Failed to download the zip archive. Please, upload the plugin manually"
-msgstr "Помилка при завантаженні zip-архіву. Будь ласка, завантажте плагін вручну"
-
-#: bws_functions.php:231
-msgid "Failed to open the zip archive. Please, upload the plugin manually"
-msgstr "Помилка при відкритті zip-архіву. Будь ласка, завантажте плагін вручну"
-
-#: bws_functions.php:237
-msgid "Your server does not support either ZipArchive or Phar. Please, upload the plugin manually"
-msgstr "Ваш сервер не підтримує формати Zip і Phar. Будь ласка, завантажте плагін вручну"
-
-#: bws_functions.php:244
-msgid "UploadDir is not writable. Please, upload the plugin manually"
-msgstr "Немає доступу до теки завантажень WordPress. Будь ласка, завантажте плагін вручну"
-
-#: bws_functions.php:267
-msgid "Something went wrong. Try again later or upload the plugin manually. We are sorry for inconvenience."
-msgstr "Виникли певні проблеми. Спробуйте ще раз пізніше або завантажте плагін вручну. Просимо вибачення за незручності."
-
-#: bws_functions.php:292
-msgid "Please, enter Your license key"
-msgstr "Будь ласка, впишіть ваш ліцензійний ключ"
-
-#: bws_functions.php:309
-msgid "Congratulations! The Pro version of the plugin is successfully download and activated."
-msgstr "Вітаємо! Pro версію плагіну успішно завантажено та активовано."
-
-#: bws_functions.php:311
-#: bws_functions.php:393
-msgid "Please, go to"
-msgstr "Будь ласка, перейдіть на"
-
-#: bws_functions.php:311
-#: bws_functions.php:393
-msgid "the setting page"
-msgstr "сторінку установок"
-
-#: bws_functions.php:312
-#: bws_functions.php:394
-msgid "You will be redirected automatically in 5 seconds."
-msgstr "Вас буде перенаправлено автоматично через 5 секунд."
-
-#: bws_functions.php:317
-msgid "You can download and activate"
-msgstr "Ви можете завантажити та активувати"
-
-#: bws_functions.php:319
-msgid "version of this plugin by entering Your license key."
-msgstr "версію цього плагіну, якщо впишете ваш ліцензійний ключ."
-
-#: bws_functions.php:321
-#: bws_functions.php:362
-msgid "You can find your license key on your personal page Client area, by clicking on the link"
-msgstr "Ви можете знайти ваш ліцензійний ключ на вашій персональній сторінці у Client area, перейшовши за посиланням"
-
-#: bws_functions.php:323
-#: bws_functions.php:364
-msgid "(your username is the email you specify when purchasing the product)."
-msgstr "(ваше ім'я - це емейл, який ви вказували при купівлі плагіну)"
-
-#: bws_functions.php:327
-#: bws_functions.php:630
+#: bws_functions.php:122 bws_functions.php:479
 msgid "or"
 msgstr "або"
 
-#: bws_functions.php:327
+#: bws_functions.php:123 bws_functions.php:155
+msgid "Add New"
+msgstr "Додати"
+
+#: bws_functions.php:127 bws_functions.php:137 bws_functions.php:213
+#: bws_functions.php:724 bws_functions.php:828
+msgid "Close notice"
+msgstr "Закрити"
+
+#: bws_functions.php:142
+msgid "Thank you for installing plugins by BestWebSoft!"
+msgstr "Дякуємо, що встановили плагіни від BestWebSoft!"
+
+#: bws_functions.php:144
+msgid "More Details"
+msgstr "Деталі"
+
+#: bws_functions.php:145
+msgid "Less Details"
+msgstr "Сховати Деталі"
+
+#: bws_functions.php:218
+msgid "It’s time to upgrade your"
+msgstr "Настав час модернізувати Ваш"
+
+#: bws_functions.php:218
+msgid "to"
+msgstr "до"
+
+#: bws_functions.php:218
+msgid "version!"
+msgstr "версії!"
+
+#: bws_functions.php:219
+msgid "Extend standard plugin functionality with new great options."
+msgstr "Розширює можливості стандартного функціоналу плагіна."
+
+#: bws_functions.php:222 bws_functions.php:665 bws_menu.php:595
+msgid "Learn More"
+msgstr "Дізнатись більше"
+
+#: bws_functions.php:239
+msgid "If you enjoy our plugin, please give it 5 stars on WordPress"
+msgstr ""
+"Якщо вам сподобався плагін, будь ласка, поставте нам 5 зірочок на WordPress"
+
+#: bws_functions.php:240
+msgid "Rate the plugin"
+msgstr "Оцінити плагін"
+
+#: bws_functions.php:243
+msgid "If there is something wrong about it, please contact us"
+msgstr "Якщо щось не так, будь ласка, повідомте нам"
+
+#: bws_functions.php:247
+msgid "Donations play an important role in supporting great projects"
+msgstr "Пожертви грають важливу роль в підтримці проектів"
+
+#: bws_functions.php:277
+msgid "Check premium options on the plugin settings page!"
+msgstr "Подивіться преміум опції на сторінці налаштувань плагіна!"
+
+#: bws_functions.php:284 bws_functions.php:320 bws_menu.php:87
+#: bws_menu.php:114
+msgid "Wrong license key"
+msgstr "Невірний ключ ліцензії"
+
+#: bws_functions.php:314 bws_functions.php:578 bws_functions.php:629
+#: bws_menu.php:108
+msgid ""
+"Something went wrong. Please try again later. If the error appears again, "
+"please contact us"
+msgstr ""
+"Щось не так, спробуйте пізніше. Якщо помилка повториться, будь ласка, "
+"повідомте нам"
+
+#: bws_functions.php:314 bws_functions.php:578 bws_functions.php:629
+#: bws_menu.php:108
+msgid "We are sorry for inconvenience."
+msgstr "Просимо вибачення за незручності."
+
+#: bws_functions.php:322
+msgid "This license key is bind to another site"
+msgstr "Цей ліцензійний ключ прив'язано до іншого сайту"
+
+#: bws_functions.php:324 bws_functions.php:488
+msgid ""
+"Unfortunately, you have exceeded the number of available tries per day. "
+"Please, upload the plugin manually."
+msgstr ""
+"На жаль, ви перевищили кількість доступних спроб на день. Будь ласка, "
+"завантажте плагін вручну"
+
+#: bws_functions.php:326 bws_menu.php:120
+msgid ""
+"Unfortunately, Your license has expired. To continue getting top-priority "
+"support and plugin updates you should extend it in your"
+msgstr ""
+"На жаль, ваша ліцензія скінчилась. Для того, щоб і надалі отримувати "
+"першочергову техпідтримку і оновлення, будь ласка, продовжте ліцензію"
+
+#: bws_functions.php:328 bws_menu.php:122
+msgid ""
+"Unfortunately, the Pro licence was already installed to this domain. The Pro "
+"Trial license can be installed only once."
+msgstr ""
+"На жаль, Pro ліцензія уже використовувалась на цьому домені.  Тріал Pro "
+"версії плагіну можна використати лише один раз."
+
+#: bws_functions.php:349 bws_functions.php:371 bws_functions.php:393
+#: bws_menu.php:368 bws_menu.php:399 bws_menu.php:410
+msgid "Failed to download the zip archive. Please, upload the plugin manually"
+msgstr ""
+"Помилка при завантаженні zip-архіву. Будь ласка, завантажте плагін вручну"
+
+#: bws_functions.php:361 bws_menu.php:385
+msgid "Failed to open the zip archive. Please, upload the plugin manually"
+msgstr "Помилка при відкритті zip-архіву. Будь ласка, завантажте плагін вручну"
+
+#: bws_functions.php:367 bws_menu.php:392
+msgid ""
+"Your server does not support either ZipArchive or Phar. Please, upload the "
+"plugin manually"
+msgstr ""
+"Ваш сервер не підтримує формати Zip і Phar. Будь ласка, завантажте плагін "
+"вручну"
+
+#: bws_functions.php:374 bws_menu.php:402
+msgid "UploadDir is not writable. Please, upload the plugin manually"
+msgstr ""
+"Немає доступу до теки завантажень WordPress. Будь ласка, завантажте плагін "
+"вручну"
+
+#: bws_functions.php:397 bws_menu.php:139
+msgid ""
+"Something went wrong. Try again later or upload the plugin manually. We are "
+"sorry for inconvenience."
+msgstr ""
+"Виникли певні проблеми. Спробуйте ще раз пізніше або завантажте плагін "
+"вручну. Просимо вибачення за незручності."
+
+#: bws_functions.php:422
+msgid "Please, enter Your license key"
+msgstr "Будь ласка, впишіть ваш ліцензійний ключ"
+
+#: bws_functions.php:452
+msgid ""
+"Congratulations! Pro version of the plugin is successfully installed and "
+"activated."
+msgstr "Вітаємо! Pro версію плагіну успішно завантажено та активовано."
+
+#: bws_functions.php:454 bws_functions.php:545
+msgid "Please, go to"
+msgstr "Будь ласка, перейдіть на"
+
+#: bws_functions.php:454 bws_functions.php:545
+msgid "the setting page"
+msgstr "сторінку установок"
+
+#: bws_functions.php:455 bws_functions.php:546
+msgid "You will be redirected automatically in 5 seconds."
+msgstr "Вас буде перенаправлено автоматично через 5 секунд."
+
+#: bws_functions.php:462
+msgid "Show Pro features"
+msgstr "Показати Pro опції"
+
+#: bws_functions.php:469
+msgid "Enter your license key to install and activate"
+msgstr "Введіть ліцензійний ключ для установки і активації"
+
+#: bws_functions.php:471
+msgid "version of the plugin."
+msgstr "версія плагіна."
+
+#: bws_functions.php:473 bws_functions.php:514
+msgid "License key can be found in the"
+msgstr "Ліцензійний ключ можна знайти в"
+
+#: bws_functions.php:475 bws_functions.php:516
+msgid "(your username is the email address specified during the purchase)."
+msgstr "(ваше ім'я користувача - це емейл, який ви вказували при купівлі)"
+
+#: bws_functions.php:479
 #, php-format
 msgid "Start Your Free %s-Day Trial Now"
 msgstr "Спробуйте %s-денну тріал версію безкоштовно"
 
-#: bws_functions.php:333
-#: bws_functions.php:342
-#: bws_functions.php:372
-#: bws_functions.php:380
-#: bws_menu.php:693
-#: bws_menu.php:750
+#: bws_functions.php:485 bws_functions.php:494 bws_functions.php:524
+#: bws_functions.php:532 bws_functions.php:1398 bws_menu.php:531
+#: bws_menu.php:540
 msgid "Activate"
 msgstr "Активувати"
 
-#: bws_functions.php:359
-#: bws_functions.php:452
+#: bws_functions.php:511 bws_functions.php:604
 #, php-format
-msgid "In order to continue using the plugin it is necessary to buy a %s license."
+msgid ""
+"In order to continue using the plugin it is necessary to buy a %s license."
 msgstr "Щоб продовжити користуватись плагіном, потрібно придбати %s ліцензію."
 
-#: bws_functions.php:360
+#: bws_functions.php:512
 msgid "After that you can activate it by entering your license key."
 msgstr "Після цього ви зможете активувати його ввівши ліцензійний ключ."
 
-#: bws_functions.php:374
+#: bws_functions.php:526 bws_menu.php:118 bws_menu.php:304
 msgid "Unfortunately, you have exceeded the number of available tries per day."
 msgstr "На жаль, ви перевищили кількість допустимих спроб."
 
-#: bws_functions.php:391
-msgid "Congratulations! The Pro license of the plugin is successfully activated."
+#: bws_functions.php:543
+msgid ""
+"Congratulations! The Pro license of the plugin is successfully activated."
 msgstr "Вітаємо! Pro версію плагіну успішно активовано."
 
-#: bws_functions.php:432
+#: bws_functions.php:584
 msgid "Wrong license key."
 msgstr "Неправильний ліцензійний ключ."
 
-#: bws_functions.php:434
+#: bws_functions.php:586
 msgid "This license key is bind to another site."
 msgstr "Цей ліцензійний ключ прив'язано до іншого сайту."
 
-#: bws_functions.php:436
-msgid "This license key is valid, but Your license has expired. If you want to update our plugin in future, you should extend the license."
-msgstr "Даний ліцензійний ключ дійсний, але строк вашої ліцензії витік. Якщо ви хочете оновлювати наш плагін у майбутньому, вам слід подовжити ліцензію."
+#: bws_functions.php:588
+msgid ""
+"This license key is valid, but Your license has expired. If you want to "
+"update our plugin in future, you should extend the license."
+msgstr ""
+"Даний ліцензійний ключ дійсний, але строк вашої ліцензії витік. Якщо ви "
+"хочете оновлювати наш плагін у майбутньому, вам слід подовжити ліцензію."
 
-#: bws_functions.php:438
+#: bws_functions.php:590
 msgid "Unfortunately, you have exceeded the number of available tries."
 msgstr "На жаль, ви перевищили кількість допустимих спроб."
 
-#: bws_functions.php:440
-msgid "Unfortunately, the Pro Trial licence was already installed to this domain. The Pro Trial license can be installed only once."
-msgstr "На жаль, тріал Pro версія плагіну уже встановлювалась на цей домен. Тріал Pro версію можна встановлювати лише один раз."
+#: bws_functions.php:592
+msgid ""
+"Unfortunately, the Pro Trial licence was already installed to this domain. "
+"The Pro Trial license can be installed only once."
+msgstr ""
+"На жаль, тріал Pro версія плагіну уже встановлювалась на цей домен. Тріал "
+"Pro версію можна встановлювати лише один раз."
 
-#: bws_functions.php:444
+#: bws_functions.php:596
 msgid "The Pro Trial license key is valid."
 msgstr "Ключ тріал Pro версії вірний."
 
-#: bws_functions.php:446
+#: bws_functions.php:598 bws_menu.php:128
 msgid "The license key is valid."
 msgstr "Ліцензійний ключ дійсний."
 
-#: bws_functions.php:449
+#: bws_functions.php:601 bws_menu.php:130
 msgid "Your license will expire on"
 msgstr "Ваша ліцензія закінчується"
 
-#: bws_functions.php:482
+#: bws_functions.php:634
 msgid "Please, enter your license key"
 msgstr "Будь ласка, введіть ваш ліцензійний ключ"
 
-#: bws_functions.php:495
-msgid "If needed you can check if the license key is correct or reenter it in the field below. You can find your license key on your personal page - Client area - on our website"
-msgstr "При необхідності ви можете перевірити правильність вашого ліцензійного ключа або знову ввести його у полі, що знаходиться нижче. Ви можете знайти свій ліцензійний ключ на вашій персональній сторінці - Client area - на нашому сайті."
+#: bws_functions.php:647
+msgid ""
+"If needed you can check if the license key is correct or reenter it in the "
+"field below. You can find your license key on your personal page - Client "
+"area - on our website"
+msgstr ""
+"При необхідності ви можете перевірити правильність вашого ліцензійного ключа "
+"або знову ввести його у полі, що знаходиться нижче. Ви можете знайти свій "
+"ліцензійний ключ на вашій персональній сторінці - Client area - на нашому "
+"сайті."
 
-#: bws_functions.php:495
-msgid "(your username is the email you specify when purchasing the product). If necessary, please submit \"Lost your password?\" request."
-msgstr "(ім'я користувача - це електронна адреса, яку ви вказуєте при купівлі продукту). При необхідності, будь ласка, відправте запит на відновлення вашого паролю."
+#: bws_functions.php:647
+msgid ""
+"(your username is the email address specified during the purchase). If "
+"necessary, please submit \"Lost your password?\" request."
+msgstr ""
+"(ваше ім'я користувача - це емейл, який ви вказували при купівлі). При "
+"необхідності, будь ласка, відправте запит на відновлення вашого паролю."
 
-#: bws_functions.php:499
+#: bws_functions.php:651 bws_menu.php:302 bws_menu.php:313
 msgid "Check license key"
 msgstr "Перевірте ліцензійний ключ"
 
-#: bws_functions.php:513
+#: bws_functions.php:665
 msgid "WARNING: Illegal use notification"
 msgstr "УВАГА: виявлено несанкціоноване використання плагіну"
 
-#: bws_functions.php:513
-msgid "You can use one license of the Pro plugin for one domain only. Please check and edit your license or domain if necessary using you personal Client Area. We strongly recommend you to solve the problem within 24 hours, otherwise the Pro plugin will be deactivated."
-msgstr "Ви можете використовувати одну ліцензію Про-плагіну для одного домену. Будь ласка, переконайтесь, що інформацію щодо ліцензії і домену введено вірно, у вкладці Client Area. Ми настійливо рекомендуємо Вам вирішити це питання протягом 24 годин, інакше плагін буде деактивовано."
+#: bws_functions.php:665
+msgid ""
+"You can use one license of the Pro plugin for one domain only. Please check "
+"and edit your license or domain if necessary using you personal Client Area. "
+"We strongly recommend you to solve the problem within 24 hours, otherwise "
+"the Pro plugin will be deactivated."
+msgstr ""
+"Ви можете використовувати одну ліцензію Про-плагіну для одного домену. Будь "
+"ласка, переконайтесь, що інформацію щодо ліцензії і домену введено вірно, у "
+"вкладці Client Area. Ми настійливо рекомендуємо Вам вирішити це питання "
+"протягом 24 годин, інакше плагін буде деактивовано."
 
-#: bws_functions.php:521
-msgid "Notice: Your Pro Trial license has expired. To continue using the plugin you should buy a Pro license"
-msgstr "Увага: Термін дії тріал періоду Pro версії плагіну скінчився. Щоб продовжити користуватись плагіном, будь ласка, придбайте ліцензію Pro"
+#: bws_functions.php:673
+msgid ""
+"Notice: Your Pro Trial license has expired. To continue using the plugin you "
+"should buy a Pro license"
+msgstr ""
+"Увага: Термін дії тріал періоду Pro версії плагіну скінчився. Щоб продовжити "
+"користуватись плагіном, будь ласка, придбайте ліцензію Pro"
 
-#: bws_functions.php:523
-msgid "Your license has expired. To continue getting top-priority support and plugin updates you should extend it."
-msgstr "Строк вашої ліцензії витік. Якщо ви хочете оновлювати наш плагін у майбутньому, вам слід подовжити ліцензію."
+#: bws_functions.php:675
+msgid ""
+"Your license has expired. To continue getting top-priority support and "
+"plugin updates you should extend it."
+msgstr ""
+"Строк вашої ліцензії витік. Якщо ви хочете оновлювати наш плагін у "
+"майбутньому, вам слід подовжити ліцензію."
 
-#: bws_functions.php:523
-#: bws_functions.php:576
-#: bws_menu.php:669
-#: bws_menu.php:691
-#: bws_menu.php:718
-#: bws_menu.php:748
-#: bws_menu.php:794
+#: bws_functions.php:675 bws_functions.php:728 bws_functions.php:1353
 msgid "Learn more"
 msgstr "Дізнатись більше"
 
-#: bws_functions.php:533
+#: bws_functions.php:685
 #, php-format
 msgid "Notice: You are using the Pro Trial license of %s plugin."
 msgstr "Увага: Ви використовуєте тріал Pro версію плагіну %s."
 
-#: bws_functions.php:535
+#: bws_functions.php:687
 msgid "Notice: You are using the Pro Trial license of plugin."
 msgstr "Увага: Ви використовуєте тріал Pro версію плагіну."
 
-#: bws_functions.php:538
+#: bws_functions.php:690
 msgid "The Pro Trial license will expire on"
 msgstr "Тріал період Pro версії плагіну закінчується"
 
-#: bws_functions.php:576
+#: bws_functions.php:728
 msgid "You license for"
 msgstr "Ваша ліцензія для"
 
-#: bws_functions.php:576
+#: bws_functions.php:728
 msgid "expires on"
 msgstr "витікає"
 
-#: bws_functions.php:576
+#: bws_functions.php:728
 msgid "and you won't be granted TOP-PRIORITY SUPPORT or UPDATES."
-msgstr "та ви більше не будете отримувати першочергову технічну підтримку та оновлення."
+msgstr ""
+"та ви більше не будете отримувати першочергову технічну підтримку та "
+"оновлення."
 
-#: bws_functions.php:626
-msgid "Thank you for installing"
-msgstr "Дякуємо, що встановили"
+#: bws_functions.php:823
+msgid "Thank you for choosing"
+msgstr "Дякуємо, що обрали"
 
-#: bws_functions.php:627
-msgid "Let's get started"
-msgstr "Розпочнемо"
+#: bws_functions.php:824
+msgid ""
+"If you have a feature, suggestion or idea you'd like to see in the plugin, "
+"we'd love to hear about it!"
+msgstr ""
+"Якщо у вас є пропозиції по додаванню нового або поліпшення поточного "
+"функціоналу плагіна, будь ласка, надсилайте їх нам! Ми завжди відкриті для "
+"нових ідей!"
 
-#: bws_functions.php:628
-msgid "Configure Settings"
-msgstr "Налаштувати плагін"
+#: bws_functions.php:825
+msgid "Suggest a Feature"
+msgstr "Запропонувати функціонал"
 
-#: bws_functions.php:631
-msgid "Add New"
-msgstr "Додати"
-
-#: bws_functions.php:635
-msgid "Close notice"
-msgstr "Закрити"
-
-#: bws_functions.php:648
+#: bws_functions.php:841
 msgid "Notice"
 msgstr "Зауважте"
 
-#: bws_functions.php:648
+#: bws_functions.php:841
 msgid "The plugin's settings have been changed."
 msgstr "Налаштування плагіну змінено."
 
-#: bws_functions.php:649
+#: bws_functions.php:842 bws_functions.php:1409
 msgid "Save Changes"
-msgstr "Сохранить изменения"
+msgstr "Зберегти зміни"
 
-#: bws_functions.php:694
-msgid "Add BWS Plugins Shortcode"
-msgstr "Додати BWS шорткод"
+#: bws_functions.php:856
+msgid ""
+"You can always look at premium options by clicking on the \"Show Pro features"
+"\" in the \"Go PRO\" tab"
+msgstr ""
+"Ви завжди можете подивитися на преміум опції, натиснувши на кнопку "
+"\"Показати Pro особливост\" на вкладці \"Перейти на PRO\""
 
-#: bws_functions.php:738
+#: bws_functions.php:985
+msgid "Add shortcode"
+msgstr "Додати шорткод"
+
+#: bws_functions.php:985
+msgid "Add BestWebSoft plugins' shortcodes using this button."
+msgstr "Додайте шорткоди BestWebSoft плагінів за допомогою цієї кнопки."
+
+#: bws_functions.php:1034
 msgid "Close"
 msgstr "Закрити"
 
-#: bws_functions.php:829
+#: bws_functions.php:1126
 msgid "Restore all plugin settings to defaults"
 msgstr "Скинути налаштування плагіну до стандартних"
 
-#: bws_functions.php:831
+#: bws_functions.php:1128
 msgid "Restore settings"
 msgstr "Скинути налаштування"
 
-#: bws_functions.php:842
+#: bws_functions.php:1139
 msgid "Are you sure you want to restore all settings by default?"
 msgstr "Ви впевнені, що хочете скинути налаштування плагіну до стандартних?"
 
-#: bws_functions.php:845
+#: bws_functions.php:1142
 msgid "Yes, restore all settings"
 msgstr "Так, скинути налаштування"
 
-#: bws_functions.php:846
+#: bws_functions.php:1143
 msgid "No, go back to the settings page"
 msgstr "Ні, повернутись назад на сторінку налаштувань"
 
-#: bws_functions.php:890
+#: bws_functions.php:1189
 msgid "Plugin"
 msgstr "Плагін"
 
-#: bws_functions.php:899
+#: bws_functions.php:1198
 msgid "Shortcode settings"
 msgstr "Налаштування шорткоду"
 
-#: bws_functions.php:904
+#: bws_functions.php:1203
 msgid "The shortcode will be inserted"
 msgstr "Буде вставлено шорткод"
 
-#: bws_functions.php:909
+#: bws_functions.php:1208
 msgid "Insert"
 msgstr "Вставити"
 
-#: bws_menu.php:506
+#: bws_functions.php:1241
+msgid "Visit Help Center"
+msgstr "Перейти в Help Center"
+
+#: bws_functions.php:1246
+msgid "FAQ"
+msgstr "FAQ"
+
+#: bws_functions.php:1252
+msgid "For more information:"
+msgstr "Для отримання додаткової інформації:"
+
+#: bws_functions.php:1253
+msgid "Documentation"
+msgstr "Документація"
+
+#: bws_functions.php:1254
+msgid "Video Instructions"
+msgstr "Відео інструкції"
+
+#: bws_functions.php:1255
+msgid "Submit a Request"
+msgstr "Надіслати запит"
+
+#: bws_functions.php:1266
+msgid "You do not have sufficient permissions to edit plugins for this site."
+msgstr "У вас недостатньо повноважень для редагування плагінів цього сайту."
+
+#: bws_functions.php:1317 bws_functions.php:1344
+#, php-format
+msgid "File %s edited successfully."
+msgstr "Файл %s успішно відредаговано."
+
+#: bws_functions.php:1319 bws_functions.php:1346
+msgid "Not enough permissions to create or update the file"
+msgstr "У Вас недостатньо дозволів для створення або поновлення файлу"
+
+#: bws_functions.php:1349
+msgid "Not enough permissions to create the file"
+msgstr "У Вас недостатньо дозволів для створення файлу"
+
+#: bws_functions.php:1387
+msgid "These styles will be added to the header on all pages of your site."
+msgstr "Ці стилі будуть додані в заголовок на всіх сторінках вашого сайту."
+
+#: bws_functions.php:1389
+#, php-format
+msgid ""
+"These PHP code will be hooked to the %s action and will be printed on front "
+"end only."
+msgstr ""
+"Цей PHP код буде прикріплений до %s action  і буде додано лише у фронтенді."
+
+#: bws_functions.php:1393
+msgid "Editing"
+msgstr "Редагування"
+
+#: bws_functions.php:1395
+msgid "Browsing"
+msgstr "Огляд"
+
+#: bws_functions.php:1402
+#, php-format
+msgid "Learn more about %s"
+msgstr "Дізнатись більше про %s"
+
+#: bws_functions.php:1413
+#, php-format
+msgid ""
+"You need to make this files writable before you can save your changes. See "
+"%s the Codex %s for more information."
+msgstr ""
+"Вам потрібно зробити цей файл доступним для запису, перед тим як ви зможете "
+"зберегти свої зміни. Перегляньте %sКодекс%s для додаткової інформації."
+
+#: bws_menu.php:116
+msgid ""
+"This license key is bind to another website. Change it via personal Client "
+"Area."
+msgstr ""
+"Цей ліцензійний ключ прив'язано до іншого сайту. Змініть це в Client Area."
+
+#: bws_menu.php:116
+msgid "Log in"
+msgstr "Увійти"
+
+#: bws_menu.php:132
+msgid "Congratulations! Pro Membership license is successfully activated."
+msgstr "Вітаємо! Pro Membership ліцензія успішно активована."
+
+#: bws_menu.php:149
+msgid "Please enter your license key."
+msgstr "Будь ласка, введіть ваш ліцензійний ключ."
+
+#: bws_menu.php:161
 msgid "Not set"
 msgstr "Не задано"
 
-#: bws_menu.php:508
-#: bws_menu.php:509
+#: bws_menu.php:163 bws_menu.php:164
 msgid "On"
 msgstr "Увімк."
 
-#: bws_menu.php:508
-#: bws_menu.php:509
+#: bws_menu.php:163 bws_menu.php:164
 msgid "Off"
 msgstr "Вимк."
 
-#: bws_menu.php:510
-#: bws_menu.php:511
-#: bws_menu.php:512
-#: bws_menu.php:513
-#: bws_menu.php:514
-#: bws_menu.php:526
+#: bws_menu.php:165 bws_menu.php:166 bws_menu.php:167 bws_menu.php:168
+#: bws_menu.php:169 bws_menu.php:181
 msgid "N/A"
 msgstr "Невідомо"
 
-#: bws_menu.php:514
+#: bws_menu.php:169
 msgid " Mb"
 msgstr "Мб"
 
-#: bws_menu.php:515
-#: bws_menu.php:516
-#: bws_menu.php:517
-#: bws_menu.php:522
+#: bws_menu.php:170 bws_menu.php:171 bws_menu.php:172 bws_menu.php:177
 msgid "Yes"
 msgstr "Так"
 
-#: bws_menu.php:515
-#: bws_menu.php:516
-#: bws_menu.php:517
-#: bws_menu.php:524
+#: bws_menu.php:170 bws_menu.php:171 bws_menu.php:172 bws_menu.php:179
 msgid "No"
 msgstr "Ні"
 
-#: bws_menu.php:534
+#: bws_menu.php:190
 msgid "Operating System"
 msgstr "Операційна система"
 
-#: bws_menu.php:535
+#: bws_menu.php:191
 msgid "Server"
 msgstr "Тип серверу"
 
-#: bws_menu.php:536
+#: bws_menu.php:192
 msgid "Memory usage"
 msgstr "Пам’яті використано"
 
-#: bws_menu.php:537
+#: bws_menu.php:193
 msgid "MYSQL Version"
 msgstr "Версія MYSQL"
 
-#: bws_menu.php:538
+#: bws_menu.php:194
 msgid "SQL Mode"
 msgstr "Режим SQL"
 
-#: bws_menu.php:539
+#: bws_menu.php:195
 msgid "PHP Version"
 msgstr "Версія PHP"
 
-#: bws_menu.php:540
+#: bws_menu.php:196
 msgid "PHP Safe Mode"
 msgstr "PHP Безпечний режим"
 
-#: bws_menu.php:541
+#: bws_menu.php:197
 msgid "PHP Allow URL fopen"
 msgstr "Дозволити PHP URL fopen"
 
-#: bws_menu.php:542
+#: bws_menu.php:198
 msgid "PHP Memory Limit"
 msgstr "Ліміт пам’яті"
 
-#: bws_menu.php:543
+#: bws_menu.php:199
 msgid "PHP Max Upload Size"
 msgstr "Макс. розмір файлу, що завантажується"
 
-#: bws_menu.php:544
+#: bws_menu.php:200
 msgid "PHP Max Post Size"
 msgstr "Макс. розмір посту"
 
-#: bws_menu.php:545
+#: bws_menu.php:201
 msgid "PHP Max Script Execute Time"
 msgstr "Макс. час виконання сценарію"
 
-#: bws_menu.php:546
+#: bws_menu.php:202
 msgid "PHP Exif support"
 msgstr "Підтримка PHP Exif"
 
-#: bws_menu.php:547
+#: bws_menu.php:203
 msgid "PHP IPTC support"
 msgstr "Підтримка PHP IPTC"
 
-#: bws_menu.php:548
+#: bws_menu.php:204
 msgid "PHP XML support"
 msgstr "Підтримка PHP XML"
 
-#: bws_menu.php:549
+#: bws_menu.php:205
 msgid "Site URL"
 msgstr "Адреса сайту"
 
-#: bws_menu.php:550
+#: bws_menu.php:206
 msgid "Home URL"
 msgstr "Адреса домашньої сторінки"
 
-#: bws_menu.php:553
+#: bws_menu.php:209
 msgid "WordPress Version"
 msgstr "Версія WordPress"
 
-#: bws_menu.php:554
+#: bws_menu.php:210
 msgid "WordPress DB Version"
 msgstr "Версія бази даних WordPress"
 
-#: bws_menu.php:555
+#: bws_menu.php:211
 msgid "Multisite"
 msgstr "Мультисайт"
 
-#: bws_menu.php:556
+#: bws_menu.php:212
 msgid "Active Theme"
 msgstr "Активна тема"
 
-#: bws_menu.php:571
+#: bws_menu.php:226
 msgid "Please enter a valid email address."
 msgstr "Будь ласка, введіть коректний емейл."
 
-#: bws_menu.php:575
+#: bws_menu.php:230
 msgid "Email with system info is sent to "
 msgstr "Емейл з системною інформацією надіслано на"
 
-#: bws_menu.php:579
+#: bws_menu.php:234
 msgid "Thank you for contacting us."
 msgstr "Дякуємо, що звернулись до нас."
 
-#: bws_menu.php:612
+#: bws_menu.php:267
 msgid "Sorry, email message could not be delivered."
 msgstr "Вибачте, ваше емейл не може бути доставлено"
 
-#: bws_menu.php:620
-msgid "Need help?"
-msgstr "Потрібна допомога?"
-
-#: bws_menu.php:621
-msgid "Client area"
-msgstr "Клієнтам"
-
-#: bws_menu.php:622
-#: bws_menu.php:933
+#: bws_menu.php:286 bws_menu.php:626
 msgid "System status"
 msgstr "Системна інформація"
 
-#: bws_menu.php:627
-msgid "Plugins"
-msgstr "Плагіни"
+#: bws_menu.php:287
+msgid "Support"
+msgstr "Поддержка"
 
-#: bws_menu.php:629
-msgid "Themes"
-msgstr "Теми"
+#: bws_menu.php:288
+msgid "Manage purchased licenses & subscriptions"
+msgstr "Управління придбаними ліцензіями і підписками"
 
-#: bws_menu.php:634
+#: bws_menu.php:288
+msgid "Client Area"
+msgstr "Client Area"
+
+#: bws_menu.php:307
+msgid "Enter your license key"
+msgstr "Ваш ліцензійний ключ"
+
+#: bws_menu.php:311
+msgid "Activate Membership"
+msgstr "Активувати Membership"
+
+#: bws_menu.php:320
+msgid "Don’t have valid license key yet?"
+msgstr "Немає чинного ліцензійного ключа?"
+
+#: bws_menu.php:320
+msgid "Subscribe to Pro Membership Now"
+msgstr "Підписатися на Pro Membership Зараз"
+
+#: bws_menu.php:329
+msgid "Upload Plugin"
+msgstr "Завантажити плагін"
+
+#: bws_menu.php:333
+#, php-format
+msgid ""
+"The plugin generated %d characters of <strong>unexpected output</strong> "
+"during activation. If you notice &#8220;headers already sent&#8221; "
+"messages, problems with syndication feeds or other issues, try deactivating "
+"or removing this plugin."
+msgstr ""
+"Цей плагін згенерував стільки символів <strong>неочікуваного виводу</strong> "
+"під час активації: %d. Якщо ви помітите повідомлення &#8220;заголовки вже "
+"надіслані&#8221;, проблеми з каналами чи інші неполадки, спробуйте вимкнути "
+"чи видалити цей плагін."
+
+#: bws_menu.php:335
+msgid ""
+"Plugin could not be activated because it triggered a <strong>fatal error</"
+"strong>."
+msgstr ""
+"Плагін не вдалося активувати, бо він спричинив <strong>критичну помилку</"
+"strong>."
+
+#: bws_menu.php:338
+msgid "Plugin <strong>activated</strong>."
+msgstr "Плагін <strong>активовано</strong>."
+
+#: bws_menu.php:345
+msgid "Installing Plugin"
+msgstr "Встановлення плагіну"
+
+#: bws_menu.php:351
+msgid "Downloading install package from"
+msgstr "Завантаження встановлюючого пакунку з"
+
+#: bws_menu.php:376
+msgid "Unpacking the package"
+msgstr "Розпакування пакета"
+
+#: bws_menu.php:381 bws_menu.php:389
+msgid "Installing the plugin"
+msgstr "Встановлення плагіну"
+
+#: bws_menu.php:395
+msgid "Successfully installed the plugin"
+msgstr "Успішно встановлено плагін"
+
+#: bws_menu.php:407
+msgid "Activate Plugin"
+msgstr "Активувати плагін"
+
+#: bws_menu.php:407 bws_menu.php:413
+msgid "Return to BestWebSoft Panel"
+msgstr "Назад до BestWebSoft Panel"
+
+#: bws_menu.php:417 bws_menu.php:432 bws_menu.php:561
 msgid "All"
 msgstr "Всі"
 
-#: bws_menu.php:635
+#: bws_menu.php:418
 msgid "Installed"
 msgstr "Встановлені"
 
-#: bws_menu.php:636
-msgid "Recommended"
-msgstr "Рекомендовані "
+#: bws_menu.php:419
+msgid "Not Installed"
+msgstr "Не встановлені"
 
-#: bws_menu.php:640
-msgid "Installed plugins"
-msgstr "Встановлені плагіни"
+#: bws_menu.php:425
+msgid "Filter results"
+msgstr "Фільтр результатів"
 
-#: bws_menu.php:672
-#: bws_menu.php:721
-msgid "Settings"
-msgstr "Налаштування"
+#: bws_menu.php:428 bws_menu.php:557
+msgid "Category"
+msgstr "Категорія"
 
-#: bws_menu.php:693
-#: bws_menu.php:750
-msgid "Activate this plugin"
-msgstr "Активувати плагін"
+#: bws_menu.php:492
+msgid "Not installed"
+msgstr "Не встановлен"
 
-#: bws_menu.php:708
-#: bws_menu.php:738
-#: bws_menu.php:784
-msgid "Go"
-msgstr "Перейти"
+#: bws_menu.php:496
+msgid "Renew to get updates"
+msgstr "Продовжити для поновлення"
 
-#: bws_menu.php:712
-#: bws_menu.php:742
-#: bws_menu.php:788
-msgid "DONATE"
-msgstr "Підтримати нас"
-
-#: bws_menu.php:758
-msgid "Recommended plugins"
-msgstr "Рекомендовані плагіни"
-
-#: bws_menu.php:796
-msgid "Install now"
-msgstr "Встановити"
-
-#: bws_menu.php:817
-msgid "Try again"
-msgstr "Спробувати ще раз"
-
-#: bws_menu.php:835
+#: bws_menu.php:499
 #, php-format
-msgid "Preview &#8220;%s&#8221;"
-msgstr "Попередній перегляд &#8220;%s&#8221;"
+msgid "Update to v %s"
+msgstr "Оновити до версії %s"
 
-#: bws_menu.php:866
-#, php-format
-msgid "Install %s"
-msgstr "Встановити %s"
-
-#: bws_menu.php:866
+#: bws_menu.php:511 bws_menu.php:534 bws_menu.php:543
 msgid "Install Now"
 msgstr "Встановити"
 
-#: bws_menu.php:869
-#, php-format
-msgid "Update to version %s"
-msgstr "Оновити до версії %s"
+#: bws_menu.php:517
+msgid "Upgrade to Pro"
+msgstr "Оновитися на Pro"
 
-#: bws_menu.php:869
-msgid "Update"
-msgstr "Оновити"
+#: bws_menu.php:521
+msgid "Donate"
+msgstr "Пожертвувати"
 
-#: bws_menu.php:876
-#, php-format
-msgid "Preview %s"
-msgstr "Попередній перегляд %s"
+#: bws_menu.php:531 bws_menu.php:540
+msgid "Activate this plugin"
+msgstr "Активувати плагін"
 
-#: bws_menu.php:876
-msgid "Preview"
-msgstr "Попередній перегляд"
+#: bws_menu.php:543
+msgid "Install this plugin"
+msgstr "Встановити плагін"
 
-#: bws_menu.php:882
-#: bws_menu.php:914
+#: bws_menu.php:552
+msgid "Nothing found. Try another criteria."
+msgstr "Нічого не знайдено. Спробуйте інші критерії."
+
+#: bws_menu.php:589 bws_menu.php:609
 #, php-format
 msgid "By %s"
 msgstr "За %s"
 
-#: bws_menu.php:888
-msgid "Details"
-msgstr "Деталі"
-
-#: bws_menu.php:920
+#: bws_menu.php:615
 msgid "Already Installed"
 msgstr "Уже встановлено %s"
 
-#: bws_menu.php:936
-msgid "Environment"
-msgstr "Системне оточення"
+#: bws_menu.php:623
+msgid "Browse Free WordPress Themes"
+msgstr "Огляд безкоштовних WordPress тем"
 
-#: bws_menu.php:947
-msgid "Active Plugins"
-msgstr "Активні плагіни"
-
-#: bws_menu.php:960
-msgid "Inactive Plugins"
-msgstr "Не активні плагіни"
-
-#: bws_menu.php:976
+#: bws_menu.php:632
 msgid "Send to support"
 msgstr "Відправити службі тех. підтримки"
 
-#: bws_menu.php:983
+#: bws_menu.php:639
 msgid "Send to custom email &#187;"
 msgstr "Відправити на електронну адресу &#187;"
+
+#: bws_menu.php:646
+msgid "Environment"
+msgstr "Системне оточення"
+
+#: bws_menu.php:657
+msgid "Active Plugins"
+msgstr "Активні плагіни"
+
+#: bws_menu.php:670
+msgid "Inactive Plugins"
+msgstr "Не активні плагіни"
+
+#: product_list.php:7
+msgid "Advertisement"
+msgstr "Реклама"
+
+#: product_list.php:8
+msgid "Content & Media"
+msgstr "Зміст & Медіа"
+
+#: product_list.php:9
+msgid "Management"
+msgstr "Управління"
+
+#: product_list.php:10
+msgid "Recommended"
+msgstr "Рекомендовані "
+
+#: product_list.php:11
+msgid "Security"
+msgstr "Безпека"
+
+#: product_list.php:12
+msgid "Site Stats"
+msgstr "Статистика сайту"
+
+#: product_list.php:13
+msgid "Social"
+msgstr "Соціальне"
+
+#: product_list.php:14
+msgid "Utilities"
+msgstr "Утиліти"
+
+#: product_list.php:15
+msgid "Other"
+msgstr "Інше"
+
+#~ msgid "Get Access to %s+ Premium Plugins"
+#~ msgstr "Отримати Доступ до %s+ Преміум Плагинам"
+
+#~ msgid ""
+#~ "Join BestWebSoft Pro Membership today, cancel any time and use all "
+#~ "plugins on a single website %s for only %s per month."
+#~ msgstr ""
+#~ "Приєднуйтесь до BestWebSoft Pro Membership сьогодні, скасовуйте підписку "
+#~ "в будь-який час і використовуйте всі плагіни на одному сайті %s всього "
+#~ "лише за %s в місяць."
+
+#~ msgid "My Account"
+#~ msgstr "Мій аккаунт"
+
+#~ msgid "BWS Panel"
+#~ msgstr "BWS Панель"
+
+#~ msgid "panel"
+#~ msgstr "панель"
+
+#~ msgid "You can download and activate"
+#~ msgstr "Ви можете завантажити та активувати"
+
+#~ msgid "version of this plugin by entering Your license key."
+#~ msgstr "версію цього плагіну, якщо впишете ваш ліцензійний ключ."
+
+#~ msgid ""
+#~ "You can find your license key on your personal page Client area, by "
+#~ "clicking on the link"
+#~ msgstr ""
+#~ "Ви можете знайти ваш ліцензійний ключ на вашій персональній сторінці у "
+#~ "Client area, перейшовши за посиланням"
+
+#~ msgid "Configure Settings"
+#~ msgstr "Налаштувати плагін"
+
+#~ msgid "Need help?"
+#~ msgstr "Потрібна допомога?"
+
+#~ msgid "Go"
+#~ msgstr "Перейти"
+
+#~ msgid "DONATE"
+#~ msgstr "Підтримати нас"
+
+#~ msgid "Recommended plugins"
+#~ msgstr "Рекомендовані плагіни"
+
+#~ msgid "Install now"
+#~ msgstr "Встановити"
+
+#~ msgid "Try again"
+#~ msgstr "Спробувати ще раз"
+
+#~ msgid "Preview &#8220;%s&#8221;"
+#~ msgstr "Попередній перегляд &#8220;%s&#8221;"
+
+#~ msgid "Install %s"
+#~ msgstr "Встановити %s"
+
+#~ msgid "Update"
+#~ msgstr "Оновити"
+
+#~ msgid "Preview %s"
+#~ msgstr "Попередній перегляд %s"
+
+#~ msgid "Preview"
+#~ msgstr "Попередній перегляд"
+
+#~ msgid "Add BWS Plugins Shortcode"
+#~ msgstr "Додати BWS шорткод"
 
 #~ msgid ""
 #~ "(your username is the email you specify when purchasing the product), "
@@ -684,10 +1038,6 @@ msgstr "Відправити на електронну адресу &#187;"
 
 #~ msgid "Install now from wordpress.org"
 #~ msgstr "Установити з wordpress.org"
-
-#, fuzzy
-#~ msgid "Activated theme"
-#~ msgstr "Поточна тема"
 
 #, fuzzy
 #~ msgid "Installed themes"
@@ -752,12 +1102,6 @@ msgstr "Відправити на електронну адресу &#187;"
 #~ msgid "Captcha"
 #~ msgstr "КАПЧА"
 
-#~ msgid "FAQ"
-#~ msgstr "FAQ"
-
-#~ msgid "Support"
-#~ msgstr "Поддержка"
-
 #~ msgid ""
 #~ "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
 #~ msgstr ""
@@ -778,9 +1122,6 @@ msgstr "Відправити на електронну адресу &#187;"
 
 #~ msgid "Activate contact form"
 #~ msgstr "Активировать контакную форму"
-
-#~ msgid "Download contact form"
-#~ msgstr "Скачать контактную форму"
 
 #~ msgid ""
 #~ "If you would like to customize this plugin for a custom form, please "

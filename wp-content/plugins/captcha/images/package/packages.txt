@@ -1,0 +1,155 @@
+#package: arabic_bt
+#name: Arabic ( black numbers - transparent background )
+#disabled:
+0.png 0
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: arabic_bw
+#name: Arabic ( black numbers - white background )
+0.png 0
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: arabic_wt
+#name: Arabic ( white numbers - transparent background )
+#disabled:
+0.png 0
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: arabic_wb
+#name: Arabic ( white numbers - black background )
+0.png 0
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: dots_bt
+#name: Dots ( black dots - transparent background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: dots_bw
+#name: Dots ( black dots - white background )
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: dots_wb
+#name: Dots ( white dots - black background )
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: dots_wt
+#name: Dots ( white dots - transparent background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: roman_bt
+#name: Roman ( black numbers - transparent background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: roman_bw
+#name: Roman ( black numbers - white background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: roman_wb
+#name: Roman ( white numbers - black background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
+
+#package: roman_wt
+#name: Roman ( white numbers - transparent background )
+#disabled:
+1.png 1
+2.png 2
+3.png 3
+4.png 4
+5.png 5
+6.png 6
+7.png 7
+8.png 8
+9.png 9
