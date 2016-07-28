@@ -9,7 +9,7 @@
 }
 
 .advanced-options {
-	margin-bottom: 20px;
+	margin: 20px 0;
 	border: 1px solid #ccc;
 	padding: 0 15px;
 }
@@ -88,19 +88,31 @@ ul.container,
 	content: "\e02f";
 }
 
-#tadv-menu-img {
-	height: 28px;
+#tadv-mce-menu {
 	margin-bottom: 0;
-	background: #fff url(../images/menu.png) no-repeat 0 center;
+	background: #fff;
 	border: 1px solid #ccc;
 	border-bottom: 0;
 	opacity: 0.4;
 	filter: alpha(opacity=40);
 }
 
-#tadv-menu-img.enabled {
+#tadv-mce-menu.enabled {
 	opacity: 1;
 	filter: alpha(opacity=100);
+}
+
+#tadv-mce-menu.mce-menubar .mce-menubtn:hover {
+	background: transparent;
+}
+
+#tadv-mce-menu .mce-btn .mce-caret {
+	margin-top: 9px;
+	margin-left: 1px;
+}
+
+#tadv-mce-menu * {
+	cursor: default;
 }
 
 #tadvzones,
@@ -134,6 +146,11 @@ ul.container,
 	display: none;
 }
 
+.tadvdropzone .mce-menubtn .descr {
+	padding: 0;
+	font-size: 13px;
+}
+
 .tadvdropzone .tadvmodule .tadvitem {
 	border: 1px solid transparent;
 	display: block;
@@ -145,8 +162,21 @@ ul.container,
 	border-radius: 2px;
 }
 
+.tadvdropzone .tadvmodule .tadvitem.mce-widget {
+	width: auto;
+	height: 20px;
+	border-color: #ccc;
+	background-color: #fff;
+	cursor: move;
+}
+
+.tadvdropzone.mce-toolbar .mce-btn .the-button {
+	padding: 0 3px;
+}
+
 .tadvdropzone .tadvmodule .tadvitem:hover {
 	border-color: #999;
+	background-image: none;
 }
 
 .tadvdropzone ul {
@@ -182,6 +212,7 @@ ul.container,
 
 #unused {
 	margin: 0;
+	min-height: 36px;
 }
 
 #unused .tadvmodule .tadvitem {
@@ -194,6 +225,11 @@ ul.container,
 	padding: 1px 3px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	background-image: none;
+	box-shadow: none;
 }
 
 #unused .tadvmodule .descr {
@@ -202,42 +238,16 @@ ul.container,
 	line-height: 22px;
 }
 
-#fontsizeselect .tadvitem {
-	background: url(../images/fontsizeselect.png) no-repeat center center;
-}
-
-#fontselect .tadvitem {
-	background: url(../images/fontselect.png) no-repeat center center;
-}
-
-#formatselect .tadvitem {
-	background: url(../images/formatselect.png) no-repeat center center;
-}
-
-#styleselect .tadvitem {
-	background: url(../images/styleselect.png) no-repeat center center;
-}
-
-#formatselect.tadvmodule .tadvitem,
-#styleselect.tadvmodule .tadvitem,
-#fontsizeselect.tadvmodule .tadvitem,
-#fontselect.tadvmodule .tadvitem {
-	width: 98px;
+#unused .tadvmodule .the-button .descr {
+	padding: 0 4px;
+	font-size: 13px;
 }
 
 .tadvdropzone #formatselect,
 .tadvdropzone #styleselect,
 .tadvdropzone #fontsizeselect,
 .tadvdropzone #fontselect {
-	width: 104px;
-}
-
-.tadvdropzone #formatselect .tadvitem,
-.tadvdropzone #styleselect .tadvitem,
-.tadvdropzone #fontsizeselect .tadvitem,
-.tadvdropzone #fontselect .tadvitem {
-	width: 92px;
-	border-color: #bbb;
+	width: 115px;
 }
 
 div.tadv-error {
@@ -265,4 +275,9 @@ div.tadv-error {
 
 .tadvdropzone .tadv-placeholder {
 	height: 28px;
+}
+
+.tadv-error {
+	color: #d54e21;
+	font-weight: bold;
 }

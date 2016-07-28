@@ -32,7 +32,7 @@ jQuery( document ).ready( function( $ ) {
 	});
 
 	$( '#menubar' ).on( 'change', function() {
-		$( '#tadv-menu-img' ).toggleClass( 'enabled', $(this).prop('checked') );
+		$( '#tadv-mce-menu' ).toggleClass( 'enabled', $(this).prop('checked') );
 	});
 
 	$('#tadv-export-select').click( function() {
@@ -56,4 +56,34 @@ jQuery( document ).ready( function( $ ) {
 			$importError.text( error );
 		}
 	});
+
+	function translate( str ) {
+		if ( window.tadvTranslation.hasOwnProperty( str ) ) {
+			return window.tadvTranslation[str];
+		}
+		return str;
+	}
+
+	if ( typeof window.tadvTranslation === 'object' ) {
+		$( '.tadvitem' ).each( function( i, element ) {
+			var $element = $( element ),
+				$descr = $element.find( '.descr' ),
+				text = $descr.text();
+
+			if ( text ) {
+				text = translate( text );
+				$descr.text( text );
+				$element.find( '.mce-ico' ).attr( 'title', text );
+			}
+		});
+
+		$( '#tadv-mce-menu .tadv-translate' ).each( function( i, element ) {
+			var $element = $( element ),
+				text = $element.text();
+
+			if ( text ) {
+				$element.text( translate( text ) );
+			}
+		});
+	}
 });
