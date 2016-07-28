@@ -158,12 +158,6 @@ if ( version_compare($GLOBALS['wp_version'], '3.8', '<=') ) {
 	echo "<div id=\"icon-options-general\" class=\"icon32\"></div>";
 }
 
-if( file_exists( plugin_dir_path( dirname(__FILE__) ).'readygraph-extension.php' )) {
-wp_enqueue_style('s2_rg_admin_template', S2URL . 'extension/readygraph/assets/css/upgrade.css');
-if (isset($_GET['readygraph_premium_notice']) && $_GET['readygraph_premium_notice'] == 'dismiss') update_option('readygraph_premium_notice',"false");
-if (get_option('readygraph_premium_notice','true') != "false"){
-echo '<div class="rg_info rg_message"><img src="'.S2URL.'extension/readygraph/assets/Sign-Alert-icon.png" style="float: left;height: 50px;padding-right: 10px;"><a href="admin.php?page=readygraph-app"><button class="button-warning pure-button" style="float: right; margin-right: 15px;">Connect ReadyGraph</button></a><h3 style="color:white">Grow your site traffic faster: Activate Email Newsletter\'s User Growth Engine (ReadyGraph)</h3><p style="color: whitesmoke">Promotion to New Users | Viral Signup Form | Site Update emails | Import Existing Users</p><div class="aa_close" style="position: absolute;right: 15px;top: 12px;"><a href="//' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . '&readygraph_premium_notice=dismiss"><img src="'.S2URL.'extension/readygraph/assets/dialog_close.png" style="width:12px;"></a></div></div>';}}
-
 $tabs = array('email' => __('Email Settings', 'subscribe2'),
 	'templates' => __('Templates', 'subscribe2'),
 	'registered' => __('Registered Users', 'subscribe2'),
