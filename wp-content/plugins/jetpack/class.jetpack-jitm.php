@@ -54,61 +54,22 @@ class Jetpack_JITM {
 		if ( ! current_user_can( 'jetpack_manage_modules' ) ) {
 			return;
 		}
-		global $pagenow;
 
-		// Only show auto update JITM if auto updates are allowed in this installation
-		$possible_reasons_for_failure = Jetpack_Autoupdate::get_possible_failures();
-		self::$auto_updates_allowed = empty( $possible_reasons_for_failure );
-		$photon_inactive = ! Jetpack::is_module_active( 'photon' );
-
-		if ( 'media-new.php' == $pagenow && $photon_inactive ) {
+		if ( 'edit-comments' == $screen->base && ! Jetpack::is_plugin_active( 'akismet/akismet.php' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
-			add_action( 'post-plupload-upload-ui', array( $this, 'photon_msg' ) );
+			add_action( 'admin_notices', array( $this, 'akismet_msg' ) );
 		}
-		elseif ( 'post-new.php' == $pagenow ) {
-			$calypso_supported_post_types = in_array( $screen->post_type, array( 'post', 'page' ) );
-			if ( $calypso_supported_post_types || $photon_inactive ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
-			}
-			if ( $calypso_supported_post_types ) {
-				add_action( 'admin_notices', array( $this, 'editor_msg' ) );
-			}
-			if ( $photon_inactive ) {
-				add_action( 'print_media_templates', array( $this, 'photon_tmpl' ) );
-			}
+		elseif (
+			'post' == $screen->base
+			&& ( isset( $_GET['message'] ) && 6 == $_GET['message'] )
+			&& ! Jetpack::is_plugin_active( 'vaultpress/vaultpress.php' )
+		) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
+			add_action( 'edit_form_top', array( $this, 'backups_after_publish_msg' ) );
 		}
-		elseif ( 'post.php' == $pagenow ) {
-			$user_published  = isset( $_GET['message'] ) && 6 == $_GET['message'];
-			if ( $user_published || $photon_inactive ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
-			}
-			if ( $user_published ) {
-				add_action( 'edit_form_top', array( $this, 'stats_msg' ) );
-			}
-			if ( $photon_inactive ) {
-				add_action( 'print_media_templates', array( $this, 'photon_tmpl' ) );
-			}
-		}
-		elseif ( self::$auto_updates_allowed ) {
-			if ( 'update-core.php' == $pagenow && ! Jetpack::is_module_active( 'manage' ) ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
-				add_action( 'admin_notices', array( $this, 'manage_msg' ) );
-			}
-			elseif ( 'plugins.php' == $pagenow ) {
-				if ( ( isset( $_GET['activate'] ) && 'true' === $_GET['activate'] ) || ( isset( $_GET['activate-multi'] ) && 'true' === $_GET['activate-multi'] ) ) {
-					add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
-					add_action( 'pre_current_active_plugins', array( $this, 'manage_pi_msg' ) );
-				} else {
-
-					// Save plugins that are activated. This is used when one or more plugins are activated to know
-					// what was activated and use it in Jetpack_JITM::manage_pi_msg() before deleting the option.
-					$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-					$action = $wp_list_table->current_action();
-					if ( $action && ( 'activate' == $action || 'activate-selected' == $action ) ) {
-						update_option( 'jetpack_temp_active_plugins_before', get_option( 'active_plugins', array() ) );
-					}
-				}
-			}
+		elseif ( 'update-core' == $screen->base && ! Jetpack::is_plugin_active( 'vaultpress/vaultpress.php' ) ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'jitm_enqueue_files' ) );
+			add_action( 'admin_notices', array( $this, 'backups_updates_msg' ) );
 		}
 	}
 
@@ -123,7 +84,7 @@ class Jetpack_JITM {
 			<a href="#" data-module="manage" class="dismiss"><span class="genericon genericon-close"></span></a>
 
 			<div class="jp-emblem">
-				<?php echo self::get_jp_emblem(); ?>
+				<?php echo Jetpack::get_jp_emblem(); ?>
 			</div>
 			<p class="msg">
 				<?php esc_html_e( 'Reduce security risks with automated plugin updates.', 'jetpack' ); ?>
@@ -154,7 +115,7 @@ class Jetpack_JITM {
 			<a href="#" data-module="photon" class="dismiss"><span class="genericon genericon-close"></span></a>
 
 			<div class="jp-emblem">
-				<?php echo self::get_jp_emblem(); ?>
+				<?php echo Jetpack::get_jp_emblem(); ?>
 			</div>
 			<p class="msg">
 				<?php esc_html_e( 'Speed up your photos and save bandwidth costs by using a free content delivery network.', 'jetpack' ); ?>
@@ -183,7 +144,7 @@ class Jetpack_JITM {
 				<a href="#" data-module="photon" class="dismiss"><span class="genericon genericon-close"></span></a>
 
 				<div class="jp-emblem">
-					<?php echo self::get_jp_emblem(); ?>
+					<?php echo Jetpack::get_jp_emblem(); ?>
 				</div>
 				<p class="msg">
 					<?php esc_html_e( 'Let Jetpack deliver your images optimized and faster than ever.', 'jetpack' ); ?>
@@ -251,7 +212,7 @@ class Jetpack_JITM {
 				<a href="#" data-module="manage-pi" class="dismiss"><span class="genericon genericon-close"></span></a>
 
 				<div class="jp-emblem">
-					<?php echo self::get_jp_emblem(); ?>
+					<?php echo Jetpack::get_jp_emblem(); ?>
 				</div>
 				<?php if ( ! $manage_active ) : ?>
 					<p class="msg">
@@ -293,7 +254,7 @@ class Jetpack_JITM {
 			<div class="jp-jitm">
 				<a href="#"  data-module="editor" class="dismiss"><span class="genericon genericon-close"></span></a>
 				<div class="jp-emblem">
-					<?php echo self::get_jp_emblem(); ?>
+					<?php echo Jetpack::get_jp_emblem(); ?>
 				</div>
 				<p class="msg">
 					<?php esc_html_e( 'Try the brand new editor.', 'jetpack' ); ?>
@@ -324,7 +285,7 @@ class Jetpack_JITM {
 			<a href="#" data-module="stats" class="dismiss"><span class="genericon genericon-close"></span></a>
 
 			<div class="jp-emblem">
-				<?php echo self::get_jp_emblem(); ?>
+				<?php echo Jetpack::get_jp_emblem(); ?>
 			</div>
 			<p class="msg">
 				<?php esc_html_e( 'Track detailed stats on this post and the rest of your site.', 'jetpack' ); ?>
@@ -343,6 +304,96 @@ class Jetpack_JITM {
 		//jitm is being viewed, track it
 		$jetpack = Jetpack::init();
 		$jetpack->stat( 'jitm', 'post-stats-viewed-' . JETPACK__VERSION );
+		$jetpack->do_stats( 'server_side' );
+	}
+
+	/**
+	 * Display JITM in Updates screen prompting user to enable Backups.
+	 *
+	 * @since 3.9.5
+	 */
+	function backups_updates_msg() {
+		$normalized_site_url = Jetpack::build_raw_urls( get_home_url() );
+		$url = 'https://wordpress.com/plans/' . $normalized_site_url;
+		$jitm_stats_url = Jetpack::build_stats_url( array( 'x_jetpack-jitm' => 'vaultpress' ) );
+		?>
+		<div class="jp-jitm" data-track="vaultpress-updates" data-stats_url="<?php echo esc_url( $jitm_stats_url ); ?>">
+			<a href="#" data-module="vaultpress" class="dismiss"><span class="genericon genericon-close"></span></a>
+
+			<div class="jp-emblem">
+				<?php echo self::get_jp_emblem(); ?>
+			</div>
+			<p class="msg">
+				<?php esc_html_e( 'Backups are recommended to protect your site before you make any changes.', 'jetpack' ); ?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $url ); ?>" target="_blank" title="<?php esc_attr_e( 'Enable VaultPress Backups', 'jetpack' ); ?>" data-module="vaultpress" data-jptracks-name="nudge_click" data-jptracks-prop="jitm-vault" class="button button-jetpack launch jptracks"><?php esc_html_e( 'Enable VaultPress Backups', 'jetpack' ); ?></a>
+			</p>
+		</div>
+		<?php
+		//jitm is being viewed, track it
+		$jetpack = Jetpack::init();
+		$jetpack->stat( 'jitm', 'vaultpress-updates-viewed-' . JETPACK__VERSION );
+		$jetpack->do_stats( 'server_side' );
+	}
+
+	/**
+	 * Display JITM in Comments screen prompting user to enable Akismet.
+	 *
+	 * @since 3.9.5
+	 */
+	function akismet_msg() {
+		$normalized_site_url = Jetpack::build_raw_urls( get_home_url() );
+		$url = 'https://wordpress.com/plans/' . $normalized_site_url;
+		$jitm_stats_url = Jetpack::build_stats_url( array( 'x_jetpack-jitm' => 'akismet' ) );
+		?>
+		<div class="jp-jitm" data-stats_url="<?php echo esc_url( $jitm_stats_url ); ?>">
+			<a href="#" data-module="akismet" class="dismiss"><span class="genericon genericon-close"></span></a>
+
+			<div class="jp-emblem">
+				<?php echo self::get_jp_emblem(); ?>
+			</div>
+			<p class="msg">
+				<?php esc_html_e( "Spam affects your site's legitimacy, protect your site with Akismet.", 'jetpack' ); ?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $url ); ?>" target="_blank" title="<?php esc_attr_e( 'Automate Spam Blocking', 'jetpack' ); ?>" data-module="akismet" data-jptracks-name="nudge_click" data-jptracks-prop="jitm-akismet" class="button button-jetpack launch jptracks"><?php esc_html_e( 'Automate Spam Blocking', 'jetpack' ); ?></a>
+			</p>
+		</div>
+		<?php
+		//jitm is being viewed, track it
+		$jetpack = Jetpack::init();
+		$jetpack->stat( 'jitm', 'akismet-viewed-' . JETPACK__VERSION );
+		$jetpack->do_stats( 'server_side' );
+	}
+
+	/**
+	 * Display JITM after a post is published prompting user to enable Backups.
+	 *
+	 * @since 3.9.5
+	 */
+	function backups_after_publish_msg() {
+		$normalized_site_url = Jetpack::build_raw_urls( get_home_url() );
+		$url = 'https://wordpress.com/plans/' . $normalized_site_url;
+		$jitm_stats_url = Jetpack::build_stats_url( array( 'x_jetpack-jitm' => 'vaultpress' ) );
+		?>
+		<div class="jp-jitm" data-track="vaultpress-publish" data-stats_url="<?php echo esc_url( $jitm_stats_url ); ?>">
+			<a href="#" data-module="vaultpress" class="dismiss"><span class="genericon genericon-close"></span></a>
+
+			<div class="jp-emblem">
+				<?php echo self::get_jp_emblem(); ?>
+			</div>
+			<p class="msg">
+				<?php esc_html_e( "Great job! Now let's make sure your hard work is never lost, backup everything with VaultPress.", 'jetpack' ); ?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $url ); ?>" target="_blank" title="<?php esc_attr_e( 'Enable Backups', 'jetpack' ); ?>" data-module="vaultpress" data-jptracks-name="nudge_click" data-jptracks-prop="jitm-vault-post" class="button button-jetpack launch jptracks"><?php esc_html_e( 'Enable Backups', 'jetpack' ); ?></a>
+			</p>
+		</div>
+		<?php
+		//jitm is being viewed, track it
+		$jetpack = Jetpack::init();
+		$jetpack->stat( 'jitm', 'vaultpress-publish-viewed-' . JETPACK__VERSION );
 		$jetpack->do_stats( 'server_side' );
 	}
 
@@ -401,17 +452,6 @@ class Jetpack_JITM {
 
 		// so if it's not an array, it means no JITM was dismissed
 		return is_array( self::$jetpack_hide_jitm );
-	}
-
-	/**
-	 * Return string containing the Jetpack logo.
-	 *
-	 * @since 3.9.0
-	 *
-	 * @return string
-	 */
-	function get_jp_emblem() {
-		return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" viewBox="0 0 172.9 172.9" enable-background="new 0 0 172.9 172.9" xml:space="preserve">	<path d="M86.4 0C38.7 0 0 38.7 0 86.4c0 47.7 38.7 86.4 86.4 86.4s86.4-38.7 86.4-86.4C172.9 38.7 134.2 0 86.4 0zM83.1 106.6l-27.1-6.9C49 98 45.7 90.1 49.3 84l33.8-58.5V106.6zM124.9 88.9l-33.8 58.5V66.3l27.1 6.9C125.1 74.9 128.4 82.8 124.9 88.9z" /></svg>';
 	}
 }
 /**

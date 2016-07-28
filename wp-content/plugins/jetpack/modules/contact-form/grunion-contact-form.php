@@ -47,7 +47,7 @@ class Grunion_Contact_Form_Plugin {
 	public function daily_akismet_meta_cleanup() {
 		global $wpdb;
 
-		$feedback_ids = $wpdb->get_col( "SELECT p.ID FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as m on m.post_id = p.ID WHERE p.post_type = 'feedback' AND m.meta_key = '_feedback_akismet_values'  > p.post_date_gmt LIMIT 10000" );
+		$feedback_ids = $wpdb->get_col( "SELECT p.ID FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as m on m.post_id = p.ID WHERE p.post_type = 'feedback' AND m.meta_key = '_feedback_akismet_values' AND DATE_SUB(NOW(), INTERVAL 15 DAY) > p.post_date_gmt LIMIT 10000" );
 
 		if ( empty( $feedback_ids ) ) {
 			return;
@@ -109,6 +109,7 @@ class Grunion_Contact_Form_Plugin {
 		if ( is_admin() ) {
 			add_action( 'admin_init',            array( $this, 'download_feedback_as_csv' ) );
 			add_action( 'admin_footer-edit.php', array( $this, 'export_form' ) );
+			add_action( 'current_screen', array( $this, 'unread_count' ) );
 		}
 
 		// custom post type we'll use to keep copies of the feedback items
@@ -120,7 +121,7 @@ class Grunion_Contact_Form_Plugin {
 				'not_found'          => __( 'No feedback found', 'jetpack' ),
 				'not_found_in_trash' => __( 'No feedback found', 'jetpack' )
 			),
-			'menu_icon'         => GRUNION_PLUGIN_URL . '/images/grunion-menu.png',
+			'menu_icon'         => 'dashicons-feedback',
 			'show_ui'           => TRUE,
 			'show_in_admin_bar' => FALSE,
 			'public'            => FALSE,
@@ -188,6 +189,29 @@ class Grunion_Contact_Form_Plugin {
 	function allow_feedback_rest_api_type( $post_types ) {
 		$post_types[] = 'feedback';
 		return $post_types;
+	}
+
+	/**
+	 * Display the count of new feedback entries received. It's reset when user visits the Feedback screen.
+	 *
+	 * @since 4.1.0
+	 */
+	function unread_count( $screen ) {
+		if ( isset( $screen->post_type ) && 'feedback' == $screen->post_type ) {
+			update_option( 'feedback_unread_count', 0 );
+		} else {
+			global $menu;
+			foreach ( $menu as $index => $menu_item ) {
+				if ( 'edit.php?post_type=feedback' == $menu_item[2] ) {
+					$unread = get_option( 'feedback_unread_count', 0 );
+					if ( $unread > 0 ) {
+						$unread_count = current_user_can( 'publish_pages' ) ? " <span class='feedback-unread count-{$unread} awaiting-mod'><span class='feedback-unread-count'>" . number_format_i18n( $unread ) . "</span></span>" : '';
+						$menu[ $index ][0] .= $unread_count;
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -407,7 +431,7 @@ class Grunion_Contact_Form_Plugin {
 	 */
 	function prepare_for_akismet( $form ) {
 		$form['comment_type'] = 'contact_form';
-		$form['user_ip']      = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
+		$form['user_ip']      = $_SERVER['REMOTE_ADDR'];
 		$form['user_agent']   = $_SERVER['HTTP_USER_AGENT'];
 		$form['referrer']     = $_SERVER['HTTP_REFERER'];
 		$form['blog']         = get_option( 'home' );
@@ -655,19 +679,6 @@ class Grunion_Contact_Form_Plugin {
 		foreach ( $post_ids as $post_id ) {
 
 			/**
-			 * Fetch post meta data.
-			 */
-			$post_meta_data = $this->get_post_meta_for_csv_export( $post_id );
-
-			/**
-			 * If `$post_meta_data` is not an array or if it is empty, then there is no
-			 * feedback to work with. Skip it.
-			 */
-			if ( ! is_array( $post_meta_data ) || empty( $post_meta_data ) ) {
-				continue;
-			}
-
-			/**
 			 * Fetch post main data, because we need the subject and author data for the feedback form.
 			 */
 			$post_real_data = $this->get_parsed_field_contents_of_post( $post_id );
@@ -693,6 +704,19 @@ class Grunion_Contact_Form_Plugin {
 			 * Map parsed fields to proper field names
 			 */
 			$mapped_fields = $this->map_parsed_field_contents_of_post_to_field_names( $post_real_data );
+
+			/**
+			 * Fetch post meta data.
+			 */
+			$post_meta_data = $this->get_post_meta_for_csv_export( $post_id );
+
+			/**
+			 * If `$post_meta_data` is not an array or if it is empty, then there is no
+			 * extra feedback to work with. Create an empty array.
+			 */
+			if ( ! is_array( $post_meta_data ) || empty( $post_meta_data ) ) {
+				$post_meta_data = array();
+			}
 
 			/**
 			 * Prepend the feedback subject to the list of fields.
@@ -1505,22 +1529,29 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 		if ( $field_ids['extra'] ) {
 			// array indexed by field label (not field id)
 			$extra_fields = get_post_meta( $feedback_id, '_feedback_extra_fields', true );
-			$extra_field_keys = array_keys( $extra_fields );
 
-			$i = 0;
-			foreach ( $field_ids['extra'] as $field_id ) {
-				$field = $form->fields[$field_id];
-				$field_index = array_search( $field_id, $field_ids['all'] );
+			/**
+			 * Only get data for the compiled form if `$extra_fields` is a valid and non-empty array.
+			 */
+			if ( is_array( $extra_fields ) && ! empty( $extra_fields ) ) {
 
-				$label = $field->get_attribute( 'label' );
+				$extra_field_keys = array_keys( $extra_fields );
 
-				$compiled_form[ $field_index ] = sprintf(
-					'<b>%1$s:</b> %2$s<br /><br />',
-					wp_kses( $label, array() ),
-					nl2br( wp_kses( $extra_fields[$extra_field_keys[$i]], array() ) )
-				);
+				$i = 0;
+				foreach ( $field_ids['extra'] as $field_id ) {
+					$field       = $form->fields[ $field_id ];
+					$field_index = array_search( $field_id, $field_ids['all'] );
 
-				$i++;
+					$label = $field->get_attribute( 'label' );
+
+					$compiled_form[ $field_index ] = sprintf(
+						'<b>%1$s:</b> %2$s<br /><br />',
+						wp_kses( $label, array() ),
+						nl2br( wp_kses( $extra_fields[ $extra_field_keys[ $i ] ], array() ) )
+					);
+
+					$i++;
+				}
 			}
 		}
 
@@ -1586,7 +1617,46 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 	}
 
 	/**
-	 * Loops through $this->fields to generate a (structured) list of field IDs
+	 * Loops through $this->fields to generate a (structured) list of field IDs.
+	 *
+	 * Important: Currently the whitelisted fields are defined as follows:
+	 *  `name`, `email`, `url`, `subject`, `textarea`
+	 *
+	 * If you need to add new fields to the Contact Form, please don't add them
+	 * to the whitelisted fields and leave them as extra fields.
+	 *
+	 * The reasoning behind this is that both the admin Feedback view and the CSV
+	 * export will not include any fields that are added to the list of
+	 * whitelisted fields without taking proper care to add them to all the
+	 * other places where they accessed/used/saved.
+	 *
+	 * The safest way to add new fields is to add them to the dropdown and the
+	 * HTML list ( @see Grunion_Contact_Form_Field::render ) and don't add them
+	 * to the list of whitelisted fields. This way they will become a part of the
+	 * `extra fields` which are saved in the post meta and will be properly
+	 * handled by the admin Feedback view and the CSV Export without any extra
+	 * work.
+	 *
+	 * If there is need to add a field to the whitelisted fields, then please
+	 * take proper care to add logic to handle the field in the following places:
+	 *
+	 *  - Below in the switch statement - so the field is recognized as whitelisted.
+	 *
+	 *  - Grunion_Contact_Form::process_submission - validation and logic.
+	 *
+	 *  - Grunion_Contact_Form::process_submission - add the field as an additional
+	 *      field in the `post_content` when saving the feedback content.
+	 *
+	 *  - Grunion_Contact_Form_Plugin::parse_fields_from_content - add mapping
+	 *      for the field, defined in the above method.
+	 *
+	 *  - Grunion_Contact_Form_Plugin::map_parsed_field_contents_of_post_to_field_names -
+	 *      add mapping of the field for the CSV Export. Otherwise it will be missing
+	 *      from the exported data.
+	 *
+	 *  - admin.php / grunion_manage_post_columns - add the field to the render logic.
+	 *      Otherwise it will be missing from the admin Feedback view.
+	 *
 	 * @return array
 	 */
 	function get_field_ids() {
@@ -1603,28 +1673,30 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 		);
 
 		foreach ( $this->fields as $id => $field ) {
-			$field_ids['all'][] = $id;
+			$field_ids[ 'all' ][] = $id;
 
 			$type = $field->get_attribute( 'type' );
-			if ( isset( $field_ids[$type] ) ) {
+			if ( isset( $field_ids[ $type ] ) ) {
 				// This type of field is already present in our whitelist of "standard" fields for this form
 				// Put it in extra
-				$field_ids['extra'][] = $id;
+				$field_ids[ 'extra' ][] = $id;
 				continue;
 			}
 
+			/**
+			 * See method description before modifying the switch cases.
+			 */
 			switch ( $type ) {
-			case 'email' :
-			case 'telephone' :
-			case 'name' :
-			case 'url' :
-			case 'subject' :
-			case 'textarea' :
-				$field_ids[$type] = $id;
-				break;
+				case 'email' :
+				case 'name' :
+				case 'url' :
+				case 'subject' :
+				case 'textarea' :
+					$field_ids[ $type ] = $id;
+					break;
 			default :
 				// Put everything else in extra
-				$field_ids['extra'][] = $id;
+				$field_ids[ 'extra' ][] = $id;
 			}
 		}
 
@@ -1790,6 +1862,12 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 		foreach ( array_merge( $field_ids['all'], $field_ids['extra'] ) as $field_id ) {
 			$field = $this->fields[$field_id];
 
+			// Skip any fields that are just a choice from a pre-defined list. They wouldn't have any value
+			// from a spam-filtering point of view.
+			if ( in_array( $field->get_attribute( 'type' ), array( 'select', 'checkbox', 'checkbox-multiple', 'radio' ) ) ) {
+				continue;
+			}
+
 			// Normalize the label into a slug.
 			$field_slug = trim( // Strip all leading/trailing dashes.
 				preg_replace(   // Normalize everything to a-z0-9_-
@@ -1850,6 +1928,17 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 					'Reply-To: "' . $comment_author . '" <' . $reply_to_addr  . ">\r\n" .
 					"Content-Type: text/html; charset=\"" . get_option('blog_charset') . "\"";
 
+		// Build feedback reference
+		$feedback_time  = current_time( 'mysql' );
+		$feedback_title = "{$comment_author} - {$feedback_time}";
+		$feedback_id    = md5( $feedback_title );
+
+		$all_values = array_merge( $all_values, array(
+			'entry_title'     => the_title_attribute( 'echo=0' ),
+			'entry_permalink' => esc_url( get_permalink( get_the_ID() ) ),
+			'feedback_id'     => $feedback_id,
+		) );
+
 		/** This filter is already documented in modules/contact-form/admin.php */
 		$subject = apply_filters( 'contact_form_subject', $contact_form_subject, $all_values );
 		$url     = $widget ? home_url( '/' ) : get_permalink( $post->ID );
@@ -1859,8 +1948,6 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 		$time = date_i18n( $date_time_format, current_time( 'timestamp' ) );
 
 		// keep a copy of the feedback as a custom post type
-		$feedback_time   = current_time( 'mysql' );
-		$feedback_title  = "{$comment_author} - {$feedback_time}";
 		$feedback_status = $is_spam === TRUE ? 'spam' : 'publish';
 
 		foreach ( (array) $akismet_values as $av_key => $av_value ) {
@@ -1892,15 +1979,21 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 			'post_parent'  => (int) $post->ID,
 			'post_title'   => addslashes( wp_kses( $feedback_title, array() ) ),
 			'post_content' => addslashes( wp_kses( $comment_content . "\n<!--more-->\n" . "AUTHOR: {$comment_author}\nAUTHOR EMAIL: {$comment_author_email}\nAUTHOR URL: {$comment_author_url}\nSUBJECT: {$subject}\nIP: {$comment_author_IP}\n" . print_r( $all_values, TRUE ), array() ) ), // so that search will pick up this data
-			'post_name'    => md5( $feedback_title ),
+			'post_name'    => $feedback_id,
 		) );
 
 		// once insert has finished we don't need this filter any more
-		remove_filter( 'wp_insert_post_data', array( $plugin, 'insert_feedback_filter' ), 10, 2 );
+		remove_filter( 'wp_insert_post_data', array( $plugin, 'insert_feedback_filter' ), 10 );
 
 		update_post_meta( $post_id, '_feedback_extra_fields', $this->addslashes_deep( $extra_values ) );
 
-		if ( Jetpack::is_plugin_active( 'akismet/akismet.php' ) ) {
+		if ( 'publish' == $feedback_status ) {
+			// Increase count of unread feedback.
+			$unread = get_option( 'feedback_unread_count', 0 ) + 1;
+			update_option( 'feedback_unread_count', $unread );
+		}
+
+		if ( defined( 'AKISMET_VERSION' ) ) {
 			update_post_meta( $post_id, '_feedback_akismet_values', $this->addslashes_deep( $akismet_values ) );
 		}
 
@@ -2282,6 +2375,7 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 			$r .= "\n<div>\n";
 			$r .= "\t\t<label for='" . esc_attr( $field_id ) . "' class='grunion-field-label telephone" . ( $this->is_error() ? ' form-error' : '' ) . "'>" . esc_html( $field_label ) . ( $field_required ? '<span>' . $required_field_text . '</span>' : '' ) . "</label>\n";
 			$r .= "\t\t<input type='tel' name='" . esc_attr( $field_id ) . "' id='" . esc_attr( $field_id ) . "' value='" . esc_attr( $field_value ) . "' " . $field_class . $field_placeholder . "/>\n";
+			break;
 		case 'textarea' :
 			$r .= "\n<div>\n";
 			$r .= "\t\t<label for='contact-form-comment-" . esc_attr( $field_id ) . "' class='grunion-field-label textarea" . ( $this->is_error() ? ' form-error' : '' ) . "'>" . esc_html( $field_label ) . ( $field_required ? '<span>' . $required_field_text . '</span>' : '' ) . "</label>\n";

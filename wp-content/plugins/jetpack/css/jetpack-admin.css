@@ -173,7 +173,7 @@ button,
 input,
 select,
 textarea {
-  color: #222;
+  color: #222222;
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.4;
@@ -251,10 +251,12 @@ img {
     -webkit-transform: scale(0.3);
     transform: scale(0.3);
   }
+
   60% {
     -webkit-transform: scale(1.15);
     transform: scale(1.15);
   }
+
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
@@ -266,10 +268,12 @@ img {
     -webkit-transform: scale(0.3);
     transform: scale(0.3);
   }
+
   60% {
     -webkit-transform: scale(1.15);
     transform: scale(1.15);
   }
+
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
@@ -280,14 +284,17 @@ img {
     -webkit-transform: scale(1);
     transform: scale(1);
   }
+
   20% {
     -webkit-transform: scale(1.15);
     transform: scale(1.15);
   }
+
   60% {
     -webkit-transform: scale(0.95);
     transform: scale(0.95);
   }
+
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
@@ -298,14 +305,17 @@ img {
     -webkit-transform: scale(1);
     transform: scale(1);
   }
+
   20% {
     -webkit-transform: scale(1.15);
     transform: scale(1.15);
   }
+
   60% {
     -webkit-transform: scale(0.95);
     transform: scale(0.95);
   }
+
   100% {
     -webkit-transform: scale(1);
     transform: scale(1);
@@ -316,6 +326,7 @@ img {
     -webkit-transform: translate3d(0px, 0px, 0px);
     transform: translate3d(0px, 0px, 0px);
   }
+
   100% {
     -webkit-transform: translate3d(680px, -680px, 0px);
     transform: translate3d(680px, -680px, 0px);
@@ -326,6 +337,7 @@ img {
     -webkit-transform: translate3d(0px, 0px, 0px);
     transform: translate3d(0px, 0px, 0px);
   }
+
   100% {
     -webkit-transform: translate3d(680px, -680px, 0px);
     transform: translate3d(680px, -680px, 0px);
@@ -378,7 +390,7 @@ img {
 .download-jetpack {
   display: inline-block;
   position: relative;
-  padding: 0.64286em 0.85714em 0.53571em;
+  padding: 0.64286em 1.08696em 0.53571em;
   color: #fff;
   font: 400 20px/1 "proxima-nova", 'Open Sans', Helvetica, sans-serif;
   background: #518d2a;
@@ -1834,7 +1846,7 @@ ul#adminmenu a.toplevel_page_jetpack:after {
   opacity: 0.6;
   position: absolute;
   top: 23px;
-  top: calc( 50% - 22px );
+  top: calc(50% - 22px );
 }
 @media (max-width: 530px) {
   .jetpack-message .squeezer {
@@ -2526,7 +2538,7 @@ ul#adminmenu a.toplevel_page_jetpack:after {
   font-size: 14px;
 }
 .configure-module p.success, .configure-module p.error {
-  color: #fff;
+  color: white;
   padding: 10px;
 }
 .configure-module p.success {
@@ -2914,6 +2926,240 @@ a.what-is-primary {
   margin-top: -6px;
 }
 
+.connection-landing {
+  text-align: center;
+}
+.connection-landing h1 {
+  margin-bottom: 0;
+}
+.connection-landing h2 {
+  margin: 0;
+  padding: 1.14286em 0;
+  font-size: 1.57143em;
+  line-height: 160%;
+  font-weight: 400;
+}
+.connection-landing h2 + p {
+  margin-top: 0;
+}
+.connection-landing p {
+  color: #686f72;
+}
+
+.connect-card {
+  text-align: center;
+  margin: 2.14286em auto 1.42857em;
+  padding: 0 4.28571em 1.42857em;
+}
+.connect-card p {
+  font-size: 1.14286em;
+}
+@media (max-width: 782px) {
+  .connect-card {
+    padding: 0 1.42857em 1.42857em;
+  }
+}
+
+.jp-card {
+  background: white;
+  border: 1px #d9d9d9 solid;
+  text-align: center;
+  margin-bottom: 2.85714em;
+}
+.jp-card p {
+  font-size: 1.14286em;
+}
+.jp-card .j-int {
+  padding: 0 4.28571em;
+}
+
+/* ==================
+The following header part is a little hacky. Certain versions of IE were having a difficult time processing multiple svg BG images.
+So I moved to stack the svgs as actual imgs instead. IE also had a hard time dealing with em(px) conversions for sizing. - golenski 
+*/
+.feature-container {
+  background: #f4f4f4;
+}
+.feature-container .j-int {
+  background: white;
+  padding: 0;
+}
+.feature-container .first-header {
+  position: relative;
+}
+@media (max-width: 900px) {
+  .feature-container .first-header {
+    border-bottom: 1px #d9d9d9 solid;
+    background-image: none;
+  }
+  .feature-container .first-header .j-header-img {
+    display: none;
+  }
+}
+@media (min-width: 900px) {
+  .feature-container .first-header {
+    background: url("../images/connection-landing/stars-right.svg") no-repeat, url("../images/connection-landing/stars-left.svg") no-repeat, white;
+    background-position: 90% 50%, 10% 50%;
+    background-size: 100px, 125px;
+  }
+}
+.feature-container .first-header .j-header-img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.feature-container .first-header .j-header-img img {
+  margin: 0 auto;
+  max-width: 100%;
+  z-index: 1001;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+@media (min-width: 900px) {
+  .feature-container .first-header .j-header-img img:first-of-type {
+    bottom: -12px;
+  }
+}
+@media (min-width: 1147px) {
+  .feature-container .first-header .j-header-img img:first-of-type {
+    bottom: -10px;
+  }
+}
+.feature-container .first-header .j-header-img img + img {
+  z-index: 999;
+}
+.feature-container .secondary-header {
+  background: transparent;
+  padding: 0 10em;
+}
+@media (max-width: 782px) {
+  .feature-container .secondary-header {
+    padding: 0 1.42857em;
+  }
+}
+.feature-container .j-feature-img {
+  padding: 0 1.42857em;
+  margin-bottom: 2.85714em;
+}
+.feature-container .j-feature-img img {
+  width: 100%;
+}
+.feature-container .j-feature-img:last-of-type {
+  margin-bottom: 1.42857em;
+}
+
+@media (min-width: 900px) {
+  .j-traffic .first-header {
+    padding-bottom: 200px;
+  }
+}
+
+@media (min-width: 900px) {
+  .j-security .first-header {
+    padding-bottom: 225px;
+  }
+}
+
+.three-feature {
+  margin: 1.42857em 0;
+  padding: 0 1.42857em;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -moz-box-orient: horizontal;
+  -moz-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+@media (max-width: 782px) {
+  .three-feature {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 530px) {
+  .three-feature {
+    padding: 0;
+  }
+}
+.three-feature .j-col {
+  border: 1px #d9d9d9 solid;
+  text-align: left;
+  padding: 0;
+  background: #f9f9f9;
+}
+@media (max-width: 782px) {
+  .three-feature .j-col {
+    margin-bottom: 1.42857em;
+  }
+}
+@media (max-width: 530px) {
+  .three-feature .j-col {
+    border-left: none;
+    border-right: none;
+  }
+}
+.three-feature .j-col:nth-of-type(2) {
+  border-left: none;
+  border-right: none;
+}
+@media (max-width: 782px) {
+  .three-feature .j-col:nth-of-type(2) {
+    border: 1px #d9d9d9 solid;
+  }
+}
+@media (max-width: 530px) {
+  .three-feature .j-col:nth-of-type(2) {
+    border-left: none;
+    border-right: none;
+  }
+}
+.three-feature h3 {
+  font-weight: 600;
+  font-size: 1.14286em;
+  min-width: 15.35714em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 782px) {
+  .three-feature h3 {
+    font-size: 1em;
+  }
+}
+.three-feature .feature-img {
+  background: white;
+  border-bottom: 1px #d9d9d9 solid;
+  text-align: center;
+}
+.three-feature .feature-img img {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.three-feature p {
+  line-height: 150%;
+  padding-bottom: 0;
+  font-size: 1em;
+}
+.three-feature h3, .three-feature p {
+  margin: 0;
+  padding: 1.42857em;
+}
+@media (max-width: 782px) {
+  .three-feature h3, .three-feature p {
+    font-size: 0.92857em;
+  }
+}
+.three-feature h3 {
+  padding-bottom: 0;
+}
+
 .jp-content .hide {
   display: none;
 }
@@ -2926,7 +3172,7 @@ a.what-is-primary {
   position: relative;
 }
 .jp-content h1 {
-  font: 300 2.57143em/1em "proxima-nova","Open Sans",Helvetica,Arial,sans-serif;
+  font: 400 1.75em "proxima-nova","Open Sans",Helvetica,Arial,sans-serif;
   position: relative;
   z-index: 3;
   width: 100%;
@@ -2970,37 +3216,17 @@ a.what-is-primary {
   margin-top: 1em !important;
 }
 
-#jump-start-area {
-  margin-top: 35px;
-  padding-left: 60px;
-  padding-right: 60px;
-  background: #fefefe;
-  border: 1px #dae0e2 solid;
-  padding-bottom: 20px;
+.jump-start-area {
+  background: white;
+  border: 1px #d9d9d9 solid;
   text-align: center;
+  padding: 0 1.42857em;
 }
-#jump-start-area .connect-btn {
-  text-align: center;
+.jump-start-area p {
+  font-size: 1.14286em;
 }
-#jump-start-area #jumpstart-cta,
-#jump-start-area .jumpstart-desc {
-  padding: 0;
-}
-#jump-start-area p {
-  font-size: 14px;
-  line-height: 185%;
-}
-#jump-start-area .spinner {
-  float: none;
-  margin: 0 auto;
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  background-position: 50% 56%;
-  background-color: rgba(254, 254, 254, 0.99);
-  display: block;
-  opacity: .9;
+.jump-start-area h1 {
+  margin: 1em auto 0;
 }
 
 .jumpstart-message p {
@@ -3032,7 +3258,7 @@ a.what-is-primary {
 
 #jumpstart-cta .button-primary {
   display: block;
-  margin: 35px 20px 5px 20px;
+  margin: 20px 20px 5px 20px;
 }
 
 #jp-config-list {
@@ -3077,7 +3303,7 @@ a.what-is-primary {
 
 .nux-intro h3 {
   background: #81a844;
-  color: #fff;
+  color: white;
   font-weight: 600;
   padding: .75em;
   margin: 0;
@@ -3247,6 +3473,12 @@ a.what-is-primary {
   -ms-transform: translate(0, -50%);
   -webkit-transform: translate(0, -50%);
   transform: translate(0, -50%);
+}
+.nux-intro .wpcom .goto.activated .feat {
+  right: 50%;
+  -ms-transform: translate(50%, -50%);
+  -webkit-transform: translate(50%, -50%);
+  transform: translate(50%, -50%);
 }
 .nux-intro .nux-foot .j-col {
   padding: 1em;
@@ -3443,9 +3675,6 @@ a.what-is-primary {
     position: relative;
     top: -1px;
   }
-  .nux-intro .wpcom .goto .feat a {
-    float: left;
-  }
 
   .nux-foot .j-col {
     border: none;
@@ -3508,5 +3737,3 @@ a.what-is-primary {
 .nav-horizontal:after, .features:after, .modules:after, .load-more:after {
   clear: both;
 }
-
-/*# sourceMappingURL=jetpack-admin.css.map */
