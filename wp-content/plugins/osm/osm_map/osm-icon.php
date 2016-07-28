@@ -18,7 +18,7 @@
 
 class Osm_icon
 {
- function getIconsize($a_IconName)
+ public static function getIconsize($a_IconName)
  {
    if (!strncmp($a_IconName, 'mic_', 4)){
      return array("height"=>41,"width"=>"32","offset_height"=>"-41","offset_width"=>"-16");
@@ -58,7 +58,7 @@ class Osm_icon
  }
 
  // just not to break shortcodes before v3.1
- function replaceOldIcon($a_IconName)
+ public static function replaceOldIcon($a_IconName)
  {
    if ($a_IconName == "car.png"){
      return "mic_black_car_01.png";
@@ -97,7 +97,7 @@ class Osm_icon
  }
 
 
- function isOsmIcon($a_IconName)
+ public static function isOsmIcon($a_IconName)
  {
    if ($a_IconName == "airport.png" ||
     $a_IconName == "bus.png" || $a_IconName == "camping.png" ||

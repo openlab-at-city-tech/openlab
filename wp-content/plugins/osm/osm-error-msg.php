@@ -31,4 +31,5 @@
     $this->ErrorMsg->add('e_gpx_list_error',  __('Num of Gpx files does not match to num of Gpx colours!', 'OSM-plugin'));  
     $this->ErrorMsg->add('e_missing_rs_error',  __('Missing the routingservice at marker_routing argument!', 'OSM-plugin'));
     $this->ErrorMsg->add('e_not_osm_icon',  __('Not valid WP OSM Plugin icon!', 'OSM-plugin'));
+    $this->ErrorMsg->add('e_not_osm_icon',  __('You have to add a marker to the post at [Add marker] tab!', 'OSM-plugin'));
 ?>

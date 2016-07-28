@@ -18,7 +18,7 @@
 
 class Osm_OLJS3
 {
-  function addTileLayer($a_LayerName, $a_Type, $a_OverviewMapZoom, $a_MapControl, $a_WMSType, $a_WMSAttrName, $a_WMSAttrUrl, $a_WMSAddress, $a_WMSParam, $a_theme){
+  public static function addTileLayer($a_LayerName, $a_Type, $a_OverviewMapZoom, $a_MapControl, $a_WMSType, $a_WMSAttrName, $a_WMSAttrUrl, $a_WMSAddress, $a_WMSParam, $a_theme){
     Osm::traceText(DEBUG_INFO, "addTileLayer V3(".$a_LayerName.",".$a_Type.",".$a_OverviewMapZoom.")");
     $TileLayer = '
            var attribution = new ol.control.Attribution({
@@ -118,7 +118,7 @@ class Osm_OLJS3
                }),
                ol.source.OSM.ATTRIBUTION
                ],
-               url: "http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png"
+               url: "'.Osm_OpenCycle_Tiles.'"
              })
            });
           ';
@@ -134,7 +134,7 @@ class Osm_OLJS3
                }),
                ol.source.OSM.ATTRIBUTION
                ],
-               url: "http://{a-c}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png"
+               url: "'.Osm_thunderforest_Outdoor_Tiles.'"
              })
            });
           ';
@@ -150,7 +150,8 @@ class Osm_OLJS3
                }),
                ol.source.OSM.ATTRIBUTION
                ],
-               url: "http://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png"
+          
+          url: "'.Osm_thunderforest_Landscape_Tiles.'"
              })
            });
           ';
@@ -166,11 +167,43 @@ class Osm_OLJS3
                }),
                ol.source.OSM.ATTRIBUTION
                ],
-               url: "http://{a-c}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png"
+               url: "'.Osm_thunderforest_Spinal_Tiles.'"
              })
            });
           ';
     } 
+            else if ($a_Type == "pioneer"){
+        $TileLayer .= '
+          var raster = new ol.layer.Tile({
+            source: new ol.source.OSM({
+              attributions: [
+               new ol.Attribution({
+                 html: "Maps &copy; " +
+                 "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data</a>"
+               }),
+               ol.source.OSM.ATTRIBUTION
+               ],
+               url: "'.Osm_thunderforest_Pioneer_Tiles.'"
+             })
+           });
+          ';
+    } 
+    
+    else if ($a_Type == "brezhoneg"){
+         $TileLayer .= '
+           var raster = new ol.layer.Tile({
+             source: new ol.source.OSM({
+               attributions: [
+                new ol.Attribution({
+               html: "&copy; Les contributeurs OSM"
+                }),
+                ol.source.OSM.ATTRIBUTION
+                ],
+              url: "http://tile-b.openstreetmap.fr/bzh/{z}/{x}/{y}.png"
+              })
+            });
+    ';
+    }
     else if ($a_Type == "basemap_at"){
 
         $TileLayer .= '
@@ -242,46 +275,29 @@ class Osm_OLJS3
         var raster = new ol.layer.Tile({
           source: new ol.source.OSM()
         });';
-      }
-    if (strtolower($a_MapControl[0])== 'fullscreen') {
-      $TileLayer .= '
-      var Controls = ol.control.defaults({ attribution: false }).extend([
-          new ol.control.FullScreen(),
-          attribution
-      ]); ';
-}
+     }
+      if (!empty($a_MapControl)){
+        $FirstString = $a_MapControl[0];
+        if ((strtolower($FirstString)== 'fullscreen')) {
+          $TileLayer .= '
+            var Controls = ol.control.defaults({ attribution: false }).extend([
+            new ol.control.FullScreen(),
+            attribution
+            ]); ';
+        }
+    }
     else {
       $TileLayer .= '
       var Controls = ol.control.defaults({ attribution: false }).extend([
           attribution
       ]); ';
-    }
-
+}
       return $TileLayer;
   }
 
-  function checkControlType($a_MapControl){
-    foreach ( $a_MapControl as $MapControl ){
-	  Osm::traceText(DEBUG_INFO, "Checking the Map Control for OL3");
-	  $MapControl = strtolower($MapControl);
-
-	  if (( $MapControl != 'control') && ($MapControl != 'fullscreen') && ($MapControl != 'mouseposition')&& ($MapControl != 'rotate')&& ($MapControl != 'scaleline')&& ($MapControl != 'zoom')&& ($MapControl != 'zoomslider')&& ($MapControl != 'zoomtoextent') && ($MapControl != 'no') && ($MapControl != 'mouseposition') && ($MapControl != 'off')) {
-	    Osm::traceText(DEBUG_ERROR, "e_invalid_control");
-	    $a_MapControl[0]='no';
-     }
-     else {
-        if (($MapControl != 'off') && ($MapControl != 'no')){
-       // up to now only fullscreen is supported.
-         $a_MapControl[0] = 'fullscreen';
-       }
-     }
-    }
-    return $a_MapControl;
-  }
-
-  function addVectorLayer($a_MapName, $a_FileName, $a_Colour, $a_Type, $a_Counter, $a_MarkerName)
+  public static function addVectorLayer($a_MapName, $a_FileName, $a_Colour, $a_Type, $a_Counter, $a_MarkerName, $a_showMarkerName)
   {
-    Osm::traceText(DEBUG_INFO, "addVectorLayer V3(".$a_LayerName.",".$a_Type.",".$a_OverviewMapZoom.")");
+    Osm::traceText(DEBUG_INFO, "addVectorLayer V3(".$a_MapName.",".$a_Type.",".$a_FileName.")");
     $VectorLayer = '';
     $VectorLayer .= '
     var style'.$a_Counter.' = {
@@ -323,13 +339,14 @@ class Osm_OLJS3
         style: function(feature, resolution) {return style'.$a_Counter.'[feature.getGeometry().getType()];}
       });
       ';
-    }
+}
+
     if ($a_Type == 'kml'){
       $VectorLayer .= '
       var vectorL = new ol.layer.Vector({
         source: new ol.source.Vector({
 	  url:"'.$a_FileName.'",
-          format: new ol.format.KML()
+          format: new ol.format.KML({ showPointNames: '.$a_showMarkerName.'})
         })
       });';
     }

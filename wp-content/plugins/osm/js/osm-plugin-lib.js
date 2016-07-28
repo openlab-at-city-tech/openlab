@@ -219,6 +219,29 @@ function osm_saveGeotag(){
   }
 }
 
+function osm_savePostMarker(){
+  if ((osm_ajax_object.MarkerLat == '') || (osm_ajax_object.MarkerLon == '')){
+    alert('Place geotag in the map before save');
+  }
+  else
+  {
+    var data = {
+      action: 'act_saveMarker',
+      MarkerLat: osm_ajax_object.MarkerLat,
+      MarkerLon: osm_ajax_object.MarkerLon,
+      MarkerIcon: osm_ajax_object.MarkerIcon,
+      MarkerText: osm_ajax_object.MarkerText,
+      MarkerName: osm_ajax_object.MarkerName,
+      post_id: osm_ajax_object.post_id,
+      marker_nonce: osm_ajax_object.marker_nonce
+    };
+    jQuery.post(osm_ajax_object.ajax_url, data, function(response) {
+      div = document.getElementById("Marker_Div");
+      div.innerHTML = response;
+    });
+  }
+}
+
 function getTileURL(bounds) {
   var res = this.map.getResolution();
   var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));

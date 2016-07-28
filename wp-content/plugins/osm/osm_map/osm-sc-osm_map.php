@@ -89,24 +89,22 @@
       $map_spec_zoom_level_max = ZOOM_LEVEL_GOOGLE_MAX;
     }
     if (($zoom < ZOOM_LEVEL_MIN || $zoom > $map_spec_zoom_level_max) && ($zoom != 'auto')){
-      $this->traceText(DEBUG_ERROR, "e_zoomlevel_range");
-      $this->traceText(DEBUG_INFO, "Error: (Zoomlevel: ".$zoom.")!");
+      Osm::traceText(DEBUG_ERROR, (sprintf(__(' zoom =  %s is out of range!'), $zoom)));
       $zoom = 0;   
     }
 
     $pos = strpos($width, "%");
     if ($pos == false) {
       if ($width < 1){
-        Osm::traceText(DEBUG_ERROR, "e_map_size");
-        Osm::traceText(DEBUG_INFO, "Error: ($width: ".$width.")!");
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!'), $width)));
         $width = 450;
       }
       $width_str = $width."px"; // make it 30px
-    } else {// it's 30%
+    } 
+    else {// it's 30%
       $width_perc = substr($width, 0, $pos ); // make it 30 
       if (($width_perc < 1) || ($width_perc >100)){
-        Osm::traceText(DEBUG_ERROR, "e_map_size");
-        Osm::traceText(DEBUG_INFO, "Error: ($width: ".$width.")!");
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [perc]!'), $width)));
         $width = "100%";
       }
       $width_str = substr($width, 0, $pos+1 ); // make it 30% 
@@ -115,16 +113,14 @@
     $pos = strpos($height, "%");
     if ($pos == false) {
       if ($height < 1){
-        Osm::traceText(DEBUG_ERROR, "e_map_size");
-        Osm::traceText(DEBUG_INFO, "Error: ($height: ".$height.")!");
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [pix]!'), $height)));
         $height = 300;
       }
       $height_str = $height."px"; // make it 30px
     } else {// it's 30%
       $height_perc = substr($height, 0, $pos ); // make it 30 
       if (($height_perc < 1) || ($height_perc >100)){
-        Osm::traceText(DEBUG_ERROR, "e_map_size");
-        Osm::traceText(DEBUG_INFO, "Error: ($height: ".$height.")!");
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [perc]!'), $height)));
         $height = "100%";
       }
       $height_str = substr($height, 0, $pos+1 ); // make it 30% 
@@ -178,7 +174,7 @@
         $Icon["offset_width"] = round(-$marker_width/2);
       }
       if ($Icon["height"] == 0 || $Icon["width"] == 0){
-        Osm::traceText(DEBUG_ERROR, "e_marker_size"); //<= ToDo
+        Osm::traceText(DEBUG_WARNING, "e_marker_size"); //<= ToDo
         $Icon["height"] = 24;
         $Icon["width"]  = 24;
       }
@@ -260,7 +256,7 @@ box-shadow: none;}';
           define ('OSM_LIBS_LOADED', 1);
       	}
       }
-      if ($type == 'GooglePhysical' || $type == 'GoogleStreet' || $type == 'GoogleHybrid' || $type == 'GoogleSatellite' || $type == 'AllGoogle' || $a_type == 'Ext'){
+      if ($type == 'GooglePhysical' || $type == 'GoogleStreet' || $type == 'GoogleHybrid' || $type == 'GoogleSatellite' || $type == 'AllGoogle' || $type == 'Ext'){
 	    if(!defined('GOOGLE_LIBS_LOADED')) {
           $output .= '<script type="text/javascript" src="'.Osm_GOOGLE_LibraryLocation.'"></script>';
           define ('GOOGLE_LIBS_LOADED', 1);
@@ -272,7 +268,7 @@ box-shadow: none;}';
       // registered and loaded by WordPress
       }
       else{
-        $this->traceText(DEBUG_ERROR, "e_library_config");
+        Osm::traceText(DEBUG_ERROR, "e_library_config");
       }
       $output .= '<script type="text/javascript">';
       $output .= '/* <![CDATA[ */';
@@ -290,7 +286,7 @@ box-shadow: none;}';
 
     // add a clickhandler if needed
     $msg_box = strtolower($msg_box);
-    if ( $msg_box == 'sc_gen' || $msg_box == 'lat_long' || $msg_box == 'metabox_marker_sc_gen'|| $msg_box == 'metabox_file_sc_gen' || $msg_box == 'metabox_geotag_sc_gen' || $msg_box == 'metabox_geometry_sc_gen'|| $msg_box == 'metabox_geotag_gen' || $msg_box == 'metabox_file_list_sc_gen'){
+    if ( $msg_box == 'sc_gen' || $msg_box == 'lat_long' || $msg_box == 'metabox_marker_sc_gen' || $msg_box == 'metabox_add_marker_sc_gen' || $msg_box == 'metabox_file_sc_gen' || $msg_box == 'metabox_geotag_sc_gen' || $msg_box == 'metabox_geometry_sc_gen'|| $msg_box == 'metabox_geotag_gen' || $msg_box == 'metabox_file_list_sc_gen'){
       global $post;
       $output .= Osm_OpenLayers::AddClickHandler($MapName, $msg_box, $post->ID);
     }
@@ -309,7 +305,7 @@ box-shadow: none;}';
     if ($gpx_file_list != 'NoFileList'){
       $GpxFileListArray   = explode( ',', $gpx_file_list ); 
       $GpxColourListArray = explode( ',', $gpx_colour_list);
-      $this->traceText(DEBUG_INFO, "(NumOfGpxFiles: ".sizeof($GpxFileListArray)." NumOfGpxColours: ".sizeof($GpxColourListArray).")!");
+      Osm::traceText(DEBUG_INFO, "(NumOfGpxFiles: ".sizeof($GpxFileListArray)." NumOfGpxColours: ".sizeof($GpxColourListArray).")!");
       if (sizeof($GpxFileListArray) == sizeof($GpxColourListArray)){
         for($x=0;$x<sizeof($GpxFileListArray);$x++){
           $GpxName = basename($GpxFileListArray[$x], ".gpx");
@@ -317,7 +313,7 @@ box-shadow: none;}';
         }
       }
       else {
-        $this->traceText(DEBUG_ERROR, "e_gpx_list_error");
+         Osm::traceText(DEBUG_ERROR, __('gpx_colour_list does not match to gpx_file_list!','OSM-plugin'));
       }
     }
     
@@ -329,15 +325,19 @@ box-shadow: none;}';
     if ($kml_file_list != 'NoFileList'){
       $KmlFileListArray   = explode( ',', $kml_file_list ); 
       $KmlColourListArray = explode( ',', $kml_colour_list);
-      $this->traceText(DEBUG_INFO, "(NumOfGpxFiles: ".sizeof($KmlFileListArray)." NumOfGpxColours: ".sizeof($KmlColourListArray).")!");
+      Osm::traceText(DEBUG_INFO, "(NumOfKmlFiles: ".sizeof($KmlFileListArray)." NumOfKmlColours: ".sizeof($KmlColourListArray).")!");
 
       for($x=0;$x<sizeof($KmlFileListArray);$x++){
         $KmlName = basename($KmlFileListArray[$x], ".kml");
-        $output .= Osm_OpenLayers::addVectorLayer($MapName, $KmlFileListArray[$x],$KmlColourListArray[$x],'KML');
+        $Kmlcolor = "blue";
+        if ($x<sizeof($KmlColourListArray)){
+            $Kmlcolor  = $KmlColourListArray[$x];
+        }
+        $output .= Osm_OpenLayers::addVectorLayer($MapName, $KmlFileListArray[$x],$Kmlcolor,'KML');
         }
 
       if (($kml_colour_list != "NoColourList") && (sizeof($KmlFileListArray) == sizeof($KmlColourListArray))){
-        $this->traceText(DEBUG_ERROR, "e_kml_list_error");
+        Osm::traceText(DEBUG_ERROR, "e_kml_list_error");
       }
     }
 
@@ -353,7 +353,7 @@ box-shadow: none;}';
     }  
     if ($marker_file_list != 'NoFileList'){
       $MarkerFileListArray = explode( ',', $marker_file_list );
-      $this->traceText(DEBUG_INFO, "(NumOfMarkerFiles: ".sizeof($MarkerFileListArray)."!");
+      Osm::traceText(DEBUG_INFO, "(NumOfMarkerFiles: ".sizeof($MarkerFileListArray)."!");
       for($x=0;$x<sizeof($MarkerFileListArray);$x++){
         $MarkerLstName = basename($MarkerFileListArray[$x], ".txt");
       	$output .= Osm_OpenLayers::addTextLayer($MapName, $MarkerLstName, $MarkerFileListArray[$x]);
@@ -362,7 +362,7 @@ box-shadow: none;}';
       	
     $marker_all_posts = strtolower($marker_all_posts);
     if ($marker_all_posts == 'y'){
-      //$this->traceText(DEBUG_ERROR, "e_use_marker_all_posts");
+      //Osm::traceText(DEBUG_ERROR, "e_use_marker_all_posts");
       $import_type  = 'osm';
     }
 
@@ -379,12 +379,12 @@ box-shadow: none;}';
       $borderOpacityListArray = explode( ',', $disc_border_opacity_list);
       $fillColorListArray     = explode( ',', $disc_fill_color_list );
       $fillOpacityListArray   = explode( ',', $disc_fill_opacity_list);
-      $this->traceText(DEBUG_INFO, "(NumOfdiscs: ".sizeof($centerListArray)." NumOfradius: ".sizeof($radiusListArray).")!");
+      Osm::traceText(DEBUG_INFO, "(NumOfdiscs: ".sizeof($centerListArray)." NumOfradius: ".sizeof($radiusListArray).")!");
 
       if (sizeof($centerListArray) == sizeof($radiusListArray) && !empty($centerListArray) && !empty($radiusListArray)   ) {
         $output .= Osm_OpenLayers::addDiscs($centerListArray,$radiusListArray,$centerOpacityListArray,$centerColorListArray, $borderWidthListArray,$borderColorListArray,$borderOpacityListArray,$fillColorListArray,$fillOpacityListArray,$MapName);
       } else {
-        $this->traceText(DEBUG_ERROR, "Discs parameters error");
+        Osm::traceText(DEBUG_ERROR, "Discs parameters error");
       }
     }
   
@@ -413,8 +413,8 @@ box-shadow: none;}';
        $Icon["name"]  = $PostMarker;
      }
      else {
-      $this->traceText(DEBUG_INFO, "e_not_osm_icon");
-      $this->traceText(DEBUG_INFO, $PostMarker);
+      Osm::traceText(DEBUG_INFO, "e_not_osm_icon");
+      Osm::traceText(DEBUG_INFO, $PostMarker);
      }
 
      list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon); 
@@ -480,11 +480,8 @@ box-shadow: none;}';
      $marker_routing = strtolower($marker_routing);
      if ($marker_routing != 'no') { 
        $temp_popup .= '<br><div class="route"><a href="';
-       if ($marker_routing == 'yn' || $marker_routing == 'yournavigation') {  
-         $temp_popup .= 'http://yournavigation.org/?tlat=' . $temp_lat . '&tlon=' . $temp_lon;
-       }
-       elseif ($marker_routing == 'ors' || $marker_routing == 'openrouteservice' || $marker_routing == 'osrm' || $marker_routing == 'cm' || $marker_routing == 'cloudmade') {
-         $temp_popup .= 'http://map.project-osrm.org/?dest=' . $temp_lat . ',' . $temp_lon;
+       if ($marker_routing == 'yn' || $marker_routing == 'yournavigation' || $marker_routing == 'ors' || $marker_routing == 'openrouteservice' || $marker_routing == 'osrm' || $marker_routing == 'cm' || $marker_routing == 'cloudmade') {
+         $temp_popup .= 'http://www.openrouteservice.org/?pos=' . $temp_lon . ',' . $temp_lat . '&zoom=12&routeOpt=Car&wp=' . $temp_lon . ',' . $temp_lat . '&lang=en&routeLang=en&distUnit=m&routeWeight=Fastest';
        }
        else {
          $temp_popup .= __("Missing routing service!", "OSM-plugin").$marker_routing;
