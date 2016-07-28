@@ -83,11 +83,11 @@
 				<td>
 					<select name="ga_enable" id="ga_enable">
 <?php
-	gde_profile_option( $g['ga_enable'], 'yes', __('Enabled', 'google-document-embedder'), __('Track events in Google Analytics', 'google-document-embedder') );
+	gde_profile_option( $g['ga_enable'], 'yes', __('Enabled', 'google-document-embedder'), __('Track events in Google Analytics (Note: does not support the latest Universal Analytics)', 'google-document-embedder') );
 	gde_profile_option( $g['ga_enable'], 'compat', __('Enabled (Compatibility Mode)', 'google-document-embedder'), __('Track events using older GDE format (< 2.5)', 'google-document-embedder') );
 	gde_profile_option( $g['ga_enable'], 'no', __('None', 'google-document-embedder'), __('Disable Google Analytics integration', 'google-document-embedder') );
 ?>
-					</select><br/>
+					</select> <br/>
 					<span class="gde-fnote" id="ga-h"></span>
 				</td>
 			</tr>

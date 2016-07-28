@@ -18,10 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {	exit; }
 @define( 'GDE_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 // help links
-@define( 'GDE_STDOPT_URL', 'http://www.davistribe.org/gde/settings/viewer-options/' );
-@define( 'GDE_ENHOPT_URL', 'http://www.davistribe.org/gde/settings/enhanced-options/' );
-@define( 'GDE_PROOPT_URL', 'http://www.davistribe.org/gde/settings/viewer-profiles/' );
-@define( 'GDE_ADVOPT_URL', 'http://www.davistribe.org/gde/settings/advanced-options/' );
+@define( 'GDE_STDOPT_URL', 'https://wordpress.org/plugins/google-document-embedder/' );
+@define( 'GDE_ENHOPT_URL', 'https://wordpress.org/plugins/google-document-embedder/' );
+@define( 'GDE_PROOPT_URL', 'https://wordpress.org/plugins/google-document-embedder/' );
+@define( 'GDE_ADVOPT_URL', 'https://wordpress.org/plugins/google-document-embedder/' );
 @define( 'GDE_FORUM_URL', 'http://wordpress.org/support/plugin/google-document-embedder' );
 @define( 'GDE_WP_URL', 'http://wordpress.org/extend/plugins/google-document-embedder/' );
 

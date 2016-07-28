@@ -593,9 +593,20 @@ function gde_admin_custom_js( $hook ) {
  */
 function gde_media_insert( $html, $id, $attachment ) {
 	global $gdeoptions;
+
+	$gdoc_url = '';
+	if (isset($attachment['url'])) {
+		$gdoc_url = $attachment['url'];
+	}
+	elseif ($id > 0) {
+		$post = get_post($id);
+		if ($post) {
+			$gdoc_url = wp_get_attachment_url($id);
+		}
+	}
 	
-	if ( gde_valid_type( $attachment['url'] ) && $gdeoptions['ed_embed_sc'] == "yes" ) {
-		return '[gview file="' . $attachment['url'] . '"]';
+	if ($gdoc_url != '' && gde_valid_type( $gdoc_url ) && $gdeoptions['ed_embed_sc'] == "yes" ) {
+		return '[gview file="' . $gdoc_url . '"]';
 	} else {
 		return $html;
 	}
@@ -667,7 +678,7 @@ function gde_mce_addbuttons() {
 
 function gde_add_tinymce_plugin( $plugin_array ) {
 	// load the TinyMCE plugin
-	$plugin_array['google-document-embedder'] = GDE_PLUGIN_URL . 'js/editor_plugin.js';
+	$plugin_array['gde'] = GDE_PLUGIN_URL . 'js/editor_plugin.js';
 	return $plugin_array;
 }
 
