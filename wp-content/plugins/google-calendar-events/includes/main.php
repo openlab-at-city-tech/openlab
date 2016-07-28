@@ -191,7 +191,7 @@ final class Plugin {
 		do_action( 'before_simcal_init' );
 
 		// Set up localization.
-		load_plugin_textdomain( 'google-calendar-events', false, dirname( plugin_basename( SIMPLE_CALENDAR_MAIN_FILE ) ) . '/languages/' );
+		load_plugin_textdomain( 'google-calendar-events', false, dirname( plugin_basename( SIMPLE_CALENDAR_MAIN_FILE ) ) . '/i18n/' );
 
 		// Init objects factory.
 		$this->objects = new Objects();
@@ -237,10 +237,12 @@ final class Plugin {
 			case 'codex' :
 			case 'apidocs' :
 				return 'http://codex.simplecalendar.io';
-			case 'add-ons' :
+			case 'addons' :
 				return self::$homepage . '/addons/';
 			case 'gcal-pro' :
 				return self::$homepage . '/addons/google-calendar-pro/';
+			case 'fullcal' :
+				return self::$homepage . '/addons/full-calendar/';
 			case 'docs' :
 				return 'http://docs.simplecalendar.io';
 			case 'github' :
@@ -249,6 +251,7 @@ final class Plugin {
 				return 'https://wordpress.org/support/plugin/google-calendar-events';
 			case 'gdev-console':
 				return 'https://console.developers.google.com';
+			case 'home' :
 			default :
 				return self::$homepage;
 		}

@@ -18,18 +18,18 @@
 				currentTime  = current.data( 'calendar-current' ),
 				currentMonth = current.find( 'span.simcal-current-month' ),
 				currentYear  = current.find( 'span.simcal-current-year' ),
-				currentDate  = new Date( currentTime * 1000 ),
+				currentDate  = moment.tz( currentTime * 1000, calendar.data( 'timezone' ) ),
 				date,
 				action;
 
 			if ( calendar.hasClass( 'simcal-default-calendar-grid' ) ) {
 				action = 'simcal_default_calendar_draw_grid';
 				// Always use the first of the month in grid.
-				date = new Date( currentDate.getFullYear(), currentDate.getMonth(), 1 );
+				date = new Date( currentDate.year(), currentDate.month() );
 				toggleGridNavButtons( buttons, date.getTime() / 1000, start, end );
 			} else {
 				action = 'simcal_default_calendar_draw_list';
-				toggleListNavButtons( buttons, calendar, start, end, false );
+				toggleListNavButtons( buttons, calendar, start, end, false, currentTime );
 				toggleListHeading( calendar );
 			}
 
@@ -126,7 +126,7 @@
 							current.attr( 'data-calendar-current', timestamp );
 
 							toggleListHeading( calendar );
-							toggleListNavButtons( buttons, calendar, start, end, direction );
+							toggleListNavButtons( buttons, calendar, start, end, direction, timestamp );
 
 							spinner.fadeToggle();
 							expandEventsToggle();
@@ -194,11 +194,21 @@
 		 * @param end       Upper bound timestamp.
 		 * @param direction Direction intent.
 		 */
-		function toggleListNavButtons( buttons, calendar, start, end, direction ) {
+		function toggleListNavButtons( buttons, calendar, start, end, direction, currentTime ) {
 
 			var list = calendar.find( '.simcal-events-list-container' ),
 				prev = list.data( 'prev' ),
-				next = list.data( 'next' );
+				next = list.data( 'next' ),
+				last_event = list.find( 'li.simcal-event:last').data( 'start' );
+
+			//var currentTime  = nav.find( '.simcal-current' ).data( 'calendar-current' );
+			// TODO: Add script_debug check to show these
+			//console.log( "current time: ", currentTime );
+			//console.log( "start: ", start );
+			//console.log( "end: ", end );
+			//console.log( 'next: ', next );
+			//console.log( 'last event: ', last_event );
+			//console.log( "ct == start", ( ct == start ? "Yes" : "No" ) );
 
 			buttons.each( function( e, b ) {
 
@@ -207,7 +217,7 @@
 				if ( direction ) {
 
 					if ( direction == 'prev' && button.hasClass( 'simcal-prev' ) ) {
-						if ( prev <= start ) {
+						if ( ( prev <= start ) && ( currentTime <= start )  ) {
 							button.attr( 'disabled', 'disabled' );
 						}
 					} else if ( button.hasClass( 'simcal-prev' ) ) {
@@ -215,7 +225,7 @@
 					}
 
 					if ( direction == 'next' && button.hasClass( 'simcal-next' ) ) {
-						if ( next >= end ) {
+						if ( ( ( next >= end ) && ( currentTime >= end ) ) || last_event >= end ) {
 							button.attr( 'disabled', 'disabled' );
 						}
 					} else if( $(button).hasClass( 'simcal-next' ) ) {
@@ -224,11 +234,11 @@
 
 				} else {
 
-					if ( prev <= start && button.hasClass( 'simcal-prev' ) ) {
+					if ( prev <= start && button.hasClass( 'simcal-prev' ) && ( currentTime <= start ) ) {
 						button.attr( 'disabled', 'disabled' );
 					}
 
-					if ( next >= end && button.hasClass( 'simcal-next' ) ) {
+					if ( ( next >= end && button.hasClass( 'simcal-next' ) && ( currentTime >= end ) ) || last_event >= end ) {
 						button.attr( 'disabled', 'disabled' );
 					}
 
@@ -243,16 +253,19 @@
 		 */
 		function toggleListHeading( calendar ) {
 
-			var current = $( calendar ).find( '.simcal-current' ),
-				heading = $( calendar ).find( '.simcal-events-list-container' ),
-				small   = heading.data( 'heading-small' ),
-				large   = heading.data( 'heading-large' );
+			var current    = $( calendar ).find( '.simcal-current' ),
+				heading    = $( calendar ).find( '.simcal-events-list-container' ),
+				small      = heading.data( 'heading-small' ),
+				large      = heading.data( 'heading-large' ),
+				newHeading = $( '<h3 />' );
 
 			if ( calendar.width() < 400 ) {
-				current.html( '<h3>' + small + '</h3>' );
+				newHeading.text( small );
 			} else {
-				current.html( '<h3>' + large + '</h3>' );
+				newHeading.text( large );
 			}
+
+			current.html( newHeading );
 		}
 
 		var gridCalendars = $( '.simcal-default-calendar-grid' );

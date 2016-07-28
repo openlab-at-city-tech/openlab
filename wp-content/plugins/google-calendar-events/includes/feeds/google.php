@@ -108,7 +108,8 @@ class Google extends Feed {
 			// Google query args.
 			$this->google_calendar_id       = $this->esc_google_calendar_id( get_post_meta( $this->post_id, '_google_calendar_id', true ) );
 			$this->google_events_recurring  = esc_attr( get_post_meta( $this->post_id, '_google_events_recurring', true ) );
-			$this->google_search_query      = esc_attr( get_post_meta( $this->post_id, '_google_events_search_query', true ) );
+            // note that google_search_query is used in a URL param and not as HTML output, so don't use esc_attr() on it
+			$this->google_search_query      = get_post_meta( $this->post_id, '_google_events_search_query', true );
 			$this->google_max_results       = max( absint( get_post_meta( $this->post_id, '_google_events_max_results', true ) ), 1 );
 
 			if ( ! is_admin() || defined( 'DOING_AJAX' ) ) {
@@ -173,10 +174,12 @@ class Google extends Feed {
 					foreach ( $response['events'] as $event ) {
 						if ( $event instanceof \Google_Service_Calendar_Event ) {
 
-							// Visibility.
-							$visibility = $event->getVisibility();
+							// Visibility and status.
 							// Public calendars may have private events which can't be properly accessed by simple api key method.
-							if ( $this->type == 'google' && ( $visibility == 'private' || $visibility == 'confidential' ) ) {
+							// Also want to skip cancelled events (single occurences deleted from repeating events)
+							$visibility = $event->getVisibility();
+							$status = $event->getStatus();
+							if ( $this->type == 'google' && ( $visibility == 'private' || $visibility == 'confidential' || $status == 'cancelled' ) ) {
 								continue;
 							}
 
@@ -188,7 +191,12 @@ class Google extends Feed {
 							$whole_day = false;
 
 							// Event start properties.
-							$start_timezone = ! $event->getStart()->timeZone ? $calendar['timezone'] : $event->getStart()->timeZone;
+							if( 'use_calendar' == $this->timezone_setting ) {
+								$start_timezone = ! $event->getStart()->timeZone ? $calendar['timezone'] : $event->getStart()->timeZone;
+							} else {
+								$start_timezone = $this->timezone;
+							}
+
 							if ( is_null( $event->getStart()->dateTime ) ) {
 								// Whole day event.
 								$date = Carbon::parse( $event->getStart()->date );
@@ -197,8 +205,29 @@ class Google extends Feed {
 								$whole_day = true;
 							} else {
 								$date = Carbon::parse( $event->getStart()->dateTime );
-								$google_start     = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $start_timezone );
+
+								// Check if there is an event level timezone
+								if( $event->getStart()->timeZone && 'use_calendar' == $this->timezone_setting ) {
+
+									// Get the two different times with the separate timezones so we can check the offsets next
+									$google_start1 = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $date->timezone );
+									$google_start2 = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $event->getStart()->timeZone );
+
+									// Get the offset in hours
+									$offset1 = $google_start1->offsetHours;
+									$offset2 = $google_start2->offsetHours;
+
+									// Get the difference between the two timezones
+									$total_offset = ( $offset2 - $offset1 );
+
+									// Add the hours offset to the date hour
+									$date->hour += $total_offset;
+								}
+
+								$google_start = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $start_timezone );
 								$google_start_utc = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, 'UTC' );
+
+								$this->timezone = $start_timezone;
 							}
 							// Start.
 							$start = $google_start->getTimestamp();
@@ -210,14 +239,38 @@ class Google extends Feed {
 							if ( false == $event->getEndTimeUnspecified() ) {
 
 								// Event end properties.
-								$end_timezone = ! $event->getEnd()->timeZone ? $calendar['timezone'] : $event->getEnd()->timeZone;
+								if( 'use_calendar' == $this->timezone_setting ) {
+									$end_timezone = ! $event->getEnd()->timeZone ? $calendar['timezone'] : $event->getEnd()->timeZone;
+								} else {
+									$end_timezone = $this->timezone;
+								}
+
 								if ( is_null( $event->getEnd()->dateTime ) ) {
 									// Whole day event.
 									$date           = Carbon::parse( $event->getEnd()->date );
-									$google_end     = Carbon::createFromDate( $date->year, $date->month, $date->day, $end_timezone )->endOfDay()->subSeconds( 59 );
-									$google_end_utc = Carbon::createFromDate( $date->year, $date->month, $date->day, 'UTC' )->endOfDay()->subSeconds( 59 );
+									$google_end     = Carbon::createFromDate( $date->year, $date->month, $date->day, $end_timezone )->startOfDay()->subSeconds( 59 );
+									$google_end_utc = Carbon::createFromDate( $date->year, $date->month, $date->day, 'UTC' )->startOfDay()->subSeconds( 59 );
 								} else {
-									$date           = Carbon::parse( $event->getEnd()->dateTime );
+									$date = Carbon::parse( $event->getEnd()->dateTime );
+
+									// Check if there is an event level timezone
+									if( $event->getEnd()->timeZone && 'use_calendar' == $this->timezone_setting ) {
+
+										// Get the two different times with the separate timezones so we can check the offsets next
+										$google_start1 = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $date->timezone );
+										$google_start2 = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $event->getEnd()->timeZone );
+
+										// Get the offset in hours
+										$offset1 = $google_start1->offsetHours;
+										$offset2 = $google_start2->offsetHours;
+
+										// Get the difference between the two timezones
+										$total_offset = ( $offset2 - $offset1 );
+
+										// Add the hours offset to the date hour
+										$date->hour += $total_offset;
+									}
+
 									$google_end     = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, $end_timezone );
 									$google_end_utc = Carbon::create( $date->year, $date->month, $date->day, $date->hour, $date->minute, $date->second, 'UTC' );
 								}
@@ -227,10 +280,10 @@ class Google extends Feed {
 								$end_utc = $google_end_utc->getTimestamp();
 
 								// Count multiple days.
-								$span = $google_start->setTimezone( $calendar['timezone'] )->diffInDays( $google_end->setTimezone( $calendar['timezone'] ) );
+								$span = $google_start->diffInDays( $google_end );
 
 								if ( $span == 0 ) {
-									if ( $google_start->toDateString() !== $google_end->toDateString() ) {
+									if ( ( $google_start->toDateString() !== $google_end->toDateString() ) && $google_end->toTimeString() != '00:00:00' ) {
 										$span = 1;
 									}
 								}
@@ -264,7 +317,8 @@ class Google extends Feed {
 								'description'    => $description,
 								'link'           => $link,
 								'visibility'     => $visibility,
-								'uid'            => $event->getICalUID(),
+								'uid'            => $event->id,
+								'ical_id'        => $event->getICalUID(),
 								'calendar'       => $this->post_id,
 								'timezone'       => $this->timezone,
 								'start'          => $start,
@@ -291,7 +345,7 @@ class Google extends Feed {
 						set_transient(
 							'_simple-calendar_feed_id_' . strval( $this->post_id ) . '_' . $this->type,
 							$calendar,
-							max( absint( $this->cache ), 60 )
+							max( absint( $this->cache ), 1 ) // Since a value of 0 means forever we set the minimum here to 1 if the user has set it to be 0
 						);
 					}
 				}
