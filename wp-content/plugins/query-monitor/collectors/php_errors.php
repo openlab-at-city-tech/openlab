@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 
 	public $id = 'php_errors';
 	private $display_errors = null;
+	private static $unexpected_error;
+	private static $wordpress_couldnt;
 
 	public function name() {
 		return __( 'PHP Errors', 'query-monitor' );
@@ -48,9 +50,6 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 	}
 
 	public function error_handler( $errno, $message, $file = null, $line = null ) {
-
-		#if ( !( error_reporting() & $errno ) )
-		#	return false;
 
 		switch ( $errno ) {
 
@@ -79,33 +78,49 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 
 		}
 
-		if ( error_reporting() > 0 ) {
+		if ( ! class_exists( 'QM_Backtrace' ) ) {
+			return false;
+		}
 
-			if ( ! class_exists( 'QM_Backtrace' ) ) {
-				return false;
-			}
+		if ( ! isset( self::$unexpected_error ) ) {
+			// These strings are from core. They're passed through `__()` as variables so they get translated at runtime
+			// but do not get seen by GlotPress when it populates its database of translatable strings for QM.
+			$unexpected_error  = 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/">support forums</a>.';
+			$wordpress_couldnt = '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)';
+			self::$unexpected_error  = __( $unexpected_error );
+			self::$wordpress_couldnt = __( $wordpress_couldnt );
+		}
 
-			$trace  = new QM_Backtrace;
-			$caller = $trace->get_caller();
-			$key    = md5( $message . $file . $line . $caller['id'] );
+		// Intentionally skip reporting these core warnings. They're a distraction when developing offline.
+		// The failed HTTP request will still appear in QM's output so it's not a big problem hiding these warnings.
+		if ( self::$unexpected_error === $message ) {
+			return false;
+		}
+		if ( self::$unexpected_error . ' ' . self::$wordpress_couldnt === $message ) {
+			return false;
+		}
 
-			$filename = QM_Util::standard_dir( $file, '' );
+		$trace  = new QM_Backtrace( array(
+			'ignore_current_filter' => false,
+		) );
+		$caller = $trace->get_caller();
+		$key    = md5( $message . $file . $line . $caller['id'] );
 
-			if ( isset( $this->data['errors'][$type][$key] ) ) {
-				$this->data['errors'][$type][$key]->calls++;
-			} else {
-				$this->data['errors'][$type][$key] = (object) array(
-					'errno'    => $errno,
-					'type'     => $type,
-					'message'  => $message,
-					'file'     => $file,
-					'filename' => $filename,
-					'line'     => $line,
-					'trace'    => $trace,
-					'calls'    => 1
-				);
-			}
+		$filename = QM_Util::standard_dir( $file, '' );
 
+		if ( isset( $this->data['errors'][$type][$key] ) ) {
+			$this->data['errors'][$type][$key]->calls++;
+		} else {
+			$this->data['errors'][$type][$key] = (object) array(
+				'errno'    => $errno,
+				'type'     => $type,
+				'message'  => $message,
+				'file'     => $file,
+				'filename' => $filename,
+				'line'     => $line,
+				'trace'    => $trace,
+				'calls'    => 1
+			);
 		}
 
 		return apply_filters( 'qm/collect/php_errors_return_value', false );

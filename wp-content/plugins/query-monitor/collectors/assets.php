@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ class QM_Collector_Assets extends QM_Collector {
 		add_action( 'admin_head',                 array( $this, 'action_head' ), 999 );
 		add_action( 'wp_head',                    array( $this, 'action_head' ), 999 );
 		add_action( 'login_head',                 array( $this, 'action_head' ), 999 );
+		add_action( 'embed_head',                 array( $this, 'action_head' ), 999 );
 	}
 
 	public function action_head() {
@@ -64,7 +65,7 @@ class QM_Collector_Assets extends QM_Collector {
 			}
 			$raw = $this->data['raw'][ $type ];
 			$broken = array_values( array_diff( $raw->queue, $raw->done ) );
-			$missing = array();
+			$missing = array_values( array_diff( $raw->queue, array_keys( $raw->registered ) ) );
 
 			if ( !empty( $broken ) ) {
 				foreach ( $broken as $key => $handle ) {
@@ -85,6 +86,9 @@ class QM_Collector_Assets extends QM_Collector {
 				$this->data['missing'][ $type ] = array_unique( $missing );
 				foreach ( $this->data['missing'][ $type ] as $handle ) {
 					$raw->add( $handle, false );
+					if ( false !== ( $key = array_search( $handle, $raw->done ) ) ) {
+						unset( $raw->done[ $key ] );
+					}
 				}
 			}
 

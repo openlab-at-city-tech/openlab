@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ if ( ! class_exists( 'QM_Collectors' ) ) {
 class QM_Collectors implements IteratorAggregate {
 
 	private $items = array();
+	private $processed = false;
 
 	public function getIterator() {
 		return new ArrayIterator( $this->items );
@@ -45,6 +46,17 @@ class QM_Collectors implements IteratorAggregate {
 
 		return $instance;
 
+	}
+
+	public function process() {
+		if ( $this->processed ) {
+			return;
+		}
+		foreach ( $this as $collector ) {
+			$collector->tear_down();
+			$collector->process();
+		}
+		$this->processed = true;
 	}
 
 }

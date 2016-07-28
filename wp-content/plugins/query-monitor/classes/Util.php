@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ class QM_Util {
 	protected static $file_components = array();
 	protected static $file_dirs       = array();
 	protected static $abspath         = null;
+	protected static $contentpath     = null;
 
 	private function __construct() {}
 
@@ -44,16 +45,19 @@ class QM_Util {
 
 	}
 
-	public static function standard_dir( $dir, $abspath_replace = null ) {
+	public static function standard_dir( $dir, $path_replace = null ) {
 
-		$dir = str_replace( '\\', '/', $dir );
-		$dir = str_replace( '//', '/', $dir );
+		$dir = wp_normalize_path( $dir );
 
-		if ( is_string( $abspath_replace ) ) {
-			if ( !self::$abspath ) {
-				self::$abspath = self::standard_dir( ABSPATH );
+		if ( is_string( $path_replace ) ) {
+			if ( ! self::$abspath ) {
+				self::$abspath     = wp_normalize_path( ABSPATH );
+				self::$contentpath = wp_normalize_path( dirname( WP_CONTENT_DIR ) . '/' );
 			}
-			$dir = str_replace( self::$abspath, $abspath_replace, $dir );
+			$dir = str_replace( array(
+				self::$abspath,
+				self::$contentpath,
+			), $path_replace, $dir );
 		}
 
 		return $dir;
@@ -63,6 +67,7 @@ class QM_Util {
 	public static function get_file_dirs() {
 		if ( empty( self::$file_dirs ) ) {
 			self::$file_dirs['plugin']     = self::standard_dir( WP_PLUGIN_DIR );
+			self::$file_dirs['go-plugin']  = self::standard_dir( WPMU_PLUGIN_DIR . '/shared-plugins' );
 			self::$file_dirs['mu-plugin']  = self::standard_dir( WPMU_PLUGIN_DIR );
 			self::$file_dirs['vip-plugin'] = self::standard_dir( get_theme_root() . '/vip/plugins' );
 			self::$file_dirs['stylesheet'] = self::standard_dir( get_stylesheet_directory() );
@@ -77,6 +82,8 @@ class QM_Util {
 	public static function get_file_component( $file ) {
 
 		# @TODO turn this into a class (eg QM_File_Component)
+
+		$file = self::standard_dir( $file );
 
 		if ( isset( self::$file_components[$file] ) ) {
 			return self::$file_components[$file];
@@ -100,11 +107,18 @@ class QM_Util {
 				} else {
 					$plug = basename( $plug );
 				}
-				$name    = sprintf( __( 'Plugin: %s', 'query-monitor' ), $plug );
+				if ( 'mu-plugin' === $type ) {
+					/* translators: %s: Plugin name */
+					$name = sprintf( __( 'MU Plugin: %s', 'query-monitor' ), $plug );
+				} else {
+					/* translators: %s: Plugin name */
+					$name = sprintf( __( 'Plugin: %s', 'query-monitor' ), $plug );
+				}
 				$context = $plug;
 				break;
+			case 'go-plugin':
 			case 'vip-plugin':
-				$plug = str_replace( self::$file_dirs['vip-plugin'], '', $file );
+				$plug = str_replace( self::$file_dirs[ $type ], '', $file );
 				$plug = trim( $plug, '/' );
 				if ( strpos( $plug, '/' ) ) {
 					$plug = explode( '/', $plug );
@@ -112,6 +126,7 @@ class QM_Util {
 				} else {
 					$plug = basename( $plug );
 				}
+				/* translators: %s: Plugin name */
 				$name    = sprintf( __( 'VIP Plugin: %s', 'query-monitor' ), $plug );
 				$context = $plug;
 				break;
@@ -167,7 +182,8 @@ class QM_Util {
 
 				if ( is_a( $callback['function'], 'Closure' ) ) {
 					$ref  = new ReflectionFunction( $callback['function'] );
-					$file = trim( QM_Util::standard_dir( $ref->getFileName(), '' ), '/' );
+					$file = QM_Util::standard_dir( $ref->getFileName(), '' );
+					/* translators: 1: Line number, 2: File name */
 					$callback['name'] = sprintf( __( 'Closure on line %1$d of %2$s', 'query-monitor' ), $ref->getStartLine(), $file );
 				} else {
 					// the object should have a __invoke() method
@@ -186,16 +202,27 @@ class QM_Util {
 			$callback['file'] = $ref->getFileName();
 			$callback['line'] = $ref->getStartLine();
 
-			if ( '__lambda_func' === $ref->getName() ) {
+			// https://github.com/facebook/hhvm/issues/5856
+			$name = trim( $ref->getName() );
+
+			if ( '__lambda_func' === $name || 0 === strpos( $name, 'lambda_' ) ) {
 				if ( preg_match( '|(?P<file>.*)\((?P<line>[0-9]+)\)|', $callback['file'], $matches ) ) {
 					$callback['file'] = $matches['file'];
 					$callback['line'] = $matches['line'];
 					$file = trim( QM_Util::standard_dir( $callback['file'], '' ), '/' );
+					/* translators: 1: Line number, 2: File name */
 					$callback['name'] = sprintf( __( 'Anonymous function on line %1$d of %2$s', 'query-monitor' ), $callback['line'], $file );
+				} else {
+					// https://github.com/facebook/hhvm/issues/5807
+					unset( $callback['line'], $callback['file'] );
+					$callback['name'] = $name . '()';
+					$callback['error'] = new WP_Error( 'unknown_lambda', __( 'Unable to determine source of lambda function', 'query-monitor' ) );
 				}
 			}
 
-			$callback['component'] = self::get_file_component( $callback['file'] );
+			if ( ! empty( $callback['file'] ) ) {
+				$callback['component'] = self::get_file_component( $callback['file'] );
+			}
 
 		} catch ( ReflectionException $e ) {
 
@@ -218,7 +245,7 @@ class QM_Util {
 		if ( self::is_ajax() ) {
 			return true;
 		}
-		if ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) and 'xmlhttprequest' == strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
+		if ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) and 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
 			return true;
 		}
 		return false;
@@ -232,34 +259,12 @@ class QM_Util {
 		}
 	}
 
-	public static function get_current_url() {
-		return ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	}
-
-	public static function include_files( $path ) {
-
- 		if ( class_exists( 'DirectoryIterator' ) and method_exists( 'DirectoryIterator', 'getExtension' ) ) {
-
-			$output_iterator = new DirectoryIterator( $path );
-
-			foreach ( $output_iterator as $output ) {
-				if ( $output->getExtension() === 'php' ) {
-					include $output->getPathname();
-				}
-			}
-
-		} else {
-
-			foreach ( glob( sprintf( '%s/*.php', $path ) ) as $file ) {
-				include $file;
-			}
-
-		}
-
-	}
-
 	public static function is_multi_network() {
 		global $wpdb;
+
+		if ( function_exists( 'is_multi_network' ) ) {
+			return is_multi_network();
+		}
 
 		if ( ! is_multisite() ) {
 			return false;
@@ -271,6 +276,34 @@ class QM_Util {
 		" );
 
 		return ( $num_sites > 1 );
+	}
+
+	public static function get_client_version( $client ) {
+
+		$client = intval( $client );
+
+		$hello = $client % 10000;
+
+		$major = intval( floor( $client / 10000 ) );
+		$minor = intval( floor( $hello / 100 ) );
+		$patch = intval( $hello % 100 );
+
+		return compact( 'major', 'minor', 'patch' );
+
+	}
+
+	public static function get_query_type( $sql ) {
+		$sql = $type = trim( $sql );
+
+		if ( 0 === strpos( $sql, '/*' ) ) {
+			// Strip out leading comments such as `/*NO_SELECT_FOUND_ROWS*/` before calculating the query type
+			$type = preg_replace( '|^/\*[^\*/]+\*/|', '', $sql );
+		}
+
+		$type = preg_split( '/\b/', trim( $type ), 2, PREG_SPLIT_NO_EMPTY );
+		$type = strtoupper( $type[0] );
+
+		return $type;
 	}
 
 }

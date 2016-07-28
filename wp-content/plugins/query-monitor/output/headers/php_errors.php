@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,16 +16,13 @@ GNU General Public License for more details.
 
 class QM_Output_Headers_PHP_Errors extends QM_Output_Headers {
 
-	public function output() {
-
-		if ( ! QM_Util::is_ajax() ) {
-			return;
-		}
+	public function get_output() {
 
 		$data = $this->collector->get_data();
+		$headers = array();
 
 		if ( empty( $data['errors'] ) ) {
-			return;
+			return array();
 		}
 
 		$count = 0;
@@ -48,18 +45,16 @@ class QM_Output_Headers_PHP_Errors extends QM_Output_Headers {
 					'component' => $component->name,
 				);
 
-				header( sprintf( 'X-QM-Error-%d: %s',
-					$count,
-					json_encode( $output_error )
-				) );
+				$key = sprintf( 'error-%d', $count );
+				$headers[ $key ] = json_encode( $output_error );
 
 			}
 
 		}
 
-		header( sprintf( 'X-QM-Errors: %d',
-			$count
-		) );
+		return array_merge( array(
+			'error-count' => $count,
+		), $headers );
 
 	}
 

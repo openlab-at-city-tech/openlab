@@ -9,7 +9,7 @@ additional database query information in Query Monitor's output.
 
 *********************************************************************
 
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,13 +29,18 @@ if ( defined( 'QM_DISABLED' ) and QM_DISABLED ) {
 	return;
 }
 
-if ( defined( 'WP_CLI' ) and WP_CLI ) {
-	# For the time being, let's not load QM when using WP-CLI because we've no persistent storage and no means of
-	# outputting collected data on the CLI. This will change in a future version of QM.
+if ( 'cli' === php_sapi_name() && ! defined( 'QM_TESTS' ) ) {
+	# For the time being, let's not load QM when using the CLI because we've no persistent storage and no means of
+	# outputting collected data on the CLI. This will hopefully change in a future version of QM.
 	return;
 }
 
-# No autoloaders for us. See https://github.com/johnbillion/QueryMonitor/issues/7
+if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+	# Let's not load QM during cron events for the same reason as above.
+	return;
+}
+
+# No autoloaders for us. See https://github.com/johnbillion/query-monitor/issues/7
 $qm_dir = dirname( dirname( __FILE__ ) );
 if ( ! is_readable( $backtrace = "{$qm_dir}/classes/Backtrace.php" ) ) {
 	return;
@@ -80,6 +85,10 @@ class QM_DB extends wpdb {
 	 */
 	function query( $query ) {
 		if ( ! $this->ready ) {
+			if ( isset( $this->check_current_query ) ) {
+				// This property was introduced in WP 4.2
+				$this->check_current_query = true;
+			}
 			return false;
 		}
 

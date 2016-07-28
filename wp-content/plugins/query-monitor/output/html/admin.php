@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ class QM_Output_Html_Admin extends QM_Output_Html {
 
 		echo '<tr>';
 		echo '<td class="qm-ltr">$pagenow</td>';
-		echo "<td>{$data['pagenow']}</td>";
+		echo '<td>' . esc_html( $data['pagenow'] ) . '</td>';
 		echo '</tr>';
 
 		$screens = array(
@@ -75,6 +75,7 @@ class QM_Output_Html_Admin extends QM_Output_Html {
 			'users-network'   => true,
 		);
 
+		// @TODO a lot of this logic can move to the collector
 		if ( !empty( $data['current_screen'] ) and isset( $screens[$data['current_screen']->base] ) ) {
 
 			# And now, WordPress' legendary inconsistency comes into play:
@@ -93,25 +94,25 @@ class QM_Output_Html_Admin extends QM_Output_Html {
 				$cols = $data['current_screen']->id;
 			}
 
-			if ( 'edit-comments' == $col ) {
+			if ( 'edit-comments' === $col ) {
 				$col = 'comments';
-			} else if ( 'upload' == $col ) {
+			} else if ( 'upload' === $col ) {
 				$col = 'media';
-			} else if ( 'link-manager' == $col ) {
+			} else if ( 'link-manager' === $col ) {
 				$col = 'link';
 			}
 
 			echo '<tr>';
-			echo '<td rowspan="2">' . __( 'Column Filters', 'query-monitor' ) . '</td>';
-			echo "<td colspan='2'>manage_<span class='qm-current'>{$cols}</span>_columns</td>";
+			echo '<td rowspan="2">' . esc_html__( 'Column Filters', 'query-monitor' ) . '</td>';
+			echo '<td colspan="2">manage_<span class="qm-current">' . esc_html( $cols ) . '</span>_columns</td>';
 			echo '</tr>';
 			echo '<tr>';
-			echo "<td colspan='2'>manage_<span class='qm-current'>{$data['current_screen']->id}</span>_sortable_columns</td>";
+			echo '<td colspan="2">manage_<span class="qm-current">' . esc_html( $data['current_screen']->id ) . '</span>_sortable_columns</td>';
 			echo '</tr>';
 
 			echo '<tr>';
-			echo '<td rowspan="1">' . __( 'Column Action', 'query-monitor' ) . '</td>';
-			echo "<td colspan='2'>manage_<span class='qm-current'>{$col}</span>_custom_column</td>";
+			echo '<td rowspan="1">' . esc_html__( 'Column Action', 'query-monitor' ) . '</td>';
+			echo '<td colspan="2">manage_<span class="qm-current">' . esc_html( $col ) . '</span>_custom_column</td>';
 			echo '</tr>';
 
 		}

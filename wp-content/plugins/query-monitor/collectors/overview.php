@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ class QM_Collector_Overview extends QM_Collector {
 		$this->data['memory_limit'] = QM_Util::convert_hr_to_bytes( ini_get( 'memory_limit' ) );
 		$this->data['memory_usage'] = ( 100 / $this->data['memory_limit'] ) * $this->data['memory'];
 
+		$this->data['is_admin'] = is_admin();
 	}
 
 }

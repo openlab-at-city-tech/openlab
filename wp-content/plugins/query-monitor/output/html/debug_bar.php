@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class QM_Output_Html_Debug_Bar extends QM_Output_Html {
 		echo '<tbody>';
 
 		echo '<tr>';
-		echo '<td valign="top">';
+		echo '<td>';
 		echo '<div id="debug-menu-target-' . esc_attr( $target ) . '" class="debug-menu-target qm-debug-bar-output">';
 
 		$this->collector->render();

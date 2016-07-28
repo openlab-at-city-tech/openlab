@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,33 +24,74 @@ class QM_Collector_Theme extends QM_Collector {
 
 	public function __construct() {
 		parent::__construct();
-		add_filter( 'body_class', array( $this, 'filter_body_class' ), 99 );
+		add_filter( 'body_class',       array( $this, 'filter_body_class' ), 999 );
+		add_filter( 'template_include', array( $this, 'filter_template_include' ), 999 );
+		add_filter( 'timber/output',    array( $this, 'filter_timber_output' ), 999, 3 );
 	}
 
-	public function filter_body_class( $class ) {
+	public function filter_body_class( array $class ) {
 		$this->data['body_class'] = $class;
 		return $class;
 	}
 
+	public function filter_template_include( $template_path ) {
+		$this->data['template_path'] = $template_path;
+		return $template_path;
+	}
+
+	public function filter_timber_output( $output, $data = null, $file = null ) {
+		if ( $file ) {
+			$this->data['timber_files'][] = $file;
+		}
+
+		return $output;
+	}
+
 	public function process() {
 
-		global $template;
+		if ( ! empty( $this->data['template_path'] ) ) {
 
-		$template_path        = QM_Util::standard_dir( $template );
-		$stylesheet_directory = QM_Util::standard_dir( get_stylesheet_directory() );
-		$template_directory   = QM_Util::standard_dir( get_template_directory() );
-		$theme_directory      = QM_Util::standard_dir( get_theme_root() );
+			$template_path        = QM_Util::standard_dir( $this->data['template_path'] );
+			$stylesheet_directory = QM_Util::standard_dir( get_stylesheet_directory() );
+			$template_directory   = QM_Util::standard_dir( get_template_directory() );
+			$theme_directory      = QM_Util::standard_dir( get_theme_root() );
 
-		$template_file  = str_replace( array( $stylesheet_directory, $template_directory ), '', $template_path );
-		$template_file  = ltrim( $template_file, '/' );
-		$theme_template = str_replace( $theme_directory, '', $template_path );
-		$theme_template = ltrim( $theme_template, '/' );
+			$template_file       = str_replace( array( $stylesheet_directory, $template_directory, ABSPATH ), '', $template_path );
+			$template_file       = ltrim( $template_file, '/' );
+			$theme_template_file = str_replace( array( $theme_directory, ABSPATH ), '', $template_path );
+			$theme_template_file = ltrim( $theme_template_file, '/' );
 
-		$this->data['template_path']  = $template_path;
-		$this->data['template_file']  = $template_file;
-		$this->data['theme_template'] = $theme_template;
+			$this->data['template_path']       = $template_path;
+			$this->data['template_file']       = $template_file;
+			$this->data['theme_template_file'] = $theme_template_file;
+
+			foreach ( get_included_files() as $file ) {
+				$filename = str_replace( array(
+					$stylesheet_directory,
+					$template_directory,
+				), '', $file );
+				if ( $filename !== $file ) {
+					$slug          = trim( str_replace( '.php', '', $filename ), '/' );
+					$display       = trim( $filename, '/' );
+					$theme_display = trim( str_replace( $theme_directory, '', $file ), '/' );
+					if ( did_action( "get_template_part_{$slug}" ) ) {
+						$this->data['template_parts'][ $file ]       = $display;
+						$this->data['theme_template_parts'][ $file ] = $theme_display;
+					} else {
+						$slug = trim( preg_replace( '|\-[^\-]+$|', '', $slug ), '/' );
+						if ( did_action( "get_template_part_{$slug}" ) ) {
+							$this->data['template_parts'][ $file ]       = $display;
+							$this->data['theme_template_parts'][ $file ] = $theme_display;
+						}
+					}
+				}
+			}
+
+		}
+
 		$this->data['stylesheet']     = get_stylesheet();
 		$this->data['template']       = get_template();
+		$this->data['is_child_theme'] = ( $this->data['stylesheet'] != $this->data['template'] );
 
 		if ( isset( $this->data['body_class'] ) ) {
 			asort( $this->data['body_class'] );
