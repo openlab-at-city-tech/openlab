@@ -49,3 +49,54 @@ function openlab_openprocessing_shortcode( $atts ) {
 	return $html;
 }
 add_shortcode( 'openprocessing', 'openlab_openprocessing_shortcode' );
+
+/**
+ * Register auto-embed handlers.
+ */
+function openlab_register_embed_handlers() {
+	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/#i', 'openlab_embed_handler_screencast' );
+}
+add_action( 'init', 'openlab_register_embed_handlers' );
+
+/**
+ * screencast.com embed callback.
+ */
+function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
+	$cached = wp_cache_get( 'screencast_embed_url_' . $url );
+	if ( false === $cached ) {
+		// This is the worst thing in the whole world.
+		$r = wp_remote_get( $url );
+		$b = wp_remote_retrieve_body( $r );
+		$b = htmlspecialchars_decode( $b );
+
+		$embed_url = '';
+		if ( preg_match( '|<iframe[^>]+src="([^"]+)"|', $b, $url_matches ) ) {
+			$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
+		}
+
+		wp_cache_set( 'screencast_embed_url_' . $url );
+	} else {
+		$embed_url = $cached;
+	}
+
+	// Get height/width from URL params, if available.
+	$height = 450;
+	$width = 800;
+	$query = parse_url( $url, PHP_URL_QUERY );
+	if ( $query ) {
+		parse_str( $query, $parts );
+
+		if ( $parts['height'] ) {
+			$height = intval( $parts['height'] );
+		}
+
+		if ( $parts['width'] ) {
+			$width = intval( $parts['width'] );
+		}
+	}
+
+	$template = '<iframe class="tscplayer_inline embeddedObject" name="tsc_player" scrolling="no" frameborder="0" type="text/html" style="overflow:hidden;" src="%s" height="%s" width="%s" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+
+	$html = sprintf( $template, $embed_url, $height, $width );
+	return $html;
+}
