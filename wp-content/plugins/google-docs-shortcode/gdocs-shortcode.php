@@ -5,7 +5,7 @@ Plugin URI: https://github.com/cuny-academic-commons/google-docs-shortcode
 Description: Easily embed a Google Doc into your blog posts
 Author: r-a-y
 Author URI: http://profiles.wordpress.org/r-a-y
-Version: 0.3
+Version: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -13,6 +13,98 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Initializer.
+ */
+function ray_gdoc_shortcode_init() {
+	add_shortcode( 'gdoc', 'ray_google_docs_shortcode' );
+
+	/**
+	 * Support for Shortcake.
+	 */
+	if ( function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
+		shortcode_ui_register_for_shortcode(
+			'gdoc',
+			array(
+
+				'label' => __( 'Google Drive', 'google-docs-shortcode' ),
+
+				'listItemImage' => '<img src="https://developers.google.com/drive/images/drive_icon_mono.png" alt="" />',
+
+				// @todo Figure out how to do conditional attributes to support 'size' and 'seamless'
+				'attrs' => array(
+					array(
+						'label' => __( 'Google Doc Link', 'google-docs-shortcode' ),
+						'attr'  => 'link',
+						'type'  => 'text',
+						'description' => __( 'Paste the published-to-the-web Google Doc link or a publicly-shared Google Doc link here.', 'gdrive' )
+					),
+
+					array(
+						'label' => __( 'Width', 'google-docs-shortcode' ),
+						'attr'  => 'width',
+						'type'  => 'number',
+						'meta' => array(
+							'style' => 'width:75px'
+						),
+						'description' => __( "Enter width in pixels. If left blank, this defaults to the theme's width.", 'gdrive' )
+					),
+
+					array(
+						'label' => __( 'Height', 'google-docs-shortcode' ),
+						'attr'  => 'height',
+						'type'  => 'number',
+						'meta' => array(
+							'style' => 'width:75px'
+						),
+						'description' => __( "Enter height in pixels. If left blank, this defaults to 300.", 'gdrive' )
+					),
+
+					array(
+						'label' => __( 'Type (non-Google Doc only)', 'google-docs-shortcode' ),
+						'attr'  => 'type',
+						'type' => 'select',
+						'options' => array(
+							'' => '--',
+							'audio' => __( 'Audio', 'google-docs-shortcode' ),
+							'other' => __( 'Other (Image, PDF, Microsoft Office, etc.)', 'google-docs-shortcode' ),
+						),
+						'description' => __( "If your Google Drive item is not a Doc, Slide, Spreadsheet or Form, select the type of item you are embedding.", 'gdrive' )
+					),
+
+					// maybe later...
+					/*
+					array(
+						'label' => __( 'Size', 'google-docs-shortcode' ),
+						'attr'  => 'size',
+						'type' => 'select',
+						'options' => array(
+							'small'  => __( 'Small - 480 x 299', 'google-docs-shortcode' ),
+							'medium' => __( 'Medium - 960 x 559', 'google-docs-shortcode' ),
+							'large'  => __( 'Large - 1440 x 839', 'google-docs-shortcode' )
+						),
+						'description' => __( 'This is only applicable to Google Slides. If you want to set a custom width and height, use the options above.', 'google-docs-shortcode' )
+					),
+					*/
+
+					// This doesn't quite work yet; commenting out for now
+					// @link https://github.com/fusioneng/Shortcake/pull/413
+					/*
+					array(
+						'label' => __( 'Show Doc Header/Footer', 'google-docs-shortcode' ),
+						'attr'  => 'seamless',
+						'type' => 'checkbox',
+						'value' => 0,
+						'description' => __( 'This is only applicable to Google Docs.', 'google-docs-shortcode' )
+					),
+					*/
+				),
+
+			)
+		);
+	}
+}
+add_action( 'init', 'ray_gdoc_shortcode_init' );
 
 /**
  * Shortcode to embed a Google Doc.
@@ -24,6 +116,9 @@ function ray_google_docs_shortcode( $atts ) {
 
 	$r = shortcode_atts( array(
 		'link'     => false,
+
+		// type
+		'type'     => false,
 
 		// dimensions
 		'width'    => ! empty( $content_width ) ? $content_width : '100%',
@@ -41,7 +136,7 @@ function ray_google_docs_shortcode( $atts ) {
 	), $atts );
 
 	// if no link or link is not from Google Docs, stop now!
-	if ( ! $r['link'] || strpos( $r['link'], '://docs.google.com' ) === false ) {
+	if ( ! $r['link'] || ( strpos( $r['link'], '://docs.google.com' ) === false && strpos( $r['link'], '://drive.google.com' ) === false ) ) {
 		return;
 	}
 
@@ -64,6 +159,10 @@ function ray_google_docs_shortcode( $atts ) {
 	// spreadsheet
 	} elseif ( strpos( $r['link'], '/spreadsheets/' ) !== false || strpos( $r['link'], '/spreadsheet/' ) !== false ) {
 		$type = 'spreadsheet';
+
+	// non-google doc
+	} elseif ( ! empty( $r['type'] ) ) {
+		$type = $r['type'];
 
 	// nada!
 	} else {
@@ -163,6 +262,21 @@ function ray_google_docs_shortcode( $atts ) {
 
 			break;
 
+		// http://webapps.stackexchange.com/a/84399
+		case 'audio' :
+			$id = str_replace( 'https://drive.google.com/file/d/', '', $r['link'] );
+			$id = str_replace( '/view?usp=sharing', '', $id );
+			$id = esc_attr( $id );
+			break;
+	}
+
+	// support "anyone with link" functionality
+	if ( false !== strpos( $r['link'], '/edit?usp=sharing' ) ) {
+		$r['link'] = str_replace( '/edit?usp=sharing', '/preview', $r['link'] );
+		$r['link'] = str_replace( '&widget=true', '', $r['link'] );
+		$r['link'] = str_replace( '&embedded=true', '', $r['link'] );
+	} elseif ( false !== strpos( $r['link'], '/view?usp=sharing' ) ) {
+		$r['link'] = str_replace( '/view?usp=sharing', '/preview', $r['link'] );
 	}
 
 	// set width
@@ -171,9 +285,17 @@ function ray_google_docs_shortcode( $atts ) {
 	// set height
 	$r['height'] = ' height="' . esc_attr( $r['height'] ) . '"';
 
-	// finally, embed the google doc!
-	$output = '<iframe id="gdoc-' . md5( $r['link'] ) . '" class="gdocs_shortcode gdocs_' . esc_attr( $type ) . '" src="' .  esc_url( $r['link'] ) . '"' . $r['width'] . $r['height'] . $extra . '></iframe>';
+	// audio uses HTML5
+	if ( 'audio' === $r['type'] ) {
+		$output = "<audio controls>
+		<source src='http://docs.google.com/uc?export=open&id={$id}'>
+		<p>" . __( 'Your browser does not support HTML5 audio', 'google-docs-shortcode' ) . "</p>
+		</audio>";
+
+	// everything else uses an IFRAME
+	} else {
+		$output = '<iframe id="gdoc-' . md5( $r['link'] ) . '" class="gdocs_shortcode gdocs_' . esc_attr( $type ) . '" src="' .  esc_url( $r['link'] ) . '"' . $r['width'] . $r['height'] . $extra . '></iframe>';
+	}
 
 	return apply_filters( 'ray_google_docs_shortcode_output', $output, $type );
 }
-add_shortcode( 'gdoc', 'ray_google_docs_shortcode' );
