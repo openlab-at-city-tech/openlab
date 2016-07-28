@@ -17,7 +17,7 @@ class Tribe__Events__Activation_Page {
 
 	/**
 	 * Filter the Default WordPress actions when updating the plugin to prevent users to be redirected if they have an
-	 * specfific intention of going back to the plugins page.
+	 * specific intention of going back to the plugins page.
 	 *
 	 * @param  array $actions The Array of links (html)
 	 * @param  string $plugin Which plugins are been updated
@@ -77,7 +77,7 @@ class Tribe__Events__Activation_Page {
 
 		delete_transient( '_tribe_events_activation_redirect' );
 
-		if ( ! current_user_can( Tribe__Events__Settings::instance()->requiredCap ) ){
+		if ( ! current_user_can( Tribe__Settings::instance()->requiredCap ) ){
 			return;
 		}
 
@@ -109,8 +109,7 @@ class Tribe__Events__Activation_Page {
 	 * @return bool
 	 */
 	protected function showed_update_message_for_current_version() {
-		$tec = Tribe__Events__Main::instance();
-		$message_version_displayed = $tec->getOption( 'last-update-message' );
+		$message_version_displayed = Tribe__Settings_Manager::get_option( 'last-update-message' );
 		if ( empty( $message_version_displayed ) ) {
 			return false;
 		}
@@ -121,8 +120,7 @@ class Tribe__Events__Activation_Page {
 	}
 
 	protected function log_display_of_message_page() {
-		$tec = Tribe__Events__Main::instance();
-		$tec->setOption( 'last-update-message', Tribe__Events__Main::VERSION );
+		Tribe__Settings_Manager::set_option( 'last-update-message', Tribe__Events__Main::VERSION );
 	}
 
 	/**
@@ -133,8 +131,7 @@ class Tribe__Events__Activation_Page {
 	 * @see Tribe__Events__Main::maybeSetTECVersion()
 	 */
 	protected function is_new_install() {
-		$tec = Tribe__Events__Main::instance();
-		$previous_versions = $tec->getOption( 'previous_ecp_versions' );
+		$previous_versions = Tribe__Settings_Manager::get_option( 'previous_ecp_versions' );
 		return empty( $previous_versions ) || ( end( $previous_versions ) == '0' );
 	}
 
@@ -151,7 +148,7 @@ class Tribe__Events__Activation_Page {
 	}
 
 	protected function get_message_page_url( $slug ) {
-		$settings = Tribe__Events__Settings::instance();
+		$settings = Tribe__Settings::instance();
 		// get the base settings page url
 		$url  = apply_filters(
 			'tribe_settings_url', add_query_arg(
@@ -166,26 +163,25 @@ class Tribe__Events__Activation_Page {
 	}
 
 	public function register_page() {
-		// tribe_events_page_tribe-events-calendar
 		if ( isset( $_GET['tec-welcome-message'] ) ) {
 			$this->disable_default_settings_page();
-			add_action( 'tribe_events_page_tribe-events-calendar', array( $this, 'display_welcome_page' ) );
+			add_action( 'tribe_events_page_' . Tribe__Settings::$parent_slug, array( $this, 'display_welcome_page' ) );
 		} elseif ( isset( $_GET['tec-update-message'] ) ) {
 			$this->disable_default_settings_page();
-			add_action( 'tribe_events_page_tribe-events-calendar', array( $this, 'display_update_page' ) );
+			add_action( 'tribe_events_page_' . Tribe__Settings::$parent_slug, array( $this, 'display_update_page' ) );
 		}
 	}
 
 	protected function disable_default_settings_page() {
-		remove_action( 'tribe_events_page_tribe-events-calendar', array( Tribe__Events__Settings::instance(), 'generatePage' ) );
+		remove_action( 'tribe_events_page_' . Tribe__Settings::$parent_slug, array( Tribe__Settings::instance(), 'generatePage' ) );
 	}
 
 	public function display_welcome_page() {
 		do_action( 'tribe_settings_top' );
 		echo '<div class="tribe_settings tribe_welcome_page wrap">';
-		echo '<h2>';
+		echo '<h1>';
 		echo $this->welcome_page_title();
-		echo '</h2>';
+		echo '</h1>';
 		echo $this->welcome_page_content();
 		echo '</div>';
 		do_action( 'tribe_settings_bottom' );
@@ -203,9 +199,9 @@ class Tribe__Events__Activation_Page {
 	public function display_update_page() {
 		do_action( 'tribe_settings_top' );
 		echo '<div class="tribe_settings tribe_update_page wrap">';
-		echo '<h2>';
+		echo '<h1>';
 		echo $this->update_page_title();
-		echo '</h2>';
+		echo '</h1>';
 		echo $this->update_page_content();
 		echo '</div>';
 		do_action( 'tribe_settings_bottom' );

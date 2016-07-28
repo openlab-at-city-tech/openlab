@@ -125,7 +125,11 @@ var tribe_events_bar_action;
 			if ( $tribedate.val() === '' && $( '.datepicker.dropdown-menu' ).is( ':hidden' ) && tt.live_ajax() && tt.pushstate ) {
 				ts.date = td.cur_date;
 				td.cur_url = td.base_url;
+				/**
+				 * DEPRECATED: tribe_ev_runAjax has been deprecated in 4.0. Use run-ajax.tribe instead
+				 */
 				$( te ).trigger( 'tribe_ev_runAjax' );
+				$( te ).trigger( 'run-ajax.tribe' );
 			}
 		} );
 
@@ -161,10 +165,10 @@ var tribe_events_bar_action;
 				'data-tribe-bar-order': i,
 				'data-view'           : displaying
 			} ).html( [
-					'   <a href="#">',
-					'   <span class="tribe-icon-' + displaying + '">' + $view.text() + '</span>',
-					'</a>'].join( "" )
-				).appendTo( '.tribe-bar-views-list' );
+				'   <a href="#">',
+				'   <span class="tribe-icon-' + displaying + '">' + $view.text() + '</span>',
+				'</a>'].join( "" )
+			).appendTo( '.tribe-bar-views-list' );
 
 		} );
 
@@ -174,7 +178,7 @@ var tribe_events_bar_action;
 
 		$currentli.prependTo( $tribebarviews ).addClass( 'tribe-bar-active' );
 
-		// toggle the views dropdown	
+		// toggle the views dropdown
 		$tribebar.on( 'click', '#tribe-bar-views', function( e ) {
 			e.stopPropagation();
 			var $this = $( this );
@@ -222,15 +226,23 @@ var tribe_events_bar_action;
 		// Add our date bits outside of our filter container
 		$( '#tribe-bar-filters' ).before( $( '#tribe-bar-dates' ) );
 
-		$( te ).on( "tribe_ev_serializeBar", function() {
+		$( te ).on( 'tribe_ev_serializeBar', function() {
 			$( 'form#tribe-bar-form input, form#tribe-bar-form select, #tribeHideRecurrence' ).each( function() {
 				var $this = $( this );
 				if ( $this.is( '#tribe-bar-date' ) ) {
-					if ( $this.val().length ) {
+					var this_val = $this.val();
+
+					if ( this_val.length ) {
 						if ( ts.view === 'month' ) {
 							ts.params[$this.attr( 'name' )] = tribeDateFormat( ts.mdate, "tribeMonthQuery" );
 							ts.url_params[$this.attr( 'name' )] = tribeDateFormat( ts.mdate, "tribeMonthQuery" );
 						}
+						// If this is not month view, but we came from there, the value of #tribe-bar-date will
+						// describe a year and a month: preserve this if so to ensure accuracy of pagination
+						else if ( this_val.match( /[0-9]{4}-[0-9]{2}/ ) ) {
+							ts.params[ $this.attr( 'name') ] = ts.url_params[ $this.attr( 'name' ) ] = this_val;
+						}
+						// In all other cases, pull the date from the datepicker
 						else {
 							ts.params[$this.attr( 'name' )] = tribeDateFormat( $this.bootstrapDatepicker( 'getDate' ), "tribeQuery" );
 							ts.url_params[$this.attr( 'name' )] = tribeDateFormat( $this.bootstrapDatepicker( 'getDate' ), "tribeQuery" );
@@ -302,24 +314,33 @@ var tribe_events_bar_action;
 
 			ts.url_params = {};
 
+			/**
+			 * DEPRECATED: tribe_ev_preCollectBarParams has been deprecated in 4.0. Use pre-collect-bar-params.tribe instead
+			 */
 			$( te ).trigger( 'tribe_ev_preCollectBarParams' );
+			$( te ).trigger( 'pre-collect-bar-params.tribe' );
 
-			$( '#tribe-bar-form input, #tribe-bar-form select' ).each( function() {
+			// Select all the required fields
+			// Normal Form + Filter Bar
+			var $forms = $( document.getElementById( 'tribe-bar-form' ) ).add( document.getElementById( 'tribe_events_filters_wrapper' ) ),
+				$inputs = $forms.find( 'input, select' );
+
+			$inputs.each( function() {
 				var $this = $( this );
-				if ( $this.val().length && !$this.hasClass( 'tribe-no-param' ) ) {
-					if ( ts.view !== 'month' && ts.datepicker_format !== '0' && $this.is( $tribedate ) ) {
+				if ( $this.val() && $this.val().length && !$this.hasClass( 'tribe-no-param' ) ) {
+					if ( ts.view !== 'month' && '0' !== ts.datepicker_format && $this.is( $tribedate ) ) {
 
-						ts.url_params[$this.attr( 'name' )] = tribeDateFormat( $this.bootstrapDatepicker( 'getDate' ), 'tribeQuery' );
+						ts.url_params[ $this.attr( 'name' ) ] = tribeDateFormat( $this.bootstrapDatepicker( 'getDate' ), 'tribeQuery' );
 
 					}
 					else {
 						if ( $this.is( ':checkbox' ) ) {
 							if ( $this.is( ':checked' ) ) {
-								ts.url_params[$this.attr( 'name' )] = $this.val();
+								ts.url_params[ $this.attr( 'name' ) ] = $this.val();
 							}
 						}
 						else {
-							ts.url_params[$this.attr( 'name' )] = $this.val();
+							ts.url_params[ $this.attr( 'name' ) ] = $this.val();
 						}
 					}
 				}
@@ -327,7 +348,11 @@ var tribe_events_bar_action;
 
 			ts.url_params = $.param( ts.url_params );
 
+			/**
+			 * DEPRECATED: tribe_ev_postCollectBarParams has been deprecated in 4.0. Use post-collect-bar-params.tribe instead
+			 */
 			$( te ).trigger( 'tribe_ev_postCollectBarParams' );
+			$( te ).trigger( 'post-collect-bar-params.tribe' );
 
 			if ( ts.url_params.length ) {
 				ts.cur_url += tt.starting_delim() + ts.url_params;

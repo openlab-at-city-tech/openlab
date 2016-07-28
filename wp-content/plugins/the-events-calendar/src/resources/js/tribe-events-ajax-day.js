@@ -171,11 +171,11 @@
 
 		}
 
-		$( te ).on( "tribe_ev_runAjax", function() {
+		$( te ).on( 'tribe_ev_runAjax', function() {
 			tribe_events_day_ajax_post();
 		} );
 
-		$( te ).on( "tribe_ev_updatingRecurrence", function() {
+		$( te ).on( 'tribe_ev_updatingRecurrence', function() {
 			if ( ts.filter_cats ) {
 				td.cur_url = ( td.default_permalinks ) ? base_url + '=' + td.cur_date : base_url + td.cur_date + '/';
 			}
@@ -252,7 +252,9 @@
 				// @ifdef DEBUG
 				dbug && debug.time( 'Day View Ajax Timer' );
 				// @endif
+
 				$( te ).trigger( 'tribe_ev_ajaxStart' ).trigger( 'tribe_ev_dayView_AjaxStart' );
+
 				$( '#tribe-events-content .tribe-events-loop' ).tribe_spin();
 
 				$.post(
@@ -308,6 +310,7 @@
 							tribe_day_add_classes();
 
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_dayView_AjaxSuccess' );
+							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_dayView_AjaxSuccess' );
 
 							// @ifdef DEBUG
 							dbug && debug.timeEnd( 'Day View Ajax Timer' );

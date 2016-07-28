@@ -116,7 +116,7 @@
 			var $target = $( '.tribe-mobile-day[data-day="' + date + '"]' ),
 				$cell = $( '.tribe-events-calendar td[data-day="' + date + '"]' ),
 				$more = $cell.find( '.tribe-events-viewmore' ),
-				$events = $cell.find( '.hentry' );
+				$events = $cell.find( '.type-tribe_events' );
 
 			if ( $events.length ) {
 				$events
@@ -174,7 +174,7 @@
 
 			var $today = $wrapper.find( '.tribe-events-present' ),
 				$mobile_trigger = $wrapper.find( '.mobile-trigger' ),
-				$tribe_grid = $wrapper.find( '#tribe-events-content > .tribe-events-calendar' );
+				$tribe_grid = $wrapper.find( document.getElementById( 'tribe-events-content' ) ).find( '.tribe-events-calendar'  );
 
 			if ( !$( '#tribe-mobile-container' ).length ) {
 				$( '<div id="tribe-mobile-container" />' ).insertAfter( $tribe_grid );
@@ -358,11 +358,11 @@
 			tribe_events_bar_calendar_ajax_actions( e );
 		} );
 
-		$( te ).on( "tribe_ev_runAjax", function() {
+		$( te ).on( 'tribe_ev_runAjax', function() {
 			tribe_events_calendar_ajax_post();
 		} );
 
-		$( te ).on( "tribe_ev_updatingRecurrence", function() {
+		$( te ).on( 'tribe_ev_updatingRecurrence', function() {
 			ts.date = $( '#tribe-events-header' ).data( "date" );
 			if ( ts.filter_cats ) {
 				td.cur_url = $( '#tribe-events-header' ).data( 'baseurl' ) + ts.date + '/';
@@ -402,11 +402,12 @@
 					eventDate: ts.date
 				};
 
-				if ( ts.category ) {
-					ts.params['tribe_event_category'] = ts.category;
-				}
-
 				ts.url_params = {};
+
+				if ( ts.category ) {
+					ts.params.tribe_event_category = ts.category;
+					ts.url_params.tribe_events_cat = ts.category;
+				}
 
 				if ( td.default_permalinks ) {
 					if( !ts.url_params.hasOwnProperty( 'post_type' ) ){
@@ -424,7 +425,7 @@
 
 				$( te ).trigger( 'tribe_ev_collectParams' );
 
-				if ( ts.pushcount > 0 || ts.filters || td.default_permalinks ) {
+				if ( ts.pushcount > 0 || ts.filters || td.default_permalinks || ts.category ) {
 					ts.do_string = true;
 					ts.pushstate = false;
 				}
@@ -499,6 +500,7 @@
 							}
 
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_monthView_ajaxSuccess' );
+							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_monthView_ajaxSuccess' );
 
 							// @ifdef DEBUG
 							dbug && debug.timeEnd( 'Month View Ajax Timer' );

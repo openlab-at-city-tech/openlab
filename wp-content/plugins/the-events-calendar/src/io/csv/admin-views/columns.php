@@ -13,20 +13,20 @@ $mapper = new Tribe__Events__Importer__Column_Mapper( $import_type );
 if ( isset( $_POST['column_map'] ) ) {
 	$mapper->set_defaults( $_POST['column_map'] );
 } else {
-	$mapper->set_defaults( get_option( 'tribe_events_import_column_mapping', array() ) );
+	$mapper->set_defaults( get_option( 'tribe_events_import_column_mapping_' . $import_type, array() ) );
 }
 
 require_once 'header.php';
 ?>
 
-<h3><?php echo sprintf( esc_html__( 'Column Mapping: %s', 'the-events-calendar' ), ucwords( $import_type ) ) ?></h3>
+<h2><?php printf( esc_html__( 'Column Mapping: %s', 'the-events-calendar' ), $import_type_title ) ?></h2>
 <?php if ( ! empty( $messages ) ): ?>
 	<div class="error"><?php echo implode( '', $messages ); ?></div>
 <?php endif; ?>
 	<div class="form">
 		<p><?php esc_html_e( 'Columns have been mapped based on your last import. Please ensure the selected fields match the columns in your CSV file.', 'the-events-calendar' ) ?></p>
 
-		<form method="POST">
+		<form method="POST" id="import">
 			<table class="">
 				<thead>
 				<th><?php esc_html_e( 'Column Headings', 'the-events-calendar' ); ?></th>
@@ -41,7 +41,7 @@ require_once 'header.php';
 
 				<tr>
 					<td colspan="2">
-						<?php submit_button( __( 'Perform Import', 'the-events-calendar' ) ); ?>
+						<?php submit_button( esc_html__( 'Perform Import', 'the-events-calendar' ) ); ?>
 					</td>
 				</tr>
 

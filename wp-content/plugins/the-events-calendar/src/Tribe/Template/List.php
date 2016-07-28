@@ -51,7 +51,6 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 		/**
 		 * List view ajax handler
 		 *
-		 * @return void
 		 */
 		public function ajax_response() {
 
@@ -74,6 +73,7 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 			if ( isset( $_POST['tribe_event_display'] ) ) {
 				if ( $_POST['tribe_event_display'] == 'past' ) {
 					$args['eventDisplay'] = 'past';
+					$args['order'] = 'DESC';
 				} elseif ( 'all' == $_POST['tribe_event_display'] ) {
 					$args['eventDisplay'] = 'all';
 				}

@@ -9,15 +9,100 @@ class Tribe__Events__Importer__Admin_Page {
 	private $messages = array();
 	private $errors = array();
 
+	/**
+	 * Static Singleton Holder
+	 * @var Tribe__Settings|null
+	 */
+	private static $instance;
+
+	/**
+	 * Static Singleton Factory Method
+	 *
+	 * @return Tribe__Settings
+	 */
+	public static function instance() {
+		if ( empty( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Admin page for the importer URL, relative to `admin_url()`
+	 * @var null|string
+	 */
+	public $admin_page_url = null;
+
+	/**
+	 * The actual Page Slug used
+	 * @var null|string
+	 */
+	public $admin_page_slug = null;
+
+	public function __construct() {
+		$this->admin_page_url = 'edit.php?post_type=' . Tribe__Events__Main::POSTTYPE;
+		$this->admin_page_slug = 'events-importer';
+	}
+
+	/**
+	 * Returns the main admin settings URL.
+	 *
+	 * @return string
+	 */
+	public function get_url( array $args = array() ) {
+		$defaults = array(
+			'page' => $this->admin_page_slug,
+		);
+
+		// Allow the link to be "changed" on the fly
+		$args = wp_parse_args( $args, $defaults );
+		$url = admin_url( $this->admin_page_url );
+
+		return esc_url( apply_filters( 'tribe_importer_url', add_query_arg( $args, $url ), $args, $url ) );
+	}
+
 	public function register_admin_page() {
 		add_submenu_page(
-			'edit.php?post_type='.Tribe__Events__Main::POSTTYPE,
-			__( 'Import', 'the-events-calendar' ),
-			__( 'Import', 'the-events-calendar' ),
+			$this->admin_page_url,
+			esc_html__( 'Import', 'the-events-calendar' ),
+			esc_html__( 'Import', 'the-events-calendar' ),
 			'import',
-			'events-importer',
+			$this->admin_page_slug,
 			array( $this, 'render_admin_page_contents' )
 		);
+	}
+
+	public function add_settings_fields( $fields = array() ) {
+		$newfields = array(
+			'csv-title'                     => array(
+				'type' => 'html',
+				'html' => '<h3>' . esc_html__( 'CSV Import Settings', 'the-events-calendar' ) . '</h3>',
+			),
+			'csv-form-content-start'        => array(
+				'type' => 'html',
+				'html' => '<div class="tribe-settings-form-wrap">',
+			),
+			'imported_post_status[csv]'     => array(
+				'type'            => 'dropdown',
+				'label'           => __( 'Default status to use for imported events', 'the-events-calendar' ),
+				'options'         => Tribe__Events__Importer__Options::get_possible_stati(),
+				'validation_type' => 'options',
+				'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+			),
+			'imported_encoding_status[csv]' => array(
+				'type'            => 'dropdown',
+				'label'           => __( 'Default encoding for imported csv file', 'the-events-calendar' ),
+				'options'         => Tribe__Events__Importer__Options::get_encoding_status(),
+				'validation_type' => 'options',
+				'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+			),
+			'csv-form-content-end'          => array(
+				'type' => 'html',
+				'html' => '</div>',
+			),
+		);
+		return array_merge( $fields, $newfields );
 	}
 
 	public function render_admin_page_contents() {
@@ -34,7 +119,24 @@ class Tribe__Events__Importer__Admin_Page {
 
 			default:
 				include Tribe__Events__Importer__Plugin::path( 'src/io/csv/admin-views/header.php' );
-				do_action( 'tribe-import-render-tab-' . $tab );
+				if ( has_action( 'tribe-import-render-tab-' . $tab ) ) {
+					/**
+					 * Remove this Action on 4.3
+					 * @deprecated
+					 */
+					_doing_it_wrong(
+						'tribe-import-render-tab-' . $tab,
+						sprintf(
+							esc_html__( 'This Action has been deprecated, to comply with WordPress Standards we are now using Underscores (_) instead of Dashes (-). From: "%s" To: "%s"', 'the-events-calendar' ),
+							'tribe-import-render-tab-' . $tab,
+							'tribe_import_render_tab_' . $tab
+						),
+						'4.0'
+					);
+					do_action( 'tribe-import-render-tab-' . $tab );
+				}
+
+				do_action( 'tribe_import_render_tab_' . $tab );
 				include Tribe__Events__Importer__Plugin::path( 'src/io/csv/admin-views/footer.php' );
 				break;
 		}
@@ -51,7 +153,7 @@ class Tribe__Events__Importer__Admin_Page {
 				try {
 					$file = new Tribe__Events__Importer__File_Reader( Tribe__Events__Importer__File_Uploader::get_file_path() );
 				} catch ( RuntimeException $e ) {
-					$this->errors[] = __( 'The file went away. Please try again.', 'the-events-calendar' );
+					$this->errors[] = esc_html__( 'The file went away. Please try again.', 'the-events-calendar' );
 					$this->state = '';
 					return $this->render_admin_page_contents();
 				}
@@ -65,7 +167,17 @@ class Tribe__Events__Importer__Admin_Page {
 					}
 				}
 				$import_type = get_option( 'tribe_events_import_type' );
-				$messages = $this->errors;
+
+				$import_type_titles_map = array();
+
+				/**
+				 * Allows filtering the import type titles to go from a slug to a pretty title.
+				 *
+				 * @param array $import_type_titles_map
+				 */
+				$import_type_titles_map = apply_filters( 'tribe_events_import_type_titles_map', $import_type_titles_map );
+				$import_type_title      = isset( $import_type_titles_map[ $import_type ] ) ? $import_type_titles_map[ $import_type ] : ucwords( $import_type );
+				$messages               = $this->errors;
 				include Tribe__Events__Importer__Plugin::path( 'src/io/csv/admin-views/columns.php' );
 				break;
 			case 'importing':
@@ -75,10 +187,32 @@ class Tribe__Events__Importer__Admin_Page {
 			case 'complete':
 				$log = get_option( 'tribe_events_import_log' );
 				$skipped = get_option( 'tribe_events_import_failed_rows', array() );
+				$encoded = get_option( 'tribe_events_import_encoded_rows', array() );
 				include Tribe__Events__Importer__Plugin::path( 'src/io/csv/admin-views/result.php' );
 				break;
 			default:
 				$messages = $this->errors;
+				$import_options = array(
+					'venues'     => esc_html__( 'Venues', 'the-events-calendar' ),
+					'organizers' => esc_html__( 'Organizers', 'the-events-calendar' ),
+					'events'     => esc_html__( 'Events', 'the-events-calendar' ),
+				);
+
+				/**
+				 * Filters the CSV import options available to the user.
+				 *
+				 * @param array $import_options An associative array of option values and labels.
+				 */
+				$import_options = apply_filters( 'tribe_events_import_options_rows', $import_options );
+
+				$default_selected_import_option = 'events';
+
+				/**
+				 * Filters the default selected option for the import options.
+				 *
+				 * @param string $default_selected_import_option
+				 */
+				$default_selected_import_option = apply_filters( 'tribe_events_import_options_default_selected', $default_selected_import_option );
 				include Tribe__Events__Importer__Plugin::path( 'src/io/csv/admin-views/import.php' );
 				break;
 		}
@@ -92,11 +226,28 @@ class Tribe__Events__Importer__Admin_Page {
 
 	public function get_available_tabs() {
 		$tabs = array(
-			__( 'General', 'the-events-calendar' ) => 'general',
-			__( 'Import: CSV', 'the-events-calendar' ) => 'csv-importer',
+			esc_html__( 'Import Settings', 'the-events-calendar' ) => 'general',
+			esc_html__( 'CSV', 'the-events-calendar' ) => 'csv-importer',
 		);
 
-		return apply_filters( 'tribe-import-tabs', $tabs );
+		if ( has_filter( 'tribe-import-tabs' ) ) {
+			/**
+			 * Remove this Filter on 4.3
+			 * @deprecated
+			 */
+			_doing_it_wrong(
+				'tribe-import-tabs',
+				sprintf(
+					esc_html__( 'This Filter has been deprecated, to comply with WordPress Standards we are now using Underscores (_) instead of Dashes (-). From: "%s" To: "%s"', 'the-events-calendar' ),
+					'tribe-import-tabs',
+					'tribe_import_tabs'
+				),
+				'4.0'
+			);
+			$tabs = apply_filters( 'tribe-import-tabs', $tabs );
+		}
+
+		return apply_filters( 'tribe_import_tabs', $tabs );
 	}
 
 	public function handle_submission() {
@@ -120,7 +271,11 @@ class Tribe__Events__Importer__Admin_Page {
 				break;
 
 			case 'continue':
-				$this->continue_import();
+				// This test guards against a fatal error that can occur if the action=continue
+				// screen is refreshed after the import completes
+				if ( Tribe__Events__Importer__File_Uploader::has_valid_csv_file() ) {
+					$this->continue_import();
+				}
 				break;
 
 			default:
@@ -150,7 +305,7 @@ class Tribe__Events__Importer__Admin_Page {
 		$this->state = 'map';
 
 		if ( empty( $_POST['import_type'] ) || empty( $_FILES['import_file']['name'] ) ) {
-			$this->errors[] = __( 'We were unable to process your request. Please try again.', 'the-events-calendar' );
+			$this->errors[] = esc_html__( 'We were unable to process your request. Please try again.', 'the-events-calendar' );
 			$this->state = '';
 			return;
 		}
@@ -177,32 +332,32 @@ class Tribe__Events__Importer__Admin_Page {
 	private function handle_column_mapping() {
 		// Deconstruct mapping.
 		if ( empty( $_POST['column_map'] ) ) {
-			return FALSE;
+			return false;
 		}
 		$column_mapping = $_POST['column_map'];
 
 		try {
 			$importer = $this->get_importer();
 		} catch ( RuntimeException $e ) {
-			$this->errors[] = __( 'The file went away. Please try again.', 'the-events-calendar' );
-			return FALSE;
+			$this->errors[] = esc_html__( 'The file went away. Please try again.', 'the-events-calendar' );
+			return false;
 		}
 		$required_fields = $importer->get_required_fields();
 		$missing = array_diff( $required_fields, $column_mapping );
 		if ( ! empty( $missing ) ) {
 			$mapper = new Tribe__Events__Importer__Column_Mapper( get_option( 'tribe_events_import_type' ) );
-			$message = __( '<p>The following fields are required for a successful import:</p>', 'the-events-calendar' );
+			$message = '<p>' . esc_html__( 'The following fields are required for a successful import:', 'the-events-calendar' ) . '</p>';
 			$message .= '<ul style="list-style-type: disc; margin-left: 1.5em;">';
 			foreach ( $missing as $key ) {
 				$message .= '<li>' . $mapper->get_column_label( $key ) . '</li>';
 			}
 			$message .= '</ul>';
 			$this->errors[] = $message;
-			return FALSE;
+			return false;
 		}
 
-		update_option( 'tribe_events_import_column_mapping', $column_mapping );
-		return TRUE;
+		update_option( 'tribe_events_import_column_mapping_' . $importer->get_type(), $column_mapping );
+		return true;
 	}
 
 	private function begin_import() {
@@ -212,8 +367,9 @@ class Tribe__Events__Importer__Admin_Page {
 
 	private function reset_tracking_options() {
 		update_option( 'tribe_events_importer_offset', get_option( 'tribe_events_importer_has_header', 0 ) );
-		update_option( 'tribe_events_import_log', array( 'updated' => 0, 'created' => 0, 'skipped' => 0 ) );
+		update_option( 'tribe_events_import_log', array( 'updated' => 0, 'created' => 0, 'skipped' => 0, 'encoding' => 0 ) );
 		update_option( 'tribe_events_import_failed_rows', array() );
+		update_option( 'tribe_events_import_encoded_rows', array() );
 	}
 
 	private function continue_import() {
@@ -245,7 +401,7 @@ class Tribe__Events__Importer__Admin_Page {
 		$type = get_option( 'tribe_events_import_type' );
 		$file_reader = new Tribe__Events__Importer__File_Reader( Tribe__Events__Importer__File_Uploader::get_file_path() );
 		$importer = Tribe__Events__Importer__File_Importer::get_importer( $type, $file_reader );
-		$importer->set_map( get_option( 'tribe_events_import_column_mapping', array() ) );
+		$importer->set_map( get_option( 'tribe_events_import_column_mapping_' . $type, array() ) );
 		$importer->set_type( get_option( 'tribe_events_import_type' ) );
 		$importer->set_limit( absint( apply_filters( 'tribe_events_csv_batch_size', 100 ) ) );
 		$importer->set_offset( get_option( 'tribe_events_importer_has_header', 0 ) );
@@ -257,12 +413,18 @@ class Tribe__Events__Importer__Admin_Page {
 		$log['updated'] += $importer->get_updated_post_count();
 		$log['created'] += $importer->get_new_post_count();
 		$log['skipped'] += $importer->get_skipped_row_count();
+		$log['encoding'] += $importer->get_encoding_changes_row_count();
 		update_option( 'tribe_events_import_log', $log );
 
-		$skipped_rows = $importer->get_skipped_row_numbers();
+		$skipped_rows            = $importer->get_skipped_row_numbers();
 		$previously_skipped_rows = get_option( 'tribe_events_import_failed_rows', array() );
-		$skipped_rows = $previously_skipped_rows + $skipped_rows;
+		$skipped_rows            = $previously_skipped_rows + $skipped_rows;
 		update_option( 'tribe_events_import_failed_rows', $skipped_rows );
+
+		$encoded_rows            = $importer->get_encoding_changes_row_numbers();
+		$previously_encoded_rows = get_option( 'tribe_events_import_encoded_rows', array() );
+		$encoded_rows            = $previously_encoded_rows + $encoded_rows;
+		update_option( 'tribe_events_import_encoded_rows', $encoded_rows );
 	}
 
 	private function clean_up_after_import() {

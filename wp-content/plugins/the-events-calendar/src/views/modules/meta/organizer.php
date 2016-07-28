@@ -28,8 +28,9 @@ $website = tribe_get_organizer_website_link();
 			}
 
 			?>
-			<dd class="fn org">
-				<?php echo tribe_get_organizer( $organizer ) ?>
+			<dt style="display:none;"><?php // This element is just to make sure we have a valid HTML ?></dt>
+			<dd class="tribe-organizer">
+				<?php echo tribe_get_organizer_link( $organizer ) ?>
 			</dd>
 			<?php
 		}
@@ -40,7 +41,7 @@ $website = tribe_get_organizer_website_link();
 				<dt>
 					<?php esc_html_e( 'Phone:', 'the-events-calendar' ) ?>
 				</dt>
-				<dd class="tel">
+				<dd class="tribe-organizer-tel">
 					<?php echo esc_html( $phone ); ?>
 				</dd>
 				<?php
@@ -51,7 +52,7 @@ $website = tribe_get_organizer_website_link();
 				<dt>
 					<?php esc_html_e( 'Email:', 'the-events-calendar' ) ?>
 				</dt>
-				<dd class="email">
+				<dd class="tribe-organizer-email">
 					<?php echo esc_html( $email ); ?>
 				</dd>
 				<?php
@@ -62,7 +63,7 @@ $website = tribe_get_organizer_website_link();
 				<dt>
 					<?php esc_html_e( 'Website:', 'the-events-calendar' ) ?>
 				</dt>
-				<dd class="url">
+				<dd class="tribe-organizer-url">
 					<?php echo $website; ?>
 				</dd>
 				<?php

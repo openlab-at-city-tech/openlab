@@ -74,7 +74,7 @@
 
 			if ( $( this ).parent().is( '.tribe-events-past' ) ) {
 				ts.view = 'past';
-			} else if ( 'undefined' !== result[1] ) {
+			} else if ( result && 'undefined' !== typeof result[1] ) {
 				ts.view = result[1];
 			} else {
 				ts.view = 'list';
@@ -86,7 +86,7 @@
 			result = reg.exec( href );
 
 			// use what is on the URL if possible
-			if ( 'undefined' !== typeof result[1] ) {
+			if ( result && 'undefined' !== typeof result[1] ) {
 				ts.paged = result[1];
 			} else {
 				// otherwise figure it out based on the current page and direction
@@ -123,7 +123,7 @@
 
 			if ( $( this ).parent().is( '.tribe-events-past' ) ) {
 				ts.view = 'past';
-			} else if ( 'undefined' !== typeof result[1] ) {
+			} else if ( result && 'undefined' !== typeof result[1] ) {
 				ts.view = result[1];
 			} else {
 				ts.view = 'list';
@@ -134,7 +134,7 @@
 
 			td.cur_url = tf.url_path( $( this ).attr( 'href' ) );
 
-			if ( 'undefined' !== typeof result[1] ) {
+			if ( result && 'undefined' !== typeof result[1] ) {
 				ts.paged = result[1];
 			} else if ( 'list' === ts.view ) {
 				if ( ts.paged > 1 ) {
@@ -198,7 +198,7 @@
 			tribe_events_bar_listajax_actions( e );
 		} );
 
-		$( te ).on( "tribe_ev_runAjax", function() {
+		$( te ).on( 'tribe_ev_runAjax', function() {
 			tribe_events_list_ajax_post();
 		} );
 
@@ -330,6 +330,8 @@
 							}
 
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_listView_AjaxSuccess' );
+							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_listView_AjaxSuccess' );
+
 							// @ifdef DEBUG
 							dbug && debug.timeEnd( 'List View Ajax Timer' );
 							// @endif

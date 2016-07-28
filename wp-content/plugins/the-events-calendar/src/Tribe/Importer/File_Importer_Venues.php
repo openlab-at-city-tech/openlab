@@ -27,25 +27,29 @@ class Tribe__Events__Importer__File_Importer_Venues extends Tribe__Events__Impor
 	}
 
 	private function build_venue_array( $venue_id, array $record ) {
-		$venue_address = trim( $this->get_value_by_key( $record, 'venue_address' ) . ' ' . $this->get_value_by_key( $record, 'venue_address2' ) );
-		$venue         = array(
-			'Venue'       => $this->get_value_by_key( $record, 'venue_name' ),
-			'Address'     => $venue_address,
-			'City'        => $this->get_value_by_key( $record, 'venue_city' ),
-			'Country'     => $this->get_value_by_key( $record, 'venue_country' ),
-			'Province'    => $this->get_value_by_key( $record, 'venue_state' ),
-			'State'       => $this->get_value_by_key( $record, 'venue_state' ),
-			'Zip'         => $this->get_value_by_key( $record, 'venue_zip' ),
-			'Phone'       => $this->get_value_by_key( $record, 'venue_phone' ),
-			'URL'         => $this->get_value_by_key( $record, 'venue_url' ),
-			'ShowMap'     => $venue_id ? get_post_meta( $venue_id, '_VenueShowMap', true ) : 'true',
-			'ShowMapLink' => $venue_id ? get_post_meta( $venue_id, '_VenueShowMapLink', true ) : 'true',
+		$venue_address         = trim( $this->get_value_by_key( $record, 'venue_address' ) . ' ' . $this->get_value_by_key( $record, 'venue_address2' ) );
+		$venue                 = array(
+			'Venue'         => $this->get_value_by_key( $record, 'venue_name' ),
+			'Description'   => $this->get_value_by_key( $record, 'venue_description' ),
+			'Address'       => $venue_address,
+			'City'          => $this->get_value_by_key( $record, 'venue_city' ),
+			'Country'       => $this->get_value_by_key( $record, 'venue_country' ),
+			'Province'      => $this->get_value_by_key( $record, 'venue_state' ),
+			'State'         => $this->get_value_by_key( $record, 'venue_state' ),
+			'Zip'           => $this->get_value_by_key( $record, 'venue_zip' ),
+			'Phone'         => $this->get_value_by_key( $record, 'venue_phone' ),
+			'URL'           => $this->get_value_by_key( $record, 'venue_url' ),
+			'ShowMap'       => $venue_id ? get_post_meta( $venue_id, '_VenueShowMap', true ) : 'true',
+			'ShowMapLink'   => $venue_id ? get_post_meta( $venue_id, '_VenueShowMapLink', true ) : 'true',
+			'FeaturedImage' => $this->get_featured_image( $venue_id, $record ),
 		);
+		
 		if ( empty( $venue['Country'] ) ) {
 			$venue['Country'] = 'United States';
 		}
 
+		$venue = apply_filters( 'tribe_events_importer_venue_array', $venue, $record, $venue_id, $this );
+
 		return $venue;
 	}
-
 }

@@ -12,7 +12,7 @@
 	<div class="tribe-half-column">
 		<?php
 
-		$changelog = new Tribe__Events__Changelog_Reader();
+		$changelog = new Tribe__Changelog_Reader();
 		foreach ( $changelog->get_changelog() as $section => $messages ):
 			if ( empty( $messages ) ) {
 				continue;
@@ -29,12 +29,12 @@
 	</div>
 
 	<div class="tribe-half-column">
-		<h3><?php _e( 'Keep the Core Plugin <strong>FREE</strong>!', 'the-events-calendar' ); ?></h3>
-		<p><?php _e( 'Every time you rate <strong>5 stars</strong>, a fairy is born. Okay maybe not, but more happy users mean more contributions and help on the forums. The community NEEDS your voice.', 'the-events-calendar' ); ?></p>
+		<h2><?php printf( esc_html__( 'Keep the Core Plugin %sFREE%s!', 'the-events-calendar' ), '<strong>', '</strong>' ); ?></h2>
+		<p><?php printf( esc_html__( 'Every time you rate %s5 stars%s, a fairy is born. Okay maybe not, but more happy users mean more contributions and help on the forums. The community NEEDS your voice.', 'the-events-calendar' ), '<strong>', '</strong>' ); ?></p>
 		<p><a href="http://wordpress.org/support/view/plugin-reviews/the-events-calendar?filter=5" target="_blank" class="button-primary"><?php esc_html_e( 'Rate It', 'the-events-calendar' ); ?></a></p>
 
 		<br/>
-		<h3><?php esc_html_e( 'PSST... Want a Discount?', 'the-events-calendar' ); ?></h3>
+		<h2><?php esc_html_e( 'PSST... Want a Discount?', 'the-events-calendar' ); ?></h2>
 		<p><?php esc_html_e( 'We send out discounts to our core users via our newsletter.', 'the-events-calendar' ); ?></p>
 		<form action="http://moderntribe.createsend.com/t/r/s/athqh/" method="post">
 			<p><input id="listthkduyk" name="cm-ol-thkduyk" type="checkbox" /> <label for="listthkduyk">Developer News</label></p>

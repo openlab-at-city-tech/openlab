@@ -14,7 +14,7 @@ if ( ! empty( $messages ) ): ?>
 	</div>
 <?php endif; ?>
 	<div id="modern-tribe-info">
-		<h3><?php esc_html_e( 'Import Instructions', 'the-events-calendar' ); ?></h3>
+		<h2><?php esc_html_e( 'Import Instructions', 'the-events-calendar' ); ?></h2>
 		<ul>
 			<li>
 				<?php esc_html_e( 'If your events have Organizers or Venues, please import those first.', 'the-events-calendar' ); ?>
@@ -33,18 +33,18 @@ if ( ! empty( $messages ) ): ?>
 				</ul>
 			</li>
 		</ul>
-		<p><?php printf( __( 'Questions? <a href="%s">Watch the video</a>.', 'the-events-calendar' ), 'http://tri.be/using-the-events-calendars-csv-importer/' ); ?></p>
+		<p><?php printf( esc_html__( 'Questions? %sWatch the video%s.', 'the-events-calendar' ), '<a href="http://tri.be/using-the-events-calendars-csv-importer/">', '</a>' ); ?></p>
 	</div>
-	<form method="post" enctype="multipart/form-data">
+	<form method="post" enctype="multipart/form-data" id="import">
 		<table class="form-table">
 			<tr>
 				<td>
 					<label title="Import Type">
 						<?php esc_html_e( 'Import Type:', 'the-events-calendar' ) ?>
 						<select name="import_type" id="events-import-import-type">
-							<option value="venues"><?php esc_html_e( 'Venues', 'the-events-calendar' ) ?></option>
-							<option value="organizers"><?php esc_html_e( 'Organizers', 'the-events-calendar' ) ?></option>
-							<option value="events" selected="selected"><?php esc_html_e( 'Events', 'the-events-calendar' ) ?></option>
+							<?php foreach ( $import_options as $value => $label ) : ?>
+								<option value="<?php echo $value ?>" <?php selected( $value == $default_selected_import_option ); ?>><?php echo $label; ?></option>
+							<?php endforeach; ?>
 						</select>
 					</label>
 				</td>
@@ -56,14 +56,14 @@ if ( ! empty( $messages ) ): ?>
 						<input type="file" name="import_file" id="events-import-csv-file" />
 					</label>
 
-					<p class="description"><?php _e( "Upload a properly formatted, UTF-8 encoded CSV file. Not sure if your file is UTF-8 encoded? Make sure to specify the character encoding when you save the file, or pass it through a <a href='http://i-tools.org/charset/exec?dest=utf-8&src=auto&download=1'>conversion tool</a>.", 'the-events-calendar' ); ?></p>
+					<p class="description"><?php printf( esc_html__( 'Upload a properly formatted, UTF-8 encoded CSV file. Not sure if your file is UTF-8 encoded? Make sure to specify the character encoding when you save the file, or pass it through a %sconversion tool%s.', 'the-events-calendar' ), '<a href="http://www.webutils.pl/index.php?idx=conv">', '</a>' ); ?></p>
 				</td>
 			</tr>
 
 			<tr>
 				<td>
 					<label title="Header Row">
-						<input type="checkbox" name="import_header" value="1" id="events-import-csv-file" checked="checked" />
+						<input type="checkbox" name="import_header" value="1" id="events-import-header" checked="checked" />
 						<?php esc_html_e( 'This file has column names in the first row', 'the-events-calendar' ) ?>
 					</label>
 				</td>
