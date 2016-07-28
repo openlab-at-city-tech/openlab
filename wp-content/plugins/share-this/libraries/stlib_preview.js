@@ -120,7 +120,7 @@ stlib_preview.setupPreview = function(jQElement, newDefaults, newOptions) {
 //		updateTags(stlib_preview.currentServices);
 		updateTags2(stlib_preview.currentServices);
 	};
-	
+
 	if (newOptions) {
 		stlib_preview.currentOptions = newOptions;
 	} else {
@@ -133,46 +133,11 @@ stlib_preview.setupPreview = function(jQElement, newDefaults, newOptions) {
 //		updateTags(stlib_preview.defaultServices);
 		updateTags2(stlib_preview.defaultServices);
 	}
-	
-	// For Object
-//	function updateTags(list) {
-//		stlib_preview.currentServices = list;
-//		
-//		type="";
-//		if (stlib_preview.currentOptions.icon == 'large')
-//			type="_large";
-//		else if (stlib_preview.currentOptions.icon == 'hcount')
-//			type="_hcount";
-//		else if (stlib_preview.currentOptions.icon == 'vcount')
-//			type="_vcount";
-//		else if (stlib_preview.currentOptions.icon == 'buttons')
-//			type="_buttons";
-//		
-//		tags="";
-//		for (attrname in stlib_preview.currentServices) {
-//			title="";
-//			if (stlib_preview.currentOptions.label && typeof(stlib_preview.currentServices[attrname])!='undefined' && typeof(stlib_preview.currentServices[attrname].title) != 'undefined')
-//				title=stlib_preview.currentServices[attrname].title;
-//			br="";
-//			if (stlib_preview.currentOptions.layout == 'v')
-//				br="<br/>";
-//			
-//			tags+="<span class='st_"+attrname+type+"' displayText='"+ title +"'></span>"+br;
-//		}
-//		/*
-//		jQuery.each(stlib_preview.currentServices, function(key, value) {
-//			tags+="<span class='st_"+key+"' displayText='"+ value.title +"'></span>";
-//		});
-//		*/
-//		jQElement.html("");
-//		jQElement.append(tags);
-//		stButtons.locateElements();
-//	}
-	
+
 	// For Array
 	function updateTags2(list) {
 		stlib_preview.currentServices = list;
-		
+
 		type="";
 		if (stlib_preview.currentOptions.icon == 'large')
 			type="_large";
@@ -182,20 +147,20 @@ stlib_preview.setupPreview = function(jQElement, newDefaults, newOptions) {
 			type="_vcount";
 		else if (stlib_preview.currentOptions.icon == 'buttons')
 			type="_buttons";
-		
+
 		tags="";
 		for (var c=0; c<stlib_preview.currentServices.length; c++) {
 			br="";
 			if (stlib_preview.currentOptions.layout == 'v')
 				br="<br/>";
-			
+
 			title="";
 			if (stlib_preview.currentOptions.label && typeof(stlib_picker._all_services[stlib_preview.currentServices[c]])!='undefined' && typeof(stlib_picker._all_services[stlib_preview.currentServices[c]].title) != 'undefined')
 				title=stlib_picker._all_services[stlib_preview.currentServices[c]].title;
 			if (stlib_preview.currentOptions.label && typeof(stlib_picker._all_native_services[stlib_preview.currentServices[c]])!='undefined' && typeof(stlib_picker._all_native_services[stlib_preview.currentServices[c]].title) != 'undefined')
 				title=stlib_picker._all_native_services[stlib_preview.currentServices[c]].title;
 			tags+="<span class='st_"+stlib_preview.currentServices[c]+type+"' displayText='"+ title +"'";
-			
+
 			// Add extra info if native services
 			// TODO: MUST CHANGE THIS!
 			if (stlib_preview.currentServices[c] == "fbsub") {
@@ -223,9 +188,9 @@ stlib_preview.setupPreview = function(jQElement, newDefaults, newOptions) {
 		}
 		jQElement.html("");
 		jQElement.append(tags);
-		stButtons.locateElements();
+		stbuttons.locateElements();
 	}
-	
+
 	//Save the options (and the picker) globally
 	stlib_preview.previewList[jQElement.attr("id")] = optionsArray;
 }

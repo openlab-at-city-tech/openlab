@@ -46,7 +46,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	if (typeof(cb) != "undefined" && cb != null) {
 		optionsArray["cb"] = cb;
 	}
-	
+
 	//Append the three divs that are needed:
 	var html = "<div class='stp_background'>";
 	html += "<div class='stp_pickerLeftArrow";
@@ -66,16 +66,16 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 		html += " stp_ulLeftNative";
 	}
 	html += "'></ul></div>";
-	
+
 	html += "<div class='picker_headings'><span id='sharingBtn' class='stp_header' onclick='showSocialButtons()'>Sharing Buttons</span>";
-	
+
 	// For HoverBar and PullDown Bar - Disable Social Plugins Tab
 	if( (st_btnType == "_none") && ((st_selectedBarStyle == "hoverbarStyle") || (st_selectedBarStyle == "pulldownStyle"))) {
 		html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header highlightSelection' style='padding-left:5px;color:#CCCCCC;cursor: none !important;'>Social Plugins</span></div>";
 	}else{
 		html += "<span class='stp_header2' style='padding-left:5px'>|</span><span id='socialPlgn' class='stp_header highlightSelection' style='padding-left:5px;'  onclick='showSocialPlugins()'>Social Plugins</span></div>";
 	}
-	
+
 	html += "<div class='stp_pickerArrow stp_pickerArrowRtNative'><img src='"+PLUGIN_PATH+"images/drag.png' class='stp_drag'></div>";
 	html += "<div class='stp_pickerRight' style='display:block;'><div id='chicklet_search'><input type='text' value='Search services' id='chicklet_search_field' onkeyup='stlib_picker.searchAndDisplay(jQuery(this).parent().parent().parent().parent(), jQuery(this).parent().parent(), this.value);'></div><ul class='stp_ulRight'></ul></div>";
 	if (options && !options.showNative) {
@@ -87,7 +87,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	}
 	html += "</div>";
 	jQElement.html(html);
-	
+
 	//Add default Services
 	var pickerDefaults = [];
 	if (newDefaults) {
@@ -95,19 +95,19 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 	} else {
 		pickerDefaults = stlib_picker.defaultServices;
 	}
-	
+
 	//Add topServices
 	if (topServices) {
 		optionsArray["topServices"] = topServices;
 	} else {
 		optionsArray["topServices"] = ["linkedin"];
 	}
-	
+
 	//Add excludedServices
 	if (excludedServices) {
 		optionsArray["excludedServices"] = excludedServices;
-	} 
-	
+	}
+
 	// Add options
 	if (options) {
 		if (options.topNativeServices) {
@@ -118,13 +118,13 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 		}
 		optionsArray["options"] = options;
 	}
-	
-	// Add list of services	
+
+	// Add list of services
 	var ul = jQElement.children(".stp_background").children(".stp_pickerLeft").children(".stp_ulLeft");
 	for(i=0;i<pickerDefaults.length;i++) {
 		stlib_picker.addServiceLink(ul, pickerDefaults[i], pickerDefaults[i]);
 	}
-	
+
 	// NON-NATIVE SERVICES
 	// TOP SERVICES
 	ul = jQElement.children(".stp_background").children(".stp_pickerRight").children(".stp_ulRight");
@@ -139,7 +139,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 			stlib_picker.addServiceLink(ul, key, value);
 		}
 	});
-	
+
 	// NATIVE SERVICES
 	if (jQElement.find(".stp_pickerBottom").length > 0) {
 		// TOP SERVICES
@@ -149,7 +149,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 				stlib_picker.addServiceLink(ul, optionsArray["topNativeServices"][i], stlib_picker._all_native_services[optionsArray["topNativeServices"][i]]);
 			}
 		}
-		
+
 		// EVERYTHING ELSE
 		jQuery.each(stlib_picker._all_native_services, function(key, value) {
 			if(jQuery.inArray(key, pickerDefaults) == -1 && jQuery.inArray(key, optionsArray["topNativeServices"]) == -1 && jQuery.inArray(key, optionsArray["excludedNativeServices"]) == -1) {
@@ -157,23 +157,24 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 			}
 		});
 	}
-	
+
 	jQElement.find("#chicklet_search_field").blur(function() {
 		var element=jQuery(this);
 		if(element.val()==""){
 			element.val("Search services");
 		}
 	});
-	
+
 	jQElement.find("#chicklet_search_field").focus(function() {
 		var element=jQuery(this);
 		if(element.val()=="Search services"){
 			element.val("");
 		}
 	});
-	
+
 	var deleteElement = false;
 	jQElement.find('.stp_ulLeft').sortable({
+		connectWith: "#shopping-cart",
 		revert: 100,
 		opacity: 0.8,
 		out: function (event, ui) {
@@ -181,7 +182,7 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 			jQElement.find('.stp_ulLeft').sortable("option", "revert", false);
 			jQElement.find('.stp_ulRight li').draggable("option", "revert", true);
 			jQElement.find('.stp_ulBottom li').draggable("option", "revert", true);
-			stlib_picker.pickerList[jQElement.attr("id")]["overLeftPicker"] = !deleteElement; 
+			stlib_picker.pickerList[jQElement.attr("id")]["overLeftPicker"] = !deleteElement;
 		},
 		over: function (event, ui) {
 			deleteElement = false;
@@ -196,9 +197,15 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 			}
 		},
 		update: function (event, ui) {
+			// To pass id through clonning object.
+			if (!ui.item.attr("id")){
+				ui.item.attr("id", "st_li_" + ui.item.attr("service"));
+				// ui.item.attr("style", ""); Clean "dragging"-time styles
+			}
+
 			stlib_picker.makeDraggable(jQElement, "#"+ui.item.attr("id"));
 			stlib_picker.enableDraggable(jQElement);
-			stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:ui.item.attr("id").substring(6),action:"move"});
+			stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:ui.item.attr("id").substring(6), action:"move"});
 		},
 		receive: function(event, ui) {
 			if (ui.item.parent().hasClass("stp_ulRight")) {
@@ -207,11 +214,11 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 				var resultName = ".stp_ulBottom";
 			}
 			jQElement.find(resultName).find("#"+ui.item.attr("id")).remove();
-			stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:ui.item.attr("id").substring(6),action:"add"});
+			stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:ui.item.attr("id").substring(6), action:"add"});
 		}
-	});
+	}).disableSelection();
 	stlib_picker.makeDraggable(jQElement);
-	
+
 	//Save the options (and the picker) globally
 	stlib_picker.pickerList[jQElement.attr("id")] = optionsArray;
 }
@@ -219,23 +226,24 @@ stlib_picker.setupPicker = function(jQElement, newDefaults, cb, topServices, exc
 stlib_picker.addServiceLink = function(ul, key, value, before) {
 	var title = "", imgProto = '';
 	if (value.title) {
-		title = value.title; 
+		title = value.title;
 	} else {
 		if (stlib_picker._all_services[value])
 			title = stlib_picker._all_services[value].title;
 		else if (stlib_picker._all_native_services[value])
 			title = stlib_picker._all_native_services[value].title;
 	}
-	
+
 	imgProto = (document.location.protocol === "https:") ? "https://ws" : "http://w";
-		
+
 	if (before && before == true)
-		ul.prepend("<li id='st_li_" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
+		ul.prepend("<li id='st_li_" + key + "' service='" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 	else
-		ul.append("<li id='st_li_" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
+		ul.append("<li id='st_li_" + key + "' service='" + key + "' class='stp_li'><img src='"+imgProto+".sharethis.com/images/"+key+"_32.png'></img><span class='stp_liText'>" + title + "</span><img src='"+PLUGIN_PATH+"images/close.png' class='stp_remove'></img></li>");
 }
 
 stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
+
 	if (pickerClass.hasClass("stp_pickerRight")) {
 		var pickerName = ".stp_pickerRight";
 		var resultName = ".stp_ulRight";
@@ -249,7 +257,7 @@ stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
 		var topServices = stlib_picker.pickerList[jQElement.attr("id")]["topNativeServices"];
 		var excludedServices = stlib_picker.pickerList[jQElement.attr("id")]["excludedNativeServices"];
 	}
-	
+
 	var ul = jQElement.children(".stp_background").children(pickerName).children(resultName);
 	var leftServices = stlib_picker.getServices(jQElement.attr("id"));
 	ul.html("");
@@ -275,7 +283,7 @@ stlib_picker.searchAndDisplay = function(jQElement, pickerClass, searchTerm) {
 				matches.push(i);
 			}
 		}
-		
+
 		//Add top services
 		for(var c=0; c<matches.length; c++){
 			if(jQuery.inArray(matches[c], leftServices) == -1 && jQuery.inArray(matches[c], topServices) != -1 && jQuery.inArray(matches[c], excludedServices) == -1) {
@@ -301,7 +309,10 @@ stlib_picker.makeDraggable = function (jQElement, elem) {
 		opacity: 0.8,
 		revert: 'invalid',
 		revertDuration: 100,
-		connectToSortable: jQElement.find('.stp_ulLeft'),
+		connectToSortable: '.stp_ulLeft',
+		start: function(event, ui) {
+			ui.helper.width(jQuery(this).width());
+		},
 		stop: function (event, ui) {
 			if (stlib_picker.pickerList[jQElement.attr("id")]["overLeftPicker"]) {
 				stlib_picker.disableDraggable(jQElement);
@@ -322,12 +333,13 @@ stlib_picker.makeDraggable = function (jQElement, elem) {
 			}
 		}
 	});
-	//Add the various Event handlers 
+	//Add the various Event handlers
 	//Need to make sure that we don't get confused when there are multiple pickers
 	var targetElem = ".stp_li";
 	if (typeof(elem) != "undefined") {
 		targetElem = elem;
 	}
+
 	jQElement.find(targetElem).find(".stp_remove").mousedown(function() {
 		var element=jQuery(this).parent();
 		stlib_picker.removeElement(jQElement, element);
@@ -336,26 +348,26 @@ stlib_picker.makeDraggable = function (jQElement, elem) {
 		if (jQElement.find(this).parent().hasClass("stp_ulLeft")) {
 			if (!jQElement.find(".stp_reorder").hasClass("stp_show")) {
 				jQElement.find(".stp_reorder").addClass("stp_show");
-			} 
+			}
 			if (!jQElement.find(this).find(".stp_remove").hasClass("stp_show")) {
 				jQElement.find(this).find(".stp_remove").addClass("stp_show");
-			} 
+			}
 		} else if (jQElement.find(this).parent().hasClass("stp_ulRight")) {
 			if (!jQElement.find(".stp_drag").hasClass("stp_show")) {
 				jQElement.find(".stp_drag").addClass("stp_show");
-			} 
+			}
 		} else if (jQElement.find(this).parent().hasClass("stp_ulBottom")) {
 			if (!jQElement.find(".stp_drag_bottom").hasClass("stp_show")) {
 				jQElement.find(".stp_drag_bottom").addClass("stp_show");
-			} 
+			}
 		}
-		
+
 	});
-//	jQElement.find(targetElem).mousedown(function() {
-//		jQElement.find(".stp_drag").removeClass("stp_show");
-//		jQElement.find(".stp_reorder").removeClass("stp_show");
-//		jQElement.find(this).find(".stp_remove").removeClass("stp_show");
-//	});
+	// jQElement.find(targetElem).mousedown(function() {
+	// 	jQElement.find(".stp_drag").removeClass("stp_show");
+	// 	jQElement.find(".stp_reorder").removeClass("stp_show");
+	// 	jQElement.find(this).find(".stp_remove").removeClass("stp_show");
+	// });
 	jQElement.find(targetElem).mouseout(function() {
 		jQElement.find(".stp_drag").removeClass("stp_show");
 		jQElement.find(".stp_drag_bottom").removeClass("stp_show");
@@ -365,17 +377,17 @@ stlib_picker.makeDraggable = function (jQElement, elem) {
 }
 
 stlib_picker.enableDraggable = function (jQElement) {
-	jQElement.find('.stp_ulRight li').draggable("option", "delay", 0);
-	jQElement.find('.stp_ulBottom li').draggable("option", "delay", 0);
+	// jQElement.find('.stp_ulRight li').draggable("option", "delay", 0);
+	// jQElement.find('.stp_ulBottom li').draggable("option", "delay", 0);
 }
 
 stlib_picker.disableDraggable = function (jQElement) {
-//	jQElement.find('.stp_ulRight li').draggable("option", "connectToSortable", false);
-//	jQElement.find('.stp_ulBottom li').draggable("option", "connectToSortable", false);
-//	jQElement.find('.stp_ulRight li').draggable("disable");
-//	jQElement.find('.stp_ulBottom li').draggable("disable");
-	jQElement.find('.stp_ulRight li').draggable("option", "delay", 300);
-	jQElement.find('.stp_ulBottom li').draggable("option", "delay", 300);
+	// jQElement.find('.stp_ulRight li').draggable("option", "connectToSortable", false);
+	// jQElement.find('.stp_ulBottom li').draggable("option", "connectToSortable", false);
+	// jQElement.find('.stp_ulRight li').draggable("disable");
+	// jQElement.find('.stp_ulBottom li').draggable("disable");
+	// jQElement.find('.stp_ulRight li').draggable("option", "delay", 300);
+	// jQElement.find('.stp_ulBottom li').draggable("option", "delay", 300);
 }
 
 stlib_picker.removeElement = function (jQElement, element) {
@@ -389,14 +401,17 @@ stlib_picker.removeElement = function (jQElement, element) {
 		var resultName = ".stp_ulBottom";
 		var searchServices = stlib_picker._all_native_services;
 	}
+
 	jQElement.find(element).effect("fade", {}, 500, function(){
 		stlib_picker.addServiceLink(jQElement.children(".stp_background").children(pickerName).children(resultName), temp, searchServices[temp], true);
-		jQElement.find(element).remove();
+		jQElement.find(element[0]).remove();
 		jQElement.find(".stp_drag").removeClass("stp_show");
 		jQElement.find(".stp_reorder").removeClass("stp_show");
 		stlib_picker.makeDraggable(jQElement, "#"+element.attr("id"));
-        stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:temp,action:"remove"});
-    });
+    setTimeout(function(){
+			stlib_picker.pickerList[jQElement.attr("id")]["cb"]({service:temp, action:"remove"});
+		}, 100)
+  });
 }
 
 function showSocialButtons(){
