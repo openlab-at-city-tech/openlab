@@ -2,7 +2,7 @@
  * Plugin Name: WP Lightbox 2
  * Plugin URI: http://yepinol.com/lightbox-2-plugin-wordpress/
  * Description: This plugin used to add the lightbox (overlay) effect to the current page images on your WordPress blog.
- * Version:       2.28.8.6
+ * Version:       2.28.9.2.1
  * Author:        Pankaj Jha
  * Author URI:    http://onlinewebapplication.com/
  * License:       GNU General Public License, v2 (or newer)
@@ -93,15 +93,22 @@
 		/*2.21 - Image Map, Shrink large images to fit smaller screens*/
 		/*2.23 - Updated jQuery calls for faster load*/
 		/*2.25 - Fixed PHP 5 bug*/
-		/*2.27 -  Compatible with wordpress 3.5.1.*/
+		/*2.27 - Compatible with wordpress 3.5.1.*/
 		/*2.28.6.1 - Fixed navigation issue (minor release)*/
-		/*2.28.8 -  Compatible with wordpress 3.8.*/
-		/*2.28.8.1 -  Fixed navigation issue.*/
-		/*2.28.8.2 -  Compatible with wordpress 3.8.1*/
-		/*2.28.8.3 -  Fixed full screen image close issue*/
-	        /*2.28.8.4 -  Compatible with wordpress 3.9*/
+		/*2.28.8 - Compatible with wordpress 3.8.*/
+		/*2.28.8.1 - Fixed navigation issue.*/
+		/*2.28.8.2 - Compatible with wordpress 3.8.1*/
+		/*2.28.8.3 - Fixed full screen image close issue*/
+	        /*2.28.8.4 - Compatible with wordpress 3.9*/
                 /*2.28.8.5 - Fixed Responsiveness Issue */
-                /*2.28.8.6 -  Compatible with wordpress 3.9.1*/
+                /*2.28.8.6 - Compatible with wordpress 3.9.1*/
+		/*2.28.8.7 - Fixed Image Galary and other HTML issue minor fix*/
+		/*2.28.8.8 - Compatible with wordpress 3.9.2*/
+		/*2.28.8.9 - Compatible with wordpress 4.0*/
+		/*2.28.9.0 - Optimize: content grouping support and exclusion performance*/
+		/*2.28.9.1 - Compatible with wordpress 4.0.1*/
+		/*2.28.9.2 - Compatible with wordpress 4.1*/
+		/*2.28.9.2.1 - Fixed: Broken shortcodes with WordPress 4.1*/
         function resizeListener(e) {
             if (opts.resizeTimeout) {
                 clearTimeout(opts.resizeTimeout);

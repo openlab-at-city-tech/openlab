@@ -1,178 +1,244 @@
 === WP Lightbox 2 ===
-Contributors: masdiblogs
-Plugin Site: http://yepinol.com/lightbox-2-plugin-wordpress/
-Donate link: http://onlinewebapplication.com/onlinewebapplication-com-donation/
-Tags: lightbox, WP Lightbox, AJAX, image, photo, picture, JQuery WP Image Plugin, colorbox,  photo albums, slideshow, image map, imagemap, flash, gallery, AJAX slideshow, JQuery slideshow, nextgen, page, pagination gallery, pagination portfolio, photo, photo album, photo albums, photo gallery, Photo Slider, photos, picture, pictures, plugin, plugin for gallery, plugin gallery, portfolio, responsive gallery, seo image, thumbnail, widget, wordpress gallery plugin, wordpress portfolio plugin, wp gallery, wp gallery plugin,  Galleria, gallery, Gallery Plugin, google, grid gallery, html5 player
+Contributors: smub, griffinjt
+Plugin Site: http://www.wpbeginner.com/
+Donate link: http://www.wpbeginner.com/
+Tags: lightbox, image, gallery, photo gallery, lightbox popup, responsive lightbox, wordpress lightbox, lightbox gallery, gallery lightbox, wordpress image lightbox, image lightbox, popup lightbox, wordpress slideshow lightbox, lightbox image, popup images, popup image, wordpress video gallery lightbox,  google map lightbox popup, swipe, google map lightbox, popup bar, popup block
 Requires at least: 3.0
-Tested up to: 3.9.1
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This plugin used to add the responsive lightbox (overlay) effect to the current page images and create photo albums/gallery on your WordPress blog.
+WP Lightbox 2 is awesome tool for adding responsive lightbox effect for images and also create lightbox for photo album/gallery on your WordPress blog. WordPress Lightbox is one of the most useful plugins for your website.
+
 == Description ==
-### [Best Responsive Lightbox (overlay) effect Plugin - Photo Albums - Image Gallery/Map Plugin](http://yepinol.com/lightbox-2-plugin-wordpress/)
-From 2.1, the default view changed to Colorbox due to the license regulation by the plugin directory. This plugin used to add the lightbox (overlay) effect to the current page images on your WordPress blog. Used to overlay images on the current page. Extension of wp-jquery-lightbox. 
 
-Just install and sit back. This plugin enable image overlay lighbox effect for all the post images in your wordpress plugin. No configuration required.
+WP Lightbox 2 is an WordPress lightbox tool for adding responsive lightbox effect for your website images and also create lightbox effect for album/gallery photos on your WordPress blog.
+Just install and sit back. This plugin enable image overlay Lightbox effect for all the images in your WordPress website.
+Also our WP Lightbox 2 plugin allow you to configure the lightbox settings.
+There are a lot of useful setting for this lightbox, that will help you to display lightbox effect in different ways.
 
-<b>This is the first [Ligtbox plugin](http://onlinewebapplication.com/wp-lightbox-2/) which support Image Map.</b>
+This plugin used to add the lightbox (overlay) effect to the current page images on your WordPress blog.
 
-<b>Feature</b>:
+WP Lightbox 2 have a lot of useful features. WP Lightbox 2 features:
 
-1. Works on all modern browsers.
-2. Group related images in post and navigate through them with ease.
-3. Backwards Compatibility.
-4. No configuration required.
-5. 5 Inbuilt theme.
-6. Lightbox display of Gallery.
-7. Display image metadata (caption, description, etc.) in lightbox
-8. Group image links (play as a slideshow)
-9. Compatible with wordpress HTML5 
+### Features of WP Lightbox 2 plugin
 
+*   **Fully Responsive WordPress Lightbox**
+*   **Easy install and use**
+*   **Works on all modern browsers**
+*   **WP Lightbox 2 works perfectly with all versions of WordPress**
+*   **Group related images in post and navigate through them with ease**
+*   **Ability to use lightbox in comments**
+*   **Ability to display download link for images**
+*   **Ability to change image info position**
+*   **Ability to reduce large images to fit smaller screens**
+*   **Ability to set Animation duration**
+*   **Ability to to type additional text below image info**
+*   **Ability to change Lightbox Overlay opacity**
+*   **Lightbox effect for WordPress Galleries**
+*   **User friendly back-end for WP Lightbox 2 plugin**
+*   **Tested on popular WordPress themes**
 
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
 
-> #### **Live Demos and Usage**
-
-> * [DEMO: Ligtbox plugin Demo](http://yepinol.com/wp-lightbox-2-plugin-wordpress-demo/)
-> * [USAGE: Know How to use WP Lighbox 2](http://onlinewebapplication.com/how-to-use-wp-lightbox-2-wordpress-plugin/)
-> * [TROUBLESHOOTING: Please read the FAQ first if you are having problems](http://yepinol.com/wp-lightbox-2-faq/)
-> 
-
-
-
-= Full support =
-If you are unable to resolve your problem with the information provided in the FAQ please leave your comments or submit a support [request](http://forums.onlinewebapplication.com/).
-
-If you value my plugins, please help me out by rate this.
-<br />
-[Author Site](http://onlinewebapplication.com)<br />
-[Lightbox 2 Plugin Home Page](http://yepinol.com/lightbox-2-plugin-wordpress/)
-<br />
-<br />
 == Installation ==
 
-To do a new installation of the plugin, please follow these steps
+### First download the WP Lightbox 2 plugin ZIP file.
+For installing the **WP Lightbox 2**, please follow these steps
 
-1. Download the zipped plugin file to your local machine.
-2. Unzip the file.
-3. Upload the `WP-lightbox-2` folder to the `/wp-content/plugins/` directory.
-4. Activate the plugin through the 'Plugins' menu in WordPress.
-5. Optionally, go to the Options page and select a new Lightbox colour scheme.
+1. Log in to your WordPress website admin panel.
+2. Then go to Plugins page Add New > Upload Plugin .
+3. Click "Choose file" then select the - WP Lightbox 2 zip file.
+4. Then Install and activate the plugin.
+5. Then, from the left panel of Dashboard, click on the **WP Lightbox 2** icon to edit WP Lightbox 2 options.
 
-<br />
-[How to use WP Lighbox 2](http://onlinewebapplication.com/how-to-use-wp-lightbox-2-wordpress-plugin/)<br />
-[Demo](http://demo.onlinewebapplication.com/wp-lightbox-2-demo/)<br />
-[FAQ](http://yepinol.com/wp-lightbox-2-faq/)
 == Frequently Asked Questions ==
-[Demo](http://demo.onlinewebapplication.com/wp-lightbox-2-demo/)
 
-Question: Why does not plugin is working for me?
+Our WP Lightbox 2 is user friendly plugin, but here you can see some frequently asked questions that can help you.
 
-Answers: Check the following reasons:
-You have changed the plugin folder`s name to something other than wp-lightbox-2.
+= How should I enable WP Lightbox 2 =
 
-The problem is with your WordPress theme, mangling image display properties. Use another theme, that does not interfere with posted images.
+By default the option "Use Lightbox for all image links" is enabled, that's means all the images in your website will display in overlay lightbox.
 
-You have other plugins that conflict with Lightbox
+= How can I disable WP Lightbox 2 for certain images =
 
-Disable your other plugins and see if that helps. If it does, re-enable each plugin, one at a time to see which one is causing the conflict.
+You just need to add rel="nobox" to your image link.
+Example -  <a href="image-link.html" rel="nobox"><img src="image-link.html" width="772" height="250" /></a>
 
-Question: It does not work properly in Browser X (Explorer 6, 7, etc)?
+= How can I display caption in lightbox =
 
-Answer: Yes it does. The problem is with your WordPress theme, mangling image display properties. Use another theme, or change your theme`s Cascading Style Sheets (CSS).
+Use the title attribute if you want to show a caption.
 
-<br />
-You can check more FAQ on plugin official website URL :<br />
+= Why plugin doesn't work for me =
 
-[WP Lightbox 2 FAQ](http://yepinol.com/wp-lightbox-2-faq/)<br />
+Check the following reasons:
 
-[WP Lightbox 2 Official URL](http://onlinewebapplication.com/wp-lightbox-2/)<br />
+- You have changed the plugin folder name to something other than wp-lightbox-2.
+- The problem is in your WordPress theme. Use another theme, that does not interfere with post/pages images.
+- You have other plugins that conflict with WP Lightbox 2. Disable your other plugins and see if that helps. If it does, re-enable each plugin, one at a time to see which one is causing the conflict.
+
+= Does WP Lightbox 2 work properly in all Browser(Chrome, Firefox, Explorer, etc) =
+
+Yes, it does. The problem is in your WordPress theme, mangling image display properties.
+Use another theme, or change your theme Cascading Style Sheets (CSS).
+
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
 
 == Screenshots ==
-[Demo](http://demo.onlinewebapplication.com/wp-lightbox-2-demo/)
 
-You can check Screen Shots on plugin website URL :<br />
-WP Lightbox 2 [Link 1](http://onlinewebapplication.com/wp-lightbox-2/)<br />
-WP Lightbox 2 [Link 2](http://yepinol.com/lightbox-2-plugin-wordpress/)<br />
+1.  **WP Lightbox 2** Front-end
+2.  **WP Lightbox 2** Back-end
+3.  **WP Lightbox 2** Back-end
+4.  **WP Lightbox 2** Front-end
+5.  [WordPress Lightbox](https://wordpress.org/plugins/wp-lightbox-2) Front-end
 
 == Changelog ==
+
+= 3.0.6.2 =
+* Add checks for images without rel tags and fix all the things.
+
+= 3.0.6.1 = 
+* Prevent double quotes on automatic rel attributes
+
+= 3.0.6 =
+* Fix: WordPress 4.4 compatibility
+
+= 3.0.5 =
+* Fix: WordPress 4.3 compatibility
+
+= 3.0.0 =
+
+* Created some important changes for Lightbox.
+
+= 2.28.9.2.1 =
+
+* Fixed: Broken shortcodes with WordPress 4.1 for Lightbox.
+
+= 2.28.9.2 =
+
+* Compatible Lightbox with wordpress 4.1.
+
+= 2.28.9.1 =
+
+* Compatible Lightbox with wordpress 4.0.1.
+
+= 2.28.9.0 =
+
+* Optimize Lightbox: content grouping support and exclusion performance .
+
+= 2.28.8.9 =
+
+* Compatible Lightbox with wordpress 4.0.
+
+= 2.28.8.8 =
+
+* Compatible Lightbox with wordpress 3.9.2
+
+= 2.28.8.7 =
+
+* Fixed Image Galary and other HTML issue minor for Lightbox .
+
 = 2.28.8.6 =
-* Compatible with wordpress 3.9.1 Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Compatible Lightbox with wordpress 3.9.1
 
 = 2.28.8.5 =
-* Fixed Responsiveness Issue [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Fixed Lightbox Responsiveness Issue .
 
 = 2.28.8.4 =
-* Compatible with wordpress 3.9. Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Compatible Lightbox with wordpress 3.9.
 
 = 2.28.8.3 =
-* Fixed full screen image close issue [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Fixed full screen image close issue for Lightbox.
 
 = 2.28.8.2 =
-* Compatible with wordpress 3.8.1. Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Compatible Lightbox with wordpress 3.8.1
 
 = 2.28.8.1 =
-* Fixed navigation Issue. Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Fixed navigation Issue for Lightbox.
 
 = 2.28.8 =
-* Compatible with wordpress 3.8 Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Compatible Lightbox with wordpress 3.8 .
 
 = 2.28.7 =
-* Compatible with wordpress 3.7.1 Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Compatible Lightbox with wordpress 3.7.1.
 
 = 2.28.6.1 =
-* Fixed navigation issue (minor release). Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+* Fixed navigation issue (minor release) for Lightbox.
 
 = 2.28.5 =
-*Compatible with wordpress 3.6.1 Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/).
+
+*Compatible Lightbox with wordpress 3.6.1.
 
 = 2.28.4 =
-*Compatible with wordpress 3.6. Check more details [here](http://forums.onlinewebapplication.com/wp-ligbox2-release-2-28-3/).
+
+*Compatible Lightbox with wordpress 3.6.
 
 = 2.28.3 =
-* Fixed HTML5 Themes support issues. Check more details [here]
-(http://onlinewebapplication.com/wp-lightbox-2/).
+
+* Fixed HTML5 Themes support issues fro Lightbox.
 
 = 2.28.2 =
-* Compatible with wordpress HTML5 Themes. Check more details [here](http://forums.onlinewebapplication.com/wp-ligbox2-release-2-28-2/).
+
+* Compatible Lightbox with wordpress HTML5 Themes.
 
 = 2.28.1 =
-Fixed PHP 5 comment bug that got reintroduced into plugin. Check more details [here](http://onlinewebapplication.com/wp-lightbox-2/).
+
+Fixed PHP 5 comment bug that got reintroduced into plugin.
 
 = 2.28 =
-*Use wp_enqueue_scripts instead.  Check support thread (http://wordpress.org/support/topic/please-stop-using-the-wp_print_scripts-action-hook-to-load-your-javascript).
+
+*Use wp_enqueue_scripts instead.  [Check support thread](http://wordpress.org/support/topic/please-stop-using-the-wp_print_scripts-action-hook-to-load-your-javascript).
 
 = 2.27 =
-* Compatible with wordpress 3.5.1. Check more details [here](http://onlinewebapplication.com/wp-lightbox-2/).
+
+* Compatible Lightbox with wordpress 3.5.1.
 
 = 2.26 =
-* Compatible with wordpress 3.5 . Check more details [here](http://yepinol.com/lightbox-2-plugin-wordpress/)
+
+* Compatible Lightbox with wordpress 3.5.
 
 = 2.25 =
-* Compatible with wordpress 3.4.2 (Fixed PHP 5 bug)
-* Fixed Bug [Stopped Working with W3 Total Cache](http://onlinewebapplication.com/wp-lightbox-2/)
+
+* Compatible Lightboxwith wordpress 3.4.2 (Fixed PHP 5 bug)
+* Fixed Bug Stopped Working with W3 Total Cache
 
 = 2.24 =
-* Compatible with wordpress 3.4.2
+
+* Compatible Lightbox with wordpress 3.4.2
 
 = 2.23 =
-* Updated jQuery calls.
+
+* Updated jQuery calls for [WordPress Lightbox](https://wordpress.org/plugins/wp-lightbox-2).
 
 = 2.22 =
-* Fixed one s, that caused a fatal error.
+
+* Fixed one's, that caused a fatal error.
 
 = 2.21 =
-* Image Map
+
+* Image Map fro Lightbox.
 * Shrink large images to fit smaller screens.
 
 = 2.2 =
+
 * Bug Fixed [Can't install update](http://wordpress.org/support/topic/plugin-wp-lightbox-2-cant-installa-update).
 
 = 2.1 =
+
 * Default view changed to Colorbox due to the license regulation by the plugin directory.
 
 = 2.0 =
+
 * List versions.
 * Works on all modern browsers.
 * Group related images in post and navigate through them with ease.
@@ -181,64 +247,42 @@ Fixed PHP 5 comment bug that got reintroduced into plugin. Check more details [h
 * 5 Inbuilt theme.
 * Lightbox display of Gallery.
 
-== Upgrade Notice ==
-= 2.28.8.6 =
-* Compatible with wordpress 3.9.1
+== Other Notes ==
 
-= 2.28.8.5 =
-* Fixed Responsiveness Issue
+### WP Lightbox 2 General Settings
 
-= 2.28.8.4 =
-* Compatible with wordpress 3.9.
+*  Use Lightbox for all image links - Enable or disable the lightbox.
+*  Enable lightbox in comments - This feature will enable lightbox for your comments.
+*  Show download link - You can display download link.
+*  Show image info on top - Choose image info position.
+*  Reduce large images to fit smaller screens - We recommend to enable this option, it will reduce large images to fit smaller screens.
+*  Minimum margin from top - You can change image position from top.
+*  Lightbox Animation duration - Type here animation duration for lightbox.
+*  Additional text below image info - Type here text, and it will appear below images.
 
-= 2.28.8.3 =
-* Fixed full screen image close issue
+### WP Lightbox 2 Design Settings
 
-= 2.28.8.2 =
-* Compatible with wordpress 3.8.1
+*  Overlay opacity - Set overlay opacity for lightbox.
+*  Overlay color - Choose overlay opacity for lightbox.
+*  Overlay close function - This function will close the lightbox when you click on overlay.
+*  Lightbox image Border width - Type here Lightbox image Border width.
+*  Lightbox image Border color - Choose Border color for Lightbox image.
+*  Lightbox image Border radius - Type here Lightbox image Border radius.
+*  Show/Hide image numbers(ex. Image 1 of 3) - Choose to show or hide numbers for images.
+*  Image info and close button background opacity - Set image info and close button background.
+*  Image info and close button background color - Set Image info and close button background color
+*  Image info text color(includ download link and other text) - Set Image info text color.
+*  Image info text font-size (include download link and other text) - Type Image info text font-size (include download link and other text)
+*  Next image title tag - Type here next image title tag.
+*  Previous image title tag - Type here previous image title tag.
+*  Choose Next/Previous button image - Choose Next/Previous button for lightbox.
+*  Maximum Width - Type maximum width for lightbox images.
+*  Maximum Height - Type maximum height for lightbox images.
+*  Show/Hide close button - Choose to show or hide close buttons for [WordPress Lightbox](https://wordpress.org/plugins/wp-lightbox-2).
+*  Close button max height - Type here close button max height for Wp Lightbox 2.
+*  Close button image title tag - Type here close button image title tag for Wp Lightbox 2.
+*  Lightbox close button image - Choose one, or upload your own image for close button for Wp Lightbox 2.
+*  Keyboard navigation - With this feature users also can change images with keyboard.
+*  Fix position for lightbox - That's mean your lightbox shouldn't change position when users scroll up or down.
 
-= 2.28.8.1 =
-* Fixed navigation issue.
-
-= 2.28.8 =
-* Compatible with wordpress 3.8
-
-= 2.28.7 =
-* Compatible with wordpress 3.7.1
-
-= 2.28.6.1 =
-* Fixed navigation issue (minor release)
-
-= 2.28.5 =
-* Compatible with wordpress 3.6.1
-
-= 2.28.4 =
-* Compatible with wordpress 3.6.
-
-= 2.28.3 =
-* Fixed HTML5 Themes support issues
-
-= 2.28.2 =
-*Compatible with wordpress HTML5.
-
-= 2.28.1 =
-*Fixed PHP 5 comment bug that got reintroduced into plugin.
-
-= 2.28 =
-*Use wp_enqueue_scripts instead
-
-= 2.27 =
-* Compatible with wordpress 3.5.1.
-
-= 2.26 =
-* Compatible with wordpress 3.5
-
-= 2.25 =
-Compatible with wordpress 3.4.2 (Fixed PHP 5 bug)
-Fixed Bug [Stopped Working with W3 Total Cache](http://onlinewebapplication.com/wp-lightbox-2/)
-
-= 2.24 =
-Compatible with wordpress 3.4.2
-
-= 2.1 =
-Default view changed to Colorbox due to the license regulation by the plugin directory.
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.

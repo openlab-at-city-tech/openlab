@@ -1,0 +1,101 @@
+.div_included_slider{
+	padding-top:3px;
+}
+.slider_parametrs{
+	padding-left:5px;
+	width:180px;
+	float:left;
+	margin-top:2px;
+}
+.slider_input{
+	display:none;
+}
+wp_lightbox2_settings_table > tbody >tr:nth-child(odd){
+	background-color:#000000;
+}
+.slider_span{	
+	margin-left: 13px;
+}
+.desription_class{
+	float:right;
+	cursor:default;
+	color:#0074a2;
+	font-size:18px;
+	font-weight:bold;
+	border:1px solid #000000;
+	border-radius:200px;
+	height:20px;
+	padding-left: 6px;
+	padding-right: 6px;
+	margin-left:15px;
+}
+
+.wp-picker-holder{
+	position:absolute;
+	z-index:999999;	
+}
+
+.not_paramter{
+	color:#B33F41;
+	font-size:14px;	
+}
+
+/* SAVE BUTTON*/
+button{
+	webkit-transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) all !important;
+	-moz-transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) all !important;
+	-ms-transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) all !important;
+	-o-transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) all !important;
+	transition:0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) all !important;
+ }
+#save_button,#save_button_general{
+	width: 100px;
+	text-align: left;
+	overflow:hidden;
+}
+#save_button_general{
+	width: 100px;
+}
+.padding_loading{
+	width: 130px !important;
+}
+#save_button_general.padding_loading{
+	width: 130px !important;
+	
+}
+ .saving_in_progress{
+	position: relative;
+	display:none;
+	width: 18px;
+	height: 18px;
+	margin-left: 12px;
+	top: 4px;
+	background-image: url(../images/loading.gif);
+	background-size:100% 100%;
+ }
+ .sucsses_save{
+	position: relative;
+	display:none;
+	width: 18px;
+	height: 18px;
+	margin-left: 12px;
+	top: 4px;
+	background-image: url(../images/success.png);
+	background-size:100% 100%;
+}
+.error_in_saving{
+	position: relative;
+	display:none;
+	width: 18px;
+	height: 18px;
+	margin-left: 12px;
+	top: 4px;
+	background-image: url(../images/remove_element.png);
+	background-size:100% 100%;
+}
+.error_massage{
+	color: #BB1E1E;
+	font-size: 18px;
+	font-weight: bold;
+	padding-left: 21px;
+}
