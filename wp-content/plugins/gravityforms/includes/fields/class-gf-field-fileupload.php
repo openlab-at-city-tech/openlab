@@ -64,7 +64,7 @@ class GF_Field_FileUpload extends GF_Field {
 			/**
 			 * A filter to allow or disallow whitelisting when uploading a file
 			 *
-			 * @param bool To set upload whitelisting to true or false (default is false, which means it is enabled)
+			 * @param bool false To set upload whitelisting to true or false (default is false, which means it is enabled)
 			 */
 			$whitelisting_disabled = apply_filters( 'gform_file_upload_whitelisting_disabled', false );
 
@@ -243,12 +243,13 @@ class GF_Field_FileUpload extends GF_Field {
 				$file_index          = intval( $file_index );
 				$file_url            = esc_attr( $file_url );
 				$display_file_url    = GFCommon::truncate_url( $file_url );
+				$file_url = $this->get_download_url( $file_url );
 				$download_button_url = GFCommon::get_base_url() . '/images/download.png';
 				$delete_button_url   = GFCommon::get_base_url() . '/images/delete.png';
 				$preview .= "<div id='preview_file_{$file_index}' class='ginput_preview'>
 								<a href='{$file_url}' target='_blank' alt='{$file_url}' title='{$file_url}'>{$display_file_url}</a>
 								<a href='{$file_url}' target='_blank' alt='{$download_file_text}' title='{$download_file_text}'>
-								<img src='{$download_button_url}' style='margin-left:10px;'/></a><a href='javascript:void(0);' alt='{$delete_file_text}' title='{$delete_file_text}' onclick='DeleteFile({$lead_id},{$id},this);' ><img src='{$delete_button_url}' style='margin-left:10px;'/></a>
+								<img src='{$download_button_url}' style='margin-left:10px;'/></a><a href='javascript:void(0);' alt='{$delete_file_text}' title='{$delete_file_text}' onclick='DeleteFile({$lead_id},{$id},this);' onkeypress='DeleteFile({$lead_id},{$id},this);' ><img src='{$delete_button_url}' style='margin-left:10px;'/></a>
 							</div>";
 			}
 
@@ -264,7 +265,7 @@ class GF_Field_FileUpload extends GF_Field {
 				$preview    = sprintf( "<div id='%s'>", $file_list_id );
 				$file_infos = $multiple_files ? $uploaded_files : array( $file_infos );
 				foreach ( $file_infos as $file_info ) {
-					$file_upload_markup = apply_filters( 'gform_file_upload_markup', "<img alt='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' title='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' class='gform_delete' src='" . GFCommon::get_base_url() . "/images/delete.png' onclick='gformDeleteUploadedFile({$form_id}, {$id}, this);' /> <strong>" . esc_html( $file_info['uploaded_filename'] ) . '</strong>', $file_info, $form_id, $id );
+					$file_upload_markup = apply_filters( 'gform_file_upload_markup', "<img alt='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' title='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' class='gform_delete' src='" . GFCommon::get_base_url() . "/images/delete.png' onclick='gformDeleteUploadedFile({$form_id}, {$id}, this);' onkeypress='gformDeleteUploadedFile({$form_id}, {$id}, this);' /> <strong>" . esc_html( $file_info['uploaded_filename'] ) . '</strong>', $file_info, $form_id, $id );
 					$preview .= "<div class='ginput_preview'>{$file_upload_markup}</div>";
 				}
 				$preview .= '</div>';
@@ -334,7 +335,9 @@ class GF_Field_FileUpload extends GF_Field {
 			$_gf_uploaded_files[ $input_name ] = $value;
 		}
 
-		return $value;
+		$value_safe = $this->sanitize_entry_value( $value, $form_id );
+
+		return $value_safe;
 	}
 
 	public function get_single_file_value( $form_id, $input_name ) {
@@ -394,7 +397,7 @@ class GF_Field_FileUpload extends GF_Field {
 				$value = empty( $uploaded_files_arr ) ? '' : sprintf( esc_html__( '%d files', 'gravityforms' ), count( $uploaded_files_arr ) );
 				return $value;
 			} elseif ( $file_count == 1 ) {
-				$value = $uploaded_files_arr[0];
+				$value = current( $uploaded_files_arr );
 			} elseif ( $file_count == 0 ) {
 				return;
 			}
@@ -404,6 +407,7 @@ class GF_Field_FileUpload extends GF_Field {
 		if ( ! empty( $file_path ) ) {
 			//displaying thumbnail (if file is an image) or an icon based on the extension
 			$thumb     = GFEntryList::get_icon_url( $file_path );
+			$file_path = $this->get_download_url( $file_path );
 			$file_path = esc_attr( $file_path );
 			$value     = "<a href='$file_path' target='_blank' title='" . esc_attr__( 'Click to view', 'gravityforms' ) . "'><img src='$thumb'/></a>";
 		}
@@ -415,17 +419,21 @@ class GF_Field_FileUpload extends GF_Field {
 		if ( ! empty( $value ) ) {
 			$output_arr = array();
 			$file_paths = $this->multipleFiles ? json_decode( $value ) : array( $value );
-			foreach ( $file_paths as $file_path ) {
-				$info = pathinfo( $file_path );
-				if ( GFCommon::is_ssl() && strpos( $file_path, 'http:' ) !== false ) {
-					$file_path = str_replace( 'http:', 'https:', $file_path );
+
+			if ( is_array( $file_paths ) ) {
+				foreach ( $file_paths as $file_path ) {
+					$info = pathinfo( $file_path );
+					$file_path = $this->get_download_url( $file_path );
+					if ( GFCommon::is_ssl() && strpos( $file_path, 'http:' ) !== false ) {
+						$file_path = str_replace( 'http:', 'https:', $file_path );
+					}
+					$file_path          = esc_attr( str_replace( ' ', '%20', $file_path ) );
+					$base_name          = $info['basename'];
+					$click_to_view_text = esc_attr__( 'Click to view', 'gravityforms' );
+					$output_arr[]       = $format == 'text' ? $file_path . PHP_EOL : "<li><a href='{$file_path}' target='_blank' title='{$click_to_view_text}'>{$base_name}</a></li>";
 				}
-				$file_path    = esc_attr( str_replace( ' ', '%20', $file_path ) );
-				$base_name = $info['basename'];
-				$click_to_view_text = esc_attr__( 'Click to view', 'gravityforms' );
-				$output_arr[] = $format == 'text' ? $file_path . PHP_EOL : "<li><a href='{$file_path}' target='_blank' title='{$click_to_view_text}'>{$base_name}</a></li>";
+				$output = join( PHP_EOL, $output_arr );
 			}
-			$output = join( PHP_EOL, $output_arr );
 		}
 		$output = empty( $output ) || $format == 'text' ? $output : sprintf( '<ul>%s</ul>', $output );
 
@@ -434,13 +442,14 @@ class GF_Field_FileUpload extends GF_Field {
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 
+		$force_download = $modifier === 'download';
+
 		if ( $this->multipleFiles ) {
 
 			$files = empty( $raw_value ) ? array() : json_decode( $raw_value, true );
 			foreach ( $files as &$file ) {
-
+				$file = $this->get_download_url( $file, $force_download );
 				$file = str_replace( ' ', '%20', $file );
-
 				if ( $esc_html ) {
 					$value = esc_html( $value );
 				}
@@ -448,13 +457,13 @@ class GF_Field_FileUpload extends GF_Field {
 			$value = $format == 'html' ? join( '<br />', $files ) : join( ', ', $files );
 
 		} else {
+			$value = $this->get_download_url( $value, $force_download );
 			$value = str_replace( ' ', '%20', $value );
 		}
 
 		if ( $url_encode ) {
 			$value = urlencode( $value );
 		}
-
 
 		return $value;
 	}
@@ -498,7 +507,6 @@ class GF_Field_FileUpload extends GF_Field {
 		$this->multipleFiles = (bool) $this->multipleFiles;
 
 		$this->allowedExtensions = sanitize_text_field( $this->allowedExtensions );
-
 	}
 
 	public function get_value_export( $entry, $input_id = '', $use_text = false, $is_csv = false ) {
@@ -514,6 +522,58 @@ class GF_Field_FileUpload extends GF_Field {
 		return $value;
 	}
 
+	/**
+	 * Returns the download URL for a file. The URL is not escaped for output.
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $file The complete file URL.
+	 * @param bool $force_download Default: false
+	 *
+	 * @return string
+	 */
+	public function get_download_url( $file, $force_download = false ) {
+		$download_url = $file;
+
+		$secure_download_location = true;
+
+		/**
+		 * By default the real location of the uploaded file will be hidden and the download URL will be generated with a security token to prevent guessing or enumeration attacks to discover the location of other files.
+		 *
+		 * Return FALSE to display the real location.
+		 *
+		 * @param bool                $secure_download_location If the secure location should be used.  Defaults to true.
+		 * @param string              $file                     The URL of the file.
+		 * @param GF_Field_FileUpload $this                     The Field
+		 */
+		$secure_download_location = apply_filters( 'gform_secure_file_download_location', $secure_download_location, $file, $this );
+		$secure_download_location = apply_filters( 'gform_secure_file_download_location_' . $this->formId, $secure_download_location, $file, $this );
+
+		if ( ! $secure_download_location ) {
+			return $download_url;
+		}
+
+		$upload_root = GFFormsModel::get_upload_url( $this->formId );
+		$upload_root = trailingslashit( $upload_root );
+
+		// Only hide the real URL if the location of the file is in the upload root for the form.
+		// The upload root is calculated using the WP Salts so if the WP Salts have changed then file can't be located during the download request.
+		if ( strpos( $file, $upload_root ) !== false ) {
+			$file = str_replace( $upload_root, '', $file );
+			$download_url = site_url( 'index.php' );
+			$args = array(
+				'gf-download' => urlencode( $file ),
+				'form-id' => $this->formId,
+				'field-id' => $this->id,
+				'hash' => GFCommon::generate_download_hash( $this->formId, $this->id, $file ),
+			);
+			if ( $force_download ) {
+				$args['dl'] = 1;
+			}
+			$download_url = add_query_arg( $args, $download_url );
+		}
+		return $download_url;
+	}
 }
 
 GF_Fields::register( new GF_Field_FileUpload() );
