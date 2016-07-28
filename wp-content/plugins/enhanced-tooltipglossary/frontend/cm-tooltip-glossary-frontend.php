@@ -48,8 +48,15 @@ class CMTooltipGlossaryFrontend {
 
 		add_action( 'bp_before_create_group', array( self::$calledClassName, 'outputGlossaryExcludeStart' ) );
 		add_action( 'bp_before_group_admin_content', array( self::$calledClassName, 'outputGlossaryExcludeStart' ), 50 );
+		add_action( 'bp_attachments_avatar_check_template', array( self::$calledClassName, 'outputGlossaryExcludeStart' ), 50 );
+		add_action( 'bp_before_profile_avatar_upload_content', array( self::$calledClassName, 'outputGlossaryExcludeStart' ), 50 );
+		add_action( 'bp_before_profile_edit_cover_image', array( self::$calledClassName, 'outputGlossaryExcludeStart' ), 50 );
+
 		add_action( 'bp_after_create_group', array( self::$calledClassName, 'outputGlossaryExcludeEnd' ) );
 		add_action( 'bp_after_group_admin_content', array( self::$calledClassName, 'outputGlossaryExcludeEnd' ), 50 );
+		add_action( 'bp_attachments_avatar_main_template', array( self::$calledClassName, 'outputGlossaryExcludeEnd' ), 50 );
+		add_action( 'bp_after_profile_avatar_upload_content', array( self::$calledClassName, 'outputGlossaryExcludeEnd' ), 50 );
+		add_action( 'bp_after_profile_edit_cover_image', array( self::$calledClassName, 'outputGlossaryExcludeEnd' ), 50 );
 	}
 
 	/**
@@ -164,7 +171,8 @@ class CMTooltipGlossaryFrontend {
 		 * New! 03/01/2014 - these rules simplify the condition whether to parse for tooltip or not
 		 */
 		$showOnSinglePost			 = (is_single() && get_option( 'cmtt_glossaryOnPosts' ) == 1);
-		$showOnSinglePage			 = (is_page() && get_option( 'cmtt_glossaryOnPages' ) == 1);
+		$noHomepage					 = (get_option( 'cmtt_glossaryOnlySingle' ) == 1 && is_front_page());
+		$showOnSinglePage			 = (is_page() && !$noHomepage && get_option( 'cmtt_glossaryOnPages' ) == 1);
 		$showOnHomepageAuthorpageEtc = (!is_page() && !is_single() && get_option( 'cmtt_glossaryOnlySingle' ) == 0);
 		$onMainQueryOnly			 = (get_option( 'cmtt_glossaryOnMainQuery' ) == 1 ) ? is_main_query() : TRUE;
 
@@ -205,7 +213,7 @@ class CMTooltipGlossaryFrontend {
 				. "(glossary_exclude)"   // 2: Shortcode name
 				. '\\b'   // Word boundary
 				. '('  // 3: Unroll the loop: Inside the opening shortcode tag
-				. '[^\\]\\/]*'	// Not a closing bracket or forward slash
+				. '[^\\]\\/]*' // Not a closing bracket or forward slash
 				. '(?:'
 				. '\\/(?!\\])'   // A forward slash not followed by a closing bracket
 				. '[^\\]\\/]*'   // Not a closing bracket or forward slash
@@ -532,9 +540,9 @@ class CMTooltipGlossaryFrontend {
 			$glossaryItemContent = apply_filters( 'cmtt_postpages_tooltip_content_add', $glossaryItemContent, $glossary_item );
 
 			if ( $removeLinksToTerms ) {
-				$link_replace = '<span ' . $titleAttr . ' data-tooltip="' . $glossaryItemContent . '" class="glossaryLink ' . $additionalClass . '">' . $titlePlaceholder . '</span>';
+				$link_replace = '<span ' . $titleAttr . ' data-cmtooltip="' . $glossaryItemContent . '" class="glossaryLink ' . $additionalClass . '">' . $titlePlaceholder . '</span>';
 			} else {
-				$link_replace = '<a href="' . $permalink . '"' . $titleAttr . ' data-tooltip="' . $glossaryItemContent . '"  class="glossaryLink ' . $additionalClass . '"' . $windowTarget . '>' . $titlePlaceholder . '</a>';
+				$link_replace = '<a href="' . $permalink . '"' . $titleAttr . ' data-cmtooltip="' . $glossaryItemContent . '"  class="glossaryLink ' . $additionalClass . '"' . $windowTarget . '>' . $titlePlaceholder . '</a>';
 			}
 		} else {
 			if ( $removeLinksToTerms ) {
@@ -717,7 +725,7 @@ class CMTooltipGlossaryFrontend {
 				/*
 				 * Add tooltip if needed (general setting enabled and page not excluded from plugin)
 				 */
-				$preItemTitleContent .= (get_option( 'cmtt_glossaryTooltip' ) == 1) ? 'data-tooltip="' . $glossaryItemContent . '"' : '';
+				$preItemTitleContent .= (get_option( 'cmtt_glossaryTooltip' ) == 1) ? 'data-cmtooltip="' . $glossaryItemContent . '"' : '';
 				$preItemTitleContent .= '>';
 
 				/*
@@ -748,7 +756,7 @@ class CMTooltipGlossaryFrontend {
 
 		$content = apply_filters( 'cmtt_glossary_index_after_content', $content );
 
-		$authorUrl = self::getAuthorUrl();
+		$authorUrl = do_shortcode( '[cminds_free_author id="cmtt"]' );
 		$content .= (get_option( 'cmtt_glossaryReferral' ) == 1 && get_option( 'cmtt_glossaryAffiliateCode' )) ? self::cmtt_getReferralSnippet() : $authorUrl;
 		return $content;
 	}
@@ -799,22 +807,6 @@ class CMTooltipGlossaryFrontend {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Returns the author Url (for free version only)
-	 */
-	public static function getAuthorUrl() {
-		/*
-		 * By leaving following snippet in the code, you're expressing your gratitude to creators of this plugin. Thank You!
-		 */
-		$authorUrl = '<div style="display:block;clear:both;"></div><span class="cmetg_poweredby">';
-		$authorUrl .= '<a href="https://www.cminds.com/" target="_blank" class="cmetg_poweredbylink">CreativeMinds WordPress</a>';
-		$authorUrl .= ' <a href="https://www.cminds.com/" target="_blank" class="cmetg_poweredbylink">Plugin</a>';
-		$authorUrl .= ' <a href="' . CMTT_URL . '" target="_blank" class="cmetg_poweredbylink">' . CMTT_NAME . '</a>';
-		$authorUrl .= '</span><div style="display:block;clear:both;"></div>';
-
-		return $authorUrl;
 	}
 
 	/**

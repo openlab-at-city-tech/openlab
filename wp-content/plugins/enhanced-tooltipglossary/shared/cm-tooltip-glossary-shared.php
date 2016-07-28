@@ -174,7 +174,7 @@ class CMTooltipGlossaryShared
             'rewrite'             => array('slug' => $glossaryPermalink, 'with_front' => false, 'feeds' => true, 'feed' => true),
             'query_var'           => true,
             'supports'            => array('title', 'editor', 'author', 'comments', 'excerpt', 'revisions',
-                'custom-fields', 'page-attributes', 'post-formats'));
+                'custom-fields', 'page-attributes'));
 
         register_post_type('glossary', apply_filters('cmtt_post_type_args', $args));
 
