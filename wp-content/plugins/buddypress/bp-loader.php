@@ -15,7 +15,7 @@
  * Description: BuddyPress helps you build any type of community website using WordPress, with member profiles, activity streams, user groups, messaging, and more.
  * Author:      The BuddyPress Community
  * Author URI:  https://buddypress.org/
- * Version:     2.5.1
+ * Version:     2.6.1.1
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -101,6 +101,22 @@ class BuddyPress {
 	 */
 	public $active_components = array();
 
+	/**
+	 * Whether autoload is in use.
+	 *
+	 * @since 2.5.0
+	 * @var bool
+	 */
+	public $do_autoload = false;
+
+	/**
+	 * Whether to load backward compatibility classes for navigation globals.
+	 *
+	 * @since 2.6.0
+	 * @var bool
+	 */
+	public $do_nav_backcompat = false;
+
 	/** Option Overload *******************************************************/
 
 	/**
@@ -123,11 +139,6 @@ class BuddyPress {
 	 * @since 1.7.0
 	 *
 	 * @static object $instance
-	 * @uses BuddyPress::constants() Setup the constants (mostly deprecated).
-	 * @uses BuddyPress::setup_globals() Setup the globals needed.
-	 * @uses BuddyPress::legacy_constants() Setup the legacy constants (deprecated).
-	 * @uses BuddyPress::includes() Include the required files.
-	 * @uses BuddyPress::setup_actions() Setup the hooks and actions.
 	 * @see buddypress()
 	 *
 	 * @return BuddyPress The one true BuddyPress.
@@ -238,11 +249,6 @@ class BuddyPress {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses is_multisite()
-	 * @uses get_current_site()
-	 * @uses get_current_blog_id()
-	 * @uses plugin_dir_path()
-	 * @uses plugin_dir_url()
 	 */
 	private function constants() {
 
@@ -319,15 +325,12 @@ class BuddyPress {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses plugin_dir_path() To generate BuddyPress plugin path.
-	 * @uses plugin_dir_url() To generate BuddyPress plugin url.
-	 * @uses apply_filters() Calls various filters.
 	 */
 	private function setup_globals() {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '2.5.1';
+		$this->version    = '2.6.1.1';
 		$this->db_version = 10469;
 
 		/** Loading ***********************************************************/
@@ -426,6 +429,12 @@ class BuddyPress {
 		/** Post types and taxonomies *****************************************/
 		$this->email_post_type     = apply_filters( 'bp_email_post_type', 'bp-email' );
 		$this->email_taxonomy_type = apply_filters( 'bp_email_tax_type', 'bp-email-type' );
+
+		/** Navigation backward compatibility *********************************/
+		if ( interface_exists( 'ArrayAccess', false ) ) {
+			// bp_nav and bp_options_nav compatibility depends on SPL.
+			$this->do_nav_backcompat = true;
+		}
 	}
 
 	/**
@@ -454,9 +463,12 @@ class BuddyPress {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses is_admin() If in WordPress admin, load additional file.
 	 */
 	private function includes() {
+		if ( function_exists( 'spl_autoload_register' ) ) {
+			spl_autoload_register( array( $this, 'autoload' ) );
+			$this->do_autoload = true;
+		}
 
 		// Load the WP abstraction file so BuddyPress can run on all WordPress setups.
 		require( $this->plugin_dir . 'bp-core/bp-core-wpabstraction.php' );
@@ -478,7 +490,6 @@ class BuddyPress {
 		require( $this->plugin_dir . 'bp-core/bp-core-cssjs.php'            );
 		require( $this->plugin_dir . 'bp-core/bp-core-update.php'           );
 		require( $this->plugin_dir . 'bp-core/bp-core-options.php'          );
-		require( $this->plugin_dir . 'bp-core/bp-core-classes.php'          );
 		require( $this->plugin_dir . 'bp-core/bp-core-taxonomy.php'         );
 		require( $this->plugin_dir . 'bp-core/bp-core-filters.php'          );
 		require( $this->plugin_dir . 'bp-core/bp-core-attachments.php'      );
@@ -488,11 +499,14 @@ class BuddyPress {
 		require( $this->plugin_dir . 'bp-core/bp-core-adminbar.php'         );
 		require( $this->plugin_dir . 'bp-core/bp-core-buddybar.php'         );
 		require( $this->plugin_dir . 'bp-core/bp-core-catchuri.php'         );
-		require( $this->plugin_dir . 'bp-core/bp-core-component.php'        );
 		require( $this->plugin_dir . 'bp-core/bp-core-functions.php'        );
 		require( $this->plugin_dir . 'bp-core/bp-core-moderation.php'       );
 		require( $this->plugin_dir . 'bp-core/bp-core-loader.php'           );
 		require( $this->plugin_dir . 'bp-core/bp-core-customizer-email.php' );
+
+		if ( ! $this->do_autoload ) {
+			require( $this->plugin_dir . 'bp-core/bp-core-classes.php' );
+		}
 
 		// Skip or load deprecated content
 		if ( false !== $this->load_deprecated ) {
@@ -507,7 +521,115 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/2.3.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.4.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.5.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.6.php' );
 		}
+	}
+
+	/**
+	 * Autoload classes.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $class
+	 */
+	public function autoload( $class ) {
+		$class_parts = explode( '_', strtolower( $class ) );
+
+		if ( 'bp' !== $class_parts[0] ) {
+			return;
+		}
+
+		$components = array(
+			'activity',
+			'blogs',
+			'core',
+			'friends',
+			'groups',
+			'members',
+			'messages',
+			'notifications',
+			'settings',
+			'xprofile',
+		);
+
+		// These classes don't have a name that matches their component.
+		$irregular_map = array(
+			'BP_Akismet' => 'activity',
+
+			'BP_Admin'                     => 'core',
+			'BP_Attachment_Avatar'         => 'core',
+			'BP_Attachment_Cover_Image'    => 'core',
+			'BP_Attachment'                => 'core',
+			'BP_Button'                    => 'core',
+			'BP_Component'                 => 'core',
+			'BP_Customizer_Control_Range'  => 'core',
+			'BP_Date_Query'                => 'core',
+			'BP_Email_Delivery'            => 'core',
+			'BP_Email_Recipient'           => 'core',
+			'BP_Email'                     => 'core',
+			'BP_Embed'                     => 'core',
+			'BP_Media_Extractor'           => 'core',
+			'BP_Members_Suggestions'       => 'core',
+			'BP_PHPMailer'                 => 'core',
+			'BP_Recursive_Query'           => 'core',
+			'BP_Suggestions'               => 'core',
+			'BP_Theme_Compat'              => 'core',
+			'BP_User_Query'                => 'core',
+			'BP_Walker_Category_Checklist' => 'core',
+			'BP_Walker_Nav_Menu_Checklist' => 'core',
+			'BP_Walker_Nav_Menu'           => 'core',
+
+			'BP_Core_Friends_Widget' => 'friends',
+
+			'BP_Group_Extension'    => 'groups',
+			'BP_Group_Member_Query' => 'groups',
+
+			'BP_Core_Members_Template'       => 'members',
+			'BP_Core_Members_Widget'         => 'members',
+			'BP_Core_Recently_Active_Widget' => 'members',
+			'BP_Core_Whos_Online_Widget'     => 'members',
+			'BP_Registration_Theme_Compat'   => 'members',
+			'BP_Signup'                      => 'members',
+		);
+
+		$component = null;
+
+		// First check to see if the class is one without a properly namespaced name.
+		if ( isset( $irregular_map[ $class ] ) ) {
+			$component = $irregular_map[ $class ];
+
+		// Next chunk is usually the component name.
+		} elseif ( in_array( $class_parts[1], $components, true ) ) {
+			$component = $class_parts[1];
+		}
+
+		if ( ! $component ) {
+			return;
+		}
+
+		// Sanitize class name.
+		$class = strtolower( str_replace( '_', '-', $class ) );
+
+		$path = dirname( __FILE__ ) . "/bp-{$component}/classes/class-{$class}.php";
+
+		// Sanity check.
+		if ( ! file_exists( $path ) ) {
+			return;
+		}
+
+		/*
+		 * Sanity check 2 - Check if component is active before loading class.
+		 * Skip if PHPUnit is running, or BuddyPress is installing for the first time.
+		 */
+		if (
+			! in_array( $component, array( 'core', 'members' ), true ) &&
+			! bp_is_active( $component ) &&
+			! function_exists( 'tests_add_filter' )
+		) {
+			return;
+		}
+
+		require $path;
 	}
 
 	/**
@@ -515,9 +637,6 @@ class BuddyPress {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses register_activation_hook() To register the activation hook.
-	 * @uses register_deactivation_hook() To register the deactivation hook.
-	 * @uses add_action() To add various actions.
 	 */
 	private function setup_actions() {
 

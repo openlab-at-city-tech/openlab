@@ -12,11 +12,15 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-require dirname( __FILE__ ) . '/classes/class-bp-members-theme-compat.php';
-require dirname( __FILE__ ) . '/classes/class-bp-registration-theme-compat.php';
+if ( ! buddypress()->do_autoload ) {
+	require dirname( __FILE__ ) . '/classes/class-bp-members-theme-compat.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-registration-theme-compat.php';
+}
 
 /**
  * Handle the display of the profile page by loading the correct template file.
+ *
+ * @since 1.5.0
  */
 function bp_members_screen_display_profile() {
 
@@ -39,6 +43,8 @@ function bp_members_screen_display_profile() {
 
 /**
  * Handle the display of the members directory index.
+ *
+ * @since 1.5.0
  */
 function bp_members_screen_index() {
 	if ( bp_is_members_directory() ) {
@@ -65,6 +71,8 @@ add_action( 'bp_screens', 'bp_members_screen_index' );
 
 /**
  * Handle the loading of the signup screen.
+ *
+ * @since 1.1.0
  */
 function bp_core_screen_signup() {
 	$bp = buddypress();
@@ -99,7 +107,7 @@ function bp_core_screen_signup() {
 	if ( !bp_get_signup_allowed() ) {
 		$bp->signup->step = 'registration-disabled';
 
-	// If the signup page is submitted, validate and save.
+		// If the signup page is submitted, validate and save.
 	} elseif ( isset( $_POST['signup_submit'] ) && bp_verify_nonce_request( 'bp_new_signup' ) ) {
 
 	    /**
@@ -151,7 +159,7 @@ function bp_core_screen_signup() {
 						$bp->signup->errors['field_' . $field_id] = __( 'This is a required field', 'buddypress' );
 				}
 
-			// This situation doesn't naturally occur so bounce to website root.
+				// This situation doesn't naturally occur so bounce to website root.
 			} else {
 				bp_core_redirect( bp_get_root_domain() );
 			}
@@ -295,6 +303,8 @@ add_action( 'bp_screens', 'bp_core_screen_signup' );
 /**
  * Handle the loading of the Activate screen.
  *
+ * @since 1.1.0
+ *
  * @todo Move the actual activation process into an action in bp-members-actions.php
  */
 function bp_core_screen_activation() {
@@ -357,14 +367,6 @@ function bp_core_screen_activation() {
 		if ( ! empty( $user->errors ) ) {
 			bp_core_add_message( $user->get_error_message(), 'error' );
 			bp_core_redirect( trailingslashit( bp_get_root_domain() . '/' . $bp->pages->activate->slug ) );
-		}
-
-		$hashed_key = wp_hash( $key );
-
-		// Check if the signup avatar folder exists. If it does, move the folder to
-		// the BP user avatars directory.
-		if ( file_exists( bp_core_avatar_upload_path() . '/avatars/signups/' . $hashed_key ) ) {
-			@rename( bp_core_avatar_upload_path() . '/avatars/signups/' . $hashed_key, bp_core_avatar_upload_path() . '/avatars/' . $user );
 		}
 
 		bp_core_add_message( __( 'Your account is now active!', 'buddypress' ) );

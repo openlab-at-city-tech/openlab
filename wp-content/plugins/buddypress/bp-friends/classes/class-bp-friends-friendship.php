@@ -106,7 +106,7 @@ class BP_Friends_Friendship {
 		$this->is_request = $is_request;
 
 		if ( !empty( $id ) ) {
-			$this->id                      = $id;
+			$this->id                      = (int) $id;
 			$this->populate_friend_details = $populate_friend_details;
 			$this->populate( $this->id );
 		}
@@ -123,10 +123,10 @@ class BP_Friends_Friendship {
 		$bp = buddypress();
 
 		if ( $friendship = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->friends->table_name} WHERE id = %d", $this->id ) ) ) {
-			$this->initiator_user_id = $friendship->initiator_user_id;
-			$this->friend_user_id    = $friendship->friend_user_id;
-			$this->is_confirmed      = $friendship->is_confirmed;
-			$this->is_limited        = $friendship->is_limited;
+			$this->initiator_user_id = (int) $friendship->initiator_user_id;
+			$this->friend_user_id    = (int) $friendship->friend_user_id;
+			$this->is_confirmed      = (int) $friendship->is_confirmed;
+			$this->is_limited        = (int) $friendship->is_limited;
 			$this->date_created      = $friendship->date_created;
 		}
 
@@ -655,6 +655,7 @@ class BP_Friends_Friendship {
 	 * - users who have been banned from the group
 	 *
 	 * @since 1.0.0
+	 * @todo Need to do a group component check before using group functions.
 	 *
 	 * @param int $user_id  ID of the user whose friends are being counted.
 	 * @param int $group_id ID of the group friends are being invited to.
@@ -663,23 +664,26 @@ class BP_Friends_Friendship {
 	public static function get_invitable_friend_count( $user_id, $group_id ) {
 
 		// Setup some data we'll use below.
-		$is_group_admin  = BP_Groups_Member::check_is_admin( $user_id, $group_id );
+		$is_group_admin  = groups_is_user_admin( $user_id, $group_id );
 		$friend_ids      = BP_Friends_Friendship::get_friend_user_ids( $user_id );
 		$invitable_count = 0;
 
 		for ( $i = 0, $count = count( $friend_ids ); $i < $count; ++$i ) {
 
 			// If already a member, they cannot be invited again.
-			if ( BP_Groups_Member::check_is_member( (int) $friend_ids[$i], $group_id ) )
+			if ( groups_is_user_member( (int) $friend_ids[$i], $group_id ) ) {
 				continue;
+			}
 
 			// If user already has invite, they cannot be added.
-			if ( BP_Groups_Member::check_has_invite( (int) $friend_ids[$i], $group_id )  )
+			if ( groups_check_user_has_invite( (int) $friend_ids[$i], $group_id ) ) {
 				continue;
+			}
 
 			// If user is not group admin and friend is banned, they cannot be invited.
-			if ( ( false === $is_group_admin ) && BP_Groups_Member::check_is_banned( (int) $friend_ids[$i], $group_id ) )
+			if ( ( false === $is_group_admin ) && groups_is_user_banned( (int) $friend_ids[$i], $group_id ) ) {
 				continue;
+			}
 
 			$invitable_count++;
 		}

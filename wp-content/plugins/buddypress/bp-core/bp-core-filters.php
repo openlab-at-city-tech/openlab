@@ -59,7 +59,6 @@ add_filter( 'bp_email_set_content_html', 'stripslashes', 8 );
 add_filter( 'bp_email_set_content_plaintext', 'wp_strip_all_tags', 6 );
 add_filter( 'bp_email_set_subject', 'sanitize_text_field', 6 );
 
-
 /**
  * Template Compatibility.
  *
@@ -80,8 +79,6 @@ add_filter( 'comments_open', 'bp_comments_open', 10, 2 );
  * Prevent specific pages (eg 'Activate') from showing on page listings.
  *
  * @since 1.5.0
- *
- * @uses bp_is_active() checks if a BuddyPress component is active.
  *
  * @param array $pages List of excluded page IDs, as passed to the
  *                     'wp_list_pages_excludes' filter.
@@ -119,9 +116,6 @@ add_filter( 'wp_list_pages_excludes', 'bp_core_exclude_pages' );
  * Prevent specific pages (eg 'Activate') from showing in the Pages meta box of the Menu Administration screen.
  *
  * @since 2.0.0
- *
- * @uses bp_is_root_blog() checks if current blog is root blog.
- * @uses buddypress() gets BuddyPress main instance
  *
  * @param object|null $object The post type object used in the meta box.
  * @return object|null The $object, with a query argument to remove register and activate pages id.
@@ -287,7 +281,6 @@ add_filter( 'comments_array', 'bp_core_filter_comments', 10, 2 );
  *
  * @since 1.2.0
  *
- * @uses apply_filters() Filter 'bp_core_login_redirect' to modify where users
  *       are redirected to on login.
  *
  * @param string  $redirect_to     The URL to be redirected to, sanitized in wp-login.php.
@@ -353,17 +346,28 @@ add_filter( 'bp_login_redirect', 'bp_core_login_redirect', 10, 3 );
  *
  * @since 2.5.0
  *
- * @param string $retval Current email content.
- * @param string $prop   Email property to check against.
+ * @param string $retval    Current email content.
+ * @param string $prop      Email property to check against.
+ * @param string $transform Either 'raw' or 'replace-tokens'.
  */
-function bp_email_plaintext_entity_decode( $retval, $prop ) {
-	if ( 'content_plaintext' !== $prop ) {
-		return $retval;
-	}
+function bp_email_plaintext_entity_decode( $retval, $prop, $transform ) {
+	switch ( $prop ) {
+		case 'content_plaintext' :
+		case 'subject' :
+			// Only decode if 'replace-tokens' is the current type.
+			if ( 'replace-tokens' === $transform ) {
+				return html_entity_decode( $retval, ENT_QUOTES );
+			} else {
+				return $retval;
+			}
+			break;
 
-	return html_entity_decode( $retval, ENT_QUOTES );
+		default :
+			return $retval;
+			break;
+	}
 }
-add_filter( 'bp_email_get_property', 'bp_email_plaintext_entity_decode', 10, 2 );
+add_filter( 'bp_email_get_property', 'bp_email_plaintext_entity_decode', 10, 3 );
 
 /**
  * Replace the generated password in the welcome email with '[User Set]'.

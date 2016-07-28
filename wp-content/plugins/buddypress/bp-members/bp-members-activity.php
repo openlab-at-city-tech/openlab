@@ -15,8 +15,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.2.0
  *
- * @uses bp_activity_set_action()
- * @uses buddypress()
  */
 function bp_members_register_activity_actions() {
 
@@ -69,6 +67,8 @@ function bp_members_format_activity_action_new_member( $action, $activity ) {
 
 /**
  * Create a "became a registered user" activity item when a user activates his account.
+ *
+ * @since 1.2.2
  *
  * @param array $user Array of userdata passed to bp_core_activated_user hook.
  * @return bool

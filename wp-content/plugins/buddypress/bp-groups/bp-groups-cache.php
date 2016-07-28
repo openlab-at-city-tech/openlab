@@ -212,6 +212,47 @@ function groups_clear_group_administrator_cache_on_member_save( BP_Groups_Member
 }
 add_action( 'groups_member_after_save', 'groups_clear_group_administrator_cache_on_member_save' );
 
+/**
+ * Clear the group type cache for a group.
+ *
+ * Called when group is deleted.
+ *
+ * @since 2.6.0
+ *
+ * @param int $group_id The group ID.
+ */
+function groups_clear_group_type_cache( $group_id = 0 ) {
+	wp_cache_delete( $group_id, 'bp_groups_group_type' );
+}
+add_action( 'groups_delete_group', 'groups_clear_group_type_cache' );
+
+/**
+ * Clear caches on membership save.
+ *
+ * @since 2.6.0
+ */
+function bp_groups_clear_user_group_cache_on_membership_save( BP_Groups_Member $member ) {
+	wp_cache_delete( $member->user_id, 'bp_groups_memberships_for_user' );
+	wp_cache_delete( $member->id, 'bp_groups_memberships' );
+}
+add_action( 'groups_member_before_save', 'bp_groups_clear_user_group_cache_on_membership_save' );
+add_action( 'groups_member_before_remove', 'bp_groups_clear_user_group_cache_on_membership_save' );
+
+/**
+ * Clear group memberships cache on miscellaneous actions not covered by the 'after_save' hook.
+ *
+ * @since 2.6.0
+ */
+function bp_groups_clear_user_group_cache_on_other_events( $user_id, $group_id ) {
+	wp_cache_delete( $user_id, 'bp_groups_memberships_for_user' );
+
+	$membership = new BP_Groups_Member( $user_id, $group_id );
+	wp_cache_delete( $membership->id, 'bp_groups_memberships' );
+}
+add_action( 'bp_groups_member_before_delete', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
+add_action( 'bp_groups_member_before_delete_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
+add_action( 'groups_accept_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
+
 /* List actions to clear super cached pages on, if super cache is installed */
 add_action( 'groups_join_group',                 'bp_core_clear_cache' );
 add_action( 'groups_leave_group',                'bp_core_clear_cache' );

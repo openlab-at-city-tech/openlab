@@ -153,22 +153,25 @@ class BP_Groups_Template {
 		}
 
 		$defaults = array(
-			'page'              => 1,
-			'per_page'          => 20,
-			'page_arg'          => 'grpage',
-			'max'               => false,
-			'type'              => 'active',
-			'order'             => 'DESC',
-			'orderby'           => 'date_created',
-			'show_hidden'       => false,
-			'user_id'           => 0,
-			'slug'              => false,
-			'include'           => false,
-			'exclude'           => false,
-			'search_terms'      => '',
-			'meta_query'        => false,
-			'populate_extras'   => true,
-			'update_meta_cache' => true,
+			'page'               => 1,
+			'per_page'           => 20,
+			'page_arg'           => 'grpage',
+			'max'                => false,
+			'type'               => 'active',
+			'order'              => 'DESC',
+			'orderby'            => 'date_created',
+			'show_hidden'        => false,
+			'user_id'            => 0,
+			'slug'               => false,
+			'include'            => false,
+			'exclude'            => false,
+			'search_terms'       => '',
+			'group_type'         => '',
+			'group_type__in'     => '',
+			'group_type__not_in' => '',
+			'meta_query'         => false,
+			'populate_extras'    => true,
+			'update_meta_cache'  => true,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -210,19 +213,22 @@ class BP_Groups_Template {
 
 		} else {
 			$this->groups = groups_get_groups( array(
-				'type'              => $type,
-				'order'             => $order,
-				'orderby'           => $orderby,
-				'per_page'          => $this->pag_num,
-				'page'              => $this->pag_page,
-				'user_id'           => $user_id,
-				'search_terms'      => $search_terms,
-				'meta_query'        => $meta_query,
-				'include'           => $include,
-				'exclude'           => $exclude,
-				'populate_extras'   => $populate_extras,
-				'update_meta_cache' => $update_meta_cache,
-				'show_hidden'       => $show_hidden
+				'type'               => $type,
+				'order'              => $order,
+				'orderby'            => $orderby,
+				'per_page'           => $this->pag_num,
+				'page'               => $this->pag_page,
+				'user_id'            => $user_id,
+				'search_terms'       => $search_terms,
+				'meta_query'         => $meta_query,
+				'group_type'         => $group_type,
+				'group_type__in'     => $group_type__in,
+				'group_type__not_in' => $group_type__not_in,
+				'include'            => $include,
+				'exclude'            => $exclude,
+				'populate_extras'    => $populate_extras,
+				'update_meta_cache'  => $update_meta_cache,
+				'show_hidden'        => $show_hidden,
 			) );
 		}
 

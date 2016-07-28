@@ -683,6 +683,7 @@ function groups_get_total_member_count( $group_id ) {
  * Get a collection of groups, based on the parameters passed.
  *
  * @since 1.2.0
+ * @since 2.6.0 Added `$group_type`, `$group_type__in`, and `$group_type__not_in` parameters.
  *
  * @param array|string $args {
  *     Array of arguments. Supports all arguments of
@@ -696,37 +697,43 @@ function groups_get_total_member_count( $group_id ) {
 function groups_get_groups( $args = '' ) {
 
 	$defaults = array(
-		'type'              => false,          // Active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts.
-		'order'             => 'DESC',         // 'ASC' or 'DESC'
-		'orderby'           => 'date_created', // date_created, last_activity, total_member_count, name, random.
-		'user_id'           => false,          // Pass a user_id to limit to only groups that this user is a member of.
-		'include'           => false,          // Only include these specific groups (group_ids).
-		'exclude'           => false,          // Do not include these specific groups (group_ids).
-		'search_terms'      => false,          // Limit to groups that match these search terms.
-		'meta_query'        => false,          // Filter by groupmeta. See WP_Meta_Query for syntax.
-		'show_hidden'       => false,          // Show hidden groups to non-admins.
-		'per_page'          => 20,             // The number of results to return per page.
-		'page'              => 1,              // The page to return if limiting per page.
-		'populate_extras'   => true,           // Fetch meta such as is_banned and is_member.
-		'update_meta_cache' => true,           // Pre-fetch groupmeta for queried groups.
+		'type'               => false,          // Active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts.
+		'order'              => 'DESC',         // 'ASC' or 'DESC'
+		'orderby'            => 'date_created', // date_created, last_activity, total_member_count, name, random.
+		'user_id'            => false,          // Pass a user_id to limit to only groups that this user is a member of.
+		'include'            => false,          // Only include these specific groups (group_ids).
+		'exclude'            => false,          // Do not include these specific groups (group_ids).
+		'search_terms'       => false,          // Limit to groups that match these search terms.
+		'group_type'         => '',
+		'group_type__in'     => '',
+		'group_type__not_in' => '',
+		'meta_query'         => false,          // Filter by groupmeta. See WP_Meta_Query for syntax.
+		'show_hidden'        => false,          // Show hidden groups to non-admins.
+		'per_page'           => 20,             // The number of results to return per page.
+		'page'               => 1,              // The page to return if limiting per page.
+		'populate_extras'    => true,           // Fetch meta such as is_banned and is_member.
+		'update_meta_cache'  => true,           // Pre-fetch groupmeta for queried groups.
 	);
 
 	$r = wp_parse_args( $args, $defaults );
 
 	$groups = BP_Groups_Group::get( array(
-		'type'              => $r['type'],
-		'user_id'           => $r['user_id'],
-		'include'           => $r['include'],
-		'exclude'           => $r['exclude'],
-		'search_terms'      => $r['search_terms'],
-		'meta_query'        => $r['meta_query'],
-		'show_hidden'       => $r['show_hidden'],
-		'per_page'          => $r['per_page'],
-		'page'              => $r['page'],
-		'populate_extras'   => $r['populate_extras'],
-		'update_meta_cache' => $r['update_meta_cache'],
-		'order'             => $r['order'],
-		'orderby'           => $r['orderby'],
+		'type'               => $r['type'],
+		'user_id'            => $r['user_id'],
+		'include'            => $r['include'],
+		'exclude'            => $r['exclude'],
+		'search_terms'       => $r['search_terms'],
+		'group_type'         => $r['group_type'],
+		'group_type__in'     => $r['group_type__in'],
+		'group_type__not_in' => $r['group_type__not_in'],
+		'meta_query'         => $r['meta_query'],
+		'show_hidden'        => $r['show_hidden'],
+		'per_page'           => $r['per_page'],
+		'page'               => $r['page'],
+		'populate_extras'    => $r['populate_extras'],
+		'update_meta_cache'  => $r['update_meta_cache'],
+		'order'              => $r['order'],
+		'orderby'            => $r['orderby'],
 	) );
 
 	/**
@@ -781,6 +788,131 @@ function groups_get_user_groups( $user_id = 0, $pag_num = 0, $pag_page = 0 ) {
 		$user_id = bp_displayed_user_id();
 
 	return BP_Groups_Member::get_group_ids( $user_id, $pag_num, $pag_page );
+}
+
+/**
+ * Get a list of groups of which the specified user is a member.
+ *
+ * Get a list of the groups to which this member belongs,
+ * filtered by group membership status and role.
+ * Usage examples: Used with no arguments specified,
+ *
+ *    bp_get_user_groups( bp_loggedin_user_id() );
+ *
+ * returns an array of the groups in which the logged-in user
+ * is an unpromoted member. To fetch an array of all groups that
+ * the current user belongs to, in any membership role,
+ * member, moderator or administrator, use
+ *
+ *    bp_get_user_groups( $user_id, array(
+ *        'is_admin' => null,
+ *        'is_mod' => null,
+ *    ) );
+ *
+ * @since 2.6.0
+ *
+ * @param int $user_id ID of the user.
+ * @param array $args {
+ *     Array of optional args.
+ *     @param bool|null   $is_confirmed Whether to return only confirmed memberships. Pass `null` to disable this
+ *                                      filter. Default: true.
+ *     @param bool|null   $is_banned    Whether to return only banned memberships. Pass `null` to disable this filter.
+ *                                      Default: false.
+ *     @param bool|null   $is_admin     Whether to return only admin memberships. Pass `null` to disable this filter.
+ *                                      Default: false.
+ *     @param bool|null   $is_mod       Whether to return only mod memberships. Pass `null` to disable this filter.
+ *                                      Default: false.
+ *     @param bool|null   $invite_sent  Whether to return only memberships with 'invite_sent'. Pass `null` to disable
+ *                                      this filter. Default: false.
+ *     @param string      $orderby      Field to order by. Accepts 'id' (membership ID), 'group_id', 'date_modified'.
+ *                                      Default: 'group_id'.
+ *     @param string      $order        Sort order. Accepts 'ASC' or 'DESC'. Default: 'ASC'.
+ * }
+ * @return array Array of matching group memberships, keyed by group ID.
+ */
+function bp_get_user_groups( $user_id, $args = array() ) {
+	$r = bp_parse_args( $args, array(
+		'is_confirmed' => true,
+		'is_banned'    => false,
+		'is_admin'     => false,
+		'is_mod'       => false,
+		'invite_sent'  => null,
+		'orderby'      => 'group_id',
+		'order'        => 'ASC',
+	), 'get_user_groups' );
+
+	$user_id = intval( $user_id );
+
+	$membership_ids = wp_cache_get( $user_id, 'bp_groups_memberships_for_user' );
+	if ( false === $membership_ids ) {
+		$membership_ids = BP_Groups_Member::get_membership_ids_for_user( $user_id );
+		wp_cache_set( $user_id, $membership_ids, 'bp_groups_memberships_for_user' );
+	}
+
+	// Prime the membership cache.
+	$uncached_membership_ids = bp_get_non_cached_ids( $membership_ids, 'bp_groups_memberships' );
+	if ( ! empty( $uncached_membership_ids ) ) {
+		$uncached_memberships = BP_Groups_Member::get_memberships_by_id( $uncached_membership_ids );
+
+		foreach ( $uncached_memberships as $uncached_membership ) {
+			wp_cache_set( $uncached_membership->id, $uncached_membership, 'bp_groups_memberships' );
+		}
+	}
+
+	// Populate group membership array from cache.
+	$groups = array();
+	foreach ( $membership_ids as $membership_id ) {
+		$membership = wp_cache_get( $membership_id, 'bp_groups_memberships' );
+
+		// Sanity check.
+		if ( ! isset( $membership->group_id ) ) {
+			continue;
+		}
+
+		$group_id = (int) $membership->group_id;
+
+		$groups[ $group_id ] = $membership;
+	}
+
+	// Normalize group data.
+	foreach ( $groups as &$group ) {
+		// Integer values.
+		foreach ( array( 'id', 'group_id', 'user_id', 'inviter_id' ) as $index ) {
+			$group->{$index} = intval( $group->{$index} );
+		}
+
+		// Boolean values.
+		foreach ( array( 'is_admin', 'is_mod', 'is_confirmed', 'is_banned', 'invite_sent' ) as $index ) {
+			$group->{$index} = (bool) $group->{$index};
+		}
+	}
+
+	// Assemble filter array for use in `wp_list_filter()`.
+	$filters = wp_array_slice_assoc( $r, array( 'is_confirmed', 'is_banned', 'is_admin', 'is_mod', 'invite_sent' ) );
+	foreach ( $filters as $filter_name => $filter_value ) {
+		if ( is_null( $filter_value ) ) {
+			unset( $filters[ $filter_name ] );
+		}
+	}
+
+	if ( ! empty( $filters ) ) {
+		$groups = wp_list_filter( $groups, $filters );
+	}
+
+	// By default, results are ordered by membership id.
+	if ( 'group_id' === $r['orderby'] ) {
+		ksort( $groups );
+	} elseif ( in_array( $r['orderby'], array( 'id', 'date_modified' ) ) ) {
+		$groups = bp_sort_by_key( $groups, $r['orderby'] );
+	}
+
+	// By default, results are ordered ASC.
+	if ( 'DESC' === strtoupper( $r['order'] ) ) {
+		// `true` to preserve keys.
+		$groups = array_reverse( $groups, true );
+	}
+
+	return $groups;
 }
 
 /**
@@ -879,10 +1011,20 @@ function groups_avatar_upload_dir( $group_id = 0 ) {
  *
  * @param int $user_id ID of the user.
  * @param int $group_id ID of the group.
- * @return bool
+ * @return int|bool ID of the membership if the user is admin, otherwise false.
  */
 function groups_is_user_admin( $user_id, $group_id ) {
-	return BP_Groups_Member::check_is_admin( $user_id, $group_id );
+	$is_admin = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'is_admin' => true,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_admin = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_admin;
 }
 
 /**
@@ -892,10 +1034,20 @@ function groups_is_user_admin( $user_id, $group_id ) {
  *
  * @param int $user_id ID of the user.
  * @param int $group_id ID of the group.
- * @return bool
+ * @return int|bool ID of the membership if the user is mod, otherwise false.
  */
 function groups_is_user_mod( $user_id, $group_id ) {
-	return BP_Groups_Member::check_is_mod( $user_id, $group_id );
+	$is_mod = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'is_mod' => true,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_mod = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_mod;
 }
 
 /**
@@ -905,10 +1057,21 @@ function groups_is_user_mod( $user_id, $group_id ) {
  *
  * @param int $user_id ID of the user.
  * @param int $group_id ID of the group.
- * @return bool
+ * @return int|bool ID of the membership if the user is member, otherwise false.
  */
 function groups_is_user_member( $user_id, $group_id ) {
-	return BP_Groups_Member::check_is_member( $user_id, $group_id );
+	$is_member = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'is_admin' => null,
+		'is_mod' => null,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_member = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_member;
 }
 
 /**
@@ -918,11 +1081,69 @@ function groups_is_user_member( $user_id, $group_id ) {
  *
  * @param int $user_id  ID of the user.
  * @param int $group_id ID of the group.
- *
- * @return bool
+ * @return int|bool ID of the membership if the user is banned, otherwise false.
  */
 function groups_is_user_banned( $user_id, $group_id ) {
-	return BP_Groups_Member::check_is_banned( $user_id, $group_id );
+	$is_banned = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'is_confirmed' => null,
+		'is_banned' => true,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_banned = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_banned;
+}
+
+/**
+ * Check whether a user has an outstanding invitation to a group.
+ *
+ * @since 2.6.0
+ *
+ * @param int $user_id ID of the user.
+ * @param int $group_id ID of the group.
+ * @return int|bool ID of the membership if the user is invited, otherwise false.
+ */
+function groups_is_user_invited( $user_id, $group_id ) {
+	$is_invited = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'invite_sent' => true,
+		'is_confirmed' => false,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_invited = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_invited;
+}
+
+/**
+ * Check whether a user has a pending membership request for a group.
+ *
+ * @since 2.6.0
+ *
+ * @param int $user_id ID of the user.
+ * @param int $group_id ID of the group.
+ * @return int|bool ID of the membership if the user is pending, otherwise false.
+ */
+function groups_is_user_pending( $user_id, $group_id ) {
+	$is_pending = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'invite_sent' => false,
+		'is_confirmed' => false,
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) ) {
+		$is_pending = $user_groups[ $group_id ]->id;
+	}
+
+	return $is_pending;
 }
 
 /**
@@ -944,6 +1165,7 @@ function groups_is_user_creator( $user_id, $group_id ) {
  * Post an Activity status update affiliated with a group.
  *
  * @since 1.2.0
+ * @since 2.6.0 Added 'error_type' parameter to $args.
  *
  * @param array|string $args {
  *     Array of arguments.
@@ -963,9 +1185,10 @@ function groups_post_update( $args = '' ) {
 	$bp = buddypress();
 
 	$defaults = array(
-		'content'  => false,
-		'user_id'  => bp_loggedin_user_id(),
-		'group_id' => 0
+		'content'    => false,
+		'user_id'    => bp_loggedin_user_id(),
+		'group_id'   => 0,
+		'error_type' => 'bool'
 	);
 
 	$r = wp_parse_args( $args, $defaults );
@@ -1006,11 +1229,12 @@ function groups_post_update( $args = '' ) {
 	$content_filtered = apply_filters( 'groups_activity_new_update_content', $activity_content );
 
 	$activity_id = groups_record_activity( array(
-		'user_id' => $user_id,
-		'action'  => $action,
-		'content' => $content_filtered,
-		'type'    => 'activity_update',
-		'item_id' => $group_id
+		'user_id'    => $user_id,
+		'action'     => $action,
+		'content'    => $content_filtered,
+		'type'       => 'activity_update',
+		'item_id'    => $group_id,
+		'error_type' => $error_type
 	) );
 
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
@@ -1100,8 +1324,9 @@ function groups_invite_user( $args = '' ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args, EXTR_SKIP );
 
-	if ( empty( $user_id ) || empty( $group_id ) )
+	if ( ! $user_id || ! $group_id || ! $inviter_id ) {
 		return false;
+	}
 
 	// If the user has already requested membership, accept the request.
 	if ( $membership_id = groups_check_for_membership_request( $user_id, $group_id ) ) {
@@ -1335,10 +1560,29 @@ function groups_get_invites_for_group( $user_id, $group_id ) {
  * @param int    $group_id ID of potential group.
  * @param string $type     Optional. Use 'sent' to check for sent invites,
  *                         'all' to check for all. Default: 'sent'.
- * @return bool True if an invitation is found, otherwise false.
+ * @return int|bool ID of the membership if found, otherwise false.
  */
 function groups_check_user_has_invite( $user_id, $group_id, $type = 'sent' ) {
-	return BP_Groups_Member::check_has_invite( $user_id, $group_id, $type );
+	$invite = false;
+
+	$args = array(
+		'is_confirmed' => false,
+		'is_banned'    => null,
+		'is_admin'     => null,
+		'is_mod'       => null,
+	);
+
+	if ( 'sent' === $type ) {
+		$args['invite_sent'] = true;
+	}
+
+	$user_groups = bp_get_user_groups( $user_id, $args );
+
+	if ( isset( $user_groups[ $group_id ] ) && 0 !== $user_groups[ $group_id ]->inviter_id ) {
+		$invite = $user_groups[ $group_id ]->id;
+	}
+
+	return $invite;
 }
 
 /**
@@ -1683,10 +1927,23 @@ function groups_delete_membership_request( $membership_id, $user_id = 0, $group_
  *
  * @param int $user_id  ID of the user.
  * @param int $group_id ID of the group.
- * @return int|null ID of the membership if found, otherwise false.
+ * @return int|bool ID of the membership if found, otherwise false.
  */
 function groups_check_for_membership_request( $user_id, $group_id ) {
-	return BP_Groups_Member::check_for_membership_request( $user_id, $group_id );
+	$request = false;
+
+	$user_groups = bp_get_user_groups( $user_id, array(
+		'is_confirmed' => false,
+		'is_banned'    => false,
+		'is_admin'     => null,
+		'is_mod'       => null
+	) );
+
+	if ( isset( $user_groups[ $group_id ] ) && 0 === $user_groups[ $group_id ]->inviter_id ) {
+		$request = $user_groups[ $group_id ]->id;
+	}
+
+	return $request;
 }
 
 /**
@@ -1849,3 +2106,290 @@ function groups_remove_data_for_user( $user_id ) {
 add_action( 'wpmu_delete_user',  'groups_remove_data_for_user' );
 add_action( 'delete_user',       'groups_remove_data_for_user' );
 add_action( 'bp_make_spam_user', 'groups_remove_data_for_user' );
+
+/** Group Types ***************************************************************/
+
+/**
+ * Register a group type.
+ *
+ * @since 2.6.0
+ *
+ * @param string $group_type Unique string identifier for the group type.
+ * @param array  $args {
+ *     Array of arguments describing the group type.
+ *
+ *     @type array $labels {
+ *         Array of labels to use in various parts of the interface.
+ *
+ *         @type string $name          Default name. Should typically be plural.
+ *         @type string $singular_name Singular name.
+ *     }
+ * }
+ * @return object|WP_Error Group type object on success, WP_Error object on failure.
+ */
+function bp_groups_register_group_type( $group_type, $args = array() ) {
+	$bp = buddypress();
+
+	if ( isset( $bp->groups->types[ $group_type ] ) ) {
+		return new WP_Error( 'bp_group_type_exists', __( 'Group type already exists.', 'buddypress' ), $group_type );
+	}
+
+	$r = bp_parse_args( $args, array(
+		'labels'        => array(),
+	), 'register_group_type' );
+
+	$group_type = sanitize_key( $group_type );
+
+	/**
+	 * Filters the list of illegal group type names.
+	 *
+	 * - 'any' is a special pseudo-type, representing items unassociated with any group type.
+	 * - 'null' is a special pseudo-type, representing users without any type.
+	 * - '_none' is used internally to denote an item that should not apply to any group types.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param array $illegal_names Array of illegal names.
+	 */
+	$illegal_names = apply_filters( 'bp_group_type_illegal_names', array( 'any', 'null', '_none' ) );
+	if ( in_array( $group_type, $illegal_names, true ) ) {
+		return new WP_Error( 'bp_group_type_illegal_name', __( 'You may not register a group type with this name.', 'buddypress' ), $group_type );
+	}
+
+	// Store the group type name as data in the object (not just as the array key).
+	$r['name'] = $group_type;
+
+	// Make sure the relevant labels have been filled in.
+	$default_name = isset( $r['labels']['name'] ) ? $r['labels']['name'] : ucfirst( $r['name'] );
+	$r['labels'] = array_merge( array(
+		'name'          => $default_name,
+		'singular_name' => $default_name,
+	), $r['labels'] );
+
+	$bp->groups->types[ $group_type ] = $type = (object) $r;
+
+	/**
+	 * Fires after a group type is registered.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $group_type Group type identifier.
+	 * @param object $type       Group type object.
+	 */
+	do_action( 'bp_groups_register_group_type', $group_type, $type );
+
+	return $type;
+}
+
+/**
+ * Get a list of all registered group type objects.
+ *
+ * @since 2.6.0
+ *
+ * @see bp_groups_register_group_type() for accepted arguments.
+ *
+ * @param array|string $args     Optional. An array of key => value arguments to match against
+ *                               the group type objects. Default empty array.
+ * @param string       $output   Optional. The type of output to return. Accepts 'names'
+ *                               or 'objects'. Default 'names'.
+ * @param string       $operator Optional. The logical operation to perform. 'or' means only one
+ *                               element from the array needs to match; 'and' means all elements
+ *                               must match. Accepts 'or' or 'and'. Default 'and'.
+ * @return array       $types    A list of groups type names or objects.
+ */
+function bp_groups_get_group_types( $args = array(), $output = 'names', $operator = 'and' ) {
+	$types = buddypress()->groups->types;
+
+	$types = wp_filter_object_list( $types, $args, $operator );
+
+	/**
+	 * Filters the array of group type objects.
+	 *
+	 * This filter is run before the $output filter has been applied, so that
+	 * filtering functions have access to the entire group type objects.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param array  $types     group type objects, keyed by name.
+	 * @param array  $args      Array of key=>value arguments for filtering.
+	 * @param string $operator  'or' to match any of $args, 'and' to require all.
+	 */
+	$types = apply_filters( 'bp_groups_get_group_types', $types, $args, $operator );
+
+	if ( 'names' === $output ) {
+		$types = wp_list_pluck( $types, 'name' );
+	}
+
+	return $types;
+}
+
+/**
+ * Retrieve a group type object by name.
+ *
+ * @since 2.6.0
+ *
+ * @param string $group_type The name of the group type.
+ * @return object A group type object.
+ */
+function bp_groups_get_group_type_object( $group_type ) {
+	$types = bp_groups_get_group_types( array(), 'objects' );
+
+	if ( empty( $types[ $group_type ] ) ) {
+		return null;
+	}
+
+	return $types[ $group_type ];
+}
+
+/**
+ * Set type for a group.
+ *
+ * @since 2.6.0
+ *
+ * @param int    $group      ID of the group.
+ * @param string $group_type Group type.
+ * @param bool   $append     Optional. True to append this to existing types for group,
+ *                           false to replace. Default: false.
+ * @return array $retval See bp_set_object_terms().
+ */
+function bp_groups_set_group_type( $group_id, $group_type, $append = false ) {
+	// Pass an empty group type to remove group's type.
+	if ( ! empty( $group_type ) && ! bp_groups_get_group_type_object( $group_type ) ) {
+		return false;
+	}
+
+	$retval = bp_set_object_terms( $group_id, $group_type, 'bp_group_type', $append );
+
+	// Bust the cache if the type has been updated.
+	if ( ! is_wp_error( $retval ) ) {
+		wp_cache_delete( $group_id, 'bp_groups_group_type' );
+
+		/**
+		 * Fires just after a group type has been changed.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param int    $group_id   ID of the group whose group type has been updated.
+		 * @param string $group_type Group type.
+		 * @param bool   $append     Whether the type is being appended to existing types.
+		 */
+		do_action( 'bp_groups_set_group_type', $group_id, $group_type, $append );
+	}
+
+	return $retval;
+}
+
+/**
+ * Get type for a group.
+ *
+ * @since 2.6.0
+ *
+ * @param int  $group_id ID of the group.
+ * @param bool $single   Optional. Whether to return a single type string. If multiple types are found
+ *                       for the group, the oldest one will be returned. Default: true.
+ * @return string|array|bool On success, returns a single group type (if `$single` is true) or an array of group
+ *                           types (if `$single` is false). Returns false on failure.
+ */
+function bp_groups_get_group_type( $group_id, $single = true ) {
+	$types = wp_cache_get( $group_id, 'bp_groups_group_type' );
+
+	if ( false === $types ) {
+		$types = bp_get_object_terms( $group_id, 'bp_group_type' );
+
+		if ( ! is_wp_error( $types ) ) {
+			$types = wp_list_pluck( $types, 'name' );
+			wp_cache_set( $group_id, $types, 'bp_groups_group_type' );
+		}
+	}
+
+	$type = false;
+	if ( ! empty( $types ) ) {
+		if ( $single ) {
+			$type = end( $types );
+		} else {
+			$type = $types;
+		}
+	}
+
+	/**
+	 * Filters a groups's group type(s).
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string|array $type     Group type.
+	 * @param int          $group_id ID of the group.
+	 * @param bool         $single   Whether to return a single type srting, or an array.
+	 */
+	return apply_filters( 'bp_groups_get_group_type', $type, $group_id, $single );
+}
+
+/**
+ * Remove type for a group.
+ *
+ * @since 2.6.0
+ *
+ * @param int            $group      ID of the user.
+ * @param string         $group_type Group type.
+ * @return bool|WP_Error $deleted    True on success. False or WP_Error on failure.
+ */
+function bp_groups_remove_group_type( $group_id, $group_type ) {
+	if ( empty( $group_type ) || ! bp_groups_get_group_type_object( $group_type ) ) {
+		return false;
+	}
+
+	$deleted = bp_remove_object_terms( $group_id, $group_type, 'bp_group_type' );
+
+	// Bust the case, if the type has been removed.
+	if ( ! is_wp_error( $deleted ) ) {
+		wp_cache_delete( $group_id, 'bp_groups_group_type' );
+
+		/**
+		 * Fires just after a group's group type has been removed.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param int    $group      ID of the group whose group type has been removed.
+		 * @param string $group_type Group type.
+		 */
+		do_action( 'bp_groups_remove_group_type', $group_id, $group_type );
+	}
+
+	return $deleted;
+}
+
+/**
+ * Check whether the given group has a certain group type.
+ *
+ * @since 2.6.0
+ *
+ * @param  int    $group_id   ID of the group.
+ * @param  srting $group_type Group type.
+ * @return bool   Whether the group has the give group type.
+ */
+function bp_groups_has_group_type( $group_id, $group_type ) {
+	if ( empty( $group_type ) || ! bp_groups_get_group_type_object( $group_type ) ) {
+		return false;
+	}
+
+	// Get all group's group types.
+	$types = bp_groups_get_group_type( $group_id, false );
+
+	if ( ! is_array( $types ) ) {
+		return false;
+	}
+
+	return in_array( $group_type, $types );
+}
+
+/**
+ * Delete a group's type when the group is deleted.
+ *
+ * @since 2.6.0
+ *
+ * @param  int   $group_id ID of the group.
+ * @return array $value    See {@see bp_groups_set_group_type()}.
+ */
+function bp_remove_group_type_on_group_delete( $group_id = 0 ) {
+	bp_groups_set_group_type( $group_id, '' );
+}
+add_action( 'groups_delete_group', 'bp_remove_group_type_on_group_delete' );

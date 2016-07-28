@@ -75,6 +75,16 @@ class BP_Groups_Component extends BP_Component {
 	public $valid_status;
 
 	/**
+	 * Group types.
+	 *
+	 * @see bp_groups_register_group_type()
+	 *
+	 * @since 2.6.0
+	 * @var array
+	 */
+	public $types = array();
+
+	/**
 	 * Start the groups component creation process.
 	 *
 	 * @since 1.5.0
@@ -107,7 +117,6 @@ class BP_Groups_Component extends BP_Component {
 			'actions',
 			'filters',
 			'screens',
-			'classes',
 			'widgets',
 			'activity',
 			'template',
@@ -115,6 +124,10 @@ class BP_Groups_Component extends BP_Component {
 			'functions',
 			'notifications'
 		);
+
+		if ( ! buddypress()->do_autoload ) {
+			$includes[] = 'classes';
+		}
 
 		if ( is_admin() ) {
 			$includes[] = 'admin';
@@ -249,6 +262,9 @@ class BP_Groups_Component extends BP_Component {
 
 			// Check once if the current group has a custom front template.
 			$this->current_group->front_template = bp_groups_get_front_template( $this->current_group );
+
+			// Initialize the nav for the groups component.
+			$this->nav = new BP_Core_Nav( $this->current_group->id );
 
 		// Set current_group to 0 to prevent debug errors.
 		} else {
@@ -432,8 +448,17 @@ class BP_Groups_Component extends BP_Component {
 
 		// Only grab count if we're on a user page.
 		if ( bp_is_user() ) {
-			$class    = ( 0 === groups_total_groups_for_user( bp_displayed_user_id() ) ) ? 'no-count' : 'count';
-			$nav_name = sprintf( _x( 'Groups <span class="%s">%s</span>', 'Group screen nav with counter', 'buddypress' ), esc_attr( $class ), bp_get_total_group_count_for_user() );
+			$class = ( 0 === groups_total_groups_for_user( bp_displayed_user_id() ) ) ? 'no-count' : 'count';
+
+			$nav_name = sprintf(
+				/* translators: %s: Group count for the current user */
+				_x( 'Groups %s', 'Group screen nav with counter', 'buddypress' ),
+				sprintf(
+					'<span class="%s">%s</span>',
+					esc_attr( $class ),
+					bp_get_total_group_count_for_user()
+				)
+			);
 		} else {
 			$nav_name = _x( 'Groups', 'Group screen nav without counter', 'buddypress' );
 		}
@@ -484,15 +509,18 @@ class BP_Groups_Component extends BP_Component {
 			// Reset sub nav.
 			$sub_nav = array();
 
-			// Add 'Groups' to the main navigation.
-			$main_nav = array(
+			/*
+			 * The top-level Groups item is called 'Memberships' for legacy reasons.
+			 * It does not appear in the interface.
+			 */
+			bp_core_new_nav_item( array(
 				'name'                => __( 'Memberships', 'buddypress' ),
 				'slug'                => $this->current_group->slug,
 				'position'            => -1, // Do not show in BuddyBar.
 				'screen_function'     => 'groups_screen_group_home',
 				'default_subnav_slug' => $this->default_extension,
 				'item_css_id'         => $this->id
-			);
+			), 'groups' );
 
 			$group_link = bp_get_group_permalink( $this->current_group );
 
@@ -663,7 +691,9 @@ class BP_Groups_Component extends BP_Component {
 				), $default_params );
 			}
 
-			parent::setup_nav( $main_nav, $sub_nav );
+			foreach ( $sub_nav as $nav ) {
+				bp_core_new_subnav_item( $nav, 'groups' );
+			}
 		}
 
 		if ( isset( $this->current_group->user_has_access ) ) {
@@ -707,8 +737,17 @@ class BP_Groups_Component extends BP_Component {
 			$pending = _x( 'No Pending Invites', 'My Account Groups sub nav', 'buddypress' );
 
 			if ( ! empty( $count['total'] ) ) {
-				$title   = sprintf( _x( 'Groups <span class="count">%s</span>',          'My Account Groups nav',     'buddypress' ), bp_core_number_format( $count ) );
-				$pending = sprintf( _x( 'Pending Invites <span class="count">%s</span>', 'My Account Groups sub nav', 'buddypress' ), bp_core_number_format( $count ) );
+				$title = sprintf(
+					/* translators: %s: Group invitation count for the current user */
+					_x( 'Groups %s', 'My Account Groups nav', 'buddypress' ),
+					'<span class="count">' . bp_core_number_format( $count ) . '</span>'
+				);
+
+				$pending = sprintf(
+					/* translators: %s: Group invitation count for the current user */
+					_x( 'Pending Invites %s', 'My Account Groups sub nav', 'buddypress' ),
+					'<span class="count">' . bp_core_number_format( $count ) . '</span>'
+				);
 			}
 
 			// Add the "My Account" sub menus.
@@ -806,9 +845,23 @@ class BP_Groups_Component extends BP_Component {
 			'bp_groups',
 			'bp_group_admins',
 			'bp_group_invite_count',
-			'group_meta'
+			'group_meta',
+			'bp_groups_memberships',
+			'bp_groups_memberships_for_user',
 		) );
 
 		parent::setup_cache_groups();
+	}
+
+	/**
+	 * Set up taxonomies.
+	 *
+	 * @since 2.6.0
+	 */
+	public function register_taxonomies() {
+		// Group Type.
+		register_taxonomy( 'bp_group_type', 'bp_group', array(
+			'public' => false,
+		) );
 	}
 }

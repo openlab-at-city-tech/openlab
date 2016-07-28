@@ -616,6 +616,12 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 /*--------------------------------------------------------------
 3.5 - Forms
 --------------------------------------------------------------*/
+
+#buddypress form fieldset {
+	border: 0;
+	padding: 0;
+}
+
 #buddypress .standard-form textarea,
 #buddypress .standard-form input[type=text],
 #buddypress .standard-form input[type=text],
@@ -653,7 +659,8 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 	margin-bottom: 5px;
 }
 #buddypress .standard-form label,
-#buddypress .standard-form span.label {
+#buddypress .standard-form span.label,
+#buddypress .standard-form legend {
 	display: block;
 	font-weight: bold;
 	margin: 15px 0 5px 0;
@@ -664,12 +671,16 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 	font-weight: normal;
 	margin: auto;
 }
-#buddypress .standard-form div.checkbox label:nth-child(n+2),
-#buddypress .standard-form div.radio div label {
+#buddypress .standard-form .checkbox label,
+#buddypress .standard-form .radio label {
 	color: #767676;
 	font-size: 100%;
 	font-weight: normal;
 	margin: 5px 0 0 0;
+}
+#buddypress .standard-form .checkbox label input,
+#buddypress .standard-form .radio label input {
+	margin-left: 3px;
 }
 #buddypress .standard-form#sidebar-login-form label {
 	margin-top: 5px;

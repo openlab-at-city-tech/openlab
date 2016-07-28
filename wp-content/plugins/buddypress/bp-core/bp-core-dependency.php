@@ -207,22 +207,27 @@ function bp_setup_cache_groups() {
 /**
  * Set up the currently logged-in user.
  *
- * We white-list the WordPress customizer which purposely loads the user early.
+ * We white-list the WordPress Customizer which purposely loads the user early.
+ * If the current user is being setup before the "init" action has fired,
+ * strange (and difficult to debug) role/capability issues will occur.
  *
  * @since 1.7.0
  *
  * @link https://buddypress.trac.wordpress.org/ticket/6046
  * @link https://core.trac.wordpress.org/ticket/24169
  *
- * @uses did_action() To make sure the user isn't loaded out of order.
- * @uses do_action() Calls 'bp_setup_current_user'.
  */
 function bp_setup_current_user() {
+	$skip_warning = (
+		( isset( $_REQUEST['wp_customize'] ) && 'on' === $_REQUEST['wp_customize'] ) ||
+		( is_admin() && 'customize.php' === basename( $_SERVER['PHP_SELF'] ) )
+	);
 
-	// If the current user is being setup before the "init" action has fired,
-	// strange (and difficult to debug) role/capability issues will occur.
-	if ( ! isset( $GLOBALS['wp_customize'] ) && ! did_action( 'after_setup_theme' ) ) {
-		_doing_it_wrong( __FUNCTION__, __( 'The current user is being initialized without using $wp->init().', 'buddypress' ), '1.7' );
+	if ( ! $skip_warning && ! did_action( 'after_setup_theme' ) ) {
+		$e = new Exception;
+		$trace = $e->getTraceAsString();
+
+		_doing_it_wrong( __FUNCTION__, __( 'The current user is being initialized without using $wp->init().', 'buddypress' ) . "\n===\nTrace:\n" . substr( $trace, strpos( $trace, '#6' ) ) . "\n===\n", '1.7' );
 	}
 
 	/**
@@ -246,6 +251,21 @@ function bp_init() {
 	 * @since 1.2.0
 	 */
 	do_action( 'bp_init' );
+}
+
+/**
+ * Fire the 'bp_rest_api_init' action, where BuddyPress registers REST API endpoints.
+ *
+ * @since 2.6.0
+ */
+function bp_rest_api_init() {
+
+	/**
+	 * Fires the 'bp_rest_api_init' function, where BuddyPress registers REST API endpoints.
+	 *
+	 * @since 2.6.0
+	 */
+	do_action( 'bp_rest_api_init' );
 }
 
 /**
@@ -356,7 +376,7 @@ function bp_widgets_init() {
 	 *
 	 * @since 1.6.0
 	 */
-	do_action ( 'bp_widgets_init' );
+	do_action( 'bp_widgets_init' );
 }
 
 /**
@@ -373,7 +393,7 @@ function bp_head() {
 	 *
 	 * @since 1.6.0
 	 */
-	do_action ( 'bp_head' );
+	do_action( 'bp_head' );
 }
 
 /** Theme Permissions *********************************************************/
@@ -387,7 +407,6 @@ function bp_head() {
  *
  * @since 1.6.0
  *
- * @uses do_action()
  */
 function bp_template_redirect() {
 
@@ -408,7 +427,6 @@ function bp_template_redirect() {
  *
  * @since 1.5.0
  *
- * @uses do_action()
  */
 function bp_register_theme_directory() {
 
@@ -429,7 +447,6 @@ function bp_register_theme_directory() {
  *
  * @since 1.7.0
  *
- * @uses do_action()
  */
 function bp_register_theme_packages() {
 
@@ -446,7 +463,6 @@ function bp_register_theme_packages() {
  *
  * @since 1.6.0
  *
- * @uses do_action() Calls 'bp_enqueue_scripts'.
  */
 function bp_enqueue_scripts() {
 
@@ -455,7 +471,25 @@ function bp_enqueue_scripts() {
 	 *
 	 * @since 1.6.0
 	 */
-	do_action ( 'bp_enqueue_scripts' );
+	do_action( 'bp_enqueue_scripts' );
+}
+
+/**
+ * Fires the 'bp_enqueue_embed_scripts' action in the <head> for BP oEmbeds.
+ *
+ * @since 2.6.0
+ */
+function bp_enqueue_embed_scripts() {
+	if ( ! is_buddypress() ) {
+		return;
+	}
+
+	/**
+	 * Enqueue CSS and JS files for BuddyPress embeds.
+	 *
+	 * @since 2.6.0
+	 */
+	do_action( 'bp_enqueue_embed_scripts' );
 }
 
 /**
@@ -463,7 +497,6 @@ function bp_enqueue_scripts() {
  *
  * @since 1.8.0
  *
- * @uses do_action() Calls 'bp_add_rewrite_tags'.
  */
 function bp_add_rewrite_tags() {
 
@@ -480,7 +513,6 @@ function bp_add_rewrite_tags() {
  *
  * @since 1.9.0
  *
- * @uses do_action() Calls 'bp_add_rewrite_rules'.
  */
 function bp_add_rewrite_rules() {
 
@@ -497,7 +529,6 @@ function bp_add_rewrite_rules() {
  *
  * @since 1.9.0
  *
- * @uses do_action() Calls 'bp_add_permastructs'.
  */
 function bp_add_permastructs() {
 
@@ -517,7 +548,6 @@ function bp_add_permastructs() {
  *
  * @since 1.6.0
  *
- * @uses do_action() Calls 'bp_setup_theme'.
  */
 function bp_setup_theme() {
 
@@ -526,7 +556,7 @@ function bp_setup_theme() {
 	 *
 	 * @since 1.6.0
 	 */
-	do_action ( 'bp_setup_theme' );
+	do_action( 'bp_setup_theme' );
 }
 
 /**
@@ -541,7 +571,6 @@ function bp_setup_theme() {
  *
  * @since 1.6.0
  *
- * @uses do_action() Calls 'bp_after_setup_theme'.
  */
 function bp_after_setup_theme() {
 
@@ -550,7 +579,7 @@ function bp_after_setup_theme() {
 	 *
 	 * @since 1.7.0
 	 */
-	do_action ( 'bp_after_setup_theme' );
+	do_action( 'bp_after_setup_theme' );
 }
 
 /** Theme Compatibility Filter ************************************************/
@@ -608,8 +637,6 @@ function bp_login_redirect( $redirect_to = '', $redirect_to_raw = '', $user = fa
  *
  * @since 1.6.0
  *
- * @uses apply_filters()
- *
  * @param string $template See 'template_include'.
  * @return string Template file to use.
  */
@@ -629,8 +656,6 @@ function bp_template_include( $template = '' ) {
  * Fire the 'bp_generate_rewrite_rules' action, where BP generates its rewrite rules.
  *
  * @since 1.7.0
- *
- * @uses do_action() Calls 'bp_generate_rewrite_rules' with {@link WP_Rewrite}.
  *
  * @param WP_Rewrite $wp_rewrite See 'generate_rewrite_rules'.
  */
@@ -652,8 +677,6 @@ function bp_generate_rewrite_rules( $wp_rewrite ) {
  * Filter the allowed themes list for BuddyPress-specific themes.
  *
  * @since 1.7.0
- *
- * @uses apply_filters() Calls 'bp_allowed_themes' with the allowed themes list.
  *
  * @param array $themes The path of the template to include.
  * @return array
@@ -677,7 +700,6 @@ function bp_allowed_themes( $themes ) {
  *
  * @since 1.9.0
  *
- * @uses do_action()
  */
 function bp_post_request() {
 
@@ -721,7 +743,6 @@ function bp_post_request() {
  *
  * @since 1.9.0
  *
- * @uses do_action()
  */
 function bp_get_request() {
 

@@ -175,7 +175,7 @@ add_action( 'bp_setup_globals', 'bp_core_set_avatar_globals' );
  *                                   local avatar. In some cases, this may be undesirable, in which
  *                                   case 'no_grav' should be set to true. To disable Gravatar
  *                                   fallbacks globally, see the 'bp_core_fetch_avatar_no_grav' filter.
- *                                   Default: false.
+ *                                   Default: true for groups, otherwise false.
  *     @type bool       $html        Whether to return an <img> HTML element, vs a raw URL
  *                                   to an avatar. If false, <img>-specific arguments (like 'css_id')
  *                                   will be ignored. Default: true.
@@ -211,7 +211,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 		'css_id'        => false,
 		'alt'           => '',
 		'email'         => false,
-		'no_grav'       => false,
+		'no_grav'       => null,
 		'html'          => true,
 		'title'         => '',
 		'extra_attr'    => '',
@@ -564,6 +564,11 @@ function bp_core_fetch_avatar( $args = '' ) {
 		}
 	}
 
+	// By default, Gravatar is not pinged for groups.
+	if ( null === $params['no_grav'] ) {
+		$params['no_grav'] = 'group' === $params['object'];
+	}
+
 	/**
 	 * Filters whether or not to skip Gravatar check.
 	 *
@@ -636,6 +641,17 @@ function bp_core_fetch_avatar( $args = '' ) {
 		if ( ! empty( $params['rating'] ) ) {
 			$url_args['r'] = strtolower( $params['rating'] );
 		}
+
+		/**
+		 * Filters the Gravatar "d" parameter.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param string $default_grav The avatar default.
+		 * @param array $params The avatar's data.
+		 */
+		$default_grav = apply_filters( 'bp_core_avatar_default', $default_grav, $params );
+
 		// Only set default image if 'Gravatar Logo' is not requested.
 		if ( 'gravatar_default' !== $default_grav ) {
 			$url_args['d'] = $default_grav;
@@ -660,7 +676,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 		 * @param string $value  Default avatar for non-gravatar requests.
 		 * @param array  $params Array of parameters for the avatar request.
 		 */
-		$gravatar = apply_filters( 'bp_core_default_avatar_' . $params['object'], bp_core_avatar_default( 'local' ), $params );
+		$gravatar = apply_filters( 'bp_core_default_avatar_' . $params['object'], bp_core_avatar_default( 'local', $params ), $params );
 	}
 
 	if ( true === $params['html'] ) {
@@ -1038,8 +1054,9 @@ function bp_avatar_ajax_upload() {
 		// Remove template message.
 		$bp->template_message      = false;
 		$bp->template_message_type = false;
-		@setcookie( 'bp-message', false, time() - 1000, COOKIEPATH );
-		@setcookie( 'bp-message-type', false, time() - 1000, COOKIEPATH );
+
+		@setcookie( 'bp-message', false, time() - 1000, COOKIEPATH, COOKIE_DOMAIN, is_ssl() );
+		@setcookie( 'bp-message-type', false, time() - 1000, COOKIEPATH, COOKIE_DOMAIN, is_ssl() );
 	}
 
 	if ( empty( $avatar ) ) {
@@ -1623,8 +1640,6 @@ function bp_core_get_upload_dir( $type = 'upload_path' ) {
  *
  * @since 1.2.0
  *
- * @uses bp_core_get_upload_dir() To get upload directory info.
- *
  * @return string Absolute path to WP upload directory.
  */
 function bp_core_avatar_upload_path() {
@@ -1643,8 +1658,6 @@ function bp_core_avatar_upload_path() {
  * Get the raw base URL for root site upload location.
  *
  * @since 1.2.0
- *
- * @uses bp_core_get_upload_dir() To get upload directory info.
  *
  * @return string Full URL to current upload location.
  */
@@ -1674,7 +1687,7 @@ function bp_get_user_has_avatar( $user_id = 0 ) {
 		$user_id = bp_displayed_user_id();
 
 	$retval = false;
-	if ( bp_core_fetch_avatar( array( 'item_id' => $user_id, 'no_grav' => true, 'html' => false ) ) != bp_core_avatar_default( 'local' ) )
+	if ( bp_core_fetch_avatar( array( 'item_id' => $user_id, 'no_grav' => true, 'html' => false, 'type' => 'full' ) ) != bp_core_avatar_default( 'local' ) )
 		$retval = true;
 
 	/**
@@ -1833,34 +1846,53 @@ function bp_core_avatar_original_max_filesize() {
  * Get the URL of the 'full' default avatar.
  *
  * @since 1.5.0
+ * @since 2.6.0 Introduced `$params` and `$object_type` parameters.
  *
- * @param string $type 'local' if the fallback should be the locally-hosted version
- *                     of the mystery-person, 'gravatar' if the fallback should be
- *                     Gravatar's version. Default: 'gravatar'.
+ * @param string $type   'local' if the fallback should be the locally-hosted version
+ *                       of the mystery person, 'gravatar' if the fallback should be
+ *                       Gravatar's version. Default: 'gravatar'.
+ * @param array  $params Parameters passed to bp_core_fetch_avatar().
  * @return string The URL of the default avatar.
  */
-function bp_core_avatar_default( $type = 'gravatar' ) {
+function bp_core_avatar_default( $type = 'gravatar', $params = array() ) {
 	// Local override.
 	if ( defined( 'BP_AVATAR_DEFAULT' ) ) {
 		$avatar = BP_AVATAR_DEFAULT;
 
 	// Use the local default image.
 	} elseif ( 'local' === $type ) {
-		$avatar = buddypress()->plugin_url . 'bp-core/images/mystery-man.jpg';
+		$size = '';
+		if (
+			( isset( $params['type'] ) && 'thumb' === $params['type'] && bp_core_avatar_thumb_width() <= 50 ) ||
+			( isset( $params['width'] ) && $params['width'] <= 50 )
+		) {
+
+			$size = '-50';
+		}
+
+		$avatar = buddypress()->plugin_url . "bp-core/images/mystery-man{$size}.jpg";
 
 	// Use Gravatar's mystery person as fallback.
 	} else {
-		$avatar = '//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=' . bp_core_avatar_full_width();
+		$size = '';
+		if ( isset( $params['type'] ) && 'thumb' === $params['type'] ) {
+			$size = bp_core_avatar_thumb_width();
+		} else {
+			$size = bp_core_avatar_full_width();
+		}
+		$avatar = '//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=' . $size;
 	}
 
 	/**
 	 * Filters the URL of the 'full' default avatar.
 	 *
 	 * @since 1.5.0
+	 * @since 2.6.0 Added `$params`.
 	 *
 	 * @param string $avatar URL of the default avatar.
+	 * @param array  $params Params provided to bp_core_fetch_avatar().
 	 */
-	return apply_filters( 'bp_core_avatar_default', $avatar );
+	return apply_filters( 'bp_core_avatar_default', $avatar, $params );
 }
 
 /**
@@ -1870,13 +1902,15 @@ function bp_core_avatar_default( $type = 'gravatar' ) {
  * defined.
  *
  * @since 1.5.0
+ * @since 2.6.0 Introduced `$object_type` parameter.
  *
- * @param string $type 'local' if the fallback should be the locally-hosted version
- *                     of the mystery-person, 'gravatar' if the fallback should be
- *                     Gravatar's version. Default: 'gravatar'.
+ * @param string $type   'local' if the fallback should be the locally-hosted version
+ *                       of the mystery person, 'gravatar' if the fallback should be
+ *                       Gravatar's version. Default: 'gravatar'.
+ * @param array  $params Parameters passed to bp_core_fetch_avatar().
  * @return string The URL of the default avatar thumb.
  */
-function bp_core_avatar_default_thumb( $type = 'gravatar' ) {
+function bp_core_avatar_default_thumb( $type = 'gravatar', $params = array() ) {
 	// Local override.
 	if ( defined( 'BP_AVATAR_DEFAULT_THUMB' ) ) {
 		$avatar = BP_AVATAR_DEFAULT_THUMB;
@@ -1894,10 +1928,12 @@ function bp_core_avatar_default_thumb( $type = 'gravatar' ) {
 	 * Filters the URL of the 'thumb' default avatar.
 	 *
 	 * @since 1.5.0
+	 * @since 2.6.0 Added `$params`.
 	 *
 	 * @param string $avatar URL of the default avatar.
+	 * @param string $params Params provided to bp_core_fetch_avatar().
 	 */
-	return apply_filters( 'bp_core_avatar_thumb', $avatar );
+	return apply_filters( 'bp_core_avatar_thumb', $avatar, $params );
 }
 
 /**
@@ -1908,12 +1944,6 @@ function bp_core_avatar_default_thumb( $type = 'gravatar' ) {
  * notices, we need to make sure this 'week' query var is reset to 0.
  *
  * @since  2.2.0
- *
- * @uses   bp_is_group_create()
- * @uses   bp_is_group_admin_page()
- * @uses   bp_is_group_admin_screen() to check for a group admin screen
- * @uses   bp_action_variable() to check for the group's avatar creation step
- * @uses   bp_is_user_change_avatar() to check for the user's change profile screen
  *
  * @param WP_Query|null $posts_query The main query object.
  */

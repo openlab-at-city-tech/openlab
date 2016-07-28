@@ -41,8 +41,6 @@ class BP_Legacy extends BP_Theme_Compat {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @uses BP_Legacy::setup_globals()
-	 * @uses BP_Legacy::setup_actions()
 	 */
 	public function __construct() {
 		parent::start();
@@ -70,8 +68,6 @@ class BP_Legacy extends BP_Theme_Compat {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @uses add_filter() To add various filters
-	 * @uses add_action() To add various actions
 	 */
 	protected function setup_actions() {
 
@@ -86,7 +82,6 @@ class BP_Legacy extends BP_Theme_Compat {
 		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_styles'   ) ); // Enqueue theme CSS
 		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts'  ) ); // Enqueue theme JS
 		add_filter( 'bp_enqueue_scripts', array( $this, 'localize_scripts' ) ); // Enqueue theme script localization
-		add_action( 'bp_head',            array( $this, 'head_scripts'     ) ); // Output some extra JS in the <head>.
 
 		/** Body no-js Class **************************************************/
 
@@ -211,7 +206,6 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * @since 1.7.0
 	 * @since 2.3.0 Support custom CSS file named after the current theme or parent theme.
 	 *
-	 * @uses wp_enqueue_style() To enqueue the styles
 	 */
 	public function enqueue_styles() {
 		$min = bp_core_get_minified_asset_suffix();
@@ -430,23 +424,6 @@ class BP_Legacy extends BP_Theme_Compat {
 	}
 
 	/**
-	 * Put some scripts in the header, like AJAX url for wp-lists.
-	 *
-	 * @since 1.7.0
-	 */
-	public function head_scripts() {
-	?>
-
-		<script type="text/javascript">
-			/* <![CDATA[ */
-			var ajaxurl = '<?php echo bp_core_ajax_url(); ?>';
-			/* ]]> */
-		</script>
-
-	<?php
-	}
-
-	/**
 	 * Adds the no-js class to the body tag.
 	 *
 	 * This function ensures that the <body> element will have the 'no-js' class by default. If you're
@@ -531,7 +508,6 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * @since 2.2.0
 	 *
 	 * @param  array $templates Array of templates.
-	 * @uses   apply_filters() call 'bp_legacy_theme_compat_page_templates_directory_only' and return false
 	 *                         to use the defined page template for component's directory and its single items
 	 * @return array
 	 */
@@ -624,7 +600,6 @@ function bp_legacy_theme_group_create_button( $title ) {
  *
  * @since 2.2.0
  *
- * @uses   bp_group_create_nav_item() to output the create a Group nav item.
  */
 function bp_legacy_theme_group_create_nav() {
 	bp_group_create_nav_item();
@@ -654,7 +629,6 @@ function bp_legacy_theme_blog_create_button( $title ) {
  *
  * @since 2.2.0
  *
- * @uses   bp_blog_create_nav_item() to output the Create a Site nav item
  */
 function bp_legacy_theme_blog_create_nav() {
 	bp_blog_create_nav_item();
@@ -945,11 +919,11 @@ function bp_legacy_theme_post_update() {
 	}
 
 	if ( ! $object && bp_is_active( 'activity' ) ) {
-		$activity_id = bp_activity_post_update( array( 'content' => $_POST['content'] ) );
+		$activity_id = bp_activity_post_update( array( 'content' => $_POST['content'], 'error_type' => 'wp_error' ) );
 
 	} elseif ( 'groups' === $object ) {
 		if ( $item_id && bp_is_active( 'groups' ) )
-			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $item_id ) );
+			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $item_id, 'error_type' => 'wp_error' ) );
 
 	} else {
 
@@ -957,8 +931,11 @@ function bp_legacy_theme_post_update() {
 		$activity_id = apply_filters( 'bp_activity_custom_update', false, $object, $item_id, $_POST['content'] );
 	}
 
-	if ( empty( $activity_id ) )
+	if ( false === $activity_id ) {
 		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . __( 'There was a problem posting your update. Please try again.', 'buddypress' ) . '</p></div>' );
+	} elseif ( is_wp_error( $activity_id ) && $activity_id->get_error_code() ) {
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . $activity_id->get_error_message() . '</p></div>' );
+	}
 
 	$last_recorded = ! empty( $_POST['since'] ) ? date( 'Y-m-d H:i:s', intval( $_POST['since'] ) ) : 0;
 	if ( $last_recorded ) {
@@ -1023,15 +1000,11 @@ function bp_legacy_theme_new_activity_comment() {
 		'activity_id' => $_POST['form_id'],
 		'content'     => $_POST['content'],
 		'parent_id'   => $_POST['comment_id'],
+		'error_type'  => 'wp_error'
 	) );
 
-	if ( ! $comment_id ) {
-		if ( ! empty( $bp->activity->errors['new_comment'] ) && is_wp_error( $bp->activity->errors['new_comment'] ) ) {
-			$feedback = $bp->activity->errors['new_comment']->get_error_message();
-			unset( $bp->activity->errors['new_comment'] );
-		}
-
-		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . esc_html( $feedback ) . '</p></div>' );
+	if ( is_wp_error( $comment_id ) ) {
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . esc_html( $comment_id->get_error_message() ) . '</p></div>' );
 	}
 
 	// Load the new activity item into the $activities_template global.
@@ -1296,7 +1269,7 @@ function bp_legacy_theme_ajax_invite_user() {
 
 		// Users who have previously requested membership do not need
 		// another invitation created for them.
-		if ( BP_Groups_Member::check_for_membership_request( $friend_id, $group_id ) ) {
+		if ( groups_check_for_membership_request( $friend_id, $group_id ) ) {
 			$user_status = 'is_pending';
 
 		// Create the user invitation.
@@ -1773,7 +1746,7 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 	$top_offset  = bp_core_avatar_full_height() - 10;
 	$left_offset = bp_core_avatar_full_width() + 20;
 
-	$cover_image = isset( $params['cover_image'] ) ? 'background-image: url(' . $params['cover_image'] . ');' : '';
+	$cover_image = ( !empty( $params['cover_image'] ) ) ? 'background-image: url(' . $params['cover_image'] . ');' : '';
 
 	$hide_avatar_style = '';
 
@@ -1794,7 +1767,7 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 				}
 
 				#buddypress div#item-header #item-header-cover-image #item-header-content {
-					margin-left:auto;
+					margin-left: auto;
 				}
 			';
 		}
@@ -1808,8 +1781,8 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 		}
 
 		#buddypress #create-group-form #header-cover-image {
-			position: relative;
 			margin: 1em 0;
+			position: relative;
 		}
 
 		.bp-user #buddypress #item-header {
@@ -1820,7 +1793,7 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 			margin-top: '. $avatar_offset .'px;
 			float: left;
 			overflow: visible;
-			width:auto;
+			width: auto;
 		}
 
 		#buddypress div#item-header #item-header-cover-image #item-header-content {
@@ -1828,40 +1801,40 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 			float: left;
 			margin-left: ' . $left_offset . 'px;
 			margin-top: -' . $top_offset . 'px;
-			width:auto;
+			width: auto;
 		}
 
 		body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-header-content,
 		body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-actions {
+			clear: none;
 			margin-top: ' . $params["height"] . 'px;
 			margin-left: 0;
-			clear: none;
 			max-width: 50%;
 		}
 
 		body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-actions {
-			padding-top: 20px;
 			max-width: 20%;
+			padding-top: 20px;
 		}
 
 		' . $hide_avatar_style . '
 
-		#buddypress div#item-header-cover-image h2 a,
-		#buddypress div#item-header-cover-image h2 {
-			color: #FFF;
+		#buddypress div#item-header-cover-image .user-nicename a,
+		#buddypress div#item-header-cover-image .user-nicename {
+			font-size: 200%;
+			color: #fff;
+			margin: 0 0 0.6em;
 			text-rendering: optimizelegibility;
-			text-shadow: 0px 0px 3px rgba( 0, 0, 0, 0.8 );
-			margin: 0 0 .6em;
-			font-size:200%;
+			text-shadow: 0 0 3px rgba( 0, 0, 0, 0.8 );
 		}
 
 		#buddypress #item-header-cover-image #item-header-avatar img.avatar {
-			border: solid 2px #FFF;
 			background: rgba( 255, 255, 255, 0.8 );
+			border: solid 2px #fff;
 		}
 
 		#buddypress #item-header-cover-image #item-header-avatar a {
-			border: none;
+			border: 0;
 			text-decoration: none;
 		}
 
@@ -1880,22 +1853,22 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 			#buddypress #item-header-cover-image #item-header-avatar,
 			.bp-user #buddypress #item-header #item-header-cover-image #item-header-avatar,
 			#buddypress div#item-header #item-header-cover-image #item-header-content {
-				width:100%;
-				text-align:center;
+				width: 100%;
+				text-align: center;
 			}
 
 			#buddypress #item-header-cover-image #item-header-avatar a {
-				display:inline-block;
+				display: inline-block;
 			}
 
 			#buddypress #item-header-cover-image #item-header-avatar img {
-				margin:0;
+				margin: 0;
 			}
 
 			#buddypress div#item-header #item-header-cover-image #item-header-content,
 			body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-header-content,
 			body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-actions {
-				margin:0;
+				margin: 0;
 			}
 
 			body.single-item.groups #buddypress div#item-header #item-header-cover-image #item-header-content,
@@ -1907,17 +1880,17 @@ function bp_legacy_theme_cover_image( $params = array() ) {
 			#buddypress div#item-header-cover-image h2 {
 				color: inherit;
 				text-shadow: none;
-				margin:25px 0 0;
-				font-size:200%;
+				margin: 25px 0 0;
+				font-size: 200%;
 			}
 
 			#buddypress #item-header-cover-image #item-buttons div {
-				float:none;
-				display:inline-block;
+				float: none;
+				display: inline-block;
 			}
 
 			#buddypress #item-header-cover-image #item-buttons:before {
-				content:"";
+				content: "";
 			}
 
 			#buddypress #item-header-cover-image #item-buttons {

@@ -10,10 +10,12 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-require dirname( __FILE__ ) . '/classes/class-bp-groups-template.php';
-require dirname( __FILE__ ) . '/classes/class-bp-groups-group-members-template.php';
-require dirname( __FILE__ ) . '/classes/class-bp-groups-membership-requests-template.php';
-require dirname( __FILE__ ) . '/classes/class-bp-groups-invite-template.php';
+if ( ! buddypress()->do_autoload ) {
+	require dirname( __FILE__ ) . '/classes/class-bp-groups-template.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-groups-group-members-template.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-groups-membership-requests-template.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-groups-invite-template.php';
+}
 
 /**
  * Output the groups component slug.
@@ -100,56 +102,42 @@ function bp_groups_directory_permalink() {
  * Start the Groups Template Loop.
  *
  * @since 1.0.0
+ * @since 2.6.0 Added `$group_type`, `$group_type__in`, and `$group_type__not_in` parameters.
  *
  * @param array|string $args {
  *     Array of parameters. All items are optional.
- *     @type string       $type              Shorthand for certain orderby/
- *                                           order combinations. 'newest',
- *                                           'active', 'popular', 'alphabetical',
- *                                           'random'. When present, will override
- *                                           orderby and order params. Default: null.
- *     @type string       $order             Sort order. 'ASC' or 'DESC'.
- *                                           Default: 'DESC'.
- *     @type string       $orderby           Property to sort by.
- *                                           'date_created', 'last_activity', 'total_member_count',
- *                                           'name', 'random'. Default: 'last_activity'.
- *     @type int          $page              Page offset of results to return.
- *                                           Default: 1 (first page of results).
- *     @type int          $per_page          Number of items to return per page
- *                                           of results. Default: 20.
- *     @type int          $max               Does NOT affect query. May change the
- *                                           reported number of total groups found,
- *                                           but not the actual number of found
- *                                           groups. Default: false.
- *     @type bool         $show_hidden       Whether to include hidden groups in
- *                                           results. Default: false.
- *     @type string       $page_arg          Query argument used for pagination.
- *                                           Default: 'grpage'.
- *     @type int          $user_id           If provided, results will be limited
- *                                           to groups of which the specified user
- *                                           is a member.
- *                                           Default: value of bp_displayed_user_id().
- *     @type string       $slug              If provided, only the group with the
- *                                           matching slug will be returned.
- *                                           Default: false.
- *     @type string       $search_terms      If provided, only groups whose names or
- *                                           descriptions match the search terms will
- *                                           be returned. Default: value of
- *                                           `$_REQUEST['groups_search']` or
- *                                           `$_REQUEST['s']`, if present. Otherwise false.
- *     @type array        $meta_query        An array of meta_query conditions.
- *                                           See {@link WP_Meta_Query::queries} for description.
- *     @type array|string $include           Array or comma-separated list of
- *                                           group IDs. Results will be limited
- *                                           to groups within the list. Default: false.
- *     @type bool         $populate_extras   Whether to fetch additional information
- *                                           (such as member count) about groups.
- *                                           Default: true.
- *     @type array|string $exclude           Array or comma-separated list of group IDs.
- *                                           Results will exclude the listed groups.
- *                                           Default: false.
- *     @type bool         $update_meta_cache Whether to fetch groupmeta for queried groups.
- *                                           Default: true.
+ *     @type string       $type               Shorthand for certain orderby/order combinations. 'newest', 'active',
+ *                                            'popular', 'alphabetical', 'random'. When present, will override
+ *                                            orderby and order params. Default: null.
+ *     @type string       $order              Sort order. 'ASC' or 'DESC'. Default: 'DESC'.
+ *     @type string       $orderby            Property to sort by. 'date_created', 'last_activity',
+ *                                            'total_member_count', 'name', 'random'. Default: 'last_activity'.
+ *     @type int          $page               Page offset of results to return. Default: 1 (first page of results).
+ *     @type int          $per_page           Number of items to return per page of results. Default: 20.
+ *     @type int          $max                Does NOT affect query. May change the reported number of total groups
+ *                                            found, but not the actual number of found groups. Default: false.
+ *     @type bool         $show_hidden        Whether to include hidden groups in results. Default: false.
+ *     @type string       $page_arg           Query argument used for pagination. Default: 'grpage'.
+ *     @type int          $user_id            If provided, results will be limited to groups of which the specified
+ *                                            user is a member. Default: value of bp_displayed_user_id().
+ *     @type string       $slug               If provided, only the group with the matching slug will be returned.
+ *                                            Default: false.
+ *     @type string       $search_terms       If provided, only groups whose names or descriptions match the search
+ *                                            terms will be returned. Default: value of `$_REQUEST['groups_search']` or
+ *                                            `$_REQUEST['s']`, if present. Otherwise false.
+ *     @type array|string $group_type         Array or comma-separated list of group types to limit results to.
+ *     @type array|string $group_type__in     Array or comma-separated list of group types to limit results to.
+ *     @type array|string $group_type__not_in Array or comma-separated list of group types that will be
+ *                                            excluded from results.
+ *     @type array        $meta_query         An array of meta_query conditions.
+ *                                            See {@link WP_Meta_Query::queries} for description.
+ *     @type array|string $include            Array or comma-separated list of group IDs. Results will be limited
+ *                                            to groups within the list. Default: false.
+ *     @type bool         $populate_extras    Whether to fetch additional information (such as member count)
+ *                                            about groups. Default: true.
+ *     @type array|string $exclude            Array or comma-separated list of group IDs. Results will exclude
+ *                                            the listed groups. Default: false.
+ *     @type bool         $update_meta_cache  Whether to fetch groupmeta for queried groups. Default: true.
  * }
  * @return bool True if there are groups to display that match the params
  */
@@ -193,42 +181,48 @@ function bp_has_groups( $args = '' ) {
 
 	// Parse defaults and requested arguments.
 	$r = bp_parse_args( $args, array(
-		'type'              => $type,
-		'order'             => 'DESC',
-		'orderby'           => 'last_activity',
-		'page'              => 1,
-		'per_page'          => 20,
-		'max'               => false,
-		'show_hidden'       => false,
-		'page_arg'          => 'grpage',
-		'user_id'           => bp_displayed_user_id(),
-		'slug'              => $slug,
-		'search_terms'      => $search_terms,
-		'meta_query'        => false,
-		'include'           => false,
-		'exclude'           => false,
-		'populate_extras'   => true,
-		'update_meta_cache' => true,
+		'type'               => $type,
+		'order'              => 'DESC',
+		'orderby'            => 'last_activity',
+		'page'               => 1,
+		'per_page'           => 20,
+		'max'                => false,
+		'show_hidden'        => false,
+		'page_arg'           => 'grpage',
+		'user_id'            => bp_displayed_user_id(),
+		'slug'               => $slug,
+		'search_terms'       => $search_terms,
+		'group_type'         => '',
+		'group_type__in'     => '',
+		'group_type__not_in' => '',
+		'meta_query'         => false,
+		'include'            => false,
+		'exclude'            => false,
+		'populate_extras'    => true,
+		'update_meta_cache'  => true,
 	), 'has_groups' );
 
 	// Setup the Groups template global.
 	$groups_template = new BP_Groups_Template( array(
-		'type'              => $r['type'],
-		'order'             => $r['order'],
-		'orderby'           => $r['orderby'],
-		'page'              => (int) $r['page'],
-		'per_page'          => (int) $r['per_page'],
-		'max'               => (int) $r['max'],
-		'show_hidden'       => $r['show_hidden'],
-		'page_arg'          => $r['page_arg'],
-		'user_id'           => (int) $r['user_id'],
-		'slug'              => $r['slug'],
-		'search_terms'      => $r['search_terms'],
-		'meta_query'        => $r['meta_query'],
-		'include'           => $r['include'],
-		'exclude'           => $r['exclude'],
-		'populate_extras'   => (bool) $r['populate_extras'],
-		'update_meta_cache' => (bool) $r['update_meta_cache'],
+		'type'               => $r['type'],
+		'order'              => $r['order'],
+		'orderby'            => $r['orderby'],
+		'page'               => (int) $r['page'],
+		'per_page'           => (int) $r['per_page'],
+		'max'                => (int) $r['max'],
+		'show_hidden'        => $r['show_hidden'],
+		'page_arg'           => $r['page_arg'],
+		'user_id'            => (int) $r['user_id'],
+		'slug'               => $r['slug'],
+		'search_terms'       => $r['search_terms'],
+		'group_type'         => $r['group_type'],
+		'group_type__in'     => $r['group_type__in'],
+		'group_type__not_in' => $r['group_type__not_in'],
+		'meta_query'         => $r['meta_query'],
+		'include'            => $r['include'],
+		'exclude'            => $r['exclude'],
+		'populate_extras'    => (bool) $r['populate_extras'],
+		'update_meta_cache'  => (bool) $r['update_meta_cache'],
 	) );
 
 	/**
@@ -597,7 +591,7 @@ function bp_group_avatar( $args = '' ) {
 			'css_id'     => $r['id'],
 			'class'      => $r['class'],
 			'width'      => $r['width'],
-			'height'     => $r['height']
+			'height'     => $r['height'],
 		) );
 
 		// If No avatar found, provide some backwards compatibility.
@@ -3420,8 +3414,6 @@ function bp_group_create_nav_item() {
  *
  * @since 2.2.0
  *
- * @uses bp_group_create_nav_item() to output the create a Group nav item.
- *
  * @return string HTML Output
  */
 function bp_group_backcompat_create_nav_item() {
@@ -3628,6 +3620,12 @@ function bp_group_has_members( $args = '' ) {
 		$exclude_admins_mods = 0;
 	}
 
+	$search_terms_default = null;
+	$search_query_arg = bp_core_get_component_search_query_arg( 'members' );
+	if ( ! empty( $_REQUEST[ $search_query_arg ] ) ) {
+		$search_terms_default = stripslashes( $_REQUEST[ $search_query_arg ] );
+	}
+
 	$r = wp_parse_args( $args, array(
 		'group_id'            => bp_get_current_group_id(),
 		'page'                => 1,
@@ -3637,7 +3635,7 @@ function bp_group_has_members( $args = '' ) {
 		'exclude_admins_mods' => $exclude_admins_mods,
 		'exclude_banned'      => 1,
 		'group_role'          => false,
-		'search_terms'        => null,
+		'search_terms'        => $search_terms_default,
 		'type'                => 'last_joined',
 	) );
 
@@ -4188,6 +4186,7 @@ function bp_groups_front_template_part() {
  * Locate a custom group front template if it exists.
  *
  * @since 2.4.0
+ * @since 2.6.0 Adds the Group Type to the front template hierarchy.
  *
  * @param  BP_Groups_Group|null $group Optional. Falls back to current group if not passed.
  * @return string|bool                 Path to front template on success; boolean false on failure.
@@ -4205,6 +4204,25 @@ function bp_groups_get_front_template( $group = null ) {
 		return $group->front_template;
 	}
 
+	$template_names = array(
+		'groups/single/front-id-'     . sanitize_file_name( $group->id )     . '.php',
+		'groups/single/front-slug-'   . sanitize_file_name( $group->slug )   . '.php',
+	);
+
+	if ( bp_groups_get_group_types() ) {
+		$group_type = bp_groups_get_group_type( $group->id );
+		if ( ! $group_type ) {
+			$group_type = 'none';
+		}
+
+		$template_names[] = 'groups/single/front-group-type-' . sanitize_file_name( $group_type )   . '.php';
+	}
+
+	$template_names = array_merge( $template_names, array(
+		'groups/single/front-status-' . sanitize_file_name( $group->status ) . '.php',
+		'groups/single/front.php'
+	) );
+
 	/**
 	 * Filters the hierarchy of group front templates corresponding to a specific group.
 	 *
@@ -4214,14 +4232,7 @@ function bp_groups_get_front_template( $group = null ) {
 	 * @param array  $template_names Array of template paths.
 	 * @param object $group          Group object.
 	 */
-	$template_names = apply_filters( 'bp_groups_get_front_template', array(
-		'groups/single/front-id-'     . sanitize_file_name( $group->id )     . '.php',
-		'groups/single/front-slug-'   . sanitize_file_name( $group->slug )   . '.php',
-		'groups/single/front-status-' . sanitize_file_name( $group->status ) . '.php',
-		'groups/single/front.php'
-	) );
-
-	return bp_locate_template( $template_names, false, true );
+	return bp_locate_template( apply_filters( 'bp_groups_get_front_template', $template_names, $group ), false, true );
 }
 
 /**
@@ -4304,9 +4315,6 @@ function bp_groups_members_filter() {
  *
  * @since 1.5.0
  *
- * @uses apply_filters() To call 'bp_user_can_create_groups'.
- * @uses bp_get_option() To retrieve value of 'bp_restrict_group_creation'. Defaults to 0.
- * @uses bp_current_user_can() To determine if current user if super admin.
  * @return bool True if user can create groups. False otherwise.
  */
 function bp_user_can_create_groups() {
@@ -4703,7 +4711,6 @@ function bp_new_group_avatar( $args = '' ) {
 			'class'   => 'avatar',
 			'id'      => 'avatar-crop-preview',
 			'alt'     => __( 'Group photo', 'buddypress' ),
-			'no_grav' => false
 		), 'get_new_group_avatar' );
 
 		// Merge parsed arguments with object specific data.
@@ -4788,7 +4795,6 @@ function bp_groups_current_create_step() {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses apply_filters() Filter bp_get_groups_current_create_step to modify.
 	 *
 	 * @return string $current_create_step
 	 */
@@ -5068,7 +5074,6 @@ function bp_group_current_admin_tab() {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @uses apply_filters() Filter bp_get_current_group_admin_tab to modify return value.
 	 *
 	 * @return string $tab The current tab's slug.
 	 */
@@ -5095,8 +5100,6 @@ function bp_group_current_admin_tab() {
  * Outputs the current group avatar.
  *
  * @since 1.0.0
- *
- * @uses bp_get_group_current_avatar() to get the avatar of the current group.
  *
  * @param string $type Thumb or full.
  */
@@ -5146,14 +5149,17 @@ function bp_get_group_has_avatar( $group_id = false ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	$group_avatar = bp_core_fetch_avatar( array(
+	$avatar_args = array(
 		'item_id' => $group_id,
 		'object'  => 'group',
 		'no_grav' => true,
 		'html'    => false,
-	) );
+		'type'    => 'thumb',
+	);
 
-	if ( bp_core_avatar_default( 'local' ) === $group_avatar ) {
+	$group_avatar = bp_core_fetch_avatar( $avatar_args );
+
+	if ( bp_core_avatar_default( 'local', $avatar_args ) === $group_avatar ) {
 		return false;
 	}
 
@@ -5791,7 +5797,6 @@ function bp_current_group_id() {
 	 * Returns the ID of the current group.
 	 *
 	 * @since 1.5.0
-	 * @uses apply_filters() Filter bp_get_current_group_id to modify this output.
 	 *
 	 * @return int $current_group_id The id of the current group, if there is one.
 	 */
@@ -5822,7 +5827,6 @@ function bp_current_group_slug() {
 	 * Returns the slug of the current group.
 	 *
 	 * @since 1.5.0
-	 * @uses apply_filters() Filter bp_get_current_group_slug to modify this output.
 	 *
 	 * @return string $current_group_slug The slug of the current group, if there is one.
 	 */
@@ -5853,26 +5857,22 @@ function bp_current_group_name() {
 	 * Returns the name of the current group.
 	 *
 	 * @since 1.5.0
-	 * @uses apply_filters() Filter bp_get_current_group_name to modify this output.
 	 *
 	 * @return string The name of the current group, if there is one.
 	 */
 	function bp_get_current_group_name() {
-		$current_group      = groups_get_current_group();
-		$current_group_name = isset( $current_group->name ) ? $current_group->name : '';
-
-		/** This filter is documented in bp-groups/bp-groups-template.php */
-		$name               = apply_filters( 'bp_get_group_name', $current_group_name );
+		$current_group = groups_get_current_group();
+		$current_name  = bp_get_group_name( $current_group );
 
 		/**
 		 * Filters the name of the current group.
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $name          Name of the current group.
+		 * @param string $current_name  Name of the current group.
 		 * @param object $current_group Instance holding the current group.
 		 */
-		return apply_filters( 'bp_get_current_group_name', $name, $current_group );
+		return apply_filters( 'bp_get_current_group_name', $current_name, $current_group );
 	}
 
 /**
@@ -5887,7 +5887,6 @@ function bp_current_group_description() {
 	 * Returns the description of the current group.
 	 *
 	 * @since 2.1.0
-	 * @uses apply_filters() Filter bp_get_current_group_description to modify
 	 *                       this output.
 	 *
 	 * @return string The description of the current group, if there is one.
@@ -5993,7 +5992,6 @@ function bp_groups_action_link( $action = '', $query_args = '', $nonce = false )
  *
  * @param array|string $args before|after|user_id
  *
- * @uses bp_groups_get_profile_stats() to get the stats.
  */
 function bp_groups_profile_stats( $args = '' ) {
 	echo bp_groups_get_profile_stats( $args );

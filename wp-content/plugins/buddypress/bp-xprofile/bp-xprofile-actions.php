@@ -20,8 +20,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * The function will delete the active avatar for a user.
  *
- * @uses bp_core_delete_avatar() Deletes the active avatar for the logged in user.
- * @uses add_action() Runs a specific function for an action when it fires.
+ * @since 1.0.0
+ *
  */
 function xprofile_action_delete_avatar() {
 
