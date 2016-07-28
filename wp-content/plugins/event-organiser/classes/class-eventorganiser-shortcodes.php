@@ -102,7 +102,11 @@ class EventOrganiser_Shortcodes {
 		} elseif ( strtolower( $atts['type'] ) == 'ical' ) {
 			//Do nothing
 		} else {
-			$url = add_query_arg( 'cid', urlencode( $url ), 'http://www.google.com/calendar/render' );
+			//Google doesn't support https:// protocols for the cid value
+			//@see https://github.com/stephenharris/Event-Organiser/issues/328
+			//@link  http://stackoverflow.com/a/21218052/932391
+			$url = preg_replace( '/^https:/i', 'http:', $url );
+			$url = add_query_arg( 'cid', urlencode( $url ), 'https://www.google.com/calendar/render' );
 		}
 
 		$html = '<a href="'.$url.'" target="_blank" '.$class.' '.$title.' '.$id.' '.$style.'>'.$content.'</a>';
@@ -421,7 +425,7 @@ class EventOrganiser_Shortcodes {
 				$replacement = get_the_post_thumbnail(get_the_ID(),$size, $attr);
 				break;
 			case 'event_url':
-				$replacement =get_permalink();
+				$replacement = eo_get_permalink();
 				break;
 			case 'event_custom_field':
 				$field = $matches[2];

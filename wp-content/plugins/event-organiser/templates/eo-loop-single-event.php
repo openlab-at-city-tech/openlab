@@ -21,10 +21,17 @@
 	<header class="eo-event-header entry-header">
 
 		<h2 class="eo-event-title entry-title">
-			<a href="<?php the_permalink(); ?>" itemprop="url">
+			<a href="<?php echo eo_get_permalink(); ?>" itemprop="url">
 				<span itemprop="summary"><?php the_title() ?></span>
 			</a>
 		</h2>
+
+		<div class="eo-event-date"> 
+			<?php
+				//Formats the start & end date of the event
+				echo eo_format_event_occurrence();
+			?>
+		</div>
 			
 	</header><!-- .entry-header -->
 	

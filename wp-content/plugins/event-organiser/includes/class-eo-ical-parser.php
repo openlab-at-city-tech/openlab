@@ -152,7 +152,7 @@ class EO_ICAL_Parser{
 		 *			'CONFIRMED' => 'publish',
 		 *			'CANCELLED' => 'trash',
 		 *			'TENTATIVE' => 'draft',
-				);
+		 *     );
 		 *     </code></pre>
 		 *  - `default_status` - the status to use for the event if the iCal feed does not provide a status#
 		 *  - `parse_html` - whether to parse a HTML version of event descriptions if provided 
@@ -399,6 +399,36 @@ class EO_ICAL_Parser{
 							}
 							$this->current_event['end'] = $end;
 							
+						}
+						
+						//If importing indefinately recurring: recurr up to some large point in time.
+						if ( array_key_exists( 'until', $this->current_event ) && is_null( $this->current_event['until'] ) && empty( $this->current_event['number_occurrences'] ) ) {
+							
+							$until = new DateTime( '2038-01-19 00:00:00', eo_get_blog_timezone() );
+							
+							/**
+							 * When parsing an iCal feed the 'until' date to assign to indefinitely recurrring events
+							 * Event Organiser doesn't support indefinitely recurring events. When it encounters them
+							 * in an iCal feed it assigns them an arbitrary date in the future. This filter allows
+							 * you to change that date
+							 * 
+							 * @since 3.1.0
+							 * @param DateTime       $until          Occurrences will be created for this event up until this date
+							 * @param array          $event          The event as imported from the iCal feed
+							 * @param EO_ICAL_Parser $eo_ical_parser The feed parser object referencing the current event being parsed.
+							 */
+							$until = apply_filters( 'eventorganiser_indefinitely_recurring_event_last_date', $until, $this->current_event, $this );
+							$this->current_event['until']         = $until;
+							$this->current_event['schedule_last'] = clone $until; //Backwards compatability 2.13.5
+
+							$this->report_warning(
+								$this->line,
+								'indefinitely-recurring-event',
+								sprintf( 
+									__( 'Feed contains an indefinitely recurring event. This event will recurr until %s.', 'eventorganiser' ),
+									$this->current_event['until']->format( get_option( 'date_format' ) )
+								)
+							);
 						}
 						
 						//Now we've finished passing the event, move venue data to $this->venue_meta
@@ -1205,17 +1235,10 @@ class EO_ICAL_Parser{
 			}
 		}
 
-		//If importing indefinately recurring, recurr up to some large point in time.
-		//TODO make a log of this somewhere.
+		//Indefinitely recurring events will be assigned an 'until' date later on
 		if ( empty( $rule_array['until'] ) && empty( $rule_array['number_occurrences'] ) ) {
-			$rule_array['until'] = new DateTime( '2038-01-19 00:00:00' );
-			$rule_array['schedule_last'] = clone $rule_array['until']; //Backwards compatability 2.13.5
-
-			$this->report_warning(
-				$this->line,
-				'indefinitely-recurring-event',
-				'Feed contained an indefinitely recurring event. This event will recurr until 2038-01-19.'
-			);
+			$rule_array['until']         = null;
+			$rule_array['schedule_last'] = null;
 		}
 
 		return $rule_array;

@@ -5,7 +5,10 @@
 class EO_Calendar_Widget extends WP_Widget
 {
 
-	var $w_arg = array(
+	/*
+	 * Array of default settings
+	 */
+	public static $w_arg = array(
 		'title'          => '',
 		'showpastevents' => 1,
 		'event-category' => '',
@@ -35,7 +38,7 @@ class EO_Calendar_Widget extends WP_Widget
 
 	function form( $instance ) {
 
-		$instance = wp_parse_args( (array) $instance, $this->w_arg );
+		$instance = wp_parse_args( (array) $instance, self::$w_arg );
 
 		printf(
 			'<p>
@@ -196,6 +199,9 @@ class EO_Calendar_Widget extends WP_Widget
 
 		$today = new DateTime( 'now', eo_get_blog_timezone() );
 
+		//Ensure a different cache key for those who can and cannot see private blogs
+		$args['_priv'] = current_user_can( 'read_private_events' ) ? '_priv' : false;
+
 		$key = $month->format( 'YM' ) . serialize( $args ).get_locale().$today->format( 'Y-m-d' );
 		$calendar = get_transient( 'eo_widget_calendar' );
 		if ( ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) && $calendar && is_array( $calendar ) && isset( $calendar[$key] ) ) {
@@ -203,8 +209,8 @@ class EO_Calendar_Widget extends WP_Widget
 		}
 
 		//Parse defaults
-		$args['show-long']  = isset( $args['show-long'] ) ? $args['show-long']  : false;
-		$args['link-to-single']  = isset( $args['link-to-single'] ) ? $args['link-to-single']  : false;
+		$args['show-long']      = isset( $args['show-long'] ) ? $args['show-long']  : false;
+		$args['link-to-single'] = isset( $args['link-to-single'] ) ? $args['link-to-single']  : false;
 
 		//Month details
 		$first_day_of_month = intval( $month->format( 'N' ) ); //0=sun,...,6=sat
@@ -232,6 +238,8 @@ class EO_Calendar_Widget extends WP_Widget
 		$required = array(
 			'numberposts' => -1,
 			'showrepeats' => 1,
+			'post_status' => array( 'publish', 'private' ),
+			'perm'        => 'readable',
 		);
 
 		if ( $args['show-long'] ) {
@@ -333,6 +341,11 @@ class EO_Calendar_Widget extends WP_Widget
 								$current_date->format( 'm' ),
 								$current_date->format( 'd' )
 							);
+							$query_args = array_filter( array(
+								'event-venue'    => $args['event-venue'],
+								'event-category' => $args['event-category'],
+							) );
+							$link = add_query_arg( $query_args, $link );
 						}
 						$link = esc_url( $link );
 
