@@ -2,7 +2,7 @@
 /*
 Plugin Name: More Privacy Options
 Plugin URI:	http://wordpress.org/extend/plugins/more-privacy-options/
-Version: 4.1.1
+Version: 4.3
 Description: Add more privacy(visibility) options to a WordPress Multisite Network. Settings->Reading->Visibility:Network Users, Blog Members, or Admins Only. Network Settings->Network Visibility Selector: All Blogs Visible to Network Users Only or Visibility managed per blog as default.
 Author: D. Sader
 Author URI: http://dsader.snowotherway.org/
@@ -178,10 +178,12 @@ class ds_more_privacy_options {
 			$blog_public_new = get_blog_option($blog_id,'blog_public');
 									
 			$to_new = $this->ds_mail_super_admin_messages($blog_public_new);			
-
+				$blogname = get_blog_option( $blog_id, 'blogname');
 			$email =  stripslashes( get_site_option('admin_email') );
-			$subject = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), '.get_site_url( $blog_id ).', '. __('changed reading visibility setting to ', $this->l10n_prefix) . $to_new;
-			$message = __('Site ', $this->l10n_prefix).$blogname.'('.$blog_id.'), '.get_site_url( $blog_id ).', '.__('changed reading visibility setting to ', $this->l10n_prefix) .$to_new;
+			$subject = __('Site ', $this->l10n_prefix).'"'.$blogname.'" (ID: '.$blog_id.'), '.get_site_url( $blog_id ).', '. __('changed reading visibility setting to ', $this->l10n_prefix) .'"'. $to_new.'"';
+  			$message .= __('Site ', $this->l10n_prefix).'"'.$blogname.'" (ID: '.$blog_id.'), '.get_site_url( $blog_id ).', '.__('changed reading visibility setting to ', $this->l10n_prefix) .'"'. $to_new.'."';
+  			$message .= __(" \r\n\r\nSent by More Privacy Options plugin.", $this->l10n_prefix);
+
 			$headers = 'Auto-Submitted: auto-generated';
  		wp_mail($email, $subject, $message, $headers);
 	}

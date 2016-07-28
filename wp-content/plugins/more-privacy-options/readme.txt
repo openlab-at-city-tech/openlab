@@ -3,7 +3,7 @@ Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: visibility, privacy, private blog, multisite, members only, network visibility, site visibility
 Requires at least: 3.7.1
-Tested up to: 4.3
+Tested up to: 4.5
 Stable tag: Trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ Adds three more levels of privacy(visibility) to the Settings-->Reading page.
 
 3. Site visible only to administrators - "Site Admins Only".
 
-Mulitsite Network Admin can set an override on site privacy at "Network Visibility Selector" on Network Settings page
+[Multisite](http://codex.wordpress.org/Create_A_Network) Network Admin can set an override on site privacy at "Network Visibility Selector" on Network Settings page
 
 Multisite Network Admin can set privacy options at Network-Sites-Edit under "Settings Tab" as well.
 
@@ -37,9 +37,10 @@ Uses WP3+ functions auth_redirect(), network_home_url(), and home_url() for SSL 
 
 Login message has link to sign-up page of a "Network Users Only" blog or a link the blog admin email if user is logged in but not a member of a "Members Only" blog.
 
-WP svn via Aptana 3.
-
 Localization ready.
+
+[GitHub](https://github.com/wp-plugins/more-privacy-options)
+[WordPress.org Plugin Mirror](http://www.pluginmirror.com/plugins/more-privacy-options/)
 
 == Installation ==
 
@@ -64,10 +65,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 4.1.1 =
-* WP 4.3 OK, network settings save bugfix.
+= 4.3 =
+* WP 4.5 tests OK, outgoing email bugfix.
 
 
 == Upgrade Notice ==
-= 4.1.1 =
-* WP 4.3 OK, network settings save bugfix.
+= 4.3 =
+* WP 4.5 tests OK, outgoing email bugfix.
