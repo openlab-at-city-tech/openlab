@@ -82,7 +82,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $display_option_bpcgc = str_replace('And', '&', $display_option_bpcgc);
         $option_value_bpcgc = $_GET['cat'];
     }
-    
+
 //semesters
     if (empty($_GET['semester'])) {
         $_GET['semester'] = "";
@@ -180,25 +180,28 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                     </select>
                 </div>
 
-                <?php if ($group_type === 'project' || $group_type === 'club'): ?>
+                <?php if (function_exists('bpcgc_get_terms_by_group_type')): ?>
+                    <?php if ($group_type === 'project' || $group_type === 'club'): ?>
 
-                    <?php $group_terms = bpcgc_get_terms_by_group_type($group_type); ?>
+                        <?php $group_terms = bpcgc_get_terms_by_group_type($group_type); ?>
 
-                    <?php if ($group_terms && !empty($group_terms)): ?>
-                        
-                        <div class="custom-select">
-                            <select name="cat" class="last-select <?php echo $bpcgc_color; ?>-text" id="bp-group-categories-select">
-                                <option value="" <?php selected('', $option_value_bpcgc) ?>>Select Category</option>
-                                <option value='cat_all' <?php selected('cat_all', $option_value_bpcgc) ?>>All</option>
-                                <?php foreach ($group_terms as $term) : ?>
-                                    <option value="<?php echo $term->slug ?>" <?php selected($option_value_bpcgc, $term->slug) ?>><?php echo $term->name ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                        <?php if ($group_terms && !empty($group_terms)): ?>
 
+                            <div class="custom-select">
+                                <select name="cat" class="last-select <?php echo $bpcgc_color; ?>-text" id="bp-group-categories-select">
+                                    <option value="" <?php selected('', $option_value_bpcgc) ?>>Select Category</option>
+                                    <option value='cat_all' <?php selected('cat_all', $option_value_bpcgc) ?>>All</option>
+                                    <?php foreach ($group_terms as $term) : ?>
+                                        <option value="<?php echo $term->slug ?>" <?php selected($option_value_bpcgc, $term->slug) ?>><?php echo $term->name ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                        <?php endif; ?>
                     <?php endif; ?>
 
-                <?php endif; ?>
+                <?php endif;
+                ?>
 
                 <?php // @todo figure out a way to make this dynamic ?>
                 <?php if ($group_type == 'course'): ?>
