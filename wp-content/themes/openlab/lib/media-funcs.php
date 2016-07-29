@@ -56,16 +56,15 @@ add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
  * @param type $params
  * @return string
  */
-function openlab_default_get_group_avatar($url, $params) {
+function openlab_default_get_group_avatar( $url, $params ) {
+	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
+		$url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
+	}
 
-    if (strstr($url, 'default-avatar') || strstr($url, 'wavatar')) {
-        $url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
-    }
-
-    return $url;
+	return $url;
 }
 
-add_filter('bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2);
+add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2 );
 
 /**
  * WordPress adds dimensions to embedded images; this is totally not responsive WordPress
