@@ -877,7 +877,7 @@ function openlab_filter_subnav_nav_new_event($subnav_item) {
 
 //submenu navigation re-ordering
 function openlab_group_submenu_nav() {
-	if ( ! bp_is_group() ) {
+	if ( ! bp_is_group() || bp_is_group_create() ) {
 		return;
 	}
 
