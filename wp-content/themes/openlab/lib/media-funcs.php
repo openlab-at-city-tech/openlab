@@ -91,3 +91,39 @@ function openlab_activity_user_avatar() {
 
     return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'user', 'type' => 'full', 'html' => false)) . '" alt="' . bp_get_displayed_user_fullname() . '"/>';
 }
+
+function openlab_activity_group_avatar() {
+    global $activities_template;
+    $current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
+
+    $item_id = $current_activity_item->item_id;
+
+    return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'group', 'type' => 'full', 'html' => false)) . '" alt="' . bp_get_group_name() . '"/>';
+}
+
+function openlab_activity_group_link() {
+    global $bp, $activities_template;
+    $current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
+
+    $item_id = $current_activity_item->item_id;
+
+    $group = groups_get_group(array('group_id' => $item_id));
+
+    return get_site_url(0, $bp->groups->slug . '/' . $group->slug);
+}
+
+function openlab_whats_happening() {
+    $whats_happening_out = '';
+
+    $activity_args = array(
+        'per_page' => 10,
+        'primary_id' => false,
+        'update_meta_cache' => false, //we'll be hitting this alot
+    );
+
+    ob_start();
+    include(locate_template('parts/home/whats-happening.php'));
+    $whats_happening_out = ob_get_clean();
+
+    return $whats_happening_out;
+}

@@ -8301,6 +8301,20 @@ body form .checkbox-list-container {
     width: 100%;
   }
 }
+.home-page #refreshActivity {
+  color: #999999;
+  cursor: pointer;
+}
+.home-page #whatsHappening {
+  padding: 4%;
+  height: 485px;
+  overflow: auto;
+}
+.home-page #whatsHappening .sidebar-block {
+  margin-bottom: 23px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #bbbbbb;
+}
 .home-page #whos-online h2 {
   padding-left: 5px;
 }
