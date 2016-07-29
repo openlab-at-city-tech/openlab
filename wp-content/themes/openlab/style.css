@@ -7351,6 +7351,12 @@ input[type="submit"] {
   font-size: 16px;
   font-weight: 600;
 }
+.form-panel .panel-body .radio {
+  margin-top: 0;
+}
+.form-panel .panel-body .radio label {
+  margin-bottom: 15px;
+}
 .panel-button-group .panel:last-of-type {
   margin-bottom: 20px;
 }
@@ -7880,7 +7886,7 @@ body .scrollbar-measure {
   border-bottom: 1px solid #dddddd;
 }
 /**form custom**/
-#departments_html .department-list-container {
+body form .checkbox-list-container {
   height: 120px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
@@ -7961,6 +7967,7 @@ body .scrollbar-measure {
   border-color: #999999 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
 .select2-container--default.select2-container .select2-results__options li {
+  background: #ffffff;
   font-weight: 600;
   line-height: 1;
   margin-bottom: 0;
@@ -8293,6 +8300,20 @@ body .scrollbar-measure {
   .home-page #cac-featured [class*="col-"] {
     width: 100%;
   }
+}
+.home-page #refreshActivity {
+  color: #999999;
+  cursor: pointer;
+}
+.home-page #whatsHappening {
+  padding: 4%;
+  height: 485px;
+  overflow: auto;
+}
+.home-page #whatsHappening .sidebar-block {
+  margin-bottom: 23px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #bbbbbb;
 }
 .home-page #whos-online h2 {
   padding-left: 5px;

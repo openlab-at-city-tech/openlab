@@ -1,0 +1,108 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+#buddypress .tag-infos {
+	float:left;
+	max-width:55%;
+	padding: 1px 12px;
+	background-color: #fff;
+	-webkit-box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+ 	margin: 10px 0 20px;
+ 	padding: 10px;
+ 	border-left: 4px solid #555;
+}
+
+#buddypress .tag-infos p {
+	margin:0;
+}
+
+#buddypress .tag-infos h4 {
+	margin:0;
+}
+
+#buddypress .tag-infos a.show-allgroups {
+	display: inline-block;
+	margin-right:0;
+	float:right;
+	width:20px;
+	text-decoration: none;
+	border: none;
+}
+
+#buddypress ul.item-list li ul.group-tags {
+	overflow: hidden;
+	margin: 10px 0 0 60px;
+}
+
+#buddypress #item-header-content ul.group-tags {
+	overflow: hidden;
+	clear:both;
+	padding-top:5px;
+}
+
+#buddypress ul.item-list li ul.group-tags li,
+#buddypress #item-header-content ul.group-tags li {
+	display:inline-block;
+	margin:0 8px 0 0;
+	background:#f0f0f0;
+	border:none;
+	padding:5px;
+	font-size: 80%;
+}
+
+#buddypress #item-header-content ul.group-tags li {
+	float:left;
+}
+
+#buddypress ul.item-list li ul.group-tags li a {
+	text-decoration: none;
+	color:inherit;
+}
+
+#buddypress #item-header-content ul.group-tags li a {
+	text-decoration: none;
+	color:#555;
+}
+
+#buddypress ul.item-list li ul.group-tags li a:before,
+#buddypress #item-header-content ul.group-tags li a:before,
+#buddypress .tag-infos a.show-allgroups:before {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+	line-height: 1;
+	font-family: "dashicons";
+	text-decoration: inherit;
+	font-weight: normal;
+	font-style: normal;
+	vertical-align: top;
+	text-align: center;
+	-webkit-transition: color .1s ease-in 0;
+	transition: color .1s ease-in 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content:"\f323";
+	margin-right:5px;
+}
+
+#buddypress .tag-infos a.show-allgroups:before {
+	content: "\f158";
+}
+
+body.edit-details #buddypress .inside input[type="checkbox"],
+body.group-details #buddypress .inside input[type="checkbox"],
+body.toplevel_page_bp-groups #bp_group_tags .inside input[type="checkbox"] {
+	margin-right:5px;
+}
+
+body.edit-details #buddypress .inside span.tag-cb,
+body.group-details #buddypress .inside span.tag-cb,
+body.toplevel_page_bp-groups #bp_group_tags .inside span.tag-cb {
+	display:inline-block;
+	margin:0 8px 0 0;
+	padding:5px;
+}

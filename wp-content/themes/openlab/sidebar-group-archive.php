@@ -69,6 +69,20 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $option_value_dept = $_GET['department'];
     }
 
+    //categories
+    if (empty($_GET['cat'])) {
+        $display_option_bpcgc = "Select Category";
+        $option_value_bpcgc = "";
+    } else if ($_GET['cat'] == 'cat_all') {
+        $display_option_bpcgc = "All";
+        $option_value_bpcgc = "cat_all";
+    } else {
+        $dept_color = "active";
+        $display_option_bpcgc = ucwords(str_replace('-', ' ', $_GET['cat']));
+        $display_option_bpcgc = str_replace('And', '&', $display_option_bpcgc);
+        $option_value_bpcgc = $_GET['cat'];
+    }
+    
 //semesters
     if (empty($_GET['semester'])) {
         $_GET['semester'] = "";
@@ -161,10 +175,30 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
                 <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
                 <div class="custom-select">
-                    <select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
+                    <select name="department" class="last-select processing <?php echo $dept_color; ?>-text" id="dept-select" <?php disabled('', $option_value_school) ?>>
                         <?php echo openlab_return_course_list($option_value_school, $option_value_dept); ?>
                     </select>
                 </div>
+
+                <?php if ($group_type === 'project' || $group_type === 'club'): ?>
+
+                    <?php $group_terms = bpcgc_get_terms_by_group_type($group_type); ?>
+
+                    <?php if ($group_terms && !empty($group_terms)): ?>
+                        
+                        <div class="custom-select">
+                            <select name="cat" class="last-select <?php echo $bpcgc_color; ?>-text" id="bp-group-categories-select">
+                                <option value="" <?php selected('', $option_value_bpcgc) ?>>Select Category</option>
+                                <option value='cat_all' <?php selected('cat_all', $option_value_bpcgc) ?>>All</option>
+                                <?php foreach ($group_terms as $term) : ?>
+                                    <option value="<?php echo $term->slug ?>" <?php selected($option_value_bpcgc, $term->slug) ?>><?php echo $term->name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                    <?php endif; ?>
+
+                <?php endif; ?>
 
                 <?php // @todo figure out a way to make this dynamic ?>
                 <?php if ($group_type == 'course'): ?>

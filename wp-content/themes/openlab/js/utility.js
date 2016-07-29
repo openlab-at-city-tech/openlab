@@ -21,6 +21,7 @@
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
             OpenLab.utility.eventValidation();
+            OpenLab.utility.refreshActivity();
 
             //EO Calendar JS filtering
             if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -123,11 +124,11 @@
             OpenLab.utility.protect++;
 
             if (dropdownSelector.length) {
-                
+
                 var comboBoxSelector = $('#venue_select.ui-combobox-input');
-                
+
                 if (comboBoxSelector.length) {
-                    
+
                     clearInterval(OpenLab.utility.uiCheck);
                     comboBoxSelector.on("autocompletesearch", function (event, ui) {
 
@@ -243,6 +244,50 @@
                 OpenLab.utility.truncateOnTheFly(false, true);
 
             });
+        },
+        refreshActivity: function () {
+
+            var refreshActivity = $('#refreshActivity');
+
+            if (!refreshActivity.length) {
+                return;
+            }
+
+            var activityContainer = $('#whatsHappening');
+
+            //safety first
+            refreshActivity.off('click');
+
+            refreshActivity.on('click', function (e) {
+                
+                e.preventDefault();
+                refreshActivity.addClass('fa-spin');
+                
+                $.ajax({
+                    type: 'GET',
+                    url: ajaxurl,
+                    data:
+                            {
+                                action: 'openlab_ajax_return_latest_activity',
+                                nonce: localVars.nonce
+                            },
+                    success: function (data, textStatus, XMLHttpRequest)
+                    {
+                        refreshActivity.removeClass('fa-spin');
+                        if (data === 'exit') {
+                            //for right now, do nothing
+                        } else {
+                            activityContainer.html(data);
+                        }
+                    },
+                    error: function (MLHttpRequest, textStatus, errorThrown) {
+                        refreshActivity.removeClass('fa-spin');
+                        console.log(errorThrown);
+                    }
+                });
+
+            });
+
         },
         truncateOnTheFly: function (onInit, loadDelay) {
             if (onInit === undefined) {
@@ -387,8 +432,6 @@
             //ajax functionality for courses archive
             $('#schoolSelect select').on('select2:select', function () {
 
-                console.log('changing');
-
                 var school = $(this).val();
                 var nonce = $('#nonce-value').text();
 
@@ -397,8 +440,12 @@
                 $('#dept-select').addClass('processing');
                 $('#dept-select').html('<option value=""></option>');
 
-                if (school == "") {
-                    document.getElementById("dept-select").innerHTML = "";
+                if (school == "" || school == "school_all") {
+                    var defaultOption = '<option value="dept_all" selected="selected">All Departments</option>';
+                    $('#dept-select').html(defaultOption);
+                    $('#dept-select').trigger('render');
+                    $('#select2-dept-select-container').text('All Departments');
+                    $('#select2-dept-select-container').attr('title', 'All Departments');
                     return;
                 }
 
@@ -413,10 +460,13 @@
                             },
                     success: function (data, textStatus, XMLHttpRequest)
                     {
+                        console.log('school', school);
                         $('#dept-select').removeAttr('disabled');
                         $('#dept-select').removeClass('processing');
                         $('#dept-select').html(data);
-                        $('.custom-select select').trigger('render');
+                        $('#dept-select').trigger('render');
+                        $('#select2-dept-select-container').text('All Departments');
+                        $('#select2-dept-select-container').attr('title', 'All Departments');
                     },
                     error: function (MLHttpRequest, textStatus, errorThrown) {
                         console.log(errorThrown);

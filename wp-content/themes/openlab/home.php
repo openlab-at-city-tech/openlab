@@ -24,6 +24,13 @@ get_header();
         <?php dynamic_sidebar('cac-featured') ?>
 
         <div class="box-1 left-box" id="whos-online">
+            <h2 class="title uppercase clearfix"><i id="refreshActivity" class="fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening On OpenLab</h2>
+            <div id="whatsHappening" class="left-block-content whats-happening-wrapper">
+                <?php echo openlab_whats_happening(); ?>
+            </div>
+        </div>
+
+        <div class="box-1 left-box" id="whos-online">
             <h2 class="title uppercase">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
         </div>
@@ -37,9 +44,9 @@ get_header();
             <?php cuny_home_square('club'); ?>
             <?php cuny_home_square('portfolio'); ?>
             <div class="clearfloat"></div>
-            <script type='text/javascript'>(function($) {
+            <script type='text/javascript'>(function ($) {
                     $('.activity-list').css('visibility', 'hidden');
-                    $('#home-new-member-wrap').css('visibility','hidden');
+                    $('#home-new-member-wrap').css('visibility', 'hidden');
                 })(jQuery);</script>
         </div>
     </div>
