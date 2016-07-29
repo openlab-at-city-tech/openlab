@@ -47,29 +47,32 @@ add_filter('wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2);
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-    global $bp;
+	if ( bp_is_group() && openlab_is_portfolio() ) {
+		buddypress()->groups->nav->edit_nav( array(
+			'name' => 'Profile',
+		), 'home', bp_get_current_group_slug() );
 
-    if (bp_is_group() && openlab_is_portfolio()) {
-        // Keep the following tabs as-is
-        $keepers = array('members');
-        foreach ($bp->bp_options_nav[$bp->current_item] as $key => $item) {
-            if ('home' == $key) {
-                $bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Profile';
-            } else if ('admin' == $key) {
-                $bp->bp_options_nav[$bp->current_item][$key]['name'] = 'Settings';
-            } else if (!in_array($key, $keepers)) {
-                unset($bp->bp_options_nav[$bp->current_item][$key]);
-            }
-        }
-    }
+		buddypress()->groups->nav->edit_nav( array(
+			'name' => 'Settings',
+		), 'admin', bp_get_current_group_slug() );
 
-    if (bp_is_group()) {
-        $bp->bp_options_nav[bp_get_current_group_slug()]['admin']['position'] = 15;
-        return;
-    }
+		// Keep the following tabs as-is
+		$keepers = array( 'home', 'admin', 'members' );
+		$nav_items = buddypress()->groups->nav->get_secondary( array( 'parent_slug' => bp_get_current_group_slug() ) );
+		foreach ( $nav_items as $nav_item ) {
+			if ( ! in_array( $nav_item->slug, $keepers ) ) {
+				buddypress()->groups->nav->delete_nav( $nav_item->slug, bp_get_current_group_slug() );
+			}
+		}
+	}
+
+	if ( bp_is_group() && ! bp_is_group_create() ) {
+		buddypress()->groups->nav->edit_nav( array(
+			'position' => 15,
+		), 'admin', bp_get_current_group_slug() );
+	}
 }
-
-add_action('bp_screens', 'openlab_modify_options_nav', 1);
+add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
 
 /**
  * Help Sidebar menu: includes categories and sub-categories.
@@ -861,62 +864,38 @@ add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event'
 function openlab_filter_subnav_nav_new_event($subnav_item) {
 
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-    
+
     //check the group calendar access setting to see if the current user has the right privileges
     $event_create_access = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_bpeo_event_create_access');
 
     if($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()){
         return "";
     }
-    
+
     return $subnav_item;
 }
 
 //submenu navigation re-ordering
 function openlab_group_submenu_nav() {
-    global $bp;
+	if ( ! bp_is_group() ) {
+		return;
+	}
 
-    $current_item = isset($bp->current_item) ? $bp->current_item : '';
+	$positions = array(
+		'home' => 10,
+		'admin' => 11,
+		'nav-forum' => 25,
+		'members' => 35,
+		'files' => 60,
+	);
 
-    if (!$current_item) {
-        return;
-    }
-
-    //get the current item menu
-    $nav_items = $bp->bp_options_nav[$current_item];
-
-    //manual sorting of current item menu
-    if ($nav_items) {
-        foreach ($nav_items as $nav_key => $nav_item) {
-            if (isset($nav_item['slug'])) {
-                switch ($nav_item) {
-                    case ( $nav_item['slug'] == 'home' ):
-                        $nav_item['position'] = 10;
-                        break;
-                    case ( $nav_item['slug'] == 'admin' ):
-                        $nav_item['position'] = 11;
-                        break;
-                    case ( $nav_item['slug'] == 'nav-forum' ):
-                        $nav_item['position'] = 25;
-                        break;
-                    case ( $nav_item['slug'] == 'members' ):
-                        $nav_item['position'] = 35;
-                        break;
-                    case ( $nav_item['slug'] == 'files' ):
-                        $nav_item['position'] = 60;
-                        break;
-                    default:
-                        $nav_item['position'] = $nav_item['position'];
-                }
-            }
-            $final_nav[$nav_key] = $nav_item;
-        }
-    }
-
-    $bp->bp_options_nav[$bp->current_item] = $final_nav;
+	foreach ( $positions as $slug => $position ) {
+		buddypress()->groups->nav->edit_nav( array(
+			'position' => $position,
+		), $slug, bp_get_current_group_slug() );
+	}
 }
-
-add_action('bp_screens', 'openlab_group_submenu_nav', 1);
+add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
 
 /**
  * Markup for group admin tabs
