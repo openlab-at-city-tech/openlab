@@ -32,11 +32,19 @@ class Bp_Customizable_Group_Categories_Activator {
     public static function activate() {
         global $wpdb;
 
-        //first we clear the options values in object cache to make sure we have the latest values
+        //first we make sure the db_version option matches what's stored in version.php
+        //on Dev Org, these values where mismatched
+        $check_db_version = get_option('db_version');
+        
+        require ABSPATH . WPINC . '/version.php';
+        
+        if($check_db_version !== $wp_db_version){
+            update_option('db_version', $wp_db_version);
+        }
+        
+        //next we clear the options values in object cache to make sure we have the latest values
         $cache_delete = wp_cache_delete('alloptions', 'options');
         $alloptions = wp_load_alloptions();
-        $row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", 'db_version' ) );
-        wp_die('<pre>'.print_r($row->option_value, true).'</pre>');
         wp_cache_set('alloptions', $alloptions, 'options');
 
         $current_db_version = get_option('db_version');
