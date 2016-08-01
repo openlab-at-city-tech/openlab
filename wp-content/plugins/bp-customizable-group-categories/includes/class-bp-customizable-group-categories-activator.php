@@ -33,9 +33,8 @@ class Bp_Customizable_Group_Categories_Activator {
         global $wpdb;
 
         //first we clear the options values in object cache to make sure we have the latest values
-        $alloptions = wp_cache_get( 'alloptions', 'options' );
-        wp_die('<pre>'.print_r($alloptions['db_version'], true).'</pre>');
-        wp_cache_delete('alloptions', 'options');
+        $cache_delete = wp_cache_delete('alloptions', 'options');
+        wp_die('<pre>'.print_r($cache_delete, true).'</pre>');
         $alloptions = wp_load_alloptions();
         wp_cache_set('alloptions', $alloptions, 'options');
 
