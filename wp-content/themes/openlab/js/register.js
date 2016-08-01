@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
                         }
 
                         if (show_validation) {
-//                            $validationdiv.show().find('input').focus();
+                            $validationdiv.show();
                         } else {
                             $validationdiv.hide();
  //                           $emailconfirm.focus();
