@@ -30,18 +30,23 @@ class Bp_Customizable_Group_Categories_Activator {
      * @since    1.0.0
      */
     public static function activate() {
-        global $wpdb, $wp_current_db_version;
+        global $wpdb;
 
-        if (!$wp_current_db_version) {
-            $current_db_version = get_option('db_version');
-        } else {
-            $current_db_version = $wp_current_db_version;
-        }
+        //first we clear the options values in object cache to make sure we have the latest values
+        wp_cache_delete('alloptions', 'options');
+        $alloptions = wp_load_alloptions();
+        wp_cache_set('alloptions', $alloptions, 'options');
+        $alloptions = wp_load_alloptions();
+
+        $current_db_version = get_option('db_version');
 
 // Upgrade versions prior to 4.4.
         if ($current_db_version < 34978) {
 // If compatible termmeta table is found, use it, but enforce a proper index and update collation.
             if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->termmeta}'") && $wpdb->get_results("SHOW INDEX FROM {$wpdb->termmeta} WHERE Column_name = 'meta_key'")) {
+
+                /** Load WordPress Administration Upgrade API */
+                require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
                 $wpdb->query("ALTER TABLE $wpdb->termmeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))");
                 maybe_convert_table_to_utf8mb4($wpdb->termmeta);
