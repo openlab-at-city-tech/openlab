@@ -35,7 +35,8 @@ class Bp_Customizable_Group_Categories_Activator {
         //first we clear the options values in object cache to make sure we have the latest values
         $cache_delete = wp_cache_delete('alloptions', 'options');
         $alloptions = wp_load_alloptions();
-        wp_die('<pre>'.print_r($alloptions, true).'</pre>');
+        $row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", 'db_version' ) );
+        wp_die('<pre>'.print_r($row->option_value, true).'</pre>');
         wp_cache_set('alloptions', $alloptions, 'options');
 
         $current_db_version = get_option('db_version');
