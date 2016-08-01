@@ -12,7 +12,6 @@ function openlab_custom_the_content($content) {
                 <div class="panel panel-default">
                     <div class="panel-heading">Contact Form</div>
                     <div class="panel-body">
-                        {$content}
                         {$form}
                     </div>
                 </div>
