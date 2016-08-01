@@ -10,6 +10,6 @@
 
 <?php
 global $wpdb;
-echo '<pre>' . print_r(wp_option('db_version'), true) . '</pre>';
+echo '<pre>' . print_r(get_option('db_version'), true) . '</pre>';
 echo '<pre>' . print_r($wpdb, true) . '</pre>';
 ?>
