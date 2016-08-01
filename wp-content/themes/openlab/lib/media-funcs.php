@@ -63,8 +63,13 @@ function openlab_default_get_group_avatar( $url, $params ) {
 
 	return $url;
 }
-
 add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2 );
+
+function openlab_default_group_avatar_img( $html ) {
+	$default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
+	return str_replace( $default_avatar, get_stylesheet_directory_uri() . '/images/default-avatar.jpg', $html );
+}
+add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
 
 /**
  * WordPress adds dimensions to embedded images; this is totally not responsive WordPress
