@@ -517,6 +517,12 @@
         });
         toggle_workshop_meeting_items();
 
+        // Move the contact form output field to the bottom of the form.
+        var contact_us_response_output = jQuery( '.wpcf7-response-output' );
+        if ( contact_us_response_output.length > 0 ) {
+                contact_us_response_output.appendTo( contact_us_response_output.closest( 'form' ) );
+        }
+
         $other_details = jQuery('#other-details');
         $reason_for_request = jQuery('#reason-for-request');
         $reason_for_request.on('change', function () {
