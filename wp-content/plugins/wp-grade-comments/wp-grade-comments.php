@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.1.0
+Version: 1.1.1
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -381,8 +381,10 @@ function olgc_prevent_private_comments_from_creating_bp_activity_items( $comment
 
 	if ( 'comment_post' === current_action() ) {
 		remove_action( 'comment_post', 'bp_blogs_record_comment', 10, 2 );
+		remove_action( 'comment_post', 'bp_activity_post_type_comment', 10, 2 );
 	} else if ( 'edit_comment' === current_action() ) {
 		remove_action( 'edit_comment', 'bp_blogs_record_comment', 10 );
+		remove_action( 'edit_comment', 'bp_activity_post_type_comment', 10 );
 	}
 }
 add_action( 'comment_post', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );

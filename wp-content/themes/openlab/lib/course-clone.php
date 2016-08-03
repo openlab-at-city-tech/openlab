@@ -29,7 +29,8 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 		'type' => 'alphabetical',
 		'include' => $user_course_ids,
 		'show_hidden' => true,
-                'per_page' => 100000,
+		'per_page' => 100000,
+		'populate_extras' => false,
 	) );
 
 	return $user_courses;
