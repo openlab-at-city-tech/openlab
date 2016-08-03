@@ -56,15 +56,15 @@ add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
  * @param type $params
  * @return string
  */
-function openlab_default_get_group_avatar( $url, $params ) {
-	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
-		$url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
-	}
+function openlab_default_get_group_avatar($url, $params) {
+    if (strstr($url, 'default-avatar') || strstr($url, 'wavatar') || strstr($url, 'mystery-group.png')) {
+        $url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
+    }
 
-	return $url;
+    return $url;
 }
 
-add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2 );
+add_filter('bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2);
 
 /**
  * WordPress adds dimensions to embedded images; this is totally not responsive WordPress
@@ -111,12 +111,17 @@ function openlab_activity_group_link() {
     return get_site_url(0, $bp->groups->slug . '/' . $group->slug);
 }
 
+/**
+ * Generates activity feed
+ * Filters by group-centric actions
+ * @return type
+ */
 function openlab_whats_happening() {
     $whats_happening_out = '';
 
     $activity_args = array(
         'per_page' => 10,
-        'primary_id' => false,
+        'action' => array('created_group', 'added_group_document', 'bbp_reply_create', 'bbp_topic_create', 'bpeo_create_event', 'bpeo_edit_event', 'bp_doc_comment', 'bp_doc_created', 'bp_doc_edited', 'deleted_group_document', 'joined_group', 'new_avatar', 'new_blog', 'new_blog_comment', 'new_blog_post', 'new_forum_post', 'new_forum_topic', 'group_details_updated'),
         'update_meta_cache' => false, //we'll be hitting this alot
     );
 
