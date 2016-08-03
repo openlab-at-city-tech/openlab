@@ -8306,14 +8306,18 @@ body form .checkbox-list-container {
   cursor: pointer;
 }
 .home-page #whatsHappening {
-  padding: 4%;
+  padding: 12px 4%;
   height: 485px;
   overflow: auto;
 }
 .home-page #whatsHappening .sidebar-block {
-  margin-bottom: 23px;
-  padding-bottom: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #bbbbbb;
+}
+.home-page #whatsHappening .sidebar-block .activity-avatar {
+  max-width: 90px;
+  margin-right: 10px;
 }
 .home-page #whos-online h2 {
   padding-left: 5px;

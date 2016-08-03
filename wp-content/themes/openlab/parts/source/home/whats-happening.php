@@ -4,14 +4,14 @@
         <?php while (bp_activities()) : bp_the_activity(); ?>
 
             <div class="sidebar-block activity-block">
-                <div class="row activity-row">
-                    <div class="activity-avatar col-sm-8 col-xs-7">
+                <div class="activity-row clearfix">
+                    <div class="activity-avatar pull-left">
                         <a href="<?php echo openlab_activity_group_link() ?>">
                             <?php echo openlab_activity_group_avatar(); ?>
                         </a>
                     </div>
 
-                    <div class="activity-content overflow-hidden col-sm-16 col-xs-17">
+                    <div class="activity-content overflow-hidden">
 
                         <div class="activity-header">
                             <?php echo openlab_get_custom_activity_action(); ?>
