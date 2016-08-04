@@ -382,7 +382,7 @@ class Bp_Customizable_Group_Categories_Admin {
 
                 $key = 'bpcgc_group_' . $group;
 
-                $term_update = add_term_meta($tag->term_id, $key, true);
+                $term_update = add_term_meta($tag->term_id, $key, true, true);
             }
         }
     }

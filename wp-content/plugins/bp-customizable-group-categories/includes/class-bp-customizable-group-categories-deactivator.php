@@ -30,7 +30,12 @@ class Bp_Customizable_Group_Categories_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+            global $wpdb;
+            
+            $sql = 'Truncate table wp_termmeta';
+            
+            $wpdb->query($sql);
+            
 	}
 
 }
