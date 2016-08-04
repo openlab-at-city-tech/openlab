@@ -8304,6 +8304,7 @@ body form .checkbox-list-container {
 .home-page #refreshActivity {
   color: #999999;
   cursor: pointer;
+  margin-top: 3px;
 }
 .home-page #whatsHappening {
   padding: 12px 4%;
