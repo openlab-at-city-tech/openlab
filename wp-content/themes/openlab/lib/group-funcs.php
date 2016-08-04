@@ -710,7 +710,7 @@ function cuny_group_single() {
                                 </div>
 
                             <?php endif; ?>
-                            
+
                             <?php if ($wds_departments && !empty($wds_departments)): ?>
 
                                 <div class="table-row row">
@@ -751,7 +751,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                                                                                                                                                    </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -940,7 +940,7 @@ function openlab_group_profile_activity_list() {
                 <?php // do_action( 'bp_before_group_status_message' )             ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                                ?></p>
+                                                        <p><?php // bp_group_status_message()                                                 ?></p>
                                                 </div>
                 -->
                 <?php // do_action( 'bp_after_group_status_message' )            ?>
@@ -1224,6 +1224,18 @@ function openlab_current_directory_filters() {
             //dump hyphens from semester values
             if ($filter_data['type'] == 'semester') {
                 $word = str_replace('-', ' ', $word);
+            }
+
+            //for group categories
+            if ($filter_data['type'] == 'cat') {
+
+                $term_obj = get_term_by('slug', $word, 'bp_group_categories');
+
+                if ($term_obj) {
+                    $word = $term_obj->name;
+                } else {
+                    $word = 'All';
+                }
             }
 
             // Leave out the 'All's
