@@ -166,7 +166,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                 <div class="custom-select" id="schoolSelect">
                     <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
-                        <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All</option>
+                        <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
                         <option value='tech' <?php selected('tech', $option_value_school) ?>>Technology &amp; Design</option>
                         <option value='studies' <?php selected('studies', $option_value_school) ?>>Professional Studies</option>
                         <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts & Sciences</option>
