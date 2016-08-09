@@ -213,6 +213,10 @@
                 args.viewRender = function (view, element) {
                     OpenLab.utility.calendarScrollBarPadding(view, element);
                 }
+            } else {
+                args.viewRender = function (view, element) {
+                    OpenLab.utility.calendarScrollBarPadding(view, element);
+                }
             }
 
             return args;

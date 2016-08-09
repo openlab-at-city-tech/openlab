@@ -9433,8 +9433,11 @@ body.membership-requests .group-list {
 .action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group {
   margin: 0;
 }
-.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-today-button {
-  margin-left: 5px;
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-month-button {
+  margin-left: 20px;
+}
+.action-events #item-body .eo-fullcalendar .fc-toolbar .fc-button-group .fc-icon {
+  top: 0;
 }
 .action-events #item-body .eo-fullcalendar .fc-time-grid-container {
   max-height: 527px;

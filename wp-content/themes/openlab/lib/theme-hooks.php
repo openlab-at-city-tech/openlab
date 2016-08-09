@@ -22,7 +22,7 @@ HTML;
 
         if (function_exists('eo_get_events')) {
             $args = array(
-                'headerright' => 'prev next today month agendaWeek',
+                'headerright' => 'prev today next month agendaWeek',
                 'defaultview' => 'agendaWeek',
                 'titleformatweek' => 'F j, Y',
             );
