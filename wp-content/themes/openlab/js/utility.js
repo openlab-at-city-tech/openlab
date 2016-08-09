@@ -258,11 +258,9 @@
 
             if (bpeo_metabox.length) {
 
-                var desc = ' <span class="bold">The event will appear in the sitewide calendar unless one or more of the groups selected is private.</span>';
-                var message = '<p class="howto">If a group selected is private, the event will not be displayed on the sitewide calendar.<p>';
+                var desc = ' <span class="bold">The event will appear in the sitewide OpenLab calendar unless one or more of the groups selected is private.</span>';
 
                 bpeo_metabox.find('.inside .bp_event_organiser_desc').append(desc);
-                bpeo_metabox.find('.inside').append(message);
                 bpeo_metabox.find('.hndle span').text('Display');
 
             }
