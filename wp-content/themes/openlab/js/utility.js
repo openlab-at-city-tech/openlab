@@ -124,7 +124,7 @@
             var venueMap = $('#venuemap');
 
             //if there is no venue present, time to quit
-            if (typeof eovenue !== 'undefined' && !venueMap.length) {
+            if (typeof eovenue === 'undefined' && !venueMap.length) {
                 return;
             }
 
