@@ -1034,8 +1034,16 @@ function wds_bp_group_meta_save($group) {
     }
     if (isset($_POST['wds_departments'])) {
         $wds_departments = implode(",", $_POST['wds_departments']);
-        groups_update_groupmeta($group->id, 'wds_departments', $wds_departments);
+
+        //fully deleting and then adding in department metadata so departments can be unchecked
+        groups_delete_groupmeta($group->id, 'wds_departments');
+        groups_add_groupmeta($group->id, wds_departments, $wds_departments, true);
+
+    } else if (isset($_POST['wds_group_school']) && !isset($_POST['wds_departments'])) {
+        //allows user to uncheck all departments
+        groups_update_groupmeta($group->id, 'wds_departments', '');
     }
+
     if (isset($_POST['wds_course_code'])) {
         groups_update_groupmeta($group->id, 'wds_course_code', $_POST['wds_course_code']);
     }
