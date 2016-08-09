@@ -15,7 +15,7 @@ function openlab_ajax_return_course_list() {
 
     $depts = openlab_get_department_list($school, 'short');
 
-    $options = '<option value="dept_all">All</option>';
+    $options = '<option value="dept_all">All Departments</option>';
 
     foreach ($depts as $dept_name => $dept_label) {
         $options .= '<option value="' . esc_attr($dept_name) . '">' . esc_attr($dept_label) . '</option>';
