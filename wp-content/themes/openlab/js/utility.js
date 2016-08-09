@@ -173,16 +173,19 @@
 
                 if (comboBoxSelector.length) {
 
-                    clearInterval(OpenLab.utility.uiCheck);
+                    //safety first
+                    clearTimeout(OpenLab.utility.uiCheck);
+
                     comboBoxSelector.on("autocompletesearch", function (event, ui) {
 
                         event.preventDefault();
 
                     });
+
                 } else {
 
                     if (OpenLab.utility.protect < 2000) {
-                        OpenLab.utility.uiCheck = clearInterval(OpenLab.utility.venueDropdownControl(), 50);
+                        OpenLab.utility.uiCheck = setTimeout(OpenLab.utility.venueDropdownControl(), 50);
                     }
 
                 }
@@ -670,7 +673,7 @@
         OpenLab.utility.detectZoom();
         OpenLab.utility.customSelects(false);
         OpenLab.utility.venueMapControl();
-        //OpenLab.utility.venueDropdownControl();
+        OpenLab.utility.venueDropdownControl();
 
         //setting equal rows on homepage group list
         equal_row_height();

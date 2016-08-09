@@ -9420,6 +9420,12 @@ body.membership-requests .group-list {
   font-size: 14px;
   font-weight: 700;
 }
+.action-events #item-body .eo-venue-input .eo-ui-button {
+  display: none;
+}
+.action-events #item-body .eo-venue-input .eo-ui-button.add-new-venue {
+  display: block;
+}
 .action-events #item-body .eo-fullcalendar .fc-toolbar h2 {
   font-size: 24px;
   font-weight: 700;
