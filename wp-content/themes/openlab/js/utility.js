@@ -10,6 +10,7 @@
         newMembers: {},
         newMembersHTML: {},
         protect: 0,
+        mapCheck: {},
         uiCheck: {},
         selectDisplay: {},
         customSelectHTML: '',
@@ -113,6 +114,49 @@
                     }
 
                 });
+
+            }
+
+        },
+        venueMapControl: function () {
+
+            var latCheck = $('#eo_venue_Lat');
+            var venueMap = $('#venuemap');
+
+            //if there is no venue present, time to quit
+            if (typeof eovenue !== 'undefined' && !venueMap.length) {
+                return;
+            }
+
+            //on initial load, hide map if we have no LatLng values
+            if (latCheck.val() === 'NaN' || parseInt(latCheck.val()) === 0) {
+                venueMap.css('display', 'none');
+            }
+
+            OpenLab.utility.protect++;
+
+            //going to use an interval to pick up on the map obj
+            if (typeof eovenue.maps !== 'undefined' && Object.keys(eovenue.maps).length > 0) {
+
+                //saftey first
+                clearTimeout(OpenLab.utility.menuCheck);
+
+                eovenue.maps.venuemap.map.addListener('center_changed', function () {
+                    console.log('lastcheckVal', latCheck.val());
+                    console.log('parseInt lastcheckVal', parseInt(latCheck.val()));
+                    if (latCheck.val() === 'NaN' || parseInt(latCheck.val()) === 0) {
+                        venueMap.css('display', 'none');
+                    } else {
+                        venueMap.css('display', 'block');
+                    }
+
+                });
+
+            } else {
+
+                if (OpenLab.utility.protect < 2000) {
+                    OpenLab.utility.mapCheck = setTimeout(OpenLab.utility.venueMapControl(), 50);
+                }
 
             }
 
@@ -259,10 +303,10 @@
             refreshActivity.off('click');
 
             refreshActivity.on('click', function (e) {
-                
+
                 e.preventDefault();
                 refreshActivity.addClass('fa-spin');
-                
+
                 $.ajax({
                     type: 'GET',
                     url: ajaxurl,
@@ -518,9 +562,9 @@
         toggle_workshop_meeting_items();
 
         // Move the contact form output field to the bottom of the form.
-        var contact_us_response_output = jQuery( '.wpcf7-response-output' );
-        if ( contact_us_response_output.length > 0 ) {
-                contact_us_response_output.appendTo( contact_us_response_output.closest( 'form' ) );
+        var contact_us_response_output = jQuery('.wpcf7-response-output');
+        if (contact_us_response_output.length > 0) {
+            contact_us_response_output.appendTo(contact_us_response_output.closest('form'));
         }
 
         $other_details = jQuery('#other-details');
@@ -625,6 +669,7 @@
         $('html').removeClass('page-loading');
         OpenLab.utility.detectZoom();
         OpenLab.utility.customSelects(false);
+        OpenLab.utility.venueMapControl();
         //OpenLab.utility.venueDropdownControl();
 
         //setting equal rows on homepage group list
