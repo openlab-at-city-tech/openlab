@@ -979,9 +979,9 @@ function openlab_require_school_and_department_for_groups() {
     if (!bp_is_group_admin_page() && !bp_is_group_create()) {
         return;
     }
-
+    
     // Don't check at deletion time ( groan )
-    if (bp_is_group_admin_page('delete-group')) {
+    if (bp_is_group_admin_screen('delete-group')) {
         return;
     }
 
@@ -989,7 +989,7 @@ function openlab_require_school_and_department_for_groups() {
     if (empty($_POST)) {
         return;
     }
-
+    
     if (bp_is_group_create()) {
         $group_type = isset($_GET['type']) ? $_GET['type'] : '';
         $redirect = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
@@ -997,11 +997,11 @@ function openlab_require_school_and_department_for_groups() {
         $group_type = openlab_get_current_group_type();
         $redirect = bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/';
     }
-
+    
     $account_type = xprofile_get_field_data('Account Type', bp_loggedin_user_id());
-    if (openlab_is_school_required_for_group_type($group_type) && bp_is_action_variable('group-details', 1) && 'staff' != strtolower($account_type)) {
+    if (openlab_is_school_required_for_group_type($group_type) && (bp_is_action_variable('group-details', 1) || bp_is_action_variable('edit-details')) && 'staff' != strtolower($account_type)) {
 
-        if (empty($_POST['wds_group_school']) || empty($_POST['wds_departments'])) {
+        if (empty($_POST['wds_group_school']) || empty($_POST['wds_departments']) || !isset($_POST['wds_departments'])) {
             bp_core_add_message('You must provide a school and department.', 'error');
             bp_core_redirect($redirect);
         }
@@ -1038,12 +1038,7 @@ function wds_bp_group_meta_save($group) {
         //fully deleting and then adding in department metadata so departments can be unchecked
         groups_delete_groupmeta($group->id, 'wds_departments');
         groups_add_groupmeta($group->id, wds_departments, $wds_departments, true);
-
-    } else if (isset($_POST['wds_group_school']) && !isset($_POST['wds_departments'])) {
-        //allows user to uncheck all departments
-        groups_update_groupmeta($group->id, 'wds_departments', '');
     }
-
     if (isset($_POST['wds_course_code'])) {
         groups_update_groupmeta($group->id, 'wds_course_code', $_POST['wds_course_code']);
     }
