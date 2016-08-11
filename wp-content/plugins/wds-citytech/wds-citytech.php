@@ -979,7 +979,7 @@ function openlab_require_school_and_department_for_groups() {
     if (!bp_is_group_admin_page() && !bp_is_group_create()) {
         return;
     }
-    
+
     // Don't check at deletion time ( groan )
     if (bp_is_group_admin_screen('delete-group')) {
         return;
@@ -989,7 +989,7 @@ function openlab_require_school_and_department_for_groups() {
     if (empty($_POST)) {
         return;
     }
-    
+
     if (bp_is_group_create()) {
         $group_type = isset($_GET['type']) ? $_GET['type'] : '';
         $redirect = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
@@ -997,7 +997,7 @@ function openlab_require_school_and_department_for_groups() {
         $group_type = openlab_get_current_group_type();
         $redirect = bp_get_group_permalink(groups_get_current_group()) . 'admin/edit-details/';
     }
-    
+
     $account_type = xprofile_get_field_data('Account Type', bp_loggedin_user_id());
     if (openlab_is_school_required_for_group_type($group_type) && (bp_is_action_variable('group-details', 1) || bp_is_action_variable('edit-details')) && 'staff' != strtolower($account_type)) {
 
@@ -1735,13 +1735,13 @@ function openlab_group_type($case = 'lower', $count = 'single', $group_id = 0) {
     // found, fall to the second, etc.
     $group_id = (int) $group_id;
     if (!$group_id && $group_id = bp_get_current_group_id()) {
-        
+
     } // current group
     else if (!$group_id && $group_id = bp_get_new_group_id()) {
-        
+
     }     // new group
     else if (!$group_id && $group_id = bp_get_group_id()) {
-        
+
     }         // group in loop
 
     $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
@@ -2359,4 +2359,4 @@ function openlab_ds_login_header() {
             }
 
             add_filter('wp_mail_from_name', 'openlab_email_from_name_filter');
-            
+
