@@ -293,12 +293,13 @@ class Bp_Customizable_Group_Categories_Admin {
                         wp_die(__('You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'bp-custocg'));
                     }
 
-                    //term meta
-                    $this->process_term_meta($_POST, $tag);
+                    $ret = BPCGC_Groups_Terms::update_term($tag_ID, $bp_group_categories_tax->name, $_POST);
 
                     if (!empty($ret) && !is_wp_error($ret)) {
                         $redirect_to = add_query_arg('message', 3, $redirect_to);
                     } else {
+                        //term meta
+                        $this->process_term_meta($_POST, $tag);
                         $redirect_to = add_query_arg('message', 5, $redirect_to);
                     }
 
@@ -357,7 +358,7 @@ class Bp_Customizable_Group_Categories_Admin {
         $tag_ID = (int) $_REQUEST['tag_ID'];
 
         $tag = get_term($tag_ID, 'bp_group_categories', OBJECT, 'edit');
-        
+
         foreach ($possible_groups as $group) {
 
             $key = 'bpcgc_group_' . $group;
