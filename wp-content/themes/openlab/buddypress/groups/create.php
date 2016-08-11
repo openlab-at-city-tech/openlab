@@ -55,6 +55,8 @@
 
             <?php do_action('template_notices') ?>
 
+	    <input type="hidden" id="new-group-type" value="<?php echo esc_attr( $group_type ); ?>" />
+
                 <?php /* Group creation step 1: Basic group details */ ?>
                 <?php if (bp_is_group_creation_step('group-details')) : ?>
 
