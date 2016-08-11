@@ -495,56 +495,52 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <?php
         $tax = get_taxonomy('event-venue');
         if (taxonomy_exists('event-venue')) :
+
+            $address_fields = _eventorganiser_get_venue_address_fields();
+            $address = array();
+            $venue_stored_name = '';
+
+            //check for stored fields when editing
+            if (in_array('edit', bp_action_variables())) {
+
+                if ($venue_id && $venue_id > 0) {
+                    $venue_obj = get_term_by('id', $venue_id,'event-venue');
+                    $venue_stored_name = $venue_obj->name;
+                    $address = eo_get_venue_address($venue_id);
+                }
+            }
             ?>	
 
-            <div class="eo-grid-row eo-venue-combobox-select">
-                <div class="eo-grid-4">
-                    <label for="venue_select"><?php echo esc_html($tax->labels->singular_name_colon); ?></label>
-                </div>
-                <div class="eo-grid-8">
-                    <select size="50" id="venue_select" name="eo_input[event-venue]">
-                        <option><?php esc_html_e('Select a venue', 'eventorganiser'); ?></option>
-                        <?php foreach ($venues as $venue) : ?>
-                            <option <?php selected($venue->term_id, $venue_id); ?> value="<?php echo intval($venue->term_id); ?>"><?php echo esc_html($venue->name); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-
             <!-- Add New Venue --> 
-            <div class="eo-grid-row eo-add-new-venue">
+            <div class="eo-grid-row eo-add-new-venue-custom">
                 <div class="eo-grid-4">
                     <label for="eo_venue_name"><?php esc_html_e('Venue Name', 'eventorganiser'); ?></label>
                 </div>
                 <div class="eo-grid-8">
-                    <input type="text" name="eo_venue[name]" id="eo_venue_name"  value=""/>
+                    <input type="text" name="eo_venue[name]" id="eo_venue_name"  value="<?php echo $venue_stored_name ?>"/>
                 </div>			
 
                 <?php
-                $address_fields = _eventorganiser_get_venue_address_fields();
                 foreach ($address_fields as $key => $label) {
                     printf(
                             '<div class="eo-grid-4">
 						<label for="eo_venue_add-%2$s">%1$s</label>
 					</div>
 					<div class="eo-grid-8">
-						<input type="text" name="eo_venue[%2$s]" class="eo_addressInput" id="eo_venue_add-%2$s"  value=""/>
-					</div>', esc_html($label), esc_attr(trim($key, '_'))/* Keys are prefixed by '_' */
+						<input type="text" name="eo_venue[%2$s]" class="eo_addressInput" id="eo_venue_add-%2$s"  value="%3$s"/>
+					</div>', esc_html($label), esc_attr(trim($key, '_'))/* Keys are prefixed by '_' */, (isset($address[trim($key, '_')]) ? $address[trim($key, '_')] : '')
                     );
                 }
                 ?>
 
                 <div class="eo-grid-4"></div>
-                <div class="eo-grid-8 event-date">
-                    <a class="button eo-add-new-venue-cancel" href="#"><?php esc_html_e('Cancel', 'eventorganiser'); ?> </a>
-                </div>
             </div>
 
             <div class="eo-grid-row venue_row <?php
-            if (!$venue_id) {
-                echo 'novenue';
-            }
-            ?>">
+        if (!$venue_id) {
+            echo 'novenue';
+        }
+                ?>">
                 <div class="eo-grid-4"></div>
                 <div class="eo-grid-8">
                     <div id="eventorganiser_venue_meta" style="display:none;">
@@ -556,7 +552,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     <div class="clear"></div>
                 </div>
             </div>
-        <?php endif; //endif venue's supported             ?>
+        <?php endif; //endif venue's supported              ?>
 
     </div>
     <?php
@@ -642,7 +638,7 @@ function openlab_bpeo_extra_venue_meta($venue_id) {
     //check if venue has physical address
     //if it does not, set Lat and Lng to NaN
     $venue_address = eo_get_venue_meta($venue_id, '_address');
-    
+
     if (empty($venue_address)) {
         eo_update_venue_meta($venue_id, '_lat', 0.00000);
         eo_update_venue_meta($venue_id, '_lng', 0.00000);
