@@ -584,7 +584,7 @@ function wds_load_group_departments() {
         if (in_array($value, $wds_departments)) {
             $checked = "checked";
         }
-        $return .= "<input type='checkbox' name='wds_departments[]' value='" . $value . "' " . $checked . "> " . $value . "<br>";
+        $return .= "<input type='checkbox' class='wds-department' name='wds_departments[]' value='" . $value . "' " . $checked . "> " . $value . "<br>";
     }
     $return .= "</div>";
     $return = str_replace("'", "\'", $return);

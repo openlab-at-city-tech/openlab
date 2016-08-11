@@ -22,6 +22,7 @@ jQuery(document).ready(function($){
 	var form,
 		form_type,
 		form_validated = false,
+		new_group_type = $( '#new-group-type' ).val(),
 		$body = $( 'body' ),
 		$gc_submit = $( '#group-creation-create' ),
 		$required_fields;
@@ -357,6 +358,20 @@ jQuery(document).ready(function($){
 
 	$( '.domain-validate' ).on( 'change', function() {
 		form_validated = false;
+	} );
+
+	// Schools/Departments are required fields for Courses.
+	$gc_submit.on( 'mouseover focus', function() {
+		if ( 'course' == new_group_type ) {
+			var school_tech = document.getElementById( 'school_tech' );
+			var is_school_selected = $( '.school-inputs input:checked' ).length > 0;
+			school_tech.setCustomValidity( is_school_selected ? '' : 'You must select a School.' );
+
+			if ( is_school_selected ) {
+				var is_department_selected = $( '.departments input:checked' ).length > 0;
+				document.getElementsByClassName( 'wds-department' )[0].setCustomValidity( is_department_selected ? '' : 'You must select a Department.' );
+			}
+		}
 	} );
 
 	/**
