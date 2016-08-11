@@ -12,6 +12,7 @@ function openlab_load_theme_fixes() {
 		case 'herothemetrust' :
 		case 'motion' :
 		case 'pilcrow' :
+		case 'sliding-door' :
 		case 'themorningafter' :
 		case 'wu-wei' :
                 case 'twentyfifteen':
