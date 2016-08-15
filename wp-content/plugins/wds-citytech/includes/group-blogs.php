@@ -432,13 +432,13 @@ function wds_bp_group_meta() {
 			<input type="hidden" name="group_type" value="<?php echo $group_type; ?>" />
 			<?php
 		} ?>
-                        
+
                 <?php do_action('openlab_group_creation_extra_meta'); ?>
-                
+
                 <?php
 		$group_site_url = openlab_get_group_site_url( $the_group_id );
 		?>
-                        
+
 		<div class="panel panel-default">
 			<div class="panel-heading">Site Details</div>
 			<div class="panel-body">

@@ -70,7 +70,7 @@ add_filter( 'wp_prepare_themes_for_js', 'openlab_reorder_theme_selections' );
  */
 function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages ) {
 	if ( 'hemingway' !== get_template() ) {
-		return $pages;
+		return $output;
 	}
 
 	$dbs = debug_backtrace();
