@@ -999,7 +999,7 @@ function openlab_require_school_and_department_for_groups() {
     }
 
     $account_type = xprofile_get_field_data('Account Type', bp_loggedin_user_id());
-    
+
     if (openlab_is_school_required_for_group_type($group_type) && (bp_is_action_variable('group-details', 1) || bp_is_action_variable('edit-details'))) {
 
         if (empty($_POST['wds_group_school']) || empty($_POST['wds_departments']) || !isset($_POST['wds_group_school']) || !isset($_POST['wds_departments'])) {
@@ -1017,6 +1017,12 @@ add_action('groups_group_after_save', 'wds_bp_group_meta_save');
 
 function wds_bp_group_meta_save($group) {
     global $wpdb, $user_ID, $bp;
+
+    $is_editing = false;
+
+    if (isset($_POST['_wp_http_referer']) && strpos($_POST['_wp_http_referer'], 'edit-details') !== false) {
+        $is_editing = true;
+    }
 
     if (isset($_POST['group_type'])) {
         groups_update_groupmeta($group->id, 'wds_group_type', $_POST['group_type']);
@@ -1037,9 +1043,11 @@ function wds_bp_group_meta_save($group) {
         groups_add_groupmeta($group->id, 'wds_group_school', $wds_group_school, true);
     } else if (!isset($_POST['wds_group_school'])) {
         //allows user to uncheck all schools (projects and clubs only)
-        groups_update_groupmeta($group->id, 'wds_group_school', '');
+        //on edit only
+        if ($is_editing) {
+            groups_update_groupmeta($group->id, 'wds_group_school', '');
+        }
     }
-
 
     if (isset($_POST['wds_departments'])) {
         $wds_departments = implode(",", $_POST['wds_departments']);
@@ -1049,7 +1057,10 @@ function wds_bp_group_meta_save($group) {
         groups_add_groupmeta($group->id, 'wds_departments', $wds_departments, true);
     } else if (!isset($_POST['wds_departments'])) {
         //allows user to uncheck all departments (projects and clubs only)
-        groups_update_groupmeta($group->id, 'wds_departments', '');
+        //on edit only
+        if ($is_editing) {
+            groups_update_groupmeta($group->id, 'wds_departments', '');
+        }
     }
 
     if (isset($_POST['wds_course_code'])) {
