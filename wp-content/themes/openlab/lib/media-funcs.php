@@ -125,11 +125,16 @@ function openlab_activity_group_link() {
  */
 function openlab_whats_happening() {
     $whats_happening_out = '';
+    
+    $tomrrow = new DateTime('tomorrow');
 
     $activity_args = array(
         'per_page' => 10,
         'action' => array('created_group', 'added_group_document', 'bbp_reply_create', 'bbp_topic_create', 'bpeo_create_event', 'bpeo_edit_event', 'bp_doc_comment', 'bp_doc_created', 'bp_doc_edited', 'deleted_group_document', 'joined_group', 'new_blog', 'new_blog_comment', 'new_blog_post', 'new_forum_post', 'new_forum_topic', 'group_details_updated'),
         'update_meta_cache' => false, //we'll be hitting this alot
+        'date_query' => array(
+            'before' => $tomrrow->format('Y-m-d'),
+        ),
     );
 
     ob_start();
