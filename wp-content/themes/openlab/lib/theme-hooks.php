@@ -225,7 +225,7 @@ function openlab_group_creation_categories() {
         }
     }
 
-    if ($group_type) {
+    if ($group_type && function_exists('bpcgc_get_terms_by_group_type')) {
 
         $categories = bpcgc_get_terms_by_group_type($group_type);
 
