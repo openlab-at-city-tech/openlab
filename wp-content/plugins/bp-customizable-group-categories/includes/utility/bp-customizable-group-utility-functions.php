@@ -36,13 +36,26 @@ function bpcgc_get_group_selected_terms($group_id = 0, $conditional = false) {
     $tax = 'bp_group_categories';
     $args = array();
 
+    $group_terms = BPCGC_Groups_Terms::get_object_terms($group_id, $tax, $args);
+
     //if sorting plugin Category Order and Taxonomy Terms Order is available, use the custom sort
     if (function_exists('tto_info_box')) {
-        $args['orderby'] = 'term_order';
-        $args['order'] = 'DESC';
-    }
 
-    $group_terms = BPCGC_Groups_Terms::get_object_terms($group_id, $tax, $args);
+        $terms_out = array();
+        $count = 0;
+
+        foreach ($group_terms as $term) {
+            if (isset($term->term_order)) {
+                $terms_out[$term->term_order] = $term;
+            } else {
+                $terms_out[$count] = $term;
+                $count++;
+            }
+        }
+        
+        ksort($terms_out);
+        $group_terms = $terms_out;
+    }
 
     if ($conditional && empty($group_terms)) {
         return false;
