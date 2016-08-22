@@ -39,6 +39,7 @@ function bpcgc_get_group_selected_terms($group_id = 0, $conditional = false) {
     //if sorting plugin Category Order and Taxonomy Terms Order is available, use the custom sort
     if (function_exists('tto_info_box')) {
         $args['orderby'] = 'term_order';
+        $args['order'] = 'ASC';
     }
 
     $group_terms = BPCGC_Groups_Terms::get_object_terms($group_id, $tax, $args);
