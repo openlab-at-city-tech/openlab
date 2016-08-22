@@ -1041,6 +1041,13 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 				);
 			}
 
+			$item_date = strtotime( $item['date'] );
+			$now = time();
+			if ( $item_date > $now ) {
+				$item_date = $now;
+			}
+			$recorded_time = date( 'Y-m-d H:i:s', $item_date );
+
 			$args = array(
 				'action' => $action,
 				'content' => $item['content'],
@@ -1048,7 +1055,7 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 				'type' => $type, 'primary_link' => $item['permalink'],
 				'user_id' => 0, // todo
 				'item_id' => bp_get_current_group_id(), // improve?
-				'recorded_time' => date( 'Y-m-d H:i:s', strtotime( $item['date'] ) ),
+				'recorded_time' => $recorded_time,
 				'hide_sitewide' => $hide_sitewide
 			);
 
