@@ -104,9 +104,27 @@ class Bp_Customizable_Group_Categories_Admin {
         $this->admin_menu = add_menu_page(_x('Group Categories', 'admin page title', 'bp-custocg'), _x('Group Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bp-group-categories', array($this, 'admin_tags'), 'dashicons-yes', 42);
         $this->admin_submenu = add_submenu_page('bp-group-categories', _x('All Categories', 'admin page title', 'bp-custocg'), _x('All Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bp-group-categories');
 
+        //if sorting plugin Category Order and Taxonomy Terms Order is available
+        if (function_exists('tto_info_box')) {
+            $this->admin_submenu_sort = add_submenu_page('bp-group-categories', _x('Sort Group Categories', 'admin page title', 'bp-custocg'), _x('Sort Group Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bpcgc-sorting', array($this, 'sorting_tags'));
+            add_action('admin_head', array($this, 'admin_head_actions'));
+        }
+
         add_action("load-{$this->admin_menu}", array($this, 'admin_tags_load'));
         add_action("bp_group_categories_add_form_fields", array($this, "admin_category_extra_fields"));
         add_action("bp_group_categories_edit_form", array($this, "admin_category_form_extra_fields"));
+    }
+
+    /**
+     * Adds some query params to the sorting submenu page
+     * Need these for the sorting functionality to properly work
+     * Hooks into admin_head, because any earlier causes issues
+     * @global array $submenu
+     */
+    function admin_head_actions() {
+        global $submenu;
+
+        $submenu['bp-group-categories'][1][2] = 'admin.php?page=bpcgc-sorting&post_type=bp_group&taxonomy=bp_group_categories';
     }
 
     /**
@@ -294,13 +312,13 @@ class Bp_Customizable_Group_Categories_Admin {
                     }
 
                     $ret = BPCGC_Groups_Terms::update_term($tag_ID, $bp_group_categories_tax->name, $_POST);
-
+                    
                     if (!empty($ret) && !is_wp_error($ret)) {
-                        $redirect_to = add_query_arg('message', 3, $redirect_to);
-                    } else {
                         //term meta
                         $this->process_term_meta($_POST, $tag);
                         $redirect_to = add_query_arg('message', 5, $redirect_to);
+                    } else {
+                        $redirect_to = add_query_arg('message', 3, $redirect_to);
                     }
 
                     wp_redirect($redirect_to);
@@ -323,6 +341,23 @@ class Bp_Customizable_Group_Categories_Admin {
 
         require_once( ABSPATH . 'wp-admin/edit-tags.php' );
         exit();
+    }
+
+    /**
+     * Sorting tags
+     */
+    public function sorting_tags() {
+
+        //first we have to clear the term cache, otherwise the ordering is loaded incorrectly
+        $args = array(
+            'taxonomy' => 'bp_group_categories',
+            'fields' => 'ids',
+        );
+        $term_ids = get_terms($args);
+        clean_term_cache($term_ids, 'bp_group_categories');
+
+        include(WP_PLUGIN_DIR . '/taxonomy-terms-order/include/interface.php');
+        TOPluginInterface();
     }
 
     /**
