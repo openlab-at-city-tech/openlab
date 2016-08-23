@@ -7,3 +7,9 @@ Author URI:
 Template:       hemingway
 Version:        0.1.0
 */
+
+.header {
+	background-image: url( 'images/OLWW_BANNER.png' );
+	background-position: right;
+	min-height: 352px;
+}
