@@ -8,8 +8,12 @@ Template:       hemingway
 Version:        0.1.0
 */
 
+.blog-menu a {
+	color: #fff;
+}
+
 .header {
 	background-image: url( 'images/OLWW_BANNER.png' );
-	background-position: right;
-	min-height: 352px;
+	background-position: left;
+	min-height: 211px;
 }
