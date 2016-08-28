@@ -12,8 +12,22 @@ Version:        0.1.0
 	color: #fff;
 }
 
+.header-cover {
+	overflow: hidden;
+}
 .header {
-	background-image: url( 'images/OLWW_BANNER.png' );
-	background-position: left;
-	min-height: 211px;
+	max-height: 211px;
+	padding: 0;
+	width: 200%;
+}
+
+.banner-img {
+	max-height: 211px;
+}
+
+@media (max-width: 500px) {
+	.header.section {
+		margin-left: -40px;
+		padding: 0;
+	}
 }
