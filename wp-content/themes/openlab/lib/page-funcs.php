@@ -66,7 +66,7 @@ function cuny_home_login() {
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
                         <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><label class="regular no-margin no-margin-bottom" for="sidebar-rememberme"><?php _e('Keep me logged in', 'buddypress') ?></label></span>
                     </div>
                     <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="0" />
                 </div>
