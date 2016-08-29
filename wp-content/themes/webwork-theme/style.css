@@ -25,9 +25,41 @@ Version:        0.1.0
 	max-height: 211px;
 }
 
+@media (max-width: 800px) {
+	.nav-toggle .bar,
+	.search-toggle .metal,
+	.search-toggle .handle {
+		background-color: #fff;
+	}
+}
+
 @media (max-width: 500px) {
+	html {
+		font-size: 11px;
+	}
+
 	.header.section {
 		margin-left: -40px;
 		padding: 0;
+	}
+
+	.wrapper {
+		position: relative;
+	}
+
+	.wrapper.inactive:before {
+		background-color: rgba(0,0,0,0.2);
+		content: "";
+		display: block;
+		height: 100%;
+		left: -10%;
+		position: absolute;
+		top: 0;
+		width: 120%;
+		z-index: 5;
+	}
+
+	.navigation {
+		z-index: 15;
 	}
 }
