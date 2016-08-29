@@ -23,7 +23,8 @@ wp_nav_menu($args);
 <div id="help-search-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
 <div id="help-search">
     <form method="get" action="<?php echo esc_url( openlab_get_help_search_url() ); ?>">
-	    <input type="text" name="help-search" class="help-search" />
+            <label class="sr-only" for="helpSearch">Help Search</label>
+	    <input type="text" name="help-search" class="help-search" id="helpSearch" />
             <button class="btn btn-default btn-block btn-primary" type="submit">Search<span class="sr-only"> Help</span></button>
     </form>
     <div class="clearfloat"></div>
