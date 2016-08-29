@@ -19,40 +19,8 @@
 
 			<div class="header-cover section bg-dark-light no-padding">
 
-				<div class="header section" style="background-image: url(<?php if (get_header_image() != '') : ?><?php header_image(); ?><?php else : ?><?php echo get_template_directory_uri() . '/images/header.jpg'; ?><?php endif; ?>);">
-
-					<div class="header-inner section-inner">
-
-						<?php if ( get_theme_mod( 'hemingway_logo' ) ) : ?>
-
-							<div class='blog-logo'>
-
-						        <a href='<?php echo esc_url( home_url( '/' ) ); ?>' title='<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>' rel='home'>
-						        	<img src='<?php echo esc_url( get_theme_mod( 'hemingway_logo' ) ); ?>' alt='<?php echo esc_attr( get_bloginfo( 'title' ) ); ?>'>
-						        </a>
-
-						    </div> <!-- /blog-logo -->
-
-						<?php elseif ( get_bloginfo( 'description' ) || get_bloginfo( 'title' ) ) : ?>
-
-							<div class="blog-info">
-
-								<h2 class="blog-title">
-									<a href="<?php echo esc_url( home_url() ); ?>" title="<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>" rel="home"><?php echo esc_attr( get_bloginfo( 'title' ) ); ?></a>
-								</h2>
-
-								<?php if ( get_bloginfo( 'description' ) ) { ?>
-
-									<h3 class="blog-description"><?php echo esc_attr( get_bloginfo( 'description' ) ); ?></h3>
-
-								<?php } ?>
-
-							</div> <!-- /blog-info -->
-
-						<?php endif; ?>
-
-					</div> <!-- /header-inner -->
-
+				<div class="header section">
+					<img class="banner-img" src="<?php echo get_stylesheet_directory_uri() . '/images/OLWW_BANNER.png'; ?>" />
 				</div> <!-- /header -->
 
 			</div> <!-- /bg-dark -->

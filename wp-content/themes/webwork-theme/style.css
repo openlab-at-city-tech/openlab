@@ -7,3 +7,27 @@ Author URI:
 Template:       hemingway
 Version:        0.1.0
 */
+
+.blog-menu a {
+	color: #fff;
+}
+
+.header-cover {
+	overflow: hidden;
+}
+.header {
+	max-height: 211px;
+	padding: 0;
+	width: 200%;
+}
+
+.banner-img {
+	max-height: 211px;
+}
+
+@media (max-width: 500px) {
+	.header.section {
+		margin-left: -40px;
+		padding: 0;
+	}
+}
