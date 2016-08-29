@@ -104,7 +104,9 @@ function openlab_activity_group_avatar() {
 
     $item_id = $current_activity_item->item_id;
 
-    return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'group', 'type' => 'full', 'html' => false)) . '" alt="' . bp_get_group_name() . '"/>';
+    $group = groups_get_group(array('group_id' => $item_id));
+
+    return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'group', 'type' => 'full', 'html' => false)) . '" alt="' . $group->name . '"/>';
 }
 
 function openlab_activity_group_link() {
@@ -125,7 +127,7 @@ function openlab_activity_group_link() {
  */
 function openlab_whats_happening() {
     $whats_happening_out = '';
-    
+
     $tomrrow = new DateTime('tomorrow');
 
     $activity_args = array(

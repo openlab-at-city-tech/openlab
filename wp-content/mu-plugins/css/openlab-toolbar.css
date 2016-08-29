@@ -7594,6 +7594,7 @@ button.oplb-bs .close {
 .oplb-bs .search .search-trigger-wrapper .search-trigger {
   display: block;
   outline: none;
+  padding: 0 0 0 4px;
 }
 .oplb-bs .search .search-trigger-wrapper .search-trigger:focus {
   outline: thin dotted;
