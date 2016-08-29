@@ -119,6 +119,8 @@ $blog_id = get_current_blog_id();
 $site = bp_get_root_domain();
 $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
+$accessibility_link = get_option('footer_link_accessibility_help_post');
+
 ob_start();
 include(WPMU_PLUGIN_DIR . '/parts/persistent/footer.php');
 $footer_out = ob_get_clean();

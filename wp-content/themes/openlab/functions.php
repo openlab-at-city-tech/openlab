@@ -20,9 +20,10 @@ function openlab_core_setup() {
 add_action('after_setup_theme', 'openlab_core_setup');
 
 /* * creating a library to organize functions* */
-/**core**/
+/* * core* */
 require_once( STYLESHEETPATH . '/lib/core/page-control.php' );
 require_once( STYLESHEETPATH . '/lib/core/frontend-admin.php' );
+require_once( STYLESHEETPATH . '/lib/core/backend-admin.php' );
 
 require_once( STYLESHEETPATH . '/lib/course-clone.php' );
 require_once( STYLESHEETPATH . '/lib/header-funcs.php' );
@@ -80,11 +81,22 @@ function openlab_load_scripts() {
             'nonce' => wp_create_nonce('request-nonce'),
         ));
 
-	wp_register_script( 'parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array( 'jquery' ) );
+        wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
     }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
+
+function openlab_admin_scripts() {
+    wp_register_script('utility-admin', get_stylesheet_directory_uri() . '/js/utility.admin.js', array('jquery', 'jquery-ui-autocomplete'), '1.6.9.7', true);
+    wp_enqueue_script('utility-admin');
+    wp_localize_script('utility-admin', 'localVars', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('request-nonce'),
+    ));
+}
+
+add_action('admin_enqueue_scripts', 'openlab_admin_scripts');
 
 /**
  * Giving the main stylesheet the highest priority among stylesheets to make sure it loads last
@@ -222,28 +234,28 @@ add_filter('bp_avatar_is_front_edit', '__return_false');
  * Used for Parsely validation.
  */
 function openlab_profile_field_input_attributes() {
-	$attributes = array();
+    $attributes = array();
 
-	switch ( bp_get_the_profile_field_name() ) {
-		case 'Name' :
-			$attributes[] = 'data-parsley-required';
-			$attributes[] = 'data-parsley-required';
-		break;
+    switch (bp_get_the_profile_field_name()) {
+        case 'Name' :
+            $attributes[] = 'data-parsley-required';
+            $attributes[] = 'data-parsley-required';
+            break;
 
-		case 'First Name' :
-			$attributes[] = 'data-parsley-required';
-		break;
+        case 'First Name' :
+            $attributes[] = 'data-parsley-required';
+            break;
 
-		case 'Last Name' :
-			$attributes[] = 'data-parsley-required';
-		break;
+        case 'Last Name' :
+            $attributes[] = 'data-parsley-required';
+            break;
 
-		case 'Account Type' :
-			$attributes[] = 'data-parsley-required';
-		break;
-	}
+        case 'Account Type' :
+            $attributes[] = 'data-parsley-required';
+            break;
+    }
 
-	if ( $attributes ) {
-		return ' ' . implode( ' ', $attributes ) . ' ';
-	}
+    if ($attributes) {
+        return ' ' . implode(' ', $attributes) . ' ';
+    }
 }

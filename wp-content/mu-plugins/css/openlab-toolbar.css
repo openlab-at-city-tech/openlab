@@ -7655,6 +7655,9 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .regular {
   font-weight: 400;
 }
+.oplb-bs#openlab-footer .deco {
+  text-decoration: underline;
+}
 .oplb-bs#openlab-footer .cuny-logo {
   max-width: 74px !important;
 }
@@ -7744,6 +7747,15 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .col-links {
   color: #333333;
 }
+.oplb-bs#openlab-footer .col-links .first-header {
+  margin-bottom: 19px;
+}
+.oplb-bs#openlab-footer .col-links .second-header {
+  margin: 22px 0 18px;
+}
+.oplb-bs#openlab-footer .col-links .statement {
+  margin-bottom: 3px;
+}
 .oplb-bs#openlab-footer .col-links a {
   color: #333333;
   font-weight: inherit;
@@ -7791,6 +7803,7 @@ button.oplb-bs .close {
 }
 .oplb-bs#openlab-footer .row-copyright {
   margin-bottom: 100px;
+  margin-top: 17px;
 }
 .oplb-bs#openlab-footer .row-copyright p,
 .oplb-bs#openlab-footer .row-copyright span,
