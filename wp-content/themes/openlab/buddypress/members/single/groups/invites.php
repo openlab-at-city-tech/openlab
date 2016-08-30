@@ -14,7 +14,7 @@
                             <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_html(bp_get_group_name()); ?>"/></a>
                         </div>
                         <div class="item col-xs-17">
-                            <p class="item-title h2"><a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="280"><?php bp_group_name() ?></a></p>
+                            <p class="item-title h2"><a class="no-deco truncate-on-the-fly" href="<?php bp_group_permalink() ?>" data-basevalue="65" data-minvalue="20" data-basewidth="280"><?php bp_group_name() ?></a></p>
 
                             <div class="description-line">
                                 <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="100" data-basewidth="280"><?php echo bp_get_group_description_excerpt() ?></p>

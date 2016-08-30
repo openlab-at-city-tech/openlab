@@ -9415,6 +9415,9 @@ body.membership-requests .group-list {
   .action-events #item-body .bpeo-upcoming-events {
     padding: 0;
   }
+  .action-events #item-body .bpeo-upcoming-events .bpeo-upcoming-event-datetime {
+    float: none;
+  }
 }
 .action-events #item-body .eventorganiser-event-meta h4 {
   font-size: 14px;

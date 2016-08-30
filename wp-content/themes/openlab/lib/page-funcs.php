@@ -57,16 +57,16 @@ function cuny_home_login() {
             <?php do_action('bp_before_sidebar_login_form') ?>
 
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <label class="sr-only" for="log">Username</label>
+                <label class="sr-only" for="sidebar-user-login">Username</label>
                 <input class="form-control input" type="text" name="log" id="sidebar-user-login" value="" placeholder="Username" tabindex="0" />
                 
-                <label class="sr-only" for="pwd">Password</label>
+                <label class="sr-only" for="sidebar-user-pass">Password</label>
                 <input class="form-control input" type="password" name="pwd" id="sidebar-user-pass" value="" placeholder="Password" tabindex="0" />
 
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
                         <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><label class="regular no-margin no-margin-bottom" for="sidebar-rememberme"><?php _e('Keep me logged in', 'buddypress') ?></label></span>
                     </div>
                     <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="0" />
                 </div>
@@ -93,10 +93,10 @@ function cuny_home_new_members() {
     <div id="new-members-top-wrapper">
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
-                    <a class="prev btn" href="#">
-                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span class="sr-only">Previous New Members</span></a>
-                    <a class="next btn" href="#">
-                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></a>
+                    <button class="prev btn btn-link">
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span class="sr-only">Previous New Members</span></button>
+                    <button class="next btn btn-link" href="#">
+                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></button>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>

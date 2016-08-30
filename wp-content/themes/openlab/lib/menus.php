@@ -14,32 +14,108 @@ register_nav_menus(array(
 ));
 
 /**
- * Ensure that external links in the help menu get the external-link glyph
+ * Using @wp_nav_menu_objects for fine-grained menu customizations
+ * @global type $post
+ * @param type $items
+ * @param type $args
+ * @return type
  */
-function openlab_help_menu_external_glyph($items, $args) {
+function openlab_wp_menu_customizations($items, $args) {
     global $post;
 
     if (false !== strpos($args->theme_location, 'about')) {
 
         $calendar_page_obj = get_page_by_path('about/calendar');
+        $upcoming_page_obj = get_page_by_path('about/calendar/upcoming');
 
+        //default order is at the end of the current set of items
+        $order = count($items);
+        $new_items = array();
+
+        //add a mobile verison of the OpenLab Calendar menu item
+        //first iterate through the current menu items and figure out where this new mobile menu item will go
         foreach ($items as $key => $item) {
+
             if (false === strpos($item->url, bp_get_root_domain())) {
                 $items[$key]->classes[] = 'external-link';
             }
+
             if ($item->title === 'OpenLab Calendar') {
-                
+
+                $items[$key]->classes[] = 'hidden-xs';
+
                 if ($post->post_parent === $calendar_page_obj->ID || $post->post_type === 'event') {
                     $items[$key]->classes[] = 'current-menu-item';
                 }
+
+                $order = $item->menu_order + 1;
+            }
+
+            if ($item->menu_order >= $order) {
+                $items[$key]->menu_order = $item->menu_order + 1;
+                $new_items[$key + 1] = $item;
+            } else {
+                $new_items[$key] = $item;
             }
         }
+
+        //then we create the menu item and inject it into the menu items array
+        $new_menu_item = openlab_custom_nav_menu_item('OpenLab Calendar', get_permalink($upcoming_page_obj->ID), $order, 0, array('visible-xs'));
+
+        $new_items[$order] = $new_menu_item;
+        ksort($new_items);
+        $items = $new_items;
+        
     }
 
     return $items;
 }
 
-add_filter('wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2);
+add_filter('wp_nav_menu_objects', 'openlab_wp_menu_customizations', 11, 2);
+
+/**
+ * Hooking into @wp_get_nav_menu_items, primarily to inject custom menu items
+ * @param type $items
+ * @param type $menu
+ * @return type
+ */
+function openlab_custom_nav_menu_items($items, $menu) {
+
+    if ($menu->slug === 'about') {
+        //default order is at the end of the current set of items
+        $order = count($items);
+        $new_items = array();
+
+        //add a mobile verison of the OpenLab Calendar menu item
+        //first iterate through the current menu items and figure out where this new mobile menu item will go
+        foreach ($items as $key => $item) {
+
+            if ($item->title === 'OpenLab Calendar') {
+                $order = $item->menu_order + 1;
+            }
+
+            if ($item->menu_order >= $order) {
+                $items[$key]->menu_order = $item->menu_order + 1;
+                $new_items[$key + 1] = $item;
+            } else {
+                $new_items[$key] = $item;
+            }
+        }
+
+        //then we create the menu item and inject it into the menu items array
+        $calendar_page_obj = get_page_by_path('about/calendar');
+        $upcoming_page_obj = get_page_by_path('about/calendar/upcoming');
+        $new_menu_item = openlab_custom_nav_menu_item('OpenLab Calendar', get_permalink($upcoming_page_obj->ID), $order, $calendar_page_obj->ID, array(''));
+
+        $new_items[$order - 1] = $new_menu_item;
+        ksort($new_items);
+        $items = $new_items;
+    }
+
+    return $items;
+}
+
+//add_filter('wp_get_nav_menu_items', 'openlab_custom_nav_menu_items', 20, 2);
 
 /**
  * Reach into the item nav menu and remove stuff as necessary
@@ -47,32 +123,33 @@ add_filter('wp_nav_menu_objects', 'openlab_help_menu_external_glyph', 10, 2);
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-	if ( bp_is_group() && openlab_is_portfolio() ) {
-		buddypress()->groups->nav->edit_nav( array(
-			'name' => 'Profile',
-		), 'home', bp_get_current_group_slug() );
+    if (bp_is_group() && openlab_is_portfolio()) {
+        buddypress()->groups->nav->edit_nav(array(
+            'name' => 'Profile',
+                ), 'home', bp_get_current_group_slug());
 
-		buddypress()->groups->nav->edit_nav( array(
-			'name' => 'Settings',
-		), 'admin', bp_get_current_group_slug() );
+        buddypress()->groups->nav->edit_nav(array(
+            'name' => 'Settings',
+                ), 'admin', bp_get_current_group_slug());
 
-		// Keep the following tabs as-is
-		$keepers = array( 'home', 'admin', 'members' );
-		$nav_items = buddypress()->groups->nav->get_secondary( array( 'parent_slug' => bp_get_current_group_slug() ) );
-		foreach ( $nav_items as $nav_item ) {
-			if ( ! in_array( $nav_item->slug, $keepers ) ) {
-				buddypress()->groups->nav->delete_nav( $nav_item->slug, bp_get_current_group_slug() );
-			}
-		}
-	}
+        // Keep the following tabs as-is
+        $keepers = array('home', 'admin', 'members');
+        $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
+        foreach ($nav_items as $nav_item) {
+            if (!in_array($nav_item->slug, $keepers)) {
+                buddypress()->groups->nav->delete_nav($nav_item->slug, bp_get_current_group_slug());
+            }
+        }
+    }
 
-	if ( bp_is_group() && ! bp_is_group_create() ) {
-		buddypress()->groups->nav->edit_nav( array(
-			'position' => 15,
-		), 'admin', bp_get_current_group_slug() );
-	}
+    if (bp_is_group() && !bp_is_group_create()) {
+        buddypress()->groups->nav->edit_nav(array(
+            'position' => 15,
+                ), 'admin', bp_get_current_group_slug());
+    }
 }
-add_action( 'bp_screens', 'openlab_modify_options_nav', 1 );
+
+add_action('bp_screens', 'openlab_modify_options_nav', 1);
 
 /**
  * Help Sidebar menu: includes categories and sub-categories.
@@ -868,7 +945,7 @@ function openlab_filter_subnav_nav_new_event($subnav_item) {
     //check the group calendar access setting to see if the current user has the right privileges
     $event_create_access = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_bpeo_event_create_access');
 
-    if($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()){
+    if ($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()) {
         return "";
     }
 
@@ -877,25 +954,26 @@ function openlab_filter_subnav_nav_new_event($subnav_item) {
 
 //submenu navigation re-ordering
 function openlab_group_submenu_nav() {
-	if ( ! bp_is_group() || bp_is_group_create() ) {
-		return;
-	}
+    if (!bp_is_group() || bp_is_group_create()) {
+        return;
+    }
 
-	$positions = array(
-		'home' => 10,
-		'admin' => 11,
-		'nav-forum' => 25,
-		'members' => 35,
-		'files' => 60,
-	);
+    $positions = array(
+        'home' => 10,
+        'admin' => 11,
+        'nav-forum' => 25,
+        'members' => 35,
+        'files' => 60,
+    );
 
-	foreach ( $positions as $slug => $position ) {
-		buddypress()->groups->nav->edit_nav( array(
-			'position' => $position,
-		), $slug, bp_get_current_group_slug() );
-	}
+    foreach ($positions as $slug => $position) {
+        buddypress()->groups->nav->edit_nav(array(
+            'position' => $position,
+                ), $slug, bp_get_current_group_slug());
+    }
 }
-add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
+
+add_action('bp_screens', 'openlab_group_submenu_nav', 1);
 
 /**
  * Markup for group admin tabs
@@ -950,7 +1028,7 @@ function openlab_group_admin_tabs($group = false) {
 
         --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )       ?>
+        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )           ?>
 
         <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
             --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
@@ -959,9 +1037,9 @@ function openlab_group_admin_tabs($group = false) {
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         <?php if ($group_type == "portfolio") : ?>
-                                                                                                                                                               <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+                                                                                                                                                                                                                                                                           <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-                                                                                                                                                               <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+                                                                                                                                                                                                                                                                           <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>
@@ -1126,4 +1204,32 @@ function openlab_calendar_submenu() {
     );
 
     return $links_out;
+}
+
+/**
+ * Function for dynamically injection menu items
+ * @param type $title
+ * @param type $url
+ * @param type $order
+ * @param type $parent
+ * @return \stdClass
+ */
+function openlab_custom_nav_menu_item($title, $url, $order, $parent = 0, $classes = array()) {
+    $item = new stdClass();
+    $item->ID = 1000000 + $order + parent;
+    $item->db_id = $item->ID;
+    $item->title = $title;
+    $item->url = $url;
+    $item->menu_order = $order;
+    $item->menu_item_parent = $parent;
+    $item->type = '';
+    $item->object = '';
+    $item->object_id = '';
+    $item->classes = $classes;
+    $item->target = '';
+    $item->attr_title = '';
+    $item->description = '';
+    $item->xfn = '';
+    $item->status = '';
+    return $item;
 }
