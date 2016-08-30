@@ -1,27 +1,28 @@
 <div class="activity-list item-list inline-element-list sidebar-sublinks">
-    <?php if (bp_has_activities($activity_args)) : ?>
 
-        <?php while (bp_activities()) : bp_the_activity(); ?>
+    <?php $activities = openlab_whats_happening_activity_items(); ?>
+
+    <?php if ($activities) : ?>
+
+        <?php foreach ($activities as $activity) : ?>
 
             <div class="sidebar-block activity-block">
                 <div class="activity-row clearfix">
                     <div class="activity-avatar pull-left">
-                        <a href="<?php echo openlab_activity_group_link() ?>">
-                            <?php echo openlab_activity_group_avatar(); ?>
-                        </a>
+                        <a href="<?php echo openlab_activity_group_link($activity) ?>"><?php echo openlab_activity_group_avatar($activity); ?></a>
                     </div>
 
                     <div class="activity-content overflow-hidden">
 
                         <div class="activity-header">
-                            <?php echo openlab_get_custom_activity_action(); ?>
+                            <?php echo openlab_get_custom_activity_action($activity); ?>
                         </div>
 
                     </div>
                 </div>
             </div>
 
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     <?php else: ?>
 
         <div class="sidebar-block activity-block">
@@ -34,7 +35,6 @@
             </div>
         </div>
 
-    <?php endif; ?>
-</div>
+    <?php endif; /* bp_has_activites() */ ?>
 
-
+</div><!-- .activity-list -->
