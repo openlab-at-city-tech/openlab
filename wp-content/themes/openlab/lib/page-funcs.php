@@ -149,13 +149,27 @@ function cuny_whos_online() {
         'alt' => __('Member avatar', 'buddypress')
     );
 
-    $sql = "SELECT user_id FROM wp_usermeta where meta_key='last_activity' and meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL 1 HOUR ) order by meta_value desc limit 20";
+    $aq = bp_activity_get( array(
+	'filter' => array(
+		'object' => buddypress()->members->id,
+		'action' => 'last_activity',
+	),
+	'max' => 20,
+    ) );
 
-    $rs = $wpdb->get_results($sql);
-    //print_r($rs);
+    $now = time();
+    $rs = array();
+    foreach ( $aq['activities'] as $activity ) {
+	if ( strtotime( $activity->date_recorded ) >= ( $now + HOUR_IN_SECONDS ) ) {
+		$rs[] = $activity->user_id;
+	}
+    }
+
     $ids = "9999999";
-    foreach ((array) $rs as $r)
-        $ids .= "," . $r->user_id;
+    foreach ( (array) $rs as $r ) {
+        $ids .= "," . intval( $r );
+    }
+
     $x = 0;
     if (bp_has_members('type=active&include=' . $ids)) :
         $x += 1;
