@@ -633,7 +633,7 @@ HTML;
 
 		$members_args['include'] = ! empty( $request_ids ) ? implode( ',', array_slice( $request_ids, 0, 3 ) ) : '0';
 
-		if ( bp_has_members( $members_args ) ) {
+		if ( ! empty( $request_ids ) && bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
 				bp_the_member();
 
