@@ -194,18 +194,15 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			echo $this->build_sorter(); // WPCS: XSS ok;
 			echo '</th>';
 			echo '<th scope="col">';
-			esc_html_e( 'Query', 'query-monitor' );
-			echo $this->build_filter( 'type', array_keys( $db->types ) ); // WPCS: XSS ok;
+			echo $this->build_filter( 'type', array_keys( $db->types ), __( 'Query', 'query-monitor' ) ); // WPCS: XSS ok;
 			echo '</th>';
 			echo '<th scope="col">';
-			esc_html_e( 'Caller', 'query-monitor' );
-			echo $this->build_filter( 'caller', wp_list_pluck( $data['times'], 'caller' ) ); // WPCS: XSS ok;
+			echo $this->build_filter( 'caller', wp_list_pluck( $data['times'], 'caller' ), __( 'Caller', 'query-monitor' ) ); // WPCS: XSS ok;
 			echo '</th>';
 
 			if ( $db->has_trace ) {
 				echo '<th scope="col">';
-				esc_html_e( 'Component', 'query-monitor' );
-				echo $this->build_filter( 'component', wp_list_pluck( $data['component_times'], 'component' ) ); // WPCS: XSS ok.
+				echo $this->build_filter( 'component', wp_list_pluck( $data['component_times'], 'component' ), __( 'Component', 'query-monitor' ) ); // WPCS: XSS ok.
 				echo '</th>';
 			}
 
@@ -370,7 +367,7 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			echo $caller_name; // WPCS: XSS ok.
 
 			if ( ! empty( $stack ) ) {
-				echo '<a href="#" class="qm-toggle" data-on="+" data-off="-">+</a>';
+				echo '<button class="qm-toggle" data-on="+" data-off="-">+</button>';
 				echo '<div class="qm-toggled">' . implode( '<br>', $stack ) . '</div>'; // WPCS: XSS ok.
 			}
 
@@ -401,7 +398,7 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 		}
 
 		if ( isset( $cols['time'] ) ) {
-			echo '<td class="qm-num qm-row-time' . esc_attr( $td ) . '">'. esc_html( $stime ) . "</td>\n";
+			echo '<td class="qm-num qm-row-time' . esc_attr( $td ) . '" data-qm-sort-weight="' . esc_attr( $row['ltime'] ) . '">' . esc_html( $stime ) . "</td>\n";
 		}
 
 		echo '</tr>';
