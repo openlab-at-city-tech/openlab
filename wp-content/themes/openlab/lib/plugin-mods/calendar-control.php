@@ -126,6 +126,8 @@ add_filter('eventorganiser_template_stack', 'openlab_add_eventorganiser_custom_t
  */
 function openlab_event_page_controller($wp) {
 
+    $redirect_url = '';
+
     /**
      * For now there are no events pages for members
      * Attempting to go to an events page will redirect to the member's profile page
@@ -216,7 +218,7 @@ HTML;
     }
 }
 
-add_action('media_buttons', openlab_manage_media_buttons);
+add_action('media_buttons', 'openlab_manage_media_buttons');
 
 /**
  * Remove Event Categories
