@@ -18,7 +18,7 @@ function openlab_asset_ver( $tag, $handle, $src = '' ) {
 	}
 
 	$_src = parse_url( $src );
-	if ( $_src['query'] ) {
+	if ( ! empty( $_src['query'] ) ) {
 		wp_parse_str( $_src['query'], $vars );
 		foreach ( $vars as $k => &$v ) {
 			if ( 'ver' !== $k ) {
