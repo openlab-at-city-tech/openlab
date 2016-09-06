@@ -10,7 +10,7 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('description' => __('The most recently uploaded group documents','bp-group-documents'));
-		parent::WP_Widget( false, $name = __( 'Recent Group Documents', 'bp-group-documents' ),$widget_ops );
+		parent::__construct( false, $name = __( 'Recent Group Documents', 'bp-group-documents' ),$widget_ops );
 	}
 
 	function widget( $args, $instance ) {
@@ -109,7 +109,7 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('description'=> __('The most commonly downloaded group documents','bp-group-documents'));
-		parent::WP_Widget( false, $name = __( 'Popular Group Documents', 'bp-group-documents' ),$widget_ops );
+		parent::__construct( false, $name = __( 'Popular Group Documents', 'bp-group-documents' ),$widget_ops );
 	}
 
 	function widget( $args, $instance ) {

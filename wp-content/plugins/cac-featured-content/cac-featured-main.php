@@ -272,9 +272,9 @@ class CAC_Featured_Content_Widget extends WP_Widget {
     }
 
 		// instantiate our widget
-		parent::WP_Widget( 
-			$id = sanitize_title( get_class( $this ) ), 
-			$name = ( isset( $this->widget['name']) ? $this->widget['name'] : $classname ), 
+		parent::__construct(
+			$id = sanitize_title( get_class( $this ) ),
+			$name = ( isset( $this->widget['name']) ? $this->widget['name'] : $classname ),
 			$options = array( 'description' => $this->widget['description'] )
 		);
 
