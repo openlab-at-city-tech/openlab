@@ -138,7 +138,7 @@ function openlab_page_crumb_overrides($crumb, $args) {
         }
         $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
         $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
-        
+
         $crumb = $b1 . ' / ' . $b2;
     }
     return $crumb;

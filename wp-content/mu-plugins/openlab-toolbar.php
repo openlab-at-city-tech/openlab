@@ -158,7 +158,7 @@ class OpenLab_Admin_Bar {
 
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
                         add_action('admin_bar_menu',array($this,'add_custom_edit_menu'),80);
-                        
+
                         //for cleanning up any plugin add ons
                         add_action('wp_before_admin_bar_render',array($this,'adminbar_plugin_cleanup'), 9999);
         } else {
@@ -964,7 +964,7 @@ HTML;
 
                 if ( is_admin() ) {
                         $current_screen = get_current_screen();
-                        
+
                         if ( 'post' == $current_screen->base
                                 && 'add' != $current_screen->action
                                 && ( $post_type_object = get_post_type_object( $post->post_type ) )
@@ -1031,16 +1031,16 @@ HTML;
                         }
                 }
         }
-        
+
         /**
          * Cleaning up any plugin addons to the admin bar
          * @param type $wp_admin_bar
          */
         function adminbar_plugin_cleanup($wp_admin_bar){
             global $wp_admin_bar;
-            
+
             $wp_admin_bar->remove_menu('tribe-events');
-            
+
         }
 
     /**
@@ -1472,13 +1472,13 @@ add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
  */
 function openlab_get_loginform(){
     $form_out = '';
-    
+
     $request_uri = $_SERVER['REQUEST_URI'];
-    
+
     ob_start();
     include(WPMU_PLUGIN_DIR . '/parts/persistent/loginform.php');
     $form_out = ob_get_clean();
-    
+
     return $form_out;
 }
 

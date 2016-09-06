@@ -148,7 +148,7 @@ class PGW_Post_Type {
 			echo '<span style="padding:3px;">' . wp_get_attachment_image( $k, 'thumbnail', false ) . '</span>';
 		echo '</p>';
 	}
-	function menu_order_metabox() { 
+	function menu_order_metabox() {
 		global $post; ?>
 <p><strong><?php _e( 'Display Order', 'post-gallery-widget' ) ?></strong></p>
 <p><label class="screen-reader-text" for="menu_order"><?php _e( 'Display Order', 'post-gallery-widget' ); ?></label><input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr($post->menu_order) ?>" /></p>
@@ -198,7 +198,7 @@ class Rotating_Post_Widget extends WP_Widget {
 			$num_posts = $instance['how_many'];
 		foreach( array( 'wdith', 'height' ) as $att )
 			$instance[$att] -= 10;
-			
+
 		if( !empty( $pgw_post_type ) ) {
 			$posts = $pgw_post_type->query_posts( $num_posts, $instance['size'], $instance['order'], $instance['width'], $instance['height'] );
 			foreach( $posts as $p ) { ?>
