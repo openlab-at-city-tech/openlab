@@ -15,7 +15,7 @@ var $id = 'ubpfattach';
 var $ver = '1.2.1';
 var $url, $path, $thumbnail_size, $bb_prefix, $meta_table;
 
-function UBPForumAttachment(){
+function __construct(){
 	$this->url = plugin_dir_url(__FILE__);
 	$this->path = plugin_dir_path(__FILE__);
 	$this->thumbnail_size = array(100, 100);

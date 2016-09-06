@@ -873,7 +873,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 	 * @package BuddyPress Docs
 	 * @since 1.0-beta
 	 */
-	function bp_docs_group_extension() {
+	function __construct() {
 		global $bp;
 
 		$bp_docs_tab_name = get_option( 'bp-docs-tab-name' );

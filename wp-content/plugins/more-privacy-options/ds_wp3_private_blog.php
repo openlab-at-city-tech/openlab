@@ -93,7 +93,7 @@ We'll see how the feedback trickles in on this issue.
 class ds_more_privacy_options {
 		var $l10n_prefix;
 
-	function ds_more_privacy_options() {
+	function __construct() {
 		global  $current_blog;
 
 		if ( ! is_multisite() ) {

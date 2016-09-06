@@ -179,7 +179,7 @@ class Openlab_Breadcrumb {
      *
      * @param array $args
      */
-    function openlab_breadcrumb() {
+    function __construct() {
         $this->on_front = get_option('show_on_front');
 
         /** Default arguments * */
