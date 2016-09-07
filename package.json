@@ -12,5 +12,8 @@
     "grunt-contrib-concat": "^0.5.1",
     "jit-grunt": "^0.9.1"
   },
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "grunt-contrib-less": "^1.4.0"
+  }
 }
