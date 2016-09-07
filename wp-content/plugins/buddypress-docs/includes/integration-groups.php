@@ -688,6 +688,7 @@ class BP_Docs_Groups_Integration {
 	 * @since 1.0.8
 	 */
 	function show_doc_count_in_tab() {
+		return;
 		global $bp;
 
 		// Get the group slug, which will be the key for the nav item

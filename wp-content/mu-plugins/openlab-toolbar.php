@@ -960,7 +960,9 @@ HTML;
         function add_custom_edit_menu( $wp_admin_bar ) {
                 global $tag, $wp_the_query;
                 $post = get_post();
-                $post_label = str_replace(array('-','_'),' ', $post->post_type);
+		if ( $post instanceof WP_Post ) {
+			$post_label = str_replace(array('-','_'),' ', $post->post_type);
+		}
 
                 if ( is_admin() ) {
                         $current_screen = get_current_screen();
