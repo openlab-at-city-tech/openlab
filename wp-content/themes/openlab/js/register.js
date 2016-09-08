@@ -29,7 +29,7 @@ window.Parsley.addValidator( 'iff', {
 			iffRecursion = false;
 		} else {
 			iffRecursion = true;
-			console.log($partner.parsley().validate());
+			$partner.parsley().validate();
 		}
 
 		return isValid;
