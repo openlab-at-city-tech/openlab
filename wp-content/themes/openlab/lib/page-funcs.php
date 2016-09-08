@@ -59,7 +59,7 @@ function cuny_home_login() {
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
                 <label class="sr-only" for="sidebar-user-login">Username</label>
                 <input class="form-control input" type="text" name="log" id="sidebar-user-login" value="" placeholder="Username" tabindex="0" />
-                
+
                 <label class="sr-only" for="sidebar-user-pass">Password</label>
                 <input class="form-control input" type="password" name="pwd" id="sidebar-user-pass" value="" placeholder="Password" tabindex="0" />
 
@@ -318,7 +318,7 @@ function openlab_registration_page() {
     ?>
 
     <div class="page" id="register-page">
-        
+
         <div id="openlab-main-content"></div>
 
         <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
@@ -464,7 +464,7 @@ function openlab_registration_page() {
                 <p class="sign-up-terms">
                     By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
                 </p>
-                
+
                 <p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
 
                 <div class="submit">

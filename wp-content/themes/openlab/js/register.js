@@ -43,15 +43,8 @@ jQuery(document).ready(function() {
 		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
 	} ).on( 'field:error', function( formInstance ) {
 		this.$element.parent( '.form-group' ).addClass( 'has-error' );
-//		console.log( 'fail' );
-//		console.log( this.$element.data( 'parsley-equalto' ) );
 	} ).on( 'field:success', function( formInstance ) {
 		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
-
-//		console.log('success');
-//		console.log( this.$element.data( 'parsley-equalto' ) );
-	} ).on( 'form:validate', function( formInstance ) {
-//		console.log( formInstance.isValid( { group: 'password', force: true } ) );
 	} );
 
     $('#signup_email').on('blur', function (e) {
@@ -256,17 +249,17 @@ jQuery(document).ready(function() {
                 $('#signup_submit').addClass('btn-disabled');
                 $('#signup_submit').val('Enter Email Address To Continue');
             }
-            
+
             $('#signup_submit').on('click',function(e){
-                
+
                 var thisElem = $(this);
-                
+
                 if(thisElem.hasClass('btn-disabled')){
                     e.preventDefault();
                     var message = 'Please Enter your Email Address To Continue';
                     $('#submitSrMessage').text(message);
                 }
-                
+
             });
 
             $.ajax(ajaxurl, {
