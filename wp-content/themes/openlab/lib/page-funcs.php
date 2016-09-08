@@ -375,6 +375,8 @@ function openlab_registration_page() {
 					data-parsley-required
 					data-parsley-type="email"
 					data-parsley-group="email"
+					data-parsley-iff="#signup_email_confirm"
+					data-parsley-iff-message=""
 				    />
 
 				    <label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
@@ -387,13 +389,13 @@ function openlab_registration_page() {
 					data-parsley-trigger="blur"
 					data-parsley-required
 					data-parsley-type="email"
-					data-parsley-equalto="#signup_email"
-					data-parsley-equalto-message="Email addresses must match."
+					data-parsley-iff="#signup_email"
+					data-parsley-iff-message="Email addresses must match."
 					data-parsley-group="email"
 				    />
 			    </div>
 
-			    <div class="form-group">
+			    <div data-parsley-children-should-match class="form-group">
 				    <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
 				    <?php do_action('bp_signup_password_errors') ?>
 				    <input
@@ -402,7 +404,11 @@ function openlab_registration_page() {
 					name="signup_password"
 					id="signup_password"
 					value=""
+					data-parsley-trigger="blur"
 					data-parsley-required
+					data-parsley-group="password"
+					data-parsley-iff="#signup_password_confirm"
+					data-parsley-iff-message=""
 				    />
 
 				    <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
@@ -413,9 +419,11 @@ function openlab_registration_page() {
 					name="signup_password_confirm"
 					id="signup_password_confirm"
 					value=""
+					data-parsley-trigger="blur"
 					data-parsley-required
-					data-parsley-equalto="#signup_password"
-					data-parsley-equalto-message="Passwords must match."
+					data-parsley-group="password"
+					data-parsley-iff="#signup_password"
+					data-parsley-iff-message="Passwords must match."
 				    />
 			    </div>
 

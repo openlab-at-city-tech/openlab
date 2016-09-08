@@ -1,5 +1,6 @@
-// Parsley validation rules.
+(function($) {
 
+// Parsley validation rules.
 window.Parsley.addValidator( 'lowercase', {
 	validateString: function( value ) {
 		return value === value.toLowerCase();
@@ -17,15 +18,40 @@ window.Parsley.addValidator( 'nospecialchars', {
 		en: 'This field supports alphanumeric characters only.'
 	}
 } );
-jQuery(document).ready(function ($) {
+
+var iffRecursion = false;
+window.Parsley.addValidator( 'iff', {
+	validateString: function( value, requirement, instance ) {
+		var $partner = $( requirement );
+		var isValid = $partner.val() == value;
+
+		if ( iffRecursion ) {
+			iffRecursion = false;
+		} else {
+			iffRecursion = true;
+			console.log($partner.parsley().validate());
+		}
+
+		return isValid;
+	}
+} );
+
+jQuery(document).ready(function() {
 	var $signup_form = $( '#signup_form' );
 
 	$signup_form.parsley( {
 		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
-	} ).on( 'field:error', function() {
+	} ).on( 'field:error', function( formInstance ) {
 		this.$element.parent( '.form-group' ).addClass( 'has-error' );
-	} ).on( 'field:success', function() {
+//		console.log( 'fail' );
+//		console.log( this.$element.data( 'parsley-equalto' ) );
+	} ).on( 'field:success', function( formInstance ) {
 		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
+
+//		console.log('success');
+//		console.log( this.$element.data( 'parsley-equalto' ) );
+	} ).on( 'form:validate', function( formInstance ) {
+//		console.log( formInstance.isValid( { group: 'password', force: true } ) );
 	} );
 
     $('#signup_email').on('blur', function (e) {
@@ -268,4 +294,6 @@ jQuery(document).ready(function ($) {
             $('#' + k).before(v);
         });
     }
-}, (jQuery));
+});
+
+}(jQuery));
