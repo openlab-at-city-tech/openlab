@@ -57,16 +57,16 @@ function cuny_home_login() {
             <?php do_action('bp_before_sidebar_login_form') ?>
 
             <form name="login-form" class="standard-form" action="<?php echo site_url('wp-login.php', 'login_post') ?>" method="post">
-                <label class="sr-only" for="log">Username</label>
+                <label class="sr-only" for="sidebar-user-login">Username</label>
                 <input class="form-control input" type="text" name="log" id="sidebar-user-login" value="" placeholder="Username" tabindex="0" />
-                
-                <label class="sr-only" for="pwd">Password</label>
+
+                <label class="sr-only" for="sidebar-user-pass">Password</label>
                 <input class="form-control input" type="password" name="pwd" id="sidebar-user-pass" value="" placeholder="Password" tabindex="0" />
 
                 <div id="keep-logged-in" class="small-text clearfix">
                     <div class="password-wrapper">
                         <a class="forgot-password-link small-text roll-over-loss" href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>">Forgot Password?</a>
-                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><?php _e('Keep me logged in', 'buddypress') ?></span>
+                        <span class="keep-logged-in-checkbox"><input class="no-margin no-margin-top" name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" tabindex="0" /><label class="regular no-margin no-margin-bottom" for="sidebar-rememberme"><?php _e('Keep me logged in', 'buddypress') ?></label></span>
                     </div>
                     <input class="btn btn-default btn-primary link-btn pull-right semibold" type="submit" name="wp-submit" id="sidebar-wp-submit" value="<?php _e('Log In'); ?>" tabindex="0" />
                 </div>
@@ -93,10 +93,10 @@ function cuny_home_new_members() {
     <div id="new-members-top-wrapper">
         <div id="new-members-text">
             <p><span class="new-member-navigation pull-right">
-                    <a class="prev btn" href="#">
-                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span class="sr-only">Previous New Members</span></a>
-                    <a class="next btn" href="#">
-                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></a>
+                    <button class="prev btn btn-link">
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span class="sr-only">Previous New Members</span></button>
+                    <button class="next btn btn-link" href="#">
+                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></button>
                 </span>
                 Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
         </div>
@@ -149,13 +149,27 @@ function cuny_whos_online() {
         'alt' => __('Member avatar', 'buddypress')
     );
 
-    $sql = "SELECT user_id FROM wp_usermeta where meta_key='last_activity' and meta_value >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL 1 HOUR ) order by meta_value desc limit 20";
+    $aq = bp_activity_get( array(
+	'filter' => array(
+		'object' => buddypress()->members->id,
+		'action' => 'last_activity',
+	),
+	'max' => 20,
+    ) );
 
-    $rs = $wpdb->get_results($sql);
-    //print_r($rs);
+    $now = time();
+    $rs = array();
+    foreach ( $aq['activities'] as $activity ) {
+	if ( strtotime( $activity->date_recorded ) >= ( $now + HOUR_IN_SECONDS ) ) {
+		$rs[] = $activity->user_id;
+	}
+    }
+
     $ids = "9999999";
-    foreach ((array) $rs as $r)
-        $ids .= "," . $r->user_id;
+    foreach ( (array) $rs as $r ) {
+        $ids .= "," . intval( $r );
+    }
+
     $x = 0;
     if (bp_has_members('type=active&include=' . $ids)) :
         $x += 1;
@@ -304,7 +318,7 @@ function openlab_registration_page() {
     ?>
 
     <div class="page" id="register-page">
-        
+
         <div id="openlab-main-content"></div>
 
         <h1 class="entry-title"><?php _e('Create an Account', 'buddypress') ?></h1>
@@ -361,6 +375,8 @@ function openlab_registration_page() {
 					data-parsley-required
 					data-parsley-type="email"
 					data-parsley-group="email"
+					data-parsley-iff="#signup_email_confirm"
+					data-parsley-iff-message=""
 				    />
 
 				    <label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
@@ -373,13 +389,13 @@ function openlab_registration_page() {
 					data-parsley-trigger="blur"
 					data-parsley-required
 					data-parsley-type="email"
-					data-parsley-equalto="#signup_email"
-					data-parsley-equalto-message="Email addresses must match."
+					data-parsley-iff="#signup_email"
+					data-parsley-iff-message="Email addresses must match."
 					data-parsley-group="email"
 				    />
 			    </div>
 
-			    <div class="form-group">
+			    <div data-parsley-children-should-match class="form-group">
 				    <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
 				    <?php do_action('bp_signup_password_errors') ?>
 				    <input
@@ -388,7 +404,11 @@ function openlab_registration_page() {
 					name="signup_password"
 					id="signup_password"
 					value=""
+					data-parsley-trigger="blur"
 					data-parsley-required
+					data-parsley-group="password"
+					data-parsley-iff="#signup_password_confirm"
+					data-parsley-iff-message=""
 				    />
 
 				    <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
@@ -399,9 +419,11 @@ function openlab_registration_page() {
 					name="signup_password_confirm"
 					id="signup_password_confirm"
 					value=""
+					data-parsley-trigger="blur"
 					data-parsley-required
-					data-parsley-equalto="#signup_password"
-					data-parsley-equalto-message="Passwords must match."
+					data-parsley-group="password"
+					data-parsley-iff="#signup_password"
+					data-parsley-iff-message="Passwords must match."
 				    />
 			    </div>
 
@@ -442,7 +464,7 @@ function openlab_registration_page() {
                 <p class="sign-up-terms">
                     By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo home_url('about/terms-of-service') ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
                 </p>
-                
+
                 <p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
 
                 <div class="submit">

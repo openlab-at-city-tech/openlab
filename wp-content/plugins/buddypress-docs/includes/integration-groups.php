@@ -688,6 +688,7 @@ class BP_Docs_Groups_Integration {
 	 * @since 1.0.8
 	 */
 	function show_doc_count_in_tab() {
+		return;
 		global $bp;
 
 		// Get the group slug, which will be the key for the nav item
@@ -873,7 +874,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 	 * @package BuddyPress Docs
 	 * @since 1.0-beta
 	 */
-	function bp_docs_group_extension() {
+	function __construct() {
 		global $bp;
 
 		$bp_docs_tab_name = get_option( 'bp-docs-tab-name' );
@@ -1139,7 +1140,7 @@ class BP_Docs_Group_Extension extends BP_Group_Extension {
 	 * @package BuddyPress Docs
 	 * @since 1.0-beta
 	 */
-	function display() {
+	function display( $group_id = null ) {
 		global $bp_docs;
 
 		$bp_docs->bp_integration->query->load_template();

@@ -37,7 +37,7 @@ function openlab_conditional_body_classes($classes) {
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
             (!empty($query_vars) && isset($query_vars['help_category'])) ||
-            in_array($post->post_name, $my_group_pages)) {
+            ( isset( $post->post_name ) && in_array($post->post_name, $my_group_pages)) ) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
 

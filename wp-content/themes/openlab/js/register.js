@@ -1,5 +1,6 @@
-// Parsley validation rules.
+(function($) {
 
+// Parsley validation rules.
 window.Parsley.addValidator( 'lowercase', {
 	validateString: function( value ) {
 		return value === value.toLowerCase();
@@ -17,14 +18,32 @@ window.Parsley.addValidator( 'nospecialchars', {
 		en: 'This field supports alphanumeric characters only.'
 	}
 } );
-jQuery(document).ready(function ($) {
+
+var iffRecursion = false;
+window.Parsley.addValidator( 'iff', {
+	validateString: function( value, requirement, instance ) {
+		var $partner = $( requirement );
+		var isValid = $partner.val() == value;
+
+		if ( iffRecursion ) {
+			iffRecursion = false;
+		} else {
+			iffRecursion = true;
+			$partner.parsley().validate();
+		}
+
+		return isValid;
+	}
+} );
+
+jQuery(document).ready(function() {
 	var $signup_form = $( '#signup_form' );
 
 	$signup_form.parsley( {
 		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
-	} ).on( 'field:error', function() {
+	} ).on( 'field:error', function( formInstance ) {
 		this.$element.parent( '.form-group' ).addClass( 'has-error' );
-	} ).on( 'field:success', function() {
+	} ).on( 'field:success', function( formInstance ) {
 		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
 	} );
 
@@ -230,17 +249,17 @@ jQuery(document).ready(function ($) {
                 $('#signup_submit').addClass('btn-disabled');
                 $('#signup_submit').val('Enter Email Address To Continue');
             }
-            
+
             $('#signup_submit').on('click',function(e){
-                
+
                 var thisElem = $(this);
-                
+
                 if(thisElem.hasClass('btn-disabled')){
                     e.preventDefault();
                     var message = 'Please Enter your Email Address To Continue';
                     $('#submitSrMessage').text(message);
                 }
-                
+
             });
 
             $.ajax(ajaxurl, {
@@ -268,4 +287,6 @@ jQuery(document).ready(function ($) {
             $('#' + k).before(v);
         });
     }
-}, (jQuery));
+});
+
+}(jQuery));

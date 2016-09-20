@@ -1,0 +1,65 @@
+/*
+Theme Name:     WeBWorK
+Theme URI:
+Description:    Theme for WeBWorK. Child of Hemingway.
+Author:         Boone Gorges
+Author URI:
+Template:       hemingway
+Version:        0.1.0
+*/
+
+.blog-menu a {
+	color: #fff;
+}
+
+.header-cover {
+	overflow: hidden;
+}
+.header {
+	max-height: 211px;
+	padding: 0;
+	width: 200%;
+}
+
+.banner-img {
+	max-height: 211px;
+}
+
+@media (max-width: 800px) {
+	.nav-toggle .bar,
+	.search-toggle .metal,
+	.search-toggle .handle {
+		background-color: #fff;
+	}
+}
+
+@media (max-width: 500px) {
+	html {
+		font-size: 11px;
+	}
+
+	.header.section {
+		margin-left: -40px;
+		padding: 0;
+	}
+
+	.wrapper {
+		position: relative;
+	}
+
+	.wrapper.inactive:before {
+		background-color: rgba(0,0,0,0.2);
+		content: "";
+		display: block;
+		height: 100%;
+		left: -10%;
+		position: absolute;
+		top: 0;
+		width: 120%;
+		z-index: 5;
+	}
+
+	.navigation {
+		z-index: 15;
+	}
+}

@@ -364,6 +364,7 @@
             }
             #wp-admin-bar-site-name{
                 border-left: none;
+		max-width: 320px;
             }
             #wp-admin-bar-my-openlab,
             #wp-admin-bar-network-menu-mobile{
@@ -400,6 +401,7 @@
                 }
             }
             #wp-admin-bar-my-account{
+		max-width: 290px;
                 .ab-sub-wrapper{
                     width: 150%;
                     min-width: 250px;
@@ -650,6 +652,7 @@
             .search-trigger{
                 display: block;
                 outline: none;
+                padding: 0 0 0 4px;
                 &:focus{
                     outline: thin dotted;
                 }
@@ -717,6 +720,9 @@
         }
         .regular{
             font-weight: 400;
+        }
+        .deco{
+            text-decoration: underline;
         }
         .cuny-logo{
             max-width: 74px !important;
@@ -810,6 +816,15 @@
         }
         .col-links{
             color: @80gray;
+            .first-header{
+                margin-bottom: 19px;
+            }
+            .second-header{
+                margin: 22px 0 18px;
+            }
+            .statement{
+                margin-bottom: 3px;
+            }
             a{
                 color: @80gray;
                 font-weight: inherit;
@@ -856,6 +871,7 @@
         }
         .row-copyright{
             margin-bottom: 100px;
+            margin-top: 17px;
             p,
             span,
             a{

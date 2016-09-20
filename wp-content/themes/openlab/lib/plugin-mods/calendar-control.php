@@ -2,7 +2,7 @@
 
 /**
  * Calendar control
- * Hooks into Events Organiser and BuddyPress Event Organiser 
+ * Hooks into Events Organiser and BuddyPress Event Organiser
  */
 function openlab_custom_calendar_assets() {
 
@@ -126,6 +126,8 @@ add_filter('eventorganiser_template_stack', 'openlab_add_eventorganiser_custom_t
  */
 function openlab_event_page_controller($wp) {
 
+    $redirect_url = '';
+
     /**
      * For now there are no events pages for members
      * Attempting to go to an events page will redirect to the member's profile page
@@ -205,10 +207,10 @@ function openlab_manage_media_buttons($editor_id) {
 
         $remove_button = <<<HTML
                 <script type="text/javascript">
-                jQuery(document).ready(function () { 
-                                
+                jQuery(document).ready(function () {
+
                                 jQuery('#wp-editor-content-media-buttons').remove();
-                
+
                             });
                 </script>
 HTML;
@@ -216,7 +218,7 @@ HTML;
     }
 }
 
-add_action('media_buttons', openlab_manage_media_buttons);
+add_action('media_buttons', 'openlab_manage_media_buttons');
 
 /**
  * Remove Event Categories
@@ -335,7 +337,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-start-datetime-label">
-                    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?> 
+                    <?php esc_html_e('Start Date/Time:', 'eventorganiser'); ?>
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-start-datetime-label">
@@ -357,7 +359,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
         <div class="eo-grid-row">
             <div class="eo-grid-4">
                 <span class="eo-label" id="eo-end-datetime-label">
-                    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?> 
+                    <?php esc_html_e('End Date/Time:', 'eventorganiser'); ?>
                 </span>
             </div>
             <div class="eo-grid-8 event-date" role="group" aria-labelledby="eo-end-datetime-label">
@@ -408,8 +410,8 @@ function _eventorganiser_details_metabox_openlab_custom() {
             <div class="eo-grid-8 event-date">
                 <div id="eo-recurrence-frequency-wrapper">
                     <?php esc_html_e('Repeat every', 'eventorganiser'); ?>
-                    <label for="eo-recurrence-frequency" class="screen-reader-text"><?php esc_html_e('Recurrence frequency', 'eventorganiser'); ?></label> 
-                    <input type="number" id="eo-recurrence-frequency" class="ui-widget-content ui-corner-all" name="eo_input[event_frequency]"  min="1" max="365" maxlength="4" size="4" value="<?php echo intval($frequency); ?>" /> 
+                    <label for="eo-recurrence-frequency" class="screen-reader-text"><?php esc_html_e('Recurrence frequency', 'eventorganiser'); ?></label>
+                    <input type="number" id="eo-recurrence-frequency" class="ui-widget-content ui-corner-all" name="eo_input[event_frequency]"  min="1" max="365" maxlength="4" size="4" value="<?php echo intval($frequency); ?>" />
                     <span id="eo-recurrence-schedule-label"></span>
                 </div>
 
@@ -417,7 +419,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
 
                     <span id="eo-days-of-week-label" class="screen-reader-text"><?php esc_html_e('Repeat on days of week:', 'eventorganiser'); ?></span>
                     <span class="eo-days-of-week-text"><?php esc_html_e('on', 'eventorganiser'); ?></span>
-                    <ul class="eo-days-of-week" role="group" aria-labelledby="eo-days-of-week-label">	
+                    <ul class="eo-days-of-week" role="group" aria-labelledby="eo-days-of-week-label">
                         <?php
                         for ($i = 0; $i <= 6; $i++) :
                             $d = ($start_day + $i) % 7;
@@ -438,9 +440,9 @@ function _eventorganiser_details_metabox_openlab_custom() {
 
                 <div id="eo-day-of-month-repeat">
                     <span id="eo-days-of-month-label" class="screen-reader-text"><?php esc_html_e('Select whether to repeat monthly by date or day:', 'eventorganiser'); ?></span>
-                    <div class="eo-days-of-month" role="group" aria-labelledby="eo-days-of-month-label">	
+                    <div class="eo-days-of-month" role="group" aria-labelledby="eo-days-of-month-label">
                         <label for="eo-by-month-day" >
-                            <input type="radio" id="eo-by-month-day" name="eo_input[schedule_meta]" <?php checked($occurs_by, 'BYMONTHDAY'); ?> value="BYMONTHDAY=" /> 
+                            <input type="radio" id="eo-by-month-day" name="eo_input[schedule_meta]" <?php checked($occurs_by, 'BYMONTHDAY'); ?> value="BYMONTHDAY=" />
                             <?php esc_html_e('date of month', 'eventorganiser'); ?>
                         </label>
                         <label for="eo-by-day" >
@@ -452,7 +454,7 @@ function _eventorganiser_details_metabox_openlab_custom() {
 
                 <div id="eo-schedule-last-date-wrapper" class="reoccurrence_label">
                     <?php esc_html_e('until', 'eventorganiser'); ?>
-                    <label id="eo-repeat-until-label" for="eo-schedule-last-date" class="screen-reader-text"><?php esc_html_e('Repeat this event until:', 'eventorganiser'); ?></label> 
+                    <label id="eo-repeat-until-label" for="eo-schedule-last-date" class="screen-reader-text"><?php esc_html_e('Repeat this event until:', 'eventorganiser'); ?></label>
                     <input class="ui-widget-content ui-corner-all" name="eo_input[schedule_end]" id="eo-schedule-last-date" size="10" maxlength="10" value="<?php echo $until->format($php_format); ?>"/>
                 </div>
 
@@ -509,16 +511,16 @@ function _eventorganiser_details_metabox_openlab_custom() {
                     $address = eo_get_venue_address($venue_id);
                 }
             }
-            ?>	
+            ?>
 
-            <!-- Add New Venue --> 
+            <!-- Add New Venue -->
             <div class="eo-grid-row eo-add-new-venue-custom">
                 <div class="eo-grid-4">
                     <label for="eo_venue_name"><?php esc_html_e('Venue Name', 'eventorganiser'); ?></label>
                 </div>
                 <div class="eo-grid-8">
                     <input type="text" name="eo_venue[name]" id="eo_venue_name"  value="<?php echo $venue_stored_name ?>"/>
-                </div>			
+                </div>
 
                 <?php
                 foreach ($address_fields as $key => $label) {
@@ -579,7 +581,7 @@ add_action('groups_group_settings_edited', 'openlab_process_group_calendar_setti
 function openlab_group_calendar_media_settings($settings, $post) {
 
     if ($post->post_type === 'event') {
-        
+
     }
 
     return $settings;

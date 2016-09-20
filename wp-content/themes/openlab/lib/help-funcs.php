@@ -436,7 +436,7 @@ function openlab_get_help_search_url() {
  */
 function openlab_set_help_search_page_template( $template ) {
 	$q = get_queried_object();
-	if ( 'help' === $q->post_type && 'search' === $q->post_name ) {
+	if ( $q instanceof WP_Post && 'help' === $q->post_type && 'search' === $q->post_name ) {
 		$template = locate_template( 'help-search.php' );
 	}
 
