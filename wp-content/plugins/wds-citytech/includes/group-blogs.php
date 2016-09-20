@@ -104,7 +104,7 @@ add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
 function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
 	openlab_add_user_to_groupblog( $group_id, $user_id );
 }
-
+add_action( 'groups_membership_accepted', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 
 /**
