@@ -123,7 +123,7 @@ function openlab_custom_nav_menu_items($items, $menu) {
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-    if (bp_is_group() && openlab_is_portfolio()) {
+    if ( bp_is_group() && openlab_is_portfolio() && ! bp_is_group_create() ) {
         buddypress()->groups->nav->edit_nav(array(
             'name' => 'Profile',
                 ), 'home', bp_get_current_group_slug());
