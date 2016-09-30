@@ -118,7 +118,7 @@ add_filter('openlab_page_crumb', 'openlab_page_crumb_overrides', 10, 2);
 function openlab_page_crumb_overrides($crumb, $args) {
     global $post, $bp;
 
-    if (bp_is_group()) {
+    if ( bp_is_group() && ! bp_is_group_create() ) {
 
         $group_type = openlab_get_group_type();
         $crumb = '<a href="' . site_url() . '/' . $group_type . 's/">' . ucfirst($group_type) . 's</a> / ' . bp_get_group_name();

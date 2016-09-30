@@ -115,7 +115,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
                     $this->term = BPCGC_Groups_Terms::get_term_by('slug', $cat_slug);
                     $term_ids = $this->term->term_id;
                 }
-            } else {
+            } elseif ( isset( $this->term->term_id ) ) {
                 $term_ids = $this->term->term_id;
             }
 
@@ -176,7 +176,7 @@ if (!class_exists('BPCGC_Groups_Tag')) :
                     $this->term = BPCGC_Groups_Terms::get_term_by('slug', $cat_slug);
                     $term_ids = $this->term->term_id;
                 }
-            } else {
+            } elseif ( isset( $this->term->term_id ) ) {
                 $term_ids = $this->term->term_id;
             }
 
