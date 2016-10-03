@@ -102,8 +102,13 @@
                     }
 
                     //can't submit an event if the end time is *before* the start time (or vice versa)
-                    var startTime = OpenLab.utility.convertTimeToNum(eventDetailMetaBox.find('#eo-start-time').val());
-                    var endTime = OpenLab.utility.convertTimeToNum(eventDetailMetaBox.find('#eo-end-time').val());
+                    var rawStartTime = eventDetailMetaBox.find('#eo-start-time').val();
+                    var rawStartDate = eventDetailMetaBox.find('#eo-start-date').val();
+                    var rawEndTime   = eventDetailMetaBox.find('#eo-end-time').val();
+                    var rawEndDate   = eventDetailMetaBox.find('#eo-end-date').val();
+
+		    var startTime = OpenLab.utility.buildTime( rawStartDate, rawStartTime );
+		    var endTime   = OpenLab.utility.buildTime( rawEndDate, rawEndTime );
 
                     if (startTime > endTime) {
                         e.preventDefault();
@@ -206,6 +211,27 @@
 
             return partOfDay + hours + minutes / 60;
         },
+	buildTime: function( date, time ) {
+	    var d = new Date();
+	    var dateParts = date.split( '-' );
+	    d.setFullYear( dateParts[2] );
+	    d.setMonth( dateParts[0] );
+	    d.setDate( dateParts[1] );
+
+	    var timeParts = time.split( /[.:]/ );
+	    var hour = parseInt( timeParts[0] );
+	    var min = parseInt( timeParts[1].substr( 0, 2 ) );
+	    var amOrPm = timeParts[1].substr( 2 );
+
+	    if ( 'pm' === amOrPm && hour < 12) {
+	        hour = hour + 12;
+	    }
+	    
+	    d.setHours( hour );
+	    d.setMinutes( min );
+
+	    return d;
+	},
         calendarFiltering: function (args, calendar) {
 
             if (calendar.defaultview === 'agendaWeek') {
