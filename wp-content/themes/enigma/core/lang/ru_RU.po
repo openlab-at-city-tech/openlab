@@ -1,0 +1,1939 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Enigma v1.8.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-30 18:13+0530\n"
+"PO-Revision-Date: 2015-06-30 18:13+0530\n"
+"Last-Translator: admin <efrem.ev@gmail.com>\n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%100/10==1 ? 2 : n%10==1 ? 0 : (n"
+"+9)%10>3 ? 2 : 1;\n"
+"X-Generator: Poedit 1.6.7\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# @ weblizar
+#: 404.php:6 404.php:9
+msgid "404 Error"
+msgstr "Ошибка 404"
+
+# @ weblizar
+#: 404.php:8 core/menu/default_menu_walker.php:23 functions.php:192
+msgid "Home"
+msgstr "Домой"
+
+# @ weblizar
+#: 404.php:20 nocontent.php:3
+msgid "404"
+msgstr "404"
+
+# @ weblizar
+#: 404.php:21
+msgid "Whoops... Page Not Found !!!"
+msgstr "Страница не найдена"
+
+# @ weblizar
+#: 404.php:22 nocontent.php:5
+msgid "We`re sorry, but the page you are looking for doesn`t exist."
+msgstr "Такой страницы не существует"
+
+# @ weblizar
+#: 404.php:23 nocontent.php:6
+msgid "Go To Homepage"
+msgstr "перейти на домашнюю"
+
+# @ weblizar
+#: archive.php:8
+#, php-format
+msgid "Daily Archives: %s"
+msgstr "ежедневные архивы: %s"
+
+# @ weblizar
+#: archive.php:10
+#, php-format
+msgid "Monthly Archives: %s"
+msgstr "архивы по месяцам: %s"
+
+# @ weblizar
+#: archive.php:10
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr ""
+
+# @ weblizar
+#: archive.php:12
+#, php-format
+msgid "Yearly Archives: %s"
+msgstr "Годовые архивы: %s"
+
+# @ weblizar
+#: archive.php:12
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr ""
+
+# @ weblizar
+#: archive.php:14
+msgid "Archives"
+msgstr "Архивы"
+
+# @ weblizar
+#: author-intro.php:4
+msgid "About Author"
+msgstr "Об авторе"
+
+# @ weblizar
+#: author.php:7
+#, php-format
+msgid "Author Archives: %s"
+msgstr "архивы автора: %s"
+
+# @ weblizar
+#: category.php:7
+#, php-format
+msgid "Category Archives: %s"
+msgstr "Архивы по рубрикам: %s"
+
+# @ weblizar
+#: comments.php:2
+msgid ""
+"This post is password protected. Enter the password to view any comments."
+msgstr "Запись запаролена. Введите пароль."
+
+# @ weblizar
+#: comments.php:6
+msgid "No Comments"
+msgstr "Без комментариев"
+
+# @ weblizar
+#: comments.php:6
+msgid "1 Comment"
+msgstr "1 коммент"
+
+# @ weblizar
+#: comments.php:10
+msgid "Comment navigation"
+msgstr "навигация по комментам"
+
+# @ weblizar
+#: comments.php:11
+msgid "&larr; Older Comments"
+msgstr "&larr; Старые комменты"
+
+# @ weblizar
+#: comments.php:12
+msgid "Newer Comments &rarr;"
+msgstr "Новые комменты &rarr;"
+
+# @ weblizar
+#: comments.php:20
+msgid "Name"
+msgstr "Имя"
+
+# @ weblizar
+#: comments.php:21
+msgid "Email"
+msgstr ""
+
+# @ weblizar
+#: comments.php:31
+msgid "Logged in as "
+msgstr "Вы вошли как"
+
+# @ weblizar
+#: comments.php:31
+msgid " Log out?"
+msgstr "Выйти?"
+
+# @ weblizar
+#: comments.php:32
+#, php-format
+msgid "Leave a Reply to %s"
+msgstr "Комментировать %s"
+
+# @ weblizar
+#: comments.php:34
+msgid "Post Comment"
+msgstr "Писать коммент"
+
+# @ weblizar
+#: comments.php:37
+msgid "Leave a Reply"
+msgstr "Оставить ответ"
+
+# @ weblizar
+#: core/comment-function.php:11
+msgid "Reply"
+msgstr "Ответить"
+
+# @ weblizar
+#: core/comment-function.php:26
+msgid "at"
+msgstr "на"
+
+# @ weblizar
+#: core/comment-function.php:34
+msgid "Your comment is awaiting moderation."
+msgstr "Ваш коммент модерируется"
+
+# @ weblizar
+#: core/flickr-widget.php:8
+msgid "Displays your latest Flickr photos."
+msgstr "Отображает ваши последние flickr фото"
+
+# @ weblizar
+#: core/flickr-widget.php:61
+msgid "Title"
+msgstr "заголовок"
+
+# @ weblizar
+#: core/flickr-widget.php:67
+msgid ""
+"Flickr ID (use <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</"
+"a>):"
+msgstr ""
+
+# @ weblizar
+#: core/flickr-widget.php:73
+msgid "Number of images to display:"
+msgstr "Номер картинки для отображения"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:41
+msgid "View Enigma Pro Demo"
+msgstr "Смотреть Enigma PRO Demo"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:42
+msgid "Upgrade to Enigma Pro"
+msgstr "Апгрет до Enigma Pro"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:47
+msgid "Responsive Design"
+msgstr "Адаптивный дизайн"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:48
+msgid "More than 13 Templates"
+msgstr "Более 13 шаблонов"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:49
+msgid "8 Different Types of Blog Templates"
+msgstr "8 различных типов"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:50
+msgid "6 Types of Portfolio Templates"
+msgstr "6 типов портфолио"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:51
+msgid "12 types Themes Colors Scheme"
+msgstr "12 цветовых схем"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:52
+msgid "Patterns Background"
+msgstr "Различные фоны"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:58
+#: core/theme-options/option-panel.php:59
+msgid "Image Background"
+msgstr "Картинки фона"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:60
+msgid "Ultimate Portfolio layout with Isotope effect"
+msgstr "Максимальный портфолио с изотопным эффектом"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:61
+msgid "Rich Short codes"
+msgstr "Богатые шорткоды"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:62
+msgid "Translation Ready"
+msgstr "Перевод готов"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:63
+msgid "Coming Soon Mode"
+msgstr "Скоро Режим"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:64
+msgid "Extreme Gallery Design Layout"
+msgstr "Экстремальные Галерея Дизайн макета"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:76
+msgid "Weblizar Theme Settings"
+msgstr "Настройки темы Weblizar"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:79
+msgid "Documentation"
+msgstr "Документация"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:80
+msgid "Support Forum"
+msgstr "Форум поддержки"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:81
+msgid "View Changelog"
+msgstr "Посмотреть изменений"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:89
+msgid "Home Option"
+msgstr "опции"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:91
+msgid "General Option"
+msgstr "Основные опции"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:92
+msgid "Slide show Option"
+msgstr "Опции слайдера"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:93
+msgid "Service Option"
+msgstr "Сервис опции"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:94
+#: core/theme-options/option-settings.php:288
+msgid "Portfolio Option"
+msgstr "опции портфолио"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:95
+msgid "Home Blog Option"
+msgstr "Опции домашней"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:96
+msgid "Footer Callout Option"
+msgstr "Опции футер"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:100
+msgid "Social Media"
+msgstr "Соц. сети"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:101
+msgid "Footer Option"
+msgstr "Футер"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:102
+msgid "Get Premium"
+msgstr "Премиум"
+
+# @ weblizar
+#: core/theme-options/option-panel.php:103
+msgid "More Products"
+msgstr "Больше продуктов"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:9
+msgid "General Settings"
+msgstr "Главные настройки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:12
+#: core/theme-options/option-settings.php:118
+#: core/theme-options/option-settings.php:291
+#: core/theme-options/option-settings.php:466
+#: core/theme-options/option-settings.php:616
+#: core/theme-options/option-settings.php:687
+#: core/theme-options/option-settings.php:733
+#: core/theme-options/option-settings.php:777
+msgid "Options Data updated"
+msgstr "Обновить настройки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:13
+#: core/theme-options/option-settings.php:119
+#: core/theme-options/option-settings.php:292
+#: core/theme-options/option-settings.php:467
+#: core/theme-options/option-settings.php:617
+#: core/theme-options/option-settings.php:688
+#: core/theme-options/option-settings.php:734
+#: core/theme-options/option-settings.php:778
+msgid "Options data Reset"
+msgstr "Сбросить настройки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:29
+msgid "Theme Color Schemes"
+msgstr "Цветовые схемы"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:39
+msgid "light-blue"
+msgstr "светло-голубой"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:40
+msgid "green"
+msgstr "зелёный"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:41
+msgid "red"
+msgstr "красный"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:42
+msgid "pink"
+msgstr "розовый"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:43
+msgid "light-purple"
+msgstr "пурпурный"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:44
+msgid "orange"
+msgstr "оранжевый"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:45
+msgid "bright-green"
+msgstr "ярко-зелёный"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:46
+msgid "dark-blue"
+msgstr "тёмно-синий"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:47
+msgid "oil"
+msgstr "масло"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:48
+msgid "black"
+msgstr "чёрный"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:49
+msgid "light-brown"
+msgstr "светло-коричневый"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:50
+msgid "coffee"
+msgstr "кофе"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:51
+msgid "flat-blue"
+msgstr "синий"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:53
+msgid "Select OUT of 10+ Color Schemes"
+msgstr "Более 10 цветовых схем"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:60
+msgid "Home-Page or Custom Page"
+msgstr "Домашняя страница или На выбор"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:61
+msgid "Enable front-page on the HOME"
+msgstr "Включить фронт-пейдж на Домашней"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:61
+#: core/theme-options/option-settings.php:86
+msgid "Click Here"
+msgstr "Жми сюда"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:64
+msgid "Custom Logo"
+msgstr "Кастом лого"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:67
+msgid "Add custom logo from here suggested size is 150X50"
+msgstr "Добавьте изображение 150х50"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:73 customizer.php:80
+msgid "Logo Height"
+msgstr "высота"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:75
+msgid ""
+"Default Logo Height : 55px, if you want to increase than specify your value"
+msgstr "Установлено ограничение в 55 пикселей"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:79 customizer.php:86
+msgid "Logo Width"
+msgstr "Ширина лого"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:81
+msgid ""
+"Default Logo Width : 150px, if you want to increase than specify your value"
+msgstr "Установлено ограничение в 150 пикселей"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:85
+msgid "Text Title"
+msgstr "Текст заголовка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:86
+msgid "Enable text-based Site Title.   Setup title"
+msgstr "Включить текст заголовка сайта"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:90
+msgid "Custom Favicon"
+msgstr "Фавиконка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:93
+msgid "Make sure you upload .icon image type which is not more then 25X25 px."
+msgstr "Ограничение 25х25 пикселей"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:99
+msgid "Custom css"
+msgstr "Стиль css"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:101
+msgid ""
+"This is a powerful feature provided here. No need to use custom css plugin, "
+"just paste your css code and see the magic."
+msgstr ""
+"Это мощное средство, представленная здесь. Нет необходимости использовать "
+"пользовательские CSS плагин, просто вставьте ваш код CSS и увидеть "
+"волшебство."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:115
+msgid "Slidshow Settings"
+msgstr "Настройки слайдера"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:133
+msgid "Home Slide 1"
+msgstr "Слайд 1"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:141
+msgid "Home Slide Image One"
+msgstr "Первое изображение слайдера"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:144
+#: core/theme-options/option-settings.php:183
+#: core/theme-options/option-settings.php:225
+msgid "Add Home Slide image here, size suggestion is 1400X570."
+msgstr "Ограничение 1400х570"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:148
+msgid "Home Slide Image Title One"
+msgstr "Заголовок слайда 1"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:150
+#: core/theme-options/option-settings.php:190
+#: core/theme-options/option-settings.php:232
+msgid "Type Home Slide Image Title Here"
+msgstr "Писать заголовок слайда"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:151
+msgid "Home Slide Image Description One"
+msgstr "Главная Презентация Описание изображения по одному"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:153
+#: core/theme-options/option-settings.php:194
+#: core/theme-options/option-settings.php:236
+msgid "Type Home Slide Image Description Here"
+msgstr "Введите дома слайд картинка Описание Здесь"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:154
+msgid "Home Slide Image Button Text One"
+msgstr "Главная Фиксатор Текст изображения Один"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:156
+#: core/theme-options/option-settings.php:198
+#: core/theme-options/option-settings.php:240
+msgid "Type Home Slide Image Button Text Here"
+msgstr "Введите дома слайд изображение кнопки текст здесь"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:157
+msgid "Home Slide Image Button Link One"
+msgstr "Главная Фиксатор Ссылка на изображение Один"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:159
+#: core/theme-options/option-settings.php:202
+#: core/theme-options/option-settings.php:244
+msgid "Type Home Slide Image Button Link Here"
+msgstr "Введите дома слайд кнопку с изображением ссылка здесь"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:172
+msgid "Home Slide 2"
+msgstr "Главная Слайд 2"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:180
+msgid "Home Slide Image Two"
+msgstr "Главная Презентация изображение Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:188
+msgid "Home Slide Image Title Two"
+msgstr "Главная Презентация Заголовок изображения Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:192
+msgid "Home Slide Image Description Two"
+msgstr "Главная Презентация изображение Описание Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:196
+msgid "Home Slide Image Button Text Two"
+msgstr "Главная Фиксатор Текст изображения Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:200
+msgid "Home Slide Image Button Link Two"
+msgstr "Главная Фиксатор Ссылка на изображение два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:214
+msgid "Home Slide 3"
+msgstr "Главная Слайд 3"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:222
+msgid "Home Slide Image Three"
+msgstr "Главная Презентация изображение три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:230
+msgid "Home Slide Image Title Three"
+msgstr "Главная Презентация Заголовок изображения Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:234
+msgid "Home Slide Image Description Three"
+msgstr "Главная Презентация изображение Описание Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:238
+msgid "Home Slide Image Button Text Three"
+msgstr "Главная Фиксатор Текст изображения Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:242
+msgid "Home Slide Image Button Link Three"
+msgstr "Главная Фиксатор Ссылка на изображение Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:258
+msgid "More Slides"
+msgstr "Другие Слайды"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:267
+msgid "Add Unlimited slides for your sideshow "
+msgstr "Добавить неограниченное слайды для вашего интермедии"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:302 customizer.php:634
+msgid "Enable Portfolio on Home"
+msgstr "Включить портфолио на Главная"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:303
+msgid "Enable Portfolio On Home."
+msgstr "Включить Портфолио домой."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:306
+msgid "Portfolio Section Heading"
+msgstr "Портфолио заголовок раздела"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:308
+msgid "Type here your Portfolio heading"
+msgstr "Введите здесь ваш курс Портфолио"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:314
+msgid "Portfolio One"
+msgstr "Портфолио Один"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:321
+msgid "Portfolio One Image"
+msgstr "Портфолио Один снимок"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:324
+#: core/theme-options/option-settings.php:354
+#: core/theme-options/option-settings.php:384
+#: core/theme-options/option-settings.php:414
+msgid "Add Portfolio image here, size suggestion is 570 X 350 px."
+msgstr ""
+"Добавить Портфолио картинки здесь, размер предложение 570 X 350 пикселей."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:328
+msgid "Portfolio One Title"
+msgstr "Портфолио название один "
+
+# @ weblizar
+#: core/theme-options/option-settings.php:330
+msgid "Type title fro home portfolio one"
+msgstr "Тип Название сюда Главная Портфолио одного"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:331
+msgid "Portfolio One Link"
+msgstr "Портфолио одну ссылку"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:333
+#: core/theme-options/option-settings.php:363
+#: core/theme-options/option-settings.php:393
+#: core/theme-options/option-settings.php:423
+msgid "Put link URL here"
+msgstr "Поставьте ссылку URL здесь"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:344
+msgid "Portfolio Two"
+msgstr "Портфолио Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:351
+msgid "Portfolio Two Image"
+msgstr "Портфолио Два изображение"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:358
+msgid "Portfolio Two Title"
+msgstr "Портфолио Два Название"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:360
+#: core/theme-options/option-settings.php:390
+#: core/theme-options/option-settings.php:420
+msgid "Type title from home portfolio"
+msgstr "Введите Название с домашней портфолио"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:361
+msgid "Portfolio Two Link"
+msgstr "Портфолио Два Ссылка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:374
+msgid "Portfolio Three"
+msgstr "Портфолио Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:381
+msgid "Portfolio Three Image"
+msgstr "Портфолио Три изображение"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:388
+msgid "Portfolio Three Title"
+msgstr "Портфолио Три Название"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:391
+msgid "Portfolio Three Link"
+msgstr "Портфолио Три Ссылка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:404
+msgid "Portfolio Four"
+msgstr "Портфолио Четыре"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:411
+msgid "Portfolio Four Image"
+msgstr "Портфолио Четыре изображение"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:418
+msgid "Portfolio Four Title"
+msgstr "Портфолио Четыре Название"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:421
+msgid "Portfolio Four Link"
+msgstr "Портфолио Четыре Ссылка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:436
+msgid "Create Unlimited Portfolio"
+msgstr "Создавать неограниченное Портфолио"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:443
+msgid "Add More Sections and More Features on your website."
+msgstr "Добавить ещё Разделы и больше возможностей на своем сайте."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:463
+msgid "Service Settings"
+msgstr "Настройки службы"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:477
+msgid "Service Section Heading"
+msgstr "Обслуживание заголовок раздела"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:479
+msgid "Type here your service heading"
+msgstr "Введите здесь ваш заголовок"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:486
+msgid "Service one"
+msgstr "Сервис один"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:493
+#: core/theme-options/option-settings.php:526
+#: core/theme-options/option-settings.php:558
+msgid "Service Title"
+msgstr "Сервис Название"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:495
+#: core/theme-options/option-settings.php:528
+#: core/theme-options/option-settings.php:560
+msgid "Type here your service title"
+msgstr "Введите здесь ваше название услуги"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:496
+#: core/theme-options/option-settings.php:529
+#: core/theme-options/option-settings.php:561
+msgid "Service  Icons"
+msgstr "Сервис Иконки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:499
+#: core/theme-options/option-settings.php:532
+#: core/theme-options/option-settings.php:564
+msgid "Service Icon (Using Bootstrap icons name) like: icon-tablet"
+msgstr ""
+"Сервис иконку (Использование Bootstrap иконки имя), как: значок-таблетки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:499
+#: core/theme-options/option-settings.php:532
+#: core/theme-options/option-settings.php:564
+msgid "Get your Font Awesome icons"
+msgstr "Получите ваш шрифт Высокий иконки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:500
+#: core/theme-options/option-settings.php:533
+#: core/theme-options/option-settings.php:565
+msgid "Service Description"
+msgstr "Описание услуг"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:505
+#: core/theme-options/option-settings.php:538
+#: core/theme-options/option-settings.php:570
+msgid "Type here your service description."
+msgstr "Введите здесь описание вашего сервиса."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:506
+#: core/theme-options/option-settings.php:539
+#: core/theme-options/option-settings.php:571
+msgid "Service  Link"
+msgstr "Сервис Ссылка"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:508
+#: core/theme-options/option-settings.php:541
+#: core/theme-options/option-settings.php:573
+msgid "Type here your service link"
+msgstr "Введите здесь ваш ссылками Сервисное"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:518
+msgid "Service Two"
+msgstr "Сервис Два"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:552
+msgid "Service Three"
+msgstr "Сервис Три"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:585
+msgid "More Services"
+msgstr "Больше сервисов"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:593
+msgid "Add More Services on your Home Page."
+msgstr "Добавить ещё Услуги на вашей домашней странице."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:613
+msgid "Social media"
+msgstr "Социальные сети"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:627
+msgid "Enable Social media:"
+msgstr "Включить Социальные сети:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:628
+msgid "Enable social media Header Section."
+msgstr "Включить в социальных медиа заголовок раздела."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:629
+msgid "Enable Social media in Footer section."
+msgstr "Включить социальных медиа в разделе Footer."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:632
+msgid "E-mail:"
+msgstr "E-mail:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:634
+msgid "Enter Email Id."
+msgstr "Введите Email ID."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:635
+msgid "Contact Number:"
+msgstr "Контактный Телефон:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:637
+msgid "Enter Contact Number."
+msgstr "Введите номер контакта."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:640
+msgid "Twitter Link:"
+msgstr "Twitter ссылка:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:642
+msgid "Enter twitter link."
+msgstr "Введите твиттер ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:645
+msgid "Linkedin Links:"
+msgstr "Linkedin Ссылки:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:647
+msgid "Enter linkedin link."
+msgstr "Введите LinkedIn ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:651
+msgid "Facebook Links:"
+msgstr "Facebook Ссылки:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:653
+msgid "Enter facebook link."
+msgstr "Введите facebook ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:657
+msgid "Youtube Links:"
+msgstr "YouTube Ссылки:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:659
+msgid "Enter youtube link."
+msgstr "Введите youtube ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:662
+msgid "Google Plus Link:"
+msgstr "Google Plus Ссылка:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:664
+msgid "Enter google plus link."
+msgstr "Введите Google Plus ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:667
+msgid "Instagram Links:"
+msgstr "Instagram Ссылки:"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:669
+msgid "Enter Instagram link."
+msgstr "Введите Instagram ссылку."
+
+# @ weblizar
+#: core/theme-options/option-settings.php:684
+msgid "Footer Customization"
+msgstr "Footer настройки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:698
+msgid "Footer customization"
+msgstr "Footer настройки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:700
+msgid "Enter your footer customization text "
+msgstr "Enter your footer customization text "
+
+# @ weblizar
+#: core/theme-options/option-settings.php:703
+msgid "Developed by text"
+msgstr "Разработано текста"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:705
+msgid "Enter developed by text"
+msgstr "Введите разработан текст"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:708
+msgid "Developed by link text"
+msgstr "Разработано текст ссылки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:710
+msgid "Enter developed by link text  "
+msgstr "Введите разработан текст ссылки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:713
+msgid "Developed by link"
+msgstr "Разработано ссылку"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:715
+msgid "Enter developed by link"
+msgstr "Введите разработан по ссылке"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:730
+msgid "Footer Call Out"
+msgstr "Footer звонки Исх"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:744
+#, fuzzy
+msgid "Enable footer call out on home page"
+msgstr "Включить портфолио на Главная"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:747
+#: core/theme-options/option-settings.php:749
+msgid "Footer Call Out Tagline"
+msgstr "Footer звонки Исх Слоган"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:752
+msgid "Button Text"
+msgstr "текст кнопки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:754
+msgid "Enter Button text  "
+msgstr "введите текст кнопки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:757
+#: core/theme-options/option-settings.php:759
+msgid "Button link"
+msgstr "Ссылка кнопки"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:774
+msgid "Home Blog"
+msgstr "Блог"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:788
+msgid "Home-Page Blog"
+msgstr "Домашняя страница"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:789
+msgid "Enable Blog Posts on HOME Page"
+msgstr "Включить в блоге сообщения на домашней странице"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:792
+msgid "Home-Blog Heading"
+msgstr "заголовок домашней блога"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:794
+msgid "Home Blog Heading "
+msgstr "Блог Заголовок"
+
+#: core/theme-options/option-settings.php:809
+msgid "Pro Responsive WordPress Theme"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:810
+#, fuzzy
+msgid "Get The Premium"
+msgstr "Премиум"
+
+#: core/theme-options/option-settings.php:810
+msgid "in Just"
+msgstr ""
+
+#: core/theme-options/option-settings.php:813
+msgid "Pro And Free Comparison Table"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:819
+#, fuzzy
+msgid "Feature"
+msgstr "Дополнительные функции"
+
+#: core/theme-options/option-settings.php:823
+msgid "Easy to customize"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:824
+#, fuzzy
+msgid "Awesome Slider"
+msgstr "Слайд 1"
+
+#: core/theme-options/option-settings.php:825
+msgid "Multi Color"
+msgstr ""
+
+#: core/theme-options/option-settings.php:826
+msgid "Boxed & Wide"
+msgstr ""
+
+#: core/theme-options/option-settings.php:827
+msgid "Widgetized Footer"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:828
+#, fuzzy
+msgid "Custom Widgets"
+msgstr "Стиль css"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:829
+#, fuzzy
+msgid "Shortcode"
+msgstr "Богатые шорткоды"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:830
+#, fuzzy
+msgid "Page Templates"
+msgstr "Более 13 шаблонов"
+
+#: core/theme-options/option-settings.php:831
+msgid "Quick Support"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:832
+#, fuzzy
+msgid "Custom CSS"
+msgstr "Стиль css"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:833
+#, fuzzy
+msgid "Custom Background"
+msgstr "Картинки фона"
+
+#: core/theme-options/option-settings.php:834
+msgid "Logo & Header text"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:835
+#, fuzzy
+msgid "Portfolio Template with Isotop"
+msgstr "Максимальный портфолио с изотопным эффектом"
+
+#: core/theme-options/option-settings.php:836
+msgid "Photobox and Lightbox enable Tamplates"
+msgstr ""
+
+#: core/theme-options/option-settings.php:837
+msgid "Special Gallery Template"
+msgstr ""
+
+#: core/theme-options/option-settings.php:844
+msgid "Free"
+msgstr ""
+
+#: core/theme-options/option-settings.php:856
+msgid "WPORG Support"
+msgstr ""
+
+#: core/theme-options/option-settings.php:865
+msgid "Enjoy Theme"
+msgstr ""
+
+#: core/theme-options/option-settings.php:874
+msgid "Pro"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:886
+#, fuzzy
+msgid "Private Support Forum"
+msgstr "Форум поддержки"
+
+#: core/theme-options/option-settings.php:894
+msgid "Demo"
+msgstr ""
+
+#: core/theme-options/option-settings.php:895
+msgid "Buy"
+msgstr ""
+
+#: core/theme-options/option-settings.php:920
+msgid "Weblizar Responsive WordPress Theme"
+msgstr ""
+
+#: core/theme-options/option-settings.php:921
+msgid "Get The Premium, And Create your website Beautifully."
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:925
+#, fuzzy
+msgid "Premium Themes"
+msgstr "Weblizar Themes"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:927 header.php:46
+msgid "Enigma"
+msgstr "Enigma"
+
+# @ weblizar
+#: core/theme-options/option-settings.php:928
+#, fuzzy
+msgid "Weblizar"
+msgstr "Weblizar Themes"
+
+#: core/theme-options/option-settings.php:929
+msgid "Guardian"
+msgstr ""
+
+#: core/theme-options/option-settings.php:930
+msgid "Green-lantern"
+msgstr ""
+
+#: core/theme-options/option-settings.php:931
+msgid "Creative "
+msgstr ""
+
+#: core/theme-options/option-settings.php:932
+msgid "Incredible"
+msgstr ""
+
+#: core/theme-options/option-settings.php:936
+msgid "Premium Plugins"
+msgstr ""
+
+#: core/theme-options/option-settings.php:938
+msgid "Ultimate Responsive Image Slider"
+msgstr ""
+
+# @ weblizar
+#: core/theme-options/option-settings.php:939
+#, fuzzy
+msgid "Responsive Portfolio"
+msgstr "Адаптивный дизайн"
+
+#: core/theme-options/option-settings.php:940
+msgid "Responsive Photo Gallery"
+msgstr ""
+
+#: core/theme-options/option-settings.php:941
+msgid "Lightbox Slider"
+msgstr ""
+
+#: core/theme-options/option-settings.php:942
+msgid "Flickr Album Gallery"
+msgstr ""
+
+#: core/theme-options/option-settings.php:943
+msgid "Instagram Shortcode & Widget"
+msgstr ""
+
+#: core/theme-options/option-settings.php:948
+msgid ""
+"Note: More details to click on weblizar Products site link are below given "
+"view site button."
+msgstr ""
+
+#: core/theme-options/option-settings.php:953
+msgid "View Site"
+msgstr ""
+
+# @ weblizar
+#: customizer.php:15
+#, fuzzy
+msgid "Theme Options"
+msgstr "опции"
+
+#: customizer.php:40
+msgid "Show Front Page"
+msgstr ""
+
+# @ weblizar
+#: customizer.php:75
+#, fuzzy
+msgid "Website Logo"
+msgstr "Кастом лого"
+
+# @ weblizar
+#: customizer.php:101
+#, fuzzy
+msgid "Custom favicon"
+msgstr "Фавиконка"
+
+# @ weblizar
+#: customizer.php:116
+#, fuzzy
+msgid "Home Blog Title"
+msgstr "Блог"
+
+# @ weblizar
+#: customizer.php:283
+#, fuzzy
+msgid "Slider Image One"
+msgstr "Первое изображение слайдера"
+
+# @ weblizar
+#: customizer.php:288
+#, fuzzy
+msgid "Slider title one"
+msgstr "Слайд заголовок"
+
+# @ weblizar
+#: customizer.php:294
+#, fuzzy
+msgid "Slider description one"
+msgstr "Главная Презентация Описание изображения по одному"
+
+# @ weblizar
+#: customizer.php:300
+#, fuzzy
+msgid "Slider Button Text One"
+msgstr "Главная Фиксатор Текст изображения Один"
+
+# @ weblizar
+#: customizer.php:307
+#, fuzzy
+msgid "Slider Button Link"
+msgstr "Ссылка кнопки"
+
+# @ weblizar
+#: customizer.php:313
+#, fuzzy
+msgid "Slider Image Two "
+msgstr "Главная Презентация изображение Два"
+
+# @ weblizar
+#: customizer.php:319
+#, fuzzy
+msgid "Slider Title Two"
+msgstr "Слайд заголовок"
+
+# @ weblizar
+#: customizer.php:325
+#, fuzzy
+msgid "Slider Description Two"
+msgstr "Главная Презентация изображение Описание Два"
+
+# @ weblizar
+#: customizer.php:331
+#, fuzzy
+msgid "Slider Button Text Two"
+msgstr "Главная Фиксатор Текст изображения Два"
+
+# @ weblizar
+#: customizer.php:337
+#, fuzzy
+msgid "Slider Link Two"
+msgstr "Сервис Два"
+
+# @ weblizar
+#: customizer.php:343
+#, fuzzy
+msgid "Slider Image Three"
+msgstr "Главная Презентация изображение три"
+
+# @ weblizar
+#: customizer.php:348
+#, fuzzy
+msgid "Slider Title Three"
+msgstr "Слайд заголовок"
+
+# @ weblizar
+#: customizer.php:355
+#, fuzzy
+msgid "Slider Description Three"
+msgstr "Главная Презентация изображение Описание Три"
+
+# @ weblizar
+#: customizer.php:361
+#, fuzzy
+msgid "Slider Button Text Three"
+msgstr "Главная Фиксатор Текст изображения Три"
+
+# @ weblizar
+#: customizer.php:367 customizer.php:391
+#, fuzzy
+msgid "Slider Button Link Three"
+msgstr "Главная Фиксатор Ссылка на изображение Три"
+
+# @ weblizar
+#: customizer.php:374
+#, fuzzy
+msgid "Service Options"
+msgstr "Сервис опции"
+
+# @ weblizar
+#: customizer.php:491
+#, fuzzy
+msgid "Service One Title"
+msgstr "Сервис Название"
+
+# @ weblizar
+#: customizer.php:499
+#, fuzzy
+msgid "Service Icon One"
+msgstr "Сервис один"
+
+#: customizer.php:500 customizer.php:531 customizer.php:559
+msgid ""
+"<a href=\"http://fontawesome.bootstrapcheatsheets.com\">FontAwesome Icons</a>"
+msgstr ""
+
+# @ weblizar
+#: customizer.php:508
+#, fuzzy
+msgid "Service One Text"
+msgstr "Сервис один"
+
+# @ weblizar
+#: customizer.php:523
+#, fuzzy
+msgid "Service Two Title"
+msgstr "Сервис Название"
+
+# @ weblizar
+#: customizer.php:530
+#, fuzzy
+msgid "Service Icon Two"
+msgstr "Сервис Два"
+
+# @ weblizar
+#: customizer.php:538
+#, fuzzy
+msgid "Service Two Text"
+msgstr "Сервис Два"
+
+# @ weblizar
+#: customizer.php:551
+#, fuzzy
+msgid "Service Three Title"
+msgstr "Сервис Название"
+
+# @ weblizar
+#: customizer.php:558
+#, fuzzy
+msgid "Service Icon Three"
+msgstr "Сервис Три"
+
+# @ weblizar
+#: customizer.php:566
+#, fuzzy
+msgid "Service Three Text"
+msgstr "Сервис Три"
+
+# @ weblizar
+#: customizer.php:575
+#, fuzzy
+msgid "Portfolio Options"
+msgstr "опции портфолио"
+
+#: customizer.php:576
+msgid "Here you can add Portfolio title,description and even portfolios"
+msgstr ""
+
+# @ weblizar
+#: customizer.php:640
+#, fuzzy
+msgid "Portfolio Heading"
+msgstr "Портфолио заголовок раздела"
+
+# @ weblizar
+#: customizer.php:648
+#, fuzzy
+msgid "Portfolio Image"
+msgstr "Портфолио Два изображение"
+
+# @ weblizar
+#: customizer.php:653
+#, fuzzy
+msgid "Portfolio Title"
+msgstr "Портфолио Два Название"
+
+# @ weblizar
+#: customizer.php:660
+#, fuzzy
+msgid "Portfolio Link"
+msgstr "Портфолио Два Ссылка"
+
+# @ weblizar
+#: customizer.php:668
+#, fuzzy
+msgid "Social Options"
+msgstr "Основные опции"
+
+# @ weblizar
+#: customizer.php:683
+#, fuzzy
+msgid "Enable Social Media Icons in Header"
+msgstr "Включить в социальных медиа заголовок раздела."
+
+# @ weblizar
+#: customizer.php:698
+#, fuzzy
+msgid "Enable Social Media Icons in Footer"
+msgstr "Включить социальных медиа в разделе Footer."
+
+# @ weblizar
+#: customizer.php:713
+#, fuzzy
+msgid "Email ID"
+msgstr "E-mail:"
+
+# @ weblizar
+#: customizer.php:728
+#, fuzzy
+msgid "Phone Number"
+msgstr "Контактный Телефон:"
+
+# @ weblizar
+#: customizer.php:743
+#, fuzzy
+msgid "Twitter"
+msgstr "Twitter ссылка:"
+
+# @ weblizar
+#: customizer.php:758
+#, fuzzy
+msgid "Facebook"
+msgstr "Facebook Ссылки:"
+
+# @ weblizar
+#: customizer.php:773
+#, fuzzy
+msgid "LinkedIn"
+msgstr "Linkedin Ссылки:"
+
+#: customizer.php:789 customizer.php:804 customizer.php:819
+msgid "Goole+"
+msgstr ""
+
+# @ weblizar
+#: customizer.php:826
+#, fuzzy
+msgid "Footer Call-Out Options"
+msgstr "Опции футер"
+
+# @ weblizar
+#: customizer.php:841
+#, fuzzy
+msgid "Enable Footer callout on HOme"
+msgstr "Включить портфолио на Главная"
+
+# @ weblizar
+#: customizer.php:856
+#, fuzzy
+msgid "Footer callout Title"
+msgstr "Footer звонки Исх Слоган"
+
+# @ weblizar
+#: customizer.php:871
+#, fuzzy
+msgid "Footer callout Button Text"
+msgstr "Опции футер"
+
+# @ weblizar
+#: customizer.php:886
+#, fuzzy
+msgid "Footer callout Button Link"
+msgstr "Опции футер"
+
+# @ weblizar
+#: customizer.php:893
+#, fuzzy
+msgid "Footer Options"
+msgstr "Футер"
+
+# @ weblizar
+#: customizer.php:908
+#, fuzzy
+msgid "Footer Customization Text"
+msgstr "Footer настройки"
+
+# @ weblizar
+#: customizer.php:924
+#, fuzzy
+msgid "Developed By Text"
+msgstr "Разработано текста"
+
+# @ weblizar
+#: customizer.php:939
+#, fuzzy
+msgid "Developed By Link Text"
+msgstr "Разработано текст ссылки"
+
+# @ weblizar
+#: customizer.php:954
+#, fuzzy
+msgid "Developed By Link"
+msgstr "Разработано ссылку"
+
+# @ weblizar
+#: functions.php:38
+msgid "Slide Title"
+msgstr "Слайд заголовок"
+
+# @ weblizar
+#: functions.php:39
+msgid "Lorem Ipsum is simply dummy text of the printing"
+msgstr "Lorem Ipsum просто манекен текста печати"
+
+# @ weblizar
+#: functions.php:40 functions.php:45 functions.php:50 functions.php:152
+#: home-blog.php:40 home-blog.php:41 home-blog.php:80 post-content.php:46
+#: post-page.php:13
+msgid "Read More"
+msgstr "Узнать больше"
+
+# @ weblizar
+#: functions.php:43
+msgid "variations of passages"
+msgstr "вариации проходов"
+
+# @ weblizar
+#: functions.php:44
+msgid "Contrary to popular belief, Lorem Ipsum is not simply random text"
+msgstr ""
+"Вопреки распространенному мнению, Lorem Ipsum это не просто случайный текст"
+
+# @ weblizar
+#: functions.php:48
+msgid "Contrary to popular "
+msgstr "Вопреки распространенному мнению"
+
+# @ weblizar
+#: functions.php:49
+msgid "Aldus PageMaker including versions of Lorem Ipsum, rutrum turpi"
+msgstr "Aldus PageMaker включая версии Lorem Ipsum, rutrum Turpi"
+
+# @ weblizar
+#: functions.php:54
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+msgstr "Lorem Ipsum просто манекен текста печати и верстки промышленности."
+
+# @ weblizar
+#: functions.php:55
+msgid "More Features"
+msgstr "Дополнительные функции"
+
+# @ weblizar
+#: functions.php:69
+msgid " &#169; 2015 Enigma Theme"
+msgstr " &#169; 2015 Enigma Theme"
+
+# @ weblizar
+#: functions.php:70
+msgid "Theme Developed By"
+msgstr "Тема Разработан"
+
+# @ weblizar
+#: functions.php:71
+msgid "Weblizar Themes"
+msgstr "Weblizar Themes"
+
+# @ weblizar
+#: functions.php:74
+msgid "Our Services"
+msgstr "Наши Услуги"
+
+# @ weblizar
+#: functions.php:75
+msgid "Idea"
+msgstr "Идея"
+
+# @ weblizar
+#: functions.php:77 functions.php:82 functions.php:87
+msgid ""
+"There are many variations of passages of Lorem Ipsum available, but the "
+"majority have suffered alteration in."
+msgstr ""
+"Есть много вариантов прохождений Lorem Ipsum доступны, но большинство "
+"пострадавших изменений в."
+
+# @ weblizar
+#: functions.php:80
+msgid "Records"
+msgstr "Записи"
+
+# @ weblizar
+#: functions.php:85
+msgid "WordPress"
+msgstr "Вордпресс"
+
+# @ weblizar
+#: functions.php:92
+msgid "Recent Works"
+msgstr "Последние работы"
+
+# @ weblizar
+#: functions.php:94
+msgid "Bonorum"
+msgstr "Bonorum"
+
+# @ weblizar
+#: functions.php:97
+msgid "Content"
+msgstr "Контент"
+
+# @ weblizar
+#: functions.php:100
+msgid "dictionary"
+msgstr "словарь"
+
+# @ weblizar
+#: functions.php:103
+msgid "randomised"
+msgstr "случайный"
+
+# @ weblizar
+#: functions.php:107
+msgid "Latest Blog"
+msgstr "Последние Блог"
+
+# @ weblizar
+#: functions.php:140
+msgid "Primary Menu"
+msgstr "Основное меню"
+
+# @ weblizar
+#: functions.php:169
+msgid "Sidebar"
+msgstr "Сайдбар"
+
+# @ weblizar
+#: functions.php:171
+msgid "The primary widget area"
+msgstr "Основная область виджет"
+
+# @ weblizar
+#: functions.php:179
+msgid "Footer Widget Area"
+msgstr "футер виджет"
+
+# @ weblizar
+#: functions.php:181
+msgid "footer widget area"
+msgstr "виджет область футера"
+
+# @ weblizar
+#: functions.php:255
+msgid "Search results for"
+msgstr "Результат поиска"
+
+# @ weblizar
+#: functions.php:258
+msgid "Tag"
+msgstr "тэг"
+
+# @ weblizar
+#: functions.php:262
+msgid "Articles posted by"
+msgstr "Статья написана"
+
+# @ weblizar
+#: functions.php:264
+msgid "Error 404"
+msgstr "Ошибка 404"
+
+# @ weblizar
+#: functions.php:313
+msgid "Youtube Profile URL"
+msgstr "Youtube URL профиля"
+
+# @ weblizar
+#: functions.php:314
+msgid "Twitter Profile URL"
+msgstr "Twitter URL профиля"
+
+# @ weblizar
+#: functions.php:315
+msgid "Facebook Profile URL"
+msgstr "Facebook URL профиля"
+
+# @ weblizar
+#: functions.php:316
+msgid "Linkedin Profile URL"
+msgstr "Linkedin профиля URL"
+
+# @ weblizar
+#: header.php:89
+msgid "Toggle navigation"
+msgstr "Переключить навигации"
+
+# @ weblizar
+#: home-blog.php:71
+msgid "NO Post"
+msgstr "нет записи"
+
+# @ weblizar
+#: home-blog.php:74
+msgid "Tags :&nbsp;"
+msgstr "Тэги :&nbsp;"
+
+# @ weblizar
+#: home-blog.php:75
+msgid "Bootstrap"
+msgstr "Bootstrap"
+
+# @ weblizar
+#: home-blog.php:76
+msgid "HTML5"
+msgstr "HTML5"
+
+# @ weblizar
+#: home-blog.php:79
+msgid "Add You Post To show post here.."
+msgstr "Добавить которое вы публикуете Чтобы показать пост здесь ."
+
+# @ weblizar
+#: home-blog.php:83
+msgid "By Admin"
+msgstr "Админ"
+
+# @ weblizar
+#: home-blog.php:84
+msgid " November 9 2013"
+msgstr "Ноябрь 9 2013"
+
+# @ weblizar
+#: home-blog.php:85
+msgid "10"
+msgstr "10"
+
+# @ weblizar
+#: nocontent.php:4
+msgid "Whoops... Post Not Found !!!"
+msgstr "Запись не найдена"
+
+# @ weblizar
+#: post-content.php:36
+msgid "Tags : "
+msgstr "Тэги :"
+
+# @ weblizar
+#: post-content.php:41
+msgid "Category : "
+msgstr "Рубрики :"
+
+# @ weblizar
+#: post-content.php:48
+msgid "Pages:"
+msgstr "страницы:"
+
+# @ weblizar
+#: post-content.php:54
+msgid "Next page"
+msgstr "Следующая страница"
+
+# @ weblizar
+#: post-content.php:55
+msgid "Previous page"
+msgstr "Предыдущая страница"
+
+# @ weblizar
+#: search.php:7
+#, php-format
+msgid "Search Results for: %s"
+msgstr "результат поиска: %s"
+
+# @ weblizar
+#: searchform.php:3
+msgid "What do you want to find?"
+msgstr "Что вы ищете"
