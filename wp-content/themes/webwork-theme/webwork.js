@@ -2,14 +2,17 @@
 	var $searchToggle, $sidebar, $wrapper;
 
 	toggleExplore = function() {
-		$searchToggle.toggleClass( 'active' );
-		if ($(".nav-toggle").hasClass("active")) {
-			$(".nav-toggle").removeClass("active");
-			$(".mobile-menu").slideToggle();
+		if ( $searchToggle.is( ':visible' ) ) {
+			if ( $searchToggle.hasClass("active") ) {
+				$searchToggle.removeClass( 'active' );
+				$sidebar.removeClass( 'sidebar-visible' );
+				$wrapper.removeClass( 'inactive' );
+			} else {
+				$searchToggle.addClass( 'active' );
+				$sidebar.addClass( 'sidebar-visible' );
+				$wrapper.addClass( 'inactive' );
+			}
 		}
-
-		$sidebar.toggleClass( 'sidebar-visible' );
-		$wrapper.toggleClass( 'inactive' );
 	}
 
 	$(document).ready(function() {

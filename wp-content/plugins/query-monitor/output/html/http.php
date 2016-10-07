@@ -36,13 +36,13 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 		echo $this->build_sorter(); // WPCS: XSS ok.
 		echo '</th>';
 		echo '<th scope="col">' . esc_html__( 'HTTP Request', 'query-monitor' ) . '</th>';
-		echo '<th scope="col">' . esc_html__( 'Response', 'query-monitor' );
-		echo $this->build_filter( 'type', array_keys( $data['types'] ) ); // WPCS: XSS ok.
+		echo '<th scope="col">';
+		echo $this->build_filter( 'type', array_keys( $data['types'] ), __( 'Response', 'query-monitor' ) ); // WPCS: XSS ok.
 		echo '</th>';
 		echo '<th scope="col">' . esc_html__( 'Transport', 'query-monitor' ) . '</th>';
 		echo '<th scope="col">' . esc_html__( 'Call Stack', 'query-monitor' ) . '</th>';
-		echo '<th scope="col">' . esc_html__( 'Component', 'query-monitor' );
-		echo $this->build_filter( 'component', wp_list_pluck( $data['component_times'], 'component' ) ); // WPCS: XSS ok.
+		echo '<th scope="col">';
+		echo $this->build_filter( 'component', wp_list_pluck( $data['component_times'], 'component' ), __( 'Component', 'query-monitor' ) ); // WPCS: XSS ok.
 		echo '</th>';
 		echo '<th scope="col" class="qm-num">' . esc_html__( 'Timeout', 'query-monitor' );
 		echo $this->build_sorter(); // WPCS: XSS ok.
@@ -69,23 +69,28 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 			foreach ( $data['http'] as $key => $row ) {
 				$ltime = $row['ltime'];
 				$i++;
+				$is_error = false;
 
 				$row_attr = array();
 
 				if ( is_wp_error( $row['response'] ) ) {
 					$response = $row['response']->get_error_message();
-					$css      = 'qm-warn';
+					$is_error = true;
 				} else {
 					$code     = wp_remote_retrieve_response_code( $row['response'] );
 					$msg      = wp_remote_retrieve_response_message( $row['response'] );
 					$css      = '';
 
 					if ( intval( $code ) >= 400 ) {
-						$css = 'qm-warn';
+						$is_error = true;;
 					}
 
 					$response = $code . ' ' . $msg;
 
+				}
+
+				if ( $is_error ) {
+					$css = 'qm-warn';
 				}
 
 				$method = esc_html( $row['args']['method'] );
@@ -98,15 +103,19 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 					) ) . '</span>';
 				}
 
-				if ( empty( $row['args']['sslverify'] ) && empty( $row['args']['local'] ) && 'https' === parse_url( $row['url'], PHP_URL_SCHEME ) ) {
-					$method .= '<br><span class="qm-warn">' . esc_html( sprintf(
-						/* translators: An HTTP API request has disabled certificate verification. %s: Relevant argument name */
-						__( '(Certificate verification disabled: %s)', 'query-monitor' ),
-						'sslverify=false'
-					) ) . '</span>';
-				}
-
 				$url = self::format_url( $row['url'] );
+
+				if ( 'https' === parse_url( $row['url'], PHP_URL_SCHEME ) ) {
+					if ( empty( $row['args']['sslverify'] ) && empty( $row['args']['local'] ) ) {
+						$method .= '<br><span class="qm-warn">' . esc_html( sprintf(
+							/* translators: An HTTP API request has disabled certificate verification. 1: Relevant argument name */
+							__( '(Certificate verification disabled: %s)', 'query-monitor' ),
+							'sslverify=false'
+						) ) . '</span>';
+					} elseif ( ! $is_error ) {
+						$url = preg_replace( '|^https:|', '<span class="qm-true">https</span>:', $url );
+					}
+				}
 
 				if ( isset( $row['transport'] ) ) {
 					$transport = $row['transport'];
@@ -174,7 +183,8 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				}
 
 				printf(
-					'<td class="qm-num">%s</td>',
+					'<td class="qm-num" data-qm-sort-weight="%s">%s</td>',
+					esc_attr( $ltime ),
 					esc_html( $stime )
 				);
 				echo '</tr>';
@@ -209,7 +219,7 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				echo '</tr>';
 			}
 			echo '</tbody>';
-		
+
 		}
 
 		echo '</table>';
@@ -223,7 +233,8 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 
 		if ( isset( $data['errors']['alert'] ) ) {
 			$class[] = 'qm-alert';
-		} else if ( isset( $data['errors']['warning'] ) ) {
+		}
+		if ( isset( $data['errors']['warning'] ) ) {
 			$class[] = 'qm-warning';
 		}
 

@@ -149,22 +149,14 @@ function cuny_whos_online() {
         'alt' => __('Member avatar', 'buddypress')
     );
 
-    $aq = bp_activity_get( array(
-	'filter' => array(
-		'object' => buddypress()->members->id,
-		'action' => 'last_activity',
-	),
-	'max' => 20,
-    ) );
-
-    $now = time();
-    $rs = array();
-    foreach ( $aq['activities'] as $activity ) {
-	if ( strtotime( $activity->date_recorded ) >= ( $now + HOUR_IN_SECONDS ) ) {
-		$rs[] = $activity->user_id;
-	}
+    $rs = wp_cache_get( 'whos_online', 'openlab' );
+    if ( ! $rs ) {
+	    $sql = "SELECT user_id FROM {$bp->activity->table_name} where component = 'members' AND type ='last_activity' and date_recorded >= DATE_SUB( UTC_TIMESTAMP(), INTERVAL 1 HOUR ) order by date_recorded desc limit 20";
+	    $rs = $wpdb->get_col($sql);
+	    wp_cache_set( 'whos_online', $rs, 'openlab', 5 * 60 );
     }
 
+    //print_r($rs);
     $ids = "9999999";
     foreach ( (array) $rs as $r ) {
         $ids .= "," . intval( $r );
@@ -210,13 +202,19 @@ function cuny_whos_online() {
 function cuny_home_square($type) {
     global $wpdb, $bp;
 
+    $cached = get_transient( 'openlab_home_square_' . $type );
+    if ( $cached ) {
+	echo $cached;
+	return;
+    }
+
     if (!bp_is_active('groups')) {
         return;
     }
 
-    $meta_filter = new BP_Groups_Meta_Filter(array(
-        'wds_group_type' => $type
-    ));
+	$meta_filter = new BP_Groups_Meta_Filter(array(
+		'wds_group_type' => $type
+	));
 
     $i = 1;
 
@@ -224,7 +222,7 @@ function cuny_home_square($type) {
         'max' => 4,
         'type' => 'active',
         'user_id' => 0,
-        'show_hidden' => false
+        'show_hidden' => false,
     );
 
     if (bp_has_groups($groups_args)) :
@@ -240,6 +238,8 @@ function cuny_home_square($type) {
             $group_ids[] = $g->id;
         }
         $group_ids_sql = implode(',', $group_ids);
+
+	ob_start();
         ?>
 
 
@@ -283,6 +283,12 @@ function cuny_home_square($type) {
 
         <?php
     endif;
+
+    $html = ob_get_clean();
+
+    set_transient( 'openlab_home_square_' . $type, $html, 5 * 60 );
+
+    echo $html;
 
     $meta_filter->remove_filters();
 }

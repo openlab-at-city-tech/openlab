@@ -42,14 +42,14 @@ class QM_Output_Html_Languages extends QM_Output_Html {
 		) ) . '</th>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td>' . esc_html__( 'Text Domain', 'query-monitor' ) . '</td>';
-		echo '<td>' . esc_html__( 'Caller', 'query-monitor' ) . '</td>';
-		echo '<td colspan="2">' . esc_html__( 'MO File', 'query-monitor' ) . '</td>';
+		echo '<th>' . esc_html__( 'Text Domain', 'query-monitor' ) . '</th>';
+		echo '<th>' . esc_html__( 'Caller', 'query-monitor' ) . '</th>';
+		echo '<th colspan="2">' . esc_html__( 'MO File', 'query-monitor' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
 
-		$not_found_class = ( 'en_US' === $data['locale'] ) ? '' : 'qm-warn';
+		$not_found_class = ( substr( $data['locale'], 0, 3 ) === "en_" ) ? '' : 'qm-warn';
 
 		foreach ( $data['languages'] as $mofile ) {
 

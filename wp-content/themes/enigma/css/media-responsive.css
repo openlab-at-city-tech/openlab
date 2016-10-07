@@ -1,0 +1,674 @@
+@media (min-width:1200px) {
+	.enigma_gallery_page .col-md-3{
+	width:25%;
+	}
+	.navbar {
+	margin-bottom: 0px; 
+
+	}
+	#enigma_nav_top.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+	border-bottom: 2px solid #F7F5F5;
+	z-index: 9999;
+	}
+	
+	.carousel-caption {
+	top: 25%;
+	}
+	.boxed .carousel-caption {
+	top: 20%;
+	}
+	
+}
+
+@media (min-width:992px) and (max-width:1199px) {
+	#enigma_nav_top.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+	border-bottom: 2px solid #F7F5F5;
+	z-index: 99997;
+	left: 0;
+	}
+	
+} 
+
+/* This Media screen css called for All Hc Pages Element---------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+@media only screen and (min-width: 960px) and (max-width: 1200px) {
+
+	.enigma_gallery_page .col-md-3{
+		width:25%;
+	}
+	.post-content-wrap {
+		width:83%;
+	}
+	.post-content-wrap-right {
+		width:83%;
+	}
+	.navbar {
+	margin-bottom: 0px; 
+
+	}
+	#enigma_nav_top.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+	border-bottom: 2px solid #F7F5F5;
+	z-index: 99997;
+	left: 0;
+	}
+	.enigma_gallery_blog{
+	width: 33.3%;
+	margin-right: 0;
+	margin-bottom: 0;
+	float: left;
+	}
+	
+}	
+@media only screen and (min-width: 767px) and (max-width: 992px) {
+.logo{
+	text-align:center;
+	padding-top:15px;
+	padding-bottom:0px;
+	}
+	.head-contact-info{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:2px;
+	padding-left:0;
+}
+
+	.social{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left: 0px;
+	}
+	.navbar-default .navbar-nav > li > a{
+	color: #000;
+	border-radius: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 8px;
+	padding-right: 8px;
+	text-transform: uppercase;
+	font-family: 'Arimo',Arial, Helvetica, sans-serif;
+	font-weight: 600;
+	font-size:15px;
+	}
+	.navbar {
+		margin-bottom: 0px; 
+
+	}
+	#enigma_nav_top.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+	border-bottom: 2px solid #F7F5F5;
+	z-index: 99997;
+	left: 0;
+	}
+	.carousel-caption{
+	top:40px;
+	}
+	.carousel-text h1 {
+	font-size: 1.4em;
+	padding:10px;
+	}
+	.carousel-list li {
+	color: #fff;
+	font-size: 0.9em;
+	margin-bottom: 10px;
+	overflow: hidden;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600; 
+	text-transform: uppercase;
+	}
+	.carousel-list {
+	top: 60px;
+	margin: 0px auto;
+	}
+	.enigma_callout_area{
+		text-align:center;
+	}
+	.enigma_callout_area p{
+		margin-bottom:20px;
+		padding:0px;
+	}
+	.enigma_callout_btn {
+	float: none;	
+	}
+	
+	/*** blog full width **/
+	.enigma_sidebar_left_side{
+
+	float:none;
+
+	}
+	.enigma_blog_right_side{
+	float:none;
+	}
+	.post-content-wrap {
+	width:100%;
+	}
+	.post-content-wrap-right {
+	width:100%;
+	}
+	.blog-date-left{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	.blog-date-right{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	
+	.enigma_fuul_blog_detail_padding {
+		padding-left: 0px;
+		padding-top:20px;
+	}
+	.enigma_blog_full .enigma_blog_thumb_wrapper_showcase {
+		margin-bottom: 0px;
+	}
+	.navbar-collapse {
+     max-height: none;
+	 }
+	 .enigma_project_section .caroufredsel_wrapper{
+		height: 350px !important;
+	 }
+	 .enigma_client_area .caroufredsel_wrapper{
+		height: 250px !important;
+	 }
+	 .enigma_project_detail_related_projet .caroufredsel_wrapper{ 
+		height: 350px !important;
+	 }
+	 /** enigma footer  copyright area ***/
+	 .enigma_footer_area{
+	 text-align:center;
+	 }
+	 .enigma_footer_copyright_info{
+		float:none;
+	}
+	.enigma_footer_social_div{
+		float:none;
+	}
+	/** contact us page **/
+	.enigma_contact_form_fields{
+	padding-right: 15px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-right: 0px solid #E5E5E5;
+	}
+	.enigma_contact_info{
+		padding-left: 15px;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	/* gallery */
+	.enigma_gallery_blog{
+	width: 33.3%;
+	margin-right: 0;
+	margin-bottom: 0;
+	float: left;
+	}
+	.carousel-indicators{
+		display:none;
+	}
+	.carousel-text .enigma_blog_read_btn{
+		display:none;
+	}
+	.carousel-caption {
+	top: 20%;
+	}
+}
+
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.dropdown-menu{
+width:100%;
+float:none;
+position:static !important;
+}
+.logo{
+	text-align:center;
+	padding-top:15px;
+	padding-bottom:0px;
+	}
+	.head-contact-info{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:2px;
+	padding-left:0;
+}
+	.social{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left: 0px;
+	}
+	.carousel-caption{
+	top:15px;
+	}
+	.carousel-text h1 {
+	font-size: 1.2em;
+	padding:10px;
+	}
+	.carousel-list li {
+	color: #fff;
+	font-size: 12px;
+	line-height:16px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	font-family: 'Abel',sans-serif;
+	text-transform: uppercase;
+	}
+	.carousel-list {
+	top: 60px;
+	margin: 0px auto;
+	}
+	
+	.enigma_callout_area{
+		text-align:center;
+	}
+	.enigma_callout_area p{
+		margin-bottom:20px;
+		padding:0px;
+	}
+	.enigma_callout_btn {
+	float: none;	
+	}
+	/**** blog full width: ***/
+	.enigma_sidebar_left_side{
+
+		float:none;
+
+	}
+	.enigma_blog_right_side{
+		float:none;
+	}
+	
+	.post-content-wrap {
+	width:100%;
+	}
+	.post-content-wrap-right {
+	width:100%;
+	}
+	.blog-date-left{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	.blog-date-right{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	.enigma_fuul_blog_detail_padding {
+		padding-left: 0px;
+		padding-top:20px;
+	}
+	.enigma_blog_full .enigma_blog_thumb_wrapper_showcase {
+		margin-bottom: 0px;
+	}
+	.navbar-collapse {
+     max-height: none;
+	 }
+	 .enigma_project_section .caroufredsel_wrapper{
+		height: 350px !important;
+	 }
+	 .enigma_client_area .caroufredsel_wrapper{
+		height: 260px !important;
+	 }
+	 .enigma_project_detail_related_projet .caroufredsel_wrapper{ 
+		height: 350px !important;
+	 }
+	 
+	/*** comment section **/
+	.enigma_comment_box .media-body {
+	float: left;
+	}
+	/** enigma footer  copyright area ***/
+	 .enigma_footer_area{
+	 text-align:center;
+	 }
+	 .enigma_footer_copyright_info{
+		float:none;
+	}
+	.enigma_footer_social_div{
+		float:none;
+	}
+	/** contact us page **/
+	.enigma_contact_form_fields{
+	padding-right: 15px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-right: 0px solid #E5E5E5;
+	}
+	.enigma_contact_info{
+		padding-left: 15px;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	/* gallery */
+	.enigma_gallery_blog{
+	width: 49.9%;
+	margin-right: 0;
+	margin-bottom: 0;
+	float: left;
+	}
+	.carousel-indicators{
+		display:none;
+	}
+	.carousel-text .enigma_blog_read_btn{
+		display:none;
+	}
+	.carousel-caption {
+	top: 20%;
+	}
+} 
+
+@media only screen and (min-width: 200px) and (max-width: 600px) {
+.dropdown-menu{
+width:100%;
+float:none;
+position:static !important;
+}
+	/*.carousel-list li {	display:none; } */	
+.carousel-text h1 {
+margin: 0 0 0px 0;
+padding: 5px;
+font-size: 7px;
+font-family: 'Open Sans', sans-serif;
+color: #fff;
+text-transform: uppercase;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+line-height: .line-height: 8px;;
+}
+.carousel-text .enigma_blog_read_btn {
+font-size: 7px;
+display: inline-block;
+padding: 3px;;
+}
+
+
+	.carousel-list li {
+	font-size: 7px;
+overflow: hidden;
+padding: 5px;
+line-height: 8px;
+display: block;
+	color: #fff;
+	font-size: 8px;
+	line-height:8px;
+	margin-bottom: 5px;
+	overflow: hidden;
+	font-family: 'Abel',sans-serif;
+	text-transform: uppercase;
+	}
+	
+	/* .carousel-caption{
+	top:10px;
+	} */
+	
+	
+	/*** blog full width **/
+	.enigma_sidebar_left_side{
+
+	float:none;
+
+	}
+	.enigma_blog_right_side{
+	float:none;
+	}
+	
+	.blog-date-left{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	
+	.blog-date-right{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	
+	.post-content-wrap {
+	width:100%;
+	}
+	.post-content-wrap-right {
+	width:100%;
+	}
+	.enigma_fuul_blog_detail_padding {
+		padding-left: 0px;
+		padding-top:20px;
+	}
+	.enigma_blog_full .enigma_blog_thumb_wrapper_showcase {
+		margin-bottom: 0px;
+	}
+	.navbar-collapse {
+     max-height: none;
+	 }
+	.enigma_project_section .caroufredsel_wrapper{
+		height: 400px !important;
+	 }
+	 .enigma_project_detail_related_projet .caroufredsel_wrapper{ 
+		height: 400px !important;
+	 }
+	 /** enigma footer  copyright area ***/
+	 .enigma_footer_area{
+	 text-align:center;
+	 }
+	 .enigma_footer_copyright_info{
+		float:none;
+	}
+	.enigma_footer_social_div{
+		float:none;
+	}
+	/** contact us page **/
+	.enigma_contact_form_fields{
+	padding-right: 15px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-right: 0px solid #E5E5E5;
+	}
+	.enigma_contact_info{
+		padding-left: 15px;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	.carousel-indicators{
+		display:none;
+	}
+	.carousel-caption {
+	top: 20%;
+	}
+}
+@media only screen and (min-width: 480px) and (max-width: 600px) {
+	.enigma_project_section .caroufredsel_wrapper{
+		height: 450px !important;
+	 }
+	 .enigma_client_area .caroufredsel_wrapper{
+		height: 300px !important;
+	 }
+	 .enigma_project_detail_related_projet .caroufredsel_wrapper{ 
+		height: 450px !important;
+	 }
+	 .carousel-indicators{
+		display:none;
+	}
+
+}
+@media only screen and (min-width: 200px) and (max-width: 480px) {
+  .head-contact-info li {
+  float: left;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.logo{
+	text-align:center;
+	padding-top:15px;
+	padding-bottom:0px;
+	}
+	.head-contact-info{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:2px;
+	padding-left:0;
+	}
+	.social{
+	display: block;
+	text-align: center;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left: 0px;
+	}
+	.carousel-text h1 {
+	margin-top: -10px;
+	font-size: 0.8em;
+	}
+	/* .carousel-list li {	display:none;	} */
+	.carousel-list li {
+	color: #fff;
+	font-size: 8px;
+	line-height:8px;
+	margin-bottom: 5px;
+	overflow: hidden;
+	font-family: 'Abel',sans-serif;
+	text-transform: uppercase;
+	}
+	
+	.carousel-caption{
+	top:30%;
+	}
+	.carousel-indicators{
+		display:none;
+	}
+	.enigma_callout_area{
+		text-align:center;
+	}
+	.enigma_callout_area p{
+		margin-bottom:20px;
+		padding:0px;
+	}
+	.enigma_callout_btn {
+	float: none;	
+	}
+	.enigma_sidebar_left_side{
+
+	float:none;
+
+	}
+	.enigma_blog_right_side{
+	float:none;
+	}
+	/** blog full width ***/
+	
+	.post-content-wrap {
+	width:100%;
+	}
+	.post-content-wrap-right {
+	width:100%;
+	}
+	
+	.blog-date-left{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	.blog-date-left li{
+		width:60px;
+		height:60px;
+	}
+	
+	.blog-date-right{
+		display:flex;
+		margin-bottom: 0px;
+	}
+	.blog-date-right li{
+		width:60px;
+		height:60px;
+	}
+	.enigma_post_date {
+		padding-top: 6px;
+		padding-left:2px;
+		padding-right:2px;
+		padding-bottom: 4px;
+	}
+	.enigma_post_date span.date {
+		font-size: 30px;
+		line-height: 25px;
+	}
+	.enigma_post_date h6 {
+		font-size: 10px;
+		line-height: 10px;
+		margin-top: 4px;
+	}
+	.enigma_post_author img {
+		height: 60px !important;
+	}
+	
+	.enigma_blog_comment{
+		width: 60px;
+		padding-top: 6px;
+		padding-left:2px;
+		padding-right:2px;
+		padding-bottom: 6px;
+	}
+	.enigma_blog_comment a{
+		color:#999999;
+	}
+	.enigma_blog_comment i{
+		font-size: 30px;
+		line-height: 25px;
+		
+
+	}
+	.enigma_blog_comment h6{
+		font-size:12px;
+		margin-top:4px;
+		
+	}
+	.enigma_fuul_blog_detail_padding {
+		padding-left: 0px;
+		padding-top:20px;
+	}
+	.enigma_blog_full .enigma_blog_thumb_wrapper_showcase {
+		margin-bottom: 0px;
+	}
+		.navbar-collapse {
+     max-height: none;
+	 }
+	.enigma_client_area .caroufredsel_wrapper{
+		height: 300px !important;
+	}
+	
+	/*** comment section **/
+	.enigma_comment_box .media-body {
+	float: left;
+	}
+	/** enigma footer  copyright area ***/
+	 .enigma_footer_area{
+	 text-align:center;
+	 }
+	 .enigma_footer_copyright_info{
+		float:none;
+	}
+	.enigma_footer_social_div{
+		float:none;
+	}
+	/* gallery */
+	.enigma_gallery_blog{
+	width: 100%;
+	margin-right: 0;
+	margin-bottom: 0;
+	float: left;
+	}
+	.carousel-text .enigma_blog_read_btn{
+		display:none;
+	}
+}

@@ -1,0 +1,61 @@
+<wpml-config>   
+    <admin-texts>
+        <key name="enigma_options">
+            <key name="slide_title_1" /> 
+			<key name="slide_desc_1" />
+            <key name="slide_btn_text_1" />
+			<key name="slide_title_2" />
+			<key name="slide_desc_2" />
+			<key name="slide_btn_text_2" />
+			<key name="slide_title_3" />           
+			<key name="slide_desc_3" />
+			<key name="slide_btn_text_3" />
+			<key name="slide_btn_link_1" />
+			<key name="slide_btn_link_2" />
+            <key name="slide_btn_link_3" />
+			<key name="fc_title" />
+			<key name="fc_btn_txt" />
+			<key name="fc_btn_link" />
+			<key name="twitter_link" />           
+			<key name="fb_link" />
+			<key name="linkedin_link" />
+			<key name="youtube_link" />
+			<key name="instagram" />
+            <key name="gplus" />
+			<key name="email_id" />
+			<key name="phone_no" />
+			<key name="footer_customizations" />
+			<key name="developed_by_text" />           
+			<key name="developed_by_weblizar_text" />
+			<key name="developed_by_link" />
+			<key name="home_service_heading" />
+			
+			<key name="service_1_title" />
+			<key name="service_1_text" />
+			<key name="service_1_link" />
+            <key name="service_2_title" />
+			<key name="service_2_text" />
+			<key name="service_2_link" />
+			<key name="service_3_title" />
+			<key name="service_3_text" />
+			<key name="service_3_link" />
+			
+			
+			<key name="port_heading" />
+			<key name="port_1_title" />
+			<key name="port_1_link" />
+			<key name="port_2_title" />
+			<key name="port_2_link" />
+			<key name="port_3_title" />
+			<key name="port_3_link" />
+			<key name="port_4_title" />
+			<key name="port_4_link" />
+			<key name="show_blog" />           
+			<key name="blog_title" />			
+        </key>
+        
+    </admin-texts>    
+    
+</wpml-config>
+
+

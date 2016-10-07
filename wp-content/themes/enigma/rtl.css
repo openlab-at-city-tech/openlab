@@ -1,0 +1,299 @@
+/*
+Theme Name: Enigma
+*/
+
+
+/*
+RTL Basics
+*/
+
+body {
+	direction:rtl;
+	unicode-bidi:embed;
+}
+
+/* Main css with editable-------------------------------------------------------------- */
+.navbar-nav {
+float: right;
+}
+a:hover, a:focus{
+	text-decoration: none ;
+}
+.wl_rtl{float:right}
+.fa-arrow-left:before{content: "\f061" !important;}
+.fa-arrow-right:before{content: "\f060" !important;}
+.glyphicon-chevron-left:before {
+content: "\e080";
+}
+.glyphicon-chevron-right:before {
+content: "\e079";
+}
+.head-contact-info{
+	
+	text-align: left;	
+	padding-right:0;
+}
+.head-contact-info li {
+	
+	margin-left:10px;	
+}
+.head-contact-info li a{color:#fff;}
+.head-contact-info i {
+	margin-left:8px;	
+}
+.logo{
+	text-align:right;
+}
+
+.social{	
+	text-align: left;
+}
+
+/*** Project Or Works  ********************************************************/
+
+.enigma_home_portfolio_showcase .enigma_home_portfolio_showcase_icons a { 
+    margin-left: 5px;
+	margin-right:2px;
+}
+.enigma_proejct_button a {	
+	text-align: left;
+}
+/********** project detail page css ***************************/
+
+.enigma-project-description h3{
+	text-align:right;
+}
+.enigma-project-description h3 span{
+	text-align:right;
+}
+.enigma-project-description p{
+	text-align:right;
+}
+
+.enigma_portfolio_detail_pagi{
+	text-align:left;
+	padding-left:0;	
+}
+.enigma_portfolio_detail_pagi li {
+	float: left;
+	margin-right:15px;
+}
+.enigma-project-detail-sidebar .launch-enigma-project a {	
+	text-align: left;	
+}
+.enigma_project_detail_related_projet .enigma_carousel-navi {
+float: left;
+}
+.sidebar-img{
+	margin-left: 5px;
+}
+/******* gallery css *************************************************************************/
+.enigma_gallery_page{	
+	float:right;	
+}
+
+.enigma_gallery_blog{	
+	float: right;
+}
+
+.enigma_gallery_showcase .enigma_gallery_showcase_icons a {  
+    margin-right: 2px;
+	margin-left:5px;	
+}
+/***************** BLog Section ************************************************************/ 
+.enigma_blog_thumb_wrapper h2 {	
+	padding-left: 0px;
+}
+
+.enigma_blog_thumb_date{	
+	text-align:right;
+	padding-right:0;
+}
+.enigma_blog_thumb_date li{	
+	margin-left:15px;
+}
+.enigma_blog_thumb_date li i{
+	margin-left:8px;
+}
+.enigma_blog_thumb_wrapper p{	
+	padding-left:8px;
+}
+.enigma_blog_thumb_wrapper span a i{
+	margin-left:6px;
+}
+.enigma_tags a i{
+	margin-left:5px;
+}
+
+.enigma_blog_thumb_wrapper_showcase .enigma_blog_thumb_wrapper_showcase_icons a {
+    margin-right: 2px;
+	margin-left:5px;	
+}
+
+/********* Blog Full width css ********/
+
+.blog-date-left{	
+	float:right;
+}
+.blog-date-right{	
+	float:left;
+}
+
+.enigma_post_date {	
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.enigma_blog_comment{
+	padding-left:10px;
+	padding-right:10px;
+}
+.post-content-wrap {
+	float: right;
+
+}
+
+.post-content-wrap-right {
+	float: left;
+
+}
+
+.enigma_blog_post_content{
+	float: left;	
+}
+.enigma_fuul_blog_detail_padding{
+	padding-left: 20px;
+	float: left;
+}
+.enigma_fuul_blog_detail_padding h2 a{
+	padding-left: 0px;
+}
+/***** Blog page with sidebar ******************/
+.enigma_recent_widget_post_move{
+	float: left;
+}
+.enigma_recent_widget_post_img {
+    margin-left: 10px !important;
+	
+}
+
+.enigma_sidebar_widget_title{
+	margin-left: -20px;
+	margin-right: -20px;	
+}
+/**** link widget **/   
+.enigma_sidebar_widget ul li a:before , .enigma_footer_widget_column ul li a:before {
+        position:absolute;
+        font-family: FontAwesome;
+        top:0;
+        left:-14px;
+        content: "\f105";
+}
+.enigma_sidebar_widget ul li ,.enigma_footer_widget_column ul#recentcomments li {list-style:none;}
+.enigma_sidebar_widget ul li a{ padding-left: 10px; }
+.enigma_sidebar_link p a i {
+	margin-left: 10px;
+}
+/*** Flickr widget **/
+.flickr-photos-list {
+	padding-right: 0;
+}
+.flickr-photos-list > li {
+	float: right;
+	margin-right: 5px;
+}
+.enigma_sidebar_left_side{
+
+float:left;
+
+}
+.enigma_blog_right_side{
+	float:left;
+}
+
+
+/********* Blog detail page *************/
+.author_detail_img{
+	float:right;
+	margin-right:20px;
+	
+}
+
+.enigma_comment_title h3 {
+    padding-left: 10px;
+}
+.pull_left_comment{
+	margin-left: 15px;
+	float: left;
+}
+
+.enigma_comment_detail {
+    margin-left: 0px;
+
+}
+.reply a > i {
+	padding-left: 5px;	
+}
+/***Client Section ******************************************************************************************************
+**************************************************************************************************************************/
+
+
+.enigma_client_area .enigma_heading_title2{
+	text-align:left;
+}
+
+.enigma_client_prev {
+	margin-left: 5px;	
+}
+
+
+
+/***** Call Out Section *******************************/
+
+.enigma_callout_btn {
+	float: left;	
+}
+.enigma_callout_area a {  
+	text-align: left;	
+}
+
+/***** Footer widget Area *****************************************************************
+***************************************************************************************/
+.enigma_footer_widget_column address p i{
+	margin-left:10px;
+}
+
+
+/* Footer area Section Css------------------------------------------------------------ */
+
+
+.enigma_footer_copyright_info{
+	float:left;
+}
+.enigma_footer_social_div{
+	float:left;
+}
+/***********theme required css **********/
+.alignright{ text-align:right;float: right;
+}
+.alignleft {
+float: right;
+margin-left: 1.5em;
+}
+table.table, table {text-align: right;}
+.enigma_footer_widget_column ul {padding-right:0;}
+.post-content-wrap-right .enigma_fuul_blog_detail_padding{
+	padding-left: 20px;
+}
+
+/*Flikr Widget CSS**/
+.enigma-sidebar .flickr_badge_image {
+    float: right;
+}
+.enigma_footer_widget_column .flickr_badge_image {
+    float: right;
+    margin-right: 5px;
+}
+.nav-next {
+	padding-right: 15%;  
+}

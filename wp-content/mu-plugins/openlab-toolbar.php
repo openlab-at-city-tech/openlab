@@ -627,7 +627,7 @@ HTML;
                     )
                 ));
 
-        $members_args = array(
+		$members_args = array(
 			'max'     => 0
 		);
 

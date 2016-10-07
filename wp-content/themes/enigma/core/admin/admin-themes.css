@@ -1,0 +1,263 @@
+body {
+  color: #919191;
+  font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  line-height: 1.785;
+}
+a,
+a:hover,
+a:focus{
+outline:none;
+text-decoration:none;
+}
+.p_header{
+background-color:#0098ff;
+color:#fff;
+padding:50px 0;
+}
+.p_header h1{
+margin:0;
+}
+.p_header .navbar-form{
+margin:0;
+}
+.p_front{
+background:#ddd;
+padding:50px 0;
+}
+.p_front .container{
+background:#fff;
+}
+.p_head{
+margin:0;
+}
+.p_front .p_form {
+  float: right;
+  display: inline-flex;
+  margin-top: 20px;
+}
+.p_front .p_form label {
+margin-right:20px;
+}
+.p_front .p_form  .form-control {
+  min-width: 160px;
+}
+.p-select {
+  display: inline-block;
+  position: relative;
+}
+select.form-control {
+  box-shadow: none;
+  color: rgba(145, 145, 145, 0.7);
+  line-height: 1.5;
+}
+select {
+  -moz-appearance: none;
+  display: inline-block;
+  font: inherit;
+  outline: medium none;
+  position: relative;
+}
+.p-select::after {
+  border-color: #919191 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  content: "";
+  height: 8px;
+  line-height: 0;
+  margin-top: -2px;
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  width: 8px;
+  z-index: 1;
+}
+.p_plugin {
+  border: 1px solid #ccc;
+  margin:40px 0;
+  padding: 20px 10px ;
+}
+.p_plugin_pic .img-thumbnail{
+padding:0;
+border:0;
+display:block;
+position:relative
+}
+.p-box{
+margin:0;
+}
+.p-box h2 a{
+text-decoration:none;
+color:#666;
+}
+.p_rateing{
+list-style:none;
+padding:0;
+margin:0;
+}
+.p_rateing li{
+display:inline-block;
+}
+.price {
+  line-height: 1;
+  margin: 0 0 30px;
+  text-align: center;
+}
+.currency {
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.price-number {
+  color: #5b5b5b;
+  display: inline-block;
+  font-size: 43px;
+  vertical-align: middle;
+}
+.btn-group-vertical .btn-lg {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 15px;
+  padding-left: 45px;
+  padding-right: 45px;
+}
+.p_plugin_desc p{
+margin:10px 0;
+color:#777;
+}
+.star-rating a {
+    color: #ffd700;
+	font-size:18px;
+}
+.menu,
+.spa-menu-head{
+margin:0;
+}
+
+.p_plugin_pic .img-thumbnail .overlay {
+background-color: rgba(255,255,255,0.90);
+border: 15px solid rgba(0,0,0,0.30);
+height: 100%;
+opacity: 0;
+visibility:hidden;
+position: absolute;
+text-align: center;
+top: 0;
+width: 100%;
+color: #fff;
+}
+.p_plugin_pic:hover .overlay {
+opacity: 0.75;
+visibility:visible;
+transition:all ease 0.6s;
+}
+.p_plugin_pic .overlay a{
+color:#fff;
+text-decoration:none;
+}
+.p_plugin_pic .overlay i {
+border-radius: 50%;
+font-size: 20px;
+height: 40px;
+padding: 8px 0;
+width:40px;
+border:1px solid #666;
+color:#666;
+margin-top:30%;
+}
+.p-box h2{
+margin:0;
+}
+.p-box p strong {
+    font-size: 16px !important;
+}
+.p-box ul li {
+    margin-bottom: 2px !important;
+}
+@media (max-width:768px){
+.p-box h2{
+font-size:24px;
+}
+.p-select::after {
+    margin-top: -5px;
+    right: 5px;
+}
+.navbar-right {
+    float: left !important;
+    margin-top: 20px !important;
+}
+}
+@media (max-width:767px){
+.menu .dropdown-menu {
+position:relative !important;
+left:0 !important;
+width:100%;
+}
+}
+@media (max-width:480px){
+.btn-group-vertical .btn-lg {
+    display: inline-block;
+    width: auto;
+    margin: 0px 2px;
+    padding: 5px 15px;
+    border-radius: 0 !important;
+}
+.price {
+    margin: 0px 0px 10px;
+    text-align: left;
+	display:inline-block;	
+}
+.p-box h2 {
+    font-size: 20px;
+}
+.section-title{
+font-size:30px;
+}
+.p_front .p_form {
+    float: left;
+}
+.price-number {
+    font-size: 30px;
+}
+.p_plugin_desc p {
+    font-size: 14px;
+}
+.p_head h1{
+font-size:24px;
+}
+.input-lg {
+    height: 35px;
+    padding: 5px 10px;
+    float: left;
+	width:64%;
+	display:inline-block;
+}
+.navbar-right {
+    float: none !important;
+}
+.navbar-form .form-group {
+    margin-bottom: 0px;
+}
+.btn-lg {
+padding: 5px 15px;
+}
+}
+li:hover {
+    cursor: pointer;
+}
+#theme {
+    padding: 0 10px;
+	font-size:20px;
+}
+#plugin {
+	font-size:20px;
+}
+.menu {
+	padding-top: 0 !important;
+}
+.theme-menu.active a {
+  background-color: #0098ff !important;
+  color: #fff !important;
+}
