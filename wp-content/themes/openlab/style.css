@@ -7351,6 +7351,10 @@ input[type="submit"] {
   font-size: 16px;
   font-weight: 600;
 }
+.form-panel .panel-heading label {
+  font-weight: 600;
+  margin-bottom: 0;
+}
 .form-panel .panel-body .radio {
   margin-top: 0;
 }
@@ -7849,6 +7853,13 @@ body .scrollbar-measure {
   overflow: scroll;
   position: absolute;
   top: -9999px;
+}
+body label.passive {
+  font-weight: inherit;
+  margin-bottom: 0;
+}
+body label.block {
+  display: block;
 }
 /**shortcodes**/
 .callout-list .row {

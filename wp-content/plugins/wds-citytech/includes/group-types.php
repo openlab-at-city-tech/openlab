@@ -363,7 +363,7 @@ function openlab_additional_faculty_field() {
 	?>
 
 	<div id="additional-faculty-admin" class="panel panel-default">
-            <div class="panel-heading">Additional Faculty</div>
+            <div class="panel-heading"><label for="additional-faculty-autocomplete">Additional Faculty</label></div>
             <div class="panel-body">
 		<?php /* Data about existing faculty */ ?>
 		<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
@@ -374,6 +374,7 @@ function openlab_additional_faculty_field() {
 
 		<ul id="additional-faculty-list" class="inline-element-list"></ul>
 
+                <label class="sr-only hide-if-js" for="additional-faculty">Additional Faculty</label>
 		<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ) ?>" />
             </div>
 	</div>

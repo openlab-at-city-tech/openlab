@@ -607,6 +607,7 @@ function wds_bp_group_meta() {
                                                 Use an existing site:</label>
                                         </div>
                                         <div class="col-sm-18">
+                                            <label class="sr-only" for="groupblog-blogid">Choose a site</label>
                                             <select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
                                                 <option value="0">- Choose a site -</option>
                                                 <?php foreach ( (array) $user_blogs as $user_blog) : ?>
@@ -630,6 +631,7 @@ function wds_bp_group_meta() {
                                         </label>
                                     </div>
                                     <div class="col-sm-18">
+                                        <label class="sr-only" for="external-site-url">Input external site URL</label>
                                         <input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
                                         <a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
                                     </div>

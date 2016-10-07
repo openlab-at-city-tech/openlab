@@ -326,6 +326,10 @@ input[type="submit"]{
     .panel-heading{
         font-size: 16px;
         font-weight: @semibold;
+        label{
+            font-weight: @semibold;
+            margin-bottom: 0;
+        }
     }
     .panel-body {
         .radio {
@@ -860,6 +864,15 @@ body{
         overflow: scroll;
         position: absolute;
         top: -9999px;
+    }
+    label{
+        &.passive{
+            font-weight: inherit;
+            margin-bottom: 0;
+        }
+        &.block{
+            display: block;
+        }
     }
 }
 /**shortcodes**/
