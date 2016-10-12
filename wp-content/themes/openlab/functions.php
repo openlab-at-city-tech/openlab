@@ -83,6 +83,10 @@ function openlab_load_scripts() {
 
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
     }
+
+    if ( bp_is_register_page() ) {
+        wp_enqueue_script( 'password-strength-meter' );
+    }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');

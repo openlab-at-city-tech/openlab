@@ -36,6 +36,22 @@ window.Parsley.addValidator( 'iff', {
 	}
 } );
 
+function checkPasswordStrength( pw, blacklist ) {
+	var score = window.wp.passwordStrength.meter( pw, blacklist, '' );
+
+	var message = window.pwsL10n.short;
+	switch ( score ) {
+		case 2 :
+			return window.pwsL10n.bad;
+
+		case 3 :
+			return window.pwsL10n.good;
+
+		case 4 :
+			return window.pwsL10n.strong;
+	}
+}
+
 jQuery(document).ready(function() {
 	var $signup_form = $( '#signup_form' );
 
@@ -45,6 +61,48 @@ jQuery(document).ready(function() {
 		this.$element.parent( '.form-group' ).addClass( 'has-error' );
 	} ).on( 'field:success', function( formInstance ) {
 		this.$element.parent( '.form-group' ).removeClass( 'has-error' );
+	} );
+
+	var inputBlacklist = [
+		'signup_username',
+		'field_1',   // Display Name
+		'field_241', // First Name
+		'field_3'    // Last Name
+	];
+
+	$password_strength_notice = $( '#password-strength-notice' );
+	$( 'body' ).on( 'keyup', '#signup_password', function( e ) {
+		var blacklistValues = [];
+		for ( var i = 0; i < inputBlacklist.length; i++ ) {
+			var fieldValue = document.getElementById( inputBlacklist[ i ] ).value;
+			if ( 4 <= fieldValue.length ) {
+				// Exclude short items. See password-strength-meter.js.
+				blacklistValues.push( fieldValue );
+			}
+		}
+
+		var score = window.wp.passwordStrength.meter( e.target.value, blacklistValues, '' );
+
+		var message = window.pwsL10n.short;
+		switch ( score ) {
+			case 2 :
+				message = window.pwsL10n.bad;
+			break;
+
+			case 3 :
+				message = window.pwsL10n.good;
+			break;
+
+			case 4 :
+				message = window.pwsL10n.strong;
+			break;
+		}
+
+		$password_strength_notice
+			.show()
+			.html( message )
+			.removeClass( 'strength-0 strength-1 strength-2 strength-3 strength-4' ).
+			addClass( 'strength-' + score );
 	} );
 
     $('#signup_email').on('blur', function (e) {
