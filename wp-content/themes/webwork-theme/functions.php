@@ -8,3 +8,15 @@ function webwork_theme_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'webwork_theme_assets' );
 
+/**
+ * Don't allow the OpenLab to add additional links to nav menus.
+ */
+add_filter( 'wp_page_menu', function( $_ ) {
+	remove_filter( 'wp_page_menu', 'my_page_menu_filter' );
+	return $_;
+}, 0 );
+
+add_filter( 'wp_nav_menu_objects', function( $_ ) {
+	remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+	return $_;
+}, 0 );
