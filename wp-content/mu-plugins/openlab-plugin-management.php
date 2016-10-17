@@ -17,6 +17,7 @@ function openlab_hide_plugins( $plugins ) {
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
+		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
