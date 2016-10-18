@@ -7,7 +7,7 @@
  */
 class BP_Groupblog_Extension extends BP_Group_Extension {
 
-	function bp_groupblog_extension() {
+	public function __construct() {
 		global $bp;
 
 		$this->name = __( 'Group Blog', 'groupblog' );
