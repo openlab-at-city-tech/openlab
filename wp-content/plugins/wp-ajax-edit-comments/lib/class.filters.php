@@ -13,7 +13,7 @@ class AECFilters {
 		/* add_date_spans - Adds spans to date links */
 		//public static class.core
 		public static function add_date_spans($content) {
-			global $comment;
+			global $comment, $aecomments;
 			if ($aecomments->skip) { $aecomments->skip = false; return $content; }
 			if (!is_object($comment)) { return $content; }
 			if (AECCore::can_edit_quickcheck($comment) != 1) { return $content; } //--ag

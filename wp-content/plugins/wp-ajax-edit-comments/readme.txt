@@ -1,10 +1,10 @@
 === WP Ajax Edit Comments ===
-Contributors: Ajay, ronalfy, joshben, blepoxp
-Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin
+Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan
+Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin, adopt-me
 Requires at least: 3.1
-Tested up to: 3.6
+Tested up to: 4.6.1
 License: GPLv2 or later
-Stable tag: 5.0.36.0
+Stable tag: 5.0.37
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
@@ -17,7 +17,7 @@ Ajax Edit Comments allows users to edit their own comments for a limited time.  
 Check out a "lite" version of this plugin called <a href="http://wordpress.org/plugins/simple-comment-editing/">Simple Comment Editing</a>.  Check out the <a href="http://www.wptavern.com/plugin-review-simple-comment-editing">WPTavern review</a> for more information.
 
 = Looking for a new Contributor =
-We're looking for a new contributor to this plugin.  All the current contributors no longer have the time to maintain this project.  If you're interested, <a href="https://github.com/ronalfy/ajax-edit-comments">fork the project on GitHub</a> and submit a pull request.  
+We're looking for a new contributor to this plugin.  All the current contributors no longer have the time to maintain this project.  If you're interested, <a href="https://github.com/ronalfy/ajax-edit-comments">fork the project on GitHub</a> and submit a pull request.   Alternatively, <a href="http://wordpress.org/support/topic/looking-for-new-developer">leave a comment here</a>.
 
 Here are some things that need to be worked on:
 <ul>
@@ -64,8 +64,16 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 5.0.37.0 =
+* Updated 2016-10-14 by Mikhail Kobzarev - Ensuring WordPress 4.6.1 compatibility
+* Fixing E_STRICT errors
+
 = 5.0.36.0 =
-* Released 12 October 2013 by Ronald Huereca
+* Updated 2014-12-11 by Ronald Huereca - Ensuring WordPress 4.1 compatibility 
+* Updated on 03 September 2014 by Ronald Huereca
+* Testing WordPress 4.0 compatibility (successfully)
+* Initially released 12 October 2013 by Ronald Huereca
 * Rolled back JavaScript slashes functionality
 
 = 5.0.35.0 =
@@ -241,6 +249,9 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 
 
 == Upgrade Notice ==
+
+= 5.0.36.0 =
+Fixing E_STRICT errors
 
 = 5.0.36.0 =
 Rolled back JavaScript slashes functionality
