@@ -111,7 +111,6 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
     overflow: hidden;
     position: relative;
     margin: 20px 20px 0 20px;
-    border-radius: 4px;
 }
 .bws-membership-backround {
     background-color: #000;
@@ -123,19 +122,30 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
 }
 .bws-membership {
     color: #fff;
-    padding: 40px 10px 37px;
-    text-align: center; 
+    padding: 23px 22px 23px 20px;
     z-index: 6;
     position: relative;
 }
-.bws-membership * {
-    text-align: center;
+.bws-membership-title {    
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 600;
+    float: left;
+}
+.bws-membership-form {
+    float: right;
+}
+.bws-membership-form * {
+    vertical-align: top;
+}
+.bws_form_input_wrap {
+    display: inline-block;
 }
 .bws-membership input[type="text"] {
     border-radius: 3px;
     border: none;
-    font-size: 16.14px;
-    padding: 8px 20px 8px 10px;
+    font-size: 13px;
+    padding: 8px 19px 8px 9px;
     text-align: left;
 }
 .bws-membership .bws-button {
@@ -144,34 +154,38 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
     text-align: center;
     display: inline-block;
     text-decoration: none;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 8px 30px;   
+    font-size: 13px;
+    padding: 8px 9px;   
     border-radius: 3px; 
     border: none;
     cursor: pointer;
+    margin: 0 6px;
 }
 .bws-membership-link {
-    font-size: 14px;
+    font-size: 15px;
     color: #999;
-    font-style: italic;
-    margin-top: 26px;
+    padding: 0 8px;
+    line-height: 27px;
 }
 .bws-membership-link a {
     color: #fff;
     text-decoration: none;
     border-bottom: 1px solid #999;
+    padding: 0 3px;
 }
 .bws-membership-link a:hover {
     border-bottom: none;
 }
 .bws_error {
     color: #c5412b;
-    margin-top: 5px;
+    margin-top: 1px;
 }
 .bws_error a {
     color: #fff;
     text-decoration: none;
+}
+.bws_input_error {
+    border: 1px solid #c5412b !important;
 }
 /*
 * themes
@@ -411,6 +425,14 @@ a.bws_donate {
     .bws-products {
         width: 370px;
     }
+    .bws-membership-title,
+    .bws-membership-form {
+        float: none;
+        text-align: center;
+    }
+    .bws-membership-title {
+        margin-bottom: 10px;
+    }
 }
 @media screen and (max-width: 782px) {
     .bws-header {
@@ -434,12 +456,22 @@ a.bws_donate {
         width: 100%;
         padding: 17px 20px 20px;
     }
+    .bws-membership * {
+        text-align: center;
+    }  
+    .bws-membership-title,
+    .bws-membership-link {
+        margin-bottom: 10px;
+        display: block;
+    }
     .bws-membership .bws-button,
+    .bws_form_input_wrap,
     .bws-membership input[type="text"] {
         width: 100%;
+        margin: 0;
     }
-    .bws-membership input[type="text"] {
-        margin-bottom: 8px;
+    .bws-membership .bws-button {
+        margin-top: 8px;
     }
     .bws-filter {
         display: none;

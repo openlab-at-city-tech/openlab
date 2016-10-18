@@ -3,8 +3,8 @@ Contributors: bestwebsoft
 Donate link: http://bestwebsoft.com/donate/
 Tags: captcha, capcha, security, spam blocker, simple captcha, antispam, protection, text captcha, captcha numbers, captcha plugin, web form protection, captcha protection
 Requires at least: 3.8
-Tested up to: 4.5.3
-Stable tag: 4.2.2
+Tested up to: 4.6.1
+Stable tag: 4.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,7 @@ http://www.youtube.com/watch?v=nlcCKSxu_Kk
 	* Registration form
 	* Reset password form
 	* Comments form
-	* [Contact Form by BestWebSoft](https://wordpress.org/plugins/contact-form-plugin)
+	* [Contact Form by BestWebSoft](http://bestwebsoft.com/products/wordpress/plugins/contact-form/?k=7f973058ee3bd3a18934b5e13b857d6f)
 	* Custom form
 * Enhance captcha protection with:
 	* Letters, numbers and images
@@ -37,28 +37,27 @@ http://www.youtube.com/watch?v=nlcCKSxu_Kk
 * Refresh captcha option
 * Image packages with hand-drawn digits
 * Edit captcha title and notifications
-* Merge IP addresses from [Limit Attempts by BestWebSoft](https://wordpress.org/plugins/limit-attempts/) plugin with Captcha whitelist
+* Merge IP addresses from [Limit Attempts by BestWebSoft](http://bestwebsoft.com/products/wordpress/plugins/limit-attempts/?k=c6b924d096b75a288daf0e49a58f93c2) plugin with Captcha whitelist
 * Add custom code via plugin settings page
 * Compatible with latest WordPress version
 * Incredibly simple settings for fast setup without modifying code
 * Detailed step-by-step documentations and videos
 * Multi-lingual (39+ languages) and RTL ready
-* 300+ ratings with a 5 star on Wordpress.org
 
 > **Pro Features**
 >
 > All features from Free version included plus:
-> 
+>
 > * Contact Form 7 compatible (since v 3.4)
 > * BuddyPress compatible: registration, comments and create a group forms
 > * WooCommerce compatible: login form
-> * [Subscriber by BestWebSoft](https://wordpress.org/plugins/subscriber/) compatible
+> * [Subscriber by BestWebSoft](http://bestwebsoft.com/products/wordpress/plugins/subscriber/?k=ac02c12d6e17bc91f4cc636eec0a0348) compatible
 > * Use multisite network to configure sub websites
 > * Captcha submission time limit for separate forms
 > * Add and enable unlimited number of image packages at the same time
-> * Get answer to your support question within one business day
-> 
-> [Upgrade to Pro Now](http://bestwebsoft.com/products/captcha/?k=2d2d85a3c277bf3489697c9a9ff2d352)
+> * Get answer to your support question within one business day ([Support Policy](http://bestwebsoft.com/support-policy/))
+>
+> [Upgrade to Pro Now](http://bestwebsoft.com/products/wordpress/plugins/captcha/?k=2d2d85a3c277bf3489697c9a9ff2d352)
 
 If you have a feature suggestion or idea you'd like to see in the plugin, we'd love to hear about it! [Suggest a Feature](http://support.bestwebsoft.com/hc/en-us/requests/new)
 
@@ -78,11 +77,12 @@ Visit our Help Center if you have any questions, our friendly Support Team is ha
 
 * Arabic (ar_AR) (thanks to Albayan Design Hani Aladoli)
 * Bangla (bn_BD) (thanks to [SM Mehdi Akram](mailto:mehdi.akram@gmail.com), www.shamokaldarpon.com)
+* Belarusian (bel) (thanks to [Natasha Diatko](mailto:natasha.diatko@gmail.com))
 * Brazilian Portuguese (pt_BR) (thanks to [Breno Jacinto](mailto:brenojac@gmail.com), www.iconis.org.br)
 * Bulgarian (bg_BG) (thanks to [Nick](mailto:paharaman@gmail.com))
 * Catalan (ca) (thanks to [Psiete](mailto:psiete@gmail.com))
-* Chinese (zh_CN) (thanks to [Newbiesup](mailto:newbiesup@gmail.com), www.wpsites.org)
-* Taiwan (zh_TW) (thanks to [Henry H](mailto:hh3stuff@gmail.com))
+* Chinese (zh_CN) (thanks to <a href="mailto:416441872@qq.com">TIM</a>)
+* Taiwan (zh_TW) (thanks to [Kaiconan](mailto:ch.unk.ai.ma.o@gmail.com))
 * Croatian (hr) (thanks to [Daniel](mailto:daniel@croteh.com))
 * Czech (cs_CZ) (thanks to [Crysman](mailto:crysman@seznam.cz))
 * Danish (da_DK) (thanks to Byrial Ole Jensed)
@@ -109,7 +109,7 @@ Visit our Help Center if you have any questions, our friendly Support Team is ha
 * Serbian (sr_RS) (thanks to Radovan Georgijevic)
 * Slovak (sk_SK) (thanks to Branco Radenovich)
 * Slovenian (sl_SI) (thanks to [Uroš Klopčič](mailto:uros.klopcic@gmail.com), www.klopcic.net)
-* Spain (es_ES) (thanks to Iván García Cubero)
+* Spain (es_ES)
 * Swedish (sv_SE) (thanks to Christer Rönningborg, [Blittan](mailto:blittan@xbmc.org))
 * Tagalog (tl) (thanks to [Roozbeh Jalali](mailto:rjalali@languageconnect.net), www.languageconnect.net)
 * Turkish (tr_TR) (thanks to Can Atasever, www.canatasever.com)
@@ -120,9 +120,9 @@ Some of these translations are not complete. We are constantly adding new featur
 
 = Recommended Plugins =
 
-* [Limit Attempts](http://wordpress.org/plugins/limit-attempts/) - Limit rate of login attempts to Wordpress website and block IP addresses temporarily. Protect against brute force attacks. Restrict login by IP access using white- and blacklists. Advanced control of user activity.
-* [Updater](http://wordpress.org/plugins/updater/) - Automatically check and update WordPress core with all installed plugins to the latest versions. Manual mode, email notifications and backups of all your files and database before updating.
-* [Contact Form](http://bestwebsoft.com/products/contact-form/) - Add contact form to your WordPress website
+* [Limit Attempts](http://bestwebsoft.com/products/wordpress/plugins/limit-attempts/?k=c6b924d096b75a288daf0e49a58f93c2) - Limit rate of login attempts to Wordpress website and block IP addresses temporarily. Protect against brute force attacks. Restrict login by IP access using white- and blacklists. Advanced control of user activity.
+* [Updater](http://bestwebsoft.com/products/wordpress/plugins/updater/?k=0864088de1701a5e104ffb77c6d7011c) - Automatically check and update WordPress core with all installed plugins to the latest versions. Manual mode, email notifications and backups of all your files and database before updating.
+* [Contact Form](http://bestwebsoft.com/products/wordpress/plugins/contact-form/?k=7f973058ee3bd3a18934b5e13b857d6f) - Add contact form to your WordPress website
 
 = Donate =
 
@@ -142,44 +142,74 @@ http://www.youtube.com/watch?v=qsfLTcSo5Ok
 
 == Frequently Asked Questions ==
 
-= Missing Captcha on the comment form? =
+= Why the CAPTCHA is missing in the comments form? =
 
-You might have a theme where comments.php is not coded properly.
+The Captcha by BestWebSoft plugin displays the CAPTCHA for those comments forms which were written in the same way as comments forms for the standard WordPress themes.
 
-Wopdpress version matters.
+Unfortunately, the plugin is incompatible with comments forms generated by using SAAS (eg: Disqus or JetPack comments forms).
 
-(WP2 series) Your theme must have a tag `<?php do_action('comment_form', $post->ID); ?>` inside the file `/wp-content/themes/[your_theme]/comments.php`.
-Most WP2 themes already have it. The best place to put this tag is before the comment textarea, you can move it up if it is below the comment textarea.
+If you don't use SAAS comments forms, please follow the next steps:
 
-(WP3 series) WP3 has a new function comment_form inside of `/wp-includes/comment-template.php`.
-Your theme is probably not up-to-date to call that function from comments.php.
-WP3 theme does not need the code line `do_action('comment_form'`... inside of `/wp-content/themes/[your_theme]/comments.php`.
-Instead it uses a new function call inside of comments.php: `<?php comment_form(); ?>`
-If you have WP3 and captcha is still missing, make sure your theme has `<?php comment_form(); ?>`
-inside of `/wp-content/themes/[your_theme]/comments.php` (please check the Twenty Ten theme's comments.php for proper example)
+1. Using FTP, please go to {wp_root_folder}/wp-content/themes/{your_theme}.
+2. Find and open `comments.php` file. It is possible that the file that is used to display the comment form in your theme called differently or comment form output functionality is inserted directly in the other templates themes (eg single.php or page.php). In this case, you need to open the corresponding file.
+3. Make sure that the file contains one of the next hooks: `do_action ( 'comment_form_logged_in_after' )`, `do_action ( 'comment_form_after_fields' )` or `do_action ( 'comment_form' )`. If you didn't find one of these hooks, then put the string `<?php do_action( 'comment_form', $post->ID ); ?>` in the comment form.
 
 = I would like to add Captcha to the custom form on my website. How can I do this? =
 
 1. Install the Captcha plugin and activate it.
-2. Open the file with the form (where you would like to add captcha to).
-3. Find a place to insert the code for the captcha output.
-4. Insert the necessary lines:
+2. (Optional) If you want to use own settings for your custom forms (for example, for your contact and sign up forms), please follow steps below:
 
-`if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom() } ;`
+a. Open "functions.php" file of your theme in the edit mode;
+b. Add the following lines to the end of the file:
 
-If the form is HTML you should insert the line with the PHP tags:
+`function add_my_forms( $forms ) {
+    $forms['form_slug']   = "Form Display Name";
+    $forms['form_2_slug'] = "Form 2 Display Name";
+    return $forms;
+}
+add_filter( 'cptch_add_form', 'add_my_forms' );`
 
-`<?php if( function_exists( 'cptch_display_captcha_custom' ) ) { echo "<input type='hidden' name='cntctfrm_contact_action' value='true' />"; echo cptch_display_captcha_custom(); } ?>`
+Please don't use the next form slugs since they are predefined by plugin settings: general, wp_login, wp_register, wp_lost_password, wp_comments, bws_contact, bws_subscriber, buddypress_register, buddypress_comments, buddypress_group, cf7_contact, woocommerce_login, woocommerce_register, woocommerce_lost_password, woocommerce_checkout.
 
-5. Then you should add the lines to the function of the entered data checking
+c. Save file changes;
+d. Go to the "Settings" tab on the plugin settings page (Admin Dashboard -> BWS Panel -> Captcha);
 
-`if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA."`
+If everything is OK, you will see new tabs with labels which you specified in the "cptch_add_form_tab" hook call function.
 
- or
+e. Switch to new tabs and configure form options on them as you need;
+f. Click "Save changes";
 
-`<?php if( function_exists( 'cptch_check_custom_form' ) && cptch_check_custom_form() !== true ) echo "Please complete the CAPTCHA." ?>`
+In case when you don`t want to use own settings for displaying the CAPTCHA in your custom form, the settings from "General Options" tab from the plugin settings page will be used.
 
-You could add this line to the variable and display this variable in the required place instead of `echo "Please complete the CAPTCHA."`. If there is a variable (responsible for the errors output) in the check function, this phrase can be added to this variable. If the function returns 'true', it means that you have entered captcha properly. In all other cases the function will return 'false'.
+3. Open the file with the form (where you would like to add CAPTCHA);
+4. Find a place to insert the code for the CAPTCHA output;
+5. Insert the following lines:
+
+`<?php echo apply_filters( 'cptch_display', '', 'my_contact_form' ); ?>`
+
+In this example, the second parameter is a slug for your custom form. If you don`t use the custom form settings (see point 2 of this instructions) you can leave it empty:
+
+`<?php echo apply_filters( 'cptch_display', '' ); ?>`
+
+6. After that, you should add the following lines to the function of the entered data checking:
+
+`<?php $error = apply_filters( 'cptch_verify', true );
+if ( true === $error ) { /* the CAPTCHA answer is right */
+    /* do necessary action */
+} else { /* the CAPTCHA answer is wrong or there are some other errors */
+    echo $error; /* display the error message or do other necessary actions in case when the CAPTCHA test was failed */
+} ?>`
+
+If there is a variable in the check function responsible for the errors output, you can concatenate variable $error to this variable. If the 'cptch_verify' filter hook returns 'true', it means that you have entered the CAPTCHA answer properly. In all other cases, the function will return the string with the error message.
+
+= I got the message "On your site uses functions ... that are deprecated". What should I do? =
+
+Starting with version 4.2.3, we have changed the functionality for faster and more correct plugin work.
+You need to replace the output and response checking for the CAPTCHA in your form according to the instruction by the link <http://support.bestwebsoft.com/hc/en-us/articles/202353439> or the appropriate point in the FAQ (see "I would like to add Captcha to the custom form on my website. How can I do this? ").
+
+After making changes, simply close the message in the admin panel.
+
+If you completely updated the CAPTCHA interaction with your form the message will not be displayed any more.
 
 = Can I move the Captcha block in the comment form? =
 
@@ -205,10 +235,28 @@ Please make sure that the problem hasn't been discussed yet on our forum (<http:
 4. Comments form with Captcha.
 5. Contact form with Captcha.
 6. Captcha Basic Settings page.
-7. Captcha Advanced Settings page.
+7. Captcha Basic Settings page ("Notification Messages" options block).
 8. Captcha Whitelist.
 
 == Changelog ==
+
+= V4.2.6 - 30.09.2016 =
+* NEW : The Belarusian language file has been added.
+* Update : The Spain language file has been updated.
+* Update : The Taiwan language file has been updated.
+
+= V4.2.4 - 18.08.2016 =
+* Bugfix : The bug with the update of the plugin database has been fixed.
+
+= V4.2.3 - 15.08.2016 =
+* NEW : An ability to choose own CAPTCHA settings for each form which is compatible with the plugin.
+* NEW : An ability to expand the list of forms which are compatible with the plugin via WordPress hooks.
+* NEW : An ability to show the CAPTCHA after the page is loaded.
+* NEW : The "[bws_captcha]" shortcode is added.
+* Update : The HTML structure of the plugin settings page has been updated.
+* Update : The Chinese language file has been updated (thanks to [TIM](mailto:416441872@qq.com)).
+* Update : BWS panel section has been updated.
+* Bugfix : The bug with displaying CSS ID for the CAPTCHA block has been fixed.
 
 = V4.2.2 - 15.07.2016 =
 * Update : BWS panel section was updated.
@@ -596,6 +644,15 @@ Please make sure that the problem hasn't been discussed yet on our forum (<http:
 * Select functionality of mathematical actions and level of their difficulty are implemented.
 
 == Upgrade Notice ==
+
+= V4.2.6 =
+* New languages added.
+
+= V4.2.4 =
+Bugs fixed.
+
+= V4.2.3 =
+New features added. Changes related to API functionality implemented. Functionality expanded. Functionality improved. Usability improved. The compatibility with new WordPress version updated. Bugs fixed.
 
 = V4.2.2 =
 Usability improved.
