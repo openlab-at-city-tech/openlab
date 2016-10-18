@@ -1,8 +1,8 @@
 === Gravity Forms Directory ===
 Tags: gravity forms, gravity form, forms, gravity, form, directory, business, business directory, directorypress, classifieds, cforms, formidable, gravityview
 Requires at least: 3.3
-Tested up to: 4.4
-Stable tag: 3.8
+Tested up to: 4.6
+Stable tag: 3.8.1
 Contributors: katzwebdesign, katzwebservices
 License: GPLv2 or later
 Donate link: https://gravityview.co
@@ -38,6 +38,7 @@ Gravity Forms is already the easiest form plugin...now, the Gravity Forms Direct
 * Option to __view single entries__ in their own page or in a lightbox
 
 ####Insert a totally configurable table using the editor
+
 There are tons of configurable options for how you want the directory to display.
 
 ###Improve Gravity Forms Functionality and Usability
@@ -45,14 +46,6 @@ There are tons of configurable options for how you want the directory to display
 * Expand the Add Fields boxes to view all the boxes at once.
 * Edit form entries directly from the Entries page (saving two clicks)
 * Easily access form data to use in your website with PHP functions - [Learn more on the plugin's website](https://katz.co/gravity-forms-addons/)
-
-#### Other Gravity Forms Add-ons:
-
-* <a href="http://wordpress.org/extend/plugins/gravity-forms-salesforce/">Gravity Forms Salesforce Add-on</a> - Integrate Gravity Forms with Salesforce.com
-* <a href="http://wordpress.org/extend/plugins/gravity-forms-highrise/">Gravity Forms Highrise Add-on</a> - Integrate Gravity Forms with Highrise, a CRM
-* <a href="http://wordpress.org/extend/plugins/gravity-forms-constant-contact/">Gravity Forms + Constant Contact</a> - If you use Constant Contact and Gravity Forms, this plugin is for you.
-* <a href="http://wordpress.org/extend/plugins/gravity-forms-mad-mimi/">Gravity Forms Mad Mimi Add-on</a> - Integrate Mad Mimi, a great email marketing company, and Gravity Forms.
-* <a href="http://wordpress.org/extend/plugins/gravity-forms-exacttarget/">Gravity Forms ExactTarget Add-on</a> - Integrate with ExactTarget, an enterprise-class email marketing service
 
 #### Have an idea or issue with this Gravity Forms add-on plugin?
 
@@ -232,6 +225,13 @@ Since 3.6.3, the Directory plugin displays formatted values (like currency). To 
 
 
 == Changelog ==
+
+= 3.8.1 on August 17, 2016 =
+* Fixed: Compatibility with Gravity Forms 2.0 Entries screen
+    - The "Directory Columns" menu returns to the toolbar
+    - Show the "Directory Columns" link when displaying the default form in the admin
+    - The "Approved" checkbox now does not break entries layout
+* Fixed: PHP warnings shown when configuring directory columns
 
 = 3.8 on December 10, 2015 =
 * Fixed: Gravity Forms 1.9.15 Entries screen conflict
@@ -557,6 +557,13 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 
 
 == Upgrade Notice ==
+
+= 3.8.1 on August 17, 2016 =
+* Fixed: Compatibility with Gravity Forms 2.0 Entries screen
+    - The "Directory Columns" menu returns to the toolbar
+    - Show the "Directory Columns" link when displaying the default form in the admin
+    - The "Approved" checkbox now does not break entries layout
+* Fixed: PHP warnings shown when configuring directory columns
 
 = 3.8 on December 10, 2015 =
 * Fixed: Gravity Forms 1.9.15 Entries screen conflict
