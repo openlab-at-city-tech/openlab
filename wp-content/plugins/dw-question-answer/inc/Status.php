@@ -1,5 +1,4 @@
 <?php  
-
 /**
  * Control all status 
  */

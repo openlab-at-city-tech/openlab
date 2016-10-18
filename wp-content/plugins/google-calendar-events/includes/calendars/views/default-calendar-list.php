@@ -138,7 +138,6 @@ class Default_Calendar_List implements Calendar_View {
 			'simcal-qtip' => array(
 				'src'       => SIMPLE_CALENDAR_ASSETS . 'js/vendor/qtip' . $min . '.js',
 				'deps'      => array( 'jquery' ),
-				'ver'       => '2.2.1',
 				'in_footer' => true,
 			),
 			'simcal-default-calendar' => array(
@@ -147,7 +146,6 @@ class Default_Calendar_List implements Calendar_View {
 					'jquery',
 					'simcal-qtip',
 				),
-				'var'       => SIMPLE_CALENDAR_VERSION,
 				'in_footer' => true,
 				'localize'  => array(
 					'simcal_default_calendar' => simcal_common_scripts_variables(),
@@ -171,7 +169,6 @@ class Default_Calendar_List implements Calendar_View {
 		return array(
 			'simcal-default-calendar-list' => array(
 				'src'   => SIMPLE_CALENDAR_ASSETS . 'css/default-calendar-list' . $min . '.css',
-				'ver'   => SIMPLE_CALENDAR_VERSION,
 				'media' => 'all',
 			),
 		);
@@ -471,11 +468,13 @@ class Default_Calendar_List implements Calendar_View {
 		}
 
 		$feed          = simcal_get_feed( $calendar );
+
+		// TODO Need $feed_timezone?
 		$feed_timezone = get_post_meta( $feed->post_id, '_feed_timezone', true );
 
 		$now = $calendar->now;
 		$current_events = $this->get_events( $timestamp );
-		$day_format = explode( ' ', $calendar->date_format );
+		$format = $calendar->date_format;
 
 		ob_start();
 
@@ -496,15 +495,15 @@ class Default_Calendar_List implements Calendar_View {
 
 		if ( ! empty( $current_events ) && is_array( $current_events ) ) :
 
+			$last_event = null;
+
 			foreach ( $current_events as $ymd => $events ) :
-
-
 
 				// This is where we can find out if an event is a multi-day event and if it needs to be shown.
 				// Since this is for list view we are showing the event on the day viewed if it is part of that day even when
 				// expand multi-day events are turned off.
 				if ( isset( $events[0][0]->multiple_days ) && $events[0][0]->multiple_days > 0 ) {
-					if ( 'current_day_only' == get_post_meta($calendar->id, '_default_calendar_expand_multi_day_events', true ) ) {
+					if ( 'current_day_only' == get_post_meta( $calendar->id, '_default_calendar_expand_multi_day_events', true ) ) {
 
 						$year  = substr( $ymd, 0, 4 );
 						$month = substr( $ymd, 4, 2 );
@@ -512,19 +511,28 @@ class Default_Calendar_List implements Calendar_View {
 
 						$temp_date = Carbon::createFromDate( $year, $month, $day );
 
-						if( ! ( $temp_date < Carbon::now()->endOfDay() ) ) {
-							continue;
+						if ( ! ( $temp_date < Carbon::now()->endOfDay() ) ) {
+
+							// Break here only if event already shown once.
+							if ( $last_event == $events[0][0] ) {
+								continue;
+							} else {
+								// Save event as "last" for next time through, then break.
+								$last_event = $events[0][0];
+							}
 						}
 					}
 				}
 
-				$day_ts = Carbon::createFromFormat( 'Ymd', $ymd, $calendar->timezone )->startOfDay()->getTimestamp();
+				// Calculate timestamp offset for list view day headings.
+				$day_date = Carbon::createFromFormat( 'Ymd', $ymd, $calendar->timezone );
+				$day_ts_offset = $day_date->addSeconds( $day_date->offset )->timestamp;
 
 				if ( ! $calendar->compact_list ) :
 
 					$date = new Carbon( 'now', $calendar->timezone );
 					$date->setLocale( substr( get_locale(), 0, 2 ) );
-					$date->setTimestamp( $day_ts );
+					$date->setTimestamp( $day_ts_offset );
 
 					if ( $date->isToday() ) {
 						$the_color = new Color( $calendar->today_color );
@@ -539,9 +547,7 @@ class Default_Calendar_List implements Calendar_View {
 
 					echo "\t" . '<dt class="simcal-day-label"' . $border_style . '>';
 					echo '<span' . $bg_style .'>';
-					foreach ( $day_format as $format ) {
-						echo $format ? '<span class="simcal-date-format" data-date-format="' . $format . '">' . date_i18n( $format, $day_ts ) . '</span> ' : ' ';
-					}
+					echo $format ? '<span class="simcal-date-format" data-date-format="' . $format . '">' . date_i18n( $format, $day_ts_offset ) . '</span> ' : ' ';
 					echo '</span>';
 					echo '</dt>' . "\n";
 
@@ -550,7 +556,7 @@ class Default_Calendar_List implements Calendar_View {
 				$list_events = '<ul class="simcal-events">' . "\n";
 
 				$calendar_classes = array();
-				$day_classes = 'simcal-weekday-' . date( 'w', $day_ts );
+				$day_classes = 'simcal-weekday-' . date( 'w', $day_ts_offset );
 
 				// Is this the present, the past or the future, Doc?
 				if ( $timestamp <= $now && $timestamp >= $now ) {
@@ -568,12 +574,6 @@ class Default_Calendar_List implements Calendar_View {
 
 						if ( $event instanceof Event ) :
 
-							if ( $feed->type == 'grouped-calendars' ) {
-								date_default_timezone_set( $feed_timezone );
-							} else {
-								date_default_timezone_set( $event->timezone );
-							}
-
 							$event_classes = $event_visibility = '';
 
 							$calendar_class     = 'simcal-events-calendar-' . strval( $event->calendar );
@@ -590,8 +590,6 @@ class Default_Calendar_List implements Calendar_View {
 								$event_visibility = ' style="display: none"';
 							endif;
 
-							$event_color = '';
-							$bullet = '';
 							$event_color = $event->get_color();
 							if ( ! empty( $event_color ) ) {
 								$side = is_rtl() ? 'right' : 'left';
@@ -660,8 +658,6 @@ class Default_Calendar_List implements Calendar_View {
 		endif;
 
 		echo '</' . $block_tag . '>';
-
-		date_default_timezone_set( $calendar->site_timezone );
 
 		return ob_get_clean();
 	}

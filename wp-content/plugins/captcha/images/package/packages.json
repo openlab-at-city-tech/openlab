@@ -1,0 +1,62 @@
+[
+	{
+		"package": "arabic_bt",
+		"name": "Arabic ( black numbers - transparent background )",
+		"disabled": true
+	},
+	{
+		"package": "arabic_bw",
+		"name": "Arabic ( black numbers - white background )",
+		"disabled": false
+	},
+	{
+		"package": "arabic_wt",
+		"name": "Arabic ( white numbers - transparent background )",
+		"disabled": true
+	},
+	{
+		"package": "arabic_wb",
+		"name": "Arabic ( white numbers - black background )",
+		"disabled": false
+	},
+	{
+		"package": "dots_bt",
+		"name": "Dots ( black dots - transparent background )",
+		"disabled": true
+	},
+	{
+		"package": "dots_bw",
+		"name": "Dots ( black dots - white background )",
+		"disabled": false
+	},
+	{
+		"package": "dots_wb",
+		"name": "Dots ( white dots - black background )",
+		"disabled": false
+	},
+	{
+		"package": "dots_wt",
+		"name": "Dots ( white dots - transparent background )",
+		"disabled": true
+	},
+	{
+		"package": "roman_bt",
+		"name": "Roman ( black numbers - transparent background )",
+		"disabled": true
+	},
+	{
+		"package": "roman_bw",
+		"name": "Roman ( black numbers - white background )",
+		"disabled": true
+	},
+	{
+		"package": "roman_wb",
+		"name": "Roman ( white numbers - black background )",
+		"disabled": true
+	},
+	{
+		"package": "roman_wt",
+		"name": "Roman ( white numbers - transparent background )",
+		"disabled": true
+	}
+]

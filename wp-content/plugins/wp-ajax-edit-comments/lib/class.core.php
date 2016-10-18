@@ -15,7 +15,7 @@ class AECCore {
 		public static function build_admin_links($commentID, $postID, $content = '') {
 			global $aecomments;
 			
-			$comment = &get_comment( $commentID );
+			$comment = get_comment( $commentID );
 			$ajax_url = admin_url( 'admin-ajax.php' ) . '?';
 			$plugin_url = $aecomments->get_plugin_url( '/views/' );
 			if (!AECCore::is_comment_owner($postID)) {
@@ -392,7 +392,7 @@ class AECCore {
 		Returns - Enumeration (0=unsuccessful,1=successful,or string error code)
 		*/
 		//public static class.core
-		function can_edit($commentID = 0, $postID = 0) {
+		public static function can_edit($commentID = 0, $postID = 0) {
 			global $wpdb, $aecomments;
 			
 			//Check if admin/editor/post author

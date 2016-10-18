@@ -3,14 +3,14 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 4.2.1
-Stable tag: 1.5.11
+Tested up to: 4.6
+Stable tag: 1.5.12
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamically show or hide widgets on WordPress pages by setting conditional logic rules on a widget with just a few mouse clicks. No knowledge of PHP required. No fiddling around with conditional tags. You can set conditional rules by Role, Dates, Browser, Mobile devices, Theme Template, Language (WPML or QTranslate), URL, for the Homepage, Single Posts, Attachments, Pages, Authors, Categories, Tags, Archives, Error Page, Search Page, Custom Post Types, Custom Post Type Archives, Custom Taxonomies in Custom Post Types, Custom Taxonomies Archives, WPEC/WPSC Categories, BuddyPress Components, BuddyPress Groups, Pods pages and bbPress.
+Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamically show or hide widgets on WordPress pages by setting conditional logic rules on a widget with just a few mouse clicks. No knowledge of PHP required. No fiddling around with conditional tags. You can set conditional rules by Role, Dates, Browser, Featured image, IP Address, Mobile devices, Theme Template, Language (WPML or QTranslate), URL, for the Homepage, Single Posts, Attachments, Pages, Authors, Categories, Tags, Archives, Error Page, Search Page, Custom Post Types, Custom Post Type Archives, Custom Taxonomies in Custom Post Types, Custom Taxonomies Archives, WPEC/WPSC Categories, BuddyPress Components, BuddyPress Groups, Pods pages and bbPress.
 
 For the latest news about Dynamic Widgets visit [my website](http://www.qurl.nl/).
 
@@ -31,6 +31,7 @@ It is very hard to continue development and support for this plugin without cont
   - Weeknumbers
   - Browsers
   - IP ranges
+  - Featured image
   - Devices (mobile, desktop)
   - Theme Templates
   - Languages (WPML or QTranslate)
@@ -62,6 +63,7 @@ It is very hard to continue development and support for this plugin without cont
   - Weeknumer on number
   - Browsers on browser name
   - IP on ranges
+  - Featued image on existence
   - Devices on type
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
@@ -187,6 +189,12 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.12 =
+
+* Added conditional check for client IP address (handy when using CLI).
+* Added support for featured image
+* (Temporary) removed QTranslate and all it's forks support because of code clashes.
 
 = Version 1.5.11 =
 

@@ -1,4 +1,0 @@
-slideshare
-==========
-
-Slideshare WordPress plugin

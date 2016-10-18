@@ -29,6 +29,7 @@ $arr = array(
 	'number_updates'	=> 7,
 	'avatar_size'		=> 48,
 	'proximity'			=> 0, // 1 to enable
+	'prio_size'			=> 0, // 1 to enable
 	'access_read'		=> 'subscriber',
 	'access_comment'	=> 'contributor',
 	'access_post'		=> 'author',

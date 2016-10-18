@@ -1,15 +1,19 @@
 <?php
-/*
-Plugin Name: SlideShare
-Plugin URI: http://yoast.com/wordpress/slideshare/
-Description: A plugin for WordPress to easily display slideshare.net presentations.
-Version: 1.9.1
-Author: Joost de Valk
-Author URI: https://yoast.com/
-*/
+/**
+ * Plugin Name: SlideShare
+ * Version: 1.9.2
+ * Plugin URI: http://yoast.com/wordpress/slideshare/
+ * Description: A plugin for WordPress to easily display slideshare.net presentations.
+ * Author: Team Yoast
+ * Author URI: https://yoast.com/
+ * Text Domain: slideshare
+ * Domain Path: /languages/
+ * License: GPL v3
+ */
 
 function yst_slideshare_init() {
-	load_plugin_textdomain( 'slideshare', null, plugins_url( 'languages', __FILE__ ) );
+
+	load_plugin_textdomain( 'slideshare', null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 add_action( 'init', 'yst_slideshare_init' );
@@ -69,7 +73,7 @@ if ( ! class_exists( 'Yoast_SlideShare_Admin' ) && is_admin() && ( ! defined( 'D
 								$rows[]  = array(
 									"id"      => "slidesharepostwidth",
 									"label"   => __( "Presentation width", 'slideshare' ),
-									"content" => '<input size="5" type="text" id="slidesharepostwidth" name="slideshare[postwidth]" value="' . $options['postwidth'] . '"/> pixels',
+									"content" => '<input size="5" type="text" id="slidesharepostwidth" name="slideshare[postwidth]" value="' . esc_attr( $options['postwidth'] ) . '"/> pixels',
 								);
 								$content = $this->form_table( $rows ) . '<div class="submit"><input type="submit" class="button-primary" name="submit" value="' . __( "Update SlideShare Settings", 'slideshare' ) . ' &raquo;" /></div>';
 								$this->postbox( 'slidesharesettings', __( 'Settings', 'slideshare' ), $content );
@@ -137,7 +141,7 @@ if ( ! is_admin() ) {
 		function embed( $id, $width ) {
 			$height = round( $width / 1.32 ) + 34;
 
-			return '<iframe src="https://www.slideshare.net/slideshow/embed_code/' . $id . '" width="' . $width . '" height="' . $height . '" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe><br/>';
+			return '<iframe src="https://www.slideshare.net/slideshow/embed_code/' . esc_attr( $id  ) . '" width="' . esc_attr( $width ) . '" height="' . esc_attr( $height ) . '" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe><br/>';
 		}
 
 		/**
@@ -155,7 +159,7 @@ if ( ! is_admin() ) {
 				$args = str_replace( '&amp;', '&', $args );
 				$r    = wp_parse_args( 'id=' . $args );
 
-				if ( $options['postwidth'] == '' ) {
+				if ( $options['postwidth'] == '' && isset( $r['w'] ) ) {
 					$width = $r['w'];
 				} else {
 					$width = $options['postwidth'];

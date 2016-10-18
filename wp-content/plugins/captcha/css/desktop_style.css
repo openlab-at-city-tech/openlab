@@ -1,4 +1,6 @@
-
+.cptch_ajax_wrap {
+	color: red;
+}
 .cptch_img:hover {
 	cursor: default;
 	position: relative;
@@ -38,26 +40,22 @@
 }
 .cptch_reload_button.cptch_active {
 	opacity: 0.7;
-	-webkit-animation: cptch_rotation 800ms infinite linear;
 	animation: cptch_rotation 800ms infinite linear;
+	-webkit-animation: cptch_rotation 800ms infinite linear;
 }
 @-webkit-keyframes cptch_rotation {
-	0% {
-		-webkit-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(359deg);
-		transform: rotate(359deg);
-	}
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(359deg);}
+}
+@-moz-keyframes cptch_rotation {
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(359deg);}
+}
+@-o-keyframes cptch_rotation {
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(359deg);}
 }
 @keyframes cptch_rotation {
-	0% {
-		-webkit-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(359deg);
-		transform: rotate(359deg);
-	}
+	0% {transform: rotate(0deg);}
+	100% {transform: rotate(359deg);}
 }

@@ -118,7 +118,7 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 			},
 
 			/**
-			 * Scrolls to the Tickets container, to show it when required
+			 * Scrolls to the Tickets container once the ticket form receives the focus.
 			 *
 			 * @return {void}
 			 */
@@ -126,6 +126,14 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 				$body.animate( {
 					scrollTop: $tickets_container.offset().top - 50
 				}, 500 );
+			},
+
+			/**
+			 * When the edit ticket form fields have completed loading we can setup
+			 * other UI features as needed.
+			 */
+			'edit-tickets-complete.tribe': function() {
+				show_hide_ticket_type_history();
 			},
 
 			/**
@@ -304,6 +312,29 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 				: "";
 		}
 
+		/**
+		 * When a ticket type is edited we should (re-)establish the UI for showing
+		 * and hiding its history, if it has one.
+		 */
+		function show_hide_ticket_type_history() {
+			var $history = $tribe_tickets.find( 'tr.ticket_advanced.history' );
+
+			if ( ! $history.length ) {
+				return;
+			}
+
+			var $toggle_link = $history.find( 'a.toggle-history' );
+			var $toggle_link_text = $toggle_link.find( 'span' );
+			var $history_list = $history.find( 'ul' );
+
+			$history.find( 'a.toggle-history' ).click( function( event ) {
+				$toggle_link_text.toggle();
+				$history_list.toggle();
+				event.stopPropagation();
+				return false;
+			} );
+		}
+
 		// Show or hide the global stock level as appropriate, both initially and thereafter
 		$enable_global_stock.change( show_hide_global_stock );
 		$enable_global_stock.trigger( 'change' );
@@ -381,6 +412,9 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 		/* "Delete Ticket" link action */
 
 		$tribe_tickets.on( 'click', '.ticket_delete', function( e ) {
+			if ( ! confirm( tribe_ticket_notices.confirm_alert ) ) {
+				return false;
+			}
 
 			e.preventDefault();
 
@@ -571,8 +605,7 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 							$( '#ticket_purchase_limit' ).val( response.data.purchase_limit );
 						}
 
-						$tribe_tickets.find( '.bumpdown-trigger' ).bumpdown();
-						$tribe_tickets.find( '.bumpdown' ).hide();
+						$tribe_tickets.find( '.tribe-bumpdown-trigger' ).bumpdown();
 
 						$( 'a#ticket_form_toggle' ).hide();
 						$( '#ticket_form' ).show();
@@ -584,13 +617,38 @@ var ticketHeaderImage = window.ticketHeaderImage || {};
 					},
 					'json'
 				).complete( function() {
-					$tribe_tickets.trigger( 'spin.tribe', 'stop' ).trigger( 'focus.tribe' );
+					$tribe_tickets
+						.trigger( 'spin.tribe', 'stop' )
+						.trigger( 'focus.tribe' )
+						.trigger( 'edit-tickets-complete.tribe' );
 				} );
 
 			} )
 			.on( 'click', '#tribe_ticket_header_image', function( e ) {
 				e.preventDefault();
 				ticketHeaderImage.uploader( '', '' );
+			} )
+			.on( 'keyup', '#ticket_price', function ( e ) {
+				e.preventDefault();
+				console.log( 'changes here' );
+				var regex, error;
+				var decimal_point = price_format.decimal;
+				var decimal_error = price_format.decimal_error;
+
+				regex = new RegExp( '[^\-0-9\%\\' + decimal_point + ']+', 'gi' );
+
+				var value = $( this ).val();
+				var newvalue = value.replace( regex, '' );
+
+				//todo add info message or tooltip to let people know we are removing the comma or period
+				if ( value !== newvalue ) {
+					console.log( 'new value' );
+					$( this ).val( newvalue );
+					//$( document.body ).triggerHandler( 'wc_add_error_tip', [ $( this ), decimal_error ] );
+				} else {
+					console.log( 'no change' );
+					//$( document.body ).triggerHandler( 'wc_remove_error_tip', [ $( this ), decimal_error ] );
+				}
 			} );
 
 

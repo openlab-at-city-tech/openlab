@@ -404,23 +404,27 @@ function openlab_registration_page() {
 			    <div data-parsley-children-should-match class="form-group">
 				    <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
 				    <?php do_action('bp_signup_password_errors') ?>
-				    <input
-					class="form-control"
-					type="password"
-					name="signup_password"
-					id="signup_password"
-					value=""
-					data-parsley-trigger="blur"
-					data-parsley-required
-					data-parsley-group="password"
-					data-parsley-iff="#signup_password_confirm"
-					data-parsley-iff-message=""
-				    />
+				    <div class="password-field">
+					    <input
+						class="form-control"
+						type="password"
+						name="signup_password"
+						id="signup_password"
+						value=""
+						data-parsley-trigger="blur"
+						data-parsley-required
+						data-parsley-group="password"
+						data-parsley-iff="#signup_password_confirm"
+						data-parsley-iff-message=""
+					    />
+
+					    <div id="password-strength-notice" class="password-strength-notice"></div>
+				    </div>
 
 				    <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
 				    <?php do_action('bp_signup_password_confirm_errors') ?>
 				    <input
-					class="form-control"
+					class="form-control password-field"
 					type="password"
 					name="signup_password_confirm"
 					id="signup_password_confirm"

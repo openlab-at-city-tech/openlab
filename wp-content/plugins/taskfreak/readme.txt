@@ -1,17 +1,21 @@
-=== TaskFreak! Free ===
+=== [UNMAINTAINED] TaskFreak! Free ===
 Contributors: taskfreak, HerveRenault
 Donate link: http://www.taskfreak.com/
 Tags: projects, tasks, management, todo, list, GTD, manage projects, project management, task management, team, planning, tracking
 Requires at least: 3.3
 Tested up to: 4.2.1
-Stable tag: 1.0.18
-Version: 1.0.18
+Stable tag: 1.0.19
+Version: 1.0.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Task management plugin from the authors of TaskFreak!
+Sorry, this plugin is no longer maintained.
 
 == Description ==
+
+** THIS PLUGIN IS NO LONGER MAINTAINED **
+
+Developers can fork it on GitHub https://github.com/taskfreak/tfwp/
 
 Manage tasks for yourself or within a group, company, organization, etc.
 Create projects or teams, then add tasks and assign to users.
@@ -36,6 +40,10 @@ Advantages :
 
 == Installation ==
 
+** THIS PLUGIN IS NO LONGER MAINTAINED **
+
+Developers can fork it on GitHub https://github.com/taskfreak/tfwp/
+
 1. Upload `taskfreak.zip` to the `/wp-content/plugins/` directory
 2. Unzip taskfreak (should create taskfreak/ folder within plugins/)
 3. Activate the plugin through the 'Plugins' menu in WordPress
@@ -45,6 +53,10 @@ Advantages :
 Note: if your theme inserts unwanted line breaks in TaskFreak's output, then use this shortcode combination: `[raw][tfk_all][/raw]`
 
 == Frequently Asked Questions ==
+
+** THIS PLUGIN IS NO LONGER MAINTAINED **
+
+Developers can fork it on GitHub https://github.com/taskfreak/tfwp/
 
 = Where can I get some help ? =
 
@@ -56,6 +68,10 @@ If you want personnal support or have specific requests, please go to
 http://www.taskfreak.com and see details about the pro version
 
 == Screenshots ==
+
+** THIS PLUGIN IS NO LONGER MAINTAINED **
+
+Developers can fork it on GitHub https://github.com/taskfreak/tfwp/
 
 1. After installing the plugin, go to the 'TaskFreak!' menu
 2. Create your first project
@@ -69,6 +85,10 @@ http://www.taskfreak.com and see details about the pro version
 10. Settings
 
 == Changelog ==
+
+** THIS PLUGIN IS NO LONGER MAINTAINED **
+
+Developers can fork it on GitHub https://github.com/taskfreak/tfwp/
 
 = 1.0.18 =
 Security fix (XSS)

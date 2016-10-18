@@ -116,8 +116,7 @@ var tribe_events_bar_action;
 					autoclose: true
 				};
 
-				$tribedate
-					.bootstrapDatepicker( td.datepicker_opts );
+				$tribedate.bootstrapDatepicker( td.datepicker_opts );
 			}
 		}
 
@@ -200,6 +199,9 @@ var tribe_events_bar_action;
 
 			}
 		} );
+
+		// Trigger Mobile Change
+		tf.maybe_default_view_change();
 
 		// change views with select (for skeleton styles)
 		$tribebar.on( 'change', '.tribe-bar-views-select', function( e ) {

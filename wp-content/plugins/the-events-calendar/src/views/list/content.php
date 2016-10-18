@@ -7,6 +7,7 @@
  * Override this template in your own theme by creating a file at [your-theme]/tribe-events/list/content.php
  *
  * @package TribeEventsCalendar
+ * @version  4.3
  *
  */
 
@@ -15,6 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 } ?>
 
 <div id="tribe-events-content" class="tribe-events-list">
+
+
+	<?php
+	/**
+	 * Fires before any content is printed inside the list view.
+	 */
+	do_action( 'tribe_events_list_before_the_content' );
+	?>
 
 	<!-- List Title -->
 	<?php do_action( 'tribe_events_before_the_title' ); ?>

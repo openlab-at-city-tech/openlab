@@ -61,20 +61,38 @@
 
 					<ul class="blog-menu">
 
-						<li><a href="#">Project Profile</a></li>
-						<li><a href="<?php echo get_option( 'home' ); ?>">Home</a></li>
-						<li><a href="#">About</a></li>
-						<li><a href="#">Help</a></li>
+						<?php if ( has_nav_menu( 'primary' ) ) : ?>
+							<?php wp_nav_menu( array(
+								'container' => '',
+								'items_wrap' => '%3$s',
+								'theme_location' => 'primary',
+								'walker' => new hemingway_nav_walker
+							) ) ?>
+						<?php else : ?>
+							<?php wp_list_pages( array(
+								'container' => '',
+								'title_li' => '',
+							) ) ?>
+						<?php endif; ?>
 
 						<div class="clear"></div>
 
 					 </ul>
 
 					 <ul class="mobile-menu">
-						<li><a href="#">Project Profile</a></li>
-						<li><a href="<?php echo get_option( 'home' ); ?>">Home</a></li>
-						<li><a href="#">About</a></li>
-						<li><a href="#">Help</a></li>
+						<?php if ( has_nav_menu( 'primary' ) ) {
+							wp_nav_menu( array(
+								'container' => '',
+								'items_wrap' => '%3$s',
+								'theme_location' => 'primary',
+								'walker' => new hemingway_nav_walker
+							) );
+						} else {
+							wp_list_pages( array(
+								'container' => '',
+								'title_li' => ''
+							));
+						} ?>
 					 </ul>
 
 				</div> <!-- /navigation-inner -->

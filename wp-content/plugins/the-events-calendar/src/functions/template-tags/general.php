@@ -288,6 +288,33 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	}
 
 	/**
+	 * Detect if an Event is Past
+	 *
+	 * Returns true if the current time is past the event end time
+	 *
+	 * @param null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_is_past_event( $event = null ) {
+
+		if ( is_null( $event ) ) {
+			global $post;
+			$event = $post;
+		}
+		// Check if event has passed
+		$gmt_offset = ( get_option( 'gmt_offset' ) >= '0' ) ? ' +' . get_option( 'gmt_offset' ) : ' ' . get_option( 'gmt_offset' );
+		$gmt_offset = str_replace( array( '.25', '.5', '.75' ), array( ':15', ':30', ':45' ), $gmt_offset );
+
+		if ( strtotime( tribe_get_end_date( $event, false, 'Y-m-d G:i' ) . $gmt_offset ) <= time() ) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * Event Category ID's
 	 *
 	 * Display the event category ID as a class for events wrapper
@@ -626,7 +653,6 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		} else {
 			$attrs['data-title'] = wp_title( '|', false, 'right' );
 		}
-
 		switch ( $current_view ) {
 			case 'month.php' :
 				$attrs['data-view']    = 'month';
@@ -1535,7 +1561,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		$url  = plugins_url( Tribe__Events__Main::instance()->plugin_dir . $path );
 
 		/**
-		 * Deprected the tribe_events_resource_url filter in 4.0 in favor of tribe_resource_url. Remove in 5.0
+		 * Deprecated the tribe_events_resource_url filter in 4.0 in favor of tribe_resource_url. Remove in 5.0
 		 */
 		$url = apply_filters( 'tribe_events_resource_url', $url, $resource );
 
@@ -1544,5 +1570,20 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Utility function to compile separated lists.
+	 *
+	 * @param string $body
+	 * @param string $separator
+	 * @param string $field
+	 *
+	 * @return string
+	 */
+	function tribe_separated_field( $body, $separator, $field ) {
+		$body_and_separator = $body ? $body . $separator : $body;
+
+		return $field ? $body_and_separator . $field : $body;
 	}
 }

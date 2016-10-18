@@ -5,7 +5,7 @@
  * Override this template in your own theme by creating a file at [your-theme]/tribe-events/tickets/orders-rsvp.php
  *
  * @package TribeEventsCalendar
- * @version 4.2.2
+ * @version 4.3
  *
  */
 
@@ -42,7 +42,7 @@ $attendee_groups = $view->get_event_rsvp_attendees_by_purchaser( $post_id, $user
 
 				printf(
 					esc_html__( ' on %s', 'event-tickets' ),
-					date_i18n( 'F j, Y', strtotime( esc_attr( $first_attendee['purchase_time'] ) ) )
+					date_i18n( Tribe__Date_Utils::DATEONLYFORMAT, strtotime( esc_attr( $first_attendee['purchase_time'] ) ) )
 				);
 				?>
 			</p>
@@ -65,8 +65,24 @@ $attendee_groups = $view->get_event_rsvp_attendees_by_purchaser( $post_id, $user
 						<!-- Wrapping <label> around both the text and the <select> will implicitly associate the text with the label. -->
 						<!-- See https://www.w3.org/WAI/tutorials/forms/labels/#associating-labels-implicitly -->
 						<label>
-							<?php esc_html_e( 'RSVP: ', 'event-tickets' ); ?>
-							<?php $view->render_rsvp_selector( "attendee[{$key}][order_status]", $attendee['order_status'], $post_id, $attendee['product_id'] ); ?>
+							<?php echo esc_html_x( 'RSVP: ', 'order status label', 'event-tickets' ); ?>
+							<?php
+							if ( ! empty( $attendee['ticket_exists'] ) ) {
+								$view->render_rsvp_selector(
+									"attendee[{$key}][order_status]",
+									$attendee['order_status'],
+									$post_id,
+									$attendee['product_id']
+								);
+							} else {
+								$view->render_rsvp_status(
+									"attendee[{$key}][order_status]",
+									$attendee['order_status'],
+									$post_id,
+									$attendee['product_id']
+								);
+							}
+							?>
 						</label>
 						<div class="ticket-type"><span class="type-label"><?php esc_html_e( 'Type: ', 'event-tickets' );?></span><?php esc_html_e( $attendee['ticket'] );?></div>
 					</div>

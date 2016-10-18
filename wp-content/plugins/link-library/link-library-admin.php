@@ -67,6 +67,8 @@ class link_library_plugin_admin {
 			add_action( 'media_buttons', 'link_library_render_editor_button', 20 );
 			add_action( 'admin_footer',  array( $this, 'render_modal' ) );
 		}
+		
+		add_action( 'link_library_reciprocal_check', 'link_library_reciprocal_link_checker', 10, 4 );		
 	}
 
 	function is_edit_page( $new_edit = null ) {
@@ -337,67 +339,6 @@ class link_library_plugin_admin {
 		}
 
 		return $newurl;
-	}
-
-	function ReciprocalLinkChecker( $RecipCheckAddress = '', $recipcheckdelete403 = false, $check_type = 'reciprocal' ) {
-		global $wpdb;
-		set_time_limit(0);
-
-		if ( $RecipCheckAddress != '' ) {
-			$linkquery = "SELECT distinct *, l.link_id as proper_link_id, UNIX_TIMESTAMP(l.link_updated) as link_date ";
-			$linkquery .= "FROM " . $this->db_prefix() . "terms t ";
-			$linkquery .= "LEFT JOIN " . $this->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
-			$linkquery .= "LEFT JOIN " . $this->db_prefix() . "term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ";
-			$linkquery .= "LEFT JOIN " . $this->db_prefix() . "links l ON (tr.object_id = l.link_id) ";
-			$linkquery .= "LEFT JOIN " . $this->db_prefix() . "links_extrainfo le ON (l.link_id = le.link_id) ";
-			$linkquery .= "WHERE tt.taxonomy = 'link_category' ";
-
-			if ( 'reciprocal' == $check_type ) {
-				$linkquery .= "AND le.link_reciprocal <> '' ";
-			} elseif ( 'broken' == $check_type ) {
-				$linkquery .= "AND l.link_url <> '' ";
-			}
-
-			$linkquery .= "order by l.link_name ASC";
-
-			$links  = $wpdb->get_results( $linkquery );
-			if ( 'reciprocal' == $check_type ) {
-				echo "<strong>" . __( 'Reciprocal Link Checker Report', 'link-library' ) . "</strong><br /><br />";
-			} elseif ( 'broken' == $check_type ) {
-				echo "<strong>" . __( 'Broken Link Checker Report', 'link-library' ) . "</strong><br /><br />";
-			}
-
-			if ( $links ) {
-				foreach ( $links as $link ) {
-					global $my_link_library_plugin;
-
-					if ( 'reciprocal' == $check_type ) {
-						$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link->link_reciprocal );
-					} elseif ( 'broken' == $check_type ) {
-						$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link->link_url );
-					}
-
-					echo '<a href="' . $link->link_url . '">' . $link->link_name . '</a>: ';
-
-					if ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_notfound' ) {
-						echo '<span style="color: #FF0000">' . __( 'Not Found', 'link-library' ) . '</span><br />';
-					} elseif ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) {
-						echo '<span style="color: #00FF00">' . __( 'OK', 'link-library' ) . '</span><br />';
-					} elseif ( 'broken' == $check_type && strpos( $reciprocal_result, 'exists' ) !== false ) {
-						echo '<span style="color: #00FF00">' . __( 'Link valid', 'link-library' ) . '</span><br />';
-					} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == true ) {
-						wp_delete_link( $link->link_id );
-						echo '<span style="color: #FF0000">' . __( 'Error 403: Link Deleted', 'link-library' ) . '</span><br />';
-					} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == false ) {
-						echo '<span style="color: #FF0000">' . __( 'Error 403', 'link-library' ) . '</span><br />';
-					} elseif ( $reciprocal_result == 'unreachable' ) {
-						echo '<span style="color: #FF0000">' . __( 'Website Unreachable', 'link-library' ) . '</span><br />';
-					}
-				}
-			} else {
-				echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
-			}
-		}
 	}
 
 	function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
@@ -817,8 +758,8 @@ class link_library_plugin_admin {
 				$options = ll_reset_options( $settings, 'table', 'return_and_set' );
 			}
 
-			if ( isset( $_GET['copy'] ) ) {
-				$destination = $_GET['copy'];
+			if ( isset( $_GET['settingscopy'] ) ) {
+				$destination = $_GET['settingscopy'];
 				$source      = $_GET['source'];
 
 				$sourcesettingsname = 'LinkLibraryPP' . $source;
@@ -882,7 +823,7 @@ class link_library_plugin_admin {
 							break;
 
 						case '9':
-							echo "<div id='message' class='updated fade'><p><strong>" . ( isset( $_GET['successimportcount'] ) ? $_GET['successimportcount'] : '0' ) . " " . __( 'link(s) imported', 'link-library' ) . ", " . ( isset( $_GET['successupdatecount'] ) ? $_GET['successupdatecount'] : '0' ) . " " . __( 'link(s) updated', 'link-library' ) . ".</strong></p></div>";
+							echo "<div id='message' class='updated fade'><p><strong>" . ( isset( $_GET['successimportcount'] ) ? intval( $_GET['successimportcount'] ) : '0' ) . " " . __( 'link(s) imported', 'link-library' ) . ", " . ( isset( $_GET['successupdatecount'] ) ? intval( $_GET['successupdatecount'] ) : '0' ) . " " . __( 'link(s) updated', 'link-library' ) . ".</strong></p></div>";
 							break;
 
 						case '10':
@@ -924,11 +865,11 @@ class link_library_plugin_admin {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Settings updated', 'link-library' ) . ".</strong></p></div>";
 			} elseif ( isset( $_GET['message'] ) && $_GET['message'] == '2' ) {
 				echo "<div id='message' class='updated fade'><p>";
-				echo $this->ReciprocalLinkChecker( $genoptions['recipcheckaddress'], $genoptions['recipcheckdelete403'], 'reciprocal' );
+				do_action( 'link_library_reciprocal_check', $this, $genoptions['recipcheckaddress'], $genoptions['recipcheckdelete403'], 'reciprocal' );
 				echo "</p></div>";
 			} elseif ( isset( $_GET['message'] ) && $_GET['message'] == '3' ) {
 				echo "<div id='message' class='updated fade'><p>";
-				echo $this->ReciprocalLinkChecker( $genoptions['recipcheckaddress'], $genoptions['recipcheckdelete403'], 'broken' );
+				do_action( 'link_library_reciprocal_check', $this, $genoptions['recipcheckaddress'], $genoptions['recipcheckdelete403'], 'broken' );
 				echo "</p></div>";
 			}
 		}
@@ -1220,7 +1161,7 @@ class link_library_plugin_admin {
 				'numberstylesets', 'includescriptcss', 'pagetitleprefix', 'pagetitlesuffix', 'schemaversion', 'thumbshotscid', 'approvalemailtitle',
 				'moderatorname', 'moderatoremail', 'rejectedemailtitle', 'approvalemailbody', 'rejectedemailbody', 'moderationnotificationtitle',
 				'linksubmissionthankyouurl', 'recipcheckaddress', 'imagefilepath', 'catselectmethod', 'expandiconpath', 'collapseiconpath', 'updatechannel',
-				'extraprotocols', 'thumbnailsize', 'thumbnailgenerator'
+				'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay'
 			) as $option_name
 		) {
 			if ( isset( $_POST[$option_name] ) ) {
@@ -1648,7 +1589,7 @@ class link_library_plugin_admin {
 					'beforecatlist1', 'beforecatlist2', 'beforecatlist3', 'catnameoutput', 'linkaddfrequency',
 					'defaultsinglecat', 'rsspreviewcount', 'rssfeedinlinecount', 'linksperpage', 'catdescpos',
 					'catlistdescpos', 'rsspreviewwidth', 'rsspreviewheight', 'numberofrssitems',
-					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished'
+					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname'
 				)
 				as $option_name
 			) {
@@ -1686,7 +1627,8 @@ class link_library_plugin_admin {
 					'showaddlinkrss', 'showaddlinkdesc', 'showaddlinkcat', 'showaddlinknotes', 'addlinkcustomcat',
 					'showaddlinkreciprocal', 'showaddlinksecondurl', 'showaddlinktelephone', 'showaddlinkemail', 'showcustomcaptcha', 'showlinksubmittername',
 					'showaddlinksubmitteremail', 'showlinksubmittercomment', 'showuserlargedescription', 'cat_letter_filter', 'beforefirstlink', 'afterlastlink',
-					'searchfieldtext', 'catfilterlabel', 'searchnoresultstext', 'addlinkdefaultcat', 'beforesubmittername', 'aftersubmittername'
+					'searchfieldtext', 'catfilterlabel', 'searchnoresultstext', 'addlinkdefaultcat', 'beforesubmittername', 'aftersubmittername',
+					'beforecatdesc', 'aftercatdesc'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -1704,7 +1646,7 @@ class link_library_plugin_admin {
 					'showlargedescription', 'addlinknoaddress', 'featuredfirst', 'usetextareaforusersubmitnotes', 'showcatonsearchresults', 'shownameifnoimage',
 					'enable_link_popup', 'nocatonstartup', 'showlinksonclick', 'showinvisibleadmin', 'combineresults', 'showifreciprocalvalid',
 					'cat_letter_filter_autoselect', 'cat_letter_filter_showalloption', 'emailsubmitter', 'addlinkakismet', 'rssfeedinlineskipempty',
-					'current_user_links', 'showsubmittername', 'onereciprocaldomain'
+					'current_user_links', 'showsubmittername', 'onereciprocaldomain', 'nooutputempty', 'showcatdesc'
 				)
 				as $option_name
 			) {
@@ -1793,7 +1735,7 @@ class link_library_plugin_admin {
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'currenttab' );
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'importrowscount' );
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'successimportcount' );
-		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'copy' );
+		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'settingscopy' );
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'reset' );
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'resettable' );
 		$cleanredirecturl = $this->remove_querystring_var( $cleanredirecturl, 'source' );
@@ -1925,8 +1867,10 @@ class link_library_plugin_admin {
 					}
 
 					$message = $emailbody;
-
-					$message .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='http://ylefebvre.ca/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+					
+					if ( !$genoptions['suppressemailfooter'] ) {
+						$message .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='http://ylefebvre.ca/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+					}
 
 					wp_mail( $linkextradata['link_submitter_email'], $emailtitle, $message, $headers );
 
@@ -2137,6 +2081,12 @@ class link_library_plugin_admin {
 							<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><?php _e( 'Additional protocols', 'link-library' ); ?></td>
 							<td class='lltooltip' title='<?php _e( 'Enter list of additional link protocols, seperated by commas', 'link-library' ); ?>'><input type="text" id="extraprotocols" name="extraprotocols" size="20" value="<?php echo $genoptions['extraprotocols']; ?>" /></td>
 						</tr>
+						<tr>
+							<td><?php _e( 'Time before clearing RSS display cache (in seconds)', 'link-library' ); ?></td>
+							<td>
+								<input type="text" id="rsscachedelay" name="rsscachedelay" size="5" value="<?php echo intval( $genoptions['rsscachedelay'] ); ?>" /></td>
+						</tr>
+
 						<tr>
 							<td>
 								<input type="submit" id="exportalllinks" name="exportalllinks" value="<?php _e( 'Export All Links', 'link-library' ); ?>" />
@@ -2477,7 +2427,8 @@ class link_library_plugin_admin {
 				endfor;
 				?>
 			</SELECT>
-			<INPUT type="button" name="copy" value="<?php _e( 'Copy', 'link-library' ); ?>!" onClick="if (confirm('Are you sure you want to copy the contents of the selected library over the current library settings?')) { window.location= 'admin.php?page=link-library-settingssets&amp;settings=<?php echo $settings; ?>&amp;copy=<?php echo $settings; ?>&source=' + jQuery('#copysource').val(); };">
+			<?php $copypath = "'admin.php?page=link-library-settingssets&settings=" . $settings . "&settingscopy=" . $settings . "&source=' + jQuery('#copysource').val();"; ?>
+			<INPUT type="button" name="copy" value="<?php _e( 'Copy', 'link-library' ); ?>!" onClick="if (confirm('Are you sure you want to copy the contents of the selected library over the current library settings?')) { var copyurl = <?php echo $copypath; ?> window.location.href = copyurl; };">
 		<?php endif; ?>
 		</div>
 	<?php }
@@ -3140,7 +3091,7 @@ class link_library_plugin_admin {
 		<br /><br />
 		<ul id="sortable">
 			<?php if ( $options['dragndroporder'] == '' ) {
-				$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13';
+				$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14';
 			} else {
 				$dragndroporder = $options['dragndroporder'];
 			}
@@ -3148,6 +3099,10 @@ class link_library_plugin_admin {
 
 			if ( !in_array( '13', $dragndroparray ) ) {
 				$dragndroparray[] = '13';
+			}
+
+			if ( !in_array( '14', $dragndroparray ) ) {
+				$dragndroparray[] = '14';
 			}
 
 			if ( $dragndroparray ) {
@@ -3205,6 +3160,10 @@ class link_library_plugin_admin {
 							?>
 							<li id="13" style='background-color: #33eecc'><?php _e( 'Submitter Name', 'link-library' ); ?></li>
 							<?php break;
+						case 14:
+							?>
+							<li id="14" style='background-color: #33eeff'><?php _e( 'Cat Desc', 'link-library' ); ?></li>
+							<?php break;
 					}
 				}
 			}
@@ -3252,7 +3211,7 @@ class link_library_plugin_admin {
 			<td style='background: #FFF'></td>
 		</tr>
 		<?php if ( $options['dragndroporder'] == '' ) {
-			$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13';
+			$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14';
 		} else {
 			$dragndroporder = $options['dragndroporder'];
 		}
@@ -3261,6 +3220,10 @@ class link_library_plugin_admin {
 
 		if ( !in_array( '13', $dragndroparray ) ) {
 			$dragndroparray[] = '13';
+		}
+
+		if ( !in_array( '14', $dragndroparray ) ) {
+			$dragndroparray[] = '14';
 		}
 
 		if ( $dragndroparray ) {
@@ -3311,15 +3274,16 @@ class link_library_plugin_admin {
 							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each link', 'link-library' ); ?>'>
 								<input type="text" id="afterlink" name="afterlink" size="22" value="<?php echo stripslashes( $options['afterlink'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
+							<td style='background: #FFF'>
+								<select name="tooltipname" id="tooltipname" style="width:200px;">
+									<option value="no_tooltip"<?php selected( $options['tooltipname'], 'no_tooltip' ); ?>><?php _e( 'No Tooltip', 'link-library' ); ?></option>
+									<option value="description"<?php selected( $options['tooltipname'], 'description' ); ?>><?php _e( 'Description', 'link-library' ); ?></option>
+								</select>
+							</td>
 							<td style='background: #FFF'>
 								<select name="sourcename" id="sourcename" style="width:200px;">
-									<option value="primary"<?php if ( $options['sourcename'] == "primary" ) {
-										echo ' selected="selected"';
-									} ?>><?php _e( 'Primary', 'link-library' ); ?></option>
-									<option value="secondary"<?php if ( $options['sourcename'] == "secondary" ) {
-										echo ' selected="selected"';
-									} ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
+									<option value="primary"<?php selected( $options['sourcename'], 'primary' ); ?>><?php _e( 'Primary', 'link-library' ); ?></option>
+									<option value="secondary"<?php selected( $options['sourcename'], 'secondary' ); ?>><?php _e( 'Secondary', 'link-library' ); ?></option>
 								</select>
 							</td>
 						</tr>
@@ -3586,6 +3550,23 @@ class link_library_plugin_admin {
 							<td style='background: #FFF'></td>
 						</tr>
 						<?php break;
+					case 14: /* -------------------------------- Category Description -------------------------------------------*/
+						?>
+						<tr>
+							<td style='background-color: #33eeff;color:#fff' class="lltooltip" title='<?php _e( 'This column allows for the output of text/code before and after the Link Large Description', 'link-library' ); ?>'><?php _e( 'Category Description', 'link-library' ); ?></td>
+							<td style='text-align:center;background: #FFF'>
+								<input type="checkbox" id="showcatdesc" name="showcatdesc" <?php checked( $options['showcatdesc'] ); ?>/>
+							</td>
+							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed before Link Large Description', 'link-library' ); ?>'>
+								<input type="text" id="beforecatdesc" name="beforecatdesc" size="22" value="<?php echo stripslashes( $options['beforecatdesc'] ); ?>" />
+							</td>
+							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after Link Large Description', 'link-library' ); ?>'>
+								<input type="text" id="aftercatdesc" name="aftercatdesc" size="22" value="<?php echo stripslashes( $options['aftercatdesc'] ); ?>" />
+							</td>
+							<td style='background: #FFF'></td>
+							<td style='background: #FFF'></td>
+						</tr>
+						<?php break;
 				}
 			}
 		}
@@ -3654,9 +3635,7 @@ class link_library_plugin_admin {
 					<?php _e( 'Show edit links when logged in as editor or administrator', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;padding:0px 20px 0px 20px'>
-					<input type="checkbox" id="showadmineditlinks" name="showadmineditlinks" <?php if ( $options['showadmineditlinks'] ) {
-						echo ' checked="checked" ';
-					} ?>/>
+					<input type="checkbox" id="showadmineditlinks" name="showadmineditlinks" <?php checked( $options['showadmineditlinks'] ); ?>/>
 				</td>
 			</tr>
 			<tr>
@@ -3664,9 +3643,14 @@ class link_library_plugin_admin {
 					<?php _e( 'Show link name when no image is assigned', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;padding:0px 20px 0px 20px'>
-					<input type="checkbox" id="shownameifnoimage" name="shownameifnoimage" <?php if ( $options['shownameifnoimage'] ) {
-						echo ' checked="checked" ';
-					} ?>/>
+					<input type="checkbox" id="shownameifnoimage" name="shownameifnoimage" <?php checked( $options['shownameifnoimage'] ); ?>/>
+				</td>
+				<td></td>
+				<td>
+					<?php _e( 'Do not output fields with no value', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;padding:0px 20px 0px 20px'>
+					<input type="checkbox" id="nooutputempty" name="nooutputempty" <?php checked( $options['nooutputempty'] ); ?>/>
 				</td>
 			</tr>
 		</table>
@@ -3742,27 +3726,19 @@ class link_library_plugin_admin {
 					<?php _e( 'Show RSS Preview Link', 'link-library' ); ?>
 				</td>
 				<td>
-					<input type="checkbox" id="rsspreview" name="rsspreview" <?php if ( $options['rsspreview'] ) {
-						echo ' checked="checked" ';
-					} ?>/>
+					<input type="checkbox" id="rsspreview" name="rsspreview" <?php checked( $options['rsspreview'] ); ?>/>
 				</td>
 				<td>
 					<?php _e( 'Number of articles shown in RSS Preview', 'link-library' ); ?>
 				</td>
 				<td>
-					<input type="text" id="rsspreviewcount" name="rsspreviewcount" size="2" value="<?php if ( $options['rsspreviewcount'] == '' ) {
-						echo '3';
-					} else {
-						echo strval( $options['rsspreviewcount'] );
-					} ?>" />
+					<input type="text" id="rsspreviewcount" name="rsspreviewcount" size="2" value="<?php echo strval( $options['rsspreviewcount'] ); ?>" />
 				</td>
 				<td>
 					<?php _e( 'Show RSS Feed Headers in Link Library output', 'link-library' ); ?>
 				</td>
 				<td>
-					<input type="checkbox" id="rssfeedinline" name="rssfeedinline" <?php if ( $options['rssfeedinline'] ) {
-						echo ' checked="checked" ';
-					} ?>/>
+					<input type="checkbox" id="rssfeedinline" name="rssfeedinline" <?php checked( $options['rssfeedinline'] ); ?>/>
 				</td>
 			</tr>
 			<tr>
@@ -3776,34 +3752,18 @@ class link_library_plugin_admin {
 					<?php _e( 'Number of RSS articles shown in Link Library Output', 'link-library' ); ?>
 				</td>
 				<td>
-					<input type="text" id="rssfeedinlinecount" name="rssfeedinlinecount" size="2" value="<?php if ( $options['rssfeedinlinecount'] == '' ) {
-						echo '1';
-					} else {
-						echo strval( $options['rssfeedinlinecount'] );
-					} ?>" />
+					<input type="text" id="rssfeedinlinecount" name="rssfeedinlinecount" size="2" value="<?php echo strval( $options['rssfeedinlinecount'] ); ?>" />
 				</td>
 				<td><?php _e( 'Max number of days since published', 'link-library' ); ?></td>
-				<td><input type="text" id="rssfeedinlinedayspublished" name="rssfeedinlinedayspublished" size="2" value="<?php if ( empty( $options['rssfeedinlinedayspublished'] ) ) {
-						echo '7';
-					} else {
-						echo strval( $options['rssfeedinlinedayspublished'] );
-					} ?>" /></td>
+				<td><input type="text" id="rssfeedinlinedayspublished" name="rssfeedinlinedayspublished" size="2" value="<?php echo strval( $options['rssfeedinlinedayspublished'] ); ?>" /></td>
 			</tr>
 			<tr>
 				<td><?php _e( 'RSS Preview Width', 'link-library' ); ?></td>
 				<td>
-					<input type="text" id="rsspreviewwidth" name="rsspreviewwidth" size="5" value="<?php if ( $options['rsspreviewwidth'] == '' ) {
-						echo '900';
-					} else {
-						echo strval( $options['rsspreviewwidth'] );
-					} ?>" /></td>
+					<input type="text" id="rsspreviewwidth" name="rsspreviewwidth" size="5" value="<?php echo strval( $options['rsspreviewwidth'] ); ?>" /></td>
 				<td><?php _e( 'RSS Preview Height', 'link-library' ); ?></td>
 				<td>
-					<input type="text" id="rsspreviewheight" name="rsspreviewheight" size="5" value="<?php if ( $options['rsspreviewheight'] == '' ) {
-						echo '700';
-					} else {
-						echo strval( $options['rsspreviewheight'] );
-					} ?>" /></td>
+					<input type="text" id="rsspreviewheight" name="rsspreviewheight" size="5" value="<?php echo strval( $options['rsspreviewheight'] ); ?>" /></td>
 				<td><?php _e( 'Skip links with no RSS inline items', 'link-library' ); ?></td>
 				<td><input type="checkbox" id="rssfeedinlineskipempty" name="rssfeedinlineskipempty" <?php checked( $options['rssfeedinlineskipempty'] ); ?>/></td>
 			</tr>
@@ -4471,7 +4431,7 @@ class link_library_plugin_admin {
 				    <input type="radio" name="siteimportlinksscope" value="specificpage"> <?php _e( 'Specific Page', 'link-library' ); ?>
 					<?php wp_dropdown_pages(); ?><br />
 					<?php $post_count = wp_count_posts();
-						  if ( $post_count < 200 ) { ?>
+						  if ( $post_count->publish < 200 ) { ?>
 					<input type="radio" name="siteimportlinksscope" value="specificpost"> <?php _e( 'Specific Post', 'link-library' ); 
 						wp_dropdown_posts(); ?><br />
 					<?php } 
@@ -5070,8 +5030,67 @@ class link_library_plugin_admin {
 				break;
 		}
 	}
+}
 
+function link_library_reciprocal_link_checker( $ll_admin_class, $RecipCheckAddress = '', $recipcheckdelete403 = false, $check_type = 'reciprocal' ) {
+	global $wpdb;
+	set_time_limit(0);
 
+	if ( $RecipCheckAddress != '' ) {
+		$linkquery = "SELECT distinct *, l.link_id as proper_link_id, UNIX_TIMESTAMP(l.link_updated) as link_date ";
+		$linkquery .= "FROM " . $ll_admin_class->db_prefix() . "terms t ";
+		$linkquery .= "LEFT JOIN " . $ll_admin_class->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
+		$linkquery .= "LEFT JOIN " . $ll_admin_class->db_prefix() . "term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ";
+		$linkquery .= "LEFT JOIN " . $ll_admin_class->db_prefix() . "links l ON (tr.object_id = l.link_id) ";
+		$linkquery .= "LEFT JOIN " . $ll_admin_class->db_prefix() . "links_extrainfo le ON (l.link_id = le.link_id) ";
+		$linkquery .= "WHERE tt.taxonomy = 'link_category' ";
+
+		if ( 'reciprocal' == $check_type ) {
+			$linkquery .= "AND le.link_reciprocal <> '' ";
+		} elseif ( 'broken' == $check_type ) {
+			$linkquery .= "AND l.link_url <> '' ";
+		}
+
+		$linkquery .= "order by l.link_name ASC";
+
+		$links  = $wpdb->get_results( $linkquery );
+		if ( 'reciprocal' == $check_type ) {
+			echo "<strong>" . __( 'Reciprocal Link Checker Report', 'link-library' ) . "</strong><br /><br />";
+		} elseif ( 'broken' == $check_type ) {
+			echo "<strong>" . __( 'Broken Link Checker Report', 'link-library' ) . "</strong><br /><br />";
+		}
+
+		if ( $links ) {
+			foreach ( $links as $link ) {
+				global $my_link_library_plugin;
+
+				if ( 'reciprocal' == $check_type ) {
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link->link_reciprocal );
+				} elseif ( 'broken' == $check_type ) {
+					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link->link_url );
+				}
+
+				echo '<a href="' . $link->link_url . '">' . $link->link_name . '</a>: ';
+
+				if ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_notfound' ) {
+					echo '<span style="color: #FF0000">' . __( 'Not Found', 'link-library' ) . '</span><br />';
+				} elseif ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) {
+					echo '<span style="color: #00FF00">' . __( 'OK', 'link-library' ) . '</span><br />';
+				} elseif ( 'broken' == $check_type && strpos( $reciprocal_result, 'exists' ) !== false ) {
+					echo '<span style="color: #00FF00">' . __( 'Link valid', 'link-library' ) . '</span><br />';
+				} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == true ) {
+					wp_delete_link( $link->link_id );
+					echo '<span style="color: #FF0000">' . __( 'Error 403: Link Deleted', 'link-library' ) . '</span><br />';
+				} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == false ) {
+					echo '<span style="color: #FF0000">' . __( 'Error 403', 'link-library' ) . '</span><br />';
+				} elseif ( $reciprocal_result == 'unreachable' ) {
+					echo '<span style="color: #FF0000">' . __( 'Website Unreachable', 'link-library' ) . '</span><br />';
+				}
+			}
+		} else {
+			echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
+		}
+	}
 }
 
 function link_library_render_editor_button() {

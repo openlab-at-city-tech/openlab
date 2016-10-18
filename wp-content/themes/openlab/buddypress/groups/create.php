@@ -92,7 +92,8 @@
                                         Clone an Existing Course</label>
 
                                     <?php $user_groups = openlab_get_courses_owned_by_user(get_current_user_id()) ?>
-
+                                    
+                                    <label class="sr-only" for="group-to-clone">Choose a Course</label>
                                     <select class="form-control" id="group-to-clone" name="group-to-clone">
                                         <option value="" <?php selected($group_id_to_clone, 0) ?>>- choose a course -</option>
 
@@ -107,12 +108,12 @@
                             </div>
                         </div>
 
-                    <?php endif ?>
+                    <?php endif; ?>
 
                     <?php /* Name/Description */ ?>
 
                     <div class="panel panel-default">
-                            <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></div>
+                        <div class="panel-heading semibold"><label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label></div>
                             <div class="panel-body">
                     <?php if ('course' == $group_type) : ?>
                         <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
@@ -142,10 +143,10 @@
                     </div>
 
                     <div class="panel panel-default">
-                    <div class="panel-heading semibold"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></div>
-                    <div class="panel-body">
-                    <textarea class="form-control" name="group-desc" id="group-desc" required><?php bp_new_group_description() ?></textarea>
-                    </div>
+                        <div class="panel-heading semibold"><label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label></div>
+                        <div class="panel-body">
+                            <textarea class="form-control" name="group-desc" id="group-desc" required><?php bp_new_group_description() ?></textarea>
+                        </div>
                     </div>
 
                     <?php do_action('bp_after_group_details_creation_step') ?>

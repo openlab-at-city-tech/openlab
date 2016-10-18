@@ -67,7 +67,7 @@ if ($this->data->count()) {
 							<?php echo $proximity ?>
 						</li>
 						<?php endif; ?>
-						<li class="tfk_desc">
+						<li class="tfk_desc<?php if ($this->prio_size) echo " tfk_size" ?>">
 							<a	href="<?php echo esc_url(add_query_arg('view', $iid)).'#tfk_task_title'; ?>"
 								title="<?php echo $this->data->get_description_extract(); ?>">
 								<?php echo $this->data->html('title'); ?>

@@ -1,9 +1,3 @@
-#adminmenu #toplevel_page_bws_panel div.wp-menu-image img,
-.admin-color-classic #adminmenu #toplevel_page_bws_panel div.wp-menu-image img,
-#adminmenu #toplevel_page_bws_panel:hover div.wp-menu-image img,
-#adminmenu #toplevel_page_bws_panel.wp-has-current-submenu div.wp-menu-image img {
-    width: 18px;
-}
 #adminmenu #toplevel_page_bws_panel .wp-submenu li:nth-child(4) a {
     border-bottom: 1px solid #444;
     padding-bottom: 12px;
@@ -502,4 +496,11 @@ span.bws_code {
 #bws_shortcode_content .title,
 #bws_shortcode_content .checkbox-title {
     white-space: normal;
+}
+/* styles for notices (license has expired, Illegal use notification ond other) on the /plugins.php page */
+.bws-plugin-update-tr .update-message {
+    margin-top: 0 !important;
+}
+.bws-plugin-update-tr .update-message :before {
+    content: '';
 }

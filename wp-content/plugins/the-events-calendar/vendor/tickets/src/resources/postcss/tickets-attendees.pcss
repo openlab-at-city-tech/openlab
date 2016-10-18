@@ -1,5 +1,5 @@
 #tribe-attendees-summary {
-	padding-bottom: 10px;
+	padding: 0;
 	position: relative;
 
 	h3,
@@ -23,22 +23,23 @@
 		}
 	}
 
-	.welcome-panel-column li {
-		line-height: 1.4em;
-		margin-bottom: 2px;
+	.welcome-panel-column {
+		padding: 20px 10px;
 
-		@media screen and (max-width: 870px) {
-			display: list-item;
+		li {
+			line-height: 1.4em;
+			margin-bottom: 2px;
+
+			@media screen and (max-width: 870px) {
+				display: list-item;
+			}
 		}
 	}
 
 	.welcome-panel-last {
 		border-left: 1px solid #eee;
-		bottom: 0;
+		float: right;
 		padding: 10px 20px 5px;
-		position: absolute;
-		right: 0;
-		top: 0;
 		width: 200px;
 
 		@media screen and (max-width: 870px) {
@@ -80,13 +81,31 @@
 }
 
 .tribe-attendees-page{
+	.welcome-panel-content h3 {
+		margin-top: 0;
+	}
+
 	a.tickets_uncheckin {
 		display: none;
+	}
+
+	h4.tickets-summary {
+		margin: 0;
 	}
 
 	.tickets_checked {
 		td {
 			opacity: .7;
+			text-decoration: line-through;
+		}
+
+		/* We don't want to strike through our row actions */
+		td.has-row-actions {
+			text-decoration: none;
+		}
+
+		/* We *do* want to strike through the ticket name however, which is in the same cell */
+		td.has-row-actions > div:nth-child(1) {
 			text-decoration: line-through;
 		}
 

@@ -52,8 +52,52 @@ class Tribe__Tickets__Tickets_Handler {
 		add_action( 'admin_menu', array( $this, 'attendees_page_register' ) );
 		add_filter( 'post_row_actions', array( $this, 'attendees_row_action' ) );
 		add_filter( 'page_row_actions', array( $this, 'attendees_row_action' ) );
+		add_action( 'tribe_tickets_attendees_do_event_action_links', array( $this, 'event_action_links' ) );
+		add_action( 'tribe_tickets_attendees_event_details_list_top', array( $this, 'event_details_top' ), 20 );
 
 		$this->path = trailingslashit(  dirname( dirname( dirname( __FILE__ ) ) ) );
+	}
+
+	/**
+	 * Injects action links into the attendee screen.
+	 *
+	 * @param $event_id
+	 */
+	public function event_action_links( $event_id ) {
+		$action_links = array(
+			'<a href="' . esc_url( get_edit_post_link( $event_id ) ) . '" title="' . esc_attr_x( 'Edit', 'attendee event actions', 'event-tickets' ) . '">' . esc_html_x( 'Edit', 'attendee event actions', 'event-tickets' ) . '</a>',
+			'<a href="' . esc_url( get_permalink( $event_id ) ) . '" title="' . esc_attr_x( 'View', 'attendee event actions', 'event-tickets' ) . '">' . esc_html_x( 'View', 'attendee event actions', 'event-tickets' ) . '</a>',
+		);
+
+		/**
+		 * Provides an opportunity to add and remove action links from the
+		 * attendee screen summary box.
+		 *
+		 * @param array $action_links
+		 */
+		$action_links = (array) apply_filters( 'tribe_tickets_attendees_event_action_links', $action_links );
+
+		if ( empty( $action_links ) ) {
+			return;
+		}
+
+		echo '<div class="event-actions">' . join( ' | ', $action_links ) . '</div>';
+	}
+
+	/**
+	 * Injects event meta data into the Attendees report
+	 *
+	 * @param int $event_id
+	 */
+	public function event_details_top( $event_id ) {
+		$pto = get_post_type_object( get_post_type( $event_id ) );
+
+		echo '
+			<li class="post-type">
+				<strong>' . esc_html__( 'Post type', 'tribe-events' ) . ': </strong>
+				' . esc_html( $pto->label ) . '
+			</li>
+		';
 	}
 
 	/**
@@ -126,12 +170,20 @@ class Tribe__Tickets__Tickets_Handler {
 		wp_enqueue_style( self::$attendees_slug . '-print', $resources_url . '/css/tickets-attendees-print.css', array(), Tribe__Tickets__Main::instance()->css_version(), 'print' );
 		wp_enqueue_script( self::$attendees_slug, $resources_url . '/js/tickets-attendees.js', array( 'jquery' ), Tribe__Tickets__Main::instance()->js_version() );
 
+		add_thickbox();
+
 		$mail_data = array(
 			'nonce'           => wp_create_nonce( 'email-attendee-list' ),
 			'required'        => esc_html__( 'You need to select a user or type a valid email address', 'event-tickets' ),
 			'sending'         => esc_html__( 'Sending...', 'event-tickets' ),
 			'checkin_nonce'   => wp_create_nonce( 'checkin' ),
 			'uncheckin_nonce' => wp_create_nonce( 'uncheckin' ),
+			'cannot_move'     => esc_html__( 'You must first select one or more tickets before you can move them!', 'event-tickets' ),
+			'move_url'        => add_query_arg( array(
+				'dialog'    => Tribe__Tickets__Main::instance()->move_tickets()->dialog_name(),
+				'check'     => wp_create_nonce( 'move_tickets' ),
+				'TB_iframe' => 'true',
+			) ),
 		);
 
 		wp_localize_script( self::$attendees_slug, 'Attendees', $mail_data );
@@ -167,12 +219,25 @@ class Tribe__Tickets__Tickets_Handler {
 	}
 
 	/**
-	 *    Setups the Attendees screen data.
+	 * Setups the Attendees screen data.
 	 */
 	public function attendees_page_screen_setup() {
-		if ( is_admin() && ( empty( $_GET['page'] ) || self::$attendees_slug !== $_GET['page'] ) ) {
+		/* There's no reason for attendee screen setup to happen twice, but because
+		 * of a fix for bug #46198 it can indeed be called twice in the same request.
+		 * This flag variable is used to workaround that.
+		 *
+		 * @see Tribe__Tickets__Tickets_Handler::attendees_page_register() (and related @todo inside that method)
+		 * @see https://central.tri.be/issues/46198
+		 *
+		 * @todo remove the has_run check once the above workaround is dispensed with
+		 */
+		static $has_run = false;
+
+		if ( $has_run || ( is_admin() && ( empty( $_GET['page'] ) || self::$attendees_slug !== $_GET['page'] ) ) ) {
 			return;
 		}
+
+		$has_run = true;
 
 		/**
 		 * This is a workaround to fix the problem
@@ -243,6 +308,12 @@ class Tribe__Tickets__Tickets_Handler {
 	 * Renders the Attendees page
 	 */
 	public function attendees_page_inside() {
+		/**
+		 * Fires immediately before the content of the attendees screen
+		 * is rendered.
+		 */
+		do_action( 'tribe_tickets_attendees_page_inside' );
+
 		include $this->path . 'src/admin-views/attendees.php';
 	}
 
@@ -276,21 +347,26 @@ class Tribe__Tickets__Tickets_Handler {
 		if ( ! is_admin() ) {
 			$columns = apply_filters( $filter_name, array() );
 		} else {
-			$columns = get_column_headers( get_current_screen() );
+			$columns = array_map( 'wp_strip_all_tags', get_column_headers( get_current_screen() ) );
 		}
 
-		$hidden = get_hidden_columns( $this->attendees_page );
-
-		// We dont want to export html inputs or private data
-		$hidden[] = 'cb';
-		$hidden[] = 'provider';
+		// We dont want HTML inputs, private data or other columns that are superfluous in a CSV export
+		$hidden = array_merge( get_hidden_columns( $this->attendees_page ), array(
+			'cb',
+			'provider',
+			'purchaser',
+			'status',
+		) );
 
 		$hidden         = array_flip( $hidden );
 		$export_columns = array_diff_key( $columns, $hidden );
 
-		// Add the Purchaser Information
-		$export_columns['purchaser_name'] = esc_html__( 'Customer Name', 'event-tickets' );
-		$export_columns['purchaser_email'] = esc_html__( 'Customer Email Address', 'event-tickets' );
+		// Add additional expected columns
+		$export_columns['order_id']           = esc_html_x( 'Order ID', 'attendee export', 'event-tickets' );
+		$export_columns['order_status_label'] = esc_html_x( 'Order Status', 'attendee export', 'event-tickets' );
+		$export_columns['attendee_id']        = esc_html_x( 'Ticket #', 'attendee export', 'event-tickets' );
+		$export_columns['purchaser_name']     = esc_html_x( 'Customer Name', 'attendee export', 'event-tickets' );
+		$export_columns['purchaser_email']    = esc_html_x( 'Customer Email Address', 'attendee export', 'event-tickets' );
 
 		/**
 		 * Used to modify what columns should be shown on the CSV export
@@ -330,6 +406,9 @@ class Tribe__Tickets__Tickets_Handler {
 						$row[ $column_id ] = esc_html( $ticket_unique_id );
 					}
 				}
+
+				// Handle custom columns that might have names containing HTML tags
+				$row[ $column_id ] = wp_strip_all_tags( $row[ $column_id ] );
 			}
 
 			$rows[] = array_values( $row );

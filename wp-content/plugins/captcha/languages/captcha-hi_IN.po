@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-06 17:24+0300\n"
-"PO-Revision-Date: 2016-06-06 17:24+0300\n"
+"POT-Creation-Date: 2016-07-30 12:53+0300\n"
+"PO-Revision-Date: 2016-07-30 12:53+0300\n"
 "Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: Outshine Solutions <ash.pr@outshinesolutions.com>\n"
 "Language: hi_IN\n"
@@ -16,937 +16,737 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: captcha.php:33 captcha.php:469
+#: captcha.php:37 captcha.php:403
 #, fuzzy
 msgid "Captcha Settings"
 msgstr "Captcha विकल्प"
 
-#: captcha.php:33
+#: captcha.php:37
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:184
-#, fuzzy
-msgid "Please enter a CAPTCHA value."
-msgstr "CAPTCHA पूरा करें."
-
-#: captcha.php:185
-#, fuzzy
-msgid "Please enter a valid CAPTCHA value."
-msgstr "CAPTCHA पूरा करें."
-
-#: captcha.php:186
-#, fuzzy
-msgid "Time limit is exhausted. Please enter CAPTCHA value again."
-msgstr "CAPTCHA पूरा करें."
-
-#: captcha.php:187
-msgid "You are in the white list"
-msgstr ""
-
-#: captcha.php:203
-#, fuzzy
-msgid "Time limit is exhausted. Please reload CAPTCHA."
-msgstr "CAPTCHA पूरा करें."
-
-#: captcha.php:310
-msgid "Login form"
-msgstr "परिवर्तन सहेजें"
-
-#: captcha.php:311
-#, fuzzy
-msgid "Registration form"
-msgstr " पंजीकरण प्रपत्र"
-
-#: captcha.php:312
-#, fuzzy
-msgid "Reset Password form"
-msgstr "पासवर्ड प्रपत्र खो दिया है"
-
-#: captcha.php:313
-msgid "Comments form"
-msgstr "टिप्पणियां फार्म"
-
-#: captcha.php:316
-#, fuzzy
-msgid "in Comments form for registered users"
-msgstr "पंजीकृत उपयोगकर्ताओं के लिए CAPTCHA छुपाएँ"
-
-#: captcha.php:320
-msgid "Plus (&#43;)"
-msgstr "प्लस (&#43;)"
-
-#: captcha.php:320
-msgid "Plus"
-msgstr "प्लस"
-
-#: captcha.php:321
-msgid "Minus (&minus;)"
-msgstr "माइनस (&minus;)"
-
-#: captcha.php:321
-msgid "Minus"
-msgstr "माइनस"
-
-#: captcha.php:322
-#, fuzzy
-msgid "Multiplication (&times;)"
-msgstr "गुणा करना(&times;)"
-
-#: captcha.php:322
-#, fuzzy
-msgid "Multiply"
-msgstr "गुणा करना(&times;)"
-
-#: captcha.php:327
-msgid "Numbers"
-msgstr "नंबर"
-
-#: captcha.php:328
-msgid "Words"
-msgstr "शब्द"
-
-#: captcha.php:329
-msgid "Images"
-msgstr ""
-
-#: captcha.php:406
-#, fuzzy
-msgid ""
-"Please select one item in the block Arithmetic and Complexity for CAPTCHA"
-msgstr "CAPTCHA के लिए ब्लॉक अंकगणित कार्यों और इस में एक बिंदु का चयन करें"
-
-#: captcha.php:412
-#, fuzzy
-msgid "Please select one item in the block Enable image packages"
-msgstr "CAPTCHA के लिए ब्लॉक अंकगणित कार्यों और इस में एक बिंदु का चयन करें"
-
-#: captcha.php:442
-#, fuzzy
-msgid "Settings saved."
-msgstr "विकल्प बचाया."
-
-#: captcha.php:454
-msgid "All plugin settings were restored."
-msgstr ""
-
-#: captcha.php:471
+#: captcha.php:405
 msgid "How to Use Step-by-step Instruction"
 msgstr ""
 
-#: captcha.php:474
-msgid "Basic"
-msgstr ""
+#: captcha.php:408 captcha.php:1653 captcha.php:1666
+msgid "Settings"
+msgstr "सेटिंग्स"
 
-#: captcha.php:475
-msgid "Advanced"
-msgstr ""
-
-#: captcha.php:476
+#: captcha.php:410
 msgid "This setting is available in Pro version"
 msgstr ""
 
-#: captcha.php:476
+#: captcha.php:410
 msgid "Packages"
 msgstr ""
 
-#: captcha.php:477
+#: captcha.php:412
 msgid "Whitelist"
 msgstr ""
 
-#: captcha.php:478
+#: captcha.php:413
 msgid "Custom code"
 msgstr ""
 
-#: captcha.php:479
+#: captcha.php:414
 msgid "Go PRO"
 msgstr ""
 
-#: captcha.php:495 captcha.php:498 includes/pro_banners.php:38
-#: includes/pro_banners.php:41
-#, fuzzy
-msgid "Enable CAPTCHA for"
-msgstr "CAPTCHA सक्षम:"
-
-#: captcha.php:499
-msgid "WordPress default"
-msgstr ""
-
-#: captcha.php:505
-msgid "This option is available only for main blog"
-msgstr ""
-
-#: captcha.php:520
-#, fuzzy
-msgid "Plugins"
-msgstr "افزونه های BWS"
-
-#: captcha.php:527 captcha.php:533
-msgid "You should"
-msgstr ""
-
-#: captcha.php:527 includes/whitelist.php:444
-msgid "activate"
-msgstr ""
-
-#: captcha.php:527
-msgid "for network"
-msgstr ""
-
-#: captcha.php:527 captcha.php:535
-msgid "to use this functionality"
-msgstr ""
-
-#: captcha.php:534
-msgid "download"
-msgstr ""
-
-#: captcha.php:547
-#, fuzzy
-msgid "If you would like to add Captcha to a custom form, please see"
-msgstr ""
-"اگر می خواهید این افزونه را به عنوان یک فرم اختصاصی سفارشی سازی کنید، لطفاً "
-"از طریق <a href=\"Mailto:plugin@bestwebsoft.com\">plugin@bestwebsoft.com</a> "
-"با ما تماس بگیرید یا اینکه فرم تماس موجود در سایت ما را پُر کنید"
-
-#: captcha.php:555
-#, fuzzy
-msgid "Hide CAPTCHA"
-msgstr "CAPTCHA सक्षम:"
-
-#: captcha.php:562
-msgid "Title"
-msgstr ""
-
-#: captcha.php:566
-msgid "Required symbol"
-msgstr ""
-
-#: captcha.php:572
-msgid "Show \"Reload\" button"
-msgstr ""
-
-#: captcha.php:578
-#, fuzzy
-msgid "Arithmetic actions"
-msgstr "CAPTCHA के लिए अंकगणित कार्रवाई"
-
-#: captcha.php:581
-msgid "Arithmetic actions for CAPTCHA"
-msgstr "CAPTCHA के लिए अंकगणित कार्रवाई"
-
-#: captcha.php:593 captcha.php:595
-msgid "Complexity"
-msgstr ""
-
-#: captcha.php:618
-msgid "Enable image packages"
-msgstr ""
-
-#: captcha.php:635
-msgid "Enlarge images on mouseover"
-msgstr ""
-
-#: captcha.php:645
-msgid "Enable time limit"
-msgstr ""
-
-#: captcha.php:651
-msgid "Set time limit"
-msgstr ""
-
-#: captcha.php:654
-msgid "seconds"
-msgstr ""
-
-#: captcha.php:660
-msgid "Notification messages"
-msgstr ""
-
-#: captcha.php:663 captcha.php:969 captcha.php:975 captcha.php:1176
-#: captcha.php:1192
-msgid "Error"
-msgstr ""
-
-#: captcha.php:665
-msgid ""
-"This messages will be displayed, if the CAPTCHA answer has not passed the "
-"verification"
-msgstr ""
-
-#: captcha.php:668
-#, fuzzy
-msgid "If the CAPTCHA field is empty"
-msgstr "CAPTCHA जो गलत था."
-
-#: captcha.php:669
-#, fuzzy
-msgid "If the CAPTCHA is incorrect"
-msgstr "CAPTCHA जो गलत था."
-
-#: captcha.php:670
-msgid "If the time limit is exhausted"
-msgstr ""
-
-#: captcha.php:672
-msgid "Info"
-msgstr ""
-
-#: captcha.php:674
-msgid "This messages will be displayed inside of the CAPTCHA"
-msgstr ""
-
-#: captcha.php:677
-msgid ""
-"If the user IP is added to the whitelist (this message will be displayed "
-"instead of the CAPTCHA)"
-msgstr ""
-
-#: captcha.php:678
-#, fuzzy
-msgid ""
-"If the time limit is exhausted (this message will be displayed above the "
-"CAPTCHA)"
-msgstr "CAPTCHA पूरा करें."
-
-#: captcha.php:685
-msgid "Save Changes"
-msgstr "परिवर्तन सहेजें"
-
-#: captcha.php:826 captcha.php:833 captcha.php:848 captcha.php:850
-#: captcha.php:858 captcha.php:1062 captcha.php:1070 captcha.php:1086
-#: captcha.php:1090 captcha.php:1099 captcha.php:1123 captcha.php:1133
-#: captcha.php:1151 captcha.php:1154 captcha.php:1162
+#: captcha.php:523 captcha.php:529 captcha.php:545 captcha.php:547
+#: captcha.php:556 captcha.php:610 captcha.php:614 captcha.php:623
+#: captcha.php:646 captcha.php:656 captcha.php:681 captcha.php:684
+#: captcha.php:692
 msgid "ERROR"
 msgstr "त्रुटि"
 
-#: captcha.php:969 captcha.php:975 captcha.php:1176 captcha.php:1192
+#: captcha.php:749 captcha.php:755
+msgid "Error"
+msgstr ""
+
+#: captcha.php:749 captcha.php:755
 #, fuzzy
 msgid "Click the BACK button on your browser, and try again."
 msgstr ""
 "त्रुटि: आप गलत CAPTCHA मुहावरा में प्रवेश किया.अपने ब्राउज़र के वापस बटन दबाएँ और फिर "
 "कोशिश करें."
 
-#: captcha.php:1550
+#: captcha.php:994
+msgid "In order to pass the CAPTCHA please enable JavaScript"
+msgstr ""
+
+#: captcha.php:1341
 msgid "zero"
 msgstr "शून्य"
 
-#: captcha.php:1551 captcha.php:1889
+#: captcha.php:1342 includes/settings_page.php:439
 msgid "one"
 msgstr "एक"
 
-#: captcha.php:1552
+#: captcha.php:1343
 msgid "two"
 msgstr "दो"
 
-#: captcha.php:1553
+#: captcha.php:1344
 msgid "three"
 msgstr "तीन"
 
-#: captcha.php:1554
+#: captcha.php:1345
 msgid "four"
 msgstr "चार"
 
-#: captcha.php:1555
+#: captcha.php:1346
 msgid "five"
 msgstr "पांच"
 
-#: captcha.php:1556 captcha.php:1889
+#: captcha.php:1347 includes/settings_page.php:439
 msgid "six"
 msgstr "छह"
 
-#: captcha.php:1557 captcha.php:1877 captcha.php:1883
+#: captcha.php:1348 includes/settings_page.php:421
+#: includes/settings_page.php:429
 msgid "seven"
 msgstr "सात"
 
-#: captcha.php:1558 captcha.php:1880
+#: captcha.php:1349 includes/settings_page.php:425
 msgid "eight"
 msgstr "आठ"
 
-#: captcha.php:1559
+#: captcha.php:1350
 msgid "nine"
 msgstr "नौ"
 
-#: captcha.php:1561
+#: captcha.php:1352
 msgid "ten"
 msgstr "दस"
 
-#: captcha.php:1562
+#: captcha.php:1353
 msgid "eleven"
 msgstr "ग्यारह"
 
-#: captcha.php:1563
+#: captcha.php:1354
 msgid "twelve"
 msgstr "बारह"
 
-#: captcha.php:1564
+#: captcha.php:1355
 msgid "thirteen"
 msgstr "तेरह"
 
-#: captcha.php:1565
+#: captcha.php:1356
 msgid "fourteen"
 msgstr "चौदह"
 
-#: captcha.php:1566
+#: captcha.php:1357
 msgid "fifteen"
 msgstr "पंद्रह"
 
-#: captcha.php:1567
+#: captcha.php:1358
 msgid "sixteen"
 msgstr "सोलह"
 
-#: captcha.php:1568
+#: captcha.php:1359
 msgid "seventeen"
 msgstr "सत्रह"
 
-#: captcha.php:1569
+#: captcha.php:1360
 msgid "eighteen"
 msgstr "अठारह"
 
-#: captcha.php:1570
+#: captcha.php:1361
 msgid "nineteen"
 msgstr "उन्नीस"
 
-#: captcha.php:1572
+#: captcha.php:1363
 msgid "twenty"
 msgstr "बीस"
 
-#: captcha.php:1573
+#: captcha.php:1364
 #, fuzzy
 msgid "twenty one"
 msgstr "बीस"
 
-#: captcha.php:1574
+#: captcha.php:1365
 #, fuzzy
 msgid "twenty two"
 msgstr "बीस"
 
-#: captcha.php:1575
+#: captcha.php:1366
 #, fuzzy
 msgid "twenty three"
 msgstr "बीस"
 
-#: captcha.php:1576
+#: captcha.php:1367
 #, fuzzy
 msgid "twenty four"
 msgstr "बीस"
 
-#: captcha.php:1577
+#: captcha.php:1368
 #, fuzzy
 msgid "twenty five"
 msgstr "बीस"
 
-#: captcha.php:1578
+#: captcha.php:1369
 #, fuzzy
 msgid "twenty six"
 msgstr "बीस"
 
-#: captcha.php:1579
+#: captcha.php:1370
 #, fuzzy
 msgid "twenty seven"
 msgstr "बीस"
 
-#: captcha.php:1580
+#: captcha.php:1371
 #, fuzzy
 msgid "twenty eight"
 msgstr "बीस"
 
-#: captcha.php:1581
+#: captcha.php:1372
 #, fuzzy
 msgid "twenty nine"
 msgstr "बीस"
 
-#: captcha.php:1583
+#: captcha.php:1374
 msgid "thirty"
 msgstr "तीस"
 
-#: captcha.php:1584
+#: captcha.php:1375
 #, fuzzy
 msgid "thirty one"
 msgstr "तीस"
 
-#: captcha.php:1585
+#: captcha.php:1376
 #, fuzzy
 msgid "thirty two"
 msgstr "तीस"
 
-#: captcha.php:1586
+#: captcha.php:1377
 #, fuzzy
 msgid "thirty three"
 msgstr "तेरह"
 
-#: captcha.php:1587
+#: captcha.php:1378
 #, fuzzy
 msgid "thirty four"
 msgstr "तीस"
 
-#: captcha.php:1588
+#: captcha.php:1379
 #, fuzzy
 msgid "thirty five"
 msgstr "तीस"
 
-#: captcha.php:1589
+#: captcha.php:1380
 #, fuzzy
 msgid "thirty six"
 msgstr "तीस"
 
-#: captcha.php:1590
+#: captcha.php:1381
 #, fuzzy
 msgid "thirty seven"
 msgstr "तेरह"
 
-#: captcha.php:1591
+#: captcha.php:1382
 #, fuzzy
 msgid "thirty eight"
 msgstr "तीस"
 
-#: captcha.php:1592
+#: captcha.php:1383
 #, fuzzy
 msgid "thirty nine"
 msgstr "तीस"
 
-#: captcha.php:1594
+#: captcha.php:1385
 msgid "forty"
 msgstr "चालीस"
 
-#: captcha.php:1595
+#: captcha.php:1386
 #, fuzzy
 msgid "forty one"
 msgstr "चालीस"
 
-#: captcha.php:1596
+#: captcha.php:1387
 #, fuzzy
 msgid "forty two"
 msgstr "चालीस"
 
-#: captcha.php:1597
+#: captcha.php:1388
 #, fuzzy
 msgid "forty three"
 msgstr "तीन"
 
-#: captcha.php:1598
+#: captcha.php:1389
 #, fuzzy
 msgid "forty four"
 msgstr "चालीस"
 
-#: captcha.php:1599
+#: captcha.php:1390
 #, fuzzy
 msgid "forty five"
 msgstr "चालीस"
 
-#: captcha.php:1600
+#: captcha.php:1391
 #, fuzzy
 msgid "forty six"
 msgstr "चालीस"
 
-#: captcha.php:1601
+#: captcha.php:1392
 #, fuzzy
 msgid "forty seven"
 msgstr "सात"
 
-#: captcha.php:1602
+#: captcha.php:1393
 #, fuzzy
 msgid "forty eight"
 msgstr "आठ"
 
-#: captcha.php:1603
+#: captcha.php:1394
 #, fuzzy
 msgid "forty nine"
 msgstr "चालीस"
 
-#: captcha.php:1605
+#: captcha.php:1396
 msgid "fifty"
 msgstr "पचास"
 
-#: captcha.php:1606
+#: captcha.php:1397
 #, fuzzy
 msgid "fifty one"
 msgstr "पचास"
 
-#: captcha.php:1607
+#: captcha.php:1398
 #, fuzzy
 msgid "fifty two"
 msgstr "पचास"
 
-#: captcha.php:1608
+#: captcha.php:1399
 #, fuzzy
 msgid "fifty three"
 msgstr "पंद्रह"
 
-#: captcha.php:1609
+#: captcha.php:1400
 #, fuzzy
 msgid "fifty four"
 msgstr "पचास"
 
-#: captcha.php:1610
+#: captcha.php:1401
 #, fuzzy
 msgid "fifty five"
 msgstr "पचास"
 
-#: captcha.php:1611
+#: captcha.php:1402
 #, fuzzy
 msgid "fifty six"
 msgstr "पचास"
 
-#: captcha.php:1612
+#: captcha.php:1403
 #, fuzzy
 msgid "fifty seven"
 msgstr "पंद्रह"
 
-#: captcha.php:1613
+#: captcha.php:1404
 #, fuzzy
 msgid "fifty eight"
 msgstr "आठ"
 
-#: captcha.php:1614
+#: captcha.php:1405
 #, fuzzy
 msgid "fifty nine"
 msgstr "पचास"
 
-#: captcha.php:1616
+#: captcha.php:1407
 msgid "sixty"
 msgstr "साठ"
 
-#: captcha.php:1617
+#: captcha.php:1408
 #, fuzzy
 msgid "sixty one"
 msgstr "साठ"
 
-#: captcha.php:1618
+#: captcha.php:1409
 #, fuzzy
 msgid "sixty two"
 msgstr "साठ"
 
-#: captcha.php:1619
+#: captcha.php:1410
 #, fuzzy
 msgid "sixty three"
 msgstr "सोलह"
 
-#: captcha.php:1620
+#: captcha.php:1411
 #, fuzzy
 msgid "sixty four"
 msgstr "साठ"
 
-#: captcha.php:1621
+#: captcha.php:1412
 #, fuzzy
 msgid "sixty five"
 msgstr "साठ"
 
-#: captcha.php:1622
+#: captcha.php:1413
 #, fuzzy
 msgid "sixty six"
 msgstr "साठ"
 
-#: captcha.php:1623
+#: captcha.php:1414
 #, fuzzy
 msgid "sixty seven"
 msgstr "सोलह"
 
-#: captcha.php:1624
+#: captcha.php:1415
 #, fuzzy
 msgid "sixty eight"
 msgstr "आठ"
 
-#: captcha.php:1625
+#: captcha.php:1416
 #, fuzzy
 msgid "sixty nine"
 msgstr "साठ"
 
-#: captcha.php:1627
+#: captcha.php:1418
 msgid "seventy"
 msgstr "सत्तर"
 
-#: captcha.php:1628
+#: captcha.php:1419
 #, fuzzy
 msgid "seventy one"
 msgstr "सत्तर"
 
-#: captcha.php:1629
+#: captcha.php:1420
 #, fuzzy
 msgid "seventy two"
 msgstr "सत्तर"
 
-#: captcha.php:1630
+#: captcha.php:1421
 #, fuzzy
 msgid "seventy three"
 msgstr "सत्रह"
 
-#: captcha.php:1631
+#: captcha.php:1422
 #, fuzzy
 msgid "seventy four"
 msgstr "सत्तर"
 
-#: captcha.php:1632
+#: captcha.php:1423
 #, fuzzy
 msgid "seventy five"
 msgstr "सत्तर"
 
-#: captcha.php:1633
+#: captcha.php:1424
 #, fuzzy
 msgid "seventy six"
 msgstr "सत्तर"
 
-#: captcha.php:1634
+#: captcha.php:1425
 #, fuzzy
 msgid "seventy seven"
 msgstr "सत्रह"
 
-#: captcha.php:1635
+#: captcha.php:1426
 #, fuzzy
 msgid "seventy eight"
 msgstr "सत्तर"
 
-#: captcha.php:1636
+#: captcha.php:1427
 #, fuzzy
 msgid "seventy nine"
 msgstr "सत्तर"
 
-#: captcha.php:1638
+#: captcha.php:1429
 msgid "eighty"
 msgstr "अस्सी"
 
-#: captcha.php:1639
+#: captcha.php:1430
 #, fuzzy
 msgid "eighty one"
 msgstr "अस्सी"
 
-#: captcha.php:1640
+#: captcha.php:1431
 #, fuzzy
 msgid "eighty two"
 msgstr "अस्सी"
 
-#: captcha.php:1641
+#: captcha.php:1432
 #, fuzzy
 msgid "eighty three"
 msgstr "अठारह"
 
-#: captcha.php:1642
+#: captcha.php:1433
 #, fuzzy
 msgid "eighty four"
 msgstr "अस्सी"
 
-#: captcha.php:1643
+#: captcha.php:1434
 #, fuzzy
 msgid "eighty five"
 msgstr "अस्सी"
 
-#: captcha.php:1644
+#: captcha.php:1435
 #, fuzzy
 msgid "eighty six"
 msgstr "अस्सी"
 
-#: captcha.php:1645
+#: captcha.php:1436
 #, fuzzy
 msgid "eighty seven"
 msgstr "अठारह"
 
-#: captcha.php:1646
+#: captcha.php:1437
 #, fuzzy
 msgid "eighty eight"
 msgstr "अस्सी"
 
-#: captcha.php:1647
+#: captcha.php:1438
 #, fuzzy
 msgid "eighty nine"
 msgstr "अस्सी"
 
-#: captcha.php:1649
+#: captcha.php:1440
 msgid "ninety"
 msgstr "नब्बे"
 
-#: captcha.php:1650
+#: captcha.php:1441
 #, fuzzy
 msgid "ninety one"
 msgstr "नब्बे"
 
-#: captcha.php:1651
+#: captcha.php:1442
 #, fuzzy
 msgid "ninety two"
 msgstr "नब्बे"
 
-#: captcha.php:1652
+#: captcha.php:1443
 #, fuzzy
 msgid "ninety three"
 msgstr "उन्नीस"
 
-#: captcha.php:1653
+#: captcha.php:1444
 #, fuzzy
 msgid "ninety four"
 msgstr "नब्बे"
 
-#: captcha.php:1654
+#: captcha.php:1445
 #, fuzzy
 msgid "ninety five"
 msgstr "नब्बे"
 
-#: captcha.php:1655
+#: captcha.php:1446
 #, fuzzy
 msgid "ninety six"
 msgstr "नब्बे"
 
-#: captcha.php:1656
+#: captcha.php:1447
 #, fuzzy
 msgid "ninety seven"
 msgstr "उन्नीस"
 
-#: captcha.php:1657
+#: captcha.php:1448
 #, fuzzy
 msgid "ninety eight"
 msgstr "नब्बे"
 
-#: captcha.php:1658
+#: captcha.php:1449
 #, fuzzy
 msgid "ninety nine"
 msgstr "नब्बे"
 
-#: captcha.php:1724
+#: captcha.php:1514
 #, fuzzy
 msgid "Encryption password is not set"
 msgstr "Decoding के पासवर्ड सेट नहीं है"
 
-#: captcha.php:1744
+#: captcha.php:1535
 #, fuzzy
 msgid "Decryption password is not set"
 msgstr "Decoding के पासवर्ड सेट नहीं है"
 
-#: captcha.php:2004 captcha.php:2017
-msgid "Settings"
-msgstr "सेटिंग्स"
-
-#: captcha.php:2018
+#: captcha.php:1667
 msgid "FAQ"
 msgstr "अक्सर पूछे जाने वाले प्रश्न"
 
-#: captcha.php:2019
+#: captcha.php:1668
 msgid "Support"
 msgstr "समर्थन"
 
-#: includes/whitelist.php:76
+#: captcha.php:1843
+msgid "Warning"
+msgstr ""
+
+#: captcha.php:1847
+msgid "plugin contains deprecated functionality that will be removed"
+msgstr ""
+
+#: captcha.php:1848
+msgid "in the future"
+msgstr ""
+
+#: captcha.php:1848
+msgid "after"
+msgstr ""
+
+#: captcha.php:1851
+msgid "has old version"
+msgstr ""
+
+#: captcha.php:1854
+msgid "has compatibility problems with"
+msgstr ""
+
+#: captcha.php:1861
+msgid "You need to update this plugin for correct work with"
+msgstr ""
+
+#: includes/whitelist.php:75
 msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
 msgstr ""
 
-#: includes/whitelist.php:88
+#: includes/whitelist.php:87
 #, php-format
 msgid ""
 "With this option, CAPTCHA will not be displayed for IP-addresses from the "
 "whitelist of %s"
 msgstr ""
 
-#: includes/whitelist.php:99 includes/whitelist.php:135
+#: includes/whitelist.php:98 includes/whitelist.php:134
 msgid "Add IP to whitelist"
 msgstr ""
 
-#: includes/whitelist.php:102
-msgid "Load IP to whitelist"
+#: includes/whitelist.php:101
+msgid "Load IP to the whitelist"
 msgstr ""
 
-#: includes/whitelist.php:105
+#: includes/whitelist.php:104
 #, php-format
 msgid ""
 "By click on this button, all IP-addresses from the whitelist of %s will be "
 "loaded to the whitelist of %s"
 msgstr ""
 
-#: includes/whitelist.php:114
+#: includes/whitelist.php:113
 #, fuzzy
 msgid "Save changes"
 msgstr "परिवर्तन सहेजें"
 
-#: includes/whitelist.php:131
+#: includes/whitelist.php:130
 msgid "My IP"
 msgstr ""
 
-#: includes/whitelist.php:139
+#: includes/whitelist.php:138
 msgid "Allowed formats:"
 msgstr ""
 
-#: includes/whitelist.php:140
+#: includes/whitelist.php:139
 msgid "Allowed diapason:"
 msgstr ""
 
-#: includes/whitelist.php:146
+#: includes/whitelist.php:145
 msgid "Search IP"
 msgstr ""
 
-#: includes/whitelist.php:202
+#: includes/whitelist.php:200
 msgid "Nothing found"
 msgstr ""
 
-#: includes/whitelist.php:202
-msgid "No IP in whitelist"
+#: includes/whitelist.php:200
+msgid "No IP in the whitelist"
 msgstr ""
 
-#: includes/whitelist.php:209
+#: includes/whitelist.php:207
 msgid "IP address"
 msgstr ""
 
-#: includes/whitelist.php:210
+#: includes/whitelist.php:208
 msgid "Date added"
 msgstr ""
 
-#: includes/whitelist.php:264 includes/whitelist.php:273
-msgid "Remove from whitelist"
-msgstr ""
-
-#: includes/whitelist.php:352
-msgid "IP added to the whitelist successfully"
-msgstr ""
-
-#: includes/whitelist.php:354 includes/whitelist.php:376
-#: includes/whitelist.php:388
-msgid "Some errors occured"
+#: includes/whitelist.php:262 includes/whitelist.php:271
+msgid "Remove from the whitelist"
 msgstr ""
 
 #: includes/whitelist.php:356
+msgid "IP added to the whitelist successfully"
+msgstr ""
+
+#: includes/whitelist.php:358 includes/whitelist.php:380
+#: includes/whitelist.php:392
+msgid "Some errors occured"
+msgstr ""
+
+#: includes/whitelist.php:360
 msgid "IP is already in the whitelist"
 msgstr ""
 
-#: includes/whitelist.php:359
+#: includes/whitelist.php:363
 msgid "Invalid IP. See allowed formats"
 msgstr ""
 
-#: includes/whitelist.php:382
+#: includes/whitelist.php:386
 msgid "One IP was deleted successfully"
 msgstr ""
 
-#: includes/whitelist.php:391
+#: includes/whitelist.php:395
 msgid "You have not entered any value"
 msgstr ""
 
-#: includes/whitelist.php:394
+#: includes/whitelist.php:398
 msgid "You have not entered any value in to the search form"
 msgstr ""
 
-#: includes/whitelist.php:396
+#: includes/whitelist.php:400
 msgid "Search results for"
 msgstr ""
 
-#: includes/whitelist.php:410
+#: includes/whitelist.php:414
 msgid "IP-address(es) successfully copied to the whitelist"
 msgstr ""
 
-#: includes/whitelist.php:435
+#: includes/whitelist.php:439
 msgid "use"
 msgstr ""
 
-#: includes/whitelist.php:435
-msgid "whitelist of"
+#: includes/whitelist.php:439
+msgid "the whitelist of"
 msgstr ""
 
-#: includes/whitelist.php:443 includes/whitelist.php:451
+#: includes/whitelist.php:447 includes/whitelist.php:455
 #, php-format
-msgid "use whitelist of %s"
+msgid "use the whitelist of %s"
 msgstr ""
 
-#: includes/whitelist.php:444
+#: includes/whitelist.php:448
 #, php-format
 msgid "you should %s to use this functionality"
 msgstr ""
 
-#: includes/whitelist.php:452
+#: includes/whitelist.php:448 includes/settings_page.php:636
+msgid "activate"
+msgstr ""
+
+#: includes/whitelist.php:456
 #, php-format
 msgid "you should install %s to use this functionality"
 msgstr ""
+
+#: includes/deprecated.php:87
+msgid "instruction"
+msgstr ""
+
+#: includes/deprecated.php:96
+#, php-format
+msgid ""
+"Functions from the %1s plugin are used on your site. These functions are "
+"deprecated ( %2s ) since version %4s. Please replace them according to the "
+"%3s. If you close this message it will appear in case if deprecated function "
+"would be called again only"
+msgstr ""
+
+#: includes/deprecated.php:115
+#, php-format
+msgid "some call functions for the \"%s\" filter hook"
+msgstr ""
+
+#: includes/deprecated.php:118
+#, fuzzy
+msgid "Enable the CAPTCHA for"
+msgstr "CAPTCHA सक्षम:"
 
 #: includes/pro_banners.php:17
 msgid "This options is available in Pro version of plugin"
@@ -964,138 +764,465 @@ msgstr ""
 msgid "Learn More"
 msgstr ""
 
-#: includes/pro_banners.php:44
-#, fuzzy
-msgid "Buddypress Registration form"
-msgstr " पंजीकरण प्रपत्र"
-
-#: includes/pro_banners.php:45
-#, fuzzy
-msgid "Buddypress Comments form"
-msgstr "टिप्पणियां फार्म"
-
-#: includes/pro_banners.php:46
-msgid "Buddypress \"Create a Group\" form"
-msgstr ""
-
-#: includes/pro_banners.php:47
-#, fuzzy
-msgid "WooCommerce login form"
-msgstr "टिप्पणियां फार्म"
-
-#: includes/pro_banners.php:48
-#, fuzzy
-msgid "WooCommerce Register form"
-msgstr " पंजीकरण प्रपत्र"
-
-#: includes/pro_banners.php:49
-#, fuzzy
-msgid "WooCommerce Lost Password form"
-msgstr "पासवर्ड प्रपत्र खो दिया है"
-
-#: includes/pro_banners.php:50
-msgid "WooCommerce Checkout Billing form"
-msgstr ""
-
-#: includes/pro_banners.php:56
-msgid "If you upgrade to Pro version all your settings will be saved."
-msgstr ""
-
-#: includes/pro_banners.php:67
-msgid "Use several packages at the same time"
-msgstr ""
-
-#: includes/pro_banners.php:70
-msgid ""
-"If this option is enabled, CAPTCHA will be use pictures from different "
-"packages at the same time"
-msgstr ""
-
-#: includes/pro_banners.php:81
+#: includes/pro_banners.php:38
 msgid "Reason"
 msgstr ""
 
-#: includes/pro_banners.php:83
+#: includes/pro_banners.php:40
 msgid "Allowed formats"
 msgstr ""
 
-#: includes/pro_banners.php:84
+#: includes/pro_banners.php:41
 msgid "Allowed separators for IPs: a comma"
 msgstr ""
 
-#: includes/pro_banners.php:84 includes/pro_banners.php:85
+#: includes/pro_banners.php:41 includes/pro_banners.php:42
 msgid "semicolon"
 msgstr ""
 
-#: includes/pro_banners.php:84
+#: includes/pro_banners.php:41
 msgid "ordinary space, tab, new line or carriage return"
 msgstr ""
 
-#: includes/pro_banners.php:85
+#: includes/pro_banners.php:42
 msgid "Allowed separators for reasons: a comma"
 msgstr ""
 
-#: includes/pro_banners.php:85
+#: includes/pro_banners.php:42
 msgid "tab, new line or carriage return"
 msgstr ""
 
-#: includes/pro_banners.php:104
+#: includes/pro_banners.php:61 includes/package_loader.php:73
 msgid "If the package already exists"
 msgstr ""
 
-#: includes/pro_banners.php:106
+#: includes/pro_banners.php:63 includes/package_loader.php:78
 msgid "Skip it"
 msgstr ""
 
-#: includes/pro_banners.php:107
+#: includes/pro_banners.php:64 includes/package_loader.php:82
 msgid "Update the existed one"
 msgstr ""
 
-#: includes/pro_banners.php:108
+#: includes/pro_banners.php:65 includes/package_loader.php:86
 #, fuzzy
 msgid "Save it as new"
 msgstr "परिवर्तन सहेजें"
 
-#: includes/pro_banners.php:111
+#: includes/pro_banners.php:68 includes/package_loader.php:91
 msgid "Install Now"
 msgstr ""
 
-#: includes/pro_banners.php:112
+#: includes/pro_banners.php:69 includes/package_loader.php:93
 msgid "Browse packages"
 msgstr ""
 
-#: includes/pro_banners.php:123 includes/pro_banners.php:200
+#: includes/pro_banners.php:80 includes/pro_banners.php:157
 msgid "Package"
 msgstr ""
 
-#: includes/pro_banners.php:126 includes/pro_banners.php:203
+#: includes/pro_banners.php:83 includes/pro_banners.php:160
 msgid "Date"
 msgstr ""
 
-#: includes/package_loader.php:33 includes/package_loader.php:145
+#: includes/pro_banners.php:177 includes/settings_page.php:656
+#, fuzzy
+msgid "Enable"
+msgstr "CAPTCHA सक्षम:"
+
+#: includes/pro_banners.php:181
+msgid "Use general settings"
+msgstr ""
+
+#: includes/pro_banners.php:185 includes/settings_page.php:657
+#, fuzzy
+msgid "Hide from registered users"
+msgstr "पंजीकृत उपयोगकर्ताओं के लिए CAPTCHA छुपाएँ"
+
+#: includes/pro_banners.php:189 includes/settings_page.php:408
+msgid "Use image packages"
+msgstr ""
+
+#: includes/pro_banners.php:219 includes/settings_page.php:546
+#, fuzzy
+msgid "for"
+msgstr "चार"
+
+#: includes/pro_banners.php:221
+msgid "seconds"
+msgstr ""
+
+#: includes/pro_banners.php:237
+msgid "Use several image packages at the same time"
+msgstr ""
+
+#: includes/package_loader.php:43
 msgid ""
 "Can not load images in to the \"uploads\" folder. Please, check your "
-"permissions."
+"permissions"
 msgstr ""
 
-#: includes/package_loader.php:45
-msgid "File packages.txt not found. Package not saved."
+#: includes/package_loader.php:131
+msgid "Error during package uploading"
 msgstr ""
 
-#: includes/package_loader.php:51
-msgid "Can not read data from packages.txt. Packages not saved."
+#: includes/package_loader.php:138
+msgid "check your archive"
 msgstr ""
 
-#: includes/package_loader.php:173
-msgid "Package successfully loaded."
+#: includes/package_loader.php:140
+msgid "file format should be ZIP-archive"
 msgstr ""
+
+#: includes/package_loader.php:142
+msgid "file size should not exceed"
+msgstr ""
+
+#: includes/package_loader.php:153
+msgid "it is impossible to upload the archive to the server"
+msgstr ""
+
+#: includes/package_loader.php:165
+msgid "archive can not be unzipped"
+msgstr ""
+
+#: includes/package_loader.php:178
+msgid "MB"
+msgstr ""
+
+#: includes/package_loader.php:180
+msgid "KB"
+msgstr ""
+
+#: includes/package_loader.php:182
+msgid "Bytes"
+msgstr ""
+
+#: includes/package_loader.php:239
+msgid "have been updated or added to the database"
+msgstr ""
+
+#: includes/package_loader.php:346
+msgid "Archive is empty"
+msgstr ""
+
+#: includes/package_loader.php:694
+#, php-format
+msgid ""
+"Some settings of the package %s were set incorrectly. They have been skipped"
+msgstr ""
+
+#: includes/package_loader.php:697
+msgid "Wrong data"
+msgstr ""
+
+#: includes/helpers.php:30
+#, fuzzy
+msgid "Please enter a CAPTCHA value."
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/helpers.php:31
+#, fuzzy
+msgid "Please enter a valid CAPTCHA value."
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/helpers.php:32
+#, fuzzy
+msgid "Time limit is exhausted. Please enter a CAPTCHA value again."
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/helpers.php:33
+#, fuzzy
+msgid "Time limit is exhausted. Please reload the CAPTCHA."
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/helpers.php:34
+msgid "You are in the whitelist"
+msgstr ""
+
+#: includes/settings_page.php:46
+msgid "General Options"
+msgstr ""
+
+#: includes/settings_page.php:47
+#, fuzzy
+msgid "WordPress Login form"
+msgstr "परिवर्तन सहेजें"
+
+#: includes/settings_page.php:48
+#, fuzzy
+msgid "WordPress Registration form"
+msgstr " पंजीकरण प्रपत्र"
+
+#: includes/settings_page.php:49
+#, fuzzy
+msgid "WordPress Reset Password form"
+msgstr "पासवर्ड प्रपत्र खो दिया है"
+
+#: includes/settings_page.php:50
+#, fuzzy
+msgid "WordPress Comments form"
+msgstr "टिप्पणियां फार्म"
+
+#: includes/settings_page.php:89
+#, fuzzy
+msgid "Buddypress Registration form"
+msgstr " पंजीकरण प्रपत्र"
+
+#: includes/settings_page.php:90
+#, fuzzy
+msgid "Buddypress Comments form"
+msgstr "टिप्पणियां फार्म"
+
+#: includes/settings_page.php:91
+msgid "Buddypress \"Create a Group\" form"
+msgstr ""
+
+#: includes/settings_page.php:92
+#, fuzzy
+msgid "WooCommerce Login form"
+msgstr "टिप्पणियां फार्म"
+
+#: includes/settings_page.php:93
+#, fuzzy
+msgid "WooCommerce Register form"
+msgstr " पंजीकरण प्रपत्र"
+
+#: includes/settings_page.php:94
+#, fuzzy
+msgid "WooCommerce Lost Password form"
+msgstr "पासवर्ड प्रपत्र खो दिया है"
+
+#: includes/settings_page.php:95
+msgid "WooCommerce Checkout Billing form"
+msgstr ""
+
+#: includes/settings_page.php:145
+msgid "All plugin settings were restored."
+msgstr ""
+
+#: includes/settings_page.php:171
+msgid "Save Changes"
+msgstr "परिवर्तन सहेजें"
+
+#: includes/settings_page.php:211 includes/settings_page.php:406
+#, fuzzy
+msgid "Arithmetic actions"
+msgstr "CAPTCHA के लिए अंकगणित कार्रवाई"
+
+#: includes/settings_page.php:212 includes/settings_page.php:407
+msgid "Complexity"
+msgstr ""
+
+#: includes/settings_page.php:221
+#, php-format
+msgid "\"%s\" option must not be fully disabled"
+msgstr ""
+
+#: includes/settings_page.php:235
+msgid "Text fields in the \"Notification messages\" option must not be empty"
+msgstr ""
+
+#: includes/settings_page.php:282
+msgid ""
+"In order to use images in the CAPTCHA, please select at least one of the "
+"items in the option \"Use image packages\". The \"Images\" checkbox in "
+"\"Complexity\" option has been disabled"
+msgstr ""
+
+#: includes/settings_page.php:291
+#, fuzzy
+msgid "Settings saved"
+msgstr "विकल्प बचाया."
+
+#: includes/settings_page.php:404
+#, php-format
+msgid ""
+"With this option the CAPTCHA will be generated via %s into the form after "
+"the end of the page loading. In this case, the most of spam bots can't "
+"figure out the answer to the CAPTCHA automatically because they just can't "
+"get the CAPTCHA content"
+msgstr ""
+
+#: includes/settings_page.php:410
+msgid "Enlarge images on mouseover"
+msgstr ""
+
+#: includes/settings_page.php:411
+msgid "Show reload button"
+msgstr ""
+
+#: includes/settings_page.php:412
+msgid "CAPTCHA title"
+msgstr ""
+
+#: includes/settings_page.php:413
+msgid "Required symbol"
+msgstr ""
+
+#: includes/settings_page.php:414
+msgid "Show CAPTCHA after the end of the page loading"
+msgstr ""
+
+#: includes/settings_page.php:420
+msgid "Plus"
+msgstr "प्लस"
+
+#: includes/settings_page.php:424
+msgid "Minus"
+msgstr "माइनस"
+
+#: includes/settings_page.php:428
+#, fuzzy
+msgid "Multiplication"
+msgstr "गुणा करना(&times;)"
+
+#: includes/settings_page.php:434
+msgid "Numbers"
+msgstr "नंबर"
+
+#: includes/settings_page.php:438
+msgid "Words"
+msgstr "शब्द"
+
+#: includes/settings_page.php:442
+msgid "Images"
+msgstr ""
+
+#: includes/settings_page.php:541
+msgid "Enable time limit"
+msgstr ""
+
+#: includes/settings_page.php:566
+#, fuzzy
+msgid "If the CAPTCHA field is empty"
+msgstr "CAPTCHA जो गलत था."
+
+#: includes/settings_page.php:567
+#, fuzzy
+msgid "If the CAPTCHA is incorrect"
+msgstr "CAPTCHA जो गलत था."
+
+#: includes/settings_page.php:568
+msgid "If the time limit is exhausted"
+msgstr ""
+
+#: includes/settings_page.php:571
+#, fuzzy
+msgid ""
+"If the time limit is exhausted (this message will be displayed above the "
+"CAPTCHA)"
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/settings_page.php:572
+msgid ""
+"If the user IP is added to the whitelist (this message will be displayed "
+"instead of the CAPTCHA)"
+msgstr ""
+
+#: includes/settings_page.php:577
+msgid "Errors"
+msgstr ""
+
+#: includes/settings_page.php:578
+msgid ""
+"These messages will be displayed if the CAPTCHA answer has not passed the "
+"verification"
+msgstr ""
+
+#: includes/settings_page.php:581
+msgid "Info"
+msgstr ""
+
+#: includes/settings_page.php:582
+#, fuzzy
+msgid "These messages will be displayed inside of the CAPTCHA"
+msgstr "CAPTCHA पूरा करें."
+
+#: includes/settings_page.php:587
+msgid "Notification messages"
+msgstr ""
+
+#: includes/settings_page.php:623
+msgid "update"
+msgstr ""
+
+#: includes/settings_page.php:624
+msgid "to the current version"
+msgstr ""
+
+#: includes/settings_page.php:631
+msgid "install"
+msgstr ""
+
+#: includes/settings_page.php:645
+msgid "You should"
+msgstr ""
+
+#: includes/settings_page.php:648
+msgid "to use this functionality"
+msgstr ""
+
+#: includes/settings_page.php:677
+msgid "This option is available only for network or for main blog"
+msgstr ""
+
+#: includes/settings_page.php:689
+msgid "Check off for adding the CAPTCHA to forms on their settings pages"
+msgstr ""
+
+#: includes/settings_page.php:783
+msgid ""
+"The image packages list is empty. Please restore default settings or re-"
+"install the plugin to fix this error"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Registration form"
+#~ msgstr " पंजीकरण प्रपत्र"
+
+#~ msgid "Comments form"
+#~ msgstr "टिप्पणियां फार्म"
+
+#~ msgid "Plus (&#43;)"
+#~ msgstr "प्लस (&#43;)"
+
+#~ msgid "Minus (&minus;)"
+#~ msgstr "माइनस (&minus;)"
+
+#, fuzzy
+#~ msgid "Multiply"
+#~ msgstr "गुणा करना(&times;)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+#~ msgstr "CAPTCHA के लिए ब्लॉक अंकगणित कार्यों और इस में एक बिंदु का चयन करें"
+
+#, fuzzy
+#~ msgid "Please select one item in the block Enable image packages"
+#~ msgstr "CAPTCHA के लिए ब्लॉक अंकगणित कार्यों और इस में एक बिंदु का चयन करें"
+
+#, fuzzy
+#~ msgid "Plugins"
+#~ msgstr "افزونه های BWS"
+
+#, fuzzy
+#~ msgid "If you would like to add Captcha to a custom form, please see"
+#~ msgstr ""
+#~ "اگر می خواهید این افزونه را به عنوان یک فرم اختصاصی سفارشی سازی کنید، "
+#~ "لطفاً از طریق <a href=\"Mailto:plugin@bestwebsoft.com\">plugin@bestwebsoft."
+#~ "com</a> با ما تماس بگیرید یا اینکه فرم تماس موجود در سایت ما را پُر کنید"
+
+#, fuzzy
+#~ msgid "Hide CAPTCHA"
+#~ msgstr "CAPTCHA सक्षम:"
+
+#~ msgid "Arithmetic actions for CAPTCHA"
+#~ msgstr "CAPTCHA के लिए अंकगणित कार्रवाई"
 
 #~ msgid "and"
 #~ msgstr "और"
-
-#, fuzzy
-#~ msgid "Enable CAPTCHA"
-#~ msgstr "CAPTCHA सक्षम:"
 
 #, fuzzy
 #~ msgid "Title for CAPTCHA in the form"

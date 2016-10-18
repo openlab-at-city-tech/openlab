@@ -607,6 +607,10 @@ msgid "Hidden"
 msgstr "Caché"
 
 #: inc/views/admin/settings.php:73
+msgid "Size task in list according to priority"
+msgstr "Taille de la tâche dans la liste selon sa priorité"
+
+#: inc/views/admin/settings.php:73
 msgid "Updates page shows"
 msgstr "La page des mises à jour affiche"
 
@@ -650,11 +654,11 @@ msgstr "Options de sécurité"
 msgid "Allow uploads in task comments"
 msgstr "Autoriser le téléversement de fichiers dans les commentaires"
 
-#: inc/views/admin/settings.php:135
+#: inc/views/admin/settings.php:135 inc/views/admin/settings.php:76
 msgid "Yes"
 msgstr "Oui"
 
-#: inc/views/admin/settings.php:138
+#: inc/views/admin/settings.php:138 inc/views/admin/settings.php:79
 msgid "No"
 msgstr "Non"
 

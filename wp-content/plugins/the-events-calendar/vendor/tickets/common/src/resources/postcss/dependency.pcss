@@ -1,0 +1,24 @@
+/* Dependency CSS */
+.tribe-dependent {
+	display: none;
+
+	&.tribe-active {
+		display: inline-block;
+
+		div& {
+			display: block;
+
+			&.select2-container {
+				display: inline-block;
+			}
+		}
+
+		td& {
+			display: table-cell;
+		}
+
+		tr& {
+			display: table-row;
+		}
+	}
+}

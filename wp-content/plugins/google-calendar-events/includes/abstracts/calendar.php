@@ -732,6 +732,51 @@ abstract class Calendar {
 	}
 
 	/**
+	 * Get "Add to Google Calendar" link.
+	 *
+	 * @since  3.1.3
+	 *
+	 * @param  Event  $event    Event object to be parsed.
+	 *
+	 * @return string
+	 */
+	public function get_add_to_gcal_url( Event $event ) {
+		$base_url = 'https://calendar.google.com/calendar/render';
+		// Was https://www.google.com/calendar/render
+
+		// Start & end date/time in specific format for GCal.
+		// &dates=20160504T110000/20160504T170000
+		// No "Z"s tacked on to preserve source timezone.
+		// All day events remove time component, but need to add a full day to show up correctly.
+		$is_all_day     = ( true == $event->whole_day );
+		$gcal_dt_format = $is_all_day ? 'Ymd' : 'Ymd\THi00';
+		$gcal_begin_dt  = $event->start_dt->format( $gcal_dt_format );
+		$end_dt_raw     = $is_all_day ? $event->end_dt->addDay() : $event->end_dt;
+		$gcal_end_dt    = $end_dt_raw->format( $gcal_dt_format );
+		$gcal_dt_string = $gcal_begin_dt . '/' . $gcal_end_dt;
+
+		// "details" (description) should work even when blank.
+		// "location" (address) should work with an address, just a name or blank.
+		$params = array(
+			'action'   => 'TEMPLATE',
+			'text'     => urlencode( strip_tags( $event->title ) ),
+			'dates'    => $gcal_dt_string,
+			'details'  => urlencode( $event->description ),
+			'location' => urlencode( $event->start_location['address'] ),
+			'trp'      => 'false',
+		);
+
+		// "ctz" (timezone) arg should be included unless all-day OR 'UTC'.
+		if ( ! $is_all_day && ( 'UTC' !== $event->timezone ) ) {
+			$params['ctz'] = urlencode( $event->timezone );
+		}
+
+		$url = add_query_arg( $params, $base_url );
+
+		return $url;
+	}
+
+	/**
 	 * Output the calendar markup.
 	 *
 	 * @since 3.0.0
@@ -775,13 +820,11 @@ abstract class Calendar {
 									. 'data-events-last="'    . $this->latest_event . '"'
 									. '>';
 
-				date_default_timezone_set( $this->timezone );
 				do_action( 'simcal_calendar_html_before', $this->id );
 
 				$view->html();
 
 				do_action( 'simcal_calendar_html_after', $this->id );
-				date_default_timezone_set( $this->site_timezone );
 
 				//$settings = get_option( 'simple-calendar_settings_calendars' );
 				$poweredby = get_post_meta( $this->id, '_poweredby', true );

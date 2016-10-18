@@ -182,7 +182,7 @@ add_filter('wp', 'openlab_event_page_controller');
  */
 function openlab_eventorganiser_custom_options($options) {
 
-    $options[dateformat] = 'mm-dd';
+    $options['dateformat'] = 'mm-dd';
 
     return $options;
 }

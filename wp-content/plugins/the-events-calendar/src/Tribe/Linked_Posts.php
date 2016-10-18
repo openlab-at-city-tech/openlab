@@ -436,12 +436,33 @@ class Tribe__Events__Linked_Posts {
 		}
 
 		$args = wp_parse_args( $args, $defaults );
-		$result = new WP_Query( $args );
-		if ( $result->have_posts() ) {
-			return $result->posts;
+
+		/**
+		 * Filters the linked posts query allowing third-party plugins to replace it.
+		 *
+		 * This is an opt-out filter: to avoid The Events Calendar from running the linked posts query as it would
+		 * normally do third parties should return anything that is not exactly `null` to replace the query and provide
+		 * alternative linked posts.
+		 *
+		 * @param array $linked_posts Defaults to `null`; will be an array if another plugin did run the query.
+		 * @param array $args         An array of query arguments in the same format used to provide arguments to WP_Query.
+		 *
+		 */
+		$linked_posts = apply_filters( 'tribe_events_linked_posts_query', null, $args );
+
+		if ( null !== $linked_posts ) {
+			return $linked_posts;
 		}
 
-		return array();
+		$result = new WP_Query( $args );
+
+		if ( $result->have_posts() ) {
+			$linked_posts = $result->posts;
+		} else {
+			$linked_posts = array();
+		}
+
+		return $linked_posts;
 	}
 
 	/**
@@ -518,7 +539,7 @@ class Tribe__Events__Linked_Posts {
 			}
 
 			// add the subject to the target
-			$linked_posts = add_post_meta( $target_post_id, $subject_meta_key, $subject_post_id );
+			$linked_posts = add_metadata('post', $target_post_id, $subject_meta_key, $subject_post_id );
 		}
 
 		if ( $linked_posts ) {
@@ -562,7 +583,7 @@ class Tribe__Events__Linked_Posts {
 
 		$subject_meta_key  = $this->get_meta_key( $subject_post_type );
 
-		delete_post_meta( $target_post_id, $subject_meta_key, $subject_post_id );
+		delete_metadata( 'post', $target_post_id, $subject_meta_key, $subject_post_id );
 
 		/**
 		 * Fired after two posts have been unlinked

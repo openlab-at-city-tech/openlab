@@ -83,6 +83,10 @@ function openlab_load_scripts() {
 
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
     }
+
+    if ( bp_is_register_page() ) {
+        wp_enqueue_script( 'password-strength-meter' );
+    }
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
@@ -108,11 +112,11 @@ function openlab_load_scripts_high_priority() {
     //less compliation via js so we can check styles in firebug via fireless - local dev only
     //@to-do: way to enqueue as last item?
     if (CSS_DEBUG) {
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.9.4', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.less', array(), '1.6.9.5', 'all');
         wp_enqueue_style('main-styles');
     } else {
 
-        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.9.4', 'all');
+        wp_register_style('main-styles', $stylesheet_dir_uri . '/style.css', array(), '1.6.9.5', 'all');
         wp_enqueue_style('main-styles');
     }
 

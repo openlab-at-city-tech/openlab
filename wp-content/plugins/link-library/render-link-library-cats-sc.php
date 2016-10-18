@@ -344,10 +344,11 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 }
 
                 if ( 'right' == $catlistdescpos || empty( $catlistdescpos ) ) {
-                    $catitem .= '<div class="linkcatname">' . $catname->name . '</div>';
+                    $catitem .= '<div class="linkcatname">' . $catname->name;
                     if ($showcatlinkcount) {
-                        $catitem .= ' (' . $catname->linkcount . ')';
+                        $catitem .= '<span class="linkcatcount"> (' . $catname->linkcount . ')</span>';
                     }
+					$catitem .= '</div>';
                 }
 
                 if ( $showcategorydescheaders ) {
@@ -359,10 +360,11 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 }
 
                 if ( 'left' == $catlistdescpos ) {
-                    $catitem .= '<div class="linkcatname">' . $catname->name . '</div>';
+                    $catitem .= '<div class="linkcatname">' . $catname->name;
                     if ( $showcatlinkcount ) {
-                        $catitem .= ' (' . $catname->linkcount . ')';
+                        $catitem .= '<span class="linkcatcount"> (' . $catname->linkcount . ')</span>';
                     }
+					$catitem .= '</div>';
                 }
 
                 if ( ( $catanchor || $showonecatonly ) && 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {

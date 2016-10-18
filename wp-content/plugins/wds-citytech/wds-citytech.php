@@ -584,7 +584,7 @@ function wds_load_group_departments() {
         if (in_array($value, $wds_departments)) {
             $checked = "checked";
         }
-        $return .= "<input type='checkbox' class='wds-department' name='wds_departments[]' value='" . $value . "' " . $checked . "> " . $value . "<br>";
+        $return .= "<label class='passive block'><input type='checkbox' class='wds-department' name='wds_departments[]' value='" . $value . "' " . $checked . "> " . $value . "</label>";
     }
     $return .= "</div>";
     $return = str_replace("'", "\'", $return);
@@ -902,18 +902,18 @@ function wds_load_group_type($group_type) {
         $return .= '<tr><td colspan="2"><p class="ol-tooltip">The following fields are not required, but including this information will make it easier for others to find your Course.</p></td></tr>';
 
         $return .= '<tr class="additional-field course-code-field">';
-        $return .= '<td class="additional-field-label">Course Code:</td>';
-        $return .= '<td><input class="form-control" type="text" name="wds_course_code" value="' . $wds_course_code . '"></td>';
+        $return .= '<td class="additional-field-label"><label class="passive" for="wds_course_code">Course Code:</label></td>';
+        $return .= '<td><input class="form-control" type="text" id="wds_course_code" name="wds_course_code" value="' . $wds_course_code . '"></td>';
         $return .= '</tr>';
 
         $return .= '<tr class="additional-field section-code-field">';
-        $return .= '<td class="additional-field-label">Section Code:';
-        $return .= '<td><input class="form-control" type="text" name="wds_section_code" value="' . $wds_section_code . '"></td>';
+        $return .= '<td class="additional-field-label"><label class="passive" for="wds_section_code">Section Code:</label></td>';
+        $return .= '<td><input class="form-control" type="text" id="wds_section_code" name="wds_section_code" value="' . $wds_section_code . '"></td>';
         $return .= '</tr>';
 
         $return .= '<tr class="additional-field semester-field">';
-        $return .= '<td class="additional-field-label">Semester:';
-        $return .= '<td><select class="form-control" name="wds_semester">';
+        $return .= '<td class="additional-field-label"><label class="passive" for="wds_semester">Semester:</label></td>';
+        $return .= '<td><select class="form-control" id="wds_semester" name="wds_semester">';
         $return .= '<option value="">--select one--';
 
         $checked = $Spring = $Summer = $Fall = $Winter = "";
@@ -936,12 +936,12 @@ function wds_load_group_type($group_type) {
         $return .= '</tr>';
 
         $return .= '<tr class="additional-field year-field">';
-        $return .= '<td class="additional-field-label">Year:';
-        $return .= '<td><input class="form-control" type="text" name="wds_year" value="' . $wds_year . '"></td>';
+        $return .= '<td class="additional-field-label"><label class="passive" for="wds_year">Year:</label></td>';
+        $return .= '<td><input class="form-control" type="text" id="wds_year" name="wds_year" value="' . $wds_year . '"></td>';
         $return .= '</tr>';
 
         $return .= '<tr class="additional-field additional-description-field">';
-        $return .= '<td colspan="2" class="additional-field-label">Additional Description/HTML:</td></tr>';
+        $return .= '<td colspan="2" class="additional-field-label"><label class="passive" for="additional-desc-html">Additional Description/HTML:</label></td></tr>';
         $return .= '<tr><td colspan="2"><textarea class="form-control" name="wds_course_html" id="additional-desc-html">' . $wds_course_html . '</textarea></td></tr>';
         $return .= '</tr>';
 

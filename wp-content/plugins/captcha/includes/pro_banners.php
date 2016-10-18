@@ -24,54 +24,11 @@ if ( ! function_exists( 'cptch_pro_block' ) ) {
 				</div>
 				<div class="bws_pro_version_tooltip">
 					<div class="bws_info"><?php _e( 'Unlock premium options by upgrading to Pro version', 'captcha' ); ?></div>
-					<a class="bws_button" href="http://bestwebsoft.com/products/captcha/?k=9701bbd97e61e52baa79c58c3caacf6d&pn=75&v=<?php echo $cptch_plugin_info["Version"]; ?>&wp_v=<?php echo $wp_version; ?>" target="_blank" title="Captcha Pro by BestWebSoft Plugin"><?php _e( 'Learn More', 'captcha' ); ?></a>
+					<a class="bws_button" href="http://bestwebsoft.com/products/wordpress/plugins/captcha/?k=9701bbd97e61e52baa79c58c3caacf6d&pn=75&v=<?php echo $cptch_plugin_info["Version"]; ?>&wp_v=<?php echo $wp_version; ?>" target="_blank" title="Captcha Pro by BestWebSoft Plugin"><?php _e( 'Learn More', 'captcha' ); ?></a>
 				</div>
 			</div>
 		<?php }
 	}
-}
-
-if ( ! function_exists( 'cptch_basic_banner' ) ) {
-	function cptch_basic_banner() { ?>
-		<table class="form-table bws_pro_version">
-			<tr valign="top">
-				<th scope="row"><?php _e( 'Enable CAPTCHA for', 'captcha' ); ?>:</th>
-				<td>
-					<fieldset>
-						<legend class="screen-reader-text"><span><?php _e( 'Enable CAPTCHA for', 'captcha' ); ?></span></legend>
-						<label><input disabled='disabled' type="checkbox" /> Contact Form 7</label><br />
-						<label><input disabled='disabled' type="checkbox" name="cptchpr_subscriber" value="1" /> Subscriber by BestWebSoft</label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'Buddypress Registration form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'Buddypress Comments form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'Buddypress "Create a Group" form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'WooCommerce login form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'WooCommerce Register form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'WooCommerce Lost Password form', 'captcha' ); ?></label><br />
-						<label><input disabled='disabled' type="checkbox" /> <?php _e( 'WooCommerce Checkout Billing form', 'captcha' ); ?></label>
-					</fieldset>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" colspan="2">
-					* <?php _e( 'If you upgrade to Pro version all your settings will be saved.', 'captcha' ); ?>
-				</th>
-			</tr>
-		</table>
-	<?php }
-}
-
-if ( ! function_exists( 'cptch_advanced_banner' ) ) {
-	function cptch_advanced_banner() { ?>
-		<table class="form-table bws_pro_version">
-			<tr valign="top">
-				<th scope="row"><?php _e( 'Use several packages at the same time', 'captcha' ); ?></th>
-				<td>
-					<input disabled='disabled' type="checkbox" /><br/>
-					<span class="bws_info"><?php _e( 'If this option is enabled, CAPTCHA will be use pictures from different packages at the same time', 'captcha' ); ?>.</span>
-				</td>
-			</tr>
-		</table>
-	<?php }
 }
 
 if ( ! function_exists( 'cptch_whitelist_banner' ) ) {
@@ -109,7 +66,7 @@ if ( ! function_exists( 'cptch_packages_banner' ) ) {
 				</p>
 				<p>
 					<label><input disabled="disabled" class="button-primary" value="<?php _e( 'Install Now', 'captcha' ); ?>" type="submit" /></label>
-					<a class="cptch_add_ons_link" href="http://bestwebsoft.com/products/captcha/addons/" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
+					<a class="cptch_add_ons_link" href="http://bestwebsoft.com/products/wordpress/plugins/captcha/addons/" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
 				</p>
 			</div>
 		</div>
@@ -204,6 +161,135 @@ if ( ! function_exists( 'cptch_packages_banner' ) ) {
 					</th>
 				</tr>
 			</tfoot>
+		</table>
+	<?php }
+}
+
+/**
+ *
+ * @since 4.2.3
+ */
+if ( ! function_exists( 'cptch_additional_options' ) ) {
+	function cptch_additional_options() {
+		$src = plugins_url( 'images/package/', dirname( __FILE__ ) ); ?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><?php _e( 'Use general settings', 'captcha' );?></th>
+				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
+			</tr>
+			<tr class="cptch_form_option_used_packages">
+				<th scope="row"><?php _e( 'Use image packages', 'captcha' );?></th>
+				<td>
+					<fieldset>
+						<div class="cptch_tabs_package_list cptch_pro_pack_tab">
+							<ul class="cptch_tabs_package_list_items">
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_bt/0.png"></span>
+									<span>Arabic ( black numbers - transparent background )</span>
+								</li>
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_bw/0.png"></span>
+									<span>Arabic ( black numbers - white background )</span>
+								</li>
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_wb/0.png"></span>
+									<span>Arabic ( white numbers - black background )</span>
+								</li>
+							</ul>
+						</div>
+					</fieldset>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="cptch_form_wp_comments_enable_time_limit"><?php _e( 'Enable time limit', 'captcha' ); ?></label></th>
+				<td>
+					<fieldset>
+						<input type="checkbox" disabled="disabled" />
+						&nbsp;<?php _e( 'for', 'captcha' ); ?>&nbsp;
+						<input value="120" type="number" disabled="disabled" />
+						&nbsp;<?php _e( 'seconds', 'captcha' ); ?></span>
+					</fieldset>
+				</td>
+			</tr>
+		</table>
+	<?php }
+}
+
+/**
+ *
+ * @since 4.2.3
+ */
+if ( ! function_exists( 'cptch_option_tab' ) ) {
+	function cptch_option_tab() {
+		$src = plugins_url( 'images/package/', dirname( __FILE__ ) ); ?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><?php _e( 'Enable', 'captcha' );?></th>
+				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php _e( 'Use general settings', 'captcha' );?></th>
+				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
+			</tr>
+			<tr>
+				<th scope="row"><?php _e( 'Hide from registered users', 'captcha' );?></th>
+				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
+			</tr>
+			<tr class="cptch_form_option_used_packages">
+				<th scope="row"><?php _e( 'Use image packages', 'captcha' );?></th>
+				<td>
+					<fieldset>
+						<div class="cptch_tabs_package_list cptch_pro_pack_tab">
+							<ul class="cptch_tabs_package_list_items">
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_bt/0.png"></span>
+									<span>Arabic ( black numbers - transparent background )</span>
+								</li>
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_bw/0.png"></span>
+									<span>Arabic ( black numbers - white background )</span>
+								</li>
+								<li>
+									<span><input type="checkbox" disabled="disabled" /></span>
+									<span><img src="<?php echo $src; ?>arabic_wb/0.png"></span>
+									<span>Arabic ( white numbers - black background )</span>
+								</li>
+							</ul>
+						</div>
+					</fieldset>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="cptch_form_wp_comments_enable_time_limit"><?php _e( 'Enable time limit', 'captcha' ); ?></label></th>
+				<td>
+					<fieldset>
+						<input type="checkbox" disabled="disabled" />
+						&nbsp;<?php _e( 'for', 'captcha' ); ?>&nbsp;
+						<input value="120" type="number" disabled="disabled" />
+						&nbsp;<?php _e( 'seconds', 'captcha' ); ?></span>
+					</fieldset>
+				</td>
+			</tr>
+		</table>
+	<?php }
+}
+
+/**
+ *
+ * @since 4.2.3
+ */
+if ( ! function_exists( 'cptch_use_several_packages' ) ) {
+	function cptch_use_several_packages() { ?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><?php _e( 'Use several image packages at the same time', 'captcha' );?></th>
+				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
+			</tr>
 		</table>
 	<?php }
 }
