@@ -3,8 +3,8 @@ Contributors: nosilver4u
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MKMQKCBFFG3WW
 Tags: image, attachment, optimize, optimization, lossless, lossy, photo, picture, seo, compression, gmagick, jpegtran, gifsicle, optipng, pngout, pngquant, jpegmini, tinyjpg, tinypng, webp, wp-cli 
 Requires at least: 4.4
-Tested up to: 4.5.3
-Stable tag: 2.9.3
+Tested up to: 4.6.1
+Stable tag: 3.1.1
 License: GPLv3
 
 Reduce image sizes in WordPress including NextGEN, GRAND FlAGallery, FooGallery and more using lossless/lossy methods and image format conversion.
@@ -31,6 +31,11 @@ The tools used for optimization are [jpegtran](http://jpegclub.org/jpegtran/), [
 EWWW Image Optimizer calls optimization utilities directly which is well suited to shared hosting situations where these utilities may already be installed. Pre-compiled binaries/executables are provided for optipng, gifsicle, pngquant, cwebp, and jpegtran. Pngout can be installed with one-click from the settings page. If none of that works, there is a cloud option that will work for any site.
 
 If you need a version of this plugin for cloud use only, see [EWWW Image Optimizer Cloud](https://wordpress.org/plugins/ewww-image-optimizer-cloud/). It is much more compact as it does not contain any binaries or any mention of the exec() function.
+
+= Support =
+
+If you need assistance using the plugin, please visit our [Support Page](https://ewww.io/contact-us/). The forums are community supported only.
+The EWWW Image Optimizer is developed at https://github.com/nosilver4u/ewww-image-optimizer
 
 = Bulk Optimize =
 
@@ -113,7 +118,7 @@ To receive updates when new strings are available for translation, you can signu
 1. *Recommended* Visit the settings page to enable/disable specific tools and turn on advanced optimization features.
 1. Done!
 
-If these steps do not work, more detailed instructions are available below the video tutorials.
+If these steps do not work, more detailed instructions are available below the video tutorials. If you need further assistance using the plugin, please visit our [Support Page](https://ewww.io/contact-us/). The forums are community supported only.
 
 At the bottom of this page, you will find a list of known working webhosts. If you have any contributions or corrections to these lists, please contact me via the form at https://ewww.io/contact-us/
 
@@ -183,13 +188,15 @@ Webhosts where things work (mostly) out of the box:
 
 Webhosts where the plugin will only work in cloud mode or only some tools are installed locally:
 
+* Cloudways
+* Flywheel
 * Gandi
 * Hostwinds
 * ipage (JPG only)
 * ipower
-* Cloudways
-* Flywheel
+* one.com - may not even work in cloud mode
 * WP Engine - use EWWW Image Optimizer Cloud fork: https://wordpress.org/plugins/ewww-image-optimizer-cloud/
+
 
 == Frequently Asked Questions ==
 
@@ -253,66 +260,36 @@ Pngout, TinyJPG/TinyPNG, JPEGmini, and Pngquant were recommended by EWWW IO user
 * feature requests are sticky at the top of the support forums, vote for the ones you like: https://wordpress.org/support/plugin/ewww-image-optimizer
 * If you would like to help translate this plugin in your language, get started here: https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/
 
-= 2.9.3 =
-* fixed: sorry, missed a session locking operation (manual optimize)
+= 3.1.1 =
+* fixed: exec() notice surpressed when it should not be
 
-= 2.9.2 =
-* changed: priority level of Alt WebP Rewriting so that pages do not get un-minified after Autoptimize runs
-* fixed: async requests for parallel optimization had an empty user agent
-* fixed: uploads broken because start_session() locks all async processes
+= 3.1.0 =
+* added: warning when excessive re-optimizations have been detected
+* added: Alt WebP supports lazy loading in Hueman theme
+* added: Alt WebP supports Lazy Load plugin and Cherry Lazy modifications
+* added: Alt WebP supports BJ Lazy Load plugin
+* added: Alt WebP supports Retina Lazysizes
+* added: ability to defer resizing of uploaded image using ewww_image_optimizer_defer_resizing filter, "other" dimensions will apply regardless of upload method
+* changed: wp_image_editor integration does not use background optimization, reverting to inline processing, holler if you want it back
+* changed: all scripts have proper version numbers to avoid caching issues
+* changed: inline webp script moved to head element to work better with lazy loading
+* changed: optimized Alt WebP code for smaller size
 
-= 2.9.1 =
-* changed: full paths are not POSTed to avoid Local File Inclusion blocks put in place by various security plugins (Wordfence & Shield)
-* fixed: reduced number of database queries during parallel optimization
-* fixed: undefined methods for BFI thumb editor class
-* added: detect Shield's Lock to Location feature and disable background/parallel operations
+= 3.0.2 =
+* fixed: fatal error running empty() on a constant in PHP less than 5.5
 
-= 2.9.0 =
-* added: parallel optimization for Media uploads (original and resizes are done concurrently), turn off under Advanced if it affects site performance
-* added: allow resize dimensions to be filtered: https://ewww.io/2016/07/05/changing-the-dimensions-for-resizing-images/
-* changed: deferred (background) optimization is now the normal mode of operation as it runs instantly, and no longer relies on wp_cron
-* changed: scheduled optimization uses new background processing to allow it to run longer, and resume quicker
-* changed: webp .htaccess rules removed when plugin is deleted
-* changed: JPG quality setting applies to conversion AND image editing (but not regular optimization), so that you can override the WP default of 82
-* changed: API license status check is faster, as results are cached while checking for updates in the background
-* fixed: .htaccess rules for webp inserted properly for sub-directory installs
-* fixed: .jpe files properly detected as image/jpeg when fetching from CDN or during folder-scanning operations
-* fixed: images generated by NextGEN are properly optimized with latest version
-* fixed: deprecated class constructors for NextGEN, Nextcellent, and FlaGallery classes (potential white screen with PHP 7)
-* fixed: basic uploader for FlaGallery broken due to missing class
-* fixed: images uploaded with WPML Media active are now resized, with better detection for newly uploaded images
-
-= 2.8.5 =
-* fixed: previous security hardening used boolval(), which is not present on PHP < 5.5
-
-= 2.8.4 =
-* security: remote command execution, please update immediately
-
-= 2.8.3 =
-* fixed: tool status not shown when tool could not be found, prevents pngout installation
-* fixed: notice when checking nonce lifetime during scheduled optimization
-* fixed: multi-site not saving cloud optimization levels
-* fixed: settings page requiring a refresh to display properly after inserting/removing an API key
-
-= 2.8.2 =
-* added: ability to use ImageMagick's 'convert' tool to convert images on Windows
-* fixed: WebP images regenerated during scheduled optimization when PNG optimization disabled
-* fixed: Windows executable checks obey 'use system tools' option
-* fixed: settings page checks for tools which have already been tested and known missing
-
-= 2.8.1 =
-* added: kudos to Cache Enabler plugin from KeyCDN for adding WebP rewrite support to work with images generated by EWWW I.O.
-* fixed: untranslatable string for resize setting description
-* fixed: Resize Media Images was not applying to the Media->Add New menu item
-* fixed: Bulk Optimize counted webp images as valid resizes
-
-= 2.8.0 =
-* added: resizing for uploaded images, set max width and height and optionally resize all existing images
-* added: retina derivative for resized original is generated if original was at least twice the size of the max dimensions (WP Retina 2x Pro only)
-* fixed: warnings for file_exists in Alt WebP function when open_basedir restriction is in effect
-* removed: disable automatic optimization, use deferred optimization instead
-* removed: disable optipng (it still functions, just seeing if anyone actually needs that option anymore)
-* changed: consolidated various settings into optimization levels for each file format, and removed Cloud tab
+= 3.0.0 =
+* fixed: resizes not checked for existence before calling parallel/async optimization, causing the process to stall
+* fixed: background optimization disabled when settings are saved
+* fixed: regression in db upgrade function throws warning on plugin upgrade
+* fixed: alt webp breaks Slider Revolution's lazyload when dummy.png.webp exists
+* fixed: background optimization for nextcellent was incomplete
+* fixed: notices under Manage Gallery for nextcellent when tool constants were not defined
+* changed: one-click actions in Media Library don't require reload, now possible to optimize several images at the same time
+* changed: API quota check no longer requires a verification on every attempt
+* changed: webp settings moved to separate tab
+* added: forced webp mode, to generate webp for every image, regardless of final filesize
+* added: in forced webp mode, must specify allowed url patterns for rewriting
 
 == Upgrade Notice ==
 
@@ -329,9 +306,6 @@ Pngout, TinyJPG/TinyPNG, JPEGmini, and Pngquant were recommended by EWWW IO user
 = 2.8.0 =
 * added: resizing for uploaded images, set max width and height and optionally resize all existing images
 * changed: settings have been revamped, please check to make sure your settings were migrated properly
-
-= 2.7.0 =
-* added: PDF Optimization, both lossless AND lossy
 
 == Contact and Credits ==
 
