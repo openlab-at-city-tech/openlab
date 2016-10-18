@@ -1,5 +1,5 @@
 <?php
-$link = add_query_arg(
+$utm_link = add_query_arg(
 	array(
 		'utm_campaign' => 'in-app',
 		'utm_medium'   => 'plugin-tec',
@@ -7,10 +7,30 @@ $link = add_query_arg(
 	), Tribe__Main::$tec_url . 'license-keys/'
 );
 
-$link = esc_url( $link );
+$utm_link = esc_url( $utm_link );
+$license_link = '<a href="' . $utm_link . '" target="_blank">' . Tribe__Main::$tec_url . '<span class="screen-reader-text">' . __( ' (opens in new window)', 'tribe-common' ) . '</span></a>';
 
 // Explanatory text about license settings for the tab information box
-$html = __( '<p>The license key you received when completing your purchase from %1$s will grant you access to support and updates until it expires. You do not need to enter the key below for the plugins to work, but you will need to enter it to get automatic updates. <strong>Find your license keys at <a href="%2$s" target="_blank">%3$s</a></strong>.</p> <p>Each paid add-on has its own unique license key. Simply paste the key into its appropriate field on below, and give it a moment to validate. You know you\'re set when a green expiration date appears alongside a "valid" message.</p> <p>If you\'re seeing a red message telling you that your key isn\'t valid or is out of installs, visit <a href="%4$s" target="_blank">%5$s</a> to manage your installs or renew / upgrade your license.</p><p>Not seeing an update but expecting one? In WordPress, go to <a href="%6$s">Dashboard > Updates</a> and click "Check Again".</p>', 'tribe-common' );
+$html = '<p>' . sprintf(
+		esc_html__( 'The license key you received when completing your purchase from %1$s will grant you access to support and updates until it expires. You do not need to enter the key below for the plugins to work, but you will need to enter it to get automatic updates. %3$sFind your license keys at %2$s%4$s.', 'tribe-common' ),
+		'<a href="' . Tribe__Main::$tec_url . '" target="_blank">' . Tribe__Main::$tec_url . '<span class="screen-reader-text">' . __( ' (opens in new window)', 'tribe-common' ) . '</span></a>',
+		$license_link,
+		'<strong>',
+		'</strong>'
+	) . '</p>';
+
+$html .= '<p>' . esc_html__( 'Each paid add-on has its own unique license key. Simply paste the key into its appropriate field below, and give it a moment to validate. You know you\'re set when a green expiration date appears alongside a "valid" message.', 'tribe-common' ) . '</p>';
+
+$html .= '<p>' . sprintf(
+		esc_html__( 'If you\'re seeing a red message telling you that your key isn\'t valid or is out of installs, visit %1$s to manage your installs or renew / upgrade your license.', 'tribe-common' ),
+		$license_link
+	) . '</p>';
+
+$html .= '<p>' . sprintf(
+		esc_html__( 'Not seeing an update but expecting one? In WordPress, go to %1$sDashboard > Updates%2$s and click "Check Again".', 'tribe-common' ),
+		'<a href="' . admin_url( '/update-core.php' ) . '">',
+		'</a>'
+	) . '</p>';
 
 // Expand with extra information for mu network users
 if ( is_multisite() ) {
@@ -47,26 +67,9 @@ $licenses_tab = array(
 	),
 	'info-box-description' => array(
 		'type' => 'html',
-		'html' => sprintf(
-			$html,
-			Tribe__Main::$tec_url,
-			$link,
-			Tribe__Main::$tec_url . 'license-keys/',
-			$link,
-			Tribe__Main::$tec_url . 'license-keys/',
-			admin_url( '/update-core.php' )
-		),
+		'html' => $html,
 	),
 	'info-end' => array(
-		'type' => 'html',
-		'html' => '</div>',
-	),
-	'tribe-form-content-start' => array(
-		'type' => 'html',
-		'html' => '<div class="tribe-settings-form-wrap">',
-	),
-	// TODO: Figure out how properly close this wrapper after the license content
-	'tribe-form-content-end'   => array(
 		'type' => 'html',
 		'html' => '</div>',
 	),

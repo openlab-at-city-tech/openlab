@@ -124,7 +124,8 @@ table.plugins .tribe-plugin-update-message a {
 .tribe-settings-form .tribe-field-radio label,
 .tribe-settings-form .tribe-field-checkbox_list label {
 	display: block;
-	margin: 5px 0;
+	margin: 5px 0 5px 20px;
+	text-indent: -20px;
 }
 .tribe-settings-form .tribe-field-radio label input,
 .tribe-settings-form .tribe-field-checkbox_list label input {
@@ -145,9 +146,8 @@ table.plugins .tribe-plugin-update-message a {
 	margin-bottom: 10px;
 	padding: 6px 0 6px 12px;
 }
-.tribe-settings-form .tribe-settings-form-wrap h3 ~ h3 {
-	margin-top: 2.25em;
-}
+.tribe-settings-form .tribe-settings-form-wrap .tribe-sysinfo-optin-msg,
+.tribe-settings-form .tribe-settings-form-wrap .system-info,
 .tribe-settings-form .tribe-settings-form-wrap h3 + p {
 	margin: 0 0 10px;
 	padding-left: 12px;
@@ -263,9 +263,11 @@ table.plugins .tribe-plugin-update-message a {
 .key-validity {
 	display: inline-block;
 }
+.optin-fail,
 .invalid-key {
 	color: red;
 }
+.optin-success,
 .valid-key {
 	color: green;
 }
@@ -409,7 +411,7 @@ table.plugins .tribe-plugin-update-message a {
 #tribe-log-controls {
 	padding-bottom: 16px;
 	padding-bottom: 1rem;
-	
+
 	/* For consistency with help screen h3 and p elements */
 	padding-left: 12px;
 }
@@ -450,6 +452,12 @@ table.plugins .tribe-plugin-update-message a {
 .template-updates-wrapper  dd {
 	margin-left: 25%;
 	padding-left: 10px;
+}
+.system-info-copy .system-info-copy-btn {
+	padding: 6px;
+}
+.system-info-copy .system-info-copy-btn .dashicons {
+	padding-right: 10px;
 }
 .template-updates-wrapper p {
 	margin-top: 0;
@@ -823,45 +831,122 @@ a.tribe-rating-link {
 .tribe-update-bar .progress .bar {
 	background: #7ad03a;
 }
-/* bumpdown */
-.bumpdown {
-	background: #f1f1f1;
-	margin: 16px 0;
-	margin: 1rem 0;
-	padding: 16px 24px 16px 16px;
-	padding: 1rem 1.5rem 1rem 1rem;
-	position: relative;
+/* = Modals/thickbox dialogs
+============================ */
+#tribe-dialog-wrapper > div {
+	padding: 16px;
+	padding: 1rem;
 }
-#poststuff .bumpdown h1,
-#poststuff .bumpdown h2,
-#poststuff .bumpdown h3,
-#poststuff .bumpdown h4,
-.bumpdown h1,
-.bumpdown h2,
-.bumpdown h3,
-.bumpdown h4 {
-	padding-left: 0;
-	padding-top: 0;
-}
-.bumpdown-arrow {
+#tribe-dialog-wrapper > div .stage {
 	display: none;
 }
-.bumpdown-close {
-	color: #686868;
-	cursor: pointer;
-	position: absolute;
-	right: 8px;
-	right: .5rem;
-	top: 8px;
-	top: .5rem;
-	z-index: 2;
+#tribe-dialog-wrapper #heading {
+	background: white;
 }
-.bumpdown-trigger .target {
-	color: #0074a2;
+#tribe-dialog-wrapper label {
+	display: block;
+}
+#tribe-dialog-wrapper .select-single-container {
+	border: 1px solid #888;
+	overflow-y: scroll;
+	height: 300px;
+}
+#tribe-dialog-wrapper .select-single-container label {
+	opacity: 1;
+	padding: 3px 5px;
+	-webkit-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+}
+#tribe-dialog-wrapper .select-single-container label:nth-child(odd) {
+	background: white;
+}
+#tribe-dialog-wrapper .select-single-container label.selected {
+	background: #0073aa;
+	color: white;
+	font-weight: bold;
+}
+#tribe-dialog-wrapper .select-single-container label input {
+	display: none;
+}
+#tribe-dialog-wrapper .select-single-container.updating label {
+	opacity: 0.35;
+	-webkit-transition: opacity 0.2s;
+	transition: opacity 0.2s;
 }
 /* Useful to ensure modals rise above the grey 'miasma' */
 .ui-front {
 	z-index: 1000000;
+}
+/* Select2 Specific rule */
+.select2-container .select2-choice abbr {
+	top: 6px;
+}
+.wp-list-table.plugins .column-description .update-message {
+	color: #d54e21;
+}
+.api-check {
+	padding: 1em;
+}
+.api-check + .notice-dismiss:hover:before {
+	color: #fff;
+}
+.api-check:before,
+	.api-check:after {
+	content: '';
+	display: table;
+}
+.api-check:after {
+	clear: both;
+}
+.api-check .tribe-spirit-animal {
+	background: #325f81;
+	background: -webkit-linear-gradient(45deg, #325f81 0%,#3d87c0 100%);
+	background: linear-gradient(45deg, #325f81 0%,#3d87c0 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#325f81', endColorstr='#3d87c0',GradientType=1 );
+	border-left: 4px solid #eee;
+	bottom: 0;
+	display: none;
+	padding: 16px;
+	padding: 1rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 180px;
+}
+.api-check .tribe-spirit-animal:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	width: 1%;
+	vertical-align: middle;
+}
+.api-check .tribe-spirit-animal img {
+	display: inline-block;
+	max-height: 100%;
+	max-width: 96%;
+	vertical-align: middle;
+}
+.api-check p {
+	line-height: 1.7;
+	margin-bottom: 1em;
+}
+.api-check a {
+	text-decoration: none;
+}
+.api-check a:hover {
+	text-decoration: underline;
+}
+.api-check .plugin-list {
+	display: inline;
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+}
+.api-check .plugin-list span.plugin-invalid:after {
+	content: ', ';
+}
+.api-check .plugin-list span.plugin-invalid:last-of-type:after {
+	content: '';
 }
 @media
 only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
@@ -891,5 +976,13 @@ only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device
 	}
 	.events-cal .tablenav.top {
 		display: none;
+	}
+}
+@media screen and (min-width: 500px) {
+	.api-check .tribe-spirit-animal {
+		display: block;
+	}
+	.api-check .notice-content {
+		margin-right: 180px;
 	}
 }

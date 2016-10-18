@@ -399,11 +399,16 @@ jQuery( document ).ready( function( $ ) {
 						.datepicker( 'option', option, endDate )
 						.datepicker( 'setDate', endDate );
 				} else {
+
 					dates
 						.not( this )
 						.not( '.tribe-no-end-date-update' )
 						.datepicker( 'option', option, date );
 				}
+
+				// fire the change and blur handlers on the field
+				$( this ).change();
+				$( this ).blur();
 			}
 		};
 
@@ -514,21 +519,27 @@ jQuery( document ).ready( function( $ ) {
 	//show state/province input based on first option in countries list, or based on user input of country
 
 	var $state_prov_chzn = $( "#StateProvinceSelect_chosen" ),
+		$state_prov_select = $( "#StateProvinceSelect" ),
 		$state_prov_text = $( "#StateProvinceText" );
 
 
 	function tribeShowHideCorrectStateProvinceInput( country ) {
 		if ( country == 'US' || country == 'United States' ) {
 			$state_prov_chzn.show();
+			if ( $state_prov_chzn.length < 1 ) {
+				$state_prov_select.show();
+			}
 			$state_prov_text.hide();
 		}
 		else if ( country != '' ) {
 			$state_prov_text.show();
 			$state_prov_chzn.hide();
+			$state_prov_select.hide();
 		}
 		else {
-			$state_prov_text.hide();
+			$state_prov_text.show();
 			$state_prov_chzn.hide();
+			$state_prov_select.hide();
 		}
 	}
 
@@ -699,16 +710,45 @@ jQuery( document ).ready( function( $ ) {
 
 });
 
+( function ( $ ) {
+	'use strict';
 
-/**
- * Re-initialize chosen on widgets when moved
- * credits: http://www.johngadbois.com/adding-your-own-callbacks-to-wordpress-ajax-requests/
- */
-jQuery( document ).ajaxSuccess( function( e, xhr, settings ) {
-	if ( typeof settings !== 'undefined' && typeof settings.data !== 'undefined' && settings.data.search( 'action=save-widget' ) != - 1 ) {
-		jQuery( "#widgets-right .chosen" ).chosen();
-	}
-} );
+	var widget_update = function ( e, $widget ) {
+		if ( 'undefined' === typeof $widget ) {
+			var $target = $( e.target ),
+				$widget;
+
+			// Prevent weird non avaiable widgets to go any further
+			if ( ! $target.parents('.widget-top').length || $target.parents('#available-widgets').length ) {
+				return;
+			}
+
+			$widget = $target.closest( 'div.widget' );
+		}
+
+		// If we are not dealing with one of the Tribe Widgets
+		if (
+			! $widget.is( '[id*="tribe-events-adv-list"]' ) &&
+			! $widget.is( '[id*="tribe-mini-calendar"]' ) &&
+			! $widget.is( '[id*="tribe-this-week-events"]' )
+		) {
+			return;
+		}
+
+		// Bail when it was not off screen
+		if ( $widget.find( '.select2-container' ).length !== 0 && ! $widget.find( '.select2-container' ).hasClass( 'select2-offscreen' ) ) {
+			return;
+		}
+
+		$widget.find( 'select.calendar-widget-add-filter' ).removeClass( 'select2-offscreen' ).select2();
+	};
+
+	// Open the Widget
+	$( document.body ).on( 'click.widgets-toggle', widget_update );
+
+	// When Updated Re-Structure the Select2
+	$( document ).on( 'widget-updated', widget_update );
+} )( jQuery );
 
 /**
  * Manage the timezone selector user interface.

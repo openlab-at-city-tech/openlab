@@ -69,14 +69,43 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 	}
 
 	protected function update_post( $post_id, array $record ) {
-		$event = $this->build_event_array( $post_id, $record );
-		Tribe__Events__API::updateEvent( $post_id, $event );
-	}
+		$update_authority_setting = Tribe__Events__Aggregator__Settings::instance()->default_update_authority( 'csv' );
 
+		$event = $this->build_event_array( $post_id, $record );
+
+		if ( 'retain' === $update_authority_setting ) {
+			$this->skipped[] = $event;
+
+			if ( $this->is_aggregator && ! empty( $this->aggregator_record ) ) {
+				$this->aggregator_record->meta['activity']->add( 'event', 'skipped', $post_id );
+			}
+
+			return false;
+		}
+
+		if ( 'preserve_changes' === $update_authority_setting ) {
+			$event['ID'] = $post_id;
+			$event = Tribe__Events__Aggregator__Event::preserve_changed_fields( $event );
+		}
+
+		add_filter( 'tribe_aggregator_track_modified_fields', '__return_false' );
+		Tribe__Events__API::updateEvent( $post_id, $event );
+
+		if ( $this->is_aggregator && ! empty( $this->aggregator_record ) ) {
+			$this->aggregator_record->meta['activity']->add( 'event', 'updated', $post_id );
+		}
+
+		remove_filter( 'tribe_aggregator_track_modified_fields', '__return_false' );
+	}
 
 	protected function create_post( array $record ) {
 		$event = $this->build_event_array( false, $record );
 		$id    = Tribe__Events__API::createEvent( $event );
+
+		if ( $this->is_aggregator && ! empty( $this->aggregator_record ) ) {
+			Tribe__Events__Aggregator__Records::instance()->add_record_to_event( $id, $this->aggregator_record->id, 'csv' );
+			$this->aggregator_record->meta['activity']->add( 'event', 'created', $id );
+		}
 
 		return $id;
 	}
@@ -120,10 +149,18 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 		$start_date = strtotime( $this->get_event_start_date( $record ) );
 		$end_date   = strtotime( $this->get_event_end_date( $record ) );
 
+		if ( empty( $this->is_aggregator ) ) {
+			$post_status_setting = Tribe__Events__Importer__Options::get_default_post_status( 'csv' );
+		} elseif ( $this->default_post_status ) {
+			$post_status_setting = $this->default_post_status;
+		} else {
+			$post_status_setting = Tribe__Events__Aggregator__Settings::instance()->default_post_status( 'csv' );
+		}
+
 		$event                  = array(
 			'post_type'             => Tribe__Events__Main::POSTTYPE,
 			'post_title'            => $this->get_value_by_key( $record, 'event_name' ),
-			'post_status'           => Tribe__Events__Importer__Options::get_default_post_status( 'csv' ),
+			'post_status'           => $post_status_setting,
 			'post_content'          => $this->get_value_by_key( $record, 'event_description' ),
 			'comment_status'        => $this->get_boolean_value_by_key( $record, 'event_comment_status', 'open', 'closed' ),
 			'ping_status'           => $this->get_boolean_value_by_key( $record, 'event_ping_status', 'open', 'closed' ),
@@ -152,12 +189,34 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 		if ( $organizer_id = $this->find_matching_organizer_id( $record ) ) {
 			$event['organizer'] = is_array( $organizer_id ) ? $organizer_id : array( 'OrganizerID' => $organizer_id );
 		}
-		
+
 		if ( $venue_id = $this->find_matching_venue_id( $record ) ) {
 			$event['venue'] = array( 'VenueID' => $venue_id );
 		}
 
-		if ( $cats = $this->get_value_by_key( $record, 'event_category' ) ) {
+		$cats = $this->get_value_by_key( $record, 'event_category' );
+		if ( $this->is_aggregator && ! empty( $this->default_category ) ) {
+			$cats = $cats ? $cats . ',' . $this->default_category : $this->default_category;
+		} elseif ( $category_setting = Tribe__Events__Aggregator__Settings::instance()->default_category( 'csv' ) ) {
+			$cats = $cats ? $cats . ',' . $category_setting : $category_setting;
+		}
+
+		if ( $this->is_aggregator ) {
+			if ( $show_map_setting = Tribe__Events__Aggregator__Settings::instance()->default_map( 'csv' ) ) {
+				$event['EventShowMap']     = $show_map_setting;
+				$event['EventShowMapLink'] = $show_map_setting;
+			} else {
+				if ( isset( $event['EventShowMap'] ) ) {
+					unset( $event['EventShowMap'] );
+				}
+
+				if ( isset( $event['EventShowMapLink'] ) ) {
+					unset( $event['EventShowMapLink'] );
+				}
+			}
+		}
+
+		if ( $cats ) {
 			$event['tax_input'][ Tribe__Events__Main::TAXONOMY ] = $this->translate_terms_to_ids( explode( ',', $cats ) );
 		}
 
@@ -187,7 +246,7 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 
 	private function find_matching_organizer_id( $record ) {
 		$name = $this->get_value_by_key( $record, 'event_organizer_name' );
-		
+
 		// organizer name is a list of IDs either space or comma separated
 		if ( preg_match( '/[\\s,]+/', $name ) && is_numeric( preg_replace( '/[\\s,]+/', '', $name ) ) ) {
 			$split = preg_split( '/[\\s,]+/', $name );
@@ -243,16 +302,29 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 				continue;
 			}
 
-			if ( ! $term_info = term_exists( $term, Tribe__Events__Main::TAXONOMY ) ) {
+			if ( is_numeric( $term ) ) {
+				$term = absint( $term );
+				$term_info = get_term( $term, Tribe__Events__Main::TAXONOMY, ARRAY_A );
+			} else {
+				$term_info = term_exists( $term, Tribe__Events__Main::TAXONOMY );
+			}
+
+			if ( ! $term_info ) {
 				// Skip if a non-existent term ID is passed.
-				if ( is_int( $term ) ) {
+				if ( is_numeric( $term ) ) {
 					continue;
 				}
 				$term_info = wp_insert_term( $term, Tribe__Events__Main::TAXONOMY );
 			}
+
 			if ( is_wp_error( $term_info ) ) {
 				continue;
 			}
+
+			if ( $this->is_aggregator && ! empty( $this->aggregator_record ) ) {
+				$this->aggregator_record->meta['activity']->add( 'category', 'created', $term_info['term_id'] );
+			}
+
 			$term_ids[] = $term_info['term_id'];
 		}
 
@@ -296,7 +368,7 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 
 	/**
 	 * Allows the user to specify the currency position using alias terms.
-	 * 
+	 *
 	 * @param array $record
 	 *
 	 * @return string Either `prefix` or `suffix`; will fall back on the first if the specified position is not

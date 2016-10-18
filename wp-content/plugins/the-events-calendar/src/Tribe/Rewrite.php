@@ -1,16 +1,9 @@
 <?php
-/**
- * Rewrite Configuration Class
- */
-
 // Don't load directly
-if ( ! defined( 'ABSPATH' ) ) {
-	die( '-1' );
-}
-
-if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
+defined( 'WPINC' ) or die;
 
 	/**
+	 * Rewrite Configuration Class
 	 * Permalinks magic Happens over here!
 	 */
 	class Tribe__Events__Rewrite {
@@ -22,22 +15,9 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 
 		/**
 		 * Static singleton variable
-		 * @var [type]
+	 * @var self
 		 */
 		public static $instance;
-
-		/**
-		 * Static Singleton Factory Method
-		 *
-		 * @return Tribe__Events__Rewrite
-		 */
-		public static function instance( $wp_rewrite = null ) {
-			if ( ! isset( self::$instance ) ) {
-				self::$instance = new self( $wp_rewrite );
-			}
-
-			return self::$instance;
-		}
 
 		/**
 		 * WP_Rewrite Instance
@@ -58,15 +38,33 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 		public $bases = array();
 
 		/**
-		 * Just dont...
-		 */
-		private function __construct() {}
-
-		/**
 		 * After creating the Hooks on WordPress we lock the usage of the function
 		 * @var boolean
 		 */
 		private $hook_lock = false;
+
+		/**
+		 * Tribe__Events__Rewrite constructor.
+		 *
+		 * @param WP_Rewrite|null $wp_rewrite
+		 */
+		public function __construct(WP_Rewrite $wp_rewrite = null) {
+			$this->rewrite = $wp_rewrite;
+		}
+
+		/**
+		 * Static Singleton Factory Method
+		 *
+		 * @return Tribe__Events__Rewrite
+		 */
+		public static function instance( $wp_rewrite = null ) {
+			if ( ! isset( self::$instance ) ) {
+				self::$instance = new self( $wp_rewrite );
+			}
+
+			return self::$instance;
+		}
+
 
 		/**
 		 * Do not allow people to Hook methods twice by mistake
@@ -114,10 +112,15 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 			do_action( 'tribe_events_pre_rewrite', $this );
 
 			/**
-			 * Backwards Compatibility filter, this filters the WP Rewrite Rules.
-			 * @todo  Check if is worth deprecating this hook
+		 * Provides an opportunity to modify The Events Calendar's rewrite rules before they
+		 * are merged in to WP's own rewrite rules.
+		 *
+		 * @param array $events_rewrite_rules
+		 * @param Tribe__Events__Rewrite $tribe_rewrite
 			 */
-			$wp_rewrite->rules = apply_filters( 'tribe_events_rewrite_rules', $this->rules + $wp_rewrite->rules, $this );
+		$this->rules = apply_filters( 'tribe_events_rewrite_rules_custom', $this->rules, $this );
+
+		$wp_rewrite->rules = $this->rules + $wp_rewrite->rules;
 		}
 
 		/**
@@ -130,13 +133,8 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 		 * @param Tribe__Events__Rewrite $rewrite
 		 */
 		public function generate_core_rules( Tribe__Events__Rewrite $rewrite ) {
-			$options = array(
-				'default_view' => Tribe__Settings_Manager::get_option( 'viewOption', 'month' ),
-			);
-
 			$rewrite
 				// Single
-				->single( array( '(\d{4}-\d{2}-\d{2})', '(\d+)' ), array( Tribe__Events__Main::POSTTYPE => '%1', 'eventDate' => '%2', 'eventSequence' => '%3' ) )
 				->single( array( '(\d{4}-\d{2}-\d{2})' ), array( Tribe__Events__Main::POSTTYPE => '%1', 'eventDate' => '%2' ) )
 				->single( array( '(\d{4}-\d{2}-\d{2})', 'embed' ), array( Tribe__Events__Main::POSTTYPE => '%1', 'eventDate' => '%2', 'embed' => 1 ) )
 				->single( array( '{{ all }}' ), array( Tribe__Events__Main::POSTTYPE => '%1', 'post_type' => Tribe__Events__Main::POSTTYPE, 'eventDisplay' => 'all' ) )
@@ -170,7 +168,7 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 				->tax( array( 'feed' ), array( 'eventDisplay' => 'list', 'feed' => 'rss2' ) )
 				->tax( array( 'ical' ), array( 'ical' => 1 ) )
 				->tax( array( 'feed', '(feed|rdf|rss|rss2|atom)' ), array( 'feed' => '%2' ) )
-				->tax( array(), array( 'eventDisplay' => $options['default_view'] ) )
+				->tax( array(), array( 'eventDisplay' => 'default' ) )
 
 				// Tag
 				->tag( array( '{{ page }}', '(\d+)' ), array( 'eventDisplay' => 'list', 'paged' => '%2' ) )
@@ -184,37 +182,40 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 				->tag( array( 'feed' ), array( 'eventDisplay' => 'list', 'feed' => 'rss2' ) )
 				->tag( array( 'ical' ), array( 'ical' => 1 ) )
 				->tag( array( 'feed', '(feed|rdf|rss|rss2|atom)' ), array( 'feed' => '%2' ) )
-				->tag( array(), array( 'eventDisplay' => $options['default_view'] ) );
+				->tag( array(), array( 'eventDisplay' => 'default' ) );
 		}
 
 		/**
-		 * When WPML is active we need to return the language Query Arg
+		 * Filters the post permalink to take 3rd party plugins into account.
 		 *
-		 * @param  string $uri Permalink for the post
+		 * @param  string $permalink Permalink for the post
 		 * @param  WP_Post $post Post Object
 		 *
 		 * @return string      Permalink with the language
 		 */
 		public function filter_post_type_link( $permalink, $post ) {
-			// When creating the link we need to re-do the Percent Placeholder
-			$permalink = str_replace( self::PERCENT_PLACEHOLDER, '%', $permalink );
+			$supported_post_types = array(
+				Tribe__Events__Main::POSTTYPE,
+				Tribe__Events__Main::VENUE_POST_TYPE,
+				Tribe__Events__Main::ORGANIZER_POST_TYPE,
+			);
 
-			if ( ! $this->is_wpml_active() || empty( $_GET['lang'] ) ) {
+			if ( ! in_array( $post->post_type, $supported_post_types ) ) {
 				return $permalink;
 			}
 
-			$lang = wp_strip_all_tags( $_GET['lang'] );
+			$permalink = str_replace( self::PERCENT_PLACEHOLDER, '%', $permalink );
 
-			return add_query_arg( array( 'lang' => $lang ), $permalink );
-		}
+			/**
+			 * Filters a supported post type permalink to allow third-party plugins to add or remove components.
+			 *
+			 * @param string $permalink The permalink for the post generated by the The Events Calendar.
+			 * @param WP_Post $post The current post object.
+			 * @param array $supported_post_types An array of post types supported by The Events Calendar.
+			 */
+			$permalink = apply_filters( 'tribe_events_post_type_permalink', $permalink, $post, $supported_post_types );
 
-		/**
-		 * Checking if WPML is active on this WP
-		 *
-		 * @return boolean
-		 */
-		public function is_wpml_active() {
-			return ! empty( $GLOBALS['sitepress'] ) && $GLOBALS['sitepress'] instanceof SitePress;
+			return $permalink;
 		}
 
 		/**
@@ -277,29 +278,20 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 			// By default we load the Default and our plugin domains
 			$domains = apply_filters( 'tribe_events_rewrite_i18n_domains', array(
 				'default' => true, // Default doesn't need file path
-				'the-events-calendar' => $tec->pluginDir . 'lang/',
+				'the-events-calendar' => $tec->plugin_dir . 'lang/',
 			) );
 
-			// If WPML exists we treat the multiple languages
-			if ( $this->is_wpml_active() ) {
-				global $sitepress;
-
-				// Grab all languages
-				$langs = $sitepress->get_active_languages();
-
-				foreach ( $langs as $lang ) {
-					$languages[] = $sitepress->get_locale( $lang['code'] );
-				}
-
-				// Prevent Duplicates and Empty langs
-				$languages = array_filter( array_unique( $languages ) );
-
-				// Query the Current Language
-				$current_locale = $sitepress->get_locale( $sitepress->get_current_language() );
-
-				// Get the strings on multiple Domains and Languages
-				$bases = $tec->get_i18n_strings( $bases, $languages, $domains, $current_locale );
-			}
+			/**
+			 * Use `tribe_events_rewrite_i18n_slugs_raw` to modify the raw version of the l10n slugs bases.
+			 *
+			 * This is useful to modify the bases before the method is taken into account.
+			 *
+			 * @param array  $bases   An array of rewrite bases that have been generated.
+			 * @param string $method  The method that's being used to generate the bases; defaults to `regex`.
+			 * @param array  $domains An associative array of language domains to use; these would be plugin or themes language
+			 *                        domains with a `'plugin-slug' => '/absolute/path/to/lang/dir'`
+			 */
+			$bases = apply_filters( 'tribe_events_rewrite_i18n_slugs_raw', $bases, $method, $domains );
 
 			if ( 'regex' === $method ) {
 				foreach ( $bases as $type => $base ) {
@@ -311,11 +303,18 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 				}
 			}
 
-
 			/**
 			 * Use `tribe_events_rewrite_i18n_slugs` to modify the final version of the l10n slugs bases
+			 *
+			 * At this stage the method has been applied already and this filter will work with the
+			 * finalized version of the bases.
+			 *
+			 * @param array  $bases   An array of rewrite bases that have been generated.
+			 * @param string $method  The method that's being used to generate the bases; defaults to `regex`.
+			 * @param array  $domains An associative array of language domains to use; these would be plugin or themes language
+			 *                        domains with a `'plugin-slug' => '/absolute/path/to/lang/dir'`
 			 */
-			return (object) apply_filters( 'tribe_events_rewrite_i18n_slugs', $bases, $method );
+			return (object) apply_filters( 'tribe_events_rewrite_i18n_slugs', $bases, $method, $domains );
 		}
 
 		/**
@@ -527,7 +526,4 @@ if ( ! class_exists( 'Tribe__Events__Rewrite' ) ) {
 
 			return false;
 		}
-
-	} // end Tribe__Events__Rewrite class
-
-} // end if !class_exists Tribe__Events__Rewrite
+	}

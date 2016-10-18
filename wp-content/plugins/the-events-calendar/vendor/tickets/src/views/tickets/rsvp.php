@@ -2,7 +2,7 @@
 /**
  * This template renders the RSVP ticket form
  *
- * @version 4.2
+ * @version 4.3
  *
  * @var bool $must_login
  */
@@ -16,7 +16,7 @@ $messages_class = $messages ? 'tribe-rsvp-message-display' : '';
 $now = current_time( 'timestamp' );
 ?>
 <form action="" class="cart <?php echo esc_attr( $messages_class ); ?>" method="post" enctype='multipart/form-data'>
-	<h2 class="tribe-events-tickets-title"><?php esc_html_e( 'RSVP', 'event-tickets' ) ?></h2>
+	<h2 class="tribe-events-tickets-title"><?php echo esc_html_x( 'RSVP', 'form heading', 'event-tickets' ) ?></h2>
 	<div class="tribe-rsvp-messages">
 		<?php
 		if ( $messages ) {
@@ -30,7 +30,7 @@ $now = current_time( 'timestamp' );
 		}//end if
 		?>
 		<div class="tribe-rsvp-message tribe-rsvp-message-error tribe-rsvp-message-confirmation-error" style="display:none;">
-			<?php echo esc_html_e( 'Please fill in the RSVP confirmation name and email fields.', 'event-tickets' ); ?>
+			<?php esc_html_e( 'Please fill in the RSVP confirmation name and email fields.', 'event-tickets' ); ?>
 		</div>
 	</div>
 	<table width="100%" class="tribe-events-tickets tribe-events-tickets-rsvp">
@@ -124,7 +124,7 @@ $now = current_time( 'timestamp' );
 
 						<tr class="tribe-tickets-order_status-row">
 							<td>
-								<label for="tribe-tickets-order_status"><?php esc_html_e( 'RSVP', 'event-tickets' ); ?>:</label>
+								<label for="tribe-tickets-order_status"><?php echo esc_html_x( 'RSVP', 'order status label', 'event-tickets' ); ?>:</label>
 							</td>
 							<td colspan="3">
 								<?php Tribe__Tickets__Tickets_View::instance()->render_rsvp_selector( 'attendee[order_status]', '' ); ?>
@@ -162,17 +162,13 @@ $now = current_time( 'timestamp' );
 $content = ob_get_clean();
 if ( $is_there_any_product ) {
 	echo $content;
+
+	// If we have rendered tickets there is generally no need to display a 'tickets unavailable' message
+	// for this post
+	$this->do_not_show_tickets_unavailable_message();
 } else {
-	$unavailability_message = $this->get_tickets_unavailable_message( $tickets );
-
-	// if there isn't an unavailability message, bail
-	if ( ! $unavailability_message ) {
-		return;
-	}
-
-	?>
-	<div class="tickets-unavailable">
-		<?php echo esc_html( $unavailability_message ); ?>
-	</div>
-	<?php
+	// Indicate that we did not render any tickets, so a 'tickets unavailable' message may be
+	// appropriate (depending on whether other ticket providers are active and have a similar
+	// result)
+	$this->maybe_show_tickets_unavailable_message( $tickets );
 }

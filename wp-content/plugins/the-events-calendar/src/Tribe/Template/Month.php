@@ -29,6 +29,16 @@ if ( ! class_exists( 'Tribe__Events__Template__Month' ) ) {
 		const AJAX_HOOK = 'tribe_calendar';
 
 		/**
+		 * The path to the template file used for the view.
+		 * This value is used in Shortcodes/Tribe_Events.php to
+		 * locate the correct template file for each shortcode
+		 * view.
+		 *
+		 * @var string
+		 */
+		public $view_path = 'month/content';
+
+		/**
 		 * Number of events per day
 		 * @var int
 		 * @see tribe_events_month_day_limit
@@ -231,6 +241,15 @@ if ( ! class_exists( 'Tribe__Events__Template__Month' ) ) {
 
 			// In all other cases, let's cache it!
 			return true;
+		}
+
+		/**
+		 * Returns an array containing the IDs of all the events in the month.
+		 *
+		 * @return array
+		 */
+		public function get_events_in_month_ids() {
+			return $this->has_events() ? wp_list_pluck( $this->events_in_month, 'ID' ) : array();
 		}
 
 		/**
@@ -732,7 +751,7 @@ if ( ! class_exists( 'Tribe__Events__Template__Month' ) ) {
 			// Populate complete date range including leading/trailing days from adjacent months
 			while ( $date <= $this->final_grid_date ) {
 
-				$day_events = self::get_daily_events( $date );
+				$day_events = $this->get_daily_events( $date );
 				$day = (int) substr( $date, - 2 );
 
 				$prev_month = (int) substr( $date, 5, 2 ) < (int) substr( $this->requested_date, 5, 2 );
@@ -1043,7 +1062,6 @@ if ( ! class_exists( 'Tribe__Events__Template__Month' ) ) {
 			if ( isset( $_POST['eventDate'] ) && $_POST['eventDate'] ) {
 
 				Tribe__Events__Query::init();
-
 
 				Tribe__Events__Main::instance()->displaying = 'month';
 
