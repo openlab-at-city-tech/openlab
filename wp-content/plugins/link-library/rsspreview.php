@@ -4,16 +4,13 @@ function link_library_generate_rss_preview( $my_link_library_plugin ) {
     $linkid = intval( $_GET['linkid'] );
     $itemcount = intval( $_GET['previewcount'] );
 
-    $link_data = get_post( $linkid );
-    $link_url = get_post_meta( $link_data->ID, 'link_url', true );
-    $link_rss = get_post_meta( $link_data->ID, 'link_rss', true );
-
-    $genoptions = get_option( 'LinkLibraryGeneral' );
+    $link = get_bookmark( $linkid );
+    $genoptions = get_option('LinkLibraryGeneral');
 
     include_once( ABSPATH . WPINC . '/feed.php' );
 
     // Get a SimplePie feed object from the specified feed source.
-    $rss = fetch_feed( $link_rss );
+    $rss = fetch_feed( $link->link_rss );
     if ( !is_wp_error( $rss ) ) { // Checks that the object is created correctly
         // Figure out how many total items there are, but limit it to 5.
         $maxitems = $rss->get_item_quantity( $itemcount );
@@ -55,7 +52,7 @@ function link_library_generate_rss_preview( $my_link_library_plugin ) {
             <?php } ?>
             <br />
             <div>
-                <a class="ll_rss_preview_button" target="feedwindow" href="<?php echo $link_rss; ?>"><span>More News from this Feed</span></a> <a class="ll_rss_preview_button" target="sitewindow" href="<?php echo $link_url; ?>"><span>See Full Web Site</span></a>
+                <a class="ll_rss_preview_button" target="feedwindow" href="<?php echo $link->link_rss; ?>"><span>More News from this Feed</span></a> <a class="ll_rss_preview_button" target="sitewindow" href="<?php echo $link->link_url; ?>"><span>See Full Web Site</span></a>
             </div>
             <br />
             <br />

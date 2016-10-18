@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 3.0
-Tested up to: 4.5
+Tested up to: 4.6.1
 Stable tag: stable
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -19,7 +19,7 @@ This plugin uses the filter method to add contents to the pages. It also contain
 You can see a few examples of pages using Link Library on my personal site:
 
 * [Library in table form with search box and link submission form](http://ylefebvre.ca/freeware-database/)
-* [Library in unordered list form with RSS feed icons](http://ylefebvre.ca/favorite-links/)
+* [Library in unordered list form with RSS feed icons](http://ylefebvre.ca/links-page-with-pagination/)
 * [Library in unordered list form with RSS feed icons and Pagination](http://ylefebvre.ca/links-page-with-pagination/)
 * [Library only showing one category at a time through AJAX queries](http://ylefebvre.ca/freeware-database-ajax-version/)
 * [Library in unordered list form with 1 full RSS item per feed inline and 5 RSS item full previews when selecting preview icon](http://ylefebvre.ca/links-page-with-preview/)
@@ -58,6 +58,51 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 5.9.13.12 =
+* Set initial value of user-submission URL fields to http://
+
+= 5.9.13.11 =
+* User submitted link are nwo properly saved with a submitted date
+* Clarified message for URL missing http in user submission form.
+
+= 5.9.13.10 =
+* Added hook for users to register their own link reciprocal check function
+
+= 5.9.13.9 =
+* Fixed issue with copying library settings in Internet Explorer
+
+= 5.9.13.8 =
+* Fixed javascript errors with quotes in translated langauges for user submission form messages
+
+= 5.9.13.7 =
+* Updated translation template file
+
+= 5.9.13.6 =
+* Fixed issue with suppression of Link Library message from rejection e-mails
+
+= 5.9.13.5 =
+* Fixed issue with CSS not appearing problem in some themes
+* Added new span class around link count for category display
+* Modified div for category link count display
+
+= 5.9.13.4 =
+* Fixed issues with RSS Preview pop-up window
+* Changed RSS inline display to respect site date format
+* Changes RSS inline display to translate dates
+* Added option under general settings to allow user to change RSS cache duration for RSS feeds
+
+= 5.9.13.2 =
+* Fixed issue with telephone output introduced in 5.9.13.1
+
+= 5.9.13.1 =
+* Fixed issue with user link submission with spam filtering on and Contact Form 7 not installed
+* Added new option to Link Name field to be able to display description as tooltip
+* Added new option in Advanced tab to not display fields that do not contain any data (note that this could have negative effects on page layout)
+* Added new item in Advanced tab to display category description as part of Link Library output
+
+= 5.9.13 =
+* Corrected XSS vulnerability
 
 = 5.9.12.29 =
 * Modified hook to add button to editor to make it removable by users

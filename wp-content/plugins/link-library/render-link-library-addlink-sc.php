@@ -225,7 +225,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
             $output .= 'data-validation="required url length" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, URL', 'link-library' ) . '" ';
         }
 
-        $output .= 'type="text" name="link_url" id="link_url" value="' . ( isset( $_GET['addlinkurl'] ) ? esc_html( stripslashes( $_GET['addlinkurl'] ), '1') : '' ) . "\" /></td></tr>\n";
+        $output .= 'type="text" name="link_url" id="link_url" value="' . ( isset( $_GET['addlinkurl'] ) ? esc_html( stripslashes( $_GET['addlinkurl'] ), '1') : 'http://' ) . "\" /></td></tr>\n";
 
         if ( 'show' == $showaddlinkrss || 'required' == $showaddlinkrss) {
             if ( empty( $linkrsslabel ) ) {
@@ -399,7 +399,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 
             $output .= 'data-validation="url length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, 1-255 chars', 'link-library' ) . '" ';
 
-            $output .= 'type="text" name="ll_reciprocal" id="ll_reciprocal" value="' . ( isset( $_GET['addlinkreciprocal'] ) ? esc_html(stripslashes($_GET['addlinkreciprocal']), '1') : '' ) . "\" /></td></tr>\n";
+            $output .= 'type="text" name="ll_reciprocal" id="ll_reciprocal" value="' . ( isset( $_GET['addlinkreciprocal'] ) ? esc_html(stripslashes($_GET['addlinkreciprocal']), '1') : 'http://' ) . "\" /></td></tr>\n";
         }
 
         if ( 'show' == $showaddlinksecondurl || 'required' == $showaddlinksecondurl) {
@@ -417,7 +417,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 
             $output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field', 'link-library' ) . '" ';
 
-            $output .= 'type="text" name="ll_secondwebaddr" id="ll_secondwebaddr" value="' . ( isset( $_GET['addlinksecondurl'] ) ? esc_html( stripslashes( $_GET['addlinksecondurl'] ), '1' ) : '' ) . "\" /></td></tr>\n";
+            $output .= 'type="text" name="ll_secondwebaddr" id="ll_secondwebaddr" value="' . ( isset( $_GET['addlinksecondurl'] ) ? esc_html( stripslashes( $_GET['addlinksecondurl'] ), '1' ) : 'http://' ) . "\" /></td></tr>\n";
         }
 
         if ( 'show' == $showaddlinktelephone || 'required' == $showaddlinktelephone) {
@@ -559,45 +559,45 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
         $output .= "\tjQuery( document ).ready( function() {\n";
 
         $output .= "\tvar LinkLibraryValidationLanguage = {\n";
-        $output .= "\t\terrorTitle: '" . __( 'Form submission failed!', 'link-library' ) . "',\n";
-        $output .= "\t\trequiredFields: '" . __( 'You have not answered all required fields', 'link-library' ) . "',\n";
-        $output .= "\t\tbadTime: '" . __( 'You have not given a correct time', 'link-library' ) . "',\n";
-        $output .= "\t\tbadEmail: '" . __( 'You have not given a correct e-mail address', 'link-library' ) . "',\n";
-        $output .= "\t\tbadTelephone: '" . __( 'You have not given a correct phone number', 'link-library' ) . "',\n";
-        $output .= "\t\tbadSecurityAnswer: '" . __( 'You have not given a correct answer to the security question', 'link-library' ) . "',\n";
-        $output .= "\t\tbadDate: '" . __( 'You have not given a correct date', 'link-library' ) . "',\n";
-        $output .= "\t\tlengthBadStart: '" . __( 'The input value must be between ', 'link-library' ) . "',\n";
-        $output .= "\t\tlengthBadEnd: '" . __( 'characters', 'link-library' ) . "',\n";
-        $output .= "\t\tlengthTooLongStart: '" . __( 'The input value is longer than ', 'link-library' ) . "',\n";
-        $output .= "\t\tlengthTooShortStart: '" . __( 'The input value is shorter than ', 'link-library' ) . "',\n";
-        $output .= "\t\tnotConfirmed: '" . __( 'Input values could not be confirmed', 'link-library' ) . "',\n";
-        $output .= "\t\tbadDomain: '" . __( 'Incorrect domain value', 'link-library' ) . "',\n";
-        $output .= "\t\tbadUrl: '" . __( 'The input value is not a correct URL', 'link-library' ) . "',\n";
-        $output .= "\t\tbadCustomVal: '" . __( 'The input value is incorrect', 'link-library' ) . "',\n";
-        $output .= "\t\tandSpaces: '" . __( ' and spaces ', 'link-library' ) . "',\n";
-        $output .= "\t\tbadInt: '" . __( 'The input value was not a correct number', 'link-library' ) . "',\n";
-        $output .= "\t\tbadSecurityNumber: '" . __( 'Your social security number was incorrect', 'link-library' ) . "',\n";
-        $output .= "\t\tbadUKVatAnswer: '" . __( 'Incorrect UK VAT Number', 'link-library' ) . "',\n";
-        $output .= "\t\tbadStrength: '" . __( 'The password is not strong enough', 'link-library' ) . "',\n";
-        $output .= "\t\tbadNumberOfSelectedOptionsStart: '" . __( 'You have to choose at least ', 'link-library' ) . "',\n";
-        $output .= "\t\tbadNumberOfSelectedOptionsEnd: '" . __( ' answers', 'link-library' ) . "',\n";
-        $output .= "\t\tbadAlphaNumeric: '" . __( 'The input value can only contain alphanumeric characters ', 'link-library' ) . "',\n";
-        $output .= "\t\tbadAlphaNumericExtra: '" . __( ' and ', 'link-library' ) . "',\n";
-        $output .= "\t\twrongFileSize: '" . __( 'The file you are trying to upload is too large (max %s)', 'link-library' ) . "',\n";
-        $output .= "\t\twrongFileType: '" . __( 'Only files of type %s is allowed', 'link-library' ) . "',\n";
-        $output .= "\t\tgroupCheckedRangeStart: '" . __( 'Please choose between ', 'link-library' ) . "',\n";
-        $output .= "\t\tgroupCheckedTooFewStart: '" . __( 'Please choose at least ', 'link-library' ) . "',\n";
-        $output .= "\t\tgroupCheckedTooManyStart: '" . __( 'Please choose a maximum of ', 'link-library' ) . "',\n";
-        $output .= "\t\tgroupCheckedEnd: '" . __( ' item(s)', 'link-library' ) . "',\n";
-        $output .= "\t\tbadCreditCard: '" . __( 'The credit card number is not correct', 'link-library' ) . "',\n";
-        $output .= "\t\tbadCVV: '" . __( 'The CVV number was not correct', 'link-library' ) . "',\n";
-        $output .= "\t\twrongFileDim : '" . __( 'Incorrect image dimensions,', 'link-library' ) . "',\n";
-        $output .= "\t\timageTooTall : '" . __( 'the image can not be taller than', 'link-library' ) . "',\n";
-        $output .= "\t\timageTooWide : '" . __( 'the image can not be wider than', 'link-library' ) . "',\n";
-        $output .= "\t\timageTooSmall : '" . __( 'the image was too small', 'link-library' ) . "',\n";
-        $output .= "\t\tmin : '" . __( 'min', 'link-library' ) . "',\n";
-        $output .= "\t\tmax : '" . __( 'max', 'link-library' ) . "',\n";
-        $output .= "\t\timageRatioNotAccepted : '" . __( 'Image ratio is not accepted', 'link-library' ) . "'\n";
+        $output .= "\t\terrorTitle: '" . addslashes( __( 'Form submission failed!', 'link-library' ) ) . "',\n";
+        $output .= "\t\trequiredFields: '" . addslashes( __( 'You have not answered all required fields', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadTime: '" . addslashes( __( 'You have not given a correct time', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadEmail: '" . addslashes( __( 'You have not given a correct e-mail address', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadTelephone: '" . addslashes( __( 'You have not given a correct phone number', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadSecurityAnswer: '" . addslashes( __( 'You have not given a correct answer to the security question', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadDate: '" . addslashes( __( 'You have not given a correct date', 'link-library' ) ) . "',\n";
+        $output .= "\t\tlengthBadStart: '" . addslashes( __( 'The input value must be between ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tlengthBadEnd: '" . addslashes( __( 'characters', 'link-library' ) ) . "',\n";
+        $output .= "\t\tlengthTooLongStart: '" . addslashes( __( 'The input value is longer than ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tlengthTooShortStart: '" . addslashes( __( 'The input value is shorter than ', 'link-library' ) ). "',\n";
+        $output .= "\t\tnotConfirmed: '" . addslashes( __( 'Input values could not be confirmed', 'link-library' ) ). "',\n";
+        $output .= "\t\tbadDomain: '" . addslashes( __( 'Incorrect domain value', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadUrl: '" . addslashes( __( 'The input value is not a correct URL. Requires http://.', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadCustomVal: '" . addslashes( __( 'The input value is incorrect', 'link-library' ) ) . "',\n";
+        $output .= "\t\tandSpaces: '" . addslashes( __( ' and spaces ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadInt: '" . addslashes( __( 'The input value was not a correct number', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadSecurityNumber: '" . addslashes( __( 'Your social security number was incorrect', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadUKVatAnswer: '" . addslashes( __( 'Incorrect UK VAT Number', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadStrength: '" . addslashes( __( 'The password is not strong enough', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadNumberOfSelectedOptionsStart: '" . addslashes( __( 'You have to choose at least ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadNumberOfSelectedOptionsEnd: '" . addslashes( __( ' answers', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadAlphaNumeric: '" . addslashes( __( 'The input value can only contain alphanumeric characters ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadAlphaNumericExtra: '" . addslashes( __( ' and ', 'link-library' ) ) . "',\n";
+        $output .= "\t\twrongFileSize: '" . addslashes( __( 'The file you are trying to upload is too large (max %s)', 'link-library' ) ) . "',\n";
+        $output .= "\t\twrongFileType: '" . addslashes( __( 'Only files of type %s is allowed', 'link-library' ) ) . "',\n";
+        $output .= "\t\tgroupCheckedRangeStart: '" . addslashes( __( 'Please choose between ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tgroupCheckedTooFewStart: '" . addslashes( __( 'Please choose at least ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tgroupCheckedTooManyStart: '" . addslashes( __( 'Please choose a maximum of ', 'link-library' ) ) . "',\n";
+        $output .= "\t\tgroupCheckedEnd: '" . addslashes( __( ' item(s)', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadCreditCard: '" . addslashes( __( 'The credit card number is not correct', 'link-library' ) ) . "',\n";
+        $output .= "\t\tbadCVV: '" . addslashes( __( 'The CVV number was not correct', 'link-library' ) ) . "',\n";
+        $output .= "\t\twrongFileDim : '" . addslashes( __( 'Incorrect image dimensions,', 'link-library' ) ) . "',\n";
+        $output .= "\t\timageTooTall : '" . addslashes( __( 'the image can not be taller than', 'link-library' ) ) . "',\n";
+        $output .= "\t\timageTooWide : '" . addslashes( __( 'the image can not be wider than', 'link-library' ) ) . "',\n";
+        $output .= "\t\timageTooSmall : '" . addslashes( __( 'the image was too small', 'link-library' ) ) . "',\n";
+        $output .= "\t\tmin : '" . addslashes( __( 'min', 'link-library' ) ) . "',\n";
+        $output .= "\t\tmax : '" . addslashes( __( 'max', 'link-library' ) ) . "',\n";
+        $output .= "\t\timageRatioNotAccepted : '" . addslashes( __( 'Image ratio is not accepted', 'link-library' ) ) . "'\n";
         $output .= "\t};\n";
 
         $output .= "\t\tjQuery.validate({\n";

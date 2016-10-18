@@ -154,7 +154,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['linkcustomcatlabel']            = __( 'User-submitted category', 'link-library' );
 	$options['linkcustomcatlistentry']        = __( 'User-submitted category (define below)', 'link-library' );
 	$options['searchlabel']                   = 'Search';
-	$options['dragndroporder']                = '1,2,3,4,5,6,7,8,9,10,11,12,13';
+	$options['dragndroporder']                = '1,2,3,4,5,6,7,8,9,10,11,12,13,14';
 	$options['showname']                      = true;
 	$options['cattargetaddress']              = '';
 	$options['displayweblink']                = 'false';
@@ -177,6 +177,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['emailcommand']                  = '';
 	$options['sourceimage']                   = 'primary';
 	$options['sourcename']                    = 'primary';
+	$options['tooltipname']                   = 'notooltip';
 	$options['enablerewrite']                 = false;
 	$options['rewritepage']                   = '';
 	$options['storelinksubmitter']            = false;
@@ -231,6 +232,10 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['beforesubmittername']             = '';
 	$options['aftersubmittername']              = '';
 	$options['onereciprocaldomain']             = false;
+	$options['nooutputempty']                   = false;
+	$options['showcatdesc']                     = false;
+	$options['beforecatdesc']                   = '';
+	$options['aftercatdesc']                    = '';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -271,7 +276,8 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['thumbnailsize']               = '120x90';
 	$genoptions['thumbnailgenerator']          = 'robothumb';
 	$genoptions['survey2015']                  = false;
-	$genoptions['addlinkakismet']                  = false;
+	$genoptions['addlinkakismet']              = false;
+	$genoptions['rsscachedelay']               = 43200;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );

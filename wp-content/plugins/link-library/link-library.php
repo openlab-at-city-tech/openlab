@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 5.9.12.29
+Version: 5.9.13.12
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.ca/
 Text Domain: link-library
@@ -172,9 +172,18 @@ class link_library_plugin {
 
 		add_filter( 'kses_allowed_protocols', array( $this, 'll_add_protocols' ) );
 
+		add_filter( 'wp_feed_cache_transient_lifetime' , array( $this, 'feed_cache_filter_handler' ) );
+
         global $wpdb;
 
         $wpdb->linkcategorymeta = $wpdb->get_blog_prefix() . 'linkcategorymeta';
+	}
+
+	function feed_cache_filter_handler( $seconds ) {
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		return $genoptions['rsscachedelay'];
 	}
 
 	function links_rss() {
@@ -579,20 +588,23 @@ class link_library_plugin {
         if ( empty( $link_rel ) )
             $link_rel = '';
 
+	    if ( empty( $link_updated ) )
+		    $link_updated = '';
+
         // Make sure we set a valid category
         if ( ! isset( $link_category ) || 0 == count( $link_category ) || !is_array( $link_category ) ) {
             $link_category = array( get_option( 'default_link_category' ) );
         }
 
         if ( $update ) {
-            if ( false === $wpdb->update( $wpdb->links, compact('link_url', 'link_name', 'link_image', 'link_target', 'link_description', 'link_visible', 'link_rating', 'link_rel', 'link_notes', 'link_rss'), compact('link_id') ) ) {
+            if ( false === $wpdb->update( $wpdb->links, compact('link_url', 'link_name', 'link_image', 'link_target', 'link_description', 'link_visible', 'link_rating', 'link_rel', 'link_notes', 'link_rss', 'link_updated' ), compact('link_id') ) ) {
                 if ( $wp_error )
                     return new WP_Error( 'db_update_error', __( 'Could not update link in the database', 'link-library' ), $wpdb->last_error );
                 else
                     return 0;
             }
         } else {
-            if ( false === $wpdb->insert( $wpdb->links, compact('link_url', 'link_name', 'link_image', 'link_target', 'link_description', 'link_visible', 'link_owner', 'link_rating', 'link_rel', 'link_notes', 'link_rss') ) ) {
+            if ( false === $wpdb->insert( $wpdb->links, compact('link_url', 'link_name', 'link_image', 'link_target', 'link_description', 'link_visible', 'link_owner', 'link_rating', 'link_rel', 'link_notes', 'link_rss', 'link_updated' ) ) ) {
                 if ( $wp_error )
                     return new WP_Error( 'db_insert_error', __( 'Could not insert link into the database', 'link-library' ), $wpdb->last_error );
                 else
@@ -876,10 +888,15 @@ class link_library_plugin {
             return $posts;
         }
 		
+		global $llstylesheet;
 		$load_jquery = false;
 		$load_thickbox = false;
-		$load_style = false;
-		global $testvar;
+		
+		if ( $llstylesheet ) {
+			$load_style = true;
+		} else {
+			$load_style = false;
+		}
 		
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
@@ -966,7 +983,6 @@ class link_library_plugin {
 			}
 		}
 		
-        global $llstylesheet;
 		if ( $load_style ) {			
 			$llstylesheet = true;
 		} else {
