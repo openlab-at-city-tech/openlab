@@ -8,6 +8,11 @@
 if ( ! class_exists( 'Yoast_Plugin_Admin' ) ) {
 	class Yoast_Plugin_Admin {
 
+		/*
+		 * @todo: no idea what this is for, defined to prevent php notice in `postbox` method.
+		 */
+		public $toc = '';
+
 		var $hook = '';
 		var $filename = '';
 		var $longname = '';
