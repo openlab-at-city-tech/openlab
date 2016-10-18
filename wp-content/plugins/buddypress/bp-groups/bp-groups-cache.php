@@ -253,6 +253,12 @@ add_action( 'bp_groups_member_before_delete', 'bp_groups_clear_user_group_cache_
 add_action( 'bp_groups_member_before_delete_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
 add_action( 'groups_accept_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
 
+function bp_groups_reset_cache_incrementor() {
+	wp_cache_delete( 'last_changed', 'bp_groups' );
+}
+add_action( 'groups_group_after_save', 'bp_groups_reset_cache_incrementor' );
+add_action( 'update_group_meta', 'bp_groups_reset_cache_incrementor' );
+
 /* List actions to clear super cached pages on, if super cache is installed */
 add_action( 'groups_join_group',                 'bp_core_clear_cache' );
 add_action( 'groups_leave_group',                'bp_core_clear_cache' );
