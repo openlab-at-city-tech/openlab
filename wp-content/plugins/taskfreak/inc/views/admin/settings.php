@@ -62,11 +62,21 @@
 		<tr>
 			<th><label><?php _e('Proximity bar', 'taskfreak') ?></label></th>
 			<td>
-				<input type="radio" name="proximity" id="optvis1" value="1" <?php checked( $this->options['proximity'], 1); ?> />
-				<label for="optvis1"><?php _e('Visible', 'taskfreak'); ?></label>
+				<input type="radio" name="proximity" id="proximity1" value="1" <?php checked( $this->options['proximity'], 1); ?> />
+				<label for="proximity1"><?php _e('Visible', 'taskfreak'); ?></label>
 				&nbsp;
-				<input type="radio" name="proximity" id="optvis0" value="0" <?php checked( $this->options['proximity'], 0); ?> />
-				<label for="optvis0"><?php _e('Hidden', 'taskfreak'); ?></label>
+				<input type="radio" name="proximity" id="proximity0" value="0" <?php checked( $this->options['proximity'], 0); ?> />
+				<label for="proximity0"><?php _e('Hidden', 'taskfreak'); ?></label>
+			</td>
+		</tr>
+		<tr>
+			<th><label><?php _e('Size task in list according to priority', 'taskfreak') ?></label></th>
+			<td>
+				<input type="radio" name="prio_size" id="prio_size1" value="1" <?php checked( $this->options['prio_size'], 1); ?> />
+				<label for="prio_size1"><?php _e('Yes', 'taskfreak'); ?></label>
+				&nbsp;
+				<input type="radio" name="prio_size" id="prio_size0" value="0" <?php checked( $this->options['prio_size'], 0); ?> />
+				<label for="prio_size0"><?php _e('No', 'taskfreak'); ?></label>
 			</td>
 		</tr>
 		<tr>

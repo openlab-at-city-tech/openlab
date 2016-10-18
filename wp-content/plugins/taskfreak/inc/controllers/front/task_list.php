@@ -60,4 +60,6 @@ $this->data->load_list(
 
 $this->npages = ceil($this->data->total() / $this->page_size); 
 
+$this->prio_size = !empty($this->options['prio_size']);
+
 $this->view('front/task_list.php');

@@ -46,6 +46,9 @@ body.rtl #tfk_tasksheet li { margin-left: initial; margin-right: 0 !important; }
 #tfk_tasksheet .tfk_pr3.tfk_late .tfk_prox { background-image: linear-gradient(to right, green, green) }
 #tfk_tasksheet .tfk_none .tfk_prox { background: #eee; }
 
+#tfk_tasksheet .tfk_pr1 .tfk_desc.tfk_size { font-size: 150%; }
+#tfk_tasksheet .tfk_pr2 .tfk_desc.tfk_size { font-size: 120%; }
+
 #tfk_tasksheet .tfk_desc, #tfk_tasksheet .tfk_prj { display: block; }
 #tfk_tasksheet .tfk_prj { margin: 0.3em 0; font-size: 0.9em; }
 #tfk_tasksheet .tfk_usr, #tfk_tasksheet .tfk_upd { display: inline; }
@@ -212,6 +215,7 @@ body.rtl #tfk_back_list { float: left; margin-left: 0; margin-right: 1em; }
 #tfk_task_details .tfk_sts a + a + a { margin-right: 0; }
 #tfk_task_details .tfk_sts0 { background-color: white; }
 #tfk_task_details .tfk_sts1, #tfk_task_details .tfk_sts2, #tfk_task_details .tfk_sts3 { background-color: #bbb; }
+#tfk_deadline_date { width: 10em; }
 
 /* task updates */
 @font-face {
