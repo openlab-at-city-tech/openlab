@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @version $Id: dynwid_admin_edit.php 1474291 2016-08-14 20:35:12Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -10,7 +10,7 @@
 
 	// Plugins support
 	DW_BP::detect();
-	DW_QT::detect();
+	// DW_QT::detect();
 	DW_WPSC::detect();
 	DW_WPML::detect();
 
@@ -372,10 +372,11 @@ div.settingbox {
 		$DW_WPML->admin();
 	}
 
+	/*
 	if ( array_key_exists('qt', $DW->dwoptions) ) {
 		$DW_QT = new DW_QT();
 		$DW_QT->admin();
-	}
+	} */
 
 	if ( array_key_exists('browser', $DW->dwoptions) ) {
 		$DW_Browser = new DW_Browser();
@@ -385,6 +386,11 @@ div.settingbox {
 	if ( array_key_exists('ip', $DW->dwoptions) ) {
 		$DW_IP = new DW_IP();
 		$DW_IP->admin();
+	}
+
+	if ( array_key_exists('fimage', $DW->dwoptions) ) {
+		$DW_FImage = new DW_Fimage();
+		$DW_FImage->admin();
 	}
 
 	if ( array_key_exists('device', $DW->dwoptions) ) {

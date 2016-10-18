@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_save.php - Saving options to the database
  *
- * @version $Id: dynwid_admin_save.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @version $Id: dynwid_admin_save.php 1474291 2016-08-14 20:35:12Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -182,6 +182,9 @@
 			$DW->addIPs($widget_id, $_POST['ip'], $ips);
 		}
 	}
+
+	// Featured Image
+	DWModule::save('fimage');
 
 	// Shortcode
 	if (! empty($_POST['shortcode_value']) ) {
@@ -455,7 +458,7 @@
 	DWModule::save('wpml', 'complex');
 
 	// QTranslate Plugin support
-	DWModule::save('qt', 'complex');
+	// DWModule::save('qt', 'complex');
 
   // WPSC/WPEC Plugin support
 	DWModule::save('wpsc', 'complex');

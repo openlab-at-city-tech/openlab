@@ -2,7 +2,7 @@
 /**
  * dynwid_worker.php - The worker does the actual work.
  *
- * @version $Id: dynwid_worker.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @version $Id: dynwid_worker.php 1474291 2016-08-14 20:35:12Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -39,10 +39,11 @@
 	}
 
 	// QT Plugin support
+	/*
 	include_once(DW_MODULES . 'qt_module.php');
 	if ( DW_QT::detect(FALSE) ) {
 		$curlang = DW_QT::detectLanguage();
-	}
+	} */
 
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
@@ -158,6 +159,7 @@
           	unset($wpml_tmp);
 
           	// QTranslate
+	          /*
           	if ( isset($qt) && isset($curlang) ) {
           		foreach ( $opt as $condition ) {
           			if ( $condition->maintype == 'qt' && $condition->name == $curlang ) {
@@ -170,7 +172,7 @@
           			$qt = $qt_tmp;
           		}
           	}
-          	unset($qt_tmp);
+          	unset($qt_tmp); */
 
           	// Browser, Device, IP, Template, Day, Week and URL
           	foreach ( $opt as $condition ) {
@@ -322,6 +324,11 @@
               		if ( $condition->name != 'default' && $condition->maintype == $DW->whereami . '-post' ) {
               			$act_custom[ ] = $condition->name;
               		}
+
+	               if ( $condition->name != 'default' && $condition->maintype == 'fimage' && $DW->hasFeaturedImage($post->ID) ) {
+		               $display = FALSE;
+							$DW->message( 'Exception triggered for ' . $widget_id . ' sets display to FALSE (rule ECPFI1)' );
+						}
               	}
 
               	// Taxonomies within CPT
@@ -453,6 +460,13 @@
 					foreach ( $opt as $condition ) {
 						if ( $condition->name != 'default' ) {
 							switch ( $condition->maintype ) {
+								case 'fimage':
+									if ( $DW->hasFeaturedImage($post->ID) ) {
+										$display = FALSE;
+										$DW->message( 'Exception triggered for ' . $widget_id . ' sets display to FALSE (rule EFI1)' );
+									}
+									break;
+
 								case 'single-author':
 								$act_author[ ] = $condition->name;
 								break;
