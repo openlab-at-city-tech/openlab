@@ -24,6 +24,7 @@ function openlab_hide_plugins( $plugins ) {
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'webwork/webwork.php',
 	);
 
 	if ( ! is_super_admin() ) {
