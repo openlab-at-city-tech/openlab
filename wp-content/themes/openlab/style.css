@@ -7031,7 +7031,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #49cabe;
+  color: #3ba49b;
   text-decoration: underline;
 }
 a.no-deco {
@@ -7039,6 +7039,25 @@ a.no-deco {
 }
 a.btn-primary {
   color: #ffffff;
+}
+a.lighter-hover:hover,
+a.lighter-hover:focus {
+  color: #49cabe;
+}
+body .darken-for-accessibility {
+  color: #3ba49b;
+}
+body .hover-darken-for-accessibility:hover,
+body .hover-darken-for-accessibility:active {
+  color: #3ba49b;
+}
+body .hover-darken-for-accessibility a:hover,
+body .hover-darken-for-accessibility a:active {
+  color: #3ba49b;
+}
+body .links-lighter-hover a:hover,
+body .links-lighter-hover a:focus {
+  color: #49cabe;
 }
 ul,
 ol {
@@ -7107,7 +7126,7 @@ blockquote .h6 {
 }
 .nav.nav-inline li.current-menu-item,
 .nav.nav-inline li:hover {
-  color: #49cabe;
+  color: #3ba49b;
 }
 .nav.nav-inline li.current-menu-item a,
 .nav.nav-inline li:hover a,
@@ -7182,7 +7201,7 @@ blockquote .h6 {
 }
 .pagination li a:hover,
 .pagination li span:hover {
-  color: #63dfd2;
+  color: #3ba49b;
   background-color: inherit;
 }
 /**structural**/
@@ -7441,7 +7460,7 @@ input[type="submit"] {
 }
 .navbar-default .container-fluid ul.nav li a:hover,
 .navbar-default .container-fluid ul.nav li a:focus {
-  color: #63dfd2;
+  color: #3ba49b;
 }
 @media (max-width: 991px) {
   .navbar-default .container-fluid ul.nav li a {
@@ -7651,7 +7670,7 @@ body ol.inline-element-list {
 }
 body .activity-title .fa {
   margin-left: 10px;
-  color: #63dfd2;
+  color: inherit;
   font-size: 18px;
 }
 body .tag-btn {
@@ -9846,7 +9865,7 @@ body.single-event #content .eo-event-venue-map {
 }
 #help-title-nav a:hover,
 #help-title-nav a:focus {
-  color: #49cabe;
+  color: #3ba49b;
   text-decoration: underline;
 }
 #help-title-nav .fa {

@@ -271,12 +271,12 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
 
         <div class="sidebar-block<?php echo $block_classes ?>">
 
-            <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+            <ul class="sidebar-sublinks portfolio-sublinks inline-element-list links-lighter-hover">
 
                 <li class="portfolio-profile-link bold">
                     <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>">
                         <?php echo (is_user_logged_in() && openlab_is_my_profile() ? 'My ' : 'Visit '); ?>
-                        <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span>
+                        <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>
                     </a>
                 </li>
 
@@ -299,7 +299,7 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
             <?php endif; ?>
 
             <div class="sidebar-block<?php echo $block_classes ?>">
-                <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
+                <ul class="sidebar-sublinks portfolio-sublinks inline-element-list links-lighter-hover">
                     <li>
                         <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
                         <a class="bold" href="<?php openlab_portfolio_creation_url() ?>">+ Create <?php openlab_portfolio_label('leading_a=1&case=upper&user_id=' . $displayed_user_id) ?></a>

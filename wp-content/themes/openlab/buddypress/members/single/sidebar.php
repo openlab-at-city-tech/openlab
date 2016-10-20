@@ -52,7 +52,7 @@ $activity_args = array(
     <?php if (bp_has_activities($activity_args)) : ?>
         <div id="activity-stream" class="activity-list item-list inline-element-list sidebar-sublinks">
             <?php while (bp_activities()) : bp_the_activity(); ?>
-                <div class="sidebar-block activity-block">
+                <div class="sidebar-block activity-block links-lighter-hover">
                     <div class="row activity-row">
                         <div class="activity-avatar col-sm-8 col-xs-7">
                             <a href="<?php bp_activity_user_link() ?>">

@@ -145,7 +145,7 @@ function cuny_widgets_init() {
         'name' => __('Featured Widget', 'cuny'),
         'description' => __('This is the widget for holding the Featured Widget', 'cuny'),
         'id' => 'cac-featured',
-        'before_widget' => '<div id="cac-featured">',
+        'before_widget' => '<div id="cac-featured" class="links-lighter-hover">',
         'after_widget' => '</div>',
     ));
 }
