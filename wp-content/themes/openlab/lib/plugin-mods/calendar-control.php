@@ -4,6 +4,10 @@
  * Calendar control
  * Hooks into Events Organiser and BuddyPress Event Organiser
  */
+
+/**
+ * Google maps API now requires a key
+ */
 function openlab_custom_calendar_assets() {
 
     $key = 'AIzaSyDQrCvCLzpXoahl68dVJmfBxemu36CUsTM';
@@ -86,12 +90,17 @@ function openlab_control_venue_taxonomy($event_category_args) {
 
 add_filter('eventorganiser_register_taxonomy_event-venue', 'openlab_control_venue_taxonomy');
 
+/**
+ * Modifying links for sitewide calendar
+ * Making sure back button goes back to sitewide calendar
+ * Taking out actions links (there's some complicated issues there)
+ * @global type $post
+ * @param type $links
+ * @return type
+ */
 function openlab_control_event_action_links($links) {
     global $post;
 
-    //modifying links for sitewide calendar
-    //making sure back button goes back to sitewide calendar
-    //taking out actions links (there's some complicated issues there)
     if ($post->post_type === 'event' && !bp_current_action()) {
         $links = array();
         $back_link = get_permalink(get_page_by_path('about/calendar'));

@@ -22,7 +22,7 @@ register_nav_menus(array(
  */
 function openlab_wp_menu_customizations($items, $args) {
     global $post;
-
+    
     if (false !== strpos($args->theme_location, 'about')) {
 
         $calendar_page_obj = get_page_by_path('about/calendar');
