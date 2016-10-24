@@ -1031,6 +1031,8 @@ class GFFormsModel {
 			/**
 			 * Fires after an inactive form gets marked as active
 			 *
+			 * @since 1.9
+			 *
 			 * @param int $form_id The Form ID used to specify which form to activate
 			 */
 			do_action( 'gform_post_form_activated', $form_id );
@@ -1038,6 +1040,8 @@ class GFFormsModel {
 			
 			/**
 			 * Fires after an active form gets marked as inactive
+			 *
+			 * @since 1.9
 			 *
 			 * @param int $form_id The Form ID used to specify which form to activate
 			 */
@@ -1355,6 +1359,8 @@ class GFFormsModel {
 		/**
 		 * Fires after a form is trashed
 		 *
+		 * @since 1.9
+		 *
 		 * @param int $form_id The ID of the form that was trashed
 		 */
 		do_action( 'gform_post_form_trashed', $form_id );
@@ -1376,6 +1382,8 @@ class GFFormsModel {
 
         /**
          * Fires after a form is restored from trash
+         *
+         * @since 1.9
          *
          * @param int $form_id The ID of the form that was restored
          */
@@ -2387,11 +2395,15 @@ class GFFormsModel {
 			return 'show';
 		}
 
-
 		$match_count = 0;
 		foreach ( $logic['rules'] as $rule ) {
 			$source_field = RGFormsModel::get_field( $form, $rule['fieldId'] );
 			$field_value  = empty( $lead ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $lead, $source_field );
+
+			// if rule fieldId is input specific, get the specified input's value
+			if( is_array( $field_value ) && isset( $field_value[ $rule['fieldId'] ] ) ) {
+				$field_value = rgar( $field_value, $rule['fieldId'] );
+			}
 
 			$is_value_match = self::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
 
@@ -2499,6 +2511,14 @@ class GFFormsModel {
 			$submitted_values[ $field->id ] = RGFormsModel::get_field_value( $field, $field_values );
 		}
 
+		/**
+		 * Allows the modification of submitted values before the incomplete submission is saved.
+		 *
+		 * @since 1.9
+		 *
+		 * @param array $submitted_values The submitted values
+		 * @param array $form             The Form object
+		 */
 		$submitted_values = apply_filters( 'gform_submission_values_pre_save', $submitted_values, $form );
 
 		$submission['submitted_values'] = $submitted_values;
@@ -2562,6 +2582,8 @@ class GFFormsModel {
 
         /**
          * Fires after an incomplete submission is saved
+         *
+         * @since 1.9
          *
          * @param array  $submission   Contains the partially submitted entry, fields, values, and files.
          * @param string $resume_token The unique resume token that was generated for this partial submission
@@ -3051,6 +3073,7 @@ class GFFormsModel {
 		$form_unique_id = self::get_form_unique_id( $form_id );
 		$pathinfo       = pathinfo( $uploaded_filename );
 
+		GFCommon::log_debug( 'Uploaded filename is ' . $uploaded_filename . ' and temporary filename is ' . $form_unique_id . '_' . $input_name . '.' . $pathinfo['extension'] );
 		return array( 'uploaded_filename' => $uploaded_filename, 'temp_filename' => "{$form_unique_id}_{$input_name}.{$pathinfo['extension']}" );
 
 	}
@@ -3160,38 +3183,52 @@ class GFFormsModel {
 		$post_id = wp_insert_post( $post_data );
 		GFCommon::log_debug( "GFFormsModel::create_post(): Result from wp_insert_post(): {$post_id}." );
 
+		if ( is_wp_error( $post_id ) ) {
+			return false;
+		}
+
+		// Add the post id to the entry so it is available during merge tag replacement.
+		$lead['post_id'] = $post_id;
+
 		//adding form id and entry id hidden custom fields
 		add_post_meta( $post_id, '_gform-form-id', $form['id'] );
 		add_post_meta( $post_id, '_gform-entry-id', $lead['id'] );
 
-		//creating post images
-		GFCommon::log_debug( 'GFFormsModel::create_post(): Creating post images.' );
 		$post_images = array();
-		foreach ( $post_data['images'] as $image ) {
-			$image_meta = array(
-				'post_excerpt' => $image['caption'],
-				'post_content' => $image['description'],
-			);
+		if ( ! empty( $post_data['images'] ) ) {
+			// Creating post images.
+			GFCommon::log_debug( 'GFFormsModel::create_post(): Processing post images.' );
 
-			//adding title only if it is not empty. It will default to the file name if it is not in the array
-			if ( ! empty( $image['title'] ) ) {
-				$image_meta['post_title'] = $image['title'];
-			}
+			foreach ( $post_data['images'] as $image ) {
+				if ( empty( $image['url'] ) ) {
+					GFCommon::log_debug( __METHOD__ . '(): No image to process for field #' . $image['field_id'] );
+					continue;
+				}
 
-			if ( ! empty( $image['url'] ) ) {
-				GFCommon::log_debug( 'GFFormsModel::create_post(): Adding image: ' . $image['url'] );
+				$image_meta = array(
+					'post_excerpt' => $image['caption'],
+					'post_content' => $image['description'],
+				);
+
+				// Adding title only if it is not empty. It will default to the file name if it is not in the array.
+				if ( ! empty( $image['title'] ) ) {
+					$image_meta['post_title'] = $image['title'];
+				}
+
+				GFCommon::log_debug( sprintf( '%s(): Field #%s. URL: %s', __METHOD__, $image['field_id'], $image['url'] ) );
 				$media_id = self::media_handle_upload( $image['url'], $post_id, $image_meta );
 
 				if ( $media_id ) {
 
-					//save media id for post body/title template variable replacement (below)
+					// Save media id for post body/title template variable replacement (below).
 					$post_images[ $image['field_id'] ] = $media_id;
 					$lead[ $image['field_id'] ] .= "|:|$media_id";
 
-					// set featured image
+					// Setting the featured image.
 					$field = RGFormsModel::get_field( $form, $image['field_id'] );
 					if ( $field->postFeaturedImage ) {
-						set_post_thumbnail( $post_id, $media_id );
+						$result = set_post_thumbnail( $post_id, $media_id );
+						GFCommon::log_debug( __METHOD__ . '(): Setting the featured image. Result from set_post_thumbnail(): ' . var_export( $result, 1 ) );
 					}
 				}
 			}
@@ -3314,8 +3351,7 @@ class GFFormsModel {
 			}
 		}
 
-		//update post_id field if a post was created
-		$lead['post_id'] = $post_id;
+		// Update the post_id in the database for this entry.
 		GFCommon::log_debug( 'GFFormsModel::create_post(): Updating entry with post id.' );
 		self::update_lead_property( $lead['id'], 'post_id', $post_id );
 
@@ -3474,6 +3510,8 @@ class GFFormsModel {
 		$file = self::copy_post_image( $url, $post_id );
 
 		if ( ! $file ) {
+			GFCommon::log_debug( __METHOD__ . '(): Image could not be copied to the media directory.' );
+
 			return false;
 		}
 
@@ -3512,6 +3550,8 @@ class GFFormsModel {
 		if ( ! is_wp_error( $id ) ) {
 			wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
 		}
+
+		GFCommon::log_debug( __METHOD__ . '(): Image copied to the media directory. Result from wp_insert_attachment(): ' . print_r( $id, 1 ) );
 
 		return $id;
 	}
@@ -4061,7 +4101,7 @@ class GFFormsModel {
 		$lead_detail_table_name = self::get_lead_details_table_name();
 		$lead_table_name        = self::get_lead_table_name();
 
-		$sort_direction = strtolower( $sort_direction ) == 'desc' ? 'DESC' : 'ASC' ;
+		$sort_direction = in_array( strtolower( $sort_direction ), array( 'desc', 'asc', 'rand' ) ) ? strtoupper( $sort_direction ) : 'ASC';
 
 		$orderby    = $is_numeric_sort ? "ORDER BY query, (value+0) $sort_direction" : "ORDER BY query, value $sort_direction";
 		$is_default = false;
@@ -4388,7 +4428,14 @@ class GFFormsModel {
 						$field_ids[] = $field->id . '.3'; //adding first name
 						$field_ids[] = $field->id . '.6'; //adding last name
 					} else {
-						$field_ids[] = $field->inputs[0]['id']; //getting first input
+						foreach ( $inputs as $input ) {
+							if ( rgar( $input, 'isHidden' ) ) {
+								continue;
+							}
+
+							$field_ids[] = $input['id']; //getting first input
+							break;
+						}
 					}
 				} else {
 					$field_ids[] = $field->id;
@@ -4445,8 +4492,11 @@ class GFFormsModel {
 				default :
 					$field = self::get_field( $form, $field_id );
 					if ( $field ) {
-						$input_label_only = apply_filters( 'gform_entry_list_column_input_label_only', $input_label_only, $form, $field );
-						$columns[strval( $field_id )] = array( 'label' => self::get_label( $field, $field_id, $input_label_only ), 'type' => $field->type, 'inputType' => $field->inputType );
+						$input_label_only               = apply_filters( 'gform_entry_list_column_input_label_only', $input_label_only, $form, $field );
+						$columns[ strval( $field_id ) ] = array( 'label'     => self::get_label( $field, $field_id, $input_label_only ),
+						                                         'type'      => $field->type,
+						                                         'inputType' => $field->inputType
+						);
 					}
 			}
 		}
@@ -4467,10 +4517,12 @@ class GFFormsModel {
 		}
 		$field_label = ( IS_ADMIN || RG_CURRENT_PAGE == 'select_columns.php' || RG_CURRENT_PAGE == 'print-entry.php' || rgget( 'gf_page', $_GET ) == 'select_columns' || rgget( 'gf_page', $_GET ) == 'print-entry' ) && ! empty( $field->adminLabel ) && $allow_admin_label ? $field->adminLabel : $field->label;
 		$input       = self::get_input( $field, $input_id );
-		if ( self::get_input_type($field) == 'checkbox' && $input != null ) {
+		if ( self::get_input_type( $field ) == 'checkbox' && $input != null ) {
 			return $input['label'];
 		} else if ( $input != null ) {
-			return $input_only ? $input['label'] : $field_label . ' (' . $input['label'] . ')';
+			$input_label = rgar( $input, 'customLabel', rgar( $input, 'label' ) );
+
+			return $input_only ? $input_label : $field_label . ' (' . $input_label . ')';
 		} else {
 			return $field_label;
 		}
@@ -4777,7 +4829,7 @@ class GFFormsModel {
 		$lead_detail_table_name = GFFormsModel::get_lead_details_table_name();
 		$lead_table_name        = GFFormsModel::get_lead_table_name();
 
-		$sort_direction = strtolower( $sort_direction ) == 'desc' ? 'DESC' : 'ASC' ;
+		$sort_direction = in_array( strtolower( $sort_direction ), array( 'desc', 'asc', 'rand' ) ) ? strtoupper( $sort_direction ) : 'ASC';
 
 		$orderby = $is_numeric_sort ? "ORDER BY query, (value+0) $sort_direction" : "ORDER BY query, value $sort_direction";
 
@@ -5662,11 +5714,11 @@ class GFFormsModel {
 		// form scheduling settings
 		if ( isset( $form['scheduleForm'] ) ) {
 			$form['scheduleForm']           = (bool) $form['scheduleForm'];
-			$form['scheduleStart']          = $form['scheduleForm'] ? preg_replace( '([^0-9/])', '', $form['scheduleStart'] ) : '';
+			$form['scheduleStart']          = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleStart'] ) : '';
 			$form['scheduleStartHour']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartHour'], 1, 12 ) : '';
 			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 1, 60 ) : '';
 			$form['scheduleStartAmpm']      = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleStartAmpm'], array( 'am', 'pm' ) ) : '';
-			$form['scheduleEnd']            = $form['scheduleForm'] ? preg_replace( '([^0-9/])', '', $form['scheduleEnd'] ) : '';
+			$form['scheduleEnd']            = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleEnd'] ) : '';
 			$form['scheduleEndHour']        = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndHour'], 1, 12 ) : '';
 			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 1, 60 ) : '';
 			$form['scheduleEndAmpm']        = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleEndAmpm'], array( 'am', 'pm' ) ) : '';
