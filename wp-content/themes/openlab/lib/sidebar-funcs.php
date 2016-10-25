@@ -8,7 +8,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
     $pull_classes .= ($mobile_dropdown ? ' mobile-dropdown' : '');
 
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"><div class="sidebar-wrapper">';
+    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"><div class="sidebar-wrapper links-lighter-hover">';
 
     switch ($type) {
         case 'actions':
@@ -199,7 +199,7 @@ function openlab_member_sidebar_menu($mobile = false) {
                 $primary_site_url = set_url_scheme(get_blog_option($primary_site_id, 'siteurl'));
                 ?>
 
-                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span></a></li>
+                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></li>
 
             </ul>
 
