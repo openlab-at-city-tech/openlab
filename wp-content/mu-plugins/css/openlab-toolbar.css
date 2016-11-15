@@ -920,7 +920,7 @@ Bootstrap variable overrides
   line-height: inherit;
 }
 .oplb-bs a {
-  color: #333;
+  color: #333333;
   text-decoration: none;
 }
 .oplb-bs a:hover,
@@ -1290,7 +1290,7 @@ a.oplb-bs .bg-danger:hover {
   padding: 10px 20px;
   margin: 0 0 20px;
   font-size: 14px;
-  border-left: 5px solid #ddd;
+  border-left: 5px solid #dddddd;
 }
 .oplb-bs blockquote p:last-child,
 .oplb-bs blockquote ul:last-child,
@@ -1314,7 +1314,7 @@ a.oplb-bs .bg-danger:hover {
 .oplb-bs blockquote.pull-right {
   padding-right: 15px;
   padding-left: 0;
-  border-right: 5px solid #ddd;
+  border-right: 5px solid #dddddd;
   border-left: 0;
   text-align: right;
 }
@@ -3425,7 +3425,7 @@ fieldset[disabled] .oplb-bs .btn-default.active {
 }
 .oplb-bs .btn-primary {
   color: #fff;
-  background-color: #444;
+  background-color: #444444;
   border-color: #373737;
 }
 .oplb-bs .btn-primary:hover,
@@ -3457,11 +3457,11 @@ fieldset[disabled] .oplb-bs .btn-primary:active,
 .oplb-bs .btn-primary.disabled.active,
 .oplb-bs .btn-primary[disabled].active,
 fieldset[disabled] .oplb-bs .btn-primary.active {
-  background-color: #444;
+  background-color: #444444;
   border-color: #373737;
 }
 .oplb-bs .btn-primary .badge {
-  color: #444;
+  color: #444444;
   background-color: #fff;
 }
 .oplb-bs .btn-primary:hover,
@@ -3493,11 +3493,11 @@ fieldset[disabled] .oplb-bs .btn-primary:active,
 .oplb-bs .btn-primary.disabled.active,
 .oplb-bs .btn-primary[disabled].active,
 fieldset[disabled] .oplb-bs .btn-primary.active {
-  background-color: #444;
+  background-color: #444444;
   border-color: #373737;
 }
 .oplb-bs .btn-primary .badge {
-  color: #444;
+  color: #444444;
   background-color: #fff;
 }
 .oplb-bs .btn-success {
@@ -3809,7 +3809,7 @@ fieldset[disabled] .oplb-bs .btn-danger.active {
   background-color: #fff;
 }
 .oplb-bs .btn-link {
-  color: #333;
+  color: #333333;
   font-weight: normal;
   cursor: pointer;
   border-radius: 0;
@@ -4397,7 +4397,7 @@ select[multiple].oplb-bs .input-group-sm > .input-group-btn > .btn {
 .oplb-bs .nav .open > a:hover,
 .oplb-bs .nav .open > a:focus {
   background-color: transparent;
-  border-color: #333;
+  border-color: #333333;
 }
 .oplb-bs .nav .nav-divider {
   height: 1px;
@@ -4878,8 +4878,8 @@ select[multiple].oplb-bs .input-group-sm > .input-group-btn > .btn {
   }
 }
 .oplb-bs .navbar-default {
-  background-color: #fff;
-  border-color: #ddd;
+  background-color: #ffffff;
+  border-color: #dddddd;
 }
 .oplb-bs .navbar-default .navbar-brand {
   color: #777;
@@ -4924,7 +4924,7 @@ select[multiple].oplb-bs .input-group-sm > .input-group-btn > .btn {
 }
 .oplb-bs .navbar-default .navbar-collapse,
 .oplb-bs .navbar-default .navbar-form {
-  border-color: #ddd;
+  border-color: #dddddd;
 }
 .oplb-bs .navbar-default .navbar-nav > .open > a,
 .oplb-bs .navbar-default .navbar-nav > .open > a:hover,
@@ -5109,7 +5109,7 @@ fieldset[disabled] .oplb-bs .navbar-inverse .btn-link:focus {
   padding: 6px 12px;
   line-height: 1.42857143;
   text-decoration: none;
-  color: #333;
+  color: #333333;
   background-color: #fff;
   border: 1px solid #ddd;
   margin-left: -1px;
@@ -5324,7 +5324,7 @@ a.oplb-bs .badge:focus {
 }
 a.list-group-item.active > .oplb-bs .badge,
 .nav-pills > .active > a > .oplb-bs .badge {
-  color: #333;
+  color: #333333;
   background-color: #fff;
 }
 .nav-pills > li > a > .oplb-bs .badge {
@@ -5388,7 +5388,7 @@ a.list-group-item.active > .oplb-bs .badge,
 a.oplb-bs .thumbnail:hover,
 a.oplb-bs .thumbnail:focus,
 a.oplb-bs .thumbnail.active {
-  border-color: #333;
+  border-color: #333333;
 }
 .oplb-bs .thumbnail .caption {
   padding: 9px;
@@ -7014,7 +7014,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:hover,
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon:focus {
-  color: #fff;
+  color: #ffffff;
 }
 .oplb-bs #wpadminbar #wp-toolbar > ul > li {
   position: relative;
@@ -7126,7 +7126,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
   background: #fff;
-  border: 1px solid #444;
+  border: 1px solid #444444;
   border-top: none;
   border-radius: 0 0 4px 4px;
   margin-top: 1px;
@@ -7261,7 +7261,7 @@ button.oplb-bs .close {
   padding: 10px 5px 17px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-menu-toggle .ab-item .navbar-toggle .icon-bar {
-  background: #fff;
+  background: #ffffff;
   height: 3px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-hamburger .icon-bar {
@@ -7386,7 +7386,7 @@ button.oplb-bs .close {
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content:focus a,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-comments:focus a {
     background: transparent;
-    color: #fff;
+    color: #ffffff;
   }
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-dashboard-link.hover > .ab-sub-wrapper,
   .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-new-content.hover > .ab-sub-wrapper,
@@ -7430,7 +7430,7 @@ button.oplb-bs .close {
   max-width: 70px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login > a {
-  background: #000;
+  background: #000000;
   border-right: 1px #666666 solid;
   max-height: 49px;
 }
@@ -7444,7 +7444,7 @@ button.oplb-bs .close {
   top: auto;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper .ab-submenu {
-  background: #fff;
+  background: #ffffff;
   border: none;
   border-radius: 0 0 4px 4px;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
@@ -7468,7 +7468,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-bp-login.login-form-active .ab-submenu {
-  border: 1px solid #444;
+  border: 1px solid #444444;
   border-top: none;
 }
 @media (max-width: 767px) {
@@ -7489,7 +7489,7 @@ button.oplb-bs .close {
   position: relative;
 }
 .oplb-bs.navbar-default .main-nav-wrapper {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddddd;
 }
 @media (max-width: 767px) {
   .oplb-bs.navbar-default .main-nav-wrapper {
@@ -7520,7 +7520,7 @@ button.oplb-bs .close {
 }
 .oplb-bs .navbar-header header {
   margin: 0;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #dddddd;
 }
 .oplb-bs .navbar-header header a {
   display: block;
@@ -7555,7 +7555,7 @@ button.oplb-bs .close {
   right: 0;
   top: 65px;
   width: 336px;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 4px 0 4px 4px;
 }
 .oplb-bs .search .search-form-wrapper .form-group {
@@ -7590,7 +7590,7 @@ button.oplb-bs .close {
   text-align: center;
   width: 30px;
   cursor: pointer;
-  color: #444;
+  color: #444444;
 }
 .oplb-bs .search .search-trigger-wrapper:hover {
   color: #49cabe;
@@ -7725,7 +7725,7 @@ button.oplb-bs .close {
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .col-logos {
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #bbbbbb;
     padding: 0 0 18px;
     margin-bottom: 20px;
   }
@@ -7750,7 +7750,7 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs#openlab-footer .col-links {
-  color: #333;
+  color: #333333;
 }
 .oplb-bs#openlab-footer .col-links .first-header {
   margin-bottom: 19px;
@@ -7762,7 +7762,7 @@ button.oplb-bs .close {
   margin-bottom: 3px;
 }
 .oplb-bs#openlab-footer .col-links a {
-  color: #333;
+  color: #333333;
   font-weight: inherit;
 }
 @media (max-width: 767px) {
@@ -7796,7 +7796,7 @@ button.oplb-bs .close {
   width: 2%;
 }
 .oplb-bs#openlab-footer .horiz-bar-wrapper .horiz-bar {
-  background: none repeat scroll 0 0 #bbb;
+  background: none repeat scroll 0 0 #bbbbbb;
   margin-left: 35%;
   padding-top: 135px;
   width: 1px;
@@ -7813,7 +7813,7 @@ button.oplb-bs .close {
 .oplb-bs#openlab-footer .row-copyright p,
 .oplb-bs#openlab-footer .row-copyright span,
 .oplb-bs#openlab-footer .row-copyright a {
-  color: #333;
+  color: #333333;
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .row-copyright p,
@@ -7851,10 +7851,10 @@ button.oplb-bs .close {
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar {
   top: 0;
   height: auto;
-  border-bottom: 19px solid #fff;
+  border-bottom: 19px solid #ffffff;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar:before {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #000000;
   bottom: -20px;
   content: "";
   left: 0;
@@ -7880,7 +7880,7 @@ button.oplb-bs .close {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #000000;
 }
 .oplb-bs.adminbar-manual-bootstrap #wpadminbar #wp-toolbar #wp-admin-bar-bp-login .ab-sub-wrapper {
   margin-top: 1px;

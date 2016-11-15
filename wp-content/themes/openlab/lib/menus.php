@@ -65,7 +65,6 @@ function openlab_wp_menu_customizations($items, $args) {
         $new_items[$order] = $new_menu_item;
         ksort($new_items);
         $items = $new_items;
-        
     }
 
     return $items;
@@ -74,56 +73,12 @@ function openlab_wp_menu_customizations($items, $args) {
 add_filter('wp_nav_menu_objects', 'openlab_wp_menu_customizations', 11, 2);
 
 /**
- * Hooking into @wp_get_nav_menu_items, primarily to inject custom menu items
- * @param type $items
- * @param type $menu
- * @return type
- */
-function openlab_custom_nav_menu_items($items, $menu) {
-
-    if ($menu->slug === 'about') {
-        //default order is at the end of the current set of items
-        $order = count($items);
-        $new_items = array();
-
-        //add a mobile verison of the OpenLab Calendar menu item
-        //first iterate through the current menu items and figure out where this new mobile menu item will go
-        foreach ($items as $key => $item) {
-
-            if ($item->title === 'OpenLab Calendar') {
-                $order = $item->menu_order + 1;
-            }
-
-            if ($item->menu_order >= $order) {
-                $items[$key]->menu_order = $item->menu_order + 1;
-                $new_items[$key + 1] = $item;
-            } else {
-                $new_items[$key] = $item;
-            }
-        }
-
-        //then we create the menu item and inject it into the menu items array
-        $calendar_page_obj = get_page_by_path('about/calendar');
-        $upcoming_page_obj = get_page_by_path('about/calendar/upcoming');
-        $new_menu_item = openlab_custom_nav_menu_item('OpenLab Calendar', get_permalink($upcoming_page_obj->ID), $order, $calendar_page_obj->ID, array(''));
-
-        $new_items[$order - 1] = $new_menu_item;
-        ksort($new_items);
-        $items = $new_items;
-    }
-
-    return $items;
-}
-
-//add_filter('wp_get_nav_menu_items', 'openlab_custom_nav_menu_items', 20, 2);
-
-/**
  * Reach into the item nav menu and remove stuff as necessary
  *
  * Hooked to bp_screens at 1 because apparently BP is broken??
  */
 function openlab_modify_options_nav() {
-    if ( bp_is_group() && openlab_is_portfolio() && ! bp_is_group_create() ) {
+    if (bp_is_group() && openlab_is_portfolio() && !bp_is_group_create()) {
         buddypress()->groups->nav->edit_nav(array(
             'name' => 'Profile',
                 ), 'home', bp_get_current_group_slug());
@@ -146,6 +101,30 @@ function openlab_modify_options_nav() {
         buddypress()->groups->nav->edit_nav(array(
             'position' => 15,
                 ), 'admin', bp_get_current_group_slug());
+    }
+
+    if (bp_is_group()) {
+        $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
+        foreach ($nav_items as $nav_item) {
+
+            if ($nav_item->slug === 'events') {
+
+                $new_option_args = array(
+                    'name' => $nav_item->name,
+                    'slug' => $nav_item->slug . '-mobile',
+                    'parent_slug' => $nav_item->parent_slug,
+                    'parent_url' => trailingslashit(bp_get_group_permalink()),
+                    'link' => trailingslashit($nav_item->link).'upcoming/',
+                    'position' => intval($nav_item->position) + 1,
+                    'item_css_id' => $nav_item->css_id . '-mobile',
+                    'screen_function' => $nav_item->screen_function,
+                    'user_has_access' => $nav_item->user_has_access,
+                    'no_access_url' => $nav_item->no_access_url,
+                );
+
+                $status = bp_core_create_subnav_link($new_option_args, 'groups');
+            }
+        }
     }
 }
 
@@ -905,14 +884,24 @@ function openlab_filter_subnav_nav_request_membership($subnav_item) {
 }
 
 add_filter('bp_get_options_nav_nav-events', 'openlab_filter_subnav_nav_events');
+add_filter('bp_get_options_nav_nav-events-mobile', 'openlab_filter_subnav_nav_events');
 
 function openlab_filter_subnav_nav_events($subnav_item) {
     $subnav_item = str_replace('Events', 'Calendar', $subnav_item);
-
+    
     //for some reason group events page is not registering this nav element as current
+    $current = '';
     if (bp_current_action() === 'events' || bp_current_component() === 'events') {
-        $subnav_item = str_replace('<li', '<li class="current-menu-item"', $subnav_item);
+        $current = " current-menu-item";
     }
+    
+    if(strpos($subnav_item,'nav-events-mobile') !== false){
+        $class = "visible-xs$current";
+    } else {
+        $class = "hidden-xs$current";
+    }
+    
+    $subnav_item = str_replace("<li", "<li class='$class'", $subnav_item);
 
     return $subnav_item;
 }
@@ -1028,7 +1017,7 @@ function openlab_group_admin_tabs($group = false) {
 
         --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )           ?>
+        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )             ?>
 
         <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
             --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
@@ -1037,9 +1026,9 @@ function openlab_group_admin_tabs($group = false) {
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         <?php if ($group_type == "portfolio") : ?>
-                                                                                                                                                                                                                                                                           <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+                                                                                                                                                                                                                                                                                                                           <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-                                                                                                                                                                                                                                                                           <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+                                                                                                                                                                                                                                                                                                                           <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>

@@ -62,7 +62,7 @@ add_action( 'init', 'openlab_register_embed_handlers' );
  * screencast.com embed callback.
  */
 function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
-	$cached = wp_cache_get( 'screencast_embed_url_' . $url );
+	$cached = wp_cache_get( 'screencast_embed_url_v2_' . $url );
 	if ( false === $cached ) {
 		// This is the worst thing in the whole world.
 		$r = wp_remote_get( $url );
@@ -70,11 +70,11 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
 		$b = htmlspecialchars_decode( $b );
 
 		$embed_url = '';
-		if ( preg_match( '|<iframe[^>]+src="([^"]+)"|', $b, $url_matches ) ) {
+		if ( preg_match( '|<iframe[^>]+src="([^"]+screencast\.com[^"]+)"|', $b, $url_matches ) ) {
 			$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
 		}
 
-		wp_cache_set( 'screencast_embed_url_' . $url );
+		wp_cache_set( 'screencast_embed_url_v2_' . $url );
 	} else {
 		$embed_url = $cached;
 	}
