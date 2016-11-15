@@ -109,10 +109,13 @@
 
 		    var startTime = OpenLab.utility.buildTime( rawStartDate, rawStartTime );
 		    var endTime   = OpenLab.utility.buildTime( rawEndDate, rawEndTime );
-
+                    
                     if (startTime > endTime) {
                         e.preventDefault();
                         var message = '<div class="bp-template-notice error">Start Time must be earlier than the End Time.</div>';
+                        
+                        //clean up first before adding new error message
+                        eventDetailMetaBox.find('.bp-template-notice').remove();
                         eventDetailMetaBox.prepend(message);
                     } else {
                         eventDetailMetaBox.find('.bp-template-notice').remove();
@@ -147,8 +150,6 @@
                 clearTimeout(OpenLab.utility.menuCheck);
 
                 eovenue.maps.venuemap.map.addListener('center_changed', function () {
-                    console.log('lastcheckVal', latCheck.val());
-                    console.log('parseInt lastcheckVal', parseInt(latCheck.val()));
                     if (latCheck.val() === 'NaN' || parseInt(latCheck.val()) === 0) {
                         venueMap.css('display', 'none');
                     } else {
@@ -222,10 +223,13 @@
 	    var hour = parseInt( timeParts[0] );
 	    var min = parseInt( timeParts[1].substr( 0, 2 ) );
 	    var amOrPm = timeParts[1].substr( 2 );
-
+            
 	    if ( 'pm' === amOrPm && hour < 12) {
 	        hour = hour + 12;
-	    }
+	    } else if ('am' === amOrPm && hour === 12){
+                //clock strikes midnight
+                hour = 0;
+            }
 	    
 	    d.setHours( hour );
 	    d.setMinutes( min );
