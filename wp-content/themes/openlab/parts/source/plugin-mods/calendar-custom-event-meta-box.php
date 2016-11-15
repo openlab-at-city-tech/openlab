@@ -187,6 +187,5 @@
         <?php endif; //endif venue's supported              ?>
 
     </div>
-    <?php
-    // create a custom nonce for submit verification later
-    wp_nonce_field('eventorganiser_event_update_' . get_the_ID() . '_' . get_current_blog_id(), '_eononce');
+    <?php // create a custom nonce for submit verification later ?>
+    <?php wp_nonce_field('eventorganiser_event_update_' . get_the_ID() . '_' . get_current_blog_id(), '_eononce');

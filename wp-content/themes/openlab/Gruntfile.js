@@ -4,7 +4,8 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         htmlclean: {
             options: {
-                unprotect: /(<[^\S\f]*\?[^\S\f]*php\b[\s\S]*)/ig
+                unprotect: /(<[^\S\f]*\?[^\S\f]*php\b[\s\S]*)/ig,
+                protect: /(?:#|\/\/)[^\r\n]*|\/\*[\s\S]*?\*\/\n\r\n\r/ig
             },
             deploy: {
                 expand: true,
