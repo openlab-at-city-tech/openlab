@@ -985,7 +985,8 @@ class BP_Groups_Group {
 		 */
 		$total_groups_sql = apply_filters( 'bp_groups_get_total_groups_sql', $t_sql, $total_sql, $r );
 
-		$cache_key = md5( $total_groups_sql . $inc );
+		// trailing 1 busts all caches for a hotfix - see #1955.
+		$cache_key = md5( $total_groups_sql . $inc . '1' );
 		$cached = wp_cache_get( $cache_key, 'bp_groups' );
 		if ( false === $cached ) {
 			$total_groups = $wpdb->get_var( $total_groups_sql );
