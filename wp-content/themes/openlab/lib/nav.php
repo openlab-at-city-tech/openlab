@@ -127,3 +127,18 @@ function openlab_loop_pagination_links_filter($has_items) {
 
 add_filter('bp_has_groups', 'openlab_loop_pagination_links_filter');
 add_filter('bp_has_members', 'openlab_loop_pagination_links_filter');
+
+function openlab_toggle_button($target = '#menu', $backgroundonly = false){
+    $button_out = '';
+    
+    $button = <<<HTML
+            <button data-target="{$target}" data-backgroundonly="{$backgroundonly}" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+HTML;
+    
+    return $button;
+}

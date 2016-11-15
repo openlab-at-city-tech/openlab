@@ -11,6 +11,12 @@
 require_once( STYLESHEETPATH . '/lib/plugin-mods/invite-funcs.php' );
 
 /**
+ * Event Organiser
+ * BuddyPress Event Organiser 
+ */
+require_once( STYLESHEETPATH . '/lib/plugin-mods/calendar-control.php' );
+
+/**
  * Plugin: Invite Anyone
  * Don't send friend requests when accepting Invite Anyone invitations
  *
@@ -471,6 +477,29 @@ function openlab_prevent_bbp_recounts( $args ) {
 	return $r;
 }
 add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
+
+function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
+	$group_root = bbp_get_group_forums_root_id();
+	$group_root_parent = get_post( $group_root )->post_parent;
+	if ( $group_root != $id && $group_root_parent != $id ) {
+		return $id;
+	}
+
+	$db = debug_backtrace();
+	$caller = '';
+	foreach ( $db as $key => $step ) {
+		if ( ! empty( $step['function'] ) && 'bbp_get_forum_id' === $step['function'] ) {
+			$caller = $db[ $key + 1 ]['function'];
+		}
+	}
+
+	if ( 'bbp_update_forum_reply_count' == $caller ) {
+		return 0;
+	}
+
+	return $id;
+}
+add_filter( 'bbp_get_forum_id', 'openlab_prevent_bbpress_from_recalculating_group_root_reply_count' );
 
 /**
  * Plugin: Social

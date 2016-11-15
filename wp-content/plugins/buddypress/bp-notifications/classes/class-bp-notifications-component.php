@@ -45,13 +45,16 @@ class BP_Notifications_Component extends BP_Component {
 	public function includes( $includes = array() ) {
 		$includes = array(
 			'actions',
-			'classes',
 			'screens',
 			'adminbar',
 			'template',
 			'functions',
 			'cache',
 		);
+
+		if ( ! buddypress()->do_autoload ) {
+			$includes[] = 'classes';
+		}
 
 		parent::includes( $includes );
 	}
@@ -79,6 +82,11 @@ class BP_Notifications_Component extends BP_Component {
 			'table_name_meta' => $bp->table_prefix . 'bp_notifications_meta',
 		);
 
+		// Metadata tables for notifications component.
+		$meta_tables = array(
+			'notification' => $bp->table_prefix . 'bp_notifications_meta',
+		);
+
 		// All globals for the notifications component.
 		// Note that global_tables is included in this array.
 		$args = array(
@@ -86,6 +94,7 @@ class BP_Notifications_Component extends BP_Component {
 			'has_directory' => false,
 			'search_string' => __( 'Search Notifications...', 'buddypress' ),
 			'global_tables' => $global_tables,
+			'meta_tables'   => $meta_tables
 		);
 
 		parent::setup_globals( $args );
@@ -122,7 +131,15 @@ class BP_Notifications_Component extends BP_Component {
 		if ( bp_is_user() && bp_user_has_access() ) {
 			$count    = bp_notifications_get_unread_notification_count( bp_displayed_user_id() );
 			$class    = ( 0 === $count ) ? 'no-count' : 'count';
-			$nav_name = sprintf( _x( 'Notifications <span class="%s">%s</span>', 'Profile screen nav', 'buddypress' ), esc_attr( $class ), bp_core_number_format( $count ) );
+			$nav_name = sprintf(
+				/* translators: %s: Unread notification count for the current user */
+				_x( 'Notifications %s', 'Profile screen nav', 'buddypress' ),
+				sprintf(
+					'<span class="%s">%s</span>',
+					esc_attr( $class ),
+					bp_core_number_format( $count )
+				)
+			);
 		} else {
 			$nav_name = _x( 'Notifications', 'Profile screen nav', 'buddypress' );
 		}
@@ -185,8 +202,16 @@ class BP_Notifications_Component extends BP_Component {
 			// Pending notification requests.
 			$count = bp_notifications_get_unread_notification_count( bp_loggedin_user_id() );
 			if ( ! empty( $count ) ) {
-				$title  = sprintf( _x( 'Notifications <span class="count">%s</span>', 'My Account Notification pending', 'buddypress' ), bp_core_number_format( $count ) );
-				$unread = sprintf( _x( 'Unread <span class="count">%s</span>',        'My Account Notification pending', 'buddypress' ), bp_core_number_format( $count ) );
+				$title = sprintf(
+					/* translators: %s: Unread notification count for the current user */
+					_x( 'Notifications %s', 'My Account Notification pending', 'buddypress' ),
+					'<span class="count">' . bp_core_number_format( $count ) . '</span>'
+				);
+				$unread = sprintf(
+					/* translators: %s: Unread notification count for the current user */
+					_x( 'Unread %s', 'My Account Notification pending', 'buddypress' ),
+					'<span class="count">' . bp_core_number_format( $count ) . '</span>'
+				);
 			} else {
 				$title  = _x( 'Notifications', 'My Account Notification',         'buddypress' );
 				$unread = _x( 'Unread',        'My Account Notification sub nav', 'buddypress' );

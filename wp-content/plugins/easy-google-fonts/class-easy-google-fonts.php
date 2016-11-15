@@ -13,8 +13,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
@@ -27,7 +27,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * @var      string
 		 * @since 	 1.3
 		 */
-		const VERSION = '1.3.5';
+		const VERSION = '1.4.0';
 
 		/**
 		 * Instance of this class.
@@ -54,7 +54,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * actions and filters.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		function __construct() {
@@ -70,7 +70,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_instance() {
@@ -89,7 +89,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * @return    Plugin slug variable.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_plugin_slug() {
@@ -102,7 +102,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_actions() {
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_filters() {
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_css_url() {
@@ -143,7 +143,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_css_path() {
@@ -158,7 +158,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_js_url() {
@@ -173,7 +173,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_js_path() {
@@ -188,7 +188,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_images_url() {
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_images_path() {
@@ -218,7 +218,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_includes_url() {
@@ -233,7 +233,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_includes_path() {
@@ -248,7 +248,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_views_url() {
@@ -263,7 +263,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * the trailing slash.
 		 * 
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_views_path() {
@@ -281,7 +281,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 *                                       activated on an individual blog.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function activate( $network_wide ) {
@@ -320,7 +320,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 *                                       deactivated on an individual blog.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function deactivate( $network_wide ) {
@@ -358,7 +358,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * @param    int    $blog_id    ID of the new blog.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function activate_new_site( $blog_id ) {
@@ -383,7 +383,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * @return   array|false    The blog ids, false if no matches.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		private static function get_blog_ids() {
@@ -405,7 +405,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * when the plugin is activated.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		private static function single_activate() {
@@ -418,7 +418,7 @@ if ( ! class_exists( 'Easy_Google_Fonts' ) ) :
 		 * when the plugin is deactivated.
 		 *
 		 * @since 1.3
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		private static function single_deactivate() {

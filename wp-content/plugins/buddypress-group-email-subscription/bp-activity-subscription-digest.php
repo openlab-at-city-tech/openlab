@@ -504,6 +504,7 @@ function ass_send_multipart_email( $to, $subject, $message_plaintext, $message )
 	//
 	// we're doing this during the 'wp_mail_from' filter because this runs before
 	// 'phpmailer_init'
+	$admin_email = addslashes( $admin_email );
 	$admin_email_filter = create_function( '$admin_email', '
 		global $phpmailer;
 
@@ -513,6 +514,7 @@ function ass_send_multipart_email( $to, $subject, $message_plaintext, $message )
 		return $admin_email;
 	' );
 
+	$from_name = addslashes( $from_name );
 	$from_name_filter = create_function( '$from_name', 'return $from_name;' );
 
 	// set the WP email overrides
@@ -520,6 +522,7 @@ function ass_send_multipart_email( $to, $subject, $message_plaintext, $message )
 	add_filter( 'wp_mail_from_name', $from_name_filter );
 
 	// setup plain-text body
+	$message_plaintext = addslashes( $message_plaintext );
 	add_action( 'phpmailer_init', create_function( '$phpmailer', '
 		$phpmailer->AltBody = "' . $message_plaintext . '";
 	' ) );
@@ -550,6 +553,21 @@ function ass_digest_record_activity( $activity_id, $user_id, $group_id, $type = 
 
 	if ( !$activity_id || !$user_id || !$group_id )
 		return;
+
+	/**
+	 * Prevent the addition of specific activity item IDs for specific users.
+	 *
+	 * @since 3.6.1
+	 *
+	 * @param bool   $proceed     Whether to continue adding this activity item to a user's digest.
+	 * @param int    $activity_id ID of activity item to be added.
+	 * @param int    $user_id     ID of user whose digest record is being modified.
+	 * @param int    $group_id    ID of the group where the action took place.
+	 * @param string $type        Type of digest.
+	 */
+	if ( false === apply_filters( 'ass_digest_record_activity_allow', true, $activity_id, $user_id, $group_id, $type ) ) {
+		return;
+	}
 
 	// get the digest/summary items for all groups for this user
 	$group_activity_ids = bp_get_user_meta( $user_id, 'ass_digest_items', true );
@@ -686,23 +704,6 @@ function ass_digest_get_user_domain( $user_id ) {
 
 	return apply_filters( 'bp_core_get_user_domain', $domain, $user_id, $mass_userdata[ $user_id ]['user_nicename'], $mass_userdata[ $user_id ]['user_login'] );
 }
-
-if ( ! function_exists( 'bp_core_enable_root_profiles' ) ) :
-/**
- * Backpat version of bp_core_enable_root_profiles().
- *
- * This function is only available in BP 1.6+.
- */
-function bp_core_enable_root_profiles() {
-
-	$retval = false;
-
-	if ( defined( 'BP_ENABLE_ROOT_PROFILES' ) && ( true == BP_ENABLE_ROOT_PROFILES ) )
-		$retval = true;
-
-	return apply_filters( 'bp_core_enable_root_profiles', $retval );
-}
-endif;
 
 // if the WP_Better_Emails plugin is installed, don't wrap the message with <html><body>$message</body></html>
 function ass_digest_support_wp_better_emails( $message, $message_pre_html_wrap ) {

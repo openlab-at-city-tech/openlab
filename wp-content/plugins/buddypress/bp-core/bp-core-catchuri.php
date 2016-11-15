@@ -210,13 +210,27 @@ function bp_core_set_uri_globals() {
 	}
 
 	// URLs with BP_ENABLE_ROOT_PROFILES enabled won't be caught above.
-	if ( empty( $matches ) && bp_core_enable_root_profiles() ) {
+	if ( empty( $matches ) && bp_core_enable_root_profiles() && ! empty( $bp_uri[0] ) ) {
 
 		// Switch field based on compat.
 		$field = bp_is_username_compatibility_mode() ? 'login' : 'slug';
 
+		/**
+		 * Filter the portion of the URI that is the displayed user's slug.
+		 *
+		 * eg. example.com/ADMIN (when root profiles is enabled)
+		 *     example.com/members/ADMIN (when root profiles isn't enabled)
+		 *
+		 * ADMIN would be the displayed user's slug.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param string $member_slug
+		 */
+		$member_slug = apply_filters( 'bp_core_set_uri_globals_member_slug', $bp_uri[0] );
+
 		// Make sure there's a user corresponding to $bp_uri[0].
-		if ( !empty( $bp->pages->members ) && !empty( $bp_uri[0] ) && $root_profile = get_user_by( $field, $bp_uri[0] ) ) {
+		if ( ! empty( $bp->pages->members ) && $root_profile = get_user_by( $field, $member_slug ) ) {
 
 			// Force BP to recognize that this is a members page.
 			$matches[]  = 1;
@@ -272,6 +286,10 @@ function bp_core_set_uri_globals() {
 
 			// Are we viewing a specific user?
 			if ( $after_member_slug ) {
+
+				/** This filter is documented in bp-core/bp-core-catchuri.php */
+				$after_member_slug = apply_filters( 'bp_core_set_uri_globals_member_slug', $after_member_slug );
+
 				// If root profile, we've already queried for the user.
 				if ( $root_profile instanceof WP_User ) {
 					$bp->displayed_user->id = $root_profile->ID;
@@ -438,6 +456,17 @@ function bp_core_load_template( $templates ) {
 	 * @param array  $filtered_templates Array of templates to attempt to load.
 	 */
 	$located_template = apply_filters( 'bp_located_template', $template, $filtered_templates );
+
+	/*
+	 * If current page is an embed, wipe out bp-default template.
+	 *
+	 * Wiping out the bp-default template allows WordPress to use their special
+	 * embed template, which is what we want.
+	 */
+	if ( function_exists( 'is_embed' ) && is_embed() ) {
+		$located_template = '';
+	}
+
 	if ( !empty( $located_template ) ) {
 		// Template was located, lets set this as a valid page and not a 404.
 		status_header( 200 );
@@ -515,6 +544,46 @@ function bp_core_catch_profile_uri() {
 		bp_core_load_template( apply_filters( 'bp_core_template_display_profile', 'members/single/home' ) );
 	}
 }
+
+/**
+ * Members user shortlink redirector.
+ *
+ * Redirects x.com/members/me/* to x.com/members/{LOGGED_IN_USER_SLUG}/*
+ *
+ * @since 2.6.0
+ *
+ * @param string $member_slug The current member slug.
+ */
+function bp_core_members_shortlink_redirector( $member_slug ) {
+	/**
+	 * Shortlink slug to redirect to logged-in user.
+	 *
+	 * x.com/members/me/* will redirect to x.com/members/{LOGGED_IN_USER_SLUG}/*
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var string $slug Defaults to 'me'.
+	 */
+	$me_slug = apply_filters( 'bp_core_members_shortlink_slug', 'me' );
+
+	// Check if we're on our special shortlink slug. If not, bail.
+	if ( $me_slug !== $member_slug ) {
+		return $member_slug;
+	}
+
+	// If logged out, redirect user to login.
+	if ( false === is_user_logged_in() ) {
+		// Add our login redirector hook.
+		add_action( 'template_redirect', 'bp_core_no_access', 0 );
+
+		return $member_slug;
+	}
+
+	$user = wp_get_current_user();
+
+	return bp_core_get_username( $user->ID, $user->user_nicename, $user->user_login );
+}
+add_filter( 'bp_core_set_uri_globals_member_slug', 'bp_core_members_shortlink_redirector' );
 
 /**
  * Catch unauthorized access to certain BuddyPress pages and redirect accordingly.
@@ -667,8 +736,6 @@ add_action( 'login_form_bpnoaccess', 'bp_core_no_access_wp_login_error' );
  * @see BP_Members_Component::setup_globals() where
  *      $bp->canonical_stack['base_url'] and ['component'] may be set.
  * @see bp_core_new_nav_item() where $bp->canonical_stack['action'] may be set.
- * @uses bp_get_canonical_url()
- * @uses bp_get_requested_url()
  */
 function bp_redirect_canonical() {
 
@@ -737,8 +804,6 @@ function bp_rel_canonical() {
  * Get the canonical URL of the current page.
  *
  * @since 1.6.0
- *
- * @uses apply_filters() Filter bp_get_canonical_url to modify return value.
  *
  * @param array $args {
  *     Optional array of arguments.
@@ -875,7 +940,6 @@ function bp_get_requested_url() {
  *
  * @since 1.6.0
  *
- * @uses bp_is_blog_page()
  */
 function _bp_maybe_remove_redirect_canonical() {
 	if ( ! bp_is_blog_page() )

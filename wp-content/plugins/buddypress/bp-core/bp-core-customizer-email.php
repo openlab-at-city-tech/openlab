@@ -47,7 +47,9 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	/**
 	 * BP_Customizer_Control_Range class.
 	 */
-	require_once dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
+	if ( ! buddypress()->do_autoload ) {
+		require_once dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
+	}
 
 	/**
 	 * Fires to let plugins register extra Customizer controls for emails.
@@ -192,7 +194,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[header_text_size]' => array(
 			'capability'        => 'bp_moderate',
 			'default'           => $defaults['header_text_size'],
-			'sanitize_callback' => 'intval',
+			'sanitize_callback' => 'absint',
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		),
@@ -220,7 +222,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[body_text_size]' => array(
 			'capability'        => 'bp_moderate',
 			'default'           => $defaults['body_text_size'],
-			'sanitize_callback' => 'intval',
+			'sanitize_callback' => 'absint',
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		),
@@ -248,7 +250,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[footer_text_size]' => array(
 			'capability'        => 'bp_moderate',
 			'default'           => $defaults['footer_text_size'],
-			'sanitize_callback' => 'intval',
+			'sanitize_callback' => 'absint',
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		),

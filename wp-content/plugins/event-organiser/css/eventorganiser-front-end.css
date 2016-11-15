@@ -1,0 +1,409 @@
+/* EO Theme compatability */
+.eo-tc-page .eo-events-nav-later{
+	float:right;
+}
+.eo-tc-page .eo-events-nav-earlier{
+	float:left;
+}
+.eo-tc-page .eo-events-nav{
+	overflow: inherit;
+	margin: 10px auto;
+	display:inline;
+}
+
+.eo-tc-page nav:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.eo-tc-event{
+	margin: 25px auto;
+}
+
+.eo-tc-event .eo-event-header{
+	display:block;
+}
+
+.eo-tc-event .eo-event-title{
+	margin-bottom:0px;
+}
+
+.eo-tc-event .eo-event-date{
+	font-style:italic;
+	display: block;
+	margin: 5px 0;;
+}
+
+.eo-tc-event .eo-event-details{
+	margin-top: 0px;	
+}
+
+.eo-event-meta{
+	margin: 10px 10px;
+}
+
+.eo-tc-event .eo-event-meta{
+	clear:both;
+	list-style:none;
+	float: none;
+	display: inline-block;
+	padding: 0;
+}
+
+.eo-tc-event .eo-event-content{
+    display: inherit;
+    float: none;
+    margin-left: 10px;	
+}
+
+.eo-event-thumbnail{
+	display: inline;
+	float:left;
+	margin: 10px;	
+}
+
+
+.fc-button .ui-button-text{line-height: 8px!important;}
+.ui-button-text-only .ui-button-text {padding: .4em .8em;}
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.14em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.3em 0 0.3em 0.45em; }
+
+/*Venue Map*/
+.eo-venue-map{z-index:1000;}
+.eo-venue-map img{max-width: none;}
+
+/* Event meta data */
+body.single-event .eo-event-venue-map,
+body.single-event .eo-event-meta{
+	float:none;
+	width: 100%;
+ } 
+@media (min-width:600px){
+	body.single-event .eo-event-meta{
+		width: 40%;
+		float: left;
+	}
+	body.single-event .eo-event-venue-map{
+		width: 40%;
+		float:right;
+	}
+}
+.eo-upcoming-dates-pipe{ margin: auto 5px; }
+
+/* fullCalendar */
+.eo-fullcalendar .fc-toolbar{ margin-bottom: 10px; }
+.eo-fullcalendar, .eo-fullcalendar button { font-size: 1em; }
+.eo-fullcalendar .fc-event{ font-size: 0.9em }
+.eo-fullcalendar .fc-view > table > thead{ background: #f2f2f2; font-weight: bold; text-align: center; }
+.eo-fullcalendar .fc-view > table > tbody{ background: #fff; }
+.eo-fullcalendar-key ul.eo_fullcalendar_key{display: inline-block;font-size: 0.8em;}
+.eo-fullcalendar-key ul.eo_fullcalendar_key li{display: inline-block;margin:0 3px;}
+.eo-fullcalendar-key span.eo_fullcalendar_key_colour{margin: 4px 2px 4px 5px;border: 1px solid #DFDFDF;border-radius: 4px 4px 4px 4px;font-size: 0.9em;vertical-align: top;padding: 0 6px;}
+
+.eo-widget-cal-wrap{
+	position:relative;
+}
+.eo-widget-cal-overlay{
+	position:absolute;
+	height:100%;
+	width:100%;
+}
+.eo-widget-cal-loading{
+	opacity: .6;
+}
+.eo-widget-cal-spinner{
+	border-radius: 50%;
+	opacity: .9;
+	background: url(images/loading-40x40.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 40px;
+	height: 40px;
+	margin: -20px 0 0 -20px; /* height or width / 2 */
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+/* Agenda CSS */
+.eo-agenda-widget ul{list-style:none; margin:0}
+.eo-agenda-widget ul li {list-style: none;}
+.eo-agenda-widget .eo-agenda-widget-nav{overflow:hidden;margin-bottom: 3px;text-align: right;}
+.eo-agenda-widget .eo-agenda-widget-nav-next, 
+.eo-agenda-widget .eo-agenda-widget-nav-prev{
+	border: 1px solid #dfdfdf; 
+	font-weight: normal;
+	cursor:pointer;
+	padding: 3px 9px;
+	background: #ececec;
+	margin: 3px;
+	color: #21759b;
+	font-size:12px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	border-radius:3px;
+}
+.eo-agenda-widget .eo-agenda-widget-nav-next:hover, 
+.eo-agenda-widget .eo-agenda-widget-nav-prev:hover{
+	background: #ddd;
+}
+.eo-agenda-widget ul.dates{border-bottom:1px solid #ececec; font-weight:bold}
+.eo-agenda-widget ul.a-date{margin:0}
+.eo-agenda-widget li.date{border-top:1px solid #ececec; padding:10px 0}
+.eo-agenda-widget li.event{padding:5px 0 5px 10px; font-weight:normal; background:#ececec; border-radius:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; opacity:0.75; color:#333; margin:1px 0; position:relative}
+.eo-agenda-widget li.event:hover{opacity:1; background:#ececec}
+.eo-agenda-widget li.event .cat{padding:10px 3px; background:none; margin-right:5px; height:100%; position:absolute;  top:0; left:0}
+.eo-agenda-widget li.event .meta{font-size:0.9em}
+.eo-agenda-widget li.event a.eo-agenda-event-permalink{display:block;text-decoration:none;color:#333;}
+.eo-agenda-widget li.event a.eo-agenda-event-permalink:hover{text-decoration:none;color:#333;}
+
+.eo-datepicker table,  
+.eo-datepicker tbody, 
+.eo-datepicker tfoot, 
+.eo-datepicker thead, 
+.eo-datepicker tr, 
+.eo-datepicker tr th, 
+.eo-datepicker tr td{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline; 
+}
+.eo-datepicker table {
+	border-collapse: collapse;
+	border-spacing: 0; 
+	width: 100%;
+}
+.eo-datepicker {
+	font-size: 14px;
+	background: white;
+	border: 1px solid #aaa;
+}
+.eo-datepicker table{
+	font-size: 0.8em;
+	margin: 0;
+}
+.eo-datepicker td,
+.eo-datepicker th{
+	margin: 0;
+	border: none;
+	padding: 1px;
+}
+.eo-datepicker td span,
+.eo-datepicker td a,
+.eo-datepicker th a{
+	background: white;
+	border: none;
+	text-decoration: none;
+	display: block;
+	padding: 0.5em .9em;
+	text-align: right;
+}
+.eo-datepicker .ui-datepicker-header{
+	background: #dddddd;/*@eo-fc-datepicker-header-bg;*/
+	height:30px;
+	text-align: center;
+}
+
+.eo-datepicker a.ui-datepicker-next,
+.eo-datepicker a.ui-datepicker-prev{
+	font-size: 1.2em;
+	font-weight: bold;
+	display: inline-block;
+	text-decoration: none;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	color: #000;
+}
+.eo-datepicker .ui-datepicker-next{
+	float:right;
+}
+.eo-datepicker .ui-datepicker-prev{
+	float: left;
+}
+.eo-datepicker select.ui-datepicker-month,
+.eo-datepicker select.ui-datepicker-year {
+	width: 45%;
+}
+.eo-datepicker .ui-datepicker-title {
+	margin: 0 2.3em;
+}
+.eo-datepicker .ui-datepicker-title select {
+	width: auto;
+	border: none;
+	padding: 0px 5px;
+	box-shadow: none;
+	margin: 0px 5px;
+	height: 30px;
+	color: #000;
+	font-size: 1em;
+}
+
+.eo-datepicker td span,
+.eo-datepicker th span,
+.eo-datepicker td a{
+	display:block;
+	text-align:center;
+}
+.eo-datepicker .ui-datepicker-calendar .ui-state-active .ui-state-default {  
+ 	background: #eee;/*@eo-fc-datepicker-selectable;*/
+    position: relative;  
+    cursor: pointer;
+    color: #333;
+}
+
+.eo-datepicker .ui-datepicker-calendar .ui-state-default.ui-state-hover{
+	color: #000;
+	background:#ddd;
+}
+.eo-datepicker .ui-datepicker-calendar .ui-state-default.ui-state-highlight{
+	background: #FFFFE0;/*@eo-fc-datepicker-highlight;*/
+}
+.eo-datepicker .ui-datepicker-next:hover,
+.eo-datepicker .ui-datepicker-prev:hover{
+	color: #000;
+	background: #aaa;/*@eo-fc-datepicker-header-bg-hover;*/
+}
+.eo-datepicker .ui-datepicker-calendar a.ui-state-active,
+.eo-datepicker .ui-datepicker-calendar .ui-state-active:hover .ui-state-active,
+.eo-datepicker .ui-datepicker-calendar .ui-datepicker-current-day .ui-state-active{
+	background: #eee;/*@eo-fc-datepicker-selectable;*/
+} 
+.eo-datepicker .ui-datepicker-calendar .ui-datepicker-current-day.ui-state-active{
+	background: #eee;/*@eo-fc-datepicker-active-bg;*/
+}
+
+#ui-datepicker-div {
+	display: none;
+}
+
+/*
+ * qTip2 - Pretty powerful tooltips - v2.2.1
+ * http://qtip2.com
+ *
+ * Copyright (c) 2014 
+ * Released under the MIT licenses
+ * http://jquery.org/license
+ *
+ * Date: Sat Sep 6 2014 11:12 GMT+0100+0100
+ * Plugins: tips modal viewport svg imagemap ie6
+ * Styles: core basic css3
+ */
+.qtip{
+	position: absolute;
+	left: -28000px;
+	top: -28000px;
+	display: none;
+
+	max-width: 280px;
+	min-width: 50px;
+
+	font-size: 10.5px;
+	line-height: 12px;
+
+	direction: ltr;
+
+	box-shadow: none;
+	padding: 0;
+}
+.qtip-content{
+	position: relative;
+	padding: 5px 9px;
+	overflow: hidden;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+.qtip-titlebar{
+	position: relative;
+	padding: 5px 35px 5px 10px;
+	overflow: hidden;
+	border-width: 0 0 1px;
+	font-weight: bold;
+}
+
+.qtip-titlebar + .qtip-content{ border-top-width: 0 !important; }
+
+/* Default close button class */
+.qtip-close{
+	position: absolute;
+	right: -9px; top: -9px;
+	z-index: 11; /* Overlap .qtip-tip */
+	cursor: pointer;
+	outline: medium none;
+	border: 1px solid transparent;
+}
+
+.qtip-titlebar .qtip-close{
+	right: 4px; top: 50%;
+	margin-top: -9px;
+}
+
+* html .qtip-titlebar .qtip-close{ top: 16px; } /* IE fix */
+.qtip-titlebar .ui-icon,
+.qtip-icon .ui-icon{
+	display: block;
+	text-indent: -1000em;
+	direction: ltr;
+}
+.qtip-icon, .qtip-icon .ui-icon{
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-decoration: none;
+}
+.qtip-icon .ui-icon{
+	width: 18px;
+	height: 14px;
+	line-height: 14px;
+	text-align: center;
+	text-indent: 0;
+	font: normal bold 10px/13px Tahoma,sans-serif;
+	color: inherit;
+	background: transparent none no-repeat -100em -100em;
+}
+
+/* Applied to 'focused' tooltips e.g. most recently displayed/interacted with */
+.qtip-focus{}
+
+/* Applied on hover of tooltips i.e. added/removed on mouseenter/mouseleave respectively */
+.qtip-hover{}
+
+/* Default tooltip style */
+.qtip-default{
+	border: 1px solid #F1D031;
+	background-color: #FFFFA3;
+	color: #555;
+}
+.qtip-default .qtip-titlebar{
+	background-color: #FFEF93;
+}
+.qtip-default .qtip-icon{
+	border-color: #CCC;
+	background: #F1F1F1;
+	color: #777;
+}
+.qtip-default .qtip-titlebar .qtip-close{
+	border-color: #AAA;
+	color: #111;
+}
+
+/*! Event Organiser tooltip style */
+.qtip-eo{
+	background-color: white;
+	border-color: #E2E2E2;
+	color: #454545;
+}
+
+.qtip-eo .qtip-titlebar{
+	background-color: #ddd;
+}

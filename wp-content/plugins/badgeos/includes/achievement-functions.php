@@ -260,7 +260,12 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
  */
 function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievement_id = 0 ) {
 
-	$max_earnings = absint( get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) );
+	$max_earnings = get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true);
+
+	//Infinite maximum earnings check
+    if($max_earnings == '-1'){
+		return false;
+	}
 
 	// If the badge has an earning limit, and we've earned it bdfore...
 	if ( $max_earnings && $user_has_badge = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
@@ -337,6 +342,34 @@ function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 }
 
 /**
+ * Get an array of post IDs for achievements that are marked as "hidden"
+ *
+ * @since  1.0.0
+ * @param  integer $achievement_id Limit the array to a specific id of achievement
+ * @return array  An array of hidden achivement post IDs
+ */
+
+function badgeos_get_hidden_achievement_by_id( $achievement_id ) {
+
+	// Grab our hidden achievements
+	global $wpdb;
+
+	//Get hidden submission posts.
+	$hidden_achievements = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM {$wpdb->posts} AS p
+                                 JOIN {$wpdb->postmeta} AS pm
+                                 ON p.ID = pm.post_id
+                                 WHERE p.ID = %d
+                                 AND pm.meta_key = '_badgeos_hidden'
+                                 AND pm.meta_value = 'hidden'
+                                 ",
+		$achievement_id));
+
+	// Return our results
+	return $hidden_achievements;
+}
+
+/**
  * Get an array of post IDs for a user's earned achievements
  *
  * @since  1.0.0
@@ -352,7 +385,8 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 	// Grab our earned achievements
 	$earned_achievements = badgeos_get_user_achievements( array(
 		'user_id'          => $user_id,
-		'achievement_type' => $achievement_type
+		'achievement_type' => $achievement_type,
+		'display' => true
 	) );
 
 	foreach ( $earned_achievements as $achievement )

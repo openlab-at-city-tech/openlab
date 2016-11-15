@@ -1,10 +1,9 @@
 === Google Doc Embedder ===
 Contributors: danlester, k3davis
 Tags: doc, docx, pdf, ppt, pptx, xls, office, powerpoint, google, document, embed
-Author URI: http://www.davistribe.org/code/
-Donate link: http://www.davistribe.org/gde/donate/
+Author URI: https://wordpress.org/plugins/google-document-embedder/
 Requires at least: 3.5
-Tested up to: 4.3
+Tested up to: 4.6
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -51,7 +50,7 @@ you use the Office 2003 equivalent formats instead.
 
 Note: Use of this plug-in implies your agreement with Google's published [Terms of Service](http://docs.google.com/viewer/TOS?hl=en "Terms of Service").
 
-Translations are welcome; see the [web site](http://www.davistribe.org/gde/notes/#translate "web site") for details.
+Translations:
 
 * English (en\_US), built-in
 * Czech (cs\_CZ) by Jirka, thanks!
@@ -73,7 +72,7 @@ Translations are welcome; see the [web site](http://www.davistribe.org/gde/notes
 Upload the documents to your site using the media upload facility built into WordPress, via FTP, or link to documents on another (public)
 site. Use the Media Library or Google Doc Embedder button in the Visual editor to build the appropriate shortcode, or use the documentation.
 
-For basic manual instructions, please see the FAQ. For advanced usage, see the [web site](http://www.davistribe.org/gde/usage/ "web site").
+For basic manual instructions, please see the FAQ.
 
 Go to "GDE Settings" (under "Settings" in the admin panel) to change defaults, or override individually using the shortcode syntax in the FAQ.
 
@@ -108,8 +107,6 @@ Common optional attributes:
 * `width=` : To override the profile's default width of the viewer, enter a new width value - e.g., "400px" or "80%"
 * `height=` : To override the profile's default height of the viewer, enter a new height value - e.g., "400px" or "80%"
 
-For a list of all available attributes, see [Usage](http://www.davistribe.org/gde/usage/ "Usage").
-
 = What are "Profiles"? =
 Profiles allow you to create a unique batch of settings and access them from the viewer using only a profile ID (or name), rather than 
 writing a horrifically complicated shortcode. This allows each instance of GDE (even on the same page) to be completely customizable while
@@ -136,9 +133,6 @@ If you are able to store your files in Google Drive, you may want to try the [Go
 The plugin works on network installs, though it must be activated on a per-site basis (not network activated). There are no multisite
 specific features at this time, but it will function normally in this environment. If you use GDE in a multisite environment, I welcome your feedback on what functionality you would like to see.
 
-= Other Common Questions =
-More common questions are answered on the GDE web site [here](http://www.davistribe.org/gde/notes/ "Notes").
-
 == Screenshots ==
 
 1. Default appearance of embedded viewer (cropped)
@@ -149,7 +143,25 @@ More common questions are answered on the GDE web site [here](http://www.davistr
 
 == Changelog ==
 
-(E) Enhanced Viewer
+= 2.6.2 =
+
+Additional checks to protect against XSS/CSRF vulnerability reported by Tristan Madani.
+
+Removed settings and profile import/export feature to reduce support and development requirements of this plugin.
+
+= 2.6.1 =
+
+Works with WP4.6.
+Fixed a potential cross-site security vulnerability.
+
+= 2.6 =
+
+New version number to avoid previous version number conflicts.
+This version should work with WP4.4
+
+= 2.5.22 =
+
+Post editor button fixed - was removed in previous version.
 
 = 2.5.21 =
 
@@ -254,8 +266,6 @@ This was needed so WordPress' new translation system works - text domain must ma
 * Fixed: Default profile not created on clean install (thanks Clifford)
 * Fixed: Viewer size from shortcode doesn't default to pixel
 * Fixed: Erroneous error message when file validation is blocked
-
-[Full history...](http://www.davistribe.org/gde/changelog/ "Full history")
 
 == Upgrade Notice ==
 

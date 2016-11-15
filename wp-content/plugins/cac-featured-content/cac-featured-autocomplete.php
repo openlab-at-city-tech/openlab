@@ -51,11 +51,12 @@ class CAC_Groups_Autocomplete {
 
 	// filters the bp_has_groups query to do a proper LIKE
 	function filter_group_sql( $sql ) {
-		global $bp;
+		global $bp, $wpdb;
 
 		$sqla = explode( 'WHERE', $sql );
 
-		$new_sql = $sqla[0] . ' WHERE g.name LIKE "%' . $this->search_terms . '%" AND ' . $sqla[1];
+		$s = '%' . $wpdb->esc_like( $this->search_terms ) . '%';
+		$new_sql = $wpdb->prepare( $sqla[0] . " WHERE g.name LIKE %s AND " . $sqla[1], $s );
 
 		return $new_sql;
 	}
@@ -111,20 +112,24 @@ class CAC_Blogs_Autocomplete {
 		else
 			$q = $value;
 
+		$s = '%' . $wpdb->esc_like( $q ) . '%';
+
 		if ( $q ) {
-			$blogs = $wpdb->get_results("
-        SELECT domain
+			$field = function_exists( 'is_subdomain_install' ) && is_subdomain_install() ? 'domain' : 'path';
+
+			$blogs = $wpdb->get_results( $wpdb->prepare( "
+        SELECT domain, path
         FROM {$wpdb->blogs}
-        WHERE domain like '%{$q}%'
+        WHERE {$field} like %s
         AND spam = '0'
         AND deleted = '0'
         AND archived = '0'
-        AND blog_id != 1");
+        AND blog_id != 1", $s ) );
 
 			foreach ( $blogs as $blog ) {
 				$retval[] = array(
-					'label' => $blog->domain,
-					'value' => $blog->domain
+					'label' => $blog->domain . $blog->path,
+					'value' => $blog->domain . $blog->path,
 				);
 			}
 		}
@@ -161,7 +166,7 @@ class CAC_Posts_Autocomplete {
 
 				// only return results if we have a valid blog
 				if ($blog) {
-					
+
 					switch_to_blog( $blog->blog_id );
 
 					$query = new WP_Query("s={$q}&post_type=post&post_status=publish");
@@ -186,7 +191,7 @@ class CAC_Posts_Autocomplete {
 			} else {
 				// we must not be running MS so we'll just list the site's blog posts
 				$query = new WP_Query("s={$q}&post_type=post&post_status=publish");
-				
+
 				foreach ($query->posts as $post) {
 					$retval[] = array(
 						'label' => $post->post_title,
@@ -194,7 +199,7 @@ class CAC_Posts_Autocomplete {
 					);
 				}
 			}
-			
+
 		}
 
 		die( json_encode( $retval ) );

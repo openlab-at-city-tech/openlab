@@ -118,7 +118,7 @@ add_filter('openlab_page_crumb', 'openlab_page_crumb_overrides', 10, 2);
 function openlab_page_crumb_overrides($crumb, $args) {
     global $post, $bp;
 
-    if (bp_is_group()) {
+    if ( bp_is_group() && ! bp_is_group_create() ) {
 
         $group_type = openlab_get_group_type();
         $crumb = '<a href="' . site_url() . '/' . $group_type . 's/">' . ucfirst($group_type) . 's</a> / ' . bp_get_group_name();
@@ -138,7 +138,7 @@ function openlab_page_crumb_overrides($crumb, $args) {
         }
         $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
         $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
-        
+
         $crumb = $b1 . ' / ' . $b2;
     }
     return $crumb;
@@ -179,7 +179,7 @@ class Openlab_Breadcrumb {
      *
      * @param array $args
      */
-    function openlab_breadcrumb() {
+    function __construct() {
         $this->on_front = get_option('show_on_front');
 
         /** Default arguments * */

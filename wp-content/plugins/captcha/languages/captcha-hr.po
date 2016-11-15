@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 12:13+0300\n"
-"PO-Revision-Date: 2015-09-17 12:13+0300\n"
-"Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
+"POT-Creation-Date: 2016-07-30 12:53+0300\n"
+"PO-Revision-Date: 2016-07-30 12:53+0300\n"
+"Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: Daniel <daniel@geogat.com>\n"
 "Language: sr_RS\n"
 "MIME-Version: 1.0\n"
@@ -16,515 +16,1226 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: whitelist.php:58
-msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
-msgstr ""
-
-#: whitelist.php:62
-msgid "Add IP to whitelist"
-msgstr ""
-
-#: whitelist.php:67
-msgid "My IP"
-msgstr ""
-
-#: whitelist.php:74
-#: whitelist.php:84
-msgid "Allowed formats:"
-msgstr ""
-
-#: whitelist.php:75
-msgid "Allowed diapason:"
-msgstr ""
-
-#: whitelist.php:82
-msgid "Reason"
-msgstr ""
-
-#: whitelist.php:85
-msgid "Allowed separators for IPs: a comma"
-msgstr ""
-
-#: whitelist.php:85
-#: whitelist.php:86
-msgid "semicolon"
-msgstr ""
-
-#: whitelist.php:85
-msgid "ordinary space, tab, new line or carriage return"
-msgstr ""
-
-#: whitelist.php:86
-msgid "Allowed separators for reasons: a comma"
-msgstr ""
-
-#: whitelist.php:86
-msgid "tab, new line or carriage return"
-msgstr ""
-
-#: whitelist.php:93
-#: captcha.php:482
-#, fuzzy
-msgid "Unlock premium options by upgrading to Pro version"
-msgstr "Otključaj premium opcije nadogradnjom na PRO verziju."
-
-#: whitelist.php:95
-#: captcha.php:484
-msgid "Learn More"
-msgstr "Saznajte više"
-
-#: whitelist.php:101
-msgid "Search IP"
-msgstr ""
-
-#: whitelist.php:132
-msgid "Nothing found"
-msgstr ""
-
-#: whitelist.php:132
-msgid "No IP in whitelist"
-msgstr ""
-
-#: whitelist.php:139
-msgid "IP address"
-msgstr ""
-
-#: whitelist.php:140
-msgid "Date added"
-msgstr ""
-
-#: whitelist.php:189
-#: whitelist.php:200
-msgid "Remove from whitelist"
-msgstr ""
-
-#: whitelist.php:266
-msgid "IP added in database successfully"
-msgstr ""
-
-#: whitelist.php:268
-#: whitelist.php:283
-#: whitelist.php:290
-msgid "Some errors occured"
-msgstr ""
-
-#: whitelist.php:270
-msgid "IP is allready in database"
-msgstr ""
-
-#: whitelist.php:273
-msgid "Invalid IP. See allowed formats"
-msgstr ""
-
-#: whitelist.php:288
-msgid "One IP was deleted successfully"
-msgstr ""
-
-#: whitelist.php:292
-msgid "You have not entered any value"
-msgstr ""
-
-#: whitelist.php:295
-msgid "You have not enterd any value in to the search form"
-msgstr ""
-
-#: whitelist.php:297
-msgid "Search results for"
-msgstr ""
-
-#: captcha.php:33
-#: captcha.php:377
+#: captcha.php:37 captcha.php:403
 #, fuzzy
 msgid "Captcha Settings"
 msgstr "Captcha Opcije"
 
-#: captcha.php:33
+#: captcha.php:37
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:148
-msgid "Please enter a CAPTCHA value."
-msgstr "Unesite CAPTCHA vrijednost."
-
-#: captcha.php:149
-msgid "Please enter a valid CAPTCHA value."
-msgstr "Unesite valjanu CAPTCHA vrijednost."
-
-#: captcha.php:154
-msgid "You are in the white list"
-msgstr ""
-
-#: captcha.php:290
-msgid "Login form"
-msgstr "Obrazac za prijavu"
-
-#: captcha.php:291
-#: captcha.php:459
-#, fuzzy
-msgid "Registration form"
-msgstr "Obrazac za registraciju"
-
-#: captcha.php:292
-#, fuzzy
-msgid "Reset Password form"
-msgstr "Obrazac za izgubljenu lozinku"
-
-#: captcha.php:293
-#: captcha.php:460
-msgid "Comments form"
-msgstr "Obrazac za komentare"
-
-#: captcha.php:296
-#, fuzzy
-msgid "in Comments form for registered users"
-msgstr "Sakrij CAPTCHA za registrirane korisnike"
-
-#: captcha.php:300
-msgid "Plus (&#43;)"
-msgstr "Plus (&#43;)"
-
-#: captcha.php:300
-msgid "Plus"
-msgstr "Plus (&#43;)"
-
-#: captcha.php:301
-msgid "Minus (&minus;)"
-msgstr "Minus (&minus;)"
-
-#: captcha.php:301
-msgid "Minus"
-msgstr "Minus"
-
-#: captcha.php:302
-#, fuzzy
-msgid "Multiplication (&times;)"
-msgstr "Pomnoži (&times;)"
-
-#: captcha.php:302
-#, fuzzy
-msgid "Multiply"
-msgstr "Pomnoži (&times;)"
-
-#: captcha.php:307
-msgid "Numbers"
-msgstr "Brojevi"
-
-#: captcha.php:308
-msgid "Words"
-msgstr "Riječi"
-
-#: captcha.php:354
-msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
-msgstr "Molimo odaberite jednu stavku u bloku aritmetike i složenosti za CAPTCHA"
-
-#: captcha.php:358
-#, fuzzy
-msgid "Settings saved."
-msgstr "Opcije spremljene"
-
-#: captcha.php:365
-msgid "All plugin settings were restored."
-msgstr ""
-
-#: captcha.php:379
+#: captcha.php:405
 msgid "How to Use Step-by-step Instruction"
 msgstr ""
 
-#: captcha.php:382
-#: captcha.php:1433
-#: captcha.php:1446
+#: captcha.php:408 captcha.php:1653 captcha.php:1666
 msgid "Settings"
 msgstr "Podešavanja"
 
-#: captcha.php:383
+#: captcha.php:410
+msgid "This setting is available in Pro version"
+msgstr ""
+
+#: captcha.php:410
+msgid "Packages"
+msgstr ""
+
+#: captcha.php:412
 msgid "Whitelist"
 msgstr ""
 
-#: captcha.php:384
-#: captcha.php:1447
-msgid "FAQ"
-msgstr "FAQ"
+#: captcha.php:413
+msgid "Custom code"
+msgstr ""
 
-#: captcha.php:385
+#: captcha.php:414
 msgid "Go PRO"
 msgstr "Go PRO"
 
-#: captcha.php:387
-msgid "Notice:"
-msgstr "Obavijest:"
-
-#: captcha.php:387
-msgid "The plugin's settings have been changed. In order to save them please don't forget to click the 'Save Changes' button."
-msgstr "Postavke dodatka su promijenjene. Kako bi se postavke spremile ne zaboravite kliknuti na \"Spremi promjene\" gumb."
-
-#: captcha.php:397
-#: captcha.php:447
-#: captcha.php:455
-#: captcha.php:458
-#, fuzzy
-msgid "Enable CAPTCHA for"
-msgstr "Omogući CAPTCHA na:"
-
-#: captcha.php:399
-#: captcha.php:521
-#: captcha.php:523
-msgid "Arithmetic actions for CAPTCHA"
-msgstr "Aritmetičke operacije za CAPTCHA"
-
-#: captcha.php:424
-msgid "Activate"
-msgstr ""
-
-#: captcha.php:434
-msgid "Download"
-msgstr ""
-
-#: captcha.php:438
-msgid "If you would like to add Captcha to a custom form, please see"
-msgstr "Ako želite Captcha-u u prilagođenom obliku, molimo pogledajte"
-
-#: captcha.php:461
-msgid "\"Create a Group\" form"
-msgstr "\"Stvori grupu \" oblik"
-
-#: captcha.php:467
-#, fuzzy
-msgid "Enable CAPTCHA"
-msgstr "Omogući CAPTCHA:"
-
-#: captcha.php:475
-msgid "If you upgrade to Pro version all your settings will be saved."
-msgstr "Ako nadogradite na Pro verziju sve postavke će se spremiti."
-
-#: captcha.php:490
-#, fuzzy
-msgid "Hide CAPTCHA"
-msgstr "Omogući CAPTCHA:"
-
-#: captcha.php:497
-msgid "Title for CAPTCHA in the form"
-msgstr "Oznaka za CAPTCHA u obrascu"
-
-#: captcha.php:501
-msgid "Required symbol"
-msgstr "Obavezni simboli"
-
-#: captcha.php:507
-msgid "Error messages"
-msgstr "Poruke o pogreškama"
-
-#: captcha.php:509
-msgid "If CAPTCHA field is empty"
-msgstr "Ako je CAPTCHA polje prazno"
-
-#: captcha.php:510
-msgid "If CAPTCHA is incorrect"
-msgstr "Ako je CAPTCHA pogrešna"
-
-#: captcha.php:514
-msgid "Display for whitelisted IP"
-msgstr ""
-
-#: captcha.php:517
-msgid "If the IP is in the whitelist, then the indicated message will be displayed instead of the captcha."
-msgstr ""
-
-#: captcha.php:534
-#: captcha.php:536
-msgid "CAPTCHA complexity level"
-msgstr "CAPTCHA razina složenosti"
-
-#: captcha.php:549
-msgid "Save Changes"
-msgstr "Spremi promjene"
-
-#: captcha.php:626
-#: captcha.php:641
-#: captcha.php:643
-#: captcha.php:650
-#: captcha.php:827
-#: captcha.php:835
-#: captcha.php:852
-#: captcha.php:860
+#: captcha.php:523 captcha.php:529 captcha.php:545 captcha.php:547
+#: captcha.php:556 captcha.php:610 captcha.php:614 captcha.php:623
+#: captcha.php:646 captcha.php:656 captcha.php:681 captcha.php:684
+#: captcha.php:692
 msgid "ERROR"
 msgstr "GREŠKA"
 
-#: captcha.php:759
-#: captcha.php:765
-#: captcha.php:881
-#: captcha.php:889
+#: captcha.php:749 captcha.php:755
 msgid "Error"
 msgstr ""
 
-#: captcha.php:759
-#: captcha.php:765
-#: captcha.php:881
-#: captcha.php:889
+#: captcha.php:749 captcha.php:755
 #, fuzzy
 msgid "Click the BACK button on your browser, and try again."
-msgstr "Greška: Unijeli ste pogrešnu CAPTCHA frazu. Vratite se nazad i pokušajte ponovo"
+msgstr ""
+"Greška: Unijeli ste pogrešnu CAPTCHA frazu. Vratite se nazad i pokušajte "
+"ponovo"
 
-#: captcha.php:913
-#: captcha.php:1217
+#: captcha.php:994
+msgid "In order to pass the CAPTCHA please enable JavaScript"
+msgstr ""
+
+#: captcha.php:1341
 msgid "zero"
 msgstr "nula"
 
-#: captcha.php:914
-#: captcha.php:1218
-#: captcha.php:1390
+#: captcha.php:1342 includes/settings_page.php:439
 msgid "one"
 msgstr "jedan"
 
-#: captcha.php:915
-#: captcha.php:1219
+#: captcha.php:1343
 msgid "two"
 msgstr "dva"
 
-#: captcha.php:916
-#: captcha.php:1220
+#: captcha.php:1344
 msgid "three"
 msgstr "tri"
 
-#: captcha.php:917
-#: captcha.php:1221
+#: captcha.php:1345
 msgid "four"
 msgstr "četiri"
 
-#: captcha.php:918
-#: captcha.php:1222
+#: captcha.php:1346
 msgid "five"
 msgstr "pet"
 
-#: captcha.php:919
-#: captcha.php:1223
-#: captcha.php:1390
+#: captcha.php:1347 includes/settings_page.php:439
 msgid "six"
 msgstr "šest"
 
-#: captcha.php:920
-#: captcha.php:1224
-#: captcha.php:1378
-#: captcha.php:1384
+#: captcha.php:1348 includes/settings_page.php:421
+#: includes/settings_page.php:429
 msgid "seven"
 msgstr "sedam"
 
-#: captcha.php:921
-#: captcha.php:1225
-#: captcha.php:1381
+#: captcha.php:1349 includes/settings_page.php:425
 msgid "eight"
 msgstr "osam"
 
-#: captcha.php:922
-#: captcha.php:1226
+#: captcha.php:1350
 msgid "nine"
 msgstr "devet"
 
-#: captcha.php:925
-#: captcha.php:1229
-msgid "eleven"
-msgstr "jedanaest"
-
-#: captcha.php:926
-#: captcha.php:1230
-msgid "twelve"
-msgstr "dvanaest"
-
-#: captcha.php:927
-#: captcha.php:1231
-msgid "thirteen"
-msgstr "trinaest"
-
-#: captcha.php:928
-#: captcha.php:1232
-msgid "fourteen"
-msgstr "četrnaest"
-
-#: captcha.php:929
-#: captcha.php:1233
-msgid "fifteen"
-msgstr "petnaest"
-
-#: captcha.php:930
-#: captcha.php:1234
-msgid "sixteen"
-msgstr "šesnaest"
-
-#: captcha.php:931
-#: captcha.php:1235
-msgid "seventeen"
-msgstr "sedamnaest"
-
-#: captcha.php:932
-#: captcha.php:1236
-msgid "eighteen"
-msgstr "osamnaest"
-
-#: captcha.php:933
-#: captcha.php:1237
-msgid "nineteen"
-msgstr "devetnaest"
-
-#: captcha.php:936
-#: captcha.php:1240
+#: captcha.php:1352
 msgid "ten"
 msgstr "deset"
 
-#: captcha.php:937
-#: captcha.php:1241
+#: captcha.php:1353
+msgid "eleven"
+msgstr "jedanaest"
+
+#: captcha.php:1354
+msgid "twelve"
+msgstr "dvanaest"
+
+#: captcha.php:1355
+msgid "thirteen"
+msgstr "trinaest"
+
+#: captcha.php:1356
+msgid "fourteen"
+msgstr "četrnaest"
+
+#: captcha.php:1357
+msgid "fifteen"
+msgstr "petnaest"
+
+#: captcha.php:1358
+msgid "sixteen"
+msgstr "šesnaest"
+
+#: captcha.php:1359
+msgid "seventeen"
+msgstr "sedamnaest"
+
+#: captcha.php:1360
+msgid "eighteen"
+msgstr "osamnaest"
+
+#: captcha.php:1361
+msgid "nineteen"
+msgstr "devetnaest"
+
+#: captcha.php:1363
 msgid "twenty"
 msgstr "dvadeset"
 
-#: captcha.php:938
-#: captcha.php:1242
+#: captcha.php:1364
+#, fuzzy
+msgid "twenty one"
+msgstr "dvadeset"
+
+#: captcha.php:1365
+#, fuzzy
+msgid "twenty two"
+msgstr "dvadeset"
+
+#: captcha.php:1366
+#, fuzzy
+msgid "twenty three"
+msgstr "dvadeset"
+
+#: captcha.php:1367
+#, fuzzy
+msgid "twenty four"
+msgstr "dvadeset"
+
+#: captcha.php:1368
+#, fuzzy
+msgid "twenty five"
+msgstr "dvadeset"
+
+#: captcha.php:1369
+#, fuzzy
+msgid "twenty six"
+msgstr "dvadeset"
+
+#: captcha.php:1370
+#, fuzzy
+msgid "twenty seven"
+msgstr "dvadeset"
+
+#: captcha.php:1371
+#, fuzzy
+msgid "twenty eight"
+msgstr "dvadeset"
+
+#: captcha.php:1372
+#, fuzzy
+msgid "twenty nine"
+msgstr "dvadeset"
+
+#: captcha.php:1374
 msgid "thirty"
 msgstr "trideset"
 
-#: captcha.php:939
-#: captcha.php:1243
+#: captcha.php:1375
+#, fuzzy
+msgid "thirty one"
+msgstr "trideset"
+
+#: captcha.php:1376
+#, fuzzy
+msgid "thirty two"
+msgstr "trideset"
+
+#: captcha.php:1377
+#, fuzzy
+msgid "thirty three"
+msgstr "trinaest"
+
+#: captcha.php:1378
+#, fuzzy
+msgid "thirty four"
+msgstr "trideset"
+
+#: captcha.php:1379
+#, fuzzy
+msgid "thirty five"
+msgstr "trideset"
+
+#: captcha.php:1380
+#, fuzzy
+msgid "thirty six"
+msgstr "trideset"
+
+#: captcha.php:1381
+#, fuzzy
+msgid "thirty seven"
+msgstr "trinaest"
+
+#: captcha.php:1382
+#, fuzzy
+msgid "thirty eight"
+msgstr "trideset"
+
+#: captcha.php:1383
+#, fuzzy
+msgid "thirty nine"
+msgstr "trideset"
+
+#: captcha.php:1385
 msgid "forty"
 msgstr "četrdeset"
 
-#: captcha.php:940
-#: captcha.php:1244
+#: captcha.php:1386
+#, fuzzy
+msgid "forty one"
+msgstr "četrdeset"
+
+#: captcha.php:1387
+#, fuzzy
+msgid "forty two"
+msgstr "četrdeset"
+
+#: captcha.php:1388
+#, fuzzy
+msgid "forty three"
+msgstr "tri"
+
+#: captcha.php:1389
+#, fuzzy
+msgid "forty four"
+msgstr "četrdeset"
+
+#: captcha.php:1390
+#, fuzzy
+msgid "forty five"
+msgstr "četrdeset"
+
+#: captcha.php:1391
+#, fuzzy
+msgid "forty six"
+msgstr "četrdeset"
+
+#: captcha.php:1392
+#, fuzzy
+msgid "forty seven"
+msgstr "sedam"
+
+#: captcha.php:1393
+#, fuzzy
+msgid "forty eight"
+msgstr "osam"
+
+#: captcha.php:1394
+#, fuzzy
+msgid "forty nine"
+msgstr "četrdeset"
+
+#: captcha.php:1396
 msgid "fifty"
 msgstr "pedeset"
 
-#: captcha.php:941
-#: captcha.php:1245
+#: captcha.php:1397
+#, fuzzy
+msgid "fifty one"
+msgstr "pedeset"
+
+#: captcha.php:1398
+#, fuzzy
+msgid "fifty two"
+msgstr "pedeset"
+
+#: captcha.php:1399
+#, fuzzy
+msgid "fifty three"
+msgstr "petnaest"
+
+#: captcha.php:1400
+#, fuzzy
+msgid "fifty four"
+msgstr "pedeset"
+
+#: captcha.php:1401
+#, fuzzy
+msgid "fifty five"
+msgstr "pedeset"
+
+#: captcha.php:1402
+#, fuzzy
+msgid "fifty six"
+msgstr "pedeset"
+
+#: captcha.php:1403
+#, fuzzy
+msgid "fifty seven"
+msgstr "petnaest"
+
+#: captcha.php:1404
+#, fuzzy
+msgid "fifty eight"
+msgstr "osam"
+
+#: captcha.php:1405
+#, fuzzy
+msgid "fifty nine"
+msgstr "pedeset"
+
+#: captcha.php:1407
 msgid "sixty"
 msgstr "šeszdeset"
 
-#: captcha.php:942
-#: captcha.php:1246
+#: captcha.php:1408
+#, fuzzy
+msgid "sixty one"
+msgstr "šeszdeset"
+
+#: captcha.php:1409
+#, fuzzy
+msgid "sixty two"
+msgstr "šeszdeset"
+
+#: captcha.php:1410
+#, fuzzy
+msgid "sixty three"
+msgstr "šesnaest"
+
+#: captcha.php:1411
+#, fuzzy
+msgid "sixty four"
+msgstr "šeszdeset"
+
+#: captcha.php:1412
+#, fuzzy
+msgid "sixty five"
+msgstr "šeszdeset"
+
+#: captcha.php:1413
+#, fuzzy
+msgid "sixty six"
+msgstr "šeszdeset"
+
+#: captcha.php:1414
+#, fuzzy
+msgid "sixty seven"
+msgstr "šesnaest"
+
+#: captcha.php:1415
+#, fuzzy
+msgid "sixty eight"
+msgstr "osam"
+
+#: captcha.php:1416
+#, fuzzy
+msgid "sixty nine"
+msgstr "šeszdeset"
+
+#: captcha.php:1418
 msgid "seventy"
 msgstr "sedamdeset"
 
-#: captcha.php:943
-#: captcha.php:1247
+#: captcha.php:1419
+#, fuzzy
+msgid "seventy one"
+msgstr "sedamdeset"
+
+#: captcha.php:1420
+#, fuzzy
+msgid "seventy two"
+msgstr "sedamdeset"
+
+#: captcha.php:1421
+#, fuzzy
+msgid "seventy three"
+msgstr "sedamnaest"
+
+#: captcha.php:1422
+#, fuzzy
+msgid "seventy four"
+msgstr "sedamdeset"
+
+#: captcha.php:1423
+#, fuzzy
+msgid "seventy five"
+msgstr "sedamdeset"
+
+#: captcha.php:1424
+#, fuzzy
+msgid "seventy six"
+msgstr "sedamdeset"
+
+#: captcha.php:1425
+#, fuzzy
+msgid "seventy seven"
+msgstr "sedamnaest"
+
+#: captcha.php:1426
+#, fuzzy
+msgid "seventy eight"
+msgstr "sedamdeset"
+
+#: captcha.php:1427
+#, fuzzy
+msgid "seventy nine"
+msgstr "sedamdeset"
+
+#: captcha.php:1429
 msgid "eighty"
 msgstr "osamdeset"
 
-#: captcha.php:944
-#: captcha.php:1248
+#: captcha.php:1430
+#, fuzzy
+msgid "eighty one"
+msgstr "osamdeset"
+
+#: captcha.php:1431
+#, fuzzy
+msgid "eighty two"
+msgstr "osamdeset"
+
+#: captcha.php:1432
+#, fuzzy
+msgid "eighty three"
+msgstr "osamnaest"
+
+#: captcha.php:1433
+#, fuzzy
+msgid "eighty four"
+msgstr "osamdeset"
+
+#: captcha.php:1434
+#, fuzzy
+msgid "eighty five"
+msgstr "osamdeset"
+
+#: captcha.php:1435
+#, fuzzy
+msgid "eighty six"
+msgstr "osamdeset"
+
+#: captcha.php:1436
+#, fuzzy
+msgid "eighty seven"
+msgstr "osamnaest"
+
+#: captcha.php:1437
+#, fuzzy
+msgid "eighty eight"
+msgstr "osamdeset"
+
+#: captcha.php:1438
+#, fuzzy
+msgid "eighty nine"
+msgstr "osamdeset"
+
+#: captcha.php:1440
 msgid "ninety"
 msgstr "devedeset"
 
-#: captcha.php:1031
-#: captcha.php:1336
-msgid "and"
-msgstr "i"
+#: captcha.php:1441
+#, fuzzy
+msgid "ninety one"
+msgstr "devedeset"
 
-#: captcha.php:1105
+#: captcha.php:1442
+#, fuzzy
+msgid "ninety two"
+msgstr "devedeset"
+
+#: captcha.php:1443
+#, fuzzy
+msgid "ninety three"
+msgstr "devetnaest"
+
+#: captcha.php:1444
+#, fuzzy
+msgid "ninety four"
+msgstr "devedeset"
+
+#: captcha.php:1445
+#, fuzzy
+msgid "ninety five"
+msgstr "devedeset"
+
+#: captcha.php:1446
+#, fuzzy
+msgid "ninety six"
+msgstr "devedeset"
+
+#: captcha.php:1447
+#, fuzzy
+msgid "ninety seven"
+msgstr "devetnaest"
+
+#: captcha.php:1448
+#, fuzzy
+msgid "ninety eight"
+msgstr "devedeset"
+
+#: captcha.php:1449
+#, fuzzy
+msgid "ninety nine"
+msgstr "devedeset"
+
+#: captcha.php:1514
 msgid "Encryption password is not set"
 msgstr "Lozinka za dešifriranje nije još podešena"
 
-#: captcha.php:1125
+#: captcha.php:1535
 msgid "Decryption password is not set"
 msgstr "Lozinka za dešifriranje nije još podešena"
 
-#: captcha.php:1448
+#: captcha.php:1667
+msgid "FAQ"
+msgstr "FAQ"
+
+#: captcha.php:1668
 msgid "Support"
 msgstr "Podrška"
+
+#: captcha.php:1843
+msgid "Warning"
+msgstr ""
+
+#: captcha.php:1847
+msgid "plugin contains deprecated functionality that will be removed"
+msgstr ""
+
+#: captcha.php:1848
+msgid "in the future"
+msgstr ""
+
+#: captcha.php:1848
+msgid "after"
+msgstr ""
+
+#: captcha.php:1851
+msgid "has old version"
+msgstr ""
+
+#: captcha.php:1854
+msgid "has compatibility problems with"
+msgstr ""
+
+#: captcha.php:1861
+msgid "You need to update this plugin for correct work with"
+msgstr ""
+
+#: includes/whitelist.php:75
+msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
+msgstr ""
+
+#: includes/whitelist.php:87
+#, php-format
+msgid ""
+"With this option, CAPTCHA will not be displayed for IP-addresses from the "
+"whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:98 includes/whitelist.php:134
+msgid "Add IP to whitelist"
+msgstr ""
+
+#: includes/whitelist.php:101
+msgid "Load IP to the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:104
+#, php-format
+msgid ""
+"By click on this button, all IP-addresses from the whitelist of %s will be "
+"loaded to the whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:113
+#, fuzzy
+msgid "Save changes"
+msgstr "Spremi promjene"
+
+#: includes/whitelist.php:130
+msgid "My IP"
+msgstr ""
+
+#: includes/whitelist.php:138
+msgid "Allowed formats:"
+msgstr ""
+
+#: includes/whitelist.php:139
+msgid "Allowed diapason:"
+msgstr ""
+
+#: includes/whitelist.php:145
+msgid "Search IP"
+msgstr ""
+
+#: includes/whitelist.php:200
+msgid "Nothing found"
+msgstr ""
+
+#: includes/whitelist.php:200
+msgid "No IP in the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:207
+msgid "IP address"
+msgstr ""
+
+#: includes/whitelist.php:208
+msgid "Date added"
+msgstr ""
+
+#: includes/whitelist.php:262 includes/whitelist.php:271
+msgid "Remove from the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:356
+msgid "IP added to the whitelist successfully"
+msgstr ""
+
+#: includes/whitelist.php:358 includes/whitelist.php:380
+#: includes/whitelist.php:392
+msgid "Some errors occured"
+msgstr ""
+
+#: includes/whitelist.php:360
+msgid "IP is already in the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:363
+msgid "Invalid IP. See allowed formats"
+msgstr ""
+
+#: includes/whitelist.php:386
+msgid "One IP was deleted successfully"
+msgstr ""
+
+#: includes/whitelist.php:395
+msgid "You have not entered any value"
+msgstr ""
+
+#: includes/whitelist.php:398
+msgid "You have not entered any value in to the search form"
+msgstr ""
+
+#: includes/whitelist.php:400
+msgid "Search results for"
+msgstr ""
+
+#: includes/whitelist.php:414
+msgid "IP-address(es) successfully copied to the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:439
+msgid "use"
+msgstr ""
+
+#: includes/whitelist.php:439
+msgid "the whitelist of"
+msgstr ""
+
+#: includes/whitelist.php:447 includes/whitelist.php:455
+#, php-format
+msgid "use the whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:448
+#, php-format
+msgid "you should %s to use this functionality"
+msgstr ""
+
+#: includes/whitelist.php:448 includes/settings_page.php:636
+msgid "activate"
+msgstr ""
+
+#: includes/whitelist.php:456
+#, php-format
+msgid "you should install %s to use this functionality"
+msgstr ""
+
+#: includes/deprecated.php:87
+msgid "instruction"
+msgstr ""
+
+#: includes/deprecated.php:96
+#, php-format
+msgid ""
+"Functions from the %1s plugin are used on your site. These functions are "
+"deprecated ( %2s ) since version %4s. Please replace them according to the "
+"%3s. If you close this message it will appear in case if deprecated function "
+"would be called again only"
+msgstr ""
+
+#: includes/deprecated.php:115
+#, php-format
+msgid "some call functions for the \"%s\" filter hook"
+msgstr ""
+
+#: includes/deprecated.php:118
+#, fuzzy
+msgid "Enable the CAPTCHA for"
+msgstr "Omogući CAPTCHA na:"
+
+#: includes/pro_banners.php:17
+msgid "This options is available in Pro version of plugin"
+msgstr ""
+
+#: includes/pro_banners.php:20
+msgid "Close"
+msgstr ""
+
+#: includes/pro_banners.php:26
+#, fuzzy
+msgid "Unlock premium options by upgrading to Pro version"
+msgstr "Otključaj premium opcije nadogradnjom na PRO verziju."
+
+#: includes/pro_banners.php:27
+msgid "Learn More"
+msgstr "Saznajte više"
+
+#: includes/pro_banners.php:38
+msgid "Reason"
+msgstr ""
+
+#: includes/pro_banners.php:40
+msgid "Allowed formats"
+msgstr ""
+
+#: includes/pro_banners.php:41
+msgid "Allowed separators for IPs: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:41 includes/pro_banners.php:42
+msgid "semicolon"
+msgstr ""
+
+#: includes/pro_banners.php:41
+msgid "ordinary space, tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:42
+msgid "Allowed separators for reasons: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:42
+msgid "tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:61 includes/package_loader.php:73
+msgid "If the package already exists"
+msgstr ""
+
+#: includes/pro_banners.php:63 includes/package_loader.php:78
+msgid "Skip it"
+msgstr ""
+
+#: includes/pro_banners.php:64 includes/package_loader.php:82
+msgid "Update the existed one"
+msgstr ""
+
+#: includes/pro_banners.php:65 includes/package_loader.php:86
+#, fuzzy
+msgid "Save it as new"
+msgstr "Spremi promjene"
+
+#: includes/pro_banners.php:68 includes/package_loader.php:91
+msgid "Install Now"
+msgstr ""
+
+#: includes/pro_banners.php:69 includes/package_loader.php:93
+msgid "Browse packages"
+msgstr ""
+
+#: includes/pro_banners.php:80 includes/pro_banners.php:157
+msgid "Package"
+msgstr ""
+
+#: includes/pro_banners.php:83 includes/pro_banners.php:160
+msgid "Date"
+msgstr ""
+
+#: includes/pro_banners.php:177 includes/settings_page.php:656
+#, fuzzy
+msgid "Enable"
+msgstr "Omogući CAPTCHA:"
+
+#: includes/pro_banners.php:181
+msgid "Use general settings"
+msgstr ""
+
+#: includes/pro_banners.php:185 includes/settings_page.php:657
+#, fuzzy
+msgid "Hide from registered users"
+msgstr "Sakrij CAPTCHA za registrirane korisnike"
+
+#: includes/pro_banners.php:189 includes/settings_page.php:408
+msgid "Use image packages"
+msgstr ""
+
+#: includes/pro_banners.php:219 includes/settings_page.php:546
+#, fuzzy
+msgid "for"
+msgstr "četiri"
+
+#: includes/pro_banners.php:221
+msgid "seconds"
+msgstr ""
+
+#: includes/pro_banners.php:237
+msgid "Use several image packages at the same time"
+msgstr ""
+
+#: includes/package_loader.php:43
+msgid ""
+"Can not load images in to the \"uploads\" folder. Please, check your "
+"permissions"
+msgstr ""
+
+#: includes/package_loader.php:131
+msgid "Error during package uploading"
+msgstr ""
+
+#: includes/package_loader.php:138
+msgid "check your archive"
+msgstr ""
+
+#: includes/package_loader.php:140
+msgid "file format should be ZIP-archive"
+msgstr ""
+
+#: includes/package_loader.php:142
+msgid "file size should not exceed"
+msgstr ""
+
+#: includes/package_loader.php:153
+msgid "it is impossible to upload the archive to the server"
+msgstr ""
+
+#: includes/package_loader.php:165
+msgid "archive can not be unzipped"
+msgstr ""
+
+#: includes/package_loader.php:178
+msgid "MB"
+msgstr ""
+
+#: includes/package_loader.php:180
+msgid "KB"
+msgstr ""
+
+#: includes/package_loader.php:182
+msgid "Bytes"
+msgstr ""
+
+#: includes/package_loader.php:239
+msgid "have been updated or added to the database"
+msgstr ""
+
+#: includes/package_loader.php:346
+msgid "Archive is empty"
+msgstr ""
+
+#: includes/package_loader.php:694
+#, php-format
+msgid ""
+"Some settings of the package %s were set incorrectly. They have been skipped"
+msgstr ""
+
+#: includes/package_loader.php:697
+msgid "Wrong data"
+msgstr ""
+
+#: includes/helpers.php:30
+msgid "Please enter a CAPTCHA value."
+msgstr "Unesite CAPTCHA vrijednost."
+
+#: includes/helpers.php:31
+msgid "Please enter a valid CAPTCHA value."
+msgstr "Unesite valjanu CAPTCHA vrijednost."
+
+#: includes/helpers.php:32
+#, fuzzy
+msgid "Time limit is exhausted. Please enter a CAPTCHA value again."
+msgstr "Unesite CAPTCHA vrijednost."
+
+#: includes/helpers.php:33
+#, fuzzy
+msgid "Time limit is exhausted. Please reload the CAPTCHA."
+msgstr "Unesite CAPTCHA vrijednost."
+
+#: includes/helpers.php:34
+msgid "You are in the whitelist"
+msgstr ""
+
+#: includes/settings_page.php:46
+msgid "General Options"
+msgstr ""
+
+#: includes/settings_page.php:47
+#, fuzzy
+msgid "WordPress Login form"
+msgstr "Obrazac za prijavu"
+
+#: includes/settings_page.php:48
+#, fuzzy
+msgid "WordPress Registration form"
+msgstr "Obrazac za registraciju"
+
+#: includes/settings_page.php:49
+#, fuzzy
+msgid "WordPress Reset Password form"
+msgstr "Obrazac za izgubljenu lozinku"
+
+#: includes/settings_page.php:50
+#, fuzzy
+msgid "WordPress Comments form"
+msgstr "Obrazac za komentare"
+
+#: includes/settings_page.php:89
+#, fuzzy
+msgid "Buddypress Registration form"
+msgstr "Obrazac za registraciju"
+
+#: includes/settings_page.php:90
+#, fuzzy
+msgid "Buddypress Comments form"
+msgstr "Obrazac za komentare"
+
+#: includes/settings_page.php:91
+#, fuzzy
+msgid "Buddypress \"Create a Group\" form"
+msgstr "\"Stvori grupu \" oblik"
+
+#: includes/settings_page.php:92
+#, fuzzy
+msgid "WooCommerce Login form"
+msgstr "Obrazac za komentare"
+
+#: includes/settings_page.php:93
+#, fuzzy
+msgid "WooCommerce Register form"
+msgstr "Obrazac za registraciju"
+
+#: includes/settings_page.php:94
+#, fuzzy
+msgid "WooCommerce Lost Password form"
+msgstr "Obrazac za izgubljenu lozinku"
+
+#: includes/settings_page.php:95
+msgid "WooCommerce Checkout Billing form"
+msgstr ""
+
+#: includes/settings_page.php:145
+msgid "All plugin settings were restored."
+msgstr ""
+
+#: includes/settings_page.php:171
+msgid "Save Changes"
+msgstr "Spremi promjene"
+
+#: includes/settings_page.php:211 includes/settings_page.php:406
+#, fuzzy
+msgid "Arithmetic actions"
+msgstr "Aritmetičke operacije za CAPTCHA"
+
+#: includes/settings_page.php:212 includes/settings_page.php:407
+msgid "Complexity"
+msgstr ""
+
+#: includes/settings_page.php:221
+#, php-format
+msgid "\"%s\" option must not be fully disabled"
+msgstr ""
+
+#: includes/settings_page.php:235
+msgid "Text fields in the \"Notification messages\" option must not be empty"
+msgstr ""
+
+#: includes/settings_page.php:282
+msgid ""
+"In order to use images in the CAPTCHA, please select at least one of the "
+"items in the option \"Use image packages\". The \"Images\" checkbox in "
+"\"Complexity\" option has been disabled"
+msgstr ""
+
+#: includes/settings_page.php:291
+#, fuzzy
+msgid "Settings saved"
+msgstr "Opcije spremljene"
+
+#: includes/settings_page.php:404
+#, php-format
+msgid ""
+"With this option the CAPTCHA will be generated via %s into the form after "
+"the end of the page loading. In this case, the most of spam bots can't "
+"figure out the answer to the CAPTCHA automatically because they just can't "
+"get the CAPTCHA content"
+msgstr ""
+
+#: includes/settings_page.php:410
+msgid "Enlarge images on mouseover"
+msgstr ""
+
+#: includes/settings_page.php:411
+msgid "Show reload button"
+msgstr ""
+
+#: includes/settings_page.php:412
+#, fuzzy
+msgid "CAPTCHA title"
+msgstr "CAPTCHA razina složenosti"
+
+#: includes/settings_page.php:413
+msgid "Required symbol"
+msgstr "Obavezni simboli"
+
+#: includes/settings_page.php:414
+msgid "Show CAPTCHA after the end of the page loading"
+msgstr ""
+
+#: includes/settings_page.php:420
+msgid "Plus"
+msgstr "Plus (&#43;)"
+
+#: includes/settings_page.php:424
+msgid "Minus"
+msgstr "Minus"
+
+#: includes/settings_page.php:428
+#, fuzzy
+msgid "Multiplication"
+msgstr "Pomnoži (&times;)"
+
+#: includes/settings_page.php:434
+msgid "Numbers"
+msgstr "Brojevi"
+
+#: includes/settings_page.php:438
+msgid "Words"
+msgstr "Riječi"
+
+#: includes/settings_page.php:442
+msgid "Images"
+msgstr ""
+
+#: includes/settings_page.php:541
+msgid "Enable time limit"
+msgstr ""
+
+#: includes/settings_page.php:566
+#, fuzzy
+msgid "If the CAPTCHA field is empty"
+msgstr "Ako je CAPTCHA polje prazno"
+
+#: includes/settings_page.php:567
+#, fuzzy
+msgid "If the CAPTCHA is incorrect"
+msgstr "Ako je CAPTCHA pogrešna"
+
+#: includes/settings_page.php:568
+msgid "If the time limit is exhausted"
+msgstr ""
+
+#: includes/settings_page.php:571
+#, fuzzy
+msgid ""
+"If the time limit is exhausted (this message will be displayed above the "
+"CAPTCHA)"
+msgstr "Unesite CAPTCHA vrijednost."
+
+#: includes/settings_page.php:572
+msgid ""
+"If the user IP is added to the whitelist (this message will be displayed "
+"instead of the CAPTCHA)"
+msgstr ""
+
+#: includes/settings_page.php:577
+#, fuzzy
+msgid "Errors"
+msgstr "Poruke o pogreškama"
+
+#: includes/settings_page.php:578
+msgid ""
+"These messages will be displayed if the CAPTCHA answer has not passed the "
+"verification"
+msgstr ""
+
+#: includes/settings_page.php:581
+msgid "Info"
+msgstr ""
+
+#: includes/settings_page.php:582
+#, fuzzy
+msgid "These messages will be displayed inside of the CAPTCHA"
+msgstr "Unesite CAPTCHA vrijednost."
+
+#: includes/settings_page.php:587
+msgid "Notification messages"
+msgstr ""
+
+#: includes/settings_page.php:623
+msgid "update"
+msgstr ""
+
+#: includes/settings_page.php:624
+msgid "to the current version"
+msgstr ""
+
+#: includes/settings_page.php:631
+msgid "install"
+msgstr ""
+
+#: includes/settings_page.php:645
+msgid "You should"
+msgstr ""
+
+#: includes/settings_page.php:648
+msgid "to use this functionality"
+msgstr ""
+
+#: includes/settings_page.php:677
+msgid "This option is available only for network or for main blog"
+msgstr ""
+
+#: includes/settings_page.php:689
+msgid "Check off for adding the CAPTCHA to forms on their settings pages"
+msgstr ""
+
+#: includes/settings_page.php:783
+msgid ""
+"The image packages list is empty. Please restore default settings or re-"
+"install the plugin to fix this error"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Registration form"
+#~ msgstr "Obrazac za registraciju"
+
+#~ msgid "Comments form"
+#~ msgstr "Obrazac za komentare"
+
+#~ msgid "Plus (&#43;)"
+#~ msgstr "Plus (&#43;)"
+
+#~ msgid "Minus (&minus;)"
+#~ msgstr "Minus (&minus;)"
+
+#, fuzzy
+#~ msgid "Multiply"
+#~ msgstr "Pomnoži (&times;)"
+
+#~ msgid ""
+#~ "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+#~ msgstr ""
+#~ "Molimo odaberite jednu stavku u bloku aritmetike i složenosti za CAPTCHA"
+
+#, fuzzy
+#~ msgid "Please select one item in the block Enable image packages"
+#~ msgstr ""
+#~ "Molimo odaberite jednu stavku u bloku aritmetike i složenosti za CAPTCHA"
+
+#, fuzzy
+#~ msgid "Plugins"
+#~ msgstr "Stranica dodataka"
+
+#~ msgid "If you would like to add Captcha to a custom form, please see"
+#~ msgstr "Ako želite Captcha-u u prilagođenom obliku, molimo pogledajte"
+
+#, fuzzy
+#~ msgid "Hide CAPTCHA"
+#~ msgstr "Omogući CAPTCHA:"
+
+#~ msgid "Arithmetic actions for CAPTCHA"
+#~ msgstr "Aritmetičke operacije za CAPTCHA"
+
+#~ msgid "If you upgrade to Pro version all your settings will be saved."
+#~ msgstr "Ako nadogradite na Pro verziju sve postavke će se spremiti."
+
+#~ msgid "and"
+#~ msgstr "i"
+
+#~ msgid "Notice:"
+#~ msgstr "Obavijest:"
+
+#~ msgid ""
+#~ "The plugin's settings have been changed. In order to save them please "
+#~ "don't forget to click the 'Save Changes' button."
+#~ msgstr ""
+#~ "Postavke dodatka su promijenjene. Kako bi se postavke spremile ne "
+#~ "zaboravite kliknuti na \"Spremi promjene\" gumb."
+
+#~ msgid "Title for CAPTCHA in the form"
+#~ msgstr "Oznaka za CAPTCHA u obrascu"
 
 #~ msgid "Go"
 #~ msgstr "Idi"
@@ -538,12 +1249,6 @@ msgstr "Podrška"
 
 #~ msgid "Download contact form"
 #~ msgstr "Preuzmi kontakt formu"
-
-#~ msgid "Register form"
-#~ msgstr "Obrazac za registraciju"
-
-#~ msgid "Lost password form"
-#~ msgstr "Obrazac za izgubljenu lozinku"
 
 #~ msgid "powered by"
 #~ msgstr "powered by"
@@ -563,9 +1268,6 @@ msgstr "Podrška"
 
 #~ msgid "Back to the WordPress"
 #~ msgstr "Natrag na WordPress"
-
-#~ msgid "Plugins page"
-#~ msgstr "Stranica dodataka"
 
 #~ msgid "Wrong license key"
 #~ msgstr "Pogrešna licenca/ključ"

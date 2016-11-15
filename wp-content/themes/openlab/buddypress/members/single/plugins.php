@@ -10,7 +10,7 @@
     ?>
 
     <h1 class="entry-title mol-title"><?php bp_displayed_user_fullname() ?>'s Profile</h1>
-
+    
     <?php echo openlab_submenu_markup('invitations'); ?>
 
     <div id="item-body" role="main">

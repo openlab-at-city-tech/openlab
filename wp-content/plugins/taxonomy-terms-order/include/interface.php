@@ -35,7 +35,7 @@
             ?>
             <div class="wrap">
                 <div class="icon32" id="icon-edit"><br></div>
-                <h2><?php _e( "Taxonomy Order", 'tto' ) ?></h2>
+                <h2><?php _e( "Taxonomy Order", 'taxonomy-terms-order' ) ?></h2>
 
                 <?php tto_info_box() ?>
                 
@@ -43,7 +43,7 @@
                 
                 <noscript>
                     <div class="error message">
-                        <p><?php _e( "This plugin can't work without javascript, because it's use drag and drop and AJAX.", 'tto' ) ?></p>
+                        <p><?php _e( "This plugin can't work without javascript, because it's use drag and drop and AJAX.", 'taxonomy-terms-order' ) ?></p>
                     </div>
                 </noscript>
 
@@ -97,11 +97,11 @@
                 
                             ?>
                             
-                            <h2 class="subtitle"><?php echo ucfirst($post_type_data->labels->name) ?> <?php _e( "Taxonomies", 'tto' ) ?></h2>
+                            <h2 class="subtitle"><?php echo ucfirst($post_type_data->labels->name) ?> <?php _e( "Taxonomies", 'taxonomy-terms-order' ) ?></h2>
                             <table cellspacing="0" class="wp-list-taxonomy">
                                 <thead>
                                 <tr>
-                                    <th style="" class="column-cb check-column" id="cb" scope="col">&nbsp;</th><th style="" class="" id="author" scope="col"><?php _e( "Taxonomy Title", 'tto' ) ?></th><th style="" class="manage-column" id="categories" scope="col"><?php _e( "Total  Posts", 'tto' ) ?></th>    </tr>
+                                    <th style="" class="column-cb check-column" id="cb" scope="col">&nbsp;</th><th style="" class="" id="author" scope="col"><?php _e( "Taxonomy Title", 'taxonomy-terms-order' ) ?></th><th style="" class="manage-column" id="categories" scope="col"><?php _e( "Total Posts", 'taxonomy-terms-order' ) ?></th>    </tr>
                                 </thead>
 
    
@@ -151,7 +151,7 @@
                     
                     <div class="alignleft actions">
                         <p class="submit">
-                            <a href="javascript:;" class="save-order button-primary"><?php _e( "Update", 'tto' ) ?></a>
+                            <a href="javascript:;" class="save-order button-primary"><?php _e( "Update", 'taxonomy-terms-order' ) ?></a>
                         </p>
                     </div>
                     
@@ -200,7 +200,7 @@
                                 var serialize_data = serialize(mySortable);
                                                                                             
                                 jQuery.post( ajaxurl, { action:'update-taxonomy-order', order: serialize_data, taxonomy : '<?php echo  $taxonomy ?>' }, function() {
-                                    jQuery("#ajax-response").html('<div class="message updated fade"><p><?php _e( "Items Order Updated", 'tto' ) ?></p></div>');
+                                    jQuery("#ajax-response").html('<div class="message updated fade"><p><?php _e( "Items Order Updated", 'taxonomy-terms-order' ) ?></p></div>');
                                     jQuery("#ajax-response div").delay(3000).hide("slow");
                                 });
                             });

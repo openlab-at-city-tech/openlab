@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.5.0
  *
- * @uses bp_get_settings_slug()
  */
 function bp_settings_slug() {
 	echo bp_get_settings_slug();
@@ -44,7 +43,6 @@ function bp_settings_slug() {
  *
  * @since 1.5.0
  *
- * @uses bp_get_settings_root_slug()
  */
 function bp_settings_root_slug() {
 	echo bp_get_settings_root_slug();
@@ -88,12 +86,15 @@ function bp_settings_pending_email_notice() {
 
 	<div id="message" class="bp-template-notice error">
 		<p><?php printf(
-			__( 'There is a pending change of your email address to %1$s.<br />Check your email (%2$s) for the verification link. <a href="%3$s">Cancel</a>', 'buddypress' ),
-			'<code>' . $pending_email['newemail'] . '</code>',
-			'<code>' . $pending_email['newemail'] . '</code>',
+			__( 'There is a pending change of your email address to %s.', 'buddypress' ),
+			'<code>' . esc_html( $pending_email['newemail'] ) . '</code>'
+		); ?>
+		<br />
+		<?php printf(
+			__( 'Check your email (%1$s) for the verification link, or <a href="%2$s">cancel the pending change</a>.', 'buddypress' ),
+			'<code>' . esc_html( bp_get_displayed_user_email() ) . '</code>',
 			esc_url( bp_displayed_user_domain() . bp_get_settings_slug() . '/?dismiss_email_change=1' )
-		);
-		?></p>
+		); ?></p>
 	</div>
 
 	<?php

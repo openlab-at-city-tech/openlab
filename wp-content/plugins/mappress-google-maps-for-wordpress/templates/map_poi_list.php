@@ -1,10 +1,4 @@
 <table style='width:100%'>
-	<thead>
-		<tr>
-			<th></th>
-			<th><?php _e('Location', 'mappress');?></th>
-		</tr>
-	</thead>
 	<tbody>
 	<?php foreach($map->pois as $poi) : ?>
 		<?php if ($poi->type == 'kml') continue; ?>

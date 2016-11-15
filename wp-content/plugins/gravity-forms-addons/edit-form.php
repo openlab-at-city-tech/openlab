@@ -5,7 +5,7 @@ add_action('init', array('GFDirectory_EditForm', 'initialize'));
 class GFDirectory_EditForm {
 
 	static public function initialize() {
-		$GFDirectory_EditForm = new GFDirectory_EditForm();
+		new self;
 	}
 
 	function __construct() {
@@ -16,10 +16,16 @@ class GFDirectory_EditForm {
 
 			add_filter('admin_head', array(&$this,'directory_admin_head'));
 
-			if( isset($_REQUEST['id'] ) ) {
+			if( isset($_REQUEST['id'] ) || self::is_gravity_page('gf_entries') ) {
 				add_filter('gform_tooltips', array(&$this, 'directory_tooltips')); //Filter to add a new tooltip
 				add_action("gform_editor_js", array(&$this, "editor_script")); //Action to inject supporting script to the form editor page
-				add_action("admin_head", array(&$this, "toolbar_links")); //Action to inject supporting script to the form editor page
+
+				// No need to add via JS any more.
+				if( class_exists( 'GFForms' ) && version_compare( GFForms::$version, '2.0', '>=' ) ) {
+					add_filter( 'gform_toolbar_menu', array( $this, 'toolbar_menu_item' ), 10, 2 );
+				} else {
+					add_action("admin_head", array(&$this, "toolbar_links")); //Action to inject supporting script to the form editor page
+				}
 				add_action("gform_field_advanced_settings", array(&$this,"use_as_entry_link_settings"), 10, 2);
 				add_filter("gform_add_field_buttons", array(&$this,"add_field_buttons"));
 				add_action('gform_editor_js_set_default_values', array(&$this,'directory_add_default_values'));
@@ -100,7 +106,7 @@ class GFDirectory_EditForm {
 
 		// Entries screen shows first form's entries by default, if not specified
 		if( isset( $_GET['id'] ) ) {
-			$formID = $_GET['id'];
+			$formID = intval( $_GET['id'] );
 		} else {
 			if( class_exists('RGFormsModel') ) {
 				$forms = RGFormsModel::get_forms(NULL, "title");
@@ -108,7 +114,13 @@ class GFDirectory_EditForm {
 			}
 		}
 
-		if( !( self::is_gravity_page('gf_entries') && isset( $formID ) && !self::is_gravity_page('gf_edit_forms') ) ) { return; }
+		if( !( self::is_gravity_page('gf_entries') && !self::is_gravity_page('gf_edit_forms') ) ) {
+			return;
+		}
+
+		if( ! isset( $formID ) ) {
+			return;
+		}
 
 		// Don't display on single entry view.
 		if( !empty( $_GET['view'] ) && $_GET['view'] === 'entry' ) {
@@ -248,7 +260,7 @@ class GFDirectory_EditForm {
 		    	}
 
 				// Add the header column
-		    	$('thead th.check-column:eq(1), tfoot th.check-column:eq(1)').after('<th class="manage-column column-cb check-column"><a href="<?php echo esc_url( add_query_arg(array('sort' => $_gform_directory_approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" style="text-align:center; margin:0 auto; display:block;" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
+		    	$('thead .column-is_starred, tfoot .column-is_starred').after('<th class="manage-column column-is_starred sortable"><a href="<?php echo esc_url( add_query_arg(array('sort' => $_gform_directory_approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
 
 				// Add to each row
 		    	$('tbody td:has(img[src*="star"]), tbody th:has(img[src*="star"])').after('<td><a href="#" class="toggleApproved" title="'+approveTitle+'">X</a></td>');
@@ -323,12 +335,51 @@ class GFDirectory_EditForm {
 		<?php endif;
 	}
 
-	public function toolbar_links() {
+	/**
+     * Add "Directory Columns" item to GF toolbar in GF 2.0+
+     *
+	 * @param array $menu_items Menu items in GF toolbar
+	 * @param int $form_id Form ID
+	 *
+	 * @return array
+	 */
+	function toolbar_menu_item( $menu_items = array(), $form_id = 0 ) {
+
 		wp_enqueue_style( 'thickbox' );
+
+		$entries_capabilities = array(
+			'gravityforms_view_entries',
+			'gravityforms_edit_entries',
+			'gravityforms_delete_entries'
+		);
+
+		$menu_items['directory_columns'] = array(
+			'label'        => __('Directory Columns', 'gravity-forms-addons'),
+			'icon'         => '<i class="dashicons dashicons-welcome-widgets-menus" style="line-height:17px"></i>',
+			'title'        => __('Modify Gravity Forms Directory Columns', 'gravity-forms-addons'),
+			'url'          => sprintf( '?gf_page=directory_columns&id=%d&add=entry&TB_iframe=true&height=600&width=700', $form_id ),
+			'menu_class'   => 'gf_form_toolbar_directory',
+			'link_class'   => 'thickbox',
+			'capabilities' => $entries_capabilities,
+			'priority'     => 200,
+		);
+
+		return $menu_items;
+	}
+
+	/**
+	* Add "Directory Columns" link to GF toolbar. No longer used after 2.0
+    * @see toolbar_menu_item
+    * @return void
+	*/
+	public function toolbar_links() {
+
+		wp_enqueue_style( 'thickbox' );
+		
 	?>
 	    <script type='text/javascript'>
 	    	jQuery(document).ready(function($) {
-	    		var url = '<?php echo add_query_arg(array('gf_page' => 'directory_columns', 'id' => @$_GET['id'], 'TB_iframe' => 'true', 'height' => 600, 'width' => 700), admin_url()); ?>';
+	    		var url = '<?php echo esc_url_raw( add_query_arg(array('gf_page' => 'directory_columns', 'id' => intval( $_GET['id'] ), 'TB_iframe' => 'true', 'height' => 600, 'width' => 700), admin_url()) ); ?>';
 	    		$link = $('<li class="gf_form_toolbar_preview gf_form_toolbar_directory" id="gf_form_toolbar_directory"><a href="'+url+'" class="thickbox" title="<?php echo esc_js(__('Modify Gravity Forms Directory Columns', 'gravity-forms-addons')); ?>"><i class="dashicons dashicons-welcome-widgets-menus" style="line-height:17px"></i> <?php echo esc_js( __('Directory Columns', 'gravity-forms-addons')); ?></a></li>');
 	    		$('#gf_form_toolbar_links').append($link);
 	    	});

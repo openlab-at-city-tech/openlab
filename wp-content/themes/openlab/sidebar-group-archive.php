@@ -65,8 +65,22 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     } else {
         $dept_color = "active";
         $display_option_dept = ucwords(str_replace('-', ' ', $_GET['department']));
-        $display_option_dept = str_replace('And', '&amp;', $display_option_dept);
+        $display_option_dept = str_replace('And', '&', $display_option_dept);
         $option_value_dept = $_GET['department'];
+    }
+
+    //categories
+    if (empty($_GET['cat'])) {
+        $display_option_bpcgc = "Select Category";
+        $option_value_bpcgc = "";
+    } else if ($_GET['cat'] == 'cat_all') {
+        $display_option_bpcgc = "All";
+        $option_value_bpcgc = "cat_all";
+    } else {
+        $dept_color = "active";
+        $display_option_bpcgc = ucwords(str_replace('-', ' ', $_GET['cat']));
+        $display_option_bpcgc = str_replace('And', '&', $display_option_bpcgc);
+        $option_value_bpcgc = $_GET['cat'];
     }
 
 //semesters
@@ -149,22 +163,45 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         <p>Narrow down your search using the filters or search box below.</p>
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
             <div id="sidebarCustomSelect" class="custom-select-parent">
-                <div class="custom-select">
-                    <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select">
+                <div class="custom-select" id="schoolSelect">
+                    <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
-                        <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All</option>
+                        <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
                         <option value='tech' <?php selected('tech', $option_value_school) ?>>Technology &amp; Design</option>
                         <option value='studies' <?php selected('studies', $option_value_school) ?>>Professional Studies</option>
-                        <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts &amp; Sciences</option>
+                        <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts & Sciences</option>
                     </select>
                 </div>
 
                 <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
                 <div class="custom-select">
-                    <select name="department" class="last-select <?php echo $dept_color; ?>-text" id="dept-select">
+                    <select name="department" class="last-select processing <?php echo $dept_color; ?>-text" id="dept-select" <?php disabled('', $option_value_school) ?>>
                         <?php echo openlab_return_course_list($option_value_school, $option_value_dept); ?>
                     </select>
                 </div>
+
+                <?php if (function_exists('bpcgc_get_terms_by_group_type')): ?>
+                    <?php if ($group_type === 'project' || $group_type === 'club'): ?>
+
+                        <?php $group_terms = bpcgc_get_terms_by_group_type($group_type); ?>
+
+                        <?php if ($group_terms && !empty($group_terms)): ?>
+
+                            <div class="custom-select">
+                                <select name="cat" class="last-select <?php echo $bpcgc_color; ?>-text" id="bp-group-categories-select">
+                                    <option value="" <?php selected('', $option_value_bpcgc) ?>>Select Category</option>
+                                    <option value='cat_all' <?php selected('cat_all', $option_value_bpcgc) ?>>All</option>
+                                    <?php foreach ($group_terms as $term) : ?>
+                                        <option value="<?php echo $term->slug ?>" <?php selected($option_value_bpcgc, $term->slug) ?>><?php echo $term->name ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                <?php endif;
+                ?>
 
                 <?php // @todo figure out a way to make this dynamic ?>
                 <?php if ($group_type == 'course'): ?>
@@ -208,7 +245,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
             <h3 class="bold font-size font-14">Search</h3>
             <form method="get" class="form-inline btn-combo" role="form">
                 <div class="form-group">
-                    <input id="search-terms" class="form-control" type="text" name="search" placeholder="Enter keyword" /><button class="btn btn-primary top-align" id="search-submit" type="submit"><i class="fa fa-search"></i></button>
+                    <input id="search-terms" class="form-control" type="text" name="search" placeholder="Enter keyword" /><label class="sr-only" for="search-terms">Enter keyword</label><button class="btn btn-primary top-align" id="search-submit" type="submit"><i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search</span></button>
                 </div>
             </form>
             <div class="clearfloat"></div>

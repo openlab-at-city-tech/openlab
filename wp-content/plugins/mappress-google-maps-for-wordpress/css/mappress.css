@@ -114,8 +114,13 @@
 /* Override common theme / user agent styles that interfere */
 .mapp-iw * {
 	color: black;
+	line-height: normal;				/* To support wpautop */
 	margin: 0px !important;
 	padding: 0px !important;
+}
+
+.mapp-iw p {
+	margin: 5px 0 5px 0 !important;		/* To support wpautop */
 }
 
 .mapp-iw .mapp-title {
@@ -126,6 +131,8 @@
 	padding-right: 10px !important;     /* important is used here because otherwise .mapp-canvas img setting will take priority */
 	vertical-align: top;
 	float: left;
+	width: 32px ;
+	height: 32px;
 }
 
 .mapp-iw img {

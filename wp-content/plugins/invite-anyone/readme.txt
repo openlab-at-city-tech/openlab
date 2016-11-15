@@ -2,9 +2,9 @@
 Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
-Requires at least: WP 3.2, BuddyPress 1.2.9
-Tested up to: WP 4.3.1, BuddyPress 2.3.3
-Stable tag: 1.3.8
+Requires at least: WP 3.2, BuddyPress 1.8
+Tested up to: WP 4.6, BuddyPress 2.6
+Stable tag: 1.3.12
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -32,6 +32,7 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 
 * Belarussian: Alexander Ovsov (<a href="http://webhostinggeeks.com/science">Web Geek Science</a>)
 * Brazilian Portuguese: Celso Bessa
+* Catalan: Mònica Grau and Toni Ginard
 * Danish: Mort3n
 * Dutch: Jesper Popma, Tim de Hoog
 * French: Guillaume Coulon, Nicolas Mollet
@@ -42,13 +43,35 @@ Invite Anyone features optional integration with CloudSponge http://cloudsponge.
 * Russian: Jettochkin, Roman Leonov
 * Serbo-Croatian: Anja Skrba
 * Spanish: Mauricio Camayo, Gregor Gimmy
-* Swedish: Alexander Berthelsen
+* Swedish: Alexander Berthelsen, Jan Anderson
 * Ukrainian: <a href="http://www.coupofy.com/">Ivanka</a>
 
 Additional details about the plugin can be found in the following languages:
 * Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a>
 
 == Changelog ==
+
+= 1.3.12 =
+* Better compatibility with HTTPS setups
+* Fixed compatibility with WP < 4.0
+* Fixed CloudSponge integration on the front-end
+
+= 1.3.11 =
+* Improvements to CloudSponge signup process
+
+= 1.3.10 =
+* Fixed bug that caused irregularities when searching for banned users to invite to group
+* Added Catalan translation
+* Updated CloudSponge integration to use support new account key format
+* Improved compatibility with PHP 7
+* Fixed PHP notice when doing LIKE query
+
+= 1.3.9 =
+* Don't make the Subject input a textarea if it's not editable
+* More selective cookie deletion, for improved cache support
+* Sort autocomplete results by display name rather than user_login
+* Updated Swedish translation
+* Ensure that group invitations go out properly during group creation
 
 = 1.3.8 =
 * Improved responsive design on Sent Invites and Send Invites screens

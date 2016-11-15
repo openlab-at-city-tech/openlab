@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,6 +40,17 @@ abstract class QM_Collector {
 
 	}
 
+	protected function maybe_log_dupe( $sql, $i ) {
+
+		$sql = str_replace( array( "\r\n", "\r", "\n" ), ' ', $sql );
+		$sql = str_replace( array( "\t", '`' ), '', $sql );
+		$sql = preg_replace( '/[ ]+/', ' ', $sql );
+		$sql = trim( $sql );
+
+		$this->data['dupes'][ $sql ][] = $i;
+
+	}
+
 	protected function log_component( $component, $ltime, $type ) {
 
 		if ( !isset( $this->data['component_times'][$component->name] ) ) {
@@ -69,7 +80,8 @@ abstract class QM_Collector {
 
 	public static function format_bool_constant( $constant ) {
 		if ( !defined( $constant ) ) {
-			return 'undefined';
+			/* translators: Undefined PHP constant */
+			return __( 'undefined', 'query-monitor' );
 		} else if ( !constant( $constant ) ) {
 			return 'false';
 		} else {

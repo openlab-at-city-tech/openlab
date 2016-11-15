@@ -17,12 +17,14 @@ function openlab_hide_plugins( $plugins ) {
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
+		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'webwork/webwork.php',
 	);
 
 	if ( ! is_super_admin() ) {

@@ -227,23 +227,23 @@ msgstr ""
 msgid "Date Modified"
 msgstr ""
 
-#: includes/class-admin-main.php:565 includes/class-project-organizer.php:68
+#: includes/class-admin-main.php:566 includes/class-project-organizer.php:68
 msgid "Project Details"
 msgstr ""
 
-#: includes/class-admin-main.php:566
+#: includes/class-admin-main.php:567
 msgid "Manage Parts"
 msgstr ""
 
-#: includes/class-admin-main.php:567 includes/class-project-organizer.php:70
+#: includes/class-admin-main.php:568 includes/class-project-organizer.php:70
 msgid "Delete Project"
 msgstr ""
 
-#: includes/class-admin-main.php:613
+#: includes/class-admin-main.php:614
 msgid "You haven't created any projects yet."
 msgstr ""
 
-#: includes/class-admin-main.php:615
+#: includes/class-admin-main.php:616
 msgid "Start a new project."
 msgstr ""
 

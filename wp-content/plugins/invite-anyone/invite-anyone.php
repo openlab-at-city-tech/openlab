@@ -3,15 +3,15 @@
 Plugin Name: Invite Anyone
 Plugin URI: http://teleogistic.net/code/buddypress/invite-anyone/
 Description: Allows group admins to invite any member of their BuddyPress community to a group or to the site
-Version: 1.3.8
+Version: 1.3.12
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
 Text Domain: invite-anyone
 Domain Path: /languages
 */
 
-define( 'BP_INVITE_ANYONE_VER', '1.3.8' );
-define( 'BP_INVITE_ANYONE_DB_VER', '1.3.8' );
+define( 'BP_INVITE_ANYONE_VER', '1.3.12' );
+define( 'BP_INVITE_ANYONE_DB_VER', '1.3.12' );
 
 if ( !defined( 'BP_INVITE_ANYONE_SLUG' ) )
 	define( 'BP_INVITE_ANYONE_SLUG', 'invite-anyone' );
@@ -49,31 +49,32 @@ function invite_anyone_locale_init() {
 }
 add_action( 'plugins_loaded', 'invite_anyone_locale_init' );
 
+/**
+ * Populate options on plugin activation.
+ */
 function invite_anyone_activation() {
-	if ( !$iaoptions = get_option( 'invite_anyone' ) )
+	if ( ! $iaoptions = get_option( 'invite_anyone' ) )
 		$iaoptions = array();
 
-	if ( !$iaoptions['max_invites'] )
+	if ( ! isset( $iaoptions['max_invites'] ) )
 		$iaoptions['max_invites'] = 5;
 
-	if ( !$iaoptions['allow_email_invitations'] )
+	if ( ! isset( $iaoptions['allow_email_invitations'] ) )
 		$iaoptions['allow_email_invitations'] = 'all';
 
-	if ( !$iaoptions['message_is_customizable'] )
+	if ( ! isset( $iaoptions['message_is_customizable'] ) )
 		$iaoptions['message_is_customizable'] = 'yes';
 
-	if ( !$iaoptions['subject_is_customizable'] )
+	if ( ! isset( $iaoptions['subject_is_customizable'] ) )
 		$iaoptions['subject_is_customizable'] = 'no';
 
-	if ( !$iaoptions['can_send_group_invites_email'] )
+	if ( ! isset( $iaoptions['can_send_group_invites_email'] ) )
 		$iaoptions['can_send_group_invites_email'] = 'yes';
 
-	if ( !$iaoptions['bypass_registration_lock'] )
+	if ( ! isset( $iaoptions['bypass_registration_lock'] ) )
 		$iaoptions['bypass_registration_lock'] = 'yes';
 
 	$iaoptions['version'] = BP_INVITE_ANYONE_VER;
 
 	update_option( 'invite_anyone', $iaoptions );
 }
-
-?>

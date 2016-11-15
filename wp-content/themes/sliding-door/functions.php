@@ -1,7 +1,6 @@
 <?php
 /**
  * slidingdoor functions and definitions
- *
  * Sets up the theme and provides some helper functions. Some helper functions
  * are used in the theme as custom template tags. Others are attached to action and
  * filter hooks in WordPress to change core functionality.
@@ -23,7 +22,7 @@
  * wait until setting up the child theme:
  *
  * <code>
- * add_action( 'after_setup_theme', 'my_child_theme_setup' );
+ * add_action( 'after_setup_theme', 'my_child_theme_setup' ); 
  * function my_child_theme_setup() {
  *     // We are providing our own filter for excerpt_length (or using the unfiltered value)
  *     remove_filter( 'excerpt_length', 'slidingdoor_excerpt_length' );
@@ -45,12 +44,24 @@ require_once ( get_template_directory() . '/theme-options.php' );
 
 
 
+	/*
+	 * Let WordPress manage the document title.
+	 * By adding theme support, we declare that this theme does not use a
+	 * hard-coded <title> tag in the document head, and expect WordPress to
+	 * provide it for us.
+	 */
+	add_theme_support( 'title-tag' );
+	
+	
+		// Change this to your theme text domain, used for internationalising strings
+	$theme_text_domain = 'slidingdoor';
+	
 /**
  * Include the TGM_Plugin_Activation class.
  */
 require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
 
-add_action( 'slidingdoor_register', 'my_theme_register_required_plugins' );
+add_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
 /**
  * Register the required plugins for this theme.
  *
@@ -80,49 +91,109 @@ function my_theme_register_required_plugins() {
 
 	);
 
-	// Change this to your theme text domain, used for internationalising strings
-	$theme_text_domain = 'slidingdoor';
 
-	/**
+
+	/*
 	 * Array of configuration settings. Amend each line as needed.
-	 * If you want the default strings to be available under your own theme domain,
-	 * leave the strings uncommented.
-	 * Some of the strings are added into a sprintf, so see the comments at the
-	 * end of each line for what each argument will be.
+	 *
+	 * TGMPA will start providing localized text strings soon. If you already have translations of our standard
+	 * strings available, please help us make TGMPA even better by giving us access to these translations or by
+	 * sending in a pull-request with .po file(s) with the translations.
+	 *
+	 * Only uncomment the strings in the config array if you want to customize the strings.
 	 */
 	$config = array(
-		'domain'       		=> $theme_text_domain,         	// Text domain - likely want to be the same as your theme.
-		'default_path' 		=> '',                         	// Default absolute path to pre-packaged plugins
-		'parent_menu_slug' 	=> 'themes.php', 				// Default parent menu slug
-		'parent_url_slug' 	=> 'themes.php', 				// Default parent URL slug
-		'menu'         		=> 'install-required-plugins', 	// Menu slug
-		'has_notices'      	=> true,                       	// Show admin notices or not
-		'is_automatic'    	=> false,					   	// Automatically activate plugins after installation or not
-		'message' 			=> '',							// Message to output right before the plugins table
-		'strings'      		=> array(
-			'page_title'                       			=> __( 'Install Required Plugins', $theme_text_domain ),
-			'menu_title'                       			=> __( 'Install Plugins', $theme_text_domain ),
-			'installing'                       			=> __( 'Installing Plugin: %s', $theme_text_domain ), // %1$s = plugin name
-			'oops'                             			=> __( 'Something went wrong with the plugin API.', $theme_text_domain ),
-			'notice_can_install_required'     			=> _n_noop( 'This theme requires the following plugin: %1$s.', 'This theme requires the following plugins: %1$s.' ), // %1$s = plugin name(s)
-			'notice_can_install_recommended'			=> _n_noop( 'This theme recommends the following plugin: %1$s.', 'This theme recommends the following plugins: %1$s.' ), // %1$s = plugin name(s)
-			'notice_cannot_install'  					=> _n_noop( 'Sorry, but you do not have the correct permissions to install the %s plugin. Contact the administrator of this site for help on getting the plugin installed.', 'Sorry, but you do not have the correct permissions to install the %s plugins. Contact the administrator of this site for help on getting the plugins installed.' ), // %1$s = plugin name(s)
-			'notice_can_activate_required'    			=> _n_noop( 'The following required plugin is currently inactive: %1$s.', 'The following required plugins are currently inactive: %1$s.' ), // %1$s = plugin name(s)
-			'notice_can_activate_recommended'			=> _n_noop( 'The following recommended plugin is currently inactive: %1$s.', 'The following recommended plugins are currently inactive: %1$s.' ), // %1$s = plugin name(s)
-			'notice_cannot_activate' 					=> _n_noop( 'Sorry, but you do not have the correct permissions to activate the %s plugin. Contact the administrator of this site for help on getting the plugin activated.', 'Sorry, but you do not have the correct permissions to activate the %s plugins. Contact the administrator of this site for help on getting the plugins activated.' ), // %1$s = plugin name(s)
-			'notice_ask_to_update' 						=> _n_noop( 'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s.', 'The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s.' ), // %1$s = plugin name(s)
-			'notice_cannot_update' 						=> _n_noop( 'Sorry, but you do not have the correct permissions to update the %s plugin. Contact the administrator of this site for help on getting the plugin updated.', 'Sorry, but you do not have the correct permissions to update the %s plugins. Contact the administrator of this site for help on getting the plugins updated.' ), // %1$s = plugin name(s)
-			'install_link' 					  			=> _n_noop( 'Begin installing plugin', 'Begin installing plugins' ),
-			'activate_link' 				  			=> _n_noop( 'Activate installed plugin', 'Activate installed plugins' ),
-			'return'                           			=> __( 'Return to Required Plugins Installer', $theme_text_domain ),
-			'plugin_activated'                 			=> __( 'Plugin activated successfully.', $theme_text_domain ),
-			'complete' 									=> __( 'All plugins installed and activated successfully. %s', $theme_text_domain ), // %1$s = dashboard link
-			'nag_type'									=> 'updated' // Determines admin notice type - can only be 'updated' or 'error'
-		)
+		'id'           => 'tgmpa',                 // Unique ID for hashing notices for multiple instances of TGMPA.
+		'default_path' => '',                      // Default absolute path to bundled plugins.
+		'menu'         => 'tgmpa-install-plugins', // Menu slug.
+		'parent_slug'  => 'themes.php',            // Parent menu slug.
+		'capability'   => 'edit_theme_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
+		'has_notices'  => true,                    // Show admin notices or not.
+		'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
+		'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
+		'is_automatic' => false,                   // Automatically activate plugins after installation or not.
+		'message'      => '',                      // Message to output right before the plugins table.
+
+		/*
+		'strings'      => array(
+			'page_title'                      => __( 'Install Required Plugins', 'theme-slug' ),
+			'menu_title'                      => __( 'Install Plugins', 'theme-slug' ),
+			'installing'                      => __( 'Installing Plugin: %s', 'theme-slug' ), // %s = plugin name.
+			'oops'                            => __( 'Something went wrong with the plugin API.', 'theme-slug' ),
+			'notice_can_install_required'     => _n_noop(
+				'This theme requires the following plugin: %1$s.',
+				'This theme requires the following plugins: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_can_install_recommended'  => _n_noop(
+				'This theme recommends the following plugin: %1$s.',
+				'This theme recommends the following plugins: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_cannot_install'           => _n_noop(
+				'Sorry, but you do not have the correct permissions to install the %1$s plugin.',
+				'Sorry, but you do not have the correct permissions to install the %1$s plugins.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_ask_to_update'            => _n_noop(
+				'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s.',
+				'The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_ask_to_update_maybe'      => _n_noop(
+				'There is an update available for: %1$s.',
+				'There are updates available for the following plugins: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_cannot_update'            => _n_noop(
+				'Sorry, but you do not have the correct permissions to update the %1$s plugin.',
+				'Sorry, but you do not have the correct permissions to update the %1$s plugins.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_can_activate_required'    => _n_noop(
+				'The following required plugin is currently inactive: %1$s.',
+				'The following required plugins are currently inactive: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_can_activate_recommended' => _n_noop(
+				'The following recommended plugin is currently inactive: %1$s.',
+				'The following recommended plugins are currently inactive: %1$s.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'notice_cannot_activate'          => _n_noop(
+				'Sorry, but you do not have the correct permissions to activate the %1$s plugin.',
+				'Sorry, but you do not have the correct permissions to activate the %1$s plugins.',
+				'theme-slug'
+			), // %1$s = plugin name(s).
+			'install_link'                    => _n_noop(
+				'Begin installing plugin',
+				'Begin installing plugins',
+				'theme-slug'
+			),
+			'update_link' 					  => _n_noop(
+				'Begin updating plugin',
+				'Begin updating plugins',
+				'theme-slug'
+			),
+			'activate_link'                   => _n_noop(
+				'Begin activating plugin',
+				'Begin activating plugins',
+				'theme-slug'
+			),
+			'return'                          => __( 'Return to Required Plugins Installer', 'theme-slug' ),
+			'plugin_activated'                => __( 'Plugin activated successfully.', 'theme-slug' ),
+			'activated_successfully'          => __( 'The following plugin was activated successfully:', 'theme-slug' ),
+			'plugin_already_active'           => __( 'No action taken. Plugin %1$s was already active.', 'theme-slug' ),  // %1$s = plugin name(s).
+			'plugin_needs_higher_version'     => __( 'Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin.', 'theme-slug' ),  // %1$s = plugin name(s).
+			'complete'                        => __( 'All plugins installed and activated successfully. %1$s', 'theme-slug' ), // %s = dashboard link.
+			'contact_admin'                   => __( 'Please contact the administrator of this site for help.', 'tgmpa' ),
+
+			'nag_type'                        => 'updated', // Determines admin notice type - can only be 'updated', 'update-nag' or 'error'.
+		),
+		*/
 	);
 
-	slidingdoor( $plugins, $config );
-
+	tgmpa( $plugins, $config );
 }
 
 
@@ -184,12 +255,9 @@ function slidingdoor_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'slidingdoor', TEMPLATEPATH . '/languages' );
+	load_theme_textdomain( 'slidingdoor', get_template_directory() . '/languages' );
 
-	$locale = get_locale();
-	$locale_file = TEMPLATEPATH . "/languages/$locale.php";
-	if ( is_readable( $locale_file ) )
-		require_once( $locale_file );
+
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
@@ -207,20 +275,13 @@ function slidingdoor_setup() {
 endif;
 
 
-// Get only the image url link by http://blogcastor.com
-function get_the_post_thumbnail_url( $post_id = NULL ) {
-    global $id;
-    $post_id = ( NULL === $post_id ) ? $id : $post_id;
-    $src = wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'full');
-    $src = $src[0];
-    return $src;
-}
+
 
 class My_Walker extends Walker_Nav_Menu
 {
 var $item_count = 0;
 
-function end_el(&$output, $item, $depth) {
+function end_el(&$output, $item, $depth=0, $args=array(), $id=0) {
 		$output .= "";
 	}
 	
@@ -231,7 +292,7 @@ function end_el(&$output, $item, $depth) {
 	 * @param int $current_page Menu item ID.
 	 * @param object $args
 	 */
-    function start_el(&$output, $item, $depth, $args) {
+    function start_el(&$output, $item, $depth=0, $args=array(), $id=0) {
         global $wp_query,$item_count;
         $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
 
@@ -245,7 +306,7 @@ function end_el(&$output, $item, $depth) {
 			$thumbnailid = (int)$item->object_id;
 			$thumbnail = get_the_post_thumbnail_url( $thumbnailid );
 			} else {
-			$thumbnail = 'http://mac-host.com/slidingdoor/slidingdoor.jpg';
+		$thumbnail =get_template_directory_uri()."/images/slidingdoor.jpg";
 			}
 		
         $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item ) );
@@ -262,14 +323,14 @@ function end_el(&$output, $item, $depth) {
  		$item_output .= "</li>\n";
 
 
-        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth = 0 , $args=array(), $id = 0 );
         }
         if($item_count == 6){
 			if(isset($item->object_id)) {
 			$thumbnailid = (int)$item->object_id;
 			$thumbnail = get_the_post_thumbnail_url( $thumbnailid );
 			} else {
-			$thumbnail = 'http://mac-host.com/slidingdoor/slidingdoor.jpg';
+			$thumbnail =get_template_directory_uri()."/images/slidingdoor.jpg";
 			}
 		
          $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item ) );
@@ -286,7 +347,7 @@ function end_el(&$output, $item, $depth) {
  		$item_output .= "</li>\n";
 
 
-        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth = 0 , $args=array(), $id = 0 );
         }
 
     $item_count ++;
@@ -295,7 +356,7 @@ function end_el(&$output, $item, $depth) {
 
 function no_sliding_menu(){
  $blog_url = site_url() ;
- $theme_url=get_bloginfo('template_url');
+ $theme_url=get_template_directory_uri();
 echo "<ul>
 			<li class=\"bk0\"><a href=\"http://mac-host.com/support\" style=\"background: url('".$theme_url."/imagemenu/images/1.jpg') repeat scroll 0%;\">slidingdoor</a></li>
 			<li class=\"bk1\"><a href=\"".$blog_url."\" style=\"background: url('".$theme_url."/imagemenu/images/2.jpg') repeat scroll 0%;\">slidingdoor</a></li>

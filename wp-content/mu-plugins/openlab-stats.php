@@ -23,9 +23,9 @@ class OpenLab_Stats {
 			'fall-2013' => array(
 				'name' => 'Fall 2013',
 				'term' => 'Fall',
-				'year' => 2013,
-				'start' => '2013-08-28 00:00:00',
-				'end' => '2013-12-31 23:59:59',
+				'year' => 2014,
+				'start' => '2014-08-28 00:00:00',
+				'end' => '2014-12-31 23:59:59',
 			),
 			'winter-2014' => array(
 				'name' => 'Winter 2014',
@@ -81,7 +81,7 @@ class OpenLab_Stats {
 		<p>For the period: <strong><?php echo date( 'F d, Y', strtotime( $this->start_date ) ) ?> - <?php echo date( 'F d, Y', strtotime( $this->end_date ) ) ?></strong></p>
 
 		<form action="" method="post">
-			1) For each student ePortfolio created in period <?php echo $this->start_date ?>-<?php echo $this->end_date ?>: First Name, Last Name, Email Address, Date ePF Created.
+			1) For each student ePortfolio created in period <?php echo $this->start_date ?>-<?php echo $this->end_date ?>: First Name, Last Name, Email Address, Date ePF Created, Last Activity (posts or comments).
 			<input name="eportfolio-create" type="submit" value="Create Report" />
 		</form>
 
@@ -204,21 +204,23 @@ class OpenLab_Stats {
 				'active' => 'Activity Count',
 				'course_profile_link' => 'Course Profile Link',
 				'external_site_url' => 'External Site URL',
+				'last_active' => 'Last Active',
 			),
 		);
 
 		foreach ( $courses as $course ) {
 			$cdata[ $course->id ] = array(
-				'semester' => $course->semester . ' ' . $course->year,
+				'semester' => trim( $course->semester . ' ' . $course->year ),
 				'school' => '',
 				'department' => '',
-				'course_name' => $course->name,
+				'course_name' => trim( $course->name ),
 				'course_code' => '',
 				'section_number' => '',
-				'faculty_name' => $course->faculty_name,
+				'faculty_name' => trim( $course->faculty_name ),
 				'active' => '',
 				'course_profile_link' => 'http://openlab.citytech.cuny.edu/groups/' . $course->slug,
 				'external_site_url' => openlab_get_external_site_url_by_group_id( $course->id ),
+				'last_active' => $wpdb->get_var( $wpdb->prepare( "SELECT date_recorded FROM {$bp->activity->table_name} WHERE component = 'groups' AND item_id = %d ORDER BY date_recorded DESC LIMIT 1", $course->id ) ),
 			);
 		}
 
@@ -275,11 +277,11 @@ class OpenLab_Stats {
 					$v = $cd->meta_value;
 					break;
 				case 'wds_section_code' :
-					$k = 'section_code';
+					$k = 'section_number';
 					$v = $cd->meta_value;
 					break;
 			}
-			$cdata[ $cd->group_id ][ $k ] = $v;
+			$cdata[ $cd->group_id ][ $k ] = trim( $v );
 		}
 		//echo '<pre>';
 		//print_r( $cdata ); die();
@@ -386,6 +388,45 @@ class OpenLab_Stats {
 
 		$portfolios = $wpdb->get_results( $portfolios_sql );
 
+		$created_ids = implode( ',', wp_list_pluck( $portfolios, 'id' ) );
+		$active_sql = $wpdb->prepare(
+			"SELECT g.id, g.creator_id, g.date_created
+			FROM
+			  {$bp->groups->table_name} g
+			  JOIN
+			  {$bp->groups->table_name_groupmeta} gm
+			  ON
+			  (g.id = gm.group_id)
+			  JOIN
+			  {$bp->profile->table_name_data} p
+			  on
+			  (g.creator_id = p.user_id)
+			  JOIN
+			  {$bp->groups->table_name_groupmeta} gm2
+			  ON
+			  (g.id = gm2.group_id)
+			WHERE
+			  gm.meta_key = 'wds_group_type'
+			  AND
+			  gm.meta_value = 'portfolio'
+			  AND
+			  gm2.meta_key = 'last_activity'
+			  AND
+			  gm2.meta_value > %s
+			  AND
+			  gm2.meta_value < %s
+			  AND
+			  g.id NOT IN ({$created_ids})
+			  AND
+			  p.field_id = %d
+			  AND
+			  p.value = 'Student'
+			"
+		, $this->start_date, $this->end_date, $at_field );
+		$active = $wpdb->get_results( $active_sql );
+
+		$portfolios = array_merge( $portfolios, $active );
+
 		$creator_ids = wp_list_pluck( $portfolios, 'creator_id' );
 		$creator_ids_sql = implode( ',', wp_parse_id_list( $creator_ids ) );
 
@@ -437,11 +478,18 @@ class OpenLab_Stats {
 				'ePortfolio Date Created',
 				'User Date Registered',
 				'ePortfolio URL',
+				'Last Active (posts or comments)',
 			),
 		);
 
 		foreach ( $portfolios as $p ) {
 			$userdata = $cdata[ $p->creator_id ];
+
+			$last_activity = groups_get_groupmeta( $p->id, 'last_activity' );
+			if ( ! $last_activity ) {
+				$last_activity = $p->date_created;
+			}
+
 			$pdata[] = array(
 				'first_name' => $userdata['first_name'],
 				'last_name' => $userdata['last_name'],
@@ -449,6 +497,7 @@ class OpenLab_Stats {
 				'date_created' => $p->date_created,
 				'user_registered' => $userdata['user_registered'],
 				'portfolio_url' => openlab_get_group_site_url( $p->id ),
+				'last_active' => $last_activity,
 			);
 		}
 

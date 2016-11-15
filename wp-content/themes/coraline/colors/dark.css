@@ -34,12 +34,14 @@ a {
 a:visited {
 	color: #ddd;
 }
+a:focus,
 a:hover {
 	color: #e74040;
 }
 h1 a, h2 a, h3 a {
 	color: #fff;
 }
+h1 a:focus, h2 a:focus, h3 a:focus,
 h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #40b340;
 }
@@ -66,12 +68,15 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	background: #fff;
 	color: #666;
 }
+#access li > a:focus,
+#access ul ul :focus > a,
 #access li:hover > a,
 #access ul ul :hover > a {
 	background: #fff;
 	color: #333;
 }
-#access ul ul a:hover {
+#access ul ul a:hover,
+#access ul ul a:focus {
 	background: #eee;
 }
 #access .current-menu-item a,
@@ -93,6 +98,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 }
 a.entry-format,
 a.entry-format:visited,
+a.entry-format:focus,
 a.entry-format:hover {
 	color: rgba(255,255,255,.3);
 }
@@ -107,6 +113,8 @@ a.entry-format:hover {
 .entry-info a {
 	color: #666;
 }
+.entry-meta a:focus,
+.entry-info a:focus,
 .entry-meta a:hover,
 .entry-info a:hover {
 	color: #e74040;
@@ -122,7 +130,8 @@ a.entry-format:hover {
 .entry-info .comments-link a {
 	color: #ddd;
 }
-.entry-info .comments-link a:hover {
+.entry-info .comments-link a:hover,
+.entry-info .comments-link a:focus {
 	background: #eee;
 	background-image: -moz-linear-gradient(100% 100% 90deg, #ddd, #fff);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#ddd));
@@ -157,8 +166,10 @@ a.entry-format:hover {
 	color: #80b0ff;
 }
 .navigation a:visited:hover,
+.navigation a:visited:focus,
 .navigation a:active,
-.navigation a:hover {
+.navigation a:hover,
+.navigation a:focus {
 	color: #e74040;
 }
 
@@ -180,7 +191,8 @@ a.entry-format:hover {
 #wp-calendar a:visited {
 	color: #80b0ff;
 }
-#wp-calendar a:visited:hover {
+#wp-calendar a:visited:hover,
+#wp-calendar a:visited:focus {
 	color: #e74040;
 }
 
@@ -195,11 +207,12 @@ a.entry-format:hover {
 	border-color: #333;
 }
 #comments .comment-meta,
-#comments .comment-meta a ,
+#comments .comment-meta a,
 #respond .form-allowed-tags {
 	color: #666;
 }
-#comments .comment-meta a:hover {
+#comments .comment-meta a:hover,
+#comments .comment-meta a:focus {
 	color: #e74040;
 }
 #comments .avatar {
@@ -214,9 +227,7 @@ a.entry-format:hover {
 #colophon a {
 	color: #888;
 }
-#colophon a:hover {
+#colophon a:hover,
+#colophon a:focus {
 	color: #e74040;
-}
-#colophon .generator-link {
-	background: url( "../images/wordpress.png" ) no-repeat left center;
 }

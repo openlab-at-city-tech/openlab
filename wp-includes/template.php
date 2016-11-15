@@ -35,6 +35,9 @@ function get_query_template( $type, $templates = array() ) {
 	 * extension and any non-alphanumeric characters delimiting words -- of the file to load.
 	 * This hook also applies to various types of files loaded as part of the Template Hierarchy.
 	 *
+	 * Possible values for `$type` include: 'index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date',
+	 * 'home', 'front_page', 'page', 'paged', 'search', 'single', 'singular', and 'attachment'.
+	 *
 	 * @since 1.5.0
 	 *
 	 * @param string $template Path to the template. See locate_template().
@@ -380,6 +383,7 @@ function get_search_template() {
  * e.g. 'single_template'.
  *
  * @since 1.5.0
+ * @since 4.4.0 `single-{post_type}-{post_name}.php` was added to the top of the template hierarchy.
  *
  * @see get_query_template()
  *
@@ -390,11 +394,46 @@ function get_single_template() {
 
 	$templates = array();
 
-	if ( ! empty( $object->post_type ) )
+	if ( ! empty( $object->post_type ) ) {
+		$templates[] = "single-{$object->post_type}-{$object->post_name}.php";
 		$templates[] = "single-{$object->post_type}.php";
+	}
+
 	$templates[] = "single.php";
 
 	return get_query_template( 'single', $templates );
+}
+
+/**
+ * Retrieves an embed template path in the current or parent template.
+ *
+ * By default the WordPress-template is returned.
+ *
+ * The template path is filterable via the dynamic {@see '$type_template'} hook,
+ * e.g. 'embed_template'.
+ *
+ * @since 4.5.0
+ *
+ * @see get_query_template()
+ *
+ * @return string Full path to embed template file.
+ */
+function get_embed_template() {
+	$object = get_queried_object();
+
+	$templates = array();
+
+	if ( ! empty( $object->post_type ) ) {
+		$post_format = get_post_format( $object );
+		if ( $post_format ) {
+			$templates[] = "embed-{$object->post_type}-{$post_format}.php";
+		}
+		$templates[] = "embed-{$object->post_type}.php";
+	}
+
+	$templates[] = "embed.php";
+
+	return get_query_template( 'embed', $templates );
 }
 
 /**
@@ -459,35 +498,10 @@ function get_attachment_template() {
 }
 
 /**
- * Retrieve path of comment popup template in current or parent template.
- *
- * Checks for comment popup template in current template, if it exists or in the
- * parent template.
- *
- * The template path is filterable via the dynamic {@see '$type_template'} hook,
- * e.g. 'commentspopup_template'.
- *
- * @since 1.5.0
- *
- * @see get_query_template()
- *
- * @return string Full path to comments popup template file.
- */
-function get_comments_popup_template() {
-	$template = get_query_template( 'comments_popup', array( 'comments-popup.php' ) );
-
-	// Backward compat code will be removed in a future release.
-	if ('' == $template)
-		$template = ABSPATH . WPINC . '/theme-compat/comments-popup.php';
-
-	return $template;
-}
-
-/**
  * Retrieve the name of the highest priority template file that exists.
  *
- * Searches in the STYLESHEETPATH before TEMPLATEPATH so that themes which
- * inherit from a parent theme can just overload one file.
+ * Searches in the STYLESHEETPATH before TEMPLATEPATH and wp-includes/theme-compat
+ * so that themes which inherit from a parent theme can just overload one file.
  *
  * @since 2.7.0
  *
@@ -506,6 +520,9 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 			break;
 		} elseif ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
 			$located = TEMPLATEPATH . '/' . $template_name;
+			break;
+		} elseif ( file_exists( ABSPATH . WPINC . '/theme-compat/' . $template_name ) ) {
+			$located = ABSPATH . WPINC . '/theme-compat/' . $template_name;
 			break;
 		}
 	}
@@ -534,7 +551,7 @@ function locate_template($template_names, $load = false, $require_once = true ) 
  * @global string     $wp_version
  * @global WP         $wp
  * @global int        $id
- * @global object     $comment
+ * @global WP_Comment $comment
  * @global int        $user_ID
  *
  * @param string $_template_file Path to template file.

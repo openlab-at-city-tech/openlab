@@ -216,7 +216,10 @@ class BP_Groups_List_Table extends WP_List_Table {
 	public function display() {
 		$this->display_tablenav( 'top' ); ?>
 
-		<h2 class="screen-reader-text"><?php _e( 'Groups list', 'buddypress' ); ?></h2>
+		<h2 class="screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'Groups list', 'buddypress' );
+		?></h2>
 
 		<table class="wp-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
 			<thead>
@@ -225,15 +228,15 @@ class BP_Groups_List_Table extends WP_List_Table {
 				</tr>
 			</thead>
 
+			<tbody id="the-comment-list">
+				<?php $this->display_rows_or_placeholder(); ?>
+			</tbody>
+
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
 				</tr>
 			</tfoot>
-
-			<tbody id="the-comment-list">
-				<?php $this->display_rows_or_placeholder(); ?>
-			</tbody>
 		</table>
 		<?php
 
@@ -284,7 +287,10 @@ class BP_Groups_List_Table extends WP_List_Table {
 	public function get_views() {
 		$url_base = bp_get_admin_url( 'admin.php?page=bp-groups' ); ?>
 
-		<h2 class="screen-reader-text"><?php _e( 'Filter groups list', 'buddypress' ); ?></h2>
+		<h2 class="screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'Filter groups list', 'buddypress' );
+		?></h2>
 
 		<ul class="subsubsub">
 			<li class="all"><a href="<?php echo esc_url( $url_base ); ?>" class="<?php if ( 'all' == $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
@@ -422,6 +428,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 * @param array $item A singular item (one full row).
 	 */
 	public function column_cb( $item = array() ) {
+		/* translators: accessibility text */
 		printf( '<label class="screen-reader-text" for="gid-%1$d">' . __( 'Select group %1$d', 'buddypress' ) . '</label><input type="checkbox" name="gid[]" value="%1$d" id="gid-%1$d" />', $item['id'] );
 	}
 

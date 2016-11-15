@@ -1,9 +1,10 @@
 === Category Order and Taxonomy Terms Order  ===
-Contributors: Nsp Code
+Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order
 Requires at least: 2.8
-Tested up to: 4.3
+Tested up to: 4.5.2
+Stable tag: 1.4.8
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
 
@@ -34,6 +35,10 @@ Feel free to contact me at electronice_delphi@yahoo.com
 
 Yes, this is the right tool for you. The plugin come with a unique feature to update the queries on the fly and return the terms in the required ored without changing any line of code. Or as alternative you can do that manually.
 
+= I prefer to apply the sort through code, how can be done? =
+
+Include a 'orderby' => 'term_order' within your get_terms() arguments.
+
 = What taxonomies will allow me to sort? =
 
 You can sort ALL taxonomies, including the default Categories.
@@ -48,7 +53,21 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 
 == Change Log ==
 
+= 1.4.8 =
+  - textomain folder fix
+  - Translation fix for user roles
+  - the_title filter replced with terms_walker 
+  - Add Nonce for admin settings
+
+= 1.4.7 =
+  - Texdomain change to taxonomy-terms-order to allow translations through translate.wordpress.org
+  - WordPress 4.4 compatibility update
+  - Css updates  
+
 = 1.4.6.1 =
+  - Security bug fix
+  
+= 1.4.5 =
   - Translation textdomain fix - thanks to Pedro Mendonça
   - Portuguese localization update - Pedro Mendonça
 
@@ -102,4 +121,4 @@ Make sure you get the latest version
 == Localization ==
 
 Available in English, Dutch, French, Deutch, Slovak, Japanese, Traditional Chineze, Brazilian Portuguese, Hungarian, Ukrainian, Czech and Romanian
-Whant to contribute with a translation to your language? Please use the attached to.pot file 
+Whant to contribute with a translation to your language? Please check at https://translate.wordpress.org/projects/wp-plugins/taxonomy-terms-order 

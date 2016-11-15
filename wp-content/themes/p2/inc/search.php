@@ -15,9 +15,9 @@ class P2_Search {
 		add_filter( 'posts_join',       array( &$this, 'search_comments_join'     ) );
 
 		// Bind text highlighting filters
-		add_filter( 'the_content',      array( &$this, 'highlight_terms_in_text'  ) );
-		add_filter( 'the_excerpt',      array( &$this, 'highlight_terms_in_text'  ) );
-		add_filter( 'comment_text',     array( &$this, 'highlight_terms_in_text'  ) );
+		add_filter( 'the_content',      array( &$this, 'highlight_terms_in_text'  ), 12 ); // Run later to avoid shortcode conflicts
+		add_filter( 'the_excerpt',      array( &$this, 'highlight_terms_in_text'  ), 12 ); // Run later to avoid shortcode conflicts
+		add_filter( 'comment_text',     array( &$this, 'highlight_terms_in_text'  ), 12 ); // Run later to avoid shortcode conflicts
 		add_filter( 'get_the_tags',     array( &$this, 'highlight_terms_in_tags'  ) );
 	}
 
@@ -40,7 +40,7 @@ class P2_Search {
 		$search = array( "comment_post_ID = $wpdb->posts.ID AND comment_approved = '1'" );
 
 		foreach( (array) $q['search_terms'] as $term ) {
-			$term     = esc_sql( like_escape( $term ) );
+			$term     = esc_sql( $wpdb->esc_like( $term ) );
 			$search[] = "( comment_content LIKE '{$n}{$term}{$n}' )";
 		}
 

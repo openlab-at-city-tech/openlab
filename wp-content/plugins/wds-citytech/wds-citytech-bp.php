@@ -122,7 +122,7 @@ add_filter('gettext', array('bpass_Translation_Mangler', 'filter_gettext'), 10, 
  * @todo With an updated of BP Groupblog, this should not be necssary. As it is, it adds a lot of
  *       overhead, and should be rewritten to avoid PHP warnings.
  */
-add_action('bp_actions','wds_add_group_members_2_blog');
+//add_action('bp_actions','wds_add_group_members_2_blog');
 function wds_add_group_members_2_blog(){
 	global $wpdb, $user_ID, $bp;
 

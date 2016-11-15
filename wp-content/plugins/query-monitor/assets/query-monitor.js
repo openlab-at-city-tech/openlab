@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -91,31 +91,70 @@ jQuery( function($) {
 		$('#wp-admin-bar-query-monitor ul').append(container);
 
 		$('#wp-admin-bar-query-monitor').find('a').on('click',function(e){
+			var paused = true;
+
 			if ( is_admin ) {
 				$('#wpfooter').css('position','relative');
 			}
 			if ( window.infinite_scroll && infinite_scroll.contentSelector ) {
+				// Infinite Scroll plugin
 
 				$( infinite_scroll.contentSelector ).infinitescroll('pause');
 
-				if ( window.console ) {
-					console.log( qm_l10n.infinitescroll_paused );
-				}
+			} else if ( window.infiniteScroll && infiniteScroll.scroller ) {
+				// Jetpack Infinite Scroll module
 
+				infiniteScroll.scroller.check = function(){
+					return false;
+				};
+
+			} else if ( window.wp && wp.themes && wp.themes.RunInstaller && wp.themes.RunInstaller.view ) {
+				// Infinite scrolling on Appearance -> Add New screens
+
+				var view = wp.themes.RunInstaller.view.view;
+				view.stopListening( view.parent, 'theme:scroll' );
+
+			} else {
+				paused = false;
 			}
-			$('#qm').show();
+
+			if ( paused && window.console ) {
+				console.debug( qm_l10n.infinitescroll_paused );
+			}
+
+			$('#qm').addClass('qm-show').removeClass('qm-hide');
 		});
 
 		$('#wp-admin-bar-query-monitor,#wp-admin-bar-query-monitor-default').show();
 
+	} else {
+
+		var container = document.createDocumentFragment();
+
+		$.each( qm.menu.sub, function( i, el ) {
+
+			var new_menu = $('<li><a/></li>');
+			new_menu
+				.find('a').eq(0)
+				.html(el.title)
+				.attr('href',el.href)
+			;
+
+			container.appendChild( new_menu.get(0) );
+
+		} );
+
+		$('<ul/>').appendTo('#qm-title').append(container).find('a').on('click',function(e){
+			$('#qm').addClass('qm-show').removeClass('qm-hide qm-peek');
+		} );
 	}
 
-	$('#qm').find('select.qm-filter').on('change',function(e){
+	$('#qm').find('.qm-filter').on('change',function(e){
 
 		var filter = $(this).attr('data-filter'),
 			table  = $(this).closest('table'),
 			tr     = table.find('tbody tr[data-qm-' + filter + ']'),
-			val    = $(this).val().replace(/[[\]()'"]/g, "\\$&"),
+			val    = $(this).val().replace(/[[\]()'"\\]/g, "\\$&"),
 			total  = tr.removeClass('qm-hide-' + filter).length,
 			hilite = $(this).attr('data-highlight'),
 			time   = 0;
@@ -143,18 +182,31 @@ jQuery( function($) {
 		var results = table.find('.qm-items-shown').removeClass('qm-hide');
 		results.find('.qm-items-number').text( QM_i18n.number_format( matches.length, 0 ) );
 		results.find('.qm-items-time').text(time);
+	});
 
-		$(this).blur();
-
+	$('#qm').find('.qm-filter-trigger').on('click',function(e){
+		var filter = $(this).data('qm-filter'),
+		    value  = $(this).data('qm-value'),
+		    target = $(this).data('qm-target');
+		$('#qm-' + target).find('.qm-filter').not('[data-filter="' + filter + '"]').val('').change();
+		$('#qm-' + target).find('[data-filter="' + filter + '"]').val(value).change();
+		$('html, body').scrollTop( $(this).closest('.qm').offset().top );
+		$('html, body').animate({
+			scrollTop: $('#qm-' + target).offset().top
+		}, 500);
+		e.preventDefault();
 	});
 
 	$('#qm').find('.qm-toggle').on('click',function(e){
 		var el = $(this);
-		$(this).closest('td').find('.qm-toggled').toggle(0,function(){
-			if ( el.attr('data-off') == el.text() )
+		$(this).closest('td').find('.qm-toggled').slideToggle(100,function(){
+			if ( el.attr('data-off') == el.text() ) {
+				el.closest('td').removeClass('qm-toggled-on');
 				el.text(el.attr('data-on'));
-			else
+			} else {
+				el.closest('td').addClass('qm-toggled-on');
 				el.text(el.attr('data-off'));
+			}
 		});
 		e.preventDefault();
 	});
@@ -183,7 +235,7 @@ jQuery( function($) {
 
 	$( document ).ajaxSuccess( function( event, response, options ) {
 
-		var errors = response.getResponseHeader( 'X-QM-Errors' );
+		var errors = response.getResponseHeader( 'X-QM-error-count' );
 
 		if ( !errors )
 			return event;
@@ -192,7 +244,7 @@ jQuery( function($) {
 
 		for ( var key = 1; key <= errors; key++ ) {
 
-			error = $.parseJSON( response.getResponseHeader( 'X-QM-Error-' + key ) );
+			error = $.parseJSON( response.getResponseHeader( 'X-QM-error-' + key ) );
 
 			if ( window.console ) {
 				console.debug( '=== ' + qm_l10n.ajax_error + ' ===' );

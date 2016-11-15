@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Initializes the wp-admin area "BuddyPress" menus and sub menus.
  *
- * @uses bp_current_user_can() returns true if the current user is a site admin, false if not.
  */
 function bp_core_admin_menu_init() {
 	add_action( bp_core_admin_hook(), 'bp_core_add_admin_menu', 9 );
@@ -123,8 +122,6 @@ function bp_core_admin_backpat_page() {
  *
  * @since 1.5.0
  *
- * @uses bp_current_user_can() to check current user permissions before showing the notices.
- * @uses bp_is_root_blog()
  */
 function bp_core_print_admin_notices() {
 
@@ -302,7 +299,15 @@ function bp_core_activation_notice() {
 
 	if ( !empty( $orphaned_components ) ) {
 		$admin_url = bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) );
-		$notice    = sprintf( __( 'The following active BuddyPress Components do not have associated WordPress Pages: %2$s. <a href="%1$s">Repair</a>', 'buddypress' ), esc_url( $admin_url ), '<strong>' . implode( '</strong>, <strong>', $orphaned_components ) . '</strong>' );
+		$notice    = sprintf(
+			'%1$s <a href="%2$s">%3$s</a>',
+			sprintf(
+				__( 'The following active BuddyPress Components do not have associated WordPress Pages: %s.', 'buddypress' ),
+				'<strong>' . implode( '</strong>, <strong>', array_map( 'esc_html', $orphaned_components ) ) . '</strong>'
+			),
+			esc_url( $admin_url ),
+			__( 'Repair', 'buddypress' )
+		);
 
 		bp_core_add_admin_notice( $notice );
 	}
@@ -324,7 +329,15 @@ function bp_core_activation_notice() {
 	// If there are duplicates, post a message about them.
 	if ( !empty( $dupe_names ) ) {
 		$admin_url = bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) );
-		$notice    = sprintf( __( 'Each BuddyPress Component needs its own WordPress page. The following WordPress Pages have more than one component associated with them: %2$s. <a href="%1$s">Repair</a>', 'buddypress' ), esc_url( $admin_url ), '<strong>' . implode( '</strong>, <strong>', $dupe_names ) . '</strong>' );
+		$notice    = sprintf(
+			'%1$s <a href="%2$s">%3$s</a>',
+			sprintf(
+				__( 'Each BuddyPress Component needs its own WordPress page. The following WordPress Pages have more than one component associated with them: %s.', 'buddypress' ),
+				'<strong>' . implode( '</strong>, <strong>', array_map( 'esc_html', $dupe_names ) ) . '</strong>'
+			),
+			esc_url( $admin_url ),
+			__( 'Repair', 'buddypress' )
+		);
 
 		bp_core_add_admin_notice( $notice );
 	}
@@ -337,12 +350,6 @@ function bp_core_activation_notice() {
  *
  * @internal Used internally to redirect BuddyPress to the about page on activation.
  *
- * @uses get_transient() To see if transient to redirect exists.
- * @uses delete_transient() To delete the transient if it exists.
- * @uses is_network_admin() To bail if being network activated.
- * @uses wp_safe_redirect() To redirect.
- * @uses add_query_arg() To help build the URL to redirect to.
- * @uses admin_url() To get the admin URL to index.php.
  */
 function bp_do_activation_redirect() {
 
@@ -548,7 +555,10 @@ function bp_core_add_contextual_help( $screen = '' ) {
 			break;
 	}
 }
-add_action( 'contextual_help', 'bp_core_add_contextual_help' );
+add_action( 'load-settings_page_bp-components', 'bp_core_add_contextual_help' );
+add_action( 'load-settings_page_bp-page-settings', 'bp_core_add_contextual_help' );
+add_action( 'load-settings_page_bp-settings', 'bp_core_add_contextual_help' );
+add_action( 'load-users_page_bp-profile-setup', 'bp_core_add_contextual_help' );
 
 /**
  * Renders contextual help content to contextual help tabs.
@@ -597,7 +607,6 @@ function bp_core_add_contextual_help_content( $tab = '' ) {
  *
  * @since 1.7.0
  *
- * @uses bp_current_user_can() To check users capability on root blog.
  */
 function bp_admin_separator() {
 
@@ -632,8 +641,6 @@ function bp_admin_separator() {
  *
  * @since 1.7.0
  *
- * @uses bp_current_user_can() To check users capability on root blog.
- *
  * @param bool $menu_order Menu order.
  * @return bool Always true.
  */
@@ -651,8 +658,6 @@ function bp_admin_custom_menu_order( $menu_order = false ) {
  * Move our custom separator above our custom post types.
  *
  * @since 1.7.0
- *
- * @uses bp_current_user_can() To check users capability on root blog.
  *
  * @param array $menu_order Menu Order.
  * @return array Modified menu order.
@@ -928,7 +933,10 @@ add_action( 'add_meta_boxes_' . bp_get_email_post_type(), 'bp_email_custom_metab
 function bp_email_plaintext_metabox( $post ) {
 ?>
 
-	<label class="screen-reader-text" for="excerpt"><?php _e( 'Plain text email content', 'buddypress' ); ?></label><textarea rows="5" cols="40" name="excerpt" id="excerpt"><?php echo $post->post_excerpt; // textarea_escaped ?></textarea>
+	<label class="screen-reader-text" for="excerpt"><?php
+		/* translators: accessibility text */
+		_e( 'Plain text email content', 'buddypress' );
+	?></label><textarea rows="5" cols="40" name="excerpt" id="excerpt"><?php echo $post->post_excerpt; // textarea_escaped ?></textarea>
 
 	<p><?php _e( 'Most email clients support HTML email. However, some people prefer to receive plain text email. Enter a plain text alternative version of your email here.', 'buddypress' ); ?></p>
 

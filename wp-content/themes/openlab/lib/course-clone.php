@@ -29,7 +29,8 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 		'type' => 'alphabetical',
 		'include' => $user_course_ids,
 		'show_hidden' => true,
-                'per_page' => 100000,
+		'per_page' => 100000,
+		'populate_extras' => false,
 	) );
 
 	return $user_courses;
@@ -672,13 +673,17 @@ class Openlab_Clone_Course_Site {
 		// Loop through all posts and:
 		// - if it's by an admin, switch to draft
 		// - if it's not by an admin, delete
+		// - if it's a nav item, change the GUID and the menu item URL meta
 		switch_to_blog( $this->site_id );
+
+		$source_site_url = get_blog_option( $this->source_site_id, 'home' );
+		$dest_site_url = get_option( 'home' );
 
                 // Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
 		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
-		$site_posts = $wpdb->get_results( "SELECT ID, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
+		$site_posts = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
@@ -700,11 +705,27 @@ class Openlab_Clone_Course_Site {
 					wp_delete_post( $sp->ID, true );
 				}
 			}
+
+			if ( 'nav_menu_item' === $sp->post_type ) {
+				$wpdb->update(
+					$wpdb->posts,
+					array(
+						'guid' => str_replace( $source_site_url, $dest_site_url, $sp->guid ),
+					),
+					array(
+						'ID' => $sp->ID,
+					)
+				);
+
+				$url = get_post_meta( $sp->ID, '_menu_item_url', true );
+				if ( $url ) {
+					update_post_meta( $sp->ID, '_menu_item_url', str_replace( $source_site_url, $dest_site_url, $url ) );
+				}
+			}
 		}
 
 		// Replace the site URL in all post content.
                 // For some reason a regular MySQL query is not working.
-                $source_site_url = get_blog_option( $this->source_site_id, 'home' );
                 $this_site_url = get_option( 'home' );
                 foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
                         $post = get_post( $post_id );

@@ -12,11 +12,45 @@ function openlab_custom_the_content($content) {
                 <div class="panel panel-default">
                     <div class="panel-heading">Contact Form</div>
                     <div class="panel-body">
-                        {$content}
                         {$form}
                     </div>
                 </div>
 HTML;
+    }
+
+    if ($post->post_type === 'page' && $post->post_name === 'calendar') {
+
+        if (function_exists('eo_get_events')) {
+            $args = array(
+                'headerright' => 'prev today next month agendaWeek',
+                'defaultview' => 'agendaWeek',
+                'titleformatweek' => 'F j, Y',
+            );
+
+            $link = eo_get_events_feed();
+            $menu_items = openlab_calendar_submenu();
+
+            ob_start();
+            include(locate_template('parts/pages/openlab-calendar.php'));
+            $content .= ob_get_clean();
+        }
+    }
+
+    if ($post->post_type === 'page' && $post->post_name === 'upcoming') {
+
+        if (function_exists('eo_get_events')) {
+
+            $args = array(
+                'event_start_after' => 'today',
+            );
+
+            $events = eo_get_events($args);
+            $menu_items = openlab_calendar_submenu();
+
+            ob_start();
+            include(locate_template('parts/pages/openlab-calendar-upcoming.php'));
+            $content .= ob_get_clean();
+        }
     }
 
     return $content;
@@ -145,3 +179,65 @@ function openlab_loader_class() {
 }
 
 add_action('wp_head', 'openlab_loader_class', 999);
+
+/**
+ * Custom MCE buttons when needed
+ * @param type $buttons
+ * @return type
+ */
+function openlab_mce_buttons($init, $editor) {
+
+    if (function_exists('bpeo_is_action')) {
+        if (bpeo_is_action('new') || bpeo_is_action('edit')) {
+
+            if (isset($init['plugins'])) {
+                $init['plugins'] .= ' image';
+            }
+
+            if (isset($init['toolbar1'])) {
+                $init['toolbar1'] .= ' image';
+            }
+        }
+    }
+
+    return $init;
+}
+
+add_filter('tiny_mce_before_init', 'openlab_mce_buttons', 10, 2);
+
+function openlab_group_creation_categories() {
+    $cats_out = '';
+
+    $group_type = filter_input(INPUT_GET, 'type');
+
+    $group_id = bp_get_new_group_id() ? bp_get_new_group_id() : bp_get_current_group_id();
+    $group_term_ids = array();
+
+    if (!empty($group_id)) {
+        $group_terms = bpcgc_get_group_selected_terms($group_id);
+
+        if (!empty($group_terms)) {
+            $group_term_ids = wp_list_pluck($group_terms, 'term_id');
+        }
+
+        if (!$group_type) {
+            $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
+        }
+    }
+
+    if ($group_type && function_exists('bpcgc_get_terms_by_group_type')) {
+
+        $categories = bpcgc_get_terms_by_group_type($group_type);
+
+        if ($categories && !empty($categories)) {
+
+            ob_start();
+            include(locate_template('parts/forms/group-categories.php'));
+            $cats_out = ob_get_clean();
+        }
+    }
+
+    echo $cats_out;
+}
+
+add_action('openlab_group_creation_extra_meta', 'openlab_group_creation_categories');

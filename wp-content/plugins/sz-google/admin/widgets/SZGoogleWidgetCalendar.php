@@ -58,6 +58,12 @@ if (!defined('SZ_PLUGIN_GOOGLE') or !SZ_PLUGIN_GOOGLE) die();
 </tr>
 
 <tr>
+	<td colspan="1" class="sz-cell-keys"><label><?php echo ucfirst(__('tabs','sz-google')) ?>:</label></td>
+	<td colspan="1" class="sz-cell-vals"><input type="radio" name="<?php echo $NAME_showtabs ?>" value="y" <?php if ($VALUE_showtabs == 'y') echo ' checked'?>>&nbsp;<?php echo ucfirst(__('yes','sz-google')) ?></td>
+	<td colspan="1" class="sz-cell-vals"><input type="radio" name="<?php echo $NAME_showtabs ?>" value="n" <?php if ($VALUE_showtabs != 'y') echo ' checked'?>>&nbsp;<?php echo ucfirst(__('no' ,'sz-google')) ?></td>
+</tr>
+
+<tr>
 	<td colspan="1" class="sz-cell-keys"><label><?php echo ucfirst(__('date','sz-google')) ?>:</label></td>
 	<td colspan="1" class="sz-cell-vals"><input type="radio" name="<?php echo $NAME_showdate ?>" value="y" <?php if ($VALUE_showdate == 'y') echo ' checked'?>>&nbsp;<?php echo ucfirst(__('yes','sz-google')) ?></td>
 	<td colspan="1" class="sz-cell-vals"><input type="radio" name="<?php echo $NAME_showdate ?>" value="n" <?php if ($VALUE_showdate != 'y') echo ' checked'?>>&nbsp;<?php echo ucfirst(__('no' ,'sz-google')) ?></td>

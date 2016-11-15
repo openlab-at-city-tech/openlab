@@ -13,6 +13,10 @@
 	padding: 4px;
 }
 
+ul.ui-autocomplete {
+	list-style-type: none;
+}
+
 .ui-autocomplete .ui-menu-item a {
 	display: block;
 	width: 100%;

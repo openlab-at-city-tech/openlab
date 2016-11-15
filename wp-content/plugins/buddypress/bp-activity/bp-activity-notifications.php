@@ -17,25 +17,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.2.0
  *
- * @uses bp_notifications_add_notification()
- * @uses bp_get_user_meta()
- * @uses bp_core_get_user_displayname()
- * @uses bp_activity_get_permalink()
- * @uses bp_core_get_user_domain()
- * @uses bp_get_settings_slug()
- * @uses bp_activity_filter_kses()
- * @uses bp_core_get_core_userdata()
- * @uses wp_specialchars_decode()
- * @uses get_blog_option()
- * @uses bp_is_active()
- * @uses bp_is_group()
- * @uses bp_get_current_group_name()
- * @uses apply_filters() To call the 'bp_activity_at_message_notification_to' hook.
- * @uses apply_filters() To call the 'bp_activity_at_message_notification_subject' hook.
- * @uses apply_filters() To call the 'bp_activity_at_message_notification_message' hook.
- * @uses wp_mail()
- * @uses do_action() To call the 'bp_activity_sent_mention_email' hook.
- *
  * @param int $activity_id      The ID of the activity update.
  * @param int $receiver_user_id The ID of the user who is receiving the update.
  */
@@ -108,26 +89,6 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
  * @since 1.2.0
  * @since 2.5.0 Updated to use new email APIs.
  *
- * @uses bp_get_user_meta()
- * @uses bp_core_get_user_displayname()
- * @uses bp_activity_get_permalink()
- * @uses bp_core_get_user_domain()
- * @uses bp_get_settings_slug()
- * @uses bp_activity_filter_kses()
- * @uses bp_core_get_core_userdata()
- * @uses wp_specialchars_decode()
- * @uses get_blog_option()
- * @uses bp_get_root_blog_id()
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_to' hook.
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_subject' hook.
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_message' hook.
- * @uses wp_mail()
- * @uses do_action() To call the 'bp_activity_sent_reply_to_update_email' hook.
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_comment_author_to' hook.
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_comment_author_subject' hook.
- * @uses apply_filters() To call the 'bp_activity_new_comment_notification_comment_author_message' hook.
- * @uses do_action() To call the 'bp_activity_sent_reply_to_reply_email' hook.
- *
  * @param int   $comment_id   The comment id.
  * @param int   $commenter_id The ID of the user who posted the comment.
  * @param array $params       {@link bp_activity_new_comment()}.
@@ -148,19 +109,35 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	add_filter( 'bp_get_activity_content_body', 'wpautop' );
 	add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
-	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
-		$args = array(
-			'tokens' => array(
-				'comment.id'                => $comment_id,
-				'commenter.id'              => $commenter_id,
-				'usermessage'               => wp_strip_all_tags( $content ),
-				'original_activity.user_id' => $original_activity->user_id,
-				'poster.name'               => $poster_name,
-				'thread.url'                => esc_url( $thread_link ),
-			),
-		);
+	if ( $original_activity->user_id != $commenter_id ) {
 
-		bp_send_email( 'activity-comment', $original_activity->user_id, $args );
+		// Send an email if the user hasn't opted-out.
+		if ( 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
+			$args = array(
+				'tokens' => array(
+					'comment.id'                => $comment_id,
+					'commenter.id'              => $commenter_id,
+					'usermessage'               => wp_strip_all_tags( $content ),
+					'original_activity.user_id' => $original_activity->user_id,
+					'poster.name'               => $poster_name,
+					'thread.url'                => esc_url( $thread_link ),
+				),
+			);
+
+			bp_send_email( 'activity-comment', $original_activity->user_id, $args );
+		}
+
+		/**
+		 * Fires at the point that notifications should be sent for activity comments.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param BP_Activity_Activity $original_activity The original activity.
+		 * @param int                  $comment_id        ID for the newly received comment.
+		 * @param int                  $commenter_id      ID of the user who made the comment.
+		 * @param array                $params            Arguments used with the original activity comment.
+		 */
+		do_action( 'bp_activity_sent_reply_to_update_notification', $original_activity, $comment_id, $commenter_id, $params );
 	}
 
 
@@ -174,19 +151,35 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 
 	$parent_comment = new BP_Activity_Activity( $params['parent_id'] );
 
-	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id && 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
-		$args = array(
-			'tokens' => array(
-				'comment.id'             => $comment_id,
-				'commenter.id'           => $commenter_id,
-				'usermessage'            => wp_strip_all_tags( $content ),
-				'parent-comment-user.id' => $parent_comment->user_id,
-				'poster.name'            => $poster_name,
-				'thread.url'             => esc_url( $thread_link ),
-			),
-		);
+	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id ) {
 
-		bp_send_email( 'activity-comment-author', $parent_comment->user_id, $args );
+		// Send an email if the user hasn't opted-out.
+		if ( 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
+			$args = array(
+				'tokens' => array(
+					'comment.id'             => $comment_id,
+					'commenter.id'           => $commenter_id,
+					'usermessage'            => wp_strip_all_tags( $content ),
+					'parent-comment-user.id' => $parent_comment->user_id,
+					'poster.name'            => $poster_name,
+					'thread.url'             => esc_url( $thread_link ),
+				),
+			);
+
+			bp_send_email( 'activity-comment-author', $parent_comment->user_id, $args );
+		}
+
+		/**
+		 * Fires at the point that notifications should be sent for comments on activity replies.
+		 *
+		 * @since 2.6.0
+		 *
+		 * @param BP_Activity_Activity $parent_comment The parent activity.
+		 * @param int                  $comment_id     ID for the newly received comment.
+		 * @param int                  $commenter_id   ID of the user who made the comment.
+		 * @param array                $params         Arguments used with the original activity comment.
+ 		 */
+		do_action( 'bp_activity_sent_reply_to_reply_notification', $parent_comment, $comment_id, $commenter_id, $params );
 	}
 }
 
@@ -210,36 +203,63 @@ add_action( 'bp_activity_comment_posted', 'bp_activity_new_comment_notification_
  *
  * @since 1.5.0
  *
- * @uses bp_loggedin_user_domain()
- * @uses bp_get_activity_slug()
- * @uses bp_core_get_user_displayname()
- * @uses apply_filters() To call the 'bp_activity_multiple_at_mentions_notification' hook.
- * @uses apply_filters() To call the 'bp_activity_single_at_mentions_notification' hook.
- * @uses do_action() To call 'activity_format_notifications' hook.
- *
  * @param string $action            The type of activity item. Just 'new_at_mention' for now.
  * @param int    $item_id           The activity ID.
  * @param int    $secondary_item_id In the case of at-mentions, this is the mentioner's ID.
  * @param int    $total_items       The total number of notifications to format.
  * @param string $format            'string' to get a BuddyBar-compatible notification, 'array' otherwise.
+ * @param int    $id                Optional. The notification ID.
  * @return string $return Formatted @mention notification.
  */
-function bp_activity_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
+function bp_activity_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string', $id = 0 ) {
+	$action_filter = $action;
+	$return        = false;
+	$activity_id   = $item_id;
+	$user_id       = $secondary_item_id;
+	$user_fullname = bp_core_get_user_displayname( $user_id );
 
 	switch ( $action ) {
 		case 'new_at_mention':
-			$activity_id      = $item_id;
-			$poster_user_id   = $secondary_item_id;
-			$at_mention_link  = bp_loggedin_user_domain() . bp_get_activity_slug() . '/mentions/';
-			$at_mention_title = sprintf( __( '@%s Mentions', 'buddypress' ), bp_get_loggedin_user_username() );
+			$action_filter = 'at_mentions';
+			$link          = bp_loggedin_user_domain() . bp_get_activity_slug() . '/mentions/';
+			$title         = sprintf( __( '@%s Mentions', 'buddypress' ), bp_get_loggedin_user_username() );
+			$amount        = 'single';
+
+			if ( (int) $total_items > 1 ) {
+				$text   = sprintf( __( 'You have %1$d new mentions', 'buddypress' ), (int) $total_items );
+				$amount = 'multiple';
+			} else {
+				$text = sprintf( __( '%1$s mentioned you', 'buddypress' ), $user_fullname );
+			}
+		break;
+
+		case 'update_reply':
+			$link   = bp_get_notifications_permalink();
+			$title  = __( 'New Activity reply', 'buddypress' );
 			$amount = 'single';
 
 			if ( (int) $total_items > 1 ) {
-				$text = sprintf( __( 'You have %1$d new mentions', 'buddypress' ), (int) $total_items );
+				$link   = add_query_arg( 'type', $action, $link );
+				$text   = sprintf( __( 'You have %1$d new replies', 'buddypress' ), (int) $total_items );
 				$amount = 'multiple';
 			} else {
-				$user_fullname = bp_core_get_user_displayname( $poster_user_id );
-				$text =  sprintf( __( '%1$s mentioned you', 'buddypress' ), $user_fullname );
+				$link = add_query_arg( 'nid', (int) $id, bp_activity_get_permalink( $activity_id ) );
+				$text = sprintf( __( '%1$s commented on one of your updates', 'buddypress' ), $user_fullname );
+			}
+		break;
+
+		case 'comment_reply':
+			$link   = bp_get_notifications_permalink();
+			$title  = __( 'New Activity comment reply', 'buddypress' );
+			$amount = 'single';
+
+			if ( (int) $total_items > 1 ) {
+				$link   = add_query_arg( 'type', $action, $link );
+				$text   = sprintf( __( 'You have %1$d new comment replies', 'buddypress' ), (int) $total_items );
+				$amount = 'multiple';
+			} else {
+				$link = add_query_arg( 'nid', (int) $id, bp_activity_get_permalink( $activity_id ) );
+				$text = sprintf( __( '%1$s replied to one your activity comments', 'buddypress' ), $user_fullname );
 			}
 		break;
 	}
@@ -247,42 +267,44 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 	if ( 'string' == $format ) {
 
 		/**
-		 * Filters the @mention notification for the string format.
+		 * Filters the activity notification for the string format.
 		 *
 		 * This is a variable filter that is dependent on how many items
 		 * need notified about. The two possible hooks are bp_activity_single_at_mentions_notification
 		 * or bp_activity_multiple_at_mentions_notification.
 		 *
 		 * @since 1.5.0
+		 * @since 2.6.0 use the $action_filter as a new dynamic portion of the filter name.
 		 *
-		 * @param string $string          HTML anchor tag for the mention.
-		 * @param string $at_mention_link The permalink for the mention.
+		 * @param string $string          HTML anchor tag for the interaction.
+		 * @param string $link            The permalink for the interaction.
 		 * @param int    $total_items     How many items being notified about.
 		 * @param int    $activity_id     ID of the activity item being formatted.
-		 * @param int    $poster_user_id  ID of the user posting the mention.
+		 * @param int    $user_id         ID of the user who inited the interaction.
 		 */
-		$return = apply_filters( 'bp_activity_' . $amount . '_at_mentions_notification', '<a href="' . esc_url( $at_mention_link ) . '" title="' . esc_attr( $at_mention_title ) . '">' . esc_html( $text ) . '</a>', $at_mention_link, (int) $total_items, $activity_id, $poster_user_id );
+		$return = apply_filters( 'bp_activity_' . $amount . '_' . $action_filter . '_notification', '<a href="' . esc_url( $link ) . '" title="' . esc_attr( $title ) . '">' . esc_html( $text ) . '</a>', $link, (int) $total_items, $activity_id, $user_id );
 	} else {
 
 		/**
-		 * Filters the @mention notification for any non-string format.
+		 * Filters the activity notification for any non-string format.
 		 *
 		 * This is a variable filter that is dependent on how many items need notified about.
 		 * The two possible hooks are bp_activity_single_at_mentions_notification
 		 * or bp_activity_multiple_at_mentions_notification.
 		 *
 		 * @since 1.5.0
+		 * @since 2.6.0 use the $action_filter as a new dynamic portion of the filter name.
 		 *
-		 * @param array  $array           Array holding the content and permalink for the mention notification.
-		 * @param string $at_mention_link The permalink for the mention.
+		 * @param array  $array           Array holding the content and permalink for the interaction notification.
+		 * @param string $link            The permalink for the interaction.
 		 * @param int    $total_items     How many items being notified about.
 		 * @param int    $activity_id     ID of the activity item being formatted.
-		 * @param int    $poster_user_id  ID of the user posting the mention.
+		 * @param int    $user_id         ID of the user who inited the interaction.
 		 */
-		$return = apply_filters( 'bp_activity_' . $amount . '_at_mentions_notification', array(
+		$return = apply_filters( 'bp_activity_' . $amount . '_' . $action_filter . '_notification', array(
 			'text' => $text,
-			'link' => $at_mention_link
-		), $at_mention_link, (int) $total_items, $activity_id, $poster_user_id );
+			'link' => $link
+		), $link, (int) $total_items, $activity_id, $user_id );
 	}
 
 	/**
@@ -292,7 +314,7 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 	 *
 	 * @param string $action            The type of activity item.
 	 * @param int    $item_id           The activity ID.
-	 * @param int    $secondary_item_id @mention mentioner ID.
+	 * @param int    $secondary_item_id The user ID who inited the interaction.
 	 * @param int    $total_items       Total amount of items to format.
 	 */
 	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
@@ -332,13 +354,60 @@ function bp_activity_at_mention_add_notification( $activity, $subject, $message,
 add_action( 'bp_activity_sent_mention_email', 'bp_activity_at_mention_add_notification', 10, 5 );
 
 /**
+ * Notify a member one of their activity received a reply.
+ *
+ * @since 2.6.0
+ *
+ * @param BP_Activity_Activity $activity     The original activity.
+ * @param int                  $comment_id   ID for the newly received comment.
+ * @param int                  $commenter_id ID of the user who made the comment.
+ */
+function bp_activity_update_reply_add_notification( $activity, $comment_id, $commenter_id ) {
+	if ( bp_is_active( 'notifications' ) ) {
+		bp_notifications_add_notification( array(
+			'user_id'           => $activity->user_id,
+			'item_id'           => $comment_id,
+			'secondary_item_id' => $commenter_id,
+			'component_name'    => buddypress()->activity->id,
+			'component_action'  => 'update_reply',
+			'date_notified'     => bp_core_current_time(),
+			'is_new'            => 1,
+		) );
+	}
+}
+add_action( 'bp_activity_sent_reply_to_update_notification', 'bp_activity_update_reply_add_notification', 10, 3 );
+
+/**
+ * Notify a member one of their activity comment received a reply.
+ *
+ * @since 2.6.0
+ *
+ * @param BP_Activity_Activity $activity_comment The parent activity.
+ * @param int                  $comment_id       ID for the newly received comment.
+ * @param int                  $commenter_id     ID of the user who made the comment.
+ */
+function bp_activity_comment_reply_add_notification( $activity_comment, $comment_id, $commenter_id ) {
+	if ( bp_is_active( 'notifications' ) ) {
+		bp_notifications_add_notification( array(
+			'user_id'           => $activity_comment->user_id,
+			'item_id'           => $comment_id,
+			'secondary_item_id' => $commenter_id,
+			'component_name'    => buddypress()->activity->id,
+			'component_action'  => 'comment_reply',
+			'date_notified'     => bp_core_current_time(),
+			'is_new'            => 1,
+		) );
+	}
+}
+add_action( 'bp_activity_sent_reply_to_reply_notification', 'bp_activity_comment_reply_add_notification', 10, 3 );
+
+/**
  * Mark at-mention notifications as read when users visit their Mentions page.
  *
  * @since 1.5.0
  * @since 2.5.0 Add the $user_id parameter
  *
  * @param int $user_id The id of the user whose notifications are marked as read.
- * @uses bp_notifications_mark_all_notifications_by_type()
  */
 function bp_activity_remove_screen_notifications( $user_id = 0 ) {
 	if ( ! bp_is_active( 'notifications' ) ) {
@@ -376,6 +445,32 @@ function bp_activity_remove_screen_notifications_single_activity_permalink( $act
 add_action( 'bp_activity_screen_single_activity_permalink', 'bp_activity_remove_screen_notifications_single_activity_permalink' );
 
 /**
+ * Mark non-mention notifications as read when user visits our read permalink.
+ *
+ * In particular, 'update_reply' and 'comment_reply' notifications are handled
+ * here. See {@link bp_activity_format_notifications()} for more info.
+ *
+ * @since 2.6.0
+ */
+function bp_activity_remove_screen_notifications_for_non_mentions() {
+	if ( false === bp_is_active( 'notifications' ) || false === is_singular() || false === is_user_logged_in() || empty( $_GET['nid'] ) ) {
+		return;
+	}
+
+	// Mark notification as read.
+	BP_Notifications_Notification::update(
+		array(
+			'is_new'  => false
+		),
+		array(
+			'user_id' => bp_loggedin_user_id(),
+			'id'      => (int) $_GET['nid']
+		)
+	);
+}
+add_action( 'bp_screens', 'bp_activity_remove_screen_notifications_for_non_mentions' );
+
+/**
  * Delete at-mention notifications when the corresponding activity item is deleted.
  *
  * @since 2.0.0
@@ -392,3 +487,57 @@ function bp_activity_at_mention_delete_notification( $activity_ids_deleted = arr
 	}
 }
 add_action( 'bp_activity_deleted_activities', 'bp_activity_at_mention_delete_notification', 10 );
+
+/**
+ * Add a notification for post comments to the post author or post commenter.
+ *
+ * Requires "activity stream commenting on blog and forum posts" to be enabled.
+ *
+ * @since 2.6.0
+ *
+ * @param int        $activity_id          The activity comment ID.
+ * @param WP_Comment $post_type_comment    WP Comment object.
+ * @param array      $activity_args        Activity comment arguments.
+ * @param object     $activity_post_object The post type tracking args object.
+ */
+function bp_activity_add_notification_for_synced_blog_comment( $activity_id, $post_type_comment, $activity_args, $activity_post_object ) {
+	// If activity comments are disabled for WP posts, stop now!
+	if ( bp_disable_blogforum_comments() || empty( $activity_id ) || false === bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	// Send a notification to the blog post author.
+	if ( (int) $post_type_comment->post->post_author !== (int) $activity_args['user_id'] ) {
+		// Only add a notification if comment author is a registered user.
+		// @todo Should we remove this restriction?
+		if ( ! empty( $post_type_comment->user_id ) ) {
+			bp_notifications_add_notification( array(
+				'user_id'           => $post_type_comment->post->post_author,
+				'item_id'           => $activity_id,
+				'secondary_item_id' => $post_type_comment->user_id,
+				'component_name'    => buddypress()->activity->id,
+				'component_action'  => 'update_reply',
+				'date_notified'     => $post_type_comment->comment_date_gmt,
+				'is_new'            => 1,
+			) );
+		}
+	}
+
+	// Send a notification to the parent comment author for follow-up comments.
+	if ( ! empty( $post_type_comment->comment_parent ) ) {
+		$parent_comment = get_comment( $post_type_comment->comment_parent );
+
+		if ( ! empty( $parent_comment->user_id ) && (int) $parent_comment->user_id !== (int) $activity_args['user_id'] ) {
+			bp_notifications_add_notification( array(
+				'user_id'           => $parent_comment->user_id,
+				'item_id'           => $activity_id,
+				'secondary_item_id' => $post_type_comment->user_id,
+				'component_name'    => buddypress()->activity->id,
+				'component_action'  => 'comment_reply',
+				'date_notified'     => $post_type_comment->comment_date_gmt,
+				'is_new'            => 1,
+			) );
+		}
+	}
+}
+add_action( 'bp_blogs_comment_sync_activity_comment', 'bp_activity_add_notification_for_synced_blog_comment', 10, 4 );

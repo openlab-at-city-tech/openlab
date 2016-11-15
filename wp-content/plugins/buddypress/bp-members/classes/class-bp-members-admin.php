@@ -65,7 +65,6 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @uses buddypress() to get BuddyPress main instance.
 	 */
 	public static function register_members_admin() {
 		if ( ! is_admin() ) {
@@ -368,7 +367,6 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @uses add_submenu_page() To add the Edit Profile page in Profile section.
 	 */
 	public function user_profile_menu() {
 
@@ -406,7 +404,6 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @uses add_submenu_page() To add the Edit Profile page in Users/Profile section.
 	 */
 	public function admin_menus() {
 
@@ -934,7 +931,14 @@ class BP_Members_Admin {
 
 			<?php else : ?>
 
-				<p><?php printf( __( 'No user found with this ID. <a href="%s">Go back and try again</a>.', 'buddypress' ), esc_url( bp_get_admin_url( 'users.php' ) ) ); ?></p>
+				<p><?php
+					printf(
+						'%1$s <a href="%2$s">%3$s</a>',
+						__( 'No user found with this ID.', 'buddypress' ),
+						esc_url( bp_get_admin_url( 'users.php' ) ),
+						__( 'Go back and try again.', 'buddypress' )
+					);
+				?></p>
 
 			<?php endif; ?>
 
@@ -1102,9 +1106,15 @@ class BP_Members_Admin {
 		$current_type = bp_get_member_type( $user->ID );
 		?>
 
-		<label for="bp-members-profile-member-type" class="screen-reader-text"><?php esc_html_e( 'Select member type', 'buddypress' ); ?></label>
+		<label for="bp-members-profile-member-type" class="screen-reader-text"><?php
+			/* translators: accessibility text */
+			esc_html_e( 'Select member type', 'buddypress' );
+		?></label>
 		<select name="bp-members-profile-member-type" id="bp-members-profile-member-type">
-			<option value="" <?php selected( '', $current_type ); ?>><?php /* translators: no option picked in select box */ esc_attr_e( '----', 'buddypress' ) ?></option>
+			<option value="" <?php selected( '', $current_type ); ?>><?php
+				/* translators: no option picked in select box */
+				esc_attr_e( '----', 'buddypress' );
+			?></option>
 			<?php foreach ( $types as $type ) : ?>
 				<option value="<?php echo esc_attr( $type->name ) ?>" <?php selected( $type->name, $current_type ) ?>><?php echo esc_html( $type->labels['singular_name'] ) ?></option>
 			<?php endforeach; ?>
@@ -1221,7 +1231,6 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @uses  user_admin_url()
 	 *
 	 * @param string $profile_link Profile Link for admin bar.
 	 * @param string $url          Profile URL.
@@ -1366,7 +1375,10 @@ class BP_Members_Admin {
 
 		if ( ! empty( $required ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-' . $required . '-list-table.php' );
-			require_once( buddypress()->members->admin->admin_dir . 'bp-members-admin-classes.php' );
+
+			if ( ! buddypress()->do_autoload ) {
+				require_once( buddypress()->members->admin->admin_dir . 'bp-members-admin-classes.php' );
+			}
 		}
 
 		return new $class();
@@ -1451,8 +1463,11 @@ class BP_Members_Admin {
 			// Add accessible hidden headings and text for the Pending Users screen.
 			if ( bp_get_major_wp_version() >= 4.4 ) {
 				get_current_screen()->set_screen_reader_content( array(
+					/* translators: accessibility text */
 					'heading_views'      => __( 'Filter users list', 'buddypress' ),
+					/* translators: accessibility text */
 					'heading_pagination' => __( 'Pending users list navigation', 'buddypress' ),
+					/* translators: accessibility text */
 					'heading_list'       => __( 'Pending users list', 'buddypress' ),
 				) );
 			}

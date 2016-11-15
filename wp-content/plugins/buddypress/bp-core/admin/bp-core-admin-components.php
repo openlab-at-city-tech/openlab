@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.6.0
  *
- * @uses bp_core_admin_component_options()
  */
 function bp_core_admin_components_settings() {
 ?>
@@ -150,7 +149,10 @@ function bp_core_admin_components_options() {
 			break;
 	} ?>
 
-	<h3 class="screen-reader-text"><?php _e( 'Filter components list', 'buddypress' ); ?></h3>
+	<h3 class="screen-reader-text"><?php
+		/* translators: accessibility text */
+		_e( 'Filter components list', 'buddypress' );
+	?></h3>
 
 	<ul class="subsubsub">
 		<li><a href="<?php echo esc_url( add_query_arg( array( 'page' => 'bp-components', 'action' => 'all'      ), bp_get_admin_url( $page ) ) ); ?>" <?php if ( $action === 'all'      ) : ?>class="current"<?php endif; ?>><?php printf( _nx( 'All <span class="count">(%s)</span>',      'All <span class="count">(%s)</span>',      $all_count,         'plugins', 'buddypress' ), number_format_i18n( $all_count                    ) ); ?></a> | </li>
@@ -160,12 +162,18 @@ function bp_core_admin_components_options() {
 		<li><a href="<?php echo esc_url( add_query_arg( array( 'page' => 'bp-components', 'action' => 'retired'  ), bp_get_admin_url( $page ) ) ); ?>" <?php if ( $action === 'retired'  ) : ?>class="current"<?php endif; ?>><?php printf( _n(  'Retired <span class="count">(%s)</span>',  'Retired <span class="count">(%s)</span>',  count( $retired_components ),  'buddypress' ), number_format_i18n( count( $retired_components  ) ) ); ?></a></li>
 	</ul>
 
-	<h3 class="screen-reader-text"><?php _e( 'Components list', 'buddypress' ); ?></h3>
+	<h3 class="screen-reader-text"><?php
+		/* translators: accessibility text */
+		_e( 'Components list', 'buddypress' );
+	?></h3>
 
 	<table class="wp-list-table widefat plugins">
 		<thead>
 			<tr>
-				<td id="cb" class="manage-column column-cb check-column"><input id="cb-select-all-1" type="checkbox" disabled><label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Bulk selection is disabled', 'buddypress' ); ?></label></td>
+				<td id="cb" class="manage-column column-cb check-column"><input id="cb-select-all-1" type="checkbox" disabled><label class="screen-reader-text" for="cb-select-all-1"><?php
+					/* translators: accessibility text */
+					_e( 'Bulk selection is disabled', 'buddypress' );
+				?></label></td>
 				<th scope="col" id="name" class="manage-column column-title column-primary"><?php _e( 'Component', 'buddypress' ); ?></th>
 				<th scope="col" id="description" class="manage-column column-description"><?php _e( 'Description', 'buddypress' ); ?></th>
 			</tr>
@@ -188,17 +196,21 @@ function bp_core_admin_components_options() {
 
 							<?php if ( !in_array( $name, array( 'core', 'members' ) ) ) : ?>
 
-								<input type="checkbox" id="<?php echo esc_attr( "bp_components[$name]" ); ?>" name="<?php echo esc_attr( "bp_components[$name]" ); ?>" value="1"<?php checked( isset( $active_components[esc_attr( $name )] ) ); ?> /><label for="<?php echo esc_attr( "bp_components[$name]" ); ?>" class="screen-reader-text"><?php printf( __( 'Select %s', 'buddypress' ), esc_html( $labels['title'] ) ); ?></label>
+								<input type="checkbox" id="<?php echo esc_attr( "bp_components[$name]" ); ?>" name="<?php echo esc_attr( "bp_components[$name]" ); ?>" value="1"<?php checked( isset( $active_components[esc_attr( $name )] ) ); ?> /><label for="<?php echo esc_attr( "bp_components[$name]" ); ?>" class="screen-reader-text"><?php
+									/* translators: accessibility text */
+									printf( __( 'Select %s', 'buddypress' ), esc_html( $labels['title'] ) ); ?></label>
 
 							<?php else : ?>
 
-								<input type="checkbox" id="<?php echo esc_attr( "bp_components[$name]" ); ?>" name="<?php echo esc_attr( "bp_components[$name]" ); ?>" value="1" checked="checked" disabled><label for="<?php echo esc_attr( "bp_components[$name]" ); ?>" class="screen-reader-text"><?php printf( __( '%s is a required component', 'buddypress' ), esc_html( $labels['title'] ) ); ?></label>
+								<input type="checkbox" id="<?php echo esc_attr( "bp_components[$name]" ); ?>" name="<?php echo esc_attr( "bp_components[$name]" ); ?>" value="1" checked="checked" disabled><label for="<?php echo esc_attr( "bp_components[$name]" ); ?>" class="screen-reader-text"><?php
+									/* translators: accessibility text */
+									printf( __( '%s is a required component', 'buddypress' ), esc_html( $labels['title'] ) ); ?></label>
 
 							<?php endif; ?>
 
 						</th>
 						<td class="plugin-title column-primary">
-							<span></span>
+							<span aria-hidden="true"></span>
 							<strong><?php echo esc_html( $labels['title'] ); ?></strong>
 						</td>
 
@@ -224,7 +236,10 @@ function bp_core_admin_components_options() {
 
 		<tfoot>
 			<tr>
-				<td class="manage-column column-cb check-column"><input id="cb-select-all-2" type="checkbox" disabled><label class="screen-reader-text" for="cb-select-all-2"><?php _e( 'Bulk selection is disabled', 'buddypress' ); ?></label></td>
+				<td class="manage-column column-cb check-column"><input id="cb-select-all-2" type="checkbox" disabled><label class="screen-reader-text" for="cb-select-all-2"><?php
+					/* translators: accessibility text */
+					_e( 'Bulk selection is disabled', 'buddypress' );
+				?></label></td>
 				<th class="manage-column column-title column-primary"><?php _e( 'Component', 'buddypress' ); ?></th>
 				<th class="manage-column column-description"><?php _e( 'Description', 'buddypress' ); ?></th>
 			</tr>
@@ -340,100 +355,18 @@ function bp_core_admin_get_active_components_from_submitted_settings( $submitted
 }
 
 /**
- * Return a list of component information, optionally filtered by type.
+ * Return a list of component information.
  *
  * We use this information both to build the markup for the admin screens, as
  * well as to do some processing on settings data submitted from those screens.
  *
  * @since 1.7.0
  *
- * @param string $type 'all', 'optional', 'retired', 'required'.
- * @return array An array of requested component data.
+ * @param string $type Optional; component type to fetch. Default value is 'all', or 'optional', 'retired', 'required'.
+ * @return array Requested components' data.
  */
 function bp_core_admin_get_components( $type = 'all' ) {
-
-	// Required components.
-	$required_components = array(
-		'core' => array(
-			'title'       => __( 'BuddyPress Core', 'buddypress' ),
-			'description' => __( 'It&#8216;s what makes <del>time travel</del> BuddyPress possible!', 'buddypress' )
-		),
-		'members' => array(
-			'title'       => __( 'Community Members', 'buddypress' ),
-			'description' => __( 'Everything in a BuddyPress community revolves around its members.', 'buddypress' )
-		),
-	);
-
-	// Retired components.
-	$retired_components = array(
-		'forums' => array(
-			'title'       => __( 'Group Forums', 'buddypress' ),
-			'description' => sprintf( __( 'BuddyPress Forums are retired. Use %s.', 'buddypress' ), '<a href="https://bbpress.org/">bbPress</a>' )
-		),
-	);
-
-	// Optional core components.
-	$optional_components = array(
-		'xprofile' => array(
-			'title'       => __( 'Extended Profiles', 'buddypress' ),
-			'description' => __( 'Customize your community with fully editable profile fields that allow your users to describe themselves.', 'buddypress' )
-		),
-		'settings' => array(
-			'title'       => __( 'Account Settings', 'buddypress' ),
-			'description' => __( 'Allow your users to modify their account and notification settings directly from within their profiles.', 'buddypress' )
-		),
-		'friends'  => array(
-			'title'       => __( 'Friend Connections', 'buddypress' ),
-			'description' => __( 'Let your users make connections so they can track the activity of others and focus on the people they care about the most.', 'buddypress' )
-		),
-		'messages' => array(
-			'title'       => __( 'Private Messaging', 'buddypress' ),
-			'description' => __( 'Allow your users to talk to each other directly and in private. Not just limited to one-on-one discussions, messages can be sent between any number of members.', 'buddypress' )
-		),
-		'activity' => array(
-			'title'       => __( 'Activity Streams', 'buddypress' ),
-			'description' => __( 'Global, personal, and group activity streams with threaded commenting, direct posting, favoriting, and @mentions, all with full RSS feed and email notification support.', 'buddypress' )
-		),
-		'notifications' => array(
-			'title'       => __( 'Notifications', 'buddypress' ),
-			'description' => __( 'Notify members of relevant activity with a toolbar bubble and/or via email, and allow them to customize their notification settings.', 'buddypress' )
-		),
-		'groups'   => array(
-			'title'       => __( 'User Groups', 'buddypress' ),
-			'description' => __( 'Groups allow your users to organize themselves into specific public, private or hidden sections with separate activity streams and member listings.', 'buddypress' )
-		),
-		'forums'   => array(
-			'title'       => __( 'Group Forums (Legacy)', 'buddypress' ),
-			'description' => __( 'Group forums allow for focused, bulletin-board style conversations.', 'buddypress' )
-		),
-		'blogs'    => array(
-			'title'       => __( 'Site Tracking', 'buddypress' ),
-			'description' => __( 'Record activity for new posts and comments from your site.', 'buddypress' )
-		)
-	);
-
-
-	// Add blogs tracking if multisite.
-	if ( is_multisite() ) {
-		$optional_components['blogs']['description'] = __( 'Record activity for new sites, posts, and comments across your network.', 'buddypress' );
-	}
-
-	switch ( $type ) {
-		case 'required' :
-			$components = $required_components;
-			break;
-		case 'optional' :
-			$components = $optional_components;
-			break;
-		case 'retired' :
-			$components = $retired_components;
-			break;
-		case 'all' :
-		default :
-			$components = array_merge( $required_components, $optional_components, $retired_components );
-			break;
-
-	}
+	$components = bp_core_get_components( $type );
 
 	/**
 	 * Filters the list of component information.

@@ -3,13 +3,13 @@
 Plugin Name: OSM
 Plugin URI: http://wp-osm-plugin.HanBlog.net
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="http://wp-osm-plugin.HanBlog.net">OSM plugin page</a>.  
-Version: 3.5.2
+Version: 3.7
 Author: MiKa
 Author URI: http://www.HanBlog.net
-Minimum WordPress Version Required: 2.8
+Minimum WordPress Version Required: 3.0
 */
 
-/*  (c) Copyright 2015  Michael Kang
+/*  (c) Copyright 2016  MiKa (www.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 2.8
 */
 load_plugin_textdomain('OSM-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V3.5.2");
+define ("PLUGIN_VER", "V3.7");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -88,8 +88,8 @@ define('OSM_OPENLAYERS_THEMES_URL', content_url(). '/uploads/osm/theme/' );
 define('OSM_PLUGIN_JS_URL', OSM_PLUGIN_URL."js/");
 
 global $wp_version;
-if (version_compare($wp_version,"2.8","<")){
-  exit('[OSM plugin - ERROR]: At least Wordpress Version 2.8 is required for this plugin!');
+if (version_compare($wp_version,"3.0","<")){
+  exit('[OSM plugin - ERROR]: At least Wordpress Version 3.0 is required for this plugin!');
 }
 	
 // get the configuratin by
@@ -133,7 +133,7 @@ function saveGeotagAndPic(){
     echo "Error: Bad ajax request";
   }
   else {
-    echo "Saved geotag!";
+    _e('Geotag saved, you can use it at [Map & geotags]!','OSM-plugin');
     $CustomField =  get_option('osm_custom_field','OSM_geo_data');
     delete_post_meta($post_id, $CustomField);
     delete_post_meta($post_id, "OSM_geo_icon");
@@ -144,6 +144,32 @@ function saveGeotagAndPic(){
   }
   wp_die();
 }
+
+function savePostMarker(){
+  $MarkerLatLon  = $_POST['MarkerLat'].','.$_POST['MarkerLon'];
+  $MarkerIcon      = $_POST['MarkerIcon'];
+  $MarkerName   = $_POST['MarkerName'];
+  $MarkerText      = $_POST['MarkerText'];
+  $post_id = $_POST['post_id'];
+  $nonce   = $_POST['marker_nonce'];
+
+  if (!wp_verify_nonce($nonce, 'osm_marker_nonce')){
+    echo "Error: Bad ajax request";
+  }
+  else {
+    delete_post_meta($post_id, "OSM_Marker_01_Name");
+    delete_post_meta($post_id, "OSM_Marker_01_LatLon");
+    delete_post_meta($post_id, "OSM_Marker_01_Icon");
+    delete_post_meta($post_id, "OSM_Marker_01_Text");
+    add_post_meta($post_id, "OSM_Marker_01_Name", $MarkerName, true );
+    add_post_meta($post_id, "OSM_Marker_01_LatLon", $MarkerLatLon, true );
+    add_post_meta($post_id, "OSM_Marker_01_Icon", $MarkerIcon, true );
+    add_post_meta($post_id, "OSM_Marker_01_Text", $MarkerText, true );
+    _e('Marker saved, you can use it at [Map & Marker]!','OSM-plugin');
+  }
+  wp_die();
+}
+
 
 // If the function exists this file is called as post-upload-ui.
 // We don't do anything then.
@@ -166,10 +192,12 @@ if ( ! function_exists( 'osm_restrict_mime_types_hint' ) ) {
 if (OSM_enable_Ajax){
   add_action( 'add_meta_boxes', 'osm_map_create' );
 }
+include('osm-args-class.php');
 include('osm-metabox.php');
-include('osm-oljs2.php');
-include('osm-oljs3.php');
-include('osm-icon.php');
+include('osm_map/osm-oljs2.php');
+include('osm_map_v3/osm-oljs3.php');
+include('osm_map/osm-icon.php');
+include('osm-icon-class.php');
     	
 // let's be unique ... 
 // with this namespace
@@ -188,6 +216,7 @@ class Osm
     add_action('wp_print_scripts',array(&$this, 'show_enqueue_script'));
     add_action('widgets_init', 'register_osm_widget' );
     add_action('wp_ajax_act_saveGeotag', 'saveGeotagAndPic');
+    add_action('wp_ajax_act_saveMarker', 'savePostMarker');
 
     // add the WP shortcode
     add_shortcode('osm_map',array(&$this, 'sc_showMap'));
@@ -214,7 +243,7 @@ class Osm
    return $EMsg;
   }
   
-  function traceText($a_Level, $a_String)
+  public static function traceText($a_Level, $a_String)
   {
     $TracePrefix = array(
     DEBUG_ERROR =>'[OSM-Plugin-Error]:',
@@ -291,10 +320,10 @@ class Osm
 
     if(is_single() && ($lat != '') && ($lon != '')){
       $title = convert_chars(strip_tags(get_bloginfo("name")))." - ".$wp_query->post->post_title;
-      $this->traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': adding geo meta tags:');
+      Osm::traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': adding geo meta tags:');
     }
     else{
-      $this->traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': did not add geo meta tags.');
+      Osm::traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': did not add geo meta tags.');
     return;
     } 
     
@@ -329,9 +358,9 @@ class Osm
 ///////////////////////
 
 
-  function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name,  $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy)
+  static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name,  $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy)
   {
-     $this->traceText(DEBUG_INFO, "OL3_createMarkerList(".$a_import.",".$a_import_osm_cat_incl_name.",".$a_import_osm_cat_excl_name.",".$a_post_type.",".$a_import_osm_custom_tax_incl_name.",".$a_custom_taxonomy.")");
+     Osm::traceText(DEBUG_INFO, "OL3_createMarkerList(".$a_import.",".$a_import_osm_cat_incl_name.",".$a_import_osm_cat_excl_name.",".$a_post_type.",".$a_import_osm_custom_tax_incl_name.",".$a_custom_taxonomy.")");
      global $post;
      $post_org = $post;
      
@@ -343,29 +372,43 @@ class Osm
        global $wpdb;
        global $post_type;
       
-
-       $post_type     = mysql_real_escape_string($a_post_type);
-       $CustomFieldName     = mysql_real_escape_string($CustomFieldName);
+       $post_type = esc_sql($a_post_type);
+       $CustomFieldName     = esc_sql($CustomFieldName);
        
-       $querystr = "
-       SELECT DISTINCT wposts.* 
-       FROM $wpdb->posts wposts
-	     LEFT JOIN $wpdb->postmeta wpostmeta ON wposts.ID = wpostmeta.post_id 
-	     LEFT JOIN $wpdb->term_relationships ON (wposts.ID = $wpdb->term_relationships.object_id)
-	     LEFT JOIN $wpdb->term_taxonomy ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
-       WHERE wpostmeta.meta_key = '$CustomFieldName'
-       AND wposts.post_status = 'publish'
-       AND wposts.post_type = '$post_type'
-       ORDER BY wpostmeta.meta_value ASC
-       ";
-
+       if ($a_import_osm_cat_incl_name == "osm_all" ){
+         $querystr = "
+         SELECT DISTINCT wposts.* 
+         FROM $wpdb->posts wposts
+	       LEFT JOIN $wpdb->postmeta wpostmeta ON wposts.ID = wpostmeta.post_id 
+	       LEFT JOIN $wpdb->term_relationships ON (wposts.ID = $wpdb->term_relationships.object_id)
+	       LEFT JOIN $wpdb->term_taxonomy ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
+         WHERE wpostmeta.meta_key = '$CustomFieldName'
+         AND wposts.post_status = 'publish'
+         AND wposts.post_type = '$post_type'
+         ";
+      }
+      else {
+        $querystr = "
+        SELECT wposts.*
+        FROM $wpdb->posts wposts
+          JOIN $wpdb->postmeta wpostmeta ON (wpostmeta.post_id = wposts.ID)
+          JOIN $wpdb->term_relationships tr ON (tr.object_id = wposts.ID)
+          JOIN $wpdb->term_taxonomy tt ON (tt.term_taxonomy_id = tr.term_taxonomy_id)
+          JOIN $wpdb->terms t ON tt.term_id = t.term_id
+      WHERE wpostmeta.meta_key = '$CustomFieldName'
+      AND wposts.post_status = 'publish'
+      AND wposts.post_type = '$post_type'
+      AND tt.taxonomy = 'category'
+      AND t.name = '$a_import_osm_cat_incl_name'
+      ";
+     }
       $pageposts = $wpdb->get_results($querystr, OBJECT);
  
 
 if ($pageposts){
   foreach ($pageposts as $post){
      setup_postdata($post); 
-      $Data = get_post_meta($post->ID, 'OSM_geo_data', true);
+      $Data = get_post_meta($post->ID, $CustomFieldName, true);
          // remove space before and after comma
       $Data = preg_replace('/\s*,\s*/', ',',$Data);
       $GeoData_Array = explode( ' ', $Data );
@@ -373,16 +416,22 @@ if ($pageposts){
       $PostMarker = get_post_meta($post->ID, 'OSM_geo_icon', true);
       $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
       
-      $Marker_Txt = '<a href="'.get_permalink($post->ID).'">'.$Category_Txt.get_the_title($post->ID).'  </a><br>';
+      $Marker_Txt = '<a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'  </a><br>';
       $Marker_Txt .= get_the_excerpt($post->ID);
-      $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$Icon[name], 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
+      $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
 }
      $post = $post_org;
-     $this->traceText(DEBUG_INFO, "Found Marker ".count($MarkerArray)); 
+     Osm::traceText(DEBUG_INFO, "Found Marker ".count($MarkerArray)); 
      return $MarkerArray;
 }
 else{
-     $this->traceText(DEBUG_ERROR, "No posts/pages with geotag found! "); 
+     Osm::traceText(DEBUG_ERROR, "No posts/pages with geotag found! "); 
+     $Text = "CustomField: ".$CustomFieldName;
+     Osm::traceText(DEBUG_ERROR, $Text);
+     $Text = "PostType: ".$post_type;
+     Osm::traceText(DEBUG_ERROR, $Text);
+     $Text = "Tagged_Filter: ".$a_import_osm_cat_incl_name;
+     Osm::traceText(DEBUG_ERROR, $Text);
 }
         
        }
@@ -391,22 +440,22 @@ else{
  
   function createMarkerList($a_import, $a_import_UserName, $a_Customfield, $a_import_osm_cat_incl_name,  $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy)
   {
-     $this->traceText(DEBUG_INFO, "createMarkerList(".$a_import.",".$a_import_UserName.",".$a_Customfield.")");
+     Osm::traceText(DEBUG_INFO, "createMarkerList(".$a_import.",".$a_import_UserName.",".$a_Customfield.")");
      global $post;
      $post_org = $post;
       
      // make a dummymarker to you use icon.clone later
      if ($a_import == 'gcstats'){
-       $this->traceText(DEBUG_INFO, "Requesting data from gcStats-plugin");
+       Osm::traceText(DEBUG_INFO, "Requesting data from gcStats-plugin");
        include('osm-import.php');
      }
      else if ($a_import == 'ecf'){
-       $this->traceText(DEBUG_INFO, "Requesting data from comments");
+       Osm::traceText(DEBUG_INFO, "Requesting data from comments");
        include('osm-import.php');
      }
      else if ($a_import == 'osm' || $a_import == 'osm_l'){
        // let's see which posts are using our geo data ...
-       $this->traceText(DEBUG_INFO, "check all posts for osm geo custom fields");
+       Osm::traceText(DEBUG_INFO, "check all posts for osm geo custom fields");
        $CustomFieldName = get_option('osm_custom_field','OSM_geo_data');        
        $recentPosts = new WP_Query();
        $recentPosts->query('meta_key='.$CustomFieldName.'&post_status=publish'.'&showposts=-1'.'&post_type='.$a_post_type.'');
@@ -463,7 +512,7 @@ else{
          $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
          for ($TagNum = 0; $TagNum < $NumOfGeoTagsInPost; $TagNum++){
            list($tag_lat, $tag_lon) = explode(',', $GeoData_Array[$TagNum]); 
-           list($tag_lat, $tag_lon) = $this->checkLatLongRange('$marker_all_posts',$tag_lat, $tag_lon);
+           list($tag_lat, $tag_lon) = Osm::checkLatLongRange('$marker_all_posts',$tag_lat, $tag_lon);
            //if ($a_import == 'osm_l' ){   
            $categories = wp_get_post_categories($post->ID);
 	   // take the last one but ignore those without a specific category
@@ -480,7 +529,7 @@ else{
            if ($a_import == 'osm_l' ){  
              $Marker_Txt .= get_the_excerpt($post->ID);
            }
-           $MarkerArray[] = array('lat'=> $tag_lat,'lon'=>$tag_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$Icon[name], 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
+           $MarkerArray[] = array('lat'=> $tag_lat,'lon'=>$tag_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
            //}	 
            //else{ // plain osm without link to the post
            //  $Marker_Txt = ' ';
@@ -488,12 +537,12 @@ else{
            //}
          }
        }
-       $this->traceText(DEBUG_INFO, "Found Marker ".count($MarkerArray));  
+       Osm::traceText(DEBUG_INFO, "Found Marker ".count($MarkerArray));  
        endwhile;
      }
      else if ($a_import == 'wpgmg'){
        // let's see which posts are using our geo data ...
-       $this->traceText(DEBUG_INFO, "check all posts for wpgmg geo custom fields");
+       Osm::traceText(DEBUG_INFO, "check all posts for wpgmg geo custom fields");
        $recentPosts = new WP_Query();
        $recentPosts->query('meta_key='.WPGMG_LAT.'&meta_key='.WPGMG_LON.'&showposts=-1');
        while ($recentPosts->have_posts()) : $recentPosts->the_post();
@@ -541,7 +590,7 @@ else{
   }
 
   // if you miss a colour, just add it
-  function checkStyleColour($a_colour){
+ public static  function checkStyleColour($a_colour){
     if ($a_colour != 'red' && $a_colour != 'blue' && $a_colour != 'black' && $a_colour != 'green' && $a_colour != 'orange'){
       return "blue";
     }
@@ -549,7 +598,7 @@ else{
   }
 
   // get the layer for the markers
-  function getImportLayer($a_type, $a_UserName, $Icon, $a_osm_cat_incl_name, $a_osm_cat_excl_name, $a_line_color, $a_line_width, $a_line_opacity, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy, $a_MapName){
+  static function getImportLayer($a_type, $a_UserName, $Icon, $a_osm_cat_incl_name, $a_osm_cat_excl_name, $a_line_color, $a_line_width, $a_line_opacity, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy, $a_MapName){
 
     if ($a_type  == 'osm_l'){
       $LayerName = 'TaggedPosts';
@@ -592,9 +641,9 @@ else{
       $PopUp = 'true';
     }
     else{
-      $this->traceText(DEBUG_ERROR, "e_import_unknwon");
+      Osm::traceText(DEBUG_ERROR, "e_import_unknwon");
     }
-    $MarkerArray = $this->createMarkerList($a_type, $a_UserName,'Empty', $a_osm_cat_incl_name,  $a_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy);
+    $MarkerArray = Osm::createMarkerList($a_type, $a_UserName,'Empty', $a_osm_cat_incl_name,  $a_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy);
     if ($a_line_color != 'none'){
       $line_color = Osm::checkStyleColour($a_line_color);
       $txt = Osm_OpenLayers::addLines($MarkerArray, $line_color, $a_line_width, $a_MapName);
@@ -604,7 +653,7 @@ else{
   }
 
  // check Lat and Long
-  function getMapCenter($a_Lat, $a_Long, $a_import, $a_import_UserName){
+  public static function getMapCenter($a_Lat, $a_Long, $a_import, $a_import_UserName){
     if ($a_import == 'wpgmg'){
       $Lat  = OSM_getCoordinateLat($a_import);
       $Lon = OSM_getCoordinateLong($a_import);
@@ -617,7 +666,7 @@ else{
         $Lon = ($Val["min"] + $Val["max"]) / 2;
       }
       else{
-       $this->traceText(DEBUG_WARNING, "getMapCenter() could not connect to gcStats plugin");
+       Osm::traceText(DEBUG_WARNING, "getMapCenter() could not connect to gcStats plugin");
        $Lat  = 0;$Long = 0;
       }
     }
@@ -634,7 +683,7 @@ else{
 
 
   // check Lat and Long
-  function getCustomFieldData()
+  public static function getCustomFieldData()
   {
     Osm::traceText(DEBUG_INFO, "getCustomFieldData");
     //todo
@@ -643,7 +692,7 @@ else{
 
     
   // check Lat and Long
-  function checkLatLongRange($a_CallingId, $a_Lat, $a_Long, $a_traceError = "yes")
+  public static function checkLatLongRange($a_CallingId, $a_Lat, $a_Long, $a_traceError = "yes")
   {
     Osm::traceText(DEBUG_INFO, "checkLatLongRange(".$a_CallingId.",".$a_Lat.",".$a_Long.",".$a_traceError.")");
     if ($a_Lat >= LAT_MIN && $a_Lat <= LAT_MAX && $a_Long >= LON_MIN && $a_Long <= LON_MAX &&
@@ -652,8 +701,8 @@ else{
     }
     else{
       if ($a_traceError == "yes"){
-        $this->traceText(DEBUG_ERROR, "e_lat_lon_range");
-        $this->traceText(DEBUG_INFO, "Error: ".$a_CallingId." Lat".$a_Lat." or Long".$a_Long);
+        Osm::traceText(DEBUG_ERROR, "e_lat_lon_range");
+        Osm::traceText(DEBUG_INFO, "Error: ".$a_CallingId." Lat".$a_Lat." or Long".$a_Long);
       }
       $a_Lat  = 0;
       $a_Long = 0;
@@ -661,20 +710,20 @@ else{
     return array($a_Lat,$a_Long);
   }
 
-  function getGPXName($filepath){
+  public static function getGPXName($filepath){
     $file = basename($filepath, ".gpx"); // $file is set to "index"
     return $file;
   }
   // shortcode for map with OpenLayers 3
   function sc_OL3JS($atts) {    
     static  $MapCounter = 0;
-    include('osm-sc-ol3js.php');	
+    include('osm_map_v3/osm-sc-osm_map_v3.php');	
     return $output;
   }
   // shortcode for map with OpenLayers 2
-  function sc_showMap($atts) {
+  public static function sc_showMap($atts) {
     static  $MapCounter = 0;
-    include('osm-sc-osm_map.php');
+    include('osm_map/osm-sc-osm_map.php');
     return $output;
   }
 
@@ -736,14 +785,18 @@ $pOsm = new Osm();
 
 function OSM_isGeotagged(){
   global $post;
+  $temp_lat = 0;
+  $temp_lon= 0;
   //$Data = get_post_meta($post->ID, 'OSM_geo_data', true); 
   $CustomFieldName = get_option('osm_custom_field','OSM_geo_data');
   $Data = get_post_meta($post->ID, $CustomFieldName, true); 
-  $Data = preg_replace('/\s*,\s*/', ',',$Data);
-  // get pairs of coordination
-  $GeoData_Array = explode( ' ', $Data );
-  list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
-  list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon,'no');
+  if (!empty($Data)) {
+    $Data = preg_replace('/\s*,\s*/', ',',$Data);
+    // get pairs of coordination
+    $GeoData_Array = explode( ' ', $Data );
+    list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
+    list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon,'no');
+  }
   if (($temp_lat != 0) || ($temp_lon != 0)){
     return 1;
   }
@@ -774,7 +827,7 @@ function OSM_getCoordinateLat($a_import)
 	$lat = get_post_meta($post->ID, WPGMG_LAT, true);
   }
   else {
-    $this->traceText(DEBUG_ERROR, "e_php_getlat_missing_arg");
+    Osm::traceText(DEBUG_ERROR, "e_php_getlat_missing_arg");
     $lat = 0;
   }
   if ($lat != '') {
@@ -802,7 +855,7 @@ function OSM_getCoordinateLong($a_import)
     list($lon) = get_post_meta($post->ID,WPGMG_LON, true);
   }
   else {
-    $this->traceText(DEBUG_ERROR, "e_php_getlon_missing_arg");
+    Osm::traceText(DEBUG_ERROR, "e_php_getlon_missing_arg");
     $lon = 0;
   }
   if ($lon != '') {

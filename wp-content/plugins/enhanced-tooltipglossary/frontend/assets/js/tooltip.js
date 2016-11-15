@@ -124,10 +124,6 @@ CM_Tooltip.gtooltip = function (opts) {
             tooltipWrapper.style.left = 'none';
 
             testNumber = (screenWidth - leftShift) < opts.minw;
-//            console.log('offset+leftshift:'+ parseInt(tooltipWrapper.offsetWidth + leftShift));
-//            console.log('offsetWidth:'+ tooltipWrapper.offsetWidth);
-//            console.log('oscreenWidth:'+ screenWidth);
-//            console.log('test:' + testNumber);
 
             if (testNumber )
             {
@@ -211,7 +207,7 @@ CM_Tooltip.glossaryTip = null;
             return this.each(function () {
                 var tooltipContent;
 
-                tooltipContent = $(this).data('tooltip');
+                tooltipContent = $(this).data('cmtooltip');
 
                 $(this).mouseenter(function () {
                     clearTimeout(CM_Tooltip.timeoutId);
@@ -233,7 +229,7 @@ CM_Tooltip.glossaryTip = null;
 
         $(document).on("glossaryTooltipReady", function () {
             if (window.cmtt_data !== undefined && window.cmtt_data.tooltip) {
-                $("[data-tooltip]").glossaryTooltip(window.cmtt_data.tooltip);
+                $("[data-cmtooltip]").glossaryTooltip(window.cmtt_data.tooltip);
             }
         });
     });

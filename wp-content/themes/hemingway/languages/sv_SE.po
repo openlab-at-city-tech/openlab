@@ -1,0 +1,497 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Hemingway v1.46\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-08-06 10:49:01+0000\n"
+"Last-Translator: anders <anders@andersnoren.se>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: 404.php:15
+#@ hemingway
+msgid "Error 404"
+msgstr "Error 404"
+
+#: 404.php:21
+#@ hemingway
+msgid "It seems like you have tried to open a page that doesn't exist. It could have been deleted, moved, or it never existed at all. You are welcome to search for what you are looking for with the form below."
+msgstr "Det verkar som att du har försökt öppna en sida som inte existerar. Den kan ha raderats, flyttats eller har aldrig existerat överhuvudtaget. Du är välkommen att söka efter det du letar efter i sökformuläret nedan."
+
+#: archive.php:12
+#, php-format
+#@ hemingway
+msgid "Date: %s"
+msgstr "Datum: %s"
+
+#: archive.php:14
+#, php-format
+#@ hemingway
+msgid "Month: %s"
+msgstr "Månad: %s"
+
+#: archive.php:14
+#@ hemingway
+msgctxt "F = Month, Y = Year"
+msgid "F Y"
+msgstr "F Y"
+
+#: archive.php:16
+#, php-format
+#@ hemingway
+msgid "Year: %s"
+msgstr "År: %s"
+
+#: archive.php:16
+#@ hemingway
+msgctxt "Y = Year"
+msgid "Y"
+msgstr "Y"
+
+#: archive.php:18
+#, php-format
+#@ hemingway
+msgid "Category: %s"
+msgstr "Kategori: %s"
+
+#: archive.php:20
+#, php-format
+#@ hemingway
+msgid "Tag: %s"
+msgstr "Etikett: %s"
+
+#: archive.php:23
+#, php-format
+#@ hemingway
+msgid "Author: %s"
+msgstr "Författare: %s"
+
+#: archive.php:25
+#@ hemingway
+msgid "Archive"
+msgstr "Arkiv"
+
+#: archive.php:33
+#: search.php:20
+#: search.php:71
+#, php-format
+#@ hemingway
+msgid "(page %s of %s)"
+msgstr "(sida %s av %s)"
+
+#: archive.php:69
+#@ hemingway
+msgid "Older<span> posts</span>"
+msgstr "Äldre <span> inlägg</span>"
+
+#: archive.php:71
+#@ hemingway
+msgid "Newer<span> posts</span>"
+msgstr "Nyare <span>inlägg</span>"
+
+#: comments.php:14
+#@ hemingway
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] "kommentar"
+msgstr[1] "kommentarer"
+
+#: comments.php:31
+#@ hemingway
+msgid "Pingback"
+msgid_plural "Pingbacks"
+msgstr[0] "Pingback"
+msgstr[1] "Pingbacks"
+
+#: comments.php:49
+#@ hemingway
+msgid "&laquo; Older<span> Comments</span>"
+msgstr "&laquo; Äldre<span> kommentarer</span>"
+
+#: comments.php:51
+#@ hemingway
+msgid "Newer<span> Comments</span> &raquo;"
+msgstr "Nyare<span> kommentarer</span> &raquo;"
+
+#: comments.php:65
+#@ hemingway
+msgid "Comments are closed."
+msgstr "Kommentarsfunktionen är avstängd."
+
+#: comments.php:72
+#@ hemingway
+msgid "Your email address will not be published."
+msgstr "Din e-postadress kommer inte att publiceras."
+
+#: comments.php:81
+#@ hemingway
+msgid "Name"
+msgstr "Namn"
+
+#: comments.php:84
+#@ hemingway
+msgid "Email"
+msgstr "E-post"
+
+#: comments.php:87
+#@ hemingway
+msgid "Website"
+msgstr "Webbplats"
+
+#: content-aside.php:9
+#: content-quote.php:9
+#: content-video.php:47
+#: content.php:47
+#@ hemingway
+msgid "Sticky"
+msgstr "Klistrat"
+
+#: content-aside.php:17
+#: content-quote.php:17
+#: content-video.php:55
+#: content.php:55
+#: functions.php:295
+#: page.php:49
+#: single.php:83
+#: template-archives.php:127
+#: template-fullwidth.php:55
+#: template-nosidebar.php:55
+#@ hemingway
+msgid "Edit"
+msgstr "Redigera"
+
+#: content-video.php:41
+#: content.php:41
+#: single.php:77
+#@ hemingway
+msgid "0 Comments"
+msgstr "0 kommentarer"
+
+#: content-video.php:41
+#: content.php:41
+#: single.php:77
+#@ hemingway
+msgid "1 Comment"
+msgstr "1 kommentar"
+
+#: content-video.php:41
+#: content.php:41
+#: single.php:77
+#@ hemingway
+msgid "% Comments"
+msgstr "% kommentarer"
+
+#: content.php:7
+#@ hemingway
+msgid "Sticky post"
+msgstr "Klistrat inlägg"
+
+#: searchform.php:2
+#@ hemingway
+msgid "Search form"
+msgstr "Sökformulär"
+
+#: footer.php:65
+#, php-format
+#@ hemingway
+msgid "Theme by <a href=\"%s\">Anders Noren</a>"
+msgstr "Tema av <a href=\"%s\">Anders Noren</a>"
+
+#: footer.php:65
+#@ hemingway
+msgid "To the top"
+msgstr "Till toppen"
+
+#: footer.php:65
+#@ hemingway
+msgid "Up"
+msgstr "Upp"
+
+#: functions.php:84
+#@ hemingway
+msgid "Footer A"
+msgstr "Footer A"
+
+#: functions.php:86
+#@ hemingway
+msgid "Widgets in this area will be shown in the left column in the footer."
+msgstr "Widgets i den här sektionen visas i den vänsta kolumnen i sidfoten."
+
+#: functions.php:93
+#@ hemingway
+msgid "Footer B"
+msgstr "Footer B"
+
+#: functions.php:95
+#@ hemingway
+msgid "Widgets in this area will be shown in the middle column in the footer."
+msgstr "Widgets i den här sektionen visas i mittenkolumnen i sidfoten."
+
+#: functions.php:102
+#@ hemingway
+msgid "Footer C"
+msgstr "Footer C"
+
+#: functions.php:104
+#@ hemingway
+msgid "Widgets in this area will be shown in the right column in the footer."
+msgstr "Widgets i den här sektionen visas i den högra kolumnen i sidfoten."
+
+#: functions.php:111
+#@ hemingway
+msgid "Sidebar"
+msgstr "Sidomeny"
+
+#: functions.php:113
+#@ hemingway
+msgid "Widgets in this area will be shown in the sidebar."
+msgstr "Widgets i den här sektionen visas i sidomenyn."
+
+#: functions.php:148
+#, php-format
+#@ hemingway
+msgid "Page %s"
+msgstr "Sida %s"
+
+#: functions.php:195
+#@ hemingway
+msgid "Continue reading"
+msgstr "Fortsätt läsa"
+
+#: functions.php:254
+#@ hemingway
+msgid "Pingback:"
+msgstr "Pingback:"
+
+#: functions.php:254
+#@ hemingway
+msgid "(Edit)"
+msgstr "(Redigera)"
+
+#: functions.php:274
+#@ hemingway
+msgid "(Post author)"
+msgstr "(Inläggsförfattare)"
+
+#: functions.php:287
+#@ hemingway
+msgid "Awaiting moderation"
+msgstr "Inväntar modererering"
+
+#: functions.php:297
+#@ hemingway
+msgid "Reply"
+msgstr "Svara"
+
+#: functions.php:315
+#@ hemingway
+msgid "Video URL (video post format)"
+msgstr "Videoadress (för video-inläggsformatet)"
+
+#: image.php:79
+#@ hemingway
+msgid "&laquo; Previous<span> attachment</span>"
+msgstr "&laquo; Föregående<span> bilaga</span>"
+
+#: image.php:80
+#@ hemingway
+msgid "Next<span> attachment</span> &raquo;"
+msgstr "Nästa<span> bilaga</span> &raquo;"
+
+#: image.php:92
+#: page.php:67
+#: single.php:147
+#: template-archives.php:143
+#: template-fullwidth.php:75
+#: template-nosidebar.php:75
+#@ hemingway
+msgid "We couldn't find any posts that matched your query. Please try again."
+msgstr "Vi kunde inte hitta några inlägg som matchade din sökning. Vänligen försök igen."
+
+#: index.php:21
+#, php-format
+#@ hemingway
+msgid "Page %s of %s"
+msgstr "Sida %s av %s"
+
+#: index.php:47
+#: search.php:46
+#@ hemingway
+msgid "&laquo; Older<span> posts</span>"
+msgstr "&laquo; Äldre<span> inlägg</span>"
+
+#: index.php:49
+#: search.php:48
+#@ hemingway
+msgid "Newer<span> posts</span> &raquo;"
+msgstr "Nyare<span> inlägg</span> &raquo;"
+
+#: search.php:13
+#: search.php:64
+#@ hemingway
+msgid "Search results:"
+msgstr "Sökresultat:"
+
+#: search.php:87
+#@ hemingway
+msgid "No results. Try again, would you kindly?"
+msgstr "Inga resultat. Försök igen, är du snäll?"
+
+#: searchform.php:3
+#@ hemingway
+msgid "Search"
+msgstr "Sök"
+
+#: single.php:115
+#@ hemingway
+msgid "Previous post:"
+msgstr "Föregående inlägg:"
+
+#: single.php:117
+#@ hemingway
+msgid "Previous post"
+msgstr "Föregående inlägg"
+
+#: single.php:128
+#@ hemingway
+msgid "Next post:"
+msgstr "Nästa inlägg:"
+
+#: single.php:130
+#@ hemingway
+msgid "Next post"
+msgstr "Nästa inlägg"
+
+#: template-archives.php:57
+#@ hemingway
+msgid "Last 30 Posts"
+msgstr "Senaste 30 inläggen"
+
+#: template-archives.php:71
+#@ hemingway
+msgid "Archives by Categories"
+msgstr "Kategoriarkiv"
+
+#: template-archives.php:77
+#@ hemingway
+msgid "Archives by Tags"
+msgstr "Etikettarkiv"
+
+#: template-archives.php:84
+#, php-format
+#@ hemingway
+msgid "View all posts in %s"
+msgstr "Visa alla inlägg i %s"
+
+#: template-archives.php:95
+#@ hemingway
+msgid "Contributors"
+msgstr "Författare"
+
+#: template-archives.php:101
+#@ hemingway
+msgid "Archives by Year"
+msgstr "År"
+
+#: template-archives.php:107
+#@ hemingway
+msgid "Archives by Month"
+msgstr "Månader"
+
+#: template-archives.php:113
+#@ hemingway
+msgid "Archives by Day"
+msgstr "Datum"
+
+#: widgets/dribbble-widget.php:10
+#@ hemingway
+msgid "Displays your latest Dribbble photos."
+msgstr "Visar dina senaste Dribbble-bilder."
+
+#: widgets/dribbble-widget.php:52
+#, php-format
+#@ hemingway
+msgid "Follow %s on Dribbble &raquo;"
+msgstr "Följ %s på Dribbble &raquo;"
+
+#: widgets/dribbble-widget.php:79
+#: widgets/flickr-widget.php:54
+#: widgets/video-widget.php:64
+#@ hemingway
+msgid "Title"
+msgstr "Titel"
+
+#: widgets/dribbble-widget.php:85
+#@ hemingway
+msgid "Dribbble username"
+msgstr "Dribbble-användarnamn"
+
+#: widgets/dribbble-widget.php:91
+#: widgets/flickr-widget.php:66
+#@ hemingway
+msgid "Number of images to display:"
+msgstr "Antal bilder att visa:"
+
+#: widgets/flickr-widget.php:8
+#@ hemingway
+msgid "Displays your latest Flickr photos."
+msgstr "Visar dina senaste Flickr-bilder."
+
+#: widgets/flickr-widget.php:32
+#@ hemingway
+msgid "More on Flickr &raquo;"
+msgstr "Mer på Flickr &raquo;"
+
+#: widgets/flickr-widget.php:60
+#@ hemingway
+msgid "Flickr ID (use <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr "Flickr-ID (använd <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+
+#: widgets/video-widget.php:8
+#@ hemingway
+msgid "Displays a video of your choosing."
+msgstr "Låter dig visa ett videoklipp."
+
+#: widgets/video-widget.php:70
+#@ hemingway
+msgid "Video URL"
+msgstr "Videoklippets adress"
+
+#: functions.php:363
+#@ hemingway
+msgid "Hemingway Options"
+msgstr "Hemingway-inställningar"
+
+#: functions.php:366
+#@ hemingway
+msgid "Allows you to customize some settings for Hemingway."
+msgstr "Låter dig ställa in temainställningar för Hemingway."
+
+#: functions.php:371
+#: functions.php:401
+#@ hemingway
+msgid "Logo"
+msgstr "Logotyp"
+
+#: functions.php:393
+#@ hemingway
+msgid "Accent Color"
+msgstr "Accentfärg"
+
+#: functions.php:373
+#@ hemingway
+msgid "Upload a logo to replace the default site name and description in the header"
+msgstr "Ladda upp en logotyp för att ersätta sidtiteln och -beskrivningen i sidhuvudet"
+

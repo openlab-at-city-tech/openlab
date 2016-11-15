@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@ GNU General Public License for more details.
 class QM_Dispatcher_Html extends QM_Dispatcher {
 
 	public $id = 'html';
+	public $did_footer = false;
 
 	public function __construct( QM_Plugin $qm ) {
 
@@ -25,8 +26,20 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'wp_ajax_qm_auth_off',        array( $this, 'ajax_off' ) );
 		add_action( 'wp_ajax_nopriv_qm_auth_off', array( $this, 'ajax_off' ) );
 
+		add_action( 'shutdown',                   array( $this, 'dispatch' ), 0 );
+
+		add_action( 'wp_footer',                  array( $this, 'action_footer' ) );
+		add_action( 'admin_footer',               array( $this, 'action_footer' ) );
+		add_action( 'login_footer',               array( $this, 'action_footer' ) );
+		add_action( 'embed_footer',               array( $this, 'action_footer' ) );
+		add_action( 'amp_post_template_footer',   array( $this, 'action_footer' ) );
+
 		parent::__construct( $qm );
 
+	}
+
+	public function action_footer() {
+		$this->did_footer = true;
 	}
 
 	/**
@@ -44,7 +57,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			wp_send_json_error( __( 'Could not set authentication cookie.', 'query-monitor' ) );
 		}
 
-		$expiration = time() + 172800; # 48 hours
+		$expiration = time() + ( 2 * DAY_IN_SECONDS );
 		$secure     = self::secure_cookie();
 		$cookie     = wp_generate_auth_cookie( get_current_user_id(), $expiration, 'logged_in' );
 
@@ -58,7 +71,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 	public function ajax_off() {
 
-		if ( ! $this->user_verified() or ! check_ajax_referer( 'qm-auth-off', 'nonce', false ) ) {
+		if ( ! self::user_verified() or ! check_ajax_referer( 'qm-auth-off', 'nonce', false ) ) {
 			wp_send_json_error( __( 'Could not clear authentication cookie.', 'query-monitor' ) );
 		}
 
@@ -78,23 +91,19 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			return;
 		}
 
-		$class = implode( ' ', array( 'hide-if-js' ) );
 		$title = __( 'Query Monitor', 'query-monitor' );
 
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'query-monitor',
-			'title' => $title,
-			'href'  => '#qm-overview',
-			'meta'  => array(
-				'classname' => $class
-			)
+			'title' => esc_html( $title ),
+			'href'  => '#qm',
 		) );
 
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'query-monitor',
 			'id'     => 'query-monitor-placeholder',
-			'title'  => $title,
-			'href'   => '#qm-overview'
+			'title'  => esc_html( $title ),
+			'href'   => '#qm',
 		) );
 
 	}
@@ -112,7 +121,21 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'enqueue_embed_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'send_headers',          'nocache_headers' );
 
+		add_action( 'amp_post_template_head', array( $this, 'enqueue_assets' ) );
+		add_action( 'amp_post_template_head', array( $this, 'manually_print_assets' ), 11 );
+
+	}
+
+	public function manually_print_assets() {
+		wp_print_scripts( array(
+			'query-monitor',
+		) );
+		wp_print_styles( array(
+			'query-monitor',
+		) );
 	}
 
 	public function enqueue_assets() {
@@ -162,36 +185,60 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 	}
 
-	public function before_output() {
+	public function dispatch() {
+
+		if ( ! $this->should_dispatch() ) {
+			return;
+		}
+
+		$this->before_output();
+
+		/* @var QM_Output_Html[] */
+		foreach ( $this->get_outputters( 'html' ) as $id => $output ) {
+			$output->output();
+		}
+
+		$this->after_output();
+
+	}
+
+	protected function before_output() {
 
 		require_once $this->qm->plugin_path( 'output/Html.php' );
 
-		QM_Util::include_files( $this->qm->plugin_path( 'output/html' ) );
+		foreach ( glob( $this->qm->plugin_path( 'output/html/*.php' ) ) as $file ) {
+			require_once $file;
+		}
 
 		$class = array(
 			'qm-no-js',
 		);
 
-		if ( !is_admin() ) {
+		if ( did_action( 'wp_head' ) ) {
 			$absolute = function_exists( 'twentyfifteen_setup' );
 			if ( apply_filters( 'qm/output/absolute_position', $absolute ) ) {
 				$class[] = 'qm-absolute';
 			}
+
+			$class[] = sprintf( 'qm-theme-%s', get_template() );
+			$class[] = sprintf( 'qm-theme-%s', get_stylesheet() );
 		}
 
 		if ( !is_admin_bar_showing() ) {
-			$class[] = 'qm-show';
+			$class[] = 'qm-peek';
 		}
 
-		echo '<div id="qm" class="' . implode( ' ', $class ) . '">';
+		echo '<div id="qm" class="' . implode( ' ', array_map( 'esc_attr', $class ) ) . '">';
 		echo '<div id="qm-wrapper">';
-		echo '<p>' . __( 'Query Monitor', 'query-monitor' ) . '</p>';
+		echo '<div id="qm-title">';
+		echo '<p>' . esc_html__( 'Query Monitor', 'query-monitor' ) . '</p>';
+		echo '</div>';
 
 	}
 
-	public function after_output() {
+	protected function after_output() {
 
-		echo '<div class="qm qm-half" id="qm-authentication">';
+		echo '<div class="qm qm-half qm-clear" id="qm-authentication">';
 		echo '<table cellspacing="0">';
 		echo '<thead>';
 		echo '<tr>';
@@ -200,22 +247,22 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo '</thead>';
 		echo '<tbody>';
 
-		if ( !$this->user_verified() ) {
+		if ( ! self::user_verified() ) {
 
 			echo '<tr>';
-			echo '<td>' . __( 'You can set an authentication cookie which allows you to view Query Monitor output when you&rsquo;re not logged in.', 'query-monitor' ) . '</td>';
+			echo '<td>' . esc_html__( 'You can set an authentication cookie which allows you to view Query Monitor output when you&rsquo;re not logged in.', 'query-monitor' ) . '</td>';
 			echo '</tr>';
 			echo '<tr>';
-			echo '<td><a href="#" class="qm-auth" data-action="on">' . __( 'Set authentication cookie', 'query-monitor' ) . '</a></td>';
+			echo '<td><a href="#" class="qm-auth" data-action="on">' . esc_html__( 'Set authentication cookie', 'query-monitor' ) . '</a></td>';
 			echo '</tr>';
 
 		} else {
 
 			echo '<tr>';
-			echo '<td>' . __( 'You currently have an authentication cookie which allows you to view Query Monitor output.', 'query-monitor' ) . '</td>';
+			echo '<td>' . esc_html__( 'You currently have an authentication cookie which allows you to view Query Monitor output.', 'query-monitor' ) . '</td>';
 			echo '</tr>';
 			echo '<tr>';
-			echo '<td><a href="#" class="qm-auth" data-action="off">' . __( 'Clear authentication cookie', 'query-monitor' ) . '</a></td>';
+			echo '<td><a href="#" class="qm-auth" data-action="off">' . esc_html__( 'Clear authentication cookie', 'query-monitor' ) . '</a></td>';
 			echo '</tr>';
 
 		}
@@ -235,8 +282,10 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo '<script type="text/javascript">' . "\n\n";
 		echo 'var qm = ' . json_encode( $json ) . ';' . "\n\n";
 		?>
-		if ( 'undefined' === typeof QM_i18n ) {
+		if ( ( 'undefined' === typeof QM_i18n ) || ( 'undefined' === typeof jQuery ) || ! jQuery ) {
 			document.getElementById( 'qm' ).style.display = 'block';
+		} else if ( ! document.getElementById( 'wpadminbar' ) ) {
+			document.getElementById( 'qm' ).className += ' qm-peek';
 		}
 		<?php
 		echo '</script>' . "\n\n";
@@ -246,10 +295,15 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 	public function js_admin_bar_menu() {
 
 		$class = implode( ' ', apply_filters( 'qm/output/menu_class', array() ) );
+
+		if ( false === strpos( $class, 'qm-' ) ) {
+			$class .= ' qm-all-clear';
+		}
+
 		$title = implode( '&nbsp;&nbsp;&nbsp;', apply_filters( 'qm/output/title', array() ) );
 
 		if ( empty( $title ) ) {
-			$title = __( 'Query Monitor', 'query-monitor' );
+			$title = esc_html__( 'Query Monitor', 'query-monitor' );
 		}
 
 		$admin_bar_menu = array(
@@ -261,7 +315,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		);
 
 		foreach ( apply_filters( 'qm/output/menus', array() ) as $menu ) {
-			$admin_bar_menu['sub'][] = $menu;
+			$admin_bar_menu['sub'][ $menu['id'] ] = $menu;
 		}
 
 		return $admin_bar_menu;
@@ -274,11 +328,28 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			return false;
 		}
 
-		if ( ! ( did_action( 'wp_footer' ) or did_action( 'admin_footer' ) or did_action( 'login_footer' ) ) ) {
+		if ( ! $this->did_footer ) {
 			return false;
 		}
 
-		if ( QM_Util::is_async() ) {
+		// If this is an async request and not a customizer preview:
+		if ( QM_Util::is_async() && ( ! function_exists( 'is_customize_preview' ) || ! is_customize_preview() ) ) {
+			return false;
+		}
+
+		# Don't process if the minimum required actions haven't fired:
+		if ( is_admin() ) {
+			if ( ! did_action( 'admin_init' ) ) {
+				return false;
+			}
+		} else {
+			if ( ! ( did_action( 'wp' ) || did_action( 'login_init' ) ) ) {
+				return false;
+			}
+		}
+
+		# Back-compat filter. Please use `qm/dispatch/html` instead
+		if ( ! apply_filters( 'qm/process', true, is_admin_bar_showing() ) ) {
 			return false;
 		}
 

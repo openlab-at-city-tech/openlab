@@ -12,8 +12,6 @@ class CMTooltipGlossaryBackend
     protected static $jsPath = NULL;
     protected static $viewsPath = NULL;
 
-    const PAGE_YEARLY_OFFER = 'https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/';
-
     public static function instance()
     {
         $class = __CLASS__;
@@ -55,7 +53,7 @@ class CMTooltipGlossaryBackend
         add_menu_page('Glossary', CMTT_NAME, 'edit_posts', CMTT_MENU_OPTION, 'edit.php?post_type=glossary', self::$cssPath . 'images/cm-glossary-tooltip-icon.png');
 
         add_submenu_page(CMTT_MENU_OPTION, 'Add New', 'Add New', 'edit_posts', 'post-new.php?post_type=glossary');
-        add_submenu_page(CMTT_MENU_OPTION, 'TooltipGlossary Options', 'Settings', 'edit_posts', CMTT_SETTINGS_OPTION, array(self::$calledClassName, 'cmtt_admin_options'));
+        add_submenu_page(CMTT_MENU_OPTION, 'TooltipGlossary Options', 'Settings', 'manage_options', CMTT_SETTINGS_OPTION, array(self::$calledClassName, 'cmtt_admin_options'));
 
         add_filter('views_edit-glossary', array(self::$calledClassName, 'cmtt_filter_admin_nav'), 10, 1);
     }

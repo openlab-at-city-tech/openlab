@@ -5,8 +5,8 @@
  * @package     WordPress
  * @subpackage  WordPress_Google_Fonts
  * @author      Sunny Johal - Titanium Themes
- * @copyright   Copyright (c) 2014, Titanium Themes
- * @version     1.3.7
+ * @copyright   Copyright (c) 2016, Titanium Themes
+ * @version     1.4.0
  * 
  */
 /**
@@ -26,6 +26,11 @@ textarea, input, select {
 #contextual-help-columns a {
     outline: none !important;
 }
+
+.spinner.egf-visible {
+    visibility: visible;
+}
+
 
 /* Admin Dialog Styles */
 #message {
@@ -74,7 +79,6 @@ textarea, input, select {
 
 /* Screen Dialog */
 #delete_message {
-
 }
 
 #update_message a {
@@ -100,6 +104,15 @@ textarea, input, select {
 
 .add-new-control-action {
     display: inline-block;
+    margin-left: 4px;
+}
+
+label.menu-name-label {
+    float: left;
+}
+
+input.custom-control-name {
+    margin-top: 3px;
     margin-left: 4px;
 }
 
@@ -367,7 +380,7 @@ ul.tagit input[type="text"] {
  * @version 1.1.1
  * 
  */
-#google-api-key {
+#egf-google-api-key {
     width: 225px;
 }
 
@@ -398,7 +411,7 @@ ul.tagit input[type="text"] {
 .spinner.spinner-left {
     float:left;
 }
-#save_api_key {
+#egf_save_api_key {
     float: left;
 }
 

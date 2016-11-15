@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,12 +14,24 @@ GNU General Public License for more details.
 
 */
 
-if ( ! interface_exists( 'QM_Output' ) ) {
-interface QM_Output {
+if ( ! class_exists( 'QM_Output' ) ) {
+abstract class QM_Output {
 
-	public function __construct( QM_Collector $collector );
+	protected $collector;
 
-	public function output();
+	public function __construct( QM_Collector $collector ) {
+		$this->collector = $collector;
+	}
+
+	abstract public function get_output();
+
+	public function output() {
+		// nothing
+	}
+
+	public function get_collector() {
+		return $this->collector;
+	}
 
 }
 }

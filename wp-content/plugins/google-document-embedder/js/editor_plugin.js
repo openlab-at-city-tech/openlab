@@ -31,8 +31,8 @@
 			return { 
 				longname : 'Google Doc Embedder',
 				author : 'Kevin Davis',
-				authorurl : 'http://www.davistribe.org/gde',
-				infourl : 'http://www.davistribe.org/gde',
+				authorurl : 'https://wordpress.org/plugins/google-document-embedder/',
+				infourl : 'https://wordpress.org/plugins/google-document-embedder/',
 				version : "1.5"}
 		}
 	});

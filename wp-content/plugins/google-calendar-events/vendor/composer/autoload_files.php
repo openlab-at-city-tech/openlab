@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
-    'f15d016d70663d5e96ccd2b863511eb8' => $vendorDir . '/cbschuld/browser.php/lib/Browser.php',
+    'cf150f72bd303a2ff07711c9a70f2d53' => $vendorDir . '/google/apiclient/src/Google/autoload.php',
 );

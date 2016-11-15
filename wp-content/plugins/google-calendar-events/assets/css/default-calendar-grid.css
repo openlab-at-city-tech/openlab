@@ -23,23 +23,69 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .simcal-icon-spin {
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
   display: inline-block; }
 
-@-webkit-keyframes spin {
+@-moz-keyframes spin {
   0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-webkit-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-o-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-ms-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 @keyframes spin {
   0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
@@ -47,8 +93,7 @@
   transition: all .2s ease-in-out; }
 
 .simcal-icon-rotate-180:before {
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg); }
+  transform: rotate(180deg); }
 
 .simcal-icon-calendar-empty:before {
   content: '\e800'; }
@@ -373,38 +418,6 @@
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
-  .simcal-event-bubble:before {
-    border-bottom: 5px solid #fff;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    content: ' ';
-    display: block;
-    font-size: 0;
-    height: 0;
-    left: 50%;
-    line-height: 0;
-    margin: -5px 0 0 -5px;
-    position: absolute;
-    width: 0;
-    z-index: 16000; }
-  .simcal-event-bubble:after {
-    border-bottom: 5px solid rgba(0, 0, 0, 0.18);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    content: ' ';
-    display: block;
-    font-size: 0;
-    height: 0;
-    left: 50%;
-    line-height: 0;
-    margin: -6px 0 0 -5px;
-    position: absolute;
-    top: 0;
-    width: 0;
-    z-index: 14999; }
   .simcal-event-bubble .simcal-event-details p,
   .simcal-event-bubble .simcal-event-details .simcal-event-description {
     margin: 0 0 1em; }
-
-.qtip-tip {
-  display: none !important; }

@@ -4,7 +4,8 @@
  */ ?>
 
 <h2 class="sidebar-title hidden-xs">Help</h2>
-<div class="sidebar-block hidden-xs">
+<div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper">
+<div class="sidebar-block clearfix">
 <?php
 $args = array(
     'theme_location' => 'helpmenu',
@@ -15,14 +16,16 @@ $args = array(
 wp_nav_menu($args);
 ?>
 </div>
-
+</div>
+<div class="sidebar-widget-wrapper">    
 <h2 class="sidebar-help-title help-search-title">Search Help</h2>
 <div class="sidebar-block padded-block">
 <div id="help-search-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
 <div id="help-search">
     <form method="get" action="<?php echo esc_url( openlab_get_help_search_url() ); ?>">
-	    <input type="text" name="help-search" class="help-search" />
-	    <input class="btn btn-default btn-block btn-primary" type="submit" value="Search" />
+            <label class="sr-only" for="helpSearch">Help Search</label>
+	    <input type="text" name="help-search" class="help-search" id="helpSearch" />
+            <button class="btn btn-default btn-block btn-primary" type="submit">Search<span class="sr-only"> Help</span></button>
     </form>
     <div class="clearfloat"></div>
 </div>
@@ -31,7 +34,7 @@ wp_nav_menu($args);
 <h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
 <div class="sidebar-block padded-block">
 <div id="support-team">
-    <div id="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
+    <div class="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
     <?php
 	$args = array(
 		'name' => 'contact-us',
@@ -82,13 +85,13 @@ wp_nav_menu($args);
         echo '</div>';
     } //end if
     ?>
-    <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o"></i> Contact Us</a>
+    <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_get_root_domain() . '/blog/help/contact-us'; ?>"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Contact Us</a>
 </div><!--support team-->
 </div>
 
 <h2 class="sidebar-help-title help-tags-title">Find a Help Topic With Tags</h2>
 <div class="sidebar-block padded-block">
-<div id="help-tags-copy"><p>Find answers throughout Help that correspond to the tags below:</p></div>
+<div class="help-tags-copy"><p>Find answers throughout Help that correspond to the tags below:</p></div>
 <div id="help-tags">
     <?php
     $args = array(
@@ -117,5 +120,6 @@ wp_nav_menu($args);
 <span class="italics cc-gloss">Attribution &mdash; NonCommercial &mdash; ShareAlike</span></p>
 <div id="creative-commons">
     <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons</a>
+</div>
 </div>
 </div>

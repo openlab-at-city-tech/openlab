@@ -72,7 +72,7 @@ class GF_Field_Time extends GF_Field {
 		$field_id = $is_entry_detail || $is_form_editor || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
 
 		$form_sub_label_placement  = rgar( $form, 'subLabelPlacement' );
-		$field_sub_label_placement = rgar( $this, 'subLabelPlacement' );
+		$field_sub_label_placement = $this->subLabelPlacement;
 		$is_sub_label_above        = $field_sub_label_placement == 'above' || ( empty( $field_sub_label_placement ) && $form_sub_label_placement == 'above' );
 		$sub_label_class_attribute = $field_sub_label_placement == 'hidden_label' ? "class='hidden_sub_label screen-reader-text'" : '';
 
@@ -163,6 +163,10 @@ class GF_Field_Time extends GF_Field {
 		}
 	}
 
+	public function get_field_label_class(){
+		return 'gfield_label gfield_label_before_complex';
+	}
+
 	public function is_value_submission_empty( $form_id ) {
 		$value = rgpost( 'input_' . $this->id );
 		if ( is_array( $value ) ) {
@@ -181,8 +185,12 @@ class GF_Field_Time extends GF_Field {
 		}
 	}
 
-
 	public function get_value_save_entry( $value, $form, $input_name, $lead_id, $lead ) {
+
+		// if $value is a default value and also an array, it will be an associative array; to be safe, let's convert all array $value to numeric
+		if( is_array( $value ) ) {
+			$value = array_values( $value );
+		}
 
 		if ( ! is_array( $value ) && ! empty( $value ) ) {
 			preg_match( '/^(\d*):(\d*) ?(.*)$/', $value, $matches );
@@ -192,9 +200,9 @@ class GF_Field_Time extends GF_Field {
 			$value[2] = rgar( $matches, 3 );
 		}
 
-		$hour   = empty( $value[0] ) ? '0' : strip_tags( $value[0] );
-		$minute = empty( $value[1] ) ? '0' : strip_tags( $value[1] );
-		$ampm   = strip_tags( rgar( $value, 2 ) );
+		$hour   = empty( $value[0] ) ? '0' : wp_strip_all_tags( $value[0] );
+		$minute = empty( $value[1] ) ? '0' : wp_strip_all_tags( $value[1] );
+		$ampm   = wp_strip_all_tags( rgar( $value, 2 ) );
 		if ( ! empty( $ampm ) ) {
 			$ampm = " $ampm";
 		}

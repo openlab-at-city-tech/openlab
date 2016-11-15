@@ -1,0 +1,23 @@
+{
+  "name": "an-gradebook",
+  "version": "1.0.0",
+  "description": "A grunt task plugin for building an-gradebook",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wp-plugins/an-gradebook.git"
+  },
+  "author": "Aori Nevo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wp-plugins/an-gradebook/issues"
+  },
+  "homepage": "https://github.com/wp-plugins/an-gradebook#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-requirejs": "^0.4.4"
+  }
+}

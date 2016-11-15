@@ -1,8 +1,8 @@
 === Google for WordPress ===
 Contributors: massimodellarovere
 Requires at least: 3.5
-Tested up to: 4.3
-Stable tag: 1.9.3
+Tested up to: 4.5
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://goo.gl/LNgg9T
@@ -383,6 +383,12 @@ Before you use the google translate module must register the site that you want 
 <a href="http://goo.gl/6G8dH">Español</a> - 
 <a href="http://goo.gl/WwtPs">Français</a> - 
 <a href="http://goo.gl/VHbwt">Deutsch</a>
+
+= Version 1.9.4 =
+* Feature: Compatible with WP 4.5
+* Feature: Option for Calendar Widget.
+* Feature: Option for Calendar Shortcode.
+* Feature: Option Day/Week/Month Calendar.
 
 = Version 1.9.3 =
 * Fix: Wrong Popup Shortcode Calendar.

@@ -4,10 +4,10 @@ Donate link: http://plugins.readygraph.com/donate/
 Tags: posts, subscription, email, subscribe, notify, notification
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 10.20.8
+Stable tag: 10.21
 License: GPL3
 
-Sends a list of subscribers emails when you publish new posts. Automate user growth and revenue with ReadyGraph integration.
+Sends a list of subscribers emails when you publish new posts.
 
 == Description ==
 
@@ -23,13 +23,7 @@ Check official website for live demo http://plugins.readygraph.com/subscribe2/
 = Summary =
 Subscribe2 provides a comprehensive subscription management and email notification system for WordPress blogs that sends email notifications to a list of subscribers when you publish new content to your blog.
 
-This plugin has integrated [ReadyGraph](http://readygraph.com/), an optional set of features to automate the growth of your userbase.  It helps you achieve the three goals of any web marketer: maximize conversion of site visitors to register for your email list, maximize viral referrals for your site, and maximize return visits to your site.  To accomplish this, we have integrated a key set of growth features with this plugin:
-	- Intelligent signup popup with email or one-click Facebook login
-	- Full viral referral flow
-	- Automated end user re-engagement emails including welcome emails, weekly digest, friend joined alert and more (all email campaigns are optional and configurable)
-	- Enhanced email deliverabilty
-	- Cloud-based analytics and data storage
-	- Settings that allow you to turn on and off all ReadyGraph features.
+**ReadyGraph is removed from the plugin**
 
 A full description of features is below.
 
@@ -48,52 +42,6 @@ The format of the email can also be customised for per-post notifications, Subsc
 
 If you want to send full content HTML emails to Public Subscribers too then upgrade to [Subscribe2 HTML](http://semperplugins.com/plugins/subscribe2-html/).
 
-= ReadyGraph App =
-
-ReadyGraph is a system that automates the growth of your site’s userbase. It is optimized to deliver audience growth and motivate users to consistently revisit your site.
-
-= Optimized Signup Form =
-
-ReadyGraph’s signup form with intelligent pop-up functionality and one-click login is designed to maximize signups to your email list.  You can configure when the popup appears so as to maximize the likelihood that the user is engaged enough to register for your list.
-
-= Viral Friend Invites =
-
-ReadyGraph adds a friend invite process to your site’s signup flow.  We then power the entire viral loop by sending email and Facebook invitations that encourage your visitors’ friends to signup for your site.
-
-= Automated Re-engagement Emails =
-
-ReadyGraph’s automated email system encourages visitors to return to your site.   Users receive optimized emails such as a welcome email, re-engagement email, regular digest with new content from your blog, and social emails.  All emails are configurable including the ability to turn on and off individual campaigns.  We handle all sending to maximize deliverability.
-
-= Analytics =
-
-Track daily-new subscribers, daily invites, total traffic, and other key metrics that quantify growth and user engagement.  ReadyGraph safely stores user data in the cloud so you can access data from anywhere.
-
-= Newsfeed =
-
-ReadyGraph’s newsfeed is an optional overlay on your site where your users can engage with others in your community and recommend your content or products to each other.  It is like having a social network that engages users embedded on your site. Users can leave comments, ‘like’ comments left by other subscribers and ‘follow’ other subscribers.  Subscribers will receive automated email updates based on these actions.
-
-= Content Voting and Ranking =
-
-ReadyGraph allows your subscribers to vote on your latest content. The top content from our network of sites is then ranked on UserBase.com by the number of votes that it has received in the past 7 days.
-
-= Monetization Through Sponsored Units =
-
-Due to popular demand, we are excited to announce that we have now added a new layer onto the ReadyGraph product: monetization. For quality sites with enough users and traffic to qualify, we will enable you to earn revenue through a set of elegant, unobtrusive sponsorship units.The ad units will be shown occasionally (much of the time they won't be noticeable) and are highly targeted based on user interests. Most importantly, they can be turned off or on at any time. In addition to helping qualifying sites support themselves, this initiative will allow us to continue to put resources towards enhancing the free features we offer each and every site owner.  Sites qualify on the basis of quality and a minimum traffic threshold.  You can view, adjust, or opt out through your site monetization settings page.
-
-= Want To Grow Even Faster? =
-
-Try [ReadyGraph premium](https://readygraph.com/accounts/payment/) for free to get these advanced features:
-
-1.	Monthly Promotion to 10,000 New Users
-2.	Unlimited New Blog Post Emails
-3.	Unlimited Viral Email Invites
-4.	Unlimited Facebook Invites
-5.	Many more premium features added all the time
-
-[Get it here!](https://readygraph.com/accounts/payment/)
-
-
-If you have questions or concerns contact us anytime at [info@readygraph.com](mailto:info@readygraph.com)
 
 == Installation ==
 
@@ -126,113 +74,6 @@ This token will automatically be replaced by dynamic subscription information an
 == Frequently Asked Questions ==
 
 For detailed FAQ and other support visit [http://plugins.readygraph.com/subscribe2/faq/](http://plugins.readygraph.com/subscribe2/faq/)
-
-= ReadyGraph FAQ =
-
-= GENERAL QUESTIONS: =
-
-**What is ReadyGraph?**
-
-ReadyGraph is a tool that makes it easy for websites to grow and manage their user-base, by allowing/utilizing: **user sign-up**, through an optional notification tab and an intelligent pop-up, with one-click sign-up and social login options; **user friend invitations**, through the sign-up pop-up, or a sidebar button; **automated emails** (optional) that keep visitors coming back, such as welcome messages to greet new users, recent site updates/posts to keep them informed, gentle reminders for inactive users, and a weekly digest of new content; **mass emailing**, for fast communication to all your subscribers; **user-interaction**, through an optional comment-feed sidebar; **analytic tools**, to track new subscribers, daily visits, and other key metrics that quantify your website’s growth and user engagement.
-
-**How do I install ReadyGraph?**
-
-After installing this plug-in, you can activate the ReadyGraph features by connecting/signing-up for your ReadyGraph account.
-
-**How do I uninstall ReadyGraph?**
-
-You can deactivate the ReadyGraph features by navigating to the upper-right corner of the “ReadyGraph App” page, clicking the drop-down menu with your email address, and disconnecting your ReadyGraph account.
-
-**How do I reinstall ReadyGraph after I had deleted?**
-
-1. Get the latest plugin update/reinstall the plugin.
-2. Disable the plugin
-3. Enable the plugin
-
-**Can I delay the sign-up pop-up?**
-
-Yes, you can delay the pop-up for up to 20 minutes; however, the most effective delay is only a few seconds. That ensures that users are engaged, before showing the pop-up to them. 
-
-**How do I check my website’s stats?**
-
-You can check your website’s stats by clicking the “Insights” button at the upper-right corner of the “ReadyGraph App” page. There, you will find various metrics about your site growth.
-
-**Can I use both the pop-up and the form widget?**
-
-Yes, you can; they will not conflict with each other.
-
-**How do I contact someone for support, or to suggest a feature?**
-
-You can contact us at info@readygraph.com. We appreciate all feedback.
-
-**I’m having problems with the latest version of the plug-in; can I switch back to an older version?**
-
-Yes, just navigate to the “Developers” tab on the wordpress.org plug-in page, and select the version that works for you.
-
-**Does this plugin help me earn revenue?**
-
-Due to popular demand, we are excited to announce that we have now added a new layer onto the ReadyGraph product: monetization. For quality sites with enough users and traffic to qualify, we will enable you to earn revenue through a set of elegant, unobtrusive sponsorship units.The ad units will be shown occasionally (much of the time they won't be noticeable) and are highly targeted based on user interests. Most importantly, they can be turned off or on at any time. In addition to helping qualifying sites support themselves, this initiative will allow us to continue to put resources towards enhancing the free features we offer each and every site owner.  Sites qualify on the basis of quality and a minimum traffic threshold.  You can view, adjust, or opt out through your site monetization settings page.
-
-= ACCOUNT QUESTIONS: =
-
-**How do I change my account email address?**
-
-Contact us as info@readygraph.com.
-
-**How do I turn off email notifications from ReadyGraph?**
-
-You can turn them off via the account settings page on ReadyGraph.com.
-
-**How do I disconnect ReadyGraph from my site?**
-
-You can disconnect ReadyGraph from your site by navigating to the upper-right corner of the “ReadyGraph App” page in this plug-in, and clicking the drop-down menu with your email address on it; there will be an option there to disconnect ReadyGraph from your site.
-
-= CUSTOMIZATION QUESTIONS: =
-
-**Can I customize the pop-up?**
-
-Yes, you can choose a template that matches your site design, from the various templates available.
-
-**Can I customize the friend-invite form?**
-
-You can customize the text on the friend invite form to something that suits your website.
-
-**Can I customize my emails?**
-
-Yes, on the right side of the “ReadyGraph App” page, you will find a link to a page where you can Configure/Enable/Disable the various automated emails that you can send via ReadyGraph.
-
-= QUESTIONS ABOUT YOUR SUBSCRIBERS: =
-
-**How do I view my subscribers?**
-
-Clicking the “Insights” button at the top of the “ReadyGraph App” page of this plug-in will take you to a page where you can view a list of your subscribers.
-
-**How do I mail my subscribers?**
-
-On the right side of the “ReadyGraph App” page, you will find a link to a page where you can send mass emails to your subscribers.
-
-**Can I import a list of existing subscribers?**
-
-This is a feature currently under development and is scheduled to be released in our next update.
-
-**Can I export a list of my subscribers?**
-
-This is a feature currently under development and is scheduled to be released in our next update. 
-
-**If I decide to stop using ReadyGraph, do I keep my subscribers?**
-
-Yes, contact us at info@readygraph.com for assistance.
-
-**Can I send automated emails/newsletters to my subscribers?**
-
-On the right side of the “ReadyGraph App” page, you will find a link to a page where you can Enable/Disable/Configure the various automated emails that you can send via ReadyGraph.
-
-**Is ReadyGraph necessary in order to use this plug-in?**
-
-No, it isn’t; you can use this plug-in without ReadyGraph features enabled, but you would be missing out on added growth opportunities.
-
-If you have questions or concerns, contact us anytime at [info@readygraph.com](mailto:info@readygraph.com)
-
 
 == Screenshots ==
 1. The Subscribe2->Mail Subscribers admin page generated by the plugin. http://plugins.readygraph.com/subscribe2/screenshots/

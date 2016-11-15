@@ -19,12 +19,24 @@ function showHide(id) {
 }
 
 jQuery(document).ready(function($){
-	var form = document.getElementById( 'create-group-form' ),
+	var form,
+		form_type,
 		form_validated = false,
-		$form = $( form ),
+		new_group_type = $( '#new-group-type' ).val(),
+		$body = $( 'body' ),
 		$gc_submit = $( '#group-creation-create' ),
 		$required_fields;
-	
+
+	if ( $body.hasClass( 'group-admin' ) ) {
+		form_type = 'admin';
+		form = document.getElementById( 'group-settings-form' );
+	} else {
+		form_type = 'create';
+		form = document.getElementById( 'create-group-form' );
+	}
+
+	$form = $( form );
+
 	$required_fields = $form.find( 'input:required' );
 
 	function new_old_switch( noo ) {
@@ -46,12 +58,12 @@ jQuery(document).ready(function($){
 					$(element).removeProp('disabled').removeClass('disabled');
                                     }
 				});
-                                
+
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').removeClass('disabled-opt');
                                 }
-                                
+
 			} else {
 				$(thisid).find('input').each(function(index,element){
                                     if ($(element).attr('type') !== 'radio') {
@@ -65,7 +77,7 @@ jQuery(document).ready(function($){
 					$(element).prop('disabled','disabled').addClass('disabled');
                                     }
 				});
-                                
+
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').addClass('disabled-opt');
@@ -348,10 +360,24 @@ jQuery(document).ready(function($){
 		form_validated = false;
 	} );
 
+	// Schools/Departments are required fields for Courses.
+	$gc_submit.on( 'mouseover focus', function() {
+		if ( 'course' == new_group_type ) {
+			var school_tech = document.getElementById( 'school_tech' );
+			var is_school_selected = $( '.school-inputs input:checked' ).length > 0;
+			school_tech.setCustomValidity( is_school_selected ? '' : 'You must select a School.' );
+
+			if ( is_school_selected ) {
+				var is_department_selected = $( '.departments input:checked' ).length > 0;
+				document.getElementsByClassName( 'wds-department' )[0].setCustomValidity( is_department_selected ? '' : 'You must select a Department.' );
+			}
+		}
+	} );
+
 	/**
 	 * Form validation.
 	 *
-	 * - Site URL is validated by AJAX.  
+	 * - Site URL is validated by AJAX.
 	 * - Name and Description use native validation.
 	 */
 	validate_form = function( event ) {
@@ -391,7 +417,7 @@ jQuery(document).ready(function($){
 
 		event.preventDefault();
 
-		domain = $domain_field.val();	
+		domain = $domain_field.val();
 
 		var warn = $domain_field.siblings( '.ajax-warning' );
 		if ( warn.length > 0 ) {
@@ -414,7 +440,7 @@ jQuery(document).ready(function($){
 					return false;
 				} else {
 					// We're done validating.
-					form_validated = true;		
+					form_validated = true;
 					$form.append( '<input name="save" value="1" type="hidden" />' );
 					$form.submit();
 					return true;
@@ -424,5 +450,7 @@ jQuery(document).ready(function($){
 	};
 
 	// Form validation.
-	form.onsubmit = validate_form;
+        if(form){
+            form.onsubmit = validate_form;
+        }
 },(jQuery));

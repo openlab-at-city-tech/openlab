@@ -1,3 +1,8 @@
+/* Hack to remove the non-functional preview pane. */
+#getchicklet {
+  display: none;
+}
+
 @font-face
 {
   font-family : "WP_ST_Helvetica";
@@ -10,9 +15,9 @@
 	width : 100%;
 	height: 50px;
 	background-color : #ECECEC;
-	margin : 0px;	
+	margin : 0px;
 }
-		
+
 #wp_st_centerContainer1{
 	/*height : 140px;*/
 	text-align:center;
@@ -173,7 +178,7 @@
 	background-repeat:no-repeat;
 	width:46px;
 	position:absolute;
-    top:0px; 
+    top:0px;
 	left:10px;
 }
 
@@ -230,10 +235,10 @@
     width: 120px;
 	margin-top: 15px;
 	margin-left: 44%;
-	height : 29px;	
+	height : 29px;
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#01bf01), color-stop(48%,#01bf01), color-stop(100%,#01bf01));
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01bf01', endColorstr='#008553',GradientType=0 );
-}	
+}
 
 .wp_st_text{
 	font-size : 12px;
@@ -251,13 +256,13 @@
     text-align: center;
 	cursor:pointer;
  }
- 
- 
+
+
 .wp_st_subOptions li.selected {
     background: none repeat scroll 0 0 #DDDDDD;
     border: 2px solid #4DAA3D;
 }
- 
+
  .wp_st_buttonCodeGeneratorConfig input {
 	border: 2px solid #ddd;
 	min-height: 1.5em;
@@ -277,7 +282,7 @@
 /*    float : left;
 	  width: 270px;
 */
-    font-weight: bold;  
+    font-weight: bold;
 	margin-top : 5px;
 	cursor : default;
 }
@@ -288,7 +293,7 @@
 	padding: 10px;
     border: 1px solid #AAAAAA;
     font-size: 0.9em;*/
-    cursor: text;	
+    cursor: text;
     max-height: 105px;
     overflow: auto;
 	font-size : 14px !important;
@@ -326,7 +331,7 @@ background: url("../images/Gradient_Default.jpg") repeat scroll 0 0 transparent;
     padding-top: 13px;
     text-align: center;
     width: 100px;
-}	
+}
 
 p.wp_st_post_heading:hover{
 	background: url("../images/Gradient_Over.jpg") repeat scroll 0 0 transparent;
@@ -454,7 +459,7 @@ p.wp_st_post_heading:hover{
 .wp_st_hoverbarStyleButtonImg {
 	margin: 19px 10px 0;
 	height: 85px;
-	width:232px;	
+	width:232px;
 }
 
 .wp_st_pulldownStyleButtonImg {
@@ -470,14 +475,14 @@ p.wp_st_post_heading:hover{
 .wp_st_loadingImage{
 	margin: 10px 10px;
 }
-	
+
 .wp_st_selectSizeType{
 	display: none;
 	width:80px;
 	margin-top:12px;
 	margin-left:5px;
 	text-align : left;
-}	
+}
 
 .wp_st_show {
 	display: block;
@@ -514,7 +519,7 @@ p.wp_st_post_heading:hover{
   vertical-align : top;
   margin-top : 2px;
 }*/
- 
+
 .stpulldown-gradient
 {
 background: #E1E1E1;
@@ -588,51 +593,51 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
   left:250px;
   top:7px;
  }
- 
+
  .wp_st_bartext{
 	margin-left: 50px;
  }
- 
+
  .wp_st_barPreviewHeader{
-	width: 135px; 
-	font-weight: bold; 
+	width: 135px;
+	font-weight: bold;
 	text-align:center;
  }
- 
+
  .wp_st_barPreviewText{
 	width : 135px;
 	font-size : 14px !important;
  }
- 
+
  .wp_st_editButton{
 	display : none;
 	position : relative;
 	width : 80px;
 	height : 30px;
 	background-color : #929292;
-	border-radius : 6px;	
+	border-radius : 6px;
 	color : white;
 	font-size : 16px;
 	cursor : pointer;
 	border: 0px none !important;
  }
- 
+
  .wp_st_additional_options{
 	min-height : auto;/*300px;*/
 	text-align : center;
  }
- 
+
  .wp_st_splServiceContainer{
 	display : none;
 	border : 1px solid #D9D9D9;
 	background-color : #ECECEC;
  }
- 
+
  #wp_st_copynshare{
 	width : 46%;
 	font-weight : bold;
  }
- 
+
  .wp_st_optionsUpdated{
 	padding : 10px;
 	border : 1px solid #aaa;
@@ -640,7 +645,7 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	text-align : center;
 	display : none;
  }
- 
+
  .wp_st_copynshare_heading{
 	width : 48%;
 	float : left;
@@ -649,14 +654,14 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	left : 12px;
 	font-size : 18px;
  }
- 
+
  .wp_st_copynshare_image{
 	width : 42%;
 	position : absolute;
 	top : 42px;
 	left : 50px;
  }
- 
+
  .wp_st_copynshare_text{
 	width : 72%;
 	position : absolute;
@@ -664,7 +669,7 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	left : 51px;
 	text-align : left;
  }
- 
+
  .wp_st_copynshare_checkboxes{
 	width : 63%;
 	position : absolute;
@@ -681,7 +686,7 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 }
 
 .wp_st_customizewidget_options{
-	/*margin-top : 15px; 
+	/*margin-top : 15px;
 	text-align : center;
 	left : 50px;
 	position : absolute;*/
@@ -690,7 +695,7 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 
 .wp_st_loginWindowDiv{
 	text-align : center;
-}	
+}
 
 .wp_st_login_message{
 	font-size : 15px;
@@ -724,17 +729,17 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
  {
   width:5em;
  }
- 
+
  .wp_st_showLoadingStatus{
 	font-size : 20px;
 	top : 10%;
  }
- 
+
  #wp_st_outerContainer{
 	display : none;
-	font-family: WP_ST_Helvetica !important; 
+	font-family: WP_ST_Helvetica !important;
  }
- 
+
  /* Fix for FB:13338. */
  .headingimg_down, .headingimgPageList_down, .headingAddionalOptions_down {
 	background: url("../images/down_arrow.png") no-repeat;
@@ -742,16 +747,16 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	width: 200px;
 	height: 42px;
 	cursor: pointer;
-	position: absolute;	
+	position: absolute;
  }
- 
+
 .headingimg_right, .headingimgPageList_right, .headingAddionalOptions_right {
 	background: url(../images/right_arrow.png) no-repeat;
 	background-position: -16px -13px;
 	width: 200px;
 	height: 42px;
 	cursor: pointer;
-	position: absolute;	
+	position: absolute;
  }
 
  .st_page_row {
@@ -759,18 +764,18 @@ background:url("//sd.sharethis.com/disc/images/Logo_Area.png") no-repeat;
 	padding:3px;
 	background: #ECECEC;
  }
- 
+
  .st_page_row:nth-child(odd) {
     background: #e0e0e0;
 }
 
 .st_additional_option_heading {
-	margin-left: -1px; 
-	margin-top: -16px; 
-	height: 13px; 
-	padding-top: 10px; 
-	padding-bottom: 15px; 
-	width: 101%; 
+	margin-left: -1px;
+	margin-top: -16px;
+	height: 13px;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	width: 101%;
 	background: #FFF;
 	font-size: 18px;
 	text-align: left;

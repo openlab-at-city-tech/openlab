@@ -37,104 +37,104 @@ var tribe_debug = true;
 
 // @ifdef DEBUG
 
-	/*!
-	 * JavaScript Debug - v0.4 - 6/22/2010
-	 * http://benalman.com/projects/javascript-debug-console-log/
-	 *
-	 * Copyright (c) 2010 "Cowboy" Ben Alman
-	 * Dual licensed under the MIT and GPL licenses.
-	 * http://benalman.com/about/license/
-	 *
-	 * With lots of help from Paul Irish!
-	 * http://paulirish.com/
-	 */
+/*!
+ * JavaScript Debug - v0.4 - 6/22/2010
+ * http://benalman.com/projects/javascript-debug-console-log/
+ *
+ * Copyright (c) 2010 "Cowboy" Ben Alman
+ * Dual licensed under the MIT and GPL licenses.
+ * http://benalman.com/about/license/
+ *
+ * With lots of help from Paul Irish!
+ * http://paulirish.com/
+ */
 
-	window.debug = (function() {
-		var window = this,
-			aps = Array.prototype.slice,
-			con = window.console,
-			that = {},
-			callback_func,
-			callback_force,
-			log_level = 9,
-			log_methods = [ 'error', 'warn', 'info', 'debug', 'log' ],
-			pass_methods = 'assert clear count dir dirxml exception group groupCollapsed groupEnd profile profileEnd table time timeEnd trace'.split( ' ' ),
-			idx = pass_methods.length,
-			logs = [];
+window.debug = (function() {
+	var window = this,
+		aps = Array.prototype.slice,
+		con = window.console,
+		that = {},
+		callback_func,
+		callback_force,
+		log_level = 9,
+		log_methods = [ 'error', 'warn', 'info', 'debug', 'log' ],
+		pass_methods = 'assert clear count dir dirxml exception group groupCollapsed groupEnd profile profileEnd table time timeEnd trace'.split( ' ' ),
+		idx = pass_methods.length,
+		logs = [];
 
-		while ( --idx >= 0 ) {
-			(function( method ) {
+	while ( --idx >= 0 ) {
+		(function( method ) {
 
-				that[ method ] = function() {
-					log_level !== 0 && con && con[ method ]
-					&& con[ method ].apply( con, arguments );
+			that[ method ] = function() {
+				log_level !== 0 && con && con[ method ]
+				&& con[ method ].apply( con, arguments );
+			}
+
+		})( pass_methods[idx] );
+	}
+
+	idx = log_methods.length;
+	while ( --idx >= 0 ) {
+		(function( idx, level ) {
+
+			that[ level ] = function() {
+				var args = aps.call( arguments ),
+					log_arr = [ level ].concat( args );
+
+				logs.push( log_arr );
+				exec_callback( log_arr );
+
+				if ( !con || !is_level( idx ) ) {
+					return;
 				}
 
-			})( pass_methods[idx] );
-		}
+				con.firebug ? con[ level ].apply( window, args )
+					: con[ level ] ? con[ level ]( args )
+					: con.log( args );
+			};
 
-		idx = log_methods.length;
-		while ( --idx >= 0 ) {
-			(function( idx, level ) {
-
-				that[ level ] = function() {
-					var args = aps.call( arguments ),
-						log_arr = [ level ].concat( args );
-
-					logs.push( log_arr );
-					exec_callback( log_arr );
-
-					if ( !con || !is_level( idx ) ) {
-						return;
-					}
-
-					con.firebug ? con[ level ].apply( window, args )
-						: con[ level ] ? con[ level ]( args )
-						: con.log( args );
-				};
-
-			})( idx, log_methods[idx] );
-		}
-
-		function exec_callback( args ) {
-			if ( callback_func && (callback_force || !con || !con.log) ) {
-				callback_func.apply( window, args );
-			}
-		}
-
-		that.setLevel = function( level ) {
-			log_level = typeof level === 'number' ? level : 9;
-		};
-
-		function is_level( level ) {
-			return log_level > 0
-				? log_level > level
-				: log_methods.length + log_level <= level;
-		}
-
-		that.setCallback = function() {
-			var args = aps.call( arguments ),
-				max = logs.length,
-				i = max;
-
-			callback_func = args.shift() || null;
-			callback_force = typeof args[0] === 'boolean' ? args.shift() : false;
-
-			i -= typeof args[0] === 'number' ? args.shift() : max;
-
-			while ( i < max ) {
-				exec_callback( logs[i++] );
-			}
-		};
-
-		return that;
-	})();
-
-	if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
-		tribe_ev.diagnostics = {
-			init: []
-		};
+		})( idx, log_methods[idx] );
 	}
+
+	function exec_callback( args ) {
+		if ( callback_func && (callback_force || !con || !con.log) ) {
+			callback_func.apply( window, args );
+		}
+	}
+
+	that.setLevel = function( level ) {
+		log_level = typeof level === 'number' ? level : 9;
+	};
+
+	function is_level( level ) {
+		return log_level > 0
+			? log_level > level
+			: log_methods.length + log_level <= level;
+	}
+
+	that.setCallback = function() {
+		var args = aps.call( arguments ),
+			max = logs.length,
+			i = max;
+
+		callback_func = args.shift() || null;
+		callback_force = typeof args[0] === 'boolean' ? args.shift() : false;
+
+		i -= typeof args[0] === 'number' ? args.shift() : max;
+
+		while ( i < max ) {
+			exec_callback( logs[i++] );
+		}
+	};
+
+	return that;
+})();
+
+if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
+	tribe_ev.diagnostics = {
+		init: []
+	};
+}
 // @endif
 
 /**
@@ -318,22 +318,22 @@ Date.prototype.format = function( mask, utc ) {
 				var name = id, string = /^[\w\-]+$/.test( id ) ? me.get( id ) : (name = 'template(string)', id); // no warnings
 				var line = 1, body = (
 					"try { " +
-						(me.variable ? "var " + me.variable + " = this.stash;" : "with (this.stash) { ") +
-						"this.ret += '" +
-						string.
-							replace( /\[\[/g, '\x11' ).replace( /\]\]/g, '\x13' ). // if you want other tag, just edit this line
-							replace( /'(?![^\x11\x13]+?\x13)/g, '\\x27' ).
-							replace( /^\s*|\s*$/g, '' ).
-							replace( /\n/g,function() {
-								return "';\nthis.line = " + (++line) + "; this.ret += '\\n"
-							} ).
-							replace( /\x11=raw(.+?)\x13/g, "' + ($1) + '" ).
-							replace( /\x11=(.+?)\x13/g, "' + this.escapeHTML($1) + '" ).
-							replace( /\x11(.+?)\x13/g, "'; $1; this.ret += '" ) +
-						"'; " + (me.variable ? "" : "}") + "return this.ret;" +
-						"} catch (e) { throw 'TemplateError: ' + e + ' (on " + name + "' + ' line ' + this.line + ')'; } " +
-						"//@ sourceURL=" + name + "\n" // source map
-					).replace( /this\.ret \+= '';/g, '' );
+					(me.variable ? "var " + me.variable + " = this.stash;" : "with (this.stash) { ") +
+					"this.ret += '" +
+					string.
+					replace( /\[\[/g, '\x11' ).replace( /\]\]/g, '\x13' ). // if you want other tag, just edit this line
+					replace( /'(?![^\x11\x13]+?\x13)/g, '\\x27' ).
+					replace( /^\s*|\s*$/g, '' ).
+					replace( /\n/g,function() {
+						return "';\nthis.line = " + (++line) + "; this.ret += '\\n"
+					} ).
+					replace( /\x11=raw(.+?)\x13/g, "' + ($1) + '" ).
+					replace( /\x11=(.+?)\x13/g, "' + this.escapeHTML($1) + '" ).
+					replace( /\x11(.+?)\x13/g, "'; $1; this.ret += '" ) +
+					"'; " + (me.variable ? "" : "}") + "return this.ret;" +
+					"} catch (e) { throw 'TemplateError: ' + e + ' (on " + name + "' + ' line ' + this.line + ')'; } " +
+					"//@ sourceURL=" + name + "\n" // source map
+				).replace( /this\.ret \+= '';/g, '' );
 				var func = new Function( body );
 				var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\x22': '&#x22;', '\x27': '&#x27;' };
 				var escapeHTML = function( string ) {
@@ -558,7 +558,12 @@ Date.prototype.format = function( mask, utc ) {
 			tribe_ev.fn.update_viewport_variables();
 			if ( prev_width !== tribe_ev.data.v_width ) {
 				tribe_ev.fn.mobile_class();
+
+				/**
+				 * DEPRECATED: tribe_ev_resizeComplete has been deprecated in 4.0. Use resize-complete.tribe instead
+				 */
 				$( tribe_ev.events ).trigger( 'tribe_ev_resizeComplete' );
+				$( tribe_ev.events ).trigger( 'resize-complete.tribe' );
 			}
 
 		},
@@ -570,10 +575,20 @@ Date.prototype.format = function( mask, utc ) {
 		 */
 		get_base_url          : function() {
 			var base_url = '',
-				$event_header = $( '#tribe-events-header' );
-			if ( $event_header.length ) {
+				$event_header = $( '#tribe-events-header' ),
+				$canonical = $( 'link[rel="canonical"]' );
+
+			if ( $canonical.length ) {
+				// use the canonical URL if it is available (it should be)
+				base_url = $canonical.attr( 'href' );
+			} else if ( $event_header.length ) {
+				// failover to the baseurl of the event header
 				base_url = $event_header.data( 'baseurl' );
+			} else {
+				// use the current URL as a last ditch effort
+				base_url = window.location.origin + window.location.path;
 			}
+
 			return base_url;
 		},
 		/**
@@ -681,11 +696,55 @@ Date.prototype.format = function( mask, utc ) {
 
 			if ( tribe_ev.data.v_width <= tribe_ev.data.mobile_break ) {
 				$body.addClass( 'tribe-mobile' );
-			}
-			else {
+			} else {
 				$body.removeClass( 'tribe-mobile' );
 			}
+
 		},
+
+		/**
+		 * @function tribe_ev.fn.mobile_view_redirect
+		 * @desc tribe_ev.fn.mobile_view_redirect Will redirect mobile users to the correct default view, this will only work if used after events-bar is loaded
+		 */
+		maybe_default_view_change   : function() {
+			// if we don't these we can't do anything
+			if (
+				// There is no default View set
+				! tribe_ev.data.default_view ||
+
+				// There is no default mobile View set
+				! tribe_ev.data.default_mobile_view ||
+
+				// The mobile and normal default views are the same
+				tribe_ev.data.default_view == tribe_ev.data.default_mobile_view ||
+
+				// There is no View set
+				! tribe_ev.state.view ||
+
+				// We are on the default mobile view
+				tribe_ev.data.default_mobile_view == tribe_ev.state.view ||
+
+				// We are with an defined view
+				tribe_ev.data.cur_url == tribe_ev.data.base_url
+			) {
+				return false;
+			}
+
+			var $body = $( 'body' );
+
+			// Not a Mobile Call
+			if ( ! $body.hasClass( 'tribe-mobile' ) ) {
+				return false;
+			}
+
+			var $views = $( '.tribe-bar-views-option' ),
+				view_class_filter = '.tribe-bar-views-option-' + tribe_ev.data.default_mobile_view,
+				$default_view_link = $views.filter( view_class_filter );
+
+			// Actually do the Changing View
+			$default_view_link.trigger( 'click' );
+		},
+
 		/**
 		 * @function tribe_ev.fn.parse_string
 		 * @desc tribe_ev.fn.parse_string converts a string to an object.
@@ -1077,21 +1136,23 @@ Date.prototype.format = function( mask, utc ) {
 	 */
 
 	tribe_ev.data = {
-		ajax_response     : {},
-		base_url          : '',
-		cur_url           : tribe_ev.fn.url_path( document.URL ),
-		cur_date          : tribe_ev.fn.current_date(),
-		datepicker_formats: {
+		ajax_response       : {},
+		base_url            : '',
+		cur_url             : tribe_ev.fn.url_path( document.URL ),
+		cur_date            : tribe_ev.fn.current_date(),
+		datepicker_formats  : {
 			'main' : ['yyyy-mm-dd', 'm/d/yyyy', 'mm/dd/yyyy', 'd/m/yyyy', 'dd/mm/yyyy', 'm-d-yyyy', 'mm-dd-yyyy', 'd-m-yyyy', 'dd-mm-yyyy'],
 			'month': ['yyyy-mm', 'm/yyyy', 'mm/yyyy', 'm/yyyy', 'mm/yyyy', 'm-yyyy', 'mm-yyyy', 'm-yyyy', 'mm-yyyy']
 		},
-		datepicker_opts   : {},
-		default_permalinks: (!config.permalink_settings.length),
-		initial_url       : tribe_ev.fn.url_path( document.URL ),
-		mobile_break      : 768,
-		params            : tribe_ev.fn.get_params(),
-		v_height          : 0,
-		v_width           : 0
+		datepicker_opts     : {},
+		default_permalinks  : (!config.permalink_settings.length),
+		initial_url         : tribe_ev.fn.url_path( document.URL ),
+		mobile_break        : 768,
+		default_mobile_view : null,
+		default_view        : null,
+		params              : tribe_ev.fn.get_params(),
+		v_height            : 0,
+		v_width             : 0
 	};
 
 	/**
@@ -1183,18 +1244,112 @@ Date.prototype.format = function( mask, utc ) {
 		ts.view && dbug && debug.time( 'Tribe JS Init Timer' );
 		// @endif
 
+		$( te ).on( 'tribe_ev_collectParams', function() {
+			// maybe add a baseurl to the Ajax request if we are attempting to navigate events. This helps with
+			// our shortcode pagination
+			if (
+				'undefined' === typeof tribe_ev.state
+				|| 'undefined' === typeof tribe_ev.state.params
+			) {
+				return;
+			}
+
+			if (
+				-1 === tribe_ev.fn.in_params( tribe_ev.state.params, 'eventdate' )
+				&& -1 === tribe_ev.fn.in_params( tribe_ev.state.params, 'tribe_event_display' )
+			) {
+				return;
+			}
+
+			// We only want to manipulate shortcode params. Bail otherwise
+			if ( ! $( document.getElementById( 'tribe-events' ) ).is( '.tribe-events-shortcode' ) ) {
+				return;
+			}
+
+			var $header = $( '#tribe-events-header' );
+			var $canonical = $( 'link[rel="canonical"]' );
+			var url = null;
+
+			if ( $canonical.length ) {
+				// use the canonical URL if it is available (it should be)
+				url = $canonical.attr( 'href' );
+			} else if ( $header.length ) {
+				// failover to the baseurl of the event header
+				url = $header.data( 'baseurl' );
+			} else {
+				// use the current URL as a last ditch effort
+				url = window.location.origin + window.location.path;
+			}
+
+			tribe_ev.state.params += '&baseurl=' + url;
+
+			if ( $header.length ) {
+				var cat = /tribe_events_cat=([^&]*)/ig.exec( $header.data( 'baseurl' ) );
+
+				if ( cat && 'undefined' !== typeof cat[1] ) {
+					cat = cat[1];
+				} else {
+					cat = null;
+				}
+
+				if ( cat ) {
+					var cat_regexp = new RegExp( 'tribe_event_category=' + cat );
+
+					if ( ! tribe_ev.state.params.match( cat_regexp ) ) {
+						tribe_ev.state.params += '&tribe_event_category=' + cat;
+					}
+
+					if ( 'string' === typeof tribe_ev.state.url_params && ! tribe_ev.state.url_params.match( cat_regexp ) ) {
+						tribe_ev.state.url_params += '&tribe_event_category=' + cat;
+					}
+				}
+			}
+		} );
+
 		/**
 		 *
-		 * Themers can override the mobile break with an override in function.php
+		 * Themers can override the mobile break with an override in functions.php
 		 *
-		 add_action( 'tribe_events_mobile_breakpoint', 'mobile_breakpoint' );
-		 function mobile_breakpoint() {
-					return 500;
-				}
+		 *************************************************************************
+
+			add_action( 'tribe_events_mobile_breakpoint', 'mobile_breakpoint' );
+
+			function mobile_breakpoint() {
+				return 500;
+			}
+
+		 *************************************************************************
 		 */
 
-		if ( $tribe_events.length && $tribe_events.tribe_has_attr( 'data-mobilebreak' ) ) {
-			td.mobile_break = parseInt( $tribe_events.attr( 'data-mobilebreak' ) );
+		if ( $tribe_events.length ) {
+			var $breakpoint_holder = $tribe_events.tribe_has_attr( 'data-mobilebreak' );
+
+			if ( false === $breakpoint_holder ) {
+				$breakpoint_holder = $tribe_events.find( '[data-mobilebreak]' ).eq( 0 );
+			} else {
+				$breakpoint_holder = $tribe_events;
+			}
+
+			if ( $breakpoint_holder.length ) {
+				td.mobile_break = parseInt( $breakpoint_holder.data( 'mobilebreak' ), 10 );
+			}
+
+			/**
+			 * Deal with the Mobile View when we have a breakpoint
+			 */
+			var $mobile_view_holder = $tribe_events.tribe_has_attr( 'data-default-mobile-view' );
+
+			if ( false === $mobile_view_holder ) {
+				$mobile_view_holder = $tribe_events.find( '[data-default-mobile-view]' ).eq( 0 );
+			} else {
+				$mobile_view_holder = $tribe_events;
+			}
+
+			if ( $mobile_view_holder.length ) {
+				// Remember, when using jQuery.data and dash separated variables they become CamelCase separated
+				td.default_mobile_view = $mobile_view_holder.data( 'defaultMobileView' );
+				td.default_view = $mobile_view_holder.data( 'defaultView' );
+			}
 		}
 
 		if ( $tribe_events.length && td.mobile_break > 0 ) {
@@ -1233,7 +1388,7 @@ Date.prototype.format = function( mask, utc ) {
 
 		/**
 		 * @function tribe_ical_url
-		 * @desc tribe_ical_url This function adds required params to the ical url. Runs on doc ready, and hooks into 'tribe_ev_ajaxSuccess' also.
+		 * @desc tribe_ical_url This function adds required params to the ical url. Runs on doc ready, and hooks into 'ajax-success.tribe' also.
 		 */
 
 		function tribe_ical_url() {
@@ -1249,7 +1404,7 @@ Date.prototype.format = function( mask, utc ) {
 			$( 'a.tribe-events-ical' ).attr( 'href', new_link );
 		}
 
-		$( te ).on( "tribe_ev_ajaxSuccess", function() {
+		$( te ).on( 'tribe_ev_ajaxSuccess', function() {
 			tribe_ical_url();
 		} );
 

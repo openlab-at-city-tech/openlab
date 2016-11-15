@@ -14,7 +14,7 @@ function theme_options_init(){
  * Load up the menu page
  */
 function theme_options_add_page() {
-	add_theme_page( __( 'Theme Options', 'slidingdoortheme' ), __( 'Theme Options', 'slidingdoortheme' ), 'edit_theme_options', 'theme_options', 'theme_options_do_page' );
+	add_theme_page( __( 'Theme Options', 'slidingdoor' ), __( 'Theme Options', 'slidingdoor' ), 'edit_theme_options', 'theme_options', 'theme_options_do_page' );
 }
 
 
@@ -30,10 +30,10 @@ function theme_options_do_page() {
 
 	?>
 	<div class="wrap">
-		<?php screen_icon(); echo "<h2>" . wp_get_theme() . __( ' Theme Options', 'slidingdoortheme' ) . "</h2>"; ?>
+		<?php echo "<h2>" . wp_get_theme() . __( ' Theme Options', 'slidingdoor' ) . "</h2>"; ?>
 
 		<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
-		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'slidingdoortheme' ); ?></strong></p></div>
+		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'slidingdoor' ); ?></strong></p></div>
 		<?php endif; ?>
 
 		<form method="post" action="options.php">
@@ -47,10 +47,10 @@ function theme_options_do_page() {
 				 * A slidingdoor light theme color option
 				 */
 				?>
-				<tr valign="top"><th scope="row"><?php _e( 'Theme color style', 'slidingdoortheme' ); ?></th>
+				<tr valign="top"><th scope="row"><?php _e( 'Theme color style', 'slidingdoor' ); ?></th>
 					<td>
 						<input id="slidingdoor_theme_options[option1]" name="slidingdoor_theme_options[option1]" type="checkbox" value="1" <?php checked( '1', $options['option1'] ); ?> />
-						<label class="description" for="slidingdoor_theme_options[option1]"><?php _e( 'Light theme colors', 'slidingdoortheme' ); ?> &nbsp&nbsp  &nbsp (This will make the theme black text on white instead of white on black.)</label> 
+						<label class="description" for="slidingdoor_theme_options[option1]"><?php _e( 'Light theme colors', 'slidingdoor' ); ?> &nbsp&nbsp  &nbsp (This will make the theme black text on white instead of white on black.)</label> 
 					</td>
 				</tr>
 				
@@ -61,10 +61,10 @@ function theme_options_do_page() {
 				 */
 				?>
 				
-				<tr valign="top"><th scope="row"><?php _e( 'Leave Sliders open', 'slidingdoortheme' ); ?></th>
+				<tr valign="top"><th scope="row"><?php _e( 'Leave Sliders open', 'slidingdoor' ); ?></th>
 					<td>
 						<input id="slidingdoor_theme_options[option2]" name="slidingdoor_theme_options[option2]" type="checkbox" value="1" <?php checked( '1', $options['option2'] ); ?> />
-						<label class="description" for="slidingdoor_theme_options[option2]"><?php _e( 'Leave Sliders Open', 'slidingdoortheme' ); ?> &nbsp (Leave sliders open according to which page you are on. You must give the pages an 'order' from 0 to 7 in the Wordpress 'Edit Page' screen for this to work.) </label>
+						<label class="description" for="slidingdoor_theme_options[option2]"><?php _e( 'Leave Sliders Open', 'slidingdoor' ); ?> &nbsp (Leave sliders open according to which page you are on. You must give the pages an 'order' from 0 to 7 in the Wordpress 'Edit Page' screen for this to work.) </label>
 					</td>
 				</tr>
 				
@@ -74,7 +74,7 @@ function theme_options_do_page() {
 
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e( 'Save Options', 'slidingdoortheme' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options', 'slidingdoor' ); ?>" />
 			</p>
 		</form>
 	</div>

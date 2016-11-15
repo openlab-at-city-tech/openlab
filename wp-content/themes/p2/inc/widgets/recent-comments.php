@@ -6,8 +6,8 @@
  * @since unknown
  */
 class P2_Recent_Comments extends WP_Widget {
-	function P2_Recent_Comments() {
-		$this->WP_Widget( false, __( 'P2 Recent Comments', 'p2' ), array( 'description' => __( 'Recent comments with avatars.', 'p2' ) ) );
+	function __construct() {
+		parent::__construct( false, __( 'P2 Recent Comments', 'p2' ), array( 'description' => __( 'Recent comments with avatars.', 'p2' ) ) );
 
 		add_action( 'comment_post', array(&$this, 'flush_widget_cache' ) );
 		add_action( 'transition_comment_status', array( &$this, 'flush_widget_cache' ) );
@@ -86,7 +86,7 @@ class P2_Recent_Comments extends WP_Widget {
 		echo "\t</table>" . $after_widget;
 	}
 
-	function comment_url_maybe_local( $comment ) {
+	static function comment_url_maybe_local( $comment ) {
 		// Only use the URLs #fragment if the comment is visible on the page.
 		// Works by detecting if the comment's post is visible on the page... may break if P2 decides to do clever stuff with comments when paginated
 		$comment_url = get_comment_link( $comment );
@@ -129,7 +129,7 @@ class P2_Recent_Comments extends WP_Widget {
 		return $comments;
 	}
 
-	function single_comment_html($comment, $avatar_size ) {
+	static function single_comment_html($comment, $avatar_size ) {
 		$no_avatar = $avatar_size == '-1';
 
 		if ( !$comment->comment_author ) $comment->comment_author = __( 'Anonymous', 'p2' );

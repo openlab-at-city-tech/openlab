@@ -1,5 +1,5 @@
 /* jshint sub: true, onevar: false, multistr: true, devel: true, smarttabs: true */
-/* global jetpackCarouselStrings, DocumentTouch, jetpackLikesWidgetQueue */
+/* global jetpackCarouselStrings, DocumentTouch */
 
 
 jQuery(document).ready(function($) {
@@ -424,10 +424,6 @@ jQuery(document).ready(function($) {
 					preventDefaultEvents : false
 				} );
 
-			$( '.jetpack-likes-widget-unloaded' ).each( function() {
-				jetpackLikesWidgetQueue.push( this.id );
-				});
-
 			nextButton.add(previousButton).click(function(e){
 				e.preventDefault();
 				e.stopPropagation();
@@ -489,11 +485,6 @@ jQuery(document).ready(function($) {
 			originalHOverflow = $('html').css('overflow');
 			$('html').css('overflow', 'hidden');
 			scrollPos = $( window ).scrollTop();
-
-			// Re-apply inline-block style here and give an initial value for the width
-			// This value will get replaced with a more appropriate value once the slide is loaded
-			// This avoids the likes widget appearing initially full width below the comment button and then shuffling up
-			jQuery( '.slim-likes-widget' ).find( 'iframe' ).css( 'display', 'inline-block' ).css( 'width', '60px' );
 
 			container.data('carousel-extra', data);
 
@@ -558,14 +549,6 @@ jQuery(document).ready(function($) {
 
 			if ( slide ) {
 				this.jp_carousel('selectSlide', slide);
-			}
-		},
-
-		resetButtons : function(current) {
-			if ( current.data('liked') ) {
-				$('.jp-carousel-buttons a.jp-carousel-like').addClass('liked').text(jetpackCarouselStrings.unlike);
-			} else {
-				$('.jp-carousel-buttons a.jp-carousel-like').removeClass('liked').text(jetpackCarouselStrings.like);
 			}
 		},
 
@@ -672,25 +655,12 @@ jQuery(document).ready(function($) {
 
 			gallery.jp_carousel( 'updateSlidePositions', animate );
 
-			gallery.jp_carousel( 'resetButtons', current );
 			container.trigger( 'jp_carousel.selectSlide', [current] );
 
 			gallery.jp_carousel( 'getTitleDesc', {
 				title: current.data( 'title' ),
 				desc: current.data( 'desc' )
 			});
-
-			// Lazy-load the Likes iframe for the current, next, and previous slides.
-			gallery.jp_carousel( 'loadLikes', attachmentId );
-			gallery.jp_carousel( 'updateLikesWidgetVisibility', attachmentId );
-
-			if ( next.length > 0 ) {
-				gallery.jp_carousel( 'loadLikes', next.data( 'attachment-id' ) );
-			}
-
-			if ( previous.length > 0 ) {
-				gallery.jp_carousel( 'loadLikes', previous.data( 'attachment-id' ) );
-			}
 
 			var imageMeta = current.data( 'image-meta' );
 			gallery.jp_carousel( 'updateExif', imageMeta );
@@ -977,6 +947,10 @@ jQuery(document).ready(function($) {
 				medium_width      = parseInt( medium_size_parts[0], 10 ),
 				medium_height     = parseInt( medium_size_parts[1], 10 );
 
+			// Assign max width and height.
+			args.orig_max_width  = args.max_width;
+			args.orig_max_height = args.max_height;
+
 			// Give devices with a higher devicePixelRatio higher-res images (Retina display = 2, Android phones = 1.5, etc)
 			if ( 'undefined' !== typeof window.devicePixelRatio && window.devicePixelRatio > 1 ) {
 				args.max_width  = args.max_width * window.devicePixelRatio;
@@ -998,6 +972,11 @@ jQuery(document).ready(function($) {
 				var origPhotonUrl = args.large_file;
 				if ( -1 !== largeFileIndex ) {
 					origPhotonUrl = args.large_file.substring( 0, largeFileIndex );
+					// If we have a really large image load a smaller version
+					// that is closer to the viewable size
+					if ( args.orig_width > args.max_width || args.orig_height > args.max_height ) {
+						origPhotonUrl += '?fit=' + args.orig_max_width + '%2C' + args.orig_max_height;
+					}
 				}
 				return origPhotonUrl;
 			}
@@ -1113,8 +1092,8 @@ jQuery(document).ready(function($) {
 			desc  = gallery.jp_carousel('parseTitleDesc', data.desc)  || '';
 
 			if ( title.length || desc.length ) {
-				// $('<div />').text(sometext).html() is a trick to go to HTML to plain text (including HTML entities decode, etc)
-				if ( $('<div />').text(title).html() === $('<div />').text(desc).html() ) {
+				// Convert from HTML to plain text (including HTML entities decode, etc)
+				if ( $('<div />').html( title ).text() === $('<div />').html( desc ).text() ) {
 					title = '';
 				}
 
@@ -1126,74 +1105,6 @@ jQuery(document).ready(function($) {
 
 			$( 'div#jp-carousel-comment-form-container' ).css('margin-top', '20px');
 			$( 'div#jp-carousel-comments-loading' ).css('margin-top', '20px');
-		},
-
-		updateLikesWidgetVisibility: function ( attachmentId ) {
-			// Only do this if likes is enabled
-			if ( 'undefined' === typeof jetpackLikesWidgetQueue ) {
-				return;
-			}
-
-			// Hide all likes widgets except for the one for the attachmentId passed in
-			$( '.jp-carousel-buttons .jetpack-likes-widget-wrapper' ).css( 'display', 'none' ).each( function () {
-				var widgetWrapper = $( this );
-				if ( widgetWrapper.attr( 'data-attachment-id' ) == attachmentId ) { // jshint ignore:line
-					widgetWrapper.css( 'display', 'inline-block' );
-					return false;
-				}
-			});
-		},
-
-		loadLikes : function ( attachmentId ) {
-			var dataCarouselExtra = $( '.jp-carousel-wrap' ).data( 'carousel-extra' );
-			var blogId = dataCarouselExtra.likes_blog_id;
-
-			if ( $( '#like-post-wrapper-' + blogId + '-' + attachmentId ).length === 0 ) {
-				// Add the iframe the first time the slide is shown.
-				var protocol = 'http';
-				var originDomain = 'http://wordpress.com';
-
-				if ( dataCarouselExtra.permalink.length ) {
-					protocol = dataCarouselExtra.permalink.split( ':' )[0];
-
-					if ( ( protocol !== 'http' ) && ( protocol !== 'https' ) ) {
-						protocol = 'http';
-					}
-
-					var parts = dataCarouselExtra.permalink.split( '/' );
-
-					if ( parts.length >= 2 ) {
-						originDomain = protocol + '://' + parts[2];
-					}
-				}
-
-				var dataSource = protocol + '://widgets.wp.com/likes/#blog_id=' + encodeURIComponent( blogId ) +
-					'&post_id=' + encodeURIComponent( attachmentId ) +
-					'&slim=1&origin=' + encodeURIComponent( originDomain );
-
-				if ( 'en' !== jetpackCarouselStrings.lang ) {
-					dataSource += '&lang=' + encodeURIComponent( jetpackCarouselStrings.lang );
-				}
-
-				var likesWidget = $( '<iframe class=\'post-likes-widget jetpack-likes-widget jetpack-resizeable\'></iframe>' )
-					.attr( 'name', 'like-post-frame-' + blogId + '-' + attachmentId )
-					.attr( 'src', dataSource )
-					.css( 'display', 'inline-block' );
-
-				var likesWidgetWrapper = $( '<div/>' )
-					.addClass( 'jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded slim-likes-widget' )
-					.attr( 'id', 'like-post-wrapper-' + blogId + '-' + attachmentId )
-					.attr( 'data-src', dataSource )
-					.attr( 'data-name', 'like-post-frame-' + blogId + '-' + attachmentId )
-					.attr( 'data-attachment-id', attachmentId )
-					.css( 'display', 'none' )
-					.css( 'vertical-align', 'middle' )
-					.append( likesWidget )
-					.append( '<div class=\'post-likes-widget-placeholder\'></div>' );
-
-				$( '.jp-carousel-buttons' ).append( likesWidgetWrapper );
-			}
-
 		},
 
 		// updateExif updates the contents of the exif UL (.jp-carousel-image-exif)
@@ -1474,7 +1385,7 @@ jQuery(document).ready(function($) {
 	};
 
 	// register the event listener for starting the gallery
-	$( document.body ).on( 'click', 'div.gallery,div.tiled-gallery', function(e) {
+	$( document.body ).on( 'click.jp-carousel', 'div.gallery,div.tiled-gallery', function(e) {
 		if ( ! $(this).jp_carousel( 'testForData', e.currentTarget ) ) {
 			return;
 		}
@@ -1490,14 +1401,14 @@ jQuery(document).ready(function($) {
 	});
 
 	// Makes carousel work on page load and when back button leads to same URL with carousel hash (ie: no actual document.ready trigger)
-	$( window ).on( 'hashchange', function () {
+	$( window ).on( 'hashchange.jp-carousel', function () {
 
 		var hashRegExp = /jp-carousel-(\d+)/,
 			matches, attachmentId, galleries, selectedThumbnail;
 
 		if ( ! window.location.hash || ! hashRegExp.test( window.location.hash ) ) {
-			if ( gallery.opened ) {
-				container.jp_carousel('close');
+			if ( gallery && gallery.opened ) {
+				container.jp_carousel( 'close' );
 			}
 
 			return;

@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: TaskFreak Free
+Plugin Name: [UNMAINTAINED] TaskFreak! Free
 Plugin URI: http://www.taskfreak.com
 Description: Task Management made easy
-Version: 1.0.18
+Version: 1.0.19
 Author: Tirzen
 Author URI: http://www.tirzen.com
 License: GPL2

@@ -46,28 +46,12 @@ class Assets {
 	private $styles = array();
 
 	/**
-	 * Disable scripts.
-	 *
-	 * @access public
-	 * @var bool
-	 */
-	public $disable_scripts = false;
-
-	/**
 	 * Disable styles.
 	 *
 	 * @access public
 	 * @var bool
 	 */
 	public $disable_styles = false;
-
-	/**
-	 * Disable styles.
-	 *
-	 * @access public
-	 * @var bool
-	 */
-	public $always_enqueue = false;
 
 	/**
 	 * Hook in tabs.
@@ -79,21 +63,13 @@ class Assets {
 		$this->min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG == true ) ? '' : '.min';
 
 		$settings = get_option( 'simple-calendar_settings_advanced' );
-		if ( isset( $settings['assets']['disable_js'] ) ) {
-			$this->disable_scripts = 'yes' == $settings['assets']['disable_js'] ? true : false;
-		}
 
 		if ( isset( $settings['assets']['disable_css'] ) ) {
 			$this->disable_styles = 'yes' == $settings['assets']['disable_css'] ? true : false;
 		}
 
-		if ( isset( $settings['assets']['always_enqueue'] ) ) {
-			$this->always_enqueue = 'yes' == $settings['assets']['always_enqueue'] ? true : false;
-		}
-
 		add_action( 'init', array( $this, 'register' ), 20 );
 		add_action( 'init', array( $this, 'enqueue' ), 40 );
-		add_action( 'wp_print_styles', array( $this, 'disable' ), 100 );
 	}
 
 	/**
@@ -116,22 +92,21 @@ class Assets {
 
 		do_action( 'simcal_enqueue_assets', $this->min );
 
-		if ( false === $this->disable_scripts ) {
-			$min = $this->min;
-			// Improves compatibility with themes and plugins using Isotope and Masonry.
-			add_action( 'wp_enqueue_scripts',
-				function () use ( $min ) {
-					if ( wp_script_is( 'simcal-qtip', 'enqueued' ) ) {
-						wp_enqueue_script(
-							'simplecalendar-imagesloaded',
-							SIMPLE_CALENDAR_ASSETS . 'js/vendor/imagesloaded' . $min . '.js',
-							array( 'simcal-qtip' ),
-							'3.1.8',
-							true
-						);
-					}
-				}, 1000 );
-		}
+
+		$min = $this->min;
+		// Improves compatibility with themes and plugins using Isotope and Masonry.
+		add_action( 'wp_enqueue_scripts',
+			function () use ( $min ) {
+				if ( wp_script_is( 'simcal-qtip', 'enqueued' ) ) {
+					wp_enqueue_script(
+						'simplecalendar-imagesloaded',
+						SIMPLE_CALENDAR_ASSETS . 'js/vendor/imagesloaded.pkgd' . $min . '.js',
+						array( 'simcal-qtip' ),
+						SIMPLE_CALENDAR_VERSION,
+						true
+					);
+				}
+			}, 1000 );
 	}
 
 	/**
@@ -141,74 +116,20 @@ class Assets {
 	 */
 	public function load() {
 
-		if ( $this->always_enqueue ) {
-			$scripts = $this->get_default_scripts();
-			$styles  = $this->get_default_styles();
+		$types = simcal_get_calendar_types();
 
-			$this->scripts = apply_filters( 'simcal_front_end_scripts', $scripts, $this->min );
-			$this->styles  = apply_filters( 'simcal_front_end_styles', $styles, $this->min );
+		foreach ( $types as $calendar => $views ) {
+			foreach( $views as $key => $view ) {
 
-			$this->load_scripts( $this->scripts );
-			$this->load_styles( $this->styles );
+				$view = simcal_get_calendar_view( 0, $calendar . '-' . $view );
 
-			return;
-		}
-
-		$id = 0;
-		$cal_id = array();
-		$scripts = $styles = array();
-
-		if ( is_singular() ) {
-
-			global $post, $post_type;
-
-			if ( 'calendar' == $post_type ) {
-
-				$id = get_queried_object_id();
-
-				$view = simcal_get_calendar_view( $id );
-				if ( $view instanceof Calendar_View ) {
-					$scripts[] = $view->scripts( $this->min );
-					$styles[]  = $view->styles( $this->min );
-				}
-
-			} else {
-
-				$id = absint( get_post_meta( $post->ID, '_simcal_attach_calendar_id', true ) );
-
-				if ( $id === 0 ) {
-
-					preg_match_all( '/' . get_shortcode_regex() . '/s', $post->post_content, $matches, PREG_SET_ORDER );
-
-					if ( ! empty( $matches ) && is_array( $matches ) ) {
-						foreach ( $matches as $shortcode ) {
-							if ( 'calendar' === $shortcode[2] || 'gcal' === $shortcode[2] ) {
-								$atts = shortcode_parse_atts( $shortcode[3] );
-								$cal_id[]   = isset( $atts['id'] ) ? intval( $atts['id'] ) : 0;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		foreach( $cal_id as $i ) {
-
-			if ( $i > 0 ) {
-
-				$view = simcal_get_calendar_view( $i );
-
-				if ( $view instanceof Calendar_View ) {
-					$scripts[] = $view->scripts( $this->min );
-					$styles[] = $view->styles( $this->min );
-				}
+				$scripts[] = $view->scripts( $this->min );
+				$styles[] = $view->styles( $this->min );
 			}
 		}
 
 		$this->get_widgets_assets();
-
 		$this->scripts = apply_filters( 'simcal_front_end_scripts', $scripts, $this->min );
-
 		// First check if there is a multi-dimensional array of scripts
 		if ( isset( $this->scripts[0] ) ) {
 			foreach ( $this->scripts as $script ) {
@@ -217,9 +138,7 @@ class Assets {
 		} else {
 			$this->load_scripts( $this->scripts );
 		}
-
 		$this->styles = apply_filters( 'simcal_front_end_styles', $styles, $this->min );
-
 		// First check if there is a multi-dimensional array of styles
 		if ( isset( $this->styles[0] ) ) {
 			foreach( $this->styles as $style ) {
@@ -267,26 +186,6 @@ class Assets {
 	}
 
 	/**
-	 * Disable scripts and styles.
-	 *
-	 * @since 3.0.0
-	 */
-	public function disable() {
-		if ( true === $this->disable_scripts ) {
-			$scripts = apply_filters( 'simcal_front_end_scripts', $this->scripts, $this->min );
-			foreach ( $scripts as $script => $v ) {
-				wp_dequeue_script( $script );
-			}
-		}
-		if ( true === $this->disable_styles ) {
-			$styles = apply_filters( 'simcal_front_end_styles', $this->styles, $this->min );
-			foreach ( $styles as $style => $v ) {
-				wp_dequeue_style( $style );
-			}
-		}
-	}
-
-	/**
 	 * Scripts.
 	 *
 	 * @since 3.0.0
@@ -295,18 +194,27 @@ class Assets {
 	 */
 	public function load_scripts( $scripts ) {
 
+		// Only load if not disabled in the settings
 		if ( ! empty( $scripts ) && is_array( $scripts ) ) {
 
 			foreach ( $scripts as $script => $v ) {
 
+				/** Plugin compatibility fixes */
+
+				// Dequeue moment.js if detected from WP Simple Pay Pro.
+				if ( ( wp_script_is( 'stripe-checkout-pro-moment', 'enqueued' ) ) && $script == 'simcal-fullcal-moment' ) {
+					continue;
+				}
+
 				if ( ! empty( $v['src'] ) ) {
 
+					// Enqueued individually so we can dequeue if already enqueued by another plugin.
+					// TODO Rework dependencies part (or remove completely).
+
 					$src        = esc_url( $v['src'] );
-					$deps       = isset( $v['deps'] )        ? $v['deps']       : array();
-					$ver        = isset( $v['ver'] )         ? $v['ver']        : SIMPLE_CALENDAR_VERSION;
 					$in_footer  = isset( $v['in_footer'] )   ? $v['in_footer']  : false;
 
-					wp_enqueue_script( $script, $src, $deps, $ver, $in_footer );
+					wp_enqueue_script( $script, $src, array(), SIMPLE_CALENDAR_VERSION, $in_footer );
 
 					if ( ! empty( $v['localize'] ) && is_array( $v['localize'] ) ) {
 						foreach ( $v['localize'] as $object => $l10n ) {
@@ -332,18 +240,20 @@ class Assets {
 	 */
 	public function load_styles( $styles ) {
 
-		if ( ! empty( $styles ) && is_array( $styles ) ) {
+		// Only load if not disabled in the settings
+		if ( ! empty( $styles ) && is_array( $styles ) && false === $this->disable_styles ) {
 
 			foreach ( $styles as $style => $v ) {
 
 				if ( ! empty( $v['src'] ) ) {
 
+					// Enqueued individually so we can dequeue if already enqueued by another plugin.
+					// TODO Rework dependencies part (or remove completely).
+
 					$src    = esc_url( $v['src'] );
-					$deps   = isset( $v['deps'] )   ? $v['deps']    : array();
-					$ver    = isset( $v['ver'] )    ? $v['ver']     : SIMPLE_CALENDAR_VERSION;
 					$media  = isset( $v['media'] )  ? $v['media']   : 'all';
 
-					wp_enqueue_style( $style, $src, $deps, $ver, $media );
+					wp_enqueue_style( $style, $src, array(), SIMPLE_CALENDAR_VERSION, $media );
 
 				} elseif ( is_string( $v ) && ! empty( $v ) ) {
 
@@ -354,64 +264,4 @@ class Assets {
 
 		}
 	}
-
-	/**
-	 * Return the default scripts that are loaded. Used mainly for the always enqueue scripts option.
-	 *
-	 * This can be improved.
-	 */
-	public function get_default_scripts() {
-		return array(
-			'simcal-qtip' => array(
-				'src'       => SIMPLE_CALENDAR_ASSETS . 'js/vendor/qtip' . $this->min . '.js',
-				'deps'      => array( 'jquery' ),
-				'ver'       => '2.2.1',
-				'in_footer' => true,
-			),
-			'simcal-default-calendar' => array(
-				'src'       => SIMPLE_CALENDAR_ASSETS . 'js/default-calendar' . $this->min . '.js',
-				'deps'      => array(
-					'jquery',
-					'simcal-qtip',
-				),
-				'var'       => SIMPLE_CALENDAR_VERSION,
-				'in_footer' => true,
-				'localize'  => array(
-					'simcal_default_calendar' => simcal_common_scripts_variables(),
-				),
-			),
-		);
-	}
-
-	/**
-	 * Return the default styles that are loaded. Used mainly for the always enqueue scripts option.
-	 *
-	 * This can be improved.
-	 */
-	public function get_default_styles() {
-		return array(
-			'simcal-qtip' => array(
-				'src'   => SIMPLE_CALENDAR_ASSETS . 'css/vendor/qtip' . $this->min . '.css',
-				'ver'   => '2.2.1',
-				'media' => 'all',
-			),
-			'simcal-default-calendar-grid' => array(
-				'src'   => SIMPLE_CALENDAR_ASSETS . 'css/default-calendar-grid' . $this->min . '.css',
-				'deps'  => array(
-					'simcal-qtip',
-				),
-				'ver'   => SIMPLE_CALENDAR_VERSION,
-				'media' => 'all',
-			),
-			'simcal-default-calendar-list' => array(
-				'src'   => SIMPLE_CALENDAR_ASSETS . 'css/default-calendar-list' . $this->min . '.css',
-				'deps'  => array(
-					'simcal-qtip',
-				),
-				'ver'   => SIMPLE_CALENDAR_VERSION,
-				'media' => 'all',
-			),
-		);
-	}
-
 }

@@ -34,7 +34,7 @@
 
                     //extract($args, EXTR_SKIP);
                     $taxonomy = get_taxonomy($term->term_taxonomy_id);
-                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span>'.apply_filters( 'the_title', $term->name, $term->term_id ).' </span></div>';
+                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span>'.apply_filters( 'to/term_title', $term->name, $term ).' </span></div>';
                 }
 
 

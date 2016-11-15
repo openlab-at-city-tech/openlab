@@ -10,8 +10,8 @@
  * @author    Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
- * @copyright Copyright (c) 2014, Titanium Themes
- * @version   1.3.9
+ * @copyright Copyright (c) 2016, Titanium Themes
+ * @version   1.4.1
  * 
  */
 if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
@@ -42,7 +42,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		function __construct() {
@@ -62,7 +62,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public static function get_instance() {
@@ -81,7 +81,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_actions() {
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function register_filters() {
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * @return    null    Return early if no settings page is registered.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function enqueue_admin_styles() {
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * @return    null    Return early if no settings page is registered.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function enqueue_admin_scripts() {
@@ -216,7 +216,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * @return array $l10n - An array of translatable strings.
 		 *
 		 * @since 1.3.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function get_l10n() {
@@ -250,7 +250,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * @link http://codex.wordpress.org/Roles_and_Capabilities 	Roles and Capabilities
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function add_plugin_admin_menu() {
@@ -287,7 +287,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * Render the settings page for this plugin.
 		 * 
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function display_plugin_admin_page() {
@@ -301,7 +301,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * Add settings action link to the plugins page.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */	
 		public function add_action_links( $links ) {
@@ -321,7 +321,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * a hook by which to add their own screen options.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function add_screen_option() {
@@ -346,7 +346,7 @@ if ( ! class_exists( 'Easy_Google_Fonts_Admin' ) ) :
 		 * help tabs are only displayed on the custom admin page.
 		 *
 		 * @since 1.2
-		 * @version 1.3.9
+		 * @version 1.4.1
 		 * 
 		 */
 		public function add_help_tabs() {

@@ -1,0 +1,453 @@
+# Translation of Coraline in Portuguese (Brazil)
+# This file is distributed under the same license as the Coraline package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-11-28 03:34:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: Coraline\n"
+
+#: eventbrite/eventbrite-index.php:29 eventbrite/eventbrite-single.php:18
+msgid "Event"
+msgstr "Evento"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/coraline/full-width-page.php
+msgid "Full-width, no sidebar"
+msgstr "Largura total, sem barra lateral"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/coraline/style.css
+msgid "A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in \"Asides\" and \"Gallery\" categories, and has an optional full-width page template that removes the sidebar."
+msgstr "Um tema clean com cabeçalho, menu, plano de fundo e layout personalizáveis. Coraline suporta 7 áreas para widgets (máximo de 3 na barra lateral, e 4 no rodapé) e imagens destacadas (miniaturas para posts de galeria, e cabeçalhos personalizáveis para posts e páginas). Inclui estilos para impressão e o Editor Visual, formatos especiais para notas e galerias, e um template de largura total que esconde a barra lateral."
+
+#: tag.php:13
+msgid "Tag Archives: %s"
+msgstr "Arquivo da tag: %s"
+
+#: single.php:21 single.php:58
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: single.php:20 single.php:57
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr "&larr;"
+
+#: sidebar.php:86
+msgid "Meta"
+msgstr "Meta"
+
+#: sidebar.php:63
+msgid "Links"
+msgstr "Links"
+
+#: sidebar.php:42
+msgid "Search It!"
+msgstr "Procure isso!"
+
+#: sidebar.php:47
+msgid "Recent Entries"
+msgstr "Entradas Recentes"
+
+#: search.php:19
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr "Nada coincide com seus critérios de busca. Tente outra vez com palavras-chave diferentes."
+
+#: search.php:17
+msgid "Nothing Found"
+msgstr "Nada Encontrado"
+
+#: loop.php:196
+msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+msgstr "<span class=\"%1$s\">Publicado em</span> %2$s"
+
+#: search.php:13
+msgid "Search Results for: %s"
+msgstr "Resultados da pesquisa por: %s"
+
+#: loop.php:178
+msgid "1 comment"
+msgstr "1 comentário"
+
+#: loop.php:178
+msgid "% comments"
+msgstr "% Comentários"
+
+#: loop.php:156
+msgid "<span class=\"%1$s\">in</span> %2$s"
+msgstr "<span class=\"%1$s\">em</span> %2$s"
+
+#: loop.php:164 loop.php:204
+msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+msgstr "<span class=\"%1$s\">Marcado com</span> %2$s"
+
+#: loop.php:101
+msgid "View posts in the Gallery category"
+msgstr "Ver posts na categoria Galeria"
+
+#: loop.php:101
+msgid "More Galleries"
+msgstr "Mais galerias"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "1 Comment"
+msgstr "1 comentário"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "% Comments"
+msgstr "% Comentários"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:178 loop.php:193
+#: single.php:34 single.php:48
+msgid "Leave a comment"
+msgstr "Deixe um comentário"
+
+#: loop.php:83
+msgid "This gallery contains <a %1$s>%2$s photos</a>."
+msgstr "Esta galeria contém <a %1$s>%2$s fotos</a>."
+
+#: loop.php:84
+msgid "Permalink to %s"
+msgstr "Ligação permanente para %s"
+
+#: loop.php:45 loop.php:113 loop.php:136 single.php:27
+msgid "All %s posts"
+msgstr "Todos o conteúdo de tipo %s"
+
+#: loop.php:21
+msgid "Apologies, but no results were found for the requested archive. Perhaps searching will help find a related post."
+msgstr "Desculpe, mas nada foi encontrado para o arquivo solicitado. Talvez a pesquisa ajude a encontrar um post relacionado."
+
+#: loop.php:12 loop.php:221
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Posts Recentes <span class=\"meta-nav\"> → </span>"
+
+#: loop.php:11 loop.php:220
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr "<span class=\"meta-nav\"> ← </span> Posts Anteriores"
+
+#: inc/theme-options.php:217 inc/theme-options.php:248
+msgid "Note: Coraline now supports Post Formats! Read more at <a href=\"http://support.wordpress.com/posts/post-formats/\">Support &raquo; Post Formats</a>."
+msgstr "Atenção: Coraline agora tem suporte para Formatos de Post! Leia mais em <a href=\"http://support.wordpress.com/posts/post-formats/\">Suporte &raquo; Formatos de Post</a>. "
+
+#: inc/theme-options.php:229
+msgid "Gallery Category"
+msgstr "Categoria da galeria"
+
+#: inc/theme-options.php:247
+msgid "Select a category to use for posts with image galleries"
+msgstr "Selecione uma categoria para utilizar para posts com galerias de imagem"
+
+#: inc/theme-options.php:256
+msgid "Save Options"
+msgstr "Guardar Opções"
+
+#: inc/theme-options.php:198
+msgid "Aside Category"
+msgstr "Categoria Notas"
+
+#: inc/theme-options.php:201 inc/theme-options.php:232
+msgid "Select a category &hellip;"
+msgstr "Selecionar uma categoria &hellip;"
+
+#: inc/theme-options.php:216
+msgid "Select a category to use for shorter aside posts"
+msgstr "Selecione uma categoria para usar para posts de notas menores"
+
+#: inc/theme-options.php:147
+msgid "Select a default color scheme"
+msgstr "Selecione um esquema de cores padrão"
+
+#: inc/theme-options.php:156 inc/theme-options.php:158
+msgid "Default Layout"
+msgstr "Layout Padrão"
+
+#: inc/theme-options.php:128
+msgid "Color Scheme"
+msgstr "Esquema de Cores"
+
+#: inc/theme-options.php:93
+msgid "Full Width (No Sidebars)"
+msgstr "Largura Inteira (sem barra lateral)"
+
+#: inc/theme-options.php:111
+msgid "%1$s Theme Options"
+msgstr "Opções de Tema %1$s"
+
+#: inc/theme-options.php:114
+msgid "Options saved"
+msgstr "Opções salvas"
+
+#: inc/theme-options.php:81
+msgid "Content-Sidebar-Sidebar"
+msgstr "Conteúdo-Barra Lateral-Barra Lateral"
+
+#: inc/theme-options.php:85
+msgid "Sidebar-Sidebar-Content"
+msgstr "Barra lateral-Barra lateral-Conteúdo"
+
+#: inc/theme-options.php:89
+msgid "Sidebar-Content-Sidebar"
+msgstr "Barra Lateral-Conteúdo-Barra Lateral"
+
+#: inc/theme-options.php:73
+msgid "Content-Sidebar"
+msgstr "Conteúdo-Barra Lateral"
+
+#: inc/theme-options.php:77
+msgid "Sidebar-Content"
+msgstr "Barra Lateral-Conteúdo"
+
+#: inc/theme-options.php:59
+msgid "Brown"
+msgstr "Marrom"
+
+#: inc/theme-options.php:55
+msgid "Red"
+msgstr "Vermelho"
+
+#: inc/theme-options.php:51
+msgid "Purple"
+msgstr "Roxo"
+
+#: inc/theme-options.php:47
+msgid "Blue"
+msgstr "Azul"
+
+#: inc/theme-options.php:43
+msgid "Pink"
+msgstr "Rosa"
+
+#: inc/theme-options.php:39
+msgid "Black"
+msgstr "Preto"
+
+#: inc/theme-options.php:35
+msgid "White"
+msgstr "Branco"
+
+#: inc/custom-header.php:62
+msgid "Limestone cave"
+msgstr "Gruta de calcário"
+
+#: inc/custom-header.php:67
+msgid "Cactii"
+msgstr "Cacto"
+
+#: inc/theme-options.php:25
+msgid "Theme Options"
+msgstr "Opções do tema"
+
+#: inc/custom-header.php:57
+msgid "Water drops"
+msgstr "Gotas de água"
+
+#: image.php:49
+msgid "Next &rarr;"
+msgstr "Próximo &rarr;"
+
+#: image.php:48
+msgid "&larr; Previous"
+msgstr "&larr; Anterior"
+
+#: image.php:22
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Published </span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  at <a href=\"%3$s\" title=\"Link to full-size image\">%4$s &times; %5$s</a> in <a href=\"%6$s\" title=\"Return to %7$s\" rel=\"gallery\">%7$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\">Publicada </span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  com <a href=\"%3$s\" title=\"Link to full-size image\">%4$s &times; %5$s</a> em <a href=\"%6$s\" title=\"Return to %7$s\" rel=\"gallery\">%7$s</a>"
+
+#: image.php:37
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Uploaded </span> at <a href=\"%1$s\" title=\"Link to full-size image\">%2$s &times; %3$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\">Enviado </span> com <a href=\"%1$s\" title=\"Link to full-size image\">%2$s &times; %3$s</a>"
+
+#: header.php:41
+msgid "Skip to content"
+msgstr "Pular para o conteúdo"
+
+#: functions.php:485
+msgid "Page %s"
+msgstr "Página %s"
+
+#: functions.php:368
+msgid "Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Marcar como favorito o <a href=\"%3$s\" title=\"Link permanente para %4$s\" rel=\"bookmark\">link permanente</a>. "
+
+#: functions.php:366
+msgid "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Esse post foi publicado em %1$s. Bookmark o <a href=\"%3$s\" title=\"Link permanente para %4$s\" rel=\"bookmark\">link permanente</a>."
+
+#: functions.php:364
+msgid "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Esse post foi publicado em %1$s e marcado %2$s. Guardar <a href=\"%3$s\" title=\"Link permanente para %4$s\" rel=\"bookmark\">link permanente</a>."
+
+#: functions.php:345
+msgid "<span class=\"by-author\"><span class=\"sep\">by</span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+msgstr "<span class=\"by-author\"><span class=\"sep\">por</span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+
+#: functions.php:347
+msgid "View all posts by %s"
+msgstr "Ver todos os artigos de %s"
+
+#: functions.php:300
+msgid "The fourth footer widget area"
+msgstr "A quarta área de widget do rodapé"
+
+#: functions.php:328
+msgid "<span class=\"%1$s\">Posted on</span> %2$s "
+msgstr "<span class=\"%1$s\">Publicado em</span> %2$s "
+
+#: functions.php:289
+msgid "The third footer widget area"
+msgstr "A terceira área de widget do rodapé"
+
+#: functions.php:298
+msgid "Fourth Footer Widget Area"
+msgstr "Quarta área de widgets do rodapé"
+
+#: functions.php:278
+msgid "The second footer widget area"
+msgstr "A segunda área de widget do rodapé"
+
+#: functions.php:287
+msgid "Third Footer Widget Area"
+msgstr "Terceira área de widgets do rodapé"
+
+#: functions.php:267
+msgid "The first footer widget area"
+msgstr "A primeira área de widget do rodapé"
+
+#: functions.php:276
+msgid "Second Footer Widget Area"
+msgstr "Segunda área de widgets do rodapé"
+
+#: functions.php:254
+msgid "Feature Widget Area"
+msgstr "Destacar área de widget"
+
+#: functions.php:256
+msgid "The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts"
+msgstr "O widget em destaque acima das barras laterais nos layouts Conteúdo-Barra Lateral-Barra Lateral e Barra Lateral-Barra Lateral-Conteúdo"
+
+#: functions.php:265
+msgid "First Footer Widget Area"
+msgstr "Primeira área de widgets do rodapé"
+
+#: functions.php:243
+msgid "Secondary Widget Area"
+msgstr "Área de widgets secundária"
+
+#: functions.php:245
+msgid "The secondary widget area appears in 3-column layouts"
+msgstr "A área de widget secundária aparece em layouts de 3 colunas"
+
+#: functions.php:232
+msgid "Primary Widget Area"
+msgstr "Área de widgets primária"
+
+#: functions.php:234
+msgid "The primary widget area"
+msgstr "A área primária de widget"
+
+#: functions.php:216
+msgid "Pingback:"
+msgstr "Pingback: "
+
+#: functions.php:202
+msgid "Your comment is awaiting moderation."
+msgstr "O seu comentário aguarda moderação."
+
+#. translators: 1: date, 2: time
+#: functions.php:191
+msgid "%1$s at %2$s"
+msgstr "%1$s às %2$s"
+
+#: functions.php:124 loop.php:121 loop.php:147 loop.php:187
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Continuar lendo <span class=\"meta-nav\">&rarr;</span>"
+
+#: functions.php:55
+msgid "Primary Navigation"
+msgstr "Navegação primária"
+
+#: eventbrite/eventbrite-index.php:42 eventbrite/eventbrite-single.php:33
+#: full-width-page.php:21 functions.php:197 functions.php:216 image.php:32
+#: image.php:43 image.php:99 loop.php:104 loop.php:128 loop.php:167
+#: loop.php:207 page.php:26 single.php:35 single.php:52
+msgid "Edit"
+msgstr "Editar"
+
+#: full-width-page.php:20 image.php:93 loop.php:148 loop.php:188 page.php:25
+#: single.php:41
+msgid "Pages:"
+msgstr "Páginas"
+
+#: footer.php:14
+msgid "Theme: %1$s by %2$s."
+msgstr "Tema: %1$s por %2$s. "
+
+#: footer.php:13
+msgid "Proudly powered by %s."
+msgstr "Orgulhosamente criado com %s."
+
+#: footer.php:13
+msgid "A Semantic Personal Publishing Platform"
+msgstr "Plataforma de publicação pessoal semântica"
+
+#: footer.php:13
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: comments.php:49
+msgid "Comments are closed."
+msgstr "Os comentários estão desativados."
+
+#: comments.php:25 comments.php:36
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr "<span class=\"meta-nav\">&larr;</span> Comentários mais antigos"
+
+#: comments.php:26 comments.php:37
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Comentários mais recentes <span class=\"meta-nav\">&rarr;</span>"
+
+#: comments.php:18
+msgid "One response to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
+msgstr[0] "Uma resposta para &ldquo;%2$s&rdquo;"
+msgstr[1] "%1$s Respostas para &ldquo;%2$s&rdquo;"
+
+#: category.php:13
+msgid "Category Archives: %s"
+msgstr "Arquivo da categoria: %s"
+
+#: author.php:14
+msgid "Author Archives: %s"
+msgstr "Arquivo do autor:%s"
+
+#: archive.php:22
+msgid "Blog Archives"
+msgstr "Arquivos do Blog"
+
+#: archive.php:20
+msgid "Yearly Archives: <span>%s</span>"
+msgstr "Arquivo do ano: <span>%s</span>"
+
+#: archive.php:18
+msgid "Monthly Archives: <span>%s</span>"
+msgstr "Arquivo do mês: <span>%s</span>"
+
+#: 404.php:15
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "A página solicitada não foi encontrada. Talvez a busca ajude."
+
+#: archive.php:16
+msgid "Daily Archives: <span>%s</span>"
+msgstr "Arquivo do dia: <span>%s</span>"
+
+#: 404.php:13 loop.php:19
+msgid "Not Found"
+msgstr "Não encontrado"

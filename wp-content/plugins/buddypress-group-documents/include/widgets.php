@@ -8,9 +8,9 @@ add_action( 'plugins_loaded', 'bp_group_documents_register_widgets' );
 
 class BP_Group_Documents_Newest_Widget extends WP_Widget {
 
-	function bp_group_documents_newest_widget() {
+	function __construct() {
 		$widget_ops = array('description' => __('The most recently uploaded group documents','bp-group-documents'));
-		parent::WP_Widget( false, $name = __( 'Recent Group Documents', 'bp-group-documents' ),$widget_ops );
+		parent::__construct( false, $name = __( 'Recent Group Documents', 'bp-group-documents' ),$widget_ops );
 	}
 
 	function widget( $args, $instance ) {
@@ -31,7 +31,7 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 	 * Main HTML Display
 	 */
 
-	$document_list = BP_Group_Documents::get_list_for_newest_widget( $instance['num_items'], $instance['group_filter'], $instance['featured'] ); 
+	$document_list = BP_Group_Documents::get_list_for_newest_widget( $instance['num_items'], $instance['group_filter'], $instance['featured'] );
 
 	if( $document_list && count($document_list) >=1 ) {
 		echo '<ul class="group-documents-recent">';
@@ -39,7 +39,7 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 			$document = new BP_Group_Documents( $item['id'] );
 			$group = new BP_Groups_Group( $document->group_id );
 			echo '<li>';
-			if( $instance['group_filter'] ) { 
+			if( $instance['group_filter'] ) {
 				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . esc_attr( $document->name ) . '</a>';
 			} else {
 				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>');
@@ -48,7 +48,7 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 		}
 		echo '</ul>';
 	} else {
-		echo '<div class="widget-error">' . __('There are no documents to display.', 'bp-group-documents') .'</div></p>';	
+		echo '<div class="widget-error">' . __('There are no documents to display.', 'bp-group-documents') .'</div></p>';
 	}
 
 	?>
@@ -107,9 +107,9 @@ class BP_Group_Documents_Newest_Widget extends WP_Widget {
 
 class BP_Group_Documents_Popular_Widget extends WP_Widget {
 
-	function bp_group_documents_popular_widget() {
+	function __construct() {
 		$widget_ops = array('description'=> __('The most commonly downloaded group documents','bp-group-documents'));
-		parent::WP_Widget( false, $name = __( 'Popular Group Documents', 'bp-group-documents' ),$widget_ops );
+		parent::__construct( false, $name = __( 'Popular Group Documents', 'bp-group-documents' ),$widget_ops );
 	}
 
 	function widget( $args, $instance ) {
@@ -131,7 +131,7 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 	 * Main HTML Display
 	 */
 
-	$document_list = BP_Group_Documents::get_list_for_popular_widget( $instance['num_items'], $instance['group_filter'], $instance['featured'] ); 
+	$document_list = BP_Group_Documents::get_list_for_popular_widget( $instance['num_items'], $instance['group_filter'], $instance['featured'] );
 
 	if( $document_list && count($document_list) >=1 ) {
 		echo '<ul class="group-documents-popular">';
@@ -139,7 +139,7 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 			$document = new BP_Group_Documents( $item['id'] );
 			$group = new BP_Groups_Group( $document->group_id );
 			echo '<li>';
-			if( $instance['group_filter'] ) { 
+			if( $instance['group_filter'] ) {
 				echo '<a href="' . $document->get_url() . '">' . $document->icon() . ' ' . esc_attr( $document->name ) . '</a>';
 			} else {
 				echo sprintf( __('%s posted in %s','bp-group-documents'),'<a href="' . $document->get_url() . '">' . esc_attr( $document->name ) . '</a>','<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>');
@@ -148,7 +148,7 @@ class BP_Group_Documents_Popular_Widget extends WP_Widget {
 		}
 		echo '</ul>';
 	} else {
-		echo '<div class="widget-error">' . __('There are no documents to display.', 'bp-group-documents') .'</div></p>';	
+		echo '<div class="widget-error">' . __('There are no documents to display.', 'bp-group-documents') .'</div></p>';
 	}
 
 	?>

@@ -107,7 +107,7 @@ class BP_Activity_Activity {
 	 * @since 1.1.0
 	 * @var int
 	 */
-	var $hide_sitewide = false;
+	var $hide_sitewide = 0;
 
 	/**
 	 * Node boundary start for activity or activity comment.
@@ -134,6 +134,24 @@ class BP_Activity_Activity {
 	var $is_spam;
 
 	/**
+	 * Error holder.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var WP_Error
+	 */
+	public $errors;
+
+	/**
+	 * Error type to return. Either 'bool' or 'wp_error'.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var string
+	 */
+	public $error_type = 'bool';
+
+	/**
 	 * Constructor method.
 	 *
 	 * @since 1.5.0
@@ -141,8 +159,11 @@ class BP_Activity_Activity {
 	 * @param int|bool $id Optional. The ID of a specific activity item.
 	 */
 	public function __construct( $id = false ) {
+		// Instantiate errors object.
+		$this->errors = new WP_Error;
+
 		if ( !empty( $id ) ) {
-			$this->id = $id;
+			$this->id = (int) $id;
 			$this->populate();
 		}
 	}
@@ -175,10 +196,10 @@ class BP_Activity_Activity {
 			$this->action            = $row->action;
 			$this->content           = $row->content;
 			$this->date_recorded     = $row->date_recorded;
-			$this->hide_sitewide     = $row->hide_sitewide;
+			$this->hide_sitewide     = (int) $row->hide_sitewide;
 			$this->mptt_left         = (int) $row->mptt_left;
 			$this->mptt_right        = (int) $row->mptt_right;
-			$this->is_spam           = $row->is_spam;
+			$this->is_spam           = (int) $row->is_spam;
 		}
 
 		// Generate dynamic 'action' when possible.
@@ -235,8 +256,22 @@ class BP_Activity_Activity {
 		 */
 		do_action_ref_array( 'bp_activity_before_save', array( &$this ) );
 
+		if ( 'wp_error' === $this->error_type && $this->errors->get_error_code() ) {
+			return $this->errors;
+		}
+
 		if ( empty( $this->component ) || empty( $this->type ) ) {
-			return false;
+			if ( 'bool' === $this->error_type ) {
+				return false;
+			} else {
+				if ( empty( $this->component ) ) {
+					$this->errors->add( 'bp_activity_missing_component' );
+				} else {
+					$this->errors->add( 'bp_activity_missing_type' );
+				}
+
+				return $this->errors;
+			}
 		}
 
 		if ( empty( $this->primary_link ) ) {
@@ -578,6 +613,18 @@ class BP_Activity_Activity {
 				$activities = $wpdb->get_results( apply_filters( 'bp_activity_get_user_join_filter', "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}, a.id {$sort}", $select_sql, $from_sql, $where_sql, $sort, $pag_sql ) );
 			}
 
+			// Integer casting for legacy activity query.
+			foreach ( (array) $activities as $i => $ac ) {
+				$activities[ $i ]->id                = (int) $ac->id;
+				$activities[ $i ]->item_id           = (int) $ac->item_id;
+				$activities[ $i ]->secondary_item_id = (int) $ac->secondary_item_id;
+				$activities[ $i ]->user_id           = (int) $ac->user_id;
+				$activities[ $i ]->hide_sitewide     = (int) $ac->hide_sitewide;
+				$activities[ $i ]->mptt_left         = (int) $ac->mptt_left;
+				$activities[ $i ]->mptt_right        = (int) $ac->mptt_right;
+				$activities[ $i ]->is_spam           = (int) $ac->is_spam;
+			}
+
 		} else {
 			// Query first for activity IDs.
 			$activity_ids_sql = "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}, a.id {$sort}";
@@ -708,7 +755,20 @@ class BP_Activity_Activity {
 
 		// Now fetch data from the cache.
 		foreach ( $activity_ids as $activity_id ) {
-			$activities[] = wp_cache_get( $activity_id, 'bp_activity' );
+			// Integer casting.
+			$activity = wp_cache_get( $activity_id, 'bp_activity' );
+			if ( ! empty( $activity ) ) {
+				$activity->id                = (int) $activity->id;
+				$activity->user_id           = (int) $activity->user_id;
+				$activity->item_id           = (int) $activity->item_id;
+				$activity->secondary_item_id = (int) $activity->secondary_item_id;
+				$activity->hide_sitewide     = (int) $activity->hide_sitewide;
+				$activity->mptt_left         = (int) $activity->mptt_left;
+				$activity->mptt_right        = (int) $activity->mptt_right;
+				$activity->is_spam           = (int) $activity->is_spam;
+			}
+
+			$activities[] = $activity;
 		}
 
 		// Then fetch user data.
@@ -1071,7 +1131,9 @@ class BP_Activity_Activity {
 
 		if ( ! empty( $where_args ) ) {
 			$where_sql = 'WHERE ' . join( ' AND ', $where_args );
-			return $wpdb->get_var( "SELECT id FROM {$bp->activity->table_name} {$where_sql}" );
+			$result = $wpdb->get_var( "SELECT id FROM {$bp->activity->table_name} {$where_sql}" );
+
+			return is_numeric( $result ) ? (int) $result : false;
 		}
 
 		return false;
@@ -1763,7 +1825,9 @@ class BP_Activity_Activity {
 
 		$bp = buddypress();
 
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE content = %s", $content ) );
+		$result = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE content = %s", $content ) );
+
+		return is_numeric( $result ) ? (int) $result : false;
 	}
 
 	/**

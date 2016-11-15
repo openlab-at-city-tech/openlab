@@ -27,7 +27,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		$now       = time();
 		if ( isset( $post->EventStartDate ) ) {
 			$postTimestamp = strtotime( $post->EventStartDate, $now );
-			$postTimestamp = strtotime( date( Tribe__Events__Date_Utils::DBDATEFORMAT, $postTimestamp ), $now ); // strip the time
+			$postTimestamp = strtotime( date( Tribe__Date_Utils::DBDATEFORMAT, $postTimestamp ), $now ); // strip the time
 			if ( $postTimestamp != $tribe_ecp->currentPostTimestamp ) {
 				$retval = true;
 			}
@@ -128,37 +128,37 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 		$tribe_ecp = Tribe__Events__Main::instance();
 
-		$title = sprintf( __( 'Upcoming %s', 'the-events-calendar' ), $events_label_plural );
+		$title = sprintf( esc_html__( 'Upcoming %s', 'the-events-calendar' ), $events_label_plural );
 
 		// If there's a date selected in the tribe bar, show the date range of the currently showing events
 		if ( isset( $_REQUEST['tribe-bar-date'] ) && $wp_query->have_posts() ) {
-			$first_returned_date = tribe_get_start_date( $wp_query->posts[0], false, Tribe__Events__Date_Utils::DBDATEFORMAT );
+			$first_returned_date = tribe_get_start_date( $wp_query->posts[0], false, Tribe__Date_Utils::DBDATEFORMAT );
 			$first_event_date    = tribe_get_start_date( $wp_query->posts[0], false );
 			$last_event_date     = tribe_get_end_date( $wp_query->posts[ count( $wp_query->posts ) - 1 ], false );
 
 			// If we are on page 1 then we may wish to use the *selected* start date in place of the
 			// first returned event date
 			if ( 1 == $wp_query->get( 'paged' ) && $_REQUEST['tribe-bar-date'] < $first_returned_date ) {
-				$first_event_date = tribe_event_format_date( $_REQUEST['tribe-bar-date'], false );
+				$first_event_date = tribe_format_date( $_REQUEST['tribe-bar-date'], false );
 			}
 
 			$title = sprintf( __( '%1$s for %2$s - %3$s', 'the-events-calendar' ), $events_label_plural, $first_event_date, $last_event_date );
 		} elseif ( tribe_is_past() ) {
-			$title = sprintf( __( 'Past %s', 'the-events-calendar' ), $events_label_plural );
+			$title = sprintf( esc_html__( 'Past %s', 'the-events-calendar' ), $events_label_plural );
 		}
 
 		if ( tribe_is_month() ) {
 			$title = sprintf(
-				__( '%1$s for %2$s', 'the-events-calendar' ),
+				esc_html__( '%1$s for %2$s', 'the-events-calendar' ),
 				$events_label_plural,
-				date_i18n( tribe_get_option( 'monthAndYearFormat', 'F Y' ), strtotime( tribe_get_month_view_date() ) )
+				date_i18n( tribe_get_date_option( 'monthAndYearFormat', 'F Y' ), strtotime( tribe_get_month_view_date() ) )
 			);
 		}
 
 		// day view title
 		if ( tribe_is_day() ) {
 			$title = sprintf(
-				__( '%1$s for %2$s', 'the-events-calendar' ),
+				esc_html__( '%1$s for %2$s', 'the-events-calendar' ),
 				$events_label_plural,
 				date_i18n( tribe_get_date_format( true ), strtotime( $wp_query->get( 'start_date' ) ) )
 			);
@@ -306,7 +306,6 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	/**
 	 * Used in list loop, displays the date headers between events in the loop when the month / year has changed
 	 *
-	 * @return void
 	 **/
 	function tribe_events_list_the_date_headers() {
 
@@ -322,7 +321,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 			$event_year        = tribe_get_start_date( $post, false, 'Y' );
 			$event_month       = tribe_get_start_date( $post, false, 'm' );
-			$month_year_format = tribe_get_option( 'monthAndYearFormat', 'F Y' );
+			$month_year_format = tribe_get_date_option( 'monthAndYearFormat', 'F Y' );
 
 			if ( $wp_query->current_post > 0 ) {
 				$prev_post = $wp_query->posts[ $wp_query->current_post - 1 ];

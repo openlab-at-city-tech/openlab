@@ -10,28 +10,28 @@ Network: true
 */
 
 class UBPForumAttachment {
-	
+
 var $id = 'ubpfattach';
 var $ver = '1.2.1';
 var $url, $path, $thumbnail_size, $bb_prefix, $meta_table;
 
-function UBPForumAttachment(){
+function __construct(){
 	$this->url = plugin_dir_url(__FILE__);
 	$this->path = plugin_dir_path(__FILE__);
 	$this->thumbnail_size = array(100, 100);
-	
+
 	register_activation_hook( __FILE__, array(&$this, 'activation') );
-	
+
 	load_plugin_textdomain($this->id, false, dirname(plugin_basename(__FILE__)).'/languages/');
-	
+
 	add_action( 'bb_init', array(&$this, 'set_db') );
 	add_action( 'admin_init', array(&$this, 'set_db') );
-	
+
 	add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array(&$this, 'admin_menu') );
 	add_action( 'admin_init', array(&$this, 'admin_init') );
 	add_action( 'admin_action_'.$this->id.'_delete_file', array(&$this, 'delete_file_n_update_meta'));
 	add_action( 'wp_ajax_'.$this->id.'_ajax', array(&$this, 'ajax') );
-	
+
 	add_action( 'bb_init', array(&$this, 'bb_init') );
 	add_action( 'init', array(&$this, 'request') );
 }
@@ -44,7 +44,7 @@ function set_db(){
 			$this->bb_prefix = $bb_table_prefix;
 			$this->meta_table = $bb_table_prefix.'meta';
 		}
-		
+
 	} else {
 		$this->bb_prefix = $bbdb->prefix;
 		$this->meta_table = $bbdb->prefix.'meta';
@@ -52,22 +52,22 @@ function set_db(){
 }
 
 function is_enable(){
-	
+
 	$opts = get_option($this->id);
-	if( empty($opts['enable']) || empty($opts['upload_dir']) ) 
+	if( empty($opts['enable']) || empty($opts['upload_dir']) )
 		return false;
-	
+
 	return true;
 }
 
 function request(){
 	if( ! $this->is_enable() ) return;
-	
+
 	if( isset($_POST[$this->id.'_upload']) AND ($_POST[$this->id.'_upload']==='true') ){
 		$this->_do_upload();
 		exit;
 	}
-	
+
 	if( isset($_GET[$this->id.'_download']) AND ($_GET[$this->id.'_download']==='true') ){
 		$this->_do_download();
 		exit;
@@ -76,37 +76,37 @@ function request(){
 
 function bb_init(){
 	if( ! $this->is_enable() ) return;
-	
+
 	$opts = get_option($this->id);
-	
+
 	// meta
 	add_action( 'groups_new_forum_topic', array(&$this, 'new_topic_meta'), 1, 2);
 	add_action( 'groups_new_forum_topic_post', array(&$this, 'new_topic_post_meta'), 1, 2);
 	add_action( 'groups_edit_forum_topic', array(&$this, 'edit_topic_meta'), 1);
 	add_action( 'groups_edit_forum_post', array(&$this, 'edit_post_meta'), 1);
-	
+
 	// display uploader - topic new
 	add_action( 'bp_after_group_forum_post_new', array(&$this, 'create_uploader') );
 	// display uploader - reply new
 	add_action( 'groups_forum_new_reply_after', array(&$this, 'create_uploader') );
 	// display uploader - global forum
 	add_action( 'groups_forum_new_topic_after', array(&$this, 'create_uploader') );
-	
+
 	// display uploader - topic edit
 	add_action( 'bp_group_after_edit_forum_topic', array(&$this, 'create_uploader_edit') );
 	// display uploader - reply edit
 	add_action( 'bp_group_after_edit_forum_post', array(&$this, 'create_uploader_edit') );
-	
+
 	// hidden form for file upload
 	add_action('wp_footer', array(&$this, 'create_upload_form'));
-	
+
 	// filebox on post-entry
 	add_action( 'bp_get_the_topic_post_content', array(&$this, 'create_filebox'));
-	
+
 	wp_enqueue_style( $this->id.'-style', $this->url.'inc/style.css', '', $this->ver);
 	wp_enqueue_script( $this->id.'-script', $this->url.'inc/script.js', array('jquery'), $this->ver);
 	wp_localize_script( $this->id.'-script', $this->id.'_vars', array(
-		'ajaxurl' 			=> admin_url( 'admin-ajax.php' ), 
+		'ajaxurl' 			=> admin_url( 'admin-ajax.php' ),
 		'nonce' 			=> wp_create_nonce( $this->id.'_nonce' ),
 		'plugin_id' 		=> $this->id,
 		'max_num' 			=> $opts['max_num'],
@@ -133,7 +133,7 @@ function create_upload_form(){
 function create_uploader( $meta_id='' ){
 	global $is_iphone;
 	if( $is_iphone ) return false;
-		
+
 	$opts = (object) get_option($this->id);
 	?>
 <div id="<?php echo $this->id?>">
@@ -155,7 +155,7 @@ function create_uploader( $meta_id='' ){
 
 function create_uploader_edit() {
 	global $wpdb, $bp, $forum_template;
-	
+
 	if( bp_is_edit_topic() ){
 		$object_id = $forum_template->topic->topic_id;
 		$object_type = 'bb_topic';
@@ -182,7 +182,7 @@ function create_filebox($content){
 	$rows = json_decode($rows);
 	$upload_dir_path = $this->get_upload_dir_path();
 	$upload_dir_url = $this->get_upload_dir_url();
-	
+
 	$ret = '<div class="clear"></div>';
 	if( !empty($rows) ){
 		$i=0;
@@ -191,20 +191,20 @@ function create_filebox($content){
 			$x = explode('.', $row->filename);
 			$ext = end($x);
 			$is_image = ( $ext=='jpg' || $ext=='jpeg' || $ext=='gif' || $ext=='png' ) ? true : false;
-			
+
 			$download_url = add_query_arg(array(
 				$this->id.'_download' => 'true',
 				'_wpnonce' => wp_create_nonce($this->id.'_nonce'),
 				'filename' => urlencode($row->filename),
 			), '');
-			
+
 			$thumbnail = $row->url;
 			if( !empty($row->thumbnail_filename) AND file_exists($upload_dir_path.$row->thumbnail_filename) ){
 				$thumbnail = $upload_dir_url.$row->thumbnail_filename;
 			}
-			
+
 			$even = ($i++%2==0) ? 'even' : '';
-			
+
 			$ret .= '<tr class="'.$even.'">';
 			if( $is_image ) {
 				$ret .= '<td class="thumb"><img src="'.$thumbnail.'" class="thumb">'.$t.'</td>';
@@ -228,14 +228,14 @@ function attachment_validate(){
 	$attachments = isset($_POST[$this->id.'-attachments']) ? $_POST[$this->id.'-attachments'] : '';
 	if( empty($attachments) || !is_array($attachments) )
 		return false;
-		
+
 	$clean = array();
 	foreach($attachments as $k=>$v)
 		$clean[$k] = $v;
-	
+
 	return json_encode($clean);
 }
-	
+
 function new_topic_meta($group_id, $topic) {
 	if( $attachment = $this->attachment_validate() )
 		bb_update_topicmeta( $topic->topic_id, $this->id.'_attachments', $attachment );
@@ -332,28 +332,28 @@ function _return_upload_error($error){
 
 function _do_upload(){
 	$opts = get_option($this->id);
-	
+
 	if ( !wp_verify_nonce($_POST[$this->id.'_nonce'], $this->id.'_nonce') )
 		$this->_return_upload_error( __('Your nonce did not verify.', $this->id) );
-	
+
 	if( empty($_FILES['file']['size']) )
 		$this->_return_upload_error( __('Please select a file to upload', $this->id) );
-		
+
 	if( $_FILES['file']['size'] > ($opts['max_size'] * 1024 * 1024) )
 		$this->_return_upload_error( sprintf(__('For uploading, file size must be less than %s Mbytes', $this->id), $opts['max_size']) );
-	
-	add_filter( 'upload_dir', array(&$this, '_upload_dir') ); 
-	add_filter( 'sanitize_file_name', array(&$this, '_sanitize_file_name') ); 
+
+	add_filter( 'upload_dir', array(&$this, '_upload_dir') );
+	add_filter( 'sanitize_file_name', array(&$this, '_sanitize_file_name') );
 	add_filter( 'upload_mimes', array(&$this, '_upload_mimes') );
-	
+
 	$upload = wp_upload_bits($_FILES['file']['name'], null, file_get_contents($_FILES['file']['tmp_name']));
 	if( isset($upload['error']) AND !empty($upload['error']) )
 		$this->_return_upload_error($upload['error']);
-	
+
 	$url = esc_js($upload['url']);
 	$filename = basename($url);
 	$message = esc_js(sprintf(__('[%s] is successfully uploaded.', $this->id), $filename));
-	
+
 	$thumbnail = $this->_create_thumbnail($upload);
 	if( !empty($thumbnail['error']) || empty($thumbnail['url'])){
 		$thumbnail_url = '';
@@ -385,7 +385,7 @@ function _create_thumbnail($upload){
 	$baseurl = str_replace($path_parts['basename'], '', $upload['url']);
 	$imagesize = getimagesize($filepath);
 	$mime_type = $imagesize['mime'];
-	
+
 	switch ( $mime_type ) {
 		case 'image/jpeg':
 			$img = imagecreatefromjpeg($filepath);
@@ -400,7 +400,7 @@ function _create_thumbnail($upload){
 			$img = false;
 			break;
 	}
-	
+
 	if ( is_resource($img) && function_exists('imagealphablending') && function_exists('imagesavealpha') ) {
 		imagealphablending($img, false);
 		imagesavealpha($img, true);
@@ -408,25 +408,25 @@ function _create_thumbnail($upload){
 		$return['error'] = __('Unable to create sub-size images.');
 		return $return;
 	}
-	
+
 	$resized = image_make_intermediate_size($filepath, $this->thumbnail_size[0], $this->thumbnail_size[1], true);
 	if( empty($resized) ){
 		$return['url'] = '';
 	}else{
 		$return['url'] = $baseurl.$resized['file'];
 	}
-	
+
 	imagedestroy($img);
 	return $return;
 }
 
 function _do_download(){
 	if ( !wp_verify_nonce($_GET['_wpnonce'], $this->id.'_nonce') )
-		wp_die(__('Your nonce did not verify.', $this->id)); 
-	
+		wp_die(__('Your nonce did not verify.', $this->id));
+
 	$filename = basename($_GET['filename']);
 	$filepath = $this->get_upload_dir_path().$filename;
-	
+
 	if( empty($filename) || !file_exists($filepath) ) {
 		wp_die(__('File does not exist', $this->id));
 	}else{
@@ -435,18 +435,18 @@ function _do_download(){
 }
 
 function _force_download($filename = '', $data = ''){
-	if ($filename == '' OR $data == '')	
+	if ($filename == '' OR $data == '')
 		return false;
-	
-	if (FALSE === strpos($filename, '.')) 
+
+	if (FALSE === strpos($filename, '.'))
 		return false;
-	
+
 	$rs = $this->_check_filetype($filename);
 	$mime_type = $rs['type'];
-	
+
 	if( empty($mime_type) ){
 		wp_die(__('Invalid file type'));
-	
+
 	}else{
 		if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE){
 			header('Content-Type: "'.$mime_type.'"');
@@ -473,36 +473,36 @@ function delete_file_n_update_meta(){
 	if( defined('DOING_AJAX') ){
 		check_ajax_referer( $this->id.'_nonce' );
 	}else{
-		check_admin_referer($this->id.'_nonce'); 
+		check_admin_referer($this->id.'_nonce');
 	}
-	
+
 	$meta_ids = $_REQUEST['meta_id'];
 	if( is_string($meta_ids) )
 		$meta_ids = array($meta_ids);
-	
+
 	foreach( $meta_ids as $meta_id ){
 		$tmp = explode('|', $meta_id);
 		if( count($tmp)!= 2 )
 			continue;
-		
+
 		$meta_id = absint($tmp[0]);
 		$file_index = stripcslashes($tmp[1]);
-		
+
 		$files = $this->get_meta( $meta_id );
 		$file = isset($files[$file_index]) ? $files[$file_index] : '';
 		unset($files[$file_index]);
-		
+
 		if( $file ){
 			if( isset($file->url) )
 				$this->unlink_file($file->url);
-			
+
 			if( isset($file->thumbnail_url) )
 				$this->unlink_file($file->thumbnail_url);
 		}
-		
+
 		$this->update_meta($meta_id, $files);
 	}
-	
+
 	if( !defined('DOING_AJAX') ){
 		$goback = wp_get_referer();
 		wp_redirect( $goback );
@@ -525,14 +525,14 @@ function get_meta_total(){
 
 function update_meta($meta_id, $files){
 	global $wpdb;
-	
+
 	if( empty($meta_id) )
 		return false;
-	
+
 	$files = !empty($files) ? (array) $files : array();
-	
+
 	$clean = array();
-	foreach($files as $k=>$v) 
+	foreach($files as $k=>$v)
 		$clean[$k] = $v;
 	$clean = json_encode( $clean );
 	$wpdb->update($this->meta_table, array('meta_value'=>$clean), array('meta_id'=>$meta_id));
@@ -540,13 +540,13 @@ function update_meta($meta_id, $files){
 
 function get_unattached_files(){
 	global $wpdb;
-	
+
 	$unattached = array();
 	$attached = array();
-	
+
 	$upload_dir_path = $this->get_upload_dir_path();
 	$upload_dir_url = $this->get_upload_dir_url();
-	
+
 	$handler = opendir($upload_dir_path);
 	while($file = readdir($handler)){
 		if($file != '.' AND $file != '..'){
@@ -554,10 +554,10 @@ function get_unattached_files(){
 		}
 	}
 	closedir($handler);
-	
+
 	if( empty($unattached) )
 		return null;
-	
+
 	$metas = $wpdb->get_results($wpdb->prepare("SELECT meta_value FROM {$this->meta_table} WHERE meta_key=%s", $this->id.'_attachments'));
 	foreach($metas as $meta){
 		if( empty($meta->meta_value) ) continue;
@@ -569,13 +569,13 @@ function get_unattached_files(){
 				$attached[] = $file->thumbnail_filename;
 		}
 	}
-	
+
 	$rs = array();
 	foreach( $unattached as $filename ){
 		if( !in_array($filename, $attached) )
 			$rs[] = $filename;
 	}
-	
+
 	return $rs;
 }
 
@@ -592,28 +592,28 @@ function unlink_file($filename){
 function ajax(){
 	if( !defined('DOING_AJAX') ) die('-1');
 	check_ajax_referer( $this->id.'_nonce' );
-	
+
 	switch( $_REQUEST['action_scope'] ){
 		case 'get_meta':
 			$r =$this->get_meta( $_REQUEST['meta_id'] );
 			echo json_encode($r);
 			break;
-		
+
 		case 'update_meta':
 			$this->update_meta($_REQUEST['meta_id'], $_POST['files']);
 			break;
-			
+
 		case 'delete_file_n_update_meta':
 			$this->delete_file_n_update_meta();
 			break;
-		
+
 		case 'delete_unattached_files':
 			if( isset($_POST['filename']))
 				$this->unlink_file($_POST['filename']);
 			if( isset($_POST['thumbnail_filename']))
 				$this->unlink_file($_POST['thumbnail_filename']);
 			break;
-		
+
 		case 'get_unattached_files':
 			$r = $this->get_unattached_files();
 			echo json_encode($r);
@@ -621,21 +621,21 @@ function ajax(){
 	}
 	die();
 }
-	
-	
-	
-	
+
+
+
+
 /* Back-end
 --------------------------------------------------------------------------------------- */
 
 function activation() {
 	global $wp_version;
-	
-	if (version_compare($wp_version, "3.1", "<")) 
+
+	if (version_compare($wp_version, "3.1", "<"))
 		wp_die("This plugin requires WordPress version 3.1 or higher.");
-	
+
 	register_uninstall_hook( __FILE__, 'ubpfattach_uninstall' );
-	
+
 	$opts = array (
 		'enable' => '',
 		'max_size' => 1,
@@ -644,12 +644,12 @@ function activation() {
 		'upload_dir' => $this->id,
 		'fm_number' => 20,
 	);
-	
+
 	$saved = get_option($this->id);
-	if ( !empty($saved) ) 
-		foreach ($saved as $key=>$val) 
+	if ( !empty($saved) )
+		foreach ($saved as $key=>$val)
 			$opts[$key] = $val;
-	
+
 	update_option($this->id, $opts);
 }
 
@@ -658,33 +658,33 @@ function admin_init(){
 }
 
 function admin_menu(){
-	if( !is_super_admin() ) 
+	if( !is_super_admin() )
 		return false;
-	
-	add_submenu_page( 
-		'bp-general-settings', 
-		'U '.__('Forum Attachment', $this->id), 
-		'U '.__('Forum Attachment', $this->id), 
-		'manage_options', 
-		$this->id, 
-		array(&$this, 'admin_options_page') 
+
+	add_submenu_page(
+		'bp-general-settings',
+		'U '.__('Forum Attachment', $this->id),
+		'U '.__('Forum Attachment', $this->id),
+		'manage_options',
+		$this->id,
+		array(&$this, 'admin_options_page')
 	);
-	
-	add_submenu_page( 
-		'bp-general-settings', 
-		'U '.__('Forum Attachment', $this->id).' - '.__('File Manager', $this->id), 
-		'U '.__('Forum Attachment', $this->id).' - '.__('File Manager', $this->id), 
-		'manage_options', 
-		$this->id.'-files', 
-		array(&$this, 'admin_file_manager') 
+
+	add_submenu_page(
+		'bp-general-settings',
+		'U '.__('Forum Attachment', $this->id).' - '.__('File Manager', $this->id),
+		'U '.__('Forum Attachment', $this->id).' - '.__('File Manager', $this->id),
+		'manage_options',
+		$this->id.'-files',
+		array(&$this, 'admin_file_manager')
 	);
 }
 
 function admin_options_page(){
-	
-	
+
+
 	$opts = (object) get_option($this->id);
-	
+
 	if( is_multisite() AND defined('BP_ROOT_BLOG') AND BP_ROOT_BLOG!=1){
 		switch_to_blog(BP_ROOT_BLOG);
 		$wp_upload_dir = wp_upload_dir();
@@ -692,27 +692,27 @@ function admin_options_page(){
 	}else{
 		$wp_upload_dir = wp_upload_dir();
 	}
-	
+
 	$all_mimes = array_keys($this->get_all_mime_types());
-	foreach($all_mimes as $i=>$mime) 
+	foreach($all_mimes as $i=>$mime)
 		$all_mimes[$i] = '['.str_replace('|', ',', $mime).']';
 	$all_mimes = implode(', ', $all_mimes);
 	?>
-	
+
 	<div class="wrap">
 		<?php screen_icon("options-general"); ?>
-		
+
 		<h2>U <?php _e('BuddyPress Forum Attachment', $this->id);?></h2>
-		
+
 		<?php settings_errors( $this->id ) ?>
-		
+
 		<form action="<?php echo admin_url('options.php')?>" method="post">
 			<?php settings_fields($this->id.'_options'); ?>
 			<table class="form-table">
 			<tr>
 				<th><strong><?php _e('Enable', $this->id)?></strong></th>
 				<td>
-					<label><input type="checkbox" name="<?php echo $this->id?>[enable]" value="1" <?php checked($opts->enable, '1')?>> 
+					<label><input type="checkbox" name="<?php echo $this->id?>[enable]" value="1" <?php checked($opts->enable, '1')?>>
 					<strong><?php _e('Enable', $this->id)?></strong></label>
 					<p>&nbsp;</p>
 				</td>
@@ -748,16 +748,16 @@ function admin_options_page(){
 					<p><code style="font-size:10px;"><?php echo $all_mimes?></code></p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th><?php _e('Number of posts to show in File Manager', $this->id)?></th>
 				<td>
 					<input type="text" name="<?php echo $this->id?>[fm_number]" value="<?php echo $opts->fm_number;?>" size="1">
 				</td>
 			</tr>
-			
+
 			</table>
-			
+
 			<p class="submit">
 				<input name="submit" type="submit" class="button-primary" value="<?php esc_attr_e(__('Save Changes', $this->id)); ?>" />
 			</p>
@@ -774,7 +774,7 @@ function admin_options_vailidate($input){
 	$r['max_num'] = absint($input['max_num']);
 	$r['allowed_file_type'] = trim($input['allowed_file_type']);
 	$r['fm_number'] = absint($input['fm_number']) ? absint($input['fm_number']) : 20;
-		
+
 	if( !$r['upload_dir'] || !$r['max_size'] || !$r['max_num'] || !$r['allowed_file_type'] ){
 		add_settings_error($this->id, 'settings_error', __('Error: please fill the required fields.', $this->id), 'error');
 		$r = get_option($this->id);
@@ -788,13 +788,13 @@ function admin_options_vailidate($input){
 function admin_file_manager(){
 	global $wpdb, $bp;
 	$opts = get_option($this->id);
-	
+
 	$paged = isset($_GET['paged']) ? max(1, absint($_GET['paged'])) : 1;
 	$items_per_page = absint($opts['fm_number']) ? absint($opts['fm_number']) : 20;
 	$total_item = $this->get_meta_total();
 	$total_page = ceil($total_item/$items_per_page);
 	$offset =  ($paged * $items_per_page) - $items_per_page;
-	
+
 	$pager_args = array(
 		'base' => @add_query_arg('paged','%#%'),
 		'format' => '',
@@ -802,23 +802,23 @@ function admin_file_manager(){
 		'current' => $paged,
 	);
 	$page_links = paginate_links( $pager_args );
-	
+
 	$upload_dir_path = $this->get_upload_dir_path();
 	$upload_dir_url = $this->get_upload_dir_url();
 	$base_url = add_query_arg(array('page'=>$_GET['page'], 'paged'=>$paged), network_admin_url('admin.php'));
-	
+
 	$sql = $wpdb->prepare("SELECT * FROM {$this->meta_table} WHERE meta_key=%s ORDER BY meta_id DESC LIMIT %d, %d", $this->id.'_attachments', $offset, $items_per_page);
 	$meta_rows = $wpdb->get_results($sql);
 	$meta_index = 0;
 	$rows = array();
-	
+
 	foreach( $meta_rows as $meta_row){
 		if( empty($meta_row->meta_value) ) continue;
 		$files = (array) json_decode($meta_row->meta_value);
 		if( !count($files) ) continue;
-				
+
 		$post = $userdata = $author = $title = $date = $post_id = $post_status = '';
-				
+
 		if( $meta_row->object_type=='bb_topic' ){
 			$sql = "SELECT t.*, f.forum_slug FROM {$this->bb_prefix}topics AS t INNER JOIN {$this->bb_prefix}forums AS f ON t.forum_id = f.forum_id WHERE t.topic_id=%d";
 			$post = $wpdb->get_row( $wpdb->prepare($sql, $meta_row->object_id));
@@ -853,11 +853,11 @@ function admin_file_manager(){
 			case 1: $post_status = __('(Trash)', $this->id); break;
 			case 0: $post_status = ''; break;
 		}
-		
+
 		$row = array();
 		foreach( $files as $file_index=>$file ){
 			$file_index = (string) $file_index;
-			
+
 			// for under version 1.2
 			if( $file_index=='0' || absint($file_index)>0 ){
 				$file_index = $file->filename;
@@ -876,18 +876,18 @@ function admin_file_manager(){
 					$thumbnail = $upload_dir_url.$file->thumbnail_filename;
 			}else{
 				$ext = preg_replace('/^.+?\.([^.]+)$/', '$1', $file->filename);
-				if ( !empty($ext) AND $mime=wp_ext2type($ext) ) 
+				if ( !empty($ext) AND $mime=wp_ext2type($ext) )
 					$thumbnail = wp_mime_type_icon($mime);
 			}
 			$thumbnail = "<img src='$thumbnail' width='40'>";
-					
+
 			$delete_url = add_query_arg(array(
 				'action' => $this->id.'_delete_file',
 				'meta_id' => $meta_row->meta_id.'|'.$file_index,
-				'_wpnonce' => wp_create_nonce($this->id.'_nonce'), 
+				'_wpnonce' => wp_create_nonce($this->id.'_nonce'),
 				'_wp_http_referer' => urlencode($base_url),
 			), '');
-			
+
 			$row[] = (object) array(
 				'meta_id' => $meta_row->meta_id,
 				'file_index' => $file_index,
@@ -903,16 +903,16 @@ function admin_file_manager(){
 		$rows[] = $row;
 	}
 	?>
-	
+
 	<div class="wrap">
 		<?php screen_icon("options-general"); ?>
-		
+
 		<h2>U <?php _e('BuddyPress Forum Attachment', $this->id);?> : <?php _e('File Manager', $this->id)?></h2>
 		<br>
-		
+
 		<form action="" method="get" id="files-form">
 		<?php wp_nonce_field($this->id.'_nonce')?>
-	
+
 		<div class="tablenav top">
 			<div class="alignleft">
 				<select class="action" name="action">
@@ -925,7 +925,7 @@ function admin_file_manager(){
 				<div class="pagination-link"><?php echo $page_links?></div>
 			</div>
 		</div>
-		
+
 		<table class="widefat fixed" id="files-table">
 			<thead>
 				<tr>
@@ -938,7 +938,7 @@ function admin_file_manager(){
 				</tr>
 			</thead>
 			<tbody>
-			<?php 
+			<?php
 			$i = 0;
 			foreach( $rows as $row){
 				$alternate = (($i++)%2==0) ? 'alternate' : '';
@@ -968,12 +968,12 @@ function admin_file_manager(){
 			<?php }} ?>
 			</tbody>
 		</table>
-		
+
 		<div class="tablenav bottom"></div>
-		
+
 		</form>
-		
-		
+
+
 		<p><br><a href="#" id="sho-unattached-files">Show Unattached Files</a></p>
 		<div id="unattached-files">
 			<h3>Unattached Files</h3>
@@ -991,9 +991,9 @@ function admin_file_manager(){
 				</tbody>
 			</table>
 		</div>
-		
+
 	</div>
-	
+
 	<style>
 	#files-table td { vertical-align: middle; }
 	#files-table .check-column input { margin-left: 8px;}
@@ -1006,53 +1006,53 @@ function admin_file_manager(){
 	#unattached-files table{width: auto;}
 	#unattached-files h3 { margin-top: 0; }
 	</style>
-	
+
 	<script>
 	(function($) { $(function(){
-	
+
 	$('<tfoot/>').html($('#files-table thead').html()).insertAfter($('#files-table thead'));
-	
-	$('#files-table th input[type=checkbox]').change(function(){ 
+
+	$('#files-table th input[type=checkbox]').change(function(){
 		$('#files-table tb input[type=checkbox]').attr('checked', this.checked);
 	});
-	
+
 	$('#files-form .tablenav-pages').clone().appendTo('#files-form .tablenav.bottom');
-	
-	$('#files-form').submit(function(){ 
-		if( $(this).find('select.action').val()=='-1' ) 
-			return false; 
+
+	$('#files-form').submit(function(){
+		if( $(this).find('select.action').val()=='-1' )
+			return false;
 	});
-	
+
 	$('a#sho-unattached-files').click( function(){
 		$(this).hide();
 		$('#unattached-files').show();
-		
+
 		var args = {
 			action: 'ubpfattach_ajax',
 			action_scope: 'get_unattached_files',
 			_ajax_nonce: '<?php echo wp_create_nonce( $this->id.'_nonce' )?>'
 		}
-		
+
 		$.post('<?php echo admin_url('admin-ajax.php')?>', args, function(res){
 			var t = $('#unattached-files');
 			t.find('img.status').hide();
 			var tbody = t.find('table tbody');
-			
+
 			if( !res || res.length==0 ){
 				tbody.find('td').append('<?php _e('No unattached files', $this->id)?>');
 				return;
 			}
-			
+
 			tbody.find('tr').remove();
 			for( var i in res ){
 				var filename = res[i];
 				var file_type = filename.substr(filename.lastIndexOf('.')+1);
 				var is_image = (file_type=='jpg'||file_type=='jpeg'||file_type=='gif'||file_type=='png') ? true : false;
 				var view_link = is_image ? '<a href="<?php echo $upload_dir_url?>'+filename+'" target="_blank"><?php _e('View')?></a> | ' : '';
-			
+
 				var delete_link = $('<a href="#">Delete</a>');
 				$.data(delete_link[0], 'filename', filename);
-				
+
 				delete_link.click( function(){
 					var t = $(this).hide();
 					var args = {
@@ -1066,19 +1066,19 @@ function admin_file_manager(){
 					});
 					return false;
 				} );
-					
+
 				var tr = $('<tr><td class="filename">'+filename+'</td><td class="actions"></td></tr>');
 				tr.find('td.actions').append( view_link, delete_link );
 				tr.appendTo( tbody );
 			}
 		}, 'json');
-		
+
 		return false;
 	});
-	
+
 	}); })(jQuery);
 	</script>
-	
+
 	<?php
 }
 

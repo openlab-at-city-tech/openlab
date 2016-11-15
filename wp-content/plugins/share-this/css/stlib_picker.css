@@ -62,7 +62,7 @@
 
 .stp_ulLeft, .stp_ulRight, .stp_ulBottom  {
 	display:block;
-	overflow-y:scroll;	
+	overflow-y:scroll;
 	height:171px;
 	margin:0px;
 	padding:0px;
@@ -90,15 +90,15 @@
     position :relative;
 	text-align : left;
 	font-size : 16px !important;
-	/*border-bottom:1px solid black;	
+	/*border-bottom:1px solid black;
 	padding:0px;
 	padding-top:5px;
-	background: #ffffee; 
+	background: #ffffee;
 	vertical-align:center;*/
 }
 
 .stp_li img {
-	display:inline-	block;
+	display:inline-block;
 	margin:0px;
 	padding:0px;
 	margin-left:5px;
@@ -143,7 +143,7 @@
 }
 
 .stp_remove {
-    height: 17px;
+  height: 17px;
 	position: absolute;
 	top: 12px;
 	width: 17px;
@@ -204,19 +204,19 @@
 }
 
 .stp_right {
-	margin-top:-75px;	
+	margin-top:-75px;
 }
 
 .stp_right:hover {
-	margin-top:-227px;	
+	margin-top:-227px;
 }
 
 .stp_down {
-	margin-top:-114px;	
+	margin-top:-114px;
 }
 
 .stp_down:hover {
-	margin-top:-266px;	
+	margin-top:-266px;
 }
 
 .stp_clear {

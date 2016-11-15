@@ -24,7 +24,7 @@ ins {
 input[type=text],
 input[type=email],
 textarea {
-	border: none;
+	border-color: #c59aa4;
 }
 
 /* Links */
@@ -34,12 +34,14 @@ a {
 a:visited {
 	color: #d6284d;
 }
+a:focus,
 a:hover {
 	color: #a31b38;
 }
 h1 a, h2 a, h3 a {
 	color: #502c36;
 }
+h1 a:focus, h2 a:focus, h3 a:focus,
 h1 a:hover, h2 a:hover, h3 a:hover {
 	color: #d6284d;
 }
@@ -66,11 +68,14 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	background: #502c36;
 	color: #f0d5ca;
 }
+#access li > a:focus,
 #access li:hover > a,
+#access ul ul :focus > a,
 #access ul ul :hover > a {
 	background: #502c36;
 	color: #faccd6;
 }
+#access ul ul a:focus,
 #access ul ul a:hover {
 	background: #71404e;
 }
@@ -102,7 +107,9 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-info a {
 	color: #714b55;
 }
+.entry-meta a:focus,
 .entry-meta a:hover,
+.entry-info a:focus,
 .entry-info a:hover {
 	color: #e74040;
 }
@@ -117,6 +124,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .entry-info .comments-link a {
 	color: #714b55;
 }
+.entry-info .comments-link a:focus,
 .entry-info .comments-link a:hover {
 	background: #fa8fa7;
 	background-image: -moz-linear-gradient(100% 100% 90deg, #bc5871, #fa8fa7);
@@ -156,8 +164,10 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 .navigation a:visited {
 	color: #d6284d;
 }
+.navigation a:visited:focus,
 .navigation a:visited:hover,
 .navigation a:active,
+.navigation a:focus,
 .navigation a:hover {
 	color: #e74040;
 }
@@ -180,6 +190,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #wp-calendar a:visited {
 	color: #d6284d;
 }
+#wp-calendar a:visited:focus,
 #wp-calendar a:visited:hover {
 	color: #e74040;
 }
@@ -199,6 +210,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #respond .form-allowed-tags {
 	color: #714b55;
 }
+#comments .comment-meta a:focus,
 #comments .comment-meta a:hover {
 	color: #e74040;
 }
@@ -214,9 +226,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #colophon a {
 	color: #714b55;
 }
+#colophon a:focus,
 #colophon a:hover {
 	color: #e74040;
-}
-#colophon .generator-link {
-	background: url("../images/wordpress.png") no-repeat left center;
 }

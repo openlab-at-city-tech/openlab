@@ -86,10 +86,6 @@ class Automattic_Latex_DVIPNG extends Automattic_Latex_WPCOM {
 
 	var $_debug = false;
 
-	function Automattic_Latex_DVIPNG( $latex, $bg_hex = 'ffffff', $fg_hex = '000000', $size = 0, $png_path_base = null, $png_url_base = null ) {
-		$this->__construct( $latex, $bg_hex, $fg_hex, $size, $png_path_base, $png_url_base );
-	}
-
 	function __construct( $latex, $bg_hex = 'ffffff', $fg_hex = '000000', $size = 0, $png_path_base = null, $png_url_base = null ) {
 		parent::__construct( $latex, $bg_hex, $fg_hex, $size );
 		$this->size_latex = $this->size_it( $this->size );

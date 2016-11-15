@@ -23,23 +23,69 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .simcal-icon-spin {
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
   display: inline-block; }
 
-@-webkit-keyframes spin {
+@-moz-keyframes spin {
   0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-webkit-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-o-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@-ms-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 @keyframes spin {
   0% {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
@@ -47,8 +93,7 @@
   transition: all .2s ease-in-out; }
 
 .simcal-icon-rotate-180:before {
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg); }
+  transform: rotate(180deg); }
 
 .simcal-icon-calendar-empty:before {
   content: '\e800'; }
@@ -283,8 +328,7 @@ body .simcal-field-textarea {
     display: block; }
   .simcal-field-datetime-format .ui-sortable-helper {
     box-shadow: -2px 4px 8px rgba(0, 0, 0, 0.12);
-    -webkit-transform: rotate(2deg);
-            transform: rotate(2deg); }
+    transform: rotate(2deg); }
 
 #simcal-settings-page .simcal-wide-text {
   width: 40em; }
@@ -381,10 +425,23 @@ body .simcal-field-textarea {
 #simcal-get-shortcode input {
   width: 100%; }
 
+#simcal-upgrade,
 #simcal-newsletter {
   background-color: #fcf8e3; }
+  #simcal-upgrade input,
   #simcal-newsletter input {
     width: 100%; }
+
+#simcal-upgrade .centered {
+  text-align: center; }
+
+#simcal-upgrade .heading {
+  font-size: 16px; }
+
+#simcal-upgrade .button-large {
+  font-size: 16px;
+  line-height: 30px;
+  height: 32px; }
 
 #simcal-calendar-settings {
   display: none; }

@@ -94,25 +94,25 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	public function views() {
 		global $role;
 
-		// Used to reset the role
+		// Used to reset the role.
 		$reset_role = $role;
 
-		// Temporarly set the role to registered
+		// Temporarly set the role to registered.
 		$role = 'registered';
 
-		// Used to reset the screen id once views are displayed
+		// Used to reset the screen id once views are displayed.
 		$reset_screen_id = $this->screen->id;
 
-		// Temporarly set the screen id to the users one
+		// Temporarly set the screen id to the users one.
 		$this->screen->id = 'users-network';
 
-		// Use the parent function so that other plugins can safely add views
+		// Use the parent function so that other plugins can safely add views.
 		parent::views();
 
-		// Reset the role
+		// Reset the role.
 		$role = $reset_role;
 
-		// Reset the screen id
+		// Reset the screen id.
 		$this->screen->id = $reset_screen_id;
 	}
 
@@ -253,7 +253,10 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 */
 	public function column_cb( $signup_object = null ) {
 	?>
-		<label class="screen-reader-text" for="signup_<?php echo intval( $signup_object->id ); ?>"><?php printf( esc_html__( 'Select user: %s', 'buddypress' ), $signup_object->user_login ); ?></label>
+		<label class="screen-reader-text" for="signup_<?php echo intval( $signup_object->id ); ?>"><?php printf(
+			/* translators: accessibility text */
+			esc_html__( 'Select user: %s', 'buddypress' ), $signup_object->user_login );
+		?></label>
 		<input type="checkbox" id="signup_<?php echo intval( $signup_object->id ) ?>" name="allsignups[]" value="<?php echo esc_attr( $signup_object->id ) ?>" />
 		<?php
 	}

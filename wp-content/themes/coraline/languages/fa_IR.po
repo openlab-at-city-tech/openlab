@@ -1,0 +1,452 @@
+# Translation of Coraline in Persian
+# This file is distributed under the same license as the Coraline package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-01-28 09:25:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: Coraline\n"
+
+#: eventbrite/eventbrite-index.php:29 eventbrite/eventbrite-single.php:18
+msgid "Event"
+msgstr "رویداد"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/coraline/full-width-page.php
+msgid "Full-width, no sidebar"
+msgstr "پهنای کامل، بدون نوار کناری"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/coraline/style.css
+msgid "A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in \"Asides\" and \"Gallery\" categories, and has an optional full-width page template that removes the sidebar."
+msgstr "یک پوستهٔ جیغ و تمیز با ویژگی گزینگان، سرایند، پس‌زمینه و چیدمان سفارشی. Coraline از ۷ پهنهٔ ابزارک (تا ۳ مورد در نوار کناری و ۴ مورد در پسایند) و تصاویر ویژه (تصاویری کوچکی برای نوشته‌های گالری‌وار و تصاویر سرایند سفارشی برای نوشته‌ها و صفحه‌ها) پشتیبانی می‌کند. این پوسته سبک‌هایی برای چاپ و ویرایش‌گر دیداری و سبک‌های ویژهٔ دیگری برای نوشته‌هایی دستهٔ «خلوت‌گویه‌ها» و «گالری» دارد. همچنین یک قالب تمام‌پهنای اختیاری که نوار کناری را حذف می‌کند نیز در بر دارد."
+
+#: tag.php:13
+msgid "Tag Archives: %s"
+msgstr "بایگانی برچسب‌ها: %s"
+
+#: single.php:21 single.php:58
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: single.php:20 single.php:57
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr "&larr;"
+
+#: sidebar.php:86
+msgid "Meta"
+msgstr "فرا"
+
+#: sidebar.php:63
+msgid "Links"
+msgstr "پیوندها"
+
+#: sidebar.php:42
+msgid "Search It!"
+msgstr "جست‌وجو کنید!"
+
+#: sidebar.php:47
+msgid "Recent Entries"
+msgstr "تازه‌ترین ورودی‌ها"
+
+#: search.php:19
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr "پوزش، اما هیچ‌چیز با معیار جست‌وجوی شما همخوانی نیافت. لطفا با چند کلیدواژهٔ دیگر دوباره تلاش کنید."
+
+#: search.php:17
+msgid "Nothing Found"
+msgstr "چیزی پیدا نشد"
+
+#: loop.php:196
+msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+msgstr "<span class=\"%1$s\">نوشته‌شده در</span> %2$s"
+
+#: search.php:13
+msgid "Search Results for: %s"
+msgstr "نتایج جست‌وجو برای: %s"
+
+#: loop.php:178
+msgid "1 comment"
+msgstr "۱ دیدگاه"
+
+#: loop.php:178
+msgid "% comments"
+msgstr "% دیدگاه"
+
+#: loop.php:156
+msgid "<span class=\"%1$s\">in</span> %2$s"
+msgstr "<span class=\"%1$s\">در</span> %2$s"
+
+#: loop.php:164 loop.php:204
+msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+msgstr "<span class=\"%1$s\">برچسب‌خورده با</span> %2$s"
+
+#: loop.php:101
+msgid "View posts in the Gallery category"
+msgstr "مشاهدهٔ نوشته‌های دستهٔ گالری"
+
+#: loop.php:101
+msgid "More Galleries"
+msgstr "گالری‌های بیشتر"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "1 Comment"
+msgstr "۱ دیدگاه"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "% Comments"
+msgstr "% دیدگاه"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:178 loop.php:193
+#: single.php:34 single.php:48
+msgid "Leave a comment"
+msgstr "بیان دیدگاه"
+
+#: loop.php:83
+msgid "This gallery contains <a %1$s>%2$s photos</a>."
+msgstr "گالری شامل <a %1$s>%2$s عکس</a> می‌باشد."
+
+#: loop.php:84
+msgid "Permalink to %s"
+msgstr "پایاپیوند به %s"
+
+#: loop.php:45 loop.php:113 loop.php:136 single.php:27
+msgid "All %s posts"
+msgstr "همهٔ %s نوشته"
+
+#: loop.php:21
+msgid "Apologies, but no results were found for the requested archive. Perhaps searching will help find a related post."
+msgstr "پوزش، اما نتیجه‌ای برای بایگانی درخواست شده، یافت نشد. شاید جست‌وجو کمک کند نوشتهٔ مرتبطی پیدا کنید."
+
+#: loop.php:12 loop.php:221
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr "نوشته‌های تازه‌تر <span class=\"meta-nav\">&rarr;</span>"
+
+#: loop.php:11 loop.php:220
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr "<span class=\"meta-nav\">&larr;</span> نوشته‌های پیشین"
+
+#: inc/theme-options.php:217 inc/theme-options.php:248
+msgid "Note: Coraline now supports Post Formats! Read more at <a href=\"http://support.wordpress.com/posts/post-formats/\">Support &raquo; Post Formats</a>."
+msgstr "توجه: Coraline هم‌اکنون از قالب‌های نوشته پشتیبانی می‌کند! اطلاعات بیشتر در <a href=\"http://support.wordpress.com/posts/post-formats/\">پشتیبانی &raquo; قالب‌های نوشته</a>."
+
+#: inc/theme-options.php:229
+msgid "Gallery Category"
+msgstr "دستهٔ گالری"
+
+#: inc/theme-options.php:247
+msgid "Select a category to use for posts with image galleries"
+msgstr "یک دسته برای نوشته‌های شامل گالری تصاویر برگزینید"
+
+#: inc/theme-options.php:256
+msgid "Save Options"
+msgstr "ذخیره‌سازی تغییرات"
+
+#: inc/theme-options.php:198
+msgid "Aside Category"
+msgstr "دستهٔ کناری"
+
+#: inc/theme-options.php:201 inc/theme-options.php:232
+msgid "Select a category &hellip;"
+msgstr "یک دسته برگزینید &hellip;"
+
+#: inc/theme-options.php:216
+msgid "Select a category to use for shorter aside posts"
+msgstr "یک دسته برای نوشته‌های کناری کوتاه‌تر برگزینید"
+
+#: inc/theme-options.php:147
+msgid "Select a default color scheme"
+msgstr "یک رنگ‌بندی پیش‌فرض برگزینید"
+
+#: inc/theme-options.php:156 inc/theme-options.php:158
+msgid "Default Layout"
+msgstr "چیدمان پیش‌فرض"
+
+#: inc/theme-options.php:128
+msgid "Color Scheme"
+msgstr "رنگ‌بندی"
+
+#: inc/theme-options.php:93
+msgid "Full Width (No Sidebars)"
+msgstr "تمام-پهنا (بدون نوار کناری)"
+
+#: inc/theme-options.php:111
+msgid "%1$s Theme Options"
+msgstr "گزینه‌های پوستهٔ %1$s"
+
+#: inc/theme-options.php:114
+msgid "Options saved"
+msgstr "گزینه‌ها ذخیره شدند"
+
+#: inc/theme-options.php:81
+msgid "Content-Sidebar-Sidebar"
+msgstr "محتوا-‌ستون‌کناری-ستون‌کناری"
+
+#: inc/theme-options.php:85
+msgid "Sidebar-Sidebar-Content"
+msgstr "ستون‌کناری-ستون‌کناری-محتوا"
+
+#: inc/theme-options.php:89
+msgid "Sidebar-Content-Sidebar"
+msgstr "ستون‌کناری-محتوا-‌ستون‌کناری"
+
+#: inc/theme-options.php:73
+msgid "Content-Sidebar"
+msgstr "محتوا-ستون‌کناری"
+
+#: inc/theme-options.php:77
+msgid "Sidebar-Content"
+msgstr "ستون‌کناری-‌محتوا"
+
+#: inc/theme-options.php:59
+msgid "Brown"
+msgstr "قهوه‌ای"
+
+#: inc/theme-options.php:55
+msgid "Red"
+msgstr "قرمز"
+
+#: inc/theme-options.php:51
+msgid "Purple"
+msgstr "بنفش"
+
+#: inc/theme-options.php:47
+msgid "Blue"
+msgstr "آبی"
+
+#: inc/theme-options.php:43
+msgid "Pink"
+msgstr "صورتی"
+
+#: inc/theme-options.php:39
+msgid "Black"
+msgstr "مشکی"
+
+#: inc/theme-options.php:35
+msgid "White"
+msgstr "سفید"
+
+#: inc/custom-header.php:62
+msgid "Limestone cave"
+msgstr "غار سنگ آهک"
+
+#: inc/custom-header.php:67
+msgid "Cactii"
+msgstr "کاکتوس‌ها"
+
+#: inc/theme-options.php:25
+msgid "Theme Options"
+msgstr "گزینه‌های پوسته"
+
+#: inc/custom-header.php:57
+msgid "Water drops"
+msgstr "قطرات آب"
+
+#: image.php:49
+msgid "Next &rarr;"
+msgstr "بعدی &rarr; "
+
+#: image.php:48
+msgid "&larr; Previous"
+msgstr "&larr; پیشین"
+
+#: image.php:22
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Published </span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  at <a href=\"%3$s\" title=\"Link to full-size image\">%4$s &times; %5$s</a> in <a href=\"%6$s\" title=\"Return to %7$s\" rel=\"gallery\">%7$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\">منتشر شده در </span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  در <a href=\"%3$s\" title=\"پیوند به تصویر با ندازهٔ کامل\">%4$s &times; %5$s</a> در <a href=\"%6$s\" title=\"بازگشت به %7$s\" rel=\"gallery\">%7$s</a>"
+
+#: image.php:37
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Uploaded </span> at <a href=\"%1$s\" title=\"Link to full-size image\">%2$s &times; %3$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\">بارگذاری شده </span> در <a href=\"%1$s\" title=\"پیوند به تصویر با اندازهٔ کامل\">%2$s &times; %3$s</a>"
+
+#: header.php:41
+msgid "Skip to content"
+msgstr "پرش به محتوا"
+
+#: functions.php:485
+msgid "Page %s"
+msgstr "صفحهٔ %s"
+
+#: functions.php:368
+msgid "Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "<a href=\"%3$s\" title=\"پایاپیوند به %4$s\" rel=\"bookmark\">پایاپیوند</a> را نشانه‌گذاری کنید."
+
+#: functions.php:366
+msgid "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "این ورودی در %1$s فرستاده شده است. <a href=\"%3$s\" title=\"پایاپیوند به %4$s\" rel=\"bookmark\">پایاپیوند</a> به آن را نشانه‌گذاری کنید."
+
+#: functions.php:364
+msgid "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "این ورودی در %1$s فرستاده شده و با %2$s برچسب خورده. <a href=\"%3$s\" title=\"پایاپیوند به %4$s\" rel=\"bookmark\">پایاپیوند</a> را نشانه‌گذاری کنید."
+
+#: functions.php:345
+msgid "<span class=\"by-author\"><span class=\"sep\">by</span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+msgstr "<span class=\"by-author\"><span class=\"sep\">بدست</span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+
+#: functions.php:347
+msgid "View all posts by %s"
+msgstr "مشاهدهٔ همهٔ نوشته‌ها بر اساس %s"
+
+#: functions.php:300
+msgid "The fourth footer widget area"
+msgstr "پهنهٔ چهارم ابزارک‌های پسایند"
+
+#: functions.php:328
+msgid "<span class=\"%1$s\">Posted on</span> %2$s "
+msgstr "<span class=\"%1$s\">منتشرشده در</span> %2$s "
+
+#: functions.php:289
+msgid "The third footer widget area"
+msgstr "پهنهٔ سوم ابزارک‌های پسایند"
+
+#: functions.php:298
+msgid "Fourth Footer Widget Area"
+msgstr "پهنهٔ ابزارک پسایند چهارم"
+
+#: functions.php:278
+msgid "The second footer widget area"
+msgstr "پهنهٔ دوم ابزارک‌های پسایند"
+
+#: functions.php:287
+msgid "Third Footer Widget Area"
+msgstr "پهنهٔ ابزارک پسایند سوم"
+
+#: functions.php:267
+msgid "The first footer widget area"
+msgstr "پهنهٔ اول ابزارک‌های پسایند"
+
+#: functions.php:276
+msgid "Second Footer Widget Area"
+msgstr "پهنهٔ ابزارک پسایند دوم"
+
+#: functions.php:254
+msgid "Feature Widget Area"
+msgstr "پهنهٔ ابزارک ویژه"
+
+#: functions.php:256
+msgid "The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts"
+msgstr "ابزارک ویژهٔ بالای ستون‌های کناری در چیدمان‌های محتوا-ستون‌کناری-ستون‌کناری و ستون‌کناری-ستون‌کناری-محتوا"
+
+#: functions.php:265
+msgid "First Footer Widget Area"
+msgstr "پهنهٔ ابزارک پسایند اول"
+
+#: functions.php:243
+msgid "Secondary Widget Area"
+msgstr "پهنهٔ ابزارک دوم"
+
+#: functions.php:245
+msgid "The secondary widget area appears in 3-column layouts"
+msgstr "پهنهٔ دوم ابزارک‌ها در چیدمان‌های ۳-ستونه نمایان می‌شود"
+
+#: functions.php:232
+msgid "Primary Widget Area"
+msgstr "پهنهٔ ابزارک اصلی"
+
+#: functions.php:234
+msgid "The primary widget area"
+msgstr "پهنهٔ اصلی ابزارک‌ها"
+
+#: functions.php:216
+msgid "Pingback:"
+msgstr "بازتاب: "
+
+#: functions.php:202
+msgid "Your comment is awaiting moderation."
+msgstr "دیدگاه شما چشم به راه بررسی است."
+
+#. translators: 1: date, 2: time
+#: functions.php:191
+msgid "%1$s at %2$s"
+msgstr "%1$s در %2$s"
+
+#: functions.php:124 loop.php:121 loop.php:147 loop.php:187
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr "به خواندن ادامه دهید <span class=\"meta-nav\">&rarr;</span>"
+
+#: functions.php:55
+msgid "Primary Navigation"
+msgstr "ناوبری اصلی"
+
+#: eventbrite/eventbrite-index.php:42 eventbrite/eventbrite-single.php:33
+#: full-width-page.php:21 functions.php:197 functions.php:216 image.php:32
+#: image.php:43 image.php:99 loop.php:104 loop.php:128 loop.php:167
+#: loop.php:207 page.php:26 single.php:35 single.php:52
+msgid "Edit"
+msgstr "ویرایش"
+
+#: full-width-page.php:20 image.php:93 loop.php:148 loop.php:188 page.php:25
+#: single.php:41
+msgid "Pages:"
+msgstr "صفحه‌ها:"
+
+#: footer.php:14
+msgid "Theme: %1$s by %2$s."
+msgstr "پوسته: %1$s کاری از %2$s."
+
+#: footer.php:13
+msgid "Proudly powered by %s."
+msgstr "با افتخار نیرو گرفته از %s."
+
+#: footer.php:13
+msgid "A Semantic Personal Publishing Platform"
+msgstr "بستر نشر شخصی معنایی"
+
+#: footer.php:13
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: comments.php:49
+msgid "Comments are closed."
+msgstr "دیدگاه‌ها بسته شده‌اند."
+
+#: comments.php:25 comments.php:36
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr "<span class=\"meta-nav\">&larr;</span> دیدگاه‌های پیشین"
+
+#: comments.php:26 comments.php:37
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr "دیدگاه‌های تازه‌تر <span class=\"meta-nav\">&rarr;</span>"
+
+#: comments.php:18
+msgid "One response to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
+msgstr[0] "%1$s پاسخ به &ldquo;%2$s&rdquo;"
+
+#: category.php:13
+msgid "Category Archives: %s"
+msgstr "بایگانی دسته‌ها: %s"
+
+#: author.php:14
+msgid "Author Archives: %s"
+msgstr "بایگانی نویسنده: %s"
+
+#: archive.php:22
+msgid "Blog Archives"
+msgstr "بايگانی‌ وب‌نوشت"
+
+#: archive.php:20
+msgid "Yearly Archives: <span>%s</span>"
+msgstr "بایگانی سالانه: <span>%s</span>"
+
+#: archive.php:18
+msgid "Monthly Archives: <span>%s</span>"
+msgstr "بایگانی ماهانه: <span>%s</span>"
+
+#: 404.php:15
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "پوزش می‌خواهیم، اما امکان پیدا کردن صفحه‌ای که به دنبال آن بودید نبود. احتمالا جست‌وجو کمک خواهد کرد."
+
+#: archive.php:16
+msgid "Daily Archives: <span>%s</span>"
+msgstr "بایگانی روزانه: <span>%s</span>"
+
+#: 404.php:13 loop.php:19
+msgid "Not Found"
+msgstr "پیدا نشد"

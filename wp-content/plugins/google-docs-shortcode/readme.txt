@@ -2,8 +2,8 @@
 Contributors: r-a-y, cuny-academic-commons
 Tags: google-docs, shortcode
 Requires at least: 3.0
-Tested up to: 4.2.x
-Stable tag: 0.3
+Tested up to: 4.4.x
+Stable tag: 0.4
 
 Easily embed a Google Doc into your blog posts
 
@@ -25,6 +25,12 @@ To view a tutorial on how to use the shortcode, [read this](http://github.com/cu
 1. To view a tutorial on how to use the shortcode, [read this](http://github.com/cuny-academic-commons/google-docs-shortcode#google-docs-shortcode).
 
 == Changelog ==
+
+= 0.4 =
+* Add support for [Shortcake](https://wordpress.org/plugins/shortcode-ui/)
+* Add support for public link sharing URLs ("Anyone can view the link" and "Public on the web" links)
+* Add support to embed audio files (must use a public link sharing URL).  This uses your browser's HTML5 audio player.
+* Add support to embed any file from Google Drive (must use a public link sharing URL).  This uses Google's preview embed viewer.
 
 = 0.3 =
 * Add support for latest Sheets format.

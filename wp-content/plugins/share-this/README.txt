@@ -1,56 +1,25 @@
-=== ShareThis: Share Buttons and Social Analytics ===
-Tags:share, share this, sharethis, addthis, addtoany, share this, bookmark facebook, like, send, google plus, +1, sharing, pinterest, sharenow, hovering bar, floating buttons, copy and paste,copynshare, instagram, linkedin
+=== ShareThis: Free Sharing Buttons and Tools ===
+
+Tags: share, share this, sharethis, addthis, addtoany, bookmark facebook, like, send, google plus, +1, sharing, pinterest, sharenow, share now, hoverbar, hover bar, hovering bar, floating buttons, copy and paste, copynshare, instagram, linkedin, social buttons, social sharing, sharing buttons
 
 Contributors:ShareThis
 Requires at least: 1.5
 Tested up to: 4.2.2
 Stable tag: trunk
 
-Social Charge your Content with ShareThis - features Social Analytics, CopyNShare, Open Graph Sharing, and the Hovering Bar!
+ShareThis provides free sharing buttons and tools to drive traffic and increase engagement on your site.
+
 
 == Description ==
 
-**Updates 4/23/2014**
+**Updates 6/23/2016**
 
-New Look. Same Function.
-You may have been selected to get a free ShareThis Multi Post widget upgrade.
-This subtle change will give your social tools a more modern look and improved user interaction. And don’t worry, the widget still functions the same way so your users can choose from 120 social channels to share your content with their friends and family. [Learn More](http://support.sharethis.com/customer/portal/articles/517332-share-widget-faqs)
+ShareThis: free sharing tools are easy to implement and will increase traffic and engagement on your site.
 
-**Increase social activity on your site with [ShareThis](www.sharethis.com)!**
+Customize your look and feel by selecting your preferred layout and over 80 social channels including Facebook, Pinterest, Twitter, Linkedin, WhatsApp and more. Start empowering users to share content and grow your traffic today
 
-* Choose from 120 social channels, including Facebook, Twitter, LinkedIn, and Pinterest.
-* Use small or large buttons, add counters or use one of the Sharing Bars 
-* Access to greater insights by creating a Social Analytics Dashboard account
+More information about the [ShareThis plugin for WordPress](https://support.sharethis.com/hc/en-us/articles/217901048-How-to-Install-ShareThis-on-Wordpress)
 
-**Miss our Webinars? Watch our 4-part Webinar Series to learn how to improve your social media strategies.**
-
-* ​Evaluate your Social Cycle: Connect. Engage. Increase. Repeat. [Watch Now](http://slidesbysharethis.com/v/4cmrl8)
-* Turning the Lights On: Increasing Engagement in your Mobile App [Watch Now](http://slidesbysharethis.com/v/sppp8n)
-* Leveraging Social Analytics to Power Quality Referral Traffic [Watch Now](http://slidesbysharethis.com/v/r5g4te)
-* Verdict: Infinite Scroll Found Guilty in Page View’s Death [Watch Now](http://slidesbysharethis.com/v/uyk7bd)
-
-
-**Join the ShareThis Network**  
-Join the ShareThis Network of over 2.4M sites and get access to your analytics: Check out the [live demo](http://sharethis.com/publishers/metrics-dashboard?txtHidDemo=demo#home).
-
-* Daily sharing activity per registered domain
-* Detailed reports on the top shared URLs of your site(s)
-* Top social channel reports
-* Analysis of the social quality of your site via [SQI – Social Quality Index](www.sharethis.com/sqi).
-
-**Track Users' Copy and Paste Shares**  
-[CopyNShare](http://support.sharethis.com/customer/portal/articles/517332#copynshare) is a ShareThis widget feature in open beta that enables you to track the shares that occur when a user copies and pastes your website's URL or content. Two options are available:
-
-* To track address URL copy and pastes, a special #hashtag is added at the end of your address bar URL 
-* To track users copy and pastes of content, a “See more: yourURL.com#SThashtag” will appear after the pasted text
-
-Enable CopyNShare for your widget! [FAQs](http://support.sharethis.com/customer/portal/articles/517332#copynshare)
-
-
-**Make it Easier for your Users to Share your Content**  
-Hovering Bar is always present on the left or right side of content, makes it easier for your users to share. It's always in view - even when your users scroll up and down the page. [Get the Hovering Bar Now!](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration#Plugin-Options)
-
-More information about the [ShareThis plugin for WordPress](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
 
 == Installation ==
 
@@ -58,12 +27,40 @@ More information about the [ShareThis plugin for WordPress](http://support.share
 2. Put the 'sharethis.php' file into your wp-content/plugins/ directory.
 3. Go to the Plugins page in your WordPress Administration area and click 'Activate' for ShareThis.
 4. In the WordPress Administration area, open the ShareThis Options page, and customize the sharing buttons based on your need.
-5. Please refer this article for detailed instructions - [wordpress installation](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
+5. Please refer this article for detailed instructions - [wordpress installation](https://support.sharethis.com/hc/en-us/articles/217901048-How-to-Install-ShareThis-on-Wordpress)
+
 
 == Changelog ==
+
+7.6
+
+Fix for settings, css fix for button height
+
+
+7.5
+
+Changes to emails
+
+
+7.4
+
+Changes to README, updated screenshots and logo.
+
+
+7.3
+
+Additional drag and drop changes
+
+
+7.2
+
+Users can now drag and drop services for newer wordpress versions
+
+
 7.0.22
 
 User will no longer see the selection of MultiPost/Direct Post widget option. By default, new users will get MultiPost Widget.
+
 
 7.0.21
 
@@ -72,28 +69,35 @@ User will no longer see the selection of MultiPost/Direct Post widget option. By
 3. Updated Sign-in workflow
 4. Works with wordpress 4.2.2
 
+
 7.0.20
 
 1. Removed ShareNow Widget from configuration section
 2. Updated Direct Post screenshots
 
+
 7.0.19
 
 Added HTTPS Support for Publishers who manage the ShareThis Plugin over HTTPS Admin Panel.
+
 
 7.0.18
 
 1. Updated Help links in the Welcome Email
 2. Updated Screenshot of the New Updated Multi-Post Widget on Configuration page
 
+
 7.0.17
 
 Added option to Show/Hide Buttons on Post Excerpts. 
+
 User can now configure whether to show buttons on Post Excerpts by selecting the checkbox provided on Configuration Page Step 4.
+
 
 7.0.16
 
 Updated Configuration Page Screenshots.
+
 
 7.0.15
 
@@ -101,30 +105,45 @@ Updated Configuration Page Screenshots.
 
 
 7.0.14
+
 1. Fix for ShareThis Settings keeps Resetting after activation of any plugin
 2. Fix for Warning messages display
 
+
 7.0.13
+
 Maintenance Fix
+
 Buttons not showing up on the Page
 
+
 7.0.12
+
 Maintenance Fixes
-1. HoverBar buttons get cut-off when placed on right position
+
+1. Hoverbar buttons get cut-off when placed on right position
 2. Unwanted <BR> Tags were getting inserted in button SPAN tags
 
+
 7.0.11
+
 Maintenance Fixes
+
 Fix for Conflict between Open Graph Plugin and ShareThis Plugin
 
+
 7.0.10
+
 Maintenance Fixes
+
 1. Social Plugins are showing-up on Hoverbar and messing the other buttons
-2. Wordpress Plugin Configuration Page Error when only HoverBar option is selected
+2. Wordpress Plugin Configuration Page Error when only Hoverbar option is selected
 3. Hover Bar Position (Left/Right) not getting updated on the actual website
 4. Pulldown Bar logo image not getting saved
 
+
 7.0.9
+
 1. Option to add or edit http/https option in code.
 2. Options to show buttons on selected pages.
 3. Advance configuration to edit code.
@@ -135,37 +154,49 @@ Maintenance Fixes
 5. Removed drop downs for Page & Post selection from Step 4.
 6. Minor bug fixes.
 
+
 7.0.8
-Hot fix for plugin upgradation failure(Content not displaying on website after plugin upgradation)
+
+Hot fix for plugin upgradation failure (content not displaying on website after plugin upgradation)
+
 
 7.0.7
+
 1. ShareThis plugin support for Wordpress 3.8
 2. Option to show buttons on Top or Below the post
 3. Option to Logout in Plugin
 
+
 7.0.6
+
 1. Secunia vulnerability issue resolved
+
 
 7.0.5
 
 1. New sharethis logo added
+
 
 7.0.4
 
 1. jQuery noConflict fixed 
 2. Yoast SEO conflict fixed
 
+
 7.0.3
 
 1. CSS Fixes
+
 
 7.0.2
 
 1. Versioning bug
 
+
 7.0.1
 
 1. Fixes for IE
+
 
 7.0
 
@@ -173,25 +204,30 @@ Hot fix for plugin upgradation failure(Content not displaying on website after p
 2. Improved plugin configuration user interface
 3. Support for more social services
 
+
 6.0
 
 1. CNS implementation
 2. Bug Fixes.
+
 
 5.4.1
 
 1. Get the Instagram badge and link to your profile!
 2. Bug Fixes.
 
+
 5.4
 
 1. Now you know how many users share by copying and pasting. Introducing CopyNShare. Enable it and check your Analytics Dashboard to see those numbers pop up.
 2. Bug Fixes.
 
+
 5.3
 
 1. Introducing floating sharing buttons - Our Hovering Bar.
 2. Bug Fixes
+
 
 5.2.1
 
@@ -199,47 +235,22 @@ Hot fix for plugin upgradation failure(Content not displaying on website after p
 2. Ability to promote your twitter handle using the 'via', 'related' options on the Twitter share button.
 3. Bug Fixes
 
-== Sharing Analytics ==
-
-Once you join the the ShareThis Network, you get access to your Social Analytics Dashboard.  Create your account and register your domain to access your site’s sharing activity. 
-Check out the [live demo](http://sharethis.com/publishers/metrics-dashboard?txtHidDemo=demo#home).
-
-Reports include:
-* Daily sharing activity per registered domain
-* Detailed reports on the top shared URLs of your site(s)
-* Top social channel reports
-* Analysis of the social quality of your site via [SQI – Social Quality Index](www.sharethis.com/sqi).
-
-What are you waiting for? Download the ShareThis plugin today and get access to your Social Analytics Dashboard!
-
-== About Us ==
-
-ShareThis' mission is to make the world more connected, trusted and valuable through sharing. Our goal is to provide websites with solutions to improve and drive value from the social engagement of their site. 
-
-With the ShareThis Publisher Network of over 2.4M websites, 120 social channels and a reach of 95% of the web (US), ShareThis is the largest ecosystem for sharing and engagement across the web. 
-
-Learn More at http://www.sharethis.com
 
 == Frequently Asked Questions ==
 
-Check out [our support page](support.sharethis.com) and [our Wordpress customization area](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
+**Do I need to create an account?**
+
+No, you do not need to create an account in order to control a limited number of ShareThis sharing tools from within WordPress and enable your site’s visitors to share the content. In order to see your site's analytics, you will need to create an account with ShareThis. Creating an account requires an email and password or you can choose to login with another social media or Google account, along with agreeing to our [Terms and Conditions](http://www.sharethis.com/pub-tos.html) and [Privacy Policy](http://www.sharethis.com/pri.html).  Oh, and you must be at least 13 years old.
+
+Check out [our support page](http://support.sharethis.com) and [our Wordpress customization area](https://support.sharethis.com/hc/en-us/articles/217901048-How-to-Install-ShareThis-on-Wordpress)
 
 Still have questions? If you need technical help, email us at support@sharethis.com.
 
-== Support ==
-
-Have questions or suggestions for us? Perhaps it's already answered or being discussed in the ShareThis forums or on our ShareThis Support Section:
-
-[Forums](http://forums.sharethis.com)
-
-[Documentation](http://support.sharethis.com/customer/portal/articles/446440-wordpress-integration)
-
-If you would like to contact the support team via email you can reach us at: support@sharethis.com
 
 == Screenshots ==
+
 Check out some screenshots of our widget in action!
 
-1. Screenshot of the ShareThis widget when a user clicks on it.
-2. Screenshot of the Social Analytics Dashboard
-3. Screenshot of the ShareThis widget above content.
-4. Example of the Hovering Bar.
+1. ShareThis on-page counters and share buttons.
+2. Example of the Hoverbar.
+3. ShareThis modal window after user clicks on ShareThis icon in the Hoverbar.

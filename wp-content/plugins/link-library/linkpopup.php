@@ -124,6 +124,12 @@ function link_library_popup_content( $my_link_library_plugin ) {
         $popup_text = str_replace( '%link_name%', '', $popup_text );
     }
 
+    if ( ( strpos( $popup_text, '%link_url%' ) !== false ) && !empty( $linkitem['link_url'] ) ) {
+        $popup_text = str_replace( '%link_url%', $linkitem['link_url'], $popup_text );
+    } elseif ( ( strpos( $popup_text, '%link_cat_name%' ) !== false ) && empty( $linkitem['name'] ) ) {
+        $popup_text = str_replace( '%link_url%', '', $popup_text );
+    }
+
     if ( ( strpos( $popup_text, '%link_cat_name%' ) !== false ) && !empty( $linkitem['name'] ) ) {            $popup_text = str_replace( '%link_cat_name%', $linkitem['name'], $popup_text );
     } elseif ( ( strpos( $popup_text, '%link_cat_name%' ) !== false ) && empty( $linkitem['name'] ) ) {
         $popup_text = str_replace( '%link_cat_name%', '', $popup_text );
@@ -174,6 +180,17 @@ function link_library_popup_content( $my_link_library_plugin ) {
         $popup_text = str_replace( '%link_email%', '', $popup_text );
     }
 
+    if ( ( strpos ( $popup_text, '%link_email_link%' ) !== false ) && !empty( $linkitem['link_email'] ) ) {
+        $linkemail = stripslashes( $linkitem['link_email'] );
+        if ( strpos ( $linkemail, '@') !== false ) {
+            $linkemail = 'mailto:' . $linkemail;
+        }
+
+        $popup_text = str_replace( '%link_email_link%', $linkemail, $popup_text );
+    } elseif ( ( strpos( $popup_text, '%link_email_link%' ) !== false ) && empty( $linkitem['link_email'] ) ) {
+        $popup_text = str_replace( '%link_email_link%', '', $popup_text );
+    }
+
     if ( ( strpos ( $popup_text, '%link_alt_web%' ) !== false ) && !empty( $linkitem['link_second_url'] ) ) {
         $linkalturl = stripslashes( esc_html( $linkitem['link_second_url'] ) );
 
@@ -214,7 +231,8 @@ function link_library_popup_content( $my_link_library_plugin ) {
         $popup_text = str_replace( '%link_rss%', '', $popup_text );
     }
 
-    echo '<div class="linkpopup">' . $popup_text . '</div>';
+    $postshortcode_popup_text = apply_filters( 'the_content', $popup_text );
+    echo '<div class="linkpopup">' . $postshortcode_popup_text . '</div>';
 
     $xpath = $my_link_library_plugin->relativePath( dirname( __FILE__ ), ABSPATH );
 

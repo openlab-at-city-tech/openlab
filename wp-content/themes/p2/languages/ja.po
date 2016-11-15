@@ -2,16 +2,28 @@
 # This file is distributed under the same license as the P2 package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2014-06-01 17:21:10+0000\n"
+"PO-Revision-Date: 2015-12-03 16:42:53+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
 
+#. Theme Name of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "P2 Classic"
+msgstr "P2 Classic"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
 msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
+msgstr "思考のスピードでブログを書きましょう。P2 テーマは、インラインコメント、ホームページ上の投稿フォーム、投稿・コメントのインライン編集、リアルタイム更新などのような機能で普通のブログをスーパーブログに変換します。"
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -285,7 +297,7 @@ msgstr "もう一度ログインしてください"
 msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
 msgstr "サーバーに接続していないようです。"
 
-#: inc/js.php:145 inc/template-tags.php:254
+#: inc/js.php:145 inc/template-tags.php:257
 msgid "%1$s <em>on</em> %2$s"
 msgstr "%1$s | %2$s"
 
@@ -305,7 +317,7 @@ msgstr "コメントスレッドを表示"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "操作を続けると、あなたのコメントまたは投稿は失われます。"
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "コメントスレッドを隠す"
 
@@ -409,31 +421,31 @@ msgstr "メニュー"
 msgid "Post"
 msgstr "投稿"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "ページ %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "Proudly powered by %s."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "http://ja.wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "画像の投稿"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "ログインして返信する"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "動画の投稿"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "あなたのコメントは承認待ちです。"
 
@@ -445,47 +457,47 @@ msgstr "サイドバー"
 msgid "Primary Menu"
 msgstr "メインメニュー"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "ヘルプを表示 / 非表示"
 
-#: footer.php:32
+#: footer.php:38
 msgid "shift + esc"
 msgstr "Shift + ESC"
 
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "トップへ移動"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "ログインへ"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "コメント表示 / 非表示"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "次の投稿 / 次のコメント"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "過去の投稿 / コメント"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "新規投稿作成"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "Theme: %1$s by %2$s."
 
-#: entry.php:117
+#: attachment.php:127 entry.php:117
 msgid "Toggle Comments"
 msgstr "コメントの表示切替"
 
@@ -497,20 +509,21 @@ msgstr "ページ:"
 msgid "<br />Tags:"
 msgstr "<br />タグ:"
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "%s が付いている欄は必須項目です"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "返信"
 
-#: entry.php:18
+#: attachment.php:31 entry.php:18
 msgid "Posts by %1$s ( @%2$s )"
 msgstr " %1$s の投稿 ( @%2$s )"
 
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "パーマリンク"
 
@@ -534,7 +547,8 @@ msgstr "&larr; 過去の投稿"
 msgid "Newer posts &rarr;"
 msgstr "新しい投稿 &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
@@ -547,24 +561,23 @@ msgstr "%s の更新"
 msgid "Toggle Comment Threads"
 msgstr "コメントスレッドの表示切替"
 
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "ファイルを表示:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(さらに ...)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "編集"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "フルサイズ: %sピクセル"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "フルサイズの画像にリンク"
 

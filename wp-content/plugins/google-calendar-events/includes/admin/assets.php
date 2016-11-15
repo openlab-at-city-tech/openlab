@@ -55,18 +55,19 @@ class Assets {
 		 * Register Admin Scripts *
 		 * ====================== */
 
+		// TipTip uses ".minified.js" filename ending.
 		wp_register_script(
 			'simcal-tiptip',
-			$js_path_vendor . 'tiptip' . $this->min . '.js',
+			$js_path_vendor . 'jquery.tipTip' . ( ( $this->min !== '' ) ? '.minified' : '' ) . '.js',
 			array( 'jquery' ),
-			'1.3',
+			SIMPLE_CALENDAR_VERSION,
 			true
 		);
 		wp_register_script(
 			'simcal-select2',
 			$js_path_vendor . 'select2' . $this->min . '.js',
 			array(),
-			'4.0',
+			SIMPLE_CALENDAR_VERSION,
 			true
 		);
 		wp_register_script(
@@ -99,7 +100,7 @@ class Assets {
 			'simcal-select2',
 			$css_path_vendor . 'select2' . $this->min . '.css',
 			array(),
-			'4.0.0'
+			SIMPLE_CALENDAR_VERSION
 		);
 		wp_register_style(
 			'simcal-admin',

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.1.0
+Version: 1.1.1
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -82,6 +82,10 @@ add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 
  * @param WP_Comment $comment    Comment object.
  */
 function olgc_insert_comment( $comment_id, $comment ) {
+	if ( ! isset( $_POST['_olgc_nonce'] ) ) {
+		return;
+	}
+
 	// Private
 	$is_private = olgc_is_instructor() && ! empty( $_POST['olgc-private-comment'] );
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
@@ -93,7 +97,7 @@ function olgc_insert_comment( $comment_id, $comment ) {
 	}
 
 	// Grade
-	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && ! empty( $_POST['olgc-grade'] ) ) {
+	if ( olgc_is_instructor() && wp_verify_nonce( $_POST['_olgc_nonce'], 'olgc-grade-entry-' . $comment->comment_post_ID ) && ! empty( $_POST['olgc-add-a-grade'] ) && isset( $_POST['olgc-grade'] ) ) {
 		$grade = wp_unslash( $_POST['olgc-grade'] );
 		update_comment_meta( $comment_id, 'olgc_grade', $grade );
 	}
@@ -116,7 +120,7 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 	$grade = '';
 	if ( 'edit-comments.php' !== $pagenow && ( olgc_is_instructor() || olgc_is_author() ) ) {
 		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
-		if ( $grade ) {
+		if ( '' !== $grade ) {
 			$text .= '<div class="olgc-grade-display"><span class="olgc-grade-label">' . __( 'Grade (Private):', 'wp-grade-comments' ) . '</span> ' . esc_html( $grade ) . '</div>';
 		}
 	}
@@ -127,7 +131,7 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 	}
 
 	$gloss = '';
-	if ( $grade && $is_private ) {
+	if ( '' !== $grade && $is_private ) {
 		$gloss = __( 'NOTE: Private response and grade are visible only to instructors and to the post\'s author.', 'wp-grade-comments' );
 	} else if ( $is_private ) {
 		$gloss = __( 'NOTE: Private response is visible only to instructors and to the post\'s author.', 'wp-grade-comments' );
@@ -381,8 +385,10 @@ function olgc_prevent_private_comments_from_creating_bp_activity_items( $comment
 
 	if ( 'comment_post' === current_action() ) {
 		remove_action( 'comment_post', 'bp_blogs_record_comment', 10, 2 );
+		remove_action( 'comment_post', 'bp_activity_post_type_comment', 10, 2 );
 	} else if ( 'edit_comment' === current_action() ) {
 		remove_action( 'edit_comment', 'bp_blogs_record_comment', 10 );
+		remove_action( 'edit_comment', 'bp_activity_post_type_comment', 10 );
 	}
 }
 add_action( 'comment_post', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );

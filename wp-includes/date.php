@@ -355,10 +355,11 @@ class WP_Date_Query {
 
 		// Weeks per year.
 		if ( isset( $_year ) ) {
-			// If we have a specific year, use it to calculate number of weeks.
-			$date = new DateTime();
-			$date->setISODate( $_year, 53 );
-			$week_count = $date->format( "W" ) === "53" ? 53 : 52;
+			/*
+			 * If we have a specific year, use it to calculate number of weeks.
+			 * Note: the number of weeks in a year is the date in which Dec 28 appears.
+			 */
+			$week_count = date( 'W', mktime( 0, 0, 0, 12, 28, $_year ) );
 
 		} else {
 			// Otherwise set the week-count to a maximum of 53.
@@ -852,7 +853,7 @@ class WP_Date_Query {
 	 *
 	 * You can pass an array of values (year, month, etc.) with missing parameter values being defaulted to
 	 * either the maximum or minimum values (controlled by the $default_to parameter). Alternatively you can
-	 * pass a string that that will be run through strtotime().
+	 * pass a string that will be run through strtotime().
 	 *
 	 * @since 3.7.0
 	 * @access public
@@ -991,7 +992,7 @@ class WP_Date_Query {
 		$format = $time = '';
 
 		// Hour
-		if ( $hour ) {
+		if ( null !== $hour ) {
 			$format .= '%H.';
 			$time   .= sprintf( '%02d', $hour ) . '.';
 		} else {

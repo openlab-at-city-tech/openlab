@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 3.6
-Tested up to: 4.1
-Stable tag: 3.6
+Requires at least: 4.1
+Tested up to: 4.5
+Stable tag: 3.7.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
@@ -106,7 +106,13 @@ Arguments:
 
 Example:
 
-`// Enable text hover for post/page titles
+`
+/**
+ * Enable text hover for post/page titles.
+ *
+ * @param array $filters Filters handled by the Text Hover plugin.
+ * @return array
+ */
 function more_text_hovers( $filters ) {
 	$filters[] = 'the_title'; // Here you could put in the name of any filter you want
 	return $filters;
@@ -124,7 +130,13 @@ Arguments:
 
 Example:
 
-`// Add dynamic text hover
+`
+/**
+ * Add dynamic text hover.
+ *
+ * @param array $text_hover_array Array of all text hover terms and their hover texts.
+ * @return array
+ */
 function my_text_hovers( $text_hover_array ) {
 	// Add new term and hover text
 	$text_hover_array['Matt'] => 'Matt Mullenweg';
@@ -192,8 +204,45 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
+= 3.7.1 (2016-06-10) =
+* Change: Update qTip2 to v3.0.3.
+    * Fixes a JS invalid .min.map file reference.
+    * Add plugin IE6 support.
+* Change: Update plugin framework to 044.
+    * Add `reset_caches()` to clear caches and memoized data. Use it in `reset_options()` and `verify_config()`.
+    * Add `verify_options()` with logic extracted from `verify_config()` for initializing default option attributes.
+    * Add  `add_option()` to add a new option to the plugin's configuration.
+    * Add filter 'sanitized_option_names' to allow modifying the list of whitelisted option names.
+    * Change: Refactor `get_option_names()`.
+
+= 3.7 (2016-04-28) =
+* New: Allow HTML to be matched for text hovering. Recommended only for non-block level tags.
+* New: Allow single replacement (based on setting) for multibyte strings.
+* Bugfix: Improve text replacement regex to account for text immediately bounded by HTML tags.
+* Change: Update plugin framework to 043:
+    * Change class name to c2c_TextHover_Plugin_043 to be plugin-specific.
+    * Disregard invalid lines supplied as part of a hash option value.
+    * Set textdomain using a string instead of a variable.
+    * Don't load textdomain from file.
+    * Change admin page header from 'h2' to 'h1' tag.
+    * Add `c2c_plugin_version()`.
+    * Formatting improvements to inline docs.
+* Change: Add support for language packs:
+    * Set textdomain using a string instead of a variable.
+    * Remove .pot file and /lang subdirectory.
+    * Remove 'Domain Path' from plugin header.
+* Change: Add many more unit tests.
+* Change: Prevent web invocation of unit test bootstrap.php.
+* New: Add LICENSE file.
+* New: Add empty index.php to prevent files from being listed if web server has enabled directory listings.
+* Change: Minor code reformatting.
+* Change: Add proper docblocks to examples in readme.txt.
+* Change: Note compatibility through WP 4.5+.
+* Change: Dropped compatibility with version of WP older than 4.1.
+* Change: Update copyright date (2016).
+
 = 3.6 (2015-02-19) =
-* Improve support of '&' in text to be replaced by recognizing its encoded alternatives ('&amp;', '&#038;') as equivalents
+* Improve support of '&' in text to be replaced by recognizing its encoded alternatives ('`&amp;`', '`&#038;`') as equivalents
 * Support replacing multibyte strings. NOTE: Multibyte strings don't honor limiting their replacement within a piece of text to once
 * Add class of 'c2c-text-hover' to acronym tags added by plugin
 * Update packaged qTip2 JS library to v2.2.1
@@ -363,6 +412,12 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.7.1 =
+Minor bugfix release: updated qTip2 library, which fixes a JavaScript error it had; updated plugin framework to 044.
+
+= 3.7 =
+Recommended update: added support for single replacement of multibyte strings; added support for replacing HTML; improved support for localization; verified compatibility through WP 4.5; dropped compatibility with WP older than 4.1; updated copyright date (2016)
 
 = 3.6 =
 Recommended update: improved support of '&' in text to be replaced; added support for replacing multibyte text; added more unit tests; updated plugin framework to version 039; noted compatibility through WP 4.1+; added plugin icon

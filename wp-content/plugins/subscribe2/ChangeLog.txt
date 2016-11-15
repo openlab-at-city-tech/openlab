@@ -1,3 +1,11 @@
+= 10.21 =
+
+* Remove ReadyGraph from subscribe2
+
+= 10.20.9 =
+
+* disable monetization by default
+
 = 10.20.8 =
 
 * WP 4.3 bug fix

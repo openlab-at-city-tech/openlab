@@ -158,7 +158,7 @@ class OpenLab_Admin_Bar {
 
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
                         add_action('admin_bar_menu',array($this,'add_custom_edit_menu'),80);
-                        
+
                         //for cleanning up any plugin add ons
                         add_action('wp_before_admin_bar_render',array($this,'adminbar_plugin_cleanup'), 9999);
         } else {
@@ -570,7 +570,7 @@ HTML;
 				'title'  => 'My Dashboard',
 				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
                                 'meta' => array(
-                                    'class' => 'admin-bar-menu-item mobile-no-hover'
+                                    'class' => 'admin-bar-menu-item mobile-no-hover exit'
                                 )
 			) );
 		}
@@ -634,13 +634,13 @@ HTML;
                     )
                 ));
 
-        $members_args = array(
+		$members_args = array(
 			'max'     => 0
 		);
 
 		$members_args['include'] = ! empty( $request_ids ) ? implode( ',', array_slice( $request_ids, 0, 3 ) ) : '0';
 
-		if ( bp_has_members( $members_args ) ) {
+		if ( ! empty( $request_ids ) && bp_has_members( $members_args ) ) {
 			while ( bp_members() ) {
 				bp_the_member();
 
@@ -782,7 +782,7 @@ HTML;
 					$title .= '<p class="message-excerpt">' .bp_format_time( strtotime( $messages_template->thread->last_message_date ) ).'<br />';
 
 					// Message excerpt
-					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More</a></p></div></div>';
+					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More<span class="sr-only">'.bp_create_excerpt(bp_get_message_thread_subject(), 30).'</span></a></p></div></div>';
 
 					$wp_admin_bar->add_node( array(
 						'parent' => 'messages',
@@ -892,7 +892,7 @@ HTML;
 			'title'  => '<span>See All Activity</span>',
 			'href'   => $link,
                         'meta' => array(
-                                'class' => 'menu-bottom-link'
+                                'class' => 'menu-bottom-link exit'
                             )
 		) );
 	}
@@ -967,11 +967,13 @@ HTML;
         function add_custom_edit_menu( $wp_admin_bar ) {
                 global $tag, $wp_the_query;
                 $post = get_post();
-                $post_label = str_replace(array('-','_'),' ', $post->post_type);
+		if ( $post instanceof WP_Post ) {
+			$post_label = str_replace(array('-','_'),' ', $post->post_type);
+		}
 
                 if ( is_admin() ) {
                         $current_screen = get_current_screen();
-                        
+
                         if ( 'post' == $current_screen->base
                                 && 'add' != $current_screen->action
                                 && ( $post_type_object = get_post_type_object( $post->post_type ) )
@@ -1038,16 +1040,16 @@ HTML;
                         }
                 }
         }
-        
+
         /**
          * Cleaning up any plugin addons to the admin bar
          * @param type $wp_admin_bar
          */
         function adminbar_plugin_cleanup($wp_admin_bar){
             global $wp_admin_bar;
-            
+
             $wp_admin_bar->remove_menu('tribe-events');
-            
+
         }
 
     /**
@@ -1268,7 +1270,7 @@ HTML;
             $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span><a href="' . $profile_url . '">'.$user_login.'</a></p>';
 
             // accept/reject buttons
-            $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></p></div></div>';
+            $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <span class="exit"><a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></span></p></div></div>';
 
             $wp_admin_bar->add_node( array(
                     'parent' => 'my-account',
@@ -1356,7 +1358,7 @@ HTML;
             //getting the theme folder for the main site
             $main_site_theme = $wpdb->get_var('SELECT option_value FROM wp_options WHERE option_name = "template"');
 
-            wp_register_style('google-open-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
+            wp_register_style('google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all');
             wp_enqueue_style('google-open-sans');
 
             $openlab_theme_link = get_site_url(1,'wp-content/themes/'). $main_site_theme . '/css/font-awesome.min.css';
@@ -1378,8 +1380,8 @@ HTML;
             $openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
-            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.8' );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.8' );
+            wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.9' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.2' );
         }
 
         function adminbar_special_body_class($classes){
@@ -1473,33 +1475,21 @@ function cac_adminbar_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 
 /**
- * JS to toggle adminbar login form
- *
- * JS is inline to reduce a server request
+ * Moved login form so that is injected via a localized variable
+ * Allows for additional interaction in openlab.nav.js
+ * Moved markup to separate template for easier editing
  */
-function cac_adminbar_js() {
-	$request_uri = $_SERVER['REQUEST_URI'];
-?>
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
+function openlab_get_loginform(){
+    $form_out = '';
 
-		var loginform = '<div class="ab-sub-wrapper"><div class="ab-submenu"><form name="login-form" style="display:none;" id="sidebar-login-form" class="standard-form form" action="<?php echo site_url( "wp-login.php", "login_post" ) ?>" method="post"><label><?php _e( "Username", "buddypress" ) ?><br /><input type="text" name="log" id="sidebar-user-login" class="input form-control" value="" /></label><br /><label><?php _e( "Password", "buddypress" ) ?><br /><input class="form-control" type="password" name="pwd" id="sidebar-user-pass" class="input" value="" /></label><p class="forgetmenot checkbox"><label><input name="rememberme" type="checkbox" id="sidebar-rememberme" value="forever" /> <?php _e( "Keep Me Logged In", "buddypress" ) ?></label></p><input type="hidden" name="redirect_to" value="<?php echo bp_get_root_domain() . $request_uri; ?>" /><input type="submit" name="wp-submit" id="sidebar-wp-submit" class="btn btn-primary" value="<?php _e("Log In"); ?>" tabindex="0" /><a href="<?php echo wp_lostpassword_url(); ?>" class="lost-pw">Forgot Password?</a></form></div></div>';
+    $request_uri = $_SERVER['REQUEST_URI'];
 
-		$("#wp-admin-bar-bp-login").append(loginform);
+    ob_start();
+    include(WPMU_PLUGIN_DIR . '/parts/persistent/loginform.php');
+    $form_out = ob_get_clean();
 
-		$("#wp-admin-bar-bp-login > a").click(function(){
-			$(".ab-submenu #sidebar-login-form").toggle(400,function(){
-                            $(".ab-submenu #sidebar-user-login").focus();
-                        });
-			$(this).toggleClass("login-click");
-			return false;
-		});
-	});
-	</script>
-
-<?php
+    return $form_out;
 }
-add_action( 'wp_footer', 'cac_adminbar_js', 999 );
 
 /**
  * The following functions wrap the admin bar in an 'oplb-bs' class to isolate bootstrap styles from the rest of the page

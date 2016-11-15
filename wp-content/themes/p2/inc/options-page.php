@@ -65,7 +65,7 @@ class P2_Options {
 				}
 			}
 
-			if ( esc_attr( $_POST[ 'p2_prompt_text' ] ) != __( "Whatcha' up to?" ) )
+			if ( esc_attr( $_POST[ 'p2_prompt_text' ] ) != __( "Whatcha' up to?", 'p2') )
 				$p2_prompt_text_val = esc_attr( $_POST[ 'p2_prompt_text' ] );
 
 			if ( isset( $_POST[ 'p2_hide_sidebar' ] ) )
@@ -176,7 +176,7 @@ class P2_Options {
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Post prompt:', 'p2' ); ?></th>
 						<td>
-							<input id="p2_prompt_text" type="input" name="p2_prompt_text" value="<?php echo ($p2_prompt_text_val == __("Whatcha' up to?") ) ? __("Whatcha' up to?") : stripslashes( $p2_prompt_text_val ); ?>" />
+							<input id="p2_prompt_text" type="input" name="p2_prompt_text" value="<?php echo ($p2_prompt_text_val == __( "Whatcha' up to?", 'p2') ) ? __("Whatcha' up to?", 'p2') : stripslashes( $p2_prompt_text_val ); ?>" />
 				 			(<?php _e( 'if empty, defaults to <strong>Whatcha up to?</strong>', 'p2' ); ?>)
 						</td>
 					</tr>

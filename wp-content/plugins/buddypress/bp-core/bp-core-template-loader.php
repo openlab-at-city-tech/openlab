@@ -19,10 +19,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.7.0
  *
- * @uses bp_locate_template()
- * @uses load_template()
- * @uses get_template_part()
- *
  * @param string      $slug Template part slug. Used to generate filenames,
  *                          eg 'friends' for 'friends.php'.
  * @param string|null $name Optional. Template part name. Used to generate
@@ -63,6 +59,20 @@ function bp_get_template_part( $slug, $name = null ) {
 
 	// Return the part that is found.
 	return bp_locate_template( $templates, true, false );
+}
+
+/**
+ * Get an asset template part.
+ *
+ * Basically the same as {@link bp_get_template_part()}, but with 'assets/'
+ * prepended to the slug.
+ *
+ * @since 2.6.0
+ *
+ * @see bp_get_template_part() for full documentation.
+ */
+function bp_get_asset_template_part( $slug, $name = null ) {
+	return bp_get_template_part( "assets/{$slug}", $name );
 }
 
 /**
@@ -123,10 +133,6 @@ function bp_locate_template( $template_names, $load = false, $require_once = tru
 	 */
 	do_action( 'bp_locate_template', $located, $template_name, $template_names, $template_locations, $load, $require_once );
 
-	// Maybe load the template if one was located.
-	$use_themes = defined( 'WP_USE_THEMES' ) && WP_USE_THEMES;
-	$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
-
 	/**
 	 * Filter here to allow/disallow template loading.
 	 *
@@ -134,13 +140,56 @@ function bp_locate_template( $template_names, $load = false, $require_once = tru
 	 *
 	 * @param bool $value True to load the template, false otherwise.
 	 */
-	$load_template = (bool) apply_filters( 'bp_locate_template_and_load', $use_themes || $doing_ajax );
+	$load_template = (bool) apply_filters( 'bp_locate_template_and_load', true );
 
-	if ( $load_template && ( true == $load ) && ! empty( $located ) ) {
+	if ( $load_template && $load && ! empty( $located ) ) {
 		load_template( $located, $require_once );
 	}
 
 	return $located;
+}
+
+/**
+ * Get file data of the highest priority asset that exists.
+ *
+ * Similar to {@link bp_locate_template()}, but for files like CSS and JS.
+ *
+ * @since 2.6.0
+ *
+ * @param  string     Relative filename to search for.
+ * @return array|bool Array of asset data if one is located (includes absolute filepath and URI).
+ *                    Boolean false on failure.
+ */
+function bp_locate_template_asset( $filename ) {
+	// Ensure assets can be located when running from /src/.
+	if ( defined( 'BP_SOURCE_SUBDIRECTORY' ) && 'src' === BP_SOURCE_SUBDIRECTORY ) {
+		$filename = str_replace( '.min', '', $filename );
+	}
+
+	// Use bp_locate_template() to find our asset.
+	$located = bp_locate_template( $filename, false );
+	if ( false === $located ) {
+		return false;
+	}
+
+	// Set up data array.
+	$data = array();
+	$data['file'] = $data['uri'] = $located;
+
+	$find = array(
+		get_theme_root(),
+		bp_get_theme_compat_dir()
+	);
+
+	$replace = array(
+		get_theme_root_uri(),
+		bp_get_theme_compat_url()
+	);
+
+	// Make sure URI path is relative to site URL.
+	$data['uri'] = str_replace( $find, $replace, $data['uri'] );
+
+	return $data;
 }
 
 /**
@@ -302,10 +351,6 @@ function bp_buffer_template_part( $slug, $name = null, $echo = true ) {
  * locations without the use of the other get_*_template() functions.
  *
  * @since 1.7.0
- *
- * @uses bp_set_theme_compat_templates()
- * @uses bp_locate_template()
- * @uses bp_set_theme_compat_template()
  *
  * @param string $type      Filename without extension.
  * @param array  $templates An optional list of template candidates.
@@ -517,7 +562,6 @@ function bp_is_template_included() {
  * @since 1.7.0
  *
  * @global string $pagenow
- * @uses bp_locate_template()
  */
 function bp_load_theme_functions() {
 	global $pagenow, $wp_query;

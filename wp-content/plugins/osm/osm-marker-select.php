@@ -1,4 +1,3 @@
-<option value="none"><?php _e('none','OSM-plugin') ?></option>
 <option value="mic_black_pinother_02.png"><?php _e('Pin #3','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
 <option value="mic_red_pinother_02.png"><?php _e('Pin #3','OSM-plugin');echo ' ';_e('red','OSM-plugin') ?></option>
 <option value="mic_green_pinother_02.png"><?php _e('Pin #3','OSM-plugin');echo ' ';_e('green','OSM-plugin') ?></option>
@@ -16,6 +15,10 @@
 <option value="mic_blue_cycling_01.png"><?php _e('Cycling','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
 <option value="mic_blue_information_01.png"><?php _e('Information','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
 <option value="mic_blue_horseriding_01.png"><?php _e('Horserinding','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
+<option value="mic_black_car_01.png"><?php _e('Car','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
+<option value="mic_brown_car_01.png"><?php _e('Car','OSM-plugin');echo ' ';_e('brown','OSM-plugin') ?></option>
+<option value="mic_green_car_01.png"><?php _e('Car','OSM-plugin');echo ' ';_e('green','OSM-plugin') ?></option>
+<option value="mic_green_caravan_01.png"><?php _e('Caravan','OSM-plugin');echo ' ';_e('green','OSM-plugin') ?></option>
 <option value="mic_black_train_01.png"><?php _e('Train','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
 <option value="mic_black_steamtrain_01.png"><?php _e('Steamtrain','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
 <option value="mic_black_powerplant_01.png"><?php _e('Powerplant','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
@@ -32,5 +35,17 @@
 <option value="mic_blue_drinkingwater_01.png"><?php _e('Drinkingwater','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
 <option value="mic_orange_archery_01.png"><?php _e('Archery','OSM-plugin');echo ' ';_e('orange','OSM-plugin') ?></option>
 <option value="mic_black_archery_01.png"><?php _e('Archery','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
+<option value="mic_black_empty_01.png"><?php _e('Empty Marker','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
+<option value="mic_black_empty_01.png"><?php _e('Empty Marker','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
+<option value="mic_green_audio_01.png"><?php _e('Speaker','OSM-plugin');echo ' ';_e('green','OSM-plugin') ?></option>
+<option value="mic_red_pirates_01.png"><?php _e('Pirates','OSM-plugin');echo ' ';_e('red','OSM-plugin') ?></option>
+<option value="mic_black_heart_01.png"><?php _e('Heart','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option>
+<option value="mic_brown_harbor_01.png"><?php _e('Harbor','OSM-plugin');echo ' ';_e('brown','OSM-plugin') ?></option>
+<option value="mic_blue_shower_01.png"><?php _e('Shower','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
+<option value="mic_brown_fillingstation_01.png"><?php _e('Fillingstation','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
+<option value="mic_blue_lighthouse-2_01.png"><?php _e('Lighthouse','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option>
+<option value="mic_brown_parking_01.png"><?php _e('Parking','OSM-plugin');echo ' ';_e('brown','OSM-plugin') ?></option>
+<option value="mic_green_palm-tree-export_01.png"><?php _e('Palm tree','OSM-plugin');echo ' ';_e('brown','OSM-plugin') ?></option>
+
 <option value="geocache.png"><?php _e('Geocache','OSM-plugin') ?></option>
 <option value="styria_linux.png"><?php _e('Styria Tux','OSM-plugin') ?></option>

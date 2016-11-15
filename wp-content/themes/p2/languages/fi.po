@@ -1,0 +1,538 @@
+# Translation of P2 in Finnish
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-09-16 18:42:32+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
+"Project-Id-Version: P2\n"
+
+#: single.php:42
+msgctxt "Previous post link"
+msgid "&larr; %title"
+msgstr "&larr; %title"
+
+#: single.php:43
+msgctxt "Next post link"
+msgid "%title &rarr;"
+msgstr "%title &rarr;"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Avainsanat: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Artikkeleita ei löytynyt!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "Hakutulokset kohteelle: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Lähetä se"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Linkki"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Blogiartikkeli"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Lainaus"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr "Päivitykset kuukaudelta %s"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Ei vielä yhtään juttua!"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Tilapäivitys"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Viimeisimmät päivitykset"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Kuinka monta avainsanaa näytetään:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Viimeisimmät kommentit"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "P2 Tuoreet avainsanat"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "Uusimman artikkelin avainsanat."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "Nimetön"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatarit:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Viimeisimmät kommentit"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Näytettävät kommentit:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Otsikko:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Uusimmat kommentit avatar-kuvan kanssa."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Ei avataria"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "Mitä mietit?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "P2 Viimeisimmät kommentit"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr "%1$s on keskustelemassa."
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr "%1$s ja %2$s keskustelevat."
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr "%1$s, %2$s ja %3$s keskustelevat."
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Hei, %s. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Näytä teksti"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Piilota teksti"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Päivitä asetukset"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Artikkelien otsikot:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Näytä otsikot."
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Sivupalkin näkyvyys:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Piilota sivupalkki."
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr "Ruudut"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Raidat"
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Täplät"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Neliöt"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr "Kuplat"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Ei mitään"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Valitse väri"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Taustakuva:"
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Tyyliasetukset"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Mukautettu taustaväri:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Salli kaikkien WordPress.com-jäsenten julkaista artikkeleita."
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Salli kaikkien rekisteröityneiden jäsenten julkaista artikkeleita."
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Piilota ketjut:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "Teeman P2 asetukset"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Toiminta-asetukset"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Lähetysoikeus:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Asetukset on tallennettu."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "Mitä kuuluu?"
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "Tämä kenttä on pakollinen."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Teeman asetukset"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Oletko varma, että haluat tyhjentää tämän kommentin? Sen sisältö poistetaan."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Ups! Näyttää siltä ettet ole kirjautunut sisään."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Ole hyvä ja kirjaudu uudelleen"
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "Ups! Näyttää siltä, että et ole yhteydessä palvelimeen. P2 ei saanut yhteyttä WordPress:iin."
+
+#: inc/js.php:145 inc/template-tags.php:257
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%1$s <em>/</em> %2$s"
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Ei hakutuloksia."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Näytä kaikki aiheet"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "Kommenttisi tai artikkelisi katoaa, jos jatkat."
+
+#: attachment.php:18 inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Piilota ketjut"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Tallenna"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Lataa..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Virhe: Ilmeni virhe. Artikkelia ei lähetetty."
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "Päivitykseksi lähetettiin."
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "Harppaa ylös"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d uudet päivitykset"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Lainaus"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Mene etusivulle"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Artikkelin otsikko"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Avainsanat:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "Virhe: ei oikeuksia lähetykseen."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Avainsanat"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "Virhe: Sinulla ei ole oikeutta muokata artikkeleita."
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "Virhe: kommenttia ei voi muokata."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "Virhe: Ilmeni virhe. Kommenttia ei lähetetty."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "Virhe: ei ole kirjauduttu sisään."
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "Virhe: Ole hyvä ja kirjoita kommentti."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "Virhe: syötä kelvollinen sähköpostiosoite"
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "Virhe: Sinun täytyy olla kirjautuneena sisään kommentoidaksesi."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "Virhe: syötä tiedot vaadittuihin kenttiin (nimi, sähköposti)."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Siirry sisältöön"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Valikko"
+
+#: header.php:30
+msgid "Post"
+msgstr "artikkeli"
+
+#: functions.php:718 index.php:24
+msgid "Page %s"
+msgstr "Sivu %s"
+
+#: functions.php:619
+msgid "Proudly powered by %s."
+msgstr "Toteutettu %s-ohjelmiston voimalla."
+
+#: functions.php:619
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: functions.php:440
+msgid "Image Post"
+msgstr "Kuva-artikkeli"
+
+#: functions.php:576
+msgid "Log in to Reply"
+msgstr "Kirjaudu sisään vastataksesi"
+
+#: functions.php:399
+msgid "Your comment is awaiting moderation."
+msgstr "Kommenttisi odottaa hyväksymistä."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Sivupalkki"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Ensisijainen valikko"
+
+#: footer.php:37
+msgid "Show/Hide help"
+msgstr "näytä tai piilota ohje"
+
+#: footer.php:38 inc/js.php:140
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: footer.php:35
+msgid "Go to top"
+msgstr "Mene ylös"
+
+#: footer.php:36
+msgid "Go to login"
+msgstr "kirjaudu sisään"
+
+#: footer.php:34
+msgid "Show/Hide comments"
+msgstr "Näytä/piilota kommentit"
+
+#: footer.php:30
+msgid "Next post/Next comment"
+msgstr "seuraava artikkeli / seuraava kommentti"
+
+#: footer.php:31
+msgid "Previous post/Previous comment"
+msgstr "edellinen artikkeli/edellinen kommentti"
+
+#: footer.php:29
+msgid "Compose new post"
+msgstr "luo uusi viesti"
+
+#: footer.php:17
+msgid "Theme: %1$s by %2$s."
+msgstr "Teema: %1$s tekijä %2$s."
+
+#: attachment.php:127 entry.php:117
+msgid "Toggle Comments"
+msgstr "Näytä/Piilota kommentit"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Sivut:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Avainsanat:"
+
+#: attachment.php:112 entry.php:100
+msgid "Required fields are marked %s"
+msgstr "Pakolliset kentät on merkitty %s"
+
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
+msgid "Reply"
+msgstr "Vastaa"
+
+#: attachment.php:31 entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "Artikkelin kirjoittaja %1$s ( @%2$s )"
+
+#: entry.php:37 functions.php:384
+msgid "Permalink"
+msgstr "Pikalinkki"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Uudemmat kommentit &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Vanhemmat kommentit"
+
+#: author.php:35
+msgid "Apologies, looks like this author does not have any posts."
+msgstr "Pahoittelut mutta tällä kirjoittajalla ei ole yhtään artikkelia."
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Vanhemmat artikkelit"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Uudemmat artikkelit &rarr;"
+
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Näppäimistön pikavalinnat"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr "Päivitykset käyttäjältä %s"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Näytä/piilota kommentit"
+
+#: attachment.php:103
+msgid "View file:"
+msgstr "Näytä tiedosto:"
+
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Lisää...)"
+
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: attachment.php:47
+msgid "Full size is %s pixels"
+msgstr "Täysikokoinen on %s pikseliä"
+
+#: attachment.php:50
+msgid "Link to full-size image"
+msgstr "Linkki täysikokoiseen kuvaan"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Valitettavasti etsimääsi ei löytynyt. Ehkä hakutoiminnosta voisi olla apua."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Mitään ei löytynyt"

@@ -10,6 +10,10 @@
 	width: auto;
 }
 
+#respond .olgc-checkboxes label {
+	display: inline;
+}
+
 .olgc-grade-entry {
 	margin: 1em 0 0;
 }

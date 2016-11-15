@@ -3,8 +3,8 @@ Contributors: takien
 Donate link: http://takien.com/donate
 Tags: table,csv,csv-to-table,post,excel,csv file,widget,tablesorter
 Requires at least: 3.0
-Tested up to: 4.2.4
-Stable tag: 1.5.3
+Tested up to: 4.4.1
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -248,9 +248,14 @@ No
 
 == Changelog ==
 
+= 1.6 = 
+* Added: exclude_row, exclude_col argument. Useful to hide sort of rows or columns from your data.
+* Added: sslverify=false to wp_remote_get $args
+* Fixed: boolean param value.
+
 = 1.5.2 = 
-* Fixed security problems
-* Removed Disqus comment on support tab
+* Fixed: security problems
+* Removed: Disqus comment on support tab
 
 = 1.5.2 = 
 * Fixed: Bug on 1.5/1.5.1, Easy Table does not work in WordPress prior to version 3.6

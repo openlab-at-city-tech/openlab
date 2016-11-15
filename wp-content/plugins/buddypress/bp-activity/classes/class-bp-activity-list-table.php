@@ -243,7 +243,10 @@ class BP_Activity_List_Table extends WP_List_Table {
 	function display() {
 		$this->display_tablenav( 'top' ); ?>
 
-		<h2 class="screen-reader-text"><?php _e( 'Activities list', 'buddypress' ); ?></h2>
+		<h2 class="screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'Activities list', 'buddypress' );
+		?></h2>
 
 		<table class="wp-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
 			<thead>
@@ -252,15 +255,15 @@ class BP_Activity_List_Table extends WP_List_Table {
 				</tr>
 			</thead>
 
+			<tbody id="the-comment-list">
+				<?php $this->display_rows_or_placeholder(); ?>
+			</tbody>
+
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
 				</tr>
 			</tfoot>
-
-			<tbody id="the-comment-list">
-				<?php $this->display_rows_or_placeholder(); ?>
-			</tbody>
 		</table>
 		<?php
 
@@ -304,7 +307,10 @@ class BP_Activity_List_Table extends WP_List_Table {
 	function get_views() {
 		$url_base = add_query_arg( array( 'page' => 'bp-activity' ), bp_get_admin_url( 'admin.php' ) ); ?>
 
-		<h2 class="screen-reader-text"><?php _e( 'Filter activities list', 'buddypress' ); ?></h2>
+		<h2 class="screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'Filter activities list', 'buddypress' );
+		?></h2>
 
 		<ul class="subsubsub">
 			<li class="all"><a href="<?php echo esc_url( $url_base ); ?>" class="<?php if ( 'spam' != $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
@@ -414,7 +420,10 @@ class BP_Activity_List_Table extends WP_List_Table {
 		$activity_actions = bp_activity_get_actions(); ?>
 
 		<div class="alignleft actions">
-			<label for="activity-type" class="screen-reader-text"><?php _e( 'Filter by activity type', 'buddypress' ); ?></label>
+			<label for="activity-type" class="screen-reader-text"><?php
+				/* translators: accessibility text */
+				_e( 'Filter by activity type', 'buddypress' );
+			?></label>
 			<select name="activity_type" id="activity-type">
 				<option value="" <?php selected( ! $selected ); ?>><?php _e( 'View all actions', 'buddypress' ); ?></option>
 
@@ -488,6 +497,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 	 * @param array $item A singular item (one full row).
 	 */
 	function column_cb( $item ) {
+		/* translators: accessibility text */
 		printf( '<label class="screen-reader-text" for="aid-%1$d">' . __( 'Select activity item %1$d', 'buddypress' ) . '</label><input type="checkbox" name="aid[]" value="%1$d" id="aid-%1$d" />', $item['id'] );
 	}
 

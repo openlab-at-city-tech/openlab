@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: WP Static HTML Output
-Plugin URI:  http://leonstafford.com/wordpress-static-html-output-plugin/
+Plugin URI:  http://leonstafford.github.io/wordpress-static-html-output-plugin/
 Description: WP Static HTML Output Plugin.
-Version:     1.1.0
+Version:     1.1.1
 Author:      Leon Stafford
-Author URI:  http://leonstafford.com/
+Author URI:  http://leonstafford.github.io
 Text Domain: static-html-output-plugin
 
-Copyright (c) 2011 Leon Stafford
+Copyright (c) 2016 Leon Stafford
  */
 
 require_once 'library/StaticHtmlOutput/Exception.php';

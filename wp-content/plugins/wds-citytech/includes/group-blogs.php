@@ -104,7 +104,7 @@ add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
 function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
 	openlab_add_user_to_groupblog( $group_id, $user_id );
 }
-
+add_action( 'groups_membership_accepted', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 
 /**
@@ -431,8 +431,11 @@ function wds_bp_group_meta() {
 			?>
 			<input type="hidden" name="group_type" value="<?php echo $group_type; ?>" />
 			<?php
-		}
+		} ?>
 
+                <?php do_action('openlab_group_creation_extra_meta'); ?>
+
+                <?php
 		$group_site_url = openlab_get_group_site_url( $the_group_id );
 		?>
 
@@ -494,7 +497,7 @@ function wds_bp_group_meta() {
 							<?php $show_website = "none" ?>
 							<div class="form-field form-required">
                                 <div scope='row' class="site-details-query">
-                                    <label><input type="checkbox" name="wds_website_check" value="yes" /> Set up a site?</label>
+                                    <label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> Set up a site?</label>
                                 </div>
 							</div>
 						<?php else : ?>
@@ -604,6 +607,7 @@ function wds_bp_group_meta() {
                                                 Use an existing site:</label>
                                         </div>
                                         <div class="col-sm-18">
+                                            <label class="sr-only" for="groupblog-blogid">Choose a site</label>
                                             <select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
                                                 <option value="0">- Choose a site -</option>
                                                 <?php foreach ( (array) $user_blogs as $user_blog) : ?>
@@ -627,8 +631,9 @@ function wds_bp_group_meta() {
                                         </label>
                                     </div>
                                     <div class="col-sm-18">
+                                        <label class="sr-only" for="external-site-url">Input external site URL</label>
                                         <input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
-                                        <a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check</a>
+                                        <a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
                                     </div>
                                 </div>
 							</div>
@@ -1038,6 +1043,13 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 				);
 			}
 
+			$item_date = strtotime( $item['date'] );
+			$now = time();
+			if ( $item_date > $now ) {
+				$item_date = $now;
+			}
+			$recorded_time = date( 'Y-m-d H:i:s', $item_date );
+
 			$args = array(
 				'action' => $action,
 				'content' => $item['content'],
@@ -1045,7 +1057,7 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 				'type' => $type, 'primary_link' => $item['permalink'],
 				'user_id' => 0, // todo
 				'item_id' => bp_get_current_group_id(), // improve?
-				'recorded_time' => date( 'Y-m-d H:i:s', strtotime( $item['date'] ) ),
+				'recorded_time' => $recorded_time,
 				'hide_sitewide' => $hide_sitewide
 			);
 

@@ -45,6 +45,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
 <?php $group_type = $filters['wds_group_type']; ?>
+<div id="openlab-main-content"></div>
 <div class="row">
 	  	<?php
 		if (openlab_is_my_profile()) {
@@ -68,7 +69,7 @@ if ( !empty( $_GET['group_sequence'] ) ) {
 				<div class="item col-xs-18">
                                     <div class="item-content-wrapper">
                                             <h2 class="item-title">
-                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                                <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                                 <span class="original-copy hidden"><?php bp_group_name() ?></span>
                                             </h2>
                                             <?php

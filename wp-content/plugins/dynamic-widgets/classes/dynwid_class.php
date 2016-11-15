@@ -612,7 +612,7 @@
 		}
 
 		private function getIP() {
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : NULL;
 			$this->message( 'Raw IP: ' . $ip );
 
 			return ( strstr($ip, '.') !== FALSE ) ? $ip : NULL;
@@ -633,6 +633,7 @@
 			DWModule::registerOption(DW_BP::$option);
 			DWModule::registerOption(DW_Browser::$option);
 			DWModule::registerOption(DW_IP::$option);
+			DWModule::registerOption(DW_Fimage::$option);
 			DWModule::registerOption(DW_Category::$option);
 			DW_CustomPost::registerOption(NULL);
 			DWModule::registerOption(DW_Date::$option);
@@ -642,7 +643,7 @@
 			DWModule::registerOption(DW_Device::$option);
 			DWModule::registerOption(DW_Page::$option);
 			DWModule::registerOption(DW_Pods::$option);
-			DWModule::registerOption(DW_QT::$option);
+			// DWModule::registerOption(DW_QT::$option);
 			DWModule::registerOption(DW_Role::$option);
 			DWModule::registerOption(DW_Search::$option);
 			DWModule::registerOption(DW_Shortcode::$option);
@@ -822,6 +823,15 @@
 		}
 
 		/**
+		 * dynWid::hasFeaturedImage() Check for featured image
+		 *
+		 * @param integer $post_id Post ID
+		 * @return bool
+		 */
+		public function hasFeaturedImage($post_id) {
+			return has_post_thumbnail($post_id);
+		}
+		/**
 		 * dynWid::hasOptions() Checks if a widget has options set
 		 *
 		 * @param string $widget_id ID of the widget
@@ -984,6 +994,7 @@
 			include_once(DW_MODULES . 'url_module.php');
 			include_once(DW_MODULES . 'device_module.php');
 			include_once(DW_MODULES . 'ip_module.php');
+			include_once(DW_MODULES . 'fimage_module.php');
 
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
@@ -993,16 +1004,17 @@
 			DW_Shortcode::checkOverrule('DW_Shortcode');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
-			DW_URL::checkOverrule('DW_Device');
-			DW_URL::checkOverrule('DW_IP');
+			DW_Device::checkOverrule('DW_Device');
+			DW_IP::checkOverrule('DW_IP');
+			DW_Fimage::checkOverrule('DW_Fimage');
 
 			// WPML Plugin Support
 			include_once(DW_MODULES . 'wpml_module.php');
 			DW_WPML::detectLanguage();
 
 			// QT Plugin Support
-			include_once(DW_MODULES . 'qt_module.php');
-			DW_QT::detectLanguage();
+			// include_once(DW_MODULES . 'qt_module.php');
+			// DW_QT::detectLanguage();
 		}
 
 		/**

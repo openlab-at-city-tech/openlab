@@ -1,0 +1,539 @@
+# Translation of P2 in Korean
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-06-01 17:21:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
+"Project-Id-Version: P2\n"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "태그: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "검색된 글이 없습니다!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "검색 결과: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "게시"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "링크"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "블로그 글"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "인용"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "아직 글이 없습니다!"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "상태 업데이트"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "최근 업데이트"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "표시할 태그 수:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "최근 태그"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s(<a href='%s' class='tooltip' title='%s'>%s</a>)"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "P2 최근 태그"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "최신 글의 태그입니다."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "익명"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "아바타:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "최근 댓글"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "보여줄 댓글의 수:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "제목:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "아바타가 있는 최근 댓글."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "아바타 없음"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "뭐하고 계세요?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "P2 최근 댓글"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr "%1$s님이 토론 중입니다."
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr "%1$s님과 %2$s님이 토론 중입니다."
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr "%1$s, %2$s 및 %3$s이(가) 토론 중입니다."
+
+#: inc/template-tags.php:94
+msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
+msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
+msgstr[0] "%1$s, %2$s, %3$s 및 %4$d명의 다른 사람들이 토론 중입니다."
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "%s님 안녕하세요. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "텍스트 보기"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "텍스트 숨기기"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "옵션 업데이트"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr "비워두시면 <strong>뭐하고 계세요?</strong>가 기본으로 설정됩니다"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "글 제목:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "제목 표시"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "사이드바 표시:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "사이드바 숨기기"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "글 프롬프트:"
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr "격자무늬"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "줄무늬"
+
+#: inc/options-page.php:166
+msgid "Santa"
+msgstr "산타"
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "물방울 무늬"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "정사각형"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "없음"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "색상 선택"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "배경 이미지:"
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "디자인 옵션"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "사용자 지정 배경색:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "모든 WordPress.com 회원이 게시하도록 허용"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "등록된 모든 회원이 게시하도록 허용"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "스레드 숨기기:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "P2 옵션"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "기능 옵션"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "게시 접근권:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "설정을 저장했습니다."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "뭐하고 계세요?"
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "필수 필드입니다."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "테마 옵션"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "정말로 이 댓글을 지우시겠습니까? 컨텐츠가 삭제됩니다."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "이런! 로그인되지 않은 것 같습니다."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "다시 로그인하세요"
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "서버에 연결되지 않은 것 같습니다. P2가 WordPress에 연결할 수 없습니다."
+
+#: inc/js.php:145 inc/template-tags.php:257
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%2$s<em>의</em> %1$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr "@을 입력한 후, 이름이나 사용자 이름을 입력하여 이 사이트의 회원을 찾아보세요"
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "일치사항 없음."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "스레드 표시"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "계속하면 댓글 또는 글이 사라집니다."
+
+#: attachment.php:18 inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "스레드 숨기기"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "저장하기"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "가져오는 중..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "오류가 발생하여 글을 게시할 수 없습니다"
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "업데이트가 게시되었습니다"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d개의 새로운 댓글"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "맨 위로 이동"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d개의 새로운 업데이트"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "인용처"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "홈페이지로 가기"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "포스트 제목"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "태그:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "오류: 게시할 수 없음."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "태그 지정"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "오류: 글을 편집할 수 없습니다."
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "오류: 이 댓글을 수정할 권한이 없습니다."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "오류: 알려지지 않은 오류가 발생해서 댓글 달기에 실패했습니다."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "오류: 로그인되지 않았습니다."
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "오류: 댓글을 입력하세요."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "에러: 올바른 이메일 주소를 입력해주세요."
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "오류: 댓글을 남기려면 로그인해야 합니다."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "에러: 꼭 필요한 항목(이름, 이메일)을 입력해주세요."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "컨텐츠로 건너뛰기"
+
+#: header.php:36
+msgid "Menu"
+msgstr "메뉴"
+
+#: header.php:30
+msgid "Post"
+msgstr "글"
+
+#: functions.php:718 index.php:24
+msgid "Page %s"
+msgstr "페이지 %s"
+
+#: functions.php:619
+msgid "Proudly powered by %s."
+msgstr "Proudly powered by %s."
+
+#: functions.php:619
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: functions.php:440
+msgid "Image Post"
+msgstr "이미지 게시"
+
+#: functions.php:576
+msgid "Log in to Reply"
+msgstr "댓글을 달기 위해 로그인"
+
+#: functions.php:438
+msgid "Video Post"
+msgstr "비디오 글"
+
+#: functions.php:399
+msgid "Your comment is awaiting moderation."
+msgstr "입력한 댓글이 검토를 기다리고 있습니다."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "사이드바"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "기본 메뉴"
+
+#: footer.php:37
+msgid "Show/Hide help"
+msgstr "도움말 표시/숨기기"
+
+#: footer.php:38 inc/js.php:140
+msgid "Cancel"
+msgstr "취소"
+
+#: footer.php:35
+msgid "Go to top"
+msgstr "상위로 가기"
+
+#: footer.php:36
+msgid "Go to login"
+msgstr "로그인하기"
+
+#: footer.php:34
+msgid "Show/Hide comments"
+msgstr "댓글 표시/숨기기"
+
+#: footer.php:30
+msgid "Next post/Next comment"
+msgstr "다음 글/다음 댓글"
+
+#: footer.php:31
+msgid "Previous post/Previous comment"
+msgstr "이전 글/이전 댓글"
+
+#: footer.php:29
+msgid "Compose new post"
+msgstr "새 글 작성"
+
+#: footer.php:17
+msgid "Theme: %1$s by %2$s."
+msgstr "테마: %1$s(%2$s 제작)."
+
+#: attachment.php:127 entry.php:117
+msgid "Toggle Comments"
+msgstr "댓글 토글 전환"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "페이지:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />태그:"
+
+#: attachment.php:112 entry.php:100
+msgid "Required fields are marked %s"
+msgstr "필수 입력창은 %s 로 표시되어 있습니다."
+
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
+msgid "Reply"
+msgstr "응답"
+
+#: attachment.php:31 entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "%1$s(@%2$s)의 글"
+
+#: entry.php:37 functions.php:384
+msgid "Permalink"
+msgstr "퍼머링크"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "새로운 댓글 &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; 예전 댓글"
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; 이전 글"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "최근 글 &rarr;"
+
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "키보드 단축키"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "댓글 스레드 토글 전환"
+
+#: attachment.php:103
+msgid "View file:"
+msgstr "파일 보기:"
+
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(더 보기 ...)"
+
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
+msgid "Edit"
+msgstr "편집"
+
+#: attachment.php:47
+msgid "Full size is %s pixels"
+msgstr "전체 크기는 %s 픽셀입니다."
+
+#: attachment.php:50
+msgid "Link to full-size image"
+msgstr "전체크기 이미지 링크"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "죄송합니다, 하지만 요청하신 페이지를 찾을 수 없습니다. 검색이 도움이 될 수도 있습니다."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "찾을 수 없음"

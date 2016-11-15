@@ -17,7 +17,8 @@
             //search
             if ($('.search-trigger-wrapper').length) {
                 OpenLab.search.searchBarLoadActions();
-                $('.search-trigger').on('click', function () {
+                $('.search-trigger').on('click', function (e) {
+                    e.preventDefault();
                     OpenLab.search.searchBarEventActions($(this));
                 });
             }
@@ -33,7 +34,7 @@
         },
         searchBarEventActions: function (searchTrigger) {
 
-            var select = $('.search-form-wrapper .hidden-custom-select select');
+            //var select = $('.search-form-wrapper .hidden-custom-select select');
             var adminBar = $('#wpadminbar');
             var mode = searchTrigger.data('mode');
             var location = searchTrigger.data('location');
@@ -66,7 +67,7 @@
                         searchTrigger.removeClass('in-action');
                     });
                 }
-                select.customSelect();
+                //select.customSelect();
             }
 
         },

@@ -1,0 +1,452 @@
+# Translation of Coraline in Korean
+# This file is distributed under the same license as the Coraline package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-11-28 03:34:57+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: Coraline\n"
+
+#: eventbrite/eventbrite-index.php:29 eventbrite/eventbrite-single.php:18
+msgid "Event"
+msgstr "이벤트"
+
+#. Template Name of the plugin/theme
+#: wp-content/themes/pub/coraline/full-width-page.php
+msgid "Full-width, no sidebar"
+msgstr "최대 폭, 사이드바 없음"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/coraline/style.css
+msgid "A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in \"Asides\" and \"Gallery\" categories, and has an optional full-width page template that removes the sidebar."
+msgstr ""
+
+#: tag.php:13
+msgid "Tag Archives: %s"
+msgstr "태그 보관물: %s"
+
+#: single.php:21 single.php:58
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: single.php:20 single.php:57
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr "&larr;"
+
+#: sidebar.php:86
+msgid "Meta"
+msgstr "그 밖의 기능"
+
+#: sidebar.php:63
+msgid "Links"
+msgstr "링크"
+
+#: sidebar.php:42
+msgid "Search It!"
+msgstr "검색하세요!"
+
+#: sidebar.php:47
+msgid "Recent Entries"
+msgstr "최근 방문자"
+
+#: search.php:19
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr "죄송합니다, 하지만 검색 기준과 일치하는 것이 없습니다. 다른 키워드로 시도해보시기 바랍니다."
+
+#: search.php:17
+msgid "Nothing Found"
+msgstr "찾지 못함"
+
+#: loop.php:196
+msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+msgstr "<span class=\"%1$s\">카테고리:</span> %2$s"
+
+#: search.php:13
+msgid "Search Results for: %s"
+msgstr "검색 결과: %s"
+
+#: loop.php:178
+msgid "1 comment"
+msgstr ""
+
+#: loop.php:178
+msgid "% comments"
+msgstr "댓글 %개"
+
+#: loop.php:156
+msgid "<span class=\"%1$s\">in</span> %2$s"
+msgstr ""
+
+#: loop.php:164 loop.php:204
+msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+msgstr "<span class=\"%1$s\">태그:</span> %2$s"
+
+#: loop.php:101
+msgid "View posts in the Gallery category"
+msgstr "갤러리 카테고리에서 글 보기"
+
+#: loop.php:101
+msgid "More Galleries"
+msgstr "더많은 갤러리"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "1 Comment"
+msgstr ""
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:193 single.php:34
+#: single.php:48
+msgid "% Comments"
+msgstr "댓글 %개"
+
+#: loop.php:93 loop.php:126 loop.php:153 loop.php:178 loop.php:193
+#: single.php:34 single.php:48
+msgid "Leave a comment"
+msgstr "댓글 남기기"
+
+#: loop.php:83
+msgid "This gallery contains <a %1$s>%2$s photos</a>."
+msgstr "갤러리는 <a %1$s>%2$s 사진</a>을 포함하고 있습니다."
+
+#: loop.php:84
+msgid "Permalink to %s"
+msgstr "%s 의 고유링크"
+
+#: loop.php:45 loop.php:113 loop.php:136 single.php:27
+msgid "All %s posts"
+msgstr "모든 %s 글"
+
+#: loop.php:21
+msgid "Apologies, but no results were found for the requested archive. Perhaps searching will help find a related post."
+msgstr "죄송합니다, 하지만 요청하신 보관물을 찾을 수 없습니다. 검색이 관련된 글을 찾는데 도움이 될 수도 있습니다."
+
+#: loop.php:12 loop.php:221
+msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+msgstr "최신 글 <span class=\"meta-nav\">&rarr;</span>"
+
+#: loop.php:11 loop.php:220
+msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+msgstr "<span class=\"meta-nav\">&larr;</span> 예전 글"
+
+#: inc/theme-options.php:217 inc/theme-options.php:248
+msgid "Note: Coraline now supports Post Formats! Read more at <a href=\"http://support.wordpress.com/posts/post-formats/\">Support &raquo; Post Formats</a>."
+msgstr ""
+
+#: inc/theme-options.php:229
+msgid "Gallery Category"
+msgstr "갤러리 카테고리"
+
+#: inc/theme-options.php:247
+msgid "Select a category to use for posts with image galleries"
+msgstr "이미지 갤러리가 포함된 글에 사용할 카테고리 선택"
+
+#: inc/theme-options.php:256
+msgid "Save Options"
+msgstr "옵션 저장"
+
+#: inc/theme-options.php:198
+msgid "Aside Category"
+msgstr "추가 정보 카테고리"
+
+#: inc/theme-options.php:201 inc/theme-options.php:232
+msgid "Select a category &hellip;"
+msgstr "카테고리 선택 &hellip;"
+
+#: inc/theme-options.php:216
+msgid "Select a category to use for shorter aside posts"
+msgstr "짧은 추가 정보 글에 사용할 카테고리 선택"
+
+#: inc/theme-options.php:147
+msgid "Select a default color scheme"
+msgstr "기본 배색 선택"
+
+#: inc/theme-options.php:156 inc/theme-options.php:158
+msgid "Default Layout"
+msgstr "기본 레이아웃"
+
+#: inc/theme-options.php:128
+msgid "Color Scheme"
+msgstr "색상표"
+
+#: inc/theme-options.php:93
+msgid "Full Width (No Sidebars)"
+msgstr "최대 폭(사이드바 없음)"
+
+#: inc/theme-options.php:111
+msgid "%1$s Theme Options"
+msgstr "%1$s 테마 옵션"
+
+#: inc/theme-options.php:114
+msgid "Options saved"
+msgstr "옵션 저장됨"
+
+#: inc/theme-options.php:81
+msgid "Content-Sidebar-Sidebar"
+msgstr "컨텐츠-사이드바-사이드바"
+
+#: inc/theme-options.php:85
+msgid "Sidebar-Sidebar-Content"
+msgstr "사이드바-사이드바-컨텐츠"
+
+#: inc/theme-options.php:89
+msgid "Sidebar-Content-Sidebar"
+msgstr "사이드바-컨텐츠-사이드바"
+
+#: inc/theme-options.php:73
+msgid "Content-Sidebar"
+msgstr "컨텐츠-사이드바"
+
+#: inc/theme-options.php:77
+msgid "Sidebar-Content"
+msgstr "사이드바-컨텐츠"
+
+#: inc/theme-options.php:59
+msgid "Brown"
+msgstr "갈색"
+
+#: inc/theme-options.php:55
+msgid "Red"
+msgstr "빨간색"
+
+#: inc/theme-options.php:51
+msgid "Purple"
+msgstr "보라색"
+
+#: inc/theme-options.php:47
+msgid "Blue"
+msgstr "파랑"
+
+#: inc/theme-options.php:43
+msgid "Pink"
+msgstr "분홍색"
+
+#: inc/theme-options.php:39
+msgid "Black"
+msgstr "검정"
+
+#: inc/theme-options.php:35
+msgid "White"
+msgstr "흰색"
+
+#: inc/custom-header.php:62
+msgid "Limestone cave"
+msgstr "석회암 동굴"
+
+#: inc/custom-header.php:67
+msgid "Cactii"
+msgstr "선인장"
+
+#: inc/theme-options.php:25
+msgid "Theme Options"
+msgstr "테마 옵션"
+
+#: inc/custom-header.php:57
+msgid "Water drops"
+msgstr "물방울"
+
+#: image.php:49
+msgid "Next &rarr;"
+msgstr "다음 &rarr;"
+
+#: image.php:48
+msgid "&larr; Previous"
+msgstr "&larr; 이전"
+
+#: image.php:22
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Published </span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr></span>  at <a href=\"%3$s\" title=\"Link to full-size image\">%4$s &times; %5$s</a> in <a href=\"%6$s\" title=\"Return to %7$s\" rel=\"gallery\">%7$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\"></span> <span class=\"entry-date\"><abbr class=\"published\" title=\"%1$s\">%2$s</abbr>이(가)</span> <a href=\"%3$s\" title=\"전체 크기 이미지 링크\">%4$s &times; %5$s</a>(으)로 <a href=\"%6$s\" title=\"%7$s(으)로 돌아가기\" rel=\"gallery\">%7$s</a>에 게시됨"
+
+#: image.php:37
+msgid "<span class=\"meta-prep meta-prep-entry-date\">Uploaded </span> at <a href=\"%1$s\" title=\"Link to full-size image\">%2$s &times; %3$s</a>"
+msgstr "<span class=\"meta-prep meta-prep-entry-date\"></span><a href=\"%1$s\" title=\"전체 크기 이미지 링크\">%2$s &times; %3$s</a> 크기로 업로드됨"
+
+#: header.php:41
+msgid "Skip to content"
+msgstr "컨텐츠로 건너뛰기"
+
+#: functions.php:485
+msgid "Page %s"
+msgstr "페이지 %s"
+
+#: functions.php:368
+msgid "Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "<a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">고유주소</a>를 북마크하세요."
+
+#: functions.php:366
+msgid "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "이 글은 %1$s 카테고리에 분류되었습니다. <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">고유주소</a> 북마크."
+
+#: functions.php:364
+msgid "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr "이 글은 %1$s 카테고리에 분류되었고 %2$s 태그가 있습니다. <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">고유주소</a> 북마크."
+
+#: functions.php:345
+msgid "<span class=\"by-author\"><span class=\"sep\">by</span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+msgstr "<span class=\"by-author\"><span class=\"sep\">작성자: </span> <span class=\"author vcard\"><a class=\"url fn n\" href=\"%1$s\" title=\"%2$s\" rel=\"author\">%3$s</a></span> </span>"
+
+#: functions.php:347
+msgid "View all posts by %s"
+msgstr "%s의 모든 글 보기"
+
+#: functions.php:300
+msgid "The fourth footer widget area"
+msgstr "네번째 푸터 위젯 영역"
+
+#: functions.php:328
+msgid "<span class=\"%1$s\">Posted on</span> %2$s "
+msgstr "%2$s<span class=\"%1$s\">에 게시됨</span>"
+
+#: functions.php:289
+msgid "The third footer widget area"
+msgstr "세번째 푸터 위젯 영역"
+
+#: functions.php:298
+msgid "Fourth Footer Widget Area"
+msgstr "네번째 푸터 위젯 영역"
+
+#: functions.php:278
+msgid "The second footer widget area"
+msgstr "두번째 푸터 위젯 영역"
+
+#: functions.php:287
+msgid "Third Footer Widget Area"
+msgstr "세번째 푸터 위젯 영역"
+
+#: functions.php:267
+msgid "The first footer widget area"
+msgstr "첫번째 푸터 위젯 영역"
+
+#: functions.php:276
+msgid "Second Footer Widget Area"
+msgstr "두번째 푸터 위젯 영역"
+
+#: functions.php:254
+msgid "Feature Widget Area"
+msgstr "추천 위젯 영역"
+
+#: functions.php:256
+msgid "The feature widget above the sidebars in Content-Sidebar-Sidebar and Sidebar-Sidebar-Content layouts"
+msgstr "컨텐츠-사이드바-사이드바 및 사이드바-사이드바-컨텐츠 레이아웃의 사이드바 상단 기능 위젯"
+
+#: functions.php:265
+msgid "First Footer Widget Area"
+msgstr "첫번째 푸터 위젯 영역"
+
+#: functions.php:243
+msgid "Secondary Widget Area"
+msgstr "2차 위젯 영역"
+
+#: functions.php:245
+msgid "The secondary widget area appears in 3-column layouts"
+msgstr "보조 위젯 영역은 3열 레이아웃에 표시됩니다"
+
+#: functions.php:232
+msgid "Primary Widget Area"
+msgstr "1차 위젯 영역"
+
+#: functions.php:234
+msgid "The primary widget area"
+msgstr "1차 위젯 영역"
+
+#: functions.php:216
+msgid "Pingback:"
+msgstr "핑백:"
+
+#: functions.php:202
+msgid "Your comment is awaiting moderation."
+msgstr "입력한 댓글이 검토를 기다리고 있습니다."
+
+#. translators: 1: date, 2: time
+#: functions.php:191
+msgid "%1$s at %2$s"
+msgstr "%1$s (%2$s)"
+
+#: functions.php:124 loop.php:121 loop.php:147 loop.php:187
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr "계속 읽기 <span class=\"meta-nav\">&rarr;</span>"
+
+#: functions.php:55
+msgid "Primary Navigation"
+msgstr "기본 네비게이션"
+
+#: eventbrite/eventbrite-index.php:42 eventbrite/eventbrite-single.php:33
+#: full-width-page.php:21 functions.php:197 functions.php:216 image.php:32
+#: image.php:43 image.php:99 loop.php:104 loop.php:128 loop.php:167
+#: loop.php:207 page.php:26 single.php:35 single.php:52
+msgid "Edit"
+msgstr "편집"
+
+#: full-width-page.php:20 image.php:93 loop.php:148 loop.php:188 page.php:25
+#: single.php:41
+msgid "Pages:"
+msgstr "페이지:"
+
+#: footer.php:14
+msgid "Theme: %1$s by %2$s."
+msgstr "테마: %1$s(%2$s 제작)."
+
+#: footer.php:13
+msgid "Proudly powered by %s."
+msgstr "Proudly powered by %s."
+
+#: footer.php:13
+msgid "A Semantic Personal Publishing Platform"
+msgstr "의미론적 개인 출판 플랫폼"
+
+#: footer.php:13
+msgid "http://wordpress.org/"
+msgstr "http://wordpress.org/"
+
+#: comments.php:49
+msgid "Comments are closed."
+msgstr "댓글은 닫혔습니다."
+
+#: comments.php:25 comments.php:36
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr "<span class=\"meta-nav\">&larr;</span> 예전 댓글"
+
+#: comments.php:26 comments.php:37
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr "새로운 댓글 <span class=\"meta-nav\">&rarr;</span>"
+
+#: comments.php:18
+msgid "One response to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
+msgstr[0] "&ldquo;%2$s&rdquo;에 대한 %1$s개의 응답"
+
+#: category.php:13
+msgid "Category Archives: %s"
+msgstr "카테고리 보관물: %s"
+
+#: author.php:14
+msgid "Author Archives: %s"
+msgstr "글쓴이 보관물: %s"
+
+#: archive.php:22
+msgid "Blog Archives"
+msgstr "블로그 보관물"
+
+#: archive.php:20
+msgid "Yearly Archives: <span>%s</span>"
+msgstr "연간 보관물: <span>%s</span>"
+
+#: archive.php:18
+msgid "Monthly Archives: <span>%s</span>"
+msgstr "월간 보관물: <span>%s</span>"
+
+#: 404.php:15
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "죄송합니다, 하지만 요청하신 페이지를 찾을 수 없습니다. 검색이 도움이 될 수도 있습니다."
+
+#: archive.php:16
+msgid "Daily Archives: <span>%s</span>"
+msgstr "일간 보관물: <span>%s</span>"
+
+#: 404.php:13 loop.php:19
+msgid "Not Found"
+msgstr "찾을 수 없음"

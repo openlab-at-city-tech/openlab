@@ -1,0 +1,694 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-10 21:44+0100\n"
+"PO-Revision-Date: 2016-01-11 13:18+0100\n"
+"Last-Translator: MiKa <Michael.Kang@Suedkorea.at>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
+"Language-Team: \n"
+"Language: es_ES\n"
+
+#: osm-color-select.php:1 osm-file-select.php:1 osm-metabox.php:91
+#: osm-theme-select.php:1 osm-widget.php:113
+msgid "none"
+msgstr "ninguna"
+
+#: osm-color-select.php:2 osm-file-select.php:5 osm-marker-select.php:4
+#: osm-marker-select.php:8 osm-marker-select.php:9 osm-marker-select.php:12
+#: osm-marker-select.php:15 osm-marker-select.php:16 osm-marker-select.php:17
+#: osm-marker-select.php:27 osm-marker-select.php:28 osm-marker-select.php:32
+#: osm-marker-select.php:34 osm-marker-select.php:35 osm-marker-select.php:39
+#: osm-marker-select.php:44 osm-marker-select.php:45 osm-marker-select.php:46
+#: osm-theme-select.php:2 osm-widget.php:92 osm-widget.php:106
+#: osm-widget.php:116
+msgid "blue"
+msgstr "azul"
+
+#: osm-color-select.php:3 osm-file-select.php:4 osm-marker-select.php:3
+#: osm-marker-select.php:5 osm-marker-select.php:11 osm-marker-select.php:14
+#: osm-marker-select.php:20 osm-marker-select.php:21 osm-marker-select.php:40
+#: osm-widget.php:102 osm-widget.php:114
+msgid "green"
+msgstr "verde"
+
+#: osm-color-select.php:4 osm-file-select.php:3 osm-marker-select.php:2
+#: osm-marker-select.php:6 osm-marker-select.php:13 osm-marker-select.php:41
+#: osm-widget.php:103 osm-widget.php:115
+msgid "red"
+msgstr "rojo"
+
+#: osm-color-select.php:5 osm-widget.php:119
+msgid "grey"
+msgstr "gris"
+
+#: osm-color-select.php:6 osm-file-select.php:6 osm-marker-select.php:1
+#: osm-marker-select.php:10 osm-marker-select.php:18 osm-marker-select.php:22
+#: osm-marker-select.php:23 osm-marker-select.php:24 osm-marker-select.php:25
+#: osm-marker-select.php:26 osm-marker-select.php:37 osm-marker-select.php:38
+#: osm-marker-select.php:42 osm-widget.php:105 osm-widget.php:118
+msgid "black"
+msgstr "negro"
+
+#: osm-color-select.php:7
+msgid "purple"
+msgstr "púrpura"
+
+#: osm-color-select.php:8 osm-marker-select.php:7 osm-widget.php:104
+msgid "yellow"
+msgstr "amarillo"
+
+#: osm-color-select.php:9 osm-marker-select.php:29 osm-marker-select.php:30
+#: osm-marker-select.php:31 osm-marker-select.php:33 osm-marker-select.php:36
+#: osm-theme-select.php:4 osm-widget.php:91 osm-widget.php:107
+#: osm-widget.php:117
+msgid "orange"
+msgstr "naranja"
+
+#: osm-error-msg.php:11
+msgid "gcStats plugin is not activated!"
+msgstr "¡El plugin gcStats no está activado!"
+
+#: osm-error-msg.php:12
+msgid "gcStats plugin has to be updated (If-Version)!"
+msgstr "¡El plugin gcStats ha sido actualizado a (If- Version)!"
+
+#: osm-error-msg.php:13
+msgid "gcStats plugin do not have any entries for this user!"
+msgstr "¡El plugin gcStats no tiene entradas para este usuario!"
+
+#: osm-error-msg.php:15
+msgid "Extra Comment Field plugin is not activated!"
+msgstr "¡El plugin Extra Comment Field no está activo!"
+
+#: osm-error-msg.php:17
+msgid "Not all options updated!"
+msgstr "¡No se han podido activar todas las opciones!"
+
+#: osm-error-msg.php:18
+msgid "Options updated!"
+msgstr "¡Opciones actualizadas!"
+
+#: osm-error-msg.php:19
+msgid "Map Zoomlevel out of range or invalid! (using defaultvalue)"
+msgstr ""
+"Nivel de zoom del mapa no válido o fuera de rango (usando valor por defecto)"
+
+#: osm-error-msg.php:20
+msgid "Lat or Lon is out of range or invalid (using defaultvalue)!"
+msgstr ""
+"¡Latitud o Longitud inválida o fuera de rango (usando valor por defecto)!"
+
+#: osm-error-msg.php:21
+msgid "Map width or height is out of range or invalid (using defaultsize)!"
+msgstr ""
+"Ancho o alto del mapa inválido o fuera de rango (usando tamaño por defecto)"
+
+#: osm-error-msg.php:22
+msgid "Did not get latitude [missing argument @ OSM_getCoordinateLat]"
+msgstr "Latitud no proporcionada [falta argumento @ OSM_getCoordinateLat]"
+
+#: osm-error-msg.php:23
+msgid "Did not get longitude [missing argument @ OSM_getCoordinateLong]"
+msgstr "Longitud no proporcionada [falta argumento @ OSM_getCoordinateLon]"
+
+#: osm-error-msg.php:24
+msgid "If you define a marker, the width and height has to be defined as well!"
+msgstr ""
+"¡Si se define un marcador, se deben definir también el ancho y el alto!"
+
+#: osm-error-msg.php:25
+msgid "Use the argument import instead of marker_all_posts!"
+msgstr "¡Usa el argumento import en lugar del marker_all_post!"
+
+#: osm-error-msg.php:26
+msgid "Import type is unknown!"
+msgstr "¡Valor de import desconocido!"
+
+#: osm-error-msg.php:27
+msgid "Invalid marker_name!"
+msgstr "¡Valor de marker_name no válido!"
+
+#: osm-error-msg.php:29
+msgid ""
+"Could not load OSM library, check LoadLibraryMode @ wp-content/plugins/osm/"
+"osm-config.php!"
+msgstr ""
+"¡No puedo cargar la biblioteca OSM, comprobar LoadLibraryMode @ wp-content/"
+"plugins/osm/osm-config.php!"
+
+#: osm-error-msg.php:30
+msgid "Invalid usage of control tag!"
+msgstr "¡Uso no válido de etiqueta de control!"
+
+#: osm-error-msg.php:31
+msgid "Num of Gpx files does not match to num of Gpx colours!"
+msgstr "¡El número de ficheros Gpx no coincide con el de colores!"
+
+#: osm-error-msg.php:32
+msgid "Missing the routingservice at marker_routing argument!"
+msgstr "¡No se encuentra routingservice como argumento de marker_routing!"
+
+#: osm-error-msg.php:33
+msgid "Not valid WP OSM Plugin icon!"
+msgstr "¡No es un icono válido para el plugin WP OSM!"
+
+#: osm-error-msg.php:34
+msgid "You have to add a marker to the post at [Add marker] tab!"
+msgstr "¡Tienes que añadir un marcador en la pestaña [Añadir marcador]!"
+
+#: osm-file-select.php:2
+msgid "KML file"
+msgstr "Fichero KML"
+
+#: osm-file-select.php:3 osm-file-select.php:4 osm-file-select.php:5
+#: osm-file-select.php:6
+msgid "GPX file"
+msgstr "Fichero GPX"
+
+#: osm-marker-select.php:1 osm-marker-select.php:2 osm-marker-select.php:3
+#: osm-marker-select.php:4 osm-metabox.php:192
+msgid "Pin #3"
+msgstr "Marcador #3"
+
+#: osm-marker-select.php:5 osm-marker-select.php:6 osm-marker-select.php:7
+#: osm-marker-select.php:8 osm-metabox.php:196 osm-widget.php:102
+#: osm-widget.php:103 osm-widget.php:104
+msgid "Waypoint"
+msgstr "Punto de ruta"
+
+#: osm-marker-select.php:9
+msgid "Marker"
+msgstr "marcador"
+
+#: osm-marker-select.php:10 osm-metabox.php:224 osm-widget.php:105
+msgid "Camera"
+msgstr "Cámara"
+
+#: osm-marker-select.php:11 osm-metabox.php:216
+msgid "Icecream"
+msgstr "Helado"
+
+#: osm-marker-select.php:12 osm-metabox.php:210
+msgid "Toilets disability"
+msgstr "Aseos para discapacitados"
+
+#: osm-marker-select.php:13 osm-metabox.php:252
+msgid "Pizzaria"
+msgstr "Pizzería"
+
+#: osm-marker-select.php:14
+msgid "Horseriding"
+msgstr "Equitación"
+
+#: osm-marker-select.php:15 osm-metabox.php:226
+msgid "Cycling"
+msgstr "Ciclismo"
+
+#: osm-marker-select.php:16 osm-metabox.php:212
+msgid "Information"
+msgstr "Información"
+
+#: osm-marker-select.php:17 osm-metabox.php:242
+msgid "Horserinding"
+msgstr "Equitación"
+
+#: osm-marker-select.php:18 osm-marker-select.php:19 osm-marker-select.php:20
+#: osm-metabox.php:282
+msgid "Car"
+msgstr "Coche"
+
+#: osm-marker-select.php:19 osm-marker-select.php:43 osm-marker-select.php:47
+#: osm-marker-select.php:48
+msgid "brown"
+msgstr "marrón"
+
+#: osm-marker-select.php:21 osm-metabox.php:200
+msgid "Caravan"
+msgstr "Caravana"
+
+#: osm-marker-select.php:22 osm-metabox.php:204
+msgid "Train"
+msgstr "Tren"
+
+#: osm-marker-select.php:23 osm-metabox.php:284
+msgid "Steamtrain"
+msgstr "Ten a vapor"
+
+#: osm-marker-select.php:24 osm-metabox.php:234
+msgid "Powerplant"
+msgstr "Central eléctrica"
+
+#: osm-marker-select.php:25 osm-metabox.php:244
+msgid "Bicycle Parking"
+msgstr "Aparcamiento para bicicletas"
+
+#: osm-marker-select.php:26 osm-metabox.php:274
+msgid "cctv"
+msgstr "Cámara de vigilancia"
+
+#: osm-marker-select.php:27 osm-metabox.php:256
+msgid "Toilets"
+msgstr "Aseos"
+
+#: osm-marker-select.php:28 osm-metabox.php:280
+msgid "Scubadiving"
+msgstr "Submarinismo"
+
+#: osm-marker-select.php:29 osm-metabox.php:276
+msgid "Motorbike"
+msgstr "Moto"
+
+#: osm-marker-select.php:30 osm-metabox.php:272
+msgid "Sailing"
+msgstr "Navegar"
+
+#: osm-marker-select.php:31 osm-metabox.php:228
+msgid "Fishing"
+msgstr "Pesca"
+
+#: osm-marker-select.php:32 osm-metabox.php:220
+msgid "Mobilephonetower"
+msgstr "Antena de telefonía"
+
+#: osm-marker-select.php:33 osm-metabox.php:240 osm-widget.php:107
+msgid "Hiking"
+msgstr "Senderismo"
+
+#: osm-marker-select.php:34 osm-metabox.php:250 osm-widget.php:106
+msgid "Bridge"
+msgstr "Puente"
+
+#: osm-marker-select.php:35 osm-metabox.php:232
+msgid "Drinkingwater"
+msgstr "Agua potable"
+
+#: osm-marker-select.php:36 osm-marker-select.php:37 osm-metabox.php:202
+msgid "Archery"
+msgstr "Tiro con arco"
+
+#: osm-marker-select.php:38 osm-marker-select.php:39 osm-metabox.php:194
+msgid "Empty Marker"
+msgstr "Marcador vacío"
+
+#: osm-marker-select.php:40 osm-metabox.php:208
+msgid "Speaker"
+msgstr "Altavoz"
+
+#: osm-marker-select.php:41 osm-metabox.php:236
+msgid "Pirates"
+msgstr "Piratas"
+
+#: osm-marker-select.php:42 osm-metabox.php:218
+msgid "Heart"
+msgstr "Corazón"
+
+#: osm-marker-select.php:43 osm-metabox.php:248
+msgid "Harbor"
+msgstr "Puerto"
+
+#: osm-marker-select.php:44 osm-metabox.php:258
+msgid "Shower"
+msgstr "Ducha"
+
+#: osm-marker-select.php:45 osm-metabox.php:260
+msgid "Fillingstation"
+msgstr "Repostaje"
+
+#: osm-marker-select.php:46 osm-metabox.php:264
+msgid "Lighthouse"
+msgstr "Faro"
+
+#: osm-marker-select.php:47 osm-metabox.php:266
+msgid "Parking"
+msgstr "Aparcamiento"
+
+#: osm-marker-select.php:48 osm-metabox.php:268
+msgid "Palm tree"
+msgstr "Palmera"
+
+#: osm-marker-select.php:50
+msgid "Geocache"
+msgstr "Geocache"
+
+#: osm-marker-select.php:51
+msgid "Styria Tux"
+msgstr "Tux tirolés"
+
+#: osm-metabox.php:69
+msgid "Map & Marker"
+msgstr "Mapa y marcador"
+
+#: osm-metabox.php:71
+msgid "Map & geotags"
+msgstr "Mapa y geoetiquetas"
+
+#: osm-metabox.php:72
+msgid "Add Marker"
+msgstr "Añadir marcador"
+
+#: osm-metabox.php:73
+msgid "Set Geotag"
+msgstr "Poner Geoetiqueta"
+
+#: osm-metabox.php:74
+msgid "Icons"
+msgstr "Iconos"
+
+#: osm-metabox.php:75
+msgid "About"
+msgstr "Acerca de"
+
+#: osm-metabox.php:80
+msgid ""
+"Add a map with or without a marker. <br>Markers have to be created at [Add "
+"Marker] tab."
+msgstr ""
+"Añadir un mapa con o sin marcador. <br>Los marcadores deben ser creados en "
+"la pestaña [Añadir marcador]."
+
+#: osm-metabox.php:81
+msgid "map type"
+msgstr "tipo de mapa"
+
+#: osm-metabox.php:85
+msgid "map border"
+msgstr "Borde del mapa"
+
+#: osm-metabox.php:89
+msgid "marker id"
+msgstr "Id del mapa"
+
+#: osm-metabox.php:95
+msgid "map controls"
+msgstr "controles del mapa"
+
+#: osm-metabox.php:97
+msgid "fullscreen"
+msgstr "pantalla completa"
+
+#: osm-metabox.php:98
+msgid "scaleline"
+msgstr "Escala"
+
+#: osm-metabox.php:99
+msgid "mouse position"
+msgstr "Posición del ratón"
+
+#: osm-metabox.php:102
+msgid "Adjust the map and click into the map to generate the shortcode!"
+msgstr "Ajusta el mapa y pincha en él para generar el código"
+
+#: osm-metabox.php:108
+msgid "Add a map with an GPX or KML file. <br>Copy file address at Meditathek."
+msgstr ""
+"Añadir un mapa con un fichero GPX o KML. <br>Copia la dirección del fichero "
+"en Meditathek."
+
+#: osm-metabox.php:109 osm-metabox.php:128 osm-widget.php:123
+msgid "Map type"
+msgstr "Tipo de mapa"
+
+#: osm-metabox.php:113
+msgid "Color"
+msgstr "Color"
+
+#: osm-metabox.php:117
+msgid "Paste the local URL of file here: "
+msgstr "Pega la URL local del fichero aquí"
+
+#: osm-metabox.php:118
+msgid ""
+"Do not save any of your personal data in the plugins/osm folder but in the "
+"upload folder!"
+msgstr ""
+"¡No guardes datos personales en la carpeta plugins/osm sino en la carpeta "
+"upload!"
+
+#: osm-metabox.php:121 osm-metabox.php:147 osm-metabox.php:179
+#, php-format
+msgid ""
+"Adjust the map and click into the map to generate the shortcode. Find more "
+"features  <a href=\"%s\" target=\"_blank\">here</a> !"
+msgstr ""
+"Ajusta el mapa y pincha en él para generar el código. Encuentra más "
+"características  <a href=\"%s\" target=\"_blank\">aquí</a> !"
+
+#: osm-metabox.php:127
+msgid ""
+"Add a map with all geotagged posts / pages of your site. <br>Set geotag to "
+"your post at [Set geotag] tab."
+msgstr ""
+"Añadir un mapa con todas las entradas / páginas geoetiquetadas de tu sitio. "
+"<br>Geoetiqueta tus entradas en la pestaña [Geoetiquetar]"
+
+#: osm-metabox.php:132
+msgid "Marker icon"
+msgstr "Icono del marcador"
+
+#: osm-metabox.php:138
+msgid "post type"
+msgstr "tipo de entrada"
+
+#: osm-metabox.php:140
+msgid "post"
+msgstr "entrada"
+
+#: osm-metabox.php:141
+msgid "page"
+msgstr "página"
+
+#: osm-metabox.php:143
+msgid "Category Filter"
+msgstr "Filtro por Categoría"
+
+#: osm-metabox.php:144
+msgid "None"
+msgstr "Ninguna"
+
+#: osm-metabox.php:153
+msgid "You can set a geotag (lat/lon) and an icon for this post / page."
+msgstr ""
+"Puedes poner una geoetiqueta (lat/lon) y un icono para esta entrada / página."
+
+#: osm-metabox.php:154
+msgid "post icon"
+msgstr "icono de la entrada"
+
+#: osm-metabox.php:156
+msgid "Click into the map for geotag!"
+msgstr "Pincha en el mapa para geoetiquetar"
+
+#: osm-metabox.php:159 osm-metabox.php:183
+msgid "Save"
+msgstr "Guardar"
+
+#: osm-metabox.php:164
+msgid "You can store a marker here for this post / page"
+msgstr "Puedes poner un marcador aquí para esta entrada / página"
+
+#: osm-metabox.php:165
+msgid "marker name"
+msgstr "nombre del marcador"
+
+#: osm-metabox.php:167
+msgid "marker icon"
+msgstr "icono del marcador"
+
+#: osm-metabox.php:173
+msgid "marker text"
+msgstr "texto del marcador"
+
+#: osm-metabox.php:173
+msgid "optional"
+msgstr "opcional"
+
+#: osm-metabox.php:174
+msgid ""
+"Use &lt;b&gt;&lt;/b&gt; for bold, &lt;i&gt;&lt;/i&gt; for kursiv and&lt;"
+"br&gt; for new line."
+msgstr ""
+"Usar &lt;b&gt;&lt;/b&gt; para negrita, &lt;i&gt;&lt;/i&gt; para cursiva "
+"and&lt;br&gt; para nueva línea."
+
+#: osm-metabox.php:188
+msgid "These icons are integrated into WP OSM Plugin with different colors:"
+msgstr ""
+"Estos iconos están integrados en el Plugin WP OSM con diferentes colores:"
+
+#: osm-metabox.php:287
+msgid "Find them in the icon dropdown box of the map generators"
+msgstr "Encuéntralos en la lista desplegable de iconos del generador de mapas"
+
+#: osm-metabox.php:296
+msgid "Coordination"
+msgstr "Coordinación"
+
+#: osm-metabox.php:296
+msgid "Development"
+msgstr "Desarrollo"
+
+#: osm-metabox.php:297
+msgid "Thanks for Translation to"
+msgstr "Gracias por la Traducción a:"
+
+#: osm-metabox.php:300
+#, php-format
+msgid "If you like the OSM plugin rate it <a href=\"%s\">here</a>. "
+msgstr "Si te gusta el Plugin OSM valóralo <a href=\"%s\">aquí</a>. "
+
+#: osm-metabox.php:302
+msgid "Thanks!"
+msgstr "¡Gracias!"
+
+#: osm-metabox.php:306 osm-options.php:18
+msgid "Some usefull sites for this plugin:"
+msgstr "Algunos sitios útiles para este plugin:"
+
+#: osm-metabox.php:308 osm-options.php:20
+msgid "for advanced samples visit the "
+msgstr "para ejemplos avanzados visitar"
+
+#: osm-metabox.php:309 osm-options.php:21
+msgid "for questions, bugs and other feedback visit the"
+msgstr "para consultas, errores y otras cuestiones visitar"
+
+#: osm-metabox.php:310 osm-options.php:22
+msgid "Follow us on twitter: "
+msgstr "Síguenos en Twitter:"
+
+#: osm-metabox.php:311 osm-options.php:23
+msgid "download the last version at WordPress.org "
+msgstr "Descarga la última versión desde WordPress.org"
+
+#: osm-metabox.php:317
+msgid "Copy the generated shortcode/customfield/argument: "
+msgstr "Copia el código/campo personalizado/argumento generado:"
+
+#: osm-metabox.php:318
+msgid "If you click into the map this text is replaced"
+msgstr "Si pinchas en el mapa este texto será remplazado"
+
+#: osm-options.php:16
+msgid ""
+"NOTE: There is a WP OSM Plugin shortcode generator when you create a post / "
+"page"
+msgstr ""
+"NOTA: Hay un generador de código del plugin WP OSM cuando creas una "
+"entrada / página"
+
+#: osm-options.php:25
+msgid "If you want to express thanks for this plugin ..."
+msgstr "Si quieres agradecer este plugin..."
+
+#: osm-options.php:27
+msgid "give this plugin a good ranking at "
+msgstr "dale a este plugin una buena valoración en"
+
+#: osm-options.php:28
+msgid "post an article about "
+msgstr "publica un artículo acerca de él"
+
+#: osm-options.php:28
+msgid " on your blog."
+msgstr "en tu blog"
+
+#: osm-options.php:32
+msgid "Map Zoomlevel for the PHP Link (1-17)"
+msgstr "Nivel de zoom del mapa para el enlace PHP (1-17)"
+
+#: osm-options.php:36
+msgid "Update Options"
+msgstr "Actualizar opciones"
+
+#: osm.php:136
+msgid "Geotag saved, you can use it at [Map & geotags]!"
+msgstr "¡Geoetiqueta guardada, puedes usarla en [Mapas y geoetiquetas]!"
+
+#: osm.php:168
+msgid "Marker saved, you can use it at [Map & Marker]!"
+msgstr "¡Marcador guardado, puedes usarlo en [Mapa y Marcador]!"
+
+#: osm.php:186
+msgid "OSM plugin added: GPX / KML"
+msgstr "Plugin OSM añadido: GPX / KML"
+
+#: osm.php:746
+msgid "OpenStreetMap Manager"
+msgstr "Gestor de OpenStreetMap"
+
+#: osm.php:746
+msgid "OSM"
+msgstr "OSM"
+
+#: osm-theme-select.php:3 osm-widget.php:90
+msgid "dark"
+msgstr "oscuro"
+
+#: osm-widget.php:10
+msgid "OSM Widget"
+msgstr "Widget OSM"
+
+#: osm-widget.php:11
+msgid "WP OSM Geotag Widget"
+msgstr "Widget Geoetiqueta WP OSM"
+
+#: osm-widget.php:40
+msgid "New title"
+msgstr "Nuevo título"
+
+#: osm-widget.php:56
+msgid "Title:"
+msgstr "Título:"
+
+#: osm-widget.php:61
+msgid "Height of map:"
+msgstr "Altura del mapa:"
+
+#: osm-widget.php:65
+msgid "Zoom"
+msgstr "Zoom"
+
+#: osm-widget.php:88
+msgid "Control Theme"
+msgstr "Tema de control"
+
+#: osm-widget.php:100
+msgid "marker"
+msgstr "marcador"
+
+#: osm-widget.php:111
+msgid "border"
+msgstr "borde"
+
+#: osm-widget.php:125
+msgid "OpenStreetMap"
+msgstr "OpenStreetMap"
+
+#: osm-widget.php:126
+msgid "CycleMap"
+msgstr "Mapa ciclista"
+
+#: osm-widget.php:127
+msgid "OpenSeaMap"
+msgstr "OpenSeaMap"
+
+#: osm-widget.php:128
+msgid "BaseMap"
+msgstr "Mapa base"
+
+#: osm-widget.php:129
+msgid "Stamen Watercolor"
+msgstr "Stamen Acuarela"
+
+#: osm-widget.php:130
+msgid "Stamen Toner"
+msgstr "Stamen Tóner"

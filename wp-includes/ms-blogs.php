@@ -9,11 +9,11 @@
  */
 
 /**
- * Update the last_updated field for the current blog.
+ * Update the last_updated field for the current site.
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  */
 function wpmu_update_blogs_date() {
 	global $wpdb;
@@ -24,7 +24,7 @@ function wpmu_update_blogs_date() {
 	 *
 	 * @since MU
 	 *
-	 * @param int $blog_id Blog ID.
+	 * @param int $blog_id Site ID.
 	 */
 	do_action( 'wpmu_blog_updated', $wpdb->blogid );
 }
@@ -38,8 +38,16 @@ function wpmu_update_blogs_date() {
  * @return string Full URL of the blog if found. Empty string if not.
  */
 function get_blogaddress_by_id( $blog_id ) {
-	$bloginfo = get_blog_details( (int) $blog_id, false ); // only get bare details!
-	return ( $bloginfo ) ? esc_url( 'http://' . $bloginfo->domain . $bloginfo->path ) : '';
+	$bloginfo = get_blog_details( (int) $blog_id );
+
+	if ( empty( $bloginfo ) ) {
+		return '';
+	}
+
+	$scheme = parse_url( $bloginfo->home, PHP_URL_SCHEME );
+	$scheme = empty( $scheme ) ? 'http' : $scheme;
+
+	return esc_url( $scheme . '://' . $bloginfo->domain . $bloginfo->path );
 }
 
 /**
@@ -68,7 +76,7 @@ function get_blogaddress_by_name( $blogname ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param string $slug
  * @return int A blog id
@@ -101,13 +109,13 @@ function get_id_from_blogname( $slug ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int|string|array $fields  Optional. A blog ID, a blog slug, or an array of fields to query against.
  *                                  If not specified the current blog ID is used.
  * @param bool             $get_all Whether to retrieve all details or only the details in the blogs table.
  *                                  Default is true.
- * @return object|false Blog details on success. False on failure.
+ * @return WP_Site|false Blog details on success. False on failure.
  */
 function get_blog_details( $fields = null, $get_all = true ) {
 	global $wpdb;
@@ -202,12 +210,16 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	}
 
 	if ( empty($details) ) {
-		$details = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->blogs WHERE blog_id = %d /* get_blog_details */", $blog_id ) );
+		$details = WP_Site::get_instance( $blog_id );
 		if ( ! $details ) {
 			// Set the full cache.
 			wp_cache_set( $blog_id, -1, 'blog-details' );
 			return false;
 		}
+	}
+
+	if ( ! $details instanceof WP_Site ) {
+		$details = new WP_Site( $details );
 	}
 
 	if ( ! $get_all ) {
@@ -216,9 +228,10 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	}
 
 	switch_to_blog( $blog_id );
-	$details->blogname		= get_option( 'blogname' );
-	$details->siteurl		= get_option( 'siteurl' );
-	$details->post_count	= get_option( 'post_count' );
+	$details->blogname   = get_option( 'blogname' );
+	$details->siteurl    = get_option( 'siteurl' );
+	$details->post_count = get_option( 'post_count' );
+	$details->home       = get_option( 'home' );
 	restore_current_blog();
 
 	/**
@@ -280,7 +293,7 @@ function refresh_blog_details( $blog_id = 0 ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int   $blog_id Blog ID
  * @param array $details Array of details keyed by blogs table field names.
@@ -427,12 +440,13 @@ function update_blog_details( $blog_id, $details = array() ) {
  *
  * @since 3.5.0
  *
- * @param stdClass $blog The blog details as returned from get_blog_details()
+ * @param WP_Site $blog The blog details as returned from get_blog_details()
  */
 function clean_blog_cache( $blog ) {
 	$blog_id = $blog->blog_id;
 	$domain_path_key = md5( $blog->domain . $blog->path );
 
+	wp_cache_delete( $blog_id, 'sites' );
 	wp_cache_delete( $blog_id , 'blog-details' );
 	wp_cache_delete( $blog_id . 'short' , 'blog-details' );
 	wp_cache_delete(  $domain_path_key, 'blog-lookup' );
@@ -550,9 +564,10 @@ function delete_blog_option( $id, $option ) {
  *
  * @since MU
  *
- * @param int    $id     The blog id
- * @param string $option The option key
- * @param mixed  $value  The option value
+ * @param int    $id         The blog id.
+ * @param string $option     The option key.
+ * @param mixed  $value      The option value.
+ * @param mixed  $deprecated Not used.
  * @return bool True on success, false on failure.
  */
 function update_blog_option( $id, $option, $value, $deprecated = null ) {
@@ -645,7 +660,7 @@ function switch_to_blog( $new_blog, $deprecated = null ) {
 			if ( is_array( $global_groups ) ) {
 				wp_cache_add_global_groups( $global_groups );
 			} else {
-				wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache' ) );
+				wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache', 'networks', 'sites' ) );
 			}
 			wp_cache_add_non_persistent_groups( array( 'comment', 'counts', 'plugins' ) );
 		}
@@ -716,7 +731,7 @@ function restore_current_blog() {
 			if ( is_array( $global_groups ) ) {
 				wp_cache_add_global_groups( $global_groups );
 			} else {
-				wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache' ) );
+				wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'site-lookup', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache', 'networks', 'sites' ) );
 			}
 			wp_cache_add_non_persistent_groups( array( 'comment', 'counts', 'plugins' ) );
 		}
@@ -781,7 +796,7 @@ function update_archived( $id, $archived ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int    $blog_id BLog ID
  * @param string $pref    A field name
@@ -857,7 +872,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int    $id   The blog id
  * @param string $pref A field name
@@ -878,7 +893,7 @@ function get_blog_status( $id, $pref ) {
  *
  * @since MU
  *
- * @global wpdb $wpdb
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param mixed $deprecated Not used
  * @param int   $start      The offset
@@ -976,4 +991,3 @@ function _update_posts_count_on_transition_post_status( $new_status, $old_status
 
 	update_posts_count();
 }
-

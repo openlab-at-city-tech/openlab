@@ -319,8 +319,8 @@ function openlab_members_pagination_links($page_args = 'upage') {
         'format' => '',
         'total' => ceil((int) $members_template->total_member_count / (int) $members_template->pag_num),
         'current' => (int) $members_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
     ));
@@ -758,8 +758,8 @@ function cuny_member_profile_header() {
             <div id="profile-action-wrapper">
                 <?php if (is_user_logged_in() && openlab_is_my_profile()) : ?>
                     <div id="group-action-wrapper">
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
                     </div>
                 <?php elseif (is_user_logged_in() && !openlab_is_my_profile()) : ?>
                     <?php bp_add_friend_button(openlab_fallback_user(), bp_loggedin_user_id()) ?>
@@ -773,7 +773,7 @@ function cuny_member_profile_header() {
                         'wrapper_id' => 'send-private-message',
                         'link_href' => bp_get_send_private_message_link(),
                         'link_title' => __('Send a private message to this user.', 'buddypress'),
-                        'link_text' => __('<i class="fa fa-envelope"></i> Send Message', 'buddypress'),
+                        'link_text' => __('<i class="fa fa-envelope" aria-hidden="true"></i> Send Message', 'buddypress'),
                         'link_class' => 'send-message btn btn-default btn-block btn-primary link-btn',
                     ))
                     ?>
@@ -857,21 +857,21 @@ function cuny_member_profile_header() {
 function openlab_custom_add_friend_button($button) {
 
     if ($button['id'] == 'not_friends') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user no-margin no-margin-left"></i> Add Friend</span><i class="fa fa-plus-circle pull-right no-margin no-margin-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user no-margin no-margin-left" aria-hidden="true"></i> Add Friend</span><i class="fa fa-plus-circle pull-right no-margin no-margin-right" aria-hidden="true"></i>';
         if (bp_current_action() == 'my-friends') {
             $button['link_class'] = $button['link_class'] . ' btn btn-primary btn-xs link-btn clearfix';
         } else {
             $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
         }
     } else if ($button['id'] == 'pending') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user no-margin no-margin-left"></i> Pending Friend</span><i class="fa fa-clock-o pull-right no-margin no-margin-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user no-margin no-margin-left" aria-hidden="true"></i> Pending Friend</span><i class="fa fa-clock-o pull-right no-margin no-margin-right" aria-hidden="true"></i>';
         if (bp_current_action() == 'my-friends') {
             $button['link_class'] = $button['link_class'] . ' btn btn-primary btn-xs link-btn clearfix';
         } else {
             $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
         }
     } else {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> Friend</span><i class="fa fa-check-circle pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user" aria-hidden="true"></i> Friend</span><i class="fa fa-check-circle pull-right" aria-hidden="true"></i>';
         if (bp_current_action() == 'my-friends') {
             $button['link_class'] = $button['link_class'] . ' btn btn-primary btn-xs link-btn clearfix';
         } else {
@@ -901,12 +901,12 @@ function openlab_member_header() {
     </h1>
     <?php if (bp_is_user_activity()): ?>
         <div class="clearfix hidden-xs">
-            <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
+            <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
         </div>
     <?php endif; ?>
     <div class="clearfix visible-xs">
         <span class="profile-type pull-left"><?php echo $account_type ?></span>
-        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
+        <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity(bp_displayed_user_id()) ?></span></div>
     </div>
     <?php
 }
@@ -924,8 +924,8 @@ function openlab_messages_pagination() {
             'format' => '',
             'total' => ceil((int) $messages_template->total_thread_count / (int) $messages_template->pag_num),
             'current' => $messages_template->pag_page,
-            'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Group pagination previous text', 'buddypress'),
-            'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Group pagination next text', 'buddypress'),
+            'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i>', 'Group pagination previous text', 'buddypress'),
+            'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i>', 'Group pagination next text', 'buddypress'),
             'mid_size' => 3,
             'type' => 'list',
         ));
@@ -936,12 +936,16 @@ function openlab_messages_pagination() {
     return $pagination;
 }
 
-function openlab_get_custom_activity_action() {
+function openlab_get_custom_activity_action( $activity = null ) {
     global $activities_template;
+
+    if ( null === $activity ) {
+	$activity = $activities_template->activity;
+    }
 
     //the things we do...
     $action_output = '';
-    $action_output_raw = $activities_template->activity->action;
+    $action_output_raw = $activity->action;
     $action_output_ary = explode('<a', $action_output_raw);
     $count = 0;
     foreach ($action_output_ary as $action_redraw) {
@@ -952,10 +956,10 @@ function openlab_get_custom_activity_action() {
         }
     }
 
-    $time_since = apply_filters_ref_array('bp_activity_time_since', array('<span class="time-since">' . bp_core_time_since($activities_template->activity->date_recorded) . '</span>', &$activities_template->activity));
+    $time_since = apply_filters_ref_array('bp_activity_time_since', array('<span class="time-since">' . bp_core_time_since($activity->date_recorded) . '</span>', &$activity));
 
     $title = '<p class="item inline-links semibold hyphenate">' . $action_output . '</p>';
-    $title .= '<p class="item timestamp"><span class="fa fa-undo"></span> ' . $time_since . '</p>';
+    $title .= '<p class="item timestamp"><span class="fa fa-undo" aria-hidden="true"></span> ' . $time_since . '</p>';
 
     return $title;
 }

@@ -25,7 +25,7 @@ class GFDirectorySelectColumns {
 
 	public static function select_columns_page() {
 
-		$form_id = $_GET["id"];
+		$form_id = intval( $_GET["id"] );
 		if ( empty( $form_id ) ) {
 			echo esc_html__( "Oops! We could not locate your form. Please try again.", "gravity-forms-addons" );
 			exit;
@@ -42,10 +42,6 @@ class GFDirectorySelectColumns {
 			wp_print_scripts( array( "jquery", "sack", "jquery-ui-sortable" ) );
 			?>
 			<style type="text/css">
-				body {
-					font-family: "Lucida Grande", Verdana, Arial, sans-serif;
-				}
-
 				#wrapper {
 					padding: 10px;
 				}
@@ -261,7 +257,7 @@ class GFDirectorySelectColumns {
 			?>
 			<div class="panel-instructions">
 				<p><?php esc_html_e( "Drag & drop to order and select which columns are displayed in the Gravity Forms Directory.", "gravity-forms-addons" ) ?></p>
-				<p><?php echo sprintf( esc_html__( "Embed the Directory on a post or a page using %s ", "gravity-forms-addons" ), '<code>[directory form="' . $_GET['id'] . '"]</code>' ); ?></p>
+				<p><?php echo sprintf( esc_html__( "Embed the Directory on a post or a page using %s ", "gravity-forms-addons" ), '<code>[directory form="' . $form_id . '"]</code>' ); ?></p>
 			</div>
 			<div class="clear"></div>
 			<div class="gcolumn_wrapper">
@@ -289,7 +285,11 @@ class GFDirectorySelectColumns {
 
 						$approvedcolumn = GFDirectory::get_approved_column( $form );
 						foreach ( $form["fields"] as $field ) {
+							if ( is_array( $field ) && ! isset( $field['type'] ) ) {
+								continue;
+							}
 							if (
+								( $field instanceof GF_Field || is_array( $field ) && ! isset( $field['type'] ) ) &&
 								in_array( RGFormsModel::get_input_type( $field ), array(
 									"checkbox",
 									'address',
@@ -308,7 +308,7 @@ class GFDirectorySelectColumns {
 							is_array( rgar( $field, "inputs" ) )
 							) {
 								foreach ( $field["inputs"] as $input ) {
-									if ( ! in_array( $input["id"], $field_ids ) && ! ( $field["type"] == "creditcard" && in_array( $input["id"], array(
+									if ( ! in_array( $input["id"], $field_ids ) && ! ( rgar( $field, 'type' ) === "creditcard" && in_array( $input["id"], array(
 												floatval( "{$field["id"]}.2" ),
 												floatval( "{$field["id"]}.3" ),
 											) ) )

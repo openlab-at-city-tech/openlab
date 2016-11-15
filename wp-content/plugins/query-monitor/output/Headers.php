@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,10 +14,20 @@ GNU General Public License for more details.
 
 */
 
-abstract class QM_Output_Headers implements QM_Output {
+abstract class QM_Output_Headers extends QM_Output {
 
-	public function __construct( QM_Collector $collector ) {
-		$this->collector = $collector;
+	public function output() {
+
+		$id = $this->collector->id;
+
+		foreach ( $this->get_output() as $key => $value ) {
+			if ( is_scalar( $value ) ) {
+				header( sprintf( 'X-QM-%s-%s: %s', $id, $key, $value ) );
+			} else {
+				header( sprintf( 'X-QM-%s-%s: %s', $id, $key, json_encode( $value ) ) );
+			}
+		}
+
 	}
 
 }

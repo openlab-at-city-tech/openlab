@@ -1,0 +1,520 @@
+# Translation of P2 in Galician
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-06-01 17:21:10+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
+"Project-Id-Version: P2\n"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Etiquetas: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Non se atopou artigo ningún!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "Resultados da procura de: %s"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Publicar"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Ligazón"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Artigo"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Cita"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr "Actualizacións de %s"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Aínda sen artigos"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Actualización de Estado"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Actualizacións recentes"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Número de etiquetas a mostrar:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Etiquetas recentes"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s en <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "Etiquetas recentes P2"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "As etiquetas dos últimos artigos."
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatares:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Comentarios recentes"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Número de comentarios a mostrar:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Título:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Comentarios recentes con avatares."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Ningún avatar"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "Que hai de novo?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "Comentarios recentes P2"
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Ola, %s. %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Mostrar o texto"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Ocultar texto"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Actualizar opcións"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr "Se queda baleiro será por defecto <strong>Que hai de novo?</strong>"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Títulos dos artigos:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Mostrar os títulos"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Aspecto da barra lateral:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Ocultar a barra lateral"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "Texto de introdución:"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Raias"
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Puntos Polka"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Cuadrados"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr "Burbullas"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Ningún"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Escoller unha cor"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Imaxe de fondo:"
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Opcións de deseño"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Cor de fondo personalizada:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Permitir publicar a calquera usuario de WordPress.com"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Permitir publicar a calquera membro rexistrado"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Ocultar conversas:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "Opcións do P2"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Opcións de funcionalidade"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Acceso á publicación:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Opcións gardadas"
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "Que hai de novo?"
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Opcións do tema"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Tes certeza de querer borrar este comentario? Os seu contido será eliminado."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Vaia! Parece ser que non que non iniciaches sesión."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Inicia sesión outra vez."
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "Vaia! Parece ser que non estás conectado ao servidor. P2 non puido conectar con WordPress."
+
+#: inc/js.php:145 inc/template-tags.php:257
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%1$s <em>en</em> %2$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr "Para atopar un membro deste sitio escribe detrás de @ un nome ou nome de usuario."
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Non hai coincidencias."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Mostrar as conversas"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "Se continúas os teus comentarios ou os teus artigos perderanse."
+
+#: attachment.php:18 inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Ocultar as conversas"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Gardar"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Houbo un erro, o artigo non foi publicado."
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "A túa actualización foi publicada"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d comentario(s) novo(s)"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "Saltar á cabeceira"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d actualización(s) nova(s)"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Cita"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Ir á páxina de inicio"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Título da entrada"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Etiquetas:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "Erro: non tes permiso para publicar."
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Etiquetar"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "Erro: non tes permiso para editar o artigo."
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "Erro: non tes permiso para editar este comentario."
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "Erro: Houbo un erro descoñecido. O comentario non foi enviado."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "Erro: sesión non iniciada."
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "Erro: Escribe un comentario."
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "Erro: escribe un enderezo de correo electrónico válido."
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "Erro: tes que estar identificado para para facer un comentario."
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "Erro: hai que cubrir os campos obrigatorios (nome, correo electrónico)."
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Saltar ao contido"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Menú"
+
+#: header.php:30
+msgid "Post"
+msgstr "Artigo"
+
+#: functions.php:718 index.php:24
+msgid "Page %s"
+msgstr "Páxina %s"
+
+#: functions.php:619
+msgid "Proudly powered by %s."
+msgstr "Fornecido con orgullo por %s."
+
+#: functions.php:619
+msgid "http://wordpress.org/"
+msgstr "http://gl.wordpress.org/"
+
+#: functions.php:440
+msgid "Image Post"
+msgstr "Artigo de imaxe"
+
+#: functions.php:576
+msgid "Log in to Reply"
+msgstr "Inicia sesión para responder"
+
+#: functions.php:438
+msgid "Video Post"
+msgstr "Artigo de vídeo"
+
+#: functions.php:399
+msgid "Your comment is awaiting moderation."
+msgstr "O teu comentario está á espera de moderación."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Barra lateral"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Menú primario"
+
+#: footer.php:37
+msgid "Show/Hide help"
+msgstr "mostrar/ocultar axuda"
+
+#: footer.php:38 inc/js.php:140
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: footer.php:35
+msgid "Go to top"
+msgstr "ir á cabeceira"
+
+#: footer.php:34
+msgid "Show/Hide comments"
+msgstr "mostrar/ocultar comentarios"
+
+#: footer.php:30
+msgid "Next post/Next comment"
+msgstr "seguinte artigo/seguinte comentario"
+
+#: footer.php:31
+msgid "Previous post/Previous comment"
+msgstr "artigo anterior/comentario anterior"
+
+#: footer.php:29
+msgid "Compose new post"
+msgstr "Escribir un artigo novo"
+
+#: footer.php:17
+msgid "Theme: %1$s by %2$s."
+msgstr "Tema: %1$s por %2$s."
+
+#: attachment.php:127 entry.php:117
+msgid "Toggle Comments"
+msgstr "Mostrar/Ocultar comentarios"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Páxinas:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Etiquetas:"
+
+#: attachment.php:112 entry.php:100
+msgid "Required fields are marked %s"
+msgstr "Os campos obrigatorios están marcados con %s"
+
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
+msgid "Reply"
+msgstr "Resposta"
+
+#: attachment.php:31 entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "Artigos de %1$s ( @%2$s )"
+
+#: entry.php:37 functions.php:384
+msgid "Permalink"
+msgstr "Ligazón permanente"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Comentarios máis recentes &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Comentarios máis antigos"
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Artigos anteriores"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Artigos máis recentes &rarr;"
+
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Atallos de teclado"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr "Actualizacións de %s"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Conmutar Fíos de Comentarios"
+
+#: attachment.php:103
+msgid "View file:"
+msgstr "Ver o ficheiro:"
+
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Máis ...) "
+
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
+msgid "Edit"
+msgstr "Editar"
+
+#: attachment.php:47
+msgid "Full size is %s pixels"
+msgstr "O tamaño orixinal é de %s píxeles"
+
+#: attachment.php:50
+msgid "Link to full-size image"
+msgstr "Ligazón á imaxe en tamaño completo"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Sentímolo, non se puido atopar a páxina solicitada. Quizais unha procura axude."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Non se atopou"

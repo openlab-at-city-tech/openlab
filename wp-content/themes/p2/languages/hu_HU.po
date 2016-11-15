@@ -1,0 +1,586 @@
+# Translation of P2 in Hungarian
+# This file is distributed under the same license as the P2 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-11-12 01:00:20+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
+"Project-Id-Version: P2\n"
+
+#. Theme Name of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "P2 Classic"
+msgstr "P2 klasszikus"
+
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#: single.php:42
+msgctxt "Previous post link"
+msgid "&larr; %title"
+msgstr "&larr; %title"
+
+#: single.php:43
+msgctxt "Next post link"
+msgid "%title &rarr;"
+msgstr "%title &rarr;"
+
+#: tag.php:14
+msgid "Tagged: %s"
+msgstr "Címke: %s"
+
+#: search.php:31 tag.php:33
+msgid "No posts found!"
+msgstr "Nincs bejegyzés!"
+
+#: search.php:14
+msgid "Search Results for: %s"
+msgstr "%s kifejezésre történő keresés eredménye"
+
+#: post-form.php:75
+msgid "Post it"
+msgstr "Új bejegyzés"
+
+#: post-form.php:35
+msgid "Link"
+msgstr "Hivatkozás"
+
+#: post-form.php:33
+msgid "Blog Post"
+msgstr "Blog bejegyzés"
+
+#: post-form.php:34
+msgid "Quote"
+msgstr "Idézet"
+
+#: index.php:28
+msgctxt "Month name"
+msgid "Updates from %s"
+msgstr "%s frissítések"
+
+#: index.php:47 single.php:35
+msgid "No posts yet!"
+msgstr "Nem található bejegyzés"
+
+#: post-form.php:32
+msgid "Status Update"
+msgstr "Állapot frissítés"
+
+#: index.php:24
+msgid "Recent Updates"
+msgstr "Legutóbbi közzétételek"
+
+#: inc/widgets/recent-tags.php:30
+msgid "Number of tags to show:"
+msgstr "Címkék mutatása:"
+
+#: inc/widgets/recent-tags.php:46
+msgid "Recent tags"
+msgstr "Legutóbbi címkék"
+
+#: inc/widgets/recent-comments.php:167
+msgid "%s on <a href='%s' class='tooltip' title='%s'>%s</a>"
+msgstr "%s - <a href='%s' class='tooltip' title='%s'>%s</a>"
+
+#: inc/widgets/recent-tags.php:10
+msgid "P2 Recent Tags"
+msgstr "P2 legutóbbi címkék"
+
+#: inc/widgets/recent-tags.php:10
+msgid "The tags from the latest posts."
+msgstr "Címkék a legutóbbi bejegyzésekből"
+
+#: inc/widgets/recent-comments.php:135
+msgid "Anonymous"
+msgstr "Névtelen"
+
+#: inc/widgets/recent-comments.php:51
+msgid "Avatars:"
+msgstr "Avatar:"
+
+#: inc/widgets/recent-comments.php:72
+msgid "Recent comments"
+msgstr "Legutóbbi hozzászólások"
+
+#: inc/widgets/recent-comments.php:45
+msgid "Number of comments to show:"
+msgstr "Mutatott hozzászólások száma:"
+
+#: inc/widgets/recent-comments.php:39 inc/widgets/recent-tags.php:24
+msgid "Title:"
+msgstr "Cím:"
+
+#: inc/widgets/recent-comments.php:10
+msgid "Recent comments with avatars."
+msgstr "Legutóbbi hozzászólások avatarral."
+
+#: inc/widgets/recent-comments.php:35
+msgid "No avatar"
+msgstr "Nincs avatar"
+
+#: inc/template-tags.php:175
+msgid "Whatcha up to?"
+msgstr "Mi újság?"
+
+#: inc/widgets/recent-comments.php:10
+msgid "P2 Recent Comments"
+msgstr "P2 legutóbbi hozzászólások"
+
+#: inc/template-tags.php:80
+msgid "%1$s is discussing."
+msgstr "%1$s fejtegetése"
+
+#: inc/template-tags.php:82
+msgid "%1$s and %2$s are discussing."
+msgstr "%1$s és %2$s beszélgetnek"
+
+#: inc/template-tags.php:87
+msgid "%1$s, %2$s, and %3$s are discussing."
+msgstr "%1$s, %2$s, és %3$s beszélgetnek"
+
+#: inc/template-tags.php:94
+msgid "%1$s, %2$s, %3$s, and %4$d other are discussing."
+msgid_plural "%1$s, %2$s, %3$s, and %4$d others are discussing."
+msgstr[0] "%1$s, %2$s, és %3$s beszélgetnek"
+msgstr[1] "%1$s, %2$s, és %3$s beszélgetnek"
+
+#: inc/template-tags.php:175
+msgid "Hi, %s. %s"
+msgstr "Üdvözlet %s! %s"
+
+#: inc/options-page.php:258
+msgid "Show Text"
+msgstr "Szöveg mutatása"
+
+#: inc/options-page.php:252
+msgid "Hide Text"
+msgstr "Szöveg elrejtése"
+
+#: inc/options-page.php:197
+msgid "Update Options"
+msgstr "Beállítások frissítése"
+
+#: inc/options-page.php:180
+msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
+msgstr "amennyiben üres, alapértelmezésben a <strong>Whatcha up ?</strong> felirat látszik"
+
+#: inc/options-page.php:184
+msgid "Post Titles:"
+msgstr "Bejegyzés címe:"
+
+#: inc/options-page.php:187
+msgid "Display titles"
+msgstr "Display titles"
+
+#: inc/options-page.php:170
+msgid "Sidebar display:"
+msgstr "Oldalsáv megjelenítése:"
+
+#: inc/options-page.php:173
+msgid "Hide the Sidebar"
+msgstr "Oldalsáv elrejtése"
+
+#: inc/options-page.php:177
+msgid "Post prompt:"
+msgstr "Bejegyzés azonnal:"
+
+#: inc/options-page.php:164
+msgid "Plaid"
+msgstr "Pléd"
+
+#: inc/options-page.php:165
+msgid "Stripes"
+msgstr "Csíkok"
+
+#: inc/options-page.php:166
+msgid "Santa"
+msgstr "Santa"
+
+#: inc/options-page.php:162
+msgid "Polka Dots"
+msgstr "Polka pontok"
+
+#: inc/options-page.php:163
+msgid "Squares"
+msgstr "Négyzetek"
+
+#: inc/options-page.php:161
+msgid "Bubbles"
+msgstr "Buborékok"
+
+#: inc/options-page.php:160
+msgid "None"
+msgstr "Egyik sem"
+
+#: inc/options-page.php:152
+msgid "Pick a Color"
+msgstr "Válasszunk egy színt"
+
+#: inc/options-page.php:158
+msgid "Background Image:"
+msgstr "Háttérkép"
+
+#: inc/options-page.php:134
+msgid "Hide comment threads by default on all non-single views"
+msgstr "Rejtsük el valamennyi hozzászólás szálat, a nem egy oldalas nézeteknél"
+
+#: inc/options-page.php:144
+msgid "Design Options"
+msgstr "Megjelenés beállításai"
+
+#: inc/options-page.php:150
+msgid "Custom Background Color:"
+msgstr "Saját háttérszín:"
+
+#: inc/options-page.php:120
+msgid "Allow any WordPress.com member to post"
+msgstr "Engedélyezzük a WordPress.com tagoknak a bejegyzés írását"
+
+#: inc/options-page.php:122
+msgid "Allow any registered member to post"
+msgstr "Engedélyezzük minden regisztráltnak a bejegyzés írását"
+
+#: inc/options-page.php:130
+msgid "Hide Threads:"
+msgstr "Hozzászólá-láncolat elrejtése:"
+
+#: inc/options-page.php:101
+msgid "P2 Options"
+msgstr "P2 beállítások"
+
+#: inc/options-page.php:106
+msgid "Functionality Options"
+msgstr "Működés lehetőségei"
+
+#: inc/options-page.php:114
+msgid "Posting Access:"
+msgstr "Közzétételi jog:"
+
+#: inc/options-page.php:95
+msgid "Options saved."
+msgstr "Beállítások mentésre kerültek."
+
+#: inc/options-page.php:68 inc/options-page.php:179
+msgid "Whatcha' up to?"
+msgstr "Mi újság?"
+
+#: inc/js.php:156
+msgid "This field is required."
+msgstr "Szükséges mező."
+
+#: inc/options-page.php:16
+msgid "Theme Options"
+msgstr "Sablon beállítások"
+
+#: inc/js.php:152
+msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
+msgstr "Bizonyos, hogy eltakarítjuk ezt a hozzászólást? A tartalma törlődni fog."
+
+#: inc/js.php:153
+msgid "Oops! Looks like you are not logged in."
+msgstr "Hoppá! Úgy tűnik, nem vagy bejelentkezve."
+
+#: inc/js.php:154
+msgid "Please log in again"
+msgstr "Ismételten be kell jelentkezni."
+
+#: inc/js.php:155
+msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
+msgstr "Hoppá! Úgy tűnik, nem kapcsolódunk a szerverhez. A P2 nem kapcsolódik a WordPress-hez."
+
+#: inc/js.php:145 inc/template-tags.php:257
+msgid "%1$s <em>on</em> %2$s"
+msgstr "%2$s <em> - </em> %1$s"
+
+#: inc/js.php:150
+msgid "After typing @, type a name or username to find a member of this site"
+msgstr "AZ @ begépelését követően a nevet, vagy a felhasználónevet kell megadni, ha ezen a honlapon egy tagot szeretnénk megkeresni."
+
+#: inc/js.php:151
+msgid "No matches."
+msgstr "Nincs egyezés."
+
+#: inc/js.php:143
+msgid "Show threads"
+msgstr "Hozzászólások csoportosítása mutatva"
+
+#: inc/js.php:144
+msgid "Your comments or posts will be lost if you continue."
+msgstr "A hozzászólás, vagy bejegyzés el fog veszni, ha folytajuk"
+
+#: attachment.php:18 inc/js.php:142 single.php:19
+msgid "Hide threads"
+msgstr "Hozzászólások csoportosítása elrejtve"
+
+#: inc/js.php:141
+msgid "Save"
+msgstr "Mentés"
+
+#: inc/js.php:139
+msgid "Loading..."
+msgstr "Betöltés..."
+
+#: inc/js.php:137
+msgid "An error has occurred, your post was not posted"
+msgstr "Egy hiba miatt a bejegyzés nem került beküldésre"
+
+#: inc/js.php:138
+msgid "Your update has been posted"
+msgstr "A frissítés beküldve"
+
+#: inc/js.php:135
+msgid "%d new comment(s)"
+msgstr "%d új hozzászólás"
+
+#: inc/js.php:136
+msgid "Jump to top"
+msgstr "A lap tetejére!"
+
+#: inc/js.php:134
+msgid "%d new update(s)"
+msgstr "%d új frissítés"
+
+#: inc/js.php:130 post-form.php:63 post-form.php:65 post-form.php:66
+#: post-form.php:67
+msgid "Citation"
+msgstr "Idézet"
+
+#: inc/js.php:132
+msgid "Go to homepage"
+msgstr "Irány a kezdőlap!"
+
+#: inc/ajax.php:215 inc/js.php:131 post-form.php:17 post-form.php:53
+#: post-form.php:54
+msgid "Post Title"
+msgstr "Bejegyzés név"
+
+#: inc/js.php:128
+msgid "Tags:"
+msgstr "Címkék:"
+
+#: inc/ajax.php:198
+msgid "Error: not allowed to post."
+msgstr "HIBA: A küldés nem engedélyezett"
+
+#: inc/ajax.php:211 inc/js.php:129 post-form.php:72 post-form.php:73
+#: post-form.php:74
+msgid "Tag it"
+msgstr "Címke"
+
+#: inc/ajax.php:47 inc/ajax.php:107
+msgid "Error: not allowed to edit post."
+msgstr "HIBA: A bejegyzés szerkesztéséhez nincs jogosultság"
+
+#: inc/ajax.php:169
+msgid "Error: not allowed to edit this comment."
+msgstr "HIBA: A hozzászólás szerkesztéséhez nincs jogosultság"
+
+#: inc/ajax-read.php:222
+msgid "Error: Unknown error occurred. Comment not posted."
+msgstr "HIBA: Ismeretlen ok miatt a hozzászólás nem került beküldésre."
+
+#: inc/ajax.php:42 inc/ajax.php:86 inc/ajax.php:100 inc/ajax.php:161
+#: inc/ajax.php:193
+msgid "Error: not logged in."
+msgstr "HIBA: Nem történt meg a bejelentkezés"
+
+#: inc/ajax-read.php:208
+msgid "Error: Please type a comment."
+msgstr "HIBA: Üres maradt a hozzászólás mező"
+
+#: inc/ajax-read.php:204
+msgid "Error: please enter a valid email address."
+msgstr "HIBA: Szabványos, valódi email címet kell megadni"
+
+#: inc/ajax-read.php:191
+msgid "Error: you must be logged in to post a comment."
+msgstr "HIBA: Be kell jelentkezni egy hozzászólás küldéséhez"
+
+#: inc/ajax-read.php:202
+msgid "Error: please fill the required fields (name, email)."
+msgstr "HIBA: A kötelező mezőket (név, email) ki kell tölteni"
+
+#: header.php:37
+msgid "Skip to content"
+msgstr "Tovább a tartalomra"
+
+#: header.php:36
+msgid "Menu"
+msgstr "Menü"
+
+#: header.php:30
+msgid "Post"
+msgstr "bejegyzés"
+
+#: functions.php:718 index.php:24
+msgid "Page %s"
+msgstr "%s oldal"
+
+#: functions.php:619
+msgid "Proudly powered by %s."
+msgstr "Köszönjük %s!"
+
+#: functions.php:619
+msgid "http://wordpress.org/"
+msgstr "http://wphu.org"
+
+#: functions.php:440
+msgid "Image Post"
+msgstr "Képbejegyzés"
+
+#: functions.php:576
+msgid "Log in to Reply"
+msgstr "Be kell jelentkezni a válaszadáshoz"
+
+#: functions.php:438
+msgid "Video Post"
+msgstr "Videóbejegyzés"
+
+#: functions.php:399
+msgid "Your comment is awaiting moderation."
+msgstr "A hozzászólás rendszer-moderációra várakozik."
+
+#: functions.php:216
+msgid "Sidebar"
+msgstr "Oldalsáv"
+
+#: functions.php:206
+msgid "Primary Menu"
+msgstr "Elsődleges menü"
+
+#: footer.php:37
+msgid "Show/Hide help"
+msgstr "segítséget mutat / elrejt"
+
+#: footer.php:38
+msgid "shift + esc"
+msgstr "shift + esc"
+
+#: footer.php:38 inc/js.php:140
+msgid "Cancel"
+msgstr "Megszakítás"
+
+#: footer.php:35
+msgid "Go to top"
+msgstr "Vissza a lap tetejére"
+
+#: footer.php:36
+msgid "Go to login"
+msgstr "belépéshez"
+
+#: footer.php:34
+msgid "Show/Hide comments"
+msgstr "hozzászólást mutat / elrejt"
+
+#: footer.php:30
+msgid "Next post/Next comment"
+msgstr "következő bejegyzés / következő hozzászólás"
+
+#: footer.php:31
+msgid "Previous post/Previous comment"
+msgstr "előző bejegyzés / előző hozzászólás"
+
+#: footer.php:29
+msgid "Compose new post"
+msgstr "új bejegyzés készítése"
+
+#: footer.php:17
+msgid "Theme: %1$s by %2$s."
+msgstr "Sablon: %1$s Szerző: %2$s."
+
+#: attachment.php:127 entry.php:117
+msgid "Toggle Comments"
+msgstr "Hozzászólások összezárása"
+
+#: entry.php:122
+msgid "Pages:"
+msgstr "Oldal:"
+
+#: entry.php:58 inc/ajax.php:151
+msgid "<br />Tags:"
+msgstr "<br />Címke:"
+
+#: attachment.php:112 entry.php:100
+msgid "Required fields are marked %s"
+msgstr "A kötelezően kitöltendő mezőket %s karakterrel jelöljük"
+
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
+msgid "Reply"
+msgstr "Hozzászólás"
+
+#: attachment.php:31 entry.php:18
+msgid "Posts by %1$s ( @%2$s )"
+msgstr "%1$s bejegyzése ( %2$s )"
+
+#: entry.php:37 functions.php:384
+msgid "Permalink"
+msgstr "Permalink"
+
+#: comments.php:22
+msgid "Newer Comments &rarr;"
+msgstr "Újabb hozzászólás &rarr;"
+
+#: comments.php:21
+msgid "&larr; Older Comments"
+msgstr "&larr; Korábbi hozzászólás"
+
+#: author.php:35
+msgid "Apologies, looks like this author does not have any posts."
+msgstr "Sajnáljuk, a szerzőnek nincsenek megjeleníthető bejegyzései."
+
+#: author.php:40 index.php:54 search.php:39 tag.php:39
+msgid "&larr; Older posts"
+msgstr "&larr; Régebbi bejegyzések"
+
+#: author.php:41 index.php:55 search.php:40 tag.php:40
+msgid "Newer posts &rarr;"
+msgstr "Újabb bejegyzések &rarr;"
+
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
+msgid "Keyboard Shortcuts"
+msgstr "Billentyűparancsok"
+
+#: author.php:19
+msgctxt "Author name"
+msgid "Updates from %s"
+msgstr "%s frissítései"
+
+#: author.php:22 index.php:33 search.php:16 tag.php:16
+msgid "Toggle Comment Threads"
+msgstr "Hozzászólás-láncolat összezárása"
+
+#: attachment.php:103
+msgid "View file:"
+msgstr "Fájl megtekintése:"
+
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
+msgid "(More ...)"
+msgstr "(Olvassuk csak tovább....)"
+
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: attachment.php:47
+msgid "Full size is %s pixels"
+msgstr "Teljes méret %s pixel"
+
+#: attachment.php:50
+msgid "Link to full-size image"
+msgstr "Hivatkozás a teljes méretű képhez"
+
+#: 404.php:15 search.php:32
+msgid "Apologies, but the page you requested could not be found. Perhaps searching will help."
+msgstr "Elnézést, de a keresett oldal nem található!<br /> Lehetséges, hogy törölték, átnevezték vagy áthelyezték, de az is lehetséges, hogy rossz volt a megadott link.<br />Talán egy keresés segíthet megtalálni."
+
+#: 404.php:14 author.php:34
+msgid "Not Found"
+msgstr "Nincs találat"

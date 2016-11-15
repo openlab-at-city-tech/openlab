@@ -10,14 +10,15 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-require dirname( __FILE__ ) . '/classes/class-bp-blogs-template.php';
+if ( ! buddypress()->do_autoload ) {
+	require dirname( __FILE__ ) . '/classes/class-bp-blogs-template.php';
+}
 
 /**
  * Output the blogs component slug.
  *
  * @since 1.5.0
  *
- * @uses bp_get_blogs_slug()
  */
 function bp_blogs_slug() {
 	echo bp_get_blogs_slug();
@@ -46,7 +47,6 @@ function bp_blogs_slug() {
  *
  * @since 1.5.0
  *
- * @uses bp_get_blogs_root_slug()
  */
 function bp_blogs_root_slug() {
 	echo bp_get_blogs_root_slug();
@@ -75,7 +75,6 @@ function bp_blogs_root_slug() {
  *
  * @since 1.5.0
  *
- * @uses bp_get_blogs_directory_permalink()
  */
 function bp_blogs_directory_permalink() {
 	echo esc_url( bp_get_blogs_directory_permalink() );
@@ -85,10 +84,6 @@ function bp_blogs_directory_permalink() {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @uses apply_filters()
-	 * @uses trailingslashit()
-	 * @uses bp_get_root_domain()
-	 * @uses bp_get_blogs_root_slug()
 	 *
 	 * @return string The URL of the Blogs directory.
 	 */
@@ -629,10 +624,12 @@ function bp_blog_latest_post( $args = array() ) {
 		 * Filters the HTML markup result for the latest blog post in loop.
 		 *
 		 * @since 1.2.0
+		 * @since 2.6.0 Added the `$r` parameter.
 		 *
 		 * @param string $retval HTML markup for the latest post.
+		 * @param array  $r      Array of parsed arguments.
 		 */
-		return apply_filters( 'bp_get_blog_latest_post', $retval );
+		return apply_filters( 'bp_get_blog_latest_post', $retval, $r );
 	}
 
 /**
@@ -714,7 +711,6 @@ function bp_blog_latest_post_permalink() {
  *
  * @since 1.7.0
  *
- * @uses bp_get_blog_latest_post_content()
  */
 function bp_blog_latest_post_content() {
 	echo bp_get_blog_latest_post_content();
@@ -874,10 +870,12 @@ function bp_total_blog_count_for_user( $user_id = 0 ) {
 		 * Filters the total number of blogs for a given user.
 		 *
 		 * @since 1.2.0
+		 * @since 2.6.0 Added the `$user_id` parameter.
 		 *
-		 * @param int $value Total number of blogs for a given user.
+		 * @param int $value   Total number of blogs for a given user.
+		 * @param int $user_id ID of the queried user.
 		 */
-		return apply_filters( 'bp_get_total_blog_count_for_user', bp_blogs_total_blogs_for_user( $user_id ) );
+		return apply_filters( 'bp_get_total_blog_count_for_user', bp_blogs_total_blogs_for_user( $user_id ), $user_id );
 	}
 	add_filter( 'bp_get_total_blog_count_for_user', 'bp_core_number_format' );
 
@@ -1108,8 +1106,8 @@ function bp_blogs_validate_blog_signup() {
 	if ( is_subdomain_install() )
 		$domain = $blogname . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
 
-	wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
-	bp_blogs_confirm_blog_signup($domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta);
+	$blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
+	bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
 	return true;
 }
 
@@ -1131,20 +1129,38 @@ function bp_blogs_validate_blog_form() {
 /**
  * Display a message after successful blog registration.
  *
+ * @since 2.6.0 Introduced `$blog_id` parameter.
+ *
  * @param string       $domain     The new blog's domain.
  * @param string       $path       The new blog's path.
  * @param string       $blog_title The new blog's title.
  * @param string       $user_name  The user name of the user who created the blog. Unused.
  * @param string       $user_email The email of the user who created the blog. Unused.
  * @param string|array $meta       Meta values associated with the new blog. Unused.
+ * @param int|null     $blog_id    ID of the newly created blog.
  */
-function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, $user_email = '', $meta = '' ) {
-	$protocol = is_ssl() ? 'https://' : 'http://';
-	$blog_url = $protocol . $domain . $path; ?>
+function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, $user_email = '', $meta = '', $blog_id = null ) {
+	switch_to_blog( $blog_id );
+	$blog_url  = set_url_scheme( home_url() );
+	$login_url = set_url_scheme( wp_login_url() );
+	restore_current_blog();
 
+	?>
 	<p><?php _e( 'Congratulations! You have successfully registered a new site.', 'buddypress' ) ?></p>
 	<p>
-		<?php printf(__( '<a href="%1$s">%2$s</a> is your new site.  <a href="%3$s">Login</a> as "%4$s" using your existing password.', 'buddypress' ), $blog_url, $blog_url, $blog_url . "wp-login.php", $user_name ); ?>
+		<?php printf(
+			'%s %s',
+			sprintf(
+				__( '%s is your new site.', 'buddypress' ),
+				sprintf( '<a href="%s">%s</a>', esc_url( $blog_url ), esc_url( $blog_url ) )
+			),
+			sprintf(
+				/* translators: 1: Login URL, 2: User name */
+				__( '<a href="%1$s">Log in</a> as "%2$s" using your existing password.', 'buddypress' ),
+				esc_url( $login_url ),
+				esc_html( $user_name )
+			)
+		); ?>
 	</p>
 
 <?php
@@ -1317,8 +1333,6 @@ function bp_blog_create_nav_item() {
  *
  * @since 2.2.0
  *
- * @uses bp_blog_create_nav_item() to output the Create a Site nav item.
- *
  * @return string HTML Output
  */
 function bp_blog_backcompat_create_nav_item() {
@@ -1398,8 +1412,6 @@ function bp_blogs_visit_blog_button( $args = '' ) {
  * Display the number of blogs in user's profile.
  *
  * @since 2.0.0
- *
- * @uses bp_blogs_admin_get_profile_stats() to get the stats.
  *
  * @param array|string $args Before|after|user_id.
  */

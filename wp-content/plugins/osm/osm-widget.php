@@ -26,8 +26,7 @@ class OSM_Tagged_Widget extends WP_Widget {
       if ( ! empty( $title ) ){
         echo $args['before_title'] . $title . $args['after_title'];
       } 
-  /**    echo do_shortcode('[osm_map type="'.$map_type.'" lat="'.$lat.'" long ="'.$lon.'" zoom="'.$zoom.'" width="100%" height="'.$height.'"  marker="OSM_geo_widget" map_border="2px solid '.$border_col.'" marker_name="'.$marker.'" theme="'.$ctrl_theme.'"]');*/
-      echo do_shortcode('[osm_map_v3 type="'.$map_type.'" map_center="'.$lat.'","'.$lon.'" zoom="'.$zoom.'" width="100%" height="'.$height.'"  marker_latlon="osm_geotag" map_border="2px solid '.$border_col.'" marker_name="'.$marker.'" theme="'.$ctrl_theme.'"]');
+      echo do_shortcode('[osm_map_v3 type="'.$map_type.'" map_center="0,0" zoom="'.$zoom.'" width="99%" height="'.$height.'"  marker_latlon="osm_geotag" map_border="2px solid '.$border_col.'" marker_name="'.$marker.'" theme="'.$ctrl_theme.'"]');
       echo $args['after_widget'];
     }
   }

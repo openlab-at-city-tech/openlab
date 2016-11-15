@@ -1,7 +1,7 @@
 <?php
 /**
- * Protection 
- * 
+ * Protection
+ *
  * This string of code will prevent hacks from accessing the file directly.
  */
 defined( 'ABSPATH' ) or die( 'Cannot access pages directly.' );
@@ -17,8 +17,8 @@ defined( 'DS' ) or define( 'DS', DIRECTORY_SEPARATOR );
  * Actions and Filters
  *
  * @author Dominic Giglio
- * 
- * Register any and all actions here. Nothing should actually be called 
+ *
+ * Register any and all actions here. Nothing should actually be called
  * directly, the entire system will be based on these actions and hooks.
  */
 add_action( 'admin_print_scripts-widgets.php', 'cac_featured_admin_js' );
@@ -37,7 +37,7 @@ function cac_featured_admin_init() {
 }
 
 /**
- * This class holds all the view related variables needed to display an instance 
+ * This class holds all the view related variables needed to display an instance
  * of the CAC Featured Content Widget. They are stored here to help keep
  * the global namespace clean and avoid naming conflicts.
  *
@@ -71,7 +71,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 
 	/**
 	 * Widget settings
-	 * 
+	 *
 	 * This multi-dimensional array holds the options used to create the WordPress Widget that
 	 * will be displayed to administrators. All of its values are set in __construct() because
    * you can't internationalize or localize the strings when declaring an array's default values.
@@ -83,7 +83,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 	 * Constructor
    *
    * @author Dominic Giglio
-	 * 
+	 *
 	 * Registers the widget details with the parent class, based off of the options
 	 * that were defined within the widget property. This method does not need to be
 	 * changed.
@@ -100,13 +100,13 @@ class CAC_Featured_Content_Widget extends WP_Widget {
       'description' => __( 'The CAC Featured Content plugin provides a widget that allows you to select from five different content "types" to feature in any number of widgetized areas.', 'cac-featured-content' ),
 
       // determines whether or not to use the sidebar _before and _after html
-      'do_wrapper' => true, 
+      'do_wrapper' => true,
 
       // to render a view file from the views directory set this to true,
       // to render the code in the html() method set this to false
       'view' => true,
 
-      // the fields array holds each element that will be output by the form() 
+      // the fields array holds each element that will be output by the form()
       // method on the admin widgets page
       'fields' => array(
         // widget title
@@ -253,7 +253,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
     if ( is_multisite() ) {
       // add the 'blog' content type
       $this->widget['fields'][2]['options']['blog'] = __( 'Blog', 'cac-featured-content' );
-      
+
       // tweak the post input field description
       $this->widget['fields'][3]['desc'] = __( 'You must enter a blog address first <br /> no http:// required', 'cac-featured-content' );
 
@@ -272,9 +272,9 @@ class CAC_Featured_Content_Widget extends WP_Widget {
     }
 
 		// instantiate our widget
-		parent::WP_Widget( 
-			$id = sanitize_title( get_class( $this ) ), 
-			$name = ( isset( $this->widget['name']) ? $this->widget['name'] : $classname ), 
+		parent::__construct(
+			$id = sanitize_title( get_class( $this ) ),
+			$name = ( isset( $this->widget['name']) ? $this->widget['name'] : $classname ),
 			$options = array( 'description' => $this->widget['description'] )
 		);
 
@@ -282,7 +282,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 
 	/**
 	 * Widget View
-	 * 
+	 *
 	 * This method determines what view method is being used and gives that view
 	 * method the proper parameters to operate.
 	 *
@@ -295,23 +295,23 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 		$this->widget['number'] = $this->number;
 		$do_wrapper = ( !isset( $this->widget['do_wrapper'] ) || $this->widget['do_wrapper'] );
 
-		if ( $do_wrapper ) 
+		if ( $do_wrapper )
 			echo $sidebar['before_widget'];
 
     // require the controller which will setup and load our views
     require 'cac-featured-controller.php';
 
-		if ( $do_wrapper ) 
+		if ( $do_wrapper )
 			echo $sidebar['after_widget'];
 	}
 
 	/**
 	 * Administration Form
-	 * 
+	 *
 	 * This method is called from within the wp-admin/widgets area when this
 	 * widget is placed into a sidebar. The resulting is a widget options form
 	 * that allows the admin to modify how the widget operates.
-	 * 
+	 *
 	 * You do not need to adjust this method what-so-ever, it will parse the array
 	 * parameters given to it from the protected widget property of this class.
 	 *
@@ -334,12 +334,12 @@ class CAC_Featured_Content_Widget extends WP_Widget {
       'class'    => '',
       'multiple' => '',
       'args'     => array(
-        'hide_empty'   => 0, 
-        'name'         => 'element_name', 
+        'hide_empty'   => 0,
+        'name'         => 'element_name',
         'hierarchical' => true
       )
     );
-    
+
     // reasons to fail
     if ( !empty( $fields ) ) {
 
@@ -348,10 +348,10 @@ class CAC_Featured_Content_Widget extends WP_Widget {
         // initializing the individual field
         $field = wp_parse_args( $field, $defaults );
         $field['args'] = wp_parse_args( $field['args'], $defaults['args'] );
-        
+
         extract( $field );
         $field['args']['name'] = $element_name = $id;
-        
+
         // grabbing the meta value
         if ( array_key_exists( $id, $instance ) )
           @$meta = esc_attr( $instance[$id] );
@@ -360,14 +360,14 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 
         $field['args']['name'] = $element_name = $this->get_field_name( $id );
         $id = $this->get_field_id( $id );
-        
+
         switch ( $type ) : default: ?>
           <?php case 'text': ?>
             <p>
               <label for="<?php echo $id; ?>">
                 <?php echo $name; ?>:
-                <input id="<?php echo $id; ?>" name="<?php echo $element_name; ?>" 
-                  value="<?php echo $meta; ?>" type="<?php echo $type; ?>" 
+                <input id="<?php echo $id; ?>" name="<?php echo $element_name; ?>"
+                  value="<?php echo $meta; ?>" type="<?php echo $type; ?>"
                   class="text large-text <?php echo $class; ?>" />
               </label>
               <br/>
@@ -379,7 +379,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
               <label for="<?php echo $id; ?>">
                 <?php echo $name; ?>:
                 <textarea cols="60" rows="4" style="width:97%"
-                  id="<?php echo $id; ?>" name="<?php echo $element_name; ?>" 
+                  id="<?php echo $id; ?>" name="<?php echo $element_name; ?>"
                   class="large-text <?php echo $class; ?>"><?php echo $meta; ?></textarea>
               </label>
               <br/>
@@ -391,12 +391,12 @@ class CAC_Featured_Content_Widget extends WP_Widget {
               <label for="<?php echo $id; ?>">
                 <?php echo $name; ?>:
                 <select <?php echo $multiple ? "MULTIPLE SIZE='$multiple'" : ''; ?>
-                  id="<?php echo $id; ?>" name="<?php echo $element_name; ?>" 
+                  id="<?php echo $id; ?>" name="<?php echo $element_name; ?>"
                   class="<?php echo $class; ?>">
-                  
+
                   <?php foreach ( (array) $options as $_value => $_name ): ?>
                     <?php $_value = !is_int( $_value ) ? $_value : $_name; ?>
-                    <option 
+                    <option
                       value="<?php echo $_value; ?>"
                       <?php echo $meta == $_value ? ' selected="selected"' : ''; ?>
                       ><?php echo $_name; ?>
@@ -414,8 +414,8 @@ class CAC_Featured_Content_Widget extends WP_Widget {
             <p>
               <?php foreach ( (array) $options as $_value => $_name ): ?>
                 <label class="<?php echo $element_name; ?>" for="<?php echo $id; ?>">
-                  <input name="<?php echo $element_name; ?>"  id="<?php echo $id; ?>" 
-                    value="<?php echo $_value; ?>" type="<?php echo $type; ?>" 
+                  <input name="<?php echo $element_name; ?>"  id="<?php echo $id; ?>"
+                    value="<?php echo $_value; ?>" type="<?php echo $type; ?>"
                     <?php echo $meta == $_value ? ' checked="checked"' : ''; ?>
                     class="<?php echo $class; ?>" />
                   <?php echo $_name; ?>
@@ -429,16 +429,16 @@ class CAC_Featured_Content_Widget extends WP_Widget {
             <?php if ( $name ): ?>
               <p><?php echo $name; ?> : </p>
             <?php endif; ?>
-            
+
             <p>
-              <!-- first hidden input forces this item to be submitted 
+              <!-- first hidden input forces this item to be submitted
               via javascript, when it is not checked -->
               <input type="hidden" name="<?php echo $element_name; ?>" value="" />
-              
+
               <?php foreach ( (array) $options as $_value => $_name ): ?>
               <label class="<?php echo $element_name; ?>" for="<?php echo $id; ?>">
-                <input value="<?php echo $_value; ?>" type="<?php echo $type; ?>" 
-                  name="<?php echo $element_name; ?>" id="<?php echo $id; ?>" 
+                <input value="<?php echo $_value; ?>" type="<?php echo $type; ?>"
+                  name="<?php echo $element_name; ?>" id="<?php echo $id; ?>"
                   <?php echo $meta == $_value? 'checked="checked"' :''; ?>
                   class="<?php echo $class; ?>" />
                 <?php echo $_name; ?>
@@ -457,9 +457,9 @@ class CAC_Featured_Content_Widget extends WP_Widget {
                 margin: 0;"><?php echo $name; ?></h3>
           <?php break; ?>
           <?php case 'hidden': ?>
-            <input 
-              id="<?php echo $id; ?>" name="<?php echo $element_name; ?>" 
-              value="<?php echo $meta; ?>" type="<?php echo $type; ?>" 
+            <input
+              id="<?php echo $id; ?>" name="<?php echo $element_name; ?>"
+              value="<?php echo $meta; ?>" type="<?php echo $type; ?>"
               style="visibility:hidden;" />
           <?php break; ?>
       <?php endswitch;
@@ -470,7 +470,7 @@ class CAC_Featured_Content_Widget extends WP_Widget {
 
 	/**
 	 * Update the Administrative parameters
-	 * 
+	 *
 	 * This function will merge any posted parameters with that of the saved
 	 * parameters. This ensures that the widget options never get lost. This
 	 * method does not need to be changed.

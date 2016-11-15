@@ -2,17 +2,17 @@
 /**
  * @package Tako Movable Comments
  * @author Ren Aysha
- * @version 1.0.6
+ * @version 1.0.7
  */
 /*
 Plugin Name: Tako Movable Comments
-Version: 1.0.6
+Version: 1.0.7
 Plugin URI: https://github.com/renettarenula/Tako/
 Author: Ren Aysha
 Author URI: http://twitter.com/RenettaRenula
 Description: This plugin allows you to move comments from one post or page to another. You can also move comments across post types and custom post types. Just click on edit comments and move your comments through the <strong>Move Comments with Tako</strong> metabox.
 
-Copyright (C) <2013> <Ren Aysha>
+Copyright (C) <2016> <Ren Aysha>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class Tako
 	/**
 	 * Initializes the plugin by adding meta box, filters, and JS files.
 	 */
-	public function __construct() 
+	public function __construct()
 	{
 		add_action( 'add_meta_boxes', array( &$this, 'tako_add_meta_box' ) );
 		add_action( 'edit_comment', array( &$this, 'tako_save_meta_box' ) );
@@ -75,13 +75,13 @@ class Tako
 	/**
 	 * This is needed in order to add a new meta box in the edit comment page
 	 */
-	public function tako_add_meta_box() 
+	public function tako_add_meta_box()
 	{
-		add_meta_box( 
+		add_meta_box(
            	'tako_move_comments'
             ,__( 'Move Comments with Tako', 'tako_lang' )
             ,array( &$this, 'tako_meta_box' )
-            ,'comment' 
+            ,'comment'
             ,'normal'
             ,'high'
         );
@@ -91,7 +91,7 @@ class Tako
 	 * The callback for the meta box in order to print the HTML form of the Meta Box
 	 * @param array $comment 	Getting the comment information for the current comment
 	 */
-	public function tako_meta_box( $comment ) 
+	public function tako_meta_box( $comment )
 	{
 		wp_nonce_field( plugin_basename( __FILE__ ), 'tako_nonce' );
 
@@ -104,7 +104,7 @@ class Tako
 
 		$html .= '<ol>';
 		$html .= '<li>' . __( 'This post currently belongs to a post titled ', 'tako_lang' ) . '<strong>' . $current_post . '</strong>' . '</li>';
-		
+
 		$html .= '<li>' . __( 'Choose the post type that you want to move this comment to ', 'tako_lang' );
 		$html .= '<select name="tako_post_type" id="tako_post_type">';
 
@@ -127,30 +127,34 @@ class Tako
 	 * The method that is responsible in ensuring that the new comment is saved
 	 * @param string $comment_content 	Getting the comment information for the current comment
 	 */
-	public function tako_save_meta_box( $comment_content ) 
+	public function tako_save_meta_box( $comment_content )
 	{
-		global $wpdb, $comment;
+		global $wpdb;
 
 		$screen = get_current_screen();
-		
+
 		// For Quick Edit: if current screen is anything other than edit-comments (main page for editing comments), ignore nonce verification.
 		if ( !wp_verify_nonce( $_POST['tako_nonce'], plugin_basename( __FILE__ ) ) && $screen->parent_base == 'edit-comments' )
 			return;
-		
+
 		// For Front-end edit: return comment_content in order to ensure that non-administrator can edit comments using other AJAX edit comments plugins
 		if ( !current_user_can( 'moderate_comments' ) )  {
 			return $comment_content;
 		}
-		
+
 		$comment_post_ID = (int) $_POST['tako_post'];
 		$comment_ID = (int) $_POST['comment_ID'];
-		
+
+		// Retrieve the comment's current post ID so we can update count later
+		$comment = get_comment($comment_ID);
+		$old_post_ID = (int) $comment->comment_post_ID;
+
 		// if post doesn't exist
 		if ( !$this->tako_post_exist( $comment_post_ID ) )
 			return $comment_content;
-		
+
 		$new = compact( 'comment_post_ID' );
-		
+
 		// if there are no nested comments, just move it
 		// otherwise, get all the subcomments first and then move it
 		if ( !$this->tako_nested_comments_exist( $comment_ID ) ) {
@@ -162,10 +166,12 @@ class Tako
 			$wpdb->query( "UPDATE $wpdb->comments SET comment_post_ID = $comment_post_ID WHERE comment_ID IN ( $val )" );
 		}
 
+		// Update comment counts
+		wp_update_comment_count( $old_post_ID );
 		wp_update_comment_count( $comment_post_ID );
-		
-		return $comment_content;	
-	}	
+
+		return $comment_content;
+	}
 
 	/**
 	 * The method that is responsible for getting all the nested comments under one comment.
@@ -173,13 +179,13 @@ class Tako
 	 * @param array $comments	This is an array of comments. These comments are subcomments of the comment that the user wants to move
 	 * @return array
 	 */
-	public function tako_get_subcomments( $comments ) 
+	public function tako_get_subcomments( $comments )
 	{
 		global $wpdb;
 		// implode the array; this is the current 'parent'
 		$parents = implode( ',', array_map( 'intval', $comments ) );
 		$nested = array(); // this will store all the subcomments
-		
+
 		do {
 			// initializing the an array (or emptying the array)
 			$subs = array();
@@ -197,7 +203,7 @@ class Tako
 
 		// merge all the subcomments with the initial parent comments
 		$merge = array_merge( $comments, $nested );
-		
+
 		return $merge;
 	}
 
@@ -206,11 +212,11 @@ class Tako
 	 * @param int $comment_ID Comment ID of the comment chosen to be moved
 	 * @return object
 	 */
-	public function tako_nested_comments_exist( $comment_ID ) 
+	public function tako_nested_comments_exist( $comment_ID )
 	{
 		$comments_args = array( 'parent' => $comment_ID );
 		$comments = get_comments( $comments_args );
-		
+
 		return $comments;
 	}
 
@@ -219,7 +225,7 @@ class Tako
 	 * @param int $comment_post_ID	The post ID that the user wants to move the comments to
 	 * @return object
 	 */
-	public function tako_post_exist( $comment_post_ID ) 
+	public function tako_post_exist( $comment_post_ID )
 	{
 		return get_post( $comment_post_ID );
 	}
@@ -229,12 +235,12 @@ class Tako
 	 * @param int $comment_ID Comment ID of the comment chosen to be moved
 	 * @return array
 	 */
-	public function get_direct_subcomments( $comment_ID ) 
+	public function get_direct_subcomments( $comment_ID )
 	{
 		$comments_args = array( 'parent' => $comment_ID );
 		$comments = get_comments( $comments_args );
 		$comments_id = array();
-		
+
 		foreach( $comments as $comment ) {
 			$comments_id[] = $comment->comment_ID;
 		}
@@ -243,11 +249,11 @@ class Tako
 	}
 
 	/**
-	* Add a bulk action for the plugin. 
+	* Add a bulk action for the plugin.
 	*/
 
 	public function tako_bulk_action_for_comments()
-	{	
+	{
 		$template = new TakoTemplate(
 			TAKO_DIR . '/views/script.view.php',
 			array(
@@ -255,7 +261,7 @@ class Tako
 			)
 		);
 
-		$template->render();	
+		$template->render();
 	}
 
 	/**
@@ -280,15 +286,15 @@ class Tako
 	 * return JSON results of posts that are categorized under the chosen
 	 * post type. JSON format - ID and title.
 	 */
-	public function tako_chosen_post_type_callback() 
+	public function tako_chosen_post_type_callback()
 	{
 		// check nonce
 		if ( !isset( $_POST['tako_ajax_nonce'] ) || !wp_verify_nonce( $_POST['tako_ajax_nonce'], 'tako-ajax-nonce' ) )
 			die( 'Permission Denied!' );
-		
+
 		$result = array();
 		$post_type = $_POST['postype'];
-		
+
 		$args  = array( 'numberposts' => -1, 'post_type' => $post_type );
 		$posts = get_posts( $args );
 
@@ -298,7 +304,7 @@ class Tako
 		}
 
 		echo json_encode( $result );
-		
+
 		die();
 	}
 
@@ -311,7 +317,7 @@ class Tako
 		// check nonce
 		if ( !isset( $_REQUEST[ 'tako_ajax_nonce' ] ) || !wp_verify_nonce( $_REQUEST[ 'tako_ajax_nonce' ], 'tako-ajax-nonce' ) )
 			die( 'Permission Denied!' );
-			
+
 		$result = array();
 
 		$post_types = get_post_types( '', 'names' );
@@ -332,7 +338,7 @@ class Tako
 		if ( !isset( $_POST['tako_ajax_nonce'] ) || !wp_verify_nonce( $_POST['tako_ajax_nonce'], 'tako-ajax-nonce' ) )
 			die( 'Permission Denied!' );
 
-		$comment_ID = $the_posts = array(); 
+		$comment_ID = $the_posts = array();
 
 		$comments = json_decode( stripslashes( $_POST[ 'comments' ] ) );
 		$post_id = ( int ) $_POST[ 'post_id' ];

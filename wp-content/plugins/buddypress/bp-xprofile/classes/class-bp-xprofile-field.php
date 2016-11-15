@@ -12,6 +12,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class to help set up XProfile fields.
+ *
+ * @since 1.0.0
  */
 class BP_XProfile_Field {
 
@@ -133,7 +135,6 @@ class BP_XProfile_Field {
 	 * Whether values from this field are autolinked to directory searches.
 	 *
 	 * @since 2.5.0
-	 *
 	 * @var bool
 	 */
 	public $do_autolink;
@@ -215,6 +216,8 @@ class BP_XProfile_Field {
 	/**
 	 * Retrieve a `BP_XProfile_Field` instance.
 	 *
+	 * @since 2.4.0
+	 *
 	 * @static
 	 *
 	 * @param int $field_id ID of the field.
@@ -234,11 +237,11 @@ class BP_XProfile_Field {
 
 			$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_fields} WHERE id = %d", $field_id ) );
 
-			wp_cache_add( $field->id, $field, 'bp_xprofile_fields' );
-
 			if ( ! $field ) {
 				return false;
 			}
+
+			wp_cache_add( $field->id, $field, 'bp_xprofile_fields' );
 		}
 
 		$_field = new BP_XProfile_Field();
@@ -817,7 +820,7 @@ class BP_XProfile_Field {
 			$do_autolink = bp_xprofile_get_meta( $this->id, 'field', 'do_autolink' );
 
 			if ( '' === $do_autolink ) {
-				$this->do_autolink = $this->is_default_field() || $this->type_obj->supports_options;
+				$this->do_autolink = $this->type_obj->supports_options;
 			} else {
 				$this->do_autolink = 'on' === $do_autolink;
 			}
@@ -939,6 +942,9 @@ class BP_XProfile_Field {
 			// Update any children of this $field_id.
 			$sql = $wpdb->prepare( "UPDATE {$table_name} SET group_id = %d WHERE parent_id = %d", $field_group_id, $field_id );
 			$wpdb->query( $sql );
+
+			// Invalidate profile field cache.
+			wp_cache_delete( $field_id, 'bp_xprofile_fields' );
 
 			return $parent;
 		}
@@ -1311,7 +1317,10 @@ class BP_XProfile_Field {
 		<div class="postbox">
 			<h2><?php echo esc_html_x( 'Description', 'XProfile admin edit field', 'buddypress' ); ?></h2>
 			<div class="inside">
-				<label for="description" class="screen-reader-text"><?php esc_html_e( 'Add description', 'buddypress' ); ?></label>
+				<label for="description" class="screen-reader-text"><?php
+					/* translators: accessibility text */
+					esc_html_e( 'Add description', 'buddypress' );
+				?></label>
 				<textarea name="description" id="description" rows="8" cols="60"><?php echo esc_textarea( $this->description ); ?></textarea>
 			</div>
 		</div>
@@ -1456,12 +1465,6 @@ class BP_XProfile_Field {
 	 * @return void If default field id 1.
 	 */
 	private function autolink_metabox() {
-
-		// Default field cannot have custom visibility.
-		if ( true === $this->is_default_field() ) {
-			return;
-		}
-
 		?>
 
 		<div class="postbox">
@@ -1470,7 +1473,10 @@ class BP_XProfile_Field {
 				<p class="description"><?php esc_html_e( 'On user profiles, link this field to a search of the Members directory, using the field value as a search term.', 'buddypress' ); ?></p>
 
 				<p>
-					<label for="do-autolink" class="screen-reader-text"><?php esc_html_e( 'Autolink status for this field', 'buddypress' ); ?></label>
+					<label for="do-autolink" class="screen-reader-text"><?php
+						/* translators: accessibility text */
+						esc_html_e( 'Autolink status for this field', 'buddypress' );
+					?></label>
 					<select name="do_autolink" id="do-autolink">
 						<option value="on" <?php selected( $this->get_do_autolink() ); ?>><?php esc_html_e( 'Enabled', 'buddypress' ); ?></option>
 						<option value="" <?php selected( $this->get_do_autolink(), false ); ?>><?php esc_html_e( 'Disabled', 'buddypress' ); ?></option>

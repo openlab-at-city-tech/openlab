@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,15 +29,15 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 		echo '<table cellspacing="0">';
 		echo '<thead>';
 		echo '<tr>';
-		echo '<th>' . __( 'Transient Set', 'query-monitor' ) . '</th>';
+		echo '<th>' . esc_html__( 'Transient Set', 'query-monitor' ) . '</th>';
 		if ( is_multisite() ) {
-			echo '<th>' . __( 'Type', 'query-monitor' ) . '</th>';
+			echo '<th>' . esc_html__( 'Type', 'query-monitor' ) . '</th>';
 		}
 		if ( !empty( $data['trans'] ) and isset( $data['trans'][0]['expiration'] ) ) {
-			echo '<th>' . __( 'Expiration', 'query-monitor' ) . '</th>';
+			echo '<th>' . esc_html__( 'Expiration', 'query-monitor' ) . '</th>';
 		}
-		echo '<th>' . __( 'Call Stack', 'query-monitor' ) . '</th>';
-		echo '<th>' . __( 'Component', 'query-monitor' ) . '</th>';
+		echo '<th>' . esc_html__( 'Call Stack', 'query-monitor' ) . '</th>';
+		echo '<th>' . esc_html__( 'Component', 'query-monitor' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 
@@ -46,29 +46,58 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 			echo '<tbody>';
 
 			foreach ( $data['trans'] as $row ) {
-				$stack = $row['trace']->get_stack();
 				$transient = str_replace( array(
 					'_site_transient_',
 					'_transient_'
 				), '', $row['transient'] );
-				$type = ( is_multisite() ) ? "<td valign='top'>{$row['type']}</td>\n" : '';
-				if ( 0 === $row['expiration'] ) {
-					$row['expiration'] = '<em>' . __( 'none', 'query-monitor' ) . '</em>';
-				}
-				$expiration = ( isset( $row['expiration'] ) ) ? "<td valign='top'>{$row['expiration']}</td>\n" : '';
 
 				$component = $row['trace']->get_component();
 
-				$stack = implode( '<br>', $stack );
-				echo "
-					<tr>\n
-						<td valign='top'>{$transient}</td>\n
-						{$type}
-						{$expiration}
-						<td valign='top' class='qm-nowrap qm-ltr'>{$stack}</td>\n
-						<td valign='top' class='qm-nowrap'>{$component->name}</td>\n
-					</tr>\n
-				";
+				echo '<tr>';
+				printf(
+					'<td>%s</td>',
+					esc_html( $transient )
+				);
+				if ( is_multisite() ) {
+					printf(
+						'<td>%s</td>',
+						esc_html( $row['type'] )
+					);
+				}
+
+				if ( isset( $row['expiration'] ) ) {
+					if ( 0 === $row['expiration'] ) {
+						printf(
+							'<td><em>%s</em></td>',
+							esc_html__( 'none', 'query-monitor' )
+						);
+					} else {
+						printf(
+							'<td>%s</td>',
+							esc_html( $row['expiration'] )
+						);
+					}
+				}
+
+				$stack          = array();
+				$filtered_trace = $row['trace']->get_filtered_trace();
+				array_shift( $filtered_trace );
+
+				foreach ( $filtered_trace as $item ) {
+					$stack[] = self::output_filename( $item['display'], $item['calling_file'], $item['calling_line'] );
+				}
+
+				printf( // WPCS: XSS ok.
+					'<td class="qm-nowrap qm-ltr">%s</td>',
+					implode( '<br>', $stack )
+				);
+				printf(
+					'<td class="qm-nowrap">%s</td>',
+					esc_html( $component->name )
+				);
+
+				echo '</tr>';
+
 			}
 
 			echo '</tbody>';
@@ -77,7 +106,7 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 
 			echo '<tbody>';
 			echo '<tr>';
-			echo '<td colspan="4" style="text-align:center !important"><em>' . __( 'none', 'query-monitor' ) . '</em></td>';
+			echo '<td colspan="4" style="text-align:center !important"><em>' . esc_html__( 'none', 'query-monitor' ) . '</em></td>';
 			echo '</tr>';
 			echo '</tbody>';
 
@@ -95,10 +124,14 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 
 		$title = ( empty( $count ) )
 			? __( 'Transients Set', 'query-monitor' )
+			/* translators: %s: Number of transient values that were set */
 			: __( 'Transients Set (%s)', 'query-monitor' );
 
 		$menu[] = $this->menu( array(
-			'title' => sprintf( $title, number_format_i18n( $count ) )
+			'title' => esc_html( sprintf(
+				$title,
+				number_format_i18n( $count )
+			) ),
 		) );
 		return $menu;
 

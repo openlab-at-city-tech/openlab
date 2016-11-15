@@ -173,6 +173,11 @@ function openlab_group_archive() {
         $department = str_replace("-", " ", $_GET['department']);
         $department = ucwords($department);
     }
+
+    if (!empty($_GET['cat'])) {
+        $categories = $_GET['cat'];
+    }
+
     if (!empty($_GET['semester'])) {
         $semester = str_replace("-", " ", $_GET['semester']);
         $semester = explode(" ", $semester);
@@ -229,6 +234,26 @@ function openlab_group_archive() {
         'meta_query' => $meta_query,
     );
 
+    if (!empty($categories)) {
+
+        if ('cat_all' === strtolower($categories)) {
+
+            $terms = get_terms('bp_group_categories');
+            $term_ids = wp_list_pluck($terms, 'term_id');
+        } else {
+            $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
+            $term_ids = $term_obj->term_id;
+        }
+
+        $group_args['tax_query'] = array(
+            array(
+                'taxonomy' => 'bp_group_categories',
+                'terms' => $term_ids,
+                'field' => 'term_id',
+            )
+        );
+    }
+
     if (!empty($_GET['group_sequence'])) {
         $group_args['type'] = $_GET['group_sequence'];
     }
@@ -256,7 +281,7 @@ function openlab_group_archive() {
                             <div class="item col-xs-18">
 
                                 <p class="item-title h2">
-                                    <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" title="<?php bp_group_name() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
+                                    <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
                                     <span class="original-copy hidden"><?php bp_group_name() ?></span>
                                 </p>
                                 <?php
@@ -334,8 +359,8 @@ function openlab_forum_pagination() {
         'format' => '',
         'total' => ceil((int) $forum_template->total_topic_count / (int) $forum_template->pag_num),
         'current' => $forum_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left"></i>', 'Forum pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right"></i>', 'Forum pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i>', 'Forum pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i>', 'Forum pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
     ));
@@ -365,7 +390,7 @@ function openlab_delete_group() {
  */
 function openlab_return_course_list($school, $department) {
 
-    $list = '<option value="dept_all" ' . selected('', $department) . ' >All</option>';
+    $list = '<option value="dept_all" ' . selected('', $department) . ' >All Departments</option>';
 
     // Sanitize. If no value is found, don't return any
     // courses
@@ -405,7 +430,7 @@ function cuny_groups_pagination_count($group_name) {
 
     $start_num = intval(( $groups_template->pag_page - 1 ) * $groups_template->pag_num) + 1;
     $from_num = bp_core_number_format($start_num);
-    $to_num = bp_core_number_format(( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ) );
+    $to_num = bp_core_number_format(( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ));
     $total = bp_core_number_format($groups_template->total_group_count);
 
     echo sprintf(__('%1$s to %2$s (of %3$s ' . $group_name . ')', 'buddypress'), $from_num, $to_num, $total);
@@ -528,7 +553,7 @@ function openlab_group_profile_header() {
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
     ?>
     <h1 class="entry-title group-title clearfix"><span class="profile-name hyphenate"><?php echo bp_group_name(); ?></span>
-        <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
+        <button data-target="#sidebar-menu-wrapper" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -537,13 +562,13 @@ function openlab_group_profile_header() {
     <?php if (bp_is_group_home() || (bp_is_group_admin_page() && !$bp->is_item_admin)): ?>
         <div class="clearfix">
             <?php if ($group_type != "portfolio") : ?>
-                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
             <?php endif; ?>
         </div>
     <?php elseif (bp_is_group_home()): ?>
         <div class="clearfix visible-xs">
             <?php if ($group_type != "portfolio") : ?>
-                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
+                <div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></div>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -556,16 +581,16 @@ function openlab_get_privacy_icon() {
 
     switch (bp_get_group_status()) {
         case 'public':
-            $status = '<span class="fa fa-eye"></span>';
+            $status = '<span class="fa fa-eye" aria-hidden="true"></span>';
             break;
         case 'private':
-            $status = '<span class="fa fa-lock"></span>';
+            $status = '<span class="fa fa-lock" aria-hidden="true"></span>';
             break;
         case 'hidden':
-            $status = '<span class="fa fa-eye-slash"></span>';
+            $status = '<span class="fa fa-eye-slash" aria-hidden="true"></span>';
             break;
         default:
-            $status = '<span class="fa fa-eye"></span>';
+            $status = '<span class="fa fa-eye" aria-hidden="true"></span>';
     }
 
     return $status;
@@ -600,8 +625,8 @@ function cuny_group_single() {
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
                     <div id="group-action-wrapper">
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>"><i class="fa fa-pencil"></i> Edit Profile</a>
-                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>"><i class="fa fa-camera"></i> Change Avatar</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
+                        <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
                     </div>
                 <?php elseif (is_user_logged_in()) : ?>
                     <div id="group-action-wrapper">
@@ -671,6 +696,39 @@ function cuny_group_single() {
                             <div class="table-row row">
                                 <div class="col-xs-24 status-message italics"><?php echo openlab_group_status_message() ?></div>
                             </div>
+
+                            <?php
+                            $wds_school = openlab_generate_school_name($group_id);
+                            $wds_departments = openlab_generate_department_name($group_id);
+                            ?> 
+
+                            <?php if ($wds_school && !empty($wds_school)): ?>
+
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">School</div>
+                                    <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
+                                </div>
+
+                            <?php endif; ?>
+
+                            <?php if ($wds_departments && !empty($wds_departments)): ?>
+
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">Department</div>
+                                    <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                </div>
+
+                            <?php endif; ?>
+
+                            <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
+                                <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
+                                    <div class="table-row row">
+                                        <div class="bold col-sm-7">Category</div>
+                                        <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
                             <div class="table-row row">
                                 <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
                                 <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
@@ -693,7 +751,7 @@ function cuny_group_single() {
 
             <?php do_action('bp_after_group_header') ?>
 
-                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
+                                                                                                                                                                                                                                                                            </div><!--<?php echo $group_type; ?>-header -->
 
     <?php endif; ?>
 
@@ -711,7 +769,7 @@ function openlab_render_message() {
 
         <div id="message" class="bp-template-notice <?php echo $type; ?> btn btn-default btn-block btn-primary link-btn clearfix">
 
-            <span class="pull-left fa fa-check"></span>
+            <span class="pull-left fa fa-check" aria-hidden="true"></span>
             <?php echo $content; ?>
 
         </div>
@@ -756,7 +814,7 @@ function openlab_group_profile_activity_list() {
                         <div class="col-sm-12">
                             <div class="recent-discussions">
                                 <div class="recent-posts">
-                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right"></span></a></h2>
+                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                                     <?php
                                     $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
@@ -799,7 +857,7 @@ function openlab_group_profile_activity_list() {
                         <div class="col-sm-12">
                             <div id="recent-docs">
                                 <div class="recent-posts">
-                                    <h4 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right"></span></a></h4>
+                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                                     <?php
                                     $docs_arg = Array("posts_per_page" => "3",
                                         "post_type" => "bp_doc",
@@ -837,7 +895,7 @@ function openlab_group_profile_activity_list() {
                         endif;
                         ?>
 
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo $href; ?>">Members<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                         <?php $member_arg = Array("exclude_admins_mods" => false); ?>
                         <?php if (bp_group_has_members($member_arg)) : ?>
 
@@ -865,7 +923,7 @@ function openlab_group_profile_activity_list() {
 
                     </div>
 
-                <?php endif; //end of if $group != 'portfolio'           ?>
+                <?php endif; //end of if $group != 'portfolio'            ?>
 
             <?php else: ?>
                 <?php
@@ -879,13 +937,13 @@ function openlab_group_profile_activity_list() {
                 ?>
                 <?php /* The group is not visible, show the status message */ ?>
 
-                <?php // do_action( 'bp_before_group_status_message' )            ?>
+                <?php // do_action( 'bp_before_group_status_message' )             ?>
                 <!--
                                                 <div id="message" class="info">
-                                                        <p><?php // bp_group_status_message()                                 ?></p>
+                                                        <p><?php // bp_group_status_message()                                                 ?></p>
                                                 </div>
                 -->
-                <?php // do_action( 'bp_after_group_status_message' )           ?>
+                <?php // do_action( 'bp_after_group_status_message' )            ?>
 
             <?php endif; ?>
 
@@ -914,7 +972,7 @@ HTML;
     $markup .= <<<HTML
             <p class="activity-content">
                 <span class="hyphenate truncate-on-the-fly" data-basevalue="120" data-minvalue="75" data-basewidth="376">{$content}</span>
-                <span><a href="{$link}" class="read-more">See More</a><span>
+                <span><a href="{$link}" class="read-more">See More<span class="sr-only">{$title}</span></a><span>
                 <span class="original-copy hidden">{$content}</span>
             </p>
 HTML;
@@ -964,16 +1022,16 @@ add_action('bp_get_group_join_button', 'openlab_remove_hidden_class_from_leave_g
 function openlab_custom_group_buttons($button) {
 
     if ($button['id'] == 'leave_group') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user" aria-hidden="true"></i> ' . $button['link_text'] . '</span><i class="fa fa-minus-circle pull-right" aria-hidden="true"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     } else if ($button['id'] == 'join_group' || $button['id'] == 'request_membership') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-plus-circle pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user" aria-hidden="true"></i> ' . $button['link_text'] . '</span><i class="fa fa-plus-circle pull-right" aria-hidden="true"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     } else if ($button['id'] == 'membership_requested') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-clock-o pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user" aria-hidden="true"></i> ' . $button['link_text'] . '</span><i class="fa fa-clock-o pull-right" aria-hidden="true"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     } else if ($button['id'] == 'accept_invite') {
-        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user"></i> ' . $button['link_text'] . '</span><i class="fa fa-plus-circle pull-right"></i>';
+        $button['link_text'] = '<span class="pull-left"><i class="fa fa-user" aria-hidden="true"></i> ' . $button['link_text'] . '</span><i class="fa fa-plus-circle pull-right" aria-hidden="true"></i>';
         $button['link_class'] = $button['link_class'] . ' btn btn-default btn-block btn-primary link-btn clearfix';
     }
 
@@ -1129,9 +1187,13 @@ function openlab_current_directory_filters() {
             break;
 
         case 'course' :
+
+            $filters = array('school', 'department', 'semester');
+            break;
+
         case 'club' :
         case 'project' :
-            $filters = array('school', 'department', 'semester');
+            $filters = array('school', 'department', 'cat', 'semester');
             break;
 
         case 'people' :
@@ -1162,6 +1224,18 @@ function openlab_current_directory_filters() {
             //dump hyphens from semester values
             if ($filter_data['type'] == 'semester') {
                 $word = str_replace('-', ' ', $word);
+            }
+
+            //for group categories
+            if ($filter_data['type'] == 'cat') {
+
+                $term_obj = get_term_by('slug', $word, 'bp_group_categories');
+
+                if ($term_obj) {
+                    $word = $term_obj->name;
+                } else {
+                    $word = 'All';
+                }
             }
 
             // Leave out the 'All's
@@ -1261,7 +1335,7 @@ function openlab_show_site_posts_and_comments() {
             <div class="col-sm-12">
                 <div id="recent-course">
                     <div class="recent-posts">
-                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right"></span></a></h2>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Posts<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
 
 
                         <?php foreach ($posts as $post) : ?>
@@ -1282,7 +1356,7 @@ function openlab_show_site_posts_and_comments() {
             <div class="col-sm-12">
                 <div id="recent-site-comments">
                     <div class="recent-posts">
-                        <h4 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Comments<span class="fa fa-chevron-circle-right"></span></a></h4>
+                        <h2 class="title activity-title"><a class="no-deco" href="<?php echo esc_attr($site_url) ?>">Recent Comments<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
                         <?php if (!empty($comments)) : ?>
                             <?php foreach ($comments as $comment) : ?>
                                 <div class="panel panel-default">
@@ -1366,7 +1440,7 @@ function openlab_bp_group_site_pages() {
                 <?php if (openlab_is_my_portfolio() || is_super_admin()) : ?>
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link bold">
-                            <a class="bold no-deco" href="<?php echo esc_url($group_site_settings['site_url']) ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                            <a class="bold no-deco" href="<?php echo esc_url($group_site_settings['site_url']) ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span></a>
                         </li>
 
                         <?php if (openlab_user_portfolio_site_is_local($displayed_user_id)) : ?>
@@ -1379,7 +1453,7 @@ function openlab_bp_group_site_pages() {
 
                     <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                         <li class="portfolio-site-link">
-                            <a class="bold no-deco" href="<?php echo trailingslashit(esc_attr($group_site_settings['site_url'])); ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>
+                            <a class="bold no-deco" href="<?php echo trailingslashit(esc_attr($group_site_settings['site_url'])); ?>">Visit <?php echo openlab_get_group_type_label('group_id=' . $group_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span></a>
                         </li>
                     </ul>
 
@@ -1390,7 +1464,7 @@ function openlab_bp_group_site_pages() {
             <div class="sidebar-block">
                 <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                     <li class="portfolio-site-link">
-                        <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle"></span></a>'; ?>
+                        <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span></a>'; ?>
                     </li>
                     <?php if ($group_site_settings['is_local'] && ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()))) : ?>
                         <li class="portfolio-dashboard-link">
@@ -1494,3 +1568,33 @@ add_filter('bp_get_group_description_excerpt', 'openlab_custom_group_excerpts', 
  */
 add_filter('bp_disable_cover_image_uploads', '__return_true');
 add_filter('bp_disable_group_cover_image_uploads', '__return_true');
+
+function openlab_get_group_activity_events_feed() {
+    $events_out = '';
+
+    // Non-public groups shouldn't show this to non-members.
+    $group = groups_get_current_group();
+    if ('public' !== $group->status && empty($group->user_has_access)) {
+        return $events_out;
+    }
+
+    if (!function_exists('eo_get_events')) {
+        return $events_out;
+    }
+
+    $args = array(
+        'event_start_after' => 'today',
+        'bp_group' => bp_get_current_group_id(),
+        'numberposts' => 5,
+    );
+
+    $events = eo_get_events($args);
+
+    $menu_items = openlab_calendar_submenu();
+
+    ob_start();
+    include(locate_template('parts/sidebar/activity-events-feed.php'));
+    $events_out .= ob_get_clean();
+
+    return $events_out;
+}

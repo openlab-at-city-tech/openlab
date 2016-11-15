@@ -12,7 +12,7 @@
   border: 1px solid #cccccc;
   bottom: 12px;
   left: -50px;
-  min-width: 300px;
+  min-width: 200px;
 }
 .ol-popup:after, .ol-popup:before {
   top: 100%;
@@ -43,4 +43,33 @@
 }
 .ol-popup-closer:after {
   content: "✖";
-  }
+}
+
+            .toggle {
+                width: 100px;
+            }
+            .ol-mouse-position {
+                right: 3em;
+                color: #fff;
+                background-color: rgba(0,60,136,.5);
+                padding: 2px 10px;
+                border-radius: 5px;
+            }
+/*                                       
+            .ol-scale-line {
+                left: 175px;
+            }
+ */
+            .ol-rotate {
+                top: 3em;
+            }
+
+            .ol-zoomslider {
+                width: 200px;
+                height: 25px;
+                left: 3em;
+                top: 0.5em;
+            }
+            .ol-zoomslider-thumb {
+                height: 16px;
+            }

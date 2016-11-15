@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8.11' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.12' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -106,7 +106,7 @@ function bp_groupblog_setup_nav() {
 
 		if ( !$checks['deep_group_integration'] ) {
 
-			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
+			$parent_slug = bp_get_current_group_slug();
 
 			if (
 
@@ -291,6 +291,36 @@ function bp_groupblog_member_join( $group_id ) {
 }
 
 /**
+ * Gets a group's groupblog settings.
+ *
+ * @since 1.8.13
+ *
+ * @return array
+ */
+function bp_groupblog_get_group_settings( $group_id ) {
+	$defaults = array(
+		'groupblog_silent_add'          => false,
+		'groupblog_default_member_role' => BP_GROUPBLOG_DEFAULT_MEMBER_ROLE,
+		'groupblog_default_mod_role'    => BP_GROUPBLOG_DEFAULT_MOD_ROLE,
+		'groupblog_default_admin_role'  => BP_GROUPBLOG_DEFAULT_ADMIN_ROLE,
+		'groupblog_enable_blog'         => false,
+		'groupblog_blog_id'             => null,
+	);
+
+	$r = array();
+	foreach ( $defaults as $key => $default_value ) {
+		$saved_value = groups_get_groupmeta( $group_id, $key, true );
+		if ( '' === $saved_value ) {
+			$r[ $key ] = $default_value;
+		} else {
+			$r[ $key ] = $saved_value;
+		}
+	}
+
+	return $r;
+}
+
+/**
  * bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id )
  *
  * Subscribes user in question to blog in question
@@ -306,61 +336,30 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	if ( !$blog_id )
 		return;
 
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	// Set up some variables
-	$groupblog_silent_add 	       = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
-	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
-	$groupblog_default_mod_role    = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
-	$groupblog_default_admin_role  = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
+	$groupblog_silent_add          = $settings['groupblog_silent_add'];
+	$groupblog_default_member_role = $settings['groupblog_default_member_role'];
+	$groupblog_default_mod_role    = $settings['groupblog_default_mod_role'];
+	$groupblog_default_admin_role  = $settings['groupblog_default_admin_role'];
 	$groupblog_creator_role        = 'admin';
 
 	// get user's blog role
 	$user_role = bp_groupblog_get_user_role( $user_id, false, $blog_id );
 
-	// Get the current user's group status. For efficiency, we try first to look at the
-	// current group object
-	if ( isset( $bp->groups->current_group->id ) && $group_id == $bp->groups->current_group->id ) {
-		// It's tricky to walk through the admin/mod lists over and over, so let's format
-		if ( empty( $bp->groups->current_group->adminlist ) ) {
-			$bp->groups->current_group->adminlist = array();
-			if ( isset( $bp->groups->current_group->admins ) ) {
-				foreach( (array)$bp->groups->current_group->admins as $admin ) {
-					if ( isset( $admin->user_id ) ) {
-						$bp->groups->current_group->adminlist[] = $admin->user_id;
-					}
-				}
-			}
-		}
-
-		if ( empty( $bp->groups->current_group->modlist ) ) {
-			$bp->groups->current_group->modlist = array();
-			if ( isset( $bp->groups->current_group->mods ) ) {
-				foreach( (array)$bp->groups->current_group->mods as $mod ) {
-					if ( isset( $mod->user_id ) ) {
-						$bp->groups->current_group->modlist[] = $mod->user_id;
-					}
-				}
-			}
-		}
-
-		if ( in_array( $user_id, $bp->groups->current_group->adminlist ) ) {
-			$user_group_status = 'admin';
-		} elseif ( in_array( $user_id, $bp->groups->current_group->modlist ) ) {
-			$user_group_status = 'mod';
-		} else {
-			// I'm assuming that if a user is passed to this function, they're a member
-			// Doing an actual lookup is costly. Try to look for an efficient method
-			$user_group_status = 'member';
-		}
+	// Get the current user's group status.
+	if ( groups_is_user_admin( $user_id, $group_id ) ) {
+		$user_group_status = 'admin';
+	} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
+		$user_group_status = 'mod';
+	} else if ( groups_is_user_member( $user_id, $group_id ) ) {
+		$user_group_status = 'member';
 	} else {
-		if ( groups_is_user_admin ( $user_id, $group_id ) ) {
-			$user_group_status = 'admin';
-		} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
-			$user_group_status = 'mod';
-		} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
-			$user_group_status = 'member';
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	// change user status based on promotion / demotion
@@ -451,10 +450,21 @@ add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 1
  * Called when user leaves.
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
+	// Only modify site membership if the plugin is configured to do so.
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	$blog_id = get_groupblog_blog_id( $group_id );
 
 	if ( ! $user_id )
 		$user_id = bp_loggedin_user_id();
+
+	// Users with no existing role should not be modified.
+	if ( ! is_user_member_of_blog( $user_id, $blog_id ) ) {
+		return;
+	}
 
 	$user = new WP_User( $user_id );
 	$user->for_blog( $blog_id );
@@ -608,7 +618,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
 
 		<p>
-			<input type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+			<label for="groupblog-create-new-no"><input type="radio" value="no" name="groupblog-create-new" id="groupblog-create-new-no" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 
 			<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
@@ -623,10 +633,11 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					endif;
 				} ?>
 			</select>
+			</label>
 		</p>
 
 		<p>
-			<input type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
+			<label for="groupblog-create-new-yes"><input type="radio" value="yes" name="groupblog-create-new" id="groupblog-create-new-yes" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></label></span>
 		</p>
 
 		<ul id="groupblog-details">
@@ -1191,6 +1202,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->save();
 	}
 
+	// Update the last_active flag for the group.
+	groups_update_last_activity( $group_id );
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 

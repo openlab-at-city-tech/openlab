@@ -3,10 +3,12 @@
 Plugin Name: Category Order and Taxonomy Terms Order
 Plugin URI: http://www.nsp-code.com
 Description: Category Order and Taxonomy Terms Order
-Version: 1.4.6.1
+Version: 1.4.8
 Author: Nsp-Code
 Author URI: http://www.nsp-code.com
 Author Email: electronice_delphi@yahoo.com
+Text Domain: taxonomy-terms-order
+Domain Path: /languages/ 
 */
 
 
@@ -55,7 +57,7 @@ Author Email: electronice_delphi@yahoo.com
     add_action( 'plugins_loaded', 'to_load_textdomain'); 
     function to_load_textdomain() 
         {
-            load_plugin_textdomain('tto', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/lang');
+            load_plugin_textdomain('taxonomy-terms-order', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages');
         }
         
     add_action('admin_print_scripts', 'TO_admin_scripts');
@@ -87,7 +89,7 @@ Author Email: electronice_delphi@yahoo.com
             include (TOPATH . '/include/terms_walker.php');
             
             include (TOPATH . '/include/options.php'); 
-            add_options_page('Taxonomy Terms Order', '<img class="menu_tto" src="'. TOURL .'/images/menu-icon.png" alt="" />' . __('Taxonomy Terms Order', 'tto'), 'manage_options', 'to-options', 'to_plugin_options');
+            add_options_page('Taxonomy Terms Order', '<img class="menu_tto" src="'. TOURL .'/images/menu-icon.png" alt="" />' . __('Taxonomy Terms Order', 'taxonomy-terms-order'), 'manage_options', 'to-options', 'to_plugin_options');
                     
             $options = get_option('tto_options');
             
@@ -122,11 +124,11 @@ Author Email: electronice_delphi@yahoo.com
                         continue;                
                     
                     if ($post_type == 'post')
-                        add_submenu_page('edit.php', __('Taxonomy Order', 'tto'), __('Taxonomy Order', 'tto'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
+                        add_submenu_page('edit.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
                         elseif ($post_type == 'attachment')
-                        $hookID =   add_submenu_page('upload.php', __('Taxonomy Order', 'tto'), __('Taxonomy Order', 'tto'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );   
+                        $hookID =   add_submenu_page('upload.php', __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );   
                         else
-                        add_submenu_page('edit.php?post_type='.$post_type, __('Taxonomy Order', 'tto'), __('Taxonomy Order', 'tto'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
+                        add_submenu_page('edit.php?post_type='.$post_type, __('Taxonomy Order', 'taxonomy-terms-order'), __('Taxonomy Order', 'taxonomy-terms-order'), $capability, 'to-interface-'.$post_type, 'TOPluginInterface' );
                 }
         }
         

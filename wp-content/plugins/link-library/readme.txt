@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 3.0
-Tested up to: 4.3
+Tested up to: 4.6.1
 Stable tag: stable
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -19,7 +19,7 @@ This plugin uses the filter method to add contents to the pages. It also contain
 You can see a few examples of pages using Link Library on my personal site:
 
 * [Library in table form with search box and link submission form](http://ylefebvre.ca/freeware-database/)
-* [Library in unordered list form with RSS feed icons](http://ylefebvre.ca/favorite-links/)
+* [Library in unordered list form with RSS feed icons](http://ylefebvre.ca/links-page-with-pagination/)
 * [Library in unordered list form with RSS feed icons and Pagination](http://ylefebvre.ca/links-page-with-pagination/)
 * [Library only showing one category at a time through AJAX queries](http://ylefebvre.ca/freeware-database-ajax-version/)
 * [Library in unordered list form with 1 full RSS item per feed inline and 5 RSS item full previews when selecting preview icon](http://ylefebvre.ca/links-page-with-preview/)
@@ -58,6 +58,181 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 5.9.13.12 =
+* Set initial value of user-submission URL fields to http://
+
+= 5.9.13.11 =
+* User submitted link are nwo properly saved with a submitted date
+* Clarified message for URL missing http in user submission form.
+
+= 5.9.13.10 =
+* Added hook for users to register their own link reciprocal check function
+
+= 5.9.13.9 =
+* Fixed issue with copying library settings in Internet Explorer
+
+= 5.9.13.8 =
+* Fixed javascript errors with quotes in translated langauges for user submission form messages
+
+= 5.9.13.7 =
+* Updated translation template file
+
+= 5.9.13.6 =
+* Fixed issue with suppression of Link Library message from rejection e-mails
+
+= 5.9.13.5 =
+* Fixed issue with CSS not appearing problem in some themes
+* Added new span class around link count for category display
+* Modified div for category link count display
+
+= 5.9.13.4 =
+* Fixed issues with RSS Preview pop-up window
+* Changed RSS inline display to respect site date format
+* Changes RSS inline display to translate dates
+* Added option under general settings to allow user to change RSS cache duration for RSS feeds
+
+= 5.9.13.2 =
+* Fixed issue with telephone output introduced in 5.9.13.1
+
+= 5.9.13.1 =
+* Fixed issue with user link submission with spam filtering on and Contact Form 7 not installed
+* Added new option to Link Name field to be able to display description as tooltip
+* Added new option in Advanced tab to not display fields that do not contain any data (note that this could have negative effects on page layout)
+* Added new item in Advanced tab to display category description as part of Link Library output
+
+= 5.9.13 =
+* Corrected XSS vulnerability
+
+= 5.9.12.29 =
+* Modified hook to add button to editor to make it removable by users
+
+= 5.9.12.28 =
+* Fixed issue with export section when site has too many pages
+
+= 5.9.12.27 =
+* Added new variable for pop-up content %link_email_link%
+
+= 5.9.12.26 =
+* Modified FAQ links to point to new wiki
+
+= 5.9.12.25 =
+* Modified code that generates update timestamp to avoid conflict with other plugins
+
+= 5.9.12.24 =
+* Modifications to Akismet user link validation code to avoid sending empty fields
+
+= 5.9.12.23 =
+* Fixed mailto output to accept HTML web links in addition to e-mails
+
+= 5.9.12.22 =
+* Added missing file for update 5.9.12.20
+
+= 5.9.12.21 =
+* Added buttons to delete all locally stored thumbnails or all locally stored favicons for links
+
+= 5.9.12.20 =
+* Added new section to Import/Export to import links from existing site content (pages, posts, CPTs)
+
+= 5.9.12.19 =
+* Added option to reject user links where reciprocal link is on same domain as an existing reciprocal link
+
+= 5.9.12.18 =
+* Fix to allow multiple libraries configured to use AJAX updates working on the same page
+
+= 5.9.12.17 =
+* Updated RSS feed generation code to fix header
+
+= 5.9.12.16 =
+* Updates supported version number and removed surveys
+
+= 5.9.12.15 =
+* Adds submitter name as a field that can be displayed
+
+= 5.9.12.14 =
+* Fix to only display a single link when using singlelinkid parameter
+
+= 5.9.12.13 =
+* Added ability to only display links submitted by the current logged user
+
+= 5.9.12.12 =
+* Fix div error in previous release
+
+= 5.9.12.11 =
+* Added ability to only display RSS feed inline if they are no older than a certain number of days
+* Added ability to hide links if they do not have any inline RSS items to display
+
+= 5.9.12.10 =
+* Added support to specify multiple categories for imported links, comma-separated
+
+= 5.9.12.9 =
+* Fixes to avoid possible division by 0 if number of columns if set to null or 0
+
+= 5.9.12.8 =
+* Corrections to link submission generated e-mails
+
+= 5.9.12.7 =
+* Fixed issues for PHP 7 compatibility
+* Added conditions only to filter unused fields from e-mail notification for new user links
+* Added information fields to visitor e-mail when new link is submitted
+
+= 5.9.12.6 =
+* Fix issue where deleting Settings #1 resets general options
+
+= 5.9.12.5 =
+* Added general setting to enable Akismet filtering for all libraries
+
+= 5.9.12.4 =
+* Fix for link pop-up not working properly from link image
+
+= 5.9.12.3 =
+* Added ability to translate messages from link submission form validation script
+* Fixed min length validation of link submission form fields
+* Made URL a link in user submission notification e-mail and added textual category name instead of having only ID
+
+= 5.9.12.2 =
+* Added option to specify default category in user link submission form
+* Added support to validate user links using Akismet (requires Akismet plugin and valid Akismet key)
+* Corrected issue with phantom links appearing in Moderation list
+
+= 5.9.12.1 =
+* Added configuration field under Search tab to allow users to define No Results text to be displayed
+* Added max lengths to field in user submission form
+* Added option to send e-mail notification to visitors when they submit links
+
+= 5.9.12 =
+* Change way that lik pop-up dialog content is loaded to avoid conflicts with other plugins
+
+= 5.9.11.7 =
+* Allow shortcodes to be executed in link pop-up content
+
+= 5.9.11.6 =
+* Added new mode to Web Link display element to only output URL
+
+= 5.9.11.5 =
+* Added %link_url% to variables that can be used in link pop-up dialog
+* Added set_time_limit in reciprocal link checker to avoid issues when checking a large number of links
+
+= 5.9.11.4 =
+* Changed reciprocal link checker output to send steady data to browser instead of building entire buffer to avoid timeout
+
+= 5.9.11.3 =
+* Added validation for submitter e-mail field
+
+= 5.9.11.2 =
+* Added call to process shortcodes in Link Library output content
+* Updated french translation
+
+= 5.9.11.1 =
+* Added more advanced validation for e-mail and URL fields in user-submission form
+
+= 5.9.11 =
+* Updated reciprocal link check to work on sites without allow_url_fopen
+* Added broken link checker
+* Added Form validation script to user-submission form to catch required fields before form submission
+
+= 5.9.10.4 =
+* Fix for search page target not working
 
 = 5.9.10.3 =
 * Changes to accept UTF8 characters in large description field (deactivate and reactivate the plugin to fix the database)

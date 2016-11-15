@@ -58,14 +58,14 @@ class JetpackTracking {
 		self::record_user_event( 'module_deactivated', array( 'module' => $module ) );
 	}
 
-	static function record_user_event( $event_type, $data ) {
+	static function record_user_event( $event_type, $data= array() ) {
 
 		$user = wp_get_current_user();
 		$site_url = get_option( 'siteurl' );
 
-		$data['_via_ua']  = $_SERVER['HTTP_USER_AGENT'];
-		$data['_via_ip']  = $_SERVER['REMOTE_ADDR'];
-		$data['_lg']      = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		$data['_via_ua']  = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		$data['_via_ip']  = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '';
+		$data['_lg']      = isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
 		$data['blog_url'] = $site_url;
 		$data['blog_id']  = Jetpack_Options::get_option( 'id' );
 

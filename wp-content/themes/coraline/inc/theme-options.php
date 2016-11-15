@@ -107,8 +107,8 @@ function coraline_theme_options_do_page() {
 
 	?>
 	<div class="wrap">
-		<?php $theme_name = function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme(); ?>
-		<?php screen_icon(); echo "<h2>" . sprintf( __( '%1$s Theme Options', 'coraline' ), $theme_name ) . "</h2>"; ?>
+		<?php $theme_name = wp_get_theme(); ?>
+		<?php echo "<h2>" . sprintf( __( '%1$s Theme Options', 'coraline' ), $theme_name ) . "</h2>"; ?>
 
 		<?php if ( false !== $_REQUEST['settings-updated'] ) : ?>
 		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'coraline' ); ?></strong></p></div>
@@ -214,7 +214,7 @@ function coraline_theme_options_do_page() {
 							?>
 						</select>
 						<label class="description" for="coraline_theme_options[aside_category]"><?php _e( 'Select a category to use for shorter aside posts', 'coraline' ); ?></label>
-						<div class="update-msg"><p>Note: Coraline now supports Post Formats! Read more at <a href="http://support.wordpress.com/posts/post-formats/">Support &raquo; Post Formats</a>.</p></div>
+						<div class="update-msg"><p><?php _e( 'Note: Coraline now supports Post Formats! Read more at <a href="http://support.wordpress.com/posts/post-formats/">Support &raquo; Post Formats</a>.', 'coraline' ); ?></p></div>
 					</td>
 				</tr>
 				<?php endif; ?>
@@ -245,7 +245,7 @@ function coraline_theme_options_do_page() {
 							?>
 						</select>
 						<label class="description" for="coraline_theme_options[gallery_category]"><?php _e( 'Select a category to use for posts with image galleries', 'coraline' ); ?></label>
-						<div class="update-msg"><p>Note: Coraline now supports Post Formats! Read more at <a href="http://support.wordpress.com/posts/post-formats/">Support &raquo; Post Formats</a>.</p></div>
+						<div class="update-msg"><p><?php _e( 'Note: Coraline now supports Post Formats! Read more at <a href="http://support.wordpress.com/posts/post-formats/">Support &raquo; Post Formats</a>.', 'coraline' ); ?></p></div>
 					</td>
 				</tr>
 				<?php endif; ?>

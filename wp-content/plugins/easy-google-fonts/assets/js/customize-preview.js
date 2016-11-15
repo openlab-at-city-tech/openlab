@@ -20,7 +20,7 @@
  * 4. Backbone
  *
  * @since 1.3.4
- * @version 1.3.9
+ * @version 1.4.1
  *
  * @todo - Leverage backbone templates to load 
  *     <style> elements into the <head> instead 
@@ -46,11 +46,15 @@
 	 * @uses object egfFontPreviewControls  
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.init = function() {
+		// console.log(egfFontPreviewControls);
+		// console.log('------------------------');
 		_.each( egfFontPreviewControls, function( value, id ) {
+
+			// console.log( "This is the id " + id );
 
 			// Get all of the properties for this setting.
 			var type       = value["type"];
@@ -97,6 +101,7 @@
 	 *     and inject the style into the <head> of the
 	 *     page.
 	 * 
+	 * @param {string} 	id 			ID key, used to fetch this font control's properties.
 	 * @param {string} 	setting 	Setting ID.
 	 * @param {string} 	styleId 	Unique id for style tag.
 	 * @param {string} 	selector 	Selector managed by this font control.
@@ -105,10 +110,10 @@
 	 * @param {boolean} withUnits 	Whether this CSS property value has units.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
-	preview.setStyle = function( setting, styleId, selector, property, importance, withUnits ) {
+	preview.setStyle = function( id, setting, styleId, selector, property, importance, withUnits ) {
 
 		// Check if this property has units.
 		withUnits = typeof withUnits !== "undefined" ? withUnits : false;
@@ -118,9 +123,11 @@
 			if ( to === '' || typeof to === "undefined" ) {
 				$( '#' + styleId ).remove();
 			} else {
-				
+
 				// Build inline style.
 				var style  = '<style id="' + styleId + '" type="text/css">';
+
+				style += preview.getOpeningMediaQuery( id );
 
 				if ( withUnits ) {
 					style += selector +' { ' + property + ': ' + to.amount + to.unit + importance + '; }';
@@ -128,13 +135,92 @@
 					style += selector +' { ' + property + ': ' + to + importance + '; }';
 				}
 
+				style += preview.getClosingMediaQuery( id );
 				style += '</style>';
 
 				// Update previewer.
-				$( '#' + styleId ).remove();
-				$(style).appendTo( head );
+				if ( $( '#' + styleId ).length !== 0 ) {
+					$( '#' + styleId ).replaceWith( style );
+				} else {
+					$( style ).appendTo( head );	
+				}
 			}
 		});
+	};
+
+	/**
+	 * Get Opening Media Query Markup
+	 *
+	 * @description - Returns the opening media
+	 *     query markup or an empty string if 
+	 *     this font control has no media query 
+	 *     settings. 
+	 * 
+	 * @param {string} 	id     Control ID.
+	 *
+	 * @since 1.4.0
+	 * @version 1.4.1
+	 * 
+	 */
+	preview.getOpeningMediaQuery = function( id ) {
+		var output = '';
+		
+		if ( typeof egfFontPreviewControls[ id ] !== "undefined" ) {
+
+			// Get the min and max properties for 
+			// this font control.
+			var minScreen = egfFontPreviewControls[ id ].egf_properties.min_screen;
+			var maxScreen = egfFontPreviewControls[ id ].egf_properties.max_screen;
+
+			// Return the output if this option
+			// has no min and max value.
+			if ( "" === minScreen.amount && "" === maxScreen.amount ) {
+				return output;
+			}
+
+			// Build the output.
+			output += "@media ";
+			
+			// Append min-width value if applicable.
+			if ( "" !== minScreen.amount ) {
+				output += "(min-width: " + minScreen.amount + minScreen.unit + ")";
+			}
+
+			// Append 'and' keyword if min and max value exists.
+			if ( "" !== minScreen.amount && "" !== maxScreen.amount ) {
+				output += " and ";
+			}
+
+			// Append max-width value if applicable.
+			if ( "" !== maxScreen.amount ) {
+				output += "(max-width: " + maxScreen.amount + maxScreen.unit + ")";
+			}
+
+			output += " {\n\t";
+		}
+
+		return output;
+	};
+
+	/**
+	 * Get Closing Media Query Markup
+	 *
+	 * @description - Returns the closing { or an
+	 *     empty string if this font control has
+	 *     no media query settings. 
+	 * 
+	 * @param {string} 	id     Control ID.
+	 *
+	 * @since 1.4.0
+	 * @version 1.4.1
+	 * 
+	 */
+	preview.getClosingMediaQuery = function( id ) {
+		if ( preview.getOpeningMediaQuery( id ) !== "" ) {
+			return "\n}\n";
+		} else {
+			return "";
+		}
 	};
 
 	/**
@@ -150,7 +236,7 @@
 	 * @param {obj} 	obj    Object containing all of the current settings.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.enqueueStylesheet = function( id ) {
@@ -180,11 +266,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setFontFamily = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][font_name]',
 			'tt-font-' + id + '-font-family',
 			selector,
@@ -205,11 +292,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setFontWeight = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][font_weight]',
 			'tt-font-' + id + '-font-weight',
 			selector,
@@ -230,11 +318,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setFontStyle = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][font_style]',
 			'tt-font-' + id + '-font-style',
 			selector,
@@ -255,11 +344,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setTextDecoration = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][text_decoration]',
 			'tt-font-' + id + '-text-decoration',
 			selector,
@@ -280,11 +370,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setTextTransform = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][text_transform]',
 			'tt-font-' + id + '-text-transform',
 			selector,
@@ -305,11 +396,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setFontColor = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][font_color]',
 			'tt-font-' + id + '-color',
 			selector,
@@ -330,11 +422,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setBackgroundColor = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][background_color]',
 			'tt-font-' + id + '-background-color',
 			selector,
@@ -355,11 +448,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setFontSize = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][font_size]',
 			'tt-font-' + id + '-font-size',
 			selector,
@@ -381,11 +475,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setLineHeight = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][line_height]',
 			'tt-font-' + id + '-line-height',
 			selector,
@@ -406,11 +501,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setLetterSpacing = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][letter_spacing]',
 			'tt-font-' + id + '-letter-spacing',
 			selector,
@@ -432,7 +528,7 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setMargin = function( id, selector, importance ) {
@@ -443,6 +539,7 @@
 		// Set up the margin preview for each position.
 		_.each( positions, function( position ) {
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][margin_' + position + ']',
 				'tt-font-' + id + '-margin-' + position,
 				selector,
@@ -465,7 +562,7 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setPadding = function( id, selector, importance ) {
@@ -476,6 +573,7 @@
 		// Set up the padding preview for each position.
 		_.each( positions, function( position ) {
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][padding_' + position + ']',
 				'tt-font-' + id + '-padding-' + position,
 				selector,
@@ -498,7 +596,7 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setBorder = function( id, selector, importance ) {
@@ -510,6 +608,7 @@
 
 			// Set border color.
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][border_' + position + '_color]',
 				'tt-font-' + id + '-border-' + position + '-color',
 				selector,
@@ -519,6 +618,7 @@
 
 			// Set border style.
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][border_' + position + '_style]',
 				'tt-font-' + id + '-border-' + position + '-style',
 				selector,
@@ -528,6 +628,7 @@
 
 			// Set border width.
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][border_' + position + '_width]',
 				'tt-font-' + id + '-border-' + position + '-width',
 				selector,
@@ -550,7 +651,7 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setBorderRadius = function( id, selector, importance ) {
@@ -559,6 +660,7 @@
 
 		_.each( positions, function( position ) {
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][border_radius_' + position + '_left]',
 				'tt-font-' + id + '-border-' + position + '-left-radius',
 				selector,
@@ -567,6 +669,7 @@
 				true
 			);
 			preview.setStyle(
+				id,
 				'tt_font_theme_options[' + id + '][border_radius_' + position + '_right]',
 				'tt-font-' + id + '-border-' + position + '-right-radius',
 				selector,
@@ -589,11 +692,12 @@
 	 * @param {string} 	importance 	Whether to force styles using !important.
 	 *
 	 * @since 1.3.4
-	 * @version 1.3.9
+	 * @version 1.4.1
 	 * 
 	 */
 	preview.setDisplay = function( id, selector, importance ) {
 		preview.setStyle(
+			id,
 			'tt_font_theme_options[' + id + '][display]',
 			'tt-font-' + id + '-display',
 			selector,

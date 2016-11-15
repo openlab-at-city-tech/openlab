@@ -138,7 +138,7 @@ class Mappress_Controls {
 		// Add delete and sort columns
 		$headers[] = '';
 		foreach($rows as $i => $row)
-			$rows[$i][] = "<span data-mapp-action='remove' title='" . __('Delete', 'mappress') . "'>X</span>";
+			$rows[$i][] = "<span data-mapp-action='remove' title='" . __('Delete', 'mappress-google-maps-for-wordpress') . "'>X</span>";
 
 		// Last row is the template
 		$lastrow = count($rows) - 1;
@@ -146,14 +146,14 @@ class Mappress_Controls {
 		unset($rows[$lastrow]);
 
 		// Hide table if empty
-		if ($lastrow <= 1)
+		if ($lastrow < 1)
 			$args['style'] = 'display:none';
 
 		// Generate table
 		$html .= self::table($headers, $rows, $args);
 
 		// Add new row button
-		$html .= "<button type='button' class='button' data-mapp-action='add'>" . __('Add', 'mappress') . "</button>";
+		$html .= "<button type='button' class='button' data-mapp-action='add'>" . __('Add', 'mappress-google-maps-for-wordpress') . "</button>";
 
 		// Add template
 		$html .= "<script type='text/template'><tr>";
@@ -200,9 +200,9 @@ class Mappress_Controls {
 	// Pseudo-combobox
 	static function combobox($name, $data, $selected = '', $args = '') {
 		$html = Mappress_Controls::select($name, $data, $selected, $args);
-		$html .= " <a class='mapp-combo-new' href='#'>" . __('New', 'mappress') . "</a>";
+		$html .= " <a class='mapp-combo-new' href='#'>" . __('New', 'mappress-google-maps-for-wordpress') . "</a>";
 		$html .= Mappress_Controls::input($name, '', array('style' => 'display:none', 'disabled' => true));
-		$html .= " <a class='mapp-combo-cancel' href='#' style='display:none'>" . __('Cancel') . "</a>";
+		$html .= " <a class='mapp-combo-cancel' href='#' style='display:none'>" . __('Cancel', 'mappress-google-maps-for-wordpress') . "</a>";
 		return "<div class='mapp-combobox'>$html</div>";
 	}
 
@@ -223,6 +223,36 @@ class Mappress_Controls {
 		$name = esc_attr($name);
 		$html = "<input type='hidden' data-mapp-iconpicker name='$name' value='$value' $atts />";
 		return $html;
+	}
+
+	static function get_post_types() {
+		$results = array();
+		$post_types = get_post_types(array('show_ui' => true), 'objects');
+		unset($post_types['attachment']);
+		foreach($post_types as $type => $obj)
+			$results[$type] = $obj->label;
+		return $results;
+	}
+
+	static function get_taxonomies() {
+		$results = array();
+		$tax_objs = get_taxonomies(array('public' => true), 'objects');
+		unset($tax_objs['post_format']);
+		foreach($tax_objs as $tax_obj)
+			$results[$tax_obj->name] = $tax_obj->label;
+		return $results;
+	}
+
+	static function get_terms($taxonomy) {
+		$results = array();
+		$terms = get_terms($taxonomy, array('hide_empty' => false));
+		if (is_array($terms)) {
+			$walker = new Mappress_Walker();
+			$walk = $walker->walk($terms, 0, array('indent' => true));
+			if (is_array($walk))
+				$results = $walk;
+		}
+		return $results;
 	}
 }
 

@@ -263,7 +263,7 @@ abstract class Calendar {
 						$this->set_events( $feed->events );
 						if ( 'use_calendar' == get_post_meta( $this->id, '_feed_timezone_setting', true ) ) {
 							$this->timezone = $feed->timezone;
-							$this->set_start( $feed->timezone );
+							$this->set_start();
 						}
 					} elseif ( is_string( $feed->events ) ) {
 						$this->errors[] = $feed->events;
@@ -448,7 +448,23 @@ abstract class Calendar {
 		if ( empty( $template ) ) {
 			$template = isset( $this->post->post_content ) ? $this->post->post_content : '';
 		}
-		$this->events_template = wpautop( wp_kses_post( trim( $template ) ) );
+
+		// TODO: Removed wpautop() call.
+
+		$event_formatting = get_post_meta( $this->id, '_event_formatting', true );
+
+		switch( $event_formatting ) {
+			case 'none':
+				$this->events_template =  wp_kses_post( trim( $template ) );
+				break;
+			case 'no_linebreaks':
+				$this->events_template =  wpautop( wp_kses_post( trim( $template ) ), false );
+				break;
+			default:
+				$this->events_template =  wpautop( wp_kses_post( trim( $template ) ), true );
+		}
+
+		//$this->events_template =  wpautop( wp_kses_post( trim( $template ) ), true );
 	}
 
 	/**
@@ -461,6 +477,11 @@ abstract class Calendar {
 	public function set_timezone( $tz = '' ) {
 
 		$site_tz = esc_attr( simcal_get_wp_timezone() );
+
+		if ( $this->feed === 'grouped-calendars' ) {
+			$this->timezone = $site_tz;
+			return;
+		}
 
 		if ( empty( $tz ) ) {
 
@@ -505,7 +526,7 @@ abstract class Calendar {
 
 			if ( 'use_custom' == $date_format_option ) {
 				$date_format_custom = esc_attr( get_post_meta( $this->id, '_calendar_date_format', true ) );
-			} elseif ( 'use_custom_php' ) {
+			} elseif ( 'use_custom_php' == $date_format_option ) {
 				$date_format_custom = esc_attr( get_post_meta( $this->id, '_calendar_date_format_php', true ) );
 			}
 		}
@@ -532,7 +553,7 @@ abstract class Calendar {
 
 			if ( 'use_custom' == $time_format_option ) {
 				$time_format_custom = esc_attr( get_post_meta( $this->id, '_calendar_time_format', true ) );
-			} elseif ( 'use_custom_php' ) {
+			} elseif ( 'use_custom_php' == $time_format_option ) {
 				$time_format_custom = esc_attr( get_post_meta( $this->id, '_calendar_time_format_php', true ) );
 			}
 		}
@@ -598,7 +619,7 @@ abstract class Calendar {
 		$this->start = Carbon::now( $this->timezone )->getTimestamp();
 
 		$calendar_begins = esc_attr( get_post_meta( $this->id, '_calendar_begins', true ) );
-		$nth = max( absint( get_post_meta( $this->id, '_calendar_begins_nth' ) ), 1 );
+		$nth = max( absint( get_post_meta( $this->id, '_calendar_begins_nth', true ) ), 1 );
 
 		if ( 'today' == $calendar_begins ) {
 			$this->start = Carbon::today( $this->timezone )->getTimestamp();
@@ -632,7 +653,7 @@ abstract class Calendar {
 			$this->start = Carbon::today( $this->timezone )->addYears( $nth )->startOfYear()->getTimeStamp();
 		} elseif ( 'custom_date' == $calendar_begins ) {
 			if ( $date = get_post_meta( $this->id, '_calendar_begins_custom_date', true ) ) {
-				$this->start = Carbon::createFromFormat( 'Y-m-d', esc_attr( $date ) )->setTimezone( $this->timezone )->getTimestamp();
+				$this->start = Carbon::createFromFormat( 'Y-m-d', esc_attr( $date ), $this->timezone )->setTimezone( $this->timezone )->startOfDay()->getTimestamp();
 			}
 		}
 	}
@@ -711,6 +732,51 @@ abstract class Calendar {
 	}
 
 	/**
+	 * Get "Add to Google Calendar" link.
+	 *
+	 * @since  3.1.3
+	 *
+	 * @param  Event  $event    Event object to be parsed.
+	 *
+	 * @return string
+	 */
+	public function get_add_to_gcal_url( Event $event ) {
+		$base_url = 'https://calendar.google.com/calendar/render';
+		// Was https://www.google.com/calendar/render
+
+		// Start & end date/time in specific format for GCal.
+		// &dates=20160504T110000/20160504T170000
+		// No "Z"s tacked on to preserve source timezone.
+		// All day events remove time component, but need to add a full day to show up correctly.
+		$is_all_day     = ( true == $event->whole_day );
+		$gcal_dt_format = $is_all_day ? 'Ymd' : 'Ymd\THi00';
+		$gcal_begin_dt  = $event->start_dt->format( $gcal_dt_format );
+		$end_dt_raw     = $is_all_day ? $event->end_dt->addDay() : $event->end_dt;
+		$gcal_end_dt    = $end_dt_raw->format( $gcal_dt_format );
+		$gcal_dt_string = $gcal_begin_dt . '/' . $gcal_end_dt;
+
+		// "details" (description) should work even when blank.
+		// "location" (address) should work with an address, just a name or blank.
+		$params = array(
+			'action'   => 'TEMPLATE',
+			'text'     => urlencode( strip_tags( $event->title ) ),
+			'dates'    => $gcal_dt_string,
+			'details'  => urlencode( $event->description ),
+			'location' => urlencode( $event->start_location['address'] ),
+			'trp'      => 'false',
+		);
+
+		// "ctz" (timezone) arg should be included unless all-day OR 'UTC'.
+		if ( ! $is_all_day && ( 'UTC' !== $event->timezone ) ) {
+			$params['ctz'] = urlencode( $event->timezone );
+		}
+
+		$url = add_query_arg( $params, $base_url );
+
+		return $url;
+	}
+
+	/**
 	 * Output the calendar markup.
 	 *
 	 * @since 3.0.0
@@ -754,20 +820,20 @@ abstract class Calendar {
 									. 'data-events-last="'    . $this->latest_event . '"'
 									. '>';
 
-				date_default_timezone_set( $this->timezone );
 				do_action( 'simcal_calendar_html_before', $this->id );
 
 				$view->html();
 
 				do_action( 'simcal_calendar_html_after', $this->id );
-				date_default_timezone_set( $this->site_timezone );
 
-				$settings = get_option( 'simple-calendar_settings_calendars' );
-				$poweredby = isset( $settings['poweredby']['opt_in'] ) ? $settings['poweredby']['opt_in'] : '';
+				//$settings = get_option( 'simple-calendar_settings_calendars' );
+				$poweredby = get_post_meta( $this->id, '_poweredby', true );
 
 				if ( 'yes' == $poweredby ) {
 					$align = is_rtl() ? 'left' : 'right';
-					echo '<small class="simcal-powered simcal-align-' . $align .'">Powered by <a href="https://simplecalendar.io" target="_blank">Simple Calendar</a></small>';
+					echo '<small class="simcal-powered simcal-align-' . $align .'">' .
+					     sprintf( __( 'Powered by <a href="%s" target="_blank">Simple Calendar</a>', 'google-calendar-events' ), simcal_get_url( 'home' ) ) .
+					     '</small>';
 				}
 
 				echo '</div>';

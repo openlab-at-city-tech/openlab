@@ -214,9 +214,10 @@ add_filter( 'after_setup_theme', 'p2_setup' );
 function p2_register_sidebar() {
 	register_sidebar( array(
 		'name' => __( 'Sidebar', 'p2' ),
+		'id'   => 'sidebar-1',
 	) );
 }
-add_filter( 'widgets_init', 'p2_register_sidebar' );
+add_action( 'widgets_init', 'p2_register_sidebar' );
 
 function p2_background_color() {
 	$background_color = get_option( 'p2_background_color' );
@@ -335,10 +336,10 @@ function p2_the_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
 	if ( '' == $title )
 		return false;
 
-	// Avoid processing the title if it's the very first part of the post content
-	// Which is the case with most "status" posts
+	// Avoid processing the title if it's the very first part of the post content,
+	// which is the case with most "status" posts
 	$pos = strpos( $content, $title );
-	if ( false === $pos || 0 < $pos ) {
+	if ( '' == get_post_format() || false === $pos || 0 < $pos ) {
 		if ( is_single() )
 			$out = $before . $t . $after;
 		else
@@ -685,7 +686,7 @@ function p2_get_supported_post_formats( $type = 'all' ) {
 function p2_is_iphone() {
 	$output = false;
 
-	if ( ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'iPad' ) ) || isset( $_GET['iphone'] ) && $_GET['iphone'] )
+	if ( ( isset( $_SERVER['HTTP_USER_AGENT'] ) && strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'iPad' ) ) || isset( $_GET['iphone'] ) && $_GET['iphone'] )
 		$output = true;
 
 	$output = (bool) apply_filters( 'p2_is_iphone', $output );

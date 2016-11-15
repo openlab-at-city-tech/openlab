@@ -171,11 +171,11 @@
 
 		}
 
-		$( te ).on( "tribe_ev_runAjax", function() {
+		$( te ).on( 'tribe_ev_runAjax', function() {
 			tribe_events_day_ajax_post();
 		} );
 
-		$( te ).on( "tribe_ev_updatingRecurrence", function() {
+		$( te ).on( 'tribe_ev_updatingRecurrence', function() {
 			if ( ts.filter_cats ) {
 				td.cur_url = ( td.default_permalinks ) ? base_url + '=' + td.cur_date : base_url + td.cur_date + '/';
 			}
@@ -252,7 +252,9 @@
 				// @ifdef DEBUG
 				dbug && debug.time( 'Day View Ajax Timer' );
 				// @endif
+
 				$( te ).trigger( 'tribe_ev_ajaxStart' ).trigger( 'tribe_ev_dayView_AjaxStart' );
+
 				$( '#tribe-events-content .tribe-events-loop' ).tribe_spin();
 
 				$.post(
@@ -287,11 +289,23 @@
 							ts.page_title = $( '#tribe-events-header' ).data( 'title' );
 							document.title = ts.page_title;
 
-							if ( ts.do_string ) {
-								if(td.cur_url.indexOf('?') !== -1){
-									td.cur_url = td.cur_url.split("?")[0];
+							// @TODO: We need to D.R.Y. this assignment and the following if statement about shortcodes/do_string
+							// Ensure that the base URL is, in fact, the URL we want
+							td.cur_url = tf.get_base_url();
+
+							// we only want to add query args for Shortcodes and ugly URL sites
+							if (
+									$( '#tribe-events.tribe-events-shortcode' ).length
+									|| ts.do_string
+							) {
+								if ( -1 !== td.cur_url.indexOf( '?' ) ) {
+									td.cur_url = td.cur_url.split( '?' )[0];
 								}
+
 								td.cur_url = td.cur_url + '?' + ts.url_params;
+							}
+
+							if ( ts.do_string ) {
 								history.pushState( {
 									"tribe_date"  : ts.date,
 									"tribe_params": ts.params
@@ -308,6 +322,7 @@
 							tribe_day_add_classes();
 
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_dayView_AjaxSuccess' );
+							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_dayView_AjaxSuccess' );
 
 							// @ifdef DEBUG
 							dbug && debug.timeEnd( 'Day View Ajax Timer' );

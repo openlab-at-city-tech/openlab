@@ -83,8 +83,10 @@ window.p2 = window.p2 || {};
 		  cache: false
 		});
 
-		if(!window.location.href.match('#'))
+		// Only focus textarea if not not on Customizer and URL has no hash
+		if( ! window.location.href.match('#') && ! ( ( window.wp || {} ).customize instanceof Function) ) {
 			$('#posttext').focus();
+		}
 
 		// ------------------------------------------------
 		// Events

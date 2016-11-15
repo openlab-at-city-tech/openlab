@@ -4,7 +4,7 @@ Plugin Name: Easy Table
 Plugin URI: http://takien.com/
 Description: Create table in post, page, or widget in easy way.
 Author: Takien
-Version: 1.5.3
+Version: 1.6
 Author URI: http://takien.com/
 */
 
@@ -106,7 +106,7 @@ function __construct(){
 private function easy_table_base($return){
 	$easy_table_base = Array(
 				'name' 			=> 'Easy Table',
-				'version' 		=> '1.5.3',
+				'version' 		=> '1.6',
 				'plugin-domain'	=> 'easy-table'
 	);
 	return $easy_table_base[$return];
@@ -163,7 +163,9 @@ function easy_table_short_code($atts, $content="") {
 		'style'         => '', /*table inline style, since 1.0*/
 		'colalign'      => '', /*column align, ex: [table colalign="left|right|center"], @since 1.0*/
 		'colwidth'      => '', /*column width, ex: [table colwidth="100|200|300"], @since 1.0*/
-		'fixlinebreak'  => $this->option('fixlinebreak') /* fix linebreak on cell if terminator is not \n or \r @since 1.1.4 */
+		'fixlinebreak'  => $this->option('fixlinebreak'), /* fix linebreak on cell if terminator is not \n or \r @since 1.1.4 */
+		'exclude_row'   => '',
+		'exclude_col'   => '',
 	 ), $atts);
 	/**
 	* because clean_pre is deprecated since WordPress 3.4, then replace it manually
@@ -197,13 +199,23 @@ function easy_table_short_code_attr($atts){
 */
 private function csv_to_table($data,$args){
 	extract($args);
+	
+	/** check param value if it is expected to be boolean
+	* @since: 1.6 
+	**/
+	$th   = filter_var($th, FILTER_VALIDATE_BOOLEAN);
+	$trim = filter_var($trim, FILTER_VALIDATE_BOOLEAN);
+	if($tf !== 'last') {
+		$tf   = filter_var($tf, FILTER_VALIDATE_BOOLEAN);
+	}
+	
 	if( $this->option('csvfile') AND $file ){
 		/*$data = @file_get_contents($file);*/
 		/** use wp_remote_get
 		* @since 0.8
 		*/
 		$data = '';
-		$response = wp_remote_get($file);
+		$response = wp_remote_get( $file, array('sslverify'=>false) );
 		/**
 			notify if error reading file.
 			@since 0.9
@@ -237,6 +249,24 @@ private function csv_to_table($data,$args){
 	}
 	
 	if(empty($data)) return false;
+	
+	/** exclude row or col 
+	* @since: 1.6
+	**/
+	
+	 if( $exclude_row ) {
+		$exclude_row = explode(',',$exclude_row);
+			foreach( $exclude_row as $x_row ) {
+				if(isset($data[$x_row-1])) {
+					unset($data[$x_row-1]);
+				}
+			}
+	}
+	
+	if( $exclude_col ) {
+		$exclude_col = explode(',',$exclude_col);
+	}
+	
 	
 	$max_cols 	= count(max($data));
 
@@ -312,6 +342,15 @@ private function csv_to_table($data,$args){
 	
 	foreach($data as $k=>$cols){ $r++;
 		//$cols = array_pad($cols,$max_cols,'');
+		
+		// exclude cols, @since: 1.6 
+		if(is_array($exclude_col)) {
+			foreach( $exclude_col as $x_col ) {
+				if(isset($cols[$x_col-1])) {
+					unset($cols[$x_col-1]);
+				}
+			}
+		}
 		
 		$output .= (($r==$tfpos) AND $tf) ? (($tf=='last')?'</tbody>':'').'<tfoot>': '';
 		$output .= "\r\n".'<tr>';
@@ -976,12 +1015,14 @@ if(isset($_POST['test-easy-table-reset'])){
 <li><strong>tablesorter</strong>, <?php _e('default value','easy-table');?> <em>'false'</em></li>
 <li><strong>file</strong>, <?php _e('default value','easy-table');?> <em>'false'</em></li>
 <li><strong>sort</strong>, <?php _e('default value','easy-table');?> <em>''</em></li>
-<li class="new"><strong>trim</strong>, <?php _e('default value','easy-table');?> <em>false</em></li>
-<li class="new"><strong>style</strong>, <?php _e('default value','easy-table');?> <em>''</em></li>
-<li class="new"><strong>limit</strong>, <?php _e('default value','easy-table');?> <em>0</em></li>
-<li class="new"><strong>terminator</strong>, <?php _e('default value','easy-table');?> <em>\n</em></li>
-<li class="new"><strong>colalign</strong>, <?php _e('default value','easy-table');?> <em>''</em>, see example on the test area</li>
-<li class="new"><strong>colwidth</strong>, <?php _e('default value','easy-table');?> <em>''</em>, see example on the test area</li>
+<li><strong>trim</strong>, <?php _e('default value','easy-table');?> <em>false</em></li>
+<li><strong>style</strong>, <?php _e('default value','easy-table');?> <em>''</em></li>
+<li><strong>limit</strong>, <?php _e('default value','easy-table');?> <em>0</em></li>
+<li><strong>terminator</strong>, <?php _e('default value','easy-table');?> <em>\n</em></li>
+<li><strong>colalign</strong>, <?php _e('default value','easy-table');?> <em>''</em>, see example on the test area</li>
+<li><strong>colwidth</strong>, <?php _e('default value','easy-table');?> <em>''</em>, see example on the test area</li>
+<li><strong>exclude_row</strong>, <?php _e('default value','easy-table');?> <em>''</em>, comma separated value, ex: exclude_row="1,3,5"</li>
+<li><strong>exclude_col</strong>, <?php _e('default value','easy-table');?> <em>''</em>, comma separated value, ex: exclude_col="1,3,5"</li>
 </ol>
 <h3><?php printf('Example usage of %s parameter','sort','easy-table');?></h3>
 <p><em>sort</em> <?php _e('parameter is for initial sorting order. Value for each column separated by comma. See example below:','easy-table');?></p>

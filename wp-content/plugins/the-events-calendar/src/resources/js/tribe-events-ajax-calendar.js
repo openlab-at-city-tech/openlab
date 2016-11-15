@@ -28,7 +28,7 @@
 		var base_url = '/';
 
 		if ( 'undefined' !== typeof config.events_base ) {
-			base_url = config.events_base;
+			base_url =  $( '#tribe-events-header' ).data( 'baseurl' );
 		} else if ( $nav_link.length ) {
 			base_url = $nav_link.first().attr( 'href' ).slice( 0, -8 );
 		}
@@ -116,7 +116,7 @@
 			var $target = $( '.tribe-mobile-day[data-day="' + date + '"]' ),
 				$cell = $( '.tribe-events-calendar td[data-day="' + date + '"]' ),
 				$more = $cell.find( '.tribe-events-viewmore' ),
-				$events = $cell.find( '.hentry' );
+				$events = $cell.find( '.type-tribe_events' );
 
 			if ( $events.length ) {
 				$events
@@ -128,8 +128,7 @@
 
 							var data = $this.data( 'tribejson' );
 
-							$target
-								.append( tribe_tmpl( 'tribe_tmpl_month_mobile', data ) );
+							$target.append( tribe_tmpl( 'tribe_tmpl_month_mobile', data ) );
 						}
 
 					} );
@@ -174,7 +173,7 @@
 
 			var $today = $wrapper.find( '.tribe-events-present' ),
 				$mobile_trigger = $wrapper.find( '.mobile-trigger' ),
-				$tribe_grid = $wrapper.find( '#tribe-events-content > .tribe-events-calendar' );
+				$tribe_grid = $wrapper.find( document.getElementById( 'tribe-events-content' ) ).find( '.tribe-events-calendar'  );
 
 			if ( !$( '#tribe-mobile-container' ).length ) {
 				$( '<div id="tribe-mobile-container" />' ).insertAfter( $tribe_grid );
@@ -284,6 +283,7 @@
 				if ( td.default_permalinks ) {
 					td.cur_url = td.cur_url.split("?")[0];
 				}
+
 				ts.popping = false;
 				tf.pre_ajax( function() {
 					tribe_events_calendar_ajax_post();
@@ -358,11 +358,11 @@
 			tribe_events_bar_calendar_ajax_actions( e );
 		} );
 
-		$( te ).on( "tribe_ev_runAjax", function() {
+		$( te ).on( 'tribe_ev_runAjax', function() {
 			tribe_events_calendar_ajax_post();
 		} );
 
-		$( te ).on( "tribe_ev_updatingRecurrence", function() {
+		$( te ).on( 'tribe_ev_updatingRecurrence', function() {
 			ts.date = $( '#tribe-events-header' ).data( "date" );
 			if ( ts.filter_cats ) {
 				td.cur_url = $( '#tribe-events-header' ).data( 'baseurl' ) + ts.date + '/';
@@ -376,7 +376,6 @@
 			}
 			ts.popping = false;
 		} );
-
 		/**
 		 * @function tribe_events_calendar_ajax_post
 		 * @desc The ajax handler for month view.
@@ -402,11 +401,12 @@
 					eventDate: ts.date
 				};
 
-				if ( ts.category ) {
-					ts.params['tribe_event_category'] = ts.category;
-				}
-
 				ts.url_params = {};
+
+				if ( ts.category ) {
+					ts.params.tribe_event_category = ts.category;
+					ts.url_params.tribe_events_cat = ts.category;
+				}
 
 				if ( td.default_permalinks ) {
 					if( !ts.url_params.hasOwnProperty( 'post_type' ) ){
@@ -424,7 +424,7 @@
 
 				$( te ).trigger( 'tribe_ev_collectParams' );
 
-				if ( ts.pushcount > 0 || ts.filters || td.default_permalinks ) {
+				if ( ts.pushcount > 0 || ts.filters || td.default_permalinks || ts.category ) {
 					ts.do_string = true;
 					ts.pushstate = false;
 				}
@@ -483,8 +483,23 @@
 							ts.page_title = $( '#tribe-events-header' ).data( 'title' );
 							document.title = ts.page_title;
 
-							if ( ts.do_string ) {
+							// @TODO: We need to D.R.Y. this assignment and the following if statement about shortcodes/do_string
+							// Ensure that the base URL is, in fact, the URL we want
+							td.cur_url = tf.get_base_url();
+
+							// we only want to add query args for Shortcodes and ugly URL sites
+							if (
+									$( '#tribe-events.tribe-events-shortcode' ).length
+									|| ts.do_string
+							) {
+								if ( -1 !== td.cur_url.indexOf( '?' ) ) {
+									td.cur_url = td.cur_url.split( '?' )[0];
+								}
+
 								td.cur_url = td.cur_url + '?' + ts.url_params;
+							}
+
+							if ( ts.do_string ) {
 								history.pushState( {
 									"tribe_date"  : ts.date,
 									"tribe_params": ts.params
@@ -499,6 +514,7 @@
 							}
 
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_monthView_ajaxSuccess' );
+							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_monthView_ajaxSuccess' );
 
 							// @ifdef DEBUG
 							dbug && debug.timeEnd( 'Month View Ajax Timer' );

@@ -84,6 +84,11 @@ class Event {
 	public $uid = '';
 
 	/**
+	 * Event iCal ID
+	 */
+	public $ical_id = '';
+
+	/**
 	 * Event parent calendar id.
 	 *
 	 * @access public
@@ -245,6 +250,11 @@ class Event {
 			$this->uid = esc_attr( $event['uid'] );
 		}
 
+		// iCal ID
+		if ( ! empty( $event['ical_id'] ) ) {
+			$this->ical_id = esc_attr( $event['ical_id'] );
+		}
+
 		// Event source.
 		if ( ! empty( $event['source'] ) ) {
 			$this->source = esc_attr( $event['source'] );
@@ -308,13 +318,13 @@ class Event {
 
 		if ( ! empty( $event['end'] ) ) {
 			$this->end = is_numeric( $event['end'] ) ? intval( $event['end'] ): false;
+			if ( ! empty( $event['end_utc'] ) ) {
+				$this->end_utc = is_numeric( $event['end_utc'] ) ? intval( $event['end_utc'] ) : false;
+			}
 			if ( ! empty( $event['end_timezone'] ) ) {
 				$this->end_timezone = esc_attr( $event['end_timezone'] );
 			}
-			if ( ! empty( $event['end_utc'] ) ) {
-				$this->end_utc = is_numeric( $event['end_utc'] ) ? intval( $event['end_utc'] ) : false;
-				$this->end_dt = Carbon::createFromTimestamp( $this->end, $this->end_timezone );
-			}
+			$this->end_dt = Carbon::createFromTimestamp( $this->end, $this->end_timezone );
 			$end_location = isset( $event['end_location'] ) ? $event['end_location'] : '';
 			$this->end_location = $this->esc_location( $end_location );
 		}

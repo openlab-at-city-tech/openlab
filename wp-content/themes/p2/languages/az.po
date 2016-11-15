@@ -2,16 +2,23 @@
 # This file is distributed under the same license as the P2 package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2014-06-01 17:21:11+0000\n"
+"PO-Revision-Date: 2015-06-25 07:11:52+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/0.1\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: P2\n"
 
+#. Author URI of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
+msgid "https://wordpress.com/themes/"
+msgstr "https://wordpress.com/themes/"
+
+#. Description of the plugin/theme
+#: wp-content/themes/pub/p2/style.css
 msgid "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
-msgstr ""
+msgstr "Blogging at the speed of thought. P2 transforms a mild-mannered blog into a super-blog with features like inline comments, a posting form right on the homepage, inline editing of posts and comments, real-time updates, and much more."
 
 #: single.php:42
 msgctxt "Previous post link"
@@ -35,10 +42,6 @@ msgstr "Yazılar tapılmadı!"
 msgid "Search Results for: %s"
 msgstr " %s üçün Axtarışın Nəticələri:"
 
-#: post-form.php:75
-msgid "Post it"
-msgstr ""
-
 #: post-form.php:35
 msgid "Link"
 msgstr "Bağlantı"
@@ -50,11 +53,6 @@ msgstr "Bloq Yazısı"
 #: post-form.php:34
 msgid "Quote"
 msgstr "Sitat"
-
-#: index.php:28
-msgctxt "Month name"
-msgid "Updates from %s"
-msgstr ""
 
 #: index.php:47 single.php:35
 msgid "No posts yet!"
@@ -116,10 +114,6 @@ msgstr "Avatarlar ilə son şərhlər."
 msgid "No avatar"
 msgstr "Avatar yoxdur"
 
-#: inc/template-tags.php:175
-msgid "Whatcha up to?"
-msgstr ""
-
 #: inc/widgets/recent-comments.php:10
 msgid "P2 Recent Comments"
 msgstr "P2 Ən Son Şərhlər"
@@ -158,10 +152,6 @@ msgstr "Mətni gizlət"
 msgid "Update Options"
 msgstr "Parametrləri Yenilə"
 
-#: inc/options-page.php:180
-msgid "if empty, defaults to <strong>Whatcha up to?</strong>"
-msgstr ""
-
 #: inc/options-page.php:184
 msgid "Post Titles:"
 msgstr "Yazı Başlıqları:"
@@ -169,14 +159,6 @@ msgstr "Yazı Başlıqları:"
 #: inc/options-page.php:187
 msgid "Display titles"
 msgstr "Başlıqları göstər"
-
-#: inc/options-page.php:170
-msgid "Sidebar display:"
-msgstr ""
-
-#: inc/options-page.php:173
-msgid "Hide the Sidebar"
-msgstr ""
 
 #: inc/options-page.php:177
 msgid "Post prompt:"
@@ -218,10 +200,6 @@ msgstr "Rəng Seç"
 msgid "Background Image:"
 msgstr "Arxa Fon Təsviri:"
 
-#: inc/options-page.php:134
-msgid "Hide comment threads by default on all non-single views"
-msgstr ""
-
 #: inc/options-page.php:144
 msgid "Design Options"
 msgstr "Dizayn Parametrləri"
@@ -250,17 +228,9 @@ msgstr "P2 parametrləri"
 msgid "Functionality Options"
 msgstr "Funksional Parametrlər"
 
-#: inc/options-page.php:114
-msgid "Posting Access:"
-msgstr ""
-
 #: inc/options-page.php:95
 msgid "Options saved."
 msgstr "Parametrlər qeyd edildi."
-
-#: inc/options-page.php:68 inc/options-page.php:179
-msgid "Whatcha' up to?"
-msgstr ""
 
 #: inc/js.php:156
 msgid "This field is required."
@@ -270,25 +240,9 @@ msgstr "Bu sahə gərəklidir."
 msgid "Theme Options"
 msgstr "Mövzu parametrləri"
 
-#: inc/js.php:152
-msgid "Are you sure you would like to clear this comment? Its contents will be deleted."
-msgstr ""
-
-#: inc/js.php:153
-msgid "Oops! Looks like you are not logged in."
-msgstr ""
-
-#: inc/js.php:154
-msgid "Please log in again"
-msgstr ""
-
 #: inc/js.php:155
 msgid "Whoops! Looks like you are not connected to the server. P2 could not connect with WordPress."
 msgstr "Əfsuslar! Görünüşə görə demək olar ki serverə qoşula bilməmisiniz. P2 WordPress ilə bağlantı qura bilmədi."
-
-#: inc/js.php:145 inc/template-tags.php:254
-msgid "%1$s <em>on</em> %2$s"
-msgstr ""
 
 #: inc/js.php:150
 msgid "After typing @, type a name or username to find a member of this site"
@@ -306,7 +260,7 @@ msgstr "Bəhsləri göstər"
 msgid "Your comments or posts will be lost if you continue."
 msgstr "Davam etsəniz şərhləriniz ya da yazılarınız qeyd edilmədən silinəcək."
 
-#: inc/js.php:142 single.php:19
+#: attachment.php:18 inc/js.php:142 single.php:19
 msgid "Hide threads"
 msgstr "Bəhsləri gizlət"
 
@@ -410,31 +364,31 @@ msgstr "Menyu"
 msgid "Post"
 msgstr "Yazı"
 
-#: functions.php:717 index.php:24
+#: functions.php:718 index.php:24
 msgid "Page %s"
 msgstr "Səhifə %s"
 
-#: functions.php:618
+#: functions.php:619
 msgid "Proudly powered by %s."
 msgstr "%s qürurla təqdim edər."
 
-#: functions.php:618
+#: functions.php:619
 msgid "http://wordpress.org/"
 msgstr "http://wordpress.org/"
 
-#: functions.php:439
+#: functions.php:440
 msgid "Image Post"
 msgstr "Təsvir Yazısı"
 
-#: functions.php:575
+#: functions.php:576
 msgid "Log in to Reply"
 msgstr "Cavab yazmaq üçün daxil olun"
 
-#: functions.php:437
+#: functions.php:438
 msgid "Video Post"
 msgstr "Video Yazı"
 
-#: functions.php:398
+#: functions.php:399
 msgid "Your comment is awaiting moderation."
 msgstr "Şərhiniz yoxlama gözləyir."
 
@@ -446,49 +400,45 @@ msgstr "Yan menyu"
 msgid "Primary Menu"
 msgstr "Əsas menyu"
 
-#: footer.php:31
+#: footer.php:37
 msgid "Show/Hide help"
 msgstr "yardımı göstər/gizlət"
 
-#: footer.php:32
+#: footer.php:38
 msgid "shift + esc"
 msgstr "shift + esc"
 
-#: footer.php:32 inc/js.php:140
+#: footer.php:38 inc/js.php:140
 msgid "Cancel"
 msgstr "İmtina"
 
-#: footer.php:29
+#: footer.php:35
 msgid "Go to top"
 msgstr "yuxarı gedin"
 
-#: footer.php:30
+#: footer.php:36
 msgid "Go to login"
 msgstr "Girişə qayıt"
 
-#: footer.php:28
+#: footer.php:34
 msgid "Show/Hide comments"
 msgstr "Şərhləri göstər/gizlət"
 
-#: footer.php:24
+#: footer.php:30
 msgid "Next post/Next comment"
 msgstr "növbəti yazı/növbəti şərh"
 
-#: footer.php:25
+#: footer.php:31
 msgid "Previous post/Previous comment"
 msgstr "əvvəlki yazı/əvvəlki şərh"
 
-#: footer.php:23
+#: footer.php:29
 msgid "Compose new post"
 msgstr "yeni bir yazı yaradın"
 
-#: footer.php:15
+#: footer.php:17
 msgid "Theme: %1$s by %2$s."
 msgstr "Mövzu: %1$s tərəfindən %2$s."
-
-#: entry.php:117
-msgid "Toggle Comments"
-msgstr ""
 
 #: entry.php:122
 msgid "Pages:"
@@ -498,20 +448,17 @@ msgstr "Səhifələr:"
 msgid "<br />Tags:"
 msgstr "<br />Etiketlər:"
 
-#: entry.php:100
+#: attachment.php:112 entry.php:100
 msgid "Required fields are marked %s"
 msgstr "Gərəkli sahələr %s ilə işarələnmişdir"
 
-#: entry.php:46 entry.php:103 entry.php:107 footer.php:26 functions.php:366
-#: functions.php:463 functions.php:574 functions.php:596
+#: attachment.php:63 attachment.php:114 attachment.php:118 entry.php:46
+#: entry.php:103 entry.php:107 footer.php:32 functions.php:367
+#: functions.php:464 functions.php:575 functions.php:597
 msgid "Reply"
 msgstr "Cavabla"
 
-#: entry.php:18
-msgid "Posts by %1$s ( @%2$s )"
-msgstr ""
-
-#: entry.php:37 functions.php:383
+#: entry.php:37 functions.php:384
 msgid "Permalink"
 msgstr "Daimi bağlantı"
 
@@ -523,10 +470,6 @@ msgstr "Yeni şərhlər &rarr;"
 msgid "&larr; Older Comments"
 msgstr "&larr; Əski şərhlər"
 
-#: author.php:35
-msgid "Apologies, looks like this author does not have any posts."
-msgstr ""
-
 #: author.php:40 index.php:54 search.php:39 tag.php:39
 msgid "&larr; Older posts"
 msgstr "&larr; Əski Yazılar"
@@ -535,37 +478,28 @@ msgstr "&larr; Əski Yazılar"
 msgid "Newer posts &rarr;"
 msgstr "Yeni Yazılar &rarr;"
 
-#: author.php:22 index.php:33 search.php:16 single.php:21 tag.php:16
+#: attachment.php:20 author.php:22 index.php:33 search.php:16 single.php:21
+#: tag.php:16
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatura Qısayolları"
 
-#: author.php:19
-msgctxt "Author name"
-msgid "Updates from %s"
-msgstr ""
-
-#: author.php:22 index.php:33 search.php:16 tag.php:16
-msgid "Toggle Comment Threads"
-msgstr ""
-
-#: attachment.php:69
+#: attachment.php:103
 msgid "View file:"
 msgstr "Fayla bax:"
 
-#: attachment.php:70 entry.php:79 entry.php:88 inc/template-tags.php:109
+#: attachment.php:104 entry.php:79 entry.php:88 inc/template-tags.php:109
 msgid "(More ...)"
 msgstr "(Daha çox ...)"
 
-#: attachment.php:54 attachment.php:72 entry.php:51 footer.php:27
-#: functions.php:388
+#: attachment.php:68 entry.php:51 footer.php:33 functions.php:389
 msgid "Edit"
 msgstr "Redaktə et"
 
-#: attachment.php:45
+#: attachment.php:47
 msgid "Full size is %s pixels"
 msgstr "Tam ölçü %s piksel"
 
-#: attachment.php:48
+#: attachment.php:50
 msgid "Link to full-size image"
 msgstr "Tam ölçülü təsvirə bağlantı"
 

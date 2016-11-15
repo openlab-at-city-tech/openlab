@@ -122,11 +122,14 @@ class BP_Blogs_Component extends BP_Component {
 			'cache',
 			'actions',
 			'screens',
-			'classes',
 			'template',
 			'filters',
 			'functions',
 		);
+
+		if ( ! buddypress()->do_autoload ) {
+			$includes[] = 'classes';
+		}
 
 		if ( bp_is_active( 'activity' ) ) {
 			$includes[] = 'activity';
@@ -176,7 +179,15 @@ class BP_Blogs_Component extends BP_Component {
 		// Add 'Sites' to the main navigation.
 		$count    = (int) bp_get_total_blog_count_for_user();
 		$class    = ( 0 === $count ) ? 'no-count' : 'count';
-		$nav_text = sprintf( __( 'Sites <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), bp_core_number_format( $count )  );
+		$nav_text = sprintf(
+			/* translators: %s: Site count for the current user */
+			__( 'Sites %s', 'buddypress' ),
+			sprintf(
+				'<span class="%s">%s</span>',
+				esc_attr( $class ),
+				bp_core_number_format( $count )
+			)
+		);
 		$main_nav = array(
 			'name'                => $nav_text,
 			'slug'                => $slug,

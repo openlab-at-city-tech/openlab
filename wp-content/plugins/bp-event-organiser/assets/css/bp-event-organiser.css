@@ -1,0 +1,105 @@
+.bpeo-calendar-filter,
+#bpeo-ical-download {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 1em;
+}
+
+.bpeo-calendar-filter::after {
+	clear: both;
+	content: "";
+	display: table;
+}
+
+.bpeo-calendar-filter h3,
+.bpeo-calendar-filter h4,
+.bpeo-calendar-filter ul,
+#bpeo-ical-download h3,
+#bpeo-ical-download ul {
+	margin: 0;
+}
+
+.bpeo-calendar-filter-type {
+	float: left;
+	width: 40%;
+	margin-right: 5%;
+}
+
+.bpeo-calendar-filter-type ul {
+	list-style-type: none;
+}
+
+.bpeo-calendar-filter-type ul li {
+	margin-left: 0;
+}
+
+.bpeo-calendar-filter-type ul li input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+.bpeo-calendar-icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	margin-right: 10px;
+	border-bottom: 0px solid transparent;
+}
+
+/* Triangle */
+.bpeo-calendar-icon-author {
+	width: 0;
+	height: 0;
+	border-left: .5em solid transparent;
+	border-right: .5em solid transparent;
+	border-bottom-width: 1em;
+}
+
+.bpeo-calendar-filter-empty {
+	display: none;
+}
+
+.bpeo-event-hidden {
+	display: none;
+}
+
+/* iCal link */
+.bpeo-ical-link {
+	text-decoration: none;
+}
+
+.bpeo-ical-link span.icon:before {
+	content: "\f508";
+	color: #aaa;
+	font-family: dashicons;
+	font-size: 18px;
+	line-height: 1.5;
+	padding-right: 5px;
+	vertical-align: bottom;
+}
+
+#bpeo-ical-download {
+	margin-top: 1em;
+}
+
+#bpeo-ical-download li {
+	list-style: none;
+	margin-left: 0;
+}
+
+/* Upcoming Events list */
+ul.bpeo-upcoming-events {
+	list-style-type: none;
+}
+
+ul.bpeo-upcoming-events li {
+	margin-bottom: 1em;
+}
+
+.bpeo-upcoming-event-datetime {
+	float: left;
+	width: 180px;
+}
+
+.bpeo-upcoming-event-title {
+	font-weight: bold;
+}

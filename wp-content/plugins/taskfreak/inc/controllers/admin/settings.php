@@ -11,6 +11,10 @@ TFWP settings
 
 $this->options = get_option('tfk_options');
 
+// for compat with versions prior to 1.1.0
+if (!isset($this->options['prio_size']))
+    $this->options['prio_size'] = 0;
+
 $this->message = '';
 
 if (isset($_POST['opt_save']) && check_admin_referer('tfk_settings')) {
@@ -22,6 +26,7 @@ if (isset($_POST['opt_save']) && check_admin_referer('tfk_settings')) {
 	$this->options['format_date'] = $_POST['format_date'];
 	$this->options['format_time'] = $_POST['format_time'];
 	$this->options['proximity'] = intval($_POST['proximity']);
+	$this->options['prio_size'] = intval($_POST['prio_size']);
 	$this->options['access_read'] = $_POST['access_read'];
 	$this->options['access_comment'] = $_POST['access_comment'];
 	$this->options['access_post'] = $_POST['access_post'];

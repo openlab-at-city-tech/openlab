@@ -17,7 +17,8 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Handles the display of the profile page by loading the correct template file.
  *
- * @uses bp_core_load_template() Looks for and loads a template file within the current member theme (folder/filename).
+ * @since 1.0.0
+ *
  */
 function xprofile_screen_display_profile() {
 	$new = isset( $_GET['new'] ) ? $_GET['new'] : '';
@@ -45,8 +46,8 @@ function xprofile_screen_display_profile() {
  * Handles the display of the profile edit page by loading the correct template file.
  * Also checks to make sure this can only be accessed for the logged in users profile.
  *
- * @uses bp_is_my_profile() Checks to make sure the current user being viewed equals the logged in user.
- * @uses bp_core_load_template() Looks for and loads a template file within the current member theme (folder/filename).
+ * @since 1.0.0
+ *
  */
 function xprofile_screen_edit_profile() {
 
@@ -203,8 +204,8 @@ function xprofile_screen_edit_profile() {
 /**
  * Handles the uploading and cropping of a user avatar. Displays the change avatar page.
  *
- * @uses bp_is_my_profile() Checks to make sure the current user being viewed equals the logged in user.
- * @uses bp_core_load_template() Looks for and loads a template file within the current member theme (folder/filename).
+ * @since 1.0.0
+ *
  */
 function xprofile_screen_change_avatar() {
 
@@ -295,8 +296,6 @@ function xprofile_screen_change_avatar() {
 
 /**
  * Displays the change cover image page.
- *
- * @package BuddyPress XProfile
  *
  * @since 2.4.0
  */

@@ -10,8 +10,10 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-require dirname( __FILE__ ) . '/classes/class-bp-messages-box-template.php';
-require dirname( __FILE__ ) . '/classes/class-bp-messages-thread-template.php';
+if ( ! buddypress()->do_autoload ) {
+	require dirname( __FILE__ ) . '/classes/class-bp-messages-box-template.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-messages-thread-template.php';
+}
 
 /**
  * Retrieve private message threads for display in inbox/sentbox/notices.
@@ -302,10 +304,12 @@ function bp_message_thread_view_link( $thread_id = 0 ) {
 		 * Filters the permalink of a particular thread.
 		 *
 		 * @since 1.0.0
+		 * @since 2.6.0 Added the `$thread_id` parameter.
 		 *
-		 * @param string $value permalink of a particular thread.
+		 * @param string $value     Permalink of a particular thread.
+		 * @param int    $thread_id ID of the thread.
 		 */
-		return apply_filters( 'bp_get_message_thread_view_link', trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/view/' . $thread_id ) );
+		return apply_filters( 'bp_get_message_thread_view_link', trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/view/' . $thread_id ), $thread_id );
 	}
 
 /**
@@ -544,10 +548,12 @@ function bp_message_thread_total_count( $thread_id = false ) {
 		 * Filters the current thread's total message count.
 		 *
 		 * @since 2.2.0
+		 * @since 2.6.0 Added the `$thread_id` parameter.
 		 *
-		 * @param int $count Current thread total message count.
+		 * @param int $count     Current thread total message count.
+		 * @param int $thread_id ID of the queried thread.
 		 */
-		return apply_filters( 'bp_get_message_thread_total_count', $count );
+		return apply_filters( 'bp_get_message_thread_total_count', $count, $thread_id );
 	}
 
 /**
@@ -575,6 +581,7 @@ function bp_message_thread_total_and_unread_count( $thread_id = false ) {
 		$unread = bp_get_message_thread_unread_count( $thread_id );
 
 		return sprintf(
+			/* translators: 1: total number, 2: accessibility text: number of unread messages */
 			'<span class="thread-count">(%1$s)</span> <span class="bp-screen-reader-text">%2$s</span>',
 			number_format_i18n( $total ),
 			sprintf( _n( '%d unread', '%d unread', $unread, 'buddypress' ), number_format_i18n( $unread ) )
@@ -676,8 +683,10 @@ function bp_message_thread_avatar( $args = '' ) {
 		 * Filters the avatar for the last sender in the current message thread.
 		 *
 		 * @since 1.0.0
+		 * @since 2.6.0 Added the `$r` parameter.
 		 *
 		 * @param string $value User avatar string.
+		 * @param array  $r     Array of parsed arguments.
 		 */
 		return apply_filters( 'bp_get_message_thread_avatar', bp_core_fetch_avatar( array(
 			'item_id' => $messages_template->thread->last_sender_id,
@@ -687,7 +696,7 @@ function bp_message_thread_avatar( $args = '' ) {
 			'class'   => $r['class'],
 			'width'   => $r['width'],
 			'height'  => $r['height'],
-		) ) );
+		) ), $r );
 	}
 
 /**
@@ -777,7 +786,10 @@ function bp_message_search_form() {
 	ob_start(); ?>
 
 	<form action="" method="get" id="search-message-form">
-		<label for="messages_search" class="bp-screen-reader-text"><?php esc_html_e( 'Search Messages', 'buddypress' ); ?></label>
+		<label for="messages_search" class="bp-screen-reader-text"><?php
+			/* translators: accessibility text */
+			esc_html_e( 'Search Messages', 'buddypress' );
+		?></label>
 		<input type="text" name="s" id="messages_search"<?php echo $search_placeholder . $search_value; ?> />
 		<input type="submit" class="button" id="messages_search_submit" name="messages_search_submit" value="<?php esc_html_e( 'Search', 'buddypress' ); ?>" />
 	</form>
@@ -919,10 +931,10 @@ function bp_messages_content_value() {
 function bp_messages_options() {
 ?>
 
-	<label for="message-type-select" class="bp-screen-reader-text">
-		<?php _e( 'Select:', 'buddypress' ) ?>
-	 </label>
-
+	<label for="message-type-select" class="bp-screen-reader-text"><?php
+		/* translators: accessibility text */
+		_e( 'Select:', 'buddypress' );
+	?></label>
 	<select name="message-type-select" id="message-type-select">
 		<option value=""><?php _e( 'Select', 'buddypress' ); ?></option>
 		<option value="read"><?php _ex('Read', 'Message dropdown filter', 'buddypress') ?></option>
@@ -949,7 +961,9 @@ function bp_messages_options() {
  */
 function bp_messages_bulk_management_dropdown() {
 	?>
-	<label class="bp-screen-reader-text" for="messages-select"><?php _e( 'Select Bulk Action', 'buddypress' ); ?></label>
+	<label class="bp-screen-reader-text" for="messages-select"><?php
+		_e( 'Select Bulk Action', 'buddypress' );
+	?></label>
 	<select name="messages_bulk_action" id="messages-select">
 		<option value="" selected="selected"><?php _e( 'Bulk Actions', 'buddypress' ); ?></option>
 		<option value="read"><?php _e( 'Mark read', 'buddypress' ); ?></option>
@@ -999,7 +1013,6 @@ function bp_messages_is_active_notice() {
  *
  * @since 1.0.0
  * @deprecated 1.6.0
- * @uses bp_get_message_is_active_notice()
  * @return bool
  */
 function bp_message_is_active_notice() {
@@ -1013,7 +1026,6 @@ function bp_message_is_active_notice() {
 	 *
 	 * @since 1.0.0
 	 * @deprecated 1.6.0
-	 * @uses bp_messages_is_active_notice()
 	 */
 	function bp_get_message_is_active_notice() {
 
@@ -1210,7 +1222,6 @@ function bp_message_activate_deactivate_text() {
  *
  * @since 1.5.0
  *
- * @uses bp_get_messages_slug()
  */
 function bp_messages_slug() {
 	echo bp_get_messages_slug();
@@ -1299,7 +1310,6 @@ function bp_send_private_message_link() {
  *
  * @since 1.2.6
  *
- * @uses bp_get_send_message_button()
  */
 function bp_send_private_message_button() {
 	echo bp_get_send_message_button();
@@ -1802,8 +1812,10 @@ function bp_the_thread_message_sender_avatar( $args = '' ) {
 		 * Filters the avatar for the current message sender.
 		 *
 		 * @since 1.1.0
+		 * @since 2.6.0 Added the `$r` parameter.
 		 *
 		 * @param string $value <img> tag containing the avatar value.
+		 * @param array  $r     Array of parsed arguments.
 		 */
 		return apply_filters( 'bp_get_the_thread_message_sender_avatar_thumb', bp_core_fetch_avatar( array(
 			'item_id' => $thread_template->message->sender_id,
@@ -1811,7 +1823,7 @@ function bp_the_thread_message_sender_avatar( $args = '' ) {
 			'width'   => $r['width'],
 			'height'  => $r['height'],
 			'alt'     => bp_core_get_user_displayname( $thread_template->message->sender_id )
-		) ) );
+		) ), $r );
 	}
 
 /**
@@ -1944,7 +1956,6 @@ function bp_the_thread_message_date_sent() {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @uses strtotime() To convert the message string into a usable timestamp.
 	 *
 	 * @return int
 	 */

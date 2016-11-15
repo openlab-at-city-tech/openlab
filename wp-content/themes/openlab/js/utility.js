@@ -10,6 +10,8 @@
         newMembers: {},
         newMembersHTML: {},
         protect: 0,
+        mapCheck: {},
+        uiCheck: {},
         selectDisplay: {},
         customSelectHTML: '',
         init: function () {
@@ -19,6 +21,17 @@
             }
             OpenLab.utility.adjustLoginBox();
             OpenLab.utility.sliderFocusHandler();
+            OpenLab.utility.eventValidation();
+            OpenLab.utility.refreshActivity();
+
+            //EO Calendar JS filtering
+            if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
+                wp.hooks.addFilter('eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering);
+            }
+
+            //BP EO Editor tweaks
+            //doing this client-side for now
+            OpenLab.utility.BPEOTweaks();
 
         },
         detectZoom: function () {
@@ -66,6 +79,223 @@
             }
 
         },
+        eventValidation: function () {
+
+            var eventPublish = $('.action-events #publish');
+            var groupMetaBox = $('#bp_event_organiser_metabox .inside');
+            var eventDetailMetaBox = $('#eventorganiser_detail .inside');
+
+            if (eventPublish.length) {
+
+                eventPublish.on('click', function (e) {
+
+                    //can't submit an event without a group selection
+                    var groupSelection = $('#bp_event_organiser_metabox .select2-selection__rendered .select2-selection__choice');
+
+                    if (!groupSelection.length) {
+                        e.preventDefault();
+
+                        var message = '<div class="bp-template-notice error">Events must be associated with at least one group.</div>';
+                        groupMetaBox.prepend(message);
+                    } else {
+                        groupMetaBox.find('.bp-template-notice').remove();
+                    }
+
+                    //can't submit an event if the end time is *before* the start time (or vice versa)
+                    var rawStartTime = eventDetailMetaBox.find('#eo-start-time').val();
+                    var rawStartDate = eventDetailMetaBox.find('#eo-start-date').val();
+                    var rawEndTime   = eventDetailMetaBox.find('#eo-end-time').val();
+                    var rawEndDate   = eventDetailMetaBox.find('#eo-end-date').val();
+
+		    var startTime = OpenLab.utility.buildTime( rawStartDate, rawStartTime );
+		    var endTime   = OpenLab.utility.buildTime( rawEndDate, rawEndTime );
+                    
+                    if (startTime > endTime) {
+                        e.preventDefault();
+                        var message = '<div class="bp-template-notice error">Start Time must be earlier than the End Time.</div>';
+                        
+                        //clean up first before adding new error message
+                        eventDetailMetaBox.find('.bp-template-notice').remove();
+                        eventDetailMetaBox.prepend(message);
+                    } else {
+                        eventDetailMetaBox.find('.bp-template-notice').remove();
+                    }
+
+                });
+
+            }
+
+        },
+        venueMapControl: function () {
+
+            var latCheck = $('#eo_venue_Lat');
+            var venueMap = $('#venuemap');
+
+            //if there is no venue present, time to quit
+            if (typeof eovenue === 'undefined' && !venueMap.length) {
+                return;
+            }
+
+            //on initial load, hide map if we have no LatLng values
+            if (latCheck.val() === 'NaN' || parseInt(latCheck.val()) === 0) {
+                venueMap.css('display', 'none');
+            }
+
+            OpenLab.utility.protect++;
+
+            //going to use an interval to pick up on the map obj
+            if (typeof eovenue.maps !== 'undefined' && Object.keys(eovenue.maps).length > 0) {
+
+                //saftey first
+                clearTimeout(OpenLab.utility.menuCheck);
+
+                eovenue.maps.venuemap.map.addListener('center_changed', function () {
+                    if (latCheck.val() === 'NaN' || parseInt(latCheck.val()) === 0) {
+                        venueMap.css('display', 'none');
+                    } else {
+                        venueMap.css('display', 'block');
+                    }
+
+                });
+
+            } else {
+
+                if (OpenLab.utility.protect < 2000) {
+                    OpenLab.utility.mapCheck = setTimeout(OpenLab.utility.venueMapControl(), 50);
+                }
+
+            }
+
+        },
+        venueDropdownControl: function () {
+
+            var dropdownSelector = $('#venue_select');
+
+            OpenLab.utility.protect++;
+
+            if (dropdownSelector.length) {
+
+                var comboBoxSelector = $('#venue_select.ui-combobox-input');
+
+                if (comboBoxSelector.length) {
+
+                    //safety first
+                    clearTimeout(OpenLab.utility.uiCheck);
+
+                    comboBoxSelector.on("autocompletesearch", function (event, ui) {
+
+                        event.preventDefault();
+
+                    });
+
+                } else {
+
+                    if (OpenLab.utility.protect < 2000) {
+                        OpenLab.utility.uiCheck = setTimeout(OpenLab.utility.venueDropdownControl(), 50);
+                    }
+
+                }
+            }
+
+        },
+        convertTimeToNum: function (time) {
+            var hoursMinutes = time.split(/[.:]/);
+            var hours = parseInt(hoursMinutes[0], 10);
+
+            var partOfDay = 0;
+
+            if (hoursMinutes[1].indexOf('pm') !== -1) {
+                partOfDay = 12;
+            }
+
+            var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+
+            return partOfDay + hours + minutes / 60;
+        },
+	buildTime: function( date, time ) {
+	    var d = new Date();
+	    var dateParts = date.split( '-' );
+	    d.setFullYear( dateParts[2] );
+	    d.setMonth( dateParts[0] );
+	    d.setDate( dateParts[1] );
+
+	    var timeParts = time.split( /[.:]/ );
+	    var hour = parseInt( timeParts[0] );
+	    var min = parseInt( timeParts[1].substr( 0, 2 ) );
+	    var amOrPm = timeParts[1].substr( 2 );
+            
+	    if ( 'pm' === amOrPm && hour < 12) {
+	        hour = hour + 12;
+	    } else if ('am' === amOrPm && hour === 12){
+                //clock strikes midnight
+                hour = 0;
+            }
+	    
+	    d.setHours( hour );
+	    d.setMinutes( min );
+
+	    return d;
+	},
+        calendarFiltering: function (args, calendar) {
+
+            if (calendar.defaultview === 'agendaWeek') {
+                args.scrollTime = '08:00:00';
+                args.viewRender = function (view, element) {
+                    OpenLab.utility.calendarScrollBarPadding(view, element);
+                }
+            } else {
+                args.viewRender = function (view, element) {
+                    OpenLab.utility.calendarScrollBarPadding(view, element);
+                }
+            }
+
+            return args;
+
+        },
+        calendarScrollBarPadding: function (view, element) {
+
+            if (view.name === 'agendaWeek') {
+
+                var width = OpenLab.utility.getScrollBarWidth();
+
+                console.log('width', width);
+
+                $('.eo-fullcalendar .fc-row.fc-widget-header').wrap("<div class='fc-header-wrapper'></div>");
+
+                $('.eo-fullcalendar .fc-day-grid, .eo-fullcalendar .fc-header-wrapper').css({
+                    'border-right': width + 'px #f3f3f3 solid'
+                });
+
+            }
+
+        },
+        getScrollBarWidth: function () {
+
+            var scrollDiv = document.createElement("div");
+            scrollDiv.className = "scrollbar-measure";
+            document.body.appendChild(scrollDiv);
+
+            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+            document.body.removeChild(scrollDiv);
+
+            return scrollbarWidth;
+
+        },
+        BPEOTweaks: function () {
+
+            var bpeo_metabox = $('#bp_event_organiser_metabox');
+
+            if (bpeo_metabox.length) {
+
+                var desc = ' <span class="bold">The event will appear in the OpenLab sitewide calendar unless one or more of the groups selected is private.</span>';
+
+                bpeo_metabox.find('.inside .bp_event_organiser_desc').append(desc);
+                bpeo_metabox.find('.hndle span').text('Display');
+
+            }
+
+        },
         setUpNewMembersBox: function (resize) {
 
             if (resize) {
@@ -93,6 +323,50 @@
                 OpenLab.utility.truncateOnTheFly(false, true);
 
             });
+        },
+        refreshActivity: function () {
+
+            var refreshActivity = $('#refreshActivity');
+
+            if (!refreshActivity.length) {
+                return;
+            }
+
+            var activityContainer = $('#whatsHappening');
+
+            //safety first
+            refreshActivity.off('click');
+
+            refreshActivity.on('click', function (e) {
+
+                e.preventDefault();
+                refreshActivity.addClass('fa-spin');
+
+                $.ajax({
+                    type: 'GET',
+                    url: ajaxurl,
+                    data:
+                            {
+                                action: 'openlab_ajax_return_latest_activity',
+                                nonce: localVars.nonce
+                            },
+                    success: function (data, textStatus, XMLHttpRequest)
+                    {
+                        refreshActivity.removeClass('fa-spin');
+                        if (data === 'exit') {
+                            //for right now, do nothing
+                        } else {
+                            activityContainer.html(data);
+                        }
+                    },
+                    error: function (MLHttpRequest, textStatus, errorThrown) {
+                        refreshActivity.removeClass('fa-spin');
+                        console.log(errorThrown);
+                    }
+                });
+
+            });
+
         },
         truncateOnTheFly: function (onInit, loadDelay) {
             if (onInit === undefined) {
@@ -135,8 +409,6 @@
 
                         //if the groupname is truncated, let's use that
                         var srprovider = thisElem.closest('.truncate-combo').find('[data-srprovider]');
-
-                        console.log('srprovider', srprovider);
 
                         if (srprovider.length) {
                             nameTrunc = srprovider.text();
@@ -210,41 +482,35 @@
             //custom select arrows
             if (resize) {
                 $('.custom-select-parent').html(OpenLab.utility.customSelectHTML);
-                $('.custom-select select').customSelect();
+                $('.custom-select select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: "100%",
+                    escapeMarkup: function (text) {
+                        return text;
+                    }
+                });
             } else {
                 OpenLab.utility.customSelectHTML = $('.custom-select-parent').html();
-                $('.custom-select select').customSelect();
-            }
-
-            OpenLab.utility.selectDisplay = setInterval(OpenLab.utility.checkDisplay, 50);
-
-        },
-        checkDisplay: function () {
-            if ($('.customSelect').length) {
-                OpenLab.utility.protect = 1000;
-            }
-
-            OpenLab.utility.protect++;
-
-            if (OpenLab.utility.protect > 1000) {
-                $('#sidebarCustomSelect').css({
-                    'visibility': 'visible',
-                    'opacity': 0
+                $('.custom-select select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: "100%",
+                    escapeMarkup: function (text) {
+                        return text;
+                    }
                 });
-                $('#sidebarCustomSelect').animate({
-                    opacity: 1
-                }, 700);
-                clearInterval(OpenLab.utility.selectDisplay);
-                OpenLab.utility.filterAjax();
             }
+
+            OpenLab.utility.filterAjax();
 
         },
         filterAjax: function () {
+
             //safety first
-            $('#school-select').unbind('change');
+            $('#schoolSelect select').off('select2:select');
 
             //ajax functionality for courses archive
-            $('#school-select').on('change', function () {
+            $('#schoolSelect select').on('select2:select', function () {
+
                 var school = $(this).val();
                 var nonce = $('#nonce-value').text();
 
@@ -253,8 +519,12 @@
                 $('#dept-select').addClass('processing');
                 $('#dept-select').html('<option value=""></option>');
 
-                if (school == "") {
-                    document.getElementById("dept-select").innerHTML = "";
+                if (school == "" || school == "school_all") {
+                    var defaultOption = '<option value="dept_all" selected="selected">All Departments</option>';
+                    $('#dept-select').html(defaultOption);
+                    $('#dept-select').trigger('render');
+                    $('#select2-dept-select-container').text('All Departments');
+                    $('#select2-dept-select-container').attr('title', 'All Departments');
                     return;
                 }
 
@@ -269,10 +539,13 @@
                             },
                     success: function (data, textStatus, XMLHttpRequest)
                     {
+                        console.log('school', school);
                         $('#dept-select').removeAttr('disabled');
                         $('#dept-select').removeClass('processing');
                         $('#dept-select').html(data);
-                        $('.custom-select select').trigger('render');
+                        $('#dept-select').trigger('render');
+                        $('#select2-dept-select-container').text('All Departments');
+                        $('#select2-dept-select-container').attr('title', 'All Departments');
                     },
                     error: function (MLHttpRequest, textStatus, errorThrown) {
                         console.log(errorThrown);
@@ -322,6 +595,12 @@
             toggle_workshop_meeting_items();
         });
         toggle_workshop_meeting_items();
+
+        // Move the contact form output field to the bottom of the form.
+        var contact_us_response_output = jQuery('.wpcf7-response-output');
+        if (contact_us_response_output.length > 0) {
+            contact_us_response_output.appendTo(contact_us_response_output.closest('form'));
+        }
 
         $other_details = jQuery('#other-details');
         $reason_for_request = jQuery('#reason-for-request');
@@ -425,6 +704,8 @@
         $('html').removeClass('page-loading');
         OpenLab.utility.detectZoom();
         OpenLab.utility.customSelects(false);
+        OpenLab.utility.venueMapControl();
+        OpenLab.utility.venueDropdownControl();
 
         //setting equal rows on homepage group list
         equal_row_height();
@@ -438,7 +719,28 @@
                 playPause: false,
                 height: '295px',
                 navigation: false,
-                navigationHover: false
+                navigationHover: false,
+                onLoaded: function () {
+
+                    var cameraImages = $('.camera_wrap .camera_target');
+                    var cameraSource = $('.camera_src');
+
+                    //have to do this because on first load, the first image is not
+                    //actually 'loaded' per se
+                    if (!cameraImages.hasClass('fully-loaded')) {
+
+                        cameraImages.addClass('fully-loaded');
+                        cameraImages.find('.cameraCont .cameraSlide_0 img').attr('alt', cameraSource.find('div').eq(0).data('alt'));
+
+                    } else {
+
+                        var currentImage = cameraImages.find('.cameraCont .cameracurrent');
+                        currentImage.find('img').attr('alt', cameraSource.find('div').eq(currentImage.index()).data('alt'));
+
+
+                    }
+
+                }
             });
         }
 

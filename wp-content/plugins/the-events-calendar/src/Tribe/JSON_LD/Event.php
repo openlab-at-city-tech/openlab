@@ -1,0 +1,143 @@
+<?php
+
+// Don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
+/**
+ * A JSON-LD class extended of the Abstract that lies on the Common Package
+ * Used for generating a Event JSON-LD markup
+ */
+class Tribe__Events__JSON_LD__Event extends Tribe__JSON_LD__Abstract {
+
+	/**
+	 * Which type of element this actually is
+	 *
+	 * @see https://developers.google.com/structured-data/rich-snippets/
+	 * @var string
+	 */
+	public $type = 'Event';
+
+	/**
+	 * On PHP 5.2 the child class doesn't get spawned on the Parent one, so we don't have
+	 * access to that information on the other side unless we pass it around as a param
+	 * so we throw __CLASS__ to the parent::instance() method to be able to spawn new instance
+	 * of this class and save on the parent::$instances variable.
+	 *
+	 * @return Tribe__Events__JSON_LD__Event
+	 */
+	public static function instance( $name = null ) {
+		return parent::instance( __CLASS__ );
+	}
+
+	/**
+	 * Fetches the JSON-LD data for this type of object
+	 *
+	 * @param  int|WP_Post|null $post The post/event
+	 * @param  array  $args
+	 * @return array
+	 */
+	public function get_data( $posts = null, $args = array() ) {
+		$posts = ( $posts instanceof WP_Post ) ? array( $posts ) : (array) $posts;
+		$return = array();
+
+		foreach ( $posts as $i => $post ) {
+			$data = parent::get_data( $post, $args );
+
+			// If we have an Empty data we just skip
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			// Fetch first key
+			$post_id = key( $data );
+
+			// Fetch first Value
+			$data = reset( $data );
+
+			$event_tz_string = get_post_meta( $post_id, '_EventTimezone', true );
+			$tz_mode         = tribe_get_option( 'tribe_events_timezone_mode', 'event' );
+			$tz_string       = $event_tz_string && $tz_mode === 'event' ? $event_tz_string : Tribe__Events__Timezones::wp_timezone_string();
+			$data->startDate = Tribe__Events__Timezones::to_utc( tribe_get_start_date( $post_id, true, Tribe__Date_Utils::DBDATETIMEFORMAT ), $tz_string, 'c' );
+			$data->endDate   = Tribe__Events__Timezones::to_utc( tribe_get_end_date( $post_id, true, Tribe__Date_Utils::DBDATETIMEFORMAT ), $tz_string, 'c' );
+
+			if ( tribe_has_venue( $post_id ) ) {
+				$venue_id       = tribe_get_venue_id( $post_id );
+				$venue_data     = Tribe__Events__JSON_LD__Venue::instance()->get_data( $venue_id );
+				$data->location = reset( $venue_data );
+			}
+
+			if ( tribe_has_organizer( $post_id ) ) {
+				$organizer_id    = tribe_get_organizer_id( $post_id );
+				$organizer_data  = Tribe__Events__JSON_LD__Organizer::instance()->get_data( $organizer_id );
+				$data->organizer = reset( $organizer_data );
+			}
+
+			$price = tribe_get_cost( $post_id );
+			$price = $this->normalize_price( $price );
+			if ( '' !== $price ) {
+				// Manually Include the Price for non Event Tickets
+				$data->offers = (object) array(
+					'@type' => 'Offer',
+					'price' => $price,
+
+					// Use the same url as the event
+					'url' => $data->url,
+				);
+			}
+
+			$return[ $post_id ] = $data;
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Normalizes the price entry to make it compatible with JSON-LD guidelines.
+	 *
+	 * @param string|int $price
+	 *
+	 * @return string
+	 */
+	protected function normalize_price( $price ) {
+		$map = array(
+			'/^\\s*free\\s*$/i' => '0',
+		);
+
+		foreach ( $map as $normalization_regex => $normalized_price ) {
+			if ( preg_match( $normalization_regex, '' . $price ) ) {
+				$price = $normalized_price;
+			}
+		}
+
+		$locale_conv = localeconv();
+
+		/**
+		 * Allows filtering the monetary decimal point used in the site.
+		 *
+		 * @param string $mon_decimal_point The monetary decimal pointer; defaults to the one
+		 *                                  returned by PHP `localeconv` function.
+		 *
+		 * @see localeconv()
+		 */
+		$mon_decimal_point = apply_filters( 'tribe_events_json_ld_price_decimal_point', $locale_conv['mon_decimal_point'] );
+
+		// normalize the decimal separator
+		$price = str_replace( $mon_decimal_point, '.', $price );
+
+		/**
+		 * Allows filtering the monetary thousands separator used in the site.
+		 *
+		 * @param string $mon_decimal_point The monetary thousands separator; defaults to the one
+		 *                                  returned by PHP `localeconv` function.
+		 *
+		 * @see localeconv()
+		 */
+		$mon_thousands_sep = apply_filters( 'tribe_events_json_ld_price_thousands_separator', $locale_conv['mon_thousands_sep'] );
+
+		// remove thousands separator
+		return str_replace( $mon_thousands_sep, '', $price );
+	}
+
+}

@@ -1356,8 +1356,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				}
 
 				h3 {
-					//background: $dark-background;
-					//color: $content-background;
 					@include font-size(14);
 
 					@media screen and (min-width: 46.25em) {

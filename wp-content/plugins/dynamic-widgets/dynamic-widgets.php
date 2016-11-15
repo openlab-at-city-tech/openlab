@@ -4,7 +4,7 @@
  * Plugin URI: http://dynamic-widgets.com/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.11
+ * Version: 1.5.12
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -15,7 +15,7 @@
  *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
- * @version $Id: dynamic-widgets.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @version $Id: dynamic-widgets.php 1478458 2016-08-19 07:06:28Z qurl $
  * @copyright 2015 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
@@ -81,7 +81,7 @@
 	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
 	define('DW_TIME_LIMIT', 86400);				// 1 day
 	define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-	define('DW_VERSION', '1.5.11');
+	define('DW_VERSION', '1.5.12');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -350,7 +350,8 @@
 			}
 
 			$default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
-			echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
+			// echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
+			echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . apply_filters( 'dynwid_post_control_label', $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')', $widget, $default ) . '</label><br />';
 		}
 	}
 

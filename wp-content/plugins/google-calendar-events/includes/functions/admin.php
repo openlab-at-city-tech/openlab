@@ -72,61 +72,6 @@ function simcal_print_field( $args, $name = '' ) {
 }
 
 /**
- * Clear feed transients cache.
- *
- * @since  3.0.0
- *
- * @param  string|int|array|\WP_Post $id
- *
- * @return bool
- */
-function simcal_delete_feed_transients( $id = '' ) {
-
-	if ( is_numeric( $id ) ) {
-		$id = intval( $id ) > 0 ? absint( $id ) : simcal_get_calendars();
-	} elseif ( $id instanceof WP_Post ) {
-		$id = $id->ID;
-	} elseif ( is_array( $id ) ) {
-		$id = array_map( 'absint', $id );
-	} else {
-		$id = simcal_get_calendars( '', true );
-	}
-
-	$feed_types = simcal_get_feed_types();
-
-	if ( is_array( $id ) ) {
-
-		$posts = get_posts( array(
-			'post_type' => 'calendar',
-			'fields'    => 'ids',
-			'post__in'  => $id,
-			'nopaging'  => true,
-		) );
-
-		foreach ( $posts as $post ) {
-			$calendar = simcal_get_calendar( $post );
-			if ( $calendar instanceof \SimpleCalendar\Abstracts\Calendar ) {
-				foreach ( $feed_types as $feed_type ) {
-					delete_transient( '_simple-calendar_feed_id_' . strval( $calendar->id ) . '_' . $feed_type );
-				}
-			}
-		}
-
-	} else {
-
-		$post = get_post( $id );
-		$calendar = simcal_get_calendar( $post );
-		if ( $calendar instanceof \SimpleCalendar\Abstracts\Calendar ) {
-			foreach ( $feed_types as $feed_type ) {
-				delete_transient( '_simple-calendar_feed_id_' . strval( $calendar->id ) . '_' . $feed_type );
-			}
-		}
-	}
-
-	return delete_transient( '_simple-calendar_feed_ids' );
-}
-
-/**
  * Sanitize a variable of unknown type.
  *
  * Recursive helper function to sanitize a variable from input,
@@ -288,7 +233,7 @@ function simcal_delete_admin_notices() {
  */
 function simcal_print_shortcode_tip( $post_id ) {
 
-	$browser = new \Browser();
+	$browser = new \SimpleCalendar\Browser();
 	if ( $browser::PLATFORM_APPLE == $browser->getPlatform() ) {
 		$cmd = '&#8984;&#43;C';
 	} else {
@@ -344,7 +289,7 @@ function simcal_newsletter_signup() {
 	if ( $screen = simcal_is_admin_screen() ) {
 
 		global $current_user;
-		get_currentuserinfo();
+		wp_get_current_user();
 
 		$name = $current_user->user_firstname ? $current_user->user_firstname : '';
 
@@ -352,7 +297,7 @@ function simcal_newsletter_signup() {
 		<div id="simcal-drip" class="<?php echo $screen; ?>">
 			<div class="signup">
 				<p>
-					<?php _e( "Enter your name and email and we'll send you a coupon code for 20% off our Google Calendar Pro add-on.", 'google-calendar-events' ); ?>
+					<?php _e( "Enter your name and email and we'll send you a coupon code for <strong>20% off</strong> all Pro Add-on purchases.", 'google-calendar-events' ); ?>
 				</p>
 
 				<p>
@@ -376,8 +321,10 @@ function simcal_newsletter_signup() {
 					   class="button button-primary"><?php _e( 'Send me the coupon', 'google-calendar-events' ); ?></a>
 				</p>
 				<div class="textright">
-					<a href="<?php echo simcal_ga_campaign_url( simcal_get_url( 'gcal-pro' ), 'core-plugin', 'sidebar-link' ); ?>"
-					   target="_blank"><?php _e( 'Just take me to GCal Pro', 'google-calendar-events' ); ?></a>
+					<em><?php _e( 'No spam. Unsubscribe anytime.', 'google-calendar-events' ); ?></em>
+					<br/>
+					<a href="<?php echo simcal_ga_campaign_url( simcal_get_url( 'addons' ), 'core-plugin', 'sidebar-link' ); ?>"
+					   target="_blank"><?php _e( 'Just take me the add-ons', 'google-calendar-events' ); ?></a>
 				</div>
 			</div>
 			<div class="thank-you" style="display: none;">
@@ -389,62 +336,42 @@ function simcal_newsletter_signup() {
 		<?php
 
 	}
-
 }
 
-if ( ! function_exists( 'mb_detect_encoding' ) ) {
+/**
+ * Upgrade to Premium Add-ons HTML.
+ *
+ * @since  3.1.6
+ *
+ * @return void
+ */
+function simcal_upgrade_to_premium() {
 
-	/**
-	 * Fallback function for `mb_detect_encoding()`,
-	 * php_mbstring module in the php.ini could be missing.
-	 *
-	 * @since  3.0.0
-	 *
-	 * @param  string $string
-	 * @param  null   $enc
-	 * @param  null   $ret
-	 *
-	 * @return bool
-	 */
-	function mb_detect_encoding( $string, $enc = null, $ret = null ) {
+	if ( $screen = simcal_is_admin_screen() ) {
+		?>
+		<div class="main">
+			<p class="heading centered">
+				<?php _e( 'Some of the features included with our premium add-ons', 'google-calendar-events' ); ?>
+			</p>
 
-		static $enclist = array(
-			'UTF-8',
-			'ASCII',
-			'ISO-8859-1',
-			'ISO-8859-2',
-			'ISO-8859-3',
-			'ISO-8859-4',
-			'ISO-8859-5',
-			'ISO-8859-6',
-			'ISO-8859-7',
-			'ISO-8859-8',
-			'ISO-8859-9',
-			'ISO-8859-10',
-			'ISO-8859-13',
-			'ISO-8859-14',
-			'ISO-8859-15',
-			'ISO-8859-16',
-			'Windows-1251',
-			'Windows-1252',
-			'Windows-1254',
-		);
+			<ul>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Display color coded events', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Show week & day views', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Fast view switching', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Event titles & start times in grid', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Limit event display times', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Display private calendar events', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Show attendees & RSVP status', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Display attachments', 'google-calendar-events' ); ?></li>
+				<li><div class="dashicons dashicons-yes"></div> <?php _e( 'Priority email support', 'google-calendar-events' ); ?></li>
+			</ul>
 
-		$result = false;
-
-		foreach ( $enclist as $item ) {
-			$sample = iconv( $item, $item, $string );
-			if ( md5( $sample ) == md5( $string ) ) {
-				if ( $ret === null ) {
-					$result = $item;
-				} else {
-					$result = true;
-				}
-				break;
-			}
-		}
-
-		return $result;
+			<div class="centered">
+				<a href="<?php echo simcal_ga_campaign_url( simcal_get_url( 'addons' ), 'core-plugin', 'sidebar-link' ); ?>"
+				   class="button-primary button-large" target="_blank">
+					<?php _e( 'Upgrade to Premium Now', 'google-calendar-events' ); ?></a>
+			</div>
+		</div>
+		<?php
 	}
-
 }

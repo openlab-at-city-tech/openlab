@@ -1,6 +1,9 @@
 /* Toolbar / Top Nav */
 
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
+/**vendor**/
+@import "select2/select2.css";
+
 .oplb-bs {
     @import "../less/bootstrap/bootstrap.less";
     /**import boostrap overrides**/
@@ -146,7 +149,8 @@
                         color: #333;
                         padding: 6px 12px;
                         text-decoration: none;
-                        &:hover{
+                        &:hover,
+                            &:focus{
                             background: @cyan;
                         }
                     }
@@ -162,6 +166,8 @@
             }
             .ab-sub-wrapper{
                 background: #fff;
+                border: 1px solid @70gray;
+                border-top: none;
                 border-radius: 0 0 4px 4px;
                 margin-top: 1px;
                 width: 600%;
@@ -175,6 +181,16 @@
                         font-size: 12px;
                         &:last-child{
                             margin-bottom: 0;
+                        }
+                    }
+                    li{
+                        &:last-child{
+                            border-radius: 0 0 4px 4px;
+                            border-bottom: none;
+                            a{
+                                border-radius: 0 0 4px 4px;
+                                border-bottom: none;
+                            }
                         }
                     }
                     .submenu-title{
@@ -194,10 +210,10 @@
                         a{
                             color: #333;
                             font-size: 12px;
-                            text-decoration: underline;
+                            text-decoration: none;
                             &:hover, 
                                 &:focus {
-                                color: #49cabe;
+                                text-decoration: underline;
                             }
                         }
                     }
@@ -254,6 +270,13 @@
                     }
                 }
             }
+            .ab-top-secondary{
+                .menupop{
+                    .ab-sub-wrapper{
+                        right: -1px;
+                    }
+                }
+            } 
             #wp-admin-bar-mobile-centered{
                 margin: 0 auto;
                 overflow: hidden;
@@ -341,6 +364,7 @@
             }
             #wp-admin-bar-site-name{
                 border-left: none;
+		max-width: 320px;
             }
             #wp-admin-bar-my-openlab,
             #wp-admin-bar-network-menu-mobile{
@@ -370,7 +394,14 @@
                     }
                 }
             }
+            #wp-admin-bar-invites,
+            #wp-admin-bar-my-openlab{
+                .ab-sub-wrapper{
+                    left: -1px;
+                }
+            }
             #wp-admin-bar-my-account{
+		max-width: 290px;
                 .ab-sub-wrapper{
                     width: 150%;
                     min-width: 250px;
@@ -441,17 +472,29 @@
                 border-right: 1px #666666 solid;
             }
             #wp-admin-bar-bp-login{
-                border-right: 1px #666666 solid;
-                max-width: 70px;
+                background: transparent;
                 position: relative;
+                max-width: 70px;
+                > a{
+                    background: @black;
+                    border-right: 1px #666666 solid;
+                    max-height: 49px;
+                }
                 .ab-sub-wrapper{
+                    background: transparent;
+                    border: none;
                     color: #333;
                     width: 350% !important;
                     left: -250%;
-                    margin-top: 0;
-                    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-                    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    margin-top: 1px;
                     top: auto;
+                    .ab-submenu{
+                        background: @white;
+                        border: none;
+                        border-radius: 0 0 4px 4px;
+                        -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                        box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+                    }
                     #sidebar-login-form{
                         padding: 3% 5%;
                         .forgetmenot{
@@ -459,7 +502,7 @@
                                 line-height: 21px;
                             }
                         }
-                        #sidebar-wp-submit{
+                        .sidebar-wp-submit{
                             margin-bottom: 5px;
                         }
                         .lost-pw{
@@ -470,6 +513,12 @@
                 @media (max-width: @screen-xs-max){
                     .ab-submenu{
                         background: #fff;
+                    }
+                }
+                &.login-form-active{
+                    .ab-submenu{
+                        border: 1px solid @70gray;
+                        border-top: none;
                     }
                 }
             }
@@ -578,10 +627,10 @@
                     .form-control{
                         display: inline-block;
                         vertical-align: top;
-                        &#search-terms{
+                        &.search-terms-mobile{
                             width: 50%;
                         }
-                        &#search-which{
+                        &.search-which-mobile{
                             width: 32%;
                             height: 35px;
                         }
@@ -596,9 +645,17 @@
             text-align: center;
             width: 30px;
             cursor: pointer;
-            color: @40gray;
+            color: @70gray;
             &:hover{
                 color: @aqua;
+            }
+            .search-trigger{
+                display: block;
+                outline: none;
+                padding: 0 0 0 4px;
+                &:focus{
+                    outline: thin dotted;
+                }
             }
             span{
                 line-height: 4.5;
@@ -633,7 +690,7 @@
         }
     }
     .search-mode-mobile{
-        #search-submit{
+        .search-submit{
             height: 35px;
             padding: 0 3%;
             vertical-align: top;
@@ -648,12 +705,6 @@
         bottom: 0;
         right: 0;
         left: 0;
-        color: #333333;
-        font-family: "Open Sans",Helvetica,Arial,sans-serif;
-        font-size: 14px;
-        line-height: 1.42857;
-        padding-top: 30px;
-        background: #f0f0f0;
         &.placeholder{
             position: relative;
             visibility: hidden;
@@ -670,6 +721,9 @@
         .regular{
             font-weight: 400;
         }
+        .deco{
+            text-decoration: underline;
+        }
         .cuny-logo{
             max-width: 74px !important;
         }
@@ -683,7 +737,13 @@
             text-shadow: none !important;
         }
         .footer-wrapper{
+            color: #333333;
+            font-family: "Open Sans",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+            line-height: 1.42857;
+            background: #f0f0f0;
             margin: 0 auto;
+            padding-top: 30px;
             width: 100%;
             @media (max-width: @screen-xs-max){
                 width: 95%;
@@ -755,9 +815,18 @@
             }
         }
         .col-links{
-            color: lighten(#666, 7.5%);
+            color: @80gray;
+            .first-header{
+                margin-bottom: 19px;
+            }
+            .second-header{
+                margin: 22px 0 18px;
+            }
+            .statement{
+                margin-bottom: 3px;
+            }
             a{
-                color: lighten(#666, 7.5%);
+                color: @80gray;
                 font-weight: inherit;
             }
             @media (max-width: @screen-xs-max){
@@ -802,10 +871,11 @@
         }
         .row-copyright{
             margin-bottom: 100px;
+            margin-top: 17px;
             p,
             span,
             a{
-                color: lighten(#666, 7.5%);
+                color: @80gray;
                 @media (max-width: @screen-xs-max){
                     font-size: 8px;
                 }
@@ -925,6 +995,22 @@ body{
         padding-top: 70px;
         @media (max-width: 767px){
             padding-top: 110px;
+        }
+    }
+    .page-table{
+        display: table;
+        width: 100%;
+        .page-table-row{
+            display: table-row;
+            height: 0;
+            &.expanded{
+                height: 100%;
+            }
+        }
+    }
+    .screen-reader-shortcut{
+        &:focus{
+            top: 0;
         }
     }
 }

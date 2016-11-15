@@ -1,13 +1,10 @@
 === Ultimate Category Excluder ===
-Contributors: planetmike
-Donate link: http://www.planetmike.com/donations/
-Tags: category, categories, exclude, visible, hidden, hide, invisible, remove
-Requires at least: 3.1
-Tested up to: 3.6
-Stable tag: 0.96
+Contributors: Marios Alexandrou
+Donate link: http://infolific.com/technology/software-worth-using/ultimate-category-excluder/
+Tags: category, categories, exclude, exclude category, exclude categories, visible, hidden, hide, invisible, remove
+Requires at least: 4.0
+Tested up to: 4.5
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://www.planetmike.com/donations/
 
 Ultimate Category Excluder allows you to quickly and easily exclude categories from your front page, archives, feeds, and search results.
 
@@ -22,7 +19,6 @@ Ultimate Category Excluder, abbreviated as UCE, is a WordPress plugin that allow
 3. Activate the plugin on your plugins page.
 4. You can edit the options by going under "Options" and then "Category Exclusion."
 5. If you are upgrading from an older version, you need to go into your "Category Exclusion" settings, choose at least one option from the Searches column, save settings, then go back and clear that option and save again.
-6. (Optional) I suggest you subscribe to my <a href="http://www.planetmike.com/feed/">RSS feed</a> so you can stay informed about any updates to Ultimate Category Excluder.
 
 == Frequently Asked Questions ==
 
@@ -30,7 +26,17 @@ Ultimate Category Excluder, abbreviated as UCE, is a WordPress plugin that allow
 
 Go into your "Category Exclusion" settings, choose at least one option from the Searches column, save settings, then go back and clear that option and save again.
 
+== Screenshots ==
+
+1. Check the categories you want to exclude.
+
 == Changelog ==
+
+= 1.0 =
+* Bug fix thanks to Golemming (re. deprecated function mysql_get_server_info).
+* Compatibility with WordPress 4.4.2 confirmed.
+* Documentation updated. No functionality changed.
+* Plugin development and support transferred from Michael Clark to Marios Alexandrou.
 
 = 0.96 =
 * September 11, 2013 - Went back to the last known (no complaints at least!) version, 0.84. 
@@ -43,7 +49,7 @@ Go into your "Category Exclusion" settings, choose at least one option from the 
 
 I also fixed several very subtle bugs that were throwing error messages behind the scenes. And I tweaked the system information section at the bottom of the UCE settings page.
 
-Added the Danish tranlation. I don't who to thank for providing this. 
+Added the Danish translation. I don't who to thank for providing this. 
 Added Brazilian translation. Thank you to Leandro Callegari Coelho.
 Feel free to send me other languages if you like.
 

@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2009-2015 John Blackbourn
+Copyright 2009-2016 John Blackbourn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,6 +33,21 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		echo '<div class="qm" id="' . esc_attr( $this->collector->id() ) . '">';
 		echo '<table cellspacing="0">';
 
+		$position_labels = array(
+			'scripts' => array(
+				'missing' => __( 'Missing Scripts', 'query-monitor' ),
+				'broken'  => __( 'Broken Dependencies', 'query-monitor' ),
+				'header'  => __( 'Header Scripts', 'query-monitor' ),
+				'footer'  => __( 'Footer Scripts', 'query-monitor' ),
+			),
+			'styles' => array(
+				'missing'  => __( 'Missing Styles', 'query-monitor' ),
+				'broken'   => __( 'Broken Dependencies', 'query-monitor' ),
+				'header'   => __( 'Header Styles', 'query-monitor' ),
+				'footer'   => __( 'Footer Styles', 'query-monitor' ),
+			),
+		);
+
 		foreach ( array(
 			'scripts' => __( 'Scripts', 'query-monitor' ),
 			'styles'  => __( 'Styles', 'query-monitor' ),
@@ -40,30 +55,30 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 			echo '<thead>';
 
-			if ( 'scripts' != $type ) {
+			if ( 'scripts' !== $type ) {
 				echo '<tr class="qm-totally-legit-spacer">';
 				echo '<td colspan="6"></td>';
 				echo '</tr>';
 			}
 
 			echo '<tr>';
-			echo '<th colspan="2">' . $type_label . '</th>';
-			echo '<th>' . __( 'Dependencies', 'query-monitor' ) . '</th>';
-			echo '<th>' . __( 'Dependents', 'query-monitor' ) . '</th>';
-			echo '<th>' . __( 'Version', 'query-monitor' ) . '</th>';
+			echo '<th colspan="2">' . esc_html( $type_label ) . '</th>';
+			echo '<th>' . esc_html__( 'Dependencies', 'query-monitor' ) . '</th>';
+			echo '<th>' . esc_html__( 'Dependents', 'query-monitor' ) . '</th>';
+			echo '<th>' . esc_html__( 'Version', 'query-monitor' ) . '</th>';
 			echo '</tr>';
 			echo '</thead>';
 			echo '<tbody>';
 
 			foreach ( array(
-				'missing' => __( 'Missing %s', 'query-monitor' ),
-				'broken'  => __( 'Broken Dependencies', 'query-monitor' ),
-				'header'  => __( 'Header %s', 'query-monitor' ),
-				'footer'  => __( 'Footer %s', 'query-monitor' ),
-			) as $position => $position_label ) {
+				'missing',
+				'broken',
+				'header',
+				'footer',
+			) as $position ) {
 
 				if ( isset( $data[ $position ][ $type ] ) ) {
-					$this->dependency_rows( $data[ $position ][ $type ], $data['raw'][ $type ], sprintf( $position_label, $type_label ) );
+					$this->dependency_rows( $data[ $position ][ $type ], $data['raw'][ $type ], $position_labels[ $type ][ $position ], $type );
 				}
 
 			}
@@ -77,14 +92,14 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 	}
 
-	protected function dependency_rows( array $handles, WP_Dependencies $dependencies, $label ) {
+	protected function dependency_rows( array $handles, WP_Dependencies $dependencies, $label, $type ) {
 
 		$first = true;
 
 		if ( empty( $handles ) ) {
 			echo '<tr>';
-			echo '<td valign="top" class="qm-nowrap">' . $label . '</td>';	
-			echo '<td valign="top" colspan="5"><em>' . __( 'none', 'query-monitor' ) . '</em></td>';
+			echo '<td class="qm-nowrap">' . esc_html( $label ) . '</td>';
+			echo '<td colspan="5"><em>' . esc_html__( 'none', 'query-monitor' ) . '</em></td>';
 			echo '</tr>';
 			return;
 		}
@@ -92,17 +107,17 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		foreach ( $handles as $handle ) {
 
 			if ( in_array( $handle, $dependencies->done ) ) {
-				echo '<tr data-qm-subject="' . $handle . '">';
+				echo '<tr data-qm-subject="' . esc_attr( $type . '-' . $handle ) . '">';
 			} else {
-				echo '<tr data-qm-subject="' . $handle . '" class="qm-warn">';
+				echo '<tr data-qm-subject="' . esc_attr( $type . '-' . $handle ) . '" class="qm-warn">';
 			}
 
 			if ( $first ) {
 				$rowspan = count( $handles );
-				echo "<th valign='top' rowspan='{$rowspan}' class='qm-nowrap'>" . $label . "</th>";	
+				echo '<th rowspan="' . esc_attr( $rowspan ) . '" class="qm-nowrap">' . esc_html( $label ) . '</th>';
 			}
 
-			$this->dependency_row( $dependencies->query( $handle ), $dependencies );
+			$this->dependency_row( $dependencies->query( $handle ), $dependencies, $type );
 
 			echo '</tr>';
 			$first = false;
@@ -110,38 +125,73 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 	}
 
-	protected function dependency_row( _WP_Dependency $script, WP_Dependencies $dependencies ) {
+	protected function dependency_row( _WP_Dependency $dependency, WP_Dependencies $dependencies, $type ) {
 
-		if ( empty( $script->ver ) ) {
-			$ver = '&nbsp;';
+		if ( empty( $dependency->ver ) ) {
+			$ver = '';
 		} else {
-			$ver = esc_html( $script->ver );
+			$ver = $dependency->ver;
 		}
 
-		if ( empty( $script->src ) ) {
-			$src = '&nbsp;';
+		$loader = rtrim( $type, 's' );
+
+		/**
+		 * Filter the asset loader source.
+		 *
+		 * The variable {$loader} can be either 'script' or 'style'.
+		 *
+		 * @param string $src    Script or style loader source path.
+		 * @param string $handle Script or style handle.
+		 */
+		$source = apply_filters( "{$loader}_loader_src", $dependency->src, $dependency->handle );
+
+		if ( is_wp_error( $source ) ) {
+			$src = $source->get_error_message();
+			if ( ( $error_data = $source->get_error_data() ) && isset( $error_data['src'] ) ) {
+				$src .= ' (' . $error_data['src'] . ')';
+			}
+		} elseif ( empty( $source ) ) {
+			$src = '';
 		} else {
-			$src = $script->src;
+			$src = $source;
 		}
 
-		$dependents = self::get_dependents( $script, $dependencies );
-		$deps = $script->deps;
+		$dependents = self::get_dependents( $dependency, $dependencies, $type );
+		$deps = $dependency->deps;
 		sort( $deps );
 
 		foreach ( $deps as & $dep ) {
 			if ( ! $dependencies->query( $dep ) ) {
+				/* translators: %s: Script or style dependency name */
 				$dep = sprintf( __( '%s (missing)', 'query-monitor' ), $dep );
 			}
 		}
 
-		echo '<td valign="top" class="qm-wrap">' . $script->handle . '<br><span class="qm-info">' . $src . '</span></td>';
-		echo '<td valign="top" class="qm-nowrap qm-highlighter" data-qm-highlight="' . implode( ' ', $deps ) . '">' . implode( '<br>', $deps ) . '</td>';
-		echo '<td valign="top" class="qm-nowrap qm-highlighter" data-qm-highlight="' . implode( ' ', $dependents ) . '">' . implode( '<br>', $dependents ) . '</td>';
-		echo '<td valign="top">' . $ver . '</td>';
+		$this->type = $type;
+
+		$highlight_deps       = array_map( array( $this, '_prefix_type' ), $deps );
+		$highlight_dependents = array_map( array( $this, '_prefix_type' ), $dependents );
+
+		echo '<td class="qm-wrap">' . esc_html( $dependency->handle ) . '<br><span class="qm-info">&nbsp;';
+		if ( is_wp_error( $source ) ) {
+			printf( '<span class="qm-warn">%s</span>',
+				esc_html( $src )
+			);
+		} else {
+			echo esc_html( $src );
+		}
+		echo '</span></td>';
+		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_deps ) ) . '">' . implode( '<br>', array_map( 'esc_html', $deps ) ) . '</td>';
+		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_dependents ) ) . '">' . implode( '<br>', array_map( 'esc_html', $dependents ) ) . '</td>';
+		echo '<td>' . esc_html( $ver ) . '</td>';
 
 	}
 
-	protected static function get_dependents( _WP_Dependency $script, WP_Dependencies $dependencies ) {
+	public function _prefix_type( $val ) {
+		return $this->type . '-' . $val;
+	}
+
+	protected static function get_dependents( _WP_Dependency $dependency, WP_Dependencies $dependencies, $type ) {
 
 		// @TODO move this into the collector
 		$dependents = array();
@@ -149,7 +199,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 		foreach ( $handles as $handle ) {
 			if ( $item = $dependencies->query( $handle ) ) {
-				if ( in_array( $script->handle, $item->deps ) ) {
+				if ( in_array( $dependency->handle, $item->deps ) ) {
 					$dependents[] = $handle;
 				}
 			}
@@ -177,7 +227,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 		$data = $this->collector->get_data();
 		$args = array(
-			'title' => $this->collector->name()
+			'title' => esc_html( $this->collector->name() ),
 		);
 
 		if ( !empty( $data['broken'] ) or !empty( $data['missing'] ) ) {
