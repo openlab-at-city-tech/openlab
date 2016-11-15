@@ -94,7 +94,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 						SUM(s.`points`) as points,
 						(SUM(s.question_time)) as question_time
 					FROM
-						`' . $this->_wpdb->users . '` AS u
+						`openlab_global.' . $this->_wpdb->users . '` AS u
 						' . ($onlyCompleded ? 'INNER' : 'LEFT') . ' JOIN `' . $this->_tableStatisticRef . '` AS sf ON
 								(sf.user_id = u.ID AND sf.quiz_id = %d)
 						LEFT JOIN `' . $this->_tableStatistic . '` AS s ON ( s.statistic_ref_id = sf.statistic_ref_id )
@@ -135,7 +135,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
             );
         } else {
             return $this->_wpdb->get_var(
-                "SELECT COUNT(ID) FROM {$this->_wpdb->users}"
+                "SELECT COUNT(ID) FROM openlab_global.{$this->_wpdb->users}"
             );
         }
     }
@@ -304,8 +304,8 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 				FROM 
 					' . $this->_tableStatisticRef . ' AS sf
 					INNER JOIN ' . $this->_tableStatistic . ' AS s ON(s.statistic_ref_id = sf.statistic_ref_id)
-					LEFT JOIN ' . $this->_wpdb->users . ' AS u ON(u.ID = sf.user_id)
-				WHERE 
+					LEFT JOIN openlab_global.' . $this->_wpdb->users . ' AS u ON(u.ID = sf.user_id)
+				WHERE
 					quiz_id = %d AND sf.form_data IS NOT NULL ' . $where . '
 				GROUP BY 
 					sf.statistic_ref_id 
@@ -377,7 +377,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 				FROM
 					' . $this->_tableStatisticRef . ' AS sf
 					INNER JOIN ' . $this->_tableStatistic . ' AS s ON(s.statistic_ref_id = sf.statistic_ref_id)
-					LEFT JOIN ' . $this->_wpdb->users . ' AS u ON(u.ID = sf.user_id)
+					LEFT JOIN openlab_global.' . $this->_wpdb->users . ' AS u ON(u.ID = sf.user_id)
 					INNER JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
 				WHERE
 					sf.quiz_id = %d AND sf.is_old = 0 ' . $where . ' ' . $timeWhere . '
@@ -510,7 +510,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 							AVG(s.question_time) as question_time,
 							SUM(q.points * (s.correct_count + s.incorrect_count)) AS g_points
 						FROM
-							' . $this->_wpdb->users . ' AS u
+							openlab_global.' . $this->_wpdb->users . ' AS u
 							' . ($onlyCompleded ? 'INNER' : 'LEFT') . ' JOIN ' . $this->_tableStatisticRef . ' AS sf ON (sf.user_id = u.ID AND sf.quiz_id = %d)
 							LEFT JOIN ' . $this->_tableStatistic . ' AS s ON ( s.statistic_ref_id = sf.statistic_ref_id )
 							LEFT JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
@@ -566,7 +566,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 						(SELECT
 							u.ID
 						FROM
-							' . $this->_wpdb->users . ' AS u
+							openlab_global.' . $this->_wpdb->users . ' AS u
 							' . ($onlyCompleded ? 'INNER' : 'LEFT') . ' JOIN ' . $this->_tableStatisticRef . ' AS sf ON (sf.user_id = u.ID AND sf.quiz_id = %d)
 							LEFT JOIN ' . $this->_tableStatistic . ' AS s ON ( s.statistic_ref_id = sf.statistic_ref_id )
 							LEFT JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
