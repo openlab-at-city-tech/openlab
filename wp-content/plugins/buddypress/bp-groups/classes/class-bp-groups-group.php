@@ -990,7 +990,7 @@ class BP_Groups_Group {
 		$cached = wp_cache_get( $cache_key, 'bp_groups' );
 		if ( false === $cached ) {
 			$total_groups = $wpdb->get_var( $total_groups_sql );
-			wp_cache_set( $cache_key, $paged_groups, 'bp_groups' );
+			wp_cache_set( $cache_key, $total_groups, 'bp_groups' );
 		} else {
 			$total_groups = $cached;
 		}
