@@ -97,6 +97,6 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
 
 	$template = '<iframe class="tscplayer_inline embeddedObject" name="tsc_player" scrolling="no" frameborder="0" type="text/html" style="overflow:hidden;" src="%s" height="%s" width="%s" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 
-	$html = sprintf( $template, $embed_url, $height, $width );
+	$html = sprintf( $template, set_url_scheme( $embed_url ), $height, $width );
 	return $html;
 }
