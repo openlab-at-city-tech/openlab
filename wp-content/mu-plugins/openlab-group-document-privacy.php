@@ -57,7 +57,6 @@ function cac_catch_group_doc_request() {
 
 		// If we have gotten this far without an error, then the download can go through
 		if ( ! $error ) {
-
 			$doc_path = BP_GROUP_DOCUMENTS_SECURE_PATH . $doc_id;
 
 			if ( file_exists( $doc_path ) ) {

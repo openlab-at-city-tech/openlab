@@ -1106,15 +1106,15 @@ function openlab_find_feed_urls( $url ) {
 	$formats = array(
 		'wordpress' => array(
 			'posts' => '{{URL}}feed',
-			'comments' => '{{URL}}/comments/feed'
+			'comments' => '{{URL}}/comments/feed',
 		),
 		'blogger' => array(
 			'posts' => '{{URL}}feeds/posts/default?alt=rss',
-			'comments' => '{{URL}}feeds/comments/default?alt=rss'
+			'comments' => '{{URL}}feeds/comments/default?alt=rss',
 		),
 		'drupal' => array(
-			'posts' => '{{URL}}posts/feed'
-		)
+			'posts' => '{{URL}}posts/feed',
+		),
 	);
 
 	$feed_urls = array();
