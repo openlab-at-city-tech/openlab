@@ -17,10 +17,26 @@ function cac_catch_group_doc_request() {
 
 	$doc_id = $_GET['get_group_doc'];
 
+	// Sanity and security checks on passed data.
+	$file_deets = explode( '/', $doc_id );
+
+	// File paths containing slashes should be ignored.
+	if ( 2 < count( $file_deets ) ) {
+		status_header( 404 );
+		nocache_headers();
+		die();
+	}
+
+	// Group ID should be an integer.
+	$group_id = $file_deets[0];
+	if ( ! is_numeric( $group_id ) ) {
+		status_header( 404 );
+		nocache_headers();
+		die();
+	}
+
 	// Check to see whether the current user has access to the doc in question
-	$file_deets 	= explode( '/', $doc_id );
-	$group_id 	= $file_deets[0];
-	$group		= new BP_Groups_Group( $group_id );
+	$group = new BP_Groups_Group( $group_id );
 
 	if ( empty( $group->id ) ) {
 		$error = array(

@@ -1121,6 +1121,16 @@ function openlab_find_feed_urls( $url ) {
 
 	foreach ( $formats as $ftype => $f ) {
 		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
+
+		// Do a HEAD check first to avoid loops when self-querying.
+		$maybe_feed_head = wp_remote_head( $maybe_feed_url, array(
+			'redirection' => 2,
+		) );
+
+		if ( 200 != wp_remote_retrieve_response_code( $maybe_feed_head ) ) {
+			continue;
+		}
+
 		$maybe_feed = wp_remote_get( $maybe_feed_url );
 		if ( ! is_wp_error( $maybe_feed ) && 200 == $maybe_feed['response']['code'] ) {
 
