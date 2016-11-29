@@ -1230,7 +1230,7 @@ HTML;
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',
-                    'title' => '<span class="hidden-lg">'.$howdy.'</span><span class="visible-lg">'.$howdy_short.'</span>',
+                    'title' => '<span class="visible-lg">'.$howdy.'</span><span class="hidden-lg">'.$howdy_short.'</span>',
                     'href' => $profile_url,
                     'meta' => array(
                         'class' => 'hidden-xs',
