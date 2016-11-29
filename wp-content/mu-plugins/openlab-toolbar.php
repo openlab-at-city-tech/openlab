@@ -1225,12 +1225,12 @@ HTML;
                     return;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
-                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 10, '&hellip;' ));
+                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ));
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',
-                    'title' => '<span class="hidden-sm">'.$howdy.'</span><span class="visible-sm">'.$howdy_short.'</span>',
+                    'title' => '<span class="hidden-lg">'.$howdy.'</span><span class="visible-lg">'.$howdy_short.'</span>',
                     'href' => $profile_url,
                     'meta' => array(
                         'class' => 'hidden-xs',
