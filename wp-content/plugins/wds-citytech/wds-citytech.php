@@ -595,11 +595,11 @@ function wds_load_group_departments() {
  * Get a list of schools
  */
 function openlab_get_school_list() {
-    return array(
-        'tech' => 'Technology & Design',
-        'studies' => 'Professional Studies',
-        'arts' => 'Arts & Sciences'
-    );
+	return array(
+		'tech' => 'Technology & Design',
+		'studies' => 'Professional Studies',
+		'arts' => 'Arts & Sciences',
+	);
 }
 
 /**
