@@ -1759,13 +1759,13 @@ function openlab_group_type($case = 'lower', $count = 'single', $group_id = 0) {
     // found, fall to the second, etc.
     $group_id = (int) $group_id;
     if (!$group_id && $group_id = bp_get_current_group_id()) {
-        
+
     } // current group
     else if (!$group_id && $group_id = bp_get_new_group_id()) {
-        
+
     }     // new group
     else if (!$group_id && $group_id = bp_get_group_id()) {
-        
+
     }         // group in loop
 
     $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
@@ -2384,4 +2384,4 @@ function openlab_ds_login_header() {
 
             add_filter('wp_mail_from_name', 'openlab_email_from_name_filter');
 
-            
+
