@@ -126,6 +126,11 @@ function openlab_force_blog_role_sync() {
 		return;
 	}
 
+	// Super admins do not need to be reassigned.
+	if ( is_super_admin() ) {
+		return;
+	}
+
 	// Is this blog associated with a group?
 	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
@@ -167,7 +172,7 @@ function openlab_force_blog_role_sync() {
 				$user->set_role( $status );
 			}
 		} else {
-			$role_is_correct = empty( $userdata->roles );
+			$role_is_correct = ! current_user_can( 'read' );
 
 			if ( ! $role_is_correct ) {
 				remove_user_from_blog( get_current_user_id(), get_current_blog_id() );
