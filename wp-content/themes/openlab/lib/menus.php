@@ -103,7 +103,7 @@ function openlab_modify_options_nav() {
                 ), 'admin', bp_get_current_group_slug());
     }
 
-    if (bp_is_group()) {
+    if ( bp_is_group() && ! bp_is_group_create() ) {
         $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
         foreach ($nav_items as $nav_item) {
 
