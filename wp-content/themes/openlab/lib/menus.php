@@ -888,19 +888,19 @@ add_filter('bp_get_options_nav_nav-events-mobile', 'openlab_filter_subnav_nav_ev
 
 function openlab_filter_subnav_nav_events($subnav_item) {
     $subnav_item = str_replace('Events', 'Calendar', $subnav_item);
-    
+
     //for some reason group events page is not registering this nav element as current
     $current = '';
     if (bp_current_action() === 'events' || bp_current_component() === 'events') {
         $current = " current-menu-item";
     }
-    
+
     if(strpos($subnav_item,'nav-events-mobile') !== false){
         $class = "visible-xs$current";
     } else {
         $class = "hidden-xs$current";
     }
-    
+
     $subnav_item = str_replace("<li", "<li class='$class'", $subnav_item);
 
     return $subnav_item;
