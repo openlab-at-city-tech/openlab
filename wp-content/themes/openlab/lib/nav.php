@@ -26,7 +26,7 @@ function openlab_help_navigation($loc = 'bottom') {
     );
 
     if (function_exists('previous_post_link_plus') && function_exists('next_post_link_plus')) {
-        echo '<nav id="nav-single" class="' . $loc . ' clearfix page-nav links-lighter-hover">';
+        echo '<nav id="nav-single" class="' . $loc . ' clearfix page-nav">';
         echo '<div class="nav-previous pull-left">';
         previous_post_link_plus($prev_args);
         echo '</div>';
