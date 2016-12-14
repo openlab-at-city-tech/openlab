@@ -1232,12 +1232,12 @@ HTML;
                     return;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
-                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 10, '&hellip;' ));
+                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ));
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',
-                    'title' => '<span class="hidden-sm">'.$howdy.'</span><span class="visible-sm">'.$howdy_short.'</span>',
+                    'title' => '<span class="visible-lg">'.$howdy.'</span><span class="hidden-lg">'.$howdy_short.'</span>',
                     'href' => $profile_url,
                     'meta' => array(
                         'class' => 'hidden-xs',
@@ -1381,7 +1381,7 @@ HTML;
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
             wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.9' );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.2' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.3' );
         }
 
         function adminbar_special_body_class($classes){

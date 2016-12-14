@@ -45,7 +45,7 @@ a {
     text-decoration: underline;
     &:hover,
         &:focus {
-        color: @aqua;
+        color: @darkTeal;
         text-decoration: underline;
     }
     &.no-deco{
@@ -53,6 +53,37 @@ a {
     }
     &.btn-primary{
         color: @white;
+    }
+    &.lighter-hover{
+        &:hover,
+            &:focus {
+            color: @aqua;
+        }
+    }
+}
+body{
+    .darken-for-accessibility{
+        color: @darkTeal;
+    }
+    .hover-darken-for-accessibility{
+        &:hover,
+            &:active{
+            color: @darkTeal;
+        }
+        a{
+            &:hover,
+                &:active{
+                color: @darkTeal;
+            }
+        }
+    }
+    .links-lighter-hover{
+        a{
+            &:hover,
+                &:focus {
+                color: @aqua;
+            }
+        }
     }
 }
 
@@ -126,7 +157,7 @@ blockquote {
             }
             &.current-menu-item,
             &:hover{
-                color: @aqua;
+                color: @darkTeal;
                 a,
                 span{
                     color: inherit;
@@ -199,7 +230,7 @@ blockquote {
                 font-size: 16px;
             }
             &:hover{
-                color: @cyan;
+                color: @darkTeal;
                 background-color: inherit;
             }
         }
@@ -369,9 +400,9 @@ input[type="submit"]{
     }
     &.is-mol-menu{
         .submenu-text{
-            color: @aqua;
+            color: @darkTeal;
             a{
-                color: @aqua;
+                color: @darkTeal;
                 &.display-as-menu-item{
                     color: @black;
                     font-weight: normal;
@@ -423,7 +454,7 @@ input[type="submit"]{
                     padding: 21px 15px;
                     &:hover,
                         &:focus {
-                        color: @cyan;
+                        color: @darkTeal;
                     }
                     @media(max-width: @screen-sm-max){
                         font-size: 13px;
@@ -676,7 +707,7 @@ body{
     .activity-title{
         .fa{
             margin-left: 10px;
-            color: @cyan;
+            color: inherit;
             font-size: floor((@font-size-base * 1.3));
         }
     }
@@ -2806,7 +2837,7 @@ body{
         padding: 0;
 
         &:hover, &:focus {
-            color: @aqua;
+            color: @darkTeal;
             text-decoration: underline;
         }
     }

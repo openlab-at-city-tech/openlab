@@ -7204,7 +7204,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:focus {
-  color: #49cabe;
+  color: #3ba49b;
 }
 @media (max-width: 767px) {
   .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper {
@@ -7345,7 +7345,7 @@ button.oplb-bs .close {
   left: -1px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account {
-  max-width: 290px;
+  max-width: 220px;
 }
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-my-account .ab-sub-wrapper {
   width: 150%;
