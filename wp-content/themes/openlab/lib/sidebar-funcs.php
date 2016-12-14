@@ -199,7 +199,7 @@ function openlab_member_sidebar_menu($mobile = false) {
                 $primary_site_url = set_url_scheme(get_blog_option($primary_site_id, 'siteurl'));
                 ?>
 
-                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span></a></li>
+                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></li>
 
             </ul>
 
@@ -276,7 +276,7 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
                 <li class="portfolio-profile-link bold">
                     <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>">
                         <?php echo (is_user_logged_in() && openlab_is_my_profile() ? 'My ' : 'Visit '); ?>
-                        <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right cyan-circle" aria-hidden="true"></span>
+                        <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>
                     </a>
                 </li>
 

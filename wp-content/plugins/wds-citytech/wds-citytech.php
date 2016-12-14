@@ -595,11 +595,11 @@ function wds_load_group_departments() {
  * Get a list of schools
  */
 function openlab_get_school_list() {
-    return array(
-        'tech' => 'Technology & Design',
-        'studies' => 'Professional Studies',
-        'arts' => 'Arts & Sciences'
-    );
+	return array(
+		'tech' => 'Technology & Design',
+		'studies' => 'Professional Studies',
+		'arts' => 'Arts & Sciences',
+	);
 }
 
 /**
@@ -607,153 +607,152 @@ function openlab_get_school_list() {
  *
  * @param str Optional. Leave out to get all departments
  */
-function openlab_get_department_list($school = '', $label_type = 'full') {
+function openlab_get_department_list( $school = '', $label_type = 'full' ) {
+	// Sanitize school name
+	$schools = openlab_get_school_list();
+	if ( isset( $schools[ $school ] ) ) {
+		$school = $school;
+	} elseif ( in_array( $school, $schools ) ) {
+		$school = array_search( $school, $schools );
+	}
 
-    // Sanitize school name
-    $schools = openlab_get_school_list();
-    if (isset($schools[$school])) {
-        $school = $school;
-    } else if (in_array($school, $schools)) {
-        $school = array_search($school, $schools);
-    }
+	$all_departments = array(
+		'tech' => array(
+			'architectural-technology' => array(
+				'label' => 'Architectural Technology',
+			),
+			'communication-design' => array(
+				'label' => 'Communication Design',
+			),
+			'computer-engineering-technology' => array(
+				'label' => 'Computer Engineering Technology',
+			),
+			'computer-systems-technology' => array(
+				'label' => 'Computer Systems Technology',
+			),
+			'construction-management-and-civil-engineering-technology' => array(
+				'label' => 'Construction Management and Civil Engineering Technology',
+				'short_label' => 'Construction & Civil Engineering Tech',
+			),
+			'electrical-and-telecommunications-engineering-technology' => array(
+				'label' => 'Electrical and Telecommunications Engineering Technology',
+				'short_label' => 'Electrical & Telecom Engineering Tech',
+			),
+			'entertainment-technology' => array(
+				'label' => 'Entertainment Technology',
+			),
+			'environmental-control-technology' => array(
+				'label' => 'Environmental Control Technology',
+			),
+			'mechanical-engineering-technology' => array(
+				'label' => 'Mechanical Engineering Technology'
+			),
+		),
+		'studies' => array(
+			'business' => array(
+				'label' => 'Business',
+			),
+			'career-and-technology-teacher-education' => array(
+				'label' => 'Career and Technology Teacher Education',
+			),
+			'dental-hygiene' => array(
+				'label' => 'Dental Hygiene',
+			),
+			'health-services-administration' => array(
+				'label' => 'Health Services Administration',
+			),
+			'hospitality-management' => array(
+				'label' => 'Hospitality Management',
+			),
+			'human-services' => array(
+				'label' => 'Human Services',
+			),
+			'law-and-paralegal-studies' => array(
+				'label' => 'Law and Paralegal Studies',
+			),
+			'nursing' => array(
+				'label' => 'Nursing',
+			),
+			'radiologic-technology-and-medical-imaging' => array(
+				'label' => 'Radiologic Technology and Medical Imaging',
+			),
+			'restorative-dentistry' => array(
+				'label' => 'Restorative Dentistry',
+			),
+			'vision-care-technology' => array(
+				'label' => 'Vision Care Technology',
+			),
+		),
+		'arts' => array(
+			'african-american-studies' => array(
+				'label' => 'African American Studies',
+			),
+			'biological-sciences' => array(
+				'label' => 'Biological Sciences',
+			),
+			'biomedical-informatics' => array(
+				'label' => 'Biomedical Informatics',
+			),
+			'chemistry' => array(
+				'label' => 'Chemistry',
+			),
+			'english' => array(
+				'label' => 'English',
+			),
+			'humanities' => array(
+				'label' => 'Humanities',
+			),
+			'library' => array(
+				'label' => 'Library',
+			),
+			'mathematics' => array(
+				'label' => 'Mathematics',
+			),
+			'professional-and-technical-writing' => array(
+				'label' => 'Professional and Technical Writing',
+			),
+			'physics' => array(
+				'label' => 'Physics',
+			),
+			'social-science' => array(
+				'label' => 'Social Science',
+			),
+		),
+	);
 
-    $all_departments = array(
-        'tech' => array(
-            'architectural-technology' => array(
-                'label' => 'Architectural Technology',
-            ),
-            'communication-design' => array(
-                'label' => 'Communication Design',
-            ),
-            'computer-engineering-technology' => array(
-                'label' => 'Computer Engineering Technology',
-            ),
-            'computer-systems-technology' => array(
-                'label' => 'Computer Systems Technology',
-            ),
-            'construction-management-and-civil-engineering-technology' => array(
-                'label' => 'Construction Management and Civil Engineering Technology',
-                'short_label' => 'Construction & Civil Engineering Tech',
-            ),
-            'electrical-and-telecommunications-engineering-technology' => array(
-                'label' => 'Electrical and Telecommunications Engineering Technology',
-                'short_label' => 'Electrical & Telecom Engineering Tech',
-            ),
-            'entertainment-technology' => array(
-                'label' => 'Entertainment Technology',
-            ),
-            'environmental-control-technology' => array(
-                'label' => 'Environmental Control Technology',
-            ),
-            'mechanical-engineering-technology' => array(
-                'label' => 'Mechanical Engineering Technology'
-            ),
-        ),
-        'studies' => array(
-            'business' => array(
-                'label' => 'Business',
-            ),
-            'career-and-technology-teacher-education' => array(
-                'label' => 'Career and Technology Teacher Education',
-            ),
-            'dental-hygiene' => array(
-                'label' => 'Dental Hygiene',
-            ),
-            'health-services-administration' => array(
-                'label' => 'Health Services Administration',
-            ),
-            'hospitality-management' => array(
-                'label' => 'Hospitality Management',
-            ),
-            'human-services' => array(
-                'label' => 'Human Services',
-            ),
-            'law-and-paralegal-studies' => array(
-                'label' => 'Law and Paralegal Studies',
-            ),
-            'nursing' => array(
-                'label' => 'Nursing',
-            ),
-            'radiologic-technology-and-medical-imaging' => array(
-                'label' => 'Radiologic Technology and Medical Imaging',
-            ),
-            'restorative-dentistry' => array(
-                'label' => 'Restorative Dentistry',
-            ),
-            'vision-care-technology' => array(
-                'label' => 'Vision Care Technology',
-            ),
-        ),
-        'arts' => array(
-            'african-american-studies' => array(
-                'label' => 'African American Studies',
-            ),
-            'biological-sciences' => array(
-                'label' => 'Biological Sciences',
-            ),
-            'biomedical-informatics' => array(
-                'label' => 'Biomedical Informatics',
-            ),
-            'chemistry' => array(
-                'label' => 'Chemistry',
-            ),
-            'english' => array(
-                'label' => 'English',
-            ),
-            'humanities' => array(
-                'label' => 'Humanities',
-            ),
-            'library' => array(
-                'label' => 'Library',
-            ),
-            'mathematics' => array(
-                'label' => 'Mathematics',
-            ),
-            'professional-and-technical-writing' => array(
-                'label' => 'Professional and Technical Writing',
-            ),
-            'physics' => array(
-                'label' => 'Physics',
-            ),
-            'social-science' => array(
-                'label' => 'Social Science',
-            ),
-        ),
-    );
+	// Lazy - I didn't feel like manually converting to key-value structure
+	$departments_sorted = array();
+	foreach ( $schools as $s_key => $s_label ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
 
-    // Lazy - I didn't feel like manually converting to key-value structure
-    $departments_sorted = array();
-    foreach ($schools as $s_key => $s_label) {
-        // Skip if we only want one school
-        if ($school && $s_key != $school) {
-            continue;
-        }
+		$departments_sorted[ $s_key ] = array();
+	}
 
-        $departments_sorted[$s_key] = array();
-    }
+	foreach ( $all_departments as $s_key => $depts ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
 
-    foreach ($all_departments as $s_key => $depts) {
-        // Skip if we only want one school
-        if ($school && $s_key != $school) {
-            continue;
-        }
+		foreach ( $depts as $dept_name => $dept ) {
+			if ( 'short' == $label_type ) {
+				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
+			} else {
+				$d_label = $dept['label'];
+			}
 
-        foreach ($depts as $dept_name => $dept) {
-            if ('short' == $label_type) {
-                $d_label = isset($dept['short_label']) ? $dept['short_label'] : $dept['label'];
-            } else {
-                $d_label = $dept['label'];
-            }
+			$departments_sorted[ $s_key ][ $dept_name ] = $d_label;
+		}
+	}
 
-            $departments_sorted[$s_key][$dept_name] = $d_label;
-        }
-    }
+	if ( $school ) {
+		$departments_sorted = $departments_sorted[ $school ];
+	}
 
-    if ($school) {
-        $departments_sorted = $departments_sorted[$school];
-    }
-
-    return $departments_sorted;
+	return $departments_sorted;
 }
 
 add_action('init', 'wds_new_group_type');
@@ -1759,13 +1758,13 @@ function openlab_group_type($case = 'lower', $count = 'single', $group_id = 0) {
     // found, fall to the second, etc.
     $group_id = (int) $group_id;
     if (!$group_id && $group_id = bp_get_current_group_id()) {
-        
+
     } // current group
     else if (!$group_id && $group_id = bp_get_new_group_id()) {
-        
+
     }     // new group
     else if (!$group_id && $group_id = bp_get_group_id()) {
-        
+
     }         // group in loop
 
     $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
@@ -2384,4 +2383,4 @@ function openlab_ds_login_header() {
 
             add_filter('wp_mail_from_name', 'openlab_email_from_name_filter');
 
-            
+
