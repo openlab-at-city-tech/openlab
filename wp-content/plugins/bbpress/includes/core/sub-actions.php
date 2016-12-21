@@ -133,20 +133,25 @@ function bbp_widgets_init() {
 }
 
 /**
+ * Initialize roles
+ *
+ * @since bbPress (r6147)
+ *
+ * @param WP_Roles $wp_roles The main WordPress roles global
+ *
+ * @uses do_action() Calls 'bbp_roles_init'
+ */
+function bbp_roles_init( $wp_roles = null ) {
+	do_action( 'bbp_roles_init', $wp_roles );
+}
+
+/**
  * Setup the currently logged-in user
  *
  * @since bbPress (r2695)
- * @uses did_action() To make sure the user isn't loaded out of order
  * @uses do_action() Calls 'bbp_setup_current_user'
  */
 function bbp_setup_current_user() {
-
-	// If the current user is being setup before the "init" action has fired,
-	// strange (and difficult to debug) role/capability issues will occur.
-	if ( ! did_action( 'after_setup_theme' ) ) {
-		_doing_it_wrong( __FUNCTION__, __( 'The current user is being initialized without using $wp->init().', 'bbpress' ), '2.3' );
-	}
-
 	do_action( 'bbp_setup_current_user' );
 }
 
