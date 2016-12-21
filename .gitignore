@@ -40,6 +40,7 @@ bb-config.php
 \.cac-major-update.json
 *config.rb
 *.log
+wp-content/plugins/buddypress/bp-forums/bbpress
 
 .svn
 wp-admin/error_log
