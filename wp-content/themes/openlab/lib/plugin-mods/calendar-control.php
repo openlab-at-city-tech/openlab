@@ -232,12 +232,12 @@ add_action('media_buttons', 'openlab_manage_media_buttons');
 /**
  * Remove Event Categories
  */
-add_filter('eventorganiser_register_taxonomy_event-category', false);
+add_filter( 'eventorganiser_register_taxonomy_event-category', '__return_false' );
 
 /**
  * Remove Event Tags
  */
-add_filter('eventorganiser_register_taxonomy_event-tag', false);
+add_filter( 'eventorganiser_register_taxonomy_event-tag', '__return_false' );
 
 /**
  * Remove plugin action for adding author
