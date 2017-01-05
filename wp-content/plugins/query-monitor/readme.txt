@@ -2,8 +2,8 @@
 Contributors: johnbillion
 Tags: ajax, debug, debug-bar, debugging, development, developer, performance, profiler, profiling, queries, query monitor, rest-api
 Requires at least: 3.7
-Tested up to: 4.6
-Stable tag: 2.12.0
+Tested up to: 4.7
+Stable tag: 2.13.2
 License: GPLv2 or later
 
 View debugging and performance information on database queries, hooks, conditionals, HTTP requests, redirects and more.
@@ -38,6 +38,7 @@ Filtering queries by component or calling function makes it easy to see which pl
 = Theme =
 
  * Shows the template filename for the current request
+ * Shows the complete template hierarchy for the current request (WordPress 4.7+)
  * Shows all template parts used on the current request
  * Shows the available body classes for the current request
  * Shows the active theme name
@@ -71,7 +72,7 @@ Filtering queries by component or calling function makes it easy to see which pl
 = HTTP Requests =
 
  * Shows all HTTP requests performed on the current request (as long as they use WordPress' HTTP API)
- * Shows the response code, call stack, transport, component, timeout, and time taken
+ * Shows the response code, call stack, component, timeout, and time taken
  * Highlights erroneous responses, such as failed requests and anything without a `200` response code
 
 = Redirects =

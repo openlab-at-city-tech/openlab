@@ -17,6 +17,7 @@ GNU General Public License for more details.
 class QM_Collector_Theme extends QM_Collector {
 
 	public $id = 'theme';
+	protected $got_theme_compat = false;
 
 	public function name() {
 		return __( 'Theme', 'query-monitor' );
@@ -27,6 +28,67 @@ class QM_Collector_Theme extends QM_Collector {
 		add_filter( 'body_class',       array( $this, 'filter_body_class' ), 999 );
 		add_filter( 'template_include', array( $this, 'filter_template_include' ), 999 );
 		add_filter( 'timber/output',    array( $this, 'filter_timber_output' ), 999, 3 );
+		add_action( 'template_redirect', array( $this, 'action_template_redirect' ) );
+	}
+
+	public static function get_query_template_names() {
+		return array(
+			'embed'             => 'is_embed',
+			'404'               => 'is_404',
+			'search'            => 'is_search',
+			'front_page'        => 'is_front_page',
+			'home'              => 'is_home',
+			'post_type_archive' => 'is_post_type_archive',
+			'taxonomy'          => 'is_tax',
+			'attachment'        => 'is_attachment',
+			'single'            => 'is_single',
+			'page'              => 'is_page',
+			'singular'          => 'is_singular',
+			'category'          => 'is_category',
+			'tag'               => 'is_tag',
+			'author'            => 'is_author',
+			'date'              => 'is_date',
+			'archive'           => 'is_archive',
+			'index'             => '__return_true',
+		);
+	}
+
+	// https://core.trac.wordpress.org/ticket/14310
+	public function action_template_redirect() {
+
+		foreach ( self::get_query_template_names() as $template => $conditional ) {
+
+			// If a matching theme-compat file is found, further conditional checks won't occur in template-loader.php
+			if ( $this->got_theme_compat ) {
+				break;
+			}
+
+			if ( function_exists( $conditional ) && call_user_func( $conditional ) ) {
+				$filter = str_replace( '_', '', $template );
+				add_filter( "{$filter}_template_hierarchy", array( $this, 'filter_template_hierarchy' ), 999 );
+				call_user_func( "get_{$template}_template" );
+				remove_filter( "{$filter}_template_hierarchy", array( $this, 'filter_template_hierarchy' ), 999 );
+			}
+
+		}
+
+	}
+
+	public function filter_template_hierarchy( array $templates ) {
+		if ( ! isset( $this->data['template_hierarchy'] ) ) {
+			$this->data['template_hierarchy'] = array();
+		}
+
+		foreach ( $templates as $template_name ) {
+			if ( file_exists( ABSPATH . WPINC . '/theme-compat/' . $template_name ) ) {
+				$this->got_theme_compat = true;
+				break;
+			}
+		}
+
+		$this->data['template_hierarchy'] = array_merge( $this->data['template_hierarchy'], $templates );
+
+		return $templates;
 	}
 
 	public function filter_body_class( array $class ) {

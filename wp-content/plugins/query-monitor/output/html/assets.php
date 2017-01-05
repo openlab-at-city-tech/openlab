@@ -30,42 +30,38 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			return;
 		}
 
-		echo '<div class="qm" id="' . esc_attr( $this->collector->id() ) . '">';
-		echo '<table cellspacing="0">';
+		echo '<div id="' . esc_attr( $this->collector->id() ) . '">';
 
 		$position_labels = array(
+			'missing' => __( 'Missing', 'query-monitor' ),
+			'broken'  => __( 'Broken Dependencies', 'query-monitor' ),
+			'header'  => __( 'Header', 'query-monitor' ),
+			'footer'  => __( 'Footer', 'query-monitor' ),
+		);
+
+		$type_labels = array(
 			'scripts' => array(
-				'missing' => __( 'Missing Scripts', 'query-monitor' ),
-				'broken'  => __( 'Broken Dependencies', 'query-monitor' ),
-				'header'  => __( 'Header Scripts', 'query-monitor' ),
-				'footer'  => __( 'Footer Scripts', 'query-monitor' ),
+				'singular' => __( 'Script', 'query-monitor' ),
+				'plural'   => __( 'Scripts', 'query-monitor' ),
 			),
 			'styles' => array(
-				'missing'  => __( 'Missing Styles', 'query-monitor' ),
-				'broken'   => __( 'Broken Dependencies', 'query-monitor' ),
-				'header'   => __( 'Header Styles', 'query-monitor' ),
-				'footer'   => __( 'Footer Styles', 'query-monitor' ),
+				'singular' => __( 'Style', 'query-monitor' ),
+				'plural'   => __( 'Styles', 'query-monitor' ),
 			),
 		);
 
-		foreach ( array(
-			'scripts' => __( 'Scripts', 'query-monitor' ),
-			'styles'  => __( 'Styles', 'query-monitor' ),
-		) as $type => $type_label ) {
+		foreach ( $type_labels as $type => $type_label ) {
 
+			echo '<div class="qm" id="' . esc_attr( $this->collector->id() ) . '-' . esc_attr( $type ) . '">';
+			echo '<table cellspacing="0">';
+			echo '<caption>' . esc_html( $type_label['plural'] ) . '</caption>';
 			echo '<thead>';
-
-			if ( 'scripts' !== $type ) {
-				echo '<tr class="qm-totally-legit-spacer">';
-				echo '<td colspan="6"></td>';
-				echo '</tr>';
-			}
-
 			echo '<tr>';
-			echo '<th colspan="2">' . esc_html( $type_label ) . '</th>';
-			echo '<th>' . esc_html__( 'Dependencies', 'query-monitor' ) . '</th>';
-			echo '<th>' . esc_html__( 'Dependents', 'query-monitor' ) . '</th>';
-			echo '<th>' . esc_html__( 'Version', 'query-monitor' ) . '</th>';
+			echo '<th scope="col">' . esc_html__( 'Position', 'query-monitor' ) . '</th>';
+			echo '<th scope="col">' . esc_html( $type_label['singular'] ) . '</th>';
+			echo '<th scope="col">' . esc_html__( 'Dependencies', 'query-monitor' ) . '</th>';
+			echo '<th scope="col">' . esc_html__( 'Dependents', 'query-monitor' ) . '</th>';
+			echo '<th scope="col">' . esc_html__( 'Version', 'query-monitor' ) . '</th>';
 			echo '</tr>';
 			echo '</thead>';
 			echo '<tbody>';
@@ -78,16 +74,17 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			) as $position ) {
 
 				if ( isset( $data[ $position ][ $type ] ) ) {
-					$this->dependency_rows( $data[ $position ][ $type ], $data['raw'][ $type ], $position_labels[ $type ][ $position ], $type );
+					$this->dependency_rows( $data[ $position ][ $type ], $data['raw'][ $type ], $position_labels[ $position ], $type );
 				}
 
 			}
 
 			echo '</tbody>';
+			echo '</table>';
+			echo '</div>';
 
 		}
 
-		echo '</table>';
 		echo '</div>';
 
 	}
@@ -114,7 +111,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 
 			if ( $first ) {
 				$rowspan = count( $handles );
-				echo '<th rowspan="' . esc_attr( $rowspan ) . '" class="qm-nowrap">' . esc_html( $label ) . '</th>';
+				echo '<th scope="row" rowspan="' . esc_attr( $rowspan ) . '" class="qm-nowrap">' . esc_html( $label ) . '</th>';
 			}
 
 			$this->dependency_row( $dependencies->query( $handle ), $dependencies, $type );
@@ -172,7 +169,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		$highlight_deps       = array_map( array( $this, '_prefix_type' ), $deps );
 		$highlight_dependents = array_map( array( $this, '_prefix_type' ), $dependents );
 
-		echo '<td class="qm-wrap">' . esc_html( $dependency->handle ) . '<br><span class="qm-info">&nbsp;';
+		echo '<th scope="row" class="qm-wrap">' . esc_html( $dependency->handle ) . '<br><span class="qm-info">&nbsp;';
 		if ( is_wp_error( $source ) ) {
 			printf( '<span class="qm-warn">%s</span>',
 				esc_html( $src )
@@ -181,8 +178,8 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			echo esc_html( $src );
 		}
 		echo '</span></td>';
-		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_deps ) ) . '">' . implode( '<br>', array_map( 'esc_html', $deps ) ) . '</td>';
-		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_dependents ) ) . '">' . implode( '<br>', array_map( 'esc_html', $dependents ) ) . '</td>';
+		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_deps ) ) . '"><ul><li>' . implode( '</li><li>', array_map( 'esc_html', $deps ) ) . '</li></ul></td>';
+		echo '<td class="qm-nowrap qm-highlighter" data-qm-highlight="' . esc_attr( implode( ' ', $highlight_dependents ) ) . '"><ul><li>' . implode( '</li><li>', array_map( 'esc_html', $dependents ) ) . '</li></ul></td>';
 		echo '<td>' . esc_html( $ver ) . '</td>';
 
 	}
@@ -226,15 +223,24 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 	public function admin_menu( array $menu ) {
 
 		$data = $this->collector->get_data();
-		$args = array(
-			'title' => esc_html( $this->collector->name() ),
+		$labels = array(
+			'scripts' => __( 'Scripts', 'query-monitor' ),
+			'styles'  => __( 'Styles', 'query-monitor' ),
 		);
 
-		if ( !empty( $data['broken'] ) or !empty( $data['missing'] ) ) {
-			$args['meta']['classname'] = 'qm-error';
-		}
+		foreach ( $labels as $type => $label ) {
+			$args = array(
+				'title' => esc_html( $label ),
+				'id'    => esc_attr( "query-monitor-{$this->collector->id}-{$type}" ),
+				'href'  => esc_attr( '#' . $this->collector->id() . '-' . $type )
+			);
 
-		$menu[] = $this->menu( $args );
+			if ( ! empty( $data['broken'][ $type ] ) or ! empty( $data['missing'][ $type ] ) ) {
+				$args['meta']['classname'] = 'qm-error';
+			}
+
+			$menu[] = $this->menu( $args );
+		}
 
 		return $menu;
 

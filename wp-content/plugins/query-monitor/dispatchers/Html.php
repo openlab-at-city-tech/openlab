@@ -33,6 +33,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'login_footer',               array( $this, 'action_footer' ) );
 		add_action( 'embed_footer',               array( $this, 'action_footer' ) );
 		add_action( 'amp_post_template_footer',   array( $this, 'action_footer' ) );
+		add_action( 'gp_footer',                  array( $this, 'action_footer' ) );
 
 		parent::__construct( $qm );
 
@@ -127,6 +128,8 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		add_action( 'amp_post_template_head', array( $this, 'enqueue_assets' ) );
 		add_action( 'amp_post_template_head', array( $this, 'manually_print_assets' ), 11 );
 
+		add_action( 'gp_head',                array( $this, 'manually_print_assets' ), 11 );
+
 	}
 
 	public function manually_print_assets() {
@@ -215,7 +218,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		);
 
 		if ( did_action( 'wp_head' ) ) {
-			$absolute = function_exists( 'twentyfifteen_setup' );
+			$absolute = function_exists( 'twentyfifteen_setup' ) || function_exists( 'twentyseventeen_setup' );
 			if ( apply_filters( 'qm/output/absolute_position', $absolute ) ) {
 				$class[] = 'qm-absolute';
 			}
@@ -343,7 +346,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 				return false;
 			}
 		} else {
-			if ( ! ( did_action( 'wp' ) || did_action( 'login_init' ) ) ) {
+			if ( ! ( did_action( 'wp' ) || did_action( 'login_init' ) || did_action( 'gp_head' ) ) ) {
 				return false;
 			}
 		}
