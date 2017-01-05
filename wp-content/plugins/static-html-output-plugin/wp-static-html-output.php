@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: WP Static HTML Output
-Plugin URI:  http://leonstafford.github.io/wordpress-static-html-output-plugin/
-Description: WP Static HTML Output Plugin.
-Version:     1.1.1
+Plugin URI:  https://leonstafford.github.io
+Description: Benefit from WordPress as a CMS but with the speed, performance and portability of a static site
+Version:     1.2.0
 Author:      Leon Stafford
-Author URI:  http://leonstafford.github.io
+Author URI:  https://leonstafford.github.io
 Text Domain: static-html-output-plugin
 
-Copyright (c) 2016 Leon Stafford
+Copyright (c) 2011 Leon Stafford
  */
 
 require_once 'library/StaticHtmlOutput/Exception.php';
@@ -42,3 +42,14 @@ function myplugin_init() {
   load_plugin_textdomain( 'static-html-output-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ); 
 }
 add_action('plugins_loaded', 'myplugin_init');
+
+add_action( 'wp_ajax_generate_archive', 'generate_archive' );
+
+function generate_archive() {
+
+    $plugin = StaticHtmlOutput::getInstance();
+
+    $plugin->genArch();
+
+    wp_die();
+}
