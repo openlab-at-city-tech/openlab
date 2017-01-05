@@ -1,14 +1,14 @@
 <?php
 /**
  * Module Name: Protect
- * Module Description: Prevent brute force attacks.
+ * Module Description: Prevent and block malicious login attempts.
  * Sort Order: 1
  * Recommendation Order: 4
  * First Introduced: 3.4
  * Requires Connection: Yes
  * Auto Activate: Yes
  * Module Tags: Recommended
- * Feature: Recommended, Performance-Security
+ * Feature: Security
  * Additional Search Queries: security, secure, protection, botnet, brute force, protect, login
  */
 
@@ -49,9 +49,8 @@ class Jetpack_Protect_Module {
 	private function __construct() {
 		add_action( 'jetpack_activate_module_protect', array ( $this, 'on_activation' ) );
 		add_action( 'jetpack_deactivate_module_protect', array ( $this, 'on_deactivation' ) );
-		add_action( 'init', array ( $this, 'maybe_get_protect_key' ) );
 		add_action( 'jetpack_modules_loaded', array ( $this, 'modules_loaded' ) );
-		add_action( 'init', array ( $this, 'check_use_math' ) );
+		add_action( 'login_init', array ( $this, 'check_use_math' ) );
 		add_filter( 'authenticate', array ( $this, 'check_preauth' ), 10, 3 );
 		add_action( 'wp_login', array ( $this, 'log_successful_login' ), 10, 2 );
 		add_action( 'wp_login_failed', array ( $this, 'log_failed_attempt' ) );
@@ -91,9 +90,12 @@ class Jetpack_Protect_Module {
 
 	public function maybe_get_protect_key() {
 		if ( get_site_option( 'jetpack_protect_activating', false ) && ! get_site_option( 'jetpack_protect_key', false ) ) {
-			$this->get_protect_key();
+			$key = $this->get_protect_key();
 			delete_site_option( 'jetpack_protect_activating' );
+			return $key;
 		}
+
+		return get_site_option( 'jetpack_protect_key' );
 	}
 
 	/**
@@ -421,11 +423,29 @@ class Jetpack_Protect_Module {
 	 * @return bool Either returns true, fires $this->kill_login, or includes a math fallback and returns false
 	 */
 	function check_login_ability( $preauth = false ) {
+		$ip = jetpack_protect_get_ip();
+		
+		/**
+		 * Short-circuit check_login_ability. 
+		 *
+		 * If there is an alternate way to validate the current IP such as
+		 * a hard-coded list of IP addresses, we can short-circuit the rest
+		 * of the login ability checks and return true here.
+		 *
+		 * @module protect
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param bool false Should we allow all logins for the current ip? Default: false
+		 */
+		if ( apply_filters( 'jpp_allow_login', false, $ip ) ) {
+			return true;
+		}
+		
 		$headers         = $this->get_headers();
 		$header_hash     = md5( json_encode( $headers ) );
 		$transient_name  = 'jpp_li_' . $header_hash;
 		$transient_value = $this->get_transient( $transient_name );
-		$ip              = jetpack_protect_get_ip();
 
 		if ( jetpack_protect_ip_is_private( $ip ) ) {
 			return true;
@@ -649,7 +669,7 @@ class Jetpack_Protect_Module {
 	function protect_call( $action = 'check_ip', $request = array () ) {
 		global $wp_version, $wpdb, $current_user;
 
-		$api_key = get_site_option( 'jetpack_protect_key' );
+		$api_key = $this->maybe_get_protect_key();
 
 		$user_agent = "WordPress/{$wp_version} | Jetpack/" . constant( 'JETPACK__VERSION' );
 

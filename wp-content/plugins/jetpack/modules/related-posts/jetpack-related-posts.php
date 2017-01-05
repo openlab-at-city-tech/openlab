@@ -76,6 +76,11 @@ class Jetpack_RelatedPosts {
 		if ( ! class_exists( 'Jetpack_Media_Summary' ) ) {
 			jetpack_require_lib( 'class.media-summary' );
 		}
+
+		// Add Related Posts to the REST API Post response.
+		if ( function_exists( 'register_rest_field' ) ) {
+			add_action( 'rest_api_init',  array( $this, 'rest_register_related_posts' ) );
+		}
 	}
 
 	/**
@@ -105,7 +110,7 @@ class Jetpack_RelatedPosts {
 	}
 
 	/**
-	 * Load related posts assets if it's a elegiable frontend page or execute search and return JSON if it's an endpoint request.
+	 * Load related posts assets if it's a elegiable front end page or execute search and return JSON if it's an endpoint request.
 	 *
 	 * @global $_GET
 	 * @action wp
@@ -173,6 +178,11 @@ class Jetpack_RelatedPosts {
 	 * @returns string
 	 */
 	public function get_target_html() {
+		require_once JETPACK__PLUGIN_DIR . '/sync/class.jetpack-sync-settings.php';
+		if ( Jetpack_Sync_Settings::is_syncing() ) {
+			return '';
+		}
+
 		$options = $this->get_options();
 
 		if ( $options['show_headline'] ) {
@@ -214,6 +224,10 @@ EOT;
 	 * @returns string
 	 */
 	public function get_target_html_unsupported() {
+		require_once JETPACK__PLUGIN_DIR . '/sync/class.jetpack-sync-settings.php';
+		if ( Jetpack_Sync_Settings::is_syncing() ) {
+			return '';
+		}
 		return "\n\n<!-- Jetpack Related Posts is not supported in this context. -->\n\n";
 	}
 
@@ -231,7 +245,7 @@ EOT;
 	 */
 	public function get_options() {
 		if ( null === $this->_options ) {
-			$this->_options = Jetpack_Options::get_option( 'relatedposts' );
+			$this->_options = Jetpack_Options::get_option( 'relatedposts', array() );
 			if ( ! is_array( $this->_options ) )
 				$this->_options = array();
 			if ( ! isset( $this->_options['enabled'] ) )
@@ -1014,17 +1028,27 @@ EOT;
 		if ( !empty( $filters ) )
 			$body['filter'] = array( 'and' => $filters );
 
-		// Load all cached values
-		$cache = get_post_meta( $post_id, $cache_meta_key, true );
-		if ( empty( $cache ) )
-			$cache = array();
-
 		// Build cache key
 		$cache_key = md5( serialize( $body ) );
 
-		// Cache is valid! Return cached value.
-		if ( isset( $cache[ $cache_key ] ) && is_array( $cache[ $cache_key ] ) && $cache[ $cache_key ][ 'expires' ] > $now_ts ) {
-			return $cache[ $cache_key ][ 'payload' ];
+		// Load all cached values
+		if ( wp_using_ext_object_cache() ) {
+			$transient_name = "{$cache_meta_key}_{$cache_key}_{$post_id}";
+			$cache = get_transient( $transient_name );
+			if ( false !== $cache ) {
+				return $cache;
+			}
+		} else {
+			$cache = get_post_meta( $post_id, $cache_meta_key, true );
+
+			if ( empty( $cache ) )
+				$cache = array();
+
+
+			// Cache is valid! Return cached value.
+			if ( isset( $cache[ $cache_key ] ) && is_array( $cache[ $cache_key ] ) && $cache[ $cache_key ][ 'expires' ] > $now_ts ) {
+				return $cache[ $cache_key ][ 'payload' ];
+			}
 		}
 
 		$response = wp_remote_post(
@@ -1055,24 +1079,35 @@ EOT;
 			}
 		}
 
-		// Copy all valid cache values
-		$new_cache = array();
-		foreach ( $cache as $k => $v ) {
-			if ( is_array( $v ) && $v[ 'expires' ] > $now_ts ) {
-				$new_cache[ $k ] = $v;
-			}
-		}
-
-		// Set new cache value if valid
-		if ( ! empty( $related_posts ) ) {
-			$new_cache[ $cache_key ] = array(
-				'expires' => 12 * HOUR_IN_SECONDS + $now_ts,
-				'payload' => $related_posts,
-			);
+		// An empty array might indicate no related posts or that posts
+		// are not yet synced to WordPress.com, so we cache for only 1
+		// minute in this case
+		if ( empty( $related_posts ) ) {
+			$cache_ttl = 60;
+		} else {
+			$cache_ttl = 12 * HOUR_IN_SECONDS;
 		}
 
 		// Update cache
-		update_post_meta( $post_id, $cache_meta_key, $new_cache );
+		if ( wp_using_ext_object_cache() ) {
+			set_transient( $transient_name, $related_posts, $cache_ttl );
+		} else {
+			// Copy all valid cache values
+			$new_cache = array();
+			foreach ( $cache as $k => $v ) {
+				if ( is_array( $v ) && $v[ 'expires' ] > $now_ts ) {
+					$new_cache[ $k ] = $v;
+				}
+			}
+
+			// Set new cache value
+			$cache_expires = $cache_ttl + $now_ts;
+			$new_cache[ $cache_key ] = array(
+				'expires' => $cache_expires,
+				'payload' => $related_posts,
+			);
+			update_post_meta( $post_id, $cache_meta_key, $new_cache );
+		}
 
 		return $related_posts;
 	}
@@ -1281,6 +1316,49 @@ EOT;
 			$this->_allow_feature_toggle = apply_filters( 'jetpack_relatedposts_filter_allow_feature_toggle', false );
 		}
 		return $this->_allow_feature_toggle;
+	}
+
+	/**
+	 * ===================================================
+	 * FUNCTIONS EXPOSING RELATED POSTS IN THE WP REST API
+	 * ===================================================
+	 */
+
+	/**
+	 * Add Related Posts to the REST API Post response.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @action rest_api_init
+	 * @uses register_rest_field, self::rest_get_related_posts
+	 * @return null
+	 */
+	public function rest_register_related_posts() {
+		register_rest_field( 'post',
+			'jetpack-related-posts',
+			array(
+				'get_callback' => array( $this, 'rest_get_related_posts' ),
+				'update_callback' => null,
+				'schema'          => null,
+			)
+		);
+	}
+
+	/**
+	 * Build an array of Related Posts.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param array $object Details of current post.
+	 * @param string $field_name Name of field.
+	 * @param WP_REST_Request $request Current request
+	 *
+	 * @uses self::get_for_post_id
+	 *
+	 * @return array
+	 */
+	public function rest_get_related_posts( $object, $field_name, $request ) {
+		return $this->get_for_post_id( $object['id'], array() );
 	}
 }
 

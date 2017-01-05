@@ -88,6 +88,12 @@ abstract class SAL_Site {
 
 	abstract public function get_ak_vp_bundle_enabled();
 
+	abstract public function get_jetpack_seo_front_page_description();
+
+	abstract public function get_jetpack_seo_title_formats();
+
+	abstract public function get_verification_services_codes();
+
 	abstract public function before_render();
 
 	abstract public function after_render( &$response );
@@ -395,7 +401,7 @@ abstract class SAL_Site {
 	}
 
 	function get_unmapped_url() {
-		return get_site_url( $this->blog_id );
+		return get_site_url( get_current_blog_id() );
 	}
 
 	function get_theme_slug() {
