@@ -8,6 +8,8 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 	public function __construct() {
 		$this->namespace = 'wp/v2';
 		$this->rest_base = 'comments';
+
+		$this->meta = new WP_REST_Comment_Meta_Fields();
 	}
 
 	/**
@@ -71,7 +73,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 
 		if ( ! empty( $request['post'] ) ) {
 			foreach ( (array) $request['post'] as $post_id ) {
-				$post = get_post( $post_id );
+				$post = $this->get_post( $post_id );
 				if ( ! empty( $post_id ) && $post && ! $this->check_read_post_permission( $post ) ) {
 					return new WP_Error( 'rest_cannot_read_post', __( 'Sorry, you cannot read the post for this comment.' ), array( 'status' => rest_authorization_required_code() ) );
 				} else if ( 0 === $post_id && ! current_user_can( 'moderate_comments' ) ) {
@@ -193,7 +195,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 		$response->header( 'X-WP-Total', $total_comments );
 		$response->header( 'X-WP-TotalPages', $max_pages );
 
-		$base = add_query_arg( $request->get_query_params(), rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ) );
+		$base = add_query_arg( $request->get_query_params(), rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ) );
 		if ( $request['page'] > 1 ) {
 			$prev_page = $request['page'] - 1;
 			if ( $prev_page > $max_pages ) {
@@ -230,7 +232,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			return new WP_Error( 'rest_cannot_read', __( 'Sorry, you cannot read this comment.' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
-		$post = get_post( $comment->comment_post_ID );
+		$post = $this->get_post( $comment->comment_post_ID );
 
 		if ( $post && ! $this->check_read_post_permission( $post ) ) {
 			return new WP_Error( 'rest_cannot_read_post', __( 'Sorry, you cannot read the post for this comment.' ), array( 'status' => rest_authorization_required_code() ) );
@@ -258,7 +260,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 		}
 
 		if ( ! empty( $comment->comment_post_ID ) ) {
-			$post = get_post( $comment->comment_post_ID );
+			$post = $this->get_post( $comment->comment_post_ID );
 			if ( empty( $post ) ) {
 				return new WP_Error( 'rest_post_invalid_id', __( 'Invalid post id.' ), array( 'status' => 404 ) );
 			}
@@ -293,7 +295,11 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			return new WP_Error( 'rest_comment_invalid_status', __( 'Sorry, you cannot set status for comments.' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
-		if ( ! empty( $request['post'] ) && $post = get_post( (int) $request['post'] ) ) {
+		if ( empty( $request['post'] ) && ! current_user_can( 'moderate_comments' ) ) {
+			return new WP_Error( 'rest_comment_invalid_post_id', __( 'Sorry, you cannot create this comment without a post' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		if ( ! empty( $request['post'] ) && $post = $this->get_post( (int) $request['post'] ) ) {
 
 			if ( ! $this->check_read_post_permission( $post ) ) {
 				return new WP_Error( 'rest_cannot_read_post', __( 'Sorry, you cannot read the post for this comment.' ), array( 'status' => rest_authorization_required_code() ) );
@@ -346,7 +352,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 		if ( ! isset( $prepared_comment['comment_author_url'] ) ) {
 			$prepared_comment['comment_author_url'] = '';
 		}
-		$prepared_comment['comment_author_IP'] = '127.0.0.1';
+
 		$prepared_comment['comment_agent'] = '';
 		$prepared_comment['comment_approved'] = wp_allow_comment( $prepared_comment );
 
@@ -370,15 +376,26 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			$this->handle_status_param( $request['status'], $comment );
 		}
 
+		$schema = $this->get_item_schema();
+		if ( ! empty( $schema['properties']['meta'] ) && isset( $request['meta'] ) ) {
+			$meta_update = $this->meta->update_value( $request['meta'], $comment_id );
+			if ( is_wp_error( $meta_update ) ) {
+				return $meta_update;
+			}
+		}
+
 		$comment = get_comment( $comment_id );
-		$this->update_additional_fields_for_object( $comment, $request );
+		$fields_update = $this->update_additional_fields_for_object( $comment, $request );
+		if ( is_wp_error( $fields_update ) ) {
+			return $fields_update;
+		}
 
 		$context = current_user_can( 'moderate_comments' ) ? 'edit' : 'view';
 		$request->set_param( 'context', $context );
 		$response = $this->prepare_item_for_response( $comment, $request );
 		$response = rest_ensure_response( $response );
 		$response->set_status( 201 );
-		$response->header( 'Location', rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $comment_id ) ) );
+		$response->header( 'Location', rest_url( sprintf( '%s/%s/%d', $this->namespace, $this->rest_base, $comment_id ) ) );
 
 		/**
 		 * Fires after a comment is created or updated via the REST API.
@@ -425,7 +442,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			return new WP_Error( 'rest_comment_invalid_id', __( 'Invalid comment id.' ), array( 'status' => 404 ) );
 		}
 
-		if ( isset( $request['type'] ) && $request['type'] !== $comment->comment_type ) {
+		if ( isset( $request['type'] ) && get_comment_type( $id ) !== $request['type'] ) {
 			return new WP_Error( 'rest_comment_invalid_type', __( 'Sorry, you cannot change the comment type.' ), array( 'status' => 404 ) );
 		}
 
@@ -450,8 +467,19 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			}
 		}
 
+		$schema = $this->get_item_schema();
+		if ( ! empty( $schema['properties']['meta'] ) && isset( $request['meta'] ) ) {
+			$meta_update = $this->meta->update_value( $request['meta'], $id );
+			if ( is_wp_error( $meta_update ) ) {
+				return $meta_update;
+			}
+		}
+
 		$comment = get_comment( $id );
-		$this->update_additional_fields_for_object( $comment, $request );
+		$fields_update = $this->update_additional_fields_for_object( $comment, $request );
+		if ( is_wp_error( $fields_update ) ) {
+			return $fields_update;
+		}
 
 		$request->set_param( 'context', 'edit' );
 		$response = $this->prepare_item_for_response( $comment, $request );
@@ -575,6 +603,10 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			$data['author_avatar_urls'] = rest_get_avatar_urls( $comment->comment_author_email );
 		}
 
+		if ( ! empty( $schema['properties']['meta'] ) ) {
+			$data['meta'] = $this->meta->get_value( $comment->comment_ID, $request );
+		}
+
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data = $this->add_additional_fields_to_object( $data, $request );
 		$data = $this->filter_response_by_context( $data, $context );
@@ -605,28 +637,28 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 	protected function prepare_links( $comment ) {
 		$links = array(
 			'self' => array(
-				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $comment->comment_ID ) ),
+				'href' => rest_url( sprintf( '%s/%s/%d', $this->namespace, $this->rest_base, $comment->comment_ID ) ),
 			),
 			'collection' => array(
-				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ),
+				'href' => rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ),
 			),
 		);
 
 		if ( 0 !== (int) $comment->user_id ) {
 			$links['author'] = array(
-				'href'       => rest_url( '/wp/v2/users/' . $comment->user_id ),
+				'href'       => rest_url( 'wp/v2/users/' . $comment->user_id ),
 				'embeddable' => true,
 			);
 		}
 
 		if ( 0 !== (int) $comment->comment_post_ID ) {
-			$post = get_post( $comment->comment_post_ID );
+			$post = $this->get_post( $comment->comment_post_ID );
 			if ( ! empty( $post->ID ) ) {
 				$obj = get_post_type_object( $post->post_type );
 				$base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
 
 				$links['up'] = array(
-					'href'       => rest_url( '/wp/v2/' . $base . '/' . $comment->comment_post_ID ),
+					'href'       => rest_url( 'wp/v2/' . $base . '/' . $comment->comment_post_ID ),
 					'embeddable' => true,
 					'post_type'  => $post->post_type,
 				);
@@ -635,8 +667,19 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 
 		if ( 0 !== (int) $comment->comment_parent ) {
 			$links['in-reply-to'] = array(
-				'href'       => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $comment->comment_parent ) ),
+				'href'       => rest_url( sprintf( '%s/%s/%d', $this->namespace, $this->rest_base, $comment->comment_parent ) ),
 				'embeddable' => true,
+			);
+		}
+
+		// Only grab one comment to verify the comment has children.
+		$comment_children = $comment->get_children( array( 'number' => 1, 'count' => true ) );
+		if ( ! empty( $comment_children ) ) {
+			$args = array( 'parent' => $comment->comment_ID );
+			$rest_url = add_query_arg( $args, rest_url( $this->namespace . '/' . $this->rest_base ) );
+
+			$links['children'] = array(
+				'href' => $rest_url,
 			);
 		}
 
@@ -739,8 +782,13 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			$prepared_comment['comment_author_url'] = $request['author_url'];
 		}
 
+		if ( isset( $request['author_ip'] ) ) {
+			$prepared_comment['comment_author_IP'] = $request['author_ip'];
+		}
+
 		if ( isset( $request['type'] ) ) {
-			$prepared_comment['comment_type'] = $request['type'];
+			// Comment type "comment" needs to be created as an empty string.
+			$prepared_comment['comment_type'] = 'comment' === $request['type'] ? '' : $request['type'];
 		}
 
 		if ( isset( $request['karma'] ) ) {
@@ -795,8 +843,11 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 				'author_ip'     => array(
 					'description'  => __( 'IP address for the object author.' ),
 					'type'         => 'string',
+					'format'       => 'ipv4',
 					'context'      => array( 'edit' ),
-					'readonly'     => true,
+					'arg_options'  => array(
+						'default'           => '127.0.0.1',
+					),
 				),
 				'author_name'     => array(
 					'description'  => __( 'Display name for the object author.' ),
@@ -892,9 +943,9 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 					'description'  => __( 'Type of Comment for the object.' ),
 					'type'         => 'string',
 					'context'      => array( 'view', 'edit', 'embed' ),
+					'default'      => 'comment',
 					'arg_options'  => array(
 						'sanitize_callback' => 'sanitize_key',
-						'default'           => '',
 					),
 				),
 			),
@@ -921,6 +972,8 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 				'properties'    => $avatar_properties,
 			);
 		}
+
+		$schema['properties']['meta'] = $this->meta->get_field_schema();
 
 		return $this->add_additional_fields_schema( $schema );
 	}
@@ -999,7 +1052,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 			'type'                  => 'string',
 			'sanitize_callback'     => 'sanitize_key',
 			'validate_callback'     => 'rest_validate_request_arg',
-			'default'               => 'asc',
+			'default'               => 'desc',
 			'enum'                  => array(
 				'asc',
 				'desc',
@@ -1124,9 +1177,13 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 	 * @return boolean Can we read it?
 	 */
 	protected function check_read_permission( $comment ) {
-
-		if ( 1 === (int) $comment->comment_approved ) {
-			return true;
+		if ( ! empty( $comment->comment_post_ID ) ) {
+			$post = get_post( $comment->comment_post_ID );
+			if ( $post ) {
+				if ( $this->check_read_post_permission( $post ) && 1 === (int) $comment->comment_approved ) {
+					return true;
+				}
+			}
 		}
 
 		if ( 0 === get_current_user_id() ) {
@@ -1135,13 +1192,6 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 
 		if ( empty( $comment->comment_post_ID ) && ! current_user_can( 'moderate_comments' ) ) {
 			return false;
-		}
-
-		$post = get_post( $comment->comment_post_ID );
-		if ( $comment->comment_post_ID && $post ) {
-			if ( ! $this->check_read_post_permission( $post ) ) {
-				return false;
-			}
 		}
 
 		if ( ! empty( $comment->user_id ) && get_current_user_id() === (int) $comment->user_id ) {
