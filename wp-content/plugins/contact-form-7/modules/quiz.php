@@ -3,26 +3,28 @@
 ** A base module for [quiz]
 **/
 
-/* Shortcode handler */
+/* form_tag handler */
 
-add_action( 'wpcf7_init', 'wpcf7_add_shortcode_quiz' );
+add_action( 'wpcf7_init', 'wpcf7_add_form_tag_quiz' );
 
-function wpcf7_add_shortcode_quiz() {
-	wpcf7_add_shortcode( 'quiz', 'wpcf7_quiz_shortcode_handler', true );
+function wpcf7_add_form_tag_quiz() {
+	wpcf7_add_form_tag( 'quiz', 'wpcf7_quiz_form_tag_handler', true );
 }
 
-function wpcf7_quiz_shortcode_handler( $tag ) {
-	$tag = new WPCF7_Shortcode( $tag );
+function wpcf7_quiz_form_tag_handler( $tag ) {
+	$tag = new WPCF7_FormTag( $tag );
 
-	if ( empty( $tag->name ) )
+	if ( empty( $tag->name ) ) {
 		return '';
+	}
 
 	$validation_error = wpcf7_get_validation_error( $tag->name );
 
 	$class = wpcf7_form_controls_class( $tag->type );
 
-	if ( $validation_error )
+	if ( $validation_error ) {
 		$class .= ' wpcf7-not-valid';
+	}
 
 	$atts = array();
 
@@ -37,6 +39,7 @@ function wpcf7_quiz_shortcode_handler( $tag ) {
 	$atts['class'] = $tag->get_class_option( $class );
 	$atts['id'] = $tag->get_id_option();
 	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
+	$atts['autocomplete'] = 'off';
 	$atts['aria-required'] = 'true';
 	$atts['aria-invalid'] = $validation_error ? 'true' : 'false';
 
@@ -74,7 +77,7 @@ function wpcf7_quiz_shortcode_handler( $tag ) {
 add_filter( 'wpcf7_validate_quiz', 'wpcf7_quiz_validation_filter', 10, 2 );
 
 function wpcf7_quiz_validation_filter( $result, $tag ) {
-	$tag = new WPCF7_Shortcode( $tag );
+	$tag = new WPCF7_FormTag( $tag );
 
 	$name = $tag->name;
 
@@ -104,7 +107,7 @@ function wpcf7_quiz_ajax_refill( $items ) {
 	if ( ! is_array( $items ) )
 		return $items;
 
-	$fes = wpcf7_scan_shortcode( array( 'type' => 'quiz' ) );
+	$fes = wpcf7_scan_form_tags( array( 'type' => 'quiz' ) );
 
 	if ( empty( $fes ) )
 		return $items;
