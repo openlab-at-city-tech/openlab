@@ -961,7 +961,7 @@ function bp_profile_get_field_groups() {
 	$groups = wp_cache_get( 'all', 'bp_xprofile_groups' );
 	if ( false === $groups ) {
 		$groups = bp_xprofile_get_groups( array( 'fetch_fields' => true ) );
-		wp_cache_set( 'all', $groups, 'bp_xprofile' );
+		wp_cache_set( 'all', $groups, 'bp_xprofile_groups' );
 	}
 
 	/**
@@ -1229,7 +1229,6 @@ function bp_edit_profile_button() {
 		'link_href'         => trailingslashit( bp_displayed_user_domain() . bp_get_profile_slug() . '/edit' ),
 		'link_class'        => 'edit',
 		'link_text'         => __( 'Edit Profile', 'buddypress' ),
-		'link_title'        => __( 'Edit Profile', 'buddypress' ),
 	) );
 }
 
@@ -1387,7 +1386,7 @@ function bp_profile_settings_visibility_select( $args = '' ) {
 
 			<?php else : ?>
 
-				<span class="field-visibility-settings-notoggle" title="<?php esc_attr_e( "This field's visibility cannot be changed.", 'buddypress' ); ?>"><?php bp_the_profile_field_visibility_level_label(); ?></span>
+				<span class="field-visibility-settings-notoggle"><?php bp_the_profile_field_visibility_level_label(); ?></span>
 
 			<?php endif;
 

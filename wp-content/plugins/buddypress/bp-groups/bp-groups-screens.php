@@ -25,6 +25,22 @@ if ( ! buddypress()->do_autoload ) {
  */
 function groups_directory_groups_setup() {
 	if ( bp_is_groups_directory() ) {
+		// Set group type if available.
+		if ( bp_is_current_action( bp_get_groups_group_type_base() ) && bp_action_variable() ) {
+			$matched_types = bp_groups_get_group_types( array(
+				'has_directory'  => true,
+				'directory_slug' => bp_action_variable(),
+			) );
+
+			// Redirect back to group directory if no match.
+			if ( empty( $matched_types ) ) {
+				bp_core_redirect( bp_get_groups_directory_permalink() );
+			}
+
+			// Set our global variable.
+			buddypress()->groups->current_directory_type = reset( $matched_types );
+		}
+
 		bp_update_is_directory( true, 'groups' );
 
 		/**
@@ -89,7 +105,7 @@ function groups_screen_group_invites() {
 			bp_core_add_message( __('Group invite accepted', 'buddypress') );
 
 			// Record this in activity streams.
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 
 			groups_record_activity( array(
 				'type'    => 'joined_group',
@@ -914,6 +930,32 @@ function groups_screen_group_admin_settings() {
 		// Check the nonce.
 		if ( !check_admin_referer( 'groups_edit_group_settings' ) )
 			return false;
+
+		/*
+		 * Save group types.
+		 *
+		 * Ensure we keep types that have 'show_in_create_screen' set to false.
+		 */
+		$current_types = bp_groups_get_group_type( bp_get_current_group_id(), false );
+		$current_types = array_intersect( bp_groups_get_group_types( array( 'show_in_create_screen' => false ) ), (array) $current_types );
+		if ( isset( $_POST['group-types'] ) ) {
+			$current_types = array_merge( $current_types, $_POST['group-types'] );
+
+			// Set group types.
+			bp_groups_set_group_type( bp_get_current_group_id(), $current_types );
+
+		// No group types checked, so this means we want to wipe out all group types.
+		} else {
+			/*
+			 * Passing a blank string will wipe out all types for the group.
+			 *
+			 * Ensure we keep types that have 'show_in_create_screen' set to false.
+			 */
+			$current_types = empty( $current_types ) ? '' : $current_types;
+
+			// Set group types.
+			bp_groups_set_group_type( bp_get_current_group_id(), $current_types );
+		}
 
 		if ( !groups_edit_group_settings( $_POST['group-id'], $enable_forum, $status, $invite_status ) ) {
 			bp_core_add_message( __( 'There was an error updating group settings. Please try again.', 'buddypress' ), 'error' );

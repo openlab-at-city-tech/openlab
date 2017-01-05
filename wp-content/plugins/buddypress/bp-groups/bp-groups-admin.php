@@ -227,7 +227,7 @@ function bp_groups_admin_load() {
 		check_admin_referer( 'edit-group_' . $group_id );
 
 		// Get the group from the database.
-		$group = groups_get_group( 'group_id=' . $group_id );
+		$group = groups_get_group( $group_id );
 
 		// If the group doesn't exist, just redirect back to the index.
 		if ( empty( $group->slug ) ) {
@@ -566,7 +566,7 @@ function bp_groups_admin_edit() {
 	$is_error = ! empty( $no_admins ) || ! empty( $errors ) || ! empty( $error_new ) || ! empty( $error_modified );
 
 	// Get the group from the database.
-	$group      = groups_get_group( 'group_id=' . (int) $_GET['gid'] );
+	$group      = groups_get_group( (int) $_GET['gid'] );
 
 	$group_name = isset( $group->name ) ? bp_get_group_name( $group ) : '';
 
@@ -798,7 +798,7 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 
 	<?php if ( bp_is_active( 'forums' ) ) : ?>
 		<div class="bp-groups-settings-section" id="bp-groups-settings-section-forum">
-			<label for="group-show-forum"><input type="checkbox" name="group-show-forum" id="group-show-forum" <?php checked( $item->enable_forum ) ?> /> <?php _e( 'Enable discussion forum', 'buddypress' ) ?><br />
+			<label for="group-show-forum"><input type="checkbox" name="group-show-forum" id="group-show-forum" <?php checked( $item->enable_forum ) ?> /> <?php _e( 'Enable discussion forum', 'buddypress' ) ?></label>
 		</div>
 	<?php endif; ?>
 
@@ -806,11 +806,9 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 		<fieldset>
 			<legend><?php _e( 'Privacy', 'buddypress' ); ?></legend>
 
-			<ul>
-				<li><input type="radio" name="group-status" id="bp-group-status-public" value="public" <?php checked( $item->status, 'public' ) ?> /><label for="bp-group-status-public"><?php _e( 'Public', 'buddypress' ) ?></label></li>
-				<li><input type="radio" name="group-status" id="bp-group-status-private" value="private" <?php checked( $item->status, 'private' ) ?> /><label for="bp-group-status-private"><?php _e( 'Private', 'buddypress' ) ?></label></li>
-				<li><input type="radio" name="group-status" id="bp-group-status-hidden" value="hidden" <?php checked( $item->status, 'hidden' ) ?> /><label for="bp-group-status-hidden"><?php _e( 'Hidden', 'buddypress' ) ?></label></li>
-			</ul>
+			<label for="bp-group-status-public"><input type="radio" name="group-status" id="bp-group-status-public" value="public" <?php checked( $item->status, 'public' ) ?> /><?php _e( 'Public', 'buddypress' ) ?></label>
+			<label for="bp-group-status-private"><input type="radio" name="group-status" id="bp-group-status-private" value="private" <?php checked( $item->status, 'private' ) ?> /><?php _e( 'Private', 'buddypress' ) ?></label>
+			<label for="bp-group-status-hidden"><input type="radio" name="group-status" id="bp-group-status-hidden" value="hidden" <?php checked( $item->status, 'hidden' ) ?> /><?php _e( 'Hidden', 'buddypress' ) ?></label>
 		</fieldset>
 	</div>
 
@@ -818,11 +816,9 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 		<fieldset>
 			<legend><?php _e( 'Who can invite others to this group?', 'buddypress' ); ?></legend>
 
-			<ul>
-				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-members" value="members" <?php checked( $invite_status, 'members' ) ?> /><label for="bp-group-invite-status-members"><?php _e( 'All group members', 'buddypress' ) ?></label></li>
-				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-mods" value="mods" <?php checked( $invite_status, 'mods' ) ?> /><label for="bp-group-invite-status-mods"><?php _e( 'Group admins and mods only', 'buddypress' ) ?></label></li>
-				<li><input type="radio" name="group-invite-status" id="bp-group-invite-status-admins" value="admins" <?php checked( $invite_status, 'admins' ) ?> /><label for="bp-group-invite-status-admins"><?php _e( 'Group admins only', 'buddypress' ) ?></label></li>
-			</ul>
+			<label for="bp-group-invite-status-members"><input type="radio" name="group-invite-status" id="bp-group-invite-status-members" value="members" <?php checked( $invite_status, 'members' ) ?> /><?php _e( 'All group members', 'buddypress' ) ?></label>
+			<label for="bp-group-invite-status-mods"><input type="radio" name="group-invite-status" id="bp-group-invite-status-mods" value="mods" <?php checked( $invite_status, 'mods' ) ?> /><?php _e( 'Group admins and mods only', 'buddypress' ) ?></label>
+			<label for="bp-group-invite-status-admins"><input type="radio" name="group-invite-status" id="bp-group-invite-status-admins" value="admins" <?php checked( $invite_status, 'admins' ) ?> /><?php _e( 'Group admins only', 'buddypress' ) ?></label>
 		</fieldset>
 	</div>
 
@@ -1050,20 +1046,33 @@ function bp_groups_admin_edit_metabox_group_type( BP_Groups_Group $group = null 
 		return;
 	}
 
-	$types = bp_groups_get_group_types( array(), 'objects' );
-	$current_type = bp_groups_get_group_type( $group->id );
+	$types         = bp_groups_get_group_types( array(), 'objects' );
+	$current_types = (array) bp_groups_get_group_type( $group->id, false );
+	$backend_only  = bp_groups_get_group_types( array( 'show_in_create_screen' => false ) );
 	?>
 
 	<label for="bp-groups-group-type" class="screen-reader-text"><?php
 		/* translators: accessibility text */
 		esc_html_e( 'Select group type', 'buddypress' );
 	?></label>
-	<select name="bp-groups-group-type" id="bp-groups-group-type">
-		<option value="" <?php selected( '', $current_type ); ?>><?php /* translators: no option picked in select box */ esc_attr_e( '----', 'buddypress' ) ?></option>
+
+	<ul class="categorychecklist form-no-clear">
 		<?php foreach ( $types as $type ) : ?>
-			<option value="<?php echo esc_attr( $type->name ) ?>" <?php selected( $type->name, $current_type ) ?>><?php echo esc_html( $type->labels['singular_name'] ) ?></option>
+			<li>
+				<label class="selectit"><input value="<?php echo esc_attr( $type->name ) ?>" name="bp-groups-group-type[]" type="checkbox" <?php checked( true, in_array( $type->name, $current_types ) ); ?>>
+					<?php
+						echo esc_html( $type->labels['singular_name'] );
+						if ( in_array( $type->name, $backend_only ) ) {
+							printf( ' <span class="description">%s</span>', esc_html__( '(Not available on the frontend)', 'buddypress' ) );
+						}
+					?>
+
+				</label>
+			</li>
+
 		<?php endforeach; ?>
-	</select>
+
+	</ul>
 
 	<?php
 
@@ -1076,7 +1085,7 @@ function bp_groups_admin_edit_metabox_group_type( BP_Groups_Group $group = null 
  * @since 2.6.0
  */
 function bp_groups_process_group_type_update( $group_id ) {
-	if ( ! isset( $_POST['bp-group-type-nonce'] ) || ! isset( $_POST['bp-groups-group-type'] ) ) {
+	if ( ! isset( $_POST['bp-group-type-nonce'] ) ) {
 		return;
 	}
 
@@ -1087,17 +1096,13 @@ function bp_groups_process_group_type_update( $group_id ) {
 		return;
 	}
 
-	// Group type string must either reference a valid group type, or be empty.
-	$group_type = wp_unslash( $_POST['bp-groups-group-type'] );
-	if ( $group_type && ! bp_groups_get_group_type_object( $group_type ) ) {
-		return;
-	}
+	$group_types = ! empty( $_POST['bp-groups-group-type'] ) ? wp_unslash( $_POST['bp-groups-group-type'] ) : array();
 
 	/*
 	 * If an invalid group type is passed, someone's doing something
 	 * fishy with the POST request, so we can fail silently.
 	 */
-	if ( bp_groups_set_group_type( $group_id, $group_type ) ) {
+	if ( bp_groups_set_group_type( $group_id, $group_types ) ) {
 		// @todo Success messages can't be posted because other stuff happens on the page load.
 	}
 }
@@ -1228,3 +1233,101 @@ function bp_groups_admin_autocomplete_handler() {
 	wp_die( json_encode( $matches ) );
 }
 add_action( 'wp_ajax_bp_group_admin_member_autocomplete', 'bp_groups_admin_autocomplete_handler' );
+
+/**
+ * Process input from the Group Type bulk change select.
+ *
+ * @since 2.7.0
+ *
+ * @param string $doaction Current $_GET action being performed in admin screen.
+ */
+function bp_groups_admin_process_group_type_bulk_changes( $doaction ) {
+	// Bail if no groups are specified or if this isn't a relevant action.
+	if ( empty( $_REQUEST['gid'] )
+		|| ( empty( $_REQUEST['bp_change_type'] ) && empty( $_REQUEST['bp_change_type2'] ) )
+		|| empty( $_REQUEST['bp_change_group_type'] )
+	) {
+		return;
+	}
+
+	// Bail if nonce check fails.
+	check_admin_referer( 'bp-bulk-groups-change-type-' . bp_loggedin_user_id(), 'bp-bulk-groups-change-type-nonce' );
+
+	if ( ! bp_current_user_can( 'bp_moderate' )  ) {
+		return;
+	}
+
+	$new_type = '';
+	if ( ! empty( $_REQUEST['bp_change_type2'] ) ) {
+		$new_type = sanitize_text_field( $_REQUEST['bp_change_type2'] );
+	} elseif ( ! empty( $_REQUEST['bp_change_type'] ) ) {
+		$new_type = sanitize_text_field( $_REQUEST['bp_change_type'] );
+	}
+
+	// Check that the selected type actually exists.
+	if ( 'remove_group_type' !== $new_type && null === bp_groups_get_group_type_object( $new_type ) ) {
+		$error = true;
+	} else {
+		// Run through group ids.
+		$error = false;
+		foreach ( (array) $_REQUEST['gid'] as $group_id ) {
+			$group_id = (int) $group_id;
+
+			// Get the old group type to check against.
+			$group_type = bp_groups_get_group_type( $group_id );
+
+			if ( 'remove_group_type' === $new_type ) {
+				// Remove the current group type, if there's one to remove.
+				if ( $group_type ) {
+					$removed = bp_groups_remove_group_type( $group_id, $group_type );
+					if ( false === $removed || is_wp_error( $removed ) ) {
+						$error = true;
+					}
+				}
+			} else {
+				// Set the new group type.
+				if ( $new_type !== $group_type ) {
+					$set = bp_groups_set_group_type( $group_id, $new_type );
+					if ( false === $set || is_wp_error( $set ) ) {
+						$error = true;
+					}
+				}
+			}
+		}
+	}
+
+	// If there were any errors, show the error message.
+	if ( $error ) {
+		$redirect = add_query_arg( array( 'updated' => 'group-type-change-error' ), wp_get_referer() );
+	} else {
+		$redirect = add_query_arg( array( 'updated' => 'group-type-change-success' ), wp_get_referer() );
+	}
+
+	wp_redirect( $redirect );
+	exit();
+}
+add_action( 'bp_groups_admin_load', 'bp_groups_admin_process_group_type_bulk_changes' );
+
+/**
+ * Display an admin notice upon group type bulk update.
+ *
+ * @since 2.7.0
+ */
+function bp_groups_admin_groups_type_change_notice() {
+	$updated = isset( $_REQUEST['updated'] ) ? $_REQUEST['updated'] : false;
+
+	// Display feedback.
+	if ( $updated && in_array( $updated, array( 'group-type-change-error', 'group-type-change-success' ), true ) ) {
+
+		if ( 'group-type-change-error' === $updated ) {
+			$notice = __( 'There was an error while changing group type. Please try again.', 'buddypress' );
+			$type   = 'error';
+		} else {
+			$notice = __( 'Group type was changed successfully.', 'buddypress' );
+			$type   = 'updated';
+		}
+
+		bp_core_add_admin_notice( $notice, $type );
+	}
+}
+add_action( bp_core_admin_hook(), 'bp_groups_admin_groups_type_change_notice' );

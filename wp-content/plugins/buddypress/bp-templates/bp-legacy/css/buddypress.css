@@ -624,7 +624,6 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 
 #buddypress .standard-form textarea,
 #buddypress .standard-form input[type=text],
-#buddypress .standard-form input[type=text],
 #buddypress .standard-form input[type=color],
 #buddypress .standard-form input[type=date],
 #buddypress .standard-form input[type=datetime],
@@ -647,7 +646,7 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 	border: 1px solid #ccc;
 	background: #fafafa;
 	border-radius: 0;
-	color: #767676;
+	color: #737373;
 	font: inherit;
 	font-size: 100%;
 	padding: 6px;
@@ -786,7 +785,7 @@ body.no-js #buddypress #messages-bulk-management #select-all-messages {
 	padding: 5px;
 	width: 160px;
 }
-#buddypress button,
+#buddypress .standard-form button,
 #buddypress a.button,
 #buddypress input[type=submit],
 #buddypress input[type=button],
@@ -805,7 +804,7 @@ a.bp-title-button {
 	text-align: center;
 	text-decoration: none;
 }
-#buddypress button:hover,
+#buddypress .standard-form button:hover,
 #buddypress a.button:hover,
 #buddypress a.button:focus,
 #buddypress input[type=submit]:hover,
@@ -844,6 +843,7 @@ a.bp-title-button {
 	float: left;
 }
 
+#buddypress form.standard-form .main-column ul#friend-list h3,
 #buddypress form.standard-form .main-column ul#friend-list h4 {
 	clear:none;
 }
@@ -861,6 +861,22 @@ a.bp-title-button {
 #buddypress form *[disabled="disabled"]{
 	cursor: default;
 	opacity: .4;
+}
+
+fieldset.register-site {
+	margin-top: 1em;
+}
+
+fieldset.create-site {
+	margin-bottom: 2em;
+}
+
+fieldset.create-site legend {
+	margin-bottom: 1em;
+}
+
+fieldset.create-site label {
+	margin-right: 3em;
 }
 
 .bp-screen-reader-text {
@@ -1071,6 +1087,7 @@ a.bp-title-button {
 #buddypress table.messages-notices tr.alt td,
 #buddypress table.forum tr.alt td {
 	background: #f5f5f5;
+	color: #707070;
 }
 #buddypress table.notification-settings {
 	margin-bottom: 20px;
@@ -1169,7 +1186,6 @@ a.bp-title-button {
 #buddypress span.activity {
 	display: inline-block;
 	font-size: small;
-	opacity: 0.8;
 	padding: 0;
 }
 #buddypress span.user-nicename {
@@ -1244,6 +1260,7 @@ a.bp-title-button {
 	text-align: right;
 	width: 20%;
 }
+#buddypress div#item-header div#item-actions h2,
 #buddypress div#item-header div#item-actions h3 {
 	margin: 0 0 5px 0;
 }
@@ -1304,6 +1321,7 @@ body.activity-permalink #buddypress ul.item-list li.activity-item {
 	margin: 0 10px 0 0;
 }
 #buddypress ul.item-list li div.item-title,
+#buddypress ul.item-list li h3,
 #buddypress ul.item-list li h4 {
 	font-weight: normal;
 	font-size: 90%;
@@ -1389,7 +1407,7 @@ body.activity-permalink #buddypress ul.item-list li.activity-item {
 #buddypress div.item-list-tabs ul li.current a {
 	background-color: #eee;
 	color: #555;
-	opacity: .8;
+	opacity: .9;
 	font-weight: bold;
 }
 #buddypress div.item-list-tabs ul li.selected a span,
@@ -1417,6 +1435,12 @@ body.activity-permalink #buddypress ul.item-list li.activity-item {
 #buddypress #members-list li {
 	overflow: auto;
 	list-style: none;
+}
+#buddypress .group-members-list {
+	width: 100%;
+	margin-top: 1em;
+	clear: both;
+	overflow: auto;
 }
 #buddypress #item-buttons:empty {
 	display: none;
@@ -1558,7 +1582,7 @@ a.message-action-star:hover {
 3.10 - Extended Profiles
 --------------------------------------------------------------*/
 
-#buddypress div.profile h4 {
+#buddypress div.profile h2 {
 	margin-bottom: auto;
 	margin-top: 15px;
 }
@@ -1583,7 +1607,7 @@ body.no-js #buddypress .field-visibility-settings-close {
 #buddypress .field-visibility-settings,
 #buddypress .field-visibility-settings-toggle,
 #buddypress .field-visibility-settings-notoggle {
-	color: #767676;
+	color: #707070;
 }
 #buddypress .field-visibility-settings-toggle a,
 #buddypress .field-visibility-settings a {
@@ -1615,12 +1639,14 @@ body.register #buddypress div.page ul {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 	background: #f5f5f5;
+	color: #707070;
 }
 #buddypress .tmce-active button.switch-tmce {
 	border-bottom-color: transparent;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 	background: #f5f5f5;
+	color: #707070;
 }
 #buddypress .standard-form .wp-editor-container textarea {
 	width: 100%;
@@ -1640,7 +1666,6 @@ body.register #buddypress div.page ul {
 .widget.buddypress span.activity {
 	display: inline-block;
 	font-size: small;
-	opacity: 0.8;
 	padding: 0;
 }
 
@@ -1742,6 +1767,7 @@ body.register #buddypress div.page ul {
 		position: relative;
 		margin-bottom:1em;
 	}
+	#buddypress form.standard-form .main-column ul#friend-list h3,
 	#buddypress form.standard-form .main-column ul#friend-list h4{
 		width:100%;
 	}

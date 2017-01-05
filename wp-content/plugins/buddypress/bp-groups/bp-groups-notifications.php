@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
  * @param BP_Groups_Group|null $old_group Group before new details were saved.
  */
 function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$group = groups_get_group( $group_id );
 
 	if ( $old_group instanceof BP_Groups_Group ) {
 		$changed = array();
@@ -68,6 +68,11 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 			continue;
 		}
 
+		$unsubscribe_args = array(
+			'user_id'           => $user_id,
+			'notification_type' => 'groups-details-updated',
+		);
+
 		$args = array(
 			'tokens' => array(
 				'changed_text' => $changed_text,
@@ -75,6 +80,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 				'group.id'     => $group_id,
 				'group.url'    => esc_url( bp_get_group_permalink( $group ) ),
 				'group.name'   => $group->name,
+				'unsubscribe'  => esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) ),
 			),
 		);
 		bp_send_email( 'groups-details-updated', (int) $user_id, $args );
@@ -115,7 +121,7 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 			'item_id'           => $group_id,
 			'secondary_item_id' => $requesting_user_id,
 			'component_name'    => buddypress()->groups->id,
-			'component_action'  => 'new_membership_request'
+			'component_action'  => 'new_membership_request',
 		) );
 	}
 
@@ -124,7 +130,12 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 		return;
 	}
 
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$unsubscribe_args = array(
+		'user_id'           => $admin_id,
+		'notification_type' => 'groups-membership-request',
+	);
+
+	$group = groups_get_group( $group_id );
 	$args  = array(
 		'tokens' => array(
 			'admin.id'             => $admin_id,
@@ -136,6 +147,7 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 			'profile.url'          => esc_url( bp_core_get_user_domain( $requesting_user_id ) ),
 			'requesting-user.id'   => $requesting_user_id,
 			'requesting-user.name' => bp_core_get_user_displayname( $requesting_user_id ),
+			'unsubscribe'          => esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) ),
 		),
 	);
 	bp_send_email( 'groups-membership-request', (int) $admin_id, $args );
@@ -172,7 +184,7 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 		return;
 	}
 
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$group = groups_get_group( $group_id );
 	$args  = array(
 		'tokens' => array(
 			'group'              => $group,
@@ -184,8 +196,25 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 	);
 
 	if ( ! empty( $accepted ) ) {
+
+		$unsubscribe_args = array(
+			'user_id'           => $requesting_user_id,
+			'notification_type' => 'groups-membership-request-accepted',
+		);
+
+		$args['tokens']['unsubscribe'] = esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) );
+
 		bp_send_email( 'groups-membership-request-accepted', (int) $requesting_user_id, $args );
+
 	} else {
+
+		$unsubscribe_args = array(
+			'user_id'           => $requesting_user_id,
+			'notification_type' => 'groups-membership-request-rejected',
+		);
+
+		$args['tokens']['unsubscribe'] = esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) );
+
 		bp_send_email( 'groups-membership-request-rejected', (int) $requesting_user_id, $args );
 	}
 }
@@ -226,7 +255,12 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 		return;
 	}
 
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$unsubscribe_args = array(
+		'user_id'           => $user_id,
+		'notification_type' => 'groups-member-promoted',
+	);
+
+	$group = groups_get_group( $group_id );
 	$args  = array(
 		'tokens' => array(
 			'group'       => $group,
@@ -235,6 +269,7 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 			'group.name'  => $group->name,
 			'promoted_to' => $promoted_to,
 			'user.id'     => $user_id,
+			'unsubscribe' => esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) ),
 		),
 	);
 	bp_send_email( 'groups-member-promoted', (int) $user_id, $args );
@@ -277,6 +312,12 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 	}
 
 	$invited_link = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();
+
+	$unsubscribe_args = array(
+		'user_id'           => $invited_user_id,
+		'notification_type' => 'groups-invitation',
+	);
+
 	$args         = array(
 		'tokens' => array(
 			'group'        => $group,
@@ -286,6 +327,7 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 			'inviter.url'  => bp_core_get_user_domain( $inviter_user_id ),
 			'inviter.id'   => $inviter_user_id,
 			'invites.url'  => esc_url( $invited_link . '/invites/' ),
+			'unsubscribe'  => esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) ),
 		),
 	);
 	bp_send_email( 'groups-invitation', (int) $invited_user_id, $args );
@@ -314,7 +356,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 			$group_id = $item_id;
 			$requesting_user_id = $secondary_item_id;
 
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 
@@ -418,7 +460,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'membership_request_accepted':
 			$group_id = $item_id;
 
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 
@@ -507,7 +549,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'membership_request_rejected':
 			$group_id = $item_id;
 
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 
@@ -595,7 +637,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'member_promoted_to_admin':
 			$group_id = $item_id;
 
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 
@@ -677,7 +719,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 		case 'member_promoted_to_mod':
 			$group_id = $item_id;
 
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 
@@ -758,7 +800,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 
 		case 'group_invite':
 			$group_id = $item_id;
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+			$group = groups_get_group( $group_id );
 			$group_link = bp_get_group_permalink( $group );
 			$amount = 'single';
 

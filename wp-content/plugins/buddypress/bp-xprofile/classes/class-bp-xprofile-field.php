@@ -203,8 +203,18 @@ class BP_XProfile_Field {
 			$user_id = isset( $userdata->ID ) ? $userdata->ID : 0;
 		}
 
-		$bp    = buddypress();
-		$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_fields} WHERE id = %d", $id ) );
+		$field = wp_cache_get( $id, 'bp_xprofile_fields' );
+		if ( false === $field ) {
+			$bp = buddypress();
+
+			$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_fields} WHERE id = %d", $id ) );
+
+			if ( ! $field ) {
+				return false;
+			}
+
+			wp_cache_add( $id, $field, 'bp_xprofile_fields' );
+		}
 
 		$this->fill_data( $field );
 
@@ -231,23 +241,7 @@ class BP_XProfile_Field {
 			return false;
 		}
 
-		$field = wp_cache_get( $field_id, 'bp_xprofile_fields' );
-		if ( false === $field ) {
-			$bp = buddypress();
-
-			$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->profile->table_name_fields} WHERE id = %d", $field_id ) );
-
-			if ( ! $field ) {
-				return false;
-			}
-
-			wp_cache_add( $field->id, $field, 'bp_xprofile_fields' );
-		}
-
-		$_field = new BP_XProfile_Field();
-		$_field->fill_data( $field );
-
-		return $_field;
+		return new self( $field_id );
 	}
 
 	/**
@@ -263,10 +257,21 @@ class BP_XProfile_Field {
 			$args = (array) $args;
 		}
 
+		$int_fields = array(
+			'id', 'is_required', 'group_id', 'parent_id', 'is_default_option',
+			'field_order', 'option_order', 'can_delete'
+		);
+
 		foreach ( $args as $k => $v ) {
 			if ( 'name' === $k || 'description' === $k ) {
 				$v = stripslashes( $v );
 			}
+
+			// Cast numeric strings as integers.
+			if ( true === in_array( $k, $int_fields ) ) {
+				$v = (int) $v;
+			}
+
 			$this->{$k} = $v;
 		}
 
@@ -499,7 +504,7 @@ class BP_XProfile_Field {
 	 * @since 1.2.0
 	 *
 	 * @param int $user_id ID of the user to get field data for.
-	 * @return object
+	 * @return BP_XProfile_ProfileData
 	 */
 	public function get_field_data( $user_id = 0 ) {
 		return new BP_XProfile_ProfileData( $this->id, $user_id );
@@ -895,7 +900,7 @@ class BP_XProfile_Field {
 	 * @global object $wpdb
 	 *
 	 * @param string $field_name Name of the field to query the ID for.
-	 * @return boolean
+	 * @return int|null Field ID on success; null on failure.
 	 */
 	public static function get_id_from_name( $field_name = '' ) {
 		global $wpdb;
@@ -908,7 +913,9 @@ class BP_XProfile_Field {
 
 		$sql = $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s AND parent_id = 0", $field_name );
 
-		return $wpdb->get_var( $sql );
+		$query = $wpdb->get_var( $sql );
+
+		return is_numeric( $query ) ? (int) $query : $query;
 	}
 
 	/**
@@ -1096,6 +1103,19 @@ class BP_XProfile_Field {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Save miscellaneous settings for this field.
+	 *
+	 * Some field types have type-specific settings, which are saved here.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $settings Array of settings.
+	 */
+	public function admin_save_settings( $settings ) {
+		return $this->type_obj->admin_save_settings( $this->id, $settings );
 	}
 
 	/**
@@ -1309,7 +1329,7 @@ class BP_XProfile_Field {
 
 		<div id="titlediv">
 			<div class="titlewrap">
-				<label id="title-prompt-text" for="title"><?php echo esc_html_x( 'Name', 'XProfile admin edit field', 'buddypress' ); ?></label>
+				<label id="title-prompt-text" for="title"><?php echo esc_html_x( 'Name (required)', 'XProfile admin edit field', 'buddypress' ); ?></label>
 				<input type="text" name="title" id="title" value="<?php echo esc_attr( $this->name ); ?>" autocomplete="off" />
 			</div>
 		</div>
@@ -1504,8 +1524,8 @@ class BP_XProfile_Field {
 
 		<div class="postbox">
 			<h2><label for="fieldtype"><?php esc_html_e( 'Type', 'buddypress'); ?></label></h2>
-			<div class="inside">
-				<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)" style="width: 30%">
+			<div class="inside" aria-live="polite" aria-atomic="true" aria-relevant="all">
+				<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)">
 
 					<?php bp_xprofile_admin_form_field_types( $this->type ); ?>
 

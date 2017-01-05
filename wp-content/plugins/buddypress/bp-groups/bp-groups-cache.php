@@ -184,7 +184,7 @@ add_action( 'groups_uninvite_user', 'groups_clear_group_user_object_cache', 10, 
 add_action( 'groups_remove_member', 'groups_clear_group_user_object_cache', 10, 2 );
 
 /**
- * Clear group administrator cache.
+ * Clear group administrator and moderator cache.
  *
  * @since 2.1.0
  *
@@ -192,15 +192,16 @@ add_action( 'groups_remove_member', 'groups_clear_group_user_object_cache', 10, 
  */
 function groups_clear_group_administrator_cache( $group_id ) {
 	wp_cache_delete( $group_id, 'bp_group_admins' );
+	wp_cache_delete( $group_id, 'bp_group_mods' );
 }
 add_action( 'groups_promote_member', 'groups_clear_group_administrator_cache' );
 add_action( 'groups_demote_member',  'groups_clear_group_administrator_cache' );
 add_action( 'groups_delete_group',   'groups_clear_group_administrator_cache' );
 
 /**
- * Clear group administrator cache when a group member is saved.
+ * Clear group administrator and moderator cache when a group member is saved.
  *
- * This accounts for situations where group administrators are added manually
+ * This accounts for situations where group admins or mods are added manually
  * using {@link BP_Groups_Member::save()}.  Usually via a plugin.
  *
  * @since 2.1.0
@@ -252,6 +253,75 @@ function bp_groups_clear_user_group_cache_on_other_events( $user_id, $group_id )
 add_action( 'bp_groups_member_before_delete', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
 add_action( 'bp_groups_member_before_delete_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
 add_action( 'groups_accept_invite', 'bp_groups_clear_user_group_cache_on_other_events', 10, 2 );
+
+/**
+ * Reset cache incrementor for the Groups component.
+ *
+ * This function invalidates all cached results of group queries,
+ * whenever one of the following events takes place:
+ *   - A group is created or updated.
+ *   - A group is deleted.
+ *   - A group's metadata is modified.
+ *
+ * @since 2.7.0
+ *
+ * @return bool True on success, false on failure.
+ */
+function bp_groups_reset_cache_incrementor() {
+	return bp_core_reset_incrementor( 'bp_groups' );
+}
+add_action( 'groups_group_after_save', 'bp_groups_reset_cache_incrementor' );
+add_action( 'bp_groups_delete_group',  'bp_groups_reset_cache_incrementor' );
+add_action( 'updated_group_meta',      'bp_groups_reset_cache_incrementor' );
+add_action( 'deleted_group_meta',      'bp_groups_reset_cache_incrementor' );
+add_action( 'added_group_meta',        'bp_groups_reset_cache_incrementor' );
+
+/**
+ * Reset cache incrementor for Groups component when a group's taxonomy terms change.
+ *
+ * We infer that a group is being affected by looking at the objects belonging
+ * to the taxonomy being affected.
+ *
+ * @since 2.7.0
+ *
+ * @param int    $object_id ID of the item whose terms are being modified.
+ * @param array  $terms     Array of object terms.
+ * @param array  $tt_ids    Array of term taxonomy IDs.
+ * @param string $taxonomy  Taxonomy slug.
+ * @return bool True on success, false on failure.
+ */
+function bp_groups_reset_cache_incrementor_on_group_term_change( $object_id, $terms, $tt_ids, $taxonomy ) {
+	$tax_object = get_taxonomy( $taxonomy );
+	if ( $tax_object && in_array( 'bp_group', $tax_object->object_type, true ) ) {
+		return bp_groups_reset_cache_incrementor();
+	}
+
+	return false;
+}
+add_action( 'bp_set_object_terms', 'bp_groups_reset_cache_incrementor_on_group_term_change', 10, 4 );
+
+/**
+ * Reset cache incrementor for Groups component when a group's taxonomy terms are removed.
+ *
+ * We infer that a group is being affected by looking at the objects belonging
+ * to the taxonomy being affected.
+ *
+ * @since 2.7.0
+ *
+ * @param int    $object_id ID of the item whose terms are being modified.
+ * @param array  $terms     Array of object terms.
+ * @param string $taxonomy  Taxonomy slug.
+ * @return bool True on success, false on failure.
+ */
+function bp_groups_reset_cache_incrementor_on_group_term_remove( $object_id, $terms, $taxonomy ) {
+	$tax_object = get_taxonomy( $taxonomy );
+	if ( $tax_object && in_array( 'bp_group', $tax_object->object_type, true ) ) {
+		return bp_groups_reset_cache_incrementor();
+	}
+
+	return false;
+}
+add_action( 'bp_remove_object_terms', 'bp_groups_reset_cache_incrementor_on_group_term_remove', 10, 3 );
 
 /* List actions to clear super cached pages on, if super cache is installed */
 add_action( 'groups_join_group',                 'bp_core_clear_cache' );

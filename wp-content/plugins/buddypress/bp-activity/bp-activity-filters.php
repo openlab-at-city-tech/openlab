@@ -207,13 +207,15 @@ function bp_activity_filter_kses( $content ) {
 	global $allowedtags;
 
 	$activity_allowedtags = $allowedtags;
-	$activity_allowedtags['a']['class']    = array();
-	$activity_allowedtags['a']['id']       = array();
-	$activity_allowedtags['a']['rel']      = array();
-	$activity_allowedtags['a']['title']    = array();
-	$activity_allowedtags['b']             = array();
-	$activity_allowedtags['code']          = array();
-	$activity_allowedtags['i']             = array();
+	$activity_allowedtags['a']['class'] = array();
+	$activity_allowedtags['a']['id']    = array();
+	$activity_allowedtags['a']['rel']   = array();
+	$activity_allowedtags['a']['title'] = array();
+
+	$activity_allowedtags['b']    = array();
+	$activity_allowedtags['code'] = array();
+	$activity_allowedtags['i']    = array();
+
 	$activity_allowedtags['img']           = array();
 	$activity_allowedtags['img']['src']    = array();
 	$activity_allowedtags['img']['alt']    = array();
@@ -222,8 +224,10 @@ function bp_activity_filter_kses( $content ) {
 	$activity_allowedtags['img']['class']  = array();
 	$activity_allowedtags['img']['id']     = array();
 	$activity_allowedtags['img']['title']  = array();
-	$activity_allowedtags['span']          = array();
-	$activity_allowedtags['span']['class'] = array();
+
+	$activity_allowedtags['span']                   = array();
+	$activity_allowedtags['span']['class']          = array();
+	$activity_allowedtags['span']['data-livestamp'] = array();
 
 
 	/**
@@ -278,7 +282,7 @@ function bp_activity_at_name_filter( $content, $activity_id = 0 ) {
 
 	// Linkify the mentions with the username.
 	foreach ( (array) $usernames as $user_id => $username ) {
-		$content = preg_replace( '/(@' . $username . '\b)/', "<a href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $content );
+		$content = preg_replace( '/(@' . $username . '\b)/', "<a class='bp-suggestions-mention' href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $content );
 	}
 
 	// Put everything back.
@@ -319,7 +323,7 @@ function bp_activity_at_name_filter_updates( $activity ) {
 	if ( ! empty( $usernames ) ) {
 		// Replace @mention text with userlinks.
 		foreach( (array) $usernames as $user_id => $username ) {
-			$activity->content = preg_replace( '/(@' . $username . '\b)/', "<a href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $activity->content );
+			$activity->content = preg_replace( '/(@' . $username . '\b)/', "<a class='bp-suggestions-mention' href='" . bp_core_get_user_domain( $user_id ) . "' rel='nofollow'>@$username</a>", $activity->content );
 		}
 
 		// Add our hook to send @mention emails after the activity item is saved.

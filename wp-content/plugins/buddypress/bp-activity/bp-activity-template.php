@@ -1177,11 +1177,7 @@ function bp_activity_secondary_avatar( $args = '' ) {
 
 				// Only if groups is active.
 				if ( bp_is_active( 'groups' ) ) {
-					$group = groups_get_group( array(
-						'group_id'          => $item_id,
-						'populate_extras'   => false,
-						'update_meta_cache' => false,
-					) );
+					$group = groups_get_group( $item_id );
 					$link  = bp_get_group_permalink( $group );
 					$name  = $group->name;
 				}
@@ -1476,6 +1472,13 @@ function bp_insert_activity_meta( $content = '' ) {
 	// Get the time since this activity was recorded.
 	$date_recorded  = bp_core_time_since( $activities_template->activity->date_recorded );
 
+	// Set up 'time-since' <span>.
+	$time_since = sprintf(
+		'<span class="time-since" data-livestamp="%1$s">%2$s</span>',
+		bp_core_get_iso8601_date( $activities_template->activity->date_recorded ),
+		$date_recorded
+	);
+
 	/**
 	 * Filters the activity item time since markup.
 	 *
@@ -1484,7 +1487,7 @@ function bp_insert_activity_meta( $content = '' ) {
 	 * @param array $value Array containing the time since markup and the current activity component.
 	 */
 	$time_since = apply_filters_ref_array( 'bp_activity_time_since', array(
-		'<span class="time-since">' . $date_recorded . '</span>',
+		$time_since,
 		&$activities_template->activity
 	) );
 
@@ -1533,7 +1536,7 @@ function bp_insert_activity_meta( $content = '' ) {
  *
  * @global object $activities_template {@link BP_Activity_Template}
  *
- * @param object|bool $activity Optional. Falls back on the current item in the loop.
+ * @param BP_Activity_Activity $activity Optional. Falls back on the current item in the loop.
  * @return bool True if can delete, false otherwise.
  */
 function bp_activity_user_can_delete( $activity = false ) {
@@ -2090,7 +2093,7 @@ function bp_activity_comment_delete_link() {
 	 *                      activity comment.
 	 */
 	function bp_get_activity_comment_delete_link() {
-		$link = wp_nonce_url( bp_get_root_domain() . '/' . bp_get_activity_slug() . '/delete/' . bp_get_activity_comment_id() . '?cid=' . bp_get_activity_comment_id(), 'bp_activity_delete_link' );
+		$link = wp_nonce_url( bp_get_activity_directory_permalink() . 'delete/' . bp_get_activity_comment_id() . '?cid=' . bp_get_activity_comment_id(), 'bp_activity_delete_link' );
 
 		/**
 		 * Filters the link used for deleting the activity comment currently being displayed.
@@ -3162,8 +3165,6 @@ function bp_send_public_message_button( $args = '' ) {
 	 *     @type string $wrapper_id        Default: 'post-mention'.
 	 *     @type string $link_href         Default: the public message link for
 	 *                                     the current member in the loop.
-	 *     @type string $link_title        Default: 'Send a public message on your
-	 *                                     activity stream.'.
 	 *     @type string $link_text         Default: 'Public Message'.
 	 *     @type string $link_class        Default: 'activity-button mention'.
 	 * }
@@ -3178,7 +3179,6 @@ function bp_send_public_message_button( $args = '' ) {
 			'block_self'        => true,
 			'wrapper_id'        => 'post-mention',
 			'link_href'         => bp_get_send_public_message_link(),
-			'link_title'        => __( 'Send a public message on your activity stream.', 'buddypress' ),
 			'link_text'         => __( 'Public Message', 'buddypress' ),
 			'link_class'        => 'activity-button mention'
 		) );

@@ -319,8 +319,8 @@ function bp_set_theme_compat_original_template( $template = '' ) {
  *
  * @since 2.4.0
  *
- * @param  string $theme_id The theme id (eg: legacy).
- * @param  array  $feature  An associative array (eg: array( name => 'feature_name', 'settings' => array() )).
+ * @param string $theme_id The theme id (eg: legacy).
+ * @param array  $feature  An associative array (eg: array( name => 'feature_name', 'settings' => array() )).
  */
 function bp_set_theme_compat_feature( $theme_id, $feature = array() ) {
 	if ( empty( $theme_id ) || empty( $feature['name'] ) ) {
@@ -379,8 +379,8 @@ function bp_set_theme_compat_feature( $theme_id, $feature = array() ) {
  *
  * @since 2.4.0
  *
- * @param  string $feature The feature (eg: cover_image).
- * @return object          The feature settings.
+ * @param string $feature The feature (eg: cover_image).
+ * @return object The feature settings.
  */
 function bp_get_theme_compat_feature( $feature = '' ) {
 	// Get current theme compat theme.
@@ -397,7 +397,7 @@ function bp_get_theme_compat_feature( $feature = '' ) {
 }
 
 /**
- * Setup the theme's features
+ * Setup the theme's features.
  *
  * Note: BP Legacy's buddypress-functions.php is not loaded in WP Administration
  * as it's loaded using bp_locate_template(). That's why this function is here.
@@ -646,7 +646,7 @@ function bp_theme_compat_reset_post( $args = array() ) {
 	unset( $dummy );
 
 	/**
-	 * Force the header back to 200 status if not a deliberate 404
+	 * Force the header back to 200 status if not a deliberate 404.
 	 *
 	 * @see https://bbpress.trac.wordpress.org/ticket/1973
 	 */
@@ -957,10 +957,12 @@ function bp_comments_open( $open, $post_id = 0 ) {
 function bp_theme_compat_toggle_is_page( $retval = '' ) {
 	global $wp_query;
 
-	$wp_query->is_page = false;
+	if ( $wp_query->is_page ) {
+		$wp_query->is_page = false;
 
-	// Set a switch so we know that we've toggled these WP_Query properties.
-	buddypress()->theme_compat->is_page_toggled = true;
+		// Set a switch so we know that we've toggled these WP_Query properties.
+		buddypress()->theme_compat->is_page_toggled = true;
+	}
 
 	return $retval;
 }

@@ -108,14 +108,23 @@ function bp_core_get_table_prefix() {
  * your own awkward callback function for usort().
  *
  * @since 2.2.0
+ * @since 2.7.0 Added $preserve_keys parameter.
  *
- * @param array      $items The items to be sorted. Its constituent items can be either associative arrays or objects.
- * @param string|int $key   The array index or property name to sort by.
- * @param string     $type  Sort type. 'alpha' for alphabetical, 'num' for numeric. Default: 'alpha'.
+ * @param array      $items         The items to be sorted. Its constituent items
+ *                                  can be either associative arrays or objects.
+ * @param string|int $key           The array index or property name to sort by.
+ * @param string     $type          Sort type. 'alpha' for alphabetical, 'num'
+ *                                  for numeric. Default: 'alpha'.
+ * @param bool       $preserve_keys Whether to keep the keys or not.
+ *
  * @return array $items The sorted array.
  */
-function bp_sort_by_key( $items, $key, $type = 'alpha' ) {
-	usort( $items, array( new BP_Core_Sort_By_Key_Callback( $key, $type ), 'sort_callback' ) );
+function bp_sort_by_key( $items, $key, $type = 'alpha', $preserve_keys = false ) {
+	if ( true === $preserve_keys ) {
+		uasort( $items, array( new BP_Core_Sort_By_Key_Callback( $key, $type ), 'sort_callback' ) );
+	} else {
+		usort( $items, array( new BP_Core_Sort_By_Key_Callback( $key, $type ), 'sort_callback' ) );
+	}
 
 	return $items;
 }
@@ -630,14 +639,7 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 		$pages = array();
 	}
 
-	$page_titles = array(
-		'activity' => _x( 'Activity', 'Page title for the Activity directory.',       'buddypress' ),
-		'groups'   => _x( 'Groups',   'Page title for the Groups directory.',         'buddypress' ),
-		'sites'    => _x( 'Sites',    'Page title for the Sites directory.',          'buddypress' ),
-		'members'  => _x( 'Members',  'Page title for the Members directory.',        'buddypress' ),
-		'activate' => _x( 'Activate', 'Page title for the user activation screen.',   'buddypress' ),
-		'register' => _x( 'Register', 'Page title for the user registration screen.', 'buddypress' ),
-	);
+	$page_titles = bp_core_get_directory_page_default_titles();
 
 	$pages_to_create = array();
 	foreach ( array_keys( $components ) as $component_name ) {
@@ -657,8 +659,8 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 	}
 
 	// No need for a Sites directory unless we're on multisite.
-	if ( ! is_multisite() && isset( $pages_to_create['sites'] ) ) {
-		unset( $pages_to_create['sites'] );
+	if ( ! is_multisite() && isset( $pages_to_create['blogs'] ) ) {
+		unset( $pages_to_create['blogs'] );
 	}
 
 	// Members must always have a page, no matter what.
@@ -691,6 +693,33 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 	if ( ! bp_is_root_blog() ) {
 		restore_current_blog();
 	}
+}
+
+/**
+ * Get the default page titles for BP directory pages.
+ *
+ * @since 2.7.0
+ *
+ * @return array
+ */
+function bp_core_get_directory_page_default_titles() {
+	$page_default_titles = array(
+		'activity' => _x( 'Activity', 'Page title for the Activity directory.',       'buddypress' ),
+		'groups'   => _x( 'Groups',   'Page title for the Groups directory.',         'buddypress' ),
+		'blogs'    => _x( 'Sites',    'Page title for the Sites directory.',          'buddypress' ),
+		'members'  => _x( 'Members',  'Page title for the Members directory.',        'buddypress' ),
+		'activate' => _x( 'Activate', 'Page title for the user activation screen.',   'buddypress' ),
+		'register' => _x( 'Register', 'Page title for the user registration screen.', 'buddypress' ),
+	);
+
+	/**
+	 * Filters the default page titles array
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $page_default_titles the array of default WP (post_title) titles.
+	 */
+	return apply_filters( 'bp_core_get_directory_page_default_titles', $page_default_titles );
 }
 
 /**
@@ -850,11 +879,17 @@ function bp_core_add_illegal_names() {
  * Get the 'search' query argument for a given component.
  *
  * @since 2.4.0
+ * @since 2.7.0 The `$component` parameter was made optional, with the current component
+ *              as the fallback value.
  *
- * @param string $component Component name.
+ * @param string $component Optional. Component name. Defaults to current component.
  * @return string|bool Query argument on success. False on failure.
  */
-function bp_core_get_component_search_query_arg( $component ) {
+function bp_core_get_component_search_query_arg( $component = null ) {
+	if ( ! $component ) {
+		$component = bp_current_component();
+	}
+
 	$query_arg = false;
 	if ( isset( buddypress()->{$component}->search_query_arg ) ) {
 		$query_arg = sanitize_title( buddypress()->{$component}->search_query_arg );
@@ -1258,6 +1293,41 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 	return apply_filters( 'bp_core_time_since', $output, $older_date, $newer_date );
 }
 
+/**
+ * Output an ISO-8601 date from a date string.
+ *
+ * @since 2.7.0
+ *
+ * @param string String of date to convert. Timezone should be UTC before using this.
+ * @return string
+ */
+ function bp_core_iso8601_date( $timestamp = '' ) {
+	echo bp_core_get_iso8601_date( $timestamp );
+}
+	/**
+	 * Return an ISO-8601 date from a date string.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string String of date to convert. Timezone should be UTC before using this.
+	 * @return string
+	 */
+	 function bp_core_get_iso8601_date( $timestamp = '' ) {
+		if ( ! $timestamp ) {
+			return '';
+		}
+
+		try {
+			$date = new DateTime( $timestamp, new DateTimeZone( 'UTC' ) );
+
+		// Not a valid date, so return blank string.
+		} catch( Exception $e ) {
+			return '';
+		}
+
+		return $date->format( DateTime::ISO8601 );
+	}
+
 /** Messages ******************************************************************/
 
 /**
@@ -1414,7 +1484,7 @@ function bp_core_record_activity() {
 	}
 
 	// Get current time.
-	$current_time = bp_core_current_time();
+	$current_time = bp_core_current_time( true, 'timestamp' );
 
 	// Use this action to detect the very first activity for a given member.
 	if ( empty( $activity ) ) {
@@ -1432,8 +1502,8 @@ function bp_core_record_activity() {
 	}
 
 	// If it's been more than 5 minutes, record a newer last-activity time.
-	if ( empty( $activity ) || ( strtotime( $current_time ) >= strtotime( '+5 minutes', $activity ) ) ) {
-		bp_update_user_last_activity( $user_id, $current_time );
+	if ( empty( $activity ) || ( $current_time >= strtotime( '+5 minutes', $activity ) ) ) {
+		bp_update_user_last_activity( $user_id, date( 'Y-m-d H:i:s', $current_time ) );
 	}
 }
 add_action( 'wp_head', 'bp_core_record_activity' );
@@ -1673,8 +1743,8 @@ function bp_use_embed_in_private_messages() {
  *
  * @since 2.6.0
  *
- * @param  string     $content The content to check.
- * @param  string|int $type    The type to check. Can also use a bitmask. See the class constants in the
+ * @param string     $content The content to check.
+ * @param string|int $type    The type to check. Can also use a bitmask. See the class constants in the
  *                             BP_Media_Extractor class for more info.
  * @return array|bool          If media exists, will return array of media metadata. Else, boolean false.
  */
@@ -2691,7 +2761,7 @@ function bp_core_get_suggestions( $args ) {
  *
  * @since 2.3.0
  *
- * @return string
+ * @return bool|array
  */
 function bp_upload_dir() {
 	$bp = buddypress();
@@ -3189,8 +3259,8 @@ function bp_email_get_template( WP_Post $object ) {
  *
  * @since 2.5.0
  *
- * @param string $text
- * @param array $tokens Token names and replacement values for the $text.
+ * @param string $text   Text to replace tokens in.
+ * @param array  $tokens Token names and replacement values for the $text.
  * @return string
  */
 function bp_core_replace_tokens_in_text( $text, $tokens ) {
@@ -3227,7 +3297,7 @@ function bp_core_replace_tokens_in_text( $text, $tokens ) {
 
 /**
  * Get a list of emails for populating the email post type.
- *t
+ *
  * @since 2.5.1
  *
  * @return array
@@ -3304,7 +3374,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Group details for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; were updated:\n<blockquote>{{changed_text}}</blockquote>", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "Group details for the group &quot;{{group.name}}&quot; were updated:\n\n{{changed_text}}\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "Group details for the group \"{{group.name}}\" were updated:\n\n{{changed_text}}\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-invitation' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3312,7 +3382,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the group: &quot;{{group.name}}&quot;.\n<a href=\"{{{invites.url}}}\">Go here to accept your invitation</a> or <a href=\"{{{group.url}}}\">visit the group</a> to learn more.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: &quot;{{group.name}}&quot;.\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
 		),
 		'groups-member-promoted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3320,7 +3390,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "You have been promoted to <b>{{promoted_to}}</b> in the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot;.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "You have been promoted to {{promoted_to}} in the group: &quot;{{group.name}}&quot;.\n\nTo visit the group, go to: {{{group.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "You have been promoted to {{promoted_to}} in the group: \"{{group.name}}\".\n\nTo visit the group, go to: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-membership-request' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3328,7 +3398,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{profile.url}}}\">{{requesting-user.name}}</a> wants to join the group &quot;{{group.name}}&quot;. As you are an administrator of this group, you must either accept or reject the membership request.\n\n<a href=\"{{{group-requests.url}}}\">Go here to manage this</a> and all other pending requests.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "{{requesting-user.name}} wants to join the group &quot;{{group.name}}&quot;. As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo manage this and all other pending requests, visit: {{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "{{requesting-user.name}} wants to join the group \"{{group.name}}\". As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo manage this and all other pending requests, visit: {{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'buddypress' ),
 		),
 		'messages-unread' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3336,7 +3406,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{sender.name}} sent you a new message: &quot;{{usersubject}}&quot;\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{message.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "{{sender.name}} sent you a new message: &quot;{{usersubject}}&quot;\n\n&quot;{{usermessage}}&quot;\n\nGo to the discussion to reply or catch up on the conversation: {{{message.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "{{sender.name}} sent you a new message: \"{{usersubject}}\"\n\n\"{{usermessage}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{message.url}}}", 'buddypress' ),
 		),
 		'settings-verify-email-change' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3352,7 +3422,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Your membership request for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; has been accepted.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "Your membership request for the group &quot;{{group.name}}&quot; has been accepted.\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "Your membership request for the group \"{{group.name}}\" has been accepted.\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-membership-request-rejected' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3360,7 +3430,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Your membership request for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; has been rejected.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "Your membership request for the group &quot;{{group.name}}&quot; has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
 	);
 }
@@ -3369,26 +3439,309 @@ function bp_email_get_schema() {
  * Get a list of emails for populating email type taxonomy terms.
  *
  * @since 2.5.1
+ * @since 2.7.0 $field argument added.
  *
- * @return array
+ * @param string $field Optional; defaults to "description" for backwards compatibility. Other values: "all".
+ * @return array {
+ *     The array of email types and their schema.
+ *
+ *     @type string $description The description of the action which causes this to trigger.
+ *     @type array  $unsubscribe {
+ *         Replacing this with false indicates that a user cannot unsubscribe from this type.
+ *
+ *         @type string $meta_key The meta_key used to toggle the email setting for this notification.
+ *         @type string $message  The message shown when the user has successfully unsubscribed.
+ *     }
  */
-function bp_email_get_type_schema() {
-	return array(
-		'activity-comment'                   => __( 'A member has replied to an activity update that the recipient posted.', 'buddypress' ),
-		'activity-comment-author'            => __( 'A member has replied to a comment on an activity update that the recipient posted.', 'buddypress' ),
-		'activity-at-message'                => __( 'Recipient was mentioned in an activity update.', 'buddypress' ),
-		'groups-at-message'                  => __( 'Recipient was mentioned in a group activity update.', 'buddypress' ),
-		'core-user-registration'             => __( 'Recipient has registered for an account.', 'buddypress' ),
-		'core-user-registration-with-blog'   => __( 'Recipient has registered for an account and site.', 'buddypress' ),
-		'friends-request'                    => __( 'A member has sent a friend request to the recipient.', 'buddypress' ),
-		'friends-request-accepted'           => __( 'Recipient has had a friend request accepted by a member.', 'buddypress' ),
-		'groups-details-updated'             => __( "A group's details were updated.", 'buddypress' ),
-		'groups-invitation'                  => __( 'A member has sent a group invitation to the recipient.', 'buddypress' ),
-		'groups-member-promoted'             => __( "Recipient's status within a group has changed.", 'buddypress' ),
-		'groups-membership-request'          => __( 'A member has requested permission to join a group.', 'buddypress' ),
-		'messages-unread'                    => __( 'Recipient has received a private message.', 'buddypress' ),
-		'settings-verify-email-change'       => __( 'Recipient has changed their email address.', 'buddypress' ),
-		'groups-membership-request-accepted' => __( 'Recipient had requested to join a group, which was accepted.', 'buddypress' ),
-		'groups-membership-request-rejected' => __( 'Recipient had requested to join a group, which was rejected.', 'buddypress' ),
+function bp_email_get_type_schema( $field = 'description' ) {
+	$activity_comment = array(
+		'description'	=> __( 'A member has replied to an activity update that the recipient posted.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_activity_new_reply',
+			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
+			),
 	);
+
+	$activity_comment_author = array(
+		'description'	=> __( 'A member has replied to a comment on an activity update that the recipient posted.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_activity_new_reply',
+			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
+			),
+	);
+
+	$activity_at_message = array(
+		'description'	=> __( 'Recipient was mentioned in an activity update.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_activity_new_mention',
+			'message'	=> __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
+		),
+	);
+
+	$groups_at_message = array(
+		'description'	=> __( 'Recipient was mentioned in a group activity update.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_activity_new_mention',
+			'message'	=> __( 'You will no longer receive emails when someone mentions you in an update.', 'buddypress' ),
+		),
+	);
+
+	$core_user_registration = array(
+		'description'	=> __( 'Recipient has registered for an account.', 'buddypress' ),
+		'unsubscribe'	=> false,
+	);
+
+	$core_user_registration_with_blog = array(
+		'description'	=> __( 'Recipient has registered for an account and site.', 'buddypress' ),
+		'unsubscribe'	=> false,
+	);
+
+	$friends_request = array(
+		'description'	=> __( 'A member has sent a friend request to the recipient.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_friends_friendship_request',
+			'message'	=> __( 'You will no longer receive emails when someone sends you a friend request.', 'buddypress' ),
+		),
+	);
+
+	$friends_request_accepted = array(
+		'description'	=> __( 'Recipient has had a friend request accepted by a member.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_friends_friendship_accepted',
+			'message'	=> __( 'You will no longer receive emails when someone accepts your friendship request.', 'buddypress' ),
+		),
+	);
+
+	$groups_details_updated = array(
+		'description'	=> __( "A group's details were updated.", 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_group_updated',
+			'message'	=> __( 'You will no longer receive emails when one of your groups is updated.', 'buddypress' ),
+		),
+	);
+
+	$groups_details_updated = array(
+		'description'	=> __( "A group's details were updated.", 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_group_updated',
+			'message'	=> __( 'You will no longer receive emails when one of your groups is updated.', 'buddypress' ),
+		),
+	);
+
+	$groups_invitation = array(
+		'description'	=> __( 'A member has sent a group invitation to the recipient.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_invite',
+			'message'	=> __( 'You will no longer receive emails when you are invited to join a group.', 'buddypress' ),
+		),
+	);
+
+	$groups_member_promoted = array(
+		'description'	=> __( "Recipient's status within a group has changed.", 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_admin_promotion',
+			'message'	=> __( 'You will no longer receive emails when you have been promoted in a group.', 'buddypress' ),
+		),
+	);
+
+	$groups_member_promoted = array(
+		'description'	=> __( "Recipient's status within a group has changed.", 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_admin_promotion',
+			'message'	=> __( 'You will no longer receive emails when you have been promoted in a group.', 'buddypress' ),
+		),
+	);
+
+	$groups_membership_request = array(
+		'description'	=> __( 'A member has requested permission to join a group.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_groups_membership_request',
+			'message'	=> __( 'You will no longer receive emails when someone requests to be a member of your group.', 'buddypress' ),
+		),
+	);
+
+	$messages_unread = array(
+		'description'	=> __( 'Recipient has received a private message.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_messages_new_message',
+			'message'	=> __( 'You will no longer receive emails when someone sends you a message.', 'buddypress' ),
+		),
+	);
+
+	$settings_verify_email_change = array(
+		'description'	=> __( 'Recipient has changed their email address.', 'buddypress' ),
+		'unsubscribe'	=> false,
+	);
+
+	$groups_membership_request_accepted = array(
+		'description'	=> __( 'Recipient had requested to join a group, which was accepted.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_membership_request_completed',
+			'message'	=> __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
+		),
+	);
+
+	$groups_membership_request_rejected = array(
+		'description'	=> __( 'Recipient had requested to join a group, which was rejected.', 'buddypress' ),
+		'unsubscribe'	=> array(
+			'meta_key'	=> 'notification_membership_request_completed',
+			'message'	=> __( 'You will no longer receive emails when your request to join a group has been accepted or denied.', 'buddypress' ),
+		),
+	);
+
+	$types = array(
+		'activity-comment'                   => $activity_comment,
+		'activity-comment-author'            => $activity_comment_author,
+		'activity-at-message'                => $activity_at_message,
+		'groups-at-message'                  => $groups_at_message,
+		'core-user-registration'             => $core_user_registration,
+		'core-user-registration-with-blog'   => $core_user_registration_with_blog,
+		'friends-request'                    => $friends_request,
+		'friends-request-accepted'           => $friends_request_accepted,
+		'groups-details-updated'             => $groups_details_updated,
+		'groups-invitation'                  => $groups_invitation,
+		'groups-member-promoted'             => $groups_member_promoted,
+		'groups-membership-request'          => $groups_membership_request,
+		'messages-unread'                    => $messages_unread,
+		'settings-verify-email-change'       => $settings_verify_email_change,
+		'groups-membership-request-accepted' => $groups_membership_request_accepted,
+		'groups-membership-request-rejected' => $groups_membership_request_rejected,
+	);
+
+	if ( $field !== 'all' ) {
+		return wp_list_pluck( $types, $field );
+	} else {
+		return $types;
+	}
+}
+
+/**
+ * Handles unsubscribing user from notification emails.
+ *
+ * @since 2.7.0
+ */
+function bp_email_unsubscribe_handler() {
+	$emails         = bp_email_get_type_schema( 'all' );
+	$raw_email_type = ! empty( $_GET['nt'] ) ? $_GET['nt'] : '';
+	$raw_hash       = ! empty( $_GET['nh'] ) ? $_GET['nh'] : '';
+	$raw_user_id    = ! empty( $_GET['uid'] ) ? absint( $_GET['uid'] ) : 0;
+	$new_hash       = hash_hmac( 'sha1', "{$raw_email_type}:{$raw_user_id}", bp_email_get_salt() );
+
+	// Check required values.
+	if ( ! $raw_user_id || ! $raw_email_type || ! $raw_hash || ! array_key_exists( $raw_email_type, $emails ) ) {
+		$redirect_to = site_url( 'wp-login.php' );
+		$result_msg  = __( 'Something has gone wrong.', 'buddypress' );
+		$unsub_msg   = __( 'Please log in and go to your settings to unsubscribe from notification emails.', 'buddypress' );
+
+	// Check valid hash.
+	} elseif ( ! hash_equals( $new_hash, $raw_hash ) ) {
+		$redirect_to = site_url( 'wp-login.php' );
+		$result_msg  = __( 'Something has gone wrong.', 'buddypress' );
+		$unsub_msg   = __( 'Please log in and go to your settings to unsubscribe from notification emails.', 'buddypress' );
+
+	// Don't let authenticated users unsubscribe other users' email notifications.
+	} elseif ( is_user_logged_in() && get_current_user_id() !== $raw_user_id ) {
+		$result_msg  = __( 'Something has gone wrong.', 'buddypress' );
+		$unsub_msg   = __( 'Please go to your notifications settings to unsubscribe from emails.', 'buddypress' );
+
+		if ( bp_is_active( 'settings' ) ) {
+			$redirect_to = sprintf(
+				'%s%s/notifications/',
+				bp_core_get_user_domain( get_current_user_id() ),
+				bp_get_settings_slug()
+			);
+		} else {
+			$redirect_to = bp_core_get_user_domain( get_current_user_id() );
+		}
+
+	} else {
+		if ( bp_is_active( 'settings' ) ) {
+			$redirect_to = sprintf(
+				'%s%s/notifications/',
+				bp_core_get_user_domain( $raw_user_id ),
+				bp_get_settings_slug()
+			);
+		} else {
+			$redirect_to = bp_core_get_user_domain( $raw_user_id );
+		}
+
+		// Unsubscribe.
+		$meta_key = $emails[ $raw_email_type ]['unsubscribe']['meta_key'];
+		bp_update_user_meta( $raw_user_id, $meta_key, 'no' );
+
+		$result_msg = $emails[ $raw_email_type ]['unsubscribe']['message'];
+		$unsub_msg  = __( 'You can change this or any other email notification preferences in your email settings.', 'buddypress' );
+	}
+
+	$message = sprintf(
+		'%1$s <a href="%2$s">%3$s</a>',
+		$result_msg,
+		esc_url( $redirect_to ),
+		esc_html( $unsub_msg )
+	);
+
+	bp_core_add_message( $message );
+	bp_core_redirect( bp_core_get_user_domain( $raw_user_id ) );
+
+	exit;
+}
+
+/**
+ * Creates unsubscribe link for notification emails.
+ *
+ * @since 2.7.0
+ *
+ * @param string $redirect_to The URL to which the unsubscribe query string is appended.
+ * @param array $args {
+ *    Used to build unsubscribe query string.
+ *
+ *    @type string $notification_type Which notification type is being sent.
+ *    @type string $user_id           The ID of the user to whom the notification is sent.
+ *    @type string $redirect_to       Optional. The url to which the user will be redirected. Default is the activity directory.
+ * }
+ * @return string The unsubscribe link.
+ */
+function bp_email_get_unsubscribe_link( $args ) {
+	$emails = bp_email_get_type_schema( 'all' );
+
+	if ( empty( $args['notification_type'] ) || ! array_key_exists( $args['notification_type'], $emails ) ) {
+		return site_url( 'wp-login.php' );
+	}
+
+	$email_type  = $args['notification_type'];
+	$redirect_to = ! empty( $args['redirect_to'] ) ? $args['redirect_to'] : site_url();
+	$user_id     = (int) $args['user_id'];
+
+	// Bail out if the activity type is not un-unsubscribable.
+	if ( empty( $emails[ $email_type ]['unsubscribe'] ) ) {
+		return '';
+	}
+
+	$link = add_query_arg(
+		array(
+			'action' => 'unsubscribe',
+			'nh'     => hash_hmac( 'sha1', "{$email_type}:{$user_id}", bp_email_get_salt() ),
+			'nt'     => $args['notification_type'],
+			'uid'    => $user_id,
+		),
+		$redirect_to
+	);
+
+	/**
+	 * Filters the unsubscribe link.
+	 *
+	 * @since 2.7.0
+	 */
+	return apply_filters( 'bp_email_get_link', $link, $redirect_to, $args );
+}
+
+/**
+ * Get a persistent salt for email unsubscribe links.
+ *
+ * @since 2.7.0
+ *
+ * @return string|null Returns null if value isn't set, otherwise string.
+ */
+function bp_email_get_salt() {
+	return bp_get_option( 'bp-emails-unsubscribe-salt', null );
 }

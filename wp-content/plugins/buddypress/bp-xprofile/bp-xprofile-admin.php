@@ -113,7 +113,7 @@ function xprofile_admin_screen( $message = '', $type = 'error' ) {
 
 			<?php endif; ?>
 
-			<div id="tabs">
+			<div id="tabs" aria-live="polite" aria-atomic="true" aria-relevant="all">
 				<ul id="field-group-tabs">
 
 					<?php if ( !empty( $groups ) ) : foreach ( $groups as $group ) : ?>
@@ -183,7 +183,7 @@ function xprofile_admin_screen( $message = '', $type = 'error' ) {
 
 						<?php endif; ?>
 
-						<fieldset id="<?php echo esc_attr( $group->id ); ?>" class="connectedSortable field-group">
+						<fieldset id="<?php echo esc_attr( $group->id ); ?>" class="connectedSortable field-group" aria-live="polite" aria-atomic="true" aria-relevant="all">
 							<legend class="screen-reader-text"><?php
 							/** This filter is documented in bp-xprofile/bp-xprofile-template.php */
 							/* translators: accessibility text */
@@ -432,6 +432,11 @@ function xprofile_admin_manage_field( $group_id, $field_id = null ) {
 					bp_xprofile_update_field_meta( $field_id, 'do_autolink', 'off' );
 				}
 
+				if ( $field->type_obj->do_settings_section() ) {
+					$settings = isset( $_POST['field-settings'] ) ? wp_unslash( $_POST['field-settings'] ) : array();
+					$field->admin_save_settings( $settings );
+				}
+
 				/**
 				 * Fires at the end of the process to save a field for a user, if successful.
 				 *
@@ -548,7 +553,7 @@ add_action( 'wp_ajax_xprofile_reorder_groups', 'xprofile_ajax_reorder_field_grou
  *
  * @since 1.5.0
  *
- * @param object $admin_field Admin field.
+ * @param BP_XProfile_Field   $admin_field Admin field.
  * @param object $admin_group Admin group object.
  * @param string $class       Classes to append to output.
  */

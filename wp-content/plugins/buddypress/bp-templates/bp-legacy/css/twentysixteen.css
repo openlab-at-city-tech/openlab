@@ -58,6 +58,16 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 * @section 1.0 - Theme - Structural Elements. overrides, Globals
 *-------------------------------------------------------------------------------
 */
+/**
+* Corrective measure to deal with 2016 / BP handling of no-js
+* classes - hide menu if BP still showing 'no-js'.
+*/
+@media screen and (max-width: 905px) {
+	html.js body.no-js .site-header-menu {
+		display: none;
+	}
+}
+
 .buddypress div.clear {
 	display: none;
 }
@@ -149,6 +159,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	padding: 0;
 }
 
+#buddypress div.item-list-tabs ul li a {
+	color: #0073c1;
+}
+
 #buddypress div.item-list-tabs ul li a span {
 	border-radius: 25%;
 }
@@ -198,10 +212,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	#buddypress #object-nav ul li:not(:last-child) {
 		border-bottom: 1px solid #eaeaea;
 	}
-}
-
-#buddypress #object-nav ul li:not(.selected) a {
-	opacity: 0.7;
 }
 
 @media screen and (max-width: 38.75em) {
@@ -651,6 +661,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	font-size: 0.875rem;
 }
 
+#buddypress #activity-stream li .activity-content .activity-header a {
+	color: #0075c4;
+}
+
 @media screen and (min-width: 46.25em) {
 	#buddypress #activity-stream li .activity-avatar {
 		float: left;
@@ -693,6 +707,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 #buddypress #activity-stream .activity-content .activity-header p {
 	background-color: #f7f7f7;
 	border: 1px solid rgba(234, 234, 234, 0.6);
+	color: #727272;
 	margin-top: 0;
 	padding: 0 0.2em;
 }
@@ -767,7 +782,16 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 #buddypress #activity-stream .activity-comments ul {
 	background: rgba(247, 247, 247, 0.6);
+	color: #737373;
 	margin: 15px 0 0 2px;
+}
+
+#buddypress #activity-stream .activity-comments ul a {
+	color: #0077c7;
+}
+
+#buddypress #activity-stream .activity-comments .acomment-meta {
+	color: #737373;
 }
 
 #buddypress #activity-stream .activity-comments .ac-form input[type="submit"],
@@ -938,7 +962,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	.single-item.groups #buddypress div#item-header #item-actions {
 		order: 3;
 	}
-	.single-item.groups #buddypress div#item-header #item-actions h3 {
+	.single-item.groups #buddypress div#item-header #item-actions h2 {
 		border-bottom: 1px solid #eaeaea;
 		text-align: center;
 	}
@@ -974,14 +998,14 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	padding-left: 0;
 }
 
-.single-item.groups #buddypress div#item-header div#item-actions h3 {
+.single-item.groups #buddypress div#item-header div#item-actions h2 {
 	font-size: 14px;
 	font-size: 0.875rem;
 	padding: 0.2em;
 }
 
 @media screen and (min-width: 46.25em) {
-	.single-item.groups #buddypress div#item-header div#item-actions h3 {
+	.single-item.groups #buddypress div#item-header div#item-actions h2 {
 		font-size: 16px;
 		font-size: 1rem;
 	}
@@ -1060,7 +1084,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 * @subsection 6.2.1.1 - Group Management
 *-----------------------------------------
 */
-.groups #group-settings-form h4 {
+.groups #group-settings-form h3 {
 	background: #555;
 	color: #fff;
 	padding: 0.2em;
@@ -1195,6 +1219,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	font-size: 0.75rem;
 }
 
+.bp-user #buddypress table a {
+	color: #0074c2;
+}
+
 @media screen and (min-width: 61.5625em) {
 	.bp-user #buddypress table th {
 		font-size: 16px;
@@ -1264,7 +1292,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	/* Edit profile */
 }
 
-.bp-user #buddypress .profile .bp-widget h4 {
+.bp-user #buddypress .profile .bp-widget h2 {
 	background: #6f6f6f;
 	color: #fff;
 	margin-bottom: 0;
@@ -1693,6 +1721,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 #buddypress .standard-form textarea {
 	border-color: rgba(212, 208, 186, 0.5);
 	border-width: 1px;
+}
+
+#buddypress .standard-form select {
+	color: #737373;
 }
 
 #buddypress #signup_form.standard-form div.submit {

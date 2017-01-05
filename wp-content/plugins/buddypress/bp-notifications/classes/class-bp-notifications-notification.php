@@ -97,7 +97,7 @@ class BP_Notifications_Notification {
 	 */
 	public function __construct( $id = 0 ) {
 		if ( ! empty( $id ) ) {
-			$this->id = $id;
+			$this->id = (int) $id;
 			$this->populate();
 		}
 	}
@@ -112,21 +112,7 @@ class BP_Notifications_Notification {
 	 * @return bool True on success, false on failure.
 	 */
 	public function save() {
-
-		// Return value.
 		$retval = false;
-
-		// Default data and format.
-		$data = array(
-			'user_id'           => $this->user_id,
-			'item_id'           => $this->item_id,
-			'secondary_item_id' => $this->secondary_item_id,
-			'component_name'    => $this->component_name,
-			'component_action'  => $this->component_action,
-			'date_notified'     => $this->date_notified,
-			'is_new'            => $this->is_new,
-		);
-		$data_format = array( '%d', '%d', '%d', '%s', '%s', '%s', '%d' );
 
 		/**
 		 * Fires before the current notification item gets saved.
@@ -138,6 +124,17 @@ class BP_Notifications_Notification {
 		 * @param BP_Notifications_Notification $value Current instance of the notification item being saved. Passed by reference.
 		 */
 		do_action_ref_array( 'bp_notification_before_save', array( &$this ) );
+
+		$data = array(
+			'user_id'           => $this->user_id,
+			'item_id'           => $this->item_id,
+			'secondary_item_id' => $this->secondary_item_id,
+			'component_name'    => $this->component_name,
+			'component_action'  => $this->component_action,
+			'date_notified'     => $this->date_notified,
+			'is_new'            => $this->is_new,
+		);
+		$data_format = array( '%d', '%d', '%d', '%s', '%s', '%s', '%d' );
 
 		// Update.
 		if ( ! empty( $this->id ) ) {
@@ -188,13 +185,13 @@ class BP_Notifications_Notification {
 
 		// Setup the notification data.
 		if ( ! empty( $notification ) && ! is_wp_error( $notification ) ) {
-			$this->item_id           = $notification->item_id;
-			$this->secondary_item_id = $notification->secondary_item_id;
-			$this->user_id           = $notification->user_id;
+			$this->item_id           = (int) $notification->item_id;
+			$this->secondary_item_id = (int) $notification->secondary_item_id;
+			$this->user_id           = (int) $notification->user_id;
 			$this->component_name    = $notification->component_name;
 			$this->component_action  = $notification->component_action;
 			$this->date_notified     = $notification->date_notified;
-			$this->is_new            = $notification->is_new;
+			$this->is_new            = (int) $notification->is_new;
 		}
 	}
 
@@ -687,6 +684,15 @@ class BP_Notifications_Notification {
 
 		$results = $wpdb->get_results( $sql );
 
+		// Integer casting.
+		foreach ( $results as $key => $result ) {
+			$results[$key]->id                = (int) $results[$key]->id;
+			$results[$key]->user_id           = (int) $results[$key]->user_id;
+			$results[$key]->item_id           = (int) $results[$key]->item_id;
+			$results[$key]->secondary_item_id = (int) $results[$key]->secondary_item_id;
+			$results[$key]->is_new            = (int) $results[$key]->is_new;
+		}
+
 		// Update meta cache.
 		if ( true === $r['update_meta_cache'] ) {
 			bp_notifications_update_meta_cache( wp_list_pluck( $results, 'id' ) );
@@ -743,7 +749,7 @@ class BP_Notifications_Notification {
 		$sql = "{$select_sql} {$from_sql} {$join_sql} {$where_sql}";
 
 		// Return the queried results.
-		return $wpdb->get_var( $sql );
+		return (int) $wpdb->get_var( $sql );
 	}
 
 	/**

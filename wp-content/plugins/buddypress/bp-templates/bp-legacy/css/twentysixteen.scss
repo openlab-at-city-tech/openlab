@@ -235,7 +235,31 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 *-------------------------------------------------------------------------------
 */
 
+// A conflict between BP's body.no-js being removed only
+// when the DOM is fully loaded & Twentysixteens hardcoded
+// class on the html el & scripting in head at start of DOM
+// causes mobile menu to stay opened too long.
+// This ruleset hides menu if html.js (2016 JS has kicked in) but BP still
+// rendering body.no-js before it's own JS removal kicks in.
+// See trac ticket https://buddypress.trac.wordpress.org/ticket/7314
 
+/**
+* Corrective measure to deal with 2016 / BP handling of no-js
+* classes - hide menu if BP still showing 'no-js'.
+*/
+
+@media screen and (max-width: 905px) {
+
+	html.js {
+
+		body.no-js {
+
+			.site-header-menu {
+				display: none;
+			}
+		}
+	}
+}
 
 .buddypress {
 	// Remove any empty clearing elements, CSS provides clearing.
@@ -363,6 +387,8 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 			li {
 				a {
+					color: #0073c1;
+
 					span {border-radius: 25%;}
 				}
 			}
@@ -439,7 +465,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 			}
 
 			li:not(.selected) {
-				a {opacity: 0.7;}
 
 				@media screen and (max-width: 38.75em) {
 					&:focus,
@@ -978,6 +1003,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 				.activity-header {
 					@include font-size(14);
+
+					a {
+						color: #0075c4;
+					}
 				}
 			}
 
@@ -1031,6 +1060,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				p {
 					background-color: $light-background;
 					border: 1px solid rgba($border-light, 0.6);
+					color: #727272;
 					margin-top: 0;
 					padding: 0 0.2em;
 				}
@@ -1114,7 +1144,16 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 			ul {
 				background: rgba($light-background, 0.6);
+				color: #737373;
 				margin: 15px 0 0 2px;
+
+				a {
+					color: #0077c7;
+				}
+			}
+
+			.acomment-meta {
+				color: #737373;
 			}
 
 			.ac-form {
@@ -1323,7 +1362,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				#item-actions {
 					order: 3;
 
-					h3 {
+					h2 {
 						border-bottom: 1px solid $border-light;
 						text-align: center;
 					}
@@ -1355,7 +1394,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 					padding-left: 0;
 				}
 
-				h3 {
+				h2 {
 					@include font-size(14);
 
 					@media screen and (min-width: 46.25em) {
@@ -1464,7 +1503,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 // headings settings screens & general global settings styles
 .groups {
 	#group-settings-form {
-		h4 {
+		h3 {
 			background: $dark-background;
 			color: $content-background;
 			padding: 0.2em;
@@ -1618,6 +1657,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 		table {
 			th {@include font-size(14)}
 			td {@include font-size(12)}
+			a { color: #0074c2; }
 
 			@include medium-up {
 				th {@include font-size(16)}
@@ -1679,7 +1719,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 		.profile {
 			.bp-widget {
-				h4 {
+				h2 {
 					background: lighten($dark-background, 10%);
 					color: #fff;
 					margin-bottom: 0;
@@ -2178,6 +2218,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 		textarea {
 			border-color: rgba($border-color, 0.5);
 			border-width: 1px;
+		}
+
+		select {
+			color: #737373;
 		}
 
 	} // close .standard-form
