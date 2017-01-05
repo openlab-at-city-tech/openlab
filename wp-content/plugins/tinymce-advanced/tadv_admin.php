@@ -1,4 +1,10 @@
 <?php
+/**
+ * This file is part of the TinyMCE Advanced WordPress plugin and is released under the same license.
+ * For more information please see tinymce-advanced.php.
+ *
+ * Copyright (c) 2007-2016 Andrew Ozz. All rights reserved.
+ */
 
 if ( ! defined( 'TADV_ADMIN_PAGE' ) ) {
 	exit;
@@ -15,130 +21,28 @@ $imgpath = TADV_URL . 'images/';
 $tadv_options_updated = false;
 $settings = $admin_settings = array();
 
+ 
+
 if ( isset( $_POST['tadv-save'] ) ) {
 	check_admin_referer( 'tadv-save-buttons-order' );
-	$options_array = $admin_settings_array = $disabled_editors = $disabled_plugins = $plugins_array = array();
-
-	// User settings
-	for ( $i = 1; $i < 5; $i++ ) {
-		$tb = 'tb' . $i;
-
-		if ( $i > 1 && ! empty( $_POST[$tb] ) && is_array( $_POST[$tb] ) &&
-			( $wp_adv = array_search( 'wp_adv', $_POST[$tb] ) ) !== false ) {
-			// Remove the "Toolbar toggle" button from row 2, 3 or 4.
-			unset( $_POST[$tb][$wp_adv] );
-		}
-
-		$buttons = $this->parse_buttons( $tb );
-		// Layer plugin buttons??
-		$buttons = str_replace( 'insertlayer', 'insertlayer,moveforward,movebackward,absolute', $buttons );
-		$settings['toolbar_' . $i] = $buttons;
-	}
-
-	if ( ! empty( $_POST['advlist'] ) ) {
-		$options_array[] = 'advlist';
-	}
-
-	if ( ! empty( $_POST['contextmenu'] ) ) {
-		$options_array[] = 'contextmenu';
-	}
-
-	if ( ! empty( $_POST['advlink'] ) ) {
-		$options_array[] = 'advlink';
-	}
-
-	if ( ! empty( $_POST['menubar'] ) ) {
-		$options_array[] = 'menubar';
-		$plugins_array = array( 'anchor', 'code', 'insertdatetime', 'nonbreaking', 'print', 'searchreplace',
-			'table', 'visualblocks', 'visualchars' );
-	}
-
-	if ( ! empty( $_POST['fontsize_formats'] ) ) {
-		$options_array[] = 'fontsize_formats';
-	}
-
-	// Admin settings, TODO
-	if ( ! empty( $_POST['importcss'] ) ) {
-		$admin_settings_array[] = 'importcss';
-	}
-
-	if ( ! empty( $_POST['no_autop'] ) ) {
-		$admin_settings_array[] = 'no_autop';
-	}
-
-	if ( ! empty( $_POST['paste_images'] ) ) {
-		$admin_settings_array[] = 'paste_images';
-	}
-
-	if ( ! empty( $_POST['disabled_plugins'] ) && is_array( $_POST['disabled_plugins'] ) ) {
-		foreach( $_POST['disabled_plugins'] as $plugin ) {
-			if ( in_array( $this->all_plugins, $plugin, true ) ) {
-				$disabled_plugins[] = $plugin;
-			}
-		}
-	}
-
-	$enable_at = ( ! empty( $_POST['tadv_enable_at'] ) && is_array( $_POST['tadv_enable_at'] ) ) ? $_POST['tadv_enable_at'] : array();
-
-	if ( ! array_key_exists( 'edit_post_screen', $enable_at ) ) {
-		$disabled_editors[] = 'edit_post_screen';
-	}
-
-	if ( ! array_key_exists( 'rest_of_wpadmin', $enable_at ) ) {
-		$disabled_editors[] = 'rest_of_wpadmin';
-	}
-
-	if ( ! array_key_exists( 'on_front_end', $enable_at ) ) {
-		$disabled_editors[] = 'on_front_end';
-	}
-
-	// Admin options
-	$admin_settings['options'] = implode( ',', $admin_settings_array );
-	$admin_settings['disabled_plugins'] = implode( ',', $disabled_plugins );
-	$admin_settings['disabled_editors'] = implode( ',', $disabled_editors );
-
-	$this->admin_settings = $admin_settings;
-	update_option( 'tadv_admin_settings', $admin_settings );
-
-	// User options
-	// TODO allow editors, authors and contributors some access
-	$this->settings = $settings;
-	$this->load_settings();
-
-	// Special case
-	if ( in_array( 'image', $this->used_buttons, true ) ) {
-		$options_array[] = 'image';
-	}
-
-	$settings['options'] = implode( ',', $options_array );
-	$this->settings = $settings;
-	$this->load_settings();
-
-	// Merge the submitted plugins buttons
-	$settings['plugins'] = implode( ',', $this->get_plugins( $plugins_array ) );
-	$this->settings = $settings;
-	$this->plugins = $settings['plugins'];
-
-	// Save the new settings. TODO: per user
-	update_option( 'tadv_settings', $settings );
-
+	$this->save_settings();
 } elseif ( isset( $_POST['tadv-restore-defaults'] ) ) {
 	check_admin_referer( 'tadv-save-buttons-order' );
 
 	// TODO: only for admin || SA
-	$this->admin_settings = $this->default_admin_settings;
-	update_option( 'tadv_admin_settings', $this->default_admin_settings );
+	$this->admin_settings = $this->get_default_admin_settings();
+	update_option( 'tadv_admin_settings', $this->get_default_admin_settings() );
 
 	// TODO: all users that can have settings
-	$this->settings = $this->default_settings;
-	update_option( 'tadv_settings', $this->default_settings );
+	$this->user_settings = $this->get_default_user_settings();
+	update_option( 'tadv_settings', $this->get_default_user_settings() );
 
-	$message = '<div class="updated"><p>' .  __('Default settings restored.', 'tinymce-advanced') . '</p></div>';
+	$message = '<div class="updated notice notice-success is-dismissible"><p>' .  __('Default settings restored.', 'tinymce-advanced') . '</p></div>';
 } elseif ( isset( $_POST['tadv-export-settings'] ) ) {
 	check_admin_referer( 'tadv-save-buttons-order' );
 
 	$this->load_settings();
-	$output = array( 'settings' => $this->settings );
+	$output = array( 'settings' => $this->user_settings );
 
 	// TODO: only admin || SA
 	$output['admin_settings'] = $this->admin_settings;
@@ -195,41 +99,16 @@ if ( isset( $_POST['tadv-save'] ) ) {
 
 	// TODO: all users
 	$import = json_decode( trim( wp_unslash( $_POST['tadv-import'] ) ), true );
-	$settings = $admin_settings = array();
 
-	if ( is_array( $import ) ) {
-		if ( ! empty( $import['settings'] ) ) {
-			$settings = $this->sanitize_settings( $import['settings'] );
-		}
-
-		// only admin || SA
-		if ( ! empty( $import['admin_settings'] ) ) {
-			$admin_settings = $this->sanitize_settings( $import['admin_settings'] );
-		}
-	}
-
-	if ( empty( $settings ) ) {
-		$message = '<div class="error"><p>' .  __('Importing of settings failed.', 'tinymce-advanced') . '</p></div>';
+	if ( ! is_array( $import ) ) {
+		$message = '<div class="error"><p>' .  __( 'Importing of settings failed.', 'tinymce-advanced' ) . '</p></div>';
 	} else {
-		// only admin || SA
-		$this->admin_settings = $admin_settings;
-		update_option( 'tadv_admin_settings', $admin_settings );
-
-		// User options
-		// TODO: allow editors, authors and contributors some access
-		$this->settings = $settings;
-		$this->load_settings();
-
-		// Merge the submitted plugins and buttons
-		if ( ! empty( $settings['plugins'] ) ) {
-			$settings['plugins'] = implode( ',', $this->get_plugins( explode( ',', $settings['plugins'] ) ) );
-		}
-
-		$this->plugins = $settings['plugins'];
-
-		// Save the new settings
-		update_option( 'tadv_settings', $settings );
+		$this->save_settings( $import );
 	}
+}
+
+if ( empty( $_POST ) ) {
+	$this->check_plugin_version();
 }
 
 $this->load_settings();
@@ -237,12 +116,11 @@ $this->load_settings();
 if ( empty( $this->toolbar_1 ) && empty( $this->toolbar_2 ) && empty( $this->toolbar_3 ) && empty( $this->toolbar_4 ) ) {
 	$message = '<div class="error"><p>' . __( 'ERROR: All toolbars are empty. Default settings loaded.', 'tinymce-advanced' ) . '</p></div>';
 
-	$this->admin_settings = $this->default_admin_settings;
-	$this->settings = $this->default_settings;
+	$this->admin_settings = $this->get_default_admin_settings();
+	$this->user_settings = $this->get_default_user_settings();
 	$this->load_settings();
 }
 
-$used_buttons = array_merge( $this->toolbar_1, $this->toolbar_2, $this->toolbar_3, $this->toolbar_4 );
 $all_buttons = $this->get_all_buttons();
 
 ?>
@@ -254,7 +132,7 @@ $all_buttons = $this->get_all_buttons();
 $this->warn_if_unsupported();
 
 if ( isset( $_POST['tadv-save'] ) && empty( $message ) ) {
-	?><div class="updated"><p><?php _e( 'Settings saved.', 'tinymce-advanced' ); ?></p></div><?php
+	?><div class="updated notice notice-success is-dismissible"><p><?php _e( 'Settings saved.', 'tinymce-advanced' ); ?></p></div><?php
 } else {
 	echo $message;
 }
@@ -269,12 +147,12 @@ if ( isset( $_POST['tadv-save'] ) && empty( $message ) ) {
 <div id="tadvzones">
 
 <p><label>
-<input type="checkbox" name="menubar" id="menubar" <?php if ( $this->check_setting( 'menubar' ) ) { echo ' checked="checked"'; } ?>>
+<input type="checkbox" name="options[]" id="menubar" value="menubar" <?php if ( $this->check_user_setting( 'menubar' ) ) { echo ' checked="checked"'; } ?>>
 <?php _e( 'Enable the editor menu.', 'tinymce-advanced' ); ?>
 </label></p>
 
 <div id="tadv-mce-menu" class="mce-container mce-menubar mce-toolbar mce-first mce-stack-layout-item
-	<?php if ( $this->check_setting( 'menubar' ) ) { echo ' enabled'; } ?>">
+	<?php if ( $this->check_user_setting( 'menubar' ) ) { echo ' enabled'; } ?>">
 	<div class="mce-container-body mce-flow-layout">
 		<div class="mce-widget mce-btn mce-menubtn mce-first mce-flow-layout-item">
 			<button type="button">
@@ -330,7 +208,7 @@ for ( $i = 1; $i < 5; $i++ ) {
 
 	?>
 	<div class="tadvdropzone mce-toolbar">
-	<ul id="tb<?php echo $i; ?>" class="container">
+	<ul id="toolbar_<?php echo $i; ?>" class="container">
 	<?php
 
 	foreach( $this->$toolbar as $button ) {
@@ -355,7 +233,7 @@ for ( $i = 1; $i < 5; $i++ ) {
 					<div class="the-button">
 						<span class="descr"><?php echo $name; ?></span>
 						<i class="mce-caret"></i>
-						<input type="hidden" class="tadv-button" name="tb<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
+						<input type="hidden" class="tadv-button" name="toolbar_<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
 					</div>
 				</div>
 				<?php
@@ -364,7 +242,7 @@ for ( $i = 1; $i < 5; $i++ ) {
 				<div class="tadvitem">
 					<i class="mce-ico mce-i-<?php echo $button; ?>" title="<?php echo $name; ?>"></i>
 					<span class="descr"><?php echo $name; ?></span>
-					<input type="hidden" class="tadv-button" name="tb<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
+					<input type="hidden" class="tadv-button" name="toolbar_<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
 				</div>
 				<?php
 			}
@@ -403,7 +281,7 @@ foreach( $all_buttons as $button => $name ) {
 				<div class="the-button">
 					<span class="descr"><?php echo $name; ?></span>
 					<i class="mce-caret"></i>
-					<input type="hidden" class="tadv-button" name="tb<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
+					<input type="hidden" class="tadv-button" name="unused[]" value="<?php echo $button; ?>" />
 				</div>
 			</div>
 			<?php
@@ -412,7 +290,7 @@ foreach( $all_buttons as $button => $name ) {
 			<div class="tadvitem">
 				<i class="mce-ico mce-i-<?php echo $button; ?>" title="<?php echo $name; ?>"></i>
 				<span class="descr"><?php echo $name; ?></span>
-				<input type="hidden" class="tadv-button" name="tb<?php echo $i; ?>[]" value="<?php echo $button; ?>" />
+				<input type="hidden" class="tadv-button" name="unused[]" value="<?php echo $button; ?>" />
 			</div>
 			<?php
 		}
@@ -429,28 +307,28 @@ foreach( $all_buttons as $button => $name ) {
 <div class="advanced-options">
 	<h3><?php _e( 'Options', 'tinymce-advanced' ); ?></h3>
 	<div>
-		<label><input type="checkbox" name="advlist" id="advlist" <?php if ( $this->check_setting('advlist') ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="options[]" value="advlist" id="advlist" <?php if ( $this->check_user_setting('advlist') ) echo ' checked="checked"'; ?> />
 		<?php _e( 'List Style Options', 'tinymce-advanced' ); ?></label>
 		<p>
 			<?php _e( 'Enable more list options: upper or lower case letters for ordered lists, disk or square for unordered lists, etc.', 'tinymce-advanced' ); ?>
 		</p>
 	</div>
 	<div>
-		<label><input type="checkbox" name="contextmenu" id="contextmenu" <?php if ( $this->check_setting('contextmenu') ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="options[]" value="contextmenu" id="contextmenu" <?php if ( $this->check_user_setting('contextmenu') ) echo ' checked="checked"'; ?> />
 		<?php _e( 'Context Menu', 'tinymce-advanced' ); ?></label>
 		<p>
 			<?php _e( 'Replace the browser context (right-click) menu.', 'tinymce-advanced' ); ?>
 		</p>
 	</div>
 	<div>
-		<label><input type="checkbox" name="advlink" id="advlink" <?php if ( $this->check_setting('advlink') ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="options[]" value="advlink" id="advlink" <?php if ( $this->check_user_setting('advlink') ) echo ' checked="checked"'; ?> />
 		<?php _e( 'Alternative link dialog', 'tinymce-advanced' ); ?></label>
 		<p>
 			<?php _e( 'Open the TinyMCE link dialog when using the link button on the toolbar or the link menu item.', 'tinymce-advanced' ); ?>
 		</p>
 	</div>
 	<div>
-		<label><input type="checkbox" name="fontsize_formats" id="fontsize_formats" <?php if ( $this->check_setting( 'fontsize_formats' ) ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="options[]" value="fontsize_formats" id="fontsize_formats" <?php if ( $this->check_user_setting( 'fontsize_formats' ) ) echo ' checked="checked"'; ?> />
 		<?php _e( 'Font sizes', 'tinymce-advanced' ); ?></label>
 		<p><?php _e( 'Replace the size setting available for fonts with: 8px 10px 12px 14px 16px 20px 24px 28px 32px 36px 48px 60px.', 'tinymce-advanced' ); ?></p>
 	</div>
@@ -477,7 +355,7 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 
 	?>
 	<div>
-		<label><input type="checkbox" name="importcss" id="importcss" <?php if ( ! $disabled && $this->check_admin_setting( 'importcss' ) ) echo ' checked="checked"'; echo $disabled; ?> />
+		<label><input type="checkbox" name="admin_options[]" value="importcss" id="importcss" <?php if ( ! $disabled && $this->check_admin_setting( 'importcss' ) ) echo ' checked="checked"'; echo $disabled; ?> />
 		<?php _e( 'Create CSS classes menu', 'tinymce-advanced' ); ?></label>
 		<p>
 		<?php
@@ -506,7 +384,7 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 		</p>
 	</div>
 	<div>
-		<label><input type="checkbox" name="no_autop" id="no_autop" <?php if ( $this->check_admin_setting( 'no_autop' ) ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="admin_options[]" value="no_autop" id="no_autop" <?php if ( $this->check_admin_setting( 'no_autop' ) ) echo ' checked="checked"'; ?> />
 		<?php _e( 'Keep paragraph tags', 'tinymce-advanced' ); ?></label>
 		<p>
 			<?php _e( 'Stop removing the &lt;p&gt; and &lt;br /&gt; tags when saving and show them in the Text editor.', 'tinymce-advanced' ); ?>
@@ -516,7 +394,7 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 		</p>
 	</div>
 	<div>
-		<label><input type="checkbox" name="paste_images" id="paste_images" <?php if ( $this->check_admin_setting( 'paste_images' ) ) echo ' checked="checked"'; ?> />
+		<label><input type="checkbox" name="admin_options[]" value="paste_images" id="paste_images" <?php if ( $this->check_admin_setting( 'paste_images' ) ) echo ' checked="checked"'; ?> />
 		<?php _e( 'Enable pasting of image source', 'tinymce-advanced' ); ?></label>
 		<p>
 			<?php _e( 'Works only in Firefox and Safari. These browsers support pasting of images directly in the editor and convert them to base64 encoded text.', 'tinymce-advanced' ); ?>
@@ -538,15 +416,15 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 	<div>
 		<h4><?php _e( 'Enable the editor enhancements for:', 'tinymce-advanced' ); ?></h4>
 		<p>
-			<label><input type="checkbox" name="tadv_enable_at[edit_post_screen]" <?php if ( $this->check_admin_setting( 'enable_edit_post_screen' ) ) echo ' checked="checked"'; ?> />
+			<label><input type="checkbox" name="tadv_enable_at[]" value="edit_post_screen" <?php if ( $this->check_admin_setting( 'enable_edit_post_screen' ) ) echo ' checked="checked"'; ?> />
 			<?php _e( 'The main editor (Add New and Edit posts and pages)', 'tinymce-advanced' ); ?></label>
 		</p>
 		<p>
-			<label><input type="checkbox" name="tadv_enable_at[rest_of_wpadmin]" <?php if ( $this->check_admin_setting( 'enable_rest_of_wpadmin' ) ) echo ' checked="checked"'; ?> />
+			<label><input type="checkbox" name="tadv_enable_at[]" value="rest_of_wpadmin" <?php if ( $this->check_admin_setting( 'enable_rest_of_wpadmin' ) ) echo ' checked="checked"'; ?> />
 			<?php _e( 'Other editors in wp-admin', 'tinymce-advanced' ); ?></label>
 		</p>
 		<p>
-			<label><input type="checkbox" name="tadv_enable_at[on_front_end]" <?php if ( $this->check_admin_setting( 'enable_on_front_end' ) ) echo ' checked="checked"'; ?> />
+			<label><input type="checkbox" name="tadv_enable_at[]" value="on_front_end" <?php if ( $this->check_admin_setting( 'enable_on_front_end' ) ) echo ' checked="checked"'; ?> />
 			<?php _e( 'Editors on the front end of the site', 'tinymce-advanced' ); ?></label>
 		</p>
 	</div>
