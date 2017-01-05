@@ -3,7 +3,7 @@
 $cminds_plugin_config = array(
 	'plugin-is-pro'					 => false,
 	'plugin-has-addons'				 => TRUE,
-	'plugin-version'				 => '3.3.7',
+	'plugin-version'				 => '3.4.0',
 	'plugin-abbrev'					 => 'cmtt',
 	'plugin-affiliate'				 => '',
 	'plugin-redirect-after-install'	 => admin_url( 'admin.php?page=cmtt_settings' ),

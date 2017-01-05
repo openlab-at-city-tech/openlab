@@ -33,14 +33,14 @@ class CMTooltipGlossaryShared
 
         if( get_option('cmtt_afterActivation', 0) == 1 )
         {
-            add_action('admin_notices', array(self::$calledClassName, '__showProMessage'));
+            add_action('admin_notices', array(self::$calledClassName, '_showProMessage'));
         }
     }
 
     /**
      * Shows the message about Pro versions on activate
      */
-    public static function __showProMessage()
+    public static function _showProMessage()
     {
         /*
          * Only show to admins

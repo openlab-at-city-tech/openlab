@@ -231,6 +231,13 @@
                         </td>
                         <td colspan="2" class="cmtt_field_help_container">Select this option if you wish the glossary index page to be displayed as tiles. This is not recommended when you have long terms.</td>
                     </tr>
+					<tr valign="top">
+                        <th scope="row">Tile width</th>
+                        <td><input type="text" name="cmtt_glossarySmallTileWidth" value="<?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>" /></td>
+                        <td colspan="2" class="cmtt_field_help_container">
+                            Select the width of the single tile in the "Small tiles" view
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
