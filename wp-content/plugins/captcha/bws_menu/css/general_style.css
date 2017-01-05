@@ -1,7 +1,7 @@
-#adminmenu #toplevel_page_bws_panel .wp-submenu li:nth-child(4) a {
-    border-bottom: 1px solid #444;
-    padding-bottom: 12px;
-    margin-bottom: 5px;
+#adminmenu #toplevel_page_bws_panel .wp-submenu li:nth-child(5) a {
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    margin-top: 6px;
 }
 .bws_info {
     color: #888;
@@ -48,7 +48,7 @@
     color: #000000;
 }
 /*
-* styles for pro_version settings and tooltip 
+* styles for pro_version settings and tooltip
 */
 td.bws_pro_version,
 tr.bws_pro_version,
@@ -67,7 +67,7 @@ td.bws_pro_version_tooltip {
     max-width: 800px;
     overflow: hidden;
 }
-.bws_table_bg { 
+.bws_table_bg {
     background: #f8e268 url("../images/pattern.png");
     opacity: 0.11;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=11); /* IE 5.5+*/
@@ -80,13 +80,13 @@ td.bws_pro_version_tooltip {
 .bws_hide_premium_options {
     z-index: 5;
 }
-.bws_pro_version_table_bloc table.bws_pro_version { 
+.bws_pro_version_table_bloc table.bws_pro_version {
     background: transparent;
     margin: 0;
     border: none;
     width: 100%;
 }
-table.bws_pro_version { 
+table.bws_pro_version {
     background: #E0E0E0;
     border: 1px solid #AAA;
     margin-bottom: 5px;
@@ -103,8 +103,8 @@ table.bws_pro_version td {
     background: #FFF;
     border-top: 1px solid #AAA;
     position: relative;
-    z-index: 2; 
-    padding: 10px; 
+    z-index: 2;
+    padding: 10px;
     font-size: 14px;
 }
 .bws_pro_version_tooltip .bws_button {
@@ -147,7 +147,7 @@ a.bws_plugin_pro_version {
     color: #666;
 }
 /* style for mini-block (ex. google map) */
-.bws_pro_version_bloc_mini .bws_pro_version_table_bloc table.bws_pro_version { 
+.bws_pro_version_bloc_mini .bws_pro_version_table_bloc table.bws_pro_version {
     width: auto;
 }
 .bws_pro_version_bloc_mini .bws_pro_version_tooltip {
@@ -155,7 +155,7 @@ a.bws_plugin_pro_version {
     text-align: center;
     width: 200px;
 }
-.bws_pro_version_bloc_mini .bws_pro_version_tooltip a {    
+.bws_pro_version_bloc_mini .bws_pro_version_tooltip a {
     display: inline-block;
     line-height: 1.5;
 }
@@ -174,7 +174,7 @@ a.bws_plugin_pro_version {
         float: none;
         text-align: center;
     }
-    .bws_pro_version_tooltip a {   
+    .bws_pro_version_tooltip a {
         display: inline-block;
         line-height: 1.5;
     }
@@ -189,7 +189,7 @@ a.bws_plugin_pro_version {
 }
 
 /*
-* styles for banner 
+* styles for banner
 */
 .bws_banner_on_plugin_page {
     border: 1px solid #d4d4d4;
@@ -213,7 +213,7 @@ a.bws_plugin_pro_version {
 }
 div.bws_banner_on_plugin_page .button {
     float: right;
-    border: none; 
+    border: none;
     font-size: 14px;
     margin: 18px 40px;
     padding: 12px 29px;
@@ -232,7 +232,7 @@ div.bws_banner_on_plugin_page .button {
     line-height: 26px;
 }
 .bws_banner_on_plugin_page .button:hover,
-.bws_banner_on_plugin_page .button:focus {    
+.bws_banner_on_plugin_page .button:focus {
     background: #222;
     color: #FFF;
 }
@@ -262,7 +262,7 @@ div.bws_banner_on_plugin_page .icon {
     color: #000;
     font-size: 16px;
     line-height: 26px;
-    padding: 13px 14px 14px; 
+    padding: 13px 14px 14px;
 }
 .bws_banner_to_settings_joint .icon span.dashicons-admin-plugins {
     font-size: 48px;
@@ -320,7 +320,7 @@ div.bws_banner_on_plugin_page .icon {
 /* #### Mobile Phones Portrait or Landscape #### */
 @media screen and (max-device-width: 768px) {
     .bws_banner_on_plugin_page .text,
-    .bws_banner_on_plugin_page .icon, 
+    .bws_banner_on_plugin_page .icon,
     .bws_banner_on_plugin_page .button_div,
     .bws_banner_on_plugin_page .button {
         float: none;
@@ -355,7 +355,7 @@ span.bws_code {
     position: relative;
     margin: 3px 5px;
     width: 28px;
-    display: inline-block;    
+    display: inline-block;
 }
 .bws_help_box:not(.dashicons) {
     vertical-align: middle;

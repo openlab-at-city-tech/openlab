@@ -135,7 +135,7 @@
 				if ( next.find( "input[name*='[use_general]']" ).is( ':checked' ) ) {
 					current.is( ':checked' ) ? next.show() : next.hide();
 				} else {
-					var rows = current.closest( '.cptch_form_tab' ).find( 'tr' ).not( '.cptch_form_option_enable' );
+					var rows = current.closest( '.cptch_form_tab' ).find( 'tr, .bws_pro_version_bloc' ).not( '.cptch_form_option_enable' );
 					current.is( ':checked' ) ? rows.show() : rows.hide();
 				}
 				set_tabs_height( $( '#cptch_settings_tabs .ui-tabs-active a' ).attr( 'href' ) );
