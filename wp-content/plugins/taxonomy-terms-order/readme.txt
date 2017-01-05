@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order
 Requires at least: 2.8
-Tested up to: 4.5.2
-Stable tag: 1.4.8
+Tested up to: 4.7
+Stable tag: 1.4.9
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. No Theme update is required.
 
@@ -52,6 +52,12 @@ Absolutelly, the plugin can do that. In fact you can configure so only the admin
 All ideas are welcome and i put them on my list to be implemented into the new versions. Anyway this may take time, but if you are in a rush, please consider a small donation and we can arrange something.
 
 == Change Log ==
+
+= 1.4.9 =
+  - Remove translations from the package
+  - Removed donate banner
+  - PHP 7 fix
+  - Unused action remove
 
 = 1.4.8 =
   - textomain folder fix

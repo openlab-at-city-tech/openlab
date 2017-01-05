@@ -33,7 +33,6 @@ box-shadow:         1px 1px 7px rgba(50, 50, 50, 0.17);}
 .p_s_item {float: right; padding: 0px 5px; margin-top: 15px; margin-bottom: 5px; }
 .p_s_item.s_gp {padding-top: 2px; margin-left: 5px}
 
-#icon-settings {background-image:url("../images/admin-icon-settings.gif");background-repeat:no-repeat;}
 .menu_tto {margin-right: 4px; display: inline; vertical-align: middle; margin-top: -1px;}  
 
 .clear {clear: both}

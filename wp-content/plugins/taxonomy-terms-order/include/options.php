@@ -20,7 +20,7 @@ function to_plugin_options()
                         
                     ?>
                       <div class="wrap"> 
-                        <div id="icon-settings" class="icon32"></div>
+                        
                             <h2><?php _e( "General Settings", 'taxonomy-terms-order' ) ?></h2>
                             
                             <?php tto_info_box() ?>
