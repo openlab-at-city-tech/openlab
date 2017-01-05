@@ -178,6 +178,11 @@ class Event_Builder {
 			'if-not-ended',
 			// If the event has NOT ended (may as well as not started yet).
 
+			'if-today',
+			// If the event is taking place today
+			'if-not-today',
+			// If the event is NOT taking place today
+
 			'if-whole-day',
 			// If the event lasts the whole day.
 			'if-all-day',
@@ -461,6 +466,22 @@ class Event_Builder {
 
 					break;
 
+				case 'if-today' :
+				case 'if-not-today' :
+					$start_dt   = $event->start_dt->setTimezone( $calendar->timezone );
+					$startOfDay = $start_dt->startOfDay()->getTimestamp();
+					$endOfDay   = $start_dt->endOfDay()->getTimestamp();
+
+					$today = ( $startOfDay <= $calendar->now ) && ( $calendar->now <= $endOfDay );
+
+					if ( ( 'if-today' == $tag ) && $today ) {
+						return $calendar->get_event_html( $event, $partial );
+					} elseif ( ( 'if-not-today' == $tag ) && ( false == $today ) ) {
+						return $calendar->get_event_html( $event, $partial );
+					}
+
+					break;
+
 				case 'if-end-time' :
 					if ( false !== $event->end ) {
 						return $calendar->get_event_html( $event, $partial );
@@ -675,8 +696,6 @@ class Event_Builder {
 	 */
 	private function get_when( Event $event ) {
 
-		//$start = $event->start_dt->setTimezone( $event->timezone );
-		//$end   = ! is_null( $event->end_dt ) ? $event->end_dt->setTimezone( $event->timezone ) : null;
 		$start = $event->start_dt;
 		$end   = $event->end_dt;
 
