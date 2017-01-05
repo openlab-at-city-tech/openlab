@@ -13,9 +13,29 @@ if ( defined( 'BP_VERSION' ) ) {
 	}
 }
 
+// Admin-related code.
+if ( defined( 'WP_NETWORK_ADMIN' ) ) {
+	require_once( dirname( __FILE__ ) . '/admin.php' );
+
+	// Updater.
+	require_once( dirname( __FILE__ ) . '/updater.php' );
+	new GES_Updater;
+}
+
+// Legacy forums.
+if ( function_exists( 'bp_setup_forums' ) ) {
+	require_once( dirname( __FILE__ ) . '/legacy-forums.php' );
+}
+
+// Core.
 require_once( dirname( __FILE__ ) . '/bp-activity-subscription-functions.php' );
 require_once( dirname( __FILE__ ) . '/bp-activity-subscription-digest.php' );
 
+/**
+ * Group extension for GES.
+ *
+ * @todo This should be moved into a separate file.
+ */
 class Group_Activity_Subscription extends BP_Group_Extension {
 
 	public function __construct() {
@@ -47,7 +67,7 @@ class Group_Activity_Subscription extends BP_Group_Extension {
 
 			wp_register_style(
 				'activity-subscription-style',
-				plugins_url( 'css/bp-activity-subscription-css.css', __FILE__ ),
+				plugins_url( basename( dirname( __FILE__ ) ) ) . '/css/bp-activity-subscription-css.css',
 				array(),
 				$revision_date
 			);
@@ -58,11 +78,11 @@ class Group_Activity_Subscription extends BP_Group_Extension {
 
 	public function ass_add_javascript() {
 		if ( apply_filters( 'ass_load_assets', bp_is_groups_component() ) ) {
-			$revision_date = '20160516';
+			$revision_date = '20160928';
 
 			wp_register_script(
 				'bp-activity-subscription-js',
-				plugins_url( 'bp-activity-subscription-js.js', __FILE__ ),
+				plugins_url( basename( dirname( __FILE__ ) ) ) . '/bp-activity-subscription-js.js',
 				array( 'jquery' ),
 				$revision_date
 			);
@@ -100,27 +120,50 @@ class Group_Activity_Subscription extends BP_Group_Extension {
 
 }
 
-function ass_activate_extension() {
-	$extension = new Group_Activity_Subscription;
-	add_action( "wp", array( &$extension, "_register" ), 2 );
-}
-
-// Install is using BP 1.5
-// Need abstraction for BP 1.6
+// Install is using BP 1.5; need abstraction for BP 1.6.
 if ( $bpges_bp_version < 1.6 ) {
 	require_once( dirname( __FILE__ ) . '/1.6-abstraction.php' );
 }
 
-// Install is using BP 1.2
-// Need abstraction for BP 1.5
-if ( $bpges_bp_version < 1.5 ) {
+// Register our group extension.
+bp_register_group_extension( 'Group_Activity_Subscription' );
 
-	// Load the abstraction files, which define the necessary 1.5 functions
-	require_once( dirname( __FILE__ ) . '/1.5-abstraction.php' );
+/**
+ * Include files only if we're on a specific page.
+ *
+ * @since 3.7.0
+ */
+function ges_late_includes() {
+	// Any group page.
+	if ( bp_is_groups_component() ) {
+		require_once( dirname( __FILE__ ) . '/screen.php' );
 
-	// Load the group extension in the legacy fashion
-	add_action( 'init', 'ass_activate_extension' );
-} else {
-	// Load the group extension in the proper fashion
-	bp_register_group_extension( 'Group_Activity_Subscription' );
+		// Group's "Email Options" page.
+		if ( bp_is_current_action( 'notifications' ) ) {
+			require_once( dirname( __FILE__ ) . '/screen-notifications.php' );
+		}
+
+		// Group creation page or any group's admin page.
+		if ( bp_is_group_create() || bp_is_group_admin_page() ) {
+			require_once( dirname( __FILE__ ) . '/screen-admin.php' );
+		}
+
+		// bbPress.
+		if ( bp_is_group() && function_exists( 'bbpress' ) ) {
+			require_once( dirname( __FILE__ ) . '/screen-bbpress.php' );
+		}
+	}
+
+	// User's "Settings > Email" page.
+	if ( bp_is_user_settings_notifications() ) {
+		require_once( dirname( __FILE__ ) . '/screen-user-settings.php' );
+	}
 }
+if ( function_exists( 'bp_setup_canonical_stack' ) ) {
+	$load_hook = 'bp_setup_canonical_stack';
+	$priority  = 20;
+} else {
+	$load_hook = 'bp_init';
+	$priority  = 5;
+}
+add_action( $load_hook, 'ges_late_includes', $priority );
