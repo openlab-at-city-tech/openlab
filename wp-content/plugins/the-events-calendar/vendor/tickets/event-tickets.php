@@ -1,7 +1,7 @@
 <?php
 /*
 Description: Event Tickets allows your guests to RSVP from any post, page, or event.
-Version: 4.3
+Version: 4.3.5
 Author: Modern Tribe, Inc.
 Author URI: http://m.tri.be/28
 License: GPLv2 or later

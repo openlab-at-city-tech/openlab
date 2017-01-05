@@ -4,8 +4,8 @@ Contributors: ModernTribe, borkweb, zbtirrell, barry.hughes, bordoni, brianjesse
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, modern tribe, tribe, widget
 Donate link: http://m.tri.be/29
 Requires at least: 3.9
-Tested up to: 4.6.1
-Stable tag: 4.3.0.1
+Tested up to: 4.7
+Stable tag: 4.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,7 +77,7 @@ Looking for something else? We’ve got add-ons available to take your calendar 
 
 = PRO Features =
 
-Add recurring events, a whole recurring events, a whole range of new views ( week / map / photo / venue / organizer) & widgets (calendar / featured venue / week / event countdown), custom event attributes, default content, location search, much more with [Events Calendar PRO](http://m.tri.be/2c)
+Add recurring events, a whole recurring events, a whole range of new views ( week / map / photo / venue / organizer) & widgets (calendar / featured venue / week / event countdown), shortcodes, custom event attributes, default content, location search, much more with [Events Calendar PRO](http://m.tri.be/2c)
 
 = Event Ticketing =
 
@@ -85,7 +85,7 @@ Collect free RSVPs with Event Tickets or add paid ticketing features with [Event
 
 = Bulk Event Import =
 
-Fill your calendar with events from your favorite sources, including Facebook, Meetup, Google Calendar, iCalendar, CSV, and ICS. Event Aggregator provides a convenient dashboard to manage scheduled imports, manual imports, filters, one-way sync, import history, and more.
+Fill your calendar with events from your favorite sources, including Facebook, Meetup, Google Calendar, iCalendar, CSV, and ICS. [Event Aggregator](http://m.tri.be/197u) provides a convenient dashboard to manage scheduled imports, manual imports, filters, one-way sync, import history, and more.
 
 = User-Submitted Events =
 
@@ -315,7 +315,78 @@ Please see the changelog for the complete list of changes in this release. Remem
 
 == Changelog ==
 
+= [4.3.5] 2016-12-20 =
+
+* Tweak - Updated the template override instructions in a number of templates [68229]
+* Tweak - Improve behaviour of tribe_get_events_title() in respect of single events [46313]
+* Tweak - Event Aggregator will only load on the Administration, prevent bigger loads for Front-End users [70812]
+* Tweak - Allow better filtering for Organizers and Venue Meta fields (Props: @Chouby from Polylang) [70894]
+* Fix - Prevent JavaScript Notices related to Bumpdown [69886]
+* Fix - Assets URL on Windows Servers are fully operational again [68377]
+* Fix - JavaScript and CSS files will respect HTTPS on all pages [69561]
+* Fix - Fixed comment count and visibility issues due to Event Aggregator records [68297]
+* Fix - Fixed PHP notices and warnings raised when importing .ics files [69960]
+* Fix - Only show link to Venues if Pro is active in List View [69887]
+* Fix - Fixed and issue that would make Event Aggregator importing notices remain stuck in the Import screen [70614]
+* Fix - Avoid error screen when saving licenses on multisite installations [68599]
+* Fix - Fix calendar view links in WPML language switcher [67134]
+
+= [4.3.4.2] 2016-12-13 =
+
+* Fix - Correct an oversight leading to breakages of the /all/ events archive for Events Calendar PRO users [70662]
+
+= [4.3.4.1] 2016-12-09 =
+
+* Fix - Updates Tribe Common to remove some stray characters that were impacting page layouts (props: @Aetles) [70536]
+
+= [4.3.4] 2016-12-08 =
+
+* Tweak - Tribe Common now is loaded only once across our plugin suite, improves performance on some cases [65755]
+* Fix - Featured Images for Event Aggregator imports are works as expected again. [69465]
+* Fix - Google Calendar and iCalendar files are now updating it's repective events [68684]
+* Fix - On demand Event Aggregator records will update events corretly [69542]
+
+= [4.3.3] 2016-11-16 =
+
+* Feature - Added Tribe Extension class and loader, to make small addons easier to build [68188]
+* Fix - Ordering on Month view is working as expected again [69123]
+* Fix - Enable ampersand character in mobile month view titles (thanks @kate for the report of this) [45409]
+* Fix - Prevent notices for Event Aggregator License checking [67981]
+* Fix - Miss-Matched text domains are resolved, important for translations (props to @Hans) [68462]
+* Fix - Sticky on Month View is working as expect again [68902]
+* Fix - Prevent HTTPS websites from pointing to Assets in HTTP [68372]
+* Fix - On `WP_Query` we will no-longer overwrite custom `post__not_in` params [42143]
+
+= [4.3.2] 2016-11-02 =
+
+* Fix - Fixes an issue where the text in the Location search field was URL encoded when using the back or forward button for navigation. [61742]
+* Fix - Aggregator Errors will not show more than once daily as comments (Thanks @Jacob for your report on the forums) [68094]
+* Fix - Event Aggregator ICS default configuration now are been Selected Correctly [67885]
+* Fix - Shortcode Month view now will display tooltips correctly [68094]
+* Fix - Avoid loading the select2 JavaScript library twice when Advanced Custom Fields is activated (props to @ryan for the initial report [43605]
+* Fix - Avoid errors and notices on calendar page when X theme and WPML plugins are active (thanks @ingrid for reporting this one) [64400]
+
+= [4.3.1.1] 2016-10-20 =
+
+* Fix - Corrected a packaging issue from the 4.3.1 release [67936]
+
+= [4.3.1] 2016-10-20 =
+
+* Tweak - Implement the pruning of Event Aggregator history records after 7 days, filterable by tribe_aggregator_record_retention [68283]
+* Tweak - Event Aggregator will now verify that the license key has uses remaining before creating a history record [68286]
+* Tweak - Improve `tribe_create_event` documentation (Props to Keith) [44871]
+* Fix - Resolved an issue where scheduled Event Aggregator imports marked as "On Demand" were being run by cron [68284]
+* Fix - Resolved a bug where empty meta fields were being inserted into Event Aggregator record post meta [68290]
+* Fix - Resolved a bug where Venue and Organizers urls were been generated incorrectly (Thanks @Matt) [68168]
+* Fix - Pagination links on Month view are updating correctly [67977]
+* Fix - Resolved the support for translated event category archive slug that could lead to broken links on the front-end while using WPML (Props to Wilco in the support Forums) [62018]
+* Fix - Resolved a bug where searching for past events in the List view would always yield no results (Thanks for the report @Davide) [61863]
+* Fix - Resolved an issue where long file names would break plugin updates on some Windows installations (pros to @Alan [62552]
+* Fix - Resolved an issue where the `/all` link on recurring events on non English websites could be broken (reported by @lumiest - thanks!) [68062]
+* Fix - Pagination links on Month view are updating correctly [67977]
+
 = [4.3.0.1] 2016-10-14 =
+
 * Fix - Preventing legacy Facebook events from been duplicated
 
 = [4.3] 2016-10-13 =
