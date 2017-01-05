@@ -906,20 +906,7 @@ class BP_Groups_Group {
 		 * @param array  $r     Array of parsed arguments for the get method.
 		 */
 		$paged_groups_sql = apply_filters( 'bp_groups_get_paged_groups_sql', join( ' ', (array) $sql ), $sql, $r );
-
-		$inc = wp_cache_get( 'last_changed', 'bp_groups' );
-		if ( ! $inc ) {
-			$inc = microtime();
-			wp_cache_set( 'last_changed', $inc, 'bp_groups' );
-		}
-		$cache_key = md5( $paged_groups_sql . $inc );
-		$cached = wp_cache_get( $cache_key, 'bp_groups' );
-		if ( false === $cached ) {
-			$paged_groups = $wpdb->get_results( $paged_groups_sql );
-			wp_cache_set( $cache_key, $paged_groups, 'bp_groups' );
-		} else {
-			$paged_groups = $cached;
-		}
+		$paged_groups     = $wpdb->get_results( $paged_groups_sql );
 
 		$total_sql['select'] = "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name} g, {$bp->groups->table_name_groupmeta} gm";
 
@@ -984,16 +971,7 @@ class BP_Groups_Group {
 		 * @param array  $r         Array of parsed arguments for the get method.
 		 */
 		$total_groups_sql = apply_filters( 'bp_groups_get_total_groups_sql', $t_sql, $total_sql, $r );
-
-		// trailing 1 busts all caches for a hotfix - see #1955.
-		$cache_key = md5( $total_groups_sql . $inc . '1' );
-		$cached = wp_cache_get( $cache_key, 'bp_groups' );
-		if ( false === $cached ) {
-			$total_groups = $wpdb->get_var( $total_groups_sql );
-			wp_cache_set( $cache_key, $total_groups, 'bp_groups' );
-		} else {
-			$total_groups = $cached;
-		}
+		$total_groups     = $wpdb->get_var( $total_groups_sql );
 
 		$group_ids = array();
 		foreach ( (array) $paged_groups as $group ) {

@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv2 or later (license.txt).
 msgid ""
 msgstr ""
-"Project-Id-Version: BuddyPress 2.6.1.1\n"
+"Project-Id-Version: BuddyPress 2.6.2\n"
 "Report-Msgid-Bugs-To: https://buddypress.trac.wordpress.org\n"
-"POT-Creation-Date: 2016-06-30 15:50:32+00:00\n"
+"POT-Creation-Date: 2016-08-04 22:00:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1920,8 +1920,8 @@ msgstr ""
 msgid "Profile photo of %s"
 msgstr ""
 
-#: bp-core/bp-core-buddybar.php:674 bp-core/bp-core-buddybar.php:690
-#: bp-core/bp-core-buddybar.php:710
+#: bp-core/bp-core-buddybar.php:676 bp-core/bp-core-buddybar.php:692
+#: bp-core/bp-core-buddybar.php:712
 msgid "You do not have access to this page."
 msgstr ""
 
@@ -5157,7 +5157,7 @@ msgid ""
 msgstr ""
 
 #: bp-members/bp-members-functions.php:1442
-#: bp-members/bp-members-functions.php:2466
+#: bp-members/bp-members-functions.php:2474
 msgid "<strong>ERROR</strong>: Your account has been marked as a spammer."
 msgstr ""
 
@@ -5223,31 +5223,31 @@ msgstr ""
 msgid "That username is already activated."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2329
+#: bp-members/bp-members-functions.php:2337
 msgid ""
 "If you have not received an email yet, <a href=\"%s\">click here to resend "
 "it</a>."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2331
+#: bp-members/bp-members-functions.php:2339
 msgid ""
 "<strong>ERROR</strong>: Your account has not been activated. Check your "
 "email for the activation link."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2362
+#: bp-members/bp-members-functions.php:2370
 msgid "<strong>ERROR</strong>: Your account has already been activated."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2364
+#: bp-members/bp-members-functions.php:2372
 msgid "Activation email resent! Please check your inbox or spam folder."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2526
+#: bp-members/bp-members-functions.php:2534
 msgid "Member type already exists."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2549
+#: bp-members/bp-members-functions.php:2557
 msgid "You may not register a member type with this name."
 msgstr ""
 
