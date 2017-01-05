@@ -4,7 +4,7 @@ Tags: share, share this, sharethis, addthis, addtoany, bookmark facebook, like, 
 
 Contributors:ShareThis
 Requires at least: 1.5
-Tested up to: 4.2.2
+Tested up to: 4.6.1
 Stable tag: trunk
 
 ShareThis provides free sharing buttons and tools to drive traffic and increase engagement on your site.
@@ -12,7 +12,7 @@ ShareThis provides free sharing buttons and tools to drive traffic and increase 
 
 == Description ==
 
-**Updates 6/23/2016**
+**Updates 10/14/2016**
 
 ShareThis: free sharing tools are easy to implement and will increase traffic and engagement on your site.
 
@@ -31,6 +31,16 @@ More information about the [ShareThis plugin for WordPress](https://support.shar
 
 
 == Changelog ==
+
+7.8
+
+Minor bug fixes
+
+
+7.7
+
+Change Call-to-Action text in Step 5 of sign up process
+
 
 7.6
 

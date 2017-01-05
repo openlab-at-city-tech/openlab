@@ -22,7 +22,7 @@
  Plugin Name: ShareThis
  Plugin URI: http://www.sharethis.com
  Description: Let your visitors share a post/page with others. Supports e-mail and posting to social bookmarking sites. <a href="options-general.php?page=sharethis.php">Configuration options are here</a>. Questions on configuration, etc.? Make sure to read the README.
- Version: 7.6
+ Version: 7.8
  Author: <a href="http://www.sharethis.com">The ShareThis Team</a>
  Author URI: http://www.sharethis.com
  */
@@ -30,7 +30,7 @@
 load_plugin_textdomain('sharethis');
 
 
-$_stversion=7.6;
+$_stversion=7.8;
 
 function install_ShareThis(){
   $publisher_id = get_option('st_pubid'); //pub key value
@@ -62,7 +62,7 @@ function install_ShareThis(){
       $pkey2 = trim(makePkey());
 
     $widget ="<script charset=\"utf-8\" type=\"text/javascript\">var switchTo5x=true;</script>";
-    $widget.="<script charset=\"utf-8\" type=\"text/javascript\" src=\"http://w.sharethis.com/button/buttons.js\"></script>";
+    $widget .= "<script charset=\"utf-8\" type=\"text/javascript\" id=\"st_insights_js\" src=\"http://w.sharethis.com/button/buttons.js?publisher=" . $publisher_id . "&product=sharethis-wordpress&wordpress_version=".trim(get_bloginfo('version'))."\"></script>";
     $widget.="<script type=\"text/javascript\">stLight.options({publisher:'$pkey2'});var st_type='wordpress".trim(get_bloginfo('version'))."';</script>";
     update_option('st_widget',$widget);
   }
@@ -672,11 +672,11 @@ function st_options_form() {
   $stType = 'wordpress'.trim(get_bloginfo('version'));
   $sharethis_callesi = (preg_match('/doNotCopy/',$widgetTag))?0:1;
 
-  $include_scripts='<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/dynamic/stlib/allServices.js"></script><script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+  $include_scripts = '<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/dynamic/stlib/allServices.js"></script><script type="text/javascript"  id="st_insights_js" src="http://w.sharethis.com/button/buttons.js?publisher=' . $publisher_id . '&product=sharethis-wordpress&wordpress_version='.trim(get_bloginfo('version')).'"></script>
       <script type="text/javascript" src="http://s.sharethis.com/loader.js"></script><link rel="stylesheet" type="text/css" href="http://w.sharethis.com/button/css/buttons.css"></link>';
   if(isset($_SERVER['HTTPS'])) {
     if ($_SERVER['HTTPS'] == "on") {
-      $include_scripts='<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="https://ws.sharethis.com/dynamic/stlib/allServices.js"></script><script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+      $include_scripts = '<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="https://ws.sharethis.com/dynamic/stlib/allServices.js"></script><script type="text/javascript"  id="st_insights_js" src="https://ws.sharethis.com/button/buttons.js?publisher=' . $publisher_id . '&product=sharethis-wordpress&wordpress_version='.trim(get_bloginfo('version')).'"></script>
       <script type="text/javascript" src="https://ss.sharethis.com/loader.js"></script><link rel="stylesheet" type="text/css" href="https://ws.sharethis.com/button/css/buttons.css"></link>';
     }
   }
@@ -948,7 +948,7 @@ function st_options_form() {
               <div id="st_step5" class="wp_st_centerContainer2" style="display:none;">
                 <div id="loginWindowDiv" class="wp_st_loginWindowDiv">
                   <div id="signInBlock" style="height:110px;">
-                    <div><h1 style="margin-top: 50px;">To get detailed analytics about sharing done on your site, please Sign In.</h1> <span id="winSignin" class="step5SignInBtn">Sign In</span></div>
+                    <div><h1 style="margin-top: 50px;">Please sign in to get the most out of your ShareThis tools.</h1> <span id="winSignin" class="step5SignInBtn">Sign In</span></div>
                   </div>
                   <!--<iframe id="loginFrame" width="644px" height="398px" frameborder="0" src="//www.sharethis.com/external-login?pluginType=newPlugins"></iframe>-->
                   <div class="wp_st_login_message">You are successfully logged-in with ShareThis.</div>
