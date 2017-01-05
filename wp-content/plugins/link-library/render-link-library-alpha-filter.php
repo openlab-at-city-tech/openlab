@@ -69,6 +69,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 		$incomingget = $_GET;
 		unset ( $incomingget['catletter'] );
 		unset ( $incomingget['searchll'] );
+		unset ( $incomingget['linkresultpage'] );
 	}
 
 	global $post;

@@ -1628,7 +1628,7 @@ class link_library_plugin_admin {
 					'showaddlinkreciprocal', 'showaddlinksecondurl', 'showaddlinktelephone', 'showaddlinkemail', 'showcustomcaptcha', 'showlinksubmittername',
 					'showaddlinksubmitteremail', 'showlinksubmittercomment', 'showuserlargedescription', 'cat_letter_filter', 'beforefirstlink', 'afterlastlink',
 					'searchfieldtext', 'catfilterlabel', 'searchnoresultstext', 'addlinkdefaultcat', 'beforesubmittername', 'aftersubmittername',
-					'beforecatdesc', 'aftercatdesc'
+					'beforecatdesc', 'aftercatdesc', 'emailextracontent'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -4025,6 +4025,14 @@ class link_library_plugin_admin {
 			<td style='width:75px;padding-right:20px'>
 				<input type="checkbox" id="emailsubmitter" name="emailsubmitter" <?php checked ( $options['emailsubmitter'] ); ?>/></td>
 			<td style='width: 20px'></td>
+		</tr>
+		<tr>
+			<td>
+				<?php _e( 'Additional text for link submitter e-mail', 'link-library' ); ?>
+			</td>
+			<td colspan="5">
+				<textarea style="width:100%" name="emailextracontent"><?php echo $options['emailextracontent']; ?></textarea>
+			</td>
 		</tr>
 		<tr>
 			<td style='width:200px'><?php _e( 'Require login to display form', 'link-library' ); ?></td>

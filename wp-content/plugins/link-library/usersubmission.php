@@ -363,6 +363,10 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						$submitteremailheaders = "MIME-Version: 1.0\r\n";
 						$submitteremailheaders .= "Content-type: text/html; charset=iso-8859-1\r\n";
 
+						if ( $genoptions['moderatorname'] != '' && $genoptions['moderatoremail'] != '' ) {
+							$submitteremailheaders .= "From: \"" . $genoptions['moderatorname'] . "\" <" . $genoptions['moderatoremail'] . ">\n";
+						}
+
 						$submitteremailtitle = __( 'Link Submission Confirmation', 'link-library' );
 
 						$submitteremailmessage = '<p>' . __( 'Thank you for your link submission on ', 'link-library' );
@@ -372,6 +376,10 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$submitteremailmessage .= '<p>' . __( 'Your link will appear once approved by the site administrator.', 'link-library' ) . '</p>';
 						} elseif ( $options['showuserlinks'] == true ) {
 							$submitteremailmessage .= '<p>' . __( 'Your link will immediately be added to the site.', 'link-library' ) . '</p>';
+						}
+
+						if ( !empty( $options['emailextracontent'] ) ) {
+							$submitteremailmessage .= '<p>' . $options['emailextracontent'] . '</p>';
 						}
 
 						$submitteremailmessage .= __( 'Link Name', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_name'] ) ) . "<br />";
