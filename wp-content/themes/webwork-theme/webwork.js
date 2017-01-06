@@ -17,7 +17,13 @@
 
 	$(document).ready(function() {
 		$searchToggle = $( '.search-toggle' );
+
 		$sidebar = $( '.ww-sidebar' );
+		if ( ! $sidebar.length ) {
+			$sidebar= $( '.sidebar' );
+			console.log($sidebar);
+		}
+
 		$wrapper = $( '.wrapper' );
 
 		// Professional programming practices.
@@ -29,7 +35,7 @@
 		}, 500 );
 
 		$wrapper.on( 'click', function( e ) {
-			if ( $wrapper.hasClass( 'inactive' ) ) {
+			if ( 'A' !== e.target.tagName && $wrapper.hasClass( 'inactive' ) ) {
 				e.preventDefault();
 				toggleExplore();
 			}

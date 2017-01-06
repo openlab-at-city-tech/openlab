@@ -31,6 +31,25 @@ Version:        0.1.0
 	.search-toggle .handle {
 		background-color: #fff;
 	}
+
+	.sidebar.sidebar-visible {
+		background: white;
+		display: block;
+		margin-left: -8%;
+		position: absolute;
+		top: 8px;
+		width: 116%;
+		z-index: 5;
+	}
+
+	.sidebar .widget {
+		padding: 16px 6%;
+	}
+
+	.widget-content,
+	.widget-title {
+		font-size: 1.5rem;
+	}
 }
 
 @media (max-width: 500px) {
