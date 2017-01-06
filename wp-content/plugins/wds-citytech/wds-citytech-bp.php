@@ -1,5 +1,8 @@
 <?php
 
+// Don't use BP HTML email for the time being. See #1822.
+add_filter( 'bp_email_use_wp_mail', '__return_true' );
+
 //Change "Group" to something else
 class bpass_Translation_Mangler {
  /*
