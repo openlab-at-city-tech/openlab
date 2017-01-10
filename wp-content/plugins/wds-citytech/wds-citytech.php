@@ -706,16 +706,16 @@ function wds_load_group_type( $group_type ) {
 	// of the logged-in user
 	$checked_array = array( 'schools' => array(), 'departments' => array() );
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
-		$account_type = strtolower(bp_get_profile_field_data(array(
+		$account_type = strtolower( bp_get_profile_field_data( array(
 			'field' => 'Account Type',
 			'user_id' => bp_loggedin_user_id(),
-		)));
+		) ) );
 		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
-		$user_department = bp_get_profile_field_data(array(
+		$user_department = bp_get_profile_field_data( array(
 			'field' => $dept_field,
 			'user_id' => bp_loggedin_user_id(),
-		));
+		) );
 
 		if ( $user_department ) {
 			$all_departments = openlab_get_department_list();
