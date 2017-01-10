@@ -82,10 +82,6 @@ add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 
  * @param WP_Comment $comment    Comment object.
  */
 function olgc_insert_comment( $comment_id, $comment ) {
-	if ( ! isset( $_POST['_olgc_nonce'] ) ) {
-		return;
-	}
-
 	// Private
 	$is_private = olgc_is_instructor() && ! empty( $_POST['olgc-private-comment'] );
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
@@ -94,6 +90,10 @@ function olgc_insert_comment( $comment_id, $comment ) {
 
 	if ( $is_private ) {
 		update_comment_meta( $comment_id, 'olgc_is_private', '1' );
+	}
+
+	if ( ! isset( $_POST['_olgc_nonce'] ) ) {
+		return;
 	}
 
 	// Grade
