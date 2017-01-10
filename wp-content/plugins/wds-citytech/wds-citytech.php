@@ -57,20 +57,18 @@ function wds_content_excerpt( $text, $text_length ) {
  * @todo This should probably be moved to a different hook. This $last_user lookup is hackish and
  *       may fail in some edge cases. I believe the hook bp_activated_user is correct.
  */
-add_action('bp_after_activation_page', 'wds_bp_complete_signup');
-
 function wds_bp_complete_signup() {
-    global $bp, $wpdb, $user_ID;
+	global $bp, $wpdb;
 
-    $last_user = $wpdb->get_results("SELECT * FROM wp_users ORDER BY ID DESC LIMIT 1", 'ARRAY_A');
-//       echo "<br />Last User ID: " . $last_user[0]['ID'] . " Last Login name: " . $last_user[0]['user_login'];
-    $user_id = $last_user[0]['ID'];
-    $first_name = xprofile_get_field_data('First Name', $user_id);
-    $last_name = xprofile_get_field_data('Last Name', $user_id);
-//	echo "<br />User ID: $user_id First : $first_name Last: $last_name";
-    $update_user_first = update_user_meta($user_id, 'first_name', $first_name);
-    $update_user_last = update_user_meta($user_id, 'last_name', $last_name);
+	$last_user = $wpdb->get_results( 'SELECT * FROM wp_users ORDER BY ID DESC LIMIT 1', 'ARRAY_A' );
+	$user_id = $last_user[0]['ID'];
+	$first_name = xprofile_get_field_data( 'First Name', $user_id );
+	$last_name = xprofile_get_field_data( 'Last Name', $user_id );
+	$update_user_first = update_user_meta( $user_id, 'first_name', $first_name );
+	$update_user_last = update_user_meta( $user_id, 'last_name', $last_name );
 }
+add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
+
 
 //child theme privacy - if corresponding group is private or hidden restrict access to site
 /* add_action( 'init','wds_check_blog_privacy' );
@@ -106,176 +104,98 @@ function wds_bp_complete_signup() {
  * menu has been selected. See cuny_add_group_menu_items() for the
  * corresponding method for custom menus.
  */
-function my_page_menu_filter($menu) {
-    global $bp, $wpdb;
+function my_page_menu_filter( $menu ) {
+	global $bp, $wpdb;
 
-    if (strpos($menu, 'Home') !== false) {
-        $menu = str_replace('Site Home', 'Home', $menu);
-        $menu = str_replace('Home', 'Site Home', $menu);
-    } else {
-        $menu = str_replace('<div class="menu"><ul>', '<div class="menu"><ul><li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>', $menu);
-    }
-    $menu = str_replace('Site Site Home', 'Site Home', $menu);
+	if ( strpos( $menu, 'Home' ) !== false ) {
+		$menu = str_replace( 'Site Home', 'Home', $menu );
+		$menu = str_replace( 'Home', 'Site Home', $menu );
+	} else {
+		$menu = str_replace( '<div class="menu"><ul>', '<div class="menu"><ul><li><a title="Site Home" href="' . site_url() . '">Site Home</a></li>', $menu );
+	}
+	$menu = str_replace( 'Site Site Home', 'Site Home', $menu );
 
-    // Only say 'Home' on the ePortfolio theme
-    // @todo: This will probably get extended to all sites
-    $menu = str_replace('Site Home', 'Home', $menu);
+	// Only say 'Home' on the ePortfolio theme
+	// @todo: This will probably get extended to all sites
+	$menu = str_replace( 'Site Home', 'Home', $menu );
 
-    $wds_bp_group_id = $wpdb->get_var($wpdb->prepare("SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id()));
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
-    if ($wds_bp_group_id) {
-        $group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type'));
-        $group = new BP_Groups_Group($wds_bp_group_id, true);
-        $menu_a = explode('<ul>', $menu);
-        $menu_a = array(
-            $menu_a[0],
-            '<ul>',
-            '<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
-            $menu_a[1],
-        );
-        $menu = implode('', $menu_a);
-    }
-    return $menu;
+	if ( $wds_bp_group_id ) {
+		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
+		$group = new BP_Groups_Group( $wds_bp_group_id, true );
+		$menu_a = explode( '<ul>', $menu );
+		$menu_a = array(
+			$menu_a[0],
+			'<ul>',
+			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+			$menu_a[1],
+		);
+		$menu = implode( '', $menu_a );
+	}
+	return $menu;
 }
-
-add_filter('wp_page_menu', 'my_page_menu_filter');
+add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
-function cuny_add_group_menu_items($items, $args) {
-    // The Sliding Door theme shouldn't get any added items
-    // See http://openlab.citytech.cuny.edu/redmine/issues/772
-    if ('custom-sliding-menu' == $args->theme_location) {
-        return $items;
-    }
+function cuny_add_group_menu_items( $items, $args ) {
+	// The Sliding Door theme shouldn't get any added items
+	// See http://openlab.citytech.cuny.edu/redmine/issues/772
+	if ( 'custom-sliding-menu' == $args->theme_location ) {
+		return $items;
+	}
 
-    if (!bp_is_root_blog()) {
-        // Only add the Home link if one is not already found
-        // See http://openlab.citytech.cuny.edu/redmine/isues/1031
-        $has_home = false;
-        foreach ($items as $item) {
-            if ('Home' === $item->title && trailingslashit(site_url()) === trailingslashit($item->url)) {
-                $has_home = true;
-                break;
-            }
-        }
+	if ( !bp_is_root_blog() ) {
+		// Only add the Home link if one is not already found
+		// See http://openlab.citytech.cuny.edu/redmine/isues/1031
+		$has_home = false;
+		foreach ( $items as $item ) {
+			if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
+				$has_home = true;
+				break;
+			}
+		}
 
-        if (!$has_home) {
-            $post_args = new stdClass;
-            $home_link = new WP_Post($post_args);
-            $home_link->title = 'Home';
-            $home_link->url = trailingslashit(site_url());
-            $home_link->slug = 'home';
-            $home_link->ID = 'home';
-            $items = array_merge(array($home_link), $items);
-        }
+		if ( !$has_home ) {
+			$post_args = new stdClass;
+			$home_link = new WP_Post( $post_args );
+			$home_link->title = 'Home';
+			$home_link->url = trailingslashit( site_url() );
+			$home_link->slug = 'home';
+			$home_link->ID = 'home';
+			$items = array_merge( array( $home_link ), $items );
+		}
 
-        $items = array_merge(cuny_group_menu_items(), $items);
-    }
+		$items = array_merge( cuny_group_menu_items(), $items );
+	}
 
-    return $items;
+	return $items;
 }
-
-add_filter('wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2);
+add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
 
 function cuny_group_menu_items() {
-    global $bp, $wpdb;
+	global $bp, $wpdb;
 
-    $items = array();
+	$items = array();
 
-    $wds_bp_group_id = $wpdb->get_var($wpdb->prepare("SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id()));
+	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
 
-    if ($wds_bp_group_id) {
-        $group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type'));
-        $group = new BP_Groups_Group($wds_bp_group_id, true);
+	if ($wds_bp_group_id) {
+		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
+		$group = new BP_Groups_Group( $wds_bp_group_id, true );
 
-        $post_args = new stdClass;
-        $profile_item = new WP_Post($post_args);
-        $profile_item->ID = 'group-profile-link';
-        $profile_item->title = sprintf('%s Profile', $group_type);
-        $profile_item->slug = 'group-profile-link';
-        $profile_item->url = bp_get_group_permalink($group);
+		$post_args = new stdClass;
+		$profile_item = new WP_Post( $post_args );
+		$profile_item->ID = 'group-profile-link';
+		$profile_item->title = sprintf( '%s Profile', $group_type );
+		$profile_item->slug = 'group-profile-link';
+		$profile_item->url = bp_get_group_permalink( $group );
 
-        $items[] = $profile_item;
-    }
+		$items[] = $profile_item;
+	}
 
-    return $items;
+	return $items;
 }
-
-//add breadcrumbs for buddypress pages
-//add_action( 'wp_footer','wds_footer_breadcrumbs' );
-function wds_footer_breadcrumbs() {
-    global $bp, $bp_current;
-    if (bp_is_group()) {
-        $group_id = $bp->groups->current_group->id;
-        $b2 = $bp->groups->current_group->name;
-        $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
-        if ($group_type == "course") {
-            $b1 = '<a href="' . site_url() . '/courses/">Courses</a>';
-        } elseif ($group_type == "project") {
-            $b1 = '<a href="' . site_url() . '/projects/">Projects</a>';
-        } elseif ($group_type == "club") {
-            $b1 = '<a href="' . site_url() . '/clubs/">Clubs</a>';
-        } else {
-            $b1 = '<a href="' . site_url() . '/groups/">Groups</a>';
-        }
-    }
-    if (!empty($bp->displayed_user->id)) {
-        $account_type = xprofile_get_field_data('Account Type', $bp->displayed_user->id);
-        if ($account_type == "Staff") {
-            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/staff/">Staff</a>';
-        } elseif ($account_type == "Faculty") {
-            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/faculty/">Faculty</a>';
-        } elseif ($account_type == "Student") {
-            $b1 = '<a href="' . site_url() . '/people/">People</a> / <a href="' . site_url() . '/people/students/">Students</a>';
-        } else {
-            $b1 = '<a href="' . site_url() . '/people/">People</a>';
-        }
-        $last_name = xprofile_get_field_data('Last Name', $bp->displayed_user->id);
-        $b2 = ucfirst($bp->displayed_user->fullname); //.''.ucfirst( $last_name )
-    }
-    if (bp_is_group() || !empty($bp->displayed_user->id)) {
-        $breadcrumb = '<div class="breadcrumb">You are here:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="View Home" href="http://openlab.citytech.cuny.edu/">Home</a> / ' . $b1 . ' / ' . $b2 . '</div>';
-        $breadcrumb = str_replace("'", "\'", $breadcrumb);
-        ?>
-        <script>document.getElementById('breadcrumb-container').innerHTML = '<?php echo $breadcrumb; ?>';</script>
-        <?php
-    }
-}
-
-//Filter bp members full name
-//add_filter( 'bp_get_member_name', 'wds_bp_the_site_member_realname' );
-//add_filter( 'bp_member_name', 'wds_bp_the_site_member_realname' );
-//add_filter( 'bp_get_displayed_user_fullname', 'wds_bp_the_site_member_realname' );
-//add_filter( 'bp_displayed_user_fullname', 'wds_bp_the_site_member_realname' );
-//add_filter( 'bp_get_loggedin_user_fullname', 'wds_bp_the_site_member_realname' );
-//add_filter( 'bp_loggedin_user_fullname', 'wds_bp_the_site_member_realname' );
-function wds_bp_the_site_member_realname() {
-    global $bp;
-    global $members_template;
-    $members_template->member->fullname = $members_template->member->display_name;
-    $user_id = $members_template->member->id;
-    $first_name = xprofile_get_field_data('Name', $user_id);
-    $last_name = xprofile_get_field_data('Last Name', $user_id);
-    return ucfirst($first_name) . " " . ucfirst($last_name);
-}
-
-//filter names in activity
-/* add_filter( 'bp_get_activity_action', 'wds_bp_the_site_member_realname_activity' );
-  add_filter( 'bp_get_activity_user_link', 'wds_bp_the_site_member_realname_activity' );
-  function wds_bp_the_site_member_realname_activity() {
-  global $bp;
-  global $activities_template;
-  print_r( $activities_template );
-  $action = $activities_template->activity->action;
-  echo "<hr><xmp>".$action."</xmp>";
-  return $action;
-  $user_id = $activities_template->activity->user_id;
-  $first_name= xprofile_get_field_data( 'Name', $user_id );
-  $last_name= xprofile_get_field_data( 'Last Name', $user_id );
-  $activities_template->activity->user_nicename = "rr";
-  $link = bp_core_get_user_domain( $activities_template->activity->user_id, $activities_template->activity->user_nicename, $activities_template->activity->user_login );
-  return "werwe";
-  } */
 
 //Default BP Avatar Full
 if (!defined('BP_AVATAR_FULL_WIDTH'))
