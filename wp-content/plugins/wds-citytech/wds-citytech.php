@@ -18,40 +18,38 @@ include 'includes/oembed.php';
  * See http://openlab.citytech.cuny.edu/redmine/issues/31
  */
 function openlab_load_custom_bp_functions() {
-    require ( dirname(__FILE__) . '/wds-citytech-bp.php' );
-    require ( dirname(__FILE__) . '/includes/email.php' );
-    require ( dirname(__FILE__) . '/includes/groupmeta-query.php' );
-    require ( dirname(__FILE__) . '/includes/group-blogs.php' );
-    require ( dirname(__FILE__) . '/includes/group-types.php' );
-    require ( dirname(__FILE__) . '/includes/portfolios.php' );
-    require ( dirname(__FILE__) . '/includes/related-links.php' );
-    require ( dirname(__FILE__) . '/includes/search.php' );
+	require( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require( dirname( __FILE__ ) . '/includes/email.php' );
+	require( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
+	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
+	require( dirname( __FILE__ ) . '/includes/group-types.php' );
+	require( dirname( __FILE__ ) . '/includes/portfolios.php' );
+	require( dirname( __FILE__ ) . '/includes/related-links.php' );
+	require( dirname( __FILE__ ) . '/includes/search.php' );
 }
 
-add_action('bp_init', 'openlab_load_custom_bp_functions');
+add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
 global $wpdb;
-date_default_timezone_set('America/New_York');
+date_default_timezone_set( 'America/New_York' );
 
-function wds_default_signup_avatar($img) {
-    if (false !== strpos($img, 'mystery-man')) {
-        $img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
-    }
+function wds_default_signup_avatar( $img ) {
+	if ( false !== strpos( $img, 'mystery-man' ) ) {
+		$img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
+	}
 
-    return $img;
+	return $img;
 }
-
-add_filter('bp_get_signup_avatar', 'wds_default_signup_avatar');
+add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 
 //
 //   This function creates an excerpt of the string passed to the length specified and
 //   breaks on a word boundary
 //
-function wds_content_excerpt($text, $text_length) {
-    return bp_create_excerpt($text, $text_length);
+function wds_content_excerpt( $text, $text_length ) {
+	return bp_create_excerpt( $text, $text_length );
 }
-
-add_action('bp_before_group_forum_topic_posts', 'wds_forum_topic_next_prev');
+add_action( 'bp_before_group_forum_topic_posts', 'wds_forum_topic_next_prev' );
 
 function wds_forum_topic_next_prev() {
     global $groups_template, $wpdb;
