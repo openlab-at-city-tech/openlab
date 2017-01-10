@@ -8,14 +8,15 @@ function webwork_theme_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'webwork_theme_assets' );
 
-remove_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3 );
 /**
  * Don't allow the OpenLab to add additional links to nav menus.
  */
-function webwork_remove_page_menu_items( $_ ) {
+add_filter( 'wp_page_menu', function( $_ ) {
 	remove_filter( 'wp_page_menu', 'my_page_menu_filter' );
+	return $_;
+}, 0 );
+
+add_filter( 'wp_nav_menu_objects', function( $_ ) {
 	remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
 	return $_;
-//	var_dump( 'rchrch' ); die();
-}
-add_filter( 'template_include', 'webwork_remove_page_menu_items' );
+}, 0 );

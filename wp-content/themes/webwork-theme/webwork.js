@@ -21,7 +21,6 @@
 		$sidebar = $( '.ww-sidebar' );
 		if ( ! $sidebar.length ) {
 			$sidebar= $( '.sidebar' );
-			console.log($sidebar);
 		}
 
 		$wrapper = $( '.wrapper' );

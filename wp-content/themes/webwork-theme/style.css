@@ -25,6 +25,45 @@ Version:        0.1.0
 	max-height: 211px;
 }
 
+.credits,
+.credits.no-padding {
+	font-size: 1.1rem;
+}
+
+.credits,
+.credits a {
+	color: #fff;
+}
+
+.credits-inner {
+	border-color: #636363;
+	border-width: 1px;
+}
+
+.tothetop i {
+	font-size: 1.5rem;
+}
+
+.column.column-1 {
+	width: 60%;
+	padding-right: 30px;
+	border-right: 1px solid #636363;
+}
+
+.footer,
+.widget-content,
+.widget-title {
+	font-size: 1.1rem;
+}
+
+.footer.section.large-padding {
+	padding: 50px 0;
+}
+
+.footer .widget-content {
+	color: #fff;
+}
+
 @media (max-width: 800px) {
 	.nav-toggle .bar,
 	.search-toggle .metal,
