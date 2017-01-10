@@ -30,7 +30,7 @@ function openlab_get_site_id_by_group_id( $group_id = 0 ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	return (int) groups_get_groupmeta($group_id, 'wds_bp_group_site_id');
+	return (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 }
 
 /**
@@ -73,18 +73,18 @@ function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 	if ( $blog_id ) {
 		$blog_public = get_blog_option( $blog_id, 'blog_public' );
 
-		if ( "-3" == $blog_public ) {
+		if ( '-3' == $blog_public ) {
 			if ( groups_is_user_admin( $user_id, $group_id ) ) {
 				$role = 'administrator';
 			}
 		} else {
 			if ( groups_is_user_admin( $user_id, $group_id ) ) {
-				$role = "administrator";
+				$role = 'administrator';
 			} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
-				$role = "editor";
+				$role = 'editor';
 			} else {
 				// Default role is lower for portfolios
-				$role = openlab_is_portfolio() ? "subscriber" : "author";
+				$role = openlab_is_portfolio() ? 'subscriber' : 'author';
 			}
 		}
 
@@ -143,14 +143,14 @@ function openlab_force_blog_role_sync() {
 
 		if ( ! empty( $member ) ) {
 			$blog_public = get_blog_option( get_current_blog_id(), 'blog_public' );
-			if ( "-3" == $blog_public ) {
+			if ( '-3' == $blog_public ) {
 				$status = $member->is_admin ? 'administrator' : '';
 			} else {
 				$status = openlab_is_portfolio( $group_id ) ? 'subscriber' : 'author';
 
 				if ( $member->is_admin ) {
 					$status = 'administrator';
-				} else if ( $member->is_mod ) {
+				} elseif ( $member->is_mod ) {
 					$status = 'editor';
 				}
 			}
@@ -199,15 +199,16 @@ add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
  */
 function openlab_group_blog_activity( $activity ) {
 
-	if ( $activity->type != 'new_blog_post' && $activity->type != 'new_blog_comment' )
+	if ( 'new_blog_post' !== $activity->type && 'new_blog_comment' !== $activity->type ) {
 		return $activity;
+	}
 
 	$blog_id = $activity->item_id;
 
 	if ( 'new_blog_post' == $activity->type ) {
 		$post_id = $activity->secondary_item_id;
 		$post = get_post( $post_id );
-	} else if ( 'new_blog_comment' == $activity->type ) {
+	} elseif ( 'new_blog_comment' == $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$post_id = $comment->comment_post_ID;
 		$post = get_post( $post_id );
@@ -215,8 +216,9 @@ function openlab_group_blog_activity( $activity ) {
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
-	if ( ! $group_id )
+	if ( ! $group_id ) {
 		return $activity;
+	}
 
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
@@ -225,7 +227,7 @@ function openlab_group_blog_activity( $activity ) {
 		'user_id' => $activity->user_id,
 		'type' => $activity->type,
 		'item_id' => $group_id,
-		'secondary_item_id' => $activity->secondary_item_id
+		'secondary_item_id' => $activity->secondary_item_id,
 	) );
 
 	// if we don't have, verify if we have an original activity
@@ -234,7 +236,7 @@ function openlab_group_blog_activity( $activity ) {
 			'user_id' => $activity->user_id,
 			'type' => $activity->type,
 			'item_id' => $activity->item_id,
-			'secondary_item_id' => $activity->secondary_item_id
+			'secondary_item_id' => $activity->secondary_item_id,
 		) );
 	}
 
@@ -250,7 +252,7 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-				__( '%s wrote a new blog post %s in the group %s', 'groupblog' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
 		$userlink = '';
@@ -260,7 +262,7 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-				__( '%s commented on %s in the group %s', 'groupblog' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	}
 
@@ -269,7 +271,7 @@ function openlab_group_blog_activity( $activity ) {
 
 	$public = get_blog_option( $blog_id, 'blog_public' );
 
-	if ( 0 > (float) $public) {
+	if ( 0 > (float) $public ) {
 		$activity->hide_sitewide = 1;
 	} else {
 		$activity->hide_sitewide = 0;
@@ -299,16 +301,19 @@ add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 0 ) {
 	global $wpdb, $bp;
 
-	if ( empty( $wpdb->blogid ) )
+	if ( empty( $wpdb->blogid ) ) {
 		return false;
+	}
 
 	$post_id = (int) $post_id;
 
-	if ( ! $blog_id )
+	if ( ! $blog_id ) {
 		$blog_id = (int) $wpdb->blogid;
+	}
 
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = bp_loggedin_user_id();
+	}
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
@@ -322,7 +327,6 @@ function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 
 		) );
 	}
 }
-
 add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
 add_action( 'trash_post', 'openlab_group_blog_remove_activity' );
 
@@ -338,8 +342,9 @@ add_action( 'trash_post', 'openlab_group_blog_remove_activity' );
 function openlab_group_blog_remove_comment_activity( $comment_id ) {
 	global $wpdb, $bp;
 
-	if ( empty( $wpdb->blogid ) )
+	if ( empty( $wpdb->blogid ) ) {
 		return false;
+	}
 
 	$comment_id = (int) $comment_id;
 	$blog_id = (int) $wpdb->blogid;
@@ -356,7 +361,6 @@ function openlab_group_blog_remove_comment_activity( $comment_id ) {
 		) );
 	}
 }
-
 add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
 add_action( 'trash_comment', 'openlab_group_blog_remove_comment_activity' );
 add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
@@ -375,7 +379,7 @@ function openlab_process_unlink_site() {
 			'external_site_url',
 			'wds_bp_group_site_id',
 			'external_site_comments_feed',
-			'external_site_posts_feed'
+			'external_site_posts_feed',
 		);
 
 		foreach ( $meta_to_delete as $m ) {
@@ -415,7 +419,7 @@ function wds_bp_group_meta() {
 	}
 
 	if ( 'group' == $group_type ) {
-		$type = isset( $_COOKIE["wds_bp_group_type"] ) ? $_COOKIE['wds_bp_group_type'] : '';
+		$type = isset( $_COOKIE['wds_bp_group_type'] ) ? $_COOKIE['wds_bp_group_type'] : '';
 	}
 
 	$group_school = groups_get_groupmeta( $the_group_id, 'wds_group_school' );
@@ -431,18 +435,16 @@ function wds_bp_group_meta() {
 	<div class="ct-group-meta">
 
 		<?php
-		if ( ! empty( $group_type ) && $group_type != "group" ) {
+		if ( ! empty( $group_type ) && 'group' !== $group_type ) {
 			echo wds_load_group_type( $group_type );
 			?>
 			<input type="hidden" name="group_type" value="<?php echo $group_type; ?>" />
 			<?php
 		} ?>
 
-                <?php do_action('openlab_group_creation_extra_meta'); ?>
+		<?php do_action( 'openlab_group_creation_extra_meta' ); ?>
 
-                <?php
-		$group_site_url = openlab_get_group_site_url( $the_group_id );
-		?>
+		<?php $group_site_url = openlab_get_group_site_url( $the_group_id ); ?>
 
 		<div class="panel panel-default">
 			<div class="panel-heading">Site Details</div>
@@ -482,8 +484,8 @@ function wds_bp_group_meta() {
 					foreach ( $user_blogs as $ubid => $ub ) {
 						$role = get_user_meta( bp_loggedin_user_id(), $wpdb->base_prefix . $ub->userblog_id . '_capabilities', true );
 
-						if ( ! array_key_exists( 'administrator', (array) $role)) {
-							unset( $user_blogs[$ubid] );
+						if ( ! array_key_exists( 'administrator', (array) $role ) ) {
+							unset( $user_blogs[ $ubid ] );
 						}
 					}
 					$user_blogs = array_values( $user_blogs );
@@ -498,46 +500,47 @@ function wds_bp_group_meta() {
 					<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 
 					<div class="form-table groupblog-setup"<?php if ( ! empty( $group_site_url ) ) : ?> style="display: none;"<?php endif ?>>
-						<?php if ( $group_type != 'portfolio' ) : ?>
-							<?php $show_website = "none" ?>
+						<?php if ( 'portfolio' !== $group_type ) : ?>
+							<?php $show_website = 'none' ?>
 							<div class="form-field form-required">
-                                <div scope='row' class="site-details-query">
-                                    <label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> Set up a site?</label>
-                                </div>
+								<div scope='row' class="site-details-query">
+									<label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> Set up a site?</label>
+								</div>
 							</div>
 						<?php else : ?>
 							<?php $show_website = 'auto' ?>
 						<?php endif ?>
 
 						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website; ?>"><div>
-                                <?php
-                                switch ( $group_type ) :
-                                    case 'course' :
-                                        ?>
-                                        <p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
+				<?php
+				switch ( $group_type ) :
+					case 'course' :
+						?>
+						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
-                                        <ul class="ol-tooltip">
-                                            <li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-                                            <li class="hyphenate">smithadv1100sp2012</li>
-                                        </ul>
+						<ul class="ol-tooltip">
+							<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+							<li class="hyphenate">smithadv1100sp2012</li>
+						</ul>
 
-                                        <p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+						<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
-                                        <?php
-                                        break;
-                                    case 'project' :
-                                        ?>
-                                        <p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
+						<?php
+						break;
 
-                                        <?php
-                                        break;
-                                    case 'club' :
-                                        ?>
-                                        <p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+					case 'project' :
+						?>
+						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
 
-                                        <?php break ?>
+						<?php
+						break;
+					case 'club' :
+						?>
+						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
 
-                                <?php endswitch ?>
+						<?php break ?>
+
+				<?php endswitch ?>
 							</div></div>
 
 						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
