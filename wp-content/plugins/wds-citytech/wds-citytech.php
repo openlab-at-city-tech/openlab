@@ -358,17 +358,19 @@ function wds_groups_ajax() {
 				$group_type = 'club';
 			}
 
+
 			echo $sack;
 			?>
 			var schools = "0";
-			if (document.getElementById('school_tech').checked) {
-				schools = schools + "," + document.getElementById('school_tech').value;
-			}
-			if (document.getElementById('school_studies').checked) {
-				schools = schools + "," + document.getElementById('school_studies').value;
-			}
-			if (document.getElementById('school_arts').checked) {
-				schools = schools + "," + document.getElementById('school_arts').value;
+			for ( school in OLGroupCreate.schools ) {
+				if ( ! OLGroupCreate.schools.hasOwnProperty( school ) ) {
+					continue;
+				}
+
+				var schoolElId = 'school_' + school;
+				if ( document.getElementById( schoolElId ).checked ) {
+					schools = schools + "," + document.getElementById( schoolElId ).value;
+				}
 			}
 			var group_type = jQuery('input[name="group_type"]').val();
 			isack.execute = 1;
@@ -399,27 +401,16 @@ function wds_load_group_departments() {
 	$schools_list = '';
 	$schools_list_ary = array();
 
+	$schools_canonical = openlab_get_school_list();
 	foreach ( $schools as $school ) {
-		switch ( $school ) {
-			case 'tech':
-				array_push( $schools_list_ary, 'Technology and Design' );
-				break;
-
-			case 'studies':
-				array_push( $schools_list_ary, 'Professional Studies' );
-				break;
-
-			case 'arts':
-				array_push( $schools_list_ary, 'Arts and Sciences' );
-				break;
+		if ( isset( $schools_canonical[ $school ] ) ) {
+			array_push( $schools_list_ary, $schools_canonical[ $school ] );
 		}
 	}
 
 	$schools_list = implode( ', ', $schools_list_ary );
 
-	$departments_tech = openlab_get_department_list( 'tech' );
-	$departments_studies = openlab_get_department_list( 'studies' );
-	$departments_arts = openlab_get_department_list( 'arts' );
+	$departments_canonical = openlab_get_department_list();
 
 	// We want to prefill the School and Dept fields, which means we have
 	// to prefetch the dept field and figure out School backward
@@ -436,29 +427,17 @@ function wds_load_group_departments() {
 		) );
 
 		foreach ( $wds_departments as $d ) {
-			if ( in_array( $d, $departments_tech ) ) {
-				$schools[] = 'tech';
-			}
-
-			if ( in_array( $d, $departments_studies ) ) {
-				$schools[] = 'studies';
-			}
-
-			if ( in_array( $d, $departments_arts ) ) {
-				$schools[] = 'art';
+			foreach ( $departments_canonical as $the_school => $the_depts ) {
+				if ( in_array( $d, $the_depts, true ) ) {
+					$schools[] = $the_school;
+				}
 			}
 		}
 	}
 
 	$departments = array();
-	if ( in_array( 'tech', $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_tech );
-	}
-	if ( in_array( 'studies', $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_studies );
-	}
-	if ( in_array( 'arts', $schools ) ) {
-		$departments = array_merge_recursive( $departments, $departments_arts );
+	foreach ( $schools as $school ) {
+		$departments = array_merge_recursive( $departments, $departments_canonical[ $school ] );
 	}
 	sort( $departments );
 
@@ -496,6 +475,7 @@ function openlab_get_school_list() {
 		'tech' => 'Technology & Design',
 		'studies' => 'Professional Studies',
 		'arts' => 'Arts & Sciences',
+		'other' => 'Other',
 	);
 }
 
@@ -613,6 +593,11 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			),
 			'social-science' => array(
 				'label' => 'Social Science',
+			),
+		),
+		'other' => array(
+			'clip' => array(
+				'label' => 'CLIP',
 			),
 		),
 	);
@@ -750,11 +735,10 @@ function wds_load_group_type( $group_type ) {
 
 	$onclick = 'onclick="wds_load_group_departments();"';
 
-	$return .= '<label><input type="checkbox" id="school_tech" name="wds_group_school[]" value="tech" ' . $onclick . ' ' . checked( in_array( 'tech', $checked_array['schools'] ), true, false ) . '> Technology & Design</label>';
-
-	$return .= '<label><input type="checkbox" id="school_studies" name="wds_group_school[]" value="studies" ' . $onclick . ' ' . checked( in_array( 'studies', $checked_array['schools'] ), true, false ) . '> Professional Studies</label>';
-
-	$return .= '<label><input type="checkbox" id="school_arts" name="wds_group_school[]" value="arts" ' . $onclick . ' ' . checked( in_array( 'arts', $checked_array['schools'] ), true, false ) . '> Arts & Sciences</label>';
+	$schools = openlab_get_school_list();
+	foreach ( $schools as $school_key => $school_label ) {
+		$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
+	}
 
 	$return .= '</td>';
 	$return .= '</tr>';

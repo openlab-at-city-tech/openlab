@@ -55,6 +55,9 @@ function openlab_enqueue_frontend_scripts() {
 	     ( bp_is_group_create() && bp_is_action_variable( 'invite-anyone', 1 ) ) ||
              ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
 		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+		wp_localize_script( 'openlab-group-create', 'OLGroupCreate', array(
+			'schools' => openlab_get_school_list(),
+		) );
 	}
 
         if ( bp_is_register_page() ) {
