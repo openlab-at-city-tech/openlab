@@ -49,36 +49,6 @@ add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 function wds_content_excerpt( $text, $text_length ) {
 	return bp_create_excerpt( $text, $text_length );
 }
-add_action( 'bp_before_group_forum_topic_posts', 'wds_forum_topic_next_prev' );
-
-function wds_forum_topic_next_prev() {
-    global $groups_template, $wpdb;
-
-    $forum_id = groups_get_groupmeta($groups_template->group->id, 'forum_id');
-    $topic_id = bp_get_the_topic_id();
-    $group_slug = bp_get_group_slug();
-    $next_topic = $wpdb->get_results("SELECT * FROM wp_bb_topics
-				                 WHERE forum_id='$forum_id' AND topic_id > '$topic_id' AND topic_status='0'
-						 ORDER BY topic_id ASC LIMIT 1", 'ARRAY_A');
-    $next_topic_slug = isset($next_topic[0]['topic_slug']) ? $next_topic[0]['topic_slug'] : '';
-    //echo "<br />Next Topic ID: " . $next_topic[0]['topic_id'];
-    $previous_topic = $wpdb->get_results("SELECT * FROM wp_bb_topics
-				                 WHERE forum_id='$forum_id' AND topic_id < '$topic_id' AND topic_status='0'
-						 ORDER BY topic_id DESC LIMIT 1", 'ARRAY_A');
-    $previous_topic_slug = isset($previous_topic[0]['topic_slug']) ? $previous_topic[0]['topic_slug'] : '';
-    if ($previous_topic_slug != '') {
-        echo "<a href='" . site_url() . "/groups/$group_slug/forum/topic/$previous_topic_slug'><<< Previous Topic &nbsp;&nbsp;&nbsp&nbsp;</a>";
-    }
-    if ($next_topic_slug != '') {
-        echo "<a href='" . site_url() . "/groups/$group_slug/forum/topic/$next_topic_slug'> Next Topic >>></a>";
-    }
-    /*
-      echo "<br />Previous Topic ID: " . $previous_topic[0]['topic_id'];
-      echo "<br />Next Topic / Previous Topic ";
-      echo "<br />Forum ID: " . $forum_id;
-      echo "<br />Topic ID: " . bp_get_the_topic_id();
-     */
-}
 
 /**
  * On activation, copies the BP first/last name profile field data into the WP 'first_name' and
