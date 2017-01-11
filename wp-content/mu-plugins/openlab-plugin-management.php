@@ -15,6 +15,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
+		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
 		'kb-gradebook/kb-gradebook.php',
