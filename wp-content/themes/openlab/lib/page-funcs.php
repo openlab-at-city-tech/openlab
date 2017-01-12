@@ -13,7 +13,7 @@ function cuny_home_login() {
     if (is_user_logged_in()) :
 
         echo '<div id="open-lab-login" class="log-box links-lighter-hover">';
-        echo '<h1 class="title inline-element semibold">Welcome, ' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h1>';
+        echo '<h1 class="title inline-element semibold hyphenate">Welcome, ' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h1>';
         do_action('bp_before_sidebar_me')
         ?>
 
