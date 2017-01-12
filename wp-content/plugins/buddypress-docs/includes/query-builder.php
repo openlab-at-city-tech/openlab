@@ -170,8 +170,10 @@ class BP_Docs_Query {
 			) );
 
 			// Create the item term
-			if ( !$item_term = wp_insert_term( $this->item_id, $this->associated_item_tax_name, $item_term_args ) )
+			$item_term = wp_insert_term( $this->item_id, $this->associated_item_tax_name, $item_term_args );
+                        if ( ! $item_term || is_wp_error( $item_term ) ) {
 				return false;
+                        }
 		}
 
 		$this->term_id = apply_filters( 'bp_docs_get_item_term_id', $item_term['term_id'], $this );
