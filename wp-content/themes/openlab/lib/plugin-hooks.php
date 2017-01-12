@@ -183,7 +183,10 @@ add_action('bp_group_manage_members_admin_item', 'openlab_manage_members_email_s
 
 //remove status from group profile pages
 add_action( 'bp_screens', function() {
-	remove_action ( 'bp_group_header_meta', 'ass_group_subscribe_button' );
+	remove_action( 'bp_after_group_settings_admin', 'ass_default_subscription_settings_form' );
+	add_action( 'bp_after_group_settings_admin', 'openlab_default_subscription_settings_form' );
+
+	remove_action( 'bp_group_header_meta', 'ass_group_subscribe_button' );
 }, 0 );
 
 

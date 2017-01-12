@@ -1070,9 +1070,6 @@ function openlab_default_subscription_settings_form() {
     <?php
 }
 
-remove_action('bp_after_group_settings_admin', 'ass_default_subscription_settings_form');
-add_action('bp_after_group_settings_admin', 'openlab_default_subscription_settings_form');
-
 /**
  * Save the group default email setting
  *
