@@ -13,7 +13,7 @@ function cuny_home_login() {
     if (is_user_logged_in()) :
 
         echo '<div id="open-lab-login" class="log-box links-lighter-hover">';
-        echo '<h1 class="title inline-element semibold">Welcome,</h1><h2 class="title inline-element">' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h2>';
+        echo '<h1 class="title inline-element semibold">Welcome, ' . bp_core_get_user_displayname(bp_loggedin_user_id()) . '</h1>';
         do_action('bp_before_sidebar_me')
         ?>
 
@@ -43,7 +43,7 @@ function cuny_home_login() {
 
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box links-lighter-hover">'; ?>
-        <?php echo '<h2 class="title"><span class="fa fa-plus-circle flush-left"></span> Join OpenLab</h2>'; ?>
+        <?php echo '<h1 class="title"><span class="fa fa-plus-circle flush-left"></span> Join OpenLab</h1>'; ?>
         <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-right semibold" href="' . site_url() . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
