@@ -30,6 +30,10 @@
 	font-weight: bold;
 }
 
+.olgc-grade-value-script {
+	margin-right: 4px;
+}
+
 .olgc-privacy-description {
 	margin: 1em 0 0;
 	opacity: .6;
@@ -37,3 +41,20 @@
 	font-style: italic;
 }
 
+.olgc-grade-toggle {
+	font-size: .9rem;
+	font-weight: bold;
+}
+
+.olgc-grade-hidden .olgc-hide-grade,
+.olgc-grade-hidden .olgc-grade-value-script {
+	display: none;
+}
+
+.olgc-grade-display .olgc-show-grade {
+	display: none;
+}
+
+.olgc-grade-display.olgc-grade-hidden .olgc-show-grade {
+	display: inline;
+}

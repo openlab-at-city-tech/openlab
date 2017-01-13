@@ -14,6 +14,11 @@
 		$reply_to_com.on( 'click', function() {
 			set_comment_visibility( $( this ) );
 		} );
+
+		$( '.olgc-grade-toggle' ).on( 'click', function( e ) {
+			e.preventDefault();
+			toggle_single_grade_visibility( $( this ) );
+		} );
 	} );
 
 	function toggle_grade_visibility() {
@@ -36,5 +41,12 @@
 			$private_checkbox.prop( 'checked', false );
 			$private_checkbox.prop( 'disabled', false );
 		}
+	}
+
+	/**
+	 * Toggle grade visibility.
+	 */
+	function toggle_single_grade_visibility( $clicked ) {
+		$clicked.closest( '.olgc-grade-display' ).toggleClass( 'olgc-grade-hidden' );
 	}
 }(jQuery))
