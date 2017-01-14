@@ -367,17 +367,15 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
         $result = $this->_wpdb->get_results(
             $this->_wpdb->prepare('
 				SELECT
-					u.`user_login`, u.`display_name`, u.ID AS user_id,
 					sf.*,
 					SUM(s.correct_count) AS correct_count,
 					SUM(s.incorrect_count) AS incorrect_count,
 					SUM(s.solved_count) as solved_count,
-					SUM(s.points) AS points, 
-					SUM(q.points) AS g_points 
+					SUM(s.points) AS points,
+					SUM(q.points) AS g_points
 				FROM
 					' . $this->_tableStatisticRef . ' AS sf
 					INNER JOIN ' . $this->_tableStatistic . ' AS s ON(s.statistic_ref_id = sf.statistic_ref_id)
-					LEFT JOIN openlab_global.' . $this->_wpdb->users . ' AS u ON(u.ID = sf.user_id)
 					INNER JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
 				WHERE
 					sf.quiz_id = %d AND sf.is_old = 0 ' . $where . ' ' . $timeWhere . '
@@ -394,8 +392,9 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
         $r = array();
 
         foreach ($result as $row) {
-            if (!empty($row['user_login'])) {
-                $row['user_name'] = $row['user_login'] . ' (' . $row['display_name'] . ')';
+            $user = get_user_by( 'id', $row['user_id'] );
+            if ( $user ) {
+                $row['user_name'] = $user->user_login . ' (' . $user->display_name . ')';
             }
 
             $row['form_data'] = $row['form_data'] === null ? null : @json_decode($row['form_data'], true);
@@ -502,7 +501,6 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
             $this->_wpdb->prepare(
                 '(
 						SELECT
-							u.`user_login`, u.`display_name`, u.ID AS user_id,
 							SUM(s.`correct_count`) as correct_count,
 							SUM(s.`incorrect_count`) as incorrect_count,
 							SUM(s.`hint_count`) as hint_count,
@@ -510,16 +508,14 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 							AVG(s.question_time) as question_time,
 							SUM(q.points * (s.correct_count + s.incorrect_count)) AS g_points
 						FROM
-							openlab_global.' . $this->_wpdb->users . ' AS u
-							' . ($onlyCompleded ? 'INNER' : 'LEFT') . ' JOIN ' . $this->_tableStatisticRef . ' AS sf ON (sf.user_id = u.ID AND sf.quiz_id = %d)
+							' . $this->_tableStatisticRef . ' AS sf
 							LEFT JOIN ' . $this->_tableStatistic . ' AS s ON ( s.statistic_ref_id = sf.statistic_ref_id )
 							LEFT JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
-						GROUP BY u.ID
+						GROUP BY sf.user_id
 					)
 						UNION
 					(
 						SELECT
-							NULL, NULL, 0,
 							SUM(s.`correct_count`) as correct_count,
 							SUM(s.`incorrect_count`) as incorrect_count,
 							SUM(s.`hint_count`) as hint_count,
@@ -535,9 +531,7 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 							m.id = %d
 						GROUP BY sf.user_id
 					)
-					
-					ORDER BY 
-						user_login
+
 					LIMIT
 						%d, %d',
                 $quizId, $quizId, $start, $limit),
@@ -545,8 +539,9 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
         );
 
         foreach ($results as $row) {
-            if (!empty($row['user_login'])) {
-                $row['user_name'] = $row['user_login'] . ' (' . $row['display_name'] . ')';
+            $user = get_user_by( 'id', $row['user_id'] );
+            if ( $user ) {
+                $row['user_name'] = $user->user_login . ' (' . $user->display_name . ')';
             }
 
             $a[] = new WpProQuiz_Model_StatisticOverview($row);
@@ -564,13 +559,12 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 				FROM
 					(
 						(SELECT
-							u.ID
+							sf.user_id
 						FROM
-							openlab_global.' . $this->_wpdb->users . ' AS u
-							' . ($onlyCompleded ? 'INNER' : 'LEFT') . ' JOIN ' . $this->_tableStatisticRef . ' AS sf ON (sf.user_id = u.ID AND sf.quiz_id = %d)
+							' . $this->_tableStatisticRef . ' AS sf
 							LEFT JOIN ' . $this->_tableStatistic . ' AS s ON ( s.statistic_ref_id = sf.statistic_ref_id )
 							LEFT JOIN ' . $this->_tableQuestion . ' AS q ON(q.id = s.question_id)
-						GROUP BY u.ID )
+						GROUP BY sf.user_id )
 					UNION
 						(SELECT
 							sf.user_id
