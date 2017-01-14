@@ -1,13 +1,21 @@
 <?php
 
 add_filter( 'webwork_client_site_base', function() {
-	$base = get_blog_option( 1, 'home' );
-	return trailingslashit( $base ) . 'ol-webwork';
+        $base = get_blog_option( 1, 'home' );
+        if ( 'CT staging' === ENV_TYPE ) {
+                return trailingslashit( $base ) . 'webwork-playground';
+        } else {
+                return trailingslashit( $base ) . 'ol-webwork';
+        }
 } );
 
 add_filter( 'webwork_server_site_base', function() {
-	$base = get_blog_option( 1, 'home' );
-	return trailingslashit( $base ) . 'ol-webwork';
+        $base = get_blog_option( 1, 'home' );
+        if ( 'CT staging' === ENV_TYPE ) {
+                return trailingslashit( $base );
+        } else {
+                return trailingslashit( $base ) . 'ol-webwork';
+        }
 } );
 
 /**
