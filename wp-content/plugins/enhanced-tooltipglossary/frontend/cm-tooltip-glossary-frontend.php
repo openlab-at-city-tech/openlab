@@ -96,6 +96,29 @@ class CMTooltipGlossaryFrontend {
 	}
 
 	/**
+	 * Add the dynamic CSS to reflect the styles set by the options
+	 * @return type
+	 */
+	public static function cmtt_dynamic_css() {
+		ob_start();
+		echo apply_filters( 'cmtt_dynamic_css_before', '' );
+		?>
+
+		.tiles ul a { min-width: <?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>; width:<?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>;  }
+		.tiles ul span { min-width:<?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>; width:<?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>;  }
+
+		<?php
+		echo apply_filters( 'cmtt_dynamic_css_after', '' );
+		$content = ob_get_clean();
+
+		/*
+		 * One can use this filter to change/remove the standard styling
+		 */
+		$dynamicCSScontent = apply_filters( 'cmtt_dynamic_css', $content );
+		return trim( $dynamicCSScontent );
+	}
+
+	/**
 	 * Adds the scripts which has to be included on the main glossary index page only
 	 */
 	public static function cmtt_glossary_createList_scripts() {
@@ -103,7 +126,14 @@ class CMTooltipGlossaryFrontend {
 		if ( is_numeric( $glossaryPageID ) && is_page( $glossaryPageID ) ) {
 			wp_enqueue_script( 'jquery-listnav', self::$jsPath . 'jquery.listnav.glossary.js', array( 'jquery' ) );
 			wp_enqueue_script( 'listnav-js', self::$jsPath . 'listnav.js', array( 'jquery', 'jquery-listnav' ) );
+
 			wp_enqueue_style( 'jquery-listnav-style', self::$cssPath . 'jquery.listnav.css' );
+			/*
+			 * It's WP 3.3+ function
+			 */
+			if ( function_exists( 'wp_add_inline_style' ) ) {
+				wp_add_inline_style( 'jquery-listnav-style', self::cmtt_dynamic_css() );
+			}
 
 			$listnavArgs				 = array(
 				'includeAll'	 => true,
@@ -243,6 +273,10 @@ class CMTooltipGlossaryFrontend {
 				 * Fix for the &amp; character and the AMP term
 				 */
 				$content = str_replace( '&#038;', '[glossary_exclude]&#038;[/glossary_exclude]', $content );
+				/*
+				 * Fix 2 for the &amp; character and the AMP term
+				 */
+				$content = preg_replace( '/(\s&\s)/','[glossary_exclude]$0[/glossary_exclude]', $content );
 
 				/*
 				 * Replace exclude tags and content between them in purpose to save the original text as is
@@ -270,7 +304,8 @@ class CMTooltipGlossaryFrontend {
 					if ( $post->post_type == 'glossary' && ($post->ID === $glossary_item->ID ) ) {
 						continue;
 					}
-					$glossary_title	 = str_replace( '&#039;', '’', preg_quote( htmlspecialchars( trim( $glossary_item->post_title ), ENT_QUOTES, 'UTF-8' ), '/' ) );
+//					$glossary_title	 = str_replace( '&#039;', '’', preg_quote( htmlspecialchars( trim( $glossary_item->post_title ), ENT_QUOTES, 'UTF-8' ), '/' ) ); //changed in 3.3.8
+					$glossary_title	 = preg_quote( htmlspecialchars( trim( $glossary_item->post_title ), ENT_COMPAT, 'UTF-8' ), '/' );
 					$addition		 = '';
 
 					$glossaryIndexArrKey = $glossary_title . $addition;
@@ -339,7 +374,7 @@ class CMTooltipGlossaryFrontend {
 	 */
 	public static function cmtt_dom_str_replace( $html, $glossarySearchString ) {
 		global $replacedTerms;
-		$replacedTerms = array();
+		$replacedTerms = is_array( $replacedTerms ) ? $replacedTerms : array();
 
 		if ( !empty( $html ) && is_string( $html ) ) {
 			$dom = new DOMDocument();
@@ -440,7 +475,8 @@ class CMTooltipGlossaryFrontend {
 		/*
 		 * If it's case insensitive, then the term keys are stored as lowercased
 		 */
-		$normalizedTitle = str_replace( '&#039;', "’", preg_quote( htmlspecialchars( trim( $title ), ENT_QUOTES, 'UTF-8' ), '/' ) );
+//		$normalizedTitle = str_replace( '&#039;', "’", preg_quote( htmlspecialchars( trim( $title ), ENT_QUOTES, 'UTF-8' ), '/' ) ); //changed in 3.3.8
+		$normalizedTitle = preg_quote( htmlspecialchars( trim( $title ), ENT_COMPAT, 'UTF-8' ), '/' );
 		$titleIndex		 = (!$caseSensitive) ? mb_strtolower( $normalizedTitle ) : $normalizedTitle;
 
 		/*
@@ -649,7 +685,7 @@ class CMTooltipGlossaryFrontend {
 
 		$glossary_list_id = 'glossaryList' . ($shortcode || isset( $_POST[ 'isshortcode' ] ) ? '_' . $_POST[ "gcat_id" ] : '');
 
-		$content .= '<div id="' . $glossary_list_id . '-nav" class="listNav"></div>';
+		$content .= '<div id="' . $glossary_list_id . '-nav" class="listNav" role="tablist"></div>';
 		$content .= '<div class="glossary-container">';
 
 		$args = array(
@@ -678,7 +714,7 @@ class CMTooltipGlossaryFrontend {
 		if ( $glossary_index ) {
 			$glossary_RequiredJSData[ 'list_id' ] = $glossary_list_id;
 
-			$content .= '<ul class="glossaryList" id="' . $glossary_list_id . '">';
+			$content .= '<ul class="glossaryList" role="tabpanel" id="' . $glossary_list_id . '">';
 
 			/*
 			 * Style links based on option

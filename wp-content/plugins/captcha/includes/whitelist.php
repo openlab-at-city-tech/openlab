@@ -285,7 +285,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 				$where =
 						0 == $ip_int
 					?
-						" WHERE `ip` LIKE '%{$this->s}%' OR `ip_to` LIKE '%{$this->s}%' OR `ip_from` LIKE '%{$this->s}%'"
+						" WHERE `ip` LIKE '%{$this->s}%'"
 					:
 						" WHERE ( `ip_from_int` <= {$ip_int} AND `ip_to_int` >= {$ip_int} )";
 			}
@@ -311,7 +311,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 				$where =
 						0 == $ip_int
 					?
-						" WHERE `ip` LIKE '%{$this->s}%' OR `ip_to` LIKE '%{$this->s}%' OR `ip_from` LIKE '%{$this->s}%'"
+						" WHERE `ip` LIKE '%{$this->s}%'"
 					:
 						" WHERE ( `ip_from_int` <= {$ip_int} AND `ip_to_int` >= {$ip_int} )";
 			}

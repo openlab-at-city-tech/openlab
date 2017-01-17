@@ -231,11 +231,11 @@ if ( ! function_exists( 'cptch_option_tab' ) ) {
 				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e( 'Use general settings', 'captcha' );?></th>
+				<th scope="row"><?php _e( 'Hide from registered users', 'captcha' );?></th>
 				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e( 'Hide from registered users', 'captcha' );?></th>
+				<th scope="row"><?php _e( 'Use general settings', 'captcha' );?></th>
 				<td><fieldset><input type="checkbox" disabled="disabled" /></fieldset></td>
 			</tr>
 			<tr class="cptch_form_option_used_packages">

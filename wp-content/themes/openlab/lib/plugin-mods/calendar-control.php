@@ -232,12 +232,12 @@ add_action('media_buttons', 'openlab_manage_media_buttons');
 /**
  * Remove Event Categories
  */
-add_filter('eventorganiser_register_taxonomy_event-category', false);
+add_filter( 'eventorganiser_register_taxonomy_event-category', '__return_false' );
 
 /**
  * Remove Event Tags
  */
-add_filter('eventorganiser_register_taxonomy_event-tag', false);
+add_filter( 'eventorganiser_register_taxonomy_event-tag', '__return_false' );
 
 /**
  * Remove plugin action for adding author
@@ -266,6 +266,8 @@ add_action('eventorganiser_additional_event_meta', 'openlab_bpeo_list_author', 5
 function openlab_handlng_eventorganiser_metaboxes() {
     remove_meta_box('eventorganiser_detail', 'event', 'normal');
     add_meta_box('eventorganiser_detail', __('Event Details', 'eventorganiser'), '_eventorganiser_details_metabox_openlab_custom', 'event', 'normal', 'high');
+
+    remove_meta_box( 'authordiv', 'event', 'normal' );
 }
 
 add_action('add_meta_boxes_event', 'openlab_handlng_eventorganiser_metaboxes', 20);

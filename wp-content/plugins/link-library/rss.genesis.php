@@ -59,7 +59,7 @@
 	
 	// Constructor function for rssGenesis Class
 	// Valid values for the rssversion parameter are: RSS20, RSS091
-	function rssGenesis ($rssversion = "RSS20") {
+	function __construct ($rssversion = "RSS20") {
 		$this->rssformat = $rssversion;
 		if ($rssversion == "RSS091")
 		{

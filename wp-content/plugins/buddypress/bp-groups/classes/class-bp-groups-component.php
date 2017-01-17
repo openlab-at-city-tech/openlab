@@ -85,6 +85,16 @@ class BP_Groups_Component extends BP_Component {
 	public $types = array();
 
 	/**
+	 * Current directory group type.
+	 *
+	 * @see groups_directory_groups_setup()
+	 *
+	 * @since 2.7.0
+	 * @var string
+	 */
+	public $current_directory_type = '';
+
+	/**
 	 * Start the groups component creation process.
 	 *
 	 * @since 1.5.0
@@ -168,13 +178,17 @@ class BP_Groups_Component extends BP_Component {
 			'group' => $bp->table_prefix . 'bp_groups_groupmeta',
 		);
 
+		// Fetch the default directory title.
+		$default_directory_titles = bp_core_get_directory_page_default_titles();
+		$default_directory_title  = $default_directory_titles[$this->id];
+
 		// All globals for groups component.
 		// Note that global_tables is included in this array.
 		$args = array(
 			'slug'                  => BP_GROUPS_SLUG,
 			'root_slug'             => isset( $bp->pages->groups->slug ) ? $bp->pages->groups->slug : BP_GROUPS_SLUG,
 			'has_directory'         => true,
-			'directory_title'       => _x( 'Groups', 'component directory title', 'buddypress' ),
+			'directory_title'       => isset( $bp->pages->groups->title ) ? $bp->pages->groups->title : $default_directory_title,
 			'notification_callback' => 'groups_format_notifications',
 			'search_string'         => _x( 'Search Groups...', 'Component directory search', 'buddypress' ),
 			'global_tables'         => $global_tables,
@@ -200,10 +214,7 @@ class BP_Groups_Component extends BP_Component {
 			$current_group_class = apply_filters( 'bp_groups_current_group_class', 'BP_Groups_Group' );
 
 			if ( $current_group_class == 'BP_Groups_Group' ) {
-				$this->current_group = groups_get_group( array(
-					'group_id'        => $group_id,
-					'populate_extras' => true,
-				) );
+				$this->current_group = groups_get_group( $group_id );
 
 			} else {
 
@@ -247,17 +258,6 @@ class BP_Groups_Component extends BP_Component {
 				$this->current_group->is_visible = true;
 			} else {
 				$this->current_group->is_visible = false;
-			}
-
-			// If this is a private or hidden group, does the user have access?
-			if ( 'private' == $this->current_group->status || 'hidden' == $this->current_group->status ) {
-				if ( $this->current_group->is_user_member && is_user_logged_in() || bp_current_user_can( 'bp_moderate' ) ) {
-					$this->current_group->user_has_access = true;
-				} else {
-					$this->current_group->user_has_access = false;
-				}
-			} else {
-				$this->current_group->user_has_access = true;
 			}
 
 			// Check once if the current group has a custom front template.

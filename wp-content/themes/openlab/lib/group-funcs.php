@@ -388,23 +388,22 @@ function openlab_delete_group() {
  * @param string $department The id of the deparment currently selected in
  *        the dropdown.
  */
-function openlab_return_course_list($school, $department) {
+function openlab_return_course_list( $school, $department ) {
+	$list = '<option value="dept_all" ' . selected( '', $department ) . ' >All Departments</option>';
 
-    $list = '<option value="dept_all" ' . selected('', $department) . ' >All Departments</option>';
+	// Sanitize. If no value is found, don't return any
+	// courses
+	$departments = openlab_get_department_list();
+	if ( ! array_key_exists( $school, $departments ) ) {
+		return $list;
+	}
 
-    // Sanitize. If no value is found, don't return any
-    // courses
-    if (!in_array($school, array('tech', 'studies', 'arts'))) {
-        return $list;
-    }
+	$depts = openlab_get_department_list( $school, 'short' );
+	foreach ( $depts as $dept_name => $dept_label ) {
+		$list .= '<option value="' . esc_attr( $dept_name ) . '" ' . selected( $department, $dept_name, false ) . '>' . esc_attr( $dept_label ) . '</option>';
+	}
 
-    $depts = openlab_get_department_list($school, 'short');
-
-    foreach ($depts as $dept_name => $dept_label) {
-        $list .= '<option value="' . esc_attr($dept_name) . '" ' . selected($department, $dept_name, false) . '>' . esc_attr($dept_label) . '</option>';
-    }
-
-    return $list;
+	return $list;
 }
 
 function openlab_group_post_count($filters, $group_args) {
@@ -700,7 +699,7 @@ function cuny_group_single() {
                             <?php
                             $wds_school = openlab_generate_school_name($group_id);
                             $wds_departments = openlab_generate_department_name($group_id);
-                            ?> 
+                            ?>
 
                             <?php if ($wds_school && !empty($wds_school)): ?>
 
@@ -1070,9 +1069,6 @@ function openlab_default_subscription_settings_form() {
     <hr />
     <?php
 }
-
-remove_action('bp_after_group_settings_admin', 'ass_default_subscription_settings_form');
-add_action('bp_after_group_settings_admin', 'openlab_default_subscription_settings_form');
 
 /**
  * Save the group default email setting

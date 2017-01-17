@@ -249,6 +249,7 @@ function wpcf7_recaptcha_callback_script() {
 
 ?>
 <script type="text/javascript">
+var recaptchaWidgets = [];
 var recaptchaCallback = function() {
 	var forms = document.getElementsByTagName('form');
 	var pattern = /(^|\s)g-recaptcha(\s|$)/;
@@ -260,16 +261,28 @@ var recaptchaCallback = function() {
 			var sitekey = divs[j].getAttribute('data-sitekey');
 
 			if (divs[j].className && divs[j].className.match(pattern) && sitekey) {
-				grecaptcha.render(divs[j], {
+				var params = {
 					'sitekey': sitekey,
 					'theme': divs[j].getAttribute('data-theme'),
 					'type': divs[j].getAttribute('data-type'),
 					'size': divs[j].getAttribute('data-size'),
-					'tabindex': divs[j].getAttribute('data-tabindex'),
-					'callback': divs[j].getAttribute('data-callback'),
-					'expired-callback': divs[j].getAttribute('data-expired-callback')
-				});
+					'tabindex': divs[j].getAttribute('data-tabindex')
+				};
 
+				var callback = divs[j].getAttribute('data-callback');
+
+				if (callback && 'function' == typeof window[callback]) {
+					params['callback'] = window[callback];
+				}
+
+				var expired_callback = divs[j].getAttribute('data-expired-callback');
+
+				if (expired_callback && 'function' == typeof window[expired_callback]) {
+					params['expired-callback'] = window[expired_callback];
+				}
+
+				var widget_id = grecaptcha.render(divs[j], params);
+				recaptchaWidgets.push(widget_id);
 				break;
 			}
 		}
@@ -279,20 +292,20 @@ var recaptchaCallback = function() {
 <?php
 }
 
-add_action( 'wpcf7_init', 'wpcf7_recaptcha_add_shortcode_recaptcha' );
+add_action( 'wpcf7_init', 'wpcf7_recaptcha_add_form_tag_recaptcha' );
 
-function wpcf7_recaptcha_add_shortcode_recaptcha() {
+function wpcf7_recaptcha_add_form_tag_recaptcha() {
 	$recaptcha = WPCF7_RECAPTCHA::get_instance();
 
 	if ( $recaptcha->is_active() ) {
-		wpcf7_add_shortcode( 'recaptcha', 'wpcf7_recaptcha_shortcode_handler' );
+		wpcf7_add_form_tag( 'recaptcha', 'wpcf7_recaptcha_form_tag_handler' );
 	}
 }
 
-function wpcf7_recaptcha_shortcode_handler( $tag ) {
+function wpcf7_recaptcha_form_tag_handler( $tag ) {
 	wp_enqueue_script( 'google-recaptcha' );
 
-	$tag = new WPCF7_Shortcode( $tag );
+	$tag = new WPCF7_FormTag( $tag );
 
 	$atts = array();
 
@@ -304,7 +317,7 @@ function wpcf7_recaptcha_shortcode_handler( $tag ) {
 	$atts['data-tabindex'] = $tag->get_option( 'tabindex', 'int', true );
 	$atts['data-callback'] = $tag->get_option( 'callback', '', true );
 	$atts['data-expired-callback'] =
-		$tag->get_option( 'expired-callback', '', true );
+		$tag->get_option( 'expired_callback', '', true );
 
 	$atts['class'] = $tag->get_class_option(
 		wpcf7_form_controls_class( $tag->type, 'g-recaptcha' ) );
@@ -363,7 +376,7 @@ function wpcf7_recaptcha_check_with_google( $spam ) {
 		return $spam;
 	}
 
-	$tags = $contact_form->form_scan_shortcode( array( 'type' => 'recaptcha' ) );
+	$tags = $contact_form->scan_form_tags( array( 'type' => 'recaptcha' ) );
 
 	if ( empty( $tags ) ) {
 		return $spam;

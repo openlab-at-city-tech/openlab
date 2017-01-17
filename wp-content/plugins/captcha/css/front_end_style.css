@@ -10,6 +10,10 @@
 .cptch_block label {
 	word-wrap: break-word;
 }
+/* fixing captcha content displaying in WooThemes */
+.cptch_block br {
+	display: none !important;
+}
 .cptch_label:hover {
 	cursor: pointer;
 }

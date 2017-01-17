@@ -811,6 +811,13 @@ class BP_Core_User {
 		$retval = array();
 		foreach ( $user_ids as $user_id ) {
 			$retval[ $user_id ] = wp_cache_get( $user_id, 'bp_last_activity' );
+
+			if ( isset( $retval['user_id'] ) ) {
+				$retval[ $user_id ]['user_id']     = (int) $retval[ $user_id ]['user_id'];
+			}
+			if ( isset( $retval['activity_id'] ) ) {
+				$retval[ $user_id ]['activity_id'] = (int) $retval[ $user_id ]['activity_id'];
+			}
 		}
 
 		return $retval;
@@ -904,6 +911,16 @@ class BP_Core_User {
 
 		// Set cache.
 		wp_cache_set( $user_id, $activity[ $user_id ], 'bp_last_activity' );
+
+		/**
+		 * Fires when a user's last_activity value has been updated.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param int    $user_id ID of the user.
+		 * @param string $time    Last activity timestamp, in 'Y-m-d H:i:s' format.
+		 */
+		do_action( 'bp_core_user_updated_last_activity', $user_id, $time );
 
 		return $updated;
 	}

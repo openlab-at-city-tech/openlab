@@ -31,10 +31,18 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 
 		echo '<div class="qm qm-half" id="' . esc_attr( $this->collector->id() ) . '">';
 		echo '<table cellspacing="0">';
+		echo '<caption>' . esc_html( $this->collector->name() ) . '</caption>';
+		echo '<thead>';
+		echo '<tr class="screen-reader-text">';
+		echo '<th scope="col">' . esc_html__( 'Data', 'query-monitor' ) . '</th>';
+		echo '<th scope="col">' . esc_html__( 'Value', 'query-monitor' ) . '</th>';
+		echo '</tr>';
+		echo '</thead>';
 		echo '<tbody>';
 
 		echo '<tr>';
-		echo '<th>' . esc_html__( 'Template File', 'query-monitor' ) . '</th>';
+		echo '<th scope="row">' . esc_html__( 'Template File', 'query-monitor' ) . '</th>';
+
 		if ( ! empty( $data['template_path'] ) ) {
 
 			if ( $data['is_child_theme'] ) {
@@ -49,72 +57,65 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 
 		echo '</tr>';
 
+		if ( ! empty( $data['template_hierarchy'] ) ) {
+
+			echo '<tr>';
+			echo '<th scope="row">' . esc_html__( 'Template Hierarchy', 'query-monitor' ) . '</th>';
+			echo '<td><ul><li>' . implode( '</li><li>', array_map( 'esc_html', $data['template_hierarchy'] ) ) . '</li></ul></td>';
+			echo '</tr>';
+
+		}
+
+		echo '<tr>';
+		echo '<th scope="row">' . esc_html__( 'Template Parts', 'query-monitor' ) . '</th>';
+
 		if ( ! empty( $data['template_parts'] ) ) {
 
-			$count = count( $data['template_parts'] );
-			echo '<tr>';
-			echo '<th rowspan="' . absint( $count ) . '">' . esc_html__( 'Template Parts', 'query-monitor' ) . '</th>';
 			if ( $data['is_child_theme'] ) {
 				$parts = $data['theme_template_parts'];
 			} else {
 				$parts = $data['template_parts'];
 			}
-			$first = true;
+
+			echo '<td><ul>';
 
 			foreach ( $parts as $filename => $display ) {
-
-				if ( ! $first ) {
-					echo '<tr>';
-				}
-
-				echo '<td>' . self::output_filename( $display, $filename ) . '</td>'; // WPCS: XSS ok.
-				echo '</tr>';
-
-				$first = false;
-
+				echo '<li>' . self::output_filename( $display, $filename ) . '</li>'; // WPCS: XSS ok.
 			}
+
+			echo '</ul></td>';
 
 		} else {
-			echo '<tr>';
-			echo '<th>' . esc_html__( 'Template Parts', 'query-monitor' ) . '</th>';
 			echo '<td><em>' . esc_html__( 'None', 'query-monitor' ) . '</em></td>';
-			echo '</tr>';
 		}
 
-		if ( ! empty( $data['timber_files'] ) ) {
+		echo '</tr>';
 
-			$count = count( $data['timber_files'] );
+		if ( ! empty( $data['timber_files'] ) ) {
 			echo '<tr>';
-			echo '<th rowspan="' . absint( $count ) . '">' . esc_html__( 'Timber Files', 'query-monitor' ) . '</th>';
-			$first = true;
+			echo '<th scope="row">' . esc_html__( 'Timber Files', 'query-monitor' ) . '</th>';
+			echo '<td><ul>';
 
 			foreach ( $data['timber_files'] as $filename ) {
-
-				if ( ! $first ) {
-					echo '<tr>';
-				}
-
-				echo '<td>' . esc_html( $filename ) . '</td>';
-				echo '</tr>';
-
-				$first = false;
-
+				echo '<li>' . self::output_filename( $filename ) . '</li>'; // WPCS: XSS ok.
 			}
 
+			echo '</ul></td>';
+			echo '</tr>';
 		}
 
 		echo '<tr>';
 		if ( $data['is_child_theme'] ) {
-			echo '<th>' . esc_html__( 'Child Theme', 'query-monitor' ) . '</th>';
+			echo '<th scope="row">' . esc_html__( 'Child Theme', 'query-monitor' ) . '</th>';
 		} else {
-			echo '<th>' . esc_html__( 'Theme', 'query-monitor' ) . '</th>';
+			echo '<th scope="row">' . esc_html__( 'Theme', 'query-monitor' ) . '</th>';
 		}
 		echo '<td>' . esc_html( $data['stylesheet'] ) . '</td>';
 		echo '</tr>';
 
 		if ( $data['is_child_theme'] ) {
 			echo '<tr>';
-			echo '<th>' . esc_html__( 'Parent Theme', 'query-monitor' ) . '</th>';
+			echo '<th scope="row">' . esc_html__( 'Parent Theme', 'query-monitor' ) . '</th>';
 			echo '<td>' . esc_html( $data['template'] ) . '</td>';
 			echo '</tr>';
 		}
@@ -122,22 +123,15 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 		if ( !empty( $data['body_class'] ) ) {
 
 			echo '<tr>';
-			echo '<th rowspan="' . count( $data['body_class'] ) . '">' . esc_html__( 'Body Classes', 'query-monitor' ) . '</th>';
-			$first = true;
+			echo '<th scope="row">' . esc_html__( 'Body Classes', 'query-monitor' ) . '</th>';
+			echo '<td><ul>';
 
 			foreach ( $data['body_class'] as $class ) {
-
-				if ( !$first ) {
-					echo '<tr>';
-				}
-
-				echo '<td>' . esc_html( $class ) . '</td>';
-				echo '</tr>';
-
-				$first = false;
-
+				echo '<li>' . esc_html( $class ) . '</li>';
 			}
 
+			echo '</ul></td>';
+			echo '</tr>';
 		}
 
 		echo '</tbody>';

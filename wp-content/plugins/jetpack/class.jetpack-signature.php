@@ -43,14 +43,14 @@ class Jetpack_Signature {
 			//     with SSL termination proxies (self-served, Cloudflare, etc.) don't need to fiddle with
 			//     the JETPACK_SIGNATURE__HTTPS_PORT constant. The code also implies we can't talk to a
 			//     site at https://example.com:80/ (which would be a strange configuration).
-			// JETPACK_SIGNATURE__HTTPS_PORT: Set this constant in wp-config.php to the backend webserver's port
+			// JETPACK_SIGNATURE__HTTPS_PORT: Set this constant in wp-config.php to the back end webserver's port
 			//                                if the site is behind a proxy running on port 443 without
-			//                                X-Forwarded-Port and the backend's port is *not* 80. It's better,
+			//                                X-Forwarded-Port and the back end's port is *not* 80. It's better,
 			//                                though, to configure the proxy to send X-Forwarded-Port.
 			$port = in_array( $host_port, array( 443, 80, JETPACK_SIGNATURE__HTTPS_PORT ) ) ? '' : $host_port;
 		} else {
 			// 80: Standard Port
-			// JETPACK_SIGNATURE__HTTPS_PORT: Set this constant in wp-config.php to the backend webserver's port
+			// JETPACK_SIGNATURE__HTTPS_PORT: Set this constant in wp-config.php to the back end webserver's port
 			//                                if the site is behind a proxy running on port 80 without
 			//                                X-Forwarded-Port. It's better, though, to configure the proxy to
 			//                                send X-Forwarded-Port.
@@ -63,6 +63,15 @@ class Jetpack_Signature {
 			$body = $override['body'];
 		} else if ( 'POST' == strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 			$body = isset( $GLOBALS['HTTP_RAW_POST_DATA'] ) ? $GLOBALS['HTTP_RAW_POST_DATA'] : null;
+
+			// Convert the $_POST to the body, if the body was empty. This is how arrays are hashed
+			// and encoded on the Jetpack side.
+			if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
+				if ( empty( $body ) && is_array( $_POST ) && count( $_POST ) > 0 ) {
+					$body = $_POST;
+				}
+			}
+
 		} else {
 			$body = null;
 		}
@@ -96,6 +105,16 @@ class Jetpack_Signature {
 			return new Jetpack_Error( 'token_mismatch', 'Incorrect token' );
 		}
 
+		// If we got an array at this point, let's encode it, so we can see what it looks like as a string.
+		if ( is_array( $body ) ) {
+			if ( count( $body ) > 0 ) {
+				$body = json_encode( $body );
+
+			} else {
+				$body = '';
+			}
+		}
+
 		$required_parameters = array( 'token', 'timestamp', 'nonce', 'method', 'url' );
 		if ( !is_null( $body ) ) {
 			$required_parameters[] = 'body_hash';
@@ -114,7 +133,7 @@ class Jetpack_Signature {
 			}
 		}
 
-		if ( is_null( $body ) ) {
+		if ( empty( $body ) ) {
 			if ( $body_hash ) {
 				return new Jetpack_Error( 'invalid_body_hash', 'The body hash does not match.' );
 			}

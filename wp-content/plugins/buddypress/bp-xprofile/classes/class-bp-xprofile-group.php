@@ -371,6 +371,10 @@ class BP_XProfile_Group {
 		// Fetch the fields.
 		$field_ids = $wpdb->get_col( "SELECT id FROM {$bp->profile->table_name_fields} WHERE group_id IN ( {$group_ids_in} ) AND parent_id = 0 {$exclude_fields_sql} {$in_sql} ORDER BY field_order" );
 
+		foreach( $groups as $group ) {
+			$group->fields = array();
+		}
+
 		// Bail if no fields.
 		if ( empty( $field_ids ) ) {
 			return $groups;
@@ -469,7 +473,6 @@ class BP_XProfile_Group {
 
 		// Merge the field array back in with the group array.
 		foreach( (array) $groups as $group ) {
-
 			// Indexes may have been shifted after previous deletions, so we get a
 			// fresh one each time through the loop.
 			$index = array_search( $group, $groups );
@@ -556,6 +559,13 @@ class BP_XProfile_Group {
 					wp_cache_set( $gdata->id, $gdata, 'bp_xprofile_groups' );
 				}
 			}
+		}
+
+		// Integer casting.
+		foreach ( (array) $groups as $key => $data ) {
+			$groups[ $key ]->id          = (int) $groups[ $key ]->id;
+			$groups[ $key ]->group_order = (int) $groups[ $key ]->group_order;
+			$groups[ $key ]->can_delete  = (int) $groups[ $key ]->can_delete;
 		}
 
 		// Reset indexes & return.
@@ -737,7 +747,7 @@ class BP_XProfile_Group {
 						<div id="post-body-content">
 							<div id="titlediv">
 								<div class="titlewrap">
-									<label id="title-prompt-text" for="title"><?php esc_html_e( 'Field Group Name', 'buddypress') ?></label>
+									<label id="title-prompt-text" for="title"><?php esc_html_e( 'Field Group Name (required)', 'buddypress') ?></label>
 									<input type="text" name="group_name" id="title" value="<?php echo esc_attr( $this->name ); ?>" autocomplete="off" />
 								</div>
 							</div>

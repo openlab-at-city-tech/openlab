@@ -277,18 +277,21 @@ function bp_dtheme_post_update() {
 
 	$activity_id = 0;
 	if ( empty( $_POST['object'] ) && bp_is_active( 'activity' ) ) {
-		$activity_id = bp_activity_post_update( array( 'content' => $_POST['content'] ) );
+		$activity_id = bp_activity_post_update( array( 'content' => $_POST['content'], 'error_type' => 'wp_error' ) );
 
 	} elseif ( $_POST['object'] == 'groups' ) {
 		if ( ! empty( $_POST['item_id'] ) && bp_is_active( 'groups' ) )
-			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $_POST['item_id'] ) );
+			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $item_id, 'error_type' => 'wp_error' ) );
 
 	} else {
 		$activity_id = apply_filters( 'bp_activity_custom_update', $_POST['object'], $_POST['item_id'], $_POST['content'] );
 	}
 
-	if ( empty( $activity_id ) )
+	if ( false === $activity_id ) {
 		exit( '-1<div id="message" class="error"><p>' . __( 'There was a problem posting your update, please try again.', 'buddypress' ) . '</p></div>' );
+	} elseif ( is_wp_error( $activity_id ) && $activity_id->get_error_code() ) {
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . $activity_id->get_error_message() . '</p></div>' );
+	}
 
 	if ( bp_has_activities ( 'include=' . $activity_id ) ) {
 		while ( bp_activities() ) {
@@ -330,10 +333,14 @@ function bp_dtheme_new_activity_comment() {
 		'activity_id' => $_POST['form_id'],
 		'content'     => $_POST['content'],
 		'parent_id'   => $_POST['comment_id'],
+		'error_type'  => 'wp_error'
 	) );
 
-	if ( ! $comment_id )
+	if ( false === $comment_id ) {
 		exit( '-1<div id="message" class="error"><p>' . __( 'There was an error posting that reply, please try again.', 'buddypress' ) . '</p></div>' );
+	} elseif ( is_wp_error( $comment_id ) ) {
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . esc_html( $comment_id->get_error_message() ) . '</p></div>' );
+	}
 
 	// Load the new activity item into the $activities_template global
 	bp_has_activities( 'display_comments=stream&hide_spam=false&show_hidden=true&include=' . $comment_id );

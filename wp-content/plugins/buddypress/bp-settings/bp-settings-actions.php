@@ -444,7 +444,7 @@ function bp_settings_verify_email_change(){
 		$pending_email = bp_get_user_meta( bp_displayed_user_id(), 'pending_email_change', true );
 
 		// Bail if the hash provided doesn't match the one saved in the database.
-		if ( urldecode( $_GET['verify_email_change'] ) !== $pending_email['hash'] ) {
+		if ( ! hash_equals( urldecode( $_GET['verify_email_change'] ), $pending_email['hash'] ) ) {
 			return;
 		}
 
@@ -472,7 +472,7 @@ function bp_settings_verify_email_change(){
 
 	// Email change is being dismissed.
 	} elseif ( ! empty( $_GET['dismiss_email_change'] ) ) {
-	        bp_delete_user_meta( bp_displayed_user_id(), 'pending_email_change' );
+		bp_delete_user_meta( bp_displayed_user_id(), 'pending_email_change' );
 		bp_core_add_message( __( 'You have successfully dismissed your pending email change.', 'buddypress' ) );
 
 		bp_core_redirect( $redirect_to );

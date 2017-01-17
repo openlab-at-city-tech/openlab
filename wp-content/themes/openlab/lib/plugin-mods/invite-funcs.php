@@ -380,3 +380,25 @@ function openlab_invite_anyone_screen_two_content() {
     <?php endif; ?>
     <?php
 }
+
+/**
+ * Don't allow group queries on invitation pages to load too many groups.
+ *
+ * See #1996.
+ */
+function openlab_limit_invite_anyone_group_query( $args ) {
+	if ( ! bp_is_user() ) {
+		return $args;
+	}
+
+	$dbs = debug_backtrace();
+	foreach ( $dbs as $db ) {
+		if ( isset( $db['function'] ) && 'openlab_invite_anyone_screen_one_content' === $db['function'] ) {
+			$args['per_page'] = 100;
+			return $args;
+		}
+	}
+
+	return $args;
+}
+add_filter( 'bp_after_has_groups_parse_args', 'openlab_limit_invite_anyone_group_query' );

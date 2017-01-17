@@ -81,7 +81,8 @@ jQuery(document).ready(function(){
 
   jQuery("#winSignin").click(function() {
     checkForLoginCredentials();
-    win = window.open("http://www.sharethis.com/external-login?pluginType=newPlugins", "newstframe","status=1,toolbar=0,width=640,height=395");
+//     win = window.open("http://www.sharethis.com/external-login?pluginType=newPlugins", "newstframe","status=1,toolbar=0,width=640,height=395");
+    win = window.open("http://tools.sharethis.com/signin", "newstframe","menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes");
   });
 });
 
@@ -1876,9 +1877,9 @@ gtc = new function () {
 
     jsScriptCode += '<script charset="utf-8" type="text/javascript">var switchTo5x='+switchTo5x+';</script>\n';
     if(selected[0].value == "https")
-      jsScriptCode += '<script charset="utf-8" type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>\n';
+      jsScriptCode += '<script charset="utf-8" type="text/javascript" id="st_insights_js" src="https://ws.sharethis.com/button/buttons.js?publisher=' + this.gtc_st_pubid + '&product=sharethis-wordpress"></script>\n';
     else
-      jsScriptCode += '<script charset="utf-8" type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>\n';
+      jsScriptCode += '<script charset="utf-8" type="text/javascript" id="st_insights_js" src="http://w.sharethis.com/button/buttons.js?publisher=' + this.gtc_st_pubid + '&product=sharethis-wordpress"></script>\n';
 
     if(this.gtc_st_current_type == '_none')
       objStlightOpt = null;

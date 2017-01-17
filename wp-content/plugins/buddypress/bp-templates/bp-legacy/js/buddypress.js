@@ -308,6 +308,11 @@ jq(document).ready( function() {
 
 		/* Favoriting activity stream items */
 		if ( target.hasClass('fav') || target.hasClass('unfav') ) {
+			/* Bail if a request is in progress */
+			if ( target.hasClass( 'loading' ) ) {
+				return false;
+			}
+
 			type      = target.hasClass('fav') ? 'fav' : 'unfav';
 			parent    = target.closest('.activity-item');
 			parent_id = parent.attr('id').substr( 9, parent.attr('id').length );
@@ -847,12 +852,13 @@ jq(document).ready( function() {
 		}
 
 		var target = jq(event.target),
-			css_id, object, template;
+			css_id, object, template, search_terms;
 
 		if ( target.attr('type') === 'submit' ) {
 			css_id = jq('.item-list-tabs li.selected').attr('id').split( '-' );
 			object = css_id[0];
 			template = null;
+			search_terms = target.parent().find( '#' + object + '_search' ).val();
 
 			// The Group Members page specifies its own template
 			if ( event.currentTarget.className === 'groups-members-search' ) {
@@ -860,7 +866,7 @@ jq(document).ready( function() {
 				template = 'groups/single/members';
 			}
 
-			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope') , 'div.' + object, target.parent().children('label').children('input').val(), 1, jq.cookie('bp-' + object + '-extras'), null, template );
+			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope') , 'div.' + object, search_terms, 1, jq.cookie('bp-' + object + '-extras'), null, template );
 
 			return false;
 		}
@@ -870,6 +876,11 @@ jq(document).ready( function() {
 
 	/* When a navigation tab is clicked - e.g. | All Groups | My Groups | */
 	jq('div.item-list-tabs').on( 'click', function(event) {
+		// If on a directory page with a type filter, add no-ajax class.
+		if ( jq( 'body' ).hasClass( 'type' ) && jq( 'body' ).hasClass( 'directory' ) ) {
+			jq(this).addClass( 'no-ajax' );
+		}
+
 		if ( jq(this).hasClass('no-ajax')  || jq( event.target ).hasClass('no-ajax') )  {
 			return;
 		}

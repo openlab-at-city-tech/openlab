@@ -18,6 +18,7 @@ class EWWWIO_Media_Background_Process extends WP_Background_Process {
 		$id = $item['id'];
 		if ( empty( $item['attempts'] ) ) {
 			$item['attempts'] = 0;
+			sleep(4); // on the first attempt, hold off and wait for the db to catchup
 		}
 		ewwwio_debug_message( "background processing $id, type: " . $item['type'] );
 		$type = $item['type'];
@@ -233,10 +234,18 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 		} else {
 			$size = $_POST['ewwwio_size'];
 		}
+		if ( empty( $_POST['ewwwio_id'] ) ) {
+			$id = 0;
+		} else {
+			$id = (int) $_POST['ewwwio_id'];
+		}
+		global $ewww_image;
 		if ( ! empty( $_POST['ewwwio_path'] ) && $size == 'full' ) {
 			$file_path = $this->find_file( $_POST['ewwwio_path'] );
 			if ( ! empty( $file_path ) ) {
 				ewwwio_debug_message( "processing async optimization request for {$_POST['ewwwio_path']}" );
+				$ewww_image = new EWWW_Image( $id, 'media', $file_path );
+				$ewww_image->resize = 'full';
 				list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path, 1, false, false, true );
 			} else {
 				ewwwio_debug_message( "could not process async optimization request for {$_POST['ewwwio_path']}" );
@@ -245,6 +254,8 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 			$file_path = $this->find_file( $_POST['ewwwio_path'] );
 			if ( ! empty( $file_path ) ) {
 				ewwwio_debug_message( "processing async optimization request for {$_POST['ewwwio_path']}" );
+				$ewww_image = new EWWW_Image( $id, 'media', $file_path );
+				$ewww_image->resize = ( empty( $size ) ? null : $size );
 				list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path );
 			} else {
 				ewwwio_debug_message( "could not process async optimization request for {$_POST['ewwwio_path']}" );

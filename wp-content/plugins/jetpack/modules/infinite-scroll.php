@@ -1,12 +1,13 @@
 <?php
 /**
  * Module Name: Infinite Scroll
- * Module Description: Add support for infinite scroll to your theme.
+ * Module Description: Automatically load new content when a visitor scrolls.
  * Sort Order: 26
  * First Introduced: 2.0
  * Requires Connection: No
  * Auto Activate: No
  * Module Tags: Appearance
+ * Feature: Appearance
  * Additional Search Queries: scroll, infinite, infinite scroll
  */
 
@@ -171,7 +172,7 @@ class Jetpack_Infinite_Scroll_Extras {
 		}
 
 		// Check if Google Analytics tracking is requested
-		$settings['google_analytics'] = (bool) get_option( $this->option_name_google_analytics );
+		$settings['google_analytics'] = (bool) Jetpack_Options::get_option_and_ensure_autoload( $this->option_name_google_analytics, 0 );
 
 		return $settings;
 	}

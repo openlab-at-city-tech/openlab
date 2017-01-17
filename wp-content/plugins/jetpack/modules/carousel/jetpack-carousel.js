@@ -232,7 +232,7 @@ jQuery(document).ready(function($) {
 
 			container.attr('itemscope', '');
 
-			container.attr('itemtype', 'http://schema.org/ImageGallery');
+			container.attr('itemtype', 'https://schema.org/ImageGallery');
 
 			container.css({
 					'position'   : 'fixed',
@@ -389,10 +389,8 @@ jQuery(document).ready(function($) {
 					$(window).scrollTop(scroll);
 				})
 				.bind('jp_carousel.afterClose', function(){
-					if ( history.pushState ) {
-						history.pushState('', document.title, window.location.pathname + window.location.search);
-					} else {
-						window.location.hash = '';
+					if ( window.location.hash && history.back ) {
+						history.back();
 					}
 					last_known_location_hash = '';
 					gallery.opened = false;
@@ -692,6 +690,14 @@ jQuery(document).ready(function($) {
 				caption.fadeOut( 'fast' ).empty();
 			}
 
+			// Record pageview in WP Stats, for each new image loaded full-screen.
+			if ( jetpackCarouselStrings.stats ) {
+				new Image().src = document.location.protocol +
+					'//pixel.wp.com/g.gif?' +
+					jetpackCarouselStrings.stats +
+					'&post=' + encodeURIComponent( attachmentId ) +
+					'&rand=' + Math.random();
+			}
 
 			// Load the images for the next and previous slides.
 			$( next ).add( previous ).each( function() {
@@ -875,7 +881,7 @@ jQuery(document).ready(function($) {
 						.css( 'width', '100%' )
 						.css( 'height', '100%' );
 
-					var slide = $('<div class="jp-carousel-slide" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"></div>')
+					var slide = $('<div class="jp-carousel-slide" itemprop="associatedMedia" itemscope itemtype="https://schema.org/ImageObject"></div>')
 							.hide()
 							.css({
 								//'position' : 'fixed',
@@ -1415,6 +1421,11 @@ jQuery(document).ready(function($) {
 		}
 
 		if ( ( window.location.hash === last_known_location_hash ) && gallery.opened ) {
+			return;
+		}
+
+		if ( window.location.hash && gallery && !gallery.opened && history.back) {
+			history.back();
 			return;
 		}
 

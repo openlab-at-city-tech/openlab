@@ -4,10 +4,10 @@ Contributors: CreativeMindsSolutions
 Donate link: http://tooltip.cminds.com/
 Tags: glossary,posts,definition,definitions,tooltip,automatic,hints,hint,tip,tool-tip,dictionary,Encyclopaedia,knowledge base,index,keywords,terms,knowledge base,knowledgebase,lexicon,synonyms,plural,singular,descriptions,description,explain,explanation,explanatory dictionary,Tooltips,vocabulary,words,word,expression,expressions,appendix,technical terms,content management,knowledge management,highlight,concordance,language,reference,terminology,jargon,palaver,style,talk,word,wording,thesaurus,word stock,wordbook,wordlist,archive,catalog,directory,index,listing,menu,source,archives,atlas,accent,expression,lingua,slang,bilingual,dialectic,expressed,lexical,literal,term,entry,verbal,verb,literature,book,literature,sourcebook,word list,translate,translation,google translate,merriam-webster,wikipedia,hint,youtube,vimeo,mp3,mp4,ecommerce,tags,amazon,products,productsrecommendations,recommendations,support,comments,images,page,pages,plugin,post,posts,seo,shortcode,sidebar,social,twitter,widget,widgets,wordpress,video,audio
 Requires at least: 3.9
-Tested up to: 4.5.2
-Stable tag: 3.3.7
+Tested up to: 4.7.0
+Stable tag: 3.4.4
 
-Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms. 
+Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
 
 == Description ==
 
@@ -16,22 +16,22 @@ The CM glossary tooltip is a WordPress plugin that enables you to check posts or
 The CM tooltip glossary plugin displays a tooltip containing the definition when users hover over the specific term.
 
 The CM tooltip glossary plugin also creates a responsive glossary index with all tooltip glossary terms used.
- 
+
 
 [youtube http://www.youtube.com/watch?v=WN3HLZ6ZuBM]
 
-This tooltip plugin allows users to add unlimited tooltips to a site or within a glossary of terms. 
+This tooltip plugin allows users to add unlimited tooltips to a site or within a glossary of terms.
 
 This Pro edition of the tooltip plugin for WordPress uses the glossary index to show related terms and links terms together to improve your overall site SEO. The tooltip glossary plugin also supports adding tooltips with abbreviations, variations and synonyms of terms.
 
-Additional Pro version  features include the ability to include or exclude specific terms from any page or post and add all types of media files. Users can also use multiple tooltip glossaries on the same website. 
+Additional Pro version  features include the ability to include or exclude specific terms from any page or post and add all types of media files. Users can also use multiple tooltip glossaries on the same website.
 
 The CM tooltip glossary plugin integrates easily with external data from dictionaries, thesauruses, and Wikipedia.
 
 > #### Plugin Site
-> * Visit [Plugin Site](https://www.cminds.com/store/tooltipglossary/)
-> * [Purchase Pro Plugin](https://www.cminds.com/store/tooltipglossary/)
-> * [Pro Version Detailed Feature List](https://www.cminds.com/store/tooltipglossary/#features)
+> * Visit [Plugin Site](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/)
+> * [Purchase Pro Plugin](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/)
+> * [Pro Version Detailed Feature List](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#features)
 > * [User Guide](https://www.cminds.com/wordpress-plugins-knowledge-base-and-documentation/?hscat=6-cm-tooltip)
 > * [Video Tutorials](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)
 
@@ -39,18 +39,18 @@ The CM tooltip glossary plugin integrates easily with external data from diction
 
 > #### Add-Ons & Extensions
 >
-> * [CM Tooltip Search Console ](https://www.cminds.com/store/tooltip-glossary-search-console-widget-add-on-for-wordpress-by-creativeminds/)
-> * [CM Tooltip Glossary Remote Import](https://www.cminds.com/store/cm-tooltip-glossary-remote-import-cm-plugins-store/)
-> * [CM Tooltip Glossary Community Terms](https://www.cminds.com/store/cm-tooltip-glossary-community-terms-cm-plugins-store/)
-> * [CM Tooltip Glossary Log & Statistics](https://www.cminds.com/store/cm-tooltip-glossary-log-cm-plugins-store/)
-> * [CM Tooltip Glossary Skins](https://www.cminds.com/store/cm-tooltip-glossary-skins-cm-plugins-store/)
-> * [CM Tooltip Glossary Widgets](https://www.cminds.com/store/purchase-cm-tooltip-glossary-widgets-add-wordpress/)
+> * [CM Tooltip Search Console ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-search-console-widget-add-on-for-wordpress-by-creativeminds/)
+> * [CM Tooltip Glossary Remote Import](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-remote-import-cm-plugins-store/)
+> * [CM Tooltip Glossary Community Terms](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-community-terms-cm-plugins-store/)
+> * [CM Tooltip Glossary Log & Statistics](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-log-cm-plugins-store/)
+> * [CM Tooltip Glossary Skins](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-skins-cm-plugins-store/)
+> * [CM Tooltip Glossary Widgets](https://www.cminds.com/wordpress-plugins-library/purchase-cm-tooltip-glossary-widgets-add-wordpress/)
 
 ---
 
 > #### Demo & User Guide
 >
-> * Demo of the plugin [here](https://www.cminds.com/store/tooltipglossary/#demo)
+> * Demo of the plugin [here](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo)
 > * For more information please visit [Detailed User Guide](https://www.cminds.com/wordpress-plugins-knowledge-base-and-documentation/?hscat=6-cm-tooltip).
 > * [Infographic](http://tooltip.cminds.com/wp-content/uploads/features/infographic1.png).
 
@@ -58,7 +58,7 @@ The CM tooltip glossary plugin integrates easily with external data from diction
 
 
 > #### Other Plugins By CM Plugins
-> * [Plugin Catalog](https://www.cminds.com/store)
+> * [Plugin Catalog](https://www.cminds.com/wordpress-plugins-library)
 > * [Free Plugins](https://profiles.wordpress.org/creativemindssolutions#content-plugins)
 
 ---
@@ -103,7 +103,7 @@ The CM tooltip glossary plugin integrates easily with external data from diction
 
 > #### Pro Version Features
 >
-> [Pro Version Detailed Feature List](https://www.cminds.com/store/tooltipglossary/#features)
+> [Pro Version Detailed Feature List](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#features)
 >
 >
 > **Pro Version Features - Content API's**
@@ -173,7 +173,7 @@ Alphabetical index for the Glossary index is based on [jQuery ListNav Plugin](ht
 * [CM Ad Changer](http://wordpress.org/plugins/cm-ad-changer/) - Manage, Track and Report Advertising Campaigns Across Sites. Can turn your WP into an Ad Server
 * [CM Download Manager](http://wordpress.org/extend/plugins/cm-download-manager) - Allows users to upload, manage, track and support documents or files in a download directory listing database for others to contribute, use and comment upon.
 * [CM Answers](http://wordpress.org/extend/plugins/cm-answers/) - Allows users to post questions and answers (Q&A) in a Stack-overflow style community forum which is easy to use, customize and install. Comes with Social integration Shortcodes.
-* [CM MicroPayments](https://www.cminds.com/store/micropayments/) - Adds the in-site support for your own "virtual currency". The purpose of this plugin is to allow in-site transactions without the necessity of processing the external payments each time (quicker & easier). Developers can use it as a platform to integrate with their own plugins.
+* [CM MicroPayments](https://www.cminds.com/wordpress-plugins-library/micropayments/) - Adds the in-site support for your own "virtual currency". The purpose of this plugin is to allow in-site transactions without the necessity of processing the external payments each time (quicker & easier). Developers can use it as a platform to integrate with their own plugins.
 * [CM Video Tutorials](https://wordpress.org/plugins/cm-plugins-video-tutorials/) - Video Tutorials showing how to use WordPress and CM Plugins like Q&A Discussion Forum, Glossary, Download Manager, Ad Changer and more.
 * [CM OnBoarding](https://wordpress.org/plugins/cm-onboarding/) - Superb Guidance tool which improves the online experience and the user satisfaction.
 
@@ -193,7 +193,7 @@ Note: You must have a call to wp_head() in your template in order for the Toolti
 
 == Frequently Asked Questions ==
 
-> [More FAQ's](https://www.cminds.com/store/tooltipglossary/#faq)
+> [More FAQ's](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#faq)
 >
 > [Detailed User Guide](https://www.cminds.com/wordpress-plugins-knowledge-base-and-documentation/?hscat=6-cm-tooltip)
 >

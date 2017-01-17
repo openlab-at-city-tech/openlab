@@ -1,337 +1,227 @@
 /*!
-* Do not modify this file directly.  It is compiled Sass code.
-* @see: jetpack/_inc/jetpack.scss
+* Do not modify this file directly.  It is compiled SASS code.
 */
-#message.jp-identity-crisis {
-  display: table;
+@charset "UTF-8";
+/*
+The MIT License (MIT)
+
+Copyright © 2011–2015 thoughtbot, inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+https://github.com/thoughtbot/bourbon
+*/
+.updated.jp-banner {
+  position: relative;
   padding: 0;
-  background: #d94f4f;
-  border: none;
-  color: #fff;
-}
-#message.jp-identity-crisis .service-mark {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 0 20px;
-}
-#message.jp-identity-crisis .service-mark:before {
-  font-family: "jetpack" !important;
-  content: "\f102";
-  font-size: 40px;
-  line-height: 1;
-  color: #fff;
-}
-#message.jp-identity-crisis .jp-id-banner__content {
-  display: table;
-  padding: 10px 0 10px 10px;
-}
-#message.jp-identity-crisis .jp-id-banner__content .success-notice {
-  color: #fff;
-}
-#message.jp-identity-crisis .jp-id-banner__content .banner-content {
-  display: table-row;
-}
-#message.jp-identity-crisis .jp-id-banner__content .banner-content p {
-  margin: 0;
-  font-size: 13px;
-  color: #fff;
-  opacity: 1.0;
-}
-#message.jp-identity-crisis .jp-id-banner__content .banner-content p strong {
-  text-decoration: none;
-  font-weight: 600;
-  color: #fff;
-  opacity: 1.0;
-}
-#message.jp-identity-crisis .jp-id-banner__content .banner-content a {
-  display: inline-block;
-  color: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  -webkit-transform: all 1s ease;
-}
-#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group {
-  display: table-row;
-}
-#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group a {
-  display: inline-block;
-  margin: 10px 0 0 0;
-  padding: 0 0 1px 0;
-  color: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  -webkit-transform: all 1s ease;
-}
-#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group a:hover {
-  color: white;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-}
-#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group .idc-separator {
-  margin: 0 6px;
 }
 
-#message.jp-banner {
-  position: relative;
-  margin-bottom: 26px;
-  padding: 17px 0 17px 44px;
-  border: none;
-  background: #81a844;
-  color: #fff;
-  overflow: hidden;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+.updated .jp-banner__header {
+  font-size: 1.125rem;
+  font-weight: 400;
+  margin-top: 0;
 }
-#message.jp-banner:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -100px;
-  width: 100%;
-  height: 50px;
-  background: url("../images/the-footcloud.svg") left bottom no-repeat;
-  pointer-events: none;
-  z-index: 1;
+
+.updated .jp-banner__button-container {
+  padding: 0.75rem 0 0;
 }
-@media (max-width: 830px) {
-  #message.jp-banner:after {
-    display: none;
+
+.jp-banner .notice-dismiss {
+  text-decoration: none;
+}
+
+.jp-banner__description {
+  font-size: 0.875rem;
+}
+
+.jp-banner__description-container {
+  padding: 1rem;
+}
+
+.updated.jp-wpcom-connect__container {
+  border-right: none;
+  padding: 0;
+  box-shadow: 0 0 0 1px rgba(200, 215, 225, 0.5), 0 1px 2px #e9eff3;
+}
+
+@media screen and (max-width: 782px) {
+  .updated.jp-wpcom-connect__container {
+    padding: 0 !important;
   }
 }
-#message.jp-banner a {
-  color: #fff;
+
+.updated.jp-wpcom-connect__container .dops-button {
+  padding: 7px 14px 9px;
 }
-#message.jp-banner h2 {
+
+.updated .notice-dismiss {
+  text-decoration: none;
+}
+
+.jp-wpcom-connect__container {
   display: block;
-  margin: 0;
-  padding: 0;
-  color: #fff;
-  font-size: 20px;
-  line-height: 1.3;
-  font-weight: normal;
-}
-#message.jp-banner h2 + p {
-  margin-top: 10px;
-}
-
-.jp-banner a {
-  padding: 0;
-}
-
-#message .jp-banner__content {
-  color: #dfffcc;
-  padding: 0 20px 0 0;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 50%;
-}
-@media (max-width: 768px) {
-  #message .jp-banner__content {
-    width: 100%;
-  }
-  #message .jp-banner__content.is-connection {
-    width: 100%;
-  }
-}
-#message .jp-banner__content a {
-  text-decoration: underline;
-  		/* Medium.com text underline hack - doesn't work well on small mobile devices... reverting to traditional underline
-  		background-image: linear-gradient(to bottom, rgba(0,0,0,0) 75%, #fff 50%);
-  		background-repeat: repeat-x;
-  		background-size: 2px 2px;
-  		background-position: 0 95%;
-  		display: inline-block;
-  
-  		@media not all, only screen and (min-resolution: 2dppx), only screen and (-webkit-min-device-pixel-ratio: 2) {
-  			background-image: linear-gradient(to bottom, rgba(0,0,0,0) 75%, #fff 75%);
-  			background-repeat: repeat-x;
-  		}
-  		*/
-}
-#message .jp-banner__content p {
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-#message .jp-banner__action-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-right: 20px;
-  width: 50%;
-  height: 100%;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-@media (max-width: 768px) {
-  #message .jp-banner__action-container {
-    position: static;
-    margin: 14px 0 9px;
-    width: 100%;
-  }
-}
-#message .jp-banner__action-container.is-full-width {
-  position: static;
-  margin: 14px 0 9px;
-  width: 100%;
-  height: auto;
-}
-@media (max-width: 768px) {
-  #message .jp-banner__action-container.is-connection {
-    width: 100%;
-  }
-}
-
-#message.is-opt-in .jp-banner__content {
-  width: 60%;
-}
-#message.is-opt-in .jp-banner__action-container {
-  width: 40%;
-}
-@media (max-width: 768px) {
-  #message.is-opt-in .jp-banner__content, #message.is-opt-in .jp-banner__action-container {
-    width: 100%;
-  }
-}
-
-#message .jp-banner__button {
-  display: inline-block;
-  position: absolute;
-  top: 50%;
-  left: 125px;
-  margin-top: -23px;
-  padding: 0.57143em 0.57143em 0.38095em 0.85714em;
-  border-radius: 6px;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  background: #518d2a;
-  box-shadow: 0 4px 0 #3e6c20, 0 2px 3px rgba(0, 0, 0, 0.2);
-  font: 400 1.5em/1 'Open Sans', Helvetica, sans-serif;
-  transition: all .1s ease-in-out;
-}
-@media (max-width: 1175px) {
-  #message .jp-banner__button {
-    font-size: 1.25em;
-    left: 110px;
-  }
-}
-@media (max-width: 830px) {
-  #message .jp-banner__button {
-    left: 45px;
-  }
-}
-@media (max-width: 768px) {
-  #message .jp-banner__button {
-    position: static;
-    margin: 0;
-  }
-}
-@media (max-width: 420px) {
-  #message .jp-banner__button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 1.1em;
-    left: 0;
-  }
-}
-#message .jp-banner__button:hover, #message .jp-banner__button:focus {
-  box-shadow: 0 4px 0 #3e6c20, 0 2px 3px rgba(0, 0, 0, 0.2);
-}
-#message .jp-banner__button:active {
-  outline: none;
-  -webkit-transform: translateY(2px);
-  -ms-transform: translateY(2px);
-  transform: translateY(2px);
-  box-shadow: 0 0px 0 #3e6c20, 0 0 0 rgba(0, 0, 0, 0.2);
-}
-#message .jp-banner__button:active:after {
-  top: -2px;
-}
-#message .jp-banner__button:before {
-  content: '';
-  display: inline-block;
   position: relative;
-  vertical-align: middle;
-  background: url("../images/connect-plug.svg") center center no-repeat;
-  background-size: 100%;
-  top: -2px;
-  margin-left: 13px;
-  width: 22px;
-  height: 22px;
+  box-sizing: border-box;
 }
-@media (max-width: 420px) {
-  #message .jp-banner__button:before {
+
+.jp-wpcom-connect__inner-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+}
+
+.jp-wpcom-connect__content-container {
+  max-width: 75rem;
+  position: relative;
+  padding: 2rem;
+}
+
+@media (min-width: 782px) {
+  .jp-wpcom-connect__content-container {
+    padding: 2rem 2rem 6rem 2rem;
+  }
+}
+
+.jp-wpcom-connect__content-container p {
+  color: #4f748e;
+  font-size: 0.875rem;
+}
+
+.jp-wpcom-connect__content-container h2 {
+  margin-top: 0;
+  color: #4F748E;
+  line-height: 1.6;
+}
+
+.jp-wpcom-connect__content-icon {
+  float: left;
+  margin: 0 2.25rem 2.25rem 0;
+}
+
+.jp-wpcom-connect__slide {
+  display: none;
+}
+
+.jp-wpcom-connect__slide.jp__slide-is-active {
+  display: block;
+}
+
+@media (min-width: 782px) {
+  .jp-wpcom-connect__content-container .jp-banner__button-container {
+    position: absolute;
+    bottom: 1rem;
+  }
+}
+
+.jp-banner__button-container .dops-button {
+  margin: 0.3125rem 0;
+}
+
+.jp-wpcom-connect__vertical-nav {
+  background-color: #F3F6F8;
+}
+
+@media (min-width: 600px) {
+  .jp-wpcom-connect__vertical-nav {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .jp-wpcom-connect__vertical-nav {
     display: none;
   }
 }
 
-#message .is-full-width .jp-banner__button {
-  position: static;
-  margin: 0;
+.jp-wpcom-connect__vertical-nav-container {
+  width: 15rem;
 }
 
-#message .is-opt-in .jp-banner__button:before {
-  content: "\f147";
-  width: 20px;
-  height: 20px;
-  background: none;
-  font: normal 20px/1 Dashicons;
+.vertical-menu__feature-item-label {
+  display: none;
 }
 
-#message .jp-banner__dismiss {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  z-index: 99;
-}
-#message .jp-banner__dismiss:before {
-  color: #a7c979;
-  content: '\f158';
-  font: normal 20px/44px 'dashicons';
-}
-#message .jp-banner__dismiss:hover {
-  opacity: 0.8;
-}
-#message .jp-banner__dismiss:active {
-  opacity: 1;
-  outline: none;
+@media (min-width: 600px) {
+  .vertical-menu__feature-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    border: none;
+    padding: 0.5rem;
+    border-bottom: 1px solid #c8d7e1;
+    border-left: 1px solid #c8d7e1;
+    border-right: 3px solid #F3F6F8;
+    background-color: #F3F6F8;
+    color: #87a6bc;
+    cursor: pointer;
+  }
+  .vertical-menu__feature-item:last-of-type {
+    position: relative;
+    top: 1px;
+  }
+  .vertical-menu__feature-item-is-selected {
+    border-right: 3px solid #0087be;
+    border-left: 1px solid #fff;
+    background-color: #fff;
+    color: #2e4453;
+  }
+  .vertical-menu__feature-item-is-selected.jp-feature-intro {
+    border-right: 3px solid #8CC258;
+  }
+  .vertical-menu__feature-item-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0.25rem;
+  }
+  .vertical-menu__feature-item svg {
+    fill: #86A6BD;
+  }
+  .vertical-menu__feature-item-is-selected svg {
+    fill: #3D596D;
+  }
+  .vertical-menu__feature-item-is-selected.jp-feature-intro svg {
+    fill: #8CC258;
+  }
+  .vertical-menu__feature-item-is-selected.wp-app-logo svg path {
+    fill: #3D596D;
+  }
+  .vertical-menu__feature-item-label {
+    display: block;
+    padding: 0.5rem;
+  }
 }
 
-#message.jp-banner.protect-error {
-  background: #fff;
-  border-right: 4px #d94f4f solid;
-}
-#message.jp-banner.protect-error .jp-banner__content {
-  color: #444;
-}
-#message.jp-banner.protect-error .jp-banner__content h2, #message.jp-banner.protect-error .jp-banner__content a {
-  color: #d94f4f;
-}
-#message.jp-banner.protect-error .jp-banner__content a:hover {
-  color: #d43a3a;
-}
-#message.jp-banner.protect-error .jp-banner__button {
-  background: #d94f4f;
-  box-shadow: none;
-  color: #fff;
-}
-#message.jp-banner.protect-error .jp-banner__button:hover, #message.jp-banner.protect-error .jp-banner__button:focus, #message.jp-banner.protect-error .jp-banner__button:active {
-  box-shadow: none;
-}
-#message.jp-banner.protect-error .jp-banner__button:hover {
-  background: #d43a3a;
-}
-#message.jp-banner.protect-error .jp-banner__dismiss:before {
-  color: #a0a5aa;
-}
-
-#message.jp-identity-crisis{display:table;padding:0;background:#d94f4f;border:none;color:#fff}#message.jp-identity-crisis .service-mark{display:table-cell;vertical-align:middle;padding:0 20px}#message.jp-identity-crisis .service-mark:before{font-family:"jetpack" !important;content:"\f102";font-size:40px;line-height:1;color:#fff}#message.jp-identity-crisis .jp-id-banner__content{display:table;padding:10px 0 10px 10px}#message.jp-identity-crisis .jp-id-banner__content .success-notice{color:#fff}#message.jp-identity-crisis .jp-id-banner__content .banner-content{display:table-row}#message.jp-identity-crisis .jp-id-banner__content .banner-content p{margin:0;font-size:13px;color:#fff;opacity:1.0}#message.jp-identity-crisis .jp-id-banner__content .banner-content p strong{text-decoration:none;font-weight:600;color:#fff;opacity:1.0}#message.jp-identity-crisis .jp-id-banner__content .banner-content a{display:inline-block;color:rgba(255,255,255,0.8);border-bottom:1px solid rgba(255,255,255,0.5);text-decoration:none;-webkit-transform:all 1s ease}#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group{display:table-row}#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group a{display:inline-block;margin:10px 0 0 0;padding:0 0 1px 0;color:rgba(255,255,255,0.8);border-bottom:1px solid rgba(255,255,255,0.5);text-decoration:none;-webkit-transform:all 1s ease}#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group a:hover{color:#fff;border-bottom:1px solid rgba(255,255,255,0.8)}#message.jp-identity-crisis .jp-id-banner__content .jp-btn-group .idc-separator{margin:0 6px}#message.jp-banner{position:relative;margin-bottom:26px;padding:17px 0 17px 44px;border:none;background:#81a844;color:#fff;overflow:hidden;-moz-box-sizing:border-box;box-sizing:border-box}#message.jp-banner:after{content:'';position:absolute;bottom:0;left:-100px;width:100%;height:50px;background:url("../images/the-footcloud.svg") left bottom no-repeat;pointer-events:none;z-index:1}@media (max-width: 830px){#message.jp-banner:after{display:none}}#message.jp-banner a{color:#fff}#message.jp-banner h2{display:block;margin:0;padding:0;color:#fff;font-size:20px;line-height:1.3;font-weight:normal}#message.jp-banner h2+p{margin-top:10px}.jp-banner a{padding:0}#message .jp-banner__content{color:#dfffcc;padding:0 20px 0 0;-moz-box-sizing:border-box;box-sizing:border-box;width:50%}@media (max-width: 768px){#message .jp-banner__content{width:100%}#message .jp-banner__content.is-connection{width:100%}}#message .jp-banner__content a{text-decoration:underline}#message .jp-banner__content p{margin:0;padding:0;line-height:1.5}#message .jp-banner__action-container{position:absolute;top:0;left:0;padding-right:20px;width:50%;height:100%;-moz-box-sizing:border-box;box-sizing:border-box}@media (max-width: 768px){#message .jp-banner__action-container{position:static;margin:14px 0 9px;width:100%}}#message .jp-banner__action-container.is-full-width{position:static;margin:14px 0 9px;width:100%;height:auto}@media (max-width: 768px){#message .jp-banner__action-container.is-connection{width:100%}}
-#message.is-opt-in .jp-banner__content{width:60%}#message.is-opt-in .jp-banner__action-container{width:40%}@media (max-width: 768px){#message.is-opt-in .jp-banner__content,#message.is-opt-in .jp-banner__action-container{width:100%}}
-#message .jp-banner__button{display:inline-block;position:absolute;top:50%;left:125px;margin-top:-23px;padding:0.57143em 0.57143em 0.38095em 0.85714em;border-radius:6px;-moz-box-sizing:border-box;box-sizing:border-box;background:#518d2a;box-shadow:0 4px 0 #3e6c20,0 2px 3px rgba(0,0,0,0.2);font:400 1.5em/1 'Open Sans', Helvetica, sans-serif;transition:all .1s ease-in-out}@media (max-width: 1175px){#message .jp-banner__button{font-size:1.25em;left:110px}}@media (max-width: 830px){#message .jp-banner__button{left:45px}}@media (max-width: 768px){#message .jp-banner__button{position:static;margin:0}}@media (max-width: 420px){#message .jp-banner__button{display:block;width:100%;text-align:center;font-size:1.1em;left:0}}#message .jp-banner__button:hover,#message .jp-banner__button:focus{box-shadow:0 4px 0 #3e6c20,0 2px 3px rgba(0,0,0,0.2)}#message .jp-banner__button:active{outline:none;-webkit-transform:translateY(2px);-ms-transform:translateY(2px);transform:translateY(2px);box-shadow:0 0px 0 #3e6c20,0 0 0 rgba(0,0,0,0.2)}#message .jp-banner__button:active:after{top:-2px}#message .jp-banner__button:before{content:'';display:inline-block;position:relative;vertical-align:middle;background:url("../images/connect-plug.svg") center center no-repeat;background-size:100%;top:-2px;margin-left:13px;width:22px;height:22px}@media (max-width: 420px){#message .jp-banner__button:before{display:none}}
-#message .is-full-width .jp-banner__button{position:static;margin:0}#message .is-opt-in .jp-banner__button:before{content:"\f147";width:20px;height:20px;background:none;font:normal 20px/1 Dashicons}#message .jp-banner__dismiss{position:absolute;top:0;left:0;width:44px;height:44px;text-align:center;z-index:99}#message .jp-banner__dismiss:before{color:#a7c979;content:'\f158';font:normal 20px/44px 'dashicons'}#message .jp-banner__dismiss:hover{opacity:0.8}#message .jp-banner__dismiss:active{opacity:1;outline:none}#message.jp-banner.protect-error{background:#fff;border-right:4px #d94f4f solid}#message.jp-banner.protect-error .jp-banner__content{color:#444}#message.jp-banner.protect-error .jp-banner__content h2,#message.jp-banner.protect-error .jp-banner__content a{color:#d94f4f}#message.jp-banner.protect-error .jp-banner__content a:hover{color:#d43a3a}#message.jp-banner.protect-error .jp-banner__button{background:#d94f4f;box-shadow:none;color:#fff}#message.jp-banner.protect-error .jp-banner__button:hover,#message.jp-banner.protect-error .jp-banner__button:focus,#message.jp-banner.protect-error .jp-banner__button:active{box-shadow:none}#message.jp-banner.protect-error .jp-banner__button:hover{background:#d43a3a}#message.jp-banner.protect-error .jp-banner__dismiss:before{color:#a0a5aa}
-
-/*# sourceMappingURL=jetpack-banners.min.css.map */
+/*# sourceMappingURL=jetpack-banners-rtl.css.map */

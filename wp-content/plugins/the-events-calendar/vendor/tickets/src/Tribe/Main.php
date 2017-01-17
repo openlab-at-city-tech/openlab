@@ -1,15 +1,11 @@
 <?php
 
 class Tribe__Tickets__Main {
-	/**
-	 * Instance of this class for use as singleton
-	 */
-	private static $instance;
 
 	/**
 	 * Current version of this plugin
 	 */
-	const VERSION = '4.3';
+	const VERSION = '4.3.5';
 
 	/**
 	 * Min required The Events Calendar version
@@ -73,10 +69,15 @@ class Tribe__Tickets__Main {
 	private $has_initialized = false;
 
 	/**
+	 * Static Singleton Holder
+	 * @var self
+	 */
+	protected static $instance;
+
+	/**
 	 * Get (and instantiate, if necessary) the instance of the class
 	 *
-	 * @static
-	 * @return Tribe__Tickets__Main
+	 * @return self
 	 */
 	public static function instance() {
 		if ( ! self::$instance ) {
@@ -89,7 +90,7 @@ class Tribe__Tickets__Main {
 	/**
 	 * Class constructor
 	 */
-	public function __construct() {
+	protected function __construct() {
 		/* Set up some parent's vars */
 		$this->plugin_name = 'Tickets';
 		$this->plugin_slug = 'tickets';
@@ -124,11 +125,25 @@ class Tribe__Tickets__Main {
 	 * Finalize the initialization of this plugin
 	 */
 	public function plugins_loaded() {
-		// It's possible we'll have initialized already (if the plugin has been embedded as a vendor lib
-		// within another plugin, for example) in which case we need not repeat the process
+		/**
+		 * It's possible we'll have initialized already (if the plugin has been embedded as a vendor lib
+		 * within another plugin, for example) in which case we need not repeat the process
+		 */
 		if ( $this->has_initialized ) {
 			return;
 		}
+
+		/**
+		 * Before any methods from this plugin are called, we initialize our Autoloading
+		 * After this method we can use any `Tribe__` classes
+		 */
+		$this->init_autoloading();
+
+		/**
+		 * We need Common to be able to load text domains correctly.
+		 * With that in mind we initialize Common passing the plugin Main class as the context
+		 */
+		Tribe__Main::instance( $this )->load_text_domain( 'event-tickets', $this->plugin_dir . 'lang/' );
 
 		if (
 			class_exists( 'TribeEvents', false )
@@ -144,14 +159,9 @@ class Tribe__Tickets__Main {
 			return;
 		}
 
-		$this->init_autoloading();
-
-		// initialize the common libraries
-		$this->common();
-
-		Tribe__Main::instance()->load_text_domain( 'event-tickets', $this->plugin_dir . 'lang/' );
-
 		$this->hooks();
+
+		$this->register_active_plugin();
 
 		$this->has_initialized = true;
 
@@ -167,6 +177,30 @@ class Tribe__Tickets__Main {
 		 * Fires once Event Tickets has completed basic setup.
 		 */
 		do_action( 'tribe_tickets_plugin_loaded' );
+	}
+
+	/**
+	 * Method to initialize Common Object
+	 *
+	 * @deprecated 4.3.4
+	 *
+	 * @return Tribe__Main
+	 */
+	public function common() {
+		return Tribe__Main::instance( $this );
+	}
+
+	/**
+	 * Registers this plugin as being active for other tribe plugins and extensions
+	 *
+	 * @return bool Indicates if Tribe Common wants the plugin to run
+	 */
+	public function register_active_plugin() {
+		if ( ! function_exists( 'tribe_register_plugin' ) ) {
+			return true;
+		}
+
+		return tribe_register_plugin( EVENT_TICKETS_MAIN_PLUGIN_FILE, __CLASS__, self::VERSION );
 	}
 
 	/**
@@ -241,20 +275,6 @@ class Tribe__Tickets__Main {
 			Tribe__Settings_Manager::set_option( 'previous_event_tickets_versions', $previous_versions );
 			Tribe__Settings_Manager::set_option( 'latest_event_tickets_version', self::VERSION );
 		}
-	}
-
-
-	/**
-	 * Common library object accessor method
-	 */
-	public function common() {
-		static $common;
-
-		if ( ! $common ) {
-			$common = new Tribe__Main( $this );
-		}
-
-		return $common;
 	}
 
 	/**

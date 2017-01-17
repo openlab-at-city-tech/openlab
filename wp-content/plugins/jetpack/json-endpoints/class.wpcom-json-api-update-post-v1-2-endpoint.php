@@ -192,6 +192,10 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 				 * Note: A category named "0" will not work right.
 				 * https://core.trac.wordpress.org/ticket/9059
 				 */
+				if ( ! is_string( $term ) ) {
+					continue;
+				}
+
 				$term_info = get_term_by( 'name', $term, $taxonomy, ARRAY_A );
 
 				if ( ! $term_info ) {
@@ -561,6 +565,11 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 			foreach ( (array) $metadata as $meta ) {
 
 				$meta = (object) $meta;
+
+				// Custom meta description can only be set on sites that have a business subscription.
+				if ( Jetpack_SEO_Posts::DESCRIPTION_META_KEY == $meta->key && ! Jetpack_SEO_Utils::is_enabled_jetpack_seo() ) {
+					return new WP_Error( 'unauthorized', __( 'SEO tools are not enabled for this site.', 'jetpack' ), 403 );
+				}
 
 				$existing_meta_item = new stdClass;
 

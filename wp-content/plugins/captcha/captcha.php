@@ -6,7 +6,7 @@ Description: #1 super security anti-spam captcha plugin for Wordpress forms.
 Author: BestWebSoft
 Text Domain: captcha
 Domain Path: /languages
-Version: 4.2.6
+Version: 4.2.8
 Author URI: http://bestwebsoft.com/
 License: GPLv2 or later
 */
@@ -73,7 +73,7 @@ if ( ! function_exists ( 'cptch_init' ) ) {
 		/* Function check if plugin is compatible with current WP version */
 		bws_wp_min_version_check( plugin_basename( __FILE__ ), $cptch_plugin_info, '3.8' );
 
-		$is_admin = is_admin() || is_blog_admin() || is_network_admin();
+		$is_admin = is_admin() && ! defined( 'DOING_AJAX' );
 
 		/* Call register settings function */
 		if ( ! $is_admin || ( isset( $_GET['page'] ) && "captcha.php" == $_GET['page'] ) )
@@ -104,8 +104,10 @@ if ( ! function_exists ( 'cptch_init' ) ) {
 
 			if ( ! $cptch_ip_in_whitelist ) {
 				add_filter( 'registration_errors', 'cptch_register_check', 10, 1 );
-				if ( is_multisite() )
+				if ( is_multisite() ) {
 					add_filter( 'wpmu_validate_user_signup', 'cptch_register_validate' );
+					add_filter( 'wpmu_validate_blog_signup', 'cptch_register_validate' );
+				}
 			}
 		}
 
@@ -231,11 +233,11 @@ if ( ! function_exists( 'cptch_create_table' ) ) {
 		 * add new columns to the 'cptch_packages' table
 		 * @since 4.2.3
 		 */
-		$column_exists = $wpdb->query( "SHOW COLUMNS FROM `{$wpdb->prefix}cptch_packages` LIKE 'settings'" );
+		$column_exists = $wpdb->query( "SHOW COLUMNS FROM `{$wpdb->base_prefix}cptch_packages` LIKE 'settings'" );
 		if ( 0 == $column_exists ) {
-			$wpdb->query( "ALTER TABLE `{$wpdb->prefix}cptch_packages` ADD (`settings` LONGTEXT NOT NULL, `user_settings` LONGTEXT NOT NULL, `add_time` DATETIME NOT NULL );" );
+			$wpdb->query( "ALTER TABLE `{$wpdb->base_prefix}cptch_packages` ADD (`settings` LONGTEXT NOT NULL, `user_settings` LONGTEXT NOT NULL, `add_time` DATETIME NOT NULL );" );
 			$wpdb->update(
-				"{$wpdb->prefix}cptch_packages",
+				"{$wpdb->base_prefix}cptch_packages",
 				array( 'add_time' => current_time( 'mysql' ) ),
 				array( 'add_time' => '0000-00-00 00:00:00' )
 			);
@@ -278,7 +280,7 @@ if ( ! function_exists( 'cptch_settings' ) ) {
 			$cptch_plugin_info = get_plugin_data( dirname(__FILE__) . '/captcha.php' );
 		}
 
-		$cptch_db_version = '1.3';
+		$cptch_db_version = '1.4';
 		$default_options  = $is_new_install = $need_update = false;
 
 		$cptch_options = get_option( 'cptch_options' );
@@ -304,11 +306,16 @@ if ( ! function_exists( 'cptch_settings' ) ) {
 			}
 
 			$cptch_options = cptch_parse_options( $cptch_options, $default_options );
+
+			/* Enabling notice about possible conflict with W3 Total Cache */
+			if ( version_compare( $cptch_options['plugin_option_version'], '4.2.7', '<=' ) ) {
+				$cptch_options['w3tc_notice'] = 1;
+			}
 		}
 
 		/* Update tables when update plugin and tables changes*/
 		if (
-			! isset( $cptch_options['plugin_db_version'] ) ||
+			empty( $cptch_options['plugin_db_version'] ) ||
 			$cptch_options['plugin_db_version'] != $cptch_db_version ||
 			$is_new_install
 		) {
@@ -1207,7 +1214,7 @@ if ( ! function_exists( 'cptch_add_scripts' ) ) {
 						})( document, "script", "cptch_script_loader" );
 					</script>';
 		} elseif ( ! wp_script_is( 'cptch_front_end_script', 'registered' ) ) {
-			wp_register_script( 'cptch_front_end_script', plugins_url( 'js/front_end_script.js' , __FILE__ ), array( 'jquery' ), false, true );
+			wp_register_script( 'cptch_front_end_script', plugins_url( 'js/front_end_script.js' , __FILE__ ), array( 'jquery' ), false, $cptch_options['plugin_option_version'] );
 			add_action( 'wp_footer', 'cptch_front_end_scripts' );
 			if (
 				$cptch_options['forms']['wp_login']['enable'] ||
@@ -1597,11 +1604,11 @@ if ( ! function_exists( 'cptch_front_end_styles' ) ) {
 			if ( empty( $cptch_options ) )
 				$cptch_options = get_option( 'cptch_options' );
 
-			wp_enqueue_style( 'cptch_stylesheet', plugins_url( 'css/front_end_style.css', __FILE__ ) );
+			wp_enqueue_style( 'cptch_stylesheet', plugins_url( 'css/front_end_style.css', __FILE__ ), array(), $cptch_options['plugin_option_version'] );
 			wp_enqueue_style( 'dashicons' );
 
 			$device_type = isset( $_SERVER['HTTP_USER_AGENT'] ) && preg_match( '/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone|Opera Mini/i', $_SERVER['HTTP_USER_AGENT'] ) ? 'mobile' : 'desktop';
-			wp_enqueue_style( "cptch_{$device_type}_style", plugins_url( "css/{$device_type}_style.css", __FILE__ ) );
+			wp_enqueue_style( "cptch_{$device_type}_style", plugins_url( "css/{$device_type}_style.css", __FILE__ ), array(), $cptch_options['plugin_option_version'] );
 		}
 	}
 }
@@ -1631,10 +1638,11 @@ if ( ! function_exists( 'cptch_front_end_scripts' ) ) {
 if ( ! function_exists ( 'cptch_admin_head' ) ) {
 	function cptch_admin_head() {
 		if ( isset( $_REQUEST['page'] ) && 'captcha.php' == $_REQUEST['page'] ) {
-			wp_enqueue_style( 'cptch_stylesheet', plugins_url( 'css/style.css', __FILE__ ) );
-			wp_enqueue_style( 'cptch_slick_css', plugins_url( 'css/slick.css', __FILE__ ) );
-			wp_enqueue_script( 'cptch_slick', plugins_url( 'js/slick.min.js' , __FILE__ ), array( 'jquery' ) );
-			wp_enqueue_script( 'cptch_script', plugins_url( 'js/script.js' , __FILE__ ), array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-tabs' ) );
+			global $cptch_options;
+			wp_enqueue_style( 'cptch_stylesheet', plugins_url( 'css/style.css', __FILE__ ), array(), $cptch_options['plugin_option_version'] );
+			wp_enqueue_style( 'cptch_slick_css', plugins_url( 'css/slick.css', __FILE__ ), array(), $cptch_options['plugin_option_version'] );
+			wp_enqueue_script( 'cptch_slick', plugins_url( 'js/slick.min.js' , __FILE__ ), array( 'jquery' ), $cptch_options['plugin_option_version'] );
+			wp_enqueue_script( 'cptch_script', plugins_url( 'js/script.js' , __FILE__ ), array( 'jquery', 'jquery-ui-resizable', 'jquery-ui-tabs' ), $cptch_options['plugin_option_version'] );
 			$args = array(
 				'start_tab' => isset( $_REQUEST['cptch_active_tab'] ) ? absint( $_REQUEST['cptch_active_tab'] ) : 0
 			);
@@ -1689,6 +1697,62 @@ if ( ! function_exists( 'cptch_register_plugin_links' ) ) {
 	}
 }
 
+/* Notice on the settings page about possible conflict with W3 Total Cache plugin */
+if ( ! function_exists( 'cptch_w3tc_notice' ) ) {
+	function cptch_w3tc_notice() {
+		global $cptch_options, $cptch_plugin_info;
+		if ( ! is_plugin_active( 'w3-total-cache/w3-total-cache.php' ) ) {
+			return;
+		}
+
+		if ( empty( $cptch_options ) )
+			$cptch_options = is_network_admin() ? get_site_option( 'cptch_options' ) : get_option( 'cptch_options' );
+
+		if ( empty( $cptch_options['w3tc_notice'] ) )
+			return '';
+
+		if( isset( $_GET['cptch_nonce'] ) && wp_verify_nonce( $_GET['cptch_nonce'], 'cptch_clean_w3tc_notice' ) ) {
+			unset( $cptch_options['w3tc_notice'] );
+			if ( is_network_admin() ) {
+				update_site_option( 'cptch_options', $cptch_options );
+			} else {
+				update_option( 'cptch_options', $cptch_options );
+			}
+			return '';
+		}
+
+		$url = add_query_arg(
+			array(
+				'cptch_clean_w3tc_notice'	=> '1',
+				'cptch_nonce'				=> wp_create_nonce( 'cptch_clean_w3tc_notice' )
+			),
+			( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
+		);
+		$close_link = "<a href=\"{$url}\" class=\"close_icon notice-dismiss\"></a>";
+		$settings_link = sprintf(
+			'<a href="%1$s">%2$s</a>',
+			admin_url( 'admin.php?page=captcha.php#cptch_load_via_ajax' ),
+			__( 'settings page', 'captcha' )
+		);
+		$message = sprintf(
+			__( 'You\'re using W3 Total Cache plugin. If %1$s doesn\'t work properly, please clear the cache in W3 Total Cache plugin and turn on \'%2$s\' option on the plugin %3$s.', 'captcha' ),
+			$cptch_plugin_info['Name'],
+			__( 'Show CAPTCHA after the end of the page loading', 'captcha' ),
+			$settings_link
+		);
+		return
+			"<style>
+				.cptch_w3tc_notice {
+					position: relative;
+				}
+				.cptch_w3tc_notice a {
+					text-decoration: none;
+				}
+			</style>
+			<div class=\"cptch_w3tc_notice error\"><p>{$message}</p>{$close_link}</div>";
+	}
+}
+
 if ( ! function_exists ( 'cptch_plugin_banner' ) ) {
 	function cptch_plugin_banner() {
 		global $hook_suffix, $cptch_plugin_info, $cptch_options;
@@ -1727,6 +1791,9 @@ if ( ! function_exists ( 'cptch_plugin_banner' ) ) {
 		 */
 		echo cptch_display_deprecated_function_message();
 
+		/* Displays notice about possible conflict with W3 Total Cache plugin */
+		echo cptch_w3tc_notice();
+
 		if ( 'plugins.php' == $hook_suffix )
 			bws_plugin_banner_to_settings( $cptch_plugin_info, 'cptch_options', 'captcha', 'admin.php?page=captcha.php' );
 
@@ -1741,7 +1808,7 @@ if ( ! function_exists ( 'cptch_delete_options' ) ) {
 	function cptch_delete_options() {
 		global $wpdb;
 		$all_plugins        = get_plugins();
-		$is_another_captcha = array_key_exists( 'captcha-plus/captcha-plus.php', $all_plugins ) || array_key_exists( 'captcha-pro/captcha-pro.php', $all_plugins );
+		$is_another_captcha = array_key_exists( 'captcha-plus/captcha-plus.php', $all_plugins ) || array_key_exists( 'captcha-pro/captcha_pro.php', $all_plugins );
 
 		require_once( dirname( __FILE__ ) . '/bws_menu/bws_include.php' );
 		bws_include_init( plugin_basename( __FILE__ ) );

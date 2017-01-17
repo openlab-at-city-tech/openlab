@@ -13,7 +13,7 @@
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
  * @copyright Copyright (c) 2016, Titanium Themes
- * @version   1.4.1
+ * @version   1.4.2
  * 
  */
 if ( ! class_exists( 'EGF_Posttype' ) ) :
@@ -44,7 +44,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		function __construct() {
@@ -64,7 +64,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function get_instance() {
@@ -83,7 +83,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public function register_actions() {
@@ -96,7 +96,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public function register_filters() {
@@ -114,7 +114,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @link 	http://codex.wordpress.org/Function_Reference/register_post_type 	register_post_type()
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public function register_font_control_posttype() {
@@ -147,7 +147,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return $post  The ID of the post if the post is successfully added to the database or 0 on failure.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function add_font_control( $control_name, $selectors = array(), $description = '', $force_styles = false ) {
@@ -208,13 +208,6 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 				}		
 			} 	
 
-			// Remove the save_post action to prevent capabilities error
-			// as wp_insert_post triggers this action when called
-			$hook_name = 'save_post';
-			global $wp_filter;
-			$save_post_functions   = $wp_filter[$hook_name];
-			$wp_filter[$hook_name] = array();
-
 			$postarr = array(
 				'post_type'   => 'tt_font_control',
 				'post_title'  => $control_name,
@@ -237,9 +230,6 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 			update_post_meta( $post, 'control_description', sanitize_text_field( $description ) );
 			update_post_meta( $post, 'force_styles', $force_styles );
 
-			// Restore all save post functions
-			$wp_filter[$hook_name] = $save_post_functions;
-
 			return $post;
 		}
 
@@ -258,7 +248,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return string $post_id The post ID of the updated/created post.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function update_font_control( $control_id, $control_name, $selectors = array(), $description = '', $force_styles = false ) {
@@ -272,15 +262,6 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 			);
 
 			$query = new WP_Query( $params );
-			
-			/*
-			 * Remove the save_post action to prevent any capabilities 
-			 * error as wp_insert_post triggers this action when called
-			 */
-			$hook_name = 'save_post';
-			global $wp_filter;
-			$save_post_functions     = $wp_filter[ $hook_name ];
-			$wp_filter[ $hook_name ] = array();
 
 			// Strip any unallowed characters from the post title
 			$control_name = str_replace( array( '#', "'", '"', '&', "}", "{" ), '', $control_name );
@@ -345,12 +326,6 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 			update_post_meta( $post_id, 'control_description', sanitize_text_field( $description ) );
 			update_post_meta( $post_id, 'force_styles', $force_styles );
 
-			/*
-			 * Restore the save_post action so any functions
-			 * that are hooked to it will execute as intended.
-			 */	
-			$wp_filter[ $hook_name ] = $save_post_functions;	
-
 			return $post_id;
 		}
 		
@@ -366,7 +341,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return boolean - true if there is another font control instance that has a matching $control_name
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function font_control_exists( $name, $exclude_control_id ) {
@@ -410,7 +385,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return post object if found otherwise false
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function get_font_control( $control_id ) {
@@ -441,7 +416,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 *         boolean if there are no posts.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function get_all_font_controls( $orderby = 'title', $order = 'ASC' ) {
@@ -474,7 +449,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * @return boolean $deleted       True if the control has been located and deleted, false otherwise.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function delete_font_control( $control_id ) {
@@ -516,7 +491,7 @@ if ( ! class_exists( 'EGF_Posttype' ) ) :
 		 * generated by the user.
 		 *
 		 * @since 1.2
-		 * @version 1.4.1
+		 * @version 1.4.2
 		 * 
 		 */
 		public static function delete_all_font_controls() {

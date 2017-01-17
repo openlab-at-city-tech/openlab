@@ -610,7 +610,7 @@ function bp_member_class( $classes = array() ) {
 		if ( ! empty( $members_template->member->last_activity ) ) {
 
 			// Calculate some times.
-			$current_time  = strtotime( bp_core_current_time() );
+			$current_time  = bp_core_current_time( true, 'timestamp' );
 			$last_activity = strtotime( $members_template->member->last_activity );
 			$still_online  = strtotime( '+5 minutes', $last_activity );
 
@@ -829,7 +829,7 @@ function bp_member_avatar( $args = '' ) {
  * @since 1.2.0
  */
 function bp_member_permalink() {
-	echo bp_get_member_permalink();
+	echo esc_url( bp_get_member_permalink() );
 }
 	/**
 	 * Get the permalink for the current member in the loop.
@@ -856,7 +856,7 @@ function bp_member_permalink() {
 	 *
 	 * @since 1.2.0
 	 */
-	function bp_member_link() { echo bp_get_member_permalink(); }
+	function bp_member_link() { echo esc_url( bp_get_member_permalink() ); }
 
 	/**
 	 * Alias of {@link bp_get_member_permalink()}.
@@ -933,7 +933,7 @@ function bp_member_name() {
  *
  * @since 1.2.0
  *
- * @param array $args See {@link bp_get_member_last_active()}.
+ * @param array $args {@see bp_get_member_last_active()}.
  */
 function bp_member_last_active( $args = array() ) {
 	echo bp_get_member_last_active( $args );
@@ -942,13 +942,14 @@ function bp_member_last_active( $args = array() ) {
 	 * Return the current member's last active time.
 	 *
 	 * @since 1.2.0
+	 * @since 2.7.0 Added 'relative' as a parameter to $args.
 	 *
 	 * @param array $args {
 	 *     Array of optional arguments.
-	 *     @type mixed $active_format If true, formatted "active 5 minutes
-	 *                                ago". If false, formatted "5 minutes ago".
-	 *                                If string, should be sprintf'able like
-	 *                                'last seen %s ago'.
+	 *     @type mixed $active_format If true, formatted "active 5 minutes ago". If false, formatted "5 minutes
+	 *                                ago". If string, should be sprintf'able like 'last seen %s ago'.
+	 *     @type bool  $relative      If true, will return relative time "5 minutes ago". If false, will return
+	 *                                date from database. Default: true.
 	 * }
 	 * @return string
 	 */
@@ -957,7 +958,8 @@ function bp_member_last_active( $args = array() ) {
 
 		// Parse the activity format.
 		$r = bp_parse_args( $args, array(
-			'active_format' => true
+			'active_format' => true,
+			'relative'      => true,
 		) );
 
 		// Backwards compatibility for anyone forcing a 'true' active_format.
@@ -967,13 +969,18 @@ function bp_member_last_active( $args = array() ) {
 
 		// Member has logged in at least one time.
 		if ( isset( $members_template->member->last_activity ) ) {
+			// We do not want relative time, so return now.
+			// @todo Should the 'bp_member_last_active' filter be applied here?
+			if ( ! $r['relative'] ) {
+				return esc_attr( $members_template->member->last_activity );
+			}
 
 			// Backwards compatibility for pre 1.5 'ago' strings.
 			$last_activity = ! empty( $r['active_format'] )
 				? bp_core_get_last_activity( $members_template->member->last_activity, $r['active_format'] )
 				: bp_core_time_since( $members_template->member->last_activity );
 
-			// Member has never logged in or been active.
+		// Member has never logged in or been active.
 		} else {
 			$last_activity = __( 'Never active', 'buddypress' );
 		}
@@ -1144,26 +1151,61 @@ function bp_member_profile_data( $args = '' ) {
 		 * @param string|bool $data Profile data if found, otherwise false.
 		 * @param array       $r    Array of parsed arguments.
 		 */
-		return apply_filters( 'bp_get_member_profile_data', $data, $r );
+		$data = apply_filters( 'bp_get_member_profile_data', $data, $r );
+
+		/**
+		 * Filters the resulting piece of member profile data by field type.
+		 *
+		 * This is a dynamic filter based on field type of the current field requested.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string|bool $data Profile data if found, otherwise false.
+		 * @param array       $r    Array of parsed arguments.
+		 */
+		$data = apply_filters( 'bp_get_member_profile_data_' . $profile_data[ $r['field'] ]['field_type'], $data, $r );
+
+		return $data;
 	}
 
 /**
  * Output the 'registered [x days ago]' string for the current member.
  *
  * @since 1.2.0
+ * @since 2.7.0 Added $args as a parameter.
+ *
+ * @param array $args Optional. {@see bp_get_member_registered()}
  */
-function bp_member_registered() {
-	echo bp_get_member_registered();
+function bp_member_registered( $args = array() ) {
+	echo bp_get_member_registered( $args );
 }
 	/**
 	 * Get the 'registered [x days ago]' string for the current member.
 	 *
 	 * @since 1.2.0
+	 * @since 2.7.0 Added $args as a parameter.
+	 *
+	 * @param array $args {
+	 *     Array of optional parameters.
+	 *
+	 *     @type bool $relative Optional. If true, returns relative registered date. eg. registered 5 months ago.
+	 *                          If false, returns registered date value from database.
+	 * }
 	 *
 	 * @return string
 	 */
-	function bp_get_member_registered() {
+	function bp_get_member_registered( $args = array() ) {
 		global $members_template;
+
+		$r = wp_parse_args( $args, array(
+			'relative' => true,
+		) );
+
+		// We do not want relative time, so return now.
+		// @todo Should the 'bp_member_registered' filter be applied here?
+		if ( ! $r['relative'] ) {
+			return esc_attr( $members_template->member->user_registered );
+		}
 
 		$registered = esc_attr( bp_core_get_last_activity( $members_template->member->user_registered, _x( 'registered %s', 'Records the timestamp that the user registered into the activity stream', 'buddypress' ) ) );
 
@@ -1715,7 +1757,7 @@ function bp_user_firstname() {
  * @since 1.2.4
  */
 function bp_loggedin_user_link() {
-	echo bp_get_loggedin_user_link();
+	echo esc_url( bp_get_loggedin_user_link() );
 }
 	/**
 	 * Get the link for the logged-in user's profile.
@@ -1742,7 +1784,7 @@ function bp_loggedin_user_link() {
  * @since 1.2.4
  */
 function bp_displayed_user_link() {
-	echo bp_get_displayed_user_link();
+	echo esc_url( bp_get_displayed_user_link() );
 }
 	/**
 	 * Get the link for the displayed user's profile.
@@ -1948,6 +1990,7 @@ function bp_loggedin_user_username() {
 		 */
 		return apply_filters( 'bp_get_loggedin_user_username', $username );
 	}
+
 /**
  * Echo the current member type message.
  *
@@ -2464,23 +2507,6 @@ function bp_signup_allowed() {
 	 * @return bool
 	 */
 	function bp_get_signup_allowed() {
-		$bp = buddypress();
-
-		$signup_allowed = false;
-
-		if ( is_multisite() ) {
-			$registration = bp_core_get_root_option( 'registration' );
-
-			if ( in_array( $registration, array( 'all', 'user' ) ) ) {
-				$signup_allowed = true;
-			}
-
-		} else {
-			if ( bp_get_option( 'users_can_register') ) {
-				$signup_allowed = true;
-			}
-		}
-
 		/**
 		 * Filters whether or not new signups are allowed.
 		 *
@@ -2488,7 +2514,7 @@ function bp_signup_allowed() {
 		 *
 		 * @param bool $signup_allowed Whether or not new signups are allowed.
 		 */
-		return apply_filters( 'bp_get_signup_allowed', $signup_allowed );
+		return apply_filters( 'bp_get_signup_allowed', (bool) bp_get_option( 'users_can_register' ) );
 	}
 
 /**

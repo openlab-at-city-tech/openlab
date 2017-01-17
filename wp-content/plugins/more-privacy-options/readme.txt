@@ -3,7 +3,7 @@ Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: visibility, privacy, private blog, multisite, members only, network visibility, site visibility
 Requires at least: 3.7.1
-Tested up to: 4.5
+Tested up to: 4.6
 Stable tag: Trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -39,8 +39,6 @@ Login message has link to sign-up page of a "Network Users Only" blog or a link 
 
 Localization ready.
 
-[GitHub](https://github.com/wp-plugins/more-privacy-options)
-[WordPress.org Plugin Mirror](http://www.pluginmirror.com/plugins/more-privacy-options/)
 
 == Installation ==
 
@@ -65,10 +63,9 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 4.3 =
-* WP 4.5 tests OK, outgoing email bugfix.
-
+= 4.6 =
+* WP 4.6 tests OK, cleanup php notices
 
 == Upgrade Notice ==
-= 4.3 =
-* WP 4.5 tests OK, outgoing email bugfix.
+= 4.6 =
+* WP 4.6 tests OK, cleanup php notices

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Ultimate Category Excluder
-Version: 1.0
+Version: 1.1
 Plugin URI: http://infolific.com/technology/software-worth-using/ultimate-category-excluder/
 Description: Easily exclude categories from your front page, feeds, archives, and search results.
 Author: Marios Alexandrou
@@ -37,7 +37,7 @@ add_filter( 'pre_get_posts','ksuce_exclude_categories' );
 load_plugin_textdomain( 'UCE', false, dirname(plugin_basename(__FILE__)) . '/languages' );
 
 function ksuce_admin_menu() {
-	add_options_page( __( 'Ultimate Category Excluder Options', 'UCE'), __( 'Category Exclusion', 'UCE' ), "manage_options", basename(__FILE__), 'ksuce_options_page' );
+	add_options_page( __( 'Ultimate Category Excluder Options', 'UCE'), __( 'Category Excluder', 'UCE' ), "manage_options", basename(__FILE__), 'ksuce_options_page' );
 }
 
 function ksuce_options_page() {
@@ -53,9 +53,9 @@ function ksuce_options_page() {
 		<thead>
 			<tr>
 				<th scope="col"><?php _e( 'Category', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from Main Page?', 'UCE' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from Front Page?', 'UCE' ); ?></th>
 				<th scope="col"><?php _e( 'Exclude from Feeds?', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from Archives?', 'UCE' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from All Archives?', 'UCE' ); ?></th>
 				<th scope="col"><?php _e( 'Exclude from Search?', 'UCE' ); ?></th>
 			</tr>
 		</thead>
@@ -88,9 +88,9 @@ function ksuce_options_page() {
 	echo "<h3>Support</h3>\n";
 	echo "<p>Please report this information when requesting support.</p>";
 	echo '<ul>';
-	echo '<li>UCE version: 1.0</li>';
+	echo '<li>UCE version: 1.1</li>';
 	echo '<li>PHP version: ' . PHP_VERSION . '</li>';
-	echo '<li>MySQL version: ' . mysqli_get_server_info( $wpdb->dbh ) . '</li>';
+//	echo '<li>MySQL version: ' . mysqli_get_server_info( $wpdb->dbh ) . '</li>';
 	echo '<li>WordPress version: ' . $wp_version . '</li>';
 	$mbctheme = wp_get_theme();
 	echo "<li>Theme: " . $mbctheme->Name . " is version " . $mbctheme->Version."</li>";
@@ -130,42 +130,70 @@ function ksuce_get_options(){
 }
 
 function ksuce_exclude_categories( $query ) {
+	$backtrace = debug_backtrace();
 	$array2[0] = "";
 	unset( $array2[0] );
 	$options = ksuce_get_options();
-	// 	wp_reset_query(); 
-	if ( $query->is_home ) {
-		$mbccount=0;
+
+	//wp_reset_query();
+	//error_log( print_r( debug_backtrace(), true ) );
+	//error_log( 'search for match: ' . in_array_recursive( 'WPSEO_Video_Sitemap', $backtrace ) );
+
+	//Exclude calls from the Yoast SEO Video Sitemap plugin
+	if ( $query->is_home && !in_array_recursive( 'WPSEO_Video_Sitemap', $backtrace ) ) {
+		$mbccount = 0;
 		foreach ( $options[ 'exclude_main' ] as $value ) {
 			$array2[$mbccount] = $value; 
 			$mbccount++;
 		}
 		$query->set('category__not_in', $array2);
 	}
-	if ($query->is_feed) {
-		$mbccount=0;
+
+	if ( $query->is_feed ) {
+		$mbccount = 0;
 		foreach ( $options[ 'exclude_feed' ] as $value ) {
 			$array2[$mbccount] = $value;
 			$mbccount++;
 		}
 		$query->set( 'category__not_in', $array2 );
 	}
-    if ( $query->is_search ) {
-		$mbccount=0;
+
+	if ( !is_admin() && $query->is_search ) {
+		$mbccount = 0;
 		foreach ( $options[ 'exclude_search' ] as $value ) {
 			$array2[$mbccount] = $value;
 			$mbccount++;
 		}
 		$query->set('category__not_in', $array2);
-    }
-	if (!is_admin() && $query->is_archive) {
-		$mbccount=0;
+	}
+
+	if ( !is_admin() && $query->is_archive ) {
+		$mbccount = 0;
 		foreach ( $options[ 'exclude_archives' ] as $value ) {
 			$array2[$mbccount] = $value;
 			$mbccount++;
 		}
 		$query->set( 'category__not_in', $array2 );
 	}
+	
 	return $query;
 }
+
+function in_array_recursive( $needle, $haystack ) {
+	$found = false;
+
+	foreach( $haystack as $item ) {
+		if ( $item === $needle ) {
+			$found = true;
+			break;
+		} elseif ( is_array( $item ) ) {
+			$found = in_array_recursive( $needle, $item );
+			if( $found ) {
+				break;
+			}
+		}
+	}
+
+	return $found;
+} 
 ?>

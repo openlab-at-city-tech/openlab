@@ -61,7 +61,6 @@ class BP_Attachment_Avatar extends BP_Attachment {
 	 * Set Upload Dir data for avatars.
 	 *
 	 * @since 2.3.0
-	 *
 	 */
 	public function set_upload_dir() {
 		if ( bp_core_avatar_upload_path() && bp_core_avatar_url() ) {
@@ -81,8 +80,7 @@ class BP_Attachment_Avatar extends BP_Attachment {
 	 *
 	 * @since 2.3.0
 	 *
-	 *
-	 * @param  array $file the temporary file attributes (before it has been moved).
+	 * @param array $file the temporary file attributes (before it has been moved).
 	 * @return array the file with extra errors if needed.
 	 */
 	public function validate_upload( $file = array() ) {
@@ -109,7 +107,6 @@ class BP_Attachment_Avatar extends BP_Attachment {
 	 *
 	 * @since 2.3.0
 	 * @since 2.4.0 Add the $ui_available_width parameter, to inform about the Avatar UI width.
-	 *
 	 *
 	 * @param string $file               The absolute path to the file.
 	 * @param int    $ui_available_width Available width for the UI.
@@ -207,11 +204,23 @@ class BP_Attachment_Avatar extends BP_Attachment {
 			return false;
 		}
 
+		if ( ! bp_attachments_current_user_can( 'edit_avatar', $args ) ) {
+			return false;
+		}
+
+		if ( 'user' === $args['object'] ) {
+			$avatar_dir = 'avatars';
+		} else {
+			$avatar_dir = sanitize_key( $args['object'] ) . '-avatars';
+		}
+
+		$args['item_id'] = (int) $args['item_id'];
+
 		/**
 		 * Original file is a relative path to the image
 		 * eg: /avatars/1/avatar.jpg
 		 */
-		$relative_path = $args['original_file'];
+		$relative_path = sprintf( '/%s/%s/%s', $avatar_dir, $args['item_id'], basename( $args['original_file'] ) );
 		$absolute_path = $this->upload_path . $relative_path;
 
 		// Bail if the avatar is not available.

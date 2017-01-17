@@ -179,6 +179,7 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
 .bws_error {
     color: #c5412b;
     margin-top: 1px;
+    max-width: 230px;
 }
 .bws_error a {
     color: #fff;

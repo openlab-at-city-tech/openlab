@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: captcha-pro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-10 15:32+0300\n"
-"PO-Revision-Date: 2016-08-10 15:32+0300\n"
+"POT-Creation-Date: 2016-11-08 14:59+0300\n"
+"PO-Revision-Date: 2016-11-08 15:02+0300\n"
 "Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: bestwebsoft.com <http://support.bestwebsoft.com>\n"
 "Language: ru_RU\n"
@@ -18,7 +18,7 @@ msgstr ""
 "((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: captcha.php:37 captcha.php:421
+#: captcha.php:37 captcha.php:428
 msgid "Captcha Settings"
 msgstr "Настройки Captcha"
 
@@ -26,495 +26,514 @@ msgstr "Настройки Captcha"
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:423
+#: captcha.php:430
 msgid "How to Use Step-by-step Instruction"
 msgstr "Инструкция по использованию"
 
-#: captcha.php:426 captcha.php:1671 captcha.php:1684
+#: captcha.php:433 captcha.php:1678 captcha.php:1691
 msgid "Settings"
 msgstr "Настройки"
 
-#: captcha.php:428
+#: captcha.php:435
 msgid "This setting is available in Pro version"
 msgstr "Эта опция доступна только для Pro-версии плагина"
 
-#: captcha.php:428
+#: captcha.php:435
 msgid "Packages"
 msgstr "Пакеты"
 
-#: captcha.php:430
+#: captcha.php:437
 msgid "Whitelist"
 msgstr "Белый список"
 
-#: captcha.php:431
+#: captcha.php:438
 msgid "Custom code"
 msgstr "Пользовательский код"
 
-#: captcha.php:432
+#: captcha.php:439
 msgid "Go PRO"
 msgstr "Перейти на PRO-версию"
 
-#: captcha.php:541 captcha.php:547 captcha.php:563 captcha.php:565
-#: captcha.php:574 captcha.php:628 captcha.php:632 captcha.php:641
-#: captcha.php:664 captcha.php:674 captcha.php:699 captcha.php:702
-#: captcha.php:710
+#: captcha.php:548 captcha.php:554 captcha.php:570 captcha.php:572
+#: captcha.php:581 captcha.php:635 captcha.php:639 captcha.php:648
+#: captcha.php:671 captcha.php:681 captcha.php:706 captcha.php:709
+#: captcha.php:717
 msgid "ERROR"
 msgstr "Ошибка"
 
-#: captcha.php:767 captcha.php:773
+#: captcha.php:774 captcha.php:780
 msgid "Error"
 msgstr "Ошибка"
 
-#: captcha.php:767 captcha.php:773
+#: captcha.php:774 captcha.php:780
 msgid "Click the BACK button on your browser, and try again."
 msgstr "Нажмите НАЗАД в браузере и попробуйте еще раз."
 
-#: captcha.php:1012
+#: captcha.php:1019
 msgid "In order to pass the CAPTCHA please enable JavaScript"
 msgstr "Для того, чтобы пройти тест CAPTCHA включите JavaScript"
 
-#: captcha.php:1359
+#: captcha.php:1366
 msgid "zero"
 msgstr "ноль"
 
-#: captcha.php:1360 includes/settings_page.php:437
+#: captcha.php:1367 includes/settings_page.php:437
 msgid "one"
 msgstr "один"
 
-#: captcha.php:1361
+#: captcha.php:1368
 msgid "two"
 msgstr "два"
 
-#: captcha.php:1362
+#: captcha.php:1369
 msgid "three"
 msgstr "три"
 
-#: captcha.php:1363
+#: captcha.php:1370
 msgid "four"
 msgstr "четыре"
 
-#: captcha.php:1364
+#: captcha.php:1371
 msgid "five"
 msgstr "пять"
 
-#: captcha.php:1365 includes/settings_page.php:437
+#: captcha.php:1372 includes/settings_page.php:437
 msgid "six"
 msgstr "шесть"
 
-#: captcha.php:1366 includes/settings_page.php:419
+#: captcha.php:1373 includes/settings_page.php:419
 #: includes/settings_page.php:427
 msgid "seven"
 msgstr "семь"
 
-#: captcha.php:1367 includes/settings_page.php:423
+#: captcha.php:1374 includes/settings_page.php:423
 msgid "eight"
 msgstr "восемь"
 
-#: captcha.php:1368
+#: captcha.php:1375
 msgid "nine"
 msgstr "девять"
 
-#: captcha.php:1370
+#: captcha.php:1377
 msgid "ten"
 msgstr "десять"
 
-#: captcha.php:1371
+#: captcha.php:1378
 msgid "eleven"
 msgstr "одиннадцать"
 
-#: captcha.php:1372
+#: captcha.php:1379
 msgid "twelve"
 msgstr "двенадцать"
 
-#: captcha.php:1373
+#: captcha.php:1380
 msgid "thirteen"
 msgstr "тринадцать"
 
-#: captcha.php:1374
+#: captcha.php:1381
 msgid "fourteen"
 msgstr "четырнадцать"
 
-#: captcha.php:1375
+#: captcha.php:1382
 msgid "fifteen"
 msgstr "пятнадцать"
 
-#: captcha.php:1376
+#: captcha.php:1383
 msgid "sixteen"
 msgstr "шестнадцать"
 
-#: captcha.php:1377
+#: captcha.php:1384
 msgid "seventeen"
 msgstr "семнадцать"
 
-#: captcha.php:1378
+#: captcha.php:1385
 msgid "eighteen"
 msgstr "восемнадцать"
 
-#: captcha.php:1379
+#: captcha.php:1386
 msgid "nineteen"
 msgstr "девятнадцать"
 
-#: captcha.php:1381
+#: captcha.php:1388
 msgid "twenty"
 msgstr "двадцать"
 
-#: captcha.php:1382
+#: captcha.php:1389
 msgid "twenty one"
 msgstr "двадцать один"
 
-#: captcha.php:1383
+#: captcha.php:1390
 msgid "twenty two"
 msgstr "двадцать два"
 
-#: captcha.php:1384
+#: captcha.php:1391
 msgid "twenty three"
 msgstr "двадцать три"
 
-#: captcha.php:1385
+#: captcha.php:1392
 msgid "twenty four"
 msgstr "двадцать четыре"
 
-#: captcha.php:1386
+#: captcha.php:1393
 msgid "twenty five"
 msgstr "двадцать пять"
 
-#: captcha.php:1387
+#: captcha.php:1394
 msgid "twenty six"
 msgstr "двадцать шесть"
 
-#: captcha.php:1388
+#: captcha.php:1395
 msgid "twenty seven"
 msgstr "двадцать семь"
 
-#: captcha.php:1389
+#: captcha.php:1396
 msgid "twenty eight"
 msgstr "двадцать восемь"
 
-#: captcha.php:1390
+#: captcha.php:1397
 msgid "twenty nine"
 msgstr "двадцать девять"
 
-#: captcha.php:1392
+#: captcha.php:1399
 msgid "thirty"
 msgstr "тридцать"
 
-#: captcha.php:1393
+#: captcha.php:1400
 msgid "thirty one"
 msgstr "тридцать один"
 
-#: captcha.php:1394
+#: captcha.php:1401
 msgid "thirty two"
 msgstr "тридцать два"
 
-#: captcha.php:1395
+#: captcha.php:1402
 msgid "thirty three"
 msgstr "тридцать три"
 
-#: captcha.php:1396
+#: captcha.php:1403
 msgid "thirty four"
 msgstr "тридцать четыре"
 
-#: captcha.php:1397
+#: captcha.php:1404
 msgid "thirty five"
 msgstr "тридцать пять"
 
-#: captcha.php:1398
+#: captcha.php:1405
 msgid "thirty six"
 msgstr "тридцать шесть"
 
-#: captcha.php:1399
+#: captcha.php:1406
 msgid "thirty seven"
 msgstr "тридцать семь"
 
-#: captcha.php:1400
+#: captcha.php:1407
 msgid "thirty eight"
 msgstr "тридцать восемь"
 
-#: captcha.php:1401
+#: captcha.php:1408
 msgid "thirty nine"
 msgstr "тридцать девять"
 
-#: captcha.php:1403
+#: captcha.php:1410
 msgid "forty"
 msgstr "сорок"
 
-#: captcha.php:1404
+#: captcha.php:1411
 msgid "forty one"
 msgstr "сорок один"
 
-#: captcha.php:1405
+#: captcha.php:1412
 msgid "forty two"
 msgstr "сорок два"
 
-#: captcha.php:1406
+#: captcha.php:1413
 msgid "forty three"
 msgstr "сорок три"
 
-#: captcha.php:1407
+#: captcha.php:1414
 msgid "forty four"
 msgstr "сорок четыре"
 
-#: captcha.php:1408
+#: captcha.php:1415
 msgid "forty five"
 msgstr "сорок пять"
 
-#: captcha.php:1409
+#: captcha.php:1416
 msgid "forty six"
 msgstr "сорок шесть"
 
-#: captcha.php:1410
+#: captcha.php:1417
 msgid "forty seven"
 msgstr "сорок семь"
 
-#: captcha.php:1411
+#: captcha.php:1418
 msgid "forty eight"
 msgstr "сорок восемь"
 
-#: captcha.php:1412
+#: captcha.php:1419
 msgid "forty nine"
 msgstr "сорок девять"
 
-#: captcha.php:1414
+#: captcha.php:1421
 msgid "fifty"
 msgstr "пятьдесят"
 
-#: captcha.php:1415
+#: captcha.php:1422
 msgid "fifty one"
 msgstr "пятьдесят один"
 
-#: captcha.php:1416
+#: captcha.php:1423
 msgid "fifty two"
 msgstr "пятьдесят два"
 
-#: captcha.php:1417
+#: captcha.php:1424
 msgid "fifty three"
 msgstr "пятьдесят три"
 
-#: captcha.php:1418
+#: captcha.php:1425
 msgid "fifty four"
 msgstr "пятьдесят четыре"
 
-#: captcha.php:1419
+#: captcha.php:1426
 msgid "fifty five"
 msgstr "пятьдесят пять"
 
-#: captcha.php:1420
+#: captcha.php:1427
 msgid "fifty six"
 msgstr "пятьдесят шесть"
 
-#: captcha.php:1421
+#: captcha.php:1428
 msgid "fifty seven"
 msgstr "пятьдесят семь"
 
-#: captcha.php:1422
+#: captcha.php:1429
 msgid "fifty eight"
 msgstr "пятьдесят восемь"
 
-#: captcha.php:1423
+#: captcha.php:1430
 msgid "fifty nine"
 msgstr "пятьдесят девять"
 
-#: captcha.php:1425
+#: captcha.php:1432
 msgid "sixty"
 msgstr "шестьдесят"
 
-#: captcha.php:1426
+#: captcha.php:1433
 msgid "sixty one"
 msgstr "шестьдесят один"
 
-#: captcha.php:1427
+#: captcha.php:1434
 msgid "sixty two"
 msgstr "шестьдесят два"
 
-#: captcha.php:1428
+#: captcha.php:1435
 msgid "sixty three"
 msgstr "шестьдесят три"
 
-#: captcha.php:1429
+#: captcha.php:1436
 msgid "sixty four"
 msgstr "шестьдесят четыре"
 
-#: captcha.php:1430
+#: captcha.php:1437
 msgid "sixty five"
 msgstr "шестьдесят пять"
 
-#: captcha.php:1431
+#: captcha.php:1438
 msgid "sixty six"
 msgstr "шестьдесят шесть"
 
-#: captcha.php:1432
+#: captcha.php:1439
 msgid "sixty seven"
 msgstr "шестьдесят семь"
 
-#: captcha.php:1433
+#: captcha.php:1440
 msgid "sixty eight"
 msgstr "шестьдесят восемь"
 
-#: captcha.php:1434
+#: captcha.php:1441
 msgid "sixty nine"
 msgstr "шестьдесят девять"
 
-#: captcha.php:1436
+#: captcha.php:1443
 msgid "seventy"
 msgstr "семьдесят"
 
-#: captcha.php:1437
+#: captcha.php:1444
 msgid "seventy one"
 msgstr "семьдесят один"
 
-#: captcha.php:1438
+#: captcha.php:1445
 msgid "seventy two"
 msgstr "семьдесят два"
 
-#: captcha.php:1439
+#: captcha.php:1446
 msgid "seventy three"
 msgstr "семьдесят три"
 
-#: captcha.php:1440
+#: captcha.php:1447
 msgid "seventy four"
 msgstr "семьдесят четыре"
 
-#: captcha.php:1441
+#: captcha.php:1448
 msgid "seventy five"
 msgstr "семьдесят пять"
 
-#: captcha.php:1442
+#: captcha.php:1449
 msgid "seventy six"
 msgstr "семьдесят шесть"
 
-#: captcha.php:1443
+#: captcha.php:1450
 msgid "seventy seven"
 msgstr "семьдесят семь"
 
-#: captcha.php:1444
+#: captcha.php:1451
 msgid "seventy eight"
 msgstr "семьдесят восемь"
 
-#: captcha.php:1445
+#: captcha.php:1452
 msgid "seventy nine"
 msgstr "семьдесят девять"
 
-#: captcha.php:1447
+#: captcha.php:1454
 msgid "eighty"
 msgstr "восемьдесят"
 
-#: captcha.php:1448
+#: captcha.php:1455
 msgid "eighty one"
 msgstr "восемьдесят один"
 
-#: captcha.php:1449
+#: captcha.php:1456
 msgid "eighty two"
 msgstr "восемьдесят два"
 
-#: captcha.php:1450
+#: captcha.php:1457
 msgid "eighty three"
 msgstr "восемьдесят три"
 
-#: captcha.php:1451
+#: captcha.php:1458
 msgid "eighty four"
 msgstr "восемьдесят четыре"
 
-#: captcha.php:1452
+#: captcha.php:1459
 msgid "eighty five"
 msgstr "восемьдесят пять"
 
-#: captcha.php:1453
+#: captcha.php:1460
 msgid "eighty six"
 msgstr "восемьдесят шесть"
 
-#: captcha.php:1454
+#: captcha.php:1461
 msgid "eighty seven"
 msgstr "восемьдесят семь"
 
-#: captcha.php:1455
+#: captcha.php:1462
 msgid "eighty eight"
 msgstr "восемьдесят восемь"
 
-#: captcha.php:1456
+#: captcha.php:1463
 msgid "eighty nine"
 msgstr "восемьдесят девять"
 
-#: captcha.php:1458
+#: captcha.php:1465
 msgid "ninety"
 msgstr "девяносто"
 
-#: captcha.php:1459
+#: captcha.php:1466
 msgid "ninety one"
 msgstr "девяносто один"
 
-#: captcha.php:1460
+#: captcha.php:1467
 msgid "ninety two"
 msgstr "девяносто два"
 
-#: captcha.php:1461
+#: captcha.php:1468
 msgid "ninety three"
 msgstr "девяносто три"
 
-#: captcha.php:1462
+#: captcha.php:1469
 msgid "ninety four"
 msgstr "девяносто четыре"
 
-#: captcha.php:1463
+#: captcha.php:1470
 msgid "ninety five"
 msgstr "девяносто пять"
 
-#: captcha.php:1464
+#: captcha.php:1471
 msgid "ninety six"
 msgstr "девяносто шесть"
 
-#: captcha.php:1465
+#: captcha.php:1472
 msgid "ninety seven"
 msgstr "девяносто семь"
 
-#: captcha.php:1466
+#: captcha.php:1473
 msgid "ninety eight"
 msgstr "девяносто восемь"
 
-#: captcha.php:1467
+#: captcha.php:1474
 msgid "ninety nine"
 msgstr "девяносто девять"
 
-#: captcha.php:1532
+#: captcha.php:1539
 msgid "Encryption password is not set"
 msgstr "Пароль для шифрования не установлен"
 
-#: captcha.php:1553
+#: captcha.php:1560
 msgid "Decryption password is not set"
 msgstr "Пароль для дешифровки не установлен"
 
-#: captcha.php:1685
+#: captcha.php:1692
 msgid "FAQ"
 msgstr "FAQ"
 
-#: captcha.php:1686
+#: captcha.php:1693
 msgid "Support"
 msgstr "Поддержка"
 
-#: captcha.php:1858
+#: captcha.php:1734
+msgid "settings page"
+msgstr "странице настроек"
+
+#: captcha.php:1737
+#, php-format
+msgid ""
+"You're using W3 Total Cache plugin. If %1$s doesn't work properly, please "
+"clear the cache in W3 Total Cache plugin and turn on '%2$s' option on the "
+"plugin %3$s."
+msgstr ""
+"Вы используете плагин W3 Total Cache. Если %1$s работает некорректно, "
+"пожалуйста очистите кэш в плагине W3 Total Cache и включите опцию \"%2$s\" "
+"на %3$s плагина."
+
+#: captcha.php:1739 includes/settings_page.php:412
+msgid "Show CAPTCHA after the end of the page loading"
+msgstr "Отображать CAPTCHA после окончания загрузки страницы"
+
+#: captcha.php:1924
 msgid "Warning"
 msgstr "Внимание"
 
-#: captcha.php:1862
+#: captcha.php:1928
 msgid "plugin contains deprecated functionality that will be removed"
 msgstr "содержит устаревший функционал, который будет удален"
 
-#: captcha.php:1863
+#: captcha.php:1929
 msgid "in the future"
 msgstr "в будущем"
 
-#: captcha.php:1863
+#: captcha.php:1929
 msgid "after"
 msgstr "после"
 
-#: captcha.php:1866
+#: captcha.php:1932
 msgid "has old version"
 msgstr "имеет устаревшую версию"
 
-#: captcha.php:1869
+#: captcha.php:1935
 msgid "has compatibility problems with"
 msgstr "имеет проблемы совместимости с"
 
-#: captcha.php:1876
+#: captcha.php:1942
 msgid "You need to update this plugin for correct work with"
 msgstr "Вам необходимо обновить этот плагин для корректной работы с"
 
@@ -764,7 +783,7 @@ msgstr "Пакет"
 msgid "Date"
 msgstr "Дата"
 
-#: includes/pro_banners.php:177 includes/pro_banners.php:234
+#: includes/pro_banners.php:177 includes/pro_banners.php:238
 msgid "Use general settings"
 msgstr "Использовать общие настройки"
 
@@ -791,7 +810,7 @@ msgstr "секунд"
 msgid "Enable"
 msgstr "Включить"
 
-#: includes/pro_banners.php:238 includes/settings_page.php:657
+#: includes/pro_banners.php:234 includes/settings_page.php:657
 msgid "Hide from registered users"
 msgstr "Скрыть от зарегистрированных пользователей"
 
@@ -811,65 +830,61 @@ msgstr ""
 msgid "Error during package uploading"
 msgstr "Ошибка при загрузке пакета"
 
-#: includes/package_loader.php:138
+#: includes/package_loader.php:143
 msgid "check your archive"
 msgstr "проверьте архив"
 
-#: includes/package_loader.php:140
+#: includes/package_loader.php:145
 msgid "file format should be ZIP-archive"
 msgstr "формат файла должен быть ZIP-архив"
 
-#: includes/package_loader.php:142
+#: includes/package_loader.php:147
 msgid "file size should not exceed"
 msgstr "размер файла должен быть не более"
 
-#: includes/package_loader.php:153
+#: includes/package_loader.php:158
 msgid "it is impossible to upload the archive to the server"
 msgstr "невозможно загрузить архив на сервер"
 
-#: includes/package_loader.php:165
+#: includes/package_loader.php:170
 msgid "archive can not be unzipped"
 msgstr "архив нельзя разархивировать"
 
-#: includes/package_loader.php:178
+#: includes/package_loader.php:183
 msgid "MB"
 msgstr "МБ"
 
-#: includes/package_loader.php:180
+#: includes/package_loader.php:185
 msgid "KB"
 msgstr "КБ"
 
-#: includes/package_loader.php:182
+#: includes/package_loader.php:187
 msgid "Bytes"
 msgstr "Байт"
 
-#: includes/package_loader.php:237
+#: includes/package_loader.php:242
 #, php-format
-msgid "One package and"
-msgid_plural "%s packages and"
-msgstr[0] "Один пакет и "
-msgstr[1] "%s пакета и "
-msgstr[2] "%s пакетов и "
-msgstr[3] "%s пакета и "
+msgid "One package has been updated or added to the database"
+msgid_plural "%s packages have been updated or added to the database"
+msgstr[0] "Один пакет был добавлен или обновлён в базе данных"
+msgstr[1] "%s пакета были добавлены или обновлены в базе данных"
+msgstr[2] "%s пакетов были добавлены или обновлены в базе данных"
+msgstr[3] "%s пакет был добавлен или обновлён в базе данных"
 
-#: includes/package_loader.php:238
+#: includes/package_loader.php:243
 #, php-format
-msgid "one image"
-msgid_plural "%s images"
-msgstr[0] "одно изображение"
-msgstr[1] "%s изображения"
-msgstr[2] "%s изображений"
-msgstr[3] "%s изображение"
+msgid "One image has been updated or added to the database"
+msgid_plural "%s images have been updated or added to the database"
+msgstr[0] "Одно изображение было добавлено или обновлено в базе данных"
+msgstr[1] "%s изображения были добавлены или обновлены в базе данных"
+msgstr[2] "%s изображений были добавлены или обновлены в базе данных"
+msgstr[3] "%s изображение было добавлено или обновлено в базе данных"
 
-#: includes/package_loader.php:239
-msgid "have been updated or added to the database"
-msgstr "были добавлены или обновлены"
-
-#: includes/package_loader.php:346
+#: includes/package_loader.php:351
 msgid "Archive is empty"
 msgstr "Архив пустой"
 
-#: includes/package_loader.php:694
+#: includes/package_loader.php:699
 #, php-format
 msgid ""
 "Some settings of the package %s were set incorrectly. They have been skipped"
@@ -877,13 +892,13 @@ msgstr ""
 "Некоторые настройки пакета %s были установлены неправильно. Они были "
 "пропущены"
 
-#: includes/package_loader.php:697
+#: includes/package_loader.php:702
 msgid "Wrong data"
 msgstr "Неправильные данные"
 
 #: includes/helpers.php:30
 msgid "Please enter a CAPTCHA value."
-msgstr "Пожалуйста, заполните CAPTCHA"
+msgstr "Пожалуйста, заполните CAPTCHA."
 
 #: includes/helpers.php:31
 msgid "Please enter a valid CAPTCHA value."
@@ -898,8 +913,8 @@ msgid "Time limit is exhausted. Please reload the CAPTCHA."
 msgstr "Лимит времени истёк. Пожалуйста, перезагрузите CAPTCHA."
 
 #: includes/helpers.php:34
-msgid "You are in the whitelist"
-msgstr "Вы в белом списке"
+msgid "You are in the whitelist."
+msgstr "Вы в белом списке."
 
 #: includes/settings_page.php:46
 msgid "General Options"
@@ -1015,10 +1030,6 @@ msgstr "Подпись к CAPTCHA"
 #: includes/settings_page.php:411
 msgid "Required symbol"
 msgstr "Символ для отображения обязательных полей"
-
-#: includes/settings_page.php:412
-msgid "Show CAPTCHA after the end of the page loading"
-msgstr "Отображать CAPTCHA после окончания загрузки страницы"
 
 #: includes/settings_page.php:418
 msgid "Plus"
@@ -1138,6 +1149,23 @@ msgid ""
 msgstr ""
 "Список пакетов изображений пустой. Пожалуйста, восстановите настройки по "
 "умолчанию или переустановите плагин для исправления этой ошибки"
+
+#~ msgid "One package %1$s"
+#~ msgid_plural "%2$s packages %3$s"
+#~ msgstr[0] "Один пакет %1$s"
+#~ msgstr[1] "%2$s пакета %3$s"
+#~ msgstr[2] "%2$s пакетов %3$s"
+#~ msgstr[3] "%2$s пакет %3$s"
+
+#~ msgid "have been updated or added to the database"
+#~ msgstr "были добавлены или обновлены"
+
+#~ msgid "one image %1$s"
+#~ msgid_plural "%2$s images %$3s"
+#~ msgstr[0] "одно изображение %1$s"
+#~ msgstr[1] "%2$s изображения %$3s"
+#~ msgstr[2] "%2$s изображений %$3s"
+#~ msgstr[3] "%2$s изображение %$3s"
 
 #~ msgid "Network Settings"
 #~ msgstr "Сетевые настройки"

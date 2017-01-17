@@ -3,32 +3,37 @@
 ** A base module for [count], Twitter-like character count
 **/
 
-/* Shortcode handler */
+/* form_tag handler */
 
-add_action( 'wpcf7_init', 'wpcf7_add_shortcode_count' );
+add_action( 'wpcf7_init', 'wpcf7_add_form_tag_count' );
 
-function wpcf7_add_shortcode_count() {
-	wpcf7_add_shortcode( 'count', 'wpcf7_count_shortcode_handler', true );
+function wpcf7_add_form_tag_count() {
+	wpcf7_add_form_tag( 'count', 'wpcf7_count_form_tag_handler', true );
 }
 
-function wpcf7_count_shortcode_handler( $tag ) {
-	$tag = new WPCF7_Shortcode( $tag );
+function wpcf7_count_form_tag_handler( $tag ) {
+	$tag = new WPCF7_FormTag( $tag );
 
 	if ( empty( $tag->name ) ) {
 		return '';
 	}
 
-	$target = wpcf7_scan_shortcode( array( 'name' => $tag->name ) );
+	$targets = wpcf7_scan_form_tags( array( 'name' => $tag->name ) );
 	$maxlength = $minlength = null;
 
-	if ( $target ) {
-		$target = new WPCF7_Shortcode( $target[0] );
-		$maxlength = $target->get_maxlength_option();
-		$minlength = $target->get_minlength_option();
+	while ( $targets ) {
+		$target = array_shift( $targets );
+		$target = new WPCF7_FormTag( $target );
 
-		if ( $maxlength && $minlength && $maxlength < $minlength ) {
-			$maxlength = $minlength = null;
+		if ( 'count' != $target->type ) {
+			$maxlength = $target->get_maxlength_option();
+			$minlength = $target->get_minlength_option();
+			break;
 		}
+	}
+
+	if ( $maxlength && $minlength && $maxlength < $minlength ) {
+		$maxlength = $minlength = null;
 	}
 
 	if ( $tag->has_option( 'down' ) ) {
@@ -53,5 +58,3 @@ function wpcf7_count_shortcode_handler( $tag ) {
 
 	return $html;
 }
-
-?>

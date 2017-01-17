@@ -39,7 +39,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	public $group_counts = 0;
 
 	/**
-	 * Multidimensional array of group visibility types and their groups.
+	 * Multidimensional array of group visibility (status) types and their groups.
 	 *
 	 * @link https://buddypress.trac.wordpress.org/ticket/6277
 	 * @var array
@@ -59,6 +59,15 @@ class BP_Groups_List_Table extends WP_List_Table {
 			'plural'   => 'groups',
 			'singular' => 'group',
 		) );
+
+		// Add Group Type column and bulk change controls.
+		if ( bp_groups_get_group_types() ) {
+			// Add Group Type column.
+			add_filter( 'bp_groups_list_table_get_columns',        array( $this, 'add_type_column' )                  );
+			add_filter( 'bp_groups_admin_get_group_custom_column', array( $this, 'column_content_group_type' ), 10, 3 );
+			// Add the bulk change select.
+			add_action( 'bp_groups_list_table_after_bulk_actions', array( $this, 'add_group_type_bulk_change_select' ) );
+		}
 	}
 
 	/**
@@ -122,7 +131,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 			$this->view = $_GET['group_status'];
 		}
 
-		// We'll use the ids of group types for the 'include' param.
+		// We'll use the ids of group status types for the 'include' param.
 		$this->group_type_ids = BP_Groups_Group::get_group_type_ids();
 
 		// Pass a dummy array if there are no groups of this type.
@@ -137,9 +146,15 @@ class BP_Groups_List_Table extends WP_List_Table {
 			$this->group_counts[ $group_type ] = count( $group_ids );
 		}
 
+		// Group types
+		$group_type = false;
+		if ( isset( $_GET['bp-group-type'] ) && null !== bp_groups_get_group_type_object( $_GET['bp-group-type'] ) ) {
+			$group_type = $_GET['bp-group-type'];
+		}
+
 		// If we're viewing a specific group, flatten all activities into a single array.
 		if ( $include_id ) {
-			$groups = array( (array) groups_get_group( 'group_id=' . $include_id ) );
+			$groups = array( (array) groups_get_group( $include_id ) );
 		} else {
 			$groups_args = array(
 				'include'  => $include,
@@ -148,6 +163,10 @@ class BP_Groups_List_Table extends WP_List_Table {
 				'orderby'  => $orderby,
 				'order'    => $order
 			);
+
+			if ( $group_type ) {
+				$groups_args['group_type'] = $group_type;
+			}
 
 			$groups = array();
 			if ( bp_has_groups( $groups_args ) ) {
@@ -241,6 +260,25 @@ class BP_Groups_List_Table extends WP_List_Table {
 		<?php
 
 		$this->display_tablenav( 'bottom' );
+	}
+
+	/**
+	 * Extra controls to be displayed between bulk actions and pagination
+	 *
+	 * @since 2.7.0
+	 * @access protected
+	 *
+	 * @param string $which
+	 */
+	protected function extra_tablenav( $which ) {
+		/**
+		 * Fires just after the bulk action controls in the WP Admin groups list table.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+		 */
+		do_action( 'bp_groups_list_table_after_bulk_actions', $which );
 	}
 
 	/**
@@ -644,5 +682,111 @@ class BP_Groups_List_Table extends WP_List_Table {
 		 * @param array  $item        The current group item in the loop.
 		 */
 		return apply_filters( 'bp_groups_admin_get_group_custom_column', '', $column_name, $item );
+	}
+
+	// Group Types
+
+	/**
+	 * Add group type column to the WordPress admin groups list table.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $columns Groups table columns.
+	 *
+	 * @return array $columns
+	 */
+	public function add_type_column( $columns = array() ) {
+		$columns['bp_group_type'] = _x( 'Group Type', 'Label for the WP groups table group type column', 'buddypress' );
+
+		return $columns;
+	}
+
+	/**
+	 * Markup for the Group Type column.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $value       Empty string.
+	 * @param string $column_name Name of the column being rendered.
+	 * @param array  $item        The current group item in the loop.
+	 */
+	public function column_content_group_type( $retval = '', $column_name, $item ) {
+		if ( 'bp_group_type' !== $column_name ) {
+			return $retval;
+		}
+
+		add_filter( 'bp_get_group_type_directory_permalink', array( $this, 'group_type_permalink_use_admin_filter' ), 10, 2 );
+		$retval = bp_get_group_type_list( $item['id'], array(
+			'parent_element' => '',
+			'label_element'  => '',
+			'label'          => '',
+			'show_all'       => true
+		) );
+		remove_filter( 'bp_get_group_type_directory_permalink', array( $this, 'group_type_permalink_use_admin_filter' ), 10, 2 );
+
+		/**
+		 * Filters the markup for the Group Type column.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string $retval Markup for the Group Type column.
+		 * @parma array  $item   The current group item in the loop.
+		 */
+		echo apply_filters_ref_array( 'bp_groups_admin_get_group_type_column', array( $retval, $item ) );
+	}
+
+	/**
+	 * Filters the group type list permalink in the Group Type column.
+	 *
+	 * Changes the group type permalink to use the admin URL.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param  string $retval Current group type permalink.
+	 * @param  object $type   Group type object.
+	 * @return string
+	 */
+	public function group_type_permalink_use_admin_filter( $retval, $type ) {
+		return add_query_arg( array( 'bp-group-type' => urlencode( $type->name ) ) );
+	}
+
+	/**
+	 * Markup for the Group Type bulk change select.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+	 */
+	public function add_group_type_bulk_change_select( $which ) {
+		// `$which` is only passed in WordPress 4.6+. Avoid duplicating controls in earlier versions.
+		static $displayed = false;
+		if ( version_compare( bp_get_major_wp_version(), '4.6', '<' ) && $displayed ) {
+			return;
+		}
+		$displayed = true;
+		$id_name = 'bottom' === $which ? 'bp_change_type2' : 'bp_change_type';
+
+		$types = bp_groups_get_group_types( array(), 'objects' );
+		?>
+		<div class="alignleft actions">
+			<label class="screen-reader-text" for="<?php echo $id_name; ?>"><?php _e( 'Change group type to&hellip;', 'buddypress' ) ?></label>
+			<select name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" style="display:inline-block;float:none;">
+				<option value=""><?php _e( 'Change group type to&hellip;', 'buddypress' ) ?></option>
+
+				<?php foreach( $types as $type ) : ?>
+
+					<option value="<?php echo esc_attr( $type->name ); ?>"><?php echo esc_html( $type->labels['singular_name'] ); ?></option>
+
+				<?php endforeach; ?>
+
+				<option value="remove_group_type"><?php _e( 'No Group Type', 'buddypress' ) ?></option>
+
+			</select>
+			<?php
+			wp_nonce_field( 'bp-bulk-groups-change-type-' . bp_loggedin_user_id(), 'bp-bulk-groups-change-type-nonce' );
+			submit_button( __( 'Change', 'buddypress' ), 'button', 'bp_change_group_type', false );
+		?>
+		</div>
+		<?php
 	}
 }

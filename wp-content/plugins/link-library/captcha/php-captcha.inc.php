@@ -87,7 +87,7 @@
       var $sFileType;
       var $sCode = '';
       
-      function PhpCaptcha(
+      function __construct(
          $aFonts, // array of TrueType fonts to use - specify full path
          $iWidth = CAPTCHA_WIDTH, // width of image
          $iHeight = CAPTCHA_HEIGHT // height of image

@@ -193,7 +193,7 @@ function wpcom_vimeo_embed_url_init() {
 add_action( 'init', 'wpcom_vimeo_embed_url_init' );
 
 function vimeo_embed_to_shortcode( $content ) {
-	if ( false === stripos( $content, 'player.vimeo.com/video/' ) ) {
+	if ( ! is_string( $content ) || false === stripos( $content, 'player.vimeo.com/video/' ) ) {
 		return $content;
 	}
 
@@ -293,10 +293,8 @@ function vimeo_link_callback( $matches ) {
 }
 
 /** This filter is documented in modules/shortcodes/youtube.php */
-if ( apply_filters( 'jetpack_comments_allow_oembed', get_option('embed_autourls') ) ) {
+if ( ! is_admin() && apply_filters( 'jetpack_comments_allow_oembed', true ) ) {
 	// We attach wp_kses_post to comment_text in default-filters.php with priority of 10 anyway, so the iframe gets filtered out.
-	if ( ! is_admin() ) {
-		// Higher priority because we need it before auto-link and autop get to it
-		add_filter( 'comment_text', 'vimeo_link', 1 );
-	}
+	// Higher priority because we need it before auto-link and autop get to it
+	add_filter( 'comment_text', 'vimeo_link', 1 );
 }

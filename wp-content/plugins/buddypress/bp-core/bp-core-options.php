@@ -13,6 +13,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get the default site options and their values.
  *
+ * Default values should not be set by calls to `get_option()` or `get_site_option()` due to
+ * these causing load order problems with `bp_core_clear_root_options_cache()`; see #BP7227.
+ *
  * @since 1.6.0
  *
  * @return array Filtered option names and values.
@@ -73,6 +76,9 @@ function bp_get_default_options() {
 		// The ID for the current theme package.
 		'_bp_theme_package_id'                 => 'legacy',
 
+		// Email unsubscribe salt.
+		'bp-emails-unsubscribe-salt'           => '',
+
 		/* Groups ************************************************************/
 
 		// @todo Move this into the groups component
@@ -94,10 +100,13 @@ function bp_get_default_options() {
 		// Force the BuddyBar.
 		'_bp_force_buddybar'                   => false,
 
-		/* Legacy theme *********************************************/
+		/* Legacy *********************************************/
 
 		// Whether to register the bp-default themes directory.
 		'_bp_retain_bp_default'                => false,
+
+		// Whether to load deprecated code.
+		'_bp_ignore_deprecated_code'           => true,
 
 		/* Widgets **************************************************/
 		'widget_bp_core_login_widget'                => false,
@@ -125,7 +134,6 @@ function bp_get_default_options() {
  * Non-destructive, so existing settings will not be overridden.
  *
  * @since 1.6.0
- *
  */
 function bp_add_options() {
 
@@ -156,7 +164,6 @@ function bp_add_options() {
  * Currently unused.
  *
  * @since 1.6.0
- *
  */
 function bp_delete_options() {
 
@@ -184,7 +191,6 @@ function bp_delete_options() {
  * Currently unused.
  *
  * @since 1.6.0
- *
  */
 function bp_setup_option_filters() {
 
@@ -242,7 +248,7 @@ function bp_pre_get_option( $value = false ) {
  *
  * The 'bp_get_option' filter is primarily for backward-compatibility.
  *
- * @since 1.2.0
+ * @since 1.5.0
  *
  * @param string $option_name The option to be retrieved.
  * @param string $default     Optional. Default value to be returned if the option
@@ -255,7 +261,7 @@ function bp_get_option( $option_name, $default = '' ) {
 	/**
 	 * Filters the option value for the requested option.
 	 *
-	 * @since 1.2.0
+	 * @since 1.5.0
 	 *
 	 * @param mixed $value The value for the option.
 	 */
@@ -411,61 +417,16 @@ function bp_core_get_root_options() {
 			$root_blog_options_meta = array_merge( $root_blog_options_meta, $network_options_meta );
 		}
 
-		// Missing some options, so do some one-time fixing.
-		if ( empty( $root_blog_options_meta ) || ( count( $root_blog_options_meta ) < count( $root_blog_option_keys ) ) ) {
-
-			// Get a list of the keys that are already populated.
-			$existing_options = array();
-			foreach( $root_blog_options_meta as $already_option ) {
-				$existing_options[$already_option->name] = $already_option->value;
-			}
-
-			// Unset the query - We'll be resetting it soon.
-			unset( $root_blog_options_meta );
-
-			// Loop through options.
-			foreach ( $root_blog_options as $old_meta_key => $old_meta_default ) {
-
-				if ( isset( $existing_options[$old_meta_key] ) ) {
-					continue;
-				}
-
-				// Get old site option.
-				if ( is_multisite() ) {
-					$old_meta_value = get_site_option( $old_meta_key );
-				}
-
-				// No site option so look in root blog.
-				if ( empty( $old_meta_value ) ) {
-					$old_meta_value = bp_get_option( $old_meta_key, $old_meta_default );
-				}
-
-				// Update the root blog option.
-				bp_update_option( $old_meta_key, $old_meta_value );
-
-				// Update the global array.
-				$root_blog_options_meta[$old_meta_key] = $old_meta_value;
-
-				// Clear out the value for the next time around.
-				unset( $old_meta_value );
-			}
-
-			$root_blog_options_meta = array_merge( $root_blog_options_meta, $existing_options );
-			unset( $existing_options );
-
-		// We're all matched up.
-		} else {
-			// Loop through our results and make them usable.
-			foreach ( $root_blog_options_meta as $root_blog_option ) {
-				$root_blog_options[$root_blog_option->name] = $root_blog_option->value;
-			}
-
-			// Copy the options no the return val.
-			$root_blog_options_meta = $root_blog_options;
-
-			// Clean up our temporary copy.
-			unset( $root_blog_options );
+		// Loop through our results and make them usable.
+		foreach ( $root_blog_options_meta as $root_blog_option ) {
+			$root_blog_options[$root_blog_option->name] = $root_blog_option->value;
 		}
+
+		// Copy the options no the return val.
+		$root_blog_options_meta = $root_blog_options;
+
+		// Clean up our temporary copy.
+		unset( $root_blog_options );
 
 		wp_cache_set( 'root_blog_options', $root_blog_options_meta, 'bp' );
 	}
@@ -489,7 +450,7 @@ function bp_core_get_root_options() {
  *
  * @since 2.3.0
  *
- * @param  string $option Name of the option key.
+ * @param string $option Name of the option key.
  * @return mixed Value, if found.
  */
 function bp_core_get_root_option( $option ) {
@@ -753,7 +714,6 @@ function bp_group_forums_root_id( $default = '0' ) {
 	 * Return the group forums root parent forum id.
 	 *
 	 * @since 1.6.0
-	 *
 	 *
 	 * @param bool|string $default Optional. Default: '0'.
 	 * @return int The ID of the group forums root forum.

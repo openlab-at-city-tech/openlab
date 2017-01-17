@@ -49,14 +49,16 @@
 		redirectBlogger				: function (widget5x, resp) {
 			stlib.buttonCodeGenerator.getPubKey2(function (response) {
 				var publisherInfo = "";
+				var pubKey = "";
 				if (typeof(response) != "undefined" && response != null) {
-					publisherInfo = ", \"" + response.data.pubkey + "\"";
+					pubKey = response.data.pubkey;
 				} else {
-					publisherInfo = ", \"" + stlib.buttonCodeGenerator.generatePublisherKey("blogger") + "\"";
+					pubKey = stlib.buttonCodeGenerator.generatePublisherKey("blogger");
 				}
+				publisherInfo = ", \"" + pubKey + "\"";
 
 				var jsonButtonList = stbuttons.getJSONButtonList(stlib_preview.getOptions("preview").icon, stlib_picker.getServices("picker"), "blogger", resp);
-				jQuery('#bloggerInputScript').attr('value', '<span id="st_finder"></span><script type="text/javascript" src="http://w.sharethis.com/widget/stblogger2.js"></script><script type="text/javascript">var switchTo5x=' + widget5x + ';stBlogger2.init("http://w.sharethis.com/button/buttons.js", ' + JSON.stringify(jsonButtonList) + ' ' + publisherInfo + ');var f = document.getElementById("st_finder");var c = f.parentNode.parentNode.childNodes;for (i=0;i<c.length;i++) { try { c[i].style.display = "none"; } catch (err) {}}</script>');
+				jQuery('#bloggerInputScript').attr('value', '<span id="st_finder"></span><script type="text/javascript" src="http://w.sharethis.com/widget/stblogger2.js"></script><script type="text/javascript">var switchTo5x=' + widget5x + ';stBlogger2.init("http://w.sharethis.com/button/buttons.js?publisher=' + pubKey + '&product=sharethis-wordpress", ' + JSON.stringify(jsonButtonList) + ' ' + publisherInfo + ');var f = document.getElementById("st_finder");var c = f.parentNode.parentNode.childNodes;for (i=0;i<c.length;i++) { try { c[i].style.display = "none"; } catch (err) {}}</script>');
 				jQuery('#bloggerSubmit').submit();
 			});
 		},
@@ -64,14 +66,16 @@
 		redirectTypepad				: function (widget5x, resp) {
 			stlib.buttonCodeGenerator.getPubKey2(function (response) {
 				var publisherInfo = "";
+				var pubKey = "";
 				if (typeof(response) != "undefined" && response != null) {
-					publisherInfo = ", \"" + response.data.pubkey + "\"";
+					pubKey = response.data.pubkey;
 				} else {
-					publisherInfo = ", \"" + stlib.buttonCodeGenerator.generatePublisherKey("typepad") + "\"";
+					pubKey = stlib.buttonCodeGenerator.generatePublisherKey("typepad");
 				}
+				publisherInfo = ", \"" + pubKey + "\"";
 
 				var jsonButtonList = stbuttons.getJSONButtonList(stlib_preview.getOptions("preview").icon, stlib_picker.getServices("picker"), "typepad", resp);
-				jQuery('#typepadInputScript').attr('value', '<script type="text/javascript" src="http://w.sharethis.com/widget/sttypepad2.js"></script><script type="text/javascript">var switchTo5x=' + widget5x + ';stTypePad2.init("http://w.sharethis.com/button/buttons.js", ' + JSON.stringify(jsonButtonList) + ' ' + publisherInfo + ');</script>');
+				jQuery('#typepadInputScript').attr('value', '<script type="text/javascript" src="http://w.sharethis.com/widget/sttypepad2.js"></script><script type="text/javascript">var switchTo5x=' + widget5x + ';stTypePad2.init("http://w.sharethis.com/button/buttons.js?publisher=' + pubKey + '&product=sharethis-wordpress", ' + JSON.stringify(jsonButtonList) + ' ' + publisherInfo + ');</script>');
 				jQuery('#typepadSubmit').submit();
 			});
 		},

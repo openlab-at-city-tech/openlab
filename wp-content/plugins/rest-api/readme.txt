@@ -1,9 +1,9 @@
 === WordPress REST API (Version 2) ===
 Contributors: rmccue, rachelbaker, danielbachhuber, joehoyle
 Tags: json, rest, api, rest-api
-Requires at least: 4.4
-Tested up to: 4.5
-Stable tag: 2.0-beta13.1
+Requires at least: 4.6
+Tested up to: 4.7-alpha
+Stable tag: 2.0-beta15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,9 +16,9 @@ This plugin provides an easy to use REST API, available via HTTP. Grab your site
 
 Want to get your site's posts? Simply send a `GET` request to `/wp-json/wp/v2/posts`. Update user with ID 4? Send a `PUT` request to `/wp-json/wp/v2/users/4`. Get all posts with the search term "awesome"? `GET /wp-json/wp/v2/posts?filter[s]=awesome`. It's that easy.
 
-WP API exposes a simple yet easy interface to WP Query, the posts API, post meta API, users API, revisions API and many more. Chances are, if you can do it with WordPress, WP API will let you do it.
+The WordPress REST API exposes a simple yet easy interface to WP Query, the posts API, post meta API, users API, revisions API and many more. Chances are, if you can do it with WordPress, the API will let you do it.
 
-WP API also includes an easy-to-use Javascript API based on Backbone models, allowing plugin and theme developers to get up and running without needing to know anything about the details of getting connected.
+The REST API also includes an easy-to-use JavaScript API based on Backbone models, allowing plugin and theme developers to get up and running without needing to know anything about the details of getting connected.
 
 Check out [our documentation][docs] for information on what's available in the API and how to use it. We've also got documentation on extending the API with extra data for plugin and theme developers!
 
@@ -38,9 +38,59 @@ Once you've installed and activated the plugin, [check out the documentation](ht
 
 == Changelog ==
 
-= 2.0 Beta 13.1 (May 25, 2016) =
+= 2.0 Beta 15.0 (October 07, 2016) =
 
-* SECURITY: Return error when request can't context==edit for users.
+* Introduce support for Post Meta, Term Meta, User Meta, and Comment Meta in
+their parent endpoints.
+
+  For your meta fields to be exposed in the REST API, you need to register
+  them. WordPress includes a `register_meta()` function which is not usually
+  required to get/set fields, but is required for API support.
+
+  To register your field, simply call register_meta and set the show_in_rest
+  flag to true. Note: register_meta must be called separately for each meta
+  key.
+
+  (props @rmccue, @danielbachhuber, @kjbenk, @duncanjbrown, [#2765][gh-2765])
+
+* Introduce Settings endpoint.
+
+  Expose options to the REST API with the `register_setting()` function, by
+  passing `$args = array( 'show_in_rest' => true )`. Note: WordPress 4.7 is
+  required. See changeset [38635][https://core.trac.wordpress.org/changeset/38635].
+
+  (props @joehoyle, @fjarrett, @danielbachhuber, @jonathanbardo,
+  @greatislander, [#2739][gh-2739])
+
+* Attachments controller, change permissions check to match core.
+
+  Check for the `upload_files` capability when creating an attachment.
+
+  (props @nullvariable, @adamsilverstein, [#2743][gh-2743])
+
+* Add `?{taxonomy}_exclude=` query parameter
+
+  This mirrors our existing support for ?{taxonomy}= filtering in the posts
+  controller (which allows querying for only records with are associated with
+  any of the provided term IDs for the specified taxonomy) by adding an
+  equivalent `_exclude` variant to list IDs of terms for which associated posts
+  should NOT be returned.
+
+  (props @kadamwhite, [#2756][gh-2756])
+
+* Use `get_comment_type()` when comparing updating comment status.
+
+  Comments having a empty `comment_type` within WordPress bites us again.
+  Fixes a bug where comments could not be updated because of bad comparison
+  logic.
+
+  (props @joehoyle, [#2753][gh-2753])
+
+[gh-2765]: https://github.com/WP-API/WP-API/issues/2765
+[gh-2739]: https://github.com/WP-API/WP-API/issues/2739
+[gh-2743]: https://github.com/WP-API/WP-API/issues/2743
+[gh-2756]: https://github.com/WP-API/WP-API/issues/2756
+[gh-2753]: https://github.com/WP-API/WP-API/issues/2753
 
 = 2.0 Beta 13.0 (March 29, 2016) =
 

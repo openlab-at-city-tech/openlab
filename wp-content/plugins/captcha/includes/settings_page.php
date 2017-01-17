@@ -228,7 +228,7 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 
 			foreach ( $general_strings as $option ) {
 				$query = "cptch_{$option}";
-				$value = isset( $_REQUEST[ $query ] ) ? esc_html( trim( $_REQUEST[ $query ] ) ) : '';
+				$value = isset( $_REQUEST[ $query ] ) ? trim( stripslashes( esc_html( $_REQUEST[ $query ] ) ) ) : '';
 
 				if ( ! in_array( $option, array( 'title', 'required_symbol' ) ) && empty( $value ) ) {
 					/* The index has been added in order to prevent the displaying of this message more than once */

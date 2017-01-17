@@ -4,7 +4,7 @@
   Plugin Name: CM Tooltip Glossary
   Plugin URI: https://www.cminds.com/
   Description:  Easily create a Glossary, Encyclopedia or Dictionary of your custom terms. Plugin parses posts and pages searching for defined glossary terms and adds links to the glossary term page. Hovering over the link shows a tooltip with the definition.
-  Version: 3.3.7
+  Version: 3.4.4
   Author: CreativeMindsSolutions
   Author URI: https://www.cminds.com/
  */
@@ -17,7 +17,7 @@ if ( !ini_get( 'max_execution_time' ) || ini_get( 'max_execution_time' ) < 300 )
 	ini_set( 'max_execution_time', 300 );
 
 	$disabled = explode( ',', ini_get( 'disable_functions' ) );
-	if ( !in_array( 'set_tim_limit', $disabled ) ) {
+	if ( !in_array( 'set_time_limit', $disabled ) ) {
 		set_time_limit( 300 );
 	}
 }
@@ -199,7 +199,11 @@ class CMTooltipGlossary {
 	}
 
 	public static function _install() {
-		self::__install();
+		self::checkPHPversion();
+
+		CMTooltipGlossaryShared::tryGenerateGlossaryIndexPage();
+		CMTooltipGlossaryShared::tryResetOldOptions();
+		self::_resetOptions();
 	}
 
 	public static function checkPHPversion() {
@@ -214,15 +218,7 @@ class CMTooltipGlossary {
 //        }
 	}
 
-	private static function __install() {
-		self::checkPHPversion();
-
-		CMTooltipGlossaryShared::tryGenerateGlossaryIndexPage();
-		CMTooltipGlossaryShared::tryResetOldOptions();
-		self::__resetOptions();
-	}
-
-	private static function __resetOptions() {
+	private static function _resetOptions() {
 		update_option( 'cmtt_afterActivation', 1 );
 
 		update_option( 'cmtt_tooltipIsClickable', 0 );

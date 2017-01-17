@@ -2397,7 +2397,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 			Registered Post Stati:    <?php echo implode( ', ', get_post_stati() ) . "\n\n"; ?>
 
 			PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
-			MySQL Version:            <?php echo (function_exists( 'mysql_get_server_info' )) ? @mysql_get_server_info() : 'N/A' . "\n"; ?>
+			MySQL Version:            <?php echo (function_exists( 'mysqli_get_server_info' )) ? @mysqli_get_server_info() : 'N/A' . "\n"; ?>
 			Web Server Info:          <?php echo $_SERVER[ 'SERVER_SOFTWARE' ] . "\n"; ?>
 
 			WordPress Memory Limit:   <?php echo WP_MEMORY_LIMIT ?><?php echo "\n"; ?>

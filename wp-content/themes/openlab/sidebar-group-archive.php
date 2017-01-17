@@ -33,28 +33,24 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     } else {
         $school_color = "active";
     }
-    switch ($_GET['school']) {
-        case "tech":
-            $display_option_school = "Technology & Design";
-            $option_value_school = "tech";
-            break;
-        case "studies":
-            $display_option_school = "Professional Studies";
-            $option_value_school = "studies";
-            break;
-        case "arts":
-            $display_option_school = "Arts & Sciences";
-            $option_value_school = "arts";
-            break;
-        case "school_all":
-            $display_option_school = "All";
-            $option_value_school = "school_all";
-            break;
-        default:
-            $display_option_school = "Select School";
-            $option_value_school = "";
-            break;
-    }
+
+	$schools = openlab_get_school_list();
+	switch ( $_GET['school'] ) {
+		case 'school_all':
+			$display_option_school = 'All';
+			$option_value_school = 'school_all';
+			break;
+
+		default :
+			if ( isset( $schools[ $_GET['school'] ] ) ) {
+				$display_option_school = $schools[ $_GET['school'] ];
+				$option_value_school = $_GET['school'];
+			} else {
+				$display_option_school = 'Select School';
+				$option_value_school = '';
+			}
+	}
+
 //processing the department value - now dynamic instead of a switch statement
     if (empty($_GET['department'])) {
         $display_option_dept = "Select Department";
@@ -167,9 +163,9 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                     <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
                         <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
-                        <option value='tech' <?php selected('tech', $option_value_school) ?>>Technology &amp; Design</option>
-                        <option value='studies' <?php selected('studies', $option_value_school) ?>>Professional Studies</option>
-                        <option value='arts' <?php selected('arts', $option_value_school) ?>>Arts & Sciences</option>
+			<?php foreach ( $schools as $school_key => $school_label ) : ?>
+				<option value='<?php echo esc_attr( $school_key ); ?>' <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $school_label ); ?></option>
+			<?php endforeach; ?>
                     </select>
                 </div>
 

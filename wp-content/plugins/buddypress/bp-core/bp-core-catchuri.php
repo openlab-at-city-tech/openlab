@@ -218,7 +218,7 @@ function bp_core_set_uri_globals() {
 		/**
 		 * Filter the portion of the URI that is the displayed user's slug.
 		 *
-		 * eg. example.com/ADMIN (when root profiles is enabled)
+		 * Eg. example.com/ADMIN (when root profiles is enabled)
 		 *     example.com/members/ADMIN (when root profiles isn't enabled)
 		 *
 		 * ADMIN would be the displayed user's slug.
@@ -553,16 +553,18 @@ function bp_core_catch_profile_uri() {
  * @since 2.6.0
  *
  * @param string $member_slug The current member slug.
+ * @return string $member_slug The current member slug.
  */
 function bp_core_members_shortlink_redirector( $member_slug ) {
+
 	/**
 	 * Shortlink slug to redirect to logged-in user.
 	 *
-	 * x.com/members/me/* will redirect to x.com/members/{LOGGED_IN_USER_SLUG}/*
+	 * The x.com/members/me/* url will redirect to x.com/members/{LOGGED_IN_USER_SLUG}/*
 	 *
 	 * @since 2.6.0
 	 *
-	 * @var string $slug Defaults to 'me'.
+	 * @param string $slug Defaults to 'me'.
 	 */
 	$me_slug = apply_filters( 'bp_core_members_shortlink_slug', 'me' );
 
@@ -635,9 +637,9 @@ function bp_core_no_access( $args = '' ) {
 	$redirect_url .= $_SERVER['REQUEST_URI'];
 
 	$defaults = array(
-		'mode'     => 2,                    // 1 = $root, 2 = wp-login.php
-		'redirect' => $redirect_url,        // the URL you get redirected to when a user successfully logs in
-		'root'     => bp_get_root_domain(),	// the landing page you get redirected to when a user doesn't have access
+		'mode'     => 2,                    // 1 = $root, 2 = wp-login.php.
+		'redirect' => $redirect_url,        // the URL you get redirected to when a user successfully logs in.
+		'root'     => bp_get_root_domain(), // the landing page you get redirected to when a user doesn't have access.
 		'message'  => __( 'You must log in to access the page you requested.', 'buddypress' )
 	);
 
@@ -654,7 +656,7 @@ function bp_core_no_access( $args = '' ) {
 	extract( $r, EXTR_SKIP );
 
 	/*
-	 * @ignore Ignore these filters and use 'bp_core_no_access' above
+	 * @ignore Ignore these filters and use 'bp_core_no_access' above.
 	 */
 	$mode     = apply_filters( 'bp_no_access_mode',     $mode,     $root,     $redirect, $message );
 	$redirect = apply_filters( 'bp_no_access_redirect', $redirect, $root,     $message,  $mode    );
@@ -664,7 +666,7 @@ function bp_core_no_access( $args = '' ) {
 
 	switch ( $mode ) {
 
-		// Option to redirect to wp-login.php
+		// Option to redirect to wp-login.php.
 		// Error message is displayed with bp_core_no_access_wp_login_error().
 		case 2 :
 			if ( !empty( $redirect ) ) {
@@ -675,7 +677,7 @@ function bp_core_no_access( $args = '' ) {
 
 			break;
 
-		// Redirect to root with "redirect_to" parameter
+		// Redirect to root with "redirect_to" parameter.
 		// Error message is displayed with bp_core_add_message().
 		case 1 :
 		default :
@@ -696,16 +698,18 @@ function bp_core_no_access( $args = '' ) {
 }
 
 /**
- * Add an error message to wp-login.php.
- *
- * Hooks into the "bpnoaccess" action defined in bp_core_no_access().
+ * Add a custom BuddyPress no access error message to wp-login.php.
  *
  * @since 1.5.0
+ * @since 2.7.0 Hook moved to 'wp_login_errors' made available since WP 3.6.0.
  *
- * @global string $error Error message to pass to wp-login.php.
+ * @param  WP_Error $errors Current error container.
+ * @return WP_Error
  */
-function bp_core_no_access_wp_login_error() {
-	global $error;
+function bp_core_no_access_wp_login_error( $errors ) {
+	if ( empty( $_GET['action'] ) || 'bpnoaccess' !== $_GET['action'] ) {
+		return $errors;
+	}
 
 	/**
 	 * Filters the error message for wp-login.php when needing to log in before accessing.
@@ -715,12 +719,27 @@ function bp_core_no_access_wp_login_error() {
 	 * @param string $value Error message to display.
 	 * @param string $value URL to redirect user to after successful login.
 	 */
-	$error = apply_filters( 'bp_wp_login_error', __( 'You must log in to access the page you requested.', 'buddypress' ), $_REQUEST['redirect_to'] );
+	$message = apply_filters( 'bp_wp_login_error', __( 'You must log in to access the page you requested.', 'buddypress' ), $_REQUEST['redirect_to'] );
 
-	// Shake shake shake!.
-	add_action( 'login_head', 'wp_shake_js', 12 );
+	$errors->add( 'bp_no_access', $message );
+
+	return $errors;
 }
-add_action( 'login_form_bpnoaccess', 'bp_core_no_access_wp_login_error' );
+add_filter( 'wp_login_errors', 'bp_core_no_access_wp_login_error' );
+
+/**
+ * Add our custom error code to WP login's shake error codes.
+ *
+ * @since 2.7.0
+ *
+ * @param  array $codes Array of WP error codes.
+ * @return array
+ */
+function bp_core_login_filter_shake_codes( $codes ) {
+	$codes[] = 'bp_no_access';
+	return $codes;
+}
+add_filter( 'shake_error_codes', 'bp_core_login_filter_shake_codes' );
 
 /**
  * Canonicalize BuddyPress URLs.
@@ -939,7 +958,6 @@ function bp_get_requested_url() {
  * notice in future versions of BuddyPress.
  *
  * @since 1.6.0
- *
  */
 function _bp_maybe_remove_redirect_canonical() {
 	if ( ! bp_is_blog_page() )
@@ -997,3 +1015,36 @@ function _bp_maybe_remove_rel_canonical() {
 	}
 }
 add_action( 'wp_head', '_bp_maybe_remove_rel_canonical', 8 );
+
+/**
+ * Stop WordPress performing a DB query for its main loop.
+ *
+ * As of WordPress 4.6, it is possible to bypass the main WP_Query entirely.
+ * This saves us one unnecessary database query! :)
+ *
+ * @since 2.7.0
+ *
+ * @param  null     $retval Current return value for filter.
+ * @param  WP_Query $query  Current WordPress query object.
+ * @return null|array
+ */
+function bp_core_filter_wp_query( $retval, $query ) {
+	if ( ! $query->is_main_query() ) {
+		return $retval;
+	}
+
+	/*
+	 * If not on a BP single page, bail.
+	 * Too early to use bp_is_single_item(), so use BP conditionals.
+	 */
+	if ( false === ( bp_is_group() || bp_is_user() || bp_is_single_activity() ) ) {
+		return $retval;
+	}
+
+	// Set default properties as recommended in the 'posts_pre_query' DocBlock.
+	$query->found_posts   = 0;
+	$query->max_num_pages = 0;
+
+	// Return something other than a null value to bypass WP_Query.
+	return array();
+}

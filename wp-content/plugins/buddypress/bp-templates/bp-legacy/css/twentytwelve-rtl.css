@@ -770,6 +770,10 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	font-size: 0.8571428571rem;
 }
 
+#buddypress #activity-stream .activity-comments a {
+	color: #737373;
+}
+
 #buddypress #activity-stream .activity-comments .ac-form {
 	border: 1px solid #d4d0ba;
 	box-sizing: border-box;
@@ -949,7 +953,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	.single-item.groups #buddypress div#item-header #item-actions {
 		order: 3;
 	}
-	.single-item.groups #buddypress div#item-header #item-actions h3 {
+	.single-item.groups #buddypress div#item-header #item-actions h2 {
 		border-bottom: 1px solid #eaeaea;
 		text-align: center;
 	}
@@ -991,7 +995,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	padding-right: 0;
 }
 
-.single-item.groups #buddypress div#item-header div#item-actions h3 {
+.single-item.groups #buddypress div#item-header div#item-actions h2 {
 	font-size: 14px;
 	font-size: 1rem;
 	padding: 0.2em;
@@ -1043,7 +1047,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 		padding-top: 0 !important;
 		width: auto;
 	}
-	.single-item.groups #buddypress #cover-image-container #item-header-cover-image #item-actions h3 {
+	.single-item.groups #buddypress #cover-image-container #item-header-cover-image #item-actions h2 {
 		border-bottom: 1px solid #eaeaea;
 	}
 }
@@ -1105,7 +1109,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 * @subsection 6.2.1.1 - Group Management
 *-----------------------------------------
 */
-.groups #group-settings-form h4 {
+.groups #group-settings-form h3 {
 	background: #555;
 	color: #fff;
 	padding: 0.2em;
@@ -1323,7 +1327,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	/* Edit profile */
 }
 
-.bp-user #buddypress .profile .bp-widget h4 {
+.bp-user #buddypress .profile .bp-widget h2 {
 	background: #6f6f6f;
 	color: #fff;
 	margin-bottom: 0;
@@ -1385,7 +1389,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	-ms-border-radius: 2px;
 	border-radius: 2px;
 	background-clip: padding-box;
-	color: #eee;
+	color: #f1f1f1;
 	font-weight: bold;
 	padding: 0.1em 0.5em;
 	text-decoration: none;

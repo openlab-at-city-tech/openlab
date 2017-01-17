@@ -64,7 +64,7 @@ function sharing_email_check_for_spam_via_akismet( $data ) {
 }
 
 function sharing_email_send_post_content( $data ) {
-	/* translators: included in e-mail when post is shared via e-mail. First item is sender's name. Second is sender's e-mail address. */
+	/* translators: included in email when post is shared via email. First item is sender's name. Second is sender's email address. */
 	$content  = sprintf( __( '%1$s (%2$s) thinks you may be interested in the following post:', 'jetpack' ), $data['name'], $data['source'] );
 	$content .= "\n\n";
 	$content .= $data['post']->post_title."\n";
@@ -200,7 +200,7 @@ function sharing_restrict_to_single( $services ) {
 }
 
 function sharing_init() {
-	if ( get_option( 'sharedaddy_disable_resources' ) ) {
+	if ( Jetpack_Options::get_option_and_ensure_autoload( 'sharedaddy_disable_resources', '0' ) ) {
 		add_filter( 'sharing_js', 'sharing_disable_js' );
 		remove_action( 'wp_head', 'sharing_add_header', 1 );
 	}

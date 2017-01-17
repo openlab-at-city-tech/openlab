@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 3.0
-Tested up to: 4.6.1
+Tested up to: 4.7
 Stable tag: stable
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -58,6 +58,17 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 5.9.13.15 =
+* Fix to use moderator e-mail for link submission notification
+
+= 5.9.13.14 =
+* Fixed issue with search not working when using Basic permalinks (e.g. website.com/?page_id=4)
+* Fixed issue with cat alpha filter and pagination landing on pages that don't exist
+
+= 5.9.13.13 =
+* Updated constructors for RSS Genesis and Captcha classes to use __construct instead of PHP 4 style constructors
+* Added field to user submission config to add content to initial e-mail sent to link submitters
 
 = 5.9.13.12 =
 * Set initial value of user-submission URL fields to http://

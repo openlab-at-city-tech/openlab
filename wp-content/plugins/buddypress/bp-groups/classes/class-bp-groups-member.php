@@ -185,18 +185,18 @@ class BP_Groups_Member {
 		$member = $wpdb->get_row($sql);
 
 		if ( !empty( $member ) ) {
-			$this->id            = $member->id;
-			$this->group_id      = $member->group_id;
-			$this->user_id       = $member->user_id;
-			$this->inviter_id    = $member->inviter_id;
-			$this->is_admin      = $member->is_admin;
-			$this->is_mod        = $member->is_mod;
-			$this->is_banned     = $member->is_banned;
+			$this->id            = (int) $member->id;
+			$this->group_id      = (int) $member->group_id;
+			$this->user_id       = (int) $member->user_id;
+			$this->inviter_id    = (int) $member->inviter_id;
+			$this->is_admin      = (int) $member->is_admin;
+			$this->is_mod        = (int) $member->is_mod;
+			$this->is_banned     = (int) $member->is_banned;
 			$this->user_title    = $member->user_title;
 			$this->date_modified = $member->date_modified;
-			$this->is_confirmed  = $member->is_confirmed;
+			$this->is_confirmed  = (int) $member->is_confirmed;
 			$this->comments      = $member->comments;
-			$this->invite_sent   = $member->invite_sent;
+			$this->invite_sent   = (int) $member->invite_sent;
 
 			$this->user = new BP_Core_User( $this->user_id );
 		}
@@ -678,7 +678,7 @@ class BP_Groups_Member {
 
 		if ( $limit && $page ) {
 			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit ), intval( $limit ) );
-	  }
+		}
 
 		if ( $filter ) {
 			$search_terms_like = '%' . bp_esc_like( $filter ) . '%';
@@ -786,7 +786,7 @@ class BP_Groups_Member {
 	 * @param int    $group_id ID of the group.
 	 * @param string $type     If 'sent', results are limited to those invitations
 	 *                         that have actually been sent (non-draft). Default: 'sent'.
-	 * @return int|null The ID of the invitation if found, otherwise null.
+	 * @return int|null The ID of the invitation if found; null if not found.
 	 */
 	public static function check_has_invite( $user_id, $group_id, $type = 'sent' ) {
 		global $wpdb;
@@ -800,7 +800,9 @@ class BP_Groups_Member {
 		if ( 'sent' == $type )
 			$sql .= " AND invite_sent = 1";
 
-		return $wpdb->get_var( $wpdb->prepare( $sql, $user_id, $group_id ) );
+		$query = $wpdb->get_var( $wpdb->prepare( $sql, $user_id, $group_id ) );
+
+		return is_numeric( $query ) ? (int) $query : $query;
 	}
 
 	/**
@@ -931,7 +933,8 @@ class BP_Groups_Member {
 	 *
 	 * @param int $user_id  ID of the user.
 	 * @param int $group_id ID of the group.
-	 * @return mixed
+	 * @return int|null int 1 if user is banned; int 0 if user is not banned;
+	 *                  null if user is not part of the group or if group doesn't exist.
 	 */
 	public static function check_is_banned( $user_id, $group_id ) {
 		global $wpdb;
@@ -941,7 +944,9 @@ class BP_Groups_Member {
 
 		$bp = buddypress();
 
-		return $wpdb->get_var( $wpdb->prepare( "SELECT is_banned FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id = %d", $user_id, $group_id ) );
+		$query = $wpdb->get_var( $wpdb->prepare( "SELECT is_banned FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id = %d", $user_id, $group_id ) );
+
+		return is_numeric( $query ) ? (int) $query : $query;
 	}
 
 	/**
@@ -951,8 +956,7 @@ class BP_Groups_Member {
 	 *
 	 * @param int $user_id  ID of the user.
 	 * @param int $group_id ID of the group.
-	 * @return int|null ID of the group if the user is the creator,
-	 *                  otherwise false.
+	 * @return int|null int of group ID if user is the creator; null on failure.
 	 */
 	public static function check_is_creator( $user_id, $group_id ) {
 		global $wpdb;
@@ -962,7 +966,9 @@ class BP_Groups_Member {
 
 		$bp = buddypress();
 
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE creator_id = %d AND id = %d", $user_id, $group_id ) );
+		$query = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE creator_id = %d AND id = %d", $user_id, $group_id ) );
+
+		return is_numeric( $query ) ? (int) $query : $query;
 	}
 
 	/**
@@ -972,7 +978,7 @@ class BP_Groups_Member {
 	 *
 	 * @param int $user_id  ID of the user.
 	 * @param int $group_id ID of the group.
-	 * @return int|null ID of the membership if found, otherwise false.
+	 * @return int Database ID of the membership if found; int 0 on failure.
 	 */
 	public static function check_for_membership_request( $user_id, $group_id ) {
 		global $wpdb;
@@ -1001,9 +1007,9 @@ class BP_Groups_Member {
 
 		// If the user is logged in and viewing their random groups, we can show hidden and private groups.
 		if ( bp_is_my_profile() ) {
-			return $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT group_id FROM {$bp->groups->table_name_members} WHERE user_id = %d AND is_confirmed = 1 AND is_banned = 0 ORDER BY rand() LIMIT %d", $user_id, $total_groups ) );
+			return array_map( 'intval', $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT group_id FROM {$bp->groups->table_name_members} WHERE user_id = %d AND is_confirmed = 1 AND is_banned = 0 ORDER BY rand() LIMIT %d", $user_id, $total_groups ) ) );
 		} else {
-			return $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT m.group_id FROM {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE m.group_id = g.id AND g.status != 'hidden' AND m.user_id = %d AND m.is_confirmed = 1 AND m.is_banned = 0 ORDER BY rand() LIMIT %d", $user_id, $total_groups ) );
+			return array_map( 'intval', $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT m.group_id FROM {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE m.group_id = g.id AND g.status != 'hidden' AND m.user_id = %d AND m.is_confirmed = 1 AND m.is_banned = 0 ORDER BY rand() LIMIT %d", $user_id, $total_groups ) ) );
 		}
 	}
 
@@ -1020,7 +1026,7 @@ class BP_Groups_Member {
 
 		$bp = buddypress();
 
-		return $wpdb->get_col( $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_confirmed = 1 AND is_banned = 0", $group_id ) );
+		return array_map( 'intval', $wpdb->get_col( $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_confirmed = 1 AND is_banned = 0", $group_id ) ) );
 	}
 
 	/**
@@ -1037,13 +1043,60 @@ class BP_Groups_Member {
 		$group_admins = wp_cache_get( $group_id, 'bp_group_admins' );
 
 		if ( false === $group_admins ) {
-			$bp = buddypress();
-			$group_admins = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, date_modified FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_admin = 1 AND is_banned = 0", $group_id ) );
+			self::prime_group_admins_mods_cache( array( $group_id ) );
+			$group_admins = wp_cache_get( $group_id, 'bp_group_admins' );
+		}
 
-			wp_cache_set( $group_id, $group_admins, 'bp_group_admins' );
+		// Integer casting.
+		foreach ( (array) $group_admins as $key => $data ) {
+			$group_admins[ $key ]->user_id = (int) $group_admins[ $key ]->user_id;
 		}
 
 		return $group_admins;
+	}
+
+	/**
+	 * Prime the bp_group_admins cache for one or more groups.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array $group_ids IDs of the groups.
+	 * @return bool True on success.
+	 */
+	public static function prime_group_admins_mods_cache( $group_ids ) {
+		global $wpdb;
+
+		$uncached = bp_get_non_cached_ids( $group_ids, 'bp_group_admins' );
+
+		if ( $uncached ) {
+			$bp = buddypress();
+			$uncached_sql = implode( ',', array_map( 'intval', $uncached ) );
+			$group_admin_mods = $wpdb->get_results( "SELECT user_id, group_id, date_modified, is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE group_id IN ({$uncached_sql}) AND ( is_admin = 1 OR is_mod = 1 ) AND is_banned = 0" );
+
+			$admins = $mods = array();
+			if ( $group_admin_mods ) {
+				foreach ( $group_admin_mods as $group_admin_mod ) {
+					$obj = new stdClass();
+					$obj->user_id = $group_admin_mod->user_id;
+					$obj->date_modified = $group_admin_mod->date_modified;
+
+					if ( $group_admin_mod->is_admin ) {
+						$admins[ $group_admin_mod->group_id ][] = $obj;
+					} else {
+						$mods[ $group_admin_mod->group_id ][] = $obj;
+					}
+				}
+			}
+
+			// Prime cache for all groups, even those with no matches.
+			foreach ( $uncached as $group_id ) {
+				$group_admins = isset( $admins[ $group_id ] ) ? $admins[ $group_id ] : array();
+				wp_cache_set( $group_id, $group_admins, 'bp_group_admins' );
+
+				$group_mods = isset( $mods[ $group_id ] ) ? $mods[ $group_id ] : array();
+				wp_cache_set( $group_id, $group_mods, 'bp_group_mods' );
+			}
+		}
 	}
 
 	/**
@@ -1057,9 +1110,19 @@ class BP_Groups_Member {
 	public static function get_group_moderator_ids( $group_id ) {
 		global $wpdb;
 
-		$bp = buddypress();
+		$group_mods = wp_cache_get( $group_id, 'bp_group_mods' );
 
-		return $wpdb->get_results( $wpdb->prepare( "SELECT user_id, date_modified FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_mod = 1 AND is_banned = 0", $group_id ) );
+		if ( false === $group_mods ) {
+			self::prime_group_admins_mods_cache( array( $group_id ) );
+			$group_mods = wp_cache_get( $group_id, 'bp_group_mods' );
+		}
+
+		// Integer casting.
+		foreach ( (array) $group_mods as $key => $data ) {
+			$group_mods[ $key ]->user_id = (int) $group_mods[ $key ]->user_id;
+		}
+
+		return $group_mods;
 	}
 
 	/**
@@ -1092,7 +1155,7 @@ class BP_Groups_Member {
 
 		$bp = buddypress();
 
-		return $wpdb->get_col( $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_confirmed = 0 AND inviter_id = 0", $group_id ) );
+		return array_map( 'intval', $wpdb->get_col( $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_confirmed = 0 AND inviter_id = 0", $group_id ) ) );
 	}
 
 	/**

@@ -52,16 +52,12 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 
 		echo '<div class="qm qm-queries" id="' . esc_attr( $this->collector->id() ) . '-wpdb">';
 		echo '<table cellspacing="0">';
-		echo '<thead>';
-		echo '<tr>';
-		echo '<th>' . esc_html__( 'Database Queries', 'query-monitor' ) . '</th>';
-		echo '</tr>';
-		echo '</thead>';
+		echo '<caption>' . esc_html( $this->collector->name() ) . '</caption>';
 		echo '<tbody>';
 		echo '<tr>';
 		echo '<td class="qm-warn">';
 		/* translators: 1: Name of PHP constant, 2: Value of PHP constant */
-		printf( esc_html__( 'No database queries were logged because the %s constant is set to %s', 'query-monitor' ),
+		printf( esc_html__( 'No database queries were logged because the %1$s constant is set to %2$s', 'query-monitor' ),
 			'<code>SAVEQUERIES</code>',
 			'<code>false</code>'
 		);
@@ -77,15 +73,13 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 
 		echo '<div class="qm qm-queries" id="qm-query-errors">';
 		echo '<table cellspacing="0">';
+		echo '<caption>' . esc_html__( 'Database Errors', 'query-monitor' ) . '</caption>';
 		echo '<thead>';
 		echo '<tr>';
-		echo '<th colspan="4">' . esc_html__( 'Database Errors', 'query-monitor' ) . '</th>';
-		echo '</tr>';
-		echo '<tr>';
-		echo '<th>' . esc_html__( 'Query', 'query-monitor' ) . '</th>';
-		echo '<th>' . esc_html__( 'Call Stack', 'query-monitor' ) . '</th>';
-		echo '<th>' . esc_html__( 'Component', 'query-monitor' ) . '</th>';
-		echo '<th>' . esc_html__( 'Error', 'query-monitor' ) . '</th>';
+		echo '<th scope="col">' . esc_html__( 'Query', 'query-monitor' ) . '</th>';
+		echo '<th scope="col">' . esc_html__( 'Call Stack', 'query-monitor' ) . '</th>';
+		echo '<th scope="col">' . esc_html__( 'Component', 'query-monitor' ) . '</th>';
+		echo '<th scope="col">' . esc_html__( 'Error', 'query-monitor' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
@@ -106,15 +100,13 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 
 		echo '<div class="qm qm-queries" id="qm-query-expensive">';
 		echo '<table cellspacing="0">';
-		echo '<thead>';
-		echo '<tr>';
-		echo '<th colspan="5" class="qm-expensive">';
+		echo '<caption>';
 		/* translators: %s: Database query time in seconds */
 		printf( esc_html__( 'Slow Database Queries (above %ss)', 'query-monitor' ),
 			'<span class="qm-expensive">' . esc_html( number_format_i18n( QM_DB_EXPENSIVE, $dp ) ) . '</span>'
 		);
-		echo '</th>';
-		echo '</tr>';
+		echo '</caption>';
+		echo '<thead>';
 		echo '<tr>';
 		echo '<th scope="col">' . esc_html__( 'Query', 'query-monitor' ) . '</th>';
 		echo '<th scope="col">' . esc_html__( 'Caller', 'query-monitor' ) . '</th>';
@@ -127,7 +119,7 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			echo '<th scope="col" class="qm-num">' . esc_html__( 'Rows', 'query-monitor' ) . '</th>';
 		}
 
-		echo '<th class="qm-num">' . esc_html__( 'Time', 'query-monitor' ) . '</th>';
+		echo '<th scope="col" class="qm-num">' . esc_html__( 'Time', 'query-monitor' ) . '</th>';
 		echo '</tr>';
 		echo '</thead>';
 		echo '<tbody>';
@@ -155,11 +147,9 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 
 		echo '<div class="qm qm-queries" id="' . esc_attr( $this->collector->id() . '-' . sanitize_title_with_dashes( $name ) ) . '">';
 		echo '<table cellspacing="0" class="qm-sortable">';
-		echo '<thead>';
-		echo '<tr>';
 		/* translators: %s: Name of database controller */
-		echo '<th colspan="' . absint( $span ) . '">' . esc_html( sprintf( __( '%s Queries', 'query-monitor' ), $name ) ) . '</th>';
-		echo '</tr>';
+		echo '<caption>' . esc_html( sprintf( __( '%s Queries', 'query-monitor' ), $name ) ) . '</caption>';
+		echo '<thead>';
 
 		if ( !empty( $db->rows ) ) {
 
@@ -174,9 +164,15 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			if ( apply_filters( 'qm/show_extended_query_prompt', true ) && ! $db->has_trace && ( '$wpdb' === $name ) ) {
 				echo '<tr>';
 				echo '<td colspan="' . absint( $span ) . '" class="qm-warn">';
-				echo wp_kses( sprintf(
+				if ( file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
 					/* translators: 1: Symlink file name, 2: URL to wiki page */
-					__( 'Extended query information such as the component and affected rows is not available. Query Monitor was unable to symlink its %1$s file into place. <a href="%2$s" target="_blank">See this wiki page for more information.</a>', 'query-monitor' ),
+					$message = __( 'Extended query information such as the component and affected rows is not available. A conflicting %1$s file is present. <a href="%2$s" target="_blank">See this wiki page for more information.</a>', 'query-monitor' );
+				} else {
+					/* translators: 1: Symlink file name, 2: URL to wiki page */
+					$message = __( 'Extended query information such as the component and affected rows is not available. Query Monitor was unable to symlink its %1$s file into place. <a href="%2$s" target="_blank">See this wiki page for more information.</a>', 'query-monitor' );	
+				}
+				echo wp_kses( sprintf(
+					$message,
 					'<code>db.php</code>',
 					'https://github.com/johnbillion/query-monitor/wiki/db.php-Symlink'
 				), array(
@@ -362,22 +358,23 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 		}
 
 		if ( isset( $cols['caller'] ) ) {
-			echo "<td class='qm-row-caller qm-ltr qm-has-toggle qm-nowrap'><div class='qm-toggler'>";
+			echo "<td class='qm-row-caller qm-ltr qm-has-toggle qm-nowrap'><ol class='qm-toggler'>";
 
-			echo $caller_name; // WPCS: XSS ok.
+			echo "<li>{$caller_name}</li>"; // WPCS: XSS ok.
 
 			if ( ! empty( $stack ) ) {
 				echo '<button class="qm-toggle" data-on="+" data-off="-">+</button>';
-				echo '<div class="qm-toggled">' . implode( '<br>', $stack ) . '</div>'; // WPCS: XSS ok.
+				echo '<div class="qm-toggled"><li>' . implode( '</li><li>', $stack ) . '</li></div>'; // WPCS: XSS ok.
 			}
 
-			echo '</div></td>';
+			echo '</ol></td>';
 		}
 
 		if ( isset( $cols['stack'] ) ) {
-			echo '<td class="qm-row-caller qm-row-stack qm-nowrap qm-ltr">';
-			echo $caller_name; // WPCS: XSS ok.
-			echo '<br>' . implode( '<br>', $stack ) . '</td>'; // WPCS: XSS ok.
+			echo '<td class="qm-row-caller qm-row-stack qm-nowrap qm-ltr"><ol>';
+			echo "<li>{$caller_name}</li>"; // WPCS: XSS ok.
+			echo '<li>' . implode( '</li><li>', $stack ) . '</li>'; // WPCS: XSS ok.
+			echo '</ol></td>';
 		}
 
 		if ( isset( $cols['component'] ) ) {
@@ -413,17 +410,22 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			foreach ( $data['dbs'] as $key => $db ) {
 				$title[] = sprintf(
 					/* translators: %s: Database query time in seconds */
-					'%s' . _x( '%s<small>S</small>', 'Query time', 'query-monitor' ),
+					'%s' . esc_html_x( '%s S', 'Query time', 'query-monitor' ),
 					( count( $data['dbs'] ) > 1 ? '&bull;&nbsp;&nbsp;&nbsp;' : '' ),
 					number_format_i18n( $db->total_time, 4 )
 				);
 				$title[] = sprintf(
 					/* translators: %s: Number of database queries */
-					_x( '%s<small>Q</small>', 'Query count', 'query-monitor' ),
+					esc_html_x( '%s Q', 'Query count', 'query-monitor' ),
 					number_format_i18n( $db->total_qs )
 				);
 			}
 		}
+
+		foreach ( $title as &$t ) {
+			$t = preg_replace( '#\s?([^0-9,\.]+)#', '<small>$1</small>', $t );
+		}
+
 		return $title;
 	}
 
