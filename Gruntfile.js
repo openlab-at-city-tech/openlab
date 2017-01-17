@@ -1,9 +1,20 @@
 module.exports = function (grunt) {
+
+    var checkFilePath = function ( filepath ) {
+        if ( ! grunt.file.exists( filepath ) ) {
+            grunt.fail.warn( 'Could not find: ' + filepath );
+        } else {
+            return true;
+        }
+    }
+
     require('jit-grunt')(grunt);
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             buddypress: {
+	        filter: checkFilePath,
+	        nonull: true,
                 options: {
                     separator: ';'
                 },
@@ -22,6 +33,8 @@ module.exports = function (grunt) {
                 dest: 'wp-content/js/buddypress.js'
             },
 	    smoothscroll: {
+	        filter: checkFilePath,
+	        nonull: true,
                 options: {
                     separator: ';'
                 },
@@ -36,6 +49,8 @@ module.exports = function (grunt) {
 		dest: 'wp-content/js/smoothscroll.js'
 	    },
 	    rootblogcss: {
+	        filter: checkFilePath,
+	        nonull: true,
                 options: {
                     separator: "\n"
                 },
