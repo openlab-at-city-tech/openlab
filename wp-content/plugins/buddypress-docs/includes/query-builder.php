@@ -158,7 +158,8 @@ class BP_Docs_Query {
 		$this->item_type_term_id = apply_filters( 'bp_docs_get_item_type_term_id', $item_type_term['term_id'], $this );
 
 		// Now, find the term associated with the item itself
-		$item_term = term_exists( $this->item_id, $this->associated_item_tax_name, $this->item_type_term_id );
+		// The string casting ensures that the lookup is against the Name field.
+		$item_term = term_exists( (string) $this->item_id, $this->associated_item_tax_name, $this->item_type_term_id );
 
 		// If the item term doesn't exist, then create it
 		if ( empty( $item_term ) ) {
