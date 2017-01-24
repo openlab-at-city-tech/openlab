@@ -439,3 +439,13 @@ function openlab_force_doc_comments_open( $open, $post_id ) {
 	return $open;
 }
 add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
+
+/**
+ * Group slug blacklist.
+ */
+function openlab_forbidden_group_names( $names ) {
+	$names[] = 'thebuzz';
+	$names[] = 'the-buzz';
+	return $names;
+}
+add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
