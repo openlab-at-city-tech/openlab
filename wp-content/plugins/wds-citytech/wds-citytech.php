@@ -2276,3 +2276,13 @@ function openlab_email_from_name_filter() {
 	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
 }
 add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
+
+/**
+ * Group slug blacklist.
+ */
+function openlab_forbidden_group_names( $names ) {
+	$names[] = 'thebuzz';
+	$names[] = 'the-buzz';
+	return $names;
+}
+add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
