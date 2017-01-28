@@ -2033,12 +2033,12 @@ function openlab_ds_login_header() {
 				<?php
 }
 
-			/**
-			 * Group member portfolio list widget
-			 *
-			 * This function is here (rather than includes/portfolios.php) because it needs
-			 * to run at 'widgets_init'.
-			 */
+/**
+ * Group member portfolio list widget
+ *
+ * This function is here (rather than includes/portfolios.php) because it needs
+ * to run at 'widgets_init'.
+ */
 class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 	public function __construct() {
@@ -2131,7 +2131,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 			</select>
 					</p>
 
-					<?php
+		<?php
 	}
 
 	protected function enqueue_scripts() {
@@ -2155,21 +2155,19 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 		</script>
 		<?php
 	}
-
 }
 
-			/**
-			 * Register the Course Portfolios widget
-			 */
+/**
+ * Register the Course Portfolios widget
+ */
 function openlab_register_portfolios_widget() {
 	register_widget( 'OpenLab_Course_Portfolios_Widget' );
 }
+add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
 
-			add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
-
-			/**
-			 * Utility function for getting the xprofile exclude groups for a given account type
-			 */
+/**
+ * Utility function for getting the xprofile exclude groups for a given account type
+ */
 function openlab_get_exclude_groups_for_account_type( $type ) {
 	global $wpdb, $bp;
 	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
@@ -2196,16 +2194,16 @@ function openlab_get_exclude_groups_for_account_type( $type ) {
 	return implode( ',', $exclude_groups );
 }
 
-			/**
-			 * Flush rewrite rules when a blog is created.
-			 *
-			 * There's a bug in WP that causes rewrite rules to be flushed before
-			 * taxonomies have been registered. As a result, tag and category archive links
-			 * do not work. Here we work around the issue by hooking into blog creation,
-			 * registering the taxonomies, and forcing another rewrite flush.
-			 *
-			 * See https://core.trac.wordpress.org/ticket/20171, http://openlab.citytech.cuny.edu/redmine/issues/1054
-			 */
+/**
+ * Flush rewrite rules when a blog is created.
+ *
+ * There's a bug in WP that causes rewrite rules to be flushed before
+ * taxonomies have been registered. As a result, tag and category archive links
+ * do not work. Here we work around the issue by hooking into blog creation,
+ * registering the taxonomies, and forcing another rewrite flush.
+ *
+ * See https://core.trac.wordpress.org/ticket/20171, http://openlab.citytech.cuny.edu/redmine/issues/1054
+ */
 function openlab_flush_rewrite_rules( $blog_id ) {
 	switch_to_blog( $blog_id );
 	create_initial_taxonomies();
@@ -2213,16 +2211,15 @@ function openlab_flush_rewrite_rules( $blog_id ) {
 	update_option( 'openlab_rewrite_rules_flushed', 1 );
 	restore_current_blog();
 }
+add_action( 'wpmu_new_blog', 'openlab_flush_rewrite_rules', 9999 );
 
-			add_action( 'wpmu_new_blog', 'openlab_flush_rewrite_rules', 9999 );
-
-			/**
-			 * Lazyloading rewrite rules repairer.
-			 *
-			 * Repairs the damage done by WP's buggy rewrite rules generator for new blogs.
-			 *
-			 * See openlab_flush_rewrite_rules().
-			 */
+/**
+ * Lazyloading rewrite rules repairer.
+ *
+ * Repairs the damage done by WP's buggy rewrite rules generator for new blogs.
+ *
+ * See openlab_flush_rewrite_rules().
+ */
 function openlab_lazy_flush_rewrite_rules() {
 	// We load late, so taxonomies should be created by now
 	if ( ! get_option( 'openlab_rewrite_rules_flushed' ) ) {
@@ -2230,24 +2227,22 @@ function openlab_lazy_flush_rewrite_rules() {
 		update_option( 'openlab_rewrite_rules_flushed', 1 );
 	}
 }
+add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
 
-			add_action( 'init', 'openlab_lazy_flush_rewrite_rules', 9999 );
-
-			/**
-			 * Whitelist the 'webcal' protocol.
-			 *
-			 * Prevents the protocol from being stripped for non-privileged users.
-			 */
+/**
+ * Whitelist the 'webcal' protocol.
+ *
+ * Prevents the protocol from being stripped for non-privileged users.
+ */
 function openlab_add_webcal_to_allowed_protocols( $protocols ) {
 	$protocols[] = 'webcal';
 	return $protocols;
 }
+add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
 
-			add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
-
-			/**
-			 * Don't limit upload space on blog 1.
-			 */
+/**
+ * Don't limit upload space on blog 1.
+ */
 function openlab_allow_unlimited_space_on_blog_1( $check ) {
 	if ( 1 === get_current_blog_id() ) {
 		return 0;
@@ -2255,34 +2250,39 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 
 	return $check;
 }
+add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
 
-			add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
+/**
+ * Disable BP 2.5 rich-text emails.
+ */
+add_filter( 'bp_email_use_wp_mail', '__return_true' );
 
-			/**
-			 * Disable BP 2.5 rich-text emails.
-			 */
-			add_filter( 'bp_email_use_wp_mail', '__return_true' );
-
-			/**
-			 * Set "From" name in outgoing email to the site name.
-			 *
-			 * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
-			 * for now, we must reinstate.
-			 *
-			 * @return string The blog name for the root blog.
-			 */
+/**
+ * Set "From" name in outgoing email to the site name.
+ *
+ * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
+ * for now, we must reinstate.
+ *
+ * @return string The blog name for the root blog.
+ */
 function openlab_email_from_name_filter() {
-
 	/**
-				 * Filters the "From" name in outgoing email to the site name.
-				 *
-				 * @since BuddyPress (1.2.0)
-				 *
-				 * @param string $value Value to set the "From" name to.
-				 */
+	 * Filters the "From" name in outgoing email to the site name.
+	 *
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param string $value Value to set the "From" name to.
+	 */
 	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
 }
+add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
 
-			add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
-
-
+/**
+ * Group slug blacklist.
+ */
+function openlab_forbidden_group_names( $names ) {
+	$names[] = 'thebuzz';
+	$names[] = 'the-buzz';
+	return $names;
+}
+add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
