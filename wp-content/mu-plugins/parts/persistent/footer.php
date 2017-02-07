@@ -11,9 +11,9 @@
                 <div class="row row-footer">
                     <div class="col-sm-12">
                         <div class="col-logos">
-                            <h2><span>OPENLAB at City Tech:</span><span>A place to learn, work, and share</span></h2>
+                            <h2><span>The OpenLab at City Tech:</span><span>A place to learn, work, and share</span></h2>
                             <div class="logos-wrapper clearfix">
-                                <p class="statement semibold"><span class="semibold">OpenLab</span> is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                                <p class="statement semibold"><span class="semibold">The OpenLab</span> is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                                 <a class="pull-left citytech-logo" href="http://www.citytech.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="New York City College of Technology" border="0" /></a>
                                 <a class="pull-left cuny-logo " href="http://www.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="City University of New York" border="0" /></a>
                             </div>
