@@ -2283,6 +2283,7 @@ add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
 function openlab_forbidden_group_names( $names ) {
 	$names[] = 'thebuzz';
 	$names[] = 'the-buzz';
+	$names[] = 'the-hub';
 	return $names;
 }
 add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
