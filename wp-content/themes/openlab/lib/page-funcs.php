@@ -98,7 +98,7 @@ function cuny_home_new_members() {
                     <button class="next btn btn-link" href="#">
                         <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></button>
                 </span>
-                Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
+                Browse through and say "Hello!" to the<br />newest members of the OpenLab.</p>
         </div>
         <div class="clearfloat"></div>
     </div><!--members-top-wrapper-->
