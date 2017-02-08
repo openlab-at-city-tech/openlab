@@ -263,3 +263,14 @@ function openlab_profile_field_input_attributes() {
         return ' ' . implode(' ', $attributes) . ' ';
     }
 }
+
+/**
+ * Don't allow the /profile/ page to be accessed.
+ */
+function openlab_redirect_from_member_profile() {
+	if ( bp_is_user_profile() && bp_is_current_action( 'public' ) ) {
+		wp_redirect( bp_displayed_user_domain() );
+		die();
+	}
+}
+add_action( 'template_redirect', 'openlab_redirect_from_member_profile' );
