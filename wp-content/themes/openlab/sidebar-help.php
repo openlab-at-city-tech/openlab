@@ -17,7 +17,7 @@ wp_nav_menu($args);
 ?>
 </div>
 </div>
-<div class="sidebar-widget-wrapper">    
+<div class="sidebar-widget-wrapper">
 <h2 class="sidebar-help-title help-search-title">Search Help</h2>
 <div class="sidebar-block padded-block">
 <div id="help-search-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
