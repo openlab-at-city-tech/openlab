@@ -807,7 +807,7 @@ HTML;
 		$wp_admin_bar->add_node( array(
 			'parent' => 'messages',
 			'id'     => 'messages-more',
-			'title'  => '<span>See All Messages</span>',
+			'title'  => '<span class="see-all">See All Messages</span>',
 			'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
                         'meta' => array(
                             'class' => 'menu-bottom-link'
@@ -882,7 +882,7 @@ HTML;
 		$wp_admin_bar->add_node( array(
 			'parent' => 'activity',
 			'id'     => 'activity-more',
-			'title'  => '<span>See All Activity</span>',
+			'title'  => '<span class="see-all">See All Activity</span>',
 			'href'   => $link,
                         'meta' => array(
                                 'class' => 'menu-bottom-link exit'
