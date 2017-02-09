@@ -585,7 +585,7 @@ class link_library_plugin_admin {
 
 		$pagehookstylesheet = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Stylesheet', 'link-library' ), __( 'Stylesheet', 'link-library' ), 'manage_options', 'link-library-stylesheet', array( $this, 'on_show_page' ) );
 
-		$pagehookreciprocal = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Reciprocal and Broken Link Checker', 'link-library' ), __( 'Reciprocal and Broken Link Checker', 'link-library' ), 'manage_options', 'link-library-reciprocal', array( $this, 'on_show_page' ) );
+		$pagehookreciprocal = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Link checking tools', 'link-library' ), __( 'Link checking tools', 'link-library' ), 'manage_options', 'link-library-reciprocal', array( $this, 'on_show_page' ) );
 
 		$faqhook = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, __( 'FAQ', 'link-library' ), __( 'FAQ', 'link-library' ), 'manage_options', 'link-library-faq', 'callback' );
 
@@ -617,7 +617,7 @@ class link_library_plugin_admin {
 		add_meta_box( 'linklibrary_general_save_meta_box', __( 'Save', 'link-library' ), array( $this, 'general_save_meta_box' ), $pagehooktop, 'normal', 'high' );
 		add_meta_box( 'linklibrary_moderation_meta_box', __( 'Links awaiting moderation', 'link-library' ), array( $this, 'moderate_meta_box' ), $pagehookmoderate, 'normal', 'high' );
 		add_meta_box( 'linklibrary_stylesheet_meta_box', __( 'Editor', 'link-library' ), array( $this, 'stylesheet_meta_box' ), $pagehookstylesheet, 'normal', 'high' );
-		add_meta_box( 'linklibrary_reciprocal_meta_box', __( 'Reciprocal Link Checker', 'link-library' ), array( $this, 'reciprocal_meta_box' ), $pagehookreciprocal, 'normal', 'high' );
+		add_meta_box( 'linklibrary_reciprocal_meta_box', __( 'Link checking tools', 'link-library' ), array( $this, 'reciprocal_meta_box' ), $pagehookreciprocal, 'normal', 'high' );
 		add_meta_box( 'linklibrary_reciprocal_save_meta_box', __( 'Save', 'link-library' ), array( $this, 'general_save_meta_box' ), $pagehookreciprocal, 'normal', 'high' );
 	}
 
@@ -870,6 +870,10 @@ class link_library_plugin_admin {
 			} elseif ( isset( $_GET['message'] ) && $_GET['message'] == '3' ) {
 				echo "<div id='message' class='updated fade'><p>";
 				do_action( 'link_library_reciprocal_check', $this, $genoptions['recipcheckaddress'], $genoptions['recipcheckdelete403'], 'broken' );
+				echo "</p></div>";
+			} elseif ( isset( $_GET['message'] ) && $_GET['message'] == '4' ) {
+				echo "<div id='message' class='updated fade'><p>";
+				$this->link_library_duplicate_link_checker( $this );
 				echo "</p></div>";
 			}
 		}
@@ -1628,7 +1632,7 @@ class link_library_plugin_admin {
 					'showaddlinkreciprocal', 'showaddlinksecondurl', 'showaddlinktelephone', 'showaddlinkemail', 'showcustomcaptcha', 'showlinksubmittername',
 					'showaddlinksubmitteremail', 'showlinksubmittercomment', 'showuserlargedescription', 'cat_letter_filter', 'beforefirstlink', 'afterlastlink',
 					'searchfieldtext', 'catfilterlabel', 'searchnoresultstext', 'addlinkdefaultcat', 'beforesubmittername', 'aftersubmittername',
-					'beforecatdesc', 'aftercatdesc', 'emailextracontent'
+					'beforecatdesc', 'aftercatdesc', 'emailextracontent', 'displayastable'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -1659,7 +1663,7 @@ class link_library_plugin_admin {
 
 			foreach (
 				array(
-					'displayastable', 'divorheader'
+					'divorheader'
 				) as $option_name
 			) {
 				if ( $_POST[$option_name] == 'true' ) {
@@ -1945,12 +1949,14 @@ class link_library_plugin_admin {
 
 		update_option( 'LinkLibraryGeneral', $genoptions );
 
-		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) ) {
+		if ( !isset( $_POST['recipcheck'] ) && !isset( $_POST['brokencheck'] ) && !isset( $_POST['duplicatecheck'] ) ) {
 			$message = 1;
 		} elseif ( isset( $_POST['recipcheck'] ) ) {
 			$message = 2;
 		} elseif ( isset( $_POST['brokencheck'] ) ) {
 			$message = 3;
+		} elseif ( isset( $_POST['duplicatecheck'] ) ) {
+			$message = 4;
 		}
 
 		if ( $message != - 1 ) {
@@ -3011,8 +3017,9 @@ class link_library_plugin_admin {
 				</td>
 				<td>
 					<select name="displayastable" id="displayastable" style="width:200px;">
-						<option value="true"<?php selected( $options['displayastable'] ); ?>><?php _e( 'Table', 'link-library' ); ?></option>
-						<option value="false"<?php selected( !$options['displayastable'] ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
+						<option value="true"<?php selected( $options['displayastable'], 'true' ); ?>><?php _e( 'Table', 'link-library' ); ?></option>
+						<option value="false"<?php selected( $options['displayastable'], 'false' ); ?>><?php _e( 'Unordered List', 'link-library' ); ?></option>
+						<option value="nosurroundingtags"<?php selected( $options['displayastable'], 'nosurroundingtags' ); ?>><?php _e( 'No surrounding tags', 'link-library' ); ?></option>
 					</select>
 				</td>
 			</tr>
@@ -4532,9 +4539,15 @@ class link_library_plugin_admin {
 					<input type='submit' id="recipcheck" name="recipcheck" value="<?php _e( 'Check Reciprocal Links', 'link-library' ); ?>" />
 				</td>
 			</tr>
+			<tr><td colspan="2"><hr /></td></tr>
 			<tr>
 				<td>
 					<input type='submit' id="brokencheck" name="brokencheck" value="<?php _e( 'Check Broken Links', 'link-library' ); ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type='submit' id="duplicatecheck" name="duplicatecheck" value="<?php _e( 'Check Duplicate Links', 'link-library' ); ?>" />
 				</td>
 			</tr>
 		</table>
@@ -5038,13 +5051,52 @@ class link_library_plugin_admin {
 				break;
 		}
 	}
+
+	function link_library_duplicate_link_checker( $ll_admin_class ) {
+		global $wpdb;
+		echo "<strong>" . __( 'Duplicate Link Checker Report', 'link-library' ) . "</strong><br /><br />";
+
+		echo "<strong>" . __( 'Duplicate URLs', 'link-library' ) . "</strong><br /><br />";
+		$linkquery = "SELECT wp_links.link_id, wp_links.link_name, wp_links.link_url FROM " . $ll_admin_class->db_prefix() . "links INNER JOIN";
+		$linkquery .= "(SELECT trim( TRAILING '/' FROM link_url ) as trim_link_url ";
+		$linkquery .= "FROM   wp_links GROUP BY link_url HAVING count(link_id) > 1) dup ";
+		$linkquery .= "ON wp_links.link_url = dup.trim_link_url";
+
+		$links  = $wpdb->get_results( $linkquery );
+
+		if ( $links ) {
+			foreach ( $links as $link ) {
+				echo $link->link_id . ' - ' . $link->link_name . ': ' . $link->link_url;
+			}
+		} else {
+			echo 'No duplicate URL links found';
+		}
+
+		echo "<br /><br /><strong>" . __( 'Duplicate Names', 'link-library' ) . "</strong><br /><br />";
+		$linkquery = "SELECT wp_links.link_id, wp_links.link_name, wp_links.link_url FROM " . $ll_admin_class->db_prefix() . "links INNER JOIN";
+		$linkquery .= "(SELECT trim( TRAILING '/' FROM link_url ) as trim_link_url ";
+		$linkquery .= "FROM   wp_links GROUP BY link_name HAVING count(link_name) > 1) dup ";
+		$linkquery .= "ON wp_links.link_url = dup.trim_link_url";
+
+		$links  = $wpdb->get_results( $linkquery );
+
+		if ( $links ) {
+			foreach ( $links as $link ) {
+				echo $link->link_id . ' - ' . $link->link_name . ': ' . $link->link_url;
+			}
+		} else {
+			echo 'No duplicate name links found';
+		}
+
+		echo '<br />';
+	}
 }
 
 function link_library_reciprocal_link_checker( $ll_admin_class, $RecipCheckAddress = '', $recipcheckdelete403 = false, $check_type = 'reciprocal' ) {
 	global $wpdb;
-	set_time_limit(0);
+	set_time_limit( 0 );
 
-	if ( $RecipCheckAddress != '' ) {
+	if ( ! empty( $RecipCheckAddress ) || ( empty( $RecipCheckAddress ) && 'reciprocal' != $check_type ) ) {
 		$linkquery = "SELECT distinct *, l.link_id as proper_link_id, UNIX_TIMESTAMP(l.link_updated) as link_date ";
 		$linkquery .= "FROM " . $ll_admin_class->db_prefix() . "terms t ";
 		$linkquery .= "LEFT JOIN " . $ll_admin_class->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
@@ -5061,7 +5113,7 @@ function link_library_reciprocal_link_checker( $ll_admin_class, $RecipCheckAddre
 
 		$linkquery .= "order by l.link_name ASC";
 
-		$links  = $wpdb->get_results( $linkquery );
+		$links = $wpdb->get_results( $linkquery );
 		if ( 'reciprocal' == $check_type ) {
 			echo "<strong>" . __( 'Reciprocal Link Checker Report', 'link-library' ) . "</strong><br /><br />";
 		} elseif ( 'broken' == $check_type ) {
@@ -5099,6 +5151,7 @@ function link_library_reciprocal_link_checker( $ll_admin_class, $RecipCheckAddre
 			echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
 		}
 	}
+
 }
 
 function link_library_render_editor_button() {

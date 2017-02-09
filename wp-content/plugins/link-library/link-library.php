@@ -3,13 +3,13 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 5.9.13.15
+Version: 5.9.13.19
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.ca/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2016 Yannick Lefebvre
+Copyright 2017 Yannick Lefebvre
 
 Translations:
 French Translation courtesy of Luc Capronnier
@@ -19,7 +19,7 @@ Serbian Translation courtesy of Ogi Djuraskovic (firstsiteguide.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNUs General Public License
-as published addlinkcatlistoverrideby the Free Software Foundation; either version 2
+as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -243,7 +243,7 @@ class link_library_plugin {
 				link_no_follow VARCHAR(1) NULL,
 				link_featured VARCHAR(1) NULL,
 				link_manual_updated VARCHAR(1) NULL,
-				UNIQUE KEY (link_id)
+				PRIMARY KEY  (link_id)
 				)";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -257,7 +257,7 @@ class link_library_plugin {
         linkcategory_id bigint(20) unsigned NOT NULL DEFAULT "0",
         meta_key varchar(255) DEFAULT NULL,
         meta_value longtext,
-        UNIQUE KEY (meta_id)
+        PRIMARY KEY  (meta_id)
         );';
 
         dbDelta ( $meta_creation_query );
@@ -522,7 +522,9 @@ class link_library_plugin {
                 return 'error_403';
             }
         } elseif ( $response['response']['code'] == '200' ) {
-			if ( strpos( $response['body'], $RecipCheckAddress ) === false ) {
+        	if ( empty( $RecipCheckAddress ) ) {
+		        return 'exists_notfound';
+	        } elseif ( strpos( $response['body'], $RecipCheckAddress ) === false ) {
 				return 'exists_notfound';
 			} elseif ( strpos( $response['body'], $RecipCheckAddress ) !== false ) {
 				return 'exists_found';

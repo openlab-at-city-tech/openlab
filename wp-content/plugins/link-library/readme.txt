@@ -59,6 +59,24 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.13.19 =
+* Re-do of changes from 5.9.13.17
+* Fixed problem on link activation with table creation syntax
+* Fixed bug with after last link field in advanced configuration table
+* Added new link display mode that is not a table or unordered list
+
+= 5.9.13.18 =
+* Rollback of modications made in 5.9.13.17
+
+= 5.9.13.17 =
+* Fixed problem on link activation with table creation syntax
+* Fixed bug with after last link field in advanced configuration table
+* Added new link display mode that is not a table or unordered list
+
+= 5.9.13.16 =
+* Renamed Reciprocal Link Checker to Link checking tools
+* Added new tool to check for duplicate links (URL or name)
+
 = 5.9.13.15 =
 * Fix to use moderator e-mail for link submission notification
 
