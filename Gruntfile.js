@@ -68,15 +68,26 @@ module.exports = function (grunt) {
 	    }
         },
         less: {
-	    production: {
-	        files: {
-	            'wp-content/mu-plugins/css/openlab-toolbar.css': 'wp-content/mu-plugins/css/openlab-toolbar.less'
-	        }
-	    }
-	}
+            production: {
+                files: {
+                    'wp-content/mu-plugins/css/openlab-toolbar.css': 'wp-content/mu-plugins/css/openlab-toolbar.less'
+                }
+            }
+        },
+        cssmin: {
+            options: {
+
+            },
+            production: {
+                files: {
+                    'wp-content/mu-plugins/css/openlab-toolbar.css': 'wp-content/mu-plugins/css/openlab-toolbar.css'
+                }
+            }
+        }
 
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.registerTask('default', ['concat', 'less']);
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.registerTask('default', ['concat', 'less', 'cssmin']);
 };
