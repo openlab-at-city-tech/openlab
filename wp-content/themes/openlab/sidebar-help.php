@@ -17,7 +17,7 @@ wp_nav_menu($args);
 ?>
 </div>
 </div>
-<div class="sidebar-widget-wrapper">    
+<div class="sidebar-widget-wrapper">
 <h2 class="sidebar-help-title help-search-title">Search Help</h2>
 <div class="sidebar-block padded-block">
 <div id="help-search-copy"><p>Find answers throughout Help that correspond to your search terms:</p></div>
@@ -31,10 +31,10 @@ wp_nav_menu($args);
 </div>
 </div>
 
-<h2 class="sidebar-help-title support-team-title">Our Support Team</h2>
+<h2 class="sidebar-help-title support-team-title">Community Team</h2>
 <div class="sidebar-block padded-block">
 <div id="support-team">
-    <div class="help-tags-copy"><p>The Support Team is here to answer all your OpenLab questions.</p></div>
+    <div class="help-tags-copy"><p>The Community Team is here to answer all your OpenLab questions.</p></div>
     <?php
 	$args = array(
 		'name' => 'contact-us',

@@ -432,10 +432,10 @@ add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
  * I guess old ones get closed automatically
  */
 function openlab_force_doc_comments_open( $open, $post_id ) {
-        $_post = get_post( $post_id );
-        if ( 'bp_doc' === $_post->post_type ) {
-                $open = true;
-        }
-        return $open;
+	$_post = get_post( $post_id );
+	if ( 'bp_doc' === $_post->post_type ) {
+		$open = true;
+	}
+	return $open;
 }
 add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );

@@ -43,7 +43,7 @@ function cuny_home_login() {
 
     <?php else : ?>
         <?php echo '<div id="open-lab-join" class="log-box links-lighter-hover">'; ?>
-        <?php echo '<h1 class="title"><span class="fa fa-plus-circle flush-left"></span> Join OpenLab</h1>'; ?>
+        <?php echo '<h1 class="title"><span class="fa fa-plus-circle flush-left"></span> Join the OpenLab</h1>'; ?>
         <?php _e('<p><a class="btn btn-default btn-primary link-btn pull-right semibold" href="' . site_url() . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>', 'buddypress') ?>
         <?php echo '</div>'; ?>
 
@@ -98,7 +98,7 @@ function cuny_home_new_members() {
                     <button class="next btn btn-link" href="#">
                         <i class="fa fa-chevron-circle-right" aria-hidden="true"></i><span class="sr-only">Next New Members</span></button>
                 </span>
-                Browse through and say "Hello!" to the<br />newest members of OpenLab.</p>
+                Browse through and say "Hello!" to the<br />newest members of the OpenLab.</p>
         </div>
         <div class="clearfloat"></div>
     </div><!--members-top-wrapper-->

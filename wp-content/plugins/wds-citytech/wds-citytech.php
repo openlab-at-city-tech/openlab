@@ -31,6 +31,7 @@ function openlab_load_custom_bp_functions() {
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
 global $wpdb;
+//date_default_timezone_set( 'America/New_York' );
 
 function wds_default_signup_avatar( $img ) {
 	if ( false !== strpos( $img, 'mystery-man' ) ) {

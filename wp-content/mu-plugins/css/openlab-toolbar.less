@@ -187,7 +187,7 @@
                         &:last-child{
                             border-radius: 0 0 4px 4px;
                             border-bottom: none;
-                            a{
+                            a:not(.btn){
                                 border-radius: 0 0 4px 4px;
                                 border-bottom: none;
                             }
@@ -211,7 +211,7 @@
                             color: #333;
                             font-size: 12px;
                             text-decoration: none;
-                            &:hover, 
+                            &:hover,
                                 &:focus {
                                 text-decoration: underline;
                             }
@@ -244,10 +244,13 @@
                         }
                         a{
                             text-decoration: underline;
-                            &:hover, 
+                            &:hover,
                                 &:focus {
                                 color: @darkTeal;
                             }
+			    &.btn {
+			        text-decoration: none;
+			    }
                         }
                     }
                 }
@@ -276,7 +279,7 @@
                         right: -1px;
                     }
                 }
-            } 
+            }
             #wp-admin-bar-mobile-centered{
                 margin: 0 auto;
                 overflow: hidden;
@@ -698,6 +701,13 @@
             }
         }
     }
+    .see-all {
+        font-size: 12px;
+        text-decoration: underline;
+	a {
+            text-decoration: underline;
+	}
+    }
 
     /**footer - also a sitewide component**/
     &#openlab-footer{
@@ -931,7 +941,7 @@
                                 padding-bottom: 16px;
                             }
                         }
-                        &.hamburger{ 
+                        &.hamburger{
                             .ab-item {
                                 .navbar-toggle{
                                     padding-bottom: 14px;

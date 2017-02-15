@@ -75,7 +75,7 @@ function openlab_load_scripts() {
         } else {
             $utility_deps[] = 'openlab-smoothscroll';
         }
-        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.6.9.8', true);
+        wp_register_script('utility', $stylesheet_dir_uri . '/js/utility.js', $utility_deps, '1.7.0.0', true);
         wp_enqueue_script('utility');
         wp_localize_script('utility', 'localVars', array(
             'nonce' => wp_create_nonce('request-nonce'),
@@ -263,3 +263,14 @@ function openlab_profile_field_input_attributes() {
         return ' ' . implode(' ', $attributes) . ' ';
     }
 }
+
+/**
+ * Don't allow the /profile/ page to be accessed.
+ */
+function openlab_redirect_from_member_profile() {
+	if ( bp_is_user_profile() && bp_is_current_action( 'public' ) ) {
+		wp_redirect( bp_displayed_user_domain() );
+		die();
+	}
+}
+add_action( 'template_redirect', 'openlab_redirect_from_member_profile' );
