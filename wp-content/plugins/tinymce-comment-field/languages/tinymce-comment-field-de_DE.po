@@ -1,0 +1,403 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TinyMCE Comment Field\n"
+"POT-Creation-Date: 2015-09-15 17:14+0100\n"
+"PO-Revision-Date: 2015-09-15 17:15+0100\n"
+"Last-Translator: Stefan Helmer <mail@eracer.de>\n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SearchPathExcluded-1: titan-framework\n"
+"X-Poedit-SearchPathExcluded-2: class-tgm.php\n"
+"X-Poedit-SearchPathExcluded-3: classes/class-tgm.php\n"
+
+#: classes/class-buttons.php:7
+msgid "Bold"
+msgstr "Fett"
+
+#: classes/class-buttons.php:8
+msgid "Italic"
+msgstr "Kursiv"
+
+#: classes/class-buttons.php:9
+msgid "Underline"
+msgstr "Unterstrichen"
+
+#: classes/class-buttons.php:10
+msgid "Strikethrough"
+msgstr "Durchgestrichen"
+
+#: classes/class-buttons.php:11
+msgid "Bullet List"
+msgstr "Liste"
+
+#: classes/class-buttons.php:12
+msgid "Numbered List"
+msgstr "Nummerierte Liste"
+
+#: classes/class-buttons.php:13
+msgid "Decrease Indent"
+msgstr "Einzug verkleinern"
+
+#: classes/class-buttons.php:14
+msgid "Increase Indent"
+msgstr "Einzug vergrößern"
+
+#: classes/class-buttons.php:15
+msgid "Blockquote"
+msgstr "Zitat"
+
+#: classes/class-buttons.php:16
+msgid "Cut"
+msgstr "Ausschneiden"
+
+#: classes/class-buttons.php:17
+msgid "Copy"
+msgstr "Kopieren"
+
+#: classes/class-buttons.php:18
+msgid "Paste"
+msgstr "Einfügen"
+
+#: classes/class-buttons.php:19
+msgid "Undo"
+msgstr "Rückgängig machen"
+
+#: classes/class-buttons.php:20
+msgid "Redo"
+msgstr "Wiederholen"
+
+#: classes/class-buttons.php:21
+msgid "Add Link"
+msgstr "Link hinzufügen"
+
+#: classes/class-buttons.php:22
+msgid "Remove Link"
+msgstr "Link entfernen"
+
+#: classes/class-buttons.php:24
+msgid "Remove Format"
+msgstr "Formatierung entfernen"
+
+#: classes/class-buttons.php:25
+msgid "Format Select"
+msgstr "Formatierung auswählen"
+
+#: classes/class-buttons.php:26
+msgid "Font Select"
+msgstr "Schriftwahl"
+
+#: classes/class-buttons.php:27
+msgid "Font Size Select"
+msgstr "Schriftgröße wählen"
+
+#: controller/class-metabox-controller.php:15 views/dummy.php:3
+msgid "TinyMCE Comment Field"
+msgstr ""
+
+#: controller/class-metabox-controller.php:32
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: controller/class-plugin-controller.php:79
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: controller/class-plugin-controller.php:80
+msgid "Donate"
+msgstr "Spende"
+
+#: controller/class-plugin-controller.php:92
+#, php-format
+msgid ""
+"Jetpack Comments are activated. TinyMCE Comment Field won't work with "
+"Jetpack Comments activated. Please <a href=\"%2$s\">deactivate</a> Jetpack "
+"Comments in order to work with TinyMCE Comment Field | <a href=\"%1$s"
+"\">Dismiss</a>"
+msgstr ""
+"Jetpack Kommentare sind aktiviert. TinyMCE Comment Field wird nicht "
+"funktionieren wenn Jetpack Kommentare aktiviert sind. Bitte <a href=\"%2$s"
+"\">deaktiviere</a> Jetpack Kommentare damit TinyMCE Comment Field "
+"funktionieren kann. | <a href=\"%1$s\">Verwerfen</a>"
+
+#: controller/class-plugin-controller.php:113
+msgid "Install Required Plugins"
+msgstr "Benötigte Plugins installieren"
+
+#: controller/class-plugin-controller.php:114
+msgid "Install Plugins"
+msgstr "Plugins installieren"
+
+#: controller/class-plugin-controller.php:115
+#, php-format
+msgid "Installing Plugin: %s"
+msgstr "Installiere Plugin: %s"
+
+#: controller/class-plugin-controller.php:117
+msgid "Something went wrong with the plugin API."
+msgstr "Etwas hat was nicht geklappt mit dem Plugin-API."
+
+#: controller/class-plugin-controller.php:118
+#, php-format
+msgid "TinyMCE Comment Field requires the following plugin: %1$s."
+msgid_plural "TinyMCE Comment Field requires the following plugins: %1$s."
+msgstr[0] "TinyMCE Comment Field benötigt das folgende Plugin: %1$s."
+msgstr[1] "TinyMCE Comment Field benötigt folgende Plugins: %1$s."
+
+#: controller/class-plugin-controller.php:120
+#, php-format
+msgid "TinyMCE Comment Field recommends the following plugin: %1$s."
+msgid_plural "TinyMCE Comment Field recommends the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: controller/class-plugin-controller.php:122
+#, php-format
+msgid ""
+"Sorry, but you do not have the correct permissions to install the %s plugin. "
+"Contact the administrator of this site for help on getting the plugin "
+"installed."
+msgid_plural ""
+"Sorry, but you do not have the correct permissions to install the %s "
+"plugins. Contact the administrator of this site for help on getting the "
+"plugins installed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: controller/class-plugin-controller.php:124
+#, php-format
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] "Folgendes benötigtes Plugin ist derzeit inaktiv: %1$s."
+msgstr[1] "Folgende benötigtes Plugins sind derzeit inaktiv: %1$s."
+
+#: controller/class-plugin-controller.php:126
+#, php-format
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: controller/class-plugin-controller.php:128
+#, php-format
+msgid ""
+"Sorry, but you do not have the correct permissions to activate the %s "
+"plugin. Contact the administrator of this site for help on getting the "
+"plugin activated."
+msgid_plural ""
+"Sorry, but you do not have the correct permissions to activate the %s "
+"plugins. Contact the administrator of this site for help on getting the "
+"plugins activated."
+msgstr[0] ""
+"Sorry, aber Sie haben nicht die richtigen Berechtigungen für die % s-Plugin "
+"installation. Kontaktieren Sie den Administrator dieser Seite."
+msgstr[1] ""
+"Sorry, aber Sie haben nicht die richtigen Berechtigungen für die % s-Plugin "
+"installation. Kontaktieren Sie den Administrator dieser Seite."
+
+#: controller/class-plugin-controller.php:130
+#, php-format
+msgid ""
+"The following plugin needs to be updated to its latest version to ensure "
+"maximum compatibility with this TinyMCE Comment Field: %1$s."
+msgid_plural ""
+"The following plugins need to be updated to their latest version to ensure "
+"maximum compatibility with this theme: %1$s."
+msgstr[0] ""
+"Das folgende Plugin muss auf die neueste Version aktualisiert werden, um "
+"maximale Kompatibilität mit TinyMCE Comment Field zu gewährleisten: %1$s."
+msgstr[1] ""
+"Die folgenden Plugins müssen auf die neueste Version aktualisiert werden, um "
+"maximale Kompatibilität mit TinyMCE Comment Field zu gewährleisten: %1$s."
+
+#: controller/class-plugin-controller.php:132
+#, php-format
+msgid ""
+"Sorry, but you do not have the correct permissions to update the %s plugin. "
+"Contact the administrator of this site for help on getting the plugin "
+"updated."
+msgid_plural ""
+"Sorry, but you do not have the correct permissions to update the %s plugins. "
+"Contact the administrator of this site for help on getting the plugins "
+"updated."
+msgstr[0] ""
+"Sorry, aber Sie haben nicht die richtigen Berechtigungen für die % s-Plugin "
+"installation. Kontaktieren Sie den Administrator dieser Seite."
+msgstr[1] ""
+"Sorry, aber Sie haben nicht die richtigen Berechtigungen für die % s-Plugin "
+"installation. Kontaktieren Sie den Administrator dieser Seite."
+
+#: controller/class-plugin-controller.php:134
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] "Plugin Installation starten"
+msgstr[1] "Installation der Plugins starten"
+
+#: controller/class-plugin-controller.php:135
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] "Aktiviere Plugin"
+msgstr[1] "Aktiviere Plugins"
+
+#: controller/class-plugin-controller.php:136
+msgid "Return to Required Plugins Installer"
+msgstr "Zurück zur Installation von benötigten Plugins"
+
+#: controller/class-plugin-controller.php:137
+msgid "Plugin activated successfully."
+msgstr "Plugin erfolgreich aktiviert."
+
+#: controller/class-plugin-controller.php:138
+#, php-format
+msgid "All plugins installed and activated successfully. %s"
+msgstr "Alle Plugins wurder installiert und erfolgreich aktiviert. %s"
+
+#: controller/class-titan-controller.php:33
+msgid "General"
+msgstr "Allgemein"
+
+#: controller/class-titan-controller.php:36
+msgid "Enable or Disable TinyMCE Comment Field"
+msgstr "Aktiviere oder deaktiviere TinyMCE Comment Field"
+
+#: controller/class-titan-controller.php:41
+msgid "Enable or Disable TinyMCE Comment Field on Mobile Devices"
+msgstr "Aktiviere oder deaktiviere TinyMCE Comment Field auf Mobilen Geräten"
+
+#: controller/class-titan-controller.php:52
+msgid "Editor Font"
+msgstr "Schriftart"
+
+#: controller/class-titan-controller.php:58
+msgid "Background Color"
+msgstr "Hintergrundfarbe"
+
+#: controller/class-titan-controller.php:60
+msgid "Pick a color"
+msgstr "Wähle eine Farbe"
+
+#: controller/class-titan-controller.php:63
+msgid "Height"
+msgstr "Höhe"
+
+#: controller/class-titan-controller.php:66
+msgid "Post Types"
+msgstr "Post Types"
+
+#: controller/class-titan-controller.php:68
+msgid "Enable or Disable TinyMCE Comment Field on certain Post Types"
+msgstr ""
+"Aktiviere oder deaktiviere TinyMCE Comment Field bei bestimmen Post Types"
+
+#: controller/class-titan-controller.php:71
+msgid "Text Direction"
+msgstr "Textrichtung"
+
+#: controller/class-titan-controller.php:73
+msgid "Left to Right"
+msgstr "Links nach rechts"
+
+#: controller/class-titan-controller.php:74
+msgid "Right to Left"
+msgstr "Rechts nach Links"
+
+#: controller/class-titan-controller.php:76
+msgid "Set the Text Direction"
+msgstr "Festlegen der Textrichtung"
+
+#: controller/class-titan-controller.php:79
+msgid "Text below Comment Field"
+msgstr "Text unterhalb des Kommentar Felds"
+
+#: controller/class-titan-controller.php:81
+msgid "Put your text or html here"
+msgstr "Text oder HTML hie einfügen"
+
+#: controller/class-titan-controller.php:87
+msgid "Buttons"
+msgstr "Buttons"
+
+#: controller/class-titan-controller.php:89
+msgid "Enable or Disable Buttons on the Toolbar"
+msgstr "Aktiviere oder deaktiviere Buttons auf der Toolbar"
+
+#: controller/class-titan-controller.php:109
+msgid "Allowed Shortcodes"
+msgstr "Erlaubte Shortcodes"
+
+#: controller/class-titan-controller.php:111
+msgid "Enable or Disable Shortcodes for the Comment Field"
+msgstr "Aktiviere oder deaktiviere TinyMCE Comment Field"
+
+#: controller/class-titan-controller.php:119
+msgid "Allow vistors or users posting images"
+msgstr "Erlaube Besuchern Bilder zu posten"
+
+#: controller/class-titan-controller.php:130
+msgid "Unregistered / Visitor"
+msgstr "Unregistriert / Besucher"
+
+#: controller/class-titan-controller.php:148
+msgid "Allow posting images only when visitors or users are in certain roles"
+msgstr ""
+"Erlaube das posten von Bildern nur wenn der Benutzer/Besucher sich in einer "
+"bestimmten Rolle befindet"
+
+#: controller/class-titan-controller.php:152
+msgid "Always moderate comments with images"
+msgstr "Moderiere Kommentare immer wenn sich ein Bild darin befindet"
+
+#: controller/class-titan-controller.php:156
+msgid "Hyperlink images"
+msgstr ""
+
+#: controller/class-titan-controller.php:161
+msgid "Max Width"
+msgstr "Maximale Breite"
+
+#: controller/class-titan-controller.php:163
+#: controller/class-titan-controller.php:168
+msgid "Larger images will be resized proportionally"
+msgstr ""
+"Bilder die die maximale Höhe oder Breite überschreiten werden automatisch "
+"skaliert"
+
+#: controller/class-titan-controller.php:166
+msgid "Max Height"
+msgstr "Maximale Höhe"
+
+#: controller/class-titan-controller.php:175
+msgid "Advanced"
+msgstr "Erweitert"
+
+#: controller/class-titan-controller.php:180
+msgid "Custom CSS"
+msgstr "Benutzerdefiniertes CSS"
+
+#: views/dummy.php:9
+msgid ""
+"TinyMCE Comment Field requires the <a href=\"https://wordpress.org/plugins/"
+"titan-framework/\" target=\"_blank\">Titan Framework Plugin</a> in order to "
+"work"
+msgstr ""
+
+#: views/dummy.php:12
+msgid "Install or activate Titan Framework"
+msgstr "Installiere oder aktiviere Titan Framework"
+
+#~ msgid "Image"
+#~ msgstr "Bild"
+
+#~ msgid "Something went wrong."
+#~ msgstr "Da ist etwas schiefgelaufen."

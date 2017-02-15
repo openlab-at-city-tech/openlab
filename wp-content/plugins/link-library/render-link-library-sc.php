@@ -602,17 +602,19 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
                 if ( -1 != $currentcategoryid && ! $combineresults) {
                     // Close the last category
-                    if ( $displayastable ) {
+                    if ( ( is_bool( $displayastable ) && $displayastable ) || 'true' == $displayastable ) {
                         $output .= "\t</table>\n";
-                    } else {
+                    } elseif ( ( is_bool( $displayastable ) && ! $displayastable ) || 'false' == $displayastable ) {
                         $output .= "\t</ul>\n";
+                    } elseif ( 'nosurroundingtags' == $displayastable ) {
+	                    $output .= '';
                     }
 
                     if ( !empty( $catlistwrappers ) ) {
                         $output .= '</div>';
                     }
 
-	                if ( !empty( $beforefirstlink ) ) {
+	                if ( !empty( $afterlastlink ) ) {
 		                $output .= stripslashes( $afterlastlink );
 	                }
 
@@ -724,7 +726,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
                             if ( $showlinksonclick ) {
                                 $catlink .= '<span class="expandlinks" id="LinksInCat' . $linkitem['term_id'] . '">';
-                                $catlink .= '<img src="';
+                                $catlink .= '<img class="arrow-down" src="';
 
                                 if ( !empty( $expandiconpath ) ) {
                                     $catlink .= $expandiconpath;
@@ -733,6 +735,16 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                                 }
 
                                 $catlink .= '" />';
+
+	                            $catlink .= '<img class="arrow-up" src="';
+
+	                            if ( !empty( $expandiconpath ) ) {
+		                            $catlink .= $expandiconpath;
+	                            } else {
+		                            $catlink .= plugins_url( 'icons/collapse-32.png', __FILE__ );
+	                            }
+
+	                            $catlink .= '" />';
 
                                 $catlink .= '</span>';
                             }
@@ -787,7 +799,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
                             if ( $showlinksonclick ) {
                                 $catlink .= '<span class="expandlinks" id="LinksInCat' . $linkitem['term_id'] . '">';
-                                $catlink .= '<img src="';
+                                $catlink .= '<img class="arrow-down" src="';
 
                                 if ( !empty( $expandiconpath ) ) {
                                     $catlink .= $expandiconpath;
@@ -796,6 +808,16 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                                 }
 
                                 $catlink .= '" />';
+
+	                            $catlink .= '<img class="arrow-up" src="';
+
+	                            if ( !empty( $expandiconpath ) ) {
+		                            $catlink .= $expandiconpath;
+	                            } else {
+		                            $catlink .= plugins_url( 'icons/collapse-32.png', __FILE__ );
+	                            }
+
+	                            $catlink .= '" />';
                                 $catlink .= '</span>';
                             }
 
@@ -816,7 +838,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                     }
                 }
 
-                if ( $displayastable && ( ! $combineresults || ( $combineresults && $linkcount == 0 ) ) ) {
+                if ( ( ( is_bool( $displayastable ) && $displayastable ) || 'true' == $displayastable ) && ( ! $combineresults || ( $combineresults && $linkcount == 0 ) ) ) {
                     $catstartlist = "\n\t<table class='linklisttable'>\n";
                     if ( $showcolumnheaders ) {
                         $catstartlist .= '<div class="linklisttableheaders"><tr>';
@@ -837,8 +859,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                     } else {
                         $catstartlist .= '';
                     }
-                } elseif ( ! $combineresults || ( $combineresults && $linkcount == 0 ) ) {
+                } elseif ( ( ( is_bool( $displayastable ) && ! $displayastable ) || 'false' == $displayastable ) && ( ! $combineresults || ( $combineresults && $linkcount == 0 ) ) ) {
                     $catstartlist = "\n\t<ul>\n";
+                } elseif ( 'nosurroundingtags' == $displayastable ) {
+                	$catstartlist = '';
                 } else {
                     $catstartlist = '';
                 }
@@ -1469,15 +1493,21 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
         } // end while
 
         // Close the last category
-        if ( $displayastable ) {
+        if ( ( is_bool( $displayastable ) && $displayastable ) || 'true' == $displayastable ) {
             $output .= "\t</table>\n";
-        } else {
+        } elseif ( ( is_bool( $displayastable ) && ! $displayastable ) || 'false' == $displayastable ) {
             $output .= "\t</ul>\n";
-        }
+        } elseif ( 'nosurroundingtags' == $displayastable ) {
+	        $output .= '';
+	    }
 
         if ( !empty( $catlistwrappers ) && ! $combineresults ) {
             $output .= '</div>';
         }
+
+	    if ( !empty( $afterlastlink ) ) {
+		    $output .= stripslashes( $afterlastlink );
+	    }
 
         if ( $usethumbshotsforimages ) {
             if ( $thumbnailgenerator == 'robothumb' ) {
@@ -1509,6 +1539,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
         $output .= "<script type='text/javascript'>\n";
         $output .= "jQuery(document).ready(function()\n";
         $output .= "{\n";
+        $output .= "jQuery('.arrow-up').hide();\n";
         $output .= "jQuery('#linklist" . $settings . " a.track_this_link').click(function() {\n";
         $output .= "linkid = this.id;\n";
         $output .= "linkid = linkid.substring(5);";
@@ -1524,29 +1555,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
         $output .= "});\n";
         $output .= "jQuery('#linklist" . $settings . " .expandlinks').click(function() {\n";
         $output .= "target = '.' + jQuery(this).attr('id');\n";
-        $output .= "if ( jQuery( target ).is(':visible') ) {\n";
-        $output .= "jQuery(target).slideUp();\n";
-        $output .= "jQuery(this).children('img').attr('src', '";
-
-        if ( !empty( $expandiconpath ) ) {
-            $output .= $expandiconpath;
-        } else {
-            $output .= plugins_url( 'icons/expand-32.png', __FILE__ );
-        }
-
-        $output .= "');\n";
-        $output .= "} else {\n";
-        $output .= "jQuery(target).slideDown();\n";
-        $output .= "jQuery(this).children('img').attr('src', '";
-
-        if ( !empty( $collapseiconpath ) ) {
-            $output .= $collapseiconpath;
-        } else {
-            $output .= plugins_url( 'icons/collapse-32.png', __FILE__ );
-        }
-
-        $output .= "');\n";
-        $output .= "}\n";
+        $output .= "jQuery(target).slideToggle();\n";
+        $output .= "jQuery(this).find('.arrow-up, .arrow-down').toggle();\n";
         $output .= "});\n";
         $output .= "});\n";
         $output .= "</script>";
