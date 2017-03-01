@@ -691,7 +691,7 @@ class Openlab_Clone_Course_Site {
 		$source_group_admins = $this->get_source_group_admins();
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
-				if ( 'publish' === $sp->post_status ) {
+				if ( 'publish' === $sp->post_status || 'private' === $sp->post_status ) {
 					$post_arr = array(
 						'ID' => $sp->ID,
 						'post_status' => 'draft',
