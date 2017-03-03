@@ -437,7 +437,7 @@ function wds_load_group_departments() {
 
 	$departments = array();
 	foreach ( $schools as $school ) {
-		$departments = array_merge_recursive( $departments, $departments_canonical[ $school ] );
+		$departments = array_merge( $departments, $departments_canonical[ $school ] );
 	}
 	sort( $departments );
 
