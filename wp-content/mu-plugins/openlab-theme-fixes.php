@@ -119,3 +119,13 @@ function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages ) {
 	return $output;
 }
 add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3 );
+
+/**
+ * Prevent Sliding Door from showing plugin installation notice.
+ */
+function openlab_remove_sliding_door_plugin_installation_notice() {
+	if ( 'sliding-door' === get_template() ) {
+		remove_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
+	}
+}
+add_action( 'after_setup_theme', 'openlab_remove_sliding_door_plugin_installation_notice', 100 );
