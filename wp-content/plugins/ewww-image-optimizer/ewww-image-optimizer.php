@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/ewww-image-optimizer/
 Description: Reduce file sizes for images within WordPress including NextGEN Gallery and GRAND FlAGallery. Uses jpegtran, optipng/pngout, and gifsicle.
 Author: Shane Bishop
 Text Domain: ewww-image-optimizer
-Version: 3.2.4
+Version: 3.2.7
 Author URI: https://ewww.io/
 License: GPLv3
 */
@@ -605,7 +605,11 @@ function ewww_image_optimizer_notice_utils( $quiet = null ) {
 // function to check if exec() is disabled
 function ewww_image_optimizer_exec_check() {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
-	$disabled = ini_get( 'disable_functions' );
+	if ( ! ewww_image_optimizer_function_exists( 'exec' ) ) {
+		return true;
+	}
+	return false;
+/*	$disabled = ini_get( 'disable_functions' );
 	ewwwio_debug_message( "disable_functions: $disabled" );
 	$suhosin_disabled = ini_get( 'suhosin.executor.func.blacklist' );
 	ewwwio_debug_message( "suhosin_blacklist: $suhosin_disabled" );
@@ -615,7 +619,7 @@ function ewww_image_optimizer_exec_check() {
 	} else {
 		ewwwio_memory( __FUNCTION__ );
 		return false;
-	}
+	}*/
 }
 
 // function to check if safe mode is on
@@ -1458,6 +1462,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		// tell the user optimization was skipped
 		return array( false, __( "Optimization skipped", EWWW_IMAGE_OPTIMIZER_DOMAIN ), $converted, $file );
 	}
+	$backup_hash = '';
 	// initialize $new_size with a zero
 	$new_size = 0;
 	// set the optimization process to OFF
@@ -1494,7 +1499,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) > 10 ) {
-				list( $file, $converted, $result, $new_size ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
 				if ( $converted ) {
 					// check to see if the user wants the originals deleted
 					if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_delete_originals' ) == TRUE ) {
@@ -1755,7 +1760,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) >= 20 && ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-				list( $file, $converted, $result, $new_size ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $jpgfile, 'image/jpeg', $skip_lossy, array( 'r' => $r, 'g' => $g, 'b' => $b, 'quality' => $gquality ) );
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $jpgfile, 'image/jpeg', $skip_lossy, array( 'r' => $r, 'g' => $g, 'b' => $b, 'quality' => $gquality ) );
 				if ( $converted ) {
 					// check to see if the user wants the originals deleted
 					if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_delete_originals' ) == TRUE ) {
@@ -2031,7 +2036,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' ) == 10 ) {
-				list( $file, $converted, $result, $new_size ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
 				if ( $converted ) {
 					// check to see if the user wants the originals deleted
 					if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_delete_originals' ) == TRUE ) {
@@ -2167,7 +2172,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_pdf_level' ) > 0 ) {
-				list( $file, $converted, $result, $new_size ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
 			}
 			break;
 		default:
@@ -2187,7 +2192,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		$perms = $stat['mode'] & 0000666; //same permissions as parent folder, strip off the executable bits
 		@chmod( $file, $perms );
 
-		$results_msg = ewww_image_optimizer_update_table( $file, $new_size, $orig_size, $original );
+		$results_msg = ewww_image_optimizer_update_table( $file, $new_size, $orig_size, $original, $backup_hash );
 		ewwwio_memory( __FUNCTION__ );
 		return array( $file, $results_msg, $converted, $original );
 	}
