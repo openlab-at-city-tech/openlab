@@ -119,3 +119,45 @@ function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages ) {
 	return $output;
 }
 add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3 );
+
+/**
+ * Prevent Sliding Door from showing plugin installation notice.
+ */
+function openlab_remove_sliding_door_plugin_installation_notice() {
+	if ( 'sliding-door' === get_template() ) {
+		remove_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
+	}
+}
+add_action( 'after_setup_theme', 'openlab_remove_sliding_door_plugin_installation_notice', 100 );
+
+/**
+ * Sliding Door requires the Page Links To plugin.
+ */
+function openlab_activate_page_links_to_on_sliding_door() {
+	if ( 'sliding-door' !== get_template() ) {
+		return;
+	}
+
+	if ( ! is_admin() || ! current_user_can( 'activate_plugins' ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'is_plugin_active' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	}
+
+	if ( ! is_plugin_active( 'page-links-to/page-links-to.php' ) ) {
+		activate_plugin( 'page-links-to/page-links-to.php' );
+	}
+}
+add_action( 'after_setup_theme', 'openlab_activate_page_links_to_on_sliding_door', 50 );
+
+/**
+ * Override Pilcrow's fallback page menu overrides.
+ */
+function openlab_pilcrow_page_menu_args( $args ) {
+	remove_filter( 'wp_page_menu_args', 'pilcrow_page_menu_args' );
+	$args['depth']     = 0;
+	return $args;
+}
+add_filter( 'wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5 );
