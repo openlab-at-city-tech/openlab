@@ -3,14 +3,14 @@
 Plugin Name: Page Links To
 Plugin URI: http://txfx.net/wordpress-plugins/page-links-to/
 Description: Allows you to point WordPress pages or posts to a URL of your choosing.  Good for setting up navigational links to non-WP sections of your site or to off-site resources.
-Version: 2.9.6
+Version: 2.9.9
 Author: Mark Jaquith
 Author URI: http://coveredwebservices.com/
 Text Domain: page-links-to
 Domain Path: /languages
 */
 
-/*  Copyright 2005-2013  Mark Jaquith
+/*  Copyright 2005-2017  Mark Jaquith
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,10 +36,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	const TARGETS_CACHE_KEY = 'plt_cache__targets';
 	const LINK_META_KEY = '_links_to';
 	const TARGET_META_KEY = '_links_to_target';
-	const VERSION = 'txfx_plt_schema_version';
+	const VERSION_KEY = 'txfx_plt_schema_version';
 	const FILE = __FILE__;
-
-	var $targets_on_this_page = array();
+	const CSS_JS_VERSION = '2.9.8';
 
 	function __construct() {
 		self::$instance = $this;
@@ -72,12 +71,14 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 
 		// Non-standard priority hooks
 		$this->hook( 'do_meta_boxes', 20 );
-		$this->hook( 'wp_footer',     19 );
-		$this->hook( 'wp_enqueue_scripts', 'start_buffer', -9999 );
-		$this->hook( 'wp_head', 'end_buffer', 9999 );
+		// $this->hook( 'wp_enqueue_scripts', 'start_buffer', -9999 );
+		$this->hook( 'wp_enqueue_scripts' );
+		// $this->hook( 'wp_enqueue_scripts', 'jquery_protection', 9999 );
+		// $this->hook( 'wp_head', 'end_buffer', 9999 );
 
 		// Non-standard callback hooks
-		$this->hook( 'load-post.php', 'load_post' );
+		$this->hook( 'load-post.php',      'load_post'  );
+		$this->hook( 'wp_default_scripts', 'log_jquery' );
 
 		// Standard hooks
 		$this->hook( 'wp_list_pages'       );
@@ -88,8 +89,8 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		$this->hook( 'plugin_row_meta'     );
 
 		// Metadata validation grants users editing privileges for our custom fields
-		register_meta('post', self::LINK_META_KEY, null, '__return_true');
-		register_meta('post', self::TARGET_META_KEY, null, '__return_true');
+		register_meta( 'post', self::LINK_META_KEY,   null, '__return_true' );
+		register_meta( 'post', self::TARGET_META_KEY, null, '__return_true' );
 	}
 
 	/**
@@ -100,19 +101,21 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function maybe_upgrade() {
 		// In earlier versions, the meta keys were stored without a leading underscore.
 		// Since then, underscore has been codified as the standard for "something manages this" post meta.
-		if ( get_option( self::VERSION ) < 3 ) {
+		if ( get_option( self::VERSION_KEY ) < 3 ) {
 			global $wpdb;
 			$total_affected = 0;
 			foreach ( array( '', '_target', '_type' ) as $meta_key ) {
 				$meta_key = 'links_to' . $meta_key;
 				$affected = $wpdb->update( $wpdb->postmeta, array( 'meta_key' => '_' . $meta_key ), compact( 'meta_key' ) );
-				if ( $affected )
+				if ( $affected ) {
 					$total_affected += $affected;
+				}
 			}
 			// Only flush the cache if something changed
-			if ( $total_affected > 0 )
+			if ( $total_affected > 0 ) {
 				wp_cache_flush();
-			if ( update_option( self::VERSION, 3 ) ) {
+			}
+			if ( update_option( self::VERSION_KEY, 3 ) ) {
 				$this->flush_links_cache();
 				$this->flush_targets_cache();
 			}
@@ -120,11 +123,33 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	}
 
 	/**
-	 * Enqueues jQuery, if we think we are going to need it
+	 * Logs data about core's jQuery
 	 */
-	function wp_footer() {
-		if ( count( $this->targets_on_this_page ) )
-			wp_enqueue_script( 'jquery' );
+	public function log_jquery( $wp_scripts ) {
+		$this->jquery      = $wp_scripts->registered['jquery'];
+		$this->jquery_core = $wp_scripts->registered['jquery-core'];
+	}
+
+	/**
+	 * Prevents jQuery from being incorrectly overwritten
+	 */
+	public function jquery_protection() {
+		global $wp_scripts;
+
+		if ( $wp_scripts->registered['jquery-core'] !== $this->jquery_core ) {
+			$wp_scripts->registered['jquery-core'] = $this->jquery_core;
+		}
+
+		if ( $wp_scripts->registered['jquery'] !== $this->jquery ) {
+			$wp_scripts->registered['jquery'] = $this->jquery;
+		}
+	}
+
+	/**
+	 * Enqueues front end scripts
+	 */
+	function wp_enqueue_scripts() {
+		wp_enqueue_script( 'page-links-to', $this->get_url() . 'js/new-tab.min.js', array( 'jquery' ), self::CSS_JS_VERSION, true );
 	}
 
 	/**
@@ -137,11 +162,14 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	/**
 	 * Collects the buffer, and injects a `jQueryWP` JS object as a
 	 * copy of `jQuery`, so that dumb themes and plugins can't hurt it
+	 *
+	 * @return string the modified buffer
 	 */
 	function buffer_callback( $content ) {
 		$pattern = "#wp-includes/js/jquery/jquery\.js\?ver=([^']+)'></script>#";
-		if ( preg_match( $pattern, $content ) )
+		if ( preg_match( $pattern, $content ) ) {
 			$content = preg_replace( $pattern, '$0<script>jQueryWP = jQuery;</script>', $content );
+		}
 		return $content;
 	}
 
@@ -171,8 +199,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 */
 	function get_post_meta( $post_id, $key ) {
 		$meta = get_post_meta( absint( $post_id ), $key, true );
-		if ( '' === $meta )
+		if ( '' === $meta ) {
 			return false;
+		}
 		return $meta;
 	}
 
@@ -245,8 +274,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		// PLT UI in their post type.
 		$plt_post_types = apply_filters( 'page-links-to-post-types', array_keys( get_post_types( array('show_ui' => true ) ) ) );
 
-		if ( in_array( $page, $plt_post_types ) && 'advanced' === $context )
+		if ( in_array( $page, $plt_post_types ) && 'advanced' === $context ) {
 			add_meta_box( 'page-links-to', _x( 'Page Links To', 'Meta box title', 'page-links-to'), array( $this, 'meta_box' ), $page, 'advanced', 'low' );
+		}
 	}
 
 	/**
@@ -273,7 +303,7 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 			<p><input name="cws_links_to" type="text" style="width:75%" id="cws-links-to" value="<?php echo esc_attr( $url ); ?>" /></p>
 			<p><label for="cws-links-to-new-tab"><input type="checkbox" name="cws_links_to_new_tab" id="cws-links-to-new-tab" value="_blank" <?php checked( (bool) $this->get_target( $post->ID ) ); ?>> <?php _e( 'Open this link in a new tab', 'page-links-to' ); ?></label></p>
 		</div>
-		<script src="<?php echo trailingslashit( plugin_dir_url( self::FILE ) ) . 'js/page-links-to.js?v=4'; ?>"></script>
+		<script src="<?php echo $this->get_url() . 'js/page-links-to.min.js?v=' . self::CSS_JS_VERSION; ?>"></script>
 	<?php
 	}
 
@@ -318,8 +348,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function clean_url( $url ) {
 		$url = trim( $url );
 		// Starts with 'www.'. Probably a mistake. So add 'http://'.
-		if ( 0 === strpos( $url, 'www.' ) )
+		if ( 0 === strpos( $url, 'www.' ) ) {
 			$url = 'http://' . $url;
+		}
 		return $url;
 	}
 
@@ -377,10 +408,12 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 * @return bool whether the flush happened
 	 */
 	function flush_links_if( $condition ) {
-		if ( ! $condition )
+		if ( $condition ) {
+			$this->flush_links_cache();
+			return true;
+		} else {
 			return false;
-		$this->flush_links_cache();
-		return true;
+		}
 	}
 
 	/**
@@ -390,10 +423,12 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 * @return bool whether the flush happened
 	 */
 	function flush_targets_if( $condition ) {
-		if ( ! $condition )
+		if ( $condition ) {
+			$this->flush_targets_cache();
+			return true;
+		} else {
 			return false;
-		$this->flush_targets_cache();
-		return true;
+		}
 	}
 
 	/**
@@ -419,17 +454,6 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	}
 
 	/**
-	 * Logs that a target=_blank PLT item has been used, so we know to trigger footer JS
-	 *
-	 * @param int|WP_Post $post post ID or object
-	 */
-	function log_target( $post ) {
-		$post = get_post( $post );
-		$this->targets_on_this_page[$post->ID] = true;
-		$this->hook( 'wp_footer', 'targets_in_new_window_via_js_footer', 999 );
-	}
-
-	/**
 	 * Filter for Post links
 	 *
 	 * @param string $link the URL for the post or page
@@ -443,8 +467,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 
 		if ( $meta_link ) {
 			$link = esc_url( $meta_link );
-			if ( $this->get_target( $post->ID ) )
-				$this->log_target( $post->ID );
+			if ( ! is_admin() && $this->get_target( $post->ID ) ) {
+				$link .= '#new_tab';
+			}
 		}
 
 		return $link;
@@ -456,11 +481,10 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function template_redirect() {
 		$link = $this->get_redirect();
 
-		if ( ! $link )
-			return;
-
-		wp_redirect( $link, 301 );
-		exit;
+		if ( $link ) {
+			wp_redirect( $link, 301 );
+			exit;
+		}
 	}
 
 	/**
@@ -469,11 +493,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 * @return string|bool the redirection URL, or false
 	 */
 	function get_redirect() {
-		if ( ! is_singular() )
+		if ( ! is_singular() || ! get_queried_object_id() ) {
 			return false;
-
-		if ( ! get_queried_object_id() )
-			return false;
+		}
 
 		$link = $this->get_link( get_queried_object_id() );
 
@@ -511,12 +533,16 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		foreach( array_keys( $targets ) as $targeted_id )
 			$targets_by_url[$links[$targeted_id]] = true;
 
-		if ( ! $links )
+		if ( ! $links ) {
 			return $pages;
+		}
 
 		$this_url = ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 		foreach ( (array) $links as $id => $page ) {
+			if ( isset( $targets_by_url[$page] ) ) {
+				$page .= '#new_tab';
+			}
 			if ( str_replace( 'http://www.', 'http://', $this_url ) === str_replace( 'http://www.', 'http://', $page ) || ( is_home() && str_replace( 'http://www.', 'http://', trailingslashit( get_bloginfo( 'url' ) ) ) === str_replace( 'http://www.', 'http://', trailingslashit( $page ) ) ) ) {
 				$highlight = true;
 				$current_page = esc_url( $page );
@@ -525,7 +551,7 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 
 		if ( count( $targets_by_url ) ) {
 			foreach ( array_keys( $targets_by_url ) as $p ) {
-				$p = esc_url( $p );
+				$p = esc_url( $p . '#new_tab' );
 				$pages = str_replace( '<a href="' . $p . '"', '<a href="' . $p . '" target="_blank"', $pages );
 			}
 		}
@@ -546,8 +572,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	function wp_nav_menu_objects( $items ) {
 		$new_items = array();
 		foreach ( $items as $item ) {
-			if ( isset( $item->object_id ) && $this->get_target( $item->object_id ) )
+			if ( isset( $item->object_id ) && $this->get_target( $item->object_id ) ) {
 				$item->target = '_blank';
+			}
 			$new_items[] = $item;
 		}
 		return $new_items;
@@ -557,9 +584,8 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 * Hooks in as a post is being loaded for editing and conditionally adds a notice
 	 */
 	function load_post() {
-		if ( isset( $_GET['post'] ) ) {
-			if ( $this->get_link( (int) $_GET['post'] ) )
-				$this->hook( 'admin_notices', 'notify_of_external_link' );
+		if ( isset( $_GET['post'] ) && $this->get_link( (int) $_GET['post'] ) ) {
+			$this->hook( 'admin_notices', 'notify_of_external_link' );
 		}
 	}
 
@@ -568,37 +594,6 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 */
 	function notify_of_external_link() {
 		?><div class="updated"><p><?php _e( '<strong>Note</strong>: This content is pointing to a custom URL. Use the &#8220;Page Links To&#8221; box to change this behavior.', 'page-links-to' ); ?></p></div><?php
-	}
-
-	/**
-	 * Return a JS file as a string
-	 *
-	 * Takes a plugin-relative path to a CS-produced JS file
-	 * and returns its second line (no CS comment line)
-	 * @param  string $path plugin-relative path to CoffeeScript-produced JS file
-	 * @return string       the JS string
-	 */
-	function inline_coffeescript( $path ) {
-			$inline_script = file_get_contents( trailingslashit( plugin_dir_path( self::FILE ) ) . $path );
-			$inline_script = explode( "\n", $inline_script );
-			return $inline_script[1];
-	}
-
-	/**
-	 * Adds inline JS to the footer to handle "open in new tab" links
-	 */
-	function targets_in_new_window_via_js_footer() {
-		$target_ids = $this->targets_on_this_page;
-		$target_urls = array();
-		foreach ( array_keys( $target_ids ) as $id ) {
-			$link = $this->get_link( $id );
-			if ( $link )
-				$target_urls[$link] = true;
-		}
-		$targets = array_keys( $target_urls );
-		if ( $targets ) {
-			?><script>var pltNewTabURLs = <?php echo json_encode( $targets ) . ';' . $this->inline_coffeescript( 'js/new-tab.js' ); ?></script><?php
-		}
 	}
 
 	/**
@@ -614,8 +609,27 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 				$links,
 				array( '<a href="https://github.com/markjaquith/page-links-to" target="_blank">GitHub</a>' )
 			);
+		} else {
+			return $links;
 		}
-		return $links;
+	}
+
+	/**
+	 * Returns the URL of this plugin's directory
+	 *
+	 * @return string this plugin's directory URL
+	 */
+	public function get_url() {
+		return plugin_dir_url( self::FILE );
+	}
+
+	/**
+	 * Returns the filesystem path of this plugin's directory
+	 *
+	 * @return string this plugin's directory filesystem path
+	 */
+	public function get_path() {
+		return plugin_dir_path( self::FILE );
 	}
 }
 

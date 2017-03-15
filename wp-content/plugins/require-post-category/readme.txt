@@ -1,9 +1,9 @@
-=== Require Post Category ===
+﻿=== Require Post Category ===
 Contributors: joshhartman
 Tags: post, category, require, force, publish, draft, admin
 Requires at least: 3.0
-Tested up to: 4.2
-Stable tag: 1.0.4
+Tested up to: 4.7
+Stable tag: 1.0.6
 
 Require users to choose a post category before saving a draft, updating a post, or publishing a post.
 
@@ -13,9 +13,11 @@ Tired of uncategorized posts? Use this simple plugin to require users to choose 
 
 = Translators =
 
+* French (fr_FR) - Dominique V.
 * Spanish (es_ES) - [Andrew Kurtis - WebHostingHub](http://www.webhostinghub.com)
+* Polish (pl_PL) - Michał Papliński
 
-If you have created your own language pack, or have an update of an existing one, you can send the [PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://www.warpconduit.net/contact) so that I can bundle it into the plugin. [Download the latest POT file](http://plugins.svn.wordpress.org/require-post-category/trunk/languages/require-post-category.pot).
+If you have created your own language pack, or have an update of an existing one, you can send the [PO and MO files](https://codex.wordpress.org/Translating_WordPress) to [me](https://www.warpconduit.net/contact) so that I can bundle it into the plugin. [Download the latest POT file](https://plugins.svn.wordpress.org/require-post-category/trunk/languages/require-post-category.pot).
 
 == Installation ==
 
@@ -30,13 +32,19 @@ Nope, just install and activate, that's it!
 
 = Have a question that is not addressed here? =
 
-Leave a comment on the plugin homepage http://www.warpconduit.net/wordpress-plugins/require-post-category/
+Leave a comment on the plugin homepage https://www.warpconduit.net/wordpress-plugins/require-post-category/
 
 == Screenshots ==
 
 1. Alert appears when you try to save a post without choosing a category
 
 == Changelog ==
+
+= 1.0.6 =
+* Added French (fr_FR) translation by Dominique V.
+
+= 1.0.5 =
+* Added Polish (pl_PL) translation by Michał P.
 
 = 1.0.4 =
 * Added Spanish (es_ES) translation by Andrew K.
