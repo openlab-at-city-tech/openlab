@@ -471,7 +471,7 @@ add_action( 'groups_group_after_save', 'openlab_additional_faculty_save' );
 /**
  * Render the "Group Contact" field when creating/editing a project or club.
  */
-function openlab_group_contact_field() {
+function openlab_group_contact_field( $create_or_edit = 'create' ) {
 	$group_type = '';
 
 	// Projects and clubs only.
@@ -510,15 +510,16 @@ function openlab_group_contact_field() {
 
 	?>
 
+	<?php if ( 'create' === $create_or_edit ) : ?>
 	<div id="group-contact-admin" class="panel panel-default">
-            <div class="panel-heading"><label for="group-contact-autocomplete">Group Contact</label></div>
+            <div class="panel-heading"><label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label></div>
             <div class="panel-body">
-		<?php if ( bp_is_group_create() ) : ?>
-			<p>By default, you are the <?php echo ucwords( $group_type ) ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
-		<?php else : ?>
-			<p>You may select one or more <?php echo $group_type ?> members as <?php echo ucwords( $group_type ) ?> Contacts.</p>
-		<?php endif; ?>
+		<p>By default, you are the <?php echo ucwords( $group_type ) ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
+	<?php endif; ?>
 
+		<?php if ( 'edit' === $create_or_edit ) : ?>
+			<label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label>
+		<?php endif; ?>
 		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />
 		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ) ?>
 		<input type="hidden" name="group-contact-group-id" id="group-contact-group-id" value="<?php echo intval( $group_id ); ?>" />
@@ -527,12 +528,20 @@ function openlab_group_contact_field() {
 
                 <label class="sr-only hide-if-js" for="group-contacts">Group Contacts</label>
 		<input class="hide-if-js" type="textbox" name="group-contacts" id="group-contacts" value="<?php echo esc_attr( implode( ', ', $existing_contacts ) ) ?>" />
+
+	<?php if ( 'create' === $create_or_edit ) : ?>
             </div>
 	</div>
+	<?php endif; ?>
+
 	<?php
 }
 add_action( 'bp_after_group_details_creation_step', 'openlab_group_contact_field', 5 );
-add_action( 'bp_after_group_details_admin', 'openlab_group_contact_field', 5 );
+
+function openlab_group_contact_field_edit() {
+	openlab_group_contact_field( 'edit' );
+}
+add_action( 'groups_custom_group_fields_editable', 'openlab_group_contact_field_edit' );
 
 /**
  * AJAX handler for group contact autocomplete.

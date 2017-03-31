@@ -26,11 +26,15 @@ ul.ui-autocomplete {
 	background: #aaa;
 }
 
-#additional-faculty-list li {
+#group-contact-list li {
 	padding: 4px;
 	line-height: 1.5em;
 }
 
-.addl-faculty-remove a {
+.group-contact-remove a {
 	margin-left: 8px;
+}
+
+#group-contact-list {
+	margin-bottom: 16px;
 }

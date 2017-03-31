@@ -720,6 +720,20 @@ function cuny_group_single() {
 
                             <?php endif; ?>
 
+                            <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
+                                <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
+                                    <div class="table-row row">
+                                        <div class="bold col-sm-7">Category</div>
+                                        <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <div class="table-row row">
+                                <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
+                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
+                            </div>
+
                             <?php if ( $group_contacts ): ?>
 				<div class="table-row row">
 					<?php /* This won't work at all for l10n */ ?>
@@ -734,20 +748,6 @@ function cuny_group_single() {
 					<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
 				</div>
                             <?php endif; ?>
-
-                            <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>
-                                <?php if ($group_terms = bpcgc_get_group_selected_terms($group_id, true)): ?>
-                                    <div class="table-row row">
-                                        <div class="bold col-sm-7">Category</div>
-                                        <div class="col-sm-17 row-content"><?php echo implode(', ', wp_list_pluck($group_terms, 'name')); ?></div>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <div class="table-row row">
-                                <div class="bold col-sm-7"><?php echo ucfirst($group_type); ?> Description</div>
-                                <div class="col-sm-17 row-content"><?php bp_group_description() ?></div>
-                            </div>
 
                             <?php if ($group_type == "portfolio"): ?>
 
