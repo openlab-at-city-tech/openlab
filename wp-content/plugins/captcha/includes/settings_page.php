@@ -1,7 +1,7 @@
 <?php
 /**
  * Displays the content of the "Settings" tab on the pligin settings page
- * @package Captcha Pro by BestWebSoft
+ * @package Captcha by BestWebSoft
  * @since 4.2.3
  */
 
@@ -193,19 +193,7 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 			 */
 			$general_arrays  = array( 'math_actions', 'operand_format', 'used_packages' );
 			$general_bool    = array( 'load_via_ajax', 'display_reload_button', 'enlarge_images', 'enable_time_limit' );
-			$general_strings = array( 'title', 'required_symbol', 'no_answer', 'wrong_answer', 'time_limit_off', 'time_limit_off_notice', 'whitelist_message' );
-
-			/**
-			 * To make an compatibility with old
-			 * Contact Form an Subscriber plugins versions
-			 * @deprecated since 4.2.3
-			 * @todo remove after 1.03.2017
-			 */
-			$related_options = array(
-				'required_symbol' => array( 'cptch_required_symbol' ),
-				'title'           => array( 'cptch_label_form' ),
-				'bws_contact'     => array( 'cptch_contact_form' )
-			);
+			$general_strings = array( 'type', 'title', 'required_symbol', 'no_answer', 'wrong_answer', 'time_limit_off', 'time_limit_off_notice', 'whitelist_message' );
 
 			$option_notices = array(
 				'math_actions'   => __( 'Arithmetic actions', 'captcha' ),
@@ -235,18 +223,10 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 					$notices['a'] = __( 'Text fields in the "Notification messages" option must not be empty', 'captcha' ) . '.';
 				} else {
 					$cptch_options[ $option ] = $value;
-
-					/**
-					 * @deprecated since 4.2.3
-					 * @todo remove the next condition block after 1.03.2017
-					 */
-					if ( array_key_exists( $option, $related_options ) ) {
-						foreach ( $related_options[ $option ] as $related )
-							$cptch_options[ $related ] = $value;
-					}
 				}
 			}
 
+			$cptch_options['images_count'] = isset( $_REQUEST['cptch_images_count'] ) ? absint( $_REQUEST['cptch_images_count'] ) : 4;
 			$cptch_options['time_limit'] = isset( $_REQUEST['cptch_time_limit'] ) ? absint( $_REQUEST['cptch_time_limit'] ) : 120;
 
 			/*
@@ -254,20 +234,10 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 			 */
 			$forms     = array_keys( $this->forms );
 			$form_bool = array( 'enable', 'hide_from_registered' );
-			foreach( $forms as $form_slug ) {
+			foreach ( $forms as $form_slug ) {
 
-				foreach( $form_bool as $option ) {
+				foreach ( $form_bool as $option ) {
 					$cptch_options['forms'][ $form_slug ][ $option ] = isset( $_REQUEST['cptch']['forms'][ $form_slug ][ $option ] );
-
-					/**
-					 * @deprecated since 4.2.3
-					 * @todo remove the next condition block after 1.03.2017
-					 */
-					if ( 'enable' == $option && array_key_exists( $form_slug, $related_options ) ) {
-						foreach ( $related_options[ $form_slug ] as $related_option )
-							$cptch_options[ $related_option ] = $cptch_options['forms'][ $form_slug ][ $option ] ? 1 : 0;
-					}
-
 				}
 			}
 
@@ -276,10 +246,15 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 			 * it is necessary that at least one of the images packages was selected on the General Options tab
 			 */
 			if (
-				$this->images_enabled() &&
+				( $this->images_enabled() || 'recognition' == $cptch_options['type'] ) &&
 				empty( $cptch_options['used_packages'] )
 			) {
-				$notices[] = __( 'In order to use images in the CAPTCHA, please select at least one of the items in the option "Use image packages". The "Images" checkbox in "Complexity" option has been disabled', 'captcha' ) . '.';
+				if ( 'recognition' == $cptch_options['type'] ) {
+					$notices[] = __( 'In order to use "Character recognition" type, please select at least one of the items in the option "Use image packages".', 'captcha' );
+					$cptch_options['type'] = 'math_actions';
+				} else {
+					$notices[] = __( 'In order to use images in the CAPTCHA, please select at least one of the items in the option "Use image packages". The "Images" checkbox in "Complexity" option has been disabled.', 'captcha' );
+				}
 				$key = array_keys( $cptch_options['operand_format'], 'images' );
 				unset( $cptch_options['operand_format'][$key[0]] );
 				if ( empty( $cptch_options['operand_format'] ) )
@@ -362,7 +337,7 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 						if ( ! empty( $this->forms[ $form_slug ][1] ) ) {
 							$src   = plugins_url( "images/{$this->forms[ $form_slug ][1]}", dirname( __FILE__ ) );
 							$content = "<img src=\"{$src}\" title=\"{$this->forms[ $form_slug ][0]}\" alt=\"{$this->forms[ $form_slug ][0]}\" />";
-							$this->add_tooltip( $content, 'cptch_thumb_block' );
+							echo bws_add_help_box( $content, 'cptch_thumb_block bws-hide-for-mobile bws-auto-width' );
 						} ?>
 					</h3>
 					<?php if ( $is_pro_tab ) {
@@ -375,22 +350,6 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 		}
 
 		/**
-		 * Displays the tooltip on the plugin options page
-		 * @see    self::display_tabs();
-		 * @access private
-		 * @param  string  $content   The content of the tooltip
-		 * @param  string  $class     The CSS-class of the tooltip
-		 * @return void
-		 */
-		private function add_tooltip( $content, $class = '' ) { ?>
-			<span class="bws_help_box dashicons dashicons-editor-help <?php echo $class; ?>">
-				<span class="bws_hidden_help_text">
-					<?php echo $content; ?>
-				</span>
-			</span>
-		<?php }
-
-		/**
 		 * Displays general plugin options
 		 * @see    self::display_tabs();
 		 * @access private
@@ -399,99 +358,130 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 		 */
 		private function display_general_options() {
 			global $cptch_options;
-			$ajax_load_tooltip = sprintf( __( "With this option the CAPTCHA will be generated via %s into the form after the end of the page loading. In this case, the most of spam bots can't figure out the answer to the CAPTCHA automatically because they just can't get the CAPTCHA content", 'captcha' ) . '.', '<a href="https://developer.mozilla.org/en-US/docs/AJAX" target="_blank">AJAX</a>' );
-			$options = array(
-				'math_actions'          => array( 'checkbox', __( 'Arithmetic actions', 'captcha' ) ),
-				'operand_format'        => array( 'checkbox', __( 'Complexity', 'captcha' ) ),
-				'used_packages'         => array( 'pack_list', __( 'Use image packages', 'captcha' ) ),
-				'use_several_packages'  => '',
-				'enlarge_images'        => array( 'checkbox', __( 'Enlarge images on mouseover', 'captcha' ) ),
-				'display_reload_button' => array( 'checkbox', __( 'Show reload button', 'captcha' ) ),
-				'title'                 => array( 'text', __( 'CAPTCHA title', 'captcha' ) ),
-				'required_symbol'       => array( 'text', __( 'Required symbol', 'captcha' ) ),
-				'load_via_ajax'         => array( 'checkbox', __( 'Show CAPTCHA after the end of the page loading', 'captcha' ), $ajax_load_tooltip )
-			);
 			$dirname = dirname(__FILE__);
-			$array_options = array(
-				'math_actions' => array(
-					'plus' => array(
-						__( 'Plus', 'captcha' ) . '&nbsp;(+)',
-						__( 'seven', 'captcha' ) . ' &#43; 1 = <img src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" />'
-					),
-					'minus' => array(
-						__( 'Minus', 'captcha' ) . '&nbsp;(-)',
-						__( 'eight', 'captcha' ) . ' &minus; 6 = <img src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" />'
-					),
-					'multiplications' => array(
-						__( 'Multiplication', 'captcha' ) . '&nbsp;(x)',
-						'<img src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" /> &times; 1 = '. __( 'seven', 'captcha' )
+			$options = array(
+				'type'					=> array(
+					'type'			=> 'radio',
+					'title' 		=> __( 'Captcha type', 'captcha' ),
+					'array_options' => array(
+						'recognition' => array(
+							__( 'Character recognition', 'captcha' ),
+							'<img src="' . plugins_url( 'images/recognition.png', $dirname ) . '" alt="" title="" />'
+						),
+						'math_actions' => array(
+							__( 'Arithmetic actions', 'captcha' ),
+							'5 &minus; <img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" /> = 1'
+						),
 					)
 				),
-				'operand_format' => array(
-					'numbers' => array(
-						__( 'Numbers', 'captcha' ),
-						'5 &minus; <img src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" /> = 1'
+				'math_actions'          => array(
+					'type'			=> 'checkbox',
+					'title' 		=> __( 'Arithmetic actions', 'captcha' ),
+					'array_options' => array(
+						'plus' => array(
+							__( 'Plus', 'captcha' ) . '&nbsp;(+)',
+							__( 'seven', 'captcha' ) . ' &#43; 1 = <img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" />'
+						),
+						'minus' => array(
+							__( 'Minus', 'captcha' ) . '&nbsp;(-)',
+							__( 'eight', 'captcha' ) . ' &minus; 6 = <img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" />'
+						),
+						'multiplications' => array(
+							__( 'Multiplication', 'captcha' ) . '&nbsp;(x)',
+							'<img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" /> &times; 1 = '. __( 'seven', 'captcha' )
+						)
 					),
-					'words' => array(
-						__( 'Words', 'captcha' ),
-						__( 'six', 'captcha' ) . ' &#43; ' . __( 'one', 'captcha' ) . ' = <img src="' . plugins_url( 'images/input.jpg' , $dirname ).'" alt="" title="" />'
+					'class' => 'cptch_for_math_actions'
+				),
+				'operand_format'        => array(
+					'type'			=> 'checkbox',
+					'title' 		=> __( 'Complexity', 'captcha' ),
+					'array_options' => array(
+						'numbers' => array(
+							__( 'Numbers', 'captcha' ),
+							'5 &minus; <img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" alt="" title="" /> = 1'
+						),
+						'words' => array(
+							__( 'Words', 'captcha' ),
+							__( 'six', 'captcha' ) . ' &#43; ' . __( 'one', 'captcha' ) . ' = <img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ).'" alt="" title="" />'
+						),
+						'images' => array(
+							__( 'Images', 'captcha' ),
+							'<span class="cptch_label">
+								<span class="cptch_span"><img class="cptch_example_input" src="' . plugins_url( 'images/2.png' , $dirname ) . '" /></span>' .
+								'<span class="cptch_span">&nbsp;&#43;&nbsp;</span>' .
+								'<span class="cptch_span"><img class="cptch_example_input" src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" /></span>
+								<span class="cptch_span">&nbsp;=&nbsp;</span>
+								<span class="cptch_span"><img class="cptch_example_input" src="' . plugins_url( 'images/5.png' , $dirname ).'" /></span>
+							</span>'
+						)
 					),
-					'images' => array(
-						__( 'Images', 'captcha' ),
-						'<span class="cptch_label">
-							<span class="cptch_span"><img src="' . plugins_url( 'images/6.png' , $dirname ) . '" /></span>' .
-							'<span class="cptch_span">&nbsp;&#43;&nbsp;</span>' .
-							'<span class="cptch_span"><img src="' . plugins_url( 'images/input.jpg' , $dirname ) . '" /></span>
-							<span class="cptch_span">&nbsp;=&nbsp;</span>
-							<span class="cptch_span"><img src="' . plugins_url( 'images/7.png' , $dirname ).'" /></span>
-						</span>'
-					)
-				)
+					'class' => 'cptch_for_math_actions'
+				),
+				'images_count' 			=> array(
+					'type'	=> 'number',
+					'title' => __( 'Images count', 'captcha' ),
+					'min'	=> 1,
+					'max'	=> 10,
+					'class' => 'cptch_for_recognition'
+				),
+				'used_packages'         => array(
+					'type'	=> 'pack_list',
+					'title' => __( 'Use image packages', 'captcha' ),
+					'class' => 'cptch_images_options'
+				),
+				'use_several_packages'  => '',
+				'enlarge_images'        => array(
+					'type'	=> 'checkbox',
+					'title' => __( 'Enlarge images on mouseover', 'captcha' ),
+					'class' => 'cptch_images_options'
+				),
+				'display_reload_button' => array(
+					'type'	=> 'checkbox',
+					'title' => __( 'Show reload button', 'captcha' ) ),
+				'title'                 => array(
+					'type'	=> 'text',
+					'title' => __( 'CAPTCHA title', 'captcha' ) ),
+				'required_symbol'       => array(
+					'type'	=> 'text',
+					'title' => __( 'Required symbol', 'captcha' ) ),
+				'load_via_ajax'         => array(
+					'type'	=> 'checkbox',
+					'title' => __( 'Show CAPTCHA after the end of the page loading', 'captcha' ),
+					'tooltip' => sprintf( __( "With this option the CAPTCHA will be generated via %s into the form after the end of the page loading. In this case, the most of spam bots can't figure out the answer to the CAPTCHA automatically because they just can't get the CAPTCHA content", 'captcha' ) . '.', '<a href="https://developer.mozilla.org/en-US/docs/AJAX" target="_blank">AJAX</a>' ) )
 			); ?>
 			<table class="form-table">
-				<?php
-				/**
-				 * @deprecated since 4.2.3
-				 * @todo remove it after 1.03.2017
-				 */
-				cptch_display_deprecated_filter();
-				foreach( $options as $key => $data ) {
+				<?php foreach ( $options as $key => $data ) {
+					$class = ! empty( $data['class'] ) ? ' class="' . $data['class'] . '"' : '';
 
-					$is_multi_option = array_key_exists( $key, $array_options );
-					$id = $is_multi_option ? '' : ( isset( $cptch_options[ $key ] ) ? "cptch_{$key}" : "cptch_form_general_{$key}" );
-					$class =
-							in_array( $key, array( 'used_packages', 'enlarge_images', 'use_several_packages' ) )
-						?
-							' class="cptch_images_options"'
-						:
-							'';
 					if ( 'use_several_packages' == $key ) {
 						if ( ! $this->hide_pro_tabs ) { ?>
-							<tr<?php echo $class . ( ! empty( $class ) && ! $this->images_enabled() ? ' style="display: none;"' : '' ); ?>>
+							<tr class="cptch_images_options">
 								<td colspan="2"><?php cptch_pro_block( 'cptch_use_several_packages' ); ?></td>
 							</tr>
 						<?php }
 						continue;
 					} ?>
-					<tr<?php echo $class . ( ! empty( $class ) && ! $this->images_enabled() ? ' style="display: none;"' : '' ); ?>>
-						<th scope="row"><label for="<?php echo $id; ?>"><?php echo $data[1]; ?></label></th>
+					<tr<?php echo $class; ?>>
+						<th scope="row"><?php echo $data['title']; ?></th>
 						<td>
 							<fieldset>
-								<?php $func = "add_{$data[0]}_input";
-								if ( $is_multi_option ) {
-									$name = "cptch_{$key}[]";
-									foreach ( $array_options[ $key ] as $slug => $sub_data ) {
+								<?php $func = "add_{$data['type']}_input";
+								if ( isset( $data['array_options'] ) ) {
+									$name = 'radio' == $data['type'] ? "cptch_{$key}" : "cptch_{$key}[]";
+									foreach ( $data['array_options'] as $slug => $sub_data ) {
 										$id      = "cptch_{$key}_{$slug}";
-										$checked = in_array( $slug, $cptch_options[ $key ] );
+										$checked = 'radio' == $data['type'] ? ( $slug == $cptch_options[ $key ] ) : in_array( $slug, $cptch_options[ $key ] );
 										$value   = $slug; ?>
 										<label for="<?php echo $id; ?>">
 											<?php $this->$func( compact( 'id', 'name', 'value', 'checked' ) );
 											echo $sub_data[0]; ?>
 										</label>
-										<?php $this->add_tooltip(  "<span class=\"cptch_example_fields_actions\">{$sub_data[1]}</span>", 'cptch_option_tooltip' ); ?>
+										<?php echo bws_add_help_box( $sub_data[1] ); ?>
 										<br />
 									<?php }
 								} else {
+									$id = isset( $data['array_options'] ) ? '' : ( isset( $cptch_options[ $key ] ) ? "cptch_{$key}" : "cptch_form_general_{$key}" );
 									$name    = $id;
 									$value   = $cptch_options[ $key ];
 									$checked = !! $value;
@@ -501,11 +491,15 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 										$open_tag = "<label for=\"{$id}\">";
 										$close_tag = "</label>";
 									}
+									if ( isset( $data['min'] ) )
+										$min = $data['min'];
+									if ( isset( $data['max'] ) )
+										$max = $data['max'];
 									echo $open_tag;
-									$this->$func( compact( 'id', 'name', 'value', 'checked' ) );
+									$this->$func( compact( 'id', 'name', 'value', 'checked', 'min', 'max' ) );
 									echo $close_tag;
-									if( ! empty( $data[2] ) )
-										$this->add_tooltip( $data[2], 'cptch_option_tooltip' );
+									if ( !empty( $data['tooltip'] ) )
+										echo bws_add_help_box( $data['tooltip'] );
 								} ?>
 							</fieldset>
 						</td>
@@ -534,11 +528,13 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 				array(
 					'id'      => "cptch_time_limit",
 					'name'    => "cptch_time_limit",
-					'value'   => $cptch_options['time_limit']
+					'value'   => $cptch_options['time_limit'],
+					'min'	  => 10,
+					'max'	  => 9999
 				)
 			); ?>
 			<tr>
-				<th scope="row"><label for="<?php echo $options[0]['id']; ?>"><?php echo __( 'Enable time limit', 'captcha' ); ?></label></th>
+				<th scope="row"><?php _e( 'Enable time limit', 'captcha' ); ?></th>
 				<td>
 					<fieldset>
 						<?php $this->add_checkbox_input( $options[0] ); ?>
@@ -549,6 +545,21 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 					</fieldset>
 				</td>
 			</tr>
+		<?php }
+
+		/**
+		 * Displays the HTML radiobutton with the specified attributes
+		 * @access private
+		 * @param  array  $args   An array of HTML attributes
+		 * @return void
+		 */
+		private function add_radio_input( $args ) { ?>
+			<input
+				type="radio"
+				id="<?php echo $args['id']; ?>"
+				name="<?php echo $args['name']; ?>"
+				value="<?php echo $args['value']; ?>"
+				<?php echo $args['checked'] ? ' checked="checked"' : ''; ?> />
 		<?php }
 
 		/**
@@ -584,18 +595,21 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 			); ?>
 
 			<tr>
-				<th scope="row"><?php echo __( 'Notification messages', 'captcha' ); ?></th>
+				<th scope="row"><?php _e( 'Notification messages', 'captcha' ); ?></th>
 				<td>
 					<fieldset>
-						<?php foreach( $options as $key => $notices ) { ?>
+						<?php foreach ( $options as $key => $notices ) { ?>
 							<p>
 								<i><?php echo $labels[ $key ][0]; ?></i>
-								<?php $this->add_tooltip( $labels[ $key ][1], 'cptch_notice_tooltip' ); ?>
+								<?php echo bws_add_help_box( $labels[ $key ][1] ); ?>
 							</p>
 							<?php foreach( $notices as $option => $notice ) {
 								$id    = $name = "cptch_{$option}";
 								$value = $cptch_options[$option]; ?>
-								<p><?php $this->add_text_input( compact( 'id', 'name', 'value' ) ); echo $notice; ?></p>
+								<p>
+									<?php $this->add_text_input( compact( 'id', 'name', 'value' ) );
+									echo $notice; ?>
+								</p>
 							<?php }
 						} ?>
 					</fieldset>
@@ -720,8 +734,7 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 				id="<?php echo $args['id']; ?>"
 				name="<?php echo $args['name']; ?>"
 				value="<?php echo isset( $args['value'] ) ? $args['value'] : 1; ?>"
-				<?php echo $args['checked'] ? ' checked="checked"' : '';
-				echo isset( $args['readonly'] ) ? $args['readonly'] : ''; ?> />
+				<?php echo $args['checked'] ? ' checked="checked"' : ''; ?> />
 		<?php }
 
 		/**
@@ -734,8 +747,8 @@ if ( ! class_exists( 'Cptch_Basic_Settings' ) ) {
 			<input
 				type="number"
 				step="1"
-				min="10"
-				max="9999"
+				min="<?php echo $args['min']; ?>"
+				max="<?php echo $args['max']; ?>"
 				id="<?php echo $args['id']; ?>"
 				name="<?php echo $args['name']; ?>"
 				value="<?php echo $args['value']; ?>" />

@@ -35,9 +35,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 			);
 			$this->basename     = $plugin_basename;
 			$this->la_info      = $limit_attempts_info;
-			$this->disable_list = 1 == $cptch_options['use_limit_attempts_whitelist'] && 'active' == $this->la_info['status'];
 			$this->display_notices();
-
 		}
 
 		/**
@@ -79,18 +77,14 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					<table>
 						<tr>
 							<td>
-								<label for="cptch_use_la_whitelist">
-									<input type="checkbox" name="cptch_use_la_whitelist" value="1" id="cptch_use_la_whitelist"<?php echo $disabled . $checked;?>/>
+								<label>
+									<input type="checkbox" name="cptch_use_la_whitelist" value="1" "<?php echo $disabled . $checked; ?>/>
 									<?php echo $limit_attempts_info['label']; ?>
 								</label>
-								<div class="bws_help_box dashicons dashicons-editor-help cptch_thumb_block">
-									<div class="bws_hidden_help_text" style="width: 200px;">
-										<p><?php printf( __( 'With this option, CAPTCHA will not be displayed for IP-addresses from the whitelist of %s', 'captcha' ), $limit_attempts_info['name'] ); ?></p>
-										<?php if ( ! empty( $limit_attempts_info['notice'] ) ) { ?>
-											<p class="bws_info"><?php echo $limit_attempts_info['notice']; ?></p>
-										<?php } ?>
-									</div>
-								</div>
+								<?php $content = sprintf( __( 'With this option, CAPTCHA will not be displayed for IP-addresses from the whitelist of %s', 'captcha' ), $limit_attempts_info['name'] );
+								if ( ! empty( $limit_attempts_info['notice'] ) )
+									$content .=  '<p class="bws_info">' . $limit_attempts_info['notice'] . '</p>';
+								echo bws_add_help_box( $content ); ?>
 							<td>
 						</tr>
 						<tr>
@@ -99,15 +93,13 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 									<button class="button" name="cptch_show_whitelist_form" value="on"<?php echo $hidden ? ' style="display: none;"' : ''; ?>><?php _e( 'Add IP to whitelist', 'captcha' ); ?></button>
 								</div>
 								<div class="alignleft">
-									<input type="submit" name="cptch_load_limit_attempts_whitelist" class="button" value="<?php _e( 'Load IP to the whitelist', 'captcha' ); ?>" style="float: left;<?php echo $hidden ? 'display: none;' : ''; ?>" <?php echo $disabled; ?>/>
-									<div class="bws_help_box dashicons dashicons-editor-help cptch_thumb_block"<?php echo $hidden ? ' style="display: none;"' : ''; ?>>
-										<div class="bws_hidden_help_text" style="width: 200px;">
-											<p><?php printf( __( 'By click on this button, all IP-addresses from the whitelist of %s will be loaded to the whitelist of %s', 'captcha' ), $limit_attempts_info['name'], 'Captcha Plus by BestWebSoft' ); ?></p>
-											<?php if ( ! empty( $limit_attempts_info['notice'] ) ) { ?>
-												<p class="bws_info"><?php echo $limit_attempts_info['notice']; ?></p>
-											<?php } ?>
-										</div>
-									</div>
+									<input type="submit" name="cptch_load_limit_attempts_whitelist" class="button" value="<?php _e( 'Load IP to the whitelist', 'captcha' ); ?>" style="float: left;<?php echo $hidden ? 'display: none;' : ''; ?>" <?php echo $disabled; ?> />
+									<?php if ( ! $hidden ) {
+										$content = sprintf( __( 'By click on this button, all IP-addresses from the whitelist of %s will be loaded to the whitelist of %s', 'captcha' ), $limit_attempts_info['name'], 'Captcha by BestWebSoft' );
+										if ( ! empty( $limit_attempts_info['notice'] ) )
+											$content .=  '<p class="bws_info">' . $limit_attempts_info['notice'] . '</p>';
+										echo bws_add_help_box( $content, 'cptch_thumb_block' );
+									} ?>
 								</div>
 								<noscript>
 									<div class="alignleft">
@@ -158,6 +150,8 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 		* @return void
 		*/
 		function prepare_items() {
+			global $cptch_options;
+			$this->disable_list = ( 1 == $cptch_options['use_limit_attempts_whitelist'] ) && 'active' == $this->la_info['status'];
 			if ( isset( $_GET['orderby'] ) && in_array( $_GET['orderby'], array_keys( $this->get_sortable_columns() ) ) ) {
 				switch ( $_GET['orderby'] ) {
 					case 'ip':
@@ -403,12 +397,28 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 			} elseif ( isset( $_POST['cptch_load_limit_attempts_whitelist'] ) && check_admin_referer( $this->basename, 'cptch_nonce_name' ) ) {
 				/* copy data from the whitelist of LimitAttempts plugin */
 				$time = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
-				$result = $wpdb->query(
-					"INSERT IGNORE INTO `{$wpdb->prefix}cptch_whitelist`
-						( `ip`, `ip_from_int`, `ip_to_int`, `add_time` )
-						( SELECT `ip`, `ip_from_int`, `ip_to_int`, '{$time}'
-							FROM `{$wpdb->prefix}lmtttmpts_whitelist` );"
-				);
+				$column_exists = $wpdb->query( "SHOW COLUMNS FROM `" . $wpdb->prefix . "lmtttmpts_whitelist` LIKE 'ip_from_int'" );
+				/* LimitAttempts Free hasn't  `ip_from_int`, `ip_to_int` COLUMNS */
+				if ( 0 == $column_exists ) {
+					$result = 0;
+					$all_ip = $wpdb->get_results( "SELECT `ip`, '{$time}' FROM `{$wpdb->prefix}lmtttmpts_whitelist`", ARRAY_A );
+					foreach ( $all_ip as $ip_value ) {
+						$ip_int = sprintf( '%u', ip2long( $ip_value['ip'] ) );
+						$result_single = $wpdb->query( $wpdb->prepare(
+							"INSERT IGNORE INTO `{$wpdb->prefix}cptch_whitelist`
+							( `ip`, `ip_from_int`, `ip_to_int`, `add_time` ) VALUES ( %s, %s, %s, %s );",
+							$ip_value['ip'], $ip_int, $ip_int, $time ) );
+						$result = $result + $result_single;
+					}					
+				} else {
+					$result = $wpdb->query(
+						"INSERT IGNORE INTO `{$wpdb->prefix}cptch_whitelist`
+							( `ip`, `ip_from_int`, `ip_to_int`, `add_time` )
+							( SELECT `ip`, `ip_from_int`, `ip_to_int`, '{$time}'
+								FROM `{$wpdb->prefix}lmtttmpts_whitelist` );"
+					);
+				}
+
 				if ( $wpdb->last_error ) {
 					$error = $wpdb->last_error;
 				} else {
@@ -417,14 +427,16 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					update_option( 'cptch_options', $cptch_options );
 				}
 			} elseif( isset( $_POST['cptch_save_add_ip_form'] ) && check_admin_referer( $this->basename, 'cptch_nonce_name' ) ) {
+				if ( empty( $cptch_options ) )
+					$cptch_options = get_option( 'cptch_options' );
 				$cptch_options['use_limit_attempts_whitelist'] = isset( $_POST['cptch_use_la_whitelist'] ) ? 1 : 0;
 				update_option( 'cptch_options', $cptch_options );
 			}
 			if ( ! empty( $message ) ) { ?>
-				<div class="updated fade below-h2"><p><strong><?php echo $message; ?>.</strong></p></div>
+				<div class="updated fade below-h2"><p><strong><?php echo $message; ?></strong></p></div>
 			<?php }
 			if ( ! empty( $error ) ) { ?>
-				<div class="error below-h2"><p><strong><?php echo $error; ?>.</strong></p></div>
+				<div class="error below-h2"><p><strong><?php echo $error; ?></strong></p></div>
 			<?php }
 		}
 
@@ -454,7 +466,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					'active'          => false,
 					'name'             => 'Limit Attempts by BestWebSoft',
 					'label'            => sprintf( __( 'use the whitelist of %s', 'captcha' ), 'Limit Attempts by BestWebSoft' ),
-					'notice'           => sprintf( __( 'you should install %s to use this functionality', 'captcha' ), '<a href="http://bestwebsoft.com/products/wordpress/plugins/limit-attempts?k=7f52b8ba74b49875aeb687556c04efd8&pn=75&v=' . $cptch_plugin_info["Version"] . '&wp_v=' . $wp_version . '" target="_blank">Limit Attempts by BestWebSoft</a>' ),
+					'notice'           => sprintf( __( 'you should install %s to use this functionality', 'captcha' ), '<a href="https://bestwebsoft.com/products/wordpress/plugins/limit-attempts?k=7f52b8ba74b49875aeb687556c04efd8&pn=75&v=' . $cptch_plugin_info["Version"] . '&wp_v=' . $wp_version . '" target="_blank">Limit Attempts by BestWebSoft</a>' ),
 					'disabled'         => true,
 				);
 			}

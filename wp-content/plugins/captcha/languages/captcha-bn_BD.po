@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-08 14:46+0300\n"
-"PO-Revision-Date: 2016-11-08 14:46+0300\n"
+"PO-Revision-Date: 2017-02-20 15:00+0200\n"
 "Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: SM Mehdi Akram <mehdi.akram@gmail.com>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2\n"
@@ -52,10 +52,9 @@ msgstr ""
 msgid "Go PRO"
 msgstr "প্রোফেশনালে যাও"
 
-#: captcha.php:548 captcha.php:554 captcha.php:570 captcha.php:572
-#: captcha.php:581 captcha.php:635 captcha.php:639 captcha.php:648
-#: captcha.php:671 captcha.php:681 captcha.php:706 captcha.php:709
-#: captcha.php:717
+#: captcha.php:548 captcha.php:554 captcha.php:570 captcha.php:572 captcha.php:581
+#: captcha.php:635 captcha.php:639 captcha.php:648 captcha.php:671 captcha.php:681
+#: captcha.php:706 captcha.php:709 captcha.php:717
 msgid "ERROR"
 msgstr "ত্রুটি"
 
@@ -67,8 +66,8 @@ msgstr ""
 #, fuzzy
 msgid "Click the BACK button on your browser, and try again."
 msgstr ""
-"ত্রুটি: আপনি একটি ভুল ক্যাপচা দিয়েছেন। আপনার ব্রাউজারের ব্যাক বোতাম ক্লিক করুন এবং "
-"আবার চেষ্টা করুন।"
+"ত্রুটি: আপনি একটি ভুল ক্যাপচা দিয়েছেন। আপনার ব্রাউজারের ব্যাক বোতাম ক্লিক করুন এবং আবার "
+"চেষ্টা করুন।"
 
 #: captcha.php:1019
 msgid "In order to pass the CAPTCHA please enable JavaScript"
@@ -102,8 +101,7 @@ msgstr "পাঁচ"
 msgid "six"
 msgstr "ছয়"
 
-#: captcha.php:1373 includes/settings_page.php:419
-#: includes/settings_page.php:427
+#: captcha.php:1373 includes/settings_page.php:419 includes/settings_page.php:427
 msgid "seven"
 msgstr "সাত"
 
@@ -571,9 +569,8 @@ msgstr "সেটিংস পাতা"
 #: captcha.php:1737
 #, php-format
 msgid ""
-"You're using W3 Total Cache plugin. If %1$s doesn't work properly, please "
-"clear the cache in W3 Total Cache plugin and turn on '%2$s' option on the "
-"plugin %3$s."
+"You're using W3 Total Cache plugin. If %1$s doesn't work properly, please clear the "
+"cache in W3 Total Cache plugin and turn on '%2$s' option on the plugin %3$s."
 msgstr ""
 
 #: captcha.php:1739 includes/settings_page.php:412
@@ -615,8 +612,8 @@ msgstr ""
 #: includes/whitelist.php:88
 #, php-format
 msgid ""
-"With this option, CAPTCHA will not be displayed for IP-addresses from the "
-"whitelist of %s"
+"With this option, CAPTCHA will not be displayed for IP-addresses from the whitelist "
+"of %s"
 msgstr ""
 
 #: includes/whitelist.php:99 includes/whitelist.php:135
@@ -630,8 +627,8 @@ msgstr ""
 #: includes/whitelist.php:105
 #, php-format
 msgid ""
-"By click on this button, all IP-addresses from the whitelist of %s will be "
-"loaded to the whitelist of %s"
+"By click on this button, all IP-addresses from the whitelist of %s will be loaded "
+"to the whitelist of %s"
 msgstr ""
 
 #: includes/whitelist.php:114
@@ -679,8 +676,7 @@ msgstr ""
 msgid "IP added to the whitelist successfully"
 msgstr ""
 
-#: includes/whitelist.php:359 includes/whitelist.php:381
-#: includes/whitelist.php:393
+#: includes/whitelist.php:359 includes/whitelist.php:381 includes/whitelist.php:393
 msgid "Some errors occured"
 msgstr ""
 
@@ -753,10 +749,10 @@ msgstr ""
 #: includes/deprecated.php:96
 #, php-format
 msgid ""
-"Functions from the %1s plugin are used on your site. These functions are "
-"deprecated ( %2s ) since version %4s. Please replace them according to the "
-"%3s. If you close this message it will appear in case if deprecated function "
-"would be called again only"
+"Functions from the %1s plugin are used on your site. These functions are deprecated "
+"( %2s ) since version %4s. Please replace them according to the %3s. If you close "
+"this message it will appear in case if deprecated function would be called again "
+"only"
 msgstr ""
 
 #: includes/deprecated.php:115
@@ -887,8 +883,7 @@ msgstr ""
 
 #: includes/package_loader.php:43
 msgid ""
-"Can not load images in to the \"uploads\" folder. Please, check your "
-"permissions"
+"Can not load images in to the \"uploads\" folder. Please, check your permissions"
 msgstr ""
 
 #: includes/package_loader.php:131
@@ -947,8 +942,7 @@ msgstr ""
 
 #: includes/package_loader.php:699
 #, php-format
-msgid ""
-"Some settings of the package %s were set incorrectly. They have been skipped"
+msgid "Some settings of the package %s were set incorrectly. They have been skipped"
 msgstr ""
 
 #: includes/package_loader.php:702
@@ -1064,9 +1058,9 @@ msgstr ""
 
 #: includes/settings_page.php:282
 msgid ""
-"In order to use images in the CAPTCHA, please select at least one of the "
-"items in the option \"Use image packages\". The \"Images\" checkbox in "
-"\"Complexity\" option has been disabled"
+"In order to use images in the CAPTCHA, please select at least one of the items in "
+"the option \"Use image packages\". The \"Images\" checkbox in \"Complexity\" option "
+"has been disabled"
 msgstr ""
 
 #: includes/settings_page.php:291
@@ -1077,10 +1071,9 @@ msgstr "অপশন সংরক্ষণ।"
 #: includes/settings_page.php:402
 #, php-format
 msgid ""
-"With this option the CAPTCHA will be generated via %s into the form after "
-"the end of the page loading. In this case, the most of spam bots can't "
-"figure out the answer to the CAPTCHA automatically because they just can't "
-"get the CAPTCHA content"
+"With this option the CAPTCHA will be generated via %s into the form after the end "
+"of the page loading. In this case, the most of spam bots can't figure out the "
+"answer to the CAPTCHA automatically because they just can't get the CAPTCHA content"
 msgstr ""
 
 #: includes/settings_page.php:408
@@ -1148,14 +1141,13 @@ msgstr ""
 #: includes/settings_page.php:571
 #, fuzzy
 msgid ""
-"If the time limit is exhausted (this message will be displayed above the "
-"CAPTCHA)"
+"If the time limit is exhausted (this message will be displayed above the CAPTCHA)"
 msgstr "দয়া করে সঠিক ক্যাপচা লিখুন।"
 
 #: includes/settings_page.php:572
 msgid ""
-"If the user IP is added to the whitelist (this message will be displayed "
-"instead of the CAPTCHA)"
+"If the user IP is added to the whitelist (this message will be displayed instead of "
+"the CAPTCHA)"
 msgstr ""
 
 #: includes/settings_page.php:577
@@ -1211,8 +1203,8 @@ msgstr ""
 
 #: includes/settings_page.php:787
 msgid ""
-"The image packages list is empty. Please restore default settings or re-"
-"install the plugin to fix this error"
+"The image packages list is empty. Please restore default settings or re-install the "
+"plugin to fix this error"
 msgstr ""
 
 #~ msgid "Registration form"
@@ -1230,8 +1222,7 @@ msgstr ""
 #~ msgid "Multiply"
 #~ msgstr "গুণ"
 
-#~ msgid ""
-#~ "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
+#~ msgid "Please select one item in the block Arithmetic and Complexity for CAPTCHA"
 #~ msgstr "ক্যাপচার জন্য ব্লক গাণিতিক এবং জটিলতা একটি আইটেম নির্বাচন করুন"
 
 #, fuzzy
@@ -1254,8 +1245,7 @@ msgstr ""
 
 #~ msgid "If you upgrade to Pro version all your settings will be saved."
 #~ msgstr ""
-#~ "আপনি যদি প্রোফেশনাল সংস্করণে আপগ্রেড করেন তাহলে আপনার সব সেটিংস সংরক্ষণ করা "
-#~ "হবে।"
+#~ "আপনি যদি প্রোফেশনাল সংস্করণে আপগ্রেড করেন তাহলে আপনার সব সেটিংস সংরক্ষণ করা হবে।"
 
 #~ msgid "and"
 #~ msgstr "এবং"
@@ -1264,11 +1254,11 @@ msgstr ""
 #~ msgstr "নোটিস:"
 
 #~ msgid ""
-#~ "The plugin's settings have been changed. In order to save them please "
-#~ "don't forget to click the 'Save Changes' button."
+#~ "The plugin's settings have been changed. In order to save them please don't "
+#~ "forget to click the 'Save Changes' button."
 #~ msgstr ""
-#~ "প্লাগইনটির সেটিংস পরিবর্তন করা হয়েছে। সংরক্ষণ করার জন্য 'পরিবর্তণ সংরক্ষন' বাটন "
-#~ "ক্লিক করতে দয়া করে ভুলবেন না।"
+#~ "প্লাগইনটির সেটিংস পরিবর্তন করা হয়েছে। সংরক্ষণ করার জন্য 'পরিবর্তণ সংরক্ষন' বাটন ক্লিক "
+#~ "করতে দয়া করে ভুলবেন না।"
 
 #~ msgid "Title for CAPTCHA in the form"
 #~ msgstr "ক্যাপচা ফর্ম এর টাইটেল"
@@ -1290,11 +1280,10 @@ msgstr ""
 #~ msgstr "প্রয়োজন"
 
 #~ msgid ""
-#~ "or higher, that is why it has been deactivated! Please upgrade WordPress "
-#~ "and try again."
+#~ "or higher, that is why it has been deactivated! Please upgrade WordPress and try "
+#~ "again."
 #~ msgstr ""
-#~ "বা উচ্চতর, এই কারণে এটি নিষ্ক্রিয় করা হয়েছে ! ওয়ার্ডপ্রেস আপগ্রেড করে আবার "
-#~ "চেষ্টা করুন।"
+#~ "বা উচ্চতর, এই কারণে এটি নিষ্ক্রিয় করা হয়েছে ! ওয়ার্ডপ্রেস আপগ্রেড করে আবার চেষ্টা করুন।"
 
 #~ msgid "Back to the WordPress"
 #~ msgstr "ওয়ার্ডপ্রেসে ফিরে যাও"
@@ -1303,48 +1292,46 @@ msgstr ""
 #~ msgstr "ভুল লাইসেন্স কী"
 
 #~ msgid ""
-#~ "Something went wrong. Try again later. If the error will appear again, "
-#~ "please, contact us <a href=http://support.bestwebsoft.com>BestWebSoft</"
-#~ "a>. We are sorry for inconvenience."
+#~ "Something went wrong. Try again later. If the error will appear again, please, "
+#~ "contact us <a href=https://support.bestwebsoft.com>BestWebSoft</a>. We are sorry "
+#~ "for inconvenience."
 #~ msgstr ""
-#~ "কিছু ভুল হয়েছে। পরে আবার চেষ্টা করুন। যদি ত্রুটি আবার প্রদর্শিত হয়, দয়া করে "
-#~ "আমাদের সাথে যোগাযোগ করুন <a href=http://support.bestwebsoft.com> "
-#~ "BestWebSoft </a>. এই অসুবিধার জন্য আমরা দুঃখিত।"
+#~ "কিছু ভুল হয়েছে। পরে আবার চেষ্টা করুন। যদি ত্রুটি আবার প্রদর্শিত হয়, দয়া করে আমাদের সাথে "
+#~ "যোগাযোগ করুন <a href=https://support.bestwebsoft.com> BestWebSoft </a>. এই "
+#~ "অসুবিধার জন্য আমরা দুঃখিত।"
 
 #~ msgid "This license key is bind to another site"
 #~ msgstr "এই লাইসেন্স কী অন্য সাইটে আবদ্ধ আছে"
 
 #~ msgid ""
-#~ "Unfortunately, you have exceeded the number of available tries per day. "
-#~ "Please, upload the plugin manually."
+#~ "Unfortunately, you have exceeded the number of available tries per day. Please, "
+#~ "upload the plugin manually."
 #~ msgstr ""
-#~ "দুর্ভাগ্যবশত, আপনি প্রতিদিন উপলব্ধ চেষ্টা সংখ্যা অতিক্রম করেছেন।  দযা করে, নিজে "
-#~ "প্লাগিন আপলোড করুন।"
+#~ "দুর্ভাগ্যবশত, আপনি প্রতিদিন উপলব্ধ চেষ্টা সংখ্যা অতিক্রম করেছেন।  দযা করে, নিজে প্লাগিন "
+#~ "আপলোড করুন।"
 
-#~ msgid ""
-#~ "Failed to download the zip archive. Please, upload the plugin manually"
+#~ msgid "Failed to download the zip archive. Please, upload the plugin manually"
 #~ msgstr "ZIP আর্কাইভ ডাউনলোড করতে ব্যর্থ হয়েছে। দয়া করে, নিজে প্লাগিন আপলোড করুন"
 
 #~ msgid "Failed to open the zip archive. Please, upload the plugin manually"
 #~ msgstr "ZIP আর্কাইভ খুলতে ব্যর্থ হয়েছে। দয়া করে, নিজে প্লাগিন আপলোড করুন"
 
 #~ msgid ""
-#~ "Your server does not support either ZipArchive or Phar. Please, upload "
-#~ "the plugin manually"
+#~ "Your server does not support either ZipArchive or Phar. Please, upload the "
+#~ "plugin manually"
 #~ msgstr ""
-#~ "আপনার সার্ভার ZipArchive বা Phar সমর্থন করে না। দয়া করে, নিজে প্লাগিন আপলোড "
-#~ "করুন"
+#~ "আপনার সার্ভার ZipArchive বা Phar সমর্থন করে না। দয়া করে, নিজে প্লাগিন আপলোড করুন"
 
 #, fuzzy
 #~ msgid "UploadDir is not writable. Please, upload the plugin manually"
 #~ msgstr "ZIP আর্কাইভ খুলতে ব্যর্থ হয়েছে। দয়া করে, নিজে প্লাগিন আপলোড করুন"
 
 #~ msgid ""
-#~ "Something went wrong. Try again later or upload the plugin manually. We "
-#~ "are sorry for inconvenience."
+#~ "Something went wrong. Try again later or upload the plugin manually. We are "
+#~ "sorry for inconvenience."
 #~ msgstr ""
-#~ "কিছু ভুল হয়েছে। পরে আবার চেষ্টা করুন অথবা নিজে প্লাগিন আপলোড করুন। এই অসুবিধার "
-#~ "জন্য আমরা দুঃখিত।"
+#~ "কিছু ভুল হয়েছে। পরে আবার চেষ্টা করুন অথবা নিজে প্লাগিন আপলোড করুন। এই অসুবিধার জন্য আমরা "
+#~ "দুঃখিত।"
 
 #~ msgid "Please, enter Your license key"
 #~ msgstr "দয়া করে, আপনার লাইসেন্স কী লিখুন"
@@ -1365,10 +1352,9 @@ msgstr ""
 #~ msgstr "যদি ভুল দেখতে পান, তাহলে আমাদের সাথে যোগাযোগ করুন"
 
 #~ msgid ""
-#~ "Congratulations! The PRO version of the plugin is successfully download "
-#~ "and activated."
-#~ msgstr ""
-#~ "অভিনন্দন! প্লাগইনটির প্রোফেশনাল সংস্করণ সফলভাবে ডাউনলোড এবং সক্রিয় হয়েছে।"
+#~ "Congratulations! The PRO version of the plugin is successfully download and "
+#~ "activated."
+#~ msgstr "অভিনন্দন! প্লাগইনটির প্রোফেশনাল সংস্করণ সফলভাবে ডাউনলোড এবং সক্রিয় হয়েছে।"
 
 #~ msgid "Please, go to"
 #~ msgstr "দয়া করে, এখানে যান"
@@ -1383,16 +1369,14 @@ msgstr ""
 #~ msgstr "সংস্করণ এর প্লাগইন আপনার লাইসেন্স কী প্রবেশ করেছে।"
 
 #~ msgid ""
-#~ "You can find your license key on your personal page Client area, by "
-#~ "clicking on the link"
+#~ "You can find your license key on your personal page Client area, by clicking on "
+#~ "the link"
 #~ msgstr ""
-#~ "এই লিঙ্কে ক্লিক করে, আপনার ব্যক্তিগত ক্লায়েন্ট এলাকা পাতা থেকে আপনি লাইসেন্স কী "
-#~ "পেতে পারেন"
+#~ "এই লিঙ্কে ক্লিক করে, আপনার ব্যক্তিগত ক্লায়েন্ট এলাকা পাতা থেকে আপনি লাইসেন্স কী পেতে "
+#~ "পারেন"
 
-#~ msgid ""
-#~ "(your username is the email you specify when purchasing the product)."
-#~ msgstr ""
-#~ "(এই পণ্যটি ক্রয় করার সময় আপনার ব্যবহারকারী নাম যে ইমেল তা  নির্দিষ্ট করুন)।"
+#~ msgid "(your username is the email you specify when purchasing the product)."
+#~ msgstr "(এই পণ্যটি ক্রয় করার সময় আপনার ব্যবহারকারী নাম যে ইমেল তা  নির্দিষ্ট করুন)।"
 
 #~ msgid "Go!"
 #~ msgstr "যাও!"
@@ -1405,8 +1389,8 @@ msgstr ""
 #~ "It's time to upgrade your <strong>Captcha plugin</strong> to <strong>PRO</"
 #~ "strong> version"
 #~ msgstr ""
-#~ "এখনই সময় আপনার <strong>ক্যাপচা প্লাগইন</strong> টিকে <strong>প্রোফেশনাল</"
-#~ "strong> সংস্করণে আপগ্রেড করার"
+#~ "এখনই সময় আপনার <strong>ক্যাপচা প্লাগইন</strong> টিকে <strong>প্রোফেশনাল</strong> "
+#~ "সংস্করণে আপগ্রেড করার"
 
 #~ msgid "Extend standard plugin functionality with new great options"
 #~ msgstr "বিস্তৃত মানের প্লাগইন কার্যকারিতার সাথে নতুন দারুন অপশনস রয়েছে"

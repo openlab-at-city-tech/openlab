@@ -63,6 +63,13 @@ form input.cptch_input {
 	line-height: 1;
 	position: relative;
 }
+.cptch_recognition .cptch_span {
+	margin-right: 2px; 
+}
+.rtl .cptch_recognition .cptch_span {
+	margin-right: 0px;
+	margin-left: 2px;
+}
 .cptch_img {
 	width: 40px;
 	max-width: 40px !important;
@@ -79,6 +86,10 @@ form input.cptch_input {
 }
 .cptch_reload_button:before {
 	vertical-align: text-bottom;
+}
+.cptch_recognition .cptch_images_wrap {
+	display: block;
+	margin-bottom: 3px;
 }
 
 /**

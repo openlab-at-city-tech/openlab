@@ -17,6 +17,12 @@
 		if ( item.hasClass( 'cptch_reload_button' ) || item.attr( 'name' ) == 'ac_form_submit' )
 			cptch_reload( item );
 	}).ready( function() {
+		if ( $( '.cptch_recognition' ).length ) {
+			$( '.cptch_recognition' ).each( function() {				
+				$( this ).find( '.cptch_input' ).css( 'width', $( this ).find( '.cptch_images_wrap' ).css( 'width' ) );
+			} );
+		}
+
 		var ajax_containers = $( '.cptch_ajax_wrap' );
 
 		if ( ! ajax_containers.length )
@@ -34,8 +40,12 @@
 function cptch_reload( object, is_ajax_load ) {
 	is_ajax_load = is_ajax_load || false;
 	(function($) {
-		var captcha = object.hasClass( '.cptch_reload_button' ) ? object.parent().parent( '.cptch_wrap' ) : object.closest( 'form' ).find( '.cptch_wrap' ),
-			button  = captcha.find( '.cptch_reload_button' );
+		if  ( is_ajax_load ) {
+			var captcha = object;
+		} else {
+			var captcha = object.hasClass( 'cptch_reload_button' ) ? object.parent().parent( '.cptch_wrap' ) : object.closest( 'form' ).find( '.cptch_wrap' );
+		}
+		var button  = captcha.find( '.cptch_reload_button' );
 		if ( ! captcha.length || button.hasClass( 'cptch_active' ) )
 			return false;
 		button.addClass( 'cptch_active' );
@@ -60,6 +70,12 @@ function cptch_reload( object, is_ajax_load ) {
 					captcha.replaceWith( result ); /* for default forms */
 				else
 					captcha_block.replaceWith( result ); /* for custom forms */
+
+				if ( $( result ).hasClass( 'cptch_recognition' ) || $( result ).find( '.cptch_wrap' ).hasClass( 'cptch_recognition' ) ) {
+					$( '.cptch_recognition' ).each( function() {				
+						$( this ).find( '.cptch_input' ).css( 'width', $( this ).find( '.cptch_images_wrap' ).css( 'width' ) );
+					} );
+				}
 			},
 			error : function ( xhr, ajaxOptions, thrownError ) {
 				alert( xhr.status );
