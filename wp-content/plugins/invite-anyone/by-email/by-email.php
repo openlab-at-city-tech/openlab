@@ -109,7 +109,7 @@ function invite_anyone_opt_out_screen() {
 			<?php if ( isset( $_GET['email'] ) && $email = $_GET['email'] ) : ?>
 				<script type="text/javascript">
 				jQuery(document).ready( function() {
-					jQuery("input#opt_out_email").val("<?php echo str_replace( ' ', '+', urldecode( $email ) ) ?>");
+					jQuery("input#opt_out_email").val("<?php echo esc_js( str_replace( ' ', '+', urldecode( $email ) ) ) ?>");
 				});
 				</script>
 			<?php endif; ?>
@@ -167,7 +167,7 @@ function invite_anyone_register_screen_message() {
 
 		<script type="text/javascript">
 		jQuery(document).ready( function() {
-			jQuery("input#signup_email").val("<?php echo str_replace( ' ', '+', $email ) ?>");
+			jQuery("input#signup_email").val("<?php echo esc_js( str_replace( ' ', '+', $email ) ) ?>");
 		});
 
 		</script>
@@ -404,6 +404,10 @@ add_action( 'wp_head', 'invite_anyone_access_test' );
 function invite_anyone_catch_send() {
 	global $bp;
 
+	if ( ! is_user_logged_in() || ! bp_is_my_profile() ) {
+		return;
+	}
+
 	if ( ! bp_is_current_component( $bp->invite_anyone->slug ) ) {
 		return;
 	}
@@ -416,13 +420,21 @@ function invite_anyone_catch_send() {
 		return;
 	}
 
+	if ( ! invite_anyone_access_test() ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['ia-send-by-email-nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['ia-send-by-email-nonce'] ), 'invite_anyone_send_by_email' ) ) {
+		return;
+	}
+
 	if ( ! invite_anyone_process_invitations( stripslashes_deep( $_POST ) ) ) {
 		bp_core_add_message( __( 'Sorry, there was a problem sending your invitations. Please try again.', 'invite-anyone' ), 'error' );
 	}
 
 	bp_core_redirect( bp_displayed_user_domain() . $bp->invite_anyone->slug . '/sent-invites' );
 }
-add_action( 'wp', 'invite_anyone_catch_send' );
+add_action( 'bp_actions', 'invite_anyone_catch_send' );
 
 function invite_anyone_catch_clear() {
 	global $bp;
@@ -609,7 +621,7 @@ function invite_anyone_screen_one_content() {
 	}
 	?>
 
-	<p id="welcome-message"><?php echo $welcome_message ?></p>
+	<p id="welcome-message"><?php echo esc_html( $welcome_message ) ?></p>
 
 	<ol id="invite-anyone-steps">
 
@@ -623,7 +635,7 @@ function invite_anyone_screen_one_content() {
 			<div class="manual-email">
 				<p>
 					<?php _e( 'Enter email addresses below, one per line.', 'invite-anyone' ) ?>
-					<?php if( invite_anyone_allowed_domains() ) : ?> <?php _e( 'You can only invite people whose email addresses end in one of the following domains:', 'invite-anyone' ) ?> <?php echo invite_anyone_allowed_domains(); ?><?php endif; ?>
+					<?php if( invite_anyone_allowed_domains() ) : ?> <?php _e( 'You can only invite people whose email addresses end in one of the following domains:', 'invite-anyone' ) ?> <?php echo esc_html( invite_anyone_allowed_domains() ); ?><?php endif; ?>
 				</p>
 
 				<?php if ( false !== $max_no_invites = invite_anyone_max_invites() ) : ?>
@@ -640,11 +652,11 @@ function invite_anyone_screen_one_content() {
 		<li>
 			<?php if ( $iaoptions['subject_is_customizable'] == 'yes' ) : ?>
 				<label for="invite-anyone-custom-subject"><?php _e( '(optional) Customize the subject line of the invitation email.', 'invite-anyone' ) ?></label>
-					<textarea name="invite_anyone_custom_subject" id="invite-anyone-custom-subject" rows="15" cols="10" ><?php echo invite_anyone_invitation_subject( $returned_subject ) ?></textarea>
+					<textarea name="invite_anyone_custom_subject" id="invite-anyone-custom-subject" rows="15" cols="10" ><?php echo esc_textarea( invite_anyone_invitation_subject( $returned_subject ) ) ?></textarea>
 			<?php else : ?>
-				<strong><?php _e( 'Subject:', 'invite-anyone' ) ?></strong> <?php echo invite_anyone_invitation_subject( $returned_subject ) ?>
+				<strong><?php _e( 'Subject:', 'invite-anyone' ) ?></strong> <?php echo esc_html( invite_anyone_invitation_subject( $returned_subject ) ) ?>
 
-				<input type="hidden" id="invite-anyone-customised-subject" name="invite_anyone_custom_subject" value="<?php echo invite_anyone_invitation_subject() ?>" />
+				<input type="hidden" id="invite-anyone-customised-subject" name="invite_anyone_custom_subject" value="<?php echo esc_attr( invite_anyone_invitation_subject() ) ?>" />
 			<?php endif; ?>
 		</li>
 
@@ -652,12 +664,12 @@ function invite_anyone_screen_one_content() {
 			<?php if ( $iaoptions['message_is_customizable'] == 'yes' ) : ?>
 				<label for="invite-anyone-custom-message"><?php _e( '(optional) Customize the text of the invitation.', 'invite-anyone' ) ?></label>
 				<p class="description"><?php _e( 'The message will also contain a custom footer containing links to accept the invitation or opt out of further email invitations from this site.', 'invite-anyone' ) ?></p>
-					<textarea name="invite_anyone_custom_message" id="invite-anyone-custom-message" cols="40" rows="10"><?php echo invite_anyone_invitation_message( $returned_message ) ?></textarea>
+					<textarea name="invite_anyone_custom_message" id="invite-anyone-custom-message" cols="40" rows="10"><?php echo esc_textarea( invite_anyone_invitation_message( $returned_message ) ) ?></textarea>
 			<?php else : ?>
 				<label for="invite-anyone-custom-message"><?php _e( 'Message:', 'invite-anyone' ) ?></label>
-					<textarea name="invite_anyone_custom_message" id="invite-anyone-custom-message" disabled="disabled"><?php echo invite_anyone_invitation_message( $returned_message ) ?></textarea>
+					<textarea name="invite_anyone_custom_message" id="invite-anyone-custom-message" disabled="disabled"><?php echo esc_textarea( invite_anyone_invitation_message( $returned_message ) ) ?></textarea>
 
-				<input type="hidden" name="invite_anyone_custom_message" value="<?php echo invite_anyone_invitation_message() ?>" />
+				<input type="hidden" name="invite_anyone_custom_message" value="<?php echo esc_attr( invite_anyone_invitation_message() ) ?>" />
 			<?php endif; ?>
 
 		</li>
@@ -677,9 +689,9 @@ function invite_anyone_screen_one_content() {
 
 						?>
 						<li>
-						<input type="checkbox" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php bp_group_id() ?>" value="<?php bp_group_id() ?>" <?php if ( $from_group == bp_get_group_id() || array_search( bp_get_group_id(), $returned_groups) ) : ?>checked<?php endif; ?> />
+						<input type="checkbox" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php echo esc_attr( bp_get_group_id() ) ?>" value="<?php echo esc_attr( bp_get_group_id() ) ?>" <?php if ( $from_group == bp_get_group_id() || array_search( bp_get_group_id(), $returned_groups) ) : ?>checked<?php endif; ?> />
 
-						<label for="invite_anyone_groups-<?php bp_group_id() ?>" class="invite-anyone-group-name"><?php bp_group_avatar_mini() ?> <span><?php bp_group_name() ?></span></label>
+						<label for="invite_anyone_groups-<?php echo esc_attr( bp_get_group_id() ) ?>" class="invite-anyone-group-name"><?php bp_group_avatar_mini() ?> <span><?php bp_group_name() ?></span></label>
 
 						</li>
 					<?php endwhile; ?>
@@ -690,6 +702,7 @@ function invite_anyone_screen_one_content() {
 
 		<?php endif; ?>
 
+		<?php wp_nonce_field( 'invite_anyone_send_by_email', 'ia-send-by-email-nonce' ); ?>
 		<?php do_action( 'invite_anyone_addl_fields' ) ?>
 
 	</ol>
@@ -747,6 +760,10 @@ function invite_anyone_screen_two() {
 		else
 			$order = 'DESC';
 
+		if ( 'DESC' !== $order ) {
+			$order = 'ASC';
+		}
+
 		$base_url = $bp->displayed_user->domain . $bp->invite_anyone->slug . '/sent-invites/';
 
 		?>
@@ -777,10 +794,10 @@ function invite_anyone_screen_two() {
 				<thead>
 					<tr>
 					  <th scope="col" class="col-delete-invite"></th>
-					  <th scope="col" class="col-email<?php if ( $sort_by == 'email' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=email&amp;order=<?php if ( $sort_by == 'email' && $order == 'ASC' ) : ?>DESC<?php else : ?>ASC<?php endif; ?>"><?php _e( 'Invited email address', 'invite-anyone' ) ?></a></th>
+					  <th scope="col" class="col-email<?php if ( $sort_by == 'email' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo esc_attr( $order ) ?>" title="Sort column order <?php echo esc_attr( $order ) ?>" href="<?php echo esc_url( $base_url ) ?>?sort_by=email&amp;order=<?php if ( $sort_by == 'email' && $order == 'ASC' ) : ?>DESC<?php else : ?>ASC<?php endif; ?>"><?php _e( 'Invited email address', 'invite-anyone' ) ?></a></th>
 					  <th scope="col" class="col-group-invitations"><?php _e( 'Group invitations', 'invite-anyone' ) ?></th>
-					  <th scope="col" class="col-date-invited<?php if ( $sort_by == 'date_invited' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=date_invited&amp;order=<?php if ( $sort_by == 'date_invited' && $order == 'DESC' ) : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e( 'Sent', 'invite-anyone' ) ?></a></th>
-					  <th scope="col" class="col-date-joined<?php if ( $sort_by == 'date_joined' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo $order ?>" title="Sort column order <?php echo $order ?>" href="<?php echo $base_url ?>?sort_by=date_joined&amp;order=<?php if ( $order == 'DESC' ) : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e( 'Accepted', 'invite-anyone' ) ?></a></th>
+					  <th scope="col" class="col-date-invited<?php if ( $sort_by == 'date_invited' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo esc_attr( $order ) ?>" title="Sort column order <?php echo esc_attr( $order ) ?>" href="<?php echo esc_url( $base_url ) ?>?sort_by=date_invited&amp;order=<?php if ( $sort_by == 'date_invited' && $order == 'DESC' ) : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e( 'Sent', 'invite-anyone' ) ?></a></th>
+					  <th scope="col" class="col-date-joined<?php if ( $sort_by == 'date_joined' ) : ?> sort-by-me<?php endif ?>"><a class="<?php echo esc_attr( $order ) ?>" title="Sort column order <?php echo esc_attr( $order ) ?>" href="<?php echo esc_url( $base_url ) ?>?sort_by=date_joined&amp;order=<?php if ( $order == 'DESC' ) : ?>ASC<?php else : ?>DESC<?php endif; ?>"><?php _e( 'Accepted', 'invite-anyone' ) ?></a></th>
 					</tr>
 				</thead>
 
@@ -849,8 +866,8 @@ function invite_anyone_screen_two() {
 						<td class="col-delete-invite"><?php echo $clear_link ?></td>
 						<td class="col-email"><?php echo esc_html( $email ) ?></td>
 						<td class="col-group-invitations"><?php echo $group_names ?></td>
-						<td class="col-date-invited"><?php echo $date_invited ?></td>
-						<td class="date-joined col-date-joined"><span></span><?php echo $date_joined ?></td>
+						<td class="col-date-invited"><?php echo esc_html( $date_invited ) ?></td>
+						<td class="date-joined col-date-joined"><span></span><?php echo esc_html( $date_joined ) ?></td>
 					</tr>
 				<?php endwhile ?>
 			 </tbody>
@@ -921,7 +938,7 @@ function invite_anyone_invitation_message( $returned_message = false ) {
 	global $bp;
 
 	if ( !$returned_message ) {
-		$inviter_name = $bp->loggedin_user->userdata->display_name;
+		$inviter_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 		$blogname = get_bloginfo('name');
 
 		$iaoptions = invite_anyone_options();
@@ -965,7 +982,7 @@ function invite_anyone_process_footer( $email ) {
 function invite_anyone_wildcard_replace( $text, $email = false ) {
 	global $bp;
 
-	$inviter_name = $bp->loggedin_user->userdata->display_name;
+	$inviter_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$site_name    = get_bloginfo( 'name' );
 	$inviter_url  = bp_loggedin_user_domain();
 
@@ -1104,6 +1121,8 @@ function invite_anyone_parse_addresses( $address_string ) {
 function invite_anyone_process_invitations( $data ) {
 	global $bp;
 
+	$options = invite_anyone_options();
+
 	$emails = false;
 	// Parse out the individual email addresses
 	if ( !empty( $data['invite_anyone_email_addresses'] ) ) {
@@ -1117,14 +1136,26 @@ function invite_anyone_process_invitations( $data ) {
 	$returned_data = array(
 		'error_message' => false,
 		'error_emails'  => array(),
-		'subject' 	=> $data['invite_anyone_custom_subject'],
-		'message' 	=> $data['invite_anyone_custom_message'],
 		'groups' 	=> isset( $data['invite_anyone_groups'] ) ? $data['invite_anyone_groups'] : ''
 	);
 
-	// Check against the max number of invites. Send back right away if there are too many
-	$options 	= invite_anyone_options();
-	$max_invites 	= !empty( $options['max_invites'] ) ? $options['max_invites'] : 5;
+	if ( 'yes' === $options['subject_is_customizable'] ) {
+		$data['invite_anyone_custom_subject'] = $data['invite_anyone_custom_subject'];
+	} else {
+		$data['invite_anyone_custom_subject'] = invite_anyone_invitation_subject();
+	}
+
+	if ( 'yes' === $options['message_is_customizable'] ) {
+		$data['invite_anyone_custom_message'] = $data['invite_anyone_custom_message'];
+	} else {
+		$data['invite_anyone_custom_message'] = invite_anyone_invitation_message();
+	}
+
+	$returned_data['subject'] = $data['invite_anyone_custom_subject'];
+	$returned_data['message'] = $data['invite_anyone_custom_message'];
+
+	// Check against the max number of invites. Send back right away if there are too many.
+	$max_invites = ! empty( $options['max_invites'] ) ? $options['max_invites'] : 5;
 
 	if ( count( $emails ) > $max_invites ) {
 
