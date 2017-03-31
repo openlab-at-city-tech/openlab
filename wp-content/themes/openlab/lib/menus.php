@@ -113,7 +113,7 @@ function openlab_modify_options_nav() {
                     'name' => $nav_item->name,
                     'slug' => $nav_item->slug . '-mobile',
                     'parent_slug' => $nav_item->parent_slug,
-                    'parent_url' => trailingslashit(bp_get_group_permalink()),
+                    'parent_url' => trailingslashit( bp_get_group_permalink( groups_get_current_group() ) ),
                     'link' => trailingslashit($nav_item->link).'upcoming/',
                     'position' => intval($nav_item->position) + 1,
                     'item_css_id' => $nav_item->css_id . '-mobile',
