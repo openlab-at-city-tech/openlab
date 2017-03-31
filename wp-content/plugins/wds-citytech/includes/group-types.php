@@ -514,9 +514,9 @@ function openlab_group_contact_field() {
             <div class="panel-heading"><label for="group-contact-autocomplete">Group Contact</label></div>
             <div class="panel-body">
 		<?php if ( bp_is_group_create() ) : ?>
-			<p>By default, you are the Group Contact. You may add or remove Contacts once your group has more members.</p>
+			<p>By default, you are the <?php echo ucwords( $group_type ) ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
 		<?php else : ?>
-			<p>You may select one or more group members as Group Contacts.</p>
+			<p>You may select one or more <?php echo $group_type ?> members as <?php echo ucwords( $group_type ) ?> Contacts.</p>
 		<?php endif; ?>
 
 		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />

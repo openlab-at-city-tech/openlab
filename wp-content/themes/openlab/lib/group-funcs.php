@@ -722,7 +722,15 @@ function cuny_group_single() {
 
                             <?php if ( $group_contacts ): ?>
 				<div class="table-row row">
-					<div class="bold col-sm-7"><?php echo _n( 'Group Contact', 'Group Contacts', count( $group_contacts ), 'openlab-theme' ); ?></div>
+					<?php /* This won't work at all for l10n */ ?>
+					<?php
+					if ( 1 === count( $group_contacts ) ) {
+						$gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
+					} else {
+						$gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
+					}
+					?>
+					<div class="bold col-sm-7"><?php echo $gc_label ?></div>
 					<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
 				</div>
                             <?php endif; ?>
