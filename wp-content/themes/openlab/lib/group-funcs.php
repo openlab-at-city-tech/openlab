@@ -699,6 +699,7 @@ function cuny_group_single() {
                             <?php
                             $wds_school = openlab_generate_school_name($group_id);
                             $wds_departments = openlab_generate_department_name($group_id);
+			    $group_contacts = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
                             <?php if ($wds_school && !empty($wds_school)): ?>
@@ -717,6 +718,13 @@ function cuny_group_single() {
                                     <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
                                 </div>
 
+                            <?php endif; ?>
+
+                            <?php if ( $group_contacts ): ?>
+				<div class="table-row row">
+					<div class="bold col-sm-7"><?php echo _n( 'Group Contact', 'Group Contacts', count( $group_contacts ), 'openlab-theme' ); ?></div>
+					<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
+				</div>
                             <?php endif; ?>
 
                             <?php if (function_exists('bpcgc_get_group_selected_terms')): ?>

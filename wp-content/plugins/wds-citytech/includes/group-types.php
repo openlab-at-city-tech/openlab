@@ -467,3 +467,161 @@ function openlab_additional_faculty_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_additional_faculty_save' );
+
+/**
+ * Render the "Group Contact" field when creating/editing a project or club.
+ */
+function openlab_group_contact_field() {
+	$group_type = '';
+
+	// Projects and clubs only.
+	if ( bp_is_group() ) {
+		$group_type = openlab_get_group_type( bp_get_current_group_id() );
+	} elseif ( bp_is_group_create() && isset( $_GET['type'] ) ) {
+		$group_type = urldecode( $_GET['type'] );
+	}
+
+	if ( ! in_array( $group_type, array( 'club', 'project' ), true ) ) {
+		return;
+	}
+
+	// Enqueue JS and CSS.
+	wp_enqueue_script( 'openlab-group-contact', plugins_url() . '/wds-citytech/assets/js/group-contact.js', array( 'jquery-ui-autocomplete' ) );
+	wp_enqueue_style( 'openlab-group-contact', plugins_url() . '/wds-citytech/assets/css/group-contact.css' );
+
+	$existing_contacts = array();
+	if ( bp_is_group_create() ) {
+		$existing_contacts[] = bp_loggedin_user_id();
+	} else {
+		$group_id = bp_get_current_group_id();
+		$existing_contacts = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
+	}
+
+	$existing_contacts_data = array();
+	foreach ( $existing_contacts as $uid ) {
+		$u = new WP_User( $uid );
+		$existing_contacts_data[] = array(
+			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $uid ) ), esc_html( $u->user_nicename ) ),
+			'value' => esc_attr( $u->user_nicename ),
+		);
+	}
+
+	wp_localize_script( 'openlab-group-contact', 'OL_Group_Contact_Existing', $existing_contacts_data );
+
+	?>
+
+	<div id="group-contact-admin" class="panel panel-default">
+            <div class="panel-heading"><label for="group-contact-autocomplete">Group Contact</label></div>
+            <div class="panel-body">
+		<?php if ( bp_is_group_create() ) : ?>
+			<p>By default, you are the Group Contact. You may add or remove Contacts once your group has more members.</p>
+		<?php else : ?>
+			<p>You may select one or more group members as Group Contacts.</p>
+		<?php endif; ?>
+
+		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />
+		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ) ?>
+		<input type="hidden" name="group-contact-group-id" id="group-contact-group-id" value="<?php echo intval( $group_id ); ?>" />
+
+		<ul id="group-contact-list" class="inline-element-list"></ul>
+
+                <label class="sr-only hide-if-js" for="group-contacts">Group Contacts</label>
+		<input class="hide-if-js" type="textbox" name="group-contacts" id="group-contacts" value="<?php echo esc_attr( implode( ', ', $existing_contacts ) ) ?>" />
+            </div>
+	</div>
+	<?php
+}
+add_action( 'bp_after_group_details_creation_step', 'openlab_group_contact_field', 5 );
+add_action( 'bp_after_group_details_admin', 'openlab_group_contact_field', 5 );
+
+/**
+ * AJAX handler for group contact autocomplete.
+ */
+function openlab_group_contact_autocomplete_cb() {
+	global $wpdb;
+
+	$nonce = $term = '';
+
+	if ( isset( $_GET['nonce'] ) ) {
+		$nonce = urldecode( $_GET['nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'openlab_group_contact_autocomplete' ) ) {
+		die( json_encode( -1 ) );
+	}
+
+	$group_id = isset( $_GET['group_id'] ) ? (int) $_GET['group_id'] : 0;
+	if ( ! $group_id ) {
+		die( json_encode( -1 ) );
+	}
+
+	if ( isset( $_GET['term'] ) ) {
+		$term = urldecode( $_GET['term'] );
+	}
+
+	$q = new BP_Group_Member_Query( array(
+		'group_id' => $group_id,
+		'search_terms' => $term,
+		'type' => 'alphabetical',
+		'group_role' => array( 'member', 'mod', 'admin' ),
+	) );
+
+	$retval = array();
+	foreach ( $q->results as $u ) {
+		$retval[] = array(
+			'label' => sprintf( '%s (%s)', esc_html( $u->fullname ), esc_html( $u->user_nicename ) ),
+			'value' => esc_attr( $u->user_nicename ),
+		);
+	}
+
+	echo json_encode( $retval );
+	die();
+}
+add_action( 'wp_ajax_openlab_group_contact_autocomplete', 'openlab_group_contact_autocomplete_cb' );
+
+/**
+ * Process the saving of group contacts.
+ */
+function openlab_group_contact_save( $group ) {
+	$nonce = '';
+
+	if ( isset( $_POST['_ol_group_contact_nonce'] ) ) {
+		$nonce = urldecode( $_POST['_ol_group_contact_nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'openlab_group_contact_autocomplete' ) ) {
+		return;
+	}
+
+	// Admins only.
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
+	// Give preference to JS-saved items.
+	$group_contact = isset( $_POST['group-contact-js'] ) ? $_POST['group-contact-js'] : null;
+	if ( null === $group_contact ) {
+		$group_contact = $_POST['group-contact'];
+	}
+
+	// Delete all existing items.
+	$existing = groups_get_groupmeta( $group->id, 'group_contact', false );
+	foreach ( $existing as $e ) {
+		groups_delete_groupmeta( $group->id, 'group_contact', $e );
+	}
+
+	foreach ( (array) $group_contact as $nicename ) {
+		$f = get_user_by( 'slug', stripslashes( $nicename ) );
+
+		if ( ! $f ) {
+			continue;
+		}
+
+		if ( ! groups_is_user_member( $f->ID, $group->id ) ) {
+			continue;
+		}
+
+		groups_add_groupmeta( $group->id, 'group_contact', $f->ID );
+	}
+}
+add_action( 'groups_group_after_save', 'openlab_group_contact_save' );
