@@ -439,3 +439,63 @@ function openlab_force_doc_comments_open( $open, $post_id ) {
 	return $open;
 }
 add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
+
+/**
+ * Markup for the 'A member has joined a public group for which you are an admin' setting.
+ */
+function openlab_group_join_admin_notification_markup() {
+	$send = bp_get_user_meta( bp_displayed_user_id(), 'notification_joined_my_public_group', true );
+	if ( ! $send ) {
+		$send = 'yes';
+	}
+
+	?>
+	<tr id="groups-notification-settings-joined-my-public-group">
+		<td></td>
+		<td>A member has joined a public group for which you are an admin.</td>
+		<td class="yes"><input type="radio" name="notifications[notification_joined_my_public_group]" id="notification-groups-joined-my-public-group-yes" value="yes" <?php checked( $send, 'yes', true ) ?>/><label for="notification-groups-joined-my-public-group-yes" class="bp-screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'Yes, send email', 'buddypress' );
+		?></label></td>
+		<td class="no"><input type="radio" name="notifications[notification_joined_my_public_group]" id="notification-groups-joined-my-public-group-no" value="no" <?php checked( $send, 'no', true ) ?>/><label for="notification-groups-joined-my-public-group-no" class="bp-screen-reader-text"><?php
+			/* translators: accessibility text */
+			_e( 'No, do not send email', 'buddypress' );
+		?></label></td>
+	</tr>
+	<?php
+}
+add_action( 'groups_screen_notification_settings', 'openlab_group_join_admin_notification_markup' );
+
+/**
+ * Send email notification to admin when a member joins a public group.
+ */
+function openlab_send_group_join_admin_notification( $group_id, $user_id ) {
+	$group = groups_get_group( $group_id );
+	if ( 'public' !== $group->status ) {
+		return;
+	}
+
+	$subject = sprintf( 'A new user has joined your group %s [%s]', $group->name, bp_get_option( 'blogname' ) );
+	$message = sprintf( 'A new user has joined your group %1$s on %2$s.
+
+User name: %3$s
+Profile link: %4$s
+
+Visit the group: %5$s',
+		$group->name,
+		bp_get_option( 'blogname' ),
+		bp_core_get_user_displayname( $user_id ),
+		bp_core_get_user_domain( $user_id ),
+		bp_get_group_permalink( $group )
+	);
+
+	foreach ( $group->admins as $admin ) {
+		$send = bp_get_user_meta( $admin->user_id, 'notification_joined_my_public_group', true );
+		if ( 'no' === $send ) {
+			continue;
+		}
+
+		wp_mail( $admin->user_email, $subject, $message );
+	}
+}
+add_action( 'groups_join_group', 'openlab_send_group_join_admin_notification', 10, 2 );
