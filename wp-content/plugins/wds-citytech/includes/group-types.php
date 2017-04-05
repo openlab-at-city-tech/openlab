@@ -536,12 +536,16 @@ function openlab_group_contact_field( $create_or_edit = 'create' ) {
 
 	<?php
 }
-add_action( 'bp_after_group_details_creation_step', 'openlab_group_contact_field', 5 );
 
 function openlab_group_contact_field_edit() {
 	openlab_group_contact_field( 'edit' );
 }
 add_action( 'groups_custom_group_fields_editable', 'openlab_group_contact_field_edit' );
+
+function openlab_group_contact_field_create() {
+	openlab_group_contact_field( 'create' );
+}
+add_action( 'bp_after_group_details_creation_step', 'openlab_group_contact_field_create', 5 );
 
 /**
  * AJAX handler for group contact autocomplete.
