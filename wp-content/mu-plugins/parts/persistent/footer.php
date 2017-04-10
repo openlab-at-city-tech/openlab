@@ -20,7 +20,7 @@
                         </div>
                         <div class="row row-copyright hidden-xs hidden-sm">
                             <div class="col-sm-24">
-                                <p><span>&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> <span class="horiz-divider">|</span> <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
+                                <p><span><a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> <span class="horiz-divider">|</span> <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
                             </div>
                         </div>
                     </div>
@@ -35,11 +35,15 @@
                         <?php endif; ?>
                     </div>
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
-                    <div class="col-sm-2 col-share">
-                        <h2>Share</h2>
-                        <a class="rss-link" href="<?php echo $site . "/activity/feed/" ?>">RSS</a>
-                        <a class="google-plus-link" href="https://plus.google.com/share?url=<?= $url ?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-                                return false;">Google +</a>
+                    <div class="col-sm-3 col-copyright">
+                        <h2>Copyright</h2>
+			<h3 class="third-header">Creative Commons</h3>
+			<ul>
+				<li>- Attribution</li>
+				<li>- NonCommercial</li>
+				<li>- ShareAlike</li>
+			</ul>
+			<img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" />
                     </div>
                 </div>
                 <div class="row row-copyright hidden-md hidden-lg">
