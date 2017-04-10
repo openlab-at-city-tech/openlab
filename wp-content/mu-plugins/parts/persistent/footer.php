@@ -37,13 +37,13 @@
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
                     <div class="col-sm-3 col-copyright">
                         <h2>Copyright</h2>
-			<h3 class="third-header">Creative Commons</h3>
+			<h3 class="third-header"><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a></h3>
 			<ul>
 				<li>- Attribution</li>
 				<li>- NonCommercial</li>
 				<li>- ShareAlike</li>
 			</ul>
-			<img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" />
+			<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" /></a>
                     </div>
                 </div>
                 <div class="row row-copyright hidden-md hidden-lg">
