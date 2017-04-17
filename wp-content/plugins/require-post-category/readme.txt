@@ -1,9 +1,9 @@
 ﻿=== Require Post Category ===
 Contributors: joshhartman
 Tags: post, category, require, force, publish, draft, admin
-Requires at least: 3.0
+Requires at least: 3.3
 Tested up to: 4.7
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 
 Require users to choose a post category before saving a draft, updating a post, or publishing a post.
 
@@ -32,13 +32,16 @@ Nope, just install and activate, that's it!
 
 = Have a question that is not addressed here? =
 
-Leave a comment on the plugin homepage https://www.warpconduit.net/wordpress-plugins/require-post-category/
+Visit this plugin's WordPress support forum at https://wordpress.org/support/plugin/require-post-category
 
 == Screenshots ==
 
 1. Alert appears when you try to save a post without choosing a category
 
 == Changelog ==
+
+= 1.0.7 =
+* Moved JavaScript to separate file and updated to use `wp_enqueue_script` and `wp_localize_script`
 
 = 1.0.6 =
 * Added French (fr_FR) translation by Dominique V.

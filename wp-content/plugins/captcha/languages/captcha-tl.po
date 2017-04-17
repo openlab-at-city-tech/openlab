@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: captcha\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 14:57+0300\n"
-"PO-Revision-Date: 2016-11-08 14:57+0300\n"
+"POT-Creation-Date: 2017-02-20 15:04+0200\n"
+"PO-Revision-Date: 2017-02-20 15:04+0200\n"
 "Last-Translator: BestWebSoft team <wp@bestwebsoft.com>\n"
 "Language-Team: Roozbeh Jalali <rjalali@languageconnect.net>\n"
 "Language: tl\n"
@@ -13,562 +13,571 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;_n:1,2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: captcha.php:37 captcha.php:428
+#: captcha.php:33 captcha.php:420
 msgid "Captcha Settings"
 msgstr "Mga Captcha Setting"
 
-#: captcha.php:37
+#: captcha.php:33
 msgid "Captcha"
 msgstr "Captcha"
 
-#: captcha.php:430
+#: captcha.php:422
 msgid "How to Use Step-by-step Instruction"
 msgstr ""
 
-#: captcha.php:433 captcha.php:1678 captcha.php:1691
+#: captcha.php:425 captcha.php:1731 captcha.php:1744
 msgid "Settings"
 msgstr "Mga setting"
 
-#: captcha.php:435
+#: captcha.php:426
 msgid "This setting is available in Pro version"
 msgstr ""
 
-#: captcha.php:435
+#: captcha.php:426
 msgid "Packages"
 msgstr ""
 
-#: captcha.php:437
+#: captcha.php:427
 msgid "Whitelist"
 msgstr ""
 
-#: captcha.php:438
+#: captcha.php:428
 msgid "Custom code"
 msgstr ""
 
-#: captcha.php:439
+#: captcha.php:429
 msgid "Go PRO"
 msgstr ""
 
-#: captcha.php:548 captcha.php:554 captcha.php:570 captcha.php:572
-#: captcha.php:581 captcha.php:635 captcha.php:639 captcha.php:648
-#: captcha.php:671 captcha.php:681 captcha.php:706 captcha.php:709
-#: captcha.php:717
+#: captcha.php:477 captcha.php:499
+msgid "Package"
+msgstr ""
+
+#: captcha.php:480 captcha.php:502
+msgid "Date"
+msgstr ""
+
+#: captcha.php:591 captcha.php:597 captcha.php:613 captcha.php:615
+#: captcha.php:624 captcha.php:678 captcha.php:682 captcha.php:691
+#: captcha.php:714 captcha.php:724 captcha.php:749 captcha.php:752
+#: captcha.php:760
 msgid "ERROR"
 msgstr "MALI"
 
-#: captcha.php:774 captcha.php:780
+#: captcha.php:817 captcha.php:823
 msgid "Error"
 msgstr ""
 
-#: captcha.php:774 captcha.php:780
+#: captcha.php:817 captcha.php:823
 #, fuzzy
 msgid "Click the BACK button on your browser, and try again."
 msgstr ""
 "Mali: Mali ang na-enter mong halaga ng CAPTCHA. I-click ang BACK na button "
 "sa iyong browser, at subukang muli."
 
-#: captcha.php:1019
+#: captcha.php:1043
 msgid "In order to pass the CAPTCHA please enable JavaScript"
 msgstr ""
 
-#: captcha.php:1366
+#: captcha.php:1418
 msgid "zero"
 msgstr "sero"
 
-#: captcha.php:1367 includes/settings_page.php:437
+#: captcha.php:1419 includes/settings_page.php:401
 msgid "one"
 msgstr "isa"
 
-#: captcha.php:1368
+#: captcha.php:1420
 msgid "two"
 msgstr "dalawa"
 
-#: captcha.php:1369
+#: captcha.php:1421
 msgid "three"
 msgstr "tatlo"
 
-#: captcha.php:1370
+#: captcha.php:1422
 msgid "four"
 msgstr "apat"
 
-#: captcha.php:1371
+#: captcha.php:1423
 msgid "five"
 msgstr "lima"
 
-#: captcha.php:1372 includes/settings_page.php:437
+#: captcha.php:1424 includes/settings_page.php:401
 msgid "six"
 msgstr "anim"
 
-#: captcha.php:1373 includes/settings_page.php:419
-#: includes/settings_page.php:427
+#: captcha.php:1425 includes/settings_page.php:378
+#: includes/settings_page.php:386
 msgid "seven"
 msgstr "pito"
 
-#: captcha.php:1374 includes/settings_page.php:423
+#: captcha.php:1426 includes/settings_page.php:382
 msgid "eight"
 msgstr "walo"
 
-#: captcha.php:1375
+#: captcha.php:1427
 msgid "nine"
 msgstr "siyam"
 
-#: captcha.php:1377
+#: captcha.php:1429
 msgid "ten"
 msgstr "sampu"
 
-#: captcha.php:1378
+#: captcha.php:1430
 msgid "eleven"
 msgstr "labing-isa"
 
-#: captcha.php:1379
+#: captcha.php:1431
 msgid "twelve"
 msgstr "labing-dalawa"
 
-#: captcha.php:1380
+#: captcha.php:1432
 msgid "thirteen"
 msgstr "labing-tatlo"
 
-#: captcha.php:1381
+#: captcha.php:1433
 msgid "fourteen"
 msgstr "labing-apat"
 
-#: captcha.php:1382
+#: captcha.php:1434
 msgid "fifteen"
 msgstr "labing-lima"
 
-#: captcha.php:1383
+#: captcha.php:1435
 msgid "sixteen"
 msgstr "labing-anim"
 
-#: captcha.php:1384
+#: captcha.php:1436
 msgid "seventeen"
 msgstr "labing-pito"
 
-#: captcha.php:1385
+#: captcha.php:1437
 msgid "eighteen"
 msgstr "labing-walo"
 
-#: captcha.php:1386
+#: captcha.php:1438
 msgid "nineteen"
 msgstr "labing-siyam"
 
-#: captcha.php:1388
+#: captcha.php:1440
 msgid "twenty"
 msgstr "dalawampu"
 
-#: captcha.php:1389
+#: captcha.php:1441
 #, fuzzy
 msgid "twenty one"
 msgstr "dalawampu"
 
-#: captcha.php:1390
+#: captcha.php:1442
 #, fuzzy
 msgid "twenty two"
 msgstr "dalawampu"
 
-#: captcha.php:1391
+#: captcha.php:1443
 #, fuzzy
 msgid "twenty three"
 msgstr "dalawampu"
 
-#: captcha.php:1392
+#: captcha.php:1444
 #, fuzzy
 msgid "twenty four"
 msgstr "dalawampu"
 
-#: captcha.php:1393
+#: captcha.php:1445
 #, fuzzy
 msgid "twenty five"
 msgstr "dalawampu"
 
-#: captcha.php:1394
+#: captcha.php:1446
 #, fuzzy
 msgid "twenty six"
 msgstr "dalawampu"
 
-#: captcha.php:1395
+#: captcha.php:1447
 #, fuzzy
 msgid "twenty seven"
 msgstr "dalawampu"
 
-#: captcha.php:1396
+#: captcha.php:1448
 #, fuzzy
 msgid "twenty eight"
 msgstr "dalawampu"
 
-#: captcha.php:1397
+#: captcha.php:1449
 #, fuzzy
 msgid "twenty nine"
 msgstr "dalawampu"
 
-#: captcha.php:1399
+#: captcha.php:1451
 msgid "thirty"
 msgstr "tatlumpu"
 
-#: captcha.php:1400
+#: captcha.php:1452
 #, fuzzy
 msgid "thirty one"
 msgstr "tatlumpu"
 
-#: captcha.php:1401
+#: captcha.php:1453
 #, fuzzy
 msgid "thirty two"
 msgstr "tatlumpu"
 
-#: captcha.php:1402
+#: captcha.php:1454
 #, fuzzy
 msgid "thirty three"
 msgstr "labing-tatlo"
 
-#: captcha.php:1403
+#: captcha.php:1455
 #, fuzzy
 msgid "thirty four"
 msgstr "tatlumpu"
 
-#: captcha.php:1404
+#: captcha.php:1456
 #, fuzzy
 msgid "thirty five"
 msgstr "tatlumpu"
 
-#: captcha.php:1405
+#: captcha.php:1457
 #, fuzzy
 msgid "thirty six"
 msgstr "tatlumpu"
 
-#: captcha.php:1406
+#: captcha.php:1458
 #, fuzzy
 msgid "thirty seven"
 msgstr "labing-tatlo"
 
-#: captcha.php:1407
+#: captcha.php:1459
 #, fuzzy
 msgid "thirty eight"
 msgstr "tatlumpu"
 
-#: captcha.php:1408
+#: captcha.php:1460
 #, fuzzy
 msgid "thirty nine"
 msgstr "tatlumpu"
 
-#: captcha.php:1410
+#: captcha.php:1462
 msgid "forty"
 msgstr "apatnapu"
 
-#: captcha.php:1411
+#: captcha.php:1463
 #, fuzzy
 msgid "forty one"
 msgstr "apatnapu"
 
-#: captcha.php:1412
+#: captcha.php:1464
 #, fuzzy
 msgid "forty two"
 msgstr "apatnapu"
 
-#: captcha.php:1413
+#: captcha.php:1465
 #, fuzzy
 msgid "forty three"
 msgstr "tatlo"
 
-#: captcha.php:1414
+#: captcha.php:1466
 #, fuzzy
 msgid "forty four"
 msgstr "apatnapu"
 
-#: captcha.php:1415
+#: captcha.php:1467
 #, fuzzy
 msgid "forty five"
 msgstr "apatnapu"
 
-#: captcha.php:1416
+#: captcha.php:1468
 #, fuzzy
 msgid "forty six"
 msgstr "apatnapu"
 
-#: captcha.php:1417
+#: captcha.php:1469
 #, fuzzy
 msgid "forty seven"
 msgstr "pito"
 
-#: captcha.php:1418
+#: captcha.php:1470
 #, fuzzy
 msgid "forty eight"
 msgstr "walo"
 
-#: captcha.php:1419
+#: captcha.php:1471
 #, fuzzy
 msgid "forty nine"
 msgstr "apatnapu"
 
-#: captcha.php:1421
+#: captcha.php:1473
 msgid "fifty"
 msgstr "limampu"
 
-#: captcha.php:1422
+#: captcha.php:1474
 #, fuzzy
 msgid "fifty one"
 msgstr "limampu"
 
-#: captcha.php:1423
+#: captcha.php:1475
 #, fuzzy
 msgid "fifty two"
 msgstr "limampu"
 
-#: captcha.php:1424
+#: captcha.php:1476
 #, fuzzy
 msgid "fifty three"
 msgstr "labing-lima"
 
-#: captcha.php:1425
+#: captcha.php:1477
 #, fuzzy
 msgid "fifty four"
 msgstr "limampu"
 
-#: captcha.php:1426
+#: captcha.php:1478
 #, fuzzy
 msgid "fifty five"
 msgstr "limampu"
 
-#: captcha.php:1427
+#: captcha.php:1479
 #, fuzzy
 msgid "fifty six"
 msgstr "limampu"
 
-#: captcha.php:1428
+#: captcha.php:1480
 #, fuzzy
 msgid "fifty seven"
 msgstr "labing-lima"
 
-#: captcha.php:1429
+#: captcha.php:1481
 #, fuzzy
 msgid "fifty eight"
 msgstr "walo"
 
-#: captcha.php:1430
+#: captcha.php:1482
 #, fuzzy
 msgid "fifty nine"
 msgstr "limampu"
 
-#: captcha.php:1432
+#: captcha.php:1484
 msgid "sixty"
 msgstr "animnapu"
 
-#: captcha.php:1433
+#: captcha.php:1485
 #, fuzzy
 msgid "sixty one"
 msgstr "animnapu"
 
-#: captcha.php:1434
+#: captcha.php:1486
 #, fuzzy
 msgid "sixty two"
 msgstr "animnapu"
 
-#: captcha.php:1435
+#: captcha.php:1487
 #, fuzzy
 msgid "sixty three"
 msgstr "labing-anim"
 
-#: captcha.php:1436
+#: captcha.php:1488
 #, fuzzy
 msgid "sixty four"
 msgstr "animnapu"
 
-#: captcha.php:1437
+#: captcha.php:1489
 #, fuzzy
 msgid "sixty five"
 msgstr "animnapu"
 
-#: captcha.php:1438
+#: captcha.php:1490
 #, fuzzy
 msgid "sixty six"
 msgstr "animnapu"
 
-#: captcha.php:1439
+#: captcha.php:1491
 #, fuzzy
 msgid "sixty seven"
 msgstr "labing-anim"
 
-#: captcha.php:1440
+#: captcha.php:1492
 #, fuzzy
 msgid "sixty eight"
 msgstr "walo"
 
-#: captcha.php:1441
+#: captcha.php:1493
 #, fuzzy
 msgid "sixty nine"
 msgstr "animnapu"
 
-#: captcha.php:1443
+#: captcha.php:1495
 msgid "seventy"
 msgstr "pitumpu"
 
-#: captcha.php:1444
+#: captcha.php:1496
 #, fuzzy
 msgid "seventy one"
 msgstr "pitumpu"
 
-#: captcha.php:1445
+#: captcha.php:1497
 #, fuzzy
 msgid "seventy two"
 msgstr "pitumpu"
 
-#: captcha.php:1446
+#: captcha.php:1498
 #, fuzzy
 msgid "seventy three"
 msgstr "labing-pito"
 
-#: captcha.php:1447
+#: captcha.php:1499
 #, fuzzy
 msgid "seventy four"
 msgstr "pitumpu"
 
-#: captcha.php:1448
+#: captcha.php:1500
 #, fuzzy
 msgid "seventy five"
 msgstr "pitumpu"
 
-#: captcha.php:1449
+#: captcha.php:1501
 #, fuzzy
 msgid "seventy six"
 msgstr "pitumpu"
 
-#: captcha.php:1450
+#: captcha.php:1502
 #, fuzzy
 msgid "seventy seven"
 msgstr "labing-pito"
 
-#: captcha.php:1451
+#: captcha.php:1503
 #, fuzzy
 msgid "seventy eight"
 msgstr "pitumpu"
 
-#: captcha.php:1452
+#: captcha.php:1504
 #, fuzzy
 msgid "seventy nine"
 msgstr "pitumpu"
 
-#: captcha.php:1454
+#: captcha.php:1506
 msgid "eighty"
 msgstr "walumpu"
 
-#: captcha.php:1455
+#: captcha.php:1507
 #, fuzzy
 msgid "eighty one"
 msgstr "walumpu"
 
-#: captcha.php:1456
+#: captcha.php:1508
 #, fuzzy
 msgid "eighty two"
 msgstr "walumpu"
 
-#: captcha.php:1457
+#: captcha.php:1509
 #, fuzzy
 msgid "eighty three"
 msgstr "labing-walo"
 
-#: captcha.php:1458
+#: captcha.php:1510
 #, fuzzy
 msgid "eighty four"
 msgstr "walumpu"
 
-#: captcha.php:1459
+#: captcha.php:1511
 #, fuzzy
 msgid "eighty five"
 msgstr "walumpu"
 
-#: captcha.php:1460
+#: captcha.php:1512
 #, fuzzy
 msgid "eighty six"
 msgstr "walumpu"
 
-#: captcha.php:1461
+#: captcha.php:1513
 #, fuzzy
 msgid "eighty seven"
 msgstr "labing-walo"
 
-#: captcha.php:1462
+#: captcha.php:1514
 #, fuzzy
 msgid "eighty eight"
 msgstr "walumpu"
 
-#: captcha.php:1463
+#: captcha.php:1515
 #, fuzzy
 msgid "eighty nine"
 msgstr "walumpu"
 
-#: captcha.php:1465
+#: captcha.php:1517
 msgid "ninety"
 msgstr "siyamnapu"
 
-#: captcha.php:1466
+#: captcha.php:1518
 #, fuzzy
 msgid "ninety one"
 msgstr "siyamnapu"
 
-#: captcha.php:1467
+#: captcha.php:1519
 #, fuzzy
 msgid "ninety two"
 msgstr "siyamnapu"
 
-#: captcha.php:1468
+#: captcha.php:1520
 #, fuzzy
 msgid "ninety three"
 msgstr "labing-siyam"
 
-#: captcha.php:1469
+#: captcha.php:1521
 #, fuzzy
 msgid "ninety four"
 msgstr "siyamnapu"
 
-#: captcha.php:1470
+#: captcha.php:1522
 #, fuzzy
 msgid "ninety five"
 msgstr "siyamnapu"
 
-#: captcha.php:1471
+#: captcha.php:1523
 #, fuzzy
 msgid "ninety six"
 msgstr "siyamnapu"
 
-#: captcha.php:1472
+#: captcha.php:1524
 #, fuzzy
 msgid "ninety seven"
 msgstr "labing-siyam"
 
-#: captcha.php:1473
+#: captcha.php:1525
 #, fuzzy
 msgid "ninety eight"
 msgstr "siyamnapu"
 
-#: captcha.php:1474
+#: captcha.php:1526
 #, fuzzy
 msgid "ninety nine"
 msgstr "siyamnapu"
 
-#: captcha.php:1539
+#: captcha.php:1591
 msgid "Encryption password is not set"
 msgstr "Hindi naka-set ang encryption password"
 
-#: captcha.php:1560
+#: captcha.php:1612
 msgid "Decryption password is not set"
 msgstr "Hindi naka-set ang decryption password"
 
-#: captcha.php:1692
+#: captcha.php:1745
 msgid "FAQ"
 msgstr "FAQ"
 
-#: captcha.php:1693
+#: captcha.php:1746
 msgid "Support"
 msgstr "Suporta"
 
-#: captcha.php:1734
+#: captcha.php:1787
 #, fuzzy
 msgid "settings page"
 msgstr "Mga opsyong na-save"
 
-#: captcha.php:1737
+#: captcha.php:1790
 #, php-format
 msgid ""
 "You're using W3 Total Cache plugin. If %1$s doesn't work properly, please "
@@ -576,318 +585,90 @@ msgid ""
 "plugin %3$s."
 msgstr ""
 
-#: captcha.php:1739 includes/settings_page.php:412
+#: captcha.php:1792 includes/settings_page.php:445
 msgid "Show CAPTCHA after the end of the page loading"
 msgstr ""
 
-#: captcha.php:1924
+#: captcha.php:1943
 msgid "Warning"
 msgstr ""
 
-#: captcha.php:1928
+#: captcha.php:1947
 msgid "plugin contains deprecated functionality that will be removed"
 msgstr ""
 
-#: captcha.php:1929
+#: captcha.php:1948
 msgid "in the future"
 msgstr ""
 
-#: captcha.php:1929
+#: captcha.php:1948
 msgid "after"
 msgstr ""
 
-#: captcha.php:1932
+#: captcha.php:1951
 msgid "has old version"
 msgstr ""
 
-#: captcha.php:1935
+#: captcha.php:1954
 msgid "has compatibility problems with"
 msgstr ""
 
-#: captcha.php:1942
+#: captcha.php:1961
 msgid "You need to update this plugin for correct work with"
 msgstr ""
 
-#: includes/whitelist.php:76
-msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
-msgstr ""
-
-#: includes/whitelist.php:88
-#, php-format
-msgid ""
-"With this option, CAPTCHA will not be displayed for IP-addresses from the "
-"whitelist of %s"
-msgstr ""
-
-#: includes/whitelist.php:99 includes/whitelist.php:135
-msgid "Add IP to whitelist"
-msgstr ""
-
-#: includes/whitelist.php:102
-msgid "Load IP to the whitelist"
-msgstr ""
-
-#: includes/whitelist.php:105
-#, php-format
-msgid ""
-"By click on this button, all IP-addresses from the whitelist of %s will be "
-"loaded to the whitelist of %s"
-msgstr ""
-
-#: includes/whitelist.php:114
+#: includes/helpers.php:31
 #, fuzzy
-msgid "Save changes"
-msgstr "I-save ang mga Pagbabago"
+msgid "Please enter a CAPTCHA value."
+msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/whitelist.php:131
-msgid "My IP"
-msgstr ""
+#: includes/helpers.php:32
+msgid "Please enter a valid CAPTCHA value."
+msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/whitelist.php:139
-msgid "Allowed formats:"
-msgstr ""
-
-#: includes/whitelist.php:140
-msgid "Allowed diapason:"
-msgstr ""
-
-#: includes/whitelist.php:146
-msgid "Search IP"
-msgstr ""
-
-#: includes/whitelist.php:201
-msgid "Nothing found"
-msgstr ""
-
-#: includes/whitelist.php:201
-msgid "No IP in the whitelist"
-msgstr ""
-
-#: includes/whitelist.php:208
-msgid "IP address"
-msgstr ""
-
-#: includes/whitelist.php:209
-msgid "Date added"
-msgstr ""
-
-#: includes/whitelist.php:263 includes/whitelist.php:272
-msgid "Remove from the whitelist"
-msgstr ""
-
-#: includes/whitelist.php:357
-msgid "IP added to the whitelist successfully"
-msgstr ""
-
-#: includes/whitelist.php:359 includes/whitelist.php:381
-#: includes/whitelist.php:393
-msgid "Some errors occured"
-msgstr ""
-
-#: includes/whitelist.php:361
-msgid "IP is already in the whitelist"
-msgstr ""
-
-#: includes/whitelist.php:364
-msgid "Invalid IP. See allowed formats"
-msgstr ""
-
-#: includes/whitelist.php:375
-#, php-format
-msgid "%s IP was deleted successfully"
-msgid_plural "%s IPs were deleted successfully"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/whitelist.php:387
-msgid "One IP was deleted successfully"
-msgstr ""
-
-#: includes/whitelist.php:396
-msgid "You have not entered any value"
-msgstr ""
-
-#: includes/whitelist.php:399
-msgid "You have not entered any value in to the search form"
-msgstr ""
-
-#: includes/whitelist.php:401
-msgid "Search results for"
-msgstr ""
-
-#: includes/whitelist.php:415
-msgid "IP-address(es) successfully copied to the whitelist"
-msgstr ""
-
-#: includes/whitelist.php:440
-msgid "use"
-msgstr ""
-
-#: includes/whitelist.php:440
-msgid "the whitelist of"
-msgstr ""
-
-#: includes/whitelist.php:448 includes/whitelist.php:456
-#, php-format
-msgid "use the whitelist of %s"
-msgstr ""
-
-#: includes/whitelist.php:449
-#, php-format
-msgid "you should %s to use this functionality"
-msgstr ""
-
-#: includes/whitelist.php:449 includes/settings_page.php:636
-msgid "activate"
-msgstr ""
-
-#: includes/whitelist.php:457
-#, php-format
-msgid "you should install %s to use this functionality"
-msgstr ""
-
-#: includes/deprecated.php:87
-msgid "instruction"
-msgstr ""
-
-#: includes/deprecated.php:96
-#, php-format
-msgid ""
-"Functions from the %1s plugin are used on your site. These functions are "
-"deprecated ( %2s ) since version %4s. Please replace them according to the "
-"%3s. If you close this message it will appear in case if deprecated function "
-"would be called again only"
-msgstr ""
-
-#: includes/deprecated.php:115
-#, php-format
-msgid "some call functions for the \"%s\" filter hook"
-msgstr ""
-
-#: includes/deprecated.php:118
+#: includes/helpers.php:33
 #, fuzzy
-msgid "Enable the CAPTCHA for"
-msgstr "Paganahin ang CAPTCHA para:"
+msgid "Time limit is exhausted. Please enter a CAPTCHA value again."
+msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/pro_banners.php:17
-msgid "This options is available in Pro version of plugin"
-msgstr ""
-
-#: includes/pro_banners.php:20
-msgid "Close"
-msgstr ""
-
-#: includes/pro_banners.php:26
-msgid "Unlock premium options by upgrading to Pro version"
-msgstr ""
-
-#: includes/pro_banners.php:27
-msgid "Learn More"
-msgstr ""
-
-#: includes/pro_banners.php:38
-msgid "Reason"
-msgstr ""
-
-#: includes/pro_banners.php:40
-msgid "Allowed formats"
-msgstr ""
-
-#: includes/pro_banners.php:41
-msgid "Allowed separators for IPs: a comma"
-msgstr ""
-
-#: includes/pro_banners.php:41 includes/pro_banners.php:42
-msgid "semicolon"
-msgstr ""
-
-#: includes/pro_banners.php:41
-msgid "ordinary space, tab, new line or carriage return"
-msgstr ""
-
-#: includes/pro_banners.php:42
-msgid "Allowed separators for reasons: a comma"
-msgstr ""
-
-#: includes/pro_banners.php:42
-msgid "tab, new line or carriage return"
-msgstr ""
-
-#: includes/pro_banners.php:61 includes/package_loader.php:73
-msgid "If the package already exists"
-msgstr ""
-
-#: includes/pro_banners.php:63 includes/package_loader.php:78
-msgid "Skip it"
-msgstr ""
-
-#: includes/pro_banners.php:64 includes/package_loader.php:82
-msgid "Update the existed one"
-msgstr ""
-
-#: includes/pro_banners.php:65 includes/package_loader.php:86
+#: includes/helpers.php:34
 #, fuzzy
-msgid "Save it as new"
-msgstr "I-save ang mga Pagbabago"
+msgid "Time limit is exhausted. Please reload the CAPTCHA."
+msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/pro_banners.php:68 includes/package_loader.php:91
-msgid "Install Now"
-msgstr ""
-
-#: includes/pro_banners.php:69 includes/package_loader.php:93
-msgid "Browse packages"
-msgstr ""
-
-#: includes/pro_banners.php:80 includes/pro_banners.php:157
-msgid "Package"
-msgstr ""
-
-#: includes/pro_banners.php:83 includes/pro_banners.php:160
-msgid "Date"
-msgstr ""
-
-#: includes/pro_banners.php:177 includes/pro_banners.php:238
-msgid "Use general settings"
-msgstr ""
-
-#: includes/pro_banners.php:181 includes/pro_banners.php:242
-#: includes/settings_page.php:406
-msgid "Use image packages"
-msgstr ""
-
-#: includes/pro_banners.php:207 includes/pro_banners.php:268
-#: includes/settings_page.php:541
-msgid "Enable time limit"
-msgstr ""
-
-#: includes/pro_banners.php:211 includes/pro_banners.php:272
-#: includes/settings_page.php:546
-#, fuzzy
-msgid "for"
-msgstr "apat"
-
-#: includes/pro_banners.php:213 includes/pro_banners.php:274
-msgid "seconds"
-msgstr ""
-
-#: includes/pro_banners.php:230 includes/settings_page.php:656
-#, fuzzy
-msgid "Enable"
-msgstr "Paganahin ang CAPTCHA para:"
-
-#: includes/pro_banners.php:234 includes/settings_page.php:657
-#, fuzzy
-msgid "Hide from registered users"
-msgstr "Itago ang CAPTCHA para sa mga rehistradong gumagamit"
-
-#: includes/pro_banners.php:290
-msgid "Use several image packages at the same time"
+#: includes/helpers.php:35
+msgid "You are in the whitelist."
 msgstr ""
 
 #: includes/package_loader.php:43
 msgid ""
 "Can not load images in to the \"uploads\" folder. Please, check your "
 "permissions"
+msgstr ""
+
+#: includes/package_loader.php:73 includes/pro_banners.php:58
+msgid "If the package already exists"
+msgstr ""
+
+#: includes/package_loader.php:78 includes/pro_banners.php:60
+msgid "Skip it"
+msgstr ""
+
+#: includes/package_loader.php:82 includes/pro_banners.php:61
+msgid "Update the existed one"
+msgstr ""
+
+#: includes/package_loader.php:86 includes/pro_banners.php:62
+#, fuzzy
+msgid "Save it as new"
+msgstr "I-save ang mga Pagbabago"
+
+#: includes/package_loader.php:91 includes/pro_banners.php:65
+msgid "Install Now"
+msgstr ""
+
+#: includes/package_loader.php:93 includes/pro_banners.php:66
+msgid "Browse packages"
 msgstr ""
 
 #: includes/package_loader.php:131
@@ -954,27 +735,82 @@ msgstr ""
 msgid "Wrong data"
 msgstr ""
 
-#: includes/helpers.php:30
+#: includes/pro_banners.php:17
+msgid "This options is available in Pro version of plugin"
+msgstr ""
+
+#: includes/pro_banners.php:20
+msgid "Close"
+msgstr ""
+
+#: includes/pro_banners.php:26
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: includes/pro_banners.php:37
+msgid "Reason"
+msgstr ""
+
+#: includes/pro_banners.php:39
+msgid "Allowed formats"
+msgstr ""
+
+#: includes/pro_banners.php:40
+msgid "Allowed separators for IPs: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:40 includes/pro_banners.php:41
+msgid "semicolon"
+msgstr ""
+
+#: includes/pro_banners.php:40
+msgid "ordinary space, tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:41
+msgid "Allowed separators for reasons: a comma"
+msgstr ""
+
+#: includes/pro_banners.php:41
+msgid "tab, new line or carriage return"
+msgstr ""
+
+#: includes/pro_banners.php:82 includes/pro_banners.php:143
+msgid "Use general settings"
+msgstr ""
+
+#: includes/pro_banners.php:86 includes/pro_banners.php:147
+#: includes/settings_page.php:425
+msgid "Use image packages"
+msgstr ""
+
+#: includes/pro_banners.php:112 includes/pro_banners.php:173
+#: includes/settings_page.php:532
+msgid "Enable time limit"
+msgstr ""
+
+#: includes/pro_banners.php:116 includes/pro_banners.php:177
+#: includes/settings_page.php:537
 #, fuzzy
-msgid "Please enter a CAPTCHA value."
-msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
+msgid "for"
+msgstr "apat"
 
-#: includes/helpers.php:31
-msgid "Please enter a valid CAPTCHA value."
-msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
+#: includes/pro_banners.php:118 includes/pro_banners.php:179
+msgid "seconds"
+msgstr ""
 
-#: includes/helpers.php:32
+#: includes/pro_banners.php:135 includes/settings_page.php:665
 #, fuzzy
-msgid "Time limit is exhausted. Please enter a CAPTCHA value again."
-msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
+msgid "Enable"
+msgstr "Paganahin ang CAPTCHA para:"
 
-#: includes/helpers.php:33
+#: includes/pro_banners.php:139 includes/settings_page.php:666
 #, fuzzy
-msgid "Time limit is exhausted. Please reload the CAPTCHA."
-msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
+msgid "Hide from registered users"
+msgstr "Itago ang CAPTCHA para sa mga rehistradong gumagamit"
 
-#: includes/helpers.php:34
-msgid "You are in the whitelist."
+#: includes/pro_banners.php:195
+msgid "Use several image packages at the same time"
 msgstr ""
 
 #: includes/settings_page.php:46
@@ -1042,37 +878,92 @@ msgstr ""
 msgid "Save Changes"
 msgstr "I-save ang mga Pagbabago"
 
-#: includes/settings_page.php:211 includes/settings_page.php:404
+#: includes/settings_page.php:199 includes/settings_page.php:367
+#: includes/settings_page.php:374
 #, fuzzy
 msgid "Arithmetic actions"
 msgstr "Mga aritmetikong aksyon para sa CAPTCHA"
 
-#: includes/settings_page.php:212 includes/settings_page.php:405
+#: includes/settings_page.php:200 includes/settings_page.php:393
 msgid "Complexity"
 msgstr ""
 
-#: includes/settings_page.php:221
+#: includes/settings_page.php:209
 #, php-format
 msgid "\"%s\" option must not be fully disabled"
 msgstr ""
 
-#: includes/settings_page.php:235
+#: includes/settings_page.php:223
 msgid "Text fields in the \"Notification messages\" option must not be empty"
 msgstr ""
 
-#: includes/settings_page.php:282
+#: includes/settings_page.php:252
 msgid ""
 "In order to use images in the CAPTCHA, please select at least one of the "
 "items in the option \"Use image packages\". The \"Images\" checkbox in "
 "\"Complexity\" option has been disabled"
 msgstr ""
 
-#: includes/settings_page.php:291
+#: includes/settings_page.php:261
 #, fuzzy
 msgid "Settings saved"
 msgstr "Mga opsyong na-save"
 
-#: includes/settings_page.php:402
+#: includes/settings_page.php:360
+msgid "Captcha type"
+msgstr ""
+
+#: includes/settings_page.php:363
+msgid "Character recognition"
+msgstr ""
+
+#: includes/settings_page.php:377
+msgid "Plus"
+msgstr "Plus"
+
+#: includes/settings_page.php:381
+msgid "Minus"
+msgstr "Minus"
+
+#: includes/settings_page.php:385
+#, fuzzy
+msgid "Multiplication"
+msgstr "Multiplication (&times;)"
+
+#: includes/settings_page.php:396
+msgid "Numbers"
+msgstr "Mga bilang"
+
+#: includes/settings_page.php:400
+msgid "Words"
+msgstr "Mga salita"
+
+#: includes/settings_page.php:404
+msgid "Images"
+msgstr ""
+
+#: includes/settings_page.php:418
+msgid "Images count"
+msgstr ""
+
+#: includes/settings_page.php:431
+msgid "Enlarge images on mouseover"
+msgstr ""
+
+#: includes/settings_page.php:436
+msgid "Show reload button"
+msgstr ""
+
+#: includes/settings_page.php:439
+#, fuzzy
+msgid "CAPTCHA title"
+msgstr "Antas ng kompleksidad ng CAPTCHA "
+
+#: includes/settings_page.php:442
+msgid "Required symbol"
+msgstr ""
+
+#: includes/settings_page.php:446
 #, php-format
 msgid ""
 "With this option the CAPTCHA will be generated via %s into the form after "
@@ -1081,135 +972,235 @@ msgid ""
 "get the CAPTCHA content"
 msgstr ""
 
-#: includes/settings_page.php:408
-msgid "Enlarge images on mouseover"
-msgstr ""
-
-#: includes/settings_page.php:409
-msgid "Show reload button"
-msgstr ""
-
-#: includes/settings_page.php:410
-#, fuzzy
-msgid "CAPTCHA title"
-msgstr "Antas ng kompleksidad ng CAPTCHA "
-
-#: includes/settings_page.php:411
-msgid "Required symbol"
-msgstr ""
-
-#: includes/settings_page.php:418
-msgid "Plus"
-msgstr "Plus"
-
-#: includes/settings_page.php:422
-msgid "Minus"
-msgstr "Minus"
-
-#: includes/settings_page.php:426
-#, fuzzy
-msgid "Multiplication"
-msgstr "Multiplication (&times;)"
-
-#: includes/settings_page.php:432
-msgid "Numbers"
-msgstr "Mga bilang"
-
-#: includes/settings_page.php:436
-msgid "Words"
-msgstr "Mga salita"
-
-#: includes/settings_page.php:440
-msgid "Images"
-msgstr ""
-
-#: includes/settings_page.php:547
+#: includes/settings_page.php:538
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/settings_page.php:566
+#: includes/settings_page.php:572
 msgid "If the CAPTCHA field is empty"
 msgstr ""
 
-#: includes/settings_page.php:567
+#: includes/settings_page.php:573
 msgid "If the CAPTCHA is incorrect"
 msgstr ""
 
-#: includes/settings_page.php:568
+#: includes/settings_page.php:574
 msgid "If the time limit is exhausted"
 msgstr ""
 
-#: includes/settings_page.php:571
+#: includes/settings_page.php:577
 #, fuzzy
 msgid ""
 "If the time limit is exhausted (this message will be displayed above the "
 "CAPTCHA)"
 msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/settings_page.php:572
+#: includes/settings_page.php:578
 msgid ""
 "If the user IP is added to the whitelist (this message will be displayed "
 "instead of the CAPTCHA)"
 msgstr ""
 
-#: includes/settings_page.php:577
+#: includes/settings_page.php:583
 msgid "Errors"
 msgstr ""
 
-#: includes/settings_page.php:578
+#: includes/settings_page.php:584
 msgid ""
 "These messages will be displayed if the CAPTCHA answer has not passed the "
 "verification"
 msgstr ""
 
-#: includes/settings_page.php:581
+#: includes/settings_page.php:587
 msgid "Info"
 msgstr ""
 
-#: includes/settings_page.php:582
+#: includes/settings_page.php:588
 #, fuzzy
 msgid "These messages will be displayed inside of the CAPTCHA"
 msgstr "Paki-enter ang tamang halaga ng CAPTCHA"
 
-#: includes/settings_page.php:587
+#: includes/settings_page.php:593
 msgid "Notification messages"
 msgstr ""
 
-#: includes/settings_page.php:623
+#: includes/settings_page.php:632
 msgid "update"
 msgstr ""
 
-#: includes/settings_page.php:624
+#: includes/settings_page.php:633
 msgid "to the current version"
 msgstr ""
 
-#: includes/settings_page.php:631
+#: includes/settings_page.php:640
 msgid "install"
 msgstr ""
 
-#: includes/settings_page.php:645
+#: includes/settings_page.php:645 includes/whitelist.php:445
+msgid "activate"
+msgstr ""
+
+#: includes/settings_page.php:654
 msgid "You should"
 msgstr ""
 
-#: includes/settings_page.php:648
+#: includes/settings_page.php:657
 msgid "to use this functionality"
 msgstr ""
 
-#: includes/settings_page.php:678
+#: includes/settings_page.php:687
 msgid "This option is available only for network or for main blog"
 msgstr ""
 
-#: includes/settings_page.php:690
+#: includes/settings_page.php:699
 msgid "Check off for adding the CAPTCHA to forms on their settings pages"
 msgstr ""
 
-#: includes/settings_page.php:787
+#: includes/settings_page.php:795
 msgid ""
 "The image packages list is empty. Please restore default settings or re-"
 "install the plugin to fix this error"
 msgstr ""
+
+#: includes/whitelist.php:74
+msgid "For IP addresses from the whitelist CAPTCHA will not be displayed"
+msgstr ""
+
+#: includes/whitelist.php:84
+#, php-format
+msgid ""
+"With this option, CAPTCHA will not be displayed for IP-addresses from the "
+"whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:93 includes/whitelist.php:127
+msgid "Add IP to whitelist"
+msgstr ""
+
+#: includes/whitelist.php:96
+msgid "Load IP to the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:98
+#, php-format
+msgid ""
+"By click on this button, all IP-addresses from the whitelist of %s will be "
+"loaded to the whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:106
+#, fuzzy
+msgid "Save changes"
+msgstr "I-save ang mga Pagbabago"
+
+#: includes/whitelist.php:123
+msgid "My IP"
+msgstr ""
+
+#: includes/whitelist.php:131
+msgid "Allowed formats:"
+msgstr ""
+
+#: includes/whitelist.php:132
+msgid "Allowed diapason:"
+msgstr ""
+
+#: includes/whitelist.php:138
+msgid "Search IP"
+msgstr ""
+
+#: includes/whitelist.php:195
+msgid "Nothing found"
+msgstr ""
+
+#: includes/whitelist.php:195
+msgid "No IP in the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:202
+msgid "IP address"
+msgstr ""
+
+#: includes/whitelist.php:203
+msgid "Date added"
+msgstr ""
+
+#: includes/whitelist.php:257 includes/whitelist.php:266
+msgid "Remove from the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:351
+msgid "IP added to the whitelist successfully"
+msgstr ""
+
+#: includes/whitelist.php:353 includes/whitelist.php:375
+#: includes/whitelist.php:387
+msgid "Some errors occured"
+msgstr ""
+
+#: includes/whitelist.php:355
+msgid "IP is already in the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:358
+msgid "Invalid IP. See allowed formats"
+msgstr ""
+
+#: includes/whitelist.php:369
+#, php-format
+msgid "%s IP was deleted successfully"
+msgid_plural "%s IPs were deleted successfully"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/whitelist.php:381
+msgid "One IP was deleted successfully"
+msgstr ""
+
+#: includes/whitelist.php:390
+msgid "You have not entered any value"
+msgstr ""
+
+#: includes/whitelist.php:393
+msgid "You have not entered any value in to the search form"
+msgstr ""
+
+#: includes/whitelist.php:395
+msgid "Search results for"
+msgstr ""
+
+#: includes/whitelist.php:409
+msgid "IP-address(es) successfully copied to the whitelist"
+msgstr ""
+
+#: includes/whitelist.php:436
+msgid "use"
+msgstr ""
+
+#: includes/whitelist.php:436
+msgid "the whitelist of"
+msgstr ""
+
+#: includes/whitelist.php:444 includes/whitelist.php:452
+#, php-format
+msgid "use the whitelist of %s"
+msgstr ""
+
+#: includes/whitelist.php:445
+#, php-format
+msgid "you should %s to use this functionality"
+msgstr ""
+
+#: includes/whitelist.php:453
+#, php-format
+msgid "you should install %s to use this functionality"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Enable the CAPTCHA for"
+#~ msgstr "Paganahin ang CAPTCHA para:"
 
 #~ msgid "Registration form"
 #~ msgstr "Form ng rehistrasyon"

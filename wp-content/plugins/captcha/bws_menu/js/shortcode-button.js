@@ -59,7 +59,7 @@
                     ed.addButton( 'add_bws_shortcode', {
                         title : bws_shortcode_button.title,
                         classes: 'bws_shortcode_button widget btn',                
-                        icon: 'icon bws-shortcode-icon',
+                        icon: 'icon bwsicons bwsicons-shortcode',
                         text: bws_shortcode_button.label,
                         onclick: function() {   
 
@@ -149,7 +149,7 @@
                 return {
                     longname : 'BWS Shortcode Buttons',
                     author : 'BWS',
-                    authorurl : 'http://bestwebsoft.com',
+                    authorurl : 'https://bestwebsoft.com',
                     infourl : '',
                     version : "0.1"
                 };

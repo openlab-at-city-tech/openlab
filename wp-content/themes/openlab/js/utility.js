@@ -633,7 +633,7 @@
 
         jQuery("#header #menu-item-40 ul li ul li a").prepend("+ ");
 
-        // this add an onclick event to the "New Topic" button while preserving 
+        // this add an onclick event to the "New Topic" button while preserving
         // the original event; this is so "New Topic" can have a "current" class
         $('.show-hide-new').click(function () {
             var origOnClick = $('.show-hide-new').onclick;
@@ -695,6 +695,13 @@
                 $(this).attr('placeholder', '');
             });
         }
+
+	// Move the 'public group' notification setting.
+	var public_group_not = $( '#groups-notification-settings-joined-my-public-group' );
+	if ( public_group_not.length ) {
+		public_group_not.remove();
+		$( '#groups-notification-settings-request' ).after( public_group_not );
+	}
 
     });//end document.ready
 
