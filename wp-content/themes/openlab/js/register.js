@@ -305,7 +305,7 @@ jQuery(document).ready(function() {
                 $('#signup_submit').val('Complete Sign Up');
             } else {
                 $('#signup_submit').addClass('btn-disabled');
-                $('#signup_submit').val('Enter Email Address To Continue');
+                $('#signup_submit').val('Please Complete Required Fields');
             }
 
             $('#signup_submit').on('click',function(e){
@@ -314,7 +314,7 @@ jQuery(document).ready(function() {
 
                 if(thisElem.hasClass('btn-disabled')){
                     e.preventDefault();
-                    var message = 'Please Enter your Email Address To Continue';
+                    var message = 'Please Complete Required Fields To Continue';
                     $('#submitSrMessage').text(message);
                 }
 
