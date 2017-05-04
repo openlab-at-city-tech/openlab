@@ -679,6 +679,10 @@ class Openlab_Clone_Course_Site {
 		$source_site_url = get_blog_option( $this->source_site_id, 'home' );
 		$dest_site_url = get_option( 'home' );
 
+		// URL replacement should be protocol-free, to account for SSL-converted sites.
+		$source_site_url = preg_replace( '/^https?/', '', $source_site_url );
+		$dest_site_url = preg_replace( '/^https?/', '', $dest_site_url );
+
                 // Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
 		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
@@ -687,7 +691,7 @@ class Openlab_Clone_Course_Site {
 		$source_group_admins = $this->get_source_group_admins();
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
-				if ( 'publish' === $sp->post_status ) {
+				if ( 'publish' === $sp->post_status || 'private' === $sp->post_status ) {
 					$post_arr = array(
 						'ID' => $sp->ID,
 						'post_status' => 'draft',
@@ -726,10 +730,9 @@ class Openlab_Clone_Course_Site {
 
 		// Replace the site URL in all post content.
                 // For some reason a regular MySQL query is not working.
-                $this_site_url = get_option( 'home' );
                 foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
                         $post = get_post( $post_id );
-                        $post->post_content = str_replace( $source_site_url, $this_site_url, $post->post_content );
+                        $post->post_content = str_replace( $source_site_url, $dest_site_url, $post->post_content );
                         wp_update_post( $post );
                 }
 

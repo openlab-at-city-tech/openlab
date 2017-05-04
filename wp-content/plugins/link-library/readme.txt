@@ -59,6 +59,10 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.13.20 =
+* Changed encoding of e-mails sent by user submission
+* Fixed condition where user submission e-mail could have no title
+
 = 5.9.13.19 =
 * Re-do of changes from 5.9.13.17
 * Fixed problem on link activation with table creation syntax

@@ -124,7 +124,8 @@
 				image_options  = $( '.cptch_images_options' ),
 				package_list   = $( ".cptch_tabs_package_list:not(.cptch_pro_pack_tab)" ),
 				limit_option   = $( "input[name=cptch_enable_time_limit]" ),
-				limit_value    = $( '.cptch_time_limit' );
+				limit_value    = $( '.cptch_time_limit' ),
+				notice;
 			/*
 			 * Show/hide all form settings by mark/unmark "Enable" checkbox.
 			 * With this all form settings will be hidden except "Enable" checkbox.
@@ -142,24 +143,26 @@
 			});
 
 			/* Handle the displaying of notice message above lists of image packages */
-			image_format.click( function() {
-				var is_checked = $( this ).is( ':checked' ),
-					notice;
+			function cptch_image_options() {
+				var is_checked = image_format.is( ':checked' );
 				if ( is_checked )
 					image_options.show();
 				else
 					image_options.hide();
+				
 				package_list.each( function() {
-					notice = $( this ).prev( '.cptch_enable_images_notice' );
+					notice = image_format.prev( '.cptch_enable_images_notice' );
 					if ( ! notice.length )
 						return;
-					if( $( this ).find( 'input:checked' ).length && ! is_checked )
+					if ( image_format.find( 'input:checked' ).length && ! is_checked )
 						notice.show();
 					else
 						notice.hide();
 				});
 				set_tabs_height( $( '#cptch_settings_tabs .ui-tabs-active a' ).attr( 'href' ) );
-			});
+			}
+			cptch_image_options()
+			image_format.click( function() { cptch_image_options(); } );
 
 			/* Handle lists of packages on form options tabs */
 			package_list.resizable({
@@ -188,6 +191,20 @@
 				else
 					limit_value.hide();
 			});
+
+			function cptch_type() {
+				if ( 'recognition' == $( 'input[name="cptch_type"]:checked' ).val() ) {
+					$( '.cptch_for_recognition' ).show();
+					$( '.cptch_for_math_actions' ).hide();
+					image_format.attr( 'checked', 'checked' );
+					cptch_image_options();	
+				} else {
+					$( '.cptch_for_recognition' ).hide();
+					$( '.cptch_for_math_actions' ).show();
+				}
+			}
+			cptch_type();
+			$( 'input[name="cptch_type"]' ).click( function() { cptch_type(); } );		
 		}
 
 		/**
@@ -210,7 +227,7 @@
 				limit_options.hide();
 		});
 
-		$( '#cptch_use_la_whitelist' ).click( function() {
+		$( 'input[name="cptch_use_la_whitelist"]' ).click( function() {
 			$( this ).closest( 'form' ).submit();
 		});
 		/*  add to whitelist my ip */

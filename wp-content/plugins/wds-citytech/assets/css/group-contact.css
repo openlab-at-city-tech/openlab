@@ -1,0 +1,40 @@
+.hide-if-js {
+	display: none;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
+}
+
+.ui-autocomplete {
+	background: #fff;
+	max-width: 200px;
+	border: 1px solid #ccc;
+	padding: 4px;
+}
+
+ul.ui-autocomplete {
+	list-style-type: none;
+}
+
+.ui-autocomplete .ui-menu-item a {
+	display: block;
+	width: 100%;
+}
+
+.ui-state-focus {
+	background: #aaa;
+}
+
+#group-contact-list li {
+	padding: 4px;
+	line-height: 1.5em;
+}
+
+.group-contact-remove a {
+	margin-left: 8px;
+}
+
+#group-contact-list {
+	margin-bottom: 16px;
+}

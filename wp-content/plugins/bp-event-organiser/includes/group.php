@@ -157,6 +157,10 @@ function bpeo_filter_query_for_bp_group( $query ) {
 
 	// Convert group IDs to a tax query.
 	$tq = $query->get( 'tax_query' );
+	if ( empty( $tq ) ) {
+		$tq = array();
+	}
+
 	$group_terms = array();
 	foreach ( $group_ids as $group_id ) {
 		$group_terms[] = 'group_' . $group_id;

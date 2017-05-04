@@ -3,13 +3,15 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
 }
 .toplevel_page_bws_panel #wpcontent,
 .bws-panel_page_bws_themes #wpcontent,
-.bws-panel_page_bws_system_status #wpcontent {
+.bws-panel_page_bws_system_status #wpcontent,
+body[class*="-bws-panel"] #wpcontent {
     padding-left: 0;
     padding-right: 0;
 }
 .toplevel_page_bws_panel .update-nag,
 .bws-panel_page_bws_themes .update-nag,
-.bws-panel_page_bws_system_status .update-nag {
+.bws-panel_page_bws_system_status .update-nag,
+body[class*="-bws-panel"] .update-nag {
     display: none;
 }
 .bws-wrap-content {
@@ -44,10 +46,11 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
     text-decoration: none;
     box-shadow: none;
 }
-.bws-logo {
-    max-height: 26px;
-    vertical-align: middle;
+.bws-logo.bwsicons {
+    font-size: 25px;
+    color: #fff;
     margin: 0 3px;
+    vertical-align: middle;
 }
 .bws-title span {
     color: #8bbed2;
@@ -214,27 +217,14 @@ a.toplevel_page_bws_panel.wp-has-current-submenu:after {
 /*
 * system status
 */
-.bws_system_info_meta_box {
-    max-width: 850px;
+table.bws-system-info {
+    margin-bottom: 15px;
 }
-.bws_system_info_meta_box .hndle {
-    cursor: pointer !important;
+table.bws-system-info td:first-child {
+    width: 33%;
 }
-.bws_system_info {
-    float: left;
-    margin-right: 10px;
-    max-width: 400px;
-}
-.rtl .bws_system_info {
-    float: right;
-}
-.bws_system_info th {
-    padding: 10px 0;
-    text-align: left;
-    width: 50%;
-}
-.bws_system_info tbody td {
-    border-bottom: 1px solid #DFDFDF;
+table.bws-system-info tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
 }
 /*
 * PLUGINS
@@ -360,7 +350,7 @@ a.bws_donate {
     display: none;
     background: #e2e2e2;
     padding: 1px 20px;
-    margin: 0 -15px 0 -20px;
+    margin: 0 -12px 0 -20px;
 }
 .bws-filter-top h2 {
     margin: 14px 0;

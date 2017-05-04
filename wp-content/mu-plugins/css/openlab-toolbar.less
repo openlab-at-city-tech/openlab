@@ -767,6 +767,10 @@
                     margin: 0 auto 8px;
                 }
             }
+	    h3{
+		font-size: 13px;
+		text-decoration: underline;
+	    }
         }
         .col-logos{
             display: inline-block;
@@ -848,19 +852,17 @@
                 }
             }
         }
-        .col-share{
-            a{
-                display: inline-block;
-                background: url('images/share_icons.png') no-repeat 0 0;
-                padding-top: 22px;
-                width: 22px;
-                height: 0;
-                overflow: hidden;
-                margin-right: 6px;
-                &.rss-link{
-                    background-position: -32px 0;
-                }
-            }
+        .col-copyright{
+	    padding-right: 0;
+	    ul {
+		font-style: italic;
+		padding-left: 0;
+		list-style-type: none;
+		font-size: 13px;
+	    }
+	    img {
+		margin-left: 8px;
+	    }
             @media (max-width: @screen-xs-max){
                 margin-top: 20px;
                 margin-bottom: 24px;

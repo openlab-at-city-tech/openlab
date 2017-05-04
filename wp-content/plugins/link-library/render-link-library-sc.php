@@ -615,6 +615,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                     }
 
 	                if ( !empty( $afterlastlink ) ) {
+                    	$output .= '<!-- here 2 -->';
 		                $output .= stripslashes( $afterlastlink );
 	                }
 
@@ -1506,6 +1507,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
         }
 
 	    if ( !empty( $afterlastlink ) ) {
+        	$output .= '<!-- here -->';
 		    $output .= stripslashes( $afterlastlink );
 	    }
 

@@ -3,8 +3,8 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
 Requires at least: WP 3.2, BuddyPress 1.8
-Tested up to: WP 4.7, BuddyPress 2.7
-Stable tag: 1.3.14
+Tested up to: WP 4.7, BuddyPress 2.8
+Stable tag: 1.3.16
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -50,6 +50,16 @@ Additional details about the plugin can be found in the following languages:
 * Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a>
 
 == Changelog ==
+
+= 1.3.16 =
+* Security fix: Disallow manual bypass of Access settings when inviting users by email. Thanks to Plugin Vulnerabilities for discovering and privately reporting this and other security issues addressed in this release.
+* Security fix: Improved CSRF protection in admin panels
+* Security fix: Improved output escaping of user-provided content in the Dashboard and on the front end
+* Fixed bug that prevented the 'email' sort from working on the Sent Invites screen.
+
+= 1.3.15 =
+* Security fix: Disallow manual overriding of non-customizable subject and message lines. Thanks to Ewoud Vlasselaer, Eric Schayes, and Nabeel Ahmed for discovering and privately reporting this issue.
+* Improve usage of BP API functions
 
 = 1.3.14 =
 * Fixed regression in 1.3.13 that caused friend request invitations to be sent improperly on account activation

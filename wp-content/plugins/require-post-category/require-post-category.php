@@ -3,7 +3,7 @@
 Plugin Name: Require Post Category
 Plugin URI: http://www.warpconduit.net/wordpress-plugins/require-post-category/
 Description: Require users to choose a post category before saving a draft or publishing.
-Version: 1.0.4
+Version: 1.0.7
 Author: Josh Hartman
 Author URI: http://www.warpconduit.net
 License: GPL2
@@ -27,42 +27,22 @@ Text Domain: require-post-category
 */
 
 add_action('plugins_loaded', 'rpc_load_translation_files');
-add_action('admin_footer-post.php', 'rpc_admin_footer_post_func');
-add_action('admin_footer-post-new.php', 'rpc_admin_footer_post_func');
+add_action('admin_enqueue_scripts', 'rpc_admin_enqueue_scripts_func');
 
 function rpc_load_translation_files(){
 	load_plugin_textdomain( 'require-post-category', false, basename(dirname( __FILE__ )) . '/languages');
 }
 
-function rpc_admin_footer_post_func(){
+function rpc_admin_enqueue_scripts_func($hook){
+	if(!in_array($hook, array('post.php', 'post-new.php'))) {
+		return;
+	}
 	global $post_type;
 	if($post_type=='post'){
-		echo "<script>
-jQuery(function($){
-	$('#publish, #save-post').click(function(e){
-		if($('#taxonomy-category input:checked').length==0){
-			alert('" . __('Please select a category before publishing this post.', 'require-post-category') . "');
-			e.stopImmediatePropagation();
-			return false;
-		}else{
-			return true;
-		}
-	});
-	var publish_click_events = $('#publish').data('events').click;
-	if(publish_click_events){
-		if(publish_click_events.length>1){
-			publish_click_events.unshift(publish_click_events.pop());
-		}
-	}
-	if($('#save-post').data('events') != null){
-		var save_click_events = $('#save-post').data('events').click;
-		if(save_click_events){
-		  if(save_click_events.length>1){
-			  save_click_events.unshift(save_click_events.pop());
-		  }
-		}
-	}
-});
-</script>";
+		wp_enqueue_script('jquery-rpc', plugin_dir_url( __FILE__ ) . 'require-post-category.js', array('jquery'), false, true);
+		$script_data = array(
+			'message' => __('Please select a category before publishing this post.', 'require-post-category')
+		);
+		wp_localize_script('jquery-rpc', 'require_post_category', $script_data);
 	}
 }

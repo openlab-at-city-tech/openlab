@@ -23,8 +23,7 @@ if ( ! function_exists( 'cptch_pro_block' ) ) {
 					<?php call_user_func( $func ); ?>
 				</div>
 				<div class="bws_pro_version_tooltip">
-					<div class="bws_info"><?php _e( 'Unlock premium options by upgrading to Pro version', 'captcha' ); ?></div>
-					<a class="bws_button" href="http://bestwebsoft.com/products/wordpress/plugins/captcha/?k=9701bbd97e61e52baa79c58c3caacf6d&pn=75&v=<?php echo $cptch_plugin_info["Version"]; ?>&wp_v=<?php echo $wp_version; ?>" target="_blank" title="Captcha Pro by BestWebSoft Plugin"><?php _e( 'Learn More', 'captcha' ); ?></a>
+					<a class="bws_button" href="https://bestwebsoft.com/products/wordpress/plugins/captcha/?k=9701bbd97e61e52baa79c58c3caacf6d&pn=75&v=<?php echo $cptch_plugin_info["Version"]; ?>&wp_v=<?php echo $wp_version; ?>" target="_blank" title="Captcha Pro by BestWebSoft Plugin"><?php _e( 'Upgrade to Pro', 'captcha' ); ?></a>
 				</div>
 			</div>
 		<?php }
@@ -50,9 +49,7 @@ if ( ! function_exists( 'cptch_whitelist_banner' ) ) {
  * @since 4.2.0
  */
 if ( ! function_exists( 'cptch_packages_banner' ) ) {
-	function cptch_packages_banner() {
-		$date = date_i18n( get_option( 'date_format' ), strtotime( '1.06.2016' ) );
-		$src  = plugins_url( 'images/package/', dirname(__FILE__) ); ?>
+	function cptch_packages_banner() { ?>
 		<div class="upload-plugin cptch_install_package_wrap">
 			<div class="bws_form wp-upload-form">
 				<p>
@@ -66,102 +63,10 @@ if ( ! function_exists( 'cptch_packages_banner' ) ) {
 				</p>
 				<p>
 					<label><input disabled="disabled" class="button-primary" value="<?php _e( 'Install Now', 'captcha' ); ?>" type="submit" /></label>
-					<a class="cptch_add_ons_link" href="http://bestwebsoft.com/products/wordpress/plugins/captcha/addons/" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
+					<a class="cptch_add_ons_link" href="https://bestwebsoft.com/products/wordpress/plugins/captcha/#addons" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
 				</p>
 			</div>
-		</div>
-		<table class="wp-list-table widefat striped">
-			<thead>
-				<tr>
-					<td id="cb" class="manage-column column-cb check-column">
-						<input id="cb-select-all-1" type="checkbox" disabled="disabled">
-					</td>
-					<th scope="col" id="name" class="manage-column column-name column-primary sortable desc">
-						<a href="#"><span><?php _e( 'Package', 'captcha' ); ?></span><span class="sorting-indicator"></span></a>
-					</th>
-					<th scope="col" id="add_time" class="manage-column column-add_time sortable desc">
-						<a href="#"><span><?php _e( 'Date', 'captcha' ); ?></span><span class="sorting-indicator"></span></a>
-					</th>
-				</tr>
-			</thead>
-			<tbody id="the-list">
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>arabic_bw/0.png"></span>
-							Arabic ( black numbers - white background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>arabic_wb/0.png"></span>
-							Arabic ( white numbers - black background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>dots_bw/1.png"></span>
-							Dots ( black dots - white background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>dots_wb/1.png"></span>
-							Dots ( white dots - black background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>roman_bw/1.png"></span>
-							Roman ( black numbers - white background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-				<tr>
-					<th scope="row" class="check-column"></th>
-					<td class="name column-name has-row-actions column-primary">
-						<div class="has-media-icon">
-							<span class="media-icon image-icon"><img src="<?php echo $src; ?>roman_wb/1.png"></span>
-							Roman ( white numbers - black background )
-						</div>
-					</td>
-					<td class="add_time column-add_time"><?php echo $date; ?></td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td id="cb" class="manage-column column-cb check-column">
-						<input id="cb-select-all-1" type="checkbox" disabled="disabled">
-					</td>
-					<th scope="col" id="name" class="manage-column column-name column-primary sortable desc">
-						<a href="#"><span><?php _e( 'Package', 'captcha' ); ?></span><span class="sorting-indicator"></span></a>
-					</th>
-					<th scope="col" id="add_time" class="manage-column column-add_time sortable desc">
-						<a href="#"><span><?php _e( 'Date', 'captcha' ); ?></span><span class="sorting-indicator"></span></a>
-					</th>
-				</tr>
-			</tfoot>
-		</table>
+		</div>		
 	<?php }
 }
 

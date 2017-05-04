@@ -90,7 +90,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 							<label>
 								<input class="button-primary cptch_install_disabled" name="cptch_install_package_submit" type="submit" value="<?php _e( 'Install Now', 'captcha' ); ?>" />
 							</label>
-							<a class="cptch_add_ons_link" href="http://bestwebsoft.com/products/wordpress/plugins/captcha/addons/" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
+							<a class="cptch_add_ons_link" href="https://bestwebsoft.com/products/wordpress/plugins/captcha/#addons" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
 						</p>
 						<?php wp_nonce_field( $this->basename, 'cptch_load_package' ); ?>
 					</fieldset>
