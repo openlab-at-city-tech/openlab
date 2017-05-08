@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 3.2 (BP 1.5)
-Tested up to: 4.7 (BP 2.7)
-Stable tag: 3.7.0
+Tested up to: 4.7 (BP 2.8)
+Stable tag: 3.7.1
 
 == Description ==
 
@@ -89,6 +89,14 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 3.7.1 =
+* Fix incorrect activity comment permalinks in digest emails.
+* Use login redirect links in digest emails, for improved navigation when not logged in.
+* Improve compatibility with non-standard Multisite configurations.
+* Improve compatibility with PHP 7.1+.
+* Improve compatibility with BP 2.5+ function signatures.
+* Improve HTML character encoding in digests.
 
 = 3.7.0 =
 * Add support for BuddyPress HTML emails, available since BuddyPress 2.5. (View the accompanying wiki article for more info - https://github.com/boonebgorges/buddypress-group-email-subscription/wiki/Email-Tokens)
