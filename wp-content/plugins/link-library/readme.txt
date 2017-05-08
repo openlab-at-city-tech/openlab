@@ -59,6 +59,13 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.13.22 =
+* Trying to fix version update loop
+
+= 5.9.13.21 =
+* Added way to create direct links to categories when showing one category at a time via AJAX (e.g. www.mysite.com/links/?cat_id=244)
+* Corrected a PHP warning
+
 = 5.9.13.20 =
 * Changed encoding of e-mails sent by user submission
 * Fixed condition where user submission e-mail could have no title
