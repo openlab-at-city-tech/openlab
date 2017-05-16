@@ -110,7 +110,7 @@ function ass_digest_fire( $type ) {
 	//
 	// @todo MySQL IN query doesn't scale well when querying a ton of IDs
 	$items = $wpdb->get_results( "
-		SELECT id, type, action, content, primary_link, secondary_item_id, date_recorded
+		SELECT id, type, action, content, primary_link, item_id, secondary_item_id, date_recorded
 			FROM {$bp->activity->table_name}
 			WHERE id IN ({$in})
 	" );
@@ -180,7 +180,7 @@ function ass_digest_fire( $type ) {
 
 			$group_name = $groups_info[ $group_id ][ 'name' ];
 			$group_slug = $groups_info[ $group_id ][ 'slug' ];
-			$group_permalink = apply_filters( 'bp_get_group_permalink', trailingslashit( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group_slug . '/' ) );
+			$group_permalink = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
 
 			// Might be nice here to link to anchor tags in the message.
 			if ( 'dig' == $type ) {
@@ -213,7 +213,7 @@ function ass_digest_fire( $type ) {
 
 		$unsubscribe_message = "\n\n" . sprintf( __( "To disable these notifications per group please login and go to: %s where you can change your email settings for each group.", 'bp-ass' ), "<a href=\"{$userdomain}{$bp->groups->slug}/\">" . __( 'My Groups', 'bp-ass' ) . "</a>" );
 
-		if ( get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) {
+		if ( bp_get_option( 'ass-global-unsubscribe-link' ) == 'yes' ) {
 			$unsubscribe_link = "$userdomain?bpass-action=unsubscribe&access_key=" . md5( $user_id . 'unsubscribe' . wp_salt() );
 			$unsubscribe_message .= "\n\n<br><br><a href=\"$unsubscribe_link\">" . __( 'Disable these notifications for all my groups at once.', 'bp-ass' ) . '</a>';
 		}
@@ -399,7 +399,7 @@ add_action( 'bp_actions', 'ass_digest_fire_test' );
 function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_name, $group_slug, $user_id ) {
 	global $bp, $ass_email_css;
 
-	$group_permalink = apply_filters( 'bp_get_group_permalink', bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group_slug . '/' );
+	$group_permalink = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
 	$group_name_link = '<a href="'.$group_permalink.'" name="'.$group_slug.'">'.$group_name.'</a>';
 
 	$userdomain = ass_digest_get_user_domain( $user_id );
@@ -480,68 +480,26 @@ function ass_digest_format_item( $item, $type ) {
 	$time_posted = date( get_option( 'time_format' ), $timestamp );
 	$date_posted = date( get_option( 'date_format' ), $timestamp );
 
-	// Daily Digest
-	if ( $type == 'dig' ) {
+	//$item_message = strip_tags( $action ) . ": \n";
+	$item_message =  "<div {$ass_email_css['item_div']}>";
+	$item_message .=  "<span {$ass_email_css['item_action']}>" . $action . ": ";
+	$item_message .= "<span {$ass_email_css['item_date']}>" . sprintf( __('at %s, %s', 'bp-ass'), $time_posted, $date_posted ) ."</span>";
+	$item_message .=  "</span>\n";
 
-		//$item_message = strip_tags( $action ) . ": \n";
-		$item_message =  "<div {$ass_email_css['item_div']}>";
-		$item_message .=  "<span {$ass_email_css['item_action']}>" . $action . ": ";
-		$item_message .= "<span {$ass_email_css['item_date']}>" . sprintf( __('at %s, %s', 'bp-ass'), $time_posted, $date_posted ) ."</span>";
-		$item_message .=  "</span>\n";
+	// activity content
+	if ( ! empty( $item->content ) )
+		$item_message .= "<br><span {$ass_email_css['item_content']}>" . apply_filters( 'ass_digest_content', $item->content, $item, $type ) . "</span>";
 
-		// activity content
-		if ( ! empty( $item->content ) )
-			$item_message .= "<br><span {$ass_email_css['item_content']}>" . apply_filters( 'ass_digest_content', $item->content, $item, $type ) . "</span>";
-
-		// view link
-		if ( $item->type == 'activity_update' || $item->type == 'activity_comment' ) {
-			$item_message .= ' - <a href="' . bp_activity_get_permalink( $item->id, $item ).'">'.__('View', 'bp-ass').'</a>';
-		} else {
-			$item_message .= ' - <a href="' . $item->primary_link .'">'.__('View', 'bp-ass').'</a>';
-		}
-
-		$item_message .= "</div>\n\n";
-
-
-	// Weekly summary
-	} elseif ( $type == 'sum' ) {
-
-		// count the number of replies
-		//
-		// commented out for now
-		// if we want to bring this back we should use a direct DB query to the
-		// wp_bb_topics table and locally cache the value
-		/*
-		if ( $item->type == 'new_forum_topic' ) {
-			if ( $posts = bp_forums_get_topic_posts( 'per_page=10000&topic_id='. $item->secondary_item_id ) ) {
-				foreach ( $posts as $post ) {
-					$since = time() - strtotime( $post->post_time );
-					if ( $since < 604800 ) //number of seconds in a week
-						$counter++;
-				}
-			}
-			$replies = ' ' . sprintf( __( '(%s replies)', 'bp-ass' ), $counter );
-		}
-		*/
-
-		$item_message =  "<div {$ass_email_css['item_div']}>";
-		$item_message .=  "<span {$ass_email_css['item_action']}>" . $action . ": ";
-		$item_message .= "<span {$ass_email_css['item_date']}>" . sprintf( __('at %s, %s', 'bp-ass'), $time_posted, $date_posted ) ."</span>";
-		$item_message .=  "</span>\n";
-
-		// activity content
-		if ( ! empty( $item->content ) )
-			$item_message .= "<br><span {$ass_email_css['item_content']}>" . apply_filters( 'ass_digest_content', $item->content, $item, $type ) . "</span>";
-
-		// view link
-		if ( $item->type == 'activity_update' || $item->type == 'activity_comment' ) {
-			$item_message .= ' - <a href="' . bp_activity_get_permalink( $item->id, $item ).'">'.__('View', 'bp-ass').'</a>';
-		} else {
-			$item_message .= ' - <a href="' . $item->primary_link .'">'.__('View', 'bp-ass').'</a>';
-		}
-
-		$item_message .= "</div>\n\n";
+	// view link
+	if ( $item->type == 'activity_update' || $item->type == 'activity_comment' ) {
+		$view_link = bp_activity_get_permalink( $item->id, $item );
+	} else {
+		$view_link = $item->primary_link;
 	}
+
+	$item_message .= ' - <a href="' . ass_get_login_redirect_url( $view_link ) .'">' . __( 'View', 'bp-ass' ) . '</a>';
+
+	$item_message .= "</div>\n\n";
 
 	$item_message = apply_filters( 'ass_digest_format_item', $item_message, $item, $action, $timestamp, $type, $replies );
 	$item_message = ass_digest_filter( $item_message );
@@ -583,12 +541,28 @@ function ass_convert_html_to_plaintext( $message ) {
 }
 
 /**
+ * Properly encode HTML characters in old digest items.
+ *
+ * This is a regex callback function used in ass_send_multipart_email().
+ *
+ * @since 3.7.1
+ *
+ * @param  array $matches Regex matches.
+ * @return string
+ */
+function ass_old_digest_item_html_entities( $matches ) {
+	global $ass_email_css;
+	return '<span ' . $ass_email_css['item_content'] . '>' . htmlentities( strip_tags( $matches[1] ), ENT_COMPAT, 'utf-8' ) . '</span>';
+}
+
+/**
  * Formats and sends a MIME multipart email with both HTML and plaintext
  *
  * We have to use some fancy filters from the wp_mail function to configure the $phpmailer object
  * properly
  */
 function ass_send_multipart_email( $to, $subject, $message_plaintext, $message ) {
+	global $ass_email_css;
 
      // setup HTML body. plugins that wrap emails with HTML templates can filter this
 	$message = apply_filters( 'ass_digest_message_html', "<html><body>{$message}</body></html>", $message );
@@ -642,6 +616,13 @@ function ass_send_multipart_email( $to, $subject, $message_plaintext, $message )
 	// set content type as HTML
 	$headers = array( 'Content-type: text/html' );
 
+	/*
+	 * Eek. Stupid HTML encoding.
+	 *
+	 * Wish we could do this higher up the chain...
+	 */
+	$message = preg_replace_callback( '/<span ' . $ass_email_css['item_content'] . '>(.+?)<\/span>/', 'ass_old_digest_item_html_entities', $message );
+
 	// send the email!
 	$result = wp_mail( $to, $subject, $message, $headers );
 
@@ -683,6 +664,9 @@ function ass_digest_record_activity( $activity_id, $user_id, $group_id, $type = 
 
 	// get the digest/summary items for all groups for this user
 	$group_activity_ids = bp_get_user_meta( $user_id, 'ass_digest_items', true );
+	if ( ! is_array( $group_activity_ids ) ) {
+		$group_activity_ids = array();
+	}
 
 	// update multi-dimensional array with the current activity_id
 	$group_activity_ids[$type][$group_id][] = $activity_id;
@@ -711,10 +695,20 @@ function ass_set_daily_digest_time( $hours, $minutes ) {
 
 	/* Clear the old recurring event and set up a new one */
 	wp_clear_scheduled_hook( 'ass_digest_event' );
+
+	// Custom BP root blog, so set up cron on BP sub-site.
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		wp_clear_scheduled_hook( 'ass_digest_event' );
+	}
+
 	wp_schedule_event( $the_timestamp, 'daily', 'ass_digest_event' );
 
+	// Restore current blog.
+	restore_current_blog();
+
 	/* Finally, save the option */
-	update_option( 'ass_digest_time', array( 'hours' => $hours, 'minutes' => $minutes ) );
+	bp_update_option( 'ass_digest_time', array( 'hours' => $hours, 'minutes' => $minutes ) );
 }
 
 // Takes the numeral equivalent of a $day: 0 for Sunday, 1 for Monday, etc
@@ -728,10 +722,20 @@ function ass_set_weekly_digest_time( $day ) {
 
 	/* Clear the old recurring event and set up a new one */
 	wp_clear_scheduled_hook( 'ass_digest_event_weekly' );
+
+	// Custom BP root blog, so set up cron on BP sub-site.
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		wp_clear_scheduled_hook( 'ass_digest_event_weekly' );
+	}
+
 	wp_schedule_event( $next_weekly, 'weekly', 'ass_digest_event_weekly' );
 
+	// Restore current blog.
+	restore_current_blog();
+
 	/* Finally, save the option */
-	update_option( 'ass_weekly_digest', $day );
+	bp_update_option( 'ass_weekly_digest', $day );
 }
 
 /*

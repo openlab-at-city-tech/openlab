@@ -230,6 +230,8 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 	$cache_key = 'member_portfolios_' . $sort_by;
 	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
 
+	$max = 100;
+
 	if ( '' == $portfolios ) {
 		$portfolios = array();
 		$group_members = new BP_Group_Member_Query( array(
@@ -240,7 +242,14 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 			'type' => 'alphabetical',
 		) );
 
+		$count = 0;
 		foreach ( $group_members->results as $member ) {
+			if ( $count > $max ) {
+				break;
+			}
+
+			$count++;
+
 			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
 			$portfolio_group = groups_get_group( array( 'group_id' => $portfolio_id ) );
 			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
@@ -300,8 +309,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		if ( 'random' === $key ) {
 			shuffle( $portfolios );
 		} else {
-			usort( $portfolios, create_function( '$a, $b', '
-				$key = "' . $key . '";
+			usort( $portfolios, function( $a, $b ) use ( $key ) {
 				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
 				$cmp = strcasecmp( $values[0], $values[1] );
 
@@ -313,7 +321,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 					$retval = 0;
 				}
 				return $retval;
-			' ) );
+			} );
 		}
 
 		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
