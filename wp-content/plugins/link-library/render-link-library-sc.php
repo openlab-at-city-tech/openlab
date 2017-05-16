@@ -244,7 +244,11 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
     } elseif ( $showonecatonly && ( !isset( $AJAXcatid ) || empty( $AJAXcatid ) ) && !empty( $defaultsinglecat ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) {
         $categorylist = $defaultsinglecat;
         $AJAXcatid = $categorylist;
-    } elseif ( $showonecatonly && ( !isset( $AJAXcatid ) || empty( $AJAXcatid ) ) && empty( $defaultsinglecat ) && empty( $_GET['searchll'] ) ) {
+    } elseif ( $showonecatonly && ( !isset( $AJAXcatid ) || empty( $AJAXcatid ) ) && isset( $_GET['cat_id'] ) && !empty( $_GET['cat_id'] ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) {
+	    $categorylist = intval( $_GET['cat_id'] );
+	    $AJAXcatid = $categorylist;
+	    $defaultsinglecat = $AJAXcatid;
+    }elseif ( $showonecatonly && ( !isset( $AJAXcatid ) || empty( $AJAXcatid ) ) && empty( $defaultsinglecat ) && empty( $_GET['searchll'] ) ) {
         $catquery = 'SELECT distinct t.name, t.term_id ';
         $catquery .= 'FROM ' . $LLPluginClass->db_prefix() . 'terms t ';
         $catquery .= 'LEFT JOIN ' . $LLPluginClass->db_prefix() . 'term_taxonomy tt ON (t.term_id = tt.term_id) ';
@@ -556,7 +560,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
     }
 
     // Display links
-    if ( ( $linkitems && $showonecatonly && $AJAXnocatset && $nocatonstartup && !isset( $_GET['searchll'] ) ) || ( empty( $linkitems ) && $nocatonstartup && empty( $_GET['searchll'] ) ) ) {
+    if ( ( $linkitems && $showonecatonly && $AJAXnocatset && $nocatonstartup && !isset( $_GET['cat_id'] ) && !isset( $_GET['searchll'] ) ) || ( empty( $linkitems ) && $nocatonstartup && empty( $_GET['searchll'] ) ) ) {
         $output .= "<div id='linklist" . $settings . "' class='linklist'>\n";
         $output .= '</div>';
     } elseif ( $linkitems && $onlycount ) {
