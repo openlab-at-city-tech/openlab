@@ -480,7 +480,7 @@ function openlab_registration_page() {
                 <p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
 
                 <div class="submit">
-                    <input type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary btn-disabled" value="<?php _e('Complete Sign Up', 'buddypress') ?>" />
+                    <input type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary btn-disabled" value="<?php _e('Please Complete Required Fields', 'buddypress') ?>" />
                 </div>
 
                 <?php do_action('bp_after_registration_submit_buttons') ?>

@@ -55,7 +55,7 @@ function checkPasswordStrength( pw, blacklist ) {
 jQuery(document).ready(function() {
 	var $signup_form = $( '#signup_form' );
 
-	$signup_form.parsley( {
+        var registrationFormValidation = $signup_form.parsley({
 		errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
 	} ).on( 'field:error', function( formInstance ) {
 		this.$element.parent( '.form-group' ).addClass( 'has-error' );
@@ -70,8 +70,8 @@ jQuery(document).ready(function() {
 		'field_3'    // Last Name
 	];
 
-	$password_strength_notice = $( '#password-strength-notice' );
-	$( 'body' ).on( 'keyup', '#signup_password', function( e ) {
+        var $password_strength_notice = $('#password-strength-notice');
+        $('body').on('keyup', '#signup_password', function (e) {
 		var blacklistValues = [];
 		for ( var i = 0; i < inputBlacklist.length; i++ ) {
 			var fieldValue = document.getElementById( inputBlacklist[ i ] ).value;
@@ -104,6 +104,11 @@ jQuery(document).ready(function() {
 			.removeClass( 'strength-0 strength-1 strength-2 strength-3 strength-4' ).
 			addClass( 'strength-' + score );
 	} );
+
+        var initValidation = false;
+        var asyncValidation = false;
+        var asyncLoaded = false;
+        formValidation($signup_form);
 
     $('#signup_email').on('blur', function (e) {
         var email = $(e.target).val().toLowerCase();
@@ -300,13 +305,6 @@ jQuery(document).ready(function() {
         var selected_account_type = $account_type_field.val();
 
         if (document.getElementById('signup_submit')) {
-            if (selected_account_type !== "") {
-                $('#signup_submit').removeClass('btn-disabled');
-                $('#signup_submit').val('Complete Sign Up');
-            } else {
-                $('#signup_submit').addClass('btn-disabled');
-                $('#signup_submit').val('Please Complete Required Fields');
-            }
 
             $('#signup_submit').on('click',function(e){
 
@@ -327,13 +325,70 @@ jQuery(document).ready(function() {
                     post_data: OLReg.post_data
                 },
                 method: 'POST',
-                success: function (response) {
-                    $('#wds-account-type').html(response);
-                    load_error_messages();
-                }
+                    success: function (response) {
+
+                        var $wds_fields = $('#wds-account-type');
+
+                        $wds_fields.html(response);
+
+                        load_error_messages();
+
+                        if (response !== 'Please select an Account Type.') {
+
+                            asyncLoaded = true;
+                            //reset validation
+                            initValidation = false;
+                            console.log('form validation on async return', registrationFormValidation.isValid());
+                            formValidation($wds_fields);
+                            updateSubmitButtonStatus();
+                        }
+
+                    }
             });
         }
     }
+
+        function formValidation(fieldParent) {
+
+            fieldParent.find('input').on('input blur', function (e) {
+
+                evaluateFormValidation();
+
+            });
+
+            fieldParent.find('select').on('change blur', function (e) {
+
+                evaluateFormValidation();
+
+            });
+
+
+        }
+
+        function updateSubmitButtonStatus() {
+
+            if (initValidation) {
+                console.log('submit change up', initValidation, asyncValidation);
+                $('#signup_submit').removeClass('btn-disabled');
+                $('#signup_submit').val('Complete Sign Up');
+            } else if (!$('#signup_submit').hasClass('btn-disabled')) {
+                console.log('submit revert', initValidation, asyncValidation);
+                $('#signup_submit').addClass('btn-disabled');
+                $('#signup_submit').val('Please Complete Required Fields');
+            }
+
+        }
+
+        function evaluateFormValidation() {
+
+            if (asyncLoaded && registrationFormValidation.isValid()) {
+                initValidation = true;
+            } else {
+                initValidation = false;
+            }
+
+            updateSubmitButtonStatus();
+        }
 
     /**
      * Put registration error messages into the template dynamically.

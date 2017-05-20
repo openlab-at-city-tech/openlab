@@ -255,6 +255,8 @@ function openlab_profile_field_input_attributes() {
             break;
 
         case 'Account Type' :
+        case 'Major Program of Study':
+        case 'Department':
             $attributes[] = 'data-parsley-required';
             break;
     }
