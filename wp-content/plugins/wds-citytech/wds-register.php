@@ -350,3 +350,23 @@ function openlab_registration_errors_object() {
 	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
 }
 add_action( 'wp_head', 'openlab_registration_errors_object' );
+
+/**
+ * Unset the activation-key current_action, so that BP doesn't auto-activate.
+ *
+ * See #2081.
+ */
+function openlab_unload_activation_key() {
+	if ( ! bp_is_current_component( 'activate' ) ) {
+		return;
+	}
+
+	$key = bp_current_action();
+	if ( ! $key ) {
+		return;
+	}
+
+	buddypress()->current_activation_key = $key;
+	buddypress()->current_action = '';
+}
+add_action( 'bp_init', 'openlab_unload_activation_key' );
