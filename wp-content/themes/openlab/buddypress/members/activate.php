@@ -39,7 +39,12 @@
 						<form action="" method="get" class="standard-form form" id="activation-form">
 
 							<label for="key"><?php _e( 'Activation Key:', 'buddypress' ) ?></label>
-							<input class="form-control" type="text" name="key" id="key" value="" />
+
+							<?php
+							$bp = buddypress();
+							$passed_key = isset( $bp->current_activation_key ) ? $bp->current_activation_key : '';
+							?>
+							<input class="form-control" type="text" name="key" id="key" value="<?php echo esc_attr( $passed_key ); ?>" />
 
 							<p class="submit">
 								<input class="btn btn-primary btn-margin btn-margin-top" type="submit" name="submit" value="<?php _e( 'Activate', 'buddypress' ) ?> &#xf138;" />
