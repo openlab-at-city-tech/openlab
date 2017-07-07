@@ -215,8 +215,10 @@ if ( ! defined( 'BP_AVATAR_FULL_HEIGHT' ) ) {
 function wds_default_theme() {
 	global $wpdb, $blog_id;
 	if ( $blog_id > 1 ) {
-		define( 'BP_DISABLE_ADMIN_BAR', true );
-		$theme = get_option( 'template' );
+		if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ) {
+                    define('BP_DISABLE_ADMIN_BAR', true);
+                }
+        $theme = get_option( 'template' );
 		if ( 'bp-default' === $theme ) {
 			switch_theme( 'twentyten', 'twentyten' );
 			wp_redirect( home_url() );
