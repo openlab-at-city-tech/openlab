@@ -330,6 +330,7 @@ function openlab_group_archive() {
 
 function openlab_groups_pagination_links() {
     global $groups_template;
+    $search_terms = '';
 
     $pagination = paginate_links(array(
         'base' => add_query_arg(array('grpage' => '%#%', 'num' => $groups_template->pag_num, 's' => $search_terms, 'sortby' => $groups_template->sort_by, 'order' => $groups_template->order)),
