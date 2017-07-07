@@ -1,0 +1,15 @@
+{
+  "name": "oplb-gradebook",
+  "version": "1.0.0",
+  "description": "A grunt task plugin for building oplb-gradebook",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joe Unander",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-requirejs": "^0.4.4"
+  }
+}
