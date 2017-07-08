@@ -239,25 +239,29 @@ add_filter('bp_avatar_is_front_edit', '__return_false');
  */
 function openlab_profile_field_input_attributes() {
     $attributes = array();
-
+    $field_name = bp_get_the_profile_field_input_name();
+    
     switch (bp_get_the_profile_field_name()) {
         case 'Name' :
             $attributes[] = 'data-parsley-required';
-            $attributes[] = 'data-parsley-required';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'First Name' :
             $attributes[] = 'data-parsley-required';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'Last Name' :
             $attributes[] = 'data-parsley-required';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'Account Type' :
         case 'Major Program of Study':
         case 'Department':
             $attributes[] = 'data-parsley-required';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
     }
 

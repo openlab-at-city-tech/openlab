@@ -309,9 +309,14 @@ input[type="submit"]{
     }
 }
 .parsley-errors-list.filled {
+    margin: 0;
+    padding: 0;
     padding-left: 0;
     list-style-type: none;
     font-weight: bold;
+    li{
+        margin: 0;
+    }
 }
 .notify-settings {
     .notify-members {
@@ -418,7 +423,8 @@ input[type="submit"]{
     display: none;
 }
 #validation-code {
-    margin-top: 8px;
+    margin-bottom: 17px;
+    margin-top: 5px;
     background: #eaeaea;
     border: 1px solid #ddd;
     border-radius: 2px;
@@ -524,7 +530,7 @@ h1.entry-title{
     @media (max-width: @screen-xs-max){
         margin-top: 12px;
         padding-bottom: 2px;
-	min-height: 26px;
+        min-height: 26px;
         .profile-name{
             display: inline-block;
             max-width: 74%;
@@ -817,32 +823,32 @@ body{
         }
     }
     #register-page{
-	.password-field {
-	    position: relative;
-	}
-	.password-strength-notice {
-	    display: none;
-	    position: absolute;
-	    right: 40px;
-	    top: 5px;
-	    padding: 2px 0;
-	    width: 100px;
-	    text-align: center;
-	    border-radius: 3px;
-	    font-weight: bold;
+        .password-field {
+            position: relative;
+        }
+        .password-strength-notice {
+            display: none;
+            position: absolute;
+            right: 40px;
+            top: 5px;
+            padding: 2px 0;
+            width: 100px;
+            text-align: center;
+            border-radius: 3px;
+            font-weight: bold;
 
-	    &.strength-0,
-	    &.strength-1,
-	    &.strength-2 {
-		background-color: #f1adad;
-	    }
-	    &.strength-3 {
-		background-color: #ffe399;
-	    }
-	    &.strength-4 {
-		background-color: #c1e1b9;
-	    }
-	}
+            &.strength-0,
+            &.strength-1,
+            &.strength-2 {
+                background-color: #f1adad;
+            }
+            &.strength-3 {
+                background-color: #ffe399;
+            }
+            &.strength-4 {
+                background-color: #c1e1b9;
+            }
+        }
         .error{
             font-weight: @normal;
             padding: 15px;
@@ -851,6 +857,14 @@ body{
             margin-top: 5px;
             background: @yellow;
             border-color: @yellow;
+        }
+        .has-error{
+            .error{
+                padding: 0;
+                .parsley-errors-list{
+                    padding: 15px;
+                }
+            }
         }
     }
     .panel-body{

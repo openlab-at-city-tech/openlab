@@ -56,14 +56,17 @@
         var $signup_form = $('#signup_form');
 
         var registrationFormValidation = $signup_form.parsley({
-            errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
+            errorsWrapper: '<ul class="parsley-errors-list"></ul>'
         }).on('field:error', function (formInstance) {
-            this.$element.parent('.form-group')
+            this.$element.closest('.form-group')
                     .addClass('has-error')
                     .prepend('<span class="sr-only">Please enter the following: </span>')
-                    .attr('role', 'alert');
+                    .attr('role', 'alert')
+                    .find('.error-container').addClass('error');
         }).on('field:success', function (formInstance) {
-            this.$element.parent('.form-group').removeClass('has-error');
+            this.$element.closest('.form-group')
+                    .removeClass('has-error')
+                    .find('.error-container').removeClass('error');
         });
 
         var inputBlacklist = [
@@ -120,7 +123,7 @@
             }
 
             var emailtype = '';
-            var $emaillabel = $('label[for="signup_email"] div');
+            var $emaillabel = $('#signup_email_error');
             var $validationdiv = $('#validation-code');
             var $emailconfirm = $('#signup_email_confirm');
 
@@ -135,9 +138,10 @@
             if ('nonct' == emailtype) {
                 // Fade out and show a 'Checking' message.
                 $emaillabel.fadeOut(function () {
-                    $emaillabel.html('&mdash; Checking...');
+                    $emaillabel.html('<p class="parsley-errors-list">&mdash; Checking...</p>');
                     $emaillabel.css('color', '#000');
                     $emaillabel.fadeIn();
+                    $emaillabel.addClass('error');
                 });
 
                 // Non-City Tech requires an AJAX request for verification.
@@ -198,7 +202,7 @@
                                 // Don't add more than one
                                 if (!$validationdiv.length) {
                                     var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code">Signup code <em>(required)</em> <span style="color: #f00;">Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
-                                    $('input#signup_email').after(valbox);
+                                    $('input#signup_email').before(valbox);
                                     $validationdiv = $('#validation-code');
                                 }
                             }
@@ -256,12 +260,13 @@
         $('input#signup_validation_code').live('blur', function () {
             var code = $(this).val();
 
-            var vcodespan = $('label[for="signup_validation_code"] span');
+            var vcodespan = $('#signup_email_error');
 
             $(vcodespan).fadeOut(function () {
-                $(vcodespan).html('&mdash; Checking...');
+                $(vcodespan).html('<p class="parsley-errors-list">&mdash; Checking...</p>');
                 $(vcodespan).css('color', '#000');
                 $(vcodespan).fadeIn();
+                $(vcodespan).addClass('error');
             });
 
             /* Handle email verification server side because there we have the functions for it */
