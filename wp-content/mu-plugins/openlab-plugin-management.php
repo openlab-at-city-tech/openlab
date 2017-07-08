@@ -11,7 +11,7 @@ function openlab_hide_plugins( $plugins ) {
 	$super_admin_only = array(
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
-		'an-gradebook/GradeBook.php',
+		//'an-gradebook/GradeBook.php',
 		'bbpress/bbpress.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
