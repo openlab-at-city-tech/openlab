@@ -58,7 +58,10 @@
         var registrationFormValidation = $signup_form.parsley({
             errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
         }).on('field:error', function (formInstance) {
-            this.$element.parent('.form-group').addClass('has-error');
+            this.$element.parent('.form-group')
+                    .addClass('has-error')
+                    .prepend('<span class="sr-only">Please enter the following: </span>')
+                    .attr('role', 'alert');
         }).on('field:success', function (formInstance) {
             this.$element.parent('.form-group').removeClass('has-error');
         });
