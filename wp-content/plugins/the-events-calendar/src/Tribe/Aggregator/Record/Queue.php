@@ -13,11 +13,9 @@ class Tribe__Events__Aggregator__Record__Queue {
 	protected $importer;
 
 	/**
-	 * Holds a Log of what has been done on This Queue
-	 *
 	 * @var Tribe__Events__Aggregator__Record__Activity
 	 */
-	public $activity = null;
+	protected $activity;
 
 	/**
 	 * Holds the Items that will be processed
@@ -64,7 +62,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 			$record = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $record );
 		}
 
-		if ( ! is_a( $record, 'Tribe__Events__Aggregator__Record__Abstract' ) ) {
+		if ( ! is_object( $record ) || ! in_array( 'Tribe__Events__Aggregator__Record__Abstract', class_parents( $record ) ) ) {
 			$this->null_process = true;
 
 			return;
@@ -107,6 +105,14 @@ class Tribe__Events__Aggregator__Record__Queue {
 		$this->cleaner = $cleaner;
 	}
 
+	public function __get( $key ) {
+		switch ( $key ) {
+			case 'activity':
+				return $this->activity();
+				break;
+		}
+	}
+
 	public function init_queue( $items ) {
 		if ( 'csv' === $this->record->origin ) {
 			$this->record->reset_tracking_options();
@@ -122,6 +128,11 @@ class Tribe__Events__Aggregator__Record__Queue {
 	}
 
 	public function load_queue() {
+		if ( empty( $this->record->meta[ self::$queue_key ] ) ) {
+			$this->is_fetching = false;
+			$this->items = array();
+		}
+
 		$this->items = $this->record->meta[ self::$queue_key ];
 
 		if ( 'fetch' === $this->items ) {
@@ -130,7 +141,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 	}
 
 	public function activity() {
-		if ( ! $this->activity ) {
+		if ( empty( $this->activity ) ) {
 			if (
 				empty( $this->record->meta[ self::$activity_key ] )
 				|| ! $this->record->meta[ self::$activity_key ] instanceof Tribe__Events__Aggregator__Record__Activity
@@ -188,6 +199,12 @@ class Tribe__Events__Aggregator__Record__Queue {
 	public function save() {
 		$this->record->update_meta( self::$activity_key, $this->activity );
 
+		/** @var Tribe__Meta__Chunker $chunker */
+		$chunker = tribe( 'chunker' );
+		// this data has the potential to be very big, so we register it for possible chunking in the db
+		$key = Tribe__Events__Aggregator__Record__Abstract::$meta_key_prefix . self::$queue_key;
+		$chunker->register_chunking_for( $this->record->post->ID, $key );
+
 		if ( empty( $this->items ) ) {
 			$this->record->delete_meta( self::$queue_key );
 		} else {
@@ -197,7 +214,8 @@ class Tribe__Events__Aggregator__Record__Queue {
 		// If we have a parent also update that
 		if ( ! empty( $this->record->post->post_parent ) ) {
 			$parent = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $this->record->post->post_parent );
-			if ( isset( $parent->meta[ self::$activity_key ] ) ) {
+
+			if ( ! tribe_is_error( $parent ) && isset( $parent->meta[ self::$activity_key ] ) ) {
 				$activity = $parent->meta[ self::$activity_key ];
 
 				if ( $activity instanceof Tribe__Events__Aggregator__Record__Activity ) {
@@ -224,7 +242,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 	/**
 	 * Processes a batch for the queue
 	 *
-	 * @return self
+	 * @return self|Tribe__Events__Aggregator__Record__Activity
 	 */
 	public function process( $batch_size = null ) {
 		if ( $this->null_process ) {

@@ -117,10 +117,197 @@ if ( ! function_exists( 'tribe_exit' ) ) {
 
 		// Die and exit are language constructs that cannot be used as callbacks on all PHP runtimes
 		if ( 'die' === $handler || 'exit' === $handler ) {
-			exit;
+			exit ( $status );
 		}
 
 		return call_user_func( $handler, $status );
 	}
 }
 
+if ( ! function_exists( 'tribe_get_request_var' ) ) {
+	/**
+	 * Tests to see if the requested variable is set either as a post field or as a URL
+	 * param and returns the value if so.
+	 *
+	 * Post data takes priority over fields passed in the URL query. If the field is not
+	 * set then $default (null unless a different value is specified) will be returned.
+	 *
+	 * The variable being tested for can be an array if you wish to find a nested value.
+	 *
+	 * @see Tribe__Utils__Array::get()
+	 *
+	 * @param string|array $var
+	 * @param mixed        $default
+	 *
+	 * @return mixed
+	 */
+	function tribe_get_request_var( $var, $default = null ) {
+		$post_var = Tribe__Utils__Array::get( $_POST, $var );
+
+		if ( null !== $post_var ) {
+			return $post_var;
+		}
+
+		$query_var = Tribe__Utils__Array::get( $_GET, $var );
+
+		if ( null !== $query_var ) {
+			return $query_var;
+		}
+
+		return $default;
+	}
+}
+
+if ( ! function_exists( 'tribe_is_truthy' ) ) {
+	/**
+	 * Determines if the provided value should be regarded as 'true'.
+	 *
+	 * @param mixed $var
+	 *
+	 * @return bool
+	 */
+	function tribe_is_truthy( $var ) {
+		if ( is_bool( $var ) ) {
+			return $var;
+		}
+
+		/**
+		 * Provides an opportunity to modify strings that will be
+		 * deemed to evaluate to true.
+		 *
+		 * @param array $truthy_strings
+		 */
+		$truthy_strings = (array) apply_filters( 'tribe_is_truthy_strings', array(
+			'1',
+			'enable',
+			'enabled',
+			'on',
+			'y',
+			'yes',
+			'true',
+		) );
+		// Makes sure we are dealing with lowercase for testing
+		if ( is_string( $var ) ) {
+			$var = strtolower( $var );
+		}
+
+		// If $var is a string, it is only true if it is contained in the above array
+		if ( in_array( $var, $truthy_strings, true ) ) {
+			return true;
+		}
+
+		// All other strings will be treated as false
+		if ( is_string( $var ) ) {
+			return false;
+		}
+
+		// For other types (ints, floats etc) cast to bool
+		return (bool) $var;
+	}
+}
+
+if ( ! function_exists( 'tribe_normalize_terms_list' ) ) {
+	/**
+	 * Normalizes a list of terms to a list of fields.
+	 *
+	 * @param $terms A term or array of terms to normalize.
+	 * @param string $taxonomy The terms taxonomy.
+	 * @param string $field Teh fields the terms should be normalized to.
+	 *
+	 * @since 4.5
+	 *
+	 * @return array An array of the valid normalized terms.
+	 */
+	function tribe_normalize_terms_list( $terms, $taxonomy, $field = 'term_id' ) {
+		if ( ! is_array( $terms ) ) {
+			$terms = array( $terms );
+		}
+
+		$normalized = array();
+		foreach ( $terms as $term ) {
+			if ( is_object( $term ) && ! empty( $term->{$field} ) ) {
+				$normalized[] = $term->{$field};
+			} elseif ( is_numeric( $term ) ) {
+				$term = get_term_by( 'id', $term, $taxonomy );
+				if ( $term instanceof WP_Term ) {
+					$normalized[] = $term->{$field};
+				}
+			} elseif ( is_string( $term ) ) {
+				$term = get_term_by( 'slug', $term, $taxonomy );
+				if ( $term instanceof WP_Term ) {
+					$normalized[] = $term->{$field};
+				}
+			} elseif ( is_array( $term ) && ! empty( $term[ $field ] ) ) {
+				$normalized[] = $term[ $field ];
+			}
+		}
+
+		return $normalized;
+	}
+}
+
+if ( ! function_exists( 'tribe_is_error' ) ) {
+	/**
+	 * Check whether variable is a WordPress or Tribe Error.
+	 *
+	 * Returns true if $thing is an object of the Tribe_Error or WP_Error class.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param mixed $thing Any old variable will do.
+	 *
+	 * @return bool Indicates if $thing was an error.
+	 */
+	function tribe_is_error( $thing ) {
+		return ( $thing instanceof Tribe__Error || is_wp_error( $thing ) );
+	}
+}
+
+if ( ! function_exists( 'tribe_retrieve_object_by_hook' ) ) {
+	/**
+	 * Attempts to find and return an object of the specified type that is associated
+	 * with a specific hook.
+	 *
+	 * This is useful when third party code registers callbacks that belong to anonymous
+	 * objects and it isn't possible to obtain the reference any other way.
+	 *
+	 * @since 4.5.8
+	 *
+	 * @param string   $class_name
+	 * @param string   $hook
+	 * @param int      $priority
+	 *
+	 * @return object|false
+	 */
+	function tribe_retrieve_object_by_hook( $class_name, $hook, $priority ) {
+		global $wp_filter;
+
+		// No callbacks registered for this hook and priority?
+		if (
+			! isset( $wp_filter[ $hook ] )
+			|| ! isset( $wp_filter[ $hook ][ $priority ] )
+		) {
+			return false;
+		}
+
+		// Otherwise iterate through the registered callbacks at the specified priority
+		foreach ( $wp_filter[ $hook ]->callbacks[ $priority ] as $callback ) {
+			// Skip if this callback isn't an object method
+			if (
+				! is_array( $callback['function'] )
+				|| ! is_object( $callback['function'][0] )
+			) {
+				continue;
+			}
+
+			// If this isn't the callback we're looking for let's skip ahead
+			if ( $class_name !== get_class( $callback['function'][0] ) ) {
+				continue;
+			}
+
+			return $callback['function'][0];
+		}
+
+		return false;
+	}
+}

@@ -58,7 +58,7 @@ if ( get_option( 'pue_install_key_event_aggregator' ) ) {
 					}
 					$facebook_button_label = __( 'Refresh your connection to Facebook', 'the-events-calendar' );
 					$facebook_disconnect_label = __( 'Disconnect', 'the-events-calendar' );
-					$facebook_disconnect_url = Tribe__Events__Aggregator__Settings::instance()->build_disconnect_facebook_url( $current_url );
+					$facebook_disconnect_url = tribe( 'events-aggregator.settings' )->build_disconnect_facebook_url( $current_url );
 				}
 				?>
 			</p>
@@ -104,7 +104,7 @@ if ( get_option( 'pue_install_key_event_aggregator' ) ) {
 		),
 	);
 
-	if ( ! Tribe__Events__Aggregator::instance()->api( 'origins' )->is_oauth_enabled( 'facebook' ) ) {
+	if ( ! tribe( 'events-aggregator.main' )->api( 'origins' )->is_oauth_enabled( 'facebook' ) ) {
 		unset( $internal['fb-start'], $internal['fb-info-box'], $internal['fb_token_button'] );
 	}
 }
