@@ -3,8 +3,8 @@ Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
 Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 4.5.3
-Stable tag: 3.1.3
+Tested up to: 4.7.3
+Stable tag: 3.1.10
 License: GPLv3
 
 Create and maintain events, including complex reoccurring patterns, venue management (with Google maps), calendars and customisable event lists
@@ -221,6 +221,37 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 8. Events list (using TwentySixteen)
 
 == Changelog ==
+
+= 3.1.10 - 8th July 2017
+* Updated 'Tested up to' version (WordPress 4.8)
+* Updated Afrikaan, Catalan, Croatian, Czech, Dutch, French, German, Greek,
+  Hungarian, Portuguese, Russian, Slovenian, Spanish and Turkish translations.
+
+= 3.1.9 - 31st March 2017
+* Removed development tool
+* Updated French, Italian and Japanese translations
+
+= 3.1.8 - 30th March 2017
+
+* Handle 767 byte index size limit in MySQL. See [#404](https://github.com/stephenharris/Event-Organiser/issues/404)
+* Fix handling of ampersands in the iCal feed
+
+= 3.1.7 - 23rd December 2016
+* bugfix: Remove icon was not visible when editing galleries on the event admin page
+
+= 3.1.6 - 11th November 2016
+ * Fix bug causing edit event admin page to link to the settings page.
+ * Fix bug in `eo_get_current_occurrence_of()`
+ * Ensure `occurrence_id` value returned by `eo_get_next_occurrence_of()` is an integer not a string.
+
+= 3.1.5 - 2nd November 2016 =
+* bugfix: Fixed conflict, affecting widget the calendar, with some tranlsation plugins. This resulted in not being able to naviage through the calendar.
+* bugfix: Fixed inline documentation
+* bugfix: Fixed `<br>` tag being used as a closing tag
+
+= 3.1.4 - 9th September 2016 =
+* Tested up to 4.6.1
+* bugfix: In the iCal field don't change the BYDAY property when a city is used as a timezone (i.e. instead of a UTC offset). Fixes [#376](https://github.com/stephenharris/Event-Organiser/issues/376)
 
 = 3.1.3 - 23rd July 2016 =
 * bugfix: Fixed tranlsation (.mo files)
