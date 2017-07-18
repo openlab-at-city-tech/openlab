@@ -313,7 +313,7 @@ box-shadow: none;}';
         }
       }
       else {
-         Osm::traceText(DEBUG_ERROR, __('gpx_colour_list does not match to gpx_file_list!','OSM-plugin'));
+         Osm::traceText(DEBUG_ERROR, __('gpx_colour_list does not match to gpx_file_list!','OSM'));
       }
     }
     

@@ -487,9 +487,14 @@ class Osm_OpenLayers
       var FileList_TypeField   = "";
       var FileList_MapTypeField = "";
       var FileList_FileField = "";
+      var FileList_TitleField = "";
       var DisplayName = "";
-	  var FileList_FileUrl = document.post.osm_file_list_URL.value;
-      var Controls = "";
+      
+	fileUrls = [];
+	fileTitles = [];
+	fileColors = [];
+      
+	  var Controls = "";
       var ControlField =""; 
       BorderField = "";
 	  
@@ -518,22 +523,44 @@ class Osm_OpenLayers
     else {
       ControlField ="";
     }
+  			
+  	/** handle multiple form fields in metabox with same input (layers and their files/colors/titles - links still missing (tbc) */		
+  		jQuery(".osmFileName").each(function(i,e) {
+  		
+  			if (jQuery(e).val() != "") {
+	  			fileUrls.push( jQuery(e).val()); 
+	  		}	
+  		});
+  		
+  		jQuery(".osmFileTitle").each(function(i,e) {
+  		
+  			if (jQuery(e).val() != "" && fileUrls[i] != "") {
+  				fileTitles.push( jQuery(e).val());
+  			} 
+  		});
+  		
+  		jQuery(".osmFileColor").each(function(i,e) {
+  		
+  			if (jQuery(e).val() != "" && typeof(fileUrls[i]) == "string") {
+  				fileColors.push( jQuery(e).val()); 
+  			}
+  		});
+  		
+	  FileList_FileField = " file_list=\"" + fileUrls.join() + "\"";
+
+	  FileList_ColorField = " file_color_list=\"" + fileColors.join() + "\""; 
 	  
-	  if (document.post.osm_file_list_color.value != "none"){
-        FileList_ColorField = " file_color_list=\"" + document.post.osm_file_list_color.value + "\""; 
-      }
-  
-	  FileList_FileField = " file_list=\""+ FileList_FileUrl + "\"";
-
-
-       
-	  GenTxt = "[osm_map_v3 map_center=\"" + Centerlonlat.lat + "," + Centerlonlat.lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + "]";
+	  FileList_TitleField = " file_title=\"" + fileTitles.join() + "\""; 
+	  
+	   
+	  GenTxt = "[osm_map_v3 map_center=\"" + Centerlonlat.lat + "," + Centerlonlat.lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + FileList_TitleField + "]";
 
       div = document.getElementById("ShortCode_Div");
       div.innerHTML = GenTxt;
     ';
     $Layer .= ' 
       markerslayer.clearMarkers();
+      /* vorsicht - hier gibt es kein document.post.osm_import (mehr?)
       if ((((document.post.osm_import.value == "single") || (document.post.osm_import.value == "none")) || (document.post.osm_mode.value == "geotagging")) && (document.post.osm_marker.value != "none")){
         var icon_Obj = osm_getIconSize(MarkerName);
         var icon_size = new OpenLayers.Size(icon_Obj.width,icon_Obj.height);
@@ -542,7 +569,7 @@ class Osm_OpenLayers
         var click_icon = new OpenLayers.Icon(icon_url,icon_size,icon_offset); 
         var icon_lonlat = new OpenLayers.LonLat(Clicklonlat.lon,Clicklonlat.lat).transform('.$a_MapName.'.displayProjection, '.$a_MapName.'.projection);
         markerslayer.addMarker(new OpenLayers.Marker(icon_lonlat,click_icon.clone()));
-      }';
+      }*/';
     }	
     else if( $a_msgBox == 'metabox_file_sc_gen'){
     $Layer .= ' 

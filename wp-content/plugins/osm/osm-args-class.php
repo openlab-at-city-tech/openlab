@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2015  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2017  MiKa (wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ class cOsm_arguments
     private  $map_Lat = '58.213';
     private  $map_Lon = '6.378';
     private  $zoom = '4';
+	private  $map_api_key = 'NoKey';
     private  $file_list = 'NoFile';
     private  $file_color_list = 'NoColor';
     private  $map_type = 'Osm';
@@ -63,6 +64,7 @@ class cOsm_arguments
         }
         else{
           Osm::traceText(DEBUG_ERROR, "marker_size error!");
+		  Osm::traceText(DEBUG_ERROR, $a_marker_size);
         }
       }
     }
@@ -128,7 +130,7 @@ private function setMapSize($a_width,  $a_height){
 }
 
 private function setPostMarkers($a_post_markers){
-    if ($a_post_markers == "1"){
+    if (($a_post_markers == "1") || ($a_post_markers == "2")  || ($a_post_markers == "3") || ($a_post_markers == "4") || ($a_post_markers == "5") || ($a_post_markers == "6") || ($a_post_markers == "7") || ($a_post_markers == "8") || ($a_post_markers == "9") || ($a_post_markers == "all")){
       $this->post_markers = $a_post_markers;
    }
     else {
@@ -137,7 +139,13 @@ private function setPostMarkers($a_post_markers){
 }
 
 private function setMapType($a_type){
-    $this->map_type = strtolower($a_type);
+    $map_type = strtolower($a_type);
+	if ((($map_type == "outdoor") || ($map_type == "landscape") || ($map_type == "spinal") || ($map_type == "pioneer") || ($map_type == "cyclemap")) && ($this->getMapAPIkey() == "NoKey")){
+	  $this->map_type = "osm";
+	}
+	else {
+	  $this->map_type = $map_type;
+	}
 }
 
 private function setDisplayMarker($a_display_marker_name){
@@ -190,20 +198,25 @@ else {
   }
 }
 
+private function setMapAPIkey($a_map_api_key){
+  $this->map_api_key = $a_map_api_key;
+}
 
-  function __construct($a_width,  $a_height, $a_map_center,  $zoom,  $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, 
+
+  function __construct($a_width, $a_height, $a_map_center, $zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, 
     $marker_name, $a_marker_size, $control, $wms_address, $wms_param, $wms_attr_name,  $wms_type, $wms_attr_url, 
     $tagged_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color){
         
     $this->setLatLon($a_map_center) ;
     $this->setMapSize($a_width,  $a_height);
     $this->setControlArray($control);
-    $this->setMapType($a_type);
     $this->setMarkersize($a_marker_size);
     $this->setPostMarkers($a_post_markers);
     $this->setDisplayMarker($a_display_marker_name);
     $this->setTaggedParam($a_tagged_param);
     $this->setTaggedColor($a_tagged_color);
+	$this->setMapAPIkey($a_map_api_key);
+	$this->setMapType($a_type); // needs to be done after setMapAPIkey
 }
 
 public function getPostMarkers(){
@@ -215,6 +228,10 @@ public function getMapCenterLat(){
 }
 public function getMapCenterLon(){
   return $this->map_Lon;
+}
+
+public function getMapAPIkey(){
+  return $this->map_api_key;
 }
 
 public function getMapWidth_str(){

@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2015  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2017  MiKa (wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
+/**
+ *  \brief class to keep the icon in an object
+ */
 class cOsm_icon
 {
   private $icon_name= 'no', $icon_URL = 'no';
@@ -106,7 +108,11 @@ class cOsm_icon
     $a_IconName == "mic_brown_car_01.png" || $a_IconName == "mic_black_camera_01.png" ||
     $a_IconName == "mic_orange_archery_01.png" || $a_IconName == "mic_black_archery_01.png" ||
     $a_IconName == "mic_blue_empty_01.png" || $a_IconName == "mic_black_empty_01.png" ||
-    $a_IconName == "mic_black_heart_01.png" || $a_IconName == "mic_green_vw_t3_01.png"
+    $a_IconName == "mic_black_heart_01.png" || $a_IconName == "mic_green_vw_t3_01.png" ||
+    $a_IconName == "mic_orange_van_01.png" || $a_IconName == "mic_orange_climbing_01.png" ||
+    $a_IconName == "mic_green_restaurant_02.png" || $a_IconName == "mic_green_hut_01.png" ||
+    $a_IconName == "mic_green_tent_01.png" || $a_IconName == "mic_blue_ski_tour_01.png" ||
+    $a_IconName == "mic_green_hut_02.png" || $a_IconName == "mic_green_caravan_01.png"
 ){
     return true;
    }
@@ -116,7 +122,7 @@ class cOsm_icon
  } 
 
 private function setIconsize($a_IconName, $a_IconHeight = -1, $a_IconWidth = -1, $a_IconFocus = -1){
-   Osm::traceText(DEBUG_INFO, "Name: ". $a_IconName." Height: ".$a_IconHeight."Width: ".$a_IconWidth." Focus: ".$a_IconFocus);
+   Osm::traceText(DEBUG_INFO, "[setIconsize]: Name: ". $a_IconName." Height: ".$a_IconHeight."Width: ".$a_IconWidth." Focus: ".$a_IconFocus);
    if ($this->isOsmIcon($a_IconName)){
    if (!strncmp($a_IconName, 'mic_', 4)){
      $this->icon_height = 41;
@@ -230,9 +236,12 @@ private function setIconsize($a_IconName, $a_IconHeight = -1, $a_IconWidth = -1,
 
   public function setIcon($a_IconName = 'mic_blue_pinother_02.png', $a_IconHeight = -1, $a_IconWidth = -1, $a_IconFocus = -1)
   {
+    if ($a_IconName == 'NoName'){
+      $a_IconName = 'mic_blue_pinother_02.png';
+    }
     $this->icon_name = $this->replaceOldIcon($a_IconName);
     $this->setIconsize($this->icon_name, $a_IconHeight, $a_IconWidth, $a_IconFocus);
-	$this->icon_URL = OSM_PLUGIN_ICONS_URL.$this->icon_name;
+    $this->icon_URL = OSM_PLUGIN_ICONS_URL.$this->icon_name;
 }
 
 public function __construct($a_IconName = 'mic_blue_pinother_02.png', $a_IconHeight = -1, $a_IconWidth = -1, $a_IconFocus = -1){
