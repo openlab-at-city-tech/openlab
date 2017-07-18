@@ -227,13 +227,19 @@ class BP_XProfile_Field {
 	 * Retrieve a `BP_XProfile_Field` instance.
 	 *
 	 * @since 2.4.0
+	 * @since 2.8.0 Added `$user_id` and `$get_data` parameters.
 	 *
 	 * @static
 	 *
-	 * @param int $field_id ID of the field.
+	 * @param int  $field_id ID of the field.
+	 * @param int  $user_id  Optional. ID of the user associated with the field.
+	 *                       Ignored if `$get_data` is false. If `$get_data` is
+	 *                       true, but no `$user_id` is provided, defaults to
+	 *                       logged-in user ID.
+	 * @param bool $get_data Whether to fetch data for the specified `$user_id`.
 	 * @return BP_XProfile_Field|false Field object if found, otherwise false.
 	 */
-	public static function get_instance( $field_id ) {
+	public static function get_instance( $field_id, $user_id = null, $get_data = true ) {
 		global $wpdb;
 
 		$field_id = (int) $field_id;
@@ -241,7 +247,7 @@ class BP_XProfile_Field {
 			return false;
 		}
 
-		return new self( $field_id );
+		return new self( $field_id, $user_id, $get_data );
 	}
 
 	/**
@@ -911,11 +917,14 @@ class BP_XProfile_Field {
 			return false;
 		}
 
-		$sql = $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s AND parent_id = 0", $field_name );
+		$id = bp_core_get_incremented_cache( $field_name, 'bp_xprofile_fields_by_name' );
+		if ( false === $id ) {
+			$sql = $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s AND parent_id = 0", $field_name );
+			$id = $wpdb->get_var( $sql );
+			bp_core_set_incremented_cache( $field_name, 'bp_xprofile_fields_by_name', $id );
+		}
 
-		$query = $wpdb->get_var( $sql );
-
-		return is_numeric( $query ) ? (int) $query : $query;
+		return is_numeric( $id ) ? (int) $id : $id;
 	}
 
 	/**
@@ -1552,6 +1561,9 @@ class BP_XProfile_Field {
 	 * @return void If not default field.
 	 */
 	private function default_field_hidden_inputs() {
+
+		// Nonce
+		wp_nonce_field( 'bp_xprofile_admin_field', 'bp_xprofile_admin_field' );
 
 		// Field 1 is the fullname field, which cannot have custom visibility.
 		if ( false === $this->is_default_field() ) {

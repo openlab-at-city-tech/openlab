@@ -14,10 +14,6 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-if ( ! buddypress()->do_autoload ) {
-	require dirname( __FILE__ ) . '/classes/class-bp-groups-theme-compat.php';
-}
-
 /**
  * Handle the display of the Groups directory index.
  *
@@ -25,22 +21,6 @@ if ( ! buddypress()->do_autoload ) {
  */
 function groups_directory_groups_setup() {
 	if ( bp_is_groups_directory() ) {
-		// Set group type if available.
-		if ( bp_is_current_action( bp_get_groups_group_type_base() ) && bp_action_variable() ) {
-			$matched_types = bp_groups_get_group_types( array(
-				'has_directory'  => true,
-				'directory_slug' => bp_action_variable(),
-			) );
-
-			// Redirect back to group directory if no match.
-			if ( empty( $matched_types ) ) {
-				bp_core_redirect( bp_get_groups_directory_permalink() );
-			}
-
-			// Set our global variable.
-			buddypress()->groups->current_directory_type = reset( $matched_types );
-		}
-
 		bp_update_is_directory( true, 'groups' );
 
 		/**
@@ -1065,6 +1045,16 @@ function groups_screen_group_admin_avatar() {
 		if ( !bp_core_avatar_handle_crop( $args ) ) {
 			bp_core_add_message( __( 'There was a problem cropping the group profile photo.', 'buddypress' ), 'error' );
 		} else {
+			/**
+			 * Fires after a group avatar is uploaded.
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param int    $group_id ID of the group.
+			 * @param string $type     Avatar type. 'crop' or 'full'.
+			 * @param array  $args     Array of parameters passed to the avatar handler.
+			 */
+			do_action( 'groups_avatar_uploaded', bp_get_current_group_id(), 'crop', $args );
 			bp_core_add_message( __( 'The new group profile photo was uploaded successfully.', 'buddypress' ) );
 		}
 	}

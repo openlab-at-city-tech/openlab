@@ -120,10 +120,40 @@ function bp_core_get_table_prefix() {
  * @return array $items The sorted array.
  */
 function bp_sort_by_key( $items, $key, $type = 'alpha', $preserve_keys = false ) {
+	$callback = function( $a, $b ) use ( $key, $type ) {
+		$values = array( 0 => false, 1 => false );
+		foreach ( func_get_args() as $indexi => $index ) {
+			if ( isset( $index->{$key} ) ) {
+				$values[ $indexi ] = $index->{$key};
+			} elseif ( isset( $index[ $key ] ) ) {
+				$values[ $indexi ] = $index[ $key ];
+			}
+		}
+
+		if ( isset( $values[0], $values[1] ) ) {
+			if ( 'num' === $type ) {
+				$cmp = $values[0] - $values[1];
+			} else {
+				$cmp = strcmp( $values[0], $values[1] );
+			}
+
+			if ( 0 > $cmp ) {
+				$retval = -1;
+			} elseif ( 0 < $cmp ) {
+				$retval = 1;
+			} else {
+				$retval = 0;
+			}
+			return $retval;
+		} else {
+			return 0;
+		}
+	};
+
 	if ( true === $preserve_keys ) {
-		uasort( $items, array( new BP_Core_Sort_By_Key_Callback( $key, $type ), 'sort_callback' ) );
+		uasort( $items, $callback );
 	} else {
-		usort( $items, array( new BP_Core_Sort_By_Key_Callback( $key, $type ), 'sort_callback' ) );
+		usort( $items, $callback );
 	}
 
 	return $items;
@@ -2372,7 +2402,7 @@ function bp_remove_adjacent_posts_rel_link() {
 		return;
 	}
 
-	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
+	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10 );
 }
 add_action( 'bp_init', 'bp_remove_adjacent_posts_rel_link' );
 
@@ -3059,7 +3089,7 @@ function bp_get_email( $email_type ) {
  * @param string|array|int|WP_User $to         Either a email address, user ID, WP_User object,
  *                                             or an array containg the address and name.
  * @param array                    $args {
- *     Optional. Array of extra. parameters.
+ *     Optional. Array of extra parameters.
  *
  *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
  * }
@@ -3104,6 +3134,23 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	// From, subject, content are set automatically.
 	$email->set_to( $to );
 	$email->set_tokens( $args['tokens'] );
+
+	/**
+	 * Gives access to an email before it is sent.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param BP_Email                 $email      The email (object) about to be sent.
+	 * @param string                   $email_type Type of email being sent.
+	 * @param string|array|int|WP_User $to         Either a email address, user ID, WP_User object,
+	 *                                             or an array containg the address and name.
+     * @param array                    $args {
+	 *     Optional. Array of extra parameters.
+	 *
+	 *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
+	 * }
+	 */
+	do_action_ref_array( 'bp_send_email', array( &$email, $email_type, $to, $args ) );
 
 	$status = $email->validate();
 	if ( is_wp_error( $status ) ) {
@@ -3382,7 +3429,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the group: &quot;{{group.name}}&quot;.\n<a href=\"{{{invites.url}}}\">Go here to accept your invitation</a> or <a href=\"{{{group.url}}}\">visit the group</a> to learn more.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
+			'post_excerpt' => __( "{{inviter.name}} has invited you to join the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo learn more about the group, visit: {{{group.url}}}.\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
 		),
 		'groups-member-promoted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3621,7 +3668,7 @@ function bp_email_get_type_schema( $field = 'description' ) {
  * @since 2.7.0
  */
 function bp_email_unsubscribe_handler() {
-	$emails         = bp_email_get_type_schema( 'all' );
+	$emails         = bp_email_get_unsubscribe_type_schema();
 	$raw_email_type = ! empty( $_GET['nt'] ) ? $_GET['nt'] : '';
 	$raw_hash       = ! empty( $_GET['nh'] ) ? $_GET['nh'] : '';
 	$raw_user_id    = ! empty( $_GET['uid'] ) ? absint( $_GET['uid'] ) : 0;
@@ -3702,7 +3749,7 @@ function bp_email_unsubscribe_handler() {
  * @return string The unsubscribe link.
  */
 function bp_email_get_unsubscribe_link( $args ) {
-	$emails = bp_email_get_type_schema( 'all' );
+	$emails = bp_email_get_unsubscribe_type_schema();
 
 	if ( empty( $args['notification_type'] ) || ! array_key_exists( $args['notification_type'], $emails ) ) {
 		return site_url( 'wp-login.php' );
@@ -3744,4 +3791,27 @@ function bp_email_get_unsubscribe_link( $args ) {
  */
 function bp_email_get_salt() {
 	return bp_get_option( 'bp-emails-unsubscribe-salt', null );
+}
+
+/**
+ * Get a list of emails for use in our unsubscribe functions.
+ *
+ * @since 2.8.0
+ *
+ * @see https://buddypress.trac.wordpress.org/ticket/7431
+ *
+ * @return array The array of email types and their schema.
+ */
+function bp_email_get_unsubscribe_type_schema() {
+	$emails = bp_email_get_type_schema( 'all' );
+
+	/**
+	 * Filters the return of `bp_email_get_type_schema( 'all' )` for use with
+	 * our unsubscribe functionality.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param array $emails The array of email types and their schema.
+	 */
+	return (array) apply_filters( 'bp_email_get_unsubscribe_type_schema', $emails );
 }
