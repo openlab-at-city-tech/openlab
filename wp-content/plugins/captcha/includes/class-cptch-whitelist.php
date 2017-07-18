@@ -19,14 +19,17 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 			$la_info,
 			$paged,
 			$order,
-			$s;
+			$s,
+			$date_filter_options,
+			$filter_by,
+			$last_filtred_by;
+
 		/**
 		* Constructor of class
 		*/
 		function __construct( $plugin_basename, $limit_attempts_info ) {
 			global $cptch_options;
-			if ( empty( $cptch_options ) )
-				$cptch_options = get_option( 'cptch_options' );
+
 			parent::__construct( array(
 				'singular'  => 'IP',
 				'plural'    => 'IP',
@@ -34,16 +37,61 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 				)
 			);
 			$this->basename     = $plugin_basename;
-			$this->la_info      = $limit_attempts_info;
-			$this->display_notices();
+			$this->la_info      = $limit_attempts_info;			
+
+			/**
+			* options for filtring
+			*/
+			$this->date_filter_options = array(
+				'all'    => __( 'All dates', 'captcha' ),
+				'day'    => __( 'Last 24 hours', 'captcha' ),
+				'week'   => __( 'Last week', 'captcha' ),
+				'month'  => __( 'Last month', 'captcha' ),
+				'year'   => __( 'Last year', 'captcha' )
+			);
+
+			/**
+			* keep in mind what was the last filtring option to compare it
+			* with the new filtring options and choose the differnt one
+			*/
+			if (
+				! empty( $_POST['cptch_last_filtred_by'] ) &&
+				in_array( $_POST['cptch_last_filtred_by'], array_keys( $this->date_filter_options ) )
+			) {
+				$this->last_filtred_by = $_POST['cptch_last_filtred_by'];
+			} else {
+				$this->last_filtred_by = 'all';
+			}
+
+			if ( ! empty( $_POST['cptch_date_filter'] ) )
+				$filter_array = array_filter( array_unique( $_POST['cptch_date_filter'] ), array( $this, 'get_date_filter_values' ) );
+
+			/**
+			* Due to the first element's key either be 0 or 1, $filter_array[ key( $filter_array ) ] should be used.
+			* It gives the ability of taking the first element of the array
+			*/
+			$this->filter_by = ! empty( $filter_array ) ? $filter_array[ key( $filter_array ) ] : $this->last_filtred_by;
+
+			/*pls */
+			if ( ! function_exists( 'cptch_pro_block' ) ) {
+				require_once( dirname( __File__ ) . '/pro_banners.php' );
+			}
+			/* pls*/
+
+			$this->disable_list = ( 1 == $cptch_options['use_limit_attempts_whitelist'] ) && 'active' == $this->la_info['status'];
 		}
 
 		/**
 		 * Display content
 		 * @return void
 		 */
-		function display_content() {
-			global $wp_version, $cptch_options;
+		function display_content() { ?>
+			<h1 class="wp-heading-inline"><?php _e( 'Captcha Whitelist', 'captcha' ); ?></h1>
+			<?php if ( ! $this->disable_list ) { ?>
+				<form method="post" action="admin.php?page=captcha-whitelist.php" class="cptch_whitelist_add_new" style="display: inline;">
+					<button class="page-title-action" name="cptch_show_whitelist_form" value="on"<?php echo ( isset( $_POST['cptch_add_to_whitelist'] ) ) ? ' style="display: none;"' : ''; ?>><?php _e( 'Add New', 'captcha' ); ?></button>
+				</form>
+			<?php }
 			if ( isset( $_SERVER ) ) {
 				$sever_vars = array( 'HTTP_X_REAL_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR' );
 				foreach ( $sever_vars as $var ) {
@@ -61,60 +109,40 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					}
 				}
 			}
+
+			$this->display_notices();
 			$this->prepare_items();
+
 			$limit_attempts_info = $this->get_limit_attempts_info();
 			$disabled = $limit_attempts_info['disabled'] ? ' disabled="disabled"' : '';
-			if ( $limit_attempts_info['active'] ) {
-				$checked = $this->disable_list ? ' checked="checked"' : '';
-				$hidden  = $this->disable_list;
-			} else {
-				$checked = '';
-				$hidden  = false;
-			} ?>
-			<p><strong><?php _e( 'For IP addresses from the whitelist CAPTCHA will not be displayed', 'captcha' ); ?></strong></p>
-			<?php if ( ! ( isset( $_REQUEST['cptch_show_whitelist_form'] ) || isset( $_REQUEST['cptch_add_to_whitelist'] ) ) ) { ?>
-				<form method="post" action="admin.php?page=captcha.php&amp;action=whitelist" style="margin: 10px 0;">
-					<table>
-						<tr>
-							<td>
-								<label>
-									<input type="checkbox" name="cptch_use_la_whitelist" value="1" "<?php echo $disabled . $checked; ?>/>
-									<?php echo $limit_attempts_info['label']; ?>
-								</label>
-								<?php $content = sprintf( __( 'With this option, CAPTCHA will not be displayed for IP-addresses from the whitelist of %s', 'captcha' ), $limit_attempts_info['name'] );
-								if ( ! empty( $limit_attempts_info['notice'] ) )
-									$content .=  '<p class="bws_info">' . $limit_attempts_info['notice'] . '</p>';
-								echo bws_add_help_box( $content ); ?>
-							<td>
-						</tr>
-						<tr>
-							<td class="cptch_whitelist_buttons">
-								<div class="alignleft">
-									<button class="button" name="cptch_show_whitelist_form" value="on"<?php echo $hidden ? ' style="display: none;"' : ''; ?>><?php _e( 'Add IP to whitelist', 'captcha' ); ?></button>
+
+			if ( ! ( isset( $_REQUEST['cptch_show_whitelist_form'] ) || isset( $_REQUEST['cptch_add_to_whitelist'] ) ) ) { ?>
+				<form method="post" action="admin.php?page=captcha-whitelist.php">
+					<?php if ( $this->disable_list ) { ?>
+						<p><?php echo __( 'Limit Attempts whitelist is activated.', 'captcha' ) .
+							' <a href="admin.php?page=limit-attempts-black-and-whitelist.php">' . __( 'View the whitelist', 'captcha' ) . '</a> ' .
+							__( 'or', 'captcha' ) .
+							' <a href="admin.php?page=captcha.php">' . __( 'Enable default captcha whitelist', 'captcha' ) . '</a>'; ?></p>
+					<?php } else { ?>
+						<div>
+							<input type="submit" name="cptch_load_limit_attempts_whitelist" class="button" value="<?php _e( 'Load IP Address(-es)', 'captcha' ); ?>" style="float: left;" <?php echo $disabled; ?> />
+							<noscript>
+								<div class="alignleft" style="margin: 0 10px;">
+									<input type="submit" name="cptch_save_add_ip_form_button" class="button-primary" value="<?php _e( 'Save changes', 'captcha' ); ?>" />
 								</div>
-								<div class="alignleft">
-									<input type="submit" name="cptch_load_limit_attempts_whitelist" class="button" value="<?php _e( 'Load IP to the whitelist', 'captcha' ); ?>" style="float: left;<?php echo $hidden ? 'display: none;' : ''; ?>" <?php echo $disabled; ?> />
-									<?php if ( ! $hidden ) {
-										$content = sprintf( __( 'By click on this button, all IP-addresses from the whitelist of %s will be loaded to the whitelist of %s', 'captcha' ), $limit_attempts_info['name'], 'Captcha by BestWebSoft' );
-										if ( ! empty( $limit_attempts_info['notice'] ) )
-											$content .=  '<p class="bws_info">' . $limit_attempts_info['notice'] . '</p>';
-										echo bws_add_help_box( $content, 'cptch_thumb_block' );
-									} ?>
-								</div>
-								<noscript>
-									<div class="alignleft">
-										<input type="submit" name="cptch_save_add_ip_form_button" class="button-primary" value="<?php _e( 'Save changes', 'captcha' ); ?>" />
-									</div>
-								</noscript>
-								<?php wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
-								<input type="hidden" name="cptch_save_add_ip_form" value="1"/>
-							<td>
-						</tr>
-					</table>
+							</noscript>
+							<div class="clear"></div>
+						</div>
+						<div class="bws_info"><?php _e( 'Load IP addresses from the "Limit Attempts" whitelist.', 'captcha' ); ?></div>
+						<?php wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
+						<input type="hidden" name="cptch_save_add_ip_form" value="1" />
+					<?php } ?>
 				</form>
 			<?php } ?>
-			<form class="form-table cptch_whitelist_form" method="post" action="admin.php?page=captcha.php&amp;action=whitelist" style="margin: 10px 0;<?php echo ! ( isset( $_REQUEST['cptch_show_whitelist_form'] ) || isset( $_REQUEST['cptch_add_to_whitelist'] ) ) ? 'display: none;': ''; ?>">
-				<div style="margin: 10px 0; position: relative;">
+			<form class="form-table cptch_whitelist_form" method="post" action="admin.php?page=captcha-whitelist.php" style="margin: 10px 0;<?php echo ! ( isset( $_REQUEST['cptch_show_whitelist_form'] ) || isset( $_REQUEST['cptch_add_to_whitelist'] ) ) ? 'display: none;': ''; ?>">
+				<div>
+					<label><?php _e( 'IP to whitelist', 'captcha' ); ?></label>
+					<br />
 					<input type="text" maxlength="31" name="cptch_add_to_whitelist" />
 					<?php if ( isset( $my_ip ) ) { ?>
 						<br />
@@ -124,21 +152,27 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 							<input type="hidden" name="cptch_add_to_whitelist_my_ip_value" value="<?php echo $my_ip; ?>" />
 						</label>
 					<?php } ?>
-					<br /><input type="submit" id="cptch_add_to_whitelist_button" class="button-secondary" value="<?php _e( 'Add IP to whitelist', 'captcha' ) ?>" />
-					<?php wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
-				</div>
-				<div style="margin: 10px 0;">
-					<span class="bws_info" style="line-height: 2;"><?php _e( "Allowed formats:", 'captcha' ); ?>&nbsp;<code>192.168.0.1</code></span><br/>
-					<span class="bws_info" style="line-height: 2;"><?php _e( "Allowed diapason:", 'captcha' ); ?>&nbsp;<code>0.0.0.0 - 255.255.255.255</code></span>
-				</div>
-				<?php cptch_pro_block( 'cptch_whitelist_banner' ); ?>
+					<div>
+						<span class="bws_info" style="line-height: 2;"><?php _e( "Allowed formats", 'captcha' ); ?>:&nbsp;<code>192.168.0.1</code></span>
+						<br/>
+						<span class="bws_info" style="line-height: 2;"><?php _e( "Allowed diapason", 'captcha' ); ?>:&nbsp;<code>0.0.0.0 - 255.255.255.255</code></span>
+					</div>
+					<!-- pls -->
+					<?php hide_pro_tabs_beyond_settings_page();
+					cptch_pro_block( 'cptch_whitelist_banner', false ); ?>
+					<!-- end pls -->
+					<p>
+						<input type="submit" id="cptch_add_to_whitelist_button" class="button-secondary" value="<?php _e( 'Add IP to whitelist', 'captcha' ) ?>" />
+						<?php wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
+					</p>
+				</div>				
 			</form>
-			<?php if ( ! $hidden ) { ?>
-				<form id="cptch_whitelist_search" method="post" action="admin.php?page=captcha.php&amp;action=whitelist">
-					<?php $this->search_box( __( 'Search IP', 'captcha' ), 'search_whitelisted_ip' );
+			<?php if ( ! $this->disable_list) { ?>
+				<form id="cptch_whitelist_search" method="post" action="admin.php?page=captcha-whitelist.php">
+					<?php $this->search_box( __( 'Search item', 'captcha' ), 'search_whitelisted_ip' );
 					wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
 				</form>
-				<form id="cptch_whitelist" method="post" action="admin.php?page=captcha.php&amp;action=whitelist">
+				<form id="cptch_whitelist" method="post" action="admin.php?page=captcha-whitelist.php">
 					<?php $this->display();
 					wp_nonce_field( $this->basename, 'cptch_nonce_name' ); ?>
 				</form>
@@ -150,8 +184,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 		* @return void
 		*/
 		function prepare_items() {
-			global $cptch_options;
-			$this->disable_list = ( 1 == $cptch_options['use_limit_attempts_whitelist'] ) && 'active' == $this->la_info['status'];
+			
 			if ( isset( $_GET['orderby'] ) && in_array( $_GET['orderby'], array_keys( $this->get_sortable_columns() ) ) ) {
 				switch ( $_GET['orderby'] ) {
 					case 'ip':
@@ -199,8 +232,8 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 		function get_columns() {
 			$columns = array(
 				'cb'      	=> '<input type="checkbox" />',
-				'ip'      	=> __( 'IP address', 'captcha' ),
-				'add_time'  => __( 'Date added', 'captcha' )
+				'ip'      	=> __( 'IP Address', 'captcha' ),
+				'add_time'  => __( 'Date Added', 'captcha' )
 			);
 			return $columns;
 		}
@@ -252,9 +285,9 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 			$order    = empty( $this->order )    ? '' : "&order={$this->order}";
 			$paged    = empty( $this->paged )    ? '' : "&paged={$this->paged}";
 			$s        = empty( $this->s )        ? '' : "&s={$this->s}";
-			$url      = "?page=captcha.php&action=whitelist&cptch_remove={$item['id']}{$order_by}{$order}{$paged}{$s}";
+			$url      = "?page=captcha-whitelist.php&cptch_remove={$item['id']}{$order_by}{$order}{$paged}{$s}";
 			$actions = array(
-				'remove' => '<a href="' . wp_nonce_url( $url, "cptch_nonce_remove_{$item['id']}" ) . '">' . __( 'Remove from the whitelist', 'captcha' ) . '</a>'
+				'delete' => '<a href="' . wp_nonce_url( $url, "cptch_nonce_remove_{$item['id']}" ) . '">' . __( 'Delete', 'captcha' ) . '</a>'
 			);
 			return sprintf('%1$s %2$s', $item['ip'], $this->row_actions( $actions ) );
 		}
@@ -263,7 +296,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 		 * @return array   $actions
 		 */
 		function get_bulk_actions() {
-			return $this->disable_list ? array() : array( 'cptch_remove'=> __( 'Remove from the whitelist', 'captcha' ) );
+			return $this->disable_list ? array() : array( 'cptch_remove'=> __( 'Delete', 'captcha' ) );
 		}
 		/**
 		 * Get content for table
@@ -283,6 +316,42 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					:
 						" WHERE ( `ip_from_int` <= {$ip_int} AND `ip_to_int` >= {$ip_int} )";
 			}
+
+			/**
+			* filter items by date if it is needed
+			*/
+			if ( 'all' != $this->filter_by ) {
+				$now = time();
+				$day = 60 * 60 * 24;
+
+				/**
+				* get the quantity of seconds in the day
+				*/
+				switch ( $this->filter_by ) {
+					case 'day':
+						$point = $now - $day;
+						break;
+					case 'week':
+						$point = $now - $day * 7;
+						break;
+					case 'month':
+						$point = $now - $day * 31;
+						break;
+					case 'year':
+						$point = $now - $day * 365;
+						break;
+					default:
+						break;
+				}
+
+				if( ! empty( $point ) ) {
+					$point = date( 'Y-m-d h:i:s', $point );
+
+					$where .= ! empty( $where ) ? ' &&' : 'WHERE';
+					$where .= ' `add_time` > "' . $point . '"';
+				}
+			}
+
 			$order_by = empty( $this->order_by ) ? '' : " ORDER BY `{$this->order_by}`";
 			$order    = empty( $this->order )    ? '' : strtoupper( " {$this->order}" );
 			$offset   = empty( $this->paged )    ? '' : " OFFSET " . ( $this->per_page * ( absint( $this->paged ) - 1 ) );
@@ -310,6 +379,36 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 						" WHERE ( `ip_from_int` <= {$ip_int} AND `ip_to_int` >= {$ip_int} )";
 			}
 			return absint( $wpdb->get_var( "SELECT COUNT(`id`) FROM `{$wpdb->prefix}cptch_whitelist`{$where}" ) );
+		}
+
+		/**
+		 * This function display's top- & bottom- filters
+		 * @since 4.3.1
+		 * @param string $which
+		 * @return void
+		 */
+		function extra_tablenav( $which ) { ?>
+			<select name="cptch_date_filter[]">
+				<?php foreach ( $this->date_filter_options as $key => $value) { ?>
+					<option value="<?php echo $key;?>" <?php echo ( $key == $this->filter_by ) ? 'selected' : ''; ?>>
+						<?php echo $value; ?>
+					</option>
+				<?php } ?>
+
+			</select>
+
+			<input type="hidden" name="cptch_last_filtred_by" value="<?php echo $this->filter_by; ?>" />
+			<input type="submit" class="button action" value="<?php _e( 'Filter', 'captcha' ); ?>" />
+		<?php }
+
+		/**
+		 * Check if filtring option is valid and not same to last time used filtring option
+		 * @see $this->extra_tablenav
+		 * @param  string   filtring option
+		 * @return array    filtred $_POST['cptch_date_filter']
+		 */
+		private function get_date_filter_values( $item ) {
+			return ( in_array( $item, array_keys( $this->date_filter_options ) ) && $this->last_filtred_by != $item );
 		}
 
 		/**
@@ -348,14 +447,14 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 							)
 						);
 						if ( ! $wpdb->last_error )
-							$message = __( 'IP added to the whitelist successfully', 'captcha' );
+							$message = __( 'IP added to the whitelist successfully.', 'captcha' );
 						else
-							$error = __( 'Some errors occured', 'captcha' );
+							$error = __( 'Some errors occurred.', 'captcha' );
 					} else {
-						$error = __( 'IP is already in the whitelist', 'captcha' );
+						$error = __( 'IP is already in the whitelist.', 'captcha' );
 					}
 				} else {
-					$error = __( 'Invalid IP. See allowed formats', 'captcha' );
+					$error = __( 'Invalid IP. See allowed formats.', 'captcha' );
 				}
 				if ( empty( $error ) ) {
 					$cptch_options['whitelist_is_empty'] = false;
@@ -372,7 +471,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 							update_option( 'cptch_options', $cptch_options );
 						}
 					} else {
-						$error = __( 'Some errors occured', 'captcha' );
+						$error = __( 'Some errors occurred', 'captcha' );
 					}
 				}
 			} elseif ( isset( $_GET['cptch_remove'] ) && check_admin_referer( 'cptch_nonce_remove_' . $_GET['cptch_remove'] ) ) {
@@ -384,13 +483,13 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 						update_option( 'cptch_options', $cptch_options );
 					}
 				} else {
-					$error = __( 'Some errors occured', 'captcha' );
+					$error = __( 'Some errors occurred', 'captcha' );
 				}
 			} elseif ( isset( $_POST['cptch_add_to_whitelist'] ) && empty( $_POST['cptch_add_to_whitelist'] ) ) {
-				$error = __( 'You have not entered any value', 'captcha' );
+				$error = __( 'You have not entered any value.', 'captcha' );
 			} elseif ( isset( $_REQUEST['s'] ) ) {
 				if ( '' == $_REQUEST['s'] ) {
-					$error = __( 'You have not entered any value in to the search form', 'captcha' );
+					$error = __( 'You have not entered any value in to the search form.', 'captcha' );
 				} else {
 					$message = __( 'Search results for', 'captcha' ) . '&nbsp;:&nbsp;' . esc_html( $_REQUEST['s'] );
 				}
@@ -409,7 +508,7 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 							( `ip`, `ip_from_int`, `ip_to_int`, `add_time` ) VALUES ( %s, %s, %s, %s );",
 							$ip_value['ip'], $ip_int, $ip_int, $time ) );
 						$result = $result + $result_single;
-					}					
+					}
 				} else {
 					$result = $wpdb->query(
 						"INSERT IGNORE INTO `{$wpdb->prefix}cptch_whitelist`
@@ -422,21 +521,16 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 				if ( $wpdb->last_error ) {
 					$error = $wpdb->last_error;
 				} else {
-					$message = $result . '&nbsp;' . __( 'IP-address(es) successfully copied to the whitelist', 'captcha' );
+					$message = $result . '&nbsp;' . __( 'IP-address(es) successfully copied to the whitelist.', 'captcha' );
 					$cptch_options['whitelist_is_empty'] = false;
 					update_option( 'cptch_options', $cptch_options );
 				}
-			} elseif( isset( $_POST['cptch_save_add_ip_form'] ) && check_admin_referer( $this->basename, 'cptch_nonce_name' ) ) {
-				if ( empty( $cptch_options ) )
-					$cptch_options = get_option( 'cptch_options' );
-				$cptch_options['use_limit_attempts_whitelist'] = isset( $_POST['cptch_use_la_whitelist'] ) ? 1 : 0;
-				update_option( 'cptch_options', $cptch_options );
 			}
 			if ( ! empty( $message ) ) { ?>
-				<div class="updated fade below-h2"><p><strong><?php echo $message; ?></strong></p></div>
+				<div class="updated fade inline"><p><strong><?php echo $message; ?></strong></p></div>
 			<?php }
 			if ( ! empty( $error ) ) { ?>
-				<div class="error below-h2"><p><strong><?php echo $error; ?></strong></p></div>
+				<div class="error inline"><p><strong><?php echo $error; ?></strong></p></div>
 			<?php }
 		}
 
@@ -445,11 +539,12 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 		 */
 		function get_limit_attempts_info() {
 			global $wp_version, $cptch_plugin_info;
+
 			if ( 'active' == $this->la_info['status'] ) {
 				$data = array(
-					'active'           => true,
+					'active'          => true,
 					'name'             => $this->la_info['plugin_info']["Name"],
-					'label'            => __( 'use', 'captcha' ) . '&nbsp;<a href="?page=' . $this->la_info['plugin_info']["TextDomain"] . '.php&action=whitelist">' . __( 'the whitelist of', 'captcha' ) . '&nbsp;' . $this->la_info['plugin_info']["Name"] . '</a>',
+					'label'            => __( 'use', 'captcha' ) . '&nbsp;<a href="?page=' . $this->la_info['plugin_info']["TextDomain"] . '.php">' . __( 'the whitelist of', 'captcha' ) . '&nbsp;' . $this->la_info['plugin_info']["Name"] . '</a>',
 					'notice'           => '',
 					'disabled'         => false,
 				);
@@ -466,11 +561,11 @@ if ( ! class_exists( 'Cptch_Whitelist' ) ) {
 					'active'          => false,
 					'name'             => 'Limit Attempts by BestWebSoft',
 					'label'            => sprintf( __( 'use the whitelist of %s', 'captcha' ), 'Limit Attempts by BestWebSoft' ),
-					'notice'           => sprintf( __( 'you should install %s to use this functionality', 'captcha' ), '<a href="https://bestwebsoft.com/products/wordpress/plugins/limit-attempts?k=7f52b8ba74b49875aeb687556c04efd8&pn=75&v=' . $cptch_plugin_info["Version"] . '&wp_v=' . $wp_version . '" target="_blank">Limit Attempts by BestWebSoft</a>' ),
+					'notice'           => sprintf( __( 'you should install %s to use this functionality', 'captcha' ), '<a href="https://bestwebsoft.com/products/wordpress/plugins/limit-attempts?k=9ab9d358ad3a23b8a99a8328595ede2e&pn=72&v=' . $cptch_plugin_info["Version"] . '&wp_v=' . $wp_version . '" target="_blank">Limit Attempts by BestWebSoft</a>' ),
 					'disabled'         => true,
 				);
 			}
 			return $data;
 		}
 	}
-} ?>
+}

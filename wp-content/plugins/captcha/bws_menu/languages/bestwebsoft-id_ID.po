@@ -4,66 +4,66 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 15:43+0300\n"
 "PO-Revision-Date: 2017-06-08 15:43+0300\n"
-"Last-Translator: Luc Capronnier <lcapronnier@yahoo.com>\n"
-"Language-Team: Luc Capronnier <lcapronnier@yahoo.com>\n"
-"Language: fr_FR\n"
+"Last-Translator: Jordan Silaen <jordan.silaen@chameleonjohn.com>\n"
+"Language-Team: chameleonjohn.com <jordan.silaen@chameleonjohn.com>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2;plural=n>2;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: bws_functions.php:72 bws_functions.php:190
 msgid "requires"
-msgstr "obligatoire"
+msgstr "membutuhkan"
 
 #: bws_functions.php:74
 msgid ""
 "or higher, that is why it has been deactivated! Please upgrade WordPress and "
 "try again."
 msgstr ""
-"ou supérieure, c'est pourquoi il a été désactivé! Merci de faire la mise à "
-"jour de WordPress puis de ré-essayer."
+"atau lebih tinggi, itu sebabnya telah dinonaktifkan! Silakan upgrade "
+"WordPress dan coba lagi."
 
 #: bws_functions.php:75
 msgid "Back to the WordPress"
-msgstr "Retour à WordPress"
+msgstr "Kembali ke WordPress"
 
 #: bws_functions.php:77
 msgid "Plugins page"
-msgstr "Page des extensions"
+msgstr "halaman plugin"
 
 #: bws_functions.php:91
 msgid "Like the plugin?"
-msgstr "Voter pour l'extension"
+msgstr "Seperti plugin?"
 
 #: bws_functions.php:93
 msgid "Rate it"
-msgstr "Notez là"
+msgstr "Menilai itu"
 
 #: bws_functions.php:102
 msgid "Need help?"
-msgstr "Besoin d'aide ?"
+msgstr "Butuh bantuan?"
 
 #: bws_functions.php:103 bws_functions.php:907 class-bws-settings.php:1047
 msgid "Visit Help Center"
-msgstr "Visiter le site du support"
+msgstr "Kunjungi Pusat Bantuan"
 
 #: bws_functions.php:106
 msgid "Want to support the plugin?"
-msgstr "Voter pour l'extension"
+msgstr "Ingin mendukung plugin?"
 
 #: bws_functions.php:107 bws_menu.php:553
 msgid "Donate"
-msgstr "Don"
+msgstr "Menyumbangkan"
 
 #: bws_functions.php:127
 msgid "WARNING: Illegal use notification"
-msgstr "AVERTISSEMENT : Notification d'utilisation abusive"
+msgstr "PERINGATAN: Illegal penggunaan notifikasi"
 
 #: bws_functions.php:127
 msgid ""
@@ -72,58 +72,56 @@ msgid ""
 "We strongly recommend you to solve the problem within 24 hours, otherwise "
 "the Pro plugin will be deactivated."
 msgstr ""
-"Vous ne pouvez utilisez qu'une licence de la version Pro de l'extension pour "
-"un seul domaine. Merci de vérifier et de modifier votre licence ou votre "
-"domaine si nécessaire en utilisant votre zone client. Nous vous recommandons "
-"de résoudre ce problème dans les 24 heures, sinon l'extension sera rendue "
-"inactive."
+"Anda dapat menggunakan satu lisensi dari plugin Pro untuk satu domain saja. "
+"Silakan periksa dan mengedit lisensi atau domain jika perlu menggunakan Anda "
+"pribadi Area Klien. Kami sangat menyarankan Anda untuk memecahkan masalah "
+"dalam waktu 24 jam, dinyatakan plugin Pro akan dinonaktifkan."
 
 #: bws_functions.php:127 bws_functions.php:339 bws_menu.php:627
 #: class-bws-settings.php:143
 msgid "Learn More"
-msgstr "En savoir plus"
+msgstr "Belajarlah lagi"
 
 #: bws_functions.php:144
 msgid ""
 "Notice: Your Pro Trial license has expired. To continue using the plugin, "
 "you should buy a Pro license"
 msgstr ""
-"Information&nbsp;:Votre licence d'évaluation est terminée. Pour continuer à "
-"utiliser cette extension, vous devez acheter une licence PRO."
+"Perhatikan: lisensi Percobaan Pro Anda telah kedaluwarsa. Untuk terus "
+"menggunakan plugin, Anda harus membeli lisensi Pro"
 
 #: bws_functions.php:146
 msgid ""
 "Your license has expired. To continue getting top-priority support and "
 "plugin updates, you should extend it."
 msgstr ""
-"Votre licence est terminée. Pour continuer à disposer du support rapide et "
-"des mises à jour de l'extension vous devez la renouveler."
+"lisensi Anda telah berakhir. Untuk terus mendapatkan dukungan top-prioritas "
+"dan update Plugin, Anda harus memperpanjang."
 
 #: bws_functions.php:146 bws_functions.php:382 deprecated.php:584
 msgid "Learn more"
-msgstr "En savoir plus"
+msgstr "Belajarlah lagi"
 
 #: bws_functions.php:164
 #, php-format
 msgid "Notice: You are using the Pro Trial license of %s plugin."
-msgstr ""
-"Avertissement : vous utilisez la version d'évaluation de l'extension %s."
+msgstr "Perhatikan: Anda menggunakan lisensi Percobaan Pro dari %s Plugin."
 
 #: bws_functions.php:166
 msgid "Notice: You are using the Pro Trial license of plugin."
-msgstr "Avertissement : vous utilisez la version d'évaluation de l'extension."
+msgstr "Perhatikan: Anda menggunakan lisensi Percobaan Pro plugin."
 
 #: bws_functions.php:169
 msgid "The Pro Trial license will expire on"
-msgstr "La licence PRO d'évaluation expirera le"
+msgstr "Lisensi Percobaan Pro akan berakhir pada"
 
 #: bws_functions.php:192
 msgid ""
 "or higher! We do not guarantee that our plugin will work correctly. Please "
 "upgrade to WordPress latest version."
 msgstr ""
-"ou plus ! Nous ne garantissons pas que notre extension fonctionne "
-"correctement. Merci de mettre à jour Wordpress avec la dernière version."
+"atau lebih tinggi! Kami tidak menjamin bahwa plugin kami akan bekerja dengan "
+"benar. Silakan upgrade ke WordPress versi terbaru."
 
 #: bws_functions.php:207
 #, php-format
@@ -132,67 +130,64 @@ msgstr ""
 
 #: bws_functions.php:208
 msgid "Let's get started"
-msgstr "Démarrer"
+msgstr "Mari kita mulai"
 
 #: bws_functions.php:209 bws_functions.php:242 bws_menu.php:557
 #: bws_menu.php:559
 msgid "Settings"
-msgstr "Réglages"
+msgstr "pengaturan"
 
 #: bws_functions.php:211 bws_menu.php:328 class-bws-settings.php:736
 #: class-bws-settings.php:1049 class-bws-settings.php:1059 deprecated.php:694
 msgid "or"
-msgstr "ou"
+msgstr "atau"
 
 #: bws_functions.php:212 bws_functions.php:244
 msgid "Add New"
-msgstr "Ajouter"
+msgstr "Tambah baru"
 
 #: bws_functions.php:216 bws_functions.php:226 bws_functions.php:330
 #: bws_functions.php:378 bws_functions.php:480
 msgid "Close notice"
-msgstr "Effacer l'avertissement"
+msgstr "Tutup pemberitahuan"
 
 #: bws_functions.php:231
 msgid "Thank you for installing plugins by BestWebSoft!"
-msgstr "Merci d'avoir installé des extensions de BestWebSoft!"
+msgstr "Terima kasih untuk menginstal plugin dengan BestWebSoft!"
 
 #: bws_functions.php:233
 msgid "More Details"
-msgstr "Plus de détails"
+msgstr "Keterangan lebih lanjut"
 
 #: bws_functions.php:234
 msgid "Less Details"
-msgstr "Moins de détails"
+msgstr "Kurang Detail"
 
 #: bws_functions.php:262
 msgid "Deprecated function(-s) is used on the site here:"
-msgstr "Une ou des fonction(s) obsolètes sont utilisées sur ce site ici&nbsp;:"
+msgstr "Fungsi usang (-s) digunakan di situs di sini:"
 
 #: bws_functions.php:276
 msgid ""
 "This function(-s) will be removed over time. Please update the product(-s)."
 msgstr ""
-"Ces fonctions seront supprimées rapidement. Merci de mettre à jour vos "
-"produits."
+"Fungsi ini (-s) akan dihapus dari waktu ke waktu. Perbarui produk (-s)."
 
 #: bws_functions.php:335
 msgid "It’s time to upgrade your"
-msgstr "C'est le moment de mettre à jour votre "
+msgstr "Saatnya untuk meng-upgrade Anda"
 
 #: bws_functions.php:335
 msgid "to"
-msgstr "à"
+msgstr "untuk"
 
 #: bws_functions.php:335
 msgid "version!"
-msgstr "version"
+msgstr "versi!"
 
 #: bws_functions.php:336
 msgid "Extend standard plugin functionality with new great options."
-msgstr ""
-"Étend les fonctionnalités classiques de l'extension avec des nouvelles "
-"options."
+msgstr "Memperluas fungsi Plugin standar dengan pilihan besar baru."
 
 #: bws_functions.php:382
 #, php-format
@@ -200,8 +195,8 @@ msgid ""
 "Your license key for %s expires on %s and you won't be granted TOP-PRIORITY "
 "SUPPORT or UPDATES."
 msgstr ""
-"Votre clé de licence pour %s est terminée le %s et vous ne disposerez plus "
-"du support rapide et des mises à jour."
+"Kunci lisensi untuk %s berakhir pada %s dan Anda tidak akan diberikan TOP-"
+"PRIORITAS DUKUNGAN atau PEMBARUAN."
 
 #: bws_functions.php:475
 #, php-format
@@ -213,34 +208,34 @@ msgid ""
 "If you have a feature, suggestion or idea you'd like to see in the plugin, "
 "we'd love to hear about it!"
 msgstr ""
-"Si vous avez une fonctionnalité, une suggestion ou une idée que vous "
-"souhaitez pour cette extension, nous serons ravis d'en parler avec vous !"
+"Jika Anda memiliki fitur, saran atau ide yang ingin Anda lihat di plugin, "
+"kami akan senang mendengar tentang hal itu!"
 
 #: bws_functions.php:477
 msgid "Suggest a Feature"
-msgstr "Proposer une fonctionnalité"
+msgstr "Sarankan Fitur sebuah"
 
 #: bws_functions.php:493 class-bws-settings.php:533 class-bws-settings.php:536
 #: class-bws-settings.php:584 class-bws-settings.php:587
 msgid "Notice"
-msgstr "Avertissement"
+msgstr "Melihat"
 
 #: bws_functions.php:493
 msgid "The plugin's settings have been changed."
-msgstr "Les paramètres de l'extension ont été modifiés."
+msgstr "pengaturan plugin ini telah berubah."
 
 #: bws_functions.php:494 class-bws-settings.php:182 class-bws-settings.php:202
 #: deprecated.php:640
 msgid "Save Changes"
-msgstr "Enregistrer les modifications"
+msgstr "Simpan perubahan"
 
 #: bws_functions.php:508
 msgid ""
 "You can always look at premium options by checking the \"Pro Options\" in "
 "the \"Misc\" tab."
 msgstr ""
-"Vous pouvez toujours consulter les options premium en cliquant sur le lien "
-"\"Voir les fonctionnalités de la version PRO\" dans l'onglet divers."
+"Anda selalu dapat melihat pilihan premium dengan memeriksa \\ \"Pro Options "
+"\" di \\ tab \"Misc \"."
 
 #: bws_functions.php:629
 msgid "Add BWS Shortcode"
@@ -248,47 +243,47 @@ msgstr ""
 
 #: bws_functions.php:630
 msgid "Add BWS Plugins Shortcode"
-msgstr "Ajouter le code court de l'extension BWS"
+msgstr "Tambahkan BWS Plugin pendek"
 
 #: bws_functions.php:649
 msgid "Add shortcode"
-msgstr "Ajouter le code court"
+msgstr "Tambahkan shortcode"
 
 #: bws_functions.php:649
 msgid "Add BestWebSoft plugins' shortcodes using this button."
-msgstr "Ajouter le code court des extensions BestWebSoft avec ce bouton."
+msgstr "Tambahkan shortcode BestWebSoft plugin 'menggunakan tombol ini."
 
 #: bws_functions.php:695
 msgid "Close"
-msgstr "Fermer"
+msgstr "Dekat"
 
 #: bws_functions.php:787
 msgid "Are you sure you want to restore default settings?"
-msgstr "Êtes vous sûr de vouloir remettre toutes les valeurs par défaut ?"
+msgstr "Apakah Anda yakin ingin mengembalikan pengaturan default?"
 
 #: bws_functions.php:790
 msgid "Yes, restore all settings"
-msgstr "Oui, remettre les valeurs par défaut"
+msgstr "Ya, mengembalikan semua pengaturan"
 
 #: bws_functions.php:791
 msgid "No, go back to the settings page"
-msgstr "Non, retourner à la page des paramètres"
+msgstr "Tidak, kembali ke halaman pengaturan"
 
 #: bws_functions.php:833
 msgid "Plugin"
-msgstr "Extension"
+msgstr "Plugin"
 
 #: bws_functions.php:842
 msgid "Shortcode settings"
-msgstr "Paramètres du code court"
+msgstr "pengaturan shortcode"
 
 #: bws_functions.php:847
 msgid "The shortcode will be inserted"
-msgstr "Le code court sera inséré"
+msgstr "shortcode akan dimasukkan"
 
 #: bws_functions.php:852
 msgid "Insert"
-msgstr "Insérer"
+msgstr "Memasukkan"
 
 #: bws_functions.php:912
 msgid "FAQ"
@@ -296,23 +291,23 @@ msgstr "FAQ"
 
 #: bws_functions.php:918
 msgid "For more information:"
-msgstr "Pour plus d'informations&nbsp;:"
+msgstr "Untuk informasi lebih lanjut:"
 
 #: bws_functions.php:919
 msgid "Documentation"
-msgstr "Documentation"
+msgstr "Dokumentasi"
 
 #: bws_functions.php:920
 msgid "Video Instructions"
-msgstr "Vidéo explicative"
+msgstr "Petunjuk Video"
 
 #: bws_functions.php:921
 msgid "Submit a Request"
-msgstr "Soumettre une requête"
+msgstr "Mengajukan permohonan"
 
 #: bws_menu.php:101 class-bws-settings.php:781 deprecated.php:322
 msgid "Wrong license key"
-msgstr "Clé de licence incorrecte"
+msgstr "kunci lisensi yang salah"
 
 #: bws_menu.php:122 class-bws-settings.php:807 class-bws-settings.php:874
 #: class-bws-settings.php:910 deprecated.php:133 deprecated.php:199
@@ -321,38 +316,35 @@ msgid ""
 "Something went wrong. Please try again later. If the error appears again, "
 "please contact us"
 msgstr ""
-"Il est survenu une erreur. Essayer de nouveau. Si l'erreur se produit de "
-"nouveau, merci de contacter <a href=http://support.bestwebsoft."
-"com>BestWebSoft</a>. Nous sommes désolés pour le désagrément."
+"Ada yang salah. Silakan coba lagi nanti. Jika kesalahan muncul lagi, "
+"silahkan hubungi kami"
 
 #: bws_menu.php:122 class-bws-settings.php:807 class-bws-settings.php:874
 #: class-bws-settings.php:910 deprecated.php:133 deprecated.php:199
 #: deprecated.php:352
 msgid "We are sorry for inconvenience."
-msgstr "Nous sommes désolés pour le désagrément."
+msgstr "Kami mohon maaf atas ketidaknyamanan."
 
 #: bws_menu.php:128 class-bws-settings.php:813 class-bws-settings.php:916
 #: deprecated.php:139 deprecated.php:358
 msgid "Wrong license key."
-msgstr "Clé de licence incorrecte."
+msgstr "kunci lisensi yang salah."
 
 #: bws_menu.php:130
 msgid ""
 "This license key is bound to another site. Change it via personal Client "
 "Area."
 msgstr ""
-"La clé de licence correspond à un autre site. Modifier là au travers de "
-"votre espace client."
+"kunci lisensi ini terikat ke situs lain. Mengubahnya melalui personal Area "
+"Klien."
 
 #: bws_menu.php:130
 msgid "Log in"
-msgstr "Connexion"
+msgstr "Masuk"
 
 #: bws_menu.php:132 bws_menu.php:334 deprecated.php:261
 msgid "Unfortunately, you have exceeded the number of available tries per day."
-msgstr ""
-"Désoler mais vous avez dépassé le nombre d'essai de la journée. Merci de "
-"télécharger l'extension manuellement."
+msgstr "Sayangnya, Anda telah melebihi jumlah mencoba tersedia per hari."
 
 #: bws_menu.php:134 class-bws-settings.php:922 deprecated.php:364
 #, php-format
@@ -360,59 +352,57 @@ msgid ""
 "Unfortunately, Your license has expired. To continue getting top-priority "
 "support and plugin updates, you should extend it in your %s"
 msgstr ""
-"Désoler, votre licence est terminée. Pour continuer à disposer du support "
-"rapide et des mises à jour de l'extension vous devez la renouveler dans "
-"votre %s"
+"Sayangnya, lisensi Anda telah kedaluwarsa. Untuk terus mendapatkan dukungan "
+"top-prioritas dan Plugin update, Anda harus memperpanjang di Anda %s"
 
 #: bws_menu.php:136 class-bws-settings.php:924 deprecated.php:366
 msgid ""
 "Unfortunately, the Pro licence was already installed to this domain. The Pro "
 "Trial license can be installed only once."
 msgstr ""
-"Une licence a déjà été installée sur ce domaine. La licence d'évaluation ne "
-"peut-être installée qu'une seule fois."
+"Sayangnya, lisensi Pro sudah dipasang untuk domain ini. Lisensi Percobaan "
+"Pro dapat diinstal hanya sekali."
 
 #: bws_menu.php:142 class-bws-settings.php:828 deprecated.php:153
 msgid "The license key is valid."
-msgstr "La clé de licence est valide."
+msgstr "Kunci lisensi berlaku."
 
 #: bws_menu.php:144 class-bws-settings.php:831 deprecated.php:156
 msgid "Your license will expire on"
-msgstr "Votre licence se termine le "
+msgstr "lisensi Anda akan berakhir pada"
 
 #: bws_menu.php:146
 msgid "Congratulations! Pro Membership license is  activated successfully."
-msgstr ""
-"Félicitations! La version PRO de cette extension a été activée avec succès."
+msgstr "Selamat! lisensi Keanggotaan Pro berhasil diaktifkan."
 
 #: bws_menu.php:153 class-bws-settings.php:996 deprecated.php:435
 msgid ""
 "Something went wrong. Try again later or upload the plugin manually. We are "
 "sorry for inconvenience."
 msgstr ""
-"Il est survenu une erreur. Essayer de nouveau ou bien télécharger "
-"l'extension manuellement.Nous sommes désolés pour le désagrément."
+"Ada yang salah. Coba lagi nanti atau meng-upload plugin secara manual. Kami "
+"mohon maaf atas ketidaknyamanan."
 
 #: bws_menu.php:163
 msgid "Please enter your license key."
-msgstr "Merci de saisir votre clé de licence."
+msgstr "Masukkan kunci lisensi Anda."
 
 #: bws_menu.php:174
 msgid "Not set"
-msgstr "Not set"
+msgstr "Tidak diatur"
 
 #: bws_menu.php:176
 msgid "On"
-msgstr "On"
+msgstr "Di"
 
 #: bws_menu.php:176
 msgid "Off"
-msgstr "Off"
+msgstr "Mati"
 
 #: bws_menu.php:177 bws_menu.php:178 bws_menu.php:179 bws_menu.php:180
 #: bws_menu.php:181 bws_menu.php:182 bws_menu.php:191
 msgid "N/A"
-msgstr "N/A"
+msgstr "N / A"
 
 #: bws_menu.php:182
 msgid " Mb"
@@ -420,27 +410,27 @@ msgstr " Mb"
 
 #: bws_menu.php:183 bws_menu.php:184 bws_menu.php:185 bws_menu.php:189
 msgid "Yes"
-msgstr "Yes"
+msgstr "iya nih"
 
 #: bws_menu.php:183 bws_menu.php:184 bws_menu.php:185 bws_menu.php:189
 msgid "No"
-msgstr "No"
+msgstr "Tidak"
 
 #: bws_menu.php:196
 msgid "WordPress Environment"
-msgstr "Environnent WordPress"
+msgstr "WordPress Lingkungan"
 
 #: bws_menu.php:198
 msgid "Home URL"
-msgstr "Home URL"
+msgstr "URL rumah"
 
 #: bws_menu.php:199
 msgid "Website URL"
-msgstr "Site URL"
+msgstr "alamat situs web"
 
 #: bws_menu.php:200
 msgid "WP Version"
-msgstr "WP Version"
+msgstr "WP Versi"
 
 #: bws_menu.php:201
 msgid "WP Multisite"
@@ -452,20 +442,20 @@ msgstr "WP Memory Limit"
 
 #: bws_menu.php:203
 msgid "Active Theme"
-msgstr "Active Theme"
+msgstr "Tema aktif"
 
 #: bws_menu.php:203 bws_menu.php:248 bws_menu.php:251
 #, php-format
 msgid "by %s"
-msgstr "par %s"
+msgstr "oleh %s"
 
 #: bws_menu.php:207
 msgid "Server Environment"
-msgstr "Server Environnent"
+msgstr "Server Lingkungan"
 
 #: bws_menu.php:209
 msgid "Operating System"
-msgstr "Operating System"
+msgstr "Sistem operasi"
 
 #: bws_menu.php:210
 msgid "Server"
@@ -473,11 +463,11 @@ msgstr "Server"
 
 #: bws_menu.php:211
 msgid "PHP Version"
-msgstr "PHP Version"
+msgstr "PHP Versi"
 
 #: bws_menu.php:212
 msgid "PHP Allow URL fopen"
-msgstr "PHP Allow URL fopen"
+msgstr "PHP Izinkan URL fopen"
 
 #: bws_menu.php:213
 msgid "PHP Memory Limit"
@@ -485,119 +475,119 @@ msgstr "PHP Memory Limit"
 
 #: bws_menu.php:214
 msgid "Memory Usage"
-msgstr "Memory usage"
+msgstr "memory Usage"
 
 #: bws_menu.php:215
 msgid "PHP Max Upload Size"
-msgstr "PHP Max Upload Size"
+msgstr "Ukuran PHP Max Upload"
 
 #: bws_menu.php:216
 msgid "PHP Max Post Size"
-msgstr "PHP Max Post Size"
+msgstr "PHP Max Pos Ukuran"
 
 #: bws_menu.php:217
 msgid "PHP Max Script Execute Time"
-msgstr "PHP Max Script Execute Time"
+msgstr "PHP Max Script Jalankan Waktu"
 
 #: bws_menu.php:218
 msgid "PHP Exif support"
-msgstr "PHP Exif support"
+msgstr "dukungan PHP Exif"
 
 #: bws_menu.php:219
 msgid "PHP IPTC support"
-msgstr "PHP IPTC support"
+msgstr "dukungan PHP IPTC"
 
 #: bws_menu.php:220
 msgid "PHP XML support"
-msgstr "PHP XML support"
+msgstr "dukungan XML PHP"
 
 #: bws_menu.php:226
 msgid "Database"
-msgstr "Base de données"
+msgstr "database"
 
 #: bws_menu.php:228
 msgid "WP DB version"
-msgstr "WordPress DB Version"
+msgstr "Versi WP DB"
 
 #: bws_menu.php:229
 msgid "MySQL version"
-msgstr "MYSQL Version"
+msgstr "versi MySQL"
 
 #: bws_menu.php:230
 msgid "SQL Mode"
-msgstr "SQL Mode"
+msgstr "SQL Modus"
 
 #: bws_menu.php:234
 msgid "Active Plugins"
-msgstr "Extensions actives"
+msgstr "Plugin aktif"
 
 #: bws_menu.php:239
 msgid "Inactive Plugins"
-msgstr "Extensions inactives"
+msgstr "Plugin tidak aktif"
 
 #: bws_menu.php:260
 msgid "Please enter a valid email address."
-msgstr "Merci de saisir une adresse e-mail valide."
+msgstr "Silakan isi alamat email."
 
 #: bws_menu.php:264
 msgid "Email with system info is sent to"
-msgstr "Le courriel avec les informations système est envoyé à"
+msgstr "Email dengan info sistem dikirim ke"
 
 #: bws_menu.php:268
 msgid "Thank you for contacting us."
-msgstr "Merci de nous avoir contacté."
+msgstr "Terima kasih sudah menghubungi kami."
 
 #: bws_menu.php:291
 msgid "Sorry, email message could not be delivered."
-msgstr "Désolé, votre e-mail n'a pas pu être envoyé."
+msgstr "Maaf, pesan email tidak dapat disampaikan."
 
 #: bws_menu.php:307 bws_menu.php:311 bws_menu.php:360 deprecated.php:91
 msgid "Plugins"
-msgstr "Extensions"
+msgstr "plugin"
 
 #: bws_menu.php:308 bws_menu.php:312 bws_menu.php:611 deprecated.php:92
 msgid "Themes"
-msgstr "Thèmes"
+msgstr "tema"
 
 #: bws_menu.php:309 bws_menu.php:313 bws_menu.php:662
 msgid "System status"
-msgstr "Etat du système"
+msgstr "Status sistem"
 
 #: bws_menu.php:317
 msgid "Support"
-msgstr "Support"
+msgstr "Mendukung"
 
 #: bws_menu.php:318
 msgid "Manage purchased licenses & subscriptions"
-msgstr "Gérer les licences et les adhésions"
+msgstr "Mengelola membeli lisensi & langganan"
 
 #: bws_menu.php:326
 #, php-format
 msgid "Get Access to %s+ Premium Plugins"
-msgstr "Accéder à plus de %s extension premiums"
+msgstr "Dapatkan Akses ke %s + Premium Plugin"
 
 #: bws_menu.php:328
 msgid "Subscribe to Pro Membership"
-msgstr "Souscrire une adhésion PRO"
+msgstr "Berlangganan Pro Keanggotaan"
 
 #: bws_menu.php:336 bws_menu.php:347 class-bws-settings.php:749
 #: deprecated.php:227
 msgid "Check license key"
-msgstr "Vérifier la clé de licence"
+msgstr "Periksa kunci lisensi"
 
 #: bws_menu.php:339
 msgid "Enter your license key"
-msgstr "Merci de saisir votre clé de licence"
+msgstr "Masukkan kunci lisensi Anda"
 
 #: bws_menu.php:345 bws_menu.php:563 bws_menu.php:572
 #: class-bws-settings.php:728 deprecated.php:259 deprecated.php:267
 #: deprecated.php:629 deprecated.php:700 deprecated.php:709
 msgid "Activate"
-msgstr "Activé"
+msgstr "Mengaktifkan"
 
 #: bws_menu.php:361
 msgid "Upload Plugin"
-msgstr "Charger l'extension"
+msgstr "Upload Plugin"
 
 #: bws_menu.php:365
 #, php-format
@@ -607,214 +597,207 @@ msgid ""
 "messages, problems with syndication feeds or other issues, try deactivating "
 "or removing this plugin."
 msgstr ""
-"Cette extension a produit %d caractères <strong>inattendus</strong> durant "
-"l'activation. Si vous constatez le message &#8220;headers already "
-"sent&#8221;, des problèmes avec les flux de syndication ou autres, essayez "
-"de désactiver l'extension ou supprimer l'extension."
+"Plugin yang dihasilkan %d karakter dari <strong> tak terduga keluaran </ "
+"strong> selama aktivasi. Jika Anda melihat & # 8220; header sudah dikirim & "
+"# 8221; pesan, masalah dengan feed sindikasi atau masalah lain, coba "
+"menonaktifkan atau menghapus plugin ini."
 
 #: bws_menu.php:367
 msgid ""
 "Plugin could not be activated because it triggered a <strong>fatal error</"
 "strong>."
 msgstr ""
-"L'extension ne peut pas être activée car une <strong>erreur fatale</strong> "
-"a été détectée."
+"Plugin tidak dapat diaktifkan karena memicu <strong> kesalahan fatal </ "
+"strong>."
 
 #: bws_menu.php:370
 msgid "Plugin <strong>activated</strong>."
-msgstr "Extension <strong>activée</strong>."
+msgstr "Plugin <strong> diaktifkan </ strong>."
 
 #: bws_menu.php:377
 msgid "Installing Plugin"
-msgstr "Extensions installées"
+msgstr "Instalasi Plugin"
 
 #: bws_menu.php:383
 msgid "Downloading install package from"
-msgstr "Télécharger le paquet d'installation depuis"
+msgstr "Men-download menginstal paket dari"
 
 #: bws_menu.php:400 bws_menu.php:431 bws_menu.php:442
 #: class-bws-settings.php:948 class-bws-settings.php:970
 #: class-bws-settings.php:992 deprecated.php:387 deprecated.php:409
 #: deprecated.php:431
 msgid "Failed to download the zip archive. Please, upload the plugin manually"
-msgstr ""
-"Erreur de téléchargement de l'archive ZIP. Merci de télécharger l'extension "
-"manuellement."
+msgstr "Gagal mengunduh arsip zip. Silakan, upload plugin secara manual"
 
 #: bws_menu.php:408
 msgid "Unpacking the package"
-msgstr "Décompresser le paquet"
+msgstr "Membuka paket"
 
 #: bws_menu.php:413 bws_menu.php:421
 msgid "Installing the plugin"
-msgstr "Installer l'extension"
+msgstr "Instalasi plugin"
 
 #: bws_menu.php:417 class-bws-settings.php:960 deprecated.php:399
 msgid "Failed to open the zip archive. Please, upload the plugin manually"
-msgstr ""
-"Erreur d'ouverture de l'archive zip. Merci de télécharger l'extension "
-"manuellement."
+msgstr "Gagal membuka arsip zip. Silakan, upload plugin secara manual"
 
 #: bws_menu.php:424 class-bws-settings.php:966 deprecated.php:405
 msgid ""
 "Your server does not support either ZipArchive or Phar. Please, upload the "
 "plugin manually"
 msgstr ""
-"Votre serveur n'a pas le support du format des archives ZIP ou Phar. Merci "
-"de télécharger l'extension manuellement."
+"server Anda tidak mendukung baik ZipArchive atau Phar. Silakan, upload "
+"plugin secara manual"
 
 #: bws_menu.php:427
 #, php-format
 msgid "The plugin %s is successfully installed."
-msgstr "L'extension %s a été installée avec succès."
+msgstr "Plugin %s berhasil diinstal."
 
 #: bws_menu.php:434 class-bws-settings.php:973 deprecated.php:412
 msgid "UploadDir is not writable. Please, upload the plugin manually"
-msgstr ""
-"Erreur d'ouverture de l'archive zip. Merci de télécharger l'extension "
-"manuellement."
+msgstr "UploadDir tidak dapat ditulis. Silakan, upload plugin secara manual"
 
 #: bws_menu.php:439
 msgid "Activate Plugin"
-msgstr "Activer l'extension"
+msgstr "Aktifkan Plugin"
 
 #: bws_menu.php:439 bws_menu.php:445
 msgid "Return to BestWebSoft Panel"
-msgstr "Retourner à l'administration BestWebSoft"
+msgstr "Kembali ke BestWebSoft Panel"
 
 #: bws_menu.php:449 bws_menu.php:464 bws_menu.php:593
 msgid "All"
-msgstr "Tous"
+msgstr "Semua"
 
 #: bws_menu.php:450 bws_menu.php:650
 msgid "Installed"
-msgstr "Installé"
+msgstr "dipasang"
 
 #: bws_menu.php:451
 msgid "Not Installed"
-msgstr "Non installé"
+msgstr "Tidak terpasang"
 
 #: bws_menu.php:457
 msgid "Filter results"
-msgstr "Filtrer les résultats"
+msgstr "Filter hasil"
 
 #: bws_menu.php:460 bws_menu.php:589
 msgid "Category"
-msgstr "Catégorie"
+msgstr "Kategori"
 
 #: bws_menu.php:524
 msgid "Not installed"
-msgstr "Non installé"
+msgstr "Tidak terpasang"
 
 #: bws_menu.php:528
 msgid "Renew to get updates"
-msgstr "Se réabonner pour avoir les mises à jour"
+msgstr "Renew untuk mendapatkan update"
 
 #: bws_menu.php:531
 #, php-format
 msgid "Update to v %s"
-msgstr "Mettre à jour avec la version %s"
+msgstr "Update untuk v %s"
 
 #: bws_menu.php:543 bws_menu.php:566 bws_menu.php:575
 msgid "Install Now"
-msgstr "Installer maintenant"
+msgstr "Pasang sekarang"
 
 #: bws_menu.php:549 class-bws-settings.php:156 class-bws-settings.php:1056
 msgid "Upgrade to Pro"
-msgstr "Passer à la version PRO"
+msgstr "Upgrade ke yang lebih baik"
 
 #: bws_menu.php:563 bws_menu.php:572
 msgid "Activate this plugin"
-msgstr "Activer cette extension"
+msgstr "Aktifkan plugin ini"
 
 #: bws_menu.php:575
 msgid "Install this plugin"
-msgstr "Installer cette extension"
+msgstr "Menginstal plugin ini"
 
 #: bws_menu.php:584
 msgid "Nothing found. Try another criteria."
-msgstr "Pas de réponse. essayer d'autres critères."
+msgstr "Tidak ada yang ditemukan. Coba kriteria lain."
 
 #: bws_menu.php:621 bws_menu.php:641
 #, php-format
 msgid "By %s"
-msgstr "Par %s"
+msgstr "Oleh %s"
 
 #: bws_menu.php:648
 msgid "Already Installed"
-msgstr "Déjà installé"
+msgstr "sudah Dipasang"
 
 #: bws_menu.php:659
 msgid "Browse Free WordPress Themes"
-msgstr "Parcourir les thèmes gratuits pour WordPress"
+msgstr "Isi Gratis WordPress Themes"
 
 #: bws_menu.php:668
 msgid "Send to support"
-msgstr "Envoyé au support"
+msgstr "Kirim untuk mendukung"
 
 #: bws_menu.php:675
 msgid "Send to custom email &#187;"
-msgstr "Envoyer un e-mail spécifique &#187;"
+msgstr "Kirim ke email khusus & # 187;"
 
 #: class-bws-settings.php:135
 msgid "Information"
-msgstr "Information"
+msgstr "Informasi"
 
 #: class-bws-settings.php:143
 msgid "Inactive"
-msgstr "Inactive"
+msgstr "non-aktif"
 
 #: class-bws-settings.php:151
 msgid "Expired"
-msgstr "Expiré"
+msgstr "kedaluwarsa"
 
 #: class-bws-settings.php:154
 #, php-format
 msgid "%s day(-s) left"
-msgstr "%s jour(s) restant"
+msgstr "%s hari (-s) kiri"
 
 #: class-bws-settings.php:160
 #, php-format
 msgid "Expired on %s"
-msgstr "Terminer le %s"
+msgstr "Berakhir pada %s"
 
 #: class-bws-settings.php:160
 msgid "Renew Now"
-msgstr "Renouveler maintenant"
+msgstr "Perbarui sekarang"
 
 #: class-bws-settings.php:162
 msgid "Active"
-msgstr "Activé"
+msgstr "Aktif"
 
 #: class-bws-settings.php:167
 msgid "License"
-msgstr "Licence"
+msgstr "Lisensi"
 
 #: class-bws-settings.php:170
 msgid "Status"
-msgstr "Etat"
+msgstr "Status"
 
 #: class-bws-settings.php:174
 msgid "Version"
-msgstr "Version"
+msgstr "Versi"
 
 #: class-bws-settings.php:282
 msgid "All plugin settings were restored."
-msgstr "Les paramètres de l'extension ont été remis aux valeurs d'origine."
+msgstr "Semua pengaturan Plugin dipulihkan."
 
 #: class-bws-settings.php:420
 msgid "Custom Code"
-msgstr "Code personnalisé"
+msgstr "Kode kustom"
 
 #: class-bws-settings.php:424 deprecated.php:497
 msgid "You do not have sufficient permissions to edit plugins for this site."
 msgstr ""
-"Vous n'avez pas assez de droits pour modifier l'extension pour ce site."
+"Anda tidak memiliki cukup izin untuk menyunting plugin untuk situs ini."
 
 #: class-bws-settings.php:429 deprecated.php:618
 msgid "These styles will be added to the header on all pages of your site."
-msgstr ""
-"Ces styles seront ajoutés aux entêtes sur tous les pages de votre site."
+msgstr "Gaya ini akan ditambahkan ke header pada semua halaman situs Anda."
 
 #: class-bws-settings.php:432 deprecated.php:620
 #, php-format
@@ -822,12 +805,12 @@ msgid ""
 "This PHP code will be hooked to the %s action and will be printed on front "
 "end only."
 msgstr ""
-"Ce code PHP sera rattaché à l'action %s et sera affiché uniquement sur la "
-"partie publique."
+"Kode PHP ini akan ketagihan untuk %s tindakan dan akan dicetak pada ujung "
+"depan saja."
 
 #: class-bws-settings.php:435
 msgid "These code will be added to the header on all pages of your site."
-msgstr "Ce code sera ajouté aux entêtes sur tous les pages de votre site."
+msgstr "Kode ini akan ditambahkan ke header pada semua halaman situs Anda."
 
 #: class-bws-settings.php:443 deprecated.php:644
 #, php-format
@@ -835,26 +818,26 @@ msgid ""
 "You need to make this files writable before you can save your changes. See "
 "%s the Codex %s for more information."
 msgstr ""
-"Vous devez rendre ce fichier modifiable avant de pouvoir enregistrer vos "
-"modifications. Regarder %s du Codex %s pour plus d'informations."
+"Anda perlu membuat file ini ditulis sebelum Anda dapat menyimpan perubahan. "
+"Lihat %s Codex %s untuk informasi lebih lanjut."
 
 #: class-bws-settings.php:453 deprecated.php:626
 msgid "Browsing"
-msgstr "Parcourir"
+msgstr "Browsing"
 
 #: class-bws-settings.php:457
 #, php-format
 msgid "Activate custom %s code."
-msgstr "Activer le code personnalisé %s."
+msgstr "Aktifkan kustom %s kode."
 
 #: class-bws-settings.php:464 deprecated.php:633
 #, php-format
 msgid "Learn more about %s"
-msgstr "En savoir plus sur %s"
+msgstr "Pelajari lebih lanjut tentang %s"
 
 #: class-bws-settings.php:524
 msgid "Miscellaneous Settings"
-msgstr "Paramètres divers"
+msgstr "Pengaturan Miscellaneous"
 
 #: class-bws-settings.php:533 class-bws-settings.php:584
 #, php-format
@@ -862,61 +845,57 @@ msgid ""
 "It is prohibited to change %s settings on this site in the %s network "
 "settings."
 msgstr ""
-"Il est interdit de changer le paramètre %s sur ce site dans les paramètres "
-"%s du réseau."
+"Dilarang mengubah %s pengaturan di situs ini di %s pengaturan jaringan."
 
 #: class-bws-settings.php:536 class-bws-settings.php:587
 #, php-format
 msgid ""
 "It is prohibited to view %s settings on this site in the %s network settings."
-msgstr ""
-"Il est interdit de voir le paramètre %s sur ce site dans les paramètres %s "
-"du réseau."
+msgstr "Dilarang melihat %s pengaturan di situs ini di %s pengaturan jaringan."
 
 #: class-bws-settings.php:545
 msgid "Pro Options"
-msgstr "Options Pro"
+msgstr "Pro Pilihan"
 
 #: class-bws-settings.php:548
 msgid "Enable to display plugin Pro options."
-msgstr "Activer pour voir les options PRO de l'extension."
+msgstr "Memungkinkan untuk menampilkan opsi Pro Plugin."
 
 #: class-bws-settings.php:553
 msgid "Track Usage"
-msgstr "Suivi de l'utilisation"
+msgstr "track Penggunaan"
 
 #: class-bws-settings.php:556
 msgid ""
 "Enable to allow tracking plugin usage anonymously in order to make it better."
 msgstr ""
-"Activer pour autoriser le suivi de l'utilisation de l'extension de manière "
-"anonyme afin de le rendre meilleur."
+"Aktifkan untuk memungkinkan pelacakan penggunaan Plugin anonim untuk "
+"membuatnya lebih baik."
 
 #: class-bws-settings.php:560
 msgid "Default Settings"
-msgstr "Réglages par défauts"
+msgstr "Pengaturan default"
 
 #: class-bws-settings.php:562
 msgid "Restore Settings"
-msgstr "Remettre les paramètres"
+msgstr "Kembalikan Pengaturan"
 
 #: class-bws-settings.php:563
 msgid "This will restore plugin settings to defaults."
-msgstr "Remettre les valeurs par défaut des paramètres de l'extension."
+msgstr "Ini akan mengembalikan pengaturan plugin untuk default."
 
 #: class-bws-settings.php:575
 msgid "Import / Export"
-msgstr "Importer / Exporter"
+msgstr "Ekspor Impor"
 
 #: class-bws-settings.php:691 class-bws-settings.php:724
 #: class-bws-settings.php:746
 msgid "License Key"
-msgstr "Clé de licence"
+msgstr "Kunci lisensi"
 
 #: class-bws-settings.php:714
 msgid "Congratulations! Pro license is activated successfully."
-msgstr ""
-"Félicitations! La version PRO de cette extension a été activée avec succès."
+msgstr "Selamat! lisensi Pro berhasil diaktifkan."
 
 #: class-bws-settings.php:715
 #, php-format
@@ -925,14 +904,14 @@ msgstr ""
 
 #: class-bws-settings.php:715
 msgid "Settings page"
-msgstr "Page des paramètres"
+msgstr "halaman pengaturan"
 
 #: class-bws-settings.php:730
 #, php-format
 msgid "Enter your license key to activate %s and get premium plugin features."
 msgstr ""
-"Saisir votre clé de licence pour activer %s et obtenir les fonctionnalités "
-"premium."
+"Masukkan kunci lisensi Anda untuk mengaktifkan %s dan mendapatkan fitur "
+"Plugin premium."
 
 #: class-bws-settings.php:733 class-bws-settings.php:920 deprecated.php:362
 #: deprecated.php:703
@@ -940,105 +919,102 @@ msgid ""
 "Unfortunately, you have exceeded the number of available tries per day. "
 "Please, upload the plugin manually."
 msgstr ""
-"Désoler mais vous avez dépassé le nombre d'essai de la journée. Merci de "
-"télécharger l'extension manuellement."
+"Sayangnya, Anda telah melebihi jumlah mencoba tersedia per hari. Silakan, "
+"upload plugin secara manual."
 
 #: class-bws-settings.php:736 deprecated.php:694
 #, php-format
 msgid "Start Your Free %s-Day Trial Now"
-msgstr "Débuter votre licence d'évaluation gratuite de %s jours"
+msgstr "Mulai Anda gratis %s -Day Percobaan Sekarang"
 
 #: class-bws-settings.php:751
 msgid ""
 "If necessary, you can check if the license key is correct or reenter it in "
 "the field below."
 msgstr ""
-"Si nécessaire vous pouvez vérifier que la clé de licence est correcte ou la "
-"saisir de nouveau dans le champ ci-dessous."
+"Jika perlu, Anda dapat memeriksa apakah kunci lisensi benar atau masuk "
+"kembali ke dalam bidang di bawah."
 
 #: class-bws-settings.php:756
 msgid "Manage License Settings"
-msgstr "Gérer les paramètres de licence"
+msgstr "Kelola Setelan License"
 
 #: class-bws-settings.php:758
 msgid "Login to Client Area"
-msgstr "Se connecter à l'espace client"
+msgstr "Login ke Area Klien"
 
 #: class-bws-settings.php:760
 msgid ""
 "Manage active licenses, download BWS products, and view your payment history "
 "using BestWebSoft Client Area."
 msgstr ""
-"Gérer les licences actives, télécharger les produits BWS, et voir "
-"l'historique de vos règlements dans l'interface client de BestWebSoft."
+"Mengelola lisensi aktif, men-download produk BWS, dan melihat riwayat "
+"pembayaran Anda menggunakan BestWebSoft Client Area."
 
 #: class-bws-settings.php:815 class-bws-settings.php:918 deprecated.php:141
 #: deprecated.php:360
 msgid "This license key is bound to another site."
-msgstr "La clé de licence correspond à un autre site."
+msgstr "kunci lisensi ini terikat ke situs lain."
 
 #: class-bws-settings.php:817 deprecated.php:143
 msgid ""
 "This license key is valid, but Your license has expired. If you want to "
 "update our plugin in future, you should extend the license."
 msgstr ""
-"La clé de licence est valide mais votre durée de validité est passée. Pour "
-"continuer à disposer du support rapide et des mises à jour de l'extension "
-"vous devez la renouveller."
+"kunci lisensi ini berlaku, tetapi lisensi Anda telah kedaluwarsa. Jika Anda "
+"ingin memperbarui plugin kami di masa depan, Anda harus memperpanjang "
+"lisensi."
 
 #: class-bws-settings.php:819 deprecated.php:145
 msgid "Unfortunately, you have exceeded the number of available tries."
-msgstr ""
-"Désoler mais vous avez dépassé le nombre d'essai de la journée. Merci de "
-"télécharger l'extension manuellement."
+msgstr "Sayangnya, Anda telah melebihi jumlah mencoba tersedia."
 
 #: class-bws-settings.php:821 deprecated.php:147
 msgid ""
 "Unfortunately, the Pro Trial licence was already installed to this domain. "
 "The Pro Trial license can be installed only once."
 msgstr ""
-"Une licence a déjà été installée sur ce domaine. La licence d'évaluation ne "
-"peut-être installée qu'une seule fois."
+"Sayangnya, lisensi Percobaan Pro sudah dipasang untuk domain ini. Lisensi "
+"Percobaan Pro dapat diinstal hanya sekali."
 
 #: class-bws-settings.php:826 deprecated.php:151
 msgid "The Pro Trial license key is valid."
-msgstr "La clé de licence d'évaluation est valide."
+msgstr "Kunci lisensi Percobaan Pro berlaku."
 
 #: class-bws-settings.php:834 deprecated.php:159 deprecated.php:246
 #, php-format
 msgid ""
 "In order to continue using the plugin it is necessary to buy a %s license."
 msgstr ""
-"Afin de pouvoir continuer à utiliser cette extension il est nécessaire "
-"d'acheter une licence %s."
+"Dalam rangka untuk terus menggunakan plugin perlu untuk membeli %s lisensi."
 
 #: class-bws-settings.php:1031 deprecated.php:463
 msgid "Please, enter Your license key"
-msgstr "Merci de saisir votre clé de licence"
+msgstr "Silakan, masukkan kunci lisensi Anda"
 
 #: class-bws-settings.php:1043
 msgid "Need Help?"
-msgstr "Besoin d'aide ?"
+msgstr "Butuh bantuan?"
 
 #: class-bws-settings.php:1045
 msgid "Read the Instruction"
-msgstr "Lire les instructions"
+msgstr "Baca Instruksi"
 
 #: class-bws-settings.php:1049
 msgid "Watch the Video"
-msgstr "Regarder la vidéo"
+msgstr "Saksikan Video"
 
 #: class-bws-settings.php:1060
 msgid "Start Your Free Trial"
-msgstr "Débuter votre licence d'évaluation gratuite"
+msgstr "Mulai Uji Coba Gratis"
 
 #: deprecated.php:93
 msgid "System Status"
-msgstr "Etat du système"
+msgstr "Status sistem"
 
 #: deprecated.php:204
 msgid "Please, enter your license key"
-msgstr "Merci de saisir votre clé de licence"
+msgstr "Silakan, masukkan kunci lisensi Anda"
 
 #: deprecated.php:223
 msgid ""
@@ -1046,101 +1022,94 @@ msgid ""
 "the field below. You can find your license key on your personal page - "
 "Client Area - on our website"
 msgstr ""
-"Si nécessaire vous pouvez vérifier que la clé de licence est correcte ou la "
-"saisir de nouveau dans le champ ci-dessous. Vous pouvez trouver votre clé de "
-"licence sur votre page personnelle (zone client) sur notre site web."
+"Jika perlu, Anda dapat memeriksa apakah kunci lisensi benar atau masuk "
+"kembali ke dalam bidang di bawah. Anda dapat menemukan kunci lisensi Anda "
+"pada halaman pribadi Anda - Area Klien - di website kami"
 
 #: deprecated.php:223
 msgid ""
 "(your username is the email address specified during the purchase). If "
 "necessary, please submit \"Lost your password?\" request."
 msgstr ""
-"(votre nom d'utilisateur est l'adresse e-mail que vous avez donnée lors de "
-"l'achat de l'extension). Si nécessaire, utilisez la fonction de demande de "
-"mot de passe perdu."
+"(Nama pengguna adalah alamat email yang ditentukan selama pembelian). Jika "
+"perlu, silahkan pilih \\ \"Kehilangan kata sandi Anda? \" Permintaan."
 
 #: deprecated.php:247
 msgid "After that, you can activate it by entering your license key."
 msgstr ""
-" Après vous pouvez activer cette extension en donnant votre clé de licence."
+"Setelah itu, Anda dapat mengaktifkannya dengan memasukkan kunci lisensi Anda."
 
 #: deprecated.php:249 deprecated.php:688
 msgid "License key can be found in the"
-msgstr "La clé de licence peut être trouvée dans "
+msgstr "kunci lisensi dapat ditemukan di"
 
 #: deprecated.php:251 deprecated.php:690
 msgid "(your username is the email address specified during the purchase)."
-msgstr ""
-"(votre nom d'utilisateur est l'adresse e-mail que vous avez donnée lors de "
-"l'achat de l'extension)."
+msgstr "(Nama pengguna adalah alamat email yang ditentukan selama pembelian)."
 
 #: deprecated.php:278
 msgid ""
 "Congratulations! The Pro license of the plugin is activated successfully."
-msgstr ""
-"Félicitations! La version PRO de cette extension a été activée avec succès."
+msgstr "Selamat! Lisensi Pro plugin tersebut berhasil diaktifkan."
 
 #: deprecated.php:280 deprecated.php:669
 msgid "Please, go to"
-msgstr "Merci d’aller à"
+msgstr "Tolong, pergi ke"
 
 #: deprecated.php:280 deprecated.php:669
 msgid "the setting page"
-msgstr "Options supplémentaires"
+msgstr "halaman pengaturan"
 
 #: deprecated.php:281 deprecated.php:670
 msgid "You will be redirected automatically in 5 seconds."
-msgstr "Vous allez être redirigé automatiquement dans 5 secondes"
+msgstr "Anda akan diarahkan secara otomatis dalam 5 detik."
 
 #: deprecated.php:315
 msgid "Check premium options on the plugin settings page!"
-msgstr ""
-"Vérifier les options premium sur la page des paramètres de l'extension!"
+msgstr "Periksa pilihan premium di halaman pengaturan plugin!"
 
 #: deprecated.php:478
 msgid "Restore all plugin settings to defaults"
-msgstr "Remettre les valeurs par défaut des paramètres de l'extension"
+msgstr "Mengembalikan semua pengaturan plugin untuk default"
 
 #: deprecated.php:480
 msgid "Restore settings"
-msgstr "Remettre les paramètres"
+msgstr "mengembalikan pengaturan"
 
 #: deprecated.php:548 deprecated.php:575
 #, php-format
 msgid "File %s edited successfully."
-msgstr "Le fichier %s a été modifié avec succès."
+msgstr "File %s berhasil diedit."
 
 #: deprecated.php:550 deprecated.php:577
 msgid "Not enough permissions to create or update the file"
-msgstr "Pas assez de droits pour créer ou modifier le fichier"
+msgstr "Tidak cukup izin untuk membuat atau memperbarui file"
 
 #: deprecated.php:580
 msgid "Not enough permissions to create the file"
-msgstr "Pas assez de droits pour créer le fichier"
+msgstr "Tidak cukup izin untuk membuat file"
 
 #: deprecated.php:624
 msgid "Editing"
-msgstr "Modifier"
+msgstr "editing"
 
 #: deprecated.php:667
 msgid ""
 "Congratulations! Pro version of the plugin is  installed and activated "
 "successfully."
-msgstr ""
-"Félicitations! La version PRO de cette extension a été téléchargée et "
-"activée avec succès."
+msgstr "Selamat! Versi Pro plugin diinstal dan diaktifkan berhasil."
 
 #: deprecated.php:677
 msgid "Show Pro features"
-msgstr "Voir les fonctionnalités de la version PRO"
+msgstr "Tampilkan fitur Pro"
 
 #: deprecated.php:684
 msgid "Enter your license key to install and activate"
-msgstr "Saisir votre clé de licence pour installer et activer"
+msgstr "Masukkan kunci lisensi Anda untuk menginstal dan mengaktifkan"
 
 #: deprecated.php:686
 msgid "version of the plugin."
-msgstr "version de l'extension."
+msgstr "versi plugin."
 
 #: product_list.php:7
 msgid "Admin Tools"
@@ -1164,11 +1133,11 @@ msgstr ""
 
 #: product_list.php:12
 msgid "Recommended"
-msgstr "Recommandé"
+msgstr "Direkomendasikan"
 
 #: product_list.php:13
 msgid "Security"
-msgstr "Sécurité"
+msgstr "Keamanan"
 
 #: product_list.php:14
 msgid "SEO"
@@ -1471,244 +1440,250 @@ msgid ""
 msgstr ""
 
 #~ msgid "Advertisement"
-#~ msgstr "Publicité"
+#~ msgstr "Iklan"
 
 #~ msgid "Content & Media"
-#~ msgstr "Contenu & média"
+#~ msgstr "Content & Media"
 
 #~ msgid "Management"
-#~ msgstr "Administration"
+#~ msgstr "Pengelolaan"
 
 #~ msgid "Site Stats"
-#~ msgstr "Statistiques"
+#~ msgstr "Statistik situs"
 
 #~ msgid "Social"
-#~ msgstr "Social"
+#~ msgstr "Sosial"
 
 #~ msgid "Utilities"
-#~ msgstr "Utilitaires"
+#~ msgstr "keperluan"
 
 #~ msgid "Other"
-#~ msgstr "Autre"
+#~ msgstr "Lain"
 
 #~ msgid "Thank you for installing"
-#~ msgstr "Merci d'avoir installé"
+#~ msgstr "Terima kasih untuk menginstal"
 
 #~ msgid "Thank you for choosing"
-#~ msgstr "Merci d'avoir choisi"
-
-#~ msgid "You will be automatically redirected to the %s in 7 seconds."
-#~ msgstr "Vous allez être redirigé automatiquement vers %s dans 7 secondes"
+#~ msgstr "Terima kasih telah memilih"
 
 #~ msgid "PHP Safe Mode"
 #~ msgstr "PHP Safe Mode"
 
-#~ msgid "WordPress Version"
-#~ msgstr "WordPress Version"
+#~ msgid "You will be automatically redirected to the %s in 7 seconds."
+#~ msgstr "Anda akan secara otomatis diarahkan ke %s dalam 7 detik."
+
+#~ msgid "You license for"
+#~ msgstr "Anda lisensi untuk"
+
+#~ msgid "expires on"
+#~ msgstr "Kadaluarsa pada"
+
+#~ msgid "This license key is bind to another site"
+#~ msgstr "kunci lisensi ini mengikat ke situs lain"
 
 #~ msgid "Successfully installed the plugin"
-#~ msgstr "Extension installée avec succès"
+#~ msgstr "Berhasil menginstal plugin"
+
+#~ msgid "Please, go to %s"
+#~ msgstr "Silakan, pergi ke %s"
+
+#~ msgid "Client Area"
+#~ msgstr "area klien"
 
 #~ msgid "If you enjoy our plugin, please give it 5 stars on WordPress"
 #~ msgstr ""
-#~ "Si notre extension vous satisfait, merci de la notée avec 5 étoiles dans "
-#~ "Wordpress"
+#~ "Jika Anda menikmati plugin kami, silakan memberikan 5 bintang pada "
+#~ "WordPress"
 
 #~ msgid "If there is something wrong about it, please contact us"
-#~ msgstr "Si vous avez une question, n'hésitez pas à nous contacter"
+#~ msgstr "Jika ada sesuatu yang salah tentang hal itu, silahkan hubungi kami"
 
 #~ msgid "Donations play an important role in supporting great projects"
-#~ msgstr "Les dons jouent un rôle important dans l'aide aux projets"
+#~ msgstr ""
+#~ "Sumbangan memainkan peran penting dalam mendukung proyek-proyek besar"
 
-#~ msgid "This license key is bind to another site"
-#~ msgstr "La clé de licence correspond à un autre site."
-
-#~ msgid "You license for"
-#~ msgstr "Votre licence pour"
+#~ msgid "WordPress Version"
+#~ msgstr "WordPress Versi"
 
 #~ msgid "Activate Membership"
-#~ msgstr "Activer l'adhésion"
+#~ msgstr "Aktifkan Keanggotaan"
 
 #~ msgid "Don’t have valid license key yet?"
-#~ msgstr "Vous n'avez pas encore de licence valide ?"
+#~ msgstr "Tidak memiliki kunci lisensi yang valid belum?"
 
 #~ msgid ""
 #~ "Join BestWebSoft Pro Membership today, cancel any time and use all "
 #~ "plugins on a single website %s for only %s per month."
 #~ msgstr ""
-#~ "Rejoignez le réseau PRO de BestWebSoft, arrêtez quand vous le vouler et "
-#~ "utiliser toutes les extensions sur un seul site %s pour seulement %s par "
-#~ "mois."
+#~ "Bergabung BestWebSoft Pro Keanggotaan hari ini, membatalkan setiap saat "
+#~ "dan menggunakan semua plugin pada situs Web %s hanya %s per bulan."
 
 #~ msgid "My Account"
-#~ msgstr "Mon compte"
+#~ msgstr "Akun saya"
 
 #~ msgid "Go"
-#~ msgstr "Passez"
+#~ msgstr "Pergi"
 
 #~ msgid "DONATE"
-#~ msgstr "Faire un don"
+#~ msgstr "MENYUMBANGKAN"
 
 #~ msgid "Recommended plugins"
-#~ msgstr "Extensions recommandées"
+#~ msgstr "plugin direkomendasikan"
 
 #~ msgid "Install now"
-#~ msgstr "Installer maintenant"
+#~ msgstr "Pasang sekarang"
 
 #~ msgid "Configure Settings"
-#~ msgstr "Configuration des paramètres"
+#~ msgstr "Konfigurasi Pengaturan"
 
 #~ msgid "Try again"
-#~ msgstr "Essayer de nouveau"
+#~ msgstr "Coba lagi"
 
 #~ msgid "Preview &#8220;%s&#8221;"
-#~ msgstr "Pré-visualiser &#8220;%s&#8221;"
+#~ msgstr "Preview & # 8220; %s & # 8221;"
 
 #~ msgid "Install %s"
-#~ msgstr "%s installé"
+#~ msgstr "Menginstal %s"
 
 #~ msgid "Update"
-#~ msgstr "Mettre à jour"
+#~ msgstr "Memperbarui"
 
 #~ msgid "Preview %s"
-#~ msgstr "Pré-visualiser %s"
+#~ msgstr "Preview %s"
 
 #~ msgid "Preview"
-#~ msgstr "Pré-visualiser"
+#~ msgstr "Preview"
 
 #~ msgid "You can download and activate"
-#~ msgstr "Vous pouvez télécharger et activer la version "
+#~ msgstr "Anda dapat men-download dan mengaktifkan"
 
 #~ msgid "version of this plugin by entering Your license key."
-#~ msgstr " de cette extension en donnant votre clé de licence."
+#~ msgstr "versi plugin ini dengan memasukkan kunci lisensi Anda."
 
 #~ msgid ""
 #~ "You can find your license key on your personal page Client area, by "
 #~ "clicking on the link"
 #~ msgstr ""
-#~ "Vous pouvez trouver votre clé de licence sur votre page personnelle dans "
-#~ "la zone cliente en cliquant sur le lien"
+#~ "Anda dapat menemukan kunci lisensi di daerah Klien halaman pribadi Anda, "
+#~ "dengan mengklik pada link"
 
 #~ msgid ""
 #~ "(your username is the email you specify when purchasing the product), "
 #~ "where you can make the necessary changes."
 #~ msgstr ""
-#~ "(votre nom d'utilisateur est l'adresse e-mail que vous avez donné lors de "
-#~ "l'achat de l'extension), où vous pourrez faire les modifications "
-#~ "nécessaires."
+#~ "(Username Anda adalah email yang Anda tentukan ketika membeli produk), di "
+#~ "mana Anda dapat membuat perubahan yang diperlukan."
 
 #~ msgid "Switch to new interface"
-#~ msgstr "Basculer vers la nouvelle interface"
+#~ msgstr "Beralih ke antarmuka baru"
 
 #~ msgid "Activated plugins"
-#~ msgstr "Plugin activé"
+#~ msgstr "plugin diaktifkan"
 
 #~ msgid "Read more"
-#~ msgstr "Lire la suite"
+#~ msgstr "Baca lebih banyak"
 
 #~ msgid "Purchase"
-#~ msgstr "Achetez"
+#~ msgstr "Membeli"
 
 #~ msgid "Free plugins"
-#~ msgstr "Plugins gratuits"
+#~ msgstr "plugin gratis"
 
 #~ msgid "Download"
-#~ msgstr "Téléchargement"
+#~ msgstr "Download"
 
 #~ msgid "Install now from wordpress.org"
-#~ msgstr "Installer maintenant depuis wordpress.org"
+#~ msgstr "Instal sekarang dari wordpress.org"
 
 #~ msgid "Free themes"
-#~ msgstr "Thèmes gratuits"
+#~ msgstr "Free tema"
 
 #~ msgid "Customize &#8220;%s&#8221;"
-#~ msgstr "Personnaliser &#8220;%s&#8221;"
+#~ msgstr "Sesuaikan & # 8220; %s & # 8221;"
 
 #~ msgid "Installed themes"
-#~ msgstr "Thèmes installés"
+#~ msgstr "tema diinstal"
 
 #~ msgid "Recommended themes"
-#~ msgstr "Thèmes recommandés"
+#~ msgstr "tema direkomendasikan"
 
 #~ msgid "Switch to old interface"
-#~ msgstr "Basculer vers l'ancienne interface"
+#~ msgstr "Beralih ke antarmuka lama"
 
-#, fuzzy
 #~ msgid "installed"
-#~ msgstr "%s installé"
+#~ msgstr "diinstal"
 
 #~ msgid "Contact Form"
-#~ msgstr "Formulaire de Contact"
+#~ msgstr "formulir kontak"
 
 #~ msgid "Contact Form Pro Extra Settings"
-#~ msgstr ""
-#~ "Options supplémentaires de la version Pro pour le formulaire de Contact"
+#~ msgstr "Hubungi Form Extra Settings Pro"
 
 #~ msgid "Contact Form Pro"
-#~ msgstr "Formulaire Pro de Contact"
+#~ msgstr "Kontak Form Pro"
 
 #~ msgid "Name:"
-#~ msgstr "Nom:"
+#~ msgstr "Nama:"
 
 #~ msgid "Address:"
-#~ msgstr "Adresse :"
+#~ msgstr "Alamat:"
 
 #~ msgid "Email Address:"
-#~ msgstr "Adresse e-mail:"
+#~ msgstr "Alamat email:"
 
 #~ msgid "Phone number:"
-#~ msgstr "Téléphone:"
+#~ msgstr "Nomor telepon:"
 
 #~ msgid "Subject:"
-#~ msgstr "Sujet:"
+#~ msgstr "Subyek:"
 
 #~ msgid "Message:"
-#~ msgstr "Message:"
+#~ msgstr "Pesan:"
 
 #~ msgid "Attachment:"
-#~ msgstr "Pièce-jointe:"
+#~ msgstr "Lampiran:"
 
 #~ msgid "Send me a copy"
-#~ msgstr "M'envoyer une copie"
+#~ msgstr "Kirimkan saya salinan"
 
 #~ msgid "Submit"
-#~ msgstr "Envoyer"
+#~ msgstr "Menyerahkan"
 
 #~ msgid "Your name is required."
-#~ msgstr "Un nom est obligatoire."
+#~ msgstr "Nama Anda diperlukan."
 
 #~ msgid "Address is required."
-#~ msgstr "Une adresse est obligatoire."
+#~ msgstr "Alamat diperlukan."
 
 #~ msgid "A valid email address is required."
-#~ msgstr "Une adresse e-mail valide est obligatoire."
+#~ msgstr "Sebuah alamat email yang valid diperlukan."
 
 #~ msgid "Phone number is required."
-#~ msgstr "Le numéro de téléphone est obligatoire."
+#~ msgstr "Nomor telepon diperlukan."
 
 #~ msgid "Subject is required."
-#~ msgstr "Sujet obligatoire."
+#~ msgstr "Subjek diperlukan."
 
 #~ msgid "Message text is required."
-#~ msgstr "Un message est obligatoire."
+#~ msgstr "Pesan teks diperlukan."
 
 #~ msgid "File format is not valid."
-#~ msgstr "La pièce-jointe n'est pas valide."
+#~ msgstr "Format file tidak valid."
 
 #~ msgid "File upload error."
-#~ msgstr "Erreur de chargement du fichier."
+#~ msgstr "Berkas kesalahan upload."
 
 #~ msgid "The file could not be uploaded."
-#~ msgstr "Le fichier n'a pas pu être envoyé."
+#~ msgstr "file tidak bisa di-upload."
 
 #~ msgid "This file is too large."
-#~ msgstr "Le fichier est trop volumineux."
+#~ msgstr "File ini terlalu besar."
 
 #~ msgid "Please fill out the CAPTCHA."
-#~ msgstr "Merci de compléter le CAPTCHA."
+#~ msgstr "Silahkan mengisi CAPTCHA."
 
 #~ msgid "Please make corrections below and try again."
-#~ msgstr "Merci de faire les corrections suivantes et de réessayer."
+#~ msgstr "Silakan melakukan koreksi di bawah ini dan coba lagi."
 
 #~ msgid ""
 #~ "If the 'Redirect to page' option is selected then the URL field should be "
@@ -1718,398 +1693,377 @@ msgstr ""
 #~ "doit être rempli avec le format suivant"
 
 #~ msgid "Such user does not exist. Settings are not saved."
-#~ msgstr ""
-#~ "Cet utilisateur est inconnu. Les modifications ne sont pas sauvegardées."
+#~ msgstr "pengguna tersebut tidak ada. Setelan tidak disimpan."
 
 #~ msgid ""
 #~ "Please enter a valid email address in the 'FROM' field. Settings are not "
 #~ "saved."
 #~ msgstr ""
-#~ "Merci de saisir une adresse e-mail valide pour le 'FROM'. Les "
-#~ "modifications ne sont pas sauvegardées."
+#~ "Silakan masukkan alamat email yang valid di bidang 'DARI'. Setelan tidak "
+#~ "disimpan."
 
 #~ msgid ""
 #~ "If you would like to add the Contact Form to your website, just copy and "
 #~ "paste this shortcode to your post or page or widget:"
 #~ msgstr ""
-#~ "Si vous souhaiter ajouter un formulaire de contact à votre site web, "
-#~ "copiez juste ce code dans un article ou sur une page ou un widget:"
+#~ "Jika Anda ingin menambahkan Form Kontak ke website Anda, hanya copy dan "
+#~ "paste shortcode ini untuk posting atau halaman atau widget:"
 
 #~ msgid ""
 #~ "If you leave the fields empty, the messages will be sent to the email "
 #~ "address specified during registration."
 #~ msgstr ""
-#~ "Si les champs ci-dessous ne sont pas renseignés le message sera envoyé à "
-#~ "l'adresse spécifiée lors de l'enregistrement."
+#~ "Jika Anda meninggalkan bidang kosong, pesan akan dikirim ke alamat email "
+#~ "yang ditentukan saat pendaftaran."
 
 #~ msgid "The user's email address:"
-#~ msgstr "Utiliser l'e-mail du compte wordpress:"
+#~ msgstr "alamat email pengguna:"
 
 #~ msgid "Create a username"
-#~ msgstr "Choisir un nom d'utilisateur"
+#~ msgstr "Membuat username"
 
 #~ msgid ""
 #~ "Enter a username of the person who should get the messages from the "
 #~ "contact form."
 #~ msgstr ""
-#~ "Choisir le nom d'utilisateur qui recevra les messages envoyés depuis le "
-#~ "formulaire de contact."
+#~ "Masukkan username dari orang yang harus mendapatkan pesan dari formulir "
+#~ "kontak."
 
 #~ msgid "Use this email address:"
-#~ msgstr "Utiliser cette adresse e-mail:"
+#~ msgstr "Gunakan alamat email ini:"
 
 #~ msgid "Enter the email address you want the messages forwarded to."
-#~ msgstr ""
-#~ "Choisir l'adresse e-mail qui sera utilisée pour recevoir les messages."
+#~ msgstr "Masukkan alamat email Anda ingin pesan diteruskan ke."
 
 #~ msgid "Additional options"
-#~ msgstr "Options supplémentaires"
+#~ msgstr "Opsi tambahan"
 
 #~ msgid "What to use?"
-#~ msgstr "Quelle méthode d'envoie ?"
+#~ msgstr "Apa yang harus digunakan?"
 
 #~ msgid "Wp-mail"
 #~ msgstr "Wp-mail"
 
 #~ msgid "You can use the wp_mail function for mailing"
-#~ msgstr ""
-#~ "Pour envoyer l'e-mail, vous pouvez utiliser la fonction wp_mail de "
-#~ "wordpress"
+#~ msgstr "Anda dapat menggunakan fungsi wp_mail untuk mailing"
 
 #~ msgid "Mail"
-#~ msgstr "E-mail"
+#~ msgstr "Surat"
 
 #~ msgid "To send mail you can use the php mail function"
-#~ msgstr "Pour envoyer l'e-mail, vous pouvez utiliser la fonction mail de php"
+#~ msgstr "Untuk mengirim email Anda dapat menggunakan fungsi php mail"
 
 #~ msgid "Change text of the 'FROM' field"
-#~ msgstr "Modifier le texte pour le champ 'FROM' du courriel"
+#~ msgstr "Perubahan teks dari bidang 'DARI'"
 
 #~ msgid "Enter the email address in the 'From' field"
-#~ msgstr "Sélectionner l'adresse e-mail pour le champ 'FROM' du courriel"
+#~ msgstr "Masukkan alamat email di bidang 'Dari'"
 
 #~ msgid "User email"
-#~ msgstr "E-mail de l'utlisateur"
+#~ msgstr "email pengguna"
 
 #~ msgid ""
 #~ "The email address of the user who fills the form will be used in the "
 #~ "field 'From'."
 #~ msgstr ""
-#~ "Dans le champ 'From' du courriel, il sera utilisé l'adresse e-mail de "
-#~ "l'utlisateur qui rempli le formulaire."
+#~ "Alamat email pengguna yang mengisi form akan digunakan dalam bidang "
+#~ "'Dari'."
 
 #~ msgid "This email address will be used in the 'From' field."
-#~ msgstr "Dans le champ 'FROM', cette adresse e-mail sera utilisée."
+#~ msgstr "Alamat email ini akan digunakan dalam bidang 'Dari'."
 
 #~ msgid "Display fields"
-#~ msgstr "Afficher le texte"
+#~ msgstr "bidang tampilan"
 
 #~ msgid "Address"
-#~ msgstr "Adresse"
+#~ msgstr "Alamat"
 
 #~ msgid "Phone"
-#~ msgstr "Téléphone"
+#~ msgstr "Telepon"
 
 #~ msgid "Attachment block"
-#~ msgstr "Bloc pièce-jointe"
+#~ msgstr "blok lampiran"
 
 #~ msgid "Users can attach the following file formats"
-#~ msgstr "Les utilisateurs peuvent joindre des documents des types suivants"
+#~ msgstr "Pengguna dapat melampirkan format file berikut"
 
 #~ msgid "Captcha"
-#~ msgstr "Captcha"
+#~ msgstr "captcha"
 
 #~ msgid "(powered by bestwebsoft.com)"
-#~ msgstr "(fourni par bestwebsoft.com)"
+#~ msgstr "(Didukung oleh bestwebsoft.com)"
 
 #~ msgid "Download captcha"
-#~ msgstr "Télécharger le captcha"
+#~ msgstr "Download captcha"
 
-#, fuzzy
 #~ msgid "Display tips below the Attachment block"
-#~ msgstr "Afficher les explications après le bloc des pièces jointes"
+#~ msgstr "kiat tampilan di bawah blok Lampiran"
 
-#, fuzzy
 #~ msgid "Display 'Send me a copy' block"
-#~ msgstr "S'envoyer une copie"
+#~ msgstr "Menampilkan 'Kirimkan saya salinan' block"
 
 #~ msgid "Name"
-#~ msgstr "Nom"
+#~ msgstr "Nama"
 
 #~ msgid "Email Address"
-#~ msgstr "Adresse e-mail"
+#~ msgstr "Alamat email"
 
 #~ msgid "Subject"
-#~ msgstr "Sujet"
+#~ msgstr "Subyek"
 
 #~ msgid "Message"
-#~ msgstr "Message"
+#~ msgstr "Pesan"
 
 #~ msgid "Display additional info in the email"
-#~ msgstr "Afficher les informations complémentaires dans le courriel"
+#~ msgstr "Menampilkan info tambahan dalam email"
 
 #~ msgid "Sent from (ip address)"
-#~ msgstr "Envoyé de (adresse IP)"
+#~ msgstr "Dikirim dari (alamat ip)"
 
-#, fuzzy
 #~ msgid "Example: Sent from (IP address):\t127.0.0.1"
-#~ msgstr "Envoyé de (adresse IP)"
+#~ msgstr "Contoh: Dikirim dari (alamat IP): \\ t127.0.0.1"
 
 #~ msgid "Date/Time"
-#~ msgstr "Date/Heure"
+#~ msgstr "Tanggal Waktu"
 
 #~ msgid "Sent from (referer)"
-#~ msgstr "Envoyer de (référence)"
+#~ msgstr "Dikirim dari (referer)"
 
 #~ msgid "Using (user agent)"
-#~ msgstr "Depuis (navigateur)"
+#~ msgstr "Menggunakan (agen pengguna)"
 
 #~ msgid "Language settings for the field names in the form"
-#~ msgstr "Définition des langues pour les titres des champs"
+#~ msgstr "Pengaturan bahasa untuk nama field dalam bentuk"
 
 #~ msgid "Add a language"
-#~ msgstr "Ajouter une langue"
+#~ msgstr "Menambahkan bahasa"
 
 #~ msgid "Change the names of the contact form fields and error messages"
-#~ msgstr ""
-#~ "Modifier le texte pour les champs du formulaire de contact et les "
-#~ "messages d'erreur"
+#~ msgstr "Mengubah nama-nama kolom formulir kontak dan pesan kesalahan"
 
 #~ msgid "English"
-#~ msgstr "Anglais"
+#~ msgstr "Inggris"
 
 #~ msgid "Error message for the Name field"
-#~ msgstr "Message d'erreur pour le champ nom"
+#~ msgstr "pesan kesalahan untuk bidang Nama"
 
 #~ msgid "Error message for the Address field"
-#~ msgstr "Message d'erreur pour le champ Adresse"
+#~ msgstr "pesan kesalahan untuk bidang Alamat"
 
 #~ msgid "Error message for the Email field"
-#~ msgstr "Message d'erreur pour le champ e-mail"
+#~ msgstr "pesan kesalahan untuk bidang Email"
 
 #~ msgid "Error message for the Phone field"
-#~ msgstr "Message d'erreur pour le champ téléphone"
+#~ msgstr "pesan kesalahan untuk bidang Telepon"
 
 #~ msgid "Error message for the Subject field"
-#~ msgstr "Message d'erreur pour le champ sujet"
+#~ msgstr "pesan kesalahan untuk kolom Subyek"
 
 #~ msgid "Error message for the Message field"
-#~ msgstr "Message d'erreur pour le champ message"
+#~ msgstr "pesan kesalahan untuk bidang Pesan"
 
 #~ msgid "Error message about the file type for the Attachment field"
-#~ msgstr "Message d'erreur pour le champ fichier joint (type du fichier)"
+#~ msgstr "pesan kesalahan tentang jenis file untuk bidang Lampiran"
 
 #~ msgid ""
 #~ "Error message while uploading a file for the Attachment field to the "
 #~ "server"
 #~ msgstr ""
-#~ "Message d'erreur pour le champ fichier joint (problème d'envoie vers le "
-#~ "serveur)"
+#~ "pesan kesalahan saat mengunggah file untuk bidang Lampiran ke server"
 
 #~ msgid "Error message while moving the file for the Attachment field"
-#~ msgstr ""
-#~ "Message d'erreur pour le champ fichier joint (déplacement du fichier)"
+#~ msgstr "pesan kesalahan saat memindahkan file untuk bidang Lampiran"
 
 #~ msgid ""
 #~ "Error message when file size limit for the Attachment field is exceeded"
-#~ msgstr ""
-#~ "Message d'erreur pour le champ fichier joint (taille limite du fichier "
-#~ "atteinte)"
+#~ msgstr "Pesan galat saat batas ukuran file untuk bidang Lampiran terlampaui"
 
 #~ msgid "Error message for the Captcha field"
-#~ msgstr "Message d'erreur pour le captcha"
+#~ msgstr "pesan kesalahan untuk bidang Captcha"
 
 #~ msgid "Error message for the whole form"
-#~ msgstr "Message d'erreur demandant à compléter les champs manquants"
+#~ msgstr "pesan kesalahan untuk seluruh bentuk"
 
 #~ msgid "for this language"
-#~ msgstr "pour cette langue"
+#~ msgstr "untuk bahasa ini"
 
 #~ msgid "Action after email is sent"
-#~ msgstr "Action après l'envoie de l'e-mail"
+#~ msgstr "Tindakan setelah email dikirim"
 
 #~ msgid "Display text"
-#~ msgstr "Afficher le texte"
+#~ msgstr "menampilkan teks"
 
 #~ msgid "Text"
-#~ msgstr "Texte"
+#~ msgstr "Teks"
 
 #~ msgid "Url"
-#~ msgstr "Url"
+#~ msgstr "url"
 
 #~ msgid "Contact Form Pro | Extra Settings"
-#~ msgstr "Formulaire Pro de Contact | Options supplémentaires"
+#~ msgstr "Hubungi Formulir Pro | Pengaturan tambahan"
 
 #~ msgid ""
 #~ "This functionality is available in the Pro version of the plugin. For "
 #~ "more details, please follow the link"
 #~ msgstr ""
-#~ "Cette fonctionalité est disponible dans le version Pro de cette "
-#~ "extension. Pour plus de détails, merci de suivre ce lien"
+#~ "Fungsi ini tersedia dalam versi Pro plugin. Untuk lebih jelasnya, "
+#~ "silahkan ikuti link"
 
 #~ msgid "Errors output"
-#~ msgstr "Affichage des erreurs"
+#~ msgstr "kesalahan keluaran"
 
 #~ msgid "Display error messages"
-#~ msgstr "Aficher les messages d'erreur"
+#~ msgstr "pesan kesalahan tampilan"
 
 #~ msgid "Color of the input field errors."
-#~ msgstr "Mettre en couleur les champs ayant des erreurs"
+#~ msgstr "Warna kesalahan field input."
 
 #~ msgid "Display error messages & color of the input field errors"
-#~ msgstr ""
-#~ "Afficher les messages d'erreur et mettre en couleur les champs ayant des "
-#~ "erreurs"
+#~ msgstr "pesan kesalahan display & warna kesalahan field input"
 
 #~ msgid "Add placeholder to the input blocks"
-#~ msgstr "Ajouter la localisation dans le bloc de saisie"
+#~ msgstr "Menambahkan placeholder ke blok masukan"
 
 #~ msgid "Add tooltips"
-#~ msgstr "Ajouter les conseils"
+#~ msgstr "Tambahkan tooltips"
 
 #~ msgid "Email address"
-#~ msgstr "Adresse e-mail"
+#~ msgstr "Alamat email"
 
 #~ msgid "Phone Number"
-#~ msgstr "Téléphone"
+#~ msgstr "Nomor telepon"
 
 #~ msgid "Attachment"
-#~ msgstr "Pièce-jointe"
+#~ msgstr "Lampiran"
 
 #~ msgid "Style options"
-#~ msgstr "Options de style"
+#~ msgstr "Pilihan gaya"
 
 #~ msgid "Text color"
-#~ msgstr "Couleur du texte"
+#~ msgstr "Warna teks"
 
 #~ msgid "Default"
-#~ msgstr "Défaut"
+#~ msgstr "kegagalan"
 
 #~ msgid "Label text color"
-#~ msgstr "Couleur des textes des intitulés"
+#~ msgstr "Warna teks Label"
 
 #~ msgid "Placeholder color"
-#~ msgstr "Couleur pour la localisation"
+#~ msgstr "warna placeholder"
 
 #~ msgid "Errors color"
-#~ msgstr "Couleur pour les erreurs"
+#~ msgstr "warna kesalahan"
 
 #~ msgid "Error text color"
-#~ msgstr "Couleur pour le texte des erreurs"
+#~ msgstr "Warna teks kesalahan"
 
 #~ msgid "Background color of the input field errors"
-#~ msgstr "Couleur de fond pour les erreurs de saisie dans les champs"
+#~ msgstr "warna latar belakang kesalahan field input"
 
 #~ msgid "Border color of the input field errors"
-#~ msgstr "Couleur de la bordure pour les erreurs de saisie dans les champs"
+#~ msgstr "warna perbatasan kesalahan field input"
 
 #~ msgid "Placeholder color of the input field errors"
-#~ msgstr "Couleur pour la localisation lors d'une erreur de saisie du champ"
+#~ msgstr "warna placeholder dari kesalahan field input"
 
 #~ msgid "Input fields"
-#~ msgstr "Champs de saisie"
+#~ msgstr "field input"
 
 #~ msgid "Input fields background color"
-#~ msgstr "Couleur de fond pour les champs de saisie"
+#~ msgstr "Input field warna latar belakang"
 
 #~ msgid "Text fields color"
-#~ msgstr "Couleur pour les textes des champs de saisie"
+#~ msgstr "Teks ladang warna"
 
 #~ msgid "Border width in px, numbers only"
-#~ msgstr "Largeur des bordures en px, nombre seulement"
+#~ msgstr "lebar perbatasan di px, angka saja"
 
 #~ msgid "Border color"
-#~ msgstr "Couleur des bordures"
+#~ msgstr "warna perbatasan"
 
 #~ msgid "Width in px, numbers only"
-#~ msgstr "Largeur en px, nombre seulement"
+#~ msgstr "Lebar di px, angka saja"
 
 #~ msgid "Button color"
-#~ msgstr "Couleur du bouton"
+#~ msgstr "warna tombol"
 
 #~ msgid "Button text color"
-#~ msgstr "Couleur du texte du bouton"
+#~ msgstr "Warna teks tombol"
 
 #~ msgid "Contact Form Pro | Preview"
-#~ msgstr "Formulaire Pro de Contact | Prévisualisation"
+#~ msgstr "Hubungi Formulir Pro | Preview"
 
 #~ msgid "Show with errors"
-#~ msgstr "Afficher avec les erreurs"
+#~ msgstr "Tampilkan dengan kesalahan"
 
 #~ msgid "Please enter your full name..."
-#~ msgstr "Merci de saisir votre nom..."
+#~ msgstr "Masukkan nama lengkap Anda ..."
 
 #~ msgid "Please enter your address..."
-#~ msgstr "Merci de saisir votre adresse..."
+#~ msgstr "Masukkan alamat Anda ..."
 
 #~ msgid "Please enter your email address..."
-#~ msgstr "Merci de saisir votre adresse e-mail..."
+#~ msgstr "Masukkan alamat email Anda ..."
 
 #~ msgid "Please enter your phone number..."
-#~ msgstr "Merci de saisir votre numéro de téléphone..."
+#~ msgstr "Masukkan nomor telepon anda..."
 
 #~ msgid "Please enter subject..."
-#~ msgstr "Merci de saisir le sujet..."
+#~ msgstr "Masukkan subjek ..."
 
 #~ msgid ""
 #~ "Supported file types: HTML, TXT, CSS, GIF, PNG, JPEG, JPG, TIFF, BMP, AI, "
 #~ "EPS, PS, RTF, PDF, DOC, DOCX, XLS, ZIP, RAR, WAV, MP3, PPT. Max file "
 #~ "size: 2MB"
 #~ msgstr ""
-#~ "Types de fichiers autorisés: HTML, TXT, CSS, GIF, PNG, JPEG, JPG, TIFF, "
-#~ "BMP, AI, EPS, PS, RTF, PDF, DOC, DOCX, XLS, ZIP, RAR, WAV, MP3, PPT. "
-#~ "Taille maximum 2MB"
+#~ "Jenis file yang didukung: HTML, TXT, CSS, GIF, PNG, JPEG, JPG, TIFF, BMP, "
+#~ "AI, EPS, PS, RTF, PDF, DOC, DOCX, XLS, ZIP, RAR, WAV, MP3, PPT. Ukuran "
+#~ "file Max: 2MB"
 
 #~ msgid "You can attach the following file formats"
-#~ msgstr "Vous pouvez joindre des fichiers aux formats suivants"
+#~ msgstr "Anda dapat melampirkan format file berikut"
 
 #~ msgid "Contact from"
-#~ msgstr "Contact de"
+#~ msgstr "kontak dari"
 
 #~ msgid "Email"
 #~ msgstr "E-mail"
 
 #~ msgid "Site"
-#~ msgstr "Site"
+#~ msgstr "situs"
 
 #~ msgid ""
 #~ "If you can see this MIME, it means that the MIME type is not supported by "
 #~ "your email client!"
 #~ msgstr ""
-#~ "Si vous voyez ce MIME c'est que votre navigateur n'accepte pas ce type de "
-#~ "MIME !"
+#~ "Jika Anda dapat melihat MIME ini, itu berarti bahwa tipe MIME tidak "
+#~ "didukung oleh klien email Anda!"
 
 #~ msgid "Display Attachment tips"
-#~ msgstr "Afficher les explications sur les pièces jointes"
+#~ msgstr "Tips tampilan Lampiran"
 
 #~ msgid "Display a phone number field"
-#~ msgstr "Afficher le champ téléphone"
+#~ msgstr "Menampilkan field nomor telepon"
 
 #~ msgid "Please enter a valid email address. Settings are not saved."
-#~ msgstr ""
-#~ "Merci de saisir une adresse e-mail valide. Les modifications ne sont pas "
-#~ "sauvegardées."
+#~ msgstr "Silakan isi alamat email. Setelan tidak disimpan."
 
 #~ msgid "E-Mail Address"
-#~ msgstr "Adresse e-mail"
+#~ msgstr "Alamat email"
 
-#, fuzzy
 #~ msgid ""
 #~ "If you would like to add a Contact Form to your website, just copy and "
 #~ "put this shortcode onto your post or page:"
 #~ msgstr ""
-#~ "Si vous souhaiter ajouter un formulaire de contact à votre site web, "
-#~ "copiez juste ce code dans un article ou sur une page ou un widget:"
+#~ "Jika Anda ingin menambahkan formulir kontak ke website Anda, hanya copy "
+#~ "dan menempatkan shortcode ini ke pos atau halaman:"
 
-#, fuzzy
 #~ msgid "Thank you for contact."
-#~ msgstr "Merci de nous avoir contacté."
+#~ msgstr "Terima kasih untuk kontak."
 
-#, fuzzy
 #~ msgid "Set a name of user wo will get messages from a contact form."
 #~ msgstr ""
-#~ "Choisir le nom d'utilisateur qui recevra les messages envoyés depuis le "
-#~ "formulaire de contact."
+#~ "Menetapkan nama pengguna wo akan mendapatkan pesan dari formulir kontak."
 
 #~ msgid "E-Mail Addresse:"
-#~ msgstr "Indirizzo e-mail:"
+#~ msgstr "E-Mail alamat:"

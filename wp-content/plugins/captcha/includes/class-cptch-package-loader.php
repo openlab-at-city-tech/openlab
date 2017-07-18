@@ -13,7 +13,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 		private $error,       /* string, message about the errors, which have occurred during the action handling */
 			$notice,          /* string, message about possible inaccuracies */
 			$message,         /* string, message about the successfull implementation of the action */
-			$basename,        /* string, contains 'includes/package_loader.php' */
+			$basename,        /* string, contains 'includes/class-cptch-package-loader.php' */
 			$upload_dir,      /* string, absolute path to the 'bws_captcha_images' folder in the 'uploads' folder */
 			$packages_dir,    /* string, absolute path to the content of the unpacked archive */
 			$result,          /* array,  number of added(updated) packages or images */
@@ -36,15 +36,13 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 				$upload_dir = wp_upload_dir();
 			}
 			$this->upload_dir = $upload_dir['basedir'] . '/bws_captcha_images';
-			if( ! file_exists( $this->upload_dir ) ) {
+			if ( ! file_exists( $this->upload_dir ) ) {
 				if ( is_writable( $upload_dir['basedir'] ) )
 					mkdir( $this->upload_dir );
 				else
-					$this->error = __( 'Can not load images in to the "uploads" folder. Please, check your permissions', 'captcha' );
+					$this->error = __( 'Can not load images in to the "uploads" folder. Please, check your permissions.', 'captcha' );
 			}
 			$this->basename = plugin_basename( __FILE__ );
-			if ( isset( $_POST['cptch_install_package_submit'] ) )
-				$this->upload_archive();
 		}
 
 		/**
@@ -54,50 +52,8 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 		 * @return  void
 		 */
 		function display() {
-			$this->display_notices(); ?>
-			<noscript>
-				<style>
-					.cptch_install_package_wrap {
-						display: block !important;
-					}
-				</style>
-			</noscript>
-			<div class="upload-plugin cptch_install_package_wrap">
-				<form id="cptch_install_package_form" class="bws_form wp-upload-form" method="post" enctype="multipart/form-data" action="admin.php?page=captcha_pro.php&amp;action=packages&amp;cptch_action=new">
-					<fieldset>
-						<p>
-							<label>
-								<input id="cptch_install_package_input" type="file" name="cptch_packages" />
-							</label>
-						</p>
-						<p><?php _e( 'If the package already exists', 'captcha' ); ?></p>
-						<p>
-
-							<label for="cptch_skip_existed">
-								<input type="radio" name="cptch_existed_package" value="skip" checked="checked" id="cptch_skip_existed" class="cptch_install_disabled" />
-								<?php _e( 'Skip it', 'captcha' ); ?>
-							</label><br/>
-							<label for="cptch_update_existed">
-								<input type="radio" name="cptch_existed_package" value="update" id="cptch_update_existed" class="cptch_install_disabled" />
-								<?php _e( 'Update the existed one', 'captcha' ); ?>
-							</label><br/>
-							<label for="cptch_save_as_new_existed">
-								<input type="radio" name="cptch_existed_package" value="save_as_new" id="cptch_save_as_new_existed" class="cptch_install_disabled" />
-								<?php _e( 'Save it as new', 'captcha' ); ?>
-							</label>
-						</p>
-						<p>
-							<label>
-								<input class="button-primary cptch_install_disabled" name="cptch_install_package_submit" type="submit" value="<?php _e( 'Install Now', 'captcha' ); ?>" />
-							</label>
-							<a class="cptch_add_ons_link" href="https://bestwebsoft.com/products/wordpress/plugins/captcha/#addons" target="_blank"><?php _e( 'Browse packages', 'captcha' ); ?></a>
-						</p>
-						<?php wp_nonce_field( $this->basename, 'cptch_load_package' ); ?>
-					</fieldset>
-				</form>
-			</div>
-		<?php }
-
+			$this->display_notices();
+		}
 
 		/**
 		 * Shows info messages
@@ -117,74 +73,6 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			if ( $this->message ) { ?>
 				<div class="updated fade below-h2"><p><?php echo $this->message; ?></p></div>
 			<?php }
-		}
-
-		/**
-		 * Check data that have been recieved from install package form
-		 * @since   1.6.9
-		 * @param   void
-		 * @return  array    $result    'error' - error message, 'path' - absolute path to the package
-		 */
-		private function upload_archive() {
-			check_admin_referer( $this->basename, 'cptch_load_package' );
-
-			$error_part  = __( "Error during package uploading", 'captcha' ) . ':&nbsp;';
-			$zip_formats = array( 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream' );
-			$max_size    = wp_max_upload_size();
-			$file        = $_FILES[ 'cptch_packages' ];
-			$is_zip = (
-				in_array( $file['type'], $zip_formats ) &&
-				'.zip' == strtolower( substr ( $file['name'], -4 ) ) &&
-				'PK' == file_get_contents( $file['tmp_name'], FALSE, NULL, 0, 2)
-			) ? true : false;
-
-			/* Archive verification before uploading */
-			if ( ! is_uploaded_file( $file['tmp_name'] ) )
-				$this->error = $error_part . __( "check your archive", 'captcha' ) . '.';
-			elseif ( ! $is_zip )
-				$this->error = $error_part . __( "file format should be ZIP-archive", 'captcha' ) . '.';
-			elseif ( $file['size'] > $max_size )
-				$this->error = $error_part . __( "file size should not exceed", 'captcha' ) . $this->get_human_readeble_file_size( $max_size ) . '.';
-
-			if ( $this->error )
-				return false;
-
-			/* Remove previoiusly loaded archive */
-			$copied = "{$this->upload_dir}/{$file['name']}";
-			if ( file_exists( $copied ) )
-				unlink( $copied );
-
-			if( ! move_uploaded_file( $file['tmp_name'], $copied ) ) {
-				$this->error = $error_part . __( "it is impossible to upload the archive to the server", 'captcha' ) . '.';
-				return false;
-			}
-
-			/* Unzip archive */
-			WP_Filesystem();
-			$this->packages_dir = $this->get_dir( 'unzip_temp' );
-			$unzip_result       = unzip_file( $copied, $this->packages_dir );
-			if ( $unzip_result ) {
-				$this->save_packages();
-				unlink( $copied );
-			} else {
-				$this->error = is_wp_error( $unzip_result ) ? $unzip_result->get_error_message() : $error_part .  __( "archive can not be unzipped", 'captcha' ) . '.';
-			}
-			return true;
-		}
-
-		/**
-		 * Convert the file size in bytes to the human readable format
-		 * @since 1.6.9
-		 * @param   int     $bytes    the file size in bytes
-		 * @return  string
-		 */
-		private function get_human_readeble_file_size( $bytes ) {
-			if ( 104857 <= $bytes ) /* if file size more then 100KB */
-				return round( $bytes / 1048576, 2 ) . "&nbsp;" . __( 'MB', 'captcha' );
-			if ( 1024 <= $bytes && 104857 >= $bytes ) /* if file size more then 1KB but less then 100KB */
-				return round( $bytes / 1024, 2 ) . "&nbsp;" . __( 'KB', 'captcha' );
-			/* if file size under 1KB */
-			return $bytes . "&nbsp;" . __( 'Bytes', 'captcha' );
 		}
 
 		/**
@@ -221,7 +109,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 					$this->saved_images[ $image->package_id ][ $image->id ] = $image->name;
 			}
 
-			/*
+			/**
 			 * if folder with unzipped images placed not in the "uploads" folder
 			 * fires during the uploading of default packages
 			 */
@@ -239,9 +127,9 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			if ( $remove_package ) {
 				$this->remove( $this->packages_dir );
 				if ( ! $this->error ) {
-					$packages_message = sprintf( _n( 'One package has been updated or added to the database', '%s packages have been updated or added to the database', $this->result[0], 'captcha' ), $this->result[0] );
-					$images_message   = sprintf( _n( 'One image has been updated or added to the database', '%s images have been updated or added to the database', $this->result[1], 'captcha' ), $this->result[1] );
-					$this->message    = "{$packages_message}<br>{$images_message}";
+					$packages_message = sprintf( _n( 'One package has been updated or added to the database.', '%s packages have been updated or added to the database.', $this->result[0], 'captcha' ), $this->result[0] );
+					$images_message   = sprintf( _n( 'One image has been updated or added to the database.', '%s images have been updated or added to the database.', $this->result[1], 'captcha' ), $this->result[1] );
+					$this->message    = "{$packages_message}<br />{$images_message}";
 				}
 			}
 		}
@@ -405,8 +293,6 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 		 */
 		private function insert_data() {
 			global $wpdb, $cptch_options;
-			if ( empty( $cptch_options ) )
-				$cptch_options = get_option( 'cptch_options' );
 			$used_packages = $cptch_options['used_packages'];
 
 			$need_update = false;
@@ -696,9 +582,9 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			if ( ! empty( $wrong ) ) {
 				$message =
 					sprintf(
-						__( 'Some settings of the package %s were set incorrectly. They have been skipped', 'captcha' ),
-						"<a href=\"admin.php?page=captcha_pro.php&action=packages&cptch_action=edit&id={$package_id}\">\"{$package_name}\"</a>"
-					) . '.<br />' .
+						__( 'Some settings of the package %s were set incorrectly. They have been skipped.', 'captcha' ),
+						"<a href=\"admin.php?page=captcha-packages.php&cptch_action=edit&id={$package_id}\">\"{$package_name}\"</a>"
+					) . '<br />' .
 					__( 'Wrong data', 'captcha' ) . ':&nbsp;' . implode( ',&nbsp;', $wrong );
 				$this->notice = ( $this->notice ? $this->notice . '<br/>' : '' ) . $message;
 			}
@@ -741,4 +627,4 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			return $next_id;
 		}
 	}
-} ?>
+}
