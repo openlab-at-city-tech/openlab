@@ -696,7 +696,7 @@ function grunion_ajax_spam() {
 			 */
 			$subject = apply_filters( 'contact_form_subject', $content_fields['_feedback_subject'], $content_fields['_feedback_all_fields'] );
 
-			wp_mail( $to, $subject, $message, $headers );
+			Grunion_Contact_Form::wp_mail( $to, $subject, $message, $headers );
 		}
 	} elseif( $_POST['make_it'] == 'publish' ) {
 		if ( ! current_user_can($post_type_object->cap->delete_post, $post_id) ) {
@@ -775,7 +775,7 @@ add_action( 'omnisearch_add_providers', 'grunion_omnisearch_add_providers' );
 function grunion_omnisearch_add_providers() {
 	// Feedback uses capability_type 'page'
 	if ( current_user_can( 'edit_pages' ) ) {
-		require_once( GRUNION_PLUGIN_DIR . '/grunion-omnisearch.php' );
+		require_once( GRUNION_PLUGIN_DIR . 'grunion-omnisearch.php' );
 		new Jetpack_Omnisearch_Grunion;
 	}
 }

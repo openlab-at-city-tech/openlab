@@ -59,7 +59,7 @@ class Jetpack_Signature {
 
 		$url = "{$scheme}://{$_SERVER['HTTP_HOST']}:{$port}" . stripslashes( $_SERVER['REQUEST_URI'] );
 
-		if ( array_key_exists( 'body', $override ) && !is_null( $override['body'] ) ) {
+		if ( array_key_exists( 'body', $override ) && ! empty( $override['body'] ) ) {
 			$body = $override['body'];
 		} else if ( 'POST' == strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 			$body = isset( $GLOBALS['HTTP_RAW_POST_DATA'] ) ? $GLOBALS['HTTP_RAW_POST_DATA'] : null;
@@ -71,8 +71,22 @@ class Jetpack_Signature {
 					$body = $_POST;
 				}
 			}
+		} else if ( 'PUT' == strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			// This is a little strange-looking, but there doesn't seem to be another way to get the PUT body
+			$raw_put_data = file_get_contents( 'php://input' );
+			parse_str( $raw_put_data, $body );
 
+			if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
+				$put_data = json_decode( $raw_put_data, true );
+				if ( is_array( $put_data ) && count( $put_data ) > 0 ) {
+					$body = $put_data;
+				}
+			}
 		} else {
+			$body = null;
+		}
+
+		if ( empty( $body ) ) {
 			$body = null;
 		}
 

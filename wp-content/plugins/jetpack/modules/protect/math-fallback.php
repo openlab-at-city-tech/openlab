@@ -50,7 +50,7 @@ if ( ! class_exists( 'Jetpack_Protect_Math_Authenticate' ) ) {
 				wp_die(
 				__( '<strong>You failed to correctly answer the math problem.</strong>  This is used to combat spam when the Protect API is unavailable.  Please use your browser\'s back button to return to the login form, press the "refresh" button to generate a new math problem, and try to log in again.', 'jetpack' ),
 				'',
-				401
+				array ( 'response' => 401 )
 				);
 			} else {
 				return true;
@@ -81,9 +81,13 @@ if ( ! class_exists( 'Jetpack_Protect_Math_Authenticate' ) ) {
 				<p><input type="submit" value="<?php esc_html_e( 'Continue &rarr;', 'jetpack' ); ?>"></p>
 			</form>
 		<?php
-			$mathage = ob_get_contents();
+			$mathpage = ob_get_contents();
 			ob_end_clean();
-			wp_die( $mathage );
+			wp_die(
+				$mathpage,
+				'',
+				array ( 'response' => 401 )
+			);
 		}
 
 		public function process_generate_math_page() {
