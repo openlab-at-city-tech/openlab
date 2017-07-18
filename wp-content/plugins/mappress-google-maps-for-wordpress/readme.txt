@@ -4,16 +4,18 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.43.10
+Stable tag: 2.44.3
 
-MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions in your blog.
+MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions.
 
 == Description ==
 MapPress adds an interactive map to the wordpress editing screens.  When editing a post or page just enter any addresses you'd like to map.
 
-The plugin will automatically insert a great-looking interactive map into your blog. Your readers can get directions right in your blog and you can even create custom HTML for the map markers (including pictures, links, etc.)!
+The plugin will automatically insert a great-looking interactive map into your blog, with directions and custom map markers.
 
-For even more features, try the [MapPress Pro Version](http://wphostreviews.com/mappress)
+For even more features, try [MapPress Pro](http://wphostreviews.com/mappress)
+
+For the latest updates please see the [Development Version](https://downloads.wordpress.org/plugin/mappress-google-maps-for-wordpress.trunk.zip)
 
 = Key Features =
 * MapPress is based on the latest Google maps API v3
@@ -31,16 +33,14 @@ For even more features, try the [MapPress Pro Version](http://wphostreviews.com/
 
 = Pro Version Features =
 * Get the [MapPress Pro Version](http://wphostreviews.com/mappress) for additional functionality
-* Use different marker icons in your maps - over 200 standard icons included
-* Use your own custom icons in your maps or download thousands of icons from the web
-* Shortcodes and template tags for "mashups": easily create a "mashup" showing all of your map locations on a single map
-* Mashups can automatically link to your blog posts and pages and they can display posts by category, date, tags, etc.
+* Use marker icons in your maps - 100 standard icons included
+* Use your own custom icons or download thousands of icons from the web
+* Create mashups by taxonomy, tag, category, or post to show multiple locations on a single map
 * Map widget to show a map or a mashup
-* Display a clickable list of mapped icons and locations under the map
 
-[Home Page](http://www.wphostreviews.com/mappress) |
-[Documentation](http://www.wphostreviews.com/mappress-documentation) |
-[FAQ](http://www.wphostreviews.com/mappress-faq) |
+[Home Page](http://www.wphostreviews.com/mappress)
+[Documentation](http://www.wphostreviews.com/mappress-documentation)
+[FAQ](http://www.wphostreviews.com/mappress-faq)
 [Support](http://www.wphostreviews.com/mappress-faq)
 
 == Screenshots ==
@@ -52,22 +52,7 @@ For even more features, try the [MapPress Pro Version](http://wphostreviews.com/
 6. Street view of mashup location
 
 = Localization =
-Please [Contact me](http://wphostreviews.com/chris-contact) if you'd like to provide a translation or an update.  Special thanks to all the folks who created and udpated these translations:
-
-* Catalan
-* Chinese / Taiwanese
-* Croatian
-* Dutch
-* Finnish
-* French
-* German
-* Hungarian
-* Italian
-* Russian
-* Serbian - Ogi of firstsiteguide.com
-* Simplified Chinese
-* Spanish
-* Swedish
+Please [Contact me](http://wphostreviews.com/chris-contact) if you'd like to provide a translation or an update.  Special thanks to all the folks who created and udpated translations.
 
 == Installation ==
 
@@ -75,10 +60,7 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 1. Install and activate the plugin through the 'Plugins' menu in WordPress
 1. You should now see a MapPress meta box in in the 'edit posts' screen
 
-[Home Page](http://www.wphostreviews.com/mappress) |
-[Documentation](http://www.wphostreviews.com/mappress-documentation) |
-[FAQ](http://www.wphostreviews.com/mappress-faq) |
-[Support](http://www.wphostreviews.com/forums)
+[Home Page](http://www.wphostreviews.com/mappress) |[Documentation](http://www.wphostreviews.com/mappress-documentation) | [FAQ](http://www.wphostreviews.com/mappress-faq) | [Support](http://www.wphostreviews.com/forums)
 
 == Upgrade ==
 
@@ -95,12 +77,30 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 
 == Changelog ==
 
+2.44.3
+* Changed: plugin repository URL updated
+
+2.44.2
+* Changed: geocoding module has been updated
+* Changed: the Nominatim geocoder has been removed
+* Changed: when geocoding an 'address' field in format 'lat,lng' the field is used verbatim rather than mapped to the nearest street address
+* Changed: extract removed from helper functions
+
+2.44.1
+* Changed: added 'footer' option for loading scripts in header/footer (for use in AJAX plugins)
+* Changed: added underscore library to loader
+* Fixed: default sort applied to mashup with orderby
+* Fixed: updated widget to use array field names (since WP 4.4)
+
+2.44
+* Changed: version updated to 2.44
+
 2.43.10
 * Changed: show blank container while loading mashups instead of default map
 * Changed: no alerts for admins on missing map container
 * Changed: apply wpautop to POIs when they are saved (wpautop inserts html tags to format carriage returns)
 * Fixed: bug where mashups were limited to 10 POIs
-* Fixed: polys are now allowed again for mashups
+* Fixed: polygons are allowed again in mashup results
 * Fixed: changed Mappress_Updater constructor for PHP 7
 
 2.43.9
@@ -335,7 +335,3 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Changed: mashup shortcode is now suppressed in the admin screens when do_shortcode is called by indexing plugins
 * Fixed: warning about file 'settings.js' on the settings screen
 * Fixed: invalid tinyMCE language for non-english sites
-
-2.39.2
-=
-* Changed: some blogs are loading outdated javascript versions, so changed use of javascript '.on' (deprecated in 1.7) to '.live'

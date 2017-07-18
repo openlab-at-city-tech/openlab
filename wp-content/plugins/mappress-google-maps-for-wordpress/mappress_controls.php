@@ -81,7 +81,6 @@ class Mappress_Controls {
 	}
 
 	static function radios($name, $data, $selected = null, $args = '') {
-		extract(wp_parse_args($args, array('vertical' => false)));
 		$atts = self::parse_atts($name, $args);
 
 		// If no selected value, use first key
@@ -94,23 +93,21 @@ class Mappress_Controls {
 		foreach ((array)$data as $key => $label) {
 			$key = esc_attr($key);
 			$html .= "<label><input type='radio' value='$key' " . checked($selected, $key, false) . " $atts />$label</label> ";
-			if ($vertical)
-				$html .= "<br/>";
 		}
 		return $html;
 	}
 
 	static function select($name, $data, $selected = '', $args = '') {
-		extract(wp_parse_args($args, array('short_labels' => false, 'none' => false)));
+		$args = (object) wp_parse_args($args, array('none' => false));
 		$atts = self::parse_atts($name, $args);
 
 		if (!is_array($data) || empty($data))
 			$data = array();
 
-		if ($none) {
-			if ($none === true)
-				$none = '&nbsp;';
-			$data = array('' => $none) + $data;
+		if ($args->none) {
+			if ($args->none === true)
+				$args->none = '&nbsp;';
+			$data = array('' => $args->none) + $data;
 		}
 
 		$html = "<select $atts>\r\n";
@@ -123,9 +120,8 @@ class Mappress_Controls {
 			$select = ($select) ? 'selected' : '';
 
 			$value = esc_attr($key);
-			$title = ($short_labels) ? esc_attr($label) : '';
-			$text = ($short_labels) ? esc_attr($key) : esc_attr($label);
-			$html .= "<option value='$value' title='$title' $select>$text</option>\r\n";
+			$text = esc_attr($label);
+			$html .= "<option value='$value' $select>$text</option>\r\n";
 		}
 		$html .= "</select>\r\n";
 		return $html;

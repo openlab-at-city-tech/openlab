@@ -142,7 +142,7 @@
 .mapp-iw .mapp-links {
 	clear: both;            /* Clear any floats from images in body */
 	white-space: nowrap;    /* Don't let links split in small infowindows */
-	margin: 4px 0 0 0 !important;
+	margin: 0 !important;	/* Margin causes scrollbars */
 	padding-top: 4px !important;
 	border-top: 1px solid lightgray ;
 }
@@ -223,9 +223,9 @@
 }
 
 .mapp-poi-list table {
-	margin-top: 10px ;
+	margin: 0 !important;				/* 2012 */
 	width: 100% ;
-	line-height: normal !important;		/* 2012 sets to 2 */
+	line-height: normal !important;		/* 2012 */
 	border-collapse: collapse ;
 	table-layout: auto;	/* 2015 */
 }
