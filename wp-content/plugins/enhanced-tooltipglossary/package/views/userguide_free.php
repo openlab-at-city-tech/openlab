@@ -113,7 +113,7 @@
 			<h3>
 				<span>Plugin Documentation</span>
 				<?php if ( $this->getUserguideUrl() ): ?>
-					<strong class="label-title-link"> <a class="label-title-link-class"  target="_blank" href="<?php echo $this->getUserguideUrl(); ?>">View Plugin Documentation >></a></strong>
+					<strong class="label-title-link"> <a class="label-title-link-class"  target="_blank" href="<?php echo $this->getUserguideUrl(); ?>">View Plugin User Guide >></a></strong>
 				<?php endif; ?>
 			</h3>
 
@@ -147,26 +147,26 @@
 		</div>
 
 		<div id="buy" class="buy postbox">
-			<h3> <span>Buy CreativeMidns bundle of all CreativeMinds WordPress Plugins</span></h3>
+			<h3> <span>Buy CreativeMidns suite of all 90+ Premium WordPress Plugins</span></h3>
 			<div class="plugins">
 				<div class="list">
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>WPmembership.png">
 							</a>
 						</div>
 
 						<div class="plugins-price item">
-							<span>$159</span>
+							<span>$199</span>
 						</div>
 
 						<div class="plugins-body item">
-							<p><strong>BEST VALUE:</strong> Get all CM products for a great discount! Offer includes unlimited updates and expert support.</p>
+							<p><strong>BEST VALUE:</strong> Get all 90+ CM products for a great discount! Offer includes one year of unlimited updates and expert support.</p>
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 				</div>
@@ -201,7 +201,7 @@
 					<!-- CM Tooltip Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/tooltipglossary' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/tooltipglossary' ); ?>" target="_blank">
 								<img class="img" width="80" src="<?php echo plugin_dir_url( __FILE__ ); ?>tooltip.png">
 							</a>
 						</div>
@@ -215,14 +215,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/tooltipglossary' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/tooltipglossary' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!-- CM Answers Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/answers' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/answers' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>answers.png">
 							</a>
 						</div>
@@ -236,14 +236,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/answers' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/answers' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!-- Download Manager Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/downloadsmanager' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/downloadsmanager' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>downloads.png">
 							</a>
 						</div>
@@ -257,14 +257,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/downloadsmanager' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/downloadsmanager' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!--  Pop Up Manager Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/cm-pop-up-banners-plugin-for-wordpress/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/cm-pop-up-banners-plugin-for-wordpress/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>popup.png">
 							</a>
 						</div>
@@ -278,14 +278,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/cm-pop-up-banners-plugin-for-wordpress/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/cm-pop-up-banners-plugin-for-wordpress/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!--  Business Directory  Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-business-directory-plugin-for-wordpress/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-business-directory-plugin-for-wordpress/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>businessdir.png">
 							</a>
 						</div>
@@ -299,14 +299,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-business-directory-plugin-for-wordpress/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-business-directory-plugin-for-wordpress/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!--  Video Lessons  Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-video-lessons-manager-plugin-for-wordpress/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-video-lessons-manager-plugin-for-wordpress/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>videolessons.png">
 							</a>
 						</div>
@@ -320,7 +320,7 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-video-lessons-manager-plugin-for-wordpress/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-video-lessons-manager-plugin-for-wordpress/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
@@ -328,7 +328,7 @@
 					<!--  FAQ  Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/faq-plugin-for-wordpress-by-creativeminds' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/faq-plugin-for-wordpress-by-creativeminds' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>faq.png">
 							</a>
 						</div>
@@ -342,14 +342,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/faq-plugin-for-wordpress-by-creativeminds' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/faq-plugin-for-wordpress-by-creativeminds' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
 					<!--  Search and Replace  Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-on-demand-search-and-replace-plugin-for-wordpress/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-on-demand-search-and-replace-plugin-for-wordpress/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>searchreplace.png">
 							</a>
 						</div>
@@ -363,14 +363,14 @@
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/purchase-cm-on-demand-search-and-replace-plugin-for-wordpress/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/purchase-cm-on-demand-search-and-replace-plugin-for-wordpress/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 
-					<!--  Cm Map Location Plugin -->
+					<!--  Cm Map Routes Plugin -->
 					<div class="plugins-table">
 						<div class="plugins-img item">
-							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/maps-routes-manager-plugin-for-wordpress-by-creativeminds/' ); ?>" target="_blank">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/maps-routes-manager-plugin-for-wordpress-by-creativeminds/' ); ?>" target="_blank">
 								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>routes.png">
 							</a>
 						</div>
@@ -380,11 +380,32 @@
 						</div>
 
 						<div class="plugins-body item">
-							<p><strong>CM Map Route Manager</strong> - Generate a catalog of map routes and trails.</p>
+							<p><strong>CM Map Route Manager</strong> - Draw map routes and generate a catalog of routes and trails with points of interest using Google maps.</p>
 						</div>
 
 						<div class="plugins-action item">
-							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/store/maps-routes-manager-plugin-for-wordpress-by-creativeminds/' ); ?>" target="_blank" >Buy</a>
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/maps-routes-manager-plugin-for-wordpress-by-creativeminds/' ); ?>" target="_blank" >More Info</a>
+						</div>
+					</div>
+
+					<!--  Cm Booking Calendar Plugin -->
+					<div class="plugins-table">
+						<div class="plugins-img item">
+							<a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/schedule-appointments-manage-bookings-plugin-wordpress/' ); ?>" target="_blank">
+								<img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>appointments_icon.png">
+							</a>
+						</div>
+
+						<div class="plugins-price item">
+							<span>$39</span>
+						</div>
+
+						<div class="plugins-body item">
+							<p><strong>CM Booking Calendar</strong> - Customers can easily schedule appointments and pay for them directly through your website.</p>
+						</div>
+
+						<div class="plugins-action item">
+							<a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/schedule-appointments-manage-bookings-plugin-wordpress/' ); ?>" target="_blank" >More Info</a>
 						</div>
 					</div>
 

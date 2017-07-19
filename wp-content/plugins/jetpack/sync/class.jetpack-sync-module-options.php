@@ -37,6 +37,15 @@ class Jetpack_Sync_Module_Options extends Jetpack_Sync_Module {
 		$this->update_options_whitelist();
 	}
 
+	public function set_late_default() {
+
+		/** This filter is already documented in json-endpoints/jetpack/class.wpcom-json-api-get-option-endpoint.php */
+		$late_options = apply_filters( 'jetpack_options_whitelist', array() );
+		if ( ! empty( $late_options ) && is_array( $late_options ) ) {
+			$this->options_whitelist = array_merge( $this->options_whitelist, $late_options );
+		}
+	}
+
 	function enqueue_full_sync_actions( $config, $max_items_to_enqueue, $state ) {
 		/**
 		 * Tells the client to sync all options to the server
@@ -62,22 +71,27 @@ class Jetpack_Sync_Module_Options extends Jetpack_Sync_Module {
 	// Is public so that we don't have to store so much data all the options twice.
 	function get_all_options() {
 		$options = array();
+		$random_string = wp_generate_password();
 		foreach ( $this->options_whitelist as $option ) {
-			$options[ $option ] = get_option( $option );
+			$option_value = get_option( $option, $random_string );
+			if ( $option_value !== $random_string ) {
+				$options[ $option ] = $option_value;
+			}
 		}
 
 		// add theme mods
 		$theme_mods_option = 'theme_mods_'.get_option( 'stylesheet' );
-		$theme_mods_value  = get_option( $theme_mods_option );
+		$theme_mods_value  = get_option( $theme_mods_option, $random_string );
+		if ( $theme_mods_value === $random_string ) {
+			return $options;
+		}
 		$this->filter_theme_mods( $theme_mods_value );
 		$options[ $theme_mods_option ] = $theme_mods_value;
-
 		return $options;
 	}
 
 	function update_options_whitelist() {
-		/** This filter is already documented in json-endpoints/jetpack/class.wpcom-json-api-get-option-endpoint.php */
-		$this->options_whitelist = apply_filters( 'jetpack_options_whitelist', Jetpack_Sync_Defaults::$default_options_whitelist );
+		$this->options_whitelist = Jetpack_Sync_Defaults::get_options_whitelist();
 	}
 
 	function set_options_whitelist( $options ) {
@@ -101,7 +115,6 @@ class Jetpack_Sync_Module_Options extends Jetpack_Sync_Module {
 				$this->filter_theme_mods( $args[2] );
 			}
 		}
-
 		return $args;
 	}
 

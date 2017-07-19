@@ -1,7 +1,7 @@
 <?php
 /*
 * Function for displaying BestWebSoft menu
-* Version: 2.0.3
+* Version: 2.1.1
 */
 
 if ( ! function_exists ( 'bws_admin_enqueue_scripts' ) )
@@ -37,7 +37,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 			$sitewide_active_plugins = ( function_exists( 'is_multisite' ) && is_multisite() ) ? get_site_option( 'active_sitewide_plugins' ) : array();
 			$update_availible_all = get_site_transient( 'update_plugins' );
 
-			$plugin_category = isset( $_GET['category'] ) ? $_GET['category'] : 'all';
+			$plugin_category = isset( $_GET['category'] ) ? esc_html( $_GET['category'] ) : 'all';
 
 			if ( ( isset( $_GET['sub'] ) && 'installed' == $_GET['sub'] ) || ! isset( $_GET['sub'] ) ) {
 				$bws_plugins_update_availible = $bws_plugins_expired = array();
@@ -53,14 +53,16 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 						$is_pro_installed = array_key_exists( $value_plugin['pro_version'], $all_plugins );
 					}
 					/* check update_availible */
-					if ( $is_pro_installed && array_key_exists( $value_plugin['pro_version'], $update_availible_all->response ) ) {
-						unset( $bws_plugins[ $key_plugin ] );
-						$value_plugin['update_availible'] = $value_plugin['pro_version'];
-						$bws_plugins_update_availible[ $key_plugin ] = $value_plugin;
-					} else if ( $is_installed && array_key_exists( $key_plugin, $update_availible_all->response ) ) {
-						unset( $bws_plugins[ $key_plugin ] );
-						$value_plugin['update_availible'] = $key_plugin;
-						$bws_plugins_update_availible[ $key_plugin ] = $value_plugin;
+					if ( ! empty( $update_availible_all ) && ! empty( $update_availible_all->response ) ) {
+						if ( $is_pro_installed && array_key_exists( $value_plugin['pro_version'], $update_availible_all->response ) ) {
+							unset( $bws_plugins[ $key_plugin ] );
+							$value_plugin['update_availible'] = $value_plugin['pro_version'];
+							$bws_plugins_update_availible[ $key_plugin ] = $value_plugin;
+						} else if ( $is_installed && array_key_exists( $key_plugin, $update_availible_all->response ) ) {
+							unset( $bws_plugins[ $key_plugin ] );
+							$value_plugin['update_availible'] = $key_plugin;
+							$bws_plugins_update_availible[ $key_plugin ] = $value_plugin;
+						}
 					}
 					/* check expired */
 					if ( $is_pro_installed && isset( $bstwbsftwppdtplgns_options['time_out'][ $value_plugin['pro_version'] ] ) &&
@@ -176,7 +178,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 			$post_max_size = ( ini_get( 'post_max_size' ) ) ? ini_get( 'post_max_size' ) : __( 'N/A', 'bestwebsoft' );
 			$max_execution_time = ( ini_get( 'max_execution_time' ) ) ? ini_get( 'max_execution_time' ) : __( 'N/A', 'bestwebsoft' );
 			$memory_limit = ( ini_get( 'memory_limit' ) ) ? ini_get( 'memory_limit' ) : __( 'N/A', 'bestwebsoft' );
-			$wp_memory_limit = ( defined( 'WP_MEMORY_LIMIT' ) ) ? WP_MEMORY_LIMIT : __( 'N/A', 'bestwebsoft' );	
+			$wp_memory_limit = ( defined( 'WP_MEMORY_LIMIT' ) ) ? WP_MEMORY_LIMIT : __( 'N/A', 'bestwebsoft' );
 			$memory_usage = ( function_exists( 'memory_get_usage' ) ) ? round( memory_get_usage() / 1024 / 1024, 2 ) . __( ' Mb', 'bestwebsoft' ) : __( 'N/A', 'bestwebsoft' );
 			$exif_read_data = ( is_callable( 'exif_read_data' ) ) ? __( 'Yes', 'bestwebsoft' ) . " ( V" . substr( phpversion( 'exif' ), 0,4 ) . ")" : __( 'No', 'bestwebsoft' );
 			$iptcparse = ( is_callable( 'iptcparse' ) ) ? __( 'Yes', 'bestwebsoft' ) : __( 'No', 'bestwebsoft' );
@@ -197,7 +199,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 						__( 'Website URL', 'bestwebsoft' )					=> get_option( 'siteurl' ),
 						__( 'WP Version', 'bestwebsoft' )					=> $wp_version,
 						__( 'WP Multisite', 'bestwebsoft' )					=> $multisite,
-						__( 'WP Memory Limit', 'bestwebsoft' )				=> $wp_memory_limit,		
+						__( 'WP Memory Limit', 'bestwebsoft' )				=> $wp_memory_limit,
 						__( 'Active Theme', 'bestwebsoft' )					=> $theme['Name'] . ' ' . $theme['Version'] . ' (' . sprintf( __( 'by %s', 'bestwebsoft' ), $theme['Author'] ) . ')'
 					),
 				),
@@ -215,7 +217,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 						__( 'PHP Max Script Execute Time', 'bestwebsoft' )	=> $max_execution_time,
 						__( 'PHP Exif support', 'bestwebsoft' )				=> $exif_read_data,
 						__( 'PHP IPTC support', 'bestwebsoft' )				=> $iptcparse,
-						__( 'PHP XML support', 'bestwebsoft' )				=> $xml_parser_create,					
+						__( 'PHP XML support', 'bestwebsoft' )				=> $xml_parser_create,
 						'$_SERVER[HTTP_HOST]'								=> $_SERVER['HTTP_HOST'],
 						'$_SERVER[SERVER_NAME]'								=> $_SERVER['SERVER_NAME'],
 					),
@@ -271,8 +273,8 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 					$headers .= 'Content-type: text/html; charset=utf-8' . "\n";
 					$headers .= 'From: ' . get_option( 'admin_email' );
 					$message_text = '<html><head><title>System Info From ' . home_url() . '</title></head><body>';
-					foreach ( $system_info as $info ) {	
-						if ( ! empty( $info['data'] ) ) {				
+					foreach ( $system_info as $info ) {
+						if ( ! empty( $info['data'] ) ) {
 							$message_text .= '<h4>' . $info['name'];
 							if ( isset( $info['count'] ) )
 								$message_text .= ' (' . $info['count'] . ')';
@@ -299,7 +301,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 						<span>panel</span>
 					</a>
 				</div>
-				<div class="bws-menu-item-icon">&#8226;&#8226;&#8226;</div>				
+				<div class="bws-menu-item-icon">&#8226;&#8226;&#8226;</div>
 				<div class="bws-nav-tab-wrapper">
 					<?php if ( $is_main_page ) { ?>
 						<a class="bws-nav-tab<?php if ( 'bws_panel' == $page ) echo ' bws-nav-tab-active'; ?>" href="<?php echo self_admin_url( 'admin.php?page=bws_panel' ); ?>"><?php _e( 'Plugins', 'bestwebsoft' ); ?></a>
@@ -530,7 +532,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 											} ?>
 										</div>
 										<div class="bws_product_description">
-											<?php echo ( strlen( $value_plugin['description'] ) > 100 ) ? substr( $value_plugin['description'], 0, 100 ) . '...' : $value_plugin['description']; ?>
+											<?php echo ( strlen( $value_plugin['description'] ) > 100 ) ? mb_substr( $value_plugin['description'], 0, 100 ) . '...' : $value_plugin['description']; ?>
 										</div>
 										<div class="bws_product_links">
 											<?php if ( $is_active || $is_pro_active ) {
@@ -683,7 +685,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 										<strong>
 											<?php echo $info['name'];
 											if ( isset( $info['count'] ) )
-												echo ' (' . $info['count'] . ')'; ?>											
+												echo ' (' . $info['count'] . ')'; ?>
 										</strong>
 									</th>
 								</tr>
@@ -697,7 +699,7 @@ if ( ! function_exists( 'bws_add_menu_render' ) ) {
 								<?php } ?>
 							</tbody>
 						</table>
-					<?php } 
+					<?php }
 				} ?>
 			</div>
 		</div>
@@ -708,6 +710,7 @@ if ( ! function_exists( 'bws_get_banner_array' ) ) {
 	function bws_get_banner_array() {
 		global $bstwbsftwppdtplgns_banner_array;
 		$bstwbsftwppdtplgns_banner_array = array(
+			array( 'gglstpvrfctn_hide_banner_on_plugin_page', 'bws-google-2-step-verification/bws-google-2-step-verification.php', '1.0.0' ),
 			array( 'sclbttns_hide_banner_on_plugin_page', 'social-buttons-pack/social-buttons-pack.php', '1.1.0' ),
 			array( 'tmsht_hide_banner_on_plugin_page', 'timesheet/timesheet.php', '0.1.3' ),
 			array( 'pgntn_hide_banner_on_plugin_page', 'pagination/pagination.php', '1.0.6' ),

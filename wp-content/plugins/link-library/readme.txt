@@ -59,6 +59,13 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.13.24 =
+* Removed debug traces for web links
+
+= 5.9.13.23 =
+* Fix display of web links so that it does not display if link is empty
+* Introduce override in shortcode for single category to display in AJAX single cat mode
+
 = 5.9.13.22 =
 * Trying to fix version update loop
 

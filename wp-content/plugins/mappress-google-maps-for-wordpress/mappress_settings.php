@@ -23,7 +23,6 @@ class Mappress_Options extends Mappress_Obj {
 		$editable = false,
 		$footer = true,
 		$from,
-		$geocoders = array('google'),
 		$hidden = false,				// Hide the map with a 'show map' link
 		$hideEmpty = false,				// Hide 'current posts' mashups if empty
 		$iconScale,
@@ -171,6 +170,7 @@ class Mappress_Settings {
 		add_settings_section('misc_settings', __('Miscellaneous', 'mappress-google-maps-for-wordpress'), array($this, 'section_settings'), 'mappress');
 
 		add_settings_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), array($this, 'set_sizes'), 'mappress', 'misc_settings');
+		add_settings_field('footer', __('Scripts', 'mappress-google-maps-for-wordpress'), array($this, 'set_footer'), 'mappress', 'misc_settings');
 		add_settings_field('adaptive', __('Adaptive display', 'mappress-google-maps-for-wordpress'), array($this, 'set_adaptive'), 'mappress', 'misc_settings');
 		add_settings_field('css', __('CSS', 'mappress-google-maps-for-wordpress'), array($this, 'set_css'), 'mappress', 'misc_settings');
 	}
@@ -215,10 +215,6 @@ class Mappress_Settings {
 		$input['poiLinks'] = (isset($input['poiLinks'])) ? $input['poiLinks'] : array();
 		$input['mapLinks'] = (isset($input['mapLinks'])) ? $input['mapLinks'] : array();
 		$input['postTypes'] = (isset($input['postTypes'])) ? $input['postTypes'] : array();
-
-		// Must select at least 1 geocoder
-		$input['geocoders'] = (isset($input['geocoders'])) ? $input['geocoders'] : array('google');
-
 		return $input;
 	}
 
@@ -238,6 +234,10 @@ class Mappress_Settings {
 		echo "<input type='text' size='50' name='mappress_options[apiKey]' value='{$this->options->apiKey}' />";
 		$helpurl = "<a href='http://wphostreviews.com/mappress-faq' target='_blank'>" . __('more info', 'mappress-google-maps-for-wordpress') . "</a>";
 		printf("<br/><i>%s (%s)</i>", __("Required to display maps", 'mappress-google-maps-for-wordpress'), $helpurl);
+	}
+
+	function set_footer() {
+		echo self::checkbox($this->options->footer, 'mappress_options[footer]', __('Output scripts in footer', 'mappress-google-maps-for-wordpress'));
 	}
 
 	function set_post_types() {
@@ -332,7 +332,7 @@ class Mappress_Settings {
 			array(__('Traffic', 'mappress-google-maps-for-wordpress'), $traffic, $initial_traffic ),
 			array(__('Bike routes', 'mappress-google-maps-for-wordpress'), $bicycling, $initial_bicycling ),
 		);
-		echo self::table($headers, $rows);
+		echo Mappress_Controls::table($headers, $rows);
 	}
 
 	function set_map_type_ids() {
@@ -391,7 +391,7 @@ class Mappress_Settings {
 		$image = "<img src='" . Mappress::$baseurl . "/images/%s' style='vertical-align:middle' />";
 
 		$alignments = array(
-			'' => __('Default', 'mappress-google-maps-for-wordpress'),
+			'' => __('Default alignment', 'mappress-google-maps-for-wordpress'),
 			'center' => sprintf($image, 'justify_center.png') . __('Center', 'mappress-google-maps-for-wordpress'),
 			'left' => sprintf($image, 'justify_left.png') . __('Left', 'mappress-google-maps-for-wordpress'),
 			'right' => sprintf($image, 'justify_right.png') . __('Right', 'mappress-google-maps-for-wordpress')
@@ -441,7 +441,7 @@ class Mappress_Settings {
 	}
 
 	function set_sizes() {
-		$headers = array(__('Default', 'mappress-google-maps-for-wordpress'), __('Width', 'mappress-google-maps-for-wordpress'), __('Height', 'mappress-google-maps-for-wordpress'));
+		$headers = array(__('Default size', 'mappress-google-maps-for-wordpress'), __('Width', 'mappress-google-maps-for-wordpress'), __('Height', 'mappress-google-maps-for-wordpress'));
 		$rows = array();
 
 		foreach($this->options->sizes as $i => $size) {
@@ -453,7 +453,7 @@ class Mappress_Settings {
 			);
 		}
 		echo __('Enter sizes in px or %', 'mappress-google-maps-for-wordpress') . ": <br/>";
-		echo self::table($headers, $rows);
+		echo Mappress_Controls::table($headers, $rows);
 	}
 
 
@@ -462,7 +462,7 @@ class Mappress_Settings {
 	*
 	*/
 	function metabox_like() {
-		$rate_link = "<a href='http://wordpress.org/extend/plugins/mappress-easy-google-maps'>" . __('Rate it 5 Stars', 'mappress-google-maps-for-wordpress') . "</a>";
+		$rate_link = "<a href='https://wordpress.org/plugins/mappress-google-maps-for-wordpress/'>" . __('Rate it 5 Stars', 'mappress-google-maps-for-wordpress') . "</a>";
 		echo "<ul>";
 		echo "<li>" . sprintf(__('%s on WordPress.org', 'mappress-google-maps-for-wordpress'), $rate_link) . "</li>";
 		echo "<li>" . __('Thanks for your support!', 'mappress-google-maps-for-wordpress') . "</li>";
@@ -598,15 +598,10 @@ class Mappress_Settings {
 	*
 	*/
 	static function dropdown($data, $selected, $name='', $args=null) {
-		$defaults = array(
+		$args = (object) wp_parse_args($args, array(
 			'id' => $name,
-			'asort' => false,
-			'ksort' => false,
 			'none' => false,
-			'class' => null,
-			'multiple' => false,
-			'select_attr' => ""
-		);
+		));
 
 		if (!is_array($data))
 			return;
@@ -620,29 +615,17 @@ class Mappress_Settings {
 				$value = array_shift($value);
 		}
 
-		extract(wp_parse_args($args, $defaults));
-
-		if ($asort)
-			asort($data);
-		if ($ksort)
-			ksort($data);
-
 		// If 'none' arg provided, prepend a blank entry
-		if ($none) {
-			if ($none === true)
-				$none = '&nbsp;';
+		if ($args->none) {
+			$none = ($args->none === true) ? '&nbsp;' : $args->none;
 			$data = array('' => $none) + $data;    // Note that array_merge() won't work because it renumbers indexes!
 		}
 
-		if (!$id)
-			$id = $name;
-
+		$id = ($args->id) ? $args->id : $name;
 		$name = ($name) ? "name='$name'" : "";
 		$id = ($id) ? "id='$id'" : "";
-		$class = ($class) ? "class='$class'" : "";
-		$multiple = ($multiple) ? "multiple='multiple'" : "";
 
-		$html = "<select $name $id $class $multiple $select_attr>";
+		$html = "<select $name $id>";
 
 		foreach ((array)$data as $key => $description) {
 			$key = esc_attr($key);
@@ -705,51 +688,6 @@ class Mappress_Settings {
 			$key = esc_attr($key);
 			$html .= "<div style='display:inline-block;margin-right:10px;'><label><input type='radio' $name value='$key' " . checked($checked, $key, false) . "/> $description</label></div>";
 		}
-		return $html;
-	}
-
-	/**
-	* Outputs a table
-	*
-	* $args values:
-	*   class 		- CSS class for table
-	* 	col_styles 	- array of column styles
-	*  	footer 		- array of footer cols
-	* 	id 			- table id
-	*	style 		- CSS styles for table
-	*
-	* @param mixed array $headers - array of header cols
-	* @param mixed array $rows - array of rows; rows are arrays of cols
-	* @param mixed array $args
-	*/
-	static function table($headers, $rows, $args = '') {
-		$defaults = array(
-			'class' => '',
-			'id' => '',
-			'style' => '',
-			'col_styles' => null
-		);
-
-		extract(wp_parse_args($args, $defaults));
-
-		$html = "<table id='$id' class='$class' style='$style'><thead><tr>";
-
-		foreach ((array)$headers as $i => $header) {
-			$style = ($col_styles) ? "style='$col_styles[$i]'" : '';
-			$html .= "<th $style>$header</th>";
-		}
-		$html .= "</tr></thead>";
-		$html .= "<tbody>";
-
-		foreach ((array)$rows as $i => $row) {
-			$html .= "<tr>";
-			foreach ((array)$row as $col)
-				$html .= "<td>$col</td>";
-			$html .= "</tr>";
-		}
-		$html .= "</tbody>";
-
-		$html .= "</table>";
 		return $html;
 	}
 

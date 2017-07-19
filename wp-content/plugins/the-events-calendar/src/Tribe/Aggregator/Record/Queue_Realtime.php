@@ -38,7 +38,7 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		add_action( 'wp_ajax_tribe_aggregator_realtime_update', array( $this, 'ajax' ) );
 		$this->queue           = $queue;
 		$this->ajax_operations = $ajax_operations ? $ajax_operations : new Tribe__Events__Ajax__Operations;
-		$this->queue_processor = $queue_processor ? $queue_processor : Tribe__Events__Aggregator::instance()->queue_processor;
+		$this->queue_processor = $queue_processor ? $queue_processor : tribe( 'events-aggregator.main' )->queue_processor;
 	}
 
 	/**
@@ -66,7 +66,8 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 			return;
 		}
 
-		$processor = Tribe__Events__Aggregator::instance()->queue_processor;
+		/** @var Tribe__Events__Aggregator__Record__Queue_Processor $processor */
+		$processor = tribe( 'events-aggregator.main' )->queue_processor;
 		if ( ! $this->record_id = $processor->next_waiting_record( true ) ) {
 			return false;
 		}
@@ -118,8 +119,11 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		// Load the queue
 		$queue = $this->queue ? $this->queue : new Tribe__Events__Aggregator__Record__Queue( $this->record_id );
 
+		// We always need to setup the Current Queue
+		$this->queue_processor->set_current_queue( $queue );
+
+		// Only if it's not empty that we care about proccesing.
 		if ( ! $queue->is_empty() ) {
-			$this->queue_processor->set_current_queue( $queue );
 			$this->queue_processor->process_batch( $this->record_id );
 		}
 

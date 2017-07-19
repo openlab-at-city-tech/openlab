@@ -194,7 +194,13 @@ if ( ! function_exists( 'tribe_get_start_time' ) ) {
 			$date_format = tribe_get_time_format();
 		}
 
-		return tribe_format_date( $start_date, false, $date_format );
+		/**
+		 * Filters the returned event start time
+		 *
+		 * @param string  $start_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_start_time', tribe_format_date( $start_date, false, $date_format ), $event );
 	}
 }
 
@@ -239,7 +245,13 @@ if ( ! function_exists( 'tribe_get_end_time' ) ) {
 			$date_format = tribe_get_time_format();
 		}
 
-		return tribe_format_date( $end_date, false, $date_format );
+		/**
+		 * Filters the returned event end time
+		 *
+		 * @param string  $end_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_end_time', tribe_format_date( $end_date, false, $date_format ), $event );
 	}
 }
 
@@ -283,7 +295,13 @@ if ( ! function_exists( 'tribe_get_start_date' ) ) {
 			return null;
 		}
 
-		return tribe_format_date( $start_date, $display_time, $date_format );
+		/**
+		 * Filters the returned event start date and time
+		 *
+		 * @param string  $start_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_start_date', tribe_format_date( $start_date, $display_time, $date_format ), $event );
 	}
 }
 
@@ -327,7 +345,13 @@ if ( ! function_exists( 'tribe_get_end_date' ) ) {
 			return null;
 		}
 
-		return tribe_format_date( $end_date, $display_time, $date_format );
+		/**
+		 * Filters the returned event end date and time
+		 *
+		 * @param string  $end_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_end_date', tribe_format_date( $end_date, $display_time, $date_format ), $event );
 	}
 }
 
@@ -353,5 +377,33 @@ if ( ! function_exists( 'tribe_normalize_manual_utc_offset' ) ) {
 		}
 
 		return $utc_offset;
+	}
+}
+
+if ( ! function_exists( 'tribe_wp_locale_weekday' ) ) {
+	/**
+	 * Return a WP Locale weekday in the specified format
+	 *
+	 * @param int|string $weekday Day of week
+	 * @param string $format Weekday format: full, weekday, initial, abbreviation, abbrev, abbr, short
+	 *
+	 * @return string
+	 */
+	function tribe_wp_locale_weekday( $weekday, $format ) {
+		return Tribe__Date_Utils::wp_locale_weekday( $weekday, $format );
+	}
+}
+
+if ( ! function_exists( 'tribe_wp_locale_month' ) ) {
+	/**
+	 * Return a WP Locale month in the specified format
+	 *
+	 * @param int|string $month Month of year
+	 * @param string $format month format: full, month, abbreviation, abbrev, abbr, short
+	 *
+	 * @return string
+	 */
+	function tribe_wp_locale_month( $month, $format ) {
+		return Tribe__Date_Utils::wp_locale_month( $month, $format );
 	}
 }

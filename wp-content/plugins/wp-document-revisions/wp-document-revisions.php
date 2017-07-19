@@ -3,7 +3,7 @@
 Plugin Name: WP Document Revisions
 Plugin URI: http://ben.balter.com/2011/08/29/wp-document-revisions-document-management-version-control-wordpress/
 Description: A document management and version control plugin for WordPress that allows teams of any size to collaboratively edit files and manage their workflow.
-Version: 2.0.0
+Version: 2.2.0
 Author: Ben Balter
 Author URI: http://ben.balter.com
 License: GPL3
@@ -142,6 +142,10 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 	}
 
 	function is_webdav_client() {
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			return false;
+		}
+
 		$client = $_SERVER['HTTP_USER_AGENT'];
 		if ( strpos( $client, 'Office' ) !== false ) {
 			return true;
@@ -1225,8 +1229,9 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 	function filename_rewrite( $file ) {
 
 		//verify this is a document
-		if ( !$this->verify_post_type( $_POST['post_id'] ) )
+		if ( ! isset( $_POST['post_id'] ) || ! $this->verify_post_type( $_POST['post_id'] ) ) {
 			return $file;
+		}
 
 		//hash and replace filename, appending extension
 		$file['name'] = md5( $file['name'] .time() ) . $this->get_extension( $file['name'] );
@@ -1247,8 +1252,9 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 	function rewrite_file_url( $file ) {
 
 		//verify that this is a document
-		if ( !$this->verify_post_type( $_POST['post_id'] ) )
+		if ( ! isset( $_POST['post_id'] ) || ! $this->verify_post_type( $_POST['post_id'] ) ) {
 			return $file;
+		}
 
 		$file['url'] = get_permalink( $_POST['post_id'] );
 
@@ -1266,10 +1272,16 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 	 * @return bool true if document, false if not
 	 */
 	function verify_post_type( $post = false ) {
+		global $wp_query;
 
 		//check for post_type query arg (post new)
 		if ( $post == false && isset( $_GET['post_type'] ) && $_GET['post_type'] == 'document' )
 			return true;
+
+		// Assume that a document feed is a document feed, even without a post object.
+		if ( $post === false && is_feed() && 'document' === $wp_query->query_vars['post_type'] ) {
+			return true;
+		}
 
 		//if post isn't set, try get vars (edit post)
 		if ( $post == false )
@@ -1316,12 +1328,9 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 		remove_filter( 'get_the_excerpt', 'twentyeleven_custom_excerpt_more' );
 
 		//include feed and die
-		include dirname( __FILE__ ) . '/includes/revision-feed.php';
-
-		global $wpdr;
+		load_template( dirname( __FILE__ ) . '/includes/revision-feed.php' );
 
 		return;
-
 	}
 
 
@@ -1910,7 +1919,7 @@ class Document_Revisions extends HTTP_WebDAV_Server {
 			return $wp;
 
 		//IE check
-		if ( stripos( $_SERVER['HTTP_USER_AGENT'], 'MSIE' ) === false )
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) || stripos( $_SERVER['HTTP_USER_AGENT'], 'MSIE' ) === false )
 			return $wp;
 
 		//verify that they are requesting a document

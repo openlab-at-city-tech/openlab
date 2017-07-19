@@ -16,10 +16,6 @@ defined( 'ABSPATH' ) || exit;
 // Include WP's list table class.
 if ( !class_exists( 'WP_List_Table' ) ) require( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
-if ( ! buddypress()->do_autoload ) {
-	require dirname( __FILE__ ) . '/classes/class-bp-activity-list-table.php';
-}
-
 // Per_page screen option. Has to be hooked in extremely early.
 if ( is_admin() && ! empty( $_REQUEST['page'] ) && 'bp-activity' == $_REQUEST['page'] )
 	add_filter( 'set-screen-option', 'bp_activity_admin_screen_options', 10, 3 );
@@ -169,8 +165,9 @@ function bp_activity_admin_screen_options( $value, $option, $new_value ) {
  * @return array Hidden Meta Boxes.
  */
 function bp_activity_admin_edit_hidden_metaboxes( $hidden, $screen ) {
-	if ( empty( $screen->id ) || 'toplevel_page_bp-activity' != $screen->id && 'toplevel_page_bp-activity_network' != $screen->id )
+	if ( empty( $screen->id ) || 'toplevel_page_bp-activity' !== $screen->id && 'toplevel_page_bp-activity-network' !== $screen->id ) {
 		return $hidden;
+	}
 
 	// Hide the primary link meta box by default.
 	$hidden  = array_merge( (array) $hidden, array( 'bp_activity_itemids', 'bp_activity_link', 'bp_activity_type', 'bp_activity_userid', ) );
@@ -393,8 +390,8 @@ function bp_activity_admin_load() {
 					 * Remove moderation and blacklist checks in case we want to ham an activity
 					 * which contains one of these listed keys.
 					 */
-					remove_action( 'bp_activity_before_save', 'bp_activity_check_moderation_keys', 2, 1 );
-					remove_action( 'bp_activity_before_save', 'bp_activity_check_blacklist_keys',  2, 1 );
+					remove_action( 'bp_activity_before_save', 'bp_activity_check_moderation_keys', 2 );
+					remove_action( 'bp_activity_before_save', 'bp_activity_check_blacklist_keys', 2 );
 
 					bp_activity_mark_as_ham( $activity );
 					$result = $activity->save();

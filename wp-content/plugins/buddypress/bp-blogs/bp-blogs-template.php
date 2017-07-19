@@ -10,10 +10,6 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-if ( ! buddypress()->do_autoload ) {
-	require dirname( __FILE__ ) . '/classes/class-bp-blogs-template.php';
-}
-
 /**
  * Output the blogs component slug.
  *
@@ -313,7 +309,6 @@ function bp_blog_avatar( $args = '' ) {
 	 *     {@link bp_core_fetch_avatar()}.
 	 *     @type string   $alt     Default: 'Profile picture of site author [user name]'.
 	 *     @type string   $class   Default: 'avatar'.
-	 *     @type string   $title   Default: 'Profile picture of site author [user name]'.
 	 *     @type string   $type    Default: 'full'.
 	 *     @type int|bool $width   Default: false.
 	 *     @type int|bool $height  Default: false.
@@ -339,7 +334,6 @@ function bp_blog_avatar( $args = '' ) {
 			'width'   => false,
 			'height'  => false,
 			'class'   => 'avatar',
-			'title'   => sprintf( __( 'Profile picture of site author %s', 'buddypress' ), esc_attr( $author_displayname ) ),
 			'id'      => false,
 			'alt'     => sprintf( __( 'Profile picture of site author %s', 'buddypress' ), esc_attr( $author_displayname ) ),
 			'no_grav' => true,
@@ -392,7 +386,7 @@ function bp_blog_avatar( $args = '' ) {
 					$size = (int) $r['width'];
 				}
 
-				$avatar = sprintf( '<img src="%1$s" class="%2$s" width="%3$s" height="%3$s" alt="%4$s" title="%4$s" />',
+				$avatar = sprintf( '<img src="%1$s" class="%2$s" width="%3$s" height="%3$s" alt="%4$s" />',
 					esc_url( $site_icon ),
 					esc_attr( "{$r['class']} avatar-{$size}" ),
 					esc_attr( $size ),
@@ -405,7 +399,6 @@ function bp_blog_avatar( $args = '' ) {
 		if ( '' === $avatar ) {
 			$avatar = bp_core_fetch_avatar( array(
 				'item_id'    => $blogs_template->blog->admin_user_id,
-				'title'      => $r['title'],
 				// 'avatar_dir' => 'blog-avatars',
 				// 'object'     => 'blog',
 				'type'       => $r['type'],
@@ -645,7 +638,7 @@ function bp_blog_last_active( $args = array() ) {
 		/**
 		 * Filters the last active date of the current blog in the loop.
 		 *
-		 * @since
+		 * @since 1.2.0
 		 *
 		 * @param string $last_activity Last active date.
 		 * @param array  $r             Array of parsed args used to determine formatting.
@@ -1084,7 +1077,7 @@ function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) 
 	if ( !is_subdomain_install() )
 		echo '<span class="prefix_address">' . $current_site->domain . $current_site->path . '</span> <input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" /><br />';
 	else
-		echo '<input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" ' . bp_get_form_field_attributes( 'blogname' ) . '/> <span class="suffix_address">.' . bp_blogs_get_subdomain_base() . '</span><br />';
+		echo '<input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" ' . bp_get_form_field_attributes( 'blogname' ) . '/> <span class="suffix_address">.' . bp_signup_get_subdomain_base() . '</span><br />';
 
 	if ( !is_user_logged_in() ) {
 		print '(<strong>' . __( 'Your address will be ' , 'buddypress');
@@ -1401,6 +1394,13 @@ function bp_blog_create_nav_item() {
 
 		$output = '<li id="blog-create-nav">' . $create_blog_button . '</li>';
 
+		/**
+		 * Filters the Create A Site nav item output.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $output Nav item output.
+		 */
 		return apply_filters( 'bp_get_blog_create_nav_item', $output );
 	}
 

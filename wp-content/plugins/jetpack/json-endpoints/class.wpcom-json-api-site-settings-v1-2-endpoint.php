@@ -1,21 +1,15 @@
 <?php
-/**
- * WARNING: This file is distributed verbatim in Jetpack.
- * There should be nothing WordPress.com specific in this file.
- *
- * @hide-in-jetpack
- * @autounit api site-settings
- */
 
-class WPCOM_JSON_API_Site_Settings_V1_2_endpoint extends WPCOM_JSON_API_Site_Settings_Endpoint {
+class WPCOM_JSON_API_Site_Settings_V1_2_Endpoint extends WPCOM_JSON_API_Site_Settings_Endpoint {
 
 	public static $site_format = array(
-		'ID'          => '(int) Site ID',
-		'name'        => '(string) Title of site',
-		'description' => '(string) Tagline or description of site',
-		'URL'         => '(string) Full URL to the site',
-		'locale'      => '(string) Locale code of the site',
-		'settings'    => '(array) An array of options/settings for the blog. Only viewable by users with post editing rights to the site.',
+		'ID'             => '(int) Site ID',
+		'name'           => '(string) Title of site',
+		'description'    => '(string) Tagline or description of site',
+		'URL'            => '(string) Full URL to the site',
+		'locale'         => '(string) Locale code of the site',
+		'locale_variant' => '(string) Locale variant code for the site, if set',
+		'settings'       => '(array) An array of options/settings for the blog. Only viewable by users with post editing rights to the site.',
 	);
 
 

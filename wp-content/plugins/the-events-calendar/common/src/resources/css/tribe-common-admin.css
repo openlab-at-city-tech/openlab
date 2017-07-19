@@ -121,6 +121,9 @@ table.plugins .tribe-plugin-update-message a {
 	float: left;
 	max-width: 500px;
 }
+.tribe-settings-form .tribe-field-wrap *:first-child {
+	margin-top: 0;
+}
 .tribe-settings-form .tribe-field-radio label,
 .tribe-settings-form .tribe-field-checkbox_list label {
 	display: block;
@@ -207,6 +210,14 @@ table.plugins .tribe-plugin-update-message a {
 	list-style: circle;
 }
 /* sizes */
+.tribe-field-inline-dropdown {
+	margin-left: 0;
+	margin-right: 0;
+}
+.tribe-field-inline-text {
+	line-height: 28px;
+	margin: 0 2px;
+}
 .tribe-field-textarea.tribe-size-small textarea {
 	height: 60px;
 	width: 180px;
@@ -305,7 +316,7 @@ table.plugins .tribe-plugin-update-message a {
 }
 .tribe-arrangeable-item {
 	border: 1px solid lightGrey;
-	border-radius: 6px;
+	border-radius: 3px;
 }
 .tribe-arrangeable-item .ui-state-default {
 	border: none;
@@ -675,9 +686,6 @@ table.plugins .tribe-plugin-update-message a {
 	display: block;
 	line-height: 1.4;
 }
-.ui-datepicker {
-	font-size: 8pt;
-}
 #ui-datepicker-div {
 	display: none;
 }
@@ -899,11 +907,6 @@ a.tribe-rating-link {
 	clear: both;
 }
 .api-check .tribe-spirit-animal {
-	background: #325f81;
-	background: -webkit-linear-gradient(45deg, #325f81 0%,#3d87c0 100%);
-	background: linear-gradient(45deg, #325f81 0%,#3d87c0 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#325f81', endColorstr='#3d87c0',GradientType=1 );
-	border-left: 4px solid #eee;
 	bottom: 0;
 	display: none;
 	padding: 16px;
@@ -911,7 +914,7 @@ a.tribe-rating-link {
 	position: absolute;
 	right: 0;
 	top: 0;
-	width: 180px;
+	width: 125px;
 }
 .api-check .tribe-spirit-animal:before {
 	content: '';
@@ -947,6 +950,195 @@ a.tribe-rating-link {
 }
 .api-check .plugin-list span.plugin-invalid:last-of-type:after {
 	content: '';
+}
+.tribe-ea-dropdown,
+.tribe-dropdown {
+	max-width: 100%;
+	width: auto;
+}
+.tribe-ea-dropdown.select2-container-active .select2-choice, .tribe-dropdown.select2-container-active .select2-choice {
+	border-color: #5897fb;
+	box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+}
+.tribe-ea-dropdown.select2-dropdown-open .select2-choice, .tribe-dropdown.select2-dropdown-open .select2-choice {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-color: #aaa;
+}
+.tribe-ea-dropdown .select2-choice, .tribe-dropdown .select2-choice {
+	background-image: none;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+}
+.tribe-ea-dropdown .select2-choice > .select2-chosen, .tribe-dropdown .select2-choice > .select2-chosen {
+	white-space: normal;
+}
+.tribe-ea-dropdown .select2-choice .select2-arrow, .tribe-dropdown .select2-choice .select2-arrow {
+	background-image: none;
+	background: transparent;
+	border-left: 0;
+}
+.tribe-ea-dropdown .select2-choice div, .tribe-dropdown .select2-choice div {
+	background-image: none;
+	background: none;
+	border-left: 0;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices, .tribe-dropdown.select2-container-multi .select2-choices {
+	background-image: none;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	min-height: 25px;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices .select2-search-field, .tribe-dropdown.select2-container-multi .select2-choices .select2-search-field {
+	line-height: 25px;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices .select2-search-field input, .tribe-dropdown.select2-container-multi .select2-choices .select2-search-field input {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices .select2-search-choice, .tribe-dropdown.select2-container-multi .select2-choices .select2-search-choice {
+	margin-top: 2px;
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 19px;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices .select2-search-choice div, .tribe-dropdown.select2-container-multi .select2-choices .select2-search-choice div {
+	line-height: inherit;
+}
+.tribe-ea-dropdown.select2-container-multi .select2-choices .select2-search-choice-close, .tribe-dropdown.select2-container-multi .select2-choices .select2-search-choice-close {
+	top: 3px;
+	left: 4px;
+	-webkit-transition-property: border,color;
+	transition-property: border,color;
+}
+.select2-results .select2-selected {
+	display: block;
+}
+.select2-results .select2-selected > .select2-result-label {
+	background-color: #efefef;
+	color: #a1a1a1;
+	cursor: default;
+}
+.select2-results li.select2-result-with-children > .select2-result-label {
+	font-weight: normal;
+}
+.select2-results li.select2-result-with-children.select2-selected {
+	display: block;
+}
+.select2-results li.select2-result-with-children.select2-selected .select2-result {
+	display: block;
+}
+.select2-results li.select2-result-with-children.select2-selected > .select2-result-label {
+	background-color: #efefef;
+	color: #a1a1a1;
+	cursor: default;
+}
+.select2-results li.select2-result-with-children.select2-result-unselectable > .select2-result-label {
+	color: #939393;
+	font-weight: normal;
+}
+/*
+Red button styles.
+
+Credit to https://github.com/jensjns/wp-admin-red-button
+=============================================*/
+.wp-core-ui .button-red {
+	-webkit-box-shadow: inset 0 1px 0 rgba(120, 200, 230, .5);
+	background-color: #a00;
+	border-bottom-color: #8D1F21;
+	border-color: #9B2124;
+	box-shadow: inset 0 1px 0 rgba(120, 200, 230, .5);
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+}
+.wp-core-ui .button-red.hover,
+.wp-core-ui .button-red:hover,
+.wp-core-ui .button-red.focus,
+.wp-core-ui .button-red:focus {
+	-webkit-box-shadow: inset 0 1px 0 rgba(120, 200, 230, .6);
+	background-color: #a00;
+	border-color: #7F1C1F;
+	box-shadow: inset 0 1px 0 rgba(120, 200, 230, .6);
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+}
+.wp-core-ui .button-red.focus,
+.wp-core-ui .button-red:focus {
+	-webkit-box-shadow: inset 0 1px 0 rgba(120, 200, 230, .6), 1px 1px 2px rgba(0, 0, 0, .4);
+	border-color: #500F0E;
+	box-shadow: inset 0 1px 0 rgba(120, 200, 230, .6), 1px 1px 2px rgba(0, 0, 0, .4);
+}
+.wp-core-ui .button-red.active,
+.wp-core-ui .button-red.active:hover,
+.wp-core-ui .button-red.active:focus,
+.wp-core-ui .button-red:active {
+	-webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, .1);
+	background: #7F1C1F;
+	border-color: #601312 #AE2426 #AE2426 #AE2426;
+	box-shadow: inset 0 1px 0 rgba(0, 0, 0, .1);
+	color: rgba(255, 255, 255, .95);
+	text-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+}
+.wp-core-ui .button-red[disabled],
+.wp-core-ui .button-red:disabled,
+.wp-core-ui .button-red-disabled {
+	color: #E79496 !important;
+	background: #BA292B !important;
+	border-color: #7F1C1F !important;
+	box-shadow:         none !important;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .1) !important;
+	cursor: default;
+}
+.ticket_form .select2-container .select2-choice .select2-arrow {
+	display: none;
+}
+/* Clearfix Utility */
+.clear {
+	zoom: 1;
+}
+.clear:after,
+	.clear:before {
+	content: " ";
+	display: table;
+}
+.clear:after {
+	clear: both;
+}
+/*
+ * Plugin install CSS
+ */
+.plugin-card-the-events-calendar .column-rating,
+	.plugin-card-the-events-calendar .column-updated,
+	.plugin-card-the-events-calendar .column-downloaded,
+	.plugin-card-events-calendar-pro .column-rating,
+	.plugin-card-events-calendar-pro .column-updated,
+	.plugin-card-events-calendar-pro .column-downloaded,
+	.plugin-card-event-tickets .column-rating,
+	.plugin-card-event-tickets .column-updated,
+	.plugin-card-event-tickets .column-downloaded,
+	.plugin-card-event-tickets-plus .column-rating,
+	.plugin-card-event-tickets-plus .column-updated,
+	.plugin-card-event-tickets-plus .column-downloaded,
+	.plugin-card-events-community .column-rating,
+	.plugin-card-events-community .column-updated,
+	.plugin-card-events-community .column-downloaded,
+	.plugin-card-events-community-tickets .column-rating,
+	.plugin-card-events-community-tickets .column-updated,
+	.plugin-card-events-community-tickets .column-downloaded,
+	.plugin-card-tribe-eventbrite .column-rating,
+	.plugin-card-tribe-eventbrite .column-updated,
+	.plugin-card-tribe-eventbrite .column-downloaded,
+	.plugin-card-tribe-filterbar .column-rating,
+	.plugin-card-tribe-filterbar .column-updated,
+	.plugin-card-tribe-filterbar .column-downloaded,
+	.plugin-card-image-widget .column-rating,
+	.plugin-card-image-widget .column-updated,
+	.plugin-card-image-widget .column-downloaded,
+	.plugin-card-image-widget-plus .column-rating,
+	.plugin-card-image-widget-plus .column-updated,
+	.plugin-card-image-widget-plus .column-downloaded {
+	display: none;
 }
 @media
 only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {

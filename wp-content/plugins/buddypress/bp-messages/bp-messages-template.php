@@ -10,11 +10,6 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-if ( ! buddypress()->do_autoload ) {
-	require dirname( __FILE__ ) . '/classes/class-bp-messages-box-template.php';
-	require dirname( __FILE__ ) . '/classes/class-bp-messages-thread-template.php';
-}
-
 /**
  * Retrieve private message threads for display in inbox/sentbox/notices.
  *
@@ -947,10 +942,13 @@ function bp_messages_options() {
 		<a href="#" id="mark_as_read"><?php _ex('Mark as Read', 'Message management markup', 'buddypress') ?></a> &nbsp;
 		<a href="#" id="mark_as_unread"><?php _ex('Mark as Unread', 'Message management markup', 'buddypress') ?></a> &nbsp;
 
+		<?php wp_nonce_field( 'bp_messages_mark_messages_read', 'mark-messages-read-nonce', false ); ?>
+		<?php wp_nonce_field( 'bp_messages_mark_messages_unread', 'mark-messages-unread-nonce', false ); ?>
+
 	<?php endif; ?>
 
 	<a href="#" id="delete_<?php echo bp_current_action(); ?>_messages"><?php _e( 'Delete Selected', 'buddypress' ); ?></a> &nbsp;
-
+	<?php wp_nonce_field( 'bp_messages_delete_selected', 'delete-selected-nonce', false ); ?>
 <?php
 }
 
@@ -1269,6 +1267,7 @@ function bp_message_get_notices() {
 					<strong><?php echo stripslashes( wp_filter_kses( $notice->subject ) ) ?></strong><br />
 					<?php echo stripslashes( wp_filter_kses( $notice->message) ) ?>
 					<a href="#" id="close-notice"><?php _e( 'Close', 'buddypress' ) ?></a>
+					<?php wp_nonce_field( 'bp_messages_close_notice', 'close-notice-nonce' ); ?>
 				</p>
 			</div>
 			<?php
@@ -1577,7 +1576,14 @@ function bp_get_the_thread_recipients() {
  */
 function bp_get_thread_recipients_count() {
 	global $thread_template;
-	return count( $thread_template->thread->recipients );
+	/**
+	 * Filters the total number of recipients in a thread.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param int $count Total recipients number.
+	 */
+	return (int) apply_filters( 'bp_get_thread_recipients_count', count( $thread_template->thread->recipients ) );
 }
 
 /**

@@ -547,7 +547,7 @@ function bp_blogs_comments_open( $activity ) {
 		switch_to_blog( $blog_id );
 
 		// Use comments_open().
-		remove_filter( 'comments_open', 'bp_comments_open', 10, 2 );
+		remove_filter( 'comments_open', 'bp_comments_open', 10 );
 		$open = comments_open( $activity->secondary_item_id );
 		add_filter( 'comments_open', 'bp_comments_open', 10, 2 );
 
@@ -624,6 +624,15 @@ function bp_blogs_record_activity_on_site_creation( $recorded_blog, $is_private,
 	if ( ! $is_private && ! $no_activity && bp_blogs_is_blog_trackable( $recorded_blog->blog_id, $recorded_blog->user_id ) ) {
 		bp_blogs_record_activity( array(
 			'user_id'      => $recorded_blog->user_id,
+
+			/**
+			 * Filters the activity created blog primary link.
+			 *
+			 * @since 1.1.0
+			 *
+			 * @param string $value Blog primary link.
+			 * @param int    $value Blog ID.
+			 */
 			'primary_link' => apply_filters( 'bp_blogs_activity_created_blog_primary_link', bp_blogs_get_blogmeta( $recorded_blog->blog_id, 'url' ), $recorded_blog->blog_id ),
 			'type'         => 'new_blog',
 			'item_id'      => $recorded_blog->blog_id
@@ -797,7 +806,7 @@ function bp_blogs_sync_add_from_activity_comment( $comment_id, $params, $parent_
 	);
 
 	// Prevent separate activity entry being made.
-	remove_action( 'comment_post', 'bp_activity_post_type_comment', 10, 2 );
+	remove_action( 'comment_post', 'bp_activity_post_type_comment', 10 );
 
 	// Handle multisite.
 	switch_to_blog( $parent_activity->item_id );
@@ -823,7 +832,7 @@ function bp_blogs_sync_add_from_activity_comment( $comment_id, $params, $parent_
 	// permalinks to use the post comment link
 	//
 	// @todo since this is done after AJAX posting, the activity comment permalink
-	// doesn't change on the frontend until the next page refresh.
+	// doesn't change on the front end until the next page refresh.
 	$resave_activity = new BP_Activity_Activity( $comment_id );
 	$resave_activity->primary_link = get_comment_link( $post_comment_id );
 
@@ -961,8 +970,8 @@ function bp_blogs_sync_activity_edit_to_post_comment( BP_Activity_Activity $acti
 	$old_comment_status  = $post_comment_status;
 
 	// No need to edit the activity, as it's the activity who's updating the comment
-	remove_action( 'transition_comment_status',     'bp_activity_transition_post_type_comment_status', 10, 3 );
-	remove_action( 'bp_activity_post_type_comment', 'bp_blogs_comment_sync_activity_comment',          10, 4 );
+	remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+	remove_action( 'bp_activity_post_type_comment', 'bp_blogs_comment_sync_activity_comment', 10 );
 
 	if ( 1 === $activity->is_spam && 'spam' !== $post_comment_status ) {
 		wp_spam_comment( $post_comment_id );
@@ -1291,7 +1300,7 @@ function bp_blogs_can_comment_reply( $retval, $comment ) {
 
 	// Check comment depth and disable if depth is too large.
 	if ( isset( buddypress()->blogs->thread_depth[$comment->item_id] ) ){
-		if ( bp_activity_get_comment_depth() > buddypress()->blogs->thread_depth[$comment->item_id] ) {
+		if ( bp_activity_get_comment_depth( $comment ) >= buddypress()->blogs->thread_depth[$comment->item_id] ) {
 			$retval = false;
 		}
 	}

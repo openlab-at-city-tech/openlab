@@ -138,7 +138,7 @@ class BP_XProfile_User_Admin {
 					$screen_id,
 					'normal',
 					'core',
-					array( 'profile_group_id' => absint( bp_get_the_profile_group_id() ) )
+					array( 'profile_group_id' => bp_get_the_profile_group_id() )
 				);
 			endwhile;
 
@@ -227,16 +227,7 @@ class BP_XProfile_User_Admin {
 
 			// Loop through the posted fields formatting any datebox values then validate the field.
 			foreach ( (array) $posted_field_ids as $field_id ) {
-				if ( ! isset( $_POST['field_' . $field_id ] ) ) {
-					if ( ! empty( $_POST['field_' . $field_id . '_day'] ) && ! empty( $_POST['field_' . $field_id . '_month'] ) && ! empty( $_POST['field_' . $field_id . '_year'] ) ) {
-
-						// Concatenate the values.
-						$date_value =   $_POST['field_' . $field_id . '_day'] . ' ' . $_POST['field_' . $field_id . '_month'] . ' ' . $_POST['field_' . $field_id . '_year'];
-
-						// Turn the concatenated value into a timestamp.
-						$_POST['field_' . $field_id] = date( 'Y-m-d H:i:s', strtotime( $date_value ) );
-					}
-				}
+				bp_xprofile_maybe_format_datebox_post_data( $field_id );
 
 				$is_required[ $field_id ] = xprofile_check_is_required_field( $field_id ) && ! bp_current_user_can( 'bp_moderate' );
 				if ( $is_required[ $field_id ] && empty( $_POST['field_' . $field_id ] ) ) {
@@ -397,7 +388,7 @@ class BP_XProfile_User_Admin {
 
 						<?php if ( $can_change_visibility ) : ?>
 
-							<a href="#" class="button visibility-toggle-link"><?php esc_html_e( 'Change', 'buddypress' ); ?></a>
+							<button type="button" class="button visibility-toggle-link"><?php esc_html_e( 'Change', 'buddypress' ); ?></button>
 
 						<?php endif; ?>
 					</p>
@@ -411,7 +402,7 @@ class BP_XProfile_User_Admin {
 								<?php bp_profile_visibility_radio_buttons(); ?>
 
 							</fieldset>
-							<a class="button field-visibility-settings-close" href="#"><?php esc_html_e( 'Close', 'buddypress' ); ?></a>
+							<button type="button" class="button field-visibility-settings-close"><?php esc_html_e( 'Close', 'buddypress' ); ?></button>
 						</div>
 
 					<?php endif; ?>
