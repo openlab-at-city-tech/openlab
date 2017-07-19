@@ -285,9 +285,6 @@ input[type="submit"]{
 }
 .form-control{
     margin-bottom: 15px;
-    &.parsley-error {
-        margin-bottom: 0;
-    }
     &[type='file']{
         padding: 6px 12px;
     }
@@ -425,10 +422,13 @@ input[type="submit"]{
 #validation-code {
     margin-bottom: 17px;
     margin-top: 5px;
-    background: #eaeaea;
-    border: 1px solid #ddd;
+    background: @yellow;
+    border: 1px solid @yellow;
     border-radius: 2px;
-    padding: 8px 16px;
+    padding: 15px;
+    #signup_validation_code{
+        margin-left: 10px;
+    }
 }
 /**header**/
 .navbar-default{

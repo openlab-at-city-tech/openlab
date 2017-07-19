@@ -193,7 +193,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
                                 if ( bp_get_the_profile_field_is_required() ) {
                                     
                                     $this_field = bp_get_the_profile_field_input_name();
-                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container' aria-hidden='true'></div>";
+                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
                                     
                                 }
                                 
@@ -225,7 +225,7 @@ function wds_get_register_fields($account_type, $post_data = array()) {
                                 if ( bp_get_the_profile_field_is_required() ) {
                                     
                                     $this_field = bp_get_the_profile_field_input_name();
-                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container' aria-hidden='true'></div>";
+                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
                                     
                                 }
                                 
