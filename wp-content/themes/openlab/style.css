@@ -7000,6 +7000,32 @@ Custom Vars
 /*
 Bootstrap variable overrides
 */
+.has-error .help-block,
+.has-error .control-label,
+.has-error .radio,
+.has-error .checkbox,
+.has-error .radio-inline,
+.has-error .checkbox-inline {
+  color: #000000;
+}
+.has-error .form-control {
+  border-color: #ccc;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.has-error .form-control:focus {
+  border-color: #b3b3b3;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
+}
+.has-error .input-group-addon {
+  color: #000000;
+  border-color: #ccc;
+  background-color: #f2dede;
+}
+.has-error .form-control-feedback {
+  color: #000000;
+}
 /**Mixins**/
 /*
 Direct Bootstrap overrides
