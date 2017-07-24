@@ -542,9 +542,9 @@ function bp_core_fetch_avatar( $args = '' ) {
 				 * @param string $value             Subdirectory where the requested avatar should be found.
 				 * @param string $html_css_id       ID attribute for avatar.
 				 * @param string $html_width        Width attribute for avatar.
-				 * @param string $html_height       Height attribtue for avatar.
+				 * @param string $html_height       Height attribute for avatar.
 				 * @param string $avatar_folder_url Avatar URL path.
-				 * @param string $avatar_folder_dir Avatar dir path.
+				 * @param string $avatar_folder_dir Avatar DIR path.
 				 */
 				return apply_filters( 'bp_core_fetch_avatar', '<img src="' . $avatar_url . '"' . $html_class . $html_css_id  . $html_width . $html_height . $html_alt . $html_title . $extra_attr . ' />', $params, $params['item_id'], $params['avatar_dir'], $html_css_id, $html_width, $html_height, $avatar_folder_url, $avatar_folder_dir );
 
@@ -1094,15 +1094,15 @@ function bp_avatar_ajax_upload() {
 }
 add_action( 'wp_ajax_bp_avatar_upload', 'bp_avatar_ajax_upload' );
 
- /**
-  * Handle avatar webcam capture.
-  *
-  * @since 2.3.0
-  *
-  * @param string $data    Base64 encoded image.
-  * @param int    $item_id Item to associate.
-  * @return bool True on success, false on failure.
-  */
+/**
+ * Handle avatar webcam capture.
+ *
+ * @since 2.3.0
+ *
+ * @param string $data    Base64 encoded image.
+ * @param int    $item_id Item to associate.
+ * @return bool True on success, false on failure.
+ */
 function bp_avatar_handle_capture( $data = '', $item_id = 0 ) {
 	if ( empty( $data ) || empty( $item_id ) ) {
 		return false;
@@ -1293,11 +1293,13 @@ function bp_avatar_ajax_set() {
 			 * @since 2.3.4 Add two new parameters to inform about the user id and
 			 *              about the way the avatar was set (eg: 'crop' or 'camera')
 			 *              Move the action at the right place, once the avatar is set
+			 * @since 2.8.0 Added the `$avatar_data` parameter.
 			 *
-			 * @param string $item_id Inform about the user id the avatar was set for
-			 * @param string $type    Inform about the way the avatar was set ('camera')
+			 * @param string $item_id     Inform about the user id the avatar was set for.
+			 * @param string $type        Inform about the way the avatar was set ('camera').
+			 * @param array  $avatar_data Array of parameters passed to the avatar handler.
 			 */
-			do_action( 'xprofile_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'] );
+			do_action( 'xprofile_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $avatar_data );
 
 			wp_send_json_success( $return );
 		}
@@ -1342,18 +1344,11 @@ function bp_avatar_ajax_set() {
 		);
 
 		if ( 'user' === $avatar_data['object'] ) {
-			/**
-			 * Fires if the new avatar was successfully cropped.
-			 *
-			 * @since 1.1.0 Used to inform the avatar was successfully cropped
-			 * @since 2.3.4 Add two new parameters to inform about the user id and
-			 *              about the way the avatar was set (eg: 'crop' or 'camera')
-			 *              Move the action at the right place, once the avatar is set
-			 *
-			 * @param string $item_id Inform about the user id the avatar was set for
-			 * @param string $type Inform about the way the avatar was set ('crop')
-			 */
-			do_action( 'xprofile_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'] );
+			/** This action is documented in bp-core/bp-core-avatars.php */
+			do_action( 'xprofile_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r );
+		} elseif ( 'group' === $avatar_data['object'] ) {
+			/** This action is documented in bp-groups/bp-groups-screens.php */
+			do_action( 'groups_avatar_uploaded', (int) $avatar_data['item_id'], $avatar_data['type'], $r );
 		}
 
 		wp_send_json_success( $return );

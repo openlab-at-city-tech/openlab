@@ -16,10 +16,6 @@ defined( 'ABSPATH' ) || exit;
 // Include WP's list table class.
 if ( !class_exists( 'WP_List_Table' ) ) require( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
-if ( ! buddypress()->do_autoload ) {
-	require dirname( __FILE__ ) . '/classes/class-bp-groups-list-table.php';
-}
-
 // The per_page screen option. Has to be hooked in extremely early.
 if ( is_admin() && ! empty( $_REQUEST['page'] ) && 'bp-groups' == $_REQUEST['page'] )
 	add_filter( 'set-screen-option', 'bp_groups_admin_screen_options', 10, 3 );
@@ -794,7 +790,7 @@ function bp_groups_admin_index() {
  */
 function bp_groups_admin_edit_metabox_settings( $item ) {
 
-	$invite_status = groups_get_groupmeta( $item->id, 'invite_status' ); ?>
+	$invite_status = bp_group_get_invite_status( $item->id ); ?>
 
 	<?php if ( bp_is_active( 'forums' ) ) : ?>
 		<div class="bp-groups-settings-section" id="bp-groups-settings-section-forum">
@@ -839,7 +835,7 @@ function bp_groups_admin_edit_metabox_add_new_members( $item ) {
 		/* translators: accessibility text */
 		_e( 'Add new members', 'buddypress' );
 	?></label>
-	<input name="bp-groups-new-members" id="bp-groups-new-members" class="bp-suggest-user" placeholder="<?php esc_attr_e( 'Enter a comma-separated list of user logins.', 'buddypress' ) ?>" />
+	<input name="bp-groups-new-members" type="text" id="bp-groups-new-members" class="bp-suggest-user" placeholder="<?php esc_attr_e( 'Enter a comma-separated list of user logins.', 'buddypress' ) ?>" />
 	<ul id="bp-groups-new-members-list"></ul>
 	<?php
 }
@@ -877,7 +873,7 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 			'group_id'   => $item->id,
 			'group_role' => array( $type ),
 			'type'       => 'alphabetical',
-			'per_page'   => 10,
+			'per_page'   => apply_filters( 'bp_groups_admin_members_type_per_page', 10, $type ),
 			'page'       => $current_type_page,
 		) );
 
@@ -988,10 +984,6 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 				</tbody>
 			</table>
 
-			<div class="bp-group-admin-pagination table-bottom">
-				<?php echo $pagination[ $member_type ]; ?>
-			</div>
-
 		<?php else : ?>
 
 			<p class="bp-groups-no-members description"><?php esc_html_e( 'No members of this type', 'buddypress' ); ?></p>
@@ -1063,7 +1055,7 @@ function bp_groups_admin_edit_metabox_group_type( BP_Groups_Group $group = null 
 					<?php
 						echo esc_html( $type->labels['singular_name'] );
 						if ( in_array( $type->name, $backend_only ) ) {
-							printf( ' <span class="description">%s</span>', esc_html__( '(Not available on the frontend)', 'buddypress' ) );
+							printf( ' <span class="description">%s</span>', esc_html__( '(Not available on the front end)', 'buddypress' ) );
 						}
 					?>
 
@@ -1131,11 +1123,19 @@ function bp_groups_admin_create_pagination_links( BP_Group_Member_Query $query, 
 	}
 
 	// The key used to paginate this member type in the $_GET global.
-	$qs_key = $member_type . '_page';
+	$qs_key   = $member_type . '_page';
 	$url_base = remove_query_arg( array( $qs_key, 'updated', 'success_modified' ), $_SERVER['REQUEST_URI'] );
 
-	$page     = isset( $_GET[ $qs_key ] ) ? absint( $_GET[ $qs_key ] ) : 1;
-	$per_page = 10; // @todo Make this customizable?
+	$page = isset( $_GET[ $qs_key ] ) ? absint( $_GET[ $qs_key ] ) : 1;
+
+	/**
+	 * Filters the number of members per member type that is displayed in group editing admin area.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string $member_type Member type, which is a group role (admin, mod etc).
+	 */
+	$per_page = apply_filters( 'bp_groups_admin_members_type_per_page', 10, $member_type );
 
 	// Don't show anything if there's no pagination.
 	if ( 1 === $page && $query->total_users <= $per_page ) {
@@ -1158,7 +1158,7 @@ function bp_groups_admin_create_pagination_links( BP_Group_Member_Query $query, 
 		$viewing_text = __( 'Viewing 1 member', 'buddypress' );
 	} else {
 		$viewing_text = sprintf(
-			_n( 'Viewing %1$s - %2$s of %3$s member', 'Viewing %1$s - %2$s of %3$s members', $query->total_users, 'buddypress' ),
+			_nx( 'Viewing %1$s - %2$s of %3$s member', 'Viewing %1$s - %2$s of %3$s members', $query->total_users, 'Group members pagination in group admin', 'buddypress' ),
 			bp_core_number_format( $current_page_start ),
 			bp_core_number_format( $current_page_end ),
 			bp_core_number_format( $query->total_users )

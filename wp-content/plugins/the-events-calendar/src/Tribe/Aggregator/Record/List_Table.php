@@ -143,7 +143,7 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 		$field = (object) array();
 		$field->label = esc_html__( 'Filter By Origin', 'the-events-calendar' );
 		$field->placeholder = esc_attr__( 'Filter By Origin', 'the-events-calendar' );
-		$field->options = Tribe__Events__Aggregator::instance()->api( 'origins' )->get();
+		$field->options = tribe( 'events-aggregator.main' )->api( 'origins' )->get();
 
 		?>
 			<label class="screen-reader-text" for="tribe-ea-field-origin"><?php echo $field->label; ?></label>
@@ -220,7 +220,7 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 		}
 
 		// disable bulk actions if the Aggregator service is inactive
-		if ( ! Tribe__Events__Aggregator::instance()->is_service_active() ) {
+		if ( ! tribe( 'events-aggregator.main' )->is_service_active() ) {
 			return '';
 		}
 
@@ -286,6 +286,17 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 
 		foreach ( $origins as $origin => $count ) {
 			$origin_instance = Tribe__Events__Aggregator__Records::instance()->get_by_origin( $origin );
+
+			if ( null === $origin_instance ) {
+				$debug_message = sprintf(
+					'The aggregator origin "%s" contains records, but is not supported and was skipped in the counts.',
+					$origin
+				);
+				Tribe__Main::instance()->log()->log_debug( $debug_message, 'aggregator' );
+
+				continue;
+			}
+
 			$link = $this->page->get_url( array( 'tab' => $this->tab->get_slug(), 'origin' => $origin ) );
 			$text = $origin_instance->get_label() . sprintf( ' <span class="count">(%s)</span>', number_format_i18n( $count ) );
 			$views[ $origin ] = ( $given_origin !== $origin ? sprintf( '<a href="%s">%s</a>', $link, $text ) : $text );
@@ -299,15 +310,13 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 	 * @return array
 	 */
 	public function get_columns() {
-		$post_type = $this->screen->post_type;
-
 		$columns = array();
 
 		switch ( $this->tab->get_slug() ) {
 			case 'scheduled':
 				// We only need the checkbox when the EA service is active because there aren't any bulk
 				// actions when EA is disabled
-				if ( Tribe__Events__Aggregator::instance()->is_service_active() ) {
+				if ( tribe( 'events-aggregator.main' )->is_service_active() ) {
 					$columns['cb'] = '<input type="checkbox" />';
 				}
 				$columns['source'] = esc_html_x( 'Source', 'column name', 'the-events-calendar' );
@@ -343,7 +352,7 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 		}
 
 		// disable row actions if the Aggregator service is inactive
-		if ( ! Tribe__Events__Aggregator::instance()->is_service_active() ) {
+		if ( ! tribe( 'events-aggregator.main' )->is_service_active() ) {
 			return '';
 		}
 
@@ -444,6 +453,10 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 	public function column_source( $post ) {
 		$record = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $post );
 
+		if ( tribe_is_error( $record ) ) {
+			return '';
+		}
+
 		if ( 'scheduled' !== $this->tab->get_slug() ) {
 			$html[] = $this->get_status_icon( $record );
 		}
@@ -451,7 +464,7 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 		$source_info = $record->get_source_info();
 		$source_info['title'] = $source_info['title'];
 
-		if ( $record->is_schedule && Tribe__Events__Aggregator::instance()->is_service_active() ) {
+		if ( $record->is_schedule && tribe( 'events-aggregator.main' )->is_service_active() ) {
 			$html[] = '<p><b><a href="' . get_edit_post_link( $post->ID ) . '">' . esc_html( $source_info['title'] ) . '</a></b></p>';
 		} else {
 			$html[] = '<p><b>' . esc_html( $source_info['title'] ) . '</b></p>';
@@ -474,7 +487,12 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 			}
 
 			if ( ! empty( $record->meta['start'] ) ) {
-				$html[] = '<dt>' . __( 'Start:', 'the-events-calendar' ) . '</dt><dd>' . esc_html( $record->meta['start'] ) . '</dd>';
+				$start = $record->meta['start'];
+				if ( is_numeric( $start ) ) {
+					$start = date( Tribe__Date_Utils::DATEONLYFORMAT, $start );
+				}
+
+				$html[] = '<dt>' . __( 'Start:', 'the-events-calendar' ) . '</dt><dd>' . esc_html( $start ) . '</dd>';
 			}
 
 			if ( ! empty( $record->meta['location'] ) ) {
@@ -494,6 +512,10 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 	public function column_imported( $post ) {
 		$html = array();
 		$record = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $post );
+
+		if ( tribe_is_error( $record ) ) {
+			return '';
+		}
 
 		if ( 'scheduled' === $this->tab->get_slug() ) {
 			$last_import_error = $record->get_last_import_status( 'error' );
@@ -551,12 +573,21 @@ class Tribe__Events__Aggregator__Record__List_Table extends WP_List_Table {
 		$html = array();
 
 		$record = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $post );
+
+		if ( tribe_is_error( $record ) ) {
+			return '';
+		}
+
 		$last_imported = $record->get_child_record_by_status( 'success', 1 );
 
 		// is this the scheduled import page?
 		if ( $last_imported && $last_imported->have_posts() ) {
 			// Fetches the Record Object
 			$last_imported = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $last_imported->post->ID );
+
+			if ( tribe_is_error( $last_imported ) ) {
+				return '';
+			}
 
 			$html[] = '<div class="tribe-ea-total">' . number_format_i18n( $record->get_event_count( 'created' ) ) . ' ' . esc_html__( 'all time', 'the-events-calendar' ) . '</div>';
 

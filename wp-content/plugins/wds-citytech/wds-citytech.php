@@ -288,7 +288,8 @@ function wds_load_account_type() {
 	} else {
 		$return = 'Please select an Account Type.';
 	}
-	$return = str_replace( "'", "\'", $return );
+        //@to-do: determine why this is here, and if it can be deprecated
+	//$return = str_replace( "'", "\'", $return );
 	die( $return );
 }
 add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );

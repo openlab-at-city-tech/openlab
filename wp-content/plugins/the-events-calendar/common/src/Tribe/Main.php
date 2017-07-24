@@ -17,7 +17,8 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.3.5';
+	const VERSION             = '4.5.8';
+
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
 	protected $plugin_context;
@@ -80,6 +81,12 @@ class Tribe__Main {
 			return;
 		}
 
+		// the 5.2 compatible autoload file
+		require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/autoload_52.php';
+
+		// the DI container class
+		require_once dirname( __FILE__ ) . '/Container.php';
+
 		if ( is_object( $context ) ) {
 			$this->plugin_context = $context;
 			$this->plugin_context_class = get_class( $context );
@@ -95,6 +102,9 @@ class Tribe__Main {
 		$this->load_text_domain( 'tribe-common', basename( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) . '/common/lang/' );
 
 		$this->init_autoloading();
+
+		$this->bind_implementations();
+
 		$this->init_libraries();
 		$this->add_hooks();
 
@@ -149,12 +159,16 @@ class Tribe__Main {
 	 */
 	public function init_libraries() {
 		Tribe__Debug::instance();
-		Tribe__Settings_Manager::instance();
+		tribe( 'settings.manager' );
+		tribe( 'tracker' );
+		tribe( 'plugins.api' );
 		$this->pue_notices();
 
 		require_once $this->plugin_path . 'src/functions/utils.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/general.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
+
+		tribe( 'ajax.dropdown' );
 
 		// Starting the log manager needs to wait until after the tribe_*_option() functions have loaded
 		$this->log = new Tribe__Log();
@@ -164,12 +178,14 @@ class Tribe__Main {
 	 * Registers resources that can/should be enqueued
 	 */
 	public function load_assets() {
-		// These ones are only registred
+		// These ones are only registered
 		tribe_assets(
 			$this,
 			array(
 				array( 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ),
 				array( 'datatables', 'vendor/datatables/media/js/jquery.dataTables.js', array( 'jquery' ) ),
+				array( 'tribe-select2', 'vendor/select2/select2.js', array( 'jquery' ) ),
+				array( 'tribe-select2-css', 'vendor/select2/select2.css' ),
 				array( 'datatables-css', 'datatables.css' ),
 				array( 'datatables-responsive', 'vendor/datatables/extensions/Responsive/js/dataTables.responsive.js', array( 'jquery', 'datatables' ) ),
 				array( 'datatables-responsive-css', 'vendor/datatables/extensions/Responsive/css/responsive.dataTables.css' ),
@@ -182,6 +198,11 @@ class Tribe__Main {
 				array( 'tribe-datatables', 'tribe-datatables.js', array( 'datatables', 'datatables-select' ) ),
 				array( 'tribe-bumpdown', 'bumpdown.js', array( 'jquery', 'underscore', 'hoverIntent' ) ),
 				array( 'tribe-bumpdown-css', 'bumpdown.css' ),
+				array( 'tribe-buttonset-style', 'buttonset.css' ),
+				array( 'tribe-dropdowns', 'dropdowns.js', array( 'jquery', 'underscore', 'tribe-select2' ) ),
+				array( 'tribe-jquery-timepicker', 'vendor/jquery-timepicker/jquery.timepicker.js', array( 'jquery' ) ),
+				array( 'tribe-jquery-timepicker-css', 'vendor/jquery-timepicker/jquery.timepicker.css' ),
+
 			)
 		);
 
@@ -189,16 +210,28 @@ class Tribe__Main {
 		tribe_assets(
 			$this,
 			array(
-				array( 'tribe-common-admin', 'tribe-common-admin.css', array( 'tribe-dependency-style', 'tribe-bumpdown-css' ) ),
+				array( 'tribe-buttonset', 'buttonset.js', array( 'jquery', 'underscore' ) ),
+				array( 'tribe-common-admin', 'tribe-common-admin.css', array( 'tribe-dependency-style', 'tribe-bumpdown-css', 'tribe-buttonset-style' ) ),
 				array( 'tribe-dependency', 'dependency.js', array( 'jquery', 'underscore' ) ),
 				array( 'tribe-dependency-style', 'dependency.css' ),
 				array( 'tribe-pue-notices', 'pue-notices.js', array( 'jquery' ) ),
-				array( 'tribe-jquery-ui-theme', 'vendor/jquery/ui.theme.css' ),
-				array( 'tribe-jquery-ui-datepicker', 'vendor/jquery/ui.datepicker.css' ),
+				array( 'tribe-datepicker', 'datepicker.css' ),
 			),
 			'admin_enqueue_scripts',
 			array(
-				'filter' => array( Tribe__Admin__Helpers::instance(), 'is_post_type_screen' ),
+				'conditionals' => array( $this, 'should_load_common_admin_css' ),
+			)
+		);
+
+		$datepicker_months = array_values( Tribe__Date_Utils::get_localized_months_full() );
+
+		tribe_asset(
+			$this,
+			'tribe-common',
+			'tribe-common.js',
+			array( 'tribe-clipboard' ),
+			'admin_enqueue_scripts',
+			array(
 				'localize' => (object) array(
 					'name' => 'tribe_system_info',
 					'data' => array(
@@ -211,43 +244,42 @@ class Tribe__Main {
 			)
 		);
 
-		tribe_asset(
-			$this,
-			'tribe-common',
-			'tribe-common.js',
-			array( 'tribe-clipboard' ),
-			'admin_enqueue_scripts',
-			array(
-				'localize' => array(
-					'name' => 'tribe_l10n_datatables',
-					'data' => array(
-						'aria' => array(
-							'sort_ascending' => __( ': activate to sort column ascending', 'tribe-common' ),
-							'sort_descending' => __( ': activate to sort column descending', 'tribe-common' ),
-						),
-						'length_menu'   => __( 'Show _MENU_ entries', 'tribe-common' ),
-						'empty_table'   => __( 'No data available in table', 'tribe-common' ),
-						'info'          => __( 'Showing _START_ to _END_ of _TOTAL_ entries', 'tribe-common' ),
-						'info_empty'    => __( 'Showing 0 to 0 of 0 entries', 'tribe-common' ),
-						'info_filtered' => __( '(filtered from _MAX_ total entries)', 'tribe-common' ),
-						'zero_records'  => __( 'No matching records found', 'tribe-common' ),
-						'search'        => __( 'Search:', 'tribe-common' ),
-						'pagination' => array(
-							'all' => __( 'All', 'tribe-common' ),
-							'next' => __( 'Next', 'tribe-common' ),
-							'previous' => __( 'Previous', 'tribe-common' ),
-						),
-						'select' => array(
-							'rows' => array(
-								0 => '',
-								'_' => __( ': Selected %d rows', 'tribe-common' ),
-								1 => __( ': Selected 1 row', 'tribe-common' ),
-							),
-						),
-					),
+		tribe( 'tribe.asset.data' )->add( 'tribe_l10n_datatables', array(
+			'aria' => array(
+				'sort_ascending' => __( ': activate to sort column ascending', 'tribe-common' ),
+				'sort_descending' => __( ': activate to sort column descending', 'tribe-common' ),
+			),
+			'length_menu'   => __( 'Show _MENU_ entries', 'tribe-common' ),
+			'empty_table'   => __( 'No data available in table', 'tribe-common' ),
+			'info'          => __( 'Showing _START_ to _END_ of _TOTAL_ entries', 'tribe-common' ),
+			'info_empty'    => __( 'Showing 0 to 0 of 0 entries', 'tribe-common' ),
+			'info_filtered' => __( '(filtered from _MAX_ total entries)', 'tribe-common' ),
+			'zero_records'  => __( 'No matching records found', 'tribe-common' ),
+			'search'        => __( 'Search:', 'tribe-common' ),
+			'pagination' => array(
+				'all' => __( 'All', 'tribe-common' ),
+				'next' => __( 'Next', 'tribe-common' ),
+				'previous' => __( 'Previous', 'tribe-common' ),
+			),
+			'select' => array(
+				'rows' => array(
+					0 => '',
+					'_' => __( ': Selected %d rows', 'tribe-common' ),
+					1 => __( ': Selected 1 row', 'tribe-common' ),
 				),
-			)
-		);
+			),
+			'datepicker' => array(
+				'dayNames'        => Tribe__Date_Utils::get_localized_weekdays_full(),
+				'dayNamesShort'   => Tribe__Date_Utils::get_localized_weekdays_short(),
+				'dayNamesMin'     => Tribe__Date_Utils::get_localized_weekdays_initial(),
+				'monthNames'      => $datepicker_months,
+				'monthNamesShort' => $datepicker_months, // We deliberately use full month names here
+				'nextText'        => esc_html__( 'Next', 'the-events-calendar' ),
+				'prevText'        => esc_html__( 'Prev', 'the-events-calendar' ),
+				'currentText'     => esc_html__( 'Today', 'the-events-calendar' ),
+				'closeText'       => esc_html__( 'Done', 'the-events-calendar' ),
+			),
+		) );
 	}
 
 	/**
@@ -289,6 +321,32 @@ class Tribe__Main {
 	}
 
 	/**
+	 * Tells us if we're on an admin screen that needs the Common admin CSS.
+	 *
+	 * Currently this includes post type screens, the Plugins page, Settings pages
+	 * and tabs, Tribe App Shop page, and the Help screen.
+	 *
+	 * @since 4.5.7
+	 *
+	 * @return bool
+	 */
+	public function should_load_common_admin_css() {
+		$helper = Tribe__Admin__Helpers::instance();
+
+		// Are we on a post type screen?
+		$is_post_type = $helper->is_post_type_screen();
+
+		// Are we on the Plugins page?
+		$is_plugins = $helper->is_screen( 'plugins' );
+
+		// Are we viewing a generic Tribe screen?
+		// Includes: Events > Settings, Events > Help, App Shop page, and more.
+		$is_tribe_screen = $helper->is_screen();
+
+		return $is_post_type || $is_plugins || $is_tribe_screen;
+	}
+
+	/**
 	 * A Helper method to load text domain
 	 * First it tries to load the wp-content/languages translation then if falls to the
 	 * try to load $dir language files
@@ -300,7 +358,7 @@ class Tribe__Main {
 	 */
 	public function load_text_domain( $domain, $dir = false ) {
 		// Added safety just in case this runs twice...
-		if ( is_textdomain_loaded( $domain ) && ! is_a( $GLOBALS['l10n'][ $domain ], 'NOOP_Translations' ) ) {
+		if ( is_textdomain_loaded( $domain ) && ! $GLOBALS['l10n'][ $domain ] instanceof NOOP_Translations ) {
 			return true;
 		}
 
@@ -456,5 +514,19 @@ class Tribe__Main {
 		 * @since 4.3
 		 */
 		do_action( 'tribe_plugins_loaded' );
+	}
+
+	/**
+	 * Registers the slug bound to the implementations in the container.
+	 */
+	public function bind_implementations() {
+		tribe_singleton( 'settings.manager', 'Tribe__Settings_Manager' );
+		tribe_singleton( 'settings', 'Tribe__Settings', array( 'hook' ) );
+		tribe_singleton( 'tribe.asset.data', 'Tribe__Asset__Data', array( 'hook' ) );
+		tribe_singleton( 'ajax.dropdown', 'Tribe__Ajax__Dropdown', array( 'hook' ) );
+		tribe_singleton( 'tracker', 'Tribe__Tracker', array( 'hook' ) );
+		tribe_singleton( 'chunker', 'Tribe__Meta__Chunker', array( 'set_post_types', 'hook' ) );
+		tribe_singleton( 'cache', 'Tribe__Cache' );
+		tribe_singleton( 'plugins.api', 'Tribe__Plugins_API', array( 'hook' ) );
 	}
 }

@@ -267,7 +267,7 @@ class Featured_Content {
 
 	/**
 	 * Exclude featured posts from the blog query when the blog is the front-page,
-	 * and user has not checked the "Display tag content in all listings" checkbox.
+	 * and user has not checked the "Also display tagged posts outside the Featured Content area" checkbox.
 	 *
 	 * Filter the home page posts, and remove any featured post ID's from it.
 	 * Hooked onto the 'pre_get_posts' action, this changes the parameters of the
@@ -493,14 +493,14 @@ class Featured_Content {
 			'priority'       => 20,
 		) );
 		$wp_customize->add_control( 'featured-content[hide-tag]', array(
-			'label'          => __( 'Hide tag from displaying in post meta and tag clouds.', 'jetpack' ),
+			'label'          => __( 'Do not display tag in post details and tag clouds.', 'jetpack' ),
 			'section'        => 'featured_content',
 			'theme_supports' => 'featured-content',
 			'type'           => 'checkbox',
 			'priority'       => 30,
 		) );
 		$wp_customize->add_control( 'featured-content[show-all]', array(
-			'label'          => __( 'Display tag content in all listings.', 'jetpack' ),
+			'label'          => __( 'Also display tagged posts outside the Featured Content area.', 'jetpack' ),
 			'section'        => 'featured_content',
 			'theme_supports' => 'featured-content',
 			'type'           => 'checkbox',
@@ -640,5 +640,18 @@ class Featured_Content {
 }
 
 Featured_Content::setup();
+
+/**
+ * Adds the featured content plugin to the set of files for which action 
+ * handlers should be copied when the theme context is loaded by the REST API.
+ *
+ * @param array $copy_dirs Copy paths with actions to be copied
+ * @return array Copy paths with featured content plugin
+ */
+function wpcom_rest_api_featured_content_copy_plugin_actions( $copy_dirs ) {
+	$copy_dirs[] = __FILE__;
+	return $copy_dirs;
+}
+add_action( 'restapi_theme_action_copy_dirs', 'wpcom_rest_api_featured_content_copy_plugin_actions' );
 
 } // end if ( ! class_exists( 'Featured_Content' ) && isset( $GLOBALS['pagenow'] ) && 'plugins.php' !== $GLOBALS['pagenow'] ) {

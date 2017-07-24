@@ -333,7 +333,6 @@
             <div class='block'>
                 <h3>Server Information</h3>
 				<?php
-				$safe_mode			 = ini_get( 'safe_mode' ) ? ini_get( 'safe_mode' ) : 'Off';
 				$upload_max			 = ini_get( 'upload_max_filesize' ) ? ini_get( 'upload_max_filesize' ) : 'N/A';
 				$post_max			 = ini_get( 'post_max_size' ) ? ini_get( 'post_max_size' ) : 'N/A';
 				$memory_limit		 = ini_get( 'memory_limit' ) ? ini_get( 'memory_limit' ) : 'N/A';

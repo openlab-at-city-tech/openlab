@@ -349,6 +349,7 @@ function openlab_registration_page() {
 
                             <div class="form-group">
                                 <label class="control-label" for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
+                                <div id="signup_username_error" class="error-container"></div>
                                 <?php do_action('bp_signup_username_errors') ?>
                                 <input
                                     class="form-control"
@@ -359,6 +360,7 @@ function openlab_registration_page() {
                                     data-parsley-lowercase
                                     data-parsley-nospecialchars
                                     data-parsley-required
+                                    data-parsley-required-message="Username is required."
                                     data-parsley-minlength="4"
                                     data-parsley-remote="<?php
                                     echo add_query_arg(array(
@@ -367,11 +369,13 @@ function openlab_registration_page() {
                                             ), $ajaxurl);
                                     ?>"
                                     data-parsley-remote-message="That username is already taken."
+                                    data-parsley-errors-container="#signup_username_error"
                                     />
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>
+                                <div id="signup_email_error" class="error-container"></div>
                                 <?php do_action('bp_signup_email_errors') ?>
                                 <input
                                     class="form-control"
@@ -381,13 +385,16 @@ function openlab_registration_page() {
                                     value="<?php echo openlab_post_value('signup_email') ?>"
                                     data-parsley-trigger="blur"
                                     data-parsley-required
+                                    data-parsley-required-message="Email is required."
                                     data-parsley-type="email"
                                     data-parsley-group="email"
                                     data-parsley-iff="#signup_email_confirm"
                                     data-parsley-iff-message=""
+                                    data-parsley-errors-container="#signup_email_error"
                                     />
 
                                 <label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
+                                <div id="signup_email_confirm_error" class="error-container"></div>
                                 <input
                                     class="form-control"
                                     type="text"
@@ -396,15 +403,18 @@ function openlab_registration_page() {
                                     value="<?php echo openlab_post_value('signup_email_confirm') ?>"
                                     data-parsley-trigger="blur"
                                     data-parsley-required
+                                    data-parsley-required-message="Confirming your email is required."
                                     data-parsley-type="email"
                                     data-parsley-iff="#signup_email"
                                     data-parsley-iff-message="Email addresses must match."
                                     data-parsley-group="email"
+                                    data-parsley-errors-container="#signup_email_confirm_error"
                                     />
                             </div>
 
                             <div data-parsley-children-should-match class="form-group">
                                 <label class="control-label" for="signup_password"><?php _e('Choose a Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+                                <div id="signup_password_error" class="error-container"></div>
                                 <?php do_action('bp_signup_password_errors') ?>
                                 <div class="password-field">
                                     <input
@@ -415,15 +425,18 @@ function openlab_registration_page() {
                                         value=""
                                         data-parsley-trigger="blur"
                                         data-parsley-required
+                                        data-parsley-required-message="Password is required."
                                         data-parsley-group="password"
                                         data-parsley-iff="#signup_password_confirm"
                                         data-parsley-iff-message=""
+                                        data-parsley-errors-container="#signup_password_error"
                                         />
 
                                     <div id="password-strength-notice" class="password-strength-notice"></div>
                                 </div>
 
                                 <label class="control-label" for="signup_password_confirm"><?php _e('Confirm Password', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?></label>
+                                <div id="signup_password_confirm_error" class="error-container"></div>
                                 <?php do_action('bp_signup_password_confirm_errors') ?>
                                 <input
                                     class="form-control password-field"
@@ -433,9 +446,11 @@ function openlab_registration_page() {
                                     value=""
                                     data-parsley-trigger="blur"
                                     data-parsley-required
+                                    data-parsley-required-message="Confirming your password is required."
                                     data-parsley-group="password"
                                     data-parsley-iff="#signup_password"
                                     data-parsley-iff-message="Passwords must match."
+                                    data-parsley-errors-container="#signup_password_confirm_error"
                                     />
                             </div>
 

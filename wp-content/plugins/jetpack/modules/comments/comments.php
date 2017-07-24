@@ -275,7 +275,8 @@ class Jetpack_Comments extends Highlander_Comments_Base {
 		}
 
 		$params['sig']    = $signature;
-		$url              = "https://jetpack.wordpress.com/jetpack-comment/?" . http_build_query( $params );
+		$url_origin       = set_url_scheme( 'http://jetpack.wordpress.com' );
+		$url              = "{$url_origin}/jetpack-comment/?" . http_build_query( $params );
 		$url              = "{$url}#parent=" . urlencode( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) );
 		$this->signed_url = $url;
 		$height           = $params['comment_registration'] || is_user_logged_in() ? '315' : '430'; // Iframe can be shorter if we're not allowing guest commenting
@@ -285,13 +286,37 @@ class Jetpack_Comments extends Highlander_Comments_Base {
 			$url .= '&replytocom=' . (int) $_GET['replytocom'];
 		}
 
+		/**
+		 * Filter whether the comment title can be displayed.
+		 *
+		 * @module comments
+		 *
+		 * @since 4.7.0
+		 *
+		 * @param bool $show Can the comment be displayed? Default to true.
+		 */
+		$show_greeting = apply_filters( 'jetpack_comment_form_display_greeting', true );
+
 		// The actual iframe (loads comment form from Jetpack server)
 		?>
 
 		<div id="respond" class="comment-respond">
-			<h3 id="reply-title" class="comment-reply-title"><?php comment_form_title( esc_html( $params['greeting'] ), esc_html( $params['greeting_reply'] ) ); ?> <small><?php cancel_comment_reply_link( esc_html__( 'Cancel reply' , 'jetpack') ); ?></small></h3>
+			<?php if ( true === $show_greeting ) : ?>
+				<h3 id="reply-title" class="comment-reply-title"><?php comment_form_title( esc_html( $params['greeting'] ), esc_html( $params['greeting_reply'] ) ); ?> <small><?php cancel_comment_reply_link( esc_html__( 'Cancel reply' , 'jetpack') ); ?></small></h3>
+			<?php endif; ?>
 			<form id="commentform" class="comment-form">
-				<iframe src="<?php echo esc_url( $url ); ?>" allowtransparency="<?php echo $transparent; ?>" style="width:100%; height: <?php echo $height; ?>px;border:0;" frameBorder="0" scrolling="no" name="jetpack_remote_comment" id="jetpack_remote_comment"></iframe>
+				<iframe src="<?php echo esc_url( $url ); ?>" style="width:100%; height: <?php echo $height; ?>px; border:0;" name="jetpack_remote_comment" class="jetpack_remote_comment" id="jetpack_remote_comment"></iframe>
+				<!--[if !IE]><!-->
+				<script>
+					document.addEventListener( 'DOMContentLoaded', function () {
+						var commentForms = document.getElementsByClassName( 'jetpack_remote_comment' );
+						for ( var i = 0; i < commentForms.length; i++ ) {
+							commentForms[i].allowTransparency = <?php echo $transparent; ?>;
+							commentForms[i].scrolling = 'no';
+						}
+					} );
+				</script>
+				<!--<![endif]-->
 			</form>
 		</div>
 
@@ -308,7 +333,7 @@ class Jetpack_Comments extends Highlander_Comments_Base {
 	 * @since JetpackComments (1.4)
 	 */
 	public function watch_comment_parent() {
-		$url_origin = 'https://jetpack.wordpress.com';
+		$url_origin = set_url_scheme( 'http://jetpack.wordpress.com' );
 	?>
 
 		<!--[if IE]>

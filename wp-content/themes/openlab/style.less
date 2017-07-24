@@ -285,9 +285,6 @@ input[type="submit"]{
 }
 .form-control{
     margin-bottom: 15px;
-    &.parsley-error {
-        margin-bottom: 0;
-    }
     &[type='file']{
         padding: 6px 12px;
     }
@@ -309,9 +306,14 @@ input[type="submit"]{
     }
 }
 .parsley-errors-list.filled {
+    margin: 0;
+    padding: 0;
     padding-left: 0;
     list-style-type: none;
     font-weight: bold;
+    li{
+        margin: 0;
+    }
 }
 .notify-settings {
     .notify-members {
@@ -418,11 +420,15 @@ input[type="submit"]{
     display: none;
 }
 #validation-code {
-    margin-top: 8px;
-    background: #eaeaea;
-    border: 1px solid #ddd;
+    margin-bottom: 17px;
+    margin-top: 5px;
+    background: @yellow;
+    border: 1px solid @yellow;
     border-radius: 2px;
-    padding: 8px 16px;
+    padding: 15px;
+    #signup_validation_code{
+        margin-left: 10px;
+    }
 }
 /**header**/
 .navbar-default{
@@ -851,6 +857,14 @@ body{
             margin-top: 5px;
             background: @yellow;
             border-color: @yellow;
+        }
+        .has-error{
+            .error{
+                padding: 0;
+                .parsley-errors-list{
+                    padding: 15px;
+                }
+            }
         }
     }
     .panel-body{

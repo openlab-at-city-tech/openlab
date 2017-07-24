@@ -1,11 +1,11 @@
-=== OSM - OpenStreetMap ===
+﻿=== OSM - OpenStreetMap ===
 Contributors: MiKa
 Tags: map, OpenStreetMap, googlemaps, geo, KML, GPX, geotag, geolocation, geocache, geocaching, OSM, travelogue, OpenLayers, CloudMade, marker, POI, geocode, geotagging, location, Tracks, WMS, fullscreen, OpenSeaMap, stamen, basemap, exif, meta, widget, thunderforest
 Requires at least: 3.0
-Tested up to: 4.5
-Stable tag: 3.7
+Tested up to: 4.7.4
+Stable tag: 3.9.4
 
-Customize maps in your post, pages and widgets. Add geotag to your blog and site. Use GPX, KML, ... 
+Customize maps in your post, pages and widgets. GPX, KML and more. The easy way to map! 
 
 == Description ==
 If you want to get detailed information about the OSM-plugin visit these pages:
@@ -13,7 +13,7 @@ If you want to get detailed information about the OSM-plugin visit these pages:
 * Homepage: [WP-OSM-Plugin](http://wp-osm-plugin.hanblog.net/ "OSM-plugin")
 * Forum: [EN|DE](http://wp-osm-plugin.hanblog.net/forums/ "OSM-plugin forum EN|DE")
 * Twitter: [@WP_OSM_Plugin](https://twitter.com/wp_osm_plugin "@WP_OSM_Plugin")
-* FacebooK: [HanBlog Net](https://de-de.facebook.com/people/HanBlog-Net/100010432170169 "HanBlog")
+* FacebooK: [@WpOsmPlugin](https://www.facebook.com/WpOsmPlugin "@WpOsmPlugin")
 
 Features of the OSM-plugin:
 
@@ -43,7 +43,7 @@ Licenses of the maps:
 * OpenStreetMap: [OpenStreetMap License](http://wiki.openstreetmap.org/wiki/OpenStreetMap_License) 
 * Stamen Maps: [Stamen License](http://maps.stamen.com)
 * BaseMap:  [BaseMap License](http://basemap.at)
-* Thunderforest: [Thunderforest License](http://www.thunderforest.com/terms/)
+* Thunderforest (API key): [Thunderforest License](http://www.thunderforest.com/terms/)
 * WMS: Depends on the map you are including - check it before including it!
 
 == Installation ==

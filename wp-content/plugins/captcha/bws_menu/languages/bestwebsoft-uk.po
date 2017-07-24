@@ -2,18 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bestwebsoft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-28 17:08+0200\n"
-"PO-Revision-Date: 2017-02-28 17:08+0200\n"
+"POT-Creation-Date: 2017-06-08 15:43+0300\n"
+"PO-Revision-Date: 2017-07-03 13:22+0300\n"
 "Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
 "Language-Team: bestwebsoft.com <https://support.bestwebsoft.com>\n"
-"Language: ru_RU\n"
+"Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: bws_functions.php:72 bws_functions.php:190
@@ -48,15 +50,15 @@ msgstr "Оцінити"
 msgid "Need help?"
 msgstr "Потрібна допомога?"
 
-#: bws_functions.php:103 bws_functions.php:916 class-bws-settings.php:1036
+#: bws_functions.php:103 bws_functions.php:907 class-bws-settings.php:1047
 msgid "Visit Help Center"
-msgstr "Перейти в Help Center"
+msgstr "Перейти до Help Center"
 
 #: bws_functions.php:106
 msgid "Want to support the plugin?"
 msgstr "Хочете підтримати плагін?"
 
-#: bws_functions.php:107 bws_menu.php:551
+#: bws_functions.php:107 bws_menu.php:553
 msgid "Donate"
 msgstr "Пожертвувати"
 
@@ -76,8 +78,8 @@ msgstr ""
 "вкладці Client Area. Ми настійливо рекомендуємо Вам вирішити це питання "
 "протягом 24 годин, інакше плагін буде деактивовано."
 
-#: bws_functions.php:127 bws_functions.php:339 bws_menu.php:625
-#: class-bws-settings.php:142
+#: bws_functions.php:127 bws_functions.php:339 bws_menu.php:627
+#: class-bws-settings.php:143
 msgid "Learn More"
 msgstr "Дізнатись більше"
 
@@ -123,20 +125,21 @@ msgstr ""
 "ласка, оновіть WordPress до останньої версії."
 
 #: bws_functions.php:207
-msgid "Thank you for installing"
-msgstr "Дякуємо, що встановили"
+#, php-format
+msgid "Thank you for installing %s plugin!"
+msgstr "Дякуємо, що встановили %s плагін!"
 
 #: bws_functions.php:208
 msgid "Let's get started"
 msgstr "Розпочнемо"
 
-#: bws_functions.php:209 bws_functions.php:242 bws_menu.php:555
-#: bws_menu.php:557
+#: bws_functions.php:209 bws_functions.php:242 bws_menu.php:557
+#: bws_menu.php:559
 msgid "Settings"
 msgstr "Налаштування"
 
-#: bws_functions.php:211 bws_menu.php:326 class-bws-settings.php:725
-#: class-bws-settings.php:1038 class-bws-settings.php:1048 deprecated.php:694
+#: bws_functions.php:211 bws_menu.php:328 class-bws-settings.php:736
+#: class-bws-settings.php:1049 class-bws-settings.php:1059 deprecated.php:694
 msgid "or"
 msgstr "або"
 
@@ -145,7 +148,7 @@ msgid "Add New"
 msgstr "Додати"
 
 #: bws_functions.php:216 bws_functions.php:226 bws_functions.php:330
-#: bws_functions.php:378 bws_functions.php:482
+#: bws_functions.php:378 bws_functions.php:480
 msgid "Close notice"
 msgstr "Закрити"
 
@@ -196,11 +199,12 @@ msgstr ""
 "Ваш ліцензійний ключ для %s витікає %s та ви більше не будете отримувати "
 "першочергову технічну підтримку та оновлення."
 
-#: bws_functions.php:477
-msgid "Thank you for choosing"
-msgstr "Дякуємо, що обрали"
+#: bws_functions.php:475
+#, php-format
+msgid "Thank you for choosing %s plugin!"
+msgstr "Дякую за вибір плагіна %s!"
 
-#: bws_functions.php:478
+#: bws_functions.php:476
 msgid ""
 "If you have a feature, suggestion or idea you'd like to see in the plugin, "
 "we'd love to hear about it!"
@@ -209,25 +213,25 @@ msgstr ""
 "функціоналу плагіна, будь ласка, надсилайте їх нам! Ми завжди відкриті для "
 "нових ідей!"
 
-#: bws_functions.php:479
+#: bws_functions.php:477
 msgid "Suggest a Feature"
 msgstr "Запропонувати функціонал"
 
-#: bws_functions.php:495 class-bws-settings.php:532 class-bws-settings.php:535
-#: class-bws-settings.php:583 class-bws-settings.php:586
+#: bws_functions.php:493 class-bws-settings.php:533 class-bws-settings.php:536
+#: class-bws-settings.php:584 class-bws-settings.php:587
 msgid "Notice"
 msgstr "Зауважте"
 
-#: bws_functions.php:495
+#: bws_functions.php:493
 msgid "The plugin's settings have been changed."
 msgstr "Налаштування плагіну змінено."
 
-#: bws_functions.php:496 class-bws-settings.php:181 class-bws-settings.php:201
+#: bws_functions.php:494 class-bws-settings.php:182 class-bws-settings.php:202
 #: deprecated.php:640
 msgid "Save Changes"
 msgstr "Зберегти зміни"
 
-#: bws_functions.php:510
+#: bws_functions.php:508
 msgid ""
 "You can always look at premium options by checking the \"Pro Options\" in "
 "the \"Misc\" tab."
@@ -235,72 +239,80 @@ msgstr ""
 "Ви завжди можете подивитися на преміум опції, натиснувши на кнопку \"Pro "
 "опції\" на вкладці \"Різне\"."
 
-#: bws_functions.php:651
+#: bws_functions.php:629
+msgid "Add BWS Shortcode"
+msgstr "Додати BWS шорткод"
+
+#: bws_functions.php:630
+msgid "Add BWS Plugins Shortcode"
+msgstr "Додати шорткод BWS плагіну"
+
+#: bws_functions.php:649
 msgid "Add shortcode"
 msgstr "Додати шорткод"
 
-#: bws_functions.php:651
+#: bws_functions.php:649
 msgid "Add BestWebSoft plugins' shortcodes using this button."
 msgstr "Додайте шорткоди BestWebSoft плагінів за допомогою цієї кнопки."
 
-#: bws_functions.php:700
+#: bws_functions.php:695
 msgid "Close"
 msgstr "Закрити"
 
-#: bws_functions.php:792
+#: bws_functions.php:787
 msgid "Are you sure you want to restore default settings?"
 msgstr "Ви впевнені, що хочете скинути налаштування плагіну до стандартних?"
 
-#: bws_functions.php:795
+#: bws_functions.php:790
 msgid "Yes, restore all settings"
 msgstr "Так, скинути налаштування"
 
-#: bws_functions.php:796
+#: bws_functions.php:791
 msgid "No, go back to the settings page"
 msgstr "Ні, повернутись назад на сторінку налаштувань"
 
-#: bws_functions.php:842
+#: bws_functions.php:833
 msgid "Plugin"
 msgstr "Плагін"
 
-#: bws_functions.php:851
+#: bws_functions.php:842
 msgid "Shortcode settings"
 msgstr "Налаштування шорткоду"
 
-#: bws_functions.php:856
+#: bws_functions.php:847
 msgid "The shortcode will be inserted"
 msgstr "Буде вставлено шорткод"
 
-#: bws_functions.php:861
+#: bws_functions.php:852
 msgid "Insert"
 msgstr "Вставити"
 
-#: bws_functions.php:921
+#: bws_functions.php:912
 msgid "FAQ"
 msgstr "FAQ"
 
-#: bws_functions.php:927
+#: bws_functions.php:918
 msgid "For more information:"
 msgstr "Для отримання додаткової інформації:"
 
-#: bws_functions.php:928
+#: bws_functions.php:919
 msgid "Documentation"
 msgstr "Документація"
 
-#: bws_functions.php:929
+#: bws_functions.php:920
 msgid "Video Instructions"
 msgstr "Відео інструкції"
 
-#: bws_functions.php:930
+#: bws_functions.php:921
 msgid "Submit a Request"
 msgstr "Надіслати запит"
 
-#: bws_menu.php:99 class-bws-settings.php:770 deprecated.php:322
+#: bws_menu.php:101 class-bws-settings.php:781 deprecated.php:322
 msgid "Wrong license key"
 msgstr "Невірний ключ ліцензії"
 
-#: bws_menu.php:120 class-bws-settings.php:796 class-bws-settings.php:863
-#: class-bws-settings.php:899 deprecated.php:133 deprecated.php:199
+#: bws_menu.php:122 class-bws-settings.php:807 class-bws-settings.php:874
+#: class-bws-settings.php:910 deprecated.php:133 deprecated.php:199
 #: deprecated.php:352
 msgid ""
 "Something went wrong. Please try again later. If the error appears again, "
@@ -309,33 +321,33 @@ msgstr ""
 "Щось не так, спробуйте пізніше. Якщо помилка повториться, будь ласка, "
 "повідомте нам"
 
-#: bws_menu.php:120 class-bws-settings.php:796 class-bws-settings.php:863
-#: class-bws-settings.php:899 deprecated.php:133 deprecated.php:199
+#: bws_menu.php:122 class-bws-settings.php:807 class-bws-settings.php:874
+#: class-bws-settings.php:910 deprecated.php:133 deprecated.php:199
 #: deprecated.php:352
 msgid "We are sorry for inconvenience."
 msgstr "Просимо вибачення за незручності."
 
-#: bws_menu.php:126 class-bws-settings.php:802 class-bws-settings.php:905
+#: bws_menu.php:128 class-bws-settings.php:813 class-bws-settings.php:916
 #: deprecated.php:139 deprecated.php:358
 msgid "Wrong license key."
 msgstr "Неправильний ліцензійний ключ."
 
-#: bws_menu.php:128
+#: bws_menu.php:130
 msgid ""
 "This license key is bound to another site. Change it via personal Client "
 "Area."
 msgstr ""
 "Цей ліцензійний ключ прив'язано до іншого сайту. Змініть це в Client Area."
 
-#: bws_menu.php:128
+#: bws_menu.php:130
 msgid "Log in"
 msgstr "Увійти"
 
-#: bws_menu.php:130 bws_menu.php:332 deprecated.php:261
+#: bws_menu.php:132 bws_menu.php:334 deprecated.php:261
 msgid "Unfortunately, you have exceeded the number of available tries per day."
 msgstr "На жаль, ви перевищили кількість допустимих спроб."
 
-#: bws_menu.php:132 class-bws-settings.php:911 deprecated.php:364
+#: bws_menu.php:134 class-bws-settings.php:922 deprecated.php:364
 #, php-format
 msgid ""
 "Unfortunately, Your license has expired. To continue getting top-priority "
@@ -344,7 +356,7 @@ msgstr ""
 "На жаль, ваша ліцензія скінчилась. Для того, щоб і надалі отримувати "
 "першочергову техпідтримку і оновлення, будь ласка, продовжте ліцензію на  %s"
 
-#: bws_menu.php:134 class-bws-settings.php:913 deprecated.php:366
+#: bws_menu.php:136 class-bws-settings.php:924 deprecated.php:366
 msgid ""
 "Unfortunately, the Pro licence was already installed to this domain. The Pro "
 "Trial license can be installed only once."
@@ -352,19 +364,19 @@ msgstr ""
 "На жаль, Pro ліцензія уже використовувалась на цьому домені.  Тріал Pro "
 "версії плагіну можна використати лише один раз."
 
-#: bws_menu.php:140 class-bws-settings.php:817 deprecated.php:153
+#: bws_menu.php:142 class-bws-settings.php:828 deprecated.php:153
 msgid "The license key is valid."
 msgstr "Ліцензійний ключ дійсний."
 
-#: bws_menu.php:142 class-bws-settings.php:820 deprecated.php:156
+#: bws_menu.php:144 class-bws-settings.php:831 deprecated.php:156
 msgid "Your license will expire on"
 msgstr "Ваша ліцензія закінчується"
 
-#: bws_menu.php:144
+#: bws_menu.php:146
 msgid "Congratulations! Pro Membership license is  activated successfully."
 msgstr "Вітаємо! Pro Membership ліцензія успішно активована."
 
-#: bws_menu.php:151 class-bws-settings.php:985 deprecated.php:435
+#: bws_menu.php:153 class-bws-settings.php:996 deprecated.php:435
 msgid ""
 "Something went wrong. Try again later or upload the plugin manually. We are "
 "sorry for inconvenience."
@@ -372,213 +384,213 @@ msgstr ""
 "Виникли певні проблеми. Спробуйте ще раз пізніше або завантажте плагін "
 "вручну. Просимо вибачення за незручності."
 
-#: bws_menu.php:161
+#: bws_menu.php:163
 msgid "Please enter your license key."
 msgstr "Будь ласка, введіть ваш ліцензійний ключ."
 
-#: bws_menu.php:172
+#: bws_menu.php:174
 msgid "Not set"
 msgstr "Не задано"
 
-#: bws_menu.php:174
+#: bws_menu.php:176
 msgid "On"
 msgstr "Увімк."
 
-#: bws_menu.php:174
+#: bws_menu.php:176
 msgid "Off"
 msgstr "Вимк."
 
-#: bws_menu.php:175 bws_menu.php:176 bws_menu.php:177 bws_menu.php:178
-#: bws_menu.php:179 bws_menu.php:180 bws_menu.php:189
+#: bws_menu.php:177 bws_menu.php:178 bws_menu.php:179 bws_menu.php:180
+#: bws_menu.php:181 bws_menu.php:182 bws_menu.php:191
 msgid "N/A"
 msgstr "Невідомо"
 
-#: bws_menu.php:180
+#: bws_menu.php:182
 msgid " Mb"
 msgstr "Мб"
 
-#: bws_menu.php:181 bws_menu.php:182 bws_menu.php:183 bws_menu.php:187
+#: bws_menu.php:183 bws_menu.php:184 bws_menu.php:185 bws_menu.php:189
 msgid "Yes"
 msgstr "Так"
 
-#: bws_menu.php:181 bws_menu.php:182 bws_menu.php:183 bws_menu.php:187
+#: bws_menu.php:183 bws_menu.php:184 bws_menu.php:185 bws_menu.php:189
 msgid "No"
 msgstr "Ні"
 
-#: bws_menu.php:194
+#: bws_menu.php:196
 msgid "WordPress Environment"
 msgstr "Системне оточення WordPress"
 
-#: bws_menu.php:196
+#: bws_menu.php:198
 msgid "Home URL"
 msgstr "Адреса домашньої сторінки"
 
-#: bws_menu.php:197
+#: bws_menu.php:199
 msgid "Website URL"
 msgstr "Адреса сайту"
 
-#: bws_menu.php:198
+#: bws_menu.php:200
 msgid "WP Version"
 msgstr "Версія WordPress"
 
-#: bws_menu.php:199
+#: bws_menu.php:201
 msgid "WP Multisite"
 msgstr "Мультисайт"
 
-#: bws_menu.php:200
+#: bws_menu.php:202
 msgid "WP Memory Limit"
 msgstr "Ліміт пам’яті WordPress"
 
-#: bws_menu.php:201
+#: bws_menu.php:203
 msgid "Active Theme"
 msgstr "Активна тема"
 
-#: bws_menu.php:201 bws_menu.php:246 bws_menu.php:249
+#: bws_menu.php:203 bws_menu.php:248 bws_menu.php:251
 #, php-format
 msgid "by %s"
 msgstr "%s"
 
-#: bws_menu.php:205
+#: bws_menu.php:207
 msgid "Server Environment"
 msgstr "Системне оточення сервера"
 
-#: bws_menu.php:207
+#: bws_menu.php:209
 msgid "Operating System"
 msgstr "Операційна система"
 
-#: bws_menu.php:208
+#: bws_menu.php:210
 msgid "Server"
 msgstr "Тип серверу"
 
-#: bws_menu.php:209
+#: bws_menu.php:211
 msgid "PHP Version"
 msgstr "Версія PHP"
 
-#: bws_menu.php:210
+#: bws_menu.php:212
 msgid "PHP Allow URL fopen"
 msgstr "Дозволити PHP URL fopen"
 
-#: bws_menu.php:211
+#: bws_menu.php:213
 msgid "PHP Memory Limit"
 msgstr "Ліміт пам’яті"
 
-#: bws_menu.php:212
+#: bws_menu.php:214
 msgid "Memory Usage"
 msgstr "Використання пам'яті"
 
-#: bws_menu.php:213
+#: bws_menu.php:215
 msgid "PHP Max Upload Size"
 msgstr "Макс. розмір файлу, що завантажується"
 
-#: bws_menu.php:214
+#: bws_menu.php:216
 msgid "PHP Max Post Size"
 msgstr "Макс. розмір посту"
 
-#: bws_menu.php:215
+#: bws_menu.php:217
 msgid "PHP Max Script Execute Time"
 msgstr "Макс. час виконання сценарію"
 
-#: bws_menu.php:216
+#: bws_menu.php:218
 msgid "PHP Exif support"
 msgstr "Підтримка PHP Exif"
 
-#: bws_menu.php:217
+#: bws_menu.php:219
 msgid "PHP IPTC support"
 msgstr "Підтримка PHP IPTC"
 
-#: bws_menu.php:218
+#: bws_menu.php:220
 msgid "PHP XML support"
 msgstr "Підтримка PHP XML"
 
-#: bws_menu.php:224
+#: bws_menu.php:226
 msgid "Database"
 msgstr "База даних"
 
-#: bws_menu.php:226
+#: bws_menu.php:228
 msgid "WP DB version"
 msgstr "Версія бази даних WordPress"
 
-#: bws_menu.php:227
+#: bws_menu.php:229
 msgid "MySQL version"
 msgstr "Версія MYSQL"
 
-#: bws_menu.php:228
+#: bws_menu.php:230
 msgid "SQL Mode"
 msgstr "Режим SQL"
 
-#: bws_menu.php:232
+#: bws_menu.php:234
 msgid "Active Plugins"
 msgstr "Активні плагіни"
 
-#: bws_menu.php:237
+#: bws_menu.php:239
 msgid "Inactive Plugins"
 msgstr "Не активні плагіни"
 
-#: bws_menu.php:258
+#: bws_menu.php:260
 msgid "Please enter a valid email address."
 msgstr "Будь ласка, введіть коректний емейл."
 
-#: bws_menu.php:262
+#: bws_menu.php:264
 msgid "Email with system info is sent to"
 msgstr "Емейл з системною інформацією надіслано на"
 
-#: bws_menu.php:266
+#: bws_menu.php:268
 msgid "Thank you for contacting us."
 msgstr "Дякуємо, що звернулись до нас."
 
-#: bws_menu.php:289
+#: bws_menu.php:291
 msgid "Sorry, email message could not be delivered."
 msgstr "Вибачте, ваше емейл не може бути доставлено"
 
-#: bws_menu.php:305 bws_menu.php:309 bws_menu.php:358 deprecated.php:91
+#: bws_menu.php:307 bws_menu.php:311 bws_menu.php:360 deprecated.php:91
 msgid "Plugins"
 msgstr "Плагіни"
 
-#: bws_menu.php:306 bws_menu.php:310 bws_menu.php:609 deprecated.php:92
+#: bws_menu.php:308 bws_menu.php:312 bws_menu.php:611 deprecated.php:92
 msgid "Themes"
 msgstr "Теми"
 
-#: bws_menu.php:307 bws_menu.php:311 bws_menu.php:660
+#: bws_menu.php:309 bws_menu.php:313 bws_menu.php:662
 msgid "System status"
 msgstr "Системна інформація"
 
-#: bws_menu.php:315
+#: bws_menu.php:317
 msgid "Support"
 msgstr "Підтримка"
 
-#: bws_menu.php:316
+#: bws_menu.php:318
 msgid "Manage purchased licenses & subscriptions"
 msgstr "Управління придбаними ліцензіями і підписками"
 
-#: bws_menu.php:324
+#: bws_menu.php:326
 #, php-format
 msgid "Get Access to %s+ Premium Plugins"
-msgstr "Отримати Доступ до %s+ Преміум Плагинам"
+msgstr "Отримати доступ до %s+ преміум плагинам"
 
-#: bws_menu.php:326
+#: bws_menu.php:328
 msgid "Subscribe to Pro Membership"
 msgstr "Підписатися на Pro Membership"
 
-#: bws_menu.php:334 bws_menu.php:345 class-bws-settings.php:738
+#: bws_menu.php:336 bws_menu.php:347 class-bws-settings.php:749
 #: deprecated.php:227
 msgid "Check license key"
 msgstr "Перевірте ліцензійний ключ"
 
-#: bws_menu.php:337
+#: bws_menu.php:339
 msgid "Enter your license key"
 msgstr "Ваш ліцензійний ключ"
 
-#: bws_menu.php:343 bws_menu.php:561 bws_menu.php:570
-#: class-bws-settings.php:717 deprecated.php:259 deprecated.php:267
+#: bws_menu.php:345 bws_menu.php:563 bws_menu.php:572
+#: class-bws-settings.php:728 deprecated.php:259 deprecated.php:267
 #: deprecated.php:629 deprecated.php:700 deprecated.php:709
 msgid "Activate"
 msgstr "Активувати"
 
-#: bws_menu.php:359
+#: bws_menu.php:361
 msgid "Upload Plugin"
 msgstr "Завантажити плагін"
 
-#: bws_menu.php:363
+#: bws_menu.php:365
 #, php-format
 msgid ""
 "The plugin generated %d characters of <strong>unexpected output</strong> "
@@ -591,7 +603,7 @@ msgstr ""
 "надіслані&#8221;, проблеми з каналами чи інші неполадки, спробуйте вимкнути "
 "чи видалити цей плагін."
 
-#: bws_menu.php:365
+#: bws_menu.php:367
 msgid ""
 "Plugin could not be activated because it triggered a <strong>fatal error</"
 "strong>."
@@ -599,39 +611,39 @@ msgstr ""
 "Плагін не вдалося активувати, бо він спричинив <strong>критичну помилку</"
 "strong>."
 
-#: bws_menu.php:368
+#: bws_menu.php:370
 msgid "Plugin <strong>activated</strong>."
 msgstr "Плагін <strong>активовано</strong>."
 
-#: bws_menu.php:375
+#: bws_menu.php:377
 msgid "Installing Plugin"
 msgstr "Встановлення плагіну"
 
-#: bws_menu.php:381
+#: bws_menu.php:383
 msgid "Downloading install package from"
 msgstr "Завантаження встановлюючого пакунку з"
 
-#: bws_menu.php:398 bws_menu.php:429 bws_menu.php:440
-#: class-bws-settings.php:937 class-bws-settings.php:959
-#: class-bws-settings.php:981 deprecated.php:387 deprecated.php:409
+#: bws_menu.php:400 bws_menu.php:431 bws_menu.php:442
+#: class-bws-settings.php:948 class-bws-settings.php:970
+#: class-bws-settings.php:992 deprecated.php:387 deprecated.php:409
 #: deprecated.php:431
 msgid "Failed to download the zip archive. Please, upload the plugin manually"
 msgstr ""
 "Помилка при завантаженні zip-архіву. Будь ласка, завантажте плагін вручну"
 
-#: bws_menu.php:406
+#: bws_menu.php:408
 msgid "Unpacking the package"
 msgstr "Розпакування пакета"
 
-#: bws_menu.php:411 bws_menu.php:419
+#: bws_menu.php:413 bws_menu.php:421
 msgid "Installing the plugin"
 msgstr "Встановлення плагіну"
 
-#: bws_menu.php:415 class-bws-settings.php:949 deprecated.php:399
+#: bws_menu.php:417 class-bws-settings.php:960 deprecated.php:399
 msgid "Failed to open the zip archive. Please, upload the plugin manually"
 msgstr "Помилка при відкритті zip-архіву. Будь ласка, завантажте плагін вручну"
 
-#: bws_menu.php:422 class-bws-settings.php:955 deprecated.php:405
+#: bws_menu.php:424 class-bws-settings.php:966 deprecated.php:405
 msgid ""
 "Your server does not support either ZipArchive or Phar. Please, upload the "
 "plugin manually"
@@ -639,158 +651,158 @@ msgstr ""
 "Ваш сервер не підтримує формати Zip і Phar. Будь ласка, завантажте плагін "
 "вручну"
 
-#: bws_menu.php:425
+#: bws_menu.php:427
 #, php-format
 msgid "The plugin %s is successfully installed."
 msgstr "Плагін %s успішно встановлено."
 
-#: bws_menu.php:432 class-bws-settings.php:962 deprecated.php:412
+#: bws_menu.php:434 class-bws-settings.php:973 deprecated.php:412
 msgid "UploadDir is not writable. Please, upload the plugin manually"
 msgstr ""
 "Немає доступу до теки завантажень WordPress. Будь ласка, завантажте плагін "
 "вручну"
 
-#: bws_menu.php:437
+#: bws_menu.php:439
 msgid "Activate Plugin"
 msgstr "Активувати плагін"
 
-#: bws_menu.php:437 bws_menu.php:443
+#: bws_menu.php:439 bws_menu.php:445
 msgid "Return to BestWebSoft Panel"
 msgstr "Назад до BestWebSoft Panel"
 
-#: bws_menu.php:447 bws_menu.php:462 bws_menu.php:591
+#: bws_menu.php:449 bws_menu.php:464 bws_menu.php:593
 msgid "All"
 msgstr "Всі"
 
-#: bws_menu.php:448 bws_menu.php:648
+#: bws_menu.php:450 bws_menu.php:650
 msgid "Installed"
 msgstr "Встановлені"
 
-#: bws_menu.php:449
+#: bws_menu.php:451
 msgid "Not Installed"
 msgstr "Не встановлені"
 
-#: bws_menu.php:455
+#: bws_menu.php:457
 msgid "Filter results"
 msgstr "Фільтр результатів"
 
-#: bws_menu.php:458 bws_menu.php:587
+#: bws_menu.php:460 bws_menu.php:589
 msgid "Category"
 msgstr "Категорія"
 
-#: bws_menu.php:522
+#: bws_menu.php:524
 msgid "Not installed"
 msgstr "Не встановлен"
 
-#: bws_menu.php:526
+#: bws_menu.php:528
 msgid "Renew to get updates"
 msgstr "Продовжити для поновлення"
 
-#: bws_menu.php:529
+#: bws_menu.php:531
 #, php-format
 msgid "Update to v %s"
 msgstr "Оновити до версії %s"
 
-#: bws_menu.php:541 bws_menu.php:564 bws_menu.php:573
+#: bws_menu.php:543 bws_menu.php:566 bws_menu.php:575
 msgid "Install Now"
 msgstr "Встановити"
 
-#: bws_menu.php:547 class-bws-settings.php:155 class-bws-settings.php:1045
+#: bws_menu.php:549 class-bws-settings.php:156 class-bws-settings.php:1056
 msgid "Upgrade to Pro"
-msgstr "Оновитися на Pro"
+msgstr "Оновити до Pro"
 
-#: bws_menu.php:561 bws_menu.php:570
+#: bws_menu.php:563 bws_menu.php:572
 msgid "Activate this plugin"
 msgstr "Активувати плагін"
 
-#: bws_menu.php:573
+#: bws_menu.php:575
 msgid "Install this plugin"
 msgstr "Встановити плагін"
 
-#: bws_menu.php:582
+#: bws_menu.php:584
 msgid "Nothing found. Try another criteria."
 msgstr "Нічого не знайдено. Спробуйте інші критерії."
 
-#: bws_menu.php:619 bws_menu.php:639
+#: bws_menu.php:621 bws_menu.php:641
 #, php-format
 msgid "By %s"
 msgstr "За %s"
 
-#: bws_menu.php:646
+#: bws_menu.php:648
 msgid "Already Installed"
 msgstr "Уже встановлено %s"
 
-#: bws_menu.php:657
+#: bws_menu.php:659
 msgid "Browse Free WordPress Themes"
 msgstr "Огляд безкоштовних WordPress тем"
 
-#: bws_menu.php:666
+#: bws_menu.php:668
 msgid "Send to support"
 msgstr "Відправити службі тех. підтримки"
 
-#: bws_menu.php:673
+#: bws_menu.php:675
 msgid "Send to custom email &#187;"
 msgstr "Відправити на електронну адресу &#187;"
 
-#: class-bws-settings.php:134
+#: class-bws-settings.php:135
 msgid "Information"
 msgstr "Інформація"
 
-#: class-bws-settings.php:142
+#: class-bws-settings.php:143
 msgid "Inactive"
 msgstr "Неактивна"
 
-#: class-bws-settings.php:150
+#: class-bws-settings.php:151
 msgid "Expired"
 msgstr "Закінчилась"
 
-#: class-bws-settings.php:153
+#: class-bws-settings.php:154
 #, php-format
 msgid "%s day(-s) left"
 msgstr "%s днів залишилося"
 
-#: class-bws-settings.php:159
+#: class-bws-settings.php:160
 #, php-format
 msgid "Expired on %s"
 msgstr "Витікає %s"
 
-#: class-bws-settings.php:159
+#: class-bws-settings.php:160
 msgid "Renew Now"
 msgstr "Відновити зараз"
 
-#: class-bws-settings.php:161
+#: class-bws-settings.php:162
 msgid "Active"
 msgstr "Активна"
 
-#: class-bws-settings.php:166
+#: class-bws-settings.php:167
 msgid "License"
 msgstr "Ліцензія"
 
-#: class-bws-settings.php:169
+#: class-bws-settings.php:170
 msgid "Status"
 msgstr "Статус"
 
-#: class-bws-settings.php:173
+#: class-bws-settings.php:174
 msgid "Version"
 msgstr "Версія"
 
-#: class-bws-settings.php:281
+#: class-bws-settings.php:282
 msgid "All plugin settings were restored."
 msgstr "Усі налаштування плагіну відновлені."
 
-#: class-bws-settings.php:419
+#: class-bws-settings.php:420
 msgid "Custom Code"
 msgstr "Користувацький код"
 
-#: class-bws-settings.php:423 deprecated.php:497
+#: class-bws-settings.php:424 deprecated.php:497
 msgid "You do not have sufficient permissions to edit plugins for this site."
 msgstr "У вас недостатньо повноважень для редагування плагінів цього сайту."
 
-#: class-bws-settings.php:428 deprecated.php:618
+#: class-bws-settings.php:429 deprecated.php:618
 msgid "These styles will be added to the header on all pages of your site."
 msgstr "Ці стилі будуть додані в заголовок на всіх сторінках вашого сайту."
 
-#: class-bws-settings.php:431 deprecated.php:620
+#: class-bws-settings.php:432 deprecated.php:620
 #, php-format
 msgid ""
 "This PHP code will be hooked to the %s action and will be printed on front "
@@ -798,11 +810,11 @@ msgid ""
 msgstr ""
 "Цей PHP код буде прикріплений до %s action  і буде додано лише у фронтенді."
 
-#: class-bws-settings.php:434
+#: class-bws-settings.php:435
 msgid "These code will be added to the header on all pages of your site."
 msgstr "Цей код буде додано в заголовок на всіх сторінках вашого сайту."
 
-#: class-bws-settings.php:442 deprecated.php:644
+#: class-bws-settings.php:443 deprecated.php:644
 #, php-format
 msgid ""
 "You need to make this files writable before you can save your changes. See "
@@ -811,25 +823,25 @@ msgstr ""
 "Вам потрібно зробити цей файл доступним для запису, перед тим як ви зможете "
 "зберегти свої зміни. Перегляньте %sКодекс%s для додаткової інформації."
 
-#: class-bws-settings.php:452 deprecated.php:626
+#: class-bws-settings.php:453 deprecated.php:626
 msgid "Browsing"
 msgstr "Огляд"
 
-#: class-bws-settings.php:456
+#: class-bws-settings.php:457
 #, php-format
 msgid "Activate custom %s code."
-msgstr "Активувать користувацький %s код."
+msgstr "Активувати користувацький %s код."
 
-#: class-bws-settings.php:463 deprecated.php:633
+#: class-bws-settings.php:464 deprecated.php:633
 #, php-format
 msgid "Learn more about %s"
 msgstr "Дізнатись більше про %s"
 
-#: class-bws-settings.php:523
+#: class-bws-settings.php:524
 msgid "Miscellaneous Settings"
 msgstr "Інші налаштування"
 
-#: class-bws-settings.php:532 class-bws-settings.php:583
+#: class-bws-settings.php:533 class-bws-settings.php:584
 #, php-format
 msgid ""
 "It is prohibited to change %s settings on this site in the %s network "
@@ -838,7 +850,7 @@ msgstr ""
 "Мережевими налаштуваннями %s забороняється змінювати налаштування %s на "
 "цьому сайті."
 
-#: class-bws-settings.php:535 class-bws-settings.php:586
+#: class-bws-settings.php:536 class-bws-settings.php:587
 #, php-format
 msgid ""
 "It is prohibited to view %s settings on this site in the %s network settings."
@@ -846,67 +858,67 @@ msgstr ""
 "Мережевими налаштуваннями %s забороняється дивитися налаштування %s на цьому "
 "сайті."
 
-#: class-bws-settings.php:544
+#: class-bws-settings.php:545
 msgid "Pro Options"
 msgstr "Pro опції"
 
-#: class-bws-settings.php:547
+#: class-bws-settings.php:548
 msgid "Enable to display plugin Pro options."
 msgstr "Увімкніть для відображення Pro опцій плагіна."
 
-#: class-bws-settings.php:552
+#: class-bws-settings.php:553
 msgid "Track Usage"
 msgstr "Збирати статистику"
 
-#: class-bws-settings.php:555
+#: class-bws-settings.php:556
 msgid ""
 "Enable to allow tracking plugin usage anonymously in order to make it better."
 msgstr ""
 "Включити, щоб дозволити анонімно відстежувати використання і зробити плагін "
 "краще."
 
-#: class-bws-settings.php:559
+#: class-bws-settings.php:560
 msgid "Default Settings"
 msgstr "Налаштування за замовчуванням"
 
-#: class-bws-settings.php:561
+#: class-bws-settings.php:562
 msgid "Restore Settings"
 msgstr "Відновлення налаштувань"
 
-#: class-bws-settings.php:562
+#: class-bws-settings.php:563
 msgid "This will restore plugin settings to defaults."
 msgstr "Відновити всі налаштування плагіна до налаштувань за замовчуванням."
 
-#: class-bws-settings.php:574
+#: class-bws-settings.php:575
 msgid "Import / Export"
 msgstr "Імпорт / Експорт"
 
-#: class-bws-settings.php:690 class-bws-settings.php:713
-#: class-bws-settings.php:735
+#: class-bws-settings.php:691 class-bws-settings.php:724
+#: class-bws-settings.php:746
 msgid "License Key"
 msgstr "Ключ ліцензії"
 
-#: class-bws-settings.php:703
+#: class-bws-settings.php:714
 msgid "Congratulations! Pro license is activated successfully."
 msgstr "Вітаємо! Pro ліцензія успішно активована."
 
-#: class-bws-settings.php:704
+#: class-bws-settings.php:715
 #, php-format
-msgid "You will be automatically redirected to the %s in 7 seconds."
-msgstr "Вас буде автоматично перенаправлено на %s через 7 секунд."
+msgid "You will be automatically redirected to the %s in %s seconds."
+msgstr "Вас буде автоматично перенаправлено на %s через %s секунд."
 
-#: class-bws-settings.php:704
+#: class-bws-settings.php:715
 msgid "Settings page"
 msgstr "сторінку налаштувань"
 
-#: class-bws-settings.php:719
+#: class-bws-settings.php:730
 #, php-format
 msgid "Enter your license key to activate %s and get premium plugin features."
 msgstr ""
 "Введіть ліцензійний ключ для активації %s і отримання додаткових можливостей "
 "плагіна."
 
-#: class-bws-settings.php:722 class-bws-settings.php:909 deprecated.php:362
+#: class-bws-settings.php:733 class-bws-settings.php:920 deprecated.php:362
 #: deprecated.php:703
 msgid ""
 "Unfortunately, you have exceeded the number of available tries per day. "
@@ -915,12 +927,12 @@ msgstr ""
 "На жаль, ви перевищили кількість доступних спроб на день. Будь ласка, "
 "завантажте плагін вручну"
 
-#: class-bws-settings.php:725 deprecated.php:694
+#: class-bws-settings.php:736 deprecated.php:694
 #, php-format
 msgid "Start Your Free %s-Day Trial Now"
 msgstr "Спробуйте %s-денну Trial версію безкоштовно"
 
-#: class-bws-settings.php:740
+#: class-bws-settings.php:751
 msgid ""
 "If necessary, you can check if the license key is correct or reenter it in "
 "the field below."
@@ -928,15 +940,15 @@ msgstr ""
 "При необхідності ви можете перевірити правильність вашого ліцензійного ключа "
 "або знову ввести його у полі, що знаходиться нижче."
 
-#: class-bws-settings.php:745
+#: class-bws-settings.php:756
 msgid "Manage License Settings"
 msgstr "Управління налаштуваннями ліцензій"
 
-#: class-bws-settings.php:747
+#: class-bws-settings.php:758
 msgid "Login to Client Area"
 msgstr "Зайти в Client Area"
 
-#: class-bws-settings.php:749
+#: class-bws-settings.php:760
 msgid ""
 "Manage active licenses, download BWS products, and view your payment history "
 "using BestWebSoft Client Area."
@@ -944,12 +956,12 @@ msgstr ""
 "Керуй активними ліцензіями, завантажуй BWS продукти, а також переглядай "
 "історію платежів за допомогою BestWebSoft Client Area."
 
-#: class-bws-settings.php:804 class-bws-settings.php:907 deprecated.php:141
+#: class-bws-settings.php:815 class-bws-settings.php:918 deprecated.php:141
 #: deprecated.php:360
 msgid "This license key is bound to another site."
 msgstr "Цей ліцензійний ключ прив'язано до іншого сайту."
 
-#: class-bws-settings.php:806 deprecated.php:143
+#: class-bws-settings.php:817 deprecated.php:143
 msgid ""
 "This license key is valid, but Your license has expired. If you want to "
 "update our plugin in future, you should extend the license."
@@ -957,11 +969,11 @@ msgstr ""
 "Даний ліцензійний ключ дійсний, але строк вашої ліцензії витік. Якщо ви "
 "хочете оновлювати наш плагін у майбутньому, вам слід подовжити ліцензію."
 
-#: class-bws-settings.php:808 deprecated.php:145
+#: class-bws-settings.php:819 deprecated.php:145
 msgid "Unfortunately, you have exceeded the number of available tries."
 msgstr "На жаль, ви перевищили кількість допустимих спроб."
 
-#: class-bws-settings.php:810 deprecated.php:147
+#: class-bws-settings.php:821 deprecated.php:147
 msgid ""
 "Unfortunately, the Pro Trial licence was already installed to this domain. "
 "The Pro Trial license can be installed only once."
@@ -969,33 +981,33 @@ msgstr ""
 "На жаль, Trial Pro версія плагіну уже встановлювалась на цей домен. Trial "
 "Pro версію можна встановлювати лише один раз."
 
-#: class-bws-settings.php:815 deprecated.php:151
+#: class-bws-settings.php:826 deprecated.php:151
 msgid "The Pro Trial license key is valid."
 msgstr "Ключ тріал Pro версії вірний."
 
-#: class-bws-settings.php:823 deprecated.php:159 deprecated.php:246
+#: class-bws-settings.php:834 deprecated.php:159 deprecated.php:246
 #, php-format
 msgid ""
 "In order to continue using the plugin it is necessary to buy a %s license."
 msgstr "Щоб продовжити користуватись плагіном, потрібно придбати %s ліцензію."
 
-#: class-bws-settings.php:1020 deprecated.php:463
+#: class-bws-settings.php:1031 deprecated.php:463
 msgid "Please, enter Your license key"
 msgstr "Будь ласка, впишіть ваш ліцензійний ключ"
 
-#: class-bws-settings.php:1032
+#: class-bws-settings.php:1043
 msgid "Need Help?"
 msgstr "Потрібна допомога?"
 
-#: class-bws-settings.php:1034
+#: class-bws-settings.php:1045
 msgid "Read the Instruction"
 msgstr "Читати інструкцію"
 
-#: class-bws-settings.php:1038
+#: class-bws-settings.php:1049
 msgid "Watch the Video"
 msgstr "Дивитися відео"
 
-#: class-bws-settings.php:1049
+#: class-bws-settings.php:1060
 msgid "Start Your Free Trial"
 msgstr "Використовувати безкоштовну Trial версію"
 
@@ -1103,40 +1115,501 @@ msgid "version of the plugin."
 msgstr "версія плагіна."
 
 #: product_list.php:7
-msgid "Advertisement"
-msgstr "Реклама"
+msgid "Admin Tools"
+msgstr "Інструменти"
 
 #: product_list.php:8
-msgid "Content & Media"
-msgstr "Зміст & Медіа"
+msgid "Content"
+msgstr "Контент"
 
 #: product_list.php:9
-msgid "Management"
-msgstr "Управління"
+msgid "eCommerce"
+msgstr "Комерція"
 
 #: product_list.php:10
+msgid "Marketing"
+msgstr "Маркетинг"
+
+#: product_list.php:11
+msgid "Navigation"
+msgstr "Навігація"
+
+#: product_list.php:12
 msgid "Recommended"
 msgstr "Рекомендовані "
 
-#: product_list.php:11
+#: product_list.php:13
 msgid "Security"
 msgstr "Безпека"
 
-#: product_list.php:12
-msgid "Site Stats"
-msgstr "Статистика сайту"
-
-#: product_list.php:13
-msgid "Social"
-msgstr "Соціальне"
-
 #: product_list.php:14
-msgid "Utilities"
-msgstr "Утиліти"
+msgid "SEO"
+msgstr "Пошукова оптимізація"
 
 #: product_list.php:15
-msgid "Other"
-msgstr "Інше"
+msgid "SMM"
+msgstr "СММ"
+
+#: product_list.php:22
+msgid ""
+"Protect WordPress website forms from spam entries by means of math logic."
+msgstr ""
+"Захищайте форми вашого сайту WordPress від зламування шляхом математичної "
+"логіки."
+
+#: product_list.php:32
+msgid "Create your personal car rental/booking and reservation website."
+msgstr "Створіть свій власний сайт прокату і резервування автомобілів."
+
+#: product_list.php:42
+msgid ""
+"Allow customers to reach you using secure contact form plugin any website "
+"must have."
+msgstr ""
+"Надайте можливість клієнтам здійснювати зв'язок з вами через безпечний "
+"плагін контактної форми, який повинен мати будь-який сайт."
+
+#: product_list.php:52
+msgid "Add unlimited number of contact forms to WordPress website."
+msgstr "Додавайте необмежену кількість контактних форм на ваш сайт WordPress."
+
+#: product_list.php:62
+msgid "Save and manage Contact Form messages. Never lose important data."
+msgstr ""
+"Зберігайте і керуйте повідомленнями плагіну Contact Form. Ніколи не "
+"втрачайте важливі дані."
+
+#: product_list.php:72
+msgid "Add unlimited custom pages to WordPress admin dashboard."
+msgstr ""
+"Додавайте необмежену кількість користувацьких сторінок у панелі "
+"адміністратора WordPress."
+
+#: product_list.php:79
+msgid "Add custom fields to WordPress website search results."
+msgstr ""
+"Додавайте користувацькі поля у результати пошуку вашого сайту WordPress."
+
+#: product_list.php:86
+msgid ""
+"Add custom post types and taxonomies to WordPress website search results."
+msgstr ""
+"Додавайте користувацькі типи постів і таксономії у результати пошуку на "
+"вашому сайті WordPress."
+
+#: product_list.php:96
+msgid "Add PayPal and 2CO donate buttons to receive charity payments."
+msgstr ""
+"Додавайте кнопки PayPal і 2CO, щоб отримувати пожертви та благодійні внески."
+
+#: product_list.php:103
+msgid ""
+"Automatically add outgoing email messages to queue instead of sending them "
+"immediately."
+msgstr ""
+"Автоматично формуйте чергу відправки вихідних електронних повідомлень. "
+"Задавайте час і пріоритет розсилки."
+
+#: product_list.php:110
+msgid ""
+"Get latest error log messages to diagnose website problems. Define and fix "
+"issues faster."
+msgstr ""
+"Отримуйте останні повідомлення з журналу помилок для діагностики проблем "
+"сайту. Швидше виявляйте і усувайте проблеми."
+
+#: product_list.php:117
+msgid ""
+"Add Facebook Follow, Like, and Share buttons to WordPress posts, pages, and "
+"widgets."
+msgstr ""
+"Додавайте кнопки Facebook \"Підписатися\", \"Подобається\" та \"Поділитися\" "
+"у пости, сторінки і віджети сайту WordPress."
+
+#: product_list.php:127
+msgid ""
+"Add beautiful galleries, albums & images to your WordPress website in a few "
+"clicks."
+msgstr ""
+"Додавайте мальовничі галереї, альбоми і зображення на ваш сайт WordPress "
+"всього в декілька кліків."
+
+#: product_list.php:137
+msgid ""
+"Add unlimited gallery categories. Organize images to make the navigation "
+"through content easier."
+msgstr ""
+"Додавайте необмежену кількість категорій галерей. Групуйте зображення, щоб "
+"спростити навігацію контентом."
+
+#: product_list.php:144
+msgid ""
+"Add Google +1, Share, Follow, Hangout buttons and profile badge to WordPress "
+"posts, pages and widgets."
+msgstr ""
+"Додавайте кнопки Google \"+1\", \"Поділитися\", \"Підписатися\", \"Hangout\" "
+"і значок профілю до постів, сторінок та віджетів WordPress."
+
+#: product_list.php:154
+msgid ""
+"Stronger security solution which protects your WordPress website from hacks "
+"and unauthorized login attempts."
+msgstr ""
+"Найпотужніше рішення безпеки, яке захищає ваш сайт WordPress від зломів та "
+"неавторизованих спроб входу в систему."
+
+#: product_list.php:164
+msgid ""
+"Add Adsense ads to WordPress website pages, posts, custom posts, search "
+"results, categories, tags, and widgets."
+msgstr ""
+"Додавайте рекламу сервісу Adsense на сторінки, пости, користувацькі пости, "
+"результати пошуку, категорії, теги і віджети сайту WordPress."
+
+#: product_list.php:174
+msgid "Add Google Analytics code to WordPress website and track basic stats."
+msgstr ""
+"Додавайте код Google Analytics на ваш сайт WordPress та відстежуйте базову "
+"статистику сайту."
+
+#: product_list.php:184
+msgid ""
+"Protect WordPress website forms from spam entries with Google Captcha "
+"(reCaptcha)."
+msgstr ""
+"Захищайте форми вашого сайту WordPress від спаму за допомогою Google Captcha "
+"(reCaptcha)."
+
+#: product_list.php:194
+msgid "Add customized Google maps to WordPress posts, pages and widgets."
+msgstr ""
+"Додавайте користувацькі карти Google у пости, сторінки та віджети WordPress."
+
+#: product_list.php:204
+msgid ""
+"Generate and add XML sitemap to WordPress website. Help search engines index "
+"your blog."
+msgstr ""
+"Створюйте та додавайте файли XML sitemap на ваш сайт WordPress. Допоможіть "
+"пошуковим системам проіндексувати ваш блог."
+
+#: product_list.php:214
+msgid ""
+"Replace external WordPress website links with Google shortlinks and track "
+"click stats."
+msgstr ""
+"Замініть зовнішні посилання сайту WordPress на короткі посилання Google і "
+"відстежуйте статистику кліків."
+
+#: product_list.php:221
+msgid ""
+"Protect WordPress website – allow and deny access for certain IP addresses, "
+"hostnames, etc."
+msgstr ""
+"Захистіть свій сайт WordPress - надавайте та забороняйте доступ з певних IP-"
+"адрес, імен хостів і т.д."
+
+#: product_list.php:231
+msgid ""
+"Create your personal job board and listing WordPress website. Search jobs, "
+"submit CV/resumes, choose candidates."
+msgstr ""
+"Створюйте свою власну дошку оголошень з переліком вакансій на базі "
+"WordPress. Здійснюйте пошук вакансій, подачу резюме/CV кандидата, вибір "
+"кандидатів."
+
+#: product_list.php:238
+msgid ""
+"Protect WordPress website against brute force attacks. Limit rate of login "
+"attempts."
+msgstr ""
+"Захищайте свій сайт WordPress від брутфорс-атак. Обмежуйте кількість спроб "
+"введення логіна."
+
+#: product_list.php:248
+msgid ""
+"Add LinkedIn Share and Follow buttons to WordPress posts, pages and widgets. "
+"5 plugins included – profile, insider, etc."
+msgstr ""
+"Додавайте кнопки LinkedIn \"Поділитися\" та \"Відстежувати\" до постів, "
+"сторінок і віджетів WordPress. 5 плагінів включено - Профіль, Інсайдер і т.д."
+
+#: product_list.php:258
+msgid ""
+"Translate WordPress website content to other languages manually. Create "
+"multilingual pages, posts, widgets, menus, etc."
+msgstr ""
+"Перекладайте вміст сайту WordPress іншими мовами вручну. Створюйте "
+"багатомовні сторінки, пости, віджети, меню і т.д."
+
+#: product_list.php:268
+msgid ""
+"Add customizable pagination to WordPress website. Split long content to "
+"multiple pages for better navigation."
+msgstr ""
+"Додавайте пагінацію з можливістю налаштування на ваш сайт WordPress. "
+"Розбивайте об'ємний контент на декілька сторінок для кращої навігації."
+
+#: product_list.php:278
+msgid ""
+"Generate PDF files and print WordPress posts/pages. Customize document "
+"header/footer styles and appearance."
+msgstr ""
+"Створюйте PDF-файли і друкуйте пости/сторінки сайту WordPress. Налаштовуйте "
+"стилі хедера/футера документа і його зовнішній вигляд."
+
+#: product_list.php:288
+msgid ""
+"Add Pinterest Follow, Pin It buttons and profile widgets (Pin, Board, "
+"Profile) to WordPress posts, pages and widgets."
+msgstr ""
+"Додавайте кнопки Pinterest \"Підписатися\", \"Зберегти\" і віджети профілю "
+"(Пін, Дошка, Профіль) до постів, сторінок і віджетів WordPress."
+
+#: product_list.php:298
+msgid ""
+"Create your personal portfolio WordPress website. Manage and showcase past "
+"projects to get more clients."
+msgstr ""
+"Створюйте і додавайте портфоліо на свій сайт WordPress. Керуйте і "
+"демонструйте минулі проекти, щоб залучити більше клієнтів."
+
+#: product_list.php:308
+msgid "Export WordPress posts to CSV file format easily. Configure data order."
+msgstr ""
+"З легкістю експортуйте пости WordPress в файли формату CSV. Налаштуйте "
+"порядок відображення даних."
+
+#: product_list.php:315
+msgid ""
+"Add extra fields to default WordPress user profile. The easiest way to "
+"create and manage additional custom values."
+msgstr ""
+"Додавайте користувацькі поля у стандартний профіль WordPress. Найпростіший "
+"спосіб створення і управління додатковими полями."
+
+#: product_list.php:322
+msgid ""
+"Add and display HTML advertisement banner on WordPress website. Customize "
+"bar styles and appearance."
+msgstr ""
+"Додавайте відображення банерної HTML реклами на сайті WordPress. Налаштуйте "
+"стилі і зовнішній вигляд банеру."
+
+#: product_list.php:332
+msgid ""
+"Add customizable quotes and tips blocks to WordPress posts, pages and "
+"widgets."
+msgstr ""
+"Додавайте редаговані цитати та підказки до постів, сторінок і віджетів "
+"WordPress."
+
+#: product_list.php:339
+msgid ""
+"Add rating plugin to your WordPress website to receive feedback from your "
+"customers."
+msgstr ""
+"Додавайте систему оцінювання і рейтингу на ваш сайт WordPress і отримуйте "
+"відгуки від ваших клієнтів."
+
+#: product_list.php:346
+msgid ""
+"Create your personal real estate WordPress website. Sell, rent and buy "
+"properties. Add, search and browse listings easily."
+msgstr ""
+"Створіть свій особистий сайт агентства нерухомості на базі WordPress. "
+"Продавайте, орендуйте і купуйте нерухомість. Легко додавайте, знаходьте і "
+"переглядайте лістинги."
+
+#: product_list.php:356
+msgid ""
+"Attach, un-attach and re-attach media files quickly to WordPress posts and "
+"pages."
+msgstr ""
+"Прикріплюйте, відкріплюйте і повторно прикріплюйте медіа файли до постів і "
+"сторінок WordPress."
+
+#: product_list.php:363
+msgid ""
+"Add related, featured, latest, and popular posts to your WordPress website. "
+"Connect your blog readers with a relevant content."
+msgstr ""
+"Додавайте схожі, обрані, останні та популярні пости на ваш сайт WordPress. "
+"Надавайте своїм читачам контент схожої тематики."
+
+#: product_list.php:370
+msgid ""
+"Send bulk email messages to WordPress users. Custom templates, advanced "
+"settings and detailed reports."
+msgstr ""
+"Здійснюйте масову розсилку листів користувачам WordPress. Користувацькі "
+"шаблони, додаткові налаштування і детальні звіти."
+
+#: product_list.php:380
+msgid ""
+"The best responsive slider plugin for your WordPress website. Create "
+"beautifully animated slides just in a few clicks."
+msgstr ""
+"Найкращий адаптивний слайдер для вашого сайту WordPress. Створюйте красиво "
+"анімовані слайди всього в декілька кліків."
+
+#: product_list.php:387
+msgid ""
+"Configure SMTP server to receive email messages from WordPress to Gmail, "
+"Yahoo, Hotmail and other services."
+msgstr ""
+"Налаштовуйте SMTP-сервер, щоб отримувати електронні повідомлення з сайту "
+"WordPress на такі поштові служби як Gmail, Yahoo, Hotmail і багато інших."
+
+#: product_list.php:394
+msgid ""
+"Add social media buttons and widgets to WordPress posts, pages and widgets. "
+"FB, Twitter, G+1, Pinterest, LinkedIn."
+msgstr ""
+"Додавайте кнопки і віджети соціальних мереж до постів, сторінок і віджетів "
+"WordPress. FB, Twitter, G+1, Pinterest, LinkedIn."
+
+#: product_list.php:404
+msgid ""
+"Add social media login, registration, and commenting to your WordPress "
+"website."
+msgstr ""
+"Додавайте на свій сайт WordPress можливість входу, реєстрації та "
+"коментування з використанням існуючих акаунтів соціальних мереж."
+
+#: product_list.php:411
+msgid ""
+"Add email newsletter sign up form to WordPress posts, pages and widgets. "
+"Collect data and subscribe your users."
+msgstr ""
+"Додавайте форму підписки на розсилку новин у пости, сторінки і віджети "
+"WordPress. Збирайте дані і здійснюйте підписку користувачів."
+
+#: product_list.php:421
+msgid ""
+"Add testimonials and feedbacks from your customers to WordPress website "
+"posts, pages, and widgets."
+msgstr ""
+"Додавайте рекомендації та відгуки ваших клієнтів в пости, сторінки і віджети "
+"сайту WordPress."
+
+#: product_list.php:428
+msgid ""
+"Best timesheet plugin for WordPress. Track employee time, streamline "
+"attendance and generate reports."
+msgstr ""
+"Кращий плагін обліку робочого часу на сайті WordPress. Відстежуйте час "
+"роботи співробітників, оптимізуйте графік роботи в офісі і створюйте звіти."
+
+#: product_list.php:438
+msgid ""
+"Add Twitter Follow, Tweet, Hashtag, and Mention buttons to WordPress posts "
+"and pages."
+msgstr ""
+"Додавайте кнопки Твіттера \"Читати\", \"Твітнути\", \"Хештеґ\" і \"Згадати\" "
+"до постів і сторінок WordPress."
+
+#: product_list.php:448
+msgid ""
+"Automatically check and update WordPress website core with all installed "
+"plugins and themes to the latest versions."
+msgstr ""
+"Виконуйте автоматичну перевірку і оновлення ядра WordPress до останніх "
+"версій з усіма встановленими плагінами та темами."
+
+#: product_list.php:458
+msgid ""
+"Powerful user role management plugin for WordPress website. Create, edit, "
+"copy, and delete user roles."
+msgstr ""
+"Ефективний плагін управління ролями користувачів для сайту WordPress. "
+"Створюйте, редагуйте, копіюйте і видаляйте ролі користувачів."
+
+#: product_list.php:468
+msgid ""
+"Display live count of online visitors who are currently browsing your "
+"WordPress website."
+msgstr ""
+"Ведіть підрахунок кількості відвідувачів, які в даний час переглядають ваш "
+"сайт WordPress."
+
+#: product_list.php:478
+msgid ""
+"Backup and export Zendesk Help Center content automatically to your "
+"WordPress website database."
+msgstr ""
+"Робіть автоматичне резервне копіювання і експорт вмісту Zendesk Help Center "
+"в базу даних вашого сайту WordPress."
+
+#~ msgid ""
+#~ "Add related posts to WordPress website posts or widgets. Link your "
+#~ "readers to relevant content."
+#~ msgstr ""
+#~ "Додавайте пов'язані публікації у пости або віджети сайту WordPress. "
+#~ "Надавайте своїм читачам контент схожої тематики."
+
+#~ msgid "Advertisement"
+#~ msgstr "Реклама"
+
+#~ msgid "Content & Media"
+#~ msgstr "Зміст та мультимедійні елементи"
+
+#~ msgid "Management"
+#~ msgstr "Управління"
+
+#~ msgid "Site Stats"
+#~ msgstr "Статистика сайту"
+
+#~ msgid "Social"
+#~ msgstr "Соціальні сервіси"
+
+#~ msgid "Utilities"
+#~ msgstr "Утиліти"
+
+#~ msgid "Other"
+#~ msgstr "Інше"
+
+#~ msgid ""
+#~ "Manage database and file system right from your WordPress admin dashboard."
+#~ msgstr ""
+#~ "Керуйте базою даних і файловою системою прямо з панелі адміністратора "
+#~ "WordPress."
+
+#~ msgid ""
+#~ "Add featured posts to WordPress website posts and widgets. Highlight "
+#~ "important information."
+#~ msgstr ""
+#~ "Додавайте обрані публікації до постів і віджетів сайту WordPress. "
+#~ "Підкреслюйте важливу інформацію."
+
+#~ msgid ""
+#~ "Add widgets Latest Posts or Latest Posts for Selected Categories to your "
+#~ "WordPress website."
+#~ msgstr ""
+#~ "Додавайте віджет найновішіх постів або найновішіх постів для обраних "
+#~ "категорій на сайт WordPress."
+
+#~ msgid ""
+#~ "Track views, comments and add the most popular posts to Wordpress widgets."
+#~ msgstr ""
+#~ "Відстежуйте перегляди, коментарі та додавайте найпопулярніші пости у "
+#~ "віджети сайту Wordpress."
+
+#~ msgid ""
+#~ "Add latest posts or latest posts for selected categories widgets to "
+#~ "WordPress website."
+#~ msgstr ""
+#~ "Додавайте віджет найновішіх постів або найновішіх постів для обраних "
+#~ "категорій на сайт WordPress."
+
+#~ msgid "Thank you for installing"
+#~ msgstr "Дякуємо, що встановили"
+
+#~ msgid "Thank you for choosing"
+#~ msgstr "Дякуємо, що обрали"
+
+#~ msgid "You will be automatically redirected to the %s in 7 seconds."
+#~ msgstr "Вас буде автоматично перенаправлено на %s через 7 секунд."
 
 #~ msgid "PHP Safe Mode"
 #~ msgstr "PHP Безпечний режим"
@@ -1244,9 +1717,6 @@ msgstr "Інше"
 
 #~ msgid "Preview"
 #~ msgstr "Попередній перегляд"
-
-#~ msgid "Add BWS Plugins Shortcode"
-#~ msgstr "Додати BWS шорткод"
 
 #~ msgid ""
 #~ "(your username is the email you specify when purchasing the product), "

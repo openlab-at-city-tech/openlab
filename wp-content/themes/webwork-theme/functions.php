@@ -8,6 +8,12 @@ function webwork_theme_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'webwork_theme_assets' );
 
+// Add 'ol-webwork' class to body for style overrides.
+add_filter( 'body_class', function( $class ) {
+	$class[] = 'ol-webwork';
+	return $class;
+} );
+
 /**
  * Don't allow the OpenLab to add additional links to nav menus.
  */

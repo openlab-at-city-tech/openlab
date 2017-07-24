@@ -406,7 +406,7 @@ function bp_activity_set_action( $component_id, $type, $description, $format_cal
  * @param array  $args {
  *     An associative array of tracking parameters. All items are optional.
  *     @type string   $bp_activity_admin_filter String to use in the Dashboard > Activity dropdown.
- *     @type string   $bp_activity_front_filter String to use in frontend dropdown.
+ *     @type string   $bp_activity_front_filter String to use in the front-end dropdown.
  *     @type string   $bp_activity_new_post     String format to use for generating the activity action. Should be a
  *                                              translatable string where %1$s is replaced by a user link and %2$s is
  *                                              the URL of the newly created post.
@@ -837,6 +837,63 @@ function bp_activity_get_types() {
 	 * @param array $actions Array of registered activity types.
 	 */
 	return apply_filters( 'bp_activity_get_types', $actions );
+}
+
+/**
+ * Gets the current activity context.
+ *
+ * The "context" is the current view type, corresponding roughly to the
+ * current component. Use this context to determine which activity actions
+ * should be whitelisted for the filter dropdown.
+ *
+ * @since 2.8.0
+ *
+ * @return string Activity context. 'member', 'member_groups', 'group', 'activity'.
+ */
+function bp_activity_get_current_context() {
+	// On member pages, default to 'member', unless this is a user's Groups activity.
+	if ( bp_is_user() ) {
+		if ( bp_is_active( 'groups' ) && bp_is_current_action( bp_get_groups_slug() ) ) {
+			$context = 'member_groups';
+		} else {
+			$context = 'member';
+		}
+
+	// On individual group pages, default to 'group'.
+	} elseif ( bp_is_active( 'groups' ) && bp_is_group() ) {
+		$context = 'group';
+
+	// 'activity' everywhere else.
+	} else {
+		$context = 'activity';
+	}
+
+	return $context;
+}
+
+/**
+ * Gets a flat list of activity actions compatible with a given context.
+ *
+ * @since 2.8.0
+ *
+ * @param string $context Optional. Name of the context. Defaults to the current context.
+ * @return array
+ */
+function bp_activity_get_actions_for_context( $context = '' ) {
+	if ( ! $context ) {
+		$context = bp_activity_get_current_context();
+	}
+
+	$actions = array();
+	foreach ( bp_activity_get_actions() as $component_actions ) {
+		foreach ( $component_actions as $component_action ) {
+			if ( in_array( $context, (array) $component_action['context'], true ) ) {
+				$actions[] = $component_action;
+			}
+		}
+	}
+
+	return $actions;
 }
 
 /** Favorites ****************************************************************/
@@ -1445,7 +1502,7 @@ function bp_activity_generate_action_string( $activity ) {
 	$action = apply_filters( 'bp_activity_generate_action_string', $activity->action, $activity );
 
 	// Remove the filter for future activity items.
-	remove_filter( 'bp_activity_generate_action_string', $actions->{$activity->component}->{$activity->type}['format_callback'], 10, 2 );
+	remove_filter( 'bp_activity_generate_action_string', $actions->{$activity->component}->{$activity->type}['format_callback'], 10 );
 
 	return $action;
 }
@@ -1724,7 +1781,7 @@ function bp_activity_get_specific( $args = '' ) {
 		'sort'              => 'DESC',     // Sort ASC or DESC
 		'spam'              => 'ham_only', // Retrieve items marked as spam.
 		'update_meta_cache' => true,
-	) );
+	), 'activity_get_specific' );
 
 	$get_args = array(
 		'display_comments'  => $r['display_comments'],
@@ -2615,9 +2672,9 @@ function bp_activity_new_comment( $args = '' ) {
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param int   $comment_id ID of the newly posted activity comment.
-		 * @param array $r          Array of parsed comment arguments.
-		 * @param int   $activity   ID of the activity item being commented on.
+		 * @param int                  $comment_id ID of the newly posted activity comment.
+		 * @param array                $r          Array of parsed comment arguments.
+		 * @param BP_Activity_Activity $activity   Activity item being commented on.
 		 */
 		do_action( 'bp_activity_comment_posted', $comment_id, $r, $activity );
 	} else {
@@ -2627,9 +2684,9 @@ function bp_activity_new_comment( $args = '' ) {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param int   $comment_id ID of the newly posted activity comment.
-		 * @param array $r          Array of parsed comment arguments.
-		 * @param int   $activity   ID of the activity item being commented on.
+		 * @param int                  $comment_id ID of the newly posted activity comment.
+		 * @param array                $r          Array of parsed comment arguments.
+		 * @param BP_Activity_Activity $activity   Activity item being commented on.
 		 */
 		do_action( 'bp_activity_comment_posted_notification_skipped', $comment_id, $r, $activity );
 	}
@@ -3113,6 +3170,24 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
 }
 
 /**
+ * Gets the excerpt length for activity items.
+ *
+ * @since 2.8.0
+ *
+ * @return int Character length for activity excerpts.
+ */
+function bp_activity_get_excerpt_length() {
+	/**
+	 * Filters the excerpt length for the activity excerpt.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int Character length for activity excerpts.
+	 */
+	return (int) apply_filters( 'bp_activity_excerpt_length', 358 );
+}
+
+/**
  * Create a rich summary of an activity item for the activity stream.
  *
  * More than just a simple excerpt, the summary could contain oEmbeds and other types of media.
@@ -3321,7 +3396,7 @@ function bp_activity_mark_as_spam( &$activity, $source = 'by_a_person' ) {
 
 	// If Akismet is active, and this was a manual spam/ham request, stop Akismet checking the activity.
 	if ( 'by_a_person' == $source && !empty( $bp->activity->akismet ) ) {
-		remove_action( 'bp_activity_before_save', array( $bp->activity->akismet, 'check_activity' ), 4, 1 );
+		remove_action( 'bp_activity_before_save', array( $bp->activity->akismet, 'check_activity' ), 4 );
 
 		// Build data package for Akismet.
 		$activity_data = BP_Akismet::build_akismet_data_package( $activity );
@@ -3368,7 +3443,7 @@ function bp_activity_mark_as_ham( &$activity, $source = 'by_a_person' ) {
 
 	// If Akismet is active, and this was a manual spam/ham request, stop Akismet checking the activity.
 	if ( 'by_a_person' == $source && !empty( $bp->activity->akismet ) ) {
-		remove_action( 'bp_activity_before_save', array( $bp->activity->akismet, 'check_activity' ), 4, 1 );
+		remove_action( 'bp_activity_before_save', array( $bp->activity->akismet, 'check_activity' ), 4 );
 
 		// Build data package for Akismet.
 		$activity_data = BP_Akismet::build_akismet_data_package( $activity );
@@ -3423,7 +3498,7 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	/** This filter is documented in bp-activity/bp-activity-template.php */
-	$content = apply_filters( 'bp_get_activity_content_body', $activity->content );
+	$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $activity->content, &$activity ) );
 
 	add_filter( 'bp_get_activity_content_body', 'convert_smilies' );
 	add_filter( 'bp_get_activity_content_body', 'wpautop' );
@@ -3491,7 +3566,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	/** This filter is documented in bp-activity/bp-activity-template.php */
-	$content = apply_filters( 'bp_get_activity_content_body', $params['content'] );
+	$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $params['content'], &$original_activity ) );
 
 	add_filter( 'bp_get_activity_content_body', 'convert_smilies' );
 	add_filter( 'bp_get_activity_content_body', 'wpautop' );
@@ -3675,7 +3750,7 @@ add_action( 'bp_before_activity_comment', 'bp_activity_comment_embed' );
 function bp_dtheme_embed_read_more( $activity ) {
 	buddypress()->activity->read_more_id = $activity->id;
 
-	add_filter( 'embed_post_id',         create_function( '', 'return buddypress()->activity->read_more_id;' ) );
+	add_filter( 'embed_post_id',         function() { return buddypress()->activity->read_more_id; } );
 	add_filter( 'bp_embed_get_cache',    'bp_embed_activity_cache',      10, 3 );
 	add_action( 'bp_embed_update_cache', 'bp_embed_activity_save_cache', 10, 3 );
 }
@@ -3745,21 +3820,21 @@ function bp_embed_activity_save_cache( $cache, $cachekey, $id ) {
  *
  * @since 2.0.0
  *
- *       directory.
- *       is the group activities.
- *
  * @return bool True if activity heartbeat is enabled, otherwise false.
  */
 function bp_activity_do_heartbeat() {
 	$retval = false;
 
-	if ( ! bp_is_activity_heartbeat_active() ) {
-		return $retval;
-	}
-
-	if ( bp_is_activity_directory() || bp_is_group_activity() ) {
+	if ( bp_is_activity_heartbeat_active() && ( bp_is_activity_directory() || bp_is_group_activity() ) ) {
 		$retval = true;
 	}
 
-	return $retval;
+	/**
+	 * Filters whether the heartbeat feature in the activity stream should be active.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param bool $retval Whether or not activity heartbeat is active.
+	 */
+	return (bool) apply_filters( 'bp_activity_do_heartbeat', $retval );
 }

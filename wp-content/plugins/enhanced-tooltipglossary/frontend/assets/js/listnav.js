@@ -12,12 +12,11 @@
             } );
         }
 
-        // Prevent scroll down when spacebar pressed
-        document.getElementById( 'glossaryList-nav' ).addEventListener( 'keydown', function ( e ) {
+        $( '#glossaryList-nav' ).keydown( function ( e ) {
             if ( ( e.keycode || e.which ) === 32 ) {
                 e.preventDefault();
             }
-        }, false );
+        } );
 
         $( '.listNav' ).keydown( function ( e ) {
             if ( e.which === 39 ) { // 'right' arrow pressed

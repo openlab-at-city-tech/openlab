@@ -1,5 +1,27 @@
 <?php
     
+    
+    /**
+    * Return default plugin options
+    * 
+    */
+    function tto_get_settings()
+        {
+            
+            $settings = get_option('tto_options'); 
+            
+            $defaults   = array (
+                                    'capability'                =>  'install_plugins',
+                                    'autosort'                  =>  '1',
+                                    'adminsort'                 =>  '1'
+                                );
+            $settings          = wp_parse_args( $settings, $defaults );
+            
+            return $settings;   
+            
+        }
+    
+        
     /**
     * @desc 
     * 

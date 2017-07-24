@@ -1,48 +1,68 @@
 === WP Static HTML Output ===
 Contributors: leonstafford
-Donate link: http://leonstafford.github.io
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NHEV6WLYJ6QWQ
 Tags: static,html,export,performance,security,portable
 Requires at least: 3.2
-Tested up to: 4.7
-Stable tag: 1.2.0
+Tested up to: 4.7.3
+Stable tag: 1.9
 
 Allows you to leverage WordPress as a great CMS, but benefit from the speed, security and portability that a static website provides.
 
 == Description ==
 
-## Features
+= Features =
 
  * generates a standalone, static html copy of your whole WordPress website
+ * auto-deploy to local folder, FTP, S3 or Dropbox
+ * one site to unlimited export targets
  * specify extra files to include in the output (ie, dynamically loaded assets)
- * 1-click static site creation and publishing to an FTP server
+ * desktop notifications alert you to when exports are complete
  * multi-language support (English/Japanese currently)
 
 This plugin produces a static HTML version of your wordpress install, incredibly useful for anyone who would like the publishing power of wordpress but whose webhost doesn't allow dynamic PHP driven sites - such as Dropbox. You can run your development site on a different domain or offline, and the plugin will change all relevant URLs when you publish your site. It's a simple but powerful plugin, and after hitting the publish button, the plugin will output a ZIP file of your entire site, ready to upload straight to it's new home. 
 
-Limitations:
+= Limitations =
 
  * The nature of a static site implies that any dynamic elements of your wordpress install that reply upon Wordpress plugins or internal functions to operate dynamically will no longer work. Significantly, this means comments. You can workaround this by including a non-Wordpress version of an external comments provider into your theme code, such as the Disqus comment system. Any page elements that rely upon Javascript will function normally. 
  * inability to correctly capture some relative links in posts
  * inability to detect assets dynamically loaded via javascript after page load, these will need to specified separately (but will work)
 
-Planned upgrades:
+= Similar plugins =
 
- * progress meter to show % of .ZIP creation 
- * speed improvements 
+Having issues with this plugin? I try to support any issues via the official support forum or email, but if you want to try some other plugins for static export, give these a go:
+
+ * [Simply Static](https://wordpress.org/plugins/simply-static/)
+
+= Planned upgrades =
+
+ * re-write export to relative URLs
+ * progress meter to show % of .ZIP creation
+ * realtime logs visible during / saved after export
+ * speed improvements for large sites
  * selectively export only changed pages since last output
- * 1-click deployment your static files via sFTP, SCP, Dropbox, etc
+ * increase 1-click deployment options
 
 Developed by [**Leon Stafford**](http://leonstafford.github.io). If you have any questions about this plugin's usage, installation or development, please email me at: [leon.stafford@mac.com](mailto:leon.stafford@mac.com)
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+= via WP Admin panel =
 
-e.g.
+1. Go to Plugins > Add New
+2. Search for "WP Static HTML Output"
+3. Click on the Install Now button
+4. Activate the plugin and find it under the Tools menu
 
-1. Upload the static-html-output directory to the `/wp-content/plugins/` directory, or install via the wordpress interface "add new" or "upload" the zip file
+= manual installation =
+
+1. Upload the static-html-output directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Access the plugin settings from the "tools" menu
+3. Access the plugin settings from the "Tools" menu
+
+= via WP CLI =
+
+1. `wp --allow-root plugin install static-html-output-plugin --activate`
+
 
 == Frequently Asked Questions ==
 
@@ -64,6 +84,49 @@ See the readme. In brief: you can't use dynamic WordPress functions such as comm
 2. The main interface (Japanese)
 
 == Changelog ==
+
+= 1.9 =
+
+ * Bugfix: Plugin now works on PHP 5.3
+
+Though this is no longer an officially supported PHP version, many of this plugin's users are running PHP 5.3 or earlier. This fix should once again allow them to use the plugin, which has not been possible for them since about version 1.2. If you are one of these affected users, please now upgrade and enjoy all the new useful features!
+
+= 1.8 =
+
+ * Bugfix: improved URL rewriting
+
+Plugin now ensures that formatted versions of your site's URL, ie //mydomain.com or http:\/\/mydomain.com\/ or the https/http equivalent are detected and rewritten to your target Base URL. The rewriting should now also work within CSS and JavaScript files. 
+
+= 1.7 =
+
+ * Bugfix: index.html contents empty for some users' themes/setups
+ * Bugfix: remove PHP short open tags for better compatibility
+
+= 1.6 =
+
+ * Additional URLs now work again! Much needed bugfix.
+
+= 1.5 =
+
+ * bugfix for Dropbox export function not exporting all files
+
+= 1.4 =
+
+ * add Dropbox export option
+ * fix bug some users encountered with 1.3 release
+
+= 1.3 =
+
+ * reduce plugin download size
+
+= 1.2.2 =
+
+ * supports Amazon Web Service's S3 as an export option
+
+= 1.2.1 =
+
+ * unlimited export targets
+ * desktop notifications alert you when all exports are completed (no more staring at the screen)
 
 = 1.2.0 =
 
@@ -145,6 +208,55 @@ Altered main codebase to fix recursion bug and endless loop. Essential upgrade.
 Initial release to Wordpress community
 
 == Upgrade Notice ==
+
+= 1.9 =
+
+Critical update for many users~!
+
+ * Bugfix: Plugin now works on PHP 5.3
+
+Though this is no longer an officially supported PHP version, many of this plugin's users are running PHP 5.3 or earlier. This fix should once again allow them to use the plugin, which has not been possible for them since about version 1.2. If you are one of these affected users, please now upgrade and enjoy all the new useful features!
+
+= 1.8 =
+
+ * Bugfix: improved URL rewriting
+
+Plugin now ensures that formatted versions of your site's URL, ie //mydomain.com or http:\/\/mydomain.com\/ or the https/http equivalent are detected and rewritten to your target Base URL. The rewriting should now also work within CSS and JavaScript files. 
+
+= 1.7 =
+
+ * Bugfix: index.html contents empty for some users' themes/setups
+ * Bugfix: remove PHP short open tags for better compatibility
+
+= 1.6 =
+
+ * Additional URLs now work again! Much needed bugfix. Recommended upgrade.
+
+= 1.5 =
+
+ * bugfix for Dropbox export function not exporting all files
+
+= 1.4 =
+
+ * add Dropbox export option
+ * fix bug some users encountered with 1.3 release
+
+= 1.3 =
+
+From this update on, will only do major point increases, ie 1.3, 1.4, vs 1.3.1, 1.3.2. This is due to way WP plugin directory only reports usage stats across major version numbers.
+
+ * reduce plugin download size
+
+= 1.2.2 =
+
+ * supports Amazon Web Service's S3 as an export option
+
+= 1.2.1 =
+
+This update brings much desired multiple export targets. Please note, it will need you to enter your settings again as the guts of the plugin changed quite a bit and a settings migration didn't make the cut.
+
+ * unlimited export targets
+ * desktop notifications alert you when all exports are completed (no more staring at the screen)
 
 = 1.2.0 =
 

@@ -69,6 +69,11 @@ function bws_show_settings_notice() {
 
 		/* help tooltips */
 		if ( $( '.bws_help_box' ).length > 0 ) {
+			if ( $( 'body' ).hasClass( 'rtl' ) ) {
+				var current_position = { my: "right top+15", at: "right bottom" };
+			} else {
+				var current_position = { my: "left top+15", at: "left bottom" };
+			}			
 			$( document ).tooltip( {
 				items: $( '.bws_help_box' ),
 				content: function() {
@@ -76,6 +81,7 @@ function bws_show_settings_notice() {
 		        },
 		        show: null, /* show immediately */
 		        tooltipClass: "bws-tooltip-content",
+		        position: current_position,
 				open: function( event, ui ) {					
 					if ( typeof( event.originalEvent ) === 'undefined' ) {
 						return false;

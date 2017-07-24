@@ -39,7 +39,7 @@
 #adminmenu #toplevel_page_bws_panel .wp-menu-image {
     font-family: 'bwsicons' !important;
 }
-#adminmenu #toplevel_page_bws_panel  .wp-menu-image:before {
+#adminmenu #toplevel_page_bws_panel .wp-menu-image:before {
     content: "\e93c";
     font-family: 'bwsicons' !important;
 }
@@ -56,6 +56,7 @@
 }
 div.bws_info {
     margin-top: 7px;
+    word-break: break-all;
 }
 .bws_info_small {
     font-size: 11px !important;
@@ -87,22 +88,24 @@ div.updated.bws-notice {
 .bws-plugin-reviews-rate,
 .bws-plugin-reviews-support,
 .bws-plugin-reviews-donate {
-    display: inline-block;
     padding: 10px;
-    width: 30%;
+    display: block;
+}
+
+@media screen and (min-width: 1600px) {
+    .bws-plugin-reviews-rate,
+    .bws-plugin-reviews-support,
+    .bws-plugin-reviews-donate {
+        display: inline-block;        
+        width: 30%;
+    }
 }
 @media screen and (max-width: 1600px) {
     .bws-plugin-reviews-rate,
     .bws-plugin-reviews-support {
         border-bottom: 1px solid #70A8C2;
         border-right: none;
-    }
-    .bws-plugin-reviews-rate,
-    .bws-plugin-reviews-support,
-    .bws-plugin-reviews-donate {
-        width: initial;
-        display: block;
-    }
+    }    
 }
 /*
 * styles for Go PRO tab
@@ -240,7 +243,8 @@ a.bws_plugin_pro_version {
     .bws_pro_version_tooltip .bws_info a {
         display: block;
     }
-    .bws_pro_version_tooltip .bws_button {
+    .bws_pro_version_tooltip .bws_button,
+    .bws_pro_version_tooltip .bws_button:hover {
         margin: 10px 10px 5px;
         float: none;
     }
@@ -465,9 +469,7 @@ span.bws_code {
     text-shadow: 0 0 2px #000;
     padding: 4px 8px;
     border: 1px solid rgba(255,255,255,0.25);
-    background-color: rgb(25,25,25);
-    background-color: rgba(25,25,25,0.92);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
+    background: rgba(25,25,25,0.92);
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -606,7 +608,7 @@ span.bws_code {
     width: 161px;
     margin: -1px 0 0 0;
     border-top: 1px solid #ddd;
-    padding: 20px 20px 20px 45px;
+    padding: 20px 21px 20px 45px;
     color: #000 !important;
     background: #fff !important;
 }
@@ -646,12 +648,20 @@ span.bws_code {
 #bws_settings_tabs li.bws-tab-import-export a:before {
     content: "\f317";
 }
-#bws_settings_tabs li.bws-tab-errors a:before {
-    content: "\f534";
+#bws_settings_tabs li.bws-tab-errors a:before,
+#bws_settings_tabs li.bws-tab-messages a:before {
+    font-family: 'bwsicons';
+    content: "\e93d";
+    font-size: 18px;
+    left: 21px;
 }
 #bws_settings_tabs li.bws-tab-notifications a:before {
     content: "\f466";
 }
+#bws_settings_tabs li.bws-tab-output a:before {
+    content: "\f498";
+}
+
 #bws_settings_tabs li:last-child a {
     border-bottom: none;
 }
@@ -678,6 +688,12 @@ span.bws_code {
     margin-left: 10px;
     margin-right: 10px;
     width: calc( 100% - 20px );
+}
+#bws_settings_tabs_wrapper .bws_tab button,
+#bws_settings_tabs_wrapper .bws_tab input[type="submit"],
+#bws_settings_tabs_wrapper .bws_tab input[type="button"] {
+    white-space: normal;
+    height: auto;
 }
 .bws_form .postbox .hndle {
     cursor: inherit;
@@ -721,6 +737,9 @@ span.bws_code {
 .rtl .bws_form #postbox-container-2 > div {
     margin-right: 160px;
     margin-left: 0;
+}
+.bws_margined_box {
+    margin: 1em 0;
 }
 @media only screen and (max-width: 1100px) {
     #bws_settings_tabs {
@@ -768,6 +787,9 @@ span.bws_code {
     .bws_form #postbox-container-2 .postbox {
         margin-bottom: 20px;
     }
+    .bws_form .postbox-container div.submit {
+        display: none;
+    }
 }
 @media screen and (max-width: 782px) {
     .bws-hide-for-mobile {
@@ -778,10 +800,10 @@ span.bws_code {
     #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=file] {
         width: 182px;
     }
-    #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=text],
+    #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=text]:not(.small-text),
     #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=password],
     #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=search],
-    #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=number],
+    #bws_settings_tabs_wrapper .bws_tab .form-table td input[type=number]:not(.small-text),
     #bws_settings_tabs_wrapper .bws_tab .form-table td select,
     #bws_settings_tabs_wrapper .bws_tab .form-table td textarea {
         width: 100%;

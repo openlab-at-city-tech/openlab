@@ -56,11 +56,41 @@
         var $signup_form = $('#signup_form');
 
         var registrationFormValidation = $signup_form.parsley({
-            errorsWrapper: '<ul class="parsley-errors-list text-danger"></ul>'
+            errorsWrapper: '<ul class="parsley-errors-list"></ul>'
         }).on('field:error', function (formInstance) {
-            this.$element.parent('.form-group').addClass('has-error');
+
+            this.$element.closest('.form-group')
+                    .find('.other-errors').remove();
+
+            this.$element.closest('.form-group')
+                    .addClass('has-error')
+                    .find('.error-container').addClass('error');
+            
+            var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
+            
+            //in some cases errorMsg is further up the chain
+            if(errorMsg.length === 0){
+                errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
+            }
+            
+            if (errorMsg.attr('role') !== 'alert') {
+                errorMsg.attr('role', 'alert');
+            }
+
         }).on('field:success', function (formInstance) {
-            this.$element.parent('.form-group').removeClass('has-error');
+            
+            this.$element.closest('.form-group')
+                    .removeClass('has-error')
+                    .find('.error-container').removeClass('error');
+
+            var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
+            
+            //in some cases errorMsg is further up the chain
+            if(errorMsg.length === 0){
+                errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
+            }
+            
+            errorMsg.attr('role', '');
         });
 
         var inputBlacklist = [
@@ -117,7 +147,7 @@
             }
 
             var emailtype = '';
-            var $emaillabel = $('label[for="signup_email"] div');
+            var $emaillabel = $('#signup_email_error');
             var $validationdiv = $('#validation-code');
             var $emailconfirm = $('#signup_email_confirm');
 
@@ -131,11 +161,10 @@
 
             if ('nonct' == emailtype) {
                 // Fade out and show a 'Checking' message.
-                $emaillabel.fadeOut(function () {
-                    $emaillabel.html('&mdash; Checking...');
-                    $emaillabel.css('color', '#000');
-                    $emaillabel.fadeIn();
-                });
+                $emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
+                $emaillabel.css('color', '#000');
+                $emaillabel.fadeIn();
+                $emaillabel.addClass('error');
 
                 // Non-City Tech requires an AJAX request for verification.
                 $.post(ajaxurl, {
@@ -173,20 +202,23 @@
                                     break;
 
                                 case '1' :
+                                    message = '&mdash; OK!';
+                                    break;
                                 default :
+                                    message = '';
                                     break;
                             }
+
+                            message = '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + message + '</li></ul>';
 
                             if (response != '1' && response != '5' && response != '4') {
                                 $emaillabel.fadeOut(function () {
                                     $emaillabel.html(message);
-                                    $emaillabel.css('color', '#f00');
                                     $emaillabel.fadeIn();
                                 });
                             } else if (response == '1') {
                                 $emaillabel.fadeOut(function () {
-                                    $emaillabel.html('&mdash; OK!');
-                                    $emaillabel.css('color', '#000');
+                                    $emaillabel.html(message);
                                     $emaillabel.fadeIn();
                                 });
                             } else {
@@ -194,8 +226,8 @@
 
                                 // Don't add more than one
                                 if (!$validationdiv.length) {
-                                    var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code">Signup code <em>(required)</em> <span style="color: #f00;">Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
-                                    $('input#signup_email').after(valbox);
+                                    var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code" role="alert">Signup code <em aria-hidden="true">(required)</em> <span>Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
+                                    $('input#signup_email').before(valbox);
                                     $validationdiv = $('#validation-code');
                                 }
                             }
@@ -253,12 +285,13 @@
         $('input#signup_validation_code').live('blur', function () {
             var code = $(this).val();
 
-            var vcodespan = $('label[for="signup_validation_code"] span');
+            var vcodespan = $('#signup_email_error');
 
             $(vcodespan).fadeOut(function () {
-                $(vcodespan).html('&mdash; Checking...');
+                $(vcodespan).html('<p class="parsley-errors-list">&mdash; Checking...</p>');
                 $(vcodespan).css('color', '#000');
                 $(vcodespan).fadeIn();
+                $(vcodespan).addClass('error');
             });
 
             /* Handle email verification server side because there we have the functions for it */

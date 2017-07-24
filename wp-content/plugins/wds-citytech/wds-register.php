@@ -189,6 +189,14 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 				$return .= "<br />Post Field 193: " . $_POST['field_193'];
 				$input_value = $_POST["{$input_name}"];
 				*/
+                                
+                                if ( bp_get_the_profile_field_is_required() ) {
+                                    
+                                    $this_field = bp_get_the_profile_field_input_name();
+                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+                                    
+                                }
+                                
 				$return .= '<input
 						class="form-control"
 						type="text"
@@ -213,6 +221,14 @@ function wds_get_register_fields($account_type, $post_data = array()) {
 					$return.=' (required)';
 				endif;
 				$return.='</label>';
+                                
+                                if ( bp_get_the_profile_field_is_required() ) {
+                                    
+                                    $this_field = bp_get_the_profile_field_input_name();
+                                    $return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+                                    
+                                }
+                                
 				//WDS ADDED $$$
 
 				$onchange = '';

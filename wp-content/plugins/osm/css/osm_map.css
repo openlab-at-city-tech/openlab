@@ -114,4 +114,24 @@ li.active a:hover {
 .tab.active {
   display:block;
 }
+
+.tabs select {
+	display:block;
+	margin-bottom:5px;
+}
 /* --- metabox tabs --- */
+
+.osmCheckoxHeadline {
+	display:block;
+}
+
+.osmFileName, .osmFileTitle {
+	width:20em;
+}
+
+.tab p.notice {
+	border:none;
+	text-decoration:italic;
+	box-shadow:none;
+	color:red;	
+}

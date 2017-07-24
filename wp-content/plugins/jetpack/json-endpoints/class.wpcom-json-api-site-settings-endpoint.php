@@ -8,6 +8,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
  		'description'       => '(string) Tagline or description of site',
  		'URL'               => '(string) Full URL to the site',
 		'lang'              => '(string) Primary language code of the site',
+		'locale_variant'    => '(string) Locale variant code for the site, if set',
 		'settings'          => '(array) An array of options/settings for the blog. Only viewable by users with post editing rights to the site.',
 	);
 
@@ -137,6 +138,14 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 			case 'URL' :
 				$response[$key] = (string) home_url();
 				break;
+			case 'locale_variant':
+				if ( function_exists( 'wpcom_l10n_get_blog_locale_variant' ) ) {
+					$blog_locale_variant = wpcom_l10n_get_blog_locale_variant();
+					if ( $blog_locale_variant ) {
+						$response[$key] = $blog_locale_variant;
+					}
+				}
+				break;
 			case 'settings':
 
 				$jetpack_relatedposts_options = Jetpack_Options::get_option( 'relatedposts' );
@@ -157,6 +166,8 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 				if ( function_exists( 'jetpack_holiday_snow_option_name' ) ) {
 					$holiday_snow = (bool) get_option( jetpack_holiday_snow_option_name() );
 				}
+
+				$api_cache = $is_jetpack ? (bool) get_option( 'jetpack_api_cache_enabled' ) : true;
 
 				$response[ $key ] = array(
 
@@ -196,8 +207,12 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					'comment_max_links'       => (int) get_option( 'comment_max_links' ),
 					'moderation_keys'         => get_option( 'moderation_keys' ),
 					'blacklist_keys'          => get_option( 'blacklist_keys' ),
-					'lang_id'                 => get_option( 'lang_id' ),
-					'wga'                     => get_option( 'wga' ),
+					'lang_id'                 => defined( 'IS_WPCOM' ) && IS_WPCOM
+						? get_lang_id_by_code( wpcom_l10n_get_blog_locale_variant( $blog_id, true ) )
+						: get_option( 'lang_id' ),
+					'wga'                     => defined( 'IS_WPCOM' ) && IS_WPCOM
+						? get_option( 'wga' )
+						: $this->get_google_analytics(),
 					'disabled_likes'          => (bool) get_option( 'disabled_likes' ),
 					'disabled_reblogs'        => (bool) get_option( 'disabled_reblogs' ),
 					'jetpack_comment_likes_enabled' => (bool) get_option( 'jetpack_comment_likes_enabled', false ),
@@ -207,14 +222,27 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					'holidaysnow'             => $holiday_snow,
 					'gmt_offset'              => get_option( 'gmt_offset' ),
 					'timezone_string'         => get_option( 'timezone_string' ),
+					'date_format'             => get_option( 'date_format' ),
+					'time_format'             => get_option( 'time_format' ),
+					'start_of_week'           => get_option( 'start_of_week' ),
 					'jetpack_testimonial'     => (bool) get_option( 'jetpack_testimonial', '0' ),
 					'jetpack_testimonial_posts_per_page' => (int) get_option( 'jetpack_testimonial_posts_per_page', '10' ),
 					'jetpack_portfolio'       => (bool) get_option( 'jetpack_portfolio', '0' ),
 					'jetpack_portfolio_posts_per_page' => (int) get_option( 'jetpack_portfolio_posts_per_page', '10' ),
+					'markdown_supported'      => true,
 					'site_icon'               => $this->get_cast_option_value_or_null( 'site_icon', 'intval' ),
 					Jetpack_SEO_Utils::FRONT_PAGE_META_OPTION => get_option( Jetpack_SEO_Utils::FRONT_PAGE_META_OPTION, '' ),
 					Jetpack_SEO_Titles::TITLE_FORMATS_OPTION => get_option( Jetpack_SEO_Titles::TITLE_FORMATS_OPTION, array() ),
+					'amp_is_supported'        => (bool) function_exists( 'wpcom_is_amp_supported' ) && wpcom_is_amp_supported( $blog_id ),
+					'amp_is_enabled'          => (bool) function_exists( 'wpcom_is_amp_enabled' ) && wpcom_is_amp_enabled( $blog_id ),
+					'api_cache'               => $api_cache,
+					'posts_per_page'          => (int) get_option( 'posts_per_page' ),
 				);
+
+				if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
+					$response[ $key ]['wpcom_publish_posts_with_markdown'] = (bool) WPCom_Markdown::is_posting_enabled();
+					$response[ $key ]['wpcom_publish_comments_with_markdown'] = (bool) WPCom_Markdown::is_commenting_enabled();
+				}
 
 				//allow future versions of this endpoint to support additional settings keys
 				/**
@@ -263,6 +291,10 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 		return false;
 	}
 
+	protected function get_google_analytics () {
+		$option_name = defined( 'IS_WPCOM' ) && IS_WPCOM ? 'wga' : 'jetpack_wga';
+		return get_option( $option_name );
+	}
 
 	/**
 	 * Updates site settings for authorized users
@@ -270,7 +302,6 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 	 * @return (array)
 	 */
 	public function update_settings() {
-
 		// $this->input() retrieves posted arguments whitelisted and casted to the $request_format
 		// specs that get passed in when this class is instantiated
 		/**
@@ -283,6 +314,8 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 		 * @param array $input Associative array of site settings to be updated.
 		 */
 		$input = apply_filters( 'rest_api_update_site_settings', $this->input() );
+
+		$blog_id = get_current_blog_id();
 
 		$jetpack_relatedposts_options = array();
 		$sharing_options = array();
@@ -349,12 +382,18 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					}
 					break;
 				case 'wga':
+				case 'jetpack_wga':
 					if ( ! isset( $value['code'] ) || ! preg_match( '/^$|^UA-[\d-]+$/i', $value['code'] ) ) {
 						return new WP_Error( 'invalid_code', 'Invalid UA ID' );
 					}
-					$wga = get_option( 'wga', array() );
+
+					$is_wpcom = defined( 'IS_WPCOM' ) && IS_WPCOM;
+					$option_name = $is_wpcom ? 'wga' : 'jetpack_wga';
+
+					$wga = get_option( $option_name, array() );
 					$wga['code'] = $value['code']; // maintain compatibility with wp-google-analytics
-					if ( update_option( 'wga', $wga ) ) {
+
+					if ( update_option( $option_name, $wga ) ) {
 						$updated[ $key ] = $value;
 					}
 
@@ -363,8 +402,10 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					/** This action is documented in modules/widgets/social-media-icons.php */
 					do_action( 'jetpack_bump_stats_extras', 'google-analytics', $enabled_or_disabled );
 
-					$business_plugins = WPCOM_Business_Plugins::instance();
-					$business_plugins->activate_plugin( 'wp-google-analytics' );
+					if ( $is_wpcom ) {
+						$business_plugins = WPCOM_Business_Plugins::instance();
+						$business_plugins->activate_plugin( 'wp-google-analytics' );
+					}
 					break;
 
 				case 'jetpack_testimonial':
@@ -420,6 +461,16 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					}
 					break;
 
+				case 'api_cache':
+					if ( empty( $value ) || WPCOM_JSON_API::is_falsy( $value ) ) {
+						if ( delete_option( 'jetpack_api_cache_enabled' ) ) {
+							$updated[ $key ] = false;
+						}
+					} else if ( update_option( 'jetpack_api_cache_enabled', true ) ) {
+						$updated[ $key ] = true;
+					}
+					break;
+
 				case 'timezone_string':
 					// Map UTC+- timezones to gmt_offsets and set timezone_string to empty
 					// https://github.com/WordPress/WordPress/blob/4.4.2/wp-admin/options.php#L175
@@ -439,11 +490,36 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					}
 					break;
 
+				case 'date_format':
+				case 'time_format':
+					// settings are stored as strings
+					if ( update_option( $key, sanitize_text_field( $value ) ) ) {
+						$updated[ $key ] = $value;
+					}
+					break;
+
+				case 'start_of_week':
+					// setting is stored as int in 0-6 range (days of week)
+					$coerce_value = (int) $value;
+					$limit_value  = ( $coerce_value >= 0 && $coerce_value <= 6 ) ? $coerce_value : 0;
+					if ( update_option( $key, $limit_value ) ) {
+						$updated[ $key ] = $limit_value;
+					}
+					break;
+
 				case 'site_icon':
 					// settings are stored as deletable numeric (all empty
 					// values as delete intent), validated as media image
 					if ( empty( $value ) || WPCOM_JSON_API::is_falsy( $value ) ) {
-						if ( delete_option( $key ) ) {
+						/**
+						 * Fallback mechanism to clear a third party site icon setting. Can be used
+						 * to unset the option when an API request instructs the site to remove the site icon.
+						 *
+						 * @module json-api
+						 *
+						 * @since 4.10
+						 */
+						if ( delete_option( $key ) || apply_filters( 'rest_api_site_icon_cleared', false )  ) {
 							$updated[ $key ] = null;
 						}
 					} else if ( is_numeric( $value ) ) {
@@ -494,6 +570,23 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					}
 					break;
 
+				case 'wpcom_publish_posts_with_markdown':
+				case 'wpcom_publish_comments_with_markdown':
+					$coerce_value = (bool) $value;
+					if ( update_option( $key, $coerce_value ) ) {
+						$updated[ $key ] = $coerce_value;
+					}
+					break;
+
+				case 'amp_is_enabled':
+					if ( function_exists( 'wpcom_update_amp_enabled' ) ) {
+						$saved = wpcom_update_amp_enabled( $blog_id, $value );
+						if ( $saved ) {
+							$updated[ $key ] = (bool) $value;
+						}
+					}
+					break;
+
 				default:
 					//allow future versions of this endpoint to support additional settings keys
 					if ( has_filter( 'site_settings_endpoint_update_' . $key ) ) {
@@ -522,8 +615,8 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 			// track new jetpack_relatedposts options against old
 			$old_relatedposts_options = Jetpack_Options::get_option( 'relatedposts' );
 			if ( Jetpack_Options::update_option( 'relatedposts', $jetpack_relatedposts_options ) ) {
-				foreach( $jetpack_relatedposts_options as $key => $value ) {
-					if ( $value !== $old_relatedposts_options[ $key ] ) {
+				foreach ( $jetpack_relatedposts_options as $key => $value ) {
+					if ( isset( $old_relatedposts_options[ $key ] ) && $value !== $old_relatedposts_options[ $key ] ) {
 						$updated[ 'jetpack_relatedposts_' . $key ] = $value;
 					}
 				}

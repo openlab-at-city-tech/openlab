@@ -450,14 +450,7 @@ function bp_activity_truncate_entry( $text, $args = array() ) {
 	 */
 	$append_text    = apply_filters( 'bp_activity_excerpt_append_text', __( '[Read more]', 'buddypress' ) );
 
-	/**
-	 * Filters the excerpt length for the activity excerpt.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int $value Number indicating how many words to trim the excerpt down to.
-	 */
-	$excerpt_length = apply_filters( 'bp_activity_excerpt_length', 358 );
+	$excerpt_length = bp_activity_get_excerpt_length();
 
 	$args = wp_parse_args( $args, array( 'ending' => __( '&hellip;', 'buddypress' ) ) );
 
@@ -603,7 +596,7 @@ function bp_activity_heartbeat_last_recorded( $response = array(), $data = array
 	ob_end_clean();
 
 	// Remove the temporary filter.
-	remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
+	remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10 );
 
 	if ( ! empty( $newest_activities['last_recorded'] ) ) {
 		$response['bp_activity_newest_activities'] = $newest_activities;

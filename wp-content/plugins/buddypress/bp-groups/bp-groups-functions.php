@@ -612,8 +612,7 @@ function groups_get_group_members( $args = array() ) {
 			6 => 'group_role',
 		);
 
-		$func_args = func_get_args();
-		$args      = bp_core_parse_args_array( $old_args_keys, $func_args );
+		$args = bp_core_parse_args_array( $old_args_keys, func_get_args() );
 	}
 
 	$r = wp_parse_args( $args, array(
@@ -628,11 +627,8 @@ function groups_get_group_members( $args = array() ) {
 		'type'                => 'last_joined',
 	) );
 
-	// For legacy users. Use of BP_Groups_Member::get_all_for_group()
-	// is deprecated. func_get_args() can't be passed to a function in PHP
-	// 5.2.x, so we create a variable.
-	$func_args = func_get_args();
-	if ( apply_filters( 'bp_use_legacy_group_member_query', false, __FUNCTION__, $func_args ) ) {
+	// For legacy users. Use of BP_Groups_Member::get_all_for_group() is deprecated.
+	if ( apply_filters( 'bp_use_legacy_group_member_query', false, __FUNCTION__, func_get_args() ) ) {
 		$retval = BP_Groups_Member::get_all_for_group( $r['group_id'], $r['per_page'], $r['page'], $r['exclude_admins_mods'], $r['exclude_banned'], $r['exclude'] );
 	} else {
 
@@ -713,6 +709,7 @@ function groups_get_groups( $args = '' ) {
 		'exclude'            => false,          // Do not include these specific groups (group_ids).
 		'parent_id'          => null,           // Get groups that are children of the specified group(s).
 		'search_terms'       => false,          // Limit to groups that match these search terms.
+		'search_columns'     => array(),        // Select which columns to search.
 		'group_type'         => '',             // Array or comma-separated list of group types to limit results to.
 		'group_type__in'     => '',             // Array or comma-separated list of group types to limit results to.
 		'group_type__not_in' => '',             // Array or comma-separated list of group types that will be excluded from results.
@@ -724,7 +721,7 @@ function groups_get_groups( $args = '' ) {
 		'update_admin_cache' => false,
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$r = bp_parse_args( $args, $defaults, 'groups_get_groups' );
 
 	$groups = BP_Groups_Group::get( array(
 		'type'               => $r['type'],
@@ -733,6 +730,7 @@ function groups_get_groups( $args = '' ) {
 		'exclude'            => $r['exclude'],
 		'parent_id'          => $r['parent_id'],
 		'search_terms'       => $r['search_terms'],
+		'search_columns'     => $r['search_columns'],
 		'group_type'         => $r['group_type'],
 		'group_type__in'     => $r['group_type__in'],
 		'group_type__not_in' => $r['group_type__not_in'],
@@ -1425,6 +1423,10 @@ function groups_accept_invite( $user_id, $group_id ) {
 	}
 
 	$member = new BP_Groups_Member( $user_id, $group_id );
+
+	// Save the inviter ID so that we can pass it to the action below.
+	$inviter_id = $member->inviter_id;
+
 	$member->accept_invite();
 
 	if ( !$member->save() ) {
@@ -1443,11 +1445,13 @@ function groups_accept_invite( $user_id, $group_id ) {
 	 * Fires after a user has accepted a group invite.
 	 *
 	 * @since 1.0.0
+	 * @since 2.8.0 The $inviter_id arg was added.
 	 *
-	 * @param int $user_id  ID of the user who accepted the group invite.
-	 * @param int $group_id ID of the group being accepted to.
+	 * @param int $user_id    ID of the user who accepted the group invite.
+	 * @param int $group_id   ID of the group being accepted to.
+	 * @param int $inviter_id ID of the user who invited this user to the group.
 	 */
-	do_action( 'groups_accept_invite', $user_id, $group_id );
+	do_action( 'groups_accept_invite', $user_id, $group_id, $inviter_id );
 
 	return true;
 }

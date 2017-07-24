@@ -28,15 +28,16 @@ if ( ! function_exists( 'cptch_get_default_options' ) ) {
 			'used_packages'                => array(),
 			'enable_time_limit'            => false,
 			'time_limit'                   => 120,
-			'no_answer'                    => __( 'Please enter a CAPTCHA value.', 'captcha' ),
-			'wrong_answer'                 => __( 'Please enter a valid CAPTCHA value.', 'captcha' ),
-			'time_limit_off'               => __( 'Time limit is exhausted. Please enter a CAPTCHA value again.', 'captcha' ),
-			'time_limit_off_notice'        => __( 'Time limit is exhausted. Please reload the CAPTCHA.', 'captcha' ),
-			'whitelist_message'            => __( 'You are in the whitelist.', 'captcha' ),
+			'no_answer'                    => __( 'Please complete the captcha.', 'captcha' ),
+			'wrong_answer'                 => __( 'Please enter correct captcha value.', 'captcha' ),
+			'time_limit_off'               => __( 'Time limit exceeded. Please complete the captcha once again.', 'captcha' ),
+			'time_limit_off_notice'        => __( 'Time limit exceeded. Please complete the captcha once again.', 'captcha' ),
+			'whitelist_message'            => __( 'Your IP address is Whitelisted.', 'captcha' ),
 			'load_via_ajax'                => false,
 			'use_limit_attempts_whitelist' => false,
 			'display_settings_notice'      => 1,
-			'suggest_feature_banner'       => 1
+			'suggest_feature_banner'       => 1,
+			'forms'                        => array(),
 		);
 
 		$forms = cptch_get_default_forms();
@@ -152,7 +153,7 @@ if ( ! function_exists( 'cptch_parse_options' ) ) {
 		}
 
 		/* Forming the options for the each of the form which are compatible with the plugin */
-		$args =array(
+		$args = array(
 			'wp_login' => array(
 				'enable' => array( 'cptch_login_form' )
 			),
@@ -171,9 +172,9 @@ if ( ! function_exists( 'cptch_parse_options' ) ) {
 			)
 		);
 
-		foreach( $args as $form => $options ) {
-			foreach( $options as $new_fields => $old_fields ) {
-				foreach( (array)$old_fields as $old_field ) {
+		foreach ( $args as $form => $options ) {
+			foreach ( $options as $new_fields => $old_fields ) {
+				foreach ( (array)$old_fields as $old_field ) {
 					if ( isset( $old_options[ $old_field ] ) ) {
 						$new_options['forms'][ $form ][ $new_fields ] = $old_options[ $old_field ];
 

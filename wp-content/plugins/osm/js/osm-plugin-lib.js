@@ -227,6 +227,7 @@ function osm_savePostMarker(){
   {
     var data = {
       action: 'act_saveMarker',
+      MarkerId: osm_ajax_object.MarkerId,
       MarkerLat: osm_ajax_object.MarkerLat,
       MarkerLon: osm_ajax_object.MarkerLon,
       MarkerIcon: osm_ajax_object.MarkerIcon,
