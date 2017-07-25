@@ -9835,6 +9835,10 @@ body.single-event #content .eo-event-venue-map {
 .members.friends .group-list .group-item-wrapper .info-row {
   height: 90px;
 }
+.messages .timestamp {
+  font-size: 10px;
+  margin-bottom: .8rem;
+}
 .messages .group-list .group-item-wrapper {
   height: 152px;
   position: relative;
