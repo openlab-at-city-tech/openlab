@@ -2728,9 +2728,20 @@ body{
     .group-list{
         .group-item-wrapper{
             height: 152px;
+            position: relative;
             @media (max-width: @screen-sm-max){
                 height: 221px;
             }
+        }
+    }
+    .message-actions {
+        bottom: 8px;
+        font-size: 1rem;
+        position: absolute;
+        right: 8px;
+
+        .message-unread {
+            color: @magenta;
         }
     }
 }

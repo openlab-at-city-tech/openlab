@@ -9837,11 +9837,21 @@ body.single-event #content .eo-event-venue-map {
 }
 .messages .group-list .group-item-wrapper {
   height: 152px;
+  position: relative;
 }
 @media (max-width: 991px) {
   .messages .group-list .group-item-wrapper {
     height: 221px;
   }
+}
+.messages .message-actions {
+  bottom: 8px;
+  font-size: 1rem;
+  position: absolute;
+  right: 8px;
+}
+.messages .message-actions .message-unread {
+  color: #ff5959;
 }
 .my-friends .group-list .group-item-wrapper .generic-button.friendship-button {
   margin-top: 8px;

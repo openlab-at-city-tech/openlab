@@ -43,11 +43,12 @@
 						<p class="thread-excerpt"><?php bp_message_thread_excerpt() ?>... <a href="<?php bp_message_thread_view_link() ?>" class="read-more" title="<?php _e( 'View Message', 'buddypress' ); ?>">See More</a></p>
 
 						<?php do_action( 'bp_messages_inbox_list_item' ) ?>
-
-						<?php /* <input type="checkbox" name="message_ids[]" value="<?php bp_message_thread_id() ?>" />
-						<a class="delete-button confirm" href="<?php bp_message_thread_delete_link() ?>" title="<?php _e( "Delete Message", "buddypress" ); ?>">Delete</a> &nbsp; */ ?>
 					</div>
-				</div>
+
+					<div class="message-actions">
+						<?php if ( bp_message_thread_has_unread() ) : ?> <span class="message-unread">Unread</span> <span class="sep">|</span><?php endif; ?><a class="delete-button confirm" href="<?php bp_message_thread_delete_link() ?>" title="<?php _e( 'Delete Message', 'buddypress' ); ?>"><i class="fa fa-minus-circle"></i>Delete</a>
+					</div>
+			</div>
 			</div>
 		<?php } ?>
 		<?php endwhile; ?>
