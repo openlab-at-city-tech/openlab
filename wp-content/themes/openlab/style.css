@@ -9835,6 +9835,9 @@ body.single-event #content .eo-event-venue-map {
 .members.friends .group-list .group-item-wrapper .info-row {
   height: 90px;
 }
+.messages .message-metadata {
+  margin-bottom: 15px;
+}
 .messages .timestamp {
   font-size: 10px;
   margin-bottom: .8rem;
