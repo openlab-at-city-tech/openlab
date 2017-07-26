@@ -17,17 +17,17 @@ class ANGB_USER{
 				$y = $params['gbid'];	
 				switch($delete_options){
 					case 'gradebook':
-						$results1 = $wpdb->delete('oplb_gradebook_users',array('uid'=>$x, 'gbid'=>$y));
-						$results2 = $wpdb->delete('oplb_gradebook_cells',array('uid'=>$x, 'gbid'=>$y));			
+						$results1 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_users",array('uid'=>$x, 'gbid'=>$y));
+						$results2 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells",array('uid'=>$x, 'gbid'=>$y));			
 						break;
 					case 'all_gradebooks':
 						echo json_encode('student deleted from all gradebooks');						
-						$results1 = $wpdb->delete('oplb_gradebook_users',array('uid'=>$x));
-						$results2 = $wpdb->delete('oplb_gradebook_cells',array('uid'=>$x));		
+						$results1 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_users",array('uid'=>$x));
+						$results2 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells",array('uid'=>$x));		
 						break;
 					case 'database':
-						$results1 = $wpdb->delete('oplb_gradebook_users',array('uid'=>$x));
-						$results2 = $wpdb->delete('oplb_gradebook_cells',array('uid'=>$x));				
+						$results1 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_users",array('uid'=>$x));
+						$results2 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells",array('uid'=>$x));				
 						require_once(ABSPATH.'wp-admin/includes/user.php' );
 						wp_delete_user($x);	
 						die();												

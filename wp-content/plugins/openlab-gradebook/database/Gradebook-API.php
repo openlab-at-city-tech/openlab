@@ -36,8 +36,8 @@ class OPLB_GradeBookAPI{
 			echo json_encode(array("status" => "Not Allowed."));
 			die();
 		} 			
-		$course = $wpdb->get_row('SELECT * FROM oplb_gradebook_courses WHERE id = '. $gbid, ARRAY_A);		
-		$assignments = $wpdb->get_results('SELECT * FROM oplb_gradebook_assignments WHERE gbid = '. $gbid, ARRAY_A);		
+		$course = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);		
+		$assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);		
 	    foreach($assignments as &$assignment){
     		$assignment['id'] = intval($assignment['id']);
     		$assignment['gbid'] = intval($assignment['gbid']);    	
@@ -55,11 +55,11 @@ class OPLB_GradeBookAPI{
 	    	$column_headers_assignment_names
 	    );	
 	    $cells= array();	    	
-		$cells = $wpdb->get_results('SELECT * FROM oplb_gradebook_cells WHERE gbid = '. $gbid, ARRAY_A);
+		$cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = $gbid", ARRAY_A);
     	foreach($cells as &$cell){
 	    	$cell['gbid'] = intval($cell['gbid']);	    	
     	}		
-		$students = $wpdb->get_results('SELECT uid FROM oplb_gradebook_users WHERE gbid = '. $gbid, ARRAY_N);
+		$students = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid", ARRAY_N);
    		foreach($students as &$value){
 	        $studentData = get_userdata($value[0]);
     	    $value = array(
@@ -110,7 +110,7 @@ class OPLB_GradeBookAPI{
 			echo json_encode(array("status" => "Not Allowed."));
 			die();
 		}  	
-		$pie_chart_data = $wpdb->get_col('SELECT assign_points_earned FROM oplb_gradebook_cells WHERE amid = '. $_GET['amid']);	
+                $pie_chart_data = $wpdb->get_col("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = {$_GET['amid']}");	
 	
 		function isA($n){ return ($n>=90 ? true : false); }
 		function isB($n){ return ($n>=80 && $n<90 ? true : false); }
@@ -140,15 +140,15 @@ class OPLB_GradeBookAPI{
 			echo json_encode(array("status" => "Not Allowed."));
 			die();
 		} 					  	
-		$line_chart_data1 = $wpdb->get_results('SELECT * FROM oplb_gradebook_cells WHERE uid = '. $_GET['uid'] .' AND gbid = '. $_GET['gbid'],ARRAY_A);	
-		$line_chart_data2 = $wpdb->get_results('SELECT * FROM oplb_gradebook_assignments WHERE gbid = '. $_GET['gbid'],ARRAY_A);
+                $line_chart_data1 = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = {$_GET['uid']} AND gbid = {$_GET['gbid']}",ARRAY_A);	
+                $line_chart_data2 = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = {$_GET['gbid']}",ARRAY_A);
 	
 		foreach($line_chart_data1 as &$line_chart_value1){
 			$line_chart_value1['assign_order']= intval($line_chart_value1['assign_order']);		
 			$line_chart_value1['assign_points_earned'] = intval($line_chart_value1['assign_points_earned']);
 			foreach($line_chart_data2 as $line_chart_value2){
 				if($line_chart_value2['id'] == $line_chart_value1['amid']){
-					$all_homework_scores = $wpdb->get_col('SELECT assign_points_earned FROM oplb_gradebook_cells WHERE amid = '. $line_chart_value2['id']);
+                                        $all_homework_scores = $wpdb->get_col("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = {$line_chart_value2['id']}");
 					$class_average = array_sum($all_homework_scores)/count($all_homework_scores);
 										
 					$line_chart_value1=array_merge($line_chart_value1, array('assign_name'=>$line_chart_value2['assign_name'], 'class_average' =>$class_average));
@@ -173,7 +173,7 @@ class OPLB_GradeBookAPI{
   		global $wpdb;		
   		$user_id = wp_get_current_user()->ID;
   		$wp_role = get_userdata($user_id)->roles;
-	  	$user_courses = $wpdb->get_results('SELECT * FROM oplb_gradebook_users WHERE uid = '. $user_id, ARRAY_A);
+	  	$user_courses = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $user_id", ARRAY_A);
 		foreach($user_courses as &$user_course){
  			$user_data = get_userdata($user_course['uid']);			
 			$user_course['first_name']= $user_data->first_name;
@@ -183,8 +183,8 @@ class OPLB_GradeBookAPI{
 			$user_course['gbid'] = intval($user_course['gbid']);					
 			$user_course['uid'] = intval($user_course['uid']);					
 		}   
-		$sql = '( SELECT gbid FROM oplb_gradebook_users WHERE uid = '. $user_id. ')';
-  		$courses = $wpdb -> get_results("SELECT * FROM oplb_gradebook_courses WHERE id IN ". $sql, ARRAY_A);
+		$sql = "( SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $user_id )";
+  		$courses = $wpdb -> get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id IN $sql", ARRAY_A);
 		foreach($courses as &$course){
 			$course['id'] = intval($course['id']);				
 			$course['year'] = intval($course['year']);			

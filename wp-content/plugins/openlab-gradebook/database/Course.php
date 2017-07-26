@@ -57,10 +57,10 @@ class gradebook_course_API{
 					echo json_encode(array("status" => "Not Allowed."));
 					die();
 				} 						
-	  			$wpdb->delete('oplb_gradebook_courses',array('id'=>$id));
-	  			$wpdb->delete('oplb_gradebook_assignments',array('gbid'=>$gbid));
-	  			$wpdb->delete('oplb_gradebook_cells',array('gbid'=>$gbid));  
-	  			$wpdb->delete('oplb_gradebook_users',array('gbid'=>$gbid));  	  			
+	  			$wpdb->delete("{$wpdb->prefix}oplb_gradebook_courses",array('id'=>$id));
+	  			$wpdb->delete("{$wpdb->prefix}oplb_gradebook_assignments",array('gbid'=>$gbid));
+	  			$wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells",array('gbid'=>$gbid));  
+	  			$wpdb->delete("{$wpdb->prefix}oplb_gradebook_users",array('gbid'=>$gbid));  	  			
 	  			echo json_encode(array('delete_course'=>'Success'));
 	  			break;
 	  		case 'PUT' :
@@ -69,12 +69,12 @@ class gradebook_course_API{
 					echo json_encode(array("status" => "Not Allowed."));
 					die();
 				} 	  					
-   				$wpdb->update('oplb_gradebook_courses', array( 
+   				$wpdb->update("{$wpdb->prefix}oplb_gradebook_courses", array( 
    					'name' => $params['name'], 'school' => $params['school'], 'semester' => $params['semester'], 
    					'year' => $params['year']),
 					array('id' => $params['id'])
 				);   
-   				$courseDetails = $wpdb->get_row('SELECT * FROM oplb_gradebook_courses WHERE id = '. $params['id'] , ARRAY_A);
+                                $courseDetails = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = {$params['id']}", ARRAY_A);
    				echo json_encode($courseDetails);	
 				break;
 	  		case 'UPDATE' :
@@ -84,7 +84,7 @@ class gradebook_course_API{
 				echo json_encode(array("patch" => "patching"));				
 				break;
 	  		case 'GET' :	  		
-   				$courseDetails = $wpdb->get_row('SELECT * FROM oplb_gradebook_courses WHERE id = '. $_GET['id'] , ARRAY_A);	
+                                $courseDetails = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = {$_GET['id']}" , ARRAY_A);	
    				echo json_encode($courseDetails);   				
 				break;
 	  		case 'POST' :
@@ -94,7 +94,7 @@ class gradebook_course_API{
 					echo json_encode(array("status" => "Not Allowed."));
 					die();
 				} 						  		
-				$wpdb->insert('oplb_gradebook_courses', 
+				$wpdb->insert("{$wpdb->prefix}oplb_gradebook_courses", 
 		    		array('name' => $params['name'], 
 		    			'school' => $params['school'], 
 		    			'semester' => $params['semester'], 
@@ -102,13 +102,13 @@ class gradebook_course_API{
 					array('%s', '%s', '%s', '%d') 
 				);
 				$gbid = $wpdb -> insert_id;
-    			$wpdb->insert('oplb_gradebook_users', 
+    			$wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", 
 		    		array('uid' => $user->ID,'gbid' => $gbid, 'role' => 'instructor'), 
 					array('%d', '%d', '%s') 
 				);	
 				global $oplb_gradebook_api;
 				$user = $oplb_gradebook_api -> oplb_gradebook_get_user($user->ID, $gbid);			
-				$course = $wpdb->get_row("SELECT * FROM oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);
+				$course = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);
 				$course['id']=intval($course['id']);
 				$course['year']=intval($course['year']);				
 				echo json_encode(array('course'=>$course, 'user'=>$user));

@@ -62,10 +62,10 @@ class gradebook_cell_API{
 					echo json_encode(array("status" => "Not Allowed."));
 					die();
 				} 		  					  			
-   				$wpdb->update('oplb_gradebook_cells', array( 'assign_order'=>$params['assign_order'], 'assign_points_earned' => $params['assign_points_earned']),
+   				$wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array( 'assign_order'=>$params['assign_order'], 'assign_points_earned' => $params['assign_points_earned']),
 					array( 'uid' => $params['uid'], 'amid' => $params['amid'] )
    				);   
-   				$assign_points_earned = $wpdb->get_row('SELECT assign_points_earned FROM oplb_gradebook_cells WHERE uid = '. $params['uid'] . ' AND amid = '. $params['amid'] , ARRAY_A);
+                                $assign_points_earned = $wpdb->get_row("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = {$params['uid']} AND amid = {$params['amid']}" , ARRAY_A);
    				$assign_points_earned['assign_points_earned'] = floatval($assign_points_earned['assign_points_earned']);
    				echo json_encode($assign_points_earned);
    				die();	  			
