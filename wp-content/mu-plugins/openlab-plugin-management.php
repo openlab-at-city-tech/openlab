@@ -11,8 +11,11 @@ function openlab_hide_plugins( $plugins ) {
 	$super_admin_only = array(
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
+		'ambrosite-nextprevious-post-link-plus/ambrosite-post-link-plus.php',
 		'an-gradebook/GradeBook.php',
 		'bbpress/bbpress.php',
+		'bp-customizable-group-categories/bp-customizable-group-categories.php',
+		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
@@ -26,6 +29,7 @@ function openlab_hide_plugins( $plugins ) {
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'titan-framework/titan-framework.php',
 		'webwork/webwork.php',
 	);
 
