@@ -216,12 +216,18 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 
 						}
 
+						$placeholder = '';
+						if ( bp_get_the_profile_field_id() === openlab_get_xprofile_field_id( 'Phone' ) ) {
+							$placeholder = 'Note: Your phone number will be public.';
+						}
+
 						$return .= '<input
 						class="form-control"
 						type="text"
 						name="' . bp_get_the_profile_field_input_name() . '"
 						id="' . bp_get_the_profile_field_input_name() . '"
 						value="' . bp_get_the_profile_field_edit_value() . '"
+						placeholder="' . esc_attr( $placeholder ) . '"
 						' . openlab_profile_field_input_attributes() . '
 						/>';
 						endif;

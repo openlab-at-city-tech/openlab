@@ -514,5 +514,9 @@ function openlab_get_xprofile_field_id( $field_name ) {
 
 		case 'Last Name' :
 			return 3;
+
+		// On the 'Student' field group.
+		case 'Phone' :
+			return 194;
 	}
 }
