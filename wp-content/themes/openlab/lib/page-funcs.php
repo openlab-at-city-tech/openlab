@@ -321,6 +321,12 @@ function openlab_registration_page() {
     do_action('bp_before_register_page');
 
     $ajaxurl = bp_core_ajax_url();
+
+	$first_name_field_id = openlab_get_xprofile_field_id( 'First Name' );
+	$last_name_field_id = openlab_get_xprofile_field_id( 'Last Name' );
+
+	$first_name_submitted = isset( $_POST['field_' . $first_name_field_id] ) ? $_POST['field_' . $field_name_field_id] : '';
+	$last_name_submitted = isset( $_POST['field_' . $last_name_field_id] ) ? $_POST['field_' . $last_name_field_id] : '';
     ?>
 
     <div class="page" id="register-page">
@@ -345,7 +351,7 @@ function openlab_registration_page() {
 
                         <div class="register-section" id="basic-details-section">
 
-                            <?php /*                             * *** Basic Account Details ***** */ ?>
+                            <?php /* Basic Account Details */ ?>
 
                             <div class="form-group">
                                 <label class="control-label" for="signup_username"><?php _e('Username', 'buddypress') ?> <?php _e('(required)', 'buddypress') ?> (lowercase & no special characters)</label>
@@ -372,6 +378,38 @@ function openlab_registration_page() {
                                     data-parsley-errors-container="#signup_username_error"
                                     />
                             </div>
+
+							<div class="form-group">
+								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>">First Name (required, but not displayed on Public Profile)</label>
+								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
+								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ) ?>
+								<input
+									class="form-control"
+									type="text"
+									name="field_<?php echo esc_attr( $first_name_field_id ); ?>"
+									id="field_<?php echo esc_attr( $first_name_field_id ); ?>"
+									data-parsley-required
+									data-parsley-required-message="First Name is required."
+									data-parsley-errors-container="#field_<?php echo esc_attr( $first_name_field_id ); ?>_error"
+									value="<?php echo esc_attr( $first_name_submitted ); ?>"
+								/>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>">Last Name (required, but not displayed on Public Profile)</label>
+								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container"></div>
+								<?php do_action( 'bp_field_' . $last_name_field_id . '_errors' ) ?>
+								<input
+									class="form-control"
+									type="text"
+									name="field_<?php echo esc_attr( $last_name_field_id ); ?>"
+									id="field_<?php echo esc_attr( $last_name_field_id ); ?>"
+									data-parsley-required
+									data-parsley-required-message="Last Name is required."
+									data-parsley-errors-container="#field_<?php echo esc_attr( $last_name_field_id ); ?>_error"
+									value="<?php echo esc_attr( $last_name_submitted ); ?>"
+								/>
+							</div>
 
                             <div class="form-group">
                                 <label class="control-label" for="signup_email"><?php _e('Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div>', 'buddypress') ?> </label>

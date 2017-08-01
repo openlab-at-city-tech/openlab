@@ -166,10 +166,20 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 	}
 
 	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
+	$exclude_fields = array(
+		openlab_get_xprofile_field_id( 'First Name' ),
+		openlab_get_xprofile_field_id( 'Last Name' ),
+	);
+
+	$has_profile_args = array(
+		'exclude_groups' => $exclude_groups,
+		'exclude_fields' => $exclude_fields,
+	);
+
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return = '';
 	if ( function_exists( 'bp_has_profile' ) ) :
-		if ( bp_has_profile( 'exclude_groups=' . $exclude_groups ) ) :
+		if ( bp_has_profile( $has_profile_args ) ) :
 			while ( bp_profile_groups() ) :
 				bp_the_profile_group();
 				while ( bp_profile_fields() ) :
