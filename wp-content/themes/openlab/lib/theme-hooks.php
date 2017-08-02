@@ -175,7 +175,7 @@ function openlab_loader_class() {
     <script type="text/javascript">
         document.documentElement.className = 'page-loading';
     </script>
-
+    
     <?php
 }
 

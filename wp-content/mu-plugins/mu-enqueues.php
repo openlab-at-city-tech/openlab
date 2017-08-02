@@ -229,3 +229,20 @@ function openlab_gtm_instatiation() {
 }
 
 add_action('wp_head', 'openlab_gtm_instatiation', 1);
+
+/**
+ * If Javascript is present, obfuscates adminbar until truncation operations are complete
+ * Otherwise there is some nasty FOUT going on
+ */
+function openlab_truncation_prep(){
+    
+    ?>
+    <!-- truncate on the fly prep -->
+    <script>document.write('<style>.truncate-on-the-fly, #wpadminbar { opacity: 0; }</style>');</script>
+
+    <?php
+    
+}
+
+add_action('wp_head', 'openlab_truncation_prep', 2);
+add_action('admin_head', 'openlab_truncation_prep', 2);
