@@ -65,31 +65,42 @@
             this.$element.closest('.form-group')
                     .addClass('has-error')
                     .find('.error-container').addClass('error');
-            
+
             var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
-            
+
+            console.log('errorMsg', errorMsg.text());
+
             //in some cases errorMsg is further up the chain
-            if(errorMsg.length === 0){
+            if (errorMsg.length === 0) {
                 errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
             }
-            
+
+            var jsElem = errorMsg[0];
+            jsElem.style.clip = 'auto';
+            var alertText = document.createTextNode(" ");
+            jsElem.appendChild(alertText);
+            jsElem.style.display = 'none';
+            jsElem.style.display = 'inline';
+
+            console.log('jsElem', jsElem);
+
             if (errorMsg.attr('role') !== 'alert') {
                 errorMsg.attr('role', 'alert');
             }
 
         }).on('field:success', function (formInstance) {
-            
+
             this.$element.closest('.form-group')
                     .removeClass('has-error')
                     .find('.error-container').removeClass('error');
 
             var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
-            
+
             //in some cases errorMsg is further up the chain
-            if(errorMsg.length === 0){
+            if (errorMsg.length === 0) {
                 errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
             }
-            
+
             errorMsg.attr('role', '');
         });
 
