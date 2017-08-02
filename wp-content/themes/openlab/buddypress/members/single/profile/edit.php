@@ -70,13 +70,20 @@ $field_ids = array(1);
                         <div<?php bp_field_css_class('editfield') ?>>
 
                             <?php if ( 'textbox' == bp_get_the_profile_field_type() || 'url' == bp_get_the_profile_field_type() ) : ?>
+								<?php
+								$placeholder = '';
+								if ( bp_get_the_profile_field_id() === openlab_get_xprofile_field_id( 'Phone' ) ) {
+									$placeholder = 'Note: Your phone number will be public.';
+								}
+								?>
+
                                 <?php if (bp_get_the_profile_field_name() == "Name") { ?>
                                     <label for="<?php bp_the_profile_field_input_name() ?>"><?php echo "Display Name"; ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
                                 <?php }else { ?>
                                     <label for="<?php bp_the_profile_field_input_name() ?>"><?php bp_the_profile_field_name() ?> <?php if (bp_get_the_profile_field_is_required()) : ?><?php _e('(required)', 'buddypress') ?><?php endif; ?></label>
                                 <?php } ?>
 
-                                <input class="form-control" type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="<?php bp_the_profile_field_edit_value() ?>" />
+                                <input class="form-control" type="text" name="<?php bp_the_profile_field_input_name() ?>" id="<?php bp_the_profile_field_input_name() ?>" value="<?php bp_the_profile_field_edit_value() ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" />
 
                             <?php endif; ?>
 
