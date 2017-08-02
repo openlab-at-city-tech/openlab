@@ -16,7 +16,15 @@ function openlab_asset_ver($tag, $handle, $src = '') {
         }
     }
 
+	// Unencode ampersands etc.
+	$src = str_replace( '&#038;', '&', $src );
     $_src = parse_url($src);
+
+	// Ignore non-openlab assets.
+	if ( false === strpos( $_src['host'], 'openlab' ) ) {
+		return $tag;
+	}
+
     if (!empty($_src['query'])) {
         wp_parse_str($_src['query'], $vars);
         foreach ($vars as $k => &$v) {
