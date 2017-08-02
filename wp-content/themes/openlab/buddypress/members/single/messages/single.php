@@ -8,7 +8,7 @@
 
 		<p id="message-recipients">
 			<span class="highlight">
-				<?php printf( __('Sent between %s and %s', 'buddypress'), bp_get_the_thread_recipients(), '<a href="' . bp_get_loggedin_user_link() . '" title="' . bp_get_loggedin_user_fullname() . '">' . bp_get_loggedin_user_fullname() . '</a>' ) ?>
+				<?php printf( __( 'Sent between %s and %s', 'buddypress' ), bp_get_the_thread_recipients(), '<a href="' . bp_get_loggedin_user_link() . '" title="' . bp_get_loggedin_user_fullname() . '">' . bp_get_loggedin_user_fullname() . '</a>' ) ?> <span class="sep">|</a><a class="delete-button confirm" href="<?php bp_the_thread_delete_link() ?>" title="<?php _e( 'Delete Message', 'buddypress' ); ?>"><i class="fa fa-minus-circle"></i>Delete</a>
 			</span>
 		</p>
 

@@ -25,7 +25,6 @@ module.exports = function (grunt) {
                     'js/jquery.easing.1.3.js',
                     'js/jquery.mobile.customized.min.js',
                     'js/camera.min.js',
-                    'js/jQuery.succinct.mod.js',
                     'js/detect-zoom.js'],
                 dest: 'js/dist/vendor.js'
             },
