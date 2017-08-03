@@ -1,12 +1,12 @@
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+var resizeTimer;
 
-    var resizeTimer;
+OpenLab.utility = (function ($) {
 
-    OpenLab.utility = {
+    return {
         newMembers: {},
         newMembersHTML: {},
         protect: 0,
@@ -316,7 +316,7 @@
             }
 
             $('#home-new-member-wrap').css('visibility', 'visible').hide().fadeIn(700, function () {
-
+                console.log('openLab', OpenLab);
                 OpenLab.truncation.truncateOnTheFly(false, true);
 
             });
@@ -456,8 +456,10 @@
             });
 
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
     var related_links_count,
             $add_new_related_link,
             $cloned_related_link_fields;
@@ -583,12 +585,12 @@
             });
         }
 
-	// Move the 'public group' notification setting.
-	var public_group_not = $( '#groups-notification-settings-joined-my-public-group' );
-	if ( public_group_not.length ) {
-		public_group_not.remove();
-		$( '#groups-notification-settings-request' ).after( public_group_not );
-	}
+        // Move the 'public group' notification setting.
+        var public_group_not = $('#groups-notification-settings-joined-my-public-group');
+        if (public_group_not.length) {
+            public_group_not.remove();
+            $('#groups-notification-settings-request').after(public_group_not);
+        }
 
     });//end document.ready
 

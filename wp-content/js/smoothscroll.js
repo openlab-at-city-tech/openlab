@@ -3338,16 +3338,14 @@ if (Hyphenator.isBookmarklet()) {
  * OpenLab search dropdowns
  */
 
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+var resizeTimer;
 
-    var legacyWidth = $(window).width();
-    var resizeTimer;
-
-    OpenLab.search = {
+OpenLab.search = (function ($) {
+    return{
         init: function () {
 
             //search
@@ -3427,6 +3425,11 @@ if (Hyphenator.isBookmarklet()) {
             return $('.device-' + alias).is(':visible');
         },
     }
+})(jQuery, OpenLab);
+
+(function ($) {
+    
+    var legacyWidth = $(window).width();
 
     $(document).ready(function () {
 
@@ -3454,16 +3457,15 @@ if (Hyphenator.isBookmarklet()) {
  * OpenLab search dropdowns
  */
 
-(function ($) {
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    var legacyWidth = $(window).width();
-    var resizeTimer;
+var resizeTimer;
+OpenLab.truncation = (function ($) {
 
-    OpenLab.truncation = {
+    return{
         init: function () {
 
             if ($('.truncate-on-the-fly').length) {
@@ -3475,6 +3477,12 @@ if (Hyphenator.isBookmarklet()) {
                         'opacity': '1.0'
                     });
                 }, 800);
+            } else {
+                setTimeout(function () {
+                    $('#wpadminbar').animate({
+                        'opacity': '1.0'
+                    });
+                }, 250);
             }
 
         },
@@ -3496,14 +3504,10 @@ if (Hyphenator.isBookmarklet()) {
                     opacity: '0'
                 });
 
-                if (thisElem.html().indexOf('Hi') !== -1) {
-                    console.log('thisElem', thisElem.html());
-                }
-
                 if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
                 }
-                
+
                 var originalCopy = thisElem.parent().find('.original-copy').html();
                 thisElem.html(originalCopy);
 
@@ -3513,7 +3517,6 @@ if (Hyphenator.isBookmarklet()) {
                 if (truncationBaseWidth === 'calculate') {
 
                     var sizerContainer = OpenLab.truncation.truncateSizerContainer(thisElem);
-                    console.log('sizerContainer', sizerContainer.html());
                     var static_w = 0;
 
                     sizerContainer.find('.truncate-static').each(function () {
@@ -3557,8 +3560,6 @@ if (Hyphenator.isBookmarklet()) {
                     var thisOmission = '';
                 }
 
-                console.log('truncationBaseWidth', container_w, truncationBaseWidth);
-
                 if (container_w < truncationBaseWidth) {
                     var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w) / truncationBaseWidth) * 100));
                     thisElem.find('.omission').remove();
@@ -3585,10 +3586,6 @@ if (Hyphenator.isBookmarklet()) {
                             'white-space': 'normal'
                         });
 
-                        if (thisElem.html().indexOf('Hi') !== -1) {
-                            console.log('sizerContainer compare before', sizerContainer_w, sizerContainerNoWrap_w);
-                        }
-
                         if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
                             OpenLab.truncation.truncateReveal(thisElem);
                             return;
@@ -3609,9 +3606,6 @@ if (Hyphenator.isBookmarklet()) {
 
                                 } else {
                                     var truncationValue = truncationBaseValue - looper;
-                                    if (thisElem.html().indexOf('Hi') !== -1) {
-                                        console.log('truncationValue', truncationBaseWidth, looper, truncationValue);
-                                    }
                                     OpenLab.truncation.truncateMainAction(thisElem, truncationValue, thisOmission);
                                 }
 
@@ -3628,10 +3622,6 @@ if (Hyphenator.isBookmarklet()) {
                                 //recalculate sizes
                                 sizerContainer_w = sizerContainer.width();
                                 sizerContainer_h = sizerContainer.height();
-
-                                if (thisElem.html().indexOf('Hi') !== -1) {
-                                    console.log('sizerContainer compare after', sizerContainer_w, sizerContainerNoWrap_w, sizerContainer_h, sizerContainerNoWrap_h);
-                                }
 
                                 if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
 
@@ -3702,7 +3692,6 @@ if (Hyphenator.isBookmarklet()) {
                 var checkContainer = thisElem.closest('.truncate-sizer-' + breakpoint);
 
                 if (checkContainer.length && OpenLab.truncation.isBreakpoint(breakpoint)) {
-                    //console.log('go breakpoint', breakpoint, checkContainer);
                     thisContainer = checkContainer;
                 }
 
@@ -3725,8 +3714,10 @@ if (Hyphenator.isBookmarklet()) {
                         'opacity': 1
                     }, 700);
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
     $(document).ready(function () {
 
         OpenLab.truncation.init();
@@ -3750,16 +3741,14 @@ if (Hyphenator.isBookmarklet()) {
  * OpenLab search dropdowns
  */
 
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+var resizeTimer;
 
-    var resizeTimer;
-    var windowWidth = $(window).width();
-
-    OpenLab.nav = {
+OpenLab.nav = (function ($) {
+    return{
         backgroundCont: {},
         backgroundTopStart: 0,
         plusHeight: 66,
@@ -3906,10 +3895,10 @@ if (Hyphenator.isBookmarklet()) {
             });
 
         },
-        removeDefaultScreenReaderShortcut: function(){
-          
+        removeDefaultScreenReaderShortcut: function () {
+
             $('#wpadminbar .screen-reader-shortcut').remove();
-            
+
         },
         directToggleAction: function () {
 
@@ -4115,8 +4104,13 @@ if (Hyphenator.isBookmarklet()) {
         fixHoverOnMobile: function (thisElem) {
             thisElem.trigger('click');
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
+    
+    var windowWidth = $(window).width();
+    
     $(document).ready(function () {
 
         OpenLab.nav.init();
@@ -4127,10 +4121,10 @@ if (Hyphenator.isBookmarklet()) {
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-            
+
             //checking to see if this is truly a resize event
             if ($(window).width() != windowWidth) {
-                
+
                 windowWidth = $(window).width();
 
                 OpenLab.nav.hoverFixes();
@@ -4151,13 +4145,12 @@ if (Hyphenator.isBookmarklet()) {
  * Makes the header relative until scrolling, to fix issue with header going behind admin bar
  */
 
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
-
-    OpenLab.fixes = {
+OpenLab.fixes = (function ($) {
+    return{
         init: function () {
 
             if ($('body').hasClass('masthead-fixed')) {
@@ -4175,9 +4168,9 @@ if (Hyphenator.isBookmarklet()) {
             //get adminbar height
             var adminBar_h = $('#wpadminbar').outerHeight();
             var scrollTrigger = Math.ceil(adminBar_h / 2);
-            
+
             //if were below the scrollTrigger, remove the fixed class, otherwise make sure it's there
-            if(OpenLab.fixes.getCurrentScroll() <= scrollTrigger){
+            if (OpenLab.fixes.getCurrentScroll() <= scrollTrigger) {
                 $('body').removeClass('masthead-fixed');
             } else {
                 $('body').addClass('masthead-fixed');
@@ -4186,10 +4179,13 @@ if (Hyphenator.isBookmarklet()) {
         },
         getCurrentScroll: function () {
             var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            
+
             return currentScroll;
         }
-    };
+    }
+})(jQuery, OpenLab);
+
+(function ($) {
 
     $(document).ready(function () {
         OpenLab.fixes.init();
