@@ -52,23 +52,10 @@ function openlab_group_library_settings() {
 }
 
 /**
- * Add the portfolio display to group sidebars.
+ * Adds the library tools display to group sidebars.
  */
 function openlab_group_library_tools_display() {
 	if ( ! openlab_library_tools_are_enabled_for_group( bp_get_current_group_id() ) ) {
-		return;
-	}
-
-	// Non-public groups shouldn't show this to non-members. See #997
-	$group = groups_get_current_group();
-	if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
-		return false;
-	}
-
-	$portfolio_data = openlab_get_group_member_portfolios();
-
-	// No member of the group has a portfolio
-	if ( empty( $portfolio_data ) ) {
 		return;
 	}
 
@@ -96,6 +83,9 @@ function openlab_group_library_tools_display() {
 }
 add_action( 'bp_group_options_nav', 'openlab_group_library_tools_display', 80 );
 
+/**
+ * Outputs the markup for the Library Search box.
+ */
 function openlab_library_search_form() {
 	?>
 
@@ -129,6 +119,9 @@ function openlab_library_search_form() {
 	<?php
 }
 
+/**
+ * Outputs the markup for the Library Information box.
+ */
 function openlab_library_information() {
 	?>
 	<div class="openlab-library-information">
