@@ -7946,6 +7946,12 @@ body label.passive {
 body label.block {
   display: block;
 }
+.panel-heading legend {
+  margin-bottom: 0;
+}
+.subpanel {
+  margin-bottom: 25px;
+}
 /**shortcodes**/
 .callout-list .row {
   margin-bottom: 34px;
