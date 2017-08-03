@@ -5,6 +5,7 @@
  */
 
 add_action( 'openlab_before_group_privacy_settings', 'openlab_group_library_settings' );
+add_action( 'widgets_init', 'openlab_register_library_tools_widget' );
 
 /**
  * Checks whether a group has the Library Tools feature enabled on the group profile.
@@ -84,6 +85,13 @@ function openlab_group_library_tools_display() {
 add_action( 'bp_group_options_nav', 'openlab_group_library_tools_display', 80 );
 
 /**
+ * Registers the Library Tools widget for WP sites.
+ */
+function openlab_register_library_tools_widget() {
+	register_widget( 'OpenLab_Library_Tools_Widget' );
+}
+
+/**
  * Outputs the markup for the Library Search box.
  */
 function openlab_library_search_form() {
@@ -135,4 +143,89 @@ function openlab_library_information() {
 		</ul>
 	</div>
 	<?php
+}
+
+/**
+ * Library Tools widget class.
+ */
+class OpenLab_Library_Tools_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'openlab-library-tools-widget',
+			'Library Tools',
+			array(
+				'class' => 'openlab-library-tools-widget',
+			)
+		);
+	}
+
+	public function parse_settings( $settings ) {
+		$merged = array_merge( array(
+			'find_library_materials' => false,
+			'library_information' => false,
+		), $settings );
+
+		$merged = array_map( 'boolval', $merged );
+
+		return $merged;
+	}
+
+	public function widget( $args, $instance ) {
+		$settings = $this->parse_settings( $instance );
+
+		?>
+
+		<?php if ( $settings['find_library_materials'] ) : ?>
+			<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+			<?php echo $args['before_title']; ?><a href="https://library.citytech.cuny.edu">Find Library Materials</a><?php echo $args['after_title']; ?>
+
+			<?php openlab_library_search_form(); ?>
+
+			<?php echo $args['after_widget']; ?>
+		<?php endif; ?>
+
+		<?php if ( $settings['library_information'] ) : ?>
+			<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+			<?php echo $args['before_title']; ?><a href="https://library.citytech.cuny.edu">Library Information</a><?php echo $args['after_title']; ?>
+
+			<?php openlab_library_information(); ?>
+
+			<?php echo $args['after_widget']; ?>
+		<?php endif; ?>
+
+		<?php
+
+	}
+
+	public function form( $instance ) {
+		$settings = $this->parse_settings( $instance );
+
+		?>
+
+		<p>
+			<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'find_library_materials' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'find_library_materials' ) ); ?>" value="1" <?php checked( $settings['find_library_materials'] ); ?> />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'find_library_materials' ) ); ?>">Find Library Materials</label>
+		</p>
+
+		<p>
+			<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'library_information' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library_information' ) ); ?>" value="1" <?php checked( $settings['library_information'] ); ?> />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'library_information' ) ); ?>">Library Information</label>
+		</p>
+
+		<?php
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance = $this->parse_settings( array() );
+
+		if ( ! empty( $new_instance['find_library_materials'] ) ) {
+			$instance['find_library_materials'] = true;
+		}
+
+		if ( ! empty( $new_instance['library_information'] ) ) {
+			$instance['library_information'] = true;
+		}
+
+		return $instance;
+	}
 }
