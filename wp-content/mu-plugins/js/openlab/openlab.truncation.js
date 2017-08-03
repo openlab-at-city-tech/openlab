@@ -2,16 +2,15 @@
  * OpenLab search dropdowns
  */
 
-(function ($) {
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    var legacyWidth = $(window).width();
-    var resizeTimer;
+var resizeTimer;
+OpenLab.truncation = (function ($) {
 
-    OpenLab.truncation = {
+    return{
         init: function () {
 
             if ($('.truncate-on-the-fly').length) {
@@ -23,6 +22,12 @@
                         'opacity': '1.0'
                     });
                 }, 800);
+            } else {
+                setTimeout(function () {
+                    $('#wpadminbar').animate({
+                        'opacity': '1.0'
+                    });
+                }, 250);
             }
 
         },
@@ -44,14 +49,10 @@
                     opacity: '0'
                 });
 
-                if (thisElem.html().indexOf('Hi') !== -1) {
-                    console.log('thisElem', thisElem.html());
-                }
-
                 if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
                 }
-                
+
                 var originalCopy = thisElem.parent().find('.original-copy').html();
                 thisElem.html(originalCopy);
 
@@ -61,7 +62,6 @@
                 if (truncationBaseWidth === 'calculate') {
 
                     var sizerContainer = OpenLab.truncation.truncateSizerContainer(thisElem);
-                    console.log('sizerContainer', sizerContainer.html());
                     var static_w = 0;
 
                     sizerContainer.find('.truncate-static').each(function () {
@@ -105,8 +105,6 @@
                     var thisOmission = '';
                 }
 
-                console.log('truncationBaseWidth', container_w, truncationBaseWidth);
-
                 if (container_w < truncationBaseWidth) {
                     var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w) / truncationBaseWidth) * 100));
                     thisElem.find('.omission').remove();
@@ -133,10 +131,6 @@
                             'white-space': 'normal'
                         });
 
-                        if (thisElem.html().indexOf('Hi') !== -1) {
-                            console.log('sizerContainer compare before', sizerContainer_w, sizerContainerNoWrap_w);
-                        }
-
                         if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
                             OpenLab.truncation.truncateReveal(thisElem);
                             return;
@@ -157,9 +151,6 @@
 
                                 } else {
                                     var truncationValue = truncationBaseValue - looper;
-                                    if (thisElem.html().indexOf('Hi') !== -1) {
-                                        console.log('truncationValue', truncationBaseWidth, looper, truncationValue);
-                                    }
                                     OpenLab.truncation.truncateMainAction(thisElem, truncationValue, thisOmission);
                                 }
 
@@ -176,10 +167,6 @@
                                 //recalculate sizes
                                 sizerContainer_w = sizerContainer.width();
                                 sizerContainer_h = sizerContainer.height();
-
-                                if (thisElem.html().indexOf('Hi') !== -1) {
-                                    console.log('sizerContainer compare after', sizerContainer_w, sizerContainerNoWrap_w, sizerContainer_h, sizerContainerNoWrap_h);
-                                }
 
                                 if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
 
@@ -250,7 +237,6 @@
                 var checkContainer = thisElem.closest('.truncate-sizer-' + breakpoint);
 
                 if (checkContainer.length && OpenLab.truncation.isBreakpoint(breakpoint)) {
-                    //console.log('go breakpoint', breakpoint, checkContainer);
                     thisContainer = checkContainer;
                 }
 
@@ -273,8 +259,10 @@
                         'opacity': 1
                     }, 700);
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
     $(document).ready(function () {
 
         OpenLab.truncation.init();
