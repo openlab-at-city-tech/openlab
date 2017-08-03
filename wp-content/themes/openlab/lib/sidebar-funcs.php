@@ -34,6 +34,12 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
             echo '<div class="sidebar-block hidden-xs">';
             wp_nav_menu($args);
             echo '</div>';
+
+			echo '<h2 class="sidebar-title hidden-xs">Learn More</h2>';
+            echo '<div class="sidebar-block sidebar-block-learnmore hidden-xs">';
+			openlab_learnmore_sidebar();
+            echo '</div>';
+
             break;
         case 'help':
             get_sidebar('help');
@@ -101,6 +107,19 @@ function openlab_group_sidebar($mobile = false) {
             <?php
         endwhile;
     endif;
+}
+
+/**
+ * 'Learn More' sidebar for About pages.
+ */
+function openlab_learnmore_sidebar() {
+	?>
+	<div class="learn-more-sidebar">
+		<p>Get updates on the <a href="http://openlabdev.org/about/">Open Road</a></p>
+		<p>Follow our student bloggers on <a href="https://openlab.citytech.cuny.edu/the-buzz/">The Buzz</a></p>
+		<p>Join the conversation about <a href="https://openlab.citytech.cuny.edu/openpedagogyopenlab/">Open Pedagogy</a></p>
+	</div>
+	<?php
 }
 
 /**

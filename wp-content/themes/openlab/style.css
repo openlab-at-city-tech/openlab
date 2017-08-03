@@ -8707,7 +8707,8 @@ body form .checkbox-list-container {
   border-radius: 0 0 4px 4px;
   border-top: none;
 }
-.sidebar .sidebar-block:first-of-type {
+.sidebar .sidebar-block:first-of-type,
+.sidebar .sidebar-block.sidebar-block-learnmore {
   margin: 0;
   border-top: 1px solid #bbbbbb;
 }
@@ -8865,6 +8866,12 @@ body form .checkbox-list-container {
     width: 95%;
     margin: 0 auto;
   }
+}
+.sidebar .learn-more-sidebar {
+  padding: 15px;
+}
+.sidebar .learn-more-sidebar a {
+  font-weight: bold;
 }
 @media (max-width: 767px) {
   .mobile-enabled .sidebar-menu-wrapper {

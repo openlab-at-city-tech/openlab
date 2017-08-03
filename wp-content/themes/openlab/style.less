@@ -1737,7 +1737,8 @@ body form{
         margin: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: none;
-        &:first-of-type{
+        &:first-of-type,
+        &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
         }
@@ -1847,6 +1848,12 @@ body form{
                 width: 95%;
                 margin: 0 auto;
             }
+        }
+    }
+    .learn-more-sidebar {
+        padding: 15px;
+        a {
+            font-weight: bold;
         }
     }
 }
