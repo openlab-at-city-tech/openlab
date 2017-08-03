@@ -916,11 +916,13 @@ add_action('bp_before_member_body', 'openlab_member_header');
 function openlab_messages_pagination() {
     global $messages_template;
 
-    $page_arg = '%#%';
+	$page_args = array(
+		'mpage' => '%#%',
+	);
 
     if ((int) $messages_template->total_thread_count && (int) $messages_template->pag_num) {
         $pagination = paginate_links(array(
-            'base' => add_query_arg($page_arg, array('mpage' => '%#%')),
+            'base' => add_query_arg( $page_args, '' ),
             'format' => '',
             'total' => ceil((int) $messages_template->total_thread_count / (int) $messages_template->pag_num),
             'current' => $messages_template->pag_page,
