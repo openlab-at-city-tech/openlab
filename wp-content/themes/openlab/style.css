@@ -10014,6 +10014,38 @@ input.help-search {
   padding-top: 35px;
   width: 101px;
 }
+.openlab-library-tools .sidebar-header a {
+  text-decoration: none;
+}
+.openlab-library-tools h3.sidebar-block-header {
+  font-size: 16px;
+  margin: 10px 0 10px 0;
+}
+.openlab-library-tools .sidebar-block-content {
+  padding: 1% 5%;
+}
+.openlab-library-tools input[type="text"],
+.openlab-library-tools select {
+  margin-bottom: 8px;
+  width: 100%;
+}
+.openlab-library-tools .library-search-actions {
+  padding: 10px 0;
+  position: relative;
+}
+.openlab-library-tools .library-search-submit {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+.openlab-library-tools .library-search-advanced-link {
+  bottom: 10px;
+  right: 0;
+  position: absolute;
+}
+.openlab-library-tools .openlab-library-information ul {
+  padding-left: 20px;
+}
 .page-nav {
   background: #f0f0f0;
   border-radius: 4px;

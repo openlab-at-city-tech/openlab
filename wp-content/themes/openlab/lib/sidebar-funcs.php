@@ -102,7 +102,6 @@ function openlab_group_sidebar($mobile = false) {
                     </div><!-- #item-buttons -->
                 </div>
                 <?php do_action('bp_group_options_nav') ?>
-                <?php echo openlab_get_group_activity_events_feed(); ?>
             </div>
             <?php
         endwhile;

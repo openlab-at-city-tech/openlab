@@ -11,6 +11,7 @@
 include 'wds-register.php';
 include 'wds-docs.php';
 include 'includes/oembed.php';
+include 'includes/library-widget.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -1023,6 +1024,10 @@ function wds_bp_group_meta_save( $group ) {
 
 		groups_update_groupmeta( $group->id, 'portfolio_list_heading', strip_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
 	}
+
+	// Library tools display.
+	$library_tools_enabled = ! empty( $_POST['group-show-library-tools'] ) ? 'yes' : 'no';
+	groups_update_groupmeta( $group->id, 'library_tools_enabled', $library_tools_enabled );
 
 	// Feed URLs ( step two of group creation )
 	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {

@@ -1622,3 +1622,6 @@ function openlab_get_group_activity_events_feed() {
 
     return $events_out;
 }
+add_action( 'bp_group_options_nav', function() {
+	echo openlab_get_group_activity_events_feed();
+}, 50 );
