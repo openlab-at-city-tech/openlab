@@ -2262,11 +2262,6 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
 
 /**
- * Disable BP 2.5 rich-text emails.
- */
-add_filter( 'bp_email_use_wp_mail', '__return_true' );
-
-/**
  * Set "From" name in outgoing email to the site name.
  *
  * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
@@ -2285,6 +2280,15 @@ function openlab_email_from_name_filter() {
 	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
 }
 add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
+
+function openlab_email_appearance_settings( $settings ) {
+	$settings['email_bg'] = '#fff';
+	$settings['header_bg'] = '#fff';
+	$settings['footer_bg'] = '#fff';
+	$settings['highlight_color'] = '#ec6348';
+	return $settings;
+}
+add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appearance_settings' );
 
 /**
  * Group slug blacklist.
