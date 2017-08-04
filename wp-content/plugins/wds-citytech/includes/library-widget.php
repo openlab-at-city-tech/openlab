@@ -63,7 +63,7 @@ function openlab_group_library_tools_display() {
 	?>
 
 	<div id="openlab-library-tools-sidebar-widget" class="sidebar-widget openlab-library-tools">
-		<h2 class="sidebar-header"><a href="https://library.citytech.cuny.edu">Library <i class="fa fa-external-link-square"></i></a></h2>
+		<h2 class="sidebar-header">Library</h2>
 
 		<div class="sidebar-block">
 			<div class="sidebar-block-content">
@@ -176,22 +176,40 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 		?>
 
 		<?php if ( $settings['find_library_materials'] ) : ?>
-			<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
-			<?php echo $args['before_title']; ?><a href="https://library.citytech.cuny.edu">Find Library Materials</a><?php echo $args['after_title']; ?>
+			<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
+			<div id="openlab-library-find-widget-content">
+				<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+				<?php echo $args['before_title']; ?>Find Library Materials<?php echo $args['after_title']; ?>
 
-			<?php openlab_library_search_form(); ?>
+				<?php openlab_library_search_form(); ?>
 
-			<?php echo $args['after_widget']; ?>
+				<?php echo $args['after_widget']; ?>
+			</div>
 		<?php endif; ?>
 
 		<?php if ( $settings['library_information'] ) : ?>
-			<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
-			<?php echo $args['before_title']; ?><a href="https://library.citytech.cuny.edu">Library Information</a><?php echo $args['after_title']; ?>
+			<div id="openlab-library-information-widget-content">
+				<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+				<?php echo $args['before_title']; ?>Library Information<?php echo $args['after_title']; ?>
 
-			<?php openlab_library_information(); ?>
+				<?php openlab_library_information(); ?>
 
-			<?php echo $args['after_widget']; ?>
+				<?php echo $args['after_widget']; ?>
+			</div>
 		<?php endif; ?>
+
+		<style type="text/css">
+			.widget_openlab-library-tools-widget input[type="text"],
+			.widget_openlab-library-tools-widget select {
+				margin-bottom: .5rem;
+			}
+
+			#openlab-library-information-widget-content ul {
+				list-style-type: disc;
+				margin-top: .5rem;
+				padding-left: 20px;
+			}
+		</style>
 
 		<?php
 
