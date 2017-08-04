@@ -7230,6 +7230,11 @@ blockquote .h6 {
   color: #3ba49b;
   background-color: inherit;
 }
+.messages #pag-bottom {
+  clear: both;
+  display: block;
+  padding-left: 7.5px;
+}
 /**structural**/
 .container-fluid {
   max-width: 1155px;
