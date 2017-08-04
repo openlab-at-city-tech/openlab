@@ -146,9 +146,10 @@ $settings = bp_email_get_appearance_settings();
 						 * @since 2.5.0
 						 */
 						do_action( 'bp_before_email_header' );
+						?>
+						<img src="<?php echo bp_get_root_domain(); ?>/wp-content/themes/openlab/images/openlab-logo.jpg" alt="<?php echo bp_get_option( 'blogname' ); ?>" />
 
-						echo bp_get_option( 'blogname' );
-
+						<?php
 						/**
 						 * Fires after the display of the email template header.
 						 *
