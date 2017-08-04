@@ -236,6 +236,11 @@ blockquote {
         }
     }
 }
+.messages #pag-bottom {
+	clear: both;
+	display: block;
+	padding-left: 7.5px;
+}
 
 /**structural**/
 .container-fluid{
@@ -946,6 +951,12 @@ body{
             display: block;
         }
     }
+}
+.panel-heading legend {
+	margin-bottom: 0;
+}
+.subpanel {
+	margin-bottom: 25px;
 }
 /**shortcodes**/
 .callout-list{
@@ -1731,7 +1742,8 @@ body form{
         margin: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: none;
-        &:first-of-type{
+        &:first-of-type,
+        &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
         }
@@ -1841,6 +1853,12 @@ body form{
                 width: 95%;
                 margin: 0 auto;
             }
+        }
+    }
+    .learn-more-sidebar {
+        padding: 15px;
+        a {
+            font-weight: bold;
         }
     }
 }
@@ -2939,6 +2957,49 @@ input.help-search {
         padding-top: 35px;
         width: 101px;
     }
+}
+.openlab-library-tools {
+	.sidebar-header a {
+		text-decoration: none;
+	}
+
+	h3.sidebar-block-header {
+		font-size: 16px;
+		margin: 10px 0 10px 0;
+	}
+
+	.sidebar-block-content {
+		padding: 1% 5%;
+	}
+
+	input[type="text"],
+	select {
+		margin-bottom: 8px;
+		width: 100%;
+	}
+
+	.library-search-actions {
+		padding: 10px 0;
+		position: relative;
+	}
+
+	.library-search-submit {
+		bottom: 0;
+		left: 0;
+		position: absolute;
+	}
+
+	.library-search-advanced-link {
+		bottom: 10px;
+		right: 0;
+		position: absolute;
+	}
+
+	.openlab-library-information {
+		ul {
+			padding-left: 20px;
+		}
+	}
 }
 .page-nav{
     background: @5gray;
