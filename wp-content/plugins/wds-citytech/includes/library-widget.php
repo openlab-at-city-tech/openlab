@@ -165,7 +165,10 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 			'library_information' => true,
 		), $settings );
 
-		$merged = array_map( 'boolval', $merged );
+		// boolval() available only on PHP 5.5+
+		foreach ( $merged as &$m ) {
+			$m = (bool) $m;
+		}
 
 		return $merged;
 	}
@@ -230,20 +233,25 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $this->get_field_id( 'library_information' ) ); ?>">Library Information</label>
 		</p>
 
+		<?php wp_nonce_field( 'openlab_library_widget', 'openlab-library-widget-nonce', false ); ?>
+
 		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
-		$instance = $this->parse_settings( array() );
-
-		if ( ! empty( $new_instance['find_library_materials'] ) ) {
-			$instance['find_library_materials'] = true;
+		if ( empty( $_POST['openlab-library-widget-nonce'] ) ) {
+			return $old_instance;
 		}
 
-		if ( ! empty( $new_instance['library_information'] ) ) {
-			$instance['library_information'] = true;
+		if ( ! wp_verify_nonce( $_POST['openlab-library-widget-nonce'], 'openlab_library_widget' ) ) {
+			return $old_instance;
 		}
 
-		return $instance;
+		$passed = array(
+			'find_library_materials' => ! empty( $new_instance['find_library_materials'] ),
+			'library_information' => ! empty( $new_instance['library_information'] ),
+		);
+
+		return $this->parse_settings( $passed );
 	}
 }
