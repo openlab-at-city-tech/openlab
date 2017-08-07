@@ -161,8 +161,8 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 
 	public function parse_settings( $settings ) {
 		$merged = array_merge( array(
-			'find_library_materials' => false,
-			'library_information' => false,
+			'find_library_materials' => true,
+			'library_information' => true,
 		), $settings );
 
 		$merged = array_map( 'boolval', $merged );
