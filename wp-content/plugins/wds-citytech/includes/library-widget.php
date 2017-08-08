@@ -212,6 +212,11 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 				margin-top: .5rem;
 				padding-left: 20px;
 			}
+
+			.library-search-advanced-link {
+				font-size: .9rem;
+				white-space: nowrap;
+			}
 		</style>
 
 		<?php
