@@ -396,7 +396,7 @@ class BP_XProfile_Group {
 		// Pull field objects from the cache.
 		$fields = array();
 		foreach ( $field_ids as $field_id ) {
-			$fields[] = xprofile_get_field( $field_id );
+			$fields[] = xprofile_get_field( $field_id, null, false );
 		}
 
 		// Store field IDs for meta cache priming.
@@ -795,6 +795,9 @@ class BP_XProfile_Group {
 										<div id="major-publishing-actions">
 
 											<?php
+
+											// Nonce fields
+											wp_nonce_field( 'bp_xprofile_admin_group', 'bp_xprofile_admin_group' );
 
 											/**
 											 * Fires at the beginning of the XProfile Group publishing actions section.

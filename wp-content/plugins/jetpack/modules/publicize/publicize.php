@@ -119,7 +119,7 @@ abstract class Publicize_Base {
 	abstract function connect_url( $service_name );
 	abstract function disconnect_url( $service_name, $id );
 	abstract function get_connection_meta( $connection );
-	abstract function get_services( $filter );
+	abstract function get_services( $filter = 'all' );
 	abstract function get_connections( $service, $_blog_id = false, $_user_id = false );
 	abstract function get_connection( $service, $id, $_blog_id = false, $_user_id = false );
 	abstract function flag_post_for_publicize( $new_status, $old_status, $post );
@@ -330,8 +330,8 @@ abstract class Publicize_Base {
 		// Did this request happen via wp-admin?
 		$from_web = isset( $_SERVER['REQUEST_METHOD'] )
 			&&
-			'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) 
-			&& 
+			'post' == strtolower( $_SERVER['REQUEST_METHOD'] )
+			&&
 			isset( $_POST[$this->ADMIN_PAGE] );
 
 		if ( ( $from_web || defined( 'POST_BY_EMAIL' ) ) && isset( $_POST['wpas_title'] ) ) {

@@ -204,7 +204,7 @@ if ( ! function_exists( 'bws_admin_notices' ) ) {
 							<img title="" src="<?php echo esc_attr( $bws_plugin_banner_to_settings[0]['banner_url'] ); ?>" alt="" />
 						</div>
 						<div class="text">
-							<strong><?php _e( 'Thank you for installing', 'bestwebsoft' ); ?> <?php echo $bws_plugin_banner_to_settings[0]['plugin_info']['Name']; ?> plugin!</strong><br />
+							<strong><?php printf( __( 'Thank you for installing %s plugin!', 'bestwebsoft' ), $bws_plugin_banner_to_settings[0]['plugin_info']['Name'] ); ?> </strong><br />
 							<?php _e( "Let's get started", 'bestwebsoft' ); ?>:
 							<a href="<?php echo $bws_plugin_banner_to_settings[0]['settings_url']; ?>"><?php _e( 'Settings', 'bestwebsoft' ); ?></a>
 							<?php if ( false != $bws_plugin_banner_to_settings[0]['post_type_url'] ) { ?>
@@ -388,7 +388,7 @@ if ( ! function_exists ( 'bws_plugin_banner_timeout' ) ) {
 
 if ( ! function_exists( 'bws_plugin_banner_to_settings' ) ) {
 	function bws_plugin_banner_to_settings( $plugin_info, $plugin_options_name, $banner_url_or_slug, $settings_url, $post_type_url = false ) {
-		global $wp_version, $bws_plugin_banner_to_settings;
+		global $bws_plugin_banner_to_settings;
 
 		$is_network_admin = is_network_admin();
 
@@ -422,8 +422,6 @@ if ( ! function_exists( 'bws_plugin_banner_to_settings' ) ) {
 
 if ( ! function_exists( 'bws_plugin_suggest_feature_banner' ) ) {
 	function bws_plugin_suggest_feature_banner( $plugin_info, $plugin_options_name, $banner_url_or_slug ) {
-		global $wp_version;
-
 		$is_network_admin = is_network_admin();
 
 		$plugin_options = $is_network_admin ? get_site_option( $plugin_options_name ) : get_option( $plugin_options_name );
@@ -474,7 +472,7 @@ if ( ! function_exists( 'bws_plugin_suggest_feature_banner' ) ) {
 					<img title="" src="<?php echo esc_attr( $banner_url_or_slug ); ?>" alt="" />
 				</div>
 				<div class="text">
-					<strong><?php _e( 'Thank you for choosing', 'bestwebsoft' ); ?> <?php echo $plugin_info['Name']; ?> plugin!</strong><br />
+					<strong><?php printf( __( 'Thank you for choosing %s plugin!', 'bestwebsoft' ), $plugin_info['Name'] ); ?></strong><br />
 					<?php _e( "If you have a feature, suggestion or idea you'd like to see in the plugin, we'd love to hear about it!", 'bestwebsoft' ); ?>
 					<a target="_blank" href="https://support.bestwebsoft.com/hc/en-us/requests/new"><?php _e( 'Suggest a Feature', 'bestwebsoft' ); ?></a>
 				</div>
@@ -546,7 +544,20 @@ if ( ! function_exists ( 'bws_plugins_admin_init' ) ) {
 				unset( $recent[ $plugin ] );
 				update_site_option( 'recently_activated', $recent );
 			}
-			wp_redirect( self_admin_url( 'admin.php?page=bws_panel&activate=true' ) );
+			/**
+			* @deprecated 1.9.8 (15.12.2016)
+			*/
+			$is_main_page = in_array( $_GET['page'], array( 'bws_panel', 'bws_themes', 'bws_system_status' ) );
+			$page = esc_attr( $_GET['page'] );
+			$tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : '';
+
+			if ( $is_main_page )
+				$current_page = 'admin.php?page=' . $page;
+			else
+				$current_page = isset( $_GET['tab'] ) ? 'admin.php?page=' . $page . '&tab=' . $tab : 'admin.php?page=' . $page;
+			/*end deprecated */
+
+			wp_redirect( self_admin_url( $current_page . '&activate=true' ) );
 			exit();
 		}
 
@@ -683,9 +694,6 @@ if ( ! class_exists( 'BWS_admin_tooltip' ) ) {
 		private $tooltip_args;
 
 		public function __construct( $tooltip_args ) {
-			global $wp_version;
-			if ( 3.3 > $wp_version )
-				return;
 			/* Default arguments */
 			$tooltip_args_default = array(
 				'tooltip_id'	=> false,
@@ -804,9 +812,7 @@ if ( ! function_exists ( 'bws_form_restore_default_confirm' ) ) {
 /* shortcode */
 if ( ! function_exists( 'bws_add_editor_buttons' ) ) {
 	function bws_add_editor_buttons() {
-		global $bws_shortcode_list, $wp_version;
-		if ( $wp_version < '3.3' )
-			return;
+		global $bws_shortcode_list;
 		if ( ! empty( $bws_shortcode_list ) && current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) ) {
 			add_filter( 'mce_external_plugins', 'bws_add_buttons' );
 			add_filter( 'mce_buttons', 'bws_register_buttons' );
@@ -832,8 +838,6 @@ if ( ! function_exists( 'bws_register_buttons' ) ) {
 if ( ! function_exists( 'bws_shortcode_media_button_popup' ) ) {
 	function bws_shortcode_media_button_popup() {
 		global $bws_shortcode_list, $wp_version;
-		if ( $wp_version < '3.3' )
-			return;
 
 		if ( ! empty( $bws_shortcode_list ) ) { ?>
 			<div id="bws_shortcode_popup" style="display:none;">

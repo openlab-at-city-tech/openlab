@@ -499,3 +499,24 @@ Visit the group: %5$s',
 	}
 }
 add_action( 'groups_join_group', 'openlab_send_group_join_admin_notification', 10, 2 );
+
+/**
+ * Fetch ID of a field by name.
+ *
+ * Fields are hardcoded to avoid lookups, but centralized here for easy management.
+ *
+ * @param string $field_name
+ */
+function openlab_get_xprofile_field_id( $field_name ) {
+	switch ( $field_name ) {
+		case 'First Name' :
+			return 241;
+
+		case 'Last Name' :
+			return 3;
+
+		// On the 'Student' field group.
+		case 'Phone' :
+			return 194;
+	}
+}

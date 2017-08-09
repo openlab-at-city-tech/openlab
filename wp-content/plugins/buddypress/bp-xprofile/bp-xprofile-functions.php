@@ -282,18 +282,24 @@ function xprofile_insert_field( $args = '' ) {
  * Get a profile field object.
  *
  * @since 1.1.0
+ * @since 2.8.0 Added `$user_id` and `$get_data` parameters.
  *
- * @param int|object $field ID of the field or object representing field data.
+ * @param int|object $field    ID of the field or object representing field data.
+ * @param int        $user_id  Optional. ID of the user associated with the field.
+ *                             Ignored if `$get_data` is false. If `$get_data` is
+ *                             true, but no `$user_id` is provided, defaults to
+ *                             logged-in user ID.
+ * @param bool       $get_data Whether to fetch data for the specified `$user_id`.
  * @return BP_XProfile_Field|null Field object if found, otherwise null.
  */
-function xprofile_get_field( $field ) {
+function xprofile_get_field( $field, $user_id = null, $get_data = true ) {
 	if ( $field instanceof BP_XProfile_Field ) {
 		$_field = $field;
 	} elseif ( is_object( $field ) ) {
 		$_field = new BP_XProfile_Field();
 		$_field->fill_data( $field );
 	} else {
-		$_field = BP_XProfile_Field::get_instance( $field );
+		$_field = BP_XProfile_Field::get_instance( $field, $user_id, $get_data );
 	}
 
 	if ( ! $_field ) {
@@ -1063,7 +1069,7 @@ function bp_xprofile_fullname_field_id() {
 		global $wpdb;
 
 		$bp = buddypress();
-		$id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", bp_xprofile_fullname_field_name() ) );
+		$id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE name = %s", addslashes( bp_xprofile_fullname_field_name() ) ) );
 
 		wp_cache_set( 'fullname_field_id', $id, 'bp_xprofile' );
 	}
@@ -1286,4 +1292,28 @@ function bp_xprofile_get_fields_by_visibility_levels( $user_id, $levels = array(
 	}
 
 	return $field_ids;
+}
+
+/**
+ * Formats datebox field values passed through a POST request.
+ *
+ * @since 2.8.0
+ *
+ * @param int $field_id The id of the current field being looped through.
+ * @return void This function only changes the global $_POST that should contain
+ *              the datebox data.
+ */
+function bp_xprofile_maybe_format_datebox_post_data( $field_id ) {
+	if ( ! isset( $_POST['field_' . $field_id] ) ) {
+		if ( ! empty( $_POST['field_' . $field_id . '_day'] ) && ! empty( $_POST['field_' . $field_id . '_month'] ) && ! empty( $_POST['field_' . $field_id . '_year'] ) ) {
+			// Concatenate the values.
+			$date_value = $_POST['field_' . $field_id . '_day'] . ' ' . $_POST['field_' . $field_id . '_month'] . ' ' . $_POST['field_' . $field_id . '_year'];
+
+			// Check that the concatenated value can be turned into a timestamp.
+			if ( $timestamp = strtotime( $date_value ) ) {
+				// Add the timestamp to the global $_POST that should contain the datebox data.
+				$_POST['field_' . $field_id] = date( 'Y-m-d H:i:s', $timestamp );
+			}
+		}
+	}
 }

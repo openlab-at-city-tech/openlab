@@ -522,7 +522,7 @@ function bp_core_get_userlink( $user_id, $no_anchor = false, $just_link = false 
 	 * @param string $value   Link text based on passed parameters.
 	 * @param int    $user_id ID of the user to check.
 	 */
-	return apply_filters( 'bp_core_get_userlink', '<a href="' . $url . '" title="' . $display_name . '">' . $display_name . '</a>', $user_id );
+	return apply_filters( 'bp_core_get_userlink', '<a href="' . $url . '">' . $display_name . '</a>', $user_id );
 }
 
 /**
@@ -1162,8 +1162,8 @@ function bp_update_user_last_activity( $user_id = 0, $time = '' ) {
 	// As of BuddyPress 2.0, last_activity is no longer stored in usermeta.
 	// However, we mirror it there for backward compatibility. Do not use!
 	// Remove our warning and re-add.
-	remove_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10, 4 );
-	remove_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10, 3 );
+	remove_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10 );
+	remove_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10 );
 	bp_update_user_meta( $user_id, 'last_activity', $time );
 	add_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10, 4 );
 	add_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10, 3 );
@@ -1474,19 +1474,24 @@ add_action( 'bp_make_spam_user', 'bp_core_remove_data' );
  * @return bool True if editing is allowed, otherwise false.
  */
 function bp_core_can_edit_settings() {
+	$status = false;
+
 	if ( bp_is_my_profile() ) {
-		return true;
+		$status = true;
+	} elseif ( is_super_admin( bp_displayed_user_id() ) && ! is_super_admin() ) {
+		$status = false;
+	} elseif ( bp_current_user_can( 'bp_moderate' ) || current_user_can( 'edit_users' ) ) {
+		$status = true;
 	}
 
-	if ( is_super_admin( bp_displayed_user_id() ) && ! is_super_admin() ) {
-		return false;
-	}
-
-	if ( bp_current_user_can( 'bp_moderate' ) || current_user_can( 'edit_users' ) ) {
-		return true;
-	}
-
-	return false;
+	/**
+	 * Filters the status of whether the logged-in user can edit settings for the displayed user or not.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param bool True if editing is allowed, otherwise false.
+	 */
+	return apply_filters( 'bp_core_can_edit_settings', $status );
 }
 
 /** Sign-up *******************************************************************/

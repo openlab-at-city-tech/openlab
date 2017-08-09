@@ -1040,7 +1040,7 @@ class BP_Members_Admin {
 					/**
 					 * In configs where BuddyPress is not network activated,
 					 * regular admins cannot mark a user as a spammer on front
-					 * end. This prevent them to do it in backend.
+					 * end. This prevent them to do it in the back end.
 					 *
 					 * Also prevent admins from marking themselves or other
 					 * admins as spammers.
@@ -1306,7 +1306,7 @@ class BP_Members_Admin {
 	 * @since 2.1.0
 	 */
 	public function remove_edit_profile_url_filter() {
-		remove_filter( 'bp_members_edit_profile_url', array( $this, 'filter_adminbar_profile_link' ), 10, 3 );
+		remove_filter( 'bp_members_edit_profile_url', array( $this, 'filter_adminbar_profile_link' ), 10 );
 	}
 
 	/** Signups Management ****************************************************/
@@ -1431,10 +1431,6 @@ class BP_Members_Admin {
 
 		if ( ! empty( $required ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-' . $required . '-list-table.php' );
-
-			if ( ! buddypress()->do_autoload ) {
-				require_once( buddypress()->members->admin->admin_dir . 'bp-members-admin-classes.php' );
-			}
 		}
 
 		return new $class();
@@ -2044,6 +2040,21 @@ class BP_Members_Admin {
 			'signups_' . $action
 		);
 
+		// Prefetch registration field data.
+		$fdata = array();
+		if ( 'activate' === $action && bp_is_active( 'xprofile' ) ) {
+			$fields = bp_xprofile_get_groups( array(
+				'profile_group_id' => 1,
+				'exclude_fields' => 1,
+				'update_meta_cache' => false,
+				'fetch_fields' => true,
+			) );
+			$fields = $fields[0]->fields;
+			foreach( $fields as $f ) {
+				$fdata[ $f->id ] = $f->name;
+			}
+		}
+
 		?>
 
 		<div class="wrap">
@@ -2052,11 +2063,46 @@ class BP_Members_Admin {
 
 			<ol class="bp-signups-list">
 			<?php foreach ( $signups as $signup ) :
+				$last_notified = mysql2date( 'Y/m/d g:i:s a', $signup->date_sent );
+				$profile_field_ids = array();
 
-				$last_notified = mysql2date( 'Y/m/d g:i:s a', $signup->date_sent ); ?>
+				// Get all xprofile field IDs except field 1.
+				if ( ! empty( $signup->meta['profile_field_ids'] ) ) {
+					$profile_field_ids = array_flip( explode( ',', $signup->meta['profile_field_ids'] ) );
+					unset( $profile_field_ids[1] );
+				} ?>
 
 				<li>
-					<?php echo esc_html( $signup->user_name ) ?> - <?php echo sanitize_email( $signup->user_email );?>
+					<strong><?php echo esc_html( $signup->user_login ) ?></strong>
+
+					<?php if ( 'activate' == $action ) : ?>
+						<table class="wp-list-table widefat fixed striped">
+							<tbody>
+								<tr>
+									<td class="column-fields"><?php esc_html_e( 'Display Name', 'buddypress' ); ?></td>
+									<td><?php echo esc_html( $signup->user_name ); ?></td>
+								</tr>
+
+								<tr>
+									<td class="column-fields"><?php esc_html_e( 'Email', 'buddypress' ); ?></td>
+									<td><?php echo sanitize_email( $signup->user_email ); ?></td>
+								</tr>
+
+								<?php if ( bp_is_active( 'xprofile' ) && ! empty( $profile_field_ids ) ) : ?>
+									<?php foreach ( $profile_field_ids as $pid => $noop ) :
+										$field_value = isset( $signup->meta[ "field_{$pid}" ] ) ? $signup->meta[ "field_{$pid}" ] : ''; ?>
+										<tr>
+											<td class="column-fields"><?php echo esc_html( $fdata[ $pid ] ); ?></td>
+											<td><?php echo $this->format_xprofile_field_for_display( $field_value ); ?></td>
+										</tr>
+
+									<?php endforeach;  ?>
+
+								<?php endif; ?>
+
+							</tbody>
+						</table>
+					<?php endif; ?>
 
 					<?php if ( 'resend' == $action ) : ?>
 
@@ -2243,7 +2289,7 @@ class BP_Members_Admin {
 	 * @return array $columns
 	 */
 	public function users_table_add_type_column( $columns = array() ) {
-		$columns[ bp_get_member_type_tax_name() ] = _x( 'Member Type', 'Label for the WP users table member type column' , 'buddypress' );
+		$columns[ bp_get_member_type_tax_name() ] = _x( 'Member Type', 'Label for the WP users table member type column', 'buddypress' );
 
 		return $columns;
 	}
@@ -2308,6 +2354,28 @@ class BP_Members_Admin {
 				$query->set( 'include', (array) $user_ids );
 			}
 		}
+	}
+
+	/**
+	 * Formats a signup's xprofile field data for display.
+	 *
+	 * Operates recursively on arrays, which are then imploded with commas.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param string|array $value Field value.
+	 * @return string
+	 */
+	protected function format_xprofile_field_for_display( $value ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( array( $this, 'format_xprofile_field_for_display' ), $value );
+			$value = implode( ', ', $value );
+		} else {
+			$value = stripslashes( $value );
+			$value = esc_html( $value );
+		}
+
+		return $value;
 	}
 }
 endif; // End class_exists check.

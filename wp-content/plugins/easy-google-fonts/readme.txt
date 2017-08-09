@@ -2,9 +2,9 @@
 Contributors: sunny_johal, amit_kayasth
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=28M8NWPHVQNYU
 Tags: WordPress Google Fonts Plugin, Google Webfonts, Google Fonts WordPress, Typography, Webfonts, WordPress Webfonts, Fonts, WordPress Fonts, Theme Fonts, Theme Fonts Plugin
-Requires at least: 4.7
-Tested up to: 4.7
-Stable tag: 1.4.2
+Requires at least: 4.8
+Tested up to: 4.8
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,10 @@ e.g.
 9. View and manage all of your custom controls in the admin area.
 
 == Changelog ==
+= 1.4.3 - WordPress 4.8 compatibility update =
+* Updated webfonts.json with the latest google fonts.
+* Updated includes class-egf-frontend.php to only output styles if there is a selector.
+
 = 1.4.2 - WordPress 4.7 compatibility update =
 * Fixed issue where the font controls weren't saving in WordPress 4.7.
 * Updated the font list.

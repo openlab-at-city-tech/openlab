@@ -92,3 +92,40 @@ function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $
 	return $content;
 }
 add_action( 'bp_ass_activity_notification_content', 'openlab_use_full_text_for_blog_related_bpges_notifications', 10, 2 );
+
+/**
+ * Respect 'Hidden' site setting when BPGES sends blog-related notifications.
+ *
+ * @param bool   $send_it
+ * @param object $activity
+ * @param int    $user_id
+ */
+function openlab_respect_hidden_site_setting_for_bpges_notifications( $send_it, $activity, $user_id ) {
+	if ( ! $send_it ) {
+		return $send_it;
+	}
+
+	if ( ! in_array( $activity->type, array( 'new_blog_post', 'new_blog_comment' ) ) ) {
+		return $send_it;
+	}
+
+	$group_id = $activity->item_id;
+
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $site_id ) {
+		return $send_it;
+	}
+
+	$site_privacy = get_blog_option( $site_id, 'blog_public' );
+	if ( '-3' !== $site_privacy ) {
+		return $send_it;
+	}
+
+	// Email notifications should only go to site admins.
+	if ( ! is_super_admin( $user_id ) ) {
+		$send_it = false;
+	}
+
+	return $send_it;
+}
+add_filter( 'bp_ass_send_activity_notification_for_user', 'openlab_respect_hidden_site_setting_for_bpges_notifications', 10, 3 );

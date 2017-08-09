@@ -39,30 +39,29 @@ class Mappress_Poi extends Mappress_Obj {
 	* @param mixed $auto true = automatically update the poi, false = return raw geocoding results
 	* @return true if auto=true and success | WP_Error on failure
 	*/
-	function geocode($auto=true) {
+	function geocode() {
 		if (!class_exists('Mappress_Pro'))
 			return new WP_Error('geocode', 'MapPress Pro required for geocoding');
 
 		// If point has a lat/lng then no geocoding
 		if (!empty($this->point['lat']) && !empty($this->point['lng'])) {
-			if ($this->address)
-				$this->correctedAddress = $this->address;
+			$this->correctedAddress = ($this->address) ? $this->address : null;
 			$this->viewport = null;
 		} else {
-			$location = Mappress::$geocoders->geocode($this->address);
+			$location = Mappress_Geocoder::geocode($this->address);
 
 			if (is_wp_error($location))
 				return $location;
 
 			$this->point = array('lat' => $location->lat, 'lng' => $location->lng);
-			$this->correctedAddress = $location->corrected_address;
+			$this->correctedAddress = $location->formatted_address;
 			$this->viewport = $location->viewport;
 		}
 
 		// Guess a default title / body - use address if available or lat, lng if not
 		if (empty($this->title) && empty($this->body)) {
 			if ($this->correctedAddress) {
-				$parsed = Mappress::$geocoders->parse_address($this->correctedAddress);
+				$parsed = Mappress_Geocoder::parse_address($this->correctedAddress);
 				$this->title = $parsed[0];
 				$this->body = (isset($parsed[1])) ? $parsed[1] : "";
 			} else {
@@ -172,7 +171,7 @@ class Mappress_Poi extends Mappress_Obj {
 	*
 	*/
 	function get_address() {
-		$parsed = Mappress::$geocoders->parse_address($this->correctedAddress);
+		$parsed = Mappress_Geocoder::parse_address($this->correctedAddress);
 		if (!$parsed)
 			return "";
 
@@ -225,30 +224,28 @@ class Mappress_Poi extends Mappress_Obj {
 	function get_directions_link($args = '') {
 		$map = $this->map();
 
-		extract(wp_parse_args($args, array(
+		$args = (object) wp_parse_args($args, array(
 			'from' => $map->options->from,
 			'to' => $map->options->to,
-			'focus' => true,
 			'text' => __('Directions', 'mappress-google-maps-for-wordpress')
-		)));
+		));
 
 		// Convert objects to indexes, quote strings
-		if (is_object($from)) {
-			$i = array_search($from, $map->pois);
+		if (is_object($args->from)) {
+			$i = array_search($args->from, $map->pois);
 			$from = "{$map->name}.getPoi($i)";
 		} else {
-			$from = "\"$from\"";
+			$from = "\"{$args->from}\"";
 		}
 
-		if (is_object($to)) {
-			$i = array_search($to, $map->pois);
+		if (is_object($args->to)) {
+			$i = array_search($args->to, $map->pois);
 			$to = "{$map->name}.getPoi($i)";
 		} else {
-			$to = "\"$to\"";
+			$to = "\"{$args->to}\"";
 		}
 
-		$link = "<a href='#' onclick = '{$map->name}.openDirections(%s, %s, $focus); return false;'>$text</a>";
-
+		$link = "<a href='#' onclick = '{$map->name}.openDirections(%s, %s, true); return false;'>{$args->text}</a>";
 		return sprintf($link, $from, $to);
 	}
 
@@ -265,22 +262,14 @@ class Mappress_Poi extends Mappress_Obj {
 	*/
 	function get_open_link ($args = '') {
 		$map = $this->map();
-		extract(wp_parse_args($args, array(
-			'title' => $this->title,
-			'zoom' => null
-		)));
-
+		$title = $this->title;
 		$i = array_search($this, $map->pois);
-		$zoom = Mappress::boolean_to_string($zoom);
-		return "<a href='#' onclick='{$map->name}.getPoi($i).open($zoom); return false;' >$title</a>";
+		return "<a href='#' onclick='{$map->name}.getPoi($i).open(null); return false;' >$title</a>";
 	}
 
 	function get_zoom_link ($args = '') {
 		$map = $this->map();
-		extract(wp_parse_args($args, array(
-			'text' => __('Zoom', 'mappress-google-maps-for-wordpress'),
-		)));
-
+		$text = __('Zoom', 'mappress-google-maps-for-wordpress');
 		$i = array_search($this, $map->pois);
 		$click = "{$map->name}.getPoi($i).zoomIn(); return false;";
 		return "<a href='#' onclick='$click'>$text</a>";

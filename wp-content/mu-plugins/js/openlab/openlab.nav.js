@@ -2,16 +2,14 @@
  * OpenLab search dropdowns
  */
 
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+var resizeTimer;
 
-    var resizeTimer;
-    var windowWidth = $(window).width();
-
-    OpenLab.nav = {
+OpenLab.nav = (function ($) {
+    return{
         backgroundCont: {},
         backgroundTopStart: 0,
         plusHeight: 66,
@@ -158,10 +156,10 @@
             });
 
         },
-        removeDefaultScreenReaderShortcut: function(){
-          
+        removeDefaultScreenReaderShortcut: function () {
+
             $('#wpadminbar .screen-reader-shortcut').remove();
-            
+
         },
         directToggleAction: function () {
 
@@ -367,8 +365,13 @@
         fixHoverOnMobile: function (thisElem) {
             thisElem.trigger('click');
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
+    
+    var windowWidth = $(window).width();
+    
     $(document).ready(function () {
 
         OpenLab.nav.init();
@@ -379,10 +382,10 @@
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-            
+
             //checking to see if this is truly a resize event
             if ($(window).width() != windowWidth) {
-                
+
                 windowWidth = $(window).width();
 
                 OpenLab.nav.hoverFixes();

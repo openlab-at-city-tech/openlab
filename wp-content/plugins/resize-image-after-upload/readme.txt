@@ -1,26 +1,25 @@
 === Resize Image After Upload ===
-Contributors: iamphilrae
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3W4M254AA3KZG
-Tags: image, processing, plugin, resize, upload, resizing, optimization, optimize, optimise, optimisation, downsize, imsanity, bulk resize
+Contributors: ShortPixel
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TKZHGYG2UCFUQ
+Tags: image, resize, rescale, bulk resize, bulk rescale, downsize, 
 Requires at least: 3.5
-Tested up to: 4.3.1
-Stable tag: 1.7.2
+Tested up to: 4.8
+Stable tag: 1.8.1
 
-Behind-the-scenes plugin to automatically resize images when uploaded, restricting size to within specified maximum h/w. Uses standard WP functions.
+Automatically resize your images after upload using this plugin. Specify height&width, the plugin will do the rest quickly and transparently.
 
 == Description ==
 
-This plugin automatically resizes images (JPEG, GIF, and PNG) when they are uploaded to within a given maximum width and/or height to reduce server space usage. This may be necessary due to the fact that images from digital cameras and smartphones can now be over 10MB each due to higher megapixel counts.
+**A free, fast, easy to use, stable and frequently updated plugin to resize your images after upload. Supported by the friendly team that created <a href="https://wordpress.org/plugins/shortpixel-image-optimiser/" target="_blank">ShortPixel</a>  :)**
 
-In addition, the plugin can force re-compression of uploaded JPEG images, regardless of whether they are resized or not.
+This plugin automatically resizes images (JPEG, GIF, and PNG) when they are uploaded to within a given maximum width and/or height to reduce server space usage, speed up your website, save you time and boost your site's SEO. 
+Imagine that nowadays images can be over 4-5MB and using this plugin you can reduce them to 100-200KB with no extra effort on your side!
 
-**NOTE 1** - This plugin will *not* resize images that have already been uploaded. 
+In addition, the plugin can force re-compression of uploaded JPEG images and convert PNGs to JPEG (if they don't have a transparency layer), regardless of whether they are resized or not.
 
-**NOTE 2** - The resizing/recompression process will discard the original uploaded file including EXIF data.
+Is that simple, just give it a try, it is safe and free! :-)
 
-This plugin is not intended to replace the WordPress *add_image_size()* function, but rather complement it. Use this plugin to ensure that no excessively large images are stored on your server, then use *add_image_size()* to create versions of the images suitable for positioning in your website theme.
-
-This plugin uses standard WordPress image resizing functions and will require a high amount of memory (RAM) to be allocated to PHP in your php.ini file (e.g 512MB).
+**Keywords:** image, picture, processing, plugin, resize, upload, resizing, optimization, optimize, optimise, optimisation, downsize, imsanity, bulk resize, compress, shrink, picture, performance, fast, images, image files, image quality, image optimizer, jpg optimisation, jpg optimization, jpg resizing, png optimisation, png optimization, png resizing, image cruncher, compress png, compress jpg, compress jpeg, faster, loading times, bandwidth, pics, remove exif, speed up site, speed up website
 
 == Installation ==
 
@@ -29,11 +28,34 @@ This plugin uses standard WordPress image resizing functions and will require a 
 3. Edit the max-width/max-height settings under 'Settings > Resize Image Upload'.
 4. Once active, just upload images as normal and it will just work!
 
+== Frequently Asked Questions ==
+
+= Is this plugin compressing the images? =
+	Yes, this plugin compresses the original images, you can select the JPEG quality for example. For a professional image optimization solution though we recommend you <a rel="friend" href="https://wordpress.org/plugins/shortpixel-image-optimiser/" target="_blank">this</a> image optimization plugin.
+
+= Is this plugin resizing also older images? =
+	This plugin will *not* resize images that have already been uploaded. For this you can use <a rel="friend" href="https://wordpress.org/plugins/shortpixel-image-optimiser/" target="_blank">ShortPixel</a>, it can not only resize your images but it can compressthem as well!
+
+= Is the original image and/or its EXIF data kept? =
+	The resizing/recompression process will discard the original uploaded file including EXIF data.
+
 == Screenshots ==
 
 1. Full preview of the settings screen.
 
 == Changelog ==
+
+= 1.8.1 =
+
+Release date: 18th June 2017
+
+* [Fix] Notice not dismissing
+
+= 1.8.0 =
+
+Release date: 18th June 2017
+
+* [Update] Add convert PNG to JPG option
 
 = 1.7.2 =
 

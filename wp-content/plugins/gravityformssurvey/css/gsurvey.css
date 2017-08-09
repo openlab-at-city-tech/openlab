@@ -1,0 +1,254 @@
+/*
+gsurvey.css
+Gravity Forms Survey Styles
+http://www.gravityforms.com
+updated: October 19, 2016 9:21 PM GMT-5
+*/
+
+/* Mobile First ​--------------------------------------------------------------- */
+
+table.gsurvey-likert * {
+    box-sizing: border-box;
+}
+
+table.gsurvey-likert {
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 0;
+    border-top: none;
+    border-left: 1px solid #CCC;
+    border-right: none;
+    border-bottom: 1px solid #CCC;
+}
+
+table.gsurvey-likert td {
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    padding: 3px;
+    border: 0;
+    position: relative;
+}
+
+table.gsurvey-likert tr td {
+    border-right: 1px solid #CCC;
+    border-top: 1px solid #CCC
+}
+
+table.gsurvey-likert th.gsurvey-likert-choice-label {
+    background-color: #EEE;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.2;
+    padding: 3px 0;
+    border-top: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+}
+
+table.gsurvey-likert .gsurvey-likert-row-label {
+    font-weight: 700;
+    background-color: rgba(238, 238, 238, 1);
+    padding-left: .5rem;
+}
+
+table.gsurvey-likert .gsurvey-likert-row-label,
+table.gsurvey-likert .gsurvey-likert-choice {
+    border-top: 1px solid #CCC;
+}
+
+body.rtl table.gsurvey-likert th.gsurvey-likert-choice-label {
+    text-align: center !important;
+    vertical-align: middle;
+}
+
+table.gsurvey-likert td.gsurvey-likert-choice.gsurvey-likert-hover {
+    background-color: rgba(223, 239, 255, .4);
+}
+
+table.gsurvey-likert td.gsurvey-likert-choice.gsurvey-likert-focus {
+    background-color: rgba(223, 239, 255, 1) !important;
+}
+
+table.gsurvey-likert td input {
+    position: absolute;
+    top: 0;
+    left: -9999px;
+}
+
+body.rtl table.gsurvey-likert td.gsurvey-likert-choice input[type="radio"] {
+    display: none;
+}
+
+table.gsurvey-likert td.gsurvey-likert-choice {
+    background-image: url(../images/active0.svg);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 26px;
+}
+
+table.gsurvey-likert td.gsurvey-likert-choice.gsurvey-likert-selected {
+    background-image: url(../images/active1.svg);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: rgba(223, 239, 255, 1);
+}
+
+/* Ratings ​--------------------------------------------------------------- */
+
+.gsurvey-rating {
+    float: left;
+}
+
+.gsurvey-rating:not(:checked) > input {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+.gsurvey-rating:not(:checked) > label {
+    float: right;
+    width: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 18px!important;
+    line-height: 18px;
+    color: #ddd;
+    background-image: url(../images/star0.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 16px 16px;
+}
+
+.gsurvey-rating:not(:checked) > label:before {
+    content: '\00a0\00a0\00a0\00a0';
+}
+
+.gsurvey-rating > input:checked ~ label {
+    background-image: url(../images/star1.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 16px 16px;
+}
+
+.gsurvey-rating:not(:checked) > label:hover,
+.gsurvey-rating:not(:checked) > label:hover ~ label {
+    background-image: url(../images/star1.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 16px 16px;
+}
+
+.gsurvey-rating > input:checked + label:hover,
+.gsurvey-rating > input:checked + label:hover ~ label,
+.gsurvey-rating > input:checked ~ label:hover,
+.gsurvey-rating > input:checked ~ label:hover ~ label,
+.gsurvey-rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
+
+ul.gsurvey-rank.ui-sortable {
+    width: auto;
+    display: inline-block;
+}
+
+.gsurvey-rank-choice {
+    cursor: move;
+    border-top: 1px solid rgba(204, 204, 204, 0);
+    border-bottom: 1px solid rgba(204, 204, 204, 0);
+    padding: .5rem 1.5rem .5rem 2rem;
+    width: auto;
+    background-image: url(../images/arrow-handle.svg);
+    background-repeat: no-repeat;
+    background-position: .5rem center;
+    background-size: 16px 16px;
+    white-space: nowrap;
+}
+
+.gsurvey-rank-choice.ui-sortable-helper {
+    border-top: 1px dashed rgba(204, 204, 204, 1);
+    border-bottom: 1px dashed rgba(204, 204, 204, 1);
+}
+
+@media only screen and (max-width: 761px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+    /* Force the survey table to not behave like tables anymore ​--------------------------------------------------------------- */
+
+    .gform_wrapper table.gsurvey-likert thead {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .gform_wrapper table.gsurvey-likert tr {
+        display: block;
+    }
+
+    .gform_wrapper table.gsurvey-likert td {
+        display: block;
+        text-align: left;
+        vertical-align: middle;
+        line-height: 2;
+        background-position: .5rem center !important;
+        min-height: 2.4em;
+    }
+
+    body.rtl .gform_wrapper table.gsurvey-likert td {
+        background-position: 99% center !important;
+    }
+
+    .gform_wrapper ul.gform_fields table.gsurvey-likert td:after {
+        content: attr(data-label);
+        line-height: 2;
+        display: inline-block;
+        margin-left: 2rem;
+        font-weight: 400;
+    }
+
+    body.rtl .gform_wrapper ul.gform_fields table.gsurvey-likert td:after {
+        margin-right: 22px;
+    }
+
+}
+
+/* media queries - rules for tablet or desktop displays ​--------------------------------------------------------------- */
+
+@media only screen and (min-width: 641px) {
+
+    ol.gsurvey-rank-entry li {
+        list-style: decimal outside none;
+    }
+
+}
+
+@media only screen and (min-width: 769px) {
+
+    table.gsurvey-likert tr th {
+        padding: 8px !important;
+    }
+
+    table.gsurvey-likert th.gsurvey-likert-row-label:first-child {
+        border-right: 1px solid #CCC;
+        border-bottom: none;
+    }
+
+    table.gsurvey-likert tr td {
+        border-top: none;
+    }
+
+    table.gsurvey-likert .gsurvey-likert-row-label {
+        font-weight: 700;
+        background-color: rgba(238, 238, 238, .6);
+        padding-left: 0;
+    }
+
+    table.gsurvey-likert tr:nth-child(odd) .gsurvey-likert-row-label {
+        background-color: rgba(238, 238, 238, 1);
+    }
+
+    table.gsurvey-likert th.gsurvey-likert-row-label:first-child {
+        background: none;
+    }
+
+}

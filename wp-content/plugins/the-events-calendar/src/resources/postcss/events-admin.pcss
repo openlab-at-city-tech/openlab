@@ -1,3 +1,5 @@
+@custom-media --tablet (max-width: 782px);
+
 /* = Post Type Listing
 =============================================*/
 .events-cal {
@@ -40,11 +42,27 @@
 		font-size: 12px;
 		padding: 0 6px 10px 0;
 		vertical-align: middle;
+
+		input,
+		select {
+			/* Add extra separation between form inputs when left aligned */
+			&.alignleft {
+				margin-right: 0.3rem;
+			}
+		}
+	}
+
+	#EventURL {
+		width: 70%;
 	}
 
 	#event-meta {
 		td {
 			vertical-align: top;
+
+			&:first-child {
+				line-height: 30px;
+			}
 
 			div {
 				margin-bottom: 10px;
@@ -54,12 +72,6 @@
 				}
 			}
 		}
-	}
-
-	select,
-	input,
-	textarea {
-		font-size: 11px;
 	}
 
 	textarea {
@@ -76,12 +88,129 @@
 	}
 
 	.tribe_sectionheader {
-		padding-bottom: 5px !important;
+		padding-bottom: 5px;
 	}
 
 	p {
-		margin: 0 0 10px 0!important;
+		margin: 0 0 10px 0;
 	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="color"],
+	input[type="date"],
+	input[type="datetime"],
+	input[type="datetime-local"],
+	input[type="email"],
+	input[type="month"],
+	input[type="number"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="text"],
+	input[type="time"],
+	input[type="url"],
+	input[type="week"] {
+		background-image: none;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		line-height: 20px;
+		margin-left: 0;
+	}
+
+	.event-dynamic-helper-text {
+		color: #999;
+		font-style: italic;
+		padding: 0;
+	}
+
+	.tribe-datetime-block {
+		.tribe-allday {
+			margin: 10px 0 0;
+		}
+
+		.tribe-field-start_date,
+		.tribe-field-start_time,
+		.tribe-field-end_date,
+		.tribe-field-end_time {
+			height: 28px;
+		}
+
+		.tribe-field-start_date,
+		.tribe-field-end_date {
+			width: 100px;
+			@media (--tablet) {
+				width: 63%;
+				display: inline-block;
+			}
+		}
+
+		.tribe-field-start_time,
+		.tribe-field-end_time {
+			width: 80px;
+			@media (--tablet) {
+				width: 35%;
+				display: inline-block;
+			}
+		}
+
+		.tribe-datetime-separator {
+			@media (--tablet) {
+				width: 100%;
+				display: block;
+				text-align: center;
+				padding: 5px 0;
+			}
+		}
+
+		.tribe-field-timezone {
+			width: 100px;
+			margin-top: -2px;
+			display: none;
+
+			&.select2-container {
+				display: inline-block;
+				margin-top: -4px;
+
+				@media (--tablet) {
+					display: table;
+					margin: 10px auto 0;
+				}
+			}
+		}
+
+		.tribe-change-timezone {
+			white-space: nowrap;
+			@media (--tablet) {
+				width: 100%;
+				display: block;
+				text-align: center;
+				padding: 5px 0;
+			}
+		}
+	}
+
+	.tribe-datetime-label {
+		vertical-align: top;
+		padding-top: 5px;
+	}
+}
+
+/* Apply a grey highlight to 'today' */
+.ui-datepicker-calendar .ui-datepicker-today {
+	a {
+		background: linear-gradient(354deg, #ccc 0%, #eee 100%);
+		color: black;
+	}
+
+	/* If today is also the current selected day, prefer the default blue highlight */
+	&.ui-datepicker-current-day a {
+		background: linear-gradient( 354deg, rgba( 10,85,160,1.00 ) 0%, rgba( 18,136,235,1.00 ) 100% );
+		color: #fff;
+	}
+}
+
+.ui-datepicker select.ui-datepicker-month {
+	width: 8rem;
 }
 
 .tribe-community-event-info {
@@ -166,19 +295,25 @@
 	cursor: move;
 }
 
-.delete-linked-post-group {
+.tribe-delete-this {
 	float: right;
 	color: #444;
 
-	&:hover {
+	&:hover,
+	&.hover-state {
 		color: #a00;
+	}
+
+	&.tribe-confirm-delete-this {
+		display : none;
 	}
 }
 
 .tribe_community_edit {
-	.edit-linked-post-link,
 	.edit-linked-post-link {
-		display: none !important;
+		a {
+			display: none;
+		}
 	}
 }
 
@@ -202,13 +337,13 @@
 	padding: 10px 15px;
 	border: 1px solid #e2e2e2;
 	-webkit-border-radius: 3px;
-	   -moz-border-radius: 3px;
-	        border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 	-webkit-border-top-left-radius: 0;
 	-moz-border-radius-topleft: 0;
 	-webkit-border-top-right-radius: 0;
 	-moz-border-radius-topright: 0;
-	 -khtml-border-radius: 3px;
+	-khtml-border-radius: 3px;
 	background: url(../images/bg_fade.png) repeat-x top left;
 	background-color: #fff;
 }
@@ -277,14 +412,11 @@ table.eventForm {
 	margin-right: 10px!important;
 }
 
-.linked-post-dropdown,
-.venue-dropdown,
-.organizer-dropdown,
 .events-dropdown,
 #eventsDefaultState,
 #defaultCountry,
 #StateProvinceSelect {
-	width: 220px !important;
+	min-width: 220px;
 }
 
 .multi-day-cutoff-dropdown {

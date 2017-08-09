@@ -430,7 +430,7 @@ function groups_format_notifications( $action, $item_id, $secondary_item_id, $to
 					 * @param string $text              Notification content.
 					 * @param string $notification_link The permalink for notification.
 					 */
-					return apply_filters( 'bp_groups_' . $amount . '_' . $action . '_notification', '<a href="' . $notification_link . '" title="' . sprintf( __( '%s requests group membership', 'buddypress' ), $user_fullname ) . '">' . $text . '</a>', $group_link, $user_fullname, $group->name, $text, $notification_link );
+					return apply_filters( 'bp_groups_' . $amount . '_' . $action . '_notification', '<a href="' . $notification_link . '">' . $text . '</a>', $group_link, $user_fullname, $group->name, $text, $notification_link );
 				} else {
 
 					/**
@@ -965,6 +965,23 @@ function bp_groups_accept_invite_mark_notifications( $user_id, $group_id ) {
 add_action( 'groups_accept_invite', 'bp_groups_accept_invite_mark_notifications', 10, 2 );
 add_action( 'groups_reject_invite', 'bp_groups_accept_invite_mark_notifications', 10, 2 );
 add_action( 'groups_delete_invite', 'bp_groups_accept_invite_mark_notifications', 10, 2 );
+
+/**
+ * Mark notifications read when a member's group membership request is granted.
+ *
+ * @since 2.8.0
+ *
+ * @param int $user_id  ID of the user.
+ * @param int $group_id ID of the group.
+ */
+function bp_groups_accept_request_mark_notifications( $user_id, $group_id ) {
+	if ( bp_is_active( 'notifications' ) ) {
+		// First null parameter marks read for all admins.
+		bp_notifications_mark_notifications_by_item_id( null, $group_id, buddypress()->groups->id, 'new_membership_request', $user_id );
+	}
+}
+add_action( 'groups_membership_accepted', 'bp_groups_accept_request_mark_notifications', 10, 2 );
+add_action( 'groups_membership_rejected', 'bp_groups_accept_request_mark_notifications', 10, 2 );
 
 /**
  * Mark notifications read when a member views their group memberships.

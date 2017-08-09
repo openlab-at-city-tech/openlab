@@ -361,14 +361,6 @@ class Mappress_Map extends Mappress_Obj {
 		if (empty($this->query))
 			$this->prepare();
 
-		$script = "mapp.data.push( " . json_encode($this) . " ); if (typeof mapp.load != 'undefined') { mapp.load(); };";
-
-		// WP 4.5: queue maps for XHTML compatibility
-		if (function_exists('wp_add_inline_script') && (!defined('DOING_AJAX') || !DOING_AJAX))
-			wp_add_inline_script('mappress', "//<![CDATA[\r\n" . $script . "\r\n//]]>");
-		else
-			$html .= Mappress::script($script);
-
 		if ($this->options->directions == 'inline') {
 			$html .= "<div id='{$this->name}_directions_' style='display:none'>";
 			$html .= $mappress->get_template($this->options->templateDirections, array('map' => $this));
@@ -381,6 +373,15 @@ class Mappress_Map extends Mappress_Obj {
 			$html .= $mappress->get_template($this->options->templatePoiList, array('map' => $this));
 			$html .= "</div>";
 		}
+
+		$script = "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };";
+
+		// WP 4.5: queue maps for XHTML compatibility
+		if (function_exists('wp_add_inline_script') && Mappress::$options->footer && (!defined('DOING_AJAX') || !DOING_AJAX))
+			wp_add_inline_script('mappress', "//<![CDATA[\r\n" . $script . "\r\n//]]>");
+		else
+			$html .= Mappress::script($script);
+
 		return $html;
 	}
 
@@ -399,7 +400,7 @@ class Mappress_Map extends Mappress_Obj {
 			$poi->prepare();
 
 		// Sort the pois
-		if ($this->options->sort)
+		if ($this->options->sort && !isset($this->query['orderby']))
 			$this->sort_pois();
 
 		// Set the HTML for each POI (comes *after* sort because links embed POI list position)
@@ -511,10 +512,8 @@ class Mappress_Map extends Mappress_Obj {
 		return $style;
 	}
 
-	function get_show_link($args = '') {
-		extract(wp_parse_args($args, array(
-			'text' => __('Show map', 'mappress-google-maps-for-wordpress')
-		)));
+	function get_show_link() {
+		$text = __('Show map', 'mappress-google-maps-for-wordpress');
 
 		if (!$this->options->hidden)
 			return '';
@@ -524,29 +523,20 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	function get_center_link($args = '') {
-		extract(wp_parse_args($args, array(
-			'text' => __('Center map', 'mappress-google-maps-for-wordpress')
-		)));
-
+		$text = __('Center map', 'mappress-google-maps-for-wordpress');
 		$click = "{$this->name}.autoCenter(true); return false;";
 		return "<a href='#' onclick='$click'>$text</a>";
 	}
 
 	function get_reset_link($args = '') {
-		extract(wp_parse_args($args, array(
-			'text' => __('Reset map', 'mappress-google-maps-for-wordpress')
-		)));
-
+		$text = __('Reset map', 'mappress-google-maps-for-wordpress');
 		$click = "{$this->name}.reset(); return false;";
 		return "<a href='#' onclick='$click'>$text</a>";
 	}
 
 	function get_bigger_link($args = '') {
-		extract(wp_parse_args($args, array(
-			'big_text' => "&raquo;&nbsp;" . __('Bigger map', 'mappress-google-maps-for-wordpress'),
-			'small_text' => "&laquo;&nbsp;" . __('Smaller map', 'mappress-google-maps-for-wordpress')
-		)));
-
+		$big_text = "&raquo;&nbsp;" . __('Bigger map', 'mappress-google-maps-for-wordpress');
+		$small_text = "&laquo;&nbsp;" . __('Smaller map', 'mappress-google-maps-for-wordpress');
 		$click = "{$this->name}.bigger(this, \"$big_text\", \"$small_text\"); return false;";
 		return "<a href='#' onclick='$click'>$big_text</a>";
 	}

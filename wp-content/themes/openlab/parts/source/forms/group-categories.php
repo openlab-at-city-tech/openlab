@@ -14,7 +14,7 @@
 
                             <?php endforeach; ?>
                             <?php if (!empty($group_term_ids)): ?>
-                                <input type="hidden" name="_group_previous_tags" value="<?php echo implode(',', $group_term_ids); ?>">
+                                <input type="hidden" name="_group_previous_categories" value="<?php echo implode(',', $group_term_ids); ?>">
                             <?php endif; ?>
                         </div>
                     </td>

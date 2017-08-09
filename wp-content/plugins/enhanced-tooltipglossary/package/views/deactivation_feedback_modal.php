@@ -1,29 +1,29 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 $labels = array(
-	'deactivation-share-title'				 => __( 'Plugin Usage Feedback', 'cminds' ),
-	'deactivation-share-reason'				 => __( 'Please tell us how can we make this plugin better for you?', 'cminds' ),
-	'deactivation-share-agree'				 => __( 'Please share my WordPress system information to help analyze my feedback*', 'cminds' ),
-	'deactivation-want-contact'				 => __( 'I will be happy to receive support to my email', 'cminds' ),
-	'deactivation-want-contact-pt-2'		 => __( 'regarding the issues I am reporting. (Please include a detailed description)', 'cminds' ),
-	'deactivation-default-contact'			 => get_bloginfo( 'admin_email' ),
-	'deactivation-share-disclaimer'			 => __( '(*) Your feedback will only be used to improve this plugin', 'cminds' ),
-	'deactivation-modal-button-deactivate'	 => __( 'Deactivate', 'cminds' ),
-	'deactivation-modal-button-confirm'		 => __( 'Yes - Deactivate', 'cminds' ),
-	'deactivation-modal-button-submit'		 => __( 'Submit & Deactivate', 'cminds' ),
-	'deactivation-modal-button-cancel'		 => _x( 'Cancel', 'the text of the cancel button of the plugin deactivation dialog box.', 'cminds' ),
+    'deactivation-share-title'             => __( 'Plugin Usage Feedback', 'cminds' ),
+    'deactivation-share-reason'            => __( 'Please tell us how can we make this plugin better for you?', 'cminds' ),
+    'deactivation-share-agree'             => __( 'Please share my WordPress system information to help analyze my feedback*', 'cminds' ),
+    'deactivation-want-contact'            => __( 'I will be happy to receive support to my email', 'cminds' ),
+    'deactivation-want-contact-pt-2'       => __( 'regarding the issues I am reporting. (Please include a detailed description)', 'cminds' ),
+    'deactivation-default-contact'         => get_bloginfo( 'admin_email' ),
+    'deactivation-share-disclaimer'        => __( '(*) Your feedback will only be used to improve this plugin', 'cminds' ),
+    'deactivation-modal-button-deactivate' => __( 'Deactivate', 'cminds' ),
+    'deactivation-modal-button-confirm'    => __( 'Yes - Deactivate', 'cminds' ),
+    'deactivation-modal-button-submit'     => __( 'Submit & Deactivate', 'cminds' ),
+    'deactivation-modal-button-cancel'     => _x( 'Cancel', 'the text of the cancel button of the plugin deactivation dialog box.', 'cminds' ),
 );
 
 $confirmation_message = apply_filters( 'cm_uninstall_confirmation_message', '' );
 ?>
 <script type="text/javascript">
     ( function ( $ ) {
-		if($('.cm-modal').length){
-			$('.cm-modal').remove();
-		}
+        if ( $( '.cm-modal' ).length ) {
+            $( '.cm-modal' ).remove();
+        }
         var modalHtml =
             '<div class="cm-modal<?php echo empty( $confirmation_message ) ? ' no-confirmation-message' : ''; ?>">'
             + '	<div class="cm-modal-dialog">'
@@ -55,7 +55,10 @@ $confirmation_message = apply_filters( 'cm_uninstall_confirmation_message', '' )
             var $currentLink;
 
             $deactivateLink.click( function ( evt ) {
-                evt.preventDefault();
+
+                if ( evt.which === 1 ) {
+                    evt.preventDefault();
+                }
                 var slug = jQuery( this ).next().data( 'slug' );
                 $slug = $modal.find( 'input[type="hidden"][name="plugin-slug"]' );
                 $slug.val( slug );
@@ -207,5 +210,5 @@ $confirmation_message = apply_filters( 'cm_uninstall_confirmation_message', '' )
     } )( jQuery );
 </script>
 <style>
-	.cm-modal{position:fixed;overflow:auto;height:100%;width:100%;top:0;z-index:100000;display:none;background:rgba(0,0,0,0.6)}.cm-modal .cm-modal-dialog{background:transparent;position:absolute;left:50%;margin-left:-298px;padding-bottom:30px;top:-100%;z-index:100001;width:596px}@media (max-width: 650px){.cm-modal .cm-modal-dialog{margin-left:-50%;box-sizing:border-box;padding-left:10px;padding-right:10px;width:100%}.cm-modal .cm-modal-dialog .cm-modal-panel>h3>strong{font-size:1.3em}.cm-modal .cm-modal-dialog li.reason{margin-bottom:10px}.cm-modal .cm-modal-dialog li.reason .reason-input{margin-left:29px}.cm-modal .cm-modal-dialog li.reason label{display:table}.cm-modal .cm-modal-dialog li.reason label>span{display:table-cell;font-size:1.3em}}.cm-modal.active{display:block}.cm-modal.active:before{display:block}.cm-modal.active .cm-modal-dialog{top:10%}.cm-modal .cm-modal-body,.cm-modal .cm-modal-footer{border:2px solid #9fb6f2;background:#e2e9fb;padding:20px;}.cm-modal .cm-modal-body{border-bottom:0}.cm-modal .cm-modal-body h2{font-size:20px}.cm-modal .cm-modal-body>div{margin-top:10px}.cm-modal .cm-modal-body>div h2{font-weight:bold;font-size:20px;margin-top:0}.cm-modal .cm-modal-footer{border-top:#eeeeee solid 1px;text-align:right}.cm-modal .cm-modal-footer>.button{margin:0 7px}.cm-modal .cm-modal-footer>.button:first-child{margin:0}.cm-modal .cm-modal-panel:not(.active){display:none}.cm-modal .reason-input{margin:3px 0 3px 22px}.cm-modal .reason-input input,.cm-modal .reason-input textarea{width:100%}body.has-cm-modal{overflow:hidden}#the-list .deactivate>.cm-slug{display:none}
+    .cm-modal{position:fixed;overflow:auto;height:100%;width:100%;top:0;z-index:100000;display:none;background:rgba(0,0,0,0.6)}.cm-modal .cm-modal-dialog{background:transparent;position:absolute;left:50%;margin-left:-298px;padding-bottom:30px;top:-100%;z-index:100001;width:596px}@media (max-width: 650px){.cm-modal .cm-modal-dialog{margin-left:-50%;box-sizing:border-box;padding-left:10px;padding-right:10px;width:100%}.cm-modal .cm-modal-dialog .cm-modal-panel>h3>strong{font-size:1.3em}.cm-modal .cm-modal-dialog li.reason{margin-bottom:10px}.cm-modal .cm-modal-dialog li.reason .reason-input{margin-left:29px}.cm-modal .cm-modal-dialog li.reason label{display:table}.cm-modal .cm-modal-dialog li.reason label>span{display:table-cell;font-size:1.3em}}.cm-modal.active{display:block}.cm-modal.active:before{display:block}.cm-modal.active .cm-modal-dialog{top:10%}.cm-modal .cm-modal-body,.cm-modal .cm-modal-footer{border:2px solid #9fb6f2;background:#e2e9fb;padding:20px;}.cm-modal .cm-modal-body{border-bottom:0}.cm-modal .cm-modal-body h2{font-size:20px}.cm-modal .cm-modal-body>div{margin-top:10px}.cm-modal .cm-modal-body>div h2{font-weight:bold;font-size:20px;margin-top:0}.cm-modal .cm-modal-footer{border-top:#eeeeee solid 1px;text-align:right}.cm-modal .cm-modal-footer>.button{margin:0 7px}.cm-modal .cm-modal-footer>.button:first-child{margin:0}.cm-modal .cm-modal-panel:not(.active){display:none}.cm-modal .reason-input{margin:3px 0 3px 22px}.cm-modal .reason-input input,.cm-modal .reason-input textarea{width:100%}body.has-cm-modal{overflow:hidden}#the-list .deactivate>.cm-slug{display:none}
 </style>

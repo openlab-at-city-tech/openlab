@@ -1,22 +1,20 @@
 <?php
-	//Email validation code
-
-
+	// Email validation code
 function openlab_registration_avatars() {
 	global $bp, $wpdb;
 
-	if ( !bp_is_register_page() ) {
+	if ( ! bp_is_register_page() ) {
 		return;
 	}
 
-        if ( empty( $bp->avatar_admin ) ) {
-		$bp->avatar_admin = new stdClass;
+	if ( empty( $bp->avatar_admin ) ) {
+		$bp->avatar_admin = new stdClass();
 	}
 
 	$bp->avatar_admin->step = 'upload-image';
 
 	/* If user has uploaded a new avatar */
-	if ( !empty( $_FILES ) ) {
+	if ( ! empty( $_FILES ) ) {
 
 		/* Check the nonce */
 		check_admin_referer( 'bp_avatar_upload' );
@@ -25,7 +23,7 @@ function openlab_registration_avatars() {
 
 		if ( is_multisite() ) {
 			/* Get the activation key */
-			if ( !$bp->signup->key = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $_POST[ 'signup_username' ], $_POST[ 'signup_email' ] ) ) ) {
+			if ( ! $bp->signup->key = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $_POST['signup_username'], $_POST['signup_email'] ) ) ) {
 				bp_core_add_message( __( 'There was a problem uploading your avatar, please try uploading it again', 'buddypress' ) );
 			} else {
 				/* Hash the key to create the upload folder (added security so people don't sniff the activation key) */
@@ -56,13 +54,22 @@ function openlab_registration_avatars() {
 		/* Reset the avatar step so we can show the upload form again if needed */
 		$bp->signup->step = 'completed-confirmation';
 		$bp->avatar_admin->step = 'upload-image';
-		$bp->signup->key = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $_POST[ 'signup_username' ], $_POST[ 'signup_email' ] ) );
+		$bp->signup->key = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $_POST['signup_username'], $_POST['signup_email'] ) );
 		$bp->signup->avatar_dir = wp_hash( $bp->signup->key );
 
-		if ( !bp_core_avatar_handle_crop( array( 'original_file' => $_POST['image_src'], 'crop_x' => $_POST['x'], 'crop_y' => $_POST['y'], 'crop_w' => $_POST['w'], 'crop_h' => $_POST['h'] ) ) )
+		if ( ! bp_core_avatar_handle_crop(
+			array(
+				'original_file' => $_POST['image_src'],
+				'crop_x' => $_POST['x'],
+				'crop_y' => $_POST['y'],
+				'crop_w' => $_POST['w'],
+				'crop_h' => $_POST['h'],
+			)
+		) ) {
 			bp_core_add_message( __( 'There was a problem cropping your avatar, please try uploading it again', 'buddypress' ), 'error' );
-		else
+		} else {
 			bp_core_add_message( __( 'Your new avatar was uploaded successfully', 'buddypress' ) );
+		}
 
 		bp_core_load_template( apply_filters( 'bp_core_template_register', 'registration/register' ) );
 	}
@@ -82,7 +89,7 @@ function wds_email_validate() {
 	global $bp;
 
 	// For development
-	if ( !defined( 'OPENLAB_SKIP_EMAIL_CHECK' ) || !OPENLAB_SKIP_EMAIL_CHECK ) {
+	if ( ! defined( 'OPENLAB_SKIP_EMAIL_CHECK' ) || ! OPENLAB_SKIP_EMAIL_CHECK ) {
 
 		$email = $_POST['signup_email'];
 		$email_parts = explode( '@', $email );
@@ -91,22 +98,22 @@ function wds_email_validate() {
 		$account_type = isset( $_POST['field_7'] ) ? stripslashes( $_POST['field_7'] ) : 'Student';
 
 		switch ( $account_type ) {
-			case 'Student' :
-                        case 'Alumni' :
+			case 'Student':
+			case 'Alumni':
 				if ( 'mail.citytech.cuny.edu' !== $domain ) {
 					$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
 				}
 				break;
 
-			case 'Faculty' :
-			case 'Staff' :
+			case 'Faculty':
+			case 'Staff':
 				if ( 'citytech.cuny.edu' !== $domain ) {
 					$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
 				}
 
 				break;
 
-			case 'Non-City Tech' :
+			case 'Non-City Tech':
 				$code = '';
 				if ( isset( $_POST['signup_validation_code'] ) ) {
 					$code = stripslashes( $_POST['signup_validation_code'] );
@@ -123,19 +130,19 @@ function wds_email_validate() {
 	// Check that the email addresses match
 	if ( empty( $_POST['signup_email_confirm'] ) ) {
 		$bp->signup->errors['signup_email'] = 'Please confirm your email address.';
-	} else if ( trim( $_POST['signup_email'] ) != trim( $_POST['signup_email_confirm'] ) ) {
+	} elseif ( trim( $_POST['signup_email'] ) != trim( $_POST['signup_email_confirm'] ) ) {
 		$bp->signup->errors['signup_email'] = 'Email addresses do not match. Please double check and resubmit.';
 	}
 
-
-	//check if privacy policy is checked
-
-	/*$bp_tos_agree = $_POST['signup_email'];
+	// check if privacy policy is checked
+	/*
+	$bp_tos_agree = $_POST['signup_email'];
 	if($bp_tos_agree!="1"){
 		$bp->signup->errors['bp_tos_agree'] = 'Please aggree to the terms of service!';
 
 	}*/
-	/*if ( in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) ) {
+	/*
+	if ( in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) ) {
 		echo 'No error!';
 		$error = 0;
 	}elseif ( in_array('mail', $domains) && in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) && $_POST['field_7']=="Student") {
@@ -144,168 +151,204 @@ function wds_email_validate() {
 
 	}*/
 
-	//if ( $error == 1) $bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
+	// if ( $error == 1) $bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
 }
 //
-//   to temporarily disable this email edit, just comment out the line below
+// to temporarily disable this email edit, just comment out the line below
 //
 add_action( 'bp_signup_validate', 'wds_email_validate' );
-//
-function wds_get_register_fields($account_type, $post_data = array()) {
-    // Fake it until you make it
-    if (!empty($post_data)) {
-        foreach ($post_data as $pdk => $pdv) {
-            $_POST[$pdk] = $pdv;
-        }
-    }
+function wds_get_register_fields( $account_type, $post_data = array()) {
+	// Fake it until you make it
+	if ( ! empty( $post_data )) {
+		foreach ($post_data as $pdk => $pdv) {
+			$_POST[ $pdk ] = $pdv;
+		}
+	}
 
-    $exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
+	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
+	$exclude_fields = array(
+		openlab_get_xprofile_field_id( 'First Name' ),
+		openlab_get_xprofile_field_id( 'Last Name' ),
+	);
+
+	$has_profile_args = array(
+		'exclude_groups' => $exclude_groups,
+		'exclude_fields' => $exclude_fields,
+	);
+
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
-	$return="";
+	$return = '';
 	if ( function_exists( 'bp_has_profile' ) ) :
-	if ( bp_has_profile( 'exclude_groups=' . $exclude_groups ) ) : while ( bp_profile_groups() ) : bp_the_profile_group();
-		while ( bp_profile_fields() ) : bp_the_profile_field();
+		if ( bp_has_profile( $has_profile_args ) ) :
+			while ( bp_profile_groups() ) :
+				bp_the_profile_group();
+				while ( bp_profile_fields() ) :
+					bp_the_profile_field();
 
-			$return .= '<div class="editfield form-group">';
-			if ( 'textbox' == bp_get_the_profile_field_type() ) :
-				if(bp_get_the_profile_field_name()=="Name"){
-					$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">Display Name';
-				}else{
-					$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
-				}
-				if ( bp_get_the_profile_field_is_required() ) {
-					if (bp_get_the_profile_field_name()=="First Name" || bp_get_the_profile_field_name()=="Last Name") {
-						$return.=' (required, but not displayed on Public Profile)';
-					} else {
-						$return.=' (required)';
-					}
-				}
-				$return.='</label>';
+					$return .= '<div class="editfield form-group">';
+					if ( 'textbox' == bp_get_the_profile_field_type() ) :
+						if (bp_get_the_profile_field_name() == 'Name') {
+							$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">Display Name';
+						} else {
+							$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+						}
+						if ( bp_get_the_profile_field_is_required() ) {
+							if (bp_get_the_profile_field_name() == 'First Name' || bp_get_the_profile_field_name() == 'Last Name') {
+								$return .= ' (required, but not displayed on Public Profile)';
+							} else {
+								$return .= ' (required)';
+							}
+						}
+						$return .= '</label>';
 
-				/*
-				$input_name = trim(bp_get_the_profile_field_input_name());
-				$return.="<br />Input field name: " . $input_name;
-				$return.="<br />Post Value: " . $_POST["{$input_name}"];
-				$return .= "<br />Post Field 193: " . $_POST['field_193'];
-				$input_value = $_POST["{$input_name}"];
-				*/
-				$return .= '<input
+						/*
+						$input_name = trim(bp_get_the_profile_field_input_name());
+						$return.="<br />Input field name: " . $input_name;
+						$return.="<br />Post Value: " . $_POST["{$input_name}"];
+						$return .= "<br />Post Field 193: " . $_POST['field_193'];
+						$input_value = $_POST["{$input_name}"];
+						*/
+
+						if ( bp_get_the_profile_field_is_required() ) {
+
+							$this_field = bp_get_the_profile_field_input_name();
+							$return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+
+						}
+
+						$placeholder = '';
+						if ( bp_get_the_profile_field_id() === openlab_get_xprofile_field_id( 'Phone' ) ) {
+							$placeholder = 'Note: Your phone number will be public.';
+						}
+
+						$return .= '<input
 						class="form-control"
 						type="text"
 						name="' . bp_get_the_profile_field_input_name() . '"
 						id="' . bp_get_the_profile_field_input_name() . '"
 						value="' . bp_get_the_profile_field_edit_value() . '"
+						placeholder="' . esc_attr( $placeholder ) . '"
 						' . openlab_profile_field_input_attributes() . '
 						/>';
-			endif;
-			if ( 'textarea' == bp_get_the_profile_field_type() ) :
-				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</label>';
-				$return.='<textarea class="form-control" rows="5" cols="40" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_edit_value();
-				$return.='</textarea>';
-			endif;
-			if ( 'selectbox' == bp_get_the_profile_field_type() ) :
-				$return.='<label class="control-label" for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</label>';
-				//WDS ADDED $$$
+						endif;
+					if ( 'textarea' == bp_get_the_profile_field_type() ) :
+						$return .= '<label for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</label>';
+						$return .= '<textarea class="form-control" rows="5" cols="40" name="' . bp_get_the_profile_field_input_name() . '" id="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_edit_value();
+						$return .= '</textarea>';
+						endif;
+					if ( 'selectbox' == bp_get_the_profile_field_type() ) :
+						$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</label>';
 
-				$onchange = '';
+						if ( bp_get_the_profile_field_is_required() ) {
 
-				$return .= '<select
+							$this_field = bp_get_the_profile_field_input_name();
+							$return .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+
+						}
+
+						// WDS ADDED $$$
+						$onchange = '';
+
+						$return .= '<select
 						class="form-control"
 						name="' . bp_get_the_profile_field_input_name() . '"
-						id="' . bp_get_the_profile_field_input_name() . '" '.
+						id="' . bp_get_the_profile_field_input_name() . '" ' .
 						$onchange .
 						openlab_profile_field_input_attributes() .
 						' >';
-					 if ( 'Account Type' == bp_get_the_profile_field_name() ) {
-						$return .= '<option selected="selected" value=""> ---- </option>';
-					 }
-					 $return.=bp_get_the_profile_field_options();
-				$return.='</select>';
+						if ( 'Account Type' == bp_get_the_profile_field_name() ) {
+							$return .= '<option selected="selected" value=""> ---- </option>';
+						}
+							 $return .= bp_get_the_profile_field_options();
+						$return .= '</select>';
 
-			endif;
-			if ( 'multiselectbox' == bp_get_the_profile_field_type() ) :
-				$return.='<label for="'.bp_get_the_profile_field_input_name().'">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</label>';
-				$return.='<select class="form-control" name="'.bp_get_the_profile_field_input_name().'" id="'.bp_get_the_profile_field_input_name().'" multiple="multiple">';
-					$return.=bp_get_the_profile_field_options();
-				$return.='</select>';
-			endif;
-			if ( 'radio' == bp_get_the_profile_field_type() ) :
-				$return.='<div class="radio">';
-				$return.='<span class="label">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</span>';
-				$return.=bp_get_the_profile_field_options();
-				if ( !bp_get_the_profile_field_is_required() ) :
-					//$return.='<a class="clear-value" href="javascript:clear( \''.bp_get_the_profile_field_input_name().'\' );">'._e( 'Clear', 'buddypress' ).'</a>';
-				endif;
-				$return.='</div>';
-			endif;
-			if ( 'checkbox' == bp_get_the_profile_field_type() ) :
-				$return.='<div class="checkbox">';
-				$return.='<span class="label">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</span>';
-				$return.=bp_get_the_profile_field_options();
-				$return.='</div>';
-			endif;
-			if ( 'datebox' == bp_get_the_profile_field_type() ) :
-				$return.='<div class="datebox">';
-				$return.='<label for="'.bp_get_the_profile_field_input_name().'_day">'.bp_get_the_profile_field_name();
-				if ( bp_get_the_profile_field_is_required() ) :
-					$return.=' (required)';
-				endif;
-				$return.='</label>';
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'_day" id="'.bp_get_the_profile_field_input_name().'_day">';
-					$return.=bp_get_the_profile_field_options( 'type=day' );
-				$return.='</select>';
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'_month" id="'.bp_get_the_profile_field_input_name().'_month">';
-					$return.=bp_get_the_profile_field_options( 'type=month' );
-				$return.='</select>';
-				$return.='<select name="'.bp_get_the_profile_field_input_name().'_year" id="'.bp_get_the_profile_field_input_name().'_year">';
-					$return.=bp_get_the_profile_field_options( 'type=year' );
-				$return.='</select>';
-				$return.='</div>';
-			endif;
-			$return.=do_action( 'bp_custom_profile_edit_fields' );
-			$return.='<p class="description">'.bp_get_the_profile_field_description().'</p>';
-			$return.='</div>';
-		endwhile;
+						endif;
+					if ( 'multiselectbox' == bp_get_the_profile_field_type() ) :
+						$return .= '<label for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</label>';
+						$return .= '<select class="form-control" name="' . bp_get_the_profile_field_input_name() . '" id="' . bp_get_the_profile_field_input_name() . '" multiple="multiple">';
+							$return .= bp_get_the_profile_field_options();
+						$return .= '</select>';
+						endif;
+					if ( 'radio' == bp_get_the_profile_field_type() ) :
+						$return .= '<div class="radio">';
+						$return .= '<span class="label">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</span>';
+						$return .= bp_get_the_profile_field_options();
+						if ( ! bp_get_the_profile_field_is_required() ) :
+							// $return.='<a class="clear-value" href="javascript:clear( \''.bp_get_the_profile_field_input_name().'\' );">'._e( 'Clear', 'buddypress' ).'</a>';
+						endif;
+						$return .= '</div>';
+						endif;
+					if ( 'checkbox' == bp_get_the_profile_field_type() ) :
+						$return .= '<div class="checkbox">';
+						$return .= '<span class="label">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</span>';
+						$return .= bp_get_the_profile_field_options();
+						$return .= '</div>';
+						endif;
+					if ( 'datebox' == bp_get_the_profile_field_type() ) :
+						$return .= '<div class="datebox">';
+						$return .= '<label for="' . bp_get_the_profile_field_input_name() . '_day">' . bp_get_the_profile_field_name();
+						if ( bp_get_the_profile_field_is_required() ) :
+							$return .= ' (required)';
+						endif;
+						$return .= '</label>';
+						$return .= '<select name="' . bp_get_the_profile_field_input_name() . '_day" id="' . bp_get_the_profile_field_input_name() . '_day">';
+							$return .= bp_get_the_profile_field_options( 'type=day' );
+						$return .= '</select>';
+						$return .= '<select name="' . bp_get_the_profile_field_input_name() . '_month" id="' . bp_get_the_profile_field_input_name() . '_month">';
+							$return .= bp_get_the_profile_field_options( 'type=month' );
+						$return .= '</select>';
+						$return .= '<select name="' . bp_get_the_profile_field_input_name() . '_year" id="' . bp_get_the_profile_field_input_name() . '_year">';
+							$return .= bp_get_the_profile_field_options( 'type=year' );
+						$return .= '</select>';
+						$return .= '</div>';
+						endif;
+					$return .= do_action( 'bp_custom_profile_edit_fields' );
+					$return .= '<p class="description">' . bp_get_the_profile_field_description() . '</p>';
+					$return .= '</div>';
+							endwhile;
 
-		/**
+				/**
 		 * Left over from WDS, we need to hardcode 3,7,241 in some cases.
+			 *
 		 * @todo Investigate
 		 */
-		$profile_field_ids = bp_get_the_profile_group_field_ids();
+				$profile_field_ids = bp_get_the_profile_group_field_ids();
 
-		$pfids_a = explode( ',', $profile_field_ids );
-		if ( !in_array( 1, $pfids_a ) ) {
-			$pfids_a[] = 1;
-			$profile_field_ids = implode( ',', $pfids_a );
-		}
+				$pfids_a = explode( ',', $profile_field_ids );
+				if ( ! in_array( 1, $pfids_a ) ) {
+					$pfids_a[] = 1;
+					$profile_field_ids = implode( ',', $pfids_a );
+				}
 
-		if ( isset( $group_id ) && 1 != $group_id ) {
-			$profile_field_ids = '3,7,241,' . $profile_field_ids;
-		}
+				if ( isset( $group_id ) && 1 != $group_id ) {
+					$profile_field_ids = '3,7,241,' . $profile_field_ids;
+				}
 
-		$return .= '<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="3,7,241,' . $profile_field_ids . '" />';
+				$return .= '<input type="hidden" name="signup_profile_field_ids" id="signup_profile_field_ids" value="3,7,241,' . $profile_field_ids . '" />';
 
-		endwhile; endif; endif;
+				endwhile;
+endif;
+endif;
 		return $return;
 }
 

@@ -1309,7 +1309,18 @@ function openlab_show_site_posts_and_comments() {
             // Set up comments
             $comment_args = array(
                 "status" => "approve",
-                "number" => "3"
+                "number" => "3",
+				'meta_query' => array(
+					'relation' => 'OR',
+					array(
+						'key'   => 'olgc_is_private',
+						'value' => '0',
+					),
+					array(
+						'key' => 'olgc_is_private',
+						'compare' => 'NOT EXISTS',
+					),
+				)
             );
 
             $wp_comments = get_comments($comment_args);
@@ -1610,3 +1621,6 @@ function openlab_get_group_activity_events_feed() {
 
     return $events_out;
 }
+add_action( 'bp_group_options_nav', function() {
+	echo openlab_get_group_activity_events_feed();
+}, 50 );

@@ -267,6 +267,8 @@ var updateLinkedInCount = function( data ) {
 				} );
 				$more_sharing_buttons.data( 'timer', false );
 			} );
+		} else {
+			$( document.body ).addClass( 'jp-sharing-input-touch' );
 		}
 
 		$( document ).click(function() {
@@ -357,7 +359,7 @@ var updateLinkedInCount = function( data ) {
 					$( '#sharing_email form a.sharing_cancel' ).show();
 
 					// Reset reCATPCHA if exists.
-					if ( 'object' === typeof grecaptcha && 'function' === typeof grecaptcha.reset ) {
+					if ( 'object' === typeof grecaptcha && 'function' === typeof grecaptcha.reset && window.___grecaptcha_cfg.count ) {
 						grecaptcha.reset();
 					}
 

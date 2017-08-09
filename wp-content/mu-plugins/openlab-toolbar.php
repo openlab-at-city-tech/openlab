@@ -105,7 +105,7 @@ class OpenLab_Admin_Bar {
                             add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
                             add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
                         }
-
+                        
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
@@ -297,8 +297,8 @@ HTML;
                         ),
  		) );
         }
-
-         /**
+        
+        /**
          * The MOL link on mobile needs to sit between the hamburger menus and the logout link
          * So we'll need a third group for this (makes styling easier)
          */
@@ -912,7 +912,7 @@ HTML;
 
             $title = wp_html_excerpt( $blogname, 40, '&hellip;' );
             $title_short = wp_html_excerpt( $blogname, 15, '&hellip;' );
-
+            
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
                     'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="fa fa-desktop visible-sm" aria-hidden="true"></span><span class="sr-only visible-sm">'.$title.'</span>',
@@ -1226,7 +1226,7 @@ HTML;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
                 $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ));
-
+                
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
                     'parent' => 'top-secondary',

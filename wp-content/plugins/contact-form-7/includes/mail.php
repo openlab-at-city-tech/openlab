@@ -24,9 +24,13 @@ class WPCF7_Mail {
 		$this->exclude_blank = ! empty( $template['exclude_blank'] );
 
 		$this->template = wp_parse_args( $template, array(
-			'subject' => '', 'sender' => '', 'body' => '',
-			'recipient' => '', 'additional_headers' => '',
-			'attachments' => '' ) );
+			'subject' => '',
+			'sender' => '',
+			'body' => '',
+			'recipient' => '',
+			'additional_headers' => '',
+			'attachments' => '',
+		) );
 	}
 
 	public function name() {
@@ -43,7 +47,8 @@ class WPCF7_Mail {
 		if ( $replace_tags ) {
 			$component = $this->replace_tags( $component, array(
 				'html' => $use_html,
-				'exclude_blank' => $exclude_blank ) );
+				'exclude_blank' => $exclude_blank,
+			) );
 
 			if ( $use_html
 			&& ! preg_match( '%<html[>\s].*</html>%is', $component ) ) {
@@ -79,7 +84,8 @@ class WPCF7_Mail {
 			'body' => $this->get( 'body', true ),
 			'recipient' => $this->get( 'recipient', true ),
 			'additional_headers' => $this->get( 'additional_headers', true ),
-			'attachments' => $this->attachments() );
+			'attachments' => $this->attachments(),
+		);
 
 		$components = apply_filters( 'wpcf7_mail_components',
 			$components, wpcf7_get_current_contact_form(), $this );
@@ -118,7 +124,8 @@ class WPCF7_Mail {
 
 		$args = wp_parse_args( $args, array(
 			'html' => false,
-			'exclude_blank' => false ) );
+			'exclude_blank' => false,
+		) );
 
 		return wpcf7_mail_replace_tags( $content, $args );
 	}
@@ -162,7 +169,8 @@ class WPCF7_Mail {
 function wpcf7_mail_replace_tags( $content, $args = '' ) {
 	$args = wp_parse_args( $args, array(
 		'html' => false,
-		'exclude_blank' => false ) );
+		'exclude_blank' => false,
+	) );
 
 	if ( is_array( $content ) ) {
 		foreach ( $content as $key => $value ) {
@@ -223,7 +231,8 @@ class WPCF7_MailTaggedText {
 	public function __construct( $content, $args = '' ) {
 		$args = wp_parse_args( $args, array(
 			'html' => false,
-			'callback' => null ) );
+			'callback' => null,
+		) );
 
 		$this->html = (bool) $args['html'];
 
@@ -390,38 +399,33 @@ function wpcf7_special_mail_tag( $output, $name, $html ) {
 	}
 
 	if ( '_post_' == substr( $name, 0, 6 ) ) {
-		$unit_tag = $submission->get_meta( 'unit_tag' );
+		$post_id = (int) $submission->get_meta( 'container_post_id' );
 
-		if ( $unit_tag
-		&& preg_match( '/^wpcf7-f(\d+)-p(\d+)-o(\d+)$/', $unit_tag, $matches ) ) {
-			$post_id = absint( $matches[2] );
+		if ( $post = get_post( $post_id ) ) {
+			if ( '_post_id' == $name ) {
+				return (string) $post->ID;
+			}
 
-			if ( $post = get_post( $post_id ) ) {
-				if ( '_post_id' == $name ) {
-					return (string) $post->ID;
-				}
+			if ( '_post_name' == $name ) {
+				return $post->post_name;
+			}
 
-				if ( '_post_name' == $name ) {
-					return $post->post_name;
-				}
+			if ( '_post_title' == $name ) {
+				return $html ? esc_html( $post->post_title ) : $post->post_title;
+			}
 
-				if ( '_post_title' == $name ) {
-					return $html ? esc_html( $post->post_title ) : $post->post_title;
-				}
+			if ( '_post_url' == $name ) {
+				return get_permalink( $post->ID );
+			}
 
-				if ( '_post_url' == $name ) {
-					return get_permalink( $post->ID );
-				}
+			$user = new WP_User( $post->post_author );
 
-				$user = new WP_User( $post->post_author );
+			if ( '_post_author' == $name ) {
+				return $user->display_name;
+			}
 
-				if ( '_post_author' == $name ) {
-					return $user->display_name;
-				}
-
-				if ( '_post_author_email' == $name ) {
-					return $user->user_email;
-				}
+			if ( '_post_author_email' == $name ) {
+				return $user->user_email;
 			}
 		}
 

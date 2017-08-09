@@ -84,8 +84,8 @@ function openlab_load_scripts() {
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
     }
 
-    if ( bp_is_register_page() ) {
-        wp_enqueue_script( 'password-strength-meter' );
+    if (bp_is_register_page()) {
+        wp_enqueue_script('password-strength-meter');
     }
 }
 
@@ -239,23 +239,36 @@ add_filter('bp_avatar_is_front_edit', '__return_false');
  */
 function openlab_profile_field_input_attributes() {
     $attributes = array();
+    $field_name = bp_get_the_profile_field_input_name();
 
     switch (bp_get_the_profile_field_name()) {
         case 'Name' :
             $attributes[] = 'data-parsley-required';
-            $attributes[] = 'data-parsley-required';
+            $attributes[] = 'data-parsley-required-message="Display Name is required."';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'First Name' :
             $attributes[] = 'data-parsley-required';
+            $attributes[] = 'data-parsley-required-message="First Name is required."';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'Last Name' :
             $attributes[] = 'data-parsley-required';
+            $attributes[] = 'data-parsley-required-message="Last Name is required."';
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
 
         case 'Account Type' :
+        case 'Major Program of Study':
+        case 'Department':
+
+            $field = bp_get_the_profile_field_name();
+
             $attributes[] = 'data-parsley-required';
+            $attributes[] = "data-parsley-required-message='$field is required.'";
+            $attributes[] = "data-parsley-errors-container='#{$field_name}_confirm_error'";
             break;
     }
 
@@ -268,9 +281,10 @@ function openlab_profile_field_input_attributes() {
  * Don't allow the /profile/ page to be accessed.
  */
 function openlab_redirect_from_member_profile() {
-	if ( bp_is_user_profile() && bp_is_current_action( 'public' ) ) {
-		wp_redirect( bp_displayed_user_domain() );
-		die();
-	}
+    if (bp_is_user_profile() && bp_is_current_action('public')) {
+        wp_redirect(bp_displayed_user_domain());
+        die();
+    }
 }
-add_action( 'template_redirect', 'openlab_redirect_from_member_profile' );
+
+add_action('template_redirect', 'openlab_redirect_from_member_profile');

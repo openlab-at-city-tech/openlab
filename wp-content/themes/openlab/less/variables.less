@@ -111,7 +111,11 @@ Bootstrap variable overrides
 //
 //## Define colors for form feedback states and, by default, alerts.
 
-@state-danger-text:              @magenta;
+@state-danger-text:              @yellow;
+
+.has-error {
+  .form-control-validation(@black; @input-border; @state-danger-bg);
+}
 
 //custom vars
 @normal: 400;

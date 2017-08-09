@@ -148,8 +148,7 @@ class BP_Groups_Template {
 				11 => 'page_arg',
 			);
 
-			$func_args = func_get_args();
-			$args      = bp_core_parse_args_array( $old_args_keys, $func_args );
+			$args = bp_core_parse_args_array( $old_args_keys, func_get_args() );
 		}
 
 		$defaults = array(
@@ -167,6 +166,7 @@ class BP_Groups_Template {
 			'exclude'            => false,
 			'parent_id'          => null,
 			'search_terms'       => '',
+			'search_columns'     => array(),
 			'group_type'         => '',
 			'group_type__in'     => '',
 			'group_type__not_in' => '',
@@ -218,6 +218,7 @@ class BP_Groups_Template {
 				'page'               => $this->pag_page,
 				'user_id'            => $user_id,
 				'search_terms'       => $search_terms,
+				'search_columns'     => $search_columns,
 				'meta_query'         => $meta_query,
 				'group_type'         => $group_type,
 				'group_type__in'     => $group_type__in,
