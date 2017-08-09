@@ -44,33 +44,6 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		</h2>
 
 		<div class="changelog point-releases">
-<<<<<<< HEAD
-			<h3><?php _e( 'Maintenance and Security Releases' ); ?></h3>
-			<p><?php printf( _n( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
-					'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.', 3 ), '4.7.5', number_format_i18n( 3 ) ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.5' ); ?>
-			</p>
-			<p><?php printf( _n( '<strong>Version %1$s</strong> addressed %2$s bug.',
-					'<strong>Version %1$s</strong> addressed %2$s bugs.', 47 ), '4.7.4', number_format_i18n( 47 ) ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.4' ); ?>
-			</p>
-			<p><?php printf( _n( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
-					'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.', 39 ), '4.7.3', number_format_i18n( 39 ) ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.3' ); ?>
-			</p>
-			<p><?php printf( __( '<strong>Version %s</strong> addressed some security issues.' ), '4.7.2' ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.2' ); ?>
-			</p>
-			<p><?php printf( _n( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
-					'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.', 62 ), '4.7.1', number_format_i18n( 62 ) ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.1' ); ?>
-			</p>
-		</div>
-
-		<div class="headline-feature feature-video">
-			<iframe width="1050" height="591" src="<?php echo esc_url( $video_url ); ?>" frameborder="0" allowfullscreen></iframe>
-			<script src="https://videopress.com/videopress-iframe.js"></script>
-=======
 			<h3><?php _e( 'Maintenance Release' ); ?></h3>
 			<p>
 				<?php
@@ -90,7 +63,6 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.8.1' );
 				?>
 				</p>
->>>>>>> c95aab1f06ad4f2496afa8b486e9268a1e95c473
 		</div>
 
 		<div class="feature-section one-col">
