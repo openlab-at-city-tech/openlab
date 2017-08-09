@@ -1,4 +1,3 @@
-<script id="course-list-template" type="text/template">
 <div class="container-fluid">
     <div class="row">
     	<div class="col-md-12 wrap">
@@ -33,4 +32,3 @@
 		</div>
 	</div>
 </div>
-</script>  

@@ -1,4 +1,3 @@
-<script id="student-view-template" type="text/template">
 	<th class="student-tools fixed-column">
 		<div class="btn-group">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -26,6 +25,5 @@
 	</td>
 	<td><%= student.get("last_name") %></td>
 	<td><%= student.get("user_login") %></td>
-</script>      
     
     

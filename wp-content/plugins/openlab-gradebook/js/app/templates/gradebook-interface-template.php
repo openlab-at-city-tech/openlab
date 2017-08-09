@@ -1,4 +1,3 @@
-<script id="gradebook-interface-template" type="text/template">
 <div class="container-fluid">
     <div class="row">
     	<div class="col-md-12 wrap">
@@ -47,8 +46,7 @@
 					</thead>		    	
 					<tbody id="students"></tbody>
 				</table>
-			</div>
+                            </div>
 		</div>
 	</div>
 </div>	
-</script>

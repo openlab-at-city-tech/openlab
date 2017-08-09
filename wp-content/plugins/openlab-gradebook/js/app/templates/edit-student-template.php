@@ -1,4 +1,3 @@
-<script id="edit-student-template" type="text/template">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -43,6 +42,5 @@
 			</div>
 		</div>		
 	</div>
-</script>   
 
 <!--if student exists in the wordpress database, use the students user_login to add. Otherwise a new record will be created for this student-->

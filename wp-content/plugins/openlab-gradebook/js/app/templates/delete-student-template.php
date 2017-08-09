@@ -1,4 +1,3 @@
-<script id="delete-student-template" type="text/template">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -32,4 +31,3 @@
 			</div>
 		</div>
 	</div>
-</script>      

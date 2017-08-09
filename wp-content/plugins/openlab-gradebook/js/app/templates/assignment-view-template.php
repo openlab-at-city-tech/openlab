@@ -1,4 +1,3 @@
-<script id="assignment-view-template" type="text/template">
 	<div class="btn-group">
   		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     		<%= assignment.get('assign_name') %> <span class="caret"></span>
@@ -31,7 +30,4 @@
 				<li class='assign-submenu-delete'><a href='#'><span class='text-danger'>Delete</span></a></li>	
 			<?php } ?>			
   		</ul>
-  	</div>
-</script>      
-    
-    
+  	</div>    

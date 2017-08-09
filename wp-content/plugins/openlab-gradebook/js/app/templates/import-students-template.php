@@ -1,4 +1,3 @@
-<script id="an-gradebook-import-students-template" type="text/template">
 <div id = "an-gradebook-import-students" class="wrap">
 	<div class="container-fluid">
     	<div class="row">
@@ -27,6 +26,5 @@
 	</div>
 	</div>
 	</div>
-</script>      
     
     

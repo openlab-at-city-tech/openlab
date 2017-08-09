@@ -1,4 +1,3 @@
-<script id="course-view-template" type="text/template">     				
 	<td>
 		<div class="btn-group">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -25,6 +24,3 @@
 	<td><%= course.get("school") %></td>
 	<td><%= course.get("semester") %></td>
 	<td><%= course.get("year") %></td>	
-</script>      
-    
-    

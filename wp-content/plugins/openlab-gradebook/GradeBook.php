@@ -70,9 +70,15 @@ add_action( 'admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts');
 
 function init_oplb_gradebook(){	
 		$template_list = glob(dirname( __FILE__ ).'/js/app/templates/*.php');
-
+                
 		foreach($template_list as $template){
-			include($template);
+                    
+                        //get template name
+                        $template_explode = explode('/', $template);    
+                        $template_filename = str_replace('.php','',array_pop($template_explode));
+                        echo "<script id='{$template_filename}' type='text/template'>";
+                            include($template);
+                        echo "</script>";
 		}	
 }
 

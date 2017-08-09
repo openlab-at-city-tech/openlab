@@ -1,4 +1,3 @@
-<script id="an-gradebook-settings-template" type="text/template">
 <div id = "an-gradebook-settings" class="wrap">
 	<div class="container-fluid">
     	<div class="row">
@@ -44,6 +43,5 @@
 	</div>
 	</div>
 	</div>
-</script>      
     
     

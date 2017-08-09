@@ -1,4 +1,3 @@
-<script id="ajax-template" type="text/template">
 <div class="container-fluid ajax-loader-container">
 	<div class="row">
 		<div class="col-sm-12"> 
@@ -46,4 +45,3 @@
 		</div>
 	</div>
 </div>
-</script>   
