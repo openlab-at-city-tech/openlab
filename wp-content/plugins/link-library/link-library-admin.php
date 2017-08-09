@@ -944,7 +944,7 @@ class link_library_plugin_admin {
 			</div>
 			<div>
 				<form name='linklibrary' enctype="multipart/form-data" action="admin-post.php" method="post">
-					<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
 
 					<?php wp_nonce_field( 'link-library' ); ?>
 					<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>

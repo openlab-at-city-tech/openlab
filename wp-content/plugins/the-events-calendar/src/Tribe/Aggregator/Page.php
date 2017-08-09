@@ -99,7 +99,7 @@ class Tribe__Events__Aggregator__Page {
 					),
 					'debug' => defined( 'WP_DEBUG' ) && true === WP_DEBUG,
 				),
-				'default_settings' => Tribe__Events__Aggregator__Settings::instance()->get_all_default_settings(),
+				'default_settings' => tribe( 'events-aggregator.settings' )->get_all_default_settings(),
 			),
 		);
 
@@ -109,6 +109,13 @@ class Tribe__Events__Aggregator__Page {
 		 * @param array $mapping Mapping data indexed by CSV import type
 		 */
 		$localize_data['data']['csv_column_mapping'] = apply_filters( 'tribe_aggregator_csv_column_mapping', $localize_data['data']['csv_column_mapping'] );
+
+		/**
+		 * filters the whole array that will be localized for event aggregator.
+		 *
+		 * @param array $localize_data
+		 */
+		$localize_data['data'] = apply_filters( 'tribe_aggregator_localized_data', $localize_data['data'] );
 
 		// Load these on all the pages
 		tribe_assets( $plugin,
@@ -122,7 +129,8 @@ class Tribe__Events__Aggregator__Page {
 						'underscore',
 						'tribe-bumpdown',
 						'tribe-dependency',
-						'tribe-events-select2',
+						'tribe-select2',
+						'tribe-events-admin',
 						'tribe-ea-facebook-login',
 					),
 				),
@@ -187,7 +195,7 @@ class Tribe__Events__Aggregator__Page {
 	 * @return boolean
 	 */
 	public function is_screen() {
-		return Tribe__Admin__Helpers::instance()->is_screen( $this->ID );
+		return ! empty( $this->ID ) && Tribe__Admin__Helpers::instance()->is_screen( $this->ID );
 	}
 
 	/**
@@ -352,7 +360,7 @@ class Tribe__Events__Aggregator__Page {
 			return false;
 		}
 
-		$aggregator = Tribe__Events__Aggregator::instance();
+		$aggregator = tribe( 'events-aggregator.main' );
 
 		if ( ! $aggregator->is_service_active() ) {
 			return false;

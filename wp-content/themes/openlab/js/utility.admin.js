@@ -1,12 +1,12 @@
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        var OpenLab = {};
-    }
+var resizeTimer;
 
-    var resizeTimer;
+OpenLab.admin = (function ($) {
 
-    OpenLab.admin = {
+    return{
         init: function () {
 
             OpenLab.admin.helpPostAutocomplete();
@@ -53,7 +53,7 @@
                     },
                     minLength: 3,
                     select: function (event, ui) {
-                        
+
                         if (ui.item.id == 0) {
                             OpenLab.admin.helpPostAutoCompleteReturnAction($(this), 0, '');
                         } else {
@@ -71,8 +71,10 @@
             var storage = thisComplete.data('target');
             $('#' + storage).val(id);
         }
-    };
+    }
+})(jQuery, OpenLab);
 
+(function ($) {
     $(document).ready(function () {
         console.log('go');
         OpenLab.admin.init();

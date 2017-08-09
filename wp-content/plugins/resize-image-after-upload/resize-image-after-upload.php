@@ -2,12 +2,12 @@
 /*
 Plugin Name: Resize Image After Upload
 Plugin URI: https://wordpress.org/plugins/resize-image-after-upload/
-Description: Simple plugin to automatically resize uploaded images to within specified maximum width and height. Also has option to force recompression of JPEGs. Configuration options found under <a href="options-general.php?page=resize-after-upload">Settings > Resize Image Upload</a>
-Author: iamphilrae
-Version: 1.7.2
-Author URI: http://www.philr.ae/
+Description: Automatically resize uploaded images to within specified maximum width and height. Also has option to force recompression of JPEGs. Configuration options found under <a href="options-general.php?page=resize-after-upload">Settings > Resize Image Upload</a>
+Author: ShortPixel
+Version: 1.8.1
+Author URI: https://shortpixel.com
 
-Copyright (C) 2015 iamphilrae
+Copyright (C) 2017 ShortPixel
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-$PLUGIN_VERSION = '1.7.2';
+$PLUGIN_VERSION = '1.8.1';
 $DEBUG_LOGGER = false;
 
 
@@ -50,15 +50,58 @@ add_action('admin_menu', 'jr_uploadresize_options_page');
 // Hook the function to the upload handler
 add_action('wp_handle_upload', 'jr_uploadresize_resize');
 
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'jr_generate_plugin_links');//for plugin settings page
 
+add_action('admin_notices', 'jr_display_notices');
+add_action('wp_ajax_jr_dismiss_notices', 'jr_dismiss_notices');
 
+/**
+ * Add ths link to Settings in Plugins Page
+ */
+function jr_generate_plugin_links($links) {
+  $settings_link = '<a href="options-general.php?page=resize-after-upload">Settings</a>';
+  array_unshift( $links, $settings_link );
+  return $links;
+}
+
+function jr_display_notices() {
+  if(get_option( 'jr_resizeupload_news') != 1 ) {
+    global $jr_settings_page;
+    $screen = get_current_screen();
+    if ( $screen->id != $jr_settings_page ) { ?>
+      <div class='notice notice-warning' id='jr-resizeupload-news' style="padding-top: 7px">
+        <div style="float:right;"><a href="javascript:jrResizeuploadDismissNews()" class="button" style="margin-top:10px;">Dismiss</a></div>
+        <strong>Resize Image After Upload</strong>
+        <p>Check out the <a href="options-general.php?page=resize-after-upload">Plugin settings</a> for new features that can make your site load faster.</p>
+      </div>
+      <script>
+        function jrResizeuploadDismissNews() {
+          jQuery("#jr-resizeupload-news").hide();
+          var data = { action  : 'jr_dismiss_notices'};
+          jQuery.get('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
+            data = JSON.parse(response);
+            if(data["Status"] == 0) {
+              console.log("dismissed");
+            }
+          });
+        }
+      </script>
+    <?php }
+  }
+}
+
+function jr_dismiss_notices() {
+  update_option( 'jr_resizeupload_news', 1);
+  die(json_encode(array("Status" => 0)));
+}
 
 /**
 * Add the options page
 */
 function jr_uploadresize_options_page(){
+    global $jr_settings_page;
 	if(function_exists('add_options_page')){
-		add_options_page(
+      $jr_settings_page = add_options_page(
 			'Resize Image After Upload',
 			'Resize Image Upload',
 			'manage_options',
@@ -209,14 +252,10 @@ function jr_uploadresize_options(){
 
   		<h4 style="font-size: 15px;font-weight: bold;margin: 2em 0 0;">Like the plugin?</h4>
 
-  		<p>This plugin was written and is maintained for free (as in free beer) by me, <a href="http://philr.ae" target="_blank">Phil Rae</a>. If you find it useful please consider donating some small change or bitcoins to my beer fund because beer is very seldom free. Thanks!</p>
+  		<p>This plugin was written for free (as in free beer) by me, <a href="http://philr.ae" target="_blank">Phil Rae</a>. If you find it useful please consider donating some small change to my beer fund because beer is very seldom free. Thanks!</p>
 
   		<p style="padding-bottom:2em;" class="resizeimage-button-wrapper">
-
-  		  <a class="resizeimage-button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3W4M254AA3KZG" target="_blank">Donate cash</a>
-
-        <a class="resizeimage-button coinbase-button" data-code="9584265cb76df0b1e99979163de143f5" data-button-style="custom_small" target="_blank" href="https://coinbase.com/checkouts/9584265cb76df0b1e99979163de143f5">Donate bitcoins</a>
-
+  		  <a class="resizeimage-button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TKZHGYG2UCFUQ" target="_blank">Donate cash</a>
   		</p>
  		</div>
 
@@ -287,16 +326,42 @@ function jr_uploadresize_options(){
 
 		</table>
 
-		<?php /* DEFINED HERE FOR FUTURE RELEASE - does not do anything if uncommented
+        <p class="description"><strong>
+            Note that any changes you make will only affect new images uploaded to your site. A specialized plugin can optimize all your present images and will also optimize new ones as they are added.
+        </strong></p>
+        <p class="description" style="font-size:1.1em;margin: 15px 0;"><strong>
+            <a href="https://shortpixel.com/riau/af/WVCLIKV28044?autoreferrer=1" target="_blank">
+                Test your website with  ShortPixel for free to see how much you could gain by optimizing your images
+            </a>
+        </strong></p>
+        <a href="https://shortpixel.com/riau/af/WVCLIKV28044?autoreferrer=1" target="_blank"><img src="<?php echo plugins_url(); ?>/resize-image-after-upload/img/sp.png" style="float:left;margin-right:20px;"/></a>
+        <p class="description">
+            ShortPixel is an easy to use, comprehensive, stable and frequently updated image optimization plugin supported by the friendly team that created it. Using a powerful set of specially tuned algorithms, it squeezes the most of each image striking the best balance between image size and quality. Current images can be all optimized with a single click. Newly added images are automatically resized/rescaled and optimized on the fly, in the background.
+        </p>
+        <p class="description-link">
+            <a href="https://shortpixel.com/riau/af/WVCLIKV28044?autoreferrer=1" target="_blank">&gt;&gt; <?php _e( 'More info', 'sb-pack' ); ?></a>
+        </p>
+
 		<hr style="margin-top:20px; margin-bottom:20px;">
 
 		<h3>Image conversion options</h3>
-		<p style="max-width:700px">Photos saved as PNG and GIF images can be extremely large in file size due to their compression methods not being suited for photos. Enable these options below to automatically convert GIF and/or PNG images to JPEG.</p>
+		<p style="max-width:700px">Photos saved as PNG <?php //and GIF ?> images can be extremely large in file size due to their compression methods not being suited for photos. Enable these options below to automatically convert <?php //GIF and/or ?>PNG images to JPEG <strong>only if they don't have transparency</strong></strong>.</p>
 
-		<p>When enabled, conversion will happen to all uploaded GIF/PNG images, not just ones that require resizing.</p>
+		<p>When enabled, conversion will happen to all suitable uploaded PNG images, not just ones that require resizing.</p>
 
 		<table class="form-table">
 
+          <tr>
+            <th scope="row">Convert PNG to JPEG</th>
+            <td>
+              <select id="convert-png" name="convertpng">
+                <option value="no" <?php if($convert_png_to_jpg == 'no') : ?>selected<?php endif; ?>>NO - just resize uploaded png images as normal</option>
+                <option value="yes" <?php if($convert_png_to_jpg == 'yes') : ?>selected<?php endif; ?>>YES - convert all uploaded png images not having a transparency layer to jpeg</option>
+              </select>
+            </td>
+          </tr>
+
+          <?php /* DEFINED HERE FOR FUTURE RELEASE - does not do anything if uncommented
 			<tr>
 				<th scope="row">Convert GIF to JPEG</th>
 				<td>
@@ -307,18 +372,9 @@ function jr_uploadresize_options(){
 				</td>
 			</tr>
 
-			<tr>
-				<th scope="row">Convert PNG to JPEG</th>
-				<td>
-					<select id="convert-png" name="convertpng">
-						<option value="no" <?php if($convert_png_to_jpg == 'no') : ?>selected<?php endif; ?>>NO - just resize uploaded png images as normal</option>
-						<option value="yes" <?php if($convert_png_to_jpg == 'yes') : ?>selected<?php endif; ?>>YES - convert all uploaded png images to jpeg</option>
-					</select>
-				</td>
-			</tr>
+		*/ ?>
 
 		</table>
-		*/ ?>
 
 		<hr style="margin-top:30px;">
 
@@ -348,13 +404,12 @@ function jr_uploadresize_resize($image_data){
 
 
   $resizing_enabled = get_option('jr_resizeupload_resize_yesno');
-	$resizing_enabled = ($resizing_enabled=='yes') ? true : false;
+  $resizing_enabled = ($resizing_enabled=='yes') ? true : false;
 
   $force_jpeg_recompression = get_option('jr_resizeupload_recompress_yesno');
-	$force_jpeg_recompression = ($force_jpeg_recompression=='yes') ? true : false;
+  $force_jpeg_recompression = ($force_jpeg_recompression=='yes') ? true : false;
 
   $compression_level = get_option('jr_resizeupload_quality');
-
 
   $max_width  = get_option('jr_resizeupload_width')==0 ? false : get_option('jr_resizeupload_width');
 
@@ -371,6 +426,9 @@ function jr_uploadresize_resize($image_data){
 	$convert_bmp_to_jpg = ($convert_bmp_to_jpg=='yes') ? true : false;
 
 
+  if($convert_png_to_jpg && $image_data['type'] == 'image/png' ) {
+    $image_data = jr_uploadresize_convert_image( $image_data, $compression_level );
+  }
 
   //---------- In with the old v1.6.2, new v1.7 (WP_Image_Editor) ------------
 
@@ -461,6 +519,52 @@ function jr_uploadresize_resize($image_data){
   return $image_data;
 } // function jr_uploadresize_resize($image_data){
 
+function jr_uploadresize_convert_image( $params, $compression_level ){
+  $transparent = 0;
+  $image = $params['file'];
+
+  $contents = file_get_contents( $image );
+  if ( ord ( file_get_contents( $image, false, null, 25, 1 ) ) & 4 ) $transparent = 1;
+  if ( stripos( $contents, 'PLTE' ) !== false && stripos( $contents, 'tRNS' ) !== false ) $transparent = 1;
+
+  $transparent_pixel = $img = $bg = false;
+  if($transparent) {
+    $img = imagecreatefrompng($params['file']);
+    $w = imagesx($img); // Get the width of the image
+    $h = imagesy($img); // Get the height of the image
+    //run through pixels until transparent pixel is found:
+    for($i = 0; $i<$w; $i++) {
+      for($j = 0; $j < $h; $j++) {
+        $rgba = imagecolorat($img, $i, $j);
+        if(($rgba & 0x7F000000) >> 24) {
+          $transparent_pixel = true;
+          break;
+        }
+      }
+    }
+  }
+
+  if( !$transparent || !$transparent_pixel) {
+    if(!$img) $img = imagecreatefrompng($params['file']);
+    $bg = imagecreatetruecolor(imagesx($img), imagesy($img));
+    imagefill($bg, 0, 0, imagecolorallocate($bg, 255, 255, 255));
+    imagealphablending($bg, 1);
+    imagecopy($bg, $img, 0, 0, 0, 0, imagesx($img), imagesy($img));
+    $newPath = preg_replace("/\.png$/", ".jpg", $params['file']);
+    $newUrl = preg_replace("/\.png$/", ".jpg", $params['url']);
+    for($i = 1; file_exists($newPath); $i++) {
+      $newPath = preg_replace("/\.png$/", "-".$i.".jpg", $params['file']);
+    }
+    if ( imagejpeg( $bg, $newPath, $compression_level ) ){
+      unlink($params['file']);
+      $params['file'] = $newPath;
+      $params['url'] = $newUrl;
+      $params['type'] = 'image/jpeg';
+    }
+  }
+
+  return $params;
+}
 
 /**
 * Simple debug logging function. Will only output to the log file

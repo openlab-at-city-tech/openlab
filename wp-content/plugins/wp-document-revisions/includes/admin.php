@@ -70,6 +70,7 @@ class Document_Revisions_Admin {
 
 		//media filters
 		add_action( 'admin_init', array( &$this, 'filter_from_media' ) );
+		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_from_media_grid' ) );
 
 		//cleanup
 		add_action( 'delete_post', array( &$this, 'delete_attachments_with_document'), 10, 1 );
@@ -345,7 +346,7 @@ class Document_Revisions_Admin {
 			</div>
 		<?php } ?>
 		<div id="lock_override">
-			<?php if ( $latest_version = $this->get_latest_revision( $post->ID ) ) { ?>
+			<?php if ( $latest_version = $this->get_latest_revision( $post->ID ) && apply_filters( 'document_revisions_enable_webdav', true ) ) { ?>
 			<object id="winFirefoxPlugin" type="application/x-sharepoint" width="0" height="0" style="visibility: hidden;"></object>
 			<a id="edit-desktop-button" href="<?php echo get_permalink( $post->ID ); ?>" class="button" title="<?php esc_attr_e( 'Edit on Desktop', 'wp-document-revisions' ); ?>">
 				<?php _e( 'Edit on Desktop', 'wp-document-revisions' ); ?>
@@ -403,9 +404,17 @@ class Document_Revisions_Admin {
 
 			if ( !current_user_can( 'read_post', $revision->ID ) || wp_is_post_autosave( $revision ) )
 				continue;
+			//preserve original file extension on revision links.
+			//this will prevent mime/ext security conflicts in IE when downloading.
+			if(is_numeric($revision->post_content)){
+				$fn = get_post_meta( $revision->post_content, '_wp_attached_file', true );
+				$fno = pathinfo($fn);
+				$info = pathinfo(get_permalink( $revision->ID ));
+				$fn = $info['dirname'].'/'.$info['filename'].'.'.$fno['extension'];
+				}else{ $fn = get_permalink( $revision->ID ); }
 ?>
 			<tr>
-				<td><a href="<?php echo get_permalink( $revision->ID ); ?>" title="<?php echo $revision->post_date; ?>" class="timestamp" id="<?php echo strtotime( $revision->post_date ); ?>"><?php echo human_time_diff( strtotime( $revision->post_date ), current_time('timestamp') ); ?></a></td>
+				<td><a href="<?php echo $fn; ?>" title="<?php echo $revision->post_date; ?>" class="timestamp" id="<?php echo strtotime( $revision->post_date ); ?>"><?php echo human_time_diff( strtotime( $revision->post_date ), current_time('timestamp') ); ?></a></td>
 				<td><?php echo get_the_author_meta( 'display_name', $revision->post_author ); ?></td>
 				<td><?php echo $revision->post_excerpt; ?></td>
 				<?php if ( $can_edit_post && $post->ID != $revision->ID ) { ?>
@@ -765,7 +774,7 @@ class Document_Revisions_Admin {
 		$key = $this->get_feed_key();
 ?>
 		<div class="tool-box">
-		<h3> <?php _e( 'Feed Privacy', 'wp-document-revisions' ); ?></h3>
+		<h2><?php _e( 'Feed Privacy', 'wp-document-revisions' ); ?></h2>
 		<table class="form-table">
 			<tr id="document_revisions_feed_key">
 				<th><label for="feed_key"><?php _e( 'Secret Feed Key', 'wp-document-revisions' ); ?></label></th>
@@ -1186,6 +1195,21 @@ class Document_Revisions_Admin {
 		add_filter( 'posts_where_paged', array( &$this, 'filter_media_where' ), 20 );
 	}
 
+	/**
+	 * Filters documents from the media grid view when queried via Ajax. This uses
+	 * the same filters from the list view applied in `filter_from_media()`.
+	 *
+	 * @param $query
+	 *
+	 * @return mixed
+	 */
+	public function filter_from_media_grid( $query ) {
+		//note: hook late so that unnattached filter can hook in, if necessary
+		add_filter( 'posts_join_paged', array( $this, 'filter_media_join' ) );
+		add_filter( 'posts_where_paged', array( $this, 'filter_media_where' ), 20 );
+
+		return $query;
+	}
 
 	/**
 	 * Requires all document revisions to have attachments

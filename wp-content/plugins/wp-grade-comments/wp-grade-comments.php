@@ -418,10 +418,33 @@ function olgc_prevent_private_comments_from_creating_bp_activity_items( $comment
 	if ( 'comment_post' === current_action() ) {
 		remove_action( 'comment_post', 'bp_blogs_record_comment', 10, 2 );
 		remove_action( 'comment_post', 'bp_activity_post_type_comment', 10, 2 );
-	} else if ( 'edit_comment' === current_action() ) {
+	} elseif ( 'edit_comment' === current_action() ) {
 		remove_action( 'edit_comment', 'bp_blogs_record_comment', 10 );
 		remove_action( 'edit_comment', 'bp_activity_post_type_comment', 10 );
 	}
 }
 add_action( 'comment_post', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
 add_action( 'edit_comment', 'olgc_prevent_private_comments_from_creating_bp_activity_items', 0 );
+
+/**
+ * Prevent private comments from appearing in BuddyPress activity streams.
+ *
+ * For now, we are going with the sledgehammer of deleting the comment altogether. In the
+ * future, we could use hide_sitewide.
+ *
+ * @since 1.1.2
+ *
+ * @param string     $new_status New comment status.
+ * @param string     $old_status Old comment status.
+ * @param WP_Comment $comment    Comment object.
+ */
+function olgc_prevent_private_comments_from_creating_bp_activity_items_on_transition( $new_staus, $old_status, $comment ) {
+	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
+
+	if ( ! $is_private ) {
+		return;
+	}
+
+	remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+}
+add_action( 'transition_comment_status', 'olgc_prevent_private_comments_from_creating_bp_activity_items_on_transition', 0, 3 );

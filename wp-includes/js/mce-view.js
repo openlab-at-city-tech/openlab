@@ -430,6 +430,7 @@
 		 */
 		replaceMarkers: function() {
 			this.getMarkers( function( editor, node ) {
+				var selected = node === editor.selection.getNode();
 				var $viewNode;
 
 				if ( ! this.loader && $( node ).text() !== this.text ) {
@@ -442,6 +443,13 @@
 				);
 
 				editor.$( node ).replaceWith( $viewNode );
+
+				if ( selected ) {
+					setTimeout( function() {
+						editor.selection.select( $viewNode[0] );
+						editor.selection.collapse();
+					} );
+				}
 			} );
 		},
 
@@ -462,7 +470,7 @@
 		 * @param {Boolean}  rendered Only set for (un)rendered nodes. Optional.
 		 */
 		setContent: function( content, callback, rendered ) {
-			if ( _.isObject( content ) && content.body.indexOf( '<script' ) !== -1 ) {
+			if ( _.isObject( content ) && ( content.sandbox || content.head || content.body.indexOf( '<script' ) !== -1 ) ) {
 				this.setIframes( content.head || '', content.body, callback, rendered );
 			} else if ( _.isString( content ) && content.indexOf( '<script' ) !== -1 ) {
 				this.setIframes( '', content, callback, rendered );
@@ -578,6 +586,9 @@
 									'display: none;' +
 									'content: "";' +
 								'}' +
+								'iframe {' +
+									'max-width: 100%;' +
+								'}' +
 							'</style>' +
 						'</head>' +
 						'<body id="wpview-iframe-sandbox" class="' + bodyClasses + '">' +
@@ -617,10 +628,22 @@
 				}
 
 				function reload() {
-					$( node ).data( 'rendered', null );
+					if ( ! editor.isHidden() ) {
+						$( node ).data( 'rendered', null );
 
-					setTimeout( function() {
-						wp.mce.views.render();
+						setTimeout( function() {
+							wp.mce.views.render();
+						} );
+					}
+				}
+
+				function addObserver() {
+					observer = new MutationObserver( _.debounce( resize, 100 ) );
+
+					observer.observe( iframeDoc.body, {
+						attributes: true,
+						childList: true,
+						subtree: true
 					} );
 				}
 
@@ -629,13 +652,11 @@
 				MutationObserver = iframeWin.MutationObserver || iframeWin.WebKitMutationObserver || iframeWin.MozMutationObserver;
 
 				if ( MutationObserver ) {
-					observer = new MutationObserver( _.debounce( resize, 100 ) );
-
-					observer.observe( iframeDoc.body, {
-						attributes: true,
-						childList: true,
-						subtree: true
-					} );
+					if ( ! iframeDoc.body ) {
+						iframeDoc.addEventListener( 'DOMContentLoaded', addObserver, false );
+					} else {
+						addObserver();
+					}
 				} else {
 					for ( i = 1; i < 6; i++ ) {
 						setTimeout( resize, i * 700 );

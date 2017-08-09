@@ -300,7 +300,7 @@ class BP_Legacy extends BP_Theme_Compat {
 			'remove_fav'	      => __( 'Remove Favorite', 'buddypress' ),
 			'show_all'            => __( 'Show all', 'buddypress' ),
 			'show_all_comments'   => __( 'Show all comments for this thread', 'buddypress' ),
-			'show_x_comments'     => __( 'Show all %d comments', 'buddypress' ),
+			'show_x_comments'     => __( 'Show all comments (%d)', 'buddypress' ),
 			'unsaved_changes'     => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
 			'view'                => __( 'View', 'buddypress' ),
 		) );
@@ -687,8 +687,16 @@ function bp_legacy_theme_ajax_querystring( $query_string, $object ) {
 
 	// Activity stream filtering on action.
 	if ( ! empty( $_BP_COOKIE['bp-' . $object . '-filter'] ) && '-1' != $_BP_COOKIE['bp-' . $object . '-filter'] ) {
-		$qs[] = 'type='   . $_BP_COOKIE['bp-' . $object . '-filter'];
-		$qs[] = 'action=' . $_BP_COOKIE['bp-' . $object . '-filter'];
+		$qs[] = 'type=' . $_BP_COOKIE['bp-' . $object . '-filter'];
+
+		if ( bp_is_active( 'activity' ) ) {
+			$actions = bp_activity_get_actions_for_context();
+			foreach ( $actions as $action ) {
+				if ( $action['key'] === $_BP_COOKIE['bp-' . $object . '-filter'] ) {
+					$qs[] = 'action=' . $_BP_COOKIE['bp-' . $object . '-filter'];
+				}
+			}
+		}
 	}
 
 	if ( ! empty( $_BP_COOKIE['bp-' . $object . '-scope'] ) ) {
@@ -865,7 +873,11 @@ function bp_legacy_theme_activity_template_loader() {
 			break;
 		case 'mentions':
 			$feed_url = bp_loggedin_user_domain() . bp_get_activity_slug() . '/mentions/feed/';
-			bp_activity_clear_new_mentions( bp_loggedin_user_id() );
+
+			if ( isset( $_POST['_wpnonce_activity_filter'] ) && wp_verify_nonce( wp_unslash( $_POST['_wpnonce_activity_filter'] ), 'activity_filter' ) ) {
+				bp_activity_clear_new_mentions( bp_loggedin_user_id() );
+			}
+
 			break;
 		default:
 			$feed_url = home_url( bp_get_activity_root_slug() . '/feed/' );
@@ -969,7 +981,7 @@ function bp_legacy_theme_post_update() {
 	}
 
 	if ( ! empty( $last_recorded ) ) {
-		remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10, 1 );
+		remove_filter( 'bp_get_activity_css_class', 'bp_activity_newest_class', 10 );
 	}
 
 	exit;
@@ -1103,16 +1115,18 @@ function bp_legacy_theme_delete_activity_comment() {
 	// Check the nonce.
 	check_admin_referer( 'bp_activity_delete_link' );
 
-	if ( ! is_user_logged_in() )
+	if ( empty( $_POST['id'] ) || ! is_numeric( $_POST['id'] ) ) {
 		exit( '-1' );
+	}
+
+	if ( ! is_user_logged_in() ) {
+		exit( '-1' );
+	}
 
 	$comment = new BP_Activity_Activity( $_POST['id'] );
 
 	// Check access.
 	if ( ! bp_current_user_can( 'bp_moderate' ) && $comment->user_id != bp_loggedin_user_id() )
-		exit( '-1' );
-
-	if ( empty( $_POST['id'] ) || ! is_numeric( $_POST['id'] ) )
 		exit( '-1' );
 
 	/** This action is documented in bp-activity/bp-activity-actions.php */
@@ -1184,6 +1198,16 @@ function bp_legacy_theme_mark_activity_favorite() {
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return;
 
+	if ( ! isset( $_POST['nonce'] ) ) {
+		return;
+	}
+
+	// Either the 'mark' or 'unmark' nonce is accepted, for backward compatibility.
+	$nonce = wp_unslash( $_POST['nonce'] );
+	if ( ! wp_verify_nonce( $nonce, 'mark_favorite' ) && ! wp_verify_nonce( $nonce, 'unmark_favorite' ) ) {
+		return;
+	}
+
 	if ( bp_activity_add_user_favorite( $_POST['id'] ) )
 		_e( 'Remove Favorite', 'buddypress' );
 	else
@@ -1203,6 +1227,16 @@ function bp_legacy_theme_unmark_activity_favorite() {
 	// Bail if not a POST action.
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return;
+
+	if ( ! isset( $_POST['nonce'] ) ) {
+		return;
+	}
+
+	// Either the 'mark' or 'unmark' nonce is accepted, for backward compatibility.
+	$nonce = wp_unslash( $_POST['nonce'] );
+	if ( ! wp_verify_nonce( $nonce, 'mark_favorite' ) && ! wp_verify_nonce( $nonce, 'unmark_favorite' ) ) {
+		return;
+	}
 
 	if ( bp_activity_remove_user_favorite( $_POST['id'] ) )
 		_e( 'Favorite', 'buddypress' );
@@ -1248,7 +1282,7 @@ function bp_legacy_theme_get_single_activity_content() {
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	/** This filter is documented in bp-activity/bp-activity-template.php */
-	$content = apply_filters( 'bp_get_activity_content_body', $activity->content );
+	$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $activity->content, &$activity ) );
 
 	exit( $content );
 }
@@ -1513,12 +1547,18 @@ function bp_legacy_theme_ajax_close_notice() {
 	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
 		return;
 
-	if ( ! isset( $_POST['notice_id'] ) ) {
+	$nonce_check = isset( $_POST['nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'bp_messages_close_notice' );
+
+	if ( ! $nonce_check || ! isset( $_POST['notice_id'] ) ) {
 		echo "-1<div id='message' class='error'><p>" . __( 'There was a problem closing the notice.', 'buddypress' ) . '</p></div>';
 
 	} else {
-		$user_id      = get_current_user_id();
-		$notice_ids   = bp_get_user_meta( $user_id, 'closed_notices', true );
+		$user_id    = get_current_user_id();
+		$notice_ids = bp_get_user_meta( $user_id, 'closed_notices', true );
+		if ( ! is_array( $notice_ids ) ) {
+			$notice_ids = array();
+		}
+
 		$notice_ids[] = (int) $_POST['notice_id'];
 
 		bp_update_user_meta( $user_id, 'closed_notices', $notice_ids );
@@ -1586,78 +1626,43 @@ function bp_legacy_theme_ajax_messages_send_reply() {
 /**
  * Mark a private message as unread in your inbox via a POST request.
  *
+ * No longer used.
+ *
  * @since 1.2.0
+ * @deprecated 2.2.0
  *
  * @return mixed String on error, void on success.
  */
 function bp_legacy_theme_ajax_message_markunread() {
-	// Bail if not a POST action.
-	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
-		return;
-
-	if ( ! isset($_POST['thread_ids']) ) {
-		echo "-1<div id='message' class='error'><p>" . __( 'There was a problem marking messages as unread.', 'buddypress' ) . '</p></div>';
-
-	} else {
-		$thread_ids = explode( ',', $_POST['thread_ids'] );
-
-		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
-			BP_Messages_Thread::mark_as_unread( (int) $thread_ids[$i] );
-		}
-	}
-
-	exit;
+	die( '-1' );
 }
 
 /**
  * Mark a private message as read in your inbox via a POST request.
  *
+ * No longer used.
+ *
  * @since 1.2.0
+ * @deprecated 2.2.0
  *
  * @return mixed String on error, void on success.
  */
 function bp_legacy_theme_ajax_message_markread() {
-	// Bail if not a POST action.
-	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
-		return;
-
-	if ( ! isset($_POST['thread_ids']) ) {
-		echo "-1<div id='message' class='error'><p>" . __('There was a problem marking messages as read.', 'buddypress' ) . '</p></div>';
-
-	} else {
-		$thread_ids = explode( ',', $_POST['thread_ids'] );
-
-		for ( $i = 0, $count = count( $thread_ids ); $i < $count; ++$i ) {
-			BP_Messages_Thread::mark_as_read( (int) $thread_ids[$i] );
-		}
-	}
-
-	exit;
+	die( '-1' );
 }
 
 /**
  * Delete a private message(s) in your inbox via a POST request.
  *
+ * No longer used.
+ *
  * @since 1.2.0
+ * @deprecated 2.2.0
  *
  * @return string HTML
  */
 function bp_legacy_theme_ajax_messages_delete() {
-	// Bail if not a POST action.
-	if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) )
-		return;
-
-	if ( ! isset($_POST['thread_ids']) ) {
-		echo "-1<div id='message' class='error'><p>" . __( 'There was a problem deleting messages.', 'buddypress' ) . '</p></div>';
-
-	} else {
-		$thread_ids = wp_parse_id_list( $_POST['thread_ids'] );
-		messages_delete_thread( $thread_ids );
-
-		_e( 'Messages deleted.', 'buddypress' );
-	}
-
-	exit;
+	die( '-1' );
 }
 
 /**

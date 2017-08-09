@@ -36,7 +36,7 @@ class TMCECF_EditorController {
         foreach ($wp_styles->registered as $wp_style):
             $style = substr($wp_style->handle, 0, 17);
             if ('tf-google-webfont' === $style):
-                $google_web_font_src = $wp_style->src;
+                $google_web_font_src = 'https:' . $wp_style->src;
                 $google_web_font_url_object = parse_url($google_web_font_src);
                 $google_web_font_query = array();
                 parse_str($google_web_font_url_object['query'], $google_web_font_query);
@@ -98,9 +98,19 @@ class TMCECF_EditorController {
 
         $current_version = (float)get_option('tinymce-comment-field_version');
 
+        global $wp_version;
+
+        $wp_version_float = (float)$wp_version;
+
+        $script_version = '4.3.1';
+
+        if($wp_version_float >= 4.8) {
+            $script_version = '4.8.0';
+        }
+
         wp_enqueue_script('jquery');
         wp_enqueue_script('tinymce-comment-field', TMCECF_PLUGIN_URL . 'js/tinymce-comment-field.js', 'jquery', $current_version, true);
-        wp_enqueue_script('tinymce-comment-field-comment-reply', TMCECF_PLUGIN_URL . 'js/comment-reply-4.3.1.js', array('jquery', 'comment-reply'), $current_version, true);
+        wp_enqueue_script('tinymce-comment-field-comment-reply', TMCECF_PLUGIN_URL . 'js/comment-reply-' . $script_version .'.js', array('jquery', 'comment-reply'), $current_version, true);
         wp_enqueue_style('mce-comments-no-status-bar', TMCECF_PLUGIN_URL . 'css/editor-no-statusbar.css');
     }
 

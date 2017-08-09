@@ -176,7 +176,7 @@ class BP_Friends_Friendship {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param Object $value Current friendship request object.
+		 * @param BP_Friends_Friendship $value Current friendship request object.
 		 */
 		do_action_ref_array( 'friends_friendship_before_save', array( &$this ) );
 
@@ -195,7 +195,7 @@ class BP_Friends_Friendship {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param Object $value Current friendship request object.
+		 * @param BP_Friends_Friendship $value Current friendship request object.
 		 */
 		do_action( 'friends_friendship_after_save', array( &$this ) );
 
@@ -644,13 +644,13 @@ class BP_Friends_Friendship {
 		$last_activities = BP_Core_User::get_last_activity( $user_ids );
 
 		// Sort and structure as expected in legacy function.
-		usort( $last_activities, create_function( '$a, $b', '
-			if ( $a["date_recorded"] == $b["date_recorded"] ) {
+		usort( $last_activities, function( $a, $b ) {
+			if ( $a['date_recorded'] == $b['date_recorded'] ) {
 				return 0;
 			}
 
-			return ( strtotime( $a["date_recorded"] ) < strtotime( $b["date_recorded"] ) ) ? 1 : -1;
-		' ) );
+			return ( strtotime( $a['date_recorded'] ) < strtotime( $b['date_recorded'] ) ) ? 1 : -1;
+		} );
 
 		$retval = array();
 		foreach ( $last_activities as $last_activity ) {

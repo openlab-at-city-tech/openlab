@@ -175,7 +175,11 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php endif; ?>
 
+			<?php do_action( 'openlab_before_group_privacy_settings' ); ?>
+
             <?php openlab_group_privacy_settings($group_type); ?>
+
+			<?php do_action( 'openlab_after_group_privacy_settings' ); ?>
 
         <?php endif; ?>
 

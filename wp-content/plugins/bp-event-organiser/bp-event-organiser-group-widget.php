@@ -430,7 +430,7 @@ class BPEO_Group_Widget extends WP_Widget {
 				<option value="" <?php selected( $group_id, '' ); ?>><?php esc_html_e( '--- Select a group ---', 'bpeo-group-widget' ); ?></option>
 
 				<?php foreach ( $groups as $i => $group_name ) : ?>
-					<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $group_id, $i ); ?>><?php echo esc_html( $group->name ); ?></option>
+					<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $group_id, $i ); ?>><?php echo esc_html( $group_name ); ?></option>
 				<?php endforeach; ?>
 			</select></p>
 

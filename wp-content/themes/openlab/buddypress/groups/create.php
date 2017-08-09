@@ -151,6 +151,12 @@
 
                     <?php do_action('bp_after_group_details_creation_step') ?>
 
+					<?php if ( 'course' === $group_type ) : ?>
+						<p class="copyright-notice italics">
+							<strong>Copyright Note:</strong> Any content that you or your students create and post on the OpenLab, including for this Course, is automatically protected under the terms and conditions of a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution NonCommercial Share-Alike 3.0 license</a>, or any successor Creative Commons license. However, you are free to specify other copyright conditions (<a href="https://creativecommons.org/faq/">Learn more here</a>). You will need to specify the license on your Course Profile and Site if it differs from the general <a href="https://openlab.citytech.cuny.edu/about/terms-of-service/#license-to-site-users">OpenLab license</a>. Please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">contact us</a> with any questions or <a href="https://openlab.citytech.cuny.edu/blog/help/copyright-and-fair-use-2/">read more in our Help section</a>.
+						</p>
+					<?php endif; ?>
+
                     <?php wp_nonce_field('groups_create_save_group-details') ?>
 
                 <?php endif; ?>

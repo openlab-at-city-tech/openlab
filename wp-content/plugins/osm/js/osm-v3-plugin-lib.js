@@ -1,9 +1,20 @@
-/*
-  OSM OpenLayers for OSM wordpress plugin
-  plugin: http://wp-osm-plugin.HanBlog.net
-  blog:   http://www.HanBlog.net
-*/
+/*  (c) Copyright 2017  MiKa (http://wp-osm-plugin.HanBlog.Net)
 
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+ 
 function osm_addClusterPopupClickhandler(a_MapObj, a_MapStr) {
 
   var container_div_id = a_MapStr + "_popup";
@@ -186,5 +197,12 @@ function osm_addMarkerLayer(a_mapname, a_lon, a_lat, a_MarkerIcon, a_MarkerXAnch
         });
 
        a_mapname.addLayer(vectorMarkerLayer);
+}
+
+function osm_addMouseHover(a_mapname){
+  a_mapname.on('pointermove', function(evt) {
+    a_mapname.getTargetElement().style.cursor =
+      a_mapname.hasFeatureAtPixel(evt.pixel) ? 'pointer' : '';
+  });
 }
 

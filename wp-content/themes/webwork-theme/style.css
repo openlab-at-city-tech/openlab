@@ -68,6 +68,25 @@ a, body a {
 	color: #fff;
 }
 
+body.ol-webwork .oplb-bs a#go-to-top {
+	background-color: #668fcf;
+	color: #fff;
+	font-family: 'OpenSans';
+	font-size: 11pt;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+body.ol-webwork .oplb-bs a#go-to-top.visible-xs {
+	display: block!important;
+}
+
+body.ol-webwork .oplb-bs a#go-to-top .fa-chevron-circle-up:before {
+	content: "\f0aa";
+	font-size: 15pt;
+	line-height: 18pt;
+}
+
 @media (max-width: 800px) {
 	.nav-toggle .bar,
 	.search-toggle .metal,

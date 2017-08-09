@@ -236,6 +236,11 @@ blockquote {
         }
     }
 }
+.messages #pag-bottom {
+	clear: both;
+	display: block;
+	padding-left: 7.5px;
+}
 
 /**structural**/
 .container-fluid{
@@ -285,9 +290,6 @@ input[type="submit"]{
 }
 .form-control{
     margin-bottom: 15px;
-    &.parsley-error {
-        margin-bottom: 0;
-    }
     &[type='file']{
         padding: 6px 12px;
     }
@@ -309,9 +311,14 @@ input[type="submit"]{
     }
 }
 .parsley-errors-list.filled {
+    margin: 0;
+    padding: 0;
     padding-left: 0;
     list-style-type: none;
     font-weight: bold;
+    li{
+        margin: 0;
+    }
 }
 .notify-settings {
     .notify-members {
@@ -418,11 +425,15 @@ input[type="submit"]{
     display: none;
 }
 #validation-code {
-    margin-top: 8px;
-    background: #eaeaea;
-    border: 1px solid #ddd;
+    margin-bottom: 17px;
+    margin-top: 5px;
+    background: @yellow;
+    border: 1px solid @yellow;
     border-radius: 2px;
-    padding: 8px 16px;
+    padding: 15px;
+    #signup_validation_code{
+        margin-left: 10px;
+    }
 }
 /**header**/
 .navbar-default{
@@ -524,7 +535,7 @@ h1.entry-title{
     @media (max-width: @screen-xs-max){
         margin-top: 12px;
         padding-bottom: 2px;
-	min-height: 26px;
+        min-height: 26px;
         .profile-name{
             display: inline-block;
             max-width: 74%;
@@ -817,32 +828,32 @@ body{
         }
     }
     #register-page{
-	.password-field {
-	    position: relative;
-	}
-	.password-strength-notice {
-	    display: none;
-	    position: absolute;
-	    right: 40px;
-	    top: 5px;
-	    padding: 2px 0;
-	    width: 100px;
-	    text-align: center;
-	    border-radius: 3px;
-	    font-weight: bold;
+        .password-field {
+            position: relative;
+        }
+        .password-strength-notice {
+            display: none;
+            position: absolute;
+            right: 40px;
+            top: 5px;
+            padding: 2px 0;
+            width: 100px;
+            text-align: center;
+            border-radius: 3px;
+            font-weight: bold;
 
-	    &.strength-0,
-	    &.strength-1,
-	    &.strength-2 {
-		background-color: #f1adad;
-	    }
-	    &.strength-3 {
-		background-color: #ffe399;
-	    }
-	    &.strength-4 {
-		background-color: #c1e1b9;
-	    }
-	}
+            &.strength-0,
+            &.strength-1,
+            &.strength-2 {
+                background-color: #f1adad;
+            }
+            &.strength-3 {
+                background-color: #ffe399;
+            }
+            &.strength-4 {
+                background-color: #c1e1b9;
+            }
+        }
         .error{
             font-weight: @normal;
             padding: 15px;
@@ -851,6 +862,14 @@ body{
             margin-top: 5px;
             background: @yellow;
             border-color: @yellow;
+        }
+        .has-error{
+            .error{
+                padding: 0;
+                .parsley-errors-list{
+                    padding: 15px;
+                }
+            }
         }
     }
     .panel-body{
@@ -1717,7 +1736,8 @@ body form{
         margin: 15px 0;
         border-radius: @border-radius-bottom;
         border-top: none;
-        &:first-of-type{
+        &:first-of-type,
+        &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
         }
@@ -1827,6 +1847,12 @@ body form{
                 width: 95%;
                 margin: 0 auto;
             }
+        }
+    }
+    .learn-more-sidebar {
+        padding: 15px;
+        a {
+            font-weight: bold;
         }
     }
 }
@@ -2711,12 +2737,30 @@ body{
     }
 }
 .messages{
+    .message-metadata {
+        margin-bottom: 15px;
+    }
+    .timestamp{
+        font-size: 10px;
+        margin-bottom: .8rem;
+    }
     .group-list{
         .group-item-wrapper{
             height: 152px;
+            position: relative;
             @media (max-width: @screen-sm-max){
                 height: 221px;
             }
+        }
+    }
+    .message-actions {
+        bottom: 8px;
+        font-size: 1rem;
+        position: absolute;
+        right: 8px;
+
+        .message-unread {
+            color: @magenta;
         }
     }
 }
@@ -2907,6 +2951,49 @@ input.help-search {
         padding-top: 35px;
         width: 101px;
     }
+}
+.openlab-library-tools {
+	.sidebar-header a {
+		text-decoration: none;
+	}
+
+	h3.sidebar-block-header {
+		font-size: 16px;
+		margin: 10px 0 10px 0;
+	}
+
+	.sidebar-block-content {
+		padding: 1% 5%;
+	}
+
+	input[type="text"],
+	select {
+		margin-bottom: 8px;
+		width: 100%;
+	}
+
+	.library-search-actions {
+		padding: 10px 0;
+		position: relative;
+	}
+
+	.library-search-submit {
+		bottom: 0;
+		left: 0;
+		position: absolute;
+	}
+
+	.library-search-advanced-link {
+		bottom: 10px;
+		right: 0;
+		position: absolute;
+	}
+
+	.openlab-library-information {
+		ul {
+			padding-left: 20px;
+		}
+	}
 }
 .page-nav{
     background: @5gray;

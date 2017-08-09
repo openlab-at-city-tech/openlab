@@ -1,0 +1,21 @@
+.badge-list {
+    list-style: none;
+    text-align: justify;
+}
+.badge-list li {
+    display: inline-block;
+    margin: 0 5px;
+    max-width: 100px;
+    vertical-align: top;
+}
+.badge-list li a {
+    display: block;
+    text-align: center;
+}
+.badge-list li img {
+}
+.badge-list:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}

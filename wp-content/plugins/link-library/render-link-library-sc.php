@@ -1254,12 +1254,13 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
                                 }
                                 break;
                             case 7: 	//------------------ Web Link Output --------------------
-
+							
                                 if ( 'false' != $displayweblink &&
                                      ( !$nooutputempty ||
-                                       ( $nooutputempty && !empty( $the_link ) && 'address' == $displayweblink && 'primary' == $sourceweblink ) ||
-                                       ( $nooutputempty && !empty( $the_second_link ) && 'address' == $displayweblink && 'secondary' == $sourceweblink ) ||
-                                       ( $nooutputempty && !empty( $weblinklabel ) && 'label' == $displayweblink )
+                                       ( $nooutputempty && !empty( $the_link ) && 'label' != $displayweblink && '#' != $the_link && 'primary' == $sourceweblink ) ||
+                                       ( $nooutputempty && !empty( $the_second_link ) && 'label' != $displayweblink && '#' != $the_second_link && 'secondary' == $sourceweblink ) ||
+                                       ( $nooutputempty && !empty( $weblinklabel ) && 'label' == $displayweblink && !empty( $the_link ) && '#' != $the_link && 'primary' == $sourceweblink ) ||
+									   ( $nooutputempty && !empty( $weblinklabel ) && 'label' == $displayweblink && !empty( $the_second_link ) && '#' != $the_second_link && 'secondary' == $sourceweblink )
                                      ) ) {
                                     if ( true == $debugmode ) {
                                         $starttimerweblink = microtime ( true );

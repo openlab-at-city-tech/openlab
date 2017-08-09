@@ -688,7 +688,6 @@ class BP_Docs_Groups_Integration {
 	 * @since 1.0.8
 	 */
 	function show_doc_count_in_tab() {
-		return;
 		global $bp;
 
 		// Get the group slug, which will be the key for the nav item
@@ -698,11 +697,16 @@ class BP_Docs_Groups_Integration {
 			return;
 		}
 
-		// This will probably only work on BP 1.3+
-		if ( !empty( $bp->bp_options_nav[$group_slug] ) && !empty( $bp->bp_options_nav[$group_slug][BP_DOCS_SLUG] ) ) {
-			$current_tab_name = $bp->bp_options_nav[$group_slug][BP_DOCS_SLUG]['name'];
+		$docs_subnav = $bp->groups->nav->get_secondary( array(
+			'parent_slug' => $group_slug,
+			'slug' => BP_DOCS_SLUG,
+		), false );
 
-			$doc_count = groups_get_groupmeta( $bp->groups->current_group->id, 'bp-docs-count' );
+		// This will probably only work on BP 1.3+
+		if ( $docs_subnav ) {
+			$current_tab_name = reset( $docs_subnav )->name;
+
+			$doc_count = groups_get_groupmeta( bp_get_current_group_id(), 'bp-docs-count' );
 
 			// For backward compatibility
 			if ( '' === $doc_count ) {
@@ -710,7 +714,9 @@ class BP_Docs_Groups_Integration {
 				$doc_count = groups_get_groupmeta( $bp->groups->current_group->id, 'bp-docs-count' );
 			}
 
-			$bp->bp_options_nav[$group_slug][BP_DOCS_SLUG]['name'] = sprintf( __( '%s <span>%d</span>', 'bp-docs' ), $current_tab_name, $doc_count );
+			$bp->groups->nav->edit_nav( array(
+				'name' => sprintf( __( '%1$s <span>%2$d</span>', 'bp-docs' ), $current_tab_name, $doc_count ),
+			), BP_DOCS_SLUG, $group_slug );
 		}
 	}
 

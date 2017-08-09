@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2015  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2017  MiKa (wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -412,7 +412,7 @@ class Osm_OpenLayers
         MapTypeField = " type=\"" + document.post.osm_marker_map_type.value + "\""; 
       }
 
-      if (document.post.osm_marker_id.value != "none"){
+      if (document.post.osm_marker_id.value != "no"){
         MarkerId = " post_markers=\"" + document.post.osm_marker_id.value + "\"";  
       }
       if (document.post.osm_marker_border.value != "none"){
@@ -447,6 +447,7 @@ class Osm_OpenLayers
       MarkerNameField = "";
       MarkerTextField ="";
 
+      MarkerId = document.post.osm_add_marker_id.value;
       MarkerIcon = document.post.osm_add_marker_icon.value;
       MarkerName = document.post.osm_add_marker_name.value;
       MarkerTextField = document.post.osm_add_marker_text.value;
@@ -455,12 +456,13 @@ class Osm_OpenLayers
       
       osm_ajax_object.MarkerLat = Clicklonlat.lat;
       osm_ajax_object.MarkerLon = Clicklonlat.lon;
+      osm_ajax_object.MarkerId = MarkerId;
       osm_ajax_object.MarkerName = MarkerName;
       osm_ajax_object.MarkerText = MarkerTextField;
       osm_ajax_object.MarkerIcon = MarkerIcon;
       osm_ajax_object.post_id = '.$a_post_id.';
 
-      GenTxt = "<br> Marker_Id: 01" + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+Clicklonlat.lat+","+Clicklonlat.lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save] to store marker!</b>";
+      GenTxt = "<br> Marker_Id: "+ MarkerId + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+Clicklonlat.lat+","+Clicklonlat.lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save] to store marker!</b>";
 
       div = document.getElementById("Marker_Div");
       div.innerHTML = GenTxt;

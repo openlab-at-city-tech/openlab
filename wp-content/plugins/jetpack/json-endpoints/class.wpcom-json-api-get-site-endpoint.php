@@ -25,6 +25,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'updates'           => '(array) An array of available updates for plugins, themes, wordpress, and languages.',
 		'jetpack_modules'   => '(array) A list of active Jetpack modules.',
 		'meta'              => '(object) Meta data',
+		'quota'             => '(array) An array describing how much space a user has left for uploads',
 	);
 
 	protected static $no_member_fields = array(
@@ -48,6 +49,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 	protected static $site_options_format = array(
 		'timezone',
 		'gmt_offset',
+		'blog_public',
 		'videopress_enabled',
 		'upgraded_filetypes_enabled',
 		'login_url',
@@ -86,13 +88,17 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'page_on_front',
 		'page_for_posts',
 		'headstart',
+		'headstart_is_fresh',
 		'ak_vp_bundle_enabled',
-		'verification_services_codes',
 		Jetpack_SEO_Utils::FRONT_PAGE_META_OPTION,
 		Jetpack_SEO_Titles::TITLE_FORMATS_OPTION,
+		'verification_services_codes',
+		'podcasting_archive',
+		'is_domain_only',
+		'is_automated_transfer',
 	);
 
-	protected static $jetpack_response_field_additions = array( 
+	protected static $jetpack_response_field_additions = array(
 		'subscribers_count',
 	);
 
@@ -101,9 +107,11 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'plan',
 	);
 
-	protected static $jetpack_response_option_additions = array( 
+	protected static $jetpack_response_option_additions = array(
 		'publicize_permanently_disabled',
-		'ak_vp_bundle_enabled'
+		'ak_vp_bundle_enabled',
+		'is_automated_transfer',
+		'frame_nonce'
 	);
 
 	private $site;
@@ -128,10 +136,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			return $blog_id;
 		}
 
-		// TODO: enable this when we can do so without being interfered with by 
-		// other endpoints that might be wrapping this one.
-		// Uncomment and see failing test: test_jetpack_site_should_have_true_jetpack_property_via_site_meta
-		// $this->filter_fields_and_options();
+		$this->filter_fields_and_options();
 
 		$response = $this->build_current_site_response();
 
@@ -174,11 +179,31 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			array_intersect( $default_fields, $this->fields_to_include ) :
 			$default_fields;
 
-		if ( ! is_user_member_of_blog( get_current_user_id(), get_current_blog_id() ) ) {
+		if ( ! $this->has_blog_access( $this->api->token_details, $blog_id ) ) {
 			$response_keys = array_intersect( $response_keys, self::$no_member_fields );
 		}
 
 		return $this->render_response_keys( $response_keys );
+	}
+
+	private function has_blog_access( $token_details, $blog_id ) {
+		if ( is_user_member_of_blog( get_current_user_id(), $blog_id ) ) {
+			return true;
+		}
+
+		$token_details = (array) $token_details;
+		if ( ! isset( $token_details['access'], $token_details['auth'], $token_details['blog_id'] ) ) {
+			return false;
+		}
+
+		if (
+			'jetpack' === $token_details['auth'] &&
+			'blog' === $token_details['access'] &&
+			$blog_id === $token_details['blog_id']
+		) {
+			return true;
+		}
+		return false;
 	}
 
 	private function render_response_keys( &$response_keys ) {
@@ -243,7 +268,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				$response[ $key ] = $this->site->is_following();
 				break;
 			case 'options':
-				// small optimisation - don't recalculate 
+				// small optimisation - don't recalculate
 				$all_options = apply_filters( 'sites_site_options_format', self::$site_options_format );
 
 				$options_response_keys = is_array( $this->options_to_include ) ?
@@ -268,16 +293,16 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			case 'jetpack' :
 				$response[ $key ] = $this->site->is_jetpack();
 				break;
-			case 'single_user_site' : 
+			case 'single_user_site' :
 				$response[ $key ] = $this->site->is_single_user_site();
 				break;
-			case 'is_vip' : 
+			case 'is_vip' :
 				$response[ $key ] = $this->site->is_vip();
 				break;
 			case 'is_multisite' :
 				$response[ $key ] = $this->site->is_multisite();
 				break;
-			case 'capabilities' : 
+			case 'capabilities' :
 				$response[ $key ] = $this->site->get_capabilities();
 				break;
 			case 'jetpack_modules':
@@ -288,6 +313,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				break;
 			case 'plan' :
 				$response[ $key ] = $this->site->get_plan();
+				break;
+			case 'quota' :
+				$response[ $key ] = $this->site->get_quota();
 				break;
 		}
 
@@ -303,7 +331,6 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		$site = $this->site;
 
 		$custom_front_page = $site->is_custom_front_page();
-		
 
 		foreach ( $options_response_keys as $key ) {
 			switch ( $key ) {
@@ -368,7 +395,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 					$options[ $key ] = $site->get_image_large_width();
 					break;
 				case 'image_large_height' :
-					$options[ $key ] = $site->get_image_large_height(); 
+					$options[ $key ] = $site->get_image_large_height();
 					break;
 				case 'permalink_structure' :
 					$options[ $key ] = $site->get_permalink_structure();
@@ -429,6 +456,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				case 'headstart' :
 					$options[ $key ] = $site->is_headstart();
 					break;
+				case 'headstart_is_fresh' :
+					$options[ $key ] = $site->is_headstart_fresh();
+					break;
 				case 'ak_vp_bundle_enabled' :
 					$options[ $key ] = $site->get_ak_vp_bundle_enabled();
 					break;
@@ -441,6 +471,18 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				case 'verification_services_codes' :
 					$options[ $key ] = $site->get_verification_services_codes();
 					break;
+				case 'podcasting_archive':
+					$options[ $key ] = $site->get_podcasting_archive();
+					break;
+				case 'is_domain_only':
+					$options[ $key ] = $site->is_domain_only();
+					break;
+				case 'is_automated_transfer':
+					$options[ $key ] = $site->is_automated_transfer();
+					break;
+				case 'blog_public':
+					$options[ $key ] = $site->get_blog_public();
+					break;
 			}
 		}
 
@@ -448,20 +490,28 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 	}
 
 	protected function build_meta_response( &$response ) {
+		$links = array(
+			'self'     => (string) $this->links->get_site_link( $this->site->blog_id ),
+			'help'     => (string) $this->links->get_site_link( $this->site->blog_id, 'help'      ),
+			'posts'    => (string) $this->links->get_site_link( $this->site->blog_id, 'posts/'    ),
+			'comments' => (string) $this->links->get_site_link( $this->site->blog_id, 'comments/' ),
+			'xmlrpc'   => (string) $this->site->get_xmlrpc_url(),
+		);
+
+		$icon = $this->site->get_icon();
+		if ( ! empty( $icon ) && ! empty( $icon['media_id'] ) ) {
+			$links['site_icon'] = (string) $this->links->get_site_link( $this->site->blog_id, 'media/' . $icon['media_id'] );
+		}
+
 		$response['meta'] = (object) array(
-			'links' => (object) array(
-				'self'     => (string) $this->links->get_site_link( $this->site->blog_id ),
-				'help'     => (string) $this->links->get_site_link( $this->site->blog_id, 'help'      ),
-				'posts'    => (string) $this->links->get_site_link( $this->site->blog_id, 'posts/'    ),
-				'comments' => (string) $this->links->get_site_link( $this->site->blog_id, 'comments/' ),
-				'xmlrpc'   => (string) $this->site->get_xmlrpc_url(),
-			),
+			'links' => (object) $links
 		);
 	}
 
 	// apply any WPCOM-only response components to a Jetpack site response
 	public function decorate_jetpack_response( &$response ) {
 		$this->site = $this->get_platform()->get_site( $response->ID );
+		switch_to_blog( $this->site->get_id() );
 
 		// ensure the response is marked as being from Jetpack
 		$response->jetpack = true;
@@ -472,8 +522,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			$response->{ $key } = $value;
 		}
 
-		$token_details = (object) $this->api->token_details;
-		if ( is_user_member_of_blog( get_current_user_id(), get_current_blog_id() ) || 'blog' === $token_details->access ) {
+		if ( $this->has_blog_access( $this->api->token_details, $response->ID ) ) {
 			$wpcom_member_response = $this->render_response_keys( self::$jetpack_response_field_member_additions );
 
 			foreach( $wpcom_member_response as $key => $value ) {
@@ -501,6 +550,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			}
 		}
 
+		restore_current_blog();
 		return $response; // possibly no need since it's modified in place
 	}
 }
