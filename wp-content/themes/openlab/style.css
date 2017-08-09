@@ -7230,6 +7230,11 @@ blockquote .h6 {
   color: #3ba49b;
   background-color: inherit;
 }
+.messages #pag-bottom {
+  clear: both;
+  display: block;
+  padding-left: 7.5px;
+}
 /**structural**/
 .container-fluid {
   max-width: 1155px;
@@ -7945,6 +7950,12 @@ body label.passive {
 }
 body label.block {
   display: block;
+}
+.panel-heading legend {
+  margin-bottom: 0;
+}
+.subpanel {
+  margin-bottom: 25px;
 }
 /**shortcodes**/
 .callout-list .row {
@@ -8701,7 +8712,8 @@ body form .checkbox-list-container {
   border-radius: 0 0 4px 4px;
   border-top: none;
 }
-.sidebar .sidebar-block:first-of-type {
+.sidebar .sidebar-block:first-of-type,
+.sidebar .sidebar-block.sidebar-block-learnmore {
   margin: 0;
   border-top: 1px solid #bbbbbb;
 }
@@ -8859,6 +8871,12 @@ body form .checkbox-list-container {
     width: 95%;
     margin: 0 auto;
   }
+}
+.sidebar .learn-more-sidebar {
+  padding: 15px;
+}
+.sidebar .learn-more-sidebar a {
+  font-weight: bold;
 }
 @media (max-width: 767px) {
   .mobile-enabled .sidebar-menu-wrapper {
@@ -10000,6 +10018,38 @@ input.help-search {
   overflow: hidden;
   padding-top: 35px;
   width: 101px;
+}
+.openlab-library-tools .sidebar-header a {
+  text-decoration: none;
+}
+.openlab-library-tools h3.sidebar-block-header {
+  font-size: 16px;
+  margin: 10px 0 10px 0;
+}
+.openlab-library-tools .sidebar-block-content {
+  padding: 1% 5%;
+}
+.openlab-library-tools input[type="text"],
+.openlab-library-tools select {
+  margin-bottom: 8px;
+  width: 100%;
+}
+.openlab-library-tools .library-search-actions {
+  padding: 10px 0;
+  position: relative;
+}
+.openlab-library-tools .library-search-submit {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+.openlab-library-tools .library-search-advanced-link {
+  bottom: 10px;
+  right: 0;
+  position: absolute;
+}
+.openlab-library-tools .openlab-library-information ul {
+  padding-left: 20px;
 }
 .page-nav {
   background: #f0f0f0;
