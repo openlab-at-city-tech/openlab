@@ -1,6 +1,6 @@
-define(['backbone','models/Cell'],function(Backbone,Cell){ 
+define(['backbone', 'models/Cell'], function (Backbone, Cell) {
     var Cells = Backbone.Collection.extend({
-        model: Cell     
-    });   
+        model: Cell
+    });
     return Cells;
 });

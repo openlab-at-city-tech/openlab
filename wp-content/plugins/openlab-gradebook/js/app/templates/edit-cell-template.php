@@ -1,1 +1,1 @@
-	<%= cell.get('assign_points_earned') %>
+<%= cell.get('assign_points_earned') %>
