@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div class="row">
-    	<div class="col-md-12 wrap">
+    	<div class="col-md-12">
+            <div class="wrap">
     		<h1>Courses
     			<?php 
     				global $oplb_gradebook_api;    			
@@ -11,6 +12,7 @@
 	    		</a>   
 	    		<?php } ?>    
     		</h1>
+            </div>
     	</div>	
     </div>   
     <div class="row">
