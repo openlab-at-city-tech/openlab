@@ -34,19 +34,36 @@
 					<button type="button" id="filter-assignments" class="btn btn-default">Filter</button>  	    		   	
 			</div>    	 		
 			<hr/>
-			<div>
-				<table id="an-gradebook-container" class="table table-bordered table-striped">  
-					<thead id="students-header">
-						<tr>
-							<th></th>
-							<th class="gradebook-student-column-first_name">First Name</th>
-							<th class="gradebook-student-column-last_name">Last Name</th>
-							<th class="gradebook-student-column-user_login">Login</th>
-						</tr>
-					</thead>		    	
-					<tbody id="students"></tbody>
-				</table>
+                        <div class="table-wrapper">
+                            <div class="pinned hidden-xs">
+                                    <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">  
+                                            <thead id="students-header-pinned" class="students-header">
+                                                    <tr>
+                                                            <th class="gradebook-student-column-interactive student-tools"></th>
+                                                            <th class="gradebook-student-column-first_name"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
+                                                            <th class="gradebook-student-column-last_name"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
+                                                            <th class="gradebook-student-column-user_login"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
+                                                    </tr>
+                                            </thead>		    	
+                                            <tbody id="students-pinned" class="students"></tbody>
+                                    </table>
+                                </div>
+                            <div class="scroll-control">
+                                <div class="scrollable">
+                                        <table id="an-gradebook-container" class="table table-bordered table-striped">  
+                                                <thead id="students-header" class="students-header">
+                                                        <tr>
+                                                            <th class="gradebook-student-column-interactive student-tools visible-xs"></th>
+                                                            <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
+                                                            <th class="gradebook-student-column-last_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
+                                                            <th class="gradebook-student-column-user_login visible-xs"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
+                                                        </tr>
+                                                </thead>		    	
+                                                <tbody id="students" class="students"></tbody>
+                                        </table>
+                                </div>
                             </div>
+                        </div>
 		</div>
 	</div>
-</div>	
+</div>

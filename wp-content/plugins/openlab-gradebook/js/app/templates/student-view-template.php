@@ -1,4 +1,4 @@
-	<th class="student-tools fixed-column">
+	<td class="student-tools fixed-column<%= mobile_styles %>">
 		<div class="btn-group">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				<span class="caret"></span>
@@ -17,13 +17,13 @@
 			<?php } ?>        									
 			</ul>
 		</div>
-	</th>
-	<td class="student">	
+	</td>
+	<td class="student<%= mobile_styles %>">	
 		<div class="column-frame">	
-			<%= student.get("first_name") %> 				
+                    <span data-toggle="tooltip" data-placement="top" title='<%= student.get("first_name") %>'><%= student.get("first_name") %></span> 				
 		</div>				
 	</td>
-	<td><%= student.get("last_name") %></td>
-	<td><%= student.get("user_login") %></td>
+        <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("last_name") %>'><%= student.get("last_name") %></span></td>
+        <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("user_login") %>'><%= student.get("user_login") %></span></td>
     
     

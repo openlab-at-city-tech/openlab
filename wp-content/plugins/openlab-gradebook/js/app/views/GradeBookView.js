@@ -5,6 +5,7 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
         initialize: function(options) {
             var self = this;  
             var _request = 0; 
+            this.resizeTimer;
 			this.xhrs = [];
 			this._subviews =[];            
             this.options = options;
@@ -17,7 +18,19 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
 			this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);                      
 			this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);                                   
 			this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment); 
-			this.render();            					
+			this.render();  
+                        
+                        $(window).on('resize', function (e) {
+
+                        clearTimeout(this.resizeTimer);
+                        this.resizeTimer = setTimeout(function () {
+
+                            self.adjustCellWidths();
+
+                        }, 250);
+
+    });
+                        
             return this;
         },
   		clearSubViews : function(){
@@ -42,7 +55,7 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
             var template = _.template($('#gradebook-interface-template').html());
             var compiled = template({course : self.course, assign_categories: _assign_categories, role: this.role});     
            	$('#wpbody-content').append(self.$el.html(compiled));
-            $('#filter-assignments-select').val(this.filter_option);                 	
+            $('#filter-assignments-select').val(this.filter_option); 
         	switch(this.gradebook.sort_key){
         		case 'cell':    
         			_.each(this.sort_column, function(cell) {
@@ -50,10 +63,21 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
                     		model: self.gradebook.students.get(cell.get('uid')), course: self.course, gradebook: self.gradebook, options: self.options
                 		}); 
                 		self._subviews.push(view);
-						$('#students').append(view.render());                     
+						$('#students').append(view.render('pinned'));                     
             		});                          		
             		var y = self.gradebook.assignments.models;
             		y = _.sortBy(y,function(assign){ return assign.get('assign_order');});
+                        
+                        _.each(this.sort_column, function(cell) {
+                		var view = new StudentView({
+                    		model: self.gradebook.students.get(cell.get('uid')), course: self.course, gradebook: self.gradebook, options: self.options
+                		}); 
+                		self._subviews.push(view);
+						$('#students-pinned').append(view.render('static'));                     
+            		});                          		
+            		var y = self.gradebook.assignments.models;
+            		y = _.sortBy(y,function(assign){ return assign.get('assign_order');});
+                        
             		_.each(y, function(assignment) {
                 		var view = new AssignmentView({
                     		model: assignment, course: self.course, gradebook: self.gradebook
@@ -66,8 +90,13 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
             		_.each(this.gradebook.sort_column.models, function(student) { 
                 		var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
                 		self._subviews.push(view);                		
-						$('#students').append(view.render());              		                 
-            		});             		            		  
+				$('#students').append(view.render('pinned')); 
+            		});     
+                        _.each(this.gradebook.sort_column.models, function(student) { 
+                		var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
+                		self._subviews.push(view);                		
+                                $('#students-pinned').append(view.render('static')); 
+            		}); 
             		var y = self.gradebook.assignments;
             		y = _.sortBy(y.models,function(assign){ return assign.get('assign_order');});  
             		_.each(y, function(assignment) {
@@ -77,7 +106,9 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
             		}); 
             		break;             	
             }    
-            this.filterAssignments();                                                 
+            this.filterAssignments();
+            this.adjustCellWidths();
+            this.postLoadActions();
             return this;
         },   
         filterAssignments: function() {       
@@ -106,6 +137,25 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
             	});
             }        
         },     
+        adjustCellWidths: function(){
+          
+            var pinnedTable = $('.pinned .table');
+            var studentTools = pinnedTable.find('.student-tools');
+            
+            var target_w = 50;
+            var pinnedTable_w = pinnedTable.width();
+            
+            var target_pct = (target_w/pinnedTable_w) * 100;
+            studentTools.css({
+               'width' :  target_pct + '%'
+            });
+            
+        },
+        postLoadActions: function(){
+          
+            $('[data-toggle="tooltip"]').tooltip()
+            
+        },
         addAssignment: function(ev) {    
             var view = new EditAssignmentView({course: this.course, gradebook: this.gradebook});           
         },    
@@ -129,6 +179,7 @@ function($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssig
 			this.render();
         },                   
         sortByAssignment: function(ev) {
+            console.log('hello sort');
             var x = this.gradebook.cells.where({amid: parseInt(ev.get('id'))});       			
 			this.sort_column = _.sortBy(x,function(cell){
 				if (ev.get('sorted')==='asc'){

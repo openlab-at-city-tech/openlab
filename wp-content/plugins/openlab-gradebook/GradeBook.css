@@ -1,258 +1,317 @@
 #loading-students-container {
-	display:absolute;
+  display: absolute;
 }
-
 .modal-body {
-	overflow: scroll;
+  overflow: scroll;
 }
-
-
 /* Chart stylings */
-
 .labeled-chart-container {
-    padding-right: 150px;
-    min-height: 180px;
-    position: relative;
+  padding-right: 150px;
+  min-height: 180px;
+  position: relative;
 }
-
-.pie-legend, .line-legend {
-    list-style: none;
-    position: absolute;
-    right: 8px;
-    top: 0;
+.pie-legend,
+.line-legend {
+  list-style: none;
+  position: absolute;
+  right: 8px;
+  top: 0;
 }
-
-.pie-legend li span, .line-legend li span {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 100%;
-    border-radius: 5px;
+.pie-legend li span,
+.line-legend li span {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  border-radius: 5px;
 }
-
-.pie-legend li, .line-legend li {
-    display: block;
-    padding-left: 30px;
-    position: relative;
-    margin-bottom: 4px;
-    border-radius: 5px;
-    padding: 2px 8px 2px 28px;
-    font-size: 14px;
-    cursor: default;
-    -webkit-transition: background-color 200ms ease-in-out;
-    -moz-transition: background-color 200ms ease-in-out;
-    -o-transition: background-color 200ms ease-in-out;
-    transition: background-color 200ms ease-in-out;
+.pie-legend li,
+.line-legend li {
+  display: block;
+  padding-left: 30px;
+  position: relative;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  padding: 2px 8px 2px 28px;
+  font-size: 14px;
+  cursor: default;
+  -webkit-transition: background-color 200ms ease-in-out;
+  -moz-transition: background-color 200ms ease-in-out;
+  -o-transition: background-color 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out;
 }
-
-
 /*  Gradebook styles */
-
 [contenteditable="true"]:active,
-[contenteditable="true"]:focus{
-border:none;
-outline:none;
+[contenteditable="true"]:focus {
+  border: none;
+  outline: none;
 }
-
 [contenteditable="true"]:focus {
   background-color: #fff;
   border: 3px solid #2ea2cc;
 }
-
-
-.cell{
-	text-align: right;
-	cursor: pointer;
+.cell {
+  text-align: right;
+  cursor: pointer;
 }
-
 .modal {
-   z-index: 999999;
+  z-index: 999999;
 }
-
-.table{
+.table {
   background-color: white;
 }
-
 #adminmenuback {
-	z-index: 1;
+  z-index: 1;
 }
-
 body {
   background-color: #f1f1f1;
 }
-
-.student-tools, .assignment-tools { 
-	overflow: visible; 
+.student-tools,
+.assignment-tools {
+  overflow: visible;
 }
-
-
-#chart-container{
-	text-align: center;
-}
-
-
-[class^="course-column-"] {
-	cursor: pointer;
-}
-
-
-td {
-	cursor: default;
-}
-
-
-#chart_div{
-	display: inline-block;
-	margin-left:auto;
-	margin-right:auto;
-}
-
-
-#oplb-gradebooks #courses-interface-buttons-container{
+#chart-container {
   text-align: center;
 }
-#oplb-gradebook #gradebook-interface-buttons-container{
- 	text-align: center;
+[class^="course-column-"] {
+  cursor: pointer;
 }
-
-#oplb-gradebook #gradebook-interface-buttons-container li{
-	display: inline-block;
+td {
+  cursor: default;
 }
-
-#oplb-gradebook button{
+#chart_div {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#oplb-gradebooks #courses-interface-buttons-container {
+  text-align: center;
+}
+#oplb-gradebook #gradebook-interface-buttons-container {
+  text-align: center;
+}
+#oplb-gradebook #gradebook-interface-buttons-container li {
   display: inline-block;
 }
-
-
-#students .selected td, 
-#students .selected th,
-#students .selected, #courses .selected td{
-   background-color: #f7fcfe;
+#oplb-gradebook button {
+  display: inline-block;
 }
-
-#students-header tr th{
-	cursor: default;
-	min-width: 75px !important;
-	max-width: 135px !important;	
+.students .selected td,
+.students .selected th,
+.students .selected,
+#courses .selected td {
+  background-color: #f7fcfe;
 }
-
-#courses tr.selected > td:first-child{
-   background-color: #f7fcfe;
-	border-left: 4px solid #2ea2cc;
+.students-header tr th {
+  cursor: default;
 }
-#students tr.selected > td:first-child{
-   background-color: #f7fcfe;
-	border-left: 4px solid #2ea2cc;
+.students-header .btn-group {
+  max-width: 100%;
 }
-
-#students-header .hover {
-	background-color: #f7fcfe;
+.students-header .btn-group .btn {
+  max-width: 100%;
 }
-
-#students td.hover{
-   background-color: #f7fcfe;
+.students-header .btn-group .btn .name {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  display: block;
+  padding-right: 12px;
+  text-overflow: ellipsis;
 }
-
-
-
-#courses tr:hover{
+.students-header .btn-group .btn .name .caret {
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+.students-header .btn-group .dropdown-menu {
+  position: fixed;
+  top: auto;
+  left: auto;
+  margin-top: 35px;
+}
+.students .btn-group .dropdown-menu {
+  position: fixed;
+  top: auto;
+  left: auto;
+  margin-top: 35px;
+}
+#courses tr.selected > td:first-child {
+  background-color: #f7fcfe;
+  border-left: 4px solid #2ea2cc;
+}
+.students tr.selected > td:first-child {
+  background-color: #f7fcfe;
+  border-left: 4px solid #2ea2cc;
+}
+.students-header .hover {
+  background-color: #f7fcfe;
+}
+.students td.hover {
+  background-color: #f7fcfe;
+}
+#courses tr:hover {
   background-color: #f7fcfe !important;
 }
-
-
-#students tr:hover{
+.students tr:hover {
   background-color: #f7fcfe !important;
 }
-
-#students td.editing .view {
-    display: none;
+.students td.editing .view {
+  display: none;
 }
-
-
-#students td .view {
-	width: inherit;
-	text-align: right;
-    padding: 0;
-    border: none;
-    margin: inherit;
-    display: block;
+.students td .view {
+  width: inherit;
+  text-align: right;
+  padding: 0;
+  border: none;
+  margin: inherit;
+  display: block;
 }
-
-#students-header .column-title {
-	display: inline-block;
-	cursor: default;
-	padding-left: 0px;
-	padding-bottom: 0px;
-	padding-top: 0px;
-  	width: 60%;
+.students-header .column-title {
+  display: inline-block;
+  cursor: default;
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  width: 60%;
 }
-
-
-#students td .edit {
-	display: none;
+.students td .edit {
+  display: none;
 }
-
-#students td.editing .edit {
-    padding: 0;
-    text-align: right;
-    display: block;
+.students td.editing .edit {
+  padding: 0;
+  text-align: right;
+  display: block;
 }
 /* typeahead-BS 
 */
-
 .twitter-typeahead .tt-query,
 .twitter-typeahead .tt-hint {
-	display: none;
-	margin-bottom: 0;
+  display: none;
+  margin-bottom: 0;
 }
-
 span.twitter-typeahead {
   width: 100%;
 }
 .tt-hint {
-	display: block;
-	width: 100%;
-	height: 38px;
-	padding: 8px 12px;
-	font-size: 14px;
-	line-height: 1.428571429;
-	color: #999;
-	vertical-align: middle;
-	background-color: #ffffff;
-	border: 1px solid #cccccc;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-	      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  display: block;
+  width: 100%;
+  height: 38px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #999;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 .tt-menu {
-	min-width: 160px;
-	margin-top: 2px;
-	padding: 5px 0;
-	background-color: #ffffff;
-	border: 1px solid #cccccc;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	border-radius: 4px;
-	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-	      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-	background-clip: padding-box;
-
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
 }
 .tt-suggestion {
-	display: block;
-	padding: 3px 20px;
+  display: block;
+  padding: 3px 20px;
 }
 .tt-suggestion:hover {
-	color: #fff;
-	background-color: #428bca;
+  color: #fff;
+  background-color: #428bca;
 }
 .tt-suggestion.tt-is-under-cursor a {
-	color: #fff;
+  color: #fff;
 }
 .tt-suggestion p {
-	margin: 0;
+  margin: 0;
 }
-
+/**pinned table**/
+.table-wrapper {
+  position: relative;
+}
+.table-wrapper .table {
+  margin-bottom: 0;
+}
+.table-wrapper .pinned {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  background: #fff;
+  width: 36%;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  z-index: 200;
+}
+.table-wrapper .pinned table {
+  border-right: none;
+  border-left: none;
+  table-layout: fixed;
+  width: 100%;
+}
+.table-wrapper .pinned table th {
+  padding: 15px 8px;
+}
+.table-wrapper .pinned #students-header-pinned th,
+.table-wrapper .pinned #students-pinned td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-wrapper .pinned #students-header-pinned th .column-frame,
+.table-wrapper .pinned #students-pinned td .column-frame {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-wrapper .pinned #students-header-pinned th span,
+.table-wrapper .pinned #students-pinned td span {
+  max-width: 100%;
+  white-space: nowrap;
+}
+.table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
+.table-wrapper .pinned #students-pinned td.student-tools {
+  overflow: visible;
+  width: 15%;
+}
+.table-wrapper .scrollable {
+  margin-left: 36%;
+  overflow: scroll;
+  overflow-y: hidden;
+}
+.table-wrapper .scrollable th,
+.table-wrapper .scrollable td {
+  min-width: 180px;
+}
+.table-wrapper .scrollable td {
+  padding-bottom: 22px;
+}
+.table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
+.table-wrapper .scrollable #students td.student-tools {
+  max-width: 50px;
+}
+@media (max-width: 767px) {
+  .table-wrapper .scrollable {
+    margin-left: 0;
+  }
+}
+.table-wrapper th.pinned-target,
+.table-wrapper td.pinned-target {
+  display: none;
+}
+.table-wrapper .fixed-header th.pinned-target {
+  display: table-cell;
+}

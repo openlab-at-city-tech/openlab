@@ -24,9 +24,21 @@ module.exports = function (grunt) {
                     out: './js/oplb-gradebook-app-min.js'
                 }
             }
-        }
+        },
+        less: {
+            development: {
+                options: {
+                    compress: false,
+                    optimization: 2
+                },
+                files: {
+                    "GradeBook.css": "GradeBook.less"
+                }
+            }
+        },
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.registerTask('default', ['requirejs']);
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.registerTask('default', ['requirejs', 'less']);
 };

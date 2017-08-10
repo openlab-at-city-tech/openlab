@@ -94,6 +94,7 @@ function($,Backbone,_,AssignmentStatisticsView, EditAssignmentView, DetailsAssig
             }        	
         },
         sortColumnCSS: function() {
+            console.log('hello sortColumnCSS');
             if (this.assignment.get('sorted')) {
         		var desc = this.$el.hasClass('desc');
         		this.$el.toggleClass( "desc", !desc ).toggleClass( "asc", desc );   

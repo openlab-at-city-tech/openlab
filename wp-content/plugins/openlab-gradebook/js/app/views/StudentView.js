@@ -19,26 +19,42 @@ function($,Backbone,_,StatisticsView,EditStudentView,DeleteStudentView, CellView
 			this._subviews =[];          	
 			this.gradebook = options.gradebook;
 			this.course = options.course;
-           	this.student = this.model;	                     
+           	this.student = this.model;	    
            	this.listenTo(this.model, 'change', this.render);            
         },    
-        render: function() {
-			var self = this;
-            var template = _.template($('#student-view-template').html()); 
-            var compiled = template({student: this.model, role: this.role});
-            this.$el.html(compiled);     
-            var gbid = parseInt(self.course.get('id')); //anq: why is this not already an integer??
-            var x = this.gradebook.cells.where({
-            	uid: parseInt(this.model.get('id')),		//anq: why is this not already an integer??
-            	gbid: gbid
-            	});
-           	x = _.sortBy(x,function(model){ return model.get('assign_order');});        	
+        render: function(pinned) {
+            
+            //give pinned a default
+            if(typeof pinned === 'undefined'){
+                pinned = 'none';
+            }
+            
+            var mobile_styles = '';
+            
+            if(pinned === 'pinned'){
+                mobile_styles = ' visible-xs';
+            }
+            
             var self = this;
-            _.each(x, function(cell) {
-                var view = new CellView({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
-                self._subviews.push(view);
-                self.$el.append(view.render());
-            });
+            var template = _.template($('#student-view-template').html());
+            var compiled = template({student: this.model, role: this.role, mobile_styles: mobile_styles});
+            this.$el.html(compiled);
+            
+            if (pinned === 'pinned' || pinned === 'none') {
+                var gbid = parseInt(self.course.get('id')); //anq: why is this not already an integer??
+                var x = this.gradebook.cells.where({
+                    uid: parseInt(this.model.get('id')),		//anq: why is this not already an integer??
+                    gbid: gbid
+                    });
+                    x = _.sortBy(x,function(model){ return model.get('assign_order');});        	
+                var self = this;
+                _.each(x, function(cell) {
+                    var view = new CellView({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
+                    self._subviews.push(view);
+                    self.$el.append(view.render());
+                });
+            }
+            
             return this.el;
         },
   		clearSubViews : function(){

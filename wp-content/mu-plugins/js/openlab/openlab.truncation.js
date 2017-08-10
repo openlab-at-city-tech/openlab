@@ -21,6 +21,8 @@ OpenLab.truncation = (function ($) {
 
         },
         truncateOnTheFly: function (onInit, loadDelay) {
+            
+            console.log('truncateOnTheFly go');
 
             if (onInit === undefined) {
                 var onInit = false;
