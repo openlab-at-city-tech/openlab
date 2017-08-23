@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'jquery-ui'],
-        function ($, Backbone, _, Assignment) {
+define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentView', 'jquery-ui'],
+        function ($, Backbone, _, Assignment, StudentView) {
             var EditAssignmentView = Backbone.View.extend({
                 id: 'base-modal',
                 className: 'modal fade',
@@ -24,15 +24,22 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'jquery-ui'],
                     return this;
                 },
                 render: function () {
-                    // var gradebook = this.courses.findWhere({selected: true});            
+                    // var gradebook = this.courses.findWhere({selected: true});     
                     var template = _.template($('#edit-assignment-template').html());
+
+                    if (!this.assignment) {
+
+                        this.assignment = new Assignment();
+
+                    }
+
                     var compiled = template({assignment: this.assignment, course: this.course, role: this.role});
                     this.$el.html(compiled);
                     this.$el.modal('show');
                     var self = this;
                     _.defer(function () {
                         this.inputName = self.$('input[name="assign_name"]');
-                        var strLength = inputName.val().length;
+                        var strLength = this.inputName.val().length;
                         if (self.assignment) {
                             $("#assign_visibility_options option[value='" + self.assignment.get('assign_visibility') + "']").attr("selected", "selected");
                         }
@@ -60,6 +67,7 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'jquery-ui'],
                     var assignmentInformation = $(ev.currentTarget).serializeObject();
                     var x = $(ev.currentTarget).serializeObject().id;
                     var toadd = this.gradebook.assignments.findWhere({id: parseInt(x)});
+                    
                     if (toadd) {
                         toadd.save(assignmentInformation, {wait: true});
                     } else {

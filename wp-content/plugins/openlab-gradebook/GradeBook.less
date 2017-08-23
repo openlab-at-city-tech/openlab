@@ -3,9 +3,15 @@
 }
 
 .modal-body {
-    overflow: scroll;
+    overflow: auto;
+    .grade-type{
+        margin-bottom: 30px;
+    }
 }
 
+h5{
+    font-weight: 600;
+}
 
 /* Chart stylings */
 
@@ -335,6 +341,7 @@ span.twitter-typeahead {
         #students-header-pinned th.gradebook-student-column-interactive,
         #students-pinned td.student-tools{
             overflow: visible;
+            padding: 12px 8px;
             width: 15%;
         }
     }
@@ -347,6 +354,10 @@ span.twitter-typeahead {
         }
         td{
             padding-bottom: 22px;
+            .grade-numeric{
+                display: block;
+                margin: 0 0 8px;
+            }
         }
         #students-header th.gradebook-student-column-interactive,
         #students td.student-tools{
@@ -359,6 +370,9 @@ span.twitter-typeahead {
     th,td{
         &.pinned-target{
             display: none;
+        }
+        .checkbox{
+            margin: 0;
         }
     }
     .fixed-header{

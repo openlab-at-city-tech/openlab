@@ -1,7 +1,7 @@
 <?php
-class ANGB_STATISTICS{
+class OPLB_STATISTICS{
 	public function __construct(){
-		add_action('wp_ajax_angb_statistics', array($this, 'statistics'));											
+		add_action('wp_ajax_oplb_statistics', array($this, 'statistics'));											
 	}
 	
 	public function statistics(){

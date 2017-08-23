@@ -16,7 +16,7 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                     $.ajax({
                         url: ajaxurl,
                         data: {
-                            action: 'angb_statistics',
+                            action: 'oplb_statistics',
                             chart_type: 'pie_chart',
                             gbid: this.model.get('gbid'),
                             amid: this.model.get('id')

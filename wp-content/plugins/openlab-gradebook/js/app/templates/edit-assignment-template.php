@@ -39,11 +39,35 @@
                             <option value="Instructor">Instructor</option>
                         </select>					
                     </div>	 						
-                </div>	
+                </div>
+                <div class="form-group grade-type">
+                    <div class="col-sm-4">&nbsp;</div>
+                    <div class="col-sm-6">
+                        <h5 class="bold">Grade Type:</h5>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="gradeType" id="gradeTypeNumeric" value="numeric" <%= assignment.get('assign_grade_type') === 'numeric' ? 'checked="checked"' : '' %>>
+                                Numeric
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="gradeType" id="gradeTypeLetter" value="letter" <%= assignment.get('assign_grade_type') === 'letter' ? 'checked="checked"' : '' %>>
+                                Letter Grades
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="gradeType" id="gradeTypeCheckmark" value="checkmark" <%= assignment.get('assign_grade_type') === 'checkmark' ? 'checked="checked"' : '' %>>
+                                Checkmark
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="gbid" value="<%= course.get('id') %>"/>	 											
             </form>    		
             <div>
-                <%= assignment ? 'Update assignment ' + assignment.get('id') + ' from course '   : 'Add to course ' +  course.get('id')%>?            			
+                <p class="text-right"><%= assignment ? 'Update assignment ' + assignment.get('assign_name') + ' from course ' +  course.get('name') : 'Add to course ' +  course.get('name') %>?</p>     			
             </div>
         </div>
         <div class="modal-footer">

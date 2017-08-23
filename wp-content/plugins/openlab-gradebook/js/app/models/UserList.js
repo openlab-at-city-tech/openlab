@@ -14,7 +14,7 @@ define(['backbone', 'models/User'], function (Backbone, User) {
             }
         },
         url: function () {
-            return ajaxurl + '?action=angb_user_list&search=' + this.search;
+            return ajaxurl + '?action=oplb_user_list&search=' + this.search;
         }
     });
     return UserCourseList;

@@ -1,5 +1,5 @@
 <?php
-class ANGB_GRADEBOOK{
+class OPLB_GRADEBOOK{
 	public function __construct(){
 		add_action('wp_ajax_gradebook', array($this, 'gradebook'));											
 	}
@@ -24,7 +24,7 @@ class ANGB_GRADEBOOK{
 				break;
 	  		case 'GET' :	  			
 				$gbid = $_GET['gbid'];			 
-			   	echo json_encode($oplb_gradebook_api->angb_get_gradebook($gbid,null,null));
+			   	echo json_encode($oplb_gradebook_api->oplb_get_gradebook($gbid,null,null));
 				break;
 	  		case 'POST' :
 				echo json_encode(array("post" => "posting"));		

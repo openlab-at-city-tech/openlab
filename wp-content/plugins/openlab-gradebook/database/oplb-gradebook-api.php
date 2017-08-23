@@ -122,7 +122,7 @@ class oplb_gradebook_api{
 			
 	}	
 	
-	public function angb_get_gradebook($gbid, $role, $uid){
+	public function oplb_get_gradebook($gbid, $role, $uid){
 		global $current_user, $wpdb;
 		if(!$uid){
 			$uid = $current_user -> ID;
@@ -218,7 +218,7 @@ class oplb_gradebook_api{
 		return $role;		
 	}
 	
-	public function angb_is_gb_administrator(){
+	public function oplb_is_gb_administrator(){
 		global $current_user;  
 		$x = $current_user->roles;
 		$y = array_keys(get_option('oplb_gradebook_settings'),true);

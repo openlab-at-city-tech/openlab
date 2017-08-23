@@ -30,7 +30,7 @@ class gradebook_assignment_API{
 				} 	  			
    				$wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", array( 'assign_name' => $params['assign_name'], 'assign_date' => $params['assign_date'],
    					'assign_due' => $params['assign_due'], 'assign_order'=>$params['assign_order'], 'assign_category' => $params['assign_category'], 
-   					'assign_visibility' => $params['assign_visibility_options']), 
+   					'assign_visibility' => $params['assign_visibility_options'], 'assign_grade_type' => $params['gradeType']),
    					array('id' => $params['id'] )
    				);   
    				$wpdb->update("oplb_gradebook_cells{$wpdb->prefix}", array( 'assign_order' => $params['assign_order']), array('amid' => $params['id'] )
@@ -67,10 +67,11 @@ class gradebook_assignment_API{
 					'assign_date' => $params['assign_date'],					
 					'assign_due' => $params['assign_due'],					
 					'assign_category' => $params['assign_category'],						
-					'assign_visibility' => $params['assign_visibility_options'],						
+					'assign_visibility' => $params['assign_visibility_options'],
+                                        'assign_grade_type' => $params['gradeType'],
 					'gbid' => $params['gbid'],
 					'assign_order'=> $assignOrder
-				), array( '%s','%s','%s','%s','%s','%d','%d') 
+				), array( '%s','%s','%s','%s','%s','%s','%d','%d')
 				);
 				$assignID = $wpdb->insert_id;
 			    $studentIDs = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = {$params['gbid']} AND role = 'student'", ARRAY_N);
@@ -81,7 +82,7 @@ class gradebook_assignment_API{
 						'gbid' => $params['gbid'],
 						'assign_order' => $assignOrder,
 						'assign_points_earned' => 0
-					), array( '%d','%d','%d','%d') 
+					), array( '%d','%d','%d','%d','%d') 
 					);
 				}
 				$assignment = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = $assignID", ARRAY_A);

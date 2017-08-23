@@ -1,1 +1,1 @@
-<%= cell.get('assign_points_earned') %>
+<span class="grade-numeric"><%= cell.get('assign_points_earned') %></span>

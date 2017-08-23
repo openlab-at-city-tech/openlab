@@ -1,5 +1,5 @@
 <?php
-class ANGB_COURSE_LIST{
+class OPLB_COURSE_LIST{
 	public function __construct(){
 		add_action('wp_ajax_course_list', array($this, 'course_list'));											
 	}
@@ -57,7 +57,7 @@ class ANGB_COURSE_LIST{
 	  		case 'POST' :
 				$params = json_decode(file_get_contents('php://input'),true);	
 				$user = wp_get_current_user();
-				if ( !$oplb_gradebook_api->angb_is_gb_administrator() ){	
+				if ( !$oplb_gradebook_api->oplb_is_gb_administrator() ){	
 					echo json_encode(array("status" => "Not Allowed."));
 					die();
 				} 					  		

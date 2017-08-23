@@ -2,7 +2,13 @@
   display: absolute;
 }
 .modal-body {
-  overflow: scroll;
+  overflow: auto;
+}
+.modal-body .grade-type {
+  margin-bottom: 30px;
+}
+h5 {
+  font-weight: 600;
 }
 /* Chart stylings */
 .labeled-chart-container {
@@ -285,6 +291,7 @@ span.twitter-typeahead {
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
 .table-wrapper .pinned #students-pinned td.student-tools {
   overflow: visible;
+  padding: 12px 8px;
   width: 15%;
 }
 .table-wrapper .scrollable {
@@ -299,6 +306,10 @@ span.twitter-typeahead {
 .table-wrapper .scrollable td {
   padding-bottom: 22px;
 }
+.table-wrapper .scrollable td .grade-numeric {
+  display: block;
+  margin: 0 0 8px;
+}
 .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
 .table-wrapper .scrollable #students td.student-tools {
   max-width: 50px;
@@ -311,6 +322,10 @@ span.twitter-typeahead {
 .table-wrapper th.pinned-target,
 .table-wrapper td.pinned-target {
   display: none;
+}
+.table-wrapper th .checkbox,
+.table-wrapper td .checkbox {
+  margin: 0;
 }
 .table-wrapper .fixed-header th.pinned-target {
   display: table-cell;

@@ -1,10 +1,10 @@
 <?php
-class ANGB_USER_LIST{
+class OPLB_USER_LIST{
 	public function __construct(){
-		add_action('wp_ajax_angb_user_list', array($this, 'angb_user_list'));											
+		add_action('wp_ajax_oplb_user_list', array($this, 'oplb_user_list'));											
 	}
 
-	public function angb_user_list(){
+	public function oplb_user_list(){
 		global $wpdb;
    		$wpdb->show_errors();  			
 		$method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];

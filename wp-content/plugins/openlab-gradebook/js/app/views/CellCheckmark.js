@@ -1,11 +1,11 @@
-define(['jquery', 'backbone', 'underscore'],
-        function ($, Backbone, _) {
-            var CellView = Backbone.View.extend({
+define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
+        function ($, Backbone, _, letterGrades) {
+
+            var CellCheckmark = Backbone.View.extend({
                 tagName: 'td',
                 className: 'cell',
                 events: {
-                    "blur .grade-numeric": "edit",
-                    "keypress .grade-numeric": "updateOnEnter"
+                    'change input.grade-checkmark': 'edit'
                 },
                 initialize: function (options) {
                     this.course = options.course;
@@ -16,20 +16,16 @@ define(['jquery', 'backbone', 'underscore'],
                 },
                 render: function () {
                     var self = this;
-                    
+
                     this.$el.attr('data-id', this.model.get('amid'));
-                    
-                    if (this.gradebook.role === 'instructor') {
-                        this.$el.find('.grade-numeric').attr('contenteditable', 'true');
-                    } else {
-                        this.$el.find('.grade-numeric').css('cursor', 'default');
-                    }
+
                     var _assignment = this.gradebook.assignments.findWhere({id: this.model.get('amid')});
                     if (_assignment) {
                         this.$el.toggleClass('hidden', !_assignment.get('visibility'));
                     }
-                    var template = _.template($('#edit-cell-template').html());
-                    var compiled = template({cell: this.model});
+                    var template = _.template($('#edit-cell-checkmark-template').html());
+
+                    var compiled = template({cell: this.model, assignment: _assignment, role: this.gradebook.role});
                     this.$el.html(compiled);
                     return this.el;
                 },
@@ -41,29 +37,34 @@ define(['jquery', 'backbone', 'underscore'],
                 },
                 updateOnEnter: function (e) {
                     if (e.keyCode == 13) {
-                        this.$el.find('.grade-numeric').blur();
+                        this.$el.blur();
                     }
                 },
                 hideInput: function (value) {
                     var self = this;
-                    if (parseFloat(value) != this.model.get('assign_points_earned')) {
-                        this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
-                                self.render();
-                            }});
-                    } else {
-                        this.$el.find('.grade-numeric').attr('contenteditable', 'true');
-                    }
+
+                    console.log('value', value)
+                    this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
+                            self.render();
+                        }});
                 },
                 edit: function () {
-                    this.$el.find('.grade-numeric').attr('contenteditable', 'false');
-                    this.hideInput(this.$el.find('.grade-numeric').html().trim());
+                    this.$el.attr('contenteditable', 'false');
+                    var value = 0;
+
+                    if (this.$el.find('.grade-checkmark').is(':checked')) {
+                        value = 100;
+                    }
+                    
+                    this.$el.find('.grade-checkmark').attr('disabled', 'disabled');
+                    this.hideInput(value);
                 },
                 hoverCell: function (ev) {
                     if (this.model.get('amid') === ev.get('id')) {
                         this.model.set({
                             hover: ev.get('hover')
                         });
-                        this.$el.find('.grade-numeric').toggleClass('hover', ev.get('hover'));
+                        this.$el.toggleClass('hover', ev.get('hover'));
                     }
                 },
                 visibilityCell: function (ev) {
@@ -78,5 +79,5 @@ define(['jquery', 'backbone', 'underscore'],
                     this.remove();
                 }
             });
-            return CellView
+            return CellCheckmark;
         });

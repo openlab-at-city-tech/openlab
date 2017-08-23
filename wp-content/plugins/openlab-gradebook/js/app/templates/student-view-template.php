@@ -18,11 +18,10 @@
         </ul>
     </div>
 </td>
-<td class="student<%= mobile_styles %>">	
-    <div class="column-frame">	
+<td class="student<%= mobile_styles %>">
+    <div class="column-frame">
         <span data-toggle="tooltip" data-placement="top" title='<%= student.get("first_name") %>'><%= student.get("first_name") %></span> 				
-    </div>				
+    </div>
 </td>
 <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("last_name") %>'><%= student.get("last_name") %></span></td>
 <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("user_login") %>'><%= student.get("user_login") %></span></td>
-

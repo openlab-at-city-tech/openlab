@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'views/EditAssignmentView', 'views/DetailsAssignmentView', 'jquery-ui'],
-        function ($, Backbone, _, AssignmentStatisticsView, EditAssignmentView, DetailsAssignmentView) {
+define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'views/EditAssignmentView', 'views/DetailsAssignmentView', 'views/GradeBookView', 'jquery-ui'],
+        function ($, Backbone, _, AssignmentStatisticsView, EditAssignmentView, DetailsAssignmentView, GradeBookView) {
             var AssignmentView = Backbone.View.extend({
                 tagName: 'th',
                 className: 'assignment-tools assignment',
@@ -10,7 +10,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     'click li.assign-submenu-delete': 'deleteAssignment',
                     'click li.assign-submenu-edit': 'editAssignment',
                     'click li.assign-submenu-left': 'shiftAssignmentLeft',
-                    'click li.assign-submenu-right': 'shiftAssignmentRight',
                     'click li.assign-submenu-right': 'shiftAssignmentRight',
                     'click li.assign-submenu-stats': 'statsAssignment',
                     'mouseenter div.column-frame': 'mouseEnter',
@@ -47,6 +46,8 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 },
                 shiftAssignmentRight: function (ev) {
                     ev.preventDefault();
+                    console.log('assign_order', this.model.get('assign_order'));
+                    console.log('assignments', this.gradebook.assignments);
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') + 1});
                     x.save({assign_order: this.model.get('assign_order'), assign_visibility_options: x.get('assign_visibility')});
                     this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility_options: this.model.get('assign_visibility')});
@@ -98,7 +99,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     }
                 },
                 sortColumnCSS: function () {
-                    console.log('hello sortColumnCSS');
                     if (this.assignment.get('sorted')) {
                         var desc = this.$el.hasClass('desc');
                         this.$el.toggleClass("desc", !desc).toggleClass("asc", desc);

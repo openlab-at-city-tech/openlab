@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditStudentView', 'views/DeleteStudentView', 'views/CellView'],
-        function ($, Backbone, _, StatisticsView, EditStudentView, DeleteStudentView, CellView) {
+define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditStudentView', 'views/DeleteStudentView', 'views/CellView', 'views/CellDropdown', 'views/CellCheckmark'],
+        function ($, Backbone, _, StatisticsView, EditStudentView, DeleteStudentView, CellView, CellDropdown, CellCheckmark) {
             var StudentView = Backbone.View.extend(
                     /** @lends StudentView.prototype */
                             {
@@ -21,9 +21,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     this.course = options.course;
                                     this.student = this.model;
                                     this.listenTo(this.model, 'change', this.render);
+                                    this.listenTo(this.gradebook, 'change:assignments', this.render);
                                 },
-                                render: function (pinned) {
-
+                                render: function (pinned, assignments) {
                                     //give pinned a default
                                     if (typeof pinned === 'undefined') {
                                         pinned = 'none';
@@ -51,9 +51,20 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         });
                                         var self = this;
                                         _.each(x, function (cell) {
-                                            var view = new CellView({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
-                                            self._subviews.push(view);
-                                            self.$el.append(view.render());
+                                            var _assignment = assignments.findWhere({id: cell.get('amid')});
+
+                                            if (typeof _assignment !== 'undefined') {
+                                                if (_assignment.get('assign_grade_type') === 'checkmark') {
+                                                    var view = new CellCheckmark({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
+                                                } else if (_assignment.get('assign_grade_type') === 'letter') {
+                                                    var view = new CellDropdown({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
+                                                } else {
+                                                    var view = new CellView({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
+                                                }
+
+                                                self._subviews.push(view);
+                                                self.$el.append(view.render());
+                                            }
                                         });
                                     }
 

@@ -8,9 +8,9 @@ define(['backbone'], function (Backbone) {
         },
         url: function () {
             if (this.get('id')) {
-                return ajaxurl + '?action=angb_user&id=' + this.get('id') + '&gbid=' + this.get('gbid') + '&delete_options=' + this.get('delete_options');
+                return ajaxurl + '?action=oplb_user&id=' + this.get('id') + '&gbid=' + this.get('gbid') + '&delete_options=' + this.get('delete_options');
             } else {
-                return ajaxurl + '?action=angb_user';
+                return ajaxurl + '?action=oplb_user';
             }
         }
     });

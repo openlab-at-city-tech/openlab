@@ -1,11 +1,11 @@
 <?php
 
-class ANGB_USER{
+class OPLB_USER{
 	public function __construct(){
-		add_action('wp_ajax_angb_user', array($this, 'angb_user'));											
+		add_action('wp_ajax_oplb_user', array($this, 'oplb_user'));											
 	}
 
-	public function angb_user(){
+	public function oplb_user(){
   		global $wpdb;
     	$wpdb->show_errors();  		 		
 		$method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];

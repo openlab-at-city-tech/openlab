@@ -5,6 +5,7 @@ define(['backbone', 'underscore'], function (Backbone, _) {
             assign_name: '',
             assign_due: '',
             assign_date: '',
+            assign_grade_type: 'numeric',
             gbid: null,
             sorted: '',
             visibility: true,

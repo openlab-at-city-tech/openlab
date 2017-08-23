@@ -11,12 +11,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.options = options;
                     this.filter_option = "-1";
                     this.course = options.course;
-                    console.log(this.course);
                     this.gradebook = options.gradebook;
-                    console.log(this.gradebook);
                     this.listenTo(self.gradebook.students, 'add remove', self.render);
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
                     this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);
+                    this.listenTo(self.gradebook.assignments, 'change:gradeType', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
                     this.render();
 
@@ -65,7 +64,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                     model: self.gradebook.students.get(cell.get('uid')), course: self.course, gradebook: self.gradebook, options: self.options
                                 });
                                 self._subviews.push(view);
-                                $('#students').append(view.render('pinned'));
+                                $('#students').append(view.render('pinned', self.gradebook.assignments));
                             });
                             var y = self.gradebook.assignments.models;
                             y = _.sortBy(y, function (assign) {
@@ -77,7 +76,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                     model: self.gradebook.students.get(cell.get('uid')), course: self.course, gradebook: self.gradebook, options: self.options
                                 });
                                 self._subviews.push(view);
-                                $('#students-pinned').append(view.render('static'));
+                                $('#students-pinned').append(view.render('static', self.gradebook.assignments));
                             });
                             var y = self.gradebook.assignments.models;
                             y = _.sortBy(y, function (assign) {
@@ -96,12 +95,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             _.each(this.gradebook.sort_column.models, function (student) {
                                 var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
                                 self._subviews.push(view);
-                                $('#students').append(view.render('pinned'));
+                                $('#students').append(view.render('pinned', self.gradebook.assignments));
                             });
                             _.each(this.gradebook.sort_column.models, function (student) {
                                 var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
                                 self._subviews.push(view);
-                                $('#students-pinned').append(view.render('static'));
+                                $('#students-pinned').append(view.render('static', self.gradebook.assignments));
                             });
                             var y = self.gradebook.assignments;
                             y = _.sortBy(y.models, function (assign) {
@@ -187,7 +186,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.render();
                 },
                 sortByAssignment: function (ev) {
-                    console.log('hello sort');
                     var x = this.gradebook.cells.where({amid: parseInt(ev.get('id'))});
                     this.sort_column = _.sortBy(x, function (cell) {
                         if (ev.get('sorted') === 'asc') {

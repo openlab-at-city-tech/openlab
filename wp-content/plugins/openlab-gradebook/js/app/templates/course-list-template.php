@@ -5,7 +5,7 @@
                 <h1>Courses
                     <?php
                     global $oplb_gradebook_api;
-                    if ($oplb_gradebook_api->angb_is_gb_administrator()) {
+                    if ($oplb_gradebook_api->oplb_is_gb_administrator()) {
                         ?>
                         <a class="btn btn-default" id="add-course">
                             Add new

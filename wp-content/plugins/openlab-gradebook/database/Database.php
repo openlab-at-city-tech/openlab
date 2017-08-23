@@ -1,16 +1,17 @@
 <?php
-class ANGB_DATABASE{
-	const oplb_gradebook_db_version = 1.0;	
+class OPLB_DATABASE{
+	const oplb_gradebook_db_version = 1.1;	
 	public function __construct(){	
 		register_activation_hook(__FILE__,array($this,'database_init'));	
 		register_activation_hook(__FILE__,array($this,'database_alter'));
 		add_action('plugins_loaded', array($this,'oplb_gradebook_upgrade_db'));	
 	}	
 	public function oplb_gradebook_upgrade_db(){
-		if(!get_site_option( 'oplb_gradebook_db_version' )){
+            
+		if(!get_option( 'oplb_gradebook_db_version' )){
 			$this->database_init();
 		}
-		if(self::oplb_gradebook_db_version > get_site_option( 'oplb_gradebook_db_version' )){
+		if(self::oplb_gradebook_db_version > get_option( 'oplb_gradebook_db_version' )){
 		    $this->database_alter();
 		}
 	}
@@ -18,12 +19,17 @@ class ANGB_DATABASE{
 		//Any alterations to the table after they have been created in a previous version should take place here.  This works
 		//by looping through the necessary db alterations based on the current version of the db. To add an alteration use the following  
 		//template code block:
-		//if(get_site_option( 'oplb_gradebook_db_version' )==[current_db_version]){ 
+		//if(get_option( 'oplb_gradebook_db_version' )==[current_db_version]){ 
 		//    do stuff to tables 
 		//    update_option( "oplb_gradebook_db_version", self::oplb_gradebook_db_version);
 		// }
 		//where the constant oplb_gradebook_db_version should be changed to a larger number.				
 		global $wpdb;
+                if(get_option( 'oplb_gradebook_db_version' )==1.0){ 
+			$sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
+			$wpdb->query($sql);				
+		    update_option( "oplb_gradebook_db_version", 1.1);
+		}
 	}
 	public function database_init() {
 		global $wpdb;
@@ -116,4 +122,3 @@ class ANGB_DATABASE{
 		update_option( "oplb_gradebook_db_version", self::oplb_gradebook_db_version );							
 	}	
 }
-?>

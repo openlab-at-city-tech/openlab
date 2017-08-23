@@ -9,24 +9,24 @@
   License: GPL
  */
 
-define("OPENLAB_GRADEBOOK_VERSION", "0.0.1");
+define("OPENLAB_GRADEBOOK_VERSION", "0.0.2");
 
 $database_file_list = glob(dirname(__FILE__) . '/database/*.php');
 foreach ($database_file_list as $database_file) {
     include($database_file);
 }
 
-$angb_database = new ANGB_DATABASE();
+$oplb_database = new OPLB_DATABASE();
 $oplb_gradebook_api = new oplb_gradebook_api();
 $oplb_gradebook_course_api = new gradebook_course_API();
 $oplb_gradebook_assignment_api = new gradebook_assignment_API();
 $oplb_gradebook_cell_api = new gradebook_cell_API();
 $oplb_gradebookapi = new OPLB_GradeBookAPI();
-$angb_course_list = new ANGB_COURSE_LIST();
-$angb_gradebook = new ANGB_GRADEBOOK();
-$angb_user = new ANGB_USER();
-$angb_user_list = new ANGB_USER_LIST();
-$angb_statistics = new ANGB_STATISTICS();
+$oplb_course_list = new OPLB_COURSE_LIST();
+$oplb_gradebook = new OPLB_GRADEBOOK();
+$oplb_user = new OPLB_USER();
+$oplb_user_list = new OPLB_USER_LIST();
+$oplb_statistics = new OPLB_STATISTICS();
 
 function register_oplb_gradebook_menu_page() {
     $roles = wp_get_current_user()->roles;
