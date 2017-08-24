@@ -17,6 +17,17 @@ OpenLab.truncation = (function ($) {
                 setTimeout(function () {
                     OpenLab.truncation.truncateOnTheFly(true);
                 }, 600);
+                setTimeout(function () {
+                    $('#wpadminbar').animate({
+                        'opacity': '1.0'
+                    });
+                }, 800);
+            } else {
+                setTimeout(function () {
+                    $('#wpadminbar').animate({
+                        'opacity': '1.0'
+                    });
+                }, 250);
             }
 
         },
@@ -34,9 +45,9 @@ OpenLab.truncation = (function ($) {
 
                 var thisElem = $(this);
 
-                /*thisElem.animate({
+                thisElem.animate({
                     opacity: '0'
-                });*/
+                });
 
                 if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
