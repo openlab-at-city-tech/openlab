@@ -108,8 +108,6 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                     }
                     var template = _.template($('#edit-cell-dropdown-template').html());
                     
-                    console.log('this.model in CellDropdown render', this.model);
-
                     var compiled = template({cell: this.model, assignment: _assignment, grades: this.thisLetterGrades, role: this.gradebook.role});
                     this.$el.html(compiled);
                     return this.el;
@@ -127,13 +125,11 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                 },
                 hideInput: function (value) {
                     var self = this;
-                    console.log('value in CellDropdown hideInput', value);
                     this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
                             self.render();
                         }});
                 },
                 edit: function () {
-                    console.log('edit go');
                     this.$el.attr('contenteditable', 'false');
                     this.$el.find('.grade-selector').attr('disabled', 'disabled');
                     this.hideInput(this.$el.find('.grade-selector').val());

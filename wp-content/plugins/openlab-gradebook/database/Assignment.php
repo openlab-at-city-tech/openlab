@@ -30,11 +30,37 @@ class gradebook_assignment_API {
                     echo json_encode(array("status" => "Not Allowed."));
                     die();
                 }
-                $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", array('assign_name' => $params['assign_name'], 'assign_date' => $params['assign_date'],
-                    'assign_due' => $params['assign_due'], 'assign_order' => $params['assign_order'], 'assign_category' => $params['assign_category'],
-                    'assign_visibility' => $params['assign_visibility_options'], 'assign_grade_type' => $params['gradeType']), array('id' => $params['id'])
+                $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", array(
+                    'assign_name' => $params['assign_name'],
+                    'assign_date' => $params['assign_date'],
+                    'assign_due' => $params['assign_due'],
+                    'assign_order' => $params['assign_order'],
+                    'assign_category' => $params['assign_category'],
+                    'assign_visibility' => $params['assign_visibility_options'],
+                    'assign_grade_type' => $params['gradeType'],
+                        ), array(
+                    'id' => $params['id']
+                        ), array(
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%d',
+                    '%s',
+                    '%s',
+                    '%s',
+                        ), array(
+                    '%d',
+                        )
                 );
-                $wpdb->update("oplb_gradebook_cells{$wpdb->prefix}", array('assign_order' => $params['assign_order']), array('amid' => $params['id'])
+                $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
+                    'assign_order' => $params['assign_order']
+                        ), array(
+                    'amid' => $params['id']
+                        ), array(
+                    '%d',
+                        ), array(
+                    '%d',
+                        )
                 );
                 $assignment = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = {$params['id']}", ARRAY_A);
                 $assignment['id'] = intval($assignment['id']);

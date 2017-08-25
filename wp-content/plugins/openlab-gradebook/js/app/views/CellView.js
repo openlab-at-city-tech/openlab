@@ -19,17 +19,12 @@ define(['jquery', 'backbone', 'underscore'],
                     
                     this.$el.attr('data-id', this.model.get('amid'));
                     
-                    if (this.gradebook.role === 'instructor') {
-                        this.$el.find('.grade-numeric').attr('contenteditable', 'true');
-                    } else {
-                        this.$el.find('.grade-numeric').css('cursor', 'default');
-                    }
                     var _assignment = this.gradebook.assignments.findWhere({id: this.model.get('amid')});
                     if (_assignment) {
                         this.$el.toggleClass('hidden', !_assignment.get('visibility'));
                     }
                     var template = _.template($('#edit-cell-template').html());
-                    var compiled = template({cell: this.model});
+                    var compiled = template({cell: this.model, gradebook: this.gradebook});
                     this.$el.html(compiled);
                     return this.el;
                 },
@@ -55,7 +50,7 @@ define(['jquery', 'backbone', 'underscore'],
                     }
                 },
                 edit: function () {
-                    this.$el.find('.grade-numeric').attr('contenteditable', 'false');
+                    this.$el.find('.grade-numeric').attr('contenteditable', 'false').css('opacity','0.42');
                     this.hideInput(this.$el.find('.grade-numeric').html().trim());
                 },
                 hoverCell: function (ev) {

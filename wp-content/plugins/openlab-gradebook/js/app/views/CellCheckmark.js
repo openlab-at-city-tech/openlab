@@ -42,8 +42,7 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                 },
                 hideInput: function (value) {
                     var self = this;
-
-                    console.log('value', value)
+                    
                     this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
                             self.render();
                         }});
