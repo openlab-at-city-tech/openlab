@@ -15,12 +15,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
                     this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:gradeType', self.render);
+                    this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
+
                     this.queue = wp.Uploader.queue;
+                    //safety first
+                    this.queue.off('remove change:uploading', this.mediaUpdate, this);
+
+                    //add listener for uploaded CSV
                     this.queue.on('remove change:uploading', this.mediaUpdate, this);
                     this.render();
-
-                    console.log('GradeBookRouter', GradeBookRouter);
 
                     $(window).on('resize', function (e) {
 
