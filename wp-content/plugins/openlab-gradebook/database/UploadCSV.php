@@ -205,7 +205,7 @@ class gradebook_upload_csv_API {
                 $assignments_stored[$thisdex]['amid'] = $existing_assignment[0]->id;
                 $assignments_stored[$thisdex]['assign_order'] = $existing_assignment[0]->assign_order;
                 $assignments_stored[$thisdex]['assign_weight'] = $existing_assignment[0]->assign_weight;
-                
+
                 continue;
             }
 
@@ -374,10 +374,19 @@ class gradebook_upload_csv_API {
                 '%s'
                     )
             );
+            //we need to get a list of all assignments, in case there are legacy assignments not on this spreadsheet
+            $current_assignments = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}oplb_gradebook_assignments", ARRAY_A);
 
             foreach ($assignments as $assigndex => $assignment) {
 
                 $this_grade = $grades[$assignment['name']];
+
+                foreach ($current_assignments as $currentdex => $current_assignment) {
+
+                    if ($current_assignment['id'] === $assignment['amid']) {
+                        unset($current_assignments[$currentdex]);
+                    }
+                }
 
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'amid' => $assignment['amid'],
@@ -393,7 +402,35 @@ class gradebook_upload_csv_API {
                     '%f'
                         )
                 );
+            }
 
+            if (!empty($current_assignments)) {
+
+                foreach ($current_assignments as $remaining_assignment) {
+
+                    $this_assignment_get = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = {$remaining_assignment['id']}", ARRAY_A);
+
+                    if (!$this_assignment_get || empty($this_assignment_get)) {
+                        continue;
+                    }
+
+                    $this_assignment = $this_assignment_get[0];
+
+                    $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                        'amid' => $this_assignment['id'],
+                        'uid' => $student_id,
+                        'gbid' => $gbid,
+                        'assign_order' => $this_assignment['assign_order'],
+                        'assign_points_earned' => 0
+                            ), array(
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%f'
+                            )
+                    );
+                }
             }
         }
 
