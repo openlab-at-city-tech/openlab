@@ -145,7 +145,7 @@ class OPLB_GradeBookAPI{
 	
 		foreach($line_chart_data1 as &$line_chart_value1){
 			$line_chart_value1['assign_order']= intval($line_chart_value1['assign_order']);		
-			$line_chart_value1['assign_points_earned'] = intval($line_chart_value1['assign_points_earned']);
+			$line_chart_value1['assign_points_earned'] = floatval($line_chart_value1['assign_points_earned']);
 			foreach($line_chart_data2 as $line_chart_value2){
 				if($line_chart_value2['id'] == $line_chart_value1['amid']){
                                         $all_homework_scores = $wpdb->get_col("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = {$line_chart_value2['id']}");

@@ -7,6 +7,13 @@
 .modal-body .grade-type {
   margin-bottom: 30px;
 }
+.upload-csv-modal .attachment-info .delete-attachment {
+  display: none;
+}
+.upload-csv-modal .setting,
+.upload-csv-modal .attachment-display-settings {
+  display: none;
+}
 h5 {
   font-weight: 600;
 }
@@ -73,6 +80,16 @@ h5 {
 }
 body {
   background-color: #f1f1f1;
+}
+body.admin_page_oplb-gradebook-upload-csv .oplb-bs.navbar-location-oplb-bs,
+body.admin_page_oplb-gradebook-upload-csv #wpadminbar,
+body.admin_page_oplb-gradebook-upload-csv #adminmenumain,
+body.admin_page_oplb-gradebook-upload-csv #wpfooter,
+body.admin_page_oplb-gradebook-upload-csv #local-env-flag {
+  display: none !important;
+}
+body.admin_page_oplb-gradebook-upload-csv #wpcontent {
+  padding-top: 21px !important;
 }
 .student-tools,
 .assignment-tools {

@@ -1,6 +1,6 @@
 <?php
 class OPLB_DATABASE{
-	const oplb_gradebook_db_version = 1.1;	
+	const oplb_gradebook_db_version = 1.2;	
 	public function __construct(){	
 		register_activation_hook(__FILE__,array($this,'database_init'));	
 		register_activation_hook(__FILE__,array($this,'database_alter'));
@@ -29,6 +29,11 @@ class OPLB_DATABASE{
 			$sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
 			$wpdb->query($sql);				
 		    update_option( "oplb_gradebook_db_version", 1.1);
+		}
+                if(get_option( 'oplb_gradebook_db_version' )==1.1){ 
+			$sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1";
+			$wpdb->query($sql);				
+		    update_option( "oplb_gradebook_db_version", 1.2);
 		}
 	}
 	public function database_init() {

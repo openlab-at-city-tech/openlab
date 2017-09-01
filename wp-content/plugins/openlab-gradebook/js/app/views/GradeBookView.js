@@ -1,6 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView',
-    'views/EditAssignmentView'],
-        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView) {
+define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame', 'router/GradeBookRouter'],
+        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame, GradeBookRouter) {
             var GradebookView = Backbone.View.extend({
                 initialize: function (options) {
                     var self = this;
@@ -17,7 +16,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:gradeType', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
+                    this.queue = wp.Uploader.queue;
+                    this.queue.on('remove change:uploading', this.mediaUpdate, this);
                     this.render();
+
+                    console.log('GradeBookRouter', GradeBookRouter);
 
                     $(window).on('resize', function (e) {
 
@@ -41,6 +44,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 events: {
                     'click button#add-student': 'addStudent',
+                    'click button#upload-csv': 'uploadCSV',
                     'click button#add-assignment': 'addAssignment',
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
@@ -170,6 +174,41 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var view = new EditStudentView({course: this.course, gradebook: this.gradebook});
                     $('body').append(view.render());
                 },
+                uploadCSV: function (e) {
+                    e.preventDefault();
+
+                    this.buildFrame().open();
+                    console.log('this.buildFrame()', this.buildFrame());
+
+                    this.buildFrame().open();
+                },
+                buildFrame: function () {
+
+                    if (this._frame)
+                        return this._frame;
+
+                    console.log('oplbGradebook', oplbGradebook);
+                    wp.media.view.settings.post.id = oplbGradebook.storagePage.ID;
+                    console.log('wp.media.view.settings in demo', wp.media.view.settings);
+
+                    this._frame = new uploadFrame({
+                        title: 'Upload CSV',
+                        button: {
+                            text: 'Select CSV'
+                        },
+                        multiple: false,
+                        library: {
+                            order: 'ASC',
+                            orderby: 'title',
+                            type: 'text/csv',
+                            search: null,
+                            uploadedTo: null
+                        }
+                    });
+
+                    return this._frame;
+
+                },
                 checkStudentSortDirection: function () {
                     if (this.gradebook.students.sort_direction === 'asc') {
                         this.gradebook.students.sort_direction = 'desc';
@@ -203,6 +242,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         xhr.abort()
                     });
                     this.remove();
+                },
+                mediaUpdate: function (data) {
+
+                    var checkFile = $('.upload-csv-modal').find('.upload-total').text();
+                    console.log('go render', parseInt(checkFile));
+                    if (parseInt(checkFile) === 1) {
+                        Backbone.history.loadUrl();
+                    }
+
                 }
             });
             return GradebookView;

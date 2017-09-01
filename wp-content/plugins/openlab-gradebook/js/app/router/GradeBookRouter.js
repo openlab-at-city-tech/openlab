@@ -13,6 +13,8 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                             this.courseList = new CourseList();
                             this.gradebook_administrators = new Settings();
                             Backbone.history.start();
+
+                            return this;
                         },
                         routes: {
                             "courses": "courses",

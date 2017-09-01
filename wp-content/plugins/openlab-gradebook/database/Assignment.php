@@ -109,7 +109,7 @@ class gradebook_assignment_API {
                         'gbid' => $params['gbid'],
                         'assign_order' => $assignOrder,
                         'assign_points_earned' => 0
-                            ), array('%d', '%d', '%d', '%d', '%d')
+                            ), array('%d', '%d', '%d', '%d', '%f')
                     );
                 }
                 $assignment = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = $assignID", ARRAY_A);
@@ -122,7 +122,7 @@ class gradebook_assignment_API {
                     $cell['amid'] = intval($cell['amid']);
                     $cell['uid'] = intval($cell['uid']);
                     $cell['assign_order'] = intval($cell['assign_order']);
-                    $cell['assign_points_earned'] = intval($cell['assign_points_earned']);
+                    $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
                 }

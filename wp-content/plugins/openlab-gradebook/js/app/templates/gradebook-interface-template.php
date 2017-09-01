@@ -17,6 +17,7 @@
                 ?>    	 
                 <div class="btn-group">    		
                     <button type="button" id="add-student" class="btn btn-default">Add Student</button>
+                    <button type="button" id="upload-csv" class="btn btn-default">Upload CSV</button>
                     <button type="button" id="add-assignment" class="btn btn-default">Add Assignment</button>
                 </div>
             <?php } ?>

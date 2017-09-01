@@ -10,6 +10,7 @@
  */
 
 define("OPENLAB_GRADEBOOK_VERSION", "0.0.2");
+define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 
 $database_file_list = glob(dirname(__FILE__) . '/database/*.php');
 foreach ($database_file_list as $database_file) {
@@ -47,20 +48,31 @@ add_action('admin_menu', 'register_oplb_gradebook_menu_page');
 
 function enqueue_oplb_gradebook_scripts($hook) {
     $app_base = plugins_url('js', __FILE__);
-    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery'), null, true);
+
+    //for media functions (to upload CSV files)
+    wp_enqueue_media();
+    wp_enqueue_script('jquery-ui-datepicker');
+
+    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.0.2', true);
     wp_enqueue_script('init_gradebookjs');
+    wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
+        'ajaxURL' => admin_url('admin-ajax.php'),
+        'depLocations' => oplb_get_dep_locations(),
+        'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG)
+    ));
     if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'gradebook_page_oplb_gradebook_settings') {
         $oplb_gradebook_develop = true;
-        wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), null, false);
-        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), null, false);
-        wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), null, false);
-        wp_register_script('requirejs', $app_base . '/require.js', array(), null, true);
+
+        wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), '0.0.0.2', false);
+        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.2', false);
+        wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.0.2', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('requirejs');
         wp_localize_script('requirejs', 'require', array(
             'baseUrl' => $app_base,
-            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js' : '/oplb-gradebook-app-min.js')
-        )));
+            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js' : '/oplb-gradebook-app-min.js'))
+        ));
     } else {
         return;
     }
@@ -130,5 +142,202 @@ function oplb_gradebook_shortcode() {
     return '<div id="wpbody-content"></div>';
 }
 
-add_shortcode('oplb_gradebook', 'oplb_gradebook_shortcode');
-?>
+//add_shortcode('oplb_gradebook', 'oplb_gradebook_shortcode');
+
+/**
+ * Grab dependencies already stored in WP (to avoid conflicts)
+ */
+function oplb_get_dep_locations() {
+
+    $include_dir = includes_url() . 'js/';
+
+    $deps = array(
+        'jquery' => $include_dir . 'jquery/jquery',
+        'jqueryui' => $include_dir . 'jquery-ui/jquery-ui.min',
+        'backbone' => $include_dir . 'backbone.min',
+        'underscore' => $include_dir . 'underscore.min',
+    );
+
+    return $deps;
+}
+
+function oplb_gradebook_current_screen_callback($screen) {
+
+    if (is_object($screen) && isset($screen->base)) {
+
+        if ($screen->base === "toplevel_page_oplb_gradebook" || $screen->base === 'gradebook_page_oplb_gradebook_settings') {
+            add_filter('gettext', 'oplb_gradebook_gettext', 99, 3);
+        }
+    }
+}
+
+add_action('current_screen', 'oplb_gradebook_current_screen_callback');
+
+function oplb_gradebook_gettext($translated_text, $untranslated_text, $domain) {
+
+    switch ($untranslated_text) {
+        case 'Drop files anywhere to upload':
+            $translated_text = 'Drop CSV anywhere to upload';
+            break;
+        case 'Select Files':
+            $translated_text = 'Select CSV';
+            break;
+        case 'No items found.':
+            $translated_text = 'Upload CSV';
+            break;
+    }
+
+    return $translated_text;
+}
+
+//activation and deactivation hooks
+register_activation_hook(__FILE__, 'activate_oplb_gradebook');
+register_deactivation_hook(__FILE__, 'deactivate_oplb_gradebook');
+
+/**
+ * Openlab Gradebook activation actions
+ */
+function activate_oplb_gradebook() {
+
+    //add custom page for csv storage - make the slug something very unlikely to be used
+    oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');
+}
+
+/**
+ * OpenLab Gradebook deactivation actions
+ * @todo: remove storage page
+ */
+function deactivate_oplb_gradebook() {
+    
+}
+
+/**
+ * Hook into wp_handle_upload to run our specific CSV uploads
+ * 1) Check to make sure file is a CSV
+ * @todo Check to make sure uploader is a faculty member
+ * @param type $file
+ * @return type
+ */
+function oplb_gradebook_wp_handle_upload_prefilter($file_info) {
+
+    $storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
+
+    if (isset($_REQUEST['post_id']) && intval($_REQUEST['post_id']) === intval($storage_page->ID)) {
+
+        if ($file_info['type'] !== 'text/csv') {
+            $file['error'] = 'This file does not appear to be a CSV.';
+            return $file;
+        }
+
+        $name = 'temp.csv';
+
+        if (isset($_REQUEST['name'])) {
+            $name = sanitize_file_name($_REQUEST['name']);
+        }
+
+        $oplb_upload_csv = new gradebook_upload_csv_API();
+        $result = $oplb_upload_csv->upload_csv($file_info, $name);
+
+        if ($result['response'] === 'oplb-gradebook-error') {
+            $file_info['error'] = $result['content'];
+            return $file_info;
+        }
+    }
+
+    return $file_info;
+}
+
+add_filter('wp_handle_upload', 'oplb_gradebook_wp_handle_upload_prefilter');
+
+/**
+ * Use wp_prepare_attachment_for_js to clean up CSV and send cleaned confirmation data back to the upload modal
+ * @param type $response
+ * @param type $attachment
+ * @param type $meta
+ * @return type
+ */
+function oplb_gradebook_wp_prepare_attachment_for_js($response, $attachment, $meta) {
+
+    $storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
+
+    if (isset($response['uploadedTo']) && $response['uploadedTo'] === $storage_page->ID) {
+        wp_delete_attachment($response['id'], true);
+    }
+
+    return $response;
+}
+
+add_filter('wp_prepare_attachment_for_js', 'oplb_gradebook_wp_prepare_attachment_for_js', 10, 3);
+
+/**
+ * Create custom page
+ * @param type $slug
+ * @param type $title
+ * @return type
+ */
+function oplb_gradebook_custom_page($slug, $title) {
+
+    $post_id = -1;
+    $author_id = 1;
+
+    if (null == get_page_by_path($slug)) {
+
+        $post_id = wp_insert_post(
+                array(
+                    'comment_status' => 'closed',
+                    'ping_status' => 'closed',
+                    'post_author' => $author_id,
+                    'post_name' => $slug,
+                    'post_title' => $title,
+                    'post_status' => 'publish',
+                    'post_type' => 'page'
+                )
+        );
+    } else {
+        $post_id = -2;
+    }
+
+    return $post_id;
+}
+
+/**
+ * Exclude custom pages from admin (so nobody messes with 'em)
+ * @global type $pagenow
+ * @global type $post_type
+ * @param type $query
+ * @return type
+ */
+function oplb_gradebook_exclude_pages_from_admin($query) {
+
+    if (!is_admin())
+        return $query;
+
+    global $pagenow, $post_type;
+
+    if ($pagenow == 'edit.php' && $post_type == 'page') {
+
+        $csv_storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
+
+        $query->query_vars['post__not_in'] = array($csv_storage_page->ID);
+    }
+}
+
+add_filter('parse_query', 'oplb_gradebook_exclude_pages_from_admin');
+
+/**
+ * Custom pages: remove link from admin bar
+ * @global type $post
+ * @global type $wp_admin_bar
+ */
+function oplb_gradebook_remove_admin_bar_edit_link() {
+    global $post;
+
+    $exclusions = array(OPLB_GRADEBOOK_STORAGE_SLUG);
+
+    if ($post && in_array($post->post_name, $exclusions)) {
+        global $wp_admin_bar;
+        $wp_admin_bar->remove_menu('edit');
+    }
+}
+
+add_action('wp_before_admin_bar_render', 'oplb_gradebook_remove_admin_bar_edit_link');

@@ -230,9 +230,15 @@ class oplb_gradebook_api{
 		}
 	}
 	
-	public function oplb_gradebook_get_user($id,$gbid){
+	public function oplb_gradebook_get_user($id,$gbid,$bool = false){
 	  	global $wpdb;
 	  	$user = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $id AND gbid = $gbid", ARRAY_A);
+                
+                //added boolean check in case of legacy usage of this function
+                if($bool && !$user || empty($user)){
+                    return false;
+                }
+                
 	  	$user_data = get_user_by('id',$id);
 	  	$user_data -> ID;
 		$user['id'] = intval($user['id']);
@@ -278,7 +284,7 @@ class oplb_gradebook_api{
 						$cell['amid'] = intval($cell['amid']);		
 						$cell['uid'] = intval($cell['uid']);				
 						$cell['assign_order'] = intval($cell['assign_order']);			
-						$cell['assign_points_earned'] = intval($cell['assign_points_earned']);		
+						$cell['assign_points_earned'] = floatval($cell['assign_points_earned']);		
 						$cell['gbid'] = intval($cell['gbid']);	
 						$cell['id'] = intval($cell['id']);
 					} 			
@@ -314,7 +320,7 @@ class oplb_gradebook_api{
 							$cell['amid'] = intval($cell['amid']);		
 							$cell['uid'] = intval($cell['uid']);				
 							$cell['assign_order'] = intval($cell['assign_order']);			
-							$cell['assign_points_earned'] = intval($cell['assign_points_earned']);		
+							$cell['assign_points_earned'] = floatval($cell['assign_points_earned']);		
 							$cell['gbid'] = intval($cell['gbid']);	
 							$cell['id'] = intval($cell['id']);
 						} 				
