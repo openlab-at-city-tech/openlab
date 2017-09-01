@@ -162,6 +162,9 @@ class oplb_gradebook_api{
 					$cell['gbid'] = intval($cell['gbid']);	
 					$cell['id'] = intval($cell['id']);
 				}  	
+                                
+                                
+                                
 				return array( "assignments" => $assignments,  
 					"cells" => $cells,   			
 					"students"=>$students,
