@@ -1,3 +1,5 @@
+@import 'css/vendor.css';
+
 #loading-students-container {
     display:absolute;
 }
@@ -194,7 +196,7 @@ td {
             }
         }
         .dropdown-menu{
-            position: fixed;
+            position: absolute;
             top: auto;
             left: auto;
             margin-top: 35px;
@@ -377,8 +379,7 @@ span.twitter-typeahead {
     }
     .scrollable{
         margin-left: 36%;
-        overflow: scroll; 
-        overflow-y: hidden; 
+        overflow: visible !important;
         th, td{ 
             min-width: 180px;
         }

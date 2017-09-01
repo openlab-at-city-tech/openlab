@@ -1,3 +1,4 @@
+@import 'css/vendor.css';
 #loading-students-container {
   display: absolute;
 }
@@ -158,7 +159,7 @@ td {
   top: 50%;
 }
 .students-header .btn-group .dropdown-menu {
-  position: fixed;
+  position: absolute;
   top: auto;
   left: auto;
   margin-top: 35px;
@@ -319,8 +320,7 @@ span.twitter-typeahead {
 }
 .table-wrapper .scrollable {
   margin-left: 36%;
-  overflow: scroll;
-  overflow-y: hidden;
+  overflow: visible !important;
 }
 .table-wrapper .scrollable th,
 .table-wrapper .scrollable td {

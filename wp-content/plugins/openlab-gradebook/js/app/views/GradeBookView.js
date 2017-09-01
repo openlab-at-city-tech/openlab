@@ -171,7 +171,26 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 postLoadActions: function () {
 
-                    $('[data-toggle="tooltip"]').tooltip()
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $('.table-wrapper .scrollable')
+                            .bind('jsp-initialised', this.calculateScrollBarPosition)
+                            .jScrollPane();
+
+                },
+                calculateScrollBarPosition: function (event, isScrollable) {
+
+                    var targetTable = $('#an-gradebook-container');
+                    console.log('targetTable, targetTable height', targetTable, targetTable.height());
+                    if (targetTable.height() < 500) {
+
+                        var targetTable_padding = 500 - targetTable.height();
+                        targetTable.closest('.jspContainer').css({
+                            'padding-bottom': targetTable.height() + targetTable_padding + 'px'
+                        });
+                        targetTable.closest('.jspContainer').find('.jspHorizontalBar').css({
+                            'bottom': (targetTable_padding - 18) + 'px'
+                        });
+                    }
 
                 },
                 addAssignment: function (ev) {
@@ -261,7 +280,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 getTotalWeight: function () {
                     var self = this;
-                    
+
                     console.log('self.gradebook.assignments', self.gradebook.assignments);
 
                     var totalWeight = 0;

@@ -10,7 +10,8 @@ oplbgb_require_config = {
         'underscore': oplbGradebook.depLocations.underscore,
         'bootstrap': 'lib/bootstrap/js/bootstrap.min',
         'chart': 'lib/chart/chart.min',
-        'bootstrap3-typeahead': 'lib/bootstrap3-typeahead/bootstrap3-typeahead.min'
+        'bootstrap3-typeahead': 'lib/bootstrap3-typeahead/bootstrap3-typeahead.min',
+        'jscrollpane': 'lib/jscrollpane/jscrollpane.dist'
     },
     shim: {
         'bootstrap': {
