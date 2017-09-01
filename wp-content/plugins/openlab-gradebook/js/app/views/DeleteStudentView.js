@@ -47,7 +47,6 @@ define(['jquery', 'backbone', 'underscore'],
                     var studentInformation = $(ev.currentTarget).serializeObject();
                     var x = studentInformation.id;
                     var todel = this.model;
-                    todel.set({delete_options: studentInformation.delete_options});
                     var self = this;
                     todel.destroy({success: function (model, response) {
                             self.$el.modal('hide');
