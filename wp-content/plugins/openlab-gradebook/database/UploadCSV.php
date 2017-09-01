@@ -186,11 +186,6 @@ class gradebook_upload_csv_API {
 
             $weights = array_slice($process_result['weights'], 3);
 
-            //normalize so we can handle decimals and percents
-            $weight_normalize = 0;
-            foreach ($weights as $weight) {
-                $weight_normalize = $weight_normalize + floatval($weight);
-            }
         }
 
         foreach ($assignments as $thisdex => $assignment) {
@@ -217,11 +212,11 @@ class gradebook_upload_csv_API {
             }
             $assignOrder = max($assignOrders) + 1;
 
-            $assign_weight = 1;
+            $assign_weight = 0;
 
             if (isset($weights[$thisdex])) {
 
-                $assign_weight = floatval($weights[$thisdex]) / $weight_normalize;
+                $assign_weight = floatval($weights[$thisdex]);
             }
 
             $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
@@ -242,7 +237,7 @@ class gradebook_upload_csv_API {
                 '%s',
                 '%s',
                 '%d',
-                '%d',
+                '%f',
                     )
             );
 

@@ -40,6 +40,12 @@
                         </select>					
                     </div>	 						
                 </div>
+                <div class="form-group">					
+                    <label for="assign_category" class="col-sm-4 control-label">Weight (no % necessary):</label>
+                    <div class="col-sm-6">				        
+                        <input type="number" id="assign_weight" class="form-control" name="assign_weight" value="<%= assignment ? assignment.get('assign_weight') : '' %>"/>
+                    </div>
+                </div>	
                 <div class="form-group grade-type">
                     <div class="col-sm-4">&nbsp;</div>
                     <div class="col-sm-6">

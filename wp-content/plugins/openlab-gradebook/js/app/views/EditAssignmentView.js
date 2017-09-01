@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentView', 'jquery-ui'],
-        function ($, Backbone, _, Assignment, StudentView) {
+define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentView', 'views/GradeBookView', 'jquery-ui'],
+        function ($, Backbone, _, Assignment, StudentView, GradeBookView) {
             var EditAssignmentView = Backbone.View.extend({
                 id: 'base-modal',
                 className: 'modal fade',
@@ -67,17 +67,21 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                     var assignmentInformation = $(ev.currentTarget).serializeObject();
                     var x = $(ev.currentTarget).serializeObject().id;
                     var toadd = this.gradebook.assignments.findWhere({id: parseInt(x)});
-                    
+                    console.log('toadd', toadd);
                     if (toadd) {
-                        toadd.save(assignmentInformation, {wait: true});
+                        toadd.save(assignmentInformation, {wait: true, success: function (model, response) {
+                                window.oplbGlobals.total_weight = model.attributes.total_weight;
+                            }});
                     } else {
                         delete(assignmentInformation['id']);
                         var toadds = new Assignment(assignmentInformation);
                         toadds.save(assignmentInformation, {success: function (model, response) {
+                                console.log('model, response', model, response);
                                 self.gradebook.assignments.add(response['assignment']);
                                 _.each(response['cells'], function (cell) {
                                     self.gradebook.cells.add(cell)
                                 });
+                                window.oplbGlobals.total_weight = model.attributes.total_weight;
                             }
                         });
                     }

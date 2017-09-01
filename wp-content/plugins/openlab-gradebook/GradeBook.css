@@ -17,6 +17,12 @@
 h5 {
   font-weight: 600;
 }
+.weight-message p {
+  margin: 0 0 0 10px;
+}
+.weight-message p .text-warning {
+  font-style: italic;
+}
 /* Chart stylings */
 .labeled-chart-container {
   padding-right: 150px;

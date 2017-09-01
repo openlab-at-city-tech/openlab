@@ -35,7 +35,10 @@
             </div>
             <div class="btn-group">
                 <button type="button" id="filter-assignments" class="btn btn-default">Filter</button>  	    		   	
-            </div>    	 		
+            </div>
+            <div class="btn-group weight-message">
+                <p><%= total_weight %></p>
+            </div>
             <hr/>
             <div class="table-wrapper">
                 <div class="pinned hidden-xs">

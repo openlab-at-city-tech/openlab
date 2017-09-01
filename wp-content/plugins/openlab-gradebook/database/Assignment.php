@@ -38,6 +38,7 @@ class gradebook_assignment_API {
                     'assign_category' => $params['assign_category'],
                     'assign_visibility' => $params['assign_visibility_options'],
                     'assign_grade_type' => $params['gradeType'],
+                    'assign_weight' => $params['assign_weight'],
                         ), array(
                     'id' => $params['id']
                         ), array(
@@ -48,6 +49,7 @@ class gradebook_assignment_API {
                     '%s',
                     '%s',
                     '%s',
+                    '%f',
                         ), array(
                     '%d',
                         )
@@ -63,9 +65,21 @@ class gradebook_assignment_API {
                         )
                 );
                 $assignment = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = {$params['id']}", ARRAY_A);
+
+                //get the total weight
+                $weights = $wpdb->get_results("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments", ARRAY_A);
+
+                $total_weight = 0;
+
+                foreach ($weights as $weight) {
+
+                    $total_weight = $total_weight + $weight['assign_weight'];
+                }
+
                 $assignment['id'] = intval($assignment['id']);
                 $assignment['gbid'] = intval($assignment['gbid']);
                 $assignment['assign_order'] = intval($assignment['assign_order']);
+                $assignment['total_weight'] = $total_weight;
                 echo json_encode($assignment);
                 break;
             case 'UPDATE' :

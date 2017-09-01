@@ -37,6 +37,8 @@ define('underscore', [], function () {
     return _;
 });
 
+window.oplbGlobals = window.oplbGlobals || {};
+window.oplbGlobals.total_weight = 0;
 
 require(['jquery', 'router/GradeBookRouter', 'bootstrap'],
         function ($, GradeBookRouter, bootstrap) {

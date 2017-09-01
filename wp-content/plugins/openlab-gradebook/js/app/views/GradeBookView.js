@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame', 'router/GradeBookRouter'],
-        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame, GradeBookRouter) {
+define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame'],
+        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame) {
             var GradebookView = Backbone.View.extend({
                 initialize: function (options) {
                     var self = this;
@@ -58,7 +58,10 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     });
                     var _assign_categories = _.without(_.uniq(_x), "") || null;
                     var template = _.template($('#gradebook-interface-template').html());
-                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.role});
+
+                    var totalWeight = self.getTotalWeight();
+
+                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.role, total_weight: totalWeight});
                     $('#wpbody-content').append(self.$el.html(compiled));
                     $('#filter-assignments-select').val(this.filter_option);
                     switch (this.gradebook.sort_key) {
@@ -251,6 +254,32 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         Backbone.history.loadUrl();
                     }
 
+                },
+                getTotalWeight: function () {
+                    var self = this;
+                    
+                    console.log('self.gradebook.assignments', self.gradebook.assignments);
+
+                    var totalWeight = 0;
+                    _.each(self.gradebook.assignments.models, function (assignment) {
+
+                        totalWeight = totalWeight + parseFloat(assignment.get('assign_weight'));
+
+                    });
+
+                    console.log('totalWeight', totalWeight);
+
+                    var message = 'Total Weight: ' + totalWeight;
+
+                    if (totalWeight > 100) {
+                        message += ' <span class="text-warning">Total weight is over 100%</span>';
+                    }
+
+                    return message;
+
+                },
+                updateTotalWeight: function () {
+                    console.log('total_weight on updateTotalWeight', window.oplbGlobals.total_weight);
                 }
             });
             return GradebookView;
