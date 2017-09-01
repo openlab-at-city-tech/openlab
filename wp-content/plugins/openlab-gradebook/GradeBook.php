@@ -343,3 +343,24 @@ function oplb_gradebook_remove_admin_bar_edit_link() {
 }
 
 add_action('wp_before_admin_bar_render', 'oplb_gradebook_remove_admin_bar_edit_link');
+
+function oplb_gradebook_dynamic_sidebar_before($index) {
+
+    $target_indices = array('sidebar-1', 'Primary Sidebar', 'sidebar_home', 'sidebar_posts', 'sidebar_pages', 'primary-widget-area');
+
+    if (in_array($index, $target_indices)) {
+
+        //@todo: move this to separate template file
+        if (is_user_logged_in()) {
+
+            $url = admin_url('admin.php?page=oplb_gradebook#courses');
+            ?>
+            <aside id="oplbGradebookLink" class="widget widget_categories">
+                <h3 class="widget-title"><a href="<?php echo $url; ?>">OpenLab Gradebook</a></h3>
+            </aside>
+            <?php
+        }
+    }
+}
+
+add_action('dynamic_sidebar_before', 'oplb_gradebook_dynamic_sidebar_before');
