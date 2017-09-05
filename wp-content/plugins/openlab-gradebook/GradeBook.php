@@ -53,7 +53,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     wp_enqueue_media();
     wp_enqueue_script('jquery-ui-datepicker');
 
-    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.0.6', true);
+    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.0.7', true);
     wp_enqueue_script('init_gradebookjs');
     wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
         'ajaxURL' => admin_url('admin-ajax.php'),
