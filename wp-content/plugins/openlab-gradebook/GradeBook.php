@@ -227,15 +227,18 @@ function oplb_gradebook_wp_handle_upload_prefilter($file_info) {
     if (isset($_REQUEST['post_id']) && intval($_REQUEST['post_id']) === intval($storage_page->ID)) {
 
         if ($file_info['type'] !== 'text/csv') {
-            $file['error'] = 'This file does not appear to be a CSV.';
-            return $file;
+            $file_info['error'] = 'This file does not appear to be a CSV.';
+            return $file_info;
+        }
+
+        if (!isset($_REQUEST['name']) || !isset($_REQUEST['gbid'])) {
+            $file_info['error'] - 'There was a problem with the upload; please try again.';
         }
 
         $name = 'temp.csv';
 
-        if (isset($_REQUEST['name'])) {
-            $name = sanitize_file_name($_REQUEST['name']);
-        }
+        $name = sanitize_file_name($_REQUEST['name']);
+        $file_info['gbid'] = intval(sanitize_text_field($_REQUEST['gbid']));
 
         $oplb_upload_csv = new gradebook_upload_csv_API();
         $result = $oplb_upload_csv->upload_csv($file_info, $name);
@@ -364,3 +367,22 @@ function oplb_gradebook_dynamic_sidebar_before($index) {
 }
 
 add_action('dynamic_sidebar_before', 'oplb_gradebook_dynamic_sidebar_before');
+
+function oplb_gradebook_plupload_default_params($params) {
+    $screen = new stdClass();
+
+    if (function_exists('get_current_screen')) {
+        $screen = get_current_screen();
+    }
+
+    if (is_object($screen) && isset($screen->base)) {
+
+        if ($screen->base === "toplevel_page_oplb_gradebook" || $screen->base === 'gradebook_page_oplb_gradebook_settings') {
+            $params['oplb_gb_upload_type'] = 'oplb_gb_csv';
+        }
+    }
+
+    return $params;
+}
+
+add_filter('plupload_default_params', 'oplb_gradebook_plupload_default_params');

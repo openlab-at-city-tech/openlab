@@ -10,6 +10,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.options = options;
                     this.filter_option = "-1";
                     this.course = options.course;
+                    this.renderControl = 0;
                     this.gradebook = options.gradebook;
                     this.listenTo(self.gradebook.students, 'add remove', self.render);
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
@@ -56,6 +57,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 render: function () {
                     var self = this;
                     this.clearSubViews();
+                    this.renderControl = 0;
                     var course = this.course;
                     var _x = _.map(self.gradebook.assignments.models, function (model) {
                         return model.get('assign_category');
@@ -203,6 +205,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 uploadCSV: function (e) {
                     e.preventDefault();
 
+                    if (typeof _wpPluploadSettings !== 'undefined') {
+                        _wpPluploadSettings.defaults.multipart_params.gbid = this.course.get('id');
+                        console.log('_wpPluploadSettings', _wpPluploadSettings);
+                    }
+
                     this.buildFrame().open();
                     console.log('this.buildFrame()', this.buildFrame());
 
@@ -271,10 +278,13 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 mediaUpdate: function (data) {
 
-                    var checkFile = $('.upload-csv-modal').find('.upload-total').text();
-                    console.log('go render', parseInt(checkFile));
-                    if (parseInt(checkFile) === 1) {
-                        Backbone.history.loadUrl();
+                    if (this.renderControl === 0) {
+                        this.renderControl = 1;
+                        var checkFile = $('.upload-csv-modal:visible').find('.upload-details .upload-index').text();
+                        console.log('go render', $('.upload-csv-modal:visible').find('.upload-details .upload-index'), parseInt(checkFile));
+                        if (parseInt(checkFile) === 1) {
+                            Backbone.history.loadUrl();
+                        }
                     }
 
                 },

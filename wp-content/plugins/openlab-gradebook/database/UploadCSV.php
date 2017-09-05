@@ -11,8 +11,9 @@ class gradebook_upload_csv_API {
      * Handle uploading of the CSV
      */
     public function upload_csv($files, $name) {
-        //@todo: $gbid needs to be dynamic
-        $gbid = 1;
+
+        $gbid = $files['gbid'];
+
         $allowed_types = array('text/csv');
         $message = array(
             'response' => 'oplb-gradebook-success',
@@ -185,21 +186,66 @@ class gradebook_upload_csv_API {
         if ($process_result['weights'][2] === 'weight') {
 
             $weights = array_slice($process_result['weights'], 3);
-
         }
 
         foreach ($assignments as $thisdex => $assignment) {
+
+            //if there is student data, we'll try and determine the assignment's type
+            //if not, we'll default to numeric (the standard default)
+            $type = 'numeric';
+            $default_type = false;
+            if (!isset($process_result['data']) || empty($process_result['data'])) {
+                $default_type = true;
+            } else {
+                //use the first row of student data to determine the type
+                $type = $this->checkAssignmentType($assignment, $process_result['data']);
+            }
 
             //check for existing assignments first
             $existing_assignment = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '{$assignment}'");
 
             if ($existing_assignment && !empty($existing_assignment)) {
+                $to_update = array();
+                $to_update_type = array();
 
-                //store assignment info for later use
+                //update info that needs to be updated store assignment info for later use
                 $assignments_stored[$thisdex]['name'] = $assignment;
                 $assignments_stored[$thisdex]['amid'] = $existing_assignment[0]->id;
                 $assignments_stored[$thisdex]['assign_order'] = $existing_assignment[0]->assign_order;
+
+
                 $assignments_stored[$thisdex]['assign_weight'] = $existing_assignment[0]->assign_weight;
+                //for weights, we will update the weight as present on the spreadsheet
+                if ($this->isStringNotEmpty(trim($weights[$thisdex]))) {
+                    $to_update['assign_weight'] = floatval($weights[$thisdex]);
+                    array_push($to_update_type, '%f');
+                    $assignments_stored[$thisdex]['assign_weight'] = floatval($weights[$thisdex]);
+                }
+
+                $assignments_stored[$thisdex]['assign_grade_type'] = $existing_assignment[0]->assign_grade_type;
+                //for grade type - if the type is already set in the database, we won't do anyting
+                //if it's empty, we'll use the type determined from the data in the CSV
+                if (!$this->isStringNotEmpty($existing_assignment[0]->assign_grade_type)) {
+                    $to_update['assign_grade_type'] = $type;
+                    array_push($to_update_type, '%s');
+                    $assignments_stored[$thisdex]['assign_grade_type'] = $type;
+                }
+
+                //if the visiblity is empty, default to 'Student'
+                if (!$this->isStringNotEmpty($existing_assignment[0]->assign_visibility)) {
+                    $to_update['assign_visibility'] = 'Student';
+                    array_push($to_update_type, '%s');
+                }
+
+                if (!empty($to_update)) {
+
+                    $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", $to_update, array(
+                        'id' => $existing_assignment[0]->id,
+                            ), $to_update_type, array(
+                        '%d',
+                            )
+                    );
+                }
 
                 continue;
             }
@@ -342,7 +388,7 @@ class gradebook_upload_csv_API {
 
             foreach ($assignments as $assigndex => $assignment) {
 
-                $this_grade = $grades[$assignment['name']];
+                $this_grade = $this->processGrade($grades[$assignment['name']]);
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'assign_points_earned' => $this_grade
@@ -374,7 +420,7 @@ class gradebook_upload_csv_API {
 
             foreach ($assignments as $assigndex => $assignment) {
 
-                $this_grade = $grades[$assignment['name']];
+                $this_grade = $this->processGrade($grades[$assignment['name']]);
 
                 foreach ($current_assignments as $currentdex => $current_assignment) {
 
@@ -432,6 +478,61 @@ class gradebook_upload_csv_API {
         return $result;
     }
 
+    public function processGrade($grade) {
+
+        $possible_letter_grades = $this->getPossibleLetterGrades();
+
+        if (in_array(strtolower(trim($grade)), $possible_letter_grades)) {
+            $grade = $this->changeLetterGradeToNumeric($grade);
+        } else if (strtolower(trim($grade)) === 'x') {
+            $grade = 100;
+        } else if (!$this->isStringNotEmpty(trim($grade))) {
+            $grade = 0;
+        }
+
+        return $grade;
+    }
+
+    private function checkAssignmentType($index, $data) {
+        $type = 'numeric';
+
+        foreach ($data as $student) {
+
+            if (!isset($student[$index]) || !$this->isStringNotEmpty($student[$index])) {
+                continue;
+            }
+
+            $possible_letter_grades = $this->getPossibleLetterGrades();
+
+            $to_test = $student[$index];
+
+            if (in_array(strtolower(trim($to_test)), $possible_letter_grades)) {
+                $type = 'letter';
+                break;
+            } else if (strtolower(trim($to_test)) === 'x') {
+                $type = 'checkmark';
+                break;
+            }
+        }
+
+        return $type;
+    }
+
+    public function changeLetterGradeToNumeric($grade) {
+        $grade_out = 0;
+        $letter_grades = $this->getLetterGrades();
+
+        foreach ($letter_grades as $letter_grade) {
+
+            if (strtoupper(trim($grade)) === $letter_grade['label']) {
+                $grade_out = $letter_grade['value'];
+                return $grade_out;
+            }
+        }
+
+        return $grade_out;
+    }
+
     /**
      * Return count of regex matches for common type of upload attack eval(base64($malicious_payload))
      * @param  string $str [description]
@@ -444,6 +545,118 @@ class gradebook_upload_csv_API {
             return 0;
 
         return preg_match_all('/<\?php|eval\s*\(|base64_decode|gzinflate|gzuncompress/imsU', $str, $matches);
+    }
+
+    private function isStringNotEmpty($string, $return_string = false) {
+
+        if ($string && !ctype_space($string) && $string !== '') {
+            if ($return_string) {
+                $return_value = $string;
+            } else {
+                $return_value = true;
+            }
+        } else {
+            if ($return_string) {
+                $return_value = '';
+            } else {
+                $return_value = NULL;
+            }
+        }
+
+        return $return_value;
+    }
+
+    private function getPossibleLetterGrades() {
+
+        $possible_letter_grades = array('a+', 'a', 'a-', 'b+', 'b', 'b-', 'c+', 'c', 'c-', 'd+', 'd', 'd-', 'f', 'inc');
+
+        return $possible_letter_grades;
+    }
+
+    public function getLetterGrades() {
+
+        $letter_grades = array(
+            array(
+                label => 'A+',
+                value => 100,
+                range_low => 100,
+                range_high => 101
+            ),
+            array(
+                label => 'A',
+                value => 96,
+                range_low => 93,
+                range_high => 100
+            ),
+            array(
+                label => 'A-',
+                value => 91.5,
+                range_low => 90,
+                range_high => 93
+            ),
+            array(
+                label => 'B+',
+                value => 88.5,
+                range_low => 87,
+                range_high => 90
+            ),
+            array(
+                label => 'B',
+                value => 85,
+                range_low => 83,
+                range_high => 87
+            ),
+            array(
+                label => 'B-',
+                value => 81.5,
+                range_low => 80,
+                range_high => 83
+            ),
+            array(
+                label => 'C+',
+                value => 78.5,
+                range_low => 77,
+                range_high => 80
+            ),
+            array(
+                label => 'C',
+                value => 75,
+                range_low => 73,
+                range_high => 77
+            ),
+            array(
+                label => 'C-',
+                value => 71.5,
+                range_low => 70,
+                range_high => 73
+            ),
+            array(
+                label => 'D+',
+                value => 68.5,
+                range_low => 67,
+                range_high => 70
+            ),
+            array(
+                label => 'D',
+                value => 65,
+                range_low => 63,
+                range_high => 67
+            ),
+            array(
+                label => 'D-',
+                value => 61.5,
+                range_low => 60,
+                range_high => 63
+            ),
+            array(
+                label => 'F',
+                value => 50,
+                range_low => 1,
+                range_high => 60
+            )
+        );
+
+        return $letter_grades;
     }
 
 }
