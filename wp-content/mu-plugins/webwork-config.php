@@ -1,5 +1,9 @@
 <?php
 
+add_filter( 'webwork_server_site_id', function() {
+	return get_current_blog_id();
+} );
+
 add_filter( 'webwork_client_site_base', function() {
         $base = get_blog_option( 1, 'home' );
         if ( 'CT staging' === ENV_TYPE ) {
