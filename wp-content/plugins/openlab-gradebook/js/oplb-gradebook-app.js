@@ -9,7 +9,7 @@ oplbgb_require_config = {
         'backbone': oplbGradebook.depLocations.backbone,
         'underscore': oplbGradebook.depLocations.underscore,
         'bootstrap': 'lib/bootstrap/js/bootstrap.min',
-        'chart': 'lib/chart/chart.min',
+        'chart': 'lib/chart/Chart.min',
         'bootstrap3-typeahead': 'lib/bootstrap3-typeahead/bootstrap3-typeahead.min',
         'jscrollpane': 'lib/jscrollpane/jscrollpane.dist'
     },

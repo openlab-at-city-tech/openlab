@@ -24,8 +24,11 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                         dataType: 'json',
                         success: function (data) {
                             var ctx = $('#myChart').get(0).getContext("2d");
-                            var myNewChart = new Chart(ctx).Pie(data);
-                            $('.labeled-chart-container').append(myNewChart.generateLegend());
+                            console.log('data for pie', data);
+                            var myNewChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: data,
+                            });
                         }
                     });
                 },

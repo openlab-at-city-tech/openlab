@@ -9,6 +9,18 @@ module.exports = function (grunt) {
     }
 
     grunt.initConfig({
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'node_modules/chart.js/dist/',
+                        src: ['**'],
+                        dest: 'js/lib/chart/'
+                    }
+                ]
+            }
+        },
         concat: {
             jscrollpane: {
                 filter: checkFilePath,
@@ -44,7 +56,7 @@ module.exports = function (grunt) {
                         'views': 'app/views',
                         'router': 'app/router',
                         'bootstrap': 'lib/bootstrap/js/bootstrap.min',
-                        'chart': 'lib/chart/chart.min',
+                        'chart': 'lib/chart/Chart.min',
                         'bootstrap3-typeahead': 'lib/bootstrap3-typeahead/bootstrap3-typeahead.min',
                         'jscrollpane': 'lib/jscrollpane/jscrollpane.dist'
                     },
@@ -71,8 +83,9 @@ module.exports = function (grunt) {
         },
     });
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.registerTask('default', ['concat', 'requirejs', 'less']);
+    grunt.registerTask('default', ['copy', 'concat', 'requirejs', 'less']);
 };

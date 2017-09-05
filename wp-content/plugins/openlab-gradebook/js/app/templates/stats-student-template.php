@@ -6,7 +6,7 @@
         </div>
         <div class="modal-body" style="overflow-x: scroll;">
             <div class="labeled-chart-container">
-                <canvas id = "myChart"></canvas>
+                <canvas id = "myChart" height="100%" width="100%"></canvas>
             </div>
         </div>
         <div class="modal-footer">

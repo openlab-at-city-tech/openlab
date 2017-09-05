@@ -23,9 +23,21 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                         },
                         dataType: 'json',
                         success: function (data) {
+                            console.log('data', data);
                             var ctx = $('#myChart').get(0).getContext("2d");
-                            var myNewChart = new Chart(ctx).Line(data);
-                            $('.labeled-chart-container').append(myNewChart.generateLegend());
+                            var options = {
+                                legend: {
+                                    display: true,
+                                    labels: {
+                                        fontColor: 'rgb(0, 0, 0)'
+                                    }
+                                }
+                            };
+                            var myNewChart = new Chart(ctx, {
+                                type: 'line',
+                                data: data,
+                                options: options,
+                            });
                         }
                     });
                 },
