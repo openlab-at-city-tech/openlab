@@ -7,7 +7,8 @@ if (window.OpenLab === undefined) {
     var OpenLab = {};
 }
 
-var resizeTimer;
+var truncationResizeTimer = {};
+
 OpenLab.truncation = (function ($) {
 
     return{
@@ -15,7 +16,9 @@ OpenLab.truncation = (function ($) {
 
             if ($('.truncate-on-the-fly').length) {
                 setTimeout(function () {
+
                     OpenLab.truncation.truncateOnTheFly(true);
+
                 }, 600);
             }
 
@@ -35,10 +38,6 @@ OpenLab.truncation = (function ($) {
             $('.truncate-on-the-fly').each(function () {
 
                 var thisElem = $(this);
-
-                /*thisElem.animate({
-                    opacity: '0'
-                });*/
 
                 if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
@@ -185,10 +184,7 @@ OpenLab.truncation = (function ($) {
                     OpenLab.truncation.truncateMainAction(thisElem, truncationValue, thisOmission);
                 }
 
-                thisElem.animate({
-                    opacity: '1.0'
-                });
-
+                OpenLab.truncation.truncateReveal(thisElem);
             });
         },
         truncateMainAction: function (thisElem, truncationValue, thisOmission) {
@@ -249,6 +245,8 @@ OpenLab.truncation = (function ($) {
                     .animate({
                         'opacity': 1
                     }, 700);
+
+            $(document).trigger('truncate-obfuscate-removed', thisElem);
         }
     }
 })(jQuery, OpenLab);
@@ -261,15 +259,23 @@ OpenLab.truncation = (function ($) {
     });
 
     $(window).on('resize', function (e) {
-
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-
+        
+        clearTimeout(truncationResizeTimer);
+        truncationResizeTimer = setTimeout(function () {
+            
             if ($('.truncate-on-the-fly').length) {
-                OpenLab.truncation.truncateOnTheFly(true);
+
+                $('.trucate-obfuscate').css('opacity', 0);
+                OpenLab.truncation.truncateOnTheFly(false);
             }
 
         }, 250);
+
+    });
+
+    $(document).on('truncate-obfuscate-removed', function (e, thisElem) {
+
+        $(thisElem).closest('.menu-loading').removeClass('menu-loading');
 
     });
 
