@@ -3342,7 +3342,7 @@ if (window.OpenLab === undefined) {
     var OpenLab = {};
 }
 
-var resizeTimer;
+var searchResizeTimer = {};
 
 OpenLab.search = (function ($) {
     return{
@@ -3439,8 +3439,8 @@ OpenLab.search = (function ($) {
 
     $(window).on('resize', function (e) {
 
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
+        clearTimeout(searchResizeTimer);
+        searchResizeTimer = setTimeout(function () {
 
             if ($(this).width() != legacyWidth) {
                 legacyWidth = $(this).width();
@@ -3462,7 +3462,8 @@ if (window.OpenLab === undefined) {
     var OpenLab = {};
 }
 
-var resizeTimer;
+var truncationResizeTimer = {};
+
 OpenLab.truncation = (function ($) {
 
     return{
@@ -3470,19 +3471,10 @@ OpenLab.truncation = (function ($) {
 
             if ($('.truncate-on-the-fly').length) {
                 setTimeout(function () {
+
                     OpenLab.truncation.truncateOnTheFly(true);
+
                 }, 600);
-                setTimeout(function () {
-                    $('#wpadminbar').animate({
-                        'opacity': '1.0'
-                    });
-                }, 800);
-            } else {
-                setTimeout(function () {
-                    $('#wpadminbar').animate({
-                        'opacity': '1.0'
-                    });
-                }, 250);
             }
 
         },
@@ -3499,10 +3491,6 @@ OpenLab.truncation = (function ($) {
             $('.truncate-on-the-fly').each(function () {
 
                 var thisElem = $(this);
-
-                thisElem.animate({
-                    opacity: '0'
-                });
 
                 if (!loadDelay && thisElem.hasClass('load-delay')) {
                     return true;
@@ -3649,10 +3637,7 @@ OpenLab.truncation = (function ($) {
                     OpenLab.truncation.truncateMainAction(thisElem, truncationValue, thisOmission);
                 }
 
-                thisElem.animate({
-                    opacity: '1.0'
-                });
-
+                OpenLab.truncation.truncateReveal(thisElem);
             });
         },
         truncateMainAction: function (thisElem, truncationValue, thisOmission) {
@@ -3713,6 +3698,8 @@ OpenLab.truncation = (function ($) {
                     .animate({
                         'opacity': 1
                     }, 700);
+
+            $(document).trigger('truncate-obfuscate-removed', thisElem);
         }
     }
 })(jQuery, OpenLab);
@@ -3725,15 +3712,23 @@ OpenLab.truncation = (function ($) {
     });
 
     $(window).on('resize', function (e) {
-
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-
+        
+        clearTimeout(truncationResizeTimer);
+        truncationResizeTimer = setTimeout(function () {
+            
             if ($('.truncate-on-the-fly').length) {
-                OpenLab.truncation.truncateOnTheFly(true);
+
+                $('.trucate-obfuscate').css('opacity', 0);
+                OpenLab.truncation.truncateOnTheFly(false);
             }
 
         }, 250);
+
+    });
+
+    $(document).on('truncate-obfuscate-removed', function (e, thisElem) {
+
+        $(thisElem).closest('.menu-loading').removeClass('menu-loading');
 
     });
 
@@ -3745,7 +3740,7 @@ if (window.OpenLab === undefined) {
     var OpenLab = {};
 }
 
-var resizeTimer;
+var navResizeTimer = {};
 
 OpenLab.nav = (function ($) {
     return{
@@ -4103,14 +4098,55 @@ OpenLab.nav = (function ($) {
         },
         fixHoverOnMobile: function (thisElem) {
             thisElem.trigger('click');
-        }
+        },
+        userNameAdjustments: function (reset) {
+            //this function exists purely to deal with weirdness surrounding overflow-x and overflow-y
+
+            if (typeof reset === 'undefined') {
+                reset = false;
+            }
+
+            var targetElem = $('#wp-admin-bar-blogs-and-admin-centered');
+
+            if (reset) {
+                targetElem.css({
+                    'max-width': 'none',
+                    'overflow': 'hidden',
+                    'float': 'none'
+                });
+
+                return true;
+
+            }
+
+            var targetElem_w = targetElem.outerWidth();
+
+            targetElem.css({
+                'max-width': targetElem_w + 'px',
+                'overflow': 'visible',
+                'float': 'right  '
+            });
+
+            //on mobile remove the dropdown
+            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('xxs')) {
+                targetElem.find('#wp-admin-bar-my-account').removeClass('menupop');
+                targetElem.find('.ab-sub-wrapper').addClass('hidden');
+            } else {
+                targetElem.find('#wp-admin-bar-my-account').addClass('menupop');
+                targetElem.find('.ab-sub-wrapper').removeClass('hidden');
+            }
+
+        },
+        isBreakpoint: function (alias) {
+            return $('.device-' + alias).is(':visible');
+        },
     }
 })(jQuery, OpenLab);
 
 (function ($) {
-    
+
     var windowWidth = $(window).width();
-    
+
     $(document).ready(function () {
 
         OpenLab.nav.init();
@@ -4119,8 +4155,10 @@ OpenLab.nav = (function ($) {
 
     $(window).on('resize', function (e) {
 
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
+        OpenLab.nav.userNameAdjustments(true);
+
+        clearTimeout(navResizeTimer);
+        navResizeTimer = setTimeout(function () {
 
             //checking to see if this is truly a resize event
             if ($(window).width() != windowWidth) {
@@ -4133,6 +4171,16 @@ OpenLab.nav = (function ($) {
             }
 
         }, 250);
+
+    });
+
+    $(document).on('truncate-obfuscate-removed', function (e, thisElem) {
+
+        if ($(thisElem).closest('.ab-top-menu').attr('id') === 'wp-admin-bar-blogs-and-admin-centered') {
+            setTimeout(function () {
+                OpenLab.nav.userNameAdjustments();
+            }, 50);
+        }
 
     });
 

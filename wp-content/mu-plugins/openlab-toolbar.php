@@ -85,9 +85,6 @@ class OpenLab_Admin_Bar {
                     add_action('wp_head',array($this,'groups_sites_fix_for_mobile'));
                 }
 
-                //for top padding in admin
-                add_action('admin_footer',array($this,'admin_bar_padding_in_admin'));
-
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
 
@@ -145,6 +142,7 @@ class OpenLab_Admin_Bar {
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
+                        
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
 
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
@@ -213,7 +211,7 @@ HTML;
 			'href'   => bp_get_root_domain(),
 			'meta'	 => array(
 				'tabindex' => 90,
-                                'class' => 'admin-bar-menu hidden-xs',
+                                'class' => 'admin-bar-menu hidden-xs', //add in truncation obfuscation (hides truncation processing on page load)
 			)
  		) );
                 $this->openlab_menu_items('openlab');
@@ -308,10 +306,11 @@ HTML;
          * @param type $wp_admin_bar
          */
         function add_middle_group_for_blogs_and_admin($wp_admin_bar) {
+            
             $wp_admin_bar->add_group(array(
                 'id' => 'blogs-and-admin-centered',
                 'meta' => array(
-                    'class' => 'ab-blogs-and-admin-centered',
+                    'class' => 'ab-blogs-and-admin-centered hidden-xxs',
                 ),
             ));
         }
@@ -445,7 +444,9 @@ HTML;
 		$wp_admin_bar->add_node( array(
 			'id'    => 'my-account',
 			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
-			'meta'	=> array()
+			'meta'  => array(
+                            'class' => 'user-display-name truncation-obfuscation', //add in truncation obfuscation (hides truncation processing on page load)
+                        ),
 		) );
 	}
 
@@ -935,7 +936,7 @@ HTML;
                     'title' => $display_string,
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
-                        'class' => 'admin-bar-menu hidden-xs',
+                        'class' => 'admin-bar-menu hidden-xs truncate-obfuscate menu-loading',
                         'tabindex' => 0,
                     ),
             ) );
@@ -1249,8 +1250,11 @@ HTML;
                 
                 if(get_current_blog_id() !== 1 || is_admin()){
                     $parent = 'blogs-and-admin-centered';
-                    $class = '';
+                    $class = 'user-display-name';
                 }
+                
+                //add in truncation obfuscation (hides truncation processing on page load)
+                $class = "$class truncate-obfuscate menu-loading";
 
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
@@ -1399,7 +1403,7 @@ HTML;
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
             wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.9' );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.4' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.5' );
         }
 
         function adminbar_special_body_class($classes){
@@ -1439,31 +1443,6 @@ HTML;
 
             <?php
         }
-
-        function admin_bar_padding_in_admin() {
-        ?>
-
-                    <style type="text/css" media="screen">
-                            html.wp-toolbar {
-                                padding-top: 0;
-                            }
-                            html.wp-toolbar #wpcontent,
-                            html.wp-toolbar #adminmenuwrap{
-                                    padding-top: 80px;
-                                }
-                                @media (max-width: 767px){
-                                            html.wp-toolbar #wpcontent,
-                                            html.wp-toolbar #adminmenuwrap{
-                                                padding-top: 120px;
-                                            }
-                                            html.wp-toolbar #wpbody{
-                                                padding-top: 0;
-                                            }
-                                        }
-                    </style>
-
-        <?php
-    }
 
     function groups_sites_fix_for_mobile(){
         ?>
@@ -1519,7 +1498,7 @@ function openlab_wrap_adminbar_top(){
 
         $admin_class = (is_admin() ? ' admin-area' : '');
     ?>
-        <div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
+        <div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
     <?php else : ?>
         <div class="oplb-bs"><div class="oplb-bs">
     <?php endif;
