@@ -1,0 +1,11 @@
+
+#message.gwp-message.error { display: none; }
+.wrap #message.gwp-message.error { display: block; }
+.wrap #message.gwp-message.error + #message.gwp-message.error { 
+    border-top-style: dotted;
+    margin-top: -16px;
+}
+
+.gwp-plugin-notice { }
+	.gwp-plugin-notice ul { margin: 0; }
+	.gwp-plugin-notice li:last-child { margin: 0; }
