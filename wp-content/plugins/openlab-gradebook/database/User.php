@@ -51,6 +51,13 @@ class OPLB_USER {
                 $id = null;
                 $gbid = $params['gbid'];
                 $user_login = $params['id-exists'];
+                
+                //@todo: create client-side response for error messages
+                if (intval($user_login === 0)) {
+                    echo 'No user submitted';
+                    die();
+                }
+
                 global $oplb_gradebook_api;
                 $results = $oplb_gradebook_api->oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login);
                 echo json_encode($results);

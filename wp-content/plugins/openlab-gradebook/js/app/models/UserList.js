@@ -5,6 +5,10 @@ define(['backbone', 'models/User'], function (Backbone, User) {
         sort_direction: 'asc',
         sort_key: 'last_name',
         comparator: function (model1, model2) {
+            
+            console.log('model1', model1);
+            console.log('model2', model2);
+            
             var _str1 = model1.get(this.sort_key);
             var _str2 = model2.get(this.sort_key);
             if (this.sort_direction === 'asc') {
@@ -14,7 +18,7 @@ define(['backbone', 'models/User'], function (Backbone, User) {
             }
         },
         url: function () {
-            return ajaxurl + '?action=oplb_user_list&search=' + this.search;
+            return ajaxurl + '?action=oplb_user_list';
         }
     });
     return UserCourseList;

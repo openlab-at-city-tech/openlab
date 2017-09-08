@@ -5,6 +5,7 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 className: 'modal fade',
                 events: {
                     'hidden.bs.modal': 'editCancel',
+                    'shown.bs.modal': 'populateStudentDropdown',
                     'keyup': 'keyPressHandler',
                     'click #edit-student-save': 'submitForm',
                     'submit #edit-student-form': 'editSave',
@@ -15,15 +16,14 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                     this.gradebook = options.gradebook;
                     this.minLength = 2;
                     this.student = this.model || null;
-                    if (!this.student) {
-                        this.userList = new UserList();
-                    }
+                    this.userList = new UserList();
                     $('body').append(this.render().el);
                     return this;
                 },
                 render: function () {
                     var self = this;
                     var template = _.template($('#edit-student-template').html());
+                    console.log('this.userList on render', this.userList);
                     var compiled = template({student: this.student, course: this.course});
                     self.$el.html(compiled);
                     this.$el.modal('show');
@@ -88,6 +88,64 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                         });
                     }
                     return false;
+                },
+                populateStudentDropdown: function () {
+                    var self = this;
+
+                    this.userList.fetch({success: function (model, response, options) {
+
+                            if (typeof response.error !== 'undefined') {
+
+                                var message = 'Problem retrieving student list';
+
+                                switch (response.error) {
+                                    case 'no_bp':
+
+                                        //in the case of no BuddyPress install, just switch to a regular input field
+                                        var new_field = '<input class="form-control" type="text" name="id-exists" id="user_login"/>';
+                                        self.$el.find('#user_login_wrapper').html(new_field);
+
+                                        return false;
+
+                                        break;
+                                    case 'no_site':
+
+                                        message = 'Unable to find site';
+
+                                        break;
+                                    case 'no_students':
+
+                                        message = 'No students have joined this course.';
+
+                                        break;
+                                }
+
+                                var optionOut = '<option value="0">' + message + '</option>';
+                                self.$el.find('#user_login').html(optionOut);
+
+                                return false;
+
+                            }
+
+                            console.log('done');
+
+                            self.$el.find('#user_login').html('');
+
+                            _(self.userList.models).each(function (user) {
+
+                                var name = user.get('user_login');
+
+                                if (user.get('xprofile_first_name') !== '' && user.get('xprofile_last_name') !== '') {
+                                    name = user.get('xprofile_first_name') + ' ' + user.get('xprofile_last_name');
+                                }
+
+                                var optionOut = '<option value="' + user.get('user_login') + '">' + name + '</option>';
+                                self.$el.find('#user_login').append(optionOut);
+
+                            });
+
+                        }});
+
                 }
             });
             return EditStudentView;

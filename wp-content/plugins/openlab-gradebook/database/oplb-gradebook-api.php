@@ -317,7 +317,18 @@ class oplb_gradebook_api {
             );
         } else {
             $user = get_user_by('login', $user_login);
+
             if ($user) {
+
+                //if user already exists, we're done
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
+                $check_for_existing_user = $wpdb->get_results($query);
+
+                if ($check_for_existing_user && !empty($check_for_existing_user)) {
+                    echo 'User already exists';
+                    die();
+                }
+
                 $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array('uid' => $user->ID,
                     'gbid' => $gbid), array('%d', '%d')
                 );
@@ -340,9 +351,25 @@ class oplb_gradebook_api {
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
                 }
+
+                $user_first_name = $user->first_name;
+                $user_last_name = $user->last_name;
+
+                $first_name_retrieve = get_user_meta($user->ID, 'first_name', true);
+                $last_name_retrieve = get_user_meta($user->ID, 'last_name', true);
+
+                //if BP is available, retreive xprofile data
+                if (OPLB_BP_AVAILABLE) {
+                    $bp_first_name = xprofile_get_field_data('First Name', $user->ID);
+                    $bp_last_name = xprofile_get_field_data('Last Name', $user->ID);
+                }
+
+                $user_first_name = ($bp_first_name && !empty($bp_first_name)) ? $bp_first_name : $first_name_retrieve;
+                $user_last_name = ($bp_last_name && !empty($bp_last_name)) ? $bp_last_name : $last_name_retrieve;
+
                 echo json_encode(array('student' => array(
-                        'first_name' => $user->first_name,
-                        'last_name' => $user->last_name,
+                        'first_name' => $user_first_name,
+                        'last_name' => $user_last_name,
                         'user_login' => $user->user_login,
                         'gbid' => intval($gbid),
                         'id' => $user->ID,
