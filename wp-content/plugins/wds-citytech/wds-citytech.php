@@ -2305,3 +2305,16 @@ function openlab_forbidden_group_names( $names ) {
 	return $names;
 }
 add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
+
+function openlab_disallow_tinymce_comment_stylesheet( $settings ) {
+	if ( ! isset( $settings['tinymce'] ) || ! isset( $settings['tinymce']['content_css'] ) ) {
+		return $settings;
+	}
+
+	if ( false !== strpos( $settings['tinymce']['content_css'], 'tinymce-comment-field-editor' ) ) {
+		unset( $settings['tinymce']['content_css'] );
+	}
+
+	return $settings;
+}
+add_filter( 'wp_editor_settings', 'openlab_disallow_tinymce_comment_stylesheet' );
