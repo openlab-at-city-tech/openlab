@@ -15,6 +15,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-htmlclean": "^2.7.12",
     "jscrollpane": "^2.0.22"
   },
   "dependencies": {}

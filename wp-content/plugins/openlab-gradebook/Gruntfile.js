@@ -9,6 +9,19 @@ module.exports = function (grunt) {
     }
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        htmlclean: {
+            options: {
+                unprotect: /(<[^\S\f]*\?[^\S\f]*php\b[\s\S]*)/ig,
+                protect: /(?:#|\/\/)[^\r\n]*|\/\*[\s\S]*?\*\/\n\r\n\r/ig
+            },
+            deploy: {
+                expand: true,
+                cwd: 'components/parts/source/',
+                src: '**/*.php',
+                dest: 'components/parts/'
+            }
+        },
         copy: {
             main: {
                 files: [
@@ -83,9 +96,10 @@ module.exports = function (grunt) {
         },
     });
 
+    grunt.loadNpmTasks('grunt-htmlclean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.registerTask('default', ['copy', 'concat', 'requirejs', 'less']);
+    grunt.registerTask('default', ['copy', 'concat', 'htmlclean', 'requirejs', 'less']);
 };
