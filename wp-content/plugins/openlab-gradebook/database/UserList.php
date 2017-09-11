@@ -41,14 +41,8 @@ class OPLB_USER_LIST {
                 //first we need to find the associated group for this site
                 $blog_id = get_current_blog_id();
 
-                echo '<pre>' . print_r($blog_id, true) . '</pre>';
-
                 $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
                 $results = $wpdb->get_results($query);
-                
-                echo '<pre>' . print_r($query, true) . '</pre>';
-                
-                echo '<pre>' . print_r($results, true) . '</pre>';
 
                 if (!$results || empty($results)) {
                     echo json_encode(array("error" => "no_site"));
@@ -56,15 +50,11 @@ class OPLB_USER_LIST {
                 }
 
                 $group_id = intval($results[0]->group_id);
-                
-                echo '<pre>' . print_r($group_id, true) . '</pre>';
 
                 $member_arg = array(
                     'group_id' => $group_id,
                     'exclude_admins_mods' => true,
                 );
-                
-                echo '<pre>' . print_r(bp_group_has_members($member_arg), true) . '</pre>';
 
                 if (bp_group_has_members($member_arg)) :
 
