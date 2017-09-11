@@ -15,7 +15,6 @@ define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 function oplb_verify_buddypress() {
 
     define("OPLB_BP_AVAILABLE", true);
-    
 }
 
 add_action('bp_include', 'oplb_verify_buddypress');
@@ -128,6 +127,37 @@ function oplb_gradebook_ajaxurl() {
 }
 
 add_action('wp_head', 'oplb_gradebook_ajaxurl');
+
+function oplb_gradebook_admin_notices() {
+    global $wp_filter;
+    $screen = get_current_screen();
+
+    //if this is not OpenLab Gradebook, we're not doing anything here
+    if (is_object($screen) && isset($screen->base)) {
+
+        if ($screen->base !== "toplevel_page_oplb_gradebook" && $screen->base !== 'gradebook_page_oplb_gradebook_settings') {
+            return false;
+        }
+    }
+
+    if (isset($wp_filter['admin_notices'])
+            && isset($wp_filter['admin_notices']->callbacks)
+            && !empty($wp_filter['admin_notices']->callbacks)) {
+
+        foreach ($wp_filter['admin_notices']->callbacks as $priority => $callback) {
+
+            foreach ($callback as $hookname => $hook) {
+
+                if (strpos($hookname, 'oplb_gradebook') === false) {
+                    $result = remove_action('admin_notices', $hookname, $priority);
+                }
+            }
+        }
+
+    }
+}
+
+add_action('admin_notices', 'oplb_gradebook_admin_notices', 1);
 
 function oplb_gradebook_shortcode() {
     init_oplb_gradebook();
