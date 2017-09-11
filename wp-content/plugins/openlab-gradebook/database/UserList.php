@@ -43,8 +43,10 @@ class OPLB_USER_LIST {
 
                 echo '<pre>' . print_r($blog_id, true) . '</pre>';
 
-                $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %d AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
+                $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
                 $results = $wpdb->get_results($query);
+                
+                echo '<pre>' . print_r($query, true) . '</pre>';
                 
                 echo '<pre>' . print_r($results, true) . '</pre>';
 
