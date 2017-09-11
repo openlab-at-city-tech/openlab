@@ -3,13 +3,14 @@
   Plugin Name: OpenLab GradeBook
   Plugin URI: https://github.com/livinglab/openlab
   Description: A modification of AN Gradebook https://wordpress.org/plugins/an-gradebook/
-  Version: 0.0.1
+  Version: 0.0.3
   Author: Joe Unander
   Author URI: http://early-adopter.com/
   License: GPL
  */
 
-define("OPENLAB_GRADEBOOK_VERSION", "0.0.2");
+define("OPENLAB_GRADEBOOK_VERSION", "0.0.3");
+define("OPENLAB_GRADEBOOK_FEATURES_TRACKER", 0.3);
 define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 
 function oplb_verify_buddypress() {
@@ -153,7 +154,6 @@ function oplb_gradebook_admin_notices() {
                 }
             }
         }
-
     }
 }
 
@@ -241,6 +241,7 @@ function activate_oplb_gradebook() {
 
     //add custom page for csv storage - make the slug something very unlikely to be used
     oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');
+    update_option('oplb_gradebook_features_tracker', OPENLAB_GRADEBOOK_FEATURES_TRACKER);
 }
 
 /**
@@ -424,3 +425,12 @@ function oplb_gradebook_plupload_default_params($params) {
 }
 
 add_filter('plupload_default_params', 'oplb_gradebook_plupload_default_params');
+
+//legacy update
+$option = get_option('oplb_gradebook_features_tracker');
+
+if (!$option || floatval($option) < 0.3) {
+
+    oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');
+    update_option('oplb_gradebook_features_tracker', OPENLAB_GRADEBOOK_FEATURES_TRACKER);
+}
