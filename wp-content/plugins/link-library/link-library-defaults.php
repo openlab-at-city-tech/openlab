@@ -237,6 +237,9 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['beforecatdesc']                   = '';
 	$options['aftercatdesc']                    = '';
 	$options['emailextracontent']               = '';
+	$options['extraquerystring']                = '';
+	$options['updatedlabel']                    = __( 'New', 'link-library' );
+	$options['showupdatedpos']                  = 'before';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -248,37 +251,40 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 
 // Function used to set general initial settings or reset them on user request
 function ll_reset_gen_settings( $setoptions = 'return' ) {
-	$genoptions['numberstylesets']             = 1;
-	$genoptions['includescriptcss']            = '';
-	$genoptions['debugmode']                   = false;
-	$genoptions['schemaversion']               = '5.0';
-	$genoptions['pagetitleprefix']             = '';
-	$genoptions['pagetitlesuffix']             = '';
-	$genoptions['thumbshotscid']               = '';
-	$genoptions['emaillinksubmitter']          = false;
-	$genoptions['suppressemailfooter']         = false;
-	$genoptions['moderatorname']               = '';
-	$genoptions['moderatoremail']              = '';
-	$genoptions['approvalemailtitle']          = '';
-	$genoptions['approvalemailbody']           = '';
-	$genoptions['rejectedemailtitle']          = '';
-	$genoptions['rejectedemailbody']           = '';
-	$genoptions['moderationnotificationtitle'] = '';
-	$genoptions['linksubmissionthankyouurl']   = '';
-	$genoptions['usefirstpartsubmittername']   = '';
-	$genoptions['recipcheckaddress']           = get_bloginfo( 'wpurl' );
-	$genoptions['recipcheckdelete403']         = false;
-	$genoptions['imagefilepath']               = 'absolute';
-	$genoptions['catselectmethod']             = 'multiselectlist';
-	$genoptions['hidedonation']                = false;
-	$genoptions['updatechannel']               = 'standard';
-	$genoptions['extraprotocols']              = '';
-	$genoptions['fullstylesheet']              = '';
-	$genoptions['thumbnailsize']               = '120x90';
-	$genoptions['thumbnailgenerator']          = 'robothumb';
-	$genoptions['survey2015']                  = false;
-	$genoptions['addlinkakismet']              = false;
-	$genoptions['rsscachedelay']               = 43200;
+	$genoptions['numberstylesets']              = 1;
+	$genoptions['includescriptcss']             = '';
+	$genoptions['debugmode']                    = false;
+	$genoptions['schemaversion']                = '5.0';
+	$genoptions['pagetitleprefix']              = '';
+	$genoptions['pagetitlesuffix']              = '';
+	$genoptions['thumbshotscid']                = '';
+	$genoptions['emaillinksubmitter']           = false;
+	$genoptions['suppressemailfooter']          = false;
+	$genoptions['moderatorname']                = '';
+	$genoptions['moderatoremail']               = '';
+	$genoptions['approvalemailtitle']           = '';
+	$genoptions['approvalemailbody']            = '';
+	$genoptions['rejectedemailtitle']           = '';
+	$genoptions['rejectedemailbody']            = '';
+	$genoptions['moderationnotificationtitle']  = '';
+	$genoptions['linksubmissionthankyouurl']    = '';
+	$genoptions['usefirstpartsubmittername']    = '';
+	$genoptions['recipcheckaddress']            = get_bloginfo( 'wpurl' );
+	$genoptions['recipcheckdelete403']          = false;
+	$genoptions['imagefilepath']                = 'absolute';
+	$genoptions['catselectmethod']              = 'multiselectlist';
+	$genoptions['hidedonation']                 = false;
+	$genoptions['updatechannel']                = 'standard';
+	$genoptions['extraprotocols']               = '';
+	$genoptions['fullstylesheet']               = '';
+	$genoptions['thumbnailsize']                = '120x90';
+	$genoptions['thumbnailgenerator']           = 'robothumb';
+	$genoptions['survey2015']                   = false;
+	$genoptions['addlinkakismet']               = false;
+	$genoptions['rsscachedelay']                = 43200;
+	$genoptions['captchagenerator']             = 'easycaptcha';
+	$genoptions['recaptchasitekey']             = '';
+	$genoptions['recaptchasecretkey']           = '';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );
