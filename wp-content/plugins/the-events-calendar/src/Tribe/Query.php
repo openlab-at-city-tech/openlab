@@ -49,7 +49,15 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 				$can_inject = false;
 			}
 
-			return apply_filters( 'tribe_query_can_inject_date_field', $can_inject );
+			/**
+			 * Determine whether a date field can be injected into various parts of a query.
+			 *
+			 * @param boolean  $can_inject Whether the date field can be injected
+			 * @param WP_Query $query      Query object
+			 *
+			 * @since 4.5.8
+			 */
+			return apply_filters( 'tribe_query_can_inject_date_field', $can_inject, $query );
 		}
 
 		/**
@@ -277,7 +285,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 								? $query->get( 'eventDate' )
 								: date_i18n( Tribe__Date_Utils::DBDATETIMEFORMAT );
 							if ( ! $query->tribe_is_past ) {
-								$query->set( 'start_date', ( '' != $query->get( 'eventDate' ) ? tribe_beginning_of_day( $event_date ) : tribe_format_date( current_time( 'timestamp' ), true, 'Y-m-d H:i:s' ) ) );
+								$query->set( 'start_date', ( '' != $query->get( 'eventDate' ) ? tribe_beginning_of_day( $event_date ) : tribe_format_date( current_time( 'timestamp' ), true, 'Y-m-d H:i:00' ) ) );
 								$query->set( 'end_date', '' );
 								$query->set( 'order', self::set_order( 'ASC', $query ) );
 							} else {
