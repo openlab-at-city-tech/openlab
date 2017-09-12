@@ -45,11 +45,11 @@ function twentytwelve_setup() {
 	/*
 	 * Makes Twenty Twelve available for translation.
 	 *
-	 * Translations can be added to the /languages/ directory.
+	 * Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/twentytwelve
 	 * If you're building a theme based on Twenty Twelve, use a find and replace
 	 * to change 'twentytwelve' to the name of your theme in all the template files.
 	 */
-	load_theme_textdomain( 'twentytwelve', get_template_directory() . '/languages' );
+	load_theme_textdomain( 'twentytwelve' );
 
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
@@ -156,6 +156,31 @@ function twentytwelve_scripts_styles() {
 	$wp_styles->add_data( 'twentytwelve-ie', 'conditional', 'lt IE 9' );
 }
 add_action( 'wp_enqueue_scripts', 'twentytwelve_scripts_styles' );
+
+/**
+ * Add preconnect for Google Fonts.
+ *
+ * @since Twenty Twelve 2.2
+ *
+ * @param array   $urls          URLs to print for resource hints.
+ * @param string  $relation_type The relation type the URLs are printed.
+ * @return array URLs to print for resource hints.
+ */
+function twentytwelve_resource_hints( $urls, $relation_type ) {
+	if ( wp_style_is( 'twentytwelve-fonts', 'queue' ) && 'preconnect' === $relation_type ) {
+		if ( version_compare( $GLOBALS['wp_version'], '4.7-alpha', '>=' ) ) {
+			$urls[] = array(
+				'href' => 'https://fonts.gstatic.com',
+				'crossorigin',
+			);
+		} else {
+			$urls[] = 'https://fonts.gstatic.com';
+		}
+	}
+
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'twentytwelve_resource_hints', 10, 2 );
 
 /**
  * Filter TinyMCE CSS path to include Google Fonts.
