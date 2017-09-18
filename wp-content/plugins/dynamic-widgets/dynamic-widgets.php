@@ -4,7 +4,7 @@
  * Plugin URI: http://dynamic-widgets.com/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.12
+ * Version: 1.5.13
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -15,8 +15,8 @@
  *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
- * @version $Id: dynamic-widgets.php 1478458 2016-08-19 07:06:28Z qurl $
- * @copyright 2015 Jacco Drabbe
+ * @version $Id: dynamic-widgets.php 1712211 2017-08-11 17:00:21Z qurl $
+ * @copyright 2017 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
  * Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
@@ -35,6 +35,7 @@
  * Thanks to Leon Juranic from DefenseCode to run it's scanner over the source code and finding a few vulnerabilities.
  * Thanks to Nathan Wright of NW Consulting for the financial contribution to implement the shortcode filter feature.
  * Thanks to Mike Epstein to find a vulnerability in the DW settings.
+ * Thanks to HANNA instruments for the financial contribution to implement the domain name / server name filter feature.
  *
  *
  * WPML Plugin support via API
@@ -81,7 +82,7 @@
 	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
 	define('DW_TIME_LIMIT', 86400);				// 1 day
 	define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-	define('DW_VERSION', '1.5.12');
+	define('DW_VERSION', '1.5.13');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -102,9 +103,9 @@
 
 		$query = "CREATE TABLE IF NOT EXISTS " . $dbtable . " (
                 id int(11) NOT NULL auto_increment,
-                widget_id varchar(60) NOT NULL,
-                maintype varchar(50) NOT NULL,
-                `name` varchar(40) NOT NULL,
+                widget_id varchar(100) NOT NULL,
+                maintype varchar(100) NOT NULL,
+                `name` varchar(100) NOT NULL,
                 `value` longtext NOT NULL,
               PRIMARY KEY  (id),
               KEY widget_id (widget_id,maintype)
@@ -167,6 +168,20 @@
 			*/
 			if ( version_compare($version, '1.5.3.1', '<') ) {
 				$query = "ALTER TABLE " . $dbtable . " CHANGE `widget_id` `widget_id` VARCHAR(60) NOT NULL";
+				$wpdb->query($query);
+			}
+
+			/*
+			 * 1.5.12.1 > All needs to widen up again. Moved it all to 100
+			 */
+			if ( version_compare($version, '1.5.12.1', '<') ) {
+				$query = "ALTER TABLE " . $dbtable . " CHANGE `widget_id` `widget_id` VARCHAR(100) NOT NULL";
+				$wpdb->query($query);
+
+				$query = "ALTER TABLE " . $dbtable . " CHANGE `maintype` `maintype` VARCHAR(100)";
+				$wpdb->query($query);
+
+				$query = "ALTER TABLE " . $dbtable . " CHANGE `name` `name` VARCHAR(100)";
 				$wpdb->query($query);
 			}
 

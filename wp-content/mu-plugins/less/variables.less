@@ -47,6 +47,7 @@ Bootstrap variable overrides
 // Extra small screen / phone
 @screen-xs-min:              480px;
 @screen-xxs-max:             (@screen-xs-min - 1);
+@screen-xxs: 320px;
 
 //** Number of columns in the grid.
 @grid-columns:              24;
@@ -113,6 +114,29 @@ Bootstrap variable overrides
 //## Define colors for form feedback states and, by default, alerts.
 
 @state-danger-text:              @magenta;
+
+/*
+For breakpoints related to really small screens
+*/
+.device-xxs,
+.device-xs{
+    .responsive-invisibility();
+}
+.device-xs {
+    @media (min-width: @screen-xs-min) and (max-width: @screen-xs-max) {
+        .responsive-visibility();
+    }
+}
+.device-xxs {
+    @media (max-width: @screen-xxs-max) {
+        .responsive-visibility();
+    }
+}
+.hidden-xxs {
+    @media (max-width: @screen-xxs-max) {
+        .responsive-invisibility();
+    }
+}
 
 /**Mixins**/
 .border-radius (@radius: @border-radius-base) {

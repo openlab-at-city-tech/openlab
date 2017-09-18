@@ -85,9 +85,6 @@ class OpenLab_Admin_Bar {
                     add_action('wp_head',array($this,'groups_sites_fix_for_mobile'));
                 }
 
-                //for top padding in admin
-                add_action('admin_footer',array($this,'admin_bar_padding_in_admin'));
-
                 //for hamburger menu on mobile
                 add_action('admin_bar_menu',array($this,'openlab_hamburger_menu'),1);
 
@@ -106,6 +103,10 @@ class OpenLab_Admin_Bar {
                             add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
                         }
                         
+                        if(get_current_blog_id() !== 1 || is_admin()){
+                            add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_blogs_and_admin'), 500 );
+                        }
+
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
 			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
@@ -136,12 +137,14 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
 
                         //removing the default account information item and menu so we can a custom Bootstrap-style one
+                        add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 6 );
+                        
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
+                        
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
 
-			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
                         //creating custom menus for comments, new content, and editing
 
@@ -208,7 +211,7 @@ HTML;
 			'href'   => bp_get_root_domain(),
 			'meta'	 => array(
 				'tabindex' => 90,
-                                'class' => 'admin-bar-menu hidden-xs',
+                                'class' => 'admin-bar-menu hidden-xs', //add in truncation obfuscation (hides truncation processing on page load)
 			)
  		) );
                 $this->openlab_menu_items('openlab');
@@ -299,6 +302,20 @@ HTML;
         }
         
         /**
+         * Add a middle group for blogs admin so we can use CSS to give the username flexible space
+         * @param type $wp_admin_bar
+         */
+        function add_middle_group_for_blogs_and_admin($wp_admin_bar) {
+            
+            $wp_admin_bar->add_group(array(
+                'id' => 'blogs-and-admin-centered',
+                'meta' => array(
+                    'class' => 'ab-blogs-and-admin-centered hidden-xxs',
+                ),
+            ));
+        }
+
+         /**
          * The MOL link on mobile needs to sit between the hamburger menus and the logout link
          * So we'll need a third group for this (makes styling easier)
          */
@@ -427,7 +444,9 @@ HTML;
 		$wp_admin_bar->add_node( array(
 			'id'    => 'my-account',
 			'title' => sprintf( "Hi, %s", $bp->loggedin_user->userdata->display_name ),
-			'meta'	=> array()
+			'meta'  => array(
+                            'class' => 'user-display-name truncation-obfuscation', //add in truncation obfuscation (hides truncation processing on page load)
+                        ),
 		) );
 	}
 
@@ -910,15 +929,14 @@ HTML;
                     $blogname = sprintf( __('Global Dashboard: %s'), esc_html( get_current_site()->site_name ) );
             }
 
-            $title = wp_html_excerpt( $blogname, 40, '&hellip;' );
-            $title_short = wp_html_excerpt( $blogname, 15, '&hellip;' );
+            $display_string = "<span class='truncate-on-the-fly hyphenate hidden-sm' data-basevalue='30' data-minvalue='5' data-basewidth='220' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span>";
             
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
-                    'title' => '<span class="hidden-sm hidden-md">'.$title.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="hidden-sm visible-md">'.$title_short.' <span class="fa fa-caret-down" aria-hidden="true"></span></span><span class="fa fa-desktop visible-sm" aria-hidden="true"></span><span class="sr-only visible-sm">'.$title.'</span>',
+                    'title' => $display_string,
                     'href'  => is_admin() ? home_url( '/' ) : admin_url(),
                     'meta' => array(
-                        'class' => 'admin-bar-menu hidden-xs',
+                        'class' => 'admin-bar-menu hidden-xs truncate-obfuscate menu-loading',
                         'tabindex' => 0,
                     ),
             ) );
@@ -1210,7 +1228,7 @@ HTML;
 			'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
 			'title'  => 'Log Out',
                         'meta'   => array(
-                            'class' => 'bold',
+                            'class' => 'bold pull-right',
                         ),
 		) );
 	}
@@ -1225,15 +1243,26 @@ HTML;
                     return;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
-                $howdy_short = sprintf(__('Hi, %1$s'), wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ));
+                $display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='40' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
                 
+                $parent = 'top-secondary';
+                $class = 'hidden-xs';
+                
+                if(get_current_blog_id() !== 1 || is_admin()){
+                    $parent = 'blogs-and-admin-centered';
+                    $class = 'user-display-name';
+                }
+                
+                //add in truncation obfuscation (hides truncation processing on page load)
+                $class = "$class truncate-obfuscate menu-loading";
+
                 $wp_admin_bar->add_menu(array(
                     'id' => 'my-account',
-                    'parent' => 'top-secondary',
-                    'title' => '<span class="visible-lg">'.$howdy.'</span><span class="hidden-lg">'.$howdy_short.'</span>',
+                    'parent' => $parent,
+                    'title' => $display_string,
                     'href' => $profile_url,
                     'meta' => array(
-                        'class' => 'hidden-xs',
+                        'class' => $class,
                         'title' => __('My Account'),
                     ),
                 ));
@@ -1374,7 +1403,7 @@ HTML;
             $openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
             wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url,array('font-awesome'), '1.6.9' );
-            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.4' );
+            wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url,array('font-awesome'), '1.6.9.5' );
         }
 
         function adminbar_special_body_class($classes){
@@ -1414,31 +1443,6 @@ HTML;
 
             <?php
         }
-
-        function admin_bar_padding_in_admin() {
-        ?>
-
-                    <style type="text/css" media="screen">
-                            html.wp-toolbar {
-                                padding-top: 0;
-                            }
-                            html.wp-toolbar #wpcontent,
-                            html.wp-toolbar #adminmenuwrap{
-                                    padding-top: 80px;
-                                }
-                                @media (max-width: 767px){
-                                            html.wp-toolbar #wpcontent,
-                                            html.wp-toolbar #adminmenuwrap{
-                                                padding-top: 120px;
-                                            }
-                                            html.wp-toolbar #wpbody{
-                                                padding-top: 0;
-                                            }
-                                        }
-                    </style>
-
-        <?php
-    }
 
     function groups_sites_fix_for_mobile(){
         ?>
@@ -1494,7 +1498,7 @@ function openlab_wrap_adminbar_top(){
 
         $admin_class = (is_admin() ? ' admin-area' : '');
     ?>
-        <div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
+        <div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class ?>"><div class="oplb-bs adminbar-manual-bootstrap<?= $admin_class ?>">
     <?php else : ?>
         <div class="oplb-bs"><div class="oplb-bs">
     <?php endif;

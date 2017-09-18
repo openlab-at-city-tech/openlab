@@ -496,6 +496,9 @@ function bbp_get_statistics( $args = '' ) {
 
 		if ( current_user_can( 'read_private_topics' ) || current_user_can( 'edit_others_topics' ) || current_user_can( 'view_trash' ) ) {
 
+			// Declare empty arrays
+			$topics = $topic_titles = array();
+
 			// Private
 			$topics['private'] = ( !empty( $r['count_private_topics'] ) && current_user_can( 'read_private_topics' ) ) ? (int) $all_topics->{$private} : 0;
 
@@ -527,6 +530,9 @@ function bbp_get_statistics( $args = '' ) {
 		$reply_count = $all_replies->publish;
 
 		if ( current_user_can( 'read_private_replies' ) || current_user_can( 'edit_others_replies' ) || current_user_can( 'view_trash' ) ) {
+
+			// Declare empty arrays
+			$replies = $reply_titles = array();
 
 			// Private
 			$replies['private'] = ( !empty( $r['count_private_replies'] ) && current_user_can( 'read_private_replies' ) ) ? (int) $all_replies->{$private} : 0;
@@ -613,9 +619,9 @@ function bbp_filter_anonymous_post_data( $args = '' ) {
 
 	// Parse arguments against default values
 	$r = bbp_parse_args( $args, array (
-		'bbp_anonymous_name'    => !empty( $_POST['bbp_anonymous_name']    ) ? $_POST['bbp_anonymous_name']    : false,
-		'bbp_anonymous_email'   => !empty( $_POST['bbp_anonymous_email']   ) ? $_POST['bbp_anonymous_email']   : false,
-		'bbp_anonymous_website' => !empty( $_POST['bbp_anonymous_website'] ) ? $_POST['bbp_anonymous_website'] : false,
+		'bbp_anonymous_name'    => !empty( $_POST['bbp_anonymous_name']    ) ? sanitize_text_field( $_POST['bbp_anonymous_name']    ) : false,
+		'bbp_anonymous_email'   => !empty( $_POST['bbp_anonymous_email']   ) ? sanitize_email(      $_POST['bbp_anonymous_email']   ) : false,
+		'bbp_anonymous_website' => !empty( $_POST['bbp_anonymous_website'] ) ? sanitize_text_field( $_POST['bbp_anonymous_website'] ) : false,
 	), 'filter_anonymous_post_data' );
 
 	// Filter variables and add errors if necessary
@@ -678,7 +684,7 @@ function bbp_check_for_duplicate( $post_data = array() ) {
 	if ( empty( $r['post_author'] ) && ( !empty( $r['anonymous_data'] ) && !empty( $r['anonymous_data']['bbp_anonymous_email'] ) ) ) {
 		$clauses = get_meta_sql( array( array(
 			'key'   => '_bbp_anonymous_email',
-			'value' => $r['anonymous_data']['bbp_anonymous_email']
+			'value' => sanitize_email( $r['anonymous_data']['bbp_anonymous_email'] )
 		) ), 'post', $wpdb->posts, 'ID' );
 
 		$join    = $clauses['join'];
@@ -1433,6 +1439,8 @@ function bbp_parse_args( $args, $defaults = array(), $filter_key = '' ) {
  *
  * @since bbPress (r2996)
  *
+ * @deprecated bbPress (r5820)
+ *
  * @global DB $wpdb
  * @global WP $wp
  * @param string $where
@@ -1631,35 +1639,12 @@ function bbp_get_all_child_ids( $parent_id = 0, $post_type = 'post' ) {
 	// Check for cache and set if needed
 	$child_ids = wp_cache_get( $cache_id, 'bbpress_posts' );
 	if ( false === $child_ids ) {
-		$post_status = array( bbp_get_public_status_id() );
 
-		// Extra post statuses based on post type
-		switch ( $post_type ) {
+		// Join post statuses to specifically exclude together
+		$not_in      = array( 'draft', 'future' );
+		$post_status = "'" . implode( "', '", $not_in ) . "'";
 
-			// Forum
-			case bbp_get_forum_post_type() :
-				$post_status[] = bbp_get_private_status_id();
-				$post_status[] = bbp_get_hidden_status_id();
-				break;
-
-			// Topic
-			case bbp_get_topic_post_type() :
-				$post_status[] = bbp_get_closed_status_id();
-				$post_status[] = bbp_get_trash_status_id();
-				$post_status[] = bbp_get_spam_status_id();
-				break;
-
-			// Reply
-			case bbp_get_reply_post_type() :
-				$post_status[] = bbp_get_trash_status_id();
-				$post_status[] = bbp_get_spam_status_id();
-				break;
-		}
-
-		// Join post statuses together
-		$post_status = "'" . implode( "', '", $post_status ) . "'";
-
-		$child_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_parent = %d AND post_status IN ( {$post_status} ) AND post_type = '%s' ORDER BY ID DESC;", $parent_id, $post_type ) );
+		$child_ids   = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_parent = %d AND post_status NOT IN ( {$post_status} ) AND post_type = '%s' ORDER BY ID DESC;", $parent_id, $post_type ) );
 		wp_cache_set( $cache_id, $child_ids, 'bbpress_posts' );
 	}
 

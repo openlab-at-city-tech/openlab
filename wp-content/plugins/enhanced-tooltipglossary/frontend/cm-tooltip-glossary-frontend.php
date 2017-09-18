@@ -191,6 +191,11 @@ class CMTooltipGlossaryFrontend {
     public static function cmtt_glossary_parse( $content, $force = false ) {
         global $glossary_index, $post;
 
+        $seo = doing_action( 'wpseo_head' );
+        if ( $seo ) {
+            return $content;
+        }
+
         /*
          * Initialize $glossarySearchStringArr as empty array
          */

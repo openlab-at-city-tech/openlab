@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
-Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
+Tags: widget, dynamic, sidebar, custom, rules, logic, display, condition, hide, show
 Requires at least: 3.0.0
-Tested up to: 4.6
-Stable tag: 1.5.12
+Tested up to: 4.8
+Stable tag: 1.5.13
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -34,8 +34,9 @@ It is very hard to continue development and support for this plugin without cont
   - Featured image
   - Devices (mobile, desktop)
   - Theme Templates
-  - Languages (WPML or QTranslate)
+  - Languages (WPML)
   - URL
+  - Domain name / Server name
   - Shortcode
   - Front page
   - Single post pages
@@ -66,8 +67,9 @@ It is very hard to continue development and support for this plugin without cont
   - Featued image on existence
   - Devices on type
   - Theme Templates on template name
-  - Languages (WPML or QTranslate) on language
+  - Languages (WPML) on language
   - URL on starting with URL, ending on URL or exact match
+  - Domain name / Server name on name
   - Shortcode on value match
   - Front page on first page
   - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags, Custom Taxonomies and/or Individual posts
@@ -87,7 +89,7 @@ It is very hard to continue development and support for this plugin without cont
 	- bbPress
 	- BuddyPress
 	- BuddyPress Group Hierarchy
-	- QTranslate
+	- QTranslate and it's forks (currently disabled)
 	- Pods
 	- WP MultiLingual (WPML)
 	- WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
@@ -189,6 +191,11 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.13 =
+
+* Widened the database fields
+* Added domain name / servername support
 
 = Version 1.5.12 =
 
@@ -465,11 +472,11 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Release notes ==
 
-This version has 4 new features and 5 bugs fixed. See the changelog for details.
+This version has 1 new feature and 1 bug fixed. See the changelog for details.
 
 == Upgrade Notice ==
 
-= 1.5.8 =
+= 1.5.13 =
 When you upgrade manually, remove the dynamic-widgets directory first.
 
 This version has 1 feature added, 1 language added and 3 bugs fixed.

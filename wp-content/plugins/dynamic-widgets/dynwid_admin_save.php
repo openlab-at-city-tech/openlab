@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_save.php - Saving options to the database
  *
- * @version $Id: dynwid_admin_save.php 1474291 2016-08-14 20:35:12Z qurl $
+ * @version $Id: dynwid_admin_save.php 1698398 2017-07-18 19:34:08Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -70,6 +70,12 @@
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
   }
+
+	// Domain
+	if ( $_POST['domain'] == 'no' && empty($_POST['domain_value']) ) {
+		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+		die();
+	}
 
   // IP
   if ( $_POST['ip'] == 'no' && empty($_POST['ip_value']) ) {
@@ -162,6 +168,27 @@
 			$DW->addUrls($widget_id, $_POST['url'], $urls);
 		}
 	}
+
+	// URL
+	if (! empty($_POST['domain_value']) ) {
+		$domains = array();
+
+		$domain_values = trim($_POST['domain_value']);
+		$domain_values = str_replace("\r", "", $domain_values);
+		$domain_values = explode("\n", $domain_values);
+
+		foreach ( $domain_values as $domain ) {
+			$url = trim($domain);
+			if (! empty($domain) ) {
+				$domains[ ] = $domain;
+			}
+		}
+
+		if ( count($domains) > 0 ) {
+			$DW->addDomains($widget_id, $_POST['domain'], $domains);
+		}
+	}
+
 
 	// IP
 	if (! empty($_POST['ip_value']) ) {

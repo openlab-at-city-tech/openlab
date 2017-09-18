@@ -2,7 +2,7 @@
 /**
  * dynwid_worker.php - The worker does the actual work.
  *
- * @version $Id: dynwid_worker.php 1474291 2016-08-14 20:35:12Z qurl $
+ * @version $Id: dynwid_worker.php 1698398 2017-07-18 19:34:08Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -179,7 +179,7 @@
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
 	            } else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
-					(bool) $device_tmp = $condition->value;
+						(bool) $device_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
           		} else if ( $condition->maintype == 'day' && $condition->name == date('N', current_time('timestamp', 0)) ) {
@@ -187,43 +187,54 @@
           		} else if ( $condition->maintype == 'week' && $condition->name == date('W', current_time('timestamp', 0)) ) {
           			(bool) $week_tmp = $condition->value;
           		} else if ( $condition->maintype == 'url' && $condition->name == 'url' ) {
-          			$urls = unserialize($condition->value);
-          			$other_url = ( $url ) ? FALSE : TRUE;
-          			foreach ( $urls as $u ) {
-          				$u = $DW->getURLPrefix() . $u;
-          				$DW->message('URL matching: ' . $u);
-          				$like_start = substr($u, 0, 1);
-          				$like_end = substr($u, -1);
+		            $urls = unserialize($condition->value);
+		            $other_url = ( $url ) ? FALSE : TRUE;
+		            foreach ( $urls as $u ) {
+			            $u = $DW->getURLPrefix() . $u;
+			            $DW->message('URL matching: ' . $u);
+			            $like_start = substr($u, 0, 1);
+			            $like_end = substr($u, -1);
 
-          				if ( $like_start == '*' && $like_end == '*' ) {
-          					$u = substr($u, 1, strlen($u) - 2);
-          					if ( stristr($DW->url, $u) !== FALSE ) {
-          						$DW->message('Anywhere within URL found');
-          						$url_tmp = $other_url;
-          					}
-          				} else if ( $like_end == '*' ) {
-          					$u = substr($u, 0, strlen($u) - 1);
-          					$u = addcslashes($u, '/?+.[]{}*^$');
+			            if ( $like_start == '*' && $like_end == '*' ) {
+				            $u = substr($u, 1, strlen($u) - 2);
+				            if ( stristr($DW->url, $u) !== FALSE ) {
+					            $DW->message('Anywhere within URL found');
+					            $url_tmp = $other_url;
+				            }
+			            } else if ( $like_end == '*' ) {
+				            $u = substr($u, 0, strlen($u) - 1);
+				            $u = addcslashes($u, '/?+.[]{}*^$');
 
-          					if ( preg_match('/^' . $u . '/', $DW->url) ) {
-          						$DW->message('Starts with URL found');
-          						$url_tmp = $other_url;
-          					}
-          				} else if ( $like_start == '*' ) {
-          					$u = substr($u, 1);
-          					$u = addcslashes($u, '/?+.[]{}*^$');
+				            if ( preg_match('/^' . $u . '/', $DW->url) ) {
+					            $DW->message('Starts with URL found');
+					            $url_tmp = $other_url;
+				            }
+			            } else if ( $like_start == '*' ) {
+				            $u = substr($u, 1);
+				            $u = addcslashes($u, '/?+.[]{}*^$');
 
-          					if ( preg_match('/' . $u . '$/', $DW->url) ) {
-          						$DW->message('Ends with URL found');
-          						$url_tmp = $other_url;
-          					}
-          				} else {
-          					if ( $DW->url == $u ) {
-          						$DW->message('Exact match URL found');
-          						$url_tmp = $other_url;
-          					}
-          				}
-          			}
+				            if ( preg_match('/' . $u . '$/', $DW->url) ) {
+					            $DW->message('Ends with URL found');
+					            $url_tmp = $other_url;
+				            }
+			            } else {
+				            if ( $DW->url == $u ) {
+					            $DW->message('Exact match URL found');
+					            $url_tmp = $other_url;
+				            }
+			            }
+		            }
+	            } else if ( $condition->maintype == 'domain' && $condition->name == 'domain' ) {
+          			$domains = unserialize($condition->value);
+		            $other_domain = ( $domain ) ? FALSE : TRUE;
+
+		            foreach ( $domains as $domain ) {
+		            	if ( $DW->hostname == $domain ) {
+				            $domain_tmp = $other_domain;
+		            		$DW->message('Flip switch for domain to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ));
+			            }
+		            }
+
           		} else if ( $condition->maintype == 'ip' && $condition->name == 'ip' && ! is_null($DW->ip_address) ) {
           			$ips =  unserialize($condition->value);
           			$other_ip = ( $ip ) ? FALSE : TRUE;
@@ -262,11 +273,11 @@
           	}
           	unset($browser_tmp);
 
-			if ( isset($device_tmp) && $device_tmp != $device ) {
-				$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
-				$device = $device_tmp;
-			}
-			unset($device_tmp);
+				if ( isset($device_tmp) && $device_tmp != $device ) {
+					$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
+					$device = $device_tmp;
+				}
+				unset($device_tmp);
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
           		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
@@ -291,6 +302,12 @@
           		$url = $url_tmp;
           	}
           	unset($url_tmp, $other_url);
+
+				if ( isset($domain_tmp) && $domain_tmp != $domain ) {
+					$DW->message('Exception triggered for domain, sets display to ' . ( ($domain_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EDMN1)');
+					$domain = $domain_tmp;
+				}
+				unset($domain_tmp, $other_domain);
 
           	if ( isset($ip_tmp) && $ip_tmp != $ip ) {
           		$DW->message('Exception triggered for ip, sets display to ' . ( ($ip_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EIP1)');
@@ -854,7 +871,7 @@
 	if ( $display ) {
 		foreach ( $DW->overrule_maintype as $mt ) {
 			if (! $$mt ) {
-		$display = FALSE;
+				$display = FALSE;
 				break;
 			}
 		}

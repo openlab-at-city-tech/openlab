@@ -1,0 +1,814 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Dynamic Widgets\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-13 18:05+0100\n"
+"PO-Revision-Date: 2013-01-22 14:37+0300\n"
+"Last-Translator: Serg\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Language: en\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:164 ../dynwid_class.php:149
+msgid "Role"
+msgstr "Úlohu"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:165 ../dynwid_class.php:150
+msgid "Date"
+msgstr "Dátum"
+
+#: ../dynwid_class_php4.php:166 ../dynwid_class.php:151
+msgid "Browser"
+msgstr "Prehliadač"
+
+#: ../dynwid_class_php4.php:167 ../dynwid_class.php:152
+msgid "Templates"
+msgstr "Šablóny"
+
+#: ../dynwid_class_php4.php:168 ../dynwid_class_php4.php:169
+#: ../dynwid_class.php:153 ../dynwid_class.php:154
+msgid "Language"
+msgstr "Jazyk"
+
+#: ../dynwid_class_php4.php:170 ../dynwid_class.php:155
+#: ../mods/frontpage_module.php:13
+msgid "Front Page"
+msgstr "Predná strana"
+
+#: ../dynwid_class_php4.php:171 ../dynwid_class.php:156
+#: ../mods/single_module.php:58
+msgid "Single Posts"
+msgstr "Jednotlivých miest"
+
+#: ../dynwid_class_php4.php:172 ../dynwid_class.php:157
+#: ../mods/attachment_module.php:12
+msgid "Attachments"
+msgstr "Prílohy"
+
+# WordPress MO
+#: ../dynwid_class_php4.php:173 ../dynwid_class.php:158
+msgid "Pages"
+msgstr "Stránky"
+
+#: ../dynwid_class_php4.php:174 ../dynwid_class.php:159
+msgid "Author Pages"
+msgstr "Autor stránky"
+
+#: ../dynwid_class_php4.php:175 ../dynwid_class.php:160
+#: ../mods/category_module.php:17
+msgid "Category Pages"
+msgstr "Stránky kategórie"
+
+#: ../dynwid_class_php4.php:176 ../dynwid_class.php:161
+msgid "Archive Pages"
+msgstr "Archívne stránky"
+
+#: ../dynwid_class_php4.php:177 ../dynwid_class.php:162
+#: ../mods/error_module.php:12
+msgid "Error Page"
+msgstr "Chyba stránky"
+
+#: ../dynwid_class_php4.php:178 ../dynwid_class.php:163
+msgid "Search page"
+msgstr "Vyhľadávaciu stránku"
+
+#: ../dynwid_class_php4.php:179 ../dynwid_class.php:164
+msgid "WPSC Category"
+msgstr "WPSC kategórie"
+
+#: ../dynwid_class_php4.php:180 ../dynwid_class.php:165
+msgid "Custom Post Type Archives"
+msgstr "Vlastné Post typ archívy"
+
+#: ../dynwid_class_php4.php:181 ../dynwid_class.php:166
+msgid "BuddyPress"
+msgstr "BuddyPress"
+
+#: ../dynwid_class_php4.php:182 ../dynwid_class.php:167
+msgid "BuddyPress Groups"
+msgstr "BuddyPress skupín"
+
+#: ../dynwid_admin.php:19 ../dynamic-widgets.php:152
+#: ../dynamic-widgets.php:175 ../dynamic-widgets.php:281
+#: ../dynamic-widgets.php:680
+msgid "Dynamic Widgets"
+msgstr "Dynamické widgety"
+
+#: ../dynwid_admin.php:26
+msgid ""
+"<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work "
+"correctly. Please disable STRICT sql mode."
+msgstr ""
+"<b>Upozornenie</b> PRÍSNE sql režime v platnosti. Dynamické widgety nemusia "
+"pracovať správne. Vypnite režim prísne sql."
+
+#: ../dynwid_admin.php:46
+msgid "Oops! Something went terrible wrong. Please reinstall Dynamic Widgets."
+msgstr "Jejda! Išiel niečo strašné zle. Reinštalujte dynamické widgety."
+
+#: ../dynwid_admin.php:54 ../dynwid_admin_overview.php:20
+msgid "OLD"
+msgstr "STARÉ"
+
+#: ../dynwid_admin.php:54 ../dynwid_admin_overview.php:20
+msgid "FILTER"
+msgstr "FILTER"
+
+#: ../dynamic-widgets.php:160
+msgid "Widgets are always displayed by default"
+msgstr "Widgety sú vždy zobrazené v predvolenom nastavení"
+
+#: ../dynamic-widgets.php:160
+msgid "The '<em>Yes</em>' selection"
+msgstr "Výber &quot;<em>Áno</em>&quot;"
+
+#: ../dynamic-widgets.php:161
+msgid "Click on the"
+msgstr "Kliknite na"
+
+#: ../dynamic-widgets.php:161
+msgid "next to the options for more info"
+msgstr "ďalšie možnosti pre viac info"
+
+#: ../dynamic-widgets.php:162
+msgid "The"
+msgstr "The"
+
+#: ../dynamic-widgets.php:162
+msgid "next to a section means it has options set."
+msgstr "vedľa časti prostriedok má možnosti nastaviť."
+
+#: ../dynamic-widgets.php:164 ../dynamic-widgets.php:165
+#: ../dynamic-widgets.php:168 ../dynamic-widgets.php:682
+#: ../dynwid_admin_overview.php:85
+msgid "Static"
+msgstr "Statické"
+
+#: ../dynamic-widgets.php:164 ../dynamic-widgets.php:166
+#: ../dynamic-widgets.php:682 ../dynwid_admin_overview.php:85
+msgid "Dynamic"
+msgstr "Dynamické"
+
+#: ../dynamic-widgets.php:165
+msgid "When a widget is"
+msgstr "Kedy je widget"
+
+#: ../dynamic-widgets.php:165
+msgid ""
+"the widget uses the WordPress default. In other words, it's shown everywhere"
+msgstr "widget má prednastavenú WordPress. Inými slovami, že dokázané všade"
+
+#: ../dynamic-widgets.php:166
+msgid "A widget is"
+msgstr "Widget je"
+
+#: ../dynamic-widgets.php:166
+msgid "when there are options set, i.e. not showing on the front page."
+msgstr "keď tam sú nastavené možnosti, t. j. nie ukazovať na prednej strane."
+
+#: ../dynamic-widgets.php:167 ../dynwid_admin_overview.php:79
+msgid "Reset"
+msgstr "Reset"
+
+#: ../dynamic-widgets.php:168
+msgid "Reset makes the widget return to"
+msgstr "Reset robí widget návrat do"
+
+# WordPress MO
+#: ../dynamic-widgets.php:234
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: ../dynamic-widgets.php:248
+msgid "Apply exception rule to widgets:"
+msgstr "Uplatňovať výnimka pravidlo widgety:"
+
+#: ../dynamic-widgets.php:264 ../dynamic-widgets.php:298
+msgid "Off"
+msgstr "Off"
+
+#: ../dynamic-widgets.php:264 ../dynamic-widgets.php:298
+msgid "On"
+msgstr "Na"
+
+#: ../dynamic-widgets.php:265
+msgid " (Default: "
+msgstr " (Predvolené: "
+
+#: ../dynamic-widgets.php:299
+msgid "Default"
+msgstr "Predvolené"
+
+#: ../dynamic-widgets.php:359
+msgid "Dynamic Widgets Options saved"
+msgstr "Dynamické widgety nastavenia uložené"
+
+#: ../dynamic-widgets.php:360
+msgid "for"
+msgstr "pre"
+
+#: ../dynamic-widgets.php:681
+msgid "Edit Dynamic Widgets Options"
+msgstr "Upraviť dynamické widgetov možnosti"
+
+#: ../dynamic-widgets.php:706
+msgid "and"
+msgstr "a"
+
+#: ../dynamic-widgets.php:712
+msgid "Options set for"
+msgstr "Možnosti pre"
+
+#: ../dynamic-widgets.php:712
+msgid "Option set for"
+msgstr "Možnosť nastaviť pre"
+
+#: ../dynwid_admin_edit.php:118
+msgid "Widget options saved."
+msgstr "Widget nastavenia uložené."
+
+#: ../dynwid_admin_edit.php:119 ../dynwid_admin_edit.php:194
+msgid "Return"
+msgstr "Návrat"
+
+#: ../dynwid_admin_edit.php:119
+msgid "to Dynamic Widgets overview"
+msgstr "na dynamické widgety prehľad"
+
+#: ../dynwid_admin_edit.php:123
+msgid "Dynamic does not mean static hiding of a widget."
+msgstr "Dynamické neznamená statické skrytie widget."
+
+#: ../dynwid_admin_edit.php:123
+msgid "Hint"
+msgstr "Tip"
+
+#: ../dynwid_admin_edit.php:123
+msgid "Remove"
+msgstr "Odstrániť"
+
+#: ../dynwid_admin_edit.php:123
+msgid "the widget from the sidebar"
+msgstr "widget z bočného panela"
+
+#: ../dynwid_admin_edit.php:128
+msgid "The From date can't be later than the To date."
+msgstr "Počiatočný dátum nesmie byť neskorší ako dátum do."
+
+#: ../dynwid_admin_edit.php:134
+msgid "Edit options for the widget"
+msgstr "Upraviť možnosti widget"
+
+#: ../dynwid_admin_edit.php:138
+msgid "Quick settings"
+msgstr "Rýchle nastavenia"
+
+#: ../dynwid_admin_edit.php:140
+msgid "Set all options to 'No'"
+msgstr "Nastaviť všetky možnosti na &quot;Nie&quot;"
+
+#: ../dynwid_admin_edit.php:140
+msgid "Except overriding options like Role, Date, etc."
+msgstr "Okrem vyššieho možnosti ako úlohu, dátum, atď."
+
+# WordPress MO
+#: ../dynwid_admin_edit.php:190 ../dynwid_admin_overview.php:140
+msgid "Save"
+msgstr "Uložiť"
+
+#: ../dynwid_admin_overview.php:20
+msgid "Method set to"
+msgstr "Metóda nastavená na hodnotu"
+
+#: ../dynwid_admin_overview.php:28
+msgid "Page limit set to"
+msgstr "Stránka limit nastavený"
+
+#: ../dynwid_admin_overview.php:31
+msgid "ERROR"
+msgstr "CHYBA"
+
+#: ../dynwid_admin_overview.php:31
+msgid "is not a valid limit."
+msgstr "nie je platný limit."
+
+#: ../dynwid_admin_overview.php:40
+msgid "Widget options have been reset to default."
+msgstr "Widget možnosti boli vynulované na predvolenú hodnotu."
+
+#: ../dynwid_admin_overview.php:48
+msgid "Inactive Widgets"
+msgstr "Neaktívne widgety"
+
+#: ../dynwid_admin_overview.php:71 ../dynwid_admin_overview.php:74
+msgid "Edit this widget options"
+msgstr "Tento widget možnosti editovania"
+
+# WordPress MO
+#: ../dynwid_admin_overview.php:74
+msgid "Edit"
+msgstr "Upraviť"
+
+#: ../dynwid_admin_overview.php:79
+msgid "Reset widget to Static"
+msgstr "Statické obnoviť widget"
+
+#: ../dynwid_admin_overview.php:100
+msgid "Advanced"
+msgstr "Pokročilé"
+
+#: ../dynwid_admin_overview.php:105
+msgid "wp_head() check:"
+msgstr "kontrola wp_head():"
+
+#: ../dynwid_admin_overview.php:110
+msgid "wp_head() is NOT called (at the most obvious place)"
+msgstr "wp_head() nie je len (na najzrejmejšími miesto)"
+
+#: ../dynwid_admin_overview.php:114
+msgid "wp_head() is called"
+msgstr "wp_head() sa nazýva"
+
+#: ../dynwid_admin_overview.php:118
+msgid "Unable to determine if wp_head() is called"
+msgstr "Nedá sa určiť, ak wp_head() sa nazýva"
+
+#: ../dynwid_admin_overview.php:130
+msgid "Use 'OLD' method"
+msgstr "Použite &quot;Staré&quot; metóda"
+
+#: ../dynwid_admin_overview.php:140
+msgid "Page limit"
+msgstr "Limit strany"
+
+#: ../dynwid_admin_overview.php:142
+msgid ""
+"The page limit sets the limit of number of pages to prevent a timeout when "
+"building the hierarchical tree. When the number of pages is above this "
+"limit, a flat list will be displayed which is less time consuming."
+msgstr ""
+"Stránka limit nastavuje maximálny počet strán zabrániť timeout pri vytváraní "
+"hierarchického stromu. Ak počet strán nad tento limit, zobrazia sa plochý "
+"zoznam, ktorý je menej časovo náročné."
+
+#: ../dynwid_admin_overview.php:144
+msgid "Currently the number of pages is"
+msgstr "V súčasnosti je počet strán"
+
+#: ../dynwid_admin_overview.php:151
+msgid ""
+"When upgrading to WPEC 3.8 the Dynamic Widgets rules for WPEC are lost. The "
+"WPEC dump gives you an overview of the rules before the update."
+msgstr ""
+"Pri inovácii na WPEC 3.8 dynamické widgety pravidlá WPEC sa stratia. WPEC "
+"výpis poskytuje prehľad pravidiel pred aktualizáciou."
+
+#: ../dynwid_admin_overview.php:152
+msgid "WARNING"
+msgstr "UPOZORNENIE"
+
+#: ../dynwid_admin_overview.php:152
+msgid ""
+"This only works correct when you did not add or change anything in the "
+"Dynamic Widgets rules."
+msgstr ""
+"Len to funguje správne, keď ste nie pridať alebo zmeniť niečo v pravidlách "
+"dynamické widgety."
+
+#: ../dynwid_admin_overview.php:157
+msgid "Create WPEC dump"
+msgstr "Vytvoriť WPEC výpisu"
+
+#: ../dynwid_admin_overview.php:164
+msgid ""
+"For debugging purposes it is possible you're asked to create a dump. Click "
+"the 'Create dump' button and save the text file."
+msgstr ""
+"Pre úèely ladenia aplikácií je možné ste požiadaní vytvoriť výpis. Kliknite "
+"na tlačidlo &quot;Vytvoriť výpisem&quot; a uložte textový súbor."
+
+#: ../dynwid_admin_overview.php:169
+msgid "Create dump"
+msgstr "Vytvorenie výpisu"
+
+#: ../dynwid_admin_overview.php:176
+msgid ""
+"When you deceide not to use this plugin anymore (sorry to hear that!). You "
+"can cleanup all settings and data related to this plugin by clicking on the "
+"'Uninstall' button. This process is irreversible! After the cleanup the "
+"plugin is deactivated automaticly."
+msgstr ""
+"Keď ste deceide Nepoužívať tento plugin už (Ospravedlňujem sa počuť, že!). "
+"Môžete vyčistenie všetkých nastavení a údajov súvisiace tento plugin "
+"kliknutím na tlačidlo &quot;Odinštalovať&quot;. Tento proces je nezvratný! "
+"Po cleanup je automaticky deaktivovaný plugin."
+
+#: ../dynwid_admin_overview.php:181
+msgid "Uninstall"
+msgstr "Odinštalovať"
+
+#: ../mods/search_module.php:13
+msgid "Search Page"
+msgstr "Vyhľadávaciu stránku"
+
+#: ../mods/search_module.php:15
+msgid "Show widget on the search page?"
+msgstr "Zobraziť widget na stránke vyhľadávania?"
+
+# WordPress MO
+#: ../mods/search_module.php:17 ../mods/qtranslate_module.php:31
+#: ../mods/category_module.php:21 ../mods/single_module.php:69
+#: ../mods/attachment_module.php:16 ../mods/error_module.php:16
+#: ../mods/frontpage_module.php:24
+msgid "Yes"
+msgstr "áno"
+
+# WordPress MO
+#: ../mods/search_module.php:18 ../mods/qtranslate_module.php:32
+#: ../mods/category_module.php:22 ../mods/single_module.php:70
+#: ../mods/attachment_module.php:17 ../mods/error_module.php:17
+#: ../mods/frontpage_module.php:25
+msgid "No"
+msgstr "nie"
+
+#: ../mods/qtranslate_module.php:22
+msgid "Language (QT)"
+msgstr "Jazyk (QT)"
+
+#: ../mods/qtranslate_module.php:24
+msgid "Show widget default on all languages?"
+msgstr "Zobraziť predvolené widget na všetky jazyky?"
+
+#: ../mods/qtranslate_module.php:24 ../mods/single_module.php:60
+#: ../mods/single_module.php:74
+msgid "Click to toggle info"
+msgstr "Kliknutím prepnúť info"
+
+#: ../mods/qtranslate_module.php:28
+msgid "Using this option can override all other options."
+msgstr "Pomocou tejto možnosti môžete prepísať všetky ostatné možnosti."
+
+#: ../mods/qtranslate_module.php:33
+msgid "Except the languages"
+msgstr "Okrem jazykov"
+
+#: ../mods/category_module.php:19
+msgid "Show widget default on category pages?"
+msgstr "Predvolené widget Ukázať na stránky kategórie?"
+
+#: ../mods/category_module.php:23
+msgid "Except the categories"
+msgstr "Okrem kategórií"
+
+#: ../mods/single_module.php:52
+msgid "Posts: "
+msgstr "Príspevky: "
+
+#: ../mods/single_module.php:52
+msgid "Tags: "
+msgstr "Tagy: "
+
+#: ../mods/single_module.php:60
+msgid "Show widget default on single posts?"
+msgstr "Zobraziť predvolené widget na jednotlivých miest?"
+
+#: ../mods/single_module.php:64
+msgid ""
+"When you use an author <b>AND</b> a category exception, both rules in the "
+"condition must be met. Otherwise the exception rule won't be applied.\n"
+"  \t\t\t\t\tIf you want to use the rules in a logical OR condition. Add the "
+"same widget again and apply the other rule to that.\n"
+"  \t\t\t\t\t"
+msgstr ""
+"Pri použití autor <b>a</b> kategórie výnimka, musia byť splnené obe pravidlá "
+"v stave. Inak nebude uplatňovať výnimka pravidlo. \n"
+"  \"t\"t\"t\"t\"tIf chcete použiť pravidlá v logickú OR. Pridať rovnaký "
+"widget znova a použiť iné pravidlo na ktoré. \n"
+"  \"t\"t\"t\"t\"t"
+
+#: ../mods/single_module.php:73
+msgid "Make exception rule available to individual posts and tags."
+msgstr "Aby výnimka pravidlo k dispozícii jednotlivé príspevky a Tagy."
+
+#: ../mods/single_module.php:77
+msgid ""
+"When you enable this option, you have the ability to apply the exception "
+"rule for <em>Single Posts</em> to tags and individual posts.\n"
+"\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag "
+"Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php"
+"\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
+"\t\t\t\t\t\tException rules for tags and individual posts in any combination "
+"work independantly, but will always be counted as one exception.<br />\n"
+"  \t\t\t\t\tPlease note when exception rules are set for Author and/or "
+"Category, these will be removed.\n"
+"  \t\t\t\t"
+msgstr ""
+"Ak zapnete túto možnosť, máte možnosť uplatniť výnimka pravidlo pre "
+"<em>Jediného príspevky</em> Tagy a individuálne príspevky. \n"
+"\"t\"t\"t\"t\"t\"tYou možno nastaviť výnimka pravidlo pre Tagy v jeden "
+"Upraviť značku Panel (prejsť na <a href=&quot;\"edit-tags.php?"
+"taxonomy=post_tag\"&quot;>Príspevok Tagy</a>, \n"
+"\"t\"t\"t\"t\"t\"tclick značku), pre jednotlivé príspevky v <a href=&quot;"
+"\"post-new.php\"&quot;>New</a> alebo <a href=&quot;\"edit.php\"&quot;"
+">upravovať</a> príspevky panel. \n"
+"\"t\"t\"t\"t\"t\"tException pravidlá pre Tagy a jednotlivé príspevky v "
+"akejkoľvek kombinácii práce samostatne, ale vždy sa bude počítať ako jedna "
+"výnimka.<br>\n"
+"  \"t\"t\"t\"t\"tPlease Poznámka Ak výnimkou pravidlá sú nastavené pre "
+"autora a/alebo kategórie, tieto budú odstránené. \n"
+"  \"t\"t\"t\"t"
+
+#: ../mods/single_module.php:94
+msgid "Except the posts by author"
+msgstr "S výnimkou príspevkov od autora"
+
+#: ../mods/single_module.php:105
+msgid "Except the posts in category"
+msgstr "Príspevky v kategórii okrem"
+
+#: ../mods/attachment_module.php:14
+msgid "Show widget on attachment pages?"
+msgstr "Zobraziť widget na zablokovanie stránok?"
+
+#: ../mods/error_module.php:14
+msgid "Show widget on the error page?"
+msgstr "Zobraziť widget na stránke chybu?"
+
+#: ../mods/frontpage_module.php:15
+msgid "Show widget on the front page?"
+msgstr "Zobraziť widget na prednej strane?"
+
+#: ../mods/frontpage_module.php:19
+msgid ""
+"This option only applies when your front page is set to display your latest "
+"posts (See Settings &gt; Reading).<br />\n"
+"\t\t\t\t\t\tWhen a static page is set, you can use the options for the "
+"static pages below.\n"
+"\t\t\t\t\t"
+msgstr ""
+"Táto možnosť platí len pri svojej titulnej strane nastavený na zobrazenie "
+"vašej najnovšie príspevky (pozri nastavenia &amp;gt; čítanie).<br>\n"
+"\"t\"t\"t\"t\"t\"tWhen statické stránky nastaviť, môžete použiť možnosti pre "
+"statické stránky nižšie. \n"
+"\"t\"t\"t\"t\"t"
+
+#: ../mods/archive_module.php:14
+msgid "Show widget on archive pages?"
+msgstr "Zobraziť widget na archívne stránky?"
+
+#: ../mods/archive_module.php:18
+msgid "This option does not include Author and Category Pages."
+msgstr "Táto možnosť nezahŕňa autora a stránky kategórie."
+
+#: ../mods/pages_module.php:14
+msgid "The static page module failed to load."
+msgstr "Statická stránka modul sa nepodarilo načítať."
+
+#: ../mods/pages_module.php:16
+msgid ""
+"This is probably because building the hierarchical tree took too long.<br /"
+">Decrease the limit of number of pages in the advanced settings."
+msgstr ""
+"Je to pravdepodobne preto budovanie hierarchického stromu trvalo príliš dlho."
+"<br>Zníženie limitu počtu stránok v pokročilom nastavenia."
+
+#: ../mods/pages_module.php:43 ../mods/custompost_module.php:46
+#: ../mods/custompost_module.php:89
+msgid "All childs"
+msgstr "Všetky childs"
+
+#: ../mods/pages_module.php:83 ../mods/pages_module.php:86
+msgid "Front page"
+msgstr "Predná strana"
+
+#: ../mods/pages_module.php:83 ../mods/pages_module.php:88
+msgid "Posts page"
+msgstr "Príspevky stránku"
+
+#: ../mods/pages_module.php:94
+msgid "Show widget default on static pages?"
+msgstr "Zobraziť predvolené widget na statické stránky?"
+
+#: ../mods/pages_module.php:101
+msgid ""
+"Checking the \"All childs\" option, makes the exception rule apply\n"
+"\t\t\t\t\tto the parent and all items under it in all levels. Also future "
+"items\n"
+"\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
+"\t\t\t\t\t\"All childs\" without the parent."
+msgstr ""
+"Kontrola \"All childs\" variant, robí výnimka pravidlo apply\n"
+"\"t\"t\"t\"t\"tto materskej a všetkých položiek pod ňou na všetkých "
+"úrovniach. Aj budúce items\n"
+"\"t\"t\"t\"t\"tunder materskej. Nie je možné uplatňovať výnimka pravidlo to\n"
+"\"t\"t\"t\"t\"t\"All childs\" bez rodiča."
+
+#: ../mods/pages_module.php:106
+msgid ""
+"Unfortunately the childs-function has been disabled\n"
+"\t\t\t\t\tbecause you have more than the limit of pages."
+msgstr ""
+"Bohužiaľ funkciu childs bol disabled\n"
+"\"t\"t\"t\"t\"tbecause máte viac než limit stránky."
+
+#: ../mods/pages_module.php:116
+msgid "Except the page(s)"
+msgstr "Okrem strany"
+
+#: ../mods/author_module.php:24
+msgid "Show widget default on author pages?"
+msgstr "Zobraziť predvolené widget na autorovi stránok?"
+
+#: ../mods/author_module.php:28
+msgid "Except the author(s)"
+msgstr "Okrem autorov"
+
+#: ../mods/bp_module.php:24
+msgid "Show widget default on BuddyPress pages?"
+msgstr "Zobraziť predvolené widget na BuddyPress stránkach?"
+
+#: ../mods/bp_module.php:28
+msgid "Except on the components pages"
+msgstr "Okrem toho na zložky stránkach"
+
+#: ../mods/bp_module.php:47
+msgid "Forum Index"
+msgstr "Forum Index"
+
+#: ../mods/bp_module.php:48
+msgid "Forum Topics"
+msgstr "Fórum Témy"
+
+#: ../mods/bp_module.php:49
+msgid "Members Index"
+msgstr "Členovia Index"
+
+#: ../mods/bp_module.php:54
+msgid "Show widget default on BuddyPress Group pages?"
+msgstr "Zobraziť predvolené widget na BuddyPress skupín stránok?"
+
+#: ../mods/bp_module.php:61
+msgid "Except in the groups"
+msgstr "Okrem skupiny"
+
+#: ../mods/bp_module.php:70
+msgid "Except in the group pages"
+msgstr "Okrem skupiny stránok"
+
+# WordPress MO
+#: ../mods/role_module.php:10
+msgid "Anonymous"
+msgstr "Anonymný"
+
+#: ../mods/role_module.php:25
+msgid "Show widget to everybody?"
+msgstr "Widget ukázať všetkým?"
+
+#: ../mods/role_module.php:29
+msgid ""
+"Setting options by role is very powerfull. It can override all other options!"
+"<br />\n"
+"\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
+msgstr ""
+"Nastavenie možností rolou je veľmi silný. To môže prepísať všetky ďalšie "
+"možnosti!<br>\n"
+"\"t\"t\"t\"t\"t\"tUsers ktorí nie sú prihlásení, dostane úlohu <em>Anonym</"
+"em> ."
+
+#: ../mods/role_module.php:34
+msgid "only to"
+msgstr "iba"
+
+#: ../mods/useragent_module.php:10
+msgid "(and other Gecko based)"
+msgstr "(a ostatné Gecko založené)"
+
+#: ../mods/useragent_module.php:17
+msgid "Other / Unknown / Not detected"
+msgstr "Ostatné / neznáme / nebola zistená"
+
+#: ../mods/useragent_module.php:28
+msgid "Show widget with all browsers?"
+msgstr "Zobraziť widget so všetkými prehliadačmi?"
+
+#: ../mods/useragent_module.php:32
+msgid "Browser detection is never 100% accurate."
+msgstr "Detekcia prehliadača nie je nikdy 100% presné."
+
+#: ../mods/useragent_module.php:37
+msgid "Except the browser(s)"
+msgstr "Okrem prehliadač"
+
+#: ../mods/tpl_module.php:23
+msgid "Show widget on every template?"
+msgstr "Widget Ukázať na každú šablónu?"
+
+#: ../mods/tpl_module.php:27
+msgid ""
+"This options takes precedence above other options like Pages and/or Single "
+"Posts."
+msgstr ""
+"To možnosti má prednosť nad iné možnosti, ako stránky a/alebo jednotlivých "
+"miest."
+
+#: ../mods/tpl_module.php:32
+msgid "Except the templates"
+msgstr "Okrem šablón"
+
+#: ../mods/tpl_module.php:34
+msgid "Default Template"
+msgstr "Predvolená šablóna"
+
+#: ../mods/custompost_module.php:126 ../mods/custompost_module.php:216
+msgid "Show widget on"
+msgstr "Ukázať widget na"
+
+#: ../mods/custompost_module.php:136
+msgid ""
+"All exceptions (Titles and Taxonomies) work in a logical OR condition. That "
+"means when one of the exceptions is met, the exception rule is applied."
+msgstr ""
+"Všetky výnimky (tituly a taxonómie) pracovať v logickú OR. To znamená, keď "
+"je splnená jedna z uvedených výnimiek, pravidlo výnimky."
+
+#: ../mods/custompost_module.php:143 ../mods/custompost_module.php:178
+#: ../mods/custompost_module.php:227 ../mods/custompost_module.php:260
+msgid "Except for"
+msgstr "S výnimkou"
+
+#: ../mods/custompost_module.php:254
+msgid "Show widget on Custom Post Type Archives"
+msgstr "Ukázať widget na vlastné Post typ Archív"
+
+#: ../mods/date_module.php:32
+msgid "Show widget always?"
+msgstr "Vždy Ukázať widget?"
+
+#: ../mods/date_module.php:36
+msgid ""
+"Next to the above role option, the date option is also very powerfull. "
+"You've been warned!"
+msgstr ""
+"Vedľa možnosti vyššie úlohu data voľba je tiež veľmi silný. Boli ste "
+"varovaní!"
+
+#: ../mods/date_module.php:37
+msgid ""
+"Enter dates in the YYYY-MM-DD format. You can also use the calender by "
+"clicking on the"
+msgstr ""
+"Zadať dátumy vo formáte RRRR-MM-DD. Môžete tiež použiť kalendár kliknutím na"
+
+#: ../mods/date_module.php:38
+msgid ""
+"Date ranges can be made by entering a From AND a To date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to be displayed from a specific date, "
+"only fill in the From date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to stop displaying on a specific date, "
+"only fill in the To date.\n"
+"  \t\t\t\t"
+msgstr ""
+"Rozsahy dátumov možno podľa zadania z a do dátumu<br>\n"
+"\"t\"t\"t\"t\"tWhen chcete widget zobrazí od určitého dátumu, len vyplniť "
+"dátum od<br>\n"
+"  \"t\"t\"t\"t\"tWhen chcete widget pre stopnutie zobrazovaného na konkrétny "
+"dátum, len vyplňte komu dátum. \n"
+"  \"t\"t\"t\"t"
+
+#: ../mods/date_module.php:45
+msgid "only"
+msgstr "len"
+
+#: ../mods/date_module.php:49
+msgid "From"
+msgstr "Od"
+
+#: ../mods/date_module.php:53
+msgid "To"
+msgstr "Na"
+
+#: ../mods/wpec_module.php:25
+msgid "Show widget default on WPSC categories?"
+msgstr "Zobraziť predvolené widget na WPSC kategórie?"
+
+#: ../mods/wpml_module.php:21
+msgid "Language (WPML)"
+msgstr "Jazyk (WPML)"
+
+#: ../mods/pods_module.php:11
+msgid "Except the Pods pages"
+msgstr "Okrem stránok struky"
+
+#: ../mods/pods_module.php:14
+msgid "Show widget default on Pods pages?"
+msgstr "Zobraziť predvolené widget na struky stránky?"

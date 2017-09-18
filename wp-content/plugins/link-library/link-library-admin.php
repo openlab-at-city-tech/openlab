@@ -240,10 +240,12 @@ class link_library_plugin_admin {
 	function ll_link_category_new_fields( $tag ) {
 
 		$caturl = '';
+		$cat_extra_query_string = '';
 
 		if ( is_object( $tag ) ) {
 			$mode   = "edit";
 			$caturl = get_metadata( 'linkcategory', $tag->term_id, 'linkcaturl', true );
+			$cat_extra_query_string = get_metadata( 'linkcategory', $tag->term_id, 'linkextraquerystring', true );
 		} else {
 			$mode = 'new';
 		}
@@ -278,6 +280,35 @@ class link_library_plugin_admin {
 		} elseif ( $mode == 'new' ) {
 			echo '</div>';
 		}
+
+		if ( $mode == 'edit' ) {
+			echo '<tr class="form-field">';
+		} elseif ( $mode == 'new' ) {
+			echo '<div class="form-field">';
+		} ?>
+
+		<?php if ( $mode == 'edit' ) {
+			echo '<th scope="row" valign="top">';
+		} ?>
+		<label for="tag-extra-query-string">
+			<?php _e( 'Extra Query String', 'link-library' ); ?></label>
+		<?php if ( $mode == 'edit' ) {
+			echo '</th>';
+		} ?>
+
+		<?php if ( $mode == 'edit' ) {
+			echo '<td>';
+		} ?>
+		<input type="text" id="cat_extra_query_string" name="cat_extra_query_string" size="60" value="<?php echo $cat_extra_query_string; ?>" />
+		<p class="description">Query string arguments that will be added to all links in this category</p>
+		<?php if ( $mode == 'edit' ) {
+			echo '</td>';
+		} ?>
+		<?php if ( $mode == 'edit' ) {
+			echo '</tr>';
+		} elseif ( $mode == 'new' ) {
+			echo '</div>';
+		}
 	}
 
 	function ll_save_link_category_new_fields( $term_id, $tt_id ) {
@@ -287,7 +318,11 @@ class link_library_plugin_admin {
 		}
 
 		if ( isset( $_POST['ll_category_url'] ) ) {
-			$returnvalue = update_metadata( 'linkcategory', $term_id, "linkcaturl", $_POST['ll_category_url'] );
+			update_metadata( 'linkcategory', $term_id, 'linkcaturl', $_POST['ll_category_url'] );
+		}
+
+		if ( isset( $_POST['cat_extra_query_string'] ) ) {
+			update_metadata( 'linkcategory', $term_id, 'linkextraquerystring', $_POST['cat_extra_query_string'] );
 		}
 	}
 
@@ -684,7 +719,7 @@ class link_library_plugin_admin {
 				}
 
 				if ( isset( $_GET['genthumbsingle'] ) || isset( $_GET['genfaviconsingle'] ) ) {
-					$linkquery .= " AND l.link_id = " . $_GET['linkid'];
+					$linkquery .= " AND l.link_id = " . intval( $_GET['linkid'] );
 				}
 
 				$linkitems = $wpdb->get_results( $linkquery );
@@ -743,6 +778,8 @@ class link_library_plugin_admin {
 				echo "<div id='message' class='updated fade'><p><strong><a href='" . $linksexportdir['url'] . '/LinksExport.csv' . "'>" . __( 'Download exported links', 'link-library' ) . "</a></strong></p></div>";
 			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '3' ) {
 				echo "<div id='message' class='updated fade'><p><strong>" . __( 'Link Library plugin directory needs to be writable to perform this action', 'link-library' ) . "</strong></p></div>";
+			} else if ( isset( $_GET['message'] ) && $_GET['message'] == '4' ) {
+				echo "<div id='message' class='updated fade'><p><strong>" . __( 'You must set the Google reCAPTCHA Site and Secret Keys to be able to set the captcha generator to Google reCAPTCHA.', 'link-library' ) . "</strong></p></div>";
 			}
 
 			$formvalue = 'save_link_library_general';
@@ -829,7 +866,6 @@ class link_library_plugin_admin {
 						case '10':
 							echo "<div id='message' class='updated fade'><p><strong>" . __( 'Links are missing categories', 'link-library' ) . "</strong></p></div>";
 							break;
-
 					}
 
 				}
@@ -1074,29 +1110,29 @@ class link_library_plugin_admin {
 	function display_menu( $menu_name = 'settingsset', $genoptions = '' ) {
 
 		if ( $menu_name == 'general' ) {
-			$tabitems = array ( 'general' => __( 'General', 'link-library' ),
-			                    'images' => __( 'Images', 'link-library' ),
-			                    'bookmarklet' => __( 'Bookmarklet', 'link-library' ),
-			                    'moderation' => __( 'Moderation', 'link-library' ),
-			                    'hidedonation' => __( 'Hide Donation', 'link-library' ),
+			$tabitems = array ( 'll-general' => __( 'General', 'link-library' ),
+			                    'll-images' => __( 'Images', 'link-library' ),
+			                    'll-bookmarklet' => __( 'Bookmarklet', 'link-library' ),
+			                    'll-moderation' => __( 'Moderation', 'link-library' ),
+			                    'll-hidedonation' => __( 'Hide Donation', 'link-library' ),
 			);
 
 			if ( isset( $genoptions['hidedonation'] ) && $genoptions['hidedonation'] ) {
-				unset ( $tabitems['hidedonation'] );
+				unset ( $tabitems['ll-hidedonation'] );
 			}
 		} elseif ( $menu_name == 'settingsset' ) {
-			$tabitems = array ( 'usage' => __( 'Usage', 'link-library' ),
-			                    'common' => __( 'Common', 'link-library' ),
-			                    'categories' => __( 'Categories', 'link-library' ),
-			                    'links' => __( 'Links', 'link-library' ),
-			                    'advanced' => __( 'Advanced', 'link-library' ),
-			                    'popup' => __( 'Pop-Ups', 'link-library' ),
-			                    'rssdisplay' => __( 'RSS Display', 'link-library' ),
-			                    'thumbnails' => __( 'Thumbnails', 'link-library' ),
-			                    'rssfeed' => __( 'RSS Feed', 'link-library' ),
-			                    'searchfield' => __( 'Search', 'link-library' ),
-			                    'userform' => __( 'User Submission', 'link-library' ),
-			                    'importexport' => __( 'Import/Export', 'link-library' ),
+			$tabitems = array ( 'll-usage' => __( 'Usage', 'link-library' ),
+			                    'll-common' => __( 'Common', 'link-library' ),
+			                    'll-categories' => __( 'Categories', 'link-library' ),
+			                    'll-links' => __( 'Links', 'link-library' ),
+			                    'll-advanced' => __( 'Advanced', 'link-library' ),
+			                    'll-popup' => __( 'Pop-Ups', 'link-library' ),
+			                    'll-rssdisplay' => __( 'RSS Display', 'link-library' ),
+			                    'll-thumbnails' => __( 'Thumbnails', 'link-library' ),
+			                    'll-rssfeed' => __( 'RSS Feed', 'link-library' ),
+			                    'll-searchfield' => __( 'Search', 'link-library' ),
+			                    'll-userform' => __( 'User Submission', 'link-library' ),
+			                    'll-importexport' => __( 'Import/Export', 'link-library' ),
 			);
 		}
 
@@ -1115,7 +1151,7 @@ class link_library_plugin_admin {
 			<?php
 				$index = 0;
 				foreach ( $tabitems as $tabkey => $tabitem ) { ?>
-				<li><a href="#<?php echo $tabkey; ?>" class="tab <?php echo $tabkey; ?> general <?php if ( $currenttab == $index ) echo 'current'; ?>"><?php echo $tabitem; ?></a> | </li>
+				<li><a href="#<?php echo $tabkey; ?>" class="ll-tab <?php echo $tabkey; ?> ll-general <?php if ( $currenttab == $index ) echo 'll-current'; ?>"><?php echo $tabitem; ?></a> | </li>
 			<?php
 				$index++;
 				} ?>
@@ -1126,7 +1162,7 @@ class link_library_plugin_admin {
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				jQuery('.content-section:not(:eq(<?php echo $currenttab; ?>))').hide();
-				jQuery('.subsubsub a.tab').click(function(e) {
+				jQuery('.subsubsub a.ll-tab').click(function(e) {
 
 					// Move the "current" CSS class.
 					jQuery(this).parents('.subsubsub').find('.current').removeClass('current');
@@ -1160,6 +1196,8 @@ class link_library_plugin_admin {
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
+		$message = 1;
+
 		foreach (
 			array(
 				'numberstylesets', 'includescriptcss', 'pagetitleprefix', 'pagetitlesuffix', 'schemaversion', 'thumbshotscid', 'approvalemailtitle',
@@ -1173,6 +1211,21 @@ class link_library_plugin_admin {
 			}
 		}
 
+		if ( isset( $_POST['captchagenerator'] ) && 'recaptcha' == $_POST['captchagenerator'] ) {
+			if ( empty( $_POST['recaptchasitekey'] ) || empty( $_POST['recaptchasecretkey'] ) ) {
+				$genoptions['captchagenerator'] = 'easycaptcha';
+				$message = 4;
+			} else {
+				$genoptions['captchagenerator'] = 'recaptcha';
+				$genoptions['recaptchasitekey'] = sanitize_text_field( $_POST['recaptchasitekey'] );
+				$genoptions['recaptchasecretkey'] = sanitize_text_field( $_POST['recaptchasecretkey'] );
+			}
+		} elseif ( isset( $_POST['captchagenerator'] ) && 'easycaptcha' == $_POST['captchagenerator'] ) {
+			$genoptions['captchagenerator'] = 'easycaptcha';
+			$genoptions['recaptchasitekey'] = '';
+			$genoptions['recaptchasecretkey'] = '';
+		}
+
 		foreach ( array( 'debugmode', 'emaillinksubmitter', 'suppressemailfooter', 'usefirstpartsubmittername', 'hidedonation', 'addlinkakismet' ) as $option_name ) {
 			if ( isset( $_POST[$option_name] ) ) {
 				$genoptions[$option_name] = true;
@@ -1184,10 +1237,7 @@ class link_library_plugin_admin {
 		}
 
 		update_option( 'LinkLibraryGeneral', $genoptions );
-
 		update_option( 'links_updated_date_format', $_POST['links_updated_date_format'] );
-
-		$message = "1";
 
 		if ( isset( $_POST['exportalllinks'] ) ) {
 			$upload_dir = wp_upload_dir();
@@ -1248,12 +1298,13 @@ class link_library_plugin_admin {
 			}
 		}
 
-
-		//lets redirect the post request into get request (you may add additional params at the url, if you need to show save results
-		$redirecturl = $this->remove_querystring_var( $_POST['_wp_http_referer'], 'message' ). "&message=" . $message;
-
 		if ( isset( $_POST['currenttab'] ) ) {
 			$redirecturl .= "&currenttab=" . $_POST['currenttab'];
+		}
+
+		$redirecturl = add_query_arg( array( 'currenttab' => $_POST['currenttab'], 'page' => 'link-library' ), admin_url() );
+		if ( !empty( $message ) ) {
+			$redirecturl = add_query_arg( array( 'message' => $message ), $redirecturl );
 		}
 
 		wp_redirect( $redirecturl );
@@ -1294,7 +1345,7 @@ class link_library_plugin_admin {
 					}
 
 					if ( !$skiprow ) {
-						if ( count( $data ) == 16 ) {
+						if ( count( $data ) == 17 ) {
 							if ( !empty( $data[5] ) ) {
 								$incomingcatdata = explode( ',', $data[5] );
 								$newlinkcat = array();
@@ -1342,16 +1393,16 @@ class link_library_plugin_admin {
 								}
 
 								$newlink = array(
-									"link_name"        => esc_html( stripslashes( $data[0] ) ),
-									"link_url"         => esc_url( stripslashes( $data[1] ) ),
-									"link_rss"         => esc_html( stripslashes( $data[2] ) ),
-									"link_description" => esc_html( stripslashes( $data[3] ) ),
-									"link_notes"       => esc_html( stripslashes( $data[4] ) ),
-									"link_category"    => $newlinkcat,
-									"link_visible"     => $data[6],
-									"link_image"       => $data[11],
-									"link_rating"	   => $newrating,
-									"link_target"      => $data[15]
+									"link_name"			=> esc_html( stripslashes( $data[0] ) ),
+									"link_url"			=> esc_url( stripslashes( $data[1] ) ),
+									"link_rss"			=> esc_html( stripslashes( $data[2] ) ),
+									"link_description"	=> esc_html( stripslashes( $data[3] ) ),
+									"link_notes"		=> esc_html( stripslashes( $data[4] ) ),
+									"link_category"		=> $newlinkcat,
+									"link_visible"		=> $data[6],
+									"link_image"		=> $data[11],
+									"link_rating"		=> $newrating,
+									"link_target"		=> $data[15]
 								);
 
 								if ( empty( $newlinkid ) ) {
@@ -1365,7 +1416,11 @@ class link_library_plugin_admin {
 								}
 
 								if ( $newlinkid != 0 ) {
-									$extradatatable = $this->db_prefix() . "links_extrainfo";
+									if ( !empty( $data[16] ) ) {
+										$wpdb->update( $this->db_prefix() . 'links', array( 'link_updated' => $data[16] ), array( 'link_id' => $newlinkid ) );
+									}
+
+									$extradatatable = $this->db_prefix() . 'links_extrainfo';
 									$nofollowvalue  = ( $data[13] == 'Y' ? true : false );
 
 									$existingextrainfo = "SELECT link_id FROM " . $extradatatable . " ";
@@ -1593,7 +1648,7 @@ class link_library_plugin_admin {
 					'beforecatlist1', 'beforecatlist2', 'beforecatlist3', 'catnameoutput', 'linkaddfrequency',
 					'defaultsinglecat', 'rsspreviewcount', 'rssfeedinlinecount', 'linksperpage', 'catdescpos',
 					'catlistdescpos', 'rsspreviewwidth', 'rsspreviewheight', 'numberofrssitems',
-					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname'
+					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname', 'showupdatedpos'
 				)
 				as $option_name
 			) {
@@ -1632,7 +1687,7 @@ class link_library_plugin_admin {
 					'showaddlinkreciprocal', 'showaddlinksecondurl', 'showaddlinktelephone', 'showaddlinkemail', 'showcustomcaptcha', 'showlinksubmittername',
 					'showaddlinksubmitteremail', 'showlinksubmittercomment', 'showuserlargedescription', 'cat_letter_filter', 'beforefirstlink', 'afterlastlink',
 					'searchfieldtext', 'catfilterlabel', 'searchnoresultstext', 'addlinkdefaultcat', 'beforesubmittername', 'aftersubmittername',
-					'beforecatdesc', 'aftercatdesc', 'emailextracontent', 'displayastable'
+					'beforecatdesc', 'aftercatdesc', 'emailextracontent', 'displayastable', 'extraquerystring', 'updatedlabel'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -1975,7 +2030,7 @@ class link_library_plugin_admin {
 		extract( $genoptions );
 
 		?>
-		<div style='padding-top:15px' id="general" class="content-section">
+		<div style='padding-top:15px' id="ll-general" class="content-section">
 		<table>
 			<tr>
 				<td>
@@ -2045,6 +2100,9 @@ class link_library_plugin_admin {
 								</select></td>
 						</tr>
 						<tr>
+							<td colspan="2"><hr /></td>
+						</tr>
+						<tr>
 							<td><?php _e( 'Thumbnail Generator', 'link-library' ); ?></td>
 							<td>
 								<select id="thumbnailgenerator" name="thumbnailgenerator">
@@ -2075,6 +2133,39 @@ class link_library_plugin_admin {
 								<?php } ?>
 								</select>
 							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><hr /></td>
+						</tr>
+						<tr class="captchagenerator">
+							<td><?php _e( 'Captcha generator' ); ?>
+							</td>
+							<td>
+								<select id="captchagenerator" name="captchagenerator">
+									<?php $captcha_generators = array( 'easycaptcha' => 'Easy Captcha', 'recaptcha' => 'Google reCAPTCHA' );
+
+									foreach ( $captcha_generators as $key => $captcha_generator ) { ?>
+									<option value="<?php echo $key; ?>" <?php selected( $genoptions['captchagenerator'], $key ); ?>><?php echo $captcha_generator; ?>
+										<?php } ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Site Key' ); ?>
+							</td>
+							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
+								<input type="text" id="recaptchasitekey" name="recaptchasitekey" size="60" value="<?php echo $genoptions['recaptchasitekey']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>"><?php _e( 'Google reCAPTCHA Secret Key' ); ?>
+							</td>
+							<td class="lltooltip" title="<?php _e( 'Sign up for the reCAPTCHA service before activating this feature to get your Site and Secret Keys', 'link-library' ); ?>">
+								<input type="text" id="recaptchasecretkey" name="recaptchasecretkey" size="60" value="<?php echo $genoptions['recaptchasecretkey']; ?>" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><hr /></td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Links Date Format', 'link-library' ); ?> (<a target="datehelp" href="https://codex.wordpress.org/Formatting_Date_and_Time"><?php _e( 'Help', 'link-library' ); ?></a>)
@@ -2120,6 +2211,11 @@ class link_library_plugin_admin {
 
 		<script type="text/javascript">
 			jQuery(document).ready(function () {
+				jQuery('.lltooltip').each(function () {
+						jQuery(this).tipTip();
+					}
+				);
+
 				jQuery("#thumbnailgenerator").change(function () {
 					jQuery(".thumbshotsapikey").toggle();
 					jQuery(".robothumbsize").toggle();
@@ -2132,7 +2228,7 @@ class link_library_plugin_admin {
 	function general_image_meta_box( $data ) {
 		$genoptions = $data['genoptions'];
 		?>
-		<div style='padding-top:15px' id="images" class="content-section">
+		<div style='padding-top:15px' id="ll-images" class="content-section">
 		<table>
 			<tr>
 				<td class='lltooltip' title='<?php _e( 'Custom full URL for expand icon. Uses default image if left empty.', 'link-library' ); ?>'><?php _e( 'Expand Icon Image', 'link-library' ); ?></td>
@@ -2156,7 +2252,7 @@ class link_library_plugin_admin {
 	function general_meta_bookmarklet_box( $data ) {
 		$bookmarkletcode = 'javascript:void(linkmanpopup=window.open(\'' . get_bloginfo( 'wpurl' ) . '/wp-admin/link-add.php?action=popup&linkurl=\'+escape(location.href)+\'&name=\'+(document.title),\'LinkManager\',\'scrollbars=yes,width=900px,height=600px,left=15,top=15,status=yes,resizable=yes\'));linkmanpopup.focus();window.focus();linkmanpopup.focus();';
 		?>
-		<div style='padding-top:15px' id="bookmarklet" class="content-section">
+		<div style='padding-top:15px' id="ll-bookmarklet" class="content-section">
 		<p><?php _e( 'Add new links to your site with this bookmarklet.', 'link-library' ); ?></p>
 		<p><?php _e( 'To use this feature, drag-and-drop the button below to your favorite / bookmark toolbar.', 'link-library' ); ?></p>
 		<a href="<?php echo $bookmarkletcode; ?>" class='button' title="<?php _e( 'Add to Links', 'link-library' ); ?>"><?php _e( 'Add to Links', 'link-library' ); ?></a>
@@ -2168,7 +2264,7 @@ class link_library_plugin_admin {
 	function general_moderation_meta_box( $data ) {
 		$genoptions = $data['genoptions'];
 		?>
-		<div style='padding-top:15px' id="moderation" class="content-section">
+		<div style='padding-top:15px' id="ll-moderation" class="content-section">
 		<table>
 			<tr>
 				<td colspan="2">
@@ -2257,7 +2353,7 @@ class link_library_plugin_admin {
 
 	function general_hide_donation_meta_box() {
 		?>
-		<div style='padding-top:15px' id="hidedonation" class="content-section">
+		<div style='padding-top:15px' id="ll-hidedonation" class="content-section">
 		<p><?php _e( 'The following option allows you to hide the Donate button and Support the Author section in the Link Library Admin pages. If you enjoy this plugin and use it regularly, please consider making a donation to the author before turning off these messages. This menu section will disappear along with the other elements.', 'link-library' ); ?></p>
 		<table>
 			<tr>
@@ -2409,9 +2505,7 @@ class link_library_plugin_admin {
 			for ( $counter = 1; $counter <= $numberofsets; $counter ++ ): ?>
 				<?php $tempoptionname = "LinkLibraryPP" . $counter;
 				$tempoptions          = get_option( $tempoptionname ); ?>
-				<option value="<?php echo $counter ?>" <?php if ( $settings == $counter ) {
-					echo 'SELECTED';
-				} ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( ! empty( $tempoptions ) && isset( $tempoptions['settingssetname'] ) ) {
+				<option value="<?php echo $counter ?>" <?php selected( $settings == $counter ); ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( ! empty( $tempoptions ) && isset( $tempoptions['settingssetname'] ) ) {
 						echo " (" . stripslashes( $tempoptions['settingssetname'] ) . ")";
 					} ?></option>
 			<?php endfor; ?>
@@ -2424,9 +2518,7 @@ class link_library_plugin_admin {
 					<?php $tempoptionname = "LinkLibraryPP" . $counter;
 					$tempoptions          = get_option( $tempoptionname );
 					if ( $counter != $settings ):?>
-						<option value="<?php echo $counter ?>" <?php if ( $settings == $counter ) {
-							echo 'SELECTED';
-						} ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( $tempoptions != "" ) {
+						<option value="<?php echo $counter ?>" <?php echo( $settings == $counter ); ?>><?php _e( 'Library', 'link-library' ); ?> <?php echo $counter ?><?php if ( $tempoptions != "" ) {
 								echo " (" . stripslashes( $tempoptions['settingssetname'] ) . ")";
 							} ?></option>
 					<?php endif;
@@ -2444,7 +2536,7 @@ class link_library_plugin_admin {
 		$settings   = $data['settings'];
 		$genoptions = $data['genoptions'];
 		?>
-		<div style='padding-top:15px' id="usage" class="content-section">
+		<div style='padding-top:15px' id="ll-usage" class="content-section">
 			<table class='widefat' style='clear:none;width:100%;background-color:#F1F1F1;background-image: linear-gradient(to top, #ECECEC, #F9F9F9);background-position:initial initial;background-repeat: initial initial'>
 				<thead>
 				<tr>
@@ -2504,7 +2596,7 @@ class link_library_plugin_admin {
 		$genoptions = $data['genoptions'];
 		?>
 
-		<div style='padding-top: 15px' id="common" class="content-section">
+		<div style='padding-top: 15px' id="ll-common" class="content-section">
 			<input type='hidden' value='<?php echo $settings; ?>' name='settingsetid' id='settingsetid' />
 			<table>
 				<tr>
@@ -2767,7 +2859,7 @@ class link_library_plugin_admin {
 		$settings   = $data['settings'];
 		$genoptions = $data['genoptions'];
 		?>
-		<div style='padding-top:15px' id="categories" class="content-section">
+		<div style='padding-top:15px' id="ll-categories" class="content-section">
 			<table>
 				<tr>
 					<td>
@@ -2926,7 +3018,7 @@ class link_library_plugin_admin {
 		$options  = $data['options'];
 		$settings = $data['settings'];
 		?>
-		<div style='padding-top:15px' id="links" class="content-section">
+		<div style='padding-top:15px' id="ll-links" class="content-section">
 		<table>
 			<tr>
 				<td>
@@ -2939,6 +3031,7 @@ class link_library_plugin_admin {
 						<option value="order"<?php selected ( $options['linkorder'] == 'order' ); ?>><?php _e( 'Order set by ', 'link-library' ); ?>'My Link Order' <?php _e( 'Wordpress Plugin', 'link-library' ); ?></option>
 						<option value="random"<?php selected( $options['linkorder'] == 'random' ); ?>><?php _e( 'Order randomly', 'link-library' ); ?></option>
 						<option value="date"<?php selected( $options['linkorder'] == 'date' ); ?>><?php _e( 'Order by updated date', 'link-library' ); ?></option>
+						<option value="hits"<?php selected( $options['linkorder'] == 'hits' ); ?>><?php _e( 'Order by number of link visits', 'link-library' ); ?></option>
 					</select>
 				</td>
 				<td style='width:100px'></td>
@@ -3024,6 +3117,14 @@ class link_library_plugin_admin {
 				</td>
 			</tr>
 			<tr>
+				<td class="lltooltip" title="<?php _e( 'Allows extra query string to be added to all links in library', 'link-library' ); ?>">
+					<?php _e( 'Additional link query string', 'link-library' ); ?>
+				</td>
+				<td class="lltooltip" title="<?php _e( 'Allows extra query string to be added to all links in library', 'link-library' ); ?>">
+					<input type="text" id="extraquerystring" name="extraquerystring" size="40" value="<?php echo $options['extraquerystring']; ?>" />
+				</td>
+			</tr>
+			<tr>
 				<td>
 					<?php _e( 'Show Column Headers', 'link-library' ); ?>
 				</td>
@@ -3093,7 +3194,7 @@ class link_library_plugin_admin {
 		$settings = $data['settings'];
 		?>
 
-		<div style='padding-top:15px' id="advanced" class="content-section">
+		<div style='padding-top:15px' id="ll-advanced" class="content-section">
 		<?php _e( 'Arrange the items below via drag-and-drop to order the various Link Library elements.', 'link-library' ); ?>
 		<br /><br />
 		<ul id="sortable">
@@ -3631,6 +3732,30 @@ class link_library_plugin_admin {
 				</td>
 			</tr>
 			<tr>
+				<td style='width:150px'>
+					<?php _e( 'Link Updated Flag Position', 'link-library' ); ?>
+				</td>
+				<td style='width:75px;padding:0px 20px 0px 20px'>
+					<select id="showupdatedpos" name="showupdatedpos">
+						<?php
+							$show_updated_pos_options = array( 'before' => 'Before Link Fields', 'after' => 'After Link Fields' );
+
+							foreach( $show_updated_pos_options as $show_updated_pos_option_key => $show_updated_pos_option ) { ?>
+								<option value="<?php echo $show_updated_pos_option_key; ?>" <?php selected( $options['showupdatedpos'], $show_updated_pos_option_key ); ?>><?php echo $show_updated_pos_option; ?></option>
+							<?php }
+						?>
+					</select>
+				</td>
+				<td style='width:20px'>
+				</td>
+				<td class="lltooltip" title="<?php _e( 'Label to be displayed before new links', 'link-library' ); ?>">
+					<?php _e( 'Updated link label', 'link-library' ); ?>
+				</td>
+				<td class="lltooltip" title="<?php _e( 'Label to be displayed before new links', 'link-library' ); ?>">
+					<input type="text" id="updatedlabel" name="updatedlabel" size="40" value="<?php echo $options['updatedlabel']; ?>" />
+				</td>
+			</tr>
+			<tr>
 				<td>
 					<?php _e( 'Add nofollow tag to outgoing links', 'link-library' ); ?>
 				</td>
@@ -3669,7 +3794,7 @@ class link_library_plugin_admin {
 		$options  = $data['options'];
 		$settings = $data['settings'];
 		?>
-		<div style='padding-top:15px' id="popup" class="content-section">
+		<div style='padding-top:15px' id="ll-popup" class="content-section">
 		<table>
 			<tr>
 				<td style='width:175px;'><?php _e( 'Enable link Pop-Ups', 'link-library' ); ?></td>
@@ -3706,7 +3831,7 @@ class link_library_plugin_admin {
 		$options  = $data['options'];
 		$settings = $data['settings'];
 		?>
-		<div style='padding-top:15px' id="rssdisplay" class="content-section">
+		<div style='padding-top:15px' id="ll-rssdisplay" class="content-section">
 		<table>
 			<tr>
 				<td>
@@ -3785,7 +3910,7 @@ class link_library_plugin_admin {
 		$settings   = $data['settings'];
 		?>
 
-		<div style='padding-top:15px' id="thumbnails" class="content-section">
+		<div style='padding-top:15px' id="ll-thumbnails" class="content-section">
 		<table>
 			<tr>
 				<td style='width: 400px' class='lltooltip' title='<?php _e( 'Checking this option will get images from the Robothumb web site every time', 'link-library' ); ?>.'>
@@ -3831,7 +3956,7 @@ class link_library_plugin_admin {
 		$settings = $data['settings'];
 		?>
 
-		<div style='padding-top:15px' id="rssfeed" class="content-section">
+		<div style='padding-top:15px' id="ll-rssfeed" class="content-section">
 		<table>
 			<tr>
 				<td>
@@ -3877,7 +4002,7 @@ class link_library_plugin_admin {
 		$options  = $data['options'];
 		$settings = $data['settings'];
 		?>
-		<div style='padding-top:15px' id="searchfield" class="content-section">
+		<div style='padding-top:15px' id="ll-searchfield" class="content-section">
 			<table>
 				<tr>
 					<td style='width:200px'><?php _e( 'Search Label', 'link-library' ); ?></td>
@@ -4005,7 +4130,7 @@ class link_library_plugin_admin {
 			$options['showuserlargedescription'] = 'show';
 		}
 		?>
-		<div style='padding-top:15px' id="userform" class="content-section">
+		<div style='padding-top:15px' id="ll-userform" class="content-section">
 		<table>
 		<tr>
 			<td colspan=5 class="lltooltip" title='<?php _e( 'Following this link shows a list of all links awaiting moderation', 'link-library' ); ?>.'>
@@ -4053,8 +4178,8 @@ class link_library_plugin_admin {
 			<td style='width: 20px'></td>
 		</tr>
 		<tr>
-			<td style='width:200px'><?php _e( 'Display captcha', 'link-library' ); ?></td>
-			<td style='width:75px;padding-right:20px'>
+			<td style='width:200px' class='lltooltip' title='<?php _e( 'Determine if a captcha will be displayed on the user submission form. Select the captcha system (Easy Captcha or Google reCAPTCHA) to be used from General Options section', 'link-library' ); ?>.'><?php _e( 'Display captcha', 'link-library' ); ?></td>
+			<td style='width:75px;padding-right:20px' class='lltooltip' title='<?php _e( 'Determine if a captcha will be displayed on the user submission form. Select the captcha system (Easy Captcha or Google reCAPTCHA) to be used from General Options section', 'link-library' ); ?>.'>
 				<input type="checkbox" id="showcaptcha" name="showcaptcha" <?php checked( $options['showcaptcha'] ); ?>/></td>
 			<td style='width: 20px'></td>
 			<td style='width: 20px'></td>
@@ -4418,7 +4543,7 @@ class link_library_plugin_admin {
 		require_once plugin_dir_path( __FILE__ ) . 'wp_dropdown_posts.php';
 		?>
 
-		<div style='padding-top:15px' id="importexport" class="content-section">
+		<div style='padding-top:15px' id="ll-importexport" class="content-section">
 		<table>
 			<tr>
 				<td class='lltooltip' title='<?php _e( 'Allows for links to be added in batch to the Wordpress links database. CSV file needs to follow template for column layout.', 'link-library' ); ?>' style='width: 330px'><?php _e( 'CSV file to upload to import links', 'link-library' ); ?> (<a href="<?php echo plugins_url( 'importtemplate.csv', __FILE__ ); ?>"><?php _e( 'file template', 'link-library' ); ?></a>)
@@ -4450,16 +4575,17 @@ class link_library_plugin_admin {
 					<input type="radio" name="siteimportlinksscope" value="specificpost"> <?php _e( 'Specific Post', 'link-library' ); 
 						wp_dropdown_posts(); ?><br />
 					<?php } 
-						  $site_post_types = get_post_types( array( '_builtin' => false ) );
-						foreach( $site_post_types as $site_post_type ) {
-							$any_posts = get_posts( array( 'post_type' => $site_post_type ) );
-							if ( count( $any_posts ) < 200 ) {
-							if ( !empty( $any_posts ) ) {
-								$post_type_data = get_post_type_object( $site_post_type ); ?>
+						$site_post_types = get_post_types( array( '_builtin' => false ) );
+						if ( !empty( $site_post_types ) ) {
+							foreach( $site_post_types as $site_post_type ) {
+								$any_posts = get_posts( array( 'post_type' => $site_post_type ) );
+								if ( !empty( $any_posts ) && count( $any_posts ) < 200 ) {
+									$post_type_data = get_post_type_object( $site_post_type ); ?>
 
-								<input type="radio" name="siteimportlinksscope" value="specific<?php echo $site_post_type; ?>"> <?php _e( 'Specific ' . $post_type_data->labels->singular_name, 'link-library' ); ?>
-								<?php wp_dropdown_posts( array( 'post_type' => $site_post_type, 'select_name' => $site_post_type . '_id' ) ); ?><br /><br />
-							<?php } }
+									<input type="radio" name="siteimportlinksscope" value="specific<?php echo $site_post_type; ?>"> <?php _e( 'Specific ' . $post_type_data->labels->singular_name, 'link-library' ); ?>
+									<?php wp_dropdown_posts( array( 'post_type' => $site_post_type, 'select_name' => $site_post_type . '_id' ) ); ?><br /><br />
+								<?php }
+							}
 						}
 					?>
 					<input type="checkbox" id="siteimportupdatesameurl" name="siteimportupdatesameurl" checked="checked" /> <?php _e( 'Update items when URL is identical', 'link-library' ); ?><br />

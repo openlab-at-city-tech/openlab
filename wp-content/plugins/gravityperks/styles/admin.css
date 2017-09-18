@@ -1,0 +1,245 @@
+/**
+* Styles for various Perk administration screens
+* 
+*/
+
+body.perk-iframe {
+    background-color: #f7f7f7;
+}
+
+.perk-iframe .wrap {
+    margin: 0;
+}
+
+.perk-iframe .wrap .content {
+    padding: 30px;
+    font-size: 15px;
+    line-height: 22px;
+    background-color: #fff;
+}
+
+.perk-iframe .wrap .content-footer {
+    background-color: #f7f7f7;
+    padding: 30px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.perk-iframe h1.page-title {
+    background-color: #f7f7f7;
+    padding: 30px;
+    border-bottom: 1px solid #eee;
+    line-height: 1;
+    margin: 0;
+}
+
+.perk-iframe .content h1 {
+    font-weight: normal;
+    margin: 50px 0 30px;
+    line-height: 1;
+    border-top: 1px solid #eee;
+    padding-top: 40px;
+}
+
+.perk-iframe .content h1:first-child {
+    margin-top: 20px;
+    border-top: 0;
+    padding-top: 0;
+}
+
+.perk-iframe .content h2 {
+    font-weight: normal;
+    margin: 30px 0 20px;
+    line-height: 1;
+    font-family: 'Merriweather', serif;
+}
+
+.perk-iframe .content form {
+    margin: 0;
+}
+
+.perk-iframe .content ul {
+    list-style: disc;
+    margin-left: 20px;
+    color: #555;
+}
+
+.perk-iframe .content li {
+    margin: 0 0 20px;
+}
+
+.perk-iframe .content li span.description {
+    margin: 0 0 20px;
+    font-family: 'Merriweather', serif;
+    display: block;
+}
+
+.perk-iframe .content p {
+    line-height: 26px;
+    margin: 0 0 24px;
+    color: #555;
+}
+
+.perk-iframe .content-footer {
+    background-color: #f7f7f7;
+    padding: 30px;
+    border-top: 1px solid #eee;
+    line-height: 1;
+    font-size: 15px;
+}
+
+.perk-settings {
+}
+
+.perk-settings textarea {
+    width: 75%;
+    height: 150px;
+}
+
+.perk-settings .updated *:last-child {
+    margin-bottom: 0;
+}
+
+.perk-settings-container {
+    border-left: 2px solid #eee;
+    margin: -18px 0 15px 6px;
+    padding: 15px 0 15px 22px;
+}
+
+.gwp-field {
+    margin: 0 0 18px;
+    padding: 0 0 18px;
+    border-bottom: 1px dotted #ddd;
+}
+
+.gwp-expandable {
+}
+
+.content > .gwp-field:nth-last-child(2),
+.gwp-field:last-child,
+.gwp-expandable.open {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.gwp-field label {
+    margin-bottom: 5px;
+}
+
+.gwp-field p.description {
+    margin: 0 0 5px;
+}
+
+.gwp-checkbox input[type="checkbox"] {
+    float: left;
+}
+
+.gwp-checkbox .label {
+    margin-left: 30px;
+}
+
+.gwp-checkbox input[type="checkbox"]:checked + .label label {
+    font-weight: bold !important;
+}
+
+.gwp-checkbox label + p {
+    margin-bottom: 5px;
+}
+
+.gwp-select select {
+    height: 2em;
+    padding: 2px;
+}
+
+.gwp-select option {
+    padding-right: 10px;
+}
+
+.gwp-field input[type="checkbox"],
+.gwp-field input[type="radio"] {
+    margin-top: 5px;
+}
+
+.documentation a.back {
+    display: block;
+    margin: 20px 0;
+}
+
+.documentation p {
+    margin: 0 0 1.6em;
+}
+
+.documentation p img {
+    border: 5px solid #eee;
+}
+
+.documentation p img.alignright {
+    float: right;
+    margin: 0 0 1.6em 20px;
+}
+
+.documentation p img.alignleft {
+    float: left;
+    margin: 0 20px 1.6em 0;
+}
+
+.documentation .notice {
+    padding: 1em 1.2em;
+    margin-bottom: 1.6em;
+    color: #946E2B;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+/* Form Editor Styles */
+
+.gfield .half {
+    float: left;
+    width: 47.5%;
+    margin-left: 5%;
+}
+
+.gfield .half:first-child {
+    margin-left: 0;
+}
+
+.gfield .third {
+    float: left;
+    width: 30%;
+    margin-left: 5%;
+}
+
+.gfield .third:first-child {
+    margin-left: 0;
+}
+
+.gp-field-setting .gp-row {
+    margin: 0 0 14px;
+}
+
+.gp-field-setting .gp-row:last-child {
+    margin: 0;
+}
+
+.ui-tabs-panel .gp-field-setting .gp-row label {
+    margin: 0 0 5px !important;
+}
+
+.gp-notice {
+    background-color: #FFFFE0;
+    border: 1px solid #F4EFB8;
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.gp-notice i {
+    color: #D4662C;
+}
+
+.gp-child-settings {
+	border-left: 2px solid #eee; padding: 15px; margin-left: 5px; margin-top: 5px;
+}
