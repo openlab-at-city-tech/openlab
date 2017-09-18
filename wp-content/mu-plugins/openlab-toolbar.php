@@ -929,7 +929,7 @@ HTML;
                     $blogname = sprintf( __('Global Dashboard: %s'), esc_html( get_current_site()->site_name ) );
             }
 
-            $display_string = "<span class='truncate-on-the-fly hyphenate hidden-sm' data-basevalue='30' data-minvalue='5' data-basewidth='220' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span>";
+            $display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate hidden-sm' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span></span>";
             
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
