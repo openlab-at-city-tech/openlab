@@ -41,7 +41,7 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                         this.inputName = self.$('input[name="assign_name"]');
                         var strLength = this.inputName.val().length;
                         if (self.assignment) {
-                            $("#assign_visibility_options option[value='" + self.assignment.get('assign_visibility') + "']").attr("selected", "selected");
+                            $("#assign_visibility option[value='" + self.assignment.get('assign_visibility') + "']").attr("selected", "selected");
                         }
                     });
                     return this;
@@ -71,22 +71,36 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                     if (toadd) {
                         toadd.save(assignmentInformation, {wait: true, success: function (model, response) {
                                 window.oplbGlobals.total_weight = model.attributes.total_weight;
+                                self.checkForAverageGradeUpdates(response);
                             }});
                     } else {
                         delete(assignmentInformation['id']);
                         var toadds = new Assignment(assignmentInformation);
                         toadds.save(assignmentInformation, {success: function (model, response) {
                                 console.log('model, response', model, response);
+                                console.log('response assignment', response['assignment']);
                                 self.gradebook.assignments.add(response['assignment']);
                                 _.each(response['cells'], function (cell) {
                                     self.gradebook.cells.add(cell)
                                 });
                                 window.oplbGlobals.total_weight = model.attributes.total_weight;
+                                self.checkForAverageGradeUpdates(response['assignment']);
                             }
                         });
                     }
                     this.$el.modal('hide');
                     return false;
+                },
+                checkForAverageGradeUpdates: function (response) {
+
+                    if (typeof response.student_grade_update === 'undefined' || response.student_grade_update.length < 1) {
+                        return false;
+                    }
+
+                    _.each(response.student_grade_update, function (update) {
+                        Backbone.pubSub.trigger('updateAverageGrade', update);
+                    });
+
                 }
             });
             return EditAssignmentView;

@@ -66,8 +66,16 @@ class gradebook_cell_API{
 					array( 'uid' => $params['uid'], 'amid' => $params['amid'] )
    				);   
                                 $assign_points_earned = $wpdb->get_row("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = {$params['uid']} AND amid = {$params['amid']}" , ARRAY_A);
-   				$assign_points_earned['assign_points_earned'] = floatval($assign_points_earned['assign_points_earned']);
-   				echo json_encode($assign_points_earned);
+                                
+                                $current_grade_average = $oplb_gradebook_api->oplb_gradebook_get_current_grade_average($params['uid'], $gbid);
+                                
+                                $data_back = array(
+                                    'current_grade_average' => $current_grade_average,
+                                    'assign_points_earned' => floatval($assign_points_earned['assign_points_earned']),
+                                    'uid' => $params['uid'],
+                                );
+                                
+   				echo json_encode($data_back);
    				die();	  			
 				break;
 	  		case 'UPDATE' :

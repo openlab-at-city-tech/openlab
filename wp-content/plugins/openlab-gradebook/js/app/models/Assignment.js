@@ -15,7 +15,7 @@ define(['backbone', 'underscore'], function (Backbone, _) {
         },
         url: function () {
             if (this.get('id')) {
-                return ajaxurl + '?action=assignment&id=' + this.get('id');
+                return ajaxurl + '?action=assignment&id=' + this.get('id') + '&gbid=' + this.get('gbid');
             } else {
                 return ajaxurl + '?action=assignment';
             }

@@ -16,9 +16,9 @@ define(['jquery', 'backbone', 'underscore'],
                 },
                 render: function () {
                     var self = this;
-                    
+
                     this.$el.attr('data-id', this.model.get('amid'));
-                    
+
                     var _assignment = this.gradebook.assignments.findWhere({id: this.model.get('amid')});
                     if (_assignment) {
                         this.$el.toggleClass('hidden', !_assignment.get('visibility'));
@@ -44,13 +44,14 @@ define(['jquery', 'backbone', 'underscore'],
                     if (parseFloat(value) != this.model.get('assign_points_earned')) {
                         this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
                                 self.render();
+                                Backbone.pubSub.trigger('updateAverageGrade', response );
                             }});
                     } else {
                         this.$el.find('.grade-numeric').attr('contenteditable', 'true');
                     }
                 },
                 edit: function () {
-                    this.$el.find('.grade-numeric').attr('contenteditable', 'false').css('opacity','0.42');
+                    this.$el.find('.grade-numeric').attr('contenteditable', 'false').css('opacity', '0.42');
                     this.hideInput(this.$el.find('.grade-numeric').html().trim());
                 },
                 hoverCell: function (ev) {

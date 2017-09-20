@@ -32,9 +32,9 @@
                     </div>	
                 </div>	
                 <div class="form-group">
-                    <label for="assign_visibility_options" class="col-sm-4 control-label">Visibility:</label>
+                    <label for="assign_visibility" class="col-sm-4 control-label">Visibility:</label>
                     <div class="col-sm-6">
-                        <select class="form-control" id="assign_visibility_options" name="assign_visibility_options">
+                        <select class="form-control" id="assign_visibility" name="assign_visibility">
                             <option value="Students">Students</option>
                             <option value="Instructor">Instructor</option>
                         </select>					
@@ -52,19 +52,19 @@
                         <h5 class="bold">Grade Type:</h5>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="gradeType" id="gradeTypeNumeric" value="numeric" <%= assignment.get('assign_grade_type') === 'numeric' ? 'checked="checked"' : '' %>>
+                                <input type="radio" name="assign_grade_type" id="gradeTypeNumeric" value="numeric" <%= assignment.get('assign_grade_type') === 'numeric' ? 'checked="checked"' : '' %>>
                                 Numeric
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="gradeType" id="gradeTypeLetter" value="letter" <%= assignment.get('assign_grade_type') === 'letter' ? 'checked="checked"' : '' %>>
+                                <input type="radio" name="assign_grade_type" id="gradeTypeLetter" value="letter" <%= assignment.get('assign_grade_type') === 'letter' ? 'checked="checked"' : '' %>>
                                 Letter Grades
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="gradeType" id="gradeTypeCheckmark" value="checkmark" <%= assignment.get('assign_grade_type') === 'checkmark' ? 'checked="checked"' : '' %>>
+                                <input type="radio" name="assign_grade_type" id="gradeTypeCheckmark" value="checkmark" <%= assignment.get('assign_grade_type') === 'checkmark' ? 'checked="checked"' : '' %>>
                                 Checkmark
                             </label>
                         </div>

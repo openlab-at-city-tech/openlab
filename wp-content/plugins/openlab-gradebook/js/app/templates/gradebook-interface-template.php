@@ -45,10 +45,11 @@
                     <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">  
                         <thead id="students-header-pinned" class="students-header">
                             <tr>
-                                <th class="gradebook-student-column-interactive student-tools"></th>
+                                <th class="gradebook-student-column-interactive student-tools adjust-widths" data-targetwidth="50"></th>
                                 <th class="gradebook-student-column-first_name"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
                                 <th class="gradebook-student-column-last_name"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
                                 <th class="gradebook-student-column-user_login"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
+                                <th class="gradebook-student-column-average adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='Current Average Grade'>Avg.</span></th>
                             </tr>
                         </thead>		    	
                         <tbody id="students-pinned" class="students"></tbody>
@@ -59,10 +60,11 @@
                         <table id="an-gradebook-container" class="table table-bordered table-striped">  
                             <thead id="students-header" class="students-header">
                                 <tr>
-                                    <th class="gradebook-student-column-interactive student-tools visible-xs"></th>
+                                    <th class="gradebook-student-column-interactive student-tools adjust-widths visible-xs" data-targetwidth="50"></th>
                                     <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
                                     <th class="gradebook-student-column-last_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
                                     <th class="gradebook-student-column-user_login visible-xs"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
+                                    <th class="gradebook-student-column-average visible-xs adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='Current Average Grade'>Avg.</span></th>
                                 </tr>
                             </thead>		    	
                             <tbody id="students" class="students"></tbody>

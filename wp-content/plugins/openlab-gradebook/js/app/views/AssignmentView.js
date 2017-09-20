@@ -41,16 +41,16 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 shiftAssignmentLeft: function (ev) {
                     ev.preventDefault();
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') - 1});
-                    x.save({assign_order: this.model.get('assign_order'), assign_visibility_options: x.get('assign_visibility')});
-                    this.assignment.save({assign_order: this.model.get('assign_order') - 1, assign_visibility_options: this.model.get('assign_visibility')});
+                    x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
+                    this.assignment.save({assign_order: this.model.get('assign_order') - 1, assign_visibility: this.model.get('assign_visibility')});
                 },
                 shiftAssignmentRight: function (ev) {
                     ev.preventDefault();
                     console.log('assign_order', this.model.get('assign_order'));
                     console.log('assignments', this.gradebook.assignments);
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') + 1});
-                    x.save({assign_order: this.model.get('assign_order'), assign_visibility_options: x.get('assign_visibility')});
-                    this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility_options: this.model.get('assign_visibility')});
+                    x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
+                    this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility: this.model.get('assign_visibility')});
                 },
                 toggleAssignmentMenu: function () {
                     var _assign_menu = $('#column-assign-id-' + this.model.get('id'));
@@ -126,7 +126,7 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     ev.preventDefault();
                     var self = this;
                     this.assignment.destroy({success:
-                                function (model) {
+                                function (model, response) {
                                     var _cells = self.gradebook.cells.where({amid: model.get('id')});
                                     self.gradebook.cells.remove(_cells);
                                     var _x = model.get('assign_order');
@@ -139,11 +139,26 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                                             _z.save({assign_order: i});
                                         }
                                     }
+
+                                    console.log('response in deleteAssignment', response);
+                                    self.checkForAverageGradeUpdates(response);
+
                                 }}
                     );
                 },
                 close: function (ev) {
                     this.remove();
+                },
+                checkForAverageGradeUpdates: function (response) {
+
+                    if (typeof response.student_grade_update === 'undefined' || response.student_grade_update.length < 1) {
+                        return false;
+                    }
+
+                    _.each(response.student_grade_update, function (update) {
+                        Backbone.pubSub.trigger('updateAverageGrade', update);
+                    });
+
                 }
             });
             return AssignmentView;

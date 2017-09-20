@@ -1,5 +1,8 @@
 define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame'],
         function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame) {
+
+            Backbone.pubSub = _.extend({}, Backbone.Events);
+
             var GradebookView = Backbone.View.extend({
                 initialize: function (options) {
                     var self = this;
@@ -15,9 +18,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.students, 'add remove', self.render);
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
                     this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);
-                    this.listenTo(self.gradebook.assignments, 'change:gradeType', self.render);
+                    this.listenTo(self.gradebook.assignments, 'change:assign_grade_type', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
+
+                    Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
                     this.queue = wp.Uploader.queue;
                     //safety first
@@ -66,6 +71,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var template = _.template($('#gradebook-interface-template').html());
 
                     var totalWeight = self.getTotalWeight();
+
+                    console.log('self.gradebook', self.gradebook);
 
                     var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.role, total_weight: totalWeight});
                     $('#wpbody-content').append(self.$el.html(compiled));
@@ -160,15 +167,26 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 adjustCellWidths: function () {
 
                     var pinnedTable = $('.pinned .table');
-                    var studentTools = pinnedTable.find('.student-tools');
+                    var columnsToAdjust = pinnedTable.find('.adjust-widths');
 
-                    var target_w = 50;
+                    if (columnsToAdjust.lenght < 1) {
+                        return false;
+                    }
+
                     var pinnedTable_w = pinnedTable.width();
 
-                    var target_pct = (target_w / pinnedTable_w) * 100;
-                    studentTools.css({
-                        'width': target_pct + '%'
+                    columnsToAdjust.each(function () {
+
+                        var thisElem = $(this);
+                        var target_w = thisElem.data('targetwidth');
+
+                        var target_pct = (target_w / pinnedTable_w) * 100;
+                        thisElem.css({
+                            'width': target_pct + '%'
+                        });
+
                     });
+
 
                 },
                 postLoadActions: function () {
@@ -313,6 +331,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 updateTotalWeight: function () {
                     console.log('total_weight on updateTotalWeight', window.oplbGlobals.total_weight);
+                },
+                updateAverageGrade: function (data) {
+
+                    var studentID = data.uid;
+                    var target = $('#average' + studentID);
+                    target.html(data.current_grade_average);
+
+                    target.attr('title', data.current_grade_average)
+                            .tooltip('fixTitle');
+
                 }
             });
             return GradebookView;
