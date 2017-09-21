@@ -471,7 +471,7 @@ class oplb_gradebook_api {
                     'uid' => $user->ID,
                     'gbid' => $gbid,
                     'role' => 'student',
-                    'current_grade_average',
+                    'current_grade_average' => 0.00,
                         ), array(
                     '%d',
                     '%d',
@@ -479,6 +479,7 @@ class oplb_gradebook_api {
                     '%f',
                         )
                 );
+
                 $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
                 foreach ($assignments as $assignment) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(

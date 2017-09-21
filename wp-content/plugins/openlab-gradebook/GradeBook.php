@@ -72,7 +72,11 @@ function enqueue_oplb_gradebook_scripts($hook) {
         'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG)
     ));
     if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'gradebook_page_oplb_gradebook_settings') {
-        //$oplb_gradebook_develop = true;
+        $oplb_gradebook_develop = false;
+        
+        if (WP_DEBUG) {
+            $oplb_gradebook_develop = true;
+        }
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), '0.0.0.2', false);
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.5', false);

@@ -2,7 +2,7 @@
 
 class OPLB_DATABASE {
 
-    const oplb_gradebook_db_version = 1.4;
+    const oplb_gradebook_db_version = 1.5;
 
     public function __construct() {
         register_activation_hook(__FILE__, array($this, 'database_init'));
@@ -15,7 +15,7 @@ class OPLB_DATABASE {
         if (!get_option('oplb_gradebook_db_version')) {
             $this->database_init();
         }
-        update_option("oplb_gradebook_db_version", 1.4);
+
         if (self::oplb_gradebook_db_version > get_option('oplb_gradebook_db_version')) {
             $this->database_alter();
         }
@@ -31,25 +31,20 @@ class OPLB_DATABASE {
         // }
         //where the constant oplb_gradebook_db_version should be changed to a larger number.				
         global $wpdb;
-        if (get_option('oplb_gradebook_db_version') == 1.0) {
+        if (get_option('oplb_gradebook_db_version') == 1.4) {
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
             $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.1);
-        }
-        if (get_option('oplb_gradebook_db_version') == 1.1) {
+
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1";
             $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.2);
-        }
-        if (get_option('oplb_gradebook_db_version') == 1.2) {
+
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments MODIFY assign_weight decimal(7,2)";
             $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.3);
-        }
-        if (get_option('oplb_gradebook_db_version') == 1.3) {
+
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00";
             $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.4);
+
+            update_option("oplb_gradebook_db_version", 1.5);
         }
     }
 
@@ -75,6 +70,7 @@ class OPLB_DATABASE {
 			uid int(11) NOT NULL,
 			gbid int(11) NOT NULL,
 			role VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "student",
+                        current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00,
 			PRIMARY KEY  (id)  )';
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
@@ -91,7 +87,9 @@ class OPLB_DATABASE {
             'assign_category' => 'mediumtext NOT NULL',
             'assign_visibility' => 'VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "Students"',
             'assign_date' => 'DATE NOT NULL DEFAULT "0000-00-00"',
-            'assign_due' => 'DATE NOT NULL DEFAULT "0000-00-00"');
+            'assign_due' => 'DATE NOT NULL DEFAULT "0000-00-00"',
+            'assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric"',
+            'assign_weight decimal(7,2) NOT NULL DEFAULT 1.00');
         if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name2 . '"') != $db_name2) {
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
