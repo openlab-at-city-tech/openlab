@@ -2,13 +2,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel"><%= course ? 'Edit ' : 'Create ' %>Course</h4>
+            <h4 class="modal-title" id="myModalLabel"><%= course ? 'Edit ' : 'Create ' %>Gradebook</h4>
         </div>
         <div class="modal-body">
             <form id="edit-course-form" class="form-horizontal"> 
                 <div class="form-group">     
                     <input type="hidden" name="id" value="<%= course ? course.get('id') : '' %>"/>        
-                    <label for="course_name" class="col-sm-3 control-label">Course Name:</label>
+                    <label for="course_name" class="col-sm-3 control-label">Gradebook Name:</label>
                     <div class="col-sm-7">
                         <input type="text" id="course_name" class="form-control" name="name" value="<%= course ? course.get('name') : '' %>"/>
                     </div>
