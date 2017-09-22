@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame'],
-        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame) {
+define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame', 'models/Course'],
+        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame, Course) {
 
             Backbone.pubSub = _.extend({}, Backbone.Events);
 
@@ -55,6 +55,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 events: {
                     'click button#add-student': 'addStudent',
                     'click button#upload-csv': 'uploadCSV',
+                    'click button#download-csv': 'downloadCSV',
                     'click button#add-assignment': 'addAssignment',
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
@@ -225,13 +226,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     if (typeof _wpPluploadSettings !== 'undefined') {
                         _wpPluploadSettings.defaults.multipart_params.gbid = this.course.get('id');
-                        console.log('_wpPluploadSettings', _wpPluploadSettings);
                     }
 
                     this.buildFrame().open();
-                    console.log('this.buildFrame()', this.buildFrame());
+                },
+                downloadCSV: function (e) {
+                    e.preventDefault();
 
-                    this.buildFrame().open();
+                    this.course.export2csv();
+
                 },
                 buildFrame: function () {
 
