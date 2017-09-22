@@ -271,7 +271,7 @@ class oplb_gradebook_api {
 
         if ($calc_grade_average !== $average_out) {
             $average_out = $calc_grade_average;
-            $this->oplb_gradebook_update_current_grade_average($average_out, $uid, $gbid);
+            $this->oplb_gradebook_update_current_grade_average($average_out, $gbid, $uid);
         }
 
         return number_format((float) $average_out, 2, '.', '');
@@ -353,7 +353,7 @@ class oplb_gradebook_api {
             foreach ($students as $key => $student) {
 
                 $calc_grade_average = $this->oplb_calculate_current_grade_average($student->uid, $gbid);
-                $this->oplb_gradebook_update_current_grade_average($calc_grade_average, $student->id, $gbid);
+                $this->oplb_gradebook_update_current_grade_average($calc_grade_average, $gbid, $student->id);
 
                 $student_data[$key] = array(
                     'uid' => $student->uid,
@@ -380,6 +380,7 @@ class oplb_gradebook_api {
             '%d',
                 )
         );
+
     }
 
     public function oplb_gradebook_get_user($id, $gbid, $bool = false) {

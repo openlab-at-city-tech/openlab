@@ -46,37 +46,44 @@ class OPLB_GradeBookAPI {
         }
         usort($assignments, build_sorter('assign_order'));
 
+        //setup weights - first three columns are blank to accommodate student info
+        $weights = array("", "", "", "weight");
+        foreach ($assignments as $assignment) {
+
+            $weight = $assignment['assign_weight'] . '%';
+            array_push($weights, $weight);
+        }
+
         $column_headers_assignment_names = array();
 
         foreach ($assignments as &$assignment) {
             array_push($column_headers_assignment_names, $assignment['assign_name']);
         }
         $column_headers = array_merge(
-                array('firstname', 'lastname', 'user_login', 'id', 'gbid'), $column_headers_assignment_names
+                array('firstname', 'lastname', 'user_login', 'current_average_grade'), $column_headers_assignment_names
         );
         $cells = array();
         $cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = $gbid", ARRAY_A);
         foreach ($cells as &$cell) {
             $cell['gbid'] = intval($cell['gbid']);
         }
-        $students = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid", ARRAY_N);
+        $students = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid");
         foreach ($students as &$value) {
-            $studentData = get_userdata($value[0]);
+            $studentData = get_userdata($value->uid);
             $value = array(
                 'firstname' => $studentData->first_name,
                 'lastname' => $studentData->last_name,
                 'user_login' => $studentData->user_login,
+                'current_grade_average' => $value->current_grade_average,
                 'id' => intval($studentData->ID),
-                'gbid' => intval($gbid)
             );
         }
+
         foreach ($cells as &$cell) {
             $cell['amid'] = intval($cell['amid']);
             $cell['uid'] = intval($cell['uid']);
             $cell['assign_order'] = intval($cell['assign_order']);
             $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
-            $cell['gbid'] = intval($cell['gbid']);
-            $cell['id'] = intval($cell['id']);
         }
         usort($cells, build_sorter('assign_order'));
         $student_records = array();
@@ -97,8 +104,13 @@ class OPLB_GradeBookAPI {
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
 
+        fputcsv($output, $weights);
         fputcsv($output, $column_headers);
         foreach ($student_records as &$row) {
+
+            //don't want to output student internal GB id
+            unset($row['id']);
+
             fputcsv($output, $row);
         }
         fclose($output);
