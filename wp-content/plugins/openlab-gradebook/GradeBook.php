@@ -9,10 +9,18 @@
   License: GPL
  */
 
+
+//establishing some constants
 define("OPENLAB_GRADEBOOK_VERSION", "0.0.3");
 define("OPENLAB_GRADEBOOK_FEATURES_TRACKER", 0.3);
 define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 
+/**
+ * Attempting to make this plugin BP and OpenLab agnostic
+ * Right now this is only partially implemented
+ * @todo: full audit of plugin for BP-dependent features
+ * @todo: full audit of plugin for OpenLab-dependent features
+ */
 function oplb_verify_buddypress() {
 
     define("OPLB_BP_AVAILABLE", true);
@@ -20,6 +28,9 @@ function oplb_verify_buddypress() {
 
 add_action('bp_include', 'oplb_verify_buddypress');
 
+/**
+ * Legacy: includes database files, where most of the backend functionality lives
+ */
 $database_file_list = glob(dirname(__FILE__) . '/database/*.php');
 foreach ($database_file_list as $database_file) {
     include($database_file);
@@ -28,6 +39,7 @@ foreach ($database_file_list as $database_file) {
 //sidebar widget
 include(dirname(__FILE__) . '/components/sidebar-widget.php');
 
+//legacy globals
 $oplb_database = new OPLB_DATABASE();
 $oplb_gradebook_api = new oplb_gradebook_api();
 $oplb_gradebook_course_api = new gradebook_course_API();
@@ -40,6 +52,9 @@ $oplb_user = new OPLB_USER();
 $oplb_user_list = new OPLB_USER_LIST();
 $oplb_statistics = new OPLB_STATISTICS();
 
+/**
+ * Legacy: setup OpenLab Gradebook admin
+ */
 function register_oplb_gradebook_menu_page() {
     $roles = wp_get_current_user()->roles;
 
@@ -57,6 +72,11 @@ function register_oplb_gradebook_menu_page() {
 
 add_action('admin_menu', 'register_oplb_gradebook_menu_page');
 
+/**
+ * Legacy: setup OpenLab admin enqueues
+ * @param type $hook
+ * @return type
+ */
 function enqueue_oplb_gradebook_scripts($hook) {
     $app_base = plugins_url('js', __FILE__);
 
@@ -97,6 +117,10 @@ function enqueue_oplb_gradebook_scripts($hook) {
 
 add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts');
 
+/**
+ * Legacy: callback for OpenLab Gradebook instantiation
+ * Adds template files to page so that BackBone JS client-side app can access them
+ */
 function init_oplb_gradebook() {
     $template_list = glob(dirname(__FILE__) . '/js/app/templates/*.php');
 
@@ -111,6 +135,10 @@ function init_oplb_gradebook() {
     }
 }
 
+/**
+ * Legacy: callback for OpenLab Gradebook settings instantiation
+ * Setups up templates for Backbone JS client-side app responsible for settings
+ */
 function init_oplb_gradebook_settings() {
     ob_start();
     include( dirname(__FILE__) . '/js/app/templates/settings-template.php' );
@@ -118,6 +146,12 @@ function init_oplb_gradebook_settings() {
     echo ob_get_clean();
 }
 
+/**
+ * Legacy: delete user hooks
+ * @todo: determine if this is necessary; actions may already be completed in database/User.php
+ * @global type $wpdb
+ * @param type $user_id
+ */
 function oplb_gradebook_my_delete_user($user_id) {
     global $wpdb;
     $results1 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_users", array('uid' => $user_id));
@@ -126,6 +160,10 @@ function oplb_gradebook_my_delete_user($user_id) {
 
 add_action('delete_user', 'oplb_gradebook_my_delete_user');
 
+/**
+ * Legacy: makes ajaxurl accessible to client-side app
+ * @todo: move this to wp_localize_script
+ */
 function oplb_gradebook_ajaxurl() {
     ?>
     <script type="text/javascript">
@@ -136,6 +174,12 @@ function oplb_gradebook_ajaxurl() {
 
 add_action('wp_head', 'oplb_gradebook_ajaxurl');
 
+/**
+ * Prevent notices from other plugins from appearing on OpenLab Gradebook pages
+ * These notices can sometimes interfere with client-side functionality
+ * @global type $wp_filter
+ * @return boolean
+ */
 function oplb_gradebook_admin_notices() {
     global $wp_filter;
     $screen = get_current_screen();
@@ -166,6 +210,11 @@ function oplb_gradebook_admin_notices() {
 
 add_action('admin_notices', 'oplb_gradebook_admin_notices', 1);
 
+/**
+ * Legacy: OpenLab Gradebook shortcode; currently not in use
+ * @todo: consider for deprecation, not currently part of OpenLab Gradebook scope, and may not work properly
+ * @return string
+ */
 function oplb_gradebook_shortcode() {
     init_oplb_gradebook();
     $oplb_gradebook_develop = false;
@@ -208,6 +257,10 @@ function oplb_get_dep_locations() {
     return $deps;
 }
 
+/**
+ * Add hook for gettext specific to OpenLab GradeBook page
+ * @param type $screen
+ */
 function oplb_gradebook_current_screen_callback($screen) {
 
     if (is_object($screen) && isset($screen->base)) {
@@ -220,6 +273,13 @@ function oplb_gradebook_current_screen_callback($screen) {
 
 add_action('current_screen', 'oplb_gradebook_current_screen_callback');
 
+/**
+ * Add translation filtering to modify strings related to Upload modal
+ * @param type $translated_text
+ * @param type $untranslated_text
+ * @param type $domain
+ * @return string
+ */
 function oplb_gradebook_gettext($translated_text, $untranslated_text, $domain) {
 
     switch ($untranslated_text) {
@@ -393,6 +453,13 @@ function oplb_gradebook_remove_admin_bar_edit_link() {
 
 add_action('wp_before_admin_bar_render', 'oplb_gradebook_remove_admin_bar_edit_link');
 
+/**
+ * Add param to modal upload to delineate type of upload
+ * @todo: leverage this param to improve how upload differentiates between 
+ * customized CSV upload and other types of uploads
+ * @param string $params
+ * @return string
+ */
 function oplb_gradebook_plupload_default_params($params) {
     $screen = new stdClass();
 
@@ -414,7 +481,8 @@ add_filter('plupload_default_params', 'oplb_gradebook_plupload_default_params');
 
 //legacy update
 $option = get_option('oplb_gradebook_features_tracker');
-
+ 
+//for legacy versions, add stoarge page
 if (!$option || floatval($option) < 0.3) {
 
     oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');

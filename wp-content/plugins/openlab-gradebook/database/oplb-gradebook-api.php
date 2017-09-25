@@ -136,7 +136,16 @@ class oplb_gradebook_api {
 
         return $pie_chart_data;
     }
-
+    
+    /**
+     * Retreive data to establish gradebook view on client-side
+     * @global type $current_user
+     * @global type $wpdb
+     * @param type $gbid
+     * @param type $role
+     * @param type $uid
+     * @return type
+     */
     public function oplb_get_gradebook($gbid, $role, $uid) {
         global $current_user, $wpdb;
         if (!$uid) {
@@ -235,14 +244,26 @@ class oplb_gradebook_api {
                 );
         }
     }
-
+    
+    /**
+     * Easily retrieve current user role
+     * @global type $wpdb
+     * @global type $current_user
+     * @param type $gbid
+     * @return type
+     */
     public function oplb_gradebook_get_user_role($gbid) {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
         $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND uid = $uid");
         return $role;
     }
-
+    
+    /**
+     * Easily establish if current user is an OpenLab Gradebook administrator
+     * @global type $current_user
+     * @return boolean
+     */
     public function oplb_is_gb_administrator() {
         global $current_user;
         $x = $current_user->roles;
@@ -254,7 +275,16 @@ class oplb_gradebook_api {
             return false;
         }
     }
-
+    
+    /**
+     * Retrieve the current grade average for a particular student
+     * Compares calculated grade average to stored average, and updates stored average
+     * if there is a difference between the two
+     * @global type $wpdb
+     * @param type $uid
+     * @param type $gbid
+     * @return type
+     */
     public function oplb_gradebook_get_current_grade_average($uid, $gbid) {
         global $wpdb;
         $average_out = 0.00;
@@ -276,7 +306,12 @@ class oplb_gradebook_api {
 
         return number_format((float) $average_out, 2, '.', '');
     }
-
+    
+    /**
+     * Calculates the total weight, i.e. the sum of all weights applied to assignments
+     * @global type $wpdb
+     * @return type
+     */
     public function oplb_gradebook_get_total_weight() {
         global $wpdb;
         $weights_by_assignment = array();
@@ -296,6 +331,14 @@ class oplb_gradebook_api {
         );
     }
 
+    /**
+     * Calculates the current grade average for a particular student
+     * Normalizes weights to 100%, then uses those weights in the grade calculation
+     * @global type $wpdb
+     * @param type $uid
+     * @param type $gbid
+     * @return type
+     */
     public function oplb_calculate_current_grade_average($uid, $gbid) {
         global $wpdb;
 
@@ -338,6 +381,12 @@ class oplb_gradebook_api {
         return number_format((float) $average_out, 2, '.', '');
     }
 
+    /**
+     * Utility for updating all student grade averages at once
+     * @global type $wpdb
+     * @param type $gbid
+     * @return type
+     */
     public function oplb_gradebook_update_all_student_current_grade_averages($gbid) {
         global $wpdb;
 
@@ -364,7 +413,14 @@ class oplb_gradebook_api {
 
         return $student_data;
     }
-
+    
+    /**
+     * Updates current grade average stored in the DB for a given student
+     * @global type $wpdb
+     * @param type $calc_grade_average
+     * @param type $gbid
+     * @param type $uid
+     */
     public function oplb_gradebook_update_current_grade_average($calc_grade_average, $gbid, $uid) {
         global $wpdb;
 
@@ -382,7 +438,16 @@ class oplb_gradebook_api {
         );
 
     }
-
+    
+    /**
+     * Retrieve user data for a given user
+     * Combines data stored in local OpenLab Gradebook tables, plus global user tables
+     * @global type $wpdb
+     * @param type $id
+     * @param type $gbid
+     * @param type $bool
+     * @return boolean
+     */
     public function oplb_gradebook_get_user($id, $gbid, $bool = false) {
         global $wpdb;
         $user = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $id AND gbid = $gbid", ARRAY_A);
@@ -405,7 +470,19 @@ class oplb_gradebook_api {
         $user['current_grade_average'] = $current_grade_average;
         return $user;
     }
-
+    
+    /**
+     * Add a new user to OpenLab Gradebook
+     * Contains legacy functionality that adds a global user
+     * @todo: deprecate this legacy functionality
+     * @global type $wpdb
+     * @param type $id
+     * @param type $gbid
+     * @param type $first_name
+     * @param type $last_name
+     * @param type $user_login
+     * @return type
+     */
     public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login) {
         global $wpdb;
         //$gbid is being passed as string, should be int.
