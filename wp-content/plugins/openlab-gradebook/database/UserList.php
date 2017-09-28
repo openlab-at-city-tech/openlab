@@ -11,10 +11,14 @@ class OPLB_USER_LIST {
      * @global type $wpdb
      * @global type $members_template
      */
-    public function oplb_user_list() {
+    public function oplb_user_list($method = false) {
         global $wpdb;
         $wpdb->show_errors();
-        $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
+
+        if (!$method) {
+            $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
+        }
+
         switch ($method) {
             case 'DELETE' :
                 echo json_encode(array("delete" => "deleting"));
@@ -29,6 +33,7 @@ class OPLB_USER_LIST {
                 echo json_encode(array("patch" => "patching"));
                 break;
             case 'GET' :
+            case 'retrieve' :
 
                 $students_out = array("error" => "no_students");
 
@@ -78,6 +83,10 @@ class OPLB_USER_LIST {
                     endwhile;
 
                 endif;
+
+                if ($method === 'retrieve') {
+                    return $students_out;
+                }
 
                 echo json_encode($students_out);
                 die();

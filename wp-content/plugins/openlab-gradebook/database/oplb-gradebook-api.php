@@ -136,7 +136,7 @@ class oplb_gradebook_api {
 
         return $pie_chart_data;
     }
-    
+
     /**
      * Retreive data to establish gradebook view on client-side
      * @global type $current_user
@@ -244,7 +244,7 @@ class oplb_gradebook_api {
                 );
         }
     }
-    
+
     /**
      * Easily retrieve current user role
      * @global type $wpdb
@@ -258,7 +258,7 @@ class oplb_gradebook_api {
         $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND uid = $uid");
         return $role;
     }
-    
+
     /**
      * Easily establish if current user is an OpenLab Gradebook administrator
      * @global type $current_user
@@ -275,7 +275,7 @@ class oplb_gradebook_api {
             return false;
         }
     }
-    
+
     /**
      * Retrieve the current grade average for a particular student
      * Compares calculated grade average to stored average, and updates stored average
@@ -306,7 +306,7 @@ class oplb_gradebook_api {
 
         return number_format((float) $average_out, 2, '.', '');
     }
-    
+
     /**
      * Calculates the total weight, i.e. the sum of all weights applied to assignments
      * @global type $wpdb
@@ -413,7 +413,7 @@ class oplb_gradebook_api {
 
         return $student_data;
     }
-    
+
     /**
      * Updates current grade average stored in the DB for a given student
      * @global type $wpdb
@@ -436,9 +436,8 @@ class oplb_gradebook_api {
             '%d',
                 )
         );
-
     }
-    
+
     /**
      * Retrieve user data for a given user
      * Combines data stored in local OpenLab Gradebook tables, plus global user tables
@@ -470,7 +469,7 @@ class oplb_gradebook_api {
         $user['current_grade_average'] = $current_grade_average;
         return $user;
     }
-    
+
     /**
      * Add a new user to OpenLab Gradebook
      * Contains legacy functionality that adds a global user
@@ -483,7 +482,7 @@ class oplb_gradebook_api {
      * @param type $user_login
      * @return type
      */
-    public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login) {
+    public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login, $return = false) {
         global $wpdb;
         //$gbid is being passed as string, should be int.
         if (!$user_login) {
@@ -499,8 +498,7 @@ class oplb_gradebook_api {
                 die();
             }
             $user_id = $result;
-            $wpdb->update($wpdb->users, array('user_login' => strtolower($first_name[0] . $last_name) . $user_id), array('ID' => $user_id)
-            );
+            $wpdb->update($wpdb->users, array('user_login' => strtolower($first_name[0] . $last_name) . $user_id), array('ID' => $user_id));
             $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
             foreach ($assignments as $assignment) {
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
@@ -541,6 +539,11 @@ class oplb_gradebook_api {
                 $check_for_existing_user = $wpdb->get_results($query);
 
                 if ($check_for_existing_user && !empty($check_for_existing_user)) {
+
+                    if ($return) {
+                        return false;
+                    }
+
                     echo 'User already exists';
                     die();
                 }
@@ -596,19 +599,60 @@ class oplb_gradebook_api {
                 $user_first_name = ($bp_first_name && !empty($bp_first_name)) ? $bp_first_name : $first_name_retrieve;
                 $user_last_name = ($bp_last_name && !empty($bp_last_name)) ? $bp_last_name : $last_name_retrieve;
 
-                echo json_encode(array('student' => array(
+                $student_out = array(
+                    'type' => 'single',
+                    'student' => array(
                         'first_name' => $user_first_name,
                         'last_name' => $user_last_name,
                         'user_login' => $user->user_login,
-                        'current_grade_average' => 0.00,
+                        'current_grade_average' => number_format((float) 0.00, 2, '.', ''),
                         'gbid' => intval($gbid),
                         'id' => $user->ID,
-                        'role' => $role[0]['role']),
+                        'role' => $role[0]['role']
+                    ),
                     'cells' => $cells
-                ));
-                die();
+                );
+
+                if ($return) {
+                    return $student_out;
+                }
+
+                wp_send_json($student_out);
             }
         }
+    }
+
+    public function oplb_gradebook_add_all_students($gbid) {
+        global $oplb_user_list;
+        $data_out = array(
+            'type' => 'all',
+            'students' => array(),
+            'cells' => array(),
+        );
+
+        $group_users = $oplb_user_list->oplb_user_list('retrieve');
+
+        if (!$group_users || empty($group_users)) {
+            echo json_encode(array("error" => "no_students"));
+            die();
+        }
+
+        foreach ($group_users as $user) {
+
+            $student_return = $this->oplb_gradebook_create_user($user->ID, $gbid, $user->xprofile_first_name, $user->xprofile_last_name, $user->user_login, true);
+
+            if (!$student_return) {
+                continue;
+            }
+
+            array_push($data_out['students'], $student_return['student']);
+
+            foreach ($student_return['cells'] as $cell) {
+                array_push($data_out['cells'], $cell);
+            }
+        }
+
+        return $data_out;
     }
 
 }

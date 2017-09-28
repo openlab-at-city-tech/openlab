@@ -22,14 +22,33 @@
                 </div>
                 <% } %>
                 <% if (!student) { %>
-                <div class="form-group"> 				    
-                    <label for="user_login" class="col-sm-4 control-label">User's name:</label>
-                    <div class="ui-front col-sm-6" id="user_login_wrapper">
-                        <select class="form-control" name="id-exists" id="user_login">
-                            <option value="0">Loading...</option>
-                        </select>
-                    </div> 
-                    <input type="hidden" name="gbid" value="<%=course.get('id')%>"/>				        
+                <div id="studentAddWrapper" class="student-add-wrapper add-all">
+                    <div id="selectStudentRange" class="form-group">
+                        <div class="col-sm-5">&nbsp;</div>
+                        <div class="col-sm-5">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="student_range_option" id="studentRangeAll" value="studentAll" checked="checked">
+                                    Add all students
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="student_range_option" id="studentRangeSingle" value="studentSingle">
+                                    Add a student
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="addSingleStudent" class="form-group">			    
+                        <label for="user_login" class="col-sm-5 control-label">User's name:</label>
+                        <div class="ui-front col-sm-5" id="user_login_wrapper">
+                            <select class="form-control" name="id-exists" id="user_login">
+                                <option value="0">Loading...</option>
+                            </select>
+                        </div> 
+                        <input type="hidden" name="gbid" value="<%=course.get('id')%>"/>				        
+                    </div>
                 </div>
                 <% } %>
                 <div>

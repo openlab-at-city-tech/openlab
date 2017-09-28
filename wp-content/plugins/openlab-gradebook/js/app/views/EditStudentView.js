@@ -9,7 +9,8 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                     'keyup': 'keyPressHandler',
                     'click #edit-student-save': 'submitForm',
                     'submit #edit-student-form': 'editSave',
-                    'input #user_login': 'loginSearch'
+                    'input #user_login': 'loginSearch',
+                    'change #selectStudentRange': 'handleStudentRangeSelection'
                 },
                 initialize: function (options) {
                     this.course = options.course;
@@ -81,13 +82,28 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                                 _.each(model.get('cells'), function (cell) {
                                     self.gradebook.cells.add(cell);
                                 });
-                                var _student = new User(model.get('student'));
-                                self.gradebook.students.add(_student);
+
+                                if (model.get('type') === 'all') {
+
+                                    _.each(model.get('students'), function (_student) {
+                                        self.gradebook.students.add(_student);
+                                    });
+
+                                } else {
+                                    var _student = new User(model.get('student'));
+                                    self.gradebook.students.add(_student);
+                                }
+
                                 self.$el.modal('hide');
                             }
                         });
                     }
                     return false;
+                },
+                handleStudentRangeSelection: function () {
+
+                    $('#studentAddWrapper').toggleClass('add-all add-single');
+
                 },
                 populateStudentDropdown: function () {
                     var self = this;

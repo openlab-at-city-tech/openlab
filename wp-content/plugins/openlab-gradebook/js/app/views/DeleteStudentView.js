@@ -49,6 +49,26 @@ define(['jquery', 'backbone', 'underscore'],
                     var todel = this.model;
                     var self = this;
                     todel.destroy({success: function (model, response) {
+
+                            var cells = self.gradebook.cells;
+                            console.log('cells in deleteSave', cells);
+
+                            _.each(cells.models, function (cell, index) {
+
+                                if (typeof cell === 'undefined') {
+                                    return;
+                                }
+
+                                if (cell.get('uid') === self.model.get('id')) {
+
+                                    cells.models.splice(index, 1);
+
+                                }
+
+                            });
+
+                            console.log('cells after procecssing in deleteSave', cells);
+
                             self.$el.modal('hide');
                         }});
                 }

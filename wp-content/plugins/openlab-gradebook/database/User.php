@@ -46,22 +46,30 @@ class OPLB_USER {
                 break;
             case 'POST' :
                 $params = json_decode(file_get_contents('php://input'), true);
-                $first_name = $params['first_name'];
-                $last_name = $params['last_name'];
-                $id = null;
                 $gbid = $params['gbid'];
-                $user_login = $params['id-exists'];
-                
-                //@todo: create client-side response for error messages
-                if (intval($user_login === 0)) {
-                    echo 'No user submitted';
-                    die();
-                }
 
-                global $oplb_gradebook_api;
-                $results = $oplb_gradebook_api->oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login);
-                echo json_encode($results);
-                break;
+                if ($params['student_range_option'] === 'studentAll') {
+
+                    global $oplb_gradebook_api;
+                    $results = $oplb_gradebook_api->oplb_gradebook_add_all_students($gbid);
+                    wp_send_json($results);
+                } else {
+
+                    $first_name = $params['first_name'];
+                    $last_name = $params['last_name'];
+                    $id = null;
+                    $user_login = $params['id-exists'];
+
+                    //@todo: create client-side response for error messages
+                    if (intval($user_login === 0)) {
+                        echo 'No user submitted';
+                        die();
+                    }
+
+                    global $oplb_gradebook_api;
+                    $results = $oplb_gradebook_api->oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login);
+                    wp_send_json($results);
+                }
         }
         die();
     }
