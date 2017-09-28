@@ -24,7 +24,7 @@
 						<span class="update"> - <?php bp_member_latest_update( 'length=10' ) ?></span>
 
 					<?php endif; ?>
-                                 
+
                                 <?php if (bp_current_action() !== 'my-friends'): ?>
                                     <div class="timestamp"><span class="fa fa-undo"></span> <?php bp_member_last_active() ?></div>
                                 <?php endif;?>
