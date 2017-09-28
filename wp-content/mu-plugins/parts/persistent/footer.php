@@ -43,7 +43,7 @@
                             <li>- NonCommercial</li>
                             <li>- ShareAlike</li>
                         </ul>
-                        <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" /></a>
+                        <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" alt="Creative Commons" /></a>
                     </div>
                 </div>
                 <div class="row row-copyright hidden-md hidden-lg">
