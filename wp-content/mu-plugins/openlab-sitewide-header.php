@@ -65,10 +65,10 @@ HTML;
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
         <div class="sr-only">Search by People or Group Type</div>
-		<label for="search-terms-{$mode}-{$location}" class="screen-reader-text">Search by People or Group Type</label>
+		<label for="search-terms-{$mode}-{$location}" class="sr-only">Search by People or Group Type</label>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="Search" />
 
-		<label for="search-which-{$mode}-{$location}" class="screen-reader-text">Select the Item Type to Search</label>
+		<label for="search-which-{$mode}-{$location}" class="sr-only">Select the Item Type to Search</label>
         <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
             <option value="members">People</option>
             <option value="courses">Courses</option>
@@ -77,7 +77,7 @@ HTML;
             <option value="portfolios">Portfolios</option>
         </select>
 
-        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i><span class="screen-reader-text">Submit</span></button>
+        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i><span class="sr-only">Submit</span></button>
         <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
         </div>
     </form><!-- #search-form -->
