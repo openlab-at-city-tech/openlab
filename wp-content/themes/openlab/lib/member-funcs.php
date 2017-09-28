@@ -262,7 +262,7 @@ function openlab_list_members($view) {
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar col-md-10 col-xs-8">
-                                <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                                <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/></a>
                             </div>
                             <div class="item col-md-14 col-xs-16">
                                 <h2 class="item-title"><a class="no-deco" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
