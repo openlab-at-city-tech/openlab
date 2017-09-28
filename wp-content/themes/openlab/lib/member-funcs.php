@@ -319,8 +319,8 @@ function openlab_members_pagination_links($page_args = 'upage') {
         'format' => '',
         'total' => ceil((int) $members_template->total_member_count / (int) $members_template->pag_num),
         'current' => (int) $members_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i>', 'Group pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i>', 'Group pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
     ));

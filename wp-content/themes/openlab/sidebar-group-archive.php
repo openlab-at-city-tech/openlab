@@ -160,6 +160,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
             <div id="sidebarCustomSelect" class="custom-select-parent">
                 <div class="custom-select" id="schoolSelect">
+                    <label for="school-select" class="sr-only">Select School</label>
                     <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                         <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
                         <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
@@ -171,6 +172,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
                 <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
                 <div class="custom-select">
+                    <label for="dept-select" class="sr-only">Select Department</label>
                     <select name="department" class="last-select processing <?php echo $dept_color; ?>-text" id="dept-select" <?php disabled('', $option_value_school) ?>>
                         <?php echo openlab_return_course_list($option_value_school, $option_value_dept); ?>
                     </select>
@@ -184,6 +186,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                         <?php if ($group_terms && !empty($group_terms)): ?>
 
                             <div class="custom-select">
+                                <label for="bp-group-categories-select" class="sr-only">Select Category</label>
                                 <select name="cat" class="last-select <?php echo $bpcgc_color; ?>-text" id="bp-group-categories-select">
                                     <option value="" <?php selected('', $option_value_bpcgc) ?>>Select Category</option>
                                     <option value='cat_all' <?php selected('cat_all', $option_value_bpcgc) ?>>All</option>
@@ -202,7 +205,8 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                 <?php // @todo figure out a way to make this dynamic ?>
                 <?php if ($group_type == 'course'): ?>
                     <div class="custom-select">
-                        <select name="semester" class="last-select <?php echo $semester_color; ?>-text">
+                        <label for="semester-select" class="sr-only">Select Semester</label>
+                        <select id="semester-select" name="semester" class="last-select <?php echo $semester_color; ?>-text">
                             <option value='' <?php selected('', $option_value_semester) ?>>Select Semester</option>
                             <option value='semester_all' <?php selected('semester_all', $option_value_semester) ?>>All</option>
                             <?php foreach (openlab_get_active_semesters() as $sem) : ?>
@@ -214,7 +218,8 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
                 <?php if ($group_type == 'portfolio' || $post_obj->post_title == 'People'): ?>
                     <div class="custom-select">
-                        <select name="usertype" class="last-select <?php echo $user_color; ?>-text">
+                        <label for="user-type-select" class="sr-only">Select User Type</label>
+                        <select id="user-type-select" name="usertype" class="last-select <?php echo $user_color; ?>-text">
                             <option value='' <?php selected('', $option_value_user_type) ?>>Select User Type</option>
                             <option value='student' <?php selected('student', $option_value_user_type) ?>>Student</option>
                             <option value='faculty' <?php selected('faculty', $option_value_user_type) ?>>Faculty</option>
@@ -225,7 +230,8 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                     </div>
                 <?php endif; ?>
                 <div class="custom-select">
-                    <select name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
+                    <label for="sequence-select" class="sr-only">Select Sort Order</label>
+                    <select id="sequence-select" name="group_sequence" class="last-select <?php echo $sort_color; ?>-text">
                         <option <?php selected($option_value, 'alphabetical') ?> value='alphabetical'>Alphabetical</option>
                         <option <?php selected($option_value, 'newest') ?>  value='newest'>Newest</option>
                         <option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
