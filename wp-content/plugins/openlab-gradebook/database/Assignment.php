@@ -14,7 +14,7 @@ class gradebook_assignment_API {
             case 'DELETE' :
                 parse_str($_SERVER['QUERY_STRING'], $params);
                 $id = $params['id'];
-                
+
                 $gbid = $wpdb->get_var("SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = $id");
                 if ($oplb_gradebook_api->oplb_gradebook_get_user_role($gbid) != 'instructor') {
                     echo json_encode(array("status" => "Not Allowed."));
@@ -133,8 +133,9 @@ class gradebook_assignment_API {
                     'assign_weight' => $params['assign_weight'],
                     'gbid' => $params['gbid'],
                     'assign_order' => $assignOrder
-                        ), array('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d')
+                        ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d')
                 );
+
                 $assignID = $wpdb->insert_id;
                 $studentIDs = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = {$params['gbid']} AND role = 'student'", ARRAY_N);
                 foreach ($studentIDs as $value) {
@@ -157,7 +158,7 @@ class gradebook_assignment_API {
                 $assignment['total_weight'] = $weight_return['total_weight'];
 
                 $student_data = $oplb_gradebook_api->oplb_gradebook_update_all_student_current_grade_averages($assignment['gbid']);
-                
+
                 if (!empty($student_data)) {
                     $assignment['student_grade_update'] = $student_data;
                 }

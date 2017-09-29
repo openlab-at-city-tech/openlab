@@ -2,7 +2,7 @@
 
 class OPLB_DATABASE {
 
-    const oplb_gradebook_db_version = 1.5;
+    const oplb_gradebook_db_version = 1.6;
 
     public function __construct() {
         register_activation_hook(__FILE__, array($this, 'database_init'));
@@ -31,7 +31,7 @@ class OPLB_DATABASE {
         // }
         //where the constant oplb_gradebook_db_version should be changed to a larger number.				
         global $wpdb;
-        if (get_option('oplb_gradebook_db_version') == 1.4) {
+        if (get_option('oplb_gradebook_db_version') < 1.6) {
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
             $wpdb->query($sql);
 
@@ -44,7 +44,7 @@ class OPLB_DATABASE {
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00";
             $wpdb->query($sql);
 
-            update_option("oplb_gradebook_db_version", 1.5);
+            update_option("oplb_gradebook_db_version", 1.6);
         }
     }
 
