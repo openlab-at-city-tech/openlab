@@ -520,3 +520,16 @@ function openlab_get_xprofile_field_id( $field_name ) {
 			return 194;
 	}
 }
+
+/**
+ * Force BP Group Documents (Files) upload extensions to match WP's.
+ */
+function openlab_filter_bp_group_documents_valid_file_formats( $formats ) {
+	$wp_types = get_allowed_mime_types();
+	$formats_array = array();
+	foreach ( $wp_types as $exts => $_ ) {
+		$formats_array = array_merge( $formats_array, explode( '|', $exts ) );
+	}
+	return implode( ',', $formats_array );
+}
+add_filter( 'option_bp_group_documents_valid_file_formats', 'openlab_filter_bp_group_documents_valid_file_formats' );
