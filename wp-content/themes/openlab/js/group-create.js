@@ -62,6 +62,7 @@ jQuery(document).ready(function($){
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').removeClass('disabled-opt');
+                                    $('#wds-website-external #find-feeds').removeClass('disabled');
                                 }
 
 			} else {
@@ -81,6 +82,7 @@ jQuery(document).ready(function($){
                                 //for external site note
                                 if ($(this).attr('id') === 'new_or_old_external'){
                                     $('#check-note').addClass('disabled-opt');
+                                    $('#wds-website-external #find-feeds').addClass('disabled');
                                 }
 			}
 		});
