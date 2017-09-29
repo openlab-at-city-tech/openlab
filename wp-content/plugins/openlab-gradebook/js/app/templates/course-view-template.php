@@ -13,7 +13,7 @@
             if (count($z)) {
                 ?>	
                 <li class='course-submenu-edit'><a href='#'>Edit</a></li>
-                <li class='course-submenu-export2csv'><a href='#'>Export to CSV</a></li>								
+                <li class='course-submenu-export2csv'><a href='#'>Download CSV</a></li>								
                 <li class='course-submenu-delete'><a href='#'><span class="text-danger">Delete</span></a></li>
             <?php } ?>
         </ul>
