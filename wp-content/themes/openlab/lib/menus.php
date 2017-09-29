@@ -408,26 +408,15 @@ function openlab_my_groups_submenu($group) {
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
             //have to add extra conditional in here for submenus on editing pages
-            if ($step_name == '') {
-                $menu_list = array(
-                    $create_link => 'Create / Clone a ' . ucfirst($group),
-                );
-            } else {
-
-                $submenu_text = 'Create / Clone a ';
-
-                $menu_list = array(
-                    $no_link => $step_name,
-                );
-            }
+            $menu_list = array(
+                $create_link => 'Create / Clone a ' . ucfirst($group),
+            );
         }
     } else {
         //have to add extra conditional in here for submenus on editing pages
-        if ($step_name == '') {
-            $menu_list = array(
-                $create_link => 'Create a ' . ucfirst($group),
-            );
-        }
+        $menu_list = array(
+            $create_link => 'Create a ' . ucfirst($group),
+        );
     }
 
     $menu_out['menu'] = openlab_submenu_gen($menu_list);
