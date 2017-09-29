@@ -88,8 +88,9 @@ class OPLB_DATABASE {
             'assign_visibility' => 'VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "Students"',
             'assign_date' => 'DATE NOT NULL DEFAULT "0000-00-00"',
             'assign_due' => 'DATE NOT NULL DEFAULT "0000-00-00"',
-            'assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric"',
-            'assign_weight decimal(7,2) NOT NULL DEFAULT 1.00');
+            'assign_grade_type' => 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric"',
+            'assign_weight' => 'decimal(7,2) NOT NULL DEFAULT 1.00',
+        );
         if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name2 . '"') != $db_name2) {
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
@@ -99,7 +100,9 @@ class OPLB_DATABASE {
 			assign_category mediumtext NOT NULL,			
 			assign_visibility VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "Students",
 			assign_date DATE NOT NULL DEFAULT "0000-00-00",
-			assign_due DATE NOT NULL DEFAULT "0000-00-00",			
+			assign_due DATE NOT NULL DEFAULT "0000-00-00",
+                        assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric",
+                        assign_weight decimal(7,2) NOT NULL DEFAULT 1.00,
 			PRIMARY KEY  (id) )';
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
