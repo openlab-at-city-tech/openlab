@@ -31,7 +31,11 @@ class OPLB_GradeBookAPI {
     }
 
     public function get_csv() {
-        global $wpdb, $oplb_gradebook_api;
+        global $wpdb, $oplb_gradebook_api, $oplb_upload_csv;
+
+        //grab the letters in case we need them
+        $letter_grades = $oplb_upload_csv->getLetterGrades();
+
         $gbid = $_GET['id'];
         if (!is_user_logged_in() || $oplb_gradebook_api->oplb_gradebook_get_user_role($gbid) != 'instructor') {
             echo json_encode(array("status" => "Not Allowed."));
@@ -39,10 +43,14 @@ class OPLB_GradeBookAPI {
         }
         $course = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);
         $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
+
+        $grade_types_by_aid = array();
+
         foreach ($assignments as &$assignment) {
             $assignment['id'] = intval($assignment['id']);
             $assignment['gbid'] = intval($assignment['gbid']);
             $assignment['assign_order'] = intval($assignment['assign_order']);
+            $grade_types_by_amID[$assignment['id']] = $assignment['assign_grade_type'];
         }
         usort($assignments, build_sorter('assign_order'));
 
@@ -67,7 +75,10 @@ class OPLB_GradeBookAPI {
         foreach ($cells as &$cell) {
             $cell['gbid'] = intval($cell['gbid']);
         }
-        $students = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid");
+
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $gbid, 'student');
+
+        $students = $wpdb->get_results($query);
         foreach ($students as &$value) {
             $studentData = get_userdata($value->uid);
             $value = array(
@@ -83,7 +94,29 @@ class OPLB_GradeBookAPI {
             $cell['amid'] = intval($cell['amid']);
             $cell['uid'] = intval($cell['uid']);
             $cell['assign_order'] = intval($cell['assign_order']);
-            $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
+
+            //crunch grades by grade type
+            $this_cell_grade_type = $grade_types_by_amID[$cell['amid']];
+
+            switch ($this_cell_grade_type) {
+                case 'letter':
+
+                    $cell['assign_points_earned'] = $oplb_upload_csv->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
+
+                    break;
+                case 'checkmark':
+
+                    if (floatval($cell['assign_points_earned']) >= 60) {
+                        $cell['assign_points_earned'] = 'x';
+                    } else {
+                        $cell['assign_points_earned'] = '';
+                    }
+
+                    break;
+                default:
+
+                    $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
+            }
         }
         usort($cells, build_sorter('assign_order'));
         $student_records = array();

@@ -658,5 +658,23 @@ class gradebook_upload_csv_API {
 
         return $letter_grades;
     }
-
+    
+    public function numeric_to_letter_grade_conversion($number){
+        
+        $letter_grades = $this->getLetterGrades();
+        
+        foreach($letter_grades as $letter_grade){
+            
+            if($number < $letter_grade['range_high'] && $number >= $letter_grade['range_low']){
+                
+                $letter = $letter_grade['label'];
+                break;
+            }
+            
+        }
+        
+        return $letter;
+        
+    }
+    
 }

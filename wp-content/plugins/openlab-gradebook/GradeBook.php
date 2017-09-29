@@ -51,6 +51,7 @@ $oplb_gradebook = new OPLB_GRADEBOOK();
 $oplb_user = new OPLB_USER();
 $oplb_user_list = new OPLB_USER_LIST();
 $oplb_statistics = new OPLB_STATISTICS();
+$oplb_upload_csv = new gradebook_upload_csv_API();
 
 /**
  * Legacy: setup OpenLab Gradebook admin
@@ -84,7 +85,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     wp_enqueue_media();
     wp_enqueue_script('jquery-ui-datepicker');
 
-    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.1.3', true);
+    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.1.4', true);
     wp_enqueue_script('init_gradebookjs');
     wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
         'ajaxURL' => admin_url('admin-ajax.php'),
@@ -102,7 +103,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.5', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.1.0', true);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.1.1', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
         wp_enqueue_script('requirejs');
@@ -327,6 +328,7 @@ function deactivate_oplb_gradebook() {
  * @return type
  */
 function oplb_gradebook_wp_handle_upload_prefilter($file_info) {
+    global $oplb_upload_csv;
 
     $storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
 
@@ -346,7 +348,6 @@ function oplb_gradebook_wp_handle_upload_prefilter($file_info) {
         $name = sanitize_file_name($_REQUEST['name']);
         $file_info['gbid'] = intval(sanitize_text_field($_REQUEST['gbid']));
 
-        $oplb_upload_csv = new gradebook_upload_csv_API();
         $result = $oplb_upload_csv->upload_csv($file_info, $name);
 
         if ($result['response'] === 'oplb-gradebook-error') {
