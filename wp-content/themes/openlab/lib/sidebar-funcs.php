@@ -122,24 +122,6 @@ function openlab_learnmore_sidebar() {
 }
 
 /**
- * 	Registration page sidebar
- *
- */
-function openlab_buddypress_register_actions() {
-    global $bp;
-    ?>
-    <h2 class="sidebar-title">&nbsp;</h2>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php
-}
-
-/**
  * Member pages sidebar - modularized for easier parsing of mobile menus
  * @param type $mobile
  */
