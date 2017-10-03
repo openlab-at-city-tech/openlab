@@ -98,6 +98,20 @@ function cuny_site_wide_footer() {
     if (get_current_blog_id() !== 1) {
         openlab_footer_markup(true);
     }
+
+    //debug
+    if (FANCY_DEBUG && WP_DEBUG && WP_DEBUG_LOG && !WP_DEBUG_DISPLAY) {
+        
+        $log = WP_CONTENT_DIR . "/debug.log";
+        
+        $debug = '<div id="debugLog" style="position: fixed;bottom: 0;left: 0;width: 70%;background: #fff;padding: 10px;">';
+        ob_start();
+        include($log);
+        $debug .= ob_get_clean();
+        $debug .= '</div>';
+
+        echo $debug;
+    }
 }
 
 /**
