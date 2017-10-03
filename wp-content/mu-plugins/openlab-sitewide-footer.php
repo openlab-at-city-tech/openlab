@@ -1,39 +1,40 @@
 <?php
+
 /**
  * Adds 'local environment' tab
  */
 function cuny_local_env_flag() {
-if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
-$env_type = 'local';
-if (defined('ENV_TYPE')) {
-$env_type = ENV_TYPE;
-}
-?>
+    if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
+        $env_type = 'local';
+        if (defined('ENV_TYPE')) {
+            $env_type = ENV_TYPE;
+        }
+        ?>
 
-<style type="text/css">
-    #local-env-flag {
-        position: fixed;
-        left: 0;
-        top: 35px;
-        width: 150px;
-        padding: 10px 15px;
-        text-align: center;
-        background: #600;
-        color: #fff;
-        font-size: 1em;
-        line-height: 1.8em;
-        border: 2px solid #666;
-        z-index: 99998;
-        opacity: 0.7;
+        <style type="text/css">
+            #local-env-flag {
+                position: fixed;
+                left: 0;
+                top: 35px;
+                width: 150px;
+                padding: 10px 15px;
+                text-align: center;
+                background: #600;
+                color: #fff;
+                font-size: 1em;
+                line-height: 1.8em;
+                border: 2px solid #666;
+                z-index: 99998;
+                opacity: 0.7;
+            }
+        </style>
+
+        <div id="local-env-flag">
+            <?php echo esc_html(strtoupper($env_type)) ?> ENVIRONMENT
+        </div>
+
+        <?php
     }
-</style>
-
-<div id="local-env-flag">
-    <?php echo esc_html(strtoupper($env_type)) ?> ENVIRONMENT
-</div>
-
-<?php
-}
 }
 
 add_action('wp_footer', 'cuny_local_env_flag');
@@ -43,46 +44,46 @@ add_action('login_footer', 'cuny_local_env_flag');
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
 function cuny_site_wide_navi_styles() {
-global $blog_id;
-$sw_navi_styles = set_url_scheme(WPMU_PLUGIN_URL . '/css/sw-navi.css');
+    global $blog_id;
+    $sw_navi_styles = set_url_scheme(WPMU_PLUGIN_URL . '/css/sw-navi.css');
 
-if ($blog_id == 1)
-return;
+    if ($blog_id == 1)
+        return;
 
-wp_register_style('SW_Navi_styles', $sw_navi_styles);
-wp_enqueue_style('SW_Navi_styles');
+    wp_register_style('SW_Navi_styles', $sw_navi_styles);
+    wp_enqueue_style('SW_Navi_styles');
 
 //google fonts
-wp_register_style('google-fonts', set_url_scheme('http://fonts.googleapis.com/css?family=Arvo'), $sw_navi_styles);
-wp_enqueue_style('google-fonts');
+    wp_register_style('google-fonts', set_url_scheme('http://fonts.googleapis.com/css?family=Arvo'), $sw_navi_styles);
+    wp_enqueue_style('google-fonts');
 }
 
 //add_action('wp_head', 'cuny_login_popup_script');
 function cuny_login_popup_script() {
-?>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        var cpl = jQuery('#cuny-popup-login');
-        jQuery("#popup-login-link").show();
-        jQuery(cpl).hide();
-
-        jQuery("#popup-login-link").click(function () {
-            if ('none' == jQuery(cpl).css('display')) {
-                jQuery(cpl).show();
-                jQuery("#sidebar-user-login").focus();
-            } else {
-                jQuery(cpl).hide();
-            }
-
-            return false;
-        });
-
-        jQuery(".close-popup-login").click(function () {
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var cpl = jQuery('#cuny-popup-login');
+            jQuery("#popup-login-link").show();
             jQuery(cpl).hide();
+
+            jQuery("#popup-login-link").click(function () {
+                if ('none' == jQuery(cpl).css('display')) {
+                    jQuery(cpl).show();
+                    jQuery("#sidebar-user-login").focus();
+                } else {
+                    jQuery(cpl).hide();
+                }
+
+                return false;
+            });
+
+            jQuery(".close-popup-login").click(function () {
+                jQuery(cpl).hide();
+            });
         });
-    });
-</script>
-<?php
+    </script>
+    <?php
 }
 
 add_action('wp_footer', 'cuny_site_wide_footer');
@@ -127,40 +128,40 @@ function cuny_site_wide_footer() {
  * @param type $placholder
  */
 function openlab_footer_markup($placeholder = NULL) {
-$footer_out = '';
-$blog_id = get_current_blog_id();
+    $footer_out = '';
+    $blog_id = get_current_blog_id();
 
-$site = bp_get_root_domain();
-$url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $site = bp_get_root_domain();
+    $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-$accessibility_link = get_option('footer_link_accessibility_help_post');
+    $accessibility_link = get_option('footer_link_accessibility_help_post');
 
-ob_start();
-include(WPMU_PLUGIN_DIR . '/parts/persistent/footer.php');
-$footer_out = ob_get_clean();
+    ob_start();
+    include(WPMU_PLUGIN_DIR . '/parts/persistent/footer.php');
+    $footer_out = ob_get_clean();
 
-echo $footer_out;
+    echo $footer_out;
 }
 
 remove_action('init', 'maybe_add_existing_user_to_blog');
 add_action('init', 'maybe_add_existing_user_to_blog', 90);
 
 function bbg_debug_queries() {
-if (!is_super_admin()) {
-return;
-}
+    if (!is_super_admin()) {
+        return;
+    }
 
-if (empty($_GET['debug_queries'])) {
-return;
-}
+    if (empty($_GET['debug_queries'])) {
+        return;
+    }
 
-global $wpdb;
-echo '<pre>';
-foreach ($wpdb->queries as $q) {
-if ($q[1] > 1) {
-print_r($q);
-}
-}
+    global $wpdb;
+    echo '<pre>';
+    foreach ($wpdb->queries as $q) {
+        if ($q[1] > 1) {
+            print_r($q);
+        }
+    }
 }
 
 //register_shutdown_function('bbg_debug_queries');
