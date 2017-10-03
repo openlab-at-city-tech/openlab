@@ -105,11 +105,11 @@ function cuny_site_wide_footer() {
         
         $log = WP_CONTENT_DIR . "/debug.log";
         
-        $debug = '<div id="debugLog" style="position: fixed;bottom: 0;left: 0;width: 70%;background: #fff;padding: 10px;">';
+        $debug = '<pre id="debugLog" style="position: fixed;bottom: 0;left: 0;width: 70%;background: #fff;padding: 10px; max-height: 150px;">';
         ob_start();
         include($log);
         $debug .= ob_get_clean();
-        $debug .= '</div>';
+        $debug .= '</pre>';
 
         echo $debug;
     }
