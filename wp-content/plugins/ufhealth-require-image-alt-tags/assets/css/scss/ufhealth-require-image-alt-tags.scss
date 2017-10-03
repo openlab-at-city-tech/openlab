@@ -1,0 +1,31 @@
+/**
+ * UF Health Require Image Alt Tags
+ * https://ufhealth.org/
+ *
+ * Copyright (c) 2017 UF Health
+ * Licensed under the GPLv2+ license.
+ */
+
+.media-frame-toolbar .media-toolbar-primary {
+
+	position: relative;
+
+	&:after {
+		display:    block;
+		background: transparent;
+		content:    '';
+		position:   absolute;
+		top:        0;
+		right:      0;
+		bottom:     0;
+		left:       0;
+	}
+
+	&.ufh-has-alt-text:after {
+		display: none;
+	}
+}
+
+.ufh-needs-alt-text {
+	border: 1px solid red;
+}
