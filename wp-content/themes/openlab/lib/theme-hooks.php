@@ -24,7 +24,7 @@ HTML;
             $args = array(
                 'headerright' => 'prev today next month agendaWeek',
                 'defaultview' => 'agendaWeek',
-                'titleformatweek' => 'F j, Y',
+                'titleformatweek' => 'F j, Y'
             );
 
             $link = eo_get_events_feed();
@@ -158,16 +158,17 @@ function openlab_custom_form_classes($classes) {
 
 add_filter('wpcf7_form_class_attr', 'openlab_custom_form_classes');
 
-function openlab_message_thread_excerpt_custom_size( $message ) {
-	global $messages_template;
+function openlab_message_thread_excerpt_custom_size($message) {
+    global $messages_template;
 
-	$message = strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 45, array(
-		'ending' => '',
-	) ) );
+    $message = strip_tags(bp_create_excerpt($messages_template->thread->last_message_content, 45, array(
+        'ending' => '',
+            )));
 
-	return $message;
+    return $message;
 }
-add_filter( 'bp_get_message_thread_excerpt', 'openlab_message_thread_excerpt_custom_size' );
+
+add_filter('bp_get_message_thread_excerpt', 'openlab_message_thread_excerpt_custom_size');
 
 function openlab_loader_class() {
     ?>
@@ -175,7 +176,7 @@ function openlab_loader_class() {
     <script type="text/javascript">
         document.documentElement.className = 'page-loading';
     </script>
-    
+
     <?php
 }
 

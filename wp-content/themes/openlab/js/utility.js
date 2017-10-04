@@ -239,10 +239,12 @@ OpenLab.utility = (function ($) {
                 args.scrollTime = '08:00:00';
                 args.viewRender = function (view, element) {
                     OpenLab.utility.calendarScrollBarPadding(view, element);
+                    OpenLab.utility.calendarButtonCustomization(view, element);
                 }
             } else {
                 args.viewRender = function (view, element) {
                     OpenLab.utility.calendarScrollBarPadding(view, element);
+                    OpenLab.utility.calendarButtonCustomization(view, element);
                 }
             }
 
@@ -264,6 +266,38 @@ OpenLab.utility = (function ($) {
                 });
 
             }
+
+        },
+        calendarButtonCustomization: function (view, element) {
+
+            //add sr-only text for accessibility
+            var buttons = $('#openlabCalendar .fc-button-group');
+
+            //get viewtype
+            var viewLabel = 'Month';
+
+            if (view.name === 'agendaWeek') {
+                viewLabel = 'Week';
+                
+                //if this is a week view, also fill in empty table header
+                $('.fc-agendaWeek-view .fc-axis.fc-widget-header').text('Time');
+                
+            }
+
+            buttons.find('.fc-button').each(function () {
+
+                var thisButton = $(this);
+                var direction = 'Previous';
+
+                if (thisButton.hasClass('fc-next-button')) {
+                    direction = 'Next';
+                }
+
+                var label = '<span class="sr-only">' + direction + ' ' + viewLabel + '</span>';
+
+                thisButton.find('.fc-icon').html(label);
+
+            });
 
         },
         getScrollBarWidth: function () {
