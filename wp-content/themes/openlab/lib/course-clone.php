@@ -685,7 +685,7 @@ class Openlab_Clone_Course_Site {
 
                 // Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
-		$this->copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+		self::copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
 		$site_posts = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
@@ -751,7 +751,7 @@ class Openlab_Clone_Course_Site {
 		return $this->source_group_admins;
 	}
 
-        /**
+	/**
 	 * Copy a file, or recursively copy a folder and its contents
 	 *
 	 * @author      Aidan Lister <aidan@php.net>
@@ -761,7 +761,7 @@ class Openlab_Clone_Course_Site {
 	 * @param       string   $dest      Destination path
 	 * @return      bool     Returns TRUE on success, FALSE on failure
 	 */
-	function copyr($source, $dest) {
+	public static function copyr($source, $dest) {
 	    // Check for symlinks
 	    if (is_link($source)) {
 		return symlink(readlink($source), $dest);
@@ -786,7 +786,7 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Deep copy directories
-		$this->copyr("$source/$entry", "$dest/$entry");
+		self::copyr("$source/$entry", "$dest/$entry");
 	    }
 
 	    // Clean up
