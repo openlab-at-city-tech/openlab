@@ -2323,3 +2323,17 @@ add_filter( 'wp_editor_settings', 'openlab_disallow_tinymce_comment_stylesheet' 
  * Blogs must be public in order for BP to record their activity.
  */
 add_filter( 'bp_is_blog_public', '__return_true' );
+
+/**
+ * Blacklist some Jetpack modules.
+ */
+function openlab_blacklist_jetpack_modules( $modules ) {
+	$blacklist = array( 'masterbar' );
+
+	foreach ( $blacklist as $module ) {
+		unset( $modules[ $module ] );
+	}
+
+	return $modules;
+}
+add_filter( 'jetpack_get_available_modules', 'openlab_blacklist_jetpack_modules' );
