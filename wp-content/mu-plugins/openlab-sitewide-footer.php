@@ -101,7 +101,7 @@ function cuny_site_wide_footer() {
     }
 
     //debug
-    if (FANCY_DEBUG && WP_DEBUG && WP_DEBUG_LOG && !WP_DEBUG_DISPLAY) {
+    if (defined('FANCY_DEBUG') && FANCY_DEBUG && WP_DEBUG && WP_DEBUG_LOG && !WP_DEBUG_DISPLAY) {
         
         $log = WP_CONTENT_DIR . "/debug.log";
         
