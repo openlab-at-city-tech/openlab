@@ -2318,3 +2318,8 @@ function openlab_disallow_tinymce_comment_stylesheet( $settings ) {
 	return $settings;
 }
 add_filter( 'wp_editor_settings', 'openlab_disallow_tinymce_comment_stylesheet' );
+
+/**
+ * Blogs must be public in order for BP to record their activity.
+ */
+add_filter( 'bp_is_blog_public', '__return_true' );

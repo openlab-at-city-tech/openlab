@@ -355,11 +355,6 @@ add_action('groups_create_group', 'openlab_create_forum_on_group_creation', 10, 
 add_filter('bp_get_new_group_enable_forum', '__return_true');
 
 /**
- * Blogs must be public in order for BP to record their activity. Only at save time
- */
-add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
-
-/**
  * Make sure the comment-dupe data doesn't get saved in the comments activity
  */
 function openlab_pre_save_comment_activity( $activity ) {
