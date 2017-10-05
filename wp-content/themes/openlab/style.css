@@ -8244,7 +8244,7 @@ body form .checkbox-list-container {
   float: left;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag {
-  background: #63dfd2;
+  background: #5cdacd;
   width: 4.5%;
   float: left;
   height: 100%;
@@ -8256,7 +8256,7 @@ body form .checkbox-list-container {
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li {
   margin: 0 auto 4px;
   background: transparent;
-  border: 1px solid #ffffff;
+  border: 1px solid #333333;
   display: block;
   height: 12px;
   width: 12px;
@@ -8265,7 +8265,7 @@ body form .checkbox-list-container {
   display: none;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li.cameracurrent {
-  background: #fff;
+  background: #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
@@ -8292,9 +8292,9 @@ body form .checkbox-list-container {
   right: 27%;
 }
 .home-page .row-home-top .slider .camera_content {
-  background: rgba(99, 223, 210, 0.8);
+  background: rgba(92, 218, 205, 0.9);
   bottom: 0;
-  color: #ffffff;
+  color: #333333;
   position: absolute;
   right: 0;
   top: 0;
@@ -8319,7 +8319,7 @@ body form .checkbox-list-container {
 }
 .home-page .row-home-top .slider .camera_content h2,
 .home-page .row-home-top .slider .camera_content p {
-  text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
+  text-shadow: 2px 2px 2px rgba(51, 51, 51, 0.2);
 }
 @media (max-width: 991px) {
   .home-page .row-home-top .slider .camera_content {
