@@ -7060,6 +7060,10 @@ a:focus {
   color: #3ba49b;
   text-decoration: underline;
 }
+a:focus {
+  outline: solid;
+  outline-offset: -2px;
+}
 a.no-deco {
   text-decoration: none;
 }

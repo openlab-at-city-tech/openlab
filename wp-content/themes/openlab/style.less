@@ -48,6 +48,10 @@ a {
         color: @darkTeal;
         text-decoration: underline;
     }
+    &:focus{
+        outline: solid;
+        outline-offset: -2px;
+    }
     &.no-deco{
         text-decoration: none;
     }
@@ -237,9 +241,9 @@ blockquote {
     }
 }
 .messages #pag-bottom {
-	clear: both;
-	display: block;
-	padding-left: 7.5px;
+    clear: both;
+    display: block;
+    padding-left: 7.5px;
 }
 
 /**structural**/
@@ -1740,7 +1744,7 @@ body form{
         border-radius: @border-radius-bottom;
         border-top: none;
         &:first-of-type,
-        &.sidebar-block-learnmore {
+            &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
         }
@@ -2956,47 +2960,47 @@ input.help-search {
     }
 }
 .openlab-library-tools {
-	.sidebar-header a {
-		text-decoration: none;
-	}
+    .sidebar-header a {
+        text-decoration: none;
+    }
 
-	h3.sidebar-block-header {
-		font-size: 16px;
-		margin: 10px 0 10px 0;
-	}
+    h3.sidebar-block-header {
+        font-size: 16px;
+        margin: 10px 0 10px 0;
+    }
 
-	.sidebar-block-content {
-		padding: 1% 5%;
-	}
+    .sidebar-block-content {
+        padding: 1% 5%;
+    }
 
-	input[type="text"],
-	select {
-		margin-bottom: 8px;
-		width: 100%;
-	}
+    input[type="text"],
+    select {
+        margin-bottom: 8px;
+        width: 100%;
+    }
 
-	.library-search-actions {
-		padding: 10px 0;
-		position: relative;
-	}
+    .library-search-actions {
+        padding: 10px 0;
+        position: relative;
+    }
 
-	.library-search-submit {
-		bottom: 0;
-		left: 0;
-		position: absolute;
-	}
+    .library-search-submit {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+    }
 
-	.library-search-advanced-link {
-		bottom: 10px;
-		right: 0;
-		position: absolute;
-	}
+    .library-search-advanced-link {
+        bottom: 10px;
+        right: 0;
+        position: absolute;
+    }
 
-	.openlab-library-information {
-		ul {
-			padding-left: 20px;
-		}
-	}
+    .openlab-library-information {
+        ul {
+            padding-left: 20px;
+        }
+    }
 }
 .page-nav{
     background: @5gray;

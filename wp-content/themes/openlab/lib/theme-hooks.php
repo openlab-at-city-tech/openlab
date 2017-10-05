@@ -7,7 +7,7 @@ function openlab_custom_the_content($content) {
     global $post;
 
     if ($post->post_name == 'contact-us' && ($post->post_type == 'page' || $post->post_type == 'help')) {
-        $form = do_shortcode('[contact-form-7 id="447" title="Contact Form 1"]');
+        $form = do_shortcode('[contact-form-7 id="5555" title="Contact Form 1"]');
         $content = <<<HTML
                 <div class="panel panel-default">
                     <div class="panel-heading">Contact Form</div>
