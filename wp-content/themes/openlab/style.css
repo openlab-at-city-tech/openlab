@@ -7063,6 +7063,7 @@ a:focus {
 a:focus {
   outline: solid;
   outline-offset: -2px;
+  outline-width: 2px;
 }
 a.no-deco {
   text-decoration: none;
