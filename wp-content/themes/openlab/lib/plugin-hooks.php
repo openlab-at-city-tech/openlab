@@ -17,6 +17,12 @@ require_once( STYLESHEETPATH . '/lib/plugin-mods/invite-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-mods/calendar-control.php' );
 
 /**
+ * Contact Form 7
+ */
+require_once( STYLESHEETPATH . '/lib/plugin-mods/contact-form-seven.php' );
+require_once( STYLESHEETPATH . '/lib/plugin-mods/contact-form-seven-module.php' );
+
+/**
  * Plugin: Invite Anyone
  * Don't send friend requests when accepting Invite Anyone invitations
  *

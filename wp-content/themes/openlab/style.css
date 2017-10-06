@@ -7060,6 +7060,11 @@ a:focus {
   color: #3ba49b;
   text-decoration: underline;
 }
+a:focus {
+  outline: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
+}
 a.no-deco {
   text-decoration: none;
 }
@@ -8096,7 +8101,7 @@ body form .checkbox-list-container {
   float: left;
   width: 32.5%;
   border-radius: 4px 0 0 4px;
-  color: #ffffff;
+  color: #000000;
   height: 295px;
 }
 @media (max-width: 767px) {
@@ -8106,6 +8111,9 @@ body form .checkbox-list-container {
     float: none;
     padding-top: 1px;
   }
+}
+.home-page .row-home-top .login .btn {
+  color: #ffffff;
 }
 .home-page .row-home-top .login h4 {
   margin-bottom: 25px;
@@ -8241,7 +8249,7 @@ body form .checkbox-list-container {
   float: left;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag {
-  background: #63dfd2;
+  background: #5cdacd;
   width: 4.5%;
   float: left;
   height: 100%;
@@ -8253,7 +8261,7 @@ body form .checkbox-list-container {
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li {
   margin: 0 auto 4px;
   background: transparent;
-  border: 1px solid #ffffff;
+  border: 1px solid #333333;
   display: block;
   height: 12px;
   width: 12px;
@@ -8262,7 +8270,7 @@ body form .checkbox-list-container {
   display: none;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li.cameracurrent {
-  background: #fff;
+  background: #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
@@ -8289,9 +8297,9 @@ body form .checkbox-list-container {
   right: 27%;
 }
 .home-page .row-home-top .slider .camera_content {
-  background: rgba(99, 223, 210, 0.8);
+  background: rgba(92, 218, 205, 0.9);
   bottom: 0;
-  color: #ffffff;
+  color: #333333;
   position: absolute;
   right: 0;
   top: 0;
@@ -8316,7 +8324,7 @@ body form .checkbox-list-container {
 }
 .home-page .row-home-top .slider .camera_content h2,
 .home-page .row-home-top .slider .camera_content p {
-  text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
+  text-shadow: 2px 2px 2px rgba(51, 51, 51, 0.2);
 }
 @media (max-width: 991px) {
   .home-page .row-home-top .slider .camera_content {
@@ -9987,8 +9995,8 @@ input.help-search {
   margin-bottom: 8px;
 }
 #help-tags .btn-primary {
-  background: #999999;
-  border-color: #999999;
+  background: #444444;
+  border-color: #444444;
 }
 #team-thumbs > div {
   min-height: 140px;
@@ -10111,7 +10119,7 @@ input.help-search {
   }
 }
 #breadcrumb-container .breadcrumb-col {
-  color: #ffffff;
+  color: #444444;
   line-height: 3.5;
   width: 100%;
   margin: 0 auto;

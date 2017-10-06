@@ -1171,6 +1171,7 @@ function ra_copy_blog_page( $group_id ) {
 					//					var_dump( $create );
 					if ( $data ) {
 						switch_to_blog( $src_id );
+						$src_upload_dir = wp_upload_dir();
 						$src_url = get_option( 'siteurl' );
 						$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
 						restore_current_blog();
@@ -1196,10 +1197,10 @@ function ra_copy_blog_page( $group_id ) {
 								}
 							}
 						}
+
 						// copy media
-						$cp_base = ABSPATH . '/' . UPLOADBLOGSDIR . '/';
-						$cp_cmd = 'cp -r ' . $cp_base . $src_id . ' ' . $cp_base . $new_id;
-						exec( $cp_cmd );
+						OpenLab_Clone_Course_Site::copyr( $src_upload_dir['basedir'], str_replace( $src_id, $new_id, $src_upload_dir['basedir'] ) );
+
 						// update options
 						$skip_options = array(
 						'admin_email',
@@ -1225,10 +1226,24 @@ function ra_copy_blog_page( $group_id ) {
 						if ( $options ) {
 							switch_to_blog( $new_id );
 							update_option( 'wds_bp_group_id', $group_id );
+
+							$old_relative_url = set_url_scheme( $src_url, 'relative' );
+							$new_relative_url = set_url_scheme( $new_url, 'relative' );
 							foreach ( $options as $o ) {
 								//								var_dump( $o );
 								if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
-									update_option( $o->option_name, maybe_unserialize( $o->option_value ) );
+									// Imperfect but we generally won't have nested arrays.
+									if ( is_serialized( $o->option_value ) ) {
+										$new_option_value = unserialize( $o->option_value );
+										foreach ( $new_option_value as $key => &$value ) {
+											if ( is_string( $value ) ) {
+												$value = str_replace( $old_relative_url, $new_relative_url, $value );
+											}
+										}
+									} else {
+										$new_option_value = str_replace( $old_relative_url, $new_relative_url, $o->option_value );
+									}
+									update_option( $o->option_name, $new_option_value );
 								}
 							}
 							if ( version_compare( $GLOBALS['wp_version'], '2.8', '>' ) ) {

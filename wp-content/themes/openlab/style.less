@@ -48,6 +48,11 @@ a {
         color: @darkTeal;
         text-decoration: underline;
     }
+    &:focus{
+        outline: solid;
+        outline-offset: -2px;
+        outline-width: 2px;
+    }
     &.no-deco{
         text-decoration: none;
     }
@@ -237,9 +242,9 @@ blockquote {
     }
 }
 .messages #pag-bottom {
-	clear: both;
-	display: block;
-	padding-left: 7.5px;
+    clear: both;
+    display: block;
+    padding-left: 7.5px;
 }
 
 /**structural**/
@@ -1109,13 +1114,16 @@ body form{
             float: left;
             width: 32.5%;
             border-radius: @border-radius-left;
-            color: @white;
+            color: @black;
             height: 295px;
             @media (max-width: @screen-xs-max){
                 background-position: right -44px;
                 width: 100%;
                 float: none;
                 padding-top: 1px;
+            }
+            .btn{
+                color: @white;
             }
             h4{
                 margin-bottom: 25px;
@@ -1254,7 +1262,7 @@ body form{
                     float: left;
                 }
                 .camera_pag{
-                    background: @cyan;
+                    background: @medTeal;
                     width: 4.5%;
                     float: left;
                     height: 100%;
@@ -1264,7 +1272,7 @@ body form{
                         li{
                             margin: 0 auto 4px;
                             background: transparent;
-                            border: 1px solid @white;
+                            border: 1px solid @80gray;
                             display: block;
                             height: 12px;
                             width: 12px;
@@ -1272,7 +1280,7 @@ body form{
                                 display: none;
                             }
                             &.cameracurrent{
-                                background: #fff;
+                                background: @80gray;
                             }
                         }
                     }
@@ -1302,9 +1310,9 @@ body form{
                 }
             }
             .camera_content{
-                background: rgba(99, 223, 210, 0.8);
+                background: rgba(92, 218, 205, .9);
                 bottom: 0;
-                color: @white;
+                color: @80gray;
                 position: absolute;
                 right: 0;
                 top: 0;
@@ -1328,7 +1336,7 @@ body form{
                 }
                 h2,
                 p{
-                    text-shadow: 2px 2px 2px rgba(99, 219, 152, 0.8);
+                    text-shadow: 2px 2px 2px rgba(51, 51, 51, 0.2);
                 }
                 @media (max-width: @screen-sm-max){
                     width: 59%;
@@ -1737,7 +1745,7 @@ body form{
         border-radius: @border-radius-bottom;
         border-top: none;
         &:first-of-type,
-        &.sidebar-block-learnmore {
+            &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
         }
@@ -2917,8 +2925,8 @@ input.help-search {
 }
 #help-tags {
     .btn-primary {
-        background: @40gray;
-        border-color: @40gray;
+        background: @70gray;
+        border-color: @70gray;
     }
 }
 #team-thumbs{
@@ -2953,47 +2961,47 @@ input.help-search {
     }
 }
 .openlab-library-tools {
-	.sidebar-header a {
-		text-decoration: none;
-	}
+    .sidebar-header a {
+        text-decoration: none;
+    }
 
-	h3.sidebar-block-header {
-		font-size: 16px;
-		margin: 10px 0 10px 0;
-	}
+    h3.sidebar-block-header {
+        font-size: 16px;
+        margin: 10px 0 10px 0;
+    }
 
-	.sidebar-block-content {
-		padding: 1% 5%;
-	}
+    .sidebar-block-content {
+        padding: 1% 5%;
+    }
 
-	input[type="text"],
-	select {
-		margin-bottom: 8px;
-		width: 100%;
-	}
+    input[type="text"],
+    select {
+        margin-bottom: 8px;
+        width: 100%;
+    }
 
-	.library-search-actions {
-		padding: 10px 0;
-		position: relative;
-	}
+    .library-search-actions {
+        padding: 10px 0;
+        position: relative;
+    }
 
-	.library-search-submit {
-		bottom: 0;
-		left: 0;
-		position: absolute;
-	}
+    .library-search-submit {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+    }
 
-	.library-search-advanced-link {
-		bottom: 10px;
-		right: 0;
-		position: absolute;
-	}
+    .library-search-advanced-link {
+        bottom: 10px;
+        right: 0;
+        position: absolute;
+    }
 
-	.openlab-library-information {
-		ul {
-			padding-left: 20px;
-		}
-	}
+    .openlab-library-information {
+        ul {
+            padding-left: 20px;
+        }
+    }
 }
 .page-nav{
     background: @5gray;
@@ -3060,7 +3068,7 @@ input.help-search {
         }
     }
     .breadcrumb-col{
-        color: @white;
+        color: @70gray;
         line-height: 3.5;
         width: 100%;
         margin: 0 auto;
