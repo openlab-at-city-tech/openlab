@@ -22,7 +22,7 @@ function openlab_wpcf7_save_contact_form($contact_form, $args, $context) {
     update_post_meta($post_ID, '_form_intro', $intro);
 }
 
-add_action('wpcf7_save_contact_form', 'openlab_wpcf7_save_contact_form', 10, 3);
+//add_action('wpcf7_save_contact_form', 'openlab_wpcf7_save_contact_form', 10, 3);
 
 function openlab_wpcf7_after_save($result) {
 
@@ -39,16 +39,18 @@ function openlab_wpcf7_after_save($result) {
         if (!$intro || empty($intro)) {
             return false;
         }
+	$intro = '';
 
         ob_start();
         include(locate_template('parts/plugin-mods/contact-form-seven-custom.php'));
+
         $form = ob_get_clean();
 
         update_post_meta($post_ID, '_form', $intro . $form);
     }
 }
 
-add_action('wpcf7_after_save', 'openlab_wpcf7_after_save', 10, 3);
+//add_action('wpcf7_after_save', 'openlab_wpcf7_after_save', 10, 3);
 
 function openlab_wpcf7_DOMinnerHTML(DOMNode $element) {
     $innerHTML = "";
@@ -100,4 +102,21 @@ HTML;
     return $properties;
 }
 
-add_action('wpcf7_contact_form_properties', 'openlab_wpcf7_contact_form_properties', 10, 2);
+//add_action('wpcf7_contact_form_properties', 'openlab_wpcf7_contact_form_properties', 10, 2);
+
+add_filter( 'the_content', function( $content ) {
+	if ( ! bp_is_root_blog() ) {
+		return $content;
+	}
+
+	if ( 51 != get_queried_object_id() ) {
+		return $content;
+	}
+
+        ob_start();
+        include(locate_template('parts/plugin-mods/contact-form-seven-custom.php'));
+        $form = ob_get_clean();
+
+	return $form;
+
+} );
