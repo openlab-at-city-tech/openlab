@@ -329,9 +329,9 @@ function openlab_group_type_meta_box_save( $group_id ) {
 add_action( 'bp_group_admin_edit_after', 'openlab_group_type_meta_box_save' );
 
 /**
- * Render the "Additional Faculty" field when creating/editing a course.
+ * Render the "Faculty" field when creating/editing a course.
  */
-function openlab_additional_faculty_field() {
+function openlab_course_faculty_metabox() {
 	// Courses only.
 	if ( bp_is_group() && ! openlab_is_course() ) {
 		return;
@@ -350,6 +350,21 @@ function openlab_additional_faculty_field() {
 		$group_id = bp_get_current_group_id();
 	}
 
+	if ( bp_is_group_create() ) {
+		$primary_faculty = bp_loggedin_user_id();
+	} else {
+		$primary_faculty = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+	}
+
+	$primary_faculty_data = array();
+	if ( $primary_faculty ) {
+		$primary_faculty_user = new WP_User( $primary_faculty );
+		$primary_faculty_data[] = array(
+			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
+			'value' => esc_attr( $primary_faculty_user->user_nicename ),
+		);
+	}
+
 	$addl_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
 	$addl_faculty_data = array();
 	foreach ( $addl_faculty as $fid ) {
@@ -363,25 +378,46 @@ function openlab_additional_faculty_field() {
 	?>
 
 	<div id="additional-faculty-admin" class="panel panel-default">
-            <div class="panel-heading"><label for="additional-faculty-autocomplete">Additional Faculty</label></div>
+		<fieldset>
+            <div class="panel-heading"><legend>Faculty</label></div>
             <div class="panel-body">
-		<?php /* Data about existing faculty */ ?>
-		<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
-		<p>If your course is taught by multiple faculty, type the name in the box below and select from the dropdown list.</p>
+				<?php /* Data about existing faculty */ ?>
+				<script type="text/javascript">var OL_Primary_Faculty_Existing = '<?php echo json_encode( $primary_faculty_data ) ?>';</script>
+				<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
 
-		<input class="hide-if-no-js" type="textbox" id="additional-faculty-autocomplete" value="" />
-		<?php wp_nonce_field( 'openlab_additional_faculty_autocomplete', '_ol_addl_faculty_nonce', false ) ?>
+				<div class="subpanel">
+					<?php wp_nonce_field( 'openlab_faculty_autocomplete', '_ol_faculty_autocomplete_nonce', false ) ?>
 
-		<ul id="additional-faculty-list" class="inline-element-list"></ul>
+					<label for="primary-faculty-autocomplete">Primary Faculty</label>
 
-                <label class="sr-only hide-if-js" for="additional-faculty">Additional Faculty</label>
-		<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ) ?>" />
-            </div>
+					<p>This is usually the person creating the course. Please note: if there are multiple faculty associated with the course they will not be listed on the Course Profile as primary or secondary.</p>
+
+					<input class="hide-if-no-js" type="textbox" id="primary-faculty-autocomplete" value="" />
+
+					<ul id="primary-faculty-list" class="inline-element-list"></ul>
+
+					<label class="sr-only hide-if-js" for="primary-faculty">Primary Faculty</label>
+					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty ) ?>" />
+				</div>
+
+				<div class="subpanel">
+					<label for="additional-faculty-autocomplete">Additional Faculty</label>
+
+					<p>If your course is taught by multiple faculty, type the name in the box below and select from the dropdown list.</p>
+
+					<input class="hide-if-no-js" type="textbox" id="additional-faculty-autocomplete" value="" />
+
+					<ul id="additional-faculty-list" class="inline-element-list"></ul>
+
+					<label class="sr-only hide-if-js" for="additional-faculty">Additional Faculty</label>
+					<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ) ?>" />
+				</div>
+		</fieldset>
 	</div>
 	<?php
 }
-add_action( 'bp_after_group_details_creation_step', 'openlab_additional_faculty_field', 5 );
-add_action( 'bp_after_group_details_admin', 'openlab_additional_faculty_field', 5 );
+add_action( 'bp_after_group_details_creation_step', 'openlab_course_faculty_metabox', 5 );
+add_action( 'bp_after_group_details_admin', 'openlab_course_faculty_metabox', 5 );
 
 /**
  * AJAX handler for additional faculty autocomplete.
@@ -395,7 +431,7 @@ function openlab_additional_faculty_autocomplete_cb() {
 		$nonce = urldecode( $_GET['nonce'] );
 	}
 
-	if ( ! wp_verify_nonce( $nonce, 'openlab_additional_faculty_autocomplete' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'openlab_faculty_autocomplete' ) ) {
 		die( json_encode( -1 ) );
 	}
 
@@ -425,16 +461,16 @@ function openlab_additional_faculty_autocomplete_cb() {
 add_action( 'wp_ajax_openlab_additional_faculty_autocomplete', 'openlab_additional_faculty_autocomplete_cb' );
 
 /**
- * Process the saving of additional faculty.
+ * Process the saving of additional and primary faculty.
  */
-function openlab_additional_faculty_save( $group ) {
+function openlab_group_faculty_save( $group ) {
 	$nonce = '';
 
-	if ( isset( $_POST['_ol_addl_faculty_nonce'] ) ) {
-		$nonce = urldecode( $_POST['_ol_addl_faculty_nonce'] );
+	if ( isset( $_POST['_ol_faculty_autocomplete_nonce'] ) ) {
+		$nonce = urldecode( $_POST['_ol_faculty_autocomplete_nonce'] );
 	}
 
-	if ( ! wp_verify_nonce( $nonce, 'openlab_additional_faculty_autocomplete' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'openlab_faculty_autocomplete' ) ) {
 		return;
 	}
 
@@ -444,12 +480,18 @@ function openlab_additional_faculty_save( $group ) {
 	}
 
 	// Give preference to JS-saved items.
+	$primary_faculty = isset( $_POST['primary-faculty-js'] ) ? $_POST['primary-faculty-js'] : null;
+	if ( null === $primary_faculty ) {
+		$primary_faculty = $_POST['primary-faculty'];
+	}
+
 	$addl_faculty = isset( $_POST['additional-faculty-js'] ) ? $_POST['additional-faculty-js'] : null;
 	if ( null === $addl_faculty ) {
 		$addl_faculty = $_POST['additional-faculty'];
 	}
 
 	// Delete all existing items.
+	groups_delete_groupmeta( $group->id, 'primary_faculty' );
 	$existing = groups_get_groupmeta( $group->id, 'additional_faculty', false );
 	foreach ( $existing as $e ) {
 		groups_delete_groupmeta( $group->id, 'additional_faculty', $e );
@@ -465,8 +507,19 @@ function openlab_additional_faculty_save( $group ) {
 		// @todo Verify that it's a faculty member?
 		groups_add_groupmeta( $group->id, 'additional_faculty', $f->ID );
 	}
+
+	foreach ( (array) $primary_faculty as $nicename ) {
+		$f = get_user_by( 'slug', stripslashes( $nicename ) );
+
+		if ( ! $f ) {
+			continue;
+		}
+
+		// @todo Verify that it's a faculty member?
+		groups_add_groupmeta( $group->id, 'primary_faculty', $f->ID );
+	}
 }
-add_action( 'groups_group_after_save', 'openlab_additional_faculty_save' );
+add_action( 'groups_group_after_save', 'openlab_group_faculty_save' );
 
 /**
  * Render the "Group Contact" field when creating/editing a project or club.
