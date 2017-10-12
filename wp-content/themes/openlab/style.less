@@ -365,17 +365,26 @@ input[type="submit"]{
         &:last-child{
             margin-bottom: 20px;
         }
+        legend{
+            &.panel-heading{
+                border-bottom: none;
+                margin: inherit;
+            }
+        }
     }
     .panel-heading{
+        color: @panel-default-text;
+        background-color: @panel-default-heading-bg;
+        border-color: @panel-default-border;
         font-size: 16px;
         font-weight: @semibold;
         label{
             font-weight: @semibold;
             margin-bottom: 0;
         }
-		& > legend {
-			font-size: inherit;
-		}
+        & > legend {
+            font-size: inherit;
+        }
     }
     .panel-body {
         .radio {
@@ -961,10 +970,10 @@ body{
     }
 }
 .panel-heading legend {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 .subpanel {
-	margin-bottom: 25px;
+    margin-bottom: 25px;
 }
 /**shortcodes**/
 .callout-list{

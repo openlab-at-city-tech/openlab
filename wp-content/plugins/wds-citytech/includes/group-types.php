@@ -379,7 +379,7 @@ function openlab_course_faculty_metabox() {
 
 	<div id="additional-faculty-admin" class="panel panel-default">
 		<fieldset>
-            <div class="panel-heading"><legend>Faculty</label></div>
+            <legend class="panel-heading">Faculty</legend>
             <div class="panel-body">
 				<?php /* Data about existing faculty */ ?>
 				<script type="text/javascript">var OL_Primary_Faculty_Existing = '<?php echo json_encode( $primary_faculty_data ) ?>';</script>
