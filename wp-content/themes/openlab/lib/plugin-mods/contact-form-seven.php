@@ -63,7 +63,7 @@ function openlab_wpcf7_DOMinnerHTML(DOMNode $element) {
     return $innerHTML;
 }
 
-function openlab_wpcf7_contact_form_properties($properties, $this) {
+function openlab_wpcf7_contact_form_properties($properties) {
 
     if (!is_admin()) {
         return $properties;
