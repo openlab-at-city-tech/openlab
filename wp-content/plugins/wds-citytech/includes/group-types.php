@@ -390,7 +390,7 @@ function openlab_course_faculty_metabox() {
 
 					<label for="primary-faculty-autocomplete">Primary Faculty</label>
 
-					<p>This is usually the person creating the course. Please note: if there are multiple faculty associated with the course they will not be listed on the Course Profile as primary or secondary.</p>
+					<p>This is usually the person creating the course.</p>
 
 					<input class="hide-if-no-js" type="textbox" id="primary-faculty-autocomplete" value="" />
 
@@ -403,7 +403,7 @@ function openlab_course_faculty_metabox() {
 				<div class="subpanel">
 					<label for="additional-faculty-autocomplete">Additional Faculty</label>
 
-					<p>If your course is taught by multiple faculty, type the name in the box below and select from the dropdown list.</p>
+					<p>If your course is taught by multiple instructors, list additional names on the Course Profile by typing the name in the box below, and select from the dropdown list. To become admins for this Course, these additional instructors must also join the Course and be promoted to admin.</p>
 
 					<input class="hide-if-no-js" type="textbox" id="additional-faculty-autocomplete" value="" />
 
