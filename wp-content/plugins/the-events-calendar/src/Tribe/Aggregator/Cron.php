@@ -172,6 +172,17 @@ class Tribe__Events__Aggregator__Cron {
 		// Fetch the last half hour as a timestamp
 		$start_timestamp = strtotime( $date );
 
+		// randomize the time by plus/minus 0-5 minutes
+		$random_minutes = ( mt_rand( -5, 5 ) * 60 );
+		$start_timestamp += $random_minutes;
+
+		$current_time = time();
+
+		// if the start timestamp is older than RIGHT NOW, set it for 5 minutes from now
+		if ( $current_time > $start_timestamp ) {
+			$start_timestamp = $current_time + absint( $random_minutes );
+		}
+
 		// Now add an action twice hourly
 		wp_schedule_event( $start_timestamp, 'tribe-every15mins', self::$action );
 	}
@@ -308,7 +319,7 @@ class Tribe__Events__Aggregator__Cron {
 				continue;
 			}
 
-			if ( $record->get_child_record_by_status( 'pending' ) ) {
+			if ( $record->get_child_record_by_status( 'pending', - 1, array( 'after' => time() - 4 * 3600 ) ) ) {
 				tribe( 'logger' )->log_debug( sprintf( 'Record (%d) skipped, has pending child(ren)', $record->id ), 'EA Cron' );
 				continue;
 			}

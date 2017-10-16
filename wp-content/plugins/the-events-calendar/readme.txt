@@ -4,8 +4,8 @@ Contributors: ModernTribe, aguseo, borkweb, barry.hughes, bordoni, brianjessee, 
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, modern tribe, tribe, widget
 Donate link: http://m.tri.be/29
 Requires at least: 4.5
-Stable tag: 4.5.12.2
-Tested up to: 4.8.1
+Stable tag: 4.6.1
+Tested up to: 4.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -327,6 +327,62 @@ Please see the changelog for the complete list of changes in this release. Remem
 
 == Changelog ==
 
+= [4.6.1] 2017-10-04 =
+
+* Fix - Fixed "Next Events" and "Previous Events" navigation links in list views, which would sometimes make a category-filtered list view lose its category filter as a user navigated through pages of future or past events (props @forumhelpdesk and @atomicdust for reporting this!) [72013]
+* Fix - Fixed some layout issues with the Tribe Bar datepicker that would arise when using a Twentysixteen or Twentyfifteen child them (thanks to @stefanrueegger for reporting this) [46471]
+* Fix - Prevented modification of event titles within the loop when using TRIBE_MODIFY_GLOBAL_TITLE [89273]
+* Fix - Fixed issue when exporting all-day multi-day events via iCal where the end date was one day early (Thank you @fairmont for reporting this!) [87775]
+* Fix - Fixed issues with the jQuery Timepicker vendor script conflicting with other plugins' similar scripts (props: @hcny et al.) [74644]
+* Fix - Fixed an issue that would prevent Event Aggregator scheduled imports from running [88395]
+* Fix - Fixed the "Start Time" and "End Time" timepicker fields in the event-creation screen to make it impossible to have an end date/time that comes before the start date/time [72686]
+* Tweak - Remove unnecessary parameters from some remove_action calls in the plugin (thanks to @JPry on GitHub for submitting this fix!) [88867]
+* Tweak - Adjusted the EA cron start time so that it never gets created in the past [88965]
+* Tweak - Improved options format in the Event Aggregator settings [88970]
+* Tweak - Added a filter to CSV importer for altering the delimiter, escaping, and enclosing characters [70570]
+* Tweak - Adjusted the `tribe_update_venue()` template tag so it no longer creates some unnecessary meta fields involving post_title, post_content, etc. (thanks @oheinrich for bringing this to our attention) [66968]
+* Tweak - Improved the performance of The Events Calendar REST API tweaking some queries [89743]
+* Tweak - Add support for a `found_posts` argument in `tribe_get_events`, `tribe_get_venues` and `tribe_get_organizers` functions to return the number of posts found matching the current query arguments [89743]
+* Deprecated - Deprecated the `tribe-events-bar-date-search-default-value` filter; use `tribe_events_bar_date_search_default_value` instead [67482]
+* Language - Improvements to aid translatability of text throughout plugin (props: @ramiy) [88982]
+* Language - 7 new strings added, 180 updated, 4 fuzzied, and 3 obsoleted
+
+= [4.6] 2017-09-25 =
+
+* Feature - Added full CRUD REST support for Events, Organizers, Venues, Event Categories, and Tags
+* Tweak - Updated Bootstrap Datepicker to v1.7.0
+* Tweak - Added latitude/longitude to REST responses when available on venues
+* Tweak - Added JSON-LD data to REST responses when available
+* Tweak - Replaced deprecated first parameter of `tribe_get_organizers()` with a parameter that, when specified with a truthy value, returns only organizers with upcoming events attached to them
+* Tweak - Added linked post filters: `tribe_{$this->post_type}_has_events_excluded_post_stati`, `tribe_events_tribe_organizer_create`, `tribe_events_tribe_organizer_update`, `tribe_event_venue_duplicate_post_fields`, `tribe_event_organizer_duplicate_custom_fields`
+* Tweak - Added action: `tribe_events_organizer_created`
+* Tweak - Added REST filters: `tribe_rest_organizer_default_only_with_upcoming`, `tribe_rest_venue_default_only_with_upcoming`, `tribe_events_rest_term_allow_delete`
+* Tweak - Added duplicate-detection filters: `tribe_duplicate_post_strategies`, `tribe_duplicate_post_strategy`, `tribe_duplicate_post_{$strategy}_strategy`
+* Language - 152 new strings added, 217 updated, 6 fuzzied, and 1 obsoleted
+
+= [4.5.13] 2017-09-20 =
+
+* Feature - Add link to the featured image in the Events List widget. New filter introduced to control this: `tribe_events_list_widget_featured_image_link` (props to @cabadaj007 for the feature request) [84807]
+* Feature - Remove 'France, Metropolitan' option from country list to prevent issues with Google Maps API (thanks @varesanodotfr for pointing this out) [78023]
+* Feature - Ignored Events will restore previous status instead of setting to 'publish' [82213]
+* Fix - Patched jQuery Resize vendor library to avoid JavaScript conflicts (props to @britner for the original report) [71994]
+* Fix - Fixed a typo in the Event List widget options [71081]
+* Fix - Addressed some PHP notices that would sometimes emerge in tag-filtered post lists in the wp-admin (thanks to @wfsec28 and others in the forums for reporting this!) [45274]
+* Fix - When "Full Styles" or "Tribe Events Styles" are used, prevent duplicate featured images from showing up in the Twenty Seventeen theme (props to @want2what and others in the forums for reporting this) [80955]
+* Fix - Fixed the issue that would prevent the start date and date range parameters from being taken into account when using 'Other URL' source in Event Aggregator
+* Fix - Aggregator will no longer update comments while inactive [78890]
+* Fix - Avoid issues when REST API archive request parameters are not in the original order (thanks @Nslaver for reporting this and providing a fix) [88748]
+* Tweak - Aggregator prevents duplicated records with the same params from being created [68833]
+* Tweak - Aggregator will now allow for some minor shifts in schedule execution time to help distribute requests to EA Service [86628]
+* Tweak - Improve text in the Event Aggregator settings [77452]
+* Tweak - Add actions before and after posts are inserted or updated by Event Aggregator to allow custom functions to kick in (`tribe_aggregator_before_insert_posts` and `tribe_aggregator_after_insert_posts`) [87530]
+* Tweak - Allow users to import CSV with numerically-named categories by using a flag (currently `%n`) (thanks @Shamsi for reporting) [78340]
+* Tweak - Allow date range and events count limits to be set on each type of import (except for 'Other URL') in Event Aggregator [79975]
+
+= [4.5.12.3] 2017-09-19 =
+
+* Fix - Display events on Month View correctly for WordPress version 4.8.2 and up (props @realcrozetva for reporting this) [88952]
+
 = [4.5.12.2] 2017-09-08 =
 
 * Fix - Fixed an issue where manually running Scheduled Imports would always result in a failed import [87321]
@@ -351,6 +407,7 @@ Please see the changelog for the complete list of changes in this release. Remem
 * Tweak - Added all the Aggregator Origins to the Admin Bar [68693]
 * Tweak - Added filters: `tribe_get_state_options`
 * Tweak - Added template tags: `maybe_format_from_datepicker()`
+* Tweak - Added the `tribe_rest_single_event_data` filter to the single event REST API endpoint to allow filtering the returned data (thanks @mwender) [88748]
 * Language - 2 new strings added, 90 updated, 0 fuzzied, and 1 obsoleted
 
 = [4.5.11] 2017-08-24 =

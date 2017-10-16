@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-08-05 22:41:59+0000\n"
+"PO-Revision-Date: 2017-09-08 21:17:28+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,50 +13,50 @@ msgstr ""
 
 #: src/admin-views/create-organizer-fields.php:19
 msgid "The e-mail address will be obfuscated on this site to avoid it getting harvested by spammers."
-msgstr ""
+msgstr "Die E-Mail Adresse wird auf der Website verschleiert, um sie gegen Spam zu schützen."
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:32
 msgid "An array containing the lineage of where this venue comes from; this should not change after the venue is created."
-msgstr ""
+msgstr "Ein Array, das den Ursprung enthält, woher dieser Ort kommt; dies sollte sich nicht ändern, nachdem der Veranstaltungsort erstellt wurde."
 
 #: src/Tribe/Main.php:958
 msgid "edit Events settings."
-msgstr ""
+msgstr "bearbeite Veranstaltungseinstellungen."
 
 #: src/Tribe/Main.php:949
 msgid "Edit the %s slug"
-msgstr ""
+msgstr "Den %s Slug (Permanlink) bearbeiten"
 
 #: src/Tribe/Linked_Posts.php:920 src/Tribe/Linked_Posts.php:926
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Finde %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:917
 msgctxt "Indefinite article for the phrase \"Find a {post type name}\" when the {post type name} starts with a vowel, e.g. \"Find an Organizer\"."
 msgid "an"
-msgstr ""
+msgstr "einen"
 
 #: src/Tribe/Linked_Posts.php:910
 msgctxt "Indefinite article for the phrase \"Find a {post type name}. Will be replaced with \"an\" if the {post type name} starts with a vowel."
 msgid "a"
-msgstr ""
+msgstr "einen"
 
 #. translators: %s: post title
 #: src/Tribe/Ignored_Events.php:388
 msgid "Hide and Ignore &#8220;%s&#8221;"
-msgstr ""
+msgstr "Verstecke und ignoriere &#8220;%s&#8221;"
 
 #: common/src/Tribe/Main.php:265
 msgid "Clear Selection."
-msgstr ""
+msgstr "Selektion aufheben"
 
 #: common/src/Tribe/Main.php:264
 msgid "Select all pages"
-msgstr ""
+msgstr "Alle Seiten selektieren"
 
 #: common/src/Tribe/Main.php:263
 msgid "All items on this page were selected. "
-msgstr ""
+msgstr "Alle Objekte auf diese Seite wurden selektiert."
 
 #: src/admin-views/aggregator/tabs/import-form.php:101
 msgid "Add more sources"
@@ -2342,7 +2342,7 @@ msgstr "Ihr Event Aggregator Facebook-Token läuft %s ab."
 
 #: src/Tribe/Aggregator.php:407
 msgid "Your Event Aggregator Facebook token expired %s."
-msgstr ""
+msgstr "Ihr Event Aggregator Facebook-Token ist %s abgelaufen."
 
 #: src/Tribe/Aggregator.php:359
 msgid "Successfully connected Event Aggregator to Facebook"
@@ -2356,15 +2356,15 @@ msgstr "Sie müssen eine Ganzzahl verwenden, um die tägliche Importgrenze zu re
 msgid "Event Aggregator System Status"
 msgstr "Event Aggregator System Status"
 
-#: src/Tribe/Aggregator/Tabs/Scheduled.php:367
+#: src/Tribe/Aggregator/Tabs/Scheduled.php:368
 msgid "Enter Event Aggregator License"
 msgstr "Geben Sie die Event Aggregator Lizenz ein"
 
-#: src/Tribe/Aggregator/Tabs/Scheduled.php:361
+#: src/Tribe/Aggregator/Tabs/Scheduled.php:362
 msgid "To continue using scheduled imports, please enter a valid Event Aggregator license key under %1$sEvents > Settings > Licenses%2$s."
 msgstr "Um weiterhin geplante Importe verwenden zu können, geben Sie unter %1$sVeranstaltungen > Einstellungen > Lizenzen%2$s einen gültigen Lizenzschlüssel für den Event Aggregator ein."
 
-#: src/Tribe/Aggregator/Tabs/Scheduled.php:356
+#: src/Tribe/Aggregator/Tabs/Scheduled.php:357
 msgid "All scheduled imports are currently suspended, and no events will be imported."
 msgstr "Alle geplanten Berichte sind derzeit gesperrt und es werden keine Veranstaltungen importiert."
 
@@ -6439,7 +6439,7 @@ msgstr "Keine anstehenden %1$s für %2$s gefunden. Versuchen Sie anstehende %3$s
 msgid "This %s has passed."
 msgstr "Diese %s hat bereits stattgefunden."
 
-#: src/Tribe/Template/Month.php:899
+#: src/Tribe/Template/Month.php:908
 msgid "The requested date \"%s\" was not valid &ndash; showing the current month instead"
 msgstr "Das abgefragte Datum \"%s\" war  nicht g&uuml;ltig &ndash; der aktuelle Monat wird stattdessen angezeigt"
 
@@ -6877,7 +6877,7 @@ msgstr "list"
 msgid "month"
 msgstr "Monat"
 
-#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.5.12.1) 
+#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.5.12.3) 
 #. #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: common/src/Tribe/Admin/Help_Page.php:59 common/src/Tribe/Customizer.php:565
