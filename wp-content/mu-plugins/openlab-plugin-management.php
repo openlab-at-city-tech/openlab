@@ -75,6 +75,18 @@ function openlab_hide_plugins( $plugins ) {
 		}
 	}
 
+	$blog_specific_whitelist = array(
+		'h5p/h5p.php' => array(
+			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
+		),
+	);
+
+	foreach ( $blog_specific_whitelist as $plugin_file => $whitelisted_blogs ) {
+		if ( ! in_array( get_current_blog_id(), $whitelisted_blogs ) ) {
+			unset( $plugins[ $plugin_file ] );
+		}
+	}
+
 	return $plugins;
 }
 add_filter( 'all_plugins', 'openlab_hide_plugins' );
