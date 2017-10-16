@@ -663,6 +663,28 @@ class link_library_plugin_admin {
 
 		$settings = ( isset( $_GET['settings'] ) ? $_GET['settings'] : 1 );
 
+		if ( isset( $_GET['settingscopy'] ) ) {
+			$destination = $_GET['settingscopy'];
+			$source      = $_GET['source'];
+
+			$sourcesettingsname = 'LinkLibraryPP' . $source;
+			$sourceoptions      = get_option( $sourcesettingsname );
+
+			$destinationsettingsname = 'LinkLibraryPP' . $destination;
+			update_option( $destinationsettingsname, $sourceoptions );
+
+			$settings = $destination;
+		}
+
+		if ( isset( $_GET['deletesettings'] ) ) {
+			check_admin_referer( 'link-library-delete' );
+
+			$settings           = $_GET['deletesettings'];
+			$deletesettingsname = 'LinkLibraryPP' . $settings;
+			$options            = delete_option( $deletesettingsname );
+			$settings           = 1;
+		}
+
 		// Retrieve general options
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 
@@ -793,28 +815,6 @@ class link_library_plugin_admin {
 
 			if ( isset( $_GET['resettable'] ) ) {
 				$options = ll_reset_options( $settings, 'table', 'return_and_set' );
-			}
-
-			if ( isset( $_GET['settingscopy'] ) ) {
-				$destination = $_GET['settingscopy'];
-				$source      = $_GET['source'];
-
-				$sourcesettingsname = 'LinkLibraryPP' . $source;
-				$sourceoptions      = get_option( $sourcesettingsname );
-
-				$destinationsettingsname = 'LinkLibraryPP' . $destination;
-				update_option( $destinationsettingsname, $sourceoptions );
-
-				$settings = $destination;
-			}
-
-			if ( isset( $_GET['deletesettings'] ) ) {
-				check_admin_referer( 'link-library-delete' );
-
-				$settings           = $_GET['deletesettings'];
-				$deletesettingsname = 'LinkLibraryPP' . $settings;
-				$options            = delete_option( $deletesettingsname );
-				$settings           = 1;
 			}
 
 			$pagetitle = __( 'Library', 'link-library' ) . ' #' . $settings . " - " . stripslashes( $options['settingssetname'] );
@@ -1250,7 +1250,7 @@ class link_library_plugin_admin {
 
 				$linkquery = "SELECT distinct l.link_name, l.link_url, l.link_rss, l.link_description, l.link_notes, ";
 				$linkquery .= "t.name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, ";
-				$linkquery .= "l.link_image, le.link_textfield, le.link_no_follow, l.link_rating, l.link_target ";
+				$linkquery .= "l.link_image, le.link_textfield, le.link_no_follow, l.link_rating, l.link_target, l.link_updated ";
 				$linkquery .= "FROM " . $this->db_prefix() . "terms t ";
 				$linkquery .= "LEFT JOIN " . $this->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
 				$linkquery .= "LEFT JOIN " . $this->db_prefix() . "term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ";
@@ -1296,10 +1296,6 @@ class link_library_plugin_admin {
 			} else {
 				$message = "3";
 			}
-		}
-
-		if ( isset( $_POST['currenttab'] ) ) {
-			$redirecturl .= "&currenttab=" . $_POST['currenttab'];
 		}
 
 		$redirecturl = add_query_arg( array( 'currenttab' => $_POST['currenttab'], 'page' => 'link-library' ), admin_url() );
@@ -1605,8 +1601,8 @@ class link_library_plugin_admin {
 				$handle = fopen( $_FILES['settingsfile']['tmp_name'], "r" );
 
 				$row         = 1;
-				$optionnames = "";
-				$options     = "";
+				$optionnames = array();
+				$options     = array();
 
 				while ( ( $data = fgetcsv( $handle, 5000, "," ) ) !== false ) {
 					if ( $row == 1 ) {

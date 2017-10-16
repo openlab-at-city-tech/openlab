@@ -59,6 +59,18 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.14.11 =
+* Corrected some PHP notices about undefined indices
+
+= 5.9.14.10 =
+* Fixed warning about missing captchagenerator index in array
+
+= 5.9.14.9 =
+* Fixed issue where library settings did not update immediate after copying a library
+
+= 5.9.14.8 =
+* Added updated date field to link export
+
 = 5.9.14.7 =
 * Added new sort option for links to display based on number of visits
 

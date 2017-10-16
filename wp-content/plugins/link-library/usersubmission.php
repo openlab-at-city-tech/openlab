@@ -419,7 +419,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$submitteremailmessage .= __( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
 						}
 
-						if ( 'show' == $options['showaddlinksubmittername'] || 'required' == $options['showaddlinksubmittername'] ) {
+						if ( 'show' == $options['showlinksubmittername'] || 'required' == $options['showlinksubmittername'] ) {
 							$submitteremailmessage .= __( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
 						}
 
