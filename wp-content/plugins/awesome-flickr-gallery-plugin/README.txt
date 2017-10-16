@@ -3,8 +3,8 @@ Contributors: ronakg
 Donate link: http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin/
 Tags: awesome, gallery, flickr, photo, image, slideshow, colorbox, portfolio, group, photoset, yahoo, slider, thumbnail, images
 Requires at least: 3.0
-Tested up to: 4.5.2
-Stable tag: 3.5.5
+Tested up to: 4.8.2
+Stable tag: 3.5.6
 License: GPLv2 or later
 
 Create a photo gallery of your Flickr photos on your WordPress enabled Website enabling you to customize it the way you like it.
@@ -113,6 +113,9 @@ Still can't get the plugin working?  Head to the discussion forum for solution -
 
 == Upgrade Notice ==
 
+= 3.5.6 =
+[Bug Fix] Photoset not found error on gallery page
+
 = 3.5.3 =
 [MAJOR CHANGE] I had to remove the Highslide option from list of slideshows. Apparently it is not compatible with WordPress's set of rules for licensing.
 [Enhancement] Highslide is replaced with Swipebox. A much better slideshow plugin which also supports touch swipes.
@@ -136,7 +139,7 @@ Still can't get the plugin working?  Head to the discussion forum for solution -
 [BUG FIX] Square option for Custom Photo Size gets reset
 
 = 3.3.1 =
-[MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead. 
+[MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead.
 
 = 3.3.0 =
 [FEATURE] Ability to set the slideshow per gallery.
@@ -204,7 +207,7 @@ Still can't get the plugin working?  Head to the discussion forum for solution -
 [BUG FIX] Custom sized thumbnails don't appear
 
 = 3.0.5 =
-[FEATURE] Select custom sizes for thumbnails in gallery. 
+[FEATURE] Select custom sizes for thumbnails in gallery.
 [ENHANCEMENT] Flexibility to modify gallery CSS to get desired look
 [ENHANCEMENT] Improved error reporting for better debuggability
 
@@ -306,7 +309,7 @@ MUST UPGRADE for all who are facing conflict issue with other plugin or themes.
 * [BUG FIX] Square option for Custom Photo Size gets reset
 
 = 3.3.1 =
-* [MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead. 
+* [MAJOR CHANGE] Highslide had to be removed from Slideshow options as WordPress moderators objected about the same due to licensing issues. This update removes the Highslide option. If you are using Highslide, you will be migrated to use Colorbox instead.
 
 = 3.3.0 =
 * [Feature] Ability to set the slideshow per gallery.
@@ -374,7 +377,7 @@ MUST UPGRADE for all who are facing conflict issue with other plugin or themes.
 * [Bug Fix] Custom size thumbnails don't appear
 
 = 3.0.5 =
-* [Feature] Select custom sizes for thumbnails in gallery. 
+* [Feature] Select custom sizes for thumbnails in gallery.
 * [Enhancement] Flexibility to modify gallery CSS to get desired look
 * [Enhancement] Improved error reporting for better debuggability
 

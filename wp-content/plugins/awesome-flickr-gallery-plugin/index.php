@@ -3,12 +3,12 @@
    Plugin Name: Awesome Flickr Gallery
    Plugin URI: http://www.ronakg.com/projects/awesome-flickr-gallery-wordpress-plugin/
    Description: Awesome Flickr Gallery is a simple, fast and light plugin to create a gallery of your Flickr photos on your WordPress enabled website.  This plugin aims at providing a simple yet customizable way to create stunning Flickr gallery.
-   Version: 3.5.5
+   Version: 3.5.6
    Author: Ronak Gandhi
    Author URI: http://www.ronakg.com
    License: GPL2
 
-   Copyright 2014 Ronak Gandhi (email : ronak.gandhi@ronakg.com)
+   Copyright 2017 Ronak Gandhi (email : me@ronakg.com)
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License, version 2, as
@@ -213,35 +213,35 @@ function afg_display_gallery($atts) {
         $photos = array();
 
         if (isset($photoset_id) && $photoset_id) {
-            $rsp_obj = $pf->photosets_getInfo($photoset_id);
-            if ($pf->error_code) return afg_error($pf->error_msg);
-            $total_photos = $rsp_obj['photos'];
+            $rsp_obj = $pf->photosets_getPhotos($photoset_id, NULL, 1, 1);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
+            $total_photos = $rsp_obj['photoset']['total'];
         }
         else if (isset($gallery_id) && $gallery_id) {
             $rsp_obj = $pf->galleries_getInfo($gallery_id);
-            if ($pf->error_code) return afg_error($pf->error_msg);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             $total_photos = $rsp_obj['gallery']['count_photos']['_content'];
         }
         else if (isset($group_id) && $group_id) {
             $rsp_obj = $pf->groups_pools_getPhotos($group_id, NULL, NULL, NULL, NULL, 1, 1);
-            if ($pf->error_code) return afg_error($pf->error_msg);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             $total_photos = $rsp_obj['photos']['total'];
             if ($total_photos > 500) $total_photos = 500;
             }
         else if (isset($tags) && $tags) {
             $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'tags'=>$tags, 'extras'=>$extras, 'per_page'=>1));
-            if ($pf->error_code) return afg_error($pf->error_msg);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             $total_photos = $rsp_obj['photos']['total'];
         }
         else if (isset($popular) && $popular) {
             $rsp_obj = $pf->photos_search(array('user_id'=>$user_id, 'sort'=>'interestingness-desc', 'extras'=>$extras, 'per_page'=>1));
-            if ($pf->error_code) return afg_error($pf->error_msg);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             $total_photos = $rsp_obj['photos']['total'];
             if ($total_photos > 500) $total_photos = 500;
         }
         else {
             $rsp_obj = $pf->people_getInfo($user_id);
-            if ($pf->error_code) return afg_error($pf->error_msg);
+            if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             $total_photos = $rsp_obj['photos']['count']['_content'];
         }
 
@@ -250,28 +250,28 @@ function afg_display_gallery($atts) {
             if ($photoset_id) {
                 $flickr_api = 'photoset';
                 $rsp_obj_total = $pf->photosets_getPhotos($photoset_id, $extras, NULL, 500, $i);
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             else if ($gallery_id) {
                 $rsp_obj_total = $pf->galleries_getPhotos($gallery_id, $extras, 500, $i);
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             else if ($group_id) {
                 $rsp_obj_total = $pf->groups_pools_getPhotos($group_id, NULL, NULL, NULL, $extras, 500, $i);
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             else if ($tags) {
                 $rsp_obj_total = $pf->photos_search(array('user_id'=>$user_id, 'tags'=>$tags, 'extras'=>$extras, 'per_page'=>500, 'page'=>$i));
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             else if ($popular) {
                 $rsp_obj_total = $pf->photos_search(array('user_id'=>$user_id, 'sort'=>'interestingness-desc', 'extras'=>$extras, 'per_page'=>500, 'page'=>$i));
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             else {
                 if (get_option('afg_flickr_token')) $rsp_obj_total = $pf->people_getPhotos($user_id, array('extras' => $extras, 'per_page' => 500, 'page' => $i));
                 else $rsp_obj_total = $pf->people_getPublicPhotos($user_id, NULL, $extras, 500, $i);
-                if ($pf->error_code) return afg_error($pf->error_msg);
+                if ($pf->error_code) return $disp_gallery . afg_error($pf->error_msg);
             }
             $photos = array_merge($photos, $rsp_obj_total[$flickr_api]['photo']);
         }
