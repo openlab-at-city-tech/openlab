@@ -115,7 +115,11 @@
 
                                             $alternate = $alternate === TRUE ? FALSE :TRUE;
                                             
-                                            $taxonomy_terms = get_terms($key);
+                                            $args = array(
+                                                        'hide_empty'    =>  0,
+                                                        'taxonomy'      =>  $post_type_taxonomy
+                                                        );
+                                            $taxonomy_terms = get_terms( $args );
                                                              
                                             ?>
                                                 <tr valign="top" class="<?php if ($alternate === TRUE) {echo 'alternate ';} ?>" id="taxonomy-<?php echo esc_attr($taxonomy)  ?>">

@@ -13,7 +13,7 @@ h2.subtitle {font-size: 15px; font-weight: bold; padding: 20px 0 10px 0}
 #order-terms #tto_sortable li.placeholder{border: dashed 2px #ccc;height:30px; background-color: #FFF;}
 
 .wp-list-taxonomy {width: 100%}
-.wp-list-taxonomy thead tr th{padding: 10px 0;}
+.wp-list-taxonomy thead tr th{padding: 10px 0; text-align: left;}
 .wp-list-taxonomy tr {background-color: #FCFCFC;}
 .wp-list-taxonomy tbody th.check-column {    padding: 9px 0 22px;}
 .wp-list-taxonomy td {    color: #555555;}

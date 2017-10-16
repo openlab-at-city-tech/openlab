@@ -39,7 +39,7 @@ function to_plugin_options()
                                                     <option value="edit_posts" <?php if (isset($options['capability']) && $options['capability'] == "edit_posts") echo 'selected="selected"'?>><?php _e('Contributor', 'taxonomy-terms-order') ?></option>
                                                     <option value="publish_posts" <?php if (isset($options['capability']) && $options['capability'] == "publish_posts") echo 'selected="selected"'?>><?php _e('Author', 'taxonomy-terms-order') ?></option>
                                                     <option value="publish_pages" <?php if (isset($options['capability']) && $options['capability'] == "publish_pages") echo 'selected="selected"'?>><?php _e('Editor', 'taxonomy-terms-order') ?></option>
-                                                    <option value="install_plugins" <?php if (!isset($options['capability']) || empty($options['capability']) || (isset($options['capability']) && $options['capability'] == "install_plugins")) echo 'selected="selected"'?>><?php _e('Administrator', 'taxonomy-terms-order') ?></option>
+                                                    <option value="manage_options" <?php if (!isset($options['capability']) || empty($options['capability']) || (isset($options['capability']) && $options['capability'] == "manage_options")) echo 'selected="selected"'?>><?php _e('Administrator', 'taxonomy-terms-order') ?></option>
                                                 </select>
                                             </td>
                                         </tr>
