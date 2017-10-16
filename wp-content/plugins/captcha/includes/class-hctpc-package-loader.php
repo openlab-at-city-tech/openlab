@@ -1,20 +1,20 @@
 <?php
 /**
  * Load images for CAPTCHA
- * @package Captcha by BestWebSoft
+ * @package Captcha
  * @since 4.2.0
  */
 if ( ! defined( 'ABSPATH' ) )
 	die();
 
-if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
-	class Cptch_Package_Loader {
+if ( ! class_exists( 'hctpc_Package_Loader' ) ) {
+	class hctpc_Package_Loader {
 
 		private $error,       /* string, message about the errors, which have occurred during the action handling */
 			$notice,          /* string, message about possible inaccuracies */
 			$message,         /* string, message about the successfull implementation of the action */
-			$basename,        /* string, contains 'includes/class-cptch-package-loader.php' */
-			$upload_dir,      /* string, absolute path to the 'bws_captcha_images' folder in the 'uploads' folder */
+			$basename,        /* string, contains 'includes/class-hctpc-package-loader.php' */
+			$upload_dir,      /* string, absolute path to the 'captcha_images' folder in the 'uploads' folder */
 			$packages_dir,    /* string, absolute path to the content of the unpacked archive */
 			$result,          /* array,  number of added(updated) packages or images */
 			$packages,        /* array,  contains the data about packages which are have to be added in to the database */
@@ -35,7 +35,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			} else {
 				$upload_dir = wp_upload_dir();
 			}
-			$this->upload_dir = $upload_dir['basedir'] . '/bws_captcha_images';
+			$this->upload_dir = $upload_dir['basedir'] . '/captcha_images';
 			if ( ! file_exists( $this->upload_dir ) ) {
 				if ( is_writable( $upload_dir['basedir'] ) )
 					mkdir( $this->upload_dir );
@@ -92,18 +92,18 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			$this->result         = array( 0, 0 );
 			$this->existed_action = $existed_action;
 			if ( empty( $existed_action ) )
-				$this->existed_action = isset( $_POST['cptch_existed_package'] ) && in_array( $_POST['cptch_existed_package'], array( 'update', 'save_as_new' ) ) ? $_POST['cptch_existed_package'] : 'skip';
+				$this->existed_action = isset( $_POST['hctpc_existed_package'] ) && in_array( $_POST['hctpc_existed_package'], array( 'update', 'save_as_new' ) ) ? $_POST['hctpc_existed_package'] : 'skip';
 
 			$this->check_tables();
 
 			/* get info about already existed packages and images */
-			$packages = $wpdb->get_results( "SELECT `id`, `folder` FROM `{$wpdb->base_prefix}cptch_packages`;" );
+			$packages = $wpdb->get_results( "SELECT `id`, `folder` FROM `{$wpdb->base_prefix}hctpc_packages`;" );
 			if ( $packages ) {
 				foreach( $packages as $pack )
 					$this->saved_packages[ $pack->id ] = $pack->folder;
 			}
 
-			$images = $wpdb->get_results( "SELECT `id`, `name`, `package_id` FROM `{$wpdb->base_prefix}cptch_images`;" );
+			$images = $wpdb->get_results( "SELECT `id`, `name`, `package_id` FROM `{$wpdb->base_prefix}hctpc_images`;" );
 			if ( $images ) {
 				foreach( $images as $image )
 					$this->saved_images[ $image->package_id ][ $image->id ] = $image->name;
@@ -145,8 +145,8 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			if ( ! function_exists( 'dbDelta' ) )
 				require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-			if ( ! $wpdb->query( "SHOW TABLES LIKE '{$wpdb->base_prefix}cptch_images';" ) ) {
-				$sql = "CREATE TABLE `{$wpdb->base_prefix}cptch_images` (
+			if ( ! $wpdb->query( "SHOW TABLES LIKE '{$wpdb->base_prefix}hctpc_images';" ) ) {
+				$sql = "CREATE TABLE `{$wpdb->base_prefix}hctpc_images` (
 					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 					`name` CHAR(100) NOT NULL,
 					`package_id` INT NOT NULL,
@@ -156,8 +156,8 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 				dbDelta( $sql );
 			}
 
-			if ( ! $wpdb->query( "SHOW TABLES LIKE '{$wpdb->base_prefix}cptch_packages';" ) ) {
-				$sql = "CREATE TABLE `{$wpdb->base_prefix}cptch_packages` (
+			if ( ! $wpdb->query( "SHOW TABLES LIKE '{$wpdb->base_prefix}hctpc_packages';" ) ) {
+				$sql = "CREATE TABLE `{$wpdb->base_prefix}hctpc_packages` (
 					`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 					`name` CHAR(100) NOT NULL,
 					`folder` CHAR(100) NOT NULL,
@@ -292,8 +292,8 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 		 * @return   void
 		 */
 		private function insert_data() {
-			global $wpdb, $cptch_options;
-			$used_packages = $cptch_options['used_packages'];
+			global $wpdb, $hctpc_options;
+			$used_packages = $hctpc_options['used_packages'];
 
 			$need_update = false;
 			$insert_data = array();
@@ -308,7 +308,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 				if ( ! empty( $insert_data ) ) {
 					$insert_data = implode( ',', $insert_data );
 					$wpdb->query(
-						"INSERT INTO `{$wpdb->base_prefix}cptch_packages`
+						"INSERT INTO `{$wpdb->base_prefix}hctpc_packages`
 							( `id`, `name`, `folder`, `settings`, `add_time` )
 						VALUES
 							{$insert_data}
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 				if ( ! empty( $insert_data ) ) {
 					$insert_data = implode( ',', $insert_data );
 					$wpdb->query(
-						"INSERT INTO `{$wpdb->base_prefix}cptch_images`
+						"INSERT INTO `{$wpdb->base_prefix}hctpc_images`
 							( `id`, `name`, `package_id`, `number` )
 						VALUES
 							{$insert_data}
@@ -354,10 +354,10 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 			}
 
 			if ( $need_update ) {
-				$cptch_options['used_packages'] = $used_packages;
-				if ( ! in_array( 'images', $cptch_options['operand_format'] ) )
-					$cptch_options['operand_format'][] = 'images';
-				update_option( 'cptch_options', $cptch_options );
+				$hctpc_options['used_packages'] = $used_packages;
+				if ( ! in_array( 'images', $hctpc_options['operand_format'] ) )
+					$hctpc_options['operand_format'][] = 'images';
+				update_option( 'hctpc_options', $hctpc_options );
 			}
 		}
 
@@ -583,7 +583,7 @@ if ( ! class_exists( 'Cptch_Package_Loader' ) ) {
 				$message =
 					sprintf(
 						__( 'Some settings of the package %s were set incorrectly. They have been skipped.', 'captcha' ),
-						"<a href=\"admin.php?page=captcha-packages.php&cptch_action=edit&id={$package_id}\">\"{$package_name}\"</a>"
+						"<a href=\"admin.php?page=captcha-packages.php&hctpc_action=edit&id={$package_id}\">\"{$package_name}\"</a>"
 					) . '<br />' .
 					__( 'Wrong data', 'captcha' ) . ':&nbsp;' . implode( ',&nbsp;', $wrong );
 				$this->notice = ( $this->notice ? $this->notice . '<br/>' : '' ) . $message;

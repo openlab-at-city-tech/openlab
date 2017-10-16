@@ -3,53 +3,45 @@
  * Displays the content on the plugin settings page
  */
 
-require_once( dirname( dirname( __FILE__ ) ) . '/bws_menu/class-bws-settings.php' );
-
-if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
-	class Cptch_Settings_Tabs extends Bws_Settings_Tabs {
+if ( ! class_exists( 'hctpc_Settings_Tabs' ) ) {
+	class hctpc_Settings_Tabs {
 		private $forms, $form_categories, $registered_forms;
+
+		private $tabs;		
+		private $plugin_basename;
+				
+		public $options;
+		public $default_options;
+		public $plugins_info  = array();
+
+		public $version;
+		public $upload_dir;
+		public $all_plugins;
+		public $is_multisite;
 
 		/**
 		 * Constructor.
 		 *
 		 * @access public
-		 *
-		 * @see Bws_Settings_Tabs::__construct() for more information on default arguments.
-		 *
 		 * @param string $plugin_basename
 		 */
 		public function __construct( $plugin_basename ) {
-			global $cptch_options, $cptch_plugin_info;
+			global $hctpc_options, $hctpc_plugin_info;
 
-			$tabs = array(
-				'settings'      => array( 'label' => __( 'Settings', 'captcha' ) ),
-				'messages'      => array( 'label' => __( 'Messages', 'captcha' ) ),
-				'misc'          => array( 'label' => __( 'Misc', 'captcha' ) ),
-				'custom_code'   => array( 'label' => __( 'Custom Code', 'captcha' ) ),
-				/*pls */
-				'license'       => array( 'label' => __( 'License Key', 'captcha' ) )
-				/* pls*/
-			);
-
-			if ( ! function_exists( 'cptch_get_default_options' ) )
+			if ( ! function_exists( 'hctpc_get_default_options' ) )
 				require_once( dirname( __FILE__ ) . '/helpers.php' );
 
-			parent::__construct( array(
-				'plugin_basename'    => $plugin_basename,
-				'plugins_info'       => $cptch_plugin_info,
-				'prefix'             => 'cptch',
-				'default_options'    => cptch_get_default_options(),
-				'options'            => $cptch_options,
-				'tabs'               => $tabs,
-				'doc_link'           => 'https://docs.google.com/document/d/11_TUSAjMjG7hLa53lmyTZ1xox03hNlEA4tRmllFep3I/',
-				/*pls */
-				'wp_slug'             => 'cptch',
-				'pro_page'           => 'admin.php?page=captcha_pro.php',
-				'bws_license_plugin' => 'captcha-pro/captcha_pro.php',
-				'link_key'           => '9701bbd97e61e52baa79c58c3caacf6d',
-				'link_pn'            => '75'
-				/* pls*/			
-			) );
+			$this->plugin_basename		= $plugin_basename;
+			$this->plugins_info			= $hctpc_plugin_info;			
+			$this->options				= $hctpc_options;
+			$this->default_options  	= hctpc_get_default_options();
+			$this->tabs  				= array(
+				'settings'      => array( 'label' => __( 'Settings', 'captcha' ) ),
+				'messages'      => array( 'label' => __( 'Messages', 'captcha' ) ),
+				'misc'          => array( 'label' => __( 'Misc', 'captcha' ) )
+			);
+			$this->version = '1.0.0';
+			$this->is_multisite = is_multisite();			
 
 			$this->all_plugins = get_plugins();
 
@@ -58,29 +50,17 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 				'wp_register'      			=> array( 'name' => __( 'Registration form', 'captcha' ) ),
 				'wp_lost_password' 			=> array( 'name' => __( 'Forgot password form', 'captcha' ) ),
 				'wp_comments'      			=> array( 'name' => __( 'Comments form', 'captcha' ) ),
-				'bws_contact'      			=> array( 'name' => 'Contact Form' ),
-				/*pls */
-				'bws_subscriber'            => array( 'name' => 'Subscriber', 'for_pro' => 1 ),
-				'cf7_contact'               => array( 'name' => 'Contact Form 7', 'for_pro' => 1 ),
-				'buddypress_register'       => array( 'name' => __( 'Registration form', 'captcha' ), 'for_pro' => 1 ),
-				'buddypress_comments'       => array( 'name' => __( 'Comments form', 'captcha' ), 'for_pro' => 1 ),
-				'buddypress_group'          => array( 'name' => __( 'Create a Group form', 'captcha' ), 'for_pro' => 1 ),
-				'woocommerce_login'         => array( 'name' => __( 'Login form', 'captcha' ), 'for_pro' => 1 ),
-				'woocommerce_register'      => array( 'name' => __( 'Registration form', 'captcha' ), 'for_pro' => 1 ),
-				'woocommerce_lost_password' => array( 'name' => __( 'Forgot password form', 'captcha' ), 'for_pro' => 1 ),
-				'woocommerce_checkout'      => array( 'name' => __( 'Checkout form', 'captcha' ), 'for_pro' => 1 )
-				/* pls*/
 			);
 
 			/*
 			 * Add users forms to the forms lists
 			 */
-			$user_forms = apply_filters( 'cptch_add_form', array() );
+			$user_forms = apply_filters( 'hctpc_add_form', array() );
 			if ( ! empty( $user_forms ) ) {
 				/*
 				 * Get default form slugs from defaults
-				 * which have been added by hook "cptch_add_default_form" */
-				$new_default_forms = array_diff( cptch_get_default_forms(), array_keys( $this->forms ) );
+				 * which have been added by hook "hctpc_add_default_form" */
+				$new_default_forms = array_diff( hctpc_get_default_forms(), array_keys( $this->forms ) );
 				/*
 				 * Remove forms slugs form from the newly added
 				 * which have not been added to defaults previously
@@ -112,70 +92,205 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 						'wp_lost_password',
 						'wp_comments'
 					)
-				),
-				'external' => array(
-					'title' => __( 'External plugins', 'captcha' ),
-					'forms' => array(
-						'bws_contact'
-					)
-				),
-				/*pls */
-				'other_for_pro' => array(
-					'external' => array(
-						'title' => __( 'External plugins', 'captcha' ),
-						'forms' => array(
-							'bws_subscriber',
-							'cf7_contact'
-						)
-					),
-					'buddypress' => array(
-						'title' => __( 'BuddyPress', 'captcha' ),
-						'forms' => array(
-							'buddypress_register',
-							'buddypress_comments',
-							'buddypress_group'
-						)
-					),
-					'woocommerce' => array(
-						'title' => __( 'WooCommerce', 'captcha' ),
-						'forms' => array(
-							'woocommerce_login',
-							'woocommerce_register',
-							'woocommerce_lost_password',
-							'woocommerce_checkout'
-						)
-					)
 				)
-				/* pls*/
 			);
 
 			/**
 			* create list with default compatible forms
 			*/
-			$this->registered_forms = array_merge(
-				$this->form_categories['wp_default']['forms'],
-				$this->form_categories['external']['forms'] /*pls */,				
-				$this->form_categories['other_for_pro']['external']['forms'],
-				$this->form_categories['other_for_pro']['buddypress']['forms'],
-				$this->form_categories['other_for_pro']['woocommerce']['forms']/* pls*/
-			);
+			$this->registered_forms = $this->form_categories['wp_default']['forms'];
 
 			$user_forms = array_diff( array_keys( $this->forms ), $this->registered_forms );
-			if ( ! empty( $user_forms ) )
-				$this->form_categories['external']['forms'] = array_merge( $this->form_categories['external']['forms'], $user_forms );
-
-			/**
-			* get ralated plugins info
-			*/
-			$this->options = $this->get_related_plugins_info( $this->options );
-
-			/**
-			* The option restoring have place later then $this->__constuct
-			* so related plugins info will be lost without this add_filter
-			*/
-			add_action( get_parent_class( $this ) . '_additional_misc_options', array( $this, 'additional_misc_options' ) );
-			add_filter( get_parent_class( $this ) . '_additional_restore_options', array( $this, 'additional_restore_options' ) );
 		}
+
+		/**
+		 * Displays the content of the "Settings" on the plugin settings page
+		 * @access public
+		 * @param  void
+		 * @return void
+		 */
+		public function display_content() {
+			$save_results = $this->save_all_tabs_options();
+
+			$this->display_messages( $save_results );
+			if ( isset( $_REQUEST['hctpc_restore_default'] ) && check_admin_referer( $this->plugin_basename, 'hctpc_nonce_name' ) ) { ?>
+				<div>
+					<p><?php _e( 'Are you sure you want to restore default settings?', 'captcha' ) ?></p>
+					<form method="post" action="">
+						<p>
+							<button class="button button-primary" name="hctpc_restore_confirm"><?php _e( 'Yes, restore all settings', 'captcha' ) ?></button>
+							<button class="button" name="hctpc_restore_deny"><?php _e( 'No, go back to the settings page', 'captcha' ) ?></button>
+							<?php wp_nonce_field( $this->plugin_basename, 'hctpc_settings_nonce_name' ); ?>
+						</p>
+					</form>
+				</div>
+			<?php } else { ?>
+				<form class="hctpc_form" method="post" action="" enctype="multipart/form-data">
+					<div id="poststuff">
+						<div id="post-body" class="metabox-holder columns-2">
+							<div id="post-body-content" style="position: relative;">
+								<?php $this->display_tabs(); ?>					
+							</div><!-- /post-body-content -->
+							<div id="postbox-container-1" class="postbox-container">
+								<div class="meta-box-sortables ui-sortable">
+									<div id="submitdiv" class="postbox">
+										<h3 class="hndle"><?php _e( 'Information', 'captcha' ); ?></h3>
+										<div class="inside">
+											<div class="submitbox" id="submitpost">
+												<div id="minor-publishing">
+													<div id="misc-publishing-actions">														
+														<div class="misc-pub-section">
+															<strong><?php _e( 'Version', 'captcha' ); ?>:</strong> <?php echo $this->plugins_info['Version']; ?>
+														</div><!-- .misc-pub-section -->
+													</div>
+													<div class="clear"></div>
+												</div>
+												<div id="major-publishing-actions">
+													<div id="publishing-action">
+														<input type="hidden" name="hctpc_form_submit" value="submit" />
+														<input id="hctpc-submit-button" type="submit" class="button button-primary button-large" value="<?php _e( 'Save Changes', 'captcha' ); ?>" />
+														<?php wp_nonce_field( $this->plugin_basename, 'hctpc_nonce_name' ); ?>					
+													</div>
+													<div class="clear"></div>
+												</div>
+											</div>
+										</div>										
+									</div>
+									<?php /**
+									 * action - Display custom metabox
+									 */
+									do_action( __CLASS__ . '_display_metabox' ); ?>
+								</div>
+							</div>
+							<div id="postbox-container-2" class="postbox-container">
+								<?php /**
+								 * action - Display additional content for #postbox-container-2
+								 */
+								do_action( __CLASS__ . '_display_second_postbox' ); ?>
+								<div class="submit">
+									<input type="submit" class="button button-primary button-large" value="<?php _e( 'Save Changes', 'captcha' ); ?>" />
+								</div>								
+							</div>
+						</div>
+					</form>
+				</div>
+			<?php }
+		}
+
+		/**
+		 * Displays the Tabs
+		 * @access public
+		 * @param  void
+		 * @return void
+		 */
+		public function display_tabs() { 
+			global $wp_version; ?>
+			<div id="hctpc_settings_tabs_wrapper"<?php if ( version_compare( $wp_version, '4.0', '<' ) ) echo ' class="edit-form-section"'; ?>>
+				<ul id="hctpc_settings_tabs">
+					<?php $this->display_tabs_list(); ?>
+				</ul>
+				<?php $this->display_tabs_content(); ?>
+				<div class="clear"></div>
+				<input type="hidden" name="hctpc_active_tab" value="<?php if ( isset( $_REQUEST['hctpc_active_tab'] ) ) echo esc_attr( $_REQUEST['hctpc_active_tab'] ); ?>" />
+			</div>
+		<?php }
+
+		/**
+		 * Displays the list of tabs
+		 * @access private
+		 * @return void
+		 */
+		private function display_tabs_list() {
+			foreach ( $this->tabs as $tab_slug => $data ) {
+				$tab_class = 'hctpc-tab-' . $tab_slug;
+				if ( ! empty( $data['class'] ) )
+					$tab_class .= ' ' . $data['class']; ?>
+				<li class="<?php echo $tab_class; ?>" data-slug="<?php echo $tab_slug; ?>">
+					<a href="#hctpc_<?php echo $tab_slug; ?>_tab">
+						<span><?php echo esc_html( $data['label'] ); ?></span>
+					</a>
+				</li>
+			<?php }
+		}
+
+		/**
+		 * Displays the content of tabs
+		 * @access private
+		 * @param  string $tab_slug
+		 * @return void
+		 */
+		public function display_tabs_content() {
+			foreach ( $this->tabs as $tab_slug => $data ) { ?>
+				<div class="hctpc_tab ui-tabs-panel ui-widget-content ui-corner-bottom" id="hctpc_<?php echo $tab_slug; ?>_tab" aria-labelledby="ui-id-2" role="tabpanel" aria-hidden="false" style="display: block;">					
+					<?php if ( method_exists( $this, 'tab_' . str_replace( '-', '_', $tab_slug ) ) ) {
+						call_user_func( array( $this, 'tab_' . str_replace( '-', '_', $tab_slug ) ) );
+					} ?>
+				</div>
+			<?php }
+		}
+
+		/**
+		 * Save all options from all tabs and display errors\messages
+		 * @access public
+		 * @param  void
+		 * @return void
+		 */
+		public function save_all_tabs_options() {
+			$message = $notice = $error = '';
+			/* Restore default settings */
+			if ( isset( $_POST['hctpc_restore_confirm'] ) && check_admin_referer( $this->plugin_basename, 'hctpc_settings_nonce_name' ) ) {
+				/* do not update package selection */
+				$this->default_options['used_packages'] = $this->options['used_packages'];
+				update_option( 'hctpc_options', $this->default_options );
+
+				$message = __( 'All plugin settings were restored.', 'captcha' );
+			} elseif ( ! isset( $_REQUEST['hctpc_restore_default'] ) && isset( $_REQUEST['hctpc_form_submit'] ) && check_admin_referer( $this->plugin_basename, 'hctpc_nonce_name' ) ) {
+				/* save tabs */				
+				$result = $this->save_options();
+				if ( ! empty( $result['error'] ) )
+					$error = $result['error'];
+				if ( ! empty( $result['message'] ) )
+					$message = $result['message'];
+				if ( ! empty( $result['notice'] ) )
+					$notice = $result['notice'];
+			}
+
+			return compact( 'message', 'notice', 'error' );
+		}
+
+		/**
+		 * Display error\message\notice
+		 * @access public
+		 * @param  $save_results - array with error\message\notice
+		 * @return void
+		 */
+		public function display_messages( $save_results ) {
+			/**
+			 * action - Display custom error\message\notice
+			 */
+			do_action( __CLASS__ . '_display_custom_messages', $save_results ); ?>
+			<div class="updated fade inline" <?php if ( empty( $save_results['message'] ) ) echo "style=\"display:none\""; ?>><p><strong><?php echo $save_results['message']; ?></strong></p></div>
+			<div class="updated hctpc-notice inline" <?php if ( empty( $save_results['notice'] ) ) echo "style=\"display:none\""; ?>><p><strong><?php echo $save_results['notice']; ?></strong></p></div>
+			<div class="error inline" <?php if ( empty( $save_results['error'] ) ) echo "style=\"display:none\""; ?>><p><strong><?php echo $save_results['error']; ?></strong></p></div>
+		<?php }
+
+		/**
+		 * Display 'misc' tab
+		 * @access private
+		 */
+		private function tab_misc() { ?>
+			<h3 class="hctpc_tab_label"><?php _e( 'Miscellaneous Settings', 'captcha' ); ?></h3>
+			<hr>
+			<table class="form-table">
+				<tr>
+					<th scope="row"><?php _e( 'Default Settings', 'captcha' ); ?></th>
+					<td>
+						<input name="hctpc_restore_default" type="submit" class="button" value="<?php _e( 'Restore Settings', 'captcha' ); ?>" />
+						<div class="hctpc_info"><?php _e( 'This will restore plugin settings to defaults.', 'captcha' ); ?></div>
+					</td>
+				</tr>
+			</table>
+		<?php }
 
 		/**
 		 * Save plugin options to the database
@@ -194,15 +309,15 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 				'operand_format' => __( 'Complexity', 'captcha' ),
 				'used_packages'  => __( 'Image Packages', 'captcha' )
 			);
-			$general_bool    = array( 'load_via_ajax', 'display_reload_button', 'enlarge_images', 'enable_time_limit', 'use_limit_attempts_whitelist' );
+			$general_bool    = array( 'load_via_ajax', 'display_reload_button', 'enlarge_images', 'enable_time_limit' );
 			$general_strings = array( 'type', 'title', 'required_symbol', 'no_answer', 'wrong_answer', 'time_limit_off', 'time_limit_off_notice', 'whitelist_message' );
 
 			foreach ( $general_bool as $option ) {
-				$this->options[ $option ] = ! empty( $_REQUEST["cptch_{$option}"] );
+				$this->options[ $option ] = ! empty( $_REQUEST["hctpc_{$option}"] );
 			}
 
 			foreach ( $general_strings as $option ) {
-				$value = isset( $_REQUEST["cptch_{$option}"] ) ? trim( stripslashes( esc_html( $_REQUEST["cptch_{$option}"] ) ) ) : '';
+				$value = isset( $_REQUEST["hctpc_{$option}"] ) ? trim( stripslashes( esc_html( $_REQUEST["hctpc_{$option}"] ) ) ) : '';
 
 				if ( ! in_array( $option, array( 'title', 'required_symbol' ) ) && empty( $value ) ) {
 					/* The index has been added in order to prevent the displaying of this message more than once */
@@ -213,7 +328,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 			}
 
 			foreach ( $general_arrays as $option => $option_name ) {
-				$value = isset( $_REQUEST["cptch_{$option}"] ) && is_array( $_REQUEST["cptch_{$option}"] ) ? array_map( 'esc_html', $_REQUEST["cptch_{$option}"] ) : array();
+				$value = isset( $_REQUEST["hctpc_{$option}"] ) && is_array( $_REQUEST["hctpc_{$option}"] ) ? array_map( 'esc_html', $_REQUEST["hctpc_{$option}"] ) : array();
 
 				/* "Arithmetic actions" and "Complexity" must not be empty */
 				if ( empty( $value ) && 'used_packages' != $option && 'recognition' != $this->options['type'] )
@@ -222,8 +337,8 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					$this->options[ $option ] = $value;
 			}
 
-			$this->options['images_count'] = isset( $_REQUEST['cptch_images_count'] ) ? absint( $_REQUEST['cptch_images_count'] ) : 4;
-			$this->options['time_limit'] = isset( $_REQUEST['cptch_time_limit'] ) ? absint( $_REQUEST['cptch_time_limit'] ) : 120;
+			$this->options['images_count'] = isset( $_REQUEST['hctpc_images_count'] ) ? absint( $_REQUEST['hctpc_images_count'] ) : 4;
+			$this->options['time_limit'] = isset( $_REQUEST['hctpc_time_limit'] ) ? absint( $_REQUEST['hctpc_time_limit'] ) : 120;
 
 			/*
 			 * Prepare forms options
@@ -232,7 +347,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 			$form_bool = array( 'enable', 'hide_from_registered' );
 			foreach ( $forms as $form_slug ) {
 				foreach ( $form_bool as $option ) {
-					$this->options['forms'][ $form_slug ][ $option ] = isset( $_REQUEST['cptch']['forms'][ $form_slug ][ $option ] );
+					$this->options['forms'][ $form_slug ][ $option ] = isset( $_REQUEST['hctpc']['forms'][ $form_slug ][ $option ] );
 				}
 			}
 
@@ -241,7 +356,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 			 * it is necessary that at least one of the images packages was selected on the General Options tab
 			 */
 			if (
-				( $this->images_enabled() || 'recognition' == $this->options['type'] ) &&
+				( in_array( 'images', $this->options['operand_format'] ) || 'recognition' == $this->options['type'] ) &&
 				empty( $this->options['used_packages'] )
 			) {
 				if ( 'recognition' == $this->options['type'] ) {
@@ -256,8 +371,8 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					$this->options['operand_format'] = array( 'numbers', 'words' );
 			}
 
-			$this->options = apply_filters( 'cptch_before_save_options', $this->options );
-			update_option( 'cptch_options', $this->options );
+			$this->options = apply_filters( 'hctpc_before_save_options', $this->options );
+			update_option( 'hctpc_options', $this->options );
 			$notice  = implode( '<br />', $notices );
 			$message = __( "Settings saved.", 'captcha' );
 
@@ -288,7 +403,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 						'minus'           => array( __( 'Subtruction', 'captcha' ) . '&nbsp;(-)' ),
 						'multiplications' => array( __( 'Multiplication', 'captcha' ) . '&nbsp;(x)' )
 					),
-					'class'         => 'cptch_for_math_actions'
+					'class'         => 'hctpc_for_math_actions'
 				),
 				'operand_format' => array(
 					'type'              => 'checkbox',
@@ -298,7 +413,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 						'words'   => array( __( 'Words (one, two, three, etc.)', 'captcha' ) ),
 						'images'  => array( __( 'Images', 'captcha' ) )
 					),
-					'class'             => 'cptch_for_math_actions'
+					'class'             => 'hctpc_for_math_actions'
 				),
 				'images_count' => array(
 					'type'              => 'number',
@@ -306,34 +421,18 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					'min'               => 1,
 					'max'               => 10,
 					'block_description' => __( 'Set a number of images to display simultaneously as a captcha question.', 'captcha' ),
-					'class'             => 'cptch_for_recognition'
-				),
-				'use_limit_attempts_whitelist' => array(
-					'type'              => 'radio',
-					'title'             => __( 'Whitelist', 'captcha' ),
-					'block_description' => __( 'With a whitelist you can hide captcha field for your personal and trusted IP addresses.', 'captcha' ),
-					'array_options'     => array(
-						'0' => array( __( 'Default', 'captcha' ) ),
-						'1' => array( __( 'Limit Attempts', 'captcha' ) . ' ' . $this->get_form_message( 'limit_attempts' ) ),
-					)
+					'class'             => 'hctpc_for_recognition'
 				),
 				'used_packages' => array(
 					'type'  => 'pack_list',
 					'title' => __( 'Image Packages', 'captcha' ),
-					'class' => 'cptch_images_options'
+					'class' => 'hctpc_images_options'
 				),
-				/*pls */
-				'use_several_packages' => array(
-					'type'   => 'checkbox',
-					'title' => __( 'Use several image packages at the same time', 'captcha' ),
-					'class' => 'cptch_images_options cptch_enable_to_use_several_packages.'
-				),
-				/* pls*/
 				'enlarge_images' => array(
 					'type'               => 'checkbox',
 					'title'              => __( 'Enlarge Images', 'captcha' ),
 					'inline_description' => __( 'Enable to enlarge captcha images on mouseover.', 'captcha' ),
-					'class'              => 'cptch_images_options'
+					'class'              => 'hctpc_images_options'
 				),
 				'display_reload_button' => array(
 					'type'               => 'checkbox',
@@ -351,44 +450,26 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					'inline_description' => __( 'Enable to display captcha when the website page is loaded.', 'captcha' )
 				)
 			); ?>
-			<h3 class="bws_tab_label"><?php _e( 'Captcha Settings', 'captcha' ); ?></h3>
-			<?php $this->help_phrase(); ?>
+			<h3 class="hctpc_tab_label"><?php _e( 'Captcha Settings', 'captcha' ); ?></h3>
 			<hr>
-			<div class="bws_tab_sub_label"><?php _e( 'General', 'captcha' ); ?></div>
+			<div class="hctpc_tab_sub_label"><?php _e( 'General', 'captcha' ); ?></div>
 			<table class="form-table">
 				<tr>
 					<th scope="row"><?php _e( 'Enable Captcha for', 'captcha' ); ?></th>
 					<td>
-						<?php foreach ( $this->form_categories as $fieldset_name => $fieldset_data ) {
-							/**
-							* All missed forms will be displayed later in pro blocks
-							*/
-							if ( 'other_for_pro' == $fieldset_name )
-								continue; ?>
+						<?php foreach ( $this->form_categories as $fieldset_name => $fieldset_data ) { ?>
 							<p><?php echo $fieldset_data['title']; ?></p>
 							<br>
 							<fieldset id="<?php echo $fieldset_name; ?>">
 								<?php foreach ( $fieldset_data['forms'] as $form_name ) { ?>
-									<label class="cptch_related">
-										<?php $disabled = 'bws_contact' == $form_name && 'active' != $this->options['related_plugins_info']['bws_contact']['status'];
-										$value = $fieldset_name . '_' . $form_name;
-										$id = 'cptch_' . $form_name . '_enable';
-										$name = 'cptch[forms][' . $form_name . '][enable]';
+									<label class="hctpc_related">
+										<?php $value = $fieldset_name . '_' . $form_name;
+										$id = 'hctpc_' . $form_name . '_enable';
+										$name = 'hctpc[forms][' . $form_name . '][enable]';
 										$checked = !! $this->options['forms'][ $form_name ]['enable'];
 										$this->add_checkbox_input( compact( 'id', 'name', 'checked', 'value', 'class', 'disabled' ) );
 
-										echo $this->forms[ $form_name ]['name'];
-										if ( 'bws_contact' == $form_name ) {
-											/**
-											* display the "install/activate" message
-											*/
-											echo $this->get_form_message( 'bws_contact' );
-
-											if ( is_plugin_active( 'contact-form-multi/contact-form-multi.php' ) ||
-													is_plugin_active( 'contact-form-multi-pro/contact-form-multi-pro.php' ) ) { ?>
-												<span class="bws_info"> <?php _e( 'Enable to add the CAPTCHA to forms on their settings pages.', 'captcha' ); ?></span>
-											<?php }
-										} ?>
+										echo $this->forms[ $form_name ]['name']; ?>
 									</label>
 									<br />
 								<?php } ?>
@@ -397,83 +478,26 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 						<?php } ?>
 					</td>
 				</tr>
-				<!-- pls -->
-			</table>
-			<?php if ( ! $this->hide_pro_tabs ) { ?>
-				<div class="bws_pro_version_bloc">
-					<div class="bws_pro_version_table_bloc">
-						<button type="submit" name="bws_hide_premium_options" class="notice-dismiss bws_hide_premium_options" title="<?php _e( 'Close', 'captcha' ); ?>"></button>
-						<div class="bws_table_bg"></div>
-						<table class="form-table bws_pro_version">
-							<tr>
-								<th></th>
-								<td>
-									<?php foreach ( $this->form_categories['other_for_pro'] as $fieldset_name => $fieldset_data ) { ?>
-										<p><?php echo $fieldset_data['title']; ?></p>
-										<br>
-										<fieldset id="<?php echo $fieldset_name; ?>">
-											<?php foreach ( $fieldset_data['forms'] as $form_name => $form_data ) { ?>
-												<label>
-													<input type="checkbox" disabled="disabled">
-													<?php echo $this->forms[ $form_data ]['name']; ?>
-												</label>
-												<br />
-											<?php } ?>
-										</fieldset>
-										<hr>
-									<?php } ?>
-								</td>
-							</tr>
-						</table>
-					</div>
-					<?php $this->bws_pro_block_links(); ?>
-				</div>
-			<?php } ?>			
-			<table class="form-table">
-				<!-- end pls -->
-				<?php foreach ( $options as $key => $data ) {
-					if ( 'use_several_packages' == $key ) {
-						if ( ! $this->hide_pro_tabs ) { ?>
-							</table>
-							<div class="bws_pro_version_bloc">
-								<div class="bws_pro_version_table_bloc">
-									<button type="submit" name="bws_hide_premium_options" class="notice-dismiss bws_hide_premium_options" title="<?php _e( 'Close', 'captcha' ); ?>"></button>
-									<div class="bws_table_bg"></div>
-									<?php cptch_use_several_packages(); ?>
-								</div>
-								<?php $this->bws_pro_block_links(); ?>
-							</div>
-							<table class="form-table">
-						<?php }
-						continue;
-					} ?>
+				<?php foreach ( $options as $key => $data ) { ?>
 					<tr<?php if ( ! empty( $data['class'] ) ) echo ' class="' . $data['class'] . '"'; ?>>
 						<th scope="row"><?php echo ucwords( $data['title'] ); ?></th>
 						<td>
 							<fieldset>
 								<?php $func = "add_{$data['type']}_input";
 								if ( isset( $data['array_options'] ) ) {
-									$name = 'radio' == $data['type'] ? 'cptch_' . $key : 'cptch_' . $key . '[]';
+									$name = 'radio' == $data['type'] ? 'hctpc_' . $key : 'hctpc_' . $key . '[]';
 									foreach ( $data['array_options'] as $slug => $sub_data ) {
-										$id = "cptch_{$key}_{$slug}"; ?>
+										$id = "hctpc_{$key}_{$slug}"; ?>
 										<label for="<?php echo $id; ?>">
-											<?php if (
-												'use_limit_attempts_whitelist' == $key &&
-												$slug &&
-												'active' != $this->options['related_plugins_info']['limit_attempts']['status']
-											) { ?>
-												<input type="radio" id="<?php echo $id; ?>" name="<?php echo $name; ?>" disabled="disabled" />
-											<?php } else {
-												$checked = 'radio' == $data['type'] ? ( $slug == $this->options[ $key ] ) : in_array( $slug, $this->options[ $key ] );
-												$value   = $slug;
-												$this->$func( compact( 'id', 'name', 'value', 'checked' ) );
-											}
+											<?php $checked = 'radio' == $data['type'] ? ( $slug == $this->options[ $key ] ) : in_array( $slug, $this->options[ $key ] );
+											$value   = $slug;
+											$this->$func( compact( 'id', 'name', 'value', 'checked' ) );
 											echo $sub_data[0]; ?>
 										</label>
 										<br />
 									<?php }
 								} else {
-									$id = isset( $data['array_options'] ) ? '' : ( isset( $this->options[ $key ] ) ? "cptch_{$key}" : "cptch_form_general_{$key}" );
+									$id = isset( $data['array_options'] ) ? '' : ( isset( $this->options[ $key ] ) ? "hctpc_{$key}" : "hctpc_form_general_{$key}" );
 									$name    = $id;
 									$value   = $this->options[ $key ];
 									$checked = !! $value;
@@ -491,12 +515,12 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 									$this->$func( compact( 'id', 'name', 'value', 'checked', 'min', 'max' ) );
 									echo $close_tag;
 									if ( isset( $data['inline_description'] ) ) { ?>
-										<span class="bws_info"><?php echo $data['inline_description']; ?></span>
+										<span class="hctpc_info"><?php echo $data['inline_description']; ?></span>
 									<?php }
 								} ?>
 							</fieldset>
 							<?php if ( isset( $data['block_description'] ) ) { ?>
-								<span class="bws_info"><?php echo $data['block_description']; ?></span>
+								<span class="hctpc_info"><?php echo $data['block_description']; ?></span>
 							<?php } ?>
 						</td>
 					</tr>
@@ -504,14 +528,14 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 
 				$options = array(
 					array(
-						'id'                 => "cptch_enable_time_limit",
-						'name'               => "cptch_enable_time_limit",
+						'id'                 => "hctpc_enable_time_limit",
+						'name'               => "hctpc_enable_time_limit",
 						'checked'            => $this->options['enable_time_limit'],
 						'inline_description' => __( 'Enable to activate a time limit requeired to complete captcha.', 'captcha' )
 					),
 					array(
-						'id'    => "cptch_time_limit",
-						'name'  => "cptch_time_limit",
+						'id'    => "hctpc_time_limit",
+						'name'  => "hctpc_time_limit",
 						'value' => $this->options['time_limit'],
 						'min'   => 10,
 						'max'   => 9999
@@ -521,37 +545,35 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					<th scope="row"><?php _e( 'Time Limit', 'captcha' ); ?></th>
 					<td>
 						<?php $this->add_checkbox_input( $options[0] ); ?>
-						<span class="bws_info"><?php echo $options[0][ 'inline_description' ]; ?></span>
+						<span class="hctpc_info"><?php echo $options[0][ 'inline_description' ]; ?></span>
 					</td>
 				</tr>
-				<tr class="cptch_time_limit" <?php echo $options[0]['checked'] ? '' : ' style="display: none"'; ?>>
+				<tr class="hctpc_time_limit" <?php echo $options[0]['checked'] ? '' : ' style="display: none"'; ?>>
 					<th scope="row"><?php _e( 'Time Limit Thershold', 'captcha' ); ?></th>
 					<td>
-						<span class="cptch_time_limit">
+						<span class="hctpc_time_limit">
 							<?php $this->add_number_input( $options[1] ); echo '&nbsp;' . _e( 'sec', 'captcha' ); ?>
 						</span>
 					</td>
 				</tr>
 			</table>
 			<?php foreach ( $this->forms as $form_slug => $data ) {
-				if ( isset( $data['for_pro'] ) || ( 'wp_comments' != $form_slug && $this->hide_pro_tabs ) )
+				if ( 'wp_comments' != $form_slug )
 					continue;				
 
 				foreach ( $this->form_categories as $category_name => $category_data ) {
 					if ( in_array( $form_slug, $category_data['forms'] ) ) {
 						if ( 'wp_default' == $category_name )
 							$category_title = 'WordPress - ';
-						elseif ( 'external' == $category_name )
-							$category_title = '';
 						else
 							$category_title = $category_data['title'] . ' - ';
 						break;
 					}
 				} ?>
-				<div class="bws_tab_sub_label cptch_<?php echo $form_slug; ?>_related_form"><?php echo $category_title . $data['name']; ?></div>
+				<div class="hctpc_tab_sub_label hctpc_<?php echo $form_slug; ?>_related_form"><?php echo $category_title . $data['name']; ?></div>
 				<?php if ( 'wp_comments' == $form_slug ) {
-					$id     	= "cptch_form_{$form_slug}_hide_from_registered";
-					$name 		= "cptch[forms][{$form_slug}][hide_from_registered]";
+					$id     	= "hctpc_form_{$form_slug}_hide_from_registered";
+					$name 		= "hctpc[forms][{$form_slug}][hide_from_registered]";
 					$checked	= !! $this->options['forms'][ $form_slug ]['hide_from_registered'];
 					$style 		= $info = $readonly = '';
 
@@ -566,80 +588,14 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					} elseif ( ! $this->options['forms'][ $form_slug ]['enable'] ) {
 						$style = ' style="display: none;"';
 					} ?>
-					<table class="form-table cptch_<?php echo $form_slug; ?>_related_form cptch_related_form_bloc">
-						<tr class="cptch_form_option_hide_from_registered"<?php echo $style; ?>>
+					<table class="form-table hctpc_<?php echo $form_slug; ?>_related_form hctpc_related_form_bloc">
+						<tr class="hctpc_form_option_hide_from_registered"<?php echo $style; ?>>
 							<th scope="row"><?php _e( 'Hide from Registered Users', 'captcha' ); ?></th>
 							<td>
 								<?php $this->add_checkbox_input( compact( 'id', 'name', 'checked', 'readonly' ) ); ?>
 							</td>
 						</tr>
-					</table><!-- .cptch_$form_slug --><!-- pls -->
-					<?php if ( ! $this->hide_pro_tabs ) { ?>
-						<div class="bws_pro_version_bloc cptch_<?php echo $form_slug; ?>_related_form cptch_related_form_bloc">
-							<div class="bws_pro_version_table_bloc">
-								<button type="submit" name="bws_hide_premium_options" class="notice-dismiss bws_hide_premium_options" title="<?php _e( 'Close', 'captcha' ); ?>"></button>
-								<div class="bws_table_bg"></div>
-								<?php cptch_additional_options(); ?>
-							</div> <!-- .bws_pro_version_table_bloc -->
-							<?php $this->bws_pro_block_links(); ?>
-						</div>
-					<?php } ?>
-					<!-- end pls -->
-				<?php } else { ?>
-					<!-- pls -->
-					<div class="bws_pro_version_bloc cptch_<?php echo $form_slug; ?>_related_form cptch_related_form_bloc">
-						<div class="bws_pro_version_table_bloc">
-							<button type="submit" name="bws_hide_premium_options" class="notice-dismiss bws_hide_premium_options" title="<?php _e( 'Close', 'captcha' ); ?>"></button>
-							<div class="bws_table_bg"></div>
-							<?php $plugin = cptch_get_plugin( $form_slug );
-
-							if ( ! empty( $plugin ) ) {
-								/* Don't display form options if there is to old plugin version */
-								if ( 'active' == $this->options['related_plugins_info'][ $plugin ]['status'] &&
-									! $this->options['related_plugins_info'][ $plugin ]['compatible']
-								) {
-									$link        = $this->options['related_plugins_info'][ $plugin ]['link'];
-									$plugin_name = $this->options['related_plugins_info'][ $plugin ]['plugin_info']['Name'];
-									$recommended = __( 'update', 'captcha' );
-									$to_current  = __( 'to the current version', 'captcha' );
-								/* Don't display form options for deactivated or not installed plugins */
-								} else {
-									switch ( $this->options['related_plugins_info'][ $plugin ]['status'] ) {
-										case 'not_installed':
-											$link        = $this->options['related_plugins_info'][ $plugin ]['link'];
-											$plugin_name = cptch_get_plugin_name( $plugin );
-											$recommended = __( 'install', 'captcha' );
-											break;
-										case 'deactivated':
-											$link        = admin_url( '/plugins.php' );
-											$plugin_name = $this->options['related_plugins_info'][ $plugin ]['plugin_info']['Name'];
-											$recommended = __( 'activate', 'captcha' );
-											break;
-										default:
-											break;
-									}
-								}
-							}
-
-							if ( ! empty( $recommended ) ) { ?>
-								<table class="form-table bws_pro_version">						
-									<tr>
-										<td colspan="2">
-											<?php echo __( 'You should', 'captcha' ) .
-											"&nbsp;<a href=\"{$link}\" target=\"_blank\">{$recommended}&nbsp;{$plugin_name}</a>&nbsp;" .
-											( empty( $to_current ) ? '' : $to_current . '&nbsp;' ) .
-											__( 'to use this functionality.', 'captcha' ); ?>
-										</td>
-									</tr>
-								</table>
-								<?php unset( $recommended );
-							} else {
-								cptch_additional_options();
-							} ?>
-						</div><!-- .bws_pro_version_table_bloc -->
-						<?php $this->bws_pro_block_links(); ?>
-					</div><!-- .bws_pro_version_bloc -->
-					<!-- end pls -->
+					</table><!-- .hctpc_$form_slug -->
 				<?php }
 			}
 		}
@@ -651,8 +607,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 		 * @return void
 		 */
 		public function tab_messages() { ?>
-			<h3 class="bws_tab_label"><?php _e( 'Messages Settings', 'captcha' ); ?></h3>
-			<?php $this->help_phrase(); ?>
+			<h3 class="hctpc_tab_label"><?php _e( 'Messages Settings', 'captcha' ); ?></h3>
 			<hr>
 			<table class="form-table">
 				<?php $messages = array(
@@ -684,23 +639,15 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 					<tr>
 						<th scope="row"><?php echo $data['title']; ?></th>
 						<td>
-							<textarea <?php echo 'id="cptch_' . $message_name . '" name="cptch_' . $message_name . '"'; ?>><?php echo trim( $this->options[ $message_name ] ); ?></textarea>
+							<textarea <?php echo 'id="hctpc_' . $message_name . '" name="hctpc_' . $message_name . '"'; ?>><?php echo trim( $this->options[ $message_name ] ); ?></textarea>
 							<?php if ( isset( $data['description'] ) ) { ?>
-								<div class="bws_info"><?php echo $data['description']; ?></div>
+								<div class="hctpc_info"><?php echo $data['description']; ?></div>
 							<?php } ?>
 						</td>
 					</tr>
 				<?php } ?>
 			</table>
 		<?php }
-
-		/**
-		 * Display custom options on the 'misc' tab
-		 * @access public
-		 */
-		public function additional_misc_options() {
-			do_action( 'cptch_settings_page_misc_action', $this->options );
-		}
 
 		/**
 		 * Displays the HTML radiobutton with the specified attributes
@@ -775,18 +722,18 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 
 			$package_list = $wpdb->get_results(
 				"SELECT
-					`{$wpdb->base_prefix}cptch_packages`.`id`,
-					`{$wpdb->base_prefix}cptch_packages`.`name`,
-					`{$wpdb->base_prefix}cptch_packages`.`folder`,
-					`{$wpdb->base_prefix}cptch_packages`.`settings`,
-					`{$wpdb->base_prefix}cptch_images`.`name` AS `image`
+					`{$wpdb->base_prefix}hctpc_packages`.`id`,
+					`{$wpdb->base_prefix}hctpc_packages`.`name`,
+					`{$wpdb->base_prefix}hctpc_packages`.`folder`,
+					`{$wpdb->base_prefix}hctpc_packages`.`settings`,
+					`{$wpdb->base_prefix}hctpc_images`.`name` AS `image`
 				FROM
-					`{$wpdb->base_prefix}cptch_packages`
+					`{$wpdb->base_prefix}hctpc_packages`
 				LEFT JOIN
-					`{$wpdb->base_prefix}cptch_images`
+					`{$wpdb->base_prefix}hctpc_images`
 				ON
-					`{$wpdb->base_prefix}cptch_images`.`package_id`=`{$wpdb->base_prefix}cptch_packages`.`id`
-				GROUP BY `{$wpdb->base_prefix}cptch_packages`.`id`
+					`{$wpdb->base_prefix}hctpc_images`.`package_id`=`{$wpdb->base_prefix}hctpc_packages`.`id`
+				GROUP BY `{$wpdb->base_prefix}hctpc_packages`.`id`
 				ORDER BY `name` ASC;",
 				ARRAY_A
 			);
@@ -803,9 +750,9 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 			} else {
 				$upload_dir = wp_upload_dir();
 			}
-			$packages_url = $upload_dir['baseurl'] . '/bws_captcha_images'; ?>
-			<div class="cptch_tabs_package_list">
-				<ul class="cptch_tabs_package_list_items">
+			$packages_url = $upload_dir['baseurl'] . '/captcha_images'; ?>
+			<div class="hctpc_tabs_package_list">
+				<ul class="hctpc_tabs_package_list_items">
 				<?php foreach ( $package_list as $pack ) {
 					$styles = '';
 					if ( ! empty( $pack['settings'] ) ) {
@@ -849,7 +796,7 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 		}
 
 		/**
-		 * Form data from the user call function for the "cptch_add_form_tab" hook
+		 * Form data from the user call function for the "hctpc_add_form_tab" hook
 		 * @access private
 		 * @param  string|array   $form_data   Each new form data
 		 * @return array                       Sanitized label
@@ -862,50 +809,6 @@ if ( ! class_exists( 'Cptch_Settings_Tabs' ) ) {
 			 * @see self::_construct()
 			 */
 			return array( 'name' => esc_html( trim( $form_data[0] ) ) );
-		}
-
-		/**
-		 * Whether the images are enabled for the CAPTCHA
-		 * @access private
-		 * @param  void
-		 * @return boolean
-		 */
-		private function images_enabled() {
-			return in_array( 'images', $this->options['operand_format'] );
-		}
-
-		/**
-		 * Custom functions for "Restore plugin options to defaults"
-		 * @access public
-		 */
-		public function additional_restore_options( $default_options ) {
-			$default_options = $this->get_related_plugins_info( $default_options );
-
-			/* do not update package selection */
-			$default_options['used_packages'] = $this->options['used_packages'];
-
-			return $default_options;
-		}
-
-		/**
-		 * Using for adding related plugin's info during the restoring or creating this class
-		 * @access public
-		 * @param  array
-		 * @return array
-		 */
-		public function get_related_plugins_info( $options ) {
-			/**
-			* default compatible plugins
-			*/
-			$compatible_plugins = array(
-				'bws_contact' => array( 'contact-form-plugin/contact_form.php', 'contact-form-pro/contact_form_pro.php' ),
-				'limit_attempts' => array( 'limit-attempts/limit-attempts.php', 'limit-attempts-pro/limit-attempts-pro.php' )
-			);
-
-			foreach ( $compatible_plugins as $plugin_slug => $plugin )
-				$options['related_plugins_info'][ $plugin_slug ] = cptch_get_plugin_status( $plugin, $this->all_plugins );
-
-			return $options;
 		}
 	}
 }
