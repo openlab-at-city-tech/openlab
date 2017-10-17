@@ -2,14 +2,14 @@
 /**
  * dynwid_init_worker.php
  *
- * @version $Id: dynwid_init_worker.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: dynwid_init_worker.php 1698398 2017-07-18 19:34:08Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
- 
+
 	defined('ABSPATH') or die("No script kiddies please!");
 
 	$DW->message('Dynamic Widgets INIT');
-	echo "\n" . '<!-- Dynamic Widgets by QURL - http://www.qurl.nl //-->' . "\n";
+	echo "\n" . '<!-- Dynamic Widgets by QURL loaded - http://www.dynamic-widgets.com //-->' . "\n";
 
 	// Register the overrule maintypes
 	$DW->registerOverrulers();
@@ -17,8 +17,8 @@
 
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
-	
-	//IP 
+
+	//IP
 	$DW->message('IP: ' . $DW->ip_address);
 
 	$DW->message('Today it is ' . date('l', current_time('timestamp', 0)) . ' (' . date('N', current_time('timestamp', 0)) . '), Week: ' . date('W', current_time('timestamp', 0)));
@@ -28,6 +28,7 @@
 	$DW->whereami = $DW->detectPage();
 	$DW->message('Page is ' . $DW->whereami);
 	$DW->message('Path URL is ' . $DW->url);
+	$DW->message('Host name is ' . $DW->hostname);
 	$DW->message('Prefix is ' . $DW->getURLPrefix());
 
 	if ( $DW->whereami == 'single' ) {

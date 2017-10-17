@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 5.9.13.24
+Version: 5.9.14.11
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.ca/
 Text Domain: link-library
@@ -474,7 +474,12 @@ class link_library_plugin {
 				$options = get_option( $settingsname );
 				
 				if ( $options['enablerewrite'] && !empty( $options['rewritepage'] ) ) {
-                    $newrules['(' . $options['rewritepage'] . ')/(.+?)$'] = 'index.php?pagename=$matches[1]&cat_name=$matches[2]';
+                    if ( is_multisite() ) {
+	                    $newrules['(' . $options['rewritepage'] . ')/(.+?)$'] = 'index.php?pagename=$matches[2]&cat_name=$matches[3]';
+                    } else {
+	                    $newrules['(' . $options['rewritepage'] . ')/(.+?)$'] = 'index.php?pagename=$matches[1]&cat_name=$matches[2]';
+                    }
+
                 }
 
 				if ( $options['publishrssfeed'] ) {
@@ -515,7 +520,7 @@ class link_library_plugin {
     }
 
 	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '' ) {
-		$response = wp_remote_get( $external_link );
+		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36' ) );
 
         if( is_wp_error( $response ) ) {
             $response_code = $response->get_error_code();
@@ -904,6 +909,7 @@ class link_library_plugin {
 		global $llstylesheet;
 		$load_jquery = false;
 		$load_thickbox = false;
+		$load_recaptcha = false;
 		
 		if ( $llstylesheet ) {
 			$load_style = true;
@@ -912,6 +918,7 @@ class link_library_plugin {
 		}
 		
 		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
 		if ( is_admin() ) {
 			$load_jquery = false;
@@ -930,6 +937,9 @@ class link_library_plugin {
 						if ( !$linklibrarypos ) {
                             if ( stripos( $post->post_content, 'link-library-cats' ) || stripos( $post->post_content, 'link-library-addlink' ) ) {
                                 $load_style = true;
+                                if ( 'recaptcha' == $genoptions['captchagenerator'] ) {
+                                	$load_recaptcha = true;
+                                }
                             }
                         }
 					}
@@ -1009,6 +1019,10 @@ class link_library_plugin {
 		if ( $load_thickbox ) {
 			wp_enqueue_script( 'thickbox' );
 			wp_enqueue_style ( 'thickbox' );
+		}
+
+		if ( $load_recaptcha && $genoptions['captchagenerator'] ) {
+			wp_enqueue_script( 'google_recaptcha', 'https://www.google.com/recaptcha/api.js', array(), false, true );
 		}
 	 
 		return $posts;

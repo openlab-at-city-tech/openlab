@@ -228,10 +228,18 @@ function dlblock_generate_headers( $filename ) {
 }
 
 function dlblock_user_has_access( $file ) {
+	if ( isset( $_SERVER['REMOTE_ADDR'] ) && isset( $_SERVER['SERVER_ADDR'] ) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] ) {
+		return true;
+	}
+
 	$user_has_access = true;
 
 	// @todo filter and separate MPO stuff
 	$blog_public = dlblock_blog_public();
+
+	if ( is_super_admin() ) {
+		return true;
+	}
 
 	switch ( $blog_public ) {
 		case -1 :

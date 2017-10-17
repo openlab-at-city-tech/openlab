@@ -22,7 +22,7 @@
                             <div class="group-item-wrapper">
                                 <div class="row">
                                 <div class="item-avatar col-md-9 col-xs-7">
-				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+				<a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php bp_member_name(); ?>"/></a>
                                 </div>
                                 <div class="item col-md-15 col-xs-17">
 				<p class="h5">

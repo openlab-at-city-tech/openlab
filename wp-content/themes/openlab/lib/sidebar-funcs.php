@@ -114,29 +114,11 @@ function openlab_group_sidebar($mobile = false) {
 function openlab_learnmore_sidebar() {
 	?>
 	<div class="learn-more-sidebar">
-		<p>Get updates on the <a href="http://openlabdev.org/about/">Open Road</a></p>
+		<p>Get updates on the <a href="https://openlab.citytech.cuny.edu/openroad/">Open Road</a></p>
 		<p>Follow our student bloggers on <a href="https://openlab.citytech.cuny.edu/the-buzz/">The Buzz</a></p>
 		<p>Join the conversation about <a href="https://openlab.citytech.cuny.edu/openpedagogyopenlab/">Open Pedagogy</a></p>
 	</div>
 	<?php
-}
-
-/**
- * 	Registration page sidebar
- *
- */
-function openlab_buddypress_register_actions() {
-    global $bp;
-    ?>
-    <h2 class="sidebar-title">&nbsp;</h2>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php
 }
 
 /**

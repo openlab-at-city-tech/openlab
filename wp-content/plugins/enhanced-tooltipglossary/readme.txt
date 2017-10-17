@@ -5,13 +5,13 @@ Donate link: http://tooltip.cminds.com/
 Tags: glossary,tooltip,lexicon, dictionary, knowledgebase
 Requires at least: 3.9
 Tested up to: 4.8
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 
 Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
 
 == Description ==
 
-[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Video](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)  | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://www.cminds.com/wordpress-plugins-knowledge-base-and-documentation/?hscat=6-cm-tooltip) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library) 
+[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Video](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)  | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://www.cminds.com/wordpress-plugins-knowledge-base-and-documentation/?hscat=6-cm-tooltip) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
 
 **Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.**
 
@@ -154,7 +154,7 @@ glossary, tooltip, lexicon, dictionary, knowledgebase, posts, definition, defini
 * [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!.
 * [CM MicroPayments](http://micropaymentplugin.com/) - Adds the in-site support for your own "virtual currency". The purpose of this plugin is to allow in-site transactions without the necessity of processing the external payments each time (quicker & easier). Developers can use it as a platform to integrate with their own plugins.
 * [CM Restrict Content](http://restrictcontent.com/) - A full-featured, powerful membership solution and content restriction plugin for WordPress. Support access by role to content on your site.
-* [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and 
+* [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and
 the user satisfaction.
 * [CM Booking Calendar](http://bookingcalendarplugin.com/) - Customers can easily schedule appointments and pay for them directly through your website.
 

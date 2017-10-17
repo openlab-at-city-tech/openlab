@@ -191,3 +191,10 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
 .catalphafilter {
 	padding-bottom: 30px;
 }
+
+.recently_updated {
+	padding: 8px;
+	margin: 14px;
+	color: #FFF;
+	background-color: #F00;
+}

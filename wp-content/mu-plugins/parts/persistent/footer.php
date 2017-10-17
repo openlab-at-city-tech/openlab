@@ -37,13 +37,13 @@
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
                     <div class="col-sm-3 col-copyright">
                         <h2>Copyright</h2>
-			<h3 class="third-header"><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a></h3>
-			<ul>
-				<li>- Attribution</li>
-				<li>- NonCommercial</li>
-				<li>- ShareAlike</li>
-			</ul>
-			<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" /></a>
+                        <h3 class="third-header"><a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a></h3>
+                        <ul>
+                            <li>- Attribution</li>
+                            <li>- NonCommercial</li>
+                            <li>- ShareAlike</li>
+                        </ul>
+                        <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" alt="Creative Commons" /></a>
                     </div>
                 </div>
                 <div class="row row-copyright hidden-md hidden-lg">
@@ -58,13 +58,6 @@
         <a class="visible-xs" id="go-to-top" href="#"><span class="fa fa-chevron-circle-up"></span><br />top</a>
     <?php endif; ?>
 </div>
-<?php /**
- * Adds divs that can be used for client-side detection of bootstrap breakpoints
- */ ?>
-<div class="device-xs visible-xs"></div>
-<div class="device-sm visible-sm"></div>
-<div class="device-md visible-md"></div>
-<div class="device-lg visible-lg"></div>
 
 <?php if (!$placeholder): ?>
 

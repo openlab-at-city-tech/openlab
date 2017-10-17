@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Dynmmic Widgets" default="build" basedir=".">
+	<target name="build" depends="prepare,lint,phploc,pdepend" />
+
+	<target name="clean" description="Cleanup build artifacts">
+		<delete dir="${basedir}/build/logs" />
+		<delete dir="${basedir}/build/pdepend" />
+		<delete dir="${basedir}/build/phpcb" />
+	</target>
+
+	<target name="prepare" depends="clean" description="Prepare for build">
+		<mkdir dir="${basedir}/build/logs" />
+		<mkdir dir="${basedir}/build/pdepend" />
+		<mkdir dir="${basedir}/build/phpcb" />
+	</target>
+
+	<target name="lint" description="Perform syntax check of sourcecode files">
+		<apply executable="php" failonerror="true">
+			<arg value="-l" />
+
+			<fileset dir="${basedir}">
+				<include name="**/*.php" />
+				<modified />
+			</fileset>
+		</apply>
+	</target>
+
+	<target name="phploc" depends="prepare" description="Measure project size using PHPLOC">
+		<exec executable="phploc" failonerror="false">
+			<arg line="--count-tests" />
+			<arg value="--log-xml" />
+			<arg value="${basedir}/build/logs/phploc.xml" />
+			<arg path="${basedir}" />
+		</exec>
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/logs/phploc.xml']" />
+	</target>
+
+	<target name="pdepend" depends="prepare" description="Calculate software metrics using PHP_Depend">
+		<exec executable="pdepend" failonerror="false">
+			<arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+			<arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.png" />
+			<arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.png" />
+			<arg value="--summary-xml=${basedir}/build/logs/pdepend.summary.xml" />
+			<arg value="--ignore=${basedir}/lib/" />
+			<arg path="${basedir}" />
+		</exec>
+		<echo file="${basedir}/build/pdepend/pdepend.html">
+			<![CDATA[
+				<img src="dependencies.png" />
+				<img src="overview-pyramid.png" />
+			]]>
+		</echo>
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/logs/jdepend.xml']" />
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/pdepend/dependencies.png']" />
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/pdepend/overview-pyramid.png']" />
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/logs/pdepend.summary.xml']" />
+		<echo message="##teamcity[publishArtifacts '${basedir}/build/pdepend/pdepend.html']" />
+	</target>
+
+	<target name="phpcb" depends="prepare" description="Generate Code Browser files using phpCB">
+		<property name="phpcb" value="${basedir}/build/deliver/phpcb.zip" />
+		<exec executable="phpcb" failonerror="false">
+			<arg line="--log ${basedir}/build/logs" />
+			<arg line="--source ${basedir}" />
+			<arg line="--output ${basedir}/build/phpcb" />
+			<arg line="--ignore ${basedir}/lib" />
+			<arg line="--ignore ${basedir}/build" />
+		</exec>
+		<zip destfile="${phpcb}" basedir="${basedir}/build/phpcb" />
+		<echo message="##teamcity[publishArtifacts '${phpcb}']" />
+	</target>
+</project>

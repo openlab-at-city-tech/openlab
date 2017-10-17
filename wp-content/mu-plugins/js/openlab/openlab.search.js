@@ -6,7 +6,7 @@ if (window.OpenLab === undefined) {
     var OpenLab = {};
 }
 
-var resizeTimer;
+var searchResizeTimer = {};
 
 OpenLab.search = (function ($) {
     return{
@@ -103,8 +103,8 @@ OpenLab.search = (function ($) {
 
     $(window).on('resize', function (e) {
 
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
+        clearTimeout(searchResizeTimer);
+        searchResizeTimer = setTimeout(function () {
 
             if ($(this).width() != legacyWidth) {
                 legacyWidth = $(this).width();

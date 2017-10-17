@@ -103,7 +103,7 @@ function openlab_modify_options_nav() {
                 ), 'admin', bp_get_current_group_slug());
     }
 
-    if ( bp_is_group() && ! bp_is_group_create() ) {
+    if (bp_is_group() && !bp_is_group_create()) {
         $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
         foreach ($nav_items as $nav_item) {
 
@@ -113,8 +113,8 @@ function openlab_modify_options_nav() {
                     'name' => $nav_item->name,
                     'slug' => $nav_item->slug . '-mobile',
                     'parent_slug' => $nav_item->parent_slug,
-                    'parent_url' => trailingslashit( bp_get_group_permalink( groups_get_current_group() ) ),
-                    'link' => trailingslashit($nav_item->link).'upcoming/',
+                    'parent_url' => trailingslashit(bp_get_group_permalink(groups_get_current_group())),
+                    'link' => trailingslashit($nav_item->link) . 'upcoming/',
                     'position' => intval($nav_item->position) + 1,
                     'item_css_id' => $nav_item->css_id . '-mobile',
                     'screen_function' => $nav_item->screen_function,
@@ -408,26 +408,15 @@ function openlab_my_groups_submenu($group) {
 
         if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
             //have to add extra conditional in here for submenus on editing pages
-            if ($step_name == '') {
-                $menu_list = array(
-                    $create_link => 'Create / Clone a ' . ucfirst($group),
-                );
-            } else {
-
-                $submenu_text = 'Create / Clone a ';
-
-                $menu_list = array(
-                    $no_link => $step_name,
-                );
-            }
+            $menu_list = array(
+                $create_link => 'Create / Clone a ' . ucfirst($group),
+            );
         }
     } else {
         //have to add extra conditional in here for submenus on editing pages
-        if ($step_name == '') {
-            $menu_list = array(
-                $create_link => 'Create a ' . ucfirst($group),
-            );
-        }
+        $menu_list = array(
+            $create_link => 'Create a ' . ucfirst($group),
+        );
     }
 
     $menu_out['menu'] = openlab_submenu_gen($menu_list);
@@ -895,7 +884,7 @@ function openlab_filter_subnav_nav_events($subnav_item) {
         $current = " current-menu-item";
     }
 
-    if(strpos($subnav_item,'nav-events-mobile') !== false){
+    if (strpos($subnav_item, 'nav-events-mobile') !== false) {
         $class = "visible-xs$current";
     } else {
         $class = "hidden-xs$current";
@@ -1026,9 +1015,9 @@ function openlab_group_admin_tabs($group = false) {
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         <?php if ($group_type == "portfolio") : ?>
-                                                                                                                                                                                                                                                                                                                           <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+                                                                                                                                                                                                                                                                                                                                                               <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
         <?php else : ?>
-                                                                                                                                                                                                                                                                                                                           <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+                                                                                                                                                                                                                                                                                                                                                               <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
         <?php endif; ?>
 
     <?php endif ?>
@@ -1165,11 +1154,11 @@ function openlab_get_group_profile_mobile_anchor_links() {
         $links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
     }
 
-    if ( openlab_portfolio_list_enabled_for_group() ) {
+    if (openlab_portfolio_list_enabled_for_group()) {
         $portfolio_data = openlab_get_group_member_portfolios($group_id);
         if (!empty($portfolio_data)) {
             $links .= '<li id="portfolios-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-member-portfolio-sidebar-widget" id="portfolios">Portfolios</a></li>';
-	}
+        }
     }
 
     return $links;
@@ -1206,7 +1195,7 @@ function openlab_calendar_submenu() {
  */
 function openlab_custom_nav_menu_item($title, $url, $order, $parent = 0, $classes = array()) {
     $item = new stdClass();
-    $item->ID = 1000000 + $order + parent;
+    $item->ID = 1000000 + $order + $parent;
     $item->db_id = $item->ID;
     $item->title = $title;
     $item->url = $url;

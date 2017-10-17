@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 3.0
-Tested up to: 4.7
+Tested up to: 4.8.1
 Stable tag: stable
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -58,6 +58,52 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 5.9.14.11 =
+* Corrected some PHP notices about undefined indices
+
+= 5.9.14.10 =
+* Fixed warning about missing captchagenerator index in array
+
+= 5.9.14.9 =
+* Fixed issue where library settings did not update immediate after copying a library
+
+= 5.9.14.8 =
+* Added updated date field to link export
+
+= 5.9.14.7 =
+* Added new sort option for links to display based on number of visits
+
+= 5.9.14.6 =
+* Renamed configuration page tab classes to avoid conflicts with other plugins
+
+= 5.9.14.5 =
+* Modified user submission form so it does not display captcha is user is logged in
+
+= 5.9.14.4 =
+* Added the option to select Google reCAPTCHA as the Captcha generator
+
+= 5.9.14.3 =
+* Added ability to specify updated date when importing links via CSV file. Can be left empty to leave updated date empty
+
+= 5.9.14.2 =
+* Fix to avoid losing save button in Link Library configuration dialogs
+
+= 5.9.14.1 =
+* Fixed updated flag functionality and added options to specify updated text and position
+
+= 5.9.14 =
+* Added ability to specify a query string to be added to all links in a library, or all links in a single category
+* Converted space indents to tabs
+
+= 5.9.13.27 =
+* Addressed potential security vulnerability
+
+= 5.9.13.26 =
+* Fix to avoid SQL warning when displaying a single category at a time in AJAX mode
+
+= 5.9.13.25 =
+* Fix to have some sites that were showing as unreachable in link checking tools now appear as valid sites
 
 = 5.9.13.24 =
 * Removed debug traces for web links
@@ -1010,6 +1056,10 @@ Further configuration is available under the Link Library Settings panel.
 
 == Frequently Asked Questions ==
 
+= Where can I find documentation for Link Library? =
+
+Visit the [official documentation for Link Library](http://ylefebvre.ca/wppluginsdoc/index.php/Link_Library)
+
 = Who are the translators behind Link Library? =
 
 * French Translation courtesy of Luc Capronnier
@@ -1082,82 +1132,6 @@ Here would be the installation procedure:
 `&lt;?php echo $my_link_library_plugin->LinkLibraryCategories('name', 1, 100, 3, 1, 0, '', '', '', false, '', ''); ?&gt;<br />
 `&lt;br /&gt;<br />
 &lt;?php echo $my_link_library_plugin->LinkLibrary('name', 1, 1, 1, 1, 0, 0, '', 0, 0, 1, 1, '&lt;td>', '&lt;/td&gt;', 1, '', '&lt;tr&gt;', '&lt;/tr&gt;', '&lt;td&gt;', '&lt;/td&gt;', 1, '&lt;td&gt;', '&lt;/td&gt;', 1, "Application", "Description", "Similar to", 1, '', '', '', false, 'linklistcatname', false, 0, null, null, null, false, false, false, false, '', ''); ?&gt;
-
-=function LinkLibraryCategories()=
-
- Output a list of all links categories, listed by category, using the settings in $wpdb->linkcategories and output it as table
-
- Parameters:<br/>
-   order (default 'name')  - Sort link categories by 'name', 'id', 'catlist'. When set to 'AdminSettings', will use parameters set in Admin Settings Panel.<br/>
-   hideifempty (default true)  - Supress listing empty link categories<br/>
-   tablewitdh (default 100) - Width of table, percentage<br/>
-   numcolumns (default 1) - Number of columns in table<br/>
-   catanchor (default false) - Determines if links to generated anchors should be created<br/>
-   flatlist (default false) - When set to true, displays an unordered list instead of a table<br/>
-   categorylist (default null) - Specifies a comma-separate list of the only categories that should be displayed<br/>
-   excludecategorylist (default null) - Specifies a comma-separate list of the categories that should not be displayed<br/>
-   showcategorydescheaders (default null) - Show category descriptions in category list<br/>
-   showonecatonly (default false) - Enable AJAX mode showing only one category at a time<br/>
-   settings (default NULL) - Settings Set ID, only used when showonecatonly is true<br/>
-   loadingicon (default NULL) - Path to icon to display when only show one category at a time<br/>
-
-=function LinkLibrary()=
-
- Output a list of all links, listed by category, using the settings in $wpdb->linkcategories and output it as a nested HTML unordered list. Can also insert anchors for categories
-
- Parameters:<br/>
-   order (default 'name')  - Sort link categories by 'name', 'id' or 'catlist'. When set to 'AdminSettings', will use parameters set in Admin Settings Panel.<br/>
-   hideifempty (default true)  - Supress listing empty link categories<br/>
-   catanchor (default false) - Adds name anchors to categorie links to be able to link directly to categories<br/>
-   showdescription (default false) - Displays link descriptions. Added for 2.1 since link categories no longer have this setting<br/>
-   shownotes (default false) - Shows notes in addition to description for links (useful since notes field is larger than description)<br/>
-   showrating (default false) - Displays link ratings. Added for 2.1 since link categories no longer have this setting<br/>
-   showupdated (default false) - Displays link updated date. Added for 2.1 since link categories no longer have this setting<br/>
-   categorylist (default null) - Only show links inside of selected categories. Enter category numbers in a string separated by commas<br/>
-   showimages (default false) - Displays link images. Added for 2.1 since link categories no longer have this setting<br/>
-   showimageandname (default false) - Show both image and name instead of only one or the other<br/>
-   usehtmltags (default false) - Use HTML tags for formatting instead of just displaying them<br/>
-   showrss (default false) - Display RSS URI if available in link description<br/>
-   beforenote (default &lt;br /&gt;) - Code to print out between the description and notes<br/>
-   nofollow (default false) - Adds nofollow tag to outgoing links<br/>
-   excludecategorylist (default null) - Specifies a comma-separate list of the categories that should not be displayed<br/>
-   afternote (default null) - Code / Text to be displayed after note<br/>
-   beforeitem (default null) - Code / Text to be displayed before item<br/>
-   afteritem (default null) - Code / Text to be displayed after item<br/>
-   beforedesc (default null) - Code / Text to be displayed before description<br/>
-   afterdesc (default null) - Code / Text to be displayed after description<br/>
-   displayastable (default false) - Display lists of links as a table (when true) or as an unordered list (when false)<br/>
-   beforelink (default null) - Code / Text to be displayed before link<br/>
-   afterlink (default null) - Code / Text to be displayed after link<br/>
-   showcolumnheaders (default false) - Show column headers if rendering in table mode<br/>
-   linkheader (default null) - Text to be shown in link column when displaying as table<br/>
-   descheader (default null) - Text to be shown in desc column when displaying as table<br/>
-   notesheader (default null) - Text to be shown in notes column when displaying as table<br/>
-   catlistwrappers (default 1) - Number of different sets of alternating elements to be placed before and after each link category section<br/>
-   beforecatlist1 (default null) - First element to be placed before a link category section<br/>
-   beforecatlist2 (default null) - Second element to be placed before a link category section<br/>
-   beforecatlist3 (default null) - Third element to be placed before a link category section<br/>
-   divorheader (default false) - Output div before and after cat name if false, output heading tag if true<br/>
-   catnameoutput (default linklistcatname) - Name of div class or heading to output<br/>   
-   showrssicon (default false) - Output RSS URI if available and assign to standard RSS icon<br />
-   linkaddfrequency (default 0) - Frequency at which extra before and after output should be placed around links<br />
-   addbeforelink (default null) - Addition output to be placed before link<br />
-   addafterlink (default null) - Addition output to be placed after link<br />
-   linktarget (default null) - Specifies the link target window<br />
-   showcategorydescheaders (default false) - Display link category description when printing category list<br />
-   showcategorydesclinks (default false) - Display link category description when printing links<br />
-   showadmineditlinks (default false) - Display edit links in output if logged in as administrator<br />
-   showonecatonly (default false) - Only show one category at a time<br />
-   AJAXcatid (default null) - Category ID for AJAX sub-queries<br />
-   defaultsinglecat (default null) - ID of first category to be shown in single category mode<br />
-   rsspreview (default false) - Add preview links after RSS feed addresses<br />
-   rssfeedpreviewcount(default 3) - Number of RSS feed items to show in preview<br />
-   rssfeedinline (default false) - Shows latest feed items inline with link list<br />
-   rssfeedinlinecontent (default false) - Shows latest feed items contents inline with link list<br />
-   rssfeedinlinecount (default 1) - Number of RSS feed items to show inline<br />
-   beforerss (default null) - String to output before RSS block<br />
-   afterrss (default null) - String to output after RSS block<br />
-
 
 == Screenshots ==
 

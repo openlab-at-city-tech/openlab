@@ -126,7 +126,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 			die();
 		}
 
-		if ( $options['showcaptcha'] && $valid ) {
+		if ( $options['showcaptcha'] && !is_user_logged_in() && $valid ) {
 			$message = apply_filters( 'link_library_verify_captcha', '' );
 			if ( $message > 0 ) {
 				$valid = false;
@@ -135,7 +135,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 			}
 		}
 
-		if ( $options['showcustomcaptcha'] == 'show' && $valid ) {
+		if ( $options['showcustomcaptcha'] == 'show' && !is_user_logged_in() && $valid ) {
 			if ( $captureddata['ll_customcaptchaanswer'] == '' ) {
 				$valid   = false;
 				$message = 5;
@@ -419,7 +419,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$submitteremailmessage .= __( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
 						}
 
-						if ( 'show' == $options['showaddlinksubmittername'] || 'required' == $options['showaddlinksubmittername'] ) {
+						if ( 'show' == $options['showlinksubmittername'] || 'required' == $options['showlinksubmittername'] ) {
 							$submitteremailmessage .= __( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
 						}
 
@@ -530,18 +530,30 @@ function link_library_verify_captcha() {
 
 	$message = 0;
 
-	if ( empty( $_REQUEST['confirm_code'] ) ) {
-		$message = 1;
-	} else {
-		if ( isset( $_COOKIE['Captcha'] ) ) {
-			list( $Hash, $Time ) = explode( '.', $_COOKIE['Captcha'] );
-			if ( md5( "ORHFUKELFPTUEODKFJ" . $_REQUEST['confirm_code'] . $_SERVER['REMOTE_ADDR'] . $Time ) != $Hash ) {
-				$message = 2;
-			} elseif ( ( time() - 5 * 60 ) > $Time ) {
-				$message = 3;
-			}
+	$generaloptions = get_option( 'LinkLibraryGeneral' );
+	$generaloptions = wp_parse_args( $generaloptions, ll_reset_gen_settings( 'return' ) );
+
+	if ( 'easycaptcha' == $generaloptions['captchagenerator'] ) {
+		if ( empty( $_REQUEST['confirm_code'] ) ) {
+			$message = 1;
 		} else {
-			$message = 4;
+			if ( isset( $_COOKIE['Captcha'] ) ) {
+				list( $Hash, $Time ) = explode( '.', $_COOKIE['Captcha'] );
+				if ( md5( "ORHFUKELFPTUEODKFJ" . $_REQUEST['confirm_code'] . $_SERVER['REMOTE_ADDR'] . $Time ) != $Hash ) {
+					$message = 2;
+				} elseif ( ( time() - 5 * 60 ) > $Time ) {
+					$message = 3;
+				}
+			} else {
+				$message = 4;
+			}
+		}
+	} elseif ( 'recaptcha' == $generaloptions['captchagenerator'] && !empty( $generaloptions['recaptchasecretkey'] ) ) {
+		require_once plugin_dir_path( __FILE__ ) . '/recaptcha/autoload.php';
+		$recaptcha = new \ReCaptcha\ReCaptcha( $generaloptions['recaptchasecretkey'] );
+		$resp = $recaptcha->verify( $_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'] );
+		if ( ! $resp->isSuccess() ) {
+			$message = 2;
 		}
 	}
 

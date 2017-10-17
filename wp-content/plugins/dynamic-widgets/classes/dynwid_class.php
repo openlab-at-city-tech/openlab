@@ -11,11 +11,12 @@
 	class dynWid {
 		private $dbtable;
 		public  $device;
+		public  $hostname;
 		public  $dwoptions = array();
 		public  $dynwid_list;
 		public  $enabled;
 		private $firstmessage = TRUE;
-		public	$ip_address;
+		public  $ip_address;
 		public  $listmade = FALSE;
 		public  $overrule_maintype = array();
 		private $registered_sidebars;
@@ -50,6 +51,7 @@
 			$this->sidebars = wp_get_sidebars_widgets();
 			$this->useragent = $this->getBrowser();
 			$this->ip_address = $this->getIP();
+			$this->hostname = $this->getHostname();
 
 			// DB init
 			$this->wpdb = $wpdb;
@@ -236,6 +238,28 @@
 										('" . esc_sql($widget_id) . "', 'shortcode', 'shortcode', '" . $value . "')";
 			$this->wpdb->query($query);
 			*/
+		}
+
+		public function addDomains($widget_id, $default, $domains) {
+			$value = serialize($domains);
+
+			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'domain',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+			}
+
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'domain',
+				'name'			=> 'domain',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
 		}
 
 		/**
@@ -611,9 +635,20 @@
 			return $results;
 		}
 
+		private function getHostname() {
+			$server_name = $_SERVER['SERVER_NAME'];
+			$hostname = $_SERVER['HTTP_HOST'];
+
+			if (! empty($hostname) && $hostname != $server_name ) {
+				return $hostname;
+			}
+
+			return $server_name;
+		}
+
 		private function getIP() {
 			$ip = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : NULL;
-			$this->message( 'Raw IP: ' . $ip );
+			// $this->message( 'Raw IP: ' . $ip );
 
 			return ( strstr($ip, '.') !== FALSE ) ? $ip : NULL;
 		}
@@ -650,6 +685,7 @@
 			DWModule::registerOption(DW_Single::$option);
 			DWModule::registerOption(DW_Tag::$option);
 			DWModule::registerOption(DW_Tpl::$option);
+			DWModule::registerOption(DW_Domain::$option);
 			DWModule::registerOption(DW_URL::$option);
 			DWModule::registerOption(DW_Week::$option);
 			DWModule::registerOption(DW_WPSC::$option);
@@ -984,17 +1020,18 @@
 		 *
 		 */
 		public function registerOverrulers() {
-			include_once(DW_MODULES . 'browser_module.php');
-			include_once(DW_MODULES . 'date_module.php');
-			include_once(DW_MODULES . 'day_module.php');
-			include_once(DW_MODULES . 'week_module.php');
-			include_once(DW_MODULES . 'role_module.php');
-			include_once(DW_MODULES . 'shortcode_module.php');
-			include_once(DW_MODULES . 'tpl_module.php');
-			include_once(DW_MODULES . 'url_module.php');
-			include_once(DW_MODULES . 'device_module.php');
-			include_once(DW_MODULES . 'ip_module.php');
-			include_once(DW_MODULES . 'fimage_module.php');
+			include_once DW_MODULES . 'browser_module.php';
+			include_once DW_MODULES . 'date_module.php';
+			include_once DW_MODULES . 'day_module.php';
+			include_once DW_MODULES . 'week_module.php';
+			include_once DW_MODULES . 'role_module.php';
+			include_once DW_MODULES . 'shortcode_module.php';
+			include_once DW_MODULES . 'tpl_module.php';
+			include_once DW_MODULES . 'url_module.php';
+			include_once DW_MODULES . 'domain_module.php';
+			include_once DW_MODULES . 'device_module.php';
+			include_once DW_MODULES . 'ip_module.php';
+			include_once DW_MODULES . 'fimage_module.php';
 
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
@@ -1004,12 +1041,13 @@
 			DW_Shortcode::checkOverrule('DW_Shortcode');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
+			DW_Domain::checkOverrule('DW_Domain');
 			DW_Device::checkOverrule('DW_Device');
 			DW_IP::checkOverrule('DW_IP');
 			DW_Fimage::checkOverrule('DW_Fimage');
 
 			// WPML Plugin Support
-			include_once(DW_MODULES . 'wpml_module.php');
+			include_once DW_MODULES . 'wpml_module.php';
 			DW_WPML::detectLanguage();
 
 			// QT Plugin Support

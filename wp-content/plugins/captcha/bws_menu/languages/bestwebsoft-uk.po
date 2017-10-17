@@ -2,20 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bestwebsoft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 15:43+0300\n"
-"PO-Revision-Date: 2017-07-03 13:22+0300\n"
+"POT-Creation-Date: 2017-03-28 13:52+0300\n"
+"PO-Revision-Date: 2017-03-28 13:54+0300\n"
 "Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
 "Language-Team: bestwebsoft.com <https://support.bestwebsoft.com>\n"
-"Language: uk_UA\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.8.7.1\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: bws_functions.php:72 bws_functions.php:190
@@ -50,7 +48,7 @@ msgstr "Оцінити"
 msgid "Need help?"
 msgstr "Потрібна допомога?"
 
-#: bws_functions.php:103 bws_functions.php:907 class-bws-settings.php:1047
+#: bws_functions.php:103 bws_functions.php:916 class-bws-settings.php:1047
 msgid "Visit Help Center"
 msgstr "Перейти до Help Center"
 
@@ -148,7 +146,7 @@ msgid "Add New"
 msgstr "Додати"
 
 #: bws_functions.php:216 bws_functions.php:226 bws_functions.php:330
-#: bws_functions.php:378 bws_functions.php:480
+#: bws_functions.php:378 bws_functions.php:482
 msgid "Close notice"
 msgstr "Закрити"
 
@@ -199,12 +197,12 @@ msgstr ""
 "Ваш ліцензійний ключ для %s витікає %s та ви більше не будете отримувати "
 "першочергову технічну підтримку та оновлення."
 
-#: bws_functions.php:475
+#: bws_functions.php:477
 #, php-format
 msgid "Thank you for choosing %s plugin!"
 msgstr "Дякую за вибір плагіна %s!"
 
-#: bws_functions.php:476
+#: bws_functions.php:478
 msgid ""
 "If you have a feature, suggestion or idea you'd like to see in the plugin, "
 "we'd love to hear about it!"
@@ -213,25 +211,25 @@ msgstr ""
 "функціоналу плагіна, будь ласка, надсилайте їх нам! Ми завжди відкриті для "
 "нових ідей!"
 
-#: bws_functions.php:477
+#: bws_functions.php:479
 msgid "Suggest a Feature"
 msgstr "Запропонувати функціонал"
 
-#: bws_functions.php:493 class-bws-settings.php:533 class-bws-settings.php:536
+#: bws_functions.php:495 class-bws-settings.php:533 class-bws-settings.php:536
 #: class-bws-settings.php:584 class-bws-settings.php:587
 msgid "Notice"
 msgstr "Зауважте"
 
-#: bws_functions.php:493
+#: bws_functions.php:495
 msgid "The plugin's settings have been changed."
 msgstr "Налаштування плагіну змінено."
 
-#: bws_functions.php:494 class-bws-settings.php:182 class-bws-settings.php:202
+#: bws_functions.php:496 class-bws-settings.php:182 class-bws-settings.php:202
 #: deprecated.php:640
 msgid "Save Changes"
 msgstr "Зберегти зміни"
 
-#: bws_functions.php:508
+#: bws_functions.php:510
 msgid ""
 "You can always look at premium options by checking the \"Pro Options\" in "
 "the \"Misc\" tab."
@@ -239,71 +237,63 @@ msgstr ""
 "Ви завжди можете подивитися на преміум опції, натиснувши на кнопку \"Pro "
 "опції\" на вкладці \"Різне\"."
 
-#: bws_functions.php:629
-msgid "Add BWS Shortcode"
-msgstr "Додати BWS шорткод"
-
-#: bws_functions.php:630
-msgid "Add BWS Plugins Shortcode"
-msgstr "Додати шорткод BWS плагіну"
-
-#: bws_functions.php:649
+#: bws_functions.php:651
 msgid "Add shortcode"
 msgstr "Додати шорткод"
 
-#: bws_functions.php:649
+#: bws_functions.php:651
 msgid "Add BestWebSoft plugins' shortcodes using this button."
 msgstr "Додайте шорткоди BestWebSoft плагінів за допомогою цієї кнопки."
 
-#: bws_functions.php:695
+#: bws_functions.php:700
 msgid "Close"
 msgstr "Закрити"
 
-#: bws_functions.php:787
+#: bws_functions.php:792
 msgid "Are you sure you want to restore default settings?"
 msgstr "Ви впевнені, що хочете скинути налаштування плагіну до стандартних?"
 
-#: bws_functions.php:790
+#: bws_functions.php:795
 msgid "Yes, restore all settings"
 msgstr "Так, скинути налаштування"
 
-#: bws_functions.php:791
+#: bws_functions.php:796
 msgid "No, go back to the settings page"
 msgstr "Ні, повернутись назад на сторінку налаштувань"
 
-#: bws_functions.php:833
+#: bws_functions.php:842
 msgid "Plugin"
 msgstr "Плагін"
 
-#: bws_functions.php:842
+#: bws_functions.php:851
 msgid "Shortcode settings"
 msgstr "Налаштування шорткоду"
 
-#: bws_functions.php:847
+#: bws_functions.php:856
 msgid "The shortcode will be inserted"
 msgstr "Буде вставлено шорткод"
 
-#: bws_functions.php:852
+#: bws_functions.php:861
 msgid "Insert"
 msgstr "Вставити"
 
-#: bws_functions.php:912
+#: bws_functions.php:921
 msgid "FAQ"
 msgstr "FAQ"
 
-#: bws_functions.php:918
+#: bws_functions.php:927
 msgid "For more information:"
 msgstr "Для отримання додаткової інформації:"
 
-#: bws_functions.php:919
+#: bws_functions.php:928
 msgid "Documentation"
 msgstr "Документація"
 
-#: bws_functions.php:920
+#: bws_functions.php:929
 msgid "Video Instructions"
 msgstr "Відео інструкції"
 
-#: bws_functions.php:921
+#: bws_functions.php:930
 msgid "Submit a Request"
 msgstr "Надіслати запит"
 
@@ -565,7 +555,7 @@ msgstr "Управління придбаними ліцензіями і під
 #: bws_menu.php:326
 #, php-format
 msgid "Get Access to %s+ Premium Plugins"
-msgstr "Отримати доступ до %s+ преміум плагинам"
+msgstr "Отримати Доступ до %s+ Преміум Плагинам"
 
 #: bws_menu.php:328
 msgid "Subscribe to Pro Membership"
@@ -709,7 +699,7 @@ msgstr "Встановити"
 
 #: bws_menu.php:549 class-bws-settings.php:156 class-bws-settings.php:1056
 msgid "Upgrade to Pro"
-msgstr "Оновити до Pro"
+msgstr "Оновитися на Pro"
 
 #: bws_menu.php:563 bws_menu.php:572
 msgid "Activate this plugin"
@@ -830,7 +820,7 @@ msgstr "Огляд"
 #: class-bws-settings.php:457
 #, php-format
 msgid "Activate custom %s code."
-msgstr "Активувати користувацький %s код."
+msgstr "Активувать користувацький %s код."
 
 #: class-bws-settings.php:464 deprecated.php:633
 #, php-format
@@ -1115,492 +1105,40 @@ msgid "version of the plugin."
 msgstr "версія плагіна."
 
 #: product_list.php:7
-msgid "Admin Tools"
-msgstr "Інструменти"
+msgid "Advertisement"
+msgstr "Реклама"
 
 #: product_list.php:8
-msgid "Content"
-msgstr "Контент"
+msgid "Content & Media"
+msgstr "Зміст & Медіа"
 
 #: product_list.php:9
-msgid "eCommerce"
-msgstr "Комерція"
+msgid "Management"
+msgstr "Управління"
 
 #: product_list.php:10
-msgid "Marketing"
-msgstr "Маркетинг"
-
-#: product_list.php:11
-msgid "Navigation"
-msgstr "Навігація"
-
-#: product_list.php:12
 msgid "Recommended"
 msgstr "Рекомендовані "
 
-#: product_list.php:13
+#: product_list.php:11
 msgid "Security"
 msgstr "Безпека"
 
+#: product_list.php:12
+msgid "Site Stats"
+msgstr "Статистика сайту"
+
+#: product_list.php:13
+msgid "Social"
+msgstr "Соціальне"
+
 #: product_list.php:14
-msgid "SEO"
-msgstr "Пошукова оптимізація"
+msgid "Utilities"
+msgstr "Утиліти"
 
 #: product_list.php:15
-msgid "SMM"
-msgstr "СММ"
-
-#: product_list.php:22
-msgid ""
-"Protect WordPress website forms from spam entries by means of math logic."
-msgstr ""
-"Захищайте форми вашого сайту WordPress від зламування шляхом математичної "
-"логіки."
-
-#: product_list.php:32
-msgid "Create your personal car rental/booking and reservation website."
-msgstr "Створіть свій власний сайт прокату і резервування автомобілів."
-
-#: product_list.php:42
-msgid ""
-"Allow customers to reach you using secure contact form plugin any website "
-"must have."
-msgstr ""
-"Надайте можливість клієнтам здійснювати зв'язок з вами через безпечний "
-"плагін контактної форми, який повинен мати будь-який сайт."
-
-#: product_list.php:52
-msgid "Add unlimited number of contact forms to WordPress website."
-msgstr "Додавайте необмежену кількість контактних форм на ваш сайт WordPress."
-
-#: product_list.php:62
-msgid "Save and manage Contact Form messages. Never lose important data."
-msgstr ""
-"Зберігайте і керуйте повідомленнями плагіну Contact Form. Ніколи не "
-"втрачайте важливі дані."
-
-#: product_list.php:72
-msgid "Add unlimited custom pages to WordPress admin dashboard."
-msgstr ""
-"Додавайте необмежену кількість користувацьких сторінок у панелі "
-"адміністратора WordPress."
-
-#: product_list.php:79
-msgid "Add custom fields to WordPress website search results."
-msgstr ""
-"Додавайте користувацькі поля у результати пошуку вашого сайту WordPress."
-
-#: product_list.php:86
-msgid ""
-"Add custom post types and taxonomies to WordPress website search results."
-msgstr ""
-"Додавайте користувацькі типи постів і таксономії у результати пошуку на "
-"вашому сайті WordPress."
-
-#: product_list.php:96
-msgid "Add PayPal and 2CO donate buttons to receive charity payments."
-msgstr ""
-"Додавайте кнопки PayPal і 2CO, щоб отримувати пожертви та благодійні внески."
-
-#: product_list.php:103
-msgid ""
-"Automatically add outgoing email messages to queue instead of sending them "
-"immediately."
-msgstr ""
-"Автоматично формуйте чергу відправки вихідних електронних повідомлень. "
-"Задавайте час і пріоритет розсилки."
-
-#: product_list.php:110
-msgid ""
-"Get latest error log messages to diagnose website problems. Define and fix "
-"issues faster."
-msgstr ""
-"Отримуйте останні повідомлення з журналу помилок для діагностики проблем "
-"сайту. Швидше виявляйте і усувайте проблеми."
-
-#: product_list.php:117
-msgid ""
-"Add Facebook Follow, Like, and Share buttons to WordPress posts, pages, and "
-"widgets."
-msgstr ""
-"Додавайте кнопки Facebook \"Підписатися\", \"Подобається\" та \"Поділитися\" "
-"у пости, сторінки і віджети сайту WordPress."
-
-#: product_list.php:127
-msgid ""
-"Add beautiful galleries, albums & images to your WordPress website in a few "
-"clicks."
-msgstr ""
-"Додавайте мальовничі галереї, альбоми і зображення на ваш сайт WordPress "
-"всього в декілька кліків."
-
-#: product_list.php:137
-msgid ""
-"Add unlimited gallery categories. Organize images to make the navigation "
-"through content easier."
-msgstr ""
-"Додавайте необмежену кількість категорій галерей. Групуйте зображення, щоб "
-"спростити навігацію контентом."
-
-#: product_list.php:144
-msgid ""
-"Add Google +1, Share, Follow, Hangout buttons and profile badge to WordPress "
-"posts, pages and widgets."
-msgstr ""
-"Додавайте кнопки Google \"+1\", \"Поділитися\", \"Підписатися\", \"Hangout\" "
-"і значок профілю до постів, сторінок та віджетів WordPress."
-
-#: product_list.php:154
-msgid ""
-"Stronger security solution which protects your WordPress website from hacks "
-"and unauthorized login attempts."
-msgstr ""
-"Найпотужніше рішення безпеки, яке захищає ваш сайт WordPress від зломів та "
-"неавторизованих спроб входу в систему."
-
-#: product_list.php:164
-msgid ""
-"Add Adsense ads to WordPress website pages, posts, custom posts, search "
-"results, categories, tags, and widgets."
-msgstr ""
-"Додавайте рекламу сервісу Adsense на сторінки, пости, користувацькі пости, "
-"результати пошуку, категорії, теги і віджети сайту WordPress."
-
-#: product_list.php:174
-msgid "Add Google Analytics code to WordPress website and track basic stats."
-msgstr ""
-"Додавайте код Google Analytics на ваш сайт WordPress та відстежуйте базову "
-"статистику сайту."
-
-#: product_list.php:184
-msgid ""
-"Protect WordPress website forms from spam entries with Google Captcha "
-"(reCaptcha)."
-msgstr ""
-"Захищайте форми вашого сайту WordPress від спаму за допомогою Google Captcha "
-"(reCaptcha)."
-
-#: product_list.php:194
-msgid "Add customized Google maps to WordPress posts, pages and widgets."
-msgstr ""
-"Додавайте користувацькі карти Google у пости, сторінки та віджети WordPress."
-
-#: product_list.php:204
-msgid ""
-"Generate and add XML sitemap to WordPress website. Help search engines index "
-"your blog."
-msgstr ""
-"Створюйте та додавайте файли XML sitemap на ваш сайт WordPress. Допоможіть "
-"пошуковим системам проіндексувати ваш блог."
-
-#: product_list.php:214
-msgid ""
-"Replace external WordPress website links with Google shortlinks and track "
-"click stats."
-msgstr ""
-"Замініть зовнішні посилання сайту WordPress на короткі посилання Google і "
-"відстежуйте статистику кліків."
-
-#: product_list.php:221
-msgid ""
-"Protect WordPress website – allow and deny access for certain IP addresses, "
-"hostnames, etc."
-msgstr ""
-"Захистіть свій сайт WordPress - надавайте та забороняйте доступ з певних IP-"
-"адрес, імен хостів і т.д."
-
-#: product_list.php:231
-msgid ""
-"Create your personal job board and listing WordPress website. Search jobs, "
-"submit CV/resumes, choose candidates."
-msgstr ""
-"Створюйте свою власну дошку оголошень з переліком вакансій на базі "
-"WordPress. Здійснюйте пошук вакансій, подачу резюме/CV кандидата, вибір "
-"кандидатів."
-
-#: product_list.php:238
-msgid ""
-"Protect WordPress website against brute force attacks. Limit rate of login "
-"attempts."
-msgstr ""
-"Захищайте свій сайт WordPress від брутфорс-атак. Обмежуйте кількість спроб "
-"введення логіна."
-
-#: product_list.php:248
-msgid ""
-"Add LinkedIn Share and Follow buttons to WordPress posts, pages and widgets. "
-"5 plugins included – profile, insider, etc."
-msgstr ""
-"Додавайте кнопки LinkedIn \"Поділитися\" та \"Відстежувати\" до постів, "
-"сторінок і віджетів WordPress. 5 плагінів включено - Профіль, Інсайдер і т.д."
-
-#: product_list.php:258
-msgid ""
-"Translate WordPress website content to other languages manually. Create "
-"multilingual pages, posts, widgets, menus, etc."
-msgstr ""
-"Перекладайте вміст сайту WordPress іншими мовами вручну. Створюйте "
-"багатомовні сторінки, пости, віджети, меню і т.д."
-
-#: product_list.php:268
-msgid ""
-"Add customizable pagination to WordPress website. Split long content to "
-"multiple pages for better navigation."
-msgstr ""
-"Додавайте пагінацію з можливістю налаштування на ваш сайт WordPress. "
-"Розбивайте об'ємний контент на декілька сторінок для кращої навігації."
-
-#: product_list.php:278
-msgid ""
-"Generate PDF files and print WordPress posts/pages. Customize document "
-"header/footer styles and appearance."
-msgstr ""
-"Створюйте PDF-файли і друкуйте пости/сторінки сайту WordPress. Налаштовуйте "
-"стилі хедера/футера документа і його зовнішній вигляд."
-
-#: product_list.php:288
-msgid ""
-"Add Pinterest Follow, Pin It buttons and profile widgets (Pin, Board, "
-"Profile) to WordPress posts, pages and widgets."
-msgstr ""
-"Додавайте кнопки Pinterest \"Підписатися\", \"Зберегти\" і віджети профілю "
-"(Пін, Дошка, Профіль) до постів, сторінок і віджетів WordPress."
-
-#: product_list.php:298
-msgid ""
-"Create your personal portfolio WordPress website. Manage and showcase past "
-"projects to get more clients."
-msgstr ""
-"Створюйте і додавайте портфоліо на свій сайт WordPress. Керуйте і "
-"демонструйте минулі проекти, щоб залучити більше клієнтів."
-
-#: product_list.php:308
-msgid "Export WordPress posts to CSV file format easily. Configure data order."
-msgstr ""
-"З легкістю експортуйте пости WordPress в файли формату CSV. Налаштуйте "
-"порядок відображення даних."
-
-#: product_list.php:315
-msgid ""
-"Add extra fields to default WordPress user profile. The easiest way to "
-"create and manage additional custom values."
-msgstr ""
-"Додавайте користувацькі поля у стандартний профіль WordPress. Найпростіший "
-"спосіб створення і управління додатковими полями."
-
-#: product_list.php:322
-msgid ""
-"Add and display HTML advertisement banner on WordPress website. Customize "
-"bar styles and appearance."
-msgstr ""
-"Додавайте відображення банерної HTML реклами на сайті WordPress. Налаштуйте "
-"стилі і зовнішній вигляд банеру."
-
-#: product_list.php:332
-msgid ""
-"Add customizable quotes and tips blocks to WordPress posts, pages and "
-"widgets."
-msgstr ""
-"Додавайте редаговані цитати та підказки до постів, сторінок і віджетів "
-"WordPress."
-
-#: product_list.php:339
-msgid ""
-"Add rating plugin to your WordPress website to receive feedback from your "
-"customers."
-msgstr ""
-"Додавайте систему оцінювання і рейтингу на ваш сайт WordPress і отримуйте "
-"відгуки від ваших клієнтів."
-
-#: product_list.php:346
-msgid ""
-"Create your personal real estate WordPress website. Sell, rent and buy "
-"properties. Add, search and browse listings easily."
-msgstr ""
-"Створіть свій особистий сайт агентства нерухомості на базі WordPress. "
-"Продавайте, орендуйте і купуйте нерухомість. Легко додавайте, знаходьте і "
-"переглядайте лістинги."
-
-#: product_list.php:356
-msgid ""
-"Attach, un-attach and re-attach media files quickly to WordPress posts and "
-"pages."
-msgstr ""
-"Прикріплюйте, відкріплюйте і повторно прикріплюйте медіа файли до постів і "
-"сторінок WordPress."
-
-#: product_list.php:363
-msgid ""
-"Add related, featured, latest, and popular posts to your WordPress website. "
-"Connect your blog readers with a relevant content."
-msgstr ""
-"Додавайте схожі, обрані, останні та популярні пости на ваш сайт WordPress. "
-"Надавайте своїм читачам контент схожої тематики."
-
-#: product_list.php:370
-msgid ""
-"Send bulk email messages to WordPress users. Custom templates, advanced "
-"settings and detailed reports."
-msgstr ""
-"Здійснюйте масову розсилку листів користувачам WordPress. Користувацькі "
-"шаблони, додаткові налаштування і детальні звіти."
-
-#: product_list.php:380
-msgid ""
-"The best responsive slider plugin for your WordPress website. Create "
-"beautifully animated slides just in a few clicks."
-msgstr ""
-"Найкращий адаптивний слайдер для вашого сайту WordPress. Створюйте красиво "
-"анімовані слайди всього в декілька кліків."
-
-#: product_list.php:387
-msgid ""
-"Configure SMTP server to receive email messages from WordPress to Gmail, "
-"Yahoo, Hotmail and other services."
-msgstr ""
-"Налаштовуйте SMTP-сервер, щоб отримувати електронні повідомлення з сайту "
-"WordPress на такі поштові служби як Gmail, Yahoo, Hotmail і багато інших."
-
-#: product_list.php:394
-msgid ""
-"Add social media buttons and widgets to WordPress posts, pages and widgets. "
-"FB, Twitter, G+1, Pinterest, LinkedIn."
-msgstr ""
-"Додавайте кнопки і віджети соціальних мереж до постів, сторінок і віджетів "
-"WordPress. FB, Twitter, G+1, Pinterest, LinkedIn."
-
-#: product_list.php:404
-msgid ""
-"Add social media login, registration, and commenting to your WordPress "
-"website."
-msgstr ""
-"Додавайте на свій сайт WordPress можливість входу, реєстрації та "
-"коментування з використанням існуючих акаунтів соціальних мереж."
-
-#: product_list.php:411
-msgid ""
-"Add email newsletter sign up form to WordPress posts, pages and widgets. "
-"Collect data and subscribe your users."
-msgstr ""
-"Додавайте форму підписки на розсилку новин у пости, сторінки і віджети "
-"WordPress. Збирайте дані і здійснюйте підписку користувачів."
-
-#: product_list.php:421
-msgid ""
-"Add testimonials and feedbacks from your customers to WordPress website "
-"posts, pages, and widgets."
-msgstr ""
-"Додавайте рекомендації та відгуки ваших клієнтів в пости, сторінки і віджети "
-"сайту WordPress."
-
-#: product_list.php:428
-msgid ""
-"Best timesheet plugin for WordPress. Track employee time, streamline "
-"attendance and generate reports."
-msgstr ""
-"Кращий плагін обліку робочого часу на сайті WordPress. Відстежуйте час "
-"роботи співробітників, оптимізуйте графік роботи в офісі і створюйте звіти."
-
-#: product_list.php:438
-msgid ""
-"Add Twitter Follow, Tweet, Hashtag, and Mention buttons to WordPress posts "
-"and pages."
-msgstr ""
-"Додавайте кнопки Твіттера \"Читати\", \"Твітнути\", \"Хештеґ\" і \"Згадати\" "
-"до постів і сторінок WordPress."
-
-#: product_list.php:448
-msgid ""
-"Automatically check and update WordPress website core with all installed "
-"plugins and themes to the latest versions."
-msgstr ""
-"Виконуйте автоматичну перевірку і оновлення ядра WordPress до останніх "
-"версій з усіма встановленими плагінами та темами."
-
-#: product_list.php:458
-msgid ""
-"Powerful user role management plugin for WordPress website. Create, edit, "
-"copy, and delete user roles."
-msgstr ""
-"Ефективний плагін управління ролями користувачів для сайту WordPress. "
-"Створюйте, редагуйте, копіюйте і видаляйте ролі користувачів."
-
-#: product_list.php:468
-msgid ""
-"Display live count of online visitors who are currently browsing your "
-"WordPress website."
-msgstr ""
-"Ведіть підрахунок кількості відвідувачів, які в даний час переглядають ваш "
-"сайт WordPress."
-
-#: product_list.php:478
-msgid ""
-"Backup and export Zendesk Help Center content automatically to your "
-"WordPress website database."
-msgstr ""
-"Робіть автоматичне резервне копіювання і експорт вмісту Zendesk Help Center "
-"в базу даних вашого сайту WordPress."
-
-#~ msgid ""
-#~ "Add related posts to WordPress website posts or widgets. Link your "
-#~ "readers to relevant content."
-#~ msgstr ""
-#~ "Додавайте пов'язані публікації у пости або віджети сайту WordPress. "
-#~ "Надавайте своїм читачам контент схожої тематики."
-
-#~ msgid "Advertisement"
-#~ msgstr "Реклама"
-
-#~ msgid "Content & Media"
-#~ msgstr "Зміст та мультимедійні елементи"
-
-#~ msgid "Management"
-#~ msgstr "Управління"
-
-#~ msgid "Site Stats"
-#~ msgstr "Статистика сайту"
-
-#~ msgid "Social"
-#~ msgstr "Соціальні сервіси"
-
-#~ msgid "Utilities"
-#~ msgstr "Утиліти"
-
-#~ msgid "Other"
-#~ msgstr "Інше"
-
-#~ msgid ""
-#~ "Manage database and file system right from your WordPress admin dashboard."
-#~ msgstr ""
-#~ "Керуйте базою даних і файловою системою прямо з панелі адміністратора "
-#~ "WordPress."
-
-#~ msgid ""
-#~ "Add featured posts to WordPress website posts and widgets. Highlight "
-#~ "important information."
-#~ msgstr ""
-#~ "Додавайте обрані публікації до постів і віджетів сайту WordPress. "
-#~ "Підкреслюйте важливу інформацію."
-
-#~ msgid ""
-#~ "Add widgets Latest Posts or Latest Posts for Selected Categories to your "
-#~ "WordPress website."
-#~ msgstr ""
-#~ "Додавайте віджет найновішіх постів або найновішіх постів для обраних "
-#~ "категорій на сайт WordPress."
-
-#~ msgid ""
-#~ "Track views, comments and add the most popular posts to Wordpress widgets."
-#~ msgstr ""
-#~ "Відстежуйте перегляди, коментарі та додавайте найпопулярніші пости у "
-#~ "віджети сайту Wordpress."
-
-#~ msgid ""
-#~ "Add latest posts or latest posts for selected categories widgets to "
-#~ "WordPress website."
-#~ msgstr ""
-#~ "Додавайте віджет найновішіх постів або найновішіх постів для обраних "
-#~ "категорій на сайт WordPress."
+msgid "Other"
+msgstr "Інше"
 
 #~ msgid "Thank you for installing"
 #~ msgstr "Дякуємо, що встановили"
@@ -1717,6 +1255,9 @@ msgstr ""
 
 #~ msgid "Preview"
 #~ msgstr "Попередній перегляд"
+
+#~ msgid "Add BWS Plugins Shortcode"
+#~ msgstr "Додати BWS шорткод"
 
 #~ msgid ""
 #~ "(your username is the email you specify when purchasing the product), "

@@ -262,7 +262,7 @@ function openlab_list_members($view) {
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar col-md-10 col-xs-8">
-                                <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                                <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/></a>
                             </div>
                             <div class="item col-md-14 col-xs-16">
                                 <h2 class="item-title"><a class="no-deco" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
@@ -319,8 +319,8 @@ function openlab_members_pagination_links($page_args = 'upage') {
         'format' => '',
         'total' => ceil((int) $members_template->total_member_count / (int) $members_template->pag_num),
         'current' => (int) $members_template->pag_page,
-        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i>', 'Group pagination previous text', 'buddypress'),
-        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i>', 'Group pagination next text', 'buddypress'),
+        'prev_text' => _x('<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">Previous</span>', 'Group pagination previous text', 'buddypress'),
+        'next_text' => _x('<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">Next</span>', 'Group pagination next text', 'buddypress'),
         'mid_size' => 3,
         'type' => 'list',
     ));
