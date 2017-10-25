@@ -332,4 +332,4 @@ function openlab_themes_filter_search_form($form) {
     return $form;
 }
 
-//add_filter('get_search_form', 'openlab_themes_filter_search_form');
+add_filter('get_search_form', 'openlab_themes_filter_search_form');
