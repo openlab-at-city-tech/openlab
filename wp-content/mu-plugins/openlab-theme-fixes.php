@@ -165,6 +165,37 @@ function openlab_pilcrow_page_menu_args($args) {
 add_filter('wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5);
 
 /**
+ * Filtering blog info to fix items in theme
+ * @param type $output
+ * @param type $show
+ * @return string
+ */
+function openlab_theme_fixes_filter_bloginfo($output, $show) {
+
+    $theme = wp_get_theme();
+
+    switch ($theme->get('TextDomain')) {
+        case 'twentyeleven':
+
+            /**
+             * Targets empty h2s
+             * The empty header will be cleaned up client-side
+             */
+            if (!$output || $output === '' || ctype_space($output)) {
+
+                $output = '<span class="empty-header">Just Another WordPress Site</span>';
+                $output .= '<script type="text/javascript">(function ($) { $(".empty-header").addClass("processing"); })(jQuery);</script>';
+            }
+
+            break;
+    }
+
+    return $output;
+}
+
+add_filter('bloginfo', 'openlab_theme_fixes_filter_bloginfo', 10, 2);
+
+/**
  * Targeted enqueues for specific-theme, specific-script fixes
  */
 function openlab_theme_fixes_init_actions() {
@@ -177,7 +208,7 @@ function openlab_theme_fixes_init_actions() {
     $plugins_url = plugins_url('js', __FILE__);
 
     foreach ($dependencies as $dep) {
-        
+
         //we'll keep the handle the same so this fix doesn't register twice
         wp_register_script("openlab-colorbox-fixes", "$plugins_url/targeted-theme-fixes/openlab.colorbox.fixes.js", array($dep), '0.0.0.1', true);
         wp_enqueue_script("openlab-colorbox-fixes");

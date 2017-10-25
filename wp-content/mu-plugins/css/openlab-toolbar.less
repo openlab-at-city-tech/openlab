@@ -1090,3 +1090,17 @@ body{
 html.wp-toolbar {
     padding-top: 0;
 }
+/**header fixes**/
+body{
+    .empty-header{
+        display: block;
+        &.processing{
+            height: 0;
+            font-size: 0;
+            visibility: hidden;
+        }
+    }
+    .empty-header-placeholder{
+        display: block;
+    }
+}
