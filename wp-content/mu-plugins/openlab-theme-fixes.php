@@ -123,51 +123,53 @@ add_filter('wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3);
 /**
  * Hemingway: Inject missing <label> element to search form, and ensure IDs/labels are unique.
  */
-function openlab_add_missing_label_element_to_searchform( $form ) {
-	static $incr;
+function openlab_add_missing_label_element_to_searchform($form) {
+    static $incr;
 
-	if ( 'hemingway' !== get_template() ) {
-		return $form;
-	}
+    if ('hemingway' !== get_template()) {
+        return $form;
+    }
 
-	if ( ! preg_match( '/<input[^>]+name="s"[^>]*/', $form, $input_match ) ) {
-		return $form;
-	}
+    if (!preg_match('/<input[^>]+name="s"[^>]*/', $form, $input_match)) {
+        return $form;
+    }
 
-	if ( ! preg_match( '/id="([^"]+)"/', $input_match[0], $id_match ) ) {
-		return $form;
-	}
+    if (!preg_match('/id="([^"]+)"/', $input_match[0], $id_match)) {
+        return $form;
+    }
 
-	if ( empty( $incr ) ) {
-		$incr = 0;
-		$id = 'search-terms';
-	} else {
-		$id = 'search-terms-' . $incr;
-	}
+    if (empty($incr)) {
+        $incr = 0;
+        $id = 'search-terms';
+    } else {
+        $id = 'search-terms-' . $incr;
+    }
 
-	$incr++;
+    $incr++;
 
-	$label = '<label for="' . esc_attr( $id ) . '" class="sr-only">Enter search terms</label>';
-	$input = str_replace( $id_match[0], 'id="' . $id . '"', $input_match[0] );
-	$form = str_replace( $input_match[0], $label . $input, $form );
+    $label = '<label for="' . esc_attr($id) . '" class="sr-only">Enter search terms</label>';
+    $input = str_replace($id_match[0], 'id="' . $id . '"', $input_match[0]);
+    $form = str_replace($input_match[0], $label . $input, $form);
 
-	return $form;
+    return $form;
 }
-add_filter( 'get_search_form', 'openlab_add_missing_label_element_to_searchform' );
+
+add_filter('get_search_form', 'openlab_add_missing_label_element_to_searchform');
 
 /**
  * Hemingway: Add missing label element to comment form.
  */
-function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields ) {
-	if ( 'hemingway' !== get_template() ) {
-		return $fields;
-	}
+function openlab_add_missing_label_element_to_comment_form_for_hemingway($fields) {
+    if ('hemingway' !== get_template()) {
+        return $fields;
+    }
 
-	$fields['comment'] .= '<label for="comment" class="sr-only">Comment Text</label>';
+    $fields['comment'] .= '<label for="comment" class="sr-only">Comment Text</label>';
 
-	return $fields;
+    return $fields;
 }
-add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
+
+add_filter('comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway');
 
 /**
  * Prevent Sliding Door from showing plugin installation notice.
@@ -285,7 +287,7 @@ function openlab_themes_filter_search_form($form) {
     if (!in_array($theme_domain, $relevant_themes)) {
         return $form;
     }
-
+    echo '<pre>' . print_r('theme conditionals work', true) . '</pre>';
     if (!isset($GLOBALS['twentyeleven_search_form_count'])) {
         $GLOBALS['twentyeleven_search_form_count'] = 1;
     } else {
@@ -293,18 +295,18 @@ function openlab_themes_filter_search_form($form) {
     }
 
     $current_form_num = $GLOBALS['twentyeleven_search_form_count'];
-
+    echo '<pre>' . print_r('setting globals works', true) . '</pre>';
     $dom = new DOMDocument;
     $dom->loadHTML($form);
     $all_tags = $p_tags = $dom->getElementsByTagName('*');
     $target_tags = array('form', 'label', 'input');
-
+    echo '<pre>' . print_r('dom parsing works', true) . '</pre>';
     foreach ($all_tags as $key => $this_tag) {
-
+        echo '<pre>' . print_r('iterating over tags works', true) . '</pre>';
         if (!in_array($this_tag->tagName, $target_tags)) {
             continue;
         }
-
+        echo '<pre>' . print_r('tag conditionals works', true) . '</pre>';
         $legacy_id = $this_tag->getAttribute('id');
 
         if ($legacy_id) {
@@ -312,14 +314,20 @@ function openlab_themes_filter_search_form($form) {
             $all_tags[$key]->setAttribute('class', $legacy_id);
         }
 
+        echo '<pre>' . print_r('setting ids/classes works', true) . '</pre>';
+
         $legacy_for = $this_tag->getAttribute('for');
 
         if ($legacy_for) {
             $all_tags[$key]->setAttribute('for', $legacy_for . $current_form_num);
         }
+
+        echo '<pre>' . print_r('setting for works', true) . '</pre>';
     }
 
     $form = $dom->saveHTML();
+
+    echo '<pre>' . print_r('saving form works', true) . '</pre>';
 
     return $form;
 }
