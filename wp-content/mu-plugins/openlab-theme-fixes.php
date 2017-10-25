@@ -287,7 +287,7 @@ function openlab_themes_filter_search_form($form) {
     if (!in_array($theme_domain, $relevant_themes)) {
         return $form;
     }
-    echo '<pre>' . print_r('theme conditionals work', true) . '</pre>';
+
     if (!isset($GLOBALS['twentyeleven_search_form_count'])) {
         $GLOBALS['twentyeleven_search_form_count'] = 1;
     } else {
@@ -295,39 +295,33 @@ function openlab_themes_filter_search_form($form) {
     }
 
     $current_form_num = $GLOBALS['twentyeleven_search_form_count'];
-    echo '<pre>' . print_r('setting globals works', true) . '</pre>';
+
     $dom = new DOMDocument;
     $dom->loadHTML($form);
     $all_tags = $dom->getElementsByTagName('*');
     $target_tags = array('form', 'label', 'input');
-    echo '<pre>' . print_r('dom parsing works', true) . '</pre>';
+
     foreach ($all_tags as $key => $this_tag) {
-        echo '<pre>' . print_r('iterating over tags works', true) . '</pre>';
+
         if (!in_array($this_tag->tagName, $target_tags)) {
             continue;
         }
-        echo '<pre>' . print_r('tag conditionals works', true) . '</pre>';
+
         $legacy_id = $this_tag->getAttribute('id');
 
         if ($legacy_id) {
-            $all_tags[$key]->setAttribute('id', $legacy_id . $current_form_num);
-            $all_tags[$key]->setAttribute('class', $legacy_id);
+            $this_tag->setAttribute('id', $legacy_id . $current_form_num);
+            $this_tag->setAttribute('class', $legacy_id);
         }
-
-        echo '<pre>' . print_r('setting ids/classes works', true) . '</pre>';
 
         $legacy_for = $this_tag->getAttribute('for');
 
         if ($legacy_for) {
-            $all_tags[$key]->setAttribute('for', $legacy_for . $current_form_num);
+            $this_tag->setAttribute('for', $legacy_for . $current_form_num);
         }
-
-        echo '<pre>' . print_r('setting for works', true) . '</pre>';
     }
 
     $form = $dom->saveHTML();
-
-    echo '<pre>' . print_r('saving form works', true) . '</pre>';
 
     return $form;
 }
