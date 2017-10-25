@@ -17,6 +17,7 @@ function openlab_load_theme_fixes() {
         case 'themorningafter' :
         case 'wu-wei' :
         case 'twentyfifteen':
+        case 'twentyeleven':
             echo '<link rel="stylesheet" id="' . $t . '-fixes" type="text/css" media="screen" href="' . get_home_url() . '/wp-content/mu-plugins/theme-fixes/' . $t . '.css" />
 ';
             break;
@@ -216,3 +217,62 @@ function openlab_theme_fixes_init_actions() {
 }
 
 add_action('wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000);
+
+/**
+ * For instances where get_search_form() is called multiple times in a template
+ * This creates mulitple IDs with the same name, which is not semantic and fails
+ * WAVE accessibility testing
+ * This function uses a global to iterate the searchform IDS
+ * @param type $form
+ * @return type
+ */
+function openlab_themes_filter_search_form($form) {
+
+    $theme = wp_get_theme();
+    $theme_domain = $theme->get('TextDomain');
+
+    $relevant_themes = array('twentyeleven');
+
+    if (!in_array($theme_domain, $relevant_themes)) {
+        return $form;
+    }
+
+    if (!isset($GLOBALS['twentyeleven_search_form_count'])) {
+        $GLOBALS['twentyeleven_search_form_count'] = 1;
+    } else {
+        $GLOBALS['twentyeleven_search_form_count'] ++;
+    }
+
+    $current_form_num = $GLOBALS['twentyeleven_search_form_count'];
+
+    $dom = new DOMDocument;
+    $dom->loadHTML($form);
+    $all_tags = $p_tags = $dom->getElementsByTagName('*');
+    $target_tags = array('form', 'label', 'input');
+
+    foreach ($all_tags as $key => $this_tag) {
+
+        if (!in_array($this_tag->tagName, $target_tags)) {
+            continue;
+        }
+
+        $legacy_id = $this_tag->getAttribute('id');
+
+        if ($legacy_id) {
+            $all_tags[$key]->setAttribute('id', $legacy_id . $current_form_num);
+            $all_tags[$key]->setAttribute('class', $legacy_id);
+        }
+
+        $legacy_for = $this_tag->getAttribute('for');
+
+        if ($legacy_for) {
+            $all_tags[$key]->setAttribute('for', $legacy_for . $current_form_num);
+        }
+    }
+
+    $form = $dom->saveHTML();
+
+    return $form;
+}
+
+add_filter('get_search_form', 'openlab_themes_filter_search_form');
