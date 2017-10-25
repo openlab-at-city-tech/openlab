@@ -156,6 +156,20 @@ function openlab_add_missing_label_element_to_searchform( $form ) {
 add_filter( 'get_search_form', 'openlab_add_missing_label_element_to_searchform' );
 
 /**
+ * Hemingway: Add missing label element to comment form.
+ */
+function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields ) {
+	if ( 'hemingway' !== get_template() ) {
+		return $fields;
+	}
+
+	$fields['comment'] .= '<label for="comment" class="sr-only">Comment Text</label>';
+
+	return $fields;
+}
+add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
+
+/**
  * Prevent Sliding Door from showing plugin installation notice.
  */
 function openlab_remove_sliding_door_plugin_installation_notice() {
