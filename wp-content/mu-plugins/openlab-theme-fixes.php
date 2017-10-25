@@ -163,3 +163,25 @@ function openlab_pilcrow_page_menu_args($args) {
 }
 
 add_filter('wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5);
+
+/**
+ * Targeted enqueues for specific-theme, specific-script fixes
+ */
+function openlab_theme_fixes_init_actions() {
+
+    /**
+     * Targets colorbox to fix accessibility issue where some versions of colorbox
+     * output empty buttons on document load
+     */
+    $dependencies = array('aec_frontend', 'afg_colorbox_js', 'gform_gravityforms');
+    $plugins_url = plugins_url('js', __FILE__);
+
+    foreach ($dependencies as $dep) {
+        
+        //we'll keep the handle the same so this fix doesn't register twice
+        wp_register_script("openlab-colorbox-fixes", "$plugins_url/targeted-theme-fixes/openlab.colorbox.fixes.js", array($dep), '0.0.0.1', true);
+        wp_enqueue_script("openlab-colorbox-fixes");
+    }
+}
+
+add_action('wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000);
