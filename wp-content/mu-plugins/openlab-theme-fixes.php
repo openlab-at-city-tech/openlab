@@ -298,7 +298,7 @@ function openlab_themes_filter_search_form($form) {
     echo '<pre>' . print_r('setting globals works', true) . '</pre>';
     $dom = new DOMDocument;
     $dom->loadHTML($form);
-    $all_tags = $p_tags = $dom->getElementsByTagName('*');
+    $all_tags = $dom->getElementsByTagName('*');
     $target_tags = array('form', 'label', 'input');
     echo '<pre>' . print_r('dom parsing works', true) . '</pre>';
     foreach ($all_tags as $key => $this_tag) {
