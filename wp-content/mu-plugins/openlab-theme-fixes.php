@@ -121,6 +121,41 @@ function openlab_fix_fallback_menu_for_hemingway($output, $r, $pages) {
 add_filter('wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3);
 
 /**
+ * Hemingway: Inject missing <label> element to search form, and ensure IDs/labels are unique.
+ */
+function openlab_add_missing_label_element_to_searchform( $form ) {
+	static $incr;
+
+	if ( 'hemingway' !== get_template() ) {
+		return $form;
+	}
+
+	if ( ! preg_match( '/<input[^>]+name="s"[^>]*/', $form, $input_match ) ) {
+		return $form;
+	}
+
+	if ( ! preg_match( '/id="([^"]+)"/', $input_match[0], $id_match ) ) {
+		return $form;
+	}
+
+	if ( empty( $incr ) ) {
+		$incr = 0;
+		$id = 'search-terms';
+	} else {
+		$id = 'search-terms-' . $incr;
+	}
+
+	$incr++;
+
+	$label = '<label for="' . esc_attr( $id ) . '" class="sr-only">Enter search terms</label>';
+	$input = str_replace( $id_match[0], 'id="' . $id . '"', $input_match[0] );
+	$form = str_replace( $input_match[0], $label . $input, $form );
+
+	return $form;
+}
+add_filter( 'get_search_form', 'openlab_add_missing_label_element_to_searchform' );
+
+/**
  * Prevent Sliding Door from showing plugin installation notice.
  */
 function openlab_remove_sliding_door_plugin_installation_notice() {
