@@ -4259,7 +4259,12 @@ OpenLab.fixes = (function ($) {
             if (thisHeader.length === 0) {
                 return false;
             }
-
+            
+            /**
+             * The replacement span we're going to add we'll inherit all of the classes and ids
+             * from the empty header element in order to maintain vertical spacing
+             * A new class "empty-header-placeholder" will be added for additional style tweaking 
+             */
             var headerClasses = thisHeader.attr('class');
 
             if (typeof headerClasses === 'undefined') {
@@ -4271,7 +4276,7 @@ OpenLab.fixes = (function ($) {
             headerClasses += 'empty-header-placeholder';
             
             var headerID = thisHeader.attr('id');
-
+            
             var replacement = $('<span></span>');
             replacement.attr('id', headerID);
             replacement.addClass(headerClasses);
