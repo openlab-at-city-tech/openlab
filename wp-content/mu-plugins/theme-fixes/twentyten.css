@@ -18,3 +18,11 @@ a:visited,
 .comment-meta a:visited {
     color: #743399;
 }
+.entry-utility,
+.entry-meta,
+#respond label{
+    color: #000;
+}
+#respond .required{
+    color: #9f2d1d;
+}
