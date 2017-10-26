@@ -18,6 +18,7 @@ function openlab_load_theme_fixes() {
         case 'wu-wei' :
         case 'twentyfifteen':
         case 'twentyeleven':
+        case 'twentyten':
             echo '<link rel="stylesheet" id="' . $t . '-fixes" type="text/css" media="screen" href="' . get_home_url() . '/wp-content/mu-plugins/theme-fixes/' . $t . '.css" />
 ';
             break;
