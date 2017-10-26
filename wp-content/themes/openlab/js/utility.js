@@ -234,7 +234,7 @@ OpenLab.utility = (function ($) {
             return d;
         },
         calendarFiltering: function (args, calendar) {
-            
+
             if (calendar.defaultview === 'agendaWeek') {
                 args.scrollTime = '08:00:00';
                 args.viewRender = function (view, element) {
@@ -272,7 +272,7 @@ OpenLab.utility = (function ($) {
 
             //add sr-only text for accessibility
             var buttons = $('.eo-fullcalendar .fc-button-group');
-            
+
             //get viewtype
             var viewLabel = 'Month';
 
@@ -669,28 +669,21 @@ OpenLab.utility = (function ($) {
                 onLoaded: function () {
 
                     var cameraImages = $('.camera_wrap .camera_target');
-                    var cameraSource = $('.camera_src');
 
                     //have to do this because on first load, the first image is not
                     //actually 'loaded' per se
                     if (!cameraImages.hasClass('fully-loaded')) {
 
                         cameraImages.addClass('fully-loaded');
-                        cameraImages.find('.cameraCont .cameraSlide_0 img').attr('alt', cameraSource.find('div').eq(0).data('alt'));
 
                         //initiate GTM tracking
                         OpenLab.utility.sliderTagManagerTracking();
-
-                    } else {
-
-                        var currentImage = cameraImages.find('.cameraCont .cameracurrent');
-                        currentImage.find('img').attr('alt', cameraSource.find('div').eq(currentImage.index()).data('alt'));
-
 
                     }
 
                 },
                 onEndTransition: function () {
+
                     //record slider link clicks
                     $('.cameraContents .cameraContent.cameracurrent .camera_content a').on('click', function () {
 
