@@ -17,6 +17,7 @@ function openlab_load_theme_fixes() {
         case 'themorningafter' :
         case 'wu-wei' :
         case 'twentyfifteen':
+        case 'twentytwelve':
         case 'twentyeleven':
         case 'twentyten':
             echo '<link rel="stylesheet" id="' . $t . '-fixes" type="text/css" media="screen" href="' . get_home_url() . '/wp-content/mu-plugins/theme-fixes/' . $t . '.css" />
