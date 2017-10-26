@@ -1,6 +1,9 @@
 // Camera slideshow v1.4.0 - a jQuery slideshow with many effects, transitions, easy to customize, using canvas and mobile ready, based on jQuery 1.9.1+
 // Copyright (c) 2012 by Manuel Masia - www.pixedelic.com
 // Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+/****This plugin is being customized, as it is no longer supported****/
+
 ;(function($){$.fn.camera = function(opts, callback) {
 	
 	var defaults = {
@@ -263,7 +266,15 @@
 			allAlign.push('');
 		}
 	});
-	
+        
+        var allAlts= new Array();
+	$('> div', elem).each( function() { 
+		if($(this).attr('data-alt')){
+			allAlts.push($(this).attr('data-alt'));
+		} else {
+			allAlts.push('');
+		}
+	});
 		
 	var allThumbs = new Array();
 	$('> div', elem).each( function() { 
@@ -1113,6 +1124,7 @@
 					wT = imgLoaded.naturalWidth;
 					hT = imgLoaded.naturalHeight;
 					$(imgLoaded).attr('data-alignment',allAlign[slideI]).attr('data-portrait',allPor[slideI]);
+                                        $(imgLoaded).prop('alt',allAlts[slideI]);
 					$(imgLoaded).attr('width',wT);
 					$(imgLoaded).attr('height',hT);
 					target.find('.cameraSlide_'+slideI).hide().css('visibility','visible');
@@ -1130,6 +1142,7 @@
 					wT = imgLoaded2.naturalWidth;
 					hT = imgLoaded2.naturalHeight;
 					$(imgLoaded2).attr('data-alignment',allAlign[slideI+1]).attr('data-portrait',allPor[slideI+1]);
+                                        $(imgLoaded2).prop('alt',allAlts[slideI]);
 					$(imgLoaded2).attr('width',wT);
 					$(imgLoaded2).attr('height',hT);
 					resizeImage();
