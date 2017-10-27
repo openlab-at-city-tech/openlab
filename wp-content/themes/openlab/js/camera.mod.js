@@ -1115,6 +1115,7 @@
 			var imgUrl = allImg[slideI];
 			var imgLoaded = new Image();
 			imgLoaded.src = imgUrl +"?"+ new Date().getTime();
+                        $(imgLoaded).prop('alt',allAlts[slideI]);
 			slide.css('visibility','hidden');
 			slide.prepend($(imgLoaded).attr('class','imgLoaded').css('visibility','hidden'));
 			var wT, hT;
@@ -1124,7 +1125,6 @@
 					wT = imgLoaded.naturalWidth;
 					hT = imgLoaded.naturalHeight;
 					$(imgLoaded).attr('data-alignment',allAlign[slideI]).attr('data-portrait',allPor[slideI]);
-                                        $(imgLoaded).prop('alt',allAlts[slideI]);
 					$(imgLoaded).attr('width',wT);
 					$(imgLoaded).attr('height',hT);
 					target.find('.cameraSlide_'+slideI).hide().css('visibility','visible');
@@ -1137,12 +1137,12 @@
 				var imgUrl2 = allImg[(slideI+1)];
 				var imgLoaded2 = new Image();
 				imgLoaded2.src = imgUrl2 +"?"+ new Date().getTime();
+                                $(imgLoaded2).prop('alt',allAlts[slideI]);
 				slideNext.prepend($(imgLoaded2).attr('class','imgLoaded').css('visibility','hidden'));
 				imgLoaded2.onload = function() {
 					wT = imgLoaded2.naturalWidth;
 					hT = imgLoaded2.naturalHeight;
 					$(imgLoaded2).attr('data-alignment',allAlign[slideI+1]).attr('data-portrait',allPor[slideI+1]);
-                                        $(imgLoaded2).prop('alt',allAlts[slideI]);
 					$(imgLoaded2).attr('width',wT);
 					$(imgLoaded2).attr('height',hT);
 					resizeImage();
