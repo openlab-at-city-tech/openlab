@@ -212,6 +212,7 @@ function openlab_invite_anyone_screen_one_content() {
 
                     <?php endif; ?>
 
+                    <?php wp_nonce_field( 'invite_anyone_send_by_email', 'ia-send-by-email-nonce' ); ?>
                     <?php do_action('invite_anyone_addl_fields') ?>
 
                 </ol>

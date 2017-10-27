@@ -24,7 +24,7 @@ module.exports = function (grunt) {
                     'js/easyaccordion.js',
                     'js/jquery.easing.1.3.js',
                     'js/jquery.mobile.customized.min.js',
-                    'js/camera.min.js',
+                    'js/camera.mod.js',
                     'js/detect-zoom.js'],
                 dest: 'js/dist/vendor.js'
             },
