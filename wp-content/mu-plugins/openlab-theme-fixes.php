@@ -230,6 +230,7 @@ function openlab_theme_fixes_filter_bloginfo($output, $show) {
 
     switch ($theme->get('TextDomain')) {
         case 'twentyeleven':
+        case 'twentytwelve':
 
             /**
              * Targets empty h2s
