@@ -284,62 +284,65 @@ function openlab_help_cats_loop() {
         </div>
     <?php endif; ?>
 
-    <?php
-    // Now get child cats and sort into two arrays for the two columns.
-    $child_cats = get_categories(array('child_of' => $parent_term->term_id, 'taxonomy' => 'help_category'));
-    $cols = array('left' => array(), 'right' => array());
-    $current_col = 'left';
-    foreach ($child_cats as $child_cat) {
-        $cols[$current_col][] = $child_cat;
-        $current_col = 'left' === $current_col ? 'right' : 'left';
-    }
+    <div>
+        <?php
+        // Now get child cats and sort into two arrays for the two columns.
+        $child_cats = get_categories(
+                array(
+                    'child_of' => $parent_term->term_id,
+                    'taxonomy' => 'help_category',
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC',
+                )
+        );
 
-    $count = 0;
-
-    foreach ($cols as $col_name => $col_cats) {
-        echo '<div>';
-        foreach ($col_cats as $child) {
-            $child_cat_id = $child->cat_ID;
-            echo '<div class="child-cat-container child-cat-container-' . intval($child_cat_id) . '">';
-            echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="' . get_term_link($child) . '">' . $child->name . '</a></h2>';
-
-            $args = array('tax_query' => array(
-                    array(
-                        'taxonomy' => 'help_category',
-                        'field' => 'slug',
-                        'include_children' => false,
-                        'terms' => array($child->slug),
-                        'operator' => 'IN'
-                    )
-                ),
-                'post_type' => 'help',
-                'orderby' => 'menu_order',
-                'order' => 'ASC',
-                'posts_per_page' => '-1',
-            );
-            $child_query = null;
-            $child_query = new WP_Query($args); //new WP_Query($args);
-
-            echo '<ul>';
-            while ($child_query->have_posts()) : $child_query->the_post();
-                ?>
-                <li>
-                    <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-                    <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
-                </li>
-                <?php
-            endwhile; // end of the loop.
-            echo '</ul>';
-            wp_reset_query();
+        $count = 0;
+        foreach ($child_cats as $child_cat):
             ?>
+
+            <div class="child-cat-container child-cat-container-<?php echo intval($child_cat->term_id); ?>">
+                <h2 class="child-cat child-cat-num-<?php echo $count; ?>"><a href="<?php echo get_term_link($child_cat); ?>"><?php echo $child_cat->name; ?></a></h2>
+
+                <?php
+                $args = array('tax_query' => array(
+                        array(
+                            'taxonomy' => 'help_category',
+                            'field' => 'slug',
+                            'include_children' => false,
+                            'terms' => array($child_cat->slug),
+                            'operator' => 'IN'
+                        )
+                    ),
+                    'post_type' => 'help',
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC',
+                    'posts_per_page' => '-1',
+                );
+                $child_query = null;
+                $child_query = new WP_Query($args); //new WP_Query($args);
+                ?>
+                <ul>
+                    <?php
+                    while ($child_query->have_posts()) : $child_query->the_post();
+                        ?>
+                        <li>
+                            <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
+                        </li>
+                        <?php
+                    endwhile; // end of the loop.
+                    wp_reset_query();
+                    ?>
+                </ul>
+
+            </div>
 
             <?php
             $count++;
-            echo '</div>';
-        }//ecnd child_cats for each
-        echo '</div>';
-    }
-    ?>
+        endforeach;
+        ?>
+
+    </div>
 
     <div style="clear:both;"></div>
 
