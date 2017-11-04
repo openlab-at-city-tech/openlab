@@ -31,7 +31,7 @@ function openlab_help_loop() {
     $hp_query = new WP_Query(array(
         'post_type' => 'help',
         'p' => $post_id,
-            ));
+    ));
 
     while ($hp_query->have_posts()) : $hp_query->the_post();
         ?>
@@ -105,8 +105,8 @@ function openlab_help_loop() {
                     <div class="submenu">
                         <div class="submenu-text pull-left bold">Topics: </div>
                         <ul class="nav nav-inline"><!--
-            <?php foreach ($nav_links as $nav_link) :
-                ?>--><li><?php echo $nav_link ?></li><!--<?php endforeach; ?>
+                            <?php foreach ($nav_links as $nav_link) :
+                                ?>--><li><?php echo $nav_link ?></li><!--<?php endforeach; ?>
                             --></ul>
                     </div>
                 </div>
@@ -114,21 +114,21 @@ function openlab_help_loop() {
 
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
-            <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+                <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
-            <?php else: ?>
+        <?php else: ?>
             <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
-            <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+                <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
-            <?php endif; ?>
+        <?php endif; ?>
 
         <div class="entry-content">
-        <?php the_content(); ?>
-        <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id) ); ?>
+            <?php the_content(); ?>
+            <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id) ); ?>
         </div>
 
-            <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>
+        <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>
 
     <?php endwhile; // end of the loop.    ?>
 
@@ -177,14 +177,14 @@ function openlab_help_tags_loop() {
     ?>
 
     <h1 class="parent-cat entry-title"><span class="profile-name hyphenate">Tag Archive for: "<?php echo $parent_cat_name; ?>"</span>
-    <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+        <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
     </h1>
 
-        <?php
-        while ($tags_query->have_posts()) : $tags_query->the_post();
+    <?php
+    while ($tags_query->have_posts()) : $tags_query->the_post();
 
-            $post_id = get_the_ID();
-            ?>
+        $post_id = get_the_ID();
+        ?>
 
         <h2 class="help-title cat-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h2>
         <div class="cat-list">Category: <?php echo get_the_term_list($post_id, 'help_category', '', ', ', ''); ?></div>
@@ -239,7 +239,7 @@ function openlab_help_cats_loop() {
 
     <?php if ($parent_term->parent == 0): ?>
         <h1 class="parent-cat entry-title"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span>
-        <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+            <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
         <div id="help-title">
             <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
@@ -249,7 +249,7 @@ function openlab_help_cats_loop() {
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
         ?>
         <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><span class="profile-name hyphenate"><?php echo $head_term->name ?></span></a>
-        <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+            <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
         <div id="help-title">
             <h2 class="page-title clearfix submenu">
@@ -265,20 +265,20 @@ function openlab_help_cats_loop() {
             <div class="child-cat-container help-cat-block">
                 <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
                 <ul>
-        <?php
-        while ($help_query->have_posts()) : $help_query->the_post();
+                    <?php
+                    while ($help_query->have_posts()) : $help_query->the_post();
 
-            $post_id = get_the_ID();
-            ?>
+                        $post_id = get_the_ID();
+                        ?>
                         <li>
                             <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
                             <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
                         </li>
 
-            <?php
-        endwhile; // end of the loop.
-        wp_reset_query();
-        ?>
+                        <?php
+                    endwhile; // end of the loop.
+                    wp_reset_query();
+                    ?>
                 </ul>
             </div>
         </div>
@@ -377,7 +377,7 @@ function openlab_glossary_cats_loop() {
     ?>
 
     <h1 class="parent-cat entry-title"><span class="profile-name hyphenate">Glossary</span>
-    <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
+        <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
     </h1>
     <div class="glossary-description"><p><?php echo $parent_term->description; ?></p></div>
 
@@ -415,7 +415,7 @@ function openlab_get_help_search_url() {
         'update_post_meta_cache' => false,
         'update_post_term_cache' => false,
         'numposts' => 1,
-            ));
+    ));
 
     $url = '';
     if ($posts) {
