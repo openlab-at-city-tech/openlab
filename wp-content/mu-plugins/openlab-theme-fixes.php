@@ -286,6 +286,7 @@ function openlab_themes_filter_search_form($form) {
 
     $relevant_themes = array(
         'filtered',
+        'herothemetrust',
         'twentyeleven',
         'twentyten',
         'twentytwelve',
