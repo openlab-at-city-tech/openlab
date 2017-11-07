@@ -285,6 +285,7 @@ function openlab_themes_filter_search_form($form) {
     $template = get_template();
 
     $relevant_themes = array(
+        'coraline',
         'filtered',
         'herothemetrust',
         'twentyeleven',
