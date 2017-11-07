@@ -342,8 +342,9 @@ function openlab_themes_filter_search_form($form) {
 		$input_label = null;
 		foreach ( $label_tags as $label_tag ) {
 			$label_for = $label_tag->getAttribute( 'for' );
-			if ( $label_for !== $input_id ) {
-				continue;
+			if ( $label_for === $input_id ) {
+				$input_label = $label_tag;
+				break;
 			}
 		}
 
