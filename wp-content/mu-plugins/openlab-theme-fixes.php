@@ -256,6 +256,7 @@ function openlab_themes_filter_search_form($form) {
         'hemingway',
         'herothemetrust',
         'p2',
+        'pilcrow',
         'twentyeleven',
         'twentyten',
         'twentytwelve',
