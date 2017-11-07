@@ -286,8 +286,9 @@ function openlab_themes_filter_search_form($form) {
     $theme_domain = $theme->get('TextDomain');
 
     $relevant_themes = array(
-	    'twentyeleven',
-	    'twentyten',
+        'twentyeleven',
+        'twentyten',
+        'twentytwelve',
     );
 
     if (!in_array($theme_domain, $relevant_themes)) {
