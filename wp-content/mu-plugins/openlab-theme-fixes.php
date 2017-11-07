@@ -329,6 +329,32 @@ function openlab_themes_filter_search_form($form) {
         }
     }
 
+	// Clean up to ensure that a label element exists for each input.
+	$input_tags = $dom->getElementsByTagName( 'input' );
+	$label_tags = $dom->getElementsByTagName( 'label' );
+	foreach ( $input_tags as $input_tag ) {
+		$input_type = $input_tag->getAttribute( 'type' );
+		if ( 'text' !== $input_type ) {
+			continue;
+		}
+
+		$input_id = $input_tag->getAttribute( 'id' );
+		$input_label = null;
+		foreach ( $label_tags as $label_tag ) {
+			$label_for = $label_tag->getAttribute( 'for' );
+			if ( $label_for !== $input_id ) {
+				continue;
+			}
+		}
+
+		if ( ! $input_label ) {
+			$new_label = $dom->createElement( 'label', 'Enter search terms' );
+			$new_label->setAttribute( 'for', $input_id );
+			$new_label->setAttribute( 'class', 'sr-only' );
+			$input_tag->parentNode->appendChild( $new_label );
+		}
+	}
+
     $form = $dom->saveHTML();
 
     return $form;
