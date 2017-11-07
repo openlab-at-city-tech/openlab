@@ -282,16 +282,16 @@ add_action('wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000);
  */
 function openlab_themes_filter_search_form($form) {
 
-    $theme = wp_get_theme();
-    $theme_domain = $theme->get('TextDomain');
+    $template = get_template();
 
     $relevant_themes = array(
+        'filtered',
         'twentyeleven',
         'twentyten',
         'twentytwelve',
     );
 
-    if (!in_array($theme_domain, $relevant_themes)) {
+    if (!in_array($template, $relevant_themes)) {
         return $form;
     }
 

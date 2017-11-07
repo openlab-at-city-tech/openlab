@@ -1,3 +1,58 @@
 #header #logo h1 {
 	line-height: 2rem;
 }
+
+form input.s {
+	margin: 0 0px 0 0;
+	width: 57%;
+	padding: 5px 10px 5px 10px !important;
+	line-height: normal!important;
+	background: none;
+	border: none;
+	height: 20px;
+}
+
+.widget_search .searchform {
+	background-color: #ebebeb;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+        border-radius: 5px;
+	display: inline-block;
+	padding: 0 !important;
+}
+
+input[type="submit"].searchsubmit{
+	display: inline-block;
+	color: #fff !important;
+	text-decoration: none;
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+	text-shadow: 0 -1px 1px rgba(0,0,0,0.3);
+	position: relative;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 5px 15px 6px;
+	border: 1px solid rgba(0,0,0,.2);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	line-height: normal !important;
+
+	font-size: 11px !important;
+	margin: 0 !important;
+	border-left: none;
+	-webkit-border-bottom-left-radius: 0px;
+	-webkit-border-top-left-radius: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	-moz-border-radius-topleft: 0px;
+	border-radius: 0px 5px 5px 0px;
+	float: right;
+	border: none;
+	height: 30px;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	background-position: 0 -1px;
+}
+
+input[type="submit"].searchsubmit:hover {
+	background-color: #e69f58 !important;
+}
