@@ -285,7 +285,10 @@ function openlab_themes_filter_search_form($form) {
     $theme = wp_get_theme();
     $theme_domain = $theme->get('TextDomain');
 
-    $relevant_themes = array('twentyeleven');
+    $relevant_themes = array(
+	    'twentyeleven',
+	    'twentyten',
+    );
 
     if (!in_array($theme_domain, $relevant_themes)) {
         return $form;

@@ -26,3 +26,7 @@ a:visited,
 #respond .required{
     color: #9f2d1d;
 }
+
+.widget_search .s {
+    width: 60%;
+}
