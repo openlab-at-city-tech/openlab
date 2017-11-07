@@ -750,8 +750,8 @@ msgid "Version"
 msgstr "Versión"
 
 #: libs/lib-bootstrap.php:15
-msgid "Could not find wp-load.php"
-msgstr "No se ha podido encontrar wp-load.php"
+msgid "Could not find wp-hide-load.php"
+msgstr "No se ha podido encontrar wp-hide-load.php"
 
 #: libs/tab-support.php:26
 msgid "Please review the documentation before submitting a request for support:"
