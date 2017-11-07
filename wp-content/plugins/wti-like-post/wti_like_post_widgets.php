@@ -4,7 +4,7 @@ class MostLikedPostsWidget extends WP_Widget
      function MostLikedPostsWidget() {
 	     load_plugin_textdomain( 'wti-like-post', false, 'wti-like-post/lang' );
           $widget_ops = array('description' => __('Widget to display most liked posts for a given time range.', 'wti-like-post'));
-          parent::WP_Widget(false, $name = __('Most Liked Posts', 'wti-like-post'), $widget_ops);
+          parent::__construct(false, $name = __('Most Liked Posts', 'wti-like-post'), $widget_ops);
      }
 
      /** @see WP_Widget::widget */
@@ -181,7 +181,7 @@ class RecentlyLikedPostsWidget extends WP_Widget
      function RecentlyLikedPostsWidget() {
 	     load_plugin_textdomain( 'wti-like-post', false, 'wti-like-post/lang' );
           $widget_ops = array('description' => __('Widget to show recently liked posts.', 'wti-like-post'));
-          parent::WP_Widget(false, $name = __('Recently Liked Posts', 'wti-like-post'), $widget_ops);
+          parent::__construct(false, $name = __('Recently Liked Posts', 'wti-like-post'), $widget_ops);
      }
 
      function widget($args, $instance) {
