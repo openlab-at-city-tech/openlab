@@ -13,6 +13,7 @@ function openlab_load_theme_fixes() {
         case 'hemingway' :
         case 'herothemetrust' :
         case 'motion' :
+        case 'p2' :
         case 'pilcrow' :
         case 'sliding-door' :
         case 'themorningafter' :
@@ -254,6 +255,7 @@ function openlab_themes_filter_search_form($form) {
         'filtered',
         'hemingway',
         'herothemetrust',
+        'p2',
         'twentyeleven',
         'twentyten',
         'twentytwelve',
