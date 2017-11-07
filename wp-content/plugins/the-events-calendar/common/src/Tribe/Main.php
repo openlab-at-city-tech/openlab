@@ -17,7 +17,7 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.6.1';
+	const VERSION             = '4.6.3';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
@@ -189,8 +189,8 @@ class Tribe__Main {
 			array(
 				array( 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ),
 				array( 'datatables', 'vendor/datatables/media/js/jquery.dataTables.js', array( 'jquery' ) ),
-				array( 'tribe-select2', 'vendor/select2/select2.js', array( 'jquery' ) ),
-				array( 'tribe-select2-css', 'vendor/select2/select2.css' ),
+				array( 'tribe-select2', 'vendor/tribe-select2/select2.js', array( 'jquery' ) ),
+				array( 'tribe-select2-css', 'vendor/tribe-select2/select2.css' ),
 				array( 'tribe-moment', 'vendor/momentjs/moment.js' ),
 				array( 'datatables-css', 'datatables.css' ),
 				array( 'datatables-responsive', 'vendor/datatables/extensions/Responsive/js/dataTables.responsive.js', array( 'jquery', 'datatables' ) ),
@@ -208,7 +208,7 @@ class Tribe__Main {
 				array( 'tribe-dropdowns', 'dropdowns.js', array( 'jquery', 'underscore', 'tribe-select2' ) ),
 				array( 'tribe-jquery-timepicker', 'vendor/jquery-tribe-timepicker/jquery.timepicker.js', array( 'jquery' ) ),
 				array( 'tribe-jquery-timepicker-css', 'vendor/jquery-tribe-timepicker/jquery.timepicker.css' ),
-
+				array( 'tribe-attrchange', 'vendor/attrchange/js/attrchange.js' ),
 			)
 		);
 
