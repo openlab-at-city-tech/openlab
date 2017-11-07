@@ -257,6 +257,7 @@ function openlab_themes_filter_search_form($form) {
         'herothemetrust',
         'p2',
         'pilcrow',
+        'sliding-door',
         'twentyeleven',
         'twentyten',
         'twentytwelve',
