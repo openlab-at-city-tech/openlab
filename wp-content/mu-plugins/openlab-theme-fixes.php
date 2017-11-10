@@ -10,8 +10,10 @@ function openlab_load_theme_fixes() {
         case 'carrington-blog' :
         case 'coraline' :
         case 'filtered' :
+        case 'hemingway' :
         case 'herothemetrust' :
         case 'motion' :
+        case 'p2' :
         case 'pilcrow' :
         case 'sliding-door' :
         case 'themorningafter' :
@@ -121,42 +123,6 @@ function openlab_fix_fallback_menu_for_hemingway($output, $r, $pages) {
 }
 
 add_filter('wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3);
-
-/**
- * Hemingway: Inject missing <label> element to search form, and ensure IDs/labels are unique.
- */
-function openlab_add_missing_label_element_to_searchform($form) {
-    static $incr;
-
-    if ('hemingway' !== get_template()) {
-        return $form;
-    }
-
-    if (!preg_match('/<input[^>]+name="s"[^>]*/', $form, $input_match)) {
-        return $form;
-    }
-
-    if (!preg_match('/id="([^"]+)"/', $input_match[0], $id_match)) {
-        return $form;
-    }
-
-    if (empty($incr)) {
-        $incr = 0;
-        $id = 'search-terms';
-    } else {
-        $id = 'search-terms-' . $incr;
-    }
-
-    $incr++;
-
-    $label = '<label for="' . esc_attr($id) . '" class="sr-only">Enter search terms</label>';
-    $input = str_replace($id_match[0], 'id="' . $id . '"', $input_match[0]);
-    $form = str_replace($input_match[0], $label . $input, $form);
-
-    return $form;
-}
-
-add_filter('get_search_form', 'openlab_add_missing_label_element_to_searchform');
 
 /**
  * Hemingway: Add missing label element to comment form.
@@ -282,12 +248,22 @@ add_action('wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000);
  */
 function openlab_themes_filter_search_form($form) {
 
-    $theme = wp_get_theme();
-    $theme_domain = $theme->get('TextDomain');
+    $template = get_template();
 
-    $relevant_themes = array('twentyeleven');
+    $relevant_themes = array(
+        'coraline',
+        'filtered',
+        'hemingway',
+        'herothemetrust',
+        'p2',
+        'pilcrow',
+        'sliding-door',
+        'twentyeleven',
+        'twentyten',
+        'twentytwelve',
+    );
 
-    if (!in_array($theme_domain, $relevant_themes)) {
+    if (!in_array($template, $relevant_themes)) {
         return $form;
     }
 
@@ -323,6 +299,33 @@ function openlab_themes_filter_search_form($form) {
             $this_tag->setAttribute('for', $legacy_for . $current_form_num);
         }
     }
+
+	// Clean up to ensure that a label element exists for each input.
+	$input_tags = $dom->getElementsByTagName( 'input' );
+	$label_tags = $dom->getElementsByTagName( 'label' );
+	foreach ( $input_tags as $input_tag ) {
+		$input_type = $input_tag->getAttribute( 'type' );
+		if ( 'submit' === $input_type ) {
+			continue;
+		}
+
+		$input_id = $input_tag->getAttribute( 'id' );
+		$input_label = null;
+		foreach ( $label_tags as $label_tag ) {
+			$label_for = $label_tag->getAttribute( 'for' );
+			if ( $label_for === $input_id ) {
+				$input_label = $label_tag;
+				break;
+			}
+		}
+
+		if ( ! $input_label ) {
+			$new_label = $dom->createElement( 'label', 'Enter search terms' );
+			$new_label->setAttribute( 'for', $input_id );
+			$new_label->setAttribute( 'class', 'sr-only' );
+			$input_tag->parentNode->appendChild( $new_label );
+		}
+	}
 
     $form = $dom->saveHTML();
 

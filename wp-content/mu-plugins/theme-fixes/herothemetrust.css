@@ -2,3 +2,31 @@
 	margin-right: 10px;
 	padding-right: 17px;
 }
+
+input[type="text"].s {
+	margin: 0 0px 0 0;
+	padding: 7px .7em 7px .7em !important;
+	line-height: normal!important;
+	width: 85%;
+	color: #9a9a9a;
+}
+
+.searchsubmit{
+	font-size: 11px !important;
+	margin: 0 !important;
+	border-left: none;
+	-webkit-border-bottom-left-radius: 0px;
+	-webkit-border-top-left-radius: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	-moz-border-radius-topleft: 0px;
+	border-bottom-left-radius: 0px;
+	border-top-left-radius: 0px;
+	float: right;
+	border: none;
+	height: 30px;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background-position: 0 -1px;
+
+}

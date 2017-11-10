@@ -1,0 +1,51 @@
+/* Admin styles for WP Accessibility */
+#wpa_settings_page .postbox {
+    margin: 0 10px 10px 0;
+}
+
+#wpa_settings_page .meta-box-sortables {
+    min-height: 0;
+}
+
+#wpa_settings_page legend {
+    font-weight: 700;
+}
+
+li.fore {
+    float: left;
+    width: 200px;
+    margin-right: 30px;
+}
+
+li.back {
+    margin-left: 230px;
+}
+
+.wpa-support-me p {
+    font-size: 1.6em;
+    font-weight: 600;
+    background: #007eb3;
+    text-shadow: 1px 1px rgb( 35, 60, 127 );
+    padding: 1em;
+    text-align: center;
+    margin: 0 0 1em;
+}
+
+.wpa-support-me p, .wpa-support-me a {
+    color: #fff;
+}
+
+.wpa-support-me a:hover, .wpa-support-me a:focus {
+    text-decoration: none;
+	background: #fff;
+	color: #007eb3;
+	text-shadow: none;
+}
+
+#wpa_settings_page ul ul {
+	margin: 1em 2em;
+}
+
+#wpa_settings_page .hndle, .settings_page_wp-accessibility-wp-accessibility .hndle {
+	cursor: auto !important;
+}

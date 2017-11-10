@@ -1,3 +1,8 @@
 #content img {
 	max-width: 100%;
 }
+
+.widget_search .s {
+
+/* This keeps the search inputs in line */	width: 60%;
+}

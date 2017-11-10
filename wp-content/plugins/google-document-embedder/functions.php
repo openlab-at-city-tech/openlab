@@ -277,75 +277,13 @@ function gde_sanitize_dims( $dim ) {
 }
 
 /**
- * Shorten ("mask") the URL to the embedded file
- *
- * @since   2.5.0.1
- * @return  string Short url response from API call, or false on error
- */
-function gde_get_short_url( $u ) {
-	return $u; //bypass this function - breaks in current viewer
-	
-	$u = urlencode( $u );
-	$service[] = "http://tinyurl.com/api-create.php?url=" . $u;
-	$service[] = "http://is.gd/create.php?format=simple&url=" . $u;
-	
-	foreach ( $service as $url ) {
-		$passed = false;
-		$response = wp_remote_get( $url );
-		if ( is_wp_error( $response ) || empty ( $response['body'] ) ) {
-			continue;
-		} else {
-			// check for rate limit exceeded or other error response
-			if ( ! gde_valid_link( $response['body'] ) ) {
-				continue;
-			} else {
-				$passed = true;
-				break;
-			}
-		}
-	}
-	
-	if ( $passed ) {
-		return $response['body'];
-	} else {
-		// can't shorten - return original URL
-		gde_dx_log("Shorten URL failed: " . urldecode( $u ));
-		return urldecode( $u );
-	}
-}
-
-/**
- * Request secure URL to document
- *
- * @since   2.5.0.1
- * @return  string Secure URL, or false on error
- */
-function gde_get_secure_url( $u ) {
-	return $u; //bypass this function - breaks in current viewer
-	
-	require_once( GDE_PLUGIN_DIR . 'libs/lib-secure.php' );
-
-	if ( ! $url = gde_make_secure_url( $u ) ) {
-		return false;
-	} else {
-		return $url;
-	}
-}
-
-/**
  * Check if settings allow a file to be privatized (downloads blocked)
  *
  * @since   2.5.0.2
  * @return  bool Whether or not the file can be blocked from download
  */
 function gde_is_blockable( $profile ) {
-	if ( $profile['viewer'] == "standard" || $profile['link_show'] !== "none" ) {
-		return false;
-	} elseif ( ! strstr( $profile['tb_flags'], "n" ) && $profile['tb_fullscr'] == "default" ) {
-		return false;
-	} else {
-		return true;
-	}
+	return false;
 }
 
 /**
@@ -365,7 +303,7 @@ function gde_ga_event( $file ) {
 		$action = "'" . strtoupper( $fnp[1] ) . "'";
 		$label = "this.href";
 	} else {
-		$category = "'" . addslashes( $gdeoptions['ga_category'] ) . "'";
+		$category = "'" . esc_attr( $gdeoptions['ga_category'] ) . "'";
 		$action = "'" . __('Download', 'google-document-embedder') . "'";
 		if ( $gdeoptions['ga_label'] == "url" ) {
 			$label = "this.href";
@@ -408,84 +346,7 @@ function gde_get_plugin_data() {
  * @return  bool Whether or not log write was successful
  */
 function gde_dx_log( $text ) {
-	global $gdeoptions, $wpdb;
-	
-	if ( GDE_DX_LOGGING > 0 || ( isset( $gdeoptions['error_log'] ) && $gdeoptions['error_log'] == "yes" ) ) {
-		// filter to trap any "unexpected output" to log
-		add_action( 'activated_plugin', 'gde_save_error' );
-		
-		$table = $wpdb->base_prefix . 'gde_dx_log';
-		
-		// create/update table if necessary, then write to log
-		if ( gde_dx_log_create() ) {
-			// write to log
-			$blogid = get_current_blog_id();
-			$text = date( "d-m-Y, H:i:s" ) . " - $text";
-			
-			if ( ! $wpdb->insert(
-					$table,
-					array(
-						'blogid' 	=>	$blogid,
-						'data'		=>	$text
-					),
-					array(
-						'%d', '%s'
-					)
-				) ) {
-				// couldn't write to db
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			// can't create db table
-			return false;
-		}
-	} else {
-		// logging disabled
-		return false;
-	}
-}
-
-/**
- * Create/update database table to store dx log
- *
- * @since   2.5.2.1
- * @return  bool Whether or not table creation/update was successful
- */
-function gde_dx_log_create() {
-	global $wpdb, $gde_db_ver;
-	
-	$table = $wpdb->base_prefix . 'gde_dx_log';
-	$db_ver_installed = get_site_option( 'gde_db_version', 0 );
-		
-	$sql = "CREATE TABLE " . $table . " (
-			  id mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT,
-			  blogid smallint(5) UNSIGNED NOT NULL,
-			  data longtext NOT NULL,
-			  UNIQUE KEY (id)
-			) ENGINE=MyISAM  DEFAULT CHARSET=utf8; ";
-	
-	if ( version_compare( $gde_db_ver, $db_ver_installed, ">" ) ) {
-		// upgrade table if needed
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-	} elseif ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) == $table ) {
-		// table's OK
-		return true;
-	} else {
-		// table doesn't exist, try to create
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-		
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) == $table ) {
-			// table's OK
-			return true;
-		} else {
-			// can't create
-			return false;
-		}
-	}
+	return false; // Removed logging
 }
 
 /**
@@ -515,46 +376,5 @@ function gde_show_error( $status ) {
 	return $code;
 }
 
-/**
- * Check health of database tables
- *
- * @since   2.5.0.3
- * @return  mixed
- * @note	Verbose text used in debug information
- */
-function gde_debug_tables( $table = array('gde_profiles', 'gde_secure'), $verbose = false ) {
-	global $wpdb;
-	
-	if ( is_array( $table ) ) {
-		$ok = true;
-		foreach ( $table as $t ) {
-			$t = $wpdb->prefix . $t;
-			if ( $wpdb->get_var( "SHOW TABLES LIKE '$t'" ) == $t ) {
-				// table good
-			} else {
-				$ok = false;
-				gde_dx_log($t . " table missing");
-				break;
-			}
-		}
-	} else {
-		$ok = true;
-		$table = $wpdb->prefix . $table;
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) == $table ) {
-			$s = "OK ";
-			$c = $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE 1=1" );
-			$s = $s . "($c items)";
-		} else {
-			$s = "NOT OK ($table missing)";
-			$ok = false;
-		}
-	}
-	
-	if ( ! $verbose ) {
-		return $ok;
-	} else {
-		return $s;
-	}
-}
 
 ?>
