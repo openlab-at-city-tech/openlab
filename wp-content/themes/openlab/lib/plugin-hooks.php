@@ -552,3 +552,29 @@ function openlab_log_out_social_accounts() {
 }
 
 add_action('init', 'openlab_log_out_social_accounts', 0);
+
+/**
+ * Plugin: Category Order and Taxonomy Terms Order
+ */
+function openlab_refresh_term_cache_after_ordering_update() {
+
+    $taxonomy = stripslashes($_POST['taxonomy']);
+    $data = stripslashes($_POST['order']);
+    $unserialised_data = unserialize($data);
+    if (is_array($unserialised_data))
+        foreach ($unserialised_data as $key => $values) {
+            //$key_parent = str_replace("item_", "", $key);
+            $items = explode("&", $values);
+            unset($item);
+            foreach ($items as $item_key => $item_) {
+                $items[$item_key] = trim(str_replace("item[]=", "", $item_));
+            }
+
+            if (is_array($items) && count($items) > 0)
+                foreach ($items as $item_key => $term_id) {
+                    clean_term_cache($term_id, $taxonomy);
+                }
+        }
+}
+
+add_action('tto/update-order', 'openlab_refresh_term_cache_after_ordering_update');
