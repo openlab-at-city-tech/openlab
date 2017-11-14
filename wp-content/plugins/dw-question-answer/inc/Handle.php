@@ -20,7 +20,8 @@ class DWQA_Handle {
 		if ( ! isset( $_POST['dwqa-action'] ) || ! isset( $_POST['submit-answer'] ) ) {
 			return false;
 		}
-
+		// do_action( 'dwqa_add_answer', $answer_id, $question_id );
+		// die();
 		if ( 'add-answer' !== sanitize_text_field( $_POST['dwqa-action'] ) ) {
 			return false;
 		}
@@ -96,6 +97,8 @@ class DWQA_Handle {
 			return false;
 		}
 
+		$answers = apply_filters( 'dwqa_insert_answer_args', $answers );
+		
 		$answer_id = wp_insert_post( $answers );
 
 		if ( !is_wp_error( $answer_id ) ) {
@@ -227,10 +230,28 @@ class DWQA_Handle {
 				$args['comment_author_url'] = isset( $_POST['url'] ) ? esc_url( $_POST['url'] ) : '';
 				$args['user_id']    = -1;
 			}
+			
+			$question_id = absint( $_POST['comment_post_ID'] );
+			if ( 'dwqa-answer' == get_post_type( $question_id ) ) {
+				$question_id = dwqa_get_question_from_answer_id( $question_id );
+			}
+			$redirect_to = get_permalink( $question_id );
+
+			if ( isset( $_GET['ans-page'] ) ) {
+				$redirect_to = add_query_arg( 'ans-page', absint( $_GET['ans-page'] ), $redirect_to );
+			}
+
+			
+
+			
 
 			if ( dwqa_count_notices( 'error', true ) > 0 ) {
+				$redirect_to = apply_filters( 'dwqa_submit_comment_error_redirect', $redirect_to, $question_id);
+				exit(wp_safe_redirect( $redirect_to ));
 				return false;
 			}
+			
+			$args = apply_filters( 'dwqa_insert_comment_args', $args );
 
 			$comment_id = wp_insert_comment( $args );
 
@@ -238,7 +259,9 @@ class DWQA_Handle {
 			$comment = get_comment( $comment_id );
 			$client_id = isset( $_POST['clientId'] ) ? sanitize_text_field( $_POST['clientId'] ) : false;
 			do_action( 'dwqa_add_comment', $comment_id, $client_id );
-
+			
+			$redirect_to = apply_filters( 'dwqa_submit_comment_success_redirect', $redirect_to, $question_id);
+			exit(wp_safe_redirect( $redirect_to ));
 		}
 	}
 
@@ -541,6 +564,8 @@ class DWQA_Handle {
 			'post_title'     => '',
 			'post_type'      => 'dwqa-question',
 		) );
+		
+		$args = apply_filters( 'dwqa_insert_question_args', $args );
 
 		$new_question = wp_insert_post( $args, true );
 

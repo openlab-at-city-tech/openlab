@@ -28,92 +28,89 @@ function openlab_help_loop() {
     global $paged, $post;
 
     $post_id = get_the_ID();
-    $hp_query = new WP_Query( array(
-	'post_type' => 'help',
-	'p' => $post_id,
-    ) );
+    $hp_query = new WP_Query(array(
+        'post_type' => 'help',
+        'p' => $post_id,
+    ));
 
-    while ( $hp_query->have_posts() ) : $hp_query->the_post();
+    while ($hp_query->have_posts()) : $hp_query->the_post();
         ?>
 
         <?php
         $help_cats = get_the_terms($post_id, 'help_category');
 
-	if ( ! empty( $help_cats ) ) {
+        if (!empty($help_cats)) {
 
-                sort($help_cats);
+            sort($help_cats);
 
-		if ( $help_cats[0]->parent == 0 ) {
-			$parent_cat_name = $help_cats[0]->name;
-			$parent_cat = $help_cats[0];
-		} else {
-			$parent_cat = get_term( $help_cats[0]->parent, 'help_category' );
-			$parent_cat_name = $parent_cat->name;
-		}
-	}
+            if ($help_cats[0]->parent == 0) {
+                $parent_cat_name = $help_cats[0]->name;
+                $parent_cat = $help_cats[0];
+            } else {
+                $parent_cat = get_term($help_cats[0]->parent, 'help_category');
+                $parent_cat_name = $parent_cat->name;
+            }
+        }
 
-	$back_next_nav = '';
+        $back_next_nav = '';
 
-	$adj_args = array(
-		'order_by' => 'menu_order',
-		'order_2nd' => 'post_date',
-		'post_type' => '"help"',
-		'return' => 'object',
-	);
+        $adj_args = array(
+            'order_by' => 'menu_order',
+            'order_2nd' => 'post_date',
+            'post_type' => '"help"',
+            'return' => 'object',
+        );
 
-	$prev_post = adjacent_post_link_plus( $adj_args, '', true );
-	$next_post = adjacent_post_link_plus( $adj_args, '', false );
+        $prev_post = adjacent_post_link_plus($adj_args, '', true);
+        $next_post = adjacent_post_link_plus($adj_args, '', false);
 
-	$back_next_nav .= '<nav id="help-title-nav"><!--';
+        $back_next_nav .= '<nav id="help-title-nav"><!--';
 
-	if ( $prev_post ) {
-		$back_next_nav .= '--><span class="nav-previous">';
-		$back_next_nav .=   '<span class="fa fa-chevron-circle-left"></span>';
-		$back_next_nav .=   sprintf( '<a href="%s">Back</a>', esc_url( get_permalink( $prev_post ) ) );
-		$back_next_nav .= '</span><!--';
-	}
+        if ($prev_post) {
+            $back_next_nav .= '--><span class="nav-previous">';
+            $back_next_nav .= '<span class="fa fa-chevron-circle-left"></span>';
+            $back_next_nav .= sprintf('<a href="%s">Back</a>', esc_url(get_permalink($prev_post)));
+            $back_next_nav .= '</span><!--';
+        }
 
-	if ( $next_post ) {
-		$back_next_nav .= '--><span class="nav-previous">';
-		$back_next_nav .=    sprintf( '<a href="%s">Next</a>', esc_url( get_permalink( $next_post ) ) );
-		$back_next_nav .=    '<span class="nav-next fa fa-chevron-circle-right"></span>';
-		$back_next_nav .= '</span><!--';
-	}
+        if ($next_post) {
+            $back_next_nav .= '--><span class="nav-previous">';
+            $back_next_nav .= sprintf('<a href="%s">Next</a>', esc_url(get_permalink($next_post)));
+            $back_next_nav .= '<span class="nav-next fa fa-chevron-circle-right"></span>';
+            $back_next_nav .= '</span><!--';
+        }
 
-	$back_next_nav .= '--></nav><!-- #nav-single -->';
-
+        $back_next_nav .= '--></nav><!-- #nav-single -->';
         ?>
 
         <?php if ($help_cats): ?>
-<h1 class="entry-title help-entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span></a>
+            <h1 class="entry-title help-entry-title"><a class="no-deco" href="<?php echo get_term_link($parent_cat); ?>"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span></a>
                 <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
                 <span class="print-link pull-right hidden-xs"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
 
             <?php
             $nav_links = array(
-		'<span class="page-title">' . get_the_title() . '</span>',
+                '<span class="page-title">' . get_the_title() . '</span>',
                 $back_next_nav,
-	    );
+            );
 
-	    $this_term = openlab_get_primary_help_term_name();
-            if ( $this_term->parent != 0 ) {
-		$nav_links = array_merge( array( '<a class="regular" href="' . get_term_link( $this_term ) . '">' . esc_html( $this_term->name ) . '</a>' ), $nav_links );
-	    }
+            $this_term = openlab_get_primary_help_term_name();
+            if ($this_term->parent != 0) {
+                $nav_links = array_merge(array('<a class="regular" href="' . get_term_link($this_term) . '">' . esc_html($this_term->name) . '</a>'), $nav_links);
+            }
+            ?>
 
-	    ?>
-
-	    <div class="row help-nav">
+            <div class="row help-nav">
                 <div class="col-md-24">
                     <div class="submenu">
                         <div class="submenu-text pull-left bold">Topics: </div>
-		        <ul class="nav nav-inline"><!--
-		        <?php foreach ( $nav_links as $nav_link ) :
-                            ?>--><li><?php echo $nav_link ?></li><!--<?php
-		        endforeach; ?>
-		        --></ul>
-		    </div>
+                        <ul class="nav nav-inline"><!--
+                            <?php foreach ($nav_links as $nav_link) :
+                                ?>--><li><?php echo $nav_link ?></li><!--<?php endforeach; ?>
+                            --></ul>
+                    </div>
                 </div>
-	    </div>
+            </div>
 
         <?php elseif ($post->post_name == "openlab-help"): ?>
             <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
@@ -128,12 +125,12 @@ function openlab_help_loop() {
 
         <div class="entry-content">
             <?php the_content(); ?>
-            <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list( $post_id ) ); ?>
+            <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id) ); ?>
         </div>
 
         <?php echo ($post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_help_navigation()); ?>
 
-    <?php endwhile; // end of the loop.   ?>
+    <?php endwhile; // end of the loop.    ?>
 
     <?php
 }
@@ -241,108 +238,111 @@ function openlab_help_cats_loop() {
     ?>
 
     <?php if ($parent_term->parent == 0): ?>
-    <h1 class="parent-cat entry-title"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span>
+        <h1 class="parent-cat entry-title"><span class="profile-name hyphenate"><?php echo $parent_cat_name; ?></span>
             <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
-	<div id="help-title">
-	    <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
-	</div>
+        <div id="help-title">
+            <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
+        </div>
         <?php
     else:
         $head_term = get_term_by('id', $parent_term->parent, 'help_category');
         ?>
-    <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><span class="profile-name hyphenate"><?php echo $head_term->name ?></span></a>
+        <h1 class="parent-cat entry-title"><a class="no-deco" href="<?php echo get_term_link($head_term) ?>"><span class="profile-name hyphenate"><?php echo $head_term->name ?></span></a>
             <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
-	<div id="help-title">
-	    <h2 class="page-title clearfix submenu">
-                <div class="submenu-text pull-left bold">Topics: </div><span><?php echo esc_html( $parent_term->name ) ?></span>
+        <div id="help-title">
+            <h2 class="page-title clearfix submenu">
+                <div class="submenu-text pull-left bold">Topics: </div><span><?php echo esc_html($parent_term->name) ?></span>
             </h2>
-	</div>
+        </div>
     <?php
     endif;
     ?>
 
-    <?php if ( $help_query->have_posts() ) : ?>
-    <div>
-        <div class="child-cat-container help-cat-block">
-            <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
-	    <ul>
-	    <?php
-	    while ($help_query->have_posts()) : $help_query->the_post();
+    <?php if ($help_query->have_posts()) : ?>
+        <div>
+            <div class="child-cat-container help-cat-block">
+                <h2 class="child-cat child-cat-num-0"><?php echo $parent_cat_name ?></h2>
+                <ul>
+                    <?php
+                    while ($help_query->have_posts()) : $help_query->the_post();
 
-		$post_id = get_the_ID();
-		?>
-		<li>
-		    <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-		    <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
-		</li>
+                        $post_id = get_the_ID();
+                        ?>
+                        <li>
+                            <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
+                        </li>
 
-		<?php
-	    endwhile; // end of the loop.
-	    wp_reset_query();
-	    ?>
-	    </ul>
-	</div>
-    </div>
+                        <?php
+                    endwhile; // end of the loop.
+                    wp_reset_query();
+                    ?>
+                </ul>
+            </div>
+        </div>
     <?php endif; ?>
 
-    <?php
-    // Now get child cats and sort into two arrays for the two columns.
-    $child_cats = get_categories(array('child_of' => $parent_term->term_id, 'taxonomy' => 'help_category'));
-    $cols = array( 'left' => array(), 'right' => array() );
-    $current_col = 'left';
-    foreach ( $child_cats as $child_cat ) {
-        $cols[ $current_col ][] = $child_cat;
-	$current_col = 'left' === $current_col ? 'right' : 'left';
-    }
+    <div>
+        <?php
+        // Now get child cats and sort into two arrays for the two columns.
+        $child_cats = get_categories(
+                array(
+                    'child_of' => $parent_term->term_id,
+                    'taxonomy' => 'help_category',
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC',
+                )
+        );
 
-    $count = 0;
+        $count = 0;
+        foreach ($child_cats as $child_cat):
+            ?>
 
-    foreach ( $cols as $col_name => $col_cats ) {
-	    echo '<div>';
-	    foreach ( $col_cats as $child ) {
-		$child_cat_id = $child->cat_ID;
-		echo '<div class="child-cat-container child-cat-container-' . intval( $child_cat_id ) . '">';
-		echo '<h2 class="child-cat child-cat-num-' . $count . '"><a href="' . get_term_link($child) . '">' . $child->name . '</a></h2>';
+            <div class="child-cat-container child-cat-container-<?php echo intval($child_cat->term_id); ?>">
+                <h2 class="child-cat child-cat-num-<?php echo $count; ?>"><a href="<?php echo get_term_link($child_cat); ?>"><?php echo $child_cat->name; ?></a></h2>
 
-		$args = array('tax_query' => array(
-			array(
-			    'taxonomy' => 'help_category',
-			    'field' => 'slug',
-			    'include_children' => false,
-			    'terms' => array($child->slug),
-			    'operator' => 'IN'
-			)
-		    ),
-		    'post_type' => 'help',
-		    'orderby' => 'menu_order',
-		    'order' => 'ASC',
-		    'posts_per_page' => '-1',
-		);
-		$child_query = null;
-		$child_query = new WP_Query($args); //new WP_Query($args);
+                <?php
+                $args = array('tax_query' => array(
+                        array(
+                            'taxonomy' => 'help_category',
+                            'field' => 'slug',
+                            'include_children' => false,
+                            'terms' => array($child_cat->slug),
+                            'operator' => 'IN'
+                        )
+                    ),
+                    'post_type' => 'help',
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC',
+                    'posts_per_page' => '-1',
+                );
+                $child_query = null;
+                $child_query = new WP_Query($args); //new WP_Query($args);
+                ?>
+                <ul>
+                    <?php
+                    while ($child_query->have_posts()) : $child_query->the_post();
+                        ?>
+                        <li>
+                            <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
+                        </li>
+                        <?php
+                    endwhile; // end of the loop.
+                    wp_reset_query();
+                    ?>
+                </ul>
 
-		echo '<ul>';
-		while ($child_query->have_posts()) : $child_query->the_post();
-		    ?>
-		    <li>
-			    <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-			    <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
-		    </li>
-		    <?php
-		endwhile; // end of the loop.
-		echo '</ul>';
-		wp_reset_query();
-		?>
+            </div>
 
-		<?php
-		$count++;
-		echo '</div>';
-	    }//ecnd child_cats for each
-	    echo '</div>';
-    }
-    ?>
+            <?php
+            $count++;
+        endforeach;
+        ?>
+
+    </div>
 
     <div style="clear:both;"></div>
 
@@ -412,20 +412,20 @@ function openlab_glossary_cats_loop() {
  * Get the URL for the OpenLab Help Search results page.
  */
 function openlab_get_help_search_url() {
-	$posts = get_posts( array(
-		'post_type' => 'help',
-		'name' => 'search',
-		'update_post_meta_cache' => false,
-		'update_post_term_cache' => false,
-		'numposts' => 1,
-	) );
+    $posts = get_posts(array(
+        'post_type' => 'help',
+        'name' => 'search',
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
+        'numposts' => 1,
+    ));
 
-	$url = '';
-	if ( $posts ) {
-		$url = get_permalink( $posts[0] );
-	}
+    $url = '';
+    if ($posts) {
+        $url = get_permalink($posts[0]);
+    }
 
-	return $url;
+    return $url;
 }
 
 /**
@@ -434,12 +434,13 @@ function openlab_get_help_search_url() {
  * No native support in template hierarchy for specific posts from a CPT, and it's too big a pain
  * to use page templates in the UI.
  */
-function openlab_set_help_search_page_template( $template ) {
-	$q = get_queried_object();
-	if ( $q instanceof WP_Post && 'help' === $q->post_type && 'search' === $q->post_name ) {
-		$template = locate_template( 'help-search.php' );
-	}
+function openlab_set_help_search_page_template($template) {
+    $q = get_queried_object();
+    if ($q instanceof WP_Post && 'help' === $q->post_type && 'search' === $q->post_name) {
+        $template = locate_template('help-search.php');
+    }
 
-	return $template;
+    return $template;
 }
-add_filter( 'template_include', 'openlab_set_help_search_page_template' );
+
+add_filter('template_include', 'openlab_set_help_search_page_template');

@@ -30,7 +30,7 @@ function add_custom_posttype_folder_taxonomy() {
           'slug' => '',
           'with_front' => false,
           'hierarchical' => false
-          ),
+        ),
         'update_count_callback' => '_update_generic_term_count'
         );
       if ($type == 'attachment') {
@@ -49,7 +49,7 @@ function add_custom_posttype_folder_taxonomy() {
             'add_new_item' => __( 'Add New Folder' ),
             'new_item_name' => __( 'New Folder Name' ),
             'menu_name' => __( 'Folders' ),
-            ),
+          ),
           'sort' => true,
           'show_admin_column' => true,
           'update_count_callback' => '_update_generic_term_count'
@@ -70,7 +70,7 @@ function add_custom_posttype_folder_taxonomy() {
             'add_new_item' => __( 'Add New Folder' ),
             'new_item_name' => __( 'New Folder Name' ),
             'menu_name' => __( 'Folders' ),
-            ),
+          ),
           'sort' => true,
           'show_admin_column' => true,
           'update_count_callback' => '_update_generic_term_count'

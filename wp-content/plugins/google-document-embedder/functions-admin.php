@@ -2,6 +2,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) {	exit; }
 
+require_once( GDE_PLUGIN_DIR . 'libs/lib-langs.php' );
+
+
 /* PROFILES ****/
 
 /**
@@ -21,12 +24,10 @@ function gde_form_to_profile( $pid, $data ) {
 	$profile['tb_fulluser'] = "no";
 	$profile['tb_print'] = "no";
 	$profile['vw_flags'] = "";
-	$profile['link_force'] = "no";
-	$profile['link_mask'] = "no";
 	$profile['link_block'] = "no";
 	
-	// enforce trailing slash on base_url
-	$data['base_url'] = trailingslashit( $data['base_url'] );
+	// enforce trailing slash on base_url, also sanitizing it
+	$profile['base_url'] = trailingslashit( $data['base_url'] );
 	
 	// sanitize width/height
 	$data['default_width'] = gde_sanitize_dims( $data['default_width'] );
@@ -37,11 +38,24 @@ function gde_form_to_profile( $pid, $data ) {
 	if ( ! $data['default_height'] ) {
 		$data['default_height'] = $profile['default_height'];
 	}
+
+	$profile['default_width'] = $data['default_width'];
+	$profile['default_height'] = $data['default_height'];
+
+	$all_langs = gde_supported_langs();
 	
 	foreach ( $data as $k => $v ) {
-		if ( array_key_exists( $k, $profile ) ) {
-			// all fields where name == profile key
-			$profile[$k] = stripslashes( $v );
+		if ($k == 'language' && isset($all_langs[$v]) ) {
+			$profile[$k] = $v;
+		}
+		elseif ($k == 'link_pos' && in_array($v, array("above", "below"))) {
+			$profile[$k] = $v;
+		}
+		elseif ($k == 'link_show' && in_array($v, array("all", "users", "none"))) {
+			$profile[$k] = $v;
+		}
+		elseif ($k == 'link_text' && preg_match("|^[A-Za-z0-9 \-_()\%,\.:]+$|", $v)) {
+			$profile[$k] = stripslashes($v);
 		} elseif ( strstr( $k, 'gdet_' ) && ( strstr( $v, 'gdet_' ) ) ) {
 			// toolbar checkboxes
 			if ( $k == 'gdet_h' ) {
@@ -57,10 +71,6 @@ function gde_form_to_profile( $pid, $data ) {
 			$profile['tb_print'] = "yes";
 		} elseif ( strstr( $k, 'gdev_' ) && ( strstr( $v, 'gdev_' ) ) ) {
 			$profile['vw_flags'] .= str_replace( "gdev_", "", $v );
-		} elseif ( $k == "force" ) {
-			$profile['link_force'] = "yes";
-		} elseif ( $k == "mask" ) {
-			$profile['link_mask'] = "yes";
 		} elseif ( $k == "block" && gde_is_blockable( $profile ) ) {
 			$profile['link_block'] = "yes";
 		}
@@ -76,57 +86,19 @@ function gde_form_to_profile( $pid, $data ) {
 }
 
 /**
- * Make new profile (from existing)
- *
- * @since   2.5.0.1
- * @return  bool Whether or not action successful
- */
-function gde_profile_to_profile( $sourceid, $name, $desc = '' ) {
-	global $wpdb;
-	$table = $wpdb->prefix . 'gde_profiles';
-	
-	if ( $sourcedata = $wpdb->get_row( $wpdb->prepare( "SELECT profile_data FROM $table WHERE profile_id = %d", $sourceid ), ARRAY_A ) ) {
-			$newprofile = array( $name, $desc, $sourcedata['profile_data'] );
-			if ( gde_write_profile( $newprofile ) > 0 ) {
-				return true;
-			} else {
-				return false;
-			}
-	} else {
-		return false;
-	}
-}
-
-/**
  * Create/update profile
  *
  * @since   2.5.0.1
  * @return  int 0 = fail, 1 = created, 2 = updated, 3 = nothing to do
  * @note	data array expected: [0] name, [1] desc, [2] serialized data
  */
-function gde_write_profile( $data, $id = null, $overwrite = false ) {
+function gde_write_profile( $data, $id, $overwrite = false ) {
 	global $wpdb;
 	$table = $wpdb->prefix . 'gde_profiles';
 	
 	if ( empty( $id ) ) {
-		// get profile name
-		$pname = strtolower( $data[0] );
-		
-		// new (non-default) profile
-		if ( ! $wpdb->insert(
-					$table,
-					array(
-						'profile_name'	=>	$pname,
-						'profile_desc'	=>	$data[1],
-						'profile_data'	=>	$data[2]
-					)
-				) ) {
-			gde_dx_log("Failed to create profile '$pname'");
-			return 0;
-		} else {
-			gde_dx_log("New profile '$pname' created");
-			return 1;
-		}
+		// No longer create new profiles
+		return 0;
 	} else {
 		// new (default) or updated profile
 		if ( is_null( $wpdb->get_row( "SELECT * FROM $table WHERE profile_id = $id" ) ) ) {
@@ -201,62 +173,6 @@ function gde_write_profile( $data, $id = null, $overwrite = false ) {
 	}
 }
 
-/**
- * Delete profile
- *
- * @since   2.5.0.1
- * @return  bool Whether or not action successful
- */
-function gde_delete_profile( $id ) {
-	global $wpdb;
-	$table = $wpdb->prefix . 'gde_profiles';
-	
-	if ( $wpdb->query( $wpdb->prepare( "DELETE FROM $table WHERE profile_id = %d", $id ) ) > 0 ) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
- * Check for duplicate profile name
- *
- * @since   2.5.0.2
- * @return  int Profile id of name or -1 if no match
- */
-function gde_profile_name_exists( $name ) {
-	global $wpdb;
-	$table = $wpdb->prefix . 'gde_profiles';
-	
-	if ( $id = $wpdb->get_row( $wpdb->prepare( "SELECT profile_id FROM $table WHERE profile_name = %s", $name ), ARRAY_A ) ) {
-		return (int) $id['profile_id'];
-	} else {
-		return -1;
-	}
-}
-
-/**
- * Make existing profile data default (overwrite current default)
- *
- * @since   2.5.0.1
- * @return  bool Whether or not action successful
- */
-function gde_overwrite_profile( $sourceid ) {
-	global $wpdb;
-	$table = $wpdb->prefix . 'gde_profiles';
-	
-	if ( $data = $wpdb->get_row( $wpdb->prepare( "SELECT profile_data FROM $table WHERE profile_id = %d", $sourceid ), ARRAY_A ) ) {
-		if ( $wpdb->update ( $table, $data, array( 'profile_id' => 1 ), array( '%s' ) ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-}
-
-
 /* SETTINGS ****/
 
 /**
@@ -268,7 +184,6 @@ function gde_overwrite_profile( $sourceid ) {
 function gde_get_locale() {
 	$locale = get_locale();
 	
-	require_once( GDE_PLUGIN_DIR . 'libs/lib-langs.php' );
 	return gde_mapped_langs( $locale );
 }
 
@@ -289,26 +204,6 @@ function gde_options() {
 	require( GDE_PLUGIN_DIR . 'options.php' );
 	add_action('in_admin_footer', 'gde_admin_footer');
 }
-
-/*
-function gde_site_option_page() {
-	global $gde_global_page;
-
-	$gde_global_page = add_submenu_page( 'settings.php', 'GDE '.__('Settings', 'google-document-embedder'), 'GDE '.__('Settings', 'google-document-embedder'), 'manage_network_options', basename(__FILE__), 'gde_site_options' );
-
-	// enable custom styles and settings jQuery
-	//add_action( 'admin_print_styles', 'gde_admin_custom_css' );
-	//add_action( 'admin_enqueue_scripts', 'gde_admin_custom_js' );
-}
-
-function gde_site_options() {
-	//if ( function_exists('current_user_can') && !current_user_can('manage_options') ) wp_die('You don\'t have access to this page.');
-	//if (! user_can_access_admin_page()) wp_die( __('You do not have sufficient permissions to access this page', 'google-document-embedder') );
-	
-	require( GDE_PLUGIN_DIR . 'site-options.php' );
-	add_action( 'in_admin_footer', 'gde_admin_footer' );
-}
-*/
 
 /**
  * Get Default Base URL
@@ -339,39 +234,6 @@ function gde_show_tab( $name ) {
 	}
 }
 
-/**
- * Reset global (multisite) options
- *
- * @since   2.5.0.1
- * @return  void
- */
-/*
-function gde_global_reset() {
-	global $gdeglobals;
-	
-	// by default, global settings are empty
-	if ($gdeglobals) {
-		delete_site_option('gde_globals');
-	}
-}
-*/
-
-/**
- * Delete autoexpire secure docs
- *
- * @since   2.5.0.1
- * @note	Runs via wp-cron according to schedule defined in lib-setup
- * @return  void
- */
-/*
-function gde_sec_cleanup() {
-	global $wpdb;
-	
-	$table = $wpdb->prefix . 'gde_secure';
-	$wpdb->query( "DELETE FROM $table WHERE autoexpire = 'Y'" );
-	gde_dx_log("Cleanup ran");
-}
-*/
 
 /**
  * Include custom css for settings pages
@@ -416,11 +278,11 @@ function gde_actlinks( $links ) {
 }
 
 function gde_admin_print_scripts( $arg ) {
-	global $pagenow;
+	/*global $pagenow;
 	if (is_admin() && ( $pagenow == 'post-new.php' || $pagenow == 'post.php' ) ) {
 		$js = GDE_PLUGIN_URL . 'js/gde-quicktags.js';
 		wp_enqueue_script( 'gde_qts', $js, array('quicktags') );
-	}
+	}*/
 }
 
 function gde_admin_custom_js( $hook ) {

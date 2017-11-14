@@ -591,7 +591,7 @@ function ll_akismet_comment_check( $comment ) {
 		$spam = true;
 	}
 
-	if ( class_exists( WPCF7_Submission ) && $submission = WPCF7_Submission::get_instance() ) {
+	if ( class_exists( 'WPCF7_Submission' ) && $submission = WPCF7_Submission::get_instance() ) {
 		$submission->akismet = array( 'comment' => $comment, 'spam' => $spam );
 	}
 

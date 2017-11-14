@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {	exit; }
+
 if ( ! function_exists('gde_activate') ) {
 	// no access if parent plugin is disabled or when accessed directly
 	wp_die('<p>'.__('You do not have sufficient permissions to access this page.').'</p>');

@@ -1,9 +1,9 @@
-=== Plugin Name ===
-Contributors: tex0gen, faceonline
+﻿=== Plugin Name ===
+Contributors: tex0gen, faceonline, rg62design
 Donate link: http://62design.co.uk/wordpress-plugins/folders/
 Tags: folder, folders, organise, pages, filter, filters, posts, media, attachments
 Requires at least: 3.0.0
-Tested up to: 4.6.1
+Tested up to: 4.9
 Stable tag: trunk
 License: GNU General Public License
 License URI: http://www.gnu.org/licenses/gpl-3.0.en.html
@@ -12,13 +12,7 @@ Bulk organise your media attachments, custom post types, pages and posts into fo
 
 == Description ==
 
-Folders gives you the ability to better organise the back-end of your WordPress site by allowing you to add pages, posts and media attachments into folders. You can then filter your pages, posts and media by the folder they belong to from within the admin sidebar. A handy plugin for those with lots of pages or posts and a whole of media.
-
-** THE FOLLOWING VIDEO MAY NOT BE CORRECT IN PARTS AS OF 12/06/2015 **
-Check out a run down of the Folders plugin in use with media attachments. (Thanks to James Olsen for this great video).
-
-[View the How To Video by James Olsen](https://www.youtube.com/watch?v=6ClVwo9OyAc "Video by James Olsen")
-
+Folders gives you the ability to better organise the back-end of your WordPress site by allowing you to add pages, posts and media attachments into folders. You can then filter your pages, posts and media by the folder they belong to from within the admin sidebar. A handy plugin for those with lots of pages or posts and a whole lot of media.
 
 == Screenshots ==
 
