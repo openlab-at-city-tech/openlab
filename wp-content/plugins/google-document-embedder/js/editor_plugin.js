@@ -6,7 +6,7 @@
 			
 			ed.addCommand('gde_cmd', function() {
 				ed.windowManager.open( {
-					file : url + '/libs/lib-eddialog.php',
+					file : url + '/libs/unsupported.html',
 					width : 475 + parseInt(ed.getLang('gde.delta_width',0)),
 					height : 475 + parseInt(ed.getLang('gde.delta_height',0)),	// 500 with page option
 					inline : 1}, {

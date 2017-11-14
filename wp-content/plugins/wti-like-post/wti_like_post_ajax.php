@@ -62,43 +62,49 @@ function WtiLikePostProcessVote() {
 			
 			if ( $task == "like" ) {
 				if ( $has_already_voted ) {
-					$query = $wpdb->prepare(
-								"UPDATE {$wpdb->prefix}wti_like_post SET 
-								value = value + 1,
-								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
-								user_id = %d WHERE post_id = %d AND ip = %s",
-								$user_id, $post_id, $wti_ip_address
+					$success = $wpdb->query(
+								$wpdb->prepare(
+									"UPDATE {$wpdb->prefix}wti_like_post SET 
+									value = value + 1,
+									date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+									user_id = %d WHERE post_id = %d AND ip = %s",
+									$user_id, $post_id, $wti_ip_address
+								)
 							);
-				} else {			
-					$query = $wpdb->prepare(
-								"INSERT INTO {$wpdb->prefix}wti_like_post SET 
-								post_id = %d, value = '1',
-								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
-								user_id = %d, ip = %s",
-								$post_id, $user_id, $wti_ip_address
+				} else {
+					$success = $wpdb->query(
+								$wpdb->prepare(
+									"INSERT INTO {$wpdb->prefix}wti_like_post SET 
+									post_id = %d, value = '1',
+									date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+									user_id = %d, ip = %s",
+									$post_id, $user_id, $wti_ip_address
+								)
 							);
 				}
 			} else {
 				if ( $has_already_voted ) {
-					$query = $wpdb->prepare(
-								"UPDATE {$wpdb->prefix}wti_like_post SET 
-								value = value - 1,
-								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
-								user_id = %d WHERE post_id = %d AND ip = %s",
-								$user_id, $post_id, $wti_ip_address
+					$success = $wpdb->query(
+								$wpdb->prepare(
+									"UPDATE {$wpdb->prefix}wti_like_post SET 
+									value = value - 1,
+									date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+									user_id = %d WHERE post_id = %d AND ip = %s",
+									$user_id, $post_id, $wti_ip_address
+								)
 							);
 				} else {
-					$query = $wpdb->prepare(
-								"INSERT INTO {$wpdb->prefix}wti_like_post SET 
-								post_id = %d, value = '-1',
-								date_time = '" . date( 'Y-m-d H:i:s' ) . "',
-								user_id = %d, ip = %s",
-								$post_id, $user_id, $wti_ip_address
+					$success = $wpdb->query(
+								$wpdb->prepare(
+									"INSERT INTO {$wpdb->prefix}wti_like_post SET 
+									post_id = %d, value = '-1',
+									date_time = '" . date( 'Y-m-d H:i:s' ) . "',
+									user_id = %d, ip = %s",
+									$post_id, $user_id, $wti_ip_address
+								)
 							);
 				}
 			}
-			
-			$success = $wpdb->query( $query );
 			
 			if ($success) {
 				$error = 0;

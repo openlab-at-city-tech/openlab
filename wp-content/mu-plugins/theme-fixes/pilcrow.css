@@ -16,3 +16,7 @@
 #cuny-sw-footer #footer {
 	border-top: 0;
 }
+
+.widget_search .s {
+	width: 60%;
+}

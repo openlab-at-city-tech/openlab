@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {	exit; }
+
+
 /**
  * List supported languages of the viewer (not the plugin)
  *

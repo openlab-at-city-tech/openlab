@@ -59,6 +59,9 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.14.12 =
+* Correction for warning related to user link submission form
+
 = 5.9.14.11 =
 * Corrected some PHP notices about undefined indices
 

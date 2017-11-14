@@ -174,26 +174,26 @@ function openlab_manage_members_email_status($user_id = '', $group = '') {
     echo '<h5>Email Status</h5>';
 
     echo '<ul class="group-manage-members-bpges-status">';
-    echo '  <li><input name="group-manage-members-bpges-status-'.$user_id.'" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
-    echo '  <li><input name="group-manage-members-bpges-status-'.$user_id.'" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
-    echo '  <li><input name="group-manage-members-bpges-status-'.$user_id.'" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
-    echo '  <li><input name="group-manage-members-bpges-status-'.$user_id.'" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
+    echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked('no', $sub_type, false) . ' data-url="' . esc_url(wp_nonce_url($group_url . '/no/' . $user_id . '/', 'ass_member_email_status')) . '" value="no" /> No Email</li>';
+    echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked('sum', $sub_type, false) . ' data-url="' . esc_url(wp_nonce_url($group_url . '/sum/' . $user_id . '/', 'ass_member_email_status')) . '" value="sum" /> Weekly</li>';
+    echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked('dig', $sub_type, false) . ' data-url="' . esc_url(wp_nonce_url($group_url . '/dig/' . $user_id . '/', 'ass_member_email_status')) . '" value="dig" /> Daily</li>';
+    echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked('supersub', $sub_type, false) . ' data-url="' . esc_url(wp_nonce_url($group_url . '/supersub/' . $user_id . '/', 'ass_member_email_status')) . '" value="supersub" /> All Email</li>';
 
     echo '</ul>';
 
-    wp_enqueue_script( 'openlab-bpges-js', get_stylesheet_directory_uri() . '/js/bpges.js', array( 'jquery' ) );
+    wp_enqueue_script('openlab-bpges-js', get_stylesheet_directory_uri() . '/js/bpges.js', array('jquery'));
 }
 
 remove_action('bp_group_manage_members_admin_item', 'ass_manage_members_email_status');
 add_action('bp_group_manage_members_admin_item', 'openlab_manage_members_email_status');
 
 //remove status from group profile pages
-add_action( 'bp_screens', function() {
-	remove_action( 'bp_after_group_settings_admin', 'ass_default_subscription_settings_form' );
-	add_action( 'bp_after_group_settings_admin', 'openlab_default_subscription_settings_form' );
+add_action('bp_screens', function() {
+    remove_action('bp_after_group_settings_admin', 'ass_default_subscription_settings_form');
+    add_action('bp_after_group_settings_admin', 'openlab_default_subscription_settings_form');
 
-	remove_action( 'bp_group_header_meta', 'ass_group_subscribe_button' );
-}, 0 );
+    remove_action('bp_group_header_meta', 'ass_group_subscribe_button');
+}, 0);
 
 
 /**
@@ -389,20 +389,20 @@ add_filter('bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2);
 /**
  * Handle discussion forum toggling for groups.
  */
-function openlab_bbp_group_toggle( $group_id ) {
-	$enable_forum = ! empty( $_POST['openlab-edit-group-forum'] );
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
-	$group->enable_forum = $enable_forum;
-	$group->save();
+function openlab_bbp_group_toggle($group_id) {
+    $enable_forum = !empty($_POST['openlab-edit-group-forum']);
+    $group = groups_get_group(array('group_id' => $group_id));
+    $group->enable_forum = $enable_forum;
+    $group->save();
 
-	if ( $enable_forum ) {
-		groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
-	} else {
-		groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
-
-	}
+    if ($enable_forum) {
+        groups_delete_groupmeta($group_id, 'openlab_disable_forum');
+    } else {
+        groups_update_groupmeta($group_id, 'openlab_disable_forum', '1');
+    }
 }
-add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
+
+add_action('groups_settings_updated', 'openlab_bbp_group_toggle');
 
 /**
  * Failsafe method for determining whether forums should be enabled for a group.
@@ -413,23 +413,23 @@ add_action( 'groups_settings_updated', 'openlab_bbp_group_toggle' );
  * yet still expect to see the Discussion tab. Our workaround is to require the explicit presence of a 'disable' flag
  * for a group's Discussion tab to be turned off.
  */
-function openlab_is_forum_enabled_for_group( $group_id = false ) {
-	if ( ! $group_id ) {
-		$group_id = bp_get_current_group_id();
-	}
+function openlab_is_forum_enabled_for_group($group_id = false) {
+    if (!$group_id) {
+        $group_id = bp_get_current_group_id();
+    }
 
-	if ( ! $group_id ) {
-		return false;
-	}
+    if (!$group_id) {
+        return false;
+    }
 
-	$disable = (bool) groups_get_groupmeta( $group_id, 'openlab_disable_forum' );
-	$forum_id = groups_get_groupmeta( $group_id, 'forum_id' );
+    $disable = (bool) groups_get_groupmeta($group_id, 'openlab_disable_forum');
+    $forum_id = groups_get_groupmeta($group_id, 'forum_id');
 
-	if ( $disable || ! $forum_id ) {
-		return false;
-	}
+    if ($disable || !$forum_id) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -438,15 +438,16 @@ function openlab_is_forum_enabled_for_group( $group_id = false ) {
  * Gah gah gah gah gah gah.
  */
 function openlab_bbp_remove_group_nav_item() {
-	if ( ! bp_is_group() ) {
-		return;
-	}
+    if (!bp_is_group()) {
+        return;
+    }
 
-	if ( ! openlab_is_forum_enabled_for_group() ) {
-		bp_core_remove_subnav_item( bp_get_current_group_slug(), 'forum' );
-	}
+    if (!openlab_is_forum_enabled_for_group()) {
+        bp_core_remove_subnav_item(bp_get_current_group_slug(), 'forum');
+    }
 }
-add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
+
+add_action('bp_screens', 'openlab_bbp_remove_group_nav_item', 1);
 
 /**
  * Enforce group privacy settings when determining bbPress forum privacy.
@@ -457,60 +458,63 @@ add_action( 'bp_screens', 'openlab_bbp_remove_group_nav_item', 1 );
  * https://bbpress.trac.wordpress.org/ticket/2327,
  * http://openlab.citytech.cuny.edu/redmine/issues/1428
  */
-function openlab_enforce_forum_privacy( $is_public, $forum_id ) {
-	$group_ids = bbp_get_forum_group_ids( $forum_id );
+function openlab_enforce_forum_privacy($is_public, $forum_id) {
+    $group_ids = bbp_get_forum_group_ids($forum_id);
 
-	if ( ! empty( $group_ids ) ) {
-		foreach ( $group_ids as $group_id ) {
-			$group = groups_get_group( array( 'group_id' => $group_id ) );
+    if (!empty($group_ids)) {
+        foreach ($group_ids as $group_id) {
+            $group = groups_get_group(array('group_id' => $group_id));
 
-			if ( 'public' !== $group->status ) {
-				$is_public = false;
-				break;
-			}
-		}
-	}
+            if ('public' !== $group->status) {
+                $is_public = false;
+                break;
+            }
+        }
+    }
 
-	return $is_public;
+    return $is_public;
 }
-add_filter( 'bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2 );
+
+add_filter('bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2);
 
 /**
  * Prevent bbPress from recounting forum topics.
  *
  * This can cause a costly tree rebuild. See bbPress #1799. See OL #1663,
  */
-function openlab_prevent_bbp_recounts( $args ) {
-	if ( bbp_get_group_forums_root_id() == $r['forum_id'] ) {
-		$r['forum_id'] = 0;
-	}
+function openlab_prevent_bbp_recounts($args) {
+    if (bbp_get_group_forums_root_id() == $r['forum_id']) {
+        $r['forum_id'] = 0;
+    }
 
-	return $r;
+    return $r;
 }
-add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
 
-function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
-	$group_root = bbp_get_group_forums_root_id();
-	$group_root_parent = get_post( $group_root )->post_parent;
-	if ( $group_root != $id && $group_root_parent != $id ) {
-		return $id;
-	}
+add_filter('bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts');
 
-	$db = debug_backtrace();
-	$caller = '';
-	foreach ( $db as $key => $step ) {
-		if ( ! empty( $step['function'] ) && 'bbp_get_forum_id' === $step['function'] ) {
-			$caller = $db[ $key + 1 ]['function'];
-		}
-	}
+function openlab_prevent_bbpress_from_recalculating_group_root_reply_count($id) {
+    $group_root = bbp_get_group_forums_root_id();
+    $group_root_parent = get_post($group_root)->post_parent;
+    if ($group_root != $id && $group_root_parent != $id) {
+        return $id;
+    }
 
-	if ( 'bbp_update_forum_reply_count' == $caller ) {
-		return 0;
-	}
+    $db = debug_backtrace();
+    $caller = '';
+    foreach ($db as $key => $step) {
+        if (!empty($step['function']) && 'bbp_get_forum_id' === $step['function']) {
+            $caller = $db[$key + 1]['function'];
+        }
+    }
 
-	return $id;
+    if ('bbp_update_forum_reply_count' == $caller) {
+        return 0;
+    }
+
+    return $id;
 }
-add_filter( 'bbp_get_forum_id', 'openlab_prevent_bbpress_from_recalculating_group_root_reply_count' );
+
+add_filter('bbp_get_forum_id', 'openlab_prevent_bbpress_from_recalculating_group_root_reply_count');
 
 /**
  * Plugin: Social
@@ -548,3 +552,29 @@ function openlab_log_out_social_accounts() {
 }
 
 add_action('init', 'openlab_log_out_social_accounts', 0);
+
+/**
+ * Plugin: Category Order and Taxonomy Terms Order
+ */
+function openlab_refresh_term_cache_after_ordering_update() {
+
+    $taxonomy = stripslashes($_POST['taxonomy']);
+    $data = stripslashes($_POST['order']);
+    $unserialised_data = unserialize($data);
+    if (is_array($unserialised_data))
+        foreach ($unserialised_data as $key => $values) {
+            //$key_parent = str_replace("item_", "", $key);
+            $items = explode("&", $values);
+            unset($item);
+            foreach ($items as $item_key => $item_) {
+                $items[$item_key] = trim(str_replace("item[]=", "", $item_));
+            }
+
+            if (is_array($items) && count($items) > 0)
+                foreach ($items as $item_key => $term_id) {
+                    clean_term_cache($term_id, $taxonomy);
+                }
+        }
+}
+
+add_action('tto/update-order', 'openlab_refresh_term_cache_after_ordering_update');

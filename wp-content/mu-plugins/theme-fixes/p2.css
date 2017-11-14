@@ -1,0 +1,27 @@
+.searchform div {
+	height: 2em;
+	clear: both;
+	margin-bottom: 2px;
+}
+.searchform input {
+	float: left;
+	margin-top: 5px;
+}
+.searchform .s {
+	width: 90%;
+}
+.searchform .searchsubmit {
+	width: auto;
+}
+.error404 #main .searchform div,
+.search #main .searchform div {
+	clear: none;
+}
+.error404 #main .searchform .s,
+.search #main .searchform .s {
+	width: 33%;
+}
+.error404 #main .searchform label,
+.search #main .searchform label {
+	display: none;
+}
