@@ -1,5 +1,5 @@
 ( function( $ ) {
-	$( document ).on( "click", '.cptch_reload_button, .wpcf7-submit', function() {
+	$( document ).on( "click", '.cptch_reload_button', function() {
 		cptch_reload( $( this ) );
 	}).on( "touchstart", function( event ) {
 		event = event || window.event;

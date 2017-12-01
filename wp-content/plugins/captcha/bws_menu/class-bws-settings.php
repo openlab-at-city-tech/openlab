@@ -791,7 +791,7 @@ if ( ! class_exists( 'Bws_Settings_Tabs' ) ) {
 						}
 						$current = get_site_transient( 'update_plugins' );
 
-						if ( ! empty( $this->all_plugins ) && ! empty( $current ) && isset( $current->response ) && is_array( $current->response ) ) {
+						if ( ! empty( $this->all_plugins ) && isset( $current ) && is_array( $current->response ) ) {
 							$to_send = array();
 							$to_send["plugins"][ $this->plugin_basename ] = $this->all_plugins[ $this->plugin_basename ];
 							$to_send["plugins"][ $this->plugin_basename ]["bws_license_key"] = $bws_license_key;
@@ -895,7 +895,7 @@ if ( ! class_exists( 'Bws_Settings_Tabs' ) ) {
 
 						if ( ! array_key_exists( $bws_license_plugin, $this->all_plugins ) ) {
 							$current = get_site_transient( 'update_plugins' );
-							if ( ! empty( $current ) && isset( $current->response ) && is_array( $current->response ) ) {
+							if ( ! empty( $current ) && is_array( $current->response ) ) {
 								$to_send = array();
 								$to_send["plugins"][ $bws_license_plugin ] = array();
 								$to_send["plugins"][ $bws_license_plugin ]["bws_license_key"] = $bws_license_key;
@@ -1071,11 +1071,6 @@ if ( ! class_exists( 'Bws_Settings_Tabs' ) ) {
 		 * @return void
 		 */
 		public function restore_options() {
-			unset(
-				$this->default_options['first_install'],
-				$this->default_options['suggest_feature_banner'],
-				$this->default_options['display_settings_notice']
-			);
 			/**
 			 * filter - Change default_options array OR process custom functions
 			 */

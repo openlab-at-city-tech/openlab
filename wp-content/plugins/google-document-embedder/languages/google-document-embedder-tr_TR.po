@@ -293,8 +293,8 @@ msgid "Open in new window"
 msgstr "Yeni pencerede aç"
 
 #: libs/lib-bootstrap.php:15
-msgid "Could not find wp-load.php"
-msgstr "Olamaz! wp-load.php dosyasını bulamadık!"
+msgid "Could not find wp-hide-load.php"
+msgstr "Olamaz! wp-hide-load.php dosyasını bulamadık!"
 
 #: libs/lib-eddialog.php:8
 msgid "Access denied."

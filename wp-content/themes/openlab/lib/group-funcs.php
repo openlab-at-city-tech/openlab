@@ -1509,16 +1509,17 @@ function openlab_get_faculty_list() {
     $faculty_list = '';
 
     if (isset($bp->groups->current_group->admins)) {
-        $faculty_id = $bp->groups->current_group->admins[0]->user_id;
         $group_id = $bp->groups->current_group->id;
+        $faculty_id = groups_get_groupmeta( $group_id, 'primary_faculty', true );
 
-        $faculty_ids = groups_get_groupmeta($group_id, 'additional_faculty', false);
+        $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
         array_unshift($faculty_ids, $faculty_id);
 
         $faculty = array();
         foreach ($faculty_ids as $id) {
+			$link = sprintf( '<a href="%s">%s</a>', bp_core_get_user_domain( $id ), bp_core_get_user_displayname( $id ) );
 
-            array_push($faculty, bp_core_get_user_displayname($id));
+            array_push( $faculty, $link );
         }
 
         $faculty = array_unique($faculty);

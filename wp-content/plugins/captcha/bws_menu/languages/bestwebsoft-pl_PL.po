@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bestwebsoft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 15:43+0300\n"
-"PO-Revision-Date: 2017-06-08 15:43+0300\n"
+"POT-Creation-Date: 2017-03-28 13:51+0300\n"
+"PO-Revision-Date: 2017-03-28 13:51+0300\n"
 "Last-Translator: bestwebsoft.com <plugins@bestwebsoft.com>\n"
 "Language-Team: Damian Dąbrowski <contact@codester.pl>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.8.7.1\n"
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Need help?"
 msgstr "Potrzebujesz pomocy?"
 
-#: bws_functions.php:103 bws_functions.php:907 class-bws-settings.php:1047
+#: bws_functions.php:103 bws_functions.php:916 class-bws-settings.php:1047
 msgid "Visit Help Center"
 msgstr ""
 
@@ -152,7 +152,7 @@ msgid "Add New"
 msgstr "Dodaj nowy"
 
 #: bws_functions.php:216 bws_functions.php:226 bws_functions.php:330
-#: bws_functions.php:378 bws_functions.php:480
+#: bws_functions.php:378 bws_functions.php:482
 msgid "Close notice"
 msgstr "Zamknij powiadomienie"
 
@@ -205,36 +205,36 @@ msgstr ""
 "zostaniesz wówczas pozbawiony SZYBKIEGO DOSTĘDO DO SUPPORTU oraz "
 "AKTUALIZACJI."
 
-#: bws_functions.php:475
+#: bws_functions.php:477
 #, php-format
 msgid "Thank you for choosing %s plugin!"
 msgstr ""
 
-#: bws_functions.php:476
+#: bws_functions.php:478
 msgid ""
 "If you have a feature, suggestion or idea you'd like to see in the plugin, "
 "we'd love to hear about it!"
 msgstr ""
 
-#: bws_functions.php:477
+#: bws_functions.php:479
 msgid "Suggest a Feature"
 msgstr ""
 
-#: bws_functions.php:493 class-bws-settings.php:533 class-bws-settings.php:536
+#: bws_functions.php:495 class-bws-settings.php:533 class-bws-settings.php:536
 #: class-bws-settings.php:584 class-bws-settings.php:587
 msgid "Notice"
 msgstr "Uwaga"
 
-#: bws_functions.php:493
+#: bws_functions.php:495
 msgid "The plugin's settings have been changed."
 msgstr "Ustawienia wtyczki zostały zmienione."
 
-#: bws_functions.php:494 class-bws-settings.php:182 class-bws-settings.php:202
+#: bws_functions.php:496 class-bws-settings.php:182 class-bws-settings.php:202
 #: deprecated.php:640
 msgid "Save Changes"
 msgstr "Zapisz zmiany"
 
-#: bws_functions.php:508
+#: bws_functions.php:510
 #, fuzzy
 msgid ""
 "You can always look at premium options by checking the \"Pro Options\" in "
@@ -243,75 +243,67 @@ msgstr ""
 "Zawsze możesz sprawdzić funkcje premium poprzez kliknięcie \"Pokaż funkcje "
 "PRO\" w zakładce \"Go PRO\""
 
-#: bws_functions.php:629
-msgid "Add BWS Shortcode"
-msgstr ""
-
-#: bws_functions.php:630
-msgid "Add BWS Plugins Shortcode"
-msgstr "Dodaj BWS Shortcode"
-
-#: bws_functions.php:649
+#: bws_functions.php:651
 #, fuzzy
 msgid "Add shortcode"
 msgstr "Dodaj BWS Shortcode"
 
-#: bws_functions.php:649
+#: bws_functions.php:651
 msgid "Add BestWebSoft plugins' shortcodes using this button."
 msgstr ""
 
-#: bws_functions.php:695
+#: bws_functions.php:700
 msgid "Close"
 msgstr "Zamknij"
 
-#: bws_functions.php:787
+#: bws_functions.php:792
 #, fuzzy
 msgid "Are you sure you want to restore default settings?"
 msgstr ""
 "Czy jesteś pewien, że chcesz przywrócić wszystkie ustawienia do wartości "
 "domyślnych?"
 
-#: bws_functions.php:790
+#: bws_functions.php:795
 msgid "Yes, restore all settings"
 msgstr "Tak, przywróć wszystkie ustawienia"
 
-#: bws_functions.php:791
+#: bws_functions.php:796
 msgid "No, go back to the settings page"
 msgstr "Nie, wróć do ustawień"
 
-#: bws_functions.php:833
+#: bws_functions.php:842
 msgid "Plugin"
 msgstr "Wtyczka"
 
-#: bws_functions.php:842
+#: bws_functions.php:851
 msgid "Shortcode settings"
 msgstr "Ustawienia shortcode"
 
-#: bws_functions.php:847
+#: bws_functions.php:856
 msgid "The shortcode will be inserted"
 msgstr "Shortcode zostanie umieszczony"
 
-#: bws_functions.php:852
+#: bws_functions.php:861
 msgid "Insert"
 msgstr "Umieść"
 
-#: bws_functions.php:912
+#: bws_functions.php:921
 msgid "FAQ"
 msgstr "FAQ"
 
-#: bws_functions.php:918
+#: bws_functions.php:927
 msgid "For more information:"
 msgstr ""
 
-#: bws_functions.php:919
+#: bws_functions.php:928
 msgid "Documentation"
 msgstr ""
 
-#: bws_functions.php:920
+#: bws_functions.php:929
 msgid "Video Instructions"
 msgstr ""
 
-#: bws_functions.php:921
+#: bws_functions.php:930
 #, fuzzy
 msgid "Submit a Request"
 msgstr "送信ボタン"
@@ -1156,336 +1148,41 @@ msgid "version of the plugin."
 msgstr "Oceń wtyczkę"
 
 #: product_list.php:7
-msgid "Admin Tools"
+msgid "Advertisement"
 msgstr ""
 
 #: product_list.php:8
-msgid "Content"
+msgid "Content & Media"
 msgstr ""
 
 #: product_list.php:9
-msgid "eCommerce"
+msgid "Management"
 msgstr ""
 
 #: product_list.php:10
-msgid "Marketing"
-msgstr ""
-
-#: product_list.php:11
-msgid "Navigation"
-msgstr ""
-
-#: product_list.php:12
 msgid "Recommended"
 msgstr "Polecane"
 
-#: product_list.php:13
+#: product_list.php:11
 msgid "Security"
 msgstr ""
 
+#: product_list.php:12
+#, fuzzy
+msgid "Site Stats"
+msgstr "Status systemu"
+
+#: product_list.php:13
+msgid "Social"
+msgstr ""
+
 #: product_list.php:14
-msgid "SEO"
+msgid "Utilities"
 msgstr ""
 
 #: product_list.php:15
-msgid "SMM"
+msgid "Other"
 msgstr ""
-
-#: product_list.php:22
-msgid ""
-"Protect WordPress website forms from spam entries by means of math logic."
-msgstr ""
-
-#: product_list.php:32
-msgid "Create your personal car rental/booking and reservation website."
-msgstr ""
-
-#: product_list.php:42
-msgid ""
-"Allow customers to reach you using secure contact form plugin any website "
-"must have."
-msgstr ""
-
-#: product_list.php:52
-msgid "Add unlimited number of contact forms to WordPress website."
-msgstr ""
-
-#: product_list.php:62
-msgid "Save and manage Contact Form messages. Never lose important data."
-msgstr ""
-
-#: product_list.php:72
-msgid "Add unlimited custom pages to WordPress admin dashboard."
-msgstr ""
-
-#: product_list.php:79
-msgid "Add custom fields to WordPress website search results."
-msgstr ""
-
-#: product_list.php:86
-msgid ""
-"Add custom post types and taxonomies to WordPress website search results."
-msgstr ""
-
-#: product_list.php:96
-msgid "Add PayPal and 2CO donate buttons to receive charity payments."
-msgstr ""
-
-#: product_list.php:103
-msgid ""
-"Automatically add outgoing email messages to queue instead of sending them "
-"immediately."
-msgstr ""
-
-#: product_list.php:110
-msgid ""
-"Get latest error log messages to diagnose website problems. Define and fix "
-"issues faster."
-msgstr ""
-
-#: product_list.php:117
-msgid ""
-"Add Facebook Follow, Like, and Share buttons to WordPress posts, pages, and "
-"widgets."
-msgstr ""
-
-#: product_list.php:127
-msgid ""
-"Add beautiful galleries, albums & images to your WordPress website in a few "
-"clicks."
-msgstr ""
-
-#: product_list.php:137
-msgid ""
-"Add unlimited gallery categories. Organize images to make the navigation "
-"through content easier."
-msgstr ""
-
-#: product_list.php:144
-msgid ""
-"Add Google +1, Share, Follow, Hangout buttons and profile badge to WordPress "
-"posts, pages and widgets."
-msgstr ""
-
-#: product_list.php:154
-msgid ""
-"Stronger security solution which protects your WordPress website from hacks "
-"and unauthorized login attempts."
-msgstr ""
-
-#: product_list.php:164
-msgid ""
-"Add Adsense ads to WordPress website pages, posts, custom posts, search "
-"results, categories, tags, and widgets."
-msgstr ""
-
-#: product_list.php:174
-msgid "Add Google Analytics code to WordPress website and track basic stats."
-msgstr ""
-
-#: product_list.php:184
-msgid ""
-"Protect WordPress website forms from spam entries with Google Captcha "
-"(reCaptcha)."
-msgstr ""
-
-#: product_list.php:194
-msgid "Add customized Google maps to WordPress posts, pages and widgets."
-msgstr ""
-
-#: product_list.php:204
-msgid ""
-"Generate and add XML sitemap to WordPress website. Help search engines index "
-"your blog."
-msgstr ""
-
-#: product_list.php:214
-msgid ""
-"Replace external WordPress website links with Google shortlinks and track "
-"click stats."
-msgstr ""
-
-#: product_list.php:221
-msgid ""
-"Protect WordPress website – allow and deny access for certain IP addresses, "
-"hostnames, etc."
-msgstr ""
-
-#: product_list.php:231
-msgid ""
-"Create your personal job board and listing WordPress website. Search jobs, "
-"submit CV/resumes, choose candidates."
-msgstr ""
-
-#: product_list.php:238
-msgid ""
-"Protect WordPress website against brute force attacks. Limit rate of login "
-"attempts."
-msgstr ""
-
-#: product_list.php:248
-msgid ""
-"Add LinkedIn Share and Follow buttons to WordPress posts, pages and widgets. "
-"5 plugins included – profile, insider, etc."
-msgstr ""
-
-#: product_list.php:258
-msgid ""
-"Translate WordPress website content to other languages manually. Create "
-"multilingual pages, posts, widgets, menus, etc."
-msgstr ""
-
-#: product_list.php:268
-msgid ""
-"Add customizable pagination to WordPress website. Split long content to "
-"multiple pages for better navigation."
-msgstr ""
-
-#: product_list.php:278
-msgid ""
-"Generate PDF files and print WordPress posts/pages. Customize document "
-"header/footer styles and appearance."
-msgstr ""
-
-#: product_list.php:288
-msgid ""
-"Add Pinterest Follow, Pin It buttons and profile widgets (Pin, Board, "
-"Profile) to WordPress posts, pages and widgets."
-msgstr ""
-
-#: product_list.php:298
-msgid ""
-"Create your personal portfolio WordPress website. Manage and showcase past "
-"projects to get more clients."
-msgstr ""
-
-#: product_list.php:308
-msgid "Export WordPress posts to CSV file format easily. Configure data order."
-msgstr ""
-
-#: product_list.php:315
-msgid ""
-"Add extra fields to default WordPress user profile. The easiest way to "
-"create and manage additional custom values."
-msgstr ""
-
-#: product_list.php:322
-msgid ""
-"Add and display HTML advertisement banner on WordPress website. Customize "
-"bar styles and appearance."
-msgstr ""
-
-#: product_list.php:332
-msgid ""
-"Add customizable quotes and tips blocks to WordPress posts, pages and "
-"widgets."
-msgstr ""
-
-#: product_list.php:339
-msgid ""
-"Add rating plugin to your WordPress website to receive feedback from your "
-"customers."
-msgstr ""
-
-#: product_list.php:346
-msgid ""
-"Create your personal real estate WordPress website. Sell, rent and buy "
-"properties. Add, search and browse listings easily."
-msgstr ""
-
-#: product_list.php:356
-msgid ""
-"Attach, un-attach and re-attach media files quickly to WordPress posts and "
-"pages."
-msgstr ""
-
-#: product_list.php:363
-msgid ""
-"Add related, featured, latest, and popular posts to your WordPress website. "
-"Connect your blog readers with a relevant content."
-msgstr ""
-
-#: product_list.php:370
-msgid ""
-"Send bulk email messages to WordPress users. Custom templates, advanced "
-"settings and detailed reports."
-msgstr ""
-
-#: product_list.php:380
-msgid ""
-"The best responsive slider plugin for your WordPress website. Create "
-"beautifully animated slides just in a few clicks."
-msgstr ""
-
-#: product_list.php:387
-msgid ""
-"Configure SMTP server to receive email messages from WordPress to Gmail, "
-"Yahoo, Hotmail and other services."
-msgstr ""
-
-#: product_list.php:394
-msgid ""
-"Add social media buttons and widgets to WordPress posts, pages and widgets. "
-"FB, Twitter, G+1, Pinterest, LinkedIn."
-msgstr ""
-
-#: product_list.php:404
-msgid ""
-"Add social media login, registration, and commenting to your WordPress "
-"website."
-msgstr ""
-
-#: product_list.php:411
-msgid ""
-"Add email newsletter sign up form to WordPress posts, pages and widgets. "
-"Collect data and subscribe your users."
-msgstr ""
-
-#: product_list.php:421
-msgid ""
-"Add testimonials and feedbacks from your customers to WordPress website "
-"posts, pages, and widgets."
-msgstr ""
-
-#: product_list.php:428
-msgid ""
-"Best timesheet plugin for WordPress. Track employee time, streamline "
-"attendance and generate reports."
-msgstr ""
-
-#: product_list.php:438
-msgid ""
-"Add Twitter Follow, Tweet, Hashtag, and Mention buttons to WordPress posts "
-"and pages."
-msgstr ""
-
-#: product_list.php:448
-msgid ""
-"Automatically check and update WordPress website core with all installed "
-"plugins and themes to the latest versions."
-msgstr ""
-
-#: product_list.php:458
-msgid ""
-"Powerful user role management plugin for WordPress website. Create, edit, "
-"copy, and delete user roles."
-msgstr ""
-
-#: product_list.php:468
-msgid ""
-"Display live count of online visitors who are currently browsing your "
-"WordPress website."
-msgstr ""
-
-#: product_list.php:478
-msgid ""
-"Backup and export Zendesk Help Center content automatically to your "
-"WordPress website database."
-msgstr ""
-
-#, fuzzy
-#~ msgid "Site Stats"
-#~ msgstr "Status systemu"
 
 #~ msgid "Thank you for installing"
 #~ msgstr "Dziękujemy za instalację"
@@ -1576,6 +1273,9 @@ msgstr ""
 
 #~ msgid "Preview"
 #~ msgstr "Podgląd"
+
+#~ msgid "Add BWS Plugins Shortcode"
+#~ msgstr "Dodaj BWS Shortcode"
 
 #~ msgid "Activated plugins"
 #~ msgstr "有効なプラグイン"

@@ -55,6 +55,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return string
 	 */
 	function tribe_get_event_label_singular() {
+		/**
+		 * Allows customization of the singular version of the Event Label
+		 *
+		 * @param string $label The singular version of the Event label, defaults to "Event" (uppercase)
+		 */
 		return apply_filters( 'tribe_event_label_singular', esc_html__( 'Event', 'the-events-calendar' ) );
 	}
 
@@ -66,6 +71,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return string
 	 */
 	function tribe_get_event_label_singular_lowercase() {
+		/**
+		 * Allows customization of the singular lowercase version of the Event Label
+		 *
+		 * @param string $label The singular lowercase version of the Event label, defaults to "event" (lowercase)
+		 */
 		return apply_filters( 'tribe_event_label_singular_lowercase', esc_html__( 'event', 'the-events-calendar' ) );
 	}
 
@@ -77,6 +87,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return string
 	 */
 	function tribe_get_event_label_plural() {
+		/**
+		 * Allows customization of the plural version of the Event Label
+		 *
+		 * @param string $label The plural version of the Event label, defaults to "Events" (uppercase)
+		 */
 		return apply_filters( 'tribe_event_label_plural', esc_html__( 'Events', 'the-events-calendar' ) );
 	}
 
@@ -88,6 +103,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return string
 	 */
 	function tribe_get_event_label_plural_lowercase() {
+		/**
+		 * Allows customization of the plural lowercase version of the Event Label
+		 *
+		 * @param string $label The plural lowercase version of the Event label, defaults to "events" (lowercase)
+		 */
 		return apply_filters( 'tribe_event_label_plural_lowercase', esc_html__( 'events', 'the-events-calendar' ) );
 	}
 
@@ -199,8 +219,8 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 *		@type string    $end_date        Maximum end date of the Event.
 	 *		@type string    $eventDate       A specific Event date for the Query.
 	 *		@type bool      $hide_upcoming   Hide events that are not on eventDate, internal usage
-	 *		@type int       $venue           Select events from a specfic Venue
-	 *		@type int       $organizer       Select events from a specfic Organizer
+	 *		@type int       $venue           Select events from a specific Venue
+	 *		@type int       $organizer       Select events from a specific Organizer
 	 *		@type string    $eventDisplay    How to display the Events, internal usage
 	 *
 	 *		@see  get_posts()  for more params
@@ -650,8 +670,21 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @todo move to template classes
 	 **/
 	function tribe_events_the_header_attributes( $current_view = null ) {
-		$attrs               = array();
-		$current_view        = ! empty( $current_view ) ? $current_view : basename( tribe_get_current_template() );
+
+		global $wp_query;
+
+		$attrs        = array();
+		$current_view = ! empty( $current_view ) ? $current_view : basename( tribe_get_current_template() );
+		$term         = false;
+		$term_name    = get_query_var( Tribe__Events__Main::TAXONOMY );
+
+		if ( ! empty( $term_name ) ) {
+			$term_obj = get_term_by( 'slug', $term_name, Tribe__Events__Main::TAXONOMY );
+		}
+
+		if ( ! empty( $term_obj ) ) {
+			$term = 0 < $term_obj->term_id ? $term_obj->term_id : false;
+		}
 
 		// wp_title was deprecated in WordPress 4.4. Fetch the document title with the new function (added in 4.4) if available
 		if ( function_exists( 'wp_get_document_title' ) ) {
@@ -672,10 +705,10 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 				$attrs['data-startofweek'] = get_option( 'start_of_week' );
 				$attrs['data-view'] = 'list';
 				if ( tribe_is_upcoming() ) {
-					$attrs['data-baseurl'] = tribe_get_listview_link( false );
+					$attrs['data-baseurl'] = tribe_get_listview_link( $term );
 				} elseif ( tribe_is_past() ) {
 					$attrs['data-view']    = 'past';
-					$attrs['data-baseurl'] = tribe_get_listview_past_link( false );
+					$attrs['data-baseurl'] = tribe_get_listview_past_link( $term );
 				}
 				break;
 		}
@@ -733,7 +766,12 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return bool
 	 */
 	function tribe_events_admin_show_cost_field() {
-		$modules      = apply_filters( 'tribe_events_tickets_modules', null );
+		$modules = null;
+
+		if ( class_exists( 'Tribe__Tickets__Tickets' ) ) {
+			$modules = Tribe__Tickets__Tickets::modules();
+		}
+
 		$event_origin = get_post_meta( get_the_ID(), '_EventOrigin', true );
 		$show_cost    = empty( $modules ) ||
 						class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) ||
@@ -1118,19 +1156,20 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 				}
 
 				if ( function_exists( 'has_post_thumbnail' ) && has_post_thumbnail( $event->ID ) ) {
-					$has_image = true;
+					$has_image      = true;
+					$image_src      = tribe_event_featured_image( $event->ID, 'large', false, false );
 					$image_tool_src = tribe_event_featured_image( $event->ID, 'medium', false, false );
 				}
 
 				$category_classes = tribe_events_event_classes( $event->ID, false );
 
-				$json['eventId'] = $event->ID;
-				$json['title'] = wp_kses_post( $event->post_title );
-				$json['permalink'] = tribe_get_event_link( $event->ID );
-				$json['imageSrc'] = $image_src;
-				$json['dateDisplay'] = $date_display;
+				$json['eventId']         = $event->ID;
+				$json['title']           = wp_kses_post( $event->post_title );
+				$json['permalink']       = tribe_get_event_link( $event->ID );
+				$json['imageSrc']        = $image_src;
+				$json['dateDisplay']     = $date_display;
 				$json['imageTooltipSrc'] = $image_tool_src;
-				$json['excerpt'] = tribe_events_get_the_excerpt( $event );
+				$json['excerpt']         = tribe_events_get_the_excerpt( $event );
 				$json['categoryClasses'] = $category_classes;
 
 				/**
@@ -1269,7 +1308,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 **/
 	function tribe_events_promo_banner( $echo = true ) {
 		if ( tribe_get_option( 'donate-link', false ) == true && ! tribe_is_bot() ) {
-			$promo = apply_filters( 'tribe_events_promo_banner_message', sprintf( esc_html__( 'Calendar powered by %sThe Events Calendar%s', 'the-events-calendar' ), '<a class="vcard url org fn" href="' . Tribe__Events__Main::$tecUrl . 'product/wordpress-events-calendar/?utm_medium=plugin-tec&utm_source=banner&utm_campaign=in-app">', '</a>' ) );
+			$promo = apply_filters( 'tribe_events_promo_banner_message', sprintf( esc_html__( 'Calendar powered by %s', 'the-events-calendar' ), '<a class="vcard url org fn" href="' . Tribe__Events__Main::$tecUrl . 'product/wordpress-events-calendar/?utm_medium=plugin-tec&utm_source=banner&utm_campaign=in-app">' . esc_html__( 'The Events Calendar', 'the-events-calendar' ) . '</a>' ) );
 			$html  = apply_filters( 'tribe_events_promo_banner', sprintf( '<p class="tribe-events-promo">%s</p>', $promo ), $promo );
 			if ( $echo ) {
 				echo $html;
@@ -1443,6 +1482,10 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		$excerpt = wp_kses( $excerpt, $allowed_html );
 
 		if ( ! has_excerpt( $post->ID ) ) {
+			// Temporarily alter the global post in preparation for our filters.
+			$global_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
+			$GLOBALS['post'] = $post;
+
 			// We will only trim Excerpt if it comes from Post Content
 
 			/**
@@ -1461,6 +1504,9 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 			// Now we actually trim it
 			$excerpt = wp_trim_words( $excerpt, $excerpt_length, $excerpt_more );
+
+			// Original post is back in action!
+			$GLOBALS['post'] = $global_post;
 		}
 
 		/**

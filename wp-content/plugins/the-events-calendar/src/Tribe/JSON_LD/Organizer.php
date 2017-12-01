@@ -56,7 +56,28 @@ class Tribe__Events__JSON_LD__Organizer extends Tribe__JSON_LD__Abstract {
 		$data->email = tribe_get_organizer_email( $post_id );
 		$data->sameAs = tribe_get_organizer_website_url( $post_id );
 
+		$data = $this->apply_object_data_filter( $data, $args, $post );
 		return array( $post_id => $data );
+	}
+
+	/**
+	 * Get a link to the event
+	 *
+	 * @since 4.5.10
+	 *
+	 * @param  int|WP_Post  $post The Post Object or ID
+	 *
+	 * @return false|string Link to the event or false
+	 */
+	protected function get_link( $post ) {
+		// @TODO Move this logic to Pro once #33734 is handled.
+		if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
+			$link = tribe_get_organizer_link( $post, false );
+		} else {
+			$link = false;
+		}
+
+		return $link;
 	}
 
 }

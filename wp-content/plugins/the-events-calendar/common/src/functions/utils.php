@@ -244,6 +244,21 @@ if ( ! function_exists( 'tribe_normalize_terms_list' ) ) {
 
 		return $normalized;
 	}
+
+	if ( ! function_exists( 'tribe_upload_image' ) ) {
+		/** * @param string|int $image The path to an image file, an image URL or an attachment post ID.
+		 *
+		 * @return int|bool The attachment post ID if the uploading and attachment is successful or the ID refers to an attachment;
+		 *                  `false` otherwise.
+		 *
+		 * @see Tribe__Image__Uploader::upload_and_get_attachment_id()
+		 */
+		function tribe_upload_image( $image ) {
+			$uploader = new Tribe__Image__Uploader( $image );
+
+			return $uploader->upload_and_get_attachment_id();
+		}
+	}
 }
 
 if ( ! function_exists( 'tribe_is_error' ) ) {
@@ -309,5 +324,18 @@ if ( ! function_exists( 'tribe_retrieve_object_by_hook' ) ) {
 		}
 
 		return false;
+	}
+}
+
+if ( ! function_exists( 'tribe_is_wpml_active' ) ) {
+	/**
+	 * A unified way of checking if WPML is activated.
+	 *
+	 * @since 4.6.2
+	 *
+	 * @return boolean
+	 */
+	function tribe_is_wpml_active() {
+		return ( class_exists( 'SitePress' ) && defined( 'ICL_PLUGIN_PATH' ) );
 	}
 }

@@ -1797,7 +1797,7 @@ function bbp_pre_get_posts_normalize_forum_visibility( $posts_query = null ) {
 
 		// Default to public status
 		if ( empty( $post_stati ) ) {
-			$post_stati[] = bbp_get_public_status_id();
+			$post_stati = array( bbp_get_public_status_id() );
 
 		// Split the status string
 		} elseif ( is_string( $post_stati ) ) {
@@ -1848,7 +1848,7 @@ function bbp_pre_get_posts_normalize_forum_visibility( $posts_query = null ) {
 		}
 
 		// Get any existing meta queries
-		$meta_query   = $posts_query->get( 'meta_query' );
+		$meta_query   = (array) $posts_query->get( 'meta_query', array() );
 
 		// Add our meta query to existing
 		$meta_query[] = $forum_ids;

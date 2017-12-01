@@ -9,6 +9,13 @@
     /**import boostrap overrides**/
     @import "../less/variables.less";
 
+    a{
+        &:focus{
+            outline: solid;
+            outline-offset: -2px;
+            outline-width: 2px;
+        }
+    }
     #wpadminbar{
         position: absolute;
         font-family: "Open Sans",Helvetica,Arial,sans-serif;
@@ -20,6 +27,13 @@
         top: 63px;
         min-width: 0;
         z-index: 99997;
+        a{
+            &:focus{
+                outline: solid;
+                outline-offset: -2px;
+                outline-width: 2px;
+            }
+        }
         p,
         a{
             text-shadow: none !important;
@@ -339,6 +353,7 @@
             }
             #wp-admin-bar-openlab{
                 > .ab-item{
+                    color: #000;
                     background: url('images/openlab_admin_bar_logo.png') #fff no-repeat 44% 58%;
                     padding: 51px 0 0;
                     width: 127px;
@@ -1075,4 +1090,18 @@ body{
 }
 html.wp-toolbar {
     padding-top: 0;
+}
+/**header fixes**/
+body{
+    .empty-header{
+        display: block;
+        &.processing{
+            height: 0;
+            font-size: 0;
+            visibility: hidden;
+        }
+    }
+    .empty-header-placeholder{
+        display: block;
+    }
 }

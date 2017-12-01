@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 1474291 2016-08-14 20:35:12Z qurl $
+ * @version $Id: dynwid_admin_edit.php 1698398 2017-07-18 19:34:08Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -406,6 +406,11 @@ div.settingbox {
 	if ( array_key_exists('url', $DW->dwoptions) ) {
 		$DW_URL = new DW_URL();
 		$DW_URL->admin();
+	}
+
+	if ( array_key_exists('domain', $DW->dwoptions) ) {
+		$DW_Domain = new DW_Domain();
+		$DW_Domain->admin();
 	}
 
 	if ( array_key_exists('shortcode', $DW->dwoptions) ) {

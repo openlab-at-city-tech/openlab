@@ -1,0 +1,412 @@
+
+# Changelog
+
+## 1.2.25
+
+	- Replaced Markdown library to resolve several PHP errors.
+
+## 1.2.24
+
+	- Fixed fatal error when Gravity Forms was deactivated before Gravity Perks.
+
+## 1.2.23
+
+	- Fixed fatal error w/ older versions of PHP and the usage of namespaces.
+
+## 1.2.22
+
+	- Fixed error on multisite installs where Gravity Perks prevented any plugin from being networked activated if GP was activated but not network activated.
+	- Improved styling on plugin table.
+
+## 1.2.21
+
+    - Added doing-it-wrong notice when a perk is instantiated too early.
+    - Fixed styling of no license and update required messages on the Plugins page.
+    - Fixed issue where 3rd party plugin could cause fatal error on perk's settings pages.
+
+## 1.2.19
+
+	- Replaced Markdown library to resolve on-going conflicts with newer versions of PHP (7+).
+	- Fixed issue where Gravity Perks updates were not displaying correctly do to an encoding issue in the API request.
+
+## 1.2.18.7
+
+    - Added 'gp-child-settings' helper style for use in Form Editor.
+
+## 1.2.18.6
+
+    - Fixed fatal error when activating plugin in Network mode due to removed function.
+    - Fixed notice generated due to missing 3rd parameter for 'update_plugin_complete_actions' filter.
+
+## 1.2.18.5
+
+    - Fixed issue where WP Engine's PHP validator was throwing a false positive error when PHP version was upgraded.
+
+## 1.2.18.4
+
+    - Updated GP_Perk::generate_options() method to better handle numeric associative arrays.
+
+## 1.2.18.3
+
+    - Fixed issue where in some cases the perk post-installation actions would show up for non-perk plugins.
+
+## 1.2.18.2
+
+    - Fixed issue with perk installation and updates for Windows servers.
+    - Changed plugin author to Gravity Wiz.
+
+## 1.2.18.1
+
+    - Updated plugin URL
+    - Fixed PHP standards issue
+
+## 1.2.18
+
+    - Fixed fatal error introduced in 1.2.17
+
+## 1.2.17
+
+    - Fixed PHP7 warnings with Markdown class.
+
+## 1.2.16
+
+    - Fixed strict standards notice for GravityPerks::register_perk_activation_hooks() being called statically.
+    - Updated adminOnly check to use object notation rather than gwar()
+
+## 1.2.15
+
+    - Fixed notice that occurs when 3rd party plugins return an invalid form object or a bad form ID is provided to the GF shortcode
+
+## 1.2.14
+
+    - Added support for activation hooks for perks
+
+## 1.2.13
+
+    - Added CSS style for styling perk field setting rows
+
+## 1.2.12
+
+    - Renamed GWPerk class to GP_Perk; GWPerk class is still accessible.
+    - Added GP_Perk::doing_ajax() method to deterine if an AJAX action is being processed.
+
+## 1.2.11
+
+    - Added GWPerk::add_css_class() helper function for adding a new CSS class to an existing CSS class string
+    - Added better translation support (and including new .pot file with plugin)
+    - Updated welcome pointer verbiage
+    - Updated admin.css with proper formatting
+    - Fixed minor security issue where unsanitized value would be stored in database. Props: Jeremy Felt
+
+## 1.2.10
+
+    - Updated settings page to always check license status after saving settings; resolves issues where license is renewed by remains invalid in cache
+    - Updated GravityPerks::flush_license() to also flush cached get_perks() response
+    - Updated GWAPI::get_api_args() with a 'timeout' of 15 to further diminsh the impact of any gwiz.com downtime on client websites
+    - Updated styling on Manage Perks page to better equalize the heights of perk listings
+
+## 1.2.9.3
+
+    - Added support for getting perk file name based on perk name; required for older perks moving to GP_Bootstrap
+
+## 1.2.9.2
+
+    - Updated "Perks" menu permission from "administrator" to "update_plugins"
+
+## 1.2.9.1
+
+    - Updated Manage Perks page to automatically hiding Install Perks tab when user does not have ability to install plugins
+
+## 1.2.9
+
+    - Public release of 1.8.x changes to encourage updates.
+    - Updated to work with new API
+    - Fixed issue where newer perks were not visible in Inactive Perks section when deactivated
+
+## 1.2.8.12
+
+    - Added GWPerk::register_noconflict_styles() method for registering "No Conflict" styles
+
+## 1.2.8.11
+
+    - Fixed lingering issue with GP and individual perk updates caused by different in http vs https on activated URL
+    - Updated GWAPI to clean up & consolidate API parameters and request arguments
+
+## 1.2.8.10
+
+    - Added versions to all enqueued scripts so new versions will force a refresh on cached script files
+
+## 1.2.8.9
+
+    - Required for the new GP Limit Dates perk.
+    - Added gperk.togglePerksTab() function; allows toggling the perks tab when any field setting changes
+
+## 1.2.8.8
+
+    - Added support for GWPerk::$prefix property; used by GWPerk::key() method for future-proof setting names
+
+## 1.2.8.7
+
+    - Added helper styles for field settings
+    - Added template for tooltips: GravityPerks::$tooltip_template
+    - Fixed issue where activating perks from non-network admin was giving warning that Gravity Perks must be network activated
+
+## 1.2.8.6
+
+    - Fixed issue where 'extra_plugin_headers' usage was overriding 3rd party headers set via the same hook
+
+## 1.2.8.5
+
+    - Fixed notice caused when no slug is set on the plugin object.
+
+## 1.2.8.4
+
+    - Fixed issue where version info was not loading correctly due to slug changes in 1.2.8.3
+
+## 1.2.8.3
+
+    - Reverted 1.2.8.2; added correct slug via API response
+    - Fixed styling issue with Perk menu highlight on first-run
+    - Updated several usages of GWPerks to GravityPerks
+    - Added escaping to several API calls
+    - Added "gperks_loaded" action; will be used to load perks via bootstrap
+
+## 1.2.8.2
+
+    - Fixed issue where updates for perks with WP 4.2 were not working due to invalid slug
+
+## 1.2.8.1
+
+    - Fixed strict standards notices in GWNotice class
+    - Fixed styling issue in Perks Settings view
+
+## 1.2.8
+
+    - Added support for dynamic hooks for the "gform_field_appearance_settings" filter
+    - Added logging to the GWAPI::pre_set_site_transient_update_plugins_filter() method
+    - Fixed issue where GP stylesheet was not included when GF no-conflict mode was enabled
+    - Fixed issue where https site URLs were failing license validation if originally activated for http site URL
+
+## 1.2.7.1
+
+    - Added logging support!
+    - Added logging to the GWAPI::perks_plugins_api_filter() method which handles retrieving the download package when installing new perks
+    - Update: refactored GravityPerks::display_plugin_row_message() method
+    - Fixed notice in GravityPerks::save_last_modified_plugin() method
+
+## 1.2.7
+
+    - Updated order of page checks in GWField::filter_input_html() so entry_detail_edit is checked before entry_detail
+    - Fixed typo in error message when GWField::input_html() is not correctly overridden
+
+## 1.2.6
+
+    - Added support for uninstallation process for perks
+    - Added GravityPerks::drop_tables() and GWPerk::drop_tables() to support dropping tables more readily
+    - Added GWPerk::init() to better support GWPerk::setup(), classes which extend the GWPerk class can now call parent::init() to include standard init functionality
+    - Added GWPerk::maybe_setup() which will call GWPerk::setup() if the version is set and has changed
+    - Added GWPerk::drop_options() to drop all perk related options on uninstall
+    - Updated GWPerks::dynamic_setting_actions() to be static (resolved a lot of notices)
+    - Fixed styling issue with failed requirements icon on Manage Perks page
+    - Fixed JS bug where gform_apply_tooltip was no longer available
+    - Miscellaneous code cleanup
+
+## 1.2.5
+
+    - Added GWPerk::register_script() to register scripts and simultaneously register them as no conflict
+
+## 1.2.4
+
+    - Added GWPerk::register_preview_style() method to support loading style in GF preview mode
+    - Added GWPerks::dynamic_setting_actions() to add position based filters for easier display on form editor
+        (i.e. gform_field_standard_settings_1, gform_field_standard_settings_100, gform_field_standard_settings_250, etc )
+    - Fixed issue in GWAPI::perks_plugins_api_filter() to only use $args->_slug if defined
+    - Fixed issue with GWPerk::register_noconflict_script() method
+
+## 1.2.3
+
+    - Added new parameter $input_id to 'gform_save_field_value' filter
+    - Fixed license success/failure images which are no longer included with Gravity Forms
+    - Fixed fatal error which occured when perk with custom field type was placed on a form with any field set to adminOnly
+    - Updated admin input styles to override default GF styling
+
+## 1.2.2
+
+    - Added runtime cache for Gravity Perks update checker
+    - Fixed JS issue where hasOwnProperty was not checked for properties array
+    - Updated GWAPI::get_perks() to correctly return false rather than null
+    - Updated GWAPI::get_perks() method to no longer cache API response when download URL is included
+    - Updated GWAPI::get_perks() cache to 12 hours (down from 24 hours)
+    - Removed deprecated method: GravityPerks::remote_get_perk()
+    - Removed plugin cache clearer code
+
+## 1.2.1
+
+    - Added GWAPI::get_site_url() to return current site making API request
+    - Added GravityPerks::is_debug() method for use in debugging
+    - Added setup process for version changes; forcing licensing to be revalidated on new versions
+
+    - Updated GWPerks class to GravityPerks; GWPerks now extends GravityPerks class for backwards compatibility
+    - Updated GravityPerks::get_license_key() method to trim the license key
+    - Updated remote GWAPI calls to pass URL; fixes issue where user's were getting "Install package not available"
+
+    - Fixed styling issue with Perk listings on Manage Perks page
+
+## 1.2
+
+    - Added debugging output for license validation
+    - Added 24 hour transient caching to GWApi::get_perks()
+    - Added 24 hour cache to Gravity Perks version API call
+
+    - Updated GWPerk::get_perk() to check for singleton class before getting new instance of class
+    - Updated GWPerk::include_field() to check for singleton class before getting new instance of class
+    - Updated API get requests to use "Gravity Perks x.x.x" as the user agent to avoid caching issues with WP Engine
+    - Updated GWPerk::get_plugins() method to clear the plugin cache if the 'Perk' plugin header is not available.
+    - Updated GWPerk->get_perk() method to convert "-" in perk filename to "_".
+        example: gp-nested-forms.php => gp_nested_forms (class is actually GP_Nested_Forms)
+    - Updated/enhanced the GWPerk->include_field() method to allow including the fields.php in an '/includes/' folder
+    - Updated cache time on valid license check from 15 minutes to 24 hours
+    - Updated GPerks::init() to be a static function
+    - Updated priority of 'update_plugins' transient modifer to 99 to bypass issues where other plugins modify the transient incorrectly or fail to return it (for both Gravity Perks and Perks)
+    - Updated minimum WordPress version to 3.7 (requires jQuery Tabs 1.10 or greater)
+    - Updated gperk.addTab() method to bind tab loading events to 'beforeActivate' rather than the deprecated 'select'
+
+    - Fixed notice when updating themes and no "plugin" index is available in $_REQUEST
+    - Fixed notices relating to 'gf_tooltip_init' no longer being included with GF
+    - Fixed issue in manage_perks.php where invalid perk caused a fatal error
+    - Fixed various code formatting issues
+
+    - Removed some old, commented-out code; cleaning is fun!
+
+    - GWField: Added support for filtering the field content via the 'gform_field_content' filter
+    - GWField: Added GWField->has_field_type() method for determining if a given form object contains the current field's field type
+    - GWField: Various updates/improvements to GWField class
+
+## 1.1.7
+
+- Fixed issue where license check for "inactive" license was failing to auto-activate license
+
+## 1.1.6
+
+- Updated GWPerk->get_base_url() method to use plugins_url(), which auto-handles http/https; WP_UPLOAD_URL does not
+
+## 1.1.5
+- Fixed issue where license check was return "site_inactive" status; GWPerks::is_valid_license() will now attempt to activate license if this status is returned
+
+## 1.1.4
+
+- Added support for testing perk management on local servers
+
+## 1.1.3
+
+- Fixed issue where the 'Perk' plugin header was not added soon enough causing activation of some plugins to fail to load it
+
+## 1.1.2
+
+- Updated min GF version
+- Updated tooltip functionality on Manage Perks page to work with new GF tooltips
+
+## 1.1.1
+
+- Fixed issue where other plugin's incorrect usage of the 'plugins_api' hook was preventing perks from being installed
+
+## 1.1
+
+- Resolved issue with WP 3.6, jQuery UI Tabs no longer supports "add" method
+
+## 1.0.7
+
+- Added Markdown() support on Manage Perks page as a temporary fix until old perks that rely on this function can be updated
+
+## 1.0.5
+
+- Added support for returning URL for documentation
+
+## 1.0.4
+
+- Added missing 'gravityperks' textdomain to several strings
+
+## 1.0.3
+
+- Fixed issue where WordPress.org plugin updates were not showing up when GP was active
+
+## 1.0.2
+
+- Fixed an issue where if the user submitted their license key with a space at the beginning or end it would correctly validate, but then fail when they attempt to download a perk.
+
+## 1.0.1
+
+- Updated perk install link to use subsites update.php rather than the network
+
+## 1.0
+
+- Added own helper functions for retrieving values from arrays, $_GET & $_POST. Reliance on GFs was resulting in too many unexpected fatal errors.
+- Updated interaction with storefront API
+- Updated many unused functions to be commented out for later review and removal
+- Updated constant URLs
+- Fixed error with documentation markdown call
+
+## 1.0.beta4.5
+
+- Updated has_valid_license() function to only check once per execution
+- Fixed fatal error when attempting to use multisite function on non-network install
+- Updated font color style on "Install Update" button on "Manage Perks" page
+- Added caching for valid license check
+- Fixed issue where gwget() was not available and generating fatal error
+- Added GWPerks::is_gravity_page() function which checks if RGForms exists before running RGForms::is_gravity_page() check
+- Fixed issue where if FTP credentials were requested, plugin package data was not retrieved and install failed
+- Updated get_perk_info on the plugins_api hook to priority 11 to resolve issues where other plugins did not return $api
+
+## 1.0.beta4
+
+- Added support for retrieving individual perk change logs on Update Plugins page
+- Updated handle_errors() to only count $pagenow as plugins.php if no 'action' parameter is set in the query string to avoid error message being output when on the delete confirmation screen
+- Updated how plugin row message is output for perks.
+- Added additional styles for perk documentation
+- Added plugins.css which is output on the plugins.php page and handles styling perk-generated admin messages
+- Added support for "header links" which includes "buy license", "register license", and "get support" conditionally based on valid license
+- Fixed several issues with how error messages were being generated
+- Added new pointer system along with a "tour" of pointers to familiarize new users with Gravit Perks
+- Added system for adding requirements for perks
+- Added support for showing failed requirements on manage perks page
+- Added better support for perk actions: activate, deactivate, install, delete
+- Added better support for managing perks on Network installs
+
+## 1.0.beta3.2
+
+- major improvements to network mode support
+- fixed issue where 'gwp_active_perks' and 'gwp_active_sitewide_perks' options were not being updated correctly
+- updated manage perks page to list installed perks in 'Active' and 'Inactive' sections
+- added system for adding requirements for perks
+- added support for showing failed requirements on manage perks page
+
+## 1.0.beta3
+
+- various bug fixes
+- updated version
+
+## 1.0.beta2.6
+
+- Updated gwpSlide() function to support true boolean override
+
+## 1.0.beta2.5
+
+- Updated GWPerk::has_min_version() method to avoid T_PAAMAYIM_NEKUDOTAYIM error
+
+## 1.0.beta2.4
+
+- Removed auto-update functioanlity for beta testers while that is polished
+- Fixed issue where Perks form setting tab was being removed when there were no field settings
+
+## 1.0.beta2.3
+
+- Fixed issue where no perks returned from API was causing an issue
+
+## 1.0.beta2.2
+
+- Updated get_license_key() function to no longer use gwar() as this is not available during this time of the process
+
+## 1.0.alpha2
+
+- Added GWField model for easier creation of GF fields
+- Fixed various minor issues.

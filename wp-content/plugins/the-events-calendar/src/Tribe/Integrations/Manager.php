@@ -27,12 +27,58 @@ class Tribe__Events__Integrations__Manager {
 	}
 
 	/**
+	 * Conditionally loads the classes needed to integrate with third-party plugins.
+	 *
+	 * Third-party plugin integration classes and methods will be loaded only if
+	 * supported plugins are activated.
+	 */
+	public function load_integrations() {
+		$this->load_acf_integration();
+		$this->load_twenty_seventeen_integration();
+		$this->load_wpml_integration();
+		$this->load_X_theme_integration();
+	}
+
+	/**
+	 * Loads our ACF integrations if that theme is active.
+	 *
+	 * @return bool
+	 */
+	private function load_acf_integration() {
+		if ( ! class_exists( 'acf' ) ) {
+			return false;
+		}
+
+		Tribe__Events__Integrations__ACF__ACF::instance()->hook();
+
+		return true;
+	}
+
+	/**
+	 * Loads our Twenty Seventeen integrations if that theme is active.
+	 *
+	 * @since 4.5.10
+	 *
+	 * @return bool
+	 */
+	protected function load_twenty_seventeen_integration() {
+		$theme = get_stylesheet();
+
+		if ( 'twentyseventeen' === $theme ) {
+			tribe( 'tec.integrations.twenty-seventeen' );
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Loads WPML integration classes and event listeners.
 	 *
 	 * @return bool
 	 */
 	private function load_wpml_integration() {
-		if ( ! ( class_exists( 'SitePress' ) && defined( 'ICL_PLUGIN_PATH' ) ) ) {
+		if ( ! tribe_is_wpml_active() ) {
 			return false;
 		}
 
@@ -42,16 +88,10 @@ class Tribe__Events__Integrations__Manager {
 	}
 
 	/**
-	 * Conditionally loads the classes needed to integrate with third-party plugins.
+	 * Loads our X Theme integrations if that theme is active.
 	 *
-	 * Third-party plugin integration classes and methods will be loaded only if
-	 * supported plugins are activated.
+	 * @return bool
 	 */
-	public function load_integrations() {
-		$this->load_wpml_integration();
-		$this->load_X_theme_integration();
-	}
-
 	private function load_X_theme_integration() {
 		$theme = wp_get_theme();
 

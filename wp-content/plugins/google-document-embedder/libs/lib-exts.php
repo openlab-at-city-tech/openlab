@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {	exit; }
+
+
 /**
  * List supported file types of the viewer
  *

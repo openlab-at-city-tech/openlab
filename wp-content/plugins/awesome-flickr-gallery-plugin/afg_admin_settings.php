@@ -419,7 +419,7 @@ if ($_POST)
     global $pf;
     if (get_option('afg_flickr_token')) $rsp_obj = $pf->people_getPhotos(get_option('afg_user_id'), array('per_page' => 5, 'page' => 1));
     else $rsp_obj = $pf->people_getPublicPhotos(get_option('afg_user_id'), NULL, NULL, 5, 1);
-    if (!$rsp_obj) echo afg_error();
+    if (!$rsp_obj) echo afg_error($pf->error_msg);
     else {
         foreach($rsp_obj['photos']['photo'] as $photo) {
             $photo_url = "http://farm{$photo['farm']}.static.flickr.com/{$photo['server']}/{$photo['id']}_{$photo['secret']}_s.jpg";
@@ -458,7 +458,7 @@ if ($_POST)
     echo afg_box('Help', $message);
 
     $message = "Just insert the code <strong><font color='steelblue'>[AFG_gallery]</font></strong> in any of your posts or pages to display the Awesome Flickr Gallery.
-        <br /><p style='text-align:center'><i>-- OR --</i></p>You can create a new Awesome Flickr Gallery with different settings on page <a href='{$_SERVER['PHP_SELF']}?page=afg_add_gallery_page'>Add Galleries.";
+        <br /><p style='text-align:center'><i>-- OR --</i></p>You can create a new Awesome Flickr Gallery with different settings on page <a href='" . get_admin_url() . "admin.php?page=afg_add_gallery_page'>Add Galleries.";
     echo afg_box('Usage Instructions', $message);
 
     echo afg_donate_box();

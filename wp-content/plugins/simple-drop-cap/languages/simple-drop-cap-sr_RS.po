@@ -1,0 +1,124 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Simple Drop Cap\n"
+"POT-Creation-Date: 2015-03-24 20:08+0700\n"
+"PO-Revision-Date: 2015-03-25 08:35+0100\n"
+"Last-Translator: \n"
+"Language-Team: Yudhistira Mauris <Yudhistira Mauris>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.4\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/create-setting-menu-page.php:10
+#: includes/create-setting-menu-page.php:20
+msgid "Simple Drop Cap Settings"
+msgstr "Simple Drop Cap podešavanja"
+
+#: includes/create-setting-menu-page.php:22
+#, php-format
+msgid ""
+"If you find a bug or need a support request, please post your request "
+"%1$shere%2$s."
+msgstr ""
+"Ako pronađete grešku ili ako vam zatreba podrška, pošaljite svoj zahtev "
+"%1$sovde%2$s."
+
+#: includes/create-setting-menu-page.php:26
+#, php-format
+msgid ""
+"And if you find this plugin helpful, please leave a review and comment "
+"%1$shere%2$s. Thank you :)"
+msgstr ""
+"Ako vam je ovaj plugin koristio, napišite pregled i komentar %1$sovde"
+"%2$s. Hvala :)"
+
+#: includes/create-setting-menu-page.php:28
+msgid "Note"
+msgstr "Napomena"
+
+#: includes/create-setting-menu-page.php:28
+#, php-format
+msgid ""
+"Pro version is available now. More advanced features and better support. "
+"%1$sGet it now for the low price!%2$s"
+msgstr ""
+"Sada je na raspolaganju i pro verzija - naprednije funkcije i bolja "
+"podrška. %1$sPreuzmite ga sada po povoljnoj ceni!%2$s"
+
+#: includes/create-setting-menu-page.php:36
+msgid "Style Settings"
+msgstr "Podešavanja stila"
+
+#: includes/create-setting-menu-page.php:40
+msgid "Display Mode"
+msgstr "Režim prikazivanja"
+
+#: includes/create-setting-menu-page.php:42
+msgid "Normal Mode"
+msgstr "Normalan režim"
+
+#: includes/create-setting-menu-page.php:46
+#: includes/create-setting-menu-page.php:55
+#, php-format
+msgid "%1$sClick here%2$s for the example."
+msgstr "%1$sKliknite ovde%2$s za primer. "
+
+#: includes/create-setting-menu-page.php:51
+msgid "Float Mode"
+msgstr "Plutajući režim"
+
+#: includes/create-setting-menu-page.php:60
+msgid "Custom Mode"
+msgstr "Prilagođeni režim"
+
+#: includes/create-setting-menu-page.php:64
+msgid ""
+"Use your own specified CSS styles. This will override all styling options."
+msgstr ""
+"Koristite sopstvene, posebne CSS stilove. Time ćete poništiti sve opcije "
+"stilizovanja."
+
+#: includes/create-setting-menu-page.php:68
+msgid "Drop Cap Color"
+msgstr "Drop Cap boja"
+
+#: includes/create-setting-menu-page.php:74
+msgid "Custom CSS Style"
+msgstr "Prilagođeni CSS stil"
+
+#: includes/create-setting-menu-page.php:76
+msgid "Specify your custom CSS styles for custom mode in the box below."
+msgstr ""
+"Odredite svoje prilagođene CSS stilove za prilagođeni režim u okviru koji "
+"sledi. "
+
+#: includes/create-setting-menu-page.php:84
+msgid "Usage Settings"
+msgstr "Podešavanja upotrebe"
+
+#: includes/create-setting-menu-page.php:88
+msgid "Drop Cap Automation"
+msgstr "Drop Cap Automatizacija"
+
+#: includes/create-setting-menu-page.php:91
+msgid ""
+"Automatically transform the first letter of all posts, pages, and custom "
+"post types into a drop cap."
+msgstr ""
+"Automatski transformiše prva slova svih postova, stranica i prilagođenih "
+"vrsta posta u drop cap."
+
+#: includes/create-setting-menu-page.php:93
+msgid ""
+"This also will disable [dropcap] shortcode on post, page, and custom post "
+"type."
+msgstr ""
+"Time će se takođe deaktivirati [dropcap] shortcode na postu, stranici i "
+"na prilagođenoj vrsti posta."

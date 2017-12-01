@@ -8,7 +8,7 @@ Author: Kevin Davis, Dan Lester
 Author URI: https://wordpress.org/plugins/google-document-embedder/
 Text Domain: google-document-embedder
 Domain Path: /languages/
-Version: 2.6.2
+Version: 2.6.4
 License: GPLv2
 */
 
@@ -38,8 +38,11 @@ License: GPLv2
  */
 
 // boring init junk
-$gde_ver 				= "2.6.2";
+$gde_ver 				= "2.6.4";
 $gde_db_ver 			= "1.2";		// update also in gde_activate()
+
+if ( ! defined( 'ABSPATH' ) ) {	exit; }
+
 
 require_once( plugin_dir_path( __FILE__ ) . 'functions.php' );
 global $wp_version;
@@ -49,17 +52,11 @@ $gdeoptions				= get_option( 'gde_options' );
 $gdetypes				= gde_supported_types();		
 
 // check for db health
-$healthy = gde_debug_tables();
+$healthy = true;
 
 // add admin functions only if needed
 if ( is_admin() ) { require_once( GDE_PLUGIN_DIR . 'functions-admin.php' ); }
 
-// get global settings - not implemented in this release
-/*
-if ( is_multisite() ) {
-	$gdeglobals			= get_site_option( 'gde_globals' );
-}
-*/
 
 // activate plugin, allow clear dx log on deactivate
 register_activation_hook( __FILE__, 'gde_activate' );
@@ -70,33 +67,14 @@ add_action( 'plugins_loaded', 'gde_load' );
 add_shortcode( 'gview', 'gde_do_shortcode' );
 
 function gde_do_shortcode( $atts ) {
-	global $healthy, $gdeoptions; //$gdeglobals
-	
-	// check profile table health
-	if ( ! $healthy ) {
-		delete_option('gde_db_version');
-		return gde_show_error( __('Unable to load profile settings', 'google-document-embedder') );
-	}
-	
-	// handle global setting overrides - not active in this release
-	/*
-	if ($gdeglobals['enforce_viewer'] == "std") {
-		$gdeoptions['disable_proxy'] = "yes";
-	}
-	if ($gdeglobals['enforce_lang']) {
-		$gdeoptions['default_lang'] = $gdeglobals['enforce_lang'];
-	}
-	*/
-	
+	global $gdeoptions;
+
 	extract( shortcode_atts( array (
 		'file' => '',
 		'profile' => 1, // default profile is always ID 1
 		'save' => '',
 		'width' => '',
-		'height' => '',
-		'cache' => ''
-		//'title' => '', // not yet implemented
-		//'page' => '',	// support broken in Google Viewer
+		'height' => ''
 	), $atts ) );
 	
 	// get requested profile data (or default if doesn't exist)
@@ -133,21 +111,15 @@ function gde_do_shortcode( $atts ) {
 			$save = $profile['link_show'];
 		}
 	}
+
 	if ( empty( $width ) ) {
 		$width = $profile['default_width'];
 	}
 	if ( empty( $height ) ) {
 		$height = $profile['default_height'];
 	}
-	if ( $cache !== "0" ) {
-		if ( empty( $cache ) ) {
-			$cache = $profile['cache'];
-		}
-	}
-	//if ( $profile['language'] !== "en_US" ) {
-		$lang =  $profile['language'];
-	//}
-	
+	$lang =  $profile['language'];
+
 	// tweak the dimensions if necessary
 	$width = gde_sanitize_dims( $width );
 	$height = gde_sanitize_dims( $height );
@@ -203,89 +175,40 @@ function gde_do_shortcode( $atts ) {
 			}
 		}
 		
-		// generate links (embed, download)
-		$links = array( $file, $file );
-		if ( $profile['link_block'] == "yes" && gde_is_blockable( $profile ) ) {
-			if ( $secure = gde_get_secure_url( $file ) ) {
-				$links[0] = $secure;
-			} else {
-				$links[0] = '';
-			}
-			$links[1] = '';
-		} elseif ( $profile['link_show'] !== "none" ) {
-			if ( $profile['link_force'] == "yes" && $profile['link_mask'] == "no" ) {
-				$links[1] = GDE_PLUGIN_URL . "load.php?d=" . urlencode( $links[1] );
-			} elseif ( $profile['link_force'] == "no" && $profile['link_mask'] == "yes" ) {
-				$short = gde_get_short_url( $links[0] );
-				$links[0] = $short;
-				$links[1] = $short;
-			} elseif ( $profile['link_force'] == "yes" && $profile['link_mask'] == "yes" ) {
-				$short = gde_get_short_url( GDE_PLUGIN_URL . "load.php?d=" . urlencode( $links[0] ) );
-				$links[0] = $short;
-				$links[1] = $short;
-			}
-		}
-		
-		// obfuscate filename if cache disabled (globally or via shortcode)
-		// note that this is ignored if the document is secure to prevent each hit from generating a new db row
-		if ( ! empty( $links[1] ) && ( $cache == "off" || $cache == "0" ) ) {
-			$links[0] .= "?" . time();
-		}
-		
 		// check for failed secure doc
-		if ( empty( $links[0] ) && empty( $links[1] ) ) {
-			$code = gde_show_error( __('Unable to secure document', 'google-document-embedder') );
+		if ( empty( $file ) ) {
+			$code = gde_show_error( __('File name is empty', 'google-document-embedder') );
 		} else {
 		
 			// which viewer?
-			//if ( $profile['viewer'] == "enhanced" ) {
-			//	$lnk = GDE_PLUGIN_URL . "view.php?url=" . urlencode( $links[0] ) . "&hl=" . $lang . "&gpid=" . $pid;
-				// make protocol-agnostic
-			//	$lnk = preg_replace( '/^https?:/i', '', $lnk );
-			//} else {
-				$lnk = "//docs.google.com/viewer?url=" . urlencode( $links[0]  ) . "&hl=" . $lang;
-			//}
-			
-			// what mode?
-			//if ( $profile['tb_mobile'] == "always" ) {
-			//	$lnk .= "&mobile=true";
-			//} else {
-				$lnk .= "&embedded=true";
-			//}
-			
+
+			$lnk = "//docs.google.com/viewer?url=" . urlencode( $file  ) . "&hl=" . urlencode($lang);
+
+			$lnk .= "&embedded=true";
+
 			// build viewer
 			if ( $viewer == false ) {
 				// exceeds max filesize
 				$vwr = '';
 			} else {
-				$vwr = '<iframe src="%U%" class="gde-frame" style="width:%W%; height:%H%; border: none;"%ATTRS%></iframe>';
+				$vwr = '<iframe src="%U%" class="gde-frame" style="width:%W%; height:%H%; border: none;" scrolling="no"></iframe>';
 				$vwr = str_replace("%U%", $lnk, $vwr);
-				$vwr = str_replace("%W%", $width, $vwr);
-				$vwr = str_replace("%H%", $height, $vwr);
-				
-				// frame attributes
-				$vattr[] = ' scrolling="no"';						// iphone scrolling bug
-				//if ( ! empty( $page ) && is_numeric( $page ) ) {	// selected starting page
-				//	$page = (int) $page - 1;
-				//	$vattr[] = ' onload="javascript:this.contentWindow.location.hash=\':0.page.' . $page . '\';"';
-				//}
-				$vwr = str_replace( "%ATTRS%", implode( '', $vattr ), $vwr );
+				$vwr = str_replace("%W%", esc_attr($width), $vwr);
+				$vwr = str_replace("%H%", esc_attr($height), $vwr);
 			}
 			
 			// show download link?
 			$allow_save = false;
-			if ( ! empty( $links[1] ) ) {	// link empty = secure document; ignore any other save attribute
-				if ( $save == "all" || $save == "1" ) {
-					$allow_save = true;
-				} elseif ( $save == "users" && is_user_logged_in() ) {
-					$allow_save = true;
-				}
+			if ( $save == "all" || $save == "1" ) {
+				$allow_save = true;
+			} elseif ( $save == "users" && is_user_logged_in() ) {
+				$allow_save = true;
 			}
-			
+
 			if ( $allow_save ) {
 				// build download link
 				$linkcode = '<p class="gde-text"><a href="%LINK%" class="gde-link"%ATTRS%>%TXT%</a></p>';
-				$linkcode = str_replace( "%LINK%", $links[1], $linkcode );
+				$linkcode = str_replace( "%LINK%", $file, $linkcode );
 				
 				// fix type
 				$ftype = strtoupper( $fnp[1] );
@@ -294,9 +217,6 @@ function gde_do_shortcode( $atts ) {
 				}
 				
 				// link attributes
-				if ( $profile['link_mask'] == "yes" ) {
-					$attr[] = ' rel="nofollow"';
-				}
 				$attr[] = gde_ga_event( $file ); // GA integration
 				$linkcode = str_replace("%ATTRS%", implode( '', $attr ), $linkcode);
 				
@@ -335,9 +255,7 @@ if ( is_admin() ) {
 	
 	// editor integration
 	if ( ! isset( $gdeoptions['ed_disable'] ) || $gdeoptions['ed_disable'] == "no" ) {
-		// add quicktag
-		add_action( 'admin_print_scripts', 'gde_admin_print_scripts' );
-		
+
 		// add tinymce button
 		add_action( 'admin_init','gde_mce_addbuttons' );
 		
@@ -352,11 +270,7 @@ if ( is_admin() ) {
 	
 	// add local settings page
 	add_action( 'admin_menu', 'gde_option_page' );
-	
-	//if ( is_multisite() ) {
-		// add global settings page
-		//add_action( 'network_admin_menu', 'gde_site_option_page' );	// not present in this release
-	//}
+
 }
 
 /**

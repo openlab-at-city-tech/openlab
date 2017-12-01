@@ -355,11 +355,6 @@ add_action('groups_create_group', 'openlab_create_forum_on_group_creation', 10, 
 add_filter('bp_get_new_group_enable_forum', '__return_true');
 
 /**
- * Blogs must be public in order for BP to record their activity. Only at save time
- */
-add_filter( 'bp_is_blog_public', create_function( '', 'return 1;' ) );
-
-/**
  * Make sure the comment-dupe data doesn't get saved in the comments activity
  */
 function openlab_pre_save_comment_activity( $activity ) {
@@ -520,3 +515,16 @@ function openlab_get_xprofile_field_id( $field_name ) {
 			return 194;
 	}
 }
+
+/**
+ * Force BP Group Documents (Files) upload extensions to match WP's.
+ */
+function openlab_filter_bp_group_documents_valid_file_formats( $formats ) {
+	$wp_types = get_allowed_mime_types();
+	$formats_array = array();
+	foreach ( $wp_types as $exts => $_ ) {
+		$formats_array = array_merge( $formats_array, explode( '|', $exts ) );
+	}
+	return implode( ',', $formats_array );
+}
+add_filter( 'option_bp_group_documents_valid_file_formats', 'openlab_filter_bp_group_documents_valid_file_formats' );

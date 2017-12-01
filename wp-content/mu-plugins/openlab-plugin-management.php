@@ -30,7 +30,9 @@ function openlab_hide_plugins( $plugins ) {
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
 		'titan-framework/titan-framework.php',
+		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'webwork/webwork.php',
+		'wp-accessibility/wp-accessibility',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -72,6 +74,18 @@ function openlab_hide_plugins( $plugins ) {
 			if ( in_array( $pkey, $network_admin_only ) ) {
 				unset( $plugins[ $pkey ] );
 			}
+		}
+	}
+
+	$blog_specific_whitelist = array(
+		'h5p/h5p.php' => array(
+			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
+		),
+	);
+
+	foreach ( $blog_specific_whitelist as $plugin_file => $whitelisted_blogs ) {
+		if ( ! in_array( get_current_blog_id(), $whitelisted_blogs ) ) {
+			unset( $plugins[ $plugin_file ] );
 		}
 	}
 

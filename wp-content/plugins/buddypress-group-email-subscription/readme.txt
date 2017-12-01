@@ -3,8 +3,8 @@ Contributors: dwenaus, boonebgorges, r-a-y
 Description: Allow users to receive email notifications of group activity. Weekly or daily digests are available.
 Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifications, notification, subscribe, subscription, digest, summary
 Requires at least: 3.2 (BP 1.5)
-Tested up to: 4.7 (BP 2.8)
-Stable tag: 3.7.1
+Tested up to: 4.8 (BP 2.9)
+Stable tag: 3.7.2
 
 == Description ==
 
@@ -90,6 +90,16 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 
 == Changelog ==
 
+= 3.7.2 =
+* Fix bug that could cause fatal errors when activating without BuddyPress.
+* Improve data passed to filters.
+* Fix invalid form markup.
+* Introduce new filters for disabling "Email Notice" and "Welcome Email" sections
+* Add CSS clases to HTML elements in digests.
+* Improve handling of deleted activity items when generating digests.
+* Fix some spelling errors.
+* Improve handling of default subscription level filters.
+
 = 3.7.1 =
 * Fix incorrect activity comment permalinks in digest emails.
 * Use login redirect links in digest emails, for improved navigation when not logged in.
@@ -135,10 +145,10 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 
 = 3.5 =
 * Fixes bug so that user no longer gets an email for their own group activity update
-* Improved email content parsing, so that the URLs contained in links are not completed removed from the email
+* Improved email content parsing, so that the URLs contained in links are not completely removed from the email
 * Improved JavaScript and CSS asset loading, for better cache busting
 * Fixed bug that caused email footer to be repeated multiple times in certain cases
-* Better support for plugin whitelabeling/changed directory names
+* Better support for plugin white labelling & changed directory names
 * Improved compatibility with the WP Better Emails plugin
 * Update JS not to use deprecated jQuery.live()
 * Improved compatibility with BuddyPress 2.2
@@ -260,7 +270,7 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 = 2.8.5 =
 * Fixed bug introduced in latest BP version where when an group admin manually removes a group member in Group Admin -> Manage Members -> Remove from group, the user kept getting emails
 * Added translation strings for the javascript mute/follow
-* Minor code cleanup to how digest/sumaries are stored
+* Minor code cleanup to how digest/summaries are stored
 * Added Russian translation
 * Added filter to digest subject line
 * Fixed error where only site admins could send out instant emails and not group admins

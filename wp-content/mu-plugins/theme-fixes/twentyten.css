@@ -1,0 +1,32 @@
+body a:link,
+body a,
+.page-title a:link,
+.page-title a,
+.entry-meta a,
+.entry-utility a,
+.navigation a:link,
+.navigation a,
+.comment-meta a:link,
+.comment-meta a,
+.reply a,
+a.comment-edit-link {
+    color: #0066cc;
+}
+a:visited,
+.page-title a:visited,
+.navigation a:visited,
+.comment-meta a:visited {
+    color: #743399;
+}
+.entry-utility,
+.entry-meta,
+#respond label{
+    color: #000;
+}
+#respond .required{
+    color: #9f2d1d;
+}
+
+.widget_search .s {
+    width: 60%;
+}

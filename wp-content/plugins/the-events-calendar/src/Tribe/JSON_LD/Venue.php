@@ -55,6 +55,7 @@ class Tribe__Events__JSON_LD__Venue extends Tribe__JSON_LD__Abstract {
 
 		$data->address = array();
 
+		$data->address['@type'] = 'PostalAddress';
 		$data->address['streetAddress'] = tribe_get_address( $post_id );
 		$data->address['addressLocality'] = tribe_get_city( $post_id );
 		$data->address['addressRegion'] = tribe_get_region( $post_id );
@@ -76,7 +77,28 @@ class Tribe__Events__JSON_LD__Venue extends Tribe__JSON_LD__Abstract {
 		$data->telephone = tribe_get_phone( $post_id );
 		$data->sameAs = tribe_get_venue_website_url( $post_id );
 
+		$data = $this->apply_object_data_filter( $data, $args, $post );
 		return array( $post_id => $data );
+	}
+
+	/**
+	 * Get a link to the event
+	 *
+	 * @since 4.5.10
+	 *
+	 * @param  int|WP_Post  $post The Post Object or ID
+	 *
+	 * @return false|string Link to the event or false
+	 */
+	protected function get_link( $post ) {
+		// @TODO Move this logic to Pro once #33734 is handled.
+		if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
+			$link = tribe_get_venue_link( $post, false );
+		} else {
+			$link = false;
+		}
+
+		return $link;
 	}
 
 }

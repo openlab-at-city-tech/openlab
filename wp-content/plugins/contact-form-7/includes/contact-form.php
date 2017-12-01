@@ -570,7 +570,7 @@ class WPCF7_ContactForm {
 		}
 
 		$tags = $this->scanned_form_tags;
-
+                
 		return $manager->filter( $tags, $cond );
 	}
 

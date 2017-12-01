@@ -1,0 +1,7 @@
+body .required {
+    color: #C10000;
+}
+
+.widget-area .s {
+	width: 53.66666666666%; /* define a width to avoid dropping a wider submit button */
+}

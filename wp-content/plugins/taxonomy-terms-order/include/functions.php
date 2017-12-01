@@ -11,7 +11,7 @@
             $settings = get_option('tto_options'); 
             
             $defaults   = array (
-                                    'capability'                =>  'install_plugins',
+                                    'capability'                =>  'manage_options',
                                     'autosort'                  =>  '1',
                                     'adminsort'                 =>  '1'
                                 );
