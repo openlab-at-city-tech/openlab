@@ -3,8 +3,8 @@
         <span class="name"><%= assignment.get('assign_name') %><span class="caret"></span></span>
     </button>
     <ul class="dropdown-menu" role="menu">	
-        <li class='assign-submenu-stats'><a href='#'>Statistics</a></li>
-        <li class='assign-submenu-details'><a href='#'>Details</a></li>  					
+        <li class='assign-submenu-stats'><a href='#'><?php esc_html_e('Statistics', 'openlab-gradebook') ?></a></li>
+        <li class='assign-submenu-details'><a href='#'><?php esc_html_e('Details', 'openlab-gradebook') ?></a></li>  					
         <?php
         global $current_user;
         $x = $current_user->roles;
@@ -25,9 +25,9 @@
             }
             %>	
 
-            <li class='assign-submenu-sort'><a href='#'>Sort</a></li>  					
-            <li class='assign-submenu-edit'><a href='#'>Edit</a></li>
-            <li class='assign-submenu-delete'><a href='#'><span class='text-danger'>Delete</span></a></li>	
+            <li class='assign-submenu-sort'><a href='#'><?php esc_html_e('Sort', 'openlab-gradebook') ?></a></li>  					
+            <li class='assign-submenu-edit'><a href='#'><?php esc_html_e('Edit', 'openlab-gradebook') ?></a></li>
+            <li class='assign-submenu-delete'><a href='#'><span class='text-danger'><?php esc_html_e('Delete', 'openlab-gradebook') ?></span></a></li>	
             <?php } ?>			
     </ul>
 </div>    

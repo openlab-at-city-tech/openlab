@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="wrap">
-                <h1>Gradebooks
+                <h1><?php esc_html_e('Gradebook', 'openlab-gradebook') ?>
                     <?php
                     global $oplb_gradebook_api;
                     if ($oplb_gradebook_api->oplb_is_gb_administrator()) {
                         ?>
                         <a class="btn btn-default" id="add-course">
-                            Add new
+                            <?php esc_html_e('Add New', 'openlab-gradebook') ?>
                         </a>   
                     <?php } ?>    
                 </h1>
@@ -21,11 +21,11 @@
                 <thead>
                     <tr>		
                         <th></th>
-                        <th class="course-column-id">ID</th>
-                        <th class="course-column-name">Gradebook</th>
-                        <th class="course-column-school">School</th>
-                        <th class="course-column-semester">Semester</th>
-                        <th class="course-column-year">Year</th>
+                        <th class="course-column-id"><?php esc_html_e('ID', 'openlab-gradebook') ?></th>
+                        <th class="course-column-name"><?php esc_html_e('Gradebook', 'openlab-gradebook') ?></th>
+                        <th class="course-column-school"><?php esc_html_e('School', 'openlab-gradebook') ?></th>
+                        <th class="course-column-semester"><?php esc_html_e('Semester', 'openlab-gradebook') ?></th>
+                        <th class="course-column-year"><?php esc_html_e('Year', 'openlab-gradebook') ?></th>
                     </tr>
                 </thead>
                 <tbody class="angb-course-list-tbody">			

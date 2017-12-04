@@ -1,10 +1,10 @@
 <td class="student-tools fixed-column<%= mobile_styles %>">
     <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-label="<?php esc_html_e('Close', 'openlab-gradebook') ?>">
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li class='student-submenu-stats'><a href='#'>Statistics</a></li>	
+            <li class='student-submenu-stats'><a href='#'><?php esc_html_e('Statistics', 'openlab-gradebook') ?></a></li>	
             <?php
             global $current_user;
             $x = $current_user->roles;
@@ -12,8 +12,8 @@
             $z = array_intersect($x, $y);
             if (count($z)) {
                 ?>						
-                <li class='student-submenu-edit'><a href='#'>Edit</a></li>
-                <li class='student-submenu-delete'><a href='#'><span class="text-danger">Delete</span></a></li>
+                <li class='student-submenu-edit'><a href='#'><?php esc_html_e('Edit', 'openlab-gradebook') ?></a></li>
+                <li class='student-submenu-delete'><a href='#'><span class="text-danger"><?php esc_html_e('Delete', 'openlab-gradebook') ?></span></a></li>
             <?php } ?>        									
         </ul>
     </div>

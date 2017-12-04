@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="wrap">
-                <h1>GradeBook:  <%= course.get('name')%></h1>
+                <h1><?php esc_html_e('GradeBook', 'openlab-gradebook') ?>: <%= course.get('name')%></h1>
             </div>
         </div>	
     </div>
@@ -16,14 +16,14 @@
             if (count($z)) {
                 ?>    	 
                 <div class="btn-group">    		
-                    <button type="button" id="add-student" class="btn btn-default">Add Student</button>
-                    <button type="button" id="download-csv" class="btn btn-default">Download CSV</button>
-                    <button type="button" id="add-assignment" class="btn btn-default">Add Assignment</button>
+                    <button type="button" id="add-student" class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook') ?></button>
+                    <button type="button" id="download-csv" class="btn btn-default"><?php esc_html_e('Download CSV', 'openlab-gradebook') ?></button>
+                    <button type="button" id="add-assignment" class="btn btn-default"><?php esc_html_e('Add Assignment', 'openlab-gradebook') ?></button>
                 </div>
             <?php } ?>
             <div class="btn-group">
                 <select name="filter_option" id="filter-assignments-select" class="form-control">
-                    <option value="-1">Show all</option>	
+                    <option value="-1"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
                     <% 
                     if( assign_categories){
                     for (var i in assign_categories){
@@ -34,7 +34,7 @@
                 </select>
             </div>
             <div class="btn-group">
-                <button type="button" id="filter-assignments" class="btn btn-default">Filter</button>  	    		   	
+                <button type="button" id="filter-assignments" class="btn btn-default"><?php esc_html_e('Filter', 'openlab-gradebook') ?></button>  	    		   	
             </div>
             <div class="btn-group weight-message">
                 <p><%= total_weight %></p>
@@ -46,10 +46,10 @@
                         <thead id="students-header-pinned" class="students-header">
                             <tr>
                                 <th class="gradebook-student-column-interactive student-tools adjust-widths" data-targetwidth="50"></th>
-                                <th class="gradebook-student-column-first_name"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
-                                <th class="gradebook-student-column-last_name"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
-                                <th class="gradebook-student-column-user_login"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
-                                <th class="gradebook-student-column-average adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='Current Average Grade'>Avg.</span></th>
+                                <th class="gradebook-student-column-first_name"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('First Name', 'openlab-gradebook') ?>'><?php esc_html_e('First Name', 'openlab-gradebook') ?></span></th>
+                                <th class="gradebook-student-column-last_name"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Last Name', 'openlab-gradebook') ?>'><?php esc_html_e('Last Name', 'openlab-gradebook') ?></span></th>
+                                <th class="gradebook-student-column-user_login"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Login', 'openlab-gradebook') ?>'><?php esc_html_e('Login', 'openlab-gradebook') ?></span></th>
+                                <th class="gradebook-student-column-average adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Current Average Grade', 'openlab-gradebook') ?>'><?php esc_html_e('Avg.', 'openlab-gradebook') ?></span></th>
                             </tr>
                         </thead>		    	
                         <tbody id="students-pinned" class="students"></tbody>
@@ -61,10 +61,10 @@
                             <thead id="students-header" class="students-header">
                                 <tr>
                                     <th class="gradebook-student-column-interactive student-tools adjust-widths visible-xs" data-targetwidth="50"></th>
-                                    <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='First Name'>First Name</span></th>
-                                    <th class="gradebook-student-column-last_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='Last Name'>Last Name</span></th>
-                                    <th class="gradebook-student-column-user_login visible-xs"><span data-toggle="tooltip" data-placement="top" title='Login'>Login</span></th>
-                                    <th class="gradebook-student-column-average visible-xs adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='Current Average Grade'>Avg.</span></th>
+                                    <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('First Name', 'openlab-gradebook') ?>'><?php esc_html_e('First Name', 'openlab-gradebook') ?></span></th>
+                                    <th class="gradebook-student-column-last_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Last Name', 'openlab-gradebook') ?>'><?php esc_html_e('Last Name', 'openlab-gradebook') ?></span></th>
+                                    <th class="gradebook-student-column-user_login visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Login', 'openlab-gradebook') ?>'><?php esc_html_e('Login', 'openlab-gradebook') ?></span></th>
+                                    <th class="gradebook-student-column-average visible-xs adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Current Average Grade', 'openlab-gradebook') ?>'><?php esc_html_e('Avg.', 'openlab-gradebook') ?></span></th>
                                 </tr>
                             </thead>		    	
                             <tbody id="students" class="students"></tbody>

@@ -1,10 +1,10 @@
 <td>
     <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-label="<?php esc_html_e('View Menu', 'openlab-gradebook') ?>">
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li class='course-submenu-view'><a href='#gradebook/<%=course.get('id')%>'>View</a></li>	
+            <li class='course-submenu-view'><a href='#gradebook/<%=course.get('id')%>'><?php esc_html_e('View', 'openlab-gradebook') ?></a></li>	
             <?php
             global $current_user;
             $x = $current_user->roles;
@@ -12,9 +12,9 @@
             $z = array_intersect($x, $y);
             if (count($z)) {
                 ?>	
-                <li class='course-submenu-edit'><a href='#'>Edit</a></li>
-                <li class='course-submenu-export2csv'><a href='#'>Download CSV</a></li>								
-                <li class='course-submenu-delete'><a href='#'><span class="text-danger">Delete</span></a></li>
+                <li class='course-submenu-edit'><a href='#'><?php esc_html_e('Edit', 'openlab-gradebook') ?></a></li>
+                <li class='course-submenu-export2csv'><a href='#'><?php esc_html_e('Download CSV', 'openlab-gradebook') ?></a></li>								
+                <li class='course-submenu-delete'><a href='#'><span class="text-danger"><?php esc_html_e('Delete', 'openlab-gradebook') ?></span></a></li>
             <?php } ?>
         </ul>
     </div>
