@@ -95,7 +95,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     ));
     if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'gradebook_page_oplb_gradebook_settings') {
         $oplb_gradebook_develop = false;
-        
+
         if (WP_DEBUG) {
             $oplb_gradebook_develop = true;
         }
@@ -483,7 +483,7 @@ add_filter('plupload_default_params', 'oplb_gradebook_plupload_default_params');
 
 //legacy update
 $option = get_option('oplb_gradebook_features_tracker');
- 
+
 //for legacy versions, add stoarge page
 if (!$option || floatval($option) < 0.3) {
 

@@ -41,8 +41,8 @@ class OPLB_COURSE_LIST {
                 break;
             case 'GET' :
                 $user_id = wp_get_current_user()->ID;
-                $sql = "( SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $user_id )";
-                $courses = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id IN $sql", ARRAY_A);
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id IN ( SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d )", $user_id);
+                $courses = $wpdb->get_results($query, ARRAY_A);
                 foreach ($courses as &$course) {
                     $course['id'] = intval($course['id']);
                     $course['year'] = intval($course['year']);

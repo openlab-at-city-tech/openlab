@@ -28,15 +28,22 @@ class oplb_gradebook_api {
             echo json_encode(array("status" => "Not Allowed."));
             die();
         }
-        ///$cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = $uid AND gbid = $gbid", ARRAY_A);	
-        $class_cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = $gbid", ARRAY_A);
+        
+        //@todo: find out what this does
+        //$query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
+        //$cells = $wpdb->get_results($query, ARRAY_A);	
+        
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
+        $class_cells = $wpdb->get_results($query, ARRAY_A);
         $cells = array_map(function($class_cell) use ($uid) {
             if ($class_cell['uid'] == $uid) {
                 return $class_cell;
             }
         }, $class_cells);
         $cells = array_filter($cells);
-        $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
+        
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+        $assignments = $wpdb->get_results($query, ARRAY_A);
 
         $cells_points = array();
         $assignments_names = array();
@@ -94,7 +101,8 @@ class oplb_gradebook_api {
             echo json_encode(array("status" => "Not Allowed."));
             die();
         }
-        $pie_chart_data = $wpdb->get_col("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = $amid");
+        $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $amid);
+        $pie_chart_data = $wpdb->get_col($query);
 
         function isA($n) {
             return ($n >= 90 ? true : false);
@@ -152,23 +160,32 @@ class oplb_gradebook_api {
             $uid = $current_user->ID;
         }
         if (!$role) {
-            $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND uid = $uid");
+            $query = $wpdb->prepare("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $uid);
+            $role = $wpdb->get_var($query);
         }
 
         switch ($role) {
             case 'instructor' :
-                $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+                $assignments = $wpdb->get_results($query, ARRAY_A);
 
                 foreach ($assignments as &$assignment) {
                     $assignment['id'] = intval($assignment['id']);
                     $assignment['gbid'] = intval($assignment['gbid']);
                     $assignment['assign_order'] = intval($assignment['assign_order']);
                 }
-                $cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = $gbid", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
+                $cells = $wpdb->get_results($query, ARRAY_A);
+                
                 foreach ($assignments as &$assignment) {
                     $assignment['gbid'] = intval($assignment['gbid']);
                 }
-                $students = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND role = 'student'", ARRAY_N);
+                
+                $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
+                $students = $wpdb->get_results($query, ARRAY_N);
+                
                 foreach ($students as &$student_id) {
                     $student = get_userdata($student_id[0]);
                     $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id[0], $gbid);
@@ -199,7 +216,10 @@ class oplb_gradebook_api {
                     "role" => "instructor"
                 );
             case 'student' :
-                $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_visibility = 'Students' AND gbid = $gbid", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_visibility = '%s' AND gbid = %d", 'Students', $gbid);
+                $assignments = $wpdb->get_results($query, ARRAY_A);
+                
                 $assignments2 = $assignments;
                 foreach ($assignments as &$assignment) {
                     $assignment['id'] = intval($assignment['id']);
@@ -211,7 +231,10 @@ class oplb_gradebook_api {
                     $assignmentIDsformated = $assignmentIDsformated . $assignment['id'] . ',';
                 }
                 $assignmentIDsformated = substr($assignmentIDsformated, 0, -1);
-                $cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid IN ( $assignmentIDsformated ) AND uid = {$current_user->ID}", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid IN ( %s ) AND uid = %d", $assignmentIDsformated, $current_user->ID);
+                $cells = $wpdb->get_results($query, ARRAY_A);
+                
                 foreach ($cells as &$cell) {
                     $cell['gbid'] = intval($cell['gbid']);
                 }
@@ -302,7 +325,8 @@ class oplb_gradebook_api {
         if (isset($params['id'])
                 && !isset($params['gbid'])) {
             $id = $params['id'];
-            $params['gbid'] = $wpdb->get_var("SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = $id");
+            $query = $wpdb->prepare("SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $id);
+            $params['gbid'] = $wpdb->get_var($query);
         }
 
         return $params;
@@ -336,7 +360,8 @@ class oplb_gradebook_api {
     public function oplb_gradebook_get_user_role() {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
-        $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $uid");
+        $query = $wpdb->prepare("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d", $uid);
+        $role = $wpdb->get_var($query);
         return $role;
     }
 
@@ -350,7 +375,8 @@ class oplb_gradebook_api {
     public function oplb_gradebook_get_user_role_by_gbid($gbid) {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
-        $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND uid = $uid");
+        $query = $wpdb->prepare("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $uid);
+        $role = $wpdb->get_var($query);
         return $role;
     }
 
@@ -410,8 +436,9 @@ class oplb_gradebook_api {
     public function oplb_gradebook_get_total_weight() {
         global $wpdb;
         $weights_by_assignment = array();
-
-        $weights = $wpdb->get_results("SELECT id, assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments", ARRAY_A);
+        
+        $query = $wpdb->prepare("SELECT id, assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments");
+        $weights = $wpdb->get_results($query, ARRAY_A);
 
         $total_weight = 0;
 
@@ -544,7 +571,8 @@ class oplb_gradebook_api {
      */
     public function oplb_gradebook_get_user($id, $gbid, $bool = false) {
         global $wpdb;
-        $user = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $id AND gbid = $gbid", ARRAY_A);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $id, $gbid);
+        $user = $wpdb->get_row($query, ARRAY_A);
 
         //added boolean check in case of legacy usage of this function
         if ($bool && !$user || empty($user)) {
@@ -594,7 +622,10 @@ class oplb_gradebook_api {
             }
             $user_id = $result;
             $wpdb->update($wpdb->users, array('user_login' => strtolower($first_name[0] . $last_name) . $user_id), array('ID' => $user_id));
-            $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
+            
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+            $assignments = $wpdb->get_results($query, ARRAY_A);
+            
             foreach ($assignments as $assignment) {
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'gbid' => $gbid, 'amid' => $assignment['id'],
@@ -603,7 +634,10 @@ class oplb_gradebook_api {
             };
             $student = get_user_by('id', $user_id);
             $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array('uid' => $student->ID, 'gbid' => $gbid, 'role' => 'student'));
-            $cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = $result", ARRAY_A);
+            
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d", $result);
+            $cells = $wpdb->get_results($query, ARRAY_A);
+            
             usort($cells, build_sorter('assign_order'));
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
@@ -655,8 +689,10 @@ class oplb_gradebook_api {
                     '%f',
                         )
                 );
-
-                $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+                $assignments = $wpdb->get_results($query, ARRAY_A);
+                
                 foreach ($assignments as $assignment) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'gbid' => $gbid,
@@ -666,9 +702,13 @@ class oplb_gradebook_api {
                             )
                     );
                 };
-                $role = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = {$user->ID} AND gbid = $gbid", ARRAY_A);
-
-                $cells = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = {$user->ID} AND gbid = $gbid", ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
+                $role = $wpdb->get_results($query, ARRAY_A);
+                
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
+                $cells = $wpdb->get_results($query, ARRAY_A);
+                
                 usort($cells, build_sorter('assign_order'));
                 foreach ($cells as &$cell) {
                     $cell['amid'] = intval($cell['amid']);

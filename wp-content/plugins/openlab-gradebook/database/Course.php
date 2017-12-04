@@ -90,8 +90,9 @@ class gradebook_course_API{
    					'name' => $params['name'], 'school' => $params['school'], 'semester' => $params['semester'], 
    					'year' => $params['year']),
 					array('id' => $gbid)
-				);   
-                                $courseDetails = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = {$gbid}", ARRAY_A);
+				);  
+                                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
+                                $courseDetails = $wpdb->get_row($query, ARRAY_A);
    				echo json_encode($courseDetails);
 				break;
 	  		case 'UPDATE' :
@@ -100,8 +101,9 @@ class gradebook_course_API{
 	  		case 'PATCH' :
 				echo json_encode(array("patch" => "patching"));				
 				break;
-	  		case 'GET' :	  		
-                                $courseDetails = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = {$gbid}" , ARRAY_A);	
+	  		case 'GET' :	 
+                                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);                            
+                                $courseDetails = $wpdb->get_row($query, ARRAY_A);	
    				echo json_encode($courseDetails);		
 				break;
 	  		case 'POST' :		
@@ -119,8 +121,9 @@ class gradebook_course_API{
 					array('%d', '%d', '%s') 
 				);	
 				global $oplb_gradebook_api;
-				$user = $oplb_gradebook_api -> oplb_gradebook_get_user($user->ID, $gbid);			
-				$course = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);
+				$user = $oplb_gradebook_api -> oplb_gradebook_get_user($user->ID, $gbid);	
+                                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
+				$course = $wpdb->get_row($query, ARRAY_A);
 				$course['id']=intval($course['id']);
 				$course['year']=intval($course['year']);				
 				echo json_encode(array('course'=>$course, 'user'=>$user));

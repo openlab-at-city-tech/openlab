@@ -32,16 +32,16 @@ class OPLB_DATABASE {
         //where the constant oplb_gradebook_db_version should be changed to a larger number.				
         global $wpdb;
         if (get_option('oplb_gradebook_db_version') < 1.6) {
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
+            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'");
             $wpdb->query($sql);
 
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1";
+            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1");
             $wpdb->query($sql);
 
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments MODIFY assign_weight decimal(7,2)";
+            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments MODIFY assign_weight decimal(7,2)");
             $wpdb->query($sql);
 
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00";
+            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00");
             $wpdb->query($sql);
 
             update_option("oplb_gradebook_db_version", 1.6);
@@ -51,8 +51,8 @@ class OPLB_DATABASE {
     public function database_init() {
         global $wpdb;
 
-        $db_name = "{$wpdb->prefix}oplb_gradebook_courses";
-        if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name . '"') != $db_name) {
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_courses");
+        if ($wpdb->get_var($query) != $db_name) {
             $sql = 'CREATE TABLE ' . $db_name . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			name MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -63,8 +63,9 @@ class OPLB_DATABASE {
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
         }
-        $db_name = "{$wpdb->prefix}oplb_gradebook_users";
-        if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name . '"') != $db_name) {
+
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_users");
+        if ($wpdb->get_var($query) != $db_name) {
             $sql = 'CREATE TABLE ' . $db_name . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			uid int(11) NOT NULL,
@@ -75,8 +76,6 @@ class OPLB_DATABASE {
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
         }
-        //$db_name2 should be changed to $table_name but we'll stick with this for now
-        $db_name2 = "{$wpdb->prefix}oplb_gradebook_assignments";
         //The column headings that should be in the oplb_assignments table are stored in $table_columns
         $table_columns = array('id', 'gbid', 'assign_order', 'assign_name', 'assign_category', 'assign_visibility', 'assign_date', 'assign_due');
         $table_columns_specs = array(
@@ -91,7 +90,9 @@ class OPLB_DATABASE {
             'assign_grade_type' => 'VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric"',
             'assign_weight' => 'decimal(7,2) NOT NULL DEFAULT 1.00',
         );
-        if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name2 . '"') != $db_name2) {
+
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_assignments");
+        if ($wpdb->get_var($query) != $db_name2) {
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			gbid int(11) NOT NULL,
@@ -109,8 +110,9 @@ class OPLB_DATABASE {
         } else {
             //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table		
             //anfixme: this needs to move to the database_alter
-            $oplb_assignments_columns = $wpdb->get_col("SELECT column_name FROM information_schema.columns
+            $query = $wpdb->prepare("SELECT column_name FROM information_schema.columns
 				WHERE table_name = $db_name2 ORDER BY ordinal_position");
+            $oplb_assignments_columns = $wpdb->get_col($query);
             $missing_columns = array_diff($table_columns, $oplb_assignments_columns);
             if (count($missing_columns)) {
                 //add missing columns
@@ -118,12 +120,13 @@ class OPLB_DATABASE {
                 foreach ($missing_columns as $missing_column) {
                     $sql = $sql . 'ADD ' . $missing_column . ' ' . $table_columns_specs[$missing_column] . ', ';
                 }
-                $sql = rtrim(trim($sql), ',');
+                $sql = $wpdp->prepare(rtrim(trim($sql), ','));
                 $wpdb->query($sql);
             }
         }
-        $db_name3 = "{$wpdb->prefix}oplb_gradebook_cells";
-        if ($wpdb->get_var('SHOW TABLES LIKE "' . $db_name3 . '"') != $db_name3) {
+
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_cells");
+        if ($wpdb->get_var($query) != $db_name3) {
             $sql = 'CREATE TABLE ' . $db_name3 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			uid int(11) NOT NULL,

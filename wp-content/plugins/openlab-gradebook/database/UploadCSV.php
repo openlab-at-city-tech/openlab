@@ -202,7 +202,8 @@ class gradebook_upload_csv_API {
             }
 
             //check for existing assignments first
-            $existing_assignment = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '{$assignment}'");
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
+            $existing_assignment = $wpdb->get_results($query);
 
             if ($existing_assignment && !empty($existing_assignment)) {
                 $to_update = array();
@@ -251,7 +252,8 @@ class gradebook_upload_csv_API {
             }
 
             //if the assignment doesn't exist, insert it
-            $assignOrders = $wpdb->get_col("SELECT assign_order FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid");
+            $query = $wpdb->prepare("SELECT assign_order FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+            $assignOrders = $wpdb->get_col($query);
 
             if (!$assignOrders) {
                 $assignOrders = array(0);
@@ -296,7 +298,9 @@ class gradebook_upload_csv_API {
             $assignments_stored[$thisdex]['assign_order'] = $assignOrder;
             $assignments_stored[$thisdex]['assign_weight'] = $assign_weight;
 
-            $studentIDs = $wpdb->get_results("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = {$gbid} AND role = 'student'", ARRAY_N);
+            $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
+            $studentIDs = $wpdb->get_results($query, ARRAY_N);
+            
             foreach ($studentIDs as $value) {
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'amid' => $assignID,
@@ -366,7 +370,8 @@ class gradebook_upload_csv_API {
 
             $search_name = "{$student['firstname']} {$student['lastname']}";
 
-            $this_user = $wpdb->get_results("SELECT DISTINCT $wpdb->users.* FROM $wpdb->users INNER JOIN $wpdb->usermeta um1 ON um1.user_id = $wpdb->users.ID JOIN $wpdb->usermeta um2 ON um2.user_id = $wpdb->users.ID WHERE um1.meta_key = 'first_name' AND um1.meta_value LIKE '{$student['firstname']}' AND um2.meta_key = 'last_name' AND um2.meta_value LIKE '{$student['lastname']}';");
+            $query = $wpdb->prepare("SELECT DISTINCT $wpdb->users.* FROM $wpdb->users INNER JOIN $wpdb->usermeta um1 ON um1.user_id = $wpdb->users.ID JOIN $wpdb->usermeta um2 ON um2.user_id = $wpdb->users.ID WHERE um1.meta_key = '%s' AND um1.meta_value LIKE '%s' AND um2.meta_key = '%s' AND um2.meta_value LIKE '%s';", 'first_name', $student['firstname'], 'last_name', $student['lastname']);
+            $this_user = $wpdb->get_results($query);
 
             if ($this_user
                     && !empty($this_user)
@@ -416,7 +421,8 @@ class gradebook_upload_csv_API {
                     )
             );
             //we need to get a list of all assignments, in case there are legacy assignments not on this spreadsheet
-            $current_assignments = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}oplb_gradebook_assignments", ARRAY_A);
+            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_assignments");
+            $current_assignments = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($assignments as $assigndex => $assignment) {
 
@@ -449,7 +455,8 @@ class gradebook_upload_csv_API {
 
                 foreach ($current_assignments as $remaining_assignment) {
 
-                    $this_assignment_get = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = {$remaining_assignment['id']}", ARRAY_A);
+                    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $remaining_assignment['id']);
+                    $this_assignment_get = $wpdb->get_results($query, ARRAY_A);
 
                     if (!$this_assignment_get || empty($this_assignment_get)) {
                         continue;
@@ -658,23 +665,21 @@ class gradebook_upload_csv_API {
 
         return $letter_grades;
     }
-    
-    public function numeric_to_letter_grade_conversion($number){
-        
+
+    public function numeric_to_letter_grade_conversion($number) {
+
         $letter_grades = $this->getLetterGrades();
-        
-        foreach($letter_grades as $letter_grade){
-            
-            if($number < $letter_grade['range_high'] && $number >= $letter_grade['range_low']){
-                
+
+        foreach ($letter_grades as $letter_grade) {
+
+            if ($number < $letter_grade['range_high'] && $number >= $letter_grade['range_low']) {
+
                 $letter = $letter_grade['label'];
                 break;
             }
-            
         }
-        
+
         return $letter;
-        
     }
-    
+
 }
