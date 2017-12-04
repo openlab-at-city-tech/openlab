@@ -259,46 +259,6 @@ function oplb_get_dep_locations() {
     return $deps;
 }
 
-/**
- * Add hook for gettext specific to OpenLab GradeBook page
- * @param type $screen
- */
-function oplb_gradebook_current_screen_callback($screen) {
-
-    if (is_object($screen) && isset($screen->base)) {
-
-        if ($screen->base === "toplevel_page_oplb_gradebook" || $screen->base === 'gradebook_page_oplb_gradebook_settings') {
-            add_filter('gettext', 'oplb_gradebook_gettext', 99, 3);
-        }
-    }
-}
-
-add_action('current_screen', 'oplb_gradebook_current_screen_callback');
-
-/**
- * Add translation filtering to modify strings related to Upload modal
- * @param type $translated_text
- * @param type $untranslated_text
- * @param type $domain
- * @return string
- */
-function oplb_gradebook_gettext($translated_text, $untranslated_text, $domain) {
-
-    switch ($untranslated_text) {
-        case 'Drop files anywhere to upload':
-            $translated_text = 'Drop CSV anywhere to upload';
-            break;
-        case 'Select Files':
-            $translated_text = 'Select CSV';
-            break;
-        case 'No items found.':
-            $translated_text = 'Upload CSV';
-            break;
-    }
-
-    return $translated_text;
-}
-
 //activation and deactivation hooks
 register_activation_hook(__FILE__, 'activate_oplb_gradebook');
 register_deactivation_hook(__FILE__, 'deactivate_oplb_gradebook');
