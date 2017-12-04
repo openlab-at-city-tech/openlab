@@ -130,7 +130,7 @@ function init_oplb_gradebook() {
 
         //get template name
         $template_explode = explode('/', $template);
-        $template_filename = str_replace('.php', '', array_pop($template_explode));
+        $template_filename = esc_html(str_replace('.php', '', array_pop($template_explode)));
         echo "<script id='{$template_filename}' type='text/template'>";
         include($template);
         echo "</script>";
