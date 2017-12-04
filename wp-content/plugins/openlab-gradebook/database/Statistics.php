@@ -12,8 +12,8 @@ class OPLB_STATISTICS{
                 $gbid = $params['gbid'];
 
                 //user check - only instructors allowed in
-                if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) != 'instructor'
-                        && $oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) != 'student') {
+                if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor'
+                        && $oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'student') {
                     echo json_encode(array("status" => "Not Allowed."));
                     die();
                 }
