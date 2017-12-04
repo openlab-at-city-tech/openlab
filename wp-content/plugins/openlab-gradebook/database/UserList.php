@@ -54,12 +54,6 @@ class OPLB_USER_LIST {
 
                 $students_out = array("error" => "no_students");
 
-                //if budypress is not avaiable, return nothing
-                if (!OPLB_BP_AVAILABLE) {
-                    echo json_encode(array("error" => "no_bp"));
-                    die();
-                }
-
                 //first we need to find the associated group for this site
                 $blog_id = get_current_blog_id();
 
@@ -88,12 +82,9 @@ class OPLB_USER_LIST {
                         global $members_template;
                         $member = $members_template->member;
 
-                        //if buddypress is available, add xprofile fields
-                        if (OPLB_BP_AVAILABLE) {
-
-                            $member->xprofile_first_name = xprofile_get_field_data('First Name', $member->ID);
-                            $member->xprofile_last_name = xprofile_get_field_data('Last Name', $member->ID);
-                        }
+                        $user_meta = $oplb_gradebook_api->oplb_gradebook_get_user_meta($member);
+                        $member->first_name = $user_meta['first_name'];
+                        $member->last_name = $user_meta['last_name'];
 
                         array_push($students_out, $member);
 

@@ -151,8 +151,8 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
 
                                 var name = user.get('user_login');
 
-                                if (user.get('xprofile_first_name') !== '' && user.get('xprofile_last_name') !== '') {
-                                    name = user.get('xprofile_first_name') + ' ' + user.get('xprofile_last_name');
+                                if (user.get('first_name') !== '' && user.get('last_name') !== '') {
+                                    name = user.get('first_name') + ' ' + user.get('last_name');
                                 }
 
                                 var optionOut = '<option value="' + user.get('user_login') + '">' + name + '</option>';

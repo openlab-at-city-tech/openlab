@@ -80,6 +80,10 @@ add_action('admin_menu', 'register_oplb_gradebook_menu_page');
  */
 function enqueue_oplb_gradebook_scripts($hook) {
     $app_base = plugins_url('js', __FILE__);
+    
+    $user = get_user_by('login', 'teststudent');
+    $first_name = get_user_meta($user->ID, 'nickname', true);
+    echo '<pre>'.print_r($user->user_login, true).'</pre>';
 
     //for media functions (to upload CSV files)
     wp_enqueue_media();
