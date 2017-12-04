@@ -19,7 +19,8 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                             action: 'oplb_statistics',
                             chart_type: 'line_chart',
                             gbid: this.model.get('gbid'),
-                            uid: this.model.get('id')
+                            uid: this.model.get('id'),
+                            nonce: oplbGradebook.nonce
                         },
                         dataType: 'json',
                         success: function (data) {

@@ -7,10 +7,25 @@ class OPLB_USER {
     }
 
     public function oplb_user() {
-        global $wpdb;
+        global $wpdb, $oplb_gradebook_api;
         $wpdb->show_errors();
-        $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
-        switch ($method) {
+
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+        $gbid = $params['gbid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+
+        switch ($params['method']) {
             case 'DELETE' :
                 parse_str($_SERVER['QUERY_STRING'], $params);
                 $x = $params['id'];
@@ -21,8 +36,6 @@ class OPLB_USER {
 
                 break;
             case 'PUT' :
-                global $oplb_gradebook_api;
-                $params = json_decode(file_get_contents('php://input'), true);
                 $ID = $params['id'];
                 $first_name = $params['first_name'];
                 $last_name = $params['last_name'];
@@ -37,15 +50,13 @@ class OPLB_USER {
                 echo json_encode(array("patch" => "patching"));
                 break;
             case 'GET' :
-                global $oplb_gradebook_api;
                 //This is not called anywhere... do we need it?
                 $id = wp_get_current_user()->ID;
-                $gbid = $_GET['gbid'];
+                $gbid = $params['gbid'];
                 $results = $oplb_gradebook_api->oplb_gradebook_get_current_user($id, $gbid);
                 echo json_encode($results);
                 break;
             case 'POST' :
-                $params = json_decode(file_get_contents('php://input'), true);
                 $gbid = $params['gbid'];
 
                 if ($params['student_range_option'] === 'studentAll') {

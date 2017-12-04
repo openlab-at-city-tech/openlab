@@ -7,7 +7,7 @@
         <div class="modal-body">
             <form id="edit-course-form" class="form-horizontal"> 
                 <div class="form-group">     
-                    <input type="hidden" name="id" value="<%= course ? course.get('id') : '' %>"/>        
+                    <input type="hidden" name="gbid" value="<%= course ? course.get('id') : '' %>"/>        
                     <label for="course_name" class="col-sm-3 control-label">Gradebook Name:</label>
                     <div class="col-sm-7">
                         <input type="text" id="course_name" class="form-control" name="name" value="<%= course ? course.get('name') : '' %>"/>

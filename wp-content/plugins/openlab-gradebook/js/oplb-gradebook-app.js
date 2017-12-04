@@ -41,6 +41,17 @@ define('underscore', [], function () {
 window.oplbGlobals = window.oplbGlobals || {};
 window.oplbGlobals.total_weight = 0;
 
+var oldBackboneSync = Backbone.sync;
+
+// Override Backbone.Sync
+Backbone.sync = function (method, model, options) {
+    
+    //globally add nonce
+    options.url = model.url() + '&nonce=' + oplbGradebook.nonce;
+    
+    return oldBackboneSync.apply(this, [method, model, options]);
+};
+
 require(['jquery', 'router/GradeBookRouter', 'bootstrap'],
         function ($, GradeBookRouter, bootstrap) {
             $.fn.serializeObject = function () {
@@ -59,5 +70,6 @@ require(['jquery', 'router/GradeBookRouter', 'bootstrap'],
                 return o;
             }
             var App = new GradeBookRouter();
+
         });
 

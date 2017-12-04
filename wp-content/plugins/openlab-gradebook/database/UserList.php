@@ -12,14 +12,31 @@ class OPLB_USER_LIST {
      * @global type $members_template
      */
     public function oplb_user_list($method = false) {
-        global $wpdb;
+        global $wpdb, $oplb_gradebook_api;
         $wpdb->show_errors();
+        $params = array();
 
-        if (!$method) {
-            $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
+        //if a method is passed, this means we are accessing the function directly
+        //and don't need to perform ajax checks
+        if ($method) {
+            $params['method'] = $method;
+        } else {
+            $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+
+            //user check - only instructors allowed in
+            if ($oplb_gradebook_api->oplb_gradebook_get_user_role() !== 'instructor') {
+                echo json_encode(array("status" => "Not Allowed."));
+                die();
+            }
+
+            //nonce check
+            if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+                echo json_encode(array("status" => "Authentication error."));
+                die();
+            }
         }
 
-        switch ($method) {
+        switch ($params['method']) {
             case 'DELETE' :
                 echo json_encode(array("delete" => "deleting"));
                 die();

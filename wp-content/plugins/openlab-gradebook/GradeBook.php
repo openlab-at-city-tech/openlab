@@ -90,6 +90,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
         'ajaxURL' => admin_url('admin-ajax.php'),
         'depLocations' => oplb_get_dep_locations(),
+        'nonce' => wp_create_nonce('oplb_gradebook'),
         'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG)
     ));
     if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'gradebook_page_oplb_gradebook_settings') {

@@ -49,19 +49,30 @@ class gradebook_cell_API{
 
 	public function cell(){
 		global $wpdb, $oplb_gradebook_api;
+                
+                $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+                $gbid = $params['gbid'];
+                
+                //user check - only instructors allowed in
+                if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) != 'instructor') {
+                    echo json_encode(array("status" => "Not Allowed."));
+                    die();
+                }
+
+                //nonce check
+                if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+                    echo json_encode(array("status" => "Authentication error."));
+                    die();
+                }
+                
    		$wpdb->show_errors();  		   		
-		$method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
-		switch ($method){
+                
+		switch ($params['method']){
 			case 'DELETE' :  
 	  			echo json_encode(array('delete'=>'deleting'));
 	  			break;
 	  		case 'PUT' :
-	  			$params = json_decode(file_get_contents('php://input'),true);
-	  			$gbid = $params['gbid'];  			
-				if ( $oplb_gradebook_api -> oplb_gradebook_get_user_role($gbid)!='instructor'){	
-					echo json_encode(array("status" => "Not Allowed."));
-					die();
-				} 		  					  			
+	  			
    				$wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array( 'assign_order'=>$params['assign_order'], 'assign_points_earned' => $params['assign_points_earned']),
 					array( 'uid' => $params['uid'], 'amid' => $params['amid'] )
    				);   

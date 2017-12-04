@@ -57,6 +57,7 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                             });
                         },
                         settings: function () {
+                            console.log('settings init');
                             var self = this;
                             this.clearViews();
                             $('#wpbody-content').prepend($('#ajax-template').html());

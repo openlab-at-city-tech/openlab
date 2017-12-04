@@ -10,8 +10,9 @@ define(['jquery', 'backbone', 'underscore'],
                     'submit #an-gradebook-settings-form': 'saveAdministrators'
                 },
                 render: function () {
+                    console.log('rendering settings');
                     var self = this;
-                    var template = _.template($('#an-gradebook-settings-template').html());
+                    var template = _.template($('#settings-template').html());
                     var compiled = template({gradebook_administrators: this.gradebook_administrators});
                     $('#wpbody-content').prepend(this.$el.html(compiled));
                     this.setInitialAdministratorsValue();
@@ -32,6 +33,7 @@ define(['jquery', 'backbone', 'underscore'],
                     $('#an-gradebook-settings-form').trigger('submit');
                 },
                 saveAdministrators: function (ev) {
+                    console.log('saving settings');
                     var self = this;
                     ev.preventDefault();
                     var result = $('#an-gradebook-settings :input').serializeObject();

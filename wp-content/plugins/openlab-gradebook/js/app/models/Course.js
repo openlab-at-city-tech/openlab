@@ -27,13 +27,13 @@ define(['backbone'], function (Backbone) {
         },
         url: function () {
             if (this.get('id')) {
-                return ajaxurl + '?action=course&id=' + this.get('id');
+                return ajaxurl + '?action=course&gbid=' + this.get('id');
             } else {
                 return ajaxurl + '?action=course';
             }
         },
         export2csv: function () {
-            window.location.assign(ajaxurl + '?action=get_csv&id=' + this.get('id'));
+            window.location.assign(ajaxurl + '?action=get_csv' + '&nonce=' + oplbGradebook.nonce + '&gbid=' + this.get('id'));
         }
     });
     return Course;

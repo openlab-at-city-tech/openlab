@@ -245,6 +245,101 @@ class oplb_gradebook_api {
         }
     }
 
+    public function oplb_gradebook_get_params($params) {
+        global $wpdb;
+
+        $args = array(
+            'id' => FILTER_VALIDATE_INT,
+            'gbid' => FILTER_VALIDATE_INT,
+            'nonce' => FILTER_SANITIZE_STRING,
+            'name' => FILTER_SANITIZE_STRING,
+            'school' => FILTER_SANITIZE_STRING,
+            'semester' => FILTER_SANITIZE_STRING,
+            'year' => FILTER_VALIDATE_INT,
+            'assign_category' => FILTER_SANITIZE_STRING,
+            'assign_date' => FILTER_SANITIZE_STRING,
+            'assign_due' => FILTER_SANITIZE_STRING,
+            'assign_grade_type' => FILTER_SANITIZE_STRING,
+            'assign_name' => FILTER_SANITIZE_STRING,
+            'assign_visibility' => FILTER_SANITIZE_STRING,
+            'assign_weight' => FILTER_VALIDATE_FLOAT,
+            'gbid' => FILTER_VALIDATE_INT,
+            'publish' => FILTER_VALIDATE_BOOLEAN,
+            'selected' => FILTER_VALIDATE_BOOLEAN,
+            'sorted' => FILTER_SANITIZE_STRING,
+            'visibility' => FILTER_VALIDATE_BOOLEAN,
+            'amid' => FILTER_VALIDATE_INT,
+            'assign_order' => FILTER_VALIDATE_INT,
+            'assign_points_earned' => FILTER_VALIDATE_FLOAT,
+            'current_grade_average' => FILTER_SANITIZE_STRING,
+            'display' => FILTER_VALIDATE_BOOLEAN,
+            'hover' => FILTER_VALIDATE_BOOLEAN,
+            'uid' => FILTER_VALIDATE_INT,
+            'chart_type' => FILTER_SANITIZE_STRING,
+            'amid' => FILTER_VALIDATE_INT,
+            'student_range_option' => FILTER_SANITIZE_STRING,
+            'first_name' => FILTER_SANITIZE_STRING,
+            'last_name' => FILTER_SANITIZE_STRING,
+            'id-exists' => FILTER_SANITIZE_STRING,
+        );
+
+        $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
+
+        if ($method === 'POST' || $method === 'PUT') {
+            //test for payload
+            $incoming = json_decode(file_get_contents('php://input'), true);
+        }
+
+        $params = filter_input_array(INPUT_GET, $args);
+
+        if ($incoming && !empty($incoming)) {
+            $incoming_params = filter_var_array($incoming, $args);
+            $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
+        }
+
+        $params['method'] = $method;
+
+        if (isset($params['id'])
+                && !isset($params['gbid'])) {
+            $id = $params['id'];
+            $params['gbid'] = $wpdb->get_var("SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = $id");
+        }
+
+        return $params;
+    }
+
+    private function oplb_gradebook_merge_arrays_on_null($a, $b) {
+
+        $c = array();
+        foreach ($a as $key => $val) {
+
+            if ($key == NULL && $b[$key] == NULL) {
+                $c[$key] = $val;
+            } else if ($key != NULL && $b[$key] == NULL) {
+                $c[$key] = $val;
+            } else if ($key != NULL && $b[$key] != NULL) {
+                $c[$key] = $b[$key];
+            } else {
+                $c[$key] = $b[$key];
+            }
+        }
+        
+        return $c;
+    }
+
+    /**
+     * Easily retrieve current user role
+     * @global type $wpdb
+     * @global type $current_user
+     * @return type
+     */
+    public function oplb_gradebook_get_user_role() {
+        global $wpdb, $current_user;
+        $uid = $current_user->ID;
+        $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = $uid");
+        return $role;
+    }
+
     /**
      * Easily retrieve current user role
      * @global type $wpdb
@@ -252,7 +347,7 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @return type
      */
-    public function oplb_gradebook_get_user_role($gbid) {
+    public function oplb_gradebook_get_user_role_by_gbid($gbid) {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
         $role = $wpdb->get_var("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = $gbid AND uid = $uid");

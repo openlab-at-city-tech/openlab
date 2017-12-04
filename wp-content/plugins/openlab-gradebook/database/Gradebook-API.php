@@ -3,16 +3,35 @@
 class OPLB_GradeBookAPI {
 
     public function __construct() {
-        add_action('wp_ajax_oplb_gradebook_get_settings', array($this, 'oplb_gradebook_get_settings'));
-        add_action('wp_ajax_oplb_gradebook_set_settings', array($this, 'oplb_gradebook_set_settings'));
+        
+        //on ice: currently the settings page is not operational, partly because it is not renedered throug the backbone app
+        //add_action('wp_ajax_oplb_gradebook_get_settings', array($this, 'oplb_gradebook_get_settings'));
+        //add_action('wp_ajax_oplb_gradebook_set_settings', array($this, 'oplb_gradebook_set_settings'));
+        
         add_action('wp_ajax_get_csv', array($this, 'get_csv'));
-        add_action('wp_ajax_get_pie_chart', array($this, 'get_pie_chart'));
-        add_action('wp_ajax_get_line_chart', array($this, 'get_line_chart'));
-        add_action('wp_ajax_get_gradebook_config', array($this, 'get_gradebook_config'));
-        add_action('wp_ajax_get_student', array($this, 'get_student'));
+        
+        //on ice: possible candidate for deprecation, does not appear to do anything    
+        //add_action('wp_ajax_get_gradebook_config', array($this, 'get_gradebook_config'));
     }
 
     public function oplb_gradebook_get_settings() {
+        global $oplb_gradebook_api;
+
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+        $gbid = $params['gbid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+
         wp_cache_delete('alloptions', 'options');
         $settings = get_option('oplb_gradebook_settings');
         echo json_encode(array('gradebook_administrators' => $settings));
@@ -20,7 +39,23 @@ class OPLB_GradeBookAPI {
     }
 
     public function oplb_gradebook_set_settings() {
-        $params = json_decode(file_get_contents('php://input'), true);
+        global $oplb_gradebook_api;
+        
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+        $gbid = $params['gbid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+        
         unset($params['action']);
         $params['administrator'] = true;
         wp_cache_delete('alloptions', 'options');
@@ -32,15 +67,25 @@ class OPLB_GradeBookAPI {
 
     public function get_csv() {
         global $wpdb, $oplb_gradebook_api, $oplb_upload_csv;
+        
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+        $gbid = $params['gbid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) != 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
 
         //grab the letters in case we need them
         $letter_grades = $oplb_upload_csv->getLetterGrades();
 
-        $gbid = $_GET['id'];
-        if (!is_user_logged_in() || $oplb_gradebook_api->oplb_gradebook_get_user_role($gbid) != 'instructor') {
-            echo json_encode(array("status" => "Not Allowed."));
-            die();
-        }
         $course = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = $gbid", ARRAY_A);
         $assignments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = $gbid", ARRAY_A);
 
@@ -152,11 +197,7 @@ class OPLB_GradeBookAPI {
 
     public function get_pie_chart() {
         global $wpdb;
-        //need to check that user has access to this assignment.
-        if (!is_user_logged_in()) {
-            echo json_encode(array("status" => "Not Allowed."));
-            die();
-        }
+        
         $pie_chart_data = $wpdb->get_col("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = {$_GET['amid']}");
 
         function isA($n) {
