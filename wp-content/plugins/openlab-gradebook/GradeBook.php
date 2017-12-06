@@ -40,7 +40,6 @@ foreach ($database_file_list as $database_file) {
 include(dirname(__FILE__) . '/components/sidebar-widget.php');
 
 //legacy globals
-$oplb_database = new OPLB_DATABASE();
 $oplb_gradebook_api = new oplb_gradebook_api();
 $oplb_gradebook_course_api = new gradebook_course_API();
 $oplb_gradebook_assignment_api = new gradebook_assignment_API();
@@ -268,6 +267,11 @@ register_deactivation_hook(__FILE__, 'deactivate_oplb_gradebook');
  */
 function activate_oplb_gradebook() {
     global $wpdb;
+    
+    //initialize databases
+    $oplb_database = new OPLB_DATABASE();
+    $oplb_database->database_init();
+    $oplb_database->database_alter();
     
     //create the instructor user so the instructor has permissions to create a Gradebook
     $user = wp_get_current_user();

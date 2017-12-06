@@ -5,8 +5,6 @@ class OPLB_DATABASE {
     const oplb_gradebook_db_version = 1.6;
 
     public function __construct() {
-        register_activation_hook(__FILE__, array($this, 'database_init'), 1);
-        register_activation_hook(__FILE__, array($this, 'database_alter'), 1);
         add_action('plugins_loaded', array($this, 'oplb_gradebook_upgrade_db'));
     }
 
