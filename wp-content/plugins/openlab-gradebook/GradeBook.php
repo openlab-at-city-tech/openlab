@@ -80,10 +80,6 @@ add_action('admin_menu', 'register_oplb_gradebook_menu_page');
  */
 function enqueue_oplb_gradebook_scripts($hook) {
     $app_base = plugins_url('js', __FILE__);
-    
-    $user = get_user_by('login', 'teststudent');
-    $first_name = get_user_meta($user->ID, 'nickname', true);
-    echo '<pre>'.print_r($user->user_login, true).'</pre>';
 
     //for media functions (to upload CSV files)
     wp_enqueue_media();
@@ -271,6 +267,28 @@ register_deactivation_hook(__FILE__, 'deactivate_oplb_gradebook');
  * Openlab Gradebook activation actions
  */
 function activate_oplb_gradebook() {
+    global $wpdb;
+    
+    //create the instructor user so the instructor has permissions to create a Gradebook
+    $user = wp_get_current_user();
+
+    $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_courses WHERE gbid = %d AND role = %s AND uid = %d", 0, 'instructor', $user->ID);
+    $init_instructor = $wpdb->get_results($query);
+
+    if (!$init_instructor || empty($init_instructor)) {
+        $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
+            'uid' => $user->ID,
+            'gbid' => 0,
+            'role' => 'instructor',
+            'current_grade_average' => 0.00,
+                ), array(
+            '%d',
+            '%d',
+            '%s',
+            '%f',
+                )
+        );
+    }
 
     //add custom page for csv storage - make the slug something very unlikely to be used
     oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');
@@ -282,7 +300,11 @@ function activate_oplb_gradebook() {
  * @todo: remove storage page
  */
 function deactivate_oplb_gradebook() {
-    
+
+    delete_option('oplb_gradebook_features_tracker');
+    delete_option('oplb_gradebook_db_version');
+    delete_option('oplb_gradebook_settings');
+    delete_option('oplb_gradebook_db_version');
 }
 
 /**

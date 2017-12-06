@@ -5,12 +5,13 @@ class OPLB_DATABASE {
     const oplb_gradebook_db_version = 1.6;
 
     public function __construct() {
-        register_activation_hook(__FILE__, array($this, 'database_init'));
-        register_activation_hook(__FILE__, array($this, 'database_alter'));
+        register_activation_hook(__FILE__, array($this, 'database_init'), 1);
+        register_activation_hook(__FILE__, array($this, 'database_alter'), 1);
         add_action('plugins_loaded', array($this, 'oplb_gradebook_upgrade_db'));
     }
 
     public function oplb_gradebook_upgrade_db() {
+        global $wpdb;
 
         if (!get_option('oplb_gradebook_db_version')) {
             $this->database_init();
@@ -19,6 +20,7 @@ class OPLB_DATABASE {
         if (self::oplb_gradebook_db_version > get_option('oplb_gradebook_db_version')) {
             $this->database_alter();
         }
+        
     }
 
     public function database_alter() {
@@ -51,7 +53,9 @@ class OPLB_DATABASE {
     public function database_init() {
         global $wpdb;
 
-        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_courses");
+        $db_name = "{$wpdb->prefix}oplb_gradebook_courses";
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', $db_name);
+
         if ($wpdb->get_var($query) != $db_name) {
             $sql = 'CREATE TABLE ' . $db_name . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
@@ -64,7 +68,9 @@ class OPLB_DATABASE {
             dbDelta($sql);
         }
 
-        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_users");
+        $db_name = "{$wpdb->prefix}oplb_gradebook_users";
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', $db_name);
+
         if ($wpdb->get_var($query) != $db_name) {
             $sql = 'CREATE TABLE ' . $db_name . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
@@ -91,7 +97,9 @@ class OPLB_DATABASE {
             'assign_weight' => 'decimal(7,2) NOT NULL DEFAULT 1.00',
         );
 
-        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_assignments");
+        $db_name2 = "{$wpdb->prefix}oplb_gradebook_assignments";
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', $db_name2);
+
         if ($wpdb->get_var($query) != $db_name2) {
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
@@ -111,7 +119,7 @@ class OPLB_DATABASE {
             //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table		
             //anfixme: this needs to move to the database_alter
             $query = $wpdb->prepare("SELECT column_name FROM information_schema.columns
-				WHERE table_name = $db_name2 ORDER BY ordinal_position");
+				WHERE table_name = %s ORDER BY ordinal_position", $db_name2);
             $oplb_assignments_columns = $wpdb->get_col($query);
             $missing_columns = array_diff($table_columns, $oplb_assignments_columns);
             if (count($missing_columns)) {
@@ -120,12 +128,14 @@ class OPLB_DATABASE {
                 foreach ($missing_columns as $missing_column) {
                     $sql = $sql . 'ADD ' . $missing_column . ' ' . $table_columns_specs[$missing_column] . ', ';
                 }
-                $sql = $wpdp->prepare(rtrim(trim($sql), ','));
+                $sql = $wpdb->prepare(rtrim(trim($sql), ','));
                 $wpdb->query($sql);
             }
         }
 
-        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', "{$wpdb->prefix}oplb_gradebook_cells");
+        $db_name3 = "{$wpdb->prefix}oplb_gradebook_cells";
+        $query = $wpdb->prepare('SHOW TABLES LIKE "%s"', $db_name3);
+
         if ($wpdb->get_var($query) != $db_name3) {
             $sql = 'CREATE TABLE ' . $db_name3 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,

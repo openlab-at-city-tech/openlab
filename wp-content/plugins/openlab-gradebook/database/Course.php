@@ -116,11 +116,39 @@ class gradebook_course_API{
 					array('%s', '%s', '%s', '%d') 
 				);
 				$gbid = $wpdb -> insert_id;
-                                $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", 
-		    		array('uid' => $user->ID,'gbid' => $gbid, 'role' => 'instructor'), 
-					array('%d', '%d', '%s') 
-				);	
-				global $oplb_gradebook_api;
+                                
+                                //before creating an instructor, see if an initial instructor was created, and use that instructor first
+                                $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", 0, 'instructor');
+                                $init_instructor = $wpdb->get_results($query);
+                                
+                                if ($init_instructor && !empty($init_instructor)) {
+                                    
+                                    $target_id = $init_instructor[0]->id;
+                                    
+                                    $wpdb->update("{$wpdb->prefix}oplb_gradebook_users", array(
+                                        'gbid' => $gbid
+                                            ), array(
+                                        'id' => $target_id,
+                                            ), array(
+                                        '%d',
+                                            ), array(
+                                        '%d',
+                                            )
+                                    );
+                                    
+                                } else {
+
+                                    $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
+                                        'uid' => $user->ID,
+                                        'gbid' => $gbid,
+                                        'role' => 'instructor'), array(
+                                        '%d',
+                                        '%d',
+                                        '%s')
+                                    );
+                                }
+
+                                global $oplb_gradebook_api;
 				$user = $oplb_gradebook_api -> oplb_gradebook_get_user($user->ID, $gbid);	
                                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
 				$course = $wpdb->get_row($query, ARRAY_A);
