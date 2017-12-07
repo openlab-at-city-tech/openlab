@@ -1,17 +1,16 @@
-define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/GradeBookView', 'views/SettingsPage',
-    'models/CourseList', 'models/Course', 'models/CourseGradebook', 'models/Settings'
+define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/GradeBookView',
+    'models/CourseList', 'models/Course', 'models/CourseGradebook',
 ],
         /**
          * @exports GradeBookRouter
          */
 
-                function ($, _, Backbone, CourseListView, GradeBookView, SettingsPage, CourseList, Course, CourseGradebook, Settings) {
+                function ($, _, Backbone, CourseListView, GradeBookView, CourseList, Course, CourseGradebook) {
                     Backbone.emulateHTTP = true;
                     var GradeBookRouter = Backbone.Router.extend({
                         initialize: function () {
                             this._views = [];
                             this.courseList = new CourseList();
-                            this.gradebook_administrators = new Settings();
                             Backbone.history.start();
 
                             return this;
@@ -19,7 +18,6 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                         routes: {
                             "courses": "courses",
                             "gradebook/:id": "show-gradebook",
-                            "settings": "settings",
                             "course/:cid/gradebook/add-student": "edit-student",
                             "course/:cid/gradebook/add-student/:uid": "edit-student"
                         },
@@ -54,17 +52,6 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                                 $('.ajax-loader-container').remove();
                                 var gradeBookView = new GradeBookView({gradebook: self.gradebook, course: self.course});
                                 self._views.push(gradeBookView);
-                            });
-                        },
-                        settings: function () {
-                            console.log('settings init');
-                            var self = this;
-                            this.clearViews();
-                            $('#wpbody-content').prepend($('#ajax-template').html());
-                            this.gradebook_administrators.fetchSettings().then(function (val) {
-                                $('.ajax-loader-container').remove();
-                                var settingsPage = new SettingsPage({gradebook_administrators: self.gradebook_administrators});
-                                self._views.push(settingsPage);
                             });
                         },
                         "edit-student": function (cid, uid) {
