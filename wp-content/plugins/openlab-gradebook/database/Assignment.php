@@ -124,6 +124,24 @@ class gradebook_assignment_API {
                     $assignOrders = array(0);
                 }
                 $assignOrder = max($assignOrders) + 1;
+                
+                //handle values that cannot be NULL
+                if(!$params['assign_weight']){
+                    $params['assign_weight'] = 0;
+                }
+                
+                if(!$params['assign_date']){
+                    $params['assign_date'] = date('Y-m-d');
+                }
+                
+                if(!$params['assign_due']){
+                    $params['assign_due'] = date('0000-00-00');
+                }
+                
+                if(!$params['assign_category']){
+                    $params['assign_category'] = 'uncategorized';
+                }
+                
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
                     'assign_name' => $params['assign_name'],
                     'assign_date' => $params['assign_date'],
@@ -136,7 +154,7 @@ class gradebook_assignment_API {
                     'assign_order' => $assignOrder
                         ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d')
                 );
-
+                
                 $assignID = $wpdb->insert_id;
                 
                 $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $params['gbid'], 'student');
