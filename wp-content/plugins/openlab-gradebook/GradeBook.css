@@ -198,7 +198,7 @@ td {
   margin-top: 35px;
 }
 .students .btn-group .dropdown-menu {
-  position: fixed;
+  position: absolute;
   top: auto;
   left: auto;
   margin-top: 35px;
