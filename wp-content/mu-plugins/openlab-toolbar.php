@@ -102,7 +102,7 @@ class OpenLab_Admin_Bar {
                             add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_mobile'), 200 );
                             add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
                         }
-                        
+
                         if(get_current_blog_id() !== 1 || is_admin()){
                             add_action( 'admin_bar_menu', array( $this,'add_middle_group_for_blogs_and_admin'), 500 );
                         }
@@ -138,11 +138,11 @@ class OpenLab_Admin_Bar {
 
                         //removing the default account information item and menu so we can a custom Bootstrap-style one
                         add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 6 );
-                        
+
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_item'),7);
                         remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
-                        
+
                         add_action('admin_bar_menu',array($this,'openlab_custom_my_account_menu'),0);
 
 //			add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
@@ -300,13 +300,13 @@ HTML;
                         ),
  		) );
         }
-        
+
         /**
          * Add a middle group for blogs admin so we can use CSS to give the username flexible space
          * @param type $wp_admin_bar
          */
         function add_middle_group_for_blogs_and_admin($wp_admin_bar) {
-            
+
             $wp_admin_bar->add_group(array(
                 'id' => 'blogs-and-admin-centered',
                 'meta' => array(
@@ -930,7 +930,7 @@ HTML;
             }
 
             $display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate hidden-sm' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span></span>";
-            
+
             $wp_admin_bar->add_menu( array(
                     'id'    => 'site-name',
                     'title' => $display_string,
@@ -1244,15 +1244,15 @@ HTML;
 
                 $howdy = sprintf(__('Hi, %1$s'), $current_user->display_name);
                 $display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='40' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
-                
+
                 $parent = 'top-secondary';
                 $class = 'hidden-xs';
-                
+
                 if(get_current_blog_id() !== 1 || is_admin()){
                     $parent = 'blogs-and-admin-centered';
                     $class = 'user-display-name';
                 }
-                
+
                 //add in truncation obfuscation (hides truncation processing on page load)
                 $class = "$class truncate-obfuscate menu-loading";
 
