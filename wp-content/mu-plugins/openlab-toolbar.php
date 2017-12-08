@@ -1151,7 +1151,7 @@ HTML;
 
             $wp_admin_bar->add_menu(array(
                 'id' => 'dashboard-link',
-                'title' => $title,'<span class="sr-only">Home</span>',
+                'title' => $title.'<span class="sr-only">Home</span>',
                 'href' => $href,
                 'meta' => array(
                     'title' => _x('Dashboard', 'admin bar menu group label'),
@@ -1289,7 +1289,9 @@ HTML;
             $user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="'.bp_core_fetch_avatar(array('item_id' => $user_id, 'object' => 'member', 'type' => 'full', 'html' => false)).'" alt="Profile picture of '. $current_user->display_name.'"/></a></div></div>' ;
 
             // name link
-            $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span><a href="' . $profile_url . '">'.$user_login.'</a></p>';
+            $user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">'.$current_user->display_name.'</span>';
+            $user_info .= $user_login !== '' ? '<a href="' . $profile_url . '">'.$user_login.'</a>' : '';
+            $user_info .= '</p>';
 
             // accept/reject buttons
             $user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <span class="exit"><a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></span></p></div></div>';
