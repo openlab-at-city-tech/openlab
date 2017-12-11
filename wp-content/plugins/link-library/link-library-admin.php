@@ -1373,8 +1373,6 @@ class link_library_plugin_admin {
 								$newrating = intval( $data[14] );
 								if ( $newrating < 0 ) {
 									$newrating = 0;
-								} elseif ( $newrating > 10 ) {
-									$newrating = 10;
 								}
 
 								$newlinkid = '';
