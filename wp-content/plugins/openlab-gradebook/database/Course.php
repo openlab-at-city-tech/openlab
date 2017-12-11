@@ -108,6 +108,24 @@ class gradebook_course_API{
 				break;
 	  		case 'POST' :		
                                 $user = wp_get_current_user();
+                            
+                                //handle values that cannot be NULL
+                                if(!$params['name']){
+                                    $params['name'] = 'Needs Name';
+                                }
+                                
+                                if(!$params['school']){
+                                    $params['school'] = '';
+                                }
+
+                                if(!$params['semester']){
+                                    $params['semester'] = '';
+                                }
+
+                                if(!$params['year']){
+                                    $params['year'] = date('Y');
+                                }
+                            
 				$wpdb->insert("{$wpdb->prefix}oplb_gradebook_courses", 
 		    		array('name' => $params['name'], 
 		    			'school' => $params['school'], 

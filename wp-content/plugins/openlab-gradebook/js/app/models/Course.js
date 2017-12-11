@@ -1,10 +1,10 @@
 define(['backbone'], function (Backbone) {
     var Course = Backbone.Model.extend({
         defaults: {
-            name: 'Calculus I',
-            school: 'Bergen',
-            semester: 'Fall',
-            year: '2014'
+            name: 'Needs Name',
+            school: '',
+            semester: '',
+            year: oplbGradebook.currentYear
         },
         fetchCourse: function () {
             var self = this;
