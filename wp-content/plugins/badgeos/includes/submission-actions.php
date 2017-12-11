@@ -23,11 +23,13 @@ function badgeos_save_nomination_data() {
 	// Nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
 
+    global $allowedposttags;
+
 	// Publish the nomination
 	return badgeos_create_nomination(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		esc_textarea( $_POST['badgeos_nomination_content'] ),
+		wp_kses_post( $_POST['badgeos_nomination_content'], $allowedposttags ),
 		absint( $_POST['badgeos_nomination_user_id'] ),
 		absint( absint( $_POST['user_id'] ) )
 	);
@@ -326,11 +328,13 @@ function badgeos_save_submission_data() {
 
     $action =  isset( $_POST['badgeos_submission_submit'] ) ? $_POST['badgeos_submission_submit'] : $_POST['badgeos_submission_draft'];
 
+    global $allowedposttags;
+
 	// Publish the submission
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		esc_textarea( $_POST['badgeos_submission_content'] ),
+        wp_kses_post( $_POST['badgeos_submission_content'], $allowedposttags ),
 		absint( $_POST['user_id'] ),
         $action
 	);
@@ -1012,8 +1016,12 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
     }
 
+	$attachment_data = null;
+
     //check attachment in draft comment submission data
-    $attachment_data = get_attachment_from_draft_submission($comment_data->comment_post_ID, get_current_user_id());
+	if ( ! empty( $comment_data ) ) {
+		$attachment_data = get_attachment_from_draft_submission($comment_data->comment_post_ID, get_current_user_id());
+	}
 
     $attachment = null;
 
@@ -1028,7 +1036,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
-		$sub_form .= '<p><textarea name="badgeos_comment" id="badgeos_comment' . absint( $post_id ) . '" class="badgeos_comment">'.$comment_data->comment_content.'</textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_comment" id="badgeos_comment' . absint( $post_id ) . '" class="badgeos_comment">' . ( ( $comment_data ) ? $comment_data->comment_content : '' ) . '</textarea></p>';
 		$sub_form .= '</fieldset>';
 
         if(get_post_meta($id, '_badgeos_all_attachment_submission_comment', true)){
@@ -1051,8 +1059,8 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		$sub_form .= '<input type="hidden" name="user_id" value="' . get_current_user_id() . '">';
 		$sub_form .= '<input type="hidden" name="submission_id" value="' . absint( $post_id ) . '">';
 
-        if($comments){
-        $sub_form .= '<input type="hidden" name="comment_id" value="' . absint( $comment_data->comment_ID ) . '">';
+        if ( $comments && $comment_data ){
+            $sub_form .= '<input type="hidden" name="comment_id" value="' . absint( $comment_data->comment_ID ) . '">';
         }
 
 	$sub_form .= '</form>';
@@ -1464,8 +1472,12 @@ function badgeos_get_submission_form( $args = array() ) {
     $submission_data = get_submission_data_from_draft();
     //end check - draft submission data
 
+	$attachment_data = null;
+
     //check attachment in draft submission data
-    $attachment_data = get_attachment_from_draft_submission($submission_data->ID, $user_ID);
+	if ( ! empty( $submission_data ) ) {
+		$attachment_data = get_attachment_from_draft_submission($submission_data->ID, $user_ID);
+	}
 
     $attachment = null;
 
@@ -1479,7 +1491,7 @@ function badgeos_get_submission_form( $args = array() ) {
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment">';
-		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">'.$submission_data->post_content.'</textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">' . ( ( $submission_data ) ? $submission_data->post_content : '' ) . '</textarea></p>';
 		$sub_form .= '</fieldset>';
 
         if(get_post_meta($post->ID, '_badgeos_all_attachment_submission', true)){
@@ -1740,7 +1752,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 
 /**
  * Get the data saved from the draft
- * @return array
+ * @return WP_Post
  */
 function get_submission_data_from_draft(){
 

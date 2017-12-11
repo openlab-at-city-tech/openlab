@@ -98,9 +98,6 @@ class BadgeOS_Editor_Shortcodes {
 
 	private function get_shortcode_sections() {
 		$output = '';
-
-
-
 		foreach( $this->shortcodes as $shortcode ) {
 			$output .= $this->get_shortcode_section($shortcode);
 		}

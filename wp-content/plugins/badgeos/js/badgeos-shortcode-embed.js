@@ -37,11 +37,10 @@
 	}
 
 	function badgeos_get_shortcode_inputs( shortcode ) {
-		return $( '.text, .select','#' + shortcode + '_wrapper' );
+		return $( '.text, .select', '#' + shortcode + '_wrapper' );
 	}
 
 	function badgeos_construct_shortcode( shortcode, attributes ) {
-
 		var output = '[';
 		output += shortcode;
 
@@ -87,7 +86,7 @@
 	$( '#insert_badgeos_shortcodes' ).on( 'click', function(e) {
 		var inputs = $( '.select2-container' );
 		$.each( inputs, function( index, el ){
-			$( el ).select2( 'val', '' );
+			$( el ).val('');
 		});
 	});
 
