@@ -3,8 +3,8 @@ Contributors: GamerZ
 Donate link: https://lesterchan.net/site/donation/  
 Tags: poll, polls, polling, vote, booth, democracy, ajax, survey, post, widget  
 Requires at least: 4.0  
-Tested up to: 4.8  
-Stable tag: 2.73.7  
+Tested up to: 4.9  
+Stable tag: 2.73.8  
 
 Adds an AJAX poll system to your WordPress blog. You can also easily add a poll into your WordPress's blog post/page.
 
@@ -27,6 +27,10 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 I spent most of my free time creating, updating, maintaining and supporting these plugins, if you really love my plugins and could spare me a couple of bucks, I will really appreciate it. If not feel free to use it without any obligations.
 
 ## Changelog
+### Version 2.73.8
+* FIXED: Bug fixes and stricter type checking
+
+### Version 2.73.7
 * FIXED: Unable to save input HTML tags for footer templates
 
 ### Version 2.73.6
@@ -92,7 +96,7 @@ I spent most of my free time creating, updating, maintaining and supporting thes
 
 ### General Usage (Without Widget)
 
-```
+~~~
 <?php if ( function_exists( 'vote_poll' ) && ! in_pollarchive() ): ?>
 	<li>
 		<h2>Polls</h2>
@@ -102,7 +106,7 @@ I spent most of my free time creating, updating, maintaining and supporting thes
 		<?php display_polls_archive_link(); ?>
 	</li>
 <?php endif; ?>
-```
+~~~
 
 * To show specific poll, use `<?php get_poll(2); ?>` where 2 is your poll id.
 * To show random poll, use `<?php get_poll(-2); ?>`
@@ -145,7 +149,7 @@ I spent most of my free time creating, updating, maintaining and supporting thes
 * Open poll-css.css
 * Add to the end of the file:
 
-```
+~~~
 .wp-polls-ul li:nth-child(01) .pollbar{ background:#8FA0C5}
 .wp-polls-ul li:nth-child(02) .pollbar{ background:#FF8}
 .wp-polls-ul li:nth-child(03) .pollbar{ background:#ff8a3b}
@@ -158,36 +162,36 @@ I spent most of my free time creating, updating, maintaining and supporting thes
 .wp-polls-ul li:nth-child(10) .pollbar{ background:#a67c52}
 .wp-polls-ul li .pollbar{ transition: background 0.7s ease-in-out }
 .wp-polls-ul li .pollbar:hover{ background:#F00 }
-```
+~~~
 
 ### To Display Total Polls
 
-```
+~~~
 <?php if ( function_exists( 'get_pollquestions' ) ): ?>
 	<?php get_pollquestions(); ?>
 <?php endif; ?> 
-```
+~~~
  
 ### To Display Total Poll Answers
 
-```
+~~~
 <?php if ( function_exists( 'get_pollanswers' ) ): ?>
 	<?php get_pollanswers(); ?>
 <?php endif; ?> 
-```
+~~~
  
 ### To Display Total Poll Votes
 
-```
+~~~
 <?php if ( function_exists( 'get_pollvotes' ) ): ?>
 	<?php get_pollvotes(); ?>
 <?php endif; ?> 
-```
+~~~
  
 ### To Display Total Poll Voters
 
-```
+~~~
 <?php if ( function_exists( 'get_pollvoters' ) ): ?>
 	<?php get_pollvoters(); ?>
 <?php endif; ?> 
-```
+~~~

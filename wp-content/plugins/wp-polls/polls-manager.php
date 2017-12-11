@@ -30,7 +30,7 @@ if(!empty($_POST['do'])) {
             $pollq_active = (int) sanitize_key($_POST['pollq_active']);
             // Poll Start Date
             $pollq_timestamp = isset( $_POST['poll_timestamp_old'] ) ? $_POST['poll_timestamp_old'] : current_time( 'timestamp' );
-            $edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1;
+            $edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1 ? 1 : 0;
             if($edit_polltimestamp === 1) {
                 $pollq_timestamp_day = (int) sanitize_key($_POST['pollq_timestamp_day']);
                 $pollq_timestamp_month = (int) sanitize_key($_POST['pollq_timestamp_month']);
@@ -179,7 +179,7 @@ if(!empty($_POST['do'])) {
             // Update Lastest Poll ID To Poll Options
             $latest_pollid = polls_latest_id();
             $update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
-            do_action( 'wp_polls_update_poll', $latest_pollid );
+            do_action( 'wp_polls_update_poll', $pollq_id );
             cron_polls_place();
             break;
     }
