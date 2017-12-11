@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.1.1
+Version: 1.2.0
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -118,56 +118,29 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 
 	// Grade has its own column on edit-comments.php.
 	$grade = '';
-	$grade_text = '';
 	if ( 'edit-comments.php' !== $pagenow && ( olgc_is_instructor() || olgc_is_author() ) ) {
 		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
 		if ( '' !== $grade ) {
-			$grade_text .= sprintf(
-				'<div class="olgc-grade-display olgc-grade-hidden">' .
-				    '<span class="olgc-grade-label">%s</span>&nbsp;' .
-				    '<a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a>' .
-				    '<noscript>' .
-				        '<span class="olgc-grade-value-noscript">%s</span>' .
-				    '</noscript>' .
-				    '<a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a>' .
-				    '<span class="olgc-grade-value-script"><br />%s</span>' .
-				'</div>',
+			$text .= sprintf(
+				'<div class="olgc-grade-display olgc-grade-hidden"><span class="olgc-grade-label">%s</span> <a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a><span class="olgc-grade-value-script">%s</span><noscript><span class="olgc-grade-value-noscript">%s</span></noscript><a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a></div>',
 				esc_html__( 'Grade (Private):', 'wp-grade-comments' ),
 				esc_html__( '(show)', 'wp-grade-comments' ),
 				esc_html( $grade ),
-				esc_html__( '(hide)', 'wp-grade-comments' ),
-				esc_html( $grade )
+				esc_html( $grade ),
+				esc_html__( '(hide)', 'wp-grade-comments' )
 			);
 		}
 	}
 
 	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
-	$comment_text = $text;
 	if ( $is_private ) {
-		$comment_text = sprintf(
-			'<div class="olgc-grade-display olgc-grade-hidden">' .
-			    '<strong class="olgc-private-notice">%s</strong>&nbsp;' .
-			    '<a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a>' .
-			    '<noscript>' .
-			        '<span class="olgc-grade-value-noscript">%s</span>' .
-			    '</noscript>' .
-			    '<a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a>' .
-			    '<span class="olgc-grade-value-script"><br />%s</span>' .
-			'</div>',
-			esc_html__( 'Comment (Private):', 'wp-grade-comments' ),
-			esc_html__( '(show)', 'wp-grade-comments' ),
-			esc_html( $text ),
-			esc_html__( '(hide)', 'wp-grade-comments' ),
-			esc_html( $text )
-		);
+		$text = '<strong class="olgc-private-notice">' . __( '(Private)', 'wp-grade-comments' ) . '</strong> ' . $text;
 	}
-
-	$text = $comment_text . $grade_text;
 
 	$gloss = '';
 	if ( '' !== $grade && $is_private ) {
 		$gloss = __( 'NOTE: Private response and grade are visible only to instructors and to the post\'s author.', 'wp-grade-comments' );
-	} else if ( $is_private ) {
+	} elseif ( $is_private ) {
 		$gloss = __( 'NOTE: Private response is visible only to instructors and to the post\'s author.', 'wp-grade-comments' );
 	}
 
@@ -191,7 +164,7 @@ function olgc_add_private_label_to_comment_reply_link( $args, $comment ) {
 	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
 	if ( $is_private ) {
 		$args['reply_text']    = '(Private) ' . $args['reply_text'];
-		$args['reply_to_text'] =  '(Private) ' . $args['reply_to_text'];
+		$args['reply_to_text'] = '(Private) ' . $args['reply_to_text'];
 	}
 
 	return $args;
@@ -286,15 +259,14 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 			continue;
 		}
 
-                if ( $user_id ) {
-                        $comment_post = get_post( $private_comment->comment_post_ID );
-                        if ( $user_id == $comment_post->post_author ) {
-                                continue;
-                        }
-                }
+		if ( $user_id ) {
+			$comment_post = get_post( $private_comment->comment_post_ID );
+			if ( $user_id == $comment_post->post_author ) {
+				continue;
+			}
+		}
 
 		$pc_ids[] = $private_comment->comment_ID;
-
 	}
 
 	$pc_ids = wp_parse_id_list( $pc_ids );
@@ -429,10 +401,7 @@ add_action( 'edit_comment', 'olgc_prevent_private_comments_from_creating_bp_acti
 /**
  * Prevent private comments from appearing in BuddyPress activity streams.
  *
- * For now, we are going with the sledgehammer of deleting the comment altogether. In the
- * future, we could use hide_sitewide.
- *
- * @since 1.1.2
+ * @since 1.2.0
  *
  * @param string     $new_status New comment status.
  * @param string     $old_status Old comment status.
