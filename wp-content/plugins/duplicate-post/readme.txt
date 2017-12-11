@@ -3,8 +3,8 @@ Contributors: 		lopo
 Donate link: 		https://duplicate-post.lopo.it/
 Tags: 				duplicate post, copy, clone
 Requires at least: 	3.6
-Tested up to: 		4.8
-Stable tag: 		3.2
+Tested up to: 		4.9
+Stable tag: 		3.2.1
 License: 			GPLv2 or later
 License URI: 		http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,13 +19,13 @@ How it works:
 
 1. In 'Edit Posts'/'Edit Pages', you can click on 'Clone' link below the post/page title: this will immediately create a copy and return to the list.
 
-2. NEW! In 'Edit Posts'/'Edit Pages', you can select one or more items, then choose 'Clone' in the 'Bulk Actions' dropdown to copy them all at once.
+2. In 'Edit Posts'/'Edit Pages', you can select one or more items, then choose 'Clone' in the 'Bulk Actions' dropdown to copy them all at once.
 
 3. In 'Edit Posts'/'Edit Pages', you can click on 'New Draft' link below the post/page title.
 
 4. On the post edit screen, you can click on 'Copy to a new draft' above "Cancel"/"Move to trash". 
 
-5. While viewing a post as a logged in user, you can click on 'Copy to a new draft' as a dropdown link under "Edit Post" in the admin bar.
+5. While viewing a post as a logged in user, you can click on 'Copy to a new draft' in the admin bar.
 
 3, 4 and 5 will lead to the edit page for the new draft: change what you want, click on 'Publish' and you're done.
 
@@ -75,6 +75,9 @@ If Duplicate Post is still in English, or if there are some untraslated strings,
 6. Bulk clone action.
 
 == Upgrade Notice ==
+
+= 3.2.1 =
+Fixes some problems with Multisite, WPML, revisions
 
 = 3.2 =
 new website + WPML compatibility + various fixes
@@ -137,6 +140,12 @@ Some users have experienced a fatal error when upgrading to v1.1: this may fix i
 New features and customization, WP 3.0 compatibility: you should upgrade if you want to copy Custom Posts with Custom Taxonomies.
 
 == Changelog ==
+
+= 3.2.1 (2017-11-25) =
+* Fixing some issues of the 3.* trunk before major redesign
+* Fixes issue when upgrading on multisite
+* Improved compatibility with WPML + page builders, thanks to WPML team
+* Prevents creating a revision immediately after the cloning
 
 = 3.2 (2017-04-04) =
 * new website with extensive documentation
@@ -291,4 +300,3 @@ If you find this useful and if you want to contribute, there are three ways:
    1. You can [write me](https://duplicate-post.lopo.it/contact) and submit your bug reports, suggestions and requests for features;
    2. If you want to translate it to your language (there are just a few lines of text), you can use the [translation project](https://translate.wordpress.org/projects/wp-plugins/duplicate-post);
    3. Using the plugin is free, but if you want you can support my efforts by donating with PayPal [here](https://duplicate-post.lopo.it/donate)
-
