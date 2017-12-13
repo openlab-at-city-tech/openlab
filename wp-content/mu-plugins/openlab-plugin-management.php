@@ -18,6 +18,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
+		'easy-table/easy-table.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
