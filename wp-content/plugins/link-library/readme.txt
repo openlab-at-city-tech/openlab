@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 3.0
-Tested up to: 4.8.1
+Tested up to: 4.9.1
 Stable tag: stable
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -58,6 +58,9 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 5.9.14.13 =
+* Removed rating limit for link import to be higher than 10. Note that if you edit and save a link, the rating will go to a value between 0 and 10. This only helps if you always import your links.
 
 = 5.9.14.12 =
 * Correction for warning related to user link submission form

@@ -55,15 +55,15 @@ msgstr ""
 msgid "A list of links to the term own, archive and parent REST URL"
 msgstr ""
 
-#: src/Tribe/Main.php:268
+#: src/Tribe/Main.php:283
 msgid "Clear Selection."
 msgstr ""
 
-#: src/Tribe/Main.php:267
+#: src/Tribe/Main.php:282
 msgid "Select all pages"
 msgstr ""
 
-#: src/Tribe/Main.php:266
+#: src/Tribe/Main.php:281
 msgid "All items on this page were selected. "
 msgstr ""
 
@@ -75,15 +75,15 @@ msgstr ""
 msgid "Import events from across the web! Event Aggregator makes it easy to run scheduled or manual imports from Facebook, Meetup, Google Calendar, and iCalendar, along with uploads from CSV and ICS files. You can also import directly from other sites running The Events Calendar thanks to our built-in REST API support."
 msgstr ""
 
-#: src/Tribe/Ajax/Dropdown.php:238
+#: src/Tribe/Ajax/Dropdown.php:243
 msgid "The \"%s\" source is invalid and cannot be reached on \"%s\" instance."
 msgstr ""
 
-#: src/Tribe/Ajax/Dropdown.php:188
+#: src/Tribe/Ajax/Dropdown.php:193
 msgid "Empty data set for this dropdown"
 msgstr ""
 
-#: src/Tribe/Ajax/Dropdown.php:175
+#: src/Tribe/Ajax/Dropdown.php:180
 msgid "Missing data source for this dropdown"
 msgstr ""
 
@@ -417,63 +417,63 @@ msgstr ""
 msgid "Renew Your License Now"
 msgstr ""
 
-#: src/Tribe/Main.php:278
+#: src/Tribe/Main.php:293
 msgid ": Selected 1 row"
 msgstr ""
 
-#: src/Tribe/Main.php:277
+#: src/Tribe/Main.php:292
 msgid ": Selected %d rows"
 msgstr ""
 
-#: src/Tribe/Main.php:272
+#: src/Tribe/Main.php:287
 msgid "Previous"
 msgstr ""
 
-#: src/Tribe/Main.php:270
+#: src/Tribe/Main.php:285
 msgid "All"
 msgstr ""
 
-#: src/Tribe/Main.php:264
+#: src/Tribe/Main.php:279
 msgid "No matching records found"
 msgstr ""
 
-#: src/Tribe/Main.php:263
+#: src/Tribe/Main.php:278
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: src/Tribe/Main.php:262
+#: src/Tribe/Main.php:277
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
-#: src/Tribe/Main.php:261
+#: src/Tribe/Main.php:276
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 
-#: src/Tribe/Main.php:260
+#: src/Tribe/Main.php:275
 msgid "No data available in table"
 msgstr ""
 
-#: src/Tribe/Main.php:259
+#: src/Tribe/Main.php:274
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: src/Tribe/Main.php:257
+#: src/Tribe/Main.php:272
 msgid ": activate to sort column descending"
 msgstr ""
 
-#: src/Tribe/Main.php:256
+#: src/Tribe/Main.php:271
 msgid ": activate to sort column ascending"
 msgstr ""
 
-#: src/Tribe/Main.php:248
+#: src/Tribe/Main.php:252
 msgid "Press \"Cmd + C\" to copy"
 msgstr ""
 
-#: src/Tribe/Main.php:247
+#: src/Tribe/Main.php:251
 msgid "System info copied"
 msgstr ""
 
-#: src/Tribe/Main.php:246 src/admin-views/tribe-options-help.php:50
+#: src/Tribe/Main.php:250 src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
 msgstr ""
 
@@ -2070,56 +2070,56 @@ msgstr "Afghanistan"
 msgid "Select a Country:"
 msgstr "Choisissez un pays :"
 
-#: src/Tribe/Validate.php:499
+#: src/Tribe/Validate.php:503
 msgid "Country List must be formatted as one country per line in the following format: <br>US, United States <br> UK, United Kingdom."
 msgstr "La liste de pays doit être formatée avec un pays par ligne et avec le format suivant: <br>FR, France <br> UK, United Kingdom."
 
-#: src/Tribe/Validate.php:483
+#: src/Tribe/Validate.php:487
 msgid "%s must be a phone number."
 msgstr "%s doit être un numéro de téléphone."
 
-#: src/Tribe/Validate.php:469
+#: src/Tribe/Validate.php:473
 msgid "%s must consist of 5 numbers."
 msgstr "%s doit comprendre au moins 5 chiffres."
 
-#: src/Tribe/Validate.php:455
+#: src/Tribe/Validate.php:459
 msgid "%s must consist of letters, spaces, apostrophes, and dashes."
 msgstr "%s doit comporter des lettres, espaces, apostrophes et tirets."
 
-#: src/Tribe/Validate.php:439
+#: src/Tribe/Validate.php:443
 msgid "%s must consist of letters, numbers, dashes, apostrophes, and spaces only."
 msgstr "%s doit contenir seulement des lettres, nombres, tirets, apostrophes et espaces."
 
-#: src/Tribe/Validate.php:423
+#: src/Tribe/Validate.php:427
 msgid "%s must be a number between 0 and 21."
 msgstr "%s doit être un nombre entre 0 et 21."
 
-#: src/Tribe/Validate.php:369
+#: src/Tribe/Validate.php:373
 msgid "%s must be a number or percentage."
 msgstr "%s doit être un nombre ou un pourcentage."
 
-#: src/Tribe/Validate.php:353
+#: src/Tribe/Validate.php:357
 msgid "%s cannot be a duplicate"
 msgstr "%s ne doit pas être en double"
 
-#: src/Tribe/Validate.php:351
+#: src/Tribe/Validate.php:355
 msgid "%s cannot be the same as %s."
 msgstr "%s ne peut être identique à %s."
 
-#: src/Tribe/Validate.php:344
+#: src/Tribe/Validate.php:348
 msgid "Comparison validation failed because no comparison value was provided, for field %s"
 msgstr "Échec de validation de la comparaison : aucune valeur de comparaison fournie pour le champ %s"
 
-#: src/Tribe/Validate.php:291 src/Tribe/Validate.php:308
-#: src/Tribe/Validate.php:330
+#: src/Tribe/Validate.php:295 src/Tribe/Validate.php:312
+#: src/Tribe/Validate.php:334
 msgid "%s must have a value that's part of its options."
 msgstr "%s doit être une valeur qui fait parti de ses options."
 
-#: src/Tribe/Validate.php:275
+#: src/Tribe/Validate.php:279
 msgid "%s must be a valid absolute URL."
 msgstr "%s doit être une URL absolue valide."
 
-#: src/Tribe/Validate.php:260
+#: src/Tribe/Validate.php:264
 msgid "%s must be a valid slug (numbers, letters, dashes, and underscores)."
 msgstr "%s doit être un permalien valide (nombre, lettres, tirets et tirets de soulignement)."
 
@@ -2227,7 +2227,7 @@ msgstr "Une clé de licence valide est nécessaire pour le support et les mises 
 msgid "License Key"
 msgstr "Clé de licence"
 
-#: src/Tribe/Main.php:265
+#: src/Tribe/Main.php:280
 msgid "Search:"
 msgstr ""
 
@@ -2239,19 +2239,19 @@ msgstr "Préférences"
 msgid "Network"
 msgstr "Réseau"
 
-#: src/Tribe/Main.php:290
+#: src/Tribe/Main.php:305
 msgid "Done"
 msgstr "Terminé"
 
-#: src/Tribe/Main.php:289
+#: src/Tribe/Main.php:304
 msgid "Today"
 msgstr "Aujourd'hui "
 
-#: src/Tribe/Main.php:288
+#: src/Tribe/Main.php:303
 msgid "Prev"
 msgstr "Précédent"
 
-#: src/Tribe/Main.php:271 src/Tribe/Main.php:287
+#: src/Tribe/Main.php:286 src/Tribe/Main.php:302
 msgid "Next"
 msgstr "Suivant"
 
