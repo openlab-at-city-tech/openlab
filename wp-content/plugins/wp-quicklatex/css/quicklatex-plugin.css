@@ -1,0 +1,262 @@
+.op-wrap{
+	background:none repeat scroll 0 0 #E9E9E6;
+	padding:0;
+	border-color:#C3CBD1;
+	border-style:solid;
+	border-width:1px 1px 1px 2px;
+	clear:both;
+	margin-top:5px;
+}
+
+.op-head{
+	color:#2A2A2A;
+	cursor:pointer;
+	font-size:1em;
+	font-weight:bold;
+	margin-left:6px;
+	padding:3px;
+}
+
+.ql-overview{
+
+}
+
+.ql-heading{
+	font-size:13px;
+	line-height:150%;
+	margin:0 10px 10px;
+	text-align:left;
+	padding-bottom: 10px;
+}
+
+.ql-heading-simple{
+	font-size:13px;
+	line-height:150%;
+	margin:0 10px 10px;
+	text-align:left;
+	border:none;
+}
+
+.ql-notes{
+	color:#777777;
+	font-size:13px;
+	line-height:150%;
+	margin:0 10px 10px;
+	text-align:left;
+	border:none;
+	margin-left:20px;
+}
+
+.ql-bottom-border{
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.ql-top-border{
+	border-top: 1px solid #dfdfdf;
+}
+
+.ql-postbox-content{
+	margin: 10px;
+}
+
+.ql-alignright{
+	padding-top:10px;
+	float:right;
+}
+
+div.inside ul li {
+	line-height:16px;
+	list-style:square outside none;
+}
+
+div.inside ul {
+	margin: 15px;
+	margin-left:20px;
+}
+
+#ql-support.postbox {
+	border-color:green;
+	border-width:2px;
+	background: #eeffee;
+}
+
+#ql-partners.postbox {
+	background: #ffffff;
+}
+
+.ql-p-justified{
+	/*font-size:11px;*/
+	margin:10px;
+	text-align: justify;
+}
+
+.ql-el-centered{
+ margin: 0 auto;
+}
+
+.ql-p-centered{
+	/*font-size:11px;*/
+	margin:10px;
+	text-align: center;
+}
+
+strong.ql-green {
+	color:green;
+	font-size:105%;
+	font-weight:bold;
+}
+
+.select{
+    width: 130px;
+}
+
+.text{
+    width: 130px;
+}
+
+tr.ql-row.even {
+    background-color: #F6F6F6;
+}
+
+tr.ql-row {
+    margin: 5px 0 0;
+    padding: 5px 0 0;
+}
+
+td.ql-desc {
+    color: #777777;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 12px;
+}
+
+.ql-code{
+ color: #555555;
+ font-family: Consolas,Monaco,Courier,monospace;
+ font-size: 13px;
+}
+
+.ql-examples{
+ color: #333333;
+ margin: 0px 50px;
+ padding: 10px;
+ font: 13px/16px Monaco,monospace;
+ border-top:1px solid #dfdfdf;
+ border-bottom:1px solid #dfdfdf;
+}
+
+.ql-code-big{
+ color: #000000;
+ font-family: Consolas,Monaco,Courier,monospace;
+ font-size: 1.1em;
+}
+
+.ql-code-desc{
+ color: #777777;
+ font-family: Consolas,Monaco,Courier,monospace;
+ font-size: 12px;
+}
+
+.ql-people{
+ margin-left:50px;
+/* margin-bottom: 30px;*/
+}
+
+dl.ql-devs{
+ margin-left:30px;
+ margin-bottom: 30px;
+ margin-top: 15px;
+}
+
+.ql-head-desc {
+    color: #777777;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 11px;
+}
+
+.ql-tag-table{
+ border:  none;
+ border-collapse: separate;    
+}
+
+td.ql-tag-cell-right{
+ padding:0;
+ margin:0;
+ /*width: 200px;*/
+ text-align: left;
+}
+
+td.ql-tag-cell-left{
+ padding:0;
+ margin:0;
+ /*width: 100px;*/
+ text-align:left;
+}
+
+.ql-preamble{
+	width:97%;	
+	margin: 0px 10px;
+	margin-bottom: 10px;
+}
+
+.op-body{
+	background:none repeat scroll 0 0 #F5F5F5;
+	border-width:1px 0 0;
+	font-weight:normal;
+}
+ 
+.img-plus-minus{
+	padding-right:3px;
+}
+
+code{
+font-size:13px;
+}
+
+/********** KAK ***********/
+
+/*
+#wrap {
+	width:880px;
+}
+*/
+
+.form-table th {
+	width:33%;
+}
+
+.form-table{
+ margin-bottom:0px;
+}
+
+#ql-header{
+	width:100%;
+}
+
+#holder {
+	width: 70%;
+	float:left;
+
+}
+
+#likethis {
+	width: 25%;
+	margin-left:10px;	
+}
+
+#about-text{
+	font-size:1.1em;
+	text-align: justify;
+	line-height:120%;
+}
+
+.ql-powered{
+ color: #555555;
+ font-size: 14px;
+}
+
+.ql-about{
+line-height:160%;
+font-size:15px;
+}

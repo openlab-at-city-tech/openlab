@@ -44,7 +44,7 @@ function olgc_add_grade_column( $columns ) {
 
 			foreach ( $comments as $comment ) {
 				$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
-				if ( $grade ) {
+				if ( '' !== $grade ) {
 					$show_column = true;
 					break 2;
 				}
@@ -86,7 +86,7 @@ function olgc_add_grade_column_content( $column_name, $post_id ) {
 	foreach ( $comments as $comment ) {
 		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
 
-		if ( $grade ) {
+		if ( '' !== $grade ) {
 			echo esc_html( $grade );
 			break;
 		}
@@ -114,7 +114,7 @@ function olgc_add_grade_column_to_editcomments( $columns ) {
 			}
 
 			$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
-			if ( $grade ) {
+			if ( '' !== $grade ) {
 				$show_column = true;
 				break;
 			}
@@ -149,7 +149,7 @@ function olgc_add_grade_column_content_to_editcomments( $column_name, $comment_i
 	}
 
 	$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
-	if ( $grade ) {
+	if ( '' !== $grade ) {
 		echo esc_html( $grade );
 	}
 }

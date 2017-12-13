@@ -147,7 +147,7 @@ $settings = bp_email_get_appearance_settings();
 						 */
 						do_action( 'bp_before_email_header' );
 						?>
-						<img src="<?php echo bp_get_root_domain(); ?>/wp-content/themes/openlab/images/openlab-logo.jpg" alt="<?php echo bp_get_option( 'blogname' ); ?>" />
+						<img src="https://openlab.citytech.cuny.edu/wp-content/themes/openlab/images/openlab-logo.jpg" alt="<?php echo bp_get_option( 'blogname' ); ?>" />
 
 						<?php
 						/**

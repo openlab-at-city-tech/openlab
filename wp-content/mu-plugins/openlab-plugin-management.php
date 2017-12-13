@@ -18,6 +18,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
+		'easy-table/easy-table.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
@@ -33,6 +34,8 @@ function openlab_hide_plugins( $plugins ) {
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'webwork/webwork.php',
 		'wp-accessibility/wp-accessibility',
+		'wp-latex/wp-latex.php',
+		'wp-post-to-pdf/wp-post-to-pdf.php',
 	);
 
 	if ( ! is_super_admin() ) {

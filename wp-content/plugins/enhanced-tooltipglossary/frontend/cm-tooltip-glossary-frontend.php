@@ -643,7 +643,7 @@ class CMTooltipGlossaryFrontend {
             $glossaryItemContent = str_replace( "color:#000000", "color:#ffffff", $glossaryItemContent );
             $glossaryItemContent = str_replace( '\\[glossary_exclude\\]', '', $glossaryItemContent );
         } else {
-            $glossaryItemContent = strtr( $glossaryItemContent, array( "\r\n" => '<br />', "\r" => '<br />', "\n" => '<br />' ) );
+            $glossaryItemContent = strtr( $glossaryItemContent, array( "\r\n\r\n" => '<br />', "\r\r" => '<br />', "\n\n" => '<br />' ) );
         }
 
         $tooltipLengthLimit = get_option( 'cmtt_glossaryLimitTooltip' );

@@ -741,11 +741,20 @@ class Openlab_Clone_Course_Site {
 
 	protected function get_source_group_admins() {
 		if ( empty( $this->source_group_admins ) ) {
-			$g = groups_get_group( array(
-				'group_id' => $this->source_group_id,
-				'populate_extras' => true,
-			) );
+			// Must switch back to root site to get admins. See #2201.
+			$switched = false;
+			if ( ! bp_is_root_blog() ) {
+				$switched = true;
+				switch_to_blog( bp_get_root_blog_id() );
+			}
+
+			$g = groups_get_group( $this->source_group_id );
+			$admins = $g->admins;
 			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
+
+			if ( $switched ) {
+				restore_current_blog();
+			}
 		}
 
 		return $this->source_group_admins;
