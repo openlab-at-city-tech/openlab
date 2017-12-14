@@ -60,6 +60,11 @@ a, body a {
 	font-size: 1.1rem;
 }
 
+.footer a {
+	color: #fff;
+	text-decoration: underline;
+}
+
 .footer.section.large-padding {
 	padding: 50px 0;
 }
