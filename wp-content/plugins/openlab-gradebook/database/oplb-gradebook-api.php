@@ -292,7 +292,7 @@ class oplb_gradebook_api {
             'visibility' => FILTER_VALIDATE_BOOLEAN,
             'amid' => FILTER_SANITIZE_NUMBER_INT,
             'assign_order' => FILTER_SANITIZE_NUMBER_INT,
-            'assign_points_earned' => FILTER_SANITIZE_NUMBER_FLOAT,
+            'assign_points_earned' => FILTER_SANITIZE_STRING,
             'current_grade_average' => FILTER_SANITIZE_STRING,
             'display' => FILTER_VALIDATE_BOOLEAN,
             'hover' => FILTER_VALIDATE_BOOLEAN,
