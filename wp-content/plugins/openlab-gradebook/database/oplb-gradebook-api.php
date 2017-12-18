@@ -232,8 +232,16 @@ class oplb_gradebook_api {
                 $assignmentIDsformated = $assignmentIDsformated . $assignment['id'] . ',';
             }
             $assignmentIDsformated = substr($assignmentIDsformated, 0, -1);
+            $assignments_to_process = explode(',', $assignmentIDsformated);
 
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid IN ( %s ) AND uid = %d", $assignmentIDsformated, $current_user->ID);
+            $assignment_count = count($assignments_to_process);
+            $placeholders = array_fill(0, $assignment_count, '%d');
+            $format = implode(', ', $placeholders);
+            
+            array_push($assignments_to_process, $current_user->ID);
+            
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid IN ($format) AND uid = %d", $assignments_to_process);
+
             $cells = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($cells as &$cell) {
@@ -471,7 +479,7 @@ class oplb_gradebook_api {
 
             $total_assignments++;
         }
-        
+
         //if no weights are assigned (i.e. all weights are set to 0), distribute weights equally
         if (intval($total_weight) === 0) {
             $total_weight = 100;
