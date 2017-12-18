@@ -23,6 +23,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
+                    Backbone.pubSub.on('updateWeightInfo', this.render, this);
 
                     this.queue = wp.Uploader.queue;
                     //safety first
@@ -312,7 +313,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 getTotalWeight: function () {
                     var self = this;
 
-                    console.log('self.gradebook.assignments', self.gradebook.assignments);
+                    console.log('getTotalWeight', self.gradebook.assignments, self.gradebook.attributes);
 
                     var totalWeight = 0;
                     _.each(self.gradebook.assignments.models, function (assignment) {
@@ -321,12 +322,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     });
 
-                    console.log('totalWeight', totalWeight);
-
                     var message = 'Total Weight: ' + totalWeight;
 
-                    if (totalWeight > 100) {
-                        message += ' <span class="text-warning">Total weight is over 100%</span>';
+                    if (totalWeight === 100) {
+                        message += ' <span class="text-warning">Any assignments that do not have a set weight will not be included in the average calculation.</span>';
+                    } else if (totalWeight > 100) {
+                        message += ' <span class="text-warning">Total weight is over 100%. Any assignments that do not have a set weight will not be included in the average calculation.</span>';
+                    } else if (totalWeight < 100) {
+                        message += ' <span class="text-warning">Total weight is under 100%. Any assignments that do not have a set weight will be given a calculated distribution of ' + self.gradebook.attributes.distributed_weight + '.</span>';
                     }
 
                     return message;
@@ -336,6 +339,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     console.log('total_weight on updateTotalWeight', window.oplbGlobals.total_weight);
                 },
                 updateAverageGrade: function (data) {
+                    
+                    console.log('updateGradeAverage', data);
 
                     var studentID = data.uid;
                     var target = $('#average' + studentID);

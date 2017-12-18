@@ -207,12 +207,14 @@ class oplb_gradebook_api {
                 $cell['id'] = intval($cell['id']);
             }
 
-
+            //get weight info
+            $get_weight_info = $this->oplb_gradebook_get_total_weight($gbid);
 
             return array("assignments" => $assignments,
                 "cells" => $cells,
                 "students" => $students,
-                "role" => "instructor"
+                "role" => "instructor",
+                "distributed_weight" => $get_weight_info['distributed_weight'],
             );
         } else if ($role === 'student') {
 
@@ -447,22 +449,57 @@ class oplb_gradebook_api {
      * @global type $wpdb
      * @return type
      */
-    public function oplb_gradebook_get_total_weight() {
+    public function oplb_gradebook_get_total_weight($gbid) {
         global $wpdb;
         $weights_by_assignment = array();
+        $distributed_weight = 0;
 
-        $query = $wpdb->prepare("SELECT id, assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments");
+        $query = $wpdb->prepare("SELECT id, assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
         $weights = $wpdb->get_results($query, ARRAY_A);
 
         $total_weight = 0;
-
+        $total_assignments = 0;
+        $assignments_with_no_weight = 0;
         foreach ($weights as $weight) {
             $total_weight = $total_weight + $weight['assign_weight'];
             $weights_by_assignment[$weight['id']] = number_format((float) $weight['assign_weight'], 2, '.', '');
+
+            //let's work out any assignments that don't have a weight
+            if (floatval($weights_by_assignment[$weight['id']]) === 0.00) {
+                $assignments_with_no_weight++;
+            }
+
+            $total_assignments++;
         }
+        
+        //if no weights are assigned (i.e. all weights are set to 0), distribute weights equally
+        if (intval($total_weight) === 0) {
+            $total_weight = 100;
+            $distributed_weight = $total_weight / $total_assignments;
+            foreach ($weights_by_assignment as &$assign_weight) {
+                $assign_weight = $distributed_weight;
+            }
+        }
+
+        //if only some assignments have a weight, and the total weight is less than 100, calculate a distributed weight for the other assignments
+        if ($assignments_with_no_weight > 0 && $total_weight < 100) {
+
+            $available_weight = 100 - $total_weight;
+            $total_weight = 100;
+            $distributed_weight = $available_weight / $assignments_with_no_weight;
+
+            foreach ($weights_by_assignment as &$assign_weight) {
+
+                if (floatval($assign_weight) === 0.00) {
+                    $assign_weight = $distributed_weight;
+                }
+            }
+        }
+
 
         return array(
             'weights_by_assignment' => $weights_by_assignment,
+            'distributed_weight' => $distributed_weight,
             'total_weight' => $total_weight,
         );
     }
@@ -481,7 +518,7 @@ class oplb_gradebook_api {
         $average_out = 0.00;
 
         //first get total weight
-        $weights_return = $this->oplb_gradebook_get_total_weight();
+        $weights_return = $this->oplb_gradebook_get_total_weight($gbid);
         $weights_by_assignment = $weights_return['weights_by_assignment'];
 
         //calibrate weight to 100
@@ -822,7 +859,7 @@ class oplb_gradebook_api {
 
                 $new_first_name[] = $name_part;
             }
-            
+
             if (!$first_name_retrieve
                     || empty($first_name_retrieve)) {
                 $first_name_retrieve = implode(' ', $new_first_name);
@@ -851,7 +888,7 @@ class oplb_gradebook_api {
             'first_name' => $first_name_retrieve,
             'last_name' => $last_name_retrieve,
         );
-        
+
         return apply_filters('oplb_gradebook_user_meta', $meta_out, $user);
     }
 

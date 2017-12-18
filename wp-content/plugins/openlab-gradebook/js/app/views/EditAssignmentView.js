@@ -70,15 +70,14 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                     console.log('toadd', toadd);
                     if (toadd) {
                         toadd.save(assignmentInformation, {wait: true, success: function (model, response) {
-                                window.oplbGlobals.total_weight = model.attributes.total_weight;
+                                console.log('toadd model, response', model, response);
                                 self.checkForAverageGradeUpdates(response);
                             }});
                     } else {
                         delete(assignmentInformation['id']);
                         var toadds = new Assignment(assignmentInformation);
                         toadds.save(assignmentInformation, {success: function (model, response) {
-                                console.log('model, response', model, response);
-                                console.log('response assignment', response['assignment']);
+                                console.log('toadd else model, response', model, response);
                                 self.gradebook.assignments.add(response['assignment']);
                                 _.each(response['cells'], function (cell) {
                                     self.gradebook.cells.add(cell)
@@ -92,10 +91,16 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                     return false;
                 },
                 checkForAverageGradeUpdates: function (response) {
+                    
+                    console.log('checkForAverageGradeUpdate', response);
 
                     if (typeof response.student_grade_update === 'undefined' || response.student_grade_update.length < 1) {
                         return false;
                     }
+                    
+                    this.gradebook.attributes.distributed_weight = response.distributed_weight;
+                    
+                    Backbone.pubSub.trigger('updateWeightInfo', response);
 
                     _.each(response.student_grade_update, function (update) {
                         Backbone.pubSub.trigger('updateAverageGrade', update);
