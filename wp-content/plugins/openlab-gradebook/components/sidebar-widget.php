@@ -28,7 +28,8 @@ class OPLB_Gradebook_Widget extends WP_Widget {
 
         $title = apply_filters('widget_title', $instance['title']);
         $title = !empty($title) ? esc_html($title) : 'Link to OpenLab Gradebook';
-        $message = esc_html($instance['message']);
+        $message = esc_html($instance['link_text']);
+        $message = !empty($message) ? esc_html($message) : 'OpenLab Gradebook';
         $url = esc_url(admin_url('admin.php?page=oplb_gradebook#courses'));
 
         ob_start();
@@ -41,7 +42,7 @@ class OPLB_Gradebook_Widget extends WP_Widget {
     public function form($instance) {
 
         $title = !empty($instance['title']) ? esc_attr($instance['title']) : 'Link to OpenLab Gradebook';
-        $message = !empty($instance['message']) ? esc_attr($instance['message']) : '';
+        $message = !empty($instance['link_text']) ? esc_attr($instance['link_text']) : 'OpenLab Gradebook';
 
         ob_start();
         include(plugin_dir_path(__FILE__) . 'parts/widgets/sidebar-widget-form.php');
@@ -55,7 +56,7 @@ class OPLB_Gradebook_Widget extends WP_Widget {
         $instance = $old_instance;
 
         $instance['title'] = esc_html(strip_tags($new_instance['title']));
-        $instance['message'] = esc_html(strip_tags($new_instance['message']));
+        $instance['link_text'] = esc_html(strip_tags($new_instance['link_text']));
 
         return $instance;
     }

@@ -6,12 +6,6 @@ if ($title) {
 }
 ?>
 
-<?php if ($message): ?>
-
-    <p class="message-wrapper"><?php echo $message; ?></p>
-
-<?php endif; ?>
-
-<p class="link-wrapper"><a href="<?php echo $url; ?>">OpenLab Gradebook</a></p>
+<p class="link-wrapper"><a href="<?php echo $url; ?>"><?php echo $message; ?></a></p>
 
 <?php echo $after_widget; ?>
