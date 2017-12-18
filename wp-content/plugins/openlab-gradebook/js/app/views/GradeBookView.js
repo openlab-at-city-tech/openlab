@@ -110,6 +110,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                     model: assignment, course: self.course, gradebook: self.gradebook
                                 });
                                 self._subviews.push(view);
+                                console.log('go cell in GradeBookView render');
                                 $('#students-header tr').append(view.render());
                             });
                             break;
@@ -131,6 +132,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             _.each(y, function (assignment) {
                                 var view = new AssignmentView({model: assignment, course: self.course, gradebook: self.gradebook});
                                 self._subviews.push(view);
+                                console.log('go student in GradeBookView render');
                                 $('#students-header tr').append(view.render());
                             });
                             break;

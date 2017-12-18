@@ -71,14 +71,22 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 editSave: function (ev) {
                     var self = this;
                     var studentInformation = $(ev.currentTarget).serializeObject();
+                    console.log('this.student in editSave', this.student);
                     if (this.student) {
                         studentInformation.id = parseInt(studentInformation.id);
-                        this.student.save(studentInformation, {wait: true});
+                        this.student.save(studentInformation, {
+                            wait: true,
+                            success: function (model, response) {
+                                console.log('model on student editSave success', model, response);
+                                Backbone.pubSub.trigger('updateWeightInfo', response);
+                            }
+                        });
                         this.$el.modal('hide');
                     } else {
                         delete(studentInformation['id']);
                         var toadds = new User(studentInformation);
                         toadds.save(studentInformation, {success: function (model) {
+                                console.log('model in toadds editSave editStudentView', model);
                                 _.each(model.get('cells'), function (cell) {
                                     self.gradebook.cells.add(cell);
                                 });
