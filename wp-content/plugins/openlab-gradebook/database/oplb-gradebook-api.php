@@ -286,7 +286,7 @@ class oplb_gradebook_api {
             'assign_grade_type' => FILTER_SANITIZE_STRING,
             'assign_name' => FILTER_SANITIZE_STRING,
             'assign_visibility' => FILTER_SANITIZE_STRING,
-            'assign_weight' => FILTER_SANITIZE_NUMBER_FLOAT,
+            'assign_weight' => FILTER_SANITIZE_STRING,
             'gbid' => FILTER_SANITIZE_NUMBER_INT,
             'publish' => FILTER_VALIDATE_BOOLEAN,
             'selected' => FILTER_VALIDATE_BOOLEAN,
