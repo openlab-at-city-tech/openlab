@@ -97,7 +97,7 @@ $settings = bp_email_get_appearance_settings();
 			table-layout: auto;
 		}
 
-		table a {
+		body.email_bg a {
 			color: <?php echo esc_html( $settings['body_text_color'] ); ?>;
 		}
 
