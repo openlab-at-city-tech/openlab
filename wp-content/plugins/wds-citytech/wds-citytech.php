@@ -2306,6 +2306,46 @@ function openlab_email_appearance_settings( $settings ) {
 add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appearance_settings' );
 
 /**
+ * Add email link styles to rendered email template.
+ *
+ * This is only used when the email content has been merged into the email template.
+ *
+ * @param string $value         Property value.
+ * @param string $property_name Email template property name.
+ * @param string $transform     How the return value was transformed.
+ * @return string Updated value.
+ */
+function openlab_bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
+	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
+		return $value;
+	}
+
+	$settings    = bp_email_get_appearance_settings();
+	$replacement = 'style="color: ' . esc_attr( $settings['body_text_color'] ) . ';';
+
+	// Find all links.
+	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
+	foreach ( $links as $link ) {
+		$new_link = $link = array_shift( $link );
+
+		// Add/modify style property.
+		if ( strpos( $link, 'style="' ) !== false ) {
+			$new_link = str_replace( 'style="', $replacement, $link );
+		} else {
+			$new_link = str_replace( '<a ', "<a {$replacement}\" ", $link );
+		}
+
+		if ( $new_link !== $link ) {
+			$value = str_replace( $link, $new_link, $value );
+		}
+	}
+
+	return $value;
+}
+remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
+add_filter( 'bp_email_get_property', 'openlab_bp_email_add_link_color_to_template', 6, 3 );
+
+/**
  * Group slug blacklist.
  */
 function openlab_forbidden_group_names( $names ) {
