@@ -40,7 +40,7 @@ function openlab_hide_plugins( $plugins ) {
 
 	if ( ! is_super_admin() ) {
 		foreach ( $plugins as $pkey => $plugin ) {
-			if ( in_array( $pkey, $super_admin_only ) ) {
+			if ( in_array( $pkey, $super_admin_only, true ) && ! is_plugin_active( $pkey ) ) {
 				unset( $plugins[ $pkey ] );
 			}
 		}
@@ -74,7 +74,7 @@ function openlab_hide_plugins( $plugins ) {
 		);
 
 		foreach ( $plugins as $pkey => $plugin ) {
-			if ( in_array( $pkey, $network_admin_only ) ) {
+			if ( in_array( $pkey, $network_admin_only, true ) && ! is_plugin_active( $pkey ) ) {
 				unset( $plugins[ $pkey ] );
 			}
 		}
@@ -87,7 +87,7 @@ function openlab_hide_plugins( $plugins ) {
 	);
 
 	foreach ( $blog_specific_whitelist as $plugin_file => $whitelisted_blogs ) {
-		if ( ! in_array( get_current_blog_id(), $whitelisted_blogs ) ) {
+		if ( ! in_array( get_current_blog_id(), $whitelisted_blogs, true ) && ! is_plugin_active( $plugin_file ) ) {
 			unset( $plugins[ $plugin_file ] );
 		}
 	}
