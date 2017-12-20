@@ -2305,7 +2305,7 @@ function openlab_email_appearance_settings( $settings ) {
 	$settings['email_bg'] = '#fff';
 	$settings['header_bg'] = '#fff';
 	$settings['footer_bg'] = '#fff';
-	$settings['highlight_color'] = '#ec6348';
+	$settings['highlight_color'] = '#5cd8cd';
 	return $settings;
 }
 add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appearance_settings' );
