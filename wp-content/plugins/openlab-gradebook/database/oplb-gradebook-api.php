@@ -17,7 +17,7 @@ class oplb_gradebook_api {
      * @return type
      */
     public function oplb_gradebook_update_user($id, $first_name, $last_name) {
-        
+
         $user = get_user_by('id', $user_id);
         return array(
             'first_name' => $user->first_name,
@@ -242,9 +242,9 @@ class oplb_gradebook_api {
             $assignment_count = count($assignments_to_process);
             $placeholders = array_fill(0, $assignment_count, '%d');
             $format = implode(', ', $placeholders);
-            
+
             array_push($assignments_to_process, $current_user->ID);
-            
+
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid IN ($format) AND uid = %d", $assignments_to_process);
 
             $cells = $wpdb->get_results($query, ARRAY_A);
@@ -282,7 +282,7 @@ class oplb_gradebook_api {
         }
     }
 
-    public function oplb_gradebook_get_params($params) {
+    public function oplb_gradebook_get_params() {
         global $wpdb;
 
         $args = array(
@@ -322,16 +322,16 @@ class oplb_gradebook_api {
 
         $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
 
+        $params = filter_input_array(INPUT_GET, $args);
+
         if ($method === 'POST' || $method === 'PUT') {
             //test for payload
             $incoming = json_decode(file_get_contents('php://input'), true);
-        }
 
-        $params = filter_input_array(INPUT_GET, $args);
-
-        if ($incoming && !empty($incoming)) {
-            $incoming_params = filter_var_array($incoming, $args);
-            $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
+            if ($incoming && !empty($incoming)) {
+                $incoming_params = filter_var_array($incoming, $args);
+                $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
+            }
         }
 
         $params['method'] = $method;
@@ -488,6 +488,12 @@ class oplb_gradebook_api {
         //if no weights are assigned (i.e. all weights are set to 0), distribute weights equally
         if (intval($total_weight) === 0) {
             $total_weight = 100;
+            
+            //avoid division by zero
+            if($total_assignments === 0){
+                $total_assignments = 1;
+            }
+            
             $distributed_weight = $total_weight / $total_assignments;
             foreach ($weights_by_assignment as &$assign_weight) {
                 $assign_weight = $distributed_weight;
