@@ -88,6 +88,13 @@ function openlab_current_group_type( $case = 'lower' ) {
 	}
 
 /**
+ * Can a given group type be cloned?
+ */
+function openlab_group_type_can_be_cloned( $group_type ) {
+	return in_array( $group_type, array( 'course', 'project' ) );
+}
+
+/**
  * Get a printable label for a group or group type
  */
 function openlab_get_group_type_label( $args = array() ) {

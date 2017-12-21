@@ -7,7 +7,7 @@
 /**
  * Get the courses that a user is an admin of
  */
-function openlab_get_courses_owned_by_user( $user_id ) {
+function openlab_get_groups_of_type_owned_by_user( $user_id, $type ) {
 	global $wpdb, $bp;
 
 	// This is pretty hackish, but the alternatives are all hacks too
@@ -17,9 +17,10 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 	if ( empty( $is_admin_of_ids ) ) {
 		$is_admin_of_ids = array( 0 );
 	}
+	_b( $is_admin_of_ids );
 
 	// Next, get list of those that are courses
-	$user_course_ids = $wpdb->get_col( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'course' AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")" );
+	$user_course_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = %s AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")", $type ) );
 	if ( empty( $user_course_ids ) ) {
 		$user_course_ids = array( 0 );
 	}
@@ -117,6 +118,7 @@ function openlab_group_clone_details( $group_id ) {
 		'course_code'            => '',
 		'section_code'           => '',
 		'additional_description' => '',
+		'categories'             => '',
 		'site_id'                => '',
 		'site_url'               => '',
 		'site_path'              => '',
@@ -141,6 +143,11 @@ function openlab_group_clone_details( $group_id ) {
 		$retval['course_code'] = groups_get_groupmeta( $group_id, 'wds_course_code' );
 		$retval['section_code'] = groups_get_groupmeta( $group_id, 'wds_section_code' );
 		$retval['additional_description'] = groups_get_groupmeta( $group_id, 'wds_course_html' );
+
+		$group_categories = bpcgc_get_group_selected_terms( $group_id );
+		if ( ! empty( $group_categories ) ) {
+			$retval['categories'] = wp_list_pluck( $group_categories, 'term_id' );
+		}
 
 		$retval['site_id'] = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 		$retval['site_url'] = get_blog_option( $retval['site_id'], 'home' );

@@ -249,6 +249,14 @@ jQuery(document).ready(function($){
 					}
 				});
 
+				// Categories
+				$('.bp-group-categories-list-container input').each(function(k,v){
+					var catId = parseInt(v.value);
+					if ( -1 !== r.categories.indexOf( catId ) ) {
+						$(v).prop('checked', true);
+					}
+				});
+
 				// Course Code
 				$('input[name="wds_course_code"]').val(r.course_code);
 
@@ -260,6 +268,11 @@ jQuery(document).ready(function($){
 
 				// Associated site
 				if ( r.site_id ) {
+					// Check 'Set up a site'
+					if ( ! setuptoggle.is(':checked') ) {
+						setuptoggle.trigger('click');
+					}
+
 					// Un-grey the website clone options
 					$('#wds-website-clone .radio').removeClass('disabled-opt');
 					$('#wds-website-clone input[name="new_or_old"]').removeAttr('disabled');
@@ -302,7 +315,7 @@ jQuery(document).ready(function($){
 	/* Clone setup */
 	var group_type = $.urlParam( 'type' );
 
-	if ( 'course' === group_type ) {
+	if ( OLGroupCreate.groupTypeCanBeCloned ) {
 		var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
 
 		$create_or_clone = $('input[name="create-or-clone"]');
