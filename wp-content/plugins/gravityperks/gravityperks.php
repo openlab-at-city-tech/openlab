@@ -987,8 +987,8 @@ class GravityPerks {
         wp_register_script( 'gwp-repeater', self::get_base_url() . '/scripts/repeater.js', array( 'jquery' ), GravityPerks::$version );
 
         // register our scripts with Gravity Forms so they are not blocked when noconflict mode is enabled
-        add_filter( 'gform_noconflict_scripts', create_function('$scripts', 'return array_merge($scripts, array("gwp-admin", "gwp-frontend", "gwp-common"));') );
-        add_filter( 'gform_noconflict_styles', create_function('$styles', 'return array_merge($styles, array("gwp-admin"));') );
+        add_filter( 'gform_noconflict_scripts', function( $scripts ) { return array_merge($scripts, array("gwp-admin", "gwp-frontend", "gwp-common")); } );
+        add_filter( 'gform_noconflict_styles', function( $styles ) { return array_merge($styles, array("gwp-admin")); } );
 
         require_once(GFCommon::get_base_path() . '/currency.php');
 

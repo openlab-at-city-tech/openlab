@@ -1,8 +1,8 @@
 <?php
 
 function bp_group_documents_register_widgets() {
-	add_action('widgets_init', create_function('', 'return register_widget("BP_Group_Documents_Newest_Widget");') );
-	add_action('widgets_init', create_function('', 'return register_widget("BP_Group_Documents_Popular_Widget");') );
+	add_action('widgets_init', function() { return register_widget("BP_Group_Documents_Newest_Widget"); } );
+	add_action('widgets_init', function() { return register_widget("BP_Group_Documents_Popular_Widget"); } );
 }
 add_action( 'plugins_loaded', 'bp_group_documents_register_widgets' );
 
