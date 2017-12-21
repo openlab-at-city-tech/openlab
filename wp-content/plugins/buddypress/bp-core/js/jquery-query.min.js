@@ -1,1 +1,0 @@
-function bp_get_querystring(a){var b=location.search.split(a+"=")[1];return b?decodeURIComponent(b.split("&")[0]):null}

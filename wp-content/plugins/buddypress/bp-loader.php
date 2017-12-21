@@ -12,10 +12,10 @@
 /**
  * Plugin Name: BuddyPress
  * Plugin URI:  https://buddypress.org/
- * Description: BuddyPress helps site builders and WordPress developers add community features to their websites, with user profile fields, activity streams, messaging, and notifications.
+ * Description: BuddyPress adds community features to WordPress. Member Profiles, Activity Streams, Direct Messaging, Notifications, and more!
  * Author:      The BuddyPress Community
  * Author URI:  https://buddypress.org/
- * Version:     2.8.2
+ * Version:     2.9.2
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -40,7 +40,7 @@ define( 'BP_REQUIRED_PHP_VERSION', '5.3.0' );
  *
  * Example: <?php $bp = buddypress(); ?>
  *
- * @return BuddyPress The one true BuddyPress Instance.
+ * @return BuddyPress|null The one true BuddyPress Instance.
  */
 function buddypress() {
 	return BuddyPress::instance();

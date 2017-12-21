@@ -564,6 +564,7 @@ class BP_Group_Extension {
 	 * @since 2.1.0
 	 */
 	protected function setup_access_settings() {
+
 		// Bail if no group ID is available.
 		if ( empty( $this->group_id ) ) {
 			return;
@@ -580,7 +581,7 @@ class BP_Group_Extension {
 		// Backward compatibility for components that do not provide
 		// explicit 'access' parameter.
 		if ( empty( $this->params['access'] ) ) {
-			if ( false === $this->enable_nav_item ) {
+			if ( false === $this->params['enable_nav_item'] ) {
 				$this->params['access'] = 'noone';
 			} else {
 				$group = groups_get_group( $this->group_id );
@@ -666,7 +667,6 @@ class BP_Group_Extension {
 	 * @return bool
 	 */
 	protected function user_meets_access_condition( $access_condition ) {
-		$group = groups_get_group( $this->group_id );
 
 		switch ( $access_condition ) {
 			case 'admin' :
@@ -753,8 +753,14 @@ class BP_Group_Extension {
 			// When we are viewing the extension display page, set the title and options title.
 			if ( bp_is_current_action( $this->slug ) ) {
 				add_filter( 'bp_group_user_has_access',   array( $this, 'group_access_protection' ), 10, 2 );
-				add_action( 'bp_template_content_header', create_function( '', 'echo "' . esc_attr( $this->name ) . '";' ) );
-				add_action( 'bp_template_title',          create_function( '', 'echo "' . esc_attr( $this->name ) . '";' ) );
+
+				$extension_name = $this->name;
+				add_action( 'bp_template_content_header', function() use ( $extension_name ) {
+					echo esc_attr( $extension_name );
+				} );
+				add_action( 'bp_template_title', function() use ( $extension_name ) {
+					echo esc_attr( $extension_name );
+				} );
 			}
 		}
 
@@ -806,7 +812,9 @@ class BP_Group_Extension {
 	 * @return bool
 	 */
 	public function user_can_see_nav_item( $user_can_see_nav_item = false ) {
-		if ( 'noone' !== $this->params['show_tab'] && current_user_can( 'bp_moderate' ) ) {
+
+		// Always allow moderators to see nav items, even if explicitly 'noone'
+		if ( ( 'noone' !== $this->params['show_tab'] ) && current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
 
@@ -816,13 +824,18 @@ class BP_Group_Extension {
 	/**
 	 * Determine whether the current user has access to visit this tab.
 	 *
+	 * Note that this controls the ability of a user to access a tab.
+	 * Display of the navigation item is controlled by user_can_see_nav_item().
+	 *
 	 * @since 2.1.0
 	 *
 	 * @param bool $user_can_visit Whether or not the user can visit the tab.
 	 * @return bool
 	 */
 	public function user_can_visit( $user_can_visit = false ) {
-		if ( 'noone' !== $this->params['access'] && current_user_can( 'bp_moderate' ) ) {
+
+		// Always allow moderators to visit a tab, even if explicitly 'noone'
+		if ( ( 'noone' !== $this->params['access'] ) && current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
 
@@ -943,13 +956,13 @@ class BP_Group_Extension {
 		$position += 40;
 
 		$current_group = groups_get_current_group();
-		$admin_link = trailingslashit( bp_get_group_permalink( $current_group ) . 'admin' );
+		$admin_link    = trailingslashit( bp_get_group_permalink( $current_group ) . 'admin' );
 
 		$subnav_args = array(
 			'name'            => $screen['name'],
 			'slug'            => $screen['slug'],
 			'parent_slug'     => $current_group->slug . '_manage',
-			'parent_url'      => trailingslashit( bp_get_group_permalink( $current_group ) . 'admin' ),
+			'parent_url'      => $admin_link,
 			'user_has_access' => bp_is_item_admin(),
 			'position'        => $position,
 			'screen_function' => 'groups_screen_group_admin',
@@ -1189,10 +1202,15 @@ class BP_Group_Extension {
 		$group_id = isset( $_GET['gid'] ) ? (int) $_GET['gid'] : 0;
 		$screen   = $this->screens['admin'];
 
+		$extension_slug = $this->slug;
+		$callback = function() use ( $extension_slug, $group_id ) {
+			do_action( 'bp_groups_admin_meta_box_content_' . $extension_slug, $group_id );
+		};
+
 		add_meta_box(
 			$screen['slug'],
 			$screen['name'],
-			create_function( '', 'do_action( "bp_groups_admin_meta_box_content_' . $this->slug . '", ' . $group_id . ' );' ),
+			$callback,
 			get_current_screen()->id,
 			$screen['metabox_context'],
 			$screen['metabox_priority']

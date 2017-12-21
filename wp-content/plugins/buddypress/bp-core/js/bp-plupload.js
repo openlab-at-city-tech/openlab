@@ -97,6 +97,11 @@ window.bp = window.bp || {};
 
 		} );
 
+		// See https://core.trac.wordpress.org/ticket/37039
+		this.uploader.bind( 'postinit', function( up ) {
+			up.refresh();
+		});
+
 		// Init BuddyPress Uploader
 		this.uploader.init();
 
@@ -270,7 +275,7 @@ window.bp = window.bp || {};
 					'IO_ERROR':               self.strings.io_error,
 					'HTTP_ERROR':             self.strings.http_error,
 					'SECURITY_ERROR':         self.strings.security_error,
-					'FILE_SIZE_ERROR':        self.strings.file_exceeds_size_limit.replace( '%s' , pluploadError.file.name )
+					'FILE_SIZE_ERROR':        self.strings.file_exceeds_size_limit.replace( '%s' , $( '<span />' ).text( pluploadError.file.name ).html() )
 				};
 
 			// Check for plupload errors.

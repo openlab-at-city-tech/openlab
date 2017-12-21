@@ -131,34 +131,38 @@ add_action( 'bp_actions', 'bp_messages_action_create_message' );
  *
  * @since 2.4.0 This function was split from messages_screen_notices(). See #6505.
  *
- * @global int $notice_id
- *
  * @return boolean
  */
 function bp_messages_action_edit_notice() {
-	global $notice_id;
 
 	// Bail if not viewing a single notice URL.
-	if ( ! bp_is_messages_component() || ! bp_is_current_action( 'notices' ) || ! bp_action_variable( 1 ) ) {
+	if ( ! bp_is_messages_component() || ! bp_is_current_action( 'notices' ) ) {
 		return false;
 	}
 
-	// Get action variables.
-	$action    = bp_action_variable( 0 ); // deactivate|activate|delete.
-	$notice_id = bp_action_variable( 1 ); // 1|2|3|etc...
+	// Get the notice ID (1|2|3).
+	$notice_id = bp_action_variable( 1 );
 
 	// Bail if notice ID is not numeric.
-	if ( ! is_numeric( $notice_id ) ) {
-		return;
+	if ( empty( $notice_id ) || ! is_numeric( $notice_id ) ) {
+		return false;
 	}
 
-	// Define local variables.
-	$redirect_to = '';
-	$feedback    = '';
-	$success     = false;
+	// Bail if the current user doesn't have administrator privileges.
+	if ( ! bp_current_user_can( 'bp_moderate' ) ) {
+		return false;
+	}
+
+	// Get the action (deactivate|activate|delete).
+	$action = sanitize_key( bp_action_variable( 0 ) );
+
+	// Check the nonce.
+	check_admin_referer( "messages_{$action}_notice" );
 
 	// Get the notice from database.
-	$notice = new BP_Messages_Notice( $notice_id );
+	$notice   = new BP_Messages_Notice( $notice_id );
+	$success  = false;
+	$feedback = '';
 
 	// Take action.
 	switch ( $action ) {
@@ -222,7 +226,7 @@ function messages_action_conversation() {
 	$thread_id = (int) bp_action_variable( 0 );
 
 	if ( ! messages_is_valid_thread( $thread_id ) || ( ! messages_check_thread_access( $thread_id ) && ! bp_current_user_can( 'bp_moderate' ) ) ) {
-		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() ) );
+		return;
 	}
 
 	// Check if a new reply has been submitted.
@@ -247,8 +251,13 @@ function messages_action_conversation() {
 		bp_core_redirect( bp_displayed_user_domain() . bp_get_messages_slug() . '/view/' . $thread_id . '/' );
 	}
 
-	// Mark message read.
-	messages_mark_thread_read( $thread_id );
+	/*
+	 * Mark message read, but only run on the logged-in user's profile.
+	 * If an admin visits a thread, it shouldn't change the read status.
+	 */
+	if ( bp_is_my_profile() ) {
+		messages_mark_thread_read( $thread_id );
+	}
 
 	/**
 	 * Fires after processing a view request for a single message thread.
@@ -295,7 +304,7 @@ add_action( 'bp_actions', 'messages_action_delete_message' );
  *
  * @since 2.2.0
  *
- * @return bool|null Returns false on failure. Otherwise redirects back to the
+ * @return false|null Returns false on failure. Otherwise redirects back to the
  *                   message box URL.
  */
 function bp_messages_action_mark_read() {
@@ -319,7 +328,7 @@ function bp_messages_action_mark_read() {
 	}
 
 	// Check access to the message and mark as read.
-	if ( messages_check_thread_access( $id ) ) {
+	if ( messages_check_thread_access( $id ) || bp_current_user_can( 'bp_moderate' ) ) {
 		messages_mark_thread_read( $id );
 		bp_core_add_message( __( 'Message marked as read.', 'buddypress' ) );
 	} else {
@@ -336,7 +345,7 @@ add_action( 'bp_actions', 'bp_messages_action_mark_read' );
  *
  * @since 2.2.0
  *
- * @return bool|null Returns false on failure. Otherwise redirects back to the
+ * @return false|null Returns false on failure. Otherwise redirects back to the
  *                   message box URL.
  */
 function bp_messages_action_mark_unread() {
@@ -360,7 +369,7 @@ function bp_messages_action_mark_unread() {
 	}
 
 	// Check access to the message and mark unread.
-	if ( messages_check_thread_access( $id ) ) {
+	if ( messages_check_thread_access( $id ) || bp_current_user_can( 'bp_moderate' ) ) {
 		messages_mark_thread_unread( $id );
 		bp_core_add_message( __( 'Message marked unread.', 'buddypress' ) );
 	} else {
@@ -404,7 +413,7 @@ function bp_messages_action_bulk_manage() {
 
 	// Make sure the user has access to all notifications before managing them.
 	foreach ( $messages as $message ) {
-		if ( ! messages_check_thread_access( $message ) ) {
+		if ( ! messages_check_thread_access( $message ) && ! bp_current_user_can( 'bp_moderate' ) ) {
 			bp_core_add_message( __( 'There was a problem managing your messages.', 'buddypress' ), 'error' );
 			bp_core_redirect( bp_displayed_user_domain() . bp_get_messages_slug() . '/' . bp_current_action() . '/' );
 		}

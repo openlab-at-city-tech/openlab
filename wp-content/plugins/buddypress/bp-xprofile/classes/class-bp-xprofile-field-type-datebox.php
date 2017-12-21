@@ -80,12 +80,14 @@ class BP_XProfile_Field_Type_Datebox extends BP_XProfile_Field_Type {
 			'name' => bp_get_the_profile_field_input_name() . '_year'
 		) ); ?>
 
-		<fieldset class="datebox">
-
 			<legend>
 				<?php bp_the_profile_field_name(); ?>
 				<?php bp_the_profile_field_required_label(); ?>
 			</legend>
+
+			<?php if ( bp_get_the_profile_field_description() ) : ?>
+				<p class="description" tabindex="0"><?php bp_the_profile_field_description(); ?></p>
+			<?php endif; ?>
 
 			<div class="input-options datebox-selects">
 
@@ -138,7 +140,6 @@ class BP_XProfile_Field_Type_Datebox extends BP_XProfile_Field_Type {
 
 			</div>
 
-		</fieldset>
 	<?php
 	}
 

@@ -126,6 +126,15 @@ class BP_Groups_Group {
 	protected $is_member;
 
 	/**
+	 * Is the current user a member of this group?
+	 * Alias of $is_member for backward compatibility.
+	 *
+	 * @since 2.9.0
+	 * @var bool
+	 */
+	protected $is_user_member;
+
+	/**
 	 * Does the current user have an outstanding invitation to this group?
 	 *
 	 * @since 1.9.0
@@ -156,6 +165,14 @@ class BP_Groups_Group {
 	 * @var bool
 	 */
 	protected $user_has_access;
+
+	/**
+	 * Can the current user know that this group exists?
+	 *
+	 * @since 2.9.0
+	 * @var bool
+	 */
+	protected $is_visible;
 
 	/**
 	 * Raw arguments passed to the constructor.
@@ -416,6 +433,7 @@ class BP_Groups_Group {
 				return $this->get_mods();
 
 			case 'is_member' :
+			case 'is_user_member' :
 				return $this->get_is_member();
 
 			case 'is_invited' :
@@ -426,6 +444,9 @@ class BP_Groups_Group {
 
 			case 'user_has_access' :
 				return $this->get_user_has_access();
+
+			case 'is_visible' :
+				return $this->is_visible();
 
 			default :
 				return isset( $this->{$key} ) ? $this->{$key} : null;
@@ -448,11 +469,13 @@ class BP_Groups_Group {
 			case 'admins' :
 			case 'is_invited' :
 			case 'is_member' :
+			case 'is_user_member' :
 			case 'is_pending' :
 			case 'last_activity' :
 			case 'mods' :
 			case 'total_member_count' :
 			case 'user_has_access' :
+			case 'is_visible' :
 			case 'forum_id' :
 				return true;
 
@@ -469,7 +492,9 @@ class BP_Groups_Group {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string $key Property name.
+	 * @param string $key   Property name.
+	 * @param mixed  $value Property value.
+	 * @return bool
 	 */
 	public function __set( $key, $value ) {
 		switch ( $key ) {
@@ -489,7 +514,7 @@ class BP_Groups_Group {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	protected function get_admins() {
 		if ( isset( $this->admins ) ) {
@@ -508,7 +533,7 @@ class BP_Groups_Group {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	protected function get_mods() {
 		if ( isset( $this->mods ) ) {
@@ -535,6 +560,7 @@ class BP_Groups_Group {
 
 		$admin_mod_users = get_users( array(
 			'include' => array_merge( $admin_ids_plucked, $mod_ids_plucked ),
+			'blog_id' => null,
 		) );
 
 		$admin_objects = $mod_objects = array();
@@ -565,7 +591,7 @@ class BP_Groups_Group {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @return bool
+	 * @return bool|int
 	 */
 	protected function get_is_member() {
 		if ( isset( $this->is_member ) ) {
@@ -604,6 +630,34 @@ class BP_Groups_Group {
 		return $this->user_has_access;
 	}
 
+	/**
+	 * Checks whether the current user can know the group exists.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @return bool
+	 */
+	protected function is_visible() {
+		if ( isset( $this->is_visible ) ) {
+			return $this->is_visible;
+		}
+
+		if ( 'hidden' === $this->status ) {
+
+			// Assume user can not know about hidden groups.
+			$this->is_visible = false;
+
+			// Group members or community moderators have access.
+			if ( ( is_user_logged_in() && $this->get_is_member() ) || bp_current_user_can( 'bp_moderate' ) ) {
+				$this->is_visible = true;
+			}
+		} else {
+			$this->is_visible = true;
+		}
+
+		return $this->is_visible;
+	}
+
 	/** Static Methods ****************************************************/
 
 	/**
@@ -612,22 +666,32 @@ class BP_Groups_Group {
 	 * @since 1.6.0
 	 *
 	 * @param string      $slug       Slug to check.
-	 * @param string|bool $table_name Optional. Name of the table to check
-	 *                                against. Default: $bp->groups->table_name.
+	 * @param string|bool $table_name Deprecated.
 	 * @return int|null Group ID if found; null if not.
 	 */
 	public static function group_exists( $slug, $table_name = false ) {
 		global $wpdb;
 
-		if ( empty( $table_name ) )
-			$table_name = buddypress()->groups->table_name;
-
-		if ( empty( $slug ) )
+		if ( empty( $slug ) ) {
 			return false;
+		}
 
-		$query = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table_name} WHERE slug = %s", strtolower( $slug ) ) );
+		$args = array(
+			'slug'               => $slug,
+			'per_page'           => 1,
+			'page'               => 1,
+			'update_meta_cache'  => false,
+			'show_hidden'        => true,
+		);
 
-		return is_numeric( $query ) ? (int) $query : $query;
+		$groups = BP_Groups_Group::get( $args );
+
+		$group_id = null;
+		if ( $groups['groups'] ) {
+			$group_id = current( $groups['groups'] )->id;
+		}
+
+		return $group_id;
 	}
 
 	/**
@@ -638,28 +702,79 @@ class BP_Groups_Group {
 	 * @since 1.6.0
 	 *
 	 * @param string $slug See {@link BP_Groups_Group::group_exists()}.
-	 * @return string|null See {@link BP_Groups_Group::group_exists()}.
+	 * @return int|null See {@link BP_Groups_Group::group_exists()}.
 	 */
 	public static function get_id_from_slug( $slug ) {
 		return BP_Groups_Group::group_exists( $slug );
 	}
 
 	/**
+	 * Get whether a group exists for an old slug.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string      $slug       Slug to check.
+	 *
+	 * @return int|null|false Group ID if found; null if not; false if missing parameters.
+	 */
+	public static function get_id_by_previous_slug( $slug ) {
+		global $wpdb;
+
+		if ( empty( $slug ) ) {
+			return false;
+		}
+
+		$args = array(
+			'meta_query'         => array(
+				array(
+					'key'   => 'previous_slug',
+					'value' => $slug
+				),
+			),
+			'orderby'            => 'meta_id',
+			'order'              => 'DESC',
+			'per_page'           => 1,
+			'page'               => 1,
+			'update_meta_cache'  => false,
+			'show_hidden'        => true,
+		);
+		$groups = BP_Groups_Group::get( $args );
+
+		$group_id = null;
+		if ( $groups['groups'] ) {
+			$group_id = current( $groups['groups'] )->id;
+		}
+
+		return $group_id;
+	}
+
+	/**
 	 * Get IDs of users with outstanding invites to a given group from a specified user.
 	 *
 	 * @since 1.6.0
+	 * @since 2.9.0 Added $sent as a parameter.
 	 *
-	 * @param int $user_id ID of the inviting user.
-	 * @param int $group_id ID of the group.
-	 * @return array IDs of users who have been invited to the group by the
-	 *               user but have not yet accepted.
+	 * @param  int      $user_id  ID of the inviting user.
+	 * @param  int      $group_id ID of the group.
+	 * @param  int|null $sent     Query for a specific invite sent status. If 0, this will query for users
+	 *                            that haven't had an invite sent to them yet. If 1, this will query for
+	 *                            users that have had an invite sent to them. If null, no invite status will
+	 *                            queried. Default: null.
+	 * @return array    IDs of users who have been invited to the group by the user but have not
+	 *                  yet accepted.
 	 */
-	public static function get_invites( $user_id, $group_id ) {
+	public static function get_invites( $user_id, $group_id, $sent = null ) {
 		global $wpdb;
 
-		$bp = buddypress();
+		$bp  = buddypress();
+		$sql = $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d and is_confirmed = 0 AND inviter_id = %d", $group_id, $user_id );
 
-		return $wpdb->get_col( $wpdb->prepare( "SELECT user_id FROM {$bp->groups->table_name_members} WHERE group_id = %d and is_confirmed = 0 AND inviter_id = %d", $group_id, $user_id ) );
+		// Query for a specific invite sent status.
+		if ( ! is_null( $sent ) ) {
+			$sql .= $wpdb->prepare( ' AND invite_sent = %d', $sent );
+		}
+
+		return $wpdb->get_col( $sql );
 	}
 
 	/**
@@ -860,6 +975,8 @@ class BP_Groups_Group {
 	 * @since 1.6.0
 	 * @since 2.6.0 Added `$group_type`, `$group_type__in`, and `$group_type__not_in` parameters.
 	 * @since 2.7.0 Added `$update_admin_cache` and `$parent_id` parameters.
+	 * @since 2.8.0 Changed `$search_terms` parameter handling and added `$search_columns` parameter.
+	 * @since 2.9.0 Added `$slug` parameter.
 	 *
 	 * @param array $args {
 	 *     Array of parameters. All items are optional.
@@ -868,7 +985,8 @@ class BP_Groups_Group {
 	 *                                            When present, will override orderby and order params.
 	 *                                            Default: null.
 	 *     @type string       $orderby            Optional. Property to sort by. 'date_created', 'last_activity',
-	 *                                            'total_member_count', 'name', 'random'. Default: 'date_created'.
+	 *                                            'total_member_count', 'name', 'random', 'meta_id'.
+	 *                                            Default: 'date_created'.
 	 *     @type string       $order              Optional. Sort order. 'ASC' or 'DESC'. Default: 'DESC'.
 	 *     @type int          $per_page           Optional. Number of items to return per page of results.
 	 *                                            Default: null (no limit).
@@ -876,7 +994,10 @@ class BP_Groups_Group {
 	 *                                            Default: null (no limit).
 	 *     @type int          $user_id            Optional. If provided, results will be limited to groups
 	 *                                            of which the specified user is a member. Default: null.
- 	 *     @type string       $search_terms       Optional. If provided, only groups whose names or descriptions
+ 	 *     @type array|string $slug               Optional. Array or comma-separated list of group slugs to limit
+ 	 *                                            results to.
+	 *                                            Default: false.
+	 *     @type string       $search_terms       Optional. If provided, only groups whose names or descriptions
 	 *                                            match the search terms will be returned. Allows specifying the
 	 *                                            wildcard position using a '*' character before or after the
 	 *                                            string or both. Works in concert with $search_columns.
@@ -901,6 +1022,9 @@ class BP_Groups_Group {
 	 *     @type bool         $update_admin_cache Whether to pre-fetch administrator IDs for the returned
 	 *                                            groups. Default: false.
 	 *     @type bool         $show_hidden        Whether to include hidden groups in results. Default: false.
+ 	 *     @type array|string $status             Optional. Array or comma-separated list of group statuses to limit
+ 	 *                                            results to. If specified, $show_hidden is ignored.
+	 *                                            Default: empty array.
 	 * }
 	 * @return array {
 	 *     @type array $groups Array of group objects returned by the
@@ -938,6 +1062,7 @@ class BP_Groups_Group {
 			'per_page'           => null,
 			'page'               => null,
 			'user_id'            => 0,
+			'slug'               => array(),
 			'search_terms'       => false,
 			'search_columns'     => array(),
 			'group_type'         => '',
@@ -950,6 +1075,7 @@ class BP_Groups_Group {
 			'update_admin_cache' => false,
 			'exclude'            => false,
 			'show_hidden'        => false,
+			'status'             => array()
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -970,8 +1096,24 @@ class BP_Groups_Group {
 
 		$where_conditions = array();
 
-		if ( empty( $r['show_hidden'] ) ) {
+		if ( ! empty( $r['status'] ) ) {
+			if ( ! is_array( $r['status'] ) ) {
+				$r['status'] = preg_split( '/[\s,]+/', $r['status'] );
+			}
+			$r['status'] = array_map( 'sanitize_title', $r['status'] );
+			$status_in = "'" . implode( "','", $r['status'] ) . "'";
+			$where_conditions['status'] = "g.status IN ({$status_in})";
+		} elseif ( empty( $r['show_hidden'] ) ) {
 			$where_conditions['hidden'] = "g.status != 'hidden'";
+		}
+
+		if ( ! empty( $r['slug'] ) ) {
+			if ( ! is_array( $r['slug'] ) ) {
+				$r['slug'] = preg_split( '/[\s,]+/', $r['slug'] );
+			}
+			$r['slug'] = array_map( 'sanitize_title', $r['slug'] );
+			$slug_in = "'" . implode( "','", $r['slug'] ) . "'";
+			$where_conditions['slug'] = "g.slug IN ({$slug_in})";
 		}
 
 		$search = '';
@@ -1098,6 +1240,11 @@ class BP_Groups_Group {
 
 			$sql['from'] .= " JOIN {$bp->groups->table_name_groupmeta} gm_last_activity on ( g.id = gm_last_activity.group_id )";
 			$where_conditions['last_activity'] = "gm_last_activity.meta_key = 'last_activity'";
+		}
+
+		// If 'meta_id' is the requested order, and there's no meta query, fall back to the default.
+		if ( 'meta_id' === $orderby && empty( $meta_query_sql['join'] ) ) {
+			$orderby = 'date_created';
 		}
 
 		// Sanitize 'order'.
@@ -1401,6 +1548,10 @@ class BP_Groups_Group {
 
 			case 'random' :
 				$order_by_term = 'rand()';
+				break;
+
+			case 'meta_id' :
+				$order_by_term = buddypress()->groups->table_name_groupmeta . '.id';
 				break;
 		}
 

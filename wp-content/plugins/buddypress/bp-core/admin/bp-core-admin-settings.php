@@ -47,6 +47,38 @@ function bp_admin_setting_callback_account_deletion() {
 <?php
 }
 
+/**
+ * Form element to change the active template pack.
+ */
+function bp_admin_setting_callback_theme_package_id() {
+	$options = '';
+
+	/*
+	 * Note: This should never be empty. /bp-templates/ is the
+	 * canonical backup if no other packages exist. If there's an error here,
+	 * something else is wrong.
+	 *
+	 * See BuddyPress::register_theme_packages()
+	 */
+	foreach ( (array) buddypress()->theme_compat->packages as $id => $theme ) {
+		$options .= sprintf(
+			'<option value="%1$s" %2$s>%3$s</option>',
+			esc_attr( $id ),
+			selected( $theme->id, bp_get_theme_package_id(), false ),
+			esc_html( $theme->name )
+		);
+	}
+
+	if ( $options ) : ?>
+		<select name="_bp_theme_package_id" id="_bp_theme_package_id"><?php echo $options; ?></select>
+		<p class="description"><label for="_bp_theme_package_id"><?php esc_html_e( 'The selected Template Pack will serve all BuddyPress templates.', 'buddypress' ); ?></label></p>
+
+	<?php else : ?>
+		<p><?php esc_html_e( 'No template packages available.', 'buddypress' ); ?></p>
+
+	<?php endif;
+}
+
 /** Activity *******************************************************************/
 
 /**
@@ -239,7 +271,7 @@ function bp_admin_setting_callback_bbpress_configuration() {
 
 	<?php if ( false === $file_exists ) : ?>
 
-		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>" title="<?php esc_attr_e( 'Attempt to save a new config file.', 'buddypress' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
+		<a class="button" href="<?php bp_admin_url( 'admin.php?page=bb-forums-setup&repair=1' ); ?>"><?php _e( 'Repair', 'buddypress' ) ?></a>
 		<span class="attention"><?php _e( 'File does not exist', 'buddypress' ); ?></span>
 
 	<?php endif; ?>

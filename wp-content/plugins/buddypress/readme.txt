@@ -1,13 +1,14 @@
 === BuddyPress ===
 Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw2113, dcavins, hnla
 Tags: social networking, activity, profiles, messaging, friends, groups, forums, notifications, settings, social, community, networks, networking
-Requires at least: 4.3
-Tested up to: 4.7.2
-Stable tag: 2.8.2
+Requires at least: 4.4
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-BuddyPress helps site builders and WordPress developers add community features to their websites, with user profile fields, activity streams, messaging, and notifications.
+BuddyPress adds community features to WordPress. Member Profiles, Activity Streams, Direct Messaging, Notifications, and more!
 
 == Description ==
 
@@ -116,97 +117,10 @@ Please consider helping translate BuddyPress at our <a href="https://translate.w
 
 == Upgrade Notice ==
 
-= 2.8.2 =
-See: https://codex.buddypress.org/releases/version-2-8-2/
-
-= 2.8.1 =
-See: https://codex.buddypress.org/releases/version-2-8-1/
+= 2.9.2 =
+See: https://codex.buddypress.org/releases/version-2-9-2/
 
 == Changelog ==
 
-= 2.8.2 =
-See: https://codex.buddypress.org/releases/version-2-8-2/
-
-= 2.8.1 =
-See: https://codex.buddypress.org/releases/version-2-8-1/
-
-= 2.8.0 =
-See: https://codex.buddypress.org/releases/version-2-8-0/
-
-= 2.7.4 =
-See: https://codex.buddypress.org/releases/version-2-7-4/
-
-= 2.7.4 =
-See: https://codex.buddypress.org/releases/version-2-7-4/
-
-= 2.7.2 =
-See: https://codex.buddypress.org/releases/version-2-7-2/
-
-= 2.7.1 =
-See: https://codex.buddypress.org/releases/version-2-7-1/
-
-= 2.7.0 =
-See: https://codex.buddypress.org/releases/version-2-7-0/
-
-= 2.6.2 =
-See: https://codex.buddypress.org/releases/version-2-6-2/
-
-= 2.6.1.1 =
-See: https://codex.buddypress.org/releases/version-2-6-1-1/
-
-= 2.6.1 =
-See: https://codex.buddypress.org/releases/version-2-6-1/
-
-= 2.6.0 =
-See: https://codex.buddypress.org/releases/version-2-6-0/
-
-= 2.5.3 =
-See: https://codex.buddypress.org/releases/version-2-5-3/
-
-= 2.5.2 =
-See: https://codex.buddypress.org/releases/version-2-5-2/
-
-= 2.5.1 =
-See: https://codex.buddypress.org/releases/version-2-5-1/
-
-= 2.5 =
-See: https://codex.buddypress.org/releases/version-2-5-0/
-
-= 2.4.3 =
-See: https://codex.buddypress.org/releases/version-2-4-3/
-
-= 2.4.2 =
-See: https://codex.buddypress.org/releases/version-2-4-2/
-
-= 2.4.1 =
-See: https://codex.buddypress.org/releases/version-2-4-1/
-
-= 2.4 =
-See: https://codex.buddypress.org/releases/version-2-4-0/
-
-= 2.3.5 =
-See: https://codex.buddypress.org/releases/version-2-3-5/
-
-= 2.3.4 =
-See: https://codex.buddypress.org/releases/version-2-3-4/
-
-= 2.3.3 =
-See: https://codex.buddypress.org/releases/version-2-3-3/
-
-= 2.3.2 =
-See: https://codex.buddypress.org/releases/version-2-3-2/
-
-= 2.3.1 =
-See: https://codex.buddypress.org/releases/version-2-3-1/
-
-= 2.3 =
-See: https://codex.buddypress.org/releases/version-2-3-0/
-
-= 2.2.1 =
-See: https://codex.buddypress.org/releases/version-2-2-1/
-
-= 2.2 =
-See: https://codex.buddypress.org/releases/version-2-2/
-
-= Older =
-See: https://codex.buddypress.org/releases/
+= 2.9.2 =
+See: https://codex.buddypress.org/releases/version-2-9-2/

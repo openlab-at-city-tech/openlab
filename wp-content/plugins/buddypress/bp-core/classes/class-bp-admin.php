@@ -395,6 +395,10 @@ class BP_Admin {
 		add_settings_field( 'bp-disable-account-deletion', __( 'Account Deletion', 'buddypress' ), 'bp_admin_setting_callback_account_deletion', 'buddypress', 'bp_main' );
 		register_setting( 'buddypress', 'bp-disable-account-deletion', 'intval' );
 
+		// Template pack picker.
+		add_settings_field( '_bp_theme_package_id', __( 'Template Pack', 'buddypress' ), 'bp_admin_setting_callback_theme_package_id', 'buddypress', 'bp_main' );
+		register_setting( 'buddypress', '_bp_theme_package_id', 'sanitize_text_field' );
+
 		/* XProfile Section **************************************************/
 
 		if ( bp_is_active( 'xprofile' ) ) {
@@ -563,7 +567,7 @@ class BP_Admin {
 
 				<div id="welcome-panel" class="welcome-panel">
 					<div class="welcome-panel-content">
-						<h3 style="margin:0"><?php _e( 'Getting Started with BuddyPress', 'buddypress' ); ?></h3>
+						<h3 style="margin:0;"><?php _e( 'Getting Started with BuddyPress', 'buddypress' ); ?></h3>
 						<div class="welcome-panel-column-container">
 							<div class="welcome-panel-column">
 								<h4><?php _e( 'Configure BuddyPress', 'buddypress' ); ?></h4>
@@ -608,114 +612,81 @@ class BP_Admin {
 
 			<?php endif; ?>
 
-			<div class="bp-headline-feature">
-				<div class="bp-headline">
-					<h3 class="headline-title"><?php esc_html_e( 'Modernizing the Codebase', 'buddypress' ); ?></h3>
-					<p class="introduction"><?php
-						 /* translators: 1: BP REST API, 2: Link to Codex article */
-						printf( __( 'To continue the migration of legacy code to modern standards and techniques necessary for the %1$s project and other new features moving forward, <a href="%2$s">BuddyPress 2.8 requires at least PHP 5.3</a>. This will allow us to build better, robust, and secure code, benefitting developers and users now and in the future.', 'buddypress'),
-						'<code>BP REST API</code>',
-						'https://codex.buddypress.org/getting-started/buddypress-2-8-will-require-php-5-3/' );
-					?></p>
-				</div>
-			</div>
-
 			<div class="bp-features-section">
 
 				<h3 class="headline-title"><?php esc_html_e( 'For Developers &amp; Site Builders', 'buddypress' ); ?></h3>
 
-				<div class="bp-feature-with-images">
-
-					<div class="bp-feature-imaged">
-						<h4 class="feature-title"><?php esc_html_e( 'More helpful "Activate Pending Accounts" screen', 'buddypress' ); ?></h4>
-						<img src="<?php echo esc_url( buddypress()->plugin_url . 'bp-core/admin/images/pending-accounts.png' ); ?>" alt="<?php esc_attr_e( 'The improved pending account screen.', 'buddypress' ); ?>">
-						<p><?php esc_html_e( 'When you click on the username on the "Users > Manage Signups" page, you can now view profile data entered by the user at the time of registration.', 'buddypress' ); ?></p>
-					</div>
-
-					<div class="bp-feature-imaged anon">
-						<h4 class="feature-title"><?php
-							/* translators: %s: List-Unsubscribe */
-							printf( __( 'Support for %s header in emails', 'buddypress' ),
-							'<code>List-Unsubscribe</code>' );
-						?></h4>
-						<img src="<?php echo esc_url( buddypress()->plugin_url . 'bp-core/admin/images/list-unsubscribe.png' ); ?>" alt="<?php esc_attr_e( 'Email header showing the list-unsubscribe feature.', 'buddypress' ); ?>">
-						<p><?php esc_html_e( 'Allow users to unsubscribe from BuddyPress email notifications in some email clients such as Gmail (web), when properly configured.', 'buddypress' ); ?></p>
-					</div>
-
-					<div class="bp-feature-imaged">
-						<h4 class="feature-title"><?php esc_html_e( 'Twenty Seventeen Companion Stylesheet', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'BuddyPress looks great in WordPress\'s latest default theme with the new Twenty Seventeen companion stylesheet.', 'buddypress' ); ?></p>
-						<p><?php
-						/* translators: 1: Link to the Codex article, 2: functions.php */
-						printf( __( 'To change the default two-column page layout to a full-width layout as seen in the image, add the <a href="%1$s">following code</a> to the  %2$s file of your Twenty Seventeen child theme.', 'buddypress' ),
-						'https://codex.buddypress.org/themes/bp-theme-compatibility-and-the-wordpress-default-themes/twenty-seventeen-theme/',
-						'<code>functions.php</code>' );
-					?></p>
-					</div>
-
-					<div class="bp-feature-imaged anon">
-						<img src="<?php echo esc_url( buddypress()->plugin_url . 'bp-core/admin/images/twenty-seventeen.png' ); ?>" alt="<?php esc_attr_e( 'Full-width BuddyPress layout for Twenty Seventeen theme.', 'buddypress' ); ?>">
-					</div>
-
-					<div class="clear"></div>
-				</div>
-
-				<div class="bp-feature">
-					<span class="dashicons dashicons-testimonial" aria-hidden="true"></span>
-					<h4 class="feature-title"><?php esc_html_e( 'More hooks for Messages', 'buddypress' ); ?></h4>
-					<p><?php esc_html_e( 'We\'ve added new filters and actions for different methods throughout the Messages component.', 'buddypress' ); ?></p>
-				</div>
-
-				<div class="bp-feature opposite">
-					<span class="dashicons dashicons-search" aria-hidden="true"></span>
-					<h4 class="feature-title"><?php esc_html_e( 'A more flexible Group search', 'buddypress' ); ?></h4>
-					<p><?php
-						/* translators: 1: search_column, 2: BP_Groups_Group::get() */
-						printf( __( 'The new %1$s parameter allows developers to specify which columns should be matched, as well as where wildcard characters should be placed, when searching via %2$s.', 'buddypress' ),
-						'<code>search_column</code>',
-						'<code>BP_Groups_Group::get()</code>' );
-					?></p>
-				</div>
-
 				<div class="bp-feature">
 					<span class="dashicons dashicons-groups" aria-hidden="true"></span>
-					<h4 class="feature-title"><?php esc_html_e( 'Alphabetical sorting for Groups widget', 'buddypress' ); ?></h4>
-					<p><?php esc_html_e( 'The groups widget can now be sorted alphabetically, in addition to sorting the results by recently active, popular, and newest groups.', 'buddypress' ); ?></p>
+					<h4 class="feature-title"><?php esc_html_e( 'Edit Group Slug', 'buddypress' ); ?></h4>
+					<p><?php esc_html_e( 'Allow administrators to change group names and permalinks. Navigate to the Groups screen in the wp-admin dashboard, click on the Edit link under the Group name, and adjust as needed.', 'buddypress' ); ?></p>
 				</div>
 
 				<div class="bp-feature opposite">
+					<span class="dashicons dashicons-admin-users" aria-hidden="true"></span>
+					<h4 class="feature-title"><?php esc_html_e( 'Improve accessibility of Extended Profile Fields', 'buddypress' ); ?></h4>
+					<p><?php esc_html_e( 'Related form fields are grouped together in fieldsets and all interactive form controls are associated with necessary ARIA states and properties.', 'buddypress' ); ?></p>
+				</div>
+
+				<div class="bp-feature">
 					<span class="dashicons dashicons-email" aria-hidden="true"></span>
-					<h4 class="feature-title"><?php
-						/* translators: %s: PHPMailer */
-						printf( __( 'Enable choice of %s', 'buddypress' ), '<code>PHPMailer</code>' );
-					?></h4>
-					<p><?php
-						/* translators: %s: PHPMailer */
-						printf( __( 'Developers can specify which %s should be used when sending BuddyPress with a new filter.', 'buddypress' ), '<code>PHPMailer</code>' );
+					<h4 class="feature-title"><?php esc_html_e( 'Send group invitation only once per user', 'buddypress' ); ?></h4>
+					<p><?php esc_html_e( 'Prevent duplicate group invitations from being sent to a user by double-checking if a group invitation has already been sent to that user.', 'buddypress' ); ?></p>
+				</div>
+
+				<div class="bp-feature opposite">
+					<span class="dashicons dashicons-testimonial" aria-hidden="true"></span>
+					<h4 class="feature-title"><?php esc_html_e( 'Tooltips Usable for All Devices', 'buddypress' ); ?></h4>
+
+					<p><?php esc_html_e( 'Replaced HTML title attributes with tooltips which provide additional information and visual cues where needed on mouse hover and keyboard focus events.', 'buddypress' );
 					?></p>
 				</div>
 
-				<div class="clear"></div>
 			</div>
 
 			<div class="bp-changelog-section">
+
 				<h3 class="changelog-title"><?php esc_html_e( 'More under the hood &#8230;', 'buddypress' ); ?></h3>
-				<div class="bp-changelog three-col">
-					<div class="col">
-						<h4 class="title"><?php esc_html_e( 'Localization Improvements', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'We continue to improve our localization internals, making it easier for translation editors to ensure that BuddyPress will be available for everyone in their own language.', 'buddypress' ); ?></p>
+				<div class="bp-changelog bp-three-column">
+					<div class="bp-column">
+						<h4 class="title"><?php esc_html_e( 'Better support for private message thread links in emails', 'buddypress' ); ?></h4>
+						<p><?php esc_html_e( 'Redirect non-authenticated users to the login screen and authenticated users to the message linked.', 'buddypress' ); ?></p>
 					</div>
-					<div class="col">
-						<h4 class="title"><?php esc_html_e( 'Developer Reference', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'Regular updates to inline code documentation make it easier for developers to understand how BuddyPress works.', 'buddypress' ); ?></p>
+					<div class="bp-column">
+						<h4 class="title"><?php esc_html_e( 'Compatibility with Bootstrap themes', 'buddypress' ); ?></h4>
+						<p><?php esc_html_e( 'Removed issues with BuddyPress-generated content being hidden in the Groups loop and Activity comments in Bootstrap themes.', 'buddypress' ); ?></p>
 					</div>
 
-					<div class="col">
-						<h4 class="title"><?php esc_html_e( 'Accessibility Upgrades', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'Continued improvements for universal access help make BuddyPress back- and front-end screens usable for everyone (and on more devices).', 'buddypress' ); ?></p>
+					<div class="bp-column">
+						<h4 class="title"><?php esc_html_e( 'Improve profile image uploads', 'buddypress' ); ?></h4>
+						<p><?php esc_html_e( 'Fixed issues with uploading in iOS Safari and uploading files with non-ASCII filenames.', 'buddypress' ); ?></p>
 					</div>
 				</div>
-				<div class="clear"></div>
+
+				<div class="bp-changelog bp-three-column">
+					<div class="bp-column">
+						<h4 class="title"><?php esc_html_e( 'URL compatibility for LightSpeed Servers', 'buddypress' ); ?></h4>
+						<p><?php
+								/* translators: %s: trailingslashit() */
+								printf( __( 'Audited and changed template link functions to use %s where necessary.', 'buddypress' ),
+								'<code>trailingslashit()</code>' );
+						?></p>
+					</div>
+					<div class="bp-column">
+						<h4 class="title"><?php esc_html_e( 'Template Packs UI in BuddyPress > Settings.', 'buddypress' ); ?></h4>
+						<p><?php esc_html_e( 'Register your new BuddyPress theme package and allow the user to select which template pack to use.', 'buddypress' ); ?></p>
+					</div>
+
+					<div class="bp-column">
+						<h4 class="title"><?php
+								/* translators: %s: bp_group_link() */
+								printf( __( 'New template function %s', 'buddypress' ),
+								'<code>bp_group_link()</code>' );
+						?></h4>
+						<p><?php esc_html_e( 'Output a group name as a text hyperlink where appropriate.', 'buddypress' ); ?></p>
+					</div>
+				</div>
+
 			</div>
 
 			<div class="bp-assets">
@@ -769,10 +740,10 @@ class BP_Admin {
 
 			<h3 class="wp-people-group"><?php _e( 'BuddyPress Team', 'buddypress' ); ?></h3>
 			<ul class="wp-people-group " id="wp-people-group-core-team">
-				<li class="wp-person" id="wp-person-slaffik">
-					<a class="web" href="https://profiles.wordpress.org/r-a-y"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/61fb07ede3247b63f19015f200b3eb2c?s=60">
-					Slava Abakumov</a>
-					<span class="title"><?php _e( '2.8 Release Lead', 'buddypress' ); ?></span>
+				<li class="wp-person" id="wp-person-hnla">
+					<a class="web" href="https://profiles.wordpress.org/hnla"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/3860c955aa3f79f13b92826ae47d07fe?s=60">
+					Hugo Ashmore</a>
+					<span class="title"><?php _e( '2.9 Release Lead', 'buddypress' ); ?></span>
 				</li>
 				<li class="wp-person" id="wp-person-r-a-y">
 					<a class="web" href="https://profiles.wordpress.org/r-a-y"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/3bfa556a62b5bfac1012b6ba5f42ebfa?s=60">
@@ -799,11 +770,6 @@ class BP_Admin {
 					Michael Beckwith</a>
 					<span class="title"><?php _e( 'Core Developer', 'buddypress' ); ?></span>
 				</li>
-				<li class="wp-person" id="wp-person-hnla">
-					<a class="web" href="https://profiles.wordpress.org/hnla"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/3860c955aa3f79f13b92826ae47d07fe?s=60">
-					Hugo</a>
-					<span class="title"><?php _e( 'Core Developer', 'buddypress' ); ?></span>
-				</li>
 				<li class="wp-person" id="wp-person-henry-wright">
 					<a class="web" href="https://profiles.wordpress.org/henry.wright"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/0da2f1a9340d6af196b870f6c107a248?s=60">
 					Henry Wright</a>
@@ -819,7 +785,11 @@ class BP_Admin {
 					shanebp</a>
 					<span class="title"><?php _e( 'Community Support', 'buddypress' ); ?></span>
 				</li>
-
+				<li class="wp-person" id="wp-person-slaffik">
+					<a class="web" href="https://profiles.wordpress.org/r-a-y"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/61fb07ede3247b63f19015f200b3eb2c?s=60">
+					Slava Abakumov</a>
+					<span class="title"><?php _e( 'Core Developer', 'buddypress' ); ?></span>
+				</li>
 				<li class="wp-person" id="wp-person-offereins">
 					<a class="web" href="https://profiles.wordpress.org/Offereins"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/2404ed0a35bb41aedefd42b0a7be61c1?s=60">
 					Laurens Offereins</a>
@@ -854,50 +824,52 @@ class BP_Admin {
 
 			<h3 class="wp-people-group"><?php printf( esc_html__( 'Contributors to BuddyPress %s', 'buddypress' ), self::display_version() ); ?></h3>
 			<p class="wp-credits-list">
-				<a href="https://profiles.wordpress.org/dontdream/">Andrea Tarantini (dontdream)</a>,
-				<a href="https://profiles.wordpress.org/ankit-k-gupta/">Ankit K Gupta (ankit-k-gupta)</a>,
-				<a href="https://profiles.wordpress.org/angeljs/">angeljs</a>,
+				<a href="https://profiles.wordpress.org/55don/">55don</a>,
+				<a href="https://profiles.wordpress.org/aaronoftomorrow/">AaronOfTomorrow</a>,
+				<a href="https://profiles.wordpress.org/allianse/">allianse</a>,
+				<a href="https://profiles.wordpress.org/antonioeatgoat/">Antonio Mangiacapra (antonioeatgoat)</a>,
+				<a href="https://profiles.wordpress.org/benjlipchak/">Benj (benjlipchak)</a>,
 				<a href="https://profiles.wordpress.org/boonebgorges/">Boone B Gorges (boonebgorges)</a>,
-				<a href="https://profiles.wordpress.org/thebrandonallen/">Brandon Allen (thebrandonallen)</a>,
 				<a href="https://profiles.wordpress.org/bhargavbhandari90/">Bunty (bhargavbhandari90)</a>,
-				<a href="https://profiles.wordpress.org/ketuchetan/">chetansatasiya (ketuchetan)</a>,
-				<a href="https://profiles.wordpress.org/chiragpatel/">Chirag Patel (chiragpatel)</a>,
+				<a href="https://profiles.wordpress.org/sbrajesh/">Brajesh Singh (sbrajesh)</a>,
+				<a href="https://profiles.wordpress.org/needle/">Christian Wach (needle)</a>,
+				<a href="https://profiles.wordpress.org/brandonliles/">brandonliles</a>,
 				<a href="https://profiles.wordpress.org/danbp/">danbp</a>,
 				<a href="https://profiles.wordpress.org/dcavins/">David Cavins (dcavins)</a>,
-				<a href="https://profiles.wordpress.org/wpdennis/">Dennis (wpdennis)</a>,
-				<a href="https://profiles.wordpress.org/Dianakc/">Diana K. Cury (Dianakc)</a>,
-				<a href="https://profiles.wordpress.org/finzend/">finzend</a>,
+				<a href="https://profiles.wordpress.org/dkelm/">dkelm</a>,
+				<a href="https://profiles.wordpress.org/dsar/">dsar</a>,
+				<a href="https://profiles.wordpress.org/dsided/">dsided</a>,
+				<a href="https://profiles.wordpress.org/henry.wright">Henry Wright (henry.wright)</a>,
 				<a href="https://profiles.wordpress.org/hnla/">Hugo (hnla)</a>,
-				<a href="https://profiles.wordpress.org/jdgrimes/">J.D. Grimes (jdgrimes)</a>,
+				<a href="https://profiles.wordpress.org/idofri/">Ido Friedlander (idofri)</a>,
+				<a href="https://profiles.wordpress.org/uscore713/">Jay (uscore713)</a>,
+				<a href="https://profiles.wordpress.org/johnbillion/">John Blackbourn (johnbillion)</a>,
 				<a href="https://profiles.wordpress.org/johnjamesjacoby/">John James Jacoby (johnjamesjacoby)</a>,
-				<a href="https://profiles.wordpress.org/jonas-lundman/">Jonas Lundman (jonas-lundman)</a>,
-				<a href="https://profiles.wordpress.org/jonieske/">jonieske</a>,
-				<a href="https://profiles.wordpress.org/jreeve/">jreeve</a>,
+				<a href="https://profiles.wordpress.org/juanho/">Juanho</a>,
 				<a href="https://profiles.wordpress.org/lakrisgubben/">lakrisgubben</a>,
 				<a href="https://profiles.wordpress.org/Offereins">Laurens Offereins (Offereins)</a>,
-				<a href="https://profiles.wordpress.org/lgreenwoo/">lgreenwoo</a>,
-				<a href="https://profiles.wordpress.org/maccast/">maccast</a>,
+				<a href="https://profiles.wordpress.org/lne1030/">lne1030</a>,
+				<a href="https://profiles.wordpress.org/lenasterg/">lenasterg</a>,
+				<a href="https://profiles.wordpress.org/maniou/">Maniou</a>,
 				<a href="https://profiles.wordpress.org/imath/">Mathieu Viet (imath)</a>,
-				<a href="https://profiles.wordpress.org/mchansy/">mchansy</a>,
 				<a href="https://profiles.wordpress.org/mercime/">mercime</a>,
 				<a href="https://profiles.wordpress.org/tw2113/">Michael Beckwith (tw2113)</a>,
+				<a href="https://profiles.wordpress.org/mikegillihan/">Mike Gillihan (MikeGillihan)</a>,
+				<a href="https://profiles.wordpress.org/milindmore22/">Milind More  (milindmore22)</a>,
 				<a href="https://profiles.wordpress.org/modemlooper/">modemlooper</a>,
-				<a href="https://profiles.wordpress.org/m_uysl/">Mustafa Uysal (m_uysl)</a>,
-				<a href="https://profiles.wordpress.org/nickmomrik/">Nick Momrik (nickmomrik)</a>,
+				<a href="https://profiles.wordpress.org/mrjarbenne/">mrjarbenne</a>,
+				<a href="https://profiles.wordpress.org/nicolaskulka/">Nicolas Kulka (NicolasKulka)</a>,
+				<a href="https://profiles.wordpress.org/oelita/">Oelita</a>,
 				<a href="https://profiles.wordpress.org/DJPaul/">Paul Gibbs (DJPaul)</a>,
 				<a href="https://profiles.wordpress.org/pareshradadiya/">paresh.radadiya (pareshradadiya)</a>,
-				<a href="https://profiles.wordpress.org/petya/">Petya Raykovska</a>,
 				<a href="https://profiles.wordpress.org/r-a-y/">r-a-y</a>,
-				<a href="https://profiles.wordpress.org/rekmla/">rekmla</a>,
 				<a href="https://profiles.wordpress.org/espellcaste/">Renato Alves (espellcaste)</a>,
-				<a href="https://profiles.wordpress.org/rogercoathup/">Roger Coathup (rogercoathup)</a>,
-				<a href="https://profiles.wordpress.org/DarkWolf/">Salvatore (DarkWolf)</a>,
-				<a href="https://profiles.wordpress.org/sanket.parmar/">Sanket Parmar (sanket.parmar)</a>,
+				<a href="https://profiles.wordpress.org/rianrietveld/">Rian Rietveld (rianrietvelde)</a>,
+				<a href="https://profiles.wordpress.org/elhardoum/">Samuel Elh (elhardoum)</a>,
+				<a href="https://profiles.wordpress.org/seventhqueen/">seventhqueen</a>,
 				<a href="https://profiles.wordpress.org/slaffik/">Slava Abakumov (slaffik)</a>,
-				<a href="https://profiles.wordpress.org/stagger-lee/">Stagger Lee (stagger-lee)</a>,
 				<a href="https://profiles.wordpress.org/netweb/">Stephen Edgar (netweb)</a>,
-				<a href="https://profiles.wordpress.org/mahype/">Sven Wagener (mahype)</a>,
-				<a href="https://profiles.wordpress.org/wordpressrene/">wordpressrene</a>.
+				<a href="https://profiles.wordpress.org/vishalkakadiya/">Vishal Kakadiya (vishalkakadiya)</a>
 			</p>
 
 			<h3 class="wp-people-group"><?php _e( '&#x1f496;With our thanks to these Open Source projects&#x1f496;', 'buddypress' ); ?></h3>
@@ -928,7 +900,7 @@ class BP_Admin {
 
 		// Switch welcome text based on whether this is a new installation or not.
 		$welcome_text = ( self::is_new_install() )
-			? __( 'Thank you for installing BuddyPress! BuddyPress helps site builders and WordPress developers add community features to their websites, with user profile fields, activity streams, messaging, and notifications.', 'buddypress' )
+			? __( 'Thank you for installing BuddyPress! BuddyPress adds community features to WordPress. Member Profiles, Activity Streams, Direct Messaging, Notifications, and more!', 'buddypress' )
 			: __( 'Thank you for updating! BuddyPress %s has many new improvements that you will enjoy.', 'buddypress' );
 
 		?>

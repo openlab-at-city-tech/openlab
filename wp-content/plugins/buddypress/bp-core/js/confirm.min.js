@@ -1,1 +1,0 @@
-jQuery(document).ready(function(){jQuery("a.confirm").click(function(){return!!confirm(BP_Confirm.are_you_sure)})});

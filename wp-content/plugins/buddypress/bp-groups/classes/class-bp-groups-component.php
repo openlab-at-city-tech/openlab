@@ -196,8 +196,10 @@ class BP_Groups_Component extends BP_Component {
 		/* Single Group Globals **********************************************/
 
 		// Are we viewing a single group?
-		if ( bp_is_groups_component() && $group_id = BP_Groups_Group::group_exists( bp_current_action() ) ) {
-
+		if ( bp_is_groups_component()
+			&& ( ( $group_id = BP_Groups_Group::group_exists( bp_current_action() ) )
+				|| ( $group_id = BP_Groups_Group::get_id_by_previous_slug( bp_current_action() ) ) )
+			) {
 			$bp->is_single_item  = true;
 
 			/**
@@ -240,20 +242,6 @@ class BP_Groups_Component extends BP_Component {
 			// If the user is not an admin, check if they are a moderator.
 			if ( ! bp_is_item_admin() ) {
 				bp_update_is_item_mod  ( groups_is_user_mod  ( bp_loggedin_user_id(), $this->current_group->id ), 'groups' );
-			}
-
-			// Is the logged in user a member of the group?
-			if ( ( is_user_logged_in() && groups_is_user_member( bp_loggedin_user_id(), $this->current_group->id ) ) ) {
-				$this->current_group->is_user_member = true;
-			} else {
-				$this->current_group->is_user_member = false;
-			}
-
-			// Should this group be visible to the logged in user?
-			if ( 'public' == $this->current_group->status || $this->current_group->is_user_member ) {
-				$this->current_group->is_visible = true;
-			} else {
-				$this->current_group->is_visible = false;
 			}
 
 			// Check once if the current group has a custom front template.
@@ -557,7 +545,7 @@ class BP_Groups_Component extends BP_Component {
 			// member and does not have an outstanding invitation,
 			// show a "Request Membership" nav item.
 			if ( is_user_logged_in() &&
-				 ! $this->current_group->is_user_member &&
+				 ! $this->current_group->is_member &&
 				 ! groups_check_for_membership_request( bp_loggedin_user_id(), $this->current_group->id ) &&
 				 $this->current_group->status == 'private' &&
 				 ! groups_check_user_has_invite( bp_loggedin_user_id(), $this->current_group->id )

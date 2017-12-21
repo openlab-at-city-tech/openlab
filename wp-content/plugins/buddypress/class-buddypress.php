@@ -109,7 +109,7 @@ class BuddyPress {
 	 * @static object $instance
 	 * @see buddypress()
 	 *
-	 * @return BuddyPress The one true BuddyPress.
+	 * @return BuddyPress|null The one true BuddyPress.
 	 */
 	public static function instance() {
 
@@ -293,7 +293,7 @@ class BuddyPress {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '2.8.2';
+		$this->version    = '2.9.2';
 		$this->db_version = 11105;
 
 		/** Loading ***********************************************************/
@@ -477,6 +477,8 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/2.5.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.6.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.7.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.8.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/2.9.php' );
 		}
 	}
 
@@ -704,7 +706,7 @@ class BuddyPress {
 		// Register the default theme compatibility package
 		bp_register_theme_package( array(
 			'id'      => 'legacy',
-			'name'    => __( 'BuddyPress Default', 'buddypress' ),
+			'name'    => __( 'BuddyPress Legacy', 'buddypress' ),
 			'version' => bp_get_version(),
 			'dir'     => trailingslashit( $this->themes_dir . '/bp-legacy' ),
 			'url'     => trailingslashit( $this->themes_url . '/bp-legacy' )
