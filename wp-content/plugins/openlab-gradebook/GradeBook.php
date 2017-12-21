@@ -497,3 +497,19 @@ function oplb_gradebook_wp_page_menu_args($args) {
 }
 
 add_filter('wp_page_menu_args', 'oplb_gradebook_wp_page_menu_args');
+
+/**
+ * Add custom storage pages to wp_list_pages exclusions
+ * Some menu fallbacks use wp_list_pages
+ * @param type $exclude_array
+ * @return type
+ */
+function oplb_gradebook_wp_list_pages_excludes($exclude_array){
+    
+    $storage_page_obj = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
+    $exclude_array[] = $storage_page_obj->ID;
+    
+    return $exclude_array;
+}
+
+add_filter('wp_list_pages_excludes', 'oplb_gradebook_wp_list_pages_excludes');
