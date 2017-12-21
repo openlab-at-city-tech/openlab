@@ -64,28 +64,52 @@ function openlab_get_group_site_url( $group_id = false ) {
 /// MEMBERSHIP SYNC ////
 ////////////////////////
 
+function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role = null ) {
+	$blog_role = null;
+	$blog_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $blog_id ) {
+		return $blog_role;
+	}
+
+	$blog_public = get_blog_option( $blog_id, 'blog_public' );
+
+	if ( null === $group_role ) {
+		if ( groups_is_user_admin( $user_id, $group_id ) ) {
+			$group_role = 'admin';
+		} elseif ( groups_is_user_mod( $user_id, $group_id ) ) {
+			$group_role = 'mod';
+		} else {
+			$group_role = 'member';
+		}
+	}
+
+	if ( '-3' == $blog_public ) {
+		if ( 'admin' === $group_role ) {
+			$blog_role = 'administrator';
+		}
+	} else {
+		if ( 'admin' === $group_role ) {
+			$blog_role = 'administrator';
+		} elseif ( 'mod' === $group_role ) {
+			$blog_role = 'editor';
+		} else {
+			// Default role is lower for portfolios
+			$blog_role = openlab_is_portfolio() ? 'subscriber' : 'author';
+		}
+	}
+
+	return $blog_role;
+}
+
 /**
  * Add user to the group blog when joining the group
  */
-function openlab_add_user_to_groupblog( $group_id, $user_id ) {
+function openlab_add_user_to_groupblog( $group_id, $user_id, $role = null ) {
 	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 
 	if ( $blog_id ) {
-		$blog_public = get_blog_option( $blog_id, 'blog_public' );
-
-		if ( '-3' == $blog_public ) {
-			if ( groups_is_user_admin( $user_id, $group_id ) ) {
-				$role = 'administrator';
-			}
-		} else {
-			if ( groups_is_user_admin( $user_id, $group_id ) ) {
-				$role = 'administrator';
-			} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
-				$role = 'editor';
-			} else {
-				// Default role is lower for portfolios
-				$role = openlab_is_portfolio() ? 'subscriber' : 'author';
-			}
+		if ( null === $role ) {
+			$role = openlab_get_blog_role_for_group_role( $group_id, $user_id );
 		}
 
 		if ( isset( $role ) ) {
@@ -93,8 +117,25 @@ function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 		}
 	}
 }
-
 add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
+
+/**
+ * Modify group site membership on promotion.
+ */
+function openlab_add_user_to_groupblog_on_promotion( $group_id, $user_id, $status ) {
+	$role = openlab_get_blog_role_for_group_role( $group_id, $user_id, $status );
+	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
+}
+add_action( 'groups_promote_member', 'openlab_add_user_to_groupblog_on_promotion', 10, 3 );
+
+/**
+ * Modify group site membership on demotion.
+ */
+function openlab_add_user_to_groupblog_on_demotion( $group_id, $user_id ) {
+	$role = openlab_get_blog_role_for_group_role( $group_id, $user_id, 'member' );
+	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
+}
+add_action( 'groups_demote_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
 
 /**
  * Join a user to a groupblog when joining the group
@@ -186,8 +227,8 @@ function openlab_force_blog_role_sync() {
 	}
 }
 
-add_action( 'init', 'openlab_force_blog_role_sync', 999 );
-add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
+//add_action( 'init', 'openlab_force_blog_role_sync', 999 );
+//add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
 
 
 ////////////////////////
