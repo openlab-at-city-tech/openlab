@@ -56,7 +56,7 @@ class OPLB_USER_LIST {
 
                 //first we need to find the associated group for this site
                 $blog_id = get_current_blog_id();
-
+                
                 $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
                 $results = $wpdb->get_results($query);
 

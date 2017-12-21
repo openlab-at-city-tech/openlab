@@ -7,7 +7,7 @@
 class OPLB_Gradebook_Widget extends WP_Widget {
 
     public function __construct() {
-
+        
         parent::__construct(
                 'oplb_gradebook_widget', __('OpenLab Gradebook Widget', 'oplb_gradebook'), array(
             'classname' => 'oplb_gradebook_widget',
@@ -19,8 +19,13 @@ class OPLB_Gradebook_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
+        global $wpdb;
 
         if (!is_user_logged_in()) {
+            return false;
+        }
+
+        if(!$this->show_user_widget()){
             return false;
         }
         
@@ -40,7 +45,11 @@ class OPLB_Gradebook_Widget extends WP_Widget {
     }
 
     public function form($instance) {
-
+        
+        if(!$this->show_user_widget()){
+            return false;
+        }
+        
         $title = !empty($instance['title']) ? esc_attr($instance['title']) : 'Link to OpenLab Gradebook';
         $message = !empty($instance['link_text']) ? esc_attr($instance['link_text']) : 'OpenLab Gradebook';
 
@@ -59,6 +68,12 @@ class OPLB_Gradebook_Widget extends WP_Widget {
         $instance['link_text'] = esc_html(strip_tags($new_instance['link_text']));
 
         return $instance;
+    }
+    
+    private function show_user_widget(){
+        
+        return apply_filters('oplb_gradebook_show_user_widget', true);
+        
     }
 
 }
