@@ -10,7 +10,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     'click a.student-statistics': 'studentStatistics',
                                     'click .dashicons-menu': 'toggleStudentMenu',
                                     'click li.student-submenu-delete': 'deleteStudent',
-                                    'click li.student-submenu-edit': 'editStudent',
+                                    //'click li.student-submenu-edit': 'editStudent',
                                     'click li.student-submenu-stats': 'studentStatistics',
                                 },
                                 /** @constructs */

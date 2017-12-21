@@ -8,11 +8,16 @@ class oplb_gradebook_api {
         };
     }
 
+    /**
+     * used to be able to update user meta here, but this has been deprecated
+     * may come back in the future as a Gradebook-only feature
+     * @param type $id
+     * @param type $first_name
+     * @param type $last_name
+     * @return type
+     */
     public function oplb_gradebook_update_user($id, $first_name, $last_name) {
-        $user_id = wp_update_user(array(
-            'ID' => $id,
-            'first_name' => $first_name,
-            'last_name' => $last_name));
+        
         $user = get_user_by('id', $user_id);
         return array(
             'first_name' => $user->first_name,

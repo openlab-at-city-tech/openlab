@@ -12,7 +12,6 @@
             $z = array_intersect($x, $y);
             if (count($z)) {
                 ?>						
-                <li class='student-submenu-edit'><a href='#'><?php esc_html_e('Edit', 'openlab-gradebook') ?></a></li>
                 <li class='student-submenu-delete'><a href='#'><span class="text-danger"><?php esc_html_e('Delete', 'openlab-gradebook') ?></span></a></li>
             <?php } ?>        									
         </ul>
