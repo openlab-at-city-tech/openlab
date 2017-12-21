@@ -121,6 +121,8 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                             if (typeof response.error !== 'undefined') {
 
                                 var message = 'Problem retrieving student list';
+                                
+                                console.log('response.error', response.error);
 
                                 switch (response.error) {
                                     case 'no_bp':
@@ -128,6 +130,7 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                                         //in the case of no BuddyPress install, just switch to a regular input field
                                         var new_field = '<input class="form-control" type="text" name="id-exists" id="user_login"/>';
                                         self.$el.find('#user_login_wrapper').html(new_field);
+                                        self.$el.find('#edit-student-save').removeAttr('disabled').text('Add');
 
                                         return false;
 
@@ -135,11 +138,14 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                                     case 'no_site':
 
                                         message = 'Unable to find site';
+                                        self.$el.closest('.modal-content').find('#edit-student-save').text('No Site');
 
                                         break;
                                     case 'no_students':
 
                                         message = 'No students have joined this course.';
+                                        self.$el.find('#user_login_wrapper select').attr('disabled', 'disabled');
+                                        self.$el.find('#edit-student-save').text('No Students');
 
                                         break;
                                 }
@@ -167,6 +173,9 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                                 self.$el.find('#user_login').append(optionOut);
 
                             });
+
+                            self.$el.find('#user_login_wrapper select').removeAttr('disabled');
+                            self.$el.find('#edit-student-save').removeAttr('disabled').text('Add');
 
                         }});
 

@@ -72,7 +72,7 @@
             <% if (student) { %>
             <button type="button" id="edit-student-save" data-dismiss="modal" class="btn btn-primary"><?php esc_html_e('Save', 'openlab-gradebook') ?></button>
             <% } else { %>
-            <button type="button" id="edit-student-save" data-dismiss="modal" class="btn btn-primary"><?php esc_html_e('Add', 'openlab-gradebook') ?></button>
+            <button type="button" id="edit-student-save" data-dismiss="modal" class="btn btn-primary" disabled="disabled"><span class="dashicons dashicons-image-rotate dashicons-spinning"></span> <?php esc_html_e('Loading', 'openlab-gradebook') ?></button>
             <% } %>
             
         </div>
