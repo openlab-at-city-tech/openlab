@@ -127,6 +127,7 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                     var self = this;
                     this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
                             self.render();
+                            Backbone.pubSub.trigger('updateAverageGrade', response );
                         }});
                 },
                 edit: function () {
