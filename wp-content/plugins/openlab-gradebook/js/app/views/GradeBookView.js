@@ -10,6 +10,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.resizeTimer;
                     this.xhrs = [];
                     this._subviews = [];
+                    this.scrollObj = {};
                     this.options = options;
                     this.filter_option = "-1";
                     this.course = options.course;
@@ -67,7 +68,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.renderControl = 0;
                     var course = this.course;
                     var _x = _.map(self.gradebook.assignments.models, function (model) {
-                        return model.get('assign_category');
+                        return model.get('assign_category').trim();
                     });
                     var _assign_categories = _.without(_.uniq(_x), "") || null;
                     var template = _.template($('#gradebook-interface-template').html());
@@ -155,6 +156,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                 return assign.get('assign_category') === _x;
                             }
                     );
+
                     if (_x === "-1") {
                         this.gradebook.assignments.each(function (assign) {
                             assign.set({visibility: true});
@@ -166,6 +168,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         _.each(_toShow, function (assign) {
                             assign.set({visibility: true});
                         });
+                    }
+
+                    if (typeof this.scrollObj.data !== 'undefined') {
+                        var jsAPI = this.scrollObj.data('jsp');
+
+                        if (typeof jsAPI !== 'undefined') {
+                            jsAPI.reinitialise();
+                        }
                     }
                 },
                 adjustCellWidths: function () {
@@ -196,7 +206,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 postLoadActions: function () {
 
                     $('[data-toggle="tooltip"]').tooltip();
-                    $('.table-wrapper .scrollable')
+                    this.scrollObj = $('.table-wrapper .scrollable')
                             .bind('jsp-initialised', this.calculateScrollBarPosition)
                             .jScrollPane();
 
@@ -341,7 +351,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     console.log('total_weight on updateTotalWeight', window.oplbGlobals.total_weight);
                 },
                 updateAverageGrade: function (data) {
-                    
+
                     console.log('updateGradeAverage', data);
 
                     var studentID = parseInt(data.uid);
