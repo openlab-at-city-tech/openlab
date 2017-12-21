@@ -344,7 +344,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     
                     console.log('updateGradeAverage', data);
 
-                    var studentID = data.uid;
+                    var studentID = parseInt(data.uid);
                     var target = $('#average' + studentID);
                     target.html(data.current_grade_average);
 

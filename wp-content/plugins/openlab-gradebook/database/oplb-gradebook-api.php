@@ -586,8 +586,8 @@ class oplb_gradebook_api {
                 $this->oplb_gradebook_update_current_grade_average($calc_grade_average, $gbid, $student->id);
 
                 $student_data[$key] = array(
-                    'uid' => $student->uid,
-                    'current_grade_average' => $calc_grade_average,
+                    'uid' => intval($student->uid),
+                    'current_grade_average' => floatval($calc_grade_average),
                 );
             }
         }
