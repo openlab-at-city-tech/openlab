@@ -1403,13 +1403,17 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 /**
  * No access redirects should happen from wp-login.php
  */
-add_filter( 'bp_no_access_mode', create_function( '', 'return 2;' ) );
+add_filter( 'bp_no_access_mode', function() {
+	return 2;
+} );
 
 /**
  * Don't auto-link items in profiles
  * Hooked to bp_screens so that it gets fired late enough
  */
-add_action( 'bp_screens', create_function( '', "remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );" ) );
+add_action( 'bp_screens', function() {
+	remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
+} );
 
 //Change "Group" to something else
 class buddypress_Translation_Mangler {

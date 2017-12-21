@@ -544,6 +544,7 @@ function openlab_group_contact_field() {
 
 	$existing_contacts = array();
 	if ( bp_is_group_create() ) {
+		$group_id = 0;
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
 		$group_id = bp_get_current_group_id();
