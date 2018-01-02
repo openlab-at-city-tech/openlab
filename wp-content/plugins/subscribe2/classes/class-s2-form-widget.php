@@ -1,11 +1,18 @@
 <?php
-class S2_Form_widget extends WP_Widget {
+class S2_Form_Widget extends WP_Widget {
 	/**
 	Declares the Subscribe2 widget class.
 	*/
 	function __construct() {
-		$widget_ops = array( 'classname' => 's2_form_widget', 'description' => esc_html__( 'Sidebar Widget for Subscribe2', 'subscribe2' ) );
-		$control_ops = array( 'width' => 250, 'height' => 300 );
+		$widget_ops = array(
+			'classname' => 's2_form_widget',
+			'description' => esc_html__( 'Sidebar Widget for Subscribe2', 'subscribe2' ),
+			'customize_selective_refresh' => true,
+		);
+		$control_ops = array(
+			'width' => 250,
+			'height' => 300,
+		);
 		parent::__construct( 's2_form_widget', esc_html__( 'Subscribe2 Widget', 'subscribe2' ), $widget_ops, $control_ops );
 	}
 
@@ -88,9 +95,31 @@ class S2_Form_widget extends WP_Widget {
 		// set some defaults, getting any old options first
 		$options = get_option( 'widget_subscribe2widget' );
 		if ( false === $options ) {
-			$defaults = array( 'title' => 'Subscribe2', 'div' => 'search', 'widgetprecontent' => '', 'widgetpostcontent' => '', 'size' => 20, 'hidebutton' => 'none', 'postto' => '', 'js' => '', 'noantispam' => '', 'nowrap' => '' );
+			$defaults = array(
+				'title' => 'Subscribe2',
+				'div' => 'search',
+				'widgetprecontent' => '',
+				'widgetpostcontent' => '',
+				'size' => 20,
+				'hidebutton' => 'none',
+				'postto' => '',
+				'js' => '',
+				'noantispam' => '',
+				'nowrap' => '',
+			);
 		} else {
-			$defaults = array( 'title' => $options['title'], 'div' => $options['div'], 'widgetprecontent' => $options['widgetprecontent'], 'widgetpostcontent' => $options['widgetpostcontent'], 'size' => $options['size'], 'hidebutton' => $options['hidebutton'], 'postto' => $options['postto'], 'js' => $options['js'], 'noantispam' => $options['noantispam'], 'nowrap' => $options['nowrap'] );
+			$defaults = array(
+				'title' => $options['title'],
+				'div' => $options['div'],
+				'widgetprecontent' => $options['widgetprecontent'],
+				'widgetpostcontent' => $options['widgetpostcontent'],
+				'size' => $options['size'],
+				'hidebutton' => $options['hidebutton'],
+				'postto' => $options['postto'],
+				'js' => $options['js'],
+				'noantispam' => $options['noantispam'],
+				'nowrap' => $options['nowrap'],
+			);
 			delete_option( 'widget_subscribe2widget' );
 		}
 		// code to obtain old settings too
@@ -111,22 +140,22 @@ class S2_Form_widget extends WP_Widget {
 		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish'";
 
 		echo '<div>' . "\r\n";
-		echo '<p><label for="'. esc_attr( $this->get_field_id( 'title' ) ) . '">' . __( 'Title', 'subscribe2' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_html__( $title ) . '" /></label></p>' . "\r\n";
+		echo '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . __( 'Title', 'subscribe2' ) . ':' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" /></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'div' ) ) . '">' . __( 'Div class name', 'subscribe2' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'div' ) ) . '" name="' . esc_attr( $this->get_field_name( 'div' ) ) . '" type="text" value="' . esc_html__( $div ) . '" /></label></p>' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'div' ) ) . '" name="' . esc_attr( $this->get_field_name( 'div' ) ) . '" type="text" value="' . esc_attr( $div ) . '" /></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'widgetprecontent' ) ) . '">' . esc_html__( 'Pre-Content', 'subscribe2' ) . ':' . "\r\n";
-		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetprecontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetprecontent' ) ) . '" rows="2" cols="25">' . esc_html__( $widgetprecontent ) . '</textarea></label></p>' . "\r\n";
+		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetprecontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetprecontent' ) ) . '" rows="2" cols="25">' . esc_attr( $widgetprecontent ) . '</textarea></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'widgetpostcontent' ) ) . '">' . __( 'Post-Content', 'subscribe2' ) . ':' . "\r\n";
-		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetpostcontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetpostcontent' ) ) . '" rows="2" cols="25">' . esc_html__( $widgetpostcontent ) . '</textarea></label></p>' . "\r\n";
+		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetpostcontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetpostcontent' ) ) . '" rows="2" cols="25">' . esc_attr( $widgetpostcontent ) . '</textarea></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'size' ) ) . '">' . esc_html__( 'Text Box Size', 'subscribe2' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'size' ) ) . '" type="text" value="' . esc_html__( $size ) . '" /></label></p>' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'size' ) ) . '" type="text" value="' . esc_attr( $size ) . '" /></label></p>' . "\r\n";
 		echo '<p>' . __( 'Display options', 'subscribe2' ) . ':<br />' . "\r\n";
-		echo '<label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="none"'. checked( 'none', $hidebutton, false ) . '/> ' . esc_html__( 'Show complete form', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="none"' . checked( 'none', $hidebutton, false ) . '/> ' . esc_html__( 'Show complete form', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '<br /><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="subscribe"' . checked( 'subscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Subscribe button', 'subscribe2' ) . '</label>' . "\r\n";
-		echo '<br /><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="unsubscribe"'. checked( 'unsubscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Unsubscribe button', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<br /><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="unsubscribe"' . checked( 'unsubscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Unsubscribe button', 'subscribe2' ) . '</label>' . "\r\n";
 		if ( '1' === $mysubscribe2->subscribe2_options['ajax'] ) {
-			echo '<br /><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="link"'. checked( 'link', $hidebutton, false ) . '/> ' . esc_html__( 'Show as link', 'subscribe2' ) . '</label>' . "\r\n";
+			echo '<br /><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="link"' . checked( 'link', $hidebutton, false ) . '/> ' . esc_html__( 'Show as link', 'subscribe2' ) . '</label>' . "\r\n";
 		}
 		echo '</p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'postto' ) ) . '">' . esc_html__( 'Post form content to page', 'subscribe2' ) . ':' . "\r\n";

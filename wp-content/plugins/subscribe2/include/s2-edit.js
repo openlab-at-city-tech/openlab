@@ -51,8 +51,8 @@ function s2_cron_revert( id ) {
 	jQuery( 'input[name="' + id + 'date"]' ).val( date );
 	jQuery( '#s2' + id + 'date' ).html( date );
 	time = jQuery( '#js' + id + 'time' ).val();
-	jQuery( '[name='+ id + 'time] option' ).filter(function() {
-		return ( this.text == time );
+	jQuery( '[name=' + id + 'time] option' ).filter(function() {
+		return ( this.text === time );
 	}).prop( 'selected', true ).parent().focus();
 	jQuery( '#s2' + id + 'time' ).html( time );
 	s2_hide( id );

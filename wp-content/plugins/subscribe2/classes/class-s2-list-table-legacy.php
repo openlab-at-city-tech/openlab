@@ -1,8 +1,8 @@
 <?php
 /**
-List Table class used in WordPress 4.3.x and above
+List Table class used in WordPress 4.2.x and below
 */
-class S2_List_Table extends WP_List_Table {
+class S2_List_Table_Legacy extends WP_List_Table {
 	function __construct() {
 		global $status, $page;
 
@@ -199,10 +199,6 @@ class S2_List_Table extends WP_List_Table {
 			$infinite_scroll = $this->_pagination_args['infinite_scroll'];
 		}
 
-		if ( 'top' === $which && $total_pages > 1 ) {
-			$this->screen->render_screen_reader_content( 'heading_pagination' );
-		}
-
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( isset( $_POST['what'] ) ) {
@@ -211,7 +207,11 @@ class S2_List_Table extends WP_List_Table {
 			$current = intval( $this->get_pagenum() );
 		}
 
-		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		if ( version_compare( $GLOBALS['wp_version'], '3.5', '<' ) ) {
+			$current_url = esc_url( ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		} else {
+			$current_url = esc_url( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) );
+		}
 
 		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 
@@ -233,78 +233,54 @@ class S2_List_Table extends WP_List_Table {
 
 		$page_links = array();
 
-		$total_pages_before = '<span class="paging-input">';
-		$total_pages_after  = '</span>';
-
-		$disable_first = $disable_last = $disable_prev = $disable_next = false;
-
+		$disable_first = $disable_last = '';
 		if ( 1 === $current ) {
-			$disable_first = true;
-			$disable_prev = true;
-		}
-		if ( 2 === $current ) {
-			$disable_first = true;
+			$disable_first = ' disabled';
 		}
 		if ( $current === $total_pages ) {
-			$disable_last = true;
-			$disable_next = true;
-		}
-		if ( $current === $total_pages - 1 ) {
-			$disable_last = true;
+			$disable_last = ' disabled';
 		}
 
-		if ( $disable_first ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='first-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( remove_query_arg( 'paged', $current_url ) ),
-				__( 'First page', 'subscribe2' ),
-				'&laquo;'
-			);
-		}
+		$page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
+			'first-page' . $disable_first,
+			esc_attr__( 'Go to the first page', 'subscribe2' ),
+			remove_query_arg( 'paged', $current_url ),
+			'&laquo;'
+		);
 
-		if ( $disable_prev ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='prev-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ) ),
-				__( 'Previous page', 'subscribe2' ),
-				'&lsaquo;'
-			);
-		}
+		$page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
+			'prev-page' . $disable_first,
+			esc_attr__( 'Go to the previous page', 'subscribe2' ),
+			add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ),
+			'&lsaquo;'
+		);
 
 		if ( 'bottom' === $which ) {
-			$html_current_page  = $current;
-			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'subscribe2' ) . '</span><span id="table-paging" class="paging-input">';
+			$html_current_page = $current;
 		} else {
-			$html_current_page = sprintf( "%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
-				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'subscribe2' ) . '</label>',
+			$html_current_page = sprintf( "<input class='current-page' title='%s' type='text' name='paged' value='%s' size='%d' />",
+				esc_attr__( 'Current page', 'subscribe2' ),
 				$current,
 				strlen( $total_pages )
 			);
 		}
+
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
-		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . $total_pages_after;
+		$page_links[] = '<span class="paging-input">' . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . '</span>';
 
-		if ( $disable_next ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='next-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ) ),
-				__( 'Next page', 'subscribe2' ),
-				'&rsaquo;'
-			);
-		}
+		$page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
+			'next-page' . $disable_last,
+			esc_attr__( 'Go to the next page', 'subscribe2' ),
+			add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ),
+			'&rsaquo;'
+		);
 
-		if ( $disable_last ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='last-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
-				__( 'Last page', 'subscribe2' ),
-				'&raquo;'
-			);
-		}
+		$page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
+			'last-page' . $disable_last,
+			esc_attr__( 'Go to the last page', 'subscribe2' ),
+			add_query_arg( 'paged', $total_pages, $current_url ),
+			'&raquo;'
+		);
 
 		$pagination_links_class = 'pagination-links';
 		if ( ! empty( $infinite_scroll ) ) {
@@ -317,6 +293,7 @@ class S2_List_Table extends WP_List_Table {
 		} else {
 			$page_class = ' no-pages';
 		}
+
 		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
 
 		echo $this->_pagination;

@@ -1,11 +1,18 @@
 <?php
-class S2_Counter_widget extends WP_Widget {
+class S2_Counter_Widget extends WP_Widget {
 	/**
 	Declares the S2_Counter_widget class.
 	*/
 	function __construct() {
-		$widget_options = array( 'classname' => 's2_counter', 'description' => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2' ) );
-		$control_options = array( 'width' => 250, 'height' => 500 );
+		$widget_options = array(
+			'classname' => 's2_counter',
+			'description' => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2' ),
+			'customize_selective_refresh' => true,
+		);
+		$control_options = array(
+			'width' => 250,
+			'height' => 500,
+		);
 		parent::__construct( 's2_counter', esc_html__( 'Subscribe2 Counter', 'subscribe2' ), $widget_options, $control_options );
 	}
 
@@ -56,9 +63,23 @@ class S2_Counter_widget extends WP_Widget {
 		// set some defaults
 		$options = get_option( 'widget_s2counter' );
 		if ( false === $options ) {
-			$defaults = array( 'title' => 'Subscriber Count', 's2w_bg' => '#e3dacf', 's2w_fg' => '#345797', 's2w_width' => '82', 's2w_height' => '16', 's2w_font' => '11' );
+			$defaults = array(
+				'title' => 'Subscriber Count',
+				's2w_bg' => '#e3dacf',
+				's2w_fg' => '#345797',
+				's2w_width' => '82',
+				's2w_height' => '16',
+				's2w_font' => '11',
+			);
 		} else {
-			$defaults = array( 'title' => $options['title'], 's2w_bg' => $options['s2w_bg'], 's2w_fg' => $options['s2w_fg'], 's2w_width' => $options['s2w_width'], 's2w_height' => $options['s2w_height'], 's2w_font' => $options['s2w_font'] );
+			$defaults = array(
+				'title' => $options['title'],
+				's2w_bg' => $options['s2w_bg'],
+				's2w_fg' => $options['s2w_fg'],
+				's2w_width' => $options['s2w_width'],
+				's2w_height' => $options['s2w_height'],
+				's2w_font' => $options['s2w_font'],
+			);
 			delete_option( 'widget_s2counter' );
 		}
 		$instance = wp_parse_args( (array) $instance, $defaults );
@@ -71,7 +92,7 @@ class S2_Counter_widget extends WP_Widget {
 		$s2w_font = htmlspecialchars( $instance['s2w_font'], ENT_QUOTES );
 		echo '<div>' . "\r\n";
 		echo '<fieldset><legend><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . esc_html__( 'Widget Title', 'subscribe2' ) . '</label></legend>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" value="' . esc_html__( $s2w_title ) . '" />' . "\r\n";
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" value="' . esc_attr( $s2w_title ) . '" />' . "\r\n";
 		echo '</fieldset>' . "\r\n";
 
 		echo '<fieldset>' . "\r\n";

@@ -1,6 +1,5 @@
 <?php
-// Copyright Matthew Robinson 2015
-class S2_Ajax_Class {
+class S2_Ajax {
 	/**
 	Constructor
 	*/
@@ -31,19 +30,20 @@ class S2_Ajax_Class {
 	function add_ajax() {
 		// enqueue the jQuery script we need and let WordPress handle the dependencies
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		$css = apply_filters( 's2_jqueryui_css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-darkness/jquery-ui.css' );
+		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-darkness/jquery-ui.css' );
 		if ( is_ssl() ) {
 			$css = str_replace( 'http:', 'https:', $css );
 		}
 		wp_register_style( 'jquery-ui-style', $css );
 		wp_enqueue_style( 'jquery-ui-style' );
-		wp_register_script( 's2_ajax', S2URL . 'include/s2_ajax' . $this->script_debug . '.js', array(), '1.0' );
+		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.2' );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'title' => __( 'Subscribe to this blog', 'subscribe2' ),
+			'nonce' => wp_create_nonce( 's2_ajax_form_nonce' ),
 		);
-		wp_localize_script( 's2_ajax', 's2_script_strings', $translation_array );
-		wp_enqueue_script( 's2_ajax' );
+		wp_localize_script( 's2-ajax', 's2_ajax_script_strings', $translation_array );
+		wp_enqueue_script( 's2-ajax' );
 	} // end add_ajax()
 
 	/**
@@ -60,13 +60,17 @@ class S2_Ajax_Class {
 		$content = $s2_frontend->shortcode( $atts );
 		$content = apply_filters( 's2_ajax_form', $content );
 		echo $content;
-		wp_die();
+		exit();
 	} // end s2_ajax_handler()
 
 	/**
 	Ajax submit handler
 	*/
 	function s2_ajax_submit_handler() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 's2_ajax_form_nonce' ) ) {
+			echo '<p>' . __( 'There was an error validating your request. Please try again later.', 'subscribe2' ) . '</p>';
+			wp_die();
+		}
 		$data = $_POST['data'];
 		if ( ( isset( $data['firstname'] ) && '' !== $data['firstname'] ) || ( isset( $data['lastname'] ) && '' !== $data['lastname'] ) || ( isset( $data['uri'] ) && 'http://' !== $data['uri'] ) ) {
 			// looks like some invisible-to-user fields were changed; falsely report success
@@ -79,23 +83,19 @@ class S2_Ajax_Class {
 		$s2_frontend->ip = $data['ip'];
 		if ( ! is_email( $s2_frontend->email ) ) {
 			echo '<p>' . __( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
-			wp_die();
 		} elseif ( $s2_frontend->is_barred( $s2_frontend->email ) ) {
 			echo '<p>' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
-			wp_die();
 		} else {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
 				$date = date( 'H:i:s.u', $s2_frontend->lockout );
 				$ips = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $s2_frontend->public WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 				if ( in_array( $s2_frontend->ip, $ips ) ) {
 					echo '<p>' . __( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
-					wp_die();
 				}
 			}
 			$check = $wpdb->get_var( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE user_email = %s", $s2_frontend->email ) );
 			if ( null !== $check ) {
 				printf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' );
-				wp_die();
 			}
 			if ( 'subscribe' === $data['button'] ) {
 				if ( '1' !== $s2_frontend->is_public( $s2_frontend->email ) ) {
@@ -111,7 +111,6 @@ class S2_Ajax_Class {
 					// they're already subscribed
 					echo '<p>' . __( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
 				}
-				wp_die();
 			} elseif ( 'unsubscribe' === $data['button'] ) {
 				if ( false === $s2_frontend->is_public( $s2_frontend->email ) ) {
 					echo '<p>' . __( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
@@ -123,7 +122,6 @@ class S2_Ajax_Class {
 						echo '<p>' . __( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
 					}
 				}
-				wp_die();
 			}
 		}
 		wp_die();
