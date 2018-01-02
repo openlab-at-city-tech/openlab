@@ -64,12 +64,22 @@ function dwqa_action_vote( ) {
 	}
 	if ($dwqa_user_vote_id!=''){
 		if ( ! dwqa_is_user_voted( $post_id, $point, $dwqa_user_vote_id ) ) {
-			$votes = maybe_unserialize(  get_post_meta( $post_id, '_dwqa_votes_log', true ) );
+			$votes = get_post_meta( $post_id, '_dwqa_votes_log', true );
 
+			//remove vote serialize
+			$data_votes = @unserialize($votes);
+			if ($data_votes !== false) {
+				$votes = $data_votes;
+			}
+			
+			if(!$votes || !is_array($votes)){
+				$votes = array();
+			}
+			
 			$votes[$dwqa_user_vote_id] = $point;
 			//update
 			do_action( 'dwqa_vote_'.$vote_for, $post_id, ( int ) $point );
-			update_post_meta( $post_id, '_dwqa_votes_log', serialize( $votes ) );
+			update_post_meta( $post_id, '_dwqa_votes_log', $votes);
 			// Update vote point
 			dwqa_update_vote_count( $post_id );
 
@@ -104,7 +114,7 @@ function dwqa_is_user_voted( $post_id, $point, $user = false ) {
 		global $current_user;
 		$user = $current_user->ID;
 	}
-	$votes = maybe_unserialize(  get_post_meta( $post_id, '_dwqa_votes_log', true ) );
+	$votes = get_post_meta( $post_id, '_dwqa_votes_log', true );
 
 	if ( empty( $votes ) ) { 
 		return false; 
@@ -140,7 +150,7 @@ function dwqa_update_vote_count( $post_id ) {
 		global $post;
 		$post_id = $post->ID;
 	}
-	$votes = maybe_unserialize(  get_post_meta( $post_id, '_dwqa_votes_log', true ) );
+	$votes = get_post_meta( $post_id, '_dwqa_votes_log', true );
 	
 	if ( empty( $votes ) ) {
 		return 0;

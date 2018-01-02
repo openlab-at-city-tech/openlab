@@ -4,7 +4,7 @@
  *  Description: A WordPress plugin was make by DesignWall.com to build an Question Answer system for support, asking and comunitcate with your customer
  *  Author: DesignWall
  *  Author URI: http://www.designwall.com
- *  Version: 1.4.7
+ *  Version: 1.4.8
  *  Text Domain: dwqa
  *  @since 1.4.0
  */
@@ -25,7 +25,7 @@ class DW_Question_Answer {
 		$this->stylesheet_dir = DWQA_STYLESHEET_DIR;
 		$this->stylesheet_uri = DWQA_STYLESHEET_URL;
 
-		$this->version = '1.4.7';
+		$this->version = '1.4.8';
 
 		// load posttype
 		$this->question = new DWQA_Posts_Question();
@@ -156,7 +156,7 @@ class DW_Question_Answer {
 		//Auto create question page
 		$options = get_option( 'dwqa_options' );
 
-		if ( ! isset( $options['pages']['archive-question'] ) || ( isset( $options['pages']['archive-question'] ) && ! get_page( $options['pages']['archive-question'] ) ) ) {
+		if ( ! isset( $options['pages']['archive-question'] ) || ( isset( $options['pages']['archive-question'] ) && ! get_post( $options['pages']['archive-question'] ) ) ) {
 			$args = array(
 				'post_title' => __( 'DWQA Questions', 'dwqa' ),
 				'post_type' => 'page',
@@ -172,7 +172,7 @@ class DW_Question_Answer {
 			}
 		}
 
-		if ( ! isset( $options['pages']['submit-question'] ) || ( isset( $options['pages']['submit-question'] ) && ! get_page( $options['pages']['submit-question'] ) ) ) {
+		if ( ! isset( $options['pages']['submit-question'] ) || ( isset( $options['pages']['submit-question'] ) && ! get_post( $options['pages']['submit-question'] ) ) ) {
 
 			$args = array(
 				'post_title' => __( 'DWQA Ask Question', 'dwqa' ),
