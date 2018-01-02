@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.44.3
+Stable tag: 2.47.5
 
-MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions.
+MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions in your blog.
 
 == Description ==
 MapPress adds an interactive map to the wordpress editing screens.  When editing a post or page just enter any addresses you'd like to map.
@@ -15,7 +15,11 @@ The plugin will automatically insert a great-looking interactive map into your b
 
 For even more features, try [MapPress Pro](http://wphostreviews.com/mappress)
 
-For the latest updates please see the [Development Version](https://downloads.wordpress.org/plugin/mappress-google-maps-for-wordpress.trunk.zip)
+[Home Page](http://www.wphostreviews.com/mappress)
+[Documentation](http://www.wphostreviews.com/mappress-documentation)
+[FAQ](http://www.wphostreviews.com/mappress-faq)
+[Support](http://www.wphostreviews.com/mappress-faq)
+
 
 = Key Features =
 * MapPress is based on the latest Google maps API v3
@@ -29,7 +33,6 @@ For the latest updates please see the [Development Version](https://downloads.wo
 * Multiple maps can be created in a single post or page
 * Real-time traffic
 * New shortcodes with many parameters: "mapid" (to specify which map to show), "width" "height", "zoom", etc.
-* Programming API to develop your own mapping plugins
 
 = Pro Version Features =
 * Get the [MapPress Pro Version](http://wphostreviews.com/mappress) for additional functionality
@@ -37,11 +40,6 @@ For the latest updates please see the [Development Version](https://downloads.wo
 * Use your own custom icons or download thousands of icons from the web
 * Create mashups by taxonomy, tag, category, or post to show multiple locations on a single map
 * Map widget to show a map or a mashup
-
-[Home Page](http://www.wphostreviews.com/mappress)
-[Documentation](http://www.wphostreviews.com/mappress-documentation)
-[FAQ](http://www.wphostreviews.com/mappress-faq)
-[Support](http://www.wphostreviews.com/mappress-faq)
 
 == Screenshots ==
 1. Options screen
@@ -60,7 +58,18 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 1. Install and activate the plugin through the 'Plugins' menu in WordPress
 1. You should now see a MapPress meta box in in the 'edit posts' screen
 
-[Home Page](http://www.wphostreviews.com/mappress) |[Documentation](http://www.wphostreviews.com/mappress-documentation) | [FAQ](http://www.wphostreviews.com/mappress-faq) | [Support](http://www.wphostreviews.com/forums)
+[Home Page](http://www.wphostreviews.com/mappress)
+[Documentation](http://www.wphostreviews.com/mappress-documentation)
+[FAQ](http://www.wphostreviews.com/mappress-faq)
+[Support](http://www.wphostreviews.com/forums)
+
+== Frequently Asked Questions ==
+Please see the plugin documentation pages:
+
+[Home Page](http://www.wphostreviews.com/mappress)
+[Documentation](http://www.wphostreviews.com/mappress-documentation)
+[FAQ](http://www.wphostreviews.com/mappress-faq)
+[Support](http://www.wphostreviews.com/forums)
 
 == Upgrade ==
 
@@ -77,25 +86,149 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 
 == Changelog ==
 
-2.44.3
+= 2.47.5 =
+* Added: filter labels can now include an icon in braces, for example [blue-dot]
+* Added: filter 'mappress_query_filter' for post-query filtering
+* Fixed: workaround for older versions of WordPress which have error in underscore library
+
+= 2.47.4 =
+* Added: setting to open POIs in a new tab/window.  For shortcodes use [mashup mashupClick="postnew"]
+* Fixed: mashups for custom post types were displaying all post types
+* Fixed: maps saved from custom fields in older versions were not auto-centering properly
+
+= 2.47.3 =
+* Fixed: Pro version updater bug fixes
+
+= 2.47.2 =
+* Fixed: Pro version automatic updater was not notifying about new updates (it may be necessary to update to the current version manually).
+
+= 2.47.1 =
+* Changed: the settings for mashup POI title and body display have been combined.  Select either poi title + body or post title + excerpt.  For shortcodes use [mashup mashupbody="poi"] for poi title + body, or [mashup mashupbody="post"] for post title + excerpt
+
+= 2.47 =
+* Added: filter dropdown now includes icons from the 'automatic icons' setting (for use as a map legend)
+* Fixed: editor spawner multiple icon color pickers, so popups were sometimes in the wrong position
+* Changed: 'directions' and 'mashupClick' (POI click behavior for mashups) are now global, set them from the settings screen instead of the shortcode
+* Changed: templates 'map.php' and 'map-list.php' were updated, please update any custom templates
+* Changed: list CSS class 'mapp-pois'/'mapp-poi' were changed to 'mapp-items'/'mapp-item'
+
+= 2.46.10 =
+* Changed: pro updater cache name changed to 'mappress_updater_[action]'
+
+= 2.46.9 =
+* Fixed: POI editor error if tinyMCE is disabled in user settings
+
+= 2.46.8 =
+* Fixed: default style not being applied
+* Fixed: infoWindow displaying even when type = 'none'
+
+= 2.46.7 =
+* Fixed: maps in Jquery tabs control not automatically resizing
+
+= 2.46.6 =
+* Fixed: sorting in editor not working after first re-sort
+
+= 2.46.5 =
+* Fixed: javascript error on settings screen
+* Fixed: improved check for multiple API keys
+* Fixed: custom template not applied for mashup POIs
+
+= 2.46.4 =
+* Fixed: mashup poilist not shown if shortcode enabled and global setting disabled
+* Fixed: default map style not always applied
+
+= 2.46.3 =
+* Fixed: editor not loading properly in 2.46.2
+* Fixed: minZoom not working in shortcodes
+
+= 2.46.2 =
+* Fixed: Pro version automatic updater communications errors
+* Fixed: icon picker was not working on MapPress settings page
+
+= 2.46.1 =
+* Added: updated French translation, thank you to Serge
+* Fixed: directions were showing 'null' if empty
+
+= 2.46 =
+* Added: NEW TEMPLATES - this release includes all new template files - please update any custom templates to match the new versions.
+* Added: mashup results can now be filtered by taxonomies, see the MapPress settings screen
+* Added: setting 'Automatic updates' allows automatic updates for the Pro version
+* Added: new layout with POIs on the left instead of under map, enable with: [mappresss layout="left"]
+* Added: check for multiple Google Maps API loads
+* Changed: template names now use hyphens instead of underscores and some names have changed: map_layout.php => map.php, map_poi_list.php => map-list.php
+* Changed: CSS class names, for example for the POI list class '.mapp-poi-list' is now '.mapp-list'.  Please update any custom CSS.
+* Changed: use the 'hamburger' menu in the map editor to set a map's center & zoom (previously a checkbox was shown in the map editor)
+* Changed: mashups now ignore any center/zoom settings and automatically center to show all POIs
+* Changed: directions now have a Google Maps link.  Transportation modes have been removed
+* Changed: 'my location' shown only for SSL or localhost sites (Google has forbidden geolocation on non-secure sites)
+* Changed: maps automatically recenter on screen resize (previously this was the 'adaptive' setting)
+* Changed: scripts are now loaded in the header if JetPack Infinite Scroll is enabled
+
+= 2.45.4 =
+* Fixed: default custom style not applied when displaying map
+
+= 2.45.3 =
+* Fixed: bug when saving quotes (such as image tags) in POI body
+* Fixed: custom map styles not displayed properly
+
+= 2.45.2 =
+* Removed: directions settings 'from' and 'to'
+* Removed: 'adaptive' setting
+
+= 2.45.1 =
+* Fixed: maps were not saving attributes correctly including title, size and map type
+* Fixed: maps with one POI were not setting zoom correctly
+* Fixed: setting for default poi zoom was not saving
+* Fixed: setting for POI click ('mashupClick') was ignored if used in shortcode
+* Changed: directions 'to' is added by default for all POIs
+* Removed: setting for no directions (directions="none")
+* Removed: POI links ('poiLinks') setting removed
+
+= 2.45 =
+* Added: a new checkbox in the map editor allows you to choose whether to save the center and zoom.  If unchecked, the map will auto-center when displayed.
+* Added: POI list sorting can now be set via the settings screen, the default is no sort
+* Added: POI list can now be clicked anywhere to select a POI (not just the POI title)
+* Added: a new 'hamburger' menu on the map provides map functions including centering and the bicycling, traffic, and transit layers
+* Added: a new 'layers' shortcode attribute enables bicycling/transit/traffic layers when map is initially displayed, for example [mappress layers="bicycling"]
+* Changed: autoicons function simplified: only 1 rule type is allowed, unfortunately you must *re-enter* any existing autoicons settings.
+* Changed: mashup settings are now global including infowindow type ('iwtype'), POI body ('mashupBody'), and POI title ('mashupTtitle') - use the settings screen to set them, NOT the shortcode
+* Changed: obsolete map control settings have been removed, and settings have been simplified to match Google defaults
+* Changed: when centering a map, if the map has a saved center/zoom the viewport will be reset to that center/zoom, otherwise it will autocenter
+* Changed: the 'initialopeninfo' shortcode attribute now accepts only true or false, not a POI index
+* Changed: POI 'directions' links have been removed from the POI list (but still show in the POIs).  This allows display of more POIs in the list.
+* Removed: mashup link ('mashuplink') setting, POI titles now always link to underlying post in mashups
+* Removed: settings 'draggable', 'keyboardshortcuts', 'maptypecontrol', 'maptypecontrolstyle', 'maptypeids', 'overviewmapcontrol', 'overviewmapcontrolopened', 'pancontrol', 'rotatecontrol', 'scalecontrol', 'scrollwheel', 'streetviewcontrol', 'tilt','tooltips','zoomcontrol', 'zoomcontrolstyle'
+* Removed: settings 'template', 'templatedirections', 'templatepoi', 'templatepoilist'
+* Removed: settings 'bicycling', 'traffic', 'transit', 'initialBicycling', 'initialTraffic', 'initialTransit'
+* Removed: 'bigger map' and POI 'zoom' functions
+* Removed: the 'mapLinks' setting is removed (these functions have been replaced by the new map menu)
+
+
+= 2.44.5 =
+* Changed: improved updater
+
+= 2.44.4 =
+* Changed: updates for PHP 7
+
+= 2.44.3 =
 * Changed: plugin repository URL updated
 
-2.44.2
+= 2.44.2 =
 * Changed: geocoding module has been updated
 * Changed: the Nominatim geocoder has been removed
 * Changed: when geocoding an 'address' field in format 'lat,lng' the field is used verbatim rather than mapped to the nearest street address
 * Changed: extract removed from helper functions
 
-2.44.1
+= 2.44.1 =
 * Changed: added 'footer' option for loading scripts in header/footer (for use in AJAX plugins)
 * Changed: added underscore library to loader
 * Fixed: default sort applied to mashup with orderby
 * Fixed: updated widget to use array field names (since WP 4.4)
 
-2.44
+= 2.44 =
 * Changed: version updated to 2.44
 
-2.43.10
+= 2.43.10 =
 * Changed: show blank container while loading mashups instead of default map
 * Changed: no alerts for admins on missing map container
 * Changed: apply wpautop to POIs when they are saved (wpautop inserts html tags to format carriage returns)
@@ -103,15 +236,14 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Fixed: polygons are allowed again in mashup results
 * Fixed: changed Mappress_Updater constructor for PHP 7
 
-2.43.9
+= 2.43.9 =
 * Added: support for XHTML sites (must be running WP 4.5 or higher)
 * Added: server API key for geocoding
 * Fixed: debugging functions
 * Fixed: removed extra code for api key in geocoder
 * Fixed: removed anonymous functions to support hosts still running PHP 5.2
 
-2.43.8
-=
+= 2.43.8 =
 * Added: API key checks updated to support Google policy change on 6/22/2016
 * Added: automatic icons can now be set by post type as well as by taxonomy
 * Changed: KML/KMZ overlays and polygons are no longer included in mashup results
@@ -123,22 +255,19 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Changed: widget now uses WP 4.3 constructor / anonymous function
 * Fixed: a Google API change broke 'my location' in directions and map editor
 
-2.43.7
+= 2.43.7 =
 * Fixed: mashups ignoring mashupTitle="poi" and always showing post title (since 2.43.4)
 
-2.43.6
-=
+= 2.43.6 =
 * Added: language support for mashup queries
 * Fixed: mashups with query="all" or "current" returned no results from 2.43.2
 * Fixed: AJAX error when adding autoicons
 * Fixed: thumbnail size is output as a style for better infobox sizing
 
-2.43.5
-=
+= 2.43.5 =
 * Changed: restored 'adaptive' setting
 
-2.43.4
-=
+= 2.43.4 =
 * Added: check for jQuery version
 * Changed: to support new geocoding API: removed 'sensor' parameter from geocoding calls, added api key and switched to https
 * Changed: restored filter 'mappress_poi_html'
@@ -148,22 +277,18 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Fixed: addresses with foreign characters (like umlaut) were incorrect when geocoding custom fields due to double utf8-encoding
 * Fixed: when using WPML, mashups with mashupClick="post" were always redirecting to post in base language
 
-2.43.3
-=
+= 2.43.3 =
 * Fixed: unable to save POIs in editor
 * Fixed: directions not working because Google changed URL structure
 
-2.43.2
-=
+= 2.43.2 =
 * Fixed: public variables caused query errors with null queries
 
-2.43.1
-=
+= 2.43.1 =
 * Added: wp_query public variables can be included in queries, for example [mashup query="cat=@cat"] to show posts in the current category
 * Fixed: drawing manager not showing up in editor
 
-2.43
-=
+= 2.43 =
 * Added: setting for automatic icons in mashups.  Note: filter 'mappress_poi_iconid' will be deprecated, please use the settings instead.
 * Added: setting 'icon scaling'.  Enter dimensions to scale regular icons, or for scaling high-DPI/retina display icons
 * Added: setting 'load scripts in footer'.  Uncheck this to show maps in AJAX calls, lightboxes, or infinite scrollers
@@ -193,37 +318,31 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Removed: border setting (add CSS styles to class 'mapp-layout' instead)
 * Removed: CDATA in post content
 
-2.42.1
-=
+= 2.42.1 =
 * Changed: wider editor infobox for Chrome and WP 3.9
 * Fixed: removed warning about border style
 * Fixed: removed !important modifier from mapp-iw styles for font weight
 
-2.42
-=
+= 2.42 =
 * Added: compatibiliy for TinyMCE 4.x in WordPress 3.9+
 * Changed: geocoding calls from PHP now use http instead of https to prevent curl errors
 * Changed: updated Spanish translation, thanks to Agustin
 * Fixed: tinyMCE icons in WordPress 3.8+
 
-2.41.1
-=
+= 2.41.1 =
 * Added: polyline and polygon vertices can now be deleted by right-clicking
 * Fixed: Mappress_Map::delete is now declared static to prevent warning messages
 
-2.41
-=
+= 2.41 =
 * Fixed: warning message in save_post action if WordPress is in debug mode and no post ID is provided
 
-2.40.9
-=
+= 2.40.9 =
 * Changed: infowindow scrollbar fix is updated and can now be turned off in settings
 * Changed: removed $poi->get_post() method
 * Changed: CSS for infowindow (.mapp-iw)
 * Fixed: use default height for mashups with width but no height
 
-2.40.8
-=
+= 2.40.8 =
 * Added: workaround for Google infoWindow sizing bug
 * Added: shortcode parameters 'from' and 'to' can be used to set a default for all directions.  Use a string or POI number, for example [mappress from="2"] or [mappress from="Mountain View, CA"]
 * Fixed: layout style was incorrect if map layout had rounded corners; this also prevented show="hidden" from working.
@@ -237,21 +356,17 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Changed: if option mashupClick="post", the plugin redirects using 'siteurl/?p=1234' instead of the permalink (which speeds up queries)
 * Changed: initialopendirections is now a boolean: set it to 'true' or 'false'.
 
-2.40.7
-=
+= 2.40.7 =
 * Fixed: workaround for new output buffering issue in latest NextGen 2.0.11
 
-2.40.6
-=
+= 2.40.6 =
 * Fixed: warning message on settings screen
 * Changed: custom map sizes are now available in all versions of the plugin
 
-2.40.5
-=
+= 2.40.5 =
 * Fixed: directions not working after Nextgen workaround
 
-2.40.4
-=
+= 2.40.4 =
 * Added: the POI editor now includes the 'paste' tinyMCE plugin to allow pasting from Microsoft Word
 * Changed: if you have set the option to link POIs to posts, featured images will also link to the underlying post
 * Changed: map sizes (on the settings screen) can be set to % sizes as well as pixels.  NOTE: existing sizes are reset, so re-enter them on the 'settings' screen if needed.
@@ -268,70 +383,21 @@ See full [installation intructions and Documentation](http://www.wphostreviews.c
 * Fixed: map are now generated from metadata only if the post type is enabled for maps on the settings screen
 * Fixed: update of maps from queued metadata was not working when multiple posts were queued at once
 
-2.40.3
-=
+= 2.40.3 =
 * Fixed: widget CSS settings
 * Fixed: added missing blue iim2 shadow icon
 
-2.40.2
-=
+= 2.40.2 =
 * Fixed: PHP notice in widget
 * Fixed: added updated Hungarian translation (thanks to Zsolt A.)
 
-2.40.1
-=
+= 2.40.1 =
 * Fixed: % width and % height were not working in the editor since 2.40
 * Fixed: PHP notice when upgrade available
 * Fixed: removed internal errors from language files
 
-2.40
-=
+= 2.40 =
 * Added: an 'insert into post' link is now available in the map list as well as the map editor
 * Changed: fields in the map editor have been rearranged for clarity
 * Changed: the 'letter' icons have been removed from the icon picker.  If you need to continue using them, contact me for support.
 * Fixed: the icon picker now loads much faster as a single image
-
-
-2.39.9
-=
-* Fixed: POI function get_custom($field) was returning all fields, not just the field requested
-* Fixed: tinyMCE editor was not saving after editing an existing POI
-
-2.39.8
-=
-* Changed: MapPress now scans for custom field changes to generate automatic maps, for better compatibility with other plugins.
-* Fixed: MapPress will now use .on or .live based on which jQuery is present (some blogs/themes/plugins do not load correct WP version 1.8.3)
-* Fixed: if the tinyMCE editor is not available POI editing will revert to a plain textbox, for compatibility for plugins that replace tinyMCE
-* Fixed: escaped translated text on buttons for directions, map editor and editor infobox forms
-
-2.39.7
-=
-* Added: a new setting 'load maps last' can be used to load the maps after the window 'load' event
-* Changed: the 'hideEmpty' parameter can now be used to hide any mashup that is empty (previously it only applied to mashups with query='current')
-* Changed: the parameter 'tilt' for 45-degree imagery now defaults to 0 (off).  Set it to "45" in your shortcode if you need 45-degreee imagery.
-* Changed: the MapPress RSS feed has been removed from the settings screen
-* Fixed: the 'language' setting was not correctly setting the language for map controls such as map type and zoom
-* Fixed: it is no longer possible to deselect ALL geocoders (the plugin will default to 'google' if nothing is selected)
-* Fixed: settings javascript was loading on other pages
-* Fixed: busy indicator showing indefinitely in Firefox for satellite maps (use the 'load maps last' setting to prevent this)
-* Fixed: invalid map auto-centering for satellite mashups (45-degree imagery was distorting the viewport calculation)
-
-2.39.6
-=
-* Fixed: featured images not displaying in mashups
-* Fixed: array query arguments (such as post__in) not working correctly
-
-2.39.5
-=
-* Fixed: wrong version number in plugin header (2.39.4 showed as 2.39.3)
-
-2.39.4
-=
-* Fixed: tinyMCE displaying empty in 2.39.3
-
-2.39.3
-=
-* Added: setting 'hideEmpty="true"' can be used to suppress a mashup of current posts if it is empty.  Setting is also available on map widget
-* Changed: mashup shortcode is now suppressed in the admin screens when do_shortcode is called by indexing plugins
-* Fixed: warning about file 'settings.js' on the settings screen
-* Fixed: invalid tinyMCE language for non-english sites
