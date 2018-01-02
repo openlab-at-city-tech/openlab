@@ -1,71 +1,68 @@
-# Translation of Development (trunk) in German
-# This file is distributed under the same license as the Development (trunk) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Development (trunk)\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/PDFEmbedder\n"
-"POT-Creation-Date: 2017-07-11 13:33+0200\n"
-"PO-Revision-Date: 2017-07-11 16:53+0200\n"
-"Last-Translator: Roland Stumpp <support@mediaoffice.de>\n"
+"POT-Creation-Date: 2017-09-01 14:43+0200\n"
+"PO-Revision-Date: 2017-09-01 15:47+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
-"Language: de\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.0.1\n"
-"X-Poedit-Basepath: ../..\n"
-"X-Poedit-SearchPath-0: pdfembedder-premium\n"
-"X-Poedit-SearchPath-1: pdfembedder-premium\n"
-"X-Poedit-SearchPath-2: .\n"
+"X-Generator: Poedit 1.8.3\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: basic_pdf_embedder.php:76
 msgid "Options only available in Premium versions"
-msgstr "Optionen sind nur in der Premium Version verfügbar"
+msgstr "Opciók, melyek csak a Prémium verzióban érhetőek el."
 
 #: basic_pdf_embedder.php:78 core/commercial_pdf_embedder.php:108
 msgid "Download Button"
-msgstr "Download-Button"
+msgstr "Letöltés gomb"
 
 #: basic_pdf_embedder.php:80
 msgid "Provide PDF download button on toolbar"
-msgstr "PDF-Download-Button auf PDF Symbolleiste zeigen"
+msgstr "PFD letöltése gomb megjelenítése az eszköztáron"
 
 #: basic_pdf_embedder.php:85 core/commercial_pdf_embedder.php:126
 msgid "External Links"
-msgstr "Externe Weblinks"
+msgstr "Külső linkek"
 
 #: basic_pdf_embedder.php:87 core/commercial_pdf_embedder.php:129
 msgid "Open links in a new browser tab/window"
-msgstr "Links in neuem Fenster öffnen"
+msgstr "Hivatkozás megnyitása új ablakban/új fülön"
 
 #: basic_pdf_embedder.php:93 core/commercial_pdf_embedder.php:117
 msgid "Track Views/Downloads"
-msgstr "Die Anzahl der Downloads und Ansichten zählen"
+msgstr "Megtekintések/Letöltések"
 
 #: basic_pdf_embedder.php:95
 msgid "Count number of views and downloads"
-msgstr "Die Anzahl der Downloads und Ansichten zählen"
+msgstr "A letöltések száma:"
 
 #: basic_pdf_embedder.php:100 core/commercial_pdf_embedder.php:99
 msgid "Continous Page Scrolling"
-msgstr "Horizontales Scrollen"
+msgstr "Engedélyezi a finom oldalgörgetési módot."
 
 #: basic_pdf_embedder.php:102
 msgid "Allow user to scroll up/down between all pages in the PDF"
-msgstr "Nutzern erlauben in allen Seiten der PDF Auf- und Ab zu scrollen"
+msgstr ""
+"Engedélyezése a fel-le görgetésnek\n"
+" az oldalak között"
 
 #: basic_pdf_embedder.php:106
 msgid ""
 "Find out more about <a href=\"%s\" target=\"_blank\">Premium Versions of the "
 "plugin on our website</a>."
 msgstr ""
-"Erfahren Sie mehr über <a href=\"%s\" target=\"_blank\">die Premium-"
-"Versionen des Plugins auf unserer Website</a>."
+"További részletek a <a href=\"%s\" target=\"_blank\">Prémium verzió "
+"weboldalán</a>."
 
 #: basic_pdf_embedder.php:116
 msgid "Mobile-friendly embedding using PDF Embedder Premium"
-msgstr "Nutzen Sie das Mobil angepasste PDF Embedder Premium"
+msgstr "Mobil-barát beágyazás a Prémium verzióban"
 
 #: basic_pdf_embedder.php:117
 msgid ""
@@ -76,12 +73,11 @@ msgid ""
 "may catch the entire browser page when\n"
 "            they're trying only to move about the document..."
 msgstr ""
-"Die kostenlose Version des Plugins sollte auf den meisten mobilen Browsern "
-"funktionieren aber es könnte umständlich für Benutzer mit kleinen "
-"Bildschirmen werden - es ist schwierig,\n"
-" das Dokument vollständig innerhalb des Bildschirms zu positionieren und mit "
-"den Fingern können Sie zoomen,\n"
-" wenn Sie 2 Finger über das Dokument bewegen..."
+"Ez az igyenenes verzió a mobil képernyők legtöbb esetében működnek, de "
+"nehézségekbe ütközhet kis képernyős felhasználóknál, - \n"
+"problémás lehet a dokumentunk pozicionálása, így lehet, hogy amikor lapozni "
+"akarjuk a dokumentumot, akkor a teljes böngészőt\n"
+"fogjuk meg véletlen helyette."
 
 #: basic_pdf_embedder.php:121
 msgid ""
@@ -97,53 +93,50 @@ msgid ""
 "            the web page by mistake. Click Exit to return to the regular web "
 "page."
 msgstr ""
-"Unser <b>PDF Embedder Premium</b> plugin löst dieses Problem mit einem "
-"intelligenten 'Vollbild' Modus.\n"
-"            Wenn das Dokument kleiner als eine bestimmte Breite ist, wird "
-"das Dokument nur als \"Vorschaubild\" mit einem großen\n"
-"           'Ansicht als Vollbild' Button angezeigt\n"
-"           und der Nutzer kann klicken wenn er das gesamte Dokument lesen "
-"will.\n"
-"           Das öffnet das Dokument, so dass man die Vollansicht im mobilen "
-"Browser hat und der Nutzer\n"
-"           kann ohne Fehler das Dokument lesen. Mit Klick auf Exit geht es "
-"zurück zur Normalansicht."
+"A <b> PDF Embered Prémium </B> pluginünk megoldja ezt a problémát egy "
+"intelligens ‘teljes képernyős' móddal.\n"
+"Amikor a dokumentum kisebb, mint egy meghatározott szélesség, csak egy "
+"'nézőképet' mutat, amit aztán \n"
+"megtekinthetünk egy ‘teljes képernyős nézet' gombbal, amire ráklikkelve "
+"megtekinthető.\n"
+"Ez megnyitja a dokumentumot teljes terjedelmében, ahol már nem lehet "
+"probléma a böngészővel."
 
 #: basic_pdf_embedder.php:130
 msgid ""
 "The user can also touch and scroll continuously between all pages of the PDF "
 "which is much easier than clicking the next/prev buttons to navigate."
 msgstr ""
-"Der Benutzer kann auch scrollen in den Seiten. Das ist viel einfacher als "
-"über die vorwärts/rückwärts Schaltflächen zum navigieren."
+"A felhasználó görgethet az oldalak között az egérrel vagy az ujjával a PDF "
+"ben, ami sokkal egyszerűbb, mint a “fel/le” gombok használata"
 
 #: basic_pdf_embedder.php:133 core/core_pdf_embedder.php:382
 msgid ""
 "See our website <a href=\"%s\">wp-pdf.com</a> for more details and purchase "
 "options."
 msgstr ""
-"Weitere Informationen finden Sie in unserer Website unter <a href=\"%s\">wp-"
-"pdf.com</a>."
+"Keresd fel honlapunkat ,<a href=\"%s\">wp-pdf.com</a> a részletekért és a "
+"vásárlási lehetőségért."
 
 #: basic_pdf_embedder.php:193
 msgid ""
 "Track downloads and views with <a href=\"%s\" target=\"_blank\">PDF Embedder "
 "Premium</a>"
 msgstr ""
-"Track-Downloads und Ansichten mit <a href=\"%s\" target=\"_blank\">PDF-"
-"Embedder Premium</a>"
+"Kövesd a letöltéseket és megnézéseket a <a href=\"%s\" target=\"_blank\">PDF "
+"Embedder Premium-al</a>"
 
 #: basic_pdf_embedder.php:195
 msgid "Downloads/Views"
-msgstr "Downloads/Ansichten"
+msgstr "Letöltések/megtekintések"
 
 #: core/EDD_SL_Plugin_Updater.php:252
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" class="
 "\"thickbox\" href=\"%2$s\">View version %3$s details</a>."
 msgstr ""
-"Es ist eine neue Version von %1$s verfügbar. <a target=\"_blank\" class="
-"\"thickbox\" href=\"%2$s\">Anzeigen der Details von Version %3$s</a>."
+"Új verzió elérhető: %1$s . <a target=\"_blank\" class=\"thickbox\" href="
+"\"%2$s\">Tekintsd meg a  %3$s részleteit</a>."
 
 #: core/EDD_SL_Plugin_Updater.php:259
 msgid ""
@@ -151,83 +144,81 @@ msgid ""
 "\"thickbox\" href=\"%2$s\">View version %3$s details</a> or <a href=\"%4$s"
 "\">update now</a>."
 msgstr ""
-"Es ist eine neue Version von %1$s verfügbar. <a target=\"_blank\" class="
-"\"thickbox\" href=\"%2$s\">Anzeigen der Details von Version %3$s</a> oder <a "
-"href=\"%4$s\">jetzt updaten</a>."
+"Új verzió elérhető: %1$s .  <a target=\"_blank\" class=\"thickbox\" href="
+"\"%2$s\">Tekintsd meg a %3$s részleteit</a> vagy <a href=\"%4$s\">frissíts</"
+"a>."
 
 #: core/EDD_SL_Plugin_Updater.php:517
 msgid "You do not have permission to install plugin updates"
-msgstr ""
-"Sie haben keine Berechtigung um Aktualisierungen des Plugins durchzuführen"
+msgstr "Nincs engedélyed a frissítés elvégzéséhez."
 
 #: core/EDD_SL_Plugin_Updater.php:517
 msgid "Error"
-msgstr "Fehler"
+msgstr "Hiba"
 
 #: core/commercial_pdf_embedder.php:71
 msgid "License"
-msgstr "Lizenz"
+msgstr "Licensz kulcs"
 
 #: core/commercial_pdf_embedder.php:82
 msgid "Display Scrollbars"
-msgstr "Scrollbar anzeigen"
+msgstr "Görgetősáv megjelenítése"
 
 #: core/commercial_pdf_embedder.php:86
 msgid "None"
-msgstr "Keine"
+msgstr "Egyik sem"
 
 #: core/commercial_pdf_embedder.php:87
 msgid "Vertical"
-msgstr "Vertikal"
+msgstr "Függőleges"
 
 #: core/commercial_pdf_embedder.php:88
 msgid "Horizontal"
-msgstr "Horizontal"
+msgstr "Vízszintes"
 
 #: core/commercial_pdf_embedder.php:89 core/core_pdf_embedder.php:324
 msgid "Both"
-msgstr "Beide"
+msgstr "Mindkettő"
 
 #: core/commercial_pdf_embedder.php:94
 msgid "User can still use mouse if scrollbars not visible"
-msgstr ""
-"Nutzer kann mit der Maus navigieren wenn die Srollbar nicht sichtbar ist"
+msgstr "A felhasználó használhatja az egeret, akkor is, ha nincs gördítősáv"
 
 #: core/commercial_pdf_embedder.php:102
 msgid ""
 "Allow user to scroll up/down between all pages in the PDF (if unchecked, "
 "user must click next/prev buttons to change page)"
 msgstr ""
-"Nutzer kann in allen Seiten der PDF scrollen (wenn nicht markiert muss der "
-"Nutzer über die Vorwärts/Rückwärts Buttons von Seite zu Seite navigieren)"
+"Egér görgetőjével mozoghat az oldalak között a PDF ben (ha nincs bepipálva, "
+"csak az eszköztár fel/le nyilvaival mozoghat)"
 
 #: core/commercial_pdf_embedder.php:111
 msgid "Provide PDF download button in toolbar"
-msgstr "PDF-Download-Button auf PDF Symbolleiste zeigen"
+msgstr "PDF letöltése gomb engedélyezése az eszköztáron"
 
 #: core/commercial_pdf_embedder.php:120
 msgid ""
 "Count number of views and downloads (figures will be shown in <a href=\"%s"
 "\">Media Library</a>)"
 msgstr ""
-"Zählt die Anzahl der Ansichten und Downloads (Zahlen werden in der <a href="
-"\"%s\">Mediathek</a>angezeigt)"
+"A megtekintések és letöltések száma (a számok a  <a href=\"%s\"> "
+"Médiatárban</a> lesznek)"
 
 #: core/commercial_pdf_embedder.php:135
 msgid "Scroll to Top"
-msgstr "Nach oben scrollen"
+msgstr "Vissza az elejére"
 
 #: core/commercial_pdf_embedder.php:138
 msgid "Scroll to top of page when user clicks next/prev"
-msgstr "Nach oben scrollen wenn ein Nutzer Vorwärts/Rückwärts klickt"
+msgstr "Az oldal tetejére ugrás, amikor a felhasználó a fel/le gombra klikkel"
 
 #: core/commercial_pdf_embedder.php:146
 msgid "No Toolbar"
-msgstr "Keine Toolbar"
+msgstr "Eszköztár kikapcsolása"
 
 #: core/commercial_pdf_embedder.php:154
 msgid "Default Mobile Settings"
-msgstr "Standard Mobile Ansicht"
+msgstr "Alap mobil beállítások"
 
 #: core/commercial_pdf_embedder.php:156
 msgid ""
@@ -235,235 +226,231 @@ msgid ""
 "displays only as a 'thumbnail' with a large 'View in Full Screen' button for "
 "the user to click to open."
 msgstr ""
-"Wenn das Dokument kleiner als die unten spezifizierte Breite wird das "
-"Dokument als 'Vorschaubild' angezeigt. Über einen Button Vollbild kann man "
-"das Vorschaubild vergrößern."
+"Amikor a dokumentum kisebb, mint az itt beállított szélesség, akkor a "
+"dokumentből cska egy ‘nézőkép' jelenik meg, egy ‘Teljes képernyős nézet' "
+"gombbal, amire rá lehet klikkelni."
 
 #: core/commercial_pdf_embedder.php:158
 msgid "Mobile Width"
-msgstr "Mobile Breite"
+msgstr "Mobil szélesség"
 
 #: core/commercial_pdf_embedder.php:162
 msgid ""
 "Enter an integer number of pixels, or 0 to disable automatic full-screen"
 msgstr ""
-"Geben Sie eine ganze Zahl ein oder 0 um den Vollbildmodus zu deaktivieren"
+"Írj be egy számot pixelben, vagy 0 -t írva kikapcsolható az automatikus "
+"teljes képernyős nézet."
 
 #: core/commercial_pdf_embedder.php:166
 msgid "Disable Device Zoom"
-msgstr "Geräte Zoom deaktivieren"
+msgstr "Nagyítás kikapcsolása"
 
 #: core/commercial_pdf_embedder.php:169
 msgid "Enable if you are experiencing quality issues on mobiles"
-msgstr "Aktivieren Sie, wenn Sie Qualitätsprobleme  im Smartphone haben"
+msgstr "Kapcsold be, ha úgy látod, hogy minőségi probléma van mobilon."
 
 #: core/commercial_pdf_embedder.php:174
 msgid ""
 "Some mobile browsers will use their own zoom, causing the PDF Embedder to "
 "render at a lower resolution than it should, or lose the toolbar off screen."
 msgstr ""
-"Einige mobile Browser verwenden ihre eigenen Zoom, wodurch der PDF-Embedder "
-"mit einer niedrigeren Auflösung abbildet als es sein sollte, oder die "
-"Symbolleiste außerhalb des Bildschirms verschwindet."
+"Egyes mobil böngészők a saját nagyításukat használják, ami miatt a PDF "
+"Embedder rossabb minőségben mutatja a dokumentumot, mint kellene, vagy "
+"eltűnik az eszköztár"
 
 #: core/commercial_pdf_embedder.php:175
 msgid ""
 "Enabling this option may help, but could potentially affect appearance in "
 "the rest of your site."
 msgstr ""
-"Die Aktivierung dieser Option kann helfen, kann sich aber auch auf den Rest "
-"Ihrer Seiten auswirken."
+"Ennek az opciónak a bekapcsolása segíthet, de lehetséges, hogy a honlap "
+"többi részére rossz hatással van."
 
 #: core/commercial_pdf_embedder.php:176
 msgid "See <a href=\"%s\" target=\"_blank\">documentation</a> for details."
 msgstr ""
-"Einzelheiten kann man in der <a href=\"%s\" target=\"_blank\">Dokumentation</"
-"a> nachlesen."
+"Nézd meg a <a href=\"%s\" target=\"_blank\">dokumentációt</a> részletekért."
 
 #: core/commercial_pdf_embedder.php:187
 msgid ""
 "You should have received a license key when you purchased this premium "
 "version of PDF Embedder."
 msgstr ""
-"Sie sollten beim Kauf dieser Premium-Version des PDF-Embedder einen "
-"Lizenzschlüssel erhalten haben."
+"Licensz kulcsot meg kellett, hogy kapd, amikor megvetted a Prémium verzióját "
+"a PDF Embeddernek."
 
 #: core/commercial_pdf_embedder.php:188
 msgid ""
 "Please enter it below to enable automatic updates, or <a href=\"%s\">email "
 "us</a> if you do not have one."
 msgstr ""
-"Bitte geben Sie diese unten ein um automatische Updates zu ermöglichen, oder "
-"schreiben eine <a href=\"%s\">E-Mail an uns</a> , wenn Sie die Lizenz nicht "
-"besitzen."
+"Kérlek írd be ide, hogy bekapcsold az automatikus frissítéseket, vagy <a "
+"href=\"%s\"> írj nekünk</a>, ha nincs ilyened."
 
 #: core/commercial_pdf_embedder.php:190
 msgid "License Key"
-msgstr "Lizenzschlüssel"
+msgstr "Licensz kulcs"
 
 #: core/commercial_pdf_embedder.php:203
 msgid "Current License"
-msgstr "Aktuelle Lizenz"
+msgstr "Aktuális Licensz"
 
 #: core/commercial_pdf_embedder.php:206
 msgid "Status"
-msgstr "Status"
+msgstr "Állapot"
 
 #: core/commercial_pdf_embedder.php:210
 msgid "Last Checked"
-msgstr "Zuletzt geprüft"
+msgstr "Utoljára ellenőrizve"
 
 #: core/commercial_pdf_embedder.php:218
 msgid "License Expires"
-msgstr "Lizenz läuft ab"
+msgstr "Licensz lejárata"
 
 #: core/commercial_pdf_embedder.php:230
 msgid ""
 "To renew your license, please <a href=\"%s\" target=\"_blank\">click here</"
 "a>."
 msgstr ""
-"Um Ihre Lizenz zu verlängern, bitte <a href=\"%s\" target=\"_blank\">hier "
-"klicken</a>."
+"Hogy meghosszabbítsd a licenszedet, <a href=\"%s\" target=\"_blank"
+"\">klikkelj ide</a>."
 
 #: core/commercial_pdf_embedder.php:233
 msgid ""
 "You will receive a 50% discount if you renew before your license expires."
-msgstr ""
-"Sie erhalten einen Rabatt von 50 %, wenn Sie Ihre Lizenz erneuern, bevor sie "
-"abläuft."
+msgstr "Kapsz 50% kedvezményt, ha a licenszed még a lejárata előtt megújítod."
 
 #: core/commercial_pdf_embedder.php:242
 msgid "Participate in future beta releases of the plugin"
-msgstr "Partiziperen Sie in Zukunft von Beta Versionen des Plugin"
+msgstr "Részt akarok venni a béta verziók tesztelésében."
 
 #: core/commercial_pdf_embedder.php:384
 msgid "Mobile width should be an integer number of pixels, or 0 to turn off"
 msgstr ""
-"Mobile Breite muss eine ganze Zahl in Pixel sein, oder 0 um es zu "
-"deaktivieren"
+"A mobil szélességi érték egy szám kellene, hogy legyen, ha 0-t írsz, akkor "
+"kikapcsolhatod azt."
 
 #: core/commercial_pdf_embedder.php:385
 msgid "License key is too short"
-msgstr "Der Lizenzschlüssel ist zu kurz"
+msgstr "A licensz kulcs túl rövid"
 
 #: core/commercial_pdf_embedder.php:387
 msgid "License key failed to activate"
-msgstr "Der Lizenzschlüssel zeigt bei der Aktivierung einen Fehler"
+msgstr "A licenszedet nem sikerült aktiválni."
 
 #: core/commercial_pdf_embedder.php:388
 msgid "License key does not exist in our system at all"
-msgstr "Der Lizenzschlüssel existiert in unserem System nicht"
+msgstr "Ez a licensz kulcs nincs benne a rendszerünkben."
 
 #: core/commercial_pdf_embedder.php:389
 msgid "License key entered is for the wrong product"
-msgstr ""
-"Der Lizenzschlüssel den Sie eingegeben haben ist für das falsche Produkt"
+msgstr "Ez a license kulcs nem ehhez a temékhez való"
 
 #: core/commercial_pdf_embedder.php:390
 msgid "License key has expired"
-msgstr "Der Lizenzschlüssel ist abgelaufen"
+msgstr "a Licensz kulcs lejárt."
 
 #: core/commercial_pdf_embedder.php:391
 msgid "License key is not permitted for this website"
-msgstr "Der Lizenzschlüssel ist für diese Website nicht gestattet"
+msgstr "A Licensz kulcs nincs engedélyezve ehhez az oldalhoz"
 
 #: core/commercial_pdf_embedder.php:392
 msgid "License key is not active for this website"
-msgstr "Der Lizenzschlüssel ist nicht für diese Website aktiv"
+msgstr "A licensz kulcs nem aktivált ehhez a honlaphoz"
 
 #: core/commercial_pdf_embedder.php:393
 msgid "License key has been disabled"
-msgstr "Der Lizenzschlüssel wurde deaktiviert"
+msgstr "A licensz kulcs letiltásra került."
 
 #: core/commercial_pdf_embedder.php:394
 msgid "License key was not provided"
-msgstr "Der Lizenzschlüssel wird nicht unterstützt"
+msgstr "A Licensz kulcs nincs engedélyezve ehhez az oldalhoz."
 
 #: core/commercial_pdf_embedder.php:441
 msgid "Downloads"
-msgstr "Downloads"
+msgstr "Letöltések"
 
 #: core/commercial_pdf_embedder.php:445
 msgid "Views"
-msgstr "Ansichten"
+msgstr "Megtekintések"
 
 #: core/core_pdf_embedder.php:37
 msgid "Loading..."
-msgstr "Lade..."
+msgstr "Betöltés…"
 
 #: core/core_pdf_embedder.php:38
 msgid "Page"
-msgstr "Seite"
+msgstr "Oldal"
 
 #: core/core_pdf_embedder.php:39
 msgid "Zoom"
-msgstr "Zoom"
+msgstr "Nagyítás"
 
 #: core/core_pdf_embedder.php:40
 msgid "Previous page"
-msgstr "Vorherige Seite"
+msgstr "Előző oldal"
 
 #: core/core_pdf_embedder.php:41
 msgid "Next page"
-msgstr "Nächste Seite"
+msgstr "Következő oldal"
 
 #: core/core_pdf_embedder.php:42
 msgid "Zoom In"
-msgstr "Vergrössern"
+msgstr "Nagyítás"
 
 #: core/core_pdf_embedder.php:43
 msgid "Zoom Out"
-msgstr "Verkleinern"
+msgstr "Kicsinyítés"
 
 #: core/core_pdf_embedder.php:44 core/core_pdf_embedder.php:251
 msgid "Secure"
-msgstr "Sicherer Zugriff"
+msgstr "Védelem"
 
 #: core/core_pdf_embedder.php:45
 msgid "Download PDF"
-msgstr "PDF herunterladen"
+msgstr "PDF letöltése"
 
 #: core/core_pdf_embedder.php:46
 msgid "Full Screen"
-msgstr "Vollbild"
+msgstr "Teljes képernyő"
 
 #: core/core_pdf_embedder.php:47
 msgid ""
 "Error: URL to the PDF file must be on exactly the same domain as the current "
 "web page."
 msgstr ""
-"Fehler: Die URL der PDF-Datei muss genau die gleiche Domain wie die aktuelle "
-"Webseite haben."
+"Hiba: a letöltendő PDF URL címe egyező domain alatt kell, hogy legyen, mint "
+"maga a honlap."
 
 #: core/core_pdf_embedder.php:48
 msgid "Click here for more info"
-msgstr "Klicken für mehr Informationen"
+msgstr "Klikkelj ide részletekért"
 
 #: core/core_pdf_embedder.php:49
 msgid "PDF page width or height are invalid"
-msgstr "Die PDF Breite oder die Höhe ist ungültig"
+msgstr "A PDF oldalnak a szélesége vagy magassága nem jó."
 
 #: core/core_pdf_embedder.php:50
 msgid "View in Full Screen"
-msgstr "Ansicht im Vollbildmodus"
+msgstr "Teljes képernyő"
 
 #: core/core_pdf_embedder.php:68
 msgid "PDFs"
-msgstr "PDFs"
+msgstr "PDF"
 
 #: core/core_pdf_embedder.php:68
 msgid "Manage PDFs"
-msgstr "PDFs verwalten"
+msgstr "PDF kezelése"
 
 #: core/core_pdf_embedder.php:68
 msgid "PDF <span class=\"count\">(%s)</span>"
 msgid_plural "PDFs <span class=\"count\">(%s)</span>"
 msgstr[0] "PDF <span class=\"count\">(%s)</span>"
-msgstr[1] "PDFs <span class=\"count\">(%s)</span>"
+msgstr[1] "PDF <span class=“count”>(%s)</span>"
 
 #: core/core_pdf_embedder.php:212 core/core_pdf_embedder.php:217
 msgid "PDF Embedder settings"
-msgstr "Einstellungen des PDF Embedder"
+msgstr "PDF Embedder beállítások"
 
 #: core/core_pdf_embedder.php:212 core/core_pdf_embedder.php:217
 msgid "PDF Embedder"
@@ -471,15 +458,16 @@ msgstr "PDF Embedder"
 
 #: core/core_pdf_embedder.php:237
 msgid "PDF Embedder setup"
-msgstr "Konfiguration PDF Embedder"
+msgstr "PDF Embedder beállítások"
 
 #: core/core_pdf_embedder.php:239
 msgid ""
 "To use the plugin, just embed PDFs in the same way as you would normally "
 "embed images in your posts/pages - but try with a PDF file instead."
 msgstr ""
-"Das Plugin wird verwendet, indem man PDFs in eine Seite wie ein Bild "
-"einbindet. Über den Button Dateien hinzufügen."
+"A Plugin használatához csak annyi a dolgod, hogy ugyanúgy beilleszted a PDF "
+"et, ahogy a képeket is szoktad az oldalakba/bejegyzésekbe, csak PDF "
+"fileokkal próbáld."
 
 #: core/core_pdf_embedder.php:240
 msgid ""
@@ -488,14 +476,13 @@ msgid ""
 "                When you insert the PDF into your post, it will "
 "automatically embed using the plugin's viewer."
 msgstr ""
-"Klicken Sie im Post-Editor auf Medien hinzufügen, und ziehen Sie dann Ihre "
-"PDF-Datei per Drag & Drop in die Medienbibliothek.\n"
-"                 Wenn Sie das PDF in Ihren Beitrag einfügen, wird es "
-"automatisch mit dem Plugin-Viewer eingebettet."
+"A szerkesztőben klikkelj a Média Hozzáadására, és ott a PDF et töltsd fel a "
+"médiatárba,\n"
+"amikor beilleszted a PDF et, magától beágyazza majd azt."
 
 #: core/core_pdf_embedder.php:249
 msgid "Main Settings"
-msgstr "Haupteinstellungen"
+msgstr "Fő beállítások"
 
 #: core/core_pdf_embedder.php:250
 msgid "Mobile"
@@ -503,60 +490,59 @@ msgstr "Mobil"
 
 #: core/core_pdf_embedder.php:278
 msgid "Save Changes"
-msgstr "Änderungen speichern"
+msgstr "Változtatások mentése"
 
 #: core/core_pdf_embedder.php:306
 msgid "Default Viewer Settings"
-msgstr "Standard-Viewer-Einstellungen"
+msgstr "Alap beállítások"
 
 #: core/core_pdf_embedder.php:308
 msgid "Width"
-msgstr "Breite"
+msgstr "Szélesség"
 
 #: core/core_pdf_embedder.php:312
 msgid "Height"
-msgstr "Höhe"
+msgstr "Magasság"
 
 #: core/core_pdf_embedder.php:316
 msgid "Enter <b>max</b> or an integer number of pixels"
-msgstr "Geben Sie <b>max</b> oder eine Zahl in Pixel"
+msgstr "Írd be azt, hogy <b>max</b>  vagy egy pixel számot"
 
 #: core/core_pdf_embedder.php:320
 msgid "Toolbar Location"
-msgstr "Ort wo die Toolbar (PDF Navigation) angezeigt wird"
+msgstr "Eszköztár helye"
 
 #: core/core_pdf_embedder.php:322
 msgid "Top"
-msgstr "Oben"
+msgstr "Felül"
 
 #: core/core_pdf_embedder.php:323
 msgid "Bottom"
-msgstr "Unten"
+msgstr "Alul"
 
 #: core/core_pdf_embedder.php:330
 msgid "Toolbar Hover"
-msgstr "Maus-Hover -Berührung mit der Maus"
+msgstr "Eszköztár megjelenése"
 
 #: core/core_pdf_embedder.php:333
 msgid "Toolbar appears only on hover over document"
-msgstr "Toolbar erscheint nur bei Berührung mit der Maus"
+msgstr "Csak akkor jelenik meg, ha az egér a dokumentum fölött van"
 
 #: core/core_pdf_embedder.php:338
 msgid "Toolbar always visible"
-msgstr "Toolbar immer sichtbar"
+msgstr "Mindig látszik"
 
 #: core/core_pdf_embedder.php:350
 msgid ""
 "You can override these defaults for specific embeds by modifying the "
 "shortcodes - see <a href=\"%s\" target=\"_blank\">instructions</a>."
 msgstr ""
-"Sie können diese Standards für spezielles einbetten durch Änderung des "
-"Shortcodes überschreiben. Hier gibt es dazu eine  <a href=\"%s\" target="
-"\"_blank\">Anleitung</a>."
+"Ezeket az alapbeállításokat felül lehet írni, ha a shortecode-okat "
+"felülírod, <a href=\"%s\" target=\"_blank\">instrukciók</a>."
 
 #: core/core_pdf_embedder.php:374
 msgid "Protect your PDFs using PDF Embedder Secure"
-msgstr "Schützen Sie Ihre PDFs mit dem Plugin PDF-Embedder Secure"
+msgstr "Védd meg a PDF ed, a PDF Embeder Secure-al"
 
 #: core/core_pdf_embedder.php:375
 msgid ""
@@ -565,129 +551,128 @@ msgid ""
 "            it is difficult for users to download or print the original PDF "
 "document."
 msgstr ""
-"Unsere <b>PDF-Embedder Premium Secure</b> Plugin bietet die gleiche "
-"einfachen, aber eleganten Ansichten für Ihre Website-Besucher, aber mit dem "
-"zusätzlichen Schutz,\n"
-"                dass der Nutzer das Dokument nicht herunterladen oder "
-"ausdrucken kann."
+"a <b>PDF Embedder Premium Secure</b>plugin ugyanolyan könnyű é elegáns "
+"megtekintő, amiben olyan védelem van, ami nagyon megnehezíti a dokumentum\n"
+"letöltését vagy kinyomtatását."
 
 #: core/core_pdf_embedder.php:378
 msgid ""
 "This means that your PDF is unlikely to be shared outside your site where "
 "you have no control over who views, prints, or shares it."
 msgstr ""
-"Dies bedeutet, dass Ihre PDF-Datei nicht auf anderen Seiten außerhalb Ihrer "
-"Website genutzt werden kann, wo Sie keine Kontrolle darüber haben, wer sie "
-"sieht, druckt, oder teilt."
+"Ez azt jelenti, hogy valószínűleg a PDF fileod nem lesz máshol is megosztva "
+"az oldaladon kívűl, ahol már nem tudod kezelni, illetve nem látod, hogy ki "
+"nézte, nyomtatta, osztotta meg."
 
 #: core/core_pdf_embedder.php:380
 msgid ""
 "Optionally add a watermark containing the user's name or email address to "
 "discourage sharing of screenshots."
 msgstr ""
-"Sie können optional ein Wasserzeichen wie einen Benutzernamen oder eine E-"
-"Mail Adresse eingeben um zu verhindern, dass Nutzer ungewollt Screenshots "
-"anfertigen."
+"Opcionálisan adhatsz hozzá vízjegyet, a neveddel vagy e-mail címeddel, ami "
+"elveszi a kedvét másoknak, hogy megosszák azt."
 
 #: core/core_pdf_embedder.php:428
 msgid "Width must be \"max\" or an integer (number of pixels)"
-msgstr "Breite muss \"max\" oder eine Zahl in Pixel sein (z. Bsp. 20px)"
+msgstr ""
+"Szélességhez vagy azt írd, hogy “max\" vagy egy konkrét számot (pixelben)"
 
 #: core/core_pdf_embedder.php:429
 msgid "Height must be \"max\" or an integer (number of pixels)"
-msgstr "Höhe muss \"max\" oder eine Zahl in Pixel sein (z. Bsp. 20px)"
+msgstr ""
+"Magassághoz vagy azt írd, hogy “max\" vagy egy konkrét számot (pixelben)"
 
 #: core/core_pdf_embedder.php:435
 msgid "Unspecified error"
-msgstr "Unbekannter Fehler"
+msgstr "Meghatározhatatlan hiba"
 
 #: core/core_pdf_embedder.php:481
 msgid "Settings saved"
-msgstr "Einstellungen gespeichert"
+msgstr "Beállítások elmentve."
 
 #: core/core_pdf_embedder.php:587
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr "Beállítások"
 
 #: premium_secure_pdf_embedder.php:85
 msgid "Not logged in"
-msgstr "Nicht eingeloggt"
+msgstr "Nem vagy bejelentkezve"
 
 #: premium_secure_pdf_embedder.php:229 premium_secure_pdf_embedder.php:231
 msgid "Secure PDFs"
-msgstr "Sichere PDF-Dateien"
+msgstr "Védett PDF"
 
 #: premium_secure_pdf_embedder.php:234
 msgid "Send new PDF media uploads to 'securepdfs' folder"
-msgstr "Senden Sie neue PDF-Medien per Upload an den \"Securepdfs\" Ordner"
+msgstr "Új PDF file küldése a 'securepdfs' könyvtárba"
 
 #: premium_secure_pdf_embedder.php:240
 msgid "Disable Right Click"
-msgstr "Rechts Klick deaktivieren"
+msgstr "Jobbklikk letiltása"
 
 #: premium_secure_pdf_embedder.php:243
 msgid "Disable right-click mouse menu (affects secure PDFs only)"
-msgstr "Kontextmenü der Maus deaktivieren (betrifft nur sichere PDF-Dateien)"
+msgstr "Jobbklikk egér menü letiltása (csak védett PDF fileok esetén)"
 
 #: premium_secure_pdf_embedder.php:249
 msgid "Cache Encrypted PDFs"
-msgstr "Cache-verschlüsselte PDFs"
+msgstr "Ideiglenes tárolása a kódolt PDF-eknek."
 
 #: premium_secure_pdf_embedder.php:252
 msgid ""
 "Cache encrypted versions of secure PDFs on the server (increase download "
 "speed)"
 msgstr ""
-"Cache-verschlüsselte Versionen der sichere PDF-Dateien auf dem Server "
-"(Erhöhung der Download-Geschwindigkeit)"
+"Ideiglenes tárolása a kódolt PDF-eknek a szerveren (ez hosszabb letöltési "
+"időt is jelent)"
 
 #: premium_secure_pdf_embedder.php:258
 msgid "Watermark"
-msgstr "Wasserzeichen"
+msgstr "Vízjel"
 
 #: premium_secure_pdf_embedder.php:260
 msgid "Text to display on secure PDFs"
-msgstr "Hinweistext auf sicheren PDFs"
+msgstr "Szöveg megjelenítése a védett PDF-en"
 
 #: premium_secure_pdf_embedder.php:268
 msgid "Horizontal alignment"
-msgstr "Horizontale Ausrichtung"
+msgstr "Vízszintes igazítás"
 
 #: premium_secure_pdf_embedder.php:270
 msgid "Left"
-msgstr "Links"
+msgstr "Bal"
 
 #: premium_secure_pdf_embedder.php:271
 msgid "Center"
-msgstr "Mittig"
+msgstr "Közép"
 
 #: premium_secure_pdf_embedder.php:272
 msgid "Right"
-msgstr "Rechts"
+msgstr "Jobb"
 
 #: premium_secure_pdf_embedder.php:277
 msgid "Vertical offset (%)"
-msgstr "Vertikaler Abstand (%)"
+msgstr "Függőleges táv"
 
 #: premium_secure_pdf_embedder.php:282
 msgid "Font Size (pt)"
-msgstr "Schriftgröße (pt)"
+msgstr "Betűméret"
 
 #: premium_secure_pdf_embedder.php:287
 msgid "Opacity (%)"
-msgstr "Transparenz (%)"
+msgstr "Áttetszőség (%)"
 
 #: premium_secure_pdf_embedder.php:292
 msgid "Rotation (degrees)"
-msgstr "Rotation (Grad)"
+msgstr "Elfogtatás (fokban)"
 
 #: premium_secure_pdf_embedder.php:297
 msgid "Page Display"
-msgstr "Seitenanzeige"
+msgstr "Oldal megjelenítés"
 
 #: premium_secure_pdf_embedder.php:300
 msgid "Show only on even page numbers"
-msgstr "Nur auf geraden Seitenzahlen anzeigen"
+msgstr "Csak páros oldalszámok megjelenítése"
 
 #: premium_secure_pdf_embedder.php:308
 msgid ""
@@ -698,13 +683,11 @@ msgid ""
 "            and the plugin provides a backdoor method for the embedded "
 "viewer to obtain the file contents."
 msgstr ""
-"Wenn  'Sichere PDF-Dateien' aktiviert ist, sind Ihre PDF-Datei-Uploads "
-"standardmäßig 'sicher'.\n"
-"            Das heißt, sie sollten in einen Unterordner 'Securepdfs' in "
-"Ihrem Upload-Bereich hochgeladen werden. Auf diese Dateien darf nicht direkt "
-"zugegriffen werden,\n"
-"            und das Plugin bietet eine Methode für den integrierten Viewer, "
-"den Inhalt der Datei darzustellen."
+"Ha a ‘Védett PDF' be van pipálva, akkor a PDF eid automatikusan ‘védetten’ "
+"lesznek feltöltve.\n"
+"Ekkor a filejaid a ‘securepdfs' könyvtárba kerülnek. Ez azt jelenti, hogy a "
+"filejaid közvetlenül nem lesznek elérhetőek, de\n"
+"a plugin eléri őket, hogy megmutassa az oldalon annak a tartalmát."
 
 #: premium_secure_pdf_embedder.php:312
 msgid ""
@@ -714,12 +697,10 @@ msgid ""
 "user to obtain the original file. Sensitive information should never be "
 "presented to viewers in any form."
 msgstr ""
-"Dies bedeutet, dass Ihre PDF-Datei nicht auf anderen Seiten außerhalb Ihrer "
-"Website genutzt werden kann, wo Sie keine Kontrolle darüber haben, wer sie "
-"sieht, druckt, oder teilt.\n"
-"       Bitte beachten Sie, dass es für bestimmte Nutzer immer noch möglich "
-"ist, die Original Datei zu bekommen. Sensible Daten sollte man nicht über "
-"den PDF Viewer bereitstellen."
+"Ez azt jelenti, hogy a PDF-ed nem valószínű, hogy megosztják, ahol nincs "
+"ráhatásod arra, hogy mi történik vele.\n"
+"Figyelemmel kell lenni arra, hogy ezek sosem biztosak. Olyan érzékeny adatok "
+"megosztását sose tegyük, ami bármilyen formában problémát okozhat."
 
 #: premium_secure_pdf_embedder.php:315
 msgid ""
@@ -727,56 +708,46 @@ msgid ""
 "%20Settings%20Secure&utm_medium=premium&utm_campaign=Premium\" target="
 "\"_blank\">Instructions</a> for more details."
 msgstr ""
-"Näheres hierzu finden Sie unter <a href=\"http://wp-pdf.com/premium-"
-"instructions/?utm_source=PDF%20Settings"
-"%20Secure&utm_medium=premium&utm_campaign=Premium\" target=\"_blank"
-"\">Anleitungen</a> ."
+"Nézd meg az<a href=\"http://wp-pdf.com/premium-instructions/?utm_source=PDF"
+"%20Settings%20Secure&utm_medium=premium&utm_campaign=Premium\" target="
+"\"_blank\">instrukciókat</a> részletekért."
 
 #: premium_secure_pdf_embedder.php:407
 msgid "Watermark Vertical offset should be a numerical value between 0 and 100"
-msgstr ""
-"Die vertikale Verschiebung des Wasserzeichens sollte eine Zahl zwischen 0 "
-"und 100 sein"
+msgstr "A vízjel függőleges eltolása egy szám kell legyen 0 és 100 között"
 
 #: premium_secure_pdf_embedder.php:408
 msgid "Font Size should be a numerical value"
-msgstr "Schriftgröße sollte ein numerischer Wert sein"
+msgstr "A betűméret egy szám kell legyen."
 
 #: premium_secure_pdf_embedder.php:409
 msgid "Watermark Opacity should be a numerical value between 0 and 100"
-msgstr ""
-"Die Transparenz des Wasserzeichens sollte ein numerischer Wert zwischen 0 "
-"und 100 sein"
+msgstr "Vízjel áttetszőségének értéke egy szám kell legyen 0 és 100 között"
 
 #: premium_secure_pdf_embedder.php:410
 msgid "Watermark Rotation should be a numerical value in degrees (0 to 360)"
-msgstr ""
-"Die Wasserzeichen Rotation sollte ein numerischen Wert in Grad haben (0 bis "
-"360)"
+msgstr "Vízjel elforgatásának értéke egy szám kell legyen (0 és 360 között)"
 
+# wordpress plugin description
 msgid ""
 "Embed PDFs straight into your posts and pages, with flexible width and "
 "height. No third-party services required."
 msgstr ""
-"Betten Sie PDFs direkt in Ihre Beiträge und Seiten, mit flexibler Breite und "
-"Höhe. Keine Drittanbieter-Dienste erforderlich."
+"PDF beágyaáza egyből a bejegyzésbe és az oldalba, flexibilis szélességgel és "
+"magassággal. Nincs szükség egyéb eszközre."
 
+# readme description
 msgid ""
 "Embed PDFs straight into your posts and pages, with intelligent resizing of "
 "width and height. No third-party services or iframes required."
 msgstr ""
-"Betten Sie PDFs direkt in Ihre Beiträge und Seiten, mit flexibler Breite und "
-"Höhe. Keine Drittanbieter-Dienste erforderlich."
+"PDF beágyaáza egyből a bejegyzésbe és az oldalba, intelligens "
+"átméretezéssel, a szélességgel és magassággal. Nincs szükség egyéb eszközre."
 
+# wordpress plugin description
 msgid "PDF Embedder Premium"
-msgstr "PDF-Embedder Premium"
+msgstr "PDF Embedder Prémium"
 
-#| msgid "PDF Embedder setup"
+# wordpress plugin description
 msgid "PDF Embedder Premium Secure"
-msgstr "PDF Embedder Premium Secure"
-
-#~ msgid "http://wp-pdf.com/"
-#~ msgstr "http://wp-pdf.com/"
-
-#~ msgid "Dan Lester"
-#~ msgstr "Dan Lester"
+msgstr "PDF Embedder Prémium Védelem"

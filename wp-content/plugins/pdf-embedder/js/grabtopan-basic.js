@@ -45,8 +45,9 @@ var pdfembGrabToPan = (function GrabToPanClosure() {
                 this.active = true;
                 this.element.addEventListener('mousedown', this._onmousedown, true);
 
-                this.element.addEventListener('DOMMouseScroll', this._onmousewheel);
                 this.element.addEventListener('mousewheel', this._onmousewheel);
+                this.element.addEventListener('wheel', this._onmousewheel);
+                this.element.addEventListener('DOMMouseScroll', this._onmousewheel);
 
                 this.element.classList.add(this.CSS_CLASS_GRAB);
                 if (this.onActiveChanged) {
@@ -154,24 +155,35 @@ var pdfembGrabToPan = (function GrabToPanClosure() {
         _onmousewheel: function GrabToPan__onmousewheel(event) {
             this.element.removeEventListener('scroll', this._endPan, true);
 
-            var MOUSE_WHEEL_DELTA_FACTOR = 40;
-            var ticks = (event.type === 'DOMMouseScroll') ? -event.detail :
-            event.wheelDelta / MOUSE_WHEEL_DELTA_FACTOR;
-            //var direction = (ticks < 0) ? 'zoomOut' : 'zoomIn';
+            var MOUSE_WHEEL_DELTA_FACTOR = 0.5;
+
+            if (event.deltaMode) {
+                // if 0, means measured in pixels
+                if (event.deltaMode == 1) { //Measured in lines
+                    MOUSE_WHEEL_DELTA_FACTOR = 10;
+                }
+                if (event.deltaMode == 2) { // Measured in pages
+                    MOUSE_WHEEL_DELTA_FACTOR = 1000;
+                }
+            }
+
+            var ticks = event.deltaY ? -event.deltaY  // 'wheel'
+                : ( event.wheelDelta ? event.wheelDelta  // 'mousewheel'
+                        : -event.detail // 'DOMMouseScroll'
+                );
 
             this.scrollLeftStart = this.element.scrollLeft;
             this.scrollTopStart = this.element.scrollTop;
-//                  var xDiff = event.clientX - this.clientXStart;
             var yDiff = ticks * MOUSE_WHEEL_DELTA_FACTOR;
             this.element.scrollTop = this.scrollTopStart - yDiff;
-            //                this.element.scrollLeft = this.scrollLeftStart - xDiff;
-
-            if (this.element.scrollTop != this.scrollTopStart || yDiff == 0) {
-                event.preventDefault();
-            }
 
             if (!this.overlay.parentNode) {
                 document.body.appendChild(this.overlay);
+            }
+
+            if (this.element.scrollTop != this.scrollTopStart || yDiff == 0) {
+                event.preventDefault();
+                return false;
             }
         },
 

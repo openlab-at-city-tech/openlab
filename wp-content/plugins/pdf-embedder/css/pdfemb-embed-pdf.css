@@ -74,6 +74,7 @@ div.pdfemb-wantmobile-fsarea {
   cursor: -webkit-grab !important;
   cursor: -moz-grab !important;
   cursor: grab !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 .grab-to-pan-grab *:not(input):not(textarea):not(button):not(select):not(:link) {
