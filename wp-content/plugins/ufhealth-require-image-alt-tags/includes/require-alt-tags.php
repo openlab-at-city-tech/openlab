@@ -50,13 +50,22 @@ function action_admin_enqueue_scripts() {
 		wp_enqueue_script( 'ufhealth_require_alt_tags' );
 		wp_enqueue_style( 'ufhealth_require_alt_tags' );
 
+		/**
+		 * Filter the disclaimer copy shown when attempting to insert an image without ALT text.
+		 *
+		 * @since 1.1.3
+		 *
+		 * @param string $disclaimer_copy The copy shown in the warning box.
+		 */
+		$disclaimer_copy = apply_filters( 'ufhealth_alt_tag_disclaimer', esc_html__( 'Please include an ‘Alt Text’ before proceeding with inserting your image.', 'ufhealth-require-image-alt-tags' ) );
+
 		wp_localize_script(
 			'ufhealth_require_alt_tags',
 			'ufhTagsCopy',
 			array(
 				'txt'        => esc_html__( 'The following image(s) are missing alt text', 'ufhealth-require-image-alt-tags' ),
 				'editTxt'    => esc_html__( 'You must enter alt text for the image', 'ufhealth-require-image-alt-tags' ),
-				'disclaimer' => esc_html__( 'Please include an ‘Alt Text’ before proceeding with inserting your image. Due to Federal and State laws, and University accessibility standards, all inserted images must include a description of what the image contains. Thank you.', 'ufhealth-require-image-alt-tags' ),
+				'disclaimer' => $disclaimer_copy,
 			)
 		);
 
