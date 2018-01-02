@@ -655,6 +655,19 @@ function stats_convert_image_urls( $html ) {
 }
 
 /**
+ * Callback for preg_replace_callback used in stats_convert_chart_urls()
+ *
+ * @since 5.6.0
+ *
+ * @param  array  $matches The matches resulting from the preg_replace_callback call.
+ * @return string          The admin url for the chart.
+ */
+function jetpack_stats_convert_chart_urls_callback( $matches ) {
+	// If there is a query string, change the beginning '?' to a '&' so it fits into the middle of this query string.
+	return 'admin.php?page=stats&noheader&chart=' . $matches[1] . str_replace( '?', '&', $matches[2] );
+}
+
+/**
  * Stats Convert Chart URLs.
  *
  * @access public
@@ -662,13 +675,11 @@ function stats_convert_image_urls( $html ) {
  * @return string
  */
 function stats_convert_chart_urls( $html ) {
-	$html = preg_replace_callback( '|https?://[-.a-z0-9]+/wp-includes/charts/([-.a-z0-9]+).php(\??)|',
-		create_function(
-			'$matches',
-			// If there is a query string, change the beginning '?' to a '&' so it fits into the middle of this query string.
-			'return "admin.php?page=stats&noheader&chart=" . $matches[1] . str_replace( "?", "&", $matches[2] );'
-		),
-		$html );
+	$html = preg_replace_callback(
+		'|https?://[-.a-z0-9]+/wp-includes/charts/([-.a-z0-9]+).php(\??)|',
+		'jetpack_stats_convert_chart_urls_callback',
+		$html
+	);
 	return $html;
 }
 
@@ -800,7 +811,7 @@ function stats_configuration_screen() {
 ?>
 		</td></tr>
 		<tr valign="top"><th scope="row"><?php esc_html_e( 'Smiley' , 'jetpack' ); ?></th>
-		<td><label><input type='checkbox'<?php checked( isset( $options['hide_smile'] ) && $options['hide_smile'] ); ?> name='hide_smile' id='hide_smile' /> <?php esc_html_e( 'Hide the stats smiley face image.', 'jetpack' ); ?></label><br /> <span class="description"><?php esc_html_e( 'The image helps collect stats and <strong>makes the world a better place</strong> but should still work when hidden', 'jetpack' ); ?> <img class="stats-smiley" alt="<?php esc_attr_e( 'Smiley face', 'jetpack' ); ?>" src="<?php echo esc_url( plugins_url( 'images/stats-smiley.gif', dirname( __FILE__ ) ) ); ?>" width="6" height="5" /></span></td></tr>
+		<td><label><input type='checkbox'<?php checked( isset( $options['hide_smile'] ) && $options['hide_smile'] ); ?> name='hide_smile' id='hide_smile' /> <?php esc_html_e( 'Hide the stats smiley face image.', 'jetpack' ); ?></label><br /> <span class="description"><?php echo wp_kses( __( 'The image helps collect stats and <strong>makes the world a better place</strong> but should still work when hidden', 'jetpack' ), array( 'strong' => array() ) ); ?> <img class="stats-smiley" alt="<?php esc_attr_e( 'Smiley face', 'jetpack' ); ?>" src="<?php echo esc_url( plugins_url( 'images/stats-smiley.gif', dirname( __FILE__ ) ) ); ?>" width="6" height="5" /></span></td></tr>
 		<tr valign="top"><th scope="row"><?php esc_html_e( 'Report visibility' , 'jetpack' ); ?></th>
 		<td>
 			<?php esc_html_e( 'Select the roles that will be able to view stats reports.', 'jetpack' ); ?><br/>
@@ -1593,7 +1604,7 @@ function stats_str_getcsv( $csv ) {
 
 	fwrite( $temp, $csv, strlen( $csv ) );
 	fseek( $temp, 0 );
-	while ( false !== $row = fgetcsv( $temp, 2000 ) ) {		
+	while ( false !== $row = fgetcsv( $temp, 2000 ) ) {
 		$data[] = $row;
 	}
 	fclose( $temp );

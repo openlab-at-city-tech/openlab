@@ -2,12 +2,13 @@
 /**
  * Module Name: Likes
  * Module Description: Give visitors an easy way to show they appreciate your content.
+ * Jumpstart Description: Give visitors an easy way to show they appreciate your content.
  * First Introduced: 2.2
  * Sort Order: 23
  * Requires Connection: Yes
  * Auto Activate: No
  * Module Tags: Social
- * Feature: Engagement
+ * Feature: Engagement, Jumpstart
  * Additional Search Queries: like, likes, wordpress.com
  */
 
@@ -141,6 +142,19 @@ class Jetpack_Likes {
 	}
 
 	/**
+	 * Stub for is_likes_visible, since some themes were calling it directly from this class
+	 *
+	 * @deprecated 5.4
+	 * @return bool
+	 */
+	function is_likes_visible() {
+		_deprecated_function( __METHOD__, 'jetpack-5.4', 'Jetpack_Likes_Settings()->is_likes_visible' );
+
+		$settings = new Jetpack_Likes_Settings();
+		return $settings->is_likes_visible();
+	}
+
+	/**
 	 * Adds in the jetpack-targetable class so when we visit sharing#likes our like settings get highlighted by a yellow box
 	 * @param  string $html row heading for the sharedaddy "which page" setting
 	 * @return string       html with the jetpack-targetable class and likes id. tbody gets closed after the like settings
@@ -265,8 +279,23 @@ class Jetpack_Likes {
 	* Register scripts
 	*/
 	function register_scripts() {
-		wp_register_script( 'postmessage', plugins_url( '_inc/postmessage.js', dirname(__FILE__) ), array( 'jquery' ), JETPACK__VERSION, false );
-		wp_register_script( 'jetpack_resize', plugins_url( '_inc/jquery.jetpack-resize.js' , dirname(__FILE__) ), array( 'jquery' ), JETPACK__VERSION, false );
+		wp_register_script(
+			'postmessage',
+			Jetpack::get_file_url_for_environment( '_inc/build/postmessage.min.js', '_inc/postmessage.js' ),
+			array( 'jquery' ),
+			JETPACK__VERSION,
+			false
+		);
+		wp_register_script(
+			'jetpack_resize',
+			Jetpack::get_file_url_for_environment(
+				'_inc/build/jquery.jetpack-resize.min.js',
+				'_inc/jquery.jetpack-resize.js'
+			),
+			array( 'jquery' ),
+			JETPACK__VERSION,
+			false
+		);
 		wp_register_script( 'jetpack_likes_queuehandler', plugins_url( 'likes/queuehandler.js' , __FILE__ ), array( 'jquery', 'postmessage', 'jetpack_resize' ), JETPACK__VERSION, true );
 	}
 
