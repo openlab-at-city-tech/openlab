@@ -227,7 +227,7 @@ function eventorganiser_cpt_register() {
 		'add_new_item'          => __( 'Add New Event', 'eventorganiser' ),
 		'edit_item'             => __( 'Edit Event', 'eventorganiser' ),
 		'new_item'              => __( 'New Event', 'eventorganiser' ),
-		'all_items'             => __( 'All events', 'eventorganiser' ),
+		'all_items'             => __( 'All Events', 'eventorganiser' ),
 		'view_item'             => __( 'View Event', 'eventorganiser' ),
 		'search_items'          => __( 'Search events', 'eventorganiser' ),
 		'not_found'             => __( 'No events found', 'eventorganiser' ),
@@ -239,7 +239,14 @@ function eventorganiser_cpt_register() {
 		'items_list'            => __( 'Events list', 'eventorganiser' ),
 		'archives'              => __( 'Event Archives', 'eventorganiser' ),
 		'insert_into_item'      => __( 'Insert into event', 'eventorganiser' ),
-		'uploaded_to_this_item' => __( 'Uploaded to this event', 'eventorganiser' ),		
+		'uploaded_to_this_item' => __( 'Uploaded to this event', 'eventorganiser' ),
+		//non-default wp labels
+		'events_at_venue'       => __( 'Events at %s','eventorganiser' ),
+		'events_in_cat'         => __( 'Event Category: %s', 'eventorganiser' ),
+		'events_in_tag'         => __( 'Event Tag: %s', 'eventorganiser' ),
+		'events_on_date'        => __( 'Events: %s','eventorganiser' ),
+		'events_in_month'       => __( 'Events: %s','eventorganiser' ),
+		'events_in_year'        => __( 'Events: %s','eventorganiser' ),
 	);
 
 	$exclude_from_search = ( 0 == eventorganiser_get_option( 'excludefromsearch' ) ) ? false : true;

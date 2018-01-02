@@ -1382,6 +1382,7 @@ function eo_get_event_fullcalendar( $args = array() ) {
 		'alldayslot' => true, 'alldaytext' => __( 'All day', 'eventorganiser' ),
 		'columnformatmonth' => 'D', 'columnformatweek' => 'D n/j', 'columnformatday' => 'l n/j',
 		'titleformatmonth' => 'F Y', 'titleformatweek' => 'M j, Y', 'titleformatday' => 'l, M j, Y',
+		'weeknumbers' => false,
 		'year' => false, 'month' => false, 'date' => false, 'defaultdate' => false,	'users_events' => false,
 		'event_series' => false, 'event_occurrence__in' => array(),
 		'theme' => false, 'reset' => true, 'isrtl' => $wp_locale->is_rtl(),
@@ -1429,7 +1430,17 @@ function eo_get_event_fullcalendar( $args = array() ) {
 	$args['event_tag']      = is_array( $args['event-tag'] )      ? implode( ',', $args['event-tag'] )      : $args['event-tag'];
 
 	//Get author ID from author/author_name
-	$args['event_organiser'] = ( $args['author'] ? (int) $args['author'] : eo_get_user_id_by( 'slug', $args['author_name'] ) );
+	if ( $args['author'] ) {
+		$args['event_organiser'] =  array_map( 'intval', explode( ',', $args['author'] ) );
+	} else {
+		$args['event_organiser'] = array();
+		$authors = explode( ',', $args['author_name'] );
+		foreach( $authors as $index => $author_name ) {
+			$args['event_organiser'][] =  eo_get_user_id_by( 'slug', $author_name );
+		}
+	}
+
+	$args['event_organiser'] = array_filter( $args['event_organiser'] );
 
 	//max/min time MUST be hh:mm format
 	$times = array( 'mintime', 'maxtime' );
@@ -1459,6 +1470,9 @@ function eo_get_event_fullcalendar( $args = array() ) {
 		$args[$date_attribute.'php'] = $args[$date_attribute];
 		$args[$date_attribute] = eo_php_to_moment( $args[$date_attribute] );
 	}
+
+	//Week numbers
+	$args['weeknumbers'] = ! empty( $args['weeknumbers'] );
 
 	EventOrganiser_Shortcodes::$calendars[] = array_merge( $args );
 
@@ -1543,7 +1557,7 @@ function eo_get_event_meta_list( $event_id = 0 ) {
 		);
 	}
 
-	if ( get_the_terms( $event_id, 'event-category' ) ) {
+	if ( get_the_terms( $event_id, 'event-category' ) && !is_wp_error( get_the_terms( $event_id, 'event-category' ) ) ) {
 		$html .= sprintf(
 			'<li><strong>%s:</strong> %s</li>' . "\n",
 			__( 'Categories', 'eventorganiser' ),
