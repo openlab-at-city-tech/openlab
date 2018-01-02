@@ -1,9 +1,9 @@
 === TinyMCE Advanced ===
 Contributors: azaozz
 Tags: wysiwyg, formatting, tinymce, write, editor
-Requires at least: 4.8
-Tested up to: 4.8
-Stable tag: 4.6.3
+Requires at least: 4.9
+Tested up to: 4.9
+Stable tag: 4.6.7
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,11 @@ With this plugin you can also enable the TinyMCE menu above the toolbars. This w
 Best is to install directly from WordPress. If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 4.6.7 =
+* Fixed compatibility with Gutenberg freeform block.
+* Forced refresh of the TinyMCE plugins after activation.
+* Updated for WordPress 4.9 and TinyMCE 4.6.7.
 
 = 4.6.3 =
 * Updated for WordPress 4.8 and TinyMCE 4.6.3.
