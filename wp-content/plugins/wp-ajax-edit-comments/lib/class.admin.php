@@ -5,7 +5,7 @@ class AECAdmin {
 			$capabilities = 'administrator';
 			if ( AECCore::is_multisite() ) $capabilities = 'manage_network';
 			$admin_hooks = array();
-			$admin_hooks[] = add_menu_page( 'Ajax Edit Comments', 'AEC', $capabilities, 'wpaec', array("AECAdmin", 'print_admin_page_behavior'), $aecomments->get_plugin_url( 'images/menu-icon.png' ) );
+			$admin_hooks[] = add_menu_page( 'Ajax Edit Comments', 'AEC', $capabilities, 'wpaec', array("AECAdmin", 'print_admin_page_behavior'), 'dashicons-format-status' );
 			$admin_hooks[] = add_submenu_page( 'wpaec', __( 'Behavior', 'ajaxEdit' ), __( 'Behavior', 'ajaxEdit' ), $capabilities, 'wpaec', array( 'AECAdmin', 'print_admin_page_behavior' ) );
 			$admin_hooks[] = add_submenu_page( 'wpaec', __( 'Appearance', 'ajaxEdit' ), __( 'Appearance', 'ajaxEdit' ), $capabilities, 'aecappearance', array( 'AECAdmin', 'print_admin_page_appearance' ) );
 			$admin_hooks[] = add_submenu_page( 'wpaec', __( 'Permissions', 'ajaxEdit' ), __( 'Permissions', 'ajaxEdit' ), $capabilities, 'aecpermissions', array( 'AECAdmin', 'print_admin_page_permissions' ) );

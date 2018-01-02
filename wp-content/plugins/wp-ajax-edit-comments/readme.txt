@@ -2,9 +2,9 @@
 Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan
 Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin, adopt-me
 Requires at least: 3.1
-Tested up to: 4.6.1
+Tested up to: 4.9.1
 License: GPLv2 or later
-Stable tag: 5.0.37
+Stable tag: 6.0.1
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
@@ -64,6 +64,9 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 6.0.1 =
+* Supports WordPress version 4.9.1
 
 = 5.0.37.0 =
 * Updated 2016-10-14 by Mikhail Kobzarev - Ensuring WordPress 4.6.1 compatibility
