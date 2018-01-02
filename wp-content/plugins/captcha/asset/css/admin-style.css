@@ -1,0 +1,8 @@
+#live-rows{flex-direction: row-reverse;}
+.wf-add-bottom-small{ background:#fff; border:1px solid #ccc; padding:15px; margin-bottom:10px}
+#filter-small-live-traffic{background:#fff; border:1px solid #ccc; padding:15px;}
+#wf-live-traffic-legend ul li{ float:left; padding:5px 10px}
+#wf-live-traffic-legend ul li.wfHuman:before{ background-color:#16bc9b}
+#wf-live-traffic-legend ul li.wfNotice:before{ background-color:#ffd10a}
+#wf-live-traffic-legend ul li.wfBlocked:before{ background-color:#d03935}
+#wf-live-traffic-legend ul li:before{    content: ''; display: block; float: left; margin: 7px 6px 0 0; width: 12px; height: 12px; background-color: #CCCCCC;}

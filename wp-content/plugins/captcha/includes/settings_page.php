@@ -1,7 +1,7 @@
 <?php
 /**
  * Displays the content of the "Settings" tab on the pligin settings page
- * @package Captcha by BestWebSoft
+ * @package Captcha by mysimplewp
  * @since 4.2.3
  */
 
