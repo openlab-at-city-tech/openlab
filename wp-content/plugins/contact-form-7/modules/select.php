@@ -34,7 +34,7 @@ function wpcf7_select_form_tag_handler( $tag ) {
 
 	$atts['class'] = $tag->get_class_option( $class );
 	$atts['id'] = $tag->get_id_option();
-	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
+	$atts['tabindex'] = $tag->get_option( 'tabindex', 'signed_int', true );
 
 	if ( $tag->is_required() ) {
 		$atts['aria-required'] = 'true';
@@ -102,9 +102,9 @@ function wpcf7_select_form_tag_handler( $tag ) {
 
 		if ( $hangover ) {
 			if ( $multiple ) {
-				$selected = in_array( esc_sql( $value ), (array) $hangover );
+				$selected = in_array( $value, (array) $hangover, true );
 			} else {
-				$selected = ( $hangover == esc_sql( $value ) );
+				$selected = ( $hangover === $value );
 			}
 		} else {
 			if ( ! $shifted && in_array( (int) $key + 1, (array) $defaults ) ) {
