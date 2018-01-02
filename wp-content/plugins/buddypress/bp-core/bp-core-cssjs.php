@@ -96,6 +96,7 @@ function bp_core_register_common_scripts() {
 	$version = bp_get_version();
 	foreach ( $scripts as $id => $script ) {
 		wp_register_script( $id, $script['file'], $script['dependencies'], $version, $script['footer'] );
+		wp_enqueue_script( $id );
 	}
 }
 add_action( 'bp_enqueue_scripts',       'bp_core_register_common_scripts', 1 );
