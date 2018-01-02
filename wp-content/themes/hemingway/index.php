@@ -32,13 +32,13 @@
 		    	
 			    		<?php get_template_part( 'content', get_post_format() ); ?>
 			    				    		
-		    		</div> <!-- /post -->
+		    		</div><!-- .post -->
 		    			        		            
 		        <?php endwhile; ?>
 	        	                    
 			<?php endif; ?>
 			
-		</div> <!-- /posts -->
+		</div><!-- .posts -->
 		
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 		
@@ -50,16 +50,16 @@
 				
 				<div class="clear"></div>
 				
-			</div> <!-- /post-nav archive-nav -->
+			</div><!-- .post-nav archive-nav -->
 		
 		<?php endif; ?>
 			
-	</div> <!-- /content.left -->
+	</div><!-- .content.left -->
 		
 	<?php get_sidebar(); ?>
 	
 	<div class="clear"></div>
 
-</div> <!-- /wrapper -->
+</div><!-- .wrapper -->
 	              	        
 <?php get_footer(); ?>

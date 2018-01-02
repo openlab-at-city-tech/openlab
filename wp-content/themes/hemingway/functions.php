@@ -1,150 +1,213 @@
 <?php
 
-// Theme setup
-add_action( 'after_setup_theme', 'hemingway_setup' );
 
-function hemingway_setup() {
-	
-	// Automatic feed
-	add_theme_support( 'automatic-feed-links' );
-	
-	// Custom background
-	add_theme_support( 'custom-background' );
+/* ---------------------------------------------------------------------------------------------
+   THEME SETUP
+   --------------------------------------------------------------------------------------------- */
+
+
+if ( ! function_exists( 'hemingway_setup' ) ) {
+
+	function hemingway_setup() {
 		
-	// Post thumbnails
-	add_theme_support( 'post-thumbnails' );
-	add_image_size( 'post-image', 676, 9999 );
-
-	// Post formats
-	add_theme_support( 'post-formats', array( 'video', 'aside', 'quote' ) );
-
-	// Custom header
-	$args = array(
-		'width'         => 1280,
-		'height'        => 416,
-		'default-image' => get_template_directory_uri() . '/images/header.jpg',
-		'uploads'       => true,
-		'header-text'  	=> false
+		// Automatic feed
+		add_theme_support( 'automatic-feed-links' );
 		
-	);
-	add_theme_support( 'custom-header', $args );
-	
-	// Title tag
-	add_theme_support( 'title-tag' );
-	
-	// Add nav menu
-	register_nav_menu( 'primary', 'Primary Menu' );
-	
-	// Make the theme translation ready
-	load_theme_textdomain('hemingway', get_template_directory() . '/languages');
-	
-	$locale = get_locale();
-	$locale_file = get_template_directory() . "/languages/$locale.php";
-	if ( is_readable($locale_file) )
-	  require_once($locale_file);
-	
-}
+		// Custom background
+		add_theme_support( 'custom-background' );
+			
+		// Post thumbnails
+		add_theme_support( 'post-thumbnails' );
+		add_image_size( 'post-image', 676, 9999 );
 
-// Enqueue Javascript files
-function hemingway_load_javascript_files() {
-	if ( !is_admin() ) {
-		wp_enqueue_script( 'hemingway_global', get_template_directory_uri().'/js/global.js', array('jquery'), '', true );
-		if ( is_singular() ) wp_enqueue_script( "comment-reply" );
+		// Post formats
+		add_theme_support( 'post-formats', array( 'video', 'aside', 'quote' ) );
+
+		// Custom header
+		$args = array(
+			'width'         => 1280,
+			'height'        => 416,
+			'default-image' => get_template_directory_uri() . '/images/header.jpg',
+			'uploads'       => true,
+			'header-text'  	=> false
+			
+		);
+		add_theme_support( 'custom-header', $args );
+		
+		// Title tag
+		add_theme_support( 'title-tag' );
+
+		// Set content width
+		global $content_width;
+		if ( ! isset( $content_width ) ) $content_width = 676;
+		
+		// Add nav menu
+		register_nav_menu( 'primary', 'Primary Menu' );
+		
+		// Make the theme translation ready
+		load_theme_textdomain( 'hemingway', get_template_directory() . '/languages' );
+		
+		$locale = get_locale();
+		$locale_file = get_template_directory() . "/languages/$locale.php";
+		if ( is_readable($locale_file) )
+		require_once($locale_file);
+		
 	}
+	add_action( 'after_setup_theme', 'hemingway_setup' );
+
 }
 
-add_action( 'wp_enqueue_scripts', 'hemingway_load_javascript_files' );
+
+/* ---------------------------------------------------------------------------------------------
+   ENQUEUE SCRIPTS
+   --------------------------------------------------------------------------------------------- */
 
 
-// Enqueue styles
-function hemingway_load_style() {
-	if ( !is_admin() ) {
-	    wp_enqueue_style( 'hemingway_googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400' );
-	    wp_enqueue_style( 'hemingway_style', get_stylesheet_uri() );
+if ( ! function_exists( 'hemingway_load_javascript_files' ) ) {
+
+	function hemingway_load_javascript_files() {
+		if ( ! is_admin() ) {
+			wp_enqueue_script( 'hemingway_global', get_template_directory_uri() . '/js/global.js', array( 'jquery' ), '', true );
+			if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
+		}
 	}
+	add_action( 'wp_enqueue_scripts', 'hemingway_load_javascript_files' );
+
 }
 
-add_action('wp_print_styles', 'hemingway_load_style');
+
+/* ---------------------------------------------------------------------------------------------
+   ENQUEUE STYLES
+   --------------------------------------------------------------------------------------------- */
 
 
-// Add editor styles
-function hemingway_add_editor_styles() {
-    add_editor_style( 'hemingway-editor-style.css' );
-    $font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400';
-    add_editor_style( str_replace( ',', '%2C', $font_url ) );
+if ( ! function_exists( 'hemingway_load_style' ) ) {
+
+	function hemingway_load_style() {
+		if ( ! is_admin() ) {
+			wp_enqueue_style( 'hemingway_googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400' );
+			wp_enqueue_style( 'hemingway_style', get_template_directory_uri() . '/style.css' );
+		}
+	}
+	add_action( 'wp_print_styles', 'hemingway_load_style' );
+
 }
-add_action( 'init', 'hemingway_add_editor_styles' );
 
 
-// Add footer widget areas
-add_action( 'widgets_init', 'hemingway_sidebar_reg' ); 
+/* ---------------------------------------------------------------------------------------------
+   ADD EDITOR STYLES
+   --------------------------------------------------------------------------------------------- */
 
-function hemingway_sidebar_reg() {
-	register_sidebar(array(
-	  'name' => __( 'Footer A', 'hemingway' ),
-	  'id' => 'footer-a',
-	  'description' => __( 'Widgets in this area will be shown in the left column in the footer.', 'hemingway' ),
-	  'before_title' => '<h3 class="widget-title">',
-	  'after_title' => '</h3>',
-	  'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
-	  'after_widget' => '</div><div class="clear"></div></div>'
-	));	
-	register_sidebar(array(
-	  'name' => __( 'Footer B', 'hemingway' ),
-	  'id' => 'footer-b',
-	  'description' => __( 'Widgets in this area will be shown in the middle column in the footer.', 'hemingway' ),
-	  'before_title' => '<h3 class="widget-title">',
-	  'after_title' => '</h3>',
-	  'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
-	  'after_widget' => '</div><div class="clear"></div></div>'
-	));
-	register_sidebar(array(
-	  'name' => __( 'Footer C', 'hemingway' ),
-	  'id' => 'footer-c',
-	  'description' => __( 'Widgets in this area will be shown in the right column in the footer.', 'hemingway' ),
-	  'before_title' => '<h3 class="widget-title">',
-	  'after_title' => '</h3>',
-	  'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
-	  'after_widget' => '</div><div class="clear"></div></div>'
-	));
-	register_sidebar(array(
-	  'name' => __( 'Sidebar', 'hemingway' ),
-	  'id' => 'sidebar',
-	  'description' => __( 'Widgets in this area will be shown in the sidebar.', 'hemingway' ),
-	  'before_title' => '<h3 class="widget-title">',
-	  'after_title' => '</h3>',
-	  'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
-	  'after_widget' => '</div><div class="clear"></div></div>'
-	));
+
+if ( ! function_exists( 'hemingway_add_editor_styles' ) ) {
+
+	function hemingway_add_editor_styles() {
+		add_editor_style( 'hemingway-editor-style.css' );
+		$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400';
+		add_editor_style( str_replace( ',', '%2C', $font_url ) );
+	}
+	add_action( 'init', 'hemingway_add_editor_styles' );
+
+}
+
+
+/* ---------------------------------------------------------------------------------------------
+   ADD WIDGET AREAS
+   --------------------------------------------------------------------------------------------- */
+
+
+if ( ! function_exists( 'hemingway_sidebar_registration' ) ) {
+
+	function hemingway_sidebar_registration() {
+
+		register_sidebar( array(
+			'name' 			=> __( 'Footer A', 'hemingway' ),
+			'id' 			=> 'footer-a',
+			'description' 	=> __( 'Widgets in this area will be shown in the left column in the footer.', 'hemingway' ),
+			'before_title' 	=> '<h3 class="widget-title">',
+			'after_title' 	=> '</h3>',
+			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'after_widget' 	=> '</div><div class="clear"></div></div>'
+		) );
+
+		register_sidebar( array(
+			'name' 			=> __( 'Footer B', 'hemingway' ),
+			'id' 			=> 'footer-b',
+			'description' 	=> __( 'Widgets in this area will be shown in the middle column in the footer.', 'hemingway' ),
+			'before_title' 	=> '<h3 class="widget-title">',
+			'after_title' 	=> '</h3>',
+			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'after_widget' 	=> '</div><div class="clear"></div></div>'
+		) );
+
+		register_sidebar( array(
+			'name' 			=> __( 'Footer C', 'hemingway' ),
+			'id' 			=> 'footer-c',
+			'description' 	=> __( 'Widgets in this area will be shown in the right column in the footer.', 'hemingway' ),
+			'before_title' 	=> '<h3 class="widget-title">',
+			'after_title' 	=> '</h3>',
+			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'after_widget' 	=> '</div><div class="clear"></div></div>'
+		) );
+
+		register_sidebar( array(
+			'name' 			=> __( 'Sidebar', 'hemingway' ),
+			'id' 			=> 'sidebar',
+			'description'	=> __( 'Widgets in this area will be shown in the sidebar.', 'hemingway' ),
+			'before_title' 	=> '<h3 class="widget-title">',
+			'after_title' 	=> '</h3>',
+			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'after_widget' 	=> '</div><div class="clear"></div></div>'
+		) );
+
+	}
+	add_action( 'widgets_init', 'hemingway_sidebar_registration' ); 
+
 }
 	
-// Add theme widgets
-require_once( get_template_directory() . "/widgets/dribbble-widget.php" );
-require_once( get_template_directory() . "/widgets/flickr-widget.php" );
-require_once( get_template_directory() . "/widgets/video-widget.php" );
+
+/* ---------------------------------------------------------------------------------------------
+   ADD THEME WIDGETS
+   --------------------------------------------------------------------------------------------- */
 
 
-// Set content-width
-if ( ! isset( $content_width ) ) $content_width = 676;
+require_once( get_template_directory() . '/widgets/dribbble-widget.php' );
+require_once( get_template_directory() . '/widgets/flickr-widget.php' );
 
 
-// Add classes to next_posts_link and previous_posts_link
-add_filter('next_posts_link_attributes', 'hemingway_posts_link_attributes_1');
-add_filter('previous_posts_link_attributes', 'hemingway_posts_link_attributes_2');
+/* ---------------------------------------------------------------------------------------------
+   ADD CLASSES TO PAGINATION LINKS
+   --------------------------------------------------------------------------------------------- */
 
-function hemingway_posts_link_attributes_1() {
-    return 'class="post-nav-older"';
+
+if ( ! function_exists( 'hemingway_next_posts_link_class' ) ) {
+
+	function hemingway_next_posts_link_class() {
+		return 'class="post-nav-older"';
+	}
+	add_filter( 'next_posts_link_attributes', 'hemingway_next_posts_link_class' );
+
 }
-function hemingway_posts_link_attributes_2() {
-    return 'class="post-nav-newer"';
+
+if ( ! function_exists( 'hemingway_prev_posts_link_class' ) ) {
+
+	function hemingway_prev_posts_link_class() {
+		return 'class="post-nav-newer"';
+	}
+	add_filter( 'previous_posts_link_attributes', 'hemingway_prev_posts_link_class' );
+
 }
 
 
-// Menu walker adding "has-children" class to menu li's with children menu items
+/* ---------------------------------------------------------------------------------------------
+   CUSTOM MENU WALKER WITH HAS-CHILDREN CLASS
+   --------------------------------------------------------------------------------------------- */
+
+
 class hemingway_nav_walker extends Walker_Nav_Menu {
     function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
         $id_field = $this->db_fields['id'];
-        if ( !empty( $children_elements[ $element->$id_field ] ) ) {
+        if ( ! empty( $children_elements[ $element->$id_field ] ) ) {
             $element->classes[] = 'has-children';
         }
         Walker_Nav_Menu::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
@@ -152,113 +215,141 @@ class hemingway_nav_walker extends Walker_Nav_Menu {
 }
 
 
-// Add class to body if the post/page has a featured image
-add_action('body_class', 'hemingway_if_featured_image_class' );
+/* ---------------------------------------------------------------------------------------------
+   BODY CLASSES
+   --------------------------------------------------------------------------------------------- */
 
-function hemingway_if_featured_image_class($classes) {
-     global $post;
-     if ( isset( $post ) && has_post_thumbnail() ) {
-             $classes[] = 'has-featured-image';
-     }
-     return $classes;
+
+if ( ! function_exists( 'hemingway_body_classes' ) ) {
+
+	function hemingway_body_classes( $classes ) {
+
+		// If there's a post thumbnail
+		if ( has_post_thumbnail() ) {
+			$classes[] = 'has-featured-image';
+		}
+
+		return $classes;
+	}
+	add_action( 'body_class', 'hemingway_body_classes' );
+
 }
 
 
-// Custom more-link text
-add_filter( 'the_content_more_link', 'hemingway_custom_more_link', 10, 2 );
+/* ---------------------------------------------------------------------------------------------
+   CUSTOM MORE LINK TEXT
+   --------------------------------------------------------------------------------------------- */
 
-function hemingway_custom_more_link( $more_link, $more_link_text ) {
-	return str_replace( $more_link_text, __('Continue reading', 'hemingway'), $more_link );
+
+if ( ! function_exists( 'hemingway_custom_more_link' ) ) {
+
+	function hemingway_custom_more_link( $more_link, $more_link_text ) {
+		return str_replace( $more_link_text, __( 'Continue reading', 'hemingway' ), $more_link );
+	}
+	add_filter( 'the_content_more_link', 'hemingway_custom_more_link', 10, 2 );
+
 }
 
 
-// Style the admin area
-function hemingway_custom_colors() {
-   echo '<style type="text/css">
-   
-#postimagediv #set-post-thumbnail img {
-	max-width: 100%;
-	height: auto;
+/* ---------------------------------------------------------------------------------------------
+   STYLE THE ADMIN AREA
+   --------------------------------------------------------------------------------------------- */
+
+
+if ( ! function_exists( 'hemingway_admin_css' ) ) {
+
+	function hemingway_admin_css() { ?>
+	<style type="text/css">
+			#postimagediv #set-post-thumbnail img {
+				max-width: 100%;
+				height: auto;
+			}
+		</style>
+		<?php 
+	}
+	add_action( 'admin_head', 'hemingway_admin_css' );
+
 }
 
-         </style>';
-}
 
-add_action('admin_head', 'hemingway_custom_colors');
+/* ---------------------------------------------------------------------------------------------
+   HEMINGWAY COMMENT FUNCTION
+   --------------------------------------------------------------------------------------------- */
 
 
-// hemingway comment function
-if ( ! function_exists( 'hemingway_comment' ) ) :
-function hemingway_comment( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	switch ( $comment->comment_type ) :
-		case 'pingback' :
-		case 'trackback' :
-	?>
-	
-	<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
-	
-		<?php __( 'Pingback:', 'hemingway' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'hemingway' ), '<span class="edit-link">', '</span>' ); ?>
+if ( ! function_exists( 'hemingway_comment' ) ) {
+	function hemingway_comment( $comment, $args, $depth ) {
+		$GLOBALS['comment'] = $comment;
+		switch ( $comment->comment_type ) :
+			case 'pingback' :
+			case 'trackback' :
+		?>
 		
-	</li>
-	<?php
+		<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
+		
+			<?php __( 'Pingback:', 'hemingway' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'hemingway' ), '<span class="edit-link">', '</span>' ); ?>
+			
+		</li>
+		<?php
+				break;
+			default :
+			global $post;
+		?>
+		<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+		
+			<div id="comment-<?php comment_ID(); ?>" class="comment">
+			
+				<div class="comment-meta comment-author vcard">
+								
+					<?php echo get_avatar( $comment, 120 ); ?>
+
+					<div class="comment-meta-content">
+												
+						<?php printf( '<cite class="fn">%1$s %2$s</cite>',
+							get_comment_author_link(),
+							( $comment->user_id === $post->post_author ) ? '<span class="post-author"> ' . __( '(Post author)', 'hemingway' ) . '</span>' : ''
+						); ?>
+						
+						<p><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php echo get_comment_date() . ' at ' . get_comment_time() ?></a></p>
+						
+					</div><!-- .comment-meta-content -->
+					
+				</div><!-- .comment-meta -->
+
+				<div class="comment-content post-content">
+				
+					<?php if ( '0' == $comment->comment_approved ) : ?>
+					
+						<p class="comment-awaiting-moderation"><?php _e( 'Awaiting moderation', 'hemingway' ); ?></p>
+						
+					<?php endif; ?>
+				
+					<?php comment_text(); ?>
+					
+					<div class="comment-actions">
+					
+						<?php edit_comment_link( __( 'Edit', 'hemingway' ), '', '' ); ?>
+						
+						<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'hemingway' ), 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+						
+						<div class="clear"></div>
+					
+					</div><!-- .comment-actions -->
+					
+				</div><!-- .comment-content -->
+
+			</div><!-- .comment-## -->
+		<?php
 			break;
-		default :
-		global $post;
-	?>
-	<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
-	
-		<div id="comment-<?php comment_ID(); ?>" class="comment">
-		
-			<div class="comment-meta comment-author vcard">
-							
-				<?php echo get_avatar( $comment, 120 ); ?>
-
-				<div class="comment-meta-content">
-											
-					<?php printf( '<cite class="fn">%1$s %2$s</cite>',
-						get_comment_author_link(),
-						( $comment->user_id === $post->post_author ) ? '<span class="post-author"> ' . __( '(Post author)', 'hemingway' ) . '</span>' : ''
-					); ?>
-					
-					<p><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php echo get_comment_date() . ' at ' . get_comment_time() ?></a></p>
-					
-				</div> <!-- /comment-meta-content -->
-				
-			</div> <!-- /comment-meta -->
-
-			<div class="comment-content post-content">
-			
-				<?php if ( '0' == $comment->comment_approved ) : ?>
-				
-					<p class="comment-awaiting-moderation"><?php _e( 'Awaiting moderation', 'hemingway' ); ?></p>
-					
-				<?php endif; ?>
-			
-				<?php comment_text(); ?>
-				
-				<div class="comment-actions">
-				
-					<?php edit_comment_link( __( 'Edit', 'hemingway' ), '', '' ); ?>
-					
-					<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'hemingway' ), 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-					
-					<div class="clear"></div>
-				
-				</div> <!-- /comment-actions -->
-				
-			</div><!-- /comment-content -->
-
-		</div><!-- /comment-## -->
-	<?php
-		break;
-	endswitch;
+		endswitch;
+	}
 }
-endif;
 
 
+/* ---------------------------------------------------------------------------------------------
+   CUSTOMIZER SETTINGS
+   --------------------------------------------------------------------------------------------- */
 
-// Hemingway theme options
 
 class Hemingway_Customize {
 
@@ -267,10 +358,10 @@ class Hemingway_Customize {
       //1. Define a new section (if desired) to the Theme Customizer
       $wp_customize->add_section( 'hemingway_options', 
          array(
-            'title' => __( 'Hemingway Options', 'hemingway' ), //Visible title of section
-            'priority' => 35, //Determines what order this appears in
-            'capability' => 'edit_theme_options', //Capability needed to tweak
-            'description' => __('Allows you to customize some settings for Hemingway.', 'hemingway'), //Descriptive tooltip
+            'title' 		=> __( 'Hemingway Options', 'hemingway' ), //Visible title of section
+            'priority'		=> 35, //Determines what order this appears in
+            'capability' 	=> 'edit_theme_options', //Capability needed to tweak
+            'description' 	=> __('Allows you to customize some settings for Hemingway.', 'hemingway'), //Descriptive tooltip
          ) 
       );
       
@@ -283,10 +374,10 @@ class Hemingway_Customize {
       //2. Register new settings to the WP database...
       $wp_customize->add_setting( 'accent_color', //No need to use a SERIALIZED name, as `theme_mod` settings already live under one db record
          array(
-            'default' => '#1abc9c', //Default setting/value to save
-            'type' => 'theme_mod', //Is this an 'option' or a 'theme_mod'?
-            'capability' => 'edit_theme_options', //Optional. Special permissions for accessing this setting.
-            'transport' => 'postMessage', //What triggers a refresh of the setting? 'refresh' or 'postMessage' (instant)?
+            'default' 			=> '#1abc9c', //Default setting/value to save
+            'type' 				=> 'theme_mod', //Is this an 'option' or a 'theme_mod'?
+            'capability' 		=> 'edit_theme_options', //Optional. Special permissions for accessing this setting.
+            'transport' 		=> 'postMessage', //What triggers a refresh of the setting? 'refresh' or 'postMessage' (instant)?
             'sanitize_callback' => 'sanitize_hex_color'
          ) 
       );
@@ -305,10 +396,10 @@ class Hemingway_Customize {
          $wp_customize, //Pass the $wp_customize object (required)
          'hemingway_accent_color', //Set a unique ID for the control
          array(
-            'label' => __( 'Accent Color', 'hemingway' ), //Admin-visible name of the control
-            'section' => 'colors', //ID of the section this control should render in (can be one of yours, or a WordPress default section)
-            'settings' => 'accent_color', //Which setting to load and manipulate (serialized is okay)
-            'priority' => 10, //Determines the order this control appears in for the specified section
+            'label' 		=> __( 'Accent Color', 'hemingway' ), //Admin-visible name of the control
+            'section' 		=> 'colors', //ID of the section this control should render in (can be one of yours, or a WordPress default section)
+            'settings' 		=> 'accent_color', //Which setting to load and manipulate (serialized is okay)
+            'priority' 		=> 10, //Determines the order this control appears in for the specified section
          ) 
       ) );
       
@@ -434,9 +525,7 @@ class Hemingway_Customize {
             $style,
             $prefix.$mod.$postfix
          );
-         if ( $echo ) {
-            echo $return;
-         }
+         if ( $echo ) echo $return;
       }
       return $return;
     }

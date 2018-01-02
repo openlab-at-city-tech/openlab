@@ -22,7 +22,7 @@
 				
 			</a>
 					
-		</div> <!-- /featured-media -->
+		</div><!-- .featured-media -->
 			
 	<?php endif; ?>
 	
@@ -58,7 +58,7 @@
 								
 	</div>
     
-</div> <!-- /post-header -->
+</div><!-- .post-header -->
 									                                    	    
 <div class="post-content">
 	    		            			            	                                                                                            
@@ -66,6 +66,6 @@
 					
 		<?php wp_link_pages(); ?>
 
-</div> <!-- /post-content -->
+</div><!-- .post-content -->
             
 <div class="clear"></div>

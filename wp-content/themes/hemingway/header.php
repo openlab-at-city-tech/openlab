@@ -6,8 +6,6 @@
 		
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
-				
-		<?php if ( is_singular() ) wp_enqueue_script( "comment-reply" ); ?>
 		 
 		<?php wp_head(); ?>
 	
@@ -31,7 +29,7 @@
 						        	<img src='<?php echo esc_url( get_theme_mod( 'hemingway_logo' ) ); ?>' alt='<?php echo esc_attr( get_bloginfo( 'title' ) ); ?>'>
 						        </a>
 						        
-						    </div> <!-- /blog-logo -->
+						    </div><!-- .blog-logo -->
 					
 						<?php elseif ( get_bloginfo( 'description' ) || get_bloginfo( 'title' ) ) : ?>
 					
@@ -47,15 +45,15 @@
 									
 								<?php } ?>
 							
-							</div> <!-- /blog-info -->
+							</div><!-- .blog-info -->
 							
 						<?php endif; ?>
 									
-					</div> <!-- /header-inner -->
+					</div><!-- .header-inner -->
 								
-				</div> <!-- /header -->
+				</div><!-- .header -->
 			
-			</div> <!-- /bg-dark -->
+			</div><!-- .bg-dark -->
 			
 			<div class="navigation section no-padding bg-dark">
 			
@@ -83,7 +81,7 @@
 						
 						<div class="clear"></div>
 					
-					</div> <!-- /toggle-container -->
+					</div><!-- .toggle-container -->
 					
 					<div class="blog-search hidden">
 					
@@ -141,6 +139,6 @@
 						
 					 </ul>
 				 
-				</div> <!-- /navigation-inner -->
+				</div><!-- .navigation-inner -->
 				
-			</div> <!-- /navigation -->
+			</div><!-- .navigation -->

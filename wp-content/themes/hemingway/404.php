@@ -22,20 +22,20 @@
 			            
 			            <?php get_search_form(); ?>
 			            
-			        </div> <!-- /post-content -->
+			        </div><!-- .post-content -->
 		        
-		        </div> <!-- /content-inner -->
+		        </div><!-- .content-inner -->
 		            	                        	
-			</div> <!-- /post -->
+			</div><!-- .post -->
 		
-		</div> <!-- /posts -->
+		</div><!-- .posts -->
 	
-	</div> <!-- /content -->
+	</div><!-- .content -->
 	
 	<?php get_sidebar(); ?>
 	
 	<div class="clear"></div>
 
-</div> <!-- /wrapper -->
+</div><!-- .wrapper -->
 
 <?php get_footer(); ?>

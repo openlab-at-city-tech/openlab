@@ -30,7 +30,7 @@
 							
 						</a>
 								
-					</div> <!-- /featured-media -->
+					</div><!-- .featured-media -->
 						
 				<?php endif; ?>
 														
@@ -38,7 +38,7 @@
 											
 				    <h1 class="post-title"><?php the_title(); ?></h1>
 				    				    
-			    </div> <!-- /post-header -->
+			    </div><!-- .post-header -->
 			   				        			        		                
 				<div class="post-content">
 							                                        
@@ -46,13 +46,13 @@
 					
 					<?php if ( current_user_can( 'manage_options' ) ) : ?>
 																	
-						<p><?php edit_post_link( __('Edit', 'hemingway') ); ?></p>
+						<p><?php edit_post_link( __( 'Edit', 'hemingway' ) ); ?></p>
 					
 					<?php endif; ?>
 														            			                        
-				</div> <!-- /post-content -->
+				</div><!-- .post-content -->
 								
-			</div> <!-- /post -->
+			</div><!-- .post -->
 			
 			<?php if ( comments_open() || get_comments_number() != '' ) : ?>
 			
@@ -60,22 +60,24 @@
 			
 			<?php endif; ?>
 		
-		</div> <!-- /posts -->
+		</div><!-- .posts -->
 		
-		<?php endwhile; else: ?>
+		<?php endwhile; 
+	
+		else: ?>
 		
-			<p><?php _e("We couldn't find any posts that matched your query. Please try again.", "hemingway"); ?></p>
+			<p><?php _e( "We couldn't find any posts that matched your query. Please try again.", "hemingway" ); ?></p>
 	
 		<?php endif; ?>
 	
 		<div class="clear"></div>
 		
-	</div> <!-- /content left -->
+	</div><!-- .content left -->
 	
 	<?php get_sidebar(); ?>
 	
 	<div class="clear"></div>
 
-</div> <!-- /wrapper -->
+</div><!-- .wrapper -->
 								
 <?php get_footer(); ?>
