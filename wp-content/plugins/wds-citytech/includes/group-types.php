@@ -367,12 +367,18 @@ function openlab_course_faculty_metabox() {
 
 	$addl_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
 	$addl_faculty_data = array();
-	foreach ( $addl_faculty as $fid ) {
-		$f = new WP_User( $fid );
-		$addl_faculty_data[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
-			'value' => esc_attr( $f->user_nicename ),
-		);
+
+	if(!empty($addl_faculty)){
+		foreach ( $addl_faculty as $fid ) {
+			$f = new WP_User( $fid );
+			$addl_faculty_data[] = array(
+				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
+				'value' => esc_attr( $f->user_nicename ),
+			);
+		}
+	} else {
+		//if no additional faculty, provide to view as empty array
+		$addl_faculty = array();
 	}
 
 	?>
