@@ -341,7 +341,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     } else if (totalWeight > 100) {
                         message += ' <span class="text-warning">Total weight is over 100%. Any assignments that do not have a set weight will not be included in the average calculation.</span>';
                     } else if (totalWeight < 100) {
-                        message += ' <span class="text-warning">Total weight is under 100%. Any assignments that do not have a set weight will be given a calculated distribution of ' + self.gradebook.attributes.distributed_weight + '.</span>';
+                        message += ' <span class="text-warning">Total weight is under 100%. Any assignments that do not have a set weight will be given a calculated distribution.';
                     }
 
                     return message;
