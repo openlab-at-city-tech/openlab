@@ -146,7 +146,7 @@ function openlab_group_clone_details( $group_id ) {
 
 		$group_categories = bpcgc_get_group_selected_terms( $group_id );
 		if ( ! empty( $group_categories ) ) {
-			$retval['categories'] = wp_list_pluck( $group_categories, 'term_id' );
+			$retval['categories'] = array_values( wp_list_pluck( $group_categories, 'term_id' ) );
 		}
 
 		$retval['site_id'] = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
