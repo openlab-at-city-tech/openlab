@@ -85,7 +85,7 @@ class gradebook_cell_API{
                                 $data_back = array(
                                     'current_grade_average' => $current_grade_average,
                                     'assign_points_earned' => floatval($assign_points_earned['assign_points_earned']),
-                                    'uid' => $params['uid'],
+                                    'uid' => intval($params['uid']),
                                 );
                                 
    				echo json_encode($data_back);

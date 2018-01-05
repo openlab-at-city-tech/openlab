@@ -23,8 +23,10 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
+                    console.log('gradebook init');
+
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
-                    Backbone.pubSub.on('updateWeightInfo', this.render, this);
+                    Backbone.pubSub.on('updateWeightInfo', this.updateWeightInfo, this);
 
                     this.queue = wp.Uploader.queue;
                     //safety first
@@ -360,6 +362,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     target.attr('title', data.current_grade_average)
                             .tooltip('fixTitle');
+
+                },
+                updateWeightInfo: function (data) {
+
+                    console.log('updateWeightInfo', data);
 
                 }
             });
