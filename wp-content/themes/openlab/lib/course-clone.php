@@ -18,11 +18,15 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 		$is_admin_of_ids = array( 0 );
 	}
 
+	echo '<pre>'.print_r($is_admin_of_ids, true).'</pre>';
+
 	// Next, get list of those that are courses
 	$user_course_ids = $wpdb->get_col( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'course' AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")" );
 	if ( empty( $user_course_ids ) ) {
 		$user_course_ids = array( 0 );
 	}
+
+	echo '<pre>'.print_r($user_course_ids, true).'</pre>';
 
 	// Finally, get a pretty list
 	$user_courses = groups_get_groups( array(
