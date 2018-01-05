@@ -2395,3 +2395,8 @@ function openlab_blacklist_jetpack_modules( $modules ) {
 	return $modules;
 }
 add_filter( 'jetpack_get_available_modules', 'openlab_blacklist_jetpack_modules' );
+
+/**
+ * Disable WP Accessibility toolbar.
+ */
+add_filter( 'option_wpa_toolbar', '__return_empty_string' );
