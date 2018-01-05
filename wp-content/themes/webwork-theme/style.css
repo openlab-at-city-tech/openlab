@@ -34,8 +34,8 @@ a, body a {
 	font-size: 1.1rem;
 }
 
-.credits,
-.credits a {
+body.ol-webwork .credits,
+body.ol-webwork .credits a {
 	color: #fff;
 }
 
@@ -60,7 +60,7 @@ a, body a {
 	font-size: 1.1rem;
 }
 
-.footer a {
+body.ol-webwork .footer a {
 	color: #fff;
 	text-decoration: underline;
 }
@@ -69,7 +69,7 @@ a, body a {
 	padding: 50px 0;
 }
 
-.footer .widget-content {
+body.ol-webwork .footer .widget-content {
 	color: #fff;
 }
 
