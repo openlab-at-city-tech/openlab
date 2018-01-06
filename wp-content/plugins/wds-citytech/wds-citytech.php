@@ -2424,3 +2424,14 @@ add_action( 'admin_footer', function() {
 	<?php
 
 } );
+
+function openlab_wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
+	if ( false === strpos( $html, 'alt-missing.png' ) ) {
+		return $html;
+	}
+
+	$url = home_url();
+	$html = str_replace( 'src=\'' . trailingslashit( home_url() ) . 'wp-content/plugins/wp-accessibility/imgs/alt-missing.png\'', 'src=\'' . trailingslashit( home_url() ) . 'wp-content/mu-plugins/img/AltTextWarning.png\'', $html );
+	return $html;
+}
+add_filter( 'image_send_to_editor', 'openlab_wpa_alt_attribute', 20, 8 );
