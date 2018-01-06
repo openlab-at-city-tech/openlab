@@ -2400,3 +2400,27 @@ add_filter( 'jetpack_get_available_modules', 'openlab_blacklist_jetpack_modules'
  * Disable WP Accessibility toolbar.
  */
 add_filter( 'option_wpa_toolbar', '__return_empty_string' );
+
+/**
+ * Hide WP Accessibility Toolbar settings.
+ */
+add_action( 'admin_footer', function() {
+	global $pagenow;
+
+	if ( 'options-general.php' !== $pagenow ) {
+		return;
+	}
+
+	if ( empty( $_GET['page'] ) || 'wp-accessibility/wp-accessibility.php' !== $_GET['page'] ) {
+		return;
+	}
+
+	?>
+<script type="text/javascript">
+	jQuery( document ).ready( function() {
+		jQuery( '#wpa_toolbar' ).closest( '.postbox' ).hide();
+	} );
+</script>
+	<?php
+
+} );
