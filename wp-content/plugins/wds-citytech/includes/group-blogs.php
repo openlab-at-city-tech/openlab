@@ -60,6 +60,24 @@ function openlab_get_group_site_url( $group_id = false ) {
 	return $site_url;
 }
 
+/**
+ * Link a site to a group.
+ *
+ * @param int $group_id
+ * @param int $site_id
+ */
+function openlab_set_group_site_id( $group_id, $site_id ) {
+	groups_update_groupmeta( $group_id, 'wds_bp_group_site_id', $site_id );
+
+	/**
+	 * Fires when a group's site ID is set or updated.
+	 *
+	 * @param int $group_id
+	 * @param int $site_id
+	 */
+	do_action( 'openlab_set_group_site_id', $group_id, $site_id );
+}
+
 ////////////////////////
 /// MEMBERSHIP SYNC ////
 ////////////////////////

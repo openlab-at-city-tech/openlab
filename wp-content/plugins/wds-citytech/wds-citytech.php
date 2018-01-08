@@ -981,7 +981,8 @@ function wds_bp_group_meta_save( $group ) {
 		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
 
 			// Associate an existing site
-			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int) $_POST['groupblog-blogid'] );
+			openlab_set_group_site_id( $group->id, $site_id, (int) $_POST['groupblog-blogid'] );
+
 		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
 
 			// External site
@@ -1131,7 +1132,8 @@ function ra_copy_blog_page( $group_id ) {
 			if ( ! is_wp_error( $id ) ) { //if it dont already exists then move over everything
 				$current_user = get_userdata( bp_loggedin_user_id() );
 
-				groups_update_groupmeta( $group_id, 'wds_bp_group_site_id', $id );
+				openlab_set_group_site_id( $group_id, $new_id );
+
 				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
                   update_user_option( $user_id, 'primary_blog', $id, true ); */
 				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
