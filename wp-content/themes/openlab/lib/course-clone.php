@@ -17,7 +17,6 @@ function openlab_get_groups_of_type_owned_by_user( $user_id, $type ) {
 	if ( empty( $is_admin_of_ids ) ) {
 		$is_admin_of_ids = array( 0 );
 	}
-	_b( $is_admin_of_ids );
 
 	// Next, get list of those that are courses
 	$user_course_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = %s AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")", $type ) );
