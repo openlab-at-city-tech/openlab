@@ -167,6 +167,23 @@ add_action( 'groups_membership_accepted', 'openlab_add_user_to_groupblog_accept'
 add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 
 /**
+ * Sync group membership to a site at the moment that the site is linked to the group.
+ */
+function openlab_sync_group_site_membership( $group_id, $site_id ) {
+	$group_members = groups_get_group_members( array(
+		'group_id' => $group_id,
+		'exclude_admins_mods' => false,
+		'exclude' => array( get_current_user_id() ),
+	) );
+
+	foreach ( $group_members['members'] as $group_member ) {
+		openlab_add_user_to_groupblog( $group_id, $group_member->user_id );
+	}
+}
+add_action( 'openlab_set_group_site_id', 'openlab_sync_group_site_membership', 10, 2 );
+
+
+/**
  * Placeholder docs for openlab_remove_user_from_groupblog()
  * I had to move that function to wds-citytech/wds-citytech.php because of
  * the order in which AJAX functions are loaded
