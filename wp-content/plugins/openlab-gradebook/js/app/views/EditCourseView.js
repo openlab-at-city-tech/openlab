@@ -13,6 +13,16 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/Course', 'boo
                     //this.options = options.options;
                     //	_(this).extend(this.options.gradebook_state);     
                     this.course = this.model || null;
+                    this.initvals = {};
+
+                    if(options.isInit){
+                        this.initvals.name = oplbGradebook.initName
+                    } else {
+                        this.initvals.name = false;
+                    }
+
+                    console.log('this.course', this.course);
+
                     this.courseList = this.collection;
                     $('body').append(this.render().el);
                     return this;
@@ -20,7 +30,7 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/Course', 'boo
                 render: function () {
                     var self = this;
                     var template = _.template($('#edit-course-template').html());
-                    var compiled = template({course: this.course});
+                    var compiled = template({course: this.course, initvals: this.initvals});
                     self.$el.html(compiled);
                     this.$el.modal('show');
                     _.defer(function () {

@@ -62,3 +62,32 @@ function openlab_oplb_gradebook_show_user_widget($status) {
 }
 
 add_filter('oplb_gradebook_show_user_widget', 'openlab_oplb_gradebook_show_user_widget', 10);
+
+function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
+    global $wpdb;
+
+    $blog_id = get_current_blog_id();
+
+    $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
+    $results = $wpdb->get_results($query);
+
+    if (!$results || empty($results)) {
+        return $placeholder;
+    }
+
+    $group_id = intval($results[0]->group_id);
+    $this_group = groups_get_group(
+        array(
+             'group_id' => $group_id,
+        )
+    );
+
+    if($this_group && !empty($this_group) && isset($this_group->name)){
+        return $this_group->name;
+    }
+
+    return $placeholder;
+
+}
+
+add_filter('oplb_gradebook_gradebook_init_placeholder','openlab_oplb_gradebook_gradebook_init_placeholder');

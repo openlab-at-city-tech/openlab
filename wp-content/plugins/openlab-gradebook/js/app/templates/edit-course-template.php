@@ -16,7 +16,11 @@
                     <input type="hidden" name="gbid" value="<%= course ? course.get('id') : '' %>"/>        
                     <label for="course_name" class="col-sm-3 control-label"><?php esc_html_e('Gradebook Name', 'openlab-gradebook') ?>:</label>
                     <div class="col-sm-7">
-                        <input type="text" id="course_name" class="form-control" name="name" value="<%= course ? course.get('name') : '' %>"/>
+                        <% if(initvals.name){ %>
+                            <input type="text" id="course_name" class="form-control" name="name" value="<%= initvals.name %>"/>
+                        <% } else { %>
+                            <input type="text" id="course_name" class="form-control" name="name" value="<%= course ? course.get('name') : '' %>"/>
+                        <% } %>
                     </div>
                 </div>
                 <div class="form-group">     					

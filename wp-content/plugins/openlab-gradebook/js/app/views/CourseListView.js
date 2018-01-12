@@ -46,14 +46,29 @@ define(['jquery', 'backbone', 'underscore', 'views/EditCourseView', 'views/Cours
                     var template = _.template($('#course-list-template').html());
                     var compiled = template({});
                     $('#wpbody-content').prepend(this.$el.html(compiled));
+
+                    if(self.courseList.models.length){
+
                     _.each(self.courseList.models, function (course) {
                         var courseView = new CourseView({model: course, collection: self.courseList});
                         $('.angb-course-list-tbody').append(courseView.render());
                     });
+                
+                    } else {
+
+                        this.editCourse(true);
+
+                    }
+
                     return this;
                 },
-                editCourse: function (ev) {
-                    var view = new EditCourseView({collection: this.courseList});
+                editCourse: function (isInit) {
+
+                    if(typeof isInit === 'undefined'){
+                        isInit = false;
+                    }
+
+                    var view = new EditCourseView({collection: this.courseList, isInit: isInit});
                     return false;
                 },
                 addCourse: function (course) {

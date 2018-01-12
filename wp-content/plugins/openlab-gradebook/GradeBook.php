@@ -84,14 +84,15 @@ function enqueue_oplb_gradebook_scripts($hook) {
     wp_enqueue_media();
     wp_enqueue_script('jquery-ui-datepicker');
 
-    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.2.7', true);
+    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.2.8', true);
     wp_enqueue_script('init_gradebookjs');
     wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
         'ajaxURL' => admin_url('admin-ajax.php'),
-        'depLocations' => oplb_get_dep_locations(),
+        'depLocations' => oplb_gradebook_get_dep_locations(),
         'nonce' => wp_create_nonce('oplb_gradebook'),
         'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG),
         'currentYear' => date('Y'),
+        'initName' => oplb_gradebook_gradebook_init_placeholder(),
     ));
     if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'gradebook_page_oplb_gradebook_settings') {
         $oplb_gradebook_develop = false;
@@ -104,7 +105,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.6', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.2.7', true);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.2.8', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
         wp_enqueue_script('requirejs');
@@ -244,7 +245,7 @@ function oplb_gradebook_shortcode() {
 /**
  * Grab dependencies already stored in WP (to avoid conflicts)
  */
-function oplb_get_dep_locations() {
+function oplb_gradebook_get_dep_locations() {
 
     $include_dir = includes_url() . 'js/';
 
@@ -261,6 +262,13 @@ function oplb_get_dep_locations() {
 //activation and deactivation hooks
 register_activation_hook(__FILE__, 'activate_oplb_gradebook');
 register_deactivation_hook(__FILE__, 'deactivate_oplb_gradebook');
+
+//
+function oplb_gradebook_gradebook_init_placeholder(){
+
+    return apply_filters('oplb_gradebook_gradebook_init_placeholder', 'Please provide a Name');
+
+}
 
 /**
  * Openlab Gradebook activation actions
