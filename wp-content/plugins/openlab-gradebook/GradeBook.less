@@ -58,67 +58,71 @@
 }
 
 #loading-students-container {
-    display:absolute;
+    display: absolute;
 }
 
 .modal-body {
     overflow: auto;
-    .grade-type{
+    .grade-type {
         margin-bottom: 30px;
     }
-    #edit-student-form{
-        .student-add-wrapper{
-            #addSingleStudent{
+    #edit-student-form {
+        .student-add-wrapper {
+            #addSingleStudent {
                 overflow-y: hidden;
                 max-height: 28px;
                 transition-property: all;
                 transition-duration: .5s;
                 transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-                @media (max-width: 767px){
+                @media (max-width: 767px) {
                     max-height: 54px;
                 }
             }
-            &.add-all{
-                #addSingleStudent{
+            &.add-all {
+                #addSingleStudent {
                     margin-bottom: 0;
                     max-height: 0;
                 }
             }
         }
-        p{
+        p {
             width: 96%;
             margin: 0 auto 10px;
             max-width: 384px;
         }
         @media (max-width: 767px) {
-            .radio{
+            .radio {
                 text-align: center;
             }
         }
     }
 }
-.upload-csv-modal{
-    .attachment-info{
-        .delete-attachment{
+
+.upload-csv-modal {
+    .attachment-info {
+        .delete-attachment {
             display: none;
         }
     }
     .setting,
-    .attachment-display-settings{
+    .attachment-display-settings {
         display: none;
     }
 }
-h5{
+
+h5 {
     font-weight: 600;
 }
-.weight-message{
-    p{
+
+.weight-message {
+    p {
         margin: 0 0 0 10px;
-        .text-warning{
+        .text-warning {
             font-style: italic;
         }
     }
 }
+
 
 /* Chart stylings */
 
@@ -127,14 +131,16 @@ h5{
     position: relative;
 }
 
-.pie-legend, .line-legend {
+.pie-legend,
+.line-legend {
     list-style: none;
     position: absolute;
     right: 8px;
     top: 0;
 }
 
-.pie-legend li span, .line-legend li span {
+.pie-legend li span,
+.line-legend li span {
     display: block;
     position: absolute;
     left: 0;
@@ -144,7 +150,8 @@ h5{
     border-radius: 5px;
 }
 
-.pie-legend li, .line-legend li {
+.pie-legend li,
+.line-legend li {
     display: block;
     padding-left: 30px;
     position: relative;
@@ -163,9 +170,9 @@ h5{
 /*  Gradebook styles */
 
 [contenteditable="true"]:active,
-[contenteditable="true"]:focus{
-    border:none;
-    outline:none;
+[contenteditable="true"]:focus {
+    border: none;
+    outline: none;
 }
 
 [contenteditable="true"]:focus {
@@ -173,8 +180,7 @@ h5{
     border: 3px solid #2ea2cc;
 }
 
-
-.cell{
+.cell {
     text-align: right;
     cursor: pointer;
 }
@@ -183,7 +189,7 @@ h5{
     z-index: 999999;
 }
 
-.table{
+.table {
     background-color: white;
 }
 
@@ -193,93 +199,90 @@ h5{
 
 body {
     background-color: #f1f1f1;
-    &.admin_page_oplb-gradebook-upload-csv{
+    &.admin_page_oplb-gradebook-upload-csv {
         .oplb-bs.navbar-location-oplb-bs,
         #wpadminbar,
         #adminmenumain,
         #wpfooter,
-        #local-env-flag{
+        #local-env-flag {
             display: none !important;
         }
-        #wpcontent{
+        #wpcontent {
             padding-top: 21px !important;
         }
     }
-    .overline{
+    .overline {
         text-decoration: overline;
     }
     @media (max-width: 767px) {
-        .radio input[type="radio"]{
+        .radio input[type="radio"] {
             position: relative;
         }
     }
-    .dashicons{
-        &.dashicons-spinning{
+    .dashicons {
+        &.dashicons-spinning {
             -webkit-animation: spin 1000ms infinite linear;
             animation: spin 1000ms infinite linear;
         }
     }
 }
 
-.student-tools, .assignment-tools { 
-    overflow: visible; 
+.student-tools,
+.assignment-tools {
+    overflow: visible;
 }
 
-
-#chart-container{
+#chart-container {
     text-align: center;
 }
-
 
 [class^="course-column-"] {
     cursor: pointer;
 }
 
-
 td {
     cursor: default;
 }
 
-
-#chart_div{
+#chart_div {
     display: inline-block;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-
-#oplb-gradebooks #courses-interface-buttons-container{
-    text-align: center;
-}
-#oplb-gradebook #gradebook-interface-buttons-container{
+#oplb-gradebooks #courses-interface-buttons-container {
     text-align: center;
 }
 
-#oplb-gradebook #gradebook-interface-buttons-container li{
+#oplb-gradebook #gradebook-interface-buttons-container {
+    text-align: center;
+}
+
+#oplb-gradebook #gradebook-interface-buttons-container li {
     display: inline-block;
 }
 
-#oplb-gradebook button{
+#oplb-gradebook button {
     display: inline-block;
 }
 
-
-.students .selected td, 
+.students .selected td,
 .students .selected th,
-.students .selected, #courses .selected td{
+.students .selected,
+#courses .selected td {
     background-color: #f7fcfe;
 }
 
-.students-header tr th{
+.students-header tr th {
     cursor: default;
 }
 
-.students-header{
-    .btn-group{
+.students-header {
+    .btn-group {
         max-width: 100%;
-        .btn{
+        .btn {
             max-width: 100%;
-            .name{
+            .name {
                 position: relative;
                 max-width: 100%;
                 overflow: hidden;
@@ -288,14 +291,14 @@ td {
                 display: block;
                 padding-right: 12px;
                 text-overflow: ellipsis;
-                .caret{
+                .caret {
                     position: absolute;
                     right: 0;
                     top: 50%;
                 }
             }
         }
-        .dropdown-menu{
+        .dropdown-menu {
             position: absolute;
             top: auto;
             left: auto;
@@ -304,9 +307,9 @@ td {
     }
 }
 
-.students{
-    .btn-group{
-        .dropdown-menu{
+.students {
+    .btn-group {
+        .dropdown-menu {
             position: absolute;
             top: auto;
             left: auto;
@@ -315,11 +318,12 @@ td {
     }
 }
 
-#courses tr.selected > td:first-child{
+#courses tr.selected>td:first-child {
     background-color: #f7fcfe;
     border-left: 4px solid #2ea2cc;
 }
-.students tr.selected > td:first-child{
+
+.students tr.selected>td:first-child {
     background-color: #f7fcfe;
     border-left: 4px solid #2ea2cc;
 }
@@ -328,25 +332,21 @@ td {
     background-color: #f7fcfe;
 }
 
-.students td.hover{
+.students td.hover {
     background-color: #f7fcfe;
 }
 
-
-
-#courses tr:hover{
+#courses tr:hover {
     background-color: #f7fcfe !important;
 }
 
-
-.students tr:hover{
+.students tr:hover {
     background-color: #f7fcfe !important;
 }
 
 .students td.editing .view {
     display: none;
 }
-
 
 .students td .view {
     width: inherit;
@@ -366,7 +366,6 @@ td {
     width: 60%;
 }
 
-
 .students td .edit {
     display: none;
 }
@@ -376,6 +375,8 @@ td {
     text-align: right;
     display: block;
 }
+
+
 /* typeahead-BS 
 */
 
@@ -388,6 +389,7 @@ td {
 span.twitter-typeahead {
     width: 100%;
 }
+
 .tt-hint {
     display: block;
     width: 100%;
@@ -405,6 +407,7 @@ span.twitter-typeahead {
     -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
+
 .tt-menu {
     min-width: 160px;
     margin-top: 2px;
@@ -416,104 +419,114 @@ span.twitter-typeahead {
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
-
 }
+
 .tt-suggestion {
     display: block;
     padding: 3px 20px;
 }
+
 .tt-suggestion:hover {
     color: #fff;
     background-color: #428bca;
 }
+
 .tt-suggestion.tt-is-under-cursor a {
     color: #fff;
 }
+
 .tt-suggestion p {
     margin: 0;
 }
 
+
 /**pinned table**/
-.table-wrapper{
-    .table{
+
+.table-wrapper {
+    .table {
         margin-bottom: 0;
     }
     position: relative;
-    .pinned{
-        position: absolute; 
-        display: block; 
-        left: 0; 
-        top: 0; 
-        background: #fff; 
-        width: 36%; 
+    .pinned {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        background: #fff;
+        width: 36%;
         border-right: 1px solid #ccc;
         border-left: 1px solid #ccc;
         z-index: 200;
-        table { 
-            border-right: none; border-left: none; width: 100%;
+        table {
+            border-right: none;
+            border-left: none;
+            width: 100%;
             table-layout: fixed;
             width: 100%;
-            th{
+            th {
                 padding: 15px 8px;
             }
         }
         #students-header-pinned th,
-        #students-pinned td{
-            overflow:hidden;
+        #students-pinned td {
+            overflow: hidden;
             text-overflow: ellipsis;
-            .column-frame{
-                overflow:hidden;
+            .column-frame {
+                overflow: hidden;
                 text-overflow: ellipsis;
             }
-            span{
+            span {
                 max-width: 100%;
                 white-space: nowrap;
             }
         }
         #students-header-pinned th.gradebook-student-column-interactive,
-        #students-pinned td.student-tools{
+        #students-pinned td.student-tools {
             overflow: visible;
             padding: 12px 8px;
             width: 15%;
         }
     }
-    .scrollable{
+    .scrollable {
         margin-left: 36%;
         overflow: visible !important;
-        th, td{ 
+        th,
+        td {
             min-width: 180px;
         }
-        td{
+        td {
             padding-bottom: 22px;
-            .grade-numeric{
+            .grade-numeric {
                 display: block;
                 margin: 0 0 8px;
             }
         }
         #students-header th.gradebook-student-column-interactive,
-        #students td.student-tools{
+        #students td.student-tools {
             max-width: 50px;
         }
         @media (max-width: 767px) {
             margin-left: 0;
         }
     }
-    th,td{
-        &.pinned-target{
+    th,
+    td {
+        &.pinned-target {
             display: none;
         }
-        .checkbox{
+        .checkbox {
             margin: 0;
         }
     }
-    .fixed-header{
-        th{
-            &.pinned-target{
+    .fixed-header {
+        th {
+            &.pinned-target {
                 display: table-cell;
             }
         }
     }
 }
+
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
@@ -524,6 +537,7 @@ span.twitter-typeahead {
         transform: rotate(359deg);
     }
 }
+
 @keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
