@@ -19,8 +19,8 @@
         </ul>
     </div>
 </td>		
-<td> <%= course.get("id") %> </td>
-<td class="course">	<%= course.get("name") %> </td>
+<td><%= course.get("id") %></td>
+<td class="course"><a href='#gradebook/<%=course.get('id')%>'><%= course.get("name") %></a></td>
 <td><%= course.get("school") %></td>
 <td><%= course.get("semester") %></td>
 <td><%= course.get("year") %></td>	
