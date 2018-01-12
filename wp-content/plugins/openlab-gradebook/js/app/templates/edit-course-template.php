@@ -5,6 +5,8 @@
             
             <% if (course) { %>
                 <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Edit Gradebook', 'openlab-gradebook') ?></h4>
+            <% } else if (initvals.goInit){ %>
+                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A Gradebook?', 'openlab-gradebook') ?></h4>
             <% } else { %>
                 <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A Gradebook', 'openlab-gradebook') ?></h4>
             <% } %>

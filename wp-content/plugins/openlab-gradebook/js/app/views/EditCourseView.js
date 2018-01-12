@@ -17,8 +17,10 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/Course', 'boo
 
                     if(options.isInit){
                         this.initvals.name = oplbGradebook.initName
+                        this.initvals.goInit = true;
                     } else {
                         this.initvals.name = false;
+                        this.initVals.goInit = false;
                     }
 
                     console.log('this.course', this.course);

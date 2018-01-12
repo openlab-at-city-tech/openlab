@@ -84,7 +84,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     wp_enqueue_media();
     wp_enqueue_script('jquery-ui-datepicker');
 
-    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.2.8', true);
+    wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.2.9', true);
     wp_enqueue_script('init_gradebookjs');
     wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
         'ajaxURL' => admin_url('admin-ajax.php'),
@@ -105,7 +105,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.6', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.2.8', true);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.2.9', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
         wp_enqueue_script('requirejs');
