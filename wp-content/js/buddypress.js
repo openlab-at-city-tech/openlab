@@ -1,4 +1,408 @@
-jQuery(document).ready(function(){jQuery("a.confirm").click(function(){return!!confirm(BP_Confirm.are_you_sure)})});;function member_widget_click_handler(){jQuery(".widget div#members-list-options a").on("click",function(){var a=this;return jQuery(a).addClass("loading"),jQuery(".widget div#members-list-options a").removeClass("selected"),jQuery(this).addClass("selected"),jQuery.post(ajaxurl,{action:"widget_members",cookie:encodeURIComponent(document.cookie),_wpnonce:jQuery("input#_wpnonce-members").val(),"max-members":jQuery("input#members_widget_max").val(),filter:jQuery(this).attr("id")},function(b){jQuery(a).removeClass("loading"),member_widget_response(b)}),!1})}function member_widget_response(a){a=a.substr(0,a.length-1),a=a.split("[[SPLIT]]"),"-1"!==a[0]?jQuery(".widget ul#members-list").fadeOut(200,function(){jQuery(".widget ul#members-list").html(a[1]),jQuery(".widget ul#members-list").fadeIn(200)}):jQuery(".widget ul#members-list").fadeOut(200,function(){var b="<p>"+a[1]+"</p>";jQuery(".widget ul#members-list").html(b),jQuery(".widget ul#members-list").fadeIn(200)})}jQuery(document).ready(function(){member_widget_click_handler(),"undefined"!=typeof wp&&wp.customize&&wp.customize.selectiveRefresh&&wp.customize.selectiveRefresh.bind("partial-content-rendered",function(){member_widget_click_handler()})});;function bp_get_querystring(a){var b=location.search.split(a+"=")[1];return b?decodeURIComponent(b.split("&")[0]):null};!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):a("object"==typeof exports?require("jquery"):jQuery)}(function(a){function b(a){return h.raw?a:encodeURIComponent(a)}function c(a){return h.raw?a:decodeURIComponent(a)}function d(a){return b(h.json?JSON.stringify(a):String(a))}function e(a){0===a.indexOf('"')&&(a=a.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{return a=decodeURIComponent(a.replace(g," ")),h.json?JSON.parse(a):a}catch(a){}}function f(b,c){var d=h.raw?b:e(b);return a.isFunction(c)?c(d):d}var g=/\+/g,h=a.cookie=function(e,g,i){if(void 0!==g&&!a.isFunction(g)){if(i=a.extend({},h.defaults,i),"number"==typeof i.expires){var j=i.expires,k=i.expires=new Date;k.setTime(+k+864e5*j)}return document.cookie=[b(e),"=",d(g),i.expires?"; expires="+i.expires.toUTCString():"",i.path?"; path="+i.path:"",i.domain?"; domain="+i.domain:"",i.secure?"; secure":""].join("")}for(var l=e?void 0:{},m=document.cookie?document.cookie.split("; "):[],n=0,o=m.length;n<o;n++){var p=m[n].split("="),q=c(p.shift()),r=p.join("=");if(e&&e===q){l=f(r,g);break}e||void 0===(r=f(r))||(l[q]=r)}return l};h.defaults={},a.removeCookie=function(b,c){return void 0!==a.cookie(b)&&(a.cookie(b,"",a.extend({},c,{expires:-1})),!a.cookie(b))}});;!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):a("object"==typeof exports?require("jquery"):jQuery)}(function(a){function b(b){return a.isFunction(b)||"object"==typeof b?b:{top:b,left:b}}var c=a.scrollTo=function(b,c,d){return a(window).scrollTo(b,c,d)};return c.defaults={axis:"xy",duration:parseFloat(a.fn.jquery)>=1.3?0:1,limit:!0},c.window=function(){return a(window)._scrollable()},a.fn._scrollable=function(){return this.map(function(){var b=this,c=!b.nodeName||a.inArray(b.nodeName.toLowerCase(),["iframe","#document","html","body"])!==-1;if(!c)return b;var d=(b.contentWindow||b).document||b.ownerDocument||b;return/webkit/i.test(navigator.userAgent)||"BackCompat"===d.compatMode?d.body:d.documentElement})},a.fn.scrollTo=function(d,e,f){return"object"==typeof e&&(f=e,e=0),"function"==typeof f&&(f={onAfter:f}),"max"===d&&(d=9e9),f=a.extend({},c.defaults,f),e=e||f.duration,f.queue=f.queue&&f.axis.length>1,f.queue&&(e/=2),f.offset=b(f.offset),f.over=b(f.over),this._scrollable().each(function(){function g(a){j.animate(l,e,f.easing,a&&function(){a.call(this,k,f)})}if(null!==d){var h,i=this,j=a(i),k=d,l={},m=j.is("html,body");switch(typeof k){case"number":case"string":if(/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(k)){k=b(k);break}if(k=m?a(k):a(k,this),!k.length)return;case"object":(k.is||k.style)&&(h=(k=a(k)).offset())}var n=a.isFunction(f.offset)&&f.offset(i,k)||f.offset;a.each(f.axis.split(""),function(a,b){var d="x"===b?"Left":"Top",e=d.toLowerCase(),o="scroll"+d,p=i[o],q=c.max(i,b);if(h)l[o]=h[e]+(m?0:p-j.offset()[e]),f.margin&&(l[o]-=parseInt(k.css("margin"+d))||0,l[o]-=parseInt(k.css("border"+d+"Width"))||0),l[o]+=n[e]||0,f.over[e]&&(l[o]+=k["x"===b?"width":"height"]()*f.over[e]);else{var r=k[e];l[o]=r.slice&&"%"===r.slice(-1)?parseFloat(r)/100*q:r}f.limit&&/^\d+$/.test(l[o])&&(l[o]=l[o]<=0?0:Math.min(l[o],q)),!a&&f.queue&&(p!==l[o]&&g(f.onAfterFirst),delete l[o])}),g(f.onAfter)}}).end()},c.max=function(b,c){var d="x"===c?"Width":"Height",e="scroll"+d;if(!a(b).is("html,body"))return b[e]-a(b)[d.toLowerCase()]();var f="client"+d,g=b.ownerDocument.documentElement,h=b.ownerDocument.body;return Math.max(g[e],h[e])-Math.min(g[f],h[f])},c});;jQuery(document).ready( function($) {
+/* jshint devel: true */
+/* global BP_Confirm */
+
+jQuery( document ).ready( function() {
+	jQuery( 'a.confirm').click( function() {
+		if ( confirm( BP_Confirm.are_you_sure ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+});
+;jQuery(document).ready( function() {
+	member_widget_click_handler();
+
+	// WP 4.5 - Customizer selective refresh support.
+	if ( 'undefined' !== typeof wp && wp.customize && wp.customize.selectiveRefresh ) {
+		wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function() {
+			member_widget_click_handler();
+		} );
+	}
+});
+
+function member_widget_click_handler() {
+	jQuery('.widget div#members-list-options a').on('click',
+		function() {
+			var link = this;
+			jQuery(link).addClass('loading');
+
+			jQuery('.widget div#members-list-options a').removeClass('selected');
+			jQuery(this).addClass('selected');
+
+			jQuery.post( ajaxurl, {
+				action: 'widget_members',
+				'cookie': encodeURIComponent(document.cookie),
+				'_wpnonce': jQuery('input#_wpnonce-members').val(),
+				'max-members': jQuery('input#members_widget_max').val(),
+				'filter': jQuery(this).attr('id')
+			},
+			function(response)
+			{
+				jQuery(link).removeClass('loading');
+				member_widget_response(response);
+			});
+
+			return false;
+		}
+	);
+}
+
+function member_widget_response(response) {
+	response = response.substr(0, response.length-1);
+	response = response.split('[[SPLIT]]');
+
+	if ( response[0] !== '-1' ) {
+		jQuery('.widget ul#members-list').fadeOut(200,
+			function() {
+				jQuery('.widget ul#members-list').html(response[1]);
+				jQuery('.widget ul#members-list').fadeIn(200);
+			}
+		);
+
+	} else {
+		jQuery('.widget ul#members-list').fadeOut(200,
+			function() {
+				var message = '<p>' + response[1] + '</p>';
+				jQuery('.widget ul#members-list').html(message);
+				jQuery('.widget ul#members-list').fadeIn(200);
+			}
+		);
+	}
+}
+;/* jshint unused: false */
+
+function bp_get_querystring( n ) {
+	var half = location.search.split( n + '=' )[1];
+	return half ? decodeURIComponent( half.split('&')[0] ) : null;
+}
+;/* jshint undef: false */
+
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function(factory) {
+	// AMD
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	// CommonJS
+	} else if (typeof exports === 'object') {
+		factory(require('jquery'));
+	// Browser globals
+	} else {
+		factory(jQuery);
+	}
+}(function($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch (e) {
+		}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function(key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path ? '; path=' + options.path : '',
+				options.domain ? '; domain=' + options.domain : '',
+				options.secure ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function(key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, {expires: -1}));
+		return !$.cookie(key);
+	};
+
+}));;/* jshint undef: false */
+/* jshint -W065 */
+
+/*!
+ * jQuery.ScrollTo
+ * Copyright (c) 2007-2014 Ariel Flesler - aflesler<a>gmail<d>com | http://flesler.blogspot.com
+ * Licensed under MIT
+ * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
+ * @projectDescription Easy element scrolling using jQuery.
+ * @author Ariel Flesler
+ * @version 1.4.12
+ */
+
+(function(factory) {
+	// AMD
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	// CommonJS
+	} else if (typeof exports === 'object') {
+		factory(require('jquery'));
+	// Browser globals
+	} else {
+		factory(jQuery);
+	}
+}(function($) {
+
+	var $scrollTo = $.scrollTo = function(target, duration, settings) {
+		return $(window).scrollTo(target, duration, settings);
+	};
+
+	$scrollTo.defaults = {
+		axis: 'xy',
+		duration: parseFloat($.fn.jquery) >= 1.3 ? 0 : 1,
+		limit: true
+	};
+
+	// Returns the element that needs to be animated to scroll the window.
+	// Kept for backwards compatibility (specially for localScroll & serialScroll)
+	$scrollTo.window = function() {
+		return $(window)._scrollable();
+	};
+
+	// Hack, hack, hack :)
+	// Returns the real elements to scroll (supports window/iframes, documents and regular nodes)
+	$.fn._scrollable = function() {
+		return this.map(function() {
+			var elem = this,
+					isWin = !elem.nodeName || $.inArray(elem.nodeName.toLowerCase(), ['iframe', '#document', 'html', 'body']) !== -1;
+
+			if (!isWin) {
+				return elem;
+			}
+
+			var doc = (elem.contentWindow || elem).document || elem.ownerDocument || elem;
+
+			return /webkit/i.test(navigator.userAgent) || doc.compatMode === 'BackCompat' ?
+					doc.body :
+					doc.documentElement;
+		});
+	};
+
+	$.fn.scrollTo = function(target, duration, settings) {
+		if (typeof duration === 'object') {
+			settings = duration;
+			duration = 0;
+		}
+		if (typeof settings === 'function') {
+			settings = {onAfter: settings};
+		}
+
+		if (target === 'max') {
+			target = 9e9;
+		}
+
+		settings = $.extend({}, $scrollTo.defaults, settings);
+		// Speed is still recognized for backwards compatibility
+		duration = duration || settings.duration;
+		// Make sure the settings are given right
+		settings.queue = settings.queue && settings.axis.length > 1;
+
+		// Let's keep the overall duration
+		if (settings.queue) {
+			duration /= 2;
+		}
+
+		settings.offset = both(settings.offset);
+		settings.over = both(settings.over);
+
+		return this._scrollable().each(function() {
+
+			// Null target yields nothing, just like jQuery does
+			if (target === null) {
+				return;
+			}
+
+			var elem = this,
+					$elem = $(elem),
+					targ = target, toff, attr = {},
+					win = $elem.is('html,body');
+
+			switch (typeof targ) {
+				// A number will pass the regex
+				case 'number':
+				case 'string':
+					if (/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)) {
+						targ = both(targ);
+						// We are done
+						break;
+					}
+					// Relative/Absolute selector, no break!
+					targ = win ? $(targ) : $(targ, this);
+					if (!targ.length) {
+						return;
+					}
+					/* falls through */
+				case 'object':
+					// DOMElement / jQuery
+					if (targ.is || targ.style) {
+						// Get the real position of the target
+						toff = (targ = $(targ)).offset();
+					}
+			}
+
+			var offset = $.isFunction(settings.offset) && settings.offset(elem, targ) || settings.offset;
+
+			$.each(settings.axis.split(''), function(i, axis) {
+				var Pos = axis === 'x' ? 'Left' : 'Top',
+						pos = Pos.toLowerCase(),
+						key = 'scroll' + Pos,
+						old = elem[key],
+						max = $scrollTo.max(elem, axis);
+
+				if (toff) {// jQuery / DOMElement
+					attr[key] = toff[pos] + (win ? 0 : old - $elem.offset()[pos]);
+
+					// If it's a dom element, reduce the margin
+					if (settings.margin) {
+						attr[key] -= parseInt(targ.css('margin' + Pos)) || 0;
+						attr[key] -= parseInt(targ.css('border' + Pos + 'Width')) || 0;
+					}
+
+					attr[key] += offset[pos] || 0;
+
+					// Scroll to a fraction of its width/height
+					if (settings.over[pos]) {
+						attr[key] += targ[axis === 'x' ? 'width' : 'height']() * settings.over[pos];
+					}
+				} else {
+					var val = targ[pos];
+					// Handle percentage values
+					attr[key] = val.slice && val.slice(-1) === '%' ?
+							parseFloat(val) / 100 * max
+							: val;
+				}
+
+				// Number or 'number'
+				if (settings.limit && /^\d+$/.test(attr[key])) {
+					// Check the limits
+					attr[key] = attr[key] <= 0 ? 0 : Math.min(attr[key], max);
+				}
+
+				// Queueing axes
+				if (!i && settings.queue) {
+					// Don't waste time animating, if there's no need.
+					if (old !== attr[key]) {
+						// Intermediate animation
+						animate(settings.onAfterFirst);
+					}
+					// Don't animate this axis again in the next iteration.
+					delete attr[key];
+				}
+			});
+
+			animate(settings.onAfter);
+
+			function animate(callback) {
+				$elem.animate(attr, duration, settings.easing, callback && function() {
+					callback.call(this, targ, settings);
+				});
+			}
+
+		}).end();
+	};
+
+	// Max scrolling position, works on quirks mode
+	// It only fails (not too badly) on IE, quirks mode.
+	$scrollTo.max = function(elem, axis) {
+		var Dim = axis === 'x' ? 'Width' : 'Height',
+				scroll = 'scroll' + Dim;
+
+		if (!$(elem).is('html,body')) {
+			return elem[scroll] - $(elem)[Dim.toLowerCase()]();
+		}
+
+		var size = 'client' + Dim,
+				html = elem.ownerDocument.documentElement,
+				body = elem.ownerDocument.body;
+
+		return Math.max(html[scroll], body[scroll]) - Math.min(html[size], body[size]);
+	};
+
+	function both(val) {
+		return $.isFunction(val) || typeof val === 'object' ? val : {top: val, left: val};
+	}
+
+	// AMD requirement
+	return $scrollTo;
+}));;jQuery(document).ready( function($) {
 
 	//Hide the sort form submit, we're gonna submit on change
 	$('#bp-group-documents-sort-form input[type=submit]').hide();
@@ -199,4 +603,1538 @@ jQuery(document).ready(function(){jQuery("a.confirm").click(function(){return!!c
 	});
 
 });
-;!function(a,b){"function"==typeof define&&define.amd?define(["jquery"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("jquery")):b(jQuery)}(this,function(a){"use strict";var b,c,d,e,f,g,h,i,j,k,l;k="caret",b=function(){function b(a){this.$inputor=a,this.domInputor=this.$inputor[0]}return b.prototype.setPos=function(a){return this.domInputor},b.prototype.getIEPosition=function(){return this.getPosition()},b.prototype.getPosition=function(){var a,b;return b=this.getOffset(),a=this.$inputor.offset(),b.left-=a.left,b.top-=a.top,b},b.prototype.getOldIEPos=function(){var a,b;return b=h.selection.createRange(),a=h.body.createTextRange(),a.moveToElementText(this.domInputor),a.setEndPoint("EndToEnd",b),a.text.length},b.prototype.getPos=function(){var a,b,c;return(c=this.range())?(a=c.cloneRange(),a.selectNodeContents(this.domInputor),a.setEnd(c.endContainer,c.endOffset),b=a.toString().length,a.detach(),b):h.selection?this.getOldIEPos():void 0},b.prototype.getOldIEOffset=function(){var a,b;return a=h.selection.createRange().duplicate(),a.moveStart("character",-1),b=a.getBoundingClientRect(),{height:b.bottom-b.top,left:b.left,top:b.top}},b.prototype.getOffset=function(b){var c,d,e,f,g;return j.getSelection&&(e=this.range())?(e.endOffset-1>0&&e.endContainer===!this.domInputor&&(c=e.cloneRange(),c.setStart(e.endContainer,e.endOffset-1),c.setEnd(e.endContainer,e.endOffset),f=c.getBoundingClientRect(),d={height:f.height,left:f.left+f.width,top:f.top},c.detach()),d&&0!==(null!=d?d.height:void 0)||(c=e.cloneRange(),g=a(h.createTextNode("|")),c.insertNode(g[0]),c.selectNode(g[0]),f=c.getBoundingClientRect(),d={height:f.height,left:f.left,top:f.top},g.remove(),c.detach())):h.selection&&(d=this.getOldIEOffset()),d&&(d.top+=a(j).scrollTop(),d.left+=a(j).scrollLeft()),d},b.prototype.range=function(){var a;if(j.getSelection)return a=j.getSelection(),a.rangeCount>0?a.getRangeAt(0):null},b}(),c=function(){function b(a){this.$inputor=a,this.domInputor=this.$inputor[0]}return b.prototype.getIEPos=function(){var a,b,c,d,e,f,g;return b=this.domInputor,f=h.selection.createRange(),e=0,f&&f.parentElement()===b&&(d=b.value.replace(/\r\n/g,"\n"),c=d.length,g=b.createTextRange(),g.moveToBookmark(f.getBookmark()),a=b.createTextRange(),a.collapse(!1),e=g.compareEndPoints("StartToEnd",a)>-1?c:-g.moveStart("character",-c)),e},b.prototype.getPos=function(){return h.selection?this.getIEPos():this.domInputor.selectionStart},b.prototype.setPos=function(a){var b,c;return b=this.domInputor,h.selection?(c=b.createTextRange(),c.move("character",a),c.select()):b.setSelectionRange&&b.setSelectionRange(a,a),b},b.prototype.getIEOffset=function(a){var b,c,d,e;return c=this.domInputor.createTextRange(),a||(a=this.getPos()),c.move("character",a),d=c.boundingLeft,e=c.boundingTop,b=c.boundingHeight,{left:d,top:e,height:b}},b.prototype.getOffset=function(b){var c,d,e;return c=this.$inputor,h.selection?(d=this.getIEOffset(b),d.top+=a(j).scrollTop()+c.scrollTop(),d.left+=a(j).scrollLeft()+c.scrollLeft(),d):(d=c.offset(),e=this.getPosition(b),d={left:d.left+e.left-c.scrollLeft(),top:d.top+e.top-c.scrollTop(),height:e.height})},b.prototype.getPosition=function(a){var b,c,e,f,g,h,i;return b=this.$inputor,f=function(a){return a=a.replace(/<|>|`|"|&/g,"?").replace(/\r\n|\r|\n/g,"<br/>"),/firefox/i.test(navigator.userAgent)&&(a=a.replace(/\s/g,"&nbsp;")),a},void 0===a&&(a=this.getPos()),i=b.val().slice(0,a),e=b.val().slice(a),g="<span style='position: relative; display: inline;'>"+f(i)+"</span>",g+="<span id='caret' style='position: relative; display: inline;'>|</span>",g+="<span style='position: relative; display: inline;'>"+f(e)+"</span>",h=new d(b),c=h.create(g).rect()},b.prototype.getIEPosition=function(a){var b,c,d,e,f;return d=this.getIEOffset(a),c=this.$inputor.offset(),e=d.left-c.left,f=d.top-c.top,b=d.height,{left:e,top:f,height:b}},b}(),d=function(){function b(a){this.$inputor=a}return b.prototype.css_attr=["borderBottomWidth","borderLeftWidth","borderRightWidth","borderTopStyle","borderRightStyle","borderBottomStyle","borderLeftStyle","borderTopWidth","boxSizing","fontFamily","fontSize","fontWeight","height","letterSpacing","lineHeight","marginBottom","marginLeft","marginRight","marginTop","outlineWidth","overflow","overflowX","overflowY","paddingBottom","paddingLeft","paddingRight","paddingTop","textAlign","textOverflow","textTransform","whiteSpace","wordBreak","wordWrap"],b.prototype.mirrorCss=function(){var b,c=this;return b={position:"absolute",left:-9999,top:0,zIndex:-2e4},"TEXTAREA"===this.$inputor.prop("tagName")&&this.css_attr.push("width"),a.each(this.css_attr,function(a,d){return b[d]=c.$inputor.css(d)}),b},b.prototype.create=function(b){return this.$mirror=a("<div></div>"),this.$mirror.css(this.mirrorCss()),this.$mirror.html(b),this.$inputor.after(this.$mirror),this},b.prototype.rect=function(){var a,b,c;return a=this.$mirror.find("#caret"),b=a.position(),c={left:b.left,top:b.top,height:a.height()},this.$mirror.remove(),c},b}(),e={contentEditable:function(a){return!(!a[0].contentEditable||"true"!==a[0].contentEditable)}},g={pos:function(a){return a||0===a?this.setPos(a):this.getPos()},position:function(a){return h.selection?this.getIEPosition(a):this.getPosition(a)},offset:function(a){var b;return b=this.getOffset(a)}},h=null,j=null,i=null,l=function(a){var b;return(b=null!=a?a.iframe:void 0)?(i=b,j=b.contentWindow,h=b.contentDocument||j.document):(i=void 0,j=window,h=document)},f=function(a){var b;h=a[0].ownerDocument,j=h.defaultView||h.parentWindow;try{return i=j.frameElement}catch(a){b=a}},a.fn.caret=function(d,f,h){var i;return g[d]?(a.isPlainObject(f)?(l(f),f=void 0):l(h),i=e.contentEditable(this)?new b(this):new c(this),g[d].apply(i,[f])):a.error("Method "+d+" does not exist on jQuery.caret")},a.fn.caret.EditableCaret=b,a.fn.caret.InputCaret=c,a.fn.caret.Utils=e,a.fn.caret.apis=g});;!function(a,b){"function"==typeof define&&define.amd?define(["jquery"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("jquery")):b(jQuery)}(this,function(a){var b,c,d,e,f,g,h,i=[].slice;c=function(){function b(b){this.current_flag=null,this.controllers={},this.alias_maps={},this.$inputor=a(b),this.setIframe(),this.listen()}return b.prototype.createContainer=function(b){if(0===(this.$el=a("#atwho-container",b)).length)return a(b.body).append(this.$el=a("<div id='atwho-container'></div>"))},b.prototype.setIframe=function(a,b){var c;return null==b&&(b=!1),a?(this.window=a.contentWindow,this.document=a.contentDocument||this.window.document,this.iframe=a):(this.document=document,this.window=window,this.iframe=null),(this.iframeStandalone=b)?(null!=(c=this.$el)&&c.remove(),this.createContainer(this.document)):this.createContainer(document)},b.prototype.controller=function(a){var b,c,d,e;if(this.alias_maps[a])c=this.controllers[this.alias_maps[a]];else{e=this.controllers;for(d in e)if(b=e[d],d===a){c=b;break}}return c?c:this.controllers[this.current_flag]},b.prototype.set_context_for=function(a){return this.current_flag=a,this},b.prototype.reg=function(a,b){var c,e;return c=(e=this.controllers)[a]||(e[a]=new d(this,a)),b.alias&&(this.alias_maps[b.alias]=a),c.init(b),this},b.prototype.listen=function(){return this.$inputor.on("keyup.atwhoInner",function(a){return function(b){return a.on_keyup(b)}}(this)).on("keydown.atwhoInner",function(a){return function(b){return a.on_keydown(b)}}(this)).on("scroll.atwhoInner",function(a){return function(b){var c;return null!=(c=a.controller())?c.view.hide(b):void 0}}(this)).on("blur.atwhoInner",function(a){return function(b){var c;if(c=a.controller())return c.view.hide(b,c.get_opt("display_timeout"))}}(this)).on("click.atwhoInner",function(a){return function(b){return a.dispatch()}}(this))},b.prototype.shutdown=function(){var a,b,c;c=this.controllers;for(b in c)a=c[b],a.destroy(),delete this.controllers[b];return this.$inputor.off(".atwhoInner"),this.$el.remove()},b.prototype.dispatch=function(){return a.map(this.controllers,function(a){return function(b){var c;return(c=b.get_opt("delay"))?(clearTimeout(a.delayedCallback),a.delayedCallback=setTimeout(function(){if(b.look_up())return a.set_context_for(b.at)},c)):b.look_up()?a.set_context_for(b.at):void 0}}(this))},b.prototype.on_keyup=function(b){var c;switch(b.keyCode){case f.ESC:b.preventDefault(),null!=(c=this.controller())&&c.view.hide();break;case f.DOWN:case f.UP:case f.CTRL:a.noop();break;case f.P:case f.N:b.ctrlKey||this.dispatch();break;default:this.dispatch()}},b.prototype.on_keydown=function(b){var c,d;if(c=null!=(d=this.controller())?d.view:void 0,c&&c.visible())switch(b.keyCode){case f.ESC:b.preventDefault(),c.hide(b);break;case f.UP:b.preventDefault(),c.prev();break;case f.DOWN:b.preventDefault(),c.next();break;case f.P:if(!b.ctrlKey)return;b.preventDefault(),c.prev();break;case f.N:if(!b.ctrlKey)return;b.preventDefault(),c.next();break;case f.TAB:case f.ENTER:if(!c.visible())return;b.preventDefault(),c.choose(b);break;default:a.noop()}},b}(),d=function(){function b(b,c){this.app=b,this.at=c,this.$inputor=this.app.$inputor,this.id=this.$inputor[0].id||this.uid(),this.setting=null,this.query=null,this.pos=0,this.cur_rect=null,this.range=null,0===(this.$el=a("#atwho-ground-"+this.id,this.app.$el)).length&&this.app.$el.append(this.$el=a("<div id='atwho-ground-"+this.id+"'></div>")),this.model=new g(this),this.view=new h(this)}return b.prototype.uid=function(){return(Math.random().toString(16)+"000000000").substr(2,8)+(new Date).getTime()},b.prototype.init=function(b){return this.setting=a.extend({},this.setting||a.fn.atwho.default,b),this.view.init(),this.model.reload(this.setting.data)},b.prototype.destroy=function(){return this.trigger("beforeDestroy"),this.model.destroy(),this.view.destroy(),this.$el.remove()},b.prototype.call_default=function(){var b,c,d;d=arguments[0],b=2<=arguments.length?i.call(arguments,1):[];try{return e[d].apply(this,b)}catch(b){return c=b,a.error(""+c+" Or maybe At.js doesn't have function "+d)}},b.prototype.trigger=function(a,b){var c,d;return null==b&&(b=[]),b.push(this),c=this.get_opt("alias"),d=c?""+a+"-"+c+".atwho":""+a+".atwho",this.$inputor.trigger(d,b)},b.prototype.callbacks=function(a){return this.get_opt("callbacks")[a]||e[a]},b.prototype.get_opt=function(a,b){var c;try{return this.setting[a]}catch(a){return c=a,null}},b.prototype.content=function(){var a;if(this.$inputor.is("textarea, input"))return this.$inputor.val();if(a=this.mark_range())return(a.startContainer.textContent||"").slice(0,a.startOffset)},b.prototype.catch_query=function(){var a,b,c,d,e,f;return b=this.content(),a=this.$inputor.caret("pos",{iframe:this.app.iframe}),f=b.slice(0,a),d=this.callbacks("matcher").call(this,this.at,f,this.get_opt("start_with_space")),"string"==typeof d&&d.length<=this.get_opt("max_len",20)?(e=a-d.length,c=e+d.length,this.pos=e,d={text:d,head_pos:e,end_pos:c},this.trigger("matched",[this.at,d.text])):(d=null,this.view.hide()),this.query=d},b.prototype.rect=function(){var b,c,d;if(b=this.$inputor.caret("offset",this.pos-1,{iframe:this.app.iframe}))return this.app.iframe&&!this.app.iframeStandalone&&(c=a(this.app.iframe).offset(),b.left+=c.left,b.top+=c.top),this.$inputor.is("[contentEditable]")&&(b=this.cur_rect||(this.cur_rect=b)),d=this.app.document.selection?0:2,{left:b.left,top:b.top,bottom:b.top+b.height+d}},b.prototype.reset_rect=function(){if(this.$inputor.is("[contentEditable]"))return this.cur_rect=null},b.prototype.mark_range=function(){var a;if(this.$inputor.is("[contentEditable]"))return this.app.window.getSelection&&(a=this.app.window.getSelection()).rangeCount>0?this.range=a.getRangeAt(0):this.app.document.selection?this.ie8_range=this.app.document.selection.createRange():void 0},b.prototype.insert_content_for=function(b){var c,d,e;return d=b.data("value"),e=this.get_opt("insert_tpl"),this.$inputor.is("textarea, input")||!e?d:(c=a.extend({},b.data("item-data"),{"atwho-data-value":d,"atwho-at":this.at}),this.callbacks("tpl_eval").call(this,e,c))},b.prototype.insert=function(b,c){var d,e,f,g,h,i,j,k,l,m,n,o;if(d=this.$inputor,l=this.callbacks("inserting_wrapper").call(this,d,b,this.get_opt("suffix")),d.is("textarea, input"))i=d.val(),j=i.slice(0,Math.max(this.query.head_pos-this.at.length,0)),k=""+j+l+i.slice(this.query.end_pos||0),d.val(k),d.caret("pos",j.length+l.length,{iframe:this.app.iframe});else if(g=this.range){for(f=g.startOffset-(this.query.end_pos-this.query.head_pos)-this.at.length,g.setStart(g.endContainer,Math.max(f,0)),g.setEnd(g.endContainer,g.endOffset),g.deleteContents(),o=a(l,this.app.document),m=0,n=o.length;m<n;m++)e=o[m],g.insertNode(e),g.setEndAfter(e),g.collapse(!1);h=this.app.window.getSelection(),h.removeAllRanges(),h.addRange(g)}else(g=this.ie8_range)&&(g.moveStart("character",this.query.end_pos-this.query.head_pos-this.at.length),g.pasteHTML(l),g.collapse(!1),g.select());return d.is(":focus")||d.focus(),d.change()},b.prototype.render_view=function(a){var b;return b=this.get_opt("search_key"),a=this.callbacks("sorter").call(this,this.query.text,a.slice(0,1001),b),this.view.render(a.slice(0,this.get_opt("limit")))},b.prototype.look_up=function(){var b,c;if(b=this.catch_query())return c=function(a){return a&&a.length>0?this.render_view(a):this.view.hide()},this.model.query(b.text,a.proxy(c,this)),b},b}(),g=function(){function b(a){this.context=a,this.at=this.context.at,this.storage=this.context.$inputor}return b.prototype.destroy=function(){return this.storage.data(this.at,null)},b.prototype.saved=function(){return this.fetch()>0},b.prototype.query=function(a,b){var c,d,e;return c=this.fetch(),d=this.context.get_opt("search_key"),c=this.context.callbacks("filter").call(this.context,a,c,d)||[],e=this.context.callbacks("remote_filter"),c.length>0||!e&&0===c.length?b(c):e.call(this.context,a,b)},b.prototype.fetch=function(){return this.storage.data(this.at)||[]},b.prototype.save=function(a){return this.storage.data(this.at,this.context.callbacks("before_save").call(this.context,a||[]))},b.prototype.load=function(a){if(!this.saved()&&a)return this._load(a)},b.prototype.reload=function(a){return this._load(a)},b.prototype._load=function(b){return"string"==typeof b?a.ajax(b,{dataType:"json"}).done(function(a){return function(b){return a.save(b)}}(this)):this.save(b)},b}(),h=function(){function b(b){this.context=b,this.$el=a("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>"),this.timeout_id=null,this.context.$el.append(this.$el),this.bind_event()}return b.prototype.init=function(){var a;return a=this.context.get_opt("alias")||this.context.at.charCodeAt(0),this.$el.attr({id:"at-view-"+a})},b.prototype.destroy=function(){return this.$el.remove()},b.prototype.bind_event=function(){var b;return b=this.$el.find("ul"),b.on("mouseenter.atwho-view","li",function(c){return b.find(".cur").removeClass("cur"),a(c.currentTarget).addClass("cur")}).on("click.atwho-view","li",function(c){return function(d){return b.find(".cur").removeClass("cur"),a(d.currentTarget).addClass("cur"),c.choose(d),d.preventDefault()}}(this))},b.prototype.visible=function(){return this.$el.is(":visible")},b.prototype.choose=function(a){var b,c;if((b=this.$el.find(".cur")).length&&(c=this.context.insert_content_for(b),this.context.insert(this.context.callbacks("before_insert").call(this.context,c,b),b),this.context.trigger("inserted",[b,a]),this.hide(a)),this.context.get_opt("hide_without_suffix"))return this.stop_showing=!0},b.prototype.reposition=function(b){var c,d,e,f;return f=this.context.app.iframeStandalone?this.context.app.window:window,b.bottom+this.$el.height()-a(f).scrollTop()>a(f).height()&&(b.bottom=b.top-this.$el.height()),b.left>(d=a(f).width()-this.$el.width()-5)&&(b.left=d),c={left:b.left,top:b.bottom},null!=(e=this.context.callbacks("before_reposition"))&&e.call(this.context,c),this.$el.offset(c),this.context.trigger("reposition",[c])},b.prototype.next=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.next(),b.length||(b=this.$el.find("li:first")),b.addClass("cur"),this.$el.animate({scrollTop:Math.max(0,a.innerHeight()*(b.index()+2)-this.$el.height())},150)},b.prototype.prev=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.prev(),b.length||(b=this.$el.find("li:last")),b.addClass("cur"),this.$el.animate({scrollTop:Math.max(0,a.innerHeight()*(b.index()+2)-this.$el.height())},150)},b.prototype.show=function(){var a;return this.stop_showing?void(this.stop_showing=!1):(this.context.mark_range(),this.visible()||(this.$el.show(),this.$el.scrollTop(0),this.context.trigger("shown")),(a=this.context.rect())?this.reposition(a):void 0)},b.prototype.hide=function(a,b){var c;if(this.visible())return isNaN(b)?(this.context.reset_rect(),this.$el.hide(),this.context.trigger("hidden",[a])):(c=function(a){return function(){return a.hide()}}(this),clearTimeout(this.timeout_id),this.timeout_id=setTimeout(c,b))},b.prototype.render=function(b){var c,d,e,f,g,h,i;if(!(a.isArray(b)&&b.length>0))return void this.hide();for(this.$el.find("ul").empty(),d=this.$el.find("ul"),g=this.context.get_opt("tpl"),h=0,i=b.length;h<i;h++)e=b[h],e=a.extend({},e,{"atwho-at":this.context.at}),f=this.context.callbacks("tpl_eval").call(this.context,g,e),c=a(this.context.callbacks("highlighter").call(this.context,f,this.context.query.text)),c.data("item-data",e),d.append(c);return this.show(),this.context.get_opt("highlight_first")?d.find("li:first").addClass("cur"):void 0},b}(),f={DOWN:40,UP:38,ESC:27,TAB:9,ENTER:13,CTRL:17,P:80,N:78},e={before_save:function(b){var c,d,e,f;if(!a.isArray(b))return b;for(f=[],d=0,e=b.length;d<e;d++)c=b[d],a.isPlainObject(c)?f.push(c):f.push({name:c});return f},matcher:function(a,b,c){var d,e,f,g;return a=a.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&"),c&&(a="(?:^|\\s)"+a),f=decodeURI("%C3%80"),g=decodeURI("%C3%BF"),e=new RegExp(""+a+"([A-Za-z"+f+"-"+g+"0-9_+-]*)$|"+a+"([^\\x00-\\xff]*)$","gi"),d=e.exec(b),d?d[2]||d[1]:null},filter:function(a,b,c){var d,e,f,g;for(g=[],e=0,f=b.length;e<f;e++)d=b[e],~new String(d[c]).toLowerCase().indexOf(a.toLowerCase())&&g.push(d);return g},remote_filter:null,sorter:function(a,b,c){var d,e,f,g;if(!a)return b;for(g=[],e=0,f=b.length;e<f;e++)d=b[e],d.atwho_order=new String(d[c]).toLowerCase().indexOf(a.toLowerCase()),d.atwho_order>-1&&g.push(d);return g.sort(function(a,b){return a.atwho_order-b.atwho_order})},tpl_eval:function(a,b){var c;try{return a.replace(/\$\{([^\}]*)\}/g,function(a,c,d){return b[c]})}catch(a){return c=a,""}},highlighter:function(a,b){var c;return b?(c=new RegExp(">\\s*(\\w*?)("+b.replace("+","\\+")+")(\\w*)\\s*<","ig"),a.replace(c,function(a,b,c,d){return"> "+b+"<strong>"+c+"</strong>"+d+" <"})):a},before_insert:function(a,b){return a},inserting_wrapper:function(a,b,c){var d;return c=""===c?c:c||" ",a.is("textarea, input")?""+b+c:"true"===a.attr("contentEditable")?(c=" "===c?"&nbsp;":c,/firefox/i.test(navigator.userAgent)?d="<span>"+b+c+"</span>":(c="<span contenteditable='false'>"+c+"</span>",d="<span contenteditable='false'>"+b+c+"</span>"),this.app.document.selection&&(d="<span contenteditable='true'>"+b+"</span>"),d+"<span></span>"):void 0}},b={load:function(a,b){var c;if(c=this.controller(a))return c.model.load(b)},setIframe:function(a,b){return this.setIframe(a,b),null},run:function(){return this.dispatch()},destroy:function(){return this.shutdown(),this.$inputor.data("atwho",null)}},a.fn.atwho=function(d){var e,f;return f=arguments,e=null,this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function(){var g,h;return(h=(g=a(this)).data("atwho"))||g.data("atwho",h=new c(this)),"object"!=typeof d&&d?b[d]&&h?e=b[d].apply(h,Array.prototype.slice.call(f,1)):a.error("Method "+d+" does not exist on jQuery.caret"):h.reg(d.at,d)}),e||this},a.fn.atwho.default={at:void 0,alias:void 0,data:null,tpl:"<li data-value='${atwho-at}${name}'>${name}</li>",insert_tpl:"<span id='${id}'>${atwho-data-value}</span>",callbacks:e,search_key:"name",suffix:void 0,hide_without_suffix:!1,start_with_space:!0,highlight_first:!0,limit:5,max_len:20,display_timeout:300,delay:null}});;window.bp=window.bp||{},function(a,b,c){var d,e=[];a.mentions=a.mentions||{},a.mentions.users=window.bp.mentions.users||[],"object"==typeof window.BP_Suggestions&&(a.mentions.users=window.BP_Suggestions.friends||a.mentions.users),b.fn.bp_mentions=function(a){b.isArray(a)&&(a={data:a});var c={delay:200,hide_without_suffix:!0,insert_tpl:"</>${atwho-data-value}</>",limit:10,start_with_space:!1,suffix:"",callbacks:{filter:function(a,b,c){var d,e,f,g=[],h=new RegExp("^"+a+"| "+a,"ig");for(e=0,f=b.length;e<f;e++)d=b[e],d[c].toLowerCase().match(h)&&g.push(d);return g},highlighter:function(a,b){if(!b)return a;var c=new RegExp(">(\\s*|[\\w\\s]*)("+this.at.replace("+","\\+")+"?"+b.replace("+","\\+")+")([\\w ]*)\\s*<","ig");return a.replace(c,function(a,b,c,d){return">"+b+"<strong>"+c+"</strong>"+d+"<"})},before_reposition:function(a){var c,d,e,f,g=b("#atwho-ground-"+this.id+" .atwho-view"),h=b("body"),i=this.$inputor.data("atwho");"undefined"!==i&&"undefined"!==i.iframe&&null!==i.iframe?(c=this.$inputor.caret("offset",{iframe:i.iframe}),e=b(i.iframe).offset(),"undefined"!==e&&(c.left+=e.left,c.top+=e.top)):c=this.$inputor.caret("offset"),c.left>h.width()/2?(g.addClass("right"),f=c.left-a.left-this.view.$el.width()):(g.removeClass("right"),f=c.left-a.left+1),h.width()<=400&&b(document).scrollTop(c.top-6),d=parseInt(this.$inputor.css("line-height").substr(0,this.$inputor.css("line-height").length-2),10),(!d||d<5)&&(d=19),a.top=c.top+d,a.left+=f},inserting_wrapper:function(a,b,c){return""+b+c}}},f={callbacks:{remote_filter:function(a,c){var f=b(this),g={};return d=e[a],"object"==typeof d?void c(d):(f.xhr&&f.xhr.abort(),g={action:"bp_get_suggestions",term:a,type:"members"},b.isNumeric(this.$inputor.data("suggestions-group-id"))&&(g["group-id"]=parseInt(this.$inputor.data("suggestions-group-id"),10)),void(f.xhr=b.getJSON(ajaxurl,g).done(function(d){if(d.success){var f=b.map(d.data,function(a){return a.search=a.search||a.ID+" "+a.name,a});e[a]=f,c(f)}})))}},data:b.map(a.data,function(a){return a.search=a.search||a.ID+" "+a.name,a}),at:"@",search_key:"search",tpl:'<li data-value="@${ID}"><img src="${image}" /><span class="username">@${ID}</span><small>${name}</small></li>'},g=b.extend(!0,{},c,f,a);return b.fn.atwho.call(this,g)},b(document).ready(function(){b(".bp-suggestions, #comments form textarea, .wp-editor-area").bp_mentions(a.mentions.users)}),a.mentions.tinyMCEinit=function(){"undefined"!=typeof window.tinyMCE&&null!==window.tinyMCE.activeEditor&&"undefined"!=typeof window.tinyMCE.activeEditor&&b(window.tinyMCE.activeEditor.contentDocument.activeElement).atwho("setIframe",b(".wp-editor-wrap iframe")[0]).bp_mentions(a.mentions.users)}}(bp,jQuery);
+;(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(["jquery"], function ($) {
+      return (root.returnExportsGlobal = factory($));
+    });
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like enviroments that support module.exports,
+    // like Node.
+    module.exports = factory(require("jquery"));
+  } else {
+    factory(jQuery);
+  }
+}(this, function ($) {
+
+/*
+  Implement Github like autocomplete mentions
+  http://ichord.github.com/At.js
+
+  Copyright (c) 2013 chord.luo@gmail.com
+  Licensed under the MIT license.
+*/
+
+/*
+本插件操作 textarea 或者 input 内的插入符
+只实现了获得插入符在文本框中的位置，我设置
+插入符的位置.
+*/
+
+"use strict";
+var EditableCaret, InputCaret, Mirror, Utils, discoveryIframeOf, methods, oDocument, oFrame, oWindow, pluginName, setContextBy;
+
+pluginName = 'caret';
+
+EditableCaret = (function() {
+  function EditableCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
+  }
+
+  EditableCaret.prototype.setPos = function(pos) {
+    return this.domInputor;
+  };
+
+  EditableCaret.prototype.getIEPosition = function() {
+    return this.getPosition();
+  };
+
+  EditableCaret.prototype.getPosition = function() {
+    var inputor_offset, offset;
+    offset = this.getOffset();
+    inputor_offset = this.$inputor.offset();
+    offset.left -= inputor_offset.left;
+    offset.top -= inputor_offset.top;
+    return offset;
+  };
+
+  EditableCaret.prototype.getOldIEPos = function() {
+    var preCaretTextRange, textRange;
+    textRange = oDocument.selection.createRange();
+    preCaretTextRange = oDocument.body.createTextRange();
+    preCaretTextRange.moveToElementText(this.domInputor);
+    preCaretTextRange.setEndPoint("EndToEnd", textRange);
+    return preCaretTextRange.text.length;
+  };
+
+  EditableCaret.prototype.getPos = function() {
+    var clonedRange, pos, range;
+    if (range = this.range()) {
+      clonedRange = range.cloneRange();
+      clonedRange.selectNodeContents(this.domInputor);
+      clonedRange.setEnd(range.endContainer, range.endOffset);
+      pos = clonedRange.toString().length;
+      clonedRange.detach();
+      return pos;
+    } else if (oDocument.selection) {
+      return this.getOldIEPos();
+    }
+  };
+
+  EditableCaret.prototype.getOldIEOffset = function() {
+    var range, rect;
+    range = oDocument.selection.createRange().duplicate();
+    range.moveStart("character", -1);
+    rect = range.getBoundingClientRect();
+    return {
+      height: rect.bottom - rect.top,
+      left: rect.left,
+      top: rect.top
+    };
+  };
+
+  EditableCaret.prototype.getOffset = function(pos) {
+    var clonedRange, offset, range, rect, shadowCaret;
+    if (oWindow.getSelection && (range = this.range())) {
+      if (range.endOffset - 1 > 0 && range.endContainer === !this.domInputor) {
+        clonedRange = range.cloneRange();
+        clonedRange.setStart(range.endContainer, range.endOffset - 1);
+        clonedRange.setEnd(range.endContainer, range.endOffset);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left + rect.width,
+          top: rect.top
+        };
+        clonedRange.detach();
+      }
+      if (!offset || (offset != null ? offset.height : void 0) === 0) {
+        clonedRange = range.cloneRange();
+        shadowCaret = $(oDocument.createTextNode("|"));
+        clonedRange.insertNode(shadowCaret[0]);
+        clonedRange.selectNode(shadowCaret[0]);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left,
+          top: rect.top
+        };
+        shadowCaret.remove();
+        clonedRange.detach();
+      }
+    } else if (oDocument.selection) {
+      offset = this.getOldIEOffset();
+    }
+    if (offset) {
+      offset.top += $(oWindow).scrollTop();
+      offset.left += $(oWindow).scrollLeft();
+    }
+    return offset;
+  };
+
+  EditableCaret.prototype.range = function() {
+    var sel;
+    if (!oWindow.getSelection) {
+      return;
+    }
+    sel = oWindow.getSelection();
+    if (sel.rangeCount > 0) {
+      return sel.getRangeAt(0);
+    } else {
+      return null;
+    }
+  };
+
+  return EditableCaret;
+
+})();
+
+InputCaret = (function() {
+  function InputCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
+  }
+
+  InputCaret.prototype.getIEPos = function() {
+    var endRange, inputor, len, normalizedValue, pos, range, textInputRange;
+    inputor = this.domInputor;
+    range = oDocument.selection.createRange();
+    pos = 0;
+    if (range && range.parentElement() === inputor) {
+      normalizedValue = inputor.value.replace(/\r\n/g, "\n");
+      len = normalizedValue.length;
+      textInputRange = inputor.createTextRange();
+      textInputRange.moveToBookmark(range.getBookmark());
+      endRange = inputor.createTextRange();
+      endRange.collapse(false);
+      if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+        pos = len;
+      } else {
+        pos = -textInputRange.moveStart("character", -len);
+      }
+    }
+    return pos;
+  };
+
+  InputCaret.prototype.getPos = function() {
+    if (oDocument.selection) {
+      return this.getIEPos();
+    } else {
+      return this.domInputor.selectionStart;
+    }
+  };
+
+  InputCaret.prototype.setPos = function(pos) {
+    var inputor, range;
+    inputor = this.domInputor;
+    if (oDocument.selection) {
+      range = inputor.createTextRange();
+      range.move("character", pos);
+      range.select();
+    } else if (inputor.setSelectionRange) {
+      inputor.setSelectionRange(pos, pos);
+    }
+    return inputor;
+  };
+
+  InputCaret.prototype.getIEOffset = function(pos) {
+    var h, textRange, x, y;
+    textRange = this.domInputor.createTextRange();
+    pos || (pos = this.getPos());
+    textRange.move('character', pos);
+    x = textRange.boundingLeft;
+    y = textRange.boundingTop;
+    h = textRange.boundingHeight;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  InputCaret.prototype.getOffset = function(pos) {
+    var $inputor, offset, position;
+    $inputor = this.$inputor;
+    if (oDocument.selection) {
+      offset = this.getIEOffset(pos);
+      offset.top += $(oWindow).scrollTop() + $inputor.scrollTop();
+      offset.left += $(oWindow).scrollLeft() + $inputor.scrollLeft();
+      return offset;
+    } else {
+      offset = $inputor.offset();
+      position = this.getPosition(pos);
+      return offset = {
+        left: offset.left + position.left - $inputor.scrollLeft(),
+        top: offset.top + position.top - $inputor.scrollTop(),
+        height: position.height
+      };
+    }
+  };
+
+  InputCaret.prototype.getPosition = function(pos) {
+    var $inputor, at_rect, end_range, format, html, mirror, start_range;
+    $inputor = this.$inputor;
+    format = function(value) {
+      value = value.replace(/<|>|`|"|&/g, '?').replace(/\r\n|\r|\n/g, "<br/>");
+      if (/firefox/i.test(navigator.userAgent)) {
+        value = value.replace(/\s/g, '&nbsp;');
+      }
+      return value;
+    };
+    if (pos === void 0) {
+      pos = this.getPos();
+    }
+    start_range = $inputor.val().slice(0, pos);
+    end_range = $inputor.val().slice(pos);
+    html = "<span style='position: relative; display: inline;'>" + format(start_range) + "</span>";
+    html += "<span id='caret' style='position: relative; display: inline;'>|</span>";
+    html += "<span style='position: relative; display: inline;'>" + format(end_range) + "</span>";
+    mirror = new Mirror($inputor);
+    return at_rect = mirror.create(html).rect();
+  };
+
+  InputCaret.prototype.getIEPosition = function(pos) {
+    var h, inputorOffset, offset, x, y;
+    offset = this.getIEOffset(pos);
+    inputorOffset = this.$inputor.offset();
+    x = offset.left - inputorOffset.left;
+    y = offset.top - inputorOffset.top;
+    h = offset.height;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  return InputCaret;
+
+})();
+
+Mirror = (function() {
+  Mirror.prototype.css_attr = ["borderBottomWidth", "borderLeftWidth", "borderRightWidth", "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle", "borderTopWidth", "boxSizing", "fontFamily", "fontSize", "fontWeight", "height", "letterSpacing", "lineHeight", "marginBottom", "marginLeft", "marginRight", "marginTop", "outlineWidth", "overflow", "overflowX", "overflowY", "paddingBottom", "paddingLeft", "paddingRight", "paddingTop", "textAlign", "textOverflow", "textTransform", "whiteSpace", "wordBreak", "wordWrap"];
+
+  function Mirror($inputor) {
+    this.$inputor = $inputor;
+  }
+
+  Mirror.prototype.mirrorCss = function() {
+    var css,
+      _this = this;
+    css = {
+      position: 'absolute',
+      left: -9999,
+      top: 0,
+      zIndex: -20000
+    };
+    if (this.$inputor.prop('tagName') === 'TEXTAREA') {
+      this.css_attr.push('width');
+    }
+    $.each(this.css_attr, function(i, p) {
+      return css[p] = _this.$inputor.css(p);
+    });
+    return css;
+  };
+
+  Mirror.prototype.create = function(html) {
+    this.$mirror = $('<div></div>');
+    this.$mirror.css(this.mirrorCss());
+    this.$mirror.html(html);
+    this.$inputor.after(this.$mirror);
+    return this;
+  };
+
+  Mirror.prototype.rect = function() {
+    var $flag, pos, rect;
+    $flag = this.$mirror.find("#caret");
+    pos = $flag.position();
+    rect = {
+      left: pos.left,
+      top: pos.top,
+      height: $flag.height()
+    };
+    this.$mirror.remove();
+    return rect;
+  };
+
+  return Mirror;
+
+})();
+
+Utils = {
+  contentEditable: function($inputor) {
+    return !!($inputor[0].contentEditable && $inputor[0].contentEditable === 'true');
+  }
+};
+
+methods = {
+  pos: function(pos) {
+    if (pos || pos === 0) {
+      return this.setPos(pos);
+    } else {
+      return this.getPos();
+    }
+  },
+  position: function(pos) {
+    if (oDocument.selection) {
+      return this.getIEPosition(pos);
+    } else {
+      return this.getPosition(pos);
+    }
+  },
+  offset: function(pos) {
+    var offset;
+    offset = this.getOffset(pos);
+    return offset;
+  }
+};
+
+oDocument = null;
+
+oWindow = null;
+
+oFrame = null;
+
+setContextBy = function(settings) {
+  var iframe;
+  if (iframe = settings != null ? settings.iframe : void 0) {
+    oFrame = iframe;
+    oWindow = iframe.contentWindow;
+    return oDocument = iframe.contentDocument || oWindow.document;
+  } else {
+    oFrame = void 0;
+    oWindow = window;
+    return oDocument = document;
+  }
+};
+
+discoveryIframeOf = function($dom) {
+  var error;
+  oDocument = $dom[0].ownerDocument;
+  oWindow = oDocument.defaultView || oDocument.parentWindow;
+  try {
+    return oFrame = oWindow.frameElement;
+  } catch (_error) {
+    error = _error;
+  }
+};
+
+$.fn.caret = function(method, value, settings) {
+  var caret;
+  if (methods[method]) {
+    if ($.isPlainObject(value)) {
+      setContextBy(value);
+      value = void 0;
+    } else {
+      setContextBy(settings);
+    }
+    caret = Utils.contentEditable(this) ? new EditableCaret(this) : new InputCaret(this);
+    return methods[method].apply(caret, [value]);
+  } else {
+    return $.error("Method " + method + " does not exist on jQuery.caret");
+  }
+};
+
+$.fn.caret.EditableCaret = EditableCaret;
+
+$.fn.caret.InputCaret = InputCaret;
+
+$.fn.caret.Utils = Utils;
+
+$.fn.caret.apis = methods;
+
+
+}));
+;/*! jquery.atwho - v0.5.2 %>
+* Copyright (c) 2014 chord.luo <chord.luo@gmail.com>;
+* homepage: http://ichord.github.com/At.js
+* Licensed MIT
+*/
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(["jquery"], function ($) {
+      return (root.returnExportsGlobal = factory($));
+    });
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like enviroments that support module.exports,
+    // like Node.
+    module.exports = factory(require("jquery"));
+  } else {
+    factory(jQuery);
+  }
+}(this, function ($) {
+
+var Api, App, Controller, DEFAULT_CALLBACKS, KEY_CODE, Model, View,
+  __slice = [].slice;
+
+App = (function() {
+  function App(inputor) {
+    this.current_flag = null;
+    this.controllers = {};
+    this.alias_maps = {};
+    this.$inputor = $(inputor);
+    this.setIframe();
+    this.listen();
+  }
+
+  App.prototype.createContainer = function(doc) {
+    if ((this.$el = $("#atwho-container", doc)).length === 0) {
+      return $(doc.body).append(this.$el = $("<div id='atwho-container'></div>"));
+    }
+  };
+
+  App.prototype.setIframe = function(iframe, standalone) {
+    var _ref;
+    if (standalone == null) {
+      standalone = false;
+    }
+    if (iframe) {
+      this.window = iframe.contentWindow;
+      this.document = iframe.contentDocument || this.window.document;
+      this.iframe = iframe;
+    } else {
+      this.document = document;
+      this.window = window;
+      this.iframe = null;
+    }
+    if (this.iframeStandalone = standalone) {
+      if ((_ref = this.$el) != null) {
+        _ref.remove();
+      }
+      return this.createContainer(this.document);
+    } else {
+      return this.createContainer(document);
+    }
+  };
+
+  App.prototype.controller = function(at) {
+    var c, current, current_flag, _ref;
+    if (this.alias_maps[at]) {
+      current = this.controllers[this.alias_maps[at]];
+    } else {
+      _ref = this.controllers;
+      for (current_flag in _ref) {
+        c = _ref[current_flag];
+        if (current_flag === at) {
+          current = c;
+          break;
+        }
+      }
+    }
+    if (current) {
+      return current;
+    } else {
+      return this.controllers[this.current_flag];
+    }
+  };
+
+  App.prototype.set_context_for = function(at) {
+    this.current_flag = at;
+    return this;
+  };
+
+  App.prototype.reg = function(flag, setting) {
+    var controller, _base;
+    controller = (_base = this.controllers)[flag] || (_base[flag] = new Controller(this, flag));
+    if (setting.alias) {
+      this.alias_maps[setting.alias] = flag;
+    }
+    controller.init(setting);
+    return this;
+  };
+
+  App.prototype.listen = function() {
+    return this.$inputor.on('keyup.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.on_keyup(e);
+      };
+    })(this)).on('keydown.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.on_keydown(e);
+      };
+    })(this)).on('scroll.atwhoInner', (function(_this) {
+      return function(e) {
+        var _ref;
+        return (_ref = _this.controller()) != null ? _ref.view.hide(e) : void 0;
+      };
+    })(this)).on('blur.atwhoInner', (function(_this) {
+      return function(e) {
+        var c;
+        if (c = _this.controller()) {
+          return c.view.hide(e, c.get_opt("display_timeout"));
+        }
+      };
+    })(this)).on('click.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.dispatch();
+      };
+    })(this));
+  };
+
+  App.prototype.shutdown = function() {
+    var c, _, _ref;
+    _ref = this.controllers;
+    for (_ in _ref) {
+      c = _ref[_];
+      c.destroy();
+      delete this.controllers[_];
+    }
+    this.$inputor.off('.atwhoInner');
+    return this.$el.remove();
+  };
+
+  App.prototype.dispatch = function() {
+    return $.map(this.controllers, (function(_this) {
+      return function(c) {
+        var delay;
+        if (delay = c.get_opt('delay')) {
+          clearTimeout(_this.delayedCallback);
+          return _this.delayedCallback = setTimeout(function() {
+            if (c.look_up()) {
+              return _this.set_context_for(c.at);
+            }
+          }, delay);
+        } else {
+          if (c.look_up()) {
+            return _this.set_context_for(c.at);
+          }
+        }
+      };
+    })(this));
+  };
+
+  App.prototype.on_keyup = function(e) {
+    var _ref;
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        if ((_ref = this.controller()) != null) {
+          _ref.view.hide();
+        }
+        break;
+      case KEY_CODE.DOWN:
+      case KEY_CODE.UP:
+      case KEY_CODE.CTRL:
+        $.noop();
+        break;
+      case KEY_CODE.P:
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          this.dispatch();
+        }
+        break;
+      default:
+        this.dispatch();
+    }
+  };
+
+  App.prototype.on_keydown = function(e) {
+    var view, _ref;
+    view = (_ref = this.controller()) != null ? _ref.view : void 0;
+    if (!(view && view.visible())) {
+      return;
+    }
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        view.hide(e);
+        break;
+      case KEY_CODE.UP:
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.DOWN:
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.P:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.TAB:
+      case KEY_CODE.ENTER:
+        if (!view.visible()) {
+          return;
+        }
+        e.preventDefault();
+        view.choose(e);
+        break;
+      default:
+        $.noop();
+    }
+  };
+
+  return App;
+
+})();
+
+Controller = (function() {
+  Controller.prototype.uid = function() {
+    return (Math.random().toString(16) + "000000000").substr(2, 8) + (new Date().getTime());
+  };
+
+  function Controller(app, at) {
+    this.app = app;
+    this.at = at;
+    this.$inputor = this.app.$inputor;
+    this.id = this.$inputor[0].id || this.uid();
+    this.setting = null;
+    this.query = null;
+    this.pos = 0;
+    this.cur_rect = null;
+    this.range = null;
+    if ((this.$el = $("#atwho-ground-" + this.id, this.app.$el)).length === 0) {
+      this.app.$el.append(this.$el = $("<div id='atwho-ground-" + this.id + "'></div>"));
+    }
+    this.model = new Model(this);
+    this.view = new View(this);
+  }
+
+  Controller.prototype.init = function(setting) {
+    this.setting = $.extend({}, this.setting || $.fn.atwho["default"], setting);
+    this.view.init();
+    return this.model.reload(this.setting.data);
+  };
+
+  Controller.prototype.destroy = function() {
+    this.trigger('beforeDestroy');
+    this.model.destroy();
+    this.view.destroy();
+    return this.$el.remove();
+  };
+
+  Controller.prototype.call_default = function() {
+    var args, error, func_name;
+    func_name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    try {
+      return DEFAULT_CALLBACKS[func_name].apply(this, args);
+    } catch (_error) {
+      error = _error;
+      return $.error("" + error + " Or maybe At.js doesn't have function " + func_name);
+    }
+  };
+
+  Controller.prototype.trigger = function(name, data) {
+    var alias, event_name;
+    if (data == null) {
+      data = [];
+    }
+    data.push(this);
+    alias = this.get_opt('alias');
+    event_name = alias ? "" + name + "-" + alias + ".atwho" : "" + name + ".atwho";
+    return this.$inputor.trigger(event_name, data);
+  };
+
+  Controller.prototype.callbacks = function(func_name) {
+    return this.get_opt("callbacks")[func_name] || DEFAULT_CALLBACKS[func_name];
+  };
+
+  Controller.prototype.get_opt = function(at, default_value) {
+    var e;
+    try {
+      return this.setting[at];
+    } catch (_error) {
+      e = _error;
+      return null;
+    }
+  };
+
+  Controller.prototype.content = function() {
+    var range;
+    if (this.$inputor.is('textarea, input')) {
+      return this.$inputor.val();
+    } else {
+      if (!(range = this.mark_range())) {
+        return;
+      }
+      return (range.startContainer.textContent || "").slice(0, range.startOffset);
+    }
+  };
+
+  Controller.prototype.catch_query = function() {
+    var caret_pos, content, end, query, start, subtext;
+    content = this.content();
+    caret_pos = this.$inputor.caret('pos', {
+      iframe: this.app.iframe
+    });
+    subtext = content.slice(0, caret_pos);
+    query = this.callbacks("matcher").call(this, this.at, subtext, this.get_opt('start_with_space'));
+    if (typeof query === "string" && query.length <= this.get_opt('max_len', 20)) {
+      start = caret_pos - query.length;
+      end = start + query.length;
+      this.pos = start;
+      query = {
+        'text': query,
+        'head_pos': start,
+        'end_pos': end
+      };
+      this.trigger("matched", [this.at, query.text]);
+    } else {
+      query = null;
+      this.view.hide();
+    }
+    return this.query = query;
+  };
+
+  Controller.prototype.rect = function() {
+    var c, iframe_offset, scale_bottom;
+    if (!(c = this.$inputor.caret('offset', this.pos - 1, {
+      iframe: this.app.iframe
+    }))) {
+      return;
+    }
+    if (this.app.iframe && !this.app.iframeStandalone) {
+      iframe_offset = $(this.app.iframe).offset();
+      c.left += iframe_offset.left;
+      c.top += iframe_offset.top;
+    }
+    if (this.$inputor.is('[contentEditable]')) {
+      c = this.cur_rect || (this.cur_rect = c);
+    }
+    scale_bottom = this.app.document.selection ? 0 : 2;
+    return {
+      left: c.left,
+      top: c.top,
+      bottom: c.top + c.height + scale_bottom
+    };
+  };
+
+  Controller.prototype.reset_rect = function() {
+    if (this.$inputor.is('[contentEditable]')) {
+      return this.cur_rect = null;
+    }
+  };
+
+  Controller.prototype.mark_range = function() {
+    var sel;
+    if (!this.$inputor.is('[contentEditable]')) {
+      return;
+    }
+    if (this.app.window.getSelection && (sel = this.app.window.getSelection()).rangeCount > 0) {
+      return this.range = sel.getRangeAt(0);
+    } else if (this.app.document.selection) {
+      return this.ie8_range = this.app.document.selection.createRange();
+    }
+  };
+
+  Controller.prototype.insert_content_for = function($li) {
+    var data, data_value, tpl;
+    data_value = $li.data('value');
+    tpl = this.get_opt('insert_tpl');
+    if (this.$inputor.is('textarea, input') || !tpl) {
+      return data_value;
+    }
+    data = $.extend({}, $li.data('item-data'), {
+      'atwho-data-value': data_value,
+      'atwho-at': this.at
+    });
+    return this.callbacks("tpl_eval").call(this, tpl, data);
+  };
+
+  Controller.prototype.insert = function(content, $li) {
+    var $inputor, node, pos, range, sel, source, start_str, text, wrapped_contents, _i, _len, _ref;
+    $inputor = this.$inputor;
+    wrapped_contents = this.callbacks('inserting_wrapper').call(this, $inputor, content, this.get_opt("suffix"));
+    if ($inputor.is('textarea, input')) {
+      source = $inputor.val();
+      start_str = source.slice(0, Math.max(this.query.head_pos - this.at.length, 0));
+      text = "" + start_str + wrapped_contents + (source.slice(this.query['end_pos'] || 0));
+      $inputor.val(text);
+      $inputor.caret('pos', start_str.length + wrapped_contents.length, {
+        iframe: this.app.iframe
+      });
+    } else if (range = this.range) {
+      pos = range.startOffset - (this.query.end_pos - this.query.head_pos) - this.at.length;
+      range.setStart(range.endContainer, Math.max(pos, 0));
+      range.setEnd(range.endContainer, range.endOffset);
+      range.deleteContents();
+      _ref = $(wrapped_contents, this.app.document);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        node = _ref[_i];
+        range.insertNode(node);
+        range.setEndAfter(node);
+        range.collapse(false);
+      }
+      sel = this.app.window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else if (range = this.ie8_range) {
+      range.moveStart('character', this.query.end_pos - this.query.head_pos - this.at.length);
+      range.pasteHTML(wrapped_contents);
+      range.collapse(false);
+      range.select();
+    }
+    if (!$inputor.is(':focus')) {
+      $inputor.focus();
+    }
+    return $inputor.change();
+  };
+
+  Controller.prototype.render_view = function(data) {
+    var search_key;
+    search_key = this.get_opt("search_key");
+    data = this.callbacks("sorter").call(this, this.query.text, data.slice(0, 1001), search_key);
+    return this.view.render(data.slice(0, this.get_opt('limit')));
+  };
+
+  Controller.prototype.look_up = function() {
+    var query, _callback;
+    if (!(query = this.catch_query())) {
+      return;
+    }
+    _callback = function(data) {
+      if (data && data.length > 0) {
+        return this.render_view(data);
+      } else {
+        return this.view.hide();
+      }
+    };
+    this.model.query(query.text, $.proxy(_callback, this));
+    return query;
+  };
+
+  return Controller;
+
+})();
+
+Model = (function() {
+  function Model(context) {
+    this.context = context;
+    this.at = this.context.at;
+    this.storage = this.context.$inputor;
+  }
+
+  Model.prototype.destroy = function() {
+    return this.storage.data(this.at, null);
+  };
+
+  Model.prototype.saved = function() {
+    return this.fetch() > 0;
+  };
+
+  Model.prototype.query = function(query, callback) {
+    var data, search_key, _remote_filter;
+    data = this.fetch();
+    search_key = this.context.get_opt("search_key");
+    data = this.context.callbacks('filter').call(this.context, query, data, search_key) || [];
+    _remote_filter = this.context.callbacks('remote_filter');
+    if (data.length > 0 || (!_remote_filter && data.length === 0)) {
+      return callback(data);
+    } else {
+      return _remote_filter.call(this.context, query, callback);
+    }
+  };
+
+  Model.prototype.fetch = function() {
+    return this.storage.data(this.at) || [];
+  };
+
+  Model.prototype.save = function(data) {
+    return this.storage.data(this.at, this.context.callbacks("before_save").call(this.context, data || []));
+  };
+
+  Model.prototype.load = function(data) {
+    if (!(this.saved() || !data)) {
+      return this._load(data);
+    }
+  };
+
+  Model.prototype.reload = function(data) {
+    return this._load(data);
+  };
+
+  Model.prototype._load = function(data) {
+    if (typeof data === "string") {
+      return $.ajax(data, {
+        dataType: "json"
+      }).done((function(_this) {
+        return function(data) {
+          return _this.save(data);
+        };
+      })(this));
+    } else {
+      return this.save(data);
+    }
+  };
+
+  return Model;
+
+})();
+
+View = (function() {
+  function View(context) {
+    this.context = context;
+    this.$el = $("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
+    this.timeout_id = null;
+    this.context.$el.append(this.$el);
+    this.bind_event();
+  }
+
+  View.prototype.init = function() {
+    var id;
+    id = this.context.get_opt("alias") || this.context.at.charCodeAt(0);
+    return this.$el.attr({
+      'id': "at-view-" + id
+    });
+  };
+
+  View.prototype.destroy = function() {
+    return this.$el.remove();
+  };
+
+  View.prototype.bind_event = function() {
+    var $menu;
+    $menu = this.$el.find('ul');
+    return $menu.on('mouseenter.atwho-view', 'li', function(e) {
+      $menu.find('.cur').removeClass('cur');
+      return $(e.currentTarget).addClass('cur');
+    }).on('click.atwho-view', 'li', (function(_this) {
+      return function(e) {
+        $menu.find('.cur').removeClass('cur');
+        $(e.currentTarget).addClass('cur');
+        _this.choose(e);
+        return e.preventDefault();
+      };
+    })(this));
+  };
+
+  View.prototype.visible = function() {
+    return this.$el.is(":visible");
+  };
+
+  View.prototype.choose = function(e) {
+    var $li, content;
+    if (($li = this.$el.find(".cur")).length) {
+      content = this.context.insert_content_for($li);
+      this.context.insert(this.context.callbacks("before_insert").call(this.context, content, $li), $li);
+      this.context.trigger("inserted", [$li, e]);
+      this.hide(e);
+    }
+    if (this.context.get_opt("hide_without_suffix")) {
+      return this.stop_showing = true;
+    }
+  };
+
+  View.prototype.reposition = function(rect) {
+    var offset, overflowOffset, _ref, _window;
+    _window = this.context.app.iframeStandalone ? this.context.app.window : window;
+    if (rect.bottom + this.$el.height() - $(_window).scrollTop() > $(_window).height()) {
+      rect.bottom = rect.top - this.$el.height();
+    }
+    if (rect.left > (overflowOffset = $(_window).width() - this.$el.width() - 5)) {
+      rect.left = overflowOffset;
+    }
+    offset = {
+      left: rect.left,
+      top: rect.bottom
+    };
+    if ((_ref = this.context.callbacks("before_reposition")) != null) {
+      _ref.call(this.context, offset);
+    }
+    this.$el.offset(offset);
+    return this.context.trigger("reposition", [offset]);
+  };
+
+  View.prototype.next = function() {
+    var cur, next;
+    cur = this.$el.find('.cur').removeClass('cur');
+    next = cur.next();
+    if (!next.length) {
+      next = this.$el.find('li:first');
+    }
+    next.addClass('cur');
+    return this.$el.animate({
+      scrollTop: Math.max(0, cur.innerHeight() * (next.index() + 2) - this.$el.height())
+    }, 150);
+  };
+
+  View.prototype.prev = function() {
+    var cur, prev;
+    cur = this.$el.find('.cur').removeClass('cur');
+    prev = cur.prev();
+    if (!prev.length) {
+      prev = this.$el.find('li:last');
+    }
+    prev.addClass('cur');
+    return this.$el.animate({
+      scrollTop: Math.max(0, cur.innerHeight() * (prev.index() + 2) - this.$el.height())
+    }, 150);
+  };
+
+  View.prototype.show = function() {
+    var rect;
+    if (this.stop_showing) {
+      this.stop_showing = false;
+      return;
+    }
+    this.context.mark_range();
+    if (!this.visible()) {
+      this.$el.show();
+      this.$el.scrollTop(0);
+      this.context.trigger('shown');
+    }
+    if (rect = this.context.rect()) {
+      return this.reposition(rect);
+    }
+  };
+
+  View.prototype.hide = function(e, time) {
+    var callback;
+    if (!this.visible()) {
+      return;
+    }
+    if (isNaN(time)) {
+      this.context.reset_rect();
+      this.$el.hide();
+      return this.context.trigger('hidden', [e]);
+    } else {
+      callback = (function(_this) {
+        return function() {
+          return _this.hide();
+        };
+      })(this);
+      clearTimeout(this.timeout_id);
+      return this.timeout_id = setTimeout(callback, time);
+    }
+  };
+
+  View.prototype.render = function(list) {
+    var $li, $ul, item, li, tpl, _i, _len;
+    if (!($.isArray(list) && list.length > 0)) {
+      this.hide();
+      return;
+    }
+    this.$el.find('ul').empty();
+    $ul = this.$el.find('ul');
+    tpl = this.context.get_opt('tpl');
+    for (_i = 0, _len = list.length; _i < _len; _i++) {
+      item = list[_i];
+      item = $.extend({}, item, {
+        'atwho-at': this.context.at
+      });
+      li = this.context.callbacks("tpl_eval").call(this.context, tpl, item);
+      $li = $(this.context.callbacks("highlighter").call(this.context, li, this.context.query.text));
+      $li.data("item-data", item);
+      $ul.append($li);
+    }
+    this.show();
+    if (this.context.get_opt('highlight_first')) {
+      return $ul.find("li:first").addClass("cur");
+    }
+  };
+
+  return View;
+
+})();
+
+KEY_CODE = {
+  DOWN: 40,
+  UP: 38,
+  ESC: 27,
+  TAB: 9,
+  ENTER: 13,
+  CTRL: 17,
+  P: 80,
+  N: 78
+};
+
+DEFAULT_CALLBACKS = {
+  before_save: function(data) {
+    var item, _i, _len, _results;
+    if (!$.isArray(data)) {
+      return data;
+    }
+    _results = [];
+    for (_i = 0, _len = data.length; _i < _len; _i++) {
+      item = data[_i];
+      if ($.isPlainObject(item)) {
+        _results.push(item);
+      } else {
+        _results.push({
+          name: item
+        });
+      }
+    }
+    return _results;
+  },
+  matcher: function(flag, subtext, should_start_with_space) {
+    var match, regexp, _a, _y;
+    flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    if (should_start_with_space) {
+      flag = '(?:^|\\s)' + flag;
+    }
+    _a = decodeURI("%C3%80");
+    _y = decodeURI("%C3%BF");
+    regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+    match = regexp.exec(subtext);
+    if (match) {
+      return match[2] || match[1];
+    } else {
+      return null;
+    }
+  },
+  filter: function(query, data, search_key) {
+    var item, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = data.length; _i < _len; _i++) {
+      item = data[_i];
+      if (~new String(item[search_key]).toLowerCase().indexOf(query.toLowerCase())) {
+        _results.push(item);
+      }
+    }
+    return _results;
+  },
+  remote_filter: null,
+  sorter: function(query, items, search_key) {
+    var item, _i, _len, _results;
+    if (!query) {
+      return items;
+    }
+    _results = [];
+    for (_i = 0, _len = items.length; _i < _len; _i++) {
+      item = items[_i];
+      item.atwho_order = new String(item[search_key]).toLowerCase().indexOf(query.toLowerCase());
+      if (item.atwho_order > -1) {
+        _results.push(item);
+      }
+    }
+    return _results.sort(function(a, b) {
+      return a.atwho_order - b.atwho_order;
+    });
+  },
+  tpl_eval: function(tpl, map) {
+    var error;
+    try {
+      return tpl.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {
+        return map[key];
+      });
+    } catch (_error) {
+      error = _error;
+      return "";
+    }
+  },
+  highlighter: function(li, query) {
+    var regexp;
+    if (!query) {
+      return li;
+    }
+    regexp = new RegExp(">\\s*(\\w*?)(" + query.replace("+", "\\+") + ")(\\w*)\\s*<", 'ig');
+    return li.replace(regexp, function(str, $1, $2, $3) {
+      return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
+    });
+  },
+  before_insert: function(value, $li) {
+    return value;
+  },
+  inserting_wrapper: function($inputor, content, suffix) {
+    var wrapped_content;
+    suffix = suffix === "" ? suffix : suffix || " ";
+    if ($inputor.is('textarea, input')) {
+      return '' + content + suffix;
+    } else if ($inputor.attr('contentEditable') === 'true') {
+      suffix = suffix === " " ? "&nbsp;" : suffix;
+      if (/firefox/i.test(navigator.userAgent)) {
+        wrapped_content = "<span>" + content + suffix + "</span>";
+      } else {
+        suffix = "<span contenteditable='false'>" + suffix + "</span>";
+        wrapped_content = "<span contenteditable='false'>" + content + suffix + "</span>";
+      }
+      if (this.app.document.selection) {
+        wrapped_content = "<span contenteditable='true'>" + content + "</span>";
+      }
+      return wrapped_content + "<span></span>";
+    }
+  }
+};
+
+Api = {
+  load: function(at, data) {
+    var c;
+    if (c = this.controller(at)) {
+      return c.model.load(data);
+    }
+  },
+  setIframe: function(iframe, standalone) {
+    this.setIframe(iframe, standalone);
+    return null;
+  },
+  run: function() {
+    return this.dispatch();
+  },
+  destroy: function() {
+    this.shutdown();
+    return this.$inputor.data('atwho', null);
+  }
+};
+
+$.fn.atwho = function(method) {
+  var result, _args;
+  _args = arguments;
+  result = null;
+  this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function() {
+    var $this, app;
+    if (!(app = ($this = $(this)).data("atwho"))) {
+      $this.data('atwho', (app = new App(this)));
+    }
+    if (typeof method === 'object' || !method) {
+      return app.reg(method.at, method);
+    } else if (Api[method] && app) {
+      return result = Api[method].apply(app, Array.prototype.slice.call(_args, 1));
+    } else {
+      return $.error("Method " + method + " does not exist on jQuery.caret");
+    }
+  });
+  return result || this;
+};
+
+$.fn.atwho["default"] = {
+  at: void 0,
+  alias: void 0,
+  data: null,
+  tpl: "<li data-value='${atwho-at}${name}'>${name}</li>",
+  insert_tpl: "<span id='${id}'>${atwho-data-value}</span>",
+  callbacks: DEFAULT_CALLBACKS,
+  search_key: "name",
+  suffix: void 0,
+  hide_without_suffix: false,
+  start_with_space: true,
+  highlight_first: true,
+  limit: 5,
+  max_len: 20,
+  display_timeout: 300,
+  delay: null
+};
+
+
+
+}));
+;/* global bp */
+
+window.bp = window.bp || {};
+
+( function( bp, $, undefined ) {
+	var mentionsQueryCache = [],
+		mentionsItem;
+
+	bp.mentions       = bp.mentions || {};
+	bp.mentions.users = window.bp.mentions.users || [];
+
+	if ( typeof window.BP_Suggestions === 'object' ) {
+		bp.mentions.users = window.BP_Suggestions.friends || bp.mentions.users;
+	}
+
+	/**
+	 * Adds BuddyPress @mentions to form inputs.
+	 *
+	 * @param {array|object} options If array, becomes the suggestions' data source. If object, passed as config to $.atwho().
+	 * @since 2.1.0
+	 */
+	$.fn.bp_mentions = function( options ) {
+		if ( $.isArray( options ) ) {
+			options = { data: options };
+		}
+
+		/**
+		 * Default options for at.js; see https://github.com/ichord/At.js/.
+		 */
+		var suggestionsDefaults = {
+			delay:               200,
+			hide_without_suffix: true,
+			insert_tpl:          '</>${atwho-data-value}</>', // For contentEditable, the fake tags make jQuery insert a textNode.
+			limit:               10,
+			start_with_space:    false,
+			suffix:              '',
+
+			callbacks: {
+				/**
+				 * Custom filter to only match the start of spaced words.
+				 * Based on the core/default one.
+				 *
+				 * @param {string} query
+				 * @param {array} data
+				 * @param {string} search_key
+				 * @return {array}
+				 * @since 2.1.0
+				 */
+				filter: function( query, data, search_key ) {
+					var item, _i, _len, _results = [],
+					regxp = new RegExp( '^' + query + '| ' + query, 'ig' ); // start of string, or preceded by a space.
+
+					for ( _i = 0, _len = data.length; _i < _len; _i++ ) {
+						item = data[ _i ];
+						if ( item[ search_key ].toLowerCase().match( regxp ) ) {
+							_results.push( item );
+						}
+					}
+
+					return _results;
+				},
+
+				/**
+				 * Removes some spaces around highlighted string and tweaks regex to allow spaces
+				 * (to match display_name). Based on the core default.
+				 *
+				 * @param {unknown} li
+				 * @param {string} query
+				 * @return {string}
+				 * @since 2.1.0
+				 */
+				highlighter: function( li, query ) {
+					if ( ! query ) {
+						return li;
+					}
+
+					var regexp = new RegExp( '>(\\s*|[\\w\\s]*)(' + this.at.replace( '+', '\\+') + '?' + query.replace( '+', '\\+' ) + ')([\\w ]*)\\s*<', 'ig' );
+					return li.replace( regexp, function( str, $1, $2, $3 ) {
+						return '>' + $1 + '<strong>' + $2 + '</strong>' + $3 + '<';
+					});
+				},
+
+				/**
+				 * Reposition the suggestion list dynamically.
+				 *
+				 * @param {unknown} offset
+				 * @since 2.1.0
+				 */
+				before_reposition: function( offset ) {
+					// get the iframe, if any, already applied with atwho
+					var caret,
+							line,
+							iframeOffset,
+							move,
+							$view = $( '#atwho-ground-' + this.id + ' .atwho-view' ),
+							$body = $( 'body' ),
+							atwhoDataValue = this.$inputor.data( 'atwho' );
+
+					if ( 'undefined' !== atwhoDataValue && 'undefined' !== atwhoDataValue.iframe && null !== atwhoDataValue.iframe ) {
+						caret = this.$inputor.caret( 'offset', { iframe: atwhoDataValue.iframe } );
+						// Caret.js no longer calculates iframe caret position from the window (it's now just within the iframe).
+						// We need to get the iframe offset from the window and merge that into our object.
+						iframeOffset = $( atwhoDataValue.iframe ).offset();
+						if ( 'undefined' !== iframeOffset ) {
+							caret.left += iframeOffset.left;
+							caret.top  += iframeOffset.top;
+						}
+					} else {
+						caret = this.$inputor.caret( 'offset' );
+					}
+
+					// If the caret is past horizontal half, then flip it, yo
+					if ( caret.left > ( $body.width() / 2 ) ) {
+						$view.addClass( 'right' );
+						move = caret.left - offset.left - this.view.$el.width();
+					} else {
+						$view.removeClass( 'right' );
+						move = caret.left - offset.left + 1;
+					}
+
+					// If we're on a small screen, scroll to caret
+					if ( $body.width() <= 400 ) {
+						$( document ).scrollTop( caret.top - 6 );
+					}
+
+					// New position is under the caret (never above) and positioned to follow
+					// Dynamic sizing based on the input area (remove 'px' from end)
+					line = parseInt( this.$inputor.css( 'line-height' ).substr( 0, this.$inputor.css( 'line-height' ).length - 2 ), 10 );
+					if ( !line || line < 5 ) { // sanity check, and catch no line-height
+						line = 19;
+					}
+
+					offset.top   = caret.top + line;
+					offset.left += move;
+				},
+
+				/**
+				 * Override default behaviour which inserts junk tags in the WordPress Visual editor.
+				 *
+				 * @param {unknown} $inputor Element which we're inserting content into.
+				 * @param {string) content The content that will be inserted.
+				 * @param {string) suffix Applied to the end of the content string.
+				 * @return {string}
+				 * @since 2.1.0
+				 */
+				inserting_wrapper: function( $inputor, content, suffix ) {
+					return '' + content + suffix;
+				}
+			}
+		},
+
+		/**
+		 * Default options for our @mentions; see https://github.com/ichord/At.js/.
+		 */
+		mentionsDefaults = {
+			callbacks: {
+				/**
+				 * If there are no matches for the query in this.data, then query BuddyPress.
+				 *
+				 * @param {string} query Partial @mention to search for.
+				 * @param {function} render_view Render page callback function.
+				 * @since 2.1.0
+				 */
+				remote_filter: function( query, render_view ) {
+					var self = $( this ),
+						params = {};
+
+					mentionsItem = mentionsQueryCache[ query ];
+					if ( typeof mentionsItem === 'object' ) {
+						render_view( mentionsItem );
+						return;
+					}
+
+					if ( self.xhr ) {
+						self.xhr.abort();
+					}
+
+					params = { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' };
+
+					if ( $.isNumeric( this.$inputor.data( 'suggestions-group-id' ) ) ) {
+						params['group-id'] = parseInt( this.$inputor.data( 'suggestions-group-id' ), 10 );
+					}
+
+					self.xhr = $.getJSON( ajaxurl, params )
+						/**
+						 * Success callback for the @suggestions lookup.
+						 *
+						 * @param {object} response Details of users matching the query.
+						 * @since 2.1.0
+						 */
+						.done(function( response ) {
+							if ( ! response.success ) {
+								return;
+							}
+
+							var data = $.map( response.data,
+								/**
+								 * Create a composite index to determine ordering of results;
+								 * nicename matches will appear on top.
+								 *
+								 * @param {array} suggestion A suggestion's original data.
+								 * @return {array} A suggestion's new data.
+								 * @since 2.1.0
+								 */
+								function( suggestion ) {
+									suggestion.search = suggestion.search || suggestion.ID + ' ' + suggestion.name;
+									return suggestion;
+								}
+							);
+
+							mentionsQueryCache[ query ] = data;
+							render_view( data );
+						});
+				}
+			},
+
+			data: $.map( options.data,
+				/**
+				 * Create a composite index to search against of nicename + display name.
+				 * This will also determine ordering of results, so nicename matches will appear on top.
+				 *
+				 * @param {array} suggestion A suggestion's original data.
+				 * @return {array} A suggestion's new data.
+				 * @since 2.1.0
+				 */
+				function( suggestion ) {
+					suggestion.search = suggestion.search || suggestion.ID + ' ' + suggestion.name;
+					return suggestion;
+				}
+			),
+
+			at:         '@',
+			search_key: 'search',
+			tpl:        '<li data-value="@${ID}"><img src="${image}" /><span class="username">@${ID}</span><small>${name}</small></li>'
+		},
+
+		opts = $.extend( true, {}, suggestionsDefaults, mentionsDefaults, options );
+		return $.fn.atwho.call( this, opts );
+	};
+
+	$( document ).ready(function() {
+		// Activity/reply, post comments, dashboard post 'text' editor.
+		$( '.bp-suggestions, #comments form textarea, .wp-editor-area' ).bp_mentions( bp.mentions.users );
+	});
+
+	bp.mentions.tinyMCEinit = function() {
+		if ( typeof window.tinyMCE === 'undefined' || window.tinyMCE.activeEditor === null || typeof window.tinyMCE.activeEditor === 'undefined' ) {
+			return;
+		} else {
+			$( window.tinyMCE.activeEditor.contentDocument.activeElement )
+				.atwho( 'setIframe', $( '.wp-editor-wrap iframe' )[0] )
+				.bp_mentions( bp.mentions.users );
+		}
+	};
+})( bp, jQuery );
