@@ -981,7 +981,7 @@ function wds_bp_group_meta_save( $group ) {
 		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
 
 			// Associate an existing site
-			openlab_set_group_site_id( $group->id, $site_id, (int) $_POST['groupblog-blogid'] );
+			openlab_set_group_site_id( $group->id, (int) $_POST['groupblog-blogid'] );
 
 		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
 
