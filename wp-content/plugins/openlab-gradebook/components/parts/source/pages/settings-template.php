@@ -22,7 +22,7 @@
                                 <td rowspan="12"><i class="oplb-grdbk-icon oplb-grdbk-icon-left oplb-grdbk-check-mark-2"></i><?php esc_html_e('checked box', 'openlab-gradebook')?></td>
                                 <td>A+</td>
                                 <td>&gt;100</td>
-                                <td>100 / 100 <?php esc_html_e('for checked box', 'openlab-gradebook')?></td>
+                                <td>100 / 100&nbsp;<?php esc_html_e('for checked box', 'openlab-gradebook')?></td>
                             </tr>
                             <tr>
                                 <td>A<br></td>
@@ -83,7 +83,7 @@
                                 <td><i class="oplb-grdbk-icon oplb-grdbk-icon-left oplb-grdbk-square-line"></i><?php esc_html_e('unchecked box', 'openlab-gradebook')?></td>
                                 <td>F</td>
                                 <td>&lt;60</td>
-                                <td>50 for F / 0 <?php esc_html_e('for unchecked box', 'openlab-gradebook')?></td>
+                                <td>50 for F / 0&nbsp;<?php esc_html_e('for unchecked box', 'openlab-gradebook')?></td>
                             </tr>
                             </table>
                         </div>
