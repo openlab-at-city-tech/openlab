@@ -100,6 +100,7 @@ body #main .selected ul li .actions a:link,
 body #main .selected ul li .actions a:visited, 
 body #main .selected ul li .actions a:hover, 
 body #main .selected ul li .actions a:active,
+body h3,
 body #footer p {
 	color: #595959;
 }
