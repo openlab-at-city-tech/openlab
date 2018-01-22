@@ -275,6 +275,12 @@ class Openlab_Clone_Course_Group {
 
 		$dq = new WP_Query( $docs_args );
 
+		// Activity items should default to the setting of the source group.
+		$callback = function( $hide_sitewide ) use ( $source_group ) {
+			return 'public' !== $source_group->status;
+		};
+		add_filter( 'bp_docs_groups_hide_sitewide', $callback );
+
 		if ( $dq->have_posts() ) {
 
 			$source_group_admins = $this->get_source_group_admins();
@@ -329,6 +335,8 @@ class Openlab_Clone_Course_Group {
 				}
 			}
 		}
+
+		remove_filter( 'bp_docs_groups_hide_sitewide', $callback );
 
 		/* 1.4+ */
 		/*
