@@ -207,11 +207,13 @@ class Openlab_Clone_Course_Group {
 	 * - Discussion topics posted by admins (but no replies)
 	 */
 	public function go() {
+		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 		$this->migrate_groupmeta();
 		$this->migrate_avatar();
 		$this->migrate_docs();
 		$this->migrate_files();
 		$this->migrate_topics();
+		add_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 	}
 
 	protected function migrate_groupmeta() {
@@ -564,12 +566,16 @@ class Openlab_Clone_Course_Site {
 	 * 3) Copy admin-authored posts from old blog
 	 */
 	public function go() {
+		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
+
 		$this->create_site();
 
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
 		}
+
+		add_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 	}
 
 	protected function create_site() {
