@@ -74,6 +74,26 @@ function openlab_clone_create_form_catcher() {
 				return;
 			}
 
+			// Set activity item visibility based on newly saved group status.
+			$a = bp_activity_get( array(
+				'show_hidden' => true,
+				'filter' => array(
+					'component' => 'groups',
+					'primary_id' => buddypress()->groups->new_group_id,
+				)
+			) );
+
+			$group = groups_get_group( buddypress()->groups->new_group_id );
+			$hide_sitewide = 'public' !== $group->status;
+
+			foreach ( $a['activities'] as $activity ) {
+				$a_obj = new BP_Activity_Activity( $activity->id );
+				if ( $hide_sitewide != $a_obj->hide_sitewide ) {
+					 $a_obj->hide_sitewide = $hide_sitewide;
+					 $a_obj->save();
+				}
+			}
+
 			break;
 	}
 }
