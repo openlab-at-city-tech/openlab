@@ -24,6 +24,11 @@ add_action('admin_enqueue_scripts', 'openlab_custom_calendar_assets', 999);
  * @return boolean
  */
 function openlab_eo_is_event_detail_screen() {
+
+    if(!function_exists('bpeo_is_action')){
+        return false;
+    }
+
     if (!empty(buddypress()->action_variables) && !bp_is_action_variable('ical') && !bp_is_action_variable('upcoming', 0) && !bpeo_is_action('new') && !bpeo_is_action('edit')) {
         return true;
     } else {
