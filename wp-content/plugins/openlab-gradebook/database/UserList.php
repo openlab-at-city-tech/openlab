@@ -54,44 +54,37 @@ class OPLB_USER_LIST {
 
                 $students_out = array("error" => "no_students");
 
-                //first we need to find the associated group for this site
+                //pass blog id to filter
                 $blog_id = get_current_blog_id();
-                
-                $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
-                $results = $wpdb->get_results($query);
 
-                if (!$results || empty($results)) {
-                    echo json_encode(array("error" => "no_site"));
-                    die();
-                }
-
-                $group_id = intval($results[0]->group_id);
-
-                $member_arg = array(
-                    'group_id' => $group_id,
-                    'exclude_admins_mods' => true,
+                //for now we're going to target 'author' users
+                $args = array(
+                    'role__in' => array('author'),
                 );
 
-                if (bp_group_has_members($member_arg)) :
+                $users = get_users($args);
+
+                if($users && !empty($users)){
 
                     //reset outgoing array
                     $students_out = array();
 
-                    while (bp_group_members()) : bp_group_the_member();
+                    foreach ($users as $user){
 
-                        global $members_template;
-                        $member = $members_template->member;
+                        $this_user = new stdClass;
+                        
+                        $user_meta = $oplb_gradebook_api->oplb_gradebook_get_user_meta($user);
+                        $this_user->first_name = $user_meta['first_name'];
+                        $this_user->last_name = $user_meta['last_name'];
+                        $this_user->user_login = $user->user_login;
 
-                        $user_meta = $oplb_gradebook_api->oplb_gradebook_get_user_meta($member);
-                        $member->first_name = $user_meta['first_name'];
-                        $member->last_name = $user_meta['last_name'];
+                        array_push($students_out, $this_user);
 
-                        array_push($students_out, $member);
+                    }
+                }
 
-                    endwhile;
-
-                endif;
-
+                $students_out = apply_filters('oplb_gradebook_students_list', $students_out, $blog_id);
+                
                 if ($method === 'retrieve') {
                     return $students_out;
                 }

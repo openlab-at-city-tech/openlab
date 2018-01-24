@@ -854,11 +854,11 @@ class oplb_gradebook_api {
      * @return type
      */
     public function oplb_gradebook_get_user_meta($user) {
-
+        
         $first_name_retrieve = get_user_meta($user->ID, 'first_name', true);
         $last_name_retrieve = get_user_meta($user->ID, 'last_name', true);
         $nickname = get_user_meta($user->ID, 'nickname', true);
-
+        
         //this won't always work, but it's worth a shot
         if ($nickname
                 && !empty($nickname)) {

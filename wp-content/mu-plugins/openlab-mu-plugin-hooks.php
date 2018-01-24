@@ -91,3 +91,48 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
 }
 
 add_filter('oplb_gradebook_gradebook_init_placeholder','openlab_oplb_gradebook_gradebook_init_placeholder');
+
+function openlab_oplb_gradebook_students_list($students, $blog_id){
+    global $wpdb, $oplb_gradebook_api;
+
+    $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
+    $results = $wpdb->get_results($query);
+
+    if (!$results || empty($results)) {
+        echo json_encode(array("error" => "no_site"));
+        die();
+    }
+
+    $group_id = intval($results[0]->group_id);
+
+    $member_arg = array(
+        'group_id' => $group_id,
+        'exclude_admins_mods' => true,
+    );
+
+    if (bp_group_has_members($member_arg)) :
+
+        //reset outgoing array
+        $students_out = array();
+
+        while (bp_group_members()) : bp_group_the_member();
+
+            global $members_template;
+            $member = $members_template->member;
+            $this_student = new stdClass;
+
+            $user_meta = $oplb_gradebook_api->oplb_gradebook_get_user_meta($member);
+            $this_student->first_name = $user_meta['first_name'];
+            $this_student->last_name = $user_meta['last_name'];
+            $this_student->user_login = $member->user_login;
+
+            array_push($students_out, $this_student);
+
+        endwhile;
+
+    endif;
+
+    return $students_out;
+}
+
+//add_filter('oplb_gradebook_students_list', 'openlab_oplb_gradebook_students_list', 10, 2);
