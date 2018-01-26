@@ -61,7 +61,7 @@ class gradebook_course_API{
                     die();
                 //for POST requests, the course doesn't exist yet, so we have to do a more generic user check
                 } else if ($params['method'] === 'POST'
-                            && $oplb_gradebook_api->oplb_gradebook_get_user_role() !== 'instructor' ) {
+                            && !$oplb_gradebook_api->oplb_is_gb_administrator()) {
                     echo json_encode(array("status" => "Not Allowed."));
                     die();
                 } else if($params['method'] === 'GET'

@@ -14,13 +14,13 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/Course', 'boo
                     //	_(this).extend(this.options.gradebook_state);     
                     this.course = this.model || null;
                     this.initvals = {};
-
+                    
                     if(options.isInit){
                         this.initvals.name = oplbGradebook.initName
                         this.initvals.goInit = true;
                     } else {
                         this.initvals.name = false;
-                        this.initVals.goInit = false;
+                        this.initvals.goInit = false;
                     }
 
                     console.log('this.course', this.course);
