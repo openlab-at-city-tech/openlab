@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/EditCourseView'],
-        function ($, Backbone, _, EditCourseView) {
+define(['jquery', 'backbone', 'underscore', 'views/EditCourseView', 'views/DeleteGradebookView'],
+        function ($, Backbone, _, EditCourseView, DeleteGradebookView) {
             var CourseView = Backbone.View.extend(
                     /** @lends CourseView.prototype */
                             {
@@ -30,8 +30,7 @@ define(['jquery', 'backbone', 'underscore', 'views/EditCourseView'],
                                 /** Delete course. */
                                 deleteCourse: function (ev) {
                                     ev.preventDefault();
-                                    this.model.set({selected: false});
-                                    this.model.destroy();
+                                    var view = new DeleteGradebookView({model: this.model, gradebook: this.gradebook, course: this.course});
                                 },
                                 /** Edit course. */
                                 editCourse: function () {

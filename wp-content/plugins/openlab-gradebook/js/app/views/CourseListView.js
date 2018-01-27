@@ -1,6 +1,6 @@
 define(['jquery', 'backbone', 'underscore', 'views/EditCourseView', 'views/CourseView'],
-        function ($, Backbone, _, EditCourseView, CourseView) {
-            /**
+function ($, Backbone, _, EditCourseView, CourseView) {
+    /**
              * A module representing a course list view.
              * @exports views/CourseListView
              */
