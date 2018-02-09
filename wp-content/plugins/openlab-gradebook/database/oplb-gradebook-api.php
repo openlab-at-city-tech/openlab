@@ -677,35 +677,64 @@ class oplb_gradebook_api {
      */
     public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login, $return = false) {
         global $wpdb;
-        //$gbid is being passed as string, should be int.
+
         if (!$user_login) {
-            $counter = intval($wpdb->get_var("SELECT MAX(id) FROM {$wpdb->users}")) + 1;
-            $result = wp_insert_user(array(
-                'user_login' => strtolower($first_name[0] . $last_name . $counter),
-                'first_name' => $first_name,
-                'last_name' => $last_name,
-                'user_pass' => 'password'
-            ));
-            if (is_wp_error($result)) {
-                echo $result->get_error_message();
+            if ($return) {
+                return false;
+            }
+
+            echo 'User does not exist';
+            die();
+        }
+
+        $user = get_user_by('login', $user_login);
+
+        if ($user) {
+
+            //if user already exists, we're done
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
+            $check_for_existing_user = $wpdb->get_results($query);
+
+            if ($check_for_existing_user && !empty($check_for_existing_user)) {
+
+                if ($return) {
+                    return false;
+                }
+
+                echo 'User already exists';
                 die();
             }
-            $user_id = $result;
-            $wpdb->update($wpdb->users, array('user_login' => strtolower($first_name[0] . $last_name) . $user_id), array('ID' => $user_id));
+
+            $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
+                'uid' => $user->ID,
+                'gbid' => $gbid,
+                'role' => 'student',
+                'current_grade_average' => 0.00,
+                    ), array(
+                '%d',
+                '%d',
+                '%s',
+                '%f',
+                    )
+            );
 
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
             $assignments = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($assignments as $assignment) {
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'gbid' => $gbid, 'amid' => $assignment['id'],
-                    'uid' => $result, 'assign_order' => $assignment['assign_order']
-                ));
+                    'gbid' => $gbid,
+                    'amid' => $assignment['id'],
+                    'uid' => $user->ID,
+                    'assign_order' => $assignment['assign_order'],
+                        )
+                );
             };
-            $student = get_user_by('id', $user_id);
-            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array('uid' => $student->ID, 'gbid' => $gbid, 'role' => 'student'));
 
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $result, $gbid);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
+            $role = $wpdb->get_results($query, ARRAY_A);
+
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
             usort($cells, build_sorter('assign_order'));
@@ -717,100 +746,28 @@ class oplb_gradebook_api {
                 $cell['gbid'] = intval($cell['gbid']);
                 $cell['id'] = intval($cell['id']);
             }
-            return array(
+
+            $user_meta = $this->oplb_gradebook_get_user_meta($user);
+
+            $student_out = array(
+                'type' => 'single',
                 'student' => array(
-                    'first_name' => $student->first_name,
-                    'last_name' => $student->last_name,
-                    'user_login' => $student->user_login,
-                    'current_grade_average' => 0.00,
+                    'first_name' => $user_meta['first_name'],
+                    'last_name' => $user_meta['last_name'],
+                    'user_login' => $user->user_login,
+                    'current_grade_average' => number_format((float) 0.00, 2, '.', ''),
                     'gbid' => intval($gbid),
-                    'id' => intval($result)
+                    'id' => $user->ID,
+                    'role' => $role[0]['role']
                 ),
                 'cells' => $cells
             );
-        } else {
-            $user = get_user_by('login', $user_login);
 
-            if ($user) {
-
-                //if user already exists, we're done
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
-                $check_for_existing_user = $wpdb->get_results($query);
-
-                if ($check_for_existing_user && !empty($check_for_existing_user)) {
-
-                    if ($return) {
-                        return false;
-                    }
-
-                    echo 'User already exists';
-                    die();
-                }
-
-                $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
-                    'uid' => $user->ID,
-                    'gbid' => $gbid,
-                    'role' => 'student',
-                    'current_grade_average' => 0.00,
-                        ), array(
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%f',
-                        )
-                );
-
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
-                $assignments = $wpdb->get_results($query, ARRAY_A);
-
-                foreach ($assignments as $assignment) {
-                    $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                        'gbid' => $gbid,
-                        'amid' => $assignment['id'],
-                        'uid' => $user->ID,
-                        'assign_order' => $assignment['assign_order'],
-                            )
-                    );
-                };
-
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
-                $role = $wpdb->get_results($query, ARRAY_A);
-
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
-                $cells = $wpdb->get_results($query, ARRAY_A);
-
-                usort($cells, build_sorter('assign_order'));
-                foreach ($cells as &$cell) {
-                    $cell['amid'] = intval($cell['amid']);
-                    $cell['uid'] = intval($cell['uid']);
-                    $cell['assign_order'] = intval($cell['assign_order']);
-                    $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
-                    $cell['gbid'] = intval($cell['gbid']);
-                    $cell['id'] = intval($cell['id']);
-                }
-
-                $user_meta = $this->oplb_gradebook_get_user_meta($user);
-
-                $student_out = array(
-                    'type' => 'single',
-                    'student' => array(
-                        'first_name' => $user_meta['first_name'],
-                        'last_name' => $user_meta['last_name'],
-                        'user_login' => $user->user_login,
-                        'current_grade_average' => number_format((float) 0.00, 2, '.', ''),
-                        'gbid' => intval($gbid),
-                        'id' => $user->ID,
-                        'role' => $role[0]['role']
-                    ),
-                    'cells' => $cells
-                );
-
-                if ($return) {
-                    return $student_out;
-                }
-
-                wp_send_json($student_out);
+            if ($return) {
+                return $student_out;
             }
+
+            wp_send_json($student_out);
         }
     }
 
