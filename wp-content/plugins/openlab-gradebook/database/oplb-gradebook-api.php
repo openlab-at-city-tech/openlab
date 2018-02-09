@@ -336,13 +336,6 @@ class oplb_gradebook_api {
 
         $params['method'] = $method;
 
-        if (isset($params['id'])
-                && !isset($params['gbid'])) {
-            $id = $params['id'];
-            $query = $wpdb->prepare("SELECT gbid FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $id);
-            $params['gbid'] = $wpdb->get_var($query);
-        }
-
         return $params;
     }
 
