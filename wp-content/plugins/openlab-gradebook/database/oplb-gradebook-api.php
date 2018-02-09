@@ -705,7 +705,7 @@ class oplb_gradebook_api {
             $student = get_user_by('id', $user_id);
             $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array('uid' => $student->ID, 'gbid' => $gbid, 'role' => 'student'));
 
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d", $result);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $result, $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
             usort($cells, build_sorter('assign_order'));

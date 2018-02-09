@@ -74,10 +74,10 @@ class gradebook_cell_API{
 	  		case 'PUT' :
 	  			
    				$wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array( 'assign_order'=>$params['assign_order'], 'assign_points_earned' => $params['assign_points_earned']),
-					array( 'uid' => $params['uid'], 'amid' => $params['amid'] )
+					array( 'uid' => $params['uid'], 'amid' => $params['amid'], 'gbid' => $gbid )
    				);   
                                 
-                                $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d", $params['uid'], $params['amid']);
+                                $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
                                 $assign_points_earned = $wpdb->get_row($query , ARRAY_A);
                                 
                                 $current_grade_average = $oplb_gradebook_api->oplb_gradebook_get_current_grade_average($params['uid'], $gbid);

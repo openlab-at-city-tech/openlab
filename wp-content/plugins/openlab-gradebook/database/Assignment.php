@@ -36,8 +36,20 @@ class gradebook_assignment_API {
 
                 $id = $params['id'];
 
-                $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells", array('amid' => $id));
-                $wpdb->delete("{$wpdb->prefix}oplb_gradebook_assignments", array('id' => $id));
+                $wpdb->delete(
+                    "{$wpdb->prefix}oplb_gradebook_cells",
+                    array(
+                        'amid' => $id,
+                        'gbid' => $gbid
+                    )
+                );
+                $wpdb->delete(
+                    "{$wpdb->prefix}oplb_gradebook_assignments",
+                    array(
+                        'id' => $id,
+                        'gbid' => $gbid
+                    )
+                );
 
                 $return_data = array('id' => $id);
 
@@ -55,7 +67,7 @@ class gradebook_assignment_API {
                 break;
             case 'PUT' :
 
-                $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $params['id']);
+                $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $params['id'], $gbid);
                 $current_weight = $wpdb->get_var($query);
                 $incoming_weight = $params['assign_weight'];
 
@@ -69,7 +81,8 @@ class gradebook_assignment_API {
                     'assign_grade_type' => $params['assign_grade_type'],
                     'assign_weight' => $params['assign_weight'],
                         ), array(
-                    'id' => $params['id']
+                    'id' => $params['id'],
+                    'gbid' => $gbid,
                         ), array(
                     '%s',
                     '%s',
@@ -81,24 +94,26 @@ class gradebook_assignment_API {
                     '%f',
                         ), array(
                     '%d',
+                    '%d',
                         )
                 );
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'assign_order' => $params['assign_order']
                         ), array(
-                    'amid' => $params['id']
+                    'amid' => $params['id'],
+                    'gbid' => $gbid,
                         ), array(
                     '%d',
                         ), array(
+                    '%d',
                     '%d',
                         )
                 );
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $params['id']);
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $params['id'], $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
 
                 //get the total weight
                 $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
-
 
                 $assignment['id'] = intval($assignment['id']);
                 $assignment['gbid'] = intval($assignment['gbid']);
@@ -179,7 +194,7 @@ class gradebook_assignment_API {
                             ), array('%d', '%d', '%d', '%d', '%f')
                     );
                 }
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $assignID);
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignID, $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
                 $assignment['assign_order'] = intval($assignment['assign_order']);
                 $assignment['gbid'] = intval($assignment['gbid']);
@@ -196,7 +211,7 @@ class gradebook_assignment_API {
                     $assignment['student_grade_update'] = $student_data;
                 }
                 
-                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $assignID);
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d AND gbid = %d", $assignID, $gbid);
                 $cells = $wpdb->get_results($query, ARRAY_A);
                 foreach ($cells as &$cell) {
                     $cell['amid'] = intval($cell['amid']);
