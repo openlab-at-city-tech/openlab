@@ -6,11 +6,8 @@
         <li class='assign-submenu-stats'><a href='#'><?php esc_html_e('Statistics', 'openlab-gradebook') ?></a></li>
         <li class='assign-submenu-details'><a href='#'><?php esc_html_e('Details', 'openlab-gradebook') ?></a></li>  					
         <?php
-        global $current_user;
-        $x = $current_user->roles;
-        $y = array_keys(get_option('oplb_gradebook_settings'), true);
-        $z = array_intersect($x, $y);
-        if (count($z)) {
+        global $oplb_gradebook_api;
+        if ($oplb_gradebook_api->oplb_is_gb_administrator()) {
             ?>
             <%
             if (min.get('assign_order') != max.get('assign_order')){

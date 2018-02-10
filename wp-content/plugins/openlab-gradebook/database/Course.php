@@ -139,7 +139,7 @@ class gradebook_course_API{
                                 $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", 0, 'instructor');
                                 $init_instructor = $wpdb->get_results($query);
                                 
-                                if ($init_instructor && !empty($init_instructor)) {
+                                if (!empty($init_instructor)) {
                                     
                                     $target_id = $init_instructor[0]->id;
                                     

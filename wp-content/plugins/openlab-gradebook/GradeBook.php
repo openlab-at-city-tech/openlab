@@ -79,6 +79,16 @@ add_action('admin_menu', 'register_oplb_gradebook_menu_page', 10);
 function oplb_gradebook_admin_menu_custom(){
     global $menu, $submenu;
 
+    foreach($menu as &$menu_item){
+
+        if(in_array('oplb_gradebook', $menu_item)){
+
+            $menu_item[2] = 'admin.php?page=oplb_gradebook#courses';
+
+        }
+
+    }
+
     if(!isset($submenu['oplb_gradebook'])){
         return false;
     }
@@ -117,17 +127,6 @@ function enqueue_oplb_gradebook_scripts($hook) {
         //for media functions (to upload CSV files)
         wp_enqueue_media();
         wp_enqueue_script('jquery-ui-datepicker');
-
-        wp_register_script('init_gradebookjs', $app_base . '/init_gradebook.js', array('jquery', 'media-views'), '0.0.3.2', true);
-        wp_enqueue_script('init_gradebookjs');
-        wp_localize_script('init_gradebookjs', 'oplbGradebook', array(
-            'ajaxURL' => admin_url('admin-ajax.php'),
-            'depLocations' => oplb_gradebook_get_dep_locations(),
-            'nonce' => wp_create_nonce('oplb_gradebook'),
-            'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG),
-            'currentYear' => date('Y'),
-            'initName' => oplb_gradebook_gradebook_init_placeholder(),
-        ));
     
         $oplb_gradebook_develop = false;
 
@@ -139,13 +138,23 @@ function enqueue_oplb_gradebook_scripts($hook) {
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.7', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.3.2', true);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.3.3', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
         wp_enqueue_script('requirejs');
+
+        wp_localize_script('requirejs', 'oplbGradebook', array(
+            'ajaxURL' => admin_url('admin-ajax.php'),
+            'depLocations' => oplb_gradebook_get_dep_locations(),
+            'nonce' => wp_create_nonce('oplb_gradebook'),
+            'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG),
+            'currentYear' => date('Y'),
+            'initName' => oplb_gradebook_gradebook_init_placeholder(),
+        ));
+
         wp_localize_script('requirejs', 'require', array(
             'baseUrl' => $app_base,
-            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver=0.0.3.2' : '/oplb-gradebook-app-min.js?ver=0.0.3.2'))
+            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver=0.0.3.3' : '/oplb-gradebook-app-min.js?ver=0.0.3.3'))
         ));
         
     } else {
@@ -230,7 +239,6 @@ function oplb_gradebook_admin_notices() {
     }
 
     if (isset($wp_filter['admin_notices'])
-            && isset($wp_filter['admin_notices']->callbacks)
             && !empty($wp_filter['admin_notices']->callbacks)) {
 
         foreach ($wp_filter['admin_notices']->callbacks as $priority => $callback) {
@@ -322,7 +330,7 @@ function activate_oplb_gradebook() {
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_courses WHERE gbid = %d AND role = %s AND uid = %d", 0, 'instructor', $user->ID);
     $init_instructor = $wpdb->get_results($query);
 
-    if (!$init_instructor || empty($init_instructor)) {
+    if (empty($init_instructor)) {
         $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
             'uid' => $user->ID,
             'gbid' => 0,

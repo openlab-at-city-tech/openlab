@@ -23,7 +23,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
-                    console.log('gradebook init');
+                    console.log('gradebook init', oplbGradebook);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
                     Backbone.pubSub.on('updateWeightInfo', this.updateWeightInfo, this);

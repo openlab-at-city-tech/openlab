@@ -64,7 +64,7 @@ class OPLB_USER_LIST {
 
                 $users = get_users($args);
 
-                if($users && !empty($users)){
+                if(!empty($users)){
 
                     //reset outgoing array
                     $students_out = array();

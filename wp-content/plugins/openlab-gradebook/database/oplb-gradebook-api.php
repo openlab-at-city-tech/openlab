@@ -328,7 +328,7 @@ class oplb_gradebook_api {
             //test for payload
             $incoming = json_decode(file_get_contents('php://input'), true);
 
-            if ($incoming && !empty($incoming)) {
+            if (!empty($incoming)) {
                 $incoming_params = filter_var_array($incoming, $args);
                 $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
             }
@@ -435,7 +435,7 @@ class oplb_gradebook_api {
         $current_grade_average_query = $wpdb->prepare("SELECT current_grade_average FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $uid, $gbid);
         $current_grade_average = $wpdb->get_results($current_grade_average_query);
 
-        if (!$current_grade_average || empty($current_grade_average)) {
+        if (empty($current_grade_average)) {
             $average_out = 0.00;
         }
 
@@ -539,7 +539,7 @@ class oplb_gradebook_api {
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
         $assignments = $wpdb->get_results($query);
 
-        if (!$assignments || empty($assignments)) {
+        if (empty($assignments)) {
             return number_format((float) $average_out, 2, '.', '');
         }
 
@@ -580,7 +580,7 @@ class oplb_gradebook_api {
         $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $gbid, 'student');
         $students = $wpdb->get_results($query);
 
-        if ($students && !empty($students)) {
+        if (!empty($students)) {
 
             $student_data = array();
 
@@ -638,14 +638,13 @@ class oplb_gradebook_api {
         $user = $wpdb->get_row($query, ARRAY_A);
 
         //added boolean check in case of legacy usage of this function
-        if ($bool && !$user || empty($user)) {
+        if ($bool && empty($user)) {
             return false;
         }
 
         $current_grade_average = $this->oplb_gradebook_get_current_grade_average($id, $gbid);
 
         $user_data = get_user_by('id', $id);
-        $user_data->ID;
         $user['id'] = intval($user['id']);
         $user['gbid'] = intval($user['gbid']);
         $user['uid'] = intval($user['uid']);
@@ -688,7 +687,7 @@ class oplb_gradebook_api {
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
             $check_for_existing_user = $wpdb->get_results($query);
 
-            if ($check_for_existing_user && !empty($check_for_existing_user)) {
+            if (!empty($check_for_existing_user)) {
 
                 if ($return) {
                     return false;
@@ -774,7 +773,7 @@ class oplb_gradebook_api {
 
         $group_users = $oplb_user_list->oplb_user_list('retrieve');
 
-        if (!$group_users || empty($group_users)) {
+        if (empty($group_users)) {
             echo json_encode(array("error" => "no_students"));
             die();
         }
@@ -810,8 +809,7 @@ class oplb_gradebook_api {
         $nickname = get_user_meta($user->ID, 'nickname', true);
         
         //this won't always work, but it's worth a shot
-        if ($nickname
-                && !empty($nickname)) {
+        if (!empty($nickname)) {
 
             $nickname_raw = explode(' ', $nickname);
             $count = 0;
@@ -829,26 +827,22 @@ class oplb_gradebook_api {
                 $new_first_name[] = $name_part;
             }
 
-            if (!$first_name_retrieve
-                    || empty($first_name_retrieve)) {
+            if (empty($first_name_retrieve)) {
                 $first_name_retrieve = implode(' ', $new_first_name);
             }
 
-            if (!$last_name_retrieve
-                    || empty($last_name_retrieve)) {
+            if (empty($last_name_retrieve)) {
 
                 $last_name_retrieve = implode(' ', $new_last_name);
             }
         }
 
         //default in case nothing comes back
-        if (!$first_name_retrieve
-                || empty($first_name_retrieve)) {
+        if (empty($first_name_retrieve)) {
             $first_name_retrieve = $user->user_login;
         }
 
-        if (!$last_name_retrieve
-                || empty($last_name_retrieve)) {
+        if (empty($last_name_retrieve)) {
 
             $last_name_retrieve = '';
         }

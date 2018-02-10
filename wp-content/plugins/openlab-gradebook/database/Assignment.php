@@ -27,7 +27,7 @@ class gradebook_assignment_API {
         $wpdb->show_errors();
         
         //trim assignment_category to prevent downstream spacing issues
-        if($params['assign_category'] && !empty($params['assign_category'])){
+        if(!empty($params['assign_category'])){
             $params['assign_category'] = trim($params['assign_category']);
         }
         

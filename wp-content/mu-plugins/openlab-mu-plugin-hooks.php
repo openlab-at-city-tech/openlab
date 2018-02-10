@@ -18,13 +18,11 @@ function openlab_oplb_gradebook_user_meta($user_meta, $user) {
     $bp_first_name = xprofile_get_field_data('First Name', $user->ID);
     $bp_last_name = xprofile_get_field_data('Last Name', $user->ID);
 
-    if ($bp_first_name
-            && !empty($bp_first_name)) {
+    if (!empty($bp_first_name)) {
         $user_meta['first_name'] = $bp_first_name;
     }
 
-    if ($bp_last_name
-            && !empty($bp_last_name)) {
+    if (!empty($bp_last_name)) {
         $user_meta['last_name'] = $bp_last_name;
     }
 
@@ -34,7 +32,6 @@ function openlab_oplb_gradebook_user_meta($user_meta, $user) {
 add_filter('oplb_gradebook_user_meta', 'openlab_oplb_gradebook_user_meta', 10, 2);
 
 function openlab_oplb_gradebook_show_user_widget($status) {
-    global $wpdb;
 
     //only show widget is user is member of group
     $blog_id = get_current_blog_id();
@@ -44,10 +41,6 @@ function openlab_oplb_gradebook_show_user_widget($status) {
     if(!$group_id){
         return false;
     }
-
-    $member_arg = array(
-        'group_id' => $group_id,
-    );
     
     $current_user = wp_get_current_user();
     
@@ -61,7 +54,6 @@ function openlab_oplb_gradebook_show_user_widget($status) {
 add_filter('oplb_gradebook_show_user_widget', 'openlab_oplb_gradebook_show_user_widget', 10);
 
 function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
-    global $wpdb;
 
     $blog_id = get_current_blog_id();
 
@@ -77,7 +69,7 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
         )
     );
 
-    if($this_group && !empty($this_group) && isset($this_group->name)){
+    if(!empty($this_group) && isset($this_group->name)){
         return $this_group->name;
     }
 
@@ -88,7 +80,7 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
 add_filter('oplb_gradebook_gradebook_init_placeholder','openlab_oplb_gradebook_gradebook_init_placeholder');
 
 function openlab_oplb_gradebook_students_list($students, $blog_id){
-    global $wpdb, $oplb_gradebook_api;
+    global $oplb_gradebook_api;
 
     //reset outgoing array
     $students_out = array();
