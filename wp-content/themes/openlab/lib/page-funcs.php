@@ -151,7 +151,7 @@ function cuny_whos_online() {
 
     $rs = wp_cache_get('whos_online', 'openlab');
     if (!$rs) {
-        $sql = "SELECT user_id FROM {$bp->activity->table_name} where component = 'members' AND type ='last_activity' and date_recorded >= DATE_SUB( NOW(), INTERVAL 1 HOUR ) order by date_recorded desc limit 20";
+        $sql = "SELECT user_id FROM {$bp->activity->table_name} where component = 'members' AND type ='last_activity' and date_recorded >= DATE_SUB( NOW(), INTERVAL 1 HOUR ) order by date_recorded desc limit 12";
         $rs = $wpdb->get_col($sql);
         wp_cache_set('whos_online', $rs, 'openlab', 5 * 60);
     }

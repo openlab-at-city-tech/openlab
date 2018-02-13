@@ -41,8 +41,6 @@ get_header();
             <h2 class="title uppercase">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
         </div>
-
-        <?php cuny_home_new_members(); ?>
     </div>
     <div id="home-right" class="col-sm-16">
         <div id="home-group-list-wrapper" class="row">
