@@ -2453,6 +2453,13 @@ add_filter( 'default_option_wpa_image_titles', 'openlab_wpa_return_on' );
 add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
 
 /**
+ * Prevent wp-accessibility from adding its own Log Out link to the toolbar.
+ */
+add_action( 'plugins_loaded', function() {
+	remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
+} );
+
+/**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
