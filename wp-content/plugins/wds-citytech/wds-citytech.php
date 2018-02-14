@@ -2451,3 +2451,16 @@ add_filter( 'default_option_wpa_search', 'openlab_wpa_return_on' );
 add_filter( 'default_option_wpa_tabindex', 'openlab_wpa_return_on' );
 add_filter( 'default_option_wpa_image_titles', 'openlab_wpa_return_on' );
 add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
+
+/**
+ * Force bbPress roles to have the 'read' capability.
+ *
+ * Without 'read', users can't access my-sites.php.
+ */
+add_filter( 'bbp_get_dynamic_roles', function( $roles ) {
+	foreach ( $roles as &$role ) {
+		$role['capabilities']['read'] = true;
+	}
+
+	return $roles;
+} );
