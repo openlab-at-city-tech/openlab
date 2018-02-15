@@ -72,6 +72,7 @@ function openlab_hide_plugins( $plugins ) {
 			'u-buddypress-forum-attachment/u-bp-forum-attachment.php',
 			'wds-buddypress-docs/loader.php',
 			'wds-citytech/wds-citytech.php',
+			'openlab-gradebook/GradeBook.php',
 		);
 
 		foreach ( $plugins as $pkey => $plugin ) {
