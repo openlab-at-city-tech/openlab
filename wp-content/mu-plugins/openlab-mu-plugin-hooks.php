@@ -36,7 +36,7 @@ function openlab_oplb_gradebook_show_user_widget($status) {
     //only show widget is user is member of group
     $blog_id = get_current_blog_id();
 
-    $group_id = openlab_mu_get_group_id_by_blog_id($blog_id);
+    $group_id = openlab_get_group_id_by_blog_id($blog_id);
 
     if(!$group_id){
         return false;
@@ -57,7 +57,7 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
 
     $blog_id = get_current_blog_id();
 
-    $group_id = openlab_mu_get_group_id_by_blog_id($blog_id);
+    $group_id = openlab_get_group_id_by_blog_id($blog_id);
 
     if(!$group_id){
         return false;
@@ -85,7 +85,7 @@ function openlab_oplb_gradebook_students_list($students, $blog_id){
     //reset outgoing array
     $students_out = array();
 
-    $group_id = openlab_mu_get_group_id_by_blog_id($blog_id);
+    $group_id = openlab_get_group_id_by_blog_id($blog_id);
 
     if(!$group_id){
         return $students_out;
@@ -119,26 +119,3 @@ function openlab_oplb_gradebook_students_list($students, $blog_id){
 }
 
 add_filter('oplb_gradebook_students_list', 'openlab_oplb_gradebook_students_list', 10, 2);
-
-function openlab_mu_get_group_id_by_blog_id($blog_id){
-    
-    if(function_exists('openlab_get_group_id_by_blog_id')){
-        $group_id = openlab_get_group_id_by_blog_id($blog_id);
-        
-        if(empty($group_id)){
-            return false;
-        }
-
-    } else {
-        $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
-        $results = $wpdb->get_results($query);
-
-        if (empty($results)) {
-            return false;
-        }
-    
-        $group_id = intval($results[0]->group_id);
-    }
-
-    return $group_id;
-}
