@@ -37,6 +37,7 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-accessibility/wp-accessibility',
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
+		'openlab-gradebook/GradeBook.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -72,7 +73,6 @@ function openlab_hide_plugins( $plugins ) {
 			'u-buddypress-forum-attachment/u-bp-forum-attachment.php',
 			'wds-buddypress-docs/loader.php',
 			'wds-citytech/wds-citytech.php',
-			'openlab-gradebook/GradeBook.php',
 		);
 
 		foreach ( $plugins as $pkey => $plugin ) {
