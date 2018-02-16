@@ -280,3 +280,76 @@ function openlab_bp_group_documents_custom_pagination_links($template) {
 
     return $legacy_pag;
 }
+
+/**
+ * Convert email notifications to BP mail.
+ */
+function openlab_group_documents_email_notification( $document ) {
+	global $bp;
+
+	$user_name = bp_core_get_userlink( bp_loggedin_user_id() );
+	$user_profile_link = bp_core_get_userlink( bp_loggedin_user_id(), false, true );
+	$group_name = $bp->groups->current_group->name;
+	$group_link = bp_get_group_permalink( $bp->groups->current_group );
+	$document_name = $document->name;
+	$document_link = $document->get_url();
+
+	$email_args = array(
+		'tokens' => array(
+			'bpgd.author-name' => $user_name,
+			'bpgd.author-url' => $user_profile_link,
+			'bpgd.file-link' => sprintf( '<a href="%s">%s</a>', $document_link, $document_name ),
+			'bpgd.file-name' => $document_name,
+			'bpgd.file-url' => $document_link,
+			'bpgd.group-name' => $group_name,
+			'bpgd.group-url' => $group_link,
+		),
+	);
+
+	//these will be all the emails getting the update
+	//'user_id' => 'user_email
+	$emails = array();
+
+	//first get the admin & moderator emails
+	if( count( $bp->groups->current_group->admins ) ) {
+		foreach( $bp->groups->current_group->admins as $user ) {
+			if( 'no' == get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
+			$emails[$user->user_id] = $user->user_email;
+		}
+	}
+	if( count( $bp->groups->current_group->mods ) ) {
+		foreach( $bp->groups->current_group->mods as $user ) {
+			if( 'no' == get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) continue;
+			if( !in_array( $user->user_email, $emails ) ) {
+				$emails[$user->user_id] = $user->user_email;
+			}
+		}
+	}
+
+	//now get all member emails, checking to make sure not to send any emails twice
+	$user_ids = BP_Groups_Member::get_group_member_ids( $bp->groups->current_group->id );
+	foreach ( (array)$user_ids as $user_id ) {
+		if ( 'no' == get_user_meta( $user_id, 'notification_group_documents_upload_member' ) ) continue;
+
+		$ud = bp_core_get_core_userdata( $user_id );
+		if( !in_array( $ud->user_email, $emails ) ) {
+			$emails[$user_id] = $ud->user_email;
+		}
+	}
+
+	foreach ( $emails as $current_id => $current_email ) {
+		bp_send_email( 'bpgd_file_uploaded_to_group', $current_id, $email_args );
+	}
+}
+remove_action( 'bp_group_documents_add_success', 'bp_group_documents_email_notification' ,10 );
+add_action( 'bp_group_documents_add_success', 'openlab_group_documents_email_notification', 10 );
+
+/**
+ * Don't send an email notification for new file uploads.
+ */
+add_filter( 'bp_ass_send_activity_notification_for_user', function( $send_it, $activity ) {
+	if ( 'added_group_document' === $activity->type ) {
+		return false;
+	}
+	return $send_it;
+}, 10, 2 );

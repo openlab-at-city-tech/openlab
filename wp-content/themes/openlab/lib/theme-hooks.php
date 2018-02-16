@@ -46,6 +46,7 @@ HTML;
 
             $events = eo_get_events($args);
             $menu_items = openlab_calendar_submenu();
+            $link = eo_get_events_feed();
 
             ob_start();
             include(locate_template('parts/pages/openlab-calendar-upcoming.php'));

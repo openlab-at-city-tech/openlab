@@ -167,9 +167,9 @@ abstract class Tribe__Customizer__Section {
 	 * A way to apply filters when getting the Customizer options
 	 * @return array
 	 */
-	public function get_defaults() {
+	public function get_defaults( $settings = array() ) {
 		// Create Ghost Options
-		return $this->create_ghost_settings( $this->defaults );
+		return $this->create_ghost_settings( wp_parse_args( $settings, $this->defaults ) );
 	}
 
 	/**
@@ -206,7 +206,7 @@ abstract class Tribe__Customizer__Section {
 			return $settings;
 		}
 
-		if ( count( $search ) === 1 ) {
+		if ( is_array( $search ) && count( $search ) === 1 ) {
 			$settings = $this->create_ghost_settings( $settings );
 		} else {
 			$settings[ $this->ID ] = $this->create_ghost_settings( $settings[ $this->ID ] );

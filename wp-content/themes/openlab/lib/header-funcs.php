@@ -1,6 +1,8 @@
 <?php //header related functionality
 
-define('BP_DISABLE_ADMIN_BAR', true);
+if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ){
+    define('BP_DISABLE_ADMIN_BAR', true);
+}
 
 add_action( 'widgets_init', 'cuny_remove_default_widget_areas', 11 );
 function cuny_remove_default_widget_areas() {

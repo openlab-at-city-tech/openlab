@@ -387,6 +387,7 @@ function openlab_my_groups_submenu($group) {
     global $bp;
     $menu_out = array();
     $menu_list = array();
+    $step_name = '';
 
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
