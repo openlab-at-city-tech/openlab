@@ -99,7 +99,7 @@ function bp_xprofile_sanitize_field_options( $field_options = '' ) {
  * @since 2.3.0
  *
  * @param mixed $field_default Field defaults to sanitize.
- * @return mixed
+ * @return array|int
  */
 function bp_xprofile_sanitize_field_default( $field_default = '' ) {
 	if ( is_array( $field_default ) ) {
@@ -168,11 +168,16 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 		return $field_value;
 	}
 
-	// Value might be serialized.
+	// Force reserialization if serialized (avoids mutation, retains integrity)
+	if ( is_serialized( $field_value ) && ( false === $reserialize ) ) {
+		$reserialize = true;
+	}
+
+	// Value might be a serialized array of options.
 	$field_value = maybe_unserialize( $field_value );
 
-	// Filter single value.
-	if ( !is_array( $field_value ) ) {
+	// Sanitize single field value.
+	if ( ! is_array( $field_value ) ) {
 		$kses_field_value     = xprofile_filter_kses( $field_value, $data_obj );
 		$filtered_field_value = wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
 
@@ -187,16 +192,15 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 		 */
 		$filtered_field_value = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_field_value, $field_value, $data_obj );
 
-	// Filter each array item independently.
+	// Sanitize multiple individual option values.
 	} else {
 		$filtered_values = array();
 		foreach ( (array) $field_value as $value ) {
-			$kses_field_value       = xprofile_filter_kses( $value, $data_obj );
-			$filtered_value 	= wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
+			$kses_field_value = xprofile_filter_kses( $value, $data_obj );
+			$filtered_value   = wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
 
 			/** This filter is documented in bp-xprofile/bp-xprofile-filters.php */
 			$filtered_values[] = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_value, $value, $data_obj );
-
 		}
 
 		if ( !empty( $reserialize ) ) {
@@ -216,7 +220,7 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
  *
  * @param string $field_value XProfile field_value to be filtered.
  * @param string $field_type  XProfile field_type to be filtered.
- * @return string $field_value Filtered XProfile field_value. False on failure.
+ * @return false|string $field_value Filtered XProfile field_value. False on failure.
  */
 function xprofile_filter_format_field_value( $field_value, $field_type = '' ) {
 
@@ -336,7 +340,7 @@ function bp_xprofile_escape_field_data( $value, $field_type, $field_id ) {
  *
  * @param string $field_value Profile field data value.
  * @param string $field_type  Profile field type.
- * @return string
+ * @return string|array
  */
 function xprofile_filter_link_profile_data( $field_value, $field_type = 'textbox' ) {
 	global $field;

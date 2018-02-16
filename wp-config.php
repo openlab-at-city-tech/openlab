@@ -23,7 +23,7 @@ if ( !defined( 'DB_NAME' ) ) {
 }
 
 // Version of the OpenLab. Used for asset versioning and cache busting.
-define( 'OL_VERSION', '1.7.16' );
+define( 'OL_VERSION', '1.7.18' );
 
 require __DIR__ . '/db-settings.php';
 

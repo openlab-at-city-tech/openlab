@@ -4,23 +4,23 @@
 
 
 .entry .olMapViewport img{
-  max-width: none !important; 
+  max-width: none !important;
   max-height: none !important;
   vertical-align: none !important;
 }
 
-.OSM_Map img { 
-  max-width: none !important; 
-  max-height: none !important; 
+.OSM_Map img {
+  max-width: none !important;
+  max-height: none !important;
   vertical-align: none;
 }
 
 .olTileImage {
-  max-width: none !important; 
+  max-width: none !important;
   max-height: none !important;
   vertical-align: none !important;
 }
-   
+
 .olControlAttribution {
   bottom: 0 !important;
 }
@@ -54,7 +54,7 @@ display: none !important;
     width:100%;
     display:inline-block;
 }
- 
+
 /*----- metabox tabs Links -----*/
 /* Clearfix */
 .tab-links:after {
@@ -62,14 +62,14 @@ display: none !important;
    clear:both;
    content:'';
 }
- 
+
 .tab-links li {
   margin:0px 5px;
   float:left;
   list-style:none;
   text-decoration:none;
 }
- 
+
 .tab-links a {
   padding:3px 6px;
   display:inline-block;
@@ -78,12 +78,12 @@ display: none !important;
   transition:all linear 0.15s;
   text-decoration:none;
 }
- 
+
 .tab-links a:hover {
   background:#FFFFFF;
   text-decoration:none;
 }
- 
+
 li.active a {
   border: 1px solid #D8D8D8;
   background:#FFFFFF;
@@ -97,41 +97,59 @@ li.active a:hover {
   border-bottom: none;
 }
 
- 
-/*----- Content of metabox tabs -----*/
-.tab-content {
-  margin: -14px 0px 0px 0px; 
-  padding:15px;
-  border-radius:3px;
-  border: 1px solid #D8D8D8;
-  background:#fff;
-}
- 
-.tab {
-  display:none;
-}
 
-.tab.active {
-  display:block;
-}
 
-.tabs select {
-	display:block;
-	margin-bottom:5px;
-}
-/* --- metabox tabs --- */
 
-.osmCheckoxHeadline {
-	display:block;
-}
 
-.osmFileName, .osmFileTitle {
-	width:20em;
-}
+/* --- new metabox --- */
 
-.tab p.notice {
-	border:none;
-	text-decoration:italic;
-	box-shadow:none;
-	color:red;	
-}
+		.osm-tab-container{
+			width: 95%;
+			margin: 0 auto;
+		}
+
+		ul.osm-tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.osm-tabs li{
+			background: none;
+			color: #222;
+			display: inline-block;
+			padding: 2px 5px;
+			cursor: pointer;
+		}
+
+		ul.osm-tabs li.current{
+			background: #fdfdfd;
+			color: #222;
+			border: 1px solid #D8D8D8;
+			border-bottom: none;
+		}
+
+		.tab-content{
+			margin: -7px 0px 0px 0px;
+            padding:15px;
+            border-radius:3px;
+			display: none;
+			background: #fdfdfd;
+			border: 1px solid #D8D8D8;
+		}
+
+		.tab-content.current{
+			display: inherit;
+		}
+
+    /* is used for icon select at metabox */
+    label.metabox-label > input{ /* HIDE RADIO */
+      visibility: hidden; /* Makes input not-clickable */
+      position: absolute; /* Remove input from document flow */
+    }
+    label.metabox-label > input + img{ /* IMAGE STYLES */
+      cursor:pointer;
+      border:2px solid transparent;
+    }
+    label.metabox-label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+      border:2px solid #808080;
+    }

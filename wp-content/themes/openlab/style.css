@@ -8445,6 +8445,29 @@ body form .checkbox-list-container {
   max-width: 90px;
   margin-right: 10px;
 }
+.home-page #stay-up-to-date {
+  padding: 12px 4%;
+}
+.home-page #stay-up-to-date .sidebar-block {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #bbbbbb;
+}
+.home-page #stay-up-to-date .sidebar-block .activity-avatar {
+  max-width: 90px;
+  margin-right: 10px;
+}
+.home-page #stay-up-to-date .sidebar-block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.home-page #stay-up-to-date .up-to-date-site-title {
+  font-weight: 600;
+}
+.home-page #stay-up-to-date .up-to-date-site-description {
+  font-size: 12px;
+}
 .home-page #whos-online h2 {
   padding-left: 5px;
 }
@@ -10227,6 +10250,7 @@ input.help-search {
 }
 @media print {
   .col-sm-18 {
+    float: none !important;
     width: 100%;
   }
 }

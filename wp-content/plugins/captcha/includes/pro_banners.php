@@ -1,7 +1,7 @@
 <?php
 /**
  * Display banners on settings page
- * @package Captcha by BestWebSoft
+ * @package Captcha by mysimplewp
  * @since 4.1.5
  */
 

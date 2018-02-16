@@ -9,6 +9,7 @@ class Mappress_Obj {
 			return;
 
 		$obj_atts = get_object_vars($this);
+		$atts = (array) $atts;
 
 		foreach ($obj_atts as $key => $value ) {
 			$newvalue = (isset($atts[$key])) ? $atts[$key] : null;

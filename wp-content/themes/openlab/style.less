@@ -1464,6 +1464,32 @@ body form{
             }
         }
     }
+    #stay-up-to-date{
+        padding: 12px 4%;
+        .sidebar-block{
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid @30gray;
+            .activity-avatar{
+                max-width: 90px;
+                margin-right: 10px;
+            }
+
+			&:last-child {
+				border-bottom: none;
+				padding-bottom: 0;
+				margin-bottom: 0;
+			}
+        }
+
+		.up-to-date-site-title {
+			font-weight: 600;
+		}
+
+		.up-to-date-site-description {
+			font-size: 12px;
+		}
+    }
     #whos-online{
         h2 {
             padding-left: 5px;
@@ -3177,6 +3203,7 @@ input.help-search {
 }
 @media print {
     .col-sm-18 {
+		float: none !important;
         width: 100%;
     }
 }

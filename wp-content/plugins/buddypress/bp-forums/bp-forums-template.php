@@ -2425,7 +2425,9 @@ function bp_has_forum_topic_posts( $args = '' ) {
 		return false;
 
 	} else {
-		$topic_template = new BP_Forums_Template_Topic( (int) $topic_id, $per_page, $max, $order );
+		if ( empty( $topic_template ) ) {
+			$topic_template = new BP_Forums_Template_Topic( (int) $topic_id, $per_page, $max, $order );
+		}
 
 		// Current topic forum_id needs to match current_group forum_id.
 		if ( bp_is_groups_component() && $topic_template->forum_id != groups_get_groupmeta( bp_get_current_group_id(), 'forum_id' ) )
@@ -2652,7 +2654,7 @@ function bp_the_topic_post_poster_name() {
 		 *
 		 * @param string $value HTML link for the poster's name.
 		 */
-		return apply_filters( 'bp_get_the_topic_post_poster_name', '<a href="' . $link . '" title="' . $topic_template->post->poster_name . '">' . $topic_template->post->poster_name . '</a>' );
+		return apply_filters( 'bp_get_the_topic_post_poster_name', '<a href="' . esc_url( $link ) . '">' . esc_html( $topic_template->post->poster_name ) . '</a>' );
 	}
 
 /**

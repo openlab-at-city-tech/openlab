@@ -31,6 +31,21 @@ class A8C_WPCOM_Masterbar {
 			return;
 		}
 
+		Jetpack::dns_prefetch( array(
+			'//s0.wp.com',
+			'//s1.wp.com',
+			'//s2.wp.com',
+			'//0.gravatar.com',
+			'//1.gravatar.com',
+			'//2.gravatar.com',
+		) );
+
+		// Atomic only - override user setting that hides masterbar from site's front.
+		// https://github.com/Automattic/jetpack/issues/7667
+		if ( jetpack_is_atomic_site() ) {
+			add_filter( 'show_admin_bar', '__return_true' );
+		}
+
 		$this->user_data = Jetpack::get_connected_user_data( $this->user_id );
 		$this->user_login = $this->user_data['login'];
 		$this->user_email = $this->user_data['email'];
@@ -66,10 +81,6 @@ class A8C_WPCOM_Masterbar {
 		}
 
 		add_action( 'wp_logout', array( $this, 'maybe_logout_user_from_wpcom' ) );
-	}
-
-	public function is_automated_transfer_site() {
-		return jetpack_is_automated_transfer_site();
 	}
 
 	public function maybe_logout_user_from_wpcom() {
@@ -121,8 +132,15 @@ class A8C_WPCOM_Masterbar {
 			wp_enqueue_style( 'noticons', $this->wpcom_static_url( '/i/noticons/noticons.css' ), array(), JETPACK__VERSION . '-' . gmdate( 'oW' ) );
 		}
 
-		wp_enqueue_script( 'jetpack-accessible-focus', plugins_url( '_inc/accessible-focus.js', JETPACK__PLUGIN_FILE ), array(), JETPACK__VERSION );
-		wp_enqueue_script( 'a8c_wpcom_masterbar_overrides', $this->wpcom_static_url( '/wp-content/mu-plugins/admin-bar/masterbar-overrides/masterbar.js' ), array(), JETPACK__VERSION );
+		wp_enqueue_script(
+			'jetpack-accessible-focus',
+			Jetpack::get_file_url_for_environment( '_inc/build/accessible-focus.min.js', '_inc/accessible-focus.js' ),
+			array(),
+			JETPACK__VERSION
+		);
+		wp_enqueue_script( 'a8c_wpcom_masterbar_tracks_events', plugins_url( 'tracks-events.js', __FILE__ ), array( 'jquery' ), JETPACK__VERSION );
+
+		wp_enqueue_script( 'a8c_wpcom_masterbar_overrides', $this->wpcom_static_url( '/wp-content/mu-plugins/admin-bar/masterbar-overrides/masterbar.js' ), array( 'jquery' ), JETPACK__VERSION );
 	}
 
 	function wpcom_static_url( $file ) {
@@ -208,7 +226,7 @@ class A8C_WPCOM_Masterbar {
 				           '</span>' .
 				           '</div>' .
 				           '</div>',
-				'class' => 'menupop',
+				'class' => 'menupop mb-trackable',
 			),
 			'parent' => 'top-secondary',
 		) );
@@ -220,6 +238,9 @@ class A8C_WPCOM_Masterbar {
 			'id'    => 'newdash',
 			'title' => esc_html__( 'Reader', 'jetpack' ),
 			'href'  => '#',
+			'meta'  => array(
+				'class' => 'mb-trackable',
+			)
 		) );
 
 		$wp_admin_bar->add_menu( array(
@@ -342,7 +363,7 @@ class A8C_WPCOM_Masterbar {
 		}
 
 		$avatar = get_avatar( $this->user_email, 32, 'mm', '', array( 'force_display' => true ) );
-		$class  = empty( $avatar ) ? '' : 'with-avatar';
+		$class  = empty( $avatar ) ? 'mb-trackable' : 'with-avatar mb-trackable';
 
 		// Add the 'Me' menu
 		$wp_admin_bar->add_menu( array(
@@ -369,7 +390,12 @@ class A8C_WPCOM_Masterbar {
 		$user_info  = get_avatar( $this->user_email, 128, 'mm', '', array( 'force_display' => true ) );
 		$user_info .= '<span class="display-name">' . $this->display_name . '</span>';
 		$user_info .= '<a class="username" href="http://gravatar.com/' . $this->user_login . '">@' . $this->user_login . '</a>';
-		$user_info .= '<form action="' . $logout_url . '" method="post"><button class="ab-sign-out" type="submit">' . esc_html__( 'Sign Out', 'jetpack' ) . '</button></form>';
+
+		$user_info .= sprintf(
+			'<div><a href="%s" class="ab-sign-out">%s</a></div>',
+			$logout_url,
+			esc_html__( 'Sign Out', 'jetpack' )
+		);
 
 		$wp_admin_bar->add_menu( array(
 			'parent' => $id,
@@ -475,7 +501,7 @@ class A8C_WPCOM_Masterbar {
 
 		$help_link = 'https://jetpack.com/support/';
 
-		if ( $this->is_automated_transfer_site() ) {
+		if ( jetpack_is_atomic_site() ) {
 			$help_link = 'https://wordpress.com/help';
 		}
 
@@ -511,6 +537,9 @@ class A8C_WPCOM_Masterbar {
 			'id' => 'ab-new-post',
 			'href' => $blog_post_page,
 			'title' => '<span>' . esc_html__( 'Write', 'jetpack' ) . '</span>',
+			'meta'  => array(
+				'class' => 'mb-trackable',
+			)
 		) );
 	}
 
@@ -532,7 +561,7 @@ class A8C_WPCOM_Masterbar {
 			'title' => _n( 'My Site', 'My Sites', $this->user_site_count, 'jetpack' ),
 			'href'  => '#',
 			'meta'  => array(
-				'class' => 'my-sites',
+				'class' => 'my-sites mb-trackable',
 			),
 		) );
 
@@ -643,9 +672,41 @@ class A8C_WPCOM_Masterbar {
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'publish',
 			'id'     => 'publish-header',
-			'title'  => esc_html_x( 'Publish', 'admin bar menu group label', 'jetpack' ),
+			'title'  => esc_html_x( 'Manage', 'admin bar menu group label', 'jetpack' ),
 			'meta'   => array(
 				'class' => 'ab-submenu-header',
+			),
+		) );
+
+		// Pages
+		$pages_title = $this->create_menu_item_pair(
+			array(
+				'url'   => 'https://wordpress.com/pages/' . esc_attr( $this->primary_site_slug ),
+				'id'    => 'wp-admin-bar-edit-page',
+				'label' => esc_html__( 'Site Pages', 'jetpack' ),
+			),
+			array(
+				'url'   => 'https://wordpress.com/page/' . esc_attr( $this->primary_site_slug ),
+				'id'    => 'wp-admin-bar-new-page-badge',
+				'label' => esc_html_x( 'Add', 'admin bar menu new item label', 'jetpack' ),
+			)
+		);
+
+		if ( ! current_user_can( 'edit_pages' ) ) {
+			$pages_title = $this->create_menu_item_anchor(
+				'ab-item ab-primary mb-icon',
+				'https://wordpress.com/pages/' . esc_attr( $this->primary_site_slug ),
+				esc_html__( 'Site Pages', 'jetpack' ),
+				'wp-admin-bar-edit-page'
+			);
+		}
+
+		$wp_admin_bar->add_menu( array(
+			'parent' => 'publish',
+			'id'     => 'new-page',
+			'title'  => $pages_title,
+			'meta'   => array(
+				'class' => 'inline-action',
 			),
 		) );
 
@@ -658,7 +719,7 @@ class A8C_WPCOM_Masterbar {
 			),
 			array(
 				'url'   => 'https://wordpress.com/post/' . esc_attr( $this->primary_site_slug ),
-				'id'    => 'wp-admin-bar-new-post',
+				'id'    => 'wp-admin-bar-new-post-badge',
 				'label' => esc_html_x( 'Add', 'admin bar menu new item label', 'jetpack' ),
 			)
 		);
@@ -677,41 +738,22 @@ class A8C_WPCOM_Masterbar {
 			'id'     => 'new-post',
 			'title'  => $posts_title,
 			'meta'   => array(
-				'class' => 'inline-action',
+				'class' => 'inline-action mb-trackable',
 			),
 		) );
 
-		// Pages
-		$pages_title = $this->create_menu_item_pair(
-			array(
-				'url'   => 'https://wordpress.com/pages/' . esc_attr( $this->primary_site_slug ),
-				'id'    => 'wp-admin-bar-edit-page',
-				'label' => esc_html__( 'Pages', 'jetpack' ),
-			),
-			array(
-				'url'   => 'https://wordpress.com/page/' . esc_attr( $this->primary_site_slug ),
-				'id'    => 'wp-admin-bar-new-page',
-				'label' => esc_html_x( 'Add', 'admin bar menu new item label', 'jetpack' ),
-			)
-		);
-
-		if ( ! current_user_can( 'edit_pages' ) ) {
-			$pages_title = $this->create_menu_item_anchor(
-				'ab-item ab-primary mb-icon',
-				'https://wordpress.com/pages/' . esc_attr( $this->primary_site_slug ),
-				esc_html__( 'Pages', 'jetpack' ),
-				'wp-admin-bar-edit-page'
-			);
+		// Comments
+		if ( current_user_can( 'moderate_comments' ) ) {
+			$wp_admin_bar->add_menu( array(
+				'parent' => 'publish',
+				'id'     => 'comments',
+				'title'  => __( 'Comments' ),
+				'href'   => 'https://wordpress.com/comments/' . esc_attr( $this->primary_site_slug ),
+				'meta'   => array(
+					'class' => 'mb-icon',
+				),
+			) );
 		}
-
-		$wp_admin_bar->add_menu( array(
-			'parent' => 'publish',
-			'id'     => 'new-page',
-			'title'  => $pages_title,
-			'meta'   => array(
-				'class' => 'inline-action',
-			),
-		) );
 
 		// Testimonials
 		if ( Jetpack::is_module_active( 'custom-content-types' ) && get_option( 'jetpack_testimonial' ) ) {
@@ -891,9 +933,9 @@ class A8C_WPCOM_Masterbar {
 					'label' => esc_html__( 'Plugins', 'jetpack' ),
 				),
 				array(
-					'url'   => 'https://wordpress.com/plugins/browse/' . esc_attr( $this->primary_site_slug ),
+					'url'   => 'https://wordpress.com/plugins/manage/' . esc_attr( $this->primary_site_slug ),
 					'id'    => 'wp-admin-bar-plugins-add',
-					'label' => esc_html_x( 'Add', 'Label for the button on the Masterbar to add a new plugin', 'jetpack' ),
+					'label' => esc_html_x( 'Manage', 'Label for the button on the Masterbar to manage plugins', 'jetpack' ),
 				)
 			);
 
@@ -907,7 +949,7 @@ class A8C_WPCOM_Masterbar {
 				),
 			) );
 
-			if ( $this->is_automated_transfer_site() ) {
+			if ( jetpack_is_atomic_site() ) {
 				$domain_title = $this->create_menu_item_pair(
 					array(
 						'url'   => 'https://wordpress.com/domains/' . esc_attr( $this->primary_site_slug ),
@@ -961,6 +1003,13 @@ class A8C_WPCOM_Masterbar {
 				'href'  => '#',
 				) );
 			}
+
+			/**
+			 * Fires when menu items are added to the masterbar "My Sites" menu.
+			 *
+			 * @since 5.4
+			 */
+			do_action( 'jetpack_masterbar' );
 		}
 	}
 }

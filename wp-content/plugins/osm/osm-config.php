@@ -5,7 +5,7 @@ define ("OSM_enable_Ajax", True);
 // change them for shortcode generatgor & geotagger
 // to your location
 define ("OSM_default_lat", 51.251);
-define ("OSM_default_lon", 7.096);
+define ("OSM_default_lon", 7.077);
 define ("OSM_default_zoom", 15);
 
 // SERVER_EMBEDDED   ... loaded by the plugin for each map (default)
@@ -45,9 +45,11 @@ define ("Osm_OL_LibraryPath", OSM_PLUGIN_URL.'js/OL/2.13.1/');
 define ("Osm_OL_LibraryLocation", OSM_PLUGIN_URL."js/OL/2.13.1/OpenLayers.js");
 
 
-define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/4.0.1/ol.js");
-define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/4.0.1/css/ol.css");
+define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/4.5.0/ol.js");
+define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/4.5.0/css/ol.css");
+define ("Osm_map_CSS", OSM_PLUGIN_URL."css/osm_map.css");
 define ("Osm_OL_3_Ext_LibraryLocation", OSM_PLUGIN_URL."js/osm-v3-plugin-lib.js");
+define ("Osm_OL_3_MetaboxEvents_LibraryLocation", OSM_PLUGIN_URL."js/osm-metabox-events.js");
 define ("Osm_OL_3_Ext_CSS", OSM_PLUGIN_URL."css/osm_map_v3.css");
 
 // OpenSeaMap scripts

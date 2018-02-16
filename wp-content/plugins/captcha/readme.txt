@@ -2,8 +2,8 @@
 Contributors: simplywordpress
 Tags: captcha, capcha, security, spam blocker, simple captcha, antispam, protection, text captcha, captcha numbers, captcha plugin, web form protection, captcha protection
 Requires at least: 3.9
-Tested up to: 4.8.1
-Stable tag: 4.3.6
+Tested up to: 4.9.1
+Stable tag: 4.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,7 +126,7 @@ This captcha can be used for login, registration, password recovery, comments fo
 
 
 
-The Captcha by BestWebSoft plugin displays the CAPTCHA for those comments forms which were written in the same way as comments forms for the standard WordPress themes.
+The Captcha by SimplyWordpress.net plugin displays the CAPTCHA for those comments forms which were written in the same way as comments forms for the standard WordPress themes.
 
 
 
@@ -282,10 +282,14 @@ In case there is no such hook in the comments file of your theme, then, unfortun
 
 
 == Changelog ==
+= V4.4.5 - 12.12.2017 =
+* Update :URL change to fit the t&c of wordpress
+* Update :Rollback of version 4.4.4 to faster version
+* Update :Security issue fixed
 
 = V4.3.6 - 18.09.2017 =
 * Update : Fix last version issues
-* Update : CContact Form7 integration issue with newer version resolve.
+* Update : Contact Form7 integration issue with newer version resolve.
 
 = V4.3.5 - 06.09.2017 =
 * Update : Fix last version issues

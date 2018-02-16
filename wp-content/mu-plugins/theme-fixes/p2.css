@@ -25,3 +25,82 @@
 .search #main .searchform label {
 	display: none;
 }
+/**contrast error fixing**/
+body a, 
+body a:visited, 
+body h1 a:visited, 
+body a:active, 
+body #main .selected .actions a, 
+body #main .selected .actions a:link, 
+body #main .selected .actions a:visited, 
+body #help dt, 
+body #media-buttons .button{
+	color: #1852AF;
+}
+body #header h1 a,
+body #header small{
+	color: #1852AF;
+}
+body .ac_over{
+	background:#1852AF;
+}
+body a.mention-current-user{
+	background:#1852AF;
+}
+body a.mention-current-user:hover{
+	background: #1852AF;
+	border-color: #1852AF;
+}
+body .ui-menu .ui-menu-item a.ui-state-hover{
+	background: #1852AF;
+}
+body .main-navigation li.current-menu-item > a,
+body .main-navigation li.current-menu-ancestor > a,
+body .main-navigation li.current-menu-item:hover > a,
+body .main-navigation li.current-menu-ancestor:hover > a {
+	color: #1852AF;
+}
+body blockquote{
+	color: #595959;
+}
+body #respond p label {
+	color: #595959;
+}
+body .category-quote blockquote p,
+body .format-quote blockquote p {
+	color: #595959;
+}
+body #main span.meta {
+	color: #595959;
+}
+body #sidebar ul {
+	color: #595959;
+}
+body .discussion p {
+	color: #595959 !important;
+}
+body .discussion p a {
+	color: #595959;
+}
+body #main .actions, 
+body #main .actions a, 
+body #main .actions a:link, 
+body #main .actions a:visited, 
+body #main .actions a:hover, 
+body #main .actions a:active,
+body #main .keyselected .actions, 
+body #main .keyselected .actions a, 
+body #main .keyselected .actions a:link, 
+body #main .keyselected .actions a:visited, 
+body #main .keyselected .actions a:hover, 
+body #main .keyselected .actions a:active,
+body #main .selected ul li .actions, 
+body #main .selected ul li .actions a, 
+body #main .selected ul li .actions a:link, 
+body #main .selected ul li .actions a:visited, 
+body #main .selected ul li .actions a:hover, 
+body #main .selected ul li .actions a:active,
+body h3,
+body #footer p {
+	color: #595959;
+}

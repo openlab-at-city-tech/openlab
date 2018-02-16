@@ -387,6 +387,7 @@ function openlab_my_groups_submenu($group) {
     global $bp;
     $menu_out = array();
     $menu_list = array();
+    $step_name = '';
 
     $group_link = $bp->root_domain . '/my-' . $group . 's/';
     $create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group . '&new=true';
@@ -401,23 +402,30 @@ function openlab_my_groups_submenu($group) {
     $submenu_text = 'My ' . ucfirst($group) . 's';
 
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
-    if ($group == "course") {
-
-        //determines if there are any courses - if not, only show "create"
+	$can_create = true;
+	$can_clone = openlab_group_type_can_be_cloned( $group );;
+	if ( 'course' === $group ) {
+        // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
 
-        if (is_super_admin(get_current_user_id()) || $faculty == "Faculty") {
-            //have to add extra conditional in here for submenus on editing pages
+        if ( is_super_admin( get_current_user_id() ) || $faculty == "Faculty" ) {
+			$can_create = true;
+		} else {
+			$can_create = false;
+		}
+	}
+
+	if ( $can_create ) {
+		if ( $can_clone ) {
             $menu_list = array(
-                $create_link => 'Create / Clone a ' . ucfirst($group),
+                $create_link => 'Create / Clone a ' . ucfirst( $group ),
             );
-        }
-    } else {
-        //have to add extra conditional in here for submenus on editing pages
-        $menu_list = array(
-            $create_link => 'Create a ' . ucfirst($group),
-        );
-    }
+		} else {
+			$menu_list = array(
+				$create_link => 'Create a ' . ucfirst($group),
+			);
+		}
+	}
 
     $menu_out['menu'] = openlab_submenu_gen($menu_list);
     $menu_out['submenu_text'] = $submenu_text;
@@ -447,8 +455,8 @@ function openlab_create_group_menu($grouptype) {
             break;
     }
 
-    if ($grouptype == 'course') {
-        $title = 'Create/Clone a Course: ';
+    if ( openlab_group_type_can_be_cloned( $grouptype ) ) {
+        $title = sprintf( 'Create/Clone a %s: ', ucfirst( $grouptype ) );
     } else {
         $title = 'Create a ' . ucfirst($grouptype) . ': ';
     }
@@ -1008,8 +1016,8 @@ function openlab_group_admin_tabs($group = false) {
 
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )             ?>
 
-        <?php if ('course' === openlab_get_group_type(bp_get_current_group_id())) : ?>
-            --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=course&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
+        <?php if ( openlab_group_type_can_be_cloned( $group_type ) ) : ?>
+            --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
         <?php endif ?>
 
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--

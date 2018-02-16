@@ -216,8 +216,10 @@ if ( ! defined( 'BP_AVATAR_FULL_HEIGHT' ) ) {
 function wds_default_theme() {
 	global $wpdb, $blog_id;
 	if ( $blog_id > 1 ) {
-		define( 'BP_DISABLE_ADMIN_BAR', true );
-		$theme = get_option( 'template' );
+		if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ) {
+                    define('BP_DISABLE_ADMIN_BAR', true);
+                }
+        $theme = get_option( 'template' );
 		if ( 'bp-default' === $theme ) {
 			switch_theme( 'twentyten', 'twentyten' );
 			wp_redirect( home_url() );
@@ -981,7 +983,8 @@ function wds_bp_group_meta_save( $group ) {
 		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
 
 			// Associate an existing site
-			groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', (int) $_POST['groupblog-blogid'] );
+			openlab_set_group_site_id( $group->id, (int) $_POST['groupblog-blogid'] );
+
 		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
 
 			// External site
@@ -1131,7 +1134,8 @@ function ra_copy_blog_page( $group_id ) {
 			if ( ! is_wp_error( $id ) ) { //if it dont already exists then move over everything
 				$current_user = get_userdata( bp_loggedin_user_id() );
 
-				groups_update_groupmeta( $group_id, 'wds_bp_group_site_id', $id );
+				openlab_set_group_site_id( $group_id, $new_id );
+
 				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
                   update_user_option( $user_id, 'primary_blog', $id, true ); */
 				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
@@ -1403,13 +1407,17 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 /**
  * No access redirects should happen from wp-login.php
  */
-add_filter( 'bp_no_access_mode', create_function( '', 'return 2;' ) );
+add_filter( 'bp_no_access_mode', function() {
+	return 2;
+} );
 
 /**
  * Don't auto-link items in profiles
  * Hooked to bp_screens so that it gets fired late enough
  */
-add_action( 'bp_screens', create_function( '', "remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );" ) );
+add_action( 'bp_screens', function() {
+	remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
+} );
 
 //Change "Group" to something else
 class buddypress_Translation_Mangler {
@@ -1970,13 +1978,17 @@ add_filter( 'user_has_cap', 'openlab_block_add_new_user', 10, 3 );
  * because of AJAX load order
  */
 function openlab_remove_user_from_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $site_id ) {
+		return;
+	}
 
-	if ( $blog_id ) {
-		remove_user_from_blog( $user_id, $blog_id );
+	if ( $site_id ) {
+		remove_user_from_blog( $user_id, $site_id );
 	}
 }
-
+add_action( 'groups_ban_member', 'openlab_remove_user_from_groupblog', 10, 2 );
+add_action( 'groups_remove_member', 'openlab_remove_user_from_groupblog', 10, 2 );
 add_action( 'groups_leave_group', 'openlab_remove_user_from_groupblog', 10, 2 );
 
 /**
@@ -2326,11 +2338,6 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
 
 /**
- * Disable BP 2.5 rich-text emails.
- */
-add_filter( 'bp_email_use_wp_mail', '__return_true' );
-
-/**
  * Set "From" name in outgoing email to the site name.
  *
  * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
@@ -2354,10 +2361,50 @@ function openlab_email_appearance_settings( $settings ) {
 	$settings['email_bg'] = '#fff';
 	$settings['header_bg'] = '#fff';
 	$settings['footer_bg'] = '#fff';
-	$settings['highlight_color'] = '#ec6348';
+	$settings['highlight_color'] = '#5cd8cd';
 	return $settings;
 }
 add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appearance_settings' );
+
+/**
+ * Add email link styles to rendered email template.
+ *
+ * This is only used when the email content has been merged into the email template.
+ *
+ * @param string $value         Property value.
+ * @param string $property_name Email template property name.
+ * @param string $transform     How the return value was transformed.
+ * @return string Updated value.
+ */
+function openlab_bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
+	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
+		return $value;
+	}
+
+	$settings    = bp_email_get_appearance_settings();
+	$replacement = 'style="color: ' . esc_attr( $settings['body_text_color'] ) . ';';
+
+	// Find all links.
+	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
+	foreach ( $links as $link ) {
+		$new_link = $link = array_shift( $link );
+
+		// Add/modify style property.
+		if ( strpos( $link, 'style="' ) !== false ) {
+			$new_link = str_replace( 'style="', $replacement, $link );
+		} else {
+			$new_link = str_replace( '<a ', "<a {$replacement}\" ", $link );
+		}
+
+		if ( $new_link !== $link ) {
+			$value = str_replace( $link, $new_link, $value );
+		}
+	}
+
+	return $value;
+}
+remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
+add_filter( 'bp_email_get_property', 'openlab_bp_email_add_link_color_to_template', 6, 3 );
 
 /**
  * Group slug blacklist.
@@ -2401,3 +2448,75 @@ function openlab_blacklist_jetpack_modules( $modules ) {
 	return $modules;
 }
 add_filter( 'jetpack_get_available_modules', 'openlab_blacklist_jetpack_modules' );
+
+/**
+ * Disable WP Accessibility toolbar.
+ */
+add_filter( 'option_wpa_toolbar', '__return_empty_string' );
+
+/**
+ * Hide WP Accessibility Toolbar settings.
+ */
+add_action( 'admin_footer', function() {
+	global $pagenow;
+
+	if ( 'options-general.php' !== $pagenow ) {
+		return;
+	}
+
+	if ( empty( $_GET['page'] ) || 'wp-accessibility/wp-accessibility.php' !== $_GET['page'] ) {
+		return;
+	}
+
+	?>
+<script type="text/javascript">
+	jQuery( document ).ready( function() {
+		jQuery( '#wpa_toolbar' ).closest( '.postbox' ).hide();
+	} );
+</script>
+	<?php
+
+} );
+
+function openlab_wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
+	if ( false === strpos( $html, 'alt-missing.png' ) ) {
+		return $html;
+	}
+
+	$url = set_url_scheme( home_url() );
+	$html = str_replace( 'src=\'' . trailingslashit( $url ) . 'wp-content/plugins/wp-accessibility/imgs/alt-missing.png\'', 'src=\'' . trailingslashit( $url ) . 'wp-content/mu-plugins/img/AltTextWarning.png\'', $html );
+	return $html;
+}
+add_filter( 'image_send_to_editor', 'openlab_wpa_alt_attribute', 20, 8 );
+
+/**
+ * Provide a default value for WP Accessibility settings.
+ */
+function openlab_wpa_return_on() {
+	return 'on';
+}
+add_filter( 'default_option_wpa_target', 'openlab_wpa_return_on' );
+add_filter( 'default_option_wpa_search', 'openlab_wpa_return_on' );
+add_filter( 'default_option_wpa_tabindex', 'openlab_wpa_return_on' );
+add_filter( 'default_option_wpa_image_titles', 'openlab_wpa_return_on' );
+add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
+
+/**
+ * Prevent wp-accessibility from adding its own Log Out link to the toolbar.
+ */
+add_action( 'plugins_loaded', function() {
+	remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
+} );
+
+/**
+ * Force bbPress roles to have the 'read' capability.
+ *
+ * Without 'read', users can't access my-sites.php.
+ */
+add_filter( 'bbp_get_dynamic_roles', function( $roles ) {
+	foreach ( $roles as &$role ) {
+		$role['capabilities']['read'] = true;
+	}
+
+	return $roles;
+} );

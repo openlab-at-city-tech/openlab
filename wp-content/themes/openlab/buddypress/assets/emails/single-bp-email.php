@@ -97,6 +97,10 @@ $settings = bp_email_get_appearance_settings();
 			table-layout: auto;
 		}
 
+		body.email_bg a {
+			color: <?php echo esc_html( $settings['body_text_color'] ); ?>;
+		}
+
 		/* What it does: Uses a better rendering method when resizing images in IE. */
 		/* & manages img max widths to ensure content body images don't exceed template width. */
 		img {

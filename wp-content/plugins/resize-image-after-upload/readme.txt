@@ -1,10 +1,10 @@
 === Resize Image After Upload ===
 Contributors: ShortPixel
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TKZHGYG2UCFUQ
+Donate link: https://www.paypal.me/resizeImage
 Tags: image, resize, rescale, bulk resize, bulk rescale, downsize, 
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 1.8.1
+Tested up to: 4.9
+Stable tag: 1.8.3
 
 Automatically resize your images after upload using this plugin. Specify height&width, the plugin will do the rest quickly and transparently.
 
@@ -18,8 +18,6 @@ Imagine that nowadays images can be over 4-5MB and using this plugin you can red
 In addition, the plugin can force re-compression of uploaded JPEG images and convert PNGs to JPEG (if they don't have a transparency layer), regardless of whether they are resized or not.
 
 Is that simple, just give it a try, it is safe and free! :-)
-
-**Keywords:** image, picture, processing, plugin, resize, upload, resizing, optimization, optimize, optimise, optimisation, downsize, imsanity, bulk resize, compress, shrink, picture, performance, fast, images, image files, image quality, image optimizer, jpg optimisation, jpg optimization, jpg resizing, png optimisation, png optimization, png resizing, image cruncher, compress png, compress jpg, compress jpeg, faster, loading times, bandwidth, pics, remove exif, speed up site, speed up website
 
 == Installation ==
 
@@ -44,6 +42,18 @@ Is that simple, just give it a try, it is safe and free! :-)
 1. Full preview of the settings screen.
 
 == Changelog ==
+
+= 1.8.3 =
+
+Release date: 20th December 2017
+
+* [Fix] Skip animated GIFs that GD can't resize.
+
+= 1.8.2 =
+
+Release date: 21th August 2017
+
+* [Fix] Better sanitize post data when saving settings.
 
 = 1.8.1 =
 

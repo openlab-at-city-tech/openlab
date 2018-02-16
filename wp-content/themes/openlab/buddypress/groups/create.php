@@ -21,6 +21,8 @@
         $group_type = 'club';
     }
 
+	$group_type_supports_cloning = openlab_group_type_can_be_cloned( $group_type );
+
     //this function doesn't work - explore for deprecation or fixing
     /* $group_type = openlab_get_current_group_type(); */
 
@@ -34,8 +36,8 @@
     }
 
     $group_id_to_clone = 0;
-    if ('course' === $group_type && !empty($_GET['clone'])) {
-        $group_id_to_clone = intval($_GET['clone']);
+    if ( openlab_group_type_can_be_cloned( $group_type ) && ! empty( $_GET['clone'] ) ) {
+        $group_id_to_clone = intval( $_GET['clone'] );
     }
     ?>
     <h1 class="entry-title mol-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
@@ -62,21 +64,31 @@
 
                     <?php do_action('bp_before_group_details_creation_step'); ?>
 
-                    <?php /* Create vs Clone for Courses */ ?>
-                    <?php if ('course' == $group_type) : ?>
+                    <?php /* Create vs Clone for clonable group types */ ?>
+                    <?php if ( $group_type_supports_cloning ) : ?>
                         <div class="panel panel-default create-or-clone-selector">
                             <div class="panel-heading semibold">Create New or Clone Existing?</div>
                             <div class="panel-body">
-                            <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-2">If you taught the same course in a previous semester or year, cloning can save you time.</p>
+							<?php
+							if ( 'course' === $group_type ) {
+								$clone_tooltip = 'If you taught the same course in a previous semester or year, cloning can save you time.';
+							} else {
+								$clone_tooltip = sprintf( 'You can clone an existing %s to save time.', $group_type );
+							}
+							?>
+                            <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-2"><?php echo $clone_tooltip; ?></p>
 
                             <ul class="create-or-clone-options">
                                 <li class="radio">
                                     <label for="create-or-clone-create"><input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked(!(bool) $group_id_to_clone) ?> />
-                                        Create a New Course</label>
+                                        Create a New <?php echo ucfirst( $group_type ); ?></label>
                                 </li>
 
                                 <?php
-                                //this is to see if the user has an courses under My Courses - if not, the Clone an Existing Course option is disabled
+                                /*
+								 * This is to see if the user has any groups of the appropriate type to clone.
+								 * If not, the option is disabled.
+								 */
                                 $filters['wds_group_type'] = $group_type;
                                 $group_args = array(
                                     'per_page' => 12,
@@ -89,13 +101,13 @@
 
                                 <li class="disable-if-js form-group radio form-inline">
                                     <label for="create-or-clone-clone" <?php echo ($course_num < 1 ? 'class="disabled-opt"' : ''); ?>><input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked((bool) $group_id_to_clone) ?> <?php echo ($course_num < 1 ? 'disabled' : ''); ?> />
-                                        Clone an Existing Course</label>
+                                        Clone an Existing <?php echo ucfirst( $group_type ); ?></label>
 
-                                    <?php $user_groups = openlab_get_courses_owned_by_user(get_current_user_id()) ?>
-                                    
-                                    <label class="sr-only" for="group-to-clone">Choose a Course</label>
+                                    <?php $user_groups = openlab_get_groups_of_type_owned_by_user( get_current_user_id(), $group_type ) ?>
+
+                                    <label class="sr-only" for="group-to-clone">Choose a <?php echo ucfirst( $group_type ); ?></label>
                                     <select class="form-control" id="group-to-clone" name="group-to-clone">
-                                        <option value="" <?php selected($group_id_to_clone, 0) ?>>- choose a course -</option>
+                                        <option value="" <?php selected($group_id_to_clone, 0) ?>>- choose a <?php echo esc_attr( $group_type ); ?> -</option>
 
                                         <?php foreach ($user_groups['groups'] as $user_group) : ?>
                                             <option value="<?php echo esc_attr($user_group->id) ?>" <?php selected($group_id_to_clone, $user_group->id) ?>><?php echo esc_attr($user_group->name) ?></option>
@@ -104,7 +116,7 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics" id="ol-clone-description">Note: The cloned course will copy the course profile, site set-up, and all docs, files, discussions, posts, and pages you've created. Posts and pages will be set to "draft" mode and menus will need to be reactivated. The cloned course will not copy course membership or member-created documents, files, discussions, comments or posts.</p>
+                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. Posts and pages will be set to "draft" mode and menus will need to be reactivated. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
                             </div>
                         </div>
 

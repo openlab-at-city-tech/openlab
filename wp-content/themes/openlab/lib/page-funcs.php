@@ -151,7 +151,7 @@ function cuny_whos_online() {
 
     $rs = wp_cache_get('whos_online', 'openlab');
     if (!$rs) {
-        $sql = "SELECT user_id FROM {$bp->activity->table_name} where component = 'members' AND type ='last_activity' and date_recorded >= DATE_SUB( NOW(), INTERVAL 1 HOUR ) order by date_recorded desc limit 20";
+        $sql = "SELECT user_id FROM {$bp->activity->table_name} where component = 'members' AND type ='last_activity' and date_recorded >= DATE_SUB( NOW(), INTERVAL 1 HOUR ) order by date_recorded desc limit 12";
         $rs = $wpdb->get_col($sql);
         wp_cache_set('whos_online', $rs, 'openlab', 5 * 60);
     }
@@ -193,6 +193,51 @@ function cuny_whos_online() {
         </div>
         <?php
     endif;
+}
+
+function openlab_stay_up_to_date() {
+	$links = array(
+		array(
+			'title' => 'The Open Road',
+			'url' => 'https://openlab.citytech.cuny.edu/groups/the-open-road/',
+			'description' => 'For all things OpenLab: news, workshops, events, community, and support!',
+			'avatar' => 'https://openlab.citytech.cuny.edu/wp-content/uploads/group-avatars/351/2ece6cb872c2ea3a17fd9248e5ff9f8c-bpfull.png',
+		),
+		array(
+			'title' => 'The Buzz',
+			'url' => 'https://openlab.citytech.cuny.edu/groups/the-buzz/',
+			'description' => 'Follow our student bloggers as they post about life at City Tech and beyond!',
+			'avatar' => 'https://openlab.citytech.cuny.edu/wp-content/uploads/group-avatars/2038/70c40887176f540c50463c79c3c8e667-bpfull.jpg',
+		),
+		array(
+			'title' => 'Open Pedagogy on the OpenLab',
+			'url' => 'https://openlab.citytech.cuny.edu/groups/open-pedagogy-on-the-openlab/',
+			'description' => 'Share and discuss resources about open digital pedagogy!',
+			'avatar' => 'https://openlab.citytech.cuny.edu/wp-content/uploads/group-avatars/1705/5a7b192cdc151-bpfull.jpg',
+		),
+	);
+
+	?>
+	<div class="activity-list item-list">
+		<?php foreach ( $links as $link ) : ?>
+			<div class="sidebar-block">
+				<div class="clearfix">
+					<div class="activity-avatar pull-left">
+						<a href="<?php echo esc_url( $link['url'] ); ?>"><img class="img-responsive" src="<?php echo esc_url( $link['avatar'] ); ?>" alt="Avatar of <?php echo esc_attr( $link['title'] ); ?>" /></a>
+					</div>
+
+					<div class="up-to-date-site-title">
+						<a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo $link['title']; ?></a>
+					</div>
+
+					<div class="up-to-date-site-description">
+						<?php echo esc_html( $link['description'] ); ?>
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+	</div>
+	<?php
 }
 
 /**

@@ -1,7 +1,7 @@
 <?php
 /**
  * Contains the functions which are use on plugin admin pages
- * @package Captcha by BestWebSoft
+ * @package Captcha by mysimplewp
  * @since   4.2.3
  */
 
@@ -312,7 +312,7 @@ if ( ! function_exists( 'cptch_get_plugin' ) ) {
 if ( ! function_exists( 'cptch_get_plugin_link' ) ) {
 	function cptch_get_plugin_link( $plugin ) {
 		global $wp_version, $cptch_plugin_info;
-		$bws_link = "https://bestwebsoft.com/products/wordpress/plugins/%1s/?k=%2s&pn=72&v={$cptch_plugin_info["Version"]}&wp_v={$wp_version}/";
+		$bws_link = "#";
 		switch ( $plugin ) {
 			case 'contact-form-plugin/contact_form.php':
 			case 'contact-form-pro/contact_form_pro.php':
@@ -335,7 +335,7 @@ if ( ! function_exists( 'cptch_get_plugin_name' ) ) {
 	function cptch_get_plugin_name( $plugin_slug ) {
 		switch( $plugin_slug ) {
 			case 'bws_contact':
-				return 'Contact Form by BestwebSoft';
+				return 'Contact Form by mysimplewp';
 			default:
 				return 'unknown';
 		}

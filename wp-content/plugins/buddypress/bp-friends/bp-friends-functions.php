@@ -44,8 +44,8 @@ function friends_add_friend( $initiator_userid, $friend_userid, $force_accept = 
 
 	// Setup the friendship data.
 	$friendship = new BP_Friends_Friendship;
-	$friendship->initiator_user_id = $initiator_userid;
-	$friendship->friend_user_id    = $friend_userid;
+	$friendship->initiator_user_id = (int) $initiator_userid;
+	$friendship->friend_user_id    = (int) $friend_userid;
 	$friendship->is_confirmed      = 0;
 	$friendship->is_limited        = 0;
 	$friendship->date_created      = bp_core_current_time();
@@ -348,7 +348,7 @@ function friends_check_user_has_friends( $user_id ) {
  *
  * @param int $initiator_user_id ID of the first user.
  * @param int $friend_user_id    ID of the second user.
- * @return int|bool ID of the friendship if found, otherwise false.
+ * @return int|null ID of the friendship if found, otherwise false.
  */
 function friends_get_friendship_id( $initiator_user_id, $friend_user_id ) {
 	return BP_Friends_Friendship::get_friendship_id( $initiator_user_id, $friend_user_id );
@@ -773,6 +773,12 @@ add_action( 'bp_make_spam_user', 'friends_remove_data' );
  * @see bp_activity_mentions_script()
  */
 function bp_friends_prime_mentions_results() {
+
+	// Stop here if user is not logged in.
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
 	if ( ! bp_activity_maybe_load_mentions_scripts() ) {
 		return;
 	}

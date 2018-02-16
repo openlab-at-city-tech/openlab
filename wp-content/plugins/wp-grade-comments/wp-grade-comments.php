@@ -1,12 +1,13 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.2.0
+Version: 1.3.0
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
 Plugin URI: http://openlab.citytech.cuny.edu
 Text Domain: wp-grade-comments
+Domain Path: /languages
 */
 
 define( 'OLGC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -118,24 +119,51 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 
 	// Grade has its own column on edit-comments.php.
 	$grade = '';
+	$grade_text = '';
 	if ( 'edit-comments.php' !== $pagenow && ( olgc_is_instructor() || olgc_is_author() ) ) {
 		$grade = get_comment_meta( $comment->comment_ID, 'olgc_grade', true );
 		if ( '' !== $grade ) {
-			$text .= sprintf(
-				'<div class="olgc-grade-display olgc-grade-hidden"><span class="olgc-grade-label">%s</span> <a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a><span class="olgc-grade-value-script">%s</span><noscript><span class="olgc-grade-value-noscript">%s</span></noscript><a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a></div>',
+			$grade_text .= sprintf(
+				'<div class="olgc-grade-display olgc-grade-hidden">' .
+				    '<span class="olgc-grade-label">%s</span>&nbsp;' .
+				    '<a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a>' .
+				    '<noscript>' .
+				        '<span class="olgc-grade-value-noscript">%s</span>' .
+				    '</noscript>' .
+				    '<a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a>' .
+				    '<span class="olgc-grade-value-script"><br />%s</span>' .
+				'</div>',
 				esc_html__( 'Grade (Private):', 'wp-grade-comments' ),
 				esc_html__( '(show)', 'wp-grade-comments' ),
 				esc_html( $grade ),
-				esc_html( $grade ),
-				esc_html__( '(hide)', 'wp-grade-comments' )
+				esc_html__( '(hide)', 'wp-grade-comments' ),
+				esc_html( $grade )
 			);
 		}
 	}
 
 	$is_private = get_comment_meta( $comment->comment_ID, 'olgc_is_private', true );
+	$comment_text = $text;
 	if ( $is_private ) {
-		$text = '<strong class="olgc-private-notice">' . __( '(Private)', 'wp-grade-comments' ) . '</strong> ' . $text;
+		$comment_text = sprintf(
+			'<div class="olgc-grade-display olgc-grade-hidden">' .
+			    '<strong class="olgc-private-notice">%s</strong>&nbsp;' .
+			    '<a href="#" class="olgc-show-grade olgc-grade-toggle">%s</a>' .
+			    '<noscript>' .
+			        '<span class="olgc-grade-value-noscript">%s</span>' .
+			    '</noscript>' .
+			    '<a href="#" class="olgc-hide-grade olgc-grade-toggle">%s</a>' .
+			    '<span class="olgc-grade-value-script"><br />%s</span>' .
+			'</div>',
+			esc_html__( 'Comment (Private):', 'wp-grade-comments' ),
+			esc_html__( '(show)', 'wp-grade-comments' ),
+			esc_html( $text ),
+			esc_html__( '(hide)', 'wp-grade-comments' ),
+			esc_html( $text )
+		);
 	}
+
+	$text = $comment_text . $grade_text;
 
 	$gloss = '';
 	if ( '' !== $grade && $is_private ) {

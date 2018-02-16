@@ -10,12 +10,18 @@
 				
 			<h2 class="comments-title">
 			
-				<?php printf( _n( '%s Comment', '%s Comments', count($wp_query->comments_by_type[comment]), 'hemingway' ), count($wp_query->comments_by_type[comment]) ); ?>
+				<?php 
+				$comment_count = count($wp_query->comments_by_type['comment']);
+				printf( _n( '%s Comment', '%s Comments', $comment_count, 'hemingway' ), $comment_count ); 
+				?>
 				
 			</h2>
 	
 			<ol class="commentlist">
-			    <?php wp_list_comments( array( 'type' => 'comment', 'callback' => 'hemingway_comment' ) ); ?>
+			    <?php wp_list_comments( array( 
+					'callback' 	=> 'hemingway_comment',
+					'type' 		=> 'comment', 
+				) ); ?>
 			</ol>
 			
 			<?php if ( ! empty( $comments_by_type['pings'] ) ) : ?>
@@ -26,7 +32,10 @@
 				
 						<h3 class="pingbacks-title">
                         
-                            <?php printf( _n( '%s Pingback', '%s Pingbacks', count($wp_query->comments_by_type[pings]), 'hemingway' ), count($wp_query->comments_by_type[pings]) ); ?>
+							<?php 
+							$pingback_count = count( $wp_query->comments_by_type['pings'] );
+							printf( _n( '%s Pingback', '%s Pingbacks', $pingback_count, 'hemingway' ), $pingback_count ); 
+							?>
 						
 						</h3>
 					
@@ -50,7 +59,7 @@
 					
 					<div class="clear"></div>
 					
-				</div> <!-- /comment-nav-below -->
+				</div><!-- .comment-nav-below -->
 				
 			<?php endif; ?>
 			

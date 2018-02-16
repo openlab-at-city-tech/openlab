@@ -65,6 +65,7 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @return BP_Members_Admin
 	 */
 	public static function register_members_admin() {
 		if ( ! is_admin() ) {
@@ -661,7 +662,7 @@ class BP_Members_Admin {
 	 *
 	 * @param object|null $user   User to create profile navigation for.
 	 * @param string      $active Which profile to highlight.
-	 * @return string
+	 * @return string|null
 	 */
 	public function profile_nav( $user = null, $active = 'WordPress' ) {
 
@@ -679,7 +680,9 @@ class BP_Members_Admin {
 
 		// Conditionally add a referer if it exists in the existing request.
 		if ( ! empty( $_REQUEST['wp_http_referer'] ) ) {
-			$query_args['wp_http_referer'] = urlencode( stripslashes_deep( $_REQUEST['wp_http_referer'] ) );
+			$wp_http_referer = wp_unslash( $_REQUEST['wp_http_referer'] );
+			$wp_http_referer = wp_validate_redirect( esc_url_raw( $wp_http_referer ) );
+			$query_args['wp_http_referer'] = urlencode( $wp_http_referer );
 		}
 
 		// Setup the two distinct "edit" URL's.
@@ -918,7 +921,9 @@ class BP_Members_Admin {
 		$form_action_url = add_query_arg( 'action', 'update', $request_url );
 		$wp_http_referer = false;
 		if ( ! empty( $_REQUEST['wp_http_referer'] ) ) {
-			$wp_http_referer = remove_query_arg( array( 'action', 'updated' ), $_REQUEST['wp_http_referer'] );
+			$wp_http_referer = wp_unslash( $_REQUEST['wp_http_referer'] );
+			$wp_http_referer = remove_query_arg( array( 'action', 'updated' ), $wp_http_referer );
+			$wp_http_referer = wp_validate_redirect( esc_url_raw( $wp_http_referer ) );
 		}
 
 		// Prepare notice for admin.
@@ -1222,7 +1227,7 @@ class BP_Members_Admin {
 	 *
 	 * @param array|string $actions WordPress row actions (edit, delete).
 	 * @param object|null  $user    The object for the user row.
-	 * @return array Merged actions.
+	 * @return null|string|array Merged actions.
 	 */
 	public function row_actions( $actions = '', $user = null ) {
 
@@ -1240,7 +1245,9 @@ class BP_Members_Admin {
 		}
 
 		// Add the referer.
-		$args['wp_http_referer'] = urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+		$wp_http_referer = wp_unslash( $_SERVER['REQUEST_URI'] );
+		$wp_http_referer = wp_validate_redirect( esc_url_raw( $wp_http_referer ) );
+		$args['wp_http_referer'] = urlencode( $wp_http_referer );
 
 		// Add the "Extended" link if the current user can edit this user.
 		if ( current_user_can( 'edit_user', $user->ID ) || bp_current_user_can( 'bp_moderate' ) ) {
@@ -1344,7 +1351,7 @@ class BP_Members_Admin {
 	 * @since 2.0.0
 	 *
 	 * @param WP_User_Query|null $query The users query.
-	 * @return WP_User_Query The users query without the signups.
+	 * @return WP_User_Query|null The users query without the signups.
 	 */
 	public function remove_signups_from_user_query( $query = null ) {
 		global $wpdb;
@@ -1422,7 +1429,7 @@ class BP_Members_Admin {
 	 *
 	 * @param string $class    The name of the class to use.
 	 * @param string $required The parent class.
-	 * @return WP_List_Table The List table.
+	 * @return WP_List_Table|null The List table.
 	 */
 	public static function get_list_table_class( $class = '', $required = '' ) {
 		if ( empty( $class ) ) {
@@ -1958,7 +1965,7 @@ class BP_Members_Admin {
 	 *
 	 * @param string $action Delete, activate, or resend activation link.
 	 *
-	 * @return string
+	 * @return null|false
 	 */
 	public function signups_admin_manage( $action = '' ) {
 		if ( ! current_user_can( $this->capability ) || empty( $action ) ) {

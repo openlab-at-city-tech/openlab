@@ -34,8 +34,8 @@ a, body a {
 	font-size: 1.1rem;
 }
 
-.credits,
-.credits a {
+body.ol-webwork .credits,
+body.ol-webwork .credits a {
 	color: #fff;
 }
 
@@ -60,16 +60,21 @@ a, body a {
 	font-size: 1.1rem;
 }
 
+body.ol-webwork .footer a {
+	color: #fff;
+	text-decoration: underline;
+}
+
 .footer.section.large-padding {
 	padding: 50px 0;
 }
 
-.footer .widget-content {
+body.ol-webwork .footer .widget-content {
 	color: #fff;
 }
 
 body.ol-webwork .oplb-bs a#go-to-top {
-	background-color: #668fcf;
+	background-color: #0044af;
 	color: #fff;
 	font-family: 'OpenSans';
 	font-size: 11pt;

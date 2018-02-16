@@ -18,6 +18,7 @@ function openlab_load_theme_fixes() {
         case 'sliding-door' :
         case 'themorningafter' :
         case 'wu-wei' :
+        case 'twentyseventeen' :
         case 'twentyfifteen':
         case 'twentytwelve':
         case 'twentyeleven':

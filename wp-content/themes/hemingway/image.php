@@ -19,7 +19,7 @@
 							<a href="<?php echo esc_url( $imageArray[0] ); ?>" title="<?php the_title_attribute(); ?>" rel="attachment">
 								<?php echo wp_get_attachment_image( $post->ID, 'post-image' ); ?></a>
 						
-						</div> <!-- /featured-media -->
+						</div><!-- .featured-media -->
 						
 						<div class="post-header">
 						
@@ -35,7 +35,7 @@
 							
 							</div>
 						
-						</div> <!-- /post-header -->
+						</div><!-- .post-header -->
 		
 						<?php if ( ! empty( $post->post_excerpt ) ) : ?>
 						
@@ -43,11 +43,11 @@
 							
 								<?php the_excerpt(); ?>
 								
-							</div> <!-- /post-content -->
+							</div><!-- .post-content -->
 							
 						<?php endif; ?>
 												
-					</div> <!-- /content-inner -->
+					</div><!-- .content-inner -->
 					
 					<div class="post-meta-bottom">
 									
@@ -81,9 +81,9 @@
 						
 							<div class="clear"></div>
 						
-						</div> <!-- /post-nav -->
+						</div><!-- .post-nav -->
 					
-					</div> <!-- /post-meta-bottom -->
+					</div><!-- .post-meta-bottom -->
 					
 					<?php comments_template( '', true ); ?>
 																                        
@@ -93,16 +93,16 @@
 				
 				<?php endif; ?>    
 					
-			</div> <!-- /post -->
+			</div><!-- .post -->
 			
-		</div> <!-- /posts -->
+		</div><!-- .posts -->
 		
-	</div> <!-- /content -->
+	</div><!-- .content -->
 	
 	<?php get_sidebar(); ?>
 	
 	<div class="clear"></div>
 
-</div> <!-- /wrapper section-inner -->
+</div><!-- .wrapper section-inner -->
 		
 <?php get_footer(); ?>

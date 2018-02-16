@@ -226,7 +226,7 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool True on success.
+	 * @return WP_Error|bool True on success.
 	 */
 	public function save() {
 		global $wpdb;
@@ -320,6 +320,7 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.2.0
 	 * @since 2.4.0 Introduced the `$fields` parameter.
+	 * @since 2.9.0 Introduced the `$order_by` parameter.
 	 *
 	 * @see BP_Activity_Activity::get_filter_sql() for a description of the
 	 *      'filter' parameter.
@@ -335,6 +336,7 @@ class BP_Activity_Activity {
 	 *     @type string       $fields            Activity fields to return. Pass 'ids' to get only the activity IDs.
 	 *                                           'all' returns full activity objects.
 	 *     @type string       $sort              ASC or DESC. Default: 'DESC'.
+	 *     @type string       $order_by          Column to order results by.
 	 *     @type array        $exclude           Array of activity IDs to exclude. Default: false.
 	 *     @type array        $in                Array of ids to limit query by (IN). Default: false.
 	 *     @type array        $meta_query        Array of meta_query conditions. See WP_Meta_Query::queries.
@@ -381,24 +383,25 @@ class BP_Activity_Activity {
 
 		$bp = buddypress();
 		$r  = wp_parse_args( $args, array(
-			'page'              => 1,          // The current page.
-			'per_page'          => 25,         // Activity items per page.
-			'max'               => false,      // Max number of items to return.
-			'fields'            => 'all',      // Fields to include.
-			'sort'              => 'DESC',     // ASC or DESC.
-			'exclude'           => false,      // Array of ids to exclude.
-			'in'                => false,      // Array of ids to limit query by (IN).
-			'meta_query'        => false,      // Filter by activitymeta.
-			'date_query'        => false,      // Filter by date.
-			'filter_query'      => false,      // Advanced filtering - see BP_Activity_Query.
-			'filter'            => false,      // See self::get_filter_sql().
-			'scope'             => false,      // Preset activity arguments.
-			'search_terms'      => false,      // Terms to search by.
-			'display_comments'  => false,      // Whether to include activity comments.
-			'show_hidden'       => false,      // Show items marked hide_sitewide.
-			'spam'              => 'ham_only', // Spam status.
-			'update_meta_cache' => true,       // Whether or not to update meta cache.
-			'count_total'       => false,      // Whether or not to use count_total.
+			'page'              => 1,               // The current page.
+			'per_page'          => 25,              // Activity items per page.
+			'max'               => false,           // Max number of items to return.
+			'fields'            => 'all',           // Fields to include.
+			'sort'              => 'DESC',          // ASC or DESC.
+			'order_by'          => 'date_recorded', // Column to order by.
+			'exclude'           => false,           // Array of ids to exclude.
+			'in'                => false,           // Array of ids to limit query by (IN).
+			'meta_query'        => false,           // Filter by activitymeta.
+			'date_query'        => false,           // Filter by date.
+			'filter_query'      => false,           // Advanced filtering - see BP_Activity_Query.
+			'filter'            => false,           // See self::get_filter_sql().
+			'scope'             => false,           // Preset activity arguments.
+			'search_terms'      => false,           // Terms to search by.
+			'display_comments'  => false,           // Whether to include activity comments.
+			'show_hidden'       => false,           // Show items marked hide_sitewide.
+			'spam'              => 'ham_only',      // Spam status.
+			'update_meta_cache' => true,            // Whether or not to update meta cache.
+			'count_total'       => false,           // Whether or not to use count_total.
 		) );
 
 		// Select conditions.
@@ -460,6 +463,29 @@ class BP_Activity_Activity {
 		if ( $sort != 'ASC' && $sort != 'DESC' ) {
 			$sort = 'DESC';
 		}
+
+		switch( $r['order_by'] ) {
+			case 'id' :
+			case 'user_id' :
+			case 'component' :
+			case 'type' :
+			case 'action' :
+			case 'content' :
+			case 'primary_link' :
+			case 'item_id' :
+			case 'secondary_item_id' :
+			case 'date_recorded' :
+			case 'hide_sitewide' :
+			case 'mptt_left' :
+			case 'mptt_right' :
+			case 'is_spam' :
+				break;
+
+			default :
+				$r['order_by'] = 'date_recorded';
+				break;
+		}
+		$order_by = 'a.' . $r['order_by'];
 
 		// Hide Hidden Items?
 		if ( ! $r['show_hidden'] ) {
@@ -544,28 +570,6 @@ class BP_Activity_Activity {
 		 */
 		$join_sql = apply_filters( 'bp_activity_get_join_sql', $join_sql, $r, $select_sql, $from_sql, $where_sql );
 
-		/**
-		 * Filters the preferred order of indexes for activity item.
-		 *
-		 * @since 1.6.0
-		 *
-		 * @param array $value Array of indexes in preferred order.
-		 */
-		$indexes = apply_filters( 'bp_activity_preferred_index_order', array( 'user_id', 'item_id', 'secondary_item_id', 'date_recorded', 'component', 'type', 'hide_sitewide', 'is_spam' ) );
-
-		foreach( $indexes as $key => $index ) {
-			if ( false !== strpos( $where_sql, $index ) ) {
-				$the_index = $index;
-				break; // Take the first one we find.
-			}
-		}
-
-		if ( !empty( $the_index ) ) {
-			$index_hint_sql = "USE INDEX ({$the_index})";
-		} else {
-			$index_hint_sql = '';
-		}
-
 		// Sanitize page and per_page parameters.
 		$page     = absint( $r['page']     );
 		$per_page = absint( $r['per_page'] );
@@ -629,7 +633,7 @@ class BP_Activity_Activity {
 
 		} else {
 			// Query first for activity IDs.
-			$activity_ids_sql = "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY a.date_recorded {$sort}, a.id {$sort}";
+			$activity_ids_sql = "{$select_sql} {$from_sql} {$join_sql} {$where_sql} ORDER BY {$order_by} {$sort}, a.id {$sort}";
 
 			if ( ! empty( $per_page ) && ! empty( $page ) ) {
 				// We query for $per_page + 1 items in order to
@@ -983,7 +987,7 @@ class BP_Activity_Activity {
 	 * @param  mixed $scope  The activity scope. Accepts string or array of scopes.
 	 * @param  array $r      Current activity arguments. Same as those of BP_Activity_Activity::get(),
 	 *                       but merged with defaults.
-	 * @return array 'sql' WHERE SQL string and 'override' activity args.
+	 * @return false|array 'sql' WHERE SQL string and 'override' activity args.
 	 */
 	public static function get_scope_query_sql( $scope = false, $r = array() ) {
 
@@ -1112,7 +1116,7 @@ class BP_Activity_Activity {
 	 * @param string $action            Action to filter by.
 	 * @param string $content           Content to filter by.
 	 * @param string $date_recorded     Date to filter by.
-	 * @return int|bool Activity ID on success, false if none is found.
+	 * @return int|false Activity ID on success, false if none is found.
 	 */
 	public static function get_id( $user_id, $component, $type, $item_id, $secondary_item_id, $action, $content, $date_recorded ) {
 		global $wpdb;
@@ -1693,7 +1697,7 @@ class BP_Activity_Activity {
 	 *
 	 * @param string     $field The database field.
 	 * @param array|bool $items The values for the IN clause, or false when none are found.
-	 * @return string|bool
+	 * @return string|false
 	 */
 	public static function get_in_operator_sql( $field, $items ) {
 		global $wpdb;
@@ -1828,7 +1832,7 @@ class BP_Activity_Activity {
 		// Get activities from user meta.
 		$favorite_activity_entries = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
 		if ( ! empty( $favorite_activity_entries ) ) {
-			return count( maybe_unserialize( $favorite_activity_entries ) );
+			return count( $favorite_activity_entries );
 		}
 
 		// No favorites.
@@ -1841,7 +1845,7 @@ class BP_Activity_Activity {
 	 * @since 1.1.0
 	 *
 	 * @param string $content The content to filter by.
-	 * @return int|bool The ID of the first matching item if found, otherwise false.
+	 * @return int|false The ID of the first matching item if found, otherwise false.
 	 */
 	public static function check_exists_by_content( $content ) {
 		global $wpdb;

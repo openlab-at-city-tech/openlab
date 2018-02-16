@@ -66,7 +66,8 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 			$output .= "<SCRIPT LANGUAGE=\"JavaScript\">\n";
 			$output .= "var ajaxobject;\n";
-			$output .= "function showLinkCat" . $settings . " ( _incomingID, _settingsID, _pagenumber ) {\n";
+			$output .= "if(typeof showLinkCat" . $settings . " !== 'function'){\n";
+			$output .= "window.showLinkCat" . $settings . " = function ( _incomingID, _settingsID, _pagenumber ) {\n";
 			$output .= "if (typeof(ajaxobject) != \"undefined\") { ajaxobject.abort(); }\n";
 
 			$output .= "\tjQuery('#contentLoading" . $settings . "').toggle();" .
@@ -83,6 +84,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				"            jQuery('#linklist" . $settings. "').html( data ); " .
 				"            jQuery('#contentLoading" . $settings . "').toggle();\n" .
 				"            } } ); ";
+			$output .= "}\n";
 			$output .= "}\n";
 
 			$output .= "</SCRIPT>\n\n";

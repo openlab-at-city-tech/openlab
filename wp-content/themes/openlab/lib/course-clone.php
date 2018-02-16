@@ -7,7 +7,7 @@
 /**
  * Get the courses that a user is an admin of
  */
-function openlab_get_courses_owned_by_user( $user_id ) {
+function openlab_get_groups_of_type_owned_by_user( $user_id, $type ) {
 	global $wpdb, $bp;
 
 	// This is pretty hackish, but the alternatives are all hacks too
@@ -19,7 +19,7 @@ function openlab_get_courses_owned_by_user( $user_id ) {
 	}
 
 	// Next, get list of those that are courses
-	$user_course_ids = $wpdb->get_col( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = 'course' AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")" );
+	$user_course_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_group_type' AND meta_value = %s AND group_id IN (" . implode( ',', wp_parse_id_list( $is_admin_of_ids ) ) . ")", $type ) );
 	if ( empty( $user_course_ids ) ) {
 		$user_course_ids = array( 0 );
 	}
@@ -74,6 +74,26 @@ function openlab_clone_create_form_catcher() {
 				return;
 			}
 
+			// Set activity item visibility based on newly saved group status.
+			$a = bp_activity_get( array(
+				'show_hidden' => true,
+				'filter' => array(
+					'component' => 'groups',
+					'primary_id' => buddypress()->groups->new_group_id,
+				)
+			) );
+
+			$group = groups_get_group( buddypress()->groups->new_group_id );
+			$hide_sitewide = 'public' !== $group->status;
+
+			foreach ( $a['activities'] as $activity ) {
+				$a_obj = new BP_Activity_Activity( $activity->id );
+				if ( $hide_sitewide != $a_obj->hide_sitewide ) {
+					 $a_obj->hide_sitewide = $hide_sitewide;
+					 $a_obj->save();
+				}
+			}
+
 			break;
 	}
 }
@@ -117,6 +137,7 @@ function openlab_group_clone_details( $group_id ) {
 		'course_code'            => '',
 		'section_code'           => '',
 		'additional_description' => '',
+		'categories'             => '',
 		'site_id'                => '',
 		'site_url'               => '',
 		'site_path'              => '',
@@ -141,6 +162,11 @@ function openlab_group_clone_details( $group_id ) {
 		$retval['course_code'] = groups_get_groupmeta( $group_id, 'wds_course_code' );
 		$retval['section_code'] = groups_get_groupmeta( $group_id, 'wds_section_code' );
 		$retval['additional_description'] = groups_get_groupmeta( $group_id, 'wds_course_html' );
+
+		$group_categories = bpcgc_get_group_selected_terms( $group_id );
+		if ( ! empty( $group_categories ) ) {
+			$retval['categories'] = array_values( wp_list_pluck( $group_categories, 'term_id' ) );
+		}
 
 		$retval['site_id'] = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 		$retval['site_url'] = get_blog_option( $retval['site_id'], 'home' );
@@ -181,11 +207,13 @@ class Openlab_Clone_Course_Group {
 	 * - Discussion topics posted by admins (but no replies)
 	 */
 	public function go() {
+		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 		$this->migrate_groupmeta();
 		$this->migrate_avatar();
 		$this->migrate_docs();
 		$this->migrate_files();
 		$this->migrate_topics();
+		add_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 	}
 
 	protected function migrate_groupmeta() {
@@ -247,6 +275,12 @@ class Openlab_Clone_Course_Group {
 
 		$dq = new WP_Query( $docs_args );
 
+		// Activity items should default to the setting of the source group.
+		$callback = function( $hide_sitewide ) use ( $source_group ) {
+			return 'public' !== $source_group->status;
+		};
+		add_filter( 'bp_docs_groups_hide_sitewide', $callback );
+
 		if ( $dq->have_posts() ) {
 
 			$source_group_admins = $this->get_source_group_admins();
@@ -301,6 +335,8 @@ class Openlab_Clone_Course_Group {
 				}
 			}
 		}
+
+		remove_filter( 'bp_docs_groups_hide_sitewide', $callback );
 
 		/* 1.4+ */
 		/*
@@ -538,12 +574,16 @@ class Openlab_Clone_Course_Site {
 	 * 3) Copy admin-authored posts from old blog
 	 */
 	public function go() {
+		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
+
 		$this->create_site();
 
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
 		}
+
+		add_action( 'bp_activity_after_save', 'ass_group_notification_activity' , 50 );
 	}
 
 	protected function create_site() {

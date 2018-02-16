@@ -2,8 +2,8 @@
 Contributors: danlester
 Tags: doc, pdf, pdf viewer, office, google, document, embed, intranet
 Requires at least: 3.5
-Tested up to: 4.7
-Stable tag: 3.0.1
+Tested up to: 4.9
+Stable tag: 3.1.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -202,6 +202,28 @@ the Plugins section of your Wordpress admin
 1. Follow the instructions from step 4 above
 
 == Changelog ==
+
+= 3.1.8 =
+
+Updated version of underlying pdf.js library, fixes some rendering bugs.
+
+Recalculates fresh viewer size more often in response to resize events. Previous versions attempted to increase performance by only recalculating viewer size when it had changed, but this missed some required resizing after Javascript-based tabs are clicked.
+
+Fixed some issues with zoom appearance.
+
+Mouse scroll wheel is now more consistent across all browsers (in terms of scroll speed).
+
+When scrollbars are always visible, no longer cuts off edge of PDF underneath.
+
+= 3.1.2 =
+
+Ready for compatibility with WordPress 4.8.
+
+New mouse wheel scrolling in Firefox wasn't working with some themes.
+
+Latest version of pdf.js library, and newest code bringing the free version into line with the premium versions.
+
+Mouse wheel scrolling in Firefox no longer also scrolls the window unless at very top or bottom of page.
 
 = 3.0.1 =
 

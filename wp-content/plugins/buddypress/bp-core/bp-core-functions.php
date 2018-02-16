@@ -488,30 +488,29 @@ function bp_core_get_packaged_component_ids() {
  *                      empty string if the list is not found.
  */
 function bp_core_get_directory_page_ids( $status = 'active' ) {
-	$page_ids = bp_get_option( 'bp-pages' );
+	$page_ids = bp_get_option( 'bp-pages', array() );
 
-	// Ensure that empty indexes are unset. Should only matter in edge cases.
-	if ( !empty( $page_ids ) && is_array( $page_ids ) ) {
-		foreach( (array) $page_ids as $component_name => $page_id ) {
-			if ( empty( $component_name ) || empty( $page_id ) ) {
-				unset( $page_ids[ $component_name ] );
-			}
+	// Loop through pages
+	foreach ( $page_ids as $component_name => $page_id ) {
 
-			// 'register' and 'activate' do not have components, but should be whitelisted.
-			if ( 'register' === $component_name || 'activate' === $component_name ) {
-				continue;
-			}
+		// Ensure that empty indexes are unset. Should only matter in edge cases.
+		if ( empty( $component_name ) || empty( $page_id ) ) {
+			unset( $page_ids[ $component_name ] );
+		}
 
-			// Trashed pages should not appear in results.
-			if ( 'trash' == get_post_status( $page_id ) ) {
-				unset( $page_ids[ $component_name ] );
+		// Trashed pages should never appear in results.
+		if ( 'trash' == get_post_status( $page_id ) ) {
+			unset( $page_ids[ $component_name ] );
+		}
 
-			}
+		// 'register' and 'activate' do not have components, but should be whitelisted.
+		if ( in_array( $component_name, array( 'register', 'activate' ), true ) ) {
+			continue;
+		}
 
-			// Remove inactive component pages, if required.
-			if ( 'active' === $status && ! bp_is_active( $component_name ) ) {
-				unset( $page_ids[ $component_name ] );
-			}
+		// Remove inactive component pages.
+		if ( ( 'active' === $status ) && ! bp_is_active( $component_name ) ) {
+			unset( $page_ids[ $component_name ] );
 		}
 	}
 
@@ -519,10 +518,12 @@ function bp_core_get_directory_page_ids( $status = 'active' ) {
 	 * Filters the list of BP directory pages from the appropriate meta table.
 	 *
 	 * @since 1.5.0
+	 * @since 2.9.0 Add $status parameter
 	 *
-	 * @param array $page_ids Array of directory pages.
+	 * @param array  $page_ids Array of directory pages.
+	 * @param string $status   Page status to limit results to
 	 */
-	return apply_filters( 'bp_core_get_directory_page_ids', $page_ids );
+	return (array) apply_filters( 'bp_core_get_directory_page_ids', $page_ids, $status );
 }
 
 /**
@@ -530,8 +531,8 @@ function bp_core_get_directory_page_ids( $status = 'active' ) {
  *
  * @since 2.6.0
  *
- * @param string $component The slug representing the component. Defaults to the current component.
- * @return int|bool The ID of the directory page associated with the component. False if none is found.
+ * @param string|null $component The slug representing the component. Defaults to the current component.
+ * @return int|false The ID of the directory page associated with the component. False if none is found.
  */
 function bp_core_get_directory_page_id( $component = null ) {
 	if ( ! $component ) {
@@ -662,7 +663,7 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 
 	// Delete any existing pages.
 	if ( 'delete' === $existing ) {
-		foreach ( (array) $pages as $page_id ) {
+		foreach ( $pages as $page_id ) {
 			wp_delete_post( $page_id, true );
 		}
 
@@ -854,7 +855,7 @@ function bp_core_add_root_component( $slug ) {
 
 	// If there was no match, add a page for this root component.
 	if ( empty( $match ) ) {
-		$add_root_items   = $bp->add_root();
+		$add_root_items   = $bp->add_root;
 		$add_root_items[] = $slug;
 		$bp->add_root     = $add_root_items;
 	}
@@ -888,7 +889,7 @@ function bp_core_create_root_component_page() {
 		) );
 	}
 
-	$page_ids = array_merge( (array) $new_page_ids, (array) bp_core_get_directory_page_ids( 'all' ) );
+	$page_ids = array_merge( $new_page_ids, bp_core_get_directory_page_ids( 'all' ) );
 	bp_core_update_directory_page_ids( $page_ids );
 }
 
@@ -912,7 +913,7 @@ function bp_core_add_illegal_names() {
  * @since 2.7.0 The `$component` parameter was made optional, with the current component
  *              as the fallback value.
  *
- * @param string $component Optional. Component name. Defaults to current component.
+ * @param string|null $component Optional. Component name. Defaults to current component.
  * @return string|bool Query argument on success. False on failure.
  */
 function bp_core_get_component_search_query_arg( $component = null ) {
@@ -1329,7 +1330,7 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
  * @since 2.7.0
  *
  * @param string String of date to convert. Timezone should be UTC before using this.
- * @return string
+ * @return string|null
  */
  function bp_core_iso8601_date( $timestamp = '' ) {
 	echo bp_core_get_iso8601_date( $timestamp );
@@ -1488,7 +1489,7 @@ function bp_core_render_message() {
  *
  *       usermeta table.
  *
- * @return bool|null Returns false if there is nothing to do.
+ * @return false|null Returns false if there is nothing to do.
  */
 function bp_core_record_activity() {
 
@@ -1776,7 +1777,7 @@ function bp_use_embed_in_private_messages() {
  * @param string     $content The content to check.
  * @param string|int $type    The type to check. Can also use a bitmask. See the class constants in the
  *                             BP_Media_Extractor class for more info.
- * @return array|bool          If media exists, will return array of media metadata. Else, boolean false.
+ * @return false|array If media exists, will return array of media metadata. Else, boolean false.
  */
 function bp_core_extract_media_from_content( $content = '', $type = 'all' ) {
 	if ( is_string( $type ) ) {

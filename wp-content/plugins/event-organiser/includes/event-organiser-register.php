@@ -32,6 +32,13 @@ function eventorganiser_register_script() {
 		'key'      => eventorganiser_get_google_maps_api_key(),
 		'language' => substr( get_locale(), 0, 2 )
 	), "{$protocal}maps.googleapis.com/maps/api/js");
+
+	/**
+	 * Filters the URL for Google Maps
+	 *
+	 * @param string The URL of Google Maps
+	 */
+	$url = apply_filters( 'eventorganiser_google_maps_url', $url );
 	wp_register_script( 'eo_GoogleMap', $url );
 
 	/* Front-end script */
@@ -71,6 +78,7 @@ function eventorganiser_register_script() {
 			'cat'         => $category ? $category->labels->view_all_items : false,
 			'venue'       => $venue    ? $venue->labels->view_all_items    : false,
 			'tag'         => $tag      ? $tag->labels->view_all_items      : false,
+			'view_all_organisers' => __( 'View all organisers', 'eventorganiser' ),
 			//Allow themes to over-ride juqery ui styling and not use images
 			'nextText' => '>',
 			'prevText' => '<',

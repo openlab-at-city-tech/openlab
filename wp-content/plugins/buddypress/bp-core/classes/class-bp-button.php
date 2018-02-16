@@ -293,11 +293,18 @@ class BP_Button {
 
 			// Always add 'generic-button' class.
 			if ( false === strpos( $r['parent_attr']['class'], 'generic-button' ) ) {
+				if ( ! is_array( $r['parent_attr'] ) ) {
+					$r['parent_attr'] = array();
+				}
 				if ( ! empty( $r['parent_attr']['class'] ) ) {
 					$r['parent_attr']['class'] .= ' ';
 				}
 				$r['parent_attr']['class'] .= 'generic-button';
 			}
+
+			// Set parent element props.
+			$this->parent_element = $r['parent_element'];
+			$this->parent_attr    = $r['parent_attr'];
 
 			// Render parent element attributes.
 			$parent_elem = new BP_Core_HTML_Element( array(

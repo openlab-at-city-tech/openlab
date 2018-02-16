@@ -1,6 +1,8 @@
 <?php //header related functionality
 
-define('BP_DISABLE_ADMIN_BAR', true);
+if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ){
+    define('BP_DISABLE_ADMIN_BAR', true);
+}
 
 add_action( 'widgets_init', 'cuny_remove_default_widget_areas', 11 );
 function cuny_remove_default_widget_areas() {
@@ -56,6 +58,7 @@ function openlab_enqueue_frontend_scripts() {
              ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
 		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
 		wp_localize_script( 'openlab-group-create', 'OLGroupCreate', array(
+			'groupTypeCanBeCloned' => isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ),
 			'schools' => openlab_get_school_list(),
 		) );
 	}

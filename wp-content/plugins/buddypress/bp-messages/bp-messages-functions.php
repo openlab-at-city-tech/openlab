@@ -254,7 +254,10 @@ function messages_send_notice( $subject, $message ) {
 function messages_delete_thread( $thread_ids, $user_id = 0 ) {
 
 	if ( empty( $user_id ) ) {
-		$user_id = bp_loggedin_user_id();
+		$user_id =
+			bp_displayed_user_id() ?
+			bp_displayed_user_id() :
+			bp_loggedin_user_id();
 	}
 
 	/**
@@ -380,10 +383,6 @@ function messages_remove_callback_values() {
  * @return int
  */
 function messages_get_unread_count( $user_id = 0 ) {
-	if ( empty( $user_id ) ) {
-		$user_id = bp_loggedin_user_id();
-	}
-
 	return BP_Messages_Thread::get_inbox_count( $user_id );
 }
 
@@ -413,7 +412,7 @@ function messages_get_message_sender( $message_id ) {
  * Check whether a message thread exists.
  *
  * @param int $thread_id ID of the thread.
- * @return int|null The message thread ID on success, null on failure.
+ * @return false|int|null The message thread ID on success, null on failure.
  */
 function messages_is_valid_thread( $thread_id ) {
 	return BP_Messages_Thread::is_valid( $thread_id );
@@ -603,7 +602,7 @@ function messages_notification_new_message( $raw_args = array() ) {
 			'notification_type' => 'messages-unread',
 		);
 
-		$args = array(
+		bp_send_email( 'messages-unread', $ud, array(
 			'tokens' => array(
 				'usermessage' => wp_strip_all_tags( stripslashes( $message ) ),
 				'message.url' => esc_url( bp_core_get_user_domain( $recipient->user_id ) . bp_get_messages_slug() . '/view/' . $thread_id . '/' ),
@@ -611,8 +610,7 @@ function messages_notification_new_message( $raw_args = array() ) {
 				'usersubject' => sanitize_text_field( stripslashes( $subject ) ),
 				'unsubscribe' => esc_url( bp_email_get_unsubscribe_link( $unsubscribe_args ) ),
 			),
-		);
-		bp_send_email( 'messages-unread', $ud, $args );
+		) );
 	}
 
 	/**

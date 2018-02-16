@@ -19,16 +19,16 @@ module.exports = function (grunt) {
                     separator: ';'
                 },
                 src: [
-                    'wp-content/plugins/buddypress/bp-core/js/confirm.min.js',
-                    'wp-content/plugins/buddypress/bp-core/js/widget-members.min.js',
-                    'wp-content/plugins/buddypress/bp-core/js/jquery-query.min.js',
-                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery-cookie.min.js',
-                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery-scroll-to.min.js',
+                    'wp-content/plugins/buddypress/bp-core/js/confirm.js',
+                    'wp-content/plugins/buddypress/bp-core/js/widget-members.js',
+                    'wp-content/plugins/buddypress/bp-core/js/jquery-query.js',
+                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery-cookie.js',
+                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery-scroll-to.js',
                     'wp-content/plugins/buddypress-group-documents/js/general.js',
                     'wp-content/plugins/buddypress-group-email-subscription/bp-activity-subscription-js.js',
-                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery.caret.min.js',
-                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery.atwho.min.js',
-                    'wp-content/plugins/buddypress/bp-activity/js/mentions.min.js'
+                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery.caret.js',
+                    'wp-content/plugins/buddypress/bp-core/js/vendor/jquery.atwho.js',
+                    'wp-content/plugins/buddypress/bp-activity/js/mentions.js'
                 ],
                 dest: 'wp-content/js/buddypress.js'
             },
@@ -62,8 +62,8 @@ module.exports = function (grunt) {
                     'wp-content/plugins/contact-form-7/includes/css/styles.css',
                     'wp-content/plugins/post-gallery-widget/css/style.css',
                     'wp-content/plugins/cac-featured-content/css/cfcw-default.css',
-                    'wp-content/plugins/buddypress/bp-templates/bp-legacy/css/buddypress.min.css',
-                    'wp-content/plugins/buddypress/bp-activity/css/mentions.min.css',
+                    'wp-content/plugins/buddypress/bp-templates/bp-legacy/css/buddypress.css',
+                    'wp-content/plugins/buddypress/bp-activity/css/mentions.css',
                     'wp-content/plugins/buddypress-group-email-subscription/css/bp-activity-subscription-css.css'
                 ],
                 dest: 'wp-content/css/root-blog-styles.css'

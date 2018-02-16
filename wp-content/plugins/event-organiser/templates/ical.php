@@ -4,7 +4,9 @@ echo "BEGIN:VCALENDAR\r\n";
 echo "VERSION:2.0\r\n";
 echo 'PRODID:-//' . get_bloginfo( 'name' ) . "//NONSGML Events//EN\r\n";
 echo "CALSCALE:GREGORIAN\r\n";
-echo 'X-WR-CALNAME:' . get_bloginfo( 'name' ) . " - Events\r\n";
+if( !is_single() ){
+	echo 'X-WR-CALNAME:' . get_bloginfo( 'name' ) . " - Events\r\n";
+}
 echo 'X-ORIGINAL-URL:' . get_post_type_archive_link( 'event' ) . "\r\n";
 echo 'X-WR-CALDESC:' . get_bloginfo( 'name' ) . " - Events\r\n";
 
@@ -30,11 +32,11 @@ if ( have_posts() ) :
 			continue;
 		}
 
-		$start         = eo_get_the_start( DATETIMEOBJ );
-		$end           = eo_get_the_end( DATETIMEOBJ );
+		$schedule_data = eo_get_event_schedule();
+		$start = $schedule_data['start'];
+		$end = $schedule_data['end'];
 		$created_date  = get_post_time( 'Ymd\THis\Z',true );
 		$modified_date = get_post_modified_time( 'Ymd\THis\Z',true );
-		$schedule_data = eo_get_event_schedule();
 
 		if ( $timezone ) {
 			$earliest_date = $earliest_date ? min( eo_get_schedule_start( DATETIMEOBJ ), $earliest_date ) : eo_get_schedule_start( DATETIMEOBJ );

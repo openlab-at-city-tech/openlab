@@ -26,6 +26,6 @@
 			
 	<?php wp_link_pages(); ?>
 				        
-</div> <!-- /post-content -->
+</div><!-- .post-content -->
             
 <div class="clear"></div>

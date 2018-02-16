@@ -21,16 +21,21 @@ jQuery(document).ready(function ($) {
 
 		var notice         = ('undefined' !== typeof showNotice) ? showNotice : false,
 		    $parent        = $('.media-frame-toolbar .media-toolbar-primary'),
-		    selectedImages = $('.selection-view ul.attachments li'),
+		    selectedImages = $('.media-frame-content ul.attachments li[aria-checked="true"]'),
 		    canProceed     = true,
 		    badImages      = [];
 
-		if (0 === selectedImages.length) {
+		// Clear all the marked ones first.
+		$('.ufh-needs-alt-text').each(function (idx, li) {
+			$(li).removeClass('ufh-needs-alt-text');
+		});
+
+		if (0 === selectedImages.length) { // This is seen in some modals.
 
 			var $image = $('.attachment-details').attr('data-id'),
 			    altText;
 
-			// Handle image uploads if there is a multi-select box (normal image insertion.
+			// Handle image uploads if there is a multi-select box (normal image insertion).
 			if ('undefined' !== typeof $image) {
 
 				var image = wp.media.model.Attachment.get($image);
@@ -54,7 +59,8 @@ jQuery(document).ready(function ($) {
 				}
 			}
 
-			if ('undefined' !== typeof altText && altText.length && 0 < altText.length) {
+			// If we don't have an alt text field or don't even have a media form we're OK.
+			if (0 === $('.media-sidebar.visible').length || ( altText.length && 0 < altText.length )) {
 
 				$parent.addClass('ufh-has-alt-text');
 
@@ -71,7 +77,7 @@ jQuery(document).ready(function ($) {
 
 			return false;
 
-		} else {
+		} else { // We've selected one or more in a normal box.
 
 			selectedImages.each(function (idx, li) {
 
@@ -80,19 +86,22 @@ jQuery(document).ready(function ($) {
 				    image   = wp.media.model.Attachment.get(imageId),
 				    altText = image.get('alt');
 
-				if (('undefined' !== typeof altText && altText.length) || 'image' !== image.get('type')) {
+				if ('undefined' !== typeof imageId) { // It's not actually an image or even an uploaded item.
 
-					$parent.addClass('ufh-has-alt-text');
-					$image.removeClass('ufh-needs-alt-text');
+					if (altText.length || 'image' !== image.get('type')) { //looks like we're OK on this one.
 
-				} else {
+						$parent.addClass('ufh-has-alt-text');
+						$image.removeClass('ufh-needs-alt-text');
 
-					$image.addClass('ufh-needs-alt-text');
+					} else { // Mark it 0 dude.
 
-					badImages.push(image.get('title'));
+						$image.addClass('ufh-needs-alt-text');
 
-					canProceed = false;
+						badImages.push(image.get('title'));
 
+						canProceed = false;
+
+					}
 				}
 			});
 

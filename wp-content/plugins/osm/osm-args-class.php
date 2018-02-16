@@ -51,6 +51,7 @@ class cOsm_arguments
     private $tagged_cluster = "false";
     private $tagged_border_color = "[0, 0, 255, 0.5]";
     private $tagged_inner_color = "[0, 0, 255, 0.5]";
+	private $map_event = 'no';
     
    private function setMarkersize($a_marker_size){
       if ($a_marker_size == "no"){
@@ -202,8 +203,11 @@ private function setMapAPIkey($a_map_api_key){
   $this->map_api_key = $a_map_api_key;
 }
 
+public function setMap_event($a_map_event){
+  $this->map_event = $a_map_event;  
+}
 
-  function __construct($a_width, $a_height, $a_map_center, $zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, 
+  function __construct($a_width, $a_height, $a_map_center, $zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, $a_map_event, 
     $marker_name, $a_marker_size, $control, $wms_address, $wms_param, $wms_attr_name,  $wms_type, $wms_attr_url, 
     $tagged_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color){
         
@@ -217,6 +221,7 @@ private function setMapAPIkey($a_map_api_key){
     $this->setTaggedColor($a_tagged_color);
 	$this->setMapAPIkey($a_map_api_key);
 	$this->setMapType($a_type); // needs to be done after setMapAPIkey
+	$this->setMap_event($a_map_event);
 }
 
 public function getPostMarkers(){
@@ -280,5 +285,8 @@ public function getTaggedInnerColor(){
     return $this->tagged_inner_color;  
 }
 
+public function getMap_event(){
+    return $this->map_event;  
+}
 }
 ?>

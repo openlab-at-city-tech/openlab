@@ -88,6 +88,13 @@ function openlab_current_group_type( $case = 'lower' ) {
 	}
 
 /**
+ * Can a given group type be cloned?
+ */
+function openlab_group_type_can_be_cloned( $group_type ) {
+	return in_array( $group_type, array( 'course', 'project' ) );
+}
+
+/**
  * Get a printable label for a group or group type
  */
 function openlab_get_group_type_label( $args = array() ) {
@@ -367,12 +374,18 @@ function openlab_course_faculty_metabox() {
 
 	$addl_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
 	$addl_faculty_data = array();
-	foreach ( $addl_faculty as $fid ) {
-		$f = new WP_User( $fid );
-		$addl_faculty_data[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
-			'value' => esc_attr( $f->user_nicename ),
-		);
+
+	if(!empty($addl_faculty)){
+		foreach ( $addl_faculty as $fid ) {
+			$f = new WP_User( $fid );
+			$addl_faculty_data[] = array(
+				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
+				'value' => esc_attr( $f->user_nicename ),
+			);
+		}
+	} else {
+		//if no additional faculty, provide to view as empty array
+		$addl_faculty = array();
 	}
 
 	?>
@@ -544,6 +557,7 @@ function openlab_group_contact_field() {
 
 	$existing_contacts = array();
 	if ( bp_is_group_create() ) {
+		$group_id = 0;
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
 		$group_id = bp_get_current_group_id();

@@ -1,0 +1,463 @@
+@import 'css/vendor.css';
+@font-face {
+  font-family: "openlab-gradebook";
+  src: url("fonts/openlab-gradebook.eot");
+  src: url("fonts/openlab-gradebook.eot?#iefix") format("embedded-opentype"), url("fonts/openlab-gradebook.woff") format("woff"), url("fonts/openlab-gradebook.ttf") format("truetype"), url("fonts/openlab-gradebook.svg#openlab-gradebook") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+[data-icon]:before {
+  font-family: "openlab-gradebook" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[class^="oplb-grdbk-"]:before,
+[class*=" oplb-grdbk-"]:before {
+  font-family: "openlab-gradebook" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.oplb-grdbk-check-mark-2:before {
+  content: "\61";
+}
+.oplb-grdbk-square-line:before {
+  content: "\62";
+}
+.oplb-grdbk-icon {
+  font-size: 26px;
+  vertical-align: middle;
+}
+.oplb-grdbk-icon.oplb-grdbk-icon-left {
+  margin-right: 5px;
+}
+.grades-table-wrapper {
+  max-width: 100%;
+  overflow: auto;
+}
+.grades-table-wrapper #gradesTable {
+  min-width: 430px;
+}
+#loading-students-container {
+  display: absolute;
+}
+.modal-body {
+  overflow: auto;
+}
+.modal-body .grade-type {
+  margin-bottom: 30px;
+}
+.modal-body #edit-student-form .student-add-wrapper #addSingleStudent {
+  overflow-y: hidden;
+  max-height: 28px;
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+@media (max-width: 767px) {
+  .modal-body #edit-student-form .student-add-wrapper #addSingleStudent {
+    max-height: 54px;
+  }
+}
+.modal-body #edit-student-form .student-add-wrapper.add-all #addSingleStudent {
+  margin-bottom: 0;
+  max-height: 0;
+}
+.modal-body #edit-student-form p {
+  width: 96%;
+  margin: 0 auto 10px;
+  max-width: 384px;
+}
+@media (max-width: 767px) {
+  .modal-body #edit-student-form .radio {
+    text-align: center;
+  }
+}
+.upload-csv-modal .attachment-info .delete-attachment {
+  display: none;
+}
+.upload-csv-modal .setting,
+.upload-csv-modal .attachment-display-settings {
+  display: none;
+}
+h5 {
+  font-weight: 600;
+}
+.weight-message p {
+  margin: 0 0 0 10px;
+}
+.weight-message p .text-warning {
+  font-style: italic;
+}
+/* Chart stylings */
+.labeled-chart-container {
+  min-height: 200px;
+  position: relative;
+}
+.pie-legend,
+.line-legend {
+  list-style: none;
+  position: absolute;
+  right: 8px;
+  top: 0;
+}
+.pie-legend li span,
+.line-legend li span {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  border-radius: 5px;
+}
+.pie-legend li,
+.line-legend li {
+  display: block;
+  padding-left: 30px;
+  position: relative;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  padding: 2px 8px 2px 28px;
+  font-size: 14px;
+  cursor: default;
+  -webkit-transition: background-color 200ms ease-in-out;
+  -moz-transition: background-color 200ms ease-in-out;
+  -o-transition: background-color 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out;
+}
+/*  Gradebook styles */
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus {
+  border: none;
+  outline: none;
+}
+[contenteditable="true"]:focus {
+  background-color: #fff;
+  border: 3px solid #2ea2cc;
+}
+.cell {
+  text-align: right;
+  cursor: pointer;
+}
+.modal {
+  z-index: 999999;
+}
+.table {
+  background-color: white;
+}
+#adminmenuback {
+  z-index: 1;
+}
+body {
+  background-color: #f1f1f1;
+}
+body.admin_page_oplb-gradebook-upload-csv .oplb-bs.navbar-location-oplb-bs,
+body.admin_page_oplb-gradebook-upload-csv #wpadminbar,
+body.admin_page_oplb-gradebook-upload-csv #adminmenumain,
+body.admin_page_oplb-gradebook-upload-csv #wpfooter,
+body.admin_page_oplb-gradebook-upload-csv #local-env-flag {
+  display: none !important;
+}
+body.admin_page_oplb-gradebook-upload-csv #wpcontent {
+  padding-top: 21px !important;
+}
+body .overline {
+  text-decoration: overline;
+}
+@media (max-width: 767px) {
+  body .radio input[type="radio"] {
+    position: relative;
+  }
+}
+body .dashicons.dashicons-spinning {
+  -webkit-animation: spin 1000ms infinite linear;
+  animation: spin 1000ms infinite linear;
+}
+.student-tools,
+.assignment-tools {
+  overflow: visible;
+}
+#chart-container {
+  text-align: center;
+}
+[class^="course-column-"] {
+  cursor: pointer;
+}
+td {
+  cursor: default;
+}
+#chart_div {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#oplb-gradebooks #courses-interface-buttons-container {
+  text-align: center;
+}
+#oplb-gradebook #gradebook-interface-buttons-container {
+  text-align: center;
+}
+#oplb-gradebook #gradebook-interface-buttons-container li {
+  display: inline-block;
+}
+#oplb-gradebook button {
+  display: inline-block;
+}
+.students .selected td,
+.students .selected th,
+.students .selected,
+#courses .selected td {
+  background-color: #f7fcfe;
+}
+.students-header tr th {
+  cursor: default;
+}
+.students-header .btn-group {
+  max-width: 100%;
+}
+.students-header .btn-group .btn {
+  max-width: 100%;
+}
+.students-header .btn-group .btn .name {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  display: block;
+  padding-right: 12px;
+  text-overflow: ellipsis;
+}
+.students-header .btn-group .btn .name .caret {
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+.students-header .btn-group .dropdown-menu {
+  position: absolute;
+  top: auto;
+  left: auto;
+  margin-top: 35px;
+}
+.students .btn-group .dropdown-menu {
+  position: absolute;
+  top: auto;
+  left: auto;
+  margin-top: 35px;
+}
+#courses tr.selected > td:first-child {
+  background-color: #f7fcfe;
+  border-left: 4px solid #2ea2cc;
+}
+.students tr.selected > td:first-child {
+  background-color: #f7fcfe;
+  border-left: 4px solid #2ea2cc;
+}
+.students-header .hover {
+  background-color: #f7fcfe;
+}
+.students td.hover {
+  background-color: #f7fcfe;
+}
+#courses tr:hover {
+  background-color: #f7fcfe !important;
+}
+.students tr:hover {
+  background-color: #f7fcfe !important;
+}
+.students td.editing .view {
+  display: none;
+}
+.students td .view {
+  width: inherit;
+  text-align: right;
+  padding: 0;
+  border: none;
+  margin: inherit;
+  display: block;
+}
+.students-header .column-title {
+  display: inline-block;
+  cursor: default;
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  width: 60%;
+}
+.students td .edit {
+  display: none;
+}
+.students td.editing .edit {
+  padding: 0;
+  text-align: right;
+  display: block;
+}
+/* typeahead-BS 
+*/
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  display: none;
+  margin-bottom: 0;
+}
+span.twitter-typeahead {
+  width: 100%;
+}
+.tt-hint {
+  display: block;
+  width: 100%;
+  height: 38px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #999;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.tt-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+.tt-suggestion:hover {
+  color: #fff;
+  background-color: #428bca;
+}
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+.tt-suggestion p {
+  margin: 0;
+}
+/**pinned table**/
+.table-wrapper {
+  position: relative;
+}
+.table-wrapper .table {
+  margin-bottom: 0;
+}
+.table-wrapper .pinned {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  background: #fff;
+  width: 36%;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  z-index: 200;
+}
+.table-wrapper .pinned table {
+  border-right: none;
+  border-left: none;
+  table-layout: fixed;
+  width: 100%;
+}
+.table-wrapper .pinned table th {
+  padding: 15px 8px;
+}
+.table-wrapper .pinned #students-header-pinned th,
+.table-wrapper .pinned #students-pinned td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-wrapper .pinned #students-header-pinned th .column-frame,
+.table-wrapper .pinned #students-pinned td .column-frame {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-wrapper .pinned #students-header-pinned th span,
+.table-wrapper .pinned #students-pinned td span {
+  max-width: 100%;
+  white-space: nowrap;
+}
+.table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
+.table-wrapper .pinned #students-pinned td.student-tools {
+  overflow: visible;
+  padding: 12px 8px;
+  width: 15%;
+}
+.table-wrapper .scrollable {
+  margin-left: 36%;
+  overflow: visible !important;
+}
+.table-wrapper .scrollable th,
+.table-wrapper .scrollable td {
+  min-width: 180px;
+}
+.table-wrapper .scrollable td {
+  padding-bottom: 22px;
+}
+.table-wrapper .scrollable td .grade-numeric {
+  display: block;
+  margin: 0 0 8px;
+}
+.table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
+.table-wrapper .scrollable #students td.student-tools {
+  max-width: 50px;
+}
+@media (max-width: 767px) {
+  .table-wrapper .scrollable {
+    margin-left: 0;
+  }
+}
+.table-wrapper th.pinned-target,
+.table-wrapper td.pinned-target {
+  display: none;
+}
+.table-wrapper th .checkbox,
+.table-wrapper td .checkbox {
+  margin: 0;
+}
+.table-wrapper .fixed-header th.pinned-target {
+  display: table-cell;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}

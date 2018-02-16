@@ -24,6 +24,13 @@ get_header();
         <?php dynamic_sidebar('cac-featured') ?>
 
         <div class="box-1 left-box">
+            <h2 class="title uppercase clearfix">Stay Up-To-Date With The OpenLab</h2>
+            <div id="stay-up-to-date" class="left-block-content stay-up-to-date-wrapper">
+                <?php echo openlab_stay_up_to_date(); ?>
+            </div>
+        </div>
+
+        <div class="box-1 left-box">
             <h2 class="title uppercase clearfix"><i id="refreshActivity" class="fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening On The OpenLab?</h2>
             <div id="whatsHappening" class="left-block-content whats-happening-wrapper">
                 <?php echo openlab_whats_happening(); ?>
@@ -34,8 +41,6 @@ get_header();
             <h2 class="title uppercase">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
         </div>
-
-        <?php cuny_home_new_members(); ?>
     </div>
     <div id="home-right" class="col-sm-16">
         <div id="home-group-list-wrapper" class="row">

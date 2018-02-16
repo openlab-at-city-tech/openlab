@@ -81,3 +81,59 @@
 	background-color: #089D80;
 	border-color: #089D80;
 }
+/**contrast error fixing**/
+body .tagcloud a{
+	background: #595959;
+}
+body .comment-meta-content p a{
+	color: #595959;
+}
+body .post-meta{
+	color: #595959;
+}
+body .post-meta a{
+	color: #595959;
+}
+body .post-categories {
+	color: #595959;
+}
+body .post-nav h5 {
+	color: #595959;
+}
+body .pingbacklist .comment-edit-link { 
+	color: #595959; 
+}
+body .bypostauthor .comment-meta-content cite .post-author {
+	color: #595959;
+}
+body .page-title h4 {
+	color: #595959;
+}
+body .page-template-template-archives-php .post-content ul li a span {
+	color: #595959;
+}
+body .widget-content ul li .post-date {
+	color: #595959;
+}
+body #wp-calendar tfoot a {
+	color: #595959;
+}
+body .post-meta .date-sep { 
+	color: #595959; 
+}
+body .credits,
+body .credits a { 
+	color: #fff; 
+}
+body .blog-description:before {
+	background: #fff;
+}
+body .blog-description {
+	color: #fff;
+}
+body .blog-menu a {
+	color: #fff;
+}
+body .blog-menu li:hover > a {
+	color: #1abc9c;
+}

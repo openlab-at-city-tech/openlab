@@ -59,6 +59,24 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.15.1 =
+* Added new field to link editor to be able to specify additional rel tags for a link using free-form text
+
+= 5.9.15 =
+* Additional fix related to pagination with permalinks
+
+= 5.9.14.16 =
+* Fixed pagination mode when using HTML Get with Permalinks switching method
+
+= 5.9.14.15 =
+* Added AJAX mode to pagination system
+
+= 5.9.14.15 =
+* Added new option to General Settings to specify the user level required to access Link Library configuration and to be able to edit links
+
+= 5.9.14.14 =
+* Fixed for [link-library-count] shortcode to work with pagination mode
+
 = 5.9.14.13 =
 * Removed rating limit for link import to be higher than 10. Note that if you edit and save a link, the rating will go to a value between 0 and 10. This only helps if you always import your links.
 

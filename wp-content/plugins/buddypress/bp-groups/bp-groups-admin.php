@@ -236,19 +236,29 @@ function bp_groups_admin_load() {
 		$error = 0;
 		$success_new = $error_new = $success_modified = $error_modified = array();
 
-		// Group name and description are handled with
-		// groups_edit_base_group_details().
-		if ( !groups_edit_base_group_details( $group_id, $_POST['bp-groups-name'], $_POST['bp-groups-description'], 0 ) ) {
-			$error = $group_id;
+		// Name, description and slug must not be empty.
+		if ( empty( $_POST['bp-groups-name'] ) ) {
+			$error = $error - 1;
+		}
+		if ( empty( $_POST['bp-groups-description'] ) ) {
+			$error = $error - 2;
+		}
+		if ( empty( $_POST['bp-groups-slug'] ) ) {
+			$error = $error - 4;
+		}
 
-			// Using negative integers for different error messages... eek!
-			if ( empty( $_POST['bp-groups-name'] ) && empty( $_POST['bp-groups-description'] ) ) {
-				$error = -3;
-			} elseif ( empty( $_POST['bp-groups-name'] ) ) {
-				$error = -1;
-			} elseif ( empty( $_POST['bp-groups-description'] ) ) {
-				$error = -2;
-			}
+		/*
+		 * Group name, slug, and description are handled with
+		 * groups_edit_base_group_details().
+		 */
+		if ( ! $error && ! groups_edit_base_group_details( array(
+				'group_id'       => $group_id,
+				'name'           => $_POST['bp-groups-name'],
+				'slug'           => $_POST['bp-groups-slug'],
+				'description'    => $_POST['bp-groups-description'],
+				'notify_members' => false,
+			) ) ) {
+			$error = $group_id;
 		}
 
 		// Enable discussion forum.
@@ -454,7 +464,7 @@ function bp_groups_admin_load() {
  * @param string $value     Will always be false unless another plugin filters it first.
  * @param string $option    Screen option name.
  * @param string $new_value Screen option form value.
- * @return string Option value. False to abandon update.
+ * @return string|int Option value. False to abandon update.
  */
 function bp_groups_admin_screen_options( $value, $option, $new_value ) {
 	if ( 'toplevel_page_bp_groups_per_page' != $option && 'toplevel_page_bp_groups_network_per_page' != $option )
@@ -518,22 +528,10 @@ function bp_groups_admin_edit() {
 		}
 
 		if ( ! empty( $errors ) ) {
-			switch ( $errors ) {
-				case -1 :
-					$messages[] = __( 'Group name cannot be empty.', 'buddypress' );
-					break;
-
-				case -2 :
-					$messages[] = __( 'Group description cannot be empty.', 'buddypress' );
-					break;
-
-				case -3 :
-					$messages[] = __( 'Group name and description cannot be empty.', 'buddypress' );
-					break;
-
-				default :
-					$messages[] = __( 'An error occurred when trying to update your group details.', 'buddypress' );
-					break;
+			if ( $errors < 0 ) {
+				$messages[] = __( 'Group name, slug, and description are all required fields.', 'buddypress' );
+			} else {
+				$messages[] = __( 'An error occurred when trying to update your group details.', 'buddypress' );
 			}
 
 		} elseif ( ! empty( $updated ) ) {
@@ -612,7 +610,11 @@ function bp_groups_admin_edit() {
 										?></label>
 										<input type="text" name="bp-groups-name" id="bp-groups-name" value="<?php echo esc_attr( stripslashes( $group_name ) ) ?>" />
 										<div id="bp-groups-permalink-box">
-											<strong><?php esc_html_e( 'Permalink:', 'buddypress' ) ?></strong> <span id="sample-permalink"><?php bp_group_permalink( $group ) ?></span> <a href="<?php echo bp_group_permalink( $group ) ?>" class="button button-small" id="bp-groups-visit-group"><?php esc_html_e( 'Visit Group', 'buddypress' ) ?></a>
+											<strong><?php esc_html_e( 'Permalink:', 'buddypress' ) ?></strong>
+											<span id="bp-groups-permalink">
+												<?php bp_groups_directory_permalink(); ?> <input type="text" id="bp-groups-slug" name="bp-groups-slug" value="<?php bp_group_slug( $group ); ?>" autocomplete="off"> /
+											</span>
+											<a href="<?php echo bp_group_permalink( $group ) ?>" class="button button-small" id="bp-groups-visit-group"><?php esc_html_e( 'Visit Group', 'buddypress' ) ?></a>
 										</div>
 
 										<label for="bp-groups-description" class="screen-reader-text"><?php
@@ -873,6 +875,14 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 			'group_id'   => $item->id,
 			'group_role' => array( $type ),
 			'type'       => 'alphabetical',
+			/**
+			 * Filters the admin members type per page value.
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param int    $value Member types per page. Default 10.
+			 * @param string $type  Member type.
+			 */
 			'per_page'   => apply_filters( 'bp_groups_admin_members_type_per_page', 10, $type ),
 			'page'       => $current_type_page,
 		) );
@@ -1029,7 +1039,7 @@ function bp_groups_admin_edit_metabox_status( $item ) {
  *
  * @since 2.6.0
  *
- * @param BP_Groups_Group|null $user The BP_Groups_Group object corresponding to the group being edited.
+ * @param BP_Groups_Group|null $group The BP_Groups_Group object corresponding to the group being edited.
  */
 function bp_groups_admin_edit_metabox_group_type( BP_Groups_Group $group = null ) {
 
@@ -1075,6 +1085,8 @@ function bp_groups_admin_edit_metabox_group_type( BP_Groups_Group $group = null 
  * Process changes from the Group Type metabox.
  *
  * @since 2.6.0
+ *
+ * @param int $group_id Group ID.
  */
 function bp_groups_process_group_type_update( $group_id ) {
 	if ( ! isset( $_POST['bp-group-type-nonce'] ) ) {

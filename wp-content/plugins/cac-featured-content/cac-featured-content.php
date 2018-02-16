@@ -2,7 +2,7 @@
 /**
 Plugin Name: CAC Featured Content
 Plugin URI: https://github.com/cuny-academic-commons/cac-featured-content
-Version: 1.0.7
+Version: 1.0.9
 Author: Dominic Giglio, Boone Gorges
 Description: Allows site authors to choose what content is to be featured on the home page.
 Text Domain: cac-featured-content

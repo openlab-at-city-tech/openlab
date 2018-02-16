@@ -14,7 +14,7 @@
 					
 				</div>
 				
-			<?php endif; ?> <!-- /footer-a -->
+			<?php endif; ?><!-- .footer-a -->
 				
 			<?php if ( is_active_sidebar( 'footer-b' ) ) : ?>
 			
@@ -24,11 +24,11 @@
 			
 						<?php dynamic_sidebar( 'footer-b' ); ?>
 											
-					</div> <!-- /widgets -->
+					</div><!-- .widgets -->
 					
 				</div>
 				
-			<?php endif; ?> <!-- /footer-b -->
+			<?php endif; ?><!-- .footer-b -->
 								
 			<?php if ( is_active_sidebar( 'footer-c' ) ) : ?>
 			
@@ -38,17 +38,17 @@
 			
 						<?php dynamic_sidebar( 'footer-c' ); ?>
 											
-					</div> <!-- /widgets -->
+					</div><!-- .widgets -->
 					
 				</div>
 				
-			<?php endif; ?> <!-- /footer-c -->
+			<?php endif; ?><!-- .footer-c -->
 			
 			<div class="clear"></div>
 		
-		</div> <!-- /footer-inner -->
+		</div><!-- .footer-inner -->
 	
-	</div> <!-- /footer -->
+	</div><!-- .footer -->
 	
 	<div class="credits section bg-dark no-padding">
 	
@@ -68,11 +68,11 @@
 			
 			<div class="clear"></div>
 		
-		</div> <!-- /credits-inner -->
+		</div><!-- .credits-inner -->
 		
-	</div> <!-- /credits -->
+	</div><!-- .credits -->
 
-</div> <!-- /big-wrapper -->
+</div><!-- .big-wrapper -->
 
 <?php wp_footer(); ?>
 

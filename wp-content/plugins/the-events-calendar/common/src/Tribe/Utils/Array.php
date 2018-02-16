@@ -1,6 +1,4 @@
 <?php
-defined( 'WPINC' ) || die; // Do not load directly.
-
 /**
  * Array utilities
  */
@@ -60,10 +58,10 @@ class Tribe__Utils__Array {
 	 *
 	 * Example: get( $a, [ 0, 1, 2 ] ) returns the value of $a[0][1][2] or the default.
 	 *
-	 * @param  array $variable  Array or object to search within.
-	 * @param  array $indexes   Specify each nested index in order.
-	 *                          Example: array( 'lvl1', 'lvl2' );
-	 * @param  mixed $default   Default value if the search finds nothing.
+	 * @param  array        $variable Array or object to search within.
+	 * @param  array|string $indexes  Specify each nested index in order.
+	 *                                Example: array( 'lvl1', 'lvl2' );
+	 * @param  mixed        $default  Default value if the search finds nothing.
 	 *
 	 * @return mixed The value of the specified index or the default if not found.
 	 */
@@ -86,6 +84,32 @@ class Tribe__Utils__Array {
 		}
 
 		return $variable;
+	}
+
+	/**
+	 * Find a value inside a list of array or objects, including one nested a few levels deep.
+	 *
+	 * @since 4.7.7
+	 *
+	 * Example: get( [$a, $b, $c], [ 0, 1, 2 ] ) returns the value of $a[0][1][2] found in $a, $b or $c
+	 * or the default.
+	 *
+	 * @param  array        $variables Array of arrays or objects to search within.
+	 * @param  array|string $indexes   Specify each nested index in order.
+	 *                                 Example: array( 'lvl1', 'lvl2' );
+	 * @param  mixed        $default   Default value if the search finds nothing.
+	 *
+	 * @return mixed The value of the specified index or the default if not found.
+	 */
+	public static function get_in_any( array $variables, $indexes, $default = null ) {
+		foreach ( $variables as $variable ) {
+			$found = self::get( $variable, $indexes, '__not_found__' );
+			if ( '__not_found__' !== $found ) {
+				return $found;
+			}
+		}
+
+		return $default;
 	}
 
 	/**

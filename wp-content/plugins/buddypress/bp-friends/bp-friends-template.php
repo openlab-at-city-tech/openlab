@@ -346,7 +346,7 @@ function bp_add_friend_button( $potential_friend_id = 0, $friend_status = false 
 	 * @param int  $potential_friend_id ID of the user to whom the button
 	 *                                  applies. Default: value of {@link bp_get_potential_friend_id()}.
 	 * @param bool $friend_status       Not currently used.
-	 * @return string HTML for the Add Friend button.
+	 * @return false|string HTML for the Add Friend button.
 	 */
 	function bp_get_add_friend_button( $potential_friend_id = 0, $friend_status = false ) {
 
@@ -441,8 +441,8 @@ function bp_add_friend_button( $potential_friend_id = 0, $friend_status = false 
  *
  * @param int $user_id Optional. Default: the displayed user's ID, or the
  *                     logged-in user's ID.
- * @return string|bool A comma-separated list of friend IDs if any are found,
- *                     otherwise false.
+ * @return false|string A comma-separated list of friend IDs if any are found,
+ *                      otherwise false.
  */
 function bp_get_friend_ids( $user_id = 0 ) {
 
@@ -563,7 +563,7 @@ function bp_friend_accept_request_link() {
 		 * @param string $value         Accept-friendship URL.
 		 * @param int    $friendship_id ID of the friendship.
 		 */
-		return apply_filters( 'bp_get_friend_accept_request_link', wp_nonce_url( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/accept/' . $friendship_id, 'friends_accept_friendship' ), $friendship_id );
+		return apply_filters( 'bp_get_friend_accept_request_link', wp_nonce_url( trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/accept/' . $friendship_id ), 'friends_accept_friendship' ), $friendship_id );
 	}
 
 /**
@@ -598,7 +598,7 @@ function bp_friend_reject_request_link() {
 		 * @param string $value         Reject-friendship URL.
 		 * @param int    $friendship_id ID of the friendship.
 		 */
-		return apply_filters( 'bp_get_friend_reject_request_link', wp_nonce_url( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/reject/' . $friendship_id, 'friends_reject_friendship' ), $friendship_id );
+		return apply_filters( 'bp_get_friend_reject_request_link', wp_nonce_url( trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/reject/' . $friendship_id ), 'friends_reject_friendship' ), $friendship_id );
 	}
 
 /**

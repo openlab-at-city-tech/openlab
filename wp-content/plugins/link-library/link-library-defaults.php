@@ -285,6 +285,8 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['captchagenerator']             = 'easycaptcha';
 	$genoptions['recaptchasitekey']             = '';
 	$genoptions['recaptchasecretkey']           = '';
+	$genoptions['rolelevel']                    = 'Administrator';
+	$genoptions['editlevel']                    = 'Administrator';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );

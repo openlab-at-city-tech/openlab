@@ -3,8 +3,8 @@ Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
 Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 4.7.3
-Stable tag: 3.1.10
+Tested up to: 4.9.0
+Stable tag: 3.6.0
 License: GPLv3
 
 Create and maintain events, including complex reoccurring patterns, venue management (with Google maps), calendars and customisable event lists
@@ -221,6 +221,62 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 8. Events list (using TwentySixteen)
 
 == Changelog ==
+
+= 3.6.0 25th November 2017
+
+* added: Ability to specify multiple event authors (organiser) in the fullcalendar author/author_name attribute
+  by using a comma seperate lised e.g: [eo_fullcalendar author="1,2"]
+* bugfix: The "organiser" full calendar filter only displays users included in the author/author_name attribute 
+  if supplied.
+* bugfix: Occurrences which have changed time still appear in the include/excludes datepicker
+* bugfix: iCal feed will display correct DSTART & DTEND values even when the initial occurrence is excluded from 
+  the query driving the feed.
+* changed: The admin calendar week/day views display 15-minute intervals. If dragging of occurrences is enabled
+  this can be done in 5 minute intervals.
+
+= 3.5.1 14th November 2017 
+
+* Fix bug where multiple filters are used in fullcalendar shortcode, seperated by a comma
+
+= 3.5.0 8th November 2017
+
+* Added 'organiser' option to calendar shortcode's headerLeft/headerCenter/headerRight attributes - allows
+  filting of the event calendar by event organiser (author).
+* Improved effeciency of calendar page load time by lazy loading required data
+* Updated French and Dutch translations
+* Tested up to 4.9.0-beta-4
+
+
+= 3.4.1 18th October 2017
+
+* Tested up to 4.9.0-beta-2
+* Fixed a bug with the calculation of long occurrences
+* Updated Czech translation
+
+= 3.4.0 25th September 2017
+
+* Tested up to 4.8.2
+* added: `weeknumbers` attribute for the calendar shortcode: `[eo_fullcalendar weeknumbers=true]`
+
+= 3.3.0 12th September 2017
+
+* added: `%event_range{date-format}{time-format}%` placeholder for the event list shortcode / widget
+* added: `%event_organiser%` placeholder for the event list shortcode / widget
+* added: `eventorganiser_google_maps_url` hook
+* updated: Spanish, Finish and Italian translations
+* bugfix: private events authored by the current user are now visible in the admin calendar
+* bugfix: Fix casing in 'All events'
+* bugfix: Fix bug in event list widget settings: `group_occurrences` checkbox is not checked, even when enabled.
+
+
+= 3.2.0 23rd August 2017
+* Updated 'Tested up to' version (WordPress 4.8.1)
+* Update Czech, Indonesian, French, Japanese, Dutch, Portuguese, 
+  Norwegian, Slovenian and Swedish.
+* Default event page names are now filterable via `eventorganiser_event_properties`.
+* Remove X-WR-CALNAME from iCal feed for single event feeds. See [#413](https://github.com/stephenharris/Event-Organiser/issues/413).
+* Fixes errors if event-category tax is disabled. See [#414](https://github.com/stephenharris/Event-Organiser/issues/414)
+* Fixes mark-up error in calendar widget: tbody must occur before tfoot
 
 = 3.1.10 - 8th July 2017
 * Updated 'Tested up to' version (WordPress 4.8)

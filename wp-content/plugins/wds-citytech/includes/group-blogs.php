@@ -60,32 +60,74 @@ function openlab_get_group_site_url( $group_id = false ) {
 	return $site_url;
 }
 
+/**
+ * Link a site to a group.
+ *
+ * @param int $group_id
+ * @param int $site_id
+ */
+function openlab_set_group_site_id( $group_id, $site_id ) {
+	groups_update_groupmeta( $group_id, 'wds_bp_group_site_id', $site_id );
+
+	/**
+	 * Fires when a group's site ID is set or updated.
+	 *
+	 * @param int $group_id
+	 * @param int $site_id
+	 */
+	do_action( 'openlab_set_group_site_id', $group_id, $site_id );
+}
+
 ////////////////////////
 /// MEMBERSHIP SYNC ////
 ////////////////////////
 
+function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role = null ) {
+	$blog_role = null;
+	$blog_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $blog_id ) {
+		return $blog_role;
+	}
+
+	$blog_public = get_blog_option( $blog_id, 'blog_public' );
+
+	if ( null === $group_role ) {
+		if ( groups_is_user_admin( $user_id, $group_id ) ) {
+			$group_role = 'admin';
+		} elseif ( groups_is_user_mod( $user_id, $group_id ) ) {
+			$group_role = 'mod';
+		} else {
+			$group_role = 'member';
+		}
+	}
+
+	if ( '-3' == $blog_public ) {
+		if ( 'admin' === $group_role ) {
+			$blog_role = 'administrator';
+		}
+	} else {
+		if ( 'admin' === $group_role ) {
+			$blog_role = 'administrator';
+		} elseif ( 'mod' === $group_role ) {
+			$blog_role = 'editor';
+		} else {
+			// Default role is lower for portfolios
+			$blog_role = openlab_is_portfolio() ? 'subscriber' : 'author';
+		}
+	}
+
+	return $blog_role;
+}
+
 /**
  * Add user to the group blog when joining the group
  */
-function openlab_add_user_to_groupblog( $group_id, $user_id ) {
+function openlab_add_user_to_groupblog( $group_id, $user_id, $role = null ) {
 	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 
 	if ( $blog_id ) {
-		$blog_public = get_blog_option( $blog_id, 'blog_public' );
-
-		if ( '-3' == $blog_public ) {
-			if ( groups_is_user_admin( $user_id, $group_id ) ) {
-				$role = 'administrator';
-			}
-		} else {
-			if ( groups_is_user_admin( $user_id, $group_id ) ) {
-				$role = 'administrator';
-			} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
-				$role = 'editor';
-			} else {
-				// Default role is lower for portfolios
-				$role = openlab_is_portfolio() ? 'subscriber' : 'author';
-			}
+		if ( null === $role ) {
+			$role = openlab_get_blog_role_for_group_role( $group_id, $user_id );
 		}
 
 		if ( isset( $role ) ) {
@@ -93,8 +135,25 @@ function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 		}
 	}
 }
-
 add_action( 'groups_join_group', 'openlab_add_user_to_groupblog', 10, 2 );
+
+/**
+ * Modify group site membership on promotion.
+ */
+function openlab_add_user_to_groupblog_on_promotion( $group_id, $user_id, $status ) {
+	$role = openlab_get_blog_role_for_group_role( $group_id, $user_id, $status );
+	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
+}
+add_action( 'groups_promote_member', 'openlab_add_user_to_groupblog_on_promotion', 10, 3 );
+
+/**
+ * Modify group site membership on demotion.
+ */
+function openlab_add_user_to_groupblog_on_demotion( $group_id, $user_id ) {
+	$role = openlab_get_blog_role_for_group_role( $group_id, $user_id, 'member' );
+	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
+}
+add_action( 'groups_demote_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
 
 /**
  * Join a user to a groupblog when joining the group
@@ -106,6 +165,23 @@ function openlab_add_user_to_groupblog_accept( $user_id, $group_id ) {
 }
 add_action( 'groups_membership_accepted', 'openlab_add_user_to_groupblog_accept', 10, 2 );
 add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 2 );
+
+/**
+ * Sync group membership to a site at the moment that the site is linked to the group.
+ */
+function openlab_sync_group_site_membership( $group_id, $site_id ) {
+	$group_members = groups_get_group_members( array(
+		'group_id' => $group_id,
+		'exclude_admins_mods' => false,
+		'exclude' => array( get_current_user_id() ),
+	) );
+
+	foreach ( $group_members['members'] as $group_member ) {
+		openlab_add_user_to_groupblog( $group_id, $group_member->user_id );
+	}
+}
+add_action( 'openlab_set_group_site_id', 'openlab_sync_group_site_membership', 10, 2 );
+
 
 /**
  * Placeholder docs for openlab_remove_user_from_groupblog()
@@ -186,8 +262,8 @@ function openlab_force_blog_role_sync() {
 	}
 }
 
-add_action( 'init', 'openlab_force_blog_role_sync', 999 );
-add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
+//add_action( 'init', 'openlab_force_blog_role_sync', 999 );
+//add_action( 'admin_init', 'openlab_force_blog_role_sync', 999 );
 
 
 ////////////////////////
@@ -543,7 +619,7 @@ function wds_bp_group_meta() {
 				<?php endswitch ?>
 							</div></div>
 
-						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && 'course' === $_GET['type'] ) : ?>
+						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ) ) : ?>
 							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo $show_website; ?>">
                                 <div id="noo_clone_options">
                                     <div class="row">

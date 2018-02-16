@@ -466,6 +466,11 @@ class link_library_plugin_admin {
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 		extract( $genoptions );
 
+		if ( floatval( $genoptions['schemaversion'] ) < '5.1' ) {
+			global $my_link_library_plugin;
+			$my_link_library_plugin->ll_install();
+		}
+
 		if ( !empty( $genoptions ) ) {
 			if ( empty( $numberstylesets ) ) {
 				$numberofsets = 1;
@@ -593,6 +598,35 @@ class link_library_plugin_admin {
 		//add our own option page, you can also add it to different sections or use your own one
 		global $wpdb, $pagehooktop, $pagehookmoderate, $pagehooksettingssets, $pagehookstylesheet, $pagehookreciprocal;
 
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		$admin_capability = 'manage_options';
+		if ( 'Editor' == $genoptions['rolelevel'] ) {
+			$admin_capability = 'delete_pages';
+		} elseif ( 'Author' == $genoptions['rolelevel'] ) {
+			$admin_capability = 'delete_posts';
+		} elseif ( 'Contributor' == $genoptions['rolelevel'] ) {
+			$admin_capability = 'edit_posts';
+		} elseif ( 'Subscriber' == $genoptions['rolelevel'] ) {
+			$admin_capability = 'read';
+		}
+
+		$edit_capability = 'manage_options';
+		if ( 'Editor' == $genoptions['editlevel'] ) {
+			$edit_capability = 'delete_pages';
+		} elseif ( 'Author' == $genoptions['editlevel'] ) {
+			$edit_capability = 'delete_posts';
+		} elseif ( 'Contributor' == $genoptions['editlevel'] ) {
+			$edit_capability = 'edit_posts';
+		} elseif ( 'Subscriber' == $genoptions['editlevel'] ) {
+			$edit_capability = 'read';
+		}
+
+		if ( !current_user_can( $edit_capability ) ) {
+			remove_menu_page( 'link-manager.php' );
+		}
+
 		$linkmoderatecount = 0;
 
 		$linkmoderatequery = "SELECT count(*) ";
@@ -603,26 +637,26 @@ class link_library_plugin_admin {
 		$linkmoderatecount = $wpdb->get_var( $linkmoderatequery );
 
 		if ( $linkmoderatecount == 0 ) {
-			$pagehooktop = add_menu_page( 'Link Library - ' . __( 'General Options', 'link-library' ), 'Link Library', 'manage_options', LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ), plugins_url( 'icons/folder-beige-internet-icon.png', __FILE__ ) );
+			$pagehooktop = add_menu_page( 'Link Library - ' . __( 'General Options', 'link-library' ), 'Link Library', $admin_capability, LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ), plugins_url( 'icons/folder-beige-internet-icon.png', __FILE__ ) );
 		} else {
-			$pagehooktop = add_menu_page( 'Link Library - ' . __( 'General Options', 'link-library' ), 'Link Library ' . '<span class="update-plugins count-' . $linkmoderatecount . '"><span class="plugin-count">' . number_format_i18n( $linkmoderatecount ) . '</span></span>', 'manage_options', LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ), plugins_url( 'icons/folder-beige-internet-icon.png', __FILE__ ) );
+			$pagehooktop = add_menu_page( 'Link Library - ' . __( 'General Options', 'link-library' ), 'Link Library ' . '<span class="update-plugins count-' . $linkmoderatecount . '"><span class="plugin-count">' . number_format_i18n( $linkmoderatecount ) . '</span></span>', $admin_capability, LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ), plugins_url( 'icons/folder-beige-internet-icon.png', __FILE__ ) );
 		}
 
-		$pagehookgeneraloptions = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'General Options', 'link-library' ), __( 'General Options', 'link-library' ), 'manage_options', LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ) );
+		$pagehookgeneraloptions = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'General Options', 'link-library' ), __( 'General Options', 'link-library' ), $admin_capability, LINK_LIBRARY_ADMIN_PAGE_NAME, array( $this, 'on_show_page' ) );
 
-		$pagehooksettingssets = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Settings', 'link-library' ), __( 'Library Settings', 'link-library' ), 'manage_options', 'link-library-settingssets', array( $this, 'on_show_page' ) );
+		$pagehooksettingssets = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Settings', 'link-library' ), __( 'Library Settings', 'link-library' ), $admin_capability, 'link-library-settingssets', array( $this, 'on_show_page' ) );
 
 		if ( $linkmoderatecount == 0 ) {
-			$pagehookmoderate = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Moderate', 'link-library' ), __( 'Moderate', 'link-library' ), 'manage_options', 'link-library-moderate', array( $this, 'on_show_page' ) );
+			$pagehookmoderate = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Moderate', 'link-library' ), __( 'Moderate', 'link-library' ), $admin_capability, 'link-library-moderate', array( $this, 'on_show_page' ) );
 		} else {
-			$pagehookmoderate = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Moderate', 'link-library' ), sprintf( __( 'Moderate', 'link-library' ) . ' %s', "<span class='update-plugins count-" . $linkmoderatecount . "'><span class='plugin-count'>" . number_format_i18n( $linkmoderatecount ) . "</span></span>" ), 'manage_options', 'link-library-moderate', array( $this, 'on_show_page' ) );
+			$pagehookmoderate = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Moderate', 'link-library' ), sprintf( __( 'Moderate', 'link-library' ) . ' %s', "<span class='update-plugins count-" . $linkmoderatecount . "'><span class='plugin-count'>" . number_format_i18n( $linkmoderatecount ) . "</span></span>" ), $admin_capability, 'link-library-moderate', array( $this, 'on_show_page' ) );
 		}
 
-		$pagehookstylesheet = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Stylesheet', 'link-library' ), __( 'Stylesheet', 'link-library' ), 'manage_options', 'link-library-stylesheet', array( $this, 'on_show_page' ) );
+		$pagehookstylesheet = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Stylesheet', 'link-library' ), __( 'Stylesheet', 'link-library' ), $admin_capability, 'link-library-stylesheet', array( $this, 'on_show_page' ) );
 
-		$pagehookreciprocal = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Link checking tools', 'link-library' ), __( 'Link checking tools', 'link-library' ), 'manage_options', 'link-library-reciprocal', array( $this, 'on_show_page' ) );
+		$pagehookreciprocal = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Link checking tools', 'link-library' ), __( 'Link checking tools', 'link-library' ), $admin_capability, 'link-library-reciprocal', array( $this, 'on_show_page' ) );
 
-		$faqhook = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, __( 'FAQ', 'link-library' ), __( 'FAQ', 'link-library' ), 'manage_options', 'link-library-faq', 'callback' );
+		$faqhook = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, __( 'FAQ', 'link-library' ), __( 'FAQ', 'link-library' ), $admin_capability, 'link-library-faq', 'callback' );
 
 		//register  callback gets call prior your own page gets rendered
 		add_action( 'load-' . $pagehooktop, array( $this, 'on_load_page' ) );
@@ -1203,7 +1237,7 @@ class link_library_plugin_admin {
 				'numberstylesets', 'includescriptcss', 'pagetitleprefix', 'pagetitlesuffix', 'schemaversion', 'thumbshotscid', 'approvalemailtitle',
 				'moderatorname', 'moderatoremail', 'rejectedemailtitle', 'approvalemailbody', 'rejectedemailbody', 'moderationnotificationtitle',
 				'linksubmissionthankyouurl', 'recipcheckaddress', 'imagefilepath', 'catselectmethod', 'expandiconpath', 'collapseiconpath', 'updatechannel',
-				'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay'
+				'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay', 'rolelevel', 'editlevel'
 			) as $option_name
 		) {
 			if ( isset( $_POST[$option_name] ) ) {
@@ -2052,6 +2086,46 @@ class link_library_plugin_admin {
 									echo '1';
 								}
 								echo $genoptions['numberstylesets']; ?>" /></td>
+						</tr>
+						<tr>
+							<td>Minimum role for Link Library configuration</td>
+							<td>
+								<?php global $wp_roles;
+								if ( $wp_roles ):?>
+									<select name='rolelevel' style='width: 200px'>
+										<?php $roles = $wp_roles->roles;
+
+										foreach ( $roles as $role ):
+											if ( $genoptions['rolelevel'] == $role['name'] ) {
+												$selectedterm = "selected='selected'";
+											} else {
+												$selectedterm = '';
+											} ?>
+											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Minimum role for Link editing</td>
+							<td>
+								<?php global $wp_roles;
+								if ( $wp_roles ):?>
+									<select name='editlevel' style='width: 200px'>
+										<?php $roles = $wp_roles->roles;
+
+										foreach ( $roles as $role ):
+											if ( $genoptions['editlevel'] == $role['name'] ) {
+												$selectedterm = "selected='selected'";
+											} else {
+												$selectedterm = '';
+											} ?>
+											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Category selection method', 'link-library' ); ?></td>
@@ -4780,6 +4854,12 @@ class link_library_plugin_admin {
 				</td>
 			</tr>
 			<tr>
+				<td><?php _e( 'Link Additional Rel Tags', 'link-library' ); ?></td>
+				<td>
+					<input type="text" id="link_addl_rel" name="link_addl_rel" size="80" value="<?php echo( isset( $extradata['link_addl_rel'] ) ? esc_attr( stripslashes( $extradata['link_addl_rel'] ) ) : '' ); ?>" />
+				</td>
+			</tr>
+			<tr>
 				<td><?php _e( 'Link Large Description', 'link-library' ); ?></td>
 				<td>
 					<?php
@@ -5117,6 +5197,10 @@ class link_library_plugin_admin {
 
 			if ( isset( $_POST['link_submitter_email'] ) ) {
 				$updatearray['link_submitter_email'] = $_POST['link_submitter_email'];
+			}
+
+			if ( isset( $_POST['link_addl_rel'] ) ) {
+				$updatearray['link_addl_rel'] = $_POST['link_addl_rel'];
 			}
 
 			if ( isset( $_POST['link_no_follow'] ) && $_POST['link_no_follow'] == 'on' ) {

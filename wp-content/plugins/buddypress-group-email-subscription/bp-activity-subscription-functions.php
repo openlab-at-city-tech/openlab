@@ -242,7 +242,7 @@ To view or reply, log in and go to:
 	}
 
 	// get subscribed users for the group
-	$subscribed_users = groups_get_groupmeta( $r['group_id'], 'ass_subscribed_users' );
+	$subscribed_users = ass_get_subscriptions_for_group( $r['group_id'] );
 
 	// this is used if a user is subscribed to the "Weekly Summary" option.
 	// the weekly summary shouldn't record everything, so we have a filter:
@@ -1056,16 +1056,40 @@ function ass_get_login_redirect_url( $url = '', $context = '' ) {
 		'redirect_to' => apply_filters( 'ass_login_redirect_to', urlencode( $url ), $context )
 	);
 
-	return add_query_arg(
+	$login_redirect_url = add_query_arg(
 		$query_args,
 		apply_filters( 'ass_login_url', wp_login_url() )
 	);
+
+	return apply_filters( 'bp_ges_login_redirect_url', $login_redirect_url );
 }
 
 
 //
 //	!GROUP SUBSCRIPTION
 //
+
+/**
+ * Get a list of user subscriptions for a group.
+ *
+ * @since 3.8.0
+ *
+ * @param int $group_id
+ * @return array
+ */
+function ass_get_subscriptions_for_group( $group_id ) {
+	$group_user_subscriptions = groups_get_groupmeta( $group_id, 'ass_subscribed_users' );
+
+	/**
+	 * Filter's the group's user subscriptions.
+	 *
+	 * @since 3.8.0
+	 *
+	 * @param array $group_user_subscriptions Keys are user IDs, values are subscription levels.
+	 * @param int   $group_id                 ID of the group.
+	 */
+	return apply_filters( 'bp_ges_group_user_subscriptions', $group_user_subscriptions, $group_id );
+}
 
 
 // returns the subscription status of a user in a group
@@ -1078,7 +1102,7 @@ function ass_get_group_subscription_status( $user_id, $group_id ) {
 	if ( !$group_id )
 		$group_id = bp_get_current_group_id();
 
-	$group_user_subscriptions = groups_get_groupmeta( $group_id, 'ass_subscribed_users' );
+	$group_user_subscriptions = ass_get_subscriptions_for_group( $group_id );
 
 	$user_subscription = isset( $group_user_subscriptions[$user_id] ) ? $group_user_subscriptions[$user_id] : false;
 
@@ -1711,6 +1735,38 @@ function ass_get_forum_type() {
 }
 
 /**
+ * Add attachment links by the GD bbPress Attachments plugin to group emails.
+ *
+ * @since 3.7.3
+ *
+ * @param  string               $content  Current email content.
+ * @param  BP_Activity_Activity $activity Current activity item.
+ * @return string
+ */
+function ass_add_gd_bbpress_attachments_to_email_content( $content, $activity ) {
+	// No GD bbPress Attachments or not a bbPress item? Stop now!
+	if ( ! function_exists( 'd4p_get_post_attachments' ) || ! in_array( $activity->type, array( 'bbp_reply_create', 'bbp_topic_create' ) ) ) {
+		return $content;
+	}
+
+	$atts = d4p_get_post_attachments( $activity->secondary_item_id );
+	if ( empty( $atts ) ) {
+		return $content;
+	}
+
+	$attachment_message = "\n\n" . __( 'This post has attachments:', 'bp-ass' );
+
+	foreach ( $atts as $attachment ) {
+		$file_url = wp_get_attachment_url( $attachment->ID );
+		$file_name = basename( get_attached_file( $attachment->ID ) );
+		$attachment_message .= sprintf( "\n<a href='%s'>%s</a>", $file_url, $file_name );
+	}
+
+	return $content . $attachment_message;
+}
+add_filter( 'bp_ass_activity_notification_content', 'ass_add_gd_bbpress_attachments_to_email_content', 100, 2 );
+
+/**
  * Determine whether user should receive a notification of their own posts
  *
  * The main purpose of the filter is so that admins can override the setting, especially
@@ -1750,3 +1806,19 @@ function ass_weekly_digest_week() {
 	elseif ( $ass_weekly_digest == 0 )
 		return __('Sunday' );
 }
+
+/**
+ * Register our theme template directory with BuddyPress.
+ *
+ * @since 3.8.0
+ */
+function bpges_register_template_stack() {
+	if ( ! bp_is_group_admin_page() ) {
+		return;
+	}
+
+	bp_register_template_stack( function() {
+		return plugin_dir_path( __FILE__ ) . '/templates/';
+	}, 20 );
+}
+add_action( 'bp_actions', 'bpges_register_template_stack' );

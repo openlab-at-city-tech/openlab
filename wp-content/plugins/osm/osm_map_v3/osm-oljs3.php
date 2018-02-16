@@ -21,7 +21,7 @@ class Osm_OLJS3
   public static function addTileLayer($a_LayerName, $a_Type, $a_OverviewMapZoom, $a_MapControl, $a_WMSType, $a_WMSAttrName, $a_WMSAttrUrl, $a_WMSAddress, $a_WMSParam, $a_theme, $a_api_key){
     Osm::traceText(DEBUG_INFO, "addTileLayer V3(".$a_LayerName.",".$a_Type.",".$a_OverviewMapZoom.")");
     $TileLayer = '
-    
+
 	var attribution = new ol.control.Attribution({
         collapsible: false
       });
@@ -60,13 +60,11 @@ class Osm_OLJS3
       else if ($a_Type == "tilewms"){
         $TileLayer .= '
         var raster = new ol.layer.Tile({
-          extent: [-13884991, 2870341, -7455066, 6338219],        
+          extent: [-13884991, 2870341, -7455066, 6338219],
           source: new ol.source.TileWMS({
-            attributions: [
-              new ol.Attribution({
-                html: "<a href=\"http://www.HanBlog.Net/\">WP OSM Plugin</a> and &copy; " +
-                "<a href=\"http://'.$a_WMSAttrUrl.'/\">'.$a_WMSAttrName.'</a>"
-              })],
+            attributions: "Maps &copy; " +
+              "<a href=\"http://www.HanBlog.Net/\">WP OSM Plugin</a> and &copy; " +
+              "<a href=\"http://'.$a_WMSAttrUrl.'/\">'.$a_WMSAttrName.'</a>",
             url: "'.$a_WMSAddress.'",
             params: {'.$a_WMSParam.'},
             serverType: "'.$a_WMSType.'"
@@ -76,17 +74,12 @@ class Osm_OLJS3
       else if ($a_Type == "openseamap"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
-            source: new ol.source.OSM()
+            source: new ol.source.OSM(),
           });
-          var Layer2 = new ol.layer.Tile({ 
+          var Layer2 = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-              new ol.Attribution({
-                html: "and &copy; " +
-                "<a href=\"http://www.openseamap.org/\">OpenSeaMap</a>"
-              }),
-              ol.source.OSM.ATTRIBUTION
-              ],
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.openseamap.org/\">OpenSeaMap</a>",
               crossOrigin: null,
               url: "'.Osm_OpenSeaMap_Tiles.'"
             })
@@ -96,84 +89,60 @@ class Osm_OLJS3
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-               new ol.Attribution({
-                html: "All maps &copy; " +
-                 "<a href=\"http://www.opencyclemap.org/\">OpenCycleMap</a>"
-               }),
-               ol.source.OSM.ATTRIBUTION
-               ],  
-               url: "'.Osm_thunderforest_Cycle_Tiles.'?apikey='.$a_api_key.'"
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+              url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
-    } 
+    }
     else if ($a_Type == "outdoor"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
               attributions: [
-               new ol.Attribution({
-                 html: "Maps &copy; " +
-                 "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data</a>"
-               }),
-               ol.source.OSM.ATTRIBUTION
-               ],
-               url: "'.Osm_thunderforest_Outdoor_Tiles.'?apikey='.$a_api_key.'"
+                attributions: "Maps &copy; " +
+                "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
-    } 
+    }
     else if ($a_Type == "landscape"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-               new ol.Attribution({
-                 html: "Maps &copy; " +
-                 "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data</a>"
-               }),
-               ol.source.OSM.ATTRIBUTION
-               ],
-          
-          url: "'.Osm_thunderforest_Landscape_Tiles.'?apikey='.$a_api_key.'"
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+              url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
-    } 
+    }
         else if ($a_Type == "spinal"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
               attributions: [
-               new ol.Attribution({
-                 html: "Maps &copy; " +
-                 "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data</a>"
-               }),
-               ol.source.OSM.ATTRIBUTION
-               ],
-               url: "'.Osm_thunderforest_Spinal_Tiles.'?apikey='.$a_api_key.'"
+                attributions: "Maps &copy; " +
+                "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
-    } 
+    }
             else if ($a_Type == "pioneer"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-               new ol.Attribution({
-                 html: "Maps &copy; " +
-                 "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data</a>"
-               }),
-               ol.source.OSM.ATTRIBUTION
-               ],
+               attributions: "Maps &copy; " +
+               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
-    } 
-    
+    }
+
     else if ($a_Type == "brezhoneg"){
          $TileLayer .= '
            var raster = new ol.layer.Tile({
@@ -243,13 +212,8 @@ class Osm_OLJS3
             ]
        }),
 
-       attributions: [
-         new ol.Attribution({
-           html: "Tiles &copy; " +
-           "<a href=\"http://www.basemap.at/\">basemap.at</a>"
-         }),
-         ol.source.OSM.ATTRIBUTION
-      ],
+       attributions: "Tiles &copy; " +
+       "<a href=\"http://www.basemap.at/\">basemap.at</a>" + ol.source.OSM.ATTRIBUTION,
    });
 
 ';
@@ -261,7 +225,7 @@ class Osm_OLJS3
           source: new ol.source.OSM()
         });';
      }
-      if (!empty($a_MapControl)){
+    if (!empty($a_MapControl)){
         $FirstString = $a_MapControl[0];
         if ((strtolower($FirstString)== 'fullscreen')) {
           $TileLayer .= '
@@ -287,7 +251,7 @@ class Osm_OLJS3
     $VectorLayer .= '
     var style'.$a_Counter.' = {
       "Point": [new ol.style.Style({
-          
+
           image: new ol.style.Icon({
             anchor: [0.5, 41],
             anchorXUnits: "fraction",
@@ -296,7 +260,7 @@ class Osm_OLJS3
             src: "'.OSM_PLUGIN_ICONS_URL.$a_MarkerName.'"
           })
       })],
-	  	  
+
       "LineString": [new ol.style.Style({
         stroke: new ol.style.Stroke({
           color: "'.$a_Colour.'",
@@ -310,9 +274,9 @@ class Osm_OLJS3
         })
       })]
     };';
-	
-	
-	/** if no map_title is given, plugin output remains the same */ 
+
+
+	/** if no map_title is given, plugin output remains the same */
 	if (empty($a_title)) {
 
 		if ($a_Type == 'kml'){
@@ -325,7 +289,7 @@ class Osm_OLJS3
 			})
 		  });';
 		}
-		    
+
 
 		if ($a_Type == 'gpx'){
 		  $VectorLayer .= '
@@ -342,13 +306,13 @@ class Osm_OLJS3
 		}
 
 		$VectorLayer .= $a_MapName .'.addLayer(vectorL'.$a_Counter.');';
-	
+
 	  } else {
-	
+
 		/** titles for layers are give, so let's start the magic :-)
-		 * vectorM is a global array	
-		 * no adding of layer at the end of this script 
-		 */ 
+		 * vectorM is a global array
+		 * no adding of layer at the end of this script
+		 */
 		if ($a_Type == 'kml'){
 			$VectorLayer .= '
 				vectorM[\'' . $a_MapName . '\'][' . $a_Counter . '] = new ol.layer.Vector({
@@ -360,7 +324,7 @@ class Osm_OLJS3
 				});'
 			;
 		}
-		
+
 		if ($a_Type == 'gpx'){
 			$VectorLayer .= '
 				vectorM[\'' . $a_MapName . '\'][' . $a_Counter . '] = new ol.layer.Vector({
@@ -376,7 +340,7 @@ class Osm_OLJS3
 				;
 			}
 		}
-		
+
 	return $VectorLayer;
 	}
 }

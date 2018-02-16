@@ -1493,7 +1493,7 @@ function bp_insert_activity_meta( $content = '' ) {
 
 		// Setup variables for activity meta.
 		$activity_permalink = bp_activity_get_permalink( $activities_template->activity->id, $activities_template->activity );
-		$activity_meta      = sprintf( '%1$s <a href="%2$s" class="view activity-time-since" title="%3$s">%4$s</a>',
+		$activity_meta      = sprintf( '%1$s <a href="%2$s" class="view activity-time-since bp-tooltip" data-bp-tooltip="%3$s">%4$s</a>',
 			$new_content,
 			$activity_permalink,
 			esc_attr__( 'View Discussion', 'buddypress' ),
@@ -1533,7 +1533,7 @@ function bp_insert_activity_meta( $content = '' ) {
  *
  * @global object $activities_template {@link BP_Activity_Template}
  *
- * @param BP_Activity_Activity $activity Optional. Falls back on the current item in the loop.
+ * @param false|BP_Activity_Activity $activity Optional. Falls back on the current item in the loop.
  * @return bool True if can delete, false otherwise.
  */
 function bp_activity_user_can_delete( $activity = false ) {
@@ -2090,7 +2090,7 @@ function bp_activity_comment_delete_link() {
 	 *                      activity comment.
 	 */
 	function bp_get_activity_comment_delete_link() {
-		$link = wp_nonce_url( bp_get_activity_directory_permalink() . 'delete/' . bp_get_activity_comment_id() . '?cid=' . bp_get_activity_comment_id(), 'bp_activity_delete_link' );
+		$link = wp_nonce_url( trailingslashit( bp_get_activity_directory_permalink() . 'delete/' . bp_get_activity_comment_id() ) . '?cid=' . bp_get_activity_comment_id(), 'bp_activity_delete_link' );
 
 		/**
 		 * Filters the link used for deleting the activity comment currently being displayed.
@@ -2342,8 +2342,8 @@ function bp_activity_comment_form_nojs_display() {
 	 *
 	 * @global object $activities_template {@link BP_Activity_Template}
 	 *
-	 * @return string|bool The activity comment form no JavaScript
-	 *                     display CSS. False on failure.
+	 * @return string|false The activity comment form no JavaScript
+	 *                      display CSS. False on failure.
 	 */
 	function bp_get_activity_comment_form_nojs_display() {
 		global $activities_template;

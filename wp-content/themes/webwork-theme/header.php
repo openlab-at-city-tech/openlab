@@ -20,7 +20,7 @@
 			<div class="header-cover section bg-dark-light no-padding">
 
 				<div class="header section">
-					<img class="banner-img" src="<?php echo get_stylesheet_directory_uri() . '/images/OLWW_BANNER.png'; ?>" />
+					<img class="banner-img" src="<?php echo get_stylesheet_directory_uri() . '/images/OLWW_BANNER.png'; ?>" alt="OpenLab WeBWorK logo" />
 				</div> <!-- /header -->
 
 			</div> <!-- /bg-dark -->

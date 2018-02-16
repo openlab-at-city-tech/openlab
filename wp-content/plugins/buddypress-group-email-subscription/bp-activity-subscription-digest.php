@@ -168,6 +168,9 @@ function ass_digest_fire( $type ) {
 		// filter the list - can be used to sort the groups
 		$group_activity_ids = apply_filters( 'ass_digest_group_activity_ids', @$group_activity_ids );
 
+		// Keep an unmodified copy of the activity IDs to be passed to filters.
+		$group_activity_ids_pristine = $group_activity_ids;
+
 		$header = "<div class=\"digest-header\" {$ass_email_css['title']}>$title " . __('at', 'bp-ass')." <a href='" . $bp->root_domain . "'>$blogname</a></div>\n\n";
 		$message = apply_filters( 'ass_digest_header', $header, $title, $ass_email_css['title'] );
 
@@ -267,6 +270,17 @@ function ass_digest_fire( $type ) {
 				// BP-specific tokens.
 				$user_message_args['usermessage'] = $body;
 				$user_message_args['poster.name'] = $userdata['user_login']; // Unused
+
+				/**
+				 * Filters the arguments passed to `ass_send_email()` when a digest is sent.
+				 *
+				 * @since 3.7.3
+				 *
+				 * @param array $user_message_args           Arguments passed to ass_send_email 'tokens' param.
+				 * @param int   $user_id                     ID of the user whose digest is currently being processed.
+				 * @param array $group_activity_ids_pristine Array of activity items in the digest.
+				 */
+				$user_message_args = apply_filters( 'bp_ges_user_digest_message_args', $user_message_args, $user_id, $group_activity_ids_pristine );
 
 				// Filters.
 				add_filter( 'bp_email_get_salutation', 'ass_digest_filter_salutation' );
@@ -446,7 +460,18 @@ function ass_digest_format_item_group( $group_id, $activity_ids, $type, $group_n
 		//$group_message .= '<pre>'. $item->id .'</pre>';
 	}
 
-	return apply_filters( 'ass_digest_format_item_group', $group_message, $group_id, $type );
+	/**
+	 * Filters the markup for a group's digest section.
+	 *
+	 * @since 3.8.0 Introduced $activity_ids and $user_id parameters.
+	 *
+	 * @param string $group_message Markup.
+	 * @param int    $group_id      ID of the group.
+	 * @param string $type          Digest type. 'dig' or 'sum'.
+	 * @param array  $activity_ids  Array of IDs included in this group's digest.
+	 * @param int    $user_id       ID of the user receiving the digest.
+	 */
+	return apply_filters( 'ass_digest_format_item_group', $group_message, $group_id, $type, $activity_ids, $user_id );
 }
 
 

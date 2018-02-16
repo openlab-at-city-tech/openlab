@@ -53,7 +53,7 @@ function messages_format_notifications( $action, $item_id, $secondary_item_id, $
 
 		if ( 'string' === $format ) {
 			if ( ! empty( $link ) ) {
-				$return = '<a href="' . esc_url( $link ) . '" title="' . esc_attr( $title ) . '">' . esc_html( $text ) . '</a>';
+				$return = '<a href="' . esc_url( $link ) . '">' . esc_html( $text ) . '</a>';
 			} else {
 				$return = esc_html( $text );
 			}
@@ -170,6 +170,14 @@ add_action( 'messages_message_sent', 'bp_messages_message_sent_add_notification'
  */
 function bp_messages_screen_conversation_mark_notifications() {
 	global $thread_template;
+
+	/*
+	 * Only run on the logged-in user's profile.
+	 * If an admin visits a thread, it shouldn't change the read status.
+	 */
+	if ( ! bp_is_my_profile() ) {
+		return;
+	}
 
 	// Get unread PM notifications for the user.
 	$new_pm_notifications = BP_Notifications_Notification::get( array(

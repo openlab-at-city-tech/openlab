@@ -1,10 +1,9 @@
 <?php
 
-add_action( 'wp_loaded', 'wpcf7_control_init' );
+add_action( 'parse_request', 'wpcf7_control_init', 20 );
 
 function wpcf7_control_init() {
-	if ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] )
-	&& 'XMLHttpRequest' == $_SERVER['HTTP_X_REQUESTED_WITH'] ) {
+	if ( WPCF7_Submission::is_restful() ) {
 		return;
 	}
 
@@ -56,7 +55,7 @@ function wpcf7_enqueue_scripts() {
 
 	$wpcf7 = array(
 		'apiSettings' => array(
-			'root' => esc_url_raw( get_rest_url() ),
+			'root' => esc_url_raw( rest_url( 'contact-form-7/v1' ) ),
 			'namespace' => 'contact-form-7/v1',
 		),
 		'recaptcha' => array(

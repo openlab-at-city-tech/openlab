@@ -53,7 +53,6 @@ jQuery(document).ready(function($) {
         document.body.removeChild(scrollDiv);
     })();
 
-
     PDFEMB_NS.vscrollbarwidth = vscrollbarwidth;
     PDFEMB_NS.hscrollbarheight = hscrollbarheight;
 
@@ -68,6 +67,8 @@ jQuery(document).ready(function($) {
         this.invalidationRound = 1;
         this.currentPageNum = 0;
         this.zoom = 100;
+        this.fromZoom = 0;
+        this.toZoom = 0;
     };
 
     pdfembPagesViewer.prototype.setup = function () {
@@ -250,12 +251,14 @@ jQuery(document).ready(function($) {
             divContainer.data('checked-window-height', newheight);
             divContainer.data('checked-window-width', newwidth);
         }
-        else if (oldheight != newheight || oldwidth != newwidth) {
+
+        if (oldheight != newheight || oldwidth != newwidth) {
             self.resizeViewer();
             self.resizeInnerDivs();
             self.invalidateAllPages();
             self.renderPage(this.currentPageNum);
             self.prerenderNearbyPages(this.currentPageNum);
+            self.pdfembMakeMobile();
 
             divContainer.data('checked-window-height', newheight);
             divContainer.data('checked-window-width', newwidth);
@@ -428,11 +431,15 @@ jQuery(document).ready(function($) {
     };
 
     pdfembPagesViewer.prototype.resizeViewer = function () {
-        var pageWidth = this.pageWidth,
-            pageHeight = this.pageHeight,
-            divContainer = this.divContainer;
+        var self = this;
+        var pageWidth = self.pageWidth,
+            pageHeight = self.pageHeight,
+            divContainer = self.divContainer;
 
         var pagesContainer = divContainer.find('div.pdfemb-pagescontainer');
+
+        var oldScrollLeft = pagesContainer[0].scrollLeft;
+        var oldScrollTop = pagesContainer[0].scrollTop;
 
         // Max out at parent container width
         var parentWidth = divContainer.parent().width();
@@ -461,12 +468,11 @@ jQuery(document).ready(function($) {
             wantWidth = parentWidth;
         }
 
-        var scale = wantWidth / pageWidth;
-        var wantHeight = pageHeight * scale;
+        var wantHeight = pageHeight * wantWidth / pageWidth;
 
-        var wantMobile = this.pdfembWantMobile(wantWidth, userHeight);
+        var wantMobile = self.pdfembWantMobile(wantWidth, userHeight);
 
-        this.wantMobile = wantMobile;
+        self.wantMobile = wantMobile;
 
         var fixedToolbars = divContainer.find('div.pdfemb-toolbar-fixed');
 
@@ -483,7 +489,7 @@ jQuery(document).ready(function($) {
             }
         }
 
-        this.userHeight = userHeight;
+        self.userHeight = userHeight;
 
         wantWidth = Math.floor(wantWidth);
         wantHeight = Math.floor(wantHeight);
@@ -491,14 +497,14 @@ jQuery(document).ready(function($) {
 
         var zoom = 100;
 
-        var wantCanvasWidth = wantWidth - (this.vscrollbar ? vscrollbarwidth : 0);
-        var wantCanvasHeight = wantHeight - (this.hscrollbar ? hscrollbarheight : 0);
+        var wantCanvasWidth = wantWidth - (self.vscrollbar ? vscrollbarwidth : 0);
+        var wantCanvasHeight = wantHeight - (self.hscrollbar ? hscrollbarheight : 0);
 
         var reducefactor = 1;
 
         if (!wantMobile) {
 
-            zoom = this.zoom;
+            zoom = self.zoom;
 
             wantCanvasWidth = wantCanvasWidth * zoom / 100;
             wantCanvasHeight = wantCanvasHeight * zoom / 100;
@@ -529,31 +535,28 @@ jQuery(document).ready(function($) {
             pagesContainer.css('top', fixedTopToolbars.height());
         }
 
+        var canvasscale = ( wantWidth - (self.vscrollbar ? vscrollbarwidth : 0) ) / pageWidth;
 
-        if (this.fromZoom != 0 && this.toZoom != 0) {
-            var oldScrollLeft = pagesContainer[0].scrollLeft;
-            var oldScrollTop = pagesContainer[0].scrollTop;
-
+        if (self.fromZoom != 0 && self.toZoom != 0) {
 
             var oldMidX = oldScrollLeft + self.pccentreLeft;
             var oldMidY = oldScrollTop + self.pccentreTop;
 
-            // var innerdiv = pagesContainer.find('div.pdfemb-inner-div').first();
-
-            pagesContainer[0].scrollLeft = (oldScrollLeft + this.pccentreLeft ) * (this.toZoom / this.fromZoom) - this.pccentreLeft;
-            pagesContainer[0].scrollTop = (oldScrollTop + this.pccentreTop) * (this.toZoom / this.fromZoom) - this.pccentreTop;
+            pagesContainer[0].scrollLeft = (oldScrollLeft + self.pccentreLeft ) * (self.toZoom / self.fromZoom) - self.pccentreLeft;
+            pagesContainer[0].scrollTop = (oldScrollTop + self.pccentreTop) * (self.toZoom / self.fromZoom) - self.pccentreTop;
         }
+
         self.fromZoom = 0;
         self.toZoom = 0;
 
-        this.wantCanvasWidth = wantCanvasWidth;
-        this.wantCanvasHeight = wantCanvasHeight;
-        this.reducefactor = reducefactor;
+        self.wantCanvasWidth = wantCanvasWidth;
+        self.wantCanvasHeight = wantCanvasHeight;
+        self.reducefactor = reducefactor;
 
-        this.wantWidth = wantWidth;
-        this.wantHeight = wantHeight;
-        this.scale = scale;
-        this.zoom = zoom;
+        self.wantWidth = wantWidth;
+        self.wantHeight = wantHeight;
+        self.canvasscale = canvasscale;
+        self.zoom = zoom;
     };
 
     pdfembPagesViewer.prototype.getTopVisiblePageNum = function () {
@@ -617,6 +620,7 @@ jQuery(document).ready(function($) {
         pagesContainer.find('.pdfemb-inner-div').not('.pdfemb-page' + pageNum).hide();
 
         innerdiv.show();
+        pagesContainer[0].scrollTop = 0;
     };
 
     pdfembPagesViewer.prototype.renderPage = function (pageNum, scrollIntoView) {
@@ -665,6 +669,8 @@ jQuery(document).ready(function($) {
                 self.createPageInnerDivs();
 
                 self.addGrabToPan();
+
+                self.pdfembMakeMobile();
             }
 
             // Lookup again if only just created
@@ -709,7 +715,7 @@ jQuery(document).ready(function($) {
 
             var wantCanvasWidth = self.wantCanvasWidth,
                 wantCanvasHeight = self.wantCanvasHeight,
-                scale = self.scale,
+                canvasscale = self.canvasscale,
                 zoom = self.zoom;
 
             canvas.css('width', wantCanvasWidth * widthfactor);
@@ -722,11 +728,8 @@ jQuery(document).ready(function($) {
                 divContainer.data('grabtopan').activate();
             }
 
-            self.pdfembMakeMobile();
-
-
             // Render PDF page into canvas context
-            var viewport = page.getViewport(scale * zoom / 100);
+            var viewport = page.getViewport(canvasscale * zoom / 100);
 
             var offscreenCanvas = document.createElement('canvas');
             offscreenCanvas.width = wantCanvasWidth * PIXEL_RATIO * self.reducefactor * widthfactor;

@@ -1,0 +1,22 @@
+{
+  "name": "oplb-gradebook",
+  "version": "1.0.0",
+  "description": "A grunt task plugin for building oplb-gradebook",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joe Unander",
+  "license": "ISC",
+  "devDependencies": {
+    "chart.js": "^2.6.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-less": "^1.4.1",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-htmlclean": "^2.7.12",
+    "jscrollpane": "^2.0.22"
+  },
+  "dependencies": {}
+}

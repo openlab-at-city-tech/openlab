@@ -107,8 +107,8 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 
 	// Activity stream filtering on action
 	if ( ! empty( $_BP_COOKIE['bp-' . $object . '-filter'] ) && '-1' != $_BP_COOKIE['bp-' . $object . '-filter'] ) {
-		$qs[] = 'type='   . $_BP_COOKIE['bp-' . $object . '-filter'];
-		$qs[] = 'action=' . $_BP_COOKIE['bp-' . $object . '-filter'];
+		$qs[] = 'type='   . urlencode( $_BP_COOKIE['bp-' . $object . '-filter'] );
+		$qs[] = 'action=' . urlencode( $_BP_COOKIE['bp-' . $object . '-filter'] );
 	}
 
 	if ( ! empty( $_BP_COOKIE['bp-' . $object . '-scope'] ) ) {
@@ -119,7 +119,7 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 
 		// Activity stream scope only on activity directory.
 		if ( 'all' != $_BP_COOKIE['bp-' . $object . '-scope'] && ! bp_displayed_user_id() && ! bp_is_single_item() )
-			$qs[] = 'scope=' . $_BP_COOKIE['bp-' . $object . '-scope'];
+			$qs[] = 'scope=' . urlencode( $_BP_COOKIE['bp-' . $object . '-scope'] );
 	}
 
 	// If page and search_terms have been passed via the AJAX post request, use those.
@@ -134,7 +134,7 @@ function bp_dtheme_ajax_querystring( $query_string, $object ) {
 
 	$object_search_text = bp_get_search_default_text( $object );
  	if ( ! empty( $_POST['search_terms'] ) && $object_search_text != $_POST['search_terms'] && 'false' != $_POST['search_terms'] && 'undefined' != $_POST['search_terms'] )
-		$qs[] = 'search_terms=' . $_POST['search_terms'];
+		$qs[] = 'search_terms=' . urlencode( $_POST['search_terms'] );
 
 	// Now pass the querystring to override default values.
 	$query_string = empty( $qs ) ? '' : join( '&', (array) $qs );
@@ -284,7 +284,7 @@ function bp_dtheme_post_update() {
 
 	} elseif ( $_POST['object'] == 'groups' ) {
 		if ( ! empty( $_POST['item_id'] ) && bp_is_active( 'groups' ) )
-			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $item_id, 'error_type' => 'wp_error' ) );
+			$activity_id = groups_post_update( array( 'content' => $_POST['content'], 'group_id' => $_POST['item_id'], 'error_type' => 'wp_error' ) );
 
 	} else {
 		$activity_id = apply_filters( 'bp_activity_custom_update', $_POST['object'], $_POST['item_id'], $_POST['content'] );

@@ -668,12 +668,12 @@ jq(document).ready( function() {
 					jq( '#' + form.attr('id') + ' textarea').val('');
 
 					/* Increase the "Reply (X)" button count */
-					jq('#activity-' + form_id[2] + ' a.acomment-reply span').html( Number( jq('#activity-' + form_id[2] + ' a.acomment-reply span').html() ) + 1 );
+					new_count = Number( jq('#activity-' + form_id[2] + ' a.acomment-reply span').html() ) + 1;
+					jq('#activity-' + form_id[2] + ' a.acomment-reply span').html( new_count );
 
 					// Increment the 'Show all x comments' string, if present
-					show_all_a = activity_comments.find('.show-all').find('a');
+					show_all_a = activity_comments.parents('.activity-comments').find('.show-all a');
 					if ( show_all_a ) {
-						new_count = jq('li#activity-' + form_id[2] + ' a.acomment-reply span').html();
 						show_all_a.html( BP_DTheme.show_x_comments.replace( '%d', new_count ) );
 					}
 				}
@@ -736,7 +736,7 @@ jq(document).ready( function() {
 					count_span.html(new_count);
 
 					// Change the 'Show all x comments' text
-					show_all_a = comment_li.siblings('.show-all').find('a');
+					show_all_a = comment_li.parents('.activity-comments').find('.show-all a');
 					if ( show_all_a ) {
 						show_all_a.html( BP_DTheme.show_x_comments.replace( '%d', new_count ) );
 					}
@@ -1187,12 +1187,14 @@ jq(document).ready( function() {
 	jq( '.visibility-toggle-link' ).on( 'click', function( event ) {
 		event.preventDefault();
 
-		jq( this ).parent().hide().addClass( 'field-visibility-settings-hide' )
+		jq( this ).attr( 'aria-expanded', 'true' ).parent().hide().addClass( 'field-visibility-settings-hide' )
 			.siblings( '.field-visibility-settings' ).show().addClass( 'field-visibility-settings-open' );
 	} );
 
 	jq( '.field-visibility-settings-close' ).on( 'click', function( event ) {
 		event.preventDefault();
+
+		jq( '.visibility-toggle-link' ).attr( 'aria-expanded', 'false' );
 
 		var settings_div = jq( this ).parent(),
 			vis_setting_text = settings_div.find( 'input:checked' ).parent().text();
@@ -1397,6 +1399,13 @@ jq(document).ready( function() {
 		return false;
 	} );
 
+	// Fix hidden group visibility with themes using the .hidden CSS rule.
+	jq('#groups-list li.hidden').each(function() {
+		if ( jq(this).css('display') === 'none' ) {
+			jq(this).css('cssText', 'display: list-item !important');
+		}
+	});
+
 	/** Button disabling ************************************************/
 
 	jq('#buddypress').on( 'click', '.pending', function() {
@@ -1558,9 +1567,9 @@ jq(document).ready( function() {
 					link.find('.bp-screen-reader-text').text( BP_PM_Star.strings.text_star );
 
 					if ( 1 === BP_PM_Star.is_single_thread ) {
-						link.prop('title', BP_PM_Star.strings.title_star );
+						link.attr('data-bp-tooltip', BP_PM_Star.strings.title_star );
 					} else {
-						link.prop('title', BP_PM_Star.strings.title_star_thread );
+						link.attr('data-bp-tooltip', BP_PM_Star.strings.title_star_thread );
 					}
 
 				} else {
@@ -1569,9 +1578,9 @@ jq(document).ready( function() {
 					link.find('.bp-screen-reader-text').text(BP_PM_Star.strings.text_unstar);
 
 					if ( 1 === BP_PM_Star.is_single_thread ) {
-						link.prop('title', BP_PM_Star.strings.title_unstar );
+						link.attr('data-bp-tooltip', BP_PM_Star.strings.title_unstar );
 					} else {
-						link.prop('title', BP_PM_Star.strings.title_unstar_thread );
+						link.attr('data-bp-tooltip', BP_PM_Star.strings.title_unstar_thread );
 					}
 				}
 			}
@@ -1964,18 +1973,17 @@ function bp_legacy_theme_hide_comments() {
 		comment_lis = jq(this).children('ul').children('li');
 		comment_count = ' ';
 
-		if ( jq('#' + parent_li.attr('id') + ' a.acomment-reply span').length ) {
-			comment_count = jq('#' + parent_li.attr('id') + ' a.acomment-reply span').html();
+		if ( jq('#' + parent_li.attr('id') + ' li').length ) {
+			comment_count = jq('#' + parent_li.attr('id') + ' li').length;
 		}
 
 		comment_lis.each( function(i) {
 			/* Show the latest 5 root comments */
 			if ( i < comment_lis.length - 5 ) {
-				jq(this).addClass('hidden');
-				jq(this).toggle();
+				jq(this).hide();
 
 				if ( !i ) {
-					jq(this).before( '<li class="show-all"><a href="#' + parent_li.attr('id') + '/show-all/" title="' + BP_DTheme.show_all_comments + '">' + BP_DTheme.show_x_comments.replace( '%d', comment_count ) + '</a></li>' );
+					jq(this).before( '<li class="show-all"><a href="#' + parent_li.attr('id') + '/show-all/">' + BP_DTheme.show_x_comments.replace( '%d', comment_count ) + '</a></li>' );
 				}
 			}
 		});
@@ -2073,7 +2081,7 @@ function bp_get_query_var( param, url ) {
 	// Parse querystring into object props.
 	// http://stackoverflow.com/a/21152762
 	url.forEach(function(item) {
-		qs[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent( item.split("=")[1] );
+		qs[item.split('=')[0]] = item.split('=')[1] && decodeURIComponent( item.split('=')[1] );
 	});
 
 	if ( qs.hasOwnProperty( param ) && qs[param] != null ) {
