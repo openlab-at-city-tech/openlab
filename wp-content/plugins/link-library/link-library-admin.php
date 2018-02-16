@@ -466,6 +466,11 @@ class link_library_plugin_admin {
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 		extract( $genoptions );
 
+		if ( floatval( $genoptions['schemaversion'] ) < '5.1' ) {
+			global $my_link_library_plugin;
+			$my_link_library_plugin->ll_install();
+		}
+
 		if ( !empty( $genoptions ) ) {
 			if ( empty( $numberstylesets ) ) {
 				$numberofsets = 1;
@@ -4849,6 +4854,12 @@ class link_library_plugin_admin {
 				</td>
 			</tr>
 			<tr>
+				<td><?php _e( 'Link Additional Rel Tags', 'link-library' ); ?></td>
+				<td>
+					<input type="text" id="link_addl_rel" name="link_addl_rel" size="80" value="<?php echo( isset( $extradata['link_addl_rel'] ) ? esc_attr( stripslashes( $extradata['link_addl_rel'] ) ) : '' ); ?>" />
+				</td>
+			</tr>
+			<tr>
 				<td><?php _e( 'Link Large Description', 'link-library' ); ?></td>
 				<td>
 					<?php
@@ -5186,6 +5197,10 @@ class link_library_plugin_admin {
 
 			if ( isset( $_POST['link_submitter_email'] ) ) {
 				$updatearray['link_submitter_email'] = $_POST['link_submitter_email'];
+			}
+
+			if ( isset( $_POST['link_addl_rel'] ) ) {
+				$updatearray['link_addl_rel'] = $_POST['link_addl_rel'];
 			}
 
 			if ( isset( $_POST['link_no_follow'] ) && $_POST['link_no_follow'] == 'on' ) {
