@@ -32,7 +32,6 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 		 */
 		public $additional_args;
 
-
 		/**
 		 * the field's label, used in error messages
 		 * @var string
@@ -44,7 +43,6 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 		 * @var string
 		 */
 		public $type;
-
 
 		/**
 		 * the result object of the validation
@@ -58,8 +56,6 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 		 * @param string $field_id The field ID to validate
 		 * @param array  $field    The field object to validate
 		 * @param mixed  $value    The value to validate
-		 *
-		 * @return array $result The result of the validation
 		 */
 		public function __construct( $field_id, $field, $value, $additional_args = array() ) {
 
@@ -71,27 +67,26 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 			$this->additional_args = $additional_args;
 
 			// if the field is invalid or incomplete, fail validation
-			if ( ! is_array( $this->field ) || ( ! isset( $this->field['validation_type'] ) && ! isset( $this->field['validation_callback'] ) ) ) {
+			if ( ! is_array( $this->field ) || ! ( isset( $this->field['validation_type'] ) || isset( $this->field['validation_callback'] ) ) ) {
 				$this->result->valid = false;
 				$this->result->error = esc_html__( 'Invalid or incomplete field passed', 'tribe-common' );
 				$this->result->error .= ( isset( $this->field['id'] ) ) ? ' (' . esc_html__( 'Field ID:', 'tribe-common' ) . ' ' . $this->field['id'] . ' )' : '';
-
-				return $this->result;
 			}
 
 			// call validation callback if a validation callback function is set
 			if ( isset( $this->field['validation_callback'] ) ) {
-				if ( function_exists( $this->field['validation_callback'] ) ) {
+				if ( is_callable( $this->field['validation_callback'] ) || function_exists( $this->field['validation_callback'] ) ) {
 					if ( ( ! isset( $_POST[ $field_id ] ) || ! $_POST[ $field_id ] || $_POST[ $field_id ] == '' ) && isset( $this->field['can_be_empty'] ) && $this->field['can_be_empty'] ) {
 						$this->result->valid = true;
-
-						return $this->result;
 					} else {
-						return call_user_func( $validation_callback );
+						$this->result->valid = call_user_func( $this->field['validation_callback'], $value );
+						if ( ! $this->result->valid ) {
+							$this->result->error = esc_html__( 'Invalid or incomplete field passed', 'tribe-common' );
+							$this->result->error .= ( isset( $this->field['id'] ) ) ? ' (' . esc_html__( 'Field ID:', 'tribe-common' ) . ' ' . $this->field['id'] . ' )' : '';
+						}
 					}
 				}
 			}
-
 
 			if ( isset( $this->field['validation_type'] ) ) {
 				if ( method_exists( $this, $this->field['validation_type'] ) ) {
@@ -100,8 +95,6 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 					$this->label = isset( $this->field['label'] ) ? $this->field['label'] : $this->field['id'];
 					if ( ( ! isset( $_POST[ $field_id ] ) || ! $_POST[ $field_id ] || $_POST[ $field_id ] == '' ) && isset( $this->field['can_be_empty'] ) && $this->field['can_be_empty'] ) {
 						$this->result->valid = true;
-
-						return $this->result;
 					} else {
 						call_user_func( array( $this, $this->type ) ); // run the validation
 					}
@@ -111,15 +104,7 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 					$this->result->error = esc_html__( 'Non-existant field validation function passed', 'tribe-common' );
 					$this->result->error .= ( isset( $this->field['id'] ) ) ? ' (' . esc_html__( 'Field ID:', 'tribe-common' ) . ' ' . $this->field['id'] . ' ' . _x( 'with function name:', 'non-existant function name passed for field validation', 'tribe-common' ) . ' ' . $this->field['validation_type'] . ' )' : '';
 				}
-			} else {
-				// no validation type set, validation fails
-				$this->result->valid = false;
-				$this->result->error = esc_html__( 'Invalid or incomplete field passed', 'tribe-common' );
-				$this->result->error .= ( isset( $this->field['id'] ) ) ? ' (' . esc_html__( 'Field ID:', 'tribe-common' ) . ' ' . $this->field['id'] . ' )' : '';
 			}
-
-			// return the result
-			return $this->result;
 		}
 
 		/**
@@ -181,6 +166,24 @@ if ( ! class_exists( 'Tribe__Validate' ) ) {
 			} else {
 				$this->result->valid = false;
 				$this->result->error = sprintf( esc_html__( '%s must contain numbers, letters, dashes and undescores only', 'tribe-common' ), $this->label );
+			}
+		}
+
+		/**
+		 * Validates a field as just "not empty".
+		 *
+		 * @since 4.7.6
+		 *
+		 * @return stdClass validation result object
+		 */
+		public function not_empty() {
+			$this->value = trim( $this->value );
+
+			if ( empty( $this->value ) ) {
+				$this->result->valid = false;
+				$this->result->error = sprintf( esc_html__( '%s must not be empty', 'tribe-common' ), $this->label );
+			} else {
+				$this->result->valid = true;
 			}
 		}
 

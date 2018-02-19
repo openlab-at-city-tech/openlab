@@ -1009,6 +1009,13 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				}
 
 				$rel = $linkitem['link_rel'];
+
+				if ( !empty( $linkitem['link_addl_rel'] ) && !empty( $rel ) ) {
+					$rel .= ' ' . $linkitem['link_addl_rel'];
+				} elseif ( !empty( $linkitem['link_addl_rel'] ) && empty( $rel ) ) {
+					$rel = $linkitem['link_addl_rel'];
+				}
+
 				if ( !empty( $rel ) && !$nofollow && !$linkitem['link_no_follow'] ) {
 					$rel = ' rel="' . $rel . '"';
 				} elseif ( !empty( $rel ) && ( $nofollow || $linkitem['link_no_follow'] ) ) {

@@ -2,8 +2,9 @@
 Contributors: simplecalendar, sureswiftcapital, pderksen, nickyoung87, nekojira, rosshanney
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
-Tested up to: 4.8.1
-Stable tag: 3.1.10
+Requires PHP: 5.3+
+Tested up to: 4.9
+Stable tag: 3.1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,11 +97,28 @@ We'd love your help! Here's a few things you can do:
 
 == Changelog ==
 
+= 3.1.14 - February 15, 2018 =
+* Fix: Issue where navigation to next month would be disabled when multi-day events extended to future months.
+
+= 3.1.13 - February 5, 2018 =
+* Fix: Issue where calendar event pop-ups would display without content.
+
+= 3.1.12 - January 4, 2018 =
+* Backwards Compat: Restored previous version (v1) of Google API Client lib to support older versions of PHP.
+* Fix: Fixed bug present in PHP 7.2 which was causing fatal errors.
+
+= 3.1.11.1 - January 3, 2018 =
+* Fix: Bump required PHP version to match 3.1.11 requiring PHP 5.5 so site's running older versions don't crash when updating.
+
+= 3.1.11 - January 2, 2018 =
+* Dev: Update Google API Client libraries to v2. NOTE: Version 5.5+ for PHP now required.
+* Fix: Default calendar list view not showing pro calendar coloring when Calendar Settings > Appearance > Limit Visible Events is set.
+
 = 3.1.10 - August 22, 2017 =
 
 * Fix: Fixed an issue where Google Calendar API key sometimes wouldn't save on the settings page.
 * Feature: Allow administrators to set spacing within the datetime separator under individual advanced calendar settings.
-* Tweak: Add the updated separator to the end date for multi-day events for consistency. i.e. if separator is " @ ", multi-day event
+* Tweak: Add the updated separator to the end date for multi-day events for consistency. i.e. if separator is " @ ", multi-day events date/time would display similar to "August 27 2017 @ 10:00 am-September 04 2017 @ 11:00 am" on tooltip or list view.
 
 = 3.1.9 - December 9, 2016 =
 

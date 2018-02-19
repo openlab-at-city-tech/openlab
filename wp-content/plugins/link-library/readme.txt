@@ -59,6 +59,9 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.15.1 =
+* Added new field to link editor to be able to specify additional rel tags for a link using free-form text
+
 = 5.9.15 =
 * Additional fix related to pagination with permalinks
 

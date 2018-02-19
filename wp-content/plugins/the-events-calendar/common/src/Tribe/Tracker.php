@@ -44,6 +44,9 @@ class Tribe__Tracker {
 
 		// Track the Post term updates
 		add_action( 'set_object_terms', array( $this, 'track_taxonomy_term_changes' ), 10, 6 );
+
+		// Clean up modified fields if the post is removed.
+		add_action( 'delete_post', array( $this, 'cleanup_meta_fields' ) );
 	}
 
 	/**
@@ -355,8 +358,13 @@ class Tribe__Tracker {
 
 		$tracked_post_types = $this->get_post_types();
 
-		$post = get_post( $object_id );
-		if ( empty( $post ) || ! in_array( $post->post_type, $tracked_post_types ) ) {
+		$post_id = tribe_post_exists( $object_id );
+
+		if (
+			empty( $post_id )
+			|| ! ( $post = get_post( $post_id ) )
+			|| ! in_array( $post->post_type, $tracked_post_types )
+		) {
 			return false;
 		}
 
@@ -425,5 +433,18 @@ class Tribe__Tracker {
 	 */
 	public function set_tracked_post_types( array $tracked_post_types ) {
 		$this->tracked_post_types = $tracked_post_types;
+	}
+
+	/**
+	 * Make sure to remove the changed field if the event is deleted to ensure there are no left meta fields when
+	 * the event is deleted.
+	 *
+	 * @since 4.7.6
+	 *
+	 * @param int  Post ID
+	 * @return bool
+	 */
+	public function cleanup_meta_fields( $post_id ) {
+		return delete_post_meta( (int) $post_id, self::$field_key );
 	}
 }
