@@ -37,7 +37,6 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-accessibility/wp-accessibility',
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
-		'openlab-gradebook/GradeBook.php',
 	);
 
 	if ( ! is_super_admin() ) {
