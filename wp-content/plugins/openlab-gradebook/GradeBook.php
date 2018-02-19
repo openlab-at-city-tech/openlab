@@ -162,7 +162,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
     }
 }
 
-add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts');
+add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts', 9999);
 
 /**
  * Legacy: callback for OpenLab Gradebook instantiation
