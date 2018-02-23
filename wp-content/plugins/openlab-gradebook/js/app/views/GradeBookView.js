@@ -147,10 +147,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 filterAssignments: function () {
                     var _x = $('#filter-assignments-select').val();
+                    console.log('_x in filterAssignments', _x);
                     this.filter_option = _x;
                     var _toHide = this.gradebook.assignments.filter(
                             function (assign) {
-                                return assign.get('assign_category') != _x;
+                                console.log('assign_category in filterAssignments', assign.get('assign_category'));
+                                return assign.get('assign_category') !== _x;
                             }
                     );
                     var _toShow = this.gradebook.assignments.filter(

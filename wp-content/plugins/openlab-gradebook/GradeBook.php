@@ -138,7 +138,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.7', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.3.5', true);
+        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.3.6', true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
         wp_enqueue_script('requirejs');
@@ -154,7 +154,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
 
         wp_localize_script('requirejs', 'require', array(
             'baseUrl' => $app_base,
-            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver=0.0.3.3' : '/oplb-gradebook-app-min.js?ver=0.0.3.3'))
+            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver=0.0.3.6' : '/oplb-gradebook-app-min.js?ver=0.0.3.6'))
         ));
         
     } else {

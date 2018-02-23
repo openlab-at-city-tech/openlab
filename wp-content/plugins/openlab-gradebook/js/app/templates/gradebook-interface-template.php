@@ -27,7 +27,7 @@
                     <% 
                     if( assign_categories){
                     for (var i in assign_categories){
-                    print('<option value='+assign_categories[i]+'>'+assign_categories[i]+'</option>');
+                    print('<option value="'+assign_categories[i]+'">'+assign_categories[i]+'</option>');
                     }
                     }
                     %>  											   			      
