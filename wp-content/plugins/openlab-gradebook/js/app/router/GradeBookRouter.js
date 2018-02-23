@@ -37,6 +37,7 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                             this.clearViews();
                             $('#wpbody-content').prepend($('#ajax-template').html());
                             this.courseList.fetchCourses().then(function (val) {
+                                console.log('self', self, this);
                                 $('.ajax-loader-container').remove();
                                 var homeView = new CourseListView({collection: self.courseList});
                                 self._views.push(homeView);
