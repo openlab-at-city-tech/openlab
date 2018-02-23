@@ -57,7 +57,7 @@ $oplb_upload_csv = new gradebook_upload_csv_API();
  */
 function register_oplb_gradebook_menu_page() {
     $roles = wp_get_current_user()->roles;
-
+    
     //in at least one case a super admin was not properly assigned a role
     if (empty($roles) && is_super_admin()) {
         $roles[0] = 'administrator';
@@ -65,6 +65,7 @@ function register_oplb_gradebook_menu_page() {
 
     $my_admin_page = add_menu_page('OpenLab GradeBook', 'OpenLab GradeBook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook', 'dashicons-book-alt', '6.12');
     $add_submenu_page_settings = in_array($roles[0], array_keys(get_option('oplb_gradebook_settings')));
+    
     if ($add_submenu_page_settings) {
         add_submenu_page('oplb_gradebook', 'Settings', 'Settings', 'administrator', 'oplb_gradebook_settings', 'init_oplb_gradebook_settings');
     }
@@ -77,19 +78,18 @@ add_action('admin_menu', 'register_oplb_gradebook_menu_page', 10);
  * That hash initiates the client-side app functionality
  */
 function oplb_gradebook_admin_menu_custom(){
-    global $menu, $submenu;
+    global $menu, $submenu, $plugin_page;
 
-    foreach($menu as &$menu_item){
+    if (!isset($submenu['oplb_gradebook'])) {
+        foreach ($menu as &$menu_item) {
 
-        if(in_array('oplb_gradebook', $menu_item)){
+            if (in_array('oplb_gradebook', $menu_item)) {
 
-            $menu_item[2] = 'admin.php?page=oplb_gradebook#courses';
+                $menu_item[2] = 'admin.php?page=oplb_gradebook#courses';
+
+            }
 
         }
-
-    }
-
-    if(!isset($submenu['oplb_gradebook'])){
         return false;
     }
 
@@ -100,7 +100,7 @@ function oplb_gradebook_admin_menu_custom(){
         }
 
         foreach($submenu_item as &$item){
-
+            
             if($item === 'oplb_gradebook'){
                 $item = 'admin.php?page=oplb_gradebook#courses';
             }
@@ -135,7 +135,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         }
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), '0.0.0.2', false);
-        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.7', false);
+        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), '0.0.0.8', false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), '0.0.0.2', false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), '0.0.0.2', true);
         wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), '0.0.3.6', true);
