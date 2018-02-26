@@ -1,4 +1,7 @@
 <?php
+/**
+ * Statistics Endpoint
+ */
 class OPLB_STATISTICS{
 	public function __construct(){
 		add_action('wp_ajax_oplb_statistics', array($this, 'statistics'));											

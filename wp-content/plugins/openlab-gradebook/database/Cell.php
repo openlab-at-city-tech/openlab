@@ -1,51 +1,11 @@
 <?php
+/**
+ * Cell API
+ */
 class gradebook_cell_API{
 	public function __construct(){
 		add_action('wp_ajax_cell', array($this, 'cell'));											
 	}
-	
-/*********************************
-* Use the following template to extend api
-*
-*	public function name_of_api(){
-*		global $wpdb;
-*   	$wpdb->show_errors();  		
-*		if (!gradebook_check_user_role('administrator')){	
-*			echo json_encode(array("status" => "Not Allowed."));
-*			die();
-*		}   		
-*		switch ($_SERVER['REQUEST_METHOD']){
-*			case 'DELETE' :  
-*	  			echo json_encode(array('delete'=>'deleting'));
-*	  			break;
-*	  		case 'PUT' :
-*	  			echo json_encode(array('put'=>'putting'));
-*				break;
-*	  		case 'UPDATE' :
-*				echo json_encode(array("update" => "updating"));				
-*				break;
-*	  		case 'PATCH' :
-*				echo json_encode(array("patch" => "patching"));				
-*				break;
-*	  		case 'GET' :
-*				echo json_encode(array("get" => "getting"));	
-*				break;
-*	  		case 'POST' :				
-*				echo json_encode(array("post" => "posting"));		  		
-*				break;
-*	  	}
-*	  	die();
-*	}
-*********************************/
-
-
-
-/*************************
-*
-*   cell api
-*
-**************************/	
-	
 
 	public function cell(){
 		global $wpdb, $oplb_gradebook_api;

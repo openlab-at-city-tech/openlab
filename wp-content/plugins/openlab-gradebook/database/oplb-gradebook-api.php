@@ -2,28 +2,16 @@
 
 class oplb_gradebook_api {
 
+    public function __construct() {
+
+        add_action('wp_ajax_get_csv', array($this, 'get_csv'));
+
+    }
+
     public function build_sorter($key) {
         return function ($a, $b) use ($key) {
             return strnatcmp($a[$key], $b[$key]);
         };
-    }
-
-    /**
-     * used to be able to update user meta here, but this has been deprecated
-     * may come back in the future as a Gradebook-only feature
-     * @param type $id
-     * @param type $first_name
-     * @param type $last_name
-     * @return type
-     */
-    public function oplb_gradebook_update_user($id, $first_name, $last_name) {
-
-        $user = get_user_by('id', $user_id);
-        return array(
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'id' => $user_id
-        );
     }
 
     public function get_line_chart($uid, $gbid) {
@@ -202,7 +190,7 @@ class oplb_gradebook_api {
                     'gbid' => intval($gbid)
                 );
             }
-            usort($cells, build_sorter('assign_order'));
+            usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
@@ -263,7 +251,7 @@ class oplb_gradebook_api {
                 'id' => intval($student->ID),
                 'gbid' => intval($gbid)
             );
-            usort($cells, build_sorter('assign_order'));
+            usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
@@ -282,6 +270,11 @@ class oplb_gradebook_api {
         }
     }
 
+    /**
+     * Utility function for sanitizing all incoming AJAX params
+     *
+     * @return void
+     */
     public function oplb_gradebook_get_params() {
         global $wpdb;
 
@@ -657,8 +650,6 @@ class oplb_gradebook_api {
 
     /**
      * Add a new user to OpenLab Gradebook
-     * Contains legacy functionality that adds a global user
-     * @todo: deprecate this legacy functionality
      * @global type $wpdb
      * @param type $id
      * @param type $gbid
@@ -729,7 +720,7 @@ class oplb_gradebook_api {
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $user->ID, $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
-            usort($cells, build_sorter('assign_order'));
+            usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
@@ -853,6 +844,146 @@ class oplb_gradebook_api {
         );
 
         return apply_filters('oplb_gradebook_user_meta', $meta_out, $user);
+    }
+
+    /**
+     * Retreive CSV of gradebook data
+     *
+     * @return void
+     */
+    public function get_csv() {
+        global $wpdb, $oplb_gradebook_api, $oplb_upload_csv;
+
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+        $gbid = $params['gbid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) != 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+
+        //grab the letters in case we need them
+        $letter_grades = $oplb_upload_csv->getLetterGrades();
+
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
+        $course = $wpdb->get_row($query, ARRAY_A);
+
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+        $assignments = $wpdb->get_results($query, ARRAY_A);
+
+        $grade_types_by_aid = array();
+
+        foreach ($assignments as &$assignment) {
+            $assignment['id'] = intval($assignment['id']);
+            $assignment['gbid'] = intval($assignment['gbid']);
+            $assignment['assign_order'] = intval($assignment['assign_order']);
+            $grade_types_by_amID[$assignment['id']] = $assignment['assign_grade_type'];
+        }
+        usort($assignments, $this->build_sorter('assign_order'));
+
+        //setup weights - first three columns are blank to accommodate student info
+        $weights = array("", "", "", "weight");
+        foreach ($assignments as $assignment) {
+
+            $weight = $assignment['assign_weight'] . '%';
+            array_push($weights, $weight);
+        }
+
+        $column_headers_assignment_names = array();
+
+        foreach ($assignments as &$assignment) {
+            array_push($column_headers_assignment_names, $assignment['assign_name']);
+        }
+        $column_headers = array_merge(
+                array('firstname', 'lastname', 'user_login', 'current_average_grade'), $column_headers_assignment_names
+        );
+        $cells = array();
+
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
+        $cells = $wpdb->get_results($query, ARRAY_A);
+        foreach ($cells as &$cell) {
+            $cell['gbid'] = intval($cell['gbid']);
+        }
+
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $gbid, 'student');
+        $students = $wpdb->get_results($query);
+
+        foreach ($students as &$value) {
+            $studentData = get_userdata($value->uid);
+            $value = array(
+                'firstname' => $studentData->first_name,
+                'lastname' => $studentData->last_name,
+                'user_login' => $studentData->user_login,
+                'current_grade_average' => $value->current_grade_average,
+                'id' => intval($studentData->ID),
+            );
+        }
+
+        foreach ($cells as &$cell) {
+            $cell['amid'] = intval($cell['amid']);
+            $cell['uid'] = intval($cell['uid']);
+            $cell['assign_order'] = intval($cell['assign_order']);
+
+            //crunch grades by grade type
+            $this_cell_grade_type = $grade_types_by_amID[$cell['amid']];
+
+            switch ($this_cell_grade_type) {
+                case 'letter':
+
+                    $cell['assign_points_earned'] = $oplb_upload_csv->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
+
+                    break;
+                case 'checkmark':
+
+                    if (floatval($cell['assign_points_earned']) >= 60) {
+                        $cell['assign_points_earned'] = 'x';
+                    } else {
+                        $cell['assign_points_earned'] = '';
+                    }
+
+                    break;
+                default:
+
+                    $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
+            }
+        }
+        usort($cells, $this->build_sorter('assign_order'));
+        $student_records = array();
+        foreach ($students as &$row) {
+            $records_for_student = array_filter($cells, function($k) use ($row) {
+                return $k['uid'] == $row['id'];
+            });
+            $scores_for_student = array_map(function($k) {
+                return $k['assign_points_earned'];
+            }, $records_for_student);
+            $student_record = array_merge($row, $scores_for_student);
+            array_push($student_records, $student_record);
+        }
+        header('Content-Type: text/csv; charset=utf-8');
+        $filename = str_replace(" ", "_", $course['name'] . '_' . $gbid);
+        header('Content-Disposition: attachment; filename=' . $filename . '.csv');
+
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, $weights);
+        fputcsv($output, $column_headers);
+        foreach ($student_records as &$row) {
+
+            //don't want to output student internal GB id
+            unset($row['id']);
+
+            fputcsv($output, $row);
+        }
+        fclose($output);
+        die();
     }
 
 }

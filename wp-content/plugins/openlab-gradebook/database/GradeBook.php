@@ -1,4 +1,7 @@
 <?php
+/**
+ * Gradebook Endpoint
+ */
 class OPLB_GRADEBOOK{
 	public function __construct(){
 		add_action('wp_ajax_gradebook', array($this, 'gradebook'));											

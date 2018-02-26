@@ -6,10 +6,8 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 events: {
                     'hidden.bs.modal': 'editCancel',
                     'shown.bs.modal': 'populateStudentDropdown',
-                    'keyup': 'keyPressHandler',
                     'click #edit-student-save': 'submitForm',
                     'submit #edit-student-form': 'editSave',
-                    'input #user_login': 'loginSearch',
                     'change #selectStudentRange': 'handleStudentRangeSelection'
                 },
                 initialize: function (options) {
@@ -30,18 +28,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                     this.$el.modal('show');
                     return self.el;
                 },
-                keyPressHandler: function (e) {
-                    if (e.keyCode == 27)
-                        this.editCancel();
-                    if (e.keyCode == 13)
-                        this.submitForm();
-                    return this;
-                },
-                getUsersLogin: function () {
-                    this.availableTags = [
-                        "testing"
-                    ];
-                },
                 editCancel: function () {
                     this.$el.data('modal', null);
                     this.remove();
@@ -50,62 +36,33 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 submitForm: function () {
                     $('#edit-student-form').submit();
                 },
-                loginSearch: function () {
-                    var self = this;
-                    this.userList.search = $('#user_login').val();
-                    if (this.userList.search.length < 2) {
-                        $('#user_login').typeahead('destroy');
-                        return false;
-                    }
-                    if (this.userList.search.length === 2) {
-                        this.userList.fetch({success: function () {
-                                var users = _.map(self.userList.models, function (user) {
-                                    var filtered_user = user.get('data').user_login;
-                                    return filtered_user;
-                                });
-                                $('#user_login').typeahead({source: users});
-                            }});
-                    }
-                    return this;
-                },
                 editSave: function (ev) {
                     var self = this;
                     var studentInformation = $(ev.currentTarget).serializeObject();
-                    console.log('this.student in editSave', this.student);
-                    if (this.student) {
-                        studentInformation.id = parseInt(studentInformation.id);
-                        this.student.save(studentInformation, {
-                            wait: true,
-                            success: function (model, response) {
-                                console.log('model on student editSave success', model, response);
-                                Backbone.pubSub.trigger('updateWeightInfo', response);
-                            }
-                        });
-                        this.$el.modal('hide');
-                    } else {
-                        delete(studentInformation['id']);
-                        var toadds = new User(studentInformation);
-                        toadds.save(studentInformation, {success: function (model) {
-                                console.log('model in toadds editSave editStudentView', model);
-                                _.each(model.get('cells'), function (cell) {
-                                    self.gradebook.cells.add(cell);
+
+                    delete(studentInformation['id']);
+                    var toadds = new User(studentInformation);
+                    toadds.save(studentInformation, {success: function (model) {
+                            console.log('model in toadds editSave editStudentView', model);
+                            _.each(model.get('cells'), function (cell) {
+                                self.gradebook.cells.add(cell);
+                            });
+
+                            if (model.get('type') === 'all') {
+
+                                _.each(model.get('students'), function (_student) {
+                                    self.gradebook.students.add(_student);
                                 });
 
-                                if (model.get('type') === 'all') {
-
-                                    _.each(model.get('students'), function (_student) {
-                                        self.gradebook.students.add(_student);
-                                    });
-
-                                } else {
-                                    var _student = new User(model.get('student'));
-                                    self.gradebook.students.add(_student);
-                                }
-
-                                self.$el.modal('hide');
+                            } else {
+                                var _student = new User(model.get('student'));
+                                self.gradebook.students.add(_student);
                             }
-                        });
-                    }
+
+                            self.$el.modal('hide');
+                        }
+                    });
+                    
                     return false;
                 },
                 handleStudentRangeSelection: function () {

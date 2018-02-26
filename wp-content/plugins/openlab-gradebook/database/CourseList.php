@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Course List Endpoint
+ */
 class OPLB_COURSE_LIST {
 
     public function __construct() {
