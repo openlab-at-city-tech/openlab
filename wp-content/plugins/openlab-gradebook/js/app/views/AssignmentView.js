@@ -154,8 +154,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     
                     this.gradebook.attributes.distributed_weight = response.distributed_weight;
                     
-                    Backbone.pubSub.trigger('updateWeightInfo', response);
-
                     _.each(response.student_grade_update, function (update) {
                         Backbone.pubSub.trigger('updateAverageGrade', update);
                     });
