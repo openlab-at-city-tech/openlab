@@ -23,8 +23,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
-                    console.log('gradebook init', oplbGradebook);
-
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
                     Backbone.pubSub.on('updateWeightInfo', this.updateWeightInfo, this);
 
@@ -77,8 +75,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     var totalWeight = self.getTotalWeight();
 
-                    console.log('self.gradebook', self.gradebook);
-
                     var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.role, total_weight: totalWeight});
                     $('#wpbody-content').append(self.$el.html(compiled));
                     $('#filter-assignments-select').val(this.filter_option);
@@ -113,7 +109,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                     model: assignment, course: self.course, gradebook: self.gradebook
                                 });
                                 self._subviews.push(view);
-                                console.log('go cell in GradeBookView render');
                                 $('#students-header tr').append(view.render());
                             });
                             break;
@@ -135,7 +130,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             _.each(y, function (assignment) {
                                 var view = new AssignmentView({model: assignment, course: self.course, gradebook: self.gradebook});
                                 self._subviews.push(view);
-                                console.log('go student in GradeBookView render');
                                 $('#students-header tr').append(view.render());
                             });
                             break;
@@ -147,11 +141,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 filterAssignments: function () {
                     var _x = $('#filter-assignments-select').val();
-                    console.log('_x in filterAssignments', _x);
                     this.filter_option = _x;
                     var _toHide = this.gradebook.assignments.filter(
                             function (assign) {
-                                console.log('assign_category in filterAssignments', assign.get('assign_category'));
                                 return assign.get('assign_category') !== _x;
                             }
                     );
@@ -218,7 +210,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 calculateScrollBarPosition: function (event, isScrollable) {
 
                     var targetTable = $('#an-gradebook-container');
-                    console.log('targetTable, targetTable height', targetTable, targetTable.height());
                     if (targetTable.height() < 500) {
 
                         var targetTable_padding = 500 - targetTable.height();
@@ -258,9 +249,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     if (this._frame)
                         return this._frame;
 
-                    console.log('oplbGradebook', oplbGradebook);
                     wp.media.view.settings.post.id = oplbGradebook.storagePage.ID;
-                    console.log('wp.media.view.settings in demo', wp.media.view.settings);
 
                     this._frame = new uploadFrame({
                         title: 'Upload CSV',
@@ -319,7 +308,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     if (this.renderControl === 0) {
                         this.renderControl = 1;
                         var checkFile = $('.upload-csv-modal:visible').find('.upload-details .upload-index').text();
-                        console.log('go render', $('.upload-csv-modal:visible').find('.upload-details .upload-index'), parseInt(checkFile));
                         if (parseInt(checkFile) === 1) {
                             Backbone.history.loadUrl();
                         }
@@ -328,8 +316,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 getTotalWeight: function () {
                     var self = this;
-
-                    console.log('getTotalWeight', self.gradebook.assignments, self.gradebook.attributes);
 
                     var totalWeight = 0;
                     _.each(self.gradebook.assignments.models, function (assignment) {
@@ -352,11 +338,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                 },
                 updateTotalWeight: function () {
-                    console.log('total_weight on updateTotalWeight', window.oplbGlobals.total_weight);
                 },
                 updateAverageGrade: function (data) {
-
-                    console.log('updateGradeAverage', data);
 
                     var studentID = parseInt(data.uid);
                     var target = $('#average' + studentID);
@@ -367,8 +350,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                 },
                 updateWeightInfo: function (data) {
-
-                    console.log('updateWeightInfo', data);
 
                 }
             });

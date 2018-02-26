@@ -22,7 +22,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 render: function () {
                     var self = this;
                     var template = _.template($('#edit-student-template').html());
-                    console.log('this.userList on render', this.userList);
                     var compiled = template({student: this.student, course: this.course});
                     self.$el.html(compiled);
                     this.$el.modal('show');
@@ -43,7 +42,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                     delete(studentInformation['id']);
                     var toadds = new User(studentInformation);
                     toadds.save(studentInformation, {success: function (model) {
-                            console.log('model in toadds editSave editStudentView', model);
                             _.each(model.get('cells'), function (cell) {
                                 self.gradebook.cells.add(cell);
                             });
@@ -79,8 +77,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
 
                                 var message = 'Problem retrieving student list';
                                 
-                                console.log('response.error', response.error);
-
                                 switch (response.error) {
                                     case 'no_bp':
 
@@ -113,8 +109,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                                 return false;
 
                             }
-
-                            console.log('done');
 
                             self.$el.find('#user_login').html('');
 

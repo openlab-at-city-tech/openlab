@@ -46,8 +46,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 },
                 shiftAssignmentRight: function (ev) {
                     ev.preventDefault();
-                    console.log('assign_order', this.model.get('assign_order'));
-                    console.log('assignments', this.gradebook.assignments);
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') + 1});
                     x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
                     this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility: this.model.get('assign_visibility')});
@@ -140,7 +138,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                                         }
                                     }
 
-                                    console.log('response in deleteAssignment', response);
                                     self.checkForAverageGradeUpdates(response);
 
                                 }}
@@ -154,8 +151,6 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     if (typeof response.student_grade_update === 'undefined' || response.student_grade_update.length < 1) {
                         return false;
                     }
-                    
-                    console.log('checkForAverageUpdates', response, this.gradebook)
                     
                     this.gradebook.attributes.distributed_weight = response.distributed_weight;
                     

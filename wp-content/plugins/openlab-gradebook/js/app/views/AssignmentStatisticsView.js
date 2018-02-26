@@ -25,7 +25,6 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                         dataType: 'json',
                         success: function (data) {
                             var ctx = $('#myChart').get(0).getContext("2d");
-                            console.log('data for pie', data);
                             var myNewChart = new Chart(ctx, {
                                 type: 'pie',
                                 data: data,

@@ -23,8 +23,6 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/Course', 'boo
                         this.initvals.goInit = false;
                     }
 
-                    console.log('this.course', this.course);
-
                     this.courseList = this.collection;
                     $('body').append(this.render().el);
                     return this;

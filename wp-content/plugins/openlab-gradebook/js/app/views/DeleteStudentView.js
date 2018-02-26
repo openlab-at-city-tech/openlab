@@ -51,7 +51,6 @@ define(['jquery', 'backbone', 'underscore'],
                     todel.destroy({success: function (model, response) {
 
                             var cells = self.gradebook.cells;
-                            console.log('cells in deleteSave', cells);
 
                             _.each(cells.models, function (cell, index) {
 
@@ -66,8 +65,6 @@ define(['jquery', 'backbone', 'underscore'],
                                 }
 
                             });
-
-                            console.log('cells after procecssing in deleteSave', cells);
 
                             self.$el.modal('hide');
                         }});
