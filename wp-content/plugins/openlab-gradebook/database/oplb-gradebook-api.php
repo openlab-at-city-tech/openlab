@@ -852,7 +852,7 @@ class oplb_gradebook_api {
      * @return void
      */
     public function get_csv() {
-        global $wpdb, $oplb_gradebook_api, $oplb_upload_csv;
+        global $wpdb, $oplb_gradebook_api;
 
         $params = $oplb_gradebook_api->oplb_gradebook_get_params();
         $gbid = $params['gbid'];
@@ -870,7 +870,7 @@ class oplb_gradebook_api {
         }
 
         //grab the letters in case we need them
-        $letter_grades = $oplb_upload_csv->getLetterGrades();
+        $letter_grades = $this->getLetterGrades();
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
         $course = $wpdb->get_row($query, ARRAY_A);
@@ -937,7 +937,7 @@ class oplb_gradebook_api {
             switch ($this_cell_grade_type) {
                 case 'letter':
 
-                    $cell['assign_points_earned'] = $oplb_upload_csv->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
+                    $cell['assign_points_earned'] = $this->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
 
                     break;
                 case 'checkmark':
@@ -984,6 +984,108 @@ class oplb_gradebook_api {
         }
         fclose($output);
         die();
+    }
+
+    public function getLetterGrades() {
+
+        $letter_grades = array(
+            array(
+                label => 'A+',
+                value => 100,
+                range_low => 100,
+                range_high => 101
+            ),
+            array(
+                label => 'A',
+                value => 96,
+                range_low => 93,
+                range_high => 100
+            ),
+            array(
+                label => 'A-',
+                value => 91.5,
+                range_low => 90,
+                range_high => 93
+            ),
+            array(
+                label => 'B+',
+                value => 88.5,
+                range_low => 87,
+                range_high => 90
+            ),
+            array(
+                label => 'B',
+                value => 85,
+                range_low => 83,
+                range_high => 87
+            ),
+            array(
+                label => 'B-',
+                value => 81.5,
+                range_low => 80,
+                range_high => 83
+            ),
+            array(
+                label => 'C+',
+                value => 78.5,
+                range_low => 77,
+                range_high => 80
+            ),
+            array(
+                label => 'C',
+                value => 75,
+                range_low => 73,
+                range_high => 77
+            ),
+            array(
+                label => 'C-',
+                value => 71.5,
+                range_low => 70,
+                range_high => 73
+            ),
+            array(
+                label => 'D+',
+                value => 68.5,
+                range_low => 67,
+                range_high => 70
+            ),
+            array(
+                label => 'D',
+                value => 65,
+                range_low => 63,
+                range_high => 67
+            ),
+            array(
+                label => 'D-',
+                value => 61.5,
+                range_low => 60,
+                range_high => 63
+            ),
+            array(
+                label => 'F',
+                value => 50,
+                range_low => 1,
+                range_high => 60
+            )
+        );
+
+        return $letter_grades;
+    }
+
+    public function numeric_to_letter_grade_conversion($number) {
+
+        $letter_grades = $this->getLetterGrades();
+
+        foreach ($letter_grades as $letter_grade) {
+
+            if ($number < $letter_grade['range_high'] && $number >= $letter_grade['range_low']) {
+
+                $letter = $letter_grade['label'];
+                break;
+            }
+        }
+
+        return $letter;
     }
 
 }
