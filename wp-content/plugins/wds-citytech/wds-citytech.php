@@ -2460,6 +2460,13 @@ add_action( 'plugins_loaded', function() {
 } );
 
 /**
+ * Unregister wp-accessibility widget.
+ */
+add_action( 'widgets_init', function() {
+	unregister_widget( 'wp_accessibility_toolbar' );
+}, 20 );
+
+/**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
