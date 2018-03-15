@@ -285,10 +285,17 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                 },
                 updateAverageGrade: function (data) {
-
                     var studentID = parseInt(data.uid);
                     var target = $('#average' + studentID);
                     target.html(data.current_grade_average);
+                    
+                    var index = 0;
+                    _.each(this.gradebook.students.models, function (student) {
+                        if(parseInt(student.get('id')) === studentID){
+                            student.set({ current_grade_average: data.current_grade_average }, { silent: true });
+                        }
+                        index++;
+                    });
 
                     target.attr('title', data.current_grade_average)
                             .tooltip('fixTitle');

@@ -88,7 +88,6 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                     return false;
                 },
                 checkForAverageGradeUpdates: function (response) {
-                    
                     if (typeof response.student_grade_update === 'undefined' || response.student_grade_update.length < 1) {
                         return false;
                     }
