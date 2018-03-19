@@ -82,7 +82,7 @@ class OPLB_USER_LIST {
 
                     }
                 }
-
+                
                 $students_out = apply_filters('oplb_gradebook_students_list', $students_out, $blog_id);
                 
                 if ($method === 'retrieve') {

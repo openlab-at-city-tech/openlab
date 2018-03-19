@@ -113,6 +113,16 @@ function openlab_oplb_gradebook_students_list($students, $blog_id){
 
         endwhile;
 
+    else: 
+
+        //if there's an error set, return the error
+        if(isset($students['error'])){
+            $students_out['error'] = $students['error'];
+        } else {
+            //no students to return
+            $students_out['error'] = 'no students';
+        }
+
     endif;
 
     return $students_out;

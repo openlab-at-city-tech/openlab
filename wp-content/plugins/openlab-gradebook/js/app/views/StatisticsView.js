@@ -24,7 +24,6 @@ define(['jquery', 'backbone', 'underscore', 'chart'],
                         },
                         dataType: 'json',
                         success: function (data) {
-                            console.log('data', data);
                             var ctx = $('#myChart').get(0).getContext("2d");
                             var options = {
                                 legend: {

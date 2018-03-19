@@ -55,6 +55,7 @@ define(['backbone', 'models/Course'],
                                     }
                                 },
                                 parse: function (response) {
+                                    this.gbRole = response.role;
                                     return response.course_list;
                                 }
                             });
