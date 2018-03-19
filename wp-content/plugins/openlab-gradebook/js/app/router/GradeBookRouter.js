@@ -17,9 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                         },
                         routes: {
                             "courses": "courses",
-                            "gradebook/:id": "show-gradebook",
-                            "course/:cid/gradebook/add-student": "edit-student",
-                            "course/:cid/gradebook/add-student/:uid": "edit-student"
+                            "gradebook/:id": "show-gradebook"
                         },
                         initPage: function () {
                             $('#wpcontent').css('padding-left', '0px');
@@ -53,16 +51,7 @@ define(['jquery', 'underscore', 'backbone', 'views/CourseListView', 'views/Grade
                                 var gradeBookView = new GradeBookView({gradebook: self.gradebook, course: self.course});
                                 self._views.push(gradeBookView);
                             });
-                        },
-                        "edit-student": function (cid, uid) {
-                            this.clearViews();
-                            if (uid) {
-                                var editStudentView = new EditStudentView();
-                            } else {
-                                var editStudentView = new EditStudentView();
-                            }
-                            this._views.push(editStudentView);
-                        },
+                        }
                     });
                     return GradeBookRouter;
                 });

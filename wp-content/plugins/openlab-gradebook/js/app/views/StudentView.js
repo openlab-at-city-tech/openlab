@@ -5,12 +5,10 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                             {
                                 tagName: 'tr',
                                 events: {
-                                    'click a.edit-student': 'editStudent',
                                     'click a.delete-student': 'deleteStudent',
                                     'click a.student-statistics': 'studentStatistics',
                                     'click .dashicons-menu': 'toggleStudentMenu',
                                     'click li.student-submenu-delete': 'deleteStudent',
-                                    //'click li.student-submenu-edit': 'editStudent',
                                     'click li.student-submenu-stats': 'studentStatistics',
                                 },
                                 /** @constructs */
@@ -116,10 +114,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                 studentStatistics: function (ev) {
                                     ev.preventDefault();
                                     var view = new StatisticsView({model: this.model, options: this.options});
-                                },
-                                editStudent: function (ev) {
-                                    ev.preventDefault();
-                                    var view = new EditStudentView({model: this.model, course: this.course, options: this.options});
                                 },
                                 deleteStudent: function (ev) {
                                     ev.preventDefault();

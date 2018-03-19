@@ -36,11 +36,7 @@ class OPLB_USER {
 
                 break;
             case 'PUT' :
-                $ID = $params['id'];
-                $first_name = $params['first_name'];
-                $last_name = $params['last_name'];
-                $results = $oplb_gradebook_api->oplb_gradebook_update_user($ID, $first_name, $last_name);
-                echo json_encode($results);
+                echo json_encode(array("put" => "putting"));
                 die();
                 break;
             case 'UPDATE' :
@@ -50,11 +46,7 @@ class OPLB_USER {
                 echo json_encode(array("patch" => "patching"));
                 break;
             case 'GET' :
-                //This is not called anywhere... do we need it?
-                $id = wp_get_current_user()->ID;
-                $gbid = $params['gbid'];
-                $results = $oplb_gradebook_api->oplb_gradebook_get_current_user($id, $gbid);
-                echo json_encode($results);
+                echo json_encode(array("get" => "getting"));
                 break;
             case 'POST' :
                 $gbid = $params['gbid'];

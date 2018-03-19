@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Assignment API
+ */
 class gradebook_assignment_API {
 
     public function __construct() {

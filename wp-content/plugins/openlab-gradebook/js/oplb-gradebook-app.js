@@ -70,7 +70,5 @@ require(['jquery', 'router/GradeBookRouter', 'bootstrap'],
                 return o;
             }
             var App = new GradeBookRouter();
-            console.log('App', App);
-            console.log('oplbGradebook', oplbGradebook);
         });
 

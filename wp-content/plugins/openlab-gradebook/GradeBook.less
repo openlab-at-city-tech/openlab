@@ -33,6 +33,21 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+    &.toplevel_page_oplb_gradebook {
+        #adminmenu {
+            .menu-top.toplevel_page_oplb_gradebook {
+                .wp-first-item {
+                    a {
+                        color: #fff;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .oplb-grdbk-check-mark-2:before {
     content: "\61";
 }
@@ -95,18 +110,6 @@
                 text-align: center;
             }
         }
-    }
-}
-
-.upload-csv-modal {
-    .attachment-info {
-        .delete-attachment {
-            display: none;
-        }
-    }
-    .setting,
-    .attachment-display-settings {
-        display: none;
     }
 }
 
@@ -199,18 +202,6 @@ h5 {
 
 body {
     background-color: #f1f1f1;
-    &.admin_page_oplb-gradebook-upload-csv {
-        .oplb-bs.navbar-location-oplb-bs,
-        #wpadminbar,
-        #adminmenumain,
-        #wpfooter,
-        #local-env-flag {
-            display: none !important;
-        }
-        #wpcontent {
-            padding-top: 21px !important;
-        }
-    }
     .overline {
         text-decoration: overline;
     }

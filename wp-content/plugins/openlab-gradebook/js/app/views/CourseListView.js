@@ -47,18 +47,25 @@ function ($, Backbone, _, EditCourseView, CourseView) {
                     var compiled = template({});
                     $('#wpbody-content').prepend(this.$el.html(compiled));
 
-                    if(self.courseList.models.length){
+                        if (self.courseList.models.length) {
+                            _.each(
+                                self.courseList.models,
+                                function(course) {
+                                    var courseView = new CourseView({
+                                        model: course,
+                                        collection: self.courseList
+                                    });
+                                    $(
+                                        ".angb-course-list-tbody"
+                                    ).append(courseView.render());
+                                }
+                            );
+                        } else {
 
-                    _.each(self.courseList.models, function (course) {
-                        var courseView = new CourseView({model: course, collection: self.courseList});
-                        $('.angb-course-list-tbody').append(courseView.render());
-                    });
-                
-                    } else {
-
-                        this.editCourse(true);
-
-                    }
+                            if(self.courseList.gbRole === 'instructor'){
+                                this.editCourse(true);
+                            }
+                        }
 
                     return this;
                 },

@@ -3,10 +3,10 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_html_e('Close', 'openlab-gradebook') ?>"><span aria-hidden="true">&times;</span></button>
 
-            <% if (assignment) { %>
+            <% if (assignment.get('assign_name')) { %>
             <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Edit Assignment', 'openlab-gradebook') ?></h4>
             <% } else { %>
-            <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create Assignment', 'openlab-gradebook') ?></h4>
+            <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Add Assignment', 'openlab-gradebook') ?></h4>
             <% } %>
 
         </div>
@@ -79,8 +79,8 @@
                 <input type="hidden" name="gbid" value="<%= course.get('id') %>"/>	 											
             </form>    		
             <div>
-                <% if (assignment) { %>
-                    <p class="text-right"><?php esc_html_e('Update assignment', 'openlab-gradebook') ?> <%= assignment.get('assign_name') %> <?php esc_html_e('from course', 'openlab-gradebook') ?> <%= course.get('name') %>?</p>
+                <% if (assignment.get('assign_name')) { %>
+                    <p class="text-right"><?php esc_html_e('Update assignment', 'openlab-gradebook') ?> <%= assignment.get('assign_name') %> <?php esc_html_e('from gradeboook', 'openlab-gradebook') ?> <%= course.get('name') %>?</p>
                 <% } else { %>
                  <p class="text-right"><?php esc_html_e('Add to course', 'openlab-gradebook') ?> <%= course.get('name') %>?</p>
                 <% } %>

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Course List Endpoint
+ */
 class OPLB_COURSE_LIST {
 
     public function __construct() {
@@ -15,7 +17,10 @@ class OPLB_COURSE_LIST {
         //because the GET request selects all courses, we go with the generic user check
         if ($oplb_gradebook_api->oplb_gradebook_get_user_role() !== 'instructor'
                 && $oplb_gradebook_api->oplb_gradebook_get_user_role() !== 'student') {
-            echo json_encode(array("status" => "Not Allowed."));
+            echo json_encode(array(
+                "status" => "Not Allowed.",
+                'role' => $oplb_gradebook_api->oplb_gradebook_get_user_role()
+            ));
             die();
         }
 
@@ -47,7 +52,7 @@ class OPLB_COURSE_LIST {
                     $course['id'] = intval($course['id']);
                     $course['year'] = intval($course['year']);
                 }
-                echo json_encode(array('course_list' => $courses));
+                echo json_encode(array('course_list' => $courses, 'role' => $oplb_gradebook_api->oplb_gradebook_get_user_role()));
                 break;
             case 'POST' :
                 echo json_encode(array("post" => "posting"));
