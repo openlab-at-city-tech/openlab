@@ -88,7 +88,7 @@ function openlab_hide_plugins( $plugins ) {
 		933,
 		962,
 		956,
-		946
+		946,
 	);
 
 	//oplb gradebook whitelist on production - will last until plugin is ready to go fully live
@@ -100,6 +100,8 @@ function openlab_hide_plugins( $plugins ) {
 		9809,
 		1807,
 		10803,
+		11561,
+		11574,
 	);
 
 	$oplb_gradebook_whitelist = $oplb_gradebook_prod_whitelist;
