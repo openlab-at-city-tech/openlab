@@ -102,6 +102,7 @@ function openlab_hide_plugins( $plugins ) {
 		10803,
 		11561,
 		11574,
+		11831,
 	);
 
 	$oplb_gradebook_whitelist = $oplb_gradebook_prod_whitelist;
@@ -123,7 +124,7 @@ function openlab_hide_plugins( $plugins ) {
 			unset( $plugins[ $plugin_file ] );
 		}
 	}
-        
+
         $plugins = openlab_mu_group_type_plugin_handling($plugins);
 
 	return $plugins;
@@ -140,17 +141,17 @@ function openlab_mu_group_type_plugin_handling($plugins) {
 
     //first we convert the blog id to a group id
     $blog_id = get_current_blog_id();
-    
+
     $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
     $results = $wpdb->get_results($query);
 
     if ($results && !empty($results)) {
-        
+
         $group_id = intval($results[0]->group_id);
-        
+
         //then we get the group type and apply any necessary conditions
         $group_type = groups_get_groupmeta($group_id, 'wds_group_type');
-        
+
         $course_only_plugins = array('openlab-gradebook/GradeBook.php');
 
         if ($group_type !== 'course') {
@@ -160,7 +161,7 @@ function openlab_mu_group_type_plugin_handling($plugins) {
                     //deactive any legacy installs
                     $plugin_dir = WP_PLUGIN_DIR;
                     $plugin_path = "$plugin_dir/$pkey";
-                    
+
                     if(is_plugin_active($pkey)){
                         deactivate_plugins($plugin_path);
                     }
