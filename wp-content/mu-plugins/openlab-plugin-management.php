@@ -102,6 +102,7 @@ function openlab_hide_plugins( $plugins ) {
 		10803,
 		11561,
 		11574,
+		11831,
 	);
 
 	$oplb_gradebook_whitelist = $oplb_gradebook_prod_whitelist;
