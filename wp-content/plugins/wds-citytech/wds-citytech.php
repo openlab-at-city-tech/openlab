@@ -2478,3 +2478,14 @@ add_filter( 'bbp_get_dynamic_roles', function( $roles ) {
 
 	return $roles;
 } );
+
+/**
+ * Don't let Ultimate Category Excluder operate on loops other than the main loop.
+ *
+ * Prevents conflicts with Category Sticky Post. See #2263.
+ */
+add_action( 'pre_get_posts', function( $query ) {
+	if ( ! $query->is_main_query() ) {
+		remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+	}
+}, 0 );
