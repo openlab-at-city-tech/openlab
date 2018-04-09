@@ -615,6 +615,10 @@ function cuny_group_single() {
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
     ?>
 
+	<div class="wrapper-block visible-xs sidebar mobile-group-site-links">
+		<?php openlab_bp_group_site_pages( true ); ?>
+	</div>
+
     <?php if (bp_is_group_home()): ?>
         <div id="<?php echo $group_type; ?>-header" class="group-header row">
 
@@ -1440,12 +1444,14 @@ function openlab_output_course_info_line($group_id) {
  * Displays per group or porftolio site links
  * @global type $bp
  */
-function openlab_bp_group_site_pages() {
+function openlab_bp_group_site_pages( $mobile = false ) {
     global $bp;
 
     $group_id = bp_get_current_group_id();
 
     $group_site_settings = openlab_get_group_site_settings($group_id);
+
+	$responsive_class = $mobile ? 'visible-xs' : 'hidden-xs';
 
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
 
@@ -1455,7 +1461,7 @@ function openlab_bp_group_site_pages() {
             <?php /* Abstract the displayed user id, so that this function works properly on my-* pages */ ?>
             <?php $displayed_user_id = bp_is_user() ? bp_displayed_user_id() : bp_loggedin_user_id(); ?>
 
-            <div class="sidebar-block">
+            <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
 
                 <?php
                 $account_type = xprofile_get_field_data('Account Type', $displayed_user_id);
@@ -1485,7 +1491,7 @@ function openlab_bp_group_site_pages() {
             </div>
         <?php } else { ?>
 
-            <div class="sidebar-block">
+            <div class="sidebar-block group-site-links <?php echo esc_html( $responsive_class ); ?>">
                 <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
                     <li class="portfolio-site-link">
                         <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>'; ?>
