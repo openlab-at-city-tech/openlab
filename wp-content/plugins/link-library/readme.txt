@@ -59,6 +59,17 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.15.4 =
+* Small change to link exporter to make it compatible with Link Library for those preferring to export and re-import links than upgrading links in place
+
+= 5.9.15.3 =
+* Added option to determine if new reset search button should be shown or not
+
+= 5.9.15.2 =
+* Added admin message for version 6.0 Beta 1
+* Added reset button to search form
+* Added function to grey out categories when displayed in search if they do not contain any links
+
 = 5.9.15.1 =
 * Added new field to link editor to be able to specify additional rel tags for a link using free-form text
 

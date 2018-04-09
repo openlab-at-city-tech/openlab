@@ -240,6 +240,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['extraquerystring']                = '';
 	$options['updatedlabel']                    = __( 'New', 'link-library' );
 	$options['showupdatedpos']                  = 'before';
+	$options['showsearchreset']                 = false;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;

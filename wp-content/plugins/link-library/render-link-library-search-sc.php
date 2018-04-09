@@ -35,19 +35,27 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 		$output .= '<input type="hidden" name="p" value="' . $_GET['p'] . '" />';
 	}
 
-	$output .= "<input type='submit' value='" . $searchlabel . "' />";
+	$output .= "<input type='submit' id='searchbutton' value='" . $searchlabel . "' />";
+
+	if ( $showsearchreset ) {
+		$output .= "<input type='submit' id='resetbutton' value='" . __( 'Reset search', 'link-library' ) . "' />";
+	}
 	$output .= "</div>\n";
 	$output .= "</form>\n\n";
 
 	$output .= "<script type='text/javascript'>\n";
 	$output .= "jQuery(document).ready(function () {\n";
-	$output .= "\tjQuery('#llsearch').submit(function () {\n";
+	$output .= "\tjQuery('#searchbutton').click(function () {\n";
 	$output .= "\t\tif (jQuery('#searchll').val() == '" . $searchfieldtext . "') {\n";
 	$output .= "\t\t\treturn false;\n";
 	$output .= "\t\t}\n";
 	$output .= "\t\telse {\n";
-	$output .= "\t\t\treturn true;\n";
+	$output .= "\t\t\tjQuery('#llsearch').submit();\n";
 	$output .= "\t\t}\n";
+	$output .= "\t});\n";
+	$output .= "\tjQuery('#resetbutton').click(function () {\n";
+	$output .= "\t\twindow.location.href = '" . get_permalink() . "';\n";
+	$output .= "\t\treturn false;\n";
 	$output .= "\t});\n";
 	$output .= "});\n";
 	$output .= "</script>";

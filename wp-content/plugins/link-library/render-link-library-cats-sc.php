@@ -110,12 +110,35 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 			}
 		}
 
-		$linkcatquery = 'SELECT ';
+		$searchterms = '';
 
-		if ( $showcatlinkcount || $pagination ) {
-			$linkcatquery .= 'count(l.link_name) as linkcount, ';
+		if ( isset($_GET['searchll'] ) && !empty( $_GET['searchll'] ) && empty( $singlelinkid ) ) {
+			$searchterms  = array();
+			$searchstring = $_GET['searchll'];
+
+			$offset = 0;
+			while ( false !== strpos( $searchstring, '"', $offset ) ) {
+				if ( 0 == $offset ) {
+					$offset = strpos( $searchstring, '"' );
+				} else {
+					$endpos        = strpos( $searchstring, '"', $offset + 1 );
+					$searchterms[] = substr( $searchstring, $offset + 1, $endpos - $offset - 2 );
+					$strlength     = ( $endpos + 1 ) - ( $offset + 1 );
+					$searchstring  = substr_replace( $searchstring, '', $offset - 1, $endpos + 2 - ( $offset ) );
+					$offset        = 0;
+				}
+			}
+
+			if ( ! empty( $searchstring ) ) {
+				$searchterms = array_merge( $searchterms, explode( " ", $searchstring ) );
+			}
+
+			if ( !empty( $searchterms ) ) {
+				$mode = 'search';
+			}
 		}
 
+		$linkcatquery = 'SELECT count(l.link_name) as linkcount, ';
 		$linkcatquery .= 't.name, t.term_id, t.slug as category_nicename, tt.description as category_description ';
 		$linkcatquery .= 'FROM ' . $LLPluginClass->db_prefix() . 'terms t LEFT JOIN ' . $LLPluginClass->db_prefix(). 'term_taxonomy tt ON (t.term_id = tt.term_id)';
 		$linkcatquery .= ' LEFT JOIN ' . $LLPluginClass->db_prefix() . 'term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ';
@@ -127,6 +150,44 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 		if ( !$showuserlinks ) {
 			$linkcatquery .= ' AND l.link_description not like \'%LinkLibrary:AwaitingModeration:RemoveTextToApprove%\' ';
+		}
+
+		if ( !empty( $searchterms ) ) {
+			$termnb = 1;
+
+			foreach( $searchterms as $searchterm ) {
+				if ( !empty( $searchterm ) ) {
+					$searchterm = str_replace( '--', '', $searchterm );
+					$searchterm = str_replace( ';', '', $searchterm );
+					$searchterm = esc_html( stripslashes( $searchterm ) );
+					if ( true == $searchterm ) {
+						if ( 1 == $termnb ) {
+							$linkcatquery .= ' AND (link_name like "%' . $searchterm . '%" ';
+							$termnb++;
+						} else {
+							$linkcatquery .= ' OR link_name like "%' . $searchterm . '%" ';
+						}
+
+						if ( false == $hidecategorynames ) {
+							$linkcatquery .= ' OR name like "%' . $searchterm . '%" ';
+						}
+
+						if ( $shownotes ) {
+							$linkcatquery .= ' OR link_notes like "%' . $searchterm . '%" ';
+						}
+
+						if ( $showdescription ) {
+							$linkcatquery .= ' OR link_description like "%' . $searchterm . '%" ';
+						}
+
+						if ( $showlargedescription ) {
+							$linkcatquery .= ' OR link_textfield like "%' . $searchterm . '%" ';
+						}
+					}
+				}
+			}
+
+			$linkcatquery .= ')';
 		}
 
 		$linkcatquery .= ' ) ';
@@ -206,7 +267,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 					$catfront = "\t<td>";
 				} elseif ( 'unordered' == $flatlist ) {
 					$catfront = "\t<li>";
-				} elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
+				} elseif ( ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) && $catname->linkcount > 0 ) {
 					$catfront = "\t<option ";
 					if ( !empty( $categoryid ) && $categoryid == $catname->term_id ) {
 						$catfront .= 'selected="selected" ';
@@ -214,135 +275,139 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 					$catfront .= 'value="';
 				}
 
-				if ( $showonecatonly ) {
-					if ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = "<a href='#' onClick=\"showLinkCat" . $settings . "('" . $catname->term_id. "', '" . $settings . "', 1);return false;\" >";
-						} elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
-							$cattext = $catname->term_id;
+				if ( $catname->linkcount > 0 ) {
+					if ( $showonecatonly ) {
+						if ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = "<a href='#' onClick=\"showLinkCat" . $settings . "('" . $catname->term_id. "', '" . $settings . "', 1);return false;\" >";
+							} elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
+								$cattext = $catname->term_id;
+							}
+						} elseif ( 'HTMLGET' == $showonecatmode ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = "<a href='";
+							}
+
+							if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
+								$cattext .= $cattargetaddress . '&cat_id=';
+							} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
+								$cattext .= $cattargetaddress . '?cat_id=';
+							} elseif ( empty( $cattargetaddress ) ) {
+								$cattext .= '?cat_id=';
+							}
+
+							$cattext .= $catname->term_id;
+
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext .= "'>";
+							}
+						} elseif ( 'HTMLGETSLUG' == $showonecatmode ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = "<a href='";
+							}
+
+							if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
+								$cattext .= $cattargetaddress . '&cat=';
+							} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
+								$cattext .= $cattargetaddress . '?cat=';
+							} elseif ( empty( $cattargetaddress ) ) {
+								$cattext .= '?cat=';
+							}
+
+							$cattext .= $catname->category_nicename;
+
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext .= "'>";
+							}
+						}  elseif ( 'HTMLGETCATNAME' == $showonecatmode ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = "<a href='";
+							}
+
+							/* if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
+								$cattext .= $cattargetaddress . '&catname=';
+							} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
+								$cattext .= $cattargetaddress . '?catname=';
+							} elseif ( empty( $cattargetaddress ) ) {
+								$cattext .= '?catname=';
+							} */
+
+							if ( !empty( $_GET ) ) {
+								$get_array = $_GET;
+							} else {
+								$get_array = array();
+							}
+
+							$get_array['catname'] = urlencode( $catname->name );
+							$get_query = add_query_arg( $get_array, $cattargetaddress );
+
+							$cattext .= $get_query;
+
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext .= "'>";
+							}
+						} elseif ( 'HTMLGETPERM' == $showonecatmode ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = "<a href='";
+							}
+
+							$cattext .= '/' . $rewritepage . '/' . $catname->category_nicename;
+
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext .= "'>";
+							}
 						}
-					} elseif ( 'HTMLGET' == $showonecatmode ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = "<a href='";
+					} else if ( $catanchor ) {
+						if ( !$pagination ) {
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext = '<a href="';
+							}
+
+							$cattext .= '#' . $catname->category_nicename;
+
+							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+								$cattext .= '">';
+							}
+						} elseif ( $pagination ) {
+							if ( 0 == $linksperpage || empty( $linksperpage ) ) {
+								$linksperpage = 5;
+							}
+
+							$pageposition = ( $linkcount + 1 ) / $linksperpage;
+							$ceilpageposition = ceil( $pageposition );
+							if ( 0 == $ceilpageposition && !isset( $_GET['linkresultpage'] ) ) {
+								if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+									$cattext = '<a href="';
+								}
+
+								$cattext .= get_permalink() . '#' . $catname->category_nicename;
+
+								if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+									$cattext .= '">';
+								}
+							} else {
+								if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+									$cattext = '<a href="';
+								}
+
+								$cattext .= '?linkresultpage=' . ( $ceilpageposition == 0 ? 1 : $ceilpageposition ) . '#' . $catname->category_nicename;
+
+								if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+									$cattext .= '">';
+								}
+							}
+
+							$linkcount = $linkcount + $catname->linkcount;
 						}
-
-						if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-							$cattext .= $cattargetaddress . '&cat_id=';
-						} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-							$cattext .= $cattargetaddress . '?cat_id=';
-						} elseif ( empty( $cattargetaddress ) ) {
-							$cattext .= '?cat_id=';
-						}
-
-						$cattext .= $catname->term_id;
-
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext .= "'>";
-						}
-					} elseif ( 'HTMLGETSLUG' == $showonecatmode ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = "<a href='";
-						}
-
-						if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-							$cattext .= $cattargetaddress . '&cat=';
-						} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-							$cattext .= $cattargetaddress . '?cat=';
-						} elseif ( empty( $cattargetaddress ) ) {
-							$cattext .= '?cat=';
-						}
-
-						$cattext .= $catname->category_nicename;
-
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext .= "'>";
-						}
-					}  elseif ( 'HTMLGETCATNAME' == $showonecatmode ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = "<a href='";
-						}
-
-						/* if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-							$cattext .= $cattargetaddress . '&catname=';
-						} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-							$cattext .= $cattargetaddress . '?catname=';
-						} elseif ( empty( $cattargetaddress ) ) {
-							$cattext .= '?catname=';
-						} */
-
-						if ( !empty( $_GET ) ) {
-							$get_array = $_GET;
-						} else {
-							$get_array = array();
-						}
-
-						$get_array['catname'] = urlencode( $catname->name );
-						$get_query = add_query_arg( $get_array, $cattargetaddress );
-
-						$cattext .= $get_query;
-
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext .= "'>";
-						}
-					} elseif ( 'HTMLGETPERM' == $showonecatmode ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = "<a href='";
-						}
-
-						$cattext .= '/' . $rewritepage . '/' . $catname->category_nicename;
-
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext .= "'>";
-						}
+					} else {
+						$cattext = '';
 					}
-				} else if ( $catanchor ) {
-					if ( !$pagination ) {
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext = '<a href="';
-						}
 
-						$cattext .= '#' . $catname->category_nicename;
-
-						if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-							$cattext .= '">';
-						}
-					} elseif ( $pagination ) {
-						if ( 0 == $linksperpage || empty( $linksperpage ) ) {
-							$linksperpage = 5;
-						}
-
-						$pageposition = ( $linkcount + 1 ) / $linksperpage;
-						$ceilpageposition = ceil( $pageposition );
-						if ( 0 == $ceilpageposition && !isset( $_GET['linkresultpage'] ) ) {
-							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-								$cattext = '<a href="';
-							}
-
-							$cattext .= get_permalink() . '#' . $catname->category_nicename;
-
-							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-								$cattext .= '">';
-							}
-						} else {
-							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-								$cattext = '<a href="';
-							}
-
-							$cattext .= '?linkresultpage=' . ( $ceilpageposition == 0 ? 1 : $ceilpageposition ) . '#' . $catname->category_nicename;
-
-							if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-								$cattext .= '">';
-							}
-						}
-
-						$linkcount = $linkcount + $catname->linkcount;
+					if ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
+						$cattext .= '">';
 					}
 				} else {
-					$cattext = '';
-				}
-
-				if ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
-					$cattext .= '">';
+					$cattext .= '<span class="emptycat">';
 				}
 
 				if ( 'right' == $catlistdescpos || empty( $catlistdescpos ) ) {
@@ -369,8 +434,12 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 					$catitem .= '</div>';
 				}
 
-				if ( ( $catanchor || $showonecatonly ) && 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-					$catitem .= '</a>';
+				if ( $catname->linkcount > 0 ) {
+					if ( ( $catanchor || $showonecatonly ) && 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
+						$catitem .= '</a>';
+					}
+				} else {
+					$catitem .= '</span>';
 				}
 
 				$output .= ( $catfront . $cattext . $catitem );
