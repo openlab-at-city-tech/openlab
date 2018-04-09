@@ -1,10 +1,10 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, wooninjas, farooqabdullah, adeelraza_786hotmailcom, rahilwazir
+Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, farooqabdullah, adeelraza_786hotmailcom
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 4.8.3
-Stable tag: 1.4.9
+Tested up to: 4.9.4
+Stable tag: 1.4.11
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -219,6 +219,22 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 1.4.11 =
+* Fix: Attachment on post Submissions
+* Fix: Display notification on setting page
+* Fix: Nomination admin email notification
+
+= 1.4.10 =
+* New: Option to toggle badgeos log entries. See the option at Settings page.
+* New: Option to "Delete All Log Entries" from database. See the option at Log Entries page.
+* Fix: Uploaded attachment not being saved
+* Fix: Compatibility with PHP 7.x (Tested upto PHP v7.2)
+* Fix: Retrieve uploaded attachment regardless of post type
+* Tweak: Defensive code checks (Thanks @jonmoore)
+
+= 1.4.9.1 =
+* Typo: Updated version in the class property
 
 = 1.4.9 =
 * Fix: Compatibility with PHP 7.x (Tested upto PHP v7.1)

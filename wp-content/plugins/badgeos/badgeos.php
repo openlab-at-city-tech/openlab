@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 1.4.9
+* Version: 1.4.11
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -33,7 +33,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '1.4.9';
+	public static $version = '1.4.11';
 
 	function __construct() {
 		// Define plugin constants
@@ -105,6 +105,12 @@ class BadgeOS {
 		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), '1.3.0', true );
 
+        $admin_js_translation_array = array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'loading_img' => admin_url( 'images/spinner.gif' ),
+        );
+        wp_localize_script( 'badgeos-admin-js', 'admin_js', $admin_js_translation_array );
+
 		// Register styles
 		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
 
@@ -128,6 +134,9 @@ class BadgeOS {
 	 * Initialize CMB.
 	 */
 	function include_cmb() {
+
+		// Don't load on frontend.
+		if ( !is_admin() ) { return; }
 		require_once( $this->directory_path . 'includes/cmb/load.php' );
 	}
 

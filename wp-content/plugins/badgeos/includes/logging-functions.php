@@ -19,6 +19,8 @@
  * @param  string  $title      An optional default title for the log post
  * @return integer             The post ID of the newly created log entry
  */
+ 
+
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
 
 	// Get the current user if no ID specified
@@ -50,7 +52,12 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
  * @param  array   $args        Available args to use for writing our new post
  * @return integer              The updated log entry ID
  */
+  
 function badgeos_log_entry( $log_post_id, $args ) {
+	$plugin_setts = get_option( 'badgeos_settings' );
+    if( 'disabled' == $plugin_setts['log_entries'] ) {
+        return null;
+    }
 
 	// If we weren't explicitly given a title, let's build one
 	if ( empty( $args['title'] ) ) {
@@ -74,6 +81,8 @@ function badgeos_log_entry( $log_post_id, $args ) {
 }
 add_filter( 'badgeos_post_log_entry', 'badgeos_log_entry', 10, 2 );
 
+
+
 /**
  * Hook to log the connected achievement ID
  *
@@ -85,3 +94,16 @@ function badgeos_log_achievement_id( $log_post_id, $object_id ) {
 	update_post_meta( $log_post_id, '_badgeos_log_achievement_id', $object_id );
 }
 add_action( 'badgeos_create_log_entry', 'badgeos_log_achievement_id', 10, 2 );
+
+function add_clear_log_button( $which ) {
+    global $post_type;
+    if( 'badgeos-log-entry' == $post_type && $which == 'top' ) {
+        $query = new WP_Query(array(
+            'post_type' => $post_type
+        ));
+        if( $query->have_posts() ){
+            ?><input type="button" id="delete_log_entries" class="button" value="Delete All Log Entries" /><?php
+        }
+    }
+}
+add_action( 'manage_posts_extra_tablenav', 'add_clear_log_button' );
