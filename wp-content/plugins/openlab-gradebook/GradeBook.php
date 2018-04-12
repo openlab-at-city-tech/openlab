@@ -117,10 +117,10 @@ function enqueue_oplb_gradebook_scripts($hook) {
         }
 
         $dep_ver = '0.0.0.8';
-        $app_ver = '0.0.4.7';
+        $app_ver = '0.0.4.8';
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
-        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $dep_ver, false);
+        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
         wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);

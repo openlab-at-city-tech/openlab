@@ -36,10 +36,9 @@
             <div class="btn-group">
                 <button type="button" id="filter-assignments" class="btn btn-default"><?php esc_html_e('Filter', 'openlab-gradebook') ?></button>  	    		   	
             </div>
-            <div class="btn-group weight-message">
+            <div class="weight-message">
                 <p><%= total_weight %></p>
             </div>
-            <hr/>
             <div class="table-wrapper">
                 <div class="pinned hidden-xs">
                     <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">  
