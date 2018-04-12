@@ -146,7 +146,7 @@ h5 {
   border: 3px solid #2ea2cc;
 }
 .cell {
-  text-align: right;
+  text-align: left;
   cursor: pointer;
 }
 .modal {
