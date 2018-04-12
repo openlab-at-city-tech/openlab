@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="form-group">     					
-                    <label for="course_school" class="col-sm-3 control-label"><?php esc_html_e('School', 'openlab-gradebook') ?>:</label>
+                    <label for="course_school" class="col-sm-3 control-label"><?php esc_html_e('Section', 'openlab-gradebook') ?>:</label>
                     <div class="col-sm-7">						
                         <input type="text" id="course_school" class="form-control" name="school" value="<%= course ? course.get('school') : '' %>"/>
                     </div>	

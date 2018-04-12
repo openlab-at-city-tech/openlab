@@ -23,7 +23,7 @@
                         <th></th>
                         <th class="course-column-id"><?php esc_html_e('ID', 'openlab-gradebook') ?></th>
                         <th class="course-column-name"><?php esc_html_e('Gradebook', 'openlab-gradebook') ?></th>
-                        <th class="course-column-school"><?php esc_html_e('School', 'openlab-gradebook') ?></th>
+                        <th class="course-column-school"><?php esc_html_e('Section', 'openlab-gradebook') ?></th>
                         <th class="course-column-semester"><?php esc_html_e('Semester', 'openlab-gradebook') ?></th>
                         <th class="course-column-year"><?php esc_html_e('Year', 'openlab-gradebook') ?></th>
                     </tr>
