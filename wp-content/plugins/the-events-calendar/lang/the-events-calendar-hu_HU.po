@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-02-01 20:48:03+0000\n"
+"PO-Revision-Date: 2018-03-25 19:58:35+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,11 +13,11 @@ msgstr ""
 
 #: src/admin-views/tribe-options-general.php:31
 msgid "The number of events per page on the List, Photo, and Map Views. Does not affect other views."
-msgstr ""
+msgstr "Az oldalanként megjelenített események száma lista, fénykép és térkép nézetekben. Nincs hatással más nézetekre."
 
 #: src/admin-views/tribe-options-general.php:28
 msgid "The number of events per page on the List View. Does not affect other views."
-msgstr ""
+msgstr "Az oldalanként megjelenített események száma lista nézetben. Nincs hatással más nézetekre."
 
 #: src/Tribe/Rewrite.php:264
 msgctxt "The \"/page/\" URL string component."
@@ -66,11 +66,11 @@ msgstr ""
 
 #: src/admin-views/tribe-options-display.php:52
 msgid "There are going to be situations where no out-of-the-box template is 100&#37; perfect. Check out our <a href=\"%s\">our themer's guide</a> for instructions on custom modifications."
-msgstr ""
+msgstr "Lesznek helyzetek, amikor egyik sablon sem 100&#37;-osan tökéletes. Nézd meg a <a href=\"%s\">Themer's Guide</a>-unkat az egyéni módosításokról."
 
 #: src/admin-views/tribe-options-display.php:49
 msgid "The settings below control the display of your calendar. If things don't look right, try switching between the three style sheet options or pick a page template from your theme."
-msgstr ""
+msgstr "Az alábbi beállítások a naptárad megjelenését szabályozzák. Ha valami nem rendesen néz ki, próbálj meg váltani a három stíluslap között vagy válassz egy oldal sablont a témádból."
 
 #: src/admin-views/aggregator/settings.php:176
 msgid "When importing from an event source, this is the maximum number of events that will be imported; on slower websites this may impact the success of imports. Setting this to a smaller number may improve results."
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
 msgstr ""
 
-#: src/Tribe/iCal.php:424
+#: src/Tribe/iCal.php:411
 msgctxt "iCal feed description"
 msgid "Events for %s"
 msgstr ""
@@ -854,7 +854,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-display.php:28
 msgid "The following three fields accept the date format options available to the PHP %1$s function. <a href=\"%2$s\" target=\"_blank\">Learn how to make your own date format here</a>."
-msgstr ""
+msgstr "A következő három mezőben a dátum formátumot lehet beállítani a PHP %1$s függvényének megfelelően. <a href=\"%2$s\" target=\"_blank\">Tanuld meg, hogyan készíthetsz saját dátumformátumot itt</a>."
 
 #: common/src/Tribe/Validate.php:537
 msgid "%s must be an email address."
@@ -886,7 +886,7 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:57
 msgid "&Aring;land Islands"
-msgstr ""
+msgstr "&Aring;land Szigetek"
 
 #: common/src/Tribe/Documentation/Swagger/Term_Definition_Provider.php:57
 msgid "A list of links to the term own, archive and parent REST URL"
@@ -894,7 +894,7 @@ msgstr ""
 
 #: src/admin-views/create-organizer-fields.php:19
 msgid "The e-mail address will be obfuscated on this site to avoid it getting harvested by spammers."
-msgstr ""
+msgstr "Az email cím kódolva lesz ezen az oldalon, hogy elkerüljük a spam-elők általi begyűjtését."
 
 #: src/Tribe/Main.php:968
 msgid "edit Events settings."
@@ -919,15 +919,15 @@ msgstr ""
 msgid "Hide and Ignore &#8220;%s&#8221;"
 msgstr ""
 
-#: common/src/Tribe/Main.php:283
+#: common/src/Tribe/Main.php:288
 msgid "Clear Selection."
 msgstr ""
 
-#: common/src/Tribe/Main.php:282
+#: common/src/Tribe/Main.php:287
 msgid "Select all pages"
 msgstr ""
 
-#: common/src/Tribe/Main.php:281
+#: common/src/Tribe/Main.php:286
 msgid "All items on this page were selected. "
 msgstr ""
 
@@ -1599,7 +1599,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:405
 msgid "Other URL Import Settings"
-msgstr ""
+msgstr "Egyéb URL importálási beállítások"
 
 #: src/admin-views/aggregator/origins/limit.php:22
 #: src/admin-views/aggregator/origins/url.php:91
@@ -1711,7 +1711,7 @@ msgstr ""
 #: src/Tribe/Venue.php:234
 msgctxt "Metabox title"
 msgid "Location"
-msgstr ""
+msgstr "Helyszín"
 
 #: src/admin-views/aggregator/settings.php:55
 msgid "Import events but preserve local changes to event fields."
@@ -1719,7 +1719,7 @@ msgstr ""
 
 #: common/src/Tribe/PUE/Checker.php:497
 msgid "%1$sBuy a license%2$s for the Event Aggregator service to access additional import features."
-msgstr ""
+msgstr "%1$sVásárolj egy licenszet%2$s az Event Aggregator szolgáltatáshoz további importálási funkciók eléréséhez."
 
 #: src/functions/template-tags/loop.php:207
 msgctxt "day_view"
@@ -1733,7 +1733,7 @@ msgstr "%1$s %2$s hónapban"
 
 #: src/admin-views/tribe-options-display.php:189
 msgid "Change the default 3 events per day in month view. To impose no limit, you may specify -1. Please note there may be performance issues if you allow too many events per day. <a href=\"%s\">Read more</a>."
-msgstr ""
+msgstr "Változtasd meg az alapértelmezett napi 3 eseményt a hónap nézetben. Ha nem szeretnél korlátozást, adj meg -1-et. Kérjük, vedd figyelembe, hogy teljesítmény problémák léphetnek fel, ha túl sok eseményt engedélyezel egy napra. <a href=\"%s\">Tudj meg többet</a>."
 
 #: src/Tribe/Main.php:741
 msgctxt "all events slug"
@@ -1971,20 +1971,20 @@ msgstr ""
 msgid "Single Event"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:197
+#: src/Tribe/Customizer/Month_Week_View.php:198
 msgid "Calendar Highlight Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:175
+#: src/Tribe/Customizer/Month_Week_View.php:176
 msgid "Calendar Table Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:144
+#: src/Tribe/Customizer/Month_Week_View.php:145
 #: src/Tribe/Customizer/Single_Event.php:79 src/Tribe/Customizer/Widget.php:60
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:143
+#: src/Tribe/Customizer/Month_Week_View.php:144
 msgid "Month View"
 msgstr "Hónap nézet"
 
@@ -2082,7 +2082,7 @@ msgstr ""
 
 #: src/Tribe/Asset/Dynamic.php:77
 msgid "This event is all day starting on %%startdatenoyear%% and ending on %%enddatewithyear%%."
-msgstr ""
+msgstr "Ez egy egész napos esemény ami %%startdatenoyear%%-i napon kezdődik és %%enddatewithyear%%-i napon végződik."
 
 #: src/Tribe/Asset/Dynamic.php:76
 msgid "This event starts at %%starttime%% on %%startdatenoyear%% and ends on %%enddatewithyear%%"
@@ -2090,11 +2090,11 @@ msgstr ""
 
 #: src/Tribe/Asset/Dynamic.php:75
 msgid "This event starts at %%starttime%% on %%startdatenoyear%% and ends at %%endtime%% on %%enddatewithyear%%"
-msgstr ""
+msgstr "Ez az esemény %%startdatewithyear%%-i napon, %%starttime%% órakor kezdődik és %%enddatewithyear%%-i napon, %%endtime%% órakor végződik."
 
 #: src/Tribe/Asset/Dynamic.php:74
 msgid "This event is all day on %%startdatewithyear%%."
-msgstr ""
+msgstr "Ez egy egész napos esemény %%startdatenoyear%%-i napon."
 
 #: src/Tribe/Asset/Dynamic.php:73
 msgid "This event is at %%starttime%% on %%startdatewithyear%%."
@@ -2102,7 +2102,7 @@ msgstr ""
 
 #: src/Tribe/Asset/Dynamic.php:72
 msgid "This event is from %%starttime%% to %%endtime%% on %%startdatewithyear%%."
-msgstr ""
+msgstr "Ez az esemény %%startdatewithyear%%-i napon, %%starttime%% órától %%endtime%% óráig tart."
 
 #: src/Tribe/Asset/Dynamic.php:69
 msgid "Dec"
@@ -2257,7 +2257,7 @@ msgctxt "Static front page setting"
 msgid "Main events page"
 msgstr ""
 
-#: common/src/Tribe/Settings.php:269 common/src/Tribe/Settings.php:270
+#: common/src/Tribe/Settings.php:281 common/src/Tribe/Settings.php:282
 msgid "Events Help"
 msgstr ""
 
@@ -2350,7 +2350,7 @@ msgstr ""
 #: src/views/single-event.php:28
 msgctxt "%s Events plural label"
 msgid "All %s"
-msgstr ""
+msgstr "Összes %s"
 
 #: src/io/csv/admin-views/header.php:17
 msgid "Legacy Events Import"
@@ -2410,7 +2410,7 @@ msgstr ""
 
 #: src/admin-views/organizer-meta-box.php:45
 msgid "The e-mail address will be obfuscated on your site to avoid it getting harvested by spammers."
-msgstr ""
+msgstr "Az email cím kódolva lesz ezen az oldalon, hogy elkerüljük a spam-elők általi begyűjtését."
 
 #: src/admin-views/aggregator/tabs/import-form.php:267
 msgid "Events will be imported with the timezone defined by the source. If no timezone is specified, events will be assigned your site's default timezone (see %1$sSettings > General%2$s)."
@@ -2476,11 +2476,11 @@ msgstr ""
 
 #: src/admin-views/aggregator/tabs/import-form.php:39
 msgid "Select Origin"
-msgstr ""
+msgstr "Forrás kiválasztása"
 
 #: src/admin-views/aggregator/tabs/import-form.php:38
 msgid "Import Origin:"
-msgstr ""
+msgstr "Import forrás:"
 
 #: src/admin-views/aggregator/tabs/import-form.php:25
 msgid "No Additional Categories"
@@ -2608,7 +2608,7 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:524
 #: src/admin-views/aggregator/settings.php:564
 msgid "Imports"
-msgstr ""
+msgstr "Importálás"
 
 #: src/admin-views/aggregator/settings.php:511
 msgid "Check out Event Aggregator."
@@ -2648,7 +2648,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:354
 msgid "Meetup Import Settings"
-msgstr ""
+msgstr "Meetup importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:330
 msgid "The default event category for events imported via Google Calendar"
@@ -2660,7 +2660,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:314
 msgid "Google Calendar Import Settings"
-msgstr ""
+msgstr "Google Naptár  importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:290
 msgid "The default event category for events imported via Facebook"
@@ -2672,7 +2672,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:274
 msgid "Facebook Import Settings"
-msgstr ""
+msgstr "Facebook  importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:250
 msgid "The default event category for events imported via .ics files"
@@ -2684,11 +2684,11 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:234
 msgid "ICS File Import Settings"
-msgstr ""
+msgstr "ICS fájl importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:210
 msgid "The default event category for events imported via iCalendar"
-msgstr ""
+msgstr "Az iCalendarból importált események alapértelmezett kategóriája"
 
 #: src/admin-views/aggregator/settings.php:199
 msgid "The default post status for events imported via iCalendar"
@@ -2696,7 +2696,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:194
 msgid "iCalendar Import Settings"
-msgstr ""
+msgstr "iCalendar importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:137
 #: src/admin-views/aggregator/settings.php:221
@@ -2720,7 +2720,7 @@ msgstr "Google Térkép megjelenítése"
 
 #: src/admin-views/aggregator/settings.php:126
 msgid "The default event category for events"
-msgstr ""
+msgstr "Az alapértelmezett esemény kategória"
 
 #: src/admin-views/aggregator/settings.php:115
 msgid "The default post status for events"
@@ -2728,7 +2728,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:110
 msgid "Global Import Settings"
-msgstr ""
+msgstr "Globális importálási beállítások"
 
 #: src/admin-views/aggregator/settings.php:79
 msgid "The default event category for events imported via CSV"
@@ -2758,7 +2758,7 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:369
 #: src/admin-views/aggregator/settings.php:409
 msgid "Default Status"
-msgstr ""
+msgstr "Alapértelmezett állapot"
 
 #: src/admin-views/aggregator/settings.php:54
 msgid "Do not re-import events. Changes made locally will be preserved."
@@ -2775,7 +2775,7 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:40
 #: src/admin-views/aggregator/settings.php:48
 msgid "Event Update Authority"
-msgstr ""
+msgstr "Esemény frissítési engedély"
 
 #: src/admin-views/aggregator/settings.php:31
 msgid "No"
@@ -2783,11 +2783,11 @@ msgstr "Nem"
 
 #: src/admin-views/aggregator/settings.php:18
 msgid "No default category"
-msgstr ""
+msgstr "Nincs alapértelmezett kategória"
 
 #: src/admin-views/aggregator/settings.php:7
 msgid "Use global import settings"
-msgstr ""
+msgstr "Globális importálási beállítások használata"
 
 #: src/admin-views/aggregator/origins/refine.php:71
 msgid "Events on or after"
@@ -2828,7 +2828,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/meetup.php:61
 msgid "Save"
-msgstr ""
+msgstr "Mentés"
 
 #: src/admin-views/aggregator/origins/meetup.php:59
 msgid "Meetup API Key:"
@@ -2864,7 +2864,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/ical.php:83
 msgid "example.com/url.ics"
-msgstr ""
+msgstr "pelda.com/url.ics"
 
 #: src/admin-views/aggregator/origins/gcal.php:89
 msgid "Copy the provided url into this field to import the events into your WordPress site."
@@ -2901,7 +2901,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/facebook.php:110
 msgid "facebook.com/example"
-msgstr ""
+msgstr "facebook.com/példa"
 
 #: src/admin-views/aggregator/origins/facebook.php:63
 #: src/admin-views/aggregator/origins/gcal.php:36
@@ -2909,7 +2909,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:91
 #: src/admin-views/aggregator/origins/url.php:36
 msgid "One-Time Import"
-msgstr ""
+msgstr "Egyszeri importálás"
 
 #: src/admin-views/aggregator/origins/facebook.php:52
 #: src/admin-views/aggregator/origins/facebook.php:64
@@ -2922,11 +2922,11 @@ msgstr ""
 #: src/admin-views/aggregator/origins/url.php:25
 #: src/admin-views/aggregator/origins/url.php:37
 msgid "Scheduled Import"
-msgstr ""
+msgstr "Időzített importálás"
 
 #: src/admin-views/aggregator/origins/facebook.php:39
 msgid "Log into Facebook"
-msgstr ""
+msgstr "Bejelentkezés a Facebookra"
 
 #: src/admin-views/aggregator/origins/facebook.php:33
 msgid "Please log in to enable event imports from Facebook."
@@ -2946,7 +2946,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:11
 #: src/admin-views/aggregator/origins/url.php:11
 msgid "Select Frequency"
-msgstr ""
+msgstr "Válassza ki a gyakoriságot"
 
 #: src/admin-views/aggregator/origins/facebook.php:7
 msgid "One-time imports include all currently listed events, while scheduled imports automatically grab new events and updates from Facebook on a set schedule. Single events can be added via a one-time import."
@@ -2958,7 +2958,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:6
 #: src/admin-views/aggregator/origins/url.php:6
 msgid "Select Import Type"
-msgstr ""
+msgstr "Importálás típusának kiválasztása"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:23
 msgid "Enter an Eventbrite event URL, e.g. https://www.eventbrite.com/e/example-12345"
@@ -2972,12 +2972,12 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:160
 #: src/admin-views/aggregator/origins/url.php:119
 msgid "Preview"
-msgstr ""
+msgstr "Előnézet"
 
 #: src/admin-views/aggregator/origins/csv.php:68
 #: src/admin-views/aggregator/origins/ics.php:35
 msgid "No file chosen"
-msgstr ""
+msgstr "Nincs fájl kiválasztva"
 
 #: src/admin-views/aggregator/origins/csv.php:43
 msgid "Upload a CSV File"
@@ -3011,11 +3011,11 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/csv.php:5
 msgid "Select Content Type"
-msgstr ""
+msgstr "Tartalom típusának kiválasztása"
 
 #: src/admin-views/aggregator/origins/csv.php:4
 msgid "Content Type:"
-msgstr ""
+msgstr "Tartalom típusa:"
 
 #: src/admin-views/aggregator/meta-box.php:56
 msgid "Change Event Update Authority"
@@ -3084,7 +3084,7 @@ msgstr[1] ""
 
 #: src/Tribe/Ignored_Events.php:919
 msgid "Event %d: %s"
-msgstr ""
+msgstr "Esemény %d: %s"
 
 #: src/Tribe/Ignored_Events.php:907
 msgid "Migration: %d Legacy Ignored Post failed to be migrated."
@@ -3123,7 +3123,7 @@ msgstr ""
 
 #: src/Tribe/Ignored_Events.php:427
 msgid "Restore"
-msgstr ""
+msgstr "Visszaállítás"
 
 #. translators: %s: post title
 #: src/Tribe/Ignored_Events.php:426
@@ -3133,7 +3133,7 @@ msgstr ""
 #: src/Tribe/Ignored_Events.php:341 src/Tribe/Ignored_Events.php:343
 #: src/admin-views/aggregator/meta-box.php:5
 msgid "Source:"
-msgstr ""
+msgstr "Forrás:"
 
 #: src/Tribe/Ignored_Events.php:315
 msgid "Last Import"
@@ -3145,13 +3145,13 @@ msgstr ""
 
 #: src/Tribe/Ignored_Events.php:312
 msgid "Source"
-msgstr ""
+msgstr "Forrás"
 
 #: src/Tribe/Ignored_Events.php:283
 msgid "%s post restored."
 msgid_plural "%s posts restored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s bejegyzés helyreállítva."
+msgstr[1] "%s bejegyzés helyreállítva."
 
 #: src/Tribe/Ignored_Events.php:231 src/Tribe/Ignored_Events.php:275
 msgid "Error restoring from Ignored Events."
@@ -3197,8 +3197,8 @@ msgstr[1] ""
 #: src/Tribe/Ignored_Events.php:136
 msgid "%s post moved to the Trash"
 msgid_plural "%s posts moved to the Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s bejegyzés áthelyezve a lomtárba"
+msgstr[1] "%s bejegyzés áthelyezve a lomtárba"
 
 #: src/Tribe/Ignored_Events.php:133
 msgid "post moved to Ignored."
@@ -3226,7 +3226,7 @@ msgstr ""
 #: src/Tribe/Ignored_Events.php:43 src/Tribe/Ignored_Events.php:59
 #: src/Tribe/Ignored_Events.php:435
 msgid "Delete Permanently"
-msgstr ""
+msgstr "Végleges törlés"
 
 #: src/Tribe/Aggregator.php:414
 msgid "Renew your Event Aggregator Facebook token"
@@ -3286,15 +3286,15 @@ msgstr "törlés"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:181
 msgid "queued"
-msgstr ""
+msgstr "sorban áll"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:94
 msgid "Scheduled Imports"
-msgstr ""
+msgstr "Ütemezett importálások"
 
 #: src/Tribe/Aggregator/Tabs/New.php:565
 msgid "Renew your Event Aggregator license"
-msgstr ""
+msgstr "Újítsa meg az Event Aggregator licenszét"
 
 #: src/Tribe/Aggregator/Tabs/New.php:562
 msgid "Renew your license in order to import events from Facebook, iCalendar, Google, or Meetup."
@@ -3306,11 +3306,11 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:541
 msgid "Learn More"
-msgstr ""
+msgstr "Tudjon meg többet"
 
 #: src/Tribe/Aggregator/Tabs/New.php:536 src/Tribe/Aggregator/Tabs/New.php:543
 msgid "opens in a new window"
-msgstr ""
+msgstr "új ablakban nyílik meg"
 
 #: src/Tribe/Aggregator/Tabs/New.php:534
 msgid "Buy It Now"
@@ -3318,11 +3318,11 @@ msgstr "Vásárlás most"
 
 #: src/Tribe/Aggregator/Tabs/New.php:531
 msgid "With Event Aggregator, you can import events from Facebook, iCalendar, Google, and Meetup.com in a jiffy."
-msgstr ""
+msgstr "Az Event Agregatorral egy szempillantás alatt importálhatsz eseményeket a Facebookról, iCalendarból, Google Naptárból és a Meetup.com-ról."
 
 #: src/Tribe/Aggregator/Tabs/New.php:529
 msgid "Import Using Event Aggregator"
-msgstr ""
+msgstr "Importáljon eseményeket az Event Aggregatorral"
 
 #: src/Tribe/Aggregator/Tabs/New.php:442
 msgid "Unable to save credentials"
@@ -3383,7 +3383,7 @@ msgstr[1] ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:330
 msgid "View your event venues"
-msgstr ""
+msgstr "Esemény helyszínének megtekintése"
 
 #: src/Tribe/Aggregator/Tabs/New.php:326
 msgid "%1$d new venue was imported."
@@ -3429,7 +3429,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:81
 msgid "New Import"
-msgstr ""
+msgstr "Új importálás"
 
 #: src/Tribe/Aggregator/Tabs/History.php:93
 msgid "History"
@@ -3442,7 +3442,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Favorite.php:37
 msgid "Favorite Imports"
-msgstr ""
+msgstr "Kedvenc importálások"
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:143
 msgid "Your Scheduled Import has been updated!"
@@ -3450,7 +3450,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:137
 msgid "View All Scheduled Imports"
-msgstr ""
+msgstr "Minden ütemezett importálás megtekintése"
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:131
 msgid "Scheduled import was successfully updated."
@@ -3458,7 +3458,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:52
 msgid "Edit Import"
-msgstr ""
+msgstr "Importálás szerkesztése"
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:175
 msgid "Please provide a Meetup URL when importing from Meetup."
@@ -3506,7 +3506,7 @@ msgstr "Importálás létrehozva"
 
 #: src/Tribe/Aggregator/Service.php:550
 msgid "Success"
-msgstr ""
+msgstr "Siker"
 
 #: src/Tribe/Aggregator/Service.php:549
 msgid "The import will be starting soon."
@@ -3687,7 +3687,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:95
 msgid "Skipped:"
-msgstr ""
+msgstr "Kihagyva:"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:94
 msgid "Updated:"
@@ -3707,7 +3707,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/List_Table.php:637
 msgid "Select %s"
-msgstr ""
+msgstr "%s kijelölése"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:602
 #: src/Tribe/Aggregator/Record/List_Table.php:611
@@ -3723,7 +3723,7 @@ msgstr "új"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:597
 msgid "Latest Import:"
-msgstr ""
+msgstr "Utolsó importálás:"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:595
 msgid "all time"
@@ -3731,7 +3731,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/List_Table.php:569
 msgid "One Time"
-msgstr ""
+msgstr "Egyszeri"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:566
 msgid "Invalid Frequency"
@@ -3767,15 +3767,15 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/List_Table.php:433
 msgid "Import preview"
-msgstr ""
+msgstr "Importálás előnézete"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:429
 msgid "Import pending"
-msgstr ""
+msgstr "Importálás függőben"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:425
 msgid "Import schedule"
-msgstr ""
+msgstr "Importálási menetrend"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:413
 msgid "Import failed"
@@ -3847,12 +3847,12 @@ msgstr "Szűrő"
 #: src/Tribe/Aggregator/Record/List_Table.php:163
 #: src/Tribe/Aggregator/Record/List_Table.php:164
 msgid "Filter By Frequency"
-msgstr ""
+msgstr "Szűrés gyakoriság alapján"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:144
 #: src/Tribe/Aggregator/Record/List_Table.php:145
 msgid "Filter By Origin"
-msgstr ""
+msgstr "Szűrés forrás alapján"
 
 #: src/Tribe/Aggregator/Record/ICS.php:33
 msgid "ICS"
@@ -3898,12 +3898,12 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Page.php:94
 msgid "Hide Filters"
-msgstr ""
+msgstr "Szűrők elrejtése"
 
 #: src/Tribe/Aggregator/Page.php:93
 #: src/Tribe/Aggregator/Record/List_Table.php:485
 msgid "View Filters"
-msgstr ""
+msgstr "Szűrők megtekintése"
 
 #: src/Tribe/Aggregator/Page.php:92
 msgid "Removing this scheduled import will stop automatic imports from the source. No events will be deleted."
@@ -4107,37 +4107,37 @@ msgstr ""
 #: src/Tribe/Aggregator/Cron.php:203
 msgctxt "aggregator schedule frequency"
 msgid "Every 15 minutes"
-msgstr ""
+msgstr "15 percenként"
 
 #: src/Tribe/Aggregator/Cron.php:118
 msgctxt "aggregator schedule frequency"
 msgid "Monthly"
-msgstr ""
+msgstr "Havonta"
 
 #: src/Tribe/Aggregator/Cron.php:113
 msgctxt "aggregator schedule frequency"
 msgid "Weekly"
-msgstr ""
+msgstr "Hetente"
 
 #: src/Tribe/Aggregator/Cron.php:108
 msgctxt "aggregator schedule frequency"
 msgid "Daily"
-msgstr ""
+msgstr "Naponta"
 
 #: src/Tribe/Aggregator/Cron.php:103
 msgctxt "aggregator schedule frequency"
 msgid "Hourly"
-msgstr ""
+msgstr "Óránként"
 
 #: src/Tribe/Aggregator/Cron.php:98
 msgctxt "aggregator schedule frequency"
 msgid "Every 30 Minutes"
-msgstr ""
+msgstr "30 percenként"
 
 #: src/Tribe/Aggregator/Cron.php:93
 msgctxt "aggregator schedule frequency"
 msgid "On Demand"
-msgstr ""
+msgstr "Igény szerint"
 
 #: src/Tribe/Aggregator/API/Origins.php:60
 #: src/Tribe/Aggregator/Record/Meetup.php:29
@@ -4166,7 +4166,7 @@ msgstr "CSV fájl"
 #: src/Tribe/Admin_List.php:330
 msgctxt "%s Event count in admin list"
 msgid "All %s"
-msgstr ""
+msgstr "Összes %s"
 
 #: common/src/admin-views/tribe-options-licenses.php:30
 msgid "Not seeing an update but expecting one? In WordPress, go to %1$sDashboard > Updates%2$s and click \"Check Again\"."
@@ -4191,7 +4191,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:55
 msgid "Event Log"
-msgstr ""
+msgstr "Eseménynapló"
 
 #: common/src/admin-views/tribe-options-help.php:42
 msgid "The details of your calendar plugin and settings is often needed for you or our staff to help troubleshoot an issue. Please opt-in below to automatically share your system information with our support team. This will allow us to assist you faster if you post in our forums."
@@ -4211,7 +4211,7 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:110
 msgid "C&ocirc;te d'Ivoire"
-msgstr ""
+msgstr "Elefántcsontpart"
 
 #: common/src/Tribe/Support.php:372
 msgid "Unique System Info Key Generated"
@@ -4261,73 +4261,73 @@ msgstr ""
 #: common/src/Tribe/PUE/Checker.php:961 common/src/Tribe/PUE/Notices.php:285
 #: src/Tribe/Aggregator/Record/Abstract.php:1089
 msgid " (opens in a new window)"
-msgstr ""
+msgstr "(új ablakban nyílik meg)"
 
 #: common/src/Tribe/PUE/Checker.php:959 common/src/Tribe/PUE/Notices.php:283
 msgid "Renew Your License Now"
-msgstr ""
+msgstr "Licensz megújítása most"
 
-#: common/src/Tribe/Main.php:293
+#: common/src/Tribe/Main.php:298
 msgid ": Selected 1 row"
 msgstr ""
 
-#: common/src/Tribe/Main.php:292
+#: common/src/Tribe/Main.php:297
 msgid ": Selected %d rows"
 msgstr ""
 
-#: common/src/Tribe/Main.php:287
+#: common/src/Tribe/Main.php:292
 msgid "Previous"
 msgstr "Előző"
 
-#: common/src/Tribe/Main.php:285
+#: common/src/Tribe/Main.php:290
 msgid "All"
-msgstr ""
+msgstr "Összes"
 
-#: common/src/Tribe/Main.php:280
+#: common/src/Tribe/Main.php:285
 msgid "Search:"
-msgstr ""
+msgstr "Keresés:"
 
-#: common/src/Tribe/Main.php:279
+#: common/src/Tribe/Main.php:284
 msgid "No matching records found"
 msgstr ""
 
-#: common/src/Tribe/Main.php:278
+#: common/src/Tribe/Main.php:283
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: common/src/Tribe/Main.php:277
+#: common/src/Tribe/Main.php:282
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:276
+#: common/src/Tribe/Main.php:281
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:275
+#: common/src/Tribe/Main.php:280
 msgid "No data available in table"
 msgstr ""
 
-#: common/src/Tribe/Main.php:274
+#: common/src/Tribe/Main.php:279
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:272
+#: common/src/Tribe/Main.php:277
 msgid ": activate to sort column descending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:271
+#: common/src/Tribe/Main.php:276
 msgid ": activate to sort column ascending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:252
+#: common/src/Tribe/Main.php:257
 msgid "Press \"Cmd + C\" to copy"
-msgstr ""
+msgstr "\"Cmd + C\" a másoláshoz"
 
-#: common/src/Tribe/Main.php:251
+#: common/src/Tribe/Main.php:256
 msgid "System info copied"
-msgstr ""
+msgstr "Rendszerinformációk másolva"
 
-#: common/src/Tribe/Main.php:250
+#: common/src/Tribe/Main.php:255
 #: common/src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
 msgstr "Másolás a vágólapra"
@@ -4388,11 +4388,11 @@ msgstr "Filter Bar"
 
 #: common/src/Tribe/Credits.php:64
 msgid "Rate %1$sEvent Tickets%2$s %3$s"
-msgstr ""
+msgstr "Értékeld az %1$sEvent Tickets%2$s %3$s-et"
 
 #: common/src/Tribe/Credits.php:55
 msgid "Rate %1$sThe Events Calendar%2$s %3$s"
-msgstr ""
+msgstr "Értékeld a %1$sThe Events Calendar%2$s %3$s-t"
 
 #: src/Tribe/Organizer.php:184
 msgid "organizer"
@@ -4466,7 +4466,7 @@ msgstr "Esemény időzónája"
 
 #: src/Tribe/Importer/Column_Mapper.php:66
 msgid "Event Excerpt"
-msgstr ""
+msgstr "Esemény kivonata"
 
 #: src/Tribe/Importer/Admin_Page.php:103
 msgid "Default encoding for imported csv file"
@@ -4479,7 +4479,7 @@ msgstr "Kattintson ide"
 
 #: src/Tribe/Google/Maps_API_Key.php:63
 msgid "<p>%s to create your Google Maps API key."
-msgstr ""
+msgstr "<p>%s a Google Maps API kulcs létrehozásához."
 
 #: src/Tribe/Google/Maps_API_Key.php:55 src/Tribe/Google/Maps_API_Key.php:62
 msgid "Google Maps API key"
@@ -4491,7 +4491,7 @@ msgstr "Google Térképek API"
 
 #: common/src/admin-views/event-log.php:117
 msgid "Download log"
-msgstr ""
+msgstr "Naplófájl letöltése"
 
 #: common/src/admin-views/event-log.php:100
 msgid "The selected log file is empty or has not been generated yet."
@@ -4593,7 +4593,7 @@ msgstr "Helyszín kiemelt képe"
 
 #: src/Tribe/Importer/Column_Mapper.php:85
 msgid "Event Featured Image"
-msgstr ""
+msgstr "Esemény kiemelt képe"
 
 #: src/Tribe/Event_Tickets/Attendees_Report.php:50
 msgid "Edit Venue"
@@ -4617,7 +4617,7 @@ msgstr ""
 
 #: src/io/csv/admin-views/import.php:36
 msgid "Questions? %sWatch the video%s."
-msgstr ""
+msgstr "Kérdése van? %sNézze meg a videót%s."
 
 #: src/io/csv/admin-views/general.php:12
 msgid "The settings below will impact events imported from files and other websites. Be sure to save your changes before starting to import events."
@@ -4645,23 +4645,23 @@ msgstr ""
 
 #: src/Tribe/Template_Factory.php:295
 msgid "No results were found for %1$s in or near %2$s."
-msgstr ""
+msgstr "Nincs találat erre: %1$s %2$s közelében."
 
 #: src/Tribe/Template_Factory.php:293
 msgid "There were no results found for %s."
-msgstr ""
+msgstr "Nincs találat erre: %s."
 
 #: src/Tribe/Template/Month.php:448
 msgid "There were no results found for %s this month. Try searching next month."
-msgstr ""
+msgstr "Nincs találat erre ebben a hónapban: %s. Kérjük, próbáld meg a következő hónapot."
 
 #: src/Tribe/Template/Day.php:147
 msgid "No %1$s scheduled for %2$s. Please try another day."
-msgstr ""
+msgstr "Nincs %1$s betervezve erre: %2$s. Kérjük, próbálj meg egy másik napot."
 
 #: src/Tribe/Main.php:4197
 msgid "Check out the %savailable add-ons%s."
-msgstr ""
+msgstr "Nézze meg az %selérhető bővítményeket%s."
 
 #: src/Tribe/Main.php:1884
 msgid "Without a defined location your event will not display a %sGoogle Rich Snippet%s on the search results."
@@ -4669,23 +4669,23 @@ msgstr ""
 
 #: src/Tribe/Main.php:1815 src/Tribe/Main.php:1835
 msgid "%1$s scheduled for: %2$s."
-msgstr ""
+msgstr "%1$s ütemezve: %2$s."
 
 #: src/Tribe/Main.php:1796
 msgid "%1$s draft updated. %2$sPreview %3$s"
-msgstr ""
+msgstr "%1$s vázlat frissítve. %2$sElőnézet %3$s"
 
 #: src/Tribe/Main.php:1787
 msgid "%1$s scheduled for: %2$s. %3$sPreview %4$s"
-msgstr ""
+msgstr "%1$s ütemezve: %2$s. %3$sElőnézet %4$s"
 
 #: src/Tribe/Main.php:1781
 msgid "%1$s submitted. %2$sPreview %3$s"
-msgstr ""
+msgstr "%1$s közzétéve. %2$sElőnézet %3$s"
 
 #: src/Tribe/Main.php:1763
 msgid "%1$s updated. %2$sView %1$s%3$s"
-msgstr ""
+msgstr "%1$s frissítve. %2$sMegtekint %1$s%3$s"
 
 #: src/Tribe/Main.php:1443
 msgid "It appears as if the tribe-common libraries cannot be found! The directory should be in the \"common/\" directory in the events calendar plugin."
@@ -4769,7 +4769,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1040
 msgid "Settings overview"
-msgstr ""
+msgstr "Beállítások áttekintése"
 
 #: src/Tribe/Main.php:1040
 msgid "%s: A thorough walkthrough of The Events Calendar and the settings that are available to you."
@@ -4803,7 +4803,7 @@ msgstr ""
 #: src/Tribe/Importer/Admin_Page.php:88
 #: src/admin-views/aggregator/settings.php:63
 msgid "CSV Import Settings"
-msgstr ""
+msgstr "CSV importálási beállítások"
 
 #: src/Tribe/Asset/Bootstrap_Datepicker.php:26
 msgid "Clear"
@@ -4867,7 +4867,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:21
 msgid "list of available functions"
-msgstr ""
+msgstr "elérhető funkciók listája"
 
 #: common/src/admin-views/tribe-options-help.php:15
 msgid "Knowledgebase"
@@ -4879,7 +4879,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:14
 msgid "Getting Support"
-msgstr ""
+msgstr "Támogatás kérése"
 
 #: common/src/admin-views/tribe-options-help.php:11
 msgid "Thanks you for using %s! All of us at Modern Tribe sincerely appreciate your support and we’re excited to see you using our plugins."
@@ -4895,11 +4895,11 @@ msgstr ""
 
 #: src/admin-views/tribe-options-display.php:72
 msgid "Enter the format to use for displaying dates with the year. Used when displaying a date in a future year."
-msgstr ""
+msgstr "Add meg a használni kívánt dátumformátumot, amikor az évek is látszanak. Jövőbeli dátumok esetében jelenik meg."
 
 #: common/src/Tribe/PUE/Checker.php:932
 msgid "Thanks for setting up a valid key. It will expire on %s"
-msgstr ""
+msgstr "Köszönjük, hogy érvényes kulcsot adott meg. A megadott kulcs lejárata: %s"
 
 #: common/src/Tribe/Admin/Help_Page.php:860
 msgid "Visit the Add-on Page"
@@ -4907,11 +4907,11 @@ msgstr "Látogasson el a bővítmények oldalra"
 
 #: common/src/Tribe/Admin/Help_Page.php:855
 msgid "Plugin Inactive"
-msgstr ""
+msgstr "Bővítmény kikapcsolva"
 
 #: common/src/Tribe/Admin/Help_Page.php:853
 msgid "Plugin Active"
-msgstr ""
+msgstr "Bővítmény bekapcsolva"
 
 #: common/src/Tribe/Admin/Help_Page.php:828
 msgid "Rating:"
@@ -4952,7 +4952,7 @@ msgstr "Event Tickets Plus"
 
 #: src/Tribe/Aggregator/Page.php:380
 msgid "Facebook Events"
-msgstr ""
+msgstr "Facebook események"
 
 #: common/src/Tribe/Admin/Help_Page.php:203
 #: common/src/Tribe/Plugins_API.php:111
@@ -4986,8 +4986,8 @@ msgstr ""
 #: src/views/month/single-day.php:42
 msgid "View %1$s %2$s"
 msgid_plural "View All %1$s %2$s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1$s %2$s megtekintése"
+msgstr[1] "Mind a %1$s %2$s megtekintése"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:54
 msgid "Completed!"
@@ -5007,11 +5007,11 @@ msgstr "Mégsem"
 
 #: common/src/Tribe/Validate.php:214
 msgid "%s must be a positive number or percent."
-msgstr ""
+msgstr "%s-nek pozitív számnak vagy százaléknak kell lennie."
 
 #: src/Tribe/Main.php:971
 msgid "%1$s or %2$s"
-msgstr ""
+msgstr "%1$s vagy %2$s"
 
 #. Author URI of the plugin/theme
 msgid "http://m.tri.be/1x"
@@ -5031,7 +5031,7 @@ msgstr "Nincsenek következő %s."
 
 #: src/views/widgets/list-widget.php:112
 msgid "View All %s"
-msgstr "Összes %s"
+msgstr "Összes %s megtekintése"
 
 #: src/views/single-event.php:46 src/views/single-event.php:79
 msgid "%s Navigation"
@@ -5059,7 +5059,7 @@ msgstr "%s keresése"
 
 #: src/views/list/nav.php:20
 msgid "%s List Navigation"
-msgstr ""
+msgstr "%s lista navigáció"
 
 #: src/views/day/single-event.php:78 src/views/day/single-featured.php:67
 #: src/views/list/single-event.php:92 src/views/list/single-featured.php:78
@@ -5157,7 +5157,7 @@ msgstr "Importálási tudnivalók"
 
 #: src/Tribe/Aggregator/Page.php:256
 msgid "Events Import"
-msgstr ""
+msgstr "Események importálása"
 
 #: src/io/csv/admin-views/general.php:54
 msgid "Save Settings"
@@ -5173,11 +5173,11 @@ msgstr "Függőben levő"
 
 #: src/Tribe/Importer/Options.php:133
 msgid "Published"
-msgstr ""
+msgstr "Közzétett"
 
 #: src/Tribe/Importer/Admin_Page.php:237
 msgid "Import Settings"
-msgstr "Beállítások importálása"
+msgstr "Importálási beállítások"
 
 #: src/io/csv/admin-views/general.php:10
 msgid "Instructions"
@@ -5205,7 +5205,7 @@ msgstr "Oszlop leképezés: %s"
 
 #: src/functions/template-tags/options.php:29
 msgid "You %1$scannot%2$s use the same slug as above. The above should ideally be plural, and this singular.%3$sYour single Event URL is like: %4$s"
-msgstr ""
+msgstr "%1$sNem használhatod%2$s ugyan azt az előtagot, mint fent. A fenti ideális esetben többes számú, ez pedig egyes számú.%3$sEgy esemény hivatkozása (URL-je) így néz ki: %4$s"
 
 #: src/functions/template-tags/options.php:20
 msgid "Your current Events URL is %s"
@@ -5252,8 +5252,8 @@ msgstr "Címkék:"
 msgctxt "category list label"
 msgid "%s Category"
 msgid_plural "%s Categories"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s kategória"
+msgstr[1] "%s kategóriák"
 
 #: src/functions/template-tags/deprecated.php:1299
 msgid "Category"
@@ -5285,7 +5285,7 @@ msgstr "Részletek"
 
 #: src/admin-views/widget-admin-list.php:31
 msgid "Show widget only if there are upcoming events"
-msgstr ""
+msgstr "Csak akkor jelenítse meg a widgetet, ha van közelgő esemény"
 
 #: src/admin-views/widget-admin-list.php:18
 msgid "Show:"
@@ -5336,27 +5336,27 @@ msgstr "Település:"
 
 #: src/admin-views/tribe-options-timezones.php:49
 msgid "Appends the timezone to the end of event scheduling information &ndash; this can be useful when you have events in numerous different timezones."
-msgstr ""
+msgstr "Hozzáfűzi az időzónát az esemény időpontjának végéhez &ndash; ez akkor hasznos, ha több különböző időzónában is van eseményed."
 
 #: src/admin-views/tribe-options-timezones.php:48
 msgid "Show timezone"
-msgstr ""
+msgstr "Időzóna mutatása"
 
 #: src/admin-views/tribe-options-timezones.php:43
 msgid "Use the sitewide timezone everywhere"
-msgstr ""
+msgstr "Használja az oldal időzónáját mindenhol"
 
 #: src/admin-views/tribe-options-timezones.php:42
 msgid "Use the local timezones for each event"
-msgstr ""
+msgstr "Használja a helyi időzónát az egyes eseményekhez"
 
 #: src/admin-views/tribe-options-timezones.php:38
 msgid "Timezone mode"
-msgstr ""
+msgstr "Időzóna mód"
 
 #: src/admin-views/tribe-options-timezones.php:30
 msgid "Timezone Settings"
-msgstr ""
+msgstr "Időzóna beállítások"
 
 #: src/admin-views/tribe-options-timezones.php:10
 msgid "Click this button to update your database and take advantage of additional timezone capabilities. Please <a href=\"%s\" target=\"_blank\">configure WordPress</a> to use the correct timezone before clicking this button!"
@@ -5364,11 +5364,11 @@ msgstr ""
 
 #: src/admin-views/tribe-options-timezones.php:9
 msgid "Update Timezone Data"
-msgstr ""
+msgstr "Időzóna adatok a frissítése"
 
 #: src/admin-views/tribe-options-timezones.php:7
 msgid "Enable timezone support"
-msgstr ""
+msgstr "Időzóna támogatásának engedélyezése"
 
 #: common/src/admin-views/tribe-options-network.php:27
 msgid "Hide the following settings tabs on every site:"
@@ -5694,7 +5694,7 @@ msgstr "Dátum formátum beállítások"
 
 #: src/admin-views/tribe-options-display.php:197
 msgid "Check this to cache your month view HTML in transients, which can help improve calendar speed on sites with many events. <a href=\"%s\">Read more</a>."
-msgstr ""
+msgstr "Engedélyezd, hogy a hónap nézetet HTML-jét tranziensekben gyorsítótárazzuk, ami gyorsíthat a naptár megjelenítésének sebességén sok eseményt tartalmazó oldalak esetében. <a href=\"%s\">Tudj meg többet</a>."
 
 #: src/admin-views/tribe-options-display.php:196
 msgid "Enable the Month View Cache"
@@ -5829,7 +5829,7 @@ msgstr "%s neve:"
 
 #: src/admin-views/events-meta-box.php:256
 msgid "Enter a 0 for %s that are free or leave blank to hide the field."
-msgstr ""
+msgstr "Az ingyenes %shez adj meg 0-t vagy hagyd üresen a mezőt."
 
 #: src/admin-views/events-meta-box.php:248
 #: src/views/modules/meta/details.php:123
@@ -5869,7 +5869,7 @@ msgstr "%s honlapja"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:502
 msgid "Location:"
-msgstr ""
+msgstr "Helyszín:"
 
 #: src/admin-views/events-meta-box.php:129
 msgid "Timezone:"
@@ -5898,7 +5898,7 @@ msgstr "Ragadós a hónap nézetben"
 
 #: src/admin-views/event-sidebar-options.php:16
 msgid "Hide From %s Listings"
-msgstr ""
+msgstr "Elrejtés a %s listázásából"
 
 #: src/admin-views/admin-welcome-message.php:54
 msgid "Product Releases, Tutorials and Community Activity"
@@ -6246,7 +6246,7 @@ msgstr "Nyugat-Szahara"
 
 #: common/src/Tribe/Languages/Locations.php:293
 msgid "Wallis and Futuna Islands"
-msgstr ""
+msgstr "Wallis- és Futuna-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:292
 msgid "Virgin Islands (U.S.)"
@@ -6302,7 +6302,7 @@ msgstr "Tuvalu"
 
 #: common/src/Tribe/Languages/Locations.php:279
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Turks- és Caicos-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:278
 msgid "Turkmenistan"
@@ -6318,7 +6318,7 @@ msgstr "Tunézia"
 
 #: common/src/Tribe/Languages/Locations.php:275
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trinidad és Tobago"
 
 #: common/src/Tribe/Languages/Locations.php:274
 msgid "Tonga"
@@ -6338,7 +6338,7 @@ msgstr "Thaiföld"
 
 #: common/src/Tribe/Languages/Locations.php:270
 msgid "Tanzania, United Republic of"
-msgstr ""
+msgstr "Tanzániai Egyesült Köztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:269
 msgid "Tajikistan"
@@ -6366,7 +6366,7 @@ msgstr "Szváziföld"
 
 #: common/src/Tribe/Languages/Locations.php:263
 msgid "Svalbard and Jan Mayen Islands"
-msgstr ""
+msgstr "Svalbard- és Jan Mayen-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:262
 msgid "Suriname"
@@ -6378,7 +6378,7 @@ msgstr "Szudán"
 
 #: common/src/Tribe/Languages/Locations.php:241
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Saint-Pierre és Miquelon"
 
 #: common/src/Tribe/Languages/Locations.php:260
 msgid "Sri Lanka"
@@ -6446,7 +6446,7 @@ msgstr "Szamoa"
 
 #: common/src/Tribe/Languages/Locations.php:242
 msgid "Saint Vincent and The Grenadines"
-msgstr ""
+msgstr "Saint Vincent és a Grenadine-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:240
 msgid "Saint Lucia"
@@ -6454,7 +6454,7 @@ msgstr "Saint Lucia"
 
 #: common/src/Tribe/Languages/Locations.php:239
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "Saint Kitts és Nevis"
 
 #: common/src/Tribe/Languages/Locations.php:236
 msgid "Rwanda"
@@ -6606,11 +6606,11 @@ msgstr "Monakó"
 
 #: common/src/Tribe/Languages/Locations.php:199
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldáviai Köztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:198
 msgid "Micronesia, Federated States of"
-msgstr ""
+msgstr "Mikronéziai Szövetségi Államok"
 
 #: common/src/Tribe/Languages/Locations.php:197
 msgid "Mexico"
@@ -6714,11 +6714,11 @@ msgstr "Kuvait"
 
 #: common/src/Tribe/Languages/Locations.php:172
 msgid "Korea, Republic of"
-msgstr ""
+msgstr "Koreai Köztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:171
 msgid "Korea, Democratic People's Republic of"
-msgstr ""
+msgstr "Koreai Demokratikus Népköztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:170
 msgid "Kiribati"
@@ -6762,7 +6762,7 @@ msgstr "Irak"
 
 #: common/src/Tribe/Languages/Locations.php:160
 msgid "Iran, Islamic Republic of"
-msgstr ""
+msgstr "Iráni Iszlám Köztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:159
 msgid "Indonesia"
@@ -6794,7 +6794,7 @@ msgstr "Apostoli Szentszék (Vatikáni Városállam)"
 
 #: common/src/Tribe/Languages/Locations.php:152
 msgid "Heard and McDonald Islands"
-msgstr ""
+msgstr "Heard és McDonald-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:151
 msgid "Haiti"
@@ -6967,7 +6967,7 @@ msgstr "Cook-szigetek"
 
 #: common/src/Tribe/Languages/Locations.php:107
 msgid "Congo, Democratic Republic of the"
-msgstr ""
+msgstr "Kongói Demokratikus Köztársaság"
 
 #: common/src/Tribe/Languages/Locations.php:106
 msgid "Congo"
@@ -7059,7 +7059,7 @@ msgstr "Botswana"
 
 #: common/src/Tribe/Languages/Locations.php:83
 msgid "Bosnia and Herzegowina"
-msgstr ""
+msgstr "Bosznia-Hercegovina"
 
 #: common/src/Tribe/Languages/Locations.php:82
 msgid "Bolivia"
@@ -7131,7 +7131,7 @@ msgstr "Argentína"
 
 #: common/src/Tribe/Languages/Locations.php:65
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua és Barbuda"
 
 #: common/src/Tribe/Languages/Locations.php:64
 msgid "Antarctica"
@@ -7333,51 +7333,51 @@ msgstr "Rendszerinformáció"
 msgid "There are no fields setup for this tab yet."
 msgstr "Erre a lapra még nincsenek mezők beállítva."
 
-#: common/src/Tribe/Settings.php:597
+#: common/src/Tribe/Settings.php:621
 msgid "The above setting was not saved. Other settings were successfully saved."
 msgid_plural "The above settings were not saved. Other settings were successfully saved."
 msgstr[0] "A fenti beállítást nem sikerült menteni. A többi beállítás mentése sikeresen megtörtént."
 msgstr[1] "A fenti beállításokat nem sikerült menteni. A többi beállítás mentése sikeresen megtörtént."
 
-#: common/src/Tribe/Settings.php:596
+#: common/src/Tribe/Settings.php:620
 msgid "None of your settings were saved. Please try again."
 msgstr "A beállítások mentése nem sikerült. Kérjük, próbáld újra."
 
-#: common/src/Tribe/Settings.php:586
+#: common/src/Tribe/Settings.php:610
 msgid "Your form had the following errors:"
 msgstr "Az űrlap a következő hibákat tartalmazza:"
 
-#: common/src/Tribe/Settings.php:419
+#: common/src/Tribe/Settings.php:431
 msgid "The request wasn't sent from this tab."
 msgstr "A kérés nem lett elküldve erről a lapról."
 
-#: common/src/Tribe/Settings.php:413
+#: common/src/Tribe/Settings.php:425
 msgid "The request was sent insecurely."
 msgstr "A kérés nem biztonságosan lett elküldve."
 
-#: common/src/Tribe/Settings.php:407
+#: common/src/Tribe/Settings.php:419
 msgid "You don't have permission to do that."
 msgstr "Ehhez nincs jogosultságod."
 
-#: common/src/Tribe/Settings.php:359 src/Tribe/Aggregator/Page.php:89
+#: common/src/Tribe/Settings.php:371 src/Tribe/Aggregator/Page.php:89
 msgid "Save Changes"
 msgstr "Módosítások mentése"
 
-#: common/src/Tribe/Settings.php:351
+#: common/src/Tribe/Settings.php:363
 msgid "You've requested a non-existent tab."
 msgstr "Az általad kért lap nem létezik."
 
-#: common/src/Tribe/Settings.php:337
+#: common/src/Tribe/Settings.php:349
 msgid "%s Settings"
 msgstr "%s beállítások"
 
-#: common/src/Tribe/Settings.php:241 common/src/Tribe/Settings.php:261
+#: common/src/Tribe/Settings.php:253 common/src/Tribe/Settings.php:273
 msgid "Events Settings"
 msgstr "Események beállításai"
 
 #: common/src/Tribe/PUE/Checker.php:888
 msgid "Hmmm... something's wrong with this validator. Please contact %ssupport%s."
-msgstr ""
+msgstr "Hmmm... Valami nincs rendben az érvényesítővel. Kérjük, fordulj a %stámogatói csapathoz%s."
 
 #: common/src/Tribe/PUE/Checker.php:927
 msgid "Valid Key! Expires on %s"
@@ -7450,7 +7450,7 @@ msgstr "Lista"
 msgid "Calendar"
 msgstr "Naptár"
 
-#: common/src/Tribe/Settings.php:242
+#: common/src/Tribe/Settings.php:254
 #: src/Tribe/Admin/Bar/Default_Configurator.php:89 src/Tribe/Main.php:4298
 msgid "Settings"
 msgstr "Beállítások"
@@ -7508,7 +7508,7 @@ msgstr "Dátum tartományon kívül."
 
 #: src/Tribe/Main.php:2288
 msgid "all"
-msgstr ""
+msgstr "összes"
 
 #: src/Tribe/Main.php:2287 src/functions/template-tags/general.php:111
 msgid "events"
@@ -7526,20 +7526,20 @@ msgstr "oldal"
 msgid "Network"
 msgstr "Hálózat"
 
-#: common/src/Tribe/Main.php:305
+#: common/src/Tribe/Main.php:310
 msgid "Done"
 msgstr "Kész"
 
-#: common/src/Tribe/Main.php:304 src/Tribe/Asset/Bootstrap_Datepicker.php:27
+#: common/src/Tribe/Main.php:309 src/Tribe/Asset/Bootstrap_Datepicker.php:27
 #: src/functions/template-tags/day.php:104
 msgid "Today"
 msgstr "Ma"
 
-#: common/src/Tribe/Main.php:303
+#: common/src/Tribe/Main.php:308
 msgid "Prev"
 msgstr "Előző"
 
-#: common/src/Tribe/Main.php:286 common/src/Tribe/Main.php:302
+#: common/src/Tribe/Main.php:291 common/src/Tribe/Main.php:307
 msgid "Next"
 msgstr "Következő"
 
@@ -7613,11 +7613,11 @@ msgstr "%s kategória frissítése"
 
 #: src/Tribe/Main.php:1743
 msgid "Edit %s Category"
-msgstr ""
+msgstr "%s kategória szerkesztése"
 
 #: src/Tribe/Main.php:1742
 msgid "Parent %s Category:"
-msgstr ""
+msgstr "%s szülőkategória:"
 
 #: src/Tribe/Main.php:1741
 msgid "Parent %s Category"
@@ -7641,7 +7641,7 @@ msgstr "%s nem található a lomtárban"
 
 #: src/Tribe/Main.php:1727 src/Tribe/Organizer.php:97 src/Tribe/Venue.php:116
 msgid "No %s found"
-msgstr "%s nem található"
+msgstr "Nincsenek %s"
 
 #: src/Tribe/Main.php:1726 src/Tribe/Organizer.php:96 src/Tribe/Venue.php:115
 msgid "Search %s"
@@ -7692,7 +7692,7 @@ msgstr "Súgó"
 
 #: common/src/Tribe/Settings_Manager.php:55
 msgid "Display"
-msgstr "Megjelenít"
+msgstr "Megjelenítés"
 
 #: src/Tribe/Main.php:1277
 msgid "The following plugins are out of date: %1$s. All add-ons contain dependencies on The Events Calendar and will not function properly unless paired with the right version. %2$sLearn More%3$s."
@@ -7730,7 +7730,7 @@ msgstr "lista"
 msgid "month"
 msgstr "hónap"
 
-#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.10.1) 
+#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.11.1) 
 #. #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: common/src/Tribe/Admin/Help_Page.php:59 common/src/Tribe/Customizer.php:569
@@ -7745,8 +7745,8 @@ msgstr "The Events Calendar"
 msgid "Event"
 msgstr "Esemény"
 
-#: common/src/Tribe/Settings.php:165 common/src/Tribe/Settings.php:229
-#: common/src/Tribe/Settings.php:230 src/Tribe/Importer/Admin_Page.php:206
+#: common/src/Tribe/Settings.php:177 common/src/Tribe/Settings.php:241
+#: common/src/Tribe/Settings.php:242 src/Tribe/Importer/Admin_Page.php:206
 #: src/Tribe/Main.php:1126 src/functions/template-tags/general.php:95
 msgid "Events"
 msgstr "Események"
@@ -7781,7 +7781,7 @@ msgstr "Eseménylista"
 msgid "A widget that displays upcoming events."
 msgstr "Egy widget, mely a következő eseményeket jeleníti meg."
 
-#: common/src/Tribe/Settings.php:619 src/Tribe/Importer/Options.php:54
+#: common/src/Tribe/Settings.php:643 src/Tribe/Importer/Options.php:54
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
 
@@ -7875,7 +7875,7 @@ msgstr "Esemény honlapja"
 
 #: src/Tribe/Importer/Column_Mapper.php:83
 msgid "Event Tags"
-msgstr ""
+msgstr "Esemény címkék"
 
 #: src/Tribe/Importer/Column_Mapper.php:82
 msgid "Event Category"
@@ -7961,19 +7961,19 @@ msgstr "A fájl eltűnt. Kérjük, próbáld újra."
 msgid "Import"
 msgstr "Importálás"
 
-#: common/src/Tribe/Field.php:617
+#: common/src/Tribe/Field.php:626
 msgid "No select options specified"
 msgstr "Nincs megadva választási lehetőség"
 
-#: common/src/Tribe/Field.php:559
+#: common/src/Tribe/Field.php:568
 msgid "No checkbox options specified"
 msgstr "Nincs megadva jelölőnégyzet lehetőség"
 
-#: common/src/Tribe/Field.php:523
+#: common/src/Tribe/Field.php:532
 msgid "No radio options specified"
 msgstr "Nincs megadva rádió gomb lehetőség"
 
-#: common/src/Tribe/Field.php:228
+#: common/src/Tribe/Field.php:231
 msgid "Invalid field type specified"
 msgstr "Érvénytelen mező típus lett megadva"
 
@@ -8049,7 +8049,7 @@ msgstr "Egy probléma miatt a befejezés előtt leállt az időzóna frissítés
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:98
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:201
 msgid "%d%% complete"
-msgstr ""
+msgstr "%d%% befejezve"
 
 #: src/Tribe/Admin/Timezone_Updater.php:78
 msgid "Update complete: timezone data has been added to all events in the database."
@@ -8100,7 +8100,7 @@ msgstr "Ugrás a WordPress frissítések oldalra"
 #: common/src/Tribe/Admin/Activation_Page.php:77
 #: src/deprecated/Tribe__Events__Activation_Page.php:41
 msgid "Return to Plugins page"
-msgstr ""
+msgstr "Vissza a bővítmények oldalra"
 
 #: common/src/Tribe/Admin/Activation_Page.php:77
 #: src/deprecated/Tribe__Events__Activation_Page.php:41

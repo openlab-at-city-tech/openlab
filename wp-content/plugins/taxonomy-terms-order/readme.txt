@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order, categories sort, order category
 Requires at least: 2.8
-Tested up to: 4.8.1
-Stable tag: 1.5.2.2
+Tested up to: 4.9.4
+Stable tag: 1.5.3.2
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
 
@@ -14,6 +14,8 @@ Order Categories and all custom taxonomies terms (hierarchically) using a Drag a
 If multiple taxonomies are created for a custom post type, a menu will allow to chose the one need to be sorted. If child categories (terms) are defined, those can be ordered too using the same interface.
 <br />Also you can have the admin terms interface sorted per your new sort.
 <br />This plugin is developed by <a target="_blank" href="http://www.nsp-code.com">Nsp-Code</a>
+
+<br />See the <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order</a> for advanced features.
 
 == Installation ==
 
@@ -56,6 +58,16 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 Consider upgrading to our advanced version of this plugin at a very resonable price <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order Order</a>
 
 == Change Log ==
+
+= 1.5.3.2 =
+  - Add nonce field for AJAX sort update
+
+= 1.5.3.1 =
+  - Removed Google Plus share button which triggered some JavaScript errors
+
+= 1.5.3 =
+  - Use JSON instead serialize method when sending order through AJAX
+  - Updated PO language file
 
 = 1.5.2.2 =
   - Default admin capability changed from install_plugins to manage_options to prevent DISALLOW_FILE_MODS issue. https://wordpress.org/support/topic/plugin-breaks-when-disallow_file_mods-is-set-to-true/

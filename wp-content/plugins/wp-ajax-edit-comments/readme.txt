@@ -1,10 +1,10 @@
-=== WP Ajax Edit Comments ===
+=== Mihdan: Ajax Edit Comments ===
 Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan
-Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin, adopt-me
+Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin
 Requires at least: 3.1
-Tested up to: 4.9.1
+Tested up to: 4.9.4
 License: GPLv2 or later
-Stable tag: 6.0.1
+Stable tag: 6.0.3
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
@@ -15,20 +15,6 @@ Ajax Edit Comments allows users to edit their own comments for a limited time.  
 = Looking for Just Comment Editing? =
 
 Check out a "lite" version of this plugin called <a href="http://wordpress.org/plugins/simple-comment-editing/">Simple Comment Editing</a>.  Check out the <a href="http://www.wptavern.com/plugin-review-simple-comment-editing">WPTavern review</a> for more information.
-
-= Looking for a new Contributor =
-We're looking for a new contributor to this plugin.  All the current contributors no longer have the time to maintain this project.  If you're interested, <a href="https://github.com/ronalfy/ajax-edit-comments">fork the project on GitHub</a> and submit a pull request.   Alternatively, <a href="http://wordpress.org/support/topic/looking-for-new-developer">leave a comment here</a>.
-
-Here are some things that need to be worked on:
-<ul>
-<li>Existing support requests.</li>
-<li>Code re-factoring.</li>
-<li>CSS overhaul.</li>
-<li>Admin options de-cluttering.</li>
-</ul>
-
-If interested, visit the <a href="https://github.com/ronalfy/ajax-edit-comments">Ajax Edit Comments GitHub project page</a>.
-
 
 = Features =
 <h4>Admin Features</h4>
@@ -64,6 +50,12 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 6.0.3 =
+* Remove "LOOKING FOR A NEW CONTRIBUTOR"
+
+= 6.0.2 =
+* Update jquery.tools to 1.2.5
 
 = 6.0.1 =
 * Supports WordPress version 4.9.1
