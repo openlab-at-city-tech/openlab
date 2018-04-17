@@ -274,9 +274,13 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var message = '';
 
                     if (totalWeight >= 100) {
-                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. Any assignments that do not have a set percentage will not be included in the average calculation. Percentages can be edited in the dropdown menus.';
+                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. Any assignments that do not have a set percentage will not be included in the average calculation.';
                     } else if (totalWeight < 100) {
-                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. The rest of the grade average will be calculated evenly. Percentages can be edited in the dropdown menus.';
+                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. The rest of the grade average will be calculated evenly.';
+                    }
+
+                    if(self.gradebook.role === 'instructor') {
+                        message += ' Percentages can be edited in the dropdown menus.';
                     }
 
                     return message;
