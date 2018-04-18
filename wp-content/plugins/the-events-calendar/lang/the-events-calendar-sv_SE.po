@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-01-28 09:21:26+0000\n"
+"PO-Revision-Date: 2018-02-22 13:56:04+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,11 +74,11 @@ msgstr "Inställningarna nedan anger hur din kalender visas. Om något inte ser 
 
 #: src/admin-views/aggregator/settings.php:176
 msgid "When importing from an event source, this is the maximum number of events that will be imported; on slower websites this may impact the success of imports. Setting this to a smaller number may improve results."
-msgstr ""
+msgstr "När du importerar från en händelsekälla är detta det maximala antalet händelser som ska importeras. På långsammare webbplatser kan detta påverka importeringen. Om du ställer in detta till ett lägre antal kan du förbättra resultatet."
 
 #: src/admin-views/aggregator/settings.php:175
 msgid "Import Quantity Limit"
-msgstr ""
+msgstr "Max antal importer"
 
 #: src/admin-views/aggregator/settings.php:160
 msgid "When importing from an event source, this is how far into the future the events will be fetched; on slower websites a larger date range may impact the success of imports. Selecting a shorter time period may improve results."
@@ -86,52 +86,52 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:159
 msgid "Import Date Range Limit"
-msgstr ""
+msgstr "Maximalt datumspann att importera"
 
 #: src/admin-views/aggregator/settings.php:148
 msgid "Limit the number of imported events by number, date range, or not at all; on slower websites this may impact the success of imports. Selecting a shorter time period or a smaller number of events may improve results."
-msgstr ""
+msgstr "Begränsa antalet importerade händelser efter antal, datumintervall eller inte alls; på långsammare webbplatser kan detta påverka importens resultat. Att välja en kortare tidsperiod eller ett mindre antal händelser kan förbättra resultatet."
 
 #: src/admin-views/aggregator/settings.php:147
 msgid "Import Limit Type"
-msgstr ""
+msgstr "Typ av importbegränsning"
 
 #: src/admin-views/aggregator/origins/refine.php:26
 msgid "Use the filters to narrow down which events are fetched from Facebook."
-msgstr ""
+msgstr "Använd filtren för att begränsa vilka händelser som hämtas från Facebook."
 
 #: src/admin-views/aggregator/origins/limit.php:20
 msgid "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
-msgstr ""
+msgstr "Event Aggregator försöker hämta %s händelser som börjar från det aktuella datumet eller det angivna datumet;"
 
-#: src/Tribe/iCal.php:424
+#: src/Tribe/iCal.php:411
 msgctxt "iCal feed description"
 msgid "Events for %s"
-msgstr ""
+msgstr "Händelser för %s"
 
 #: src/Tribe/REST/V1/Messages.php:45
 msgid "The requested event term archive page does not exist"
-msgstr ""
+msgstr "Den begärda händelseperiodens arkivsida finns inte"
 
 #: src/Tribe/REST/V1/Messages.php:43
 msgid "The requested organizer archive page does not exist"
-msgstr ""
+msgstr "Den begärda organisatörens arkivsida finns inte"
 
 #: src/Tribe/REST/V1/Messages.php:42
 msgid "The requested venue archive page does not exist"
-msgstr ""
+msgstr "Den begärda platsens arkivsida finns inte"
 
 #: src/Tribe/REST/V1/Messages.php:41
 msgid "The organizer could not be updated"
-msgstr ""
+msgstr "Organisatören kunde inte uppdateras"
 
 #: src/Tribe/REST/V1/Messages.php:40
 msgid "The venue could not be updated"
-msgstr ""
+msgstr "Platsen kunde inte uppdateras"
 
 #: src/Tribe/REST/V1/Messages.php:39
 msgid "The event could not be updated"
-msgstr ""
+msgstr "Händelsen kunde inte uppdateras"
 
 #: src/Tribe/REST/V1/Messages.php:38
 msgid "The organizer is already trashed"
@@ -195,63 +195,63 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:239
 msgid "The venue post status"
-msgstr ""
+msgstr "Platsens status"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:233
 msgid "The venue description"
-msgstr ""
+msgstr "Platsens beskrivning"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:221
 msgid "The venue publication date (UTC timezone)"
-msgstr ""
+msgstr "Publiceringsdatum för platsen (UTC-tidszon)"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:215
 msgid "The venue publication date"
-msgstr ""
+msgstr "Publiceringsdatum för platsen"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:209
 msgid "The venue author ID"
-msgstr ""
+msgstr "Platsförfattarens ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:187
 msgid "the venue post ID"
-msgstr ""
+msgstr "platsens post-ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:167
 msgid "The venue with the specified ID could not be deleted."
-msgstr ""
+msgstr "Platsen med det angivna ID:t kunde inte tas bort."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:164
 msgid "The venue with the specified ID has been deleted already."
-msgstr ""
+msgstr "Platsen med det angivna ID:t har redan tagits bort."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:161
 msgid "The current user cannot delete the venue with the specified ID."
-msgstr ""
+msgstr "Den nuvarande användaren kan inte ta bort platsen med angivet ID."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:158
 msgid "The venue post ID is missing or does not exist."
-msgstr ""
+msgstr "Platsens ID saknas eller finns inte."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:152
 msgid "Deletes a venue and returns its data"
-msgstr ""
+msgstr "Tar bort en plats och returnerar dess data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:144
 msgid "The user is not authorized to create venues"
-msgstr ""
+msgstr "Användaren är inte behörig att skapa platser"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:135
 msgid "Returns the data of the created venue"
-msgstr ""
+msgstr "Returnerar data för den skapade platsen"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:129
 msgid "Returns the data of the updated venue"
-msgstr ""
+msgstr "Returnerar data för den uppdaterade platsen"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:120
 msgid "A venue with the specified post ID does not exist."
-msgstr ""
+msgstr "En plats med det angivna ID:t finns inte."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:114
 msgid "The venue post ID is missing."
@@ -919,15 +919,15 @@ msgstr "en"
 msgid "Hide and Ignore &#8220;%s&#8221;"
 msgstr "Dölj och ignorera &#8220;%s&#8221;"
 
-#: common/src/Tribe/Main.php:283
+#: common/src/Tribe/Main.php:288
 msgid "Clear Selection."
 msgstr "Rensa markering."
 
-#: common/src/Tribe/Main.php:282
+#: common/src/Tribe/Main.php:287
 msgid "Select all pages"
 msgstr "Välj alla sidor"
 
-#: common/src/Tribe/Main.php:281
+#: common/src/Tribe/Main.php:286
 msgid "All items on this page were selected. "
 msgstr "Alla objekt på denna sida markerades."
 
@@ -1971,20 +1971,20 @@ msgstr "Färg för inläggets titel "
 msgid "Single Event"
 msgstr "Enstaka evenemang"
 
-#: src/Tribe/Customizer/Month_Week_View.php:197
+#: src/Tribe/Customizer/Month_Week_View.php:198
 msgid "Calendar Highlight Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:175
+#: src/Tribe/Customizer/Month_Week_View.php:176
 msgid "Calendar Table Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:144
+#: src/Tribe/Customizer/Month_Week_View.php:145
 #: src/Tribe/Customizer/Single_Event.php:79 src/Tribe/Customizer/Widget.php:60
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:143
+#: src/Tribe/Customizer/Month_Week_View.php:144
 msgid "Month View"
 msgstr "Månadsvy"
 
@@ -2257,7 +2257,7 @@ msgctxt "Static front page setting"
 msgid "Main events page"
 msgstr ""
 
-#: common/src/Tribe/Settings.php:269 common/src/Tribe/Settings.php:270
+#: common/src/Tribe/Settings.php:281 common/src/Tribe/Settings.php:282
 msgid "Events Help"
 msgstr ""
 
@@ -4267,67 +4267,67 @@ msgstr "(öppnas i nytt fönster)"
 msgid "Renew Your License Now"
 msgstr "Förnya din licens nu"
 
-#: common/src/Tribe/Main.php:293
+#: common/src/Tribe/Main.php:298
 msgid ": Selected 1 row"
 msgstr ""
 
-#: common/src/Tribe/Main.php:292
+#: common/src/Tribe/Main.php:297
 msgid ": Selected %d rows"
 msgstr ""
 
-#: common/src/Tribe/Main.php:287
+#: common/src/Tribe/Main.php:292
 msgid "Previous"
 msgstr "Föregående"
 
-#: common/src/Tribe/Main.php:285
+#: common/src/Tribe/Main.php:290
 msgid "All"
 msgstr "Alla"
 
-#: common/src/Tribe/Main.php:280
+#: common/src/Tribe/Main.php:285
 msgid "Search:"
 msgstr "Sök:"
 
-#: common/src/Tribe/Main.php:279
+#: common/src/Tribe/Main.php:284
 msgid "No matching records found"
 msgstr "Inga matchande poster hittades"
 
-#: common/src/Tribe/Main.php:278
+#: common/src/Tribe/Main.php:283
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: common/src/Tribe/Main.php:277
+#: common/src/Tribe/Main.php:282
 msgid "Showing 0 to 0 of 0 entries"
 msgstr "Visar 0 till 0 av 0 poster"
 
-#: common/src/Tribe/Main.php:276
+#: common/src/Tribe/Main.php:281
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:275
+#: common/src/Tribe/Main.php:280
 msgid "No data available in table"
 msgstr "Inga data i tabellen"
 
-#: common/src/Tribe/Main.php:274
+#: common/src/Tribe/Main.php:279
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:272
+#: common/src/Tribe/Main.php:277
 msgid ": activate to sort column descending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:271
+#: common/src/Tribe/Main.php:276
 msgid ": activate to sort column ascending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:252
+#: common/src/Tribe/Main.php:257
 msgid "Press \"Cmd + C\" to copy"
 msgstr "Tryck \"Cmd + C\" för att kopiera"
 
-#: common/src/Tribe/Main.php:251
+#: common/src/Tribe/Main.php:256
 msgid "System info copied"
 msgstr "Systeminformation kopierades"
 
-#: common/src/Tribe/Main.php:250
+#: common/src/Tribe/Main.php:255
 #: common/src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
@@ -7333,45 +7333,45 @@ msgstr "Systeminformation"
 msgid "There are no fields setup for this tab yet."
 msgstr "Det finns för närvarande inga fält för denna flik."
 
-#: common/src/Tribe/Settings.php:597
+#: common/src/Tribe/Settings.php:621
 msgid "The above setting was not saved. Other settings were successfully saved."
 msgid_plural "The above settings were not saved. Other settings were successfully saved."
 msgstr[0] "Inställningen ovan sparades inte. Alla andra inställningar sparades korrekt."
 msgstr[1] "Inställningarna ovan sparades inte. Alla andra inställningar sparades korrekt."
 
-#: common/src/Tribe/Settings.php:596
+#: common/src/Tribe/Settings.php:620
 msgid "None of your settings were saved. Please try again."
 msgstr "Inga inställningar sparades. Försök igen."
 
-#: common/src/Tribe/Settings.php:586
+#: common/src/Tribe/Settings.php:610
 msgid "Your form had the following errors:"
 msgstr "Ditt formulär hade följande fel:"
 
-#: common/src/Tribe/Settings.php:419
+#: common/src/Tribe/Settings.php:431
 msgid "The request wasn't sent from this tab."
 msgstr "Begäran skickas inte från den här fliken."
 
-#: common/src/Tribe/Settings.php:413
+#: common/src/Tribe/Settings.php:425
 msgid "The request was sent insecurely."
 msgstr "Begäran skickades osäkert."
 
-#: common/src/Tribe/Settings.php:407
+#: common/src/Tribe/Settings.php:419
 msgid "You don't have permission to do that."
 msgstr "Du har inte behörighet att göra det."
 
-#: common/src/Tribe/Settings.php:359 src/Tribe/Aggregator/Page.php:89
+#: common/src/Tribe/Settings.php:371 src/Tribe/Aggregator/Page.php:89
 msgid "Save Changes"
 msgstr "Spara ändringar"
 
-#: common/src/Tribe/Settings.php:351
+#: common/src/Tribe/Settings.php:363
 msgid "You've requested a non-existent tab."
 msgstr "Du har begärt en icke-existerande flik."
 
-#: common/src/Tribe/Settings.php:337
+#: common/src/Tribe/Settings.php:349
 msgid "%s Settings"
 msgstr "%s Inställningar"
 
-#: common/src/Tribe/Settings.php:241 common/src/Tribe/Settings.php:261
+#: common/src/Tribe/Settings.php:253 common/src/Tribe/Settings.php:273
 msgid "Events Settings"
 msgstr "Evenemangsinställningar"
 
@@ -7450,7 +7450,7 @@ msgstr "Lista"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: common/src/Tribe/Settings.php:242
+#: common/src/Tribe/Settings.php:254
 #: src/Tribe/Admin/Bar/Default_Configurator.php:89 src/Tribe/Main.php:4298
 msgid "Settings"
 msgstr "Inställningar"
@@ -7526,20 +7526,20 @@ msgstr "sida"
 msgid "Network"
 msgstr "Nätverk"
 
-#: common/src/Tribe/Main.php:305
+#: common/src/Tribe/Main.php:310
 msgid "Done"
 msgstr "Färdig"
 
-#: common/src/Tribe/Main.php:304 src/Tribe/Asset/Bootstrap_Datepicker.php:27
+#: common/src/Tribe/Main.php:309 src/Tribe/Asset/Bootstrap_Datepicker.php:27
 #: src/functions/template-tags/day.php:104
 msgid "Today"
 msgstr "Idag"
 
-#: common/src/Tribe/Main.php:303
+#: common/src/Tribe/Main.php:308
 msgid "Prev"
 msgstr "Föregående"
 
-#: common/src/Tribe/Main.php:286 common/src/Tribe/Main.php:302
+#: common/src/Tribe/Main.php:291 common/src/Tribe/Main.php:307
 msgid "Next"
 msgstr "Nästa"
 
@@ -7730,7 +7730,7 @@ msgstr "lista"
 msgid "month"
 msgstr "månad"
 
-#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.10.1) 
+#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.11.1) 
 #. #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: common/src/Tribe/Admin/Help_Page.php:59 common/src/Tribe/Customizer.php:569
@@ -7745,8 +7745,8 @@ msgstr "The Events Calendar"
 msgid "Event"
 msgstr "Evenemang"
 
-#: common/src/Tribe/Settings.php:165 common/src/Tribe/Settings.php:229
-#: common/src/Tribe/Settings.php:230 src/Tribe/Importer/Admin_Page.php:206
+#: common/src/Tribe/Settings.php:177 common/src/Tribe/Settings.php:241
+#: common/src/Tribe/Settings.php:242 src/Tribe/Importer/Admin_Page.php:206
 #: src/Tribe/Main.php:1126 src/functions/template-tags/general.php:95
 msgid "Events"
 msgstr "Evenemang"
@@ -7781,7 +7781,7 @@ msgstr "Evenemangslista"
 msgid "A widget that displays upcoming events."
 msgstr "En widget som visar kommande evenemang."
 
-#: common/src/Tribe/Settings.php:619 src/Tribe/Importer/Options.php:54
+#: common/src/Tribe/Settings.php:643 src/Tribe/Importer/Options.php:54
 msgid "Settings saved."
 msgstr "Inställningar sparade."
 
@@ -7961,19 +7961,19 @@ msgstr "Filen försvann. Vänligen försök igen."
 msgid "Import"
 msgstr "Importera"
 
-#: common/src/Tribe/Field.php:617
+#: common/src/Tribe/Field.php:626
 msgid "No select options specified"
 msgstr "Inga val angivna"
 
-#: common/src/Tribe/Field.php:559
+#: common/src/Tribe/Field.php:568
 msgid "No checkbox options specified"
 msgstr "Inga kryssruteval angivna"
 
-#: common/src/Tribe/Field.php:523
+#: common/src/Tribe/Field.php:532
 msgid "No radio options specified"
 msgstr "Inga radioknappsval specificerade"
 
-#: common/src/Tribe/Field.php:228
+#: common/src/Tribe/Field.php:231
 msgid "Invalid field type specified"
 msgstr "Ogiltig fälttyp angiven"
 

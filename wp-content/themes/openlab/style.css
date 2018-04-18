@@ -7896,6 +7896,11 @@ body .panel-body .bp-template-notice {
 body .group-header {
   margin-top: 40px;
 }
+@media (max-width: 767px) {
+  body .group-header {
+    margin-top: 8px;
+  }
+}
 body .group-header .bp-template-notice {
   color: #000000;
   margin-top: 4px;
@@ -8703,6 +8708,12 @@ body form .checkbox-list-container {
     padding: 1% 4%;
     width: 100%;
   }
+}
+.mobile-group-site-links {
+  margin-top: 30px;
+}
+.mobile-group-site-links .portfolio-site-link {
+  font-size: 1.75rem;
 }
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {

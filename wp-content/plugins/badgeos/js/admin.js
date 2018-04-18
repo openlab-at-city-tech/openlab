@@ -54,4 +54,19 @@ jQuery(document).ready(function($) {
 			$('.credly-notifications-message').hide();
 	}).change();
 
+	$( '#delete_log_entries' ).click( function() {
+		var confirmation = confirm( 'It will delete all the log entries' );
+		if( confirmation ) {
+            var data = {
+                'action': 'delete_badgeos_log_entries'
+            };
+            $.post( admin_js.ajax_url, data, function(response) {
+                $( '#wpbody-content .wrap' ).prepend( '<div class="notice notice-warning delete-log-entries"><p><img src="'+ admin_js.loading_img +'" /> &nbsp;&nbsp;BadgeOS is deleting log entries as background process, you can continue exploring badgeos</p></div>' );
+
+                setTimeout( function() {
+                	$( '#wpbody-content .wrap .delete-log-entries' ).slideUp();
+				}, 10000 );
+            } );
+		}
+	});
 });

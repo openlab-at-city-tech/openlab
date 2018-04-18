@@ -1,0 +1,112 @@
+/* 
+ Theme Name:   OpenLab Twenty Sixteen
+ Description:  This is a child theme of Twenty Sixteen.  It is similar, with a few changes to list and heading styles, margins, and the black border around the site has been removed.  It also displays breadcrumb navigation with activation of the plugin Breadcrumb NavXT.
+ Author:       Bree
+ Template:     twentysixteen
+ Version:      1.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+
+--------------------------------------------*/
+
+/* Hide black border around the site*/
+
+body:not(.custom-background-image):before,
+	body:not(.custom-background-image):after {
+		height: 0;
+	}
+
+.site {
+    margin: 0;
+}
+
+/* Breadcrumbs plugin */
+
+.breadcrumbs {
+	padding-top: 1.75em;
+	font-family: Montserrat, "Helvetica Neue", sans-serif;
+}
+
+/* Widget */
+    
+.widget {
+	border-top: 2px solid #1a1a1a;
+}
+
+/**
+ * 3.0 - Typography
+ */
+
+h4,
+h5,
+h6 {
+	font-weight: 1200;
+}
+
+/**
+ * 4.0 - Elements
+ */
+ 
+ul,
+ol {
+	margin: 0 0 1.75em 1.25em;
+	padding: 0 0 0 1em
+}
+
+ul {
+	list-style: disc inside;
+}
+
+ol {
+	list-style: decimal inside;
+	margin-left: 1.5em;
+}
+
+/**
+ * 11.1 - Header
+ */
+
+.site-title {
+    font-size: 2rem;
+    font-size: 32px;
+}
+
+/**
+ * 11.2 - Posts and pages
+ */
+
+.entry-content h4,
+.entry-summary h4,
+.comment-content h4,
+.textwidget h4 {
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+.entry-content h5,
+.entry-summary h5,
+.comment-content h5,
+.textwidget h5 {
+	font-size: 15px;
+	font-size: .9375rem;
+}
+
+.entry-content h6,
+.entry-summary h6,
+.comment-content h6,
+.textwidget h6 {
+	font-size: 15px;
+	font-size: .9375rem;
+	font-style: normal;
+	color: #767676;
+}
+
+/**
+ * 14.4 - >= 985px
+ */
+
+@media screen and (min-width: 61.5625em) {
+	.site-header {
+		padding: 3.25em 4.5455% 2.25em;
+	}
+}	

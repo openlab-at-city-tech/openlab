@@ -910,12 +910,12 @@ select.tribe-events-dropdown {
 
 .venue-address {
 	margin-top: 1em;
-	
+
 	&>* {
 		display: block;
 		margin-top: 0.5em;
 	}
-	
+
 }
 
 /* = Single Event Template Styles
@@ -999,7 +999,7 @@ select.tribe-events-dropdown {
 		margin-bottom: 30px;
 		text-align: center;
 	}
-	
+
 	/* Export Links */
 	.tribe-events-cal-links {
 		clear: both;
@@ -1828,10 +1828,6 @@ input[name*='tribe-bar-']:-moz-placeholder {
 		border-radius: 0 0 3px 3px;
 	}
 
-	[name='tribe-bar-view'] {
-		display: none;
-	}
-
 	.tribe-bar-views-list {
 		float: left;
 		width: 100%;
@@ -1840,11 +1836,6 @@ input[name*='tribe-bar-']:-moz-placeholder {
 	.tribe-bar-settings {
 		display: none;
 	}
-}
-
-/* Views Select */
-.tribe-no-js #tribe-bar-views [name='tribe-bar-view'] {
-	display: block;
 }
 
 /* Tribe Bar Mini Styles */
@@ -2366,6 +2357,7 @@ input[name*='tribe-bar-']:-moz-placeholder {
 /* Twenty Seventeen
 ========================================================================== */
 .tribe-theme-twentyseventeen {
+
 	.entry-content {
 		a {
 			box-shadow: none;
@@ -2376,7 +2368,14 @@ input[name*='tribe-bar-']:-moz-placeholder {
 		.single-featured-image-header {
 			display: none;
 		}
-	}	
+	}
+
+	/* Ensure full-width calendar if Main Events Page is site homepage. */
+	&.page-template-page-php.blog:not(.has-sidebar) {
+		#primary article {
+			width: 100%;
+		}
+	}
 }
 
 /* = Events Retina

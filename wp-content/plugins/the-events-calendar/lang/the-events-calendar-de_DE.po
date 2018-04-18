@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-02-08 14:05:32+0000\n"
+"PO-Revision-Date: 2018-03-27 18:16:06+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -104,7 +104,7 @@ msgstr "Verwenden Sie die Filter, um einzugrenzen, welche Veranstaltungen von Fa
 msgid "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
 msgstr "Der Event Aggregator versucht, %s Veranstaltungen ab dem aktuellen Datum oder dem angegebenen Datum abzurufen;"
 
-#: src/Tribe/iCal.php:424
+#: src/Tribe/iCal.php:411
 msgctxt "iCal feed description"
 msgid "Events for %s"
 msgstr "Veranstaltungen für %s"
@@ -919,15 +919,15 @@ msgstr "einen"
 msgid "Hide and Ignore &#8220;%s&#8221;"
 msgstr "Verstecke und ignoriere &#8220;%s&#8221;"
 
-#: common/src/Tribe/Main.php:283
+#: common/src/Tribe/Main.php:288
 msgid "Clear Selection."
 msgstr "Selektion aufheben"
 
-#: common/src/Tribe/Main.php:282
+#: common/src/Tribe/Main.php:287
 msgid "Select all pages"
 msgstr "Alle Seiten selektieren"
 
-#: common/src/Tribe/Main.php:281
+#: common/src/Tribe/Main.php:286
 msgid "All items on this page were selected. "
 msgstr "Alle Objekte auf diese Seite wurden selektiert."
 
@@ -1179,7 +1179,7 @@ msgstr "Ob oder ob nicht diese Veranstaltung eine ganztägige Veranstaltung ist"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:94
 msgid "The event start date in the event or site timezone"
-msgstr "Das Veranstaltungs - Startdatum in der Zeitzone der Veranstaltung oder Webseite"
+msgstr "Das Veranstaltungs-Startdatum in der Zeitzone der Veranstaltung oder Website"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:98
 msgid "An array of each component of the event start date"
@@ -1187,7 +1187,7 @@ msgstr "Ein Array mit allen Komponenten der Veranstaltungsstartzeit"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:103
 msgid "The event end date in the event or site timezone"
-msgstr "Das Veranstaltungs - Enddatum in der Zeitzone der Veranstaltung oder Webseite"
+msgstr "Das Veranstaltungs-Enddatum in der Zeitzone der Veranstaltung oder Website"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:107
 msgid "An array of each component of the event end date"
@@ -1224,7 +1224,7 @@ msgstr "Die Details der Veranstaltungskosten"
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:147
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:298
 msgid "The event website URL"
-msgstr "Die URL der Webseite zur Veranstaltung"
+msgstr "Die URL der Website zur Veranstaltung"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:151
 msgid "Whether the map should be shown for the event or not"
@@ -1277,7 +1277,7 @@ msgstr "Die WordPress Beitrags ID des Autors des Veranstalters"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:41
 msgid "The organizer creation date in the site timezone"
-msgstr "Das Erstellungsdatum für den Organisator in der Zeitzone der Webseite"
+msgstr "Das Erstellungsdatum für den Organisator in der Zeitzone der Website"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:45
 msgid "The organizer creation date in UTC time"
@@ -1285,11 +1285,11 @@ msgstr "Das Erstellungsdatum für den Veranstalter in UTC Zeit"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:49
 msgid "The organizer last modification date in the site timezone"
-msgstr "Das letzte Änderungsdatum für den Veranstalter in der Zeitzone der Webseite"
+msgstr "Das letzte Änderungsdatum für den Veranstalter in der Zeitzone der Website"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:61
 msgid "The URL to the organizer page"
-msgstr "Die URL zur Webseite des Veranstalters"
+msgstr "Die URL zur Website des Veranstalters"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:65
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:244
@@ -1324,7 +1324,7 @@ msgstr "Die Veranstaltungsort ID, die global zur Identifizierung im Event Aggreg
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:41
 msgid "The venue creation date in the site timezone"
-msgstr "Das Erstellungsdatum für den Veranstaltungsort in der Zeitzone der Webseite"
+msgstr "Das Erstellungsdatum für den Veranstaltungsort in der Zeitzone der Website"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:45
 msgid "The venue creation date in UTC time"
@@ -1332,7 +1332,7 @@ msgstr "Das Erstellungsdatum für den Veranstaltungsort in UTC Zeit"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:49
 msgid "The venue last modification date in the site timezone"
-msgstr "Das letzte Änderungsdatum für den Veranstaltungsort in der Zeitzone der Webseite"
+msgstr "Das letzte Änderungsdatum für den Veranstaltungsort in der Zeitzone der Website"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:61
 msgid "The URL to the venue page"
@@ -1378,7 +1378,7 @@ msgstr "Die Telefonnummer des Veranstaltungsorts"
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:122
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:304
 msgid "The venue website URL"
-msgstr "Die URL zur Webseite des Veranstaltungsortes"
+msgstr "Die URL zur Website des Veranstaltungsortes"
 
 #: src/Tribe/REST/V1/EA_Messages.php:9
 msgid "Event Aggregator cannot import events from this site."
@@ -1386,7 +1386,7 @@ msgstr "Event Aggregator kann keine Veranstaltungen von dieser Seite importieren
 
 #: src/Tribe/REST/V1/EA_Messages.php:11
 msgid "The Events Calendar is API is not providing the site origin correctly."
-msgstr "Die Events Calendar REST API stellt den Webseitenursprung nicht korrekt bereit."
+msgstr "Die Events Calendar REST-API stellt den Website-Ursprung nicht korrekt bereit."
 
 #: src/Tribe/REST/V1/EA_Messages.php:14
 msgid "Events could not be imported. The URL provided could be reached and has The Events Calendar REST API enabled, but returned malformed data."
@@ -1486,7 +1486,7 @@ msgstr "Das Erstellungsdatum der Veranstaltung in UTC-Zeit"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:49
 msgid "The event last modification date in the site timezone"
-msgstr "Das letzte Änderungsdatum für die Veranstaltung in der Zeitzone der Webseite"
+msgstr "Das letzte Änderungsdatum für die Veranstaltung in der Zeitzone der Website"
 
 #: src/Tribe/REST/V1/EA_Messages.php:39
 msgid "Learn more."
@@ -1971,20 +1971,20 @@ msgstr "Farbe Beitragstitel"
 msgid "Single Event"
 msgstr "Einzelveranstaltung"
 
-#: src/Tribe/Customizer/Month_Week_View.php:197
+#: src/Tribe/Customizer/Month_Week_View.php:198
 msgid "Calendar Highlight Color"
 msgstr "Kalender Highlight Farbe"
 
-#: src/Tribe/Customizer/Month_Week_View.php:175
+#: src/Tribe/Customizer/Month_Week_View.php:176
 msgid "Calendar Table Color"
 msgstr "Farbe der Kalender Tabelle "
 
-#: src/Tribe/Customizer/Month_Week_View.php:144
+#: src/Tribe/Customizer/Month_Week_View.php:145
 #: src/Tribe/Customizer/Single_Event.php:79 src/Tribe/Customizer/Widget.php:60
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
 msgstr "Hier gewählte Optionen überschreiben die Werte aus \"Allgemeine Einstellungen\" und \"Globale Elemente\""
 
-#: src/Tribe/Customizer/Month_Week_View.php:143
+#: src/Tribe/Customizer/Month_Week_View.php:144
 msgid "Month View"
 msgstr "Monatsansicht"
 
@@ -2257,7 +2257,7 @@ msgctxt "Static front page setting"
 msgid "Main events page"
 msgstr "Hauptseite Veranstaltungen"
 
-#: common/src/Tribe/Settings.php:269 common/src/Tribe/Settings.php:270
+#: common/src/Tribe/Settings.php:281 common/src/Tribe/Settings.php:282
 msgid "Events Help"
 msgstr "Veranstaltungen Hilfe"
 
@@ -3306,7 +3306,7 @@ msgstr "Ihre Event Aggregator Lizenz ist abgelaufen."
 
 #: src/Tribe/Aggregator/Tabs/New.php:541
 msgid "Learn More"
-msgstr "Erfahren Sie mehr"
+msgstr "Mehr erfahren"
 
 #: src/Tribe/Aggregator/Tabs/New.php:536 src/Tribe/Aggregator/Tabs/New.php:543
 msgid "opens in a new window"
@@ -4267,67 +4267,67 @@ msgstr "(öffnet in einem neuen Fenster)"
 msgid "Renew Your License Now"
 msgstr "Jetzt Lizenz erneuern"
 
-#: common/src/Tribe/Main.php:293
+#: common/src/Tribe/Main.php:298
 msgid ": Selected 1 row"
 msgstr ": 1 Zeile ausgewählt"
 
-#: common/src/Tribe/Main.php:292
+#: common/src/Tribe/Main.php:297
 msgid ": Selected %d rows"
 msgstr ": %d Zeilen ausgewählt"
 
-#: common/src/Tribe/Main.php:287
+#: common/src/Tribe/Main.php:292
 msgid "Previous"
 msgstr "Zurück"
 
-#: common/src/Tribe/Main.php:285
+#: common/src/Tribe/Main.php:290
 msgid "All"
 msgstr "Alle"
 
-#: common/src/Tribe/Main.php:280
+#: common/src/Tribe/Main.php:285
 msgid "Search:"
 msgstr "Suchen:"
 
-#: common/src/Tribe/Main.php:279
+#: common/src/Tribe/Main.php:284
 msgid "No matching records found"
 msgstr "Keine passenden Ergebnisse gefunden"
 
-#: common/src/Tribe/Main.php:278
+#: common/src/Tribe/Main.php:283
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(gefiltert von _MAX_ Gesamt Einträgen)"
 
-#: common/src/Tribe/Main.php:277
+#: common/src/Tribe/Main.php:282
 msgid "Showing 0 to 0 of 0 entries"
 msgstr "Zeige 0 bis 0 von 0 Einträgen"
 
-#: common/src/Tribe/Main.php:276
+#: common/src/Tribe/Main.php:281
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Zeige __START_ bis _END_ von _TOTAL_ Einträgen"
 
-#: common/src/Tribe/Main.php:275
+#: common/src/Tribe/Main.php:280
 msgid "No data available in table"
 msgstr "Kein Daten in Tabelle vorhanden"
 
-#: common/src/Tribe/Main.php:274
+#: common/src/Tribe/Main.php:279
 msgid "Show _MENU_ entries"
 msgstr "Zeige _MENU_ Einträge"
 
-#: common/src/Tribe/Main.php:272
+#: common/src/Tribe/Main.php:277
 msgid ": activate to sort column descending"
 msgstr ": aktivieren, um Spalte absteigend zu sortieren"
 
-#: common/src/Tribe/Main.php:271
+#: common/src/Tribe/Main.php:276
 msgid ": activate to sort column ascending"
 msgstr ": aktivieren, um Spalte aufsteigend zu sortieren"
 
-#: common/src/Tribe/Main.php:252
+#: common/src/Tribe/Main.php:257
 msgid "Press \"Cmd + C\" to copy"
 msgstr "Drücke \"CTRL + C\" um zu kopieren"
 
-#: common/src/Tribe/Main.php:251
+#: common/src/Tribe/Main.php:256
 msgid "System info copied"
 msgstr "Systeminformationen kopiert"
 
-#: common/src/Tribe/Main.php:250
+#: common/src/Tribe/Main.php:255
 #: common/src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
@@ -5428,7 +5428,7 @@ msgstr "Sie müssen updaten!"
 #: common/src/Tribe/Admin/Help_Page.php:405
 msgctxt "not available"
 msgid "n/a"
-msgstr "n/v"
+msgstr "n. a."
 
 #: common/src/admin-views/tribe-options-general.php:64
 msgid "Debug Bar Plugin"
@@ -5811,7 +5811,7 @@ msgstr "E-Mail:"
 #: src/views/modules/meta/details.php:148
 #: src/views/modules/meta/organizer.php:65 src/views/modules/meta/venue.php:45
 msgid "Website:"
-msgstr "Webseite:"
+msgstr "Website:"
 
 #: src/admin-views/create-organizer-fields.php:2
 #: src/admin-views/create-venue-fields.php:159
@@ -5865,7 +5865,7 @@ msgstr "URL:"
 
 #: src/admin-views/events-meta-box.php:175
 msgid "%s Website"
-msgstr "%s Webseite"
+msgstr "%s Website"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:502
 msgid "Location:"
@@ -6282,7 +6282,7 @@ msgstr "United States Minor Outlying Islands"
 
 #: common/src/Tribe/Languages/Locations.php:284
 msgid "United Kingdom"
-msgstr "Großbritannien (Vereinigtes Königreich)"
+msgstr "Vereinigtes Königreich"
 
 #: common/src/Tribe/Languages/Locations.php:283
 msgid "United Arab Emirates"
@@ -6370,7 +6370,7 @@ msgstr "Svalbard und Jan Mayen Inseln"
 
 #: common/src/Tribe/Languages/Locations.php:262
 msgid "Suriname"
-msgstr "Surinam"
+msgstr "Suriname"
 
 #: common/src/Tribe/Languages/Locations.php:261
 msgid "Sudan"
@@ -6406,7 +6406,7 @@ msgstr "Salomonen"
 
 #: common/src/Tribe/Languages/Locations.php:254
 msgid "Slovenia"
-msgstr "Slovenien"
+msgstr "Slowenien"
 
 #: common/src/Tribe/Languages/Locations.php:253
 msgid "Slovakia (Slovak Republic)"
@@ -6450,7 +6450,7 @@ msgstr "St. Vincent und die Grenadinen"
 
 #: common/src/Tribe/Languages/Locations.php:240
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "St. Lucia"
 
 #: common/src/Tribe/Languages/Locations.php:239
 msgid "Saint Kitts and Nevis"
@@ -6462,7 +6462,7 @@ msgstr "Ruanda"
 
 #: common/src/Tribe/Languages/Locations.php:235
 msgid "Russian Federation"
-msgstr "Russland / Russische Föderation"
+msgstr "Russland"
 
 #: common/src/Tribe/Languages/Locations.php:234
 msgid "Romania"
@@ -6490,7 +6490,7 @@ msgstr "Polen"
 
 #: common/src/Tribe/Languages/Locations.php:228
 msgid "Pitcairn"
-msgstr "Pitcairn"
+msgstr "Pitcairninseln"
 
 #: common/src/Tribe/Languages/Locations.php:227
 msgid "Philippines"
@@ -6646,7 +6646,7 @@ msgstr "Mali"
 
 #: common/src/Tribe/Languages/Locations.php:189
 msgid "Maldives"
-msgstr "Maldiven"
+msgstr "Malediven"
 
 #: common/src/Tribe/Languages/Locations.php:188
 msgid "Malaysia"
@@ -6658,7 +6658,7 @@ msgstr "Malawi"
 
 #: common/src/Tribe/Languages/Locations.php:186
 msgid "Madagascar"
-msgstr "Madagascar"
+msgstr "Madagaskar"
 
 #: common/src/Tribe/Languages/Locations.php:185
 msgid "Macedonia"
@@ -6674,7 +6674,7 @@ msgstr "Luxemburg"
 
 #: common/src/Tribe/Languages/Locations.php:182
 msgid "Lithuania"
-msgstr "Lithauen"
+msgstr "Litauen"
 
 #: common/src/Tribe/Languages/Locations.php:181
 msgid "Liechtenstein"
@@ -6706,7 +6706,7 @@ msgstr "Demokratische Volksrepublik Laos"
 
 #: common/src/Tribe/Languages/Locations.php:174
 msgid "Kyrgyzstan"
-msgstr "Kirgistan"
+msgstr "Kirgisistan"
 
 #: common/src/Tribe/Languages/Locations.php:173
 msgid "Kuwait"
@@ -6859,7 +6859,7 @@ msgstr "Gambia"
 
 #: common/src/Tribe/Languages/Locations.php:136
 msgid "Gabon"
-msgstr "Gabon"
+msgstr "Gabun"
 
 #: common/src/Tribe/Languages/Locations.php:135
 msgid "French Southern Territories"
@@ -6883,11 +6883,11 @@ msgstr "Finnland"
 
 #: common/src/Tribe/Languages/Locations.php:130
 msgid "Fiji"
-msgstr "Fiji"
+msgstr "Fidschi"
 
 #: common/src/Tribe/Languages/Locations.php:129
 msgid "Faroe Islands"
-msgstr "Färöer Inseln"
+msgstr "Färöer"
 
 #: common/src/Tribe/Languages/Locations.php:128
 msgid "Falkland Islands (Malvinas)"
@@ -6895,7 +6895,7 @@ msgstr "Falkland-Inseln (Malvinas)"
 
 #: common/src/Tribe/Languages/Locations.php:127
 msgid "Ethiopia"
-msgstr "Äthophien"
+msgstr "Äthiopien"
 
 #: common/src/Tribe/Languages/Locations.php:126
 msgid "Estonia"
@@ -6935,7 +6935,7 @@ msgstr "Dominica"
 
 #: common/src/Tribe/Languages/Locations.php:117
 msgid "Djibouti"
-msgstr "Djibouti"
+msgstr "Dschibuti"
 
 #: common/src/Tribe/Languages/Locations.php:116
 msgid "Denmark"
@@ -6943,7 +6943,7 @@ msgstr "Dänemark"
 
 #: common/src/Tribe/Languages/Locations.php:115
 msgid "Czech Republic"
-msgstr "Tschechische Republik"
+msgstr "Tschechien"
 
 #: common/src/Tribe/Languages/Locations.php:114
 msgid "Cyprus"
@@ -6963,7 +6963,7 @@ msgstr "Costa Rica"
 
 #: common/src/Tribe/Languages/Locations.php:108
 msgid "Cook Islands"
-msgstr "Cook-Inseln"
+msgstr "Cookinseln"
 
 #: common/src/Tribe/Languages/Locations.php:107
 msgid "Congo, Democratic Republic of the"
@@ -6987,7 +6987,7 @@ msgstr "Kokosinseln"
 
 #: common/src/Tribe/Languages/Locations.php:101
 msgid "Christmas Island"
-msgstr "Weihnachtsinseln"
+msgstr "Weihnachtsinsel"
 
 #: common/src/Tribe/Languages/Locations.php:100
 msgid "China"
@@ -7007,11 +7007,11 @@ msgstr "Zentralafrikanische Republik"
 
 #: common/src/Tribe/Languages/Locations.php:96
 msgid "Cayman Islands"
-msgstr "Cayman Inseln"
+msgstr "Caymaninseln"
 
 #: common/src/Tribe/Languages/Locations.php:95
 msgid "Cape Verde"
-msgstr "Kapverdische Inseln"
+msgstr "Kap Verde"
 
 #: common/src/Tribe/Languages/Locations.php:94
 msgid "Canada"
@@ -7095,7 +7095,7 @@ msgstr "Barbados"
 
 #: common/src/Tribe/Languages/Locations.php:74
 msgid "Bangladesh"
-msgstr "Bangladesh"
+msgstr "Bangladesch"
 
 #: common/src/Tribe/Languages/Locations.php:73
 msgid "Bahrain"
@@ -7151,7 +7151,7 @@ msgstr "Andorra"
 
 #: common/src/Tribe/Languages/Locations.php:60
 msgid "American Samoa"
-msgstr "Amerikanisch Samoa"
+msgstr "Amerikanisch-Samoa"
 
 #: common/src/Tribe/Languages/Locations.php:59
 msgid "Algeria"
@@ -7333,45 +7333,45 @@ msgstr "Systeminformationen"
 msgid "There are no fields setup for this tab yet."
 msgstr "Es sind noch keine Felder für diesen Reiter definiert."
 
-#: common/src/Tribe/Settings.php:597
+#: common/src/Tribe/Settings.php:621
 msgid "The above setting was not saved. Other settings were successfully saved."
 msgid_plural "The above settings were not saved. Other settings were successfully saved."
 msgstr[0] "Die obige Einstellung wurde nicht gespeichert. Andere Einstellungen wurden erfolgreich gespeichert."
 msgstr[1] "Die obigen Einstellungen wurde nicht gespeichert. Andere Einstellungen wurden erfolgreich gespeichert."
 
-#: common/src/Tribe/Settings.php:596
+#: common/src/Tribe/Settings.php:620
 msgid "None of your settings were saved. Please try again."
 msgstr "Die Eintellungen konnten gespeichert werden. Versuchen Sie es erneut."
 
-#: common/src/Tribe/Settings.php:586
+#: common/src/Tribe/Settings.php:610
 msgid "Your form had the following errors:"
 msgstr "Ihr Formular hat folgende Fehler:"
 
-#: common/src/Tribe/Settings.php:419
+#: common/src/Tribe/Settings.php:431
 msgid "The request wasn't sent from this tab."
 msgstr "Die Anfrage wurde nicht von diesem Reiter gesendet."
 
-#: common/src/Tribe/Settings.php:413
+#: common/src/Tribe/Settings.php:425
 msgid "The request was sent insecurely."
 msgstr "Die Anfrage wurde unverschlüsselt gesendet."
 
-#: common/src/Tribe/Settings.php:407
+#: common/src/Tribe/Settings.php:419
 msgid "You don't have permission to do that."
 msgstr "Sie besitzen nicht die nötigen Rechte dafür."
 
-#: common/src/Tribe/Settings.php:359 src/Tribe/Aggregator/Page.php:89
+#: common/src/Tribe/Settings.php:371 src/Tribe/Aggregator/Page.php:89
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: common/src/Tribe/Settings.php:351
+#: common/src/Tribe/Settings.php:363
 msgid "You've requested a non-existent tab."
 msgstr "Sie wollen einen nicht vorhandenen Reiter anzeigen."
 
-#: common/src/Tribe/Settings.php:337
+#: common/src/Tribe/Settings.php:349
 msgid "%s Settings"
 msgstr "%s Einstellungen"
 
-#: common/src/Tribe/Settings.php:241 common/src/Tribe/Settings.php:261
+#: common/src/Tribe/Settings.php:253 common/src/Tribe/Settings.php:273
 msgid "Events Settings"
 msgstr "Veranstaltungseinstellungen"
 
@@ -7450,7 +7450,7 @@ msgstr "Liste"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: common/src/Tribe/Settings.php:242
+#: common/src/Tribe/Settings.php:254
 #: src/Tribe/Admin/Bar/Default_Configurator.php:89 src/Tribe/Main.php:4298
 msgid "Settings"
 msgstr "Einstellungen"
@@ -7526,22 +7526,22 @@ msgstr "Seite"
 msgid "Network"
 msgstr "Netzwerk"
 
-#: common/src/Tribe/Main.php:305
+#: common/src/Tribe/Main.php:310
 msgid "Done"
 msgstr "Erledigt"
 
-#: common/src/Tribe/Main.php:304 src/Tribe/Asset/Bootstrap_Datepicker.php:27
+#: common/src/Tribe/Main.php:309 src/Tribe/Asset/Bootstrap_Datepicker.php:27
 #: src/functions/template-tags/day.php:104
 msgid "Today"
 msgstr "Heute"
 
-#: common/src/Tribe/Main.php:303
+#: common/src/Tribe/Main.php:308
 msgid "Prev"
-msgstr "Vorherige"
+msgstr "Zurück"
 
-#: common/src/Tribe/Main.php:286 common/src/Tribe/Main.php:302
+#: common/src/Tribe/Main.php:291 common/src/Tribe/Main.php:307
 msgid "Next"
-msgstr "Nächste"
+msgstr "Weiter"
 
 #: src/Tribe/Linked_Posts.php:945
 msgid "No saved %s exists."
@@ -7730,7 +7730,7 @@ msgstr "list"
 msgid "month"
 msgstr "Monat"
 
-#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.10.1) 
+#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.11.1) 
 #. #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: common/src/Tribe/Admin/Help_Page.php:59 common/src/Tribe/Customizer.php:569
@@ -7745,8 +7745,8 @@ msgstr "The Events Calendar"
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: common/src/Tribe/Settings.php:165 common/src/Tribe/Settings.php:229
-#: common/src/Tribe/Settings.php:230 src/Tribe/Importer/Admin_Page.php:206
+#: common/src/Tribe/Settings.php:177 common/src/Tribe/Settings.php:241
+#: common/src/Tribe/Settings.php:242 src/Tribe/Importer/Admin_Page.php:206
 #: src/Tribe/Main.php:1126 src/functions/template-tags/general.php:95
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -7781,9 +7781,9 @@ msgstr "Veranstaltungsliste"
 msgid "A widget that displays upcoming events."
 msgstr "Ein Widget, das die bevorstehenden Veranstaltungen anzeigt."
 
-#: common/src/Tribe/Settings.php:619 src/Tribe/Importer/Options.php:54
+#: common/src/Tribe/Settings.php:643 src/Tribe/Importer/Options.php:54
 msgid "Settings saved."
-msgstr "Einstellungen gespeichert.."
+msgstr "Die Einstellungen wurden gespeichert."
 
 #: src/Tribe/Importer/File_Uploader.php:36
 msgid "Could not save %s."
@@ -7871,7 +7871,7 @@ msgstr "Veranstaltungsort"
 
 #: src/Tribe/Importer/Column_Mapper.php:84
 msgid "Event Website"
-msgstr "Veranstaltungswebseite"
+msgstr "Veranstaltungswebsite"
 
 #: src/Tribe/Importer/Column_Mapper.php:83
 msgid "Event Tags"
@@ -7961,19 +7961,19 @@ msgstr "Die Datei wurde nicht gefunden. Bitte versuchen Sie es nochmal."
 msgid "Import"
 msgstr "Importieren"
 
-#: common/src/Tribe/Field.php:617
+#: common/src/Tribe/Field.php:626
 msgid "No select options specified"
 msgstr "Keine Auswahloptionen definiert"
 
-#: common/src/Tribe/Field.php:559
+#: common/src/Tribe/Field.php:568
 msgid "No checkbox options specified"
 msgstr "Keine Checkboxoptionen definiert"
 
-#: common/src/Tribe/Field.php:523
+#: common/src/Tribe/Field.php:532
 msgid "No radio options specified"
 msgstr "Keine Bewertungsoptionen definiert"
 
-#: common/src/Tribe/Field.php:228
+#: common/src/Tribe/Field.php:231
 msgid "Invalid field type specified"
 msgstr "Falsche Feldart definiert"
 

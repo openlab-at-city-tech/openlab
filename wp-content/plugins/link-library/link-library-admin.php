@@ -492,6 +492,13 @@ class link_library_plugin_admin {
 			if ( $thumbshotsactive && empty( $thumbshotscid ) && $genoptions['thumbnailgenerator'] == 'thumbshots' ) {
 				add_action( 'admin_notices', array( $this, 'll_thumbshots_warning' ) );
 			}
+
+			if ( ( !isset( $genoptions['ll_60_beta_1'] ) || !$genoptions['ll_60_beta_1'] ) && !isset( $_GET['dismiss_ll_60_beta_1'] ) ) {
+				add_action( 'admin_notices', array( $this, 'll_60_beta_1' ) );
+			} elseif ( ( !isset( $genoptions['ll_60_beta_1'] ) || !$genoptions['ll_60_beta_1'] ) && isset( $_GET['dismiss_ll_60_beta_1'] ) ) {
+				$genoptions['ll_60_beta_1'] = true;
+				update_option( 'LinkLibraryGeneral', $genoptions );
+			}
 		}
 	}
 
@@ -529,6 +536,11 @@ class link_library_plugin_admin {
 	function ll_thumbshots_warning() {
 		echo "
         <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: Missing Thumbshots API Key', 'link-library' ) . "</strong></p> <p>" . __( 'One of your link libraries is configured to use Thumbshots for link thumbails, but you have not entered your Thumbshots.com API Key. Please visit Thumbshots.com to apply for a free or paid account and enter your API in the Link Library admin panel.', 'link-library' ) . " <a href='" . esc_url( add_query_arg( array( 'page' => 'link-library' ), admin_url( 'admin.php' ) ) ) . "'>" . __( 'Jump to Link Library admin', 'link-library' ) . "</a></p></div>";
+	}
+
+	function ll_60_beta_1() {
+		echo "
+        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library 6.0 Beta 1 Available', 'link-library' ) . "</strong></p> <p>" . __( 'Many years in the making, Link Library 6.0 Beta 1 is now available and looking for beta testers. Once enough users have successful migrated to the new version, it will be widely distributed.', 'link-library' ) . "<br /><br /><a target='_blank' href='http://ylefebvre.ca/link-library-6-0-public-beta-1/'>" . __( 'Read more and download here', 'link-library' ) . "</a> <a class='button' href='" . esc_url( add_query_arg( array( 'page' => 'link-library', 'dismiss_ll_60_beta_1' => 1 ), admin_url( 'admin.php' ) ) ) . "'>Dismiss this message</a></p></div>";
 	}
 
 	function ll_missing_categories() {
@@ -1283,7 +1295,7 @@ class link_library_plugin_admin {
 				global $wpdb;
 
 				$linkquery = "SELECT distinct l.link_name, l.link_url, l.link_rss, l.link_description, l.link_notes, ";
-				$linkquery .= "t.name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, ";
+				$linkquery .= "t.name as cat_name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, ";
 				$linkquery .= "l.link_image, le.link_textfield, le.link_no_follow, l.link_rating, l.link_target, l.link_updated ";
 				$linkquery .= "FROM " . $this->db_prefix() . "terms t ";
 				$linkquery .= "LEFT JOIN " . $this->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
@@ -1733,7 +1745,7 @@ class link_library_plugin_admin {
 					'showlargedescription', 'addlinknoaddress', 'featuredfirst', 'usetextareaforusersubmitnotes', 'showcatonsearchresults', 'shownameifnoimage',
 					'enable_link_popup', 'nocatonstartup', 'showlinksonclick', 'showinvisibleadmin', 'combineresults', 'showifreciprocalvalid',
 					'cat_letter_filter_autoselect', 'cat_letter_filter_showalloption', 'emailsubmitter', 'addlinkakismet', 'rssfeedinlineskipempty',
-					'current_user_links', 'showsubmittername', 'onereciprocaldomain', 'nooutputempty', 'showcatdesc'
+					'current_user_links', 'showsubmittername', 'onereciprocaldomain', 'nooutputempty', 'showcatdesc', 'showsearchreset'
 				)
 				as $option_name
 			) {
@@ -2096,11 +2108,7 @@ class link_library_plugin_admin {
 										<?php $roles = $wp_roles->roles;
 
 										foreach ( $roles as $role ):
-											if ( $genoptions['rolelevel'] == $role['name'] ) {
-												$selectedterm = "selected='selected'";
-											} else {
-												$selectedterm = '';
-											} ?>
+											$selectedterm = selected( $genoptions['rolelevel'], $role['name'], false ); ?>
 											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
 										<?php endforeach; ?>
 									</select>
@@ -2116,11 +2124,7 @@ class link_library_plugin_admin {
 										<?php $roles = $wp_roles->roles;
 
 										foreach ( $roles as $role ):
-											if ( $genoptions['editlevel'] == $role['name'] ) {
-												$selectedterm = "selected='selected'";
-											} else {
-												$selectedterm = '';
-											} ?>
+											$selectedterm = selected( $genoptions['editlevel'], $role['name'], false ); ?>
 											<option value='<?php echo $role['name']; ?>' <?php echo $selectedterm; ?>><?php echo $role['name']; ?></option>
 										<?php endforeach; ?>
 									</select>
@@ -4031,9 +4035,7 @@ class link_library_plugin_admin {
 					<?php _e( 'Publish RSS Feed', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;padding-right:20px'>
-					<input type="checkbox" id="publishrssfeed" name="publishrssfeed" <?php if ( $options['publishrssfeed'] ) {
-						echo ' checked="checked" ';
-					} ?>/>
+					<input type="checkbox" id="publishrssfeed" name="publishrssfeed" <?php checked( $options['publishrssfeed'] ); ?>/>
 				</td>
 				<td><?php _e( 'Number of items in RSS feed', 'link-library' ); ?></td>
 				<td style='width:75px;padding-right:20px'>
@@ -4103,6 +4105,14 @@ class link_library_plugin_admin {
 					<td class="lltooltip" title='<?php _e( 'Leave empty when links are to be displayed on same page as search box', 'link-library' ); ?>'><?php _e( 'Results Page Address', 'link-library' ); ?></td>
 					<td class="lltooltip" title='<?php _e( 'Leave empty when links are to be displayed on same page as search box', 'link-library' ); ?>'>
 						<input type="text" id="searchresultsaddress" name="searchresultsaddress" size="80" value="<?php echo strval( esc_html( stripslashes( $options['searchresultsaddress'] ) ) ); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<?php _e( 'Show Reset Search button', 'link-library' ); ?>
+					</td>
+					<td style='width:75px;padding-right:20px'>
+						<input type="checkbox" id="showsearchreset" name="showsearchreset" <?php checked( $options['showsearchreset'] ); ?>/>
 					</td>
 				</tr>
 			</table>

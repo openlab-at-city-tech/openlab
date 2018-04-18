@@ -93,10 +93,7 @@ h5 {
   font-weight: 600;
 }
 .weight-message p {
-  margin: 0 0 0 10px;
-}
-.weight-message p .text-warning {
-  font-style: italic;
+  margin: 28px 0 14px;
 }
 /* Chart stylings */
 .labeled-chart-container {
@@ -146,7 +143,7 @@ h5 {
   border: 3px solid #2ea2cc;
 }
 .cell {
-  text-align: right;
+  text-align: left;
   cursor: pointer;
 }
 .modal {

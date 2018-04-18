@@ -244,7 +244,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 					$newlink   = array(
 						"link_name"        => esc_html( stripslashes( $captureddata['link_name'] ) ),
-						"link_url"         => esc_html( stripslashes( $captureddata['link_url'] ) ),
+						"link_url"         => esc_url( stripslashes( $captureddata['link_url'] ) ),
 						"link_rss"         => esc_html( stripslashes( $captureddata['link_rss'] ) ),
 						"link_description" => esc_html( stripslashes( $newlinkdesc ) ),
 						"link_notes"       => esc_html( stripslashes( $captureddata['link_notes'] ) ),

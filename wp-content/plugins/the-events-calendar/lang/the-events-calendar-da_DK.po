@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-01-29 05:45:29+0000\n"
+"PO-Revision-Date: 2018-03-01 15:58:48+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
 msgstr ""
 
-#: src/Tribe/iCal.php:424
+#: src/Tribe/iCal.php:411
 msgctxt "iCal feed description"
 msgid "Events for %s"
 msgstr ""
@@ -919,33 +919,33 @@ msgstr ""
 msgid "Hide and Ignore &#8220;%s&#8221;"
 msgstr ""
 
-#: common/src/Tribe/Main.php:283
+#: common/src/Tribe/Main.php:288
 msgid "Clear Selection."
 msgstr ""
 
-#: common/src/Tribe/Main.php:282
+#: common/src/Tribe/Main.php:287
 msgid "Select all pages"
 msgstr ""
 
-#: common/src/Tribe/Main.php:281
+#: common/src/Tribe/Main.php:286
 msgid "All items on this page were selected. "
 msgstr ""
 
 #: src/admin-views/aggregator/tabs/import-form.php:101
 msgid "Add more sources"
-msgstr ""
+msgstr "Tilføj flere kilder"
 
 #: src/Tribe/Aggregator/Service.php:537
 msgid "No upcoming Facebook events found."
-msgstr ""
+msgstr "Der blev ikke fundet nogle kommende Facebookbegivenheder"
 
 #: src/Tribe/Aggregator/Service.php:179
 msgid "Event Aggregator server has blocked your request. Please try your import again later or contact support to know why."
-msgstr ""
+msgstr "Event Aggregator server har blokeret din forespørgsel. Kør din import igen senere, eller kontakt supporten for yderligere information."
 
 #: src/Tribe/Customizer/General_Theme.php:311
 msgid "Featured Highlight Color"
-msgstr ""
+msgstr "Farven til at fremhæve \"udvalge\""
 
 #: src/Tribe/Aggregator/Service.php:207
 msgid "The response from the Event Aggregator server was badly formed and could not be understood. Please try again."
@@ -953,11 +953,11 @@ msgstr ""
 
 #: common/src/Tribe/Plugins_API.php:37
 msgid "Import events from across the web! Event Aggregator makes it easy to run scheduled or manual imports from Facebook, Meetup, Google Calendar, and iCalendar, along with uploads from CSV and ICS files. You can also import directly from other sites running The Events Calendar thanks to our built-in REST API support."
-msgstr ""
+msgstr "Importer begivenheder fra hele Internettet. Event Aggregator gør det nemt at afvikle planlagt eller manuel import fra Facebook, Meetup, Google Calendar og iCalendar, subsidiært med uploads fra CSV- og ICS-filer. Du kan også importere direkte fra andre sider med The Events Calendar takket være den indbyggede REST API understøttelse."
 
 #: src/Tribe/Integrations/WPML/Defaults.php:117
 msgid "The Events Calendar could not write WPML default config file: please create the file manually."
-msgstr ""
+msgstr "The Events Calendar kunne ikke oprette standard WPML konfigurations-fil: opret venligst filen manuelt"
 
 #: common/src/Tribe/Plugins_API.php:94
 msgid "Accept user-submitted events on your site! With Community Events, you can accept public submissions or require account sign-on. Settings give you the options to save as a draft or publish automatically, enable categories and tags, and choose whether users can edit/manage their own events or simply submit. Best of all - setup is easy! Just activate, configure the options, and off you go."
@@ -1131,7 +1131,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:25
 msgid "The requested event archive page does not exist"
-msgstr ""
+msgstr "Den anmodede arkivside for begivenheder findes ikke"
 
 #: src/admin-views/aggregator/fields/schedule.php:50
 #: src/admin-views/aggregator/fields/schedule.php:68
@@ -1157,15 +1157,15 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:69
 msgid "The event name"
-msgstr ""
+msgstr "Navn på begivenhed"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:73
 msgid "The event long description"
-msgstr ""
+msgstr "Lang beskrivelse til begivenhed"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:77
 msgid "The event short description"
-msgstr ""
+msgstr "Kort beskrivelse til begivenhed"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:85
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:81
@@ -1616,59 +1616,59 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Settings.php:327 src/Tribe/Aggregator/Settings.php:328
 msgid "24 hours"
-msgstr ""
+msgstr "24 timer"
 
 #: src/Tribe/Aggregator/Settings.php:331 src/Tribe/Aggregator/Settings.php:332
 msgid "72 hours"
-msgstr ""
+msgstr "72 timer"
 
 #: src/Tribe/Aggregator/Settings.php:335
 msgid "One week"
-msgstr ""
+msgstr "En uge"
 
 #: src/Tribe/Aggregator/Service.php:557
 msgid "The requested source does not have any upcoming and published events matching the search criteria."
-msgstr ""
+msgstr "Den anmodede kilde har ingen kommende eller publicerede begivenheder, der passer til søgekriteriet."
 
 #: src/Tribe/Aggregator/Settings.php:336
 msgid "a week"
-msgstr ""
+msgstr "en uge"
 
 #: src/Tribe/Aggregator/Settings.php:339
 msgid "Two weeks"
-msgstr ""
+msgstr "To uger"
 
 #: src/Tribe/Aggregator/Settings.php:340
 msgid "two weeks"
-msgstr ""
+msgstr "to uger"
 
 #: src/Tribe/Aggregator/Settings.php:343
 msgid "Three weeks"
-msgstr ""
+msgstr "Tre uger"
 
 #: src/Tribe/Aggregator/Settings.php:347
 msgid "One month"
-msgstr ""
+msgstr "En måned"
 
 #: src/Tribe/Aggregator/Settings.php:348
 msgid "a month"
-msgstr ""
+msgstr "en måned"
 
 #: src/Tribe/Aggregator/Settings.php:351
 msgid "Two months"
-msgstr ""
+msgstr "To måneder"
 
 #: src/Tribe/Aggregator/Settings.php:352
 msgid "two months"
-msgstr ""
+msgstr "to måneder"
 
 #: src/Tribe/Aggregator/Settings.php:355
 msgid "Three months"
-msgstr ""
+msgstr "Tre måneder"
 
 #: src/Tribe/Aggregator/Settings.php:356
 msgid "three months"
-msgstr ""
+msgstr "tre måneder"
 
 #: src/Tribe/Aggregator/Tabs/New.php:363
 msgid "%1$d new event tag was created."
@@ -1711,11 +1711,11 @@ msgstr ""
 #: src/Tribe/Venue.php:234
 msgctxt "Metabox title"
 msgid "Location"
-msgstr ""
+msgstr "Sted"
 
 #: src/admin-views/aggregator/settings.php:55
 msgid "Import events but preserve local changes to event fields."
-msgstr ""
+msgstr "Importer begivenheder, men bevar de lokale ændringer i begivenhedsfeltet"
 
 #: common/src/Tribe/PUE/Checker.php:497
 msgid "%1$sBuy a license%2$s for the Event Aggregator service to access additional import features."
@@ -1738,7 +1738,7 @@ msgstr ""
 #: src/Tribe/Main.php:741
 msgctxt "all events slug"
 msgid "all"
-msgstr ""
+msgstr "alle"
 
 #: common/src/Tribe/Validate.php:248
 msgid "%s must be a whole number."
@@ -1854,7 +1854,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:4376
 msgid "Keyword"
-msgstr ""
+msgstr "Nøgleord"
 
 #: src/functions/template-tags/loop.php:166
 msgctxt "featured events title"
@@ -1869,7 +1869,7 @@ msgstr ""
 #: src/admin-views/events-meta-box.php:99
 msgctxt "Start Date Time \"to\" End Date Time"
 msgid "to"
-msgstr ""
+msgstr "til"
 
 #: src/admin-views/aggregator/fields/schedule.php:79
 #: src/admin-views/events-meta-box.php:97
@@ -1879,7 +1879,7 @@ msgstr ""
 
 #: src/admin-views/events-meta-box.php:72
 msgid "Start/End:"
-msgstr ""
+msgstr "Start/Slut:"
 
 #: src/admin-views/event-sidebar-options.php:33
 msgid "Featured events are highlighted on the front end in views, archives, and widgets."
@@ -1887,28 +1887,28 @@ msgstr ""
 
 #: src/admin-views/event-sidebar-options.php:31
 msgid "Feature Event"
-msgstr ""
+msgstr "Udvalgte begivenheder"
 
 #: src/admin-views/create-venue-fields.php:236
 msgid "Show Google Map Link?"
-msgstr ""
+msgstr "Vis Google Map Link?"
 
 #: src/admin-views/create-venue-fields.php:218
 msgid "Show Google Map?"
-msgstr ""
+msgstr "Vis Google Map?"
 
 #: src/admin-views/create-venue-fields.php:182
 msgid "Venue URL"
-msgstr ""
+msgstr "Mødestedets URL"
 
 #: src/admin-views/create-venue-fields.php:154
 msgid "Venue Zip Code"
-msgstr ""
+msgstr "Mødestedets postnummer"
 
 #: src/admin-views/create-venue-fields.php:127
 #: src/admin-views/create-venue-fields.php:133
 msgid "Venue State"
-msgstr ""
+msgstr "Mødestedets land"
 
 #: src/admin-views/aggregator/settings.php:97
 msgid "Stop all Event Aggregator imports from running. Existing imported events will not be affected. Imports via CSV file will still be available."
@@ -1924,7 +1924,7 @@ msgstr ""
 
 #: src/Tribe/iCal.php:134
 msgid "Export Events"
-msgstr ""
+msgstr "Eksporter begivenheder"
 
 #: src/Tribe/Main.php:740
 msgctxt "featured events slug"
@@ -1957,11 +1957,11 @@ msgstr ""
 
 #: src/Tribe/Customizer/Widget.php:59
 msgid "Widgets"
-msgstr ""
+msgstr "Widgets"
 
 #: src/Tribe/Customizer/Single_Event.php:132
 msgid "Details Background Color"
-msgstr ""
+msgstr "Baggrundsfarven for deltaljer"
 
 #: src/Tribe/Customizer/Single_Event.php:110
 msgid "Post Title Color"
@@ -1971,20 +1971,20 @@ msgstr ""
 msgid "Single Event"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:197
+#: src/Tribe/Customizer/Month_Week_View.php:198
 msgid "Calendar Highlight Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:175
+#: src/Tribe/Customizer/Month_Week_View.php:176
 msgid "Calendar Table Color"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:144
+#: src/Tribe/Customizer/Month_Week_View.php:145
 #: src/Tribe/Customizer/Single_Event.php:79 src/Tribe/Customizer/Widget.php:60
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
 msgstr ""
 
-#: src/Tribe/Customizer/Month_Week_View.php:143
+#: src/Tribe/Customizer/Month_Week_View.php:144
 msgid "Month View"
 msgstr ""
 
@@ -2257,7 +2257,7 @@ msgctxt "Static front page setting"
 msgid "Main events page"
 msgstr ""
 
-#: common/src/Tribe/Settings.php:269 common/src/Tribe/Settings.php:270
+#: common/src/Tribe/Settings.php:281 common/src/Tribe/Settings.php:282
 msgid "Events Help"
 msgstr ""
 
@@ -4267,67 +4267,67 @@ msgstr ""
 msgid "Renew Your License Now"
 msgstr ""
 
-#: common/src/Tribe/Main.php:293
+#: common/src/Tribe/Main.php:298
 msgid ": Selected 1 row"
 msgstr ""
 
-#: common/src/Tribe/Main.php:292
+#: common/src/Tribe/Main.php:297
 msgid ": Selected %d rows"
 msgstr ""
 
-#: common/src/Tribe/Main.php:287
+#: common/src/Tribe/Main.php:292
 msgid "Previous"
 msgstr ""
 
-#: common/src/Tribe/Main.php:285
+#: common/src/Tribe/Main.php:290
 msgid "All"
 msgstr ""
 
-#: common/src/Tribe/Main.php:280
+#: common/src/Tribe/Main.php:285
 msgid "Search:"
 msgstr ""
 
-#: common/src/Tribe/Main.php:279
+#: common/src/Tribe/Main.php:284
 msgid "No matching records found"
 msgstr ""
 
-#: common/src/Tribe/Main.php:278
+#: common/src/Tribe/Main.php:283
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: common/src/Tribe/Main.php:277
+#: common/src/Tribe/Main.php:282
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:276
+#: common/src/Tribe/Main.php:281
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:275
+#: common/src/Tribe/Main.php:280
 msgid "No data available in table"
 msgstr ""
 
-#: common/src/Tribe/Main.php:274
+#: common/src/Tribe/Main.php:279
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: common/src/Tribe/Main.php:272
+#: common/src/Tribe/Main.php:277
 msgid ": activate to sort column descending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:271
+#: common/src/Tribe/Main.php:276
 msgid ": activate to sort column ascending"
 msgstr ""
 
-#: common/src/Tribe/Main.php:252
+#: common/src/Tribe/Main.php:257
 msgid "Press \"Cmd + C\" to copy"
 msgstr ""
 
-#: common/src/Tribe/Main.php:251
+#: common/src/Tribe/Main.php:256
 msgid "System info copied"
 msgstr ""
 
-#: common/src/Tribe/Main.php:250
+#: common/src/Tribe/Main.php:255
 #: common/src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
 msgstr ""
@@ -7333,45 +7333,45 @@ msgstr "Systeminformation"
 msgid "There are no fields setup for this tab yet."
 msgstr "Der er endnu ikke sat nogen felter op på dette faneblad."
 
-#: common/src/Tribe/Settings.php:597
+#: common/src/Tribe/Settings.php:621
 msgid "The above setting was not saved. Other settings were successfully saved."
 msgid_plural "The above settings were not saved. Other settings were successfully saved."
 msgstr[0] "Indstillingen ovenfor blev ikke gemt. Andre indstillinger blev gemt."
 msgstr[1] "Indstillingerne ovenfor blev ikke gemt. Andre indstillinger blev gemt."
 
-#: common/src/Tribe/Settings.php:596
+#: common/src/Tribe/Settings.php:620
 msgid "None of your settings were saved. Please try again."
 msgstr "Dine indstillinger blev ikke gemt. Prøv igen."
 
-#: common/src/Tribe/Settings.php:586
+#: common/src/Tribe/Settings.php:610
 msgid "Your form had the following errors:"
 msgstr "Din formular oplevede følgende fejl:"
 
-#: common/src/Tribe/Settings.php:419
+#: common/src/Tribe/Settings.php:431
 msgid "The request wasn't sent from this tab."
 msgstr "Forespørgslen var ikke sendt fra dette faneblad."
 
-#: common/src/Tribe/Settings.php:413
+#: common/src/Tribe/Settings.php:425
 msgid "The request was sent insecurely."
 msgstr "Forespørgslen er ikke afsendt sikkert."
 
-#: common/src/Tribe/Settings.php:407
+#: common/src/Tribe/Settings.php:419
 msgid "You don't have permission to do that."
 msgstr "Du har ikke rettigheder til dette."
 
-#: common/src/Tribe/Settings.php:359 src/Tribe/Aggregator/Page.php:89
+#: common/src/Tribe/Settings.php:371 src/Tribe/Aggregator/Page.php:89
 msgid "Save Changes"
 msgstr "Gem ændringer"
 
-#: common/src/Tribe/Settings.php:351
+#: common/src/Tribe/Settings.php:363
 msgid "You've requested a non-existent tab."
 msgstr "Det efterspurgte faneblad findes ikke."
 
-#: common/src/Tribe/Settings.php:337
+#: common/src/Tribe/Settings.php:349
 msgid "%s Settings"
 msgstr "%s indstillinger"
 
-#: common/src/Tribe/Settings.php:241 common/src/Tribe/Settings.php:261
+#: common/src/Tribe/Settings.php:253 common/src/Tribe/Settings.php:273
 msgid "Events Settings"
 msgstr "Indstillinger for begivenheder"
 
@@ -7450,7 +7450,7 @@ msgstr "Liste"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: common/src/Tribe/Settings.php:242
+#: common/src/Tribe/Settings.php:254
 #: src/Tribe/Admin/Bar/Default_Configurator.php:89 src/Tribe/Main.php:4298
 msgid "Settings"
 msgstr "Indstillinger"
@@ -7524,22 +7524,22 @@ msgstr "side"
 
 #: common/src/Tribe/Settings_Manager.php:219
 msgid "Network"
-msgstr "Nerværk"
+msgstr "Netværk"
 
-#: common/src/Tribe/Main.php:305
+#: common/src/Tribe/Main.php:310
 msgid "Done"
 msgstr "Færdig"
 
-#: common/src/Tribe/Main.php:304 src/Tribe/Asset/Bootstrap_Datepicker.php:27
+#: common/src/Tribe/Main.php:309 src/Tribe/Asset/Bootstrap_Datepicker.php:27
 #: src/functions/template-tags/day.php:104
 msgid "Today"
 msgstr "I dag"
 
-#: common/src/Tribe/Main.php:303
+#: common/src/Tribe/Main.php:308
 msgid "Prev"
 msgstr "Forrige"
 
-#: common/src/Tribe/Main.php:286 common/src/Tribe/Main.php:302
+#: common/src/Tribe/Main.php:291 common/src/Tribe/Main.php:307
 msgid "Next"
 msgstr "Næste"
 
@@ -7730,7 +7730,7 @@ msgstr "liste"
 msgid "month"
 msgstr "måned"
 
-#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.10.1) 
+#. #-#-#-#-#  the-events-calendar-code.pot (The Events Calendar 4.6.11.1) 
 #. #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: common/src/Tribe/Admin/Help_Page.php:59 common/src/Tribe/Customizer.php:569
@@ -7745,8 +7745,8 @@ msgstr "The Events Calendar"
 msgid "Event"
 msgstr "Begivenhed"
 
-#: common/src/Tribe/Settings.php:165 common/src/Tribe/Settings.php:229
-#: common/src/Tribe/Settings.php:230 src/Tribe/Importer/Admin_Page.php:206
+#: common/src/Tribe/Settings.php:177 common/src/Tribe/Settings.php:241
+#: common/src/Tribe/Settings.php:242 src/Tribe/Importer/Admin_Page.php:206
 #: src/Tribe/Main.php:1126 src/functions/template-tags/general.php:95
 msgid "Events"
 msgstr "Begivenheder"
@@ -7781,7 +7781,7 @@ msgstr "Liste"
 msgid "A widget that displays upcoming events."
 msgstr "Widget, der viser planlagte begivenheder."
 
-#: common/src/Tribe/Settings.php:619 src/Tribe/Importer/Options.php:54
+#: common/src/Tribe/Settings.php:643 src/Tribe/Importer/Options.php:54
 msgid "Settings saved."
 msgstr "Indstillingerne blev gemt."
 
@@ -7961,19 +7961,19 @@ msgstr "Filen forsvandt. Prøv venligst igen."
 msgid "Import"
 msgstr "CSV import"
 
-#: common/src/Tribe/Field.php:617
+#: common/src/Tribe/Field.php:626
 msgid "No select options specified"
 msgstr "Ingen select options valgt"
 
-#: common/src/Tribe/Field.php:559
+#: common/src/Tribe/Field.php:568
 msgid "No checkbox options specified"
 msgstr "Ingen checkbox options valgt"
 
-#: common/src/Tribe/Field.php:523
+#: common/src/Tribe/Field.php:532
 msgid "No radio options specified"
 msgstr "Ingen radio options valgt"
 
-#: common/src/Tribe/Field.php:228
+#: common/src/Tribe/Field.php:231
 msgid "Invalid field type specified"
 msgstr "Forkert felttype valgt"
 

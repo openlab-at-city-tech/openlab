@@ -271,14 +271,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     });
 
-                    var message = 'Total Weight: ' + totalWeight;
+                    var message = '';
 
-                    if (totalWeight === 100) {
-                        message += ' <span class="text-warning">Any assignments that do not have a set weight will not be included in the average calculation.</span>';
-                    } else if (totalWeight > 100) {
-                        message += ' <span class="text-warning">Total weight is over 100%. Any assignments that do not have a set weight will not be included in the average calculation.</span>';
+                    if (totalWeight >= 100) {
+                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. Any assignments that do not have a set percentage will not be included in the average calculation.';
                     } else if (totalWeight < 100) {
-                        message += ' <span class="text-warning">Total weight is under 100%. Any assignments that do not have a set weight will be given a calculated distribution.';
+                        message += '<strong>Percentage of Total Grade:</strong> ' + totalWeight +  '% of the total grade has been designated. The rest of the grade average will be calculated evenly.';
+                    }
+
+                    if(self.gradebook.role === 'instructor') {
+                        message += ' Percentages can be edited in the dropdown menus.';
                     }
 
                     return message;

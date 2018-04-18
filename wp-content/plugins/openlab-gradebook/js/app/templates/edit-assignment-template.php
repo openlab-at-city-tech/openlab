@@ -47,7 +47,7 @@
                     </div>	 						
                 </div>
                 <div class="form-group">					
-                    <label for="assign_category" class="col-sm-4 control-label"><?php esc_html_e('Weight (no % necessary)', 'openlab-gradebook') ?>:</label>
+                    <label for="assign_category" class="col-sm-4 control-label"><?php esc_html_e('Percentage of Total Grade', 'openlab-gradebook') ?>:</label>
                     <div class="col-sm-6">				        
                         <input type="number" id="assign_weight" class="form-control" name="assign_weight" value="<%= assignment ? assignment.get('assign_weight') : '' %>"/>
                     </div>

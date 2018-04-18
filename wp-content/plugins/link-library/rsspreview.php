@@ -29,11 +29,11 @@ function link_library_generate_rss_preview( $my_link_library_plugin ) {
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8; ?>" />
 		<meta http-equiv="imagetoolbar" content="false" />
 
-		<?php if ( isset( $genoptions['stylesheet'] ) && !empty( $genoptions['stylesheet'] ) ): ?>
+		<?php if ( isset( $genoptions['stylesheet'] ) && !empty( $genoptions['stylesheet'] ) ) { ?>
 			<style id='LinkLibraryStyle' type='text/css'>
 				<?php echo stripslashes( $genoptions['fullstylesheet'] ); ?>
 			</style>
-		<?php endif; ?>
+		<?php } ?>
 
 	</head>
 
