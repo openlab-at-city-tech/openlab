@@ -209,3 +209,9 @@ body.ol-webwork .oplb-bs a#go-to-top .fa-chevron-circle-up:before {
 		z-index: 15;
 	}
 }
+
+/* WP upload dialog fixes */
+.media-frame .uploader-inline h2,
+.media-frame .uploader-inline p {
+	text-align: center;
+}
