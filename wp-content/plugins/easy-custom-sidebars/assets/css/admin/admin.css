@@ -1,0 +1,497 @@
+/**
+ * WordPress Administration Custom Sidebar Menu
+ * Interface CSS Styles. This CSS file has been
+ * updated to match the new WordPress Admin UI.
+ *
+ * @package     Easy_Custom_Sidebars
+ * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
+ * @license     GPL-2.0+
+ * @copyright   Copyright (c) 2015, Titanium Themes
+ * @version     1.0.9
+ * 
+ */
+
+/**
+ * Global Styles
+ */
+.clear {
+    clear: both;
+}
+
+.howto {
+    display: block;
+    font-style: italic;
+}
+.wp-admin select {
+}
+
+textarea, input, select {
+    font-size: 14px;
+}
+/**
+ * Mananage Sidebar Replacements Page
+ * ==================================
+ *
+ * The following styles are used for the Manage
+ * Sidebar Replacements Screen.
+ *
+ * @version 1.0.9
+ * 
+ */
+
+#sidebar-replacements-wrap .widefat {
+	min-width: 550px;
+	width: 60%;
+}
+.fixed .column-sidebars {
+	width: 35%;
+}
+span.sidebar-edit-link {
+	margin-left: 6px;
+}
+
+span.sidebar-delete-link a {
+    color: #BC0B0B;
+    text-decoration: underline;
+}
+
+#sidebar-management .sidebar-edit {
+	margin-bottom: 20px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.spinner {
+    /*visibility: visible;*/
+}
+
+.ecs-visible.spinner {
+    visibility: visible;
+}
+
+#sidebar-management .spinner {
+    float:left;
+}
+
+#sidebar-replacements-table {
+    margin-top: 20px;
+}
+
+tr.deleting {
+    background: #FF6666;
+}
+
+tr.success {
+    background: #E0FFE1;
+}
+
+td.default-widget-areas {
+    vertical-align: middle;
+    vertical-align: -webkit-baseline-middle;
+    line-height: 1.4;
+}
+
+.no-sidebars label,
+.sidebar-dialog label {
+    display: inline-block;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+.sidebar-dialog.no-sidebars .new-label {
+    display: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#delete_all_sidebars {
+    margin-top: 10px;
+    color: #BC0B0B;
+    display: inline-block;
+}
+
+
+/**
+ * Create/Edit Sidebar Replacements Page
+ * =====================================
+ *
+ * The following styles are used for the Manage
+ * Sidebar Replacements Screen.
+ *
+ * @version 1.0.9
+ * 
+ */
+
+/* Sidebar Edit Container Styles */
+
+#sidebars-frame {
+    margin-left: 300px;
+    margin-top: 23px;
+    display: block;
+
+}
+
+#sidebar-frame ul {
+    margin-left: 0
+}
+
+#sidebars-frame:after {
+	clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+#sidebar-management-liquid {
+    float: left;
+    min-width: 100%;
+    outline: 0 none;
+    margin-top: 0;
+}
+
+#wpbody-content #sidebar-all-pages-column {
+    clear: both;
+    float: left;
+    margin-left: -300px;
+    padding-top: 0;
+    width: 281px;
+}
+
+/* Sidebar Dialog Styles */
+#message {
+    display: none;
+}
+
+.manage-sidebars {
+    overflow: hidden;
+    margin-top: 23px;
+    padding: 10px;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto;
+    -webkit-background-size: auto;
+    background: #FBFBFB;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.manage-sidebars .add-new-menu-action {
+    margin: 4px 0 0 6px;
+    display: inline-block;
+}
+
+.manage-sidebars form {
+    margin-bottom: 0;
+}
+
+.manage-sidebars select {
+    *height: 111;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+/* Sidebar With Metabox Accordion */
+.accordion-container {
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.accordion-section {
+    margin: 0;
+}
+
+.accordion-section .categorychecklist {
+    margin: 13px 0;
+}
+
+/* Placeholder */
+.quick-search::-webkit-input-placeholder { 
+    color: #AAAAAA; 
+    font-style: italic;
+}
+
+.quick-search::-moz-placeholder { 
+    color: #AAAAAA; 
+    font-style: italic;
+}
+
+.quick-search:-ms-input-placeholder { 
+    color: #AAAAAA; 
+    font-style: italic;
+}
+
+input.quick-search:-moz-placeholder { 
+    color: #AAAAAA; 
+    font-style: italic;
+}
+
+.metabox-holder-disabled .postbox,
+.metabox-holder-disabled .accordion-section-content  {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.accordion-container .accordion-section:first-child,
+.accordion-container .accordion-section.first-child {
+}
+
+.accordion-section:last-child {
+
+}
+
+.accordion-section-title {
+    -moz-user-select: none;
+    border-left: 1px solid #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    cursor: pointer;
+    margin: 0;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.metabox-holder h3.hndle,
+.control-section .accordion-section-title {
+    padding: 10px 10px 11px 14px
+}
+
+#sidebar-meta .accordion-section-content {
+    padding: 18px 13px;
+    display: none;
+    overflow: hidden;
+}
+
+#sidebar-meta .accordion-section.open .accordion-section-content {
+    background: none repeat scroll 0 0 #FDFDFD;
+    display: block;
+}
+
+#sidebar-meta .inside {
+    clear: both;
+    margin: 10px 0 0;
+    font-size: 13px;
+}
+
+ul.posttype-tabs,
+ul.add-menu-item-tabs {
+    margin-left: 0;
+}
+
+ul.add-menu-item-tabs li, 
+ul.category-tabs li, 
+ul.wp-tab-bar li {
+    padding: 3px 8px;
+}
+
+/**
+ * Sidebar Header and Sidebar Footer Styles
+ */
+#sidebar-header, #sidebar-footer {
+    background: #F5F5F5;
+	padding: 0 10px;
+    line-height: 1.4em;
+}
+
+#sidebar-header {
+	border-bottom: 1px solid #DFDFDF;
+}
+
+#sidebar-header .custom-sidebar-name-label {
+	margin-top: 4px;
+}
+
+#sidebar-header .custom-sidebar-name {
+    width: 270px;
+}
+
+#sidebar-header .major-publishing-actions,
+#sidebar-footer .major-publishing-actions {
+	clear: both;
+	padding: 3px 0 5px;
+}
+
+#sidebar-header .major-publishing-actions .publishing-action,
+#sidebar-footer .major-publishing-actions .publishing-action{
+	float: right;
+    line-height: 23px;
+    margin: 2px 0 1px;
+    text-align: right;
+}
+
+#sidebar-header .howto span {
+    display: block;
+    float: left;
+    margin-top: 6px;
+    margin-right: 10px;
+	font-style: italic;
+}
+
+#sidebar-footer {
+}
+
+#sidebar-footer .delete-action {
+    float: left;
+    margin-top: 2px;
+}
+
+#sidebar-footer .delete-action a {
+	color: #BC0B0B;
+}
+
+#sidebar-footer .submitdelete,
+#sidebar-footer .submitcancel {
+	display: block;
+    float: left;
+    line-height: 15px;
+    margin: 4px 0;
+}
+
+/* Sidebar Right Side Settings Body */
+
+#wpbody .open-label {
+    display: block;
+    float: left;
+}
+
+#post-body {
+    *zoom: 0;
+    border-style: solid;
+    border-width: 1px 0;
+    padding: 0 10px 10px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom-color: #DFDFDF;
+    border-top-color: #FFFFFF;
+}
+
+#post-body-content {
+	float: none;
+    position: relative;
+    margin-bottom: 0;
+
+}
+
+#post-body-content:after{
+	clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.sidebar-settings {
+    margin-top: 2em;
+    overflow: hidden;
+}
+
+.sidebar-settings dt {
+    clear: both;
+    left: 0;
+    padding: 3px 0 0;
+}
+
+.sidebar-settings dd {
+    float: left;
+    margin: 0;
+}
+
+
+/**
+ * The UI Sortables Functionality
+ */
+
+.menu-item-settings .description-thin, 
+.menu-item-settings .description-wide {
+    float: none;
+}
+
+.sortable-placeholder {
+    height: 35px;
+    width: 410px;
+    margin-top: 11px!important;
+    margin-bottom: 0px;
+    padding: 0;
+}
+
+#sidebar-to-edit {
+    padding-top: 1px;
+    margin-left: 0px;
+}
+
+#sidebar-to-edit li {
+    margin-top: 11px;
+    margin-bottom: 11px;
+    min-height: 1px;
+}
+
+#sidebar-to-edit .menu-item-settings {
+    display: none;
+}
+
+#sidebar-to-edit li.deleting {
+   
+}
+
+#sidebar-to-edit li.deleting .menu-item-handle {
+    background: none;
+    background-color: #FF6666;
+}
+
+#sidebar_description {
+    width: 250px;
+    height: 100px;
+}
+
+#sidebar-meta ul.outer-border {
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+dl.menu-item-bar {
+    margin-top: 0;
+}
+
+/**
+ * WordPress Responsive Styles 3.8+
+ * 
+ * The styles below are used to make the admin area
+ * completely responsive.
+ *
+ * @package     Easy_Custom_Sidebars
+ * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
+ * @license     GPL-2.0+
+ * @copyright   Copyright (c) 2015, Titanium Themes
+ * @version     1.0.9
+ * 
+ */
+@media screen and (max-width: 782px) {
+    #wpbody-content #sidebar-all-pages-column {
+        margin-left: 0;
+        width: 100%;
+        float: none;
+        margin-bottom: 23px;
+    }
+
+    /**
+     * Create/Edit Sidebar Replacements Page
+     * =====================================
+     *
+     * The following styles are used for the Manage
+     * Sidebar Replacements Screen.
+     *
+     * @version 1.0.9
+     * 
+     */
+
+    /* Sidebar Edit Container Styles */
+
+    #sidebars-frame {
+        margin-left: 0px;
+        margin-top: 23px;
+        display: block;
+
+    }    
+}
