@@ -85,6 +85,7 @@ class GFDirectory_EditForm {
 
 				field.choices = null;
 		        field.inputs = null;
+		        field.gf_directory_approval = true;
 
 		        if(!field.choices)
 		            field.choices = new Array(new Choice("<?php echo esc_js( __("Approved", "gravity-forms-addons")); ?>"));
@@ -102,7 +103,7 @@ class GFDirectory_EditForm {
 	}
 
 	public function directory_admin_head() {
-		global $_gform_directory_approvedcolumn, $process_bulk_update_message;
+		global $process_bulk_update_message;
 
 		// Entries screen shows first form's entries by default, if not specified
 		if( isset( $_GET['id'] ) ) {
@@ -143,19 +144,15 @@ class GFDirectory_EditForm {
 		}
 		</style>
 		<script>
-
 			<?php
 
-			//$formID = RGForms::get("id");
-
 	        if(empty($formID)) {
-		        $forms = RGFormsModel::get_forms(NULL, "title");
+		        $forms = RGFormsModel::get_forms(null, "title");
 	            $formID = $forms[0]->id;
 	        }
 
-		   	$_gform_directory_approvedcolumn = empty($_gform_directory_approvedcolumn) ? GFDirectory::globals_get_approved_column($formID) : $_gform_directory_approvedcolumn;
+		   	$approvedcolumn = GFDirectory::globals_get_approved_column( $formID );
 
-			if(!empty($_gform_directory_approvedcolumn)) {
 			    echo 'formID = '.$formID.';';
 		       ?>
 
@@ -211,10 +208,8 @@ class GFDirectory_EditForm {
 			jQuery(document).ready(function($) {
 
 		    	<?php if(!empty($process_bulk_update_message)) { ?>
-			    	displayMessage('<?php echo esc_js($process_bulk_update_message); ?>', 'updated', '#lead_form');
+			    	displayMessage('<?php echo esc_js($process_bulk_update_message); ?>', 'updated', '.gf_entries');
 			    <?php } ?>
-
-		    	$("#bulk_action,#bulk_action2").append('<optgroup label="Directory"><option value="approve-'+formID+'"><?php echo esc_js( __('Approve', 'gravity-forms-addons')); ?></option><option value="unapprove-'+formID+'"><?php echo esc_js( __('Disapprove', 'gravity-forms-addons')); ?></option></optgroup>');
 
 		    	var approveTitle = '<?php echo esc_js( __('Entry not approved for directory viewing. Click to approve this entry.', 'gravity-forms-addons')); ?>';
 		    	var unapproveTitle = '<?php echo esc_js( __('Entry approved for directory viewing. Click to disapprove this entry.', 'gravity-forms-addons')); ?>';
@@ -225,52 +220,79 @@ class GFDirectory_EditForm {
 		    		var $tr = $(this).parents('tr');
 					var is_approved = $tr.is(".lead_approved");
 
-					if(e.type == 'click') {
+					if(e.type === 'click') {
 				        $tr.toggleClass("lead_approved");
 				    }
 
 					// Update the title and screen-reader text
-			        if(!is_approved) { $(this).text('X').prop('title', unapproveTitle); }
-			        else { $(this).text('O').prop('title', approveTitle); }
+			        if(!is_approved) {
+						$(this).text('X').prop('title', unapproveTitle);
+					} else {
+						$(this).text('O').prop('title', approveTitle);
+					}
 
 					if(e.type == 'click') {
 				        UpdateApproved($('th input[type="checkbox"]', $tr).val(), is_approved ? 0 : 'Approved');
 				    }
 
-					UpdateApprovedColumns($(this).parents('table'), false);
+					UpdateApprovedColumns($(this).parents('table.gf_entries'), false);
 
 					return false;
-
 		    	});
 
 		    	// We want to make sure that the checkboxes go away even if the Approved column is showing.
 		    	// They will be in sync when loaded, so only upon click will we process.
 		    	function UpdateApprovedColumns($table, onLoad) {
-					var colIndex = $('th:contains("Approved")', $table).index() - 1;
+
+		    		<?php
+
+		    		if( ! empty( $approvedcolumn ) ) {
+		    		   /** @see https://stackoverflow.com/a/350300/480856 */
+		    		   $approved_column_jquery = str_replace( '.', '\\\.', $approvedcolumn );
+		    		   $approved_column_jquery = 'field_id-' . esc_html( $approved_column_jquery );
+
+		    		?>
 
 					$('tr', $table).each(function() {
-						if($(this).is('.lead_approved') || (onLoad && $("input.lead_approved", $(this)).length > 0)) {
-							if(onLoad && $(this).not('.lead_approved')) { $(this).addClass('lead_approved'); }
-							$('td:visible:eq('+colIndex+'):has(.toggleApproved)', $(this)).html("<img src='<?php echo plugins_url('images/tick.png', __FILE__); ?>/>");
+
+						// No GF approval; don't modify things
+						if( 0 === $( '.toggleApproved', $( this ) ).length ) {
+							return;
+						}
+
+						if( $(this).is('.lead_approved') || (onLoad && $("input.lead_approved", $(this)).length > 0)) {
+
+							if(onLoad && $(this).not('.lead_approved')) {
+								$(this).addClass('lead_approved');
+							}
+
+							$('td.column-<?php echo $approved_column_jquery; ?>:visible', $(this)).html('<i class="fa fa-check gf_valid"></i>');
+
 						} else {
-							if(onLoad && $(this).is('.lead_approved')) { $(this).removeClass('lead_approved'); }
-							$('td:visible:eq('+colIndex+'):has(.toggleApproved)', $(this)).html('');
+
+							if(onLoad && $(this).is('.lead_approved')) {
+								$(this).removeClass('lead_approved');
+							}
+
+							$('td.column-<?php echo $approved_column_jquery; ?>:visible', $(this)).html('');
 						}
 					});
+					<?php
+					}
+					?>
 		    	}
 
 				// Add the header column
-		    	$('thead .column-is_starred, tfoot .column-is_starred').after('<th class="manage-column column-is_starred sortable"><a href="<?php echo esc_url( add_query_arg(array('sort' => $_gform_directory_approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
+		    	$('thead .column-is_starred, tfoot .column-is_starred').after('<th class="manage-column column-is_starred sortable"><a href="<?php echo esc_url( add_query_arg(array('sort' => $approvedcolumn)) ); ?>"><img src="<?php echo plugins_url( '/images/form-button-1.png', __FILE__); ?>" title="<?php echo esc_js( __('Show entry in directory view?', 'gravity-forms-addons')); ?>" /></span></a></th>');
 
 				// Add to each row
-		    	$('tbody td:has(img[src*="star"]), tbody th:has(img[src*="star"])').after('<td><a href="#" class="toggleApproved" title="'+approveTitle+'">X</a></td>');
+		    	$('tbody th:has(img[src*="star"])').after('<td><a href="#" class="toggleApproved" title="'+approveTitle+'">X</a></td>');
 
 		    	$('tr:has(input.lead_approved)').addClass('lead_approved').find('a.toggleApproved').prop('title', unapproveTitle).text('O');
 
-		    	UpdateApprovedColumns($('table'), true);
+		    	UpdateApprovedColumns($('table.gf_entries'), true);
 
 		    });
-			<?php } // end if(!empty($_gform_directory_approvedcolumn)) check ?>
 		</script><?php
 	}
 
