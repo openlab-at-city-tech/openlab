@@ -16,6 +16,10 @@ a, body a {
 	color: #0044af;
 }
 
+body .blog-menu {
+  overflow: hidden;
+}
+
 body .blog-menu a {
   color: #fff;
   display: block;
