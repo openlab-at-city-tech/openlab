@@ -66,7 +66,7 @@
 		     alt="GravityView money-back Guarantee" class="alignright" style="margin: 10px 0 0 10px;"/>
 		<?php
 
-		echo wpautop( sprintf( esc_html__( '%sGravityView%s is the best way to display Gravity Forms entries on your website.', 'gravity-forms-addons' ), '<a href="http://katz.si/gravityview">', '</a>' ) );
+		echo wpautop( sprintf( esc_html__( '%sGravityView%s is the best way to display Gravity Forms entries on your website.', 'gravity-forms-addons' ), '<a href="https://katz.si/gravityview">', '</a>' ) );
 
 		?>
 

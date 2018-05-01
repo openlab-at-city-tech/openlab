@@ -13,7 +13,7 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 		$celltitle = '';
 
 		if ( $approved ) {
-			$leadapproved = self::check_approval( $lead, $approvedcolumn );
+			$leadapproved = self::check_approval( $lead, $approvedcolumn, $smartapproval );
 		}
 
 		if ( ( isset( $leadapproved ) && $leadapproved && $approved ) || ! $approved ) {
@@ -34,6 +34,22 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 
 					$field = RGFormsModel::get_field( $form, $field_id );
 
+					if( $field ) {
+						$value = RGFormsModel::get_lead_field_value( $lead, $field );
+
+						if ( GFCommon::is_post_field( $field ) ) {
+							$input_type = $field->type;
+						} else {
+							$input_type = $field->get_input_type();
+						}
+
+					} else {
+						$value = rgar( $lead, $field_id );
+						$input_type = $field_id;
+                    }
+
+					$display_value = $value;
+
 					$lightboxclass = '';
 
 					if ( ! empty( $lightboxsettings['images'] ) ) {
@@ -44,24 +60,12 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 						}
 					}
 
-					$value         = RGFormsModel::get_lead_field_value( $lead, $field );
-					$display_value = $value;
-
 					/**
 					 * @since 3.6.3
 					 */
 					if ( apply_filters( 'kws_gf_directory_format_value', true ) ) {
 						$display_value = GFCommon::get_lead_field_display( $field, $value, $lead["currency"] );
 						$display_value = apply_filters( "gform_entry_field_value", $display_value, $field, $lead, $form );
-					}
-
-					// `id`, `ip`, etc.
-					if ( ! is_numeric( $field_id ) ) {
-						$input_type = $field_id;
-					} elseif ( GFCommon::is_post_field( $field ) ) {
-						$input_type = $field['type'];
-					} else {
-						$input_type = RGFormsModel::get_input_type( $field );
 					}
 
 					switch ( $input_type ) {
@@ -83,7 +87,7 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 								if ( $input_type === 'address' && $appendaddress ) {
 									$address['id']        = floor( (int) $field_id );
 									$address[ $field_id ] = $value;
-									if ( $hideaddresspieces ) {
+									if ( ! empty( $hideaddresspieces ) ) {
 										$value = NULL;
 									}
 								} else {
@@ -143,8 +147,8 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 							if ( in_array( 'urls', $lightboxsettings ) || ! empty( $lightboxsettings['urls'] ) ) {
 								$lightboxclass .= ' rel="directory_all directory_urls"';
 							}
-							if ( $linkwebsite ) {
-								$value = "<a href='" . esc_attr( $lead["source_url"] ) . "'{$target}{$lightboxclass} title='" . esc_attr( $lead["source_url"] ) . "'$nofollow>.../" . esc_attr( GFCommon::truncate_url( $lead["source_url"] ) ) . "</a>";
+							if ( ! empty( $linkwebsite ) ) {
+								$value = "<a href='" . esc_url_raw( $lead["source_url"] ) . "'{$target}{$lightboxclass} title='" . esc_attr( $lead["source_url"] ) . "'$nofollow>.../" . esc_attr( GFCommon::truncate_url( $lead["source_url"] ) ) . "</a>";
 							} else {
 								$value = esc_attr( GFCommon::truncate_url( $lead["source_url"] ) );
 							}
@@ -175,7 +179,7 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 							break;
 
 						case "date" :
-							if ( $dateformat ) {
+							if ( ! empty( $dateformat ) ) {
 								$value = GFCommon::date_display( $value, $dateformat );
 							} else {
 								$value = GFCommon::date_display( $value, $field["dateFormat"] );
@@ -192,7 +196,6 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 
 						default:
 							$input_type = 'text';
-
 							if ( is_email( $value ) && $linkemail ) {
 								$value = "<a href='mailto:$value'$nofollow>$value</a>";
 							} elseif ( preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $value ) && $linkwebsite ) {
@@ -273,11 +276,11 @@ if ( is_array( $leads ) && ! empty( $leads ) && sizeof( $leads ) > 0 && $lead_co
 		<td colspan="<?php echo sizeof( $columns ); ?>" class="noresults" style="padding:20px;"><?php
 
 			if ( $search_query ) {
-				_e( "This search returned no results.", "gravity-forms-addons" );
+				esc_html_e( "This search returned no results.", "gravity-forms-addons" );
 			} elseif ( $limituser ) {
-				_e( "This form does not have any visible entries.", "gravity-forms-addons" );
+				esc_html_e( "This form does not have any visible entries.", "gravity-forms-addons" );
 			} else {
-				_e( "This form does not have any entries yet.", "gravity-forms-addons" );
+				esc_html_e( "This form does not have any entries yet.", "gravity-forms-addons" );
 			}
 
 			?></td>

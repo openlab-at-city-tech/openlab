@@ -3,8 +3,9 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
-Tested up to: 4.8
-Stable tag: 1.6.1
+Requires PHP: 5.3
+Tested up to: 4.9
+Stable tag: 1.6.3
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -46,7 +47,10 @@ Learn more! <a href="http://make.wordpress.org/accessibility/wp-accessibility-pl
 
 The plug-in is intended to help with deficiencies commonly found in themes and to solve some issues in WordPress core. It can't correct every problem (by a long shot), but provides tools to fix some issues, supplement the accessibility of your site, or identify problems.
 
-Translating my plug-ins is always appreciated. Visit <a href="https://translate.wordpress.org/projects/wp-plugins/wp-accessibility">the WordPress translations site</a> to get your language into shape!
+= Contribute! =
+
+* <a href="https://translate.wordpress.org/projects/wp-plugins/wp-accessibility">Help Translate WP Accessibility</a>
+* <a href="https://github.com/joedolson/wp-accessibility">Contribute to WP Accessibility</a>
 
 == Installation ==
 
@@ -58,10 +62,23 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 = Future =
 
-[Suggest a change!](https://github.com/joedolson/wp-accessibility/)
+[Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
 * Conflict with NextGen gallery to explore
-* Gutenberg: filter colors in cover text?
-* 
+
+= 1.6.3 =
+
+* Bug fix: incorrect function name
+* Bug fix: don't use POST data directly when value is known 
+
+= 1.6.2 =
+
+* Removed 'ScrollTo' JS.
+* Changed toolbar font size setting from em to px for predictability.
+* Updated 'diagnostic.css' to latest version.
+* Removed 'create_function' for PHP 7.2 compatibility.
+* Removed 'extract'
+* Code updated to conform to WordPress PHP standards
+* Code restructuring. 
 
 = 1.6.1 =
 
