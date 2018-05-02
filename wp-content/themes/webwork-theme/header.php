@@ -23,6 +23,8 @@
 					<img class="banner-img" src="<?php echo get_stylesheet_directory_uri() . '/images/OLWW_BANNER.png'; ?>" alt="OpenLab WeBWorK logo" />
 				</div> <!-- /header -->
 
+				<h1 class="screen-reader-text">OpenLab WeBWorK</h1>
+
 			</div> <!-- /bg-dark -->
 
 			<div class="navigation section no-padding bg-dark" role="navigation">
