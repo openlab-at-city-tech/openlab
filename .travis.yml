@@ -4,3 +4,10 @@ php:
   - nightly
 
 script: php developer/lint-php.php
+
+notifications:
+  email:
+    recipients:
+      - boonebgorges@gmail.com
+    on_success: change
+    on_failure: always
