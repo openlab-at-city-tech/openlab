@@ -8,7 +8,7 @@ Template:       hemingway
 Version:        0.1.0
 */
 
-a, body a {
+a, body.ol-webwork a {
 	color: #0044af;
 }
 
