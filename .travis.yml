@@ -3,4 +3,4 @@ php:
   - 7.2
   - nightly
 
-script: php developer/lint.php
+script: php developer/lint-php.php
