@@ -7197,6 +7197,9 @@ button.oplb-bs .close {
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p:last-child {
   margin-bottom: 0;
 }
+.oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li {
+  line-height: 18px;
+}
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu li:last-child {
   border-radius: 0 0 4px 4px;
   border-bottom: none;
