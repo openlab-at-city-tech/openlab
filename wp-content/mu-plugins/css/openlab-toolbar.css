@@ -7153,6 +7153,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li {
   font-size: 14px;
+  line-height: 19px;
 }
 .oplb-bs #wpadminbar #wp-toolbar .admin-bar-menu li a {
   background: #fff;
