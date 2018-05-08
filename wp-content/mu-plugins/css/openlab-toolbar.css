@@ -7190,6 +7190,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu p {
   color: #333;
+  line-height: 18px;
   margin-bottom: 8px;
   font-size: 12px;
 }
