@@ -41,39 +41,6 @@ function openlab_get_home_slider() {
 }
 
 /**
- * Custom mysteryman
- * @return type
- */
-function openlab_new_mysteryman() {
-    return get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
-}
-
-add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
-
-/**
- * Custom default avatar
- * @param string $url
- * @param type $params
- * @return string
- */
-function openlab_default_get_group_avatar($url, $params) {
-    if (strstr($url, 'default-avatar') || strstr($url, 'wavatar') || strstr($url, 'mystery-group.png')) {
-        $url = get_stylesheet_directory_uri() . '/images/default-avatar.jpg';
-    }
-
-    return $url;
-}
-
-add_filter('bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2);
-
-function openlab_default_group_avatar_img($html) {
-    $default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
-    return str_replace($default_avatar, get_stylesheet_directory_uri() . '/images/default-avatar.jpg', $html);
-}
-
-add_filter('bp_core_fetch_avatar', 'openlab_default_group_avatar_img');
-
-/**
  * WordPress adds dimensions to embedded images; this is totally not responsive WordPress
  * @param type $html
  * @return type
