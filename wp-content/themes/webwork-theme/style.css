@@ -16,6 +16,10 @@ a, body.ol-webwork a {
 	color: #0044af;
 }
 
+a:hover, body.ol-webwork a:hover {
+	color: #000;
+}
+
 body .blog-menu {
   overflow: hidden;
 }
