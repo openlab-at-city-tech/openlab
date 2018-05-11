@@ -7045,9 +7045,11 @@ button.oplb-bs .close {
   font-weight: 700;
 }
 .oplb-bs #wpadminbar .fa {
+  color: #fff;
   font-size: 14px;
   line-height: 1;
   margin: 0 4px;
+  padding: 0;
 }
 .oplb-bs #wpadminbar #wp-toolbar {
   line-height: normal;
