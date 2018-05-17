@@ -23,7 +23,7 @@ a:hover, body.ol-webwork a:hover {
 .header-cover {
 	overflow: hidden;
 }
-.header {
+body.ol-webwork .header {
 	max-height: 211px;
 	padding: 0;
 	width: 200%;
