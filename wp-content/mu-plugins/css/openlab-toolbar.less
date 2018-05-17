@@ -38,13 +38,18 @@
         a{
             text-shadow: none !important;
         }
+		a:not(.btn){
+			color: #333;
+		}
         .bold{
             font-weight: 700;
         }
         .fa {
+			color: #fff;
             font-size: 14px;
             line-height: 1;
             margin: 0 4px;
+			padding: 0;
         }
         #wp-toolbar{
             line-height: normal;
@@ -155,6 +160,7 @@
             .admin-bar-menu{
                 li{
                     font-size: 14px;
+					line-height: 19px;
                     a{
                         background: #fff;
                         color: #333;
@@ -188,6 +194,7 @@
                     border-radius: inherit;
                     p{
                         color: #333;
+						line-height: 18px;
                         margin-bottom: 8px;
                         font-size: 12px;
                         &:last-child{
@@ -195,6 +202,7 @@
                         }
                     }
                     li{
+						line-height: 18px;
                         &:last-child{
                             border-radius: 0 0 4px 4px;
                             border-bottom: none;

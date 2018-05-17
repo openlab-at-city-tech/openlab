@@ -1,17 +1,16 @@
 <?php
 /*
 Plugin Name: 	Gravity Forms Directory & Addons
-Plugin URI: 	http://katz.co/gravity-forms-addons/
-Description: 	Turn <a href="http://katz.si/gravityforms">Gravity Forms</a> into a great WordPress directory...and more!
+Plugin URI: 	https://katz.co/gravity-forms-addons/
+Description: 	Turn <a href="https://katz.si/gravityforms">Gravity Forms</a> into a great WordPress directory...and more!
 Author: 		Katz Web Services, Inc.
-Version: 		3.8.1
+Version: 		4.1.3
 Author URI:		https://gravityview.co
 Text Domain:    gravity-forms-addons
 License:		GPLv2 or later
-License URI: 	http://www.gnu.org/licenses/gpl-2.0.html
-Domain Path:	/languages
+License URI: 	https://www.gnu.org/licenses/gpl-2.0.html
 
-Copyright 2015 Katz Web Services, Inc.  (email: info@katzwebservices.com)
+Copyright 2018 Katz Web Services, Inc.  (email: info@katzwebservices.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,8 +35,8 @@ class GFDirectory {
 
 	private static $path = "gravity-forms-addons/gravity-forms-addons.php";
 	private static $slug = "gravity-forms-addons";
-	private static $version = "3.8.1";
-	private static $min_gravityforms_version = "1.5";
+	private static $version = "4.2";
+	private static $min_gravityforms_version = "2.2.3.12";
 
 	public static function directory_defaults( $args = array() ) {
 		$defaults = array(
@@ -177,9 +176,6 @@ class GFDirectory {
 		include_once( plugin_dir_path( __FILE__ ) . '/admin.php' );
 		include_once( plugin_dir_path( __FILE__ ) . '/gravity-forms-lead-creator.php' );
 
-		if ( in_array( RG_CURRENT_PAGE, array( "gf_entries", "admin.php", "admin-ajax.php" ) ) ) {
-			self::globals_get_approved_column();
-		}
 		if ( self::is_gravity_page() ) {
 			self::load_functionality();
 		}
@@ -197,6 +193,12 @@ class GFDirectory {
 
 		self::add_rewrite();
 
+		add_action( 'wp_ajax_rg_update_feed_active', array( 'GFDirectory', 'update_feed_active' ) );
+        add_action( 'wp_ajax_gf_select_directory_form', array( 'GFDirectory', 'select_directory_form' ) );
+        add_action( 'wp_ajax_rg_update_approved', array( 'GFDirectory', 'directory_update_approved_hook' ) );
+        add_action( 'wp_ajax_change_directory_columns', array( 'GFDirectory', 'change_directory_columns' ) );
+		add_filter( 'plugin_action_links', array( 'GFDirectory', 'settings_link' ), 10, 2 );
+
 		if ( ! self::is_gravityforms_supported() ) {
 			return;
 		}
@@ -211,7 +213,6 @@ class GFDirectory {
 			if ( apply_filters( 'kws_gf_directory_shortlink', true ) ) {
 				add_filter( 'get_shortlink', array( 'GFDirectory', 'shortlink' ) );
 			}
-			add_filter( 'kws_gf_directory_lead_filter', array( 'GFDirectory', 'show_only_user_entries' ), 10, 2 );
 			add_filter( 'kws_gf_directory_anchor_text', array( 'GFDirectory', 'directory_anchor_text' ) );
 		}
 
@@ -234,15 +235,6 @@ class GFDirectory {
 		} else if ( self::is_gravity_page( 'gf_entries' ) ) {
 			wp_enqueue_script( 'thickbox', array( 'jquery' ) );
 			add_filter( "gform_get_field_value", array( 'GFDirectory', 'add_lead_approved_hidden_input' ), 1, 3 );
-		} else if ( in_array( RG_CURRENT_PAGE, array( "admin-ajax.php" ) ) ) {
-			add_action( 'wp_ajax_rg_update_feed_active', array( 'GFDirectory', 'update_feed_active' ) );
-			add_action( 'wp_ajax_gf_select_directory_form', array( 'GFDirectory', 'select_directory_form' ) );
-			add_action( 'wp_ajax_rg_update_approved', array( 'GFDirectory', 'directory_update_approved_hook' ) );
-			add_action( 'wp_ajax_change_directory_columns', array( 'GFDirectory', 'change_directory_columns' ) );
-		} else if ( in_array( RG_CURRENT_PAGE, array( "plugins.php" ) ) ) {
-
-			add_filter( 'plugin_action_links', array( 'GFDirectory', 'settings_link' ), 10, 2 );
-
 		}
 
 	}
@@ -483,86 +475,68 @@ class GFDirectory {
 		$wp_rewrite->add_endpoint( "{$endpoint}", EP_ALL );
 	}
 
-	//Returns true if the current page is one of Gravity Forms pages. Returns false if not
+	/**
+	 * @param array $page
+	 *
+	 * @return bool Returns true if the current page is one of Gravity Forms pages. Returns false if not
+	 */
 	public static function is_gravity_page( $page = array() ) {
-		$current_page = trim( strtolower( RGForms::get( "page" ) ) );
+		$current_page = trim( strtolower( rgget( "page" ) ) );
 		if ( empty( $page ) ) {
 			$gf_pages = array( "gf_edit_forms", "gf_new_form", "gf_entries", "gf_settings", "gf_export", "gf_help" );
 		} else {
 			$gf_pages = is_array( $page ) ? $page : array( $page );
 		}
 
-		return in_array( $current_page, $gf_pages );
+		return in_array( $current_page, $gf_pages, true );
 	}
 
+	/**
+     * Update the approval status for the entry
+     *
+	 * @param int $lead_id
+	 * @param int $approved
+	 * @param int $form_id
+	 * @param int $approvedcolumn
+	 */
 	static function directory_update_approved( $lead_id = 0, $approved = 0, $form_id = 0, $approvedcolumn = 0 ) {
-		global $wpdb, $_gform_directory_approvedcolumn, $current_user;
+
 		$current_user = wp_get_current_user();
-		$user_data    = get_userdata( $current_user->ID );
-
-		if ( ! empty( $approvedcolumn ) ) {
-			$_gform_directory_approvedcolumn = $approvedcolumn;
-		}
-
-		if ( empty( $_gform_directory_approvedcolumn ) ) {
-			return false;
-		}
-
-		$lead_detail_table = RGFormsModel::get_lead_details_table_name();
 
 		// This will be faster in the 1.6+ future.
 		if ( function_exists( 'gform_update_meta' ) ) {
 			gform_update_meta( $lead_id, 'is_approved', $approved );
 		}
 
-		if ( empty( $approved ) ) {
-			//Deleting details for this field
-			$sql = $wpdb->prepare( "DELETE FROM $lead_detail_table WHERE lead_id=%d AND field_number BETWEEN %f AND %f ", $lead_id, $_gform_directory_approvedcolumn - 0.001, $_gform_directory_approvedcolumn + 0.001 );
-			$wpdb->query( $sql );
+		if ( ! empty( $approvedcolumn ) ) {
 
-			RGFormsModel::add_note( $lead_id, $current_user->ID, $user_data->display_name, stripslashes( __( 'Disapproved the lead', 'gravity-forms-addons' ) ) );
-
-		} else {
-
-			// Get the fields for the lead
-			$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead_id ) );
-
-			$lead_detail_id = RGFormsModel::get_lead_detail_id( $current_fields, $_gform_directory_approvedcolumn );
-
-			// If there's already a field for the approved column, then we update it.
-			if ( $lead_detail_id > 0 ) {
-				$update = $wpdb->update( $lead_detail_table, array( "value" => $approved ), array(
-					"lead_id"      => $lead_id,
-					'form_id'      => $form_id,
-					'field_number' => $_gform_directory_approvedcolumn,
-				), array( "%s" ), array( "%d", "%d", "%f" ) );
-			} // Otherwise, we create it.
-			else {
-				$update = $wpdb->insert( $lead_detail_table, array(
-					"lead_id"      => $lead_id,
-					"form_id"      => $form_id,
-					"field_number" => $_gform_directory_approvedcolumn,
-					"value"        => $approved,
-				), array( "%d", "%d", "%f", "%s" ) );
+			if ( ! method_exists( 'GFAPI', 'update_entry_field' ) ) {
+				GFCommon::log_error( "Cannot update approval; update_entry_field not available in Gravity Forms" );
+				return;
 			}
 
-			RGFormsModel::add_note( $lead_id, $current_user->ID, $user_data->display_name, stripslashes( __( 'Approved the lead', 'gravity-forms-addons' ) ) );
+			$approved = $approved ? $approved : '';
+
+			GFAPI::update_entry_field( $lead_id, $approvedcolumn, $approved );
 		}
+
+		$message = empty( $approved ) ? __( 'Disapproved the lead', 'gravity-forms-addons' ) : __( 'Approved the lead', 'gravity-forms-addons' );
+
+        RGFormsModel::add_note( $lead_id, $current_user->ID, $current_user->display_name, $message );
 	}
 
 	static public function edit_lead_detail( $Form, $lead, $options ) {
-		global $current_user, $_gform_directory_approvedcolumn;
+		global $current_user;
 		require_once( GFCommon::get_base_path() . "/form_display.php" );
-		if ( empty( $_gform_directory_approvedcolumn ) ) {
-			$_gform_directory_approvedcolumn = self::get_approved_column( $Form );
-		}
+
+		$approvedcolumn = self::get_approved_column( $Form );
 
 		// We fetch this again, since it may have had some admin-only columns taken out.
 		#$lead = RGFormsModel::get_lead($lead["id"]);
 
 		// If you want to allow users to edit their own approval (?) add a filter and return true.
 		if ( apply_filters( 'kws_gf_directory_allow_user_edit_approved', false ) === false ) {
-			$Form['fields'] = self::remove_approved_column( 'form', $Form['fields'], $_gform_directory_approvedcolumn );
+			$Form['fields'] = self::remove_approved_column( 'form', $Form['fields'], $approvedcolumn );
 		}
 
 		// If this is not the form that should be edited
@@ -578,10 +552,10 @@ class GFDirectory {
 			( ! empty( $options['useredit'] ) && is_user_logged_in() && intval( $current_user->ID ) === intval( $lead['created_by'] ) ) === true || // OR
 
 			// Administrators can edit every listing, and this person has administrator access
-			( ! empty( $options['adminedit'] ) && self::has_access( "gravityforms_directory" ) ) === true )
-		) {
+			( ! empty( $options['adminedit'] ) && ( self::has_access( "gravityforms_directory" ) === true || GFCommon::current_user_can_any('gravityforms_edit_entries') ) )
+		) ) {
 			// Kick them out.
-			printf( esc_html_e( '%sYou do not have permission to edit this form.%s', 'gravity-forms-addons' ), '<div class="error">', '</div>' );
+			printf( esc_html__( '%sYou do not have permission to edit this form.%s', 'gravity-forms-addons' ), '<div class="error">', '</div>' );
 
 			return;
 		}
@@ -589,14 +563,14 @@ class GFDirectory {
 		$validation_message = '';
 
 		// If the form is submitted
-		if ( RGForms::post( "action" ) === "update" ) {
+		if ( rgpost( "action" ) === "update" ) {
 			check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' );
 
 			$lead = apply_filters( 'kws_gf_directory_lead_being_updated', $lead, $Form );
 
 			// We don't DO passwords.
 			foreach ( $Form['fields'] as $key => $field ) {
-				if ( $field['type'] === 'password' ) {
+				if ( $field->type === 'password' ) {
 					unset( $Form['fields'][ $key ] );
 				}
 			}
@@ -605,8 +579,8 @@ class GFDirectory {
 
 			$validation_message = '';
 			foreach ( $Form['fields'] as $field ) {
-				if ( ! GFCommon::is_product_field( $field["type"] ) ) {
-					$validation_message .= ( rgget( "failed_validation", $field ) && ! empty( $field["validation_message"] ) ) ? sprintf( "<li class='gfield_description validation_message'><strong>%s</strong>: %s</li>", $field["label"], $field["validation_message"] ) : "";;
+				if ( ! GFCommon::is_product_field( $field->type ) ) {
+					$validation_message .= ( rgget( "failed_validation", $field ) && ! empty( $field->validation_message ) ) ? sprintf( "<li class='gfield_description validation_message'><strong>%s</strong>: %s</li>", $field->label, $field->validation_message ) : "";;
 				}
 			}
 			if ( ! empty( $validation_message ) ) {
@@ -617,12 +591,16 @@ class GFDirectory {
 			// So the form submission always throws an error even though there's no problem.
 			// Product fields can't be edited, so that doesn't really matter.
 			if ( ! empty( $is_valid ) || ( empty( $is_valid ) && empty( $validation_message ) ) ) {
-				do_action( 'kws_gf_directory_pre_update_lead', $lead, $Form );
-				// since @3.6.1 to enable conditional fields' updates.
+
+			    do_action( 'kws_gf_directory_pre_update_lead', $lead, $Form );
+
+			    // since @3.6.1 to enable conditional fields' updates.
 				self::save_lead( $Form, $lead );
+
 				$lead = RGFormsModel::get_lead( $lead["id"] );
 
 				do_action( 'kws_gf_directory_post_update_lead', $lead, $Form );
+
 				echo apply_filters( 'kws_gf_directory_lead_updated_message', sprintf( esc_html__( "%sThe entry was successfully updated.%s", 'gravity-forms-addons' ), "<p class='updated' id='message' style='padding:.5em .75em; background-color:#ffffcc; border:1px solid #ccc;'>", "</p>" ), $lead, $Form );
 
 				return $lead;
@@ -649,11 +627,10 @@ class GFDirectory {
 				<?php
 
 				$form_without_products = $Form;
-				$post_message_shown    = false;
 				$product_fields        = array();
 				foreach ( $Form['fields'] as $key => $field ) {
 					if (
-						GFCommon::is_product_field( $field["type"] ) ||
+						GFCommon::is_product_field( $field->type ) ||
 						is_numeric( $lead["post_id"] ) && GFCommon::is_post_field( $field )
 					) {
 						if ( is_numeric( $lead["post_id"] ) && GFCommon::is_post_field( $field ) && ! $message_shown ) {
@@ -662,9 +639,9 @@ class GFDirectory {
 						}
 
 						unset( $form_without_products['fields'][ $key ] );
-						$product_fields[] = $field['id'];
-						if ( ! empty( $field['inputs'] ) ) {
-							foreach ( $field['inputs'] as $input ) {
+						$product_fields[] = $field->id;
+						if ( ! empty( $field->inputs ) ) {
+							foreach ( $field->inputs as $input ) {
 								$product_fields[] = $input['id'];
 							}
 						}
@@ -700,23 +677,24 @@ class GFDirectory {
 			require_once( GFCommon::get_base_path() . "/entry_list.php" );
 		}
 
-		global $current_user, $_gform_directory_approvedcolumn;
-		get_currentuserinfo();
+		global $current_user;
+		wp_get_current_user();
 
 		$display_empty_fields       = '';
 		$allow_display_empty_fields = true;
 		if ( $allow_display_empty_fields ) {
-			$display_empty_fields = @rgget( "gf_display_empty_fields", $_COOKIE );
+			$cookie_array = isset( $_COOKIE ) ? $_COOKIE : array();
+			$display_empty_fields = rgar( $cookie_array, "gf_display_empty_fields" );
 		}
 		if ( empty( $options ) ) {
 			$options = self::directory_defaults();
 		}
 
 		// There is no edit link
-		if ( isset( $_GET['edit'] ) || RGForms::post( "action" ) === "update" ) {
+		if ( isset( $_GET['edit'] ) || rgpost( "action" ) === "update" ) {
 			// Process editing leads
 			$lead = self::edit_lead_detail( $Form, $lead, $options );
-			if ( RGForms::post( "action" ) !== "update" ) {
+			if ( rgpost( "action" ) !== "update" ) {
 				return;
 			}
 		}
@@ -757,9 +735,9 @@ class GFDirectory {
 			foreach ( $Form["fields"] as $field ) {
 
 				// Don't show fields defined as hide in single.
-				if ( ! empty( $field['hideInSingle'] ) ) {
+				if ( ! empty( $field->hideInSingle ) ) {
 					if ( self::has_access( "gravityforms_directory" ) ) {
-						echo "\n\t\t\t\t\t\t\t\t\t" . '<!-- ' . sprintf( esc_html__( '(Admin-only notice) Field #%d not shown: "Hide This Field in Single Entry View" was selected.', 'gravity-forms-addons' ), $field['id'] ) . ' -->' . "\n\n";
+						echo "\n\t\t\t\t\t\t\t\t\t" . '<!-- ' . sprintf( esc_html__( '(Admin-only notice) Field #%d not shown: "Hide This Field in Single Entry View" was selected.', 'gravity-forms-addons' ), $field->id ) . ' -->' . "\n\n";
 					}
 					continue;
 				}
@@ -801,7 +779,7 @@ class GFDirectory {
 
 					default :
 						//ignore product fields as they will be grouped together at the end of the grid
-						if ( GFCommon::is_product_field( $field["type"] ) ) {
+						if ( GFCommon::is_product_field( $field->type ) ) {
 							$has_product_fields = true;
 							continue;
 						}
@@ -966,18 +944,18 @@ class GFDirectory {
 			return false;
 		}
 
-		foreach ( $form['fields'] as $key => $col ) {
+		foreach ( $form['fields'] as $key => $field ) {
 			// Only the Go to Entry button adds disableMargins.
 
-			if ( $col['type'] === 'hidden' && ! empty( $col['useAsEntryLink'] ) && ! empty( $col['disableMargins'] ) ) {
+			if ( $field->type === 'hidden' && ! empty( $field->useAsEntryLink ) && ! empty( $field->disableMargins ) ) {
 				continue;
 			}
-			if ( ! empty( $col['adminOnly'] ) ) {
-				$adminOnly[] = $col['id'];
+			if ( ! empty( $field->adminOnly ) ) {
+				$adminOnly[] = $field->id;
 			}
-			if ( isset( $col['inputs'] ) && is_array( $col['inputs'] ) ) {
-				foreach ( $col['inputs'] as $key2 => $input ) {
-					if ( ! empty( $col['adminOnly'] ) ) {
+			if ( isset( $field->inputs ) && is_array( $field->inputs ) ) {
+				foreach ( $field->inputs as $key2 => $input ) {
+					if ( ! empty( $field->adminOnly ) ) {
 						$adminOnly[] = $input['id'];
 					}
 				}
@@ -987,10 +965,11 @@ class GFDirectory {
 		return $adminOnly;
 	}
 
-	/*
-	* 	Get the form and lead IDs from the URL or from $_REQUEST
-	*	@return array|null $formid, $leadid if found. Null if not.
-	*/
+	/**
+	 * Get the form and lead IDs from the URL or from $_REQUEST
+	 *
+	 * @return array|null $formid, $leadid if found. Null if not.
+	 */
 	static private function get_form_and_lead_ids() {
 		global $wp, $wp_rewrite;
 
@@ -1085,10 +1064,11 @@ class GFDirectory {
 
 		list( $formid, $leadid ) = self::get_form_and_lead_ids();
 
-		if ( ! is_null( $leadid ) && ! is_null( $formid ) ) {
+		$lead = apply_filters( 'kws_gf_directory_lead_detail', GFAPI::get_entry( $leadid ) );
+
+		if ( $lead && ! is_wp_error( $lead ) && ! is_null( $formid ) ) {
 
 			$form = apply_filters( 'kws_gf_directory_lead_detail_form', RGFormsModel::get_form_meta( (int) $formid ) );
-			$lead = apply_filters( 'kws_gf_directory_lead_detail', RGFormsModel::get_lead( (int) $leadid ) );
 
 			if ( empty( $approvedcolumn ) ) {
 				$approvedcolumn = self::get_approved_column( $form );
@@ -1097,12 +1077,27 @@ class GFDirectory {
 				$adminonlycolumns = self::get_admin_only( $form );
 			}
 
+			$approved = self::check_approval( $lead, $approvedcolumn, rgar( $options, 'smartapproval', false ) );
+
 			//since 3.5
 			$lead = self::remove_hidden_fields( array( $lead ), $adminonlycolumns, $approvedcolumn, true, true, $showadminonly, $form );
-			$lead = $lead[0];
+			$lead = isset( $lead[0] ) ? $lead[0] : false;
 
 			ob_start(); // Using ob_start() allows us to filter output
-			self::lead_detail( $form, $lead, false, $inline, $options );
+
+			if( ! $approved && ! GFCommon::current_user_can_any( array( 'gravityforms_view_entries', 'gravityforms_edit_entries' ) ) ) {
+                esc_html_e( 'You are not allowed to view this content.', 'gravity-forms-addons' );
+                return false;
+            }
+
+			if ( ! $approved && empty( $_GET['edit'] ) ) {
+			    echo '<div class="error" style="border: 1px solid #ccc; padding: 1em; margin: .5em 0 1em;">';
+				esc_html_e( 'This entry is not approved, but you are logged-in and have permission to see it.', 'gravity-forms-addons' );
+				echo '</div>';
+			}
+
+            self::lead_detail( $form, $lead, false, $inline, $options );
+
 			$content = ob_get_contents(); // Get the output
 			ob_end_clean(); // Clear the buffer
 
@@ -1130,7 +1125,6 @@ class GFDirectory {
 	}
 
 	public static function update_grid_column_meta( $form_id, $columns ) {
-		global $wpdb;
 
 		$meta = maybe_serialize( stripslashes_deep( $columns ) );
 
@@ -1138,9 +1132,9 @@ class GFDirectory {
 	}
 
 	public static function get_grid_column_meta( $form_id ) {
-		global $wpdb;
 
 		$grid = get_option( 'gf_directory_form_' . $form_id . '_grid' );
+
 		if ( ! $grid ) {
 			$grid = GFFormsModel::get_grid_column_meta( $form_id );
 			self::update_grid_column_meta( $form_id, $grid );
@@ -1158,21 +1152,21 @@ class GFDirectory {
 			for ( $i = 0, $count = sizeof( $form["fields"] ); $i < $count && $i < 5; $i ++ ) {
 				$field = $form["fields"][ $i ];
 
-				if ( RGForms::get( "displayOnly", $field ) ) {
+				if ( $field->displayOnly ) {
 					continue;
 				}
 
 
-				if ( isset( $field["inputs"] ) && is_array( $field["inputs"] ) ) {
-					$field_ids[] = $field["id"];
-					if ( $field["type"] == "name" ) {
-						$field_ids[] = $field["id"] . '.3'; //adding first name
-						$field_ids[] = $field["id"] . '.6'; //adding last name
-					} else if ( isset( $field["inputs"][0] ) ) {
-						$field_ids[] = $field["inputs"][0]["id"]; //getting first input
+				if ( isset( $field->inputs ) && is_array( $field->inputs ) ) {
+					$field_ids[] = $field->id;
+					if ( 'name' === $field->type ) {
+						$field_ids[] = $field->id . '.3'; //adding first name
+						$field_ids[] = $field->id . '.6'; //adding last name
+					} else if ( isset( $field->inputs[0] ) ) {
+						$field_ids[] = $field->inputs[0]["id"]; //getting first input
 					}
 				} else {
-					$field_ids[] = $field["id"];
+					$field_ids[] = $field->id;
 				}
 			}
 			//adding default entry meta columns
@@ -1224,8 +1218,8 @@ class GFDirectory {
 					if ( $field ) {
 						$columns[ strval( $field_id ) ] = array(
 							"label"     => self::get_label( $field, $field_id, $input_label_only ),
-							"type"      => rgget( "type", $field ),
-							"inputType" => rgget( "inputType", $field ),
+							"type"      => rgobj( $field, 'type' ),
+							"inputType" => rgobj( $field, 'inputType' ),
 						);
 					}
 			}
@@ -1238,9 +1232,9 @@ class GFDirectory {
 	 * Get the label for the input field. This is necessary to prevent Admin Labels from being used instead of normal labels.
 	 */
 	public static function get_label( $field, $input_id = 0, $input_only = false ) {
-		$field_label = rgar( $field, "label" );
+		$field_label = rgobj( $field, "label" );
 		$input       = GFFormsModel::get_input( $field, $input_id );
-		if ( rgget( "type", $field ) == "checkbox" && $input != NULL ) {
+		if ( 'checkbox' === rgobj( $field, "type" ) && $input != NULL ) {
 			return $input["label"];
 		} else if ( $input != NULL ) {
 			return $input_only ? $input["label"] : $field_label . ' (' . $input["label"] . ')';
@@ -1309,15 +1303,15 @@ class GFDirectory {
 
 		$form_id = $form;
 
-		$form = RGFormsModel::get_form_meta( $form_id );
+		$form = GFAPI::get_form( $form_id );
 
-		if ( empty( $form ) ) {
+		if ( ! $form ) {
 			return;
 		}
 
 		$sort_field     = empty( $_GET["sort"] ) ? $sort : $_GET["sort"];
 		$sort_direction = empty( $_GET["dir"] ) ? $dir : $_GET["dir"];
-		$search_query   = ! empty( $_GET["gf_search"] ) ? $_GET["gf_search"] : NULL;
+		$search_query   = isset( $_GET["gf_search"] ) ? $_GET["gf_search"] : NULL;
 
 
 		$start_date = ! empty( $_GET["start_date"] ) ? $_GET["start_date"] : $start_date;
@@ -1341,17 +1335,27 @@ class GFDirectory {
 		$tableclass .= ! empty( $jstable ) ? sprintf( ' tablesorter tablesorter-%s', apply_filters( 'kws_gf_tablesorter_theme', 'blue', $form ) ) : '';
 		$title           = $form["title"];
 		$sort_field_meta = RGFormsModel::get_field( $form, $sort_field );
-		$is_numeric      = $sort_field_meta["type"] == "number";
+		$is_numeric      = ( $sort_field_meta && $sort_field_meta->type === "number" );
 
 		$columns = self::get_grid_columns( $form_id, true );
 
 		$approvedcolumn = NULL;
 
-		if ( ( ! $approved && $approved !== - 1 ) || ( ! empty( $smartapproval ) && $approved === - 1 ) ) {
+		$smartapproval = ! empty( $smartapproval );
+		$enable_smart_approval = false;
+
+		// Approved is not enabled, and smart approval is enabled
+		if ( - 1 === $approved && $smartapproval ) {
+		    $enable_smart_approval = true;
+            $approved = true;
+		}
+
+		if ( true === $approved ) {
 			$approvedcolumn = self::get_approved_column( $form );
 		}
 
-		if ( ! empty( $smartapproval ) && $approved === - 1 && ! empty( $approvedcolumn ) ) {
+
+		if ( $approved || ( ! empty( $smartapproval ) && $approved === - 1 ) && ! empty( $approvedcolumn ) ) {
 			$approved = true; // If there is an approved column, turn on approval
 		} else {
 			$approved = false; // Otherwise, show entries as normal.
@@ -1397,17 +1401,39 @@ class GFDirectory {
 		$show_search_filters = apply_filters( 'kws_gf_directory_search_filters', $show_search_filters, $form );
 		$search_criteria     = array();
 		foreach ( $show_search_filters as $key ) {
-			if ( ! empty( $_GET[ 'filter_' . $key ] ) ) {
-				$search_criteria[ $key ] = $_GET[ 'filter_' . $key ];
+			if ( '' !== rgget('filter_' . $key ) ) {
+				$search_criteria['field_filters'][] = array(
+                  'key' => $key,
+                  'value' => rgget('filter_' . $key ),
+                );
 			}
 		}
 
+        // 2.3 supports $smartapproval out of the box
+		if( $smartapproval && $enable_smart_approval && self::use_gf_23_db() ) {
+
+			$search_criteria['field_filters'][] = array(
+				'key' => 'is_approved',
+				'operator' => 'isnot',
+				'value' => ''
+			);
+
+			$search_criteria['field_filters'][] = array(
+				'key' => 'is_approved',
+				'operator' => 'isnot',
+				'value' => '0'
+			);
+
+			$search_criteria['field_filters']['mode'] = 'all';
+
+        }
+
+        $total_count = 0;
 
 		//
 		// Or start to generate the directory
 		//
-		$leads = GFDirectory::get_leads( $form_id, $sort_field, $sort_direction, $search_query, $first_item_index, $page_size, $star, $read, $is_numeric, $start_date, $end_date, 'active', $approvedcolumn, $limituser, $search_criteria );
-
+		$leads = GFDirectory::get_leads( $form_id, $sort_field, $sort_direction, $search_query, $first_item_index, $page_size, $star, $read, $is_numeric, $start_date, $end_date, 'active', $approvedcolumn, $limituser, $search_criteria, $total_count );
 
 		// Allow lightbox to determine whether showadminonly is valid without passing a query string in URL
 		if ( $entry === true && ! empty( $lightboxsettings['entry'] ) ) {
@@ -1440,8 +1466,7 @@ class GFDirectory {
 				$lead_count = count( $leads );
 				$leads      = array_slice( $leads, $first_item_index, $page_size );
 			} else {
-				$lead_count = self::get_lead_count( $form_id, $search_query, $star, $read, $approvedcolumn, $approved, $leads, $start_date, $end_date, $limituser, $search_criteria );
-
+				$lead_count = $total_count;
 			}
 
 
@@ -1475,8 +1500,8 @@ class GFDirectory {
 			<script>
 				<?php if(! empty( $lightboxsettings['images'] ) || ! empty( $lightboxsettings['entry'] )) { ?>
 
-				var tb_pathToImage = "<?php echo site_url( '/wp-includes/js/thickbox/loadingAnimation.gif' ); ?>";
-				var tb_closeImage = "<?php echo site_url( '/wp-includes/js/thickbox/tb-close.png' ); ?>";
+				var tb_pathToImage = "<?php echo esc_js( site_url( '/wp-includes/js/thickbox/loadingAnimation.gif' ) ); ?>";
+				var tb_closeImage = "<?php echo esc_js( site_url( '/wp-includes/js/thickbox/tb-close.png' ) ); ?>";
 				var tb_height = 600;
 				<?php } ?>
 				function not_empty( variable ) {
@@ -1523,7 +1548,7 @@ class GFDirectory {
 						} else {
 							echo '&';
 						} ?>page=' +<?php echo isset( $_GET['pagenum'] ) ? intval( $_GET['pagenum'] ) : '"1"'; ?>;
-					var location = "<?php echo get_permalink( $post->ID ); ?>" + page + search + sort + dir + search_filters;
+					var location = "<?php echo esc_js( get_permalink( $post->ID ) ); ?>" + page + search + sort + dir + search_filters;
 					document.location = location;
 				}
 				<?php } ?>
@@ -1660,7 +1685,7 @@ class GFDirectory {
 									foreach ( $search_criteria as $key => $value ) {
 										$new_query_args[ 'filter_' . $key ] = $value;
 									}
-									echo add_query_arg( $new_query_args, get_permalink( $post->ID ) );
+									echo esc_url_raw( add_query_arg( $new_query_args, get_permalink( $post->ID ) ) );
 									?>"><?php
 								}
 								if ( $field_info['type'] == 'id' && $entry ) {
@@ -1804,6 +1829,17 @@ class GFDirectory {
 
 		return $content; // Return it!
 	}
+
+	/**
+     * Should we use Gravity Forms 2.3+ database structure?
+     *
+     * @since 4.1.2
+     *
+	 * @return bool True: Gravity Forms 2.3 is alive; false: What's 2.3?
+	 */
+	static public function use_gf_23_db() {
+		return method_exists( 'GFFormsModel', 'get_database_version' ) && version_compare( GFFormsModel::get_database_version(), '2.3-dev-1', '>=' );
+    }
 
 	/**
 	 * Render image link HTML
@@ -1972,8 +2008,8 @@ class GFDirectory {
 
 
 	static public function get_credit_link( $columns = 1, $options = array() ) {
-		global $post;// prevents calling before <HTML>
-		if ( empty( $post ) || is_admin() ) {
+
+		if ( ! did_action('wp_head') || is_admin() ) {
 			return;
 		}
 
@@ -1982,7 +2018,13 @@ class GFDirectory {
 		// Only show credit link if the user has saved settings;
 		// this prevents existing directories adding a link without user action.
 		if ( isset( $settings['version'] ) ) {
-			echo "<tr><th colspan='{$columns}'>" . self::attr( $options ) . "</th></tr>";
+
+			$plugin_name = esc_html__( 'Gravity Forms Directory', 'gravity-forms-addon' );
+			$link = '<a href="https://katz.co/gravity-forms-addons/">' . $plugin_name . '</a>';
+		    $attribution_text = sprintf( esc_html__('Powered by %s', 'gravity-forms-addon' ), $link );
+			$attribution_html = '<span class="kws_gf_credit" style="font-weight:normal; text-align:center; display:block; margin:0 auto;">'. $attribution_text . '</span>';
+
+			echo "<tr><th colspan='{$columns}'>" . $attribution_html . "</th></tr>";
 		}
 	}
 
@@ -1990,56 +2032,19 @@ class GFDirectory {
 		return self::$version;
 	}
 
-	static public function return_7776000() {
-		return 7776000; // extend the cache to 90 days
-	}
+	static public function add_lead_approved_hidden_input( $value, $lead, $field = '' ) {
 
-	static public function attr( $options, $default = '<span class="kws_gf_credit" style="font-weight:normal; text-align:center; display:block; margin:0 auto;">Powered by <a href="http://katz.co/gravity-forms-addons/">Gravity Forms Directory</a></span>' ) {
-		include_once( ABSPATH . WPINC . '/feed.php' );
-		add_filter( 'wp_feed_cache_transient_lifetime', array( 'GFDirectory', 'return_7776000' ) );
-		$rss = fetch_feed( add_query_arg( array(
-			'site'    => htmlentities( substr( get_bloginfo( 'url' ), is_ssl() ? 8 : 7 ) ),
-			'from'    => 'kws_gf_addons',
-			'version' => self::$version,
-			'credit'  => ! empty( $options['credit'] ),
-		), 'http://www.katzwebservices.com/development/attribution.php' ) );
-		remove_filter( 'wp_feed_cache_transient_lifetime', array( 'GFDirectory', 'return_7776000' ) );
-		if ( $rss && ! is_wp_error( $rss ) ) {
-			// We want to strip all tags except for 'style', 'id', and 'class' so that the return value is always safe for the site.
-			$strip = array(
-				'bgsound',
-				'expr',
-				'onclick',
-				'onerror',
-				'onfinish',
-				'onmouseover',
-				'onmouseout',
-				'onfocus',
-				'onblur',
-				'lowsrc',
-				'dynsrc',
-			);
-			$rss->strip_attributes( $strip );
-			$rss_items = $rss->get_items( 0, 1 );
-			foreach ( $rss_items as $item ) {
-				return str_replace( array( "\n", "\r" ), ' ', $item->get_description() );
-			}
+		if ( ! isset( $processed_meta ) ) {
+            static $processed_meta = array();
 		}
 
-		return $default;
-	}
+		if ( ! in_array( $lead['id'], $processed_meta ) ) {
+			$processed_meta[] = $lead['id'];
 
+			$forms          = RGFormsModel::get_forms( null, "title" );
+			$approvedcolumn = self::globals_get_approved_column( $forms[0]->id );
 
-	static public function add_lead_approved_hidden_input( $value, $lead, $field = '' ) {
-		global $_gform_directory_processed_meta, $_gform_directory_approvedcolumn;
-
-		if ( ! in_array( $lead['id'], $_gform_directory_processed_meta ) ) {
-			$_gform_directory_processed_meta[] = $lead['id'];
-			if ( empty( $_gform_directory_approvedcolumn ) ) {
-				$forms                           = RGFormsModel::get_forms( NULL, "title" );
-				$_gform_directory_approvedcolumn = self::globals_get_approved_column( $forms[0]->id );
-			}
-			if ( self::check_approval( $lead, $_gform_directory_approvedcolumn ) ) {
+			if ( self::check_approval( $lead, $approvedcolumn ) ) {
 				echo '<span style="display:none;"><input type="hidden" class="lead_approved" id="lead_approved_' . $lead['id'] . '" value="true" /></span>';
 			}
 		}
@@ -2048,50 +2053,52 @@ class GFDirectory {
 	}
 
 
-	static public function globals_get_approved_column( $formID = 0 ) {
-		global $_gform_directory_processed_meta, $_gform_directory_approvedcolumn, $_gform_directory_activeform;
+	static public function globals_get_approved_column( $form_id = 0 ) {
 
-		$_gform_directory_processed_meta = array();
+		$form_id = empty( $form_id ) ? rgget( "id" ) : $form_id;
 
-		if ( empty( $formID ) ) {
-			$formID = RGForms::get( "id" );
-
-			if ( empty( $formID ) ) {
-				$forms  = RGFormsModel::get_forms( NULL, "title" );
-				$formID = $forms[0]->id;
+		if ( empty( $form_id ) ) {
+			// If there's no 'id' query string, grab the first form available
+			if ( self::is_gravity_page('gf_entries') ) {
+				$forms   = RGFormsModel::get_forms( NULL, "title" );
+				$form_id = $forms[0]->id;
 			}
 		}
 
-		if ( ! empty( $formID ) ) {
-			$_gform_directory_activeform = RGFormsModel::get_form_meta( $formID );
-		} else if ( isset( $_GET['id'] ) ) {
-			$_gform_directory_activeform = RGFormsModel::get_form_meta( $_GET['id'] );
-		}
+        $active_form = RGFormsModel::get_form_meta( $form_id );
 
-		$_gform_directory_approvedcolumn = self::get_approved_column( $_gform_directory_activeform );
-
-		return $_gform_directory_approvedcolumn;
+		return self::get_approved_column( $active_form );
 	}
 
 	static public function get_approved_column( $form ) {
-		if ( ! is_array( $form ) ) {
+
+	    if ( ! is_array( $form ) || ! is_array( $form['fields'] ) ) {
 			return false;
 		}
 
-		foreach ( @$form['fields'] as $key => $col ) {
-			if ( isset( $col['inputs'] ) && is_array( $col['inputs'] ) ) {
-				foreach ( $col['inputs'] as $key2 => $input ) {
-					if ( strtolower( $input['label'] ) == 'approved' && $col['type'] == 'checkbox' && ! empty( $col['adminOnly'] ) ) {
-						return $input['id'];
+		$approved_strings = array( __( 'Approved', 'gravity-forms-addons' ), __("Approved?", "gravity-forms-addons"), __("Approved? (Admin-only)", "gravity-forms-addons") );
+
+		/** @var GF_Field_Checkbox $field */
+		foreach ( $form['fields'] as $field ) {
+
+			if ( ! is_a( $field, 'GF_Field' ) ) {
+                continue;
+			}
+
+            if ( 'checkbox' === $field->type && $field->adminOnly ) {
+
+				if ( $field->gf_directory_approval || in_array( $field->label, $approved_strings ) || in_array( $field->adminLabel, $approved_strings ) ) {
+					foreach ( $field->inputs as $input ) {
+						if ( in_array( $input['label'], $approved_strings ) || in_array( $input['value'], $approved_strings ) ) {
+							return $input['id'];
+						}
 					}
 				}
-			}
-		}
 
-		foreach ( @$form['fields'] as $key => $col ) {
-			if ( isset( $col['label'] ) && strtolower( $col['label'] ) == 'approved' && $col['type'] == 'checkbox' ) {
-				if ( isset( $col['inputs'][0]['id'] ) ) {
-					return $key;
+				foreach ( $field->inputs as $input ) {
+					if ( in_array( $input['label'], $approved_strings ) || ( isset( $input['value'] ) && in_array( $input['value'], $approved_strings ) ) ) {
+						return $input['id'];
+					}
 				}
 			}
 		}
@@ -2101,10 +2108,9 @@ class GFDirectory {
 
 
 	static public function directory_update_approved_hook() {
-		global $_gform_directory_approvedcolumn;
 		check_ajax_referer( 'rg_update_approved', 'rg_update_approved' );
 		if ( ! empty( $_POST["lead_id"] ) ) {
-			$_gform_directory_approvedcolumn = empty( $_gform_directory_approvedcolumn ) ? self::globals_get_approved_column( $_POST['form_id'] ) : $_gform_directory_approvedcolumn;
+			$_gform_directory_approvedcolumn = self::globals_get_approved_column( $_POST['form_id'] );
 			self::directory_update_approved( (int) $_POST["lead_id"], $_POST["approved"], (int) $_POST['form_id'], $_gform_directory_approvedcolumn );
 		}
 	}
@@ -2115,7 +2121,7 @@ class GFDirectory {
 			$this_plugin = plugin_basename( __FILE__ );
 		}
 		if ( $file == $this_plugin ) {
-			$settings_link = '<a href="' . admin_url( 'admin.php?page=gf_settings&addon=Directory+%26+Addons' ) . '">' . __( 'Settings', 'gravity-forms-addons' ) . '</a>';
+			$settings_link = '<a href="' . admin_url( 'admin.php?page=gf_settings&addon=Directory+%26+Addons' ) . '">' . esc_html__( 'Settings', 'gravity-forms-addons' ) . '</a>';
 			array_unshift( $links, $settings_link ); // before other links
 		}
 
@@ -2218,8 +2224,8 @@ class GFDirectory {
 		$search_fields = array();
 
 		foreach ( $form['fields'] as $field ) {
-			if ( ! empty( $field['isSearchFilter'] ) ) {
-				$search_fields[] = $field['id'];
+			if ( ! empty( $field->isSearchFilter ) ) {
+				$search_fields[] = $field->id;
 			}
 		}
 
@@ -2246,317 +2252,142 @@ class GFDirectory {
 	 * @param string $status (default: 'active')
 	 * @param mixed $approvedcolumn (default: null)
 	 * @param bool $limituser (default: false)
-	 * @param array $search_criterias , since 3.5
+	 * @param array $search_criteria , since 3.5
 	 *
 	 * @return array Leads results
 	 */
-	public static function get_leads( $form_id, $sort_field_number = 0, $sort_direction = 'DESC', $search = '', $offset = 0, $page_size = 30, $star = NULL, $read = NULL, $is_numeric_sort = false, $start_date = NULL, $end_date = NULL, $status = 'active', $approvedcolumn = NULL, $limituser = false, $search_criterias ) {
+	public static function get_leads( $form_id, $sort_field_number = 0, $sort_direction = 'DESC', $search = '', $offset = 0, $page_size = 30, $star = NULL, $read = NULL, $is_numeric_sort = false, $start_date = NULL, $end_date = NULL, $status = 'active', $approvedcolumn = NULL, $limituser = false, $search_criteria = array(), &$total_count = null ) {
 
-		global $wpdb;
+		$search_criteria['status'] = $status;
 
-		if ( $sort_field_number == 0 ) {
+		if ( 0 === $sort_field_number ) {
 			$sort_field_number = "date_created";
 		}
 
-		//since 3.5
-		if ( empty( $search_criterias ) ) {
-			$search_criterias = array();
+		$sorting = array(
+            'direction' => $sort_direction,
+            'key' => $sort_field_number,
+            'is_numeric' => $is_numeric_sort,
+        );
+
+		$paging = array(
+            'page_size' => $page_size,
+            'offset' => $offset,
+        );
+
+		$search_criteria['field_filters'] = rgar( $search_criteria, 'field_filters', array() );
+
+		if ( '' !== $search && ! is_null( $search ) ) {
+			$search_criteria['field_filters'][] = array(
+				'key' => null,
+				'value' => $search,
+			);
 		}
 
-		// Retrieve the leads based on whether it's sorted or not.
-		if ( is_numeric( $sort_field_number ) ) {
-			$sql = self::sort_by_custom_field_query( $form_id, $sort_field_number, $sort_direction, $search, $search_criterias, $offset, $page_size, $star, $read, $is_numeric_sort, $status, $approvedcolumn, $limituser );
-		} else {
-			$sql = self::sort_by_default_field_query( $form_id, $sort_field_number, $sort_direction, $search, $search_criterias, $offset, $page_size, $star, $read, $is_numeric_sort, $start_date, $end_date, $status, $approvedcolumn, $limituser );
+		if ( ! is_null( $star ) ) {
+			$search_criteria['field_filters'][] = array(
+	            'key' => 'is_starred',
+                'value' => (int) $star,
+            );
 		}
 
-		//initializing rownum
-		$wpdb->query( "select @rownum:=0" );
+		if ( ! is_null( $read ) ) {
+			$search_criteria['field_filters'][] = array(
+				'key' => 'is_read',
+				'value' => (int) $read,
+			);
+		}
 
-		//getting results
+		if ( $start_date ) {
+			$search_criteria['start_date'] = $start_date;
+		}
 
-		$results = $wpdb->get_results( $sql );
+		if ( $end_date ) {
+			$search_criteria['end_date'] = $end_date;
+		}
 
+		if ( $limituser ) {
+			$current_user = wp_get_current_user();
 
-		$return = '';
-		if ( function_exists( 'gform_get_meta' ) ) {
-			$return = RGFormsModel::build_lead_array( $results ); // This is a private function until 1.6
+			$search_criteria['field_filters'][] = array(
+                'key' => 'created_by',
+                'operator' => 'is',
+                'value' => $current_user->ID,
+            );
+		}
+
+		if ( $approvedcolumn ) {
+			$search_criteria['field_filters']['mode'] = 'all';
+		}
+
+		$return = GFAPI::get_entries( $form_id, $search_criteria, $sorting, $paging, $total_count );
+
+		// Gravity Forms 2.3 supports smart approval out of the box. Before then, nope!
+		if ( ! self::use_gf_23_db() ) {
+
+			$entry_ids = array();
+			foreach ( $return as $l ) {
+				$entry_ids[] = $l['id'];
+			}
+
+			$meta_values = gform_get_meta_values_for_entries( $entry_ids, array( 'is_approved' ) );
+
+			foreach ( $return as $key => $lead ) {
+
+				/**
+				 * @var object $meta_value {
+				 * @type string $lead_id Entry ID
+				 * @type string $is_approved 'Approved' if approved; '0' if not
+				 * }
+				 */
+				foreach ( $meta_values as $meta_value ) {
+					if ( (string) $lead['id'] === rgobj( $meta_value, 'lead_id' ) && '0' === rgobj( $meta_value, 'is_approved' ) ) {
+						unset( $return[ $key ] );
+						$total_count--;
+					}
+				}
+			}
 		}
 
 		// Used by at least the show_only_user_entries() method
-		$return = apply_filters( 'kws_gf_directory_lead_filter', $return, compact( "approved", "sort_field_number", "sort_direction", "search_query", "search_criterias", "first_item_index", "page_size", "star", "read", "is_numeric", "start_date", "end_date", "status", "approvedcolumn", "limituser" ) );
+		$return = apply_filters( 'kws_gf_directory_lead_filter', $return, compact( "approved", "sort_field_number", "sort_direction", "search_query", "search_criteria", "first_item_index", "page_size", "star", "read", "is_numeric", "start_date", "end_date", "status", "approvedcolumn", "limituser" ) );
 
 		return $return;
 	}
 
-	static function is_current_user( $lead = array() ) {
-		global $current_user;
-		get_currentuserinfo();
+	/**
+     * Is the entry `created_by` equal to the current WP User ID?
+     *
+	 * @param array $lead Entry array
+	 *
+	 * @return bool true: same user; false: nope!
+	 */
+	public static function is_current_user( $lead = array() ) {
+		$current_user = wp_get_current_user();
+
+		if ( empty( $lead["created_by"] ) ) {
+            return false;
+		}
 
 		return ( (int) $current_user->ID === (int) $lead["created_by"] );
 	}
 
+	/**
+     * @deprecated 4.0
+	 */
 	static function show_only_user_entries( $leads = array(), $settings = array() ) {
-		if ( empty( $settings['limituser'] ) ) {
-			return $leads;
-		}
-
-		return array_filter( $leads, array( 'GFDirectory', 'is_current_user' ) );
+		_deprecated_function( __METHOD__, '4.0' );
+		return $leads;
 	}
-
 
 	/**
-	 * sort_by_custom_field_query function.
-	 *
-	 * A copy of the Gravity Forms method, but adding $approvedcolumns and $limituser args
-	 *
-	 * @access private
-	 * @static
-	 *
-	 * @param mixed $form_id
-	 * @param int $sort_field_number (default: 0)
-	 * @param string $sort_direction (default: 'DESC')
-	 * @param string $search (default: '')
-	 * @param array $search_criterias , since 3.5
-	 * @param int $offset (default: 0)
-	 * @param int $page_size (default: 30)
-	 * @param mixed $star (default: null)
-	 * @param mixed $read (default: null)
-	 * @param bool $is_numeric_sort (default: false)
-	 * @param string $status (default: 'active')
-	 * @param mixed $approvedcolumn (default: null)
-	 * @param bool $limituser (default: false)
-	 *
-	 * @return void
-	 */
-	private static function sort_by_custom_field_query( $form_id, $sort_field_number = 0, $sort_direction = 'DESC', $search = '', $search_criterias, $offset = 0, $page_size = 30, $star = NULL, $read = NULL, $is_numeric_sort = false, $status = 'active', $approvedcolumn = NULL, $limituser = false ) {
-		global $wpdb, $current_user;
-		if ( ! is_numeric( $form_id ) || ! is_numeric( $sort_field_number ) || ! is_numeric( $offset ) || ! is_numeric( $page_size ) ) {
-			return "";
-		}
-
-		$lead_detail_table_name = RGFormsModel::get_lead_details_table_name();
-		$lead_table_name        = RGFormsModel::get_lead_table_name();
-
-		$orderby = $is_numeric_sort ? "ORDER BY query, (value+0) $sort_direction" : "ORDER BY query, value $sort_direction";
-
-		//$search = empty($search) ? "" : "WHERE d.value LIKE '%$search%' ";
-		$search_term   = "%$search%";
-		$search_filter = empty( $search ) ? "" : $wpdb->prepare( "WHERE d.value LIKE %s", $search_term );
-
-		//starred clause
-		$where = empty( $search ) ? "WHERE" : "AND";
-		$search_filter .= $star !== NULL && $status == 'active' ? $wpdb->prepare( "$where is_starred=%d AND status='active' ", $star ) : "";
-
-		//read clause
-		$where = empty( $search ) ? "WHERE" : "AND";
-		$search_filter .= $read !== NULL && $status == 'active' ? $wpdb->prepare( "$where is_read=%d AND status='active' ", $read ) : "";
-
-		//status clause
-		if ( function_exists( 'gform_get_meta' ) ) {
-			$where = empty( $search ) ? "WHERE" : "AND";
-			$search_filter .= $wpdb->prepare( "$where status=%s ", $status );
-		}
-
-		// new search criterias since 3.5
-		$in_search_criteria = '';
-		if ( ! empty( $search_criterias ) ) {
-			foreach ( $search_criterias as $field_id => $value ) {
-				$value = "%$value%";
-				$in_search_criteria .= $wpdb->prepare( " l.id IN (SELECT lead_id from $lead_detail_table_name WHERE field_number = %s AND value LIKE %s) AND ", $field_id, $value );
-			}
-		}
-		$where              = empty( $search_filter ) ? "WHERE " : "AND ";
-		$in_search_criteria = ( ! empty( $in_search_criteria ) ) ? $where . substr( $in_search_criteria, 0, - 4 ) : ''; // to add where/and and remove the last AND
-
-
-		if ( $limituser ) {
-			get_currentuserinfo();
-			if ( (int) $current_user->ID !== 0 || ( $current_user->ID === 0 && apply_filters( 'kws_gf_show_entries_if_not_logged_in', apply_filters( 'kws_gf_treat_not_logged_in_as_user', true ) ) ) ) {
-				$where = empty( $search_filter ) ? "WHERE" : "AND";
-				if ( (int) $current_user->ID === 0 ) {
-					$search_filter .= $wpdb->prepare( "$where (created_by IS NULL OR created_by=%d)", $current_user->ID );
-				} else {
-					$search_filter .= $wpdb->prepare( "$where l.created_by=%d ", $current_user->ID );
-				}
-			} else {
-				return false;
-			}
-		}
-
-		$field_number_min = $sort_field_number - 0.001;
-		$field_number_max = $sort_field_number + 0.001;
-
-		$in_filter = "";
-		if ( ! empty( $approvedcolumn ) ) {
-			$in_filter = $wpdb->prepare( "WHERE l.id IN (SELECT lead_id from $lead_detail_table_name WHERE field_number BETWEEN %f AND %f)", $approvedcolumn - 0.001, $approvedcolumn + 0.001 );
-			// This will work once all the fields are converted to the meta_key after 1.6
-			#$search_filter .= $wpdb->prepare(" AND m.meta_key = 'is_approved' AND m.meta_value = %s", 1);
-		}
-
-		$limit_filter = ''; //paging is done later since 3.5 to allow multisort
-		if ( ! apply_filters( 'kws_gf_directory_want_multisort', false ) ) {
-			if ( $page_size > 0 ) {
-				$limit_filter = "LIMIT $offset,$page_size";
-			}
-		}
-
-		$sql = "
-			SELECT filtered.sort, l.*, d.field_number, d.value
-			FROM $lead_table_name l
-			INNER JOIN $lead_detail_table_name d ON d.lead_id = l.id
-			INNER JOIN (
-				SELECT distinct sorted.sort, l.id
-				FROM $lead_table_name l
-				INNER JOIN $lead_detail_table_name d ON d.lead_id = l.id
-				INNER JOIN (
-					SELECT @rownum:=@rownum+1 as sort, id FROM (
-						SELECT 0 as query, lead_id as id, value
-						FROM $lead_detail_table_name
-						WHERE form_id=$form_id
-						AND field_number between $field_number_min AND $field_number_max
-
-						UNION ALL
-
-						SELECT 1 as query, l.id, d.value
-						FROM $lead_table_name l
-						LEFT OUTER JOIN $lead_detail_table_name d ON d.lead_id = l.id AND field_number between $field_number_min AND $field_number_max
-						WHERE l.form_id=$form_id
-						AND d.lead_id IS NULL
-
-					) sorted1
-				   $orderby
-				) sorted ON d.lead_id = sorted.id
-				$search_filter
-				$in_search_criteria
-				$limit_filter
-			) filtered ON filtered.id = l.id
-			$in_filter
-			ORDER BY filtered.sort";
-
-		return $sql;
-	}
-
-
-	/**
-	 * sort_by_default_field_query function.
-	 *
-	 * A copy of the Gravity Forms method, but adding $approvedcolumns and $limituser args
-	 *
-	 * @access private
-	 * @static
-	 *
-	 * @param mixed $form_id
-	 * @param mixed $sort_field
-	 * @param string $sort_direction (default: 'DESC')
-	 * @param string $search (default: '')
-	 * @param array $search_criterias - since 3.5
-	 * @param int $offset (default: 0)
-	 * @param int $page_size (default: 30)
-	 * @param mixed $star (default: null)
-	 * @param mixed $read (default: null)
-	 * @param bool $is_numeric_sort (default: false)
-	 * @param mixed $start_date (default: null)
-	 * @param mixed $end_date (default: null)
-	 * @param string $status (default: 'active')
-	 * @param mixed $approvedcolumn (default: null)
-	 * @param bool $limituser (default: false)
-	 *
-	 * @return void
-	 */
-	private static function sort_by_default_field_query( $form_id, $sort_field, $sort_direction = 'DESC', $search = '', $search_criterias, $offset = 0, $page_size = 30, $star = NULL, $read = NULL, $is_numeric_sort = false, $start_date = NULL, $end_date = NULL, $status = 'active', $approvedcolumn = NULL, $limituser = false ) {
-		global $wpdb, $current_user;
-
-		if ( ! is_numeric( $form_id ) || ! is_numeric( $offset ) || ! is_numeric( $page_size ) ) {
-			return "";
-		}
-
-		$lead_detail_table_name = RGFormsModel::get_lead_details_table_name();
-		$lead_table_name        = RGFormsModel::get_lead_table_name();
-
-		$search_term   = "%$search%";
-		$search_filter = empty( $search ) ? "" : $wpdb->prepare( " AND value LIKE %s", $search_term );
-
-		// new search criterias since 3.5
-		$in_search_criteria = '';
-		if ( ! empty( $search_criterias ) ) {
-			foreach ( $search_criterias as $field_id => $value ) {
-				$value = "%$value%";
-				$in_search_criteria .= $wpdb->prepare( " AND l.id IN (SELECT lead_id from $lead_detail_table_name WHERE field_number = %s AND value LIKE %s)", $field_id, $value );
-			}
-		}
-
-		$star_filter = $star !== NULL && $status == 'active' ? $wpdb->prepare( " AND is_starred=%d AND status='active' ", $star ) : "";
-		$read_filter = $read !== NULL && $status == 'active' ? $wpdb->prepare( " AND is_read=%d AND status='active' ", $read ) : "";
-		if ( function_exists( 'gform_get_meta' ) ) {
-			$status_filter = $wpdb->prepare( " AND status=%s ", $status );
-		} else {
-			$status_filter = '';
-		}
-
-		$start_date_filter = empty( $start_date ) ? "" : " AND datediff(date_created, '$start_date') >=0";
-		$end_date_filter   = empty( $end_date ) ? "" : " AND datediff(date_created, '$end_date') <=0";
-
-		$in_filter = "";
-		if ( ! empty( $approvedcolumn ) ) {
-			$in_filter = $wpdb->prepare( "l.id IN (SELECT lead_id from $lead_detail_table_name WHERE field_number BETWEEN %f AND %f) AND", $approvedcolumn - 0.001, $approvedcolumn + 0.001 );
-			// This will work once all the fields are converted to the meta_key after 1.6
-			#$search_filter .= $wpdb->prepare(" AND m.meta_key = 'is_approved' AND m.meta_value = %s", 1);
-		}
-
-		$user_filter = '';
-		if ( $limituser ) {
-			get_currentuserinfo();
-			if ( (int) $current_user->ID !== 0 || ( $current_user->ID === 0 && apply_filters( 'kws_gf_show_entries_if_not_logged_in', apply_filters( 'kws_gf_treat_not_logged_in_as_user', true ) ) ) ) {
-				if ( (int) $current_user->ID === 0 ) {
-					$user_filter = $wpdb->prepare( " AND (created_by IS NULL OR created_by=%d)", $current_user->ID );
-				} else {
-					$user_filter = $wpdb->prepare( " AND created_by=%d ", $current_user->ID );
-				}
-			} else {
-				return false;
-			}
-		}
-
-		$limit_filter = ''; //paging is done later since 3.5 to allow multisort
-		if ( ! apply_filters( 'kws_gf_directory_want_multisort', false ) ) {
-			if ( $page_size > 0 ) {
-				$limit_filter = "LIMIT $offset,$page_size";
-			}
-		}
-
-		$sql = "
-			SELECT filtered.sort, l.*, d.field_number, d.value
-			FROM $lead_table_name l
-			INNER JOIN $lead_detail_table_name d ON d.lead_id = l.id
-			INNER JOIN
-			(
-				SELECT @rownum:=@rownum + 1 as sort, id
-				FROM
-				(
-					SELECT distinct l.id
-					FROM $lead_table_name l
-					INNER JOIN $lead_detail_table_name d ON d.lead_id = l.id
-					WHERE $in_filter
-					l.form_id=$form_id
-					$search_filter
-					$in_search_criteria
-					$star_filter
-					$read_filter
-					$user_filter
-					$status_filter
-					$start_date_filter
-					$end_date_filter
-					ORDER BY $sort_field $sort_direction
-					$limit_filter
-				) page
-			) filtered ON filtered.id = l.id
-			ORDER BY filtered.sort";
-
-		return $sql;
-	}
-
-	static function directory_anchor_text( $value = NULL ) {
+     * Modify how the anchor text is displayed based on filters
+     *
+     * @param string $value Original anchor text (eg: "https://www.example.com?query=string")
+     *
+     * @return string Modified anchor text (eg: "example.com")
+     */
+	static function directory_anchor_text( $value = '' ) {
 
 		if ( apply_filters( 'kws_gf_directory_anchor_text_striphttp', true ) ) {
 			$value = str_replace( 'http://', '', $value );
@@ -2630,7 +2461,7 @@ class GFDirectory {
 			if ( $linknewwindow ) {
 				$target = ' target="_blank"';
 			}
-			$address .= "<br/>" . apply_filters( 'kws_gf_directory_map_link', "<a href='http://maps.google.com/maps?q=$address_qs'" . $target . " class='map-it-link'>" . __( 'Map It' ) . "</a>" );
+			$address .= "<br/>" . apply_filters( 'kws_gf_directory_map_link', "<a href='https://maps.google.com/maps?q=$address_qs'" . $target . " class='map-it-link'>" . esc_html__( 'Map It' ) . "</a>" );
 		}
 
 		return $address;
@@ -2681,7 +2512,6 @@ class GFDirectory {
 			}
 			$content = preg_replace( "/<\/tr[^>]*>/", "\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t\t\t\t</li>", $content );
 		}
-		#	$content = preg_replace("/\<\/p\>\s+\<\/li/ism","\<\/p\>\<\/li", $content);
 		$content = preg_replace( "/(?:\s+)?(valign\=\"(?:.*?)\"|width\=\"(?:.*?)\"|cellspacing\=\"(?:.*?)\")(?:\s+)?/ism", ' ', $content );
 		$content = preg_replace( "/<\/?tbody[^>]*>/", "", $content );
 		$content = preg_replace( "/<thead[^>]*>.*<\/thead>|<tfoot[^>]*>.*<\/tfoot>/is", "", $content );
@@ -2746,7 +2576,7 @@ class GFDirectory {
 					$url = $url['path'];
 				}
 				$href = trailingslashit( $url ) . sanitize_title( apply_filters( 'kws_gf_directory_endpoint', 'entry' ) ) . '/' . $form_id . apply_filters( 'kws_gf_directory_endpoint_separator', '/' ) . $lead_id . '/';
-				#if(!empty($url['query'])) { $href .= '?'.$url['query']; }
+
 				$href = add_query_arg( array(
 					'gf_search'  => ! empty( $_REQUEST['gf_search'] ) ? $_REQUEST['gf_search'] : NULL,
 					'sort'       => isset( $_REQUEST['sort'] ) ? $_REQUEST['sort'] : NULL,
@@ -2787,81 +2617,22 @@ class GFDirectory {
 		if ( ! is_numeric( $form_id ) ) {
 			return "";
 		}
-
-		$detail_table_name = RGFormsModel::get_lead_details_table_name();
-		$lead_table_name   = RGFormsModel::get_lead_table_name();
-
-		$star_filter = $star !== NULL ? $wpdb->prepare( "AND is_starred=%d ", $star ) : "";
-		$read_filter = $read !== NULL ? $wpdb->prepare( "AND is_read=%d ", $read ) : "";
-		if ( function_exists( 'gform_get_meta' ) ) {
-			$status_filter = $wpdb->prepare( " AND status=%s ", 'active' );
-		} else {
-			$status_filter = '';
-		}
-		$start_date_filter = empty( $start_date ) ? "" : " AND datediff(date_created, '$start_date') >=0";
-		$end_date_filter   = empty( $end_date ) ? "" : " AND datediff(date_created, '$end_date') <=0";
-
-		$search_term   = "%$search%";
-		$search_filter = empty( $search ) ? "" : $wpdb->prepare( "AND ld.value LIKE %s", $search_term );
-
-		// new search criterias since 3.5
-		$in_search_criteria = '';
-		if ( ! empty( $search_criterias ) ) {
-			foreach ( $search_criterias as $field_id => $value ) {
-				$value = "%$value%";
-				$in_search_criteria .= $wpdb->prepare( " AND l.id IN (SELECT lead_id from $detail_table_name WHERE field_number = %s AND value LIKE %s)", $field_id, $value );
-			}
-		}
-
-
-		$user_filter = '';
-		if ( $limituser ) {
-			get_currentuserinfo();
-			if ( (int) $current_user->ID !== 0 || ( $current_user->ID === 0 && apply_filters( 'kws_gf_show_entries_if_not_logged_in', apply_filters( 'kws_gf_treat_not_logged_in_as_user', true ) ) ) ) {
-				if ( ! empty( $current_user->ID ) ) {
-					$user_filter = $wpdb->prepare( " AND l.created_by=%d ", $current_user->ID );
-				} else {
-					$user_filter = $wpdb->prepare( " AND (created_by IS NULL OR created_by=%d)", $current_user->ID );
-				}
-			} else {
-				return false;
-			}
-
-		}
-
-		$in_filter = "";
-		if ( $approved ) {
-			$in_filter = $wpdb->prepare( "l.id IN (SELECT lead_id from $detail_table_name WHERE field_number BETWEEN %f AND %f) AND", $column - 0.001, $column + 0.001 );
-			// This will work once all the fields are converted to the meta_key after 1.6
-			#$search_filter .= $wpdb->prepare(" AND m.meta_key = 'is_approved' AND m.meta_value = %s", 1);
-		}
-
-		$sql = "SELECT count(distinct l.id) FROM $lead_table_name as l,
-				$detail_table_name as ld";
-#		$sql .= function_exists('gform_get_meta') ? " INNER JOIN wp_rg_lead_meta m ON l.id = m.lead_id " : ""; // After 1.6
-		$sql .= "
-				WHERE $in_filter
-				l.form_id=$form_id
-				AND ld.form_id=$form_id
-				AND l.id = ld.lead_id
-				$star_filter
-				$read_filter
-				$status_filter
-				$user_filter
-				$start_date_filter
-				$end_date_filter
-				$search_filter
-				$in_search_criteria";
-
-		return $wpdb->get_var( $sql );
 	}
 
 	static function check_meta_approval( $lead_id ) {
 		return gform_get_meta( $lead_id, 'is_approved' );
 	}
 
-	static function check_approval( $lead, $column ) {
-		return self::check_meta_approval( $lead['id'] );
+	static function check_approval( $lead, $column, $smartapproval = false ) {
+
+	    $approved = self::check_meta_approval( $lead['id'] ) || ! empty( $lead[ $column ] );
+
+	    // Approval isn't set yet
+	    if( ! $approved && ! empty( $smartapproval ) ) {
+		    $approved = false === gform_get_meta( $lead['id'], 'is_approved' );
+        }
+
+		return $approved;
 	}
 
 	static function hide_in_directory( $form, $field_id ) {
@@ -2874,8 +2645,7 @@ class GFDirectory {
 
 	static function check_hide_in( $type, $form, $field_id ) {
 		foreach ( $form['fields'] as $field ) {
-#			echo $field['label'] . ' / ' . floor($field['id']).' / '.floor($field_id).' / <strong>'.$field["{$type}"].'</strong><br />';
-			if ( floor( $field_id ) === floor( $field['id'] ) && ! empty( $field["{$type}"] ) ) {
+			if ( floor( $field_id ) === floor( $field->id ) && ! empty( $field->{$type} ) ) {
 				return true;
 			}
 		}
@@ -2894,7 +2664,7 @@ class GFDirectory {
 		}
 		foreach ( $form['fields'] as $field ) {
 
-			if ( floor( $field_id ) === floor( $field['id'] ) && ! empty( $field[ $property ] ) ) {
+			if ( floor( $field_id ) === floor( $field->id ) && ! empty( $field[ $property ] ) ) {
 				return $field[ $property ];
 			}
 		}
@@ -2918,7 +2688,7 @@ class GFDirectory {
 		}
 
 		foreach ( $form['fields'] as $field ) {
-			if ( floor( $field_id ) === floor( $field['id'] ) ) {
+			if ( floor( $field_id ) === floor( $field->id ) ) {
 				return $field;
 			}
 		}
@@ -2963,7 +2733,7 @@ class GFDirectory {
 	 * @param bool $show_admin_only (default: false)
 	 * @param mixed $form
 	 *
-	 * @return void
+	 * @return array
 	 */
 	static function remove_hidden_fields( $leads, $admin_only, $approved, $is_leads, $is_single = false, $show_admin_only = false, $form ) {
 
@@ -2978,6 +2748,12 @@ class GFDirectory {
 		if ( $is_leads ) {
 
 			foreach ( $leads as $index => $lead ) {
+
+				if ( ! $lead ) {
+					unset( $leads[ $index ] );
+					continue;
+				}
+
 				// the field_ids are the numeric array keys of a lead
 				$field_ids = array_filter( array_keys( $lead ), 'is_int' );
 
@@ -3047,32 +2823,34 @@ class GFDirectory {
 	public static function save_lead( $form, &$lead ) {
 		global $wpdb;
 
-		if ( IS_ADMIN && ! GFCommon::current_user_can_any( "gravityforms_edit_entries" ) ) {
+		if ( is_admin() && ! GFCommon::current_user_can_any( "gravityforms_edit_entries" ) ) {
 			die( __( "You don't have adequate permission to edit entries.", "gravityforms" ) );
 		}
 
-		$lead_detail_table = RGFormsModel::get_lead_details_table_name();
-
-		//Inserting lead if null
-		if ( $lead == NULL ) {
-			global $current_user;
-			$user_id = $current_user && $current_user->ID ? $current_user->ID : 'NULL';
-
-			$lead_table = RGFormsModel::get_lead_table_name();
-			$user_agent = RGFormsModel::truncate( $_SERVER["HTTP_USER_AGENT"], 250 );
-			$currency   = GFCommon::get_currency();
-			$source_url = RGFormsModel::truncate( RGFormsModel::get_current_page_url(), 200 );
-
-			$wpdb->query( $wpdb->prepare( "INSERT INTO $lead_table(form_id, ip, source_url, date_created, user_agent, currency, created_by) VALUES(%d, %s, %s, utc_timestamp(), %s, %s, {$user_id})", $form["id"], RGFormsModel::get_ip(), $source_url, $user_agent, $currency ) );
-
+		// Create a new entry with just an ID, if null
+		if ( null === $lead ) {
+			$temp_entry = array(
+                'form_id' => $form['id'],
+                'user_agent' => RGFormsModel::truncate( $_SERVER["HTTP_USER_AGENT"], 250 ),
+            );
 
 			//reading newly created lead id
-			$lead_id = $wpdb->insert_id;
-			$lead    = array( "id" => $lead_id );
+			$entry_id = GFAPI::add_entry( $temp_entry );
 
+			unset( $temp_entry );
+
+			$lead = GFAPI::get_entry( $entry_id );
 		}
 
-		$current_fields   = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead["id"] ) );
+
+		if ( self::use_gf_23_db() ) {
+			$entry_meta_table = RGFormsModel::get_entry_meta_table_name();
+			$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, meta_key FROM $entry_meta_table WHERE entry_id=%d", $lead['id'] ) );
+        } else {
+			$lead_detail_table = RGFormsModel::get_lead_details_table_name();
+			$current_fields    = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead["id"] ) );
+		}
+
 		$original_post_id = rgget( "post_id", $lead );
 
 		$total_fields       = array();
@@ -3082,71 +2860,94 @@ class GFDirectory {
 		foreach ( $form["fields"] as $field ) {
 
 			//Ignore fields that are marked as display only
-			if ( rgget( "displayOnly", $field ) && $field["type"] != "password" ) {
+			if ( rgget( "displayOnly", $field ) && $field->type !== "password" ) {
 				continue;
 			}
 
 			//ignore pricing fields in the entry detail
-			if ( RG_CURRENT_VIEW == "entry" && GFCommon::is_pricing_field( $field["type"] ) ) {
+			if ( GFForms::get( 'view' ) === "entry" && GFCommon::is_pricing_field( $field->type ) ) {
 				continue;
 			}
 
 
 			//process total field after all fields have been saved
-			if ( $field["type"] == "total" ) {
+			if ( $field->type == "total" ) {
 				$total_fields[] = $field;
 				continue;
 			}
 
 			//only save fields that are not hidden (except on entry screen)
-			if ( RG_CURRENT_VIEW == "entry" || ! RGFormsModel::is_field_hidden( $form, $field, array(), $lead ) ) {
-				// process calculation fields after all fields have been saved (moved after the is hidden check)
-				if ( GFCommon::has_field_calculation( $field ) ) {
+			if ( GFForms::get( 'view' ) === "entry" || ! GFFormsModel::is_field_hidden( $form, $field, array(), $lead ) ) {
+
+			    // process calculation fields after all fields have been saved (moved after the is hidden check)
+				if ( $field->has_calculation() ) {
 					$calculation_fields[] = $field;
 					continue;
 				}
 
-				if ( $field['type'] == 'post_category' ) {
+				if ( $field->type == 'post_category' ) {
 					$field = GFCommon::add_categories_as_choices( $field, '' );
 				}
 
-				if ( isset( $field["inputs"] ) && is_array( $field["inputs"] ) ) {
-
-					foreach ( $field["inputs"] as $input ) {
-						RGFormsModel::save_input( $form, $field, $lead, $current_fields, $input["id"] );
+				if ( isset( $field->inputs ) && is_array( $field->inputs ) ) {
+					foreach ( $field->inputs as $input ) {
+						GFFormsModel::save_input( $form, $field, $lead, $current_fields, $input["id"] );
 					}
 				} else {
-					RGFormsModel::save_input( $form, $field, $lead, $current_fields, $field["id"] );
+					GFFormsModel::save_input( $form, $field, $lead, $current_fields, $field->id );
 				}
 			}
 
+			if( method_exists( 'GFFormsModel', 'commit_batch_field_operations' ) ) {
+				GFFormsModel::commit_batch_field_operations();
+            }
+
 			//Refresh lead to support conditionals (not optimal but...)
-			$lead = RGFormsModel::get_lead( $lead['id'] );
+			$lead = GFFormsModel::get_lead( $lead['id'] );
 		}
 
 		if ( ! empty( $calculation_fields ) ) {
+
+			if( method_exists( 'GFFormsModel', 'begin_batch_field_operations' ) ) {
+				GFFormsModel::begin_batch_field_operations();
+			}
+
 			foreach ( $calculation_fields as $calculation_field ) {
 
-				if ( isset( $calculation_field["inputs"] ) && is_array( $calculation_field["inputs"] ) ) {
-					foreach ( $calculation_field["inputs"] as $input ) {
+				if ( isset( $calculation_field->inputs ) && is_array( $calculation_field->inputs ) ) {
+					foreach ( $calculation_field->inputs as $input ) {
 						RGFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $input["id"] );
 						RGFormsModel::refresh_lead_field_value( $lead["id"], $input["id"] );
 					}
 				} else {
-					RGFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $calculation_field["id"] );
-					RGFormsModel::refresh_lead_field_value( $lead["id"], $calculation_field["id"] );
+					RGFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $calculation_field->id );
+					RGFormsModel::refresh_lead_field_value( $lead["id"], $calculation_field->id );
 				}
-
 			}
+
+			if( method_exists( 'GFFormsModel', 'commit_batch_field_operations' ) ) {
+				GFFormsModel::commit_batch_field_operations();
+			}
+
 			RGFormsModel::refresh_product_cache( $form, $lead = RGFormsModel::get_lead( $lead['id'] ) );
 		}
 
 		//saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
+
+			if( method_exists( 'GFFormsModel', 'begin_batch_field_operations' ) ) {
+				GFFormsModel::begin_batch_field_operations();
+			}
+
 			foreach ( $total_fields as $total_field ) {
 				GFCommon::log_debug( "Saving total field." );
-				RGFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field["id"] );
+
+				RGFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
 			}
+
+			if( method_exists( 'GFFormsModel', 'commit_batch_field_operations' ) ) {
+                GFFormsModel::commit_batch_field_operations();
+            }
 		}
 	}
 
@@ -3205,18 +3006,12 @@ function kws_gf_load_functions() {
 		function get_gf_field_label( $form_id, $field_id ) {
 			$form = RGFormsModel::get_form_meta( $form_id );
 			foreach ( $form["fields"] as $field ) {
-				if ( $field['id'] == $field_id ) {
-					# $output = RGForms::escape_text($field['label']); // No longer used
-					$output = esc_html( $field['label'] ); // Using esc_html(), a WP function
-				} elseif ( is_array( $field['inputs'] ) ) {
-					foreach ( $field["inputs"] as $input ) {
+				if ( $field->id == $field_id ) {
+					$output = esc_html( $field->label ); // Using esc_html(), a WP function
+				} elseif ( is_array( $field->inputs ) ) {
+					foreach ( $field->inputs as $input ) {
 						if ( $input['id'] == $field_id ) {
-							if ( class_exists( 'GFCommon' ) ) {
-								$output = esc_html( GFCommon::get_label( $field, $field_id ) );
-							} else {
-								#$output = RGForms::escape_text(RGForms::get_label($field,$field_id));  // No longer used
-								$output = esc_html( RGForms::get_label( $field, $field_id ) );  // No longer used
-							}
+							$output = esc_html( GFCommon::get_label( $field, $field_id ) );
 						}
 					}
 				}

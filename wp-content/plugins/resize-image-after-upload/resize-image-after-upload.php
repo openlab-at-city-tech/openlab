@@ -4,7 +4,7 @@ Plugin Name: Resize Image After Upload
 Plugin URI: https://wordpress.org/plugins/resize-image-after-upload/
 Description: Automatically resize uploaded images to within specified maximum width and height. Also has option to force recompression of JPEGs. Configuration options found under <a href="options-general.php?page=resize-after-upload">Settings > Resize Image Upload</a>
 Author: ShortPixel
-Version: 1.8.3
+Version: 1.8.4
 Author URI: https://shortpixel.com
 
 Copyright (C) 2017 ShortPixel
@@ -24,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-$PLUGIN_VERSION = '1.8.3';
+$PLUGIN_VERSION = '1.8.4';
 $DEBUG_LOGGER = false;
 
 
@@ -52,8 +52,8 @@ add_action('wp_handle_upload', 'jr_uploadresize_resize');
 
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'jr_generate_plugin_links');//for plugin settings page
 
-add_action('admin_notices', 'jr_display_notices');
-add_action('wp_ajax_jr_dismiss_notices', 'jr_dismiss_notices');
+//add_action('admin_notices', 'jr_display_notices');
+//add_action('wp_ajax_jr_dismiss_notices', 'jr_dismiss_notices');
 
 /**
  * Add ths link to Settings in Plugins Page
@@ -606,3 +606,22 @@ function jr_error_log($message) {
     error_log(print_r($message, true));
   }
 }
+
+
+// Add Smart Notification
+require_once 'class-riau-smart-notification.php';
+RIAU_Smart_Notification::get_instance( array(
+  'plugins' => array(
+    'shortpixel-image-optimiser' => array(
+      'name' => __( 'ShortPixel Image Optimizer', 'resize-image-after-upload' ),
+      'description' => __( 'A freemium easy to use, comprehensive, stable and frequently updated image compression plugin supported by the friendly team that created it.', 'resize-image-after-upload' ),
+      'image' => plugins_url('/img/shortpixel.png',__FILE__),
+    ),
+    'modula-best-grid-gallery' => array(
+      'name' => __( 'Modula WordPress Photo Gallery', 'resize-image-after-upload' ),
+      'description' => __( 'Modula is currently the easiest and fastest photo gallery plugin for WordPress. With its wizard you are able to build an image gallery in a few seconds, unlike many other WordPress gallery plugins.', 'resize-image-after-upload' ),
+      'image' => plugins_url('/img/wp-modula.jpg',__FILE__),
+    ),
+  ),
+  
+) );

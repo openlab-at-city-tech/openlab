@@ -8,8 +8,12 @@ Template:       hemingway
 Version:        0.1.0
 */
 
-a, body a {
+a, body.ol-webwork a {
 	color: #0044af;
+}
+
+a:hover, body.ol-webwork a:hover {
+	color: #000;
 }
 
 .blog-menu a {
