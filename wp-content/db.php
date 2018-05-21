@@ -41,9 +41,10 @@ class SharDB extends wpdb {
 	var $last_used_server;
 	var $used_servers = array();
 	var $written_servers = array();
+	var $last_found_rows_result = null;
 
 	function __construct($dbuser, $dbpassword, $dbname, $dbhost) {
-		register_shutdown_function( array( &$this, '__destruct' ) );
+		register_shutdown_function( array( $this, '__destruct' ) );
 
 		if ( defined( 'WP_DEBUG' ) )
 			$this->show_errors = (bool) WP_DEBUG;
@@ -82,28 +83,28 @@ class SharDB extends wpdb {
 		$this->dbname = $dbname;
 		$this->dbhost = $dbhost;
 
+		/* Use ext/mysqli if it exists and:
+		 *  - WP_USE_EXT_MYSQL is defined as false, or
+		 *  - We are a development version of WordPress, or
+		 *  - We are running PHP 5.5 or greater, or
+		 *  - ext/mysql is not loaded.
+		 */
+		if ( function_exists( 'mysqli_connect' ) ) {
+			if ( defined( 'WP_USE_EXT_MYSQL' ) ) {
+				$this->use_mysqli = ! WP_USE_EXT_MYSQL;
+			} elseif ( version_compare( phpversion(), '5.5', '>=' ) ) {
+				$this->use_mysqli = true;
+			} elseif ( false !== strpos( $GLOBALS['wp_version'], '-' ) ) {
+				$this->use_mysqli = true;
+			}
+		}
+
 		if ( null === $this->open_connections )
 			$this->open_connections = array();
 
 	}
-        
-         /**
-         * Real escape, using mysql_real_escape_string()
-         *
-         * @see mysql_real_escape_string()
-         * @since 2.8.0
-         * @access private
-         *
-         * @param string $string to escape
-         * @return string escaped
-         */
-        function _real_escape($string) {
-            if ($this->dbh)
-                return mysql_real_escape_string($string, $this->dbh);
-            return addslashes($string);
-        }
 
-        /**
+	/**
 	 * Find the first table name referenced in a query
 	 * @param string query
 	 * @return string table
@@ -191,7 +192,7 @@ class SharDB extends wpdb {
 			return false;
 
 		$dataset = $shardb_dataset;
-		$hash = strtoupper( substr( md5( $matches[ 1 ] ), 0, $shardb_hash_length ) );
+		$hash = substr( md5( $matches[ 1 ] ), 0, $shardb_hash_length );
 		$partition = hexdec( $hash );
 		$table_blog_id = $matches[ 1 ];
 // VIP Blog Check.
@@ -216,15 +217,28 @@ class SharDB extends wpdb {
 	 * @return resource mysql database connection
 	 */
 	function &db_connect( $query = '' ) {
+
 		global $vip_db, $shardb_local_db, $enable_home_db;
-		$connect_function = $this->persistent ? 'mysql_pconnect' : 'mysql_connect';
+
+		$host = isset( $this->db_server['host'] ) ? $this->db_server['host'] : $this->dbhost;
+		if ( $this->persistent ) {
+
+			$connect_function = $this->use_mysqli ? 'mysqli_connect' : 'mysql_pconnect';
+			$host = 'p:' . $host;
+
+		} else {
+
+			$connect_function = $this->use_mysqli ? 'mysqli_connect' : 'mysql_connect';
+
+		}
+
 		if ( $this->single_db ) {
-			if ( is_resource( $this->dbh ) )
+			if ( $this->is_resource( $this->dbh ) )
 				return $this->dbh;
-			$this->dbh = $connect_function($this->db_server['host'], $this->db_server['user'], $this->db_server['password'], true);
-			if ( ! is_resource( $this->dbh ) )
+			$this->dbh = $connect_function( $host, $this->db_server['user'], $this->db_server['password'], true );
+			if ( ! $this->is_resource( $this->dbh ) )
 				$this->bail("We were unable to connect to the database at {$this->db_server['host']}.");
-			if ( ! mysql_select_db($this->db_server['name'], $this->dbh) )
+			if ( ! $this->select( $this->db_server['name'], $this->dbh ) )
 				$this->bail("We were unable to select the database.");
 			if ( !empty( $this->charset ) ) {
 				$collation_query = "SET NAMES '$this->charset'";
@@ -266,7 +280,7 @@ class SharDB extends wpdb {
 				$operation = 'read';
 			}
 
-			if ( isset( $this->dbhs[$dbhname] ) && is_resource( $this->dbhs[$dbhname] ) ) { // We're already connected!
+			if ( isset( $this->dbhs[$dbhname] ) && $this->is_resource( $this->dbhs[$dbhname] ) ) { // We're already connected!
 				// Keep this connection at the top of the stack to prevent disconnecting frequently-used connections
 				if ( $k = array_search($dbhname, $this->open_connections) ) {
 					unset($this->open_connections[$k]);
@@ -274,8 +288,9 @@ class SharDB extends wpdb {
 				}
 
 				// Using an existing connection, select the db we need and if that fails, disconnect and connect anew.
-				if ( ( isset($_server['name']) && mysql_select_db($_server['name'], $this->dbhs[$dbhname]) ) ||
-						( isset($this->used_servers[$dbhname]['db']) && mysql_select_db($this->used_servers[$dbhname]['db'], $this->dbhs[$dbhname]) ) ) {
+				if (
+					isset( $_server['name'] ) && $this->select( $_server['name'], $this->dbhs[$dbhname] ) ||
+						( isset( $this->used_servers[$dbhname]['db'] ) && $this->select( $this->used_servers[$dbhname]['db'], $this->dbhs[$dbhname] ) ) ) {
 					$this->last_used_server = $this->used_servers[$dbhname];
 					$this->current_host = $this->dbh2host[$dbhname];
 					return $this->dbhs[$dbhname];
@@ -346,6 +361,7 @@ class SharDB extends wpdb {
 					while ( $this->dbhs[$dbhname] === false ) {
 						$try_count++;
 						$this->dbhs[$dbhname] = $connect_function( "$host:$port", $server['user'], $server['password'] );
+
 						if ( $try_count == 4 ) {
 							break;
 						} else {
@@ -358,31 +374,39 @@ class SharDB extends wpdb {
 					$this->dbhs[$dbhname] = false;
 				}
 
-				if ( $this->dbhs[$dbhname] && is_resource($this->dbhs[$dbhname]) ) {
+				if ( $this->is_resource( $this->dbhs[$dbhname] ) ) {
+
 					$this->db_connections[] = array( "{$server['user']}@$host:$port", number_format( ( $this->timer_stop() ), 7) );
 					$this->dbh2host[$dbhname] = $this->current_host = "$host:$port";
 					$this->open_connections[] = $dbhname;
 					break;
+
 				} else {
+
 					$error_details = array (
 						'referrer' => "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
 						'host' => $host,
-						'error' => mysql_error(),
-						'errno' => mysql_errno(),
+						'error' => $this->use_mysqli ? mysqli_error( $this->dbhs[$dbhname] ) : mysql_error(),
+						'errno' => $this->use_mysqli ? mysqli_errno( $this->dbhs[$dbhname] ) : mysql_errno(),
 						'tcp_responsive' => $this->tcp_responsive,
 					);
 					$msg = date( "Y-m-d H:i:s" ) . " Can't select $dbhname - ";
 					$msg .= "\n" . print_r($error_details, true);
 
 					$this->print_error( $msg );
+
 				}
 			} // end foreach ( $servers as $server )
 
-			if ( ! is_resource( $this->dbhs[$dbhname] ) ) {
+			if ( ! $this->is_resource( $this->dbhs[$dbhname] ) ) {
+
 				echo "Unable to connect to $host:$port while querying table '$table' ($dbhname)";
 				return $this->bail("Unable to connect to $host:$port while querying table '$table' ($dbhname)");
+
 			}
-			if ( ! mysql_select_db( $server['name'], $this->dbhs[$dbhname] ) ) {
+
+			$this->select( $server['name'], $this->dbhs[$dbhname] );
+			if ( ! $this->ready ) {
 				echo "Connected to $host:$port but unable to select database '{$server['name']}' while querying table '$table' ($dbhname)";
 				return $this->bail("Connected to $host:$port but unable to select database '{$server['name']}' while querying table '$table' ($dbhname)");
 			}
@@ -394,7 +418,12 @@ class SharDB extends wpdb {
 				$collation_query .= " COLLATE '{$server['collate']}'";
 			if ( !empty($collation_query) && !empty($this->collation) )
 				$collation_query .= " COLLATE '$this->collation'";
-			mysql_query($collation_query, $this->dbhs[$dbhname]);
+
+			if ( $this->use_mysqli ) {
+				mysqli_query( $this->dbhs[$dbhname], $collation_query );
+			} else {
+				mysql_query( $collation_query );
+			}
 
 			$this->last_used_server = array( "server" => $server['host'], "db" => $server['name'] );
 
@@ -402,8 +431,10 @@ class SharDB extends wpdb {
 
 			// Close current and prevent future read-only connections to the written cluster
 			if ( $write ) {
-				if ( is_resource($this->dbhs[$read_dbh]) && $this->dbhs[$read_dbh] != $this->dbhs[$dbhname] )
+
+				if ( isset( $this->dbhs[$dbhname] ) && isset( $this->dbhs[$read_dbh] ) && $this->is_resource( $this->dbhs[$read_dbh] ) && $this->dbhs[$read_dbh] != $this->dbhs[$dbhname] ) {
 					$this->disconnect( $read_dbh );
+				}
 
 				$this->dbhs[$read_dbh] = & $this->dbhs[$dbhname];
 
@@ -412,25 +443,65 @@ class SharDB extends wpdb {
 
 			while ( count($this->open_connections) > $this->max_connections ) {
 				$oldest_connection = array_shift($this->open_connections);
-				if ( $this->dbhs[$oldest_connection] != $this->dbhs[$dbhname] )
+				if ( ! isset( $this->dbhs[$oldest_connection] ) || ! isset( $this->dbhs[$dbhname] ) ) {
+					continue;
+				}
+
+				if ( $this->dbhs[$oldest_connection] != $this->dbhs[$dbhname] ) {
 					$this->disconnect($oldest_connection);
+				}
 			}
 		}
 		return $this->dbhs[$dbhname];
 	}
 
 	/**
+	 * Is this a mysql resource
+	 */
+	function is_resource( $link ) {
+
+		if ( ! $link ) {
+			return false;
+		}
+
+		return $this->use_mysqli ? ( $link instanceof mysqli ) : is_resource( $link );
+
+	}
+
+	/**
+	 * Ensure the database is connected before escaping
+	 */
+	function _real_escape( $string ) {
+
+		if ( ! $this->dbh ) {
+			$this->dbh = $this->db_connect( $string );
+		}
+
+		return parent::_real_escape( $string );
+
+	}
+
+	/**
 	 * Disconnect and remove connection from open connections list
 	 * @param string $dbhname
 	 */
-	function disconnect($dbhname) {
-		if ( $k = array_search($dbhname, $this->open_connections) )
-			unset($this->open_connections[$k]);
+	function disconnect( $dbhname ) {
 
-		if ( is_resource($this->dbhs[$dbhname]) )
-			mysql_close($this->dbhs[$dbhname]);
+		$k = array_search( $dbhname, $this->open_connections );
+		if ( isset( $this->open_connections[$k] ) ) {
+			unset( $this->open_connections[$k] );
+		}
 
-		unset($this->dbhs[$dbhname]);
+		if ( $this->is_resource( $this->dbhs[$dbhname] ) ) {
+
+			if ( $this->use_mysqli ) {
+				mysqli_close($this->dbhs[$dbhname]);
+			} else {
+				mysql_close($this->dbhs[$dbhname]);
+			}
+		}
+
+		unset( $this->dbhs[$dbhname] );
 	}
 	/**
 	 * Basic query. See docs for more details.
@@ -438,83 +509,33 @@ class SharDB extends wpdb {
 	 * @return int number of rows
 	 */
 	function query($query) {
-		// filter the query, if filters are available
-		// NOTE: some queries are made before the plugins have been loaded, and thus cannot be filtered with this method
-		if ( function_exists('apply_filters') )
-			$query = apply_filters('query', $query);
 
-		// initialise return
-		$return_val = 0;
-		$this->flush();
-
-		// Log how the function was called
-		$this->func_call = "\$db->query(\"$query\")";
-
-		// Keep track of the last query for debug..
-		$this->last_query = $query;
-
-		if ( $this->save_queries )
-			$this->timer_start();
-
-		if ( preg_match('/^\s*SELECT\s+FOUND_ROWS(\s*)/i', $query) && is_resource($this->last_found_rows_result) ) {
-			$this->result = $this->last_found_rows_result;
-		} else {
-			$this->dbh = $this->db_connect( $query );
-
-			if ( ! is_resource($this->dbh) )
-				return false;
-
-			$this->result = mysql_query($query, $this->dbh);
-			++$this->num_queries;
-
-			if ( preg_match('/^\s*SELECT\s+SQL_CALC_FOUND_ROWS\s/i', $query) ) {
-				$this->last_found_rows_result = mysql_query("SELECT FOUND_ROWS()", $this->dbh);
-				++$this->num_queries;
-			}
+		if ( preg_match( '/^\s*SELECT\s+FOUND_ROWS(\s*)/i', $query ) ) {
+			$this->last_result = $this->last_found_rows_result;
+			return 1;
 		}
 
-		if ( $this->save_queries )
-			$this->queries[] = array( $query, $this->timer_stop(), $this->get_caller() );
+		$this->dbh = $this->db_connect( $query );
 
-		// If there is an error then take note of it
-		if ( $this->last_error = mysql_error($this->dbh) ) {
-			$this->print_error($this->last_error);
+		if ( ! $this->is_resource( $this->dbh ) ) {
 			return false;
 		}
 
-		if ( preg_match("/^\\s*(insert|delete|update|replace|alter) /i",$query) ) {
-			$this->rows_affected = mysql_affected_rows($this->dbh);
+		$result = parent::query( $query );
 
-			// Take note of the insert_id
-			if ( preg_match("/^\\s*(insert|replace) /i",$query) ) {
-				$this->insert_id = mysql_insert_id($this->dbh);
-			}
-			// Return number of rows affected
-			$return_val = $this->rows_affected;
-		} else {
-			$i = 0;
-			$this->col_info = array();
-			while ($i < @mysql_num_fields($this->result)) {
-				$this->col_info[$i] = @mysql_fetch_field($this->result);
-				$i++;
-			}
-			$num_rows = 0;
-			$this->last_result = array();
-			while ( $row = @mysql_fetch_object($this->result) ) {
-				$this->last_result[$num_rows] = $row;
-				$num_rows++;
-			}
+		if ( preg_match('/^\s*SELECT\s+SQL_CALC_FOUND_ROWS\s/i', $query) ) {
 
-			@mysql_free_result($this->result);
+			$_last_result = $this->last_result;
+			parent::query( 'SELECT FOUND_ROWS()' );
+			$this->last_found_rows_result = $this->last_result;
+			++$this->num_queries;
 
-			// Log number of rows the query returned
-			$this->num_rows = $num_rows;
+			$this->last_result = $_last_result;
 
-			// Return number of rows selected
-			$return_val = $this->num_rows;
 		}
 
-		return $return_val;
+		return $result;
+
 	}
 	/**
 	 * Check the responsiveness of a tcp/ip daemon
@@ -692,5 +713,3 @@ class BPDB extends SharDB {
 
 endif; // !class_exists( 'BPDB' )
 endif; // is_multisite()
-
-?>
