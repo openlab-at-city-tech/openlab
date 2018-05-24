@@ -14,7 +14,7 @@
 					
 					printf( __( 'Search results: "%s"', 'hemingway' ), get_search_query() );
 				
-					$paged = get_query_var( 'paged' ) ?: 1;
+					$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 					
 					if ( 1 < $wp_query->max_num_pages ) : ?>
 					
@@ -66,7 +66,7 @@
 						
 						printf( __( 'Search results: "%s"', 'hemingway' ), get_search_query() );
 						
-						$paged = get_query_var( 'paged' ) ?: 1;
+						$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 						
 						if ( "1" < $wp_query->max_num_pages ) : ?>
 						
