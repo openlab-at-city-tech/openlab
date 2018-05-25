@@ -5,6 +5,7 @@ namespace OpenLab\Badges;
 class App {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_taxonomy' ) );
+		Template::init();
 	}
 
 	public static function register_taxonomy() {

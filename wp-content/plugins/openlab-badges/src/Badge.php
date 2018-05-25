@@ -2,11 +2,12 @@
 
 namespace OpenLab\Badges;
 
-class Badge {
+class Badge implements Grantable {
 	private $data = array(
 		'id'    => null,
 		'name'  => null,
 		'image' => null,
+		'link'  => null,
 	);
 
 	public function __construct( $badge_id = null ) {
@@ -28,6 +29,11 @@ class Badge {
 		if ( $image ) {
 			$this->set_image( $image );
 		}
+
+		$link = get_term_meta( $term->term_id, 'link', true );
+		if ( $link ) {
+			$this->set_link( $link );
+		}
 	}
 
 	public function save() {
@@ -48,6 +54,7 @@ class Badge {
 		}
 
 		update_term_meta( $term_id, 'image', $this->get_image() );
+		update_term_meta( $term_id, 'link', $this->get_link() );
 	}
 
 	public function set_id( $id ) {
@@ -62,6 +69,10 @@ class Badge {
 		$this->data['image'] = $image;
 	}
 
+	public function set_link( $link ) {
+		$this->data['link'] = $link;
+	}
+
 	public function get_id() {
 		return (int) $this->data['id'];
 	}
@@ -72,5 +83,21 @@ class Badge {
 
 	public function get_image() {
 		return $this->data['image'];
+	}
+
+	public function get_link() {
+		return $this->data['link'];
+	}
+
+	/**
+	 * @todo Tooltip. See http://accessibility.athena-ict.com/aria/examples/tooltip.shtml
+	 */
+	public function get_avatar_badge_html() {
+		return sprintf(
+			'<a href="%s"><img class="badge-image" src="%s" alt="%s" /></a>',
+			esc_attr( $this->get_link() ),
+			esc_attr( $this->get_image() ),
+			esc_attr( $this->get_name() )
+		);
 	}
 }

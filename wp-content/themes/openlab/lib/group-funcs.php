@@ -625,6 +625,8 @@ function cuny_group_single() {
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
+
+					<?php do_action( 'bp_group_header_after_avatar' ); ?>
                 </div>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
