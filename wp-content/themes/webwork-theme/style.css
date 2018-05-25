@@ -34,6 +34,11 @@ body .blog-menu a {
   font-size: 15px; /*change*/
   font-weight: 600 /*new*/
 }
+
+body.ol-webwork .blog-menu > .has-children a {
+	padding-right: 35px;
+}
+
 body .blog-menu > li:before {
   content: "/";
   display: block;
