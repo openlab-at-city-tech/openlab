@@ -6,6 +6,7 @@ class Badge implements Grantable {
 	private $data = array(
 		'id'    => null,
 		'name'  => null,
+		'slug'  => null,
 		'image' => null,
 		'link'  => null,
 	);
@@ -24,6 +25,7 @@ class Badge implements Grantable {
 
 		$this->set_id( $term->term_id );
 		$this->set_name( $term->name );
+		$this->set_slug( $term->slug );
 
 		$image = get_term_meta( $term->term_id, 'image', true );
 		if ( $image ) {
@@ -40,7 +42,9 @@ class Badge implements Grantable {
 		$term_id = $this->get_id();
 
 		if ( ! $term_id ) {
-			$term = wp_insert_term( $this->get_name(), 'openlab_badge' );
+			$term = wp_insert_term( $this->get_name(), 'openlab_badge', array(
+				'slug' => $this->get_slug(),
+			) );
 			if ( is_wp_error( $term ) ) {
 				return $term;
 			}
@@ -50,6 +54,7 @@ class Badge implements Grantable {
 		} else {
 			wp_update_term( $term_id, 'openlab_badge', array(
 				'name' => $this->get_name(),
+				'slug' => $this->get_slug(),
 			) );
 		}
 
@@ -63,6 +68,10 @@ class Badge implements Grantable {
 
 	public function set_name( $name ) {
 		$this->data['name'] = $name;
+	}
+
+	public function set_slug( $slug ) {
+		$this->data['slug'] = $slug;
 	}
 
 	public function set_image( $image ) {
@@ -81,6 +90,10 @@ class Badge implements Grantable {
 		return $this->data['name'];
 	}
 
+	public function get_slug() {
+		return $this->data['slug'];
+	}
+
 	public function get_image() {
 		return $this->data['image'];
 	}
@@ -92,12 +105,18 @@ class Badge implements Grantable {
 	/**
 	 * @todo Tooltip. See http://accessibility.athena-ict.com/aria/examples/tooltip.shtml
 	 */
-	public function get_avatar_badge_html() {
-		return sprintf(
-			'<a href="%s"><img class="badge-image" src="%s" alt="%s" /></a>',
-			esc_attr( $this->get_link() ),
-			esc_attr( $this->get_image() ),
-			esc_attr( $this->get_name() )
-		);
+	public function get_avatar_badge_html( $group_id ) {
+		$group = groups_get_group( $group_id );
+
+		$tooltip_id = 'badge-tooltip-' . $group->slug . '-' . $this->get_slug();
+
+		$html  = '<div class="avatar-badge">';
+		$html .=   '<img class="badge-image" aria-describedby="' . esc_attr( $tooltip_id ) . '" src="' . esc_attr( $this->get_image() ) . '" alt="' . esc_attr( $this->get_name() ) . '" />';
+		$html .=   '<div id="' . esc_attr( $tooltip_id ) . '" class="badge-tooltip" role="tooltip">';
+		$html .=     esc_html( $this->get_name() ) . " &mdash; " . sprintf( '<a href="%s">%s</a>', esc_attr( $this->get_link() ), esc_html__( 'Learn More', 'openlab-badges' ) );
+		$html .=   '</div>';
+		$html .= '</div>';
+
+		return $html;
 	}
 }
