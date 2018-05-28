@@ -5,6 +5,8 @@ add_filter( 'webwork_server_site_id', function() {
 } );
 
 add_filter( 'webwork_client_site_base', function() {
+	return trailingslashit( get_option( 'home' ) );
+
         $base = get_blog_option( 1, 'home' );
         if ( 'CT staging' === ENV_TYPE ) {
                 return trailingslashit( $base ) . 'webwork-playground';
@@ -14,6 +16,8 @@ add_filter( 'webwork_client_site_base', function() {
 } );
 
 add_filter( 'webwork_server_site_base', function() {
+	return trailingslashit( get_option( 'home' ) );
+
         $base = get_blog_option( 1, 'home' );
         if ( 'CT staging' === ENV_TYPE ) {
                 return trailingslashit( $base );
