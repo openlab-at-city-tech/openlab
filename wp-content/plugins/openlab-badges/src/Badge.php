@@ -119,4 +119,24 @@ class Badge implements Grantable {
 
 		return $html;
 	}
+
+	public static function get( $args = array() ) {
+		$r = array_merge( array(
+			'hide_empty' => false,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		), $args );
+
+		$terms = get_terms( 'openlab_badge', array(
+			'hide_empty' => $r['hide_empty'],
+			'orderby'    => $r['orderby'],
+			'order'      => $r['order'],
+		) );
+
+		$badges = array_map( function( $term ) {
+			return new self( $term->term_id );
+		}, $terms );
+
+		return $badges;
+	}
 }
