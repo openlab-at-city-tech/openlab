@@ -7,6 +7,7 @@ class Template {
 		wp_register_style( 'openlab-badges', OLBADGES_PLUGIN_URL . '/assets/css/openlab-badges.css' );
 		wp_register_script( 'openlab-badges', OLBADGES_PLUGIN_URL . '/assets/js/openlab-badges.js', array( 'jquery' ), false, true );
 		add_action( 'bp_group_header_after_avatar', array( __CLASS__, 'avatar_links' ) );
+		add_action( 'bp_group_directory_after_avatar', array( __CLASS__, 'avatar_links' ) );
 	}
 
 	public static function avatar_links() {

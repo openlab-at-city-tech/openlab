@@ -277,6 +277,7 @@ function openlab_group_archive() {
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-6">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr(bp_get_group_name()); ?>"/></a>
+								<?php do_action( 'bp_group_directory_after_avatar' ); ?>
                             </div>
                             <div class="item col-xs-18">
 
