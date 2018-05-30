@@ -21,7 +21,7 @@ a:hover, body.ol-webwork a:hover {
 }
 
 body .blog-menu {
-  overflow: hidden;
+  height: 69px;
 }
 
 body .blog-menu a {
