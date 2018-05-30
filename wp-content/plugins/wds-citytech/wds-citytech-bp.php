@@ -110,6 +110,18 @@ To view this $grouptype log in and follow the link below:
 ---------------------
 " );
 		break;
+
+	case 'Leave Group' :
+		return $translations->translate( 'Leave ' . ucwords( $grouptype ) );
+		break;
+
+	case 'You successfully left the group.' :
+		return $translations->translate( 'You successfully left the ' . $grouptype . '.' );
+		break;
+
+	case 'You joined the group!' :
+		return $translations->translate( 'You joined the ' . $grouptype . '!' );
+		break;
   }
   return $translation;
  }
