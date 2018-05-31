@@ -20,6 +20,21 @@ a:hover, body.ol-webwork a:hover {
 	color: #000;
 }
 
+.header-cover {
+	overflow: hidden;
+}
+body.ol-webwork .header {
+	max-height: 211px;
+	padding: 0;
+	width: 200%;
+}
+@media (max-width: 800px) {
+	body.ol-webwork .header {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
 body .blog-menu {
   height: 69px;
 }
