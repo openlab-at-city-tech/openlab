@@ -50,6 +50,11 @@ body .blog-menu a {
   font-weight: 600 /*new*/
 }
 
+body.ol-webwork .blog-menu a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
 body.ol-webwork .blog-menu > .has-children a {
 	padding-right: 35px;
 }
