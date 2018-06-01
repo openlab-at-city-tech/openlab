@@ -84,6 +84,11 @@ body .blog-menu > .page_item_has_children::after {
   top: 50%;
   margin-top: -2px;
 }
+
+body .mobile-menu a {
+	color: #fff;
+}
+
 body .footer.section.large-padding {
   padding: 65px 0 50px; /*change*/
 }
