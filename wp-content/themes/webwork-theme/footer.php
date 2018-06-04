@@ -1,4 +1,4 @@
-	<div class="footer section large-padding bg-dark">
+	<div class="footer section large-padding bg-dark" role="complementary">
 
 		<div class="footer-inner section-inner">
 
@@ -32,7 +32,7 @@
 
 	</div> <!-- /footer -->
 
-	<div class="credits section bg-dark no-padding">
+	<div class="credits section bg-dark no-padding" role="contentinfo">
 
 		<div class="credits-inner section-inner">
 

@@ -5,8 +5,7 @@
 	<head>
 		
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
-		 
+		<meta name="viewport" content="width=device-width, initial-scale=1" >
 		<?php wp_head(); ?>
 	
 	</head>
@@ -92,48 +91,40 @@
 					<ul class="blog-menu">
 					
 						<?php if ( has_nav_menu( 'primary' ) ) {
-																			
 							wp_nav_menu( array( 
-							
-								'container' => '', 
-								'items_wrap' => '%3$s',
-								'theme_location' => 'primary', 
-								'walker' => new hemingway_nav_walker
-															
-							) ); } else {
-						
+								'container' 		=> '', 
+								'items_wrap' 		=> '%3$s',
+								'theme_location' 	=> 'primary', 
+								'walker' 			=> new hemingway_nav_walker
+							) );
+						} else {
 							wp_list_pages( array(
-							
 								'container' => '',
-								'title_li' => ''
-							
-							));
-							
+								'title_li' 	=> ''
+							) );
 						} ?>
-						
-						<div class="clear"></div>
-												
+
 					 </ul>
+
+					 <div class="clear"></div>
 					 
 					 <ul class="mobile-menu">
 					
 						<?php if ( has_nav_menu( 'primary' ) ) {
 																			
 							wp_nav_menu( array( 
-							
-								'container' => '', 
-								'items_wrap' => '%3$s',
-								'theme_location' => 'primary', 
-								'walker' => new hemingway_nav_walker
-															
-							) ); } else {
+								'container' 		=> '', 
+								'items_wrap' 		=> '%3$s',
+								'theme_location' 	=> 'primary', 
+								'walker' 			=> new hemingway_nav_walker
+							) ); 
+						
+						} else {
 						
 							wp_list_pages( array(
-							
-								'container' => '',
-								'title_li' => ''
-							
-							));
+								'container' 	=> '',
+								'title_li' 		=> ''
+							) );
 							
 						} ?>
 						
