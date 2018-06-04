@@ -4,92 +4,98 @@
 */
 
 body.perk-iframe {
-    background-color: #f7f7f7;
+	background-color: #f7f7f7;
 }
 
 .perk-iframe .wrap {
-    margin: 0;
+	margin: 0;
 }
 
 .perk-iframe .wrap .content {
-    padding: 30px;
-    font-size: 15px;
-    line-height: 22px;
-    background-color: #fff;
+	padding: 30px;
+	font-size: 15px;
+	line-height: 22px;
+	background-color: #fff;
 }
 
 .perk-iframe .wrap .content-footer {
-    background-color: #f7f7f7;
-    padding: 30px;
-    border-top: 1px solid #eee;
-    text-align: right;
+	background-color: #f7f7f7;
+	padding: 30px;
+	border-top: 1px solid #eee;
+	text-align: right;
+}
+
+.perk-iframe .header {
+	background-color: #f7f7f7;
+	border-bottom: 1px solid #eee;
 }
 
 .perk-iframe h1.page-title {
-    background-color: #f7f7f7;
-    padding: 30px;
-    border-bottom: 1px solid #eee;
-    line-height: 1;
-    margin: 0;
+	padding: 30px;
+	line-height: 1;
+	margin: 0;
+}
+
+.perk-iframe .header .updated {
+	margin: 0 30px 30px;
 }
 
 .perk-iframe .content h1 {
-    font-weight: normal;
-    margin: 50px 0 30px;
-    line-height: 1;
-    border-top: 1px solid #eee;
-    padding-top: 40px;
+	font-weight: normal;
+	margin: 50px 0 30px;
+	line-height: 1;
+	border-top: 1px solid #eee;
+	padding-top: 40px;
 }
 
 .perk-iframe .content h1:first-child {
-    margin-top: 20px;
-    border-top: 0;
-    padding-top: 0;
+	margin-top: 20px;
+	border-top: 0;
+	padding-top: 0;
 }
 
 .perk-iframe .content h2 {
-    font-weight: normal;
-    margin: 30px 0 20px;
-    line-height: 1;
-    font-family: 'Merriweather', serif;
+	font-weight: normal;
+	margin: 30px 0 20px;
+	line-height: 1;
+	font-family: 'Merriweather', serif;
 }
 
 .perk-iframe .content form {
-    margin: 0;
+	margin: 0;
 }
 
 .perk-iframe .content ul {
-    list-style: disc;
-    margin-left: 20px;
-    color: #555;
+	list-style: disc;
+	margin-left: 20px;
+	color: #555;
 }
 
 .perk-iframe .content li {
-    margin: 0 0 20px;
+	margin: 0 0 20px;
 }
 
 .perk-iframe .content li span.description {
-    margin: 0 0 20px;
-    font-family: 'Merriweather', serif;
-    display: block;
+	margin: 0 0 20px;
+	font-family: 'Merriweather', serif;
+	display: block;
 }
 
 .perk-iframe .content p {
-    line-height: 26px;
-    margin: 0 0 24px;
-    color: #555;
+	line-height: 26px;
+	margin: 0 0 24px;
+	color: #555;
 }
 
 .perk-iframe .content-footer {
-    background-color: #f7f7f7;
-    padding: 30px;
-    border-top: 1px solid #eee;
-    line-height: 1;
-    font-size: 15px;
+	background-color: #f7f7f7;
+	padding: 30px;
+	border-top: 1px solid #eee;
+	line-height: 1;
+	font-size: 15px;
 }
 
-.perk-settings {
-}
+.perk-settings { }
 
 .perk-settings textarea {
     width: 75%;
@@ -242,4 +248,337 @@ body.perk-iframe {
 
 .gp-child-settings {
 	border-left: 2px solid #eee; padding: 15px; margin-left: 5px; margin-top: 5px;
+}
+
+/* WP Pointer */
+.gwp-pointer .wp-pointer-buttons {
+    display: inline-block;
+}
+
+.gwp-pointer .wp-pointer-buttons:first-of-type {
+    margin: 0 0 0 15px;
+}
+
+.gwp-pointer .wp-pointer-buttons:last-of-type {
+    float: right;
+}
+
+.gwp-pointer .wp-pointer-buttons:first-of-type:last-of-type {
+    float: none;
+    display: block;
+}
+
+.gwp-pointer a.next::before {
+    content: '\f148';
+    transform: scale(-1, 1);
+    left: -9px;
+}
+
+
+
+
+/**
+ * Manage Perks
+ */
+
+#_gwp-header-links {
+	float: right;
+	margin-top: -36px;
+}
+
+#_gwp-header-links li {
+	display: inline;
+	padding-left: 10px;
+}
+
+.wrap div.gwp-message {
+	margin-top: 15px;
+}
+
+.forms_page_gwp_perks .nav-tab-wrapper {
+	padding-top: 0 !important;
+}
+
+.nav-tab-wrapper + .notice {
+	margin: 20px 0 -15px;
+}
+
+.nav-tab-wrapper + .notice + .notice {
+	margin: 35px 0 -15px;
+}
+
+.forms_page_gwp_perks .manage-menus {
+	margin: 20px 0;
+}
+
+div.gwp-message + .manage-menus { }
+
+#gwp_license_key {
+	width: 50%;
+	height: 29px;
+	margin-top: 0px;
+}
+
+#gwp_license_submit,
+#gw-buy-license {
+	float: right;
+}
+
+#gw-buy-license {
+	margin-left: 10px;
+}
+
+.gp-active-perks {}
+
+.perks {
+	padding: 20px 0 0;
+}
+
+.perks .manage-perks-intro,
+.perks .install-perks-intro {
+	border-bottom: 1px solid #eee;
+	padding: 0 20px 20px;
+	margin: 0 0 20px;
+}
+
+.perks .install-perks-intro h3 {
+	margin-top: 0;
+}
+
+.perks .no-perks-installed,
+.perks .all-perks-installed,
+.perks .install-perks-api-message {
+	padding: 60px 20px 20px;
+	margin: 0 0 20px;
+	text-align: center;
+	font-size: 24px;
+	line-height: 36px;
+	width: 100%;
+}
+
+.perks .no-perks-installed a {
+	cursor: pointer;
+}
+
+.perks .install-perks-api-message a {
+	display: block;
+	text-decoration: none;
+}
+
+#install.tab-container {
+	position: relative;
+}
+
+#install #need-license-splash {
+	background-color: #fff;
+	position: absolute;
+	z-index: 99;
+	top: 100px;
+	left: 50%;
+	margin-left: -25%;
+	width: 44%;
+	padding: 3%;
+	box-shadow: 0 0 100px 100px #fff;
+}
+
+#install #need-license-splash .perk-listing {
+	width: auto;
+}
+
+#install #need-license-splash .perk-listing .wrap {
+	min-height: 0;
+}
+
+#install #need-license-splash h3 {
+	margin: 0 0 18px;
+}
+
+#install #need-license-splash p {
+	margin: 0 0 18px;
+}
+
+#install #need-license-splash .dismiss-link {
+	float: right;
+	line-height: 22px;
+}
+
+.perk-listings {
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+
+.perk-listing {
+	background-color: #f4f8fc;
+	box-shadow: 0 0 20px #D8E9FA inset;
+	border: 1px solid #eee;
+	float: left;
+	margin: 0 10px 20px;
+	width: 280px;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+.perk-listing .wrap {
+	padding: 15px;
+	border: 4px solid #fff;
+	height: 170px;
+	margin: 0;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.perk-listing h3 {
+	margin: 0 0 4px;
+}
+
+.perk-listing p {
+	margin: 0;
+	padding: 0;
+}
+
+.perk-listing span.version {
+	color: #6E9FB5;
+	white-space: nowrap;
+}
+
+.perk-listing .actions {
+	flex: 0;
+	margin: auto 0;
+}
+
+.perk-listing .perk-description {
+	flex: 1;
+	position: relative;
+	overflow: hidden;
+	margin: 12px 0 0;
+}
+
+.perk-listing .perk-description::after {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 20px;
+	bottom: 0;
+	background: -webkit-linear-gradient(transparent, #f7f7f7) left repeat;
+	background: linear-gradient(transparent, #f7f7f7) left repeat;
+}
+
+.perks .perk-listing a.button-primary {
+	color: #fff;
+}
+
+.perk-listing .network-activated-perk {
+	background-color: #fff;
+	padding: 5px 7px;
+	line-height: 1;
+	position: absolute;
+	bottom: 0;
+	right: 15px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.perk-listing .network-activated-perk a {
+	background: none repeat scroll 0 0 transparent;
+	display: block;
+	font-size: 10px;
+	height: auto;
+	text-decoration: none;
+	text-indent: 0;
+	text-transform: uppercase;
+	width: auto;
+}
+
+.perk-listing .actions-buttons {
+	margin: 7px 0 4px
+}
+
+.qtip-content ul {
+	margin: 0;
+}
+
+.perk-listing.install,
+.perk-listing.inactive {
+	background-color: #f7f7f7;
+	box-shadow: 0 0 20px #e7e7e7 inset;
+	padding: 0;
+}
+
+.perk-listing.install span.version,
+.perk-listing.inactive span.version {
+	color: #999;
+}
+
+.perk-listing.perk-error {
+	background-color: #FFEBE8;
+	box-shadow: 0 0 20px #FCCCC8 inset;
+}
+
+.perk-listing.perk-error .perk-description::after {
+	background: -webkit-linear-gradient(transparent, #FFEBE8) left repeat;
+	background: linear-gradient(transparent, #FFEBE8) left repeat;
+}
+
+.perk-listing.perk-error span.version {
+	color: #999;
+}
+
+.perk-listing.perk-error a {
+	color: #7F564D;
+}
+
+.perk-listing.perk-error.failed-requirements a.gp-requirements {
+	background-image: url(../images/icon-exclamation.png);
+	text-indent: -999em;
+	display: inline-block;
+	height: 16px;
+}
+
+.perk-listing.perk-error .gp-unregistered {
+	width: 20px;
+	height: 20px;
+	top: -10px;
+	left: -10px;
+	z-index: 2;
+	position: absolute;
+	opacity: 1;
+}
+
+.perk-listing.perk-error .gp-unregistered::before {
+	width: 20px;
+	height: 20px;
+	color: #23282d;
+	font-family: "dashicons";
+	font-size: 24px;
+	line-height: 20px;
+	text-align: center;
+	vertical-align: middle;
+	text-indent: -2px;
+	display: block;
+	content: "\f534";
+	background: white;
+	border-radius: 100%;
+}
+
+.forms_page_gwp_perks .gwp_buy_license-pointer .wp-pointer-arrow {
+	left: auto;
+	right: 50px;
+}
+
+.forms_page_gwp_perks .gwp_register_license-pointer .wp-pointer-arrow {
+	left: auto;
+	right: 44px;
+}
+
+.forms_page_gwp_perks .gwp_get_support-pointer .wp-pointer-arrow {
+	left: auto;
+	right: 27px;
 }

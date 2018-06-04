@@ -5,6 +5,7 @@ class GWPerksPage {
     public static function load_page() {
 
         self::load_perk_pointers();
+        self::license_manager_form_action();
 
         add_action( 'admin_print_footer_scripts', array(__class__, 'output_tb_resize_script'), 11 );
 
@@ -16,90 +17,7 @@ class GWPerksPage {
 
         ?>
 
-        <style type="text/css">
-
-            #gwp-header-links { float: right; margin-top: -36px; }
-                #gwp-header-links li { display: inline; padding-left: 10px; }
-
-            .gp-active-perks { }
-
-            .perks { padding: 20px 0 0; }
-
-            .perks .manage-perks-intro,
-            .perks .install-perks-intro { border-bottom: 1px solid #eee; padding: 0 20px 20px; margin: 0 0 20px; }
-                .perks .install-perks-intro h3 { margin-top: 0; }
-            .perks .no-perks-installed { padding: 60px 20px 20px; margin: 0 0 20px; text-align: center; font-size: 24px;
-                line-height: 36px; }
-                .perks .no-perks-installed a { cursor: pointer; }
-
-            .perks .all-perks-installed { padding: 60px 20px 20px; margin: 0 0 20px; text-align: center; font-size: 24px;
-                line-height: 36px; width: 100%; }
-
-            #install.tab-container { position: relative; }
-                #install #need-license-splash { background-color: #fff; position: absolute; z-index: 99;
-                    top: 100px; left: 50%; margin-left: -25%; width: 44%; padding: 3%;
-                    box-shadow: 0 0 100px 100px #fff; }
-                #install #need-license-splash .perk-listing { width: auto; }
-                #install #need-license-splash .perk-listing .wrap { min-height: 0; }
-                #install #need-license-splash h3 { margin: 0 0 18px; }
-                #install #need-license-splash p { margin: 0 0 18px; }
-                #install #need-license-splash .dismiss-link { float: right; line-height: 22px; }
-
-            .perk-listings {
-                display: -webkit-flex;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-flex-wrap: wrap;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-            }
-            .perk-listing { background-color: #f4f8fc; box-shadow: 0 0 20px #D8E9FA inset;
-                border: 1px solid #eee; float: left; margin: 0 10px 20px; width: 260px;
-                display: -webkit-flex;
-                display: -ms-flexbox;
-                display: flex;
-            }
-
-                .perk-listing .wrap { padding: 15px; border: 4px solid #fff; min-height: 160px; margin: 0;
-                    position: relative; }
-                .perk-listing h3 { margin: 0 0 4px; }
-                .perk-listing p { margin: 0; padding: 0; }
-                .perk-listing span.version { color: #6E9FB5; }
-                .perk-listing .actions { margin: 0 0 12px; }
-
-                    .perks .perk-listing a.button-primary { color: #fff; }
-
-                .perk-listing .network-activated-perk { background-color: #fff; padding: 5px 7px; line-height: 1;
-                    position: absolute; bottom: 0; right: 15px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
-                .perk-listing .network-activated-perk a { background: none repeat scroll 0 0 transparent; display: block;
-                    font-size: 10px; height: auto; text-decoration: none; text-indent: 0; text-transform: uppercase; width: auto; }
-
-                .perk-listing .update-available { margin-top: 12px; text-align: center; }
-
-                .qtip-content ul { margin: 0; }
-
-            .perk-listing.install,
-            .perk-listing.inactive { background-color: #f7f7f7; box-shadow: 0 0 20px #e7e7e7 inset; padding: 0; }
-
-                .perk-listing.install .actions { position: absolute; bottom: 10px; }
-                .perk-listing.install h3 { margin: 0 0 12px; }
-                .perk-listing.install span.version,
-                .perk-listing.inactive span.version { color: #999; }
-
-            .perk-listing.failed-requirements { background-color: #FFEBE8; box-shadow: 0 0 20px #FCCCC8 inset; }
-
-                .perk-listing.failed-requirements span.version { color: #999; }
-                .perk-listing.failed-requirements a { color: #7F564D; }
-                .perk-listing.failed-requirements a.gp-requirements { background-image: url(<?php echo GWPerks::get_base_url(); ?>/images/icon-exclamation.png);
-                    text-indent: -999em; display: inline-block; height: 16px; }
-
-            .forms_page_gwp_perks .gwp_buy_license-pointer .wp-pointer-arrow { left: auto; right: 50px; }
-            .forms_page_gwp_perks .gwp_register_license-pointer .wp-pointer-arrow { left: auto; right: 44px; }
-            .forms_page_gwp_perks .gwp_get_support-pointer .wp-pointer-arrow { left: auto; right: 27px; }
-
-        </style>
-
-        <?php 
+        <?php
         if( wp_script_is( 'gform_tooltip_init', 'registered' ) ) {
 			wp_print_scripts( 'gform_tooltip_init' );
         } else if( wp_script_is( 'gf_tooltip_init', 'registered' ) ) {
@@ -161,16 +79,6 @@ class GWPerksPage {
                     sortPerks();
                 });
 
-                <?php if( self::show_splash() ): ?>
-                    if( tab != 'install' ) {
-                        $(document).one('gperks_toggle_tabs.splash', function() {
-                            showLicenseSplash();
-                        });
-                    } else {
-                        showLicenseSplash();
-                    }
-                <?php endif; ?>
-
             });
 
             function toggleTabs(elem, tab) {
@@ -223,6 +131,8 @@ class GWPerksPage {
 
         <div class="wrap">
 
+	        <?php self::display_license_manager(); ?>
+
             <div class="icon32" id="icon-themes"><br></div>
             <h2 class="nav-tab-wrapper">
                 <a class="nav-tab <?php echo !$is_install ? 'nav-tab-active' : ''; ?>" href="#manage">Manage Perks</a>
@@ -230,8 +140,6 @@ class GWPerksPage {
                     <a class="nav-tab <?php echo $is_install ? 'nav-tab-active' : ''; ?>" href="#install">Install Perks</a>
                 <?php endif; ?>
             </h2>
-
-            <?php self::display_header_links(); ?>
 
             <?php self::handle_message_code(); ?>
 
@@ -282,7 +190,8 @@ class GWPerksPage {
                     ?>
 
                     <div class="no-perks-installed">
-                        <?php printf( __('You don\'t have any perks installed.<br /> %sLet\'s go install some perks!%s', 'gravityperks'), '<a onclick="jQuery(\'a[href=\\\'#install\\\']\').click();">', '</a>'); ?>
+	                    <?php _e( "You don't have any perks installed.", 'gravityperks' ); ?><br>
+	                    <a onclick="jQuery('a[href=\'#install\']').click();return;"><?php _e( "Let's go install some perks!", 'gravityperks' ); ?></a>
                     </div>
 
                     <?php
@@ -303,78 +212,132 @@ class GWPerksPage {
 
     }
 
+	public static function get_uninstalled_perk_listing( $perk ) {
+
+		$generic_perk = new GWPerk( $perk->plugin_file, $perk->ID );
+		$is_registered = GWPerks::is_perk_registered( $perk->ID );
+
+		?>
+
+        <div class="perk-listing <?php echo $is_registered ? 'registered' : 'install' ?>">
+            <div class="wrap">
+
+                <h3><?php echo $perk->name; ?> <span class="version">v.<?php echo $perk->version; ?></span></h3>
+
+				<?php if ( $perk->documentation ): ?>
+                    <div class="actions">
+                        <a href="<?php echo $perk->documentation; ?>" target="_blank" title="<?php printf(__('%s Documentation', 'gravityperks'), $perk->name); ?>">
+							<?php _e('View Documentation', 'gravityperks'); ?>
+                        </a>
+                    </div>
+				<?php endif; ?>
+
+                <div class="perk-description"><?php echo $perk->sections['description']; ?></div>
+
+                <div class="actions actions-buttons">
+					<?php if( GWPerks::has_valid_license() ): ?>
+
+						<?php if ( GWPerks::has_available_perks() || GWPerks::is_perk_registered($perk->ID) ): ?>
+
+                            <a href="<?php echo $generic_perk->get_link_for('install'); ?>" class="button"><?php _e('Install Perk', 'gravityperks'); ?></a>
+
+							<?php if ( GWPerks::is_perk_registered($perk->ID) ): ?>
+                                <a href="<?php echo $generic_perk->get_link_for('deregister'); ?>" class="button"><?php _e('Deregister', 'gravityperks'); ?></a>
+							<?php endif; ?>
+
+						<?php else: ?>
+
+                            <a href="<?php echo GWPerks::get_license_upgrade_url(); ?>" class="button" target="_blank"><?php _e('Upgrade License', 'gravityperks'); ?></a>
+
+						<?php endif; ?>
+
+					<?php else: ?>
+
+                        <a href="<?php echo GW_BUY_URL; ?>" class="button" target="_blank"><?php _e('Buy License', 'gravityperks'); ?></a>
+
+					<?php endif; ?>
+                </div>
+
+            </div>
+        </div>
+        <?php
+
+    }
+
     public static function install_page( $is_active ) {
+
+	    $available_perks = GWPerks::get_available_perks();
+
+	    $unregistered_perks = array();
+	    $registered_perks   = array();
+
+	    foreach ( $available_perks as $perk ) {
+
+		    if ( ! isset( $perk->plugin_file ) || empty( $perk->plugin_file ) || GWPerk::is_installed( $perk->plugin_file ) ) {
+			    continue;
+		    }
+
+		    if ( GWPerks::is_perk_registered( $perk->ID ) ) {
+			    $registered_perks[] = $perk;
+
+			    continue;
+		    }
+
+		    $unregistered_perks[] = $perk;
+
+	    }
+
         ?>
 
-        <div id="install" class="perks plugins tab-container <?php echo self::show_splash() ? 'splash' : ''; ?>" <?php echo $is_active ? '' : 'style="display:none;"'; ?> >
+        <div id="install" class="perks plugins tab-container" <?php echo $is_active ? '' : 'style="display:none;"'; ?> >
 
-            <?php if( self::show_splash() ):
-                $generic_perk = new GWPerk();
-                ?>
-                <div id="need-license-splash" style="display:none;">
-                    <div class="perk-listing">
-                        <div class="wrap">
-                            <h3><?php _e('Want Access to All Perks? Buy a License!', 'gravityperks'); ?></h3>
-                            <p><?php printf( __('Purchase a Gravity Perks license and install as many perks as you\'d like! If you\'ve already purchased a license you can register it via the "Register License" button below.', 'gravityperks'),
-                                '<a href="' . GW_REGISTER_LICENSE_URL . '">', '</a>' ); ?></p>
-                            <!--<p><?php _e('Keep your Gravity Perks license active for unlimited access to <strong>all current and future</strong> perks . You\'ll also get free automatic upgrades and premium support.', 'gravityperks' ); ?></p>-->
-                            <div class="gp-license-splash-actions">
-                                <a href="<?php echo GW_BUY_GPERKS_URL; ?>" class="button-primary" target="_blank"><?php _e('Buy License', 'gravityperks'); ?></a>
-                                <a href="<?php echo GW_REGISTER_LICENSE_URL; ?>&register=1" class="button-secondary"><?php _e('Register License', 'gravityperks'); ?></a>
-                                <a href="javascript:void(0);" onclick="dismissLicenseSplash();" class="dismiss-link"><?php _e('dismiss', 'gravityperks'); ?></a>
-                            </div>
-                        </div>
+            <?php if( empty( $available_perks ) && GravityPerks::get_api_status() != '200' ): ?>
+
+	            <div class="install-perks-api-message">
+	                <?php echo GravityPerks::get_api_error_message(); ?>
+	            </div>
+
+            <?php else: ?>
+
+                <?php
+	            if(!empty($registered_perks)) {
+		            ?>
+
+                    <h3 class="gp-inline-header"><?php _e('Registered Perks', 'gravityperks'); ?></h3>
+                    <div class="gp-registered-perks perk-listings">
+			            <?php foreach($registered_perks as $perk) {
+				            self::get_uninstalled_perk_listing($perk);
+			            } ?>
                     </div>
-                </div>
+
+		            <?php
+	            }
+	            ?>
+
+	            <?php
+	            if(!empty($unregistered_perks)) {
+		            ?>
+
+                    <h3 class="gp-inline-header"><?php _e('Unregistered Perks', 'gravityperks'); ?></h3>
+                    <div class="gp-unregistered-perks perk-listings">
+			            <?php foreach($unregistered_perks as $perk) {
+				            self::get_uninstalled_perk_listing($perk);
+			            } ?>
+                    </div>
+
+		            <?php
+	            }
+	            ?>
+
+	            <?php if ( empty( $unregistered_perks ) && empty( $registered_perks ) ): ?>
+
+		            <div class="all-perks-installed">
+			            <?php _e( 'Holy cow. You must really love perks.<br /><strong>You\'ve installed them all</strong>!', 'gravityperks' ); ?>
+		            </div>
+
+	            <?php endif; ?>
+
             <?php endif; ?>
-
-            <div class="perk-listings">
-
-            <?php
-            $available_perks = GWPerks::get_available_perks();
-            $i = 0;
-            foreach($available_perks as $perk):
-
-                if( !isset($perk->plugin_file) || empty($perk->plugin_file) || GWPerk::is_installed( $perk->plugin_file ) )
-                     continue;
-
-                $generic_perk = new GWPerk($perk->plugin_file);
-
-                ?>
-
-                <div class="perk-listing install">
-                    <div class="wrap">
-
-                        <h3><?php echo $perk->name; ?> <span class="version">v.<?php echo $perk->version; ?></span></h3>
-
-                        <div class="actions">
-                            <?php if( GWPerks::has_valid_license() ): ?>
-                                <a href="<?php echo $generic_perk->get_link_for('install'); ?>" class="button"><?php _e('Install Perk', 'gravityperks'); ?></a>
-                            <?php else: ?>
-                                <a href="<?php echo GW_BUY_GPERKS_URL; ?>" class="button" target="_blank"><?php _e('Buy License', 'gravityperks'); ?></a>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="perk-description"><?php echo $perk->sections['description']; ?></div>
-
-                    </div>
-                </div>
-
-            <?php endforeach;
-
-            if(!isset($generic_perk)): ?>
-
-                <div class="all-perks-installed">
-                    <?php _e('Holy cow. You must really love perks.<br /><strong>You\'ve installed them all</strong>!', 'gravityperks'); ?>
-                </div>
-
-            <?php endif;
-
-            unset($perk);
-            $i++;
-            ?>
-
-            </div> <!-- / perk-listings -->
 
         </div>
 
@@ -419,6 +382,7 @@ class GWPerksPage {
         $actions = array();
         $is_network_activated = is_plugin_active_for_network($perk_file);
         $is_active = is_plugin_active($perk_file);
+        $available_perks = GWPerks::get_available_perks();
 
         $perk = GWPerk::get_perk( $perk_file );
         if( is_wp_error( $perk ) ) {
@@ -427,25 +391,30 @@ class GWPerksPage {
 
         if( $is_active ) {
 
+	        $documentation = $perk->get_documentation();
+	        $is_url = ( is_array( $documentation ) && rgar( $documentation, 'type' ) == 'url' ) || strpos( (string) $documentation, 'http' ) === 0;
+	        $class  = $is_url ? '' : 'thickbox';
+	        $target = $is_url ? '_blank' : '_self';
+
+	        $actions['documentation'] = '<a class="' . $class . '" target="' . $target . '" 
+                    title="' . sprintf(__('%s Documentation', 'gravityperks'), $perk_data['Name']) . '" 
+                    href="' . $perk->get_link_for('documentation') . '" 
+                    class="documentation">' . __('Docs', 'gravityperks') . '</a>';
+
             if(!$is_network_activated)
                 $actions['deactivate'] = '<a href="' . $perk->get_link_for('deactivate') . '" class="deactivate">' . __('Deactivate', 'gravityperks') . '</a>';
 
-            if( method_exists( $perk, 'documentation' ) ) {
-                
-                $documentation = $perk->get_documentation();
-                $is_url = is_array( $documentation ) && rgar( $documentation, 'type' ) == 'url';
-                $class = $is_url ? '' : 'thickbox';
-                $target = $is_url ? '_blank' : '_self';
-                
-                $actions['documentation'] = '<a class="' . $class . '" target="' . $target . '" title="Gravity Perks Documentation" href="' . $perk->get_link_for('documentation') . '" class="documentation">' . __('Documentation', 'gravityperks') . '</a>';
-                
+            if( $perk->has_method( 'settings', '' ) ) {
+	            $actions['settings'] = sprintf( '<a class="thickbox settings" title="Gravity Perks Settings" href="%s">%s</a>', $perk->get_link_for( 'settings' ), __( 'Settings', 'gravityperks' ) );
             }
-
-            if(method_exists($perk, 'settings'))
-                $actions['settings'] = '<a class="thickbox" title="Gravity Perks Settings" href="' . $perk->get_link_for('settings') . '" class="settings">' . __('Settings', 'gravityperks') . '</a>';
 
         }
         else {
+
+            if ( ! empty( $available_perks[ $perk_file ] ) && $documentation = $available_perks[ $perk_file ]->documentation ) {
+                $actions['documentation'] = '<a target="_blank" title="' . sprintf(__('%s Documentation', 'gravityperks'), $perk_data['Name']) . '" 
+                    href="' . $documentation . '" class="documentation">' . __('Docs', 'gravityperks') . '</a>';
+            }
 
             $actions['activate'] = '<a href="' . $perk->get_link_for('activate') . '" class="activate">Activate</a>';
             $actions['delete'] = '<a href="' . $perk->get_link_for('delete') . '" class="delete">Delete</a>';
@@ -462,14 +431,35 @@ class GWPerksPage {
 
         }
 
-        $update_info  = $perk->has_update();
-        $is_supported = $perk->is_supported();
+	    $update_info     = $perk->has_update();
+	    $is_supported    = $perk->is_supported();
+	    $is_unregistered = false;
 
         $listing_class = $is_active ? 'active' : 'inactive';
-        $listing_class .= ! $is_active || $is_supported ? '' : ' failed-requirements';
+        $listing_class .= ! $is_active || $is_supported ? '' : ' perk-error failed-requirements';
+
+	    $available_perks  = GWPerks::get_available_perks();
+	    $perk_info        = rgar( $available_perks, $perk->basename );
+	    $license_data     = GWPerks::get_license_data();
+	    $registered_perks = rgar( $license_data, 'registered_perks', array() );
+
+	    if ( !GWPerks::is_unlimited() && $perk_info && array_search( $perk_info->ID, $registered_perks ) === false ) {
+		    $is_unregistered = true;
+		    $listing_class   .= ' perk-error unregistered';
+	    }
 
         $actions = apply_filters( 'gperks_perk_action_links', array_filter( $actions ), $perk_file, $perk_data );
         $actions = apply_filters( "gperks_perk_action_links_$perk_file", $actions, $perk_file, $perk_data );
+
+	    $tooltip = '';
+
+	    if( $is_unregistered ) {
+		    $tooltip .= __( '<b>This perk is unregistered.</b> You will not receive updates for it.', 'gravityperks' );
+	    }
+
+	    if( $is_active && ! $is_supported ) {
+		    $tooltip .= $perk->failed_requirements_tooltip( $perk->get_failed_requirements() );
+	    }
 
         if( $is_ajax ) {
             ob_start();
@@ -480,10 +470,14 @@ class GWPerksPage {
         <div class="perk-listing <?php echo $listing_class; ?>">
             <div class="wrap">
 
+	            <?php if( ! empty( $tooltip ) ): ?>
+		            <a class="gp-unregistered tooltip gf_tooltip"
+		               tooltip="<?php echo esc_attr( $tooltip ); ?>"
+		               title="<?php echo esc_attr( $tooltip ); ?>"
+		               href="javascript:void(0);"></a>
+	            <?php endif; ?>
+
                 <h3>
-                    <?php if($is_active && !$is_supported ): ?>
-                        <span class="requirements"><?php $perk->failed_requirements_tooltip( $perk->get_failed_requirements() ); ?></span>
-                    <?php endif; ?>
                     <?php echo $perk_data['Name']; ?>
                     <span class="version">v.<?php echo $perk_data['Version']; ?></span></h3>
 
@@ -492,6 +486,11 @@ class GWPerksPage {
                     $action_count = count( $actions );
                     $i = 0;
                     foreach ( $actions as $action => $link ) {
+                        if ($action === 'activate' && $is_unregistered && !GWPerks::has_available_perks()) {
+                            $action_count--;
+                            continue;
+                        }
+
                         ++$i;
                         ( $i == $action_count ) ? $sep = '' : $sep = ' | ';
                         echo "<span class='$action'>$link$sep</span>";
@@ -500,19 +499,31 @@ class GWPerksPage {
 
                 <p class="perk-description"><?php echo gwar($perk_data, 'Description'); ?></p>
 
-                <?php if($is_network_activated): ?>
-                    <div class="network-activated-perk">
-                        <a href="<?php echo network_admin_url('plugins.php'); ?>" class="tooltip" tooltip="<?php echo esc_attr(__('<h6>Network Activated Perk</h6>This perk is network activated. You can deactivate this perk from the Network Admin Plugins page.', 'gravityperks')); ?>"><?php _e('Network Activated', 'gravityperks'); ?></a>
+                <?php if($is_unregistered): ?>
+                    <div class="actions-buttons register-perk">
+                        <?php if( GWPerks::has_valid_license() ): ?>
+                            <?php if (GWPerks::has_available_perks()): ?>
+                                <a class="button button-primary" href="<?php echo esc_html( wp_nonce_url( add_query_arg( array( 'page' => 'gwp_perks', 'gwp_register_perk' => $perk_info->ID ), admin_url('admin.php') ), 'gwp_register_perk' ) ); ?>">Register Perk</a>
+			                <?php else: ?>
+                                <a class="button button-primary" href="<?php echo GWPerks::get_license_upgrade_url(); ?>" target="_blank">Upgrade License to Register</a>
+	                        <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 
                 <?php if($update_info): ?>
-                    <div class="update-available">
-                        <?php if( GWPerks::has_valid_license() ): ?>
+                    <div class="actions-buttons update-available">
+                        <?php if( GWPerks::has_valid_license() && ! $is_unregistered ): ?>
                             <a href="<?php echo $perk->get_link_for('upgrade'); ?>" class="button button-primary">Install Update (v.<?php echo $update_info->new_version; ?>)</a>
                         <?php else: ?>
                             <a class="button button-primary" style="cursor:pointer;" onclick="alert('<?php _e('You must purchase or register your license to take advantage of automatic upgrades.', 'gravityperks'); ?>');">Install Update (v.<?php echo $update_info->new_version; ?>)</a>
                         <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if($is_network_activated): ?>
+                    <div class="network-activated-perk">
+                        <a href="<?php echo network_admin_url('plugins.php'); ?>" class="tooltip" tooltip="<?php echo esc_attr(__('<h6>Network Activated Perk</h6>This perk is network activated. You can deactivate this perk from the Network Admin Plugins page.', 'gravityperks')); ?>"><?php _e('Network Activated', 'gravityperks'); ?></a>
                     </div>
                 <?php endif; ?>
 
@@ -632,31 +643,152 @@ class GWPerksPage {
 
     }
 
-    public static function display_header_links() {
+    public static function display_license_manager() {
 
-        $header_links = array();
+	    if ( isset( $GLOBALS['GWP_LICENSE_NOTICE'] ) && $GLOBALS['GWP_LICENSE_NOTICE'] instanceof GWNotice ) {
+		    $GLOBALS['GWP_LICENSE_NOTICE']->display();
+	    }
 
-        if( GWPerks::has_valid_license() ) {
-            $header_links[] = array( 'label' => __('Get Support', 'gravityperks'), 'href' => GW_SUPPORT_URL, 'target' => '_blank', 'id' => 'gw-get-support' );
-            $header_links[] = array( 'label' => __('Settings', 'gravityperks'), 'href' => GW_SETTINGS_URL, 'id' => 'gw-settings' );
-        } else {
-            $header_links[] = array( 'label' => __('Buy License', 'gravityperks'), 'href' => GW_BUY_GPERKS_URL, 'target' => '_blank', 'id' => 'gw-buy-license' );
-            $header_links[] = array( 'label' => __('Register License', 'gravityperks'), 'href' => GW_REGISTER_LICENSE_URL, 'id' => 'gw-register-license' );
-        }
+        ?>
+        <div class="manage-menus">
+            <?php if( GWPerks::has_valid_license() ):
+                $license_data = GWPerks::get_license_data();
+                $registered_perk_count = is_array($license_data['registered_perks']) ? count($license_data['registered_perks']) : 0;
+                ?>
+                <span class="dashicons dashicons-yes"></span>
+                <strong>Gravity Perks <?php echo $license_data['price_name']; ?></strong>
+                <?php
+                if ($license_data['perk_limit'] !== 0) {
+                    echo $registered_perk_count . ' / ' . $license_data['perk_limit'] . ' perks registered';
+                }
+                ?>
+                <?php if ( ! defined( 'GPERKS_LICENSE_KEY' ) || ! GPERKS_LICENSE_KEY ): ?>
+                    | <a href="<?php echo esc_html( wp_nonce_url( add_query_arg( array( 'page' => 'gwp_perks', 'gwp_deactivate_license' => 1 ), admin_url('admin.php') ), 'gwp_deactivate_license' ) ); ?>"
+                            onClick="return confirm('<?php _e('Are you sure you wish to deactivate your Gravity Perks license on this site?'); ?>');">Deactivate</a>
+                <?php endif; ?>
+                <?php if ( $license_data['price_id'] != GW_PRICE_ID_PRO && $license_data['price_id'] != GW_PRICE_ID_LEGACY_UNLIMITED ): ?>
+                | <a href="<?php echo GWPerks::get_license_upgrade_url(); ?>" target="_blank">Upgrade</a>
+                <?php endif; ?>
 
-        $header_links = apply_filters( 'gperks_header_links', $header_links );
-        $links = array();
+                | <a href="<?php echo GW_ACCOUNT_URL; ?>" target="_blank">Manage</a>
 
-        foreach( $header_links as $header_link ) {
+                | <a href="<?php echo esc_html( wp_nonce_url( add_query_arg( array( 'page' => 'gwp_perks', 'gwp_flush_license' => 1 ), admin_url('admin.php') ), 'gwp_flush_license' ) ); ?>">Refresh</a>
 
-            $class = gwar($header_link, 'class') ? gwar($header_link, 'class') : 'button-secondary';
-            $target = gwar($header_link, 'target') ? 'target="' . gwar($header_link, 'target') . '"' : '';
-            $id = gwar($header_link, 'id') ? 'id="' . gwar($header_link, 'id') . '"' : '';
+                | <a href="https://gravitywiz.com/documentation/license-faq/" style="text-decoration: none;" target="_blank"><span class="dashicons dashicons-editor-help"></span></a>
+            <?php else: ?>
+                <form id="gwp_license" method="post" action="<?php echo remove_query_arg( array( 'gwp_deactivate_license' ) ); ?>">
+	                <?php wp_nonce_field('update', 'gwp_license'); ?>
 
-            $links[] = "<a class=\"{$class}\" href=\"{$header_link['href']}\" {$target} {$id} >{$header_link['label']}</a>";
-        }
+                    <input type="text" name="gwp_license_key" id="gwp_license_key"
+                           placeholder="Enter your Gravity Perks license..."/>
 
-        echo '<ul id="gwp-header-links"><li>' . implode('</li><li>', $links) . '</li></ul>';
+	                <?php if( GWPerks::has_valid_license() ): ?>
+
+		                <a id="gw-get-support" href="<?php echo GW_SUPPORT_URL; ?>" target="_blank"
+		                   class="button button-secondary"><?php _e( 'Get Support', 'gravityperks' ); ?></a>
+
+	                <?php else: ?>
+
+		                <a id="gw-buy-license" href="<?php echo GW_BUY_URL; ?>" target="_blank"
+		                   class="button button-secondary"><?php _e( 'Buy License', 'gravityperks' ); ?></a>
+
+			        <?php endif; ?>
+
+                    <input type="submit" value="Register License" name="gwp_license_submit" id="gwp_license_submit"
+                           class="button button-primary"/>
+
+                </form>
+            <?php endif; ?>
+        </div>
+        <?php
+
+    }
+
+    public static function license_manager_form_action() {
+
+        if ( gwar($_POST, 'gwp_license_submit') ) {
+
+	        $settings = get_site_option('gwp_settings') ? get_site_option('gwp_settings') : array();
+
+	        check_admin_referer( 'update', 'gwp_license' );
+
+	        $settings = array_merge( $settings, array(
+		        'license_key' => trim( stripslashes( $_POST['gwp_license_key'] ) )
+	        ) );
+
+	        update_site_option( 'gwp_settings', $settings );
+
+	        GWPerks::flush_license();
+
+            if ( ! GWPerks::has_valid_license() ) {
+            	if( GravityPerks::get_api_status() != '200' ) {
+		            $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice( GravityPerks::get_api_error_message(), array( 'class' => 'inline error gwp-message' ) );
+	            } else {
+            	    $license_data = GravityPerks::get_license_data();
+            	    $message =  __( 'Oops! That doesn\'t appear to be a valid license.', 'gravityperks' );
+
+		            if ( rgar( $license_data, 'activations_left' ) === 0 ) {
+			            if ( $license_limit = rgar( $license_data, 'license_limit' ) ) {
+				            $message = sprintf( __( 'Oops! You have reached your license\'s site limit of %d site(s).', 'gravityperks' ), $license_limit );
+			            } else {
+				            $message = sprintf( __( 'Oops! You have reached your license\'s site limit.', 'gravityperks' ), $license_limit );
+			            }
+
+                        $message .= sprintf( ' <a href="%s" target="_blank">%s</a>', GravityPerks::get_license_upgrade_url(), __( 'Upgrade Now', 'gravityperks' ) );
+		            }
+
+                    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice( $message, array( 'class' => 'inline error gwp-message' ) );
+	            }
+            }
+
+        } else if ( $perk_id = gwar($_GET, 'gwp_deregister_perk') ) {
+
+		    check_admin_referer( 'gwp_deregister_perk' );
+
+		    GWPerks::flush_license();
+
+		    if( GWPerks::deregister_perk( $perk_id ) ) {
+			    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice(__('Perk successfully deregistered.', 'gravityperks'), array('class' => 'inline notice notice-success gwp-message'));
+		    }
+
+
+	    } else if ( $perk_id = gwar($_GET, 'gwp_register_perk') ) {
+
+	        check_admin_referer( 'gwp_register_perk' );
+
+	        GWPerks::flush_license();
+
+	        if( GWPerks::register_perk( $perk_id ) ) {
+		        $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice( __( 'Perk successfully registered.', 'gravityperks' ), array( 'class' => 'inline notice notice-success gwp-message' ) );
+	        }
+
+
+        } else if ( gwar($_GET, 'gwp_deactivate_license') ) {
+
+		    check_admin_referer( 'gwp_deactivate_license' );
+
+	        GravityPerks::get_api()->deactivate_license();
+
+		    $settings = get_site_option('gwp_settings') ? get_site_option('gwp_settings') : array();
+		    $settings = array_merge( $settings, array(
+			    'license_key' => '',
+		    ) );
+
+		    update_site_option( 'gwp_settings', $settings );
+
+		    GWPerks::flush_license();
+
+		    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice(__('License successfully deactivated.', 'gravityperks'), array('class' => 'inline notice notice-success gwp-message'));
+
+	    } else if ( gwar($_GET, 'gwp_flush_license') ) {
+
+		    check_admin_referer( 'gwp_flush_license' );
+
+		    GWPerks::flush_license();
+
+		    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice(__('License successfully refreshed.', 'gravityperks'), array('class' => 'inline notice notice-success gwp-message'));
+
+	    }
 
     }
 
@@ -720,14 +852,6 @@ class GWPerksPage {
                 'position' => array( 'edge' => 'top', 'align' => 'right', 'offset' => '23 0' )
                 ),
             array(
-                'name' => 'gwp_register_license',
-                'target' => 'a#gw-register-license',
-                'title' => '<h3>' . __('Register Your License', 'gravityperks') . '</h3>',
-                'content' => '<p>' . __('Already purchased a license? Register your license to enable unlimited access to <strong>all perks</strong> along with automatic upgrades and support.', 'gravityperks') . '</p>',
-                'pending' => 'gwp_buy_license',
-                'position' => array( 'edge' => 'top', 'align' => 'right' )
-                ),
-            array(
                 'name' => 'gwp_get_support',
                 'target' => 'a#gw-get-support',
                 'title' => '<h3>' . __('Need Help? Get Support!', 'gravityperks') . '</h3>',
@@ -752,7 +876,7 @@ class GWPerksPage {
             $pointer['action'] = $pending && !GWPerks::is_pointer_dismissed( $pending ) ? '' : ".pointer('open');";
 
             $dependent_pointer = self::get_pointer_dependency( $pointer['name'] );
-            $pointer['on_close'] = $dependent_pointer ? "$('" . $dependent_pointer['target'] . "').pointer('open');" : '';
+            $pointer['on_next'] = $dependent_pointer ? "$('" . $dependent_pointer['target'] . "').pointer('open');" : '';
 
             $position = gwar($pointer, 'position');
             $pointer['position'] = $position ? $position : array( 'edge' => 'top' );
@@ -773,14 +897,33 @@ class GWPerksPage {
 
                 $('<?php echo $pointer['target']; ?>').pointer({
                     content: '<?php echo $pointer['title'] . $pointer['content']; ?>',
+                    buttons: function( event, t ) {
+	                    var closeButton = $('<a class="close" href="#">End Tour</a>');
+	                    var nextButton = $('<a class="close next" href="#">Next</a>');
+
+	                    closeButton.bind( 'click.pointer', function(e) {
+		                    e.preventDefault();
+
+		                    jQuery.post( ajaxurl, {
+			                    security: '<?php echo wp_create_nonce( 'gwp-dismiss-pointers' ); ?>',
+			                    action: 'gwp_dismiss_pointers'
+		                    });
+
+		                    t.element.pointer('close');
+	                    });
+
+	                    nextButton.bind( 'click.pointer', function(e) {
+		                    <?php echo $pointer['on_next']; ?>
+		                    gwpDismissPointer( '<?php echo $pointer['name']; ?>' );
+		                    t.element.pointer('close');
+	                    });
+
+	                    return closeButton<?php echo $pointer['on_next'] ? '.add(nextButton)' : '' ?>;
+                    },
                     position: <?php echo json_encode($pointer['position']); ?>,
-                    pointerClass: '<?php echo $pointer['class']; ?>',
+                    pointerClass: 'gwp-pointer <?php echo $pointer['class']; ?>',
                     open: function(events, elements) {
                         <?php echo gwar( $pointer, 'on_open' ); ?>
-                    },
-                    close: function() {
-                        gwpDismissPointer( '<?php echo $pointer['name']; ?>' );
-                        <?php echo $pointer['on_close']; ?>
                     }
                 })<?php echo $pointer['action']; ?>;
 
@@ -804,12 +947,6 @@ class GWPerksPage {
                 return $pointer;
         }
         return false;
-    }
-
-    public static function show_splash() {
-        return false;
-        $splash_dismissed = GWPerks::is_pointer_dismissed( 'need_license_splash' );
-        return !GWPerks::has_valid_license() && !$splash_dismissed;
     }
 
 
@@ -914,24 +1051,22 @@ class GWPerksPage {
 
         <body class="perk-iframe wp-core-ui">
 
-            <div class="wrap perk-settings">
-                <form action="" method="post">
-                    <h1 class="page-title"><?php echo $page_title; ?></h1>
-                    <div class="content">
-                        <?php
-
-                        if(isset($notice))
-                            $notice->display();
-
-                        $perk->settings();
-
-                        ?>
-                    </div>
-                    <div class="content-footer">
-                        <input type="submit" id="gwp_save_settings" name="gwp_save_settings" class="button button-primary" value="<?php _e('Save Settings', 'gravityperks'); ?>" />
-                    </div>
-                </form>
-            </div>
+	        <div class="wrap perk-settings">
+		        <form action="" method="post">
+			        <div class="header">
+				        <h1 class="page-title"><?php echo $page_title; ?></h1>
+				        <?php if( isset( $notice ) ):
+					        $notice->display();
+				        endif; ?>
+			        </div>
+			        <div class="content">
+				        <?php echo $perk->get_settings(); ?>
+			        </div>
+			        <div class="content-footer">
+				        <input type="submit" id="gwp_save_settings" name="gwp_save_settings" class="button button-primary" value="<?php _e('Save Settings', 'gravityperks'); ?>" />
+			        </div>
+		        </form>
+	        </div>
 
             <script type="text/javascript">
             setTimeout('jQuery(".updated").slideUp();', 5000);
