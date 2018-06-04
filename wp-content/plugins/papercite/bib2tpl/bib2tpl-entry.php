@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__) . "/../lib/UTF8.php");
-
 /**
  * This class is an entry format
  * @author Benjamin Piwowarski
@@ -11,7 +9,7 @@ class PaperciteBibtexEntryFormat {
   var $formats = array();
   var $properties = array();
 
-  function PaperciteBibtexEntryFormat(&$file_content) {
+  function __construct(&$file_content) {
     $parser = xml_parser_create(); 
     if (!$parser) 
       return false;
@@ -328,11 +326,11 @@ class PaperciteBibtexEntryFormat {
           {
             if($firstTime)
               {
-                $firstNameInitialMake = UTF8::utf8_strtoupper(UTF8::utf8_substr(trim($name), 0, 1));
+                $firstNameInitialMake = mb_strtoupper(mb_substr(trim($name), 0, 1));
                 $firstTime = FALSE;
               }
             else
-              $initials[] = UTF8::utf8_strtoupper(UTF8::utf8_substr(trim($name), 0, 1));
+              $initials[] = mb_strtoupper(mb_substr(trim($name), 0, 1));
           }
         if(isset($initials))
           {
