@@ -27,12 +27,21 @@
   <li><?php _e('give this plugin a good ranking at ','OSM') ?><a target="_new" href="http://wordpress.org/support/view/plugin-reviews/osm">WordPress.org</a>.</li>
   <li><?php _e('post an article about ','OSM') ?><a target="_new" href="http://www.OpenStreetMap.org">OpenStreetMap</a><?php _e(' on your blog.','OSM') ?></li>
 </ol>
- <tr> <h3>  PHP Interface setting:</h3> </tr>
+<form method="post">   
+<table>
+ <tr> <h3> Shortcodegenerator Settings:</h3> </tr>
  <tr>
-  <td><label for="osm_zoom_level"><?php _e('Map Zoomlevel for the PHP Link (1-17)','OSM') ?>:</label></td>
-  <td><input type="text" name="osm_zoom_level" value="<?php echo $osm_zoom_level ?>" /></td>
+  <td><label for="osm_zoom_level"><?php _e('Default Latitude for maps','OSM') ?>:</label></td>
+  <td><input type="text" name="osm_default_lat" value="<?php echo esc_attr($osm_default_lat) ?>" /></td>
+ </tr>
+ <tr>
+  <td><label for="osm_zoom_level"><?php _e('Default Longitude for maps','OSM') ?>:</label></td>
+  <td><input type="text" name="osm_default_lon" value="<?php echo esc_attr($osm_default_lon) ?>" /></td>
+ </tr>
+ <tr>
+  <td><label for="osm_zoom_level"><?php _e('Default Zoom Level for maps','OSM') ?>:</label></td>
+  <td><input type="text" name="osm_default_zoom" value="<?php echo esc_attr($osm_default_zoom) ?>" /></td>
  </tr>
 </table>
 <div class="submit"><input type="submit" name="Options" value="<?php _e('Update Options','OSM') ?> &raquo;" /></div>
-</div>
 </form>
