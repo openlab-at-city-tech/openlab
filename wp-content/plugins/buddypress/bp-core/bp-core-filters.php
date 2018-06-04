@@ -101,9 +101,6 @@ function bp_core_exclude_pages( $pages = array() ) {
 	if ( !empty( $bp->pages->register ) )
 		$pages[] = $bp->pages->register->id;
 
-	if ( !empty( $bp->pages->forums ) && ( !bp_is_active( 'forums' ) || ( bp_is_active( 'forums' ) && bp_forums_has_directory() && !bp_forums_is_installed_correctly() ) ) )
-		$pages[] = $bp->pages->forums->id;
-
 	/**
 	 * Filters specific pages that shouldn't show up on page listings.
 	 *
@@ -967,7 +964,7 @@ function bp_email_add_link_color_to_template( $value, $property_name, $transform
 	}
 
 	$settings    = bp_email_get_appearance_settings();
-	$replacement = 'style="color: ' . esc_attr( $settings['highlight_color'] ) . ';';
+	$replacement = 'style="color: ' . esc_attr( $settings['link_text_color'] ) . ';';
 
 	// Find all links.
 	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
@@ -1008,16 +1005,17 @@ function bp_email_set_default_headers( $headers, $property, $transform, $email )
 	$tokens = $email->get_tokens();
 
 	// Add 'List-Unsubscribe' header if applicable.
-	if ( ! empty( $tokens['unsubscribe'] ) && $tokens['unsubscribe'] !== site_url( 'wp-login.php' ) ) {
+	if ( ! empty( $tokens['unsubscribe'] ) && $tokens['unsubscribe'] !== wp_login_url() ) {
 		$user = get_user_by( 'email', $tokens['recipient.email'] );
 
-		$headers['List-Unsubscribe'] = sprintf(
-			'<%s>',
-			esc_url_raw( bp_email_get_unsubscribe_link( array(
-				'user_id'           => $user->ID,
-				'notification_type' => $email->get( 'type' ),
-			) ) )
-		);
+		$link = bp_email_get_unsubscribe_link( array(
+			'user_id'           => $user->ID,
+			'notification_type' => $email->get( 'type' ),
+		) );
+
+		if ( ! empty( $link ) ) {
+			$headers['List-Unsubscribe'] = sprintf( '<%s>', esc_url_raw( $link ) );
+		}
 	}
 
 	return $headers;
@@ -1038,6 +1036,7 @@ add_filter( 'bp_email_get_headers', 'bp_email_set_default_headers', 6, 4 );
 function bp_email_set_default_tokens( $tokens, $property_name, $transform, $email ) {
 	$tokens['site.admin-email'] = bp_get_option( 'admin_email' );
 	$tokens['site.url']         = home_url();
+	$tokens['email.subject']    = $email->get_subject();
 
 	// These options are escaped with esc_html on the way into the database in sanitize_option().
 	$tokens['site.description'] = wp_specialchars_decode( bp_get_option( 'blogdescription' ), ENT_QUOTES );
@@ -1048,7 +1047,6 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 	$tokens['recipient.email']     = '';
 	$tokens['recipient.name']      = '';
 	$tokens['recipient.username']  = '';
-
 
 	// Who is the email going to?
 	$recipient = $email->get( 'to' );
@@ -1065,6 +1063,7 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 
 		if ( $user_obj ) {
 			$tokens['recipient.username'] = $user_obj->user_login;
+
 			if ( bp_is_active( 'settings' ) && empty( $tokens['unsubscribe'] ) ) {
 				$tokens['unsubscribe'] = esc_url( sprintf(
 					'%s%s/notifications/',
@@ -1077,7 +1076,7 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 
 	// Set default unsubscribe link if not passed.
 	if ( empty( $tokens['unsubscribe'] ) ) {
-		$tokens['unsubscribe'] = site_url( 'wp-login.php' );
+		$tokens['unsubscribe'] = wp_login_url();
 	}
 
 	// Email preheader.
@@ -1132,7 +1131,7 @@ function bp_core_render_email_template( $template ) {
 
 	// Make sure we add a <title> tag so WP Customizer picks it up.
 	$template = str_replace( '<head>', '<head><title>' . esc_html_x( 'BuddyPress Emails', 'screen heading', 'buddypress' ) . '</title>', $template );
-	echo str_replace( '{{{content}}}', nl2br( get_post()->post_content ), $template );
+	echo str_replace( '{{{content}}}', wpautop( get_post()->post_content ), $template );
 
 	/*
 	 * Link colours are applied directly in the email template before sending, so we

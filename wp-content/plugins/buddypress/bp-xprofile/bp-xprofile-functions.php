@@ -158,6 +158,7 @@ function bp_xprofile_get_field_types() {
 		'selectbox'      => 'BP_XProfile_Field_Type_Selectbox',
 		'textarea'       => 'BP_XProfile_Field_Type_Textarea',
 		'textbox'        => 'BP_XProfile_Field_Type_Textbox',
+		'telephone'      => 'BP_XProfile_Field_Type_Telephone',
 	);
 
 	/**
@@ -783,15 +784,17 @@ function bp_xprofile_bp_user_query_search( $sql, BP_User_Query $query ) {
 
 	// Combine the core search (against wp_users) into a single OR clause
 	// with the xprofile_data search.
-	$search_xprofile = $wpdb->prepare(
-		"u.{$query->uid_name} IN ( SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE %s OR value LIKE %s )",
+	$matched_user_ids = $wpdb->get_col( $wpdb->prepare(
+		"SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE %s OR value LIKE %s",
 		$search_terms_nospace,
 		$search_terms_space
-	);
+	) );
 
-	$search_core     = $sql['where']['search'];
-	$search_combined = "( {$search_xprofile} OR {$search_core} )";
-	$sql['where']['search'] = $search_combined;
+	if ( ! empty( $matched_user_ids ) ) {
+		$search_core     = $sql['where']['search'];
+		$search_combined = " ( u.{$query->uid_name} IN (" . implode(',', $matched_user_ids) . ") OR {$search_core} )";
+		$sql['where']['search'] = $search_combined;
+	}
 
 	return $sql;
 }
@@ -836,9 +839,7 @@ function xprofile_sync_wp_profile( $user_id = 0 ) {
 	bp_update_user_meta( $user_id, 'last_name',  $lastname  );
 
 	wp_update_user( array( 'ID' => $user_id, 'display_name' => $fullname ) );
-	wp_cache_delete( 'bp_core_userdata_' . $user_id, 'bp' );
 }
-add_action( 'xprofile_updated_profile', 'xprofile_sync_wp_profile' );
 add_action( 'bp_core_signup_user',      'xprofile_sync_wp_profile' );
 add_action( 'bp_core_activated_user',   'xprofile_sync_wp_profile' );
 
@@ -862,6 +863,22 @@ function xprofile_sync_bp_profile( &$errors, $update, &$user ) {
 }
 add_action( 'user_profile_update_errors', 'xprofile_sync_bp_profile', 10, 3 );
 
+/**
+ * Update the WP display, last, and first name fields when the xprofile display name field is updated.
+ *
+ * @since 3.0.0
+ *
+ * @param BP_XProfile_ProfileData $data Current instance of the profile data being saved.
+ */
+function xprofile_sync_wp_profile_on_single_field_set( $data ) {
+
+	if ( bp_xprofile_fullname_field_id() !== $data->field_id ) {
+		return;
+	}
+
+	xprofile_sync_wp_profile( $data->user_id );
+}
+add_action( 'xprofile_data_after_save', 'xprofile_sync_wp_profile_on_single_field_set' );
 
 /**
  * When a user is deleted, we need to clean up the database and remove all the

@@ -123,23 +123,93 @@ class BP_Groups_Component extends BP_Component {
 	public function includes( $includes = array() ) {
 		$includes = array(
 			'cache',
-			'forums',
-			'actions',
 			'filters',
-			'screens',
 			'widgets',
-			'activity',
 			'template',
 			'adminbar',
 			'functions',
 			'notifications'
 		);
 
+		// Conditional includes.
+		if ( bp_is_active( 'activity' ) ) {
+			$includes[] = 'activity';
+		}
 		if ( is_admin() ) {
 			$includes[] = 'admin';
 		}
 
 		parent::includes( $includes );
+	}
+
+	/**
+	 * Late includes method.
+	 *
+	 * Only load up certain code when on specific pages.
+	 *
+	 * @since 3.0.0
+	 */
+	public function late_includes() {
+		// Bail if PHPUnit is running.
+		if ( defined( 'BP_TESTS_DIR' ) ) {
+			return;
+		}
+
+		if ( bp_is_groups_component() ) {
+			// Authenticated actions.
+			if ( is_user_logged_in() &&
+				in_array( bp_current_action(), array( 'create', 'join', 'leave-group' ), true )
+			) {
+				require $this->path . 'bp-groups/actions/' . bp_current_action() . '.php';
+			}
+
+			// Actions - RSS feed handler.
+			if ( bp_is_active( 'activity' ) && bp_is_current_action( 'feed' ) ) {
+				require $this->path . 'bp-groups/actions/feed.php';
+			}
+
+			// Actions - Random group handler.
+			if ( isset( $_GET['random-group'] ) ) {
+				require $this->path . 'bp-groups/actions/random.php';
+			}
+
+			// Screens - Directory.
+			if ( bp_is_groups_directory() ) {
+				require $this->path . 'bp-groups/screens/directory.php';
+			}
+
+			// Screens - User profile integration.
+			if ( bp_is_user() ) {
+				require $this->path . 'bp-groups/screens/user/my-groups.php';
+
+				if ( bp_is_current_action( 'invites' ) ) {
+					require $this->path . 'bp-groups/screens/user/invites.php';
+				}
+			}
+
+			// Single group.
+			if ( bp_is_group() ) {
+				// Actions - Access protection.
+				require $this->path . 'bp-groups/actions/access.php';
+
+				// Public nav items.
+				if ( in_array( bp_current_action(), array( 'home', 'request-membership', 'activity', 'members', 'send-invites' ), true ) ) {
+					require $this->path . 'bp-groups/screens/single/' . bp_current_action() . '.php';
+				}
+
+				// Admin nav items.
+				if ( bp_is_item_admin() && is_user_logged_in() ) {
+					require $this->path . 'bp-groups/screens/single/admin.php';
+
+					if ( in_array( bp_get_group_current_admin_tab(), array( 'edit-details', 'group-settings', 'group-avatar', 'group-cover-image', 'manage-members', 'membership-requests', 'delete-group' ), true ) ) {
+						require $this->path . 'bp-groups/screens/single/admin/' . bp_get_group_current_admin_tab() . '.php';
+					}
+				}
+			}
+
+			// Theme compatibility.
+			new BP_Groups_Theme_Compat();
+		}
 	}
 
 	/**
@@ -544,12 +614,7 @@ class BP_Groups_Component extends BP_Component {
 			// If this is a private group, and the user is not a
 			// member and does not have an outstanding invitation,
 			// show a "Request Membership" nav item.
-			if ( is_user_logged_in() &&
-				 ! $this->current_group->is_member &&
-				 ! groups_check_for_membership_request( bp_loggedin_user_id(), $this->current_group->id ) &&
-				 $this->current_group->status == 'private' &&
-				 ! groups_check_user_has_invite( bp_loggedin_user_id(), $this->current_group->id )
-				) {
+			if ( bp_current_user_can( 'groups_request_membership', array( 'group_id' => $this->current_group->id ) ) ) {
 
 				$sub_nav[] = array(
 					'name'            => _x( 'Request Membership','Group screen nav', 'buddypress' ),
@@ -558,20 +623,6 @@ class BP_Groups_Component extends BP_Component {
 					'parent_slug'     => $this->current_group->slug,
 					'screen_function' => 'groups_screen_group_request_membership',
 					'position'        => 30
-				);
-			}
-
-			// Forums are enabled and turned on.
-			if ( $this->current_group->enable_forum && bp_is_active( 'forums' ) ) {
-				$sub_nav[] = array(
-					'name'            => _x( 'Forum', 'My Group screen nav', 'buddypress' ),
-					'slug'            => 'forum',
-					'parent_url'      => $group_link,
-					'parent_slug'     => $this->current_group->slug,
-					'screen_function' => 'groups_screen_group_forum',
-					'position'        => 40,
-					'user_has_access' => $this->current_group->user_has_access,
-					'item_css_id'     => 'forums'
 				);
 			}
 

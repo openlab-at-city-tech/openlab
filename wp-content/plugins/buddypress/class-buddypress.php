@@ -235,6 +235,16 @@ class BuddyPress {
 			define( 'BP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
 
+		// Legacy forum constant - supported for compatibility with bbPress 2.
+		if ( ! defined( 'BP_FORUMS_PARENT_FORUM_ID' ) ) {
+			define( 'BP_FORUMS_PARENT_FORUM_ID', 1 );
+		}
+
+		// Legacy forum constant - supported for compatibility with bbPress 2.
+		if ( ! defined( 'BP_FORUMS_SLUG' ) ) {
+			define( 'BP_FORUMS_SLUG', 'forums' );
+		}
+
 		// Only applicable to those running trunk
 		if ( ! defined( 'BP_SOURCE_SUBDIRECTORY' ) ) {
 			define( 'BP_SOURCE_SUBDIRECTORY', '' );
@@ -293,7 +303,7 @@ class BuddyPress {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '2.9.3';
+		$this->version    = '3.0.0';
 		$this->db_version = 11105;
 
 		/** Loading ***********************************************************/
@@ -389,7 +399,23 @@ class BuddyPress {
 		$this->displayed_user = new stdClass();
 
 		/** Post types and taxonomies *****************************************/
+
+		/**
+		 * Filters the post type slug for the email component.
+		 *
+		 * since 2.5.0
+		 *
+		 * @param string $value Email post type slug.
+		 */
 		$this->email_post_type     = apply_filters( 'bp_email_post_type', 'bp-email' );
+
+		/**
+		 * Filters the taxonomy slug for the email type component.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $value Email type taxonomy slug.
+		 */
 		$this->email_taxonomy_type = apply_filters( 'bp_email_tax_type', 'bp-email-type' );
 	}
 
@@ -479,6 +505,11 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/2.7.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.8.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/2.9.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/3.0.php' );
+		}
+
+		if ( defined( 'WP_CLI' ) && file_exists( $this->plugin_dir . 'cli/wp-cli-bp.php' ) ) {
+			require( $this->plugin_dir . 'cli/wp-cli-bp.php' );
 		}
 	}
 
@@ -710,6 +741,14 @@ class BuddyPress {
 			'version' => bp_get_version(),
 			'dir'     => trailingslashit( $this->themes_dir . '/bp-legacy' ),
 			'url'     => trailingslashit( $this->themes_url . '/bp-legacy' )
+		) );
+
+		bp_register_theme_package( array(
+			'id'      => 'nouveau',
+			'name'    => __( 'BuddyPress Nouveau', 'buddypress' ),
+			'version' => bp_get_version(),
+			'dir'     => trailingslashit( $this->themes_dir . '/bp-nouveau' ),
+			'url'     => trailingslashit( $this->themes_url . '/bp-nouveau' )
 		) );
 
 		// Register the basic theme stack. This is really dope.

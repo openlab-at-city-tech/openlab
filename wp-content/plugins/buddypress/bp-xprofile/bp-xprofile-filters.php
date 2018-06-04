@@ -288,7 +288,7 @@ function xprofile_filter_format_field_value_by_field_id( $field_value, $field_id
  */
 function xprofile_filter_pre_validate_value_by_field_type( $value, $field, $field_type_obj ) {
 	if ( method_exists( $field_type_obj, 'pre_validate_filter' ) ) {
-		$value = call_user_func( array( $field_type_obj, 'pre_validate_filter' ), $value );
+		$value = call_user_func( array( $field_type_obj, 'pre_validate_filter' ), $value, $field->id );
 	}
 
 	return $value;
@@ -358,11 +358,27 @@ function xprofile_filter_link_profile_data( $field_value, $field_type = 'textbox
 	}
 
 	if ( strpos( $field_value, ',' ) !== false ) {
+		// Comma-separated lists.
 		$list_type = 'comma';
-		$values    = explode( ',', $field_value ); // Comma-separated lists.
+		$values    = explode( ',', $field_value );
 	} else {
-		$list_type = 'semicolon';
-		$values = explode( ';', $field_value ); // Semicolon-separated lists.
+		/*
+		 * Semicolon-separated lists.
+		 *
+		 * bp_xprofile_escape_field_data() runs before this function, which often runs esc_html().
+		 * In turn, that encodes HTML entities in the string (";" becomes "&#039;").
+		 *
+		 * Before splitting on the ";" character, decode the HTML entities, and re-encode after.
+		 * This prevents input like "O'Hara" rendering as "O&#039; Hara" (with each of those parts
+		 * having a seperate HTML link).
+		 */
+		$list_type   = 'semicolon';
+		$field_value = wp_specialchars_decode( $field_value, ENT_QUOTES );
+		$values      = explode( ';', $field_value );
+
+		array_walk( $values, function( &$value, $key ) use ( $field_type, $field ) {
+			$value = bp_xprofile_escape_field_data( $value, $field_type, $field->id );
+		} );
 	}
 
 	if ( ! empty( $values ) ) {

@@ -3,6 +3,8 @@
 This is the BuddyPress companion stylesheet for
 the WordPress Twentysixteen theme.
 
+@version 3.0.0
+
 This sheet supports the primary BuddyPress styles in buddypress.css
 
 If you are running as a child theme of twentysixteen this stylesheet will be
@@ -1610,12 +1612,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 	border-bottom-color: #b7b7b7;
 	line-height: 1;
 	text-align: left;
-}
-
-.bp-user #buddypress #message-threads.sitewide-notices td:last-child a:last-child {
-	line-height: 0;
-	margin-right: 0.7em;
-	text-indent: -999em;
 }
 
 .bp-user #buddypress #message-threads.sitewide-notices td:last-child a:last-child:after {

@@ -48,11 +48,11 @@ function groups_get_group( $group_id ) {
 	 * Old-style arguments take the form of an array or a query string.
 	 */
 	if ( ! is_numeric( $group_id ) ) {
-		$r = wp_parse_args( $group_id, array(
+		$r = bp_parse_args( $group_id, array(
 			'group_id'        => false,
 			'load_users'      => false,
 			'populate_extras' => false,
-		) );
+		), 'groups_get_group' );
 
 		$group_id = $r['group_id'];
 	}
@@ -88,8 +88,7 @@ function groups_get_group( $group_id ) {
  *                                  'hidden'. Defaults to 'public'.
  *     @type int      $parent_id    The ID of the parent group. Default: 0.
  *     @type int      $enable_forum Optional. Whether the group has a forum enabled.
- *                                  If the legacy forums are enabled for this group
- *                                  or if a bbPress forum is enabled for the group,
+ *                                  If a bbPress forum is enabled for the group,
  *                                  set this to 1. Default: 0.
  *     @type string   $date_created The GMT time, in Y-m-d h:i:s format, when the group
  *                                  was created. Defaults to the current time.
@@ -98,19 +97,18 @@ function groups_get_group( $group_id ) {
  */
 function groups_create_group( $args = '' ) {
 
-	$defaults = array(
+	$args = bp_parse_args( $args, array(
 		'group_id'     => 0,
 		'creator_id'   => 0,
 		'name'         => '',
 		'description'  => '',
 		'slug'         => '',
-		'status'       => 'public',
-		'parent_id'    => 0,
-		'enable_forum' => 0,
-		'date_created' => bp_core_current_time()
-	);
+		'status'       => null,
+		'parent_id'    => null,
+		'enable_forum' => null,
+		'date_created' => null
+	), 'groups_create_group' );
 
-	$args = wp_parse_args( $args, $defaults );
 	extract( $args, EXTR_SKIP );
 
 	// Pass an existing group ID.
@@ -118,7 +116,12 @@ function groups_create_group( $args = '' ) {
 		$group = groups_get_group( $group_id );
 		$name  = ! empty( $name ) ? $name : $group->name;
 		$slug  = ! empty( $slug ) ? $slug : $group->slug;
+		$creator_id  = ! empty( $creator_id ) ? $creator_id : $group->creator_id;
 		$description = ! empty( $description ) ? $description : $group->description;
+		$status = ! is_null( $status ) ? $status : $group->status;
+		$parent_id = ! is_null( $parent_id ) ? $parent_id : $group->parent_id;
+		$enable_forum = ! is_null( $enable_forum ) ? $enable_forum : $group->enable_forum;
+		$date_created = ! is_null( $date_created ) ? $date_created : $group->date_created;
 
 		// Groups need at least a name.
 		if ( empty( $name ) ) {
@@ -129,6 +132,12 @@ function groups_create_group( $args = '' ) {
 	} else {
 		// Instantiate new group object.
 		$group = new BP_Groups_Group;
+
+		// Check for null values, reset to sensible defaults.
+		$status = ! is_null( $status ) ? $status : 'public';
+		$parent_id = ! is_null( $parent_id ) ? $parent_id : 0;
+		$enable_forum = ! is_null( $enable_forum ) ? $enable_forum : 0;
+		$date_created = ! is_null( $date_created ) ? $date_created : bp_core_current_time();
 	}
 
 	// Set creator ID.
@@ -245,13 +254,13 @@ function groups_edit_base_group_details( $args = array() ) {
 		$args = bp_core_parse_args_array( $old_args_keys, func_get_args() );
 	}
 
-	$r = wp_parse_args( $args, array(
+	$r = bp_parse_args( $args, array(
 		'group_id'       => bp_get_current_group_id(),
 		'name'           => null,
 		'slug'           => null,
 		'description'    => null,
 		'notify_members' => false,
-	) );
+	), 'groups_edit_base_group_details' );
 
 	if ( ! $r['group_id'] ) {
 		return false;
@@ -343,13 +352,6 @@ function groups_edit_group_settings( $group_id, $enable_forum, $status, $invite_
 
 	if ( !$group->save() )
 		return false;
-
-	// If forums have been enabled, and a forum does not yet exist, we need to create one.
-	if ( $group->enable_forum ) {
-		if ( bp_is_active( 'forums' ) && !groups_get_groupmeta( $group->id, 'forum_id' ) ) {
-			groups_new_group_forum( $group->id, $group->name, $group->description );
-		}
-	}
 
 	// Set the invite status.
 	if ( $invite_status )
@@ -638,25 +640,24 @@ function groups_get_group_mods( $group_id ) {
  * returning true.
  *
  * @since 1.0.0
+ * @since 3.0.0 $group_id now supports multiple values. Only works if legacy query is not
+ *              in use.
  *
  * @param array $args {
  *     An array of optional arguments.
- *     @type int      $group_id     ID of the group whose members are being queried.
- *                                  Default: current group ID.
- *     @type int      $page         Page of results to be queried. Default: 1.
- *     @type int      $per_page     Number of items to return per page of results.
- *                                  Default: 20.
- *     @type int      $max          Optional. Max number of items to return.
- *     @type array    $exclude      Optional. Array of user IDs to exclude.
- *     @type bool|int $value        True (or 1) to exclude admins and mods from results.
- *                                  Default: 1.
- *     @type bool|int $value        True (or 1) to exclude banned users from results.
- *                                  Default: 1.
- *     @type array    $group_role   Optional. Array of group roles to include.
- *     @type string   $search_terms Optional. Filter results by a search string.
- *     @type string   $type         Optional. Sort the order of results. 'last_joined',
- *                                  'first_joined', or any of the $type params available
- *                                  in {@link BP_User_Query}. Default: 'last_joined'.
+ *     @type int|array|string $group_id            ID of the group to limit results to. Also accepts multiple values
+ *                                                 either as an array or as a comma-delimited string.
+ *     @type int              $page                Page of results to be queried. Default: 1.
+ *     @type int              $per_page            Number of items to return per page of results. Default: 20.
+ *     @type int              $max                 Optional. Max number of items to return.
+ *     @type array            $exclude             Optional. Array of user IDs to exclude.
+ *     @type bool|int         $exclude_admins_mods True (or 1) to exclude admins and mods from results. Default: 1.
+ *     @type bool|int         $exclude_banned      True (or 1) to exclude banned users from results. Default: 1.
+ *     @type array            $group_role          Optional. Array of group roles to include.
+ *     @type string           $search_terms        Optional. Filter results by a search string.
+ *     @type string           $type                Optional. Sort the order of results. 'last_joined', 'first_joined', or
+ *                                                 any of the $type params available in {@link BP_User_Query}. Default:
+ *                                                 'last_joined'.
  * }
  * @return false|array Multi-d array of 'members' list and 'count'.
  */
@@ -679,7 +680,7 @@ function groups_get_group_members( $args = array() ) {
 		$args = bp_core_parse_args_array( $old_args_keys, func_get_args() );
 	}
 
-	$r = wp_parse_args( $args, array(
+	$r = bp_parse_args( $args, array(
 		'group_id'            => bp_get_current_group_id(),
 		'per_page'            => false,
 		'page'                => false,
@@ -689,7 +690,7 @@ function groups_get_group_members( $args = array() ) {
 		'group_role'          => array(),
 		'search_terms'        => false,
 		'type'                => 'last_joined',
-	) );
+	), 'groups_get_group_members' );
 
 	// For legacy users. Use of BP_Groups_Member::get_all_for_group() is deprecated.
 	if ( apply_filters( 'bp_use_legacy_group_member_query', false, __FUNCTION__, func_get_args() ) ) {
@@ -765,7 +766,7 @@ function groups_get_total_member_count( $group_id ) {
 function groups_get_groups( $args = '' ) {
 
 	$defaults = array(
-		'type'               => false,          // Active, newest, alphabetical, random, popular, most-forum-topics or most-forum-posts.
+		'type'               => false,          // Active, newest, alphabetical, random, popular.
 		'order'              => 'DESC',         // 'ASC' or 'DESC'
 		'orderby'            => 'date_created', // date_created, last_activity, total_member_count, name, random, meta_id.
 		'user_id'            => false,          // Pass a user_id to limit to only groups that this user is a member of.
@@ -785,6 +786,7 @@ function groups_get_groups( $args = '' ) {
 		'page'               => 1,              // The page to return if limiting per page.
 		'update_meta_cache'  => true,           // Pre-fetch groupmeta for queried groups.
 		'update_admin_cache' => false,
+		'fields'             => 'all',          // Return BP_Groups_Group objects or a list of ids.
 	);
 
 	$r = bp_parse_args( $args, $defaults, 'groups_get_groups' );
@@ -810,6 +812,7 @@ function groups_get_groups( $args = '' ) {
 		'update_admin_cache' => $r['update_admin_cache'],
 		'order'              => $r['order'],
 		'orderby'            => $r['orderby'],
+		'fields'             => $r['fields'],
 	) );
 
 	/**
@@ -1261,14 +1264,12 @@ function groups_post_update( $args = '' ) {
 
 	$bp = buddypress();
 
-	$defaults = array(
+	$r = bp_parse_args( $args, array(
 		'content'    => false,
 		'user_id'    => bp_loggedin_user_id(),
 		'group_id'   => 0,
 		'error_type' => 'bool'
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	), 'groups_post_update' );
 	extract( $r, EXTR_SKIP );
 
 	if ( empty( $group_id ) && !empty( $bp->groups->current_group->id ) )
@@ -1390,15 +1391,13 @@ function groups_get_invite_count_for_user( $user_id = 0 ) {
  */
 function groups_invite_user( $args = '' ) {
 
-	$defaults = array(
+	$args = bp_parse_args( $args, array(
 		'user_id'       => false,
 		'group_id'      => false,
 		'inviter_id'    => bp_loggedin_user_id(),
 		'date_modified' => bp_core_current_time(),
 		'is_confirmed'  => 0
-	);
-
-	$args = wp_parse_args( $args, $defaults );
+	), 'groups_invite_user' );
 	extract( $args, EXTR_SKIP );
 
 	if ( ! $user_id || ! $group_id || ! $inviter_id ) {
@@ -1897,7 +1896,7 @@ function groups_send_membership_request( $requesting_user_id, $group_id ) {
 		 * @param int   $requesting_user_id  ID of the user requesting membership.
 		 * @param array $admins              Array of group admins.
 		 * @param int   $group_id            ID of the group being requested to.
-		 * @param int   $requesting_user->id ID of the user requesting membership.
+		 * @param int   $requesting_user->id ID of the membership.
 		 */
 		do_action( 'groups_membership_requested', $requesting_user_id, $admins, $group_id, $requesting_user->id );
 
@@ -2200,7 +2199,48 @@ add_action( 'wpmu_delete_user',  'groups_remove_data_for_user' );
 add_action( 'delete_user',       'groups_remove_data_for_user' );
 add_action( 'bp_make_spam_user', 'groups_remove_data_for_user' );
 
+/**
+ * Update orphaned child groups when the parent is deleted.
+ *
+ * @since 2.7.0
+ *
+ * @param BP_Groups_Group $group Instance of the group item being deleted.
+ */
+function bp_groups_update_orphaned_groups_on_group_delete( $group ) {
+	// Get child groups and set the parent to the deleted parent's parent.
+	$grandparent_group_id = $group->parent_id;
+	$child_args = array(
+		'parent_id'         => $group->id,
+		'show_hidden'       => true,
+		'per_page'          => false,
+		'update_meta_cache' => false,
+	);
+	$children = groups_get_groups( $child_args );
+	$children = $children['groups'];
+
+	foreach ( $children as $cgroup ) {
+		$cgroup->parent_id = $grandparent_group_id;
+		$cgroup->save();
+	}
+}
+add_action( 'bp_groups_delete_group', 'bp_groups_update_orphaned_groups_on_group_delete', 10, 2 );
+
 /** Group Types ***************************************************************/
+
+/**
+ * Fire the 'bp_groups_register_group_types' action.
+ *
+ * @since 2.6.0
+ */
+function bp_groups_register_group_types() {
+	/**
+	 * Fires when it's appropriate to register group types.
+	 *
+	 * @since 2.6.0
+	 */
+	do_action( 'bp_groups_register_group_types' );
+}
+add_action( 'bp_register_taxonomies', 'bp_groups_register_group_types' );
 
 /**
  * Register a group type.
