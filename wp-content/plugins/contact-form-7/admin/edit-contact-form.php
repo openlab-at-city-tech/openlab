@@ -88,8 +88,9 @@ if ( $post ) :
 		'id' => 'title',
 		'spellcheck' => 'true',
 		'autocomplete' => 'off',
-		'disabled' => current_user_can( 'wpcf7_edit_contact_form', $post_id )
-			? '' : 'disabled' );
+		'disabled' =>
+			current_user_can( 'wpcf7_edit_contact_form', $post_id ) ? '' : 'disabled',
+	);
 
 	echo sprintf( '<input %s />', wpcf7_format_atts( $posttitle_atts ) );
 ?>
@@ -166,13 +167,33 @@ if ( $post ) :
 <?php endif; ?>
 
 <div id="informationdiv" class="postbox">
-<h3><?php echo esc_html( __( 'Information', 'contact-form-7' ) ); ?></h3>
+<h3><?php echo esc_html( __( "Do you need help?", 'contact-form-7' ) ); ?></h3>
 <div class="inside">
-<ul>
-<li><?php echo wpcf7_link( __( 'https://contactform7.com/docs/', 'contact-form-7' ), __( 'Docs', 'contact-form-7' ) ); ?></li>
-<li><?php echo wpcf7_link( __( 'https://contactform7.com/faq/', 'contact-form-7' ), __( 'FAQ', 'contact-form-7' ) ); ?></li>
-<li><?php echo wpcf7_link( __( 'https://contactform7.com/support/', 'contact-form-7' ), __( 'Support', 'contact-form-7' ) ); ?></li>
-</ul>
+	<p><?php echo esc_html( __( "Here are some available options to help solve your problems.", 'contact-form-7' ) ); ?></p>
+	<ol>
+		<li><?php echo sprintf(
+			/* translators: 1: FAQ, 2: Docs ("FAQ & Docs") */
+			__( '%1$s &#38; %2$s', 'contact-form-7' ),
+			wpcf7_link(
+				__( 'https://contactform7.com/faq/', 'contact-form-7' ),
+				__( 'FAQ', 'contact-form-7' )
+			),
+			wpcf7_link(
+				__( 'https://contactform7.com/docs/', 'contact-form-7' ),
+				__( 'Docs', 'contact-form-7' )
+			)
+		); ?></li>
+		<li><?php echo wpcf7_link(
+			__( 'https://wordpress.org/support/plugin/contact-form-7/', 'contact-form-7' ),
+			__( 'Support Forums', 'contact-form-7' )
+		); ?></li>
+<?php if ( 'en_' === substr( get_user_locale(), 0, 3 ) ) : ?>
+		<li><?php echo wpcf7_link(
+			__( 'https://contactform7.com/custom-development/', 'contact-form-7' ),
+			__( 'Professional Services', 'contact-form-7' )
+		); ?></li>
+<?php endif; ?>
+	</ol>
 </div>
 </div><!-- #informationdiv -->
 
@@ -181,8 +202,16 @@ if ( $post ) :
 <div id="postbox-container-2" class="postbox-container">
 <div id="contact-form-editor">
 <div class="keyboard-interaction"><?php
-	/* translators: %s: ◀ ▶ dashicon */
-	echo sprintf( esc_html( __( '%s keys switch panels', 'contact-form-7' ) ), '<span class="dashicons dashicons-leftright"></span>' );
+	echo sprintf(
+		/* translators: 1: ◀ ▶ dashicon, 2: screen reader text for the dashicon */
+		esc_html( __( '%1$s %2$s keys switch panels', 'contact-form-7' ) ),
+		'<span class="dashicons dashicons-leftright" aria-hidden="true"></span>',
+		sprintf(
+			'<span class="screen-reader-text">%s</span>',
+			/* translators: screen reader text */
+			esc_html( __( '(left and right arrow)', 'contact-form-7' ) )
+		)
+	);
 ?></div>
 
 <?php
@@ -194,13 +223,17 @@ if ( $post ) :
 		$panels = array(
 			'form-panel' => array(
 				'title' => __( 'Form', 'contact-form-7' ),
-				'callback' => 'wpcf7_editor_panel_form' ),
+				'callback' => 'wpcf7_editor_panel_form',
+			),
 			'mail-panel' => array(
 				'title' => __( 'Mail', 'contact-form-7' ),
-				'callback' => 'wpcf7_editor_panel_mail' ),
+				'callback' => 'wpcf7_editor_panel_mail',
+			),
 			'messages-panel' => array(
 				'title' => __( 'Messages', 'contact-form-7' ),
-				'callback' => 'wpcf7_editor_panel_messages' ) );
+				'callback' => 'wpcf7_editor_panel_messages',
+			),
+		);
 
 		$additional_settings = trim( $post->prop( 'additional_settings' ) );
 		$additional_settings = explode( "\n", $additional_settings );
@@ -214,7 +247,8 @@ if ( $post ) :
 					__( 'Additional Settings (%d)', 'contact-form-7' ),
 					$additional_settings )
 				: __( 'Additional Settings', 'contact-form-7' ),
-			'callback' => 'wpcf7_editor_panel_additional_settings' );
+			'callback' => 'wpcf7_editor_panel_additional_settings',
+		);
 	}
 
 	$panels = apply_filters( 'wpcf7_editor_panels', $panels );
