@@ -111,7 +111,7 @@ function dkpdf_output_pdf( $query ) {
 
   if( $pdf ) {
 
-      include('mpdf60/mpdf.php');
+	  require_once  realpath(__DIR__ . '/..') . '/vendor/autoload.php';
 
       // page orientation
       $dkpdf_page_orientation = get_option( 'dkpdf_page_orientation', '' );
@@ -137,10 +137,31 @@ function dkpdf_output_pdf( $query ) {
       $dkpdf_margin_bottom = get_option( 'dkpdf_margin_bottom', '30' );
       $dkpdf_margin_header = get_option( 'dkpdf_margin_header', '15' );
 
+      // fonts
+      $mpdf_default_config = (new Mpdf\Config\ConfigVariables())->getDefaults();
+      $dkpdf_mpdf_font_dir = apply_filters('dkpdf_mpdf_font_dir',$mpdf_default_config['fontDir']);
+
+      $mpdf_default_font_config = (new Mpdf\Config\FontVariables())->getDefaults();
+      $dkpdf_mpdf_font_data = apply_filters('dkpdf_mpdf_font_data',$mpdf_default_font_config['fontdata']);
+
+      // temp directory
+      $dkpdf_mpdf_temp_dir = apply_filters('dkpdf_mpdf_temp_dir',realpath( __DIR__ . '/..' ) . '/tmp');
+
+      $mpdf_config = apply_filters('dkpdf_mpdf_config',[
+          'tempDir'           => $dkpdf_mpdf_temp_dir,
+          'default_font_size' => $dkpdf_font_size,
+          'format'            => $format,
+          'margin_left'       => $dkpdf_margin_left,
+          'margin_right'      => $dkpdf_margin_right,
+          'margin_top'        => $dkpdf_margin_top,
+          'margin_bottom'     => $dkpdf_margin_bottom,
+          'margin_header'     => $dkpdf_margin_header,
+          'fontDir'           => $dkpdf_mpdf_font_dir,
+          'fontdata'          => $dkpdf_mpdf_font_data,
+      ]);
+
       // creating and setting the pdf
-      $mpdf = new mPDF('utf-8', $format, $dkpdf_font_size, $dkpdf_font_family,
-        $dkpdf_margin_left, $dkpdf_margin_right, $dkpdf_margin_top, $dkpdf_margin_bottom, $dkpdf_margin_header
-      );
+      $mpdf = new \Mpdf\Mpdf( $mpdf_config );
 
       // encrypts and sets the PDF document permissions
       // https://mpdf.github.io/reference/mpdf-functions/setprotection.html
@@ -180,12 +201,11 @@ function dkpdf_output_pdf( $query ) {
       // action to do (open or download)
       $pdfbutton_action = sanitize_option( 'dkpdf_pdfbutton_action', get_option( 'dkpdf_pdfbutton_action', 'open' ) );
 
+	  global $post;
       $title = apply_filters( 'dkpdf_pdf_filename', get_the_title( $post->ID ) );
 
       $mpdf->SetTitle( $title );
       $mpdf->SetAuthor( apply_filters( 'dkpdf_pdf_author', get_bloginfo( 'name' ) ) );
-
-      global $post;
 
       if( $pdfbutton_action == 'open') {
 
