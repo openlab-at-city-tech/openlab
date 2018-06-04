@@ -4,8 +4,8 @@ Plugin Name: BuddyPress Group Email Subscription
 Plugin URI: http://wordpress.org/extend/plugins/buddypress-group-email-subscription/
 Description: Allows group members to receive email notifications for group activity and forum posts instantly or as daily digest or weekly summary.
 Author: Deryk Wenaus, boonebgorges, r-a-y
-Revision Date: August 7, 2017
-Version: 3.7.2
+Revision Date: April 25, 2018
+Version: 3.8.2
 */
 
 /**
@@ -15,7 +15,7 @@ Version: 3.7.2
  *
  * @var string Date string of last revision.
  */
-define( 'GES_REVISION_DATE', '2017-08-07 18:00 UTC' );
+define( 'GES_REVISION_DATE', '2018-04-25 14:00 UTC' );
 
 /**
  * Main loader for the plugin.
@@ -34,9 +34,9 @@ function ass_loader() {
 	} else {
 		$older_version_notice = sprintf( __( "Hey! BP Group Email Subscription v3.7.0 requires BuddyPress 1.5 or higher.  If you are still using BuddyPress 1.2 and you don't plan on upgrading, use <a href='%s'>BP Group Email Subscription v3.6.2 instead</a>.", 'bp-ass' ), 'https://downloads.wordpress.org/plugin/buddypress-group-email-subscription.3.6.1.zip' );
 
-		add_action( 'admin_notices', create_function( '', "
-			echo '<div class=\"error\"><p>" . $older_version_notice . "</p></div>';
-		" ) );
+		add_action( 'admin_notices', function() use ( $older_version_notice ) {
+			echo '<div class="error"><p>' . $older_version_notice . '</p></div>';
+		} );
 	}
 }
 add_action( 'bp_include', 'ass_loader' );

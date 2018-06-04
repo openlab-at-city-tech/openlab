@@ -298,66 +298,91 @@ To view or reply, log in and go to:
 			}
 		}
 
-		$send_it = false;
+		$send_immediately = $add_to_digest_queue = false;
 
-		// Self-notification email for bbPress posts
-		if ( $self_notify === true ) {
-			$send_it      = true;
-			$group_status = 'self_notify';
+		if (
+			( true === $self_notify ) ||
+			( 'supersub' === $group_status ) ||
+			( 'sub' === $group_status && 'bbp_topic_create' === $activity_obj->type )
+		) {
+			$send_immediately = true;
+		}
 
-			// notification settings link
-			$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/#groups-subscription-notification-settings';
+		// Special case: users should not get immediate notifications of their own group activity updates.
+		if ( 'activity_update' === $activity_obj->type && $r['sender_id'] === $user_id ) {
+			$send_immediately = false;
+		}
 
-			// set notice
-			$notice = $email_setting_desc = __( 'You are currently receiving notifications for your own posts.', 'bp-ass' );
-
-			$email_setting_links = sprintf( __( 'To disable these notifications please log in and go to: %s', 'bp-ass' ), $settings_link );
-			$email_setting_links .= "\n\n" . __( 'Once you are logged in, uncheck "Receive notifications of your own posts?".', 'bp-ass' );
-
-			$notice .= "\n\n" . $email_setting_links;
-
-		// User is subscribed to "All Mail"
-		// OR user is subscribed to "New Topics" (bbPress 2)
-		} elseif ( $group_status == 'supersub' || ( $group_status == 'sub' && $activity_obj->type == 'bbp_topic_create' ) ) {
-
-			/*
-			 * If someone is signed up for all email and they post a group update,
-			 * they should not receive an email.
-			 */
-			if ( 'activity_update' == $activity_obj->type && $r['sender_id'] === $user_id ) {
-				continue;
-			}
-
-			$send_it = true;
-
-			$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ), $group_status );
-
-			$email_setting_string = __( 'Your email setting for this group is: %s', 'bp-ass' );
-			$group_status_string  = ass_subscribe_translate( $group_status );
-
-			$notice             = sprintf( $email_setting_string, $group_status_string );
-			$email_setting_desc = sprintf( $email_setting_string, '<strong> ' . $group_status_string . '</strong>' );
-
-			$email_setting_links = sprintf( __( 'To change your email setting for this group, please log in and go to: %s', 'bp-ass' ), $settings_link );
-			$email_setting_links .= "\n\n" . ass_group_unsubscribe_links( $user_id );
-
-			$notice .= "\n" . $email_setting_links;
-
+		if (
+			( 'dig' === $group_status ) ||
+			( 'sum' === $group_status && $this_activity_is_important )
+		) {
+			$add_to_digest_queue = true;
 		}
 
 		/**
-		 * Filter whether a given user should receive immediate notification of the current activity.
+		 * Filters whether a given user should receive immediate notification of the current activity.
 		 *
 		 * @since 3.6.0
+		 * @since 3.8.0 Added `$group_status` parameter.
 		 *
-		 * @param bool   $send_it True to send an immediate email notification, false otherwise.
-		 * @param object $content Activity object.
-		 * @param int    $user_id ID of the user.
+		 * @param bool   $send_immediately True to send an immediate email notification, false otherwise.
+		 * @param object $activity_obj     Activity object.
+		 * @param int    $user_id          ID of the user.
+		 * @param string $group_status     Group subscription status for the current user.
 		 */
-		$send_it = apply_filters( 'bp_ass_send_activity_notification_for_user', $send_it, $activity_obj, $user_id );
+		$send_immediately = apply_filters( 'bp_ass_send_activity_notification_for_user', $send_immediately, $activity_obj, $user_id, $group_status );
+
+		/**
+		 * Filters whether to add the current activity item to the digest queue for the current user.
+		 *
+		 * @since 3.8.0
+		 *
+		 * @param bool   $add_to_digest_queue True to send an immediate email notification, false otherwise.
+		 * @param object $activity_obj        Activity object.
+		 * @param int    $user_id             ID of the user.
+		 * @param string $group_status        Group subscription status for the current user.
+		 */
+		$add_to_digest_queue = apply_filters( 'bp_ges_add_to_digest_queue_for_user', $add_to_digest_queue, $activity_obj, $user_id, $group_status );
+
+		$raw_group_status = $group_status;
+
+		// Assemble variables for use in building immediate notification, if necessary.
+		if ( $send_immediately ) {
+			// Self-notification email for bbPress posts
+			if ( true === $self_notify ) {
+				$group_status = 'self_notify';
+
+				// notification settings link
+				$settings_link = trailingslashit( bp_core_get_user_domain( $user_id ) . bp_get_settings_slug() ) . 'notifications/#groups-subscription-notification-settings';
+
+				// set notice
+				$notice = $email_setting_desc = __( 'You are currently receiving notifications for your own posts.', 'bp-ass' );
+
+				$email_setting_links = sprintf( __( 'To disable these notifications please log in and go to: %s', 'bp-ass' ), $settings_link );
+				$email_setting_links .= "\n\n" . __( 'Once you are logged in, uncheck "Receive notifications of your own posts?".', 'bp-ass' );
+
+				$notice .= "\n\n" . $email_setting_links;
+
+			} else {
+
+				$settings_link = ass_get_login_redirect_url( trailingslashit( bp_get_group_permalink( $group ) . 'notifications' ), $group_status );
+
+				$email_setting_string = __( 'Your email setting for this group is: %s', 'bp-ass' );
+				$group_status_string  = ass_subscribe_translate( $group_status );
+
+				$notice             = sprintf( $email_setting_string, $group_status_string );
+				$email_setting_desc = sprintf( $email_setting_string, '<strong> ' . $group_status_string . '</strong>' );
+
+				$email_setting_links = sprintf( __( 'To change your email setting for this group, please log in and go to: %s', 'bp-ass' ), $settings_link );
+				$email_setting_links .= "\n\n" . ass_group_unsubscribe_links( $user_id );
+
+				$notice .= "\n" . $email_setting_links;
+			}
+		}
 
 		// if we're good to send, send the email!
-		if ( $send_it ) {
+		if ( $send_immediately ) {
 			$user_message_args = array(
 				'message'           => $message,
 				'notice'            => $notice,
@@ -416,11 +441,9 @@ To view or reply, log in and go to:
 
 		}
 
-		// otherwise, user is subscribed to "Daily Digest" so record item in digest!
-		// OR user is subscribed to "Weekly Summary" and activity item is important
-		// enough to be recorded
-		if ( $group_status == 'dig' || ( $group_status == 'sum' && $this_activity_is_important ) ) {
-			ass_digest_record_activity( $r['activity_id'], $user_id, $r['group_id'], $group_status );
+		// Record in digest queue, if necessary.
+		if ( $add_to_digest_queue ) {
+			ass_digest_record_activity( $r['activity_id'], $user_id, $r['group_id'], $raw_group_status );
 		}
 	}
 }
@@ -1174,14 +1197,58 @@ function ass_group_ajax_callback() {
 }
 add_action( 'wp_ajax_ass_group_ajax', 'ass_group_ajax_callback' );
 
+/** GROUP LEAVE/REMOVAL EVENTS ***********************************************/
 
-// if the user leaves the group or if they are removed by an admin, delete their subscription status
+/**
+ * No longer used.
+ *
+ * @param int $group_id ID of the group.
+ * @param int $user_id  ID of the user.
+ */
 function ass_unsubscribe_on_leave( $group_id, $user_id ){
 	ass_group_subscription( 'delete', $user_id, $group_id );
 }
-add_action( 'groups_leave_group', 'ass_unsubscribe_on_leave', 100, 2 );
-add_action( 'groups_remove_member', 'ass_unsubscribe_on_leave', 100, 2 );
 
+/**
+ * Remove a user's subscription level after a 'remove' action.
+ *
+ * @since 3.8.0
+ *
+ * @param BP_Groups_Member $membership
+ */
+function bpges_unsubscribe_on_membership_remove( BP_Groups_Member $membership ) {
+	ass_group_subscription( 'delete', $membership->user_id, $membership->group_id );
+}
+add_action( 'groups_member_before_remove', 'bpges_unsubscribe_on_membership_remove' );
+
+/**
+ * Remove a user's subscription level after a 'delete' action.
+ *
+ * @since 3.8.0
+ *
+ * @param int $user_id  ID of the user.
+ * @param int $group_id ID of the group.
+ */
+function bpges_unsubscribe_on_membership_delete( $user_id, $group_id ) {
+	ass_group_subscription( 'delete', $user_id, $group_id );
+}
+add_action( 'bp_groups_member_before_delete', 'bpges_unsubscribe_on_membership_delete', 10, 2 );
+
+/**
+ * Remove a user's subscription level after a 'ban' action.
+ *
+ * @since 3.8.0
+ *
+ * @param BP_Groups_Member $membership
+ */
+function bpges_unsubscribe_on_membership_ban( BP_Groups_Member $membership ) {
+	if ( ! $membership->is_banned ) {
+		return;
+	}
+
+	ass_group_subscription( 'delete', $membership->user_id, $membership->group_id );
+}
+add_action( 'groups_member_before_save', 'bpges_unsubscribe_on_membership_ban' );
 
 
 //
@@ -1199,6 +1266,11 @@ function ass_set_default_subscription( $groups_member ){
 	//if the person has requested access to a private group but has not been approved, don't subscribe them
 	if ( !$groups_member->is_confirmed )
 		return;
+
+	// If the member is banned, don't add.
+	if ( $groups_member->is_banned ) {
+		return;
+	}
 
 	$default_gsub = ass_get_default_subscription( $groups_member->group_id );
 
