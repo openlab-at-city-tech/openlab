@@ -377,16 +377,17 @@ class Anthologize_Admin_Main {
 		require_once( anthologize()->includes_dir . 'class-export-panel.php' );
 		Anthologize_Export_Panel::save_session();
 
-		$type = $_SESSION['filetype'];
+		$session = anthologize_get_session();
+		$format = $session['filetype'];
 
-		if ( !is_array( $anthologize_formats[$type] ) )
+		if ( ! is_array( $anthologize_formats[ $format ] ) ) {
 			return;
+		}
 
-		$project_id = $_SESSION['project_id'];
+		$project_id = $session['project_id'];
 
-		load_template( $anthologize_formats[$type]['loader-path'] );
-
-		return false;
+		load_template( $anthologize_formats[ $format ]['loader-path'] );
+		die;
 	}
 
 	/**
@@ -651,22 +652,13 @@ class Anthologize_Admin_Main {
 
 	function meta_save_box( $post_id ) {
 		?>
-	<div class="inside">
 		<div class="submitbox" id="submitpost">
-
 			<div id="minor-publishing">
-
-				<div style="display:none;">
-					<input type="submit" name="save" value="Save">
-				</div>
-
 				<div>
-					<input type="submit" name="save" value="<?php _e( 'Save Changes', 'anthologize' ) ?>" tabindex="4" class="button button-highlighted">
+					<input type="submit" name="save" value="<?php _e( 'Save Changes', 'anthologize' ) ?>" class="button button-primary">
 				</div>
 			</div>
 		</div>
-	</div>
-
 		<?php
 	}
 
@@ -770,10 +762,10 @@ class Anthologize_Admin_Main {
 		?>
 		<div class="my_meta_control">
 
-			<label>Author Name <span>(optional)</span></label>
+			<label><?php esc_html_e( 'Author Name', 'anthologize' ); ?> <span><?php esc_html_e( '(optional)', 'anthologize' ); ?></span></label>
 
 			<p>
-				<textarea class="tags-input" name="anthologize_meta[author_name]" rows="3" cols="27"><?php echo esc_html( $author_name ) ?></textarea>
+				<textarea class="tags-input" name="anthologize_meta[author_name]" rows="3"><?php echo esc_html( $author_name ) ?></textarea>
 			</p>
 
 			<?php /* Display content for imported feed, if there is any */ ?>
