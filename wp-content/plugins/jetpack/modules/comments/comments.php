@@ -112,11 +112,10 @@ class Jetpack_Comments extends Highlander_Comments_Base {
 
 		// Selfishly remove everything from the existing comment form
 		remove_all_actions( 'comment_form_before' );
-		remove_all_actions( 'comment_form_after' );
 
 		// Selfishly add only our actions back to the comment form
 		add_action( 'comment_form_before', array( $this, 'comment_form_before' ) );
-		add_action( 'comment_form_after', array( $this, 'comment_form_after' ) );
+		add_action( 'comment_form_after',  array( $this, 'comment_form_after'  ), 1 ); // Set very early since we remove everything outputed before our action.
 
 		// Before a comment is posted
 		add_action( 'pre_comment_on_post', array( $this, 'pre_comment_on_post' ), 1 );
@@ -311,7 +310,7 @@ class Jetpack_Comments extends Highlander_Comments_Base {
 				</h3>
 			<?php endif; ?>
 			<form id="commentform" class="comment-form">
-				<iframe src="<?php echo esc_url( $url ); ?>" style="width:100%; height: <?php echo $height; ?>px; border:0;" name="jetpack_remote_comment" class="jetpack_remote_comment" id="jetpack_remote_comment"></iframe>
+				<iframe title="<?php esc_attr_e( 'Comment Form' , 'jetpack' ); ?>" src="<?php echo esc_url( $url ); ?>" style="width:100%; height: <?php echo $height; ?>px; border:0;" name="jetpack_remote_comment" class="jetpack_remote_comment" id="jetpack_remote_comment"></iframe>
 				<!--[if !IE]><!-->
 				<script>
 					document.addEventListener('DOMContentLoaded', function () {
