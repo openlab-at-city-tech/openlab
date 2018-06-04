@@ -2,18 +2,25 @@
 
 class DWQA_Notifications {
 
+	private $time_delay = 120;
+	// private $time_delay = 0;
 	public function __construct() {
-		// add_action( 'dwqa_add_question', array( $this, 'new_question_notify' ), 10, 2 );
-		// add_action( 'wp_insert_comment', array( $this, 'new_comment_notify' ), 10, 2 );
-		// add_action( 'dwqa_add_answer', array( $this, 'new_answer_notify' ), 10, 2 );
-		
-		add_action('dwqa_new_question_notify', array( $this, 'new_question_notify' ), 10, 2);
-		add_action('dwqa_new_answer_notify', array( $this, 'new_answer_notify' ), 10, 2);
-		add_action('dwqa_new_comment_notify', array( $this, 'new_comment_notify' ), 10, 2);
 
-		add_action( 'dwqa_add_question', array( $this, 'dwqa_queue_add_question' ), 10, 2 );
-		add_action( 'dwqa_add_answer', array( $this, 'dwqa_queue_add_answer' ), 10, 2 );
-		add_action( 'wp_insert_comment', array( $this, 'dwqa_queue_insert_comment' ), 10, 2 );
+		if(get_option('dwqa_enable_email_delay')){
+			add_action('dwqa_new_question_notify', array( $this, 'new_question_notify' ), 10, 2);
+			add_action('dwqa_new_answer_notify', array( $this, 'new_answer_notify' ), 10, 2);
+			add_action('dwqa_new_comment_notify', array( $this, 'new_comment_notify' ), 10, 2);
+
+			add_action( 'dwqa_add_question', array( $this, 'dwqa_queue_add_question' ), 10, 2 );
+			add_action( 'dwqa_add_answer', array( $this, 'dwqa_queue_add_answer' ), 10, 2 );
+			add_action( 'wp_insert_comment', array( $this, 'dwqa_queue_insert_comment' ), 10, 2 );
+		}else{
+			add_action( 'dwqa_add_question', array( $this, 'new_question_notify' ), 10, 2 );
+			add_action( 'wp_insert_comment', array( $this, 'new_comment_notify' ), 10, 2 );
+			add_action( 'dwqa_add_answer', array( $this, 'new_answer_notify' ), 10, 2 );
+		}
+		
+		
 		
 
 		// add_action( 'dwqa_add_question', array( $this, 'new_activity' ) );
@@ -419,7 +426,7 @@ class DWQA_Notifications {
 	
 	public function get_admin_email( $type = 'question' ){
 		$admin_email = get_option( 'dwqa_subscrible_sendto_address', '' );
-		$emails = explode( PHP_EOL, $admin_email );
+		$emails = preg_split('/\r\n|\r|\n/', $admin_email );
 		$emails = array_merge( $emails, array( get_bloginfo( 'admin_email' ) ) );
 		return $emails;
 	}
