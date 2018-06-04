@@ -7,6 +7,7 @@ h4.comment-meta {
 #the-comment-list .author-com-count-no-pending {
 	margin-right: 21px;
 }
+
 .column-commenters_count {
 	width: 74px;
 	text-align: center;
@@ -14,6 +15,12 @@ h4.comment-meta {
 .column-commenters_count .author-com-count.author-com-count-no-pending {
 	float: none;
 }
+
+/* Explicitly set font color with a specifity to override a too-broadly applied style (by Akismet). */
+#the-comment-list .author .author-com-count a span {
+	color: #fff;
+}
+
 @media screen and (max-width: 782px) {
 	.wp-list-table.users .author-com-count {
 		float: none;
