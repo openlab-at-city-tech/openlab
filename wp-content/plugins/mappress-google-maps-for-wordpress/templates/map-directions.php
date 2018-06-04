@@ -5,13 +5,13 @@
 	<?php endif; ?>
 	<div>
 		<span class='mapp-dir-a'></span>
-		<input class='mapp-dir-saddr' tabindex='1'/>
+		<input class='mapp-dir-addr mapp-dir-saddr' tabindex='1'/>
 		<span data-mapp-action='dir-swap' class='mapp-dir-arrows'></span>
 	</div>
 
 	<div>
 		<span class='mapp-dir-b'></span>
-		<input class='mapp-dir-daddr' tabindex='2'/>
+		<input class='mapp-dir-addr mapp-dir-daddr' tabindex='2'/>
 	</div>
 
 	<div class='mapp-dir-toolbar'>

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.47.5
+Stable tag: 2.48.6
 
 MapPress is the most popular and easiest way to create great-looking Google Maps and driving directions in your blog.
 
@@ -85,6 +85,63 @@ Please see the plugin documentation pages:
 4. Get directions from any map marker
 
 == Changelog ==
+
+= 2.48.6 =
+* Fixed: geocoding bug in editor
+
+= 2.48.5 =
+* Fixed: shake in editor caused by Google API update
+* Fixed: API compatibility setting not applied in admin screens
+* Changed: removed inline directions, shape editor
+
+= 2.48.4 =
+* Added: maps now support full-screen control: [mappress fullscreenControl="true"]
+* Fixed: map center was changing when resizing
+* Fixed: mashups were ignoring custom POI list template
+* Changed: mashup filter now shows term names instead of term slugs
+
+= 2.48.3 =
+* Added: dismissible notices
+* Fixed: incorrect sorting for mashups with 'orderby' clause in query
+* Fixed: incorrect CSS in settings screen
+* Changed: use gzip only for mashups, not for maps, added checks for PHP libraries
+
+= 2.48.2 =
+* Fixed: POI list was being hidden on small maps with 'inline' vertical layout
+* Fixed: empty 'ghost' link if post thumbnail is absent
+
+= 2.48.1 =
+* Updated version number
+
+= 2.48 =
+* Updated version number
+
+= 2.47.10 =
+* Fixed: centering error for fixed centers
+
+= 2.47.9 =
+* Fixed: PHP 7 error on 'break' statement
+
+= 2.47.8 =
+* Fixed: bug in free version prevented editing
+
+= 2.47.7 =
+* Fixed: internal javascript error
+
+= 2.47.6 =
+* Added: prevent javascript caching when upgrading from free to Pro
+* Added: enable gzip compression for AJAX data (depends on server settings)
+* Added: 'compatibility' setting to prevent loading maps API by other plugins/themes
+* Added: new layout with POIs on left.  Use settings or [mashup layout="left"] for a single map
+* Added: shortcode 'center' can be a place or 'user' to geolocate, for example: [mashup center="new york"] or [mashup center="user"]
+* Changed: mashup query updated to improve performance
+* Changed: faster excerpts for mashup POIs
+* Changed: Pro update settings are now enabled by default
+* Changed: automatic centering zooms out less whenever possible (viewport padding reduced to zero)
+* Changed: clickableIcons defaulted to false (prevent clicks on Google landmarks)
+* Changed: removed extra code for xhtml validity checkers
+* Changed: updates to directions and template 'map-directions.php'
+* Changed: detection for Jetpack infinite scroll improved
 
 = 2.47.5 =
 * Added: filter labels can now include an icon in braces, for example [blue-dot]

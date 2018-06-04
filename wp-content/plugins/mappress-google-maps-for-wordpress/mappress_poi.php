@@ -6,15 +6,13 @@ class Mappress_Poi extends Mappress_Obj {
 		$iconid,
 		$point = array('lat' => 0, 'lng' => 0),
 		$poly,
+		$postid,
 		$kml,
+		$thumbnail,
 		$title = '',
 		$type,
+		$url,
 		$viewport;              // array('sw' => array('lat' => 0, 'lng' => 0), 'ne' => array('lat' => 0, 'lng' => 0))
-
-	// Not saved
-	var $postid,
-		$url;
-
 
 	function __sleep() {
 		return array('address', 'body', 'correctedAddress', 'iconid', 'point', 'poly', 'kml', 'title', 'type', 'viewport');
@@ -73,46 +71,11 @@ class Mappress_Poi extends Mappress_Obj {
 	function set_html() {
 		global $post;
 		$html = Mappress::get_template('map-poi', array('poi' => $this));
-			$html = apply_filters('mappress_poi_html', $html, $this);
+		$html = apply_filters('mappress_poi_html', $html, $this);
 		$this->html = $html;
 	}
 
-	/**
-	* Prepare poi for output
-	*/
-	function prepare() {
-		global $post;
-
-		// Only mashup POIs need to be modified
-		if (!$this->postid)
-			return;
-
-		$map = $this->map();
-
-		// Set title
-		if (Mappress::$options->mashupBody == 'post') {
-			$post = get_post($this->postid);
-			$this->title = $post->post_title;
-		}
-
-		// Set body
-		if (Mappress::$options->mashupBody == 'post') {
-			$post = get_post($this->postid);
-			if ($post) {
-				$old_post = clone $post;
-				setup_postdata($post);
-				$this->body = get_the_excerpt();
-				$post = $old_post;
-				setup_postdata($post);
-			}
-		}
-
-		// Set URL
-		$this->url = get_permalink($this->postid);
-	}
-
 	function part($part) {
-		$map = $this->map();
 		switch($part) {
 			case 'body' :
 				$html = $this->body;
@@ -127,12 +90,7 @@ class Mappress_Poi extends Mappress_Obj {
 				break;
 
 			case 'thumbnail' :
-				$html = '';
-				if ($this->postid && Mappress::$options->thumbs) {
-					$size = (Mappress::$options->thumbSize) ? Mappress::$options->thumbSize : null;
-					$style = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight) ? sprintf("width: %spx; height : %spx;", Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
-					$html = sprintf("<a href='%s'>%s</a>", $this->url, get_the_post_thumbnail($this->postid, $size, array('style' => $style)));
-				}
+				$html = ($this->thumbnail) ? sprintf("<a href='%s'>%s</a>", $this->url, $this->thumbnail) : '';
 				break;
 
 			case 'title' :
@@ -150,29 +108,21 @@ class Mappress_Poi extends Mappress_Obj {
 
 
 	/**
-	* Get a post excerpt for a poi
-	* Uses the WP get_the_excerpt(), which requires postdata to be set up.
-	*
-	* @param mixed $postid
+	* Fast excerpt for a poi
 	*/
-	function get_post_excerpt() {
-		global $post;
+	function get_post_excerpt($post) {
+		// Fast excerpts: similar to wp_trim_excerpt() in formatting.php, but without (slow) call to get_the_content()
+		$text = ($post->post_excerpt) ? $post->post_excerpt : $post->post_content;
+		$text = strip_shortcodes($text);
+		$excerpt_length = 55;
+		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '[&hellip;]' );
+		return wp_trim_words( $text, $excerpt_length, $excerpt_more );
+	}
 
-		$post = get_post($this->postid);
-		if (empty($this->postid) || empty($post))
-			return "";
-
-		$old_post = ($post) ? clone $post : null;
-		setup_postdata($post);
-		$html = get_the_excerpt();
-
-		// wp_reset_postdata() may not work with other plugins so use the cloned copy instead
-		if ($old_post) {
-			$post = $old_post;
-			setup_postdata($post);
-		}
-
-		return $html;
+	function get_thumbnail($post) {
+		$size = (Mappress::$options->thumbSize) ? Mappress::$options->thumbSize : null;
+		$style = (Mappress::$options->thumbWidth && Mappress::$options->thumbHeight) ? sprintf("width: %spx; height : %spx;", Mappress::$options->thumbWidth, Mappress::$options->thumbHeight) : null;
+		return get_the_post_thumbnail($post, $size, array('style' => $style));			// Slow due to get_post_thumbnail_id()
 	}
 }
 ?>

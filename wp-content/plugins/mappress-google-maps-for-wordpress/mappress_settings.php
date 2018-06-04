@@ -5,7 +5,7 @@
 class Mappress_Options extends Mappress_Obj {
 	var $alignment,
 		$autoicons,
-		$autoupdate,
+		$autoupdate = true,
 		$apiKey,
 		$apiKeyServer,
 		$autodisplay = 'top',
@@ -13,16 +13,18 @@ class Mappress_Options extends Mappress_Obj {
 		$country,
 		$css = true,
 		$defaultIcon,
+		$deregister,
 		$directions = 'google',
 		$directionsServer = 'https://maps.google.com',
 		$filter,
 		$footer = true,
-		$geolocate,
 		$iconScale,
 		$initialOpenInfo,
 		$iwType = 'iw',
 		$language,
+		$layout = 'inline',
 		$license,
+		$maxPois = 75,
 		$mashupBody = 'poi',
 		$mashupClick = 'poi',
 		$metaKeys = array(),
@@ -74,16 +76,16 @@ class Mappress_Settings {
 	function admin_init() {
 		register_setting('mappress', self::$basename, array($this, 'validate'));
 
+		$this->add_section('basic', __('Basic Settings', 'mappress-google-maps-for-wordpress'));
+		$this->add_field('apiKey', __('Google API key', 'mappress-google-maps-for-wordpress'), 'basic');
+
 		// License: single blogs, or main blog on multisite
 		if (Mappress::$pro && $this->options->autoupdate && (!is_multisite() || (is_super_admin() && is_main_site())) )
 			$this->add_section('license', __('License', 'mappress-google-maps-for-wordpress'));
 
-		$this->add_section('basic', __('Basic Settings', 'mappress-google-maps-for-wordpress'));
-		$this->add_field('apiKey', __('Google API key', 'mappress-google-maps-for-wordpress'), 'basic');
-		$this->add_field('postTypes', __('Post types', 'mappress-google-maps-for-wordpress'), 'basic');
-		$this->add_field('autodisplay', __('Automatic display', 'mappress-google-maps-for-wordpress'), 'basic');
-
 		$this->add_section('maps', __('Map Settings', 'mappress-google-maps-for-wordpress'));
+		$this->add_field('postTypes', __('Post types', 'mappress-google-maps-for-wordpress'), 'maps');
+		$this->add_field('autodisplay', __('Automatic display', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('alignment', __('Map alignment', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('directions', __('Directions', 'mappress-google-maps-for-wordpress'), 'maps');
 
@@ -96,7 +98,6 @@ class Mappress_Settings {
 			$this->add_section('icons', __('Icons', 'mappress-google-maps-for-wordpress'));
 			$this->add_section('styles', __('Styled Maps', 'mappress-google-maps-for-wordpress'));
 			$this->add_section('geocoding', __('Geocoding', 'mappress-google-maps-for-wordpress'));
-			$this->add_field('apiKeyServer', __('Google Server API key', 'mappress-google-maps-for-wordpress'), 'geocoding');
 		}
 
 		$this->add_section('l10n', __('Localization', 'mappress-google-maps-for-wordpress'));
@@ -105,8 +106,9 @@ class Mappress_Settings {
 		$this->add_field('directionsServer', __('Directions server', 'mappress-google-maps-for-wordpress'), 'l10n');
 
 		$this->add_section('misc', __('Miscellaneous', 'mappress-google-maps-for-wordpress'));
-		$this->add_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), 'misc');
+		$this->add_field('deregister', __('Compatiblity', 'mappress-google-maps-for-wordpress'), 'misc');
 		$this->add_field('footer', __('Scripts', 'mappress-google-maps-for-wordpress'), 'misc');
+		$this->add_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), 'misc');
 	}
 
 	function add_section($section, $title) {
@@ -167,7 +169,6 @@ class Mappress_Settings {
 			'right' => __('Right', 'mappress-google-maps-for-wordpress')
 		);
 		echo Mappress_Controls::radios($name, $alignments, $this->options->alignment);
-		return;
 	}
 
 	function set_api_key($name) {
@@ -192,6 +193,10 @@ class Mappress_Settings {
 		echo ' ' . sprintf(__('%s for searching', 'mappress-google-maps-for-wordpress'), $cctld_link);
 	}
 
+	function set_deregister($name) {
+		echo Mappress_Controls::checkmark($name, $this->options->deregister, __('Avoid conflicts with other plugins/themes that load the Google Maps API', 'mappress-google-maps-for-wordpress'));
+	}
+
 	function set_directions($name) {
 		$directions_types = array(
 			'google' => __('Google', 'mappress-google-maps-for-wordpress'),
@@ -207,7 +212,7 @@ class Mappress_Settings {
 
 	function set_footer($name) {
 		// Disable if jetpack infinite scroll is used
-		if (get_option('infinite_scroll')) {
+		if (class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'infinite-scroll' )) {
 			echo Mappress_Controls::checkmark($name, false, __('Output scripts in footer', 'mappress-google-maps-for-wordpress'), array('disabled' => true));
 			printf("<br/><i>%s</i>", __('Disabled because Jetpack Infinite Scroll is active', 'mappress-google-maps-for-wordpress'));
 		} else {
@@ -269,14 +274,6 @@ class Mappress_Settings {
 	}
 
 	function metabox_preview($object, $metabox) {
-		if (!Mappress::$pro) {
-			$link = "<a href='https://wordpress.org/plugins/mappress-google-maps-for-wordpress/'>" . __('rate it 5 Stars', 'mappress-google-maps-for-wordpress') . "</a>";
-			echo "<div class='mappress-like' style='float:right; font-size: 14px; width: 45%'><h3>Like this plugin?</h3>";
-			echo sprintf(__('Please %s on WordPress.org.', 'mappress-google-maps-for-wordpress'), $link);
-			echo "<br/><hr/>" . __('Thanks for your support!', 'mappress-google-maps-for-wordpress');
-			echo "</div>";
-		}
-
 		$poi = new Mappress_Poi(array(
 			'correctedAddress' => 'San Francisco, CA',
 			"title" => "MapPress",
@@ -284,7 +281,7 @@ class Mappress_Settings {
 			"point" => array('lat' => 37.774095, 'lng' => -122.418731)
 		));
 		$pois = array($poi);
-		$map = new Mappress_Map(array('alignment' => 'default', 'width' => '50%', 'height' => 200, 'pois' => $pois, 'zoom' => 4));
+		$map = new Mappress_Map(array('alignment' => 'default', 'width' => '95%', 'height' => 200, 'pois' => $pois, 'zoom' => 4));
 		echo $map->display();
 		}
 

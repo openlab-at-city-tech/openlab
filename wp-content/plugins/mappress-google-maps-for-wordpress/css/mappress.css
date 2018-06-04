@@ -49,36 +49,36 @@
 /* Canvas */
 .mapp-canvas {
 	height: 100%;
-	margin: 0px;  				/* Plugin overrides, for map alignment */
+	margin: 0px;
 	overflow: hidden !important;
 	padding: 0px !important;
+	position: relative;			/* Need for initial dialog position */
 	word-wrap: normal;			/* 2013 sets break-word, which interferes w/Google copyright in IE only */
 }
 
 .mapp-canvas img {
 	background-color: transparent !important;
-	max-width: 99999px !important;  		/* Some themes have max-width/max-height set, and some phones can't accept max-width: auto.  */
+	box-shadow: none !important;		/* 2012 */
+	border-radius: 0px !important;		/* 2012 */
+	max-width: 99999px !important;  	/* Themes have max-width/max-height set, and some phones can't accept max-width: auto.  */
 	max-height: none !important;
-	visibility: inherit !important;
-	padding: 0px !important;
 	margin: 0px !important;
-	box-shadow: none !important;		/* 2012 adds box shadow to all images */
-	border-radius: 0px !important;					/* 2012 adds border-radius to all images */
+	padding: 0px !important;
+	visibility: inherit !important;
 }
 
-/* Loading dialog box */
 .mapp-dialog {
 	background-color: white;
-	border: 1px solid gray;
-	border-radius: 5px;
-	display: none;
-	left: 50%;
-	padding: 10px 10px 10px 0px;
+	color: black;
+	min-height: 40px;
+	opacity: .95;
+	padding: 10px;
 	position: absolute;
-	top: 29px;
-	transform: translateX(-50%);
+	text-align: center;
+	top: 0; left: 0; right: 0;
 	z-index: 1;
 }
+
 
 .mapp-dialog .mapp-spinner {
 	display: inline-block;
@@ -96,17 +96,22 @@
 	overflow: hidden;
 }
 
-
-.mapp-header .mapp-filters-toggle {
-	line-height: 34px;
+.mapp-header-button {
+	border-left: 1px solid lightgray;
+	cursor: pointer;
+	float: right;
+	line-height: 40px;
 	margin-left: 5px;
-	padding-left: 10px;
+	min-width: 70px;
+	padding: 0 5px 0 5px;
+	text-align: center;
+	text-transform: uppercase;
 }
 
 .mapp-search-wrapper {
-	max-width: 450px;
 	padding: 2px;
 }
+
 /*
 	-----------------------------------------------------------------------------------
 	Search
@@ -242,7 +247,7 @@
 /* Override theme link styles */
 .mapp-iw a, .mapp-iw a:link, .mapp-iw a:active, .mapp-iw a:visited, .mapp-iw a:hover {
 	border: none !important;
-	box-shadow: none;			/* 2016 */
+	box-shadow: none !important;			/* 2016, 2017 */
 	color: #4272db !important;
 	text-decoration: none !important;
 }
@@ -259,8 +264,7 @@
 
 .mapp-ib {
 	background-color: white;
-	border: 1px solid lightgray;
-	box-shadow: 1px 1px 1px #888;
+	box-shadow: 1px 1px 1px 1px #888;
 	box-sizing: border-box;
 	display: none;
 	outline: none;
@@ -283,7 +287,6 @@
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: none;
-	filter: drop-shadow(1px 1px 1px #888);
 	margin-left: -10px;
 	margin-top: -2px;
 	padding: 0;
@@ -310,19 +313,6 @@
 	background-color: white;
 	position: relative;		/* Needed to scroll list for selection */
 	z-index: 1;
-}
-
-.mapp-inline .mapp-list .mapp-items {
-	border-top: 1px solid lightgray;
-	max-height: 300px;
-}
-
-.mapp-left .mapp-list {
-	border-right: 1px solid lightgray;
-	float: left;
-	height: 100%;
-	max-width: 250px;
-	width: 35%;
 }
 
 .mapp-list .mapp-items {
@@ -390,6 +380,69 @@
 	color: black;
 }
 
+.mapp-list .mapp-msg {
+	text-align: center;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	layouts
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-left .mapp-list {
+	border-right: 1px solid lightgray;
+	float: left;
+	height: 100%;
+	max-width: 45%;
+	width: 250px;
+}
+
+.mapp-left.mapp-mini .mapp-list {
+	display: none !important;	/* Override editor */
+}
+
+.mapp-inline .mapp-list .mapp-items {
+	border-top: 1px solid lightgray;
+	max-height: 300px;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	Views
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-view-filters .mapp-filters {
+	display: block;
+}
+
+.mapp-view-menu .mapp-menu {
+	display: block;
+}
+
+.mapp-view-directions .mapp-directions {
+	display: block;
+}
+
+.mapp-view-directions .mapp-list {
+	display: none;
+}
+
+.mapp-left [data-mapp-action="view-map"] { display: none; }
+.mapp-left.mapp-view-list [data-mapp-action="view-list"] { display: none; }
+.mapp-left.mapp-view-list [data-mapp-action="view-map"] { display: block; }
+
+.mapp-left.mapp-view-mini .mapp-list {
+	display: none;
+}
+
+.mapp-left.mapp-view-list .mapp-list {
+	display: block;
+	width: 100%;
+	max-width: none;
+}
+
 
 /*
 	-----------------------------------------------------------------------------------
@@ -431,7 +484,7 @@
 	margin: 10px 0 0px 0 ;
 }
 
-.mapp-dir-saddr, .mapp-dir-daddr {
+.mapp-dir-addr {
 	width: 80% ;
 	line-height: normal ;
 }
@@ -448,30 +501,6 @@
 .mapp-dir-arrows { width: 10px; height: 12px; background-position: -10px -489px; position: relative; top: 10px; left: 5px; }
 .mapp-dir-a { width: 24px; height: 24px; background-position: 0px -140px; }
 .mapp-dir-b { width: 24px; height: 24px; background-position: 0px -71px; }
-
-
-/*
-	-----------------------------------------------------------------------------------
-	Views
-	-----------------------------------------------------------------------------------
-*/
-
-.mapp-view-filters .mapp-filters {
-	display: block;
-}
-
-.mapp-view-menu .mapp-menu {
-	display: block;
-}
-
-.mapp-view-directions .mapp-directions {
-	display: block;
-}
-
-.mapp-view-directions .mapp-list {
-	display: none;
-}
-
 
 /*
 	-----------------------------------------------------------------------------------
@@ -580,15 +609,13 @@
 	color: black;
 }
 
-/* Icons */
-img.mapp-icon {
+img.mapp-icon, .mapp-icon img {
 	max-width: 24px !important; 	/* 2012 tries to override */
 	max-height: 24px;
 	vertical-align: middle;
 	box-shadow: none !important;	/* 2012 applies box shadow to all images */
 }
 
-/* Error messages, e.g. invalid address */
 .mapp-error {
 	background-color: #ffebe8;
 	margin: 0;
@@ -609,12 +636,10 @@ img.mapp-icon {
 	cursor: pointer;
 }
 
-/* Max-size element */
 .mapp-max {
 	width: 100%;
 }
 
-/* Caret */
 .mapp-caret:after {
 	content: "";
 	display: inline-block;

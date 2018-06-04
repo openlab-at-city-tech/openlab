@@ -4,7 +4,6 @@
 		<div class='mapp-main'>
 			<?php echo $map->part('list-left'); ?>
 			<div class="mapp-canvas"></div>
-			<div class="mapp-dialog"><span class="mapp-spinner"></span><?php echo __('Loading', 'mappress-google-maps-for-wordpress'); ?></div>
 			<?php echo $map->part('filters'); ?>
 			<?php echo $map->part('controls'); ?>
 		</div>
