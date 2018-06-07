@@ -2526,3 +2526,13 @@ add_action( 'pre_get_posts', function( $query ) {
 		remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
 	}
 }, 0 );
+
+add_filter( 'mime_types', function( $types ) {
+	// AutoCAD - #2332.
+	$types['ctb|stb'] = 'application/octet-stream';
+	$types['dwg|dxf|acd|dwt'] = 'image/vnd.dwg';
+	$types['vwx'] = 'application/vnd.vectorworks';
+
+
+	return $types;
+} );
