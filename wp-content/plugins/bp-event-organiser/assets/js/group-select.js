@@ -5,52 +5,61 @@ var bpeoGroupMsg = BpEventOrganiserSettings.group_privacy_message,
 jQuery(function($){
 	var select2obj;
 
-	bpeoCurrStatus = $('#post-status-display').text();
-	bpeoCurrVisibility = $('#post-visibility-display').text();
 	bpeoSelect = $('#bp_event_organiser_metabox select');
-	bpeoPrivateFlag = bpeoSelect.find('[title]').length;
 	bpeoSubmit = $('#submitdiv .inside');
-
+	bpeoPublicFlag = bpeoSelect.find('[title]').length;
+	bpeoIsPrivate  = !!bpeoPublicFlag; // convert to boolean
+	bpeoIsPrivate  = !bpeoPublicFlag;  // flip the boolean
 
 	bpeoToggle = function() {
 		var notice = bpeoSubmit.find('.updated');
 
-		if ( false === $.isEmptyObject( bpeoSelect.val() ) ) {
-			bpeoToggleFlag = true;
-
-			if ( bpeoPrivateFlag === 1 ) {
-				$("#visibility-radio-private").prop("checked", true);
-				$('#post-status-display').fadeOut('fast').text( postL10n.privatelyPublished ).fadeIn('fast');
-				$('#post-visibility-display').fadeOut('fast').text( postL10n.private ).fadeIn('fast');
-			}
-
+		if ( true === $.isEmptyObject( bpeoSelect.val() ) ) {
+			$('.misc-pub-post-status, .misc-pub-visibility').show();
+			$('.edit-post-status').show();
+			$('#save-post').show();
+			$('#submitdiv .inside .error').hide();
+			notice.fadeOut();
+		} else {
 			$('.misc-pub-post-status, .misc-pub-visibility').hide();
 			$('#save-post').hide();
 			$('#submitdiv .inside .error').show();
 
-			if ( ! notice.length && typeof adminpage === 'undefined' ) {
-				bpeoSubmit.prepend('<div class="updated"><p>' + bpeoGroupMsg + '</p></div>');
-			} else {
-				notice.fadeIn('fast');
-			}
+			if ( bpeoPublicFlag > 0 ) {
+				bpeoGroupMsg = BpEventOrganiserSettings.group_public_message;
 
-		} else if ( bpeoPrivateFlag === 0 && bpeoToggleFlag === true ) {
-			bpeoToggleFlag = false;
-			$("#visibility-radio-public").prop("checked", true);
-			$('.misc-pub-post-status, .misc-pub-visibility').show();
-			$('#post-status-display').fadeOut('fast').text( bpeoCurrStatus ).fadeIn('fast');
-			$('.edit-post-status').show();
-			$('#post-visibility-display').fadeOut('fast').text( bpeoCurrVisibility ).fadeIn('fast');
-			$('#save-post').show();
-			$('#submitdiv .inside .error').hide();
+				$("#visibility-radio-public" ).prop("checked", true);
+				$('#post-status-display').fadeOut('fast').text( postL10n.published ).fadeIn('fast');
+				$('#post-visibility-display').fadeOut('fast').text( postL10n.public ).fadeIn('fast');
+			} else {
+				bpeoGroupMsg = BpEventOrganiserSettings.group_privacy_message;
+
+				$("#visibility-radio-private" ).prop("checked", true);
+				$('#post-status-display').fadeOut('fast').text( postL10n.privatelyPublished ).fadeIn('fast');
+				$('#post-visibility-display').fadeOut('fast').text( postL10n.private ).fadeIn('fast');
+			}
 
 			if ( notice.length ) {
+				bpeoToggleFlag = false;
+
 				notice.fadeOut('fast');
+				notice.find('p').html( bpeoGroupMsg );
+				notice.fadeIn();
+			} else {
+				bpeoSubmit.prepend('<div class="updated"><p>' + bpeoGroupMsg + '</p></div>');
 			}
+
 		}
 	}
 
-	bpeoToggle();
+	$('#post-status-select, #post-visibility-select, #timestampdiv').hide();
+
+	if ( ! $( 'body' ).hasClass( 'bp-user' ) ) {
+		if ( ! bpeoSubmit.find('.updated').length && typeof adminpage === 'undefined' ) {
+			bpeoSubmit.prepend('<div class="updated"><p>' + bpeoGroupMsg + '</p></div>');
+		}
+		bpeoToggle();
+	}
 
 	// do not show "Save Draft" button for public groups when clicking on the
 	// "Cancel" button when toggled from the "Publish immediately" option
@@ -113,18 +122,19 @@ jQuery(function($){
 	});
 
 	bpeoSelect.on("select2:unselecting", function (e) {
-		if ( 'Private' == e.params.args.data.title || true === e.params.args.data.private ) {
-			bpeoPrivateFlag--;
+		if ( 'Public' == e.params.args.data.title || true === e.params.args.data.public ) {
+			bpeoPublicFlag--;
 		}
 	});
 
 	bpeoSelect.on("select2:selecting", function (e) {
-		if ( 'Private' == e.params.args.data.title || true === e.params.args.data.private ) {
-			bpeoPrivateFlag++;
+		if ( 'Public' == e.params.args.data.title || true === e.params.args.data.public ) {
+			bpeoPublicFlag++;
 		}
 	});
 
 	bpeoSelect.on("select2:unselect select2:select", function (e) {
+		bpeoToggleFlag = true;
 		bpeoToggle();
 	});
 

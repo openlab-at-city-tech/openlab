@@ -274,6 +274,10 @@ class WP_Frontend_Admin_Screen {
 		$this->before_display();
 	?>
 
+		<script type="text/javascript">
+			document.body.className = document.body.className.replace( 'no-js', 'js' );
+		</script>
+
 		<h2 class="admin-page-title"><?php esc_html_e( $title  ); ?></h2>
 
 		<div id="post-body">
@@ -438,14 +442,21 @@ class WP_Frontend_Admin_Screen {
 		// @see wp_default_scripts()
 		$suffix = SCRIPT_DEBUG ? '' : '.min';
 		wp_enqueue_script( 'word-count', admin_url( "js/word-count$suffix.js" ), array( 'jquery' ), false, 1 );
-		wp_enqueue_script( 'postbox', admin_url( "js/postbox$suffix.js" ), array('jquery-ui-sortable'), false, 1 );
-		wp_enqueue_script( 'post', admin_url( "js/post$suffix.js" ), array( 'suggest', 'wp-lists', 'postbox' ), false, 1 );
-		wp_enqueue_script( 'link', admin_url( "js/link$suffix.js" ), array( 'wp-lists', 'postbox' ), false, 1 );
+		wp_enqueue_script( 'post', admin_url( "js/post$suffix.js" ), array( 'suggest', 'wp-lists' ), false, 1 );
+		wp_enqueue_script( 'link', admin_url( "js/link$suffix.js" ), array( 'wp-lists' ), false, 1 );
 		//wp_enqueue_script( 'autosave' );
 
 		// yay, different WP versions!
 		if ( version_compare( $wp_version, '4.1.999') >= 0 ) {
-			wp_enqueue_script( 'tags-box', admin_url( "js/tags-box$suffix.js" ), array( 'jquery', 'suggest' ), false, 1 );
+			$suggest = 'suggest';
+			if ( version_compare( $wp_version, '4.6.999' >= 0 ) ) {
+				$suggest = 'tags-suggest';
+			}
+			wp_enqueue_script( 'tags-box', admin_url( "js/tags-box$suffix.js" ), array( 'jquery', $suggest ), false, 1 );
+		}
+		if ( version_compare( $wp_version, '4.6.999' >= 0 ) ) {
+			wp_enqueue_script( 'wp-a11y', includes_url( "js/wp-a11y$suffix.js" ), array( 'jquery' ), false, 1 );
+			wp_enqueue_script( 'tags-suggest', admin_url( "js/tags-suggest$suffix.js" ), array( 'jquery-ui-autocomplete', 'wp-a11y' ), false, 1 );
 		}
 
 		if ( wp_is_mobile() ) {
@@ -464,6 +475,14 @@ class WP_Frontend_Admin_Screen {
 		wp_localize_script( 'tags-box', 'tagsBoxL10n', array(
 			'tagDelimiter' => $this->strings['tag_delimiter'],
 		) );
+		wp_localize_script( 'tags-suggest', 'tagsSuggestL10n', array(
+			'tagDelimiter' => $this->strings['tag_delimiter'],
+			'removeTerm'   => __( 'Remove term:' ),
+			'termSelected' => __( 'Term selected.' ),
+			'termAdded'    => __( 'Term added.' ),
+			'termRemoved'  => __( 'Term removed.' ),
+		) );
+
 		wp_localize_script( 'word-count', 'wordCountL10n', array(
 			'type' => 'characters' == $this->strings( 'words' ) ? 'c' : 'w',
 		) );
@@ -507,12 +526,16 @@ class WP_Frontend_Admin_Screen {
 		}
 
 		// set the 'pagenow' JS variable to emulate wp-admin area
+		// postboxes variable abstraction is necessary due to post.js calling for it.
 		// @see /wp-admin/admin-header.php
 	?>
 
 <script type="text/javascript">
 	var pagenow = '<?php echo self::$post_type; ?>',
-		typenow = '<?php echo self::$post_type; ?>';
+		typenow = '<?php echo self::$post_type; ?>',
+		postboxes = new Object();
+
+	postboxes.add_postbox_toggles = function() {}
 </script>
 
 	<?php

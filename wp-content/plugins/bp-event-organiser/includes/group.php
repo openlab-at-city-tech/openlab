@@ -157,7 +157,7 @@ function bpeo_filter_query_for_bp_group( $query ) {
 
 	// Convert group IDs to a tax query.
 	$tq = $query->get( 'tax_query' );
-	if ( empty( $tq ) ) {
+	if ( '' === $tq ) {
 		$tq = array();
 	}
 
@@ -332,6 +332,30 @@ function bpeo_group_event_meta_cap( $caps, $cap, $user_id, $args ) {
 				if ( is_super_admin() || $can_access ) {
 					$caps = array( 'read' );
 				}
+			}
+
+			break;
+
+		/*
+		 * Give group members access to private events in their private groups. Ugh.
+		 */
+		case 'read_private_events' :
+			if ( ! bp_is_group() ) {
+				return $caps;
+			}
+
+			$can_access = false;
+			$group = groups_get_current_group();
+
+			if ( isset( buddypress()->groups->current_group->is_user_member ) ) {
+				$can_access = buddypress()->groups->current_group->is_user_member;
+
+			} elseif ( groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+				$can_access = true;
+			}
+
+			if ( is_super_admin() || $can_access ) {
+				$caps = array( 'read' );
 			}
 
 			break;
