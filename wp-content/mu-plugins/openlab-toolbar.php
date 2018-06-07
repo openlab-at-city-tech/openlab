@@ -1197,7 +1197,7 @@ HTML;
 			$actions['post-new.php'] = array( $cpts['post']->labels->name_admin_bar, 'new-post' );
 		}
 
-		if ( isset( $cpts['attachment'] ) && current_user_can( 'upload_files' ) ) {
+		if ( isset( $cpts['attachment'] ) && current_user_can( 'upload_files' ) && current_user_can( 'edit_posts' ) ) {
 			$actions['media-new.php'] = array( $cpts['attachment']->labels->name_admin_bar, 'new-media' );
 		}
 
