@@ -26,6 +26,7 @@ function openlab_hide_plugins( $plugins ) {
 		'grader/grader.php',
 		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
+		'pdf-embedder/pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
