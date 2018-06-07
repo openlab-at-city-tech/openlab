@@ -9817,6 +9817,9 @@ body.membership-requests .group-list {
 .action-events.event-detail #item-body > h4 {
   display: none;
 }
+.sidebar-widget .bpeo-upcoming-event-title {
+  padding-left: 0;
+}
 body.single-event #content .eo-event-meta,
 body.single-event #content .eo-event-venue-map {
   float: none;
