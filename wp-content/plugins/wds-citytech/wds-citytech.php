@@ -2530,7 +2530,7 @@ add_action( 'pre_get_posts', function( $query ) {
 add_filter( 'mime_types', function( $types ) {
 	// AutoCAD - #2332.
 	$types['ctb|stb'] = 'application/octet-stream';
-	$types['dwg|dxf|acd|dwt'] = 'image/vnd.dwg';
+	$types['dwg|dxf|acd|dwt'] = 'application/acad';
 	$types['vwx'] = 'application/vnd.vectorworks';
 
 
