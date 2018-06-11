@@ -1,0 +1,20 @@
+{
+	"name": "tobiasbg/tablepress",
+	"version": "1.9.0",
+	"description": "TablePress plugin for WordPress",
+	"keywords": ["wordpress", "plugin", "table"],
+	"homepage": "https://tablepress.org/",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Tobias Bäthge",
+			"email": "wordpress@tobias.baethge.com",
+			"homepage": "https://tobias.baethge.com/"
+		}
+	],
+	"type": "wordpress-plugin",
+	"require": {
+		"php": ">=5.2.4",
+		"composer/installers": "v1.0.6"
+	}
+}
