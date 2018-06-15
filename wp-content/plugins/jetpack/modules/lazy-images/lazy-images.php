@@ -45,18 +45,49 @@ class Jetpack_Lazy_Images {
 
 		// Do not lazy load avatar in admin bar
 		add_action( 'admin_bar_menu', array( $this, 'remove_filters' ), 0 );
+
+		add_filter( 'wp_kses_allowed_html', array( $this, 'allow_lazy_attributes' ) );
 	}
 
 	public function setup_filters() {
-		add_filter( 'the_content', array( $this, 'add_image_placeholders' ), 99 ); // run this later, so other content filters have run, including image_add_wh on WP.com
-		add_filter( 'post_thumbnail_html', array( $this, 'add_image_placeholders' ), 11 );
-		add_filter( 'get_avatar', array( $this, 'add_image_placeholders' ), 11 );
+		add_filter( 'the_content', array( $this, 'add_image_placeholders' ), PHP_INT_MAX ); // run this later, so other content filters have run, including image_add_wh on WP.com
+		add_filter( 'post_thumbnail_html', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		add_filter( 'get_avatar', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		add_filter( 'widget_text', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		add_filter( 'get_image_tag', array( $this, 'add_image_placeholders' ), PHP_INT_MAX);
+		add_filter( 'wp_get_attachment_image_attributes', array( __CLASS__, 'process_image_attributes' ), PHP_INT_MAX );
 	}
 
 	public function remove_filters() {
-		remove_filter( 'the_content', array( $this, 'add_image_placeholders' ), 99 );
-		remove_filter( 'post_thumbnail_html', array( $this, 'add_image_placeholders' ), 11 );
-		remove_filter( 'get_avatar', array( $this, 'add_image_placeholders' ), 11 );
+		remove_filter( 'the_content', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		remove_filter( 'post_thumbnail_html', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		remove_filter( 'get_avatar', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		remove_filter( 'widget_text', array( $this, 'add_image_placeholders' ), PHP_INT_MAX );
+		remove_filter( 'get_image_tag', array( $this, 'add_image_placeholders' ), PHP_INT_MAX);
+		remove_filter( 'wp_get_attachment_image_attributes', array( __CLASS__, 'process_image_attributes' ), PHP_INT_MAX );
+	}
+
+	/**
+	 * Ensure that our lazy image attributes are not filtered out of image tags.
+	 *
+	 * @param array $allowed_tags The allowed tags and their attributes.
+	 * @return array
+	 */
+	public function allow_lazy_attributes( $allowed_tags ) {
+		if ( ! isset( $allowed_tags['img'] ) ) {
+			return $allowed_tags;
+		}
+
+		// But, if images are allowed, ensure that our attributes are allowed!
+		$img_attributes = array_merge( $allowed_tags['img'], array(
+			'data-lazy-src' => 1,
+			'data-lazy-srcset' => 1,
+			'data-lazy-sizes' => 1,
+		) );
+
+		$allowed_tags['img'] = $img_attributes;
+
+		return $allowed_tags;
 	}
 
 	public function add_image_placeholders( $content ) {
@@ -81,6 +112,54 @@ class Jetpack_Lazy_Images {
 		return $content;
 	}
 
+	/**
+	 * Returns true when a given string of classes contains a class signifying lazy images
+	 * should not process the image.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param string $classes A string of space-separated classes.
+	 * @return bool
+	 */
+	public static function should_skip_image_with_blacklisted_class( $classes ) {
+		$blacklisted_classes = array(
+			'skip-lazy',
+			'gazette-featured-content-thumbnail',
+		);
+
+		/**
+		 * Allow plugins and themes to tell lazy images to skip an image with a given class.
+		 *
+		 * @module lazy-images
+		 *
+		 * @since 5.9.0
+		 *
+		 * @param array An array of strings where each string is a class.
+		 */
+		$blacklisted_classes = apply_filters( 'jetpack_lazy_images_blacklisted_classes', $blacklisted_classes );
+
+		if ( ! is_array( $blacklisted_classes ) || empty( $blacklisted_classes ) ) {
+			return false;
+		}
+
+		foreach ( $blacklisted_classes as $class ) {
+			if ( false !== strpos( $classes, $class ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Processes images in content by acting as the preg_replace_callback
+	 *
+	 * @since 5.6.0
+	 *
+	 * @param array $matches
+	 *
+	 * @return string The image with updated lazy attributes
+	 */
 	static function process_image( $matches ) {
 		$old_attributes_str = $matches[2];
 		$old_attributes_kses_hair = wp_kses_hair( $old_attributes_str, wp_allowed_protocols() );
@@ -90,22 +169,67 @@ class Jetpack_Lazy_Images {
 		}
 
 		$old_attributes = self::flatten_kses_hair_data( $old_attributes_kses_hair );
-		$new_attributes = $old_attributes;
+		$new_attributes = self::process_image_attributes( $old_attributes );
+
+		// If we didn't add lazy attributes, just return the original image source.
+		if ( empty( $new_attributes['data-lazy-src'] ) ) {
+			return $matches[0];
+		}
+
+		$new_attributes_str = self::build_attributes_string( $new_attributes );
+
+		return sprintf( '<img %1$s><noscript>%2$s</noscript>', $new_attributes_str, $matches[0] );
+	}
+
+	/**
+	 * Given an array of image attributes, updates the `src`, `srcset`, and `sizes` attributes so
+	 * that they load lazily.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @param array $attributes
+	 *
+	 * @return array The updated image attributes array with lazy load attributes
+	 */
+	static function process_image_attributes( $attributes ) {
+		if ( empty( $attributes['src'] ) ) {
+			return $attributes;
+		}
+
+		if ( ! empty( $attributes['class'] ) && self::should_skip_image_with_blacklisted_class( $attributes['class'] ) ) {
+			return $attributes;
+		}
+
+		/**
+		 * Allow plugins and themes to conditionally skip processing an image via its attributes.
+		 *
+		 * @module-lazy-images
+		 *
+		 * @since 5.9.0
+		 *
+		 * @param bool  Default to not skip processing the current image.
+		 * @param array An array of attributes via wp_kses_hair() for the current image.
+		 */
+		if ( apply_filters( 'jetpack_lazy_images_skip_image_with_atttributes', false, $attributes ) ) {
+			return $attributes;
+		}
+
+		$old_attributes = $attributes;
 
 		// Set placeholder and lazy-src
-		$new_attributes['src'] = self::get_placeholder_image();
-		$new_attributes['data-lazy-src'] = $old_attributes['src'];
+		$attributes['src'] = self::get_placeholder_image();
+		$attributes['data-lazy-src'] = $old_attributes['src'];
 
 		// Handle `srcset`
-		if ( ! empty( $new_attributes['srcset'] ) ) {
-			$new_attributes['data-lazy-srcset'] = $old_attributes['srcset'];
-			unset( $new_attributes['srcset'] );
+		if ( ! empty( $attributes['srcset'] ) ) {
+			$attributes['data-lazy-srcset'] = $old_attributes['srcset'];
+			unset( $attributes['srcset'] );
 		}
 
 		// Handle `sizes`
-		if ( ! empty( $new_attributes['sizes'] ) ) {
-			$new_attributes['data-lazy-sizes'] = $old_attributes['sizes'];
-			unset( $new_attributes['sizes'] );
+		if ( ! empty( $attributes['sizes'] ) ) {
+			$attributes['data-lazy-sizes'] = $old_attributes['sizes'];
+			unset( $attributes['sizes'] );
 		}
 
 		/**
@@ -113,7 +237,7 @@ class Jetpack_Lazy_Images {
 		 *
 		 * One potential use of this filter is for themes that set `height:auto` on the `img` tag.
 		 * With this filter, the theme could get the width and height attributes from the
-		 * $new_attributes array and then add a style tag that sets those values as well, which could
+		 * $attributes array and then add a style tag that sets those values as well, which could
 		 * minimize reflow as images load.
 		 *
 		 * @module lazy-images
@@ -123,10 +247,7 @@ class Jetpack_Lazy_Images {
 		 * @param array An array containing the attributes for the image, where the key is the attribute name
 		 *              and the value is the attribute value.
 		 */
-		$new_attributes = apply_filters( 'jetpack_lazy_images_new_attributes', $new_attributes );
-		$new_attributes_str = self::build_attributes_string( $new_attributes );
-
-		return sprintf( '<img %1$s><noscript>%2$s</noscript>', $new_attributes_str, $matches[0] );
+		return apply_filters( 'jetpack_lazy_images_new_attributes', $attributes );
 	}
 
 	private static function get_placeholder_image() {
@@ -171,7 +292,10 @@ class Jetpack_Lazy_Images {
 	public function enqueue_assets() {
 		wp_enqueue_script(
 			'jetpack-lazy-images',
-			plugins_url( 'modules/lazy-images/js/lazy-images.js', JETPACK__PLUGIN_FILE ),
+			Jetpack::get_file_url_for_environment(
+				'_inc/build/lazy-images/js/lazy-images.min.js',
+				'modules/lazy-images/js/lazy-images.js'
+			),
 			array( 'jquery' ),
 			JETPACK__VERSION,
 			true

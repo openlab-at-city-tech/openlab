@@ -16,14 +16,14 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @var $parent
 	 */
-	static $parent;
+	public static $parent;
 
 	/**
 	 * The Singleton instance
 	 *
 	 * @var $instance
 	 */
-	static $instance;
+	public static $instance;
 
 	/**
 	 * Array of accepted shortcode keys and default values
@@ -40,7 +40,7 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @param Object $instance The WP Document Revisions instance
 	 */
-	function __construct( &$instance = null ) {
+	public function __construct( &$instance = null ) {
 
 		self::$instance = &$this;
 
@@ -65,7 +65,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param array    $args the arguments to pass to the function
 	 * @returns mixed the result of the function
 	 */
-	function __call( $function, $args ) {
+	public function __call( $function, $args ) {
 		return call_user_func_array( array( &self::$parent, $function ), $args );
 	}
 
@@ -77,7 +77,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param string $name the property to fetch
 	 * @returns mixed the property's value
 	 */
-	function __get( $name ) {
+	public function __get( $name ) {
 		return Document_Revisions::$$name;
 	}
 
@@ -89,7 +89,7 @@ class WP_Document_Revisions_Front_End {
 	 * @returns string a UL with the revisions
 	 * @since 1.2
 	 */
-	function revisions_shortcode( $atts ) {
+	public function revisions_shortcode( $atts ) {
 
 		// normalize args
 		$atts = shortcode_atts( $this->shortcode_defaults, $atts );
@@ -143,7 +143,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param array $atts shortcode attributes
 	 * @return string the shortcode output
 	 */
-	function documents_shortcode( $atts ) {
+	public function documents_shortcode( $atts ) {
 
 		$defaults = array(
 			'orderby' => 'modified',
@@ -152,7 +152,55 @@ class WP_Document_Revisions_Front_End {
 
 		// list of all string or int based query vars (because we are going through shortcode)
 		// via http://codex.wordpress.org/Class_Reference/WP_Query#Parameters
-		$keys = array( 'author', 'author_name', 'cat', 'category_name', 'category__and', 'tag', 'tag_id', 'p', 'name', 'post_parent', 'post_status', 'numberposts', 'year', 'monthnum', 'w', 'day', 'hour', 'minute', 'second', 'meta_key', 'meta_value', 'meta_value_num', 'meta_compare' );
+		$keys = array(
+			'author',
+			'author_name',
+			'author__in',
+			'author__not_in',
+			'cat',
+			'category_name',
+			'category__and',
+			'category__in',
+			'category__not_in',
+			'tag',
+			'tag_id',
+			'tag__and',
+			'tag__in',
+			'tag__not_in',
+			'tag_slug__and',
+			'tag_slug__in',
+			'tax_query',
+			's',
+			'p',
+			'name',
+			'title',
+			'page_id',
+			'pagename',
+			'post_parent',
+			'post_parent__in',
+			'post_parent__not_in',
+			'post__in',
+			'post__not_in',
+			'post_name__in',
+			'has_password',
+			'post_password',
+			'post_status',
+			'numberposts',
+			'year',
+			'monthnum',
+			'w',
+			'day',
+			'hour',
+			'minute',
+			'second',
+			'm',
+			'date_query',
+			'meta_key',
+			'meta_value',
+			'meta_value_num',
+			'meta_compare',
+			'meta_query',
+		);
 
 		foreach ( $keys as $key ) {
 			$defaults[ $key ] = null;
@@ -207,7 +255,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param Array $atts shortcode attributes
 	 * @return Array modified shortcode attributes
 	 */
-	function shortcode_atts_hyphen_filter( $atts ) {
+	public function shortcode_atts_hyphen_filter( $atts ) {
 
 		foreach ( (array) $atts as $k => $v ) {
 
@@ -253,7 +301,7 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * Init widget and register
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct( 'Document_Revisions_Recently_Revised_Widget', __( 'Recently Revised Documents', 'wp-document-revisions' ) );
 
 		// can't i18n outside of a function
@@ -267,7 +315,7 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 * @param Array  $args the widget arguments
 	 * @param Object $instance the WP Document Revisions instance
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 
 		global $wpdr;
 		if ( ! $wpdr ) {
@@ -296,7 +344,7 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 		echo $args['before_widget'] . $args['before_title'] . esc_html( apply_filters( 'widget_title', $instance['title'] ) ) . $args['after_title'] . '<ul>';
 
 		foreach ( $documents as $document ) :
-			$link = ( current_user_can( 'edit_post', $document->ID ) ) ? add_query_arg(
+			$link = ( current_user_can( 'edit_document', $document->ID ) ) ? add_query_arg(
 				array(
 					'post' => $document->ID,
 					'action' => 'edit',
@@ -312,7 +360,8 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 		<?php
 		endforeach;
 
-		echo esc_html( '</ul>' . $args['after_widget'] );
+		// @codingStandardsIgnoreLine WordPress.XSS.EscapeOutput.OutputNotEscaped
+		echo '</ul>' . $args['after_widget'];
 	}
 
 
@@ -321,7 +370,7 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 *
 	 * @param Object $instance the WP Document Revisions instance
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		foreach ( $this->defaults as $key => $value ) {
 			if ( ! isset( $instance[ $key ] ) ) {
@@ -358,7 +407,7 @@ class Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 * @param Object $new_instance the new instance
 	 * @param Object $old_instance the old instance
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title']       = strip_tags( $new_instance['title'] );

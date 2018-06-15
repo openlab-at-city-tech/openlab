@@ -51,6 +51,12 @@ function bp_friends_clear_bp_friends_friendships_cache( $friendship_id, $initiat
 
 	// Clear the friendship object cache.
 	wp_cache_delete( $friendship_id, 'bp_friends_friendships' );
+
+	// Clear incremented cache.
+	$friendship = new stdClass;
+	$friendship->initiator_user_id = $initiator_user_id;
+	$friendship->friend_user_id    = $friend_user_id;
+	bp_friends_delete_cached_friendships_on_friendship_save( $friendship );
 }
 add_action( 'friends_friendship_requested', 'bp_friends_clear_bp_friends_friendships_cache', 10, 3 );
 add_action( 'friends_friendship_accepted',  'bp_friends_clear_bp_friends_friendships_cache', 10, 3 );
@@ -71,6 +77,9 @@ function bp_friends_clear_bp_friends_friendships_cache_remove( $friendship_id, B
 
 	// Clear the friendship object cache.
 	wp_cache_delete( $friendship_id, 'bp_friends_friendships' );
+
+	// Clear incremented cache.
+	bp_friends_delete_cached_friendships_on_friendship_save( $friendship );
 }
 add_action( 'friends_friendship_withdrawn', 'bp_friends_clear_bp_friends_friendships_cache_remove', 10, 2 );
 add_action( 'friends_friendship_rejected',  'bp_friends_clear_bp_friends_friendships_cache_remove', 10, 2 );
@@ -118,6 +127,19 @@ function bp_friends_clear_request_cache_on_remove( $friendship_id, BP_Friends_Fr
 }
 add_action( 'friends_friendship_withdrawn', 'bp_friends_clear_request_cache_on_remove', 10, 2 );
 add_action( 'friends_friendship_rejected',  'bp_friends_clear_request_cache_on_remove', 10, 2 );
+
+/**
+ * Delete individual friendships from the cache when they are changed.
+ *
+ * @since 3.0.0
+ *
+ * @param BP_Friends_Friendship $friendship Friendship object.
+ */
+function bp_friends_delete_cached_friendships_on_friendship_save( $friendship ) {
+	bp_core_delete_incremented_cache( $friendship->friend_user_id . ':' . $friendship->initiator_user_id, 'bp_friends' );
+	bp_core_delete_incremented_cache( $friendship->initiator_user_id . ':' . $friendship->friend_user_id, 'bp_friends' );
+}
+add_action( 'friends_friendship_after_save', 'bp_friends_delete_cached_friendships_on_friendship_save' );
 
 // List actions to clear super cached pages on, if super cache is installed.
 add_action( 'friends_friendship_rejected',  'bp_core_clear_cache' );

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.8
+ * Version:     1.9
  * Plugin URI:  http://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -10,7 +10,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 4.7+.
+ * Compatible with WordPress 4.6 through 4.9+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.8
+ * @version 1.9
  */
 
 /*
@@ -29,11 +29,13 @@
  *   counts would be for the group and not the individual. The link to see the emails would search for all of the
  *   email addresses in the group. Via filter maybe?
  * - Add sortability to 'Comments' column in user table
+ * - Consider inserting commenter bomment bubble via 'comment_row_actions' hook like Akismet does, though that
+ *   requires introducing a JS dependency.
  *
  */
 
 /*
-	Copyright (c) 2009-2017 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2009-2018 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -104,7 +106,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.8';
+		return '1.9';
 	}
 
 	/**
@@ -130,6 +132,9 @@ class c2c_AdminCommentersCommentsCount {
 		add_action( 'admin_enqueue_scripts',      array( __CLASS__, 'enqueue_admin_css'       )        );
 		add_filter( 'manage_users_columns',       array( __CLASS__, 'add_user_column'         )        );
 		add_filter( 'manage_users_custom_column', array( __CLASS__, 'handle_column_data'      ), 10, 3 );
+
+		// Disable Akismet's version of this functionality.
+		add_filter( 'akismet_show_user_comments_approved', '__return_false' );
 	}
 
 	/**
@@ -147,8 +152,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.3
 	 */
 	public static function enqueue_admin_css() {
-		wp_register_style( __CLASS__ . '_admin', plugins_url( 'assets/admin.css', __FILE__ ) );
-		wp_enqueue_style( __CLASS__ . '_admin', false, array(), self::version() );
+		wp_enqueue_style( __CLASS__ . '_admin', plugins_url( 'assets/admin.css', __FILE__ ), array(), self::version() );
 	}
 
 	/**
@@ -225,8 +229,8 @@ class c2c_AdminCommentersCommentsCount {
 			$pending_count = $wpdb->get_var( $wpdb->prepare( $query, $value, 0 ) );
 		} elseif ( 'pingback' == $type || 'trackback' == $type ) {
 			$query = "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_author_url LIKE %s AND comment_type = %s AND comment_approved = %d";
-			$comment_count = $wpdb->get_var( $wpdb->prepare( $query, $author_url.'%', $type, 1 ) );
-			$pending_count = $wpdb->get_var( $wpdb->prepare( $query, $author_url.'%', $type, 0 ) );
+			$comment_count = $wpdb->get_var( $wpdb->prepare( $query, $wpdb->esc_like( $value ) . '%', $type, 1 ) );
+			$pending_count = $wpdb->get_var( $wpdb->prepare( $query, $wpdb->esc_like( $value ) . '%', $type, 0 ) );
 		} else {
 			$comment_count = $pending_count = 0;
 		}
@@ -292,7 +296,7 @@ class c2c_AdminCommentersCommentsCount {
 			// Want to get the root domain and not use the exact pingback/trackback source link
 			$parsed_url = parse_url( $author_url );
 			$author_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
-			list( $comment_count, $pending_count ) = self::get_comments_count( 'comment_author_url', $author_url . '%', $type );
+			list( $comment_count, $pending_count ) = self::get_comments_count( 'comment_author_url', $author_url, $type );
 			$author_email = $author_url;
 			/* Translators: sorry, but I'm not supplying explicit translation strings for all possible other comment types.
 			   You can at least expect '%d trackback', '%d trackbacks', '%d pingback' and '%d pingbacks' */

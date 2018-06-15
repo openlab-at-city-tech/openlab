@@ -18,6 +18,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
+		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
@@ -25,6 +26,7 @@ function openlab_hide_plugins( $plugins ) {
 		'grader/grader.php',
 		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
+		'pdf-embedder/pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
@@ -159,3 +161,17 @@ function openlab_mu_group_type_plugin_handling($plugins) {
 
     return $plugins;
 }
+
+/**
+ * License key for PDF Embedder Premium.
+ */
+function openlab_pdfemb_filter_license_key( $opt ) {
+	if ( ! defined( 'OPENLAB_PDFEMB_LICENSE_KEY' ) ) {
+		return $opt;
+	}
+
+	$opt['pdfemb_license_key'] = OPENLAB_PDFEMB_LICENSE_KEY;
+	return $opt;
+}
+add_filter( 'option_pdfemb', 'openlab_pdfemb_filter_license_key' );
+add_filter( 'default_option_pdfemb', 'openlab_pdfemb_filter_license_key' );

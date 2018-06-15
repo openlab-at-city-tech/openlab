@@ -1,5 +1,6 @@
 <div class='mapp-header'>
 	<div class='mapp-search-wrapper'>
+		<?php echo $map->part('view-toggles');?>
 		<?php echo $map->part('filters-toggle');?>
 		<?php echo $map->part('search'); ?>
 	</div>

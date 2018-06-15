@@ -91,6 +91,33 @@ function stats_enqueue_dashboard_head() {
 }
 
 /**
+ * Checks if filter is set and dnt is enabled.
+ *
+ * @return bool
+ */
+function jetpack_is_dnt_enabled() {
+	/**
+	 * Filter the option which decides honor DNT or not.
+	 *
+	 * @module stats
+	 * @since 6.1.0
+	 *
+	 * @param bool false Honors DNT for clients who don't want to be tracked. Defaults to false. Set to true to enable.
+	 */
+	if ( false === apply_filters( 'jetpack_honor_dnt_header_for_stats', false ) ) {
+		return false;
+	}
+
+	foreach ( $_SERVER as $name => $value ) {
+		if ( 'http_dnt' == strtolower( $name ) && 1 == $value ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Prevent sparkline img requests being redirected to upgrade.php.
  * See wp-admin/admin.php where it checks $wp_db_version.
  *
@@ -144,7 +171,7 @@ function stats_map_meta_caps( $caps, $cap, $user_id ) {
 function stats_template_redirect() {
 	global $current_user, $stats_footer;
 
-	if ( is_feed() || is_robots() || is_trackback() || is_preview() ) {
+	if ( is_feed() || is_robots() || is_trackback() || is_preview() || jetpack_is_dnt_enabled() ) {
 		return;
 	}
 
@@ -164,7 +191,7 @@ function stats_template_redirect() {
 	$data_stats_array = stats_array( $data );
 
 	$stats_footer = <<<END
-<script type='text/javascript' src='{$script}' async defer></script>
+<script type='text/javascript' src='{$script}' async='async' defer='defer'></script>
 <script type='text/javascript'>
 	_stq = window._stq || [];
 	_stq.push([ 'view', {{$data_stats_array}} ]);
@@ -702,6 +729,7 @@ function stats_convert_post_titles( $html ) {
 			'post_type' => 'any',
 			'post_status' => 'any',
 			'numberposts' => -1,
+			'suppress_filters' => false,
 		)
 	);
 	foreach ( $posts as $post ) {
@@ -1248,6 +1276,9 @@ jQuery( function($) {
 #stats-info #top-posts, #stats-info #top-search {
 	float: left;
 	width: 50%;
+}
+#stats-info #top-posts {
+	padding-right: 3%;
 }
 #top-posts .stats-section-inner p {
 	white-space: nowrap;

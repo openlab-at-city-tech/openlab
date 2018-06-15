@@ -657,7 +657,16 @@ class GF_Field_List extends GF_Field {
 	 * @return string The processed merge tag.
 	 */
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$output_format = in_array( $modifier, array( 'text', 'html', 'url' ) ) ? $modifier : $format;
+		
+		$modifiers = $this->get_modifiers();
+
+		$allowed_modifiers = array( 'text', 'html', 'url' );
+
+		if( $found_modifiers = array_intersect( $modifiers, $allowed_modifiers ) ) {
+			$output_format = $found_modifiers[0];
+		} else {
+			$output_format = $format;
+		}
 
 		return GFCommon::get_lead_field_display( $this, $raw_value, $entry['currency'], true, $output_format );
 	}
@@ -679,6 +688,7 @@ class GF_Field_List extends GF_Field {
 		if ( ! $this->enableColumns ) {
 			return $value;
 		} else {
+			$value     = empty( $value ) ? array() : $value;
 			$col_count = count( $this->choices );
 			$rows      = array();
 
@@ -717,7 +727,7 @@ class GF_Field_List extends GF_Field {
 	}
 
 	/**
-	 * Gets the field value, formatted for exports.
+	 * Gets the field value, formatted for exports. For CSV export return an array.
 	 *
 	 * @since  Unknown
 	 * @access public
@@ -732,9 +742,9 @@ class GF_Field_List extends GF_Field {
 	 * @param array  $entry    The Entry Object.
 	 * @param string $input_id Input ID to export. If not defined, uses the current input ID. Defaults to empty string.
 	 * @param bool   $use_text Not used. Defaults to false.
-	 * @param bool   $is_csv   If the export should be formatted as CSV. Defaults to false.
+	 * @param bool   $is_csv   Is the value going to be used in the CSV export? Defaults to false.
 	 *
-	 * @return string
+	 * @return string|array
 	 */
 	public function get_value_export( $entry, $input_id = '', $use_text = false, $is_csv = false ) {
 		if ( empty( $input_id ) ) {
@@ -746,12 +756,15 @@ class GF_Field_List extends GF_Field {
 		}
 
 		$value = rgar( $entry, $input_id );
+
+		$value = unserialize( $value );
+
 		if ( empty( $value ) || $is_csv ) {
 
 			return $value;
 		}
 
-		$list_values = $column_values = unserialize( $value );
+		$list_values = $column_values = $value;
 
 		if ( isset( $column_num ) && is_numeric( $column_num ) && $this->enableColumns ) {
 			$column        = rgars( $this->choices, "{$column_num}/text" );

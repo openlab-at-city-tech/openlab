@@ -344,6 +344,16 @@ class BP_XProfile_Field {
 			return false;
 		}
 
+		/**
+		 * Fires before the current field instance gets deleted.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param BP_XProfile_Field $this        Current instance of the field being deleted. Passed by reference.
+		 * @param bool              $delete_data Whether or not to delete data.
+		 */
+		do_action_ref_array( 'xprofile_field_before_delete', array( &$this, $delete_data ) );
+
 		$bp  = buddypress();
 		$sql = $wpdb->prepare( "DELETE FROM {$bp->profile->table_name_fields} WHERE id = %d OR parent_id = %d", $this->id, $this->id );
 
@@ -351,10 +361,23 @@ class BP_XProfile_Field {
 			return false;
 		}
 
+		// Delete all metadata for this field.
+		bp_xprofile_delete_meta( $this->id, 'field' );
+
 		// Delete the data in the DB for this field.
 		if ( true === $delete_data ) {
 			BP_XProfile_ProfileData::delete_for_field( $this->id );
 		}
+
+		/**
+		 * Fires after the current field instance gets deleted.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param BP_XProfile_Field $this        Current instance of the field being deleted. Passed by reference.
+		 * @param bool              $delete_data Whether or not to delete data.
+		 */
+		do_action_ref_array( 'xprofile_field_after_delete', array( &$this, $delete_data ) );
 
 		return true;
 	}
@@ -555,11 +578,13 @@ class BP_XProfile_Field {
 		 * Filters the found children for a field.
 		 *
 		 * @since 1.2.5
+		 * @since 3.0.0 Added the `$this` parameter.
 		 *
-		 * @param object $children    Found children for a field.
-		 * @param bool   $for_editing Whether or not the field is for editing.
+		 * @param object            $children    Found children for a field.
+		 * @param bool              $for_editing Whether or not the field is for editing.
+		 * @param BP_XProfile_Field $this        Field object
 		 */
-		return apply_filters( 'bp_xprofile_field_get_children', $children, $for_editing );
+		return apply_filters( 'bp_xprofile_field_get_children', $children, $for_editing, $this );
 	}
 
 	/**
@@ -1145,10 +1170,19 @@ class BP_XProfile_Field {
 	 * @param string $message Message to display.
 	 */
 	public function render_admin_form( $message = '' ) {
+
+		// Users Admin URL
+		$users_url = bp_get_admin_url( 'users.php' );
+
+		// Add New
 		if ( empty( $this->id ) ) {
 			$title  = __( 'Add New Field', 'buddypress' );
-			$action	= "users.php?page=bp-profile-setup&amp;group_id=" . $this->group_id . "&amp;mode=add_field#tabs-" . $this->group_id;
-			$button	= __( 'Save', 'buddypress' );
+			$button	= __( 'Save',          'buddypress' );
+			$action = add_query_arg( array(
+				'page'     => 'bp-profile-setup',
+				'mode'     => 'add_field',
+				'group_id' => (int) $this->group_id
+			), $users_url . '#tabs-' . (int) $this->group_id );
 
 			if ( !empty( $_POST['saveField'] ) ) {
 				$this->name        = $_POST['title'];
@@ -1161,10 +1195,17 @@ class BP_XProfile_Field {
 					$this->order_by = $_POST["sort_order_{$this->type}"];
 				}
 			}
+
+		// Edit
 		} else {
 			$title  = __( 'Edit Field', 'buddypress' );
-			$action = "users.php?page=bp-profile-setup&amp;mode=edit_field&amp;group_id=" . $this->group_id . "&amp;field_id=" . $this->id . "#tabs-" . $this->group_id;
-			$button	= __( 'Update', 'buddypress' );
+			$button	= __( 'Update',     'buddypress' );
+			$action = add_query_arg( array(
+				'page'     => 'bp-profile-setup',
+				'mode'     => 'edit_field',
+				'group_id' => (int) $this->group_id,
+				'field_id' => (int) $this->id
+			), $users_url . '#tabs-' . (int) $this->group_id );
 		} ?>
 
 		<div class="wrap">
@@ -1268,6 +1309,12 @@ class BP_XProfile_Field {
 	 */
 	private function submit_metabox( $button_text = '' ) {
 
+		// Setup the URL for deleting
+		$users_url  = bp_get_admin_url( 'users.php' );
+		$cancel_url = add_query_arg( array(
+			'page' => 'bp-profile-setup'
+		), $users_url );
+
 		/**
 		 * Fires before XProfile Field submit metabox.
 		 *
@@ -1305,7 +1352,7 @@ class BP_XProfile_Field {
 						<?php endif; ?>
 
 						<div id="delete-action">
-							<a href="users.php?page=bp-profile-setup" class="deletion"><?php esc_html_e( 'Cancel', 'buddypress' ); ?></a>
+							<a href="<?php echo esc_url( $cancel_url ); ?>" class="deletion"><?php esc_html_e( 'Cancel', 'buddypress' ); ?></a>
 						</div>
 
 						<?php wp_nonce_field( 'xprofile_delete_option' ); ?>

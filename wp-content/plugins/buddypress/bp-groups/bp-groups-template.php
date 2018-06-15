@@ -467,7 +467,13 @@ function bp_the_group() {
 }
 
 /**
- * Is the group visible to the currently logged-in user?
+ * Is the group accessible to the currently logged-in user?
+ * Despite the name of the function, it has historically checked
+ * whether a user has access to a group.
+ * In BP 2.9, a property was added to the BP_Groups_Group class,
+ * `is_visible`, that describes whether a user can know the group exists.
+ * If you wish to check that property, use the check:
+ * bp_current_user_can( 'groups_see_group' ).
  *
  * @since 1.0.0
  *
@@ -485,15 +491,7 @@ function bp_group_is_visible( $group = null ) {
 		$group =& $groups_template->group;
 	}
 
-	if ( 'public' == $group->status ) {
-		return true;
-	} else {
-		if ( groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
-			return true;
-		}
-	}
-
-	return false;
+	return bp_current_user_can( 'groups_access_group', array( 'group_id' => $group->id ) );
 }
 
 /**
@@ -925,9 +923,9 @@ function bp_group_last_active( $group = false, $args = array() ) {
 			$group =& $groups_template->group;
 		}
 
-		$r = wp_parse_args( $args, array(
+		$r = bp_parse_args( $args, array(
 			'relative' => true,
-		) );
+		), 'group_last_active' );
 
 		$last_active = $group->last_activity;
 		if ( ! $last_active ) {
@@ -1353,9 +1351,9 @@ function bp_group_date_created( $group = false, $args = array() ) {
 	function bp_get_group_date_created( $group = false, $args = array() ) {
 		global $groups_template;
 
-		$r = wp_parse_args( $args, array(
+		$r = bp_parse_args( $args, array(
 			'relative' => true,
-		) );
+		), 'group_date_created' );
 
 		if ( empty( $group ) ) {
 			$group =& $groups_template->group;
@@ -1561,16 +1559,14 @@ function bp_group_creator_avatar( $group = false, $args = array() ) {
 			$group =& $groups_template->group;
 		}
 
-		$defaults = array(
+		$r = bp_parse_args( $args, array(
 			'type'   => 'full',
 			'width'  => false,
 			'height' => false,
 			'class'  => 'avatar',
 			'id'     => false,
 			'alt'    => sprintf( __( 'Group creator profile photo of %s', 'buddypress' ),  bp_core_get_user_displayname( $group->creator_id ) )
-		);
-
-		$r = wp_parse_args( $args, $defaults );
+		), 'group_creator_avatar' );
 		extract( $r, EXTR_SKIP );
 
 		$avatar = bp_core_fetch_avatar( array( 'item_id' => $group->creator_id, 'type' => $type, 'css_id' => $id, 'class' => $class, 'width' => $width, 'height' => $height, 'alt' => $alt ) );
@@ -2064,138 +2060,6 @@ function bp_group_forum_permalink() {
 	}
 
 /**
- * Output the topic count for a group forum.
- *
- * @since 1.2.0
- *
- * @param array|string $args See {@link bp_get_group_forum_topic_count()}.
- */
-function bp_group_forum_topic_count( $args = '' ) {
-	echo bp_get_group_forum_topic_count( $args );
-}
-	/**
-	 * Generate the topic count string for a group forum.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param array|string $args {
-	 *     Array of arguments.
-	 *     @type bool $showtext Optional. If true, result will be formatted as "x topics".
-	 *                          If false, just a number will be returned.
-	 *                          Default: false.
-	 * }
-	 * @return string|int
-	 */
-	function bp_get_group_forum_topic_count( $args = '' ) {
-		global $groups_template;
-
-		$defaults = array(
-			'showtext' => false
-		);
-
-		$r = wp_parse_args( $args, $defaults );
-		extract( $r, EXTR_SKIP );
-
-		if ( !$forum_id = groups_get_groupmeta( $groups_template->group->id, 'forum_id' ) ) {
-			return false;
-		}
-
-		if ( !bp_is_active( 'forums' ) ) {
-			return false;
-		}
-
-		if ( !$groups_template->group->forum_counts ) {
-			$groups_template->group->forum_counts = bp_forums_get_forum_topicpost_count( (int) $forum_id );
-		}
-
-		if ( (bool) $showtext ) {
-			if ( 1 == (int) $groups_template->group->forum_counts[0]->topics ) {
-				$total_topics = sprintf( __( '%d topic', 'buddypress' ), (int) $groups_template->group->forum_counts[0]->topics );
-			} else {
-				$total_topics = sprintf( __( '%d topics', 'buddypress' ), (int) $groups_template->group->forum_counts[0]->topics );
-			}
-		} else {
-			$total_topics = (int) $groups_template->group->forum_counts[0]->topics;
-		}
-
-		/**
-		 * Filters the topic count string for a group forum.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $total_topics Total topic count string.
-		 * @param bool   $showtext     Whether or not to return as formatted string.
-		 */
-		return apply_filters( 'bp_get_group_forum_topic_count', $total_topics, (bool)$showtext );
-	}
-
-/**
- * Output the post count for a group forum.
- *
- * @since 1.2.0
- *
- * @param array|string $args See {@link bp_get_group_forum_post_count()}.
- */
-function bp_group_forum_post_count( $args = '' ) {
-	echo bp_get_group_forum_post_count( $args );
-}
-	/**
-	 * Generate the post count string for a group forum.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param array|string $args {
-	 *     Array of arguments.
-	 *     @type bool $showtext Optional. If true, result will be formatted as "x posts".
-	 *                          If false, just a number will be returned.
-	 *                          Default: false.
-	 * }
-	 * @return string|int
-	 */
-	function bp_get_group_forum_post_count( $args = '' ) {
-		global $groups_template;
-
-		$defaults = array(
-			'showtext' => false
-		);
-
-		$r = wp_parse_args( $args, $defaults );
-		extract( $r, EXTR_SKIP );
-
-		if ( !$forum_id = groups_get_groupmeta( $groups_template->group->id, 'forum_id' ) ) {
-			return false;
-		}
-
-		if ( !bp_is_active( 'forums' ) ) {
-			return false;
-		}
-
-		if ( !$groups_template->group->forum_counts ) {
-			$groups_template->group->forum_counts = bp_forums_get_forum_topicpost_count( (int) $forum_id );
-		}
-
-		if ( (bool) $showtext ) {
-			if ( 1 == (int) $groups_template->group->forum_counts[0]->posts ) {
-				$total_posts = sprintf( __( '%d post', 'buddypress' ), (int) $groups_template->group->forum_counts[0]->posts );
-			} else {
-				$total_posts = sprintf( __( '%d posts', 'buddypress' ), (int) $groups_template->group->forum_counts[0]->posts );
-			}
-		} else {
-			$total_posts = (int) $groups_template->group->forum_counts[0]->posts;
-		}
-
-		/**
-		 * Filters the post count string for a group forum.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $total_posts Total post count string.
-		 * @param bool   $showtext    Whether or not to return as formatted string.
-		 */
-		return apply_filters( 'bp_get_group_forum_post_count', $total_posts, (bool)$showtext );
-	}
-
-/**
  * Determine whether forums are enabled for a group.
  *
  * @since 1.0.0
@@ -2357,32 +2221,7 @@ function bp_groups_user_can_send_invites( $group_id = 0, $user_id = 0 ) {
 	}
 
 	if ( $user_id ) {
-		// Users with the 'bp_moderate' cap can always send invitations.
-		if ( user_can( $user_id, 'bp_moderate' ) ) {
-			$can_send_invites = true;
-		} else {
-			$invite_status = bp_group_get_invite_status( $group_id );
-
-			switch ( $invite_status ) {
-				case 'admins' :
-					if ( groups_is_user_admin( $user_id, $group_id ) ) {
-						$can_send_invites = true;
-					}
-					break;
-
-				case 'mods' :
-					if ( groups_is_user_mod( $user_id, $group_id ) || groups_is_user_admin( $user_id, $group_id ) ) {
-						$can_send_invites = true;
-					}
-					break;
-
-				case 'members' :
-					if ( groups_is_user_member( $user_id, $group_id ) ) {
-						$can_send_invites = true;
-					}
-					break;
-			}
-		}
+		$can_send_invites = bp_user_can( $user_id, 'groups_send_invitation', array( 'group_id' => $group_id ) );
 	}
 
 	/**
@@ -2605,12 +2444,10 @@ function bp_group_member_promote_mod_link( $args = '' ) {
 	function bp_get_group_member_promote_mod_link( $args = '' ) {
 		global $members_template, $groups_template;
 
-		$defaults = array(
+		$r = bp_parse_args( $args, array(
 			'user_id' => $members_template->member->user_id,
 			'group'   => &$groups_template->group
-		);
-
-		$r = wp_parse_args( $args, $defaults );
+		), 'group_member_promote_mod_link' );
 		extract( $r, EXTR_SKIP );
 
 		/**
@@ -2648,12 +2485,10 @@ function bp_group_member_promote_admin_link( $args = '' ) {
 	function bp_get_group_member_promote_admin_link( $args = '' ) {
 		global $members_template, $groups_template;
 
-		$defaults = array(
+		$r = bp_parse_args( $args, array(
 			'user_id' => !empty( $members_template->member->user_id ) ? $members_template->member->user_id : false,
 			'group'   => &$groups_template->group
-		);
-
-		$r = wp_parse_args( $args, $defaults );
+		), 'group_member_promote_admin_link' );
 		extract( $r, EXTR_SKIP );
 
 		/**
@@ -3386,62 +3221,6 @@ function bp_has_friends_to_invite( $group = false ) {
 }
 
 /**
- * Output a 'New Topic' button for a group.
- *
- * @since 1.2.7
- *
- * @param BP_Groups_Group|bool $group The BP Groups_Group object if passed,
- *                                    boolean false if not passed.
- */
-function bp_group_new_topic_button( $group = false ) {
-	echo bp_get_group_new_topic_button( $group );
-}
-
-	/**
-	 * Returns a 'New Topic' button for a group.
-	 *
-	 * @since 1.2.7
-	 *
-	 * @param BP_Groups_Group|bool $group The BP Groups_Group object if
-	 *                                    passed, boolean false if not passed.
-	 * @return false|string HTML code for the button.
-	 */
-	function bp_get_group_new_topic_button( $group = false ) {
-		global $groups_template;
-
-		if ( empty( $group ) ) {
-			$group =& $groups_template->group;
-		}
-
-		if ( !is_user_logged_in() || bp_group_is_user_banned() || !bp_is_group_forum() || bp_is_group_forum_topic() ) {
-			return false;
-		}
-
-		$button = array(
-			'id'                => 'new_topic',
-			'component'         => 'groups',
-			'must_be_logged_in' => true,
-			'block_self'        => true,
-			'wrapper_class'     => 'group-button',
-			'link_href'         => '#post-new',
-			'link_class'        => 'group-button show-hide-new',
-			'link_id'           => 'new-topic-button',
-			'link_text'         => __( 'New Topic', 'buddypress' ),
-		);
-
-		/**
-		 * Filters the HTML button for creating a new topic in a group.
-		 *
-		 * @since 1.5.0
-		 * @since 2.5.0 Added the `$group` parameter.
-		 *
-		 * @param string $button HTML button for a new topic.
-		 * @param object $group  Group object.
-		 */
-		return bp_get_button( apply_filters( 'bp_get_group_new_topic_button', $button, $group ) );
-	}
-
-/**
  * Output button to join a group.
  *
  * @since 1.0.0
@@ -3888,7 +3667,7 @@ function bp_group_has_members( $args = '' ) {
 		$search_terms_default = stripslashes( $_REQUEST[ $search_query_arg ] );
 	}
 
-	$r = wp_parse_args( $args, array(
+	$r = bp_parse_args( $args, array(
 		'group_id'            => bp_get_current_group_id(),
 		'page'                => 1,
 		'per_page'            => 20,
@@ -3899,7 +3678,7 @@ function bp_group_has_members( $args = '' ) {
 		'group_role'          => false,
 		'search_terms'        => $search_terms_default,
 		'type'                => 'last_joined',
-	) );
+	), 'group_has_members' );
 
 	/*
 	 * If an empty search_terms string has been passed,
@@ -4274,9 +4053,9 @@ function bp_group_member_joined_since( $args = array() ) {
 	function bp_get_group_member_joined_since( $args = array() ) {
 		global $members_template;
 
-		$r = wp_parse_args( $args, array(
+		$r = bp_parse_args( $args, array(
 			'relative' => true,
-		) );
+		), 'group_member_joined_since' );
 
 		// We do not want relative time, so return now.
 		// @todo Should the 'bp_get_group_member_joined_since' filter be applied here?
@@ -5213,11 +4992,13 @@ function bp_new_group_invite_friend_list( $args = array() ) {
 		}
 
 		// Parse arguments.
-		$r = wp_parse_args( $args, array(
+		$r = bp_parse_args( $args, array(
 			'user_id'   => bp_loggedin_user_id(),
 			'group_id'  => false,
-			'separator' => 'li'
-		) );
+			'before'    => '',
+			'separator' => 'li',
+			'after'     => '',
+		), 'group_invite_friend_list' );
 
 		// No group passed, so look for new or current group ID's.
 		if ( empty( $r['group_id'] ) ) {
@@ -5229,6 +5010,17 @@ function bp_new_group_invite_friend_list( $args = array() ) {
 
 		// Setup empty items array.
 		$items = array();
+
+		// Build list markup parent elements.
+		$before = '';
+		if ( ! empty( $r['before'] ) ) {
+			$before = $r['before'];
+		}
+
+		$after = '';
+		if ( ! empty( $r['after'] ) ) {
+			$after = $r['after'];
+		}
 
 		// Get user's friends who are not in this group already.
 		$friends = friends_get_friends_invite_list( $r['user_id'], $r['group_id'] );
@@ -5256,7 +5048,7 @@ function bp_new_group_invite_friend_list( $args = array() ) {
 		$invitable_friends = apply_filters( 'bp_get_new_group_invite_friend_list', $items, $r, $args );
 
 		if ( ! empty( $invitable_friends ) && is_array( $invitable_friends ) ) {
-			$retval = implode( "\n", $invitable_friends );
+			$retval = $before . implode( "\n", $invitable_friends ) . $after;
 		} else {
 			$retval = false;
 		}
@@ -5565,14 +5357,12 @@ function bp_custom_group_fields() {
 function bp_group_has_membership_requests( $args = '' ) {
 	global $requests_template;
 
-	$defaults = array(
+	$r = bp_parse_args( $args, array(
 		'group_id' => bp_get_current_group_id(),
 		'per_page' => 10,
 		'page'     => 1,
 		'max'      => false
-	);
-
-	$r = wp_parse_args( $args, $defaults );
+	), 'group_has_membership_requests' );
 
 	$requests_template = new BP_Groups_Membership_Requests_Template( $r );
 
@@ -5814,12 +5604,12 @@ function bp_group_requests_pagination_count() {
 function bp_group_has_invites( $args = '' ) {
 	global $invites_template, $group_id;
 
-	$r = wp_parse_args( $args, array(
+	$r = bp_parse_args( $args, array(
 		'group_id' => false,
 		'user_id'  => bp_loggedin_user_id(),
 		'per_page' => false,
 		'page'     => 1,
-	) );
+	), 'group_has_invites' );
 
 	if ( empty( $r['group_id'] ) ) {
 		if ( groups_get_current_group() ) {

@@ -74,13 +74,6 @@ $spacing-val-xs: 5px;
 	font-size: $rem-font-value + rem;
 }
 
-// To allow mixins to pass VendorPrefix scss-lint tests we disable lint-test
-// for specific blocks / rulesets
-// until such time as exemption lists can be built for the scss-lint.yml?
-// Any vendor prefix properties / mixins need to be in this block
-
-// scss-lint:disable VendorPrefix
-
 // Border border-radius mixins
 @mixin border-radius($radius) {
 	-webkit-border-radius: $radius;
@@ -136,9 +129,6 @@ $spacing-val-xs: 5px;
 	#{$property}: calc(#{$expression});
 }
 
-// Re-enable the VendorPrefix lint test
-// scss-lint:enable VendorPrefix
-
 // BP message boxes
 @mixin message-box($background, $text-color: null) {
 
@@ -185,6 +175,8 @@ $link-action:        #c82b2b;
 
 This is the BuddyPress companion stylesheet for
 the WordPress Twentysixteen theme.
+
+@version 3.0.0
 
 This sheet supports the primary BuddyPress styles in buddypress.css
 
@@ -2272,13 +2264,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				border-bottom-color: darken($border-light, 20%);
 				line-height: 1;
 				text-align: right;
-
-				a:last-child {
-					// hide the 'x' text
-					line-height: 0;
-					margin-left: 0.7em;
-					text-indent: -999em;
-				}
 
 				a:last-child:after {
 					content: attr(title);

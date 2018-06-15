@@ -4,7 +4,7 @@
 
 	Theme Name: Hemingway
     Text Domain: hemingway
-	Version: 1.59
+	Version: 1.64
 	Description: Hemingway is a clean, beautiful and responsive two-column theme for bloggers. Features responsive design, retina-ready assets, full-width header image with parallax scrolling effect, custom accent color, custom logo upload, custom widgets (video, Flickr and Dribbble), page templates and translation-ready code. Demo: http://www.andersnoren.se/themes/hemingway/
 	Tags: blog, two-columns, right-sidebar, custom-colors, custom-header, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, post-formats, sticky-post, theme-options, threaded-comments, translation-ready
 	Author: Anders Norén
@@ -316,13 +316,12 @@ a.more-link,
 }
 
 .blog-description {
+	color: rgba( 255, 255, 255, 0.5 );
 	font-family: 'Raleway', sans-serif;
-	text-align: center;
-	color: rgba(255,255,255,0.4);
 	font-weight: 300;
+	line-height: 1.25;
+	text-align: center;
 }
-
-/* Nav-toggle --------------------------------------- */
 
 
 /* -------------------------------------------------------------------------------- */
@@ -356,7 +355,7 @@ a.more-link,
 	padding: 27px 20px;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	color: rgba(255,255,255,0.4);
+	color: rgba( 255, 255, 255, 0.5 );
 	font-size: 13px;
 }
 
@@ -371,7 +370,7 @@ a.more-link,
 	content: "";
 	display: block;
 	border: 5px solid transparent;
-	border-top-color: rgba(255,255,255,0.4);
+	border-top-color: rgba( 255, 255, 255, 0.5 );
 	position: absolute;
 	z-index: 1001;
 	right: 17px;
@@ -1054,6 +1053,11 @@ img.alignright,
 	text-align: center;
 }
 
+.post-content .wp-caption-text a,
+.post-content .gallery-caption a {
+	display: inline;
+}
+
 .post-content .gallery-caption {
 	font-size: 16px;
 	line-height: 24px;
@@ -1438,14 +1442,21 @@ li > div.comment {
 .comment-form p { margin-bottom: 20px; }
 .comment-form p:last-child { margin-bottom: 0; }
 
+.comment-form label {
+	display: block;
+	margin: 0 0 8px 0;
+}
+
+.comment-form input[type="checkbox"] + label {
+	display: inline;
+	margin: 0 0 0 5px;
+}
+
 p.comment-notes,
 p.logged-in-as {
 	margin-bottom: 10%;
 	color: #666;
 }
-
-#respond form label,
-.comment-form .required { display: none; }
 
 .comment-form input[type="text"],
 .comment-form input[type="email"],
@@ -1932,15 +1943,27 @@ p.form-allowed-tags {
 /* Footer widgets --------------------------------------- */
 
 
-.footer .widget { border-bottom-color: rgba(255,255,255,0.1) }
+.footer .widget { 
+	border-bottom-color: rgba(255,255,255,0.1) 
+}
 
-.footer .widget-title { color: #EEE; letter-spacing: 1px; font-weight: 600; }
+.footer .widget-title { 
+	color: #EEE; 
+	font-weight: 600; 
+	letter-spacing: 1px; 
+}
 
-.footer .widget-content { color: #666; }
+.footer .widget-content { 
+	color: #858585; 
+}
 
-.footer .widget-content ul li { border-top-color: rgba(255,255,255,0.1); }
+.footer .widget-content ul li { 
+	border-top-color: rgba(255,255,255,0.1); 
+}
 
-.footer .widget-content > ul > li:first-child { border-top: none; }
+.footer .widget-content > ul > li:first-child { 
+	border-top: none; 
+}
 
 
 /* Widget search --------------------------------------- */
@@ -1991,7 +2014,9 @@ p.form-allowed-tags {
 }
 
 .credits,
-.credits a { color: #666; }
+.credits a { 
+	color: #858585; 
+}
 
 .credits-left { float: left; }
 .credits-right { float: right; }

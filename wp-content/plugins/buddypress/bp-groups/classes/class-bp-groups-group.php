@@ -78,9 +78,11 @@ class BP_Groups_Group {
 	public $parent_id;
 
 	/**
-	 * Should (legacy) bbPress forums be enabled for this group?
+	 * Controls whether the group has a forum enabled.
 	 *
 	 * @since 1.6.0
+	 * @since 3.0.0 Previously, this referred to Legacy Forums. It's still used by bbPress 2 for integration.
+	 *
 	 * @var int
 	 */
 	public $enable_forum;
@@ -558,10 +560,15 @@ class BP_Groups_Group {
 		$mod_ids = BP_Groups_Member::get_group_moderator_ids( $this->id );
 		$mod_ids_plucked = wp_list_pluck( $mod_ids, 'user_id' );
 
-		$admin_mod_users = get_users( array(
-			'include' => array_merge( $admin_ids_plucked, $mod_ids_plucked ),
-			'blog_id' => null,
-		) );
+		$admin_mod_ids = array_merge( $admin_ids_plucked, $mod_ids_plucked );
+		$admin_mod_users = array();
+
+		if ( ! empty( $admin_mod_ids ) ) {
+			$admin_mod_users = get_users( array(
+				'include' => $admin_mod_ids,
+				'blog_id' => null,
+			) );
+		}
 
 		$admin_objects = $mod_objects = array();
 		foreach ( $admin_mod_users as $admin_mod_user ) {
@@ -1025,10 +1032,13 @@ class BP_Groups_Group {
  	 *     @type array|string $status             Optional. Array or comma-separated list of group statuses to limit
  	 *                                            results to. If specified, $show_hidden is ignored.
 	 *                                            Default: empty array.
+ 	 *     @type string       $fields             Which fields to return. Specify 'ids' to fetch a list of IDs.
+ 	 *                                            Default: 'all' (return BP_Groups_Group objects).
+ 	 *                                            If set, meta and admin caches will not be prefetched.
 	 * }
 	 * @return array {
 	 *     @type array $groups Array of group objects returned by the
-	 *                         paginated query.
+	 *                         paginated query. (IDs only if `fields` is set to `ids`.)
 	 *     @type int   $total  Total count of all groups matching non-
 	 *                         paginated query params.
 	 * }
@@ -1075,10 +1085,11 @@ class BP_Groups_Group {
 			'update_admin_cache' => false,
 			'exclude'            => false,
 			'show_hidden'        => false,
-			'status'             => array()
+			'status'             => array(),
+			'fields'             => 'all',
 		);
 
-		$r = wp_parse_args( $args, $defaults );
+		$r = bp_parse_args( $args, $defaults, 'bp_groups_group_get' );
 
 		$bp = buddypress();
 
@@ -1299,20 +1310,54 @@ class BP_Groups_Group {
 			$paged_group_ids = $cached;
 		}
 
-		$uncached_group_ids = bp_get_non_cached_ids( $paged_group_ids, 'bp_groups' );
-		if ( $uncached_group_ids ) {
-			$group_ids_sql = implode( ',', array_map( 'intval', $uncached_group_ids ) );
-			$group_data_objects = $wpdb->get_results( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id IN ({$group_ids_sql})" );
-			foreach ( $group_data_objects as $group_data_object ) {
-				wp_cache_set( $group_data_object->id, $group_data_object, 'bp_groups' );
+		if ( 'ids' === $r['fields'] ) {
+			// We only want the IDs.
+			$paged_groups = array_map( 'intval', $paged_group_ids );
+		} else {
+			$uncached_group_ids = bp_get_non_cached_ids( $paged_group_ids, 'bp_groups' );
+			if ( $uncached_group_ids ) {
+				$group_ids_sql = implode( ',', array_map( 'intval', $uncached_group_ids ) );
+				$group_data_objects = $wpdb->get_results( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id IN ({$group_ids_sql})" );
+				foreach ( $group_data_objects as $group_data_object ) {
+					wp_cache_set( $group_data_object->id, $group_data_object, 'bp_groups' );
+				}
 			}
+
+			$paged_groups = array();
+			foreach ( $paged_group_ids as $paged_group_id ) {
+				$paged_groups[] = new BP_Groups_Group( $paged_group_id );
+			}
+
+			$group_ids = array();
+			foreach ( (array) $paged_groups as $group ) {
+				$group_ids[] = $group->id;
+			}
+
+			// Grab all groupmeta.
+			if ( ! empty( $r['update_meta_cache'] ) ) {
+				bp_groups_update_meta_cache( $group_ids );
+			}
+
+			// Prefetch all administrator IDs, if requested.
+			if ( $r['update_admin_cache'] ) {
+				BP_Groups_Member::prime_group_admins_mods_cache( $group_ids );
+			}
+
+			// Set up integer properties needing casting.
+			$int_props = array(
+				'id', 'creator_id', 'enable_forum'
+			);
+
+			// Integer casting.
+			foreach ( $paged_groups as $key => $g ) {
+				foreach ( $int_props as $int_prop ) {
+					$paged_groups[ $key ]->{$int_prop} = (int) $paged_groups[ $key ]->{$int_prop};
+				}
+			}
+
 		}
 
-		$paged_groups = array();
-		foreach ( $paged_group_ids as $paged_group_id ) {
-			$paged_groups[] = new BP_Groups_Group( $paged_group_id );
-		}
-
+		// Find the total number of groups in the results set.
 		$total_groups_sql = "SELECT COUNT(DISTINCT g.id) FROM {$sql['from']} $where";
 
 		/**
@@ -1333,35 +1378,6 @@ class BP_Groups_Group {
 		} else {
 			$total_groups = (int) $cached;
 		}
-
-		$group_ids = array();
-		foreach ( (array) $paged_groups as $group ) {
-			$group_ids[] = $group->id;
-		}
-
-		// Grab all groupmeta.
-		if ( ! empty( $r['update_meta_cache'] ) ) {
-			bp_groups_update_meta_cache( $group_ids );
-		}
-
-		// Prefetch all administrator IDs, if requested.
-		if ( $r['update_admin_cache'] ) {
-			BP_Groups_Member::prime_group_admins_mods_cache( $group_ids );
-		}
-
-		// Set up integer properties needing casting.
-		$int_props = array(
-			'id', 'creator_id', 'enable_forum'
-		);
-
-		// Integer casting.
-		foreach ( $paged_groups as $key => $g ) {
-			foreach ( $int_props as $int_prop ) {
-				$paged_groups[ $key ]->{$int_prop} = (int) $paged_groups[ $key ]->{$int_prop};
-			}
-		}
-
-		unset( $sql, $total_sql );
 
 		return array( 'groups' => $paged_groups, 'total' => $total_groups );
 	}
@@ -1447,77 +1463,6 @@ class BP_Groups_Group {
 	}
 
 	/**
-	 * Get a list of groups, sorted by those that have the most legacy forum topics.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param int|null          $limit           Optional. The max number of results to return.
-	 *                                           Default: null (no limit).
-	 * @param int|null          $page            Optional. The page offset of results to return.
-	 *                                           Default: null (no limit).
-	 * @param int               $user_id         Optional. If present, groups will be limited to
-	 *                                           those of which the specified user is a member.
-	 * @param string|bool       $search_terms    Optional. Limit groups to those whose name
-	 *                                           or description field contain the search string.
-	 * @param bool              $populate_extras Optional. Whether to fetch extra
-	 *                                           information about the groups. Default: true.
-	 * @param string|array|bool $exclude         Optional. Array or comma-separated list of group
-	 *                                           IDs to exclude from results.
-	 * @return array {
-	 *     @type array $groups Array of group objects returned by the
-	 *                         paginated query.
-	 *     @type int   $total  Total count of all groups matching non-
-	 *                         paginated query params.
-	 * }
-	 */
-	public static function get_by_most_forum_topics( $limit = null, $page = null, $user_id = 0, $search_terms = false, $populate_extras = true, $exclude = false ) {
-		global $wpdb, $bbdb;
-
-		if ( empty( $bbdb ) ) {
-
-			/** This action is documented in bp-forums/bp-forums-screens */
-			do_action( 'bbpress_init' );
-		}
-
-		if ( !empty( $limit ) && !empty( $page ) ) {
-			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
-		}
-
-		if ( !is_user_logged_in() || ( !bp_current_user_can( 'bp_moderate' ) && ( $user_id != bp_loggedin_user_id() ) ) )
-			$hidden_sql = " AND g.status != 'hidden'";
-
-		if ( !empty( $search_terms ) ) {
-			$search_terms_like = '%' . bp_esc_like( $search_terms ) . '%';
-			$search_sql        = $wpdb->prepare( ' AND ( g.name LIKE %s OR g.description LIKE %s ) ', $search_terms_like, $search_terms_like );
-		}
-
-		if ( !empty( $exclude ) ) {
-			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
-			$exclude_sql = " AND g.id NOT IN ({$exclude})";
-		}
-
-		$bp = buddypress();
-
-		if ( !empty( $user_id ) ) {
-			$user_id      = absint( esc_sql( $user_id ) );
-			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} ORDER BY f.topics DESC {$pag_sql}" );
-			$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql}" );
-		} else {
-			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} {$exclude_sql} ORDER BY f.topics DESC {$pag_sql}" );
-			$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.topics > 0 {$hidden_sql} {$search_sql} {$exclude_sql}" );
-		}
-
-		if ( !empty( $populate_extras ) ) {
-			foreach ( (array) $paged_groups as $group ) {
-				$group_ids[] = $group->id;
-			}
-			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
-		}
-
-		return array( 'groups' => $paged_groups, 'total' => $total_groups );
-	}
-
-	/**
 	 * Convert the 'orderby' param into a proper SQL term/column.
 	 *
 	 * @since 1.8.0
@@ -1556,75 +1501,6 @@ class BP_Groups_Group {
 		}
 
 		return $order_by_term;
-	}
-
-	/**
-	 * Get a list of groups, sorted by those that have the most legacy forum posts.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param int|null          $limit           Optional. The max number of results to return.
-	 *                                           Default: null (no limit).
-	 * @param int|null          $page            Optional. The page offset of results to return.
-	 *                                           Default: null (no limit).
-	 * @param string|bool       $search_terms    Optional. Limit groups to those whose name
-	 *                                           or description field contain the search string.
-	 * @param bool              $populate_extras Optional. Whether to fetch extra
-	 *                                           information about the groups. Default: true.
-	 * @param string|array|bool $exclude         Optional. Array or comma-separated list of group
-	 *                                           IDs to exclude from results.
-	 * @return array {
-	 *     @type array $groups Array of group objects returned by the
-	 *                         paginated query.
-	 *     @type int   $total  Total count of all groups matching non-
-	 *                         paginated query params.
-	 * }
-	 */
-	public static function get_by_most_forum_posts( $limit = null, $page = null, $search_terms = false, $populate_extras = true, $exclude = false ) {
-		global $wpdb, $bbdb;
-
-		if ( empty( $bbdb ) ) {
-
-			/** This action is documented in bp-forums/bp-forums-screens */
-			do_action( 'bbpress_init' );
-		}
-
-		if ( !empty( $limit ) && !empty( $page ) ) {
-			$pag_sql = $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit), intval( $limit ) );
-		}
-
-		if ( !is_user_logged_in() || ( !bp_current_user_can( 'bp_moderate' ) && ( $user_id != bp_loggedin_user_id() ) ) )
-			$hidden_sql = " AND g.status != 'hidden'";
-
-		if ( !empty( $search_terms ) ) {
-			$search_terms_like = '%' . bp_esc_like( $search_terms ) . '%';
-			$search_sql        = $wpdb->prepare( ' AND ( g.name LIKE %s OR g.description LIKE %s ) ', $search_terms_like, $search_terms_like );
-		}
-
-		if ( !empty( $exclude ) ) {
-			$exclude     = implode( ',', wp_parse_id_list( $exclude ) );
-			$exclude_sql = " AND g.id NOT IN ({$exclude})";
-		}
-
-		$bp = buddypress();
-
-		if ( !empty( $user_id ) ) {
-			$user_id = esc_sql( $user_id );
-			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} ORDER BY f.posts ASC {$pag_sql}" );
-			$total_groups = $wpdb->get_results( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.posts > 0 {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 {$exclude_sql} " );
-		} else {
-			$paged_groups = $wpdb->get_results( "SELECT DISTINCT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) AND f.posts > 0 {$hidden_sql} {$search_sql} {$exclude_sql} ORDER BY f.posts ASC {$pag_sql}" );
-			$total_groups = $wpdb->get_var( "SELECT COUNT(DISTINCT g.id) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bbdb->forums} f, {$bp->groups->table_name} g WHERE g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' AND (gm3.meta_key = 'forum_id' AND gm3.meta_value = f.forum_id) {$hidden_sql} {$search_sql} {$exclude_sql}" );
-		}
-
-		if ( !empty( $populate_extras ) ) {
-			foreach ( (array) $paged_groups as $group ) {
-				$group_ids[] = $group->id;
-			}
-			$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
-		}
-
-		return array( 'groups' => $paged_groups, 'total' => $total_groups );
 	}
 
 	/**
@@ -1765,7 +1641,7 @@ class BP_Groups_Group {
 	 * Get a total group count for the site.
 	 *
 	 * Will include hidden groups in the count only if
-	 * current_user_can( 'bp_moderate' ).
+	 * bp_current_user_can( 'bp_moderate' ).
 	 *
 	 * @since 1.6.0
 	 *
@@ -1784,42 +1660,6 @@ class BP_Groups_Group {
 	}
 
 	/**
-	 * Get global count of forum topics in public groups (legacy forums).
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param string $type Optional. If 'unreplied', count will be limited to
-	 *                     those topics that have received no replies.
-	 * @return int Forum topic count.
-	 */
-	public static function get_global_forum_topic_count( $type ) {
-		global $bbdb, $wpdb;
-
-		$bp = buddypress();
-
-		if ( 'unreplied' == $type )
-			$bp->groups->filter_sql = ' AND t.topic_posts = 1';
-
-		/**
-		 * Filters the portion of the SQL related to global count of forum topics in public groups.
-		 *
-		 * See https://buddypress.trac.wordpress.org/ticket/4306.
-		 *
-		 * @since 1.6.0
-		 *
-		 * @param string $filter_sql SQL portion for the query.
-		 * @param string $type       Type of forum topics to query for.
-		 */
-		$extra_sql = apply_filters( 'get_global_forum_topic_count_extra_sql', $bp->groups->filter_sql, $type );
-
-		// Make sure the $extra_sql begins with an AND.
-		if ( 'AND' != substr( trim( strtoupper( $extra_sql ) ), 0, 3 ) )
-			$extra_sql = ' AND ' . $extra_sql;
-
-		return $wpdb->get_var( "SELECT COUNT(t.topic_id) FROM {$bbdb->topics} AS t, {$bp->groups->table_name} AS g LEFT JOIN {$bp->groups->table_name_groupmeta} AS gm ON g.id = gm.group_id WHERE (gm.meta_key = 'forum_id' AND gm.meta_value = t.forum_id) AND g.status = 'public' AND t.topic_status = '0' AND t.topic_sticky != '2' {$extra_sql} " );
-	}
-
-	/**
 	 * Get the member count for a group.
 	 *
 	 * @since 1.6.0
@@ -1833,54 +1673,6 @@ class BP_Groups_Group {
 		$bp = buddypress();
 
 		return $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM {$bp->groups->table_name_members} WHERE group_id = %d AND is_confirmed = 1 AND is_banned = 0", $group_id ) );
-	}
-
-	/**
-	 * Get a total count of all topics of a given status, across groups/forums.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string      $status       Which group type to count. 'public', 'private',
-	 *                                  'hidden', or 'all'. Default: 'public'.
-	 * @param string|bool $search_terms Provided search terms.
-	 * @return int The topic count
-	 */
-	public static function get_global_topic_count( $status = 'public', $search_terms = false ) {
-		global $bbdb, $wpdb;
-
-		switch ( $status ) {
-			case 'all' :
-				$status_sql = '';
-				break;
-
-			case 'hidden' :
-				$status_sql = "AND g.status = 'hidden'";
-				break;
-
-			case 'private' :
-				$status_sql = "AND g.status = 'private'";
-				break;
-
-			case 'public' :
-			default :
-				$status_sql = "AND g.status = 'public'";
-				break;
-		}
-
-		$bp = buddypress();
-
-		$sql = array();
-
-		$sql['select'] = "SELECT COUNT(t.topic_id)";
-		$sql['from']   = "FROM {$bbdb->topics} AS t INNER JOIN {$bp->groups->table_name_groupmeta} AS gm ON t.forum_id = gm.meta_value INNER JOIN {$bp->groups->table_name} AS g ON gm.group_id = g.id";
-		$sql['where']  = "WHERE gm.meta_key = 'forum_id' {$status_sql} AND t.topic_status = '0' AND t.topic_sticky != '2'";
-
-		if ( !empty( $search_terms ) ) {
-			$search_terms_like = '%' . bp_esc_like( $search_terms ) . '%';
-			$sql['where'] .= $wpdb->prepare( " AND ( t.topic_title LIKE %s )", $search_terms_like );
-		}
-
-		return $wpdb->get_var( implode( ' ', $sql ) );
 	}
 
 	/**

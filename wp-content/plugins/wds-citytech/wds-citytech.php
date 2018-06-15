@@ -43,6 +43,43 @@ function wds_default_signup_avatar( $img ) {
 }
 add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 
+/**
+ * Get the stylesheet directory for the main site.
+ */
+function openlab_get_stylesheet_dir_uri() {
+	return content_url( '/themes/openlab' );
+}
+
+/**
+ * Custom mysteryman
+ * @return type
+ */
+function openlab_new_mysteryman() {
+    return openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+}
+add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
+
+/**
+ * Custom default avatar
+ * @param string $url
+ * @param type $params
+ * @return string
+ */
+function openlab_default_get_group_avatar($url, $params) {
+    if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
+        $url = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+    }
+
+    return $url;
+}
+add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2 );
+
+function openlab_default_group_avatar_img($html) {
+    $default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
+    return str_replace( $default_avatar, openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg', $html );
+}
+add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
+
 //
 //   This function creates an excerpt of the string passed to the length specified and
 //   breaks on a word boundary
@@ -2489,3 +2526,13 @@ add_action( 'pre_get_posts', function( $query ) {
 		remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
 	}
 }, 0 );
+
+add_filter( 'mime_types', function( $types ) {
+	// AutoCAD - #2332.
+	$types['ctb|stb'] = 'application/octet-stream';
+	$types['dwg|dxf|acd|dwt'] = 'application/acad';
+	$types['vwx'] = 'application/vnd.vectorworks';
+
+
+	return $types;
+} );

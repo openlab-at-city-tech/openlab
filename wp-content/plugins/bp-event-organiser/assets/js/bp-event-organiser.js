@@ -305,10 +305,22 @@
 	/**
 	 * Reset week height.
 	 */
-	reset_week_height = function( eo_event, eo_event_link, calendar ) {
-		var event_cell = calendar.dateToCell( eo_event._start );
+	reset_week_height = function( eo_event, eo_event_link, calendar_el ) {
+		var date = eo_event._start._d;
+		var mm = date.getMonth() + 1
+		if ( mm < 10 ) {
+			mm = '0' + mm;
+		}
+
+		var dd = date.getDate();
+		if ( dd < 10 ) {
+			dd = '0' + dd;
+		}
+
+		var cell_date = date.getFullYear() + '-' + mm + '-' + dd;
+		var event_cell = $( 'td[data-date="' + cell_date + '"' );
 		var event_height = eo_event_link.height();
-		var weeks = calendar.element.find( '.fc-week' );
+		var weeks = calendar_el.el.find( '.fc-week' );
 		var $week = $( weeks[ event_cell.row ] );
 		var $week_content_div = $week.find( '.fc-day-content > div' );
 

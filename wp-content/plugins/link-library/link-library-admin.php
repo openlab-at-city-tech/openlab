@@ -493,10 +493,10 @@ class link_library_plugin_admin {
 				add_action( 'admin_notices', array( $this, 'll_thumbshots_warning' ) );
 			}
 
-			if ( ( !isset( $genoptions['ll_60_beta_1'] ) || !$genoptions['ll_60_beta_1'] ) && !isset( $_GET['dismiss_ll_60_beta_1'] ) ) {
-				add_action( 'admin_notices', array( $this, 'll_60_beta_1' ) );
-			} elseif ( ( !isset( $genoptions['ll_60_beta_1'] ) || !$genoptions['ll_60_beta_1'] ) && isset( $_GET['dismiss_ll_60_beta_1'] ) ) {
-				$genoptions['ll_60_beta_1'] = true;
+			if ( ( !isset( $genoptions['ll_60_beta_12'] ) || !$genoptions['ll_60_beta_12'] ) && !isset( $_GET['dismiss_ll_60_beta_12'] ) ) {
+				add_action( 'admin_notices', array( $this, 'll_60_beta_12' ) );
+			} elseif ( ( !isset( $genoptions['ll_60_beta_12'] ) || !$genoptions['ll_60_beta_12'] ) && isset( $_GET['dismiss_ll_60_beta_12'] ) ) {
+				$genoptions['ll_60_beta_12'] = true;
 				update_option( 'LinkLibraryGeneral', $genoptions );
 			}
 		}
@@ -538,9 +538,9 @@ class link_library_plugin_admin {
         <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: Missing Thumbshots API Key', 'link-library' ) . "</strong></p> <p>" . __( 'One of your link libraries is configured to use Thumbshots for link thumbails, but you have not entered your Thumbshots.com API Key. Please visit Thumbshots.com to apply for a free or paid account and enter your API in the Link Library admin panel.', 'link-library' ) . " <a href='" . esc_url( add_query_arg( array( 'page' => 'link-library' ), admin_url( 'admin.php' ) ) ) . "'>" . __( 'Jump to Link Library admin', 'link-library' ) . "</a></p></div>";
 	}
 
-	function ll_60_beta_1() {
+	function ll_60_beta_12() {
 		echo "
-        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library 6.0 Beta 1 Available', 'link-library' ) . "</strong></p> <p>" . __( 'Many years in the making, Link Library 6.0 Beta 1 is now available and looking for beta testers. Once enough users have successful migrated to the new version, it will be widely distributed.', 'link-library' ) . "<br /><br /><a target='_blank' href='http://ylefebvre.ca/link-library-6-0-public-beta-1/'>" . __( 'Read more and download here', 'link-library' ) . "</a> <a class='button' href='" . esc_url( add_query_arg( array( 'page' => 'link-library', 'dismiss_ll_60_beta_1' => 1 ), admin_url( 'admin.php' ) ) ) . "'>Dismiss this message</a></p></div>";
+        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library 6.0 Release Date Set / Beta 12 Available', 'link-library' ) . "</strong></p> <p>" . __( 'After many months of beta testing, version 6.0 will be released on May 17th 2018. If you have not tried the beta yet, there is still a month to try it out. If you want to be sure update is solid, version 6.1 will be released once support questions are back to a normal level.', 'link-library' ) . "<br /><br /><a target='_blank' href='http://ylefebvre.ca/link-library-6-0-public-beta-1/'>" . __( 'Read more about the new version and download beta here', 'link-library' ) . "</a> <a class='button' href='" . esc_url( add_query_arg( array( 'page' => 'link-library', 'dismiss_ll_60_beta_12' => 1 ), admin_url( 'admin.php' ) ) ) . "'>Dismiss this message</a></p></div>";
 	}
 
 	function ll_missing_categories() {

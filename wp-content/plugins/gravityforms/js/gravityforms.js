@@ -467,6 +467,10 @@ function gformGetProductQuantity(formId, productFieldId) {
         quantityInput = jQuery('#ginput_quantity_' + formId + '_' + productFieldId),
         numberFormat;
 
+    if (gformIsHidden(quantityInput)) {
+        return 0;
+    }
+
     if (quantityInput.length > 0) {
 
         quantity = quantityInput.val();
@@ -731,6 +735,37 @@ function gformPasswordStrength(password1, password2) {
 
 }
 
+//----------------------------
+//------ CHECKBOX FIELD ------
+//----------------------------
+
+function gformToggleCheckboxes( toggleCheckbox ) {
+
+	var $toggle      = jQuery( toggleCheckbox ).parent(),
+	    $toggleLabel = $toggle.find( 'label' );
+	    $checkboxes  = $toggle.parent().find( 'li:not( .gchoice_select_all )' );
+
+	// Set checkboxes state.
+	$checkboxes.each( function() {
+
+		// Set checkbox checked state.
+		jQuery( 'input[type="checkbox"]', this ).prop( 'checked', toggleCheckbox.checked ).trigger( 'change' );
+
+		// Execute onclick event.
+		if ( typeof jQuery( 'input[type="checkbox"]', this )[0].onclick === 'function' ) {
+			jQuery( 'input[type="checkbox"]', this )[0].onclick();
+		}
+
+	} );
+
+	// Change toggle label.
+	if ( toggleCheckbox.checked ) {
+		$toggleLabel.html( $toggleLabel.data( 'label-deselect' ) );
+	} else {
+		$toggleLabel.html( $toggleLabel.data( 'label-select' ) );
+	}
+
+}
 
 
 //----------------------------
@@ -925,6 +960,9 @@ function gformInitCurrencyFormatFields(fieldList){
 
 var GFCalc = function(formId, formulaFields){
 
+	this.formId = formId;
+	this.formulaFields = formulaFields;
+
     this.patt = /{[^{]*?:(\d+(\.\d+)?)(:(.*?))?}/i;
     this.exprPatt = /^[0-9 -/*\(\)]+$/i;
     this.isCalculating = {};
@@ -933,11 +971,8 @@ var GFCalc = function(formId, formulaFields){
 
         var calc = this;
         jQuery(document).bind("gform_post_conditional_logic", function(){
-            for(var i=0; i<formulaFields.length; i++) {
-                var formulaField = jQuery.extend({}, formulaFields[i]);
-                calc.runCalc(formulaField, formId);
-            }
-        });
+            calc.runCalcs( formId, formulaFields );
+        } );
 
         for(var i=0; i<formulaFields.length; i++) {
             var formulaField = jQuery.extend({}, formulaFields[i]);
@@ -951,7 +986,7 @@ var GFCalc = function(formId, formulaFields){
 
         var calcObj      = this,
             field        = jQuery('#field_' + formId + '_' + formulaField.field_id),
-            formulaInput = jQuery('#input_' + formId + '_' + formulaField.field_id),
+            formulaInput = field.hasClass( 'gfield_price' ) ? jQuery( '#ginput_base_price_' + formId + '_' + formulaField.field_id ) : jQuery( '#input_' + formId + '_' + formulaField.field_id ),
             previous_val = formulaInput.val(),
             formula      = gform.applyFilters( 'gform_calculation_formula', formulaField.formula, formulaField, formId, calcObj ),
             expr         = calcObj.replaceFieldTags( formId, formula, formulaField ).replace(/(\r\n|\n|\r)/gm,""),
@@ -1013,8 +1048,8 @@ var GFCalc = function(formId, formulaFields){
 
         // if this is a calculation product, handle differently
         if(field.hasClass('gfield_price')) {
-            formulaInput.text(result);
-            jQuery('#ginput_base_price_' + formId + '_' + formulaField.field_id).val(result).trigger('change');
+            jQuery('#input_' + formId + '_' + formulaField.field_id).text(result);
+            formulaInput.val(result).trigger('change');
             gformCalculateTotalPrice(formId);
         } else {
             formulaInput.val(result).trigger('change');
@@ -1022,6 +1057,12 @@ var GFCalc = function(formId, formulaFields){
 
     }
 
+    this.runCalcs = function( formId, formulaFields ) {
+	    for(var i=0; i<formulaFields.length; i++) {
+		    var formulaField = jQuery.extend({}, formulaFields[i]);
+		    this.runCalc( formulaField, formId );
+	    }
+    }
 
     this.bindCalcEvents = function(formulaField, formId) {
 
@@ -1300,17 +1341,30 @@ function renderRecaptcha() {
 	            'tabindex': $elem.data( 'tabindex' )
             };
 
-        if( ! $elem.is( ':empty' ) ) {
+        if ( ! $elem.is( ':empty' ) ) {
             return;
         }
 
-        if( $elem.data( 'stoken' ) ) {
+        if ( $elem.data( 'stoken' ) ) {
             parameters.stoken = $elem.data( 'stoken' );
         }
 
+	    /**
+	     * Allows a custom callback function to be executed when the user successfully submits the captcha.
+	     *
+	     * @since 2.2.5.20
+	     *
+	     * @param string|false callback The name of the callback function to be executed when the user successfully submits the captcha.
+	     * @param object       $elem    The jQuery object containing the div element with the ginput_recaptcha class for the current reCaptcha field.
+	     */
+	    var callback = gform.applyFilters( 'gform_recaptcha_callback', false, $elem );
+	    if ( callback ) {
+		    parameters.callback = callback;
+	    }
+
         grecaptcha.render( this.id, parameters );
 
-	    if( parameters.tabindex ) {
+	    if ( parameters.tabindex ) {
 		    $elem.find( 'iframe' ).attr( 'tabindex', parameters.tabindex );
 	    }
 
@@ -1345,9 +1399,9 @@ function gformValidateFileSize( field, max_file_size ) {
 	
 	// If selected file is larger than maximum file size, set validation message and unset file selection.
 	if ( file && file.size > max_file_size ) {
-		
+
 		// Set validation message.
-		validation_element.html( file.name + " - " + gform_gravityforms.strings.file_exceeds_limit );
+		validation_element.text( file.name + " - " + gform_gravityforms.strings.file_exceeds_limit );
 		
 		// Unset file selection.
 		var input = jQuery( field );
@@ -1356,7 +1410,7 @@ function gformValidateFileSize( field, max_file_size ) {
 	} else {
 		
 		// Reset validation message.
-		validation_element.html( '' );
+		validation_element.text( '' );
 		
 	}
 	
@@ -1448,10 +1502,14 @@ function gformValidateFileSize( field, max_file_size ) {
         };
 
         function addMessage(messagesID, message){
-            $("#" + messagesID).prepend("<li>" + message + "</li>");
+            $("#" + messagesID).prepend("<li>" + htmlEncode(message) + "</li>");
         }
 
         uploader.init();
+
+		uploader.bind('BeforeUpload', function(up, file){
+			up.settings.multipart_params.original_filename = file.name;
+		});
 
         uploader.bind('FilesAdded', function(up, files) {
             var max = parseInt(up.settings.gf_vars.max_files),
@@ -1486,13 +1544,15 @@ function gformValidateFileSize( field, max_file_size ) {
                 var status = '<div id="'
                     + file.id
                     + '" class="ginput_preview">'
-                    + file.name
+                    + htmlEncode(file.name)
                     + ' (' + size + ') <b></b> '
-                    + '<a href="javascript:void(0)" title="' + strings.cancel_upload + '" onclick=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\' onkeypress=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\'>' + strings.cancel + '</a>'
+                    + '<a href="javascript:void(0)" title="' + strings.cancel_upload + '" onclick=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container.id + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\' onkeypress=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container.id + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\'>' + strings.cancel + '</a>'
                     + '</div>';
 
                 $('#' + up.settings.filelist).prepend(status);
                 totalCount++;
+
+
 
             });
 
@@ -1536,10 +1596,9 @@ function gformValidateFileSize( field, max_file_size ) {
             } else if (err.code === plupload.FILE_SIZE_ERROR) {
                 addMessage(up.settings.gf_vars.message_id, err.file.name + " - " + strings.file_exceeds_limit);
             } else {
-                var m = "<li>Error: " + err.code +
+                var m = "Error: " + err.code +
                     ", Message: " + err.message +
-                    (err.file ? ", File: " + err.file.name : "") +
-                    "</li>";
+                    (err.file ? ", File: " + err.file.name : "");
 
                 addMessage(up.settings.gf_vars.message_id, m);
             }
@@ -1548,7 +1607,20 @@ function gformValidateFileSize( field, max_file_size ) {
             up.refresh(); // Reposition Flash
         });
 
+		uploader.bind('ChunkUploaded', function(up, file, result) {
+			var response = $.secureEvalJSON(result.response);
+			if(response.status == "error"){
+				up.removeFile(file);
+				addMessage(up.settings.gf_vars.message_id, file.name + " - " + response.error.message);
+				$('#' + file.id ).html('');
+			}
+		});
+
         uploader.bind('FileUploaded', function(up, file, result) {
+			if( ! up.getFile(file.id) ) {
+				// The file has been removed from the queue.
+				return;
+			}
             var response = $.secureEvalJSON(result.response);
             if(response.status == "error"){
                 addMessage(up.settings.gf_vars.message_id, file.name + " - " + response.error.message);
@@ -1556,7 +1628,7 @@ function gformValidateFileSize( field, max_file_size ) {
                 return;
             }
 
-            var html = '<strong>' + file.name + '</strong>';
+            var html = '<strong>' + htmlEncode(file.name) + '</strong>';
             var formId = up.settings.multipart_params.form_id;
             var fieldId = up.settings.multipart_params.field_id;
             html = "<img "
@@ -1573,11 +1645,9 @@ function gformValidateFileSize( field, max_file_size ) {
 
             $( '#' + file.id ).html( html );
 
-            var fieldID = up.settings.multipart_params["field_id"];
-
             if(file.percent == 100){
                 if(response.status && response.status == 'ok'){
-                    addFile(fieldID, response.data);
+                    addFile(fieldId, response.data);
                 }  else {
                     addMessage(up.settings.gf_vars.message_id, strings.unknown_error + ': ' + file.name);
                 }
@@ -1596,7 +1666,6 @@ function gformValidateFileSize( field, max_file_size ) {
 
 			return files;
 		}
-
 
         function getFiles(fieldID){
             var allFiles = getAllFiles();
@@ -1651,6 +1720,9 @@ function gformValidateFileSize( field, max_file_size ) {
         });
     }
 
+	function htmlEncode(value){
+		return $('<div/>').text(value).html();
+	}
 
 }(window.gfMultiFileUploader = window.gfMultiFileUploader || {}, jQuery));
 
@@ -1687,7 +1759,6 @@ function gformAddSpinner(formId, spinnerUrl) {
 	}
 
 }
-
 
 //----------------------------------------
 //------ EVENT FUNCTIONS -----------------
@@ -1768,6 +1839,37 @@ function gformExtractInputIndex( inputId ) {
     var inputIndex = parseInt( inputId.toString().split( '.' )[1] );
     return ! inputIndex ? false : inputIndex;
 }
+
+jQuery( document ).on( 'submit.gravityforms', '.gform_wrapper form', function( event ) {
+
+	var formWrapper = jQuery( this ).closest( '.gform_wrapper' ),
+		formID = formWrapper.attr( 'id' ).split( '_' )[ 2 ],
+		hasPages = formWrapper.find( '.gform_page' ).length > 0,
+		sourcePage = formWrapper.find( 'input[name^="gform_source_page_number_"]' ).val(),
+		targetPage = formWrapper.find( 'input[name^="gform_target_page_number_"]' ).val();
+	
+	// If this is a single page form, return.
+	if ( ! hasPages ) {
+		return;
+	}
+	
+	// Get visible page.
+	var visiblePage = formWrapper.find( '.gform_page:visible' );
+	
+	// Get page submit button.
+	var submitButton = visiblePage.find( '.gform_page_footer .gform_next_button' );
+	if ( submitButton.length === 0 ) {
+		submitButton = visiblePage.find( '.gform_page_footer .gform_button' )
+	}
+
+	// If submit button is not visible and target page is the next/final page, do not submit.
+	if ( ! submitButton.is( ':visible' ) && targetPage > sourcePage ) {
+		window[ 'gf_submitting_' + formID ] = false;
+		event.preventDefault();
+	}
+	
+} );
+
 
 
 //----------------------------------------

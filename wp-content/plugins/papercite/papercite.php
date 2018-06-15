@@ -5,13 +5,13 @@
   Plugin Name: papercite
   Plugin URI: http://www.bpiwowar.net/papercite
   Description: papercite enables to add BibTeX entries formatted as HTML in wordpress pages and posts. The input data is the bibtex text file and the output is HTML. 
-  Version: 0.5.15
+  Version: 0.5.18
   Author: Benjamin Piwowarski
   Author URI: http://www.bpiwowar.net
 */
 
 
-/*  Copyright 2012-13  Benjamin Piwowarski  (email : benjamim@bpiwowar.net)
+/*  Copyright 2012-18  Benjamin Piwowarski  (email : benjamim@bpiwowar.net)
 
     Contributors:
     - Michael Schreifels: auto-bibshow and no processing in post lists options
@@ -122,16 +122,16 @@ class Papercite {
    * @param url The URL
    * @param timeout The timeout of the cache
    */
-  function getCached($url, $timeout = 3600) {
+  function getCached($url, $timeout = 3600, $sslverify = false) {
     // check if cached file exists
     $name = strtolower(preg_replace("@[/:]@","_",$url));
-    $dir = plugin_dir_path(dirname(__FILE__)) . "/papercite/cache";
-    $file = "$dir/$name.bib";
+    $dir_path = self::getCacheDirectory( 'path' );
+    $file = "$dir_path/$name.bib";
 
     // check if file date exceeds 60 minutes   
     if (! (file_exists($file) && (filemtime($file) + $timeout > time())))  {
       // Download URL and process
-      $req = wp_remote_get($url);
+      $req = wp_remote_get($url, array('sslverify' => $sslverify));
       if (is_wp_error($req)) {
         $this->addMessage("Could not retrieve remote URL ".htmlentities($url). ": " . $req->get_error_message());
         return false;
@@ -145,6 +145,10 @@ class Papercite {
 
       // Everything is OK: retrieve the body of the HTTP answer
       $body = wp_remote_retrieve_body($req);
+      if (!file_exists($dir_path)) {
+        mkdir($dir_path);
+      }
+      
       if ($body) {
         $f=fopen($file,"wb");
         fwrite($f,$body);
@@ -160,22 +164,25 @@ class Papercite {
         return false;
       }
     }
-  
-    return array($file, plugins_url()."/papercite/cache/$name");
+
+    $dir_url = self::getCacheDirectory( 'url' );
+
+    return array($file, $dir_url . '/' . $name);
   }
 
   static $bibtex_parsers = array("pear" => "Pear parser", "osbib" => "OSBiB parser");
 
   // Names of the options that can be set
   static $option_names = array("format", "timeout", "file", "bibshow_template", "bibtex_template", "bibtex_parser", 
-    "use_db", "auto_bibshow", "use_media", "use_files", "skip_for_post_lists", "process_titles", "checked_files", "show_links", "highlight");
+    "use_db", "auto_bibshow", "use_media", "use_files", "skip_for_post_lists", "process_titles", "checked_files", "show_links", "highlight", "ssl_check");
 
   // Default value of options
   static $default_options = 
   array("format" => "ieee", "group" => "none", "order" => "desc", "sort" => "none", "key_format" => "numeric",
         "bibtex_template" => "default-bibtex", "bibshow_template" => "default-bibshow", "bibtex_parser" => "osbib", "use_db" => false,
         "auto_bibshow" => false, "use_media" => false, "use_files" => true, "skip_for_post_lists" => false, "group_order" => "", "timeout" => 3600, "process_titles" => true,
-        "checked_files" => array(array("pdf", "pdf", "", "pdf", "application/pdf")), "show_links" => true, "highlight" => "");
+        "checked_files" => array(array("pdf", "pdf", "", "pdf", "application/pdf")), "show_links" => true, "highlight" => "",
+        "ssl_check" => false);
   /**
    * Init is called before the first callback
    */
@@ -202,7 +209,7 @@ class Papercite {
 
       // Use custom field values "papercite_options"
       $option_fields = get_post_custom_values("papercite_options");
-      if (sizeof($option_fields) > 0) {
+      if ($option_fields && sizeof($option_fields) > 0) {
         foreach($option_fields as $field) {
           $matches = array();
           preg_match_all("#^\s*([\w\d-_]+)\s*=\s*(.+)$#m", $field, $matches, PREG_SET_ORDER);
@@ -220,7 +227,20 @@ class Papercite {
       
   
     }
-    
+
+  }
+
+  /**
+   * Get a writeable directory for caching remote bibtex files.
+   *
+   * @param string $type 'path' for local filepath, or 'url' for URL.
+   * @return string
+   */
+  static function getCacheDirectory( $type = 'dir' ) {
+    $uploads_dir = wp_upload_dir();
+
+    $base = 'url' === $type ? $uploads_dir['baseurl'] : $uploads_dir['basedir'];
+    return apply_filters( 'papercite_cache_directory', $base . '/papercite-cache' );
   }
 
   
@@ -287,12 +307,38 @@ class Papercite {
       if (file_exists(WP_CONTENT_DIR . "/papercite-data/$relfile"))
         return array(WP_CONTENT_DIR . "/papercite-data/$relfile", WP_CONTENT_URL . "/papercite-data/$relfile");
 
-      if (file_exists(WP_PLUGIN_DIR . "/papercite/$relfile"))
-        return array(WP_PLUGIN_DIR . "/papercite/$relfile", WP_PLUGIN_URL . "/papercite/$relfile");
+      $path = plugin_dir_path(__FILE__) . "/$relfile";
+      if (file_exists($path))
+        return array($path, plugin_dir_url($path));
    }
 
    // Nothin' found
    return false;
+  }
+
+  /**
+   * Returns the content of a file (disk or post data)
+   * 
+   * @see papercite::getDataFile
+   */
+    static function getContent($relfile, $ext, $folder, $mimetype, $options, $use_files = false) {
+    // Handles custom:// 
+    $custom_prefix = "custom://";
+    if (papercite::startsWith($relfile, $custom_prefix)) {
+        $key =  substr($relfile, strlen($custom_prefix));
+        $data = get_post_custom_values("papercite_$key");
+        if ($data) {
+          return $data[0];
+        }
+    }
+
+    // Normal behavior
+    $data = papercite::getDataFile($relfile, $ext, $folder, $mimetype, $options, $use_files);
+    if ($data) {
+      return file_get_contents($data[0]);
+    }
+
+    return false;
   }
 
   /** 
@@ -333,6 +379,7 @@ class Papercite {
 
      $timeout = $options["timeout"];
      $processtitles = $options["process_titles"];
+     $sslverify = $options["ssl_check"];
     
     // Loop over the different given URIs
     $bibFile = false;
@@ -359,7 +406,7 @@ class Papercite {
       if ($stringedFile) {
           // do nothing
       } else if (preg_match('#^(ftp|http)s?://#', $biburi) == 1) {
-        $bibFile = $this->getCached($biburi, $timeout);
+        $bibFile = $this->getCached($biburi, $timeout, $sslverify);
       } else {
         $biburi = preg_replace("#\\.bib$#", "", $biburi);
         $bibFile = $this->getDataFile("$biburi", "bib", "bib", "application/x-bibtex", $options);
@@ -422,7 +469,7 @@ class Papercite {
       if (!$stringedFile && $this->useDb()) {
           // First delete everything
             if ($oldurlid >= 0) {
-                $wpdb->query($wpdb->prepare("DELETE FROM $papercite_table_name WHERE urlid=%d", $oldurlid));
+              $code = $wpdb->query($wpdb->prepare("DELETE FROM $papercite_table_name WHERE urlid=%d", $oldurlid));
               if ($code === FALSE) 
                     break;
             } else {
@@ -507,11 +554,11 @@ class Papercite {
       return array(
         "anonymous-whole" => true, // for compatibility in the output
         "group" => $options["group"], 
-            "group_order" => $options["group_order"], 
+        "group_order" => $options["group_order"], 
         "sort" => $options["sort"], 
-            "order" => $options["order"],
+        "order" => $options["order"],
         "key_format" => $options["key_format"],
-            "limit" => papercite::array_get($options, "limit", 0),
+        "limit" => papercite::array_get($options, "limit", 0),
         "highlight" => $options["highlight"]
       );
   }
@@ -773,6 +820,9 @@ class Papercite {
   //! Add an error message
   var $error_messages = array();
   function addMessage($message) {
+    if (defined('PHPUNIT_PAPERCITE_TESTSUITE')) {
+      print "[message] $message\n";
+    }
     $this->error_messages[] = "<div>" . $message . "</div>";
   }
 
@@ -847,17 +897,18 @@ class Papercite {
    */
   function showEntries($refs, $goptions, $options, $getKeys, $mainTpl, $formatTpl, $mode) {
     // Get the template files
-    $mainFile = $this->getDataFile("$mainTpl", "tpl", "tpl", "MIMETYPE", $goptions, true);
-    $formatFile = $this->getDataFile("$formatTpl", "tpl", "format", "MIMETYPE", $goptions, true);
+    $main = $this->getContent("$mainTpl", "tpl", "tpl", "MIMETYPE", $goptions, true);
+    $format = $this->getContent("$formatTpl", "tpl", "format", "MIMETYPE", $goptions, true);
 
     // Fallback to defaults if needed
-    if (!$mainFile)
-      $mainFile = $this->getDataFile(papercite::$default_options["${mode}_template"], "tpl", "tpl", "MIMETYPE", $goptions, true);
-    if (!$formatFile)
-      $formatFile = $this->getDataFile(papercite::$default_options["format"], "tpl", "format", "MIMETYPE", $goptions, true);
-
-    $main = file_get_contents($mainFile[0]);
-    $format = file_get_contents($formatFile[0]);
+    if (!$main) {
+      $main = $this->getContent(papercite::$default_options["${mode}_template"], "tpl", "tpl", "MIMETYPE", $goptions, true);
+      if (!$main) throw new \Exception("Could not find template ${mode}_template");
+    }
+    if (!$format) {
+      $format = $this->getContent(papercite::$default_options["format"], "tpl", "format", "MIMETYPE", $goptions, true);
+      if (!$main) throw new \Exception("Could not find template " . papercite::$default_options["format"]);
+    }
 
     $bibtexEntryTemplate = new PaperciteBibtexEntryFormat($format);
 

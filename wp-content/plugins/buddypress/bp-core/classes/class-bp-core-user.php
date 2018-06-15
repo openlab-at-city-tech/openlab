@@ -166,11 +166,6 @@ class BP_Core_User {
 			$this->email     = esc_attr( bp_core_get_user_email( $this->id ) );
 		}
 
-		// Cache a few things that are fetched often.
-		wp_cache_set( 'bp_user_fullname_' . $this->id, $this->fullname, 'bp' );
-		wp_cache_set( 'bp_user_email_' . $this->id, $this->email, 'bp' );
-		wp_cache_set( 'bp_user_url_' . $this->id, $this->user_url, 'bp' );
-
 		$this->avatar       = bp_core_fetch_avatar( array( 'item_id' => $this->id, 'type' => 'full', 'alt' => sprintf( __( 'Profile photo of %s', 'buddypress' ), $this->fullname ) ) );
 		$this->avatar_thumb = bp_core_fetch_avatar( array( 'item_id' => $this->id, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile photo of %s', 'buddypress' ), $this->fullname ) ) );
 		$this->avatar_mini  = bp_core_fetch_avatar( array( 'item_id' => $this->id, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile photo of %s', 'buddypress' ), $this->fullname ), 'width' => 30, 'height' => 30 ) );
@@ -749,18 +744,13 @@ class BP_Core_User {
 	/**
 	 * Get WordPress user details for a specified user.
 	 *
-	 * @global wpdb $wpdb WordPress database object.
+	 * @since 3.0.0 Results might be from cache
 	 *
 	 * @param int $user_id User ID.
-	 * @return array Associative array.
+	 * @return false|object WP_User if successful, false on failure.
 	 */
 	public static function get_core_userdata( $user_id ) {
-		global $wpdb;
-
-		if ( !$user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->users} WHERE ID = %d LIMIT 1", $user_id ) ) )
-			return false;
-
-		return $user;
+		return WP_User::get_data_by( 'id', $user_id );
 	}
 
 	/**

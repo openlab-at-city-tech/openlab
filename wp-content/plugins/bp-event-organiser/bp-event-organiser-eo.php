@@ -275,8 +275,8 @@ class BuddyPress_Event_Organiser_EO {
 			<?php
 				foreach( $this->group_ids as $gid ) {
 					$group = groups_get_group( array( 'group_id' => $gid ) );
-					$private = 'public' !== $group->status ? 'title="Private"' : '';
-					echo "<option value='{$gid}' selected='selected' {$private}>{$group->name}</option>";
+					$public = 'public' === $group->status ? 'title="Public"' : '';
+					echo "<option value='{$gid}' selected='selected' {$public}>{$group->name}</option>";
 				}
 			?>
 		</select>
@@ -320,7 +320,7 @@ class BuddyPress_Event_Organiser_EO {
 				) ),
 				'avatar' => bp_get_group_avatar_mini(),
 				'total_member_count' => $group->total_member_count,
-				'private' => $group->status !== 'public'
+				'public' => $group->status === 'public'
 			);
 		}
 

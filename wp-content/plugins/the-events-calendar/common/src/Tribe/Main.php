@@ -17,13 +17,12 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.7.10';
+	const VERSION             = '4.7.15';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
 	protected $plugin_context;
 	protected $plugin_context_class;
-	protected $doing_ajax = false;
 
 	public static $tribe_url = 'http://tri.be/';
 	public static $tec_url = 'https://theeventscalendar.com/';
@@ -97,8 +96,6 @@ class Tribe__Main {
 
 		$this->init_libraries();
 		$this->add_hooks();
-
-		$this->doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
 
 		Tribe__Extension_Loader::instance();
 
@@ -174,25 +171,19 @@ class Tribe__Main {
 			array(
 				array( 'tribe-accessibility-css', 'accessibility.css' ),
 				array( 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ),
-				array( 'datatables', 'vendor/datatables/media/js/jquery.dataTables.js', array( 'jquery' ) ),
+				array( 'datatables', 'vendor/datatables/datatables.js', array( 'jquery' ) ),
 				array( 'tribe-select2', 'vendor/tribe-select2/select2.js', array( 'jquery' ) ),
 				array( 'tribe-select2-css', 'vendor/tribe-select2/select2.css' ),
 				array( 'tribe-utils-camelcase', 'utils-camelcase.js', array( 'underscore' ) ),
 				array( 'tribe-moment', 'vendor/momentjs/moment.js' ),
+				array( 'tribe-tooltipster', 'vendor/tooltipster/tooltipster.bundle.js', array( 'jquery' ) ),
+				array( 'tribe-tooltipster-css', 'vendor/tooltipster/tooltipster.bundle.css' ),
 				array( 'datatables-css', 'datatables.css' ),
-				array( 'datatables-responsive', 'vendor/datatables/extensions/Responsive/js/dataTables.responsive.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-responsive-css', 'vendor/datatables/extensions/Responsive/css/responsive.dataTables.css' ),
-				array( 'datatables-select', 'vendor/datatables/extensions/Select/js/dataTables.select.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-select-css', 'vendor/datatables/extensions/Select/css/select.dataTables.css' ),
-				array( 'datatables-scroller', 'vendor/datatables/extensions/Scroller/js/dataTables.scroller.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-scroller-css', 'vendor/datatables/extensions/Scroller/css/scroller.dataTables.css' ),
-				array( 'datatables-fixedheader', 'vendor/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-fixedheader-css', 'vendor/datatables/extensions/FixedHeader/css/fixedHeader.dataTables.css' ),
-				array( 'tribe-datatables', 'tribe-datatables.js', array( 'datatables', 'datatables-select' ) ),
+				array( 'tribe-datatables', 'tribe-datatables.js', array( 'datatables' ) ),
 				array( 'tribe-bumpdown', 'bumpdown.js', array( 'jquery', 'underscore', 'hoverIntent' ) ),
 				array( 'tribe-bumpdown-css', 'bumpdown.css' ),
 				array( 'tribe-buttonset-style', 'buttonset.css' ),
-				array( 'tribe-dropdowns', 'dropdowns.js', array( 'jquery', 'underscore', 'tribe-select2' ) ),
+				array( 'tribe-dropdowns', 'dropdowns.js', array( 'jquery', 'underscore', 'tribe-select2', 'tribe-common' ) ),
 				array( 'tribe-jquery-timepicker', 'vendor/jquery-tribe-timepicker/jquery.timepicker.js', array( 'jquery' ) ),
 				array( 'tribe-jquery-timepicker-css', 'vendor/jquery-tribe-timepicker/jquery.timepicker.css' ),
 				array( 'tribe-timepicker', 'timepicker.js', array( 'jquery', 'tribe-jquery-timepicker' ) ),
@@ -206,8 +197,8 @@ class Tribe__Main {
 			array(
 				array( 'tribe-buttonset', 'buttonset.js', array( 'jquery', 'underscore' ) ),
 				array( 'tribe-common-admin', 'tribe-common-admin.css', array( 'tribe-dependency-style', 'tribe-bumpdown-css', 'tribe-buttonset-style', 'tribe-select2-css' ) ),
-				array( 'tribe-validation', 'validation.js', array( 'jquery', 'underscore', 'tribe-common', 'tribe-utils-camelcase' ) ),
-				array( 'tribe-validation-style', 'validation.css', array() ),
+				array( 'tribe-validation', 'validation.js', array( 'jquery', 'underscore', 'tribe-common', 'tribe-utils-camelcase', 'tribe-tooltipster' ) ),
+				array( 'tribe-validation-style', 'validation.css', array( 'tribe-tooltipster-css' ) ),
 				array( 'tribe-dependency', 'dependency.js', array( 'jquery', 'underscore', 'tribe-common' ) ),
 				array( 'tribe-dependency-style', 'dependency.css', array( 'tribe-select2-css' ) ),
 				array( 'tribe-pue-notices', 'pue-notices.js', array( 'jquery' ) ),
@@ -228,15 +219,6 @@ class Tribe__Main {
 			'admin_enqueue_scripts',
 			array(
 				'priority' => 0,
-				'localize' => (object) array(
-					'name' => 'tribe_system_info',
-					'data' => array(
-						'sysinfo_optin_nonce'   => wp_create_nonce( 'sysinfo_optin_nonce' ),
-						'clipboard_btn_text'    => __( 'Copy to clipboard', 'tribe-common' ),
-						'clipboard_copied_text' => __( 'System info copied', 'tribe-common' ),
-						'clipboard_fail_text'   => __( 'Press "Cmd + C" to copy', 'tribe-common' ),
-					),
-				),
 			)
 		);
 	 }
@@ -289,6 +271,13 @@ class Tribe__Main {
 				'currentText'     => esc_html__( 'Today', 'the-events-calendar' ),
 				'closeText'       => esc_html__( 'Done', 'the-events-calendar' ),
 			),
+		) );
+
+		tribe( 'asset.data' )->add( 'tribe_system_info', array(
+			'sysinfo_optin_nonce'   => wp_create_nonce( 'sysinfo_optin_nonce' ),
+			'clipboard_btn_text'    => __( 'Copy to clipboard', 'tribe-common' ),
+			'clipboard_copied_text' => __( 'System info copied', 'tribe-common' ),
+			'clipboard_fail_text'   => __( 'Press "Cmd + C" to copy', 'tribe-common' ),
 		) );
 	}
 
@@ -474,14 +463,17 @@ class Tribe__Main {
 	 * context.
 	 *
 	 * @since 4.0
+	 *
+	 * @todo Add warning with '_deprecated_function'
+	 *
+	 * @param bool $doing_ajax An injectable status to override the `DOING_AJAX` check.
+	 *
+	 * @deprecated 4.7.12
+	 *
 	 * @return boolean
 	 */
 	public function doing_ajax( $doing_ajax = null ) {
-		if ( ! is_null( $doing_ajax ) ) {
-			$this->doing_ajax = $doing_ajax;
-		}
-
-		return $this->doing_ajax;
+		return tribe( 'context' )->doing_ajax( $doing_ajax );
 	}
 
 	/**
@@ -500,6 +492,7 @@ class Tribe__Main {
 	 * Runs tribe_plugins_loaded action, should be hooked to the end of plugins_loaded
 	 */
 	public function tribe_plugins_loaded() {
+		tribe_register_provider( 'Tribe__Service_Providers__Processes' );
 		/**
 		 * Runs after all plugins including Tribe ones have loaded
 		 *
@@ -530,6 +523,7 @@ class Tribe__Main {
 		tribe_singleton( 'post-duplicate', 'Tribe__Duplicate__Post' );
 		tribe_singleton( 'context', 'Tribe__Context' );
 		tribe_singleton( 'post-transient', 'Tribe__Post_Transient' );
+		tribe_singleton( 'db', 'Tribe__Db' );
 
 		tribe_singleton( 'callback', 'Tribe__Utils__Callback' );
 		tribe_singleton( 'pue.notices', 'Tribe__PUE__Notices' );

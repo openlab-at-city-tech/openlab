@@ -268,7 +268,8 @@ class Jetpack_Protect_Module {
 	 *
 	 * @return void
 	 */
-	function log_failed_attempt() {
+	function log_failed_attempt( $login_user = null ) {
+
 		/**
 		 * Fires before every failed login attempt.
 		 *
@@ -276,9 +277,12 @@ class Jetpack_Protect_Module {
 		 *
 		 * @since 3.4.0
 		 *
-		 * @param string jetpack_protect_get_ip IP stored by Protect.
+		 * @param array Information about failed login attempt
+		 *   [
+		 *     'login' => (string) Username or email used in failed login attempt
+		 *   ]
 		 */
-		do_action( 'jpp_log_failed_attempt', jetpack_protect_get_ip() );
+		do_action( 'jpp_log_failed_attempt', array( 'login' => $login_user ) );
 
 		if ( isset( $_COOKIE['jpp_math_pass'] ) ) {
 
@@ -431,7 +435,7 @@ class Jetpack_Protect_Module {
 		/**
 		 * JETPACK_ALWAYS_PROTECT_LOGIN will always disable the login page, and use a page provided by Jetpack.
 		 */
-		if ( defined( 'JETPACK_ALWAYS_PROTECT_LOGIN' ) && JETPACK_ALWAYS_PROTECT_LOGIN ) {
+		if ( Jetpack_Constants::is_true( 'JETPACK_ALWAYS_PROTECT_LOGIN' ) ) {
 			$this->kill_login();
 		}
 
@@ -550,7 +554,7 @@ class Jetpack_Protect_Module {
 		 * @param bool true Should we fallback to the Math questions when an IP is blocked. Default to true.
 		 */
 		$allow_math_fallback_on_fail = apply_filters( 'jpp_use_captcha_when_blocked', true );
-		if ( ! $allow_math_fallback_on_fail ) {
+		if ( ! $allow_math_fallback_on_fail  ) {
 			$this->kill_login();
 		}
 		include_once dirname( __FILE__ ) . '/protect/math-fallback.php';

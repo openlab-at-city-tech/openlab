@@ -65,23 +65,26 @@ class GWAPI {
 			'author'            => $this->author
 		) );
 
-		$request_args = self::get_request_args( array(
-			'body' => urlencode_deep( $api_params )
-		) );
+		add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
 
-		$request = wp_remote_post( GW_STORE_URL, $request_args );
-		if ( is_wp_error( $request ) ) {
+		$request_url  = esc_url_raw( GW_STORE_URL );
+		$request_args = self::get_request_args( array( 'body' => urlencode_deep( $api_params ) ) );
+		$response     = wp_remote_post( $request_url, $request_args );
+
+		GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+		if ( is_wp_error( $response ) ) {
 			return false;
 		}
 
-		$request = json_decode( wp_remote_retrieve_body( $request ) );
-		if( ! $request ) {
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+		if( ! $response ) {
 			return false;
 		}
 
 		$perks = array();
 
-		foreach( $request as $plugin_file => $perk ) {
+		foreach( $response as $plugin_file => $perk ) {
 
 			if( property_exists( $perk, 'sections' ) ) {
 				$perk->sections = maybe_unserialize( $perk->sections );
@@ -96,6 +99,44 @@ class GWAPI {
 		}
 
 		return ! empty( $perks ) ? $perks : false;
+	}
+
+
+	/**
+	 * Get Dashboard Announcements
+	 */
+	public function get_dashboard_announcements() {
+
+		$announcements = get_transient( 'gperks_get_dashboard_announcements' );
+
+		if( ! empty( $announcements ) )
+			return $announcements;
+
+		$api_params = self::get_api_args( array(
+			'edd_action' => 'get_dashboard_announcements'
+		) );
+
+		add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+		$request_url  = esc_url_raw( GW_STORE_URL );
+		$request_args = self::get_request_args( array( 'body' => urlencode_deep( $api_params ) ) );
+		$response     = wp_remote_post( $request_url, $request_args );
+
+		GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+		if( ! $response || ! is_array( $response ) ) {
+			return false;
+		}
+
+		set_transient( 'gperks_get_dashboard_announcements', $response, 60 * 60 * 12 );
+
+		return ! empty( $response ) ? $response : false;
+
 	}
 
 	/**
@@ -183,6 +224,10 @@ class GWAPI {
 
 	    GravityPerks::log_debug( 'Yes! This is a perk.' );
 
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+	    $request_url = esc_url_raw( GW_STORE_URL );
+
         $api_params = self::get_api_args( array(
             'edd_action'  => 'get_perk',
             'plugin_file' => $plugin_file,
@@ -193,28 +238,30 @@ class GWAPI {
             'body' => urlencode_deep( $api_params )
         ) );
 
-        $request = wp_remote_post( GW_STORE_URL, $request_args );
+        $response = wp_remote_post( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
 
         GravityPerks::log_debug( 'API Parameters: ' . print_r( $api_params, true ) );
         GravityPerks::log_debug( 'Request Arguments: ' . print_r( $request_args, true ) );
-	    GravityPerks::log_debug( 'Response from GW API: ' . print_r( $request, true ) );
+	    GravityPerks::log_debug( 'Response from GW API: ' . print_r( $response, true ) );
 
-        if ( is_wp_error( $request ) ) {
+        if ( is_wp_error( $response ) ) {
 	        GravityPerks::log_debug( 'Rats! There was an error with the GW API response' );
 	        return $_data;
         }
 
-        $request = json_decode( wp_remote_retrieve_body( $request ) );
-        if( ! $request ) {
+        $perk = json_decode( wp_remote_retrieve_body( $response ) );
+        if( ! $response ) {
 	        GravityPerks::log_debug( 'Rats! There was an error with the GW API response' );
 	        return $_data;
         }
 
 	    GravityPerks::log_debug( 'Ok! Everything looks good. Let\'s build the response needed for WordPress.' );
 
-        $request->is_perk = true;
-        $request->sections = (array) maybe_unserialize( $request->sections );
-        $request->sections['changelog'] = GWPerks::format_changelog( $request->sections['changelog'] );
+        $perk->is_perk = true;
+        $perk->sections = (array) maybe_unserialize( $perk->sections );
+        $perk->sections['changelog'] = GWPerks::format_changelog( $perk->sections['changelog'] );
 
         // don't allow other plugins to override the $request this function returns, several plugins use the 'plugins_api'
         // filter incorrectly and return a hard 'false' rather than returning the $_data object when they do not need to modify
@@ -222,18 +269,21 @@ class GWAPI {
         remove_all_filters( 'plugins_api' );
 
         // remove all the filters causes an infinite loop so add one dummy function so the loop can break itself
-        add_filter( 'plugins_api', create_function( '$_data', 'return $_data;' ) );
+        add_filter( 'plugins_api', array( new GP_Late_Static_Binding(), 'GWAPI_dummy_func' ) );
 
         // needed for testing on local
         add_filter( 'http_request_args', array( $this, 'allow_unsecure_urls_on_localhost' ) );
 
-        return $request;
+	    GWPerks::flush_license();
+
+	    return $perk;
     }
 
     public function allow_unsecure_urls_on_localhost( $request ) {
 
-        if( GWPerks::is_local() )
-            $request['reject_unsafe_urls'] = false;
+        if( GWPerks::is_local() ) {
+	        $request['reject_unsafe_urls'] = false;
+        }
 
         return $request;
     }
@@ -252,57 +302,101 @@ class GWAPI {
         return isset($installed_perks[$plugin_file]) ? $installed_perks[$plugin_file]['Version'] : false;
     }
 
+    public function get_license_data( $flush = false ) {
+
+	    if( ! $flush ) {
+		    $license_data = get_transient( 'gwp_license_data' );
+		    if( $license_data !== false )
+			    return $license_data;
+	    }
+
+	    $license = GWPerks::get_license_key();
+
+	    // 'check_license' is a standard EDD API action
+	    $api_params = self::get_api_args( array(
+		    'edd_action' => 'check_license',
+		    'license'    => $license,
+		    'item_name'  => urlencode( $this->get_product_name() ),
+	    ) );
+
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+	    $request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+	    $request_args = self::get_request_args();
+	    $response     = wp_remote_get( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+	    $has_valid_license = false;
+	    $license_data = false;
+
+	    if ( ! is_wp_error( $response ) ) {
+
+		    $license_data = json_decode( wp_remote_retrieve_body( $response ), ARRAY_A );
+
+		    if( is_array( $license_data ) ) {
+
+			    // at some point EDD added 'site_inactive' status which indicates the license has not been activated for this
+			    // site even though it already might have been, go ahead and activate it and see if it is still active
+			    if( in_array( $license_data['license'], array( 'inactive', 'site_inactive' ) ) ) {
+				    $has_valid_license = $this->activate_license( $license );
+			    } else {
+				    $has_valid_license = $license_data['license'] == 'valid';
+			    }
+
+		    }
+
+		    $license_data['valid'] = $has_valid_license;
+
+	    }
+
+	    set_transient( 'gwp_license_data', $license_data, 60 * 60 * 24 ); // cache license daily
+
+	    return $license_data;
+
+    }
+
     public function has_valid_license( $flush = false ) {
 
         if( ! $flush ) {
             $has_valid_license = get_transient( 'gwp_has_valid_license' );
-            if( $has_valid_license !== false )
-                return $has_valid_license == true;
+            if( $has_valid_license !== false ) {
+	            return $has_valid_license == true;
+            }
         }
 
-        $license = GWPerks::get_license_key();
+        $has_valid_license = false;
 
-        // 'check_license' is a standard EDD API action
-        $api_params = self::get_api_args( array(
-            'edd_action' => 'check_license',
-            'license'    => $license,
-            'item_name'  => urlencode( $this->get_product_name() )
-        ) );
-
-        $request_url = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
-        $response    = wp_remote_get( $request_url, self::get_request_args() );
-
-        if( GravityPerks::is_debug() ) {
-            print_rr( array(
-                'request_url' => $request_url,
-                'response' => $response,
-                '_SERVER' => $_SERVER )
-            );
+        if ( $license_data = $this->get_license_data( $flush ) ) {
+	        $has_valid_license = isset( $license_data['valid'] ) && $license_data['valid'] ? 1 : 0;
         }
 
-	    $has_valid_license = false;
-
-        if ( ! is_wp_error( $response ) ) {
-
-	        $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-	        if( is_object( $license_data ) ) {
-
-		        // at some point EDD added 'site_inactive' status which indicates the license has not been activated for this
-		        // site even though it already might have been, go ahead and activate it and see if it is still active
-		        if( in_array( $license_data->license, array( 'inactive', 'site_inactive' ) ) ) {
-			        $has_valid_license = $this->activate_license( $license );
-		        } else {
-			        $has_valid_license = $license_data->license == 'valid';
-		        }
-
-	        }
-
-        }
-
-        set_transient( 'gwp_has_valid_license', $has_valid_license ? 1 : 0, 60 * 60 * 24 ); // cache license daily
+        set_transient( 'gwp_has_valid_license', $has_valid_license, 60 * 60 * 24 ); // cache license daily
 
         return $has_valid_license;
+    }
+
+    public function get_api_status() {
+
+	    $api_params = self::get_api_args( array(
+		    'edd_action' => 'get_api_status',
+	    ) );
+
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+	    $request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+	    $request_args = self::get_request_args();
+	    $response     = wp_remote_get( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+	    return wp_remote_retrieve_response_code( $response );
+    }
+
+    public function log_http_request_args( $args ) {
+	    remove_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+	    GravityPerks::log( print_r( compact( 'args' ), true ) );
+	    return $args;
     }
 
     public function activate_license( $license ) {
@@ -310,11 +404,16 @@ class GWAPI {
         $api_params = self::get_api_args( array(
             'edd_action' => 'activate_license',
             'license'    => $license,
-            'item_name'  => urlencode( $this->get_product_name() )
+            'item_name'  => urlencode( $this->get_product_name() ),
         ) );
 
-        $request_url = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
-        $response    = wp_remote_get( $request_url, self::get_request_args() );
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+        $request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+        $request_args = self::get_request_args();
+        $response     = wp_remote_get( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
 
         // make sure the response came back okay
         if ( is_wp_error( $response ) )
@@ -324,6 +423,80 @@ class GWAPI {
         $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
         return $license_data->license == 'valid';
+    }
+
+    public function deactivate_license() {
+
+    	$gwp_settings = get_site_option('gwp_settings');
+	    $license = rgar($gwp_settings, 'license_key');
+
+	    if (!$license) {
+	    	return false;
+	    }
+
+	    $api_params = self::get_api_args( array(
+		    'edd_action' => 'deactivate_license',
+		    'license'    => $license,
+		    'item_name'  => urlencode( $this->get_product_name() ),
+	    ) );
+
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+	    $request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+	    $request_args = self::get_request_args();
+	    $response     = wp_remote_get( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+	    return $response;
+    }
+
+	public function register_perk( $perk_id ) {
+
+		$license = GWPerks::get_license_key();
+
+		$api_params = self::get_api_args( array(
+			'edd_action' => 'register_perk',
+			'json'       => true,
+			'license'    => $license,
+			'perk_id'    => $perk_id
+		) );
+
+		add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+		$request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+		$request_args = self::get_request_args();
+		$response     = wp_remote_get( $request_url, $request_args );
+
+		GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+		$body = json_decode( wp_remote_retrieve_body( $response ) );
+
+		return rgar( $body, 'success' );
+	}
+
+    public function deregister_perk( $perk_id ) {
+
+	    $license = GWPerks::get_license_key();
+
+	    $api_params = self::get_api_args( array(
+		    'edd_action' => 'deregister_perk',
+		    'json'       => true,
+		    'license'    => $license,
+		    'perk_id'    => $perk_id
+	    ) );
+
+	    add_filter( 'http_request_args', array( $this, 'log_http_request_args' ) );
+
+	    $request_url  = esc_url_raw( add_query_arg( $api_params, GW_STORE_URL ) );
+	    $request_args = self::get_request_args();
+	    $response     = wp_remote_get( $request_url, $request_args );
+
+	    GravityPerks::log( print_r( compact( 'request_url', 'request_args', 'response' ), true ) );
+
+	    $body = json_decode( wp_remote_retrieve_body( $response ) );
+
+	    return rgar( $body, 'success' );
     }
 
     public static function get_api_args( $args = array() ) {

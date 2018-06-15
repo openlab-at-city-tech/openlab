@@ -1,0 +1,470 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy Custom Sidebars\n"
+"POT-Creation-Date: 2015-01-20 12:45-0000\n"
+"PO-Revision-Date: 2015-01-20 12:45-0000\n"
+"Last-Translator: Sunny Johal - Titanium Themes <support@titaniumthemes.com>\n"
+"Language-Team: Sunny Johal - Titanium Themes <support@titaniumthemes.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/admin/class-ecs-admin.php:226 views/admin-page/edit-screen.php:151
+#: views/admin-page/manage-screen.php:116
+msgid "Select a Sidebar"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:227
+#: includes/admin/class-ecs-admin.php:779
+#: includes/admin/class-ecs-admin.php:1055
+#: includes/admin/class-ecs-admin.php:1330
+#: includes/admin/class-ecs-admin.php:1573
+#: includes/admin/class-ecs-admin.php:1738
+msgid "Add to Sidebar"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:229
+msgid ""
+"This page is asking you to confirm that you want to leave - data you have "
+"entered may not be saved."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:230
+msgid ""
+"Warning! You are about to permanently delete all sidebars. 'Cancel' to stop, "
+"'OK' to delete."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:231
+msgid ""
+"You are about to permanently delete this sidebar. 'Cancel' to stop, 'OK' to "
+"delete."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:232 views/admin-page/edit-screen.php:153
+#: views/admin-page/manage-screen.php:118
+msgid "Deactivate Sidebar"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:233
+msgid "Leave Page"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:234
+msgid "Stay on Page"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:235
+msgid "No Results Found."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:236
+msgid "No Sidebars"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:285
+#: includes/admin/class-ecs-admin.php:286
+msgid "Theme Sidebars"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:372
+msgid "Overview"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:384
+msgid "For more information:"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:385
+msgid "Documentation on Registering Sidebars"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:386
+msgid "Support Forums"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:409
+msgid ""
+"This screen is used for managing your custom sidebars. It provides a way to "
+"replace the default widget areas that have been registed with your theme. If "
+"your theme does not natively support widget areas you can learn about adding "
+"this support by following the documentation link to the side."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:410
+msgid "From this screen you can:"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:411
+msgid "Create, edit, and delete custom sidebars"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:412
+msgid "Choose which widget area you would like to replace"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:413
+msgid ""
+"Add, organize, and modify pages/posts etc that belong to a custom sidebar"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:547
+#: includes/admin/class-ecs-admin.php:862
+#: includes/admin/class-ecs-admin.php:1162
+#: includes/admin/class-ecs-admin.php:1423
+msgid "No items."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:564
+#: includes/admin/class-ecs-admin.php:891
+#: includes/admin/class-ecs-admin.php:1187
+#: includes/admin/class-ecs-admin.php:1452
+msgid "&laquo;"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:565
+#: includes/admin/class-ecs-admin.php:892
+#: includes/admin/class-ecs-admin.php:1188
+#: includes/admin/class-ecs-admin.php:1453
+msgid "&raquo;"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:601
+msgid "Most Recent"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:602
+#: includes/admin/class-ecs-admin.php:938
+#: includes/admin/class-ecs-admin.php:1222
+#: includes/admin/class-ecs-admin.php:1489
+#: includes/admin/class-ecs-admin.php:1708
+msgid "View All"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:603
+#: includes/admin/class-ecs-admin.php:662
+#: includes/admin/class-ecs-admin.php:664
+#: includes/admin/class-ecs-admin.php:943
+#: includes/admin/class-ecs-admin.php:1017
+#: includes/admin/class-ecs-admin.php:1019
+#: includes/admin/class-ecs-admin.php:1223
+#: includes/admin/class-ecs-admin.php:1297
+#: includes/admin/class-ecs-admin.php:1299
+#: includes/admin/class-ecs-admin.php:1494
+#: includes/admin/class-ecs-admin.php:1558
+#: includes/admin/class-ecs-admin.php:1560
+msgid "Search"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:615
+#: includes/admin/class-ecs-admin.php:621
+#: includes/admin/class-ecs-admin.php:695
+#: includes/admin/class-ecs-admin.php:701
+#: includes/admin/class-ecs-admin.php:1234
+#: includes/admin/class-ecs-admin.php:1240
+#: includes/admin/class-ecs-admin.php:1264
+#: includes/admin/class-ecs-admin.php:1270
+#: includes/admin/class-ecs-admin.php:1946
+#: includes/admin/class-ecs-admin.php:1947
+#: includes/admin/class-ecs-admin.php:2018
+#: includes/admin/class-ecs-admin.php:2019
+#: includes/admin/class-ecs-ajax.php:295 includes/admin/class-ecs-ajax.php:296
+#: includes/admin/class-ecs-ajax.php:367 includes/admin/class-ecs-ajax.php:368
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:629
+#: includes/admin/class-ecs-admin.php:636
+#: includes/admin/class-ecs-admin.php:709
+#: includes/admin/class-ecs-admin.php:716
+#: includes/admin/class-ecs-admin.php:1965
+#: includes/admin/class-ecs-admin.php:1970
+#: includes/admin/class-ecs-admin.php:1971
+#: includes/admin/class-ecs-ajax.php:314 includes/admin/class-ecs-ajax.php:319
+#: includes/admin/class-ecs-ajax.php:320
+#, php-format
+msgid "%s Archive"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:676
+#: includes/admin/class-ecs-admin.php:1036
+#: includes/admin/class-ecs-admin.php:1311
+msgid "No results found."
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:739
+msgctxt "nav menu home label"
+msgid "Home"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:775
+#: includes/admin/class-ecs-admin.php:1051
+#: includes/admin/class-ecs-admin.php:1326
+#: includes/admin/class-ecs-admin.php:1569
+#: includes/admin/class-ecs-admin.php:1734
+msgid "Select All"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:802
+#: includes/admin/walker/class-ecs-walker-edit.php:97
+msgid "All Posts In Category"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:933
+#: includes/admin/class-ecs-admin.php:1221
+msgid "Most Used"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1353
+msgid "Author Archives"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1599
+msgid "Template Hierarchy"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1635
+#: includes/admin/class-ecs-admin.php:2082
+msgid "404 - Page Not Found"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1646
+#: includes/admin/class-ecs-admin.php:2063
+#: includes/admin/class-ecs-admin.php:2083
+#: includes/admin/class-ecs-ajax.php:411
+msgid "Author Archive"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1657
+#: includes/admin/class-ecs-admin.php:2084
+msgid "Blog Index Page"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1668
+#: includes/admin/class-ecs-admin.php:2085
+msgid "Date Archive"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1683
+#: includes/admin/class-ecs-admin.php:2093
+#, php-format
+msgid "Page Template: %s"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:1695
+#: includes/admin/class-ecs-admin.php:2086
+msgid "Search Results"
+msgstr ""
+
+#: includes/admin/class-ecs-admin.php:2105
+#: includes/admin/class-ecs-ajax.php:431
+msgid "Template"
+msgstr ""
+
+#: includes/admin/class-ecs-ajax.php:512 includes/admin/class-ecs-ajax.php:572
+msgid "Custom Sidebar"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-checklist.php:97
+#, php-format
+msgctxt "nav menu front page title"
+msgid "Home: %s"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:128
+#, php-format
+msgid "%s (Invalid)"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:149
+#: includes/admin/walker/class-ecs-walker-edit.php:150
+msgid "(No Title)"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:159
+#: includes/admin/walker/class-ecs-walker-edit.php:160
+msgid "Edit Sidebar Item"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:171
+#, php-format
+msgid "Original: %s"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:185
+msgid "Remove"
+msgstr ""
+
+#: includes/admin/walker/class-ecs-walker-edit.php:186
+msgid "Cancel"
+msgstr ""
+
+#: includes/frontend/class-ecs-posttype.php:141
+msgid "Custom Sidebar Instances"
+msgstr ""
+
+#: includes/frontend/class-ecs-posttype.php:142
+msgid "Custom Sidebar Instance"
+msgstr ""
+
+#: includes/frontend/class-ecs-posttype.php:343
+#: includes/frontend/class-ecs-posttype.php:433
+#: views/admin-page/dialog-deleted.php:18
+#: views/admin-page/dialog-updated.php:18
+msgid "Sidebar"
+msgstr ""
+
+#: views/admin-page/create-screen.php:69 views/admin-page/edit-screen.php:80
+#: views/admin-page/manage-screen.php:70
+msgid "Sidebar Name"
+msgstr ""
+
+#: views/admin-page/create-screen.php:70 views/admin-page/edit-screen.php:81
+msgid "Enter sidebar name here"
+msgstr ""
+
+#: views/admin-page/create-screen.php:76
+#: views/admin-page/create-screen.php:112
+msgid "Create Sidebar"
+msgstr ""
+
+#: views/admin-page/create-screen.php:94
+msgid "Create New Sidebar"
+msgstr ""
+
+#: views/admin-page/create-screen.php:96
+msgid "Give your sidebar a name above, then click Create Sidebar."
+msgstr ""
+
+#: views/admin-page/create-screen.php:106 views/admin-page/edit-screen.php:177
+msgid "Delete Sidebar"
+msgstr ""
+
+#: views/admin-page/dialog-deleted.php:20
+#, php-format
+msgid "%1$s has been deleted."
+msgstr ""
+
+#: views/admin-page/dialog-updated.php:20
+#, php-format
+msgid "%1$s has been updated."
+msgstr ""
+
+#: views/admin-page/edit-screen.php:87 views/admin-page/edit-screen.php:183
+msgid "Save Sidebar"
+msgstr ""
+
+#: views/admin-page/edit-screen.php:106
+msgid "Sidebar Replacement Pages"
+msgstr ""
+
+#: views/admin-page/edit-screen.php:109
+msgid ""
+"Drag each item into the order you prefer. Click the arrow on the right of "
+"the item to reveal additional configuration options. Please ensure that any "
+"items added to this sidebar contain the default 'Sidebar to Replace' widget "
+"area selected in the sidebar properties below."
+msgstr ""
+
+#: views/admin-page/edit-screen.php:114
+msgid ""
+"Add items from the column on the left. Please ensure that any items added to "
+"this sidebar contain the default 'Sidebar to Replace' widget area selected "
+"in the sidebar properties below."
+msgstr ""
+
+#: views/admin-page/edit-screen.php:137
+msgid "Sidebar Properties"
+msgstr ""
+
+#: views/admin-page/edit-screen.php:139
+msgid "Edit information below."
+msgstr ""
+
+#: views/admin-page/edit-screen.php:142
+msgid "Sidebar to Replace"
+msgstr ""
+
+#: views/admin-page/edit-screen.php:162
+msgid "Sidebar Description"
+msgstr ""
+
+#: views/admin-page/edit-screen.php:164
+msgid "Enter sidebar description here"
+msgstr ""
+
+#: views/admin-page/manage-control-form.php:21
+msgid "Select a sidebar to edit:"
+msgstr ""
+
+#: views/admin-page/manage-control-form.php:26
+msgid "Select"
+msgstr ""
+
+#: views/admin-page/manage-control-form.php:29
+msgid "create a new sidebar"
+msgstr ""
+
+#: views/admin-page/manage-control-form.php:32
+msgid "Create a new Sidebar."
+msgstr ""
+
+#: views/admin-page/manage-screen.php:32 views/admin-page/manage-screen.php:54
+msgid "Create a new sidebar for your theme:"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:35 views/admin-page/manage-screen.php:57
+msgid "Create a New Sidebar"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:53
+msgid "Manage your sidebar replacements here or:"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:71
+msgid "Default Sidebar To Replace"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:100
+msgid "Edit"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:100
+msgid "Delete"
+msgstr ""
+
+#: views/admin-page/manage-screen.php:137
+msgid "Delete All Sidebars"
+msgstr ""
+
+#: views/admin-page/page-start.php:32
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: views/admin-page/page-start.php:36
+msgid ""
+"This theme does not support widgets, please use a theme that supports "
+"widgets in order to enable the sidebar generator."
+msgstr ""
+
+#: views/admin-page/tabs.php:21
+msgid "Edit Sidebars"
+msgstr ""
+
+#: views/admin-page/tabs.php:24
+msgid "Manage Sidebar Replacements"
+msgstr ""
+
+#: views/admin-page/tabs.php:29
+msgid "Advanced"
+msgstr ""

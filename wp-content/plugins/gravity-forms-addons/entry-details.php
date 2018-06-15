@@ -30,7 +30,7 @@ if(!is_plugin_active( 'gravity-forms-addons/gravity-forms-addons.php' )) {
 
 // Verify that the link is accessed properly
 if ( false == wp_verify_nonce( $_GET['view'], sprintf('view-%d-%d', $_REQUEST['leadid'], $_REQUEST['form']) )) {
-     wp_die( 'Verication failed. Please return to the original page, refresh, and click on the entry again.', 'gravity-forms-addons');
+     wp_die( 'Verification failed. Please return to the original page, refresh, and click on the entry again.', 'gravity-forms-addons');
 }
 
 // Force a happy header

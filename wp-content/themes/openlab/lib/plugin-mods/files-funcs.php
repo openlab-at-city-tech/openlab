@@ -5,6 +5,9 @@
  * They are duplicated here so that Bootstrap markup can be injected for uniform styling
  */
 
+// Plugin must set up nav late. See http://redmine.citytech.cuny.edu/issues/2335
+add_action( 'bp_setup_nav', 'bp_group_documents_setup_nav', 20 );
+
 /**
  * Dequeue inherit styling from plugin
  */

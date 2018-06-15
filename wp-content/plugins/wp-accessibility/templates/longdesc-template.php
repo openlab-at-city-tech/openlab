@@ -1,9 +1,18 @@
 <?php
-/*
-*  The goal for this template is to provide the simplest possible interface to view the long description. 
-*  If you replace the template, I recommend against including your peripheral design, such as navigation.
-*  The purpose of the long description is to get the description and return to your previous context.
-*/
+/**
+ * Longdesc display template.
+ *
+ * The goal for this template is to provide the simplest possible interface to view the long description.
+ * If you replace the template, I recommend against including your peripheral design, such as navigation.
+ * The purpose of the long description is to get the description and return to your previous context.
+ *
+ * @category Templates
+ * @package  WP Accessibility
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/wp-accessibility/
+ */
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -23,7 +32,7 @@
 		if ( isset( $_GET['referrer'] ) ) {
 			$uri = get_permalink( (int) $_GET['referrer'] );
 			if ( ! empty( $uri ) ) {
-				$uri .= '#' . longdesc_return_anchor( get_the_ID() );
+				$uri .= '#' . wpa_longdesc_return_anchor( get_the_ID() );
 				print '<p><a href="' . esc_url( $uri ) . '">' . esc_html__( 'Return to article.', 'wp-accessibility' ) . '</a></p>';
 			}
 		}
