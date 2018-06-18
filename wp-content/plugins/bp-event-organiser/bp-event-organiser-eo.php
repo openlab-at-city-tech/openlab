@@ -271,11 +271,11 @@ class BuddyPress_Event_Organiser_EO {
 
 		<p class="bp_event_organiser_desc"><?php _e( 'Enter the names of each group this event should appear in.', 'bp-event-organiser' ); ?></p>
 
-		<select name="bp_group_organizer_groups[]" multiple="multiple" style="width:100%;">
+		<select class="bp-event-organiser-event-groups" name="bp_group_organizer_groups[]" multiple="multiple" style="width:100%;">
 			<?php
 				foreach( $this->group_ids as $gid ) {
 					$group = groups_get_group( array( 'group_id' => $gid ) );
-					$public = 'public' === $group->status ? 'title="Public"' : '';
+					$public = 'public' === $group->status ? "title='Public'" : '';
 					echo "<option value='{$gid}' selected='selected' {$public}>{$group->name}</option>";
 				}
 			?>

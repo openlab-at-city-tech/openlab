@@ -5,7 +5,7 @@ var bpeoGroupMsg = BpEventOrganiserSettings.group_privacy_message,
 jQuery(function($){
 	var select2obj;
 
-	bpeoSelect = $('#bp_event_organiser_metabox select');
+	bpeoSelect = $('#bp_event_organiser_metabox select.bp-event-organiser-event-groups');
 	bpeoSubmit = $('#submitdiv .inside');
 	bpeoPublicFlag = bpeoSelect.find('[title]').length;
 	bpeoIsPrivate  = !!bpeoPublicFlag; // convert to boolean
