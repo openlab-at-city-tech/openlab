@@ -978,7 +978,7 @@ function openlab_group_admin_tabs($group = false) {
     ?>
     <!--
     <?php if (openlab_is_portfolio()) : ?>
-        <?php if ($bp->is_item_admin || $bp->is_item_mod) { ?>
+        <?php if ( $bp->is_item_admin ) { ?>
             --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li><!--
         <?php } ?>
 
@@ -1001,7 +1001,7 @@ function openlab_group_admin_tabs($group = false) {
 
     <?php else : ?>
 
-        <?php if ($bp->is_item_admin || $bp->is_item_mod) { ?>
+        <?php if ( $bp->is_item_admin ) { ?>
             --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress'); ?></a></li><!--
         <?php } ?>
 
@@ -1061,7 +1061,7 @@ function openlab_group_membership_tabs($group = false) {
         --><li<?php if ($bp->current_action == 'invite-anyone') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e('Invite New Members', 'buddypress'); ?></a></li><!--
     <?php endif; ?>
 
-    <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
+    <?php if ( $bp->is_item_admin ) : ?>
         --><li<?php if ('notifications' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e('Email Members', 'buddypress'); ?></a></li><!--
     <?php endif; ?>
 
