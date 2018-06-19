@@ -726,10 +726,10 @@ function openlab_filter_subnav_members($subnav_item) {
     //string replace menu name
     $new_item = str_replace("Members", "Membership", $subnav_item);
 
-    //switch slugs based on user role
-    if ($bp->is_item_admin || $bp->is_item_mod):
-        $new_item = str_replace("/members/", "/admin/manage-members", $new_item);
-    endif;
+    // Switch slugs based on user role.
+    if ( $bp->is_item_admin ) {
+        $new_item = str_replace( '/members/', '/admin/manage-members', $new_item );
+	}
 
     $uri = $bp->unfiltered_uri;
     $check_uri = array('groups', 'notifications');
@@ -1047,7 +1047,7 @@ function openlab_group_membership_tabs($group = false) {
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
     ?>
     <!--
-    <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
+    <?php if ( $bp->is_item_admin ) : ?>
         --><li<?php if ($current_tab == 'manage-members') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/manage-members"><?php _e('Membership', 'buddypress'); ?></a></li><!--
 
         <?php if ($group->status == 'private'): ?>
