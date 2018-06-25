@@ -1632,3 +1632,20 @@ function openlab_get_group_activity_events_feed() {
 add_action( 'bp_group_options_nav', function() {
 	echo openlab_get_group_activity_events_feed();
 }, 50 );
+
+/**
+ * Group membership request link.
+ */
+function openlab_group_request_user_link() {
+	global $requests_template;
+
+	$user_id   = $requests_template->request->user_id;
+	$user_url  = bp_core_get_user_domain( $user_id );
+	$user_name = bp_core_get_user_displayname( $user_id );
+
+	return sprintf(
+		'<a href="%s" class="truncate-on-the-fly" data-basevalue="20" data-minvalue="10" data-basewidth="152">%s</a>',
+		esc_url( $user_url ),
+		esc_html( $user_name )
+	);
+}

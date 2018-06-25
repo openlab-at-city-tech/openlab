@@ -656,18 +656,6 @@ OpenLab.utility = (function ($) {
         //setting equal rows on homepage group list
         equal_row_height();
 
-				// Equal item height on group membership requests.
-				var tallestRequestHeight = 0;
-				var $groupRequests = $('#group-manage-request-list .group-item-wrapper');
-				$groupRequests.each(function() {
-					var thisRequestHeight = $(this).height();
-					if ( thisRequestHeight > tallestRequestHeight ) {
-						tallestRequestHeight = thisRequestHeight;
-					}
-				});	
-				$groupRequests.height(tallestRequestHeight);
-
-
         //camera js slider on home
         if ($('.camera_wrap').length) {
             $('.camera_wrap').camera({

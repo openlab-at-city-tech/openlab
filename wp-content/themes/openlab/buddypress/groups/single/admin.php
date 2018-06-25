@@ -435,7 +435,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
                                     <div class="col-md-15 col-xs-17">
                                         <h4>
-            <?php bp_group_request_user_link() ?>
+											<?php echo openlab_group_request_user_link() ?>
                                         </h4>
 
                                         <ul class="group-member-actions">

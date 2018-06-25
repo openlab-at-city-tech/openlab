@@ -9212,7 +9212,7 @@ input#group-request-send {
   font-weight: normal;
 }
 .group-manage-members.group-list .group-item .group-item-wrapper {
-  height: auto;
+  height: 115px;
   /* User name */
   /* "Email Status" and other secondary headers */
 }
