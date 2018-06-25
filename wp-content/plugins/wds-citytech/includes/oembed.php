@@ -55,6 +55,19 @@ add_shortcode( 'openprocessing', 'openlab_openprocessing_shortcode' );
  */
 function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/#i', 'openlab_embed_handler_screencast' );
+
+	wp_embed_register_handler(
+		'pinterest',
+		'#'
+		. 'https?://'
+		. '(?:www\.)?'
+		. '(?:[a-z]{2}\.)?'
+		. 'pinterest\.[a-z.]+/'
+		. '([^/]+)'
+		. '(/[^/]+)?'
+		. '#',
+		'openlab_pinterest_embed_handler'
+	);
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -99,4 +112,36 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
 
 	$html = sprintf( $template, set_url_scheme( $embed_url ), $height, $width );
 	return $html;
+}
+
+/**
+ * Stolen from Jetpack.
+ */
+function openlab_pinterest_embed_handler( $matches, $attr, $url ) {
+	// Pinterest's JS handles making the embed
+    $script_src = '//assets.pinterest.com/js/pinit.js';
+	wp_enqueue_script( 'pinterest-embed', $script_src, array(), false, true );
+
+	$path = parse_url( $url, PHP_URL_PATH );
+	if ( 0 === strpos( $path, '/pin/' ) ) {
+		$embed_type = 'embedPin';
+	} elseif ( preg_match( '#^/([^/]+)/?$#', $path ) ) {
+		$embed_type = 'embedUser';
+	} elseif ( preg_match( '#^/([^/]+)/([^/]+)/?$#', $path ) ) {
+		$embed_type = 'embedBoard';
+	} else {
+		if ( current_user_can( 'edit_posts' ) ) {
+			return __( 'Sorry, that Pinterest URL was not recognized.', 'jetpack' );
+		}
+		return;
+	}
+
+	$return = sprintf( '<a data-pin-do="%s" href="%s"></a>', esc_attr( $embed_type ), esc_url( $url ) );
+
+	// If we're generating an embed view for the WordPress Admin via ajax...
+	if ( doing_action( 'wp_ajax_parse-embed' ) ) {
+		$return .= sprintf( '<script src="%s"></script>', esc_url( $script_src ) );
+	}
+
+	return $return;
 }
