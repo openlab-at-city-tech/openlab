@@ -540,3 +540,24 @@ function openlab_filter_bp_group_documents_valid_file_formats( $formats ) {
 	return implode( ',', $formats_array );
 }
 add_filter( 'option_bp_group_documents_valid_file_formats', 'openlab_filter_bp_group_documents_valid_file_formats' );
+
+/**
+ * Force @-mentions scripts to load on appropriate pages.
+ */
+add_filter( 'bp_activity_maybe_load_mentions_scripts', function( $load ) {
+	global $pagenow;
+
+	if ( ! is_user_logged_in() ) {
+		return $load;
+	}
+
+	if ( bp_is_messages_compose_screen() ) {
+		return true;
+	}
+
+	if ( bp_is_group() && bp_is_current_action( 'forum' ) ) {
+		return true;
+	}
+
+	return $load;
+} );
