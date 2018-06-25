@@ -1386,7 +1386,7 @@ HTML;
 		}
 
 		$howdy          = sprintf( __( 'Hi, %1$s' ), $current_user->display_name );
-		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='40' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
+		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='30' data-minvalue='5' data-basewidth='300' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
 
 		$parent = 'top-secondary';
 		$class  = 'hidden-xs';
