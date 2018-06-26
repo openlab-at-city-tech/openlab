@@ -9818,6 +9818,7 @@ body.membership-requests .group-list {
   display: none;
 }
 .sidebar-widget .bpeo-upcoming-event-title {
+  font-weight: bold;
   padding-left: 0;
 }
 body.single-event #content .eo-event-meta,
