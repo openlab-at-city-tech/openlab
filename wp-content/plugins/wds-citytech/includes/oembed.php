@@ -125,6 +125,9 @@ function openlab_pinterest_embed_handler( $matches, $attr, $url ) {
 	$path = parse_url( $url, PHP_URL_PATH );
 	if ( 0 === strpos( $path, '/pin/' ) ) {
 		$embed_type = 'embedPin';
+	} elseif ( 0 === strpos( $path, '/topics/' ) ) {
+		// Pinterest oEmbed doesn't support topics.
+		return $url;
 	} elseif ( preg_match( '#^/([^/]+)/?$#', $path ) ) {
 		$embed_type = 'embedUser';
 	} elseif ( preg_match( '#^/([^/]+)/([^/]+)/?$#', $path ) ) {
