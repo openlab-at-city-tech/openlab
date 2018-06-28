@@ -561,3 +561,79 @@ add_filter( 'bp_activity_maybe_load_mentions_scripts', function( $load ) {
 
 	return $load;
 } );
+
+/**
+ * Add data-suggestions-group-id attribute to blog comment fields.
+ */
+add_filter( 'comment_form_fields', function( $fields ) {
+	if ( ! isset( $fields['comment'] ) ) {
+		return $fields;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return $fields;
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return $fields;
+	}
+
+	$fields['comment'] = str_replace(
+		'<textarea ',
+		sprintf( '<textarea data-suggestions-group-id="%s" ', esc_attr( $group_id ) ),
+		$fields['comment']
+	);
+
+	return $fields;
+} );
+
+/**
+ * Add data-suggestions-group-id attribute to post editor.
+ */
+add_filter( 'the_editor', function( $editor ) {
+	if ( ! is_user_logged_in() ) {
+		return $editor;
+	}
+
+	if ( bp_is_group() ) {
+		$group_id = bp_get_current_group_id();
+	} elseif ( ! bp_is_root_blog() ) {
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	}
+
+	if ( ! $group_id ) {
+		return $editor;
+	}
+
+	$editor = str_replace(
+		'<textarea ',
+		sprintf( '<textarea data-suggestions-group-id="%s" ', esc_attr( $group_id ) ),
+		$editor
+	);
+
+	return $editor;
+} );
+
+/**
+ * Move data-suggestions-group-id to the TinyMCE instance so it's recognized by the Mentions script.
+ */
+add_filter( 'tiny_mce_before_init', function( $settings, $editor_id ) {
+	if ( 'content' === $editor_id ) {
+		$settings['init_instance_callback'] = "function() {
+			window.bp.mentions.tinyMCEinit;
+
+			var groupId = jQuery( '#content' ).data( 'suggestions-group-id' );
+
+			if ( typeof window.tinyMCE === 'undefined' || window.tinyMCE.activeEditor === null || typeof window.tinyMCE.activeEditor === 'undefined' ) {
+				return;
+			} else {
+				console.log(groupId);
+				jQuery( window.tinyMCE.activeEditor.contentDocument.activeElement )
+				  .data( 'bp-suggestions-group-id', groupId );
+			}
+		}";
+	}
+
+	return $settings;
+}, 20, 2 );
