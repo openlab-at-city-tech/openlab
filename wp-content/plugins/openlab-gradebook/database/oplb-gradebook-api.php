@@ -1,20 +1,24 @@
 <?php
 
-class oplb_gradebook_api {
+class oplb_gradebook_api
+{
 
-    public function __construct() {
+    public function __construct()
+    {
 
         add_action('wp_ajax_get_csv', array($this, 'get_csv'));
 
     }
 
-    public function build_sorter($key) {
+    public function build_sorter($key)
+    {
         return function ($a, $b) use ($key) {
             return strnatcmp($a[$key], $b[$key]);
         };
     }
 
-    public function get_line_chart($uid, $gbid) {
+    public function get_line_chart($uid, $gbid)
+    {
         global $wpdb;
         //need to check that user has access to this gradebook.		
         if (!is_user_logged_in()) {
@@ -28,7 +32,7 @@ class oplb_gradebook_api {
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
         $class_cells = $wpdb->get_results($query, ARRAY_A);
-        $cells = array_map(function($class_cell) use ($uid) {
+        $cells = array_map(function ($class_cell) use ($uid) {
             if ($class_cell['uid'] == $uid) {
                 return $class_cell;
             }
@@ -46,7 +50,7 @@ class oplb_gradebook_api {
         usort($assignments, $this->build_sorter('assign_order'));
 
         foreach ($assignments as $assignment) {
-            $assignment_cells_points = array_map(function($class_cell) use ($assignment) {
+            $assignment_cells_points = array_map(function ($class_cell) use ($assignment) {
                 if ($class_cell['amid'] == $assignment['id']) {
                     return floatval($class_cell['assign_points_earned']);
                 }
@@ -56,11 +60,11 @@ class oplb_gradebook_api {
             array_push($assignment_averages, number_format($total_points / count($assignment_cells_points), 2));
         }
 
-        $cells_points = array_map(function($cell) {
+        $cells_points = array_map(function ($cell) {
             return floatval($cell['assign_points_earned']);
         }, $cells);
 
-        $assignments_names = array_map(function($assignment) {
+        $assignments_names = array_map(function ($assignment) {
             return $assignment['assign_name'];
         }, $assignments);
 
@@ -87,7 +91,8 @@ class oplb_gradebook_api {
         );
     }
 
-    public function get_pie_chart($amid) {
+    public function get_pie_chart($amid)
+    {
         global $wpdb;
         //need to check that user has access to this assignment.
         if (!is_user_logged_in()) {
@@ -97,23 +102,28 @@ class oplb_gradebook_api {
         $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $amid);
         $pie_chart_data = $wpdb->get_col($query);
 
-        function isA($n) {
+        function isA($n)
+        {
             return ($n >= 90 ? true : false);
         }
 
-        function isB($n) {
+        function isB($n)
+        {
             return ($n >= 80 && $n < 90 ? true : false);
         }
 
-        function isC($n) {
+        function isC($n)
+        {
             return ($n >= 70 && $n < 80 ? true : false);
         }
 
-        function isD($n) {
+        function isD($n)
+        {
             return ($n >= 60 && $n < 70 ? true : false);
         }
 
-        function isF($n) {
+        function isF($n)
+        {
             return ($n < 60 ? true : false);
         }
 
@@ -147,9 +157,10 @@ class oplb_gradebook_api {
      * @param type $uid
      * @return type
      */
-    public function oplb_get_gradebook($gbid, $role, $uid) {
+    public function oplb_get_gradebook($gbid, $role, $uid)
+    {
 
-        
+
 
         global $current_user, $wpdb;
         if (!$uid) {
@@ -207,7 +218,8 @@ class oplb_gradebook_api {
             //get weight info
             $get_weight_info = $this->oplb_gradebook_get_total_weight($gbid);
 
-            return array("assignments" => $assignments,
+            return array(
+                "assignments" => $assignments,
                 "cells" => $cells,
                 "students" => $students,
                 "role" => "instructor",
@@ -279,7 +291,8 @@ class oplb_gradebook_api {
      *
      * @return void
      */
-    public function oplb_gradebook_get_params() {
+    public function oplb_gradebook_get_params()
+    {
         global $wpdb;
 
         $args = array(
@@ -336,16 +349,17 @@ class oplb_gradebook_api {
         return $params;
     }
 
-    private function oplb_gradebook_merge_arrays_on_null($a, $b) {
+    private function oplb_gradebook_merge_arrays_on_null($a, $b)
+    {
 
         $c = array();
         foreach ($a as $key => $val) {
 
-            if ($key == NULL && $b[$key] == NULL) {
+            if ($key == null && $b[$key] == null) {
                 $c[$key] = $val;
-            } else if ($key != NULL && $b[$key] == NULL) {
+            } else if ($key != null && $b[$key] == null) {
                 $c[$key] = $val;
-            } else if ($key != NULL && $b[$key] != NULL) {
+            } else if ($key != null && $b[$key] != null) {
                 $c[$key] = $b[$key];
             } else {
                 $c[$key] = $b[$key];
@@ -361,7 +375,8 @@ class oplb_gradebook_api {
      * @global type $current_user
      * @return type
      */
-    public function oplb_gradebook_get_user_role() {
+    public function oplb_gradebook_get_user_role()
+    {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
         $query = $wpdb->prepare("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d", $uid);
@@ -376,7 +391,8 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @return type
      */
-    public function oplb_gradebook_get_user_role_by_gbid($gbid) {
+    public function oplb_gradebook_get_user_role_by_gbid($gbid)
+    {
         global $wpdb, $current_user;
         $uid = $current_user->ID;
         $query = $wpdb->prepare("SELECT role FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $uid);
@@ -389,7 +405,8 @@ class oplb_gradebook_api {
      * @global type $current_user
      * @return boolean
      */
-    public function oplb_is_gb_administrator() {
+    public function oplb_is_gb_administrator()
+    {
         global $current_user;
         $x = $current_user->roles;
         $y = array_keys(get_option('oplb_gradebook_settings'), true);
@@ -409,7 +426,8 @@ class oplb_gradebook_api {
      * @param type $b
      * @return int
      */
-    private function oplb_array_uintersect_strict_comparison($a, $b) {
+    private function oplb_array_uintersect_strict_comparison($a, $b)
+    {
         if ($a === $b) {
             return 0;
         }
@@ -425,7 +443,8 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @return type
      */
-    public function oplb_gradebook_get_current_grade_average($uid, $gbid) {
+    public function oplb_gradebook_get_current_grade_average($uid, $gbid)
+    {
         global $wpdb;
         $average_out = 0.00;
 
@@ -444,7 +463,7 @@ class oplb_gradebook_api {
             $this->oplb_gradebook_update_current_grade_average($average_out, $gbid, $uid);
         }
 
-        return number_format((float) $average_out, 2, '.', '');
+        return number_format((float)$average_out, 2, '.', '');
     }
 
     /**
@@ -452,7 +471,8 @@ class oplb_gradebook_api {
      * @global type $wpdb
      * @return type
      */
-    public function oplb_gradebook_get_total_weight($gbid) {
+    public function oplb_gradebook_get_total_weight($gbid)
+    {
         global $wpdb;
         $weights_by_assignment = array();
         $distributed_weight = 0;
@@ -465,7 +485,7 @@ class oplb_gradebook_api {
         $assignments_with_no_weight = 0;
         foreach ($weights as $weight) {
             $total_weight = $total_weight + $weight['assign_weight'];
-            $weights_by_assignment[$weight['id']] = number_format((float) $weight['assign_weight'], 2, '.', '');
+            $weights_by_assignment[$weight['id']] = number_format((float)$weight['assign_weight'], 2, '.', '');
 
             //let's work out any assignments that don't have a weight
             if (floatval($weights_by_assignment[$weight['id']]) === 0.00) {
@@ -480,10 +500,10 @@ class oplb_gradebook_api {
             $total_weight = 100;
             
             //avoid division by zero
-            if($total_assignments === 0){
+            if ($total_assignments === 0) {
                 $total_assignments = 1;
             }
-            
+
             $distributed_weight = $total_weight / $total_assignments;
             foreach ($weights_by_assignment as &$assign_weight) {
                 $assign_weight = $distributed_weight;
@@ -521,7 +541,8 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @return type
      */
-    public function oplb_calculate_current_grade_average($uid, $gbid) {
+    public function oplb_calculate_current_grade_average($uid, $gbid)
+    {
         global $wpdb;
 
         $average_out = 0.00;
@@ -538,12 +559,12 @@ class oplb_gradebook_api {
         $assignments = $wpdb->get_results($query);
 
         if (empty($assignments)) {
-            return number_format((float) $average_out, 2, '.', '');
+            return number_format((float)$average_out, 2, '.', '');
         }
 
-        foreach ($assignments as $assignment){
+        foreach ($assignments as $assignment) {
             //handling null value grades, which are excepted from the average
-            if(intval($assignment->is_null) === 1){
+            if (intval($assignment->is_null) === 1) {
 
                 $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignment->amid, $gbid);
 
@@ -576,7 +597,7 @@ class oplb_gradebook_api {
             $average_out = $average_out + $grade_adj;
         }
 
-        return number_format((float) $average_out, 2, '.', '');
+        return number_format((float)$average_out, 2, '.', '');
     }
 
     /**
@@ -585,7 +606,8 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @return type
      */
-    public function oplb_gradebook_update_all_student_current_grade_averages($gbid) {
+    public function oplb_gradebook_update_all_student_current_grade_averages($gbid)
+    {
         global $wpdb;
 
         $student_data = array();
@@ -604,7 +626,7 @@ class oplb_gradebook_api {
 
                 $student_data[$key] = array(
                     'uid' => intval($student->uid),
-                    'current_grade_average' => number_format((float) $calc_grade_average, 2, '.', ''),
+                    'current_grade_average' => number_format((float)$calc_grade_average, 2, '.', ''),
                 );
             }
         }
@@ -619,21 +641,21 @@ class oplb_gradebook_api {
      * @param type $gbid
      * @param type $uid
      */
-    public function oplb_gradebook_update_current_grade_average($calc_grade_average, $gbid, $uid) {
+    public function oplb_gradebook_update_current_grade_average($calc_grade_average, $gbid, $uid)
+    {
         global $wpdb;
 
         $wpdb->update("{$wpdb->prefix}oplb_gradebook_users", array(
             'current_grade_average' => $calc_grade_average
-                ), array(
+        ), array(
             'gbid' => $gbid,
             'uid' => $uid,
-                ), array(
+        ), array(
             '%f',
-                ), array(
+        ), array(
             '%d',
             '%d',
-                )
-        );
+        ));
     }
 
     /**
@@ -645,7 +667,8 @@ class oplb_gradebook_api {
      * @param type $bool
      * @return boolean
      */
-    public function oplb_gradebook_get_user($id, $gbid, $bool = false) {
+    public function oplb_gradebook_get_user($id, $gbid, $bool = false)
+    {
         global $wpdb;
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $id, $gbid);
         $user = $wpdb->get_row($query, ARRAY_A);
@@ -678,7 +701,8 @@ class oplb_gradebook_api {
      * @param type $user_login
      * @return type
      */
-    public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login, $return = false) {
+    public function oplb_gradebook_create_user($id, $gbid, $first_name, $last_name, $user_login, $return = false)
+    {
         global $wpdb;
 
         if (!$user_login) {
@@ -713,40 +737,41 @@ class oplb_gradebook_api {
                 'gbid' => $gbid,
                 'role' => 'student',
                 'current_grade_average' => 0.00,
-                    ), array(
+            ), array(
                 '%d',
                 '%d',
                 '%s',
                 '%f',
-                    )
-            );
+            ));
 
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
             $assignments = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($assignments as $assignment) {
 
-                $null_targets = array('numeric','letter');
+                $null_targets = array('numeric', 'letter');
 
                 $is_null = 0;
-                if(in_array($assignment['assign_grade_type'], $null_targets)){
+                if (in_array($assignment['assign_grade_type'], $null_targets)) {
                     $is_null = 1;
                 }
 
-                $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'gbid' => $gbid,
-                    'amid' => $assignment['id'],
-                    'uid' => $user->ID,
-                    'assign_order' => $assignment['assign_order'],
-                    'is_null' => $is_null
-                ),
-                array(
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d',
-                )
+                $wpdb->insert(
+                    "{$wpdb->prefix}oplb_gradebook_cells",
+                    array(
+                        'gbid' => $gbid,
+                        'amid' => $assignment['id'],
+                        'uid' => $user->ID,
+                        'assign_order' => $assignment['assign_order'],
+                        'is_null' => $is_null
+                    ),
+                    array(
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%d',
+                    )
                 );
             };
 
@@ -775,7 +800,7 @@ class oplb_gradebook_api {
                     'first_name' => $user_meta['first_name'],
                     'last_name' => $user_meta['last_name'],
                     'user_login' => $user->user_login,
-                    'current_grade_average' => number_format((float) 0.00, 2, '.', ''),
+                    'current_grade_average' => number_format((float)0.00, 2, '.', ''),
                     'gbid' => intval($gbid),
                     'id' => $user->ID,
                     'role' => $role[0]['role']
@@ -791,7 +816,8 @@ class oplb_gradebook_api {
         }
     }
 
-    public function oplb_gradebook_add_all_students($gbid) {
+    public function oplb_gradebook_add_all_students($gbid)
+    {
         global $oplb_user_list;
         $data_out = array(
             'type' => 'all',
@@ -830,8 +856,9 @@ class oplb_gradebook_api {
      * @param type $user
      * @return type
      */
-    public function oplb_gradebook_get_user_meta($user) {
-        
+    public function oplb_gradebook_get_user_meta($user)
+    {
+
         $first_name_retrieve = get_user_meta($user->ID, 'first_name', true);
         $last_name_retrieve = get_user_meta($user->ID, 'last_name', true);
         $nickname = get_user_meta($user->ID, 'nickname', true);
@@ -888,7 +915,8 @@ class oplb_gradebook_api {
      *
      * @return void
      */
-    public function get_csv() {
+    public function get_csv()
+    {
         global $wpdb, $oplb_gradebook_api;
 
         $params = $oplb_gradebook_api->oplb_gradebook_get_params();
@@ -939,7 +967,8 @@ class oplb_gradebook_api {
             array_push($column_headers_assignment_names, $assignment['assign_name']);
         }
         $column_headers = array_merge(
-                array('firstname', 'lastname', 'username', 'current_average_grade'), $column_headers_assignment_names
+            array('firstname', 'lastname', 'username', 'current_average_grade'),
+            $column_headers_assignment_names
         );
         $cells = array();
 
@@ -994,10 +1023,10 @@ class oplb_gradebook_api {
         usort($cells, $this->build_sorter('assign_order'));
         $student_records = array();
         foreach ($students as &$row) {
-            $records_for_student = array_filter($cells, function($k) use ($row) {
+            $records_for_student = array_filter($cells, function ($k) use ($row) {
                 return $k['uid'] == $row['id'];
             });
-            $scores_for_student = array_map(function($k) {
+            $scores_for_student = array_map(function ($k) {
                 return $k['assign_points_earned'];
             }, $records_for_student);
             $student_record = array_merge($row, $scores_for_student);
@@ -1023,7 +1052,8 @@ class oplb_gradebook_api {
         die();
     }
 
-    public function getLetterGrades() {
+    public function getLetterGrades()
+    {
 
         $letter_grades = array(
             array(
@@ -1109,7 +1139,8 @@ class oplb_gradebook_api {
         return $letter_grades;
     }
 
-    public function numeric_to_letter_grade_conversion($number) {
+    public function numeric_to_letter_grade_conversion($number)
+    {
 
         $letter_grades = $this->getLetterGrades();
 

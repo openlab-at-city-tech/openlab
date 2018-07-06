@@ -1,12 +1,15 @@
 <?php
 
-class OPLB_USER {
+class OPLB_USER
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('wp_ajax_oplb_user', array($this, 'oplb_user'));
     }
 
-    public function oplb_user() {
+    public function oplb_user()
+    {
         global $wpdb, $oplb_gradebook_api;
         $wpdb->show_errors();
 
@@ -26,7 +29,7 @@ class OPLB_USER {
         }
 
         switch ($params['method']) {
-            case 'DELETE' :
+            case 'DELETE':
                 parse_str($_SERVER['QUERY_STRING'], $params);
                 $x = $params['id'];
                 $y = $params['gbid'];
@@ -35,20 +38,20 @@ class OPLB_USER {
                 $results2 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells", array('uid' => $x, 'gbid' => $y));
 
                 break;
-            case 'PUT' :
+            case 'PUT':
                 echo json_encode(array("put" => "putting"));
                 die();
                 break;
-            case 'UPDATE' :
+            case 'UPDATE':
                 echo json_encode(array("update" => "updating"));
                 break;
-            case 'PATCH' :
+            case 'PATCH':
                 echo json_encode(array("patch" => "patching"));
                 break;
-            case 'GET' :
+            case 'GET':
                 echo json_encode(array("get" => "getting"));
                 break;
-            case 'POST' :
+            case 'POST':
                 $gbid = $params['gbid'];
 
                 if ($params['student_range_option'] === 'studentAll') {
