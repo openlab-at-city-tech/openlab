@@ -35,6 +35,7 @@ $oplb_gradebook = new OPLB_GRADEBOOK();
 $oplb_user = new OPLB_USER();
 $oplb_user_list = new OPLB_USER_LIST();
 $oplb_statistics = new OPLB_STATISTICS();
+$oplb_database = new OPLB_DATABASE();
 
 /**
  * Legacy: setup OpenLab Gradebook admin
@@ -117,7 +118,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         }
 
         $dep_ver = '0.0.0.8';
-        $app_ver = '0.0.4.9';
+        $app_ver = '0.0.5.0';
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
@@ -153,6 +154,7 @@ add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts', 9999);
  * Adds template files to page so that BackBone JS client-side app can access them
  */
 function init_oplb_gradebook() {
+
     $template_list = glob(dirname(__FILE__) . '/js/app/templates/*.php');
 
     foreach ($template_list as $template) {

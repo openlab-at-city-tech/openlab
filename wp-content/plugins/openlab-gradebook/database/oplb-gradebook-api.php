@@ -148,6 +148,9 @@ class oplb_gradebook_api {
      * @return type
      */
     public function oplb_get_gradebook($gbid, $role, $uid) {
+
+        
+
         global $current_user, $wpdb;
         if (!$uid) {
             $uid = $current_user->ID;
@@ -198,6 +201,7 @@ class oplb_gradebook_api {
                 $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                 $cell['gbid'] = intval($cell['gbid']);
                 $cell['id'] = intval($cell['id']);
+                $cell['is_null'] = boolval($cell['is_null']);
             }
 
             //get weight info
@@ -425,7 +429,7 @@ class oplb_gradebook_api {
         global $wpdb;
         $average_out = 0.00;
 
-        $current_grade_average_query = $wpdb->prepare("SELECT current_grade_average FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $uid, $gbid);
+        $current_grade_average_query = $wpdb->prepare("SELECT current_grade_average FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $uid, $gbid, 1);
         $current_grade_average = $wpdb->get_results($current_grade_average_query);
 
         if (empty($current_grade_average)) {
@@ -525,15 +529,31 @@ class oplb_gradebook_api {
         //first get total weight
         $weights_return = $this->oplb_gradebook_get_total_weight($gbid);
         $weights_by_assignment = $weights_return['weights_by_assignment'];
+        $total_weight = $weights_return['total_weight'];
 
         //calibrate weight to 100
         $normalization_pct = 100 / $weights_return['total_weight'];
 
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid, 1);
         $assignments = $wpdb->get_results($query);
 
         if (empty($assignments)) {
             return number_format((float) $average_out, 2, '.', '');
+        }
+
+        foreach ($assignments as $assignment){
+            //handling null value grades, which are excepted from the average
+            if(intval($assignment->is_null) === 1){
+
+                $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignment->amid, $gbid);
+
+                $assign_weight_retrieve = $wpdb->get_results($query);
+                $assign_weight = $assign_weight_retrieve[0]->assign_weight;
+
+                //recalculate normatlization pct
+                $total_weight = $total_weight - $assign_weight;
+                $normalization_pct = 100 / $total_weight;
+            }
         }
 
         foreach ($assignments as $assignment) {
@@ -705,12 +725,28 @@ class oplb_gradebook_api {
             $assignments = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($assignments as $assignment) {
+
+                $null_targets = array('numeric','letter');
+
+                $is_null = 0;
+                if(in_array($assignment['assign_grade_type'], $null_targets)){
+                    $is_null = 1;
+                }
+
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'gbid' => $gbid,
                     'amid' => $assignment['id'],
                     'uid' => $user->ID,
                     'assign_order' => $assignment['assign_order'],
-                        )
+                    'is_null' => $is_null
+                ),
+                array(
+                    '%d',
+                    '%d',
+                    '%d',
+                    '%d',
+                    '%d',
+                )
                 );
             };
 
@@ -728,6 +764,7 @@ class oplb_gradebook_api {
                 $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                 $cell['gbid'] = intval($cell['gbid']);
                 $cell['id'] = intval($cell['id']);
+                $cell['is_null'] = intval($cell['is_null']);
             }
 
             $user_meta = $this->oplb_gradebook_get_user_meta($user);

@@ -1,16 +1,20 @@
 <?php
+
 /**
  * Initial database configuration on plugin activation
  */
-class OPLB_DATABASE {
+class OPLB_DATABASE
+{
 
-    const oplb_gradebook_db_version = 1.6;
+    const oplb_gradebook_db_version = 1.7;
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('plugins_loaded', array($this, 'oplb_gradebook_upgrade_db'));
     }
 
-    public function oplb_gradebook_upgrade_db() {
+    public function oplb_gradebook_upgrade_db()
+    {
         global $wpdb;
 
         if (!get_option('oplb_gradebook_db_version')) {
@@ -20,19 +24,20 @@ class OPLB_DATABASE {
         if (self::oplb_gradebook_db_version > get_option('oplb_gradebook_db_version')) {
             $this->database_alter();
         }
-        
+
     }
 
-    public function database_alter() {
+    public function database_alter()
+    {
         /**Any alterations to the table after they have been created in a previous version should take place here.  This works
-        * by looping through the necessary db alterations based on the current version of the db. To add an alteration use the following  
-        * template code block:
-        * if(get_option( 'oplb_gradebook_db_version' )==[current_db_version]){ 
-        *    do stuff to tables 
-        *    update_option( "oplb_gradebook_db_version", self::oplb_gradebook_db_version);
-        *  }
-        * where the constant oplb_gradebook_db_version should be changed to a larger number.
-        */			
+         * by looping through the necessary db alterations based on the current version of the db. To add an alteration use the following  
+         * template code block:
+         * if(get_option( 'oplb_gradebook_db_version' )==[current_db_version]){ 
+         *    do stuff to tables 
+         *    update_option( "oplb_gradebook_db_version", self::oplb_gradebook_db_version);
+         *  }
+         * where the constant oplb_gradebook_db_version should be changed to a larger number.
+         */
         global $wpdb;
         if (get_option('oplb_gradebook_db_version') < 1.6) {
             $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'");
@@ -49,9 +54,18 @@ class OPLB_DATABASE {
 
             update_option("oplb_gradebook_db_version", 1.6);
         }
+
+        if (get_option('oplb_gradebook_db_version') < 1.7) {
+
+            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD is_null tinyint unsigned NOT NULL DEFAULT 0");
+            $wpdb->query($sql);
+            update_option("oplb_gradebook_db_version", 1.7);
+        }
+
     }
 
-    public function database_init() {
+    public function database_init()
+    {
         global $wpdb;
 
         $db_name = "{$wpdb->prefix}oplb_gradebook_courses";

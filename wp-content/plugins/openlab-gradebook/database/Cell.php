@@ -37,10 +37,35 @@ class gradebook_cell_API
 				break;
 			case 'PUT':
 
+				$is_null = 1;
+
+				if (is_numeric($params['assign_points_earned'])) {
+					$is_null = 0;
+				}
+
+
 				$wpdb->update(
 					"{$wpdb->prefix}oplb_gradebook_cells",
-					array('assign_order' => $params['assign_order'], 'assign_points_earned' => $params['assign_points_earned']),
-					array('uid' => $params['uid'], 'amid' => $params['amid'], 'gbid' => $gbid)
+					array(
+						'assign_order' => $params['assign_order'],
+						'assign_points_earned' => $params['assign_points_earned'],
+						'is_null' => $is_null,
+					),
+					array(
+						'uid' => $params['uid'],
+						'amid' => $params['amid'],
+						'gbid' => $gbid
+					),
+					array(
+						'%d',
+						'%f',
+						'%d'
+					),
+					array(
+						'%d',
+						'%d',
+						'%d'
+					)
 				);
 
 				$query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
@@ -52,6 +77,7 @@ class gradebook_cell_API
 					'current_grade_average' => $current_grade_average,
 					'assign_points_earned' => floatval($assign_points_earned['assign_points_earned']),
 					'uid' => intval($params['uid']),
+					'is_null' => $is_null,
 				);
 
 				echo json_encode($data_back);

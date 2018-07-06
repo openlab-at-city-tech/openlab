@@ -99,14 +99,27 @@ class gradebook_assignment_API {
                     '%d',
                         )
                 );
-                $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'assign_order' => $params['assign_order']
-                        ), array(
+
+                $is_null = 1;
+
+                if($params['assign_grade_type'] === 'checkmark'){
+                    $is_null = 0;
+                }
+
+                $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", 
+                    array(
+                    'assign_order' => $params['assign_order'],
+                    'is_null' => $is_null,
+                        ), 
+                    array(
                     'amid' => $params['id'],
                     'gbid' => $gbid,
-                        ), array(
+                        ), 
+                        array(
                     '%d',
-                        ), array(
+                    '%d'
+                        ), 
+                        array(
                     '%d',
                     '%d',
                         )
@@ -186,14 +199,22 @@ class gradebook_assignment_API {
                 
                 $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $params['gbid'], 'student');
                 $studentIDs = $wpdb->get_results($query, ARRAY_N);
+
+                $is_null = 1;
+
+                if($params['assign_grade_type'] === 'checkmark'){
+                    $is_null = 0;
+                }
+
                 foreach ($studentIDs as $value) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
                         'gbid' => $params['gbid'],
                         'assign_order' => $assignOrder,
-                        'assign_points_earned' => 0
-                            ), array('%d', '%d', '%d', '%d', '%f')
+                        'assign_points_earned' => 0,
+                        'is_null' => $is_null,
+                            ), array('%d', '%d', '%d', '%d', '%f', '%d')
                     );
                 }
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignID, $gbid);
@@ -222,6 +243,7 @@ class gradebook_assignment_API {
                     $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
+                    $cell['is_null'] = boolval(intval($cell['is_null']));
                 }
                 $data = array('assignment' => $assignment, 'cells' => $cells);
                 echo json_encode($data);
