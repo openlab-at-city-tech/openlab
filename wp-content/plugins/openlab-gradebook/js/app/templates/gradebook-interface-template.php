@@ -17,7 +17,6 @@
                 ?>    	 
                 <div class="btn-group">    		
                     <button type="button" id="add-student" class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook') ?></button>
-                    <button type="button" id="download-csv" class="btn btn-default"><?php esc_html_e('Download CSV', 'openlab-gradebook') ?></button>
                     <button type="button" id="add-assignment" class="btn btn-default"><?php esc_html_e('Add Assignment', 'openlab-gradebook') ?></button>
                 </div>
             <?php 
@@ -45,7 +44,11 @@
                     <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">  
                         <thead id="students-header-pinned" class="students-header">
                             <tr>
-                                <th class="gradebook-student-column-interactive student-tools adjust-widths" data-targetwidth="50"></th>
+                                <th class="gradebook-student-column-interactive student-tools download-csv adjust-widths" data-targetwidth="50">
+                                <% if (role === 'instructor') { %>
+                                    <button type="button" id="download-csv" class="btn btn-link"><i class="fa fa-download" aria-hidden="true"></i></button>
+                                <% } %>
+                                </th>
                                 <th class="gradebook-student-column-first_name"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('First Name', 'openlab-gradebook') ?>'><?php esc_html_e('First Name', 'openlab-gradebook') ?></span></th>
                                 <th class="gradebook-student-column-last_name"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Last Name', 'openlab-gradebook') ?>'><?php esc_html_e('Last Name', 'openlab-gradebook') ?></span></th>
                                 <th class="gradebook-student-column-user_login"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Username', 'openlab-gradebook') ?>'><?php esc_html_e('Username', 'openlab-gradebook') ?></span></th>

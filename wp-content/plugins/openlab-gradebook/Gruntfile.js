@@ -55,6 +55,7 @@ module.exports = function (grunt) {
                     separator: "\n"
                 },
                 src: [
+                    'node_modules/@fortawesome/fontawesome-free/css/fontawesome.css',
                     'node_modules/jscrollpane/style/jquery.jscrollpane.css'
                 ],
                 dest: 'css/vendor.css'

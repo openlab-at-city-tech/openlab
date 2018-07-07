@@ -1,4 +1,4 @@
-@import 'css/vendor.css';
+@import "css/vendor.css";
 @font-face {
   font-family: "openlab-gradebook";
   src: url("fonts/openlab-gradebook.eot");
@@ -67,7 +67,7 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
   overflow-y: hidden;
   max-height: 28px;
   transition-property: all;
-  transition-duration: .5s;
+  transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 @media (max-width: 767px) {
@@ -392,6 +392,23 @@ span.twitter-typeahead {
   overflow: visible;
   padding: 12px 8px;
   width: 15%;
+}
+.table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive.download-csv,
+.table-wrapper .pinned #students-pinned td.student-tools.download-csv {
+  width: 19.685%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  background: #0073aa;
+}
+.table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive.download-csv button,
+.table-wrapper .pinned #students-pinned td.student-tools.download-csv button {
+  font-size: 22px;
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+  color: #fff;
 }
 .table-wrapper .scrollable {
   margin-left: 36%;
