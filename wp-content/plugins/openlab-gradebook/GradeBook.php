@@ -49,6 +49,7 @@ function register_oplb_gradebook_menu_page() {
     }
 
     $my_admin_page = add_menu_page('OpenLab GradeBook', 'OpenLab GradeBook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook', 'dashicons-book-alt', '6.12');
+    add_submenu_page('oplb_gradebook', 'OpenLab Gradebook', 'My Gradebook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook');
     $add_submenu_page_settings = in_array($roles[0], array_keys(get_option('oplb_gradebook_settings')));
     
     if ($add_submenu_page_settings) {
