@@ -93,7 +93,7 @@ h5 {
   font-weight: 600;
 }
 .weight-message p {
-  margin: 28px 0 14px;
+  margin: 28px 0 4px;
 }
 /* Chart stylings */
 .labeled-chart-container {
@@ -353,7 +353,7 @@ span.twitter-typeahead {
   position: absolute;
   display: block;
   left: 0;
-  top: 0;
+  top: 10px;
   background: #fff;
   width: 36%;
   border-right: 1px solid #ccc;
@@ -368,6 +368,9 @@ span.twitter-typeahead {
 }
 .table-wrapper .pinned table th {
   padding: 15px 8px;
+}
+.table-wrapper .pinned .student-grades {
+  display: none;
 }
 .table-wrapper .pinned #students-header-pinned th,
 .table-wrapper .pinned #students-pinned td {
@@ -393,6 +396,24 @@ span.twitter-typeahead {
 .table-wrapper .scrollable {
   margin-left: 36%;
   overflow: visible !important;
+}
+.table-wrapper .scrollable .jspContainer {
+  padding-top: 10px;
+}
+.table-wrapper .scrollable .student-grades {
+  min-width: 80px;
+}
+.table-wrapper .scrollable .student-grades span {
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
+}
+.table-wrapper .scrollable .student-grades .grade-selector {
+  max-width: 50px;
 }
 .table-wrapper .scrollable th,
 .table-wrapper .scrollable td {

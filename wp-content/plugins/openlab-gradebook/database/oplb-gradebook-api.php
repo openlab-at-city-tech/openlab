@@ -189,20 +189,23 @@ class oplb_gradebook_api
                 $assignment['gbid'] = intval($assignment['gbid']);
             }
 
-            $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
-            $students = $wpdb->get_results($query, ARRAY_N);
+            $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
+            $students = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($students as &$student_id) {
-                $student = get_userdata($student_id[0]);
-                $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id[0], $gbid);
-                $student_id = array(
+                $student = get_userdata($student_id['uid']);
+                $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id['uid'], $gbid);
+
+                $student_extras = array(
                     'first_name' => $student->first_name,
                     'last_name' => $student->last_name,
                     'user_login' => $student->user_login,
                     'current_grade_average' => $current_grade_average,
                     'id' => intval($student->ID),
-                    'gbid' => intval($gbid)
+                    'gbid' => intval($gbid),
                 );
+
+                $student_id = array_merge($student_extras, $student_id);
             }
             usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
@@ -259,13 +262,18 @@ class oplb_gradebook_api
             $student = get_userdata($current_user->ID);
             $current_grade_average = $this->oplb_gradebook_get_current_grade_average($current_user->ID, $gbid);
 
+            $query = $wpdb->prepare("SELECT mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $current_user->ID);
+            $grades = $wpdb->get_results($query);
+
             $student = array(
                 'first_name' => $student->first_name,
                 'last_name' => $student->last_name,
                 'user_login' => $student->user_login,
                 'current_grade_average' => $current_grade_average,
                 'id' => intval($student->ID),
-                'gbid' => intval($gbid)
+                'gbid' => intval($gbid),
+                'mid_semester_grade' =>  $grades[0] -> mid_semester_grade,
+                'final_grade' => $grades[0] -> final_grade,
             );
             usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
@@ -310,7 +318,6 @@ class oplb_gradebook_api
             'assign_name' => FILTER_SANITIZE_STRING,
             'assign_visibility' => FILTER_SANITIZE_STRING,
             'assign_weight' => FILTER_SANITIZE_STRING,
-            'gbid' => FILTER_SANITIZE_NUMBER_INT,
             'publish' => FILTER_VALIDATE_BOOLEAN,
             'selected' => FILTER_VALIDATE_BOOLEAN,
             'sorted' => FILTER_SANITIZE_STRING,
@@ -328,6 +335,8 @@ class oplb_gradebook_api
             'first_name' => FILTER_SANITIZE_STRING,
             'last_name' => FILTER_SANITIZE_STRING,
             'id-exists' => FILTER_SANITIZE_STRING,
+            'grade' => FILTER_SANITIZE_STRING,
+            'type' => FILTER_SANITIZE_STRING,
         );
 
         $method = (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) ? $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] : $_SERVER['REQUEST_METHOD'];
@@ -340,6 +349,9 @@ class oplb_gradebook_api
 
             if (!empty($incoming)) {
                 $incoming_params = filter_var_array($incoming, $args);
+                $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
+            } else if (!empty($_POST)) {
+                $incoming_params = filter_var_array($_POST, $args);
                 $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
             }
         }

@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditStudentView', 'views/DeleteStudentView', 'views/CellView', 'views/CellDropdown', 'views/CellCheckmark'],
-        function ($, Backbone, _, StatisticsView, EditStudentView, DeleteStudentView, CellView, CellDropdown, CellCheckmark) {
+define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditStudentView', 'views/DeleteStudentView', 'views/CellView', 'views/CellDropdown', 'views/CellCheckmark', 'models/letterGrades', 'models/User'],
+        function ($, Backbone, _, StatisticsView, EditStudentView, DeleteStudentView, CellView, CellDropdown, CellCheckmark, letterGrades, User) {
             var StudentView = Backbone.View.extend(
                     /** @lends StudentView.prototype */
                             {
@@ -10,6 +10,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     'click .dashicons-menu': 'toggleStudentMenu',
                                     'click li.student-submenu-delete': 'deleteStudent',
                                     'click li.student-submenu-stats': 'studentStatistics',
+                                    'change select.grade-selector.mid': 'editMid',
+                                    'change select.grade-selector.final': 'editFinal'
                                 },
                                 /** @constructs */
                                 initialize: function (options) {
@@ -20,6 +22,90 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     this.student = this.model;
                                     this.listenTo(this.model, 'change', this.render);
                                     this.listenTo(this.gradebook, 'change:assignments', this.render);
+
+                                    Backbone.pubSub.on('editSuccess', this.editSuccess, this);
+
+                                    this.midGrades = new letterGrades([
+                                        {
+                                            label: '--',
+                                            value: '--',
+                                        },
+                                        {
+                                            label: 'P = Passing Work',
+                                            value: 'passing',
+                                        },
+                                        {
+                                            label: 'BL = Borderline',
+                                            value: 'borderline',
+                                        },
+                                        {
+                                            label: 'U = Unsatisfactory',
+                                            value: 'unsatisfactory',
+                                        },
+                                        {
+                                            label: 'SA = Stopped Attending',
+                                            value: 'stopped_attending',
+                                        },
+                                    ]);
+
+                                    this.finalGrades = new letterGrades([
+                                        {
+                                            label: '--',
+                                            value: '--',
+                                        },
+                                        {
+                                            label: 'A',
+                                            value: 'a',
+                                        },
+                                        {
+                                            label: 'A-',
+                                            value: 'a_minus',
+                                        },
+                                        {
+                                            label: 'B+',
+                                            value: 'b_plus',
+                                        },
+                                        {
+                                            label: 'B',
+                                            value: 'b',
+                                        },
+                                        {
+                                            label: 'B-',
+                                            value: 'b_minus',
+                                        },
+                                        {
+                                            label: 'C+',
+                                            value: 'c_plus',
+                                        },
+                                        {
+                                            label: 'C',
+                                            value: 'c',
+                                        },
+                                        {
+                                            label: 'D',
+                                            value: 'd',
+                                        },
+                                        {
+                                            label: 'F',
+                                            value: 'f',
+                                        },
+                                        {
+                                            label: 'WF - withdrew, failing',
+                                            value: 'wf',
+                                        },
+                                        {
+                                            label: 'WN = withdrew, never attended (academic penalty)',
+                                            value: 'wn',
+                                        },
+                                        {
+                                            label: '* WN = administrative withdrawl, never attended',
+                                            value: 'wn_admin',
+                                        },
+                                        {
+                                            label: 'WU = Unofficial Withdrawl',
+                                            value: '',
+                                        }
+                                    ]);
                                 },
                                 render: function (pinned, assignments) {
                                     //give pinned a default
@@ -34,8 +120,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     }
 
                                     var self = this;
+                                    console.log('this in studentView render', this);
                                     var template = _.template($('#student-view-template').html());
-                                    var compiled = template({student: this.model, role: this.role, mobile_styles: mobile_styles});
+                                    var compiled = template({student: this.model, role: this.gradebook.role, mobile_styles: mobile_styles, midGrades: this.midGrades, finalGrades: this.finalGrades});
                                     this.$el.html(compiled);
 
                                     if (pinned === 'pinned' || pinned === 'none') {
@@ -123,6 +210,35 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                 close: function (ev) {
                                     this.clearSubViews();
                                     this.remove();
+                                },
+                                editMid: function(){
+                                    this.edit('mid');
+                                },
+                                editFinal: function(){
+                                    this.edit('final');
+                                },
+                                edit: function (ev) {
+                                    this.$el.attr('contenteditable', 'false');
+
+                                    var targetSelector = '.grade-selector.' + ev;
+
+                                    this.$el.find(targetSelector).attr('disabled', 'disabled');
+                                    var value = this.$el.find(targetSelector).val();
+                                    var type = this.$el.find(targetSelector).data('type');
+                                    var uid = this.$el.find(targetSelector).data('uid');
+                                    var gbid = parseInt(this.course.get('id'));
+
+                                    var toedit = new User();
+                                    toedit.updateStudentGrade(value, type, uid, gbid);
+                                    
+                                },
+                                editSuccess: function(){
+                                    console.log('edit success');
+                                    this.$el.find('.grade-selector').removeAttr('disabled');
+                                },
+                                editError: function(){
+                                    console.log('edit error');
+                                    this.$el.find('.grade-selector').removeAttr('disabled');
                                 }
                             });
                     return StudentView;

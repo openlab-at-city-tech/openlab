@@ -119,10 +119,9 @@ h5 {
 
 .weight-message {
     p {
-        margin: 28px 0 14px;
+        margin: 28px 0 4px;
     }
 }
-
 
 /* Chart stylings */
 
@@ -165,7 +164,6 @@ h5 {
     -o-transition: background-color 200ms ease-in-out;
     transition: background-color 200ms ease-in-out;
 }
-
 
 /*  Gradebook styles */
 
@@ -364,7 +362,6 @@ td {
     display: block;
 }
 
-
 /* typeahead-BS 
 */
 
@@ -427,7 +424,6 @@ span.twitter-typeahead {
     margin: 0;
 }
 
-
 /**pinned table**/
 
 .table-wrapper {
@@ -439,7 +435,7 @@ span.twitter-typeahead {
         position: absolute;
         display: block;
         left: 0;
-        top: 0;
+        top: 10px;
         background: #fff;
         width: 36%;
         border-right: 1px solid #ccc;
@@ -454,6 +450,9 @@ span.twitter-typeahead {
             th {
                 padding: 15px 8px;
             }
+        }
+        .student-grades {
+            display: none;
         }
         #students-header-pinned th,
         #students-pinned td {
@@ -478,6 +477,24 @@ span.twitter-typeahead {
     .scrollable {
         margin-left: 36%;
         overflow: visible !important;
+        .jspContainer {
+            padding-top: 10px;
+        }
+        .student-grades {
+            min-width: 80px;
+            span {
+                width: 50px;
+                max-width: 50px;
+                min-width: 50px;
+                white-space: nowrap;
+                overflow: hidden;
+                display: inline-block;
+                text-overflow: ellipsis;
+            }
+            .grade-selector{
+                max-width: 50px;
+            }
+        }
         th,
         td {
             min-width: 180px;

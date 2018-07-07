@@ -6,6 +6,7 @@ class OPLB_USER
     public function __construct()
     {
         add_action('wp_ajax_oplb_user', array($this, 'oplb_user'));
+        add_action('wp_ajax_oplb_student_grades', array($this, 'oplb_student_grades'));
     }
 
     public function oplb_user()
@@ -78,6 +79,56 @@ class OPLB_USER
                 }
         }
         die();
+    }
+
+    public function oplb_student_grades()
+    {
+        global $wpdb, $oplb_gradebook_api;
+        $wpdb->show_errors();
+
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+
+        $gbid = $params['gbid'];
+        $uid = $params['uid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+
+        $target_column = 'mid_semester_grade';
+        if ($params['type'] === 'final') {
+            $target_column = 'final_grade';
+        }
+
+        $wpdb->update(
+            "{$wpdb->prefix}oplb_gradebook_users",
+            array(
+                $target_column => $params['grade'],
+            ),
+            array(
+                "uid" => $uid,
+                "gbid" => $gbid,
+            ),
+            array(
+                '%s',
+            ),
+            array(
+                '%d',
+                '%d',
+            )
+        );
+
+        wp_send_json('success!');
+
+        wp_die();
     }
 
 }
