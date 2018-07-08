@@ -8,33 +8,43 @@
     </div>
     <div class="row">
         <div class="col-md-12">  
-            <?php
-            global $current_user;
-            $x = $current_user->roles;
-            $y = array_keys(get_option('oplb_gradebook_settings'), true);
-            $z = array_intersect($x, $y);
-            if (count($z)) {
-                ?>    	 
-                <div class="btn-group">    		
-                    <button type="button" id="add-student" class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook') ?></button>
-                    <button type="button" id="add-assignment" class="btn btn-default"><?php esc_html_e('Add Assignment', 'openlab-gradebook') ?></button>
+            <div class="action-buttons-wrapper">
+                <?php
+                global $current_user;
+                $x = $current_user->roles;
+                $y = array_keys(get_option('oplb_gradebook_settings'), true);
+                $z = array_intersect($x, $y);
+                if (count($z)) {
+                    ?>    	 
+                    <div class="btn-arrange">
+                        <div class="btn-group">    		
+                            <button type="button" id="add-student" class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook') ?></button>
+                        </div>
+                    </div>
+                    <div class="btn-arrange">
+                        <div class="btn-group">
+                            <button type="button" id="add-assignment" class="btn btn-default"><?php esc_html_e('Add Assignment', 'openlab-gradebook') ?></button>
+                        </div>
+                    </div>
+                <?php 
+            } ?>
+                <div class="btn-arrange">
+                    <div class="btn-group">
+                        <select name="filter_option" id="filter-assignments-select" class="form-control">
+                            <option value="-1"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
+                            <% 
+                            if( assign_categories){
+                            for (var i in assign_categories){
+                            print('<option value="'+assign_categories[i]+'">'+assign_categories[i]+'</option>');
+                            }
+                            }
+                            %>  											   			      
+                        </select>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" id="filter-assignments" class="btn btn-default"><?php esc_html_e('Filter', 'openlab-gradebook') ?></button>  	    		   	
+                    </div>
                 </div>
-            <?php 
-        } ?>
-            <div class="btn-group">
-                <select name="filter_option" id="filter-assignments-select" class="form-control">
-                    <option value="-1"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
-                    <% 
-                    if( assign_categories){
-                    for (var i in assign_categories){
-                    print('<option value="'+assign_categories[i]+'">'+assign_categories[i]+'</option>');
-                    }
-                    }
-                    %>  											   			      
-                </select>
-            </div>
-            <div class="btn-group">
-                <button type="button" id="filter-assignments" class="btn btn-default"><?php esc_html_e('Filter', 'openlab-gradebook') ?></button>  	    		   	
             </div>
             <div class="weight-message">
                 <p><%= total_weight %></p>

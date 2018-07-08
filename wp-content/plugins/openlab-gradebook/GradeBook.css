@@ -299,6 +299,10 @@ td {
 span.twitter-typeahead {
   width: 100%;
 }
+.action-buttons-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
 .tt-hint {
   display: block;
   width: 100%;
