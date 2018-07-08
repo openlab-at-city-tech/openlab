@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="wrap">
-                <h1><?php esc_html_e('GradeBook', 'openlab-gradebook') ?>: <%= course.get('name')%></h1>
+                <h1><span><?php esc_html_e('GradeBook', 'openlab-gradebook') ?></span>: <%= course.get('name')%></h1>
             </div>
         </div>	
     </div>
