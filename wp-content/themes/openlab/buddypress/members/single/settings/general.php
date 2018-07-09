@@ -49,7 +49,7 @@ do_action('bp_before_member_settings_template');
             <label for="pass1">Change Password</label>
             <input class="form-control" type="password" name="pass1" id="pass1" size="16" value="" class="settings-input small" />
 
-            <label for="pass1">Confirm Change Password</label>
+            <label for="pass2">Confirm Change Password</label>
             <input class="form-control" type="password" name="pass2" id="pass2" size="16" value="" class="settings-input small" />
 
             <p class="description">Leave blank for no change</p>
@@ -66,7 +66,7 @@ do_action('bp_before_member_settings_template');
         <?php if (in_array($account_type, array('Student', 'Alumni'))) : ?>
             <div class="form-group settings-section account-type-section">
                 <label for="account_type">Account Type</label>
-                <select class="form-control" name="account_type">
+                <select class="form-control" name="account_type" id="account_type">
                     <option value="Student" <?php selected('Student', $account_type) ?>>Student</option>
                     <option value="Alumni" <?php selected('Alumni', $account_type) ?>>Alumni</option>
                 </select>
