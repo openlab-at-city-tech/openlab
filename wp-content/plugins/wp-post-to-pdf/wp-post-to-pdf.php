@@ -355,6 +355,14 @@ if (!class_exists(wpptopdf)) {
                 $pdf->Output($filePath, 'FI');
             else
                 $pdf->Output($filePath, 'F');
+
+			// Clean up all TCPDF image files.
+			$cached_files = glob( K_PATH_CACHE . '/*' );
+			foreach ( $cached_files as $cached_file ) {
+				if ( is_file( $cached_file ) ) {
+					@unlink( $cached_file );
+				}
+			}
         }
 
         function add_button($content)
