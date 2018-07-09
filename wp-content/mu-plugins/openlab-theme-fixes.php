@@ -19,6 +19,7 @@ function openlab_load_theme_fixes() {
         case 'themorningafter' :
         case 'wu-wei' :
         case 'twentyseventeen' :
+        case 'twentysixteen':
         case 'twentyfifteen':
         case 'twentytwelve':
         case 'twentyeleven':
