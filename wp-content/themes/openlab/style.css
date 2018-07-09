@@ -7752,8 +7752,8 @@ body .focus {
 }
 body .mol-count,
 body .site-visibility .fa {
-  background: #ff5959;
-  color: #ffffff;
+  background: #ff6666;
+  color: #000000;
   border-radius: 10px;
   display: inline-block;
   font-size: 13px;
