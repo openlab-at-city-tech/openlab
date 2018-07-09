@@ -1609,6 +1609,11 @@ function openlab_get_group_activity_events_feed() {
         return $events_out;
     }
 
+	// Don't show on portfolios.
+	if ( openlab_is_portfolio() ) {
+		return $events_out;
+	}
+
     if (!function_exists('eo_get_events')) {
         return $events_out;
     }
