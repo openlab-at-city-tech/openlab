@@ -1348,11 +1348,6 @@ div.wpcf7 {
 	padding: 0;
 }
 
-div.wpcf7-response-output {
-	margin: 2em 0.5em 1em;
-	padding: 0.2em 1em;
-}
-
 div.wpcf7 .screen-reader-response {
 	position: absolute;
 	overflow: hidden;
@@ -1364,11 +1359,18 @@ div.wpcf7 .screen-reader-response {
 	border: 0;
 }
 
+div.wpcf7-response-output {
+	margin: 2em 0.5em 1em;
+	padding: 0.2em 1em;
+	border: 2px solid #ff0000;
+}
+
 div.wpcf7-mail-sent-ok {
 	border: 2px solid #398f14;
 }
 
-div.wpcf7-mail-sent-ng {
+div.wpcf7-mail-sent-ng,
+div.wpcf7-aborted {
 	border: 2px solid #ff0000;
 }
 
@@ -1376,7 +1378,8 @@ div.wpcf7-spam-blocked {
 	border: 2px solid #ffa500;
 }
 
-div.wpcf7-validation-errors {
+div.wpcf7-validation-errors,
+div.wpcf7-acceptance-missing {
 	border: 2px solid #f7e700;
 }
 
@@ -1644,6 +1647,8 @@ CSS for the gallery widget
 
 /*--------------------------------------------------------------
 Hello, this is the BuddyPress Legacy stylesheet.
+
+@version 3.0.0
 
 ----------------------------------------------------------------
 >>> TABLE OF CONTENTS:
@@ -2428,6 +2433,10 @@ body.activity-permalink #buddypress div.activity-comments div.acomment-content {
 	font-weight: 700;
 	margin: 15px 0 5px;
 	width: auto;
+}
+
+#buddypress label.xprofile-field-label {
+	display: inline;
 }
 
 #buddypress .standard-form p label,
