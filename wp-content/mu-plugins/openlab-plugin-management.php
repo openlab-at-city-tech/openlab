@@ -20,6 +20,7 @@ function openlab_hide_plugins( $plugins ) {
 		'cac-non-cuny-signup/loader.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'embed-google-map/embed_google_map.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
