@@ -265,7 +265,7 @@
                             text-decoration: underline;
                             &:hover,
                                 &:focus {
-                                color: @darkTeal;
+                                text-decoration: none;
                             }
                             &.btn {
                                 text-decoration: none;
@@ -740,8 +740,15 @@
     .see-all {
         font-size: 12px;
         text-decoration: underline;
+        &:hover {
+            text-decoration: none;
+        }
         a {
             text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 

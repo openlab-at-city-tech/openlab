@@ -7261,7 +7261,7 @@ button.oplb-bs .close {
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:hover,
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a:focus {
-  color: #3ba49b;
+  text-decoration: none;
 }
 .oplb-bs #wpadminbar #wp-toolbar .ab-sub-wrapper .ab-submenu .nav-content-item a.btn {
   text-decoration: none;
@@ -7712,10 +7712,12 @@ button.oplb-bs .close {
 }
 .oplb-bs .see-all {
   font-size: 12px;
-  text-decoration: underline;
 }
 .oplb-bs .see-all a {
   text-decoration: underline;
+}
+.oplb-bs .see-all a:hover {
+  text-decoration: none;
 }
 .oplb-bs#openlab-footer {
   position: absolute;
