@@ -7056,6 +7056,9 @@ button.oplb-bs .close {
   margin: 0 auto;
   max-width: 1140px;
 }
+.oplb-bs #wpadminbar #wp-toolbar .btn-default:hover {
+  color: #333333;
+}
 .oplb-bs #wpadminbar #wp-toolbar #wp-admin-bar-root-default .ab-icon.dashicon-icon {
   font: 400 28px/1 dashicons;
   height: auto;
@@ -7712,6 +7715,10 @@ button.oplb-bs .close {
 }
 .oplb-bs .see-all {
   font-size: 12px;
+  text-decoration: underline;
+}
+.oplb-bs .see-all:hover {
+  text-decoration: none;
 }
 .oplb-bs .see-all a {
   text-decoration: underline;
