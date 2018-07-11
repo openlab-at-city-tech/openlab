@@ -8109,6 +8109,7 @@ body form .checkbox-list-container {
 }
 .select2-container--default.select2-container .select2-results__option--highlighted[aria-selected] {
   background: #49cabe;
+  color: #333333;
 }
 /**home page**/
 .home-page .btn,
