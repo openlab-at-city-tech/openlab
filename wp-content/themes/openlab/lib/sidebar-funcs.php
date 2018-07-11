@@ -273,14 +273,14 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
 
             <ul class="sidebar-sublinks portfolio-sublinks inline-element-list">
 
-                <li class="portfolio-profile-link bold">
+                <li class="portfolio-site-link bold">
                     <a class="bold no-deco" href="<?php openlab_user_portfolio_url() ?>">
                         <?php echo (is_user_logged_in() && openlab_is_my_profile() ? 'My ' : 'Visit '); ?>
                         <?php openlab_portfolio_label('user_id=' . $displayed_user_id . '&case=upper'); ?> Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>
                     </a>
                 </li>
 
-                <li class="portfolio-site-link">
+                <li class="portfolio-dashboard-link">
                     <a href="<?php openlab_user_portfolio_profile_url() ?>">Profile</a>
                     <?php if (openlab_is_my_profile() && openlab_user_portfolio_site_is_local()) : ?>
                         | <a class="portfolio-dashboard-link" href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>

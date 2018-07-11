@@ -8716,6 +8716,22 @@ body form .checkbox-list-container {
     width: 100%;
   }
 }
+.portfolio-site-link {
+  font-size: 1.1em;
+}
+.portfolio-site-link a {
+  display: block;
+}
+.portfolio-site-link:hover > a,
+.portfolio-site-link:focus > a {
+  background: #63dfd2;
+  color: #333333;
+  text-decoration: none;
+}
+.portfolio-site-link:hover > a .cyan-circle,
+.portfolio-site-link:focus > a .cyan-circle {
+  color: #63dfd2;
+}
 .mobile-group-site-links {
   margin-top: 30px;
 }
@@ -8846,8 +8862,26 @@ body form .checkbox-list-container {
 .sidebar .sidebar-block ul.sidebar-sublinks li {
   margin-bottom: 10px;
 }
+.sidebar .sidebar-block ul.sidebar-sublinks li.portfolio-site-link {
+  margin-bottom: 6px;
+}
 .sidebar .sidebar-block ul.sidebar-sublinks li:last-child {
   margin-bottom: 0;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks {
+  padding: 10px 0 18px;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks a {
+  padding: 7px 5%;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks .portfolio-dashboard-link {
+  margin-left: 5%;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks .portfolio-dashboard-link a {
+  padding: 7px 0;
+}
+.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks .portfolio-dashboard-link a:last-child {
+  padding-left: 0;
 }
 .sidebar .sidebar-block ul.sidebar-sublinks.group-event-activity li {
   margin-bottom: 14px;

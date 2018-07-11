@@ -1743,6 +1743,24 @@ body form{
         }
     }
 }
+.portfolio-site-link {
+  font-size: 1.1em;
+  a {
+    display: block;
+  }
+
+  &:hover, &:focus{
+    > a{
+      background: @cyan;
+      color: @80gray;
+      text-decoration: none;
+
+      .cyan-circle{
+        color: @cyan;
+      }
+    }
+  }
+}
 .mobile-group-site-links {
   margin-top: 30px;
   .portfolio-site-link {
@@ -1885,10 +1903,30 @@ body form{
         ul.sidebar-sublinks{
             padding: 6% 5%;
             li{
-                margin-bottom: 10px;
-                &:last-child{
-                    margin-bottom: 0;
+              margin-bottom: 10px;
+              &.portfolio-site-link {
+                margin-bottom: 6px;
+              }
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+            &.portfolio-sublinks {
+              padding: 10px 0 18px;
+              a {
+                padding: 7px 5%;
+              }
+
+              .portfolio-dashboard-link {
+                margin-left: 5%;
+              }
+              .portfolio-dashboard-link a {
+                padding: 7px 0;
+
+                &:last-child {
+                  padding-left: 0;
                 }
+              }
             }
             &.group-event-activity{
                 li{
