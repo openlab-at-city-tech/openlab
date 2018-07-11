@@ -30,7 +30,10 @@
     if ('portfolio' == $group_type) {
         $group_label = openlab_get_portfolio_label('case=upper&user_id=' . bp_loggedin_user_id());
         $page_title = 'Create ' . openlab_get_portfolio_label('case=upper&leading_a=1&user_id=' . bp_loggedin_user_id());
-    } else {
+    } elseif ( $group_type_supports_cloning ) {
+		$group_label = $group_type;
+		$page_title = 'Create/Clone a ' . ucwords( $group_type );
+	} else {
         $group_label = $group_type;
         $page_title = 'Create a ' . ucwords($group_type);
     }
@@ -40,7 +43,7 @@
         $group_id_to_clone = intval( $_GET['clone'] );
     }
     ?>
-    <h1 class="entry-title mol-title"><?php bp_loggedin_user_fullname() ?>'s Profile</h1>
+    <h1 class="entry-title mol-title"><?php echo esc_html( $page_title ); ?></h1>
     <?php
     // get account type to see if they're faculty
     $faculty = xprofile_get_field_data('Account Type', get_current_user_id());

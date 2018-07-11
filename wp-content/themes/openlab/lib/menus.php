@@ -442,7 +442,7 @@ function openlab_create_group_menu($grouptype) {
 
     switch ($current_step) {
         case 'group-details':
-            $step_name = 'Step One: Profile';
+            $step_name = 'Step One: Create Profile & Site';
             break;
         case 'group-settings':
             $step_name = 'Step Two: Privacy Settings';
@@ -455,15 +455,8 @@ function openlab_create_group_menu($grouptype) {
             break;
     }
 
-    if ( openlab_group_type_can_be_cloned( $grouptype ) ) {
-        $title = sprintf( 'Create/Clone a %s: ', ucfirst( $grouptype ) );
-    } else {
-        $title = 'Create a ' . ucfirst($grouptype) . ': ';
-    }
-
     $menu_mup = <<<HTML
             <div class="submenu create-group-submenu">
-                <div class="submenu-text pull-left bold"><h2>{$title}</h2></div>
                 <ul class="nav nav-inline">
                     <li class="submenu-item item-create-clone-a-course current-menu-item bold">{$step_name}</li>
                 </ul>
