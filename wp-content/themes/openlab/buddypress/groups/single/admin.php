@@ -8,7 +8,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages  ?>
 
-<div class="row"><div class="col-md-24">
+<div class="row">
+    <div class="col-md-24">
         <div class="submenu">
 
             <?php if ($bp->action_variables[0] == 'membership-requests' || $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications'): ?>
@@ -27,7 +28,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php endif; ?>
 
         </div><!-- .item-list-tabs -->
-    </div></div>
+    </div>
+</div>
 
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
 
