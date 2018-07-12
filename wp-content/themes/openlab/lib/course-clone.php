@@ -130,6 +130,7 @@ add_action( 'wp_ajax_openlab_group_clone_fetch_details', 'openlab_group_clone_fe
 function openlab_group_clone_details( $group_id ) {
 	$retval = array(
 		'group_id'               => $group_id,
+		'enable_sharing'         => false,
 		'name'                   => '',
 		'description'            => '',
 		'schools'                => array(),
@@ -145,6 +146,8 @@ function openlab_group_clone_details( $group_id ) {
 
 	if ( $group_id ) {
 		$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+		$retval['enable_sharing'] = openlab_group_can_be_cloned( $group_id );
 
 		$retval['name'] = $group->name;
 		$retval['description'] = $group->description;

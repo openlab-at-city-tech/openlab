@@ -226,6 +226,11 @@ jQuery(document).ready(function($){
 			success: function( response ) {
 				var r = JSON.parse( response );
 
+				// Sharing
+				if ( r.enable_sharing ) {
+					$('#openlab-enable-sharing').prop('checked', true);
+				}
+
 				// Description
 				$('#group-desc').val(r.description);
 
