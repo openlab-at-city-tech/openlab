@@ -58,6 +58,28 @@ function openlab_get_group_clone_history_data( $group_id ) {
 	return $source_datas;
 }
 
+/**
+ * Determines whether a group can be cloned.
+ *
+ * @param int $group_id ID of the group.
+ */
+function openlab_group_can_be_cloned( $group_id ) {
+	$group = groups_get_group( $group_id );
+	if ( $group->id ) {
+		$group_type = openlab_get_group_type( $group_id );
+	} else {
+		$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'club';
+	}
+
+	if ( ! openlab_group_type_can_be_cloned( $group_type ) ) {
+		return false;
+	}
+
+	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
+
+	return ! empty( $sharing_enabled_for_group );
+}
+
 /** WIDGETS ******************************************************************/
 
 /**
@@ -65,6 +87,7 @@ function openlab_get_group_clone_history_data( $group_id ) {
  */
 add_action( 'widgets_init', function() {
 	register_widget( 'OpenLab_Clone_Credits_Widget' );
+	register_widget( 'OpenLab_Shareable_Content_Widget' );
 }, 20 );
 
 /**
@@ -99,6 +122,34 @@ add_action( 'bp_init', function() {
 			}
 		}
 	}
+
+	// Shareable Content widget.
+	$show_shareable_content_widget = true;
+	if ( ! openlab_group_can_be_cloned( $group_id ) ) {
+		$show_shareable_content_widget = false;
+	} else {
+		$group_type = openlab_get_group_type( $group_id );
+
+		// Courses only for the moment.
+		if ( 'course' !== $group_type ) {
+			$show_shareable_content_widget = false;
+		}
+	}
+
+	if ( $show_shareable_content_widget ) {
+		$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
+			$show_shareable_content_widget = false;
+		}
+	}
+
+	if ( ! $show_shareable_content_widget ) {
+		foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
+			if ( 0 === strpos( $widget_id, 'openlab_shareable_content' ) ) {
+				unset( $GLOBALS['wp_registered_widgets'][ $widget_id ] );
+			}
+		}
+	}
 }, 1000 );
 
 /**
@@ -127,6 +178,22 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
 		default :
 			$sidebar = reset( array_keys( $GLOBALS['wp_registered_sidebars'] ) );
 		break;
+	}
+
+	// No doubles.
+	$sidebars = get_option( 'sidebars_widgets', array() );
+	$already  = false;
+	if ( ! empty( $sidebars[ $sidebar ] ) ) {
+		foreach ( $sidebars[ $sidebar ] as $widget_id ) {
+			if ( 0 === strpos( $widget_id, $widget ) ) {
+				$already = true;
+				break;
+			}
+		}
+	}
+
+	if ( $already ) {
+		return;
 	}
 
 	if ( ! class_exists( 'CBox_Widget_Setter' ) ) {
@@ -211,3 +278,77 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	}
 }
 
+class OpenLab_Shareable_Content_Widget extends WP_Widget {
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct(
+			'openlab_shareable_content_widget',
+			'Shareable Content',
+			array(
+				'description' => ''
+			)
+		);
+	}
+
+	/**
+	 * Outputs the widget content.
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 */
+	public function widget( $args, $instance ) {
+		// Don't show if the user can't clone.
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+		$group_type_label = openlab_get_group_type_label(
+			array(
+				'group_id' => $group_id,
+				'case'     => 'upper',
+			)
+		);
+
+		$clone_link = add_query_arg(
+			array(
+				'clone' => $group_id,
+				'type'  => $group_type,
+			),
+			bp_get_groups_directory_permalink() . 'create/step/group-details/'
+		);
+
+		echo $args['before_widget'];
+
+		echo $args['before_title'] . 'Shareable Content' . $args['after_title'];
+		echo sprintf( '<p><a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a></p>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
+		echo $args['after_widget'];
+	}
+
+	/**
+	 * Admin form.
+	 */
+	public function form( $instance ) {
+		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$group_type = openlab_get_group_type_label(
+			array(
+				'group_id' => $group_id,
+				'case'     => 'upper',
+			)
+		);
+
+		?>
+		<p>Provides a link for others to clone your <?php echo $group_type; ?>.</p>
+		<?php
+	}
+
+	/**
+	 * Process form options.
+	 *
+	 * @param array $new_instance
+	 * @param array $old_instance
+	 * @return array
+	 */
+	public function update( $new_instance, $old_instance ) {
+		return $new_instance;
+	}
+}

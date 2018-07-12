@@ -248,6 +248,13 @@ function openlab_sharing_settings_save( $group ) {
 
 	if ( $enable_sharing ) {
 		groups_update_groupmeta( $group->id, 'enable_sharing', 1 );
+
+		$site_id = openlab_get_site_id_by_group_id( $group->id );
+		if ( $site_id ) {
+			switch_to_blog( $site_id );
+			openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
+			restore_current_blog();
+		}
 	} else {
 		groups_delete_groupmeta( $group->id, 'enable_sharing' );
 	}
@@ -296,28 +303,6 @@ function openlab_add_clone_button_to_profile() {
 	<?php
 }
 add_action( 'bp_group_header_actions', 'openlab_add_clone_button_to_profile', 50 );
-
-/**
- * Determines whether a group can be cloned.
- *
- * @param int $group_id ID of the group.
- */
-function openlab_group_can_be_cloned( $group_id ) {
-	$group = groups_get_group( $group_id );
-	if ( $group->id ) {
-		$group_type = openlab_get_group_type( $group_id );
-	} else {
-		$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'club';
-	}
-
-	if ( ! openlab_group_type_can_be_cloned( $group_type ) ) {
-		return false;
-	}
-
-	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
-
-	return ! empty( $sharing_enabled_for_group );
-}
 
 /** CLASSES ******************************************************************/
 
@@ -978,4 +963,3 @@ class Openlab_Clone_Course_Site {
 	    return true;
 	}
 }
-
