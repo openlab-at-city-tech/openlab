@@ -7628,6 +7628,9 @@ body .btn-margin.btn-margin-top {
 body .btn-default:hover {
   color: #333333;
 }
+body .btn-default:hover.btn-primary {
+  color: #ffffff;
+}
 body .btn-disabled {
   opacity: 0.65;
   filter: alpha(opacity=65);
