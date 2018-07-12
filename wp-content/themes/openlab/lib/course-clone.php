@@ -259,6 +259,16 @@ function openlab_add_clone_button_to_profile() {
 
 	$group_type = openlab_get_group_type( $group_id );
 
+	// Courses only for the moment.
+	if ( 'course' !== $group_type ) {
+		return;
+	}
+
+	$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+	if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
+		return;
+	}
+
 	$group_type_label = openlab_get_group_type_label(
 		array(
 			'group_id' => $group_id,

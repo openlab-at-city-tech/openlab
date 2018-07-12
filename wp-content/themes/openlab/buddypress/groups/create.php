@@ -87,26 +87,33 @@
                                         Create a New <?php echo ucfirst( $group_type ); ?></label>
                                 </li>
 
-                                <?php
-                                /*
-								 * This is to see if the user has any groups of the appropriate type to clone.
-								 * If not, the option is disabled.
-								 */
-                                $filters['wds_group_type'] = $group_type;
-                                $group_args = array(
-                                    'per_page' => 12,
-                                    'show_hidden' => true,
-                                    'user_id' => $bp->loggedin_user->id
-                                );
+                                <?php $user_groups = openlab_get_groups_of_type_owned_by_user( get_current_user_id(), $group_type ) ?>
 
-                                $course_num = openlab_group_post_count($filters, $group_args);
+                                <?php /* "Sharable" groups should be added to list if not present */ ?>
+                                <?php
+                                if ( ! empty( $_GET['clone'] ) ) {
+                                    $group_id = intval( $_GET['clone'] );
+                                    if ( openlab_group_can_be_cloned( $group_id ) ) {
+                                        $in_list = false;
+                                        foreach ( $user_groups['groups'] as $_g ) {
+                                            if ( $group_id === $_g->id ) {
+                                                $in_list = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if ( ! $in_list ) {
+                                            $user_groups['groups'][] = groups_get_group( $group_id );
+                                            $user_groups['total']++;
+                                        }
+                                    }
+                                }
                                 ?>
 
                                 <li class="disable-if-js form-group radio form-inline">
-                                    <label for="create-or-clone-clone" <?php echo ($course_num < 1 ? 'class="disabled-opt"' : ''); ?>><input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked((bool) $group_id_to_clone) ?> <?php echo ($course_num < 1 ? 'disabled' : ''); ?> />
+                                    <label for="create-or-clone-clone" <?php echo ( empty( $user_groups['groups'] ) ? 'class="disabled-opt"' : '' ); ?>><input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked((bool) $group_id_to_clone) ?> <?php disabled( empty( $user_groups['groups'] ) ); ?> />
                                         Clone an Existing <?php echo ucfirst( $group_type ); ?></label>
 
-                                    <?php $user_groups = openlab_get_groups_of_type_owned_by_user( get_current_user_id(), $group_type ) ?>
 
                                     <label class="sr-only" for="group-to-clone">Choose a <?php echo ucfirst( $group_type ); ?></label>
                                     <select class="form-control" id="group-to-clone" name="group-to-clone">
