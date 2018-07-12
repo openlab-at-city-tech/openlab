@@ -245,6 +245,39 @@ function openlab_sharing_settings_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_sharing_settings_save' );
 
 /**
+ * Adds 'Clone this Course' button to group profile.
+ */
+function openlab_add_clone_button_to_profile() {
+	$group_id = bp_get_current_group_id();
+
+	if ( ! openlab_group_can_be_cloned( $group_id ) ) {
+		return;
+	}
+
+	$group_type = openlab_get_group_type( $group_id );
+
+	$group_type_label = openlab_get_group_type_label(
+		array(
+			'group_id' => $group_id,
+			'case'     => 'upper',
+		)
+	);
+
+	$clone_link = add_query_arg(
+		array(
+			'clone' => $group_id,
+			'type'  => $group_type,
+		),
+		bp_get_groups_directory_permalink() . 'create/step/group-details/'
+	);
+
+	?>
+	<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo esc_attr( $clone_link ); ?>"><i class="fa fa-clone" aria-hidden="true"></i> Clone this <?php echo esc_html( $group_type_label ); ?></a>
+	<?php
+}
+add_action( 'bp_group_header_actions', 'openlab_add_clone_button_to_profile', 50 );
+
+/**
  * Determines whether a group can be cloned.
  *
  * @param int $group_id ID of the group.
