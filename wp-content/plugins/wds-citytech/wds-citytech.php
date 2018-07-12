@@ -12,6 +12,7 @@ include 'wds-register.php';
 include 'wds-docs.php';
 include 'includes/oembed.php';
 include 'includes/library-widget.php';
+include 'includes/clone.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades

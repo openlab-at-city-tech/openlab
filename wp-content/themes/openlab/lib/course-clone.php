@@ -319,60 +319,6 @@ function openlab_group_can_be_cloned( $group_id ) {
 	return ! empty( $sharing_enabled_for_group );
 }
 
-/**
- * Get the clone history of a group.
- *
- * Returns an array of group IDs, ordered from oldest to newest.
- *
- * @param int $group_id ID of the group.
- * @return array
- */
-function openlab_get_group_clone_history( $group_id ) {
-	$history = groups_get_groupmeta( $group_id, 'clone_history', true );
-	if ( empty( $history ) ) {
-		$history = array();
-
-		// Legacy.
-		$clone_source_group = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-		if ( $clone_source_group ) {
-			$history[] = $clone_source_group;
-		}
-	}
-
-	return array_map( 'intval', $history );
-}
-
-/**
- * Get more complete data about the clone history of a group.
- *
- * Returns an array of arrays, each of which has information about group names,
- * URLs, and creators.
- *
- * @param int $group_id ID of the group.
- * @return array
- */
-function openlab_get_group_clone_history_data( $group_id ) {
-	$source_ids = openlab_get_group_clone_history( $group_id );
-
-	$source_datas = array();
-	foreach ( $source_ids as $source_id ) {
-		$source_group = groups_get_group( $source_id );
-
-		$source_data = array(
-			'group_id'           => $source_id,
-			'group_url'          => bp_get_group_permalink( $source_group ),
-			'group_name'         => $source_group->name,
-			'group_creator_id'   => $source_group->creator_id,
-			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
-			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
-		);
-
-		$source_datas[] = $source_data;
-	}
-
-	return $source_datas;
-}
-
 /** CLASSES ******************************************************************/
 
 class Openlab_Clone_Course_Group {
@@ -856,6 +802,8 @@ class Openlab_Clone_Course_Site {
                 // Just in case
                 create_initial_taxonomies();
                 flush_rewrite_rules();
+
+		openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
 
 		restore_current_blog();
 	}
