@@ -614,7 +614,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
-    $clone_history = openlab_get_group_clone_history_data( $group_id );
+    $clone_history  = openlab_get_group_clone_history_data( $group_id );
+	$credits_groups = array_map( function( $clone_group ) {
+		return sprintf(
+			'<a href="%s">%s</a>',
+			esc_attr( $clone_group['group_url'] ),
+			esc_html( $clone_group['group_name'] )
+		);
+	}, $clone_history );
+
     ?>
 
 	<div class="wrapper-block visible-xs sidebar mobile-group-site-links">
@@ -690,6 +698,15 @@ function cuny_group_single() {
                                 <div class="bold col-sm-7">Course Description</div>
                                 <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
                             </div>
+
+                            <?php if ( $clone_history ) : ?>
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">Credits</div>
+                                    <div class="col-sm-17 row-content">
+                                        <?php echo implode( ', ', $credits_groups ); ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                     </div>
