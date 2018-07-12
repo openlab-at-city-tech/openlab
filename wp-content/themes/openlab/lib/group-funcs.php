@@ -613,6 +613,8 @@ function cuny_group_single() {
     $group_type = openlab_get_group_type(bp_get_current_group_id());
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
+
+    $clone_history = openlab_get_group_clone_history_data( $group_id );
     ?>
 
 	<div class="wrapper-block visible-xs sidebar mobile-group-site-links">
@@ -639,7 +641,7 @@ function cuny_group_single() {
                     </div>
                 <?php endif; ?>
                 <?php openlab_render_message(); ?>
-        </div><!-- #<?php echo $group_type; ?>-header-avatar -->
+            </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
             <div id="<?php echo $group_type; ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo $group_id; ?>">
 
@@ -703,9 +705,9 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $wds_school = openlab_generate_school_name($group_id);
-                            $wds_departments = openlab_generate_department_name($group_id);
-			    $group_contacts = groups_get_groupmeta( $group_id, 'group_contact', false );
+                            $wds_school      = openlab_generate_school_name( $group_id );
+                            $wds_departments = openlab_generate_department_name( $group_id );
+                            $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
                             <?php if ($wds_school && !empty($wds_school)): ?>
@@ -741,18 +743,18 @@ function cuny_group_single() {
                             </div>
 
                             <?php if ( $group_contacts ): ?>
-				<div class="table-row row">
-					<?php /* This won't work at all for l10n */ ?>
-					<?php
-					if ( 1 === count( $group_contacts ) ) {
-						$gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
-					} else {
-						$gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
-					}
-					?>
-					<div class="bold col-sm-7"><?php echo $gc_label ?></div>
-					<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
-				</div>
+                                <div class="table-row row">
+                                    <?php /* This won't work at all for l10n */ ?>
+                                    <?php
+                                    if ( 1 === count( $group_contacts ) ) {
+                                        $gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
+                                    } else {
+                                        $gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
+                                    }
+                                    ?>
+                                    <div class="bold col-sm-7"><?php echo $gc_label ?></div>
+                                    <div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
+                                </div>
                             <?php endif; ?>
 
                             <?php if ($group_type == "portfolio"): ?>
