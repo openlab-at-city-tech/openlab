@@ -125,6 +125,10 @@
 
                     <?php endif; ?>
 
+                    <?php if ( $group_type_supports_cloning ) : ?>
+                        <?php openlab_group_sharing_settings_markup( 0 ); ?>
+                    <?php endif; ?>
+
                     <?php /* Name/Description */ ?>
 
                     <div class="panel panel-default">

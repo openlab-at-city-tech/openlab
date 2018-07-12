@@ -186,6 +186,86 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
 	$c->go();
 }
 
+/** CREATE / EDIT *************************************************************/
+
+/**
+ * Outputs the markup for the Sharing Settings panel.
+ *
+ * @param int $group_id ID of the group.
+ */
+function openlab_group_sharing_settings_markup( $group_id ) {
+	$sharing_enabled = openlab_group_can_be_cloned( $group_id );
+
+	?>
+
+	<div class="panel panel-default sharing-settings-panel">
+		<div class="panel-heading semibold">Sharing Settings</div>
+		<div class="panel-body">
+			<p>This setting enables other faculty to reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
+
+			<div class="checkbox">
+				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ) ?> /> Enable sharing</label>
+			</div>
+		</div>
+
+		<?php wp_nonce_field( 'openlab_sharing_settings', 'openlab_sharing_settings_nonce', false ) ?>
+	</div>
+
+	<?php
+}
+
+/**
+ * Processes Sharing Settings on create/edit.
+ *
+ * @param BP_Groups_Group $group Group object.
+ */
+function openlab_sharing_settings_save( $group ) {
+	$nonce = '';
+	if ( isset( $_POST['openlab_sharing_settings_nonce'] ) ) {
+		$nonce = urldecode( $_POST['openlab_sharing_settings_nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'openlab_sharing_settings' ) ) {
+		return;
+	}
+
+	// Admins only.
+	if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
+	$enable_sharing = ! empty( $_POST['openlab-enable-sharing'] );
+
+	if ( $enable_sharing ) {
+		groups_update_groupmeta( $group->id, 'enable_sharing', 1 );
+	} else {
+		groups_delete_groupmeta( $group->id, 'enable_sharing' );
+	}
+}
+add_action( 'groups_group_after_save', 'openlab_sharing_settings_save' );
+
+/**
+ * Determines whether a group can be cloned.
+ *
+ * @param int $group_id ID of the group.
+ */
+function openlab_group_can_be_cloned( $group_id ) {
+	$group = groups_get_group( $group_id );
+	if ( $group->id ) {
+		$group_type = openlab_get_group_type( $group_id );
+	} else {
+		$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'club';
+	}
+
+	if ( ! openlab_group_type_can_be_cloned( $group_type ) ) {
+		return false;
+	}
+
+	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
+
+	return ! empty( $sharing_enabled_for_group );
+}
+
 /** CLASSES ******************************************************************/
 
 class Openlab_Clone_Course_Group {
