@@ -10,6 +10,8 @@ class Template {
 		add_action( 'bp_group_directory_after_avatar', array( __CLASS__, 'avatar_links' ) );
 
 		add_filter( 'bp_before_has_groups_parse_args', array( __CLASS__, 'filter_group_args' ) );
+
+		add_action( 'groups_group_after_save', array( __CLASS__, 'save_group_settings' ) );
 	}
 
 	public static function register_scripts() {
@@ -70,5 +72,89 @@ class Template {
 		}
 
 		return $args;
+	}
+
+	public static function group_admin_markup() {
+		$group_id        = bp_get_current_group_id();
+		$badge_group     = new Group( $group_id );
+		$group_badges    = $badge_group->get_badges();
+		$group_badge_ids = array_map( function( $group_badge ) {
+			return $group_badge->get_id();
+		}, $group_badges );
+
+		$all_badges = Badge::get();
+
+		wp_enqueue_style( 'openlab-badges' );
+		wp_enqueue_script( 'openlab-badges' );
+
+		?>
+		<?php if ( $all_badges ) : ?>
+			<ul class="badge-selector">
+			<?php foreach ( $all_badges as $badge ) : ?>
+				<li>
+					<input type="checkbox" value="<?php echo esc_attr( $badge->get_id() ); ?>" name="badge-selector[]" id="badge-selector-<?php echo esc_attr( $badge->get_slug() ); ?>" <?php checked( in_array( $badge->get_id(), $group_badge_ids, true ) ) ?> />
+
+					<?php echo $badge->get_avatar_badge_html( $group_id ); ?>
+					<label for="badge-selector-<?php echo esc_attr( $badge->get_slug() ); ?>">
+						<?php echo esc_html( $badge->get_name() ); ?>
+					</label>
+				</li>
+			<?php endforeach; ?>
+			</ul>
+
+			<?php wp_nonce_field( 'openlab_badges_group_settings', 'openlab-badges-group-settings-nonce', false ); ?>
+
+		<?php else : ?>
+			<p><?php esc_html_e( 'You have not created any badges yet.', 'openlab-badges' ); ?></p>
+		<?php endif;
+	}
+
+	/**
+	 * Catch group settings save.
+	 *
+	 * @param \BP_Groups_Group $group Group object.
+	 */
+	public static function save_group_settings( \BP_Groups_Group $group ) {
+		static $run;
+
+		// Prevent dupes.
+		if ( $run ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['openlab-badges-group-settings-nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['openlab-badges-group-settings-nonce'], 'openlab_badges_group_settings' ) ) {
+			return;
+		}
+
+		if ( empty( $_POST['badge-selector'] ) ) {
+			$badge_ids = array();
+		} else {
+			$badge_ids = array_map( 'intval', $_POST['badge-selector'] );
+		}
+
+		$badge_group     = new Group( $group->id );
+		$group_badges    = $badge_group->get_badges();
+		$group_badge_ids = array_map( function( $group_badge ) {
+			return $group_badge->get_id();
+		}, $group_badges );
+
+		$to_grant  = array_diff( $badge_ids, $group_badge_ids );
+		$to_revoke = array_diff( $group_badge_ids, $badge_ids );
+
+		foreach ( $to_grant as $to_grant_id ) {
+			$badge = new Badge( $to_grant_id );
+			$badge_group->grant( $badge );
+		}
+
+		foreach ( $to_revoke as $to_revoke_id ) {
+			$badge = new Badge( $to_revoke_id );
+			$badge_group->revoke( $badge );
+		}
+
+		$run = true;
 	}
 }

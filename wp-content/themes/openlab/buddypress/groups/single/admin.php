@@ -87,6 +87,15 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php do_action('template_notices') ?>
 
+            <?php if ( current_user_can( 'grant_badges' ) && class_exists( '\OpenLab\Badges\Template' ) ) : ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Badges</div>
+                    <div class="panel-body">
+                        <?php \OpenLab\Badges\Template::group_admin_markup(); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <?php if ( openlab_group_type_can_be_cloned( $group_type ) ) : ?>
                 <?php openlab_group_sharing_settings_markup( bp_get_current_group_id() ); ?>
             <?php endif; ?>

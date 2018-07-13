@@ -115,3 +115,14 @@ ul.badge-links li:last-child {
 	border-width: 14px;
 	margin-left: -14px;
 }
+
+/* Group admin */
+.badge-selector .avatar-badge {
+	display: inline-block;
+}
+.badge-selector .badge-image {
+	width: 50px;
+}
+.badge-selector > li {
+	margin-bottom: 1em;
+}
