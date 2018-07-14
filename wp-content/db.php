@@ -360,7 +360,7 @@ class SharDB extends wpdb {
 					$try_count = 0;
 					while ( $this->dbhs[$dbhname] === false ) {
 						$try_count++;
-						$this->dbhs[$dbhname] = $connect_function( "$host:$port", $server['user'], $server['password'] );
+						$this->dbhs[$dbhname] = $connect_function( "$host", $server['user'], $server['password'] );
 
 						if ( $try_count == 4 ) {
 							break;
