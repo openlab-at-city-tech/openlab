@@ -62,6 +62,10 @@ class Badge implements Grantable {
 		update_term_meta( $term_id, 'link', $this->get_link() );
 	}
 
+	public function delete() {
+		return wp_delete_term( $this->get_id(), 'openlab_badge' );
+	}
+
 	public function set_id( $id ) {
 		$this->data['id'] = (int) $id;
 	}
@@ -120,6 +124,34 @@ class Badge implements Grantable {
 		return $html;
 	}
 
+	public function edit_html() {
+		$slug = $this->get_slug();
+		$name = $this->get_name();
+
+		$id = $this->get_id();
+		if ( ! $id ) {
+			$id   = '_new';
+			$slug = '_new';
+		}
+
+		?>
+		<label>
+			<span class="badge-field-label"><?php echo esc_html( 'Name', 'openlab-badges' ); ?></span>
+			<input name="badges[<?php echo esc_attr( $id ); ?>][name]" id="badge-<?php echo esc_attr( $slug ); ?>-name" value="<?php echo esc_attr( $name ); ?>" />
+		</label>
+
+		<label>
+			<span class="badge-field-label"><?php echo esc_html( 'Image URL', 'openlab-badges' ); ?></span>
+			<input name="badges[<?php echo esc_attr( $id ); ?>][image]" id="badge-<?php echo esc_attr( $slug ); ?>-name" value="<?php echo esc_attr( $this->get_image() ); ?>" />
+		</label>
+
+		<label>
+			<span class="badge-field-label"><?php echo esc_html( 'Link', 'openlab-badges' ); ?></span>
+			<input name="badges[<?php echo esc_attr( $id ); ?>][link]" id="badge-<?php echo esc_attr( $slug ); ?>-name" value="<?php echo esc_attr( $this->get_link() ); ?>" />
+		</label>
+		<?php
+	}
+
 	public static function get( $args = array() ) {
 		$r = array_merge( array(
 			'hide_empty' => false,
@@ -132,6 +164,15 @@ class Badge implements Grantable {
 			'orderby'    => $r['orderby'],
 			'order'      => $r['order'],
 		) );
+
+		// Override crummy filters.
+		usort( $terms, function( $a, $b ) {
+			if ( $a->name === $b->name ) {
+				return $a->term_id > $b->term_id;
+			}
+
+			return strnatcasecmp( $a->name, $b->name );
+		} );
 
 		$badges = array_map( function( $term ) {
 			return new self( $term->term_id );

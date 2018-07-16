@@ -5,7 +5,10 @@ namespace OpenLab\Badges;
 class App {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_taxonomy' ) );
+		add_action( 'map_meta_cap', array( __CLASS__, 'map_meta_cap' ), 10, 4 );
+
 		Template::init();
+		Admin::init();
 	}
 
 	public static function register_taxonomy() {
@@ -27,5 +30,15 @@ class App {
 			'labels'    => $labels,
 			'menu_icon' => 'dashicons-shield',
 		) );
+	}
+
+	public static function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		switch ( $cap ) {
+			case 'manage_badges' :
+			case 'grant_badges' :
+				return array( 'manage_network_options' );
+		}
+
+		return $caps;
 	}
 }
