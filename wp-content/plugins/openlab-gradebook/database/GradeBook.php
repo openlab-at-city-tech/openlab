@@ -18,8 +18,6 @@ class OPLB_GRADEBOOK
 		$params = $oplb_gradebook_api->oplb_gradebook_get_params();
 		$gbid = $params['gbid'];
 
-		echo '<pre>'.print_r($gbid, true).'</pre>';
-                
                 //user check - only allow GET requests
 		if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) === 'instructor'
 			|| $oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) === 'student') {

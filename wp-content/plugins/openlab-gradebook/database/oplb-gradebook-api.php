@@ -188,11 +188,7 @@ class oplb_gradebook_api
 
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
 
-            echo '<pre>'.print_r($query, true).'</pre>';
-
             $students = $wpdb->get_results($query, ARRAY_A);
-
-            echo '<pre>'.print_r($students, true).'</pre>';
 
             foreach ($students as &$student_id) {
                 $student = get_userdata($student_id['uid']);
