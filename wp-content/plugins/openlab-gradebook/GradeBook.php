@@ -2,7 +2,7 @@
 /*
   Plugin Name: OpenLab GradeBook
   Plugin URI: https://github.com/livinglab/openlab
-  Description: A modification of AN Gradebook https://wordpress.org/plugins/an-gradebook/
+  Description: A modification of AN GradeBook https://wordpress.org/plugins/an-gradebook/
   Version: 0.0.3
   Author: Joe Unander
   Author URI: http://early-adopter.com/
@@ -38,7 +38,7 @@ $oplb_statistics = new OPLB_STATISTICS();
 $oplb_database = new OPLB_DATABASE();
 
 /**
- * Legacy: setup OpenLab Gradebook admin
+ * Legacy: setup OpenLab GradeBook admin
  */
 function register_oplb_gradebook_menu_page() {
     $roles = wp_get_current_user()->roles;
@@ -49,7 +49,7 @@ function register_oplb_gradebook_menu_page() {
     }
 
     $my_admin_page = add_menu_page('OpenLab GradeBook', 'OpenLab GradeBook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook', 'dashicons-book-alt', '6.12');
-    add_submenu_page('oplb_gradebook', 'OpenLab Gradebook', 'My Gradebook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook');
+    add_submenu_page('oplb_gradebook', 'OpenLab GradeBook', 'My GradeBook', $roles[0], 'oplb_gradebook', 'init_oplb_gradebook');
     $add_submenu_page_settings = in_array($roles[0], array_keys(get_option('oplb_gradebook_settings')));
     
     if ($add_submenu_page_settings) {
@@ -60,7 +60,7 @@ function register_oplb_gradebook_menu_page() {
 add_action('admin_menu', 'register_oplb_gradebook_menu_page', 10);
 
 /**
- * Updating admin menu to appends "#courses" to the Gradebook URL
+ * Updating admin menu to appends "#courses" to the GradeBook URL
  * That hash initiates the client-side app functionality
  */
 function oplb_gradebook_admin_menu_custom(){
@@ -119,7 +119,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
         }
 
         $dep_ver = '0.0.0.9';
-        $app_ver = '0.0.5.7';
+        $app_ver = '0.0.5.8';
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
@@ -151,7 +151,7 @@ function enqueue_oplb_gradebook_scripts($hook) {
 add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts', 9999);
 
 /**
- * Legacy: callback for OpenLab Gradebook instantiation
+ * Legacy: callback for OpenLab GradeBook instantiation
  * Adds template files to page so that BackBone JS client-side app can access them
  */
 function init_oplb_gradebook() {
@@ -170,7 +170,7 @@ function init_oplb_gradebook() {
 }
 
 /**
- * Legacy: callback for OpenLab Gradebook settings instantiation
+ * Legacy: callback for OpenLab GradeBook settings instantiation
  * Setups up templates for Backbone JS client-side app responsible for settings
  */
 function init_oplb_gradebook_settings() {
@@ -208,7 +208,7 @@ function oplb_gradebook_ajaxurl() {
 add_action('wp_head', 'oplb_gradebook_ajaxurl');
 
 /**
- * Prevent notices from other plugins from appearing on OpenLab Gradebook pages
+ * Prevent notices from other plugins from appearing on OpenLab GradeBook pages
  * These notices can sometimes interfere with client-side functionality
  * @global type $wp_filter
  * @return boolean
@@ -217,7 +217,7 @@ function oplb_gradebook_admin_notices() {
     global $wp_filter;
     $screen = get_current_screen();
 
-    //if this is not OpenLab Gradebook, we're not doing anything here
+    //if this is not OpenLab GradeBook, we're not doing anything here
     if (is_object($screen) && isset($screen->base)) {
 
         if ($screen->base !== "toplevel_page_oplb_gradebook" && $screen->base !== 'openlab-gradebook_page_oplb_gradebook_settings') {
@@ -271,7 +271,7 @@ function oplb_gradebook_gradebook_init_placeholder(){
 }
 
 /**
- * Openlab Gradebook activation actions
+ * Openlab GradeBook activation actions
  */
 function activate_oplb_gradebook() {
     global $wpdb;
@@ -281,7 +281,7 @@ function activate_oplb_gradebook() {
     $oplb_database->database_init();
     $oplb_database->database_alter();
 
-    //create the instructor user so the instructor has permissions to create a Gradebook
+    //create the instructor user so the instructor has permissions to create a GradeBook
     $user = wp_get_current_user();
 
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_courses WHERE gbid = %d AND role = %s AND uid = %d", 0, 'instructor', $user->ID);
@@ -306,7 +306,7 @@ function activate_oplb_gradebook() {
 }
 
 /**
- * OpenLab Gradebook deactivation actions
+ * OpenLab GradeBook deactivation actions
  * @todo: remove storage page
  */
 function deactivate_oplb_gradebook() {

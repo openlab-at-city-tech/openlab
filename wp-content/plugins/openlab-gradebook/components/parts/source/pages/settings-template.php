@@ -16,7 +16,7 @@
                                 <th><?php esc_html_e('Assignment Grade Type Checkmark', 'openlab-gradebook')?></th>
                                 <th><?php esc_html_e('Assignment Grade Type Letter Grades', 'openlab-gradebook')?></th>
                                 <th><?php esc_html_e('Assignment Grade Type Numeric', 'openlab-gradebook')?></th>
-                                <th><?php esc_html_e('Gradebook Mid Value - used to compute an average from letter grades or checkmarks', 'openlab-gradebook')?></th>
+                                <th><?php esc_html_e('GradeBook Mid Value - used to compute an average from letter grades or checkmarks', 'openlab-gradebook')?></th>
                             </tr>
                             <tr>
                                 <td rowspan="12"><i class="oplb-grdbk-icon oplb-grdbk-icon-left oplb-grdbk-check-mark-2"></i><?php esc_html_e('checked box', 'openlab-gradebook')?></td>

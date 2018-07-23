@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Gradebook Endpoint
+ * GradeBook Endpoint
  */
 class OPLB_GRADEBOOK
 {

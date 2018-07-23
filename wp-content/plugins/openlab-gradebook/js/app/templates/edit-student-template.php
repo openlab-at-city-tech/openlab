@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div>
-                    <p class="text-center"><?php esc_html_e('Students must have a user profile on this course site to be added to OpenLab Gradebook.', 'openlab-gradebook') ?></p>
+                    <p class="text-center"><?php esc_html_e('Students must have a user profile on this course site to be added to OpenLab GradeBook.', 'openlab-gradebook') ?></p>
                 </div>			        
             </form>
         </div>

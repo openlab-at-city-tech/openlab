@@ -144,7 +144,7 @@ h5 {
   -o-transition: background-color 200ms ease-in-out;
   transition: background-color 200ms ease-in-out;
 }
-/*  Gradebook styles */
+/*  GradeBook styles */
 [contenteditable="true"]:active,
 [contenteditable="true"]:focus {
   border: none;

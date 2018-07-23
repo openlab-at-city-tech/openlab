@@ -413,7 +413,7 @@ class oplb_gradebook_api
     }
 
     /**
-     * Easily establish if current user is an OpenLab Gradebook administrator
+     * Easily establish if current user is an OpenLab GradeBook administrator
      * @global type $current_user
      * @return boolean
      */
@@ -672,7 +672,7 @@ class oplb_gradebook_api
 
     /**
      * Retrieve user data for a given user
-     * Combines data stored in local OpenLab Gradebook tables, plus global user tables
+     * Combines data stored in local OpenLab GradeBook tables, plus global user tables
      * @global type $wpdb
      * @param type $id
      * @param type $gbid
@@ -704,7 +704,7 @@ class oplb_gradebook_api
     }
 
     /**
-     * Add a new user to OpenLab Gradebook
+     * Add a new user to OpenLab GradeBook
      * @global type $wpdb
      * @param type $id
      * @param type $gbid
