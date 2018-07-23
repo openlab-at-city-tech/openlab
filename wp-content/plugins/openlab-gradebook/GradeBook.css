@@ -315,6 +315,18 @@ span.twitter-typeahead {
   display: flex;
   justify-content: space-between;
 }
+@media (max-width: 479px) {
+  .action-buttons-wrapper {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .action-buttons-wrapper .btn-arrange {
+    margin: 0 12px 12px 0;
+  }
+  .action-buttons-wrapper .btn-arrange:last-child {
+    width: 100%;
+  }
+}
 .tt-hint {
   display: block;
   width: 100%;

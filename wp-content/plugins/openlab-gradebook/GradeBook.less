@@ -395,6 +395,16 @@ span.twitter-typeahead {
 .action-buttons-wrapper {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 479px) {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        .btn-arrange{
+            margin: 0 12px 12px 0;
+            &:last-child{
+                width: 100%;
+            }
+        }
+    }
 }
 
 .tt-hint {
@@ -539,7 +549,7 @@ span.twitter-typeahead {
             }
             .grade-selector {
                 max-width: 48px;
-                .display-value{
+                .display-value {
                     display: none;
                 }
             }
