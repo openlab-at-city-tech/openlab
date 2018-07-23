@@ -1677,3 +1677,21 @@ function openlab_group_request_user_link() {
 		esc_html( $user_name )
 	);
 }
+
+/**
+ * Adds a Badges link under group avatars on single group headers.
+ */
+function openlab_add_badge_button_to_profile() {
+	if ( ! current_user_can( 'grant_badges' ) ) {
+		return;
+	}
+
+	$group_id = bp_get_current_group_id();
+
+	$badge_link = bp_get_group_permalink( groups_get_current_group() ) . 'admin/group-settings/#panel-badges';
+
+	?>
+	<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo esc_attr( $badge_link ); ?>"><i class="fa fa-certificate" aria-hidden="true"></i> Manage Badges</a>
+	<?php
+}
+add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );

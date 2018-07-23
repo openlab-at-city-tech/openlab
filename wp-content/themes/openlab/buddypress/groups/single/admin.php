@@ -88,7 +88,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php do_action('template_notices') ?>
 
             <?php if ( current_user_can( 'grant_badges' ) && class_exists( '\OpenLab\Badges\Template' ) ) : ?>
-                <div class="panel panel-default">
+                <div id="panel-badges" class="panel panel-default">
                     <div class="panel-heading">Badges</div>
                     <div class="panel-body">
                         <?php \OpenLab\Badges\Template::group_admin_markup(); ?>
