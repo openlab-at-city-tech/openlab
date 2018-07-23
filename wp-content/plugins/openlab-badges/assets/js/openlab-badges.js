@@ -18,15 +18,11 @@
 	}
 
 	var disableTooltip = function(e) {
-		var $el = $(this);
-		// don't have a better way to do this at the moment
-		setTimeout(function(){
-			$el.removeClass( 'tooltip-on' );
-		},2000);
+		$(this).removeClass( 'tooltip-on' );
 	}
 
 	var toggleTooltip = function() {
-		$(this).toggleClass('tooltip-on');
+		$(this).toggleClass( 'tooltip-on' );
 	}
 
 }(jQuery));
