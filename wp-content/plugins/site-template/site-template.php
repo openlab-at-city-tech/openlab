@@ -14,7 +14,8 @@ Network: true
 function get_major_version()
 {
 	global  $wp_version;
-	return array_shift(explode('.',$wp_version));
+	$parts = explode( '.', $wp_version );
+	return array_shift( $parts );
 }
 
 
