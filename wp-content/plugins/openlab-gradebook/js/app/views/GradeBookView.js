@@ -69,7 +69,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     console.log('this in GradeBookView render', this);
 
-                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.gradebook.role, total_weight: totalWeight});
+                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.gradebook.role, total_weight: totalWeight, assign_length: self.gradebook.assignments.length});
                     $('#wpbody-content').append(self.$el.html(compiled));
                     $('#filter-assignments-select').val(this.filter_option);
                     switch (this.gradebook.sort_key) {

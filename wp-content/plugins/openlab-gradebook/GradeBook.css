@@ -369,7 +369,7 @@ span.twitter-typeahead {
   position: absolute;
   display: block;
   left: 0;
-  top: 10px;
+  top: 15px;
   background: #fff;
   width: 36%;
   border-right: 1px solid #ccc;
@@ -431,29 +431,39 @@ span.twitter-typeahead {
   overflow: visible !important;
 }
 .table-wrapper .scrollable .jspContainer {
-  padding-top: 10px;
+  padding-top: 15px;
+}
+.table-wrapper .scrollable .jspContainer .jspPane {
+  top: 15px !important;
 }
 .table-wrapper .scrollable .student-grades {
-  min-width: 80px;
+  min-width: 65px;
 }
 .table-wrapper .scrollable .student-grades span {
-  width: 50px;
-  max-width: 50px;
-  min-width: 50px;
+  width: 48px;
+  max-width: 48px;
+  min-width: 48px;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
 }
+.table-wrapper .scrollable .student-grades .tooltip .tooltip-inner {
+  left: 25%;
+  position: relative;
+}
 .table-wrapper .scrollable .student-grades .grade-selector {
-  max-width: 50px;
+  max-width: 48px;
+}
+.table-wrapper .scrollable .student-grades .grade-selector .display-value {
+  display: none;
 }
 .table-wrapper .scrollable th,
 .table-wrapper .scrollable td {
   min-width: 180px;
 }
 .table-wrapper .scrollable td {
-  padding-bottom: 22px;
+  padding-bottom: 17px;
 }
 .table-wrapper .scrollable td .grade-numeric {
   display: block;
@@ -478,6 +488,14 @@ span.twitter-typeahead {
 }
 .table-wrapper .fixed-header th.pinned-target {
   display: table-cell;
+}
+.table-wrapper.no-assignments .scrollable table {
+  table-layout: fixed;
+  width: 130px;
+}
+.table-wrapper.no-assignments .scrollable .student-grades {
+  width: 65px;
+  padding: 15px 8px 10px;
 }
 @-webkit-keyframes spin {
   0% {

@@ -30,7 +30,7 @@
 <span>
 <select class="grade-selector mid" data-type="mid" data-uid="<%= student.get('id') %>" <%= role === 'instructor' ? '' : 'disabled="disabled"' %>>
         <% midGrades.each(function(grade) { %>
-            <option value="<%= grade.get('value') %>" <% if(student.get('mid_semester_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>
+            <option <% if(grade.get('type') === 'display_value') { print('class="display-value"') } %> value="<%= grade.get('value') %>" <% if(student.get('mid_semester_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>
         <% }); %>
 </select>
 </span>

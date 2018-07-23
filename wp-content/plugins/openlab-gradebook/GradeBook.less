@@ -457,7 +457,7 @@ span.twitter-typeahead {
         position: absolute;
         display: block;
         left: 0;
-        top: 10px;
+        top: 15px;
         background: #fff;
         width: 36%;
         border-right: 1px solid #ccc;
@@ -515,21 +515,33 @@ span.twitter-typeahead {
         margin-left: 36%;
         overflow: visible !important;
         .jspContainer {
-            padding-top: 10px;
+            padding-top: 15px;
+            .jspPane {
+                top: 15px !important;
+            }
         }
         .student-grades {
-            min-width: 80px;
+            min-width: 65px;
             span {
-                width: 50px;
-                max-width: 50px;
-                min-width: 50px;
+                width: 48px;
+                max-width: 48px;
+                min-width: 48px;
                 white-space: nowrap;
                 overflow: hidden;
                 display: inline-block;
                 text-overflow: ellipsis;
             }
+            .tooltip {
+                .tooltip-inner {
+                    left: 25%;
+                    position: relative;
+                }
+            }
             .grade-selector {
-                max-width: 50px;
+                max-width: 48px;
+                .display-value{
+                    display: none;
+                }
             }
         }
         th,
@@ -537,7 +549,7 @@ span.twitter-typeahead {
             min-width: 180px;
         }
         td {
-            padding-bottom: 22px;
+            padding-bottom: 17px;
             .grade-numeric {
                 display: block;
                 margin: 0 0 8px;
@@ -564,6 +576,18 @@ span.twitter-typeahead {
         th {
             &.pinned-target {
                 display: table-cell;
+            }
+        }
+    }
+    &.no-assignments {
+        .scrollable {
+            table {
+                table-layout: fixed;
+                width: 130px;
+            }
+            .student-grades {
+                width: 65px;
+                padding: 15px 8px 10px;
             }
         }
     }

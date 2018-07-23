@@ -109,25 +109,8 @@ class gradebook_assignment_API
                     $is_null = 0;
                 }
 
-                $wpdb->update(
-                    "{$wpdb->prefix}oplb_gradebook_cells",
-                    array(
-                        'assign_order' => $params['assign_order'],
-                        'is_null' => $is_null,
-                    ),
-                    array(
-                        'amid' => $params['id'],
-                        'gbid' => $gbid,
-                    ),
-                    array(
-                        '%d',
-                        '%d'
-                    ),
-                    array(
-                        '%d',
-                        '%d',
-                    )
-                );
+                $oplb_gradebook_api->oplb_gradebook_update_cells_by_assignment($params['id'], $gbid, $params['assign_order']);
+
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $params['id'], $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
 

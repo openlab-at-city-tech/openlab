@@ -49,7 +49,7 @@
             <div class="weight-message">
                 <p><%= total_weight %></p>
             </div>
-            <div class="table-wrapper">
+            <div class="table-wrapper <% if(assign_length === 0) { print('no-assignments') } else { print('assignments') } %>">
                 <div class="pinned hidden-xs">
                     <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">  
                         <thead id="students-header-pinned" class="students-header">

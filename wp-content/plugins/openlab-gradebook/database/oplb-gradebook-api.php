@@ -272,8 +272,8 @@ class oplb_gradebook_api
                 'current_grade_average' => $current_grade_average,
                 'id' => intval($student->ID),
                 'gbid' => intval($gbid),
-                'mid_semester_grade' =>  $grades[0] -> mid_semester_grade,
-                'final_grade' => $grades[0] -> final_grade,
+                'mid_semester_grade' => $grades[0]->mid_semester_grade,
+                'final_grade' => $grades[0]->final_grade,
             );
             usort($cells, $this->build_sorter('assign_order'));
             foreach ($cells as &$cell) {
@@ -1166,6 +1166,43 @@ class oplb_gradebook_api
         }
 
         return $letter;
+    }
+
+    public function oplb_gradebook_update_cells_by_assignment($amid, $gbid, $assign_order)
+    {
+        global $wpdb;
+
+        $query = $wpdb->prepare("SELECT id, assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d AND gbid = %d", $amid, $gbid);
+        $cells = $wpdb->get_results($query);
+
+        foreach ($cells as $cell) {
+
+            $is_null = 1;
+
+            if (is_numeric($cell->assign_points_earned)) {
+                $is_null = 0;
+            }
+
+            $wpdb->update(
+                "{$wpdb->prefix}oplb_gradebook_cells",
+                array(
+                    'assign_order' => $assign_order,
+                    'is_null' => $is_null,
+                ),
+                array(
+                    'id' => $cell->id,
+                ),
+                array(
+                    '%d',
+                    '%d'
+                ),
+                array(
+                    '%d',
+                )
+            );
+
+        }
+
     }
 
 }

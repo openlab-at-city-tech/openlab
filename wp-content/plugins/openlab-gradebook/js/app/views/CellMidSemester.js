@@ -23,16 +23,32 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                             value: 'passing',
                         },
                         {
+                            label: 'P',
+                            value: 'passing_display',
+                        },
+                        {
                             label: 'BL = Borderline',
                             value: 'borderline',
+                        },
+                        {
+                            label: 'BL',
+                            value: 'borderline_display',
                         },
                         {
                             label: 'U = Unsatisfactory',
                             value: 'unsatisfactory',
                         },
                         {
+                            label: 'U',
+                            value: 'unsatisfactory_display',
+                        },
+                        {
                             label: 'SA = Stopped Attending',
                             value: 'stopped_attending',
+                        },
+                        {
+                            label: 'SA',
+                            value: 'stopped_attending_display',
                         },
                     ]);
 

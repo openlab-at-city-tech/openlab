@@ -29,22 +29,47 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         {
                                             label: '--',
                                             value: '--',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'P = Passing Work',
+                                            value: 'passing_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'P',
                                             value: 'passing',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: 'BL = Borderline',
+                                            value: 'borderline_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'BL',
                                             value: 'borderline',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: 'U = Unsatisfactory',
+                                            value: 'unsatisfactory_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'U',
                                             value: 'unsatisfactory',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: 'SA = Stopped Attending',
+                                            value: 'stopped_attending_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'SA',
                                             value: 'stopped_attending',
+                                            type: 'display_value'
                                         },
                                     ]);
 
@@ -52,58 +77,92 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         {
                                             label: '--',
                                             value: '--',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'A',
                                             value: 'a',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'A-',
                                             value: 'a_minus',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'B+',
                                             value: 'b_plus',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'B',
                                             value: 'b',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'B-',
                                             value: 'b_minus',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'C+',
                                             value: 'c_plus',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'C',
                                             value: 'c',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'D',
                                             value: 'd',
+                                            type: 'none'
                                         },
                                         {
                                             label: 'F',
                                             value: 'f',
+                                            type: 'none'
                                         },
                                         {
-                                            label: 'WF - withdrew, failing',
+                                            label: 'WF = withdrew, failing',
+                                            value: 'wf_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'WF',
                                             value: 'wf',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: 'WN = withdrew, never attended (academic penalty)',
+                                            value: 'wn_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'WN',
                                             value: 'wn',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: '* WN = administrative withdrawl, never attended',
+                                            value: 'wn_admin_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: '* WN',
                                             value: 'wn_admin',
+                                            type: 'display_value'
                                         },
                                         {
                                             label: 'WU = Unofficial Withdrawl',
-                                            value: '',
+                                            value: 'wu_display',
+                                            type: 'display_item'
+                                        },
+                                        {
+                                            label: 'WU',
+                                            value: 'wu',
+                                            type: 'display_value'
                                         }
                                     ]);
                                 },
@@ -223,7 +282,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     var targetSelector = '.grade-selector.' + ev;
 
                                     this.$el.find(targetSelector).attr('disabled', 'disabled');
+                                    
                                     var value = this.$el.find(targetSelector).val();
+                                    
+                                    if(value.indexOf('_display') !== -1){
+                                        value = value.replace(/_display/, '');
+                                        this.$el.find(targetSelector).val(value);
+                                    }
+                                    
                                     var type = this.$el.find(targetSelector).data('type');
                                     var uid = this.$el.find(targetSelector).data('uid');
                                     var gbid = parseInt(this.course.get('id'));
