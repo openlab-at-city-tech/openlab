@@ -2537,3 +2537,10 @@ add_filter( 'mime_types', function( $types ) {
 
 	return $types;
 } );
+
+/** TablePress mods **********************************************************/
+
+add_filter( 'tablepress_table_template', function( $table ) {
+	$table['options']['datatables_paginate'] = false;
+	return $table;
+} );
