@@ -7515,7 +7515,7 @@ input[type="submit"] {
 }
 .navbar-default .container-fluid ul.nav li a:hover,
 .navbar-default .container-fluid ul.nav li a:focus {
-  color: #3ba49b;
+  text-decoration: underline;
 }
 @media (max-width: 991px) {
   .navbar-default .container-fluid ul.nav li a {
