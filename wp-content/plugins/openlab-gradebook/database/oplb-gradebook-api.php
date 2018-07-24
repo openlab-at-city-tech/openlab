@@ -182,9 +182,6 @@ class oplb_gradebook_api
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
-            echo '<pre>'.print_r('Assignment Query: ', true).'</pre>';
-            echo '<pre>'.print_r($wpdb, true).'</pre>';
-
             foreach ($assignments as &$assignment) {
                 $assignment['gbid'] = intval($assignment['gbid']);
             }
@@ -192,9 +189,6 @@ class oplb_gradebook_api
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
 
             $students = $wpdb->get_results($query, ARRAY_A);
-
-            echo '<pre>'.print_r('Student Query: ', true).'</pre>';
-            echo '<pre>'.print_r($wpdb, true).'</pre>';
 
             foreach ($students as &$student_id) {
                 $student = get_userdata($student_id['uid']);
