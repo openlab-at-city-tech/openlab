@@ -7057,8 +7057,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #3ba49b;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:focus {
   outline: solid;
@@ -7235,8 +7234,7 @@ blockquote .h6 {
 }
 .pagination li a:hover,
 .pagination li span:hover {
-  color: #3ba49b;
-  background-color: inherit;
+  text-decoration: underline;
 }
 .messages #pag-bottom {
   clear: both;
