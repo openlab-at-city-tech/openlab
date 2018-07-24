@@ -2540,7 +2540,15 @@ add_filter( 'mime_types', function( $types ) {
 
 /** TablePress mods **********************************************************/
 
+/**
+ * Pagination should be disabled by default.
+ */
 add_filter( 'tablepress_table_template', function( $table ) {
 	$table['options']['datatables_paginate'] = false;
 	return $table;
 } );
+
+/**
+ * Don't let TablePress save CSS to a file.
+ */
+add_filter( 'tablepress_save_custom_css_to_file', '__return_false' );
