@@ -7057,8 +7057,8 @@ a {
 }
 a:hover,
 a:focus {
-  color: #3ba49b;
-  text-decoration: underline;
+  color: inherit;
+  text-decoration: none;
 }
 a:focus {
   outline: solid;
@@ -7067,6 +7067,9 @@ a:focus {
 }
 a.no-deco {
   text-decoration: none;
+}
+a.no-deco:hover {
+  text-decoration: underline;
 }
 a.btn-primary {
   color: #ffffff;
@@ -7235,8 +7238,7 @@ blockquote .h6 {
 }
 .pagination li a:hover,
 .pagination li span:hover {
-  color: #3ba49b;
-  background-color: inherit;
+  text-decoration: underline;
 }
 .messages #pag-bottom {
   clear: both;
@@ -7515,7 +7517,7 @@ input[type="submit"] {
 }
 .navbar-default .container-fluid ul.nav li a:hover,
 .navbar-default .container-fluid ul.nav li a:focus {
-  color: #3ba49b;
+  text-decoration: underline;
 }
 @media (max-width: 991px) {
   .navbar-default .container-fluid ul.nav li a {

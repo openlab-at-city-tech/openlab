@@ -45,8 +45,8 @@ a {
     text-decoration: underline;
     &:hover,
         &:focus {
-        color: @darkTeal;
-        text-decoration: underline;
+        color: inherit;
+        text-decoration: none;
     }
     &:focus{
         outline: solid;
@@ -55,6 +55,9 @@ a {
     }
     &.no-deco{
         text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
     }
     &.btn-primary{
         color: @white;
@@ -238,8 +241,7 @@ blockquote {
                 font-size: 16px;
             }
             &:hover{
-                color: @darkTeal;
-                background-color: inherit;
+                text-decoration: underline;
             }
         }
     }
@@ -485,7 +487,7 @@ input[type="submit"]{
                     padding: 21px 15px;
                     &:hover,
                         &:focus {
-                        color: @darkTeal;
+                        text-decoration: underline;
                     }
                     @media(max-width: @screen-sm-max){
                         font-size: 13px;

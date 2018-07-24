@@ -176,3 +176,12 @@ function openlab_pdfemb_filter_license_key( $opt ) {
 }
 add_filter( 'option_pdfemb', 'openlab_pdfemb_filter_license_key' );
 add_filter( 'default_option_pdfemb', 'openlab_pdfemb_filter_license_key' );
+
+/**
+ * Load stylesheet for TablePress.
+ */
+function openlab_tablepress_stylesheet( $atts ) {
+	wp_enqueue_style( 'openlab-tablepress', content_url( 'mu-plugins/css/tablepress.css' ) );
+	return $atts;
+}
+add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );

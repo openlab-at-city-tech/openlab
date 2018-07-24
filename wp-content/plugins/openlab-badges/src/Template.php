@@ -6,8 +6,8 @@ class Template {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_scripts' ) );
 
-		add_action( 'bp_group_header_after_avatar', array( __CLASS__, 'avatar_links' ) );
-		add_action( 'bp_group_directory_after_avatar', array( __CLASS__, 'avatar_links' ) );
+		add_action( 'bp_group_header_after_avatar', array( __CLASS__, 'avatar_links_single_group_header' ) );
+		add_action( 'bp_group_directory_after_avatar', array( __CLASS__, 'avatar_links_group_directory' ) );
 
 		add_filter( 'bp_before_has_groups_parse_args', array( __CLASS__, 'filter_group_args' ) );
 
@@ -19,7 +19,15 @@ class Template {
 		wp_register_script( 'openlab-badges', OLBADGES_PLUGIN_URL . '/assets/js/openlab-badges.js', array( 'jquery' ), false, true );
 	}
 
-	public static function avatar_links() {
+	public static function avatar_links_single_group_header() {
+		self::avatar_links( 'single' );
+	}
+
+	public static function avatar_links_group_directory() {
+		self::avatar_links( 'directory' );
+	}
+
+	public static function avatar_links( $context = 'single' ) {
 		wp_enqueue_style( 'openlab-badges' );
 		wp_enqueue_script( 'openlab-badges' );
 
@@ -32,7 +40,7 @@ class Template {
 		if ( $group_badges ) {
 			$html .= '<ul class="badge-links">';
 			foreach ( $group_badges as $group_badge ) {
-				$html .= '<li>' . $group_badge->get_avatar_badge_html( $group_id ) . '</li>';
+				$html .= '<li>' . $group_badge->get_avatar_badge_html( $group_id, $context ) . '</li>';
 			}
 			$html .= '</ul>';
 		}

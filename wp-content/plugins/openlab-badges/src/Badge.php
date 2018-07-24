@@ -109,15 +109,30 @@ class Badge implements Grantable {
 	/**
 	 * @todo Tooltip. See http://accessibility.athena-ict.com/aria/examples/tooltip.shtml
 	 */
-	public function get_avatar_badge_html( $group_id ) {
+	public function get_avatar_badge_html( $group_id, $context = 'single' ) {
 		$group = groups_get_group( $group_id );
 
 		$tooltip_id = 'badge-tooltip-' . $group->slug . '-' . $this->get_slug();
 
+		$badge_link_start = '';
+		$badge_link_end   = '';
+
+		if ( 'single' === $context ) {
+			$badge_link_start = sprintf(
+				'<a href="%s">',
+				esc_attr( $this->get_link() )
+			);
+
+			$badge_link_end = '</a>';
+		}
+
 		$html  = '<div class="avatar-badge">';
-		$html .=   '<img class="badge-image" aria-describedby="' . esc_attr( $tooltip_id ) . '" src="' . esc_attr( $this->get_image() ) . '" alt="' . esc_attr( $this->get_name() ) . '" />';
+		$html .=   $badge_link_start;
+		$html .=     '<img class="badge-image" aria-describedby="' . esc_attr( $tooltip_id ) . '" src="' . esc_attr( $this->get_image() ) . '" alt="' . esc_attr( $this->get_name() ) . '" />';
+		$html .=   $badge_link_end;
+
 		$html .=   '<div id="' . esc_attr( $tooltip_id ) . '" class="badge-tooltip" role="tooltip">';
-		$html .=     esc_html( $this->get_name() ) . " &mdash; " . sprintf( '<a href="%s">%s</a>', esc_attr( $this->get_link() ), esc_html__( 'Learn More', 'openlab-badges' ) );
+		$html .=     esc_html( $this->get_name() );
 		$html .=   '</div>';
 		$html .= '</div>';
 
