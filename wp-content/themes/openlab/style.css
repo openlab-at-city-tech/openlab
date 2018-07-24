@@ -7057,6 +7057,7 @@ a {
 }
 a:hover,
 a:focus {
+  color: inherit;
   text-decoration: none;
 }
 a:focus {
@@ -7066,6 +7067,9 @@ a:focus {
 }
 a.no-deco {
   text-decoration: none;
+}
+a.no-deco:hover {
+  text-decoration: underline;
 }
 a.btn-primary {
   color: #ffffff;
