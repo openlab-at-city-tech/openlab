@@ -533,13 +533,15 @@ add_filter( 'bbp_get_single_forum_description', 'openlab_remove_bbpress_empty_fo
  * Removes single forum title from group forum page.
  */
 function openlab_remove_bbpress_forum_title( $title ) {
-	if ( ! bp_is_group() || ! bp_is_current_action( 'forum' ) || bp_action_variables() ) {
+	if ( ! bp_is_group() || ! bp_is_current_action( 'forum' ) ) {
 		return $title;
 	}
 
 	// Pretty cool technique.
-	$is_display_forums = false;
+	$is_display_forums        = false;
 	$is_single_forum_template = false;
+	$is_forum_nav             = false;
+
 	foreach ( debug_backtrace() as $db ) {
 		if ( ! empty( $db['class'] ) && 'BBP_Forums_Group_Extension' === $db['class'] && ! empty( $db['function'] ) && 'display_forums' === $db['function'] ) {
 			$is_display_forums = true;
@@ -548,15 +550,20 @@ function openlab_remove_bbpress_forum_title( $title ) {
 		if ( ! empty( $db['function'] ) && 'bbp_locate_template' === $db['function'] && ! empty( $db['args'][0][0] ) && 'content-single-forum.php' === $db['args'][0][0] ) {
 			$is_single_forum_template = true;
 		}
+
+		if ( ! empty( $db['function'] ) && 'openlab_forum_tabs' === $db['function'] ) {
+			$is_forum_nav = true;
+		}
 	}
 
-	if ( $is_display_forums && ! $is_single_forum_template ) {
+	if ( $is_display_forums && ! $is_single_forum_template && ! $is_forum_nav ) {
 		return '';
 	}
 
 	return $title;
 }
 add_filter( 'bbp_get_forum_title', 'openlab_remove_bbpress_forum_title' );
+add_filter( 'bbp_get_topic_title', 'openlab_remove_bbpress_forum_title' );
 
 /**
  * Plugin: Social
