@@ -33,10 +33,13 @@ function openlab_get_group_clone_history( $group_id ) {
  * Returns an array of arrays, each of which has information about group names,
  * URLs, and creators.
  *
- * @param int $group_id ID of the group.
+ * @param int $group_id        ID of the group.
+ * @param int $exclude_creator Whether to exclude groups created by the specified user.
+ *                             These groups are trimmed only from the end of the ancestry chain.
+ *                             Default true.
  * @return array
  */
-function openlab_get_group_clone_history_data( $group_id ) {
+function openlab_get_group_clone_history_data( $group_id, $exclude_creator = null ) {
 	$source_ids = openlab_get_group_clone_history( $group_id );
 
 	$source_datas = array();
@@ -53,6 +56,19 @@ function openlab_get_group_clone_history_data( $group_id ) {
 		);
 
 		$source_datas[] = $source_data;
+	}
+
+	// Trim exclude_creator groups.
+	if ( $source_datas && null !== $exclude_creator ) {
+		$exclude_creator = intval( $exclude_creator );
+		$source_count    = count( $source_datas ) - 1;
+		for ( $i = $source_count; $i >= 0; $i-- ) {
+			if ( $source_datas[ $i ]['group_creator_id'] !== $exclude_creator ) {
+				break;
+			}
+
+			unset( $source_datas[ $i ] );
+		}
 	}
 
 	return $source_datas;
@@ -230,7 +246,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-		$history  = openlab_get_group_clone_history_data( $group_id );
+		$group    = groups_get_group( $group_id );
+		$history  = openlab_get_group_clone_history_data( $group_id, $group->creator_id );
 
 		$credits_groups = array_map( function( $clone_group ) {
 			return sprintf(
