@@ -24,6 +24,6 @@ end_of_line = crlf
 indent_style = space
 indent_size = 4
 
-[wp-content/themes/openlab/*]
+[wp-content/themes/openlab/**]
 indent_style = space
 indent_size = 4
