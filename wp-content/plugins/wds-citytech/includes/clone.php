@@ -251,9 +251,11 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		$credits_groups = array_map( function( $clone_group ) {
 			return sprintf(
-				'<li><a href="%s">%s</a></li>',
+				'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
 				esc_attr( $clone_group['group_url'] ),
-				esc_html( $clone_group['group_name'] )
+				esc_html( $clone_group['group_name'] ),
+				esc_attr( $clone_group['group_creator_url'] ),
+				esc_html( $clone_group['group_creator_name'] )
 			);
 		}, $history );
 
