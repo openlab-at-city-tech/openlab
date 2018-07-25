@@ -249,10 +249,8 @@ function openlab_sharing_settings_save( $group ) {
 	if ( $enable_sharing ) {
 		groups_update_groupmeta( $group->id, 'enable_sharing', 1 );
 
-		// Add the Credits widget if there are non-self ancestors.
 		$site_id = openlab_get_site_id_by_group_id( $group->id );
-		$group   = groups_get_group( $this->group_id );
-		if ( $site_id && openlab_get_group_clone_history_data( $group->id, $group->creator_id ) ) {
+		if ( $site_id ) {
 			switch_to_blog( $site_id );
 			openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
 			restore_current_blog();
