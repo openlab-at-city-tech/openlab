@@ -331,7 +331,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 		$clone_link = add_query_arg(
 			array(
 				'clone' => $group_id,
-				'type'  => $group_type,
+				'type'  => openlab_get_group_type( $group_id ),
 			),
 			bp_get_groups_directory_permalink() . 'create/step/group-details/'
 		);
