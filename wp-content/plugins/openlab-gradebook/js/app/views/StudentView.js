@@ -179,7 +179,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     }
 
                                     var self = this;
-                                    console.log('this in studentView render', this);
                                     var template = _.template($('#student-view-template').html());
                                     var compiled = template({student: this.model, role: this.gradebook.role, mobile_styles: mobile_styles, midGrades: this.midGrades, finalGrades: this.finalGrades});
                                     this.$el.html(compiled);
