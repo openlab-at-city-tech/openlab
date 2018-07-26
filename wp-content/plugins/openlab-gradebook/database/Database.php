@@ -30,26 +30,26 @@ class OPLB_DATABASE
     public function database_alter()
     {
         /**Any alterations to the table after they have been created in a previous version should take place here.  This works
-         * by looping through the necessary db alterations based on the current version of the db. To add an alteration use the following  
+         * by looping through the necessary db alterations based on the current version of the db. To add an alteration use the following
          * template code block:
-         * if(get_option( 'oplb_gradebook_db_version' )==[current_db_version]){ 
-         *    do stuff to tables 
+         * if(get_option( 'oplb_gradebook_db_version' )==[current_db_version]){
+         *    do stuff to tables
          *    update_option( "oplb_gradebook_db_version", self::oplb_gradebook_db_version);
          *  }
          * where the constant oplb_gradebook_db_version should be changed to a larger number.
          */
         global $wpdb;
         if (get_option('oplb_gradebook_db_version') < 1.6) {
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'numeric'";
             $wpdb->query($sql);
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments ADD assign_weight int(11) NOT NULL DEFAULT 1";
             $wpdb->query($sql);
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments MODIFY assign_weight decimal(7,2)");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_assignments MODIFY assign_weight decimal(7,2)";
             $wpdb->query($sql);
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD current_grade_average decimal(7,2) NOT NULL DEFAULT 0.00";
             $wpdb->query($sql);
 
             update_option("oplb_gradebook_db_version", 1.6);
@@ -57,17 +57,17 @@ class OPLB_DATABASE
 
         if (get_option('oplb_gradebook_db_version') < 1.7) {
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD is_null tinyint unsigned NOT NULL DEFAULT 0");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD is_null tinyint unsigned NOT NULL DEFAULT 0";
             $wpdb->query($sql);
             update_option("oplb_gradebook_db_version", 1.7);
         }
 
         if (get_option('oplb_gradebook_db_version') < 1.81) {
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '--'");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '--'";
             $wpdb->query($sql);
 
-            $sql = $wpdb->prepare("ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD final_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '--'");
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD final_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '--'";
             $wpdb->query($sql);
 
             update_option("oplb_gradebook_db_version", 1.81);
