@@ -788,7 +788,11 @@ class Openlab_Clone_Course_Site {
                 create_initial_taxonomies();
                 flush_rewrite_rules();
 
-		openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
+		// Only add the Credits widget if there are non-self ancestors.
+		$group = groups_get_group( $this->group_id );
+		if ( openlab_get_group_clone_history_data( $group->id, $group->creator_id ) ) {
+			openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
+		}
 
 		restore_current_blog();
 	}

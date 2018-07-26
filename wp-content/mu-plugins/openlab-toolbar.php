@@ -1558,6 +1558,8 @@ HTML;
 		}
 
 		// Registering font-awesome here so it can be used on the admin bar and on the main site.
+		// Plugins don't play nice.
+		wp_deregister_style( 'font-awesome' );
 		wp_register_style( 'font-awesome', $openlab_theme_link, array(), '20130604', 'all' );
 		wp_enqueue_style( 'font-awesome' );
 

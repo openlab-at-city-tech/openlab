@@ -7919,6 +7919,17 @@ body .group-header .bp-template-notice {
   padding: 6px 12px;
   text-align: left;
 }
+body .group-credits {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+}
+body .group-credits li {
+  margin-bottom: .5em;
+}
+body .group-credits li:last-child {
+  margin-bottom: 0;
+}
 body .current-filters {
   margin: 0;
   font-size: 14px;

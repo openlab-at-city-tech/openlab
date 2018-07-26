@@ -615,12 +615,14 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
-    $clone_history  = openlab_get_group_clone_history_data( $group_id );
+    $clone_history  = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
 	$credits_groups = array_map( function( $clone_group ) {
 		return sprintf(
-			'<a href="%s">%s</a>',
+			'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
 			esc_attr( $clone_group['group_url'] ),
-			esc_html( $clone_group['group_name'] )
+			esc_html( $clone_group['group_name'] ),
+			esc_attr( $clone_group['group_creator_url'] ),
+			esc_html( $clone_group['group_creator_name'] )
 		);
 	}, $clone_history );
 
@@ -706,7 +708,9 @@ function cuny_group_single() {
                                 <div class="table-row row">
                                     <div class="bold col-sm-7">Credits</div>
                                     <div class="col-sm-17 row-content">
-                                        <?php echo implode( ', ', $credits_groups ); ?>
+                                        <ul class="group-credits">
+                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                        </ul>
                                     </div>
                                 </div>
                             <?php endif; ?>
