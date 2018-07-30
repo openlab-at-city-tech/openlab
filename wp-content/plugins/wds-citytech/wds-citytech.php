@@ -537,6 +537,59 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 		$school = array_search( $school, $schools );
 	}
 
+	// Lazy - I didn't feel like manually converting to key-value structure
+	$departments_sorted = array();
+	foreach ( $schools as $s_key => $s_label ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		$departments_sorted[ $s_key ] = array();
+	}
+
+	if ( $school ) {
+		$d_schools = array( $school );
+	} else {
+		$d_schools = array_keys( $schools );
+	}
+
+	foreach ( $d_schools as $d_school ) {
+		$depts = openlab_get_entity_departments( $d_school );
+
+		foreach ( $depts as $dept_name => $dept ) {
+			if ( 'short' == $label_type ) {
+				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
+			} else {
+				$d_label = $dept['label'];
+			}
+
+			$departments_sorted[ $d_school ][ $dept_name ] = $d_label;
+		}
+	}
+
+	if ( $school ) {
+		$departments_sorted = $departments_sorted[ $school ];
+	}
+
+	return $departments_sorted;
+}
+
+function openlab_get_office_list() {
+	return array(
+		'academic_affairs' => 'Academic Affairs',
+		'student_affairs' => 'Student Affairs & Enrollment Management',
+		'administration' => 'Administration & Finance',
+		'president' => 'President\'s Office',
+	);
+}
+
+/**
+ * Get information about departments belonging to an entity (School or Office).
+ *
+ * @param string $entity Entity slug.
+ */
+function openlab_get_entity_departments( $entity ) {
 	$all_departments = array(
 		'tech' => array(
 			'architectural-technology' => array(
@@ -644,41 +697,177 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 				'label' => 'CLIP',
 			),
 		),
+		'academic_affairs' => array(
+			'provost' => array(
+				'label' => 'Provost\'s Office',
+			),
+			'arts-dean' => array(
+				'label' => 'School of Arts and Sciences, Dean’s Office',
+			),
+			'tech-dean' => array(
+				'label' => 'School of Technology & Design, Dean’s Office',
+			),
+			'professional-dean' => array(
+				'label' => 'School of Professional Studies, Dean’s Office',
+			),
+			'air' => array(
+				'label' => 'AIR',
+			),
+			'fyp' => array(
+				'label' => 'FYP',
+			),
+			'faculty-commons' => array(
+				'label' => 'Faculty Commons',
+			),
+			'office-of-sponsored-programs' => array(
+				'label' => 'Office of Sponsored Programs',
+			),
+			'adjunct-workload-management-office' => array(
+				'label' => 'Adjunct Workload Management Office',
+			),
+			'undergraduate-research' => array(
+				'label' => 'Undergraduate Research & Emerging Scholars',
+			),
+			'honors-scholors' => array(
+				'label' => 'Honors Scholars',
+			),
+			'bmi' => array(
+				'label' => 'BMI',
+			),
+			'asap' => array(
+				'label' => 'ASAP',
+			),
+			'college-now' => array(
+				'label' => 'College Now',
+			),
+			'c-step' => array(
+				'label' => 'C-Step',
+			),
+			'ptech' => array(
+				'label' => 'PTECH',
+			),
+			'city-poly' => array(
+				'label' => 'City Poly',
+			),
+			'beoc' => array(
+				'label' => 'BEOC',
+			),
+			'continuing-education' => array(
+				'label' => 'Continuing Education',
+			),
+			'instructional-technology' => array(
+				'label' => 'Instructional Technology',
+			),
+			'college-learning-center' => array(
+				'label' => 'College Learning Center',
+			),
+			'library' => array(
+				'label' => 'Library',
+			),
+		),
+		'student-affairs' => array(
+			'registrar' => array(
+				'label' => 'Registrar',
+			),
+			'admissions' => array(
+				'label' => 'Admissions',
+			),
+			'transfer-and-recruitment' => array(
+				'label' => 'Transfer & Recruitment Office',
+			),
+			'new-student-center' => array(
+				'label' => 'New Student Center',
+			),
+			'financial-aid' => array(
+				'label' => 'Financial Aid',
+			),
+			'seek' => array(
+				'label' => 'SEEK',
+			),
+			'student-affairs' => array(
+				'label' => 'Student Affairs',
+			),
+			'student-life' => array(
+				'label' => 'Student Life & Development',
+			),
+			'cuny-edge' => array(
+				'label' => 'CUNY Edge',
+			),
+			'city-tech-childcare-services' => array(
+				'label' => 'City Tech Childcare Services',
+			),
+			'counseling' => array(
+				'label' => 'Counseling',
+			),
+			'center-for-student-accessibility' => array(
+				'label' => 'Center for Student Accessibility',
+			),
+			'counseling' => array(
+				'label' => 'Counseling',
+			),
+			'office-of-veterans-support-services' => array(
+				'label' => 'Office of Veterans Support Services',
+			),
+			'cuny-service-corps' => array(
+				'label' => 'CUNY Service Corps',
+			),
+		),
+		'administration' => array(
+			'buildings-and-grounds' => array(
+				'label' => 'Buildings & Grounds',
+			),
+			'business-office' => array(
+				'label' => 'Business Office',
+			),
+			'office-of-human-resources' => array(
+				'label' => 'Office of Human Resources',
+			),
+			'health-and-safety' => array(
+				'label' => 'Health & Safety',
+			),
+			'bookstore' => array(
+				'label' => 'Bookstore',
+			),
+			'office-of-computer-information-services' => array(
+				'label' => 'Office of Computer Information Services',
+			),
+		),
+		'president' => array(
+			'public-relations' => array(
+				'label' => 'Public Relations',
+			),
+			'public-safety' => array(
+				'label' => 'Public Safety',
+			),
+			'professional-development-center' => array(
+				'label' => 'Professional Development Center',
+			),
+			'city-tech-foundation' => array(
+				'label' => 'City Tech Foundation',
+			),
+			'communications' => array(
+				'label' => 'Communications',
+			),
+			'legal-and-title-ix' => array(
+				'label' => 'Legal and Title IX',
+			),
+			'image-and-visual-communications' => array(
+				'label' => 'Image & Visual Communications',
+			),
+			'office-of-faculty-staff-relations' => array(
+				'label' => 'Office of Faculty / Staff Relations',
+			),
+			'alumni-relations' => array(
+				'label' => 'Alumni Relations',
+			),
+		),
 	);
 
-	// Lazy - I didn't feel like manually converting to key-value structure
-	$departments_sorted = array();
-	foreach ( $schools as $s_key => $s_label ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
-
-		$departments_sorted[ $s_key ] = array();
+	if ( ! isset( $all_departments[ $entity ] ) ) {
+		return array();
 	}
 
-	foreach ( $all_departments as $s_key => $depts ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
-
-		foreach ( $depts as $dept_name => $dept ) {
-			if ( 'short' == $label_type ) {
-				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
-			} else {
-				$d_label = $dept['label'];
-			}
-
-			$departments_sorted[ $s_key ][ $dept_name ] = $d_label;
-		}
-	}
-
-	if ( $school ) {
-		$departments_sorted = $departments_sorted[ $school ];
-	}
-
-	return $departments_sorted;
+	return $all_departments[ $entity ];
 }
 
 function wds_new_group_type() {
