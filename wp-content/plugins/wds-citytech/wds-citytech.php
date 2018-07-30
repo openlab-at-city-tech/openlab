@@ -575,21 +575,24 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 	return $departments_sorted;
 }
 
+/**
+ * Returns a list of Offices.
+ */
 function openlab_get_office_list() {
 	return array(
-		'academic_affairs' => 'Academic Affairs',
-		'student_affairs' => 'Student Affairs & Enrollment Management',
+		'academic-affairs' => 'Academic Affairs',
+		'student-affairs' => 'Student Affairs & Enrollment Management',
 		'administration' => 'Administration & Finance',
 		'president' => 'President\'s Office',
 	);
 }
 
 /**
- * Get information about departments belonging to an entity (School or Office).
+ * Returns information about departments belonging to an entity (School or Office).
  *
- * @param string $entity Entity slug.
+ * @param string $entity Optional. Entity slug.
  */
-function openlab_get_entity_departments( $entity ) {
+function openlab_get_entity_departments( $entity = null ) {
 	$all_departments = array(
 		'tech' => array(
 			'architectural-technology' => array(
@@ -697,7 +700,7 @@ function openlab_get_entity_departments( $entity ) {
 				'label' => 'CLIP',
 			),
 		),
-		'academic_affairs' => array(
+		'academic-affairs' => array(
 			'provost' => array(
 				'label' => 'Provost\'s Office',
 			),
@@ -784,7 +787,7 @@ function openlab_get_entity_departments( $entity ) {
 			'seek' => array(
 				'label' => 'SEEK',
 			),
-			'student-affairs' => array(
+			'student-affairs-dept' => array(
 				'label' => 'Student Affairs',
 			),
 			'student-life' => array(
@@ -862,6 +865,10 @@ function openlab_get_entity_departments( $entity ) {
 			),
 		),
 	);
+
+	if ( ! $entity ) {
+		return $all_departments;
+	}
 
 	if ( ! isset( $all_departments[ $entity ] ) ) {
 		return array();
