@@ -98,12 +98,12 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'custom_admin_bar_sidebar_toggle' ), 0 );
 
 			if ( get_current_blog_id() === 1 && ! is_admin() ) {
-				add_action( 'admin_bar_menu', array( $this, 'add_middle_group_for_mobile' ), 200 );
+				add_action( 'admin_bar_menu', array( $this, 'add_middle_group_for_mobile' ), 3 );
 				add_action( 'admin_bar_menu', array( $this, 'add_mobile_mol_link' ), 9999 );
 			}
 
 			if ( get_current_blog_id() !== 1 || is_admin() ) {
-				add_action( 'admin_bar_menu', array( $this, 'add_middle_group_for_blogs_and_admin' ), 500 );
+				add_action( 'admin_bar_menu', array( $this, 'add_middle_group_for_blogs_and_admin' ), 3 );
 			}
 
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
@@ -136,11 +136,11 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
 
 			// removing the default account information item and menu so we can a custom Bootstrap-style one
-			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 6 );
-
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
 			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_item' ), 7 );
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
+
+			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 8 );
 
 			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_menu' ), 0 );
 
@@ -368,6 +368,7 @@ HTML;
 		}
 
 		$howdy       = '<span class="small-size">' . sprintf( __( 'Hi, %1$s' ), $username ) . '</span>';
+		//$howdy 		 = "<span class='truncate-sizer small-size'><span class='truncate-on-the-fly' data-basevalue='30' data-minvalue='10' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
 		$howdy_small = '<span class="very-small-size">' . sprintf( __( 'Hi, %1$s' ), $username_small ) . '</span>';
 
 		$wp_admin_bar->add_menu(
@@ -1386,7 +1387,7 @@ HTML;
 		}
 
 		$howdy          = sprintf( __( 'Hi, %1$s' ), $current_user->display_name );
-		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='30' data-minvalue='5' data-basewidth='0' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
+		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='30' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
 
 		$parent = 'top-secondary';
 		$class  = 'hidden-xs';

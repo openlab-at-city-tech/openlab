@@ -390,7 +390,7 @@ OpenLab.nav = (function ($) {
             targetElem.css({
                 'max-width': targetElem_w + 'px',
                 'overflow': 'visible',
-                'float': 'right  '
+                'float': 'none'
             });
 
             //on mobile remove the dropdown

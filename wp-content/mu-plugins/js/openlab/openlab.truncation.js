@@ -107,8 +107,12 @@ OpenLab.truncation = (function ($) {
 
                     if (thisElem.data('basewidth') === 'calculate') {
 
+                        //thisElem.html('');
+
                         var sizerContainer_w = sizerContainer.width();
                         var sizerContainer_h = sizerContainer.height();
+
+                        //thisElem.html(originalCopy);
 
                         sizerContainer.css({
                             'white-space': 'nowrap'
@@ -120,6 +124,8 @@ OpenLab.truncation = (function ($) {
                         sizerContainer.css({
                             'white-space': 'normal'
                         });
+
+                        console.log('originalCopy, sizerContainerNoWrap_w, sizerContainer_w', originalCopy, sizerContainerNoWrap_w, sizerContainer_w);
 
                         if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
                             OpenLab.truncation.truncateReveal(thisElem);
