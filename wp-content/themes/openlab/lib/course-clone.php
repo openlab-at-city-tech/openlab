@@ -911,6 +911,14 @@ class Openlab_Clone_Course_Site {
 				if ( $url ) {
 					update_post_meta( $sp->ID, '_menu_item_url', str_replace( $source_site_url, $dest_site_url, $url ) );
 				}
+
+				// Delete all edit locks.
+				$wpdb->delete(
+					$wpdb->postmeta,
+					array(
+						'meta_key' => '_edit_lock',
+					)
+				);
 			}
 		}
 
