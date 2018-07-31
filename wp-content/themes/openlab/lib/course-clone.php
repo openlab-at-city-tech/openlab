@@ -664,18 +664,28 @@ class Openlab_Clone_Course_Group {
 		// @todo - forum attachments
 	}
 
+	/**
+	 * Gets the admins of all source groups.
+	 *
+	 * This returns admins for ALL courses in a clone history, so that grandchildren+ get
+	 * original content cloned properly.
+	 */
 	protected function get_source_group_admins() {
-		if ( empty( $this->source_group_admins ) ) {
-			$g                         = groups_get_group(
-				array(
-					'group_id'        => $this->source_group_id,
-					'populate_extras' => true,
-				)
-			);
-			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
+		if ( ! empty( $this->source_group_admins ) ) {
+			return $this->source_group_admins;
 		}
 
-		return $this->source_group_admins;
+		$clone_history = openlab_get_group_clone_history( $this->group_id );
+
+		$admin_ids = array();
+		foreach ( $clone_history as $group_id ) {
+			$group     = groups_get_group( $group_id );
+			$admin_ids = array_merge( $admin_ids, wp_list_pluck( $group->admins, 'user_id' ) );
+		}
+
+		$this->source_group_admins = array_unique( $admin_ids );
+
+		return $admin_ids;
 	}
 }
 
@@ -916,22 +926,30 @@ class Openlab_Clone_Course_Site {
 	}
 
 	protected function get_source_group_admins() {
-		if ( empty( $this->source_group_admins ) ) {
-			// Must switch back to root site to get admins. See #2201.
-			$switched = false;
-			if ( ! bp_is_root_blog() ) {
-				$switched = true;
-				switch_to_blog( bp_get_root_blog_id() );
-			}
-
-			$g                         = groups_get_group( $this->source_group_id );
-			$admins                    = $g->admins;
-			$this->source_group_admins = wp_list_pluck( $g->admins, 'user_id' );
-
-			if ( $switched ) {
-				restore_current_blog();
-			}
+		if ( ! empty( $this->source_group_admins ) ) {
+			return $this->source_group_admins;
 		}
+
+		$clone_history = openlab_get_group_clone_history( $this->group_id );
+
+		// Must switch back to root site to get admins. See #2201.
+		$switched = false;
+		if ( ! bp_is_root_blog() ) {
+			$switched = true;
+			switch_to_blog( bp_get_root_blog_id() );
+		}
+
+		$admin_ids = array();
+		foreach ( $clone_history as $group_id ) {
+			$group     = groups_get_group( $group_id );
+			$admin_ids = array_merge( $admin_ids, wp_list_pluck( $group->admins, 'user_id' ) );
+		}
+
+		if ( $switched ) {
+			restore_current_blog();
+		}
+
+		$this->source_group_admins = array_unique( $admin_ids );
 
 		return $this->source_group_admins;
 	}
