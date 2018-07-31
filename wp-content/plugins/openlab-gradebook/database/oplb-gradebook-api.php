@@ -182,8 +182,8 @@ class oplb_gradebook_api
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
             $cells = $wpdb->get_results($query, ARRAY_A);
 
-            foreach ($assignments as &$assignment) {
-                $assignment['gbid'] = intval($assignment['gbid']);
+            foreach ($cells as &$cell) {
+                $cells['gbid'] = intval($cells['gbid']);
             }
 
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
@@ -458,7 +458,7 @@ class oplb_gradebook_api
         global $wpdb;
         $average_out = 0.00;
 
-        $current_grade_average_query = $wpdb->prepare("SELECT current_grade_average FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $uid, $gbid, 1);
+        $current_grade_average_query = $wpdb->prepare("SELECT current_grade_average FROM {$wpdb->prefix}oplb_gradebook_users WHERE uid = %d AND gbid = %d", $uid, $gbid);
         $current_grade_average = $wpdb->get_results($current_grade_average_query);
 
         if (empty($current_grade_average)) {
@@ -565,7 +565,7 @@ class oplb_gradebook_api
         //calibrate weight to 100
         $normalization_pct = 100 / $weights_return['total_weight'];
 
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid, 1);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
         $assignments = $wpdb->get_results($query);
 
         if (empty($assignments)) {

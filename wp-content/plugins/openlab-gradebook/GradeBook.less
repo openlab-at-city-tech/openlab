@@ -398,9 +398,9 @@ span.twitter-typeahead {
     @media (max-width: 479px) {
         flex-wrap: wrap;
         justify-content: flex-start;
-        .btn-arrange{
+        .btn-arrange {
             margin: 0 12px 12px 0;
-            &:last-child{
+            &:last-child {
                 width: 100%;
             }
         }
@@ -530,6 +530,17 @@ span.twitter-typeahead {
                 top: 15px !important;
             }
         }
+        .gradebook-student-column-average {
+            .tooltip {
+                .tooltip-inner {
+                    @media (max-width: 767px) {
+                        left: -107%;
+                        position: relative;
+                        width: 250%;
+                    }
+                }
+            }
+        }
         .student-grades {
             min-width: 65px;
             span {
@@ -545,6 +556,11 @@ span.twitter-typeahead {
                 .tooltip-inner {
                     left: 25%;
                     position: relative;
+                    @media (max-width: 767px) {
+                        left: -107%;
+                        position: relative;
+                        width: 250%;
+                    }
                 }
             }
             .grade-selector {
@@ -594,10 +610,17 @@ span.twitter-typeahead {
             table {
                 table-layout: fixed;
                 width: 130px;
+                @media (max-width: 767px) {
+                    table-layout: auto;
+                    width: auto;
+                }
             }
             .student-grades {
                 width: 65px;
                 padding: 15px 8px 10px;
+                @media (max-width: 767px) {
+                    padding: 19px 8px 3px;
+                }
             }
         }
     }

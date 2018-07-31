@@ -6,7 +6,7 @@
 class OPLB_DATABASE
 {
 
-    const oplb_gradebook_db_version = 1.81;
+    const oplb_gradebook_db_version = 1.82;
 
     public function __construct()
     {
@@ -55,13 +55,6 @@ class OPLB_DATABASE
             update_option("oplb_gradebook_db_version", 1.6);
         }
 
-        if (get_option('oplb_gradebook_db_version') < 1.7) {
-
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD is_null tinyint unsigned NOT NULL DEFAULT 0";
-            $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.7);
-        }
-
         if (get_option('oplb_gradebook_db_version') < 1.81) {
 
             $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '--'";
@@ -71,6 +64,19 @@ class OPLB_DATABASE
             $wpdb->query($sql);
 
             update_option("oplb_gradebook_db_version", 1.81);
+        }
+
+        if (get_option('oplb_gradebook_db_version') < 1.82) {
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_cells LIKE %s", 'is_null');
+            $check_columns = $wpdb->get_results($query);
+            
+            if (empty($check_columns)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD is_null tinyint unsigned NOT NULL DEFAULT 0";
+                $wpdb->query($sql);
+            }
+            update_option("oplb_gradebook_db_version", 1.82);
         }
 
     }
@@ -154,7 +160,7 @@ class OPLB_DATABASE
                 foreach ($missing_columns as $missing_column) {
                     $sql = $sql . 'ADD ' . $missing_column . ' ' . $table_columns_specs[$missing_column] . ', ';
                 }
-                $sql = $wpdb->prepare(rtrim(trim($sql), ','));
+                $sql = $wpdb->prepare(rtrim(trim($sql), ','), '');
                 $wpdb->query($sql);
             }
         }
