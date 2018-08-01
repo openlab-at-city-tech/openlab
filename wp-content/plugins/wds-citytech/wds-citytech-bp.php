@@ -628,7 +628,6 @@ add_filter( 'tiny_mce_before_init', function( $settings, $editor_id ) {
 			if ( typeof window.tinyMCE === 'undefined' || window.tinyMCE.activeEditor === null || typeof window.tinyMCE.activeEditor === 'undefined' ) {
 				return;
 			} else {
-				console.log(groupId);
 				jQuery( window.tinyMCE.activeEditor.contentDocument.activeElement )
 				  .data( 'bp-suggestions-group-id', groupId );
 			}
