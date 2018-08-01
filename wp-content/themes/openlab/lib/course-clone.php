@@ -213,12 +213,12 @@ function openlab_group_sharing_settings_markup( $group_id ) {
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
-		<div class="panel-heading semibold">Sharing Settings</div>
+		<div class="panel-heading semibold">Shared Cloning Settings</div>
 		<div class="panel-body">
-			<p>This setting enables other faculty to reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
+			<p>This setting enables other faculty to clone your course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
 
 			<div class="checkbox">
-				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable sharing</label>
+				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable shared cloning</label>
 			</div>
 		</div>
 
