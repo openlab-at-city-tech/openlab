@@ -304,7 +304,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_shareable_content_widget',
-			'Shareable Content',
+			'Shared Cloning',
 			array(
 				'description' => ''
 			)
@@ -338,7 +338,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Shareable Content' . $args['after_title'];
+		echo $args['before_title'] . 'Shared Cloning' . $args['after_title'];
 		echo sprintf( '<p><a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a></p>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
 		echo $args['after_widget'];
 	}
