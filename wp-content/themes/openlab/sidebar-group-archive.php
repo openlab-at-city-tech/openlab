@@ -247,7 +247,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                 </div>
 
 				<?php $badges = \OpenLab\Badges\Badge::get( array( 'hide_empty' => true ) ); ?>
-				<?php if ( $badges ) : ?>
+				<?php if ( $badges && in_array( $group_type, array( 'course', 'project' ), true ) ) : ?>
 					<div class="custom-select">
 						<label for="badge-select" class="sr-only">Select Type</label>
 						<select id="badge-select" name="group_badge" class="last-select <?php echo $badge_color; ?>-text">
