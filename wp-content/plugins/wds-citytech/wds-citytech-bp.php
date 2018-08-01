@@ -551,7 +551,7 @@ add_filter( 'bp_activity_maybe_load_mentions_scripts', function( $load ) {
 		return $load;
 	}
 
-	if ( bp_is_messages_compose_screen() ) {
+	if ( bp_is_messages_compose_screen() || bp_is_messages_conversation() ) {
 		return true;
 	}
 

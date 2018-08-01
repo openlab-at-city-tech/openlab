@@ -76,7 +76,7 @@
 
 					<?php do_action( 'bp_before_message_reply_box' ) ?>
 
-					<textarea class="form-control" name="content" id="message_content" rows="15" cols="40"></textarea>
+					<textarea class="form-control bp-suggestions" name="content" id="message_content" rows="15" cols="40"></textarea>
 
 					<?php do_action( 'bp_after_message_reply_box' ) ?>
 
