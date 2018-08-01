@@ -46,10 +46,18 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 	foreach ( $source_ids as $source_id ) {
 		$source_group = groups_get_group( $source_id );
 
+		$course_code = groups_get_groupmeta( $source_id, 'wds_course_code' );
+		$group_type  = openlab_get_group_type_label(
+			array(
+				'group_id' => $group_id,
+				'case'     => 'upper',
+			)
+		);
+
 		$source_data = array(
 			'group_id'           => $source_id,
 			'group_url'          => bp_get_group_permalink( $source_group ),
-			'group_name'         => $source_group->name,
+			'group_name'         => $course_code ? $course_code : $group_type,
 			'group_creator_id'   => $source_group->creator_id,
 			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
 			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
