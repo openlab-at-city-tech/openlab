@@ -17,7 +17,7 @@
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>
 
 			<div class="message-box panel panel-default">
-                            
+
                             <div class="panel-body">
 
 				<div class="message-metadata">
