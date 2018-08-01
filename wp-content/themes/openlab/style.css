@@ -7453,9 +7453,6 @@ input[type="submit"] {
   padding: 0 7px 0 0;
   margin-right: 7px;
 }
-.has-menu-items.is-mol-menu .submenu-text {
-  color: #3ba49b;
-}
 .has-menu-items.is-mol-menu .submenu-text a {
   color: #3ba49b;
 }
