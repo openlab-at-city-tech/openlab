@@ -621,7 +621,7 @@ add_filter( 'the_editor', function( $editor ) {
 add_filter( 'tiny_mce_before_init', function( $settings, $editor_id ) {
 	if ( 'content' === $editor_id ) {
 		$settings['init_instance_callback'] = "function() {
-			window.bp.mentions.tinyMCEinit;
+			window.bp.mentions.tinyMCEinit();
 
 			var groupId = jQuery( '#content' ).data( 'suggestions-group-id' );
 
