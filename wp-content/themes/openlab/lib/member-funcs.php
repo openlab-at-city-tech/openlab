@@ -1001,3 +1001,8 @@ function openlab_trim_message_subject($subject) {
 }
 
 add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
+
+/**
+ * Ensure that @-mentions in message content are properly linked.
+ */
+add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
