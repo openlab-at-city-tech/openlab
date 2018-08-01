@@ -24,8 +24,6 @@ OpenLab.truncation = (function ($) {
 
         },
         truncateOnTheFly: function (onInit, loadDelay) {
-            
-            console.log('truncateOnTheFly go');
 
             if (onInit === undefined) {
                 var onInit = false;
@@ -124,8 +122,6 @@ OpenLab.truncation = (function ($) {
                         sizerContainer.css({
                             'white-space': 'normal'
                         });
-
-                        console.log('originalCopy, sizerContainerNoWrap_w, sizerContainer_w', originalCopy, sizerContainerNoWrap_w, sizerContainer_w);
 
                         if (sizerContainerNoWrap_w <= sizerContainer_w && sizerContainer_h === sizerContainerNoWrap_h) {
                             OpenLab.truncation.truncateReveal(thisElem);
@@ -265,10 +261,10 @@ OpenLab.truncation = (function ($) {
     });
 
     $(window).on('resize', function (e) {
-        
+
         clearTimeout(truncationResizeTimer);
         truncationResizeTimer = setTimeout(function () {
-            
+
             if ($('.truncate-on-the-fly').length) {
 
                 $('.trucate-obfuscate').css('opacity', 0);
