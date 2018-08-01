@@ -96,10 +96,6 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                 </div>
             <?php endif; ?>
 
-            <?php if ( openlab_group_type_can_be_cloned( $group_type ) ) : ?>
-                <?php openlab_group_sharing_settings_markup( bp_get_current_group_id() ); ?>
-            <?php endif; ?>
-
             <?php if (function_exists('bbpress') && !openlab_is_portfolio()) : ?>
                 <?php $forum_enabled = openlab_is_forum_enabled_for_group() ?>
                 <div class="panel panel-default">

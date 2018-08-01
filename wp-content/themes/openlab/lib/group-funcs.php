@@ -1699,3 +1699,28 @@ function openlab_add_badge_button_to_profile() {
 	<?php
 }
 add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );
+
+add_action( 'bp_after_group_details_creation_step', function() {
+    if ( ! empty( $_GET['type'] ) ) {
+        $group_type = $_GET['type'];
+    } else {
+        $group_type = 'club';
+    }
+
+	$group_type_supports_cloning = openlab_group_type_can_be_cloned( $group_type );
+
+    if ( $group_type_supports_cloning ) {
+        openlab_group_sharing_settings_markup( 0 );
+    }
+}, 4 );
+
+add_action( 'bp_after_group_details_admin', function() {
+    $group      = groups_get_current_group();
+    $group_type = groups_get_groupmeta( $group->id, 'wds_group_type' );
+
+	$group_type_supports_cloning = openlab_group_type_can_be_cloned( $group_type );
+
+    if ( $group_type_supports_cloning ) {
+        openlab_group_sharing_settings_markup( bp_get_current_group_id() );
+    }
+}, 4 );
