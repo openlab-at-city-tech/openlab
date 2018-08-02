@@ -551,7 +551,7 @@ add_filter( 'bp_activity_maybe_load_mentions_scripts', function( $load ) {
 		return $load;
 	}
 
-	if ( bp_is_messages_compose_screen() ) {
+	if ( bp_is_messages_compose_screen() || bp_is_messages_conversation() ) {
 		return true;
 	}
 
@@ -621,14 +621,13 @@ add_filter( 'the_editor', function( $editor ) {
 add_filter( 'tiny_mce_before_init', function( $settings, $editor_id ) {
 	if ( 'content' === $editor_id ) {
 		$settings['init_instance_callback'] = "function() {
-			window.bp.mentions.tinyMCEinit;
+			window.bp.mentions.tinyMCEinit();
 
 			var groupId = jQuery( '#content' ).data( 'suggestions-group-id' );
 
 			if ( typeof window.tinyMCE === 'undefined' || window.tinyMCE.activeEditor === null || typeof window.tinyMCE.activeEditor === 'undefined' ) {
 				return;
 			} else {
-				console.log(groupId);
 				jQuery( window.tinyMCE.activeEditor.contentDocument.activeElement )
 				  .data( 'bp-suggestions-group-id', groupId );
 			}
