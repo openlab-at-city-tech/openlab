@@ -206,6 +206,7 @@ class oplb_gradebook_api
                 $student_id = array_merge($student_extras, $student_id);
             }
             usort($cells, $this->build_sorter('assign_order'));
+            $cells_by_assignment = array();
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
@@ -214,10 +215,11 @@ class oplb_gradebook_api
                 $cell['gbid'] = intval($cell['gbid']);
                 $cell['id'] = intval($cell['id']);
                 $cell['is_null'] = boolval($cell['is_null']);
+                $cells_by_assignment[$cell['amid']] = $cell;
             }
 
             //get weight info
-            $get_weight_info = $this->oplb_gradebook_get_total_weight($gbid);
+            $get_weight_info = $this->oplb_gradebook_get_total_weight($gbid, $cells_by_assignment);
 
             return array(
                 "assignments" => $assignments,
@@ -481,7 +483,7 @@ class oplb_gradebook_api
      * @global type $wpdb
      * @return type
      */
-    public function oplb_gradebook_get_total_weight($gbid)
+    public function oplb_gradebook_get_total_weight($gbid, $cells)
     {
         global $wpdb;
         $weights_by_assignment = array();
@@ -495,6 +497,13 @@ class oplb_gradebook_api
         $assignments_with_no_weight = 0;
         foreach ($weights as $weight) {
             $total_weight = $total_weight + $weight['assign_weight'];
+
+            $this_cell = $cells[$weight['id']];
+
+            if($this_cell->is_null){
+                continue;
+            }
+
             $weights_by_assignment[$weight['id']] = number_format((float)$weight['assign_weight'], 2, '.', '');
 
             //let's work out any assignments that don't have a weight
@@ -557,34 +566,27 @@ class oplb_gradebook_api
 
         $average_out = 0.00;
 
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
+        $assignments = $wpdb->get_results($query);
+
+        //cells by assignment
+        $cells_by_assignment = array();
+        foreach($assignments as $assignment){
+
+            $cells_by_assignment[$assignment->amid] = $assignment;
+
+        }
+
         //first get total weight
-        $weights_return = $this->oplb_gradebook_get_total_weight($gbid);
+        $weights_return = $this->oplb_gradebook_get_total_weight($gbid, $cells_by_assignment);
         $weights_by_assignment = $weights_return['weights_by_assignment'];
         $total_weight = $weights_return['total_weight'];
 
         //calibrate weight to 100
         $normalization_pct = 100 / $weights_return['total_weight'];
 
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
-        $assignments = $wpdb->get_results($query);
-
         if (empty($assignments)) {
             return number_format((float)$average_out, 2, '.', '');
-        }
-
-        foreach ($assignments as $assignment) {
-            //handling null value grades, which are excepted from the average
-            if (intval($assignment->is_null) === 1) {
-
-                $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignment->amid, $gbid);
-
-                $assign_weight_retrieve = $wpdb->get_results($query);
-                $assign_weight = $assign_weight_retrieve[0]->assign_weight;
-
-                //recalculate normatlization pct
-                $total_weight = $total_weight - $assign_weight;
-                $normalization_pct = 100 / $total_weight;
-            }
         }
 
         foreach ($assignments as $assignment) {
