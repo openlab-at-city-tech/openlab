@@ -20,8 +20,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     this.gradebook = options.gradebook;
                                     this.course = options.course;
                                     this.student = this.model;
-                                    this.listenTo(this.model, 'change', this.render);
-                                    this.listenTo(this.gradebook, 'change:assignments', this.render);
 
                                     Backbone.pubSub.on('editSuccess', this.editSuccess, this);
 
@@ -165,6 +163,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                             type: 'display_value'
                                         }
                                     ]);
+
+                                    this.studentGradeLabels('mid');
+                                    this.studentGradeLabels('final');
+
+                                    this.listenTo(this.model, 'change', this.render);
+                                    this.listenTo(this.gradebook, 'change:assignments', this.render);
                                 },
                                 render: function (pinned, assignments) {
                                     //give pinned a default
@@ -177,6 +181,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     if (pinned === 'pinned') {
                                         mobile_styles = ' visible-xs';
                                     }
+
+                                    console.log('this.model in render studentView', this.model);
 
                                     var self = this;
                                     var template = _.template($('#student-view-template').html());
@@ -214,6 +220,38 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     this.postLoadActions();
 
                                     return this.el;
+                                },
+                                studentGradeLabels: function(ev){
+
+                                    var toSearch = this.midGrades;
+                                    var studentVal = this.model.get('mid_semester_grade');
+                                    var title = '';
+
+                                    if(ev === 'final'){ 
+                                         toSearch = this.finalGrades;
+                                         studentVal = this.model.get('final_grade');
+                                    }
+
+                                    _.each(toSearch.models, function (grade) {
+                                        
+                                        if(grade.get('value') === studentVal + '_display' && title === ''){
+                                            title = grade.get('label');
+                                        } else if(grade.get('value') === studentVal && title === ''){
+                                            title = grade.get('label');
+                                        }
+
+                                    });
+
+                                    if(title === ''){
+                                        title = '--';
+                                    }
+
+                                    if(ev === 'final'){
+                                        this.student.set('tool_tip_final', title);
+                                    } else {
+                                        this.student.set('tool_tip_mid', title);
+                                    }
+
                                 },
                                 postLoadActions: function(){
                                     $('[data-toggle="tooltip"]').tooltip();
@@ -327,8 +365,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     });
 
                                     this.$el.find(targetSelector).attr('title', title)
-                                    .tooltip('fixTitle')
-                                    .tooltip('show');
+                                    .tooltip('fixTitle');
                                     
                                 },
                                 editSuccess: function(){

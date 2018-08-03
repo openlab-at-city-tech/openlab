@@ -486,6 +486,26 @@ span.twitter-typeahead {
 .table-wrapper .scrollable .student-grades .grade-selector .display-value {
   display: none;
 }
+.table-wrapper .scrollable .student-grades.mid-semester-grade .tooltip,
+.table-wrapper .scrollable .student-grades.final-grade .tooltip {
+  margin-top: 0;
+}
+.table-wrapper .scrollable .student-grades.mid-semester-grade .tooltip .tooltip-arrow,
+.table-wrapper .scrollable .student-grades.final-grade .tooltip .tooltip-arrow {
+  left: 50%;
+  margin-left: 7px;
+  border-width: 0 5px 15px;
+  z-index: 2;
+  transform: rotate(-30deg);
+  top: -7px;
+}
+.table-wrapper .scrollable .student-grades.mid-semester-grade .tooltip .tooltip-inner,
+.table-wrapper .scrollable .student-grades.final-grade .tooltip .tooltip-inner {
+  left: 60%;
+  background: #efefef;
+  color: #000;
+  border: 1px solid #dddddd;
+}
 .table-wrapper .scrollable th,
 .table-wrapper .scrollable td {
   min-width: 180px;

@@ -570,6 +570,26 @@ span.twitter-typeahead {
                     display: none;
                 }
             }
+            &.mid-semester-grade,
+            &.final-grade{
+                .tooltip{
+                    margin-top: 0;
+                    .tooltip-arrow{
+                        left: 50%;
+                        margin-left: 7px;
+                        border-width: 0 5px 15px;
+                        z-index: 2;
+                        transform: rotate(-30deg);
+                        top: -7px;
+                    }
+                    .tooltip-inner{
+                        left: 60%;
+                        background: #efefef;
+                        color: #000;
+                        border: 1px solid #dddddd;
+                    }
+                }
+            }
         }
         th,
         td {
