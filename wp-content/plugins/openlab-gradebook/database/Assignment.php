@@ -64,6 +64,8 @@ class gradebook_assignment_API
                 if (!empty($student_data)) {
                     $return_data['student_grade_update'] = $student_data;
                 }
+
+                wp_die('hold it');
                 
                 //get the total weight
                 $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
@@ -192,6 +194,8 @@ class gradebook_assignment_API
                     $is_null = 0;
                 }
 
+                wp_die('hold it');
+
                 foreach ($studentIDs as $value) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
@@ -202,9 +206,6 @@ class gradebook_assignment_API
                         'is_null' => $is_null,
                     ), array('%d', '%d', '%d', '%d', '%f', '%d'));
                 }
-
-                wp_die('hold it');
-
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignID, $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
                 $assignment['assign_order'] = intval($assignment['assign_order']);
