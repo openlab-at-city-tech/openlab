@@ -51,7 +51,7 @@ function openlab_mu_enqueue() {
     wp_register_script('google-plus-one', 'https://apis.google.com/js/plusone.js');
     wp_enqueue_script('google-plus-one');
 
-    $js_ver = '1.6.8.8';
+    $js_ver = '1.6.8.9';
 
     // adding smooth scroll
     if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
