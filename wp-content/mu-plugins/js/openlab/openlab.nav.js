@@ -70,7 +70,7 @@ OpenLab.nav = (function ($) {
         },
         hoverFixes: function () {
             //fixing hover issues on mobile
-            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
+            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
                 $('.mobile-no-hover').bind('touchend', function () {
                     OpenLab.nav.fixHoverOnMobile($(this));
                 })
@@ -363,6 +363,7 @@ OpenLab.nav = (function ($) {
             return $('.device-' + alias).is(':visible');
         },
         fixHoverOnMobile: function (thisElem) {
+            console.log('fixHoverOnMobile click', thisElem);
             thisElem.trigger('click');
         },
         userNameAdjustments: function (reset) {
