@@ -64,12 +64,10 @@ class gradebook_assignment_API
                 if (!empty($student_data)) {
                     $return_data['student_grade_update'] = $student_data;
                 }
-
-                wp_die('hold it');
                 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
-                $return_data['distributed_weight'] = $weight_return['distributed_weight'];
+                //$weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                //$return_data['distributed_weight'] = $weight_return['distributed_weight'];
 
                 echo json_encode($return_data);
                 break;
@@ -194,8 +192,6 @@ class gradebook_assignment_API
                     $is_null = 0;
                 }
 
-                wp_die('hold it');
-
                 foreach ($studentIDs as $value) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
@@ -213,9 +209,9 @@ class gradebook_assignment_API
                 $assignment['id'] = intval($assignment['id']);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid']);
-                $assignment['total_weight'] = $weight_return['total_weight'];
-                $assignment['distributed_weight'] = $weight_return['distributed_weight'];
+                //$weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid']);
+                //$assignment['total_weight'] = $weight_return['total_weight'];
+                //$assignment['distributed_weight'] = $weight_return['distributed_weight'];
 
                 $student_data = $oplb_gradebook_api->oplb_gradebook_update_all_student_current_grade_averages($assignment['gbid']);
 
