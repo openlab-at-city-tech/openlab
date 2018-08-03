@@ -115,13 +115,13 @@ class gradebook_assignment_API
                 $assignment = $wpdb->get_row($query, ARRAY_A);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                //$weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
 
                 $assignment['id'] = intval($assignment['id']);
                 $assignment['gbid'] = intval($assignment['gbid']);
                 $assignment['assign_order'] = intval($assignment['assign_order']);
                 $assignment['total_weight'] = $weight_return['total_weight'];
-                $assignment['distributed_weight'] = $weight_return['distributed_weight'];
+                //$assignment['distributed_weight'] = $weight_return['distributed_weight'];
 
                 //if weight changed, update students
                 if ($current_weight !== $incoming_weight) {
