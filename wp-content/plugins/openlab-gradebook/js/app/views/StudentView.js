@@ -211,7 +211,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         });
                                     }
 
+                                    this.postLoadActions();
+
                                     return this.el;
+                                },
+                                postLoadActions: function(){
+                                    $('[data-toggle="tooltip"]').tooltip();
                                 },
                                 clearSubViews: function () {
                                     var self = this;
@@ -295,6 +300,35 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
 
                                     var toedit = new User();
                                     toedit.updateStudentGrade(value, type, uid, gbid);
+
+                                    this.handleTooltips(ev);
+                                    
+                                },
+                                handleTooltips: function(ev){
+                                  
+                                    var targetSelector = '.grade-selector.' + ev;
+                                    var value = this.$el.find(targetSelector).val();
+
+                                    var toSearch = this.midGrades;
+
+                                    if(ev === 'final'){ 
+                                         toSearch = this.finalGrades;
+                                    }
+
+                                    var title = '';
+                                    toSearch.each(function(grade){
+                                        console.log('grade', grade);
+                                        if(grade.get('value') === value + '_display' && title === ''){
+                                            title = grade.get('label');
+                                        } else if(grade.get('value') === value && title === ''){
+                                            title = grade.get('label');
+                                        }
+
+                                    });
+
+                                    this.$el.find(targetSelector).attr('title', title)
+                                    .tooltip('fixTitle')
+                                    .tooltip('show');
                                     
                                 },
                                 editSuccess: function(){
