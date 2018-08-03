@@ -3810,7 +3810,7 @@ OpenLab.nav = (function ($) {
         hoverFixes: function () {
             //fixing hover issues on mobile
             console.log('hoverFixes go');
-            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
+            if (OpenLab.nav.isBreakpoint('xxs') || OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
                 console.log('mobile-no-hover objects', $('.mobile-no-hover'));
                 $('.mobile-no-hover').bind('touchend', function () {
                     console.log('mobile no hover touchend', $(this));
