@@ -31,6 +31,7 @@ ul.badge-links li:last-child {
 }
 
 .badge-image {
+	background: #444;
 	border: 5px solid #444;
 	border-radius: 35px;
 	width: 100%;
@@ -58,6 +59,7 @@ ul.badge-links li:last-child {
 }
 
 .group-list .badge-image {
+	background: #68dfd2;
 	border: 2px solid #68dfd2;
 	border-radius: 17px;
 }
