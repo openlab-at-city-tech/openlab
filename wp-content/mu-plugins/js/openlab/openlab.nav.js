@@ -70,11 +70,8 @@ OpenLab.nav = (function ($) {
         },
         hoverFixes: function () {
             //fixing hover issues on mobile
-            console.log('hoverFixes go');
             if (OpenLab.nav.isBreakpoint('xxs') || OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
-                console.log('mobile-no-hover objects', $('.mobile-no-hover'));
                 $('.mobile-no-hover').bind('touchend', function () {
-                    console.log('mobile no hover touchend', $(this));
                     OpenLab.nav.fixHoverOnMobile($(this));
                 })
             }
@@ -240,7 +237,6 @@ OpenLab.nav = (function ($) {
                 }
 
                 if (thisElem.hasClass('active')) {
-                    console.log('hiding menu via directToggleResizeHandler');
                     OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
 
                 }
@@ -366,7 +362,6 @@ OpenLab.nav = (function ($) {
             return $('.device-' + alias).is(':visible');
         },
         fixHoverOnMobile: function (thisElem) {
-            console.log('fixHoverOnMobile click', thisElem);
             thisElem.trigger('click');
         },
         userNameAdjustments: function (reset) {
