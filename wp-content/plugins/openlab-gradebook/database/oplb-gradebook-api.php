@@ -498,10 +498,12 @@ class oplb_gradebook_api
         foreach ($weights as $weight) {
             $total_weight = $total_weight + $weight['assign_weight'];
 
-            $this_cell = $cells[$weight['id']];
+            if (!empty($cells[$weight['id']])) {
+                $this_cell = $cells[$weight['id']];
 
-            if($this_cell->is_null){
-                continue;
+                if ($this_cell->is_null) {
+                    continue;
+                }
             }
 
             $weights_by_assignment[$weight['id']] = number_format((float)$weight['assign_weight'], 2, '.', '');
@@ -571,7 +573,7 @@ class oplb_gradebook_api
 
         //cells by assignment
         $cells_by_assignment = array();
-        foreach($assignments as $assignment){
+        foreach ($assignments as $assignment) {
 
             $cells_by_assignment[$assignment->amid] = $assignment;
 
