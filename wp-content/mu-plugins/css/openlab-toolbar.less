@@ -309,12 +309,13 @@
                 justify-content: flex-end;
                 flex-basis: 5%;
                 min-width: 85px;
+                max-width: 85px;
                 .menupop {
                     .ab-sub-wrapper {
                         right: -1px;
                     }
                 }
-                @media (max-width: @screen-xs-max){
+                @media (max-width: @screen-xs-max) {
                     flex-basis: 26px;
                 }
             }
@@ -454,7 +455,7 @@
             }
             #wp-admin-bar-my-account {
                 flex-grow: 2;
-                > .ab-item {
+                >.ab-item {
                     display: inline-block;
                     width: 100%;
                     text-align: right;
