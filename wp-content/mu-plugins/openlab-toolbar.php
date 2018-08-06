@@ -1445,7 +1445,7 @@ HTML;
 		) . '" alt="Profile picture of ' . $current_user->display_name . '"/></a></div></div>';
 
 		// Name link.
-		$user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name bold">' . $current_user->display_name . '</span>';
+		$user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name hyphenate bold">' . $current_user->display_name . '</span>';
 		$user_info .= $user_login !== '' ? '<a href="' . $profile_url . '">' . $user_login . '</a>' : '';
 		$user_info .= '</p>';
 
@@ -1571,7 +1571,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.6.9.8' );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.6.9.9' );
 	}
 
 	function adminbar_special_body_class( $classes ) {
