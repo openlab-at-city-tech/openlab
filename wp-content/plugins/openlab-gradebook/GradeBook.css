@@ -521,6 +521,16 @@ span.twitter-typeahead {
 .table-wrapper .scrollable #students td.student-tools {
   max-width: 50px;
 }
+.table-wrapper .scrollable #students-header th.gradebook-student-column-interactive button#download-csv-mobile,
+.table-wrapper .scrollable #students td.student-tools button#download-csv-mobile {
+  background: #0073aa;
+  font-size: 22px;
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+  color: #fff;
+  width: 34px;
+}
 @media (max-width: 767px) {
   .table-wrapper .scrollable {
     margin-left: 0;

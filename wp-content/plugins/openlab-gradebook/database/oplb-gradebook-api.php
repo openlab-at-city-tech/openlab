@@ -1002,8 +1002,8 @@ class oplb_gradebook_api
                 'lastname' => $studentData->last_name,
                 'username' => $studentData->user_login,
                 'current_grade_average' => $value->current_grade_average,
-                'mid_semester_grade' => $value->mid_semester_grade,
-                'final_grade' => $value->final_grade,
+                'mid_semester_grade' => $this->get_student_grade_label($value->mid_semester_grade),
+                'final_grade' => $this->get_student_grade_label($value->final_grade),
                 'id' => intval($studentData->ID),
             );
         }
@@ -1206,6 +1206,37 @@ class oplb_gradebook_api
             );
 
         }
+
+    }
+
+    public function get_student_grade_label($grade)
+    {
+
+        $conversion_table = array(
+            'passing' => 'P',
+            'borderline' => 'BL',
+            'unsatisfactory' => 'U',
+            'stopped_attending' => 'SA',
+            'a' => 'A',
+            'a_minus' => 'A-',
+            'b_plus' => 'B+',
+            'b' => 'B',
+            'b_minus' => 'B-',
+            'c_plus' => 'C+',
+            'c' => 'C',
+            'd' => 'D',
+            'f' => 'F',
+            'wf' => 'WF',
+            'wn' => 'WN',
+            'wn_admin' => '* WN',
+            'wu' => 'WU',
+        );
+
+        if (!empty($conversion_table[$grade])) {
+            return $conversion_table[$grade];
+        }
+
+        return $grade;
 
     }
 

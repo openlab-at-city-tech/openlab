@@ -50,6 +50,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 events: {
                     'click button#add-student': 'addStudent',
                     'click button#download-csv': 'downloadCSV',
+                    'click button#download-csv-mobile': 'downloadCSV',
                     'click button#add-assignment': 'addAssignment',
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
