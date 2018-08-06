@@ -9,9 +9,6 @@ if ( ! class_exists( 'GFForms' ) ) {
  * look into the post_upgrade_schema() function for a sample and instructions on how to do it.
  */
 
-/** WordPress Upgrade Functions */
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
 class GF_Upgrade {
 
 	private $versions = null;

@@ -166,14 +166,17 @@ class GF_Query {
 
 		$force_order_numeric = false;
 		if ( ! $order->is_entry_column() ) {
-
-			$form = GFAPI::get_form( $form_id );
-			$field = GFFormsModel::get_field( $form, $sort_field );
-
-			if ( $field && $field->get_input_type() == 'number' ) {
-				$force_order_numeric = isset( $sorting['is_numeric'] ) ? $sorting['is_numeric'] : true;
+			if ( isset( $sorting['is_numeric'] ) ) {
+				$force_order_numeric = $sorting['is_numeric'];
 			} else {
-				$force_order_numeric = isset( $sorting['is_numeric'] ) ? $sorting['is_numeric'] : false;
+				$field = GFAPI::get_field( $form_id, $sort_field );
+
+				if ( $field instanceof GF_Field ) {
+					$force_order_numeric = $field->get_input_type() == 'number';
+				} else {
+					$entry_meta          = GFFormsModel::get_entry_meta( $form_id );
+					$force_order_numeric = rgars( $entry_meta, $sort_field . '/is_numeric' );
+				}
 			}
 		}
 
@@ -781,6 +784,7 @@ class GF_Query {
 		$paginate = implode( ' ', array_filter( array( $limit, $offset ), 'strlen' ) );
 
 		$sql = implode( ' ', array_filter( array( $select, $from, $join, $where, $order, $paginate ), 'strlen' ) );
+		GFCommon::log_debug( __METHOD__ . '(): sql => ' . $sql );
 
 		$this->timer_start();
 		$results = $wpdb->get_results( $sql, ARRAY_N );
@@ -987,15 +991,13 @@ class GF_Query {
 					GF_Query_Condition::_and( $this->where, $meta_condition )
 				);
 
-				if ( empty( $_joins ) ) {
-					/**
-					 * Make sure the initial join exists.
-					 */
-					$_joins = $this->_join_infer( $meta_condition );
-				}
+				/**
+				 * Make sure the initial join exists.
+				 */
+				$_joins = array_merge( $this->_join_infer( $meta_condition ), $_joins );
 			}
 
-			$_joins [] = sprintf( '`%s` AS `%s` ON `%s`.`%s` = `%s`.`%s`',
+			$_joins[] = sprintf( '`%s` AS `%s` ON `%s`.`%s` = `%s`.`%s`',
 				$table_on, $alias_on, $alias_on, $column_on, $equals_table, $equals_column );
 		}
 
@@ -1309,7 +1311,7 @@ class GF_Query {
 		if( ! $form ) {
 			return false;
 		}
-		
+
 		// running entry through gform_get_field_value filter
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
@@ -1323,6 +1325,7 @@ class GF_Query {
 						$field->id,
 						$input['id']
 					), rgar( $db_values, (string) $input['id'] ), $entry, $field, $input['id'] );
+					unset( $db_values[ (string) $input['id'] ] );
 				}
 			} else {
 				$value = rgar( $db_values, (string) $field->id );
@@ -1334,13 +1337,29 @@ class GF_Query {
 					$form['id'],
 					$field->id
 				), $value, $entry, $field, '' );
+				unset( $db_values[ (string) $field->id ] );
 			}
 		}
 		$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 		$meta_keys  = array_keys( $entry_meta );
 		foreach ( $meta_keys as $meta_key ) {
-			$entry[ $meta_key ] = isset( $db_values[ $meta_key ] ) ? maybe_unserialize( $db_values[ $meta_key ] ) : false;
+			if ( isset( $db_values[ $meta_key ] ) ) {
+				$entry[ $meta_key ] = maybe_unserialize( $db_values[ $meta_key ] );
+				unset( $db_values[ $meta_key ] );
+			} else {
+				$entry[ $meta_key ] = false;
+			}
 		}
+
+		// Assign remaining input values to the entry
+		foreach ( $db_values as $db_key => $db_value ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( intval( $db_key ) == $field->id ) {
+					$entry[ $db_key ] = $db_value;
+				}
+			}
+		}
+
 		return $entry;
 	}
 }

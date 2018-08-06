@@ -4934,6 +4934,10 @@ div.range_max input {
 		margin-left: 0;
 	}
 
+	.gforms_settings_wrap .gform_tab_group {
+		flex-flow: column;
+	}
+
 	.gforms_settings_wrap #gform_tabs{
 		float: none;
 		width:100%;
