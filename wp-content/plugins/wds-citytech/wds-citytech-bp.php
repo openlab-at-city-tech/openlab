@@ -24,7 +24,7 @@ class bpass_Translation_Mangler {
    }
 
 
-   if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
+   if ( isset( $_COOKIE['wds_bp_group_type'] ) && bp_is_group_create() ) {
    	$grouptype = $_COOKIE['wds_bp_group_type'];
    } else {
    	$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
