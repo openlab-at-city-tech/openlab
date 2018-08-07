@@ -36,58 +36,76 @@ class bpass_Translation_Mangler {
 		switch ( $text ) {
 			case 'How do you want to read this group?':
 				return $translations->translate( "How do you want to read this $grouptype?" );
-			 break;
+			break;
+
 			case 'I will read this group on the web':
 				return $translations->translate( "I will read this $grouptype on the web" );
-			 break;
+			break;
+
 			case 'Send all group activity as it arrives':
 				return $translations->translate( "Send all $grouptype activity as it arrives" );
-			 break;
+			break;
+
 			case 'Your email notifications are set to %s for this group.':
 				return $translations->translate( "Your email notifications are set to %s for this $grouptype." );
-			 break;
+			break;
+
 			case 'When new users join this group, their default email notification settings will be:':
 				return $translations->translate( "When new users join this $grouptype, their default email notification settings will be:" );
-			 break;
+			break;
+
 			case 'No Email (users will read this group on the web - good for any group - the default)':
 				return $translations->translate( "No Email (users will read this $grouptype on the web - good for any $grouptype - the default)" );
-			 break;
+			break;
+
 			case "Weekly Summary Email (the week's topics - good for large groups)":
 				return $translations->translate( "Weekly Summary Email (the week\'s topics - good for large $plural_grouptype)" );
-			 break;
+			break;
+
 			case 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)':
 				return $translations->translate( "Daily Digest Email (all daily activity bundles in one email - good for medium-size $plural_grouptype)" );
-			 break;
+			break;
+
 			case 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)':
 				return $translations->translate( "New Topics Email (new topics are sent as they arrive, but not replies - good for small $plural_grouptype)" );
-			 break;
+			break;
+
 			case 'All Email (send emails about everything - recommended only for working groups)':
 				return $translations->translate( "All Email (send emails about everything - recommended only for working $plural_grouptype)" );
-			 break;
+			break;
+
 			case 'Group Email Settings':
 				return $translations->translate( "$uc_grouptype Email Settings" );
 			break;
+
 			case 'To change the email notification settings for your groups go to %s and click change for each group.':
 				return $translations->translate( "To change the email notification settings for your $plural_grouptype go to %s and click change for each $grouptype." );
-			 break;
+			break;
+
 			case 'Send an email notice to everyone in the group':
 				return $translations->translate( "Send an email notice to everyone in the $grouptype" );
 			break;
+
 			case 'You can use the form below to send an email notice to all group members.':
 				return $translations->translate( "You can use the form below to send an email notice to all $grouptype members." );
 			break;
+
 			case 'Everyone in the group will receive the email -- regardless of their email settings -- so use with caution':
 				return $translations->translate( "Everyone in the $grouptype will receive the email -- regardless of their email settings -- so use with caution" );
 			break;
+
 			case ' - sent from the group ':
 				return $translations->translate( " - sent from the $grouptype " );
 			break;
+
 			case 'Send an email when a new member join the group.':
 				return $translations->translate( "Send an email when a new member joins the $grouptype." );
 			break;
+
 			case 'Email this notice to everyone in the group':
 				return $translations->translate( "Email this notice to everyone in the $grouptype" );
 			break;
+
 			case "This is a notice from the group '%s':
 
 \"%s\"
