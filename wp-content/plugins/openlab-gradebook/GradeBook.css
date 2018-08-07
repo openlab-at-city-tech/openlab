@@ -458,12 +458,19 @@ span.twitter-typeahead {
   }
 }
 .table-wrapper .scrollable .student-grades {
-  min-width: 65px;
+  min-width: 68px;
+  position: relative;
+}
+.table-wrapper .scrollable .student-grades .fa-info-circle {
+  position: absolute;
+  font-size: 17px;
+  right: 3px;
+  bottom: 14px;
 }
 .table-wrapper .scrollable .student-grades span {
-  width: 48px;
-  max-width: 48px;
-  min-width: 48px;
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
@@ -481,7 +488,7 @@ span.twitter-typeahead {
   }
 }
 .table-wrapper .scrollable .student-grades .grade-selector {
-  max-width: 48px;
+  max-width: 50px;
 }
 .table-wrapper .scrollable .student-grades .grade-selector .display-value {
   display: none;
@@ -505,6 +512,7 @@ span.twitter-typeahead {
   background: #efefef;
   color: #000;
   border: 1px solid #dddddd;
+  width: 116px;
 }
 .table-wrapper .scrollable th,
 .table-wrapper .scrollable td {
@@ -558,7 +566,7 @@ span.twitter-typeahead {
   }
 }
 .table-wrapper.no-assignments .scrollable .student-grades {
-  width: 65px;
+  width: 68px;
   padding: 15px 8px 10px;
 }
 @media (max-width: 767px) {

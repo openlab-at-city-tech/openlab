@@ -364,7 +364,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
 
                                     });
 
-                                    this.$el.find(targetSelector).attr('title', title)
+                                    this.$el.find(targetSelector).closest('.student-grades').find('.fa-info-circle').attr('title', title)
                                     .tooltip('fixTitle');
                                     
                                 },
