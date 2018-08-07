@@ -22,6 +22,7 @@ function openlab_load_theme_fixes() {
         case 'twentyseventeen' :
         case 'twentysixteen':
         case 'twentyfifteen':
+        case 'twentythirteen':
         case 'twentytwelve':
         case 'twentyeleven':
         case 'twentyten':
