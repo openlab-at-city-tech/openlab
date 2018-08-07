@@ -506,12 +506,19 @@ span.twitter-typeahead {
             padding: 12px 8px;
             width: 15%;
             &.download-csv {
+                position: relative;
                 width: 19.685%;
                 padding: 0;
                 margin: 0;
                 text-align: center;
                 vertical-align: middle;
                 background: #0073aa;
+                .fa-info-circle {
+                    position: absolute;
+                    font-size: 17px;
+                    right: 4px;
+                    bottom: 7px;
+                }
                 button {
                     font-size: 22px;
                     padding: 0;
@@ -553,7 +560,7 @@ span.twitter-typeahead {
             }
             span {
                 width: 60px;
-                max-width:60px;
+                max-width: 60px;
                 min-width: 60px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -564,6 +571,7 @@ span.twitter-typeahead {
                 .tooltip-inner {
                     left: 25%;
                     position: relative;
+                    min-width: 180px;
                     @media (max-width: 767px) {
                         left: -107%;
                         position: relative;
