@@ -107,7 +107,12 @@ function openlab_hide_plugins( $plugins ) {
 		8091,
 		8723,
 		6249,
-		10827
+		10827,
+		12248,
+		9184,
+		7007,
+		10098,
+		8250,
 	);
 
 	$blog_specific_whitelist = array(
