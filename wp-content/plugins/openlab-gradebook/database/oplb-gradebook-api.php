@@ -1223,7 +1223,7 @@ class oplb_gradebook_api
             'f' => 'F',
             'wf' => 'WF',
             'wn' => 'WN',
-            'wn_admin' => '* WN',
+            'wn_admin' => '*WN',
             'wu' => 'WU',
         );
 

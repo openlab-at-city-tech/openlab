@@ -28,7 +28,9 @@
 <td class="student<%= mobile_styles %>"><span id="average<%= student.get('id') %>" data-toggle="tooltip" data-placement="top" title='<%= student.get("current_grade_average") %>'><%= student.get("current_grade_average") %></span></td>
 <td class="student student-grades mid-semester-grade">
 <span>
+<% if (role === 'student'){ %>
 <i class="fa fa-info-circle" data-toggle='tooltip' data-placement='bottom' title="<%= student.get('tool_tip_mid') %>"></i>
+<% } %>
 <select class="grade-selector mid" data-type="mid" data-uid="<%= student.get('id') %>" <%= role === 'instructor' ? '' : 'disabled="disabled"' %>>
         <% midGrades.each(function(grade) { %>
             <option <% if(grade.get('type') === 'display_value') { print('class="display-value"') } %> value="<%= grade.get('value') %>" <% if(student.get('mid_semester_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>
@@ -38,7 +40,9 @@
 </td>
 <td class="student student-grades final-grade">
 <span>
+<% if (role === 'student'){ %>
 <i class="fa fa-info-circle" data-toggle='tooltip' data-placement='bottom' title="<%= student.get('tool_tip_final') %>"></i>
+<% } %>
 <select class="grade-selector final" data-type="final" data-uid="<%= student.get('id') %>" <%= role === 'instructor' ? '' : 'disabled="disabled"' %>>
         <% finalGrades.each(function(grade) { %>
             <option <% if(grade.get('type') === 'display_value') { print('class="display-value"') } %> value="<%= grade.get('value') %>" <% if(student.get('final_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>

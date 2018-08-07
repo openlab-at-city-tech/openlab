@@ -143,12 +143,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                             type: 'display_value'
                                         },
                                         {
-                                            label: '* WN = administrative withdrawl, never attended',
+                                            label: '*WN = administrative withdrawl, never attended',
                                             value: 'wn_admin_display',
                                             type: 'display_item'
                                         },
                                         {
-                                            label: '* WN',
+                                            label: '*WN',
                                             value: 'wn_admin',
                                             type: 'display_value'
                                         },
