@@ -496,15 +496,16 @@ class oplb_gradebook_api
         $total_assignments = 0;
         $assignments_with_no_weight = 0;
         foreach ($weights as $weight) {
-            $total_weight = $total_weight + $weight['assign_weight'];
 
             if (!empty($cells[$weight['id']])) {
                 $this_cell = $cells[$weight['id']];
 
-                if ($this_cell->is_null) {
+                if (intval($this_cell->is_null) === 1) {
                     continue;
                 }
             }
+
+            $total_weight = $total_weight + $weight['assign_weight'];
 
             $weights_by_assignment[$weight['id']] = number_format((float)$weight['assign_weight'], 2, '.', '');
 
@@ -1176,22 +1177,16 @@ class oplb_gradebook_api
     {
         global $wpdb;
 
-        $query = $wpdb->prepare("SELECT id, assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d AND gbid = %d", $amid, $gbid);
+        $query = $wpdb->prepare("SELECT id, is_null FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d AND gbid = %d", $amid, $gbid);
         $cells = $wpdb->get_results($query);
 
         foreach ($cells as $cell) {
-
-            $is_null = 1;
-
-            if (is_numeric($cell->assign_points_earned)) {
-                $is_null = 0;
-            }
 
             $wpdb->update(
                 "{$wpdb->prefix}oplb_gradebook_cells",
                 array(
                     'assign_order' => $assign_order,
-                    'is_null' => $is_null,
+                    'is_null' => $cell->is_null,
                 ),
                 array(
                     'id' => $cell->id,
