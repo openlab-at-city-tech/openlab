@@ -1,4 +1,35 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.3.3
+	- Added security enhancements.
+
+	- Fixed an issue where the validation message can't be displayed on the last page of a form.
+	- Fixed an issue with the cron task which can prevent other cron tasks from running in the same process.
+ 	- Fixed the shipping field in the pricing summary table using the choice value when the text is requested.
+	- Fixed conditional logic not adding the "gf-default-disabled" class to selects which are disabled by custom code or add-ons.
+	- Fixed issue introduced in 2.3.2 where GFFeedAddon::get_single_submission_feed() failed to return cached feed when no $form was provided.
+	- Fixed the pricing summary table using the choice text when the values are requested. Credit: Naomi C. Bush.
+	- Fixed select elements not being disabled when the field is hidden by conditional logic.
+	- Fixed a PHP notice on form display when populating a list field with an array via the gravity_form function or the "gform_form_args" filter.
+	- Fixed an invalid form fields array causing PHP notices and JavaScript errors in the form editor.
+	- Fixed plugin settings content escaping the page at the mobile breakpoint.
+	- Fixed a performance issue where WordPress upgrade functions are loaded on every request.
+    - Fixed notices when re-running the db upgrade on new installations.
+
+	- Reverted the default value of the "gform_product_info_name_include_field_label" filter to false. Credit: The team at Gravity PDF.
+
+	- Updated conditional logic not to interact with inputs with the gf-default-disabled class.
+	- Updated Chosen JS script to latest version to fix an issue when searching in non-ASCII languages.
+
+	- AF: Fixed an issue with the field select setting where the field_types args are ignored. Credit: Naomi C. Bush.
+
+	- API: Fixed an issue where sorting entries numerically by an entry meta column which is registered with "is_numeric" as true, such as "partial_entry_percent", did not work.
+	- API: Fixed an issue when searching entries when the operator is NOT IN and the array of values doesn't contain an empty string - entries without a value for the field are not included in the results.
+	- API: Fixed an issue with searching for empty entry meta values.
+	- API: Fixed an issue with joins in the entry search. Join inference was being called too early for all the correct joinable fields to be processed.
+	- API: Fixed the entry detail page, {all_fields}, and {pricing_fields} merge tags using an outdated product info cache when the entry is updated by GFAPI::update_entry().
+	- API: Fixed an issue where entries don't contain all the values for fields when the inputs are added dynamically during submission.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.3.2
 	- Added the "gform_field_filters" filter enabling the filter settings for the form fields, entry properties, and entry meta to be overridden.
 	- Added 'gform_use_post_value_for_conditional_logic_save_entry' to support fetching values from the $_POST when evaluating a field's conditional logic while re-saving an existing entry.
@@ -20,7 +51,7 @@ Version 2.3.2
 	- Fixed JS errors which can occur when using the reCAPTCHA field if there is a slow network connection or jQuery is included in the page footer.
 	- Fixed an issue with the upgrade process where the table check for the incomplete submissions table may fail.
 	- Fixed a JavaScript error when sites use jQuery v3 on the front-end.
-	- Fixed bad text strings in messages regarding Add-Ons incompatible with the version of Gravity Formsx
+	- Fixed bad text strings in messages regarding Add-Ons incompatible with the version of Gravity Forms.
 	- Fixed GFCommon::get_product_fields() interacting with option and shipping fields as arrays instead of using object notation.
 	- Fixed an issue with how the result from the gform_product_info_name_include_field_label filter was being used.
 	- Fixed the admin label not being used for the option and shipping fields when using the {all_fields:admin} merge tag.
@@ -30,7 +61,7 @@ Version 2.3.2
 	- Fixed text format notifications being formatted to include HTML br tags.
 	- Fixed an issue with the Date field layout.
 	- Fixed an issue with the entry search where incorrect results are returned when searching for a meta value that is not empty.
-	- AF: Fixed an issue with the Ajax request for the "show more" link on the Results page which prevented additional results being displayed.
+	- AF: Fixed an issue with the Ajax request for the "show more" link on the Results page which prevented additional results being displayed. Credit: Cliff Seal.
 	- API: Fixed an issue with the entry search where searching for an empty string meta value will return zero results.
 	- API: Fixed issue with GFAPI::count_entries( 0 ) where the result is always zero.
 

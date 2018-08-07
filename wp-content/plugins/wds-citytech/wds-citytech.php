@@ -14,6 +14,9 @@ include 'includes/oembed.php';
 include 'includes/library-widget.php';
 include 'includes/clone.php';
 
+// Disable Try Gutenberg.
+remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.

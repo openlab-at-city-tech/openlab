@@ -1707,7 +1707,7 @@ add_action( 'bp_after_group_details_creation_step', function() {
         $group_type = 'club';
     }
 
-	$group_type_supports_cloning = openlab_group_type_can_be_cloned( $group_type );
+	$group_type_supports_cloning = openlab_group_type_can_be_cloned_by_others( $group_type );
 
     if ( $group_type_supports_cloning ) {
         openlab_group_sharing_settings_markup( 0 );

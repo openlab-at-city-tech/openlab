@@ -875,6 +875,8 @@ class GFAPI {
 
 		GFFormsModel::begin_batch_field_operations();
 
+		$has_product_field = false;
+
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
 			$type = GFFormsModel::get_input_type( $field );
@@ -908,6 +910,10 @@ class GFAPI {
 				}
 				unset( $current_entry[ $field_id ] );
 			}
+
+			if ( ! $has_product_field && GFCommon::is_product_field( $field->type ) ) {
+				$has_product_field = true;
+			}
 		}
 
 		// Save the entry meta values - only for the entry meta currently available for the form, ignore the rest.
@@ -934,6 +940,12 @@ class GFAPI {
 			}
 		}
 
+		// Unset to prevent GFFormsModel::queue_batch_field_operation() setting them to empty strings in $entry during the next foreach.
+		$entry_columns = GFFormsModel::get_lead_db_columns();
+		foreach ( $entry_columns as $column ) {
+			unset( $current_entry[ $column ] );
+		}
+
 		foreach ( $current_entry as $k => $v ) {
 			$lead_detail_id = GFFormsModel::get_lead_detail_id( $current_fields, $k );
 			$field          = self::get_field( $form, $k );
@@ -945,6 +957,9 @@ class GFAPI {
 
 		GFFormsModel::commit_batch_field_operations();
 
+		if ( $has_product_field ) {
+			GFFormsModel::refresh_product_cache( $form, $entry );
+		}
 
 		/**
 		 * Fires after the Entry is updated.

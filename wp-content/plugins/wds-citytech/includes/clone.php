@@ -153,9 +153,7 @@ add_action( 'bp_init', function() {
 		$show_shareable_content_widget = false;
 	} else {
 		$group_type = openlab_get_group_type( $group_id );
-
-		// Courses only for the moment.
-		if ( 'course' !== $group_type ) {
+		if ( ! openlab_group_type_can_be_cloned_by_others( $group_type ) ) {
 			$show_shareable_content_widget = false;
 		}
 	}

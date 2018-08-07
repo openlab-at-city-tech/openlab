@@ -302,7 +302,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 	 * designator class so these inputs are exempted below.
 	 */
 	if( ! $target.data( 'gf-disabled-assessed' ) ) {
-		$target.find( 'input:hidden:disabled' ).addClass( 'gf-default-disabled' );
+		$target.find( ':input:hidden:disabled' ).addClass( 'gf-default-disabled' );
 		$target.data( 'gf-disabled-assessed', true );
 	}
 
@@ -316,7 +316,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		if(useAnimation && !isInit){
 			if($target.length > 0){
-				$target.find('input:hidden:not(.gf-default-disabled)').prop( 'disabled', false );
+				$target.find(':input:hidden:not(.gf-default-disabled)').prop( 'disabled', false );
 				$target.slideDown(callback);
 			} else if(callback){
 				callback();
@@ -330,7 +330,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			if ( display == '' || display == 'none' ){
 				display = 'list-item';
 			}
-			$target.find('input:hidden:not(.gf-default-disabled)').prop( 'disabled', false );
+			$target.find(':input:hidden:not(.gf-default-disabled)').prop( 'disabled', false );
 			$target.css('display', display);
 
 			if(callback){
@@ -369,7 +369,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			}
 		} else{
 			$target.hide();
-			$target.find('input:hidden').prop( 'disabled', true );
+			$target.find(':input:hidden:not(.gf-default-disabled)').prop( 'disabled', true );
 			if(callback){
 				callback();
 			}

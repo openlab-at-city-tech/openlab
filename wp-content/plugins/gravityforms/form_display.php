@@ -1289,7 +1289,7 @@ class GFFormDisplay {
 
 	public static function get_first_page_with_error( $form ) {
 
-		$page = 1;
+		$page = self::get_current_page( $form['id'] );
 
 		foreach ( $form['fields'] as $field ) {
 			if ( $field->failed_validation ) {

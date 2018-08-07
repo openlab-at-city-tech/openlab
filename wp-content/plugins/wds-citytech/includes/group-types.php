@@ -22,7 +22,7 @@ function openlab_group_types() {
 		'club',
 		'course',
 		'portfolio',
-		'school' // Legacy. Not sure what this is used for
+		'school', // Legacy. Not sure what this is used for
 	);
 }
 
@@ -40,57 +40,63 @@ function openlab_current_group_type( $case = 'lower' ) {
 	 * @bool $case 'lower' for all lowercase, otherwise Title Case
 	 * @return string
 	 */
-	function openlab_get_current_group_type( $case = 'lower' ) {
-		global $bp, $post;
+function openlab_get_current_group_type( $case = 'lower' ) {
+	global $bp, $post;
 
-		// We stash in the $bp global for faster subsequent lookups
-		if ( isset( $bp->groups->current_group->group_type ) ) {
+	// We stash in the $bp global for faster subsequent lookups.
+	if ( isset( $bp->groups->current_group->group_type ) ) {
 
-			$group_type = $bp->groups->current_group->group_type;
+		$group_type = $bp->groups->current_group->group_type;
 
-		} else {
+	} else {
 
+		$group_type = 'group';
+
+		if ( bp_is_group() ) {
+			$group_type = openlab_get_group_type( bp_get_current_group_id() );
+		} elseif ( bp_is_group_create() && isset( $_GET['type'] ) ) {
+			$group_type = urldecode( $_GET['type'] );
+		} elseif ( bp_is_group_create() ) {
+			$group_type = openlab_get_group_type( bp_get_new_group_id() );
+		} elseif ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
+			$group_type = $_COOKIE['wds_bp_group_type'];
+		}
+
+		$group_type = strtolower( $group_type );
+
+		if ( ! in_array( $group_type, openlab_group_types() ) ) {
 			$group_type = 'group';
-
-			if ( bp_is_group() ) {
-				$group_type = openlab_get_group_type( bp_get_current_group_id() );
-			} else if ( bp_is_group_create() && isset( $_GET['type'] ) ) {
-				$group_type = urldecode( $_GET['type'] );
-			} else if ( bp_is_group_create() ) {
-				$group_type = openlab_get_group_type( bp_get_new_group_id() );
-			} else if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
-				$group_type = $_COOKIE['wds_bp_group_type'];
-			}
-
-			$group_type = strtolower( $group_type );
-
-			if ( !in_array( $group_type, openlab_group_types() ) ) {
-				$group_type = 'group';
-			}
-
-			if ( empty( $bp->groups->current_group ) ) {
-				$bp->groups->current_group = new stdClass;
-			}
-			$bp->groups->current_group->group_type = $group_type;
 		}
 
-		//fix for archive pages, which are pages and don't return an actual group type
-		if ($group_type == 'group' && openlab_page_slug_to_grouptype()!= 'not-archive' )
-		{
-			$group_type = openlab_page_slug_to_grouptype();
+		if ( empty( $bp->groups->current_group ) ) {
+			$bp->groups->current_group = new stdClass;
 		}
-
-		if ( 'lower' !== $case ) {
-			$group_type = ucwords( $group_type );
-		}
-
-		return $group_type;
+		$bp->groups->current_group->group_type = $group_type;
 	}
+
+	// Fix for archive pages, which are pages and don't return an actual group type.
+	if ( 'group' === $group_type && 'not-archive' !== openlab_page_slug_to_grouptype() ) {
+		$group_type = openlab_page_slug_to_grouptype();
+	}
+
+	if ( 'lower' !== $case ) {
+		$group_type = ucwords( $group_type );
+	}
+
+	return $group_type;
+}
 
 /**
  * Can a given group type be cloned?
  */
 function openlab_group_type_can_be_cloned( $group_type ) {
+	return in_array( $group_type, array( 'course', 'project' ) );
+}
+
+/**
+ * Can a given group type be cloned by third parties?
+ */
+function openlab_group_type_can_be_cloned_by_others( $group_type ) {
 	return in_array( $group_type, array( 'course' ) );
 }
 
@@ -98,10 +104,12 @@ function openlab_group_type_can_be_cloned( $group_type ) {
  * Get a printable label for a group or group type
  */
 function openlab_get_group_type_label( $args = array() ) {
-	$r = wp_parse_args( $args, array(
-		'group_id' => openlab_fallback_group(),
-		'case' => 'lower',
-	) );
+	$r = wp_parse_args(
+		$args, array(
+			'group_id' => openlab_fallback_group(),
+			'case'     => 'lower',
+		)
+	);
 
 	// Skip the group type lookup if one has been provided
 	if ( empty( $r['group_type'] ) ) {
@@ -132,13 +140,13 @@ function openlab_get_group_type( $group_id = 0 ) {
 		return '';
 	}
 
-	if ( !$group_id ) {
+	if ( ! $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
 
 	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
-	if ( !in_array( $group_type, openlab_group_types() ) ) {
+	if ( ! in_array( $group_type, openlab_group_types() ) ) {
 		$group_type = 'group';
 	}
 
@@ -150,16 +158,20 @@ function openlab_get_group_type( $group_id = 0 ) {
 ///////////////////////////
 
 function openlab_is_group_type( $group_id = 0, $type = 'group' ) {
-	return $type == openlab_get_group_type( $group_id );
+	return openlab_get_group_type( $group_id ) === $type;
 }
 
-function openlab_is_course( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'course' ); }
+function openlab_is_course( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'course' ); }
 
-function openlab_is_project( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'project' ); }
+function openlab_is_project( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'project' ); }
 
-function openlab_is_portfolio( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'portfolio' ); }
+function openlab_is_portfolio( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'portfolio' ); }
 
-function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'club' ); }
+function openlab_is_club( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'club' ); }
 
 /**
  * Get all the groups that a given user is NOT allowed to see, for a given group type
@@ -181,7 +193,7 @@ function openlab_get_unavailable_groups( $user_id = 0 ) {
 		return array();
 	}
 
-	if ( !isset( $bp->hidden_groups ) ) {
+	if ( ! isset( $bp->hidden_groups ) ) {
 		$bp->hidden_groups = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name} WHERE status = 'hidden' ORDER BY id DESC" ) );
 	}
 
@@ -194,7 +206,7 @@ function openlab_get_unavailable_groups( $user_id = 0 ) {
 			'page'            => null,
 			'per_page'        => null,
 			'type'            => 'newest',
-			'show_hidden'     => true
+			'show_hidden'     => true,
 		);
 
 		if ( bp_has_groups( $my_groups_args ) ) {
@@ -203,7 +215,7 @@ function openlab_get_unavailable_groups( $user_id = 0 ) {
 
 				$key = array_search( bp_get_group_id(), $bp->hidden_groups );
 				if ( false !== $key ) {
-					unset( $bp->hidden_groups[$key] );
+					unset( $bp->hidden_groups[ $key ] );
 				}
 			}
 		}
@@ -218,7 +230,7 @@ function openlab_get_unavailable_groups( $user_id = 0 ) {
 function openlab_group_is_hidden( $group_id = 0 ) {
 	$is_hidden = false;
 
-	if ( !$group_id ) {
+	if ( ! $group_id ) {
 		if ( bp_is_group() ) {
 			$group = groups_get_current_group();
 		} else {
@@ -241,33 +253,32 @@ function openlab_group_is_hidden( $group_id = 0 ) {
  * It attaches a group type to a specific page slug
  * At some point these archive pages will be moved to the right location in the BP hierarchy, and this function won't be necessary
  */
-function openlab_page_slug_to_grouptype()
-{
+function openlab_page_slug_to_grouptype() {
 	global $post;
 
-	$postname = $post->post_name;
-	$group_type = explode("-",$postname);
+	$postname   = $post->post_name;
+	$group_type = explode( '-', $postname );
 
-	switch($group_type[count($group_type) - 1]){
+	switch ( $group_type[ count( $group_type ) - 1 ] ) {
 		case 'courses':
 			$group_type = 'course';
-		break;
+			break;
 
 		case 'projects':
 			$group_type = 'project';
-		break;
+			break;
 
 		case 'clubs':
 			$group_type = 'club';
-		break;
+			break;
 
 		case 'portfolios':
 			$group_type = 'portfolio';
-		break;
+			break;
 
-		default :
+		default:
 			$group_type = 'not-archive';
-		break;
+			break;
 	}
 
 	return $group_type;
@@ -301,19 +312,19 @@ function openlab_group_type_meta_box_cb( $group ) {
 
 	<ul>
 		<li>
-			<input type="radio" <?php checked( 'course', $group_type ) ?> value="course" name="openlab-group-type" /> Course
+			<input type="radio" <?php checked( 'course', $group_type ); ?> value="course" name="openlab-group-type" /> Course
 		</li>
 
 		<li>
-			<input type="radio" <?php checked( 'club', $group_type ) ?> value="club" name="openlab-group-type" /> Club
+			<input type="radio" <?php checked( 'club', $group_type ); ?> value="club" name="openlab-group-type" /> Club
 		</li>
 
 		<li>
-			<input type="radio" <?php checked( 'project', $group_type ) ?> value="project" name="openlab-group-type" /> Project
+			<input type="radio" <?php checked( 'project', $group_type ); ?> value="project" name="openlab-group-type" /> Project
 		</li>
 
 		<li>
-			<input type="radio" <?php checked( 'portfolio', $group_type ) ?> value="portfolio" name="openlab-group-type" /> Portfolio
+			<input type="radio" <?php checked( 'portfolio', $group_type ); ?> value="portfolio" name="openlab-group-type" /> Portfolio
 		</li>
 	</ul>
 	<?php
@@ -365,19 +376,19 @@ function openlab_course_faculty_metabox() {
 
 	$primary_faculty_data = array();
 	if ( $primary_faculty ) {
-		$primary_faculty_user = new WP_User( $primary_faculty );
+		$primary_faculty_user   = new WP_User( $primary_faculty );
 		$primary_faculty_data[] = array(
 			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
 			'value' => esc_attr( $primary_faculty_user->user_nicename ),
 		);
 	}
 
-	$addl_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+	$addl_faculty      = groups_get_groupmeta( $group_id, 'additional_faculty', false );
 	$addl_faculty_data = array();
 
-	if(!empty($addl_faculty)){
+	if ( ! empty( $addl_faculty ) ) {
 		foreach ( $addl_faculty as $fid ) {
-			$f = new WP_User( $fid );
+			$f                   = new WP_User( $fid );
 			$addl_faculty_data[] = array(
 				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
 				'value' => esc_attr( $f->user_nicename ),
@@ -392,14 +403,14 @@ function openlab_course_faculty_metabox() {
 
 	<div id="additional-faculty-admin" class="panel panel-default">
 		<fieldset>
-            <legend class="panel-heading">Faculty</legend>
-            <div class="panel-body">
+			<legend class="panel-heading">Faculty</legend>
+			<div class="panel-body">
 				<?php /* Data about existing faculty */ ?>
-				<script type="text/javascript">var OL_Primary_Faculty_Existing = '<?php echo json_encode( $primary_faculty_data ) ?>';</script>
-				<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ) ?>';</script>
+				<script type="text/javascript">var OL_Primary_Faculty_Existing = '<?php echo json_encode( $primary_faculty_data ); ?>';</script>
+				<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ); ?>';</script>
 
 				<div class="subpanel">
-					<?php wp_nonce_field( 'openlab_faculty_autocomplete', '_ol_faculty_autocomplete_nonce', false ) ?>
+					<?php wp_nonce_field( 'openlab_faculty_autocomplete', '_ol_faculty_autocomplete_nonce', false ); ?>
 
 					<label for="primary-faculty-autocomplete">Primary Faculty</label>
 
@@ -410,7 +421,7 @@ function openlab_course_faculty_metabox() {
 					<ul id="primary-faculty-list" class="inline-element-list"></ul>
 
 					<label class="sr-only hide-if-js" for="primary-faculty">Primary Faculty</label>
-					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty ) ?>" />
+					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty ); ?>" />
 				</div>
 
 				<div class="subpanel">
@@ -423,7 +434,7 @@ function openlab_course_faculty_metabox() {
 					<ul id="additional-faculty-list" class="inline-element-list"></ul>
 
 					<label class="sr-only hide-if-js" for="additional-faculty">Additional Faculty</label>
-					<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ) ?>" />
+					<input class="hide-if-js" type="textbox" name="additional-faculty" id="additional-faculty" value="<?php echo esc_attr( implode( ', ', $addl_faculty ) ); ?>" />
 				</div>
 		</fieldset>
 	</div>
@@ -438,7 +449,8 @@ add_action( 'bp_after_group_details_admin', 'openlab_course_faculty_metabox', 5 
 function openlab_additional_faculty_autocomplete_cb() {
 	global $wpdb;
 
-	$nonce = $term = '';
+	$nonce = '';
+	$term  = '';
 
 	if ( isset( $_GET['nonce'] ) ) {
 		$nonce = urldecode( $_GET['nonce'] );
@@ -455,10 +467,10 @@ function openlab_additional_faculty_autocomplete_cb() {
 	}
 
 	// Direct query for speed.
-	$bp = buddypress();
+	$bp          = buddypress();
 	$at_field_id = xprofile_get_field_id_from_name( 'Account Type' );
-	$like = $wpdb->esc_like( $term );
-	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$bp->profile->table_name_data} x ON (u.ID = x.user_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND x.field_id = %d AND x.value = 'Faculty'", $at_field_id ) );
+	$like        = $wpdb->esc_like( $term );
+	$found       = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$bp->profile->table_name_data} x ON (u.ID = x.user_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND x.field_id = %d AND x.value = 'Faculty'", $at_field_id ) );
 
 	$retval = array();
 	foreach ( (array) $found as $u ) {
@@ -557,16 +569,16 @@ function openlab_group_contact_field() {
 
 	$existing_contacts = array();
 	if ( bp_is_group_create() ) {
-		$group_id = 0;
+		$group_id            = 0;
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
-		$group_id = bp_get_current_group_id();
+		$group_id          = bp_get_current_group_id();
 		$existing_contacts = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
 	}
 
 	$existing_contacts_data = array();
 	foreach ( $existing_contacts as $uid ) {
-		$u = new WP_User( $uid );
+		$u                        = new WP_User( $uid );
 		$existing_contacts_data[] = array(
 			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $uid ) ), esc_html( $u->user_nicename ) ),
 			'value' => esc_attr( $u->user_nicename ),
@@ -578,21 +590,21 @@ function openlab_group_contact_field() {
 	?>
 
 	<div id="group-contact-admin" class="panel panel-default">
-            <div class="panel-heading"><label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label></div>
-            <div class="panel-body">
-		<p>By default, you are the <?php echo ucwords( $group_type ) ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
+			<div class="panel-heading"><label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label></div>
+			<div class="panel-body">
+		<p>By default, you are the <?php echo ucwords( $group_type ); ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
 
 		<label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label>
 		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />
-		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ) ?>
+		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ); ?>
 		<input type="hidden" name="group-contact-group-id" id="group-contact-group-id" value="<?php echo intval( $group_id ); ?>" />
 
 		<ul id="group-contact-list" class="inline-element-list"></ul>
 
-                <label class="sr-only hide-if-js" for="group-contacts">Group Contacts</label>
-		<input class="hide-if-js" type="textbox" name="group-contacts" id="group-contacts" value="<?php echo esc_attr( implode( ', ', $existing_contacts ) ) ?>" />
+				<label class="sr-only hide-if-js" for="group-contacts">Group Contacts</label>
+		<input class="hide-if-js" type="textbox" name="group-contacts" id="group-contacts" value="<?php echo esc_attr( implode( ', ', $existing_contacts ) ); ?>" />
 
-            </div>
+			</div>
 	</div>
 
 	<?php
@@ -606,7 +618,8 @@ add_action( 'bp_after_group_details_admin', 'openlab_group_contact_field', 5 );
 function openlab_group_contact_autocomplete_cb() {
 	global $wpdb;
 
-	$nonce = $term = '';
+	$nonce = '';
+	$term  = '';
 
 	if ( isset( $_GET['nonce'] ) ) {
 		$nonce = urldecode( $_GET['nonce'] );
@@ -625,12 +638,14 @@ function openlab_group_contact_autocomplete_cb() {
 		$term = urldecode( $_GET['term'] );
 	}
 
-	$q = new BP_Group_Member_Query( array(
-		'group_id' => $group_id,
-		'search_terms' => $term,
-		'type' => 'alphabetical',
-		'group_role' => array( 'member', 'mod', 'admin' ),
-	) );
+	$q = new BP_Group_Member_Query(
+		array(
+			'group_id'     => $group_id,
+			'search_terms' => $term,
+			'type'         => 'alphabetical',
+			'group_role'   => array( 'member', 'mod', 'admin' ),
+		)
+	);
 
 	$retval = array();
 	foreach ( $q->results as $u ) {

@@ -3568,7 +3568,7 @@ Content-Type: text/html;
 							} else {
 								list( $name, $price ) = explode( '|', $lead_value );
 
-								if ( ! $use_choice_text ) {
+								if ( $use_choice_text ) {
 									$name = RGFormsModel::get_choice_text( $field, $name );
 								}
 
@@ -3579,7 +3579,7 @@ Content-Type: text/html;
 								 *
 								 * @param bool $include_field_label Indicates if the label should be included in the product name. Default is false.
 								 */
-								$include_field_label = apply_filters( 'gform_product_info_name_include_field_label', true );
+								$include_field_label = apply_filters( 'gform_product_info_name_include_field_label', false );
 								if ( $include_field_label ) {
 									$name = $field_label . " ({$name})";
 								}
@@ -3637,6 +3637,9 @@ Content-Type: text/html;
 				$shipping_field_id = $shipping_fields[0]->id;
 				if ( $shipping_fields[0]->inputType != 'singleshipping' && ! empty( $shipping_price ) ) {
 					list( $shipping_method, $shipping_price ) = explode( '|', $shipping_price );
+					if ( $use_choice_text ) {
+						$shipping_method = RGFormsModel::get_choice_text( $shipping_fields[0], $shipping_method );
+					}
 					$shipping_name .= " ($shipping_method)";
 				}
 			}
