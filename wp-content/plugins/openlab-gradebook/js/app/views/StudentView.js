@@ -182,8 +182,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         mobile_styles = ' visible-xs';
                                     }
 
-                                    console.log('this.model in render studentView', this.model);
-
                                     var self = this;
                                     var template = _.template($('#student-view-template').html());
                                     var compiled = template({student: this.model, role: this.gradebook.role, mobile_styles: mobile_styles, midGrades: this.midGrades, finalGrades: this.finalGrades});
@@ -338,6 +336,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
 
                                     var toedit = new User();
                                     toedit.updateStudentGrade(value, type, uid, gbid);
+
+                                    if(value && value !== undefined){
+                                        if(type === 'mid'){
+                                            this.student.attributes.mid_semester_grade = value;
+                                        } else {
+                                            this.student.attributes.final_grade = value;
+                                        }
+                                    }
 
                                     this.handleTooltips(ev);
                                     
