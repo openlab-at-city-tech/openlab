@@ -41,7 +41,8 @@ define(['jquery', 'backbone', 'underscore'],
                 },
                 hideInput: function (value) {
                     var self = this;
-                    if (parseFloat(value) != this.model.get('assign_points_earned')) {
+                    if ((parseFloat(value) != this.model.get('assign_points_earned')) || (parseInt(value) === 0 && (this.model.get('is_null') || this.model.get('is_null') === 1))) {
+                        this.$el.find('.grade-numeric').attr('contenteditable', 'false').css('opacity', '0.42');
                         this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
                                 self.render();
                                 Backbone.pubSub.trigger('updateAverageGrade', response );
@@ -51,7 +52,6 @@ define(['jquery', 'backbone', 'underscore'],
                     }
                 },
                 edit: function () {
-                    this.$el.find('.grade-numeric').attr('contenteditable', 'false').css('opacity', '0.42');
                     this.hideInput(this.$el.find('.grade-numeric').html().trim());
                 },
                 hoverCell: function (ev) {
