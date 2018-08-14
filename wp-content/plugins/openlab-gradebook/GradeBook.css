@@ -402,6 +402,9 @@ span.twitter-typeahead {
 .table-wrapper .pinned .student-grades {
   display: none;
 }
+.table-wrapper .pinned .gradebook-student-column-average {
+  display: none;
+}
 .table-wrapper .pinned #students-header-pinned th,
 .table-wrapper .pinned #students-pinned td {
   overflow: hidden;
@@ -457,6 +460,9 @@ span.twitter-typeahead {
 }
 .table-wrapper .scrollable .jspContainer .jspPane {
   top: 15px !important;
+}
+.table-wrapper .scrollable .gradebook-student-column-average {
+  display: none !important;
 }
 @media (max-width: 767px) {
   .table-wrapper .scrollable .gradebook-student-column-average .tooltip .tooltip-inner {
