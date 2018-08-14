@@ -8,7 +8,6 @@
 
                         <h2 class="h4"><?php esc_html_e('GradeBook Assignment Grade Types:', 'openlab-gradebook')?></h2>
                         <p><?php esc_html_e('Grade type can be set per assignment by selecting "Edit" from the dropdown menu.', 'openlab-gradebook')?></p>
-                        <p><?php esc_html_e('The grade ranges used in GradeBook are those used by CUNY City Tech, values shown below.', 'openlab-gradebook')?></p>
 
                         <div class="grades-table-wrapper">
                             <table id="gradesTable" class="table table-bordered table-striped">
