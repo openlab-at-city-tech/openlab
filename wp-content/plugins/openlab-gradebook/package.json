@@ -19,6 +19,7 @@
     "jscrollpane": "^2.0.22"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.1.0"
+    "@fortawesome/fontawesome-free": "^5.1.0",
+    "grunt-contrib-watch": "^1.1.0"
   }
 }
