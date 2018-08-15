@@ -347,7 +347,7 @@ class GFFormSettings {
 				<div class="error below-h2" id="after_update_error_dialog">
 					<p>
 						<?php _e( 'There was an error while saving your form.', 'gravityforms' ) ?>
-						<?php printf( __( 'Please %scontact our support team%s.', 'gravityforms' ), '<a href="http://www.gravityhelp.com">', '</a>' ) ?>
+						<?php printf( __( 'Please %scontact our support team%s.', 'gravityforms' ), '<a href="https://www.gravityforms.com/support/">', '</a>' ) ?>
 					</p>
 				</div>
 				<?php
@@ -1234,7 +1234,7 @@ class GFFormSettings {
 
 		if ( ! empty( $confirmation['message'] ) && self::confirmation_looks_unsafe( $confirmation['message'] ) ) {
 			$dismissible_message = esc_html__( 'Your confirmation message appears to contain a merge tag as the value for an HTML attribute. Depending on the attribute and field type, this might be a security risk. %sFurther details%s', 'gravityforms' );
-			$dismissible_message = sprintf( $dismissible_message, '<a href="https://www.gravityhelp.com/documentation/article/security-warning-merge-tags-html-attribute-values/" target="_blank">', '</a>' );
+			$dismissible_message = sprintf( $dismissible_message, '<a href="https://docs.gravityforms.com/security-warning-merge-tags-html-attribute-values/" target="_blank">', '</a>' );
 			GFCommon::add_dismissible_message( $dismissible_message, 'confirmation_unsafe_' . $form_id );
 		}
 
@@ -1262,9 +1262,9 @@ class GFFormSettings {
 
 				<?php if ( $is_duplicate ) :?>
 				$('#confirmation_conditional_logic_container').pointer({
-					content     : '<h3><?php _e( 'Important', 'gravityforms' ) ?></h3><p><?php _e( 'Ensure that the conditional logic for this confirmation is different from all the other confirmations for this form and then press save to create the new confirmation.', 'gravityforms' ) ?></p>',
-					position    : {
-						edge : 'bottom', // arrow direction
+					content: <?php echo json_encode( sprintf( '<h3>%s</h3><p>%s</p>', __( 'Important', 'gravityforms' ), __( 'Ensure that the conditional logic for this confirmation is different from all the other confirmations for this form and then press save to create the new confirmation.', 'gravityforms' ) ) ); ?>,
+					position: {
+						edge: 'bottom', // arrow direction
 						align: 'center' // vertical alignment
 					},
 					pointerWidth: 300
@@ -1273,16 +1273,16 @@ class GFFormSettings {
 			});
 
 
-			gform.addFilter("gform_merge_tags", "MaybeAddSaveMergeTags");
-			function MaybeAddSaveMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option){
+			gform.addFilter('gform_merge_tags', 'MaybeAddSaveMergeTags');
+			function MaybeAddSaveMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
 				var event = confirmation.event;
-				if ( event == 'form_saved' || event == 'form_save_email_sent' ) {
-					mergeTags["other"].tags.push({ tag: '{save_link}', label: '<?php _e( 'Save &amp; Continue Link', 'gravityforms' ) ?>' });
-					mergeTags["other"].tags.push({ tag: '{save_token}', label: '<?php _e( 'Save &amp; Continue Token', 'gravityforms' ) ?>' });
+				if ( event === 'form_saved' || event === 'form_save_email_sent' ) {
+					mergeTags['other'].tags.push({ tag: '{save_link}', label: <?php echo json_encode( __( 'Save &amp; Continue Link', 'gravityforms' ) ) ?> });
+					mergeTags['other'].tags.push({ tag: '{save_token}', label: <?php echo json_encode( __( 'Save &amp; Continue Token', 'gravityforms' ) ) ?> });
 				}
 
-				if( event == 'form_saved' ) {
-					mergeTags["other"].tags.push({ tag: '{save_email_input}', label: '<?php _e( 'Save &amp; Continue Email Input', 'gravityforms' ) ?>' });
+				if ( event === 'form_saved' ) {
+					mergeTags['other'].tags.push({ tag: '{save_email_input}', label: <?php echo json_encode( __( 'Save &amp; Continue Email Input', 'gravityforms' ) ) ?> });
 				}
 
 				return mergeTags;
@@ -1656,12 +1656,6 @@ class GFFormSettings {
 
 		</div> <!-- / wrap -->
 
-		<script type="text/javascript">
-			jQuery(document).ready(function ($) {
-				$('.gform_tab_container').css('minHeight', jQuery('#gform_tabs').height() + 100);
-			});
-		</script>
-
 	<?php
 	}
 
@@ -2020,7 +2014,7 @@ class GFFormSettings {
 				'name'        => __( 'Save and Continue Confirmation', 'gravityforms' ),
 				'isDefault'   => true,
 				'type'        => 'message',
-				'message'     => __( 'Please use the following link to return to your form from any computer. <br /> {save_link} <br /> This link will expire after 30 days. <br />Enter your email address to send the link by email. <br /> {save_email_input}', 'gravityforms' ),
+				'message'     => __( '<p>Please use the following link to return and complete this form from any computer.</p><p class="resume_form_link_wrapper"> {save_link} </p><p> Note: This link will expire after 30 days.<br />Enter your email address if you would like to receive the link via email.</p></p> {save_email_input}</p>', 'gravityforms' ),
 				'url'         => '',
 				'pageId'      => '',
 				'queryString' => '',
@@ -2032,7 +2026,7 @@ class GFFormSettings {
 				'name'        => __( 'Save and Continue Email Sent Confirmation', 'gravityforms' ),
 				'isDefault'   => true,
 				'type'        => 'message',
-				'message'     => __( 'The link was sent to the following email address: {save_email}', 'gravityforms' ),
+				'message'     => __( '<span class="saved_message_success">Success!</span>The link was sent to the following email address: <span class="saved_message_email">{save_email}</span>', 'gravityforms' ),
 				'url'         => '',
 				'pageId'      => '',
 				'queryString' => '',
@@ -2482,7 +2476,7 @@ class GFConfirmationTable extends WP_List_Table {
 		switch ( rgar( $item, 'type' ) ) {
 
 			case 'message':
-				return '<a class="limit-text" title="' . strip_tags( $item['message'] ) . '">' . strip_tags( $item['message'] ) . '</a>';
+				return '<a class="limit-text">' . wp_kses_post( $item['message'] ) . '</a>';
 
 			case 'page':
 
@@ -2491,14 +2485,14 @@ class GFConfirmationTable extends WP_List_Table {
 					return __( '<em>This page does not exist.</em>', 'gravityforms' );
 				}
 
-				return '<a href="' . get_permalink( $item['pageId'] ) . '">' . $page->post_title . '</a>';
+				return '<a href="' . get_permalink( $item['pageId'] ) . '">' . esc_html( $page->post_title ) . '</a>';
 
 			case 'redirect':
 				$url_pieces    = parse_url( $item['url'] );
 				$url_connector = rgar( $url_pieces, 'query' ) ? '&' : '?';
 				$url           = rgar( $item, 'queryString' ) ? "{$item['url']}{$url_connector}{$item['queryString']}" : $item['url'];
-
-				return '<a class="limit-text" title="' . $url . '">' . $url . '</a>';
+				$url           = esc_url( $url );
+				return '<a class="limit-text">' . $url . '</a>';
 		}
 
 		return '';

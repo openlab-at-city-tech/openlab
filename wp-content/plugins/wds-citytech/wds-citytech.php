@@ -12,6 +12,10 @@ include 'wds-register.php';
 include 'wds-docs.php';
 include 'includes/oembed.php';
 include 'includes/library-widget.php';
+include 'includes/clone.php';
+
+// Disable Try Gutenberg.
+remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -2536,3 +2540,29 @@ add_filter( 'mime_types', function( $types ) {
 
 	return $types;
 } );
+
+/** TablePress mods **********************************************************/
+
+/**
+ * Pagination should be disabled by default.
+ */
+add_filter( 'tablepress_table_template', function( $table ) {
+	$table['options']['datatables_paginate'] = false;
+	return $table;
+} );
+
+/**
+ * Don't let TablePress save CSS to a file.
+ */
+add_filter( 'tablepress_save_custom_css_to_file', '__return_false' );
+
+/**
+ * Don't let users uninstall TablePress.
+ */
+add_filter( 'map_meta_cap', function( $caps, $cap, $user_id ) {
+	if ( 'tablepress_delete_tables' !== $cap ) {
+		return $caps;
+	}
+
+	return array( 'do_not_allow' );
+}, 10, 4 );

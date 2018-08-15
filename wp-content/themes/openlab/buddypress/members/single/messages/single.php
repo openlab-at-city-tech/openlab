@@ -17,7 +17,7 @@
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>
 
 			<div class="message-box panel panel-default">
-                            
+
                             <div class="panel-body">
 
 				<div class="message-metadata">
@@ -76,7 +76,7 @@
 
 					<?php do_action( 'bp_before_message_reply_box' ) ?>
 
-					<textarea class="form-control" name="content" id="message_content" rows="15" cols="40"></textarea>
+					<textarea class="form-control bp-suggestions" name="content" id="message_content" rows="15" cols="40"></textarea>
 
 					<?php do_action( 'bp_after_message_reply_box' ) ?>
 

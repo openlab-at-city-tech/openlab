@@ -19,22 +19,47 @@ function bpeo_get_events_new_slug() {
 
 /**
  * Register common assets.
+ *
+ * No longer used. See https://github.com/cuny-academic-commons/bp-event-organiser/issues/48.
  */
 function bpeo_register_assets() {
+	// Deprecated. See bpeo_enqueue_assets() and issue #48.
+}
+
+/**
+ * Register and enqueue common assets.
+ *
+ * Because of reported conflicts between our version of Select2 and that required by other plugins, we register
+ * scripts only when they're needed. This minimizes the chances of mismatches.
+ */
+function bpeo_enqueue_assets() {
 	// Select2
 	if ( false === wp_script_is( 'select2' ) ) {
-		wp_register_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js', array( 'jquery' ) );
 	}
 	if ( false === wp_style_is( 'select2' ) ) {
-		wp_register_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css' );
+		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css' );
 	}
 
-	wp_register_script( 'bp_event_organiser_js', BUDDYPRESS_EVENT_ORGANISER_URL . 'assets/js/bp-event-organiser.js', array( 'jquery' ), BUDDYPRESS_EVENT_ORGANISER_VERSION, true );
+	wp_enqueue_script( 'bp_event_organiser_js', BUDDYPRESS_EVENT_ORGANISER_URL . 'assets/js/bp-event-organiser.js', array( 'jquery' ), BUDDYPRESS_EVENT_ORGANISER_VERSION, true );
 
-	wp_register_script( 'bpeo-group-select', BUDDYPRESS_EVENT_ORGANISER_URL . 'assets/js/group-select.js', array( 'jquery', 'select2' ), BUDDYPRESS_EVENT_ORGANISER_VERSION, true );
+	wp_enqueue_script( 'bpeo-group-select', BUDDYPRESS_EVENT_ORGANISER_URL . 'assets/js/group-select.js', array( 'jquery', 'select2' ), BUDDYPRESS_EVENT_ORGANISER_VERSION, true );
+
+	wp_localize_script( 'bp_event_organiser_js', 'BpEventOrganiserSettings', array(
+		'calendar_filter_title' => __( 'Filters', 'bp-event-organiser' ),
+		'calendar_author_filter_title' => __( 'By Author', 'bp-event-organiser' ),
+		'calendar_group_filter_title' => __( 'By Group', 'bp-event-organiser' ),
+		'loggedin_user_id' => bp_loggedin_user_id()
+	) );
+
+	wp_localize_script( 'bpeo-group-select', 'BpEventOrganiserSettings', array(
+		'group_privacy_message' => __( 'You have added a group to this event.  Since groups have their own privacy settings, we have removed the ability to set the status for this event.', 'bp-event-organiser' ),
+		'group_public_message' => sprintf( __( 'You have added a %1$s to this event. Since the added group is %2$s, be aware that your event will also be publicized on the sitewide event calendar.', 'bp-event-organiser' ),
+			'<strong>' . __( 'public group', 'bp-event-organiser' ) . '</strong>',
+			'<strong>' . __( 'public', 'bp-event-organiser' ) . '</strong>'
+		),
+	) );
 }
-add_action( 'wp_enqueue_scripts',    'bpeo_register_assets', 5 );
-add_action( 'admin_enqueue_scripts', 'bpeo_register_assets', 5 );
 
 /**
  * Filters the CPT arguments for Event Organiser.
@@ -427,10 +452,20 @@ add_filter( 'template_include', 'bpeo_remove_default_canonical_event_content', 2
  * @see bpeo_remove_default_canonical_event_content()
  *
  * @param  string $content Current content.
- * @return string
+ * @return string $content The modified content.
  */
 function bpeo_canonical_event_content( $content ) {
 	global $pages;
+
+	// bail if not canonical event
+	if ( ! is_singular( 'event' ) ) {
+		return $content;
+	}
+
+	// bail if not event post type
+	if ( get_post_type( get_the_ID() ) != 'event' ) {
+		return $content;
+	}
 
 	// reset get_the_content() to use already-rendered content so we can use it in
 	// our content-eo-event.php template part
@@ -603,6 +638,76 @@ add_filter( 'shortcode_atts_eo_fullcalendar', 'bpeo_filter_eo_fullcalendar_short
  */
 add_filter( 'pre_transient_eo_full_calendar_public', '__return_empty_array' );
 add_filter( 'pre_transient_eo_full_calendar_public_priv', '__return_empty_array' );
+
+/**
+ * Add the Room field to the Event editing metabox.
+ *
+ * @param WP_Post $post Post currently being edited.
+ */
+function bpeo_add_room_field_to_metabox( WP_Post $post ) {
+	if ( ! taxonomy_exists( 'event-venue' ) ) {
+		return;
+	}
+
+	$room = get_post_meta( $post->ID, 'bpeo_room', true );
+
+	?>
+
+	<div class="eo-grid-row eo-room">
+		<div class="eo-grid-4">
+			<label for="room"><?php esc_html_e( 'Room:', 'bp-event-organiser' ); ?></label>
+		</div>
+		<div class="eo-grid-8">
+			<input type="text" id="room" name="eo_input[room]" value="<?php echo esc_attr( $room ); ?>" />
+		</div>
+
+		<?php wp_nonce_field( 'bpeo_room_' . $post->ID, 'bpeo-room-nonce', false ); ?>
+	</div>
+
+	<?php
+}
+add_action( 'eventorganiser_metabox_additional_fields', 'bpeo_add_room_field_to_metabox' );
+
+/**
+ * Save Room data when an event is saved.
+ *
+ * Fired with priority 15 to follow `eventorganiser_details_save()`.
+ *
+ * @param int $post_id ID of the post being edited.
+ */
+function bpeo_save_room_field_on_post_save( $post_id ) {
+	if ( ! isset( $_POST['bpeo-room-nonce'] ) || ! wp_verify_nonce( $_POST['bpeo-room-nonce'], 'bpeo_room_' . $post_id ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_event', $post_id ) ) {
+		return;
+	}
+
+	$room = isset( $_POST['eo_input']['room'] ) ? wp_unslash( $_POST['eo_input']['room'] ) : '';
+
+	update_post_meta( $post_id, 'bpeo_room', $room );
+}
+add_action( 'save_post', 'bpeo_save_room_field_on_post_save', 15 );
+
+/**
+ * Display Room info on event page.
+ *
+ * Hooked at priority 0 so it's directly after Venue.
+ */
+function bpeo_list_room() {
+	$room = get_post_meta( get_the_ID(), 'bpeo_room', true );
+	if ( ! $room ) {
+		return;
+	}
+
+	printf( '<li><strong>' . esc_html( 'Room:', 'bp-event-organiser' ) . '</strong> %s</li>', esc_html( $room ) );
+}
+add_action( 'eventorganiser_additional_event_meta', 'bpeo_list_room', 0 );
 
 /**
  * Get an item's calendar color.

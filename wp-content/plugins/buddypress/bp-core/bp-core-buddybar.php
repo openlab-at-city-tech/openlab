@@ -608,6 +608,11 @@ function bp_core_register_subnav_screen_function( $args = '', $component = 'memb
 	}
 
 	$parent_nav = $bp->{$component}->nav->get_primary( array( 'slug' => $r['parent_slug'] ), false );
+	if ( ! $parent_nav ) {
+		return ;
+	}
+
+	$parent_nav = reset( $parent_nav );
 
 	// If we *do* meet condition (2), then the added subnav item is currently being requested.
 	if ( ( bp_current_action() && bp_is_current_action( $r['slug'] ) ) || ( bp_is_user() && ! bp_current_action() && ! empty( $parent_nav->screen_function ) && $r['screen_function'] == $parent_nav->screen_function ) ) {
@@ -670,10 +675,9 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item, $component
 
 			$bp = buddypress();
 
-			// If a redirect URL has been passed to the subnav
-			// item, respect it.
+			// If a redirect URL has been passed to the subnav item, respect it.
 			if ( ! empty( $subnav_item['no_access_url'] ) ) {
-				$message     = __( 'You do not have access to this page.', 'buddypress' );
+				$message     = __( 'You do not have access to that page.', 'buddypress' );
 				$redirect_to = trailingslashit( $subnav_item['no_access_url'] );
 
 			// In the case of a user page, we try to assume a
@@ -689,7 +693,7 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item, $component
 				// component, as long as that component is
 				// publicly accessible.
 				if ( bp_is_my_profile() || ( isset( $parent_nav_default_item ) && $parent_nav_default_item->show_for_displayed_user ) ) {
-					$message     = __( 'You do not have access to this page.', 'buddypress' );
+					$message     = __( 'You do not have access to that page.', 'buddypress' );
 					$redirect_to = bp_displayed_user_domain();
 
 				// In some cases, the default tab is not accessible to
@@ -717,6 +721,7 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item, $component
 				'message'  => $message,
 				'root'     => $redirect_to,
 				'redirect' => false,
+				'mode'     => 1
 			);
 
 		} else {

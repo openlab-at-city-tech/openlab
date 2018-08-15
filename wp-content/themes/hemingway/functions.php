@@ -47,11 +47,6 @@ if ( ! function_exists( 'hemingway_setup' ) ) {
 		// Make the theme translation ready
 		load_theme_textdomain( 'hemingway', get_template_directory() . '/languages' );
 		
-		$locale = get_locale();
-		$locale_file = get_template_directory() . "/languages/$locale.php";
-		if ( is_readable($locale_file) )
-		require_once($locale_file);
-		
 	}
 	add_action( 'after_setup_theme', 'hemingway_setup' );
 

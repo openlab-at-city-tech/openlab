@@ -14,14 +14,21 @@ function bp_group_documents_screen_notification_settings() {
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group you belong to', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="yes" <?php checked( $upload_member, true ) ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_member]" value="no" <?php checked( $upload_member, false ) ?>/></td>
+			<label for="notifications-group-documents-upload-member-yes" class="bp-screen-reader-text">Yes, send email</label>
+			<td class="yes"><input type="radio" id="notifications-group-documents-upload-member-yes" name="notifications[notification_group_documents_upload_member]" value="yes" <?php checked( $upload_member, true ) ?>/></td>
+
+			<label for="notifications-group-documents-upload-member-no" class="bp-screen-reader-text">No, do not send email</label>
+			<td class="no"><input type="radio" id="notifications-group-documents-upload-member-no" name="notifications[notification_group_documents_upload_member]" value="no" <?php checked( $upload_member, false ) ?>/></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td><?php _e( 'A member uploads a document to a group for which you are an moderator/admin', 'bp-group-documents' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php checked( $upload_mod, true ) ?>/></td>
-			<td class="no"><input type="radio" name="notifications[notification_group_documents_upload_mod]" value="no" <?php checked( $upload_mod, false ) ?>/></td>
+
+			<label for="notifications-group-documents-upload-mod-yes" class="bp-screen-reader-text">Yes, send email</label>
+			<td class="yes"><input type="radio" id="notifications-group-documents-upload-mod-yes" name="notifications[notification_group_documents_upload_mod]" value="yes" <?php checked( $upload_mod, true ) ?>/></td>
+
+			<label for="notifications-group-documents-upload-mod-no" class="bp-screen-reader-text">No, do not send email</label>
+			<td class="no"><input type="radio" id="notifications-group-documents-upload-mod-no" name="notifications[notification_group_documents_upload_mod]" value="no" <?php checked( $upload_mod, false ) ?>/></td>
 		</tr>
 
 		<?php do_action( 'bp_group_documents_notification_settings' ); ?>

@@ -10,6 +10,7 @@
                 <dt><?php esc_html_e('Date Assigned', 'openlab-gradebook') ?>:</dt> <dd><%= assignment.get('assign_date') %></dt>
                 <dt><?php esc_html_e('Date Due', 'openlab-gradebook') ?>:</dt> <dd><%= assignment.get('assign_due') %></dt>
                 <dt><?php esc_html_e('Assignment Category', 'openlab-gradebook') ?>:</dt> <dd><%= assignment.get('assign_category') %></dt>
+                <dt><?php esc_html_e('Percentage of Total Grade', 'openlab-gradebook') ?>:</dt> <dd><%= assignment.get('assign_weight') %>%</dt>
             </dl>
         </div>
         <div class="modal-footer">

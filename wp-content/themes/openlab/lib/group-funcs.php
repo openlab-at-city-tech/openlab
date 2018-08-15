@@ -277,6 +277,7 @@ function openlab_group_archive() {
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-6">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr(bp_get_group_name()); ?>"/></a>
+								<?php do_action( 'bp_group_directory_after_avatar' ); ?>
                             </div>
                             <div class="item col-xs-18">
 
@@ -613,6 +614,18 @@ function cuny_group_single() {
     $group_type = openlab_get_group_type(bp_get_current_group_id());
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
+
+    $clone_history  = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+	$credits_groups = array_map( function( $clone_group ) {
+		return sprintf(
+			'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
+			esc_attr( $clone_group['group_url'] ),
+			esc_html( $clone_group['group_name'] ),
+			esc_attr( $clone_group['group_creator_url'] ),
+			esc_html( $clone_group['group_creator_name'] )
+		);
+	}, $clone_history );
+
     ?>
 
 	<div class="wrapper-block visible-xs sidebar mobile-group-site-links">
@@ -625,12 +638,15 @@ function cuny_group_single() {
             <div id="<?php echo $group_type; ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
+
+					<?php do_action( 'bp_group_header_after_avatar' ); ?>
                 </div>
 
                 <?php if (is_user_logged_in() && $bp->is_item_admin): ?>
                     <div id="group-action-wrapper">
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/edit-details/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
                         <a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo bp_group_permalink() . 'admin/group-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
+                        <?php do_action( 'bp_group_header_actions' ); ?>
                     </div>
                 <?php elseif (is_user_logged_in()) : ?>
                     <div id="group-action-wrapper">
@@ -638,7 +654,7 @@ function cuny_group_single() {
                     </div>
                 <?php endif; ?>
                 <?php openlab_render_message(); ?>
-        </div><!-- #<?php echo $group_type; ?>-header-avatar -->
+            </div><!-- #<?php echo $group_type; ?>-header-avatar -->
 
             <div id="<?php echo $group_type; ?>-header-content" class="col-sm-16 col-xs-24 alignleft group-header-content group-<?php echo $group_id; ?>">
 
@@ -687,6 +703,17 @@ function cuny_group_single() {
                                 <div class="bold col-sm-7">Course Description</div>
                                 <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
                             </div>
+
+                            <?php if ( $clone_history ) : ?>
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">Credits</div>
+                                    <div class="col-sm-17 row-content">
+                                        <ul class="group-credits">
+                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                     </div>
@@ -702,9 +729,9 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $wds_school = openlab_generate_school_name($group_id);
-                            $wds_departments = openlab_generate_department_name($group_id);
-			    $group_contacts = groups_get_groupmeta( $group_id, 'group_contact', false );
+                            $wds_school      = openlab_generate_school_name( $group_id );
+                            $wds_departments = openlab_generate_department_name( $group_id );
+                            $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
                             <?php if ($wds_school && !empty($wds_school)): ?>
@@ -740,18 +767,18 @@ function cuny_group_single() {
                             </div>
 
                             <?php if ( $group_contacts ): ?>
-				<div class="table-row row">
-					<?php /* This won't work at all for l10n */ ?>
-					<?php
-					if ( 1 === count( $group_contacts ) ) {
-						$gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
-					} else {
-						$gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
-					}
-					?>
-					<div class="bold col-sm-7"><?php echo $gc_label ?></div>
-					<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
-				</div>
+                                <div class="table-row row">
+                                    <?php /* This won't work at all for l10n */ ?>
+                                    <?php
+                                    if ( 1 === count( $group_contacts ) ) {
+                                        $gc_label = sprintf( '%s Contact', ucwords( $group_type ) );
+                                    } else {
+                                        $gc_label = sprintf( '%s Contacts', ucwords( $group_type ) );
+                                    }
+                                    ?>
+                                    <div class="bold col-sm-7"><?php echo $gc_label ?></div>
+                                    <div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
+                                </div>
                             <?php endif; ?>
 
                             <?php if ($group_type == "portfolio"): ?>
@@ -1609,6 +1636,11 @@ function openlab_get_group_activity_events_feed() {
         return $events_out;
     }
 
+	// Don't show on portfolios.
+	if ( openlab_is_portfolio() ) {
+		return $events_out;
+	}
+
     if (!function_exists('eo_get_events')) {
         return $events_out;
     }
@@ -1632,3 +1664,52 @@ function openlab_get_group_activity_events_feed() {
 add_action( 'bp_group_options_nav', function() {
 	echo openlab_get_group_activity_events_feed();
 }, 50 );
+
+/**
+ * Group membership request link.
+ */
+function openlab_group_request_user_link() {
+	global $requests_template;
+
+	$user_id   = $requests_template->request->user_id;
+	$user_url  = bp_core_get_user_domain( $user_id );
+	$user_name = bp_core_get_user_displayname( $user_id );
+
+	return sprintf(
+		'<a href="%s" class="truncate-on-the-fly" data-basevalue="20" data-minvalue="10" data-basewidth="152">%s</a>',
+		esc_url( $user_url ),
+		esc_html( $user_name )
+	);
+}
+
+/**
+ * Adds a Badges link under group avatars on single group headers.
+ */
+function openlab_add_badge_button_to_profile() {
+	if ( ! current_user_can( 'grant_badges' ) ) {
+		return;
+	}
+
+	$group_id = bp_get_current_group_id();
+
+	$badge_link = bp_get_group_permalink( groups_get_current_group() ) . 'admin/group-settings/#panel-badges';
+
+	?>
+	<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo esc_attr( $badge_link ); ?>"><i class="fa fa-certificate" aria-hidden="true"></i> Manage Badges</a>
+	<?php
+}
+add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );
+
+add_action( 'bp_after_group_details_creation_step', function() {
+    if ( ! empty( $_GET['type'] ) ) {
+        $group_type = $_GET['type'];
+    } else {
+        $group_type = 'club';
+    }
+
+	$group_type_supports_cloning = openlab_group_type_can_be_cloned_by_others( $group_type );
+
+    if ( $group_type_supports_cloning ) {
+        openlab_group_sharing_settings_markup( 0 );
+    }
+}, 4 );

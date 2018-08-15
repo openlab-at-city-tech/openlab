@@ -13,7 +13,7 @@ class WordAds_Params {
 			'wordads_approved'           => false,
 			'wordads_active'             => false,
 			'wordads_house'              => true,
-			'enable_header_ad'           => false,
+			'enable_header_ad'           => true,
 			'wordads_second_belowpost'   => true,
 			'wordads_display_front_page' => true,
 			'wordads_display_post'       => true,
@@ -71,16 +71,12 @@ class WordAds_Params {
 	 * @since 4.5.0
 	 */
 	public static function is_cloudflare() {
-		if ( defined( 'WORDADS_CLOUDFLARE' ) ) {
-			return true;
-		}
-		if ( isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
-			return true;
-		}
-		if ( isset( $_SERVER['HTTP_CF_IPCOUNTRY'] ) ) {
-			return true;
-		}
-		if ( isset( $_SERVER['HTTP_CF_VISITOR'] ) ) {
+		if (
+			defined( 'WORDADS_CLOUDFLARE' )
+			|| isset( $_SERVER['HTTP_CF_CONNECTING_IP'] )
+			|| isset( $_SERVER['HTTP_CF_IPCOUNTRY'] )
+			|| isset( $_SERVER['HTTP_CF_VISITOR'] )
+		) {
 			return true;
 		}
 

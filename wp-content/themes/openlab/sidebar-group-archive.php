@@ -21,6 +21,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
     $school_color = "passive";
     $dept_color = "passive";
     $semester_color = "passive";
+    $badge_color = "passive";
     $sort_color = "passive";
     $user_color = "passive";
 
@@ -97,6 +98,13 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $display_option_semester = ucfirst(str_replace('-', ' ', $_GET['semester']));
         $option_value_semester = $_GET['semester'];
     }
+
+	if ( ! empty( $_GET['group_badge'] ) ) {
+		$badge_color = 'active';
+		$badge_value = wp_unslash( $_GET['group_badge'] );
+	} else {
+		$badge_value = '';
+	}
 
 //user types - for people archive page
     if (empty($_GET['usertype'])) {
@@ -237,6 +245,21 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                         <option <?php selected($option_value, 'active') ?> value='active'>Last Active</option>
                     </select>
                 </div>
+
+				<?php $badges = \OpenLab\Badges\Badge::get( array( 'hide_empty' => true ) ); ?>
+				<?php if ( $badges && in_array( $group_type, array( 'course', 'project' ), true ) ) : ?>
+					<div class="custom-select">
+						<label for="badge-select" class="sr-only">Select Type</label>
+						<select id="badge-select" name="group_badge" class="last-select <?php echo $badge_color; ?>-text">
+                            <option value='all' <?php selected( '', $badge_value ) ?>>Select Type</option>
+                            <option value='all' <?php selected( 'all', $badge_value ) ?>>All</option>
+							<?php foreach ( $badges as $badge ) : ?>
+								<option <?php selected( $badge->get_id(), $badge_value ); ?> value="<?php echo esc_attr( $badge->get_id() ); ?>"><?php echo esc_html( $badge->get_name() ); ?></option>
+
+							<?php endforeach; ?>
+						</select>
+					</div>
+				<?php endif; ?>
 
             </div>
             <input class="btn btn-primary" type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">

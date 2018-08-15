@@ -217,11 +217,11 @@ class Mappress_Controls {
 		return $results;
 	}
 
-	static function get_terms($taxonomy) {
+	static function get_terms($taxonomy, $fields='slugs') {
 		$results = array();
 		$terms = get_terms($taxonomy, array('hide_empty' => false, 'exclude' => 1));
 		if (is_array($terms)) {
-			$walker = new Mappress_Walker();
+			$walker = new Mappress_Walker($fields);
 			$walk = $walker->walk($terms, 0, array('indent' => true));
 			if (is_array($walk))
 				$results = $walk;
@@ -237,13 +237,20 @@ class Mappress_Controls {
 */
 class Mappress_Walker extends Walker {
 	public $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
+	public $fields;
+
+	function __construct($fields=false) {
+		$this->fields = $fields;
+	}
+
 	function start_el( &$output, $term, $depth = 0, $args = array(), $id = 0 ) {
 		if (!is_array($output))
 			$output = array();
 
 		// If 'indent' set, use spaces (for hierarchical lists like taxonomies)
 		$indent = (isset($args['indent']) && $args['indent']) ? str_repeat('&mdash;', $depth) : '';
-		$output[$term->slug] = $indent . $term->slug;
+		$value = ($this->fields == 'names') ? $term->name : $term->slug;
+		$output[$term->slug] = $indent . $value;
 	}
 }
 ?>

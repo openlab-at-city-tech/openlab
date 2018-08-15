@@ -21,13 +21,14 @@
                                 </div>
                             </div>
                             <div class="col-sm-16">
-                            
+
                                 <p class="italics"><?php _e( 'Your avatar will be used on your profile and throughout the site. If there is a Gravatar associated with your account email we will use that, or you can upload an image from your computer. Click below to select a JPG, GIF or PNG format photo from your computer and then click "Upload Image" to proceed.', 'buddypress') ?></p>
 
                                 <p id="avatar-upload">
                                     <div class="form-group form-inline">
                                             <div class="form-control type-file-wrapper">
                                                 <input type="file" name="file" id="file" />
+												<label for="file" class="screen-reader-text">Select File to Upload</label>
                                             </div>
                                             <input class="btn btn-primary top-align" type="submit" name="upload" id="upload" value="<?php _e( 'Upload Image', 'buddypress' ) ?>" />
                                             <input type="hidden" name="action" id="action" value="bp_avatar_upload" />

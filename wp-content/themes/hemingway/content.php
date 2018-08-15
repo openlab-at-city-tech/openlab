@@ -4,17 +4,17 @@
 
 		<div class="featured-media">
 		
-			<?php if( is_sticky() ) { ?> <span class="sticky-post"><?php _e('Sticky post', 'hemingway'); ?></span> <?php } ?>
+			<?php if ( is_sticky() ) : ?><span class="sticky-post"><?php _e( 'Sticky post', 'hemingway' ); ?></span><?php endif; ?>
 		
 			<a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title(); ?>">
 			
-				<?php the_post_thumbnail('post-image'); ?>
+				<?php the_post_thumbnail( 'post-image' ); ?>
 				
-				<?php if ( !empty(get_post(get_post_thumbnail_id())->post_excerpt) ) : ?>
+				<?php if ( ! empty( get_post( get_post_thumbnail_id() )->post_excerpt ) ) : ?>
 								
 					<div class="media-caption-container">
 					
-						<p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
+						<p class="media-caption"><?php echo get_post( get_post_thumbnail_id() )->post_excerpt; ?></p>
 						
 					</div>
 					
@@ -30,7 +30,7 @@
     
     <div class="post-meta">
 	
-		<span class="post-date"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_time(get_option('date_format')); ?></a></span>
+		<span class="post-date"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_time( get_option( 'date_format' ) ); ?></a></span>
 		
 		<span class="date-sep"> / </span>
 			
@@ -40,28 +40,28 @@
 		
 		<?php comments_popup_link( '<span class="comment">' . __( '0 Comments', 'hemingway' ) . '</span>', __( '1 Comment', 'hemingway' ), __( '% Comments', 'hemingway' ) ); ?>
 		
-		<?php if( is_sticky() && !has_post_thumbnail() ) { ?> 
+		<?php if ( is_sticky() && !has_post_thumbnail() ) : ?> 
 		
 			<span class="date-sep"> / </span>
 		
 			<?php _e('Sticky', 'hemingway'); ?>
 		
-		<?php } ?>
+		<?php endif; ?>
 		
-		<?php if ( current_user_can( 'manage_options' ) ) { ?>
+		<?php if ( current_user_can( 'manage_options' ) ) : ?>
 		
 			<span class="date-sep"> / </span>
 						
-			<?php edit_post_link(__('Edit', 'hemingway')); ?>
+			<?php edit_post_link( __( 'Edit', 'hemingway' ) ); ?>
 		
-		<?php } ?>
+		<?php endif; ?>
 								
 	</div>
     
 </div><!-- .post-header -->
 									                                    	    
 <div class="post-content">
-	    		            			            	                                                                                            
+	
 		<?php the_content(); ?>
 					
 		<?php wp_link_pages(); ?>

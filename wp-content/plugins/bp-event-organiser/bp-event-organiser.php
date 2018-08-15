@@ -221,29 +221,7 @@ class BuddyPress_Event_Organiser {
 			return;
 		}
 
-		// only add the following on a user's calendar
-		if ( bp_is_user() && bp_is_current_action( 'calendar' ) ) {
-			wp_enqueue_script( 'bp_event_organiser_js' );
-
-			$vars = array(
-				'calendar_filter_title' => __( 'Filters', 'bp-event-organiser' ),
-				'calendar_author_filter_title' => __( 'By Author', 'bp-event-organiser' ),
-				'calendar_group_filter_title' => __( 'By Group', 'bp-event-organiser' ),
-				'loggedin_user_id' => bp_loggedin_user_id()
-			);
-
-			wp_localize_script( 'bp_event_organiser_js', 'BpEventOrganiserSettings', $vars );
-		}
-
-		// only do this when creating or editing an event on backend or frontend
-		if ( false === $frontend || ( bpeo_is_action( 'new' ) || bpeo_is_action( 'edit' ) ) ) {
-			wp_enqueue_style( 'select2' );
-			wp_enqueue_script( 'bpeo-group-select' );
-
-			$vars['group_privacy_message'] = __( 'You have added a group to this event.  Since groups have their own privacy settings, we have removed the ability to set the status for this event.', 'bp-event-organiser' );
-
-			wp_localize_script( 'bpeo-group-select', 'BpEventOrganiserSettings', $vars );
-		}
+		bpeo_enqueue_assets();
 	}
 
 	/**

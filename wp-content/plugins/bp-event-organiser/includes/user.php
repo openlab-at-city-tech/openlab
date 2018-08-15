@@ -163,6 +163,11 @@ function bpeo_map_basic_meta_caps( $caps, $cap, $user_id, $args ) {
 		case 'publish_events' :
 		case 'manage_venues' :
 		case 'edit_events' : // handles adding tags/categories
+			// Don't allow editing in the Dashboard.
+			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+				return $caps;
+			}
+
 			break;
 
 		// meta caps

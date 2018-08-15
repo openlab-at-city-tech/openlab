@@ -3,8 +3,8 @@ Contributors: never5, barrykooij, mikejolley, hchouhan
 Donate link: http://www.barrykooij.com/donate/
 Tags: download, downloads, monitor, hits, download monitor, tracking, admin, count, counter, files, versions, download count, logging, AJAX, digital, documents, download category, download manager, download template, downloadmanager, file manager, file tree, grid, hits, ip-address, manager, media, monitor, password, protect downloads, tracker
 Requires at least: 3.8
-Tested up to: 4.9
-Stable tag: 1.9.9
+Tested up to: 4.9.6
+Stable tag: 4.1.0
 License: GPLv3
 Text Domain: -
 
@@ -104,10 +104,6 @@ Download links are powered by endpoints. If you find them 404'ing, go to Setting
 
 Admin hits are not counted, log out and try!
 
-= I used this before, so why is this version 1? =
-
-Version 1.0.0 is a fresh start/complete rewrite of the legacy 3.0 version using modern best-practices such as custom post types and endpoints. Because of this, data from the legacy plugin won't work without migration using [the legacy importer](https://www.download-monitor.com/extensions/dlm-legacy-importer/). Since this upgrade process isn't straightforward nor automated I've reverted the version to 1.0.0 to prevent automatic updates.
-
 More documentation can be found in our [Knowledge Base](https://www.download-monitor.com/kb/).
 
 == Screenshots ==
@@ -115,9 +111,103 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 1. The main admin screen lists your downloads using familiar WordPress UI.
 2. Easily add file information and multiple versions.
 3. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
-4. Display regular download links or fancy ones all using shortcodes and templates.
 
 == Changelog ==
+
+= 4.1.0: May 21, 2018 =
+* Feature: Added a new option that allows site-owners if and how they wish to track IP addresses of users.
+* Feature: Added a new option that allows site-owners to decide if they wish to track user agent of users.
+* Tweak: Fixed an issue where title of log dates had incorrect date.
+* Tweak: Added compatibility for 'Post Types Order' plugin. The dashboard widget no longer is affected by their custom order.
+* Tweak: Added dlm_frontend_scripts filter, allows user to not include DLM frontend assets.
+* Tweak: No longer load jQuery UI CSS from Google CDN, file is now included in plugin.
+* Tweak: No longer loading jQuery images from Google CDN, images are now included in plugin.
+
+= 4.0.8: May 3, 2018 =
+* Tweak: Fixed a bug in the legacy upgrader that caused versions with empty dates not to added.
+* Tweak: Fixed the use of getTimeStamp() because PHP 5.2 doesn't support this.
+
+= 4.0.7: April 13, 2018 =
+* Tweak: Fixed a bug that caused certain months in the reports filter to crash for non English languages.
+* Tweak: Fixed a bug that caused the 10 download limit on the Dashboard Widget to be ignored.
+* Tweak: Added "dlm_remove_dashboard_popular_downloads" filter that allows for not loading of dashboard widget.
+* Tweak: Moved 'dlm_log_item' filter to within the WordPressLogItemRepository::persist() method. This way the filter will always be called upon a log persist.
+* Tweak: Filter 'dlm_log_item' 2nd and 3rd argument changed from DLM_Download & DLM_Download_Version type to int (ID's of both download and version).
+* Tweak: Moved 'dlm_downloading_log_item_added' filter to within the WordPressLogItemRepository::persist() method. This way the filter will always be called upon a log persist.
+* Tweak: Filter 'dlm_downloading_log_item_added' 2nd and 3rd argument changed from DLM_Download & DLM_Download_Version type to int (ID's of both download and version).
+* Tweak: Added filter 'dlm_reports_page_start' to add content on top of admin reports page.
+* Tweak: Added filter 'dlm_reports_page_end' to add content on bottom of admin reports page.
+* Tweak: Added download id and download object to 'dlm_placeholder_image_src' filter, props [James Golovich](https://github.com/jamesgol).
+* Tweak: Added filter 'dlm_download_get_versions' on return of DLM_Download::get_versions(), props [James Golovich](https://github.com/jamesgol).
+* Tweak: Added $atts to various shortcode filters, props [James Golovich](https://github.com/jamesgol).
+
+= 4.0.6: March 8, 2018 =
+* Tweak: Fixed a bug in the version-list template, correct version links are now displayed.
+
+= 4.0.5: February 21, 2018 =
+* Tweak: Fixed a bug that caused the "Add file" button to not appear on the Add New Download screen.
+* Tweak: Fixed a bug that caused the crc32b hash not to be saved when adding a download via the 'Quick-add Download' option.
+* Tweak: WordPressVersionRepository no longer explicitly sets 'post_content' and 'post_excerpt' database fields of dlm_download_version to empty strings. Props [Erin Morelli](https://github.com/ErinMorelli).
+
+= 4.0.4: February 19, 2018 =
+* Tweak: Fixed a bug where versions of draft and pending review downloads were not displayed in the backend.
+
+= 4.0.3: February 9, 2018 =
+* Tweak: We now cache if we need to upgrade legacy downloads. This prevents us from checking if we need to upgrade on every pageload, improving performance and preventing constant sql warning when legacy table doesn't exist.
+* Tweak: Fixed SQL error in has_ip_downloaded_version() call ('type' does not exist).
+
+= 4.0.2: February 2, 2018 =
+* Tweak: Moved no cache headers up in download process, improving cache prevention.
+* Tweak: Added new log item meta data methods, making it easier to add meta data.
+* Tweak: Added new action 'dlm_downloading_log_item_added'. Is triggered after log item is added on download request.
+* Tweak: Added $download and $version arguments to 'dlm_log_item' filter.
+
+= 4.0.1: January 25, 2018 =
+* Tweak: Fixed an issue that caused widget limit to not work.
+* Tweak: Fixed an count() warning in PHP7.2 on extension page.
+* Tweak: Fixed a passed by reference notice in lower PHP versions in get_visitor_ip() call.
+* Tweak: Added 'dlm_download_count' filter to fitler get_download_count() return value.
+* Tweak: Downloads now return an empty version if no version is added. This prevents mulitple possible fatal errors when external scripts don't check if get_version() returns null.
+* Tweak: Added an extra check to if website needs upgrading. If there are new downloads in the database, no upgrade is recommended.
+* Tweak: Added an extra warning on the upgrade page to users that navigate to the page while we think no upgrade is needed.
+* Tweak: Requesting a non existing download no longer triggers a fatal error (exception is now properly handled).
+* Tweak: Correct exception handling when trying to save meta boxes of non existing download.
+
+= 4.0.0: January 22, 2018 =
+* Feature: Added reports page for download statistics.
+* Feature: Added hash values to version blocks.
+* Feature: Added option to include downloads in WordPress default search results, props [Kurt Zenisek](https://github.com/KZeni).
+* Feature: Added SHA256 hash.
+* Feature: Added support for regex patterns in user agent blacklist, props [Matt Mower](https://github.com/mdmower).
+* Feature: Added user filter to logs, props [neptuneweb](https://github.com/neptuneweb).
+* Feature: Log columns in log table are now sortable.
+* Feature: Added an option for the user to remove all transients.
+* Feature: Added the ability to exclude tags from the [downloads] shortcode.
+* Feature: Added search option in "Insert Download" overlay.
+* Feature: Added builtin legacy upgrade tool to help users move their downloads from legacy to current version.
+* Tweak: Added 'dlm_file_path' filter to filter file_path in download request.
+* Tweak: We're now only serving downloads when requested over the GET or POST HTTP method. This can be filtered via filter dlm_accepted_request_methods.
+* Tweak: Added Download Title to download log CSV export file.
+* Tweak: Added 'dlm_shortcode_total_downloads' filter to output of [total_downloads] shortcode, props [Joel James](https://github.com/Joel-James).
+* Tweak: Added support for Apache 2.4 and up in generated .htaccess file.
+* Tweak: Added 'dlm_download_use_version_transient' filter to allow website to not use cache transients.
+* Tweak: Downloads need to be published in order to exist, draft downloads can no longer be downloaded.
+* Tweak: Fixed plugin links on plugin overview page.
+* Tweak: Optimization rewrite of DLM_Download class.
+* Tweak: Optimization rewrite of DLM_Download_Version class.
+* Tweak: Introduction of Factory and Repository design patterns for Downloads and Versions.
+* Tweak: Complete rewrite of setting fields.
+* Tweak: Updated template files to use new download methods.
+* Tweak: Introduced new filter "dlm_setting_field_TYPE", allowing third party programs to add custom field types to settings.
+* Tweak: Implemented Composer autoloader.
+* Tweak: Download Categories and Download Tags label name now contains 'Download'.
+* Tweak: Download Widget now uses default template output set in settings when no output template is set.
+* Tweak: Download Widget CSS tweaks.
+* Tweak: Download category and download tags are now excluded from Yoast SEO sitemap.
+* Tweak: 'Delete Logs' button now requires a confirmation.
+* Tweak: Placeholders for download thumbnails in media library list view are now also properly replaced.
+* Tweak: Minor UX improvement on Download Information fields making it easier to copy these, props [Danny van Kooten](https://github.com/dannyvankooten).
+* Tweak: Replaced double underscore prefixed functions with single underscore prefix to comply with PHP reserved method naming rules.
 
 = 1.9.9: October 18, 2017 =
 * Tweak: Fixed an issue with 'No Access' page not saving correctly.

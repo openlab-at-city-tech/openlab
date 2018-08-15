@@ -82,14 +82,17 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 		// test for BP 1.8+
 		// could also use 'bp_esc_sql_order' (the other core addition)
 		if ( function_exists( 'bp_core_get_upload_dir' ) ) {
-
 			// init array
 			$args = array(
 				'name' => $name,
 				'slug' => $slug,
 				'nav_item_position' => $pos,
 				'enable_create_step' => false,
-				'screens' => array(
+			);
+
+			// Only register the "Manage > Events" screen for non-public groups.
+			if ( bp_is_group() && 'public' !== bp_get_group_status( groups_get_current_group() ) ) {
+				$args['screens'] = array(
 					'edit' => array(
 						'enabled' => true,
 						'slug' => 'events',
@@ -97,8 +100,8 @@ class BP_Event_Organiser_Group_Extension extends BP_Group_Extension {
 						'screen_callback' => array( $this, 'edit_screen_callback' ),
 						'screen_save_callback' => array( $this, 'edit_screen_save_callback' ),
 					),
-				),
-			);
+				);
+			}
 
 			// init
 			parent::init( $args );

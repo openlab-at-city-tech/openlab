@@ -4,9 +4,10 @@ define ("OSM_enable_Ajax", True);
 
 // change them for shortcode generatgor & geotagger
 // to your location
-define ("OSM_default_lat", 51.251);
-define ("OSM_default_lon", 7.077);
-define ("OSM_default_zoom", 15);
+define ("OSM_default_lat",  apply_filters('get_osm_default_lat', get_option("osm_default_lat",43.758629))); 
+define ("OSM_default_lon",  apply_filters('get_osm_default_lon', get_option("osm_default_lon",6.924225)));
+define ("OSM_default_zoom", apply_filters('get_osm_default_zoom', get_option("osm_default_zoom",11)));
+
 
 // SERVER_EMBEDDED   ... loaded by the plugin for each map (default)
 // SERVER_WP_ENQUEUE ... registered and loaded by WordPress

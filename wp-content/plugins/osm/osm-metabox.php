@@ -51,7 +51,7 @@ function osm_map_create_shortcode_function( $post ) {
   jQuery(document).ready(function(){
 
 	jQuery('ul.osm-tabs li').click(function(){
-		var tab_id = $(this).attr('data-tab');
+		var tab_id = jQuery(this).attr('data-tab');
 
 		jQuery('ul.osm-tabs li').removeClass('current');
 		jQuery('.tab-content').removeClass('current');

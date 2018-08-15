@@ -41,6 +41,33 @@ Source: http://www.unsplash.com
 
 == Changelog ==
 
+Version 1.64 (2018-05-24)
+-------------------------
+- Fixed output of cookie checkbox in comments
+
+Version 1.63 (2018-03-29)
+-------------------------
+- Adjusted viewport meta tag element from 1.60
+
+Version 1.62 (2018-03-28)
+-------------------------
+- Version bump due to issues with the theme uploader on 2018-03-27
+
+Version 1.61 (2018-03-27)
+-------------------------
+- Updated footer colors to have stronger contrast
+- Updated header colors to also pass the WCAG AA standard
+
+Version 1.60 (2018-03-27)
+-------------------------
+- Removed the viewport meta tag from the head
+- Moved clear element out of .blog-menu element
+- Tweaked blog description styling
+- Updated footer colors to make sure they pass the WCAG AA standard
+- Changed ternarys to be full-length, to retain compatibility with older PHP versions
+- Set links within .gallery-caption and .wp-caption-text to be inline
+- General cleanup
+
 Version 1.59 (2017-12-03)
 -------------------------
 - The pluggable update: made all functions in functions.php pluggable

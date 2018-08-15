@@ -45,8 +45,8 @@ a {
     text-decoration: underline;
     &:hover,
         &:focus {
-        color: @darkTeal;
-        text-decoration: underline;
+        color: inherit;
+        text-decoration: none;
     }
     &:focus{
         outline: solid;
@@ -55,6 +55,9 @@ a {
     }
     &.no-deco{
         text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
     }
     &.btn-primary{
         color: @white;
@@ -162,12 +165,15 @@ blockquote {
             }
             &.current-menu-item,
             &:hover{
-                color: @darkTeal;
+                color: @80gray;
                 a,
                 span{
                     color: inherit;
                     text-decoration: none;
                 }
+            }
+            &.current-menu-item {
+                font-weight: @bold;
             }
             &:last-child,
                 &.last-item{
@@ -235,8 +241,7 @@ blockquote {
                 font-size: 16px;
             }
             &:hover{
-                color: @darkTeal;
-                background-color: inherit;
+                text-decoration: underline;
             }
         }
     }
@@ -424,9 +429,7 @@ input[type="submit"]{
     }
     &.is-mol-menu{
         .submenu-text{
-            color: @darkTeal;
             a{
-                color: @darkTeal;
                 &.display-as-menu-item{
                     color: @black;
                     font-weight: normal;
@@ -482,7 +485,7 @@ input[type="submit"]{
                     padding: 21px 15px;
                     &:hover,
                         &:focus {
-                        color: @darkTeal;
+                        text-decoration: underline;
                     }
                     @media(max-width: @screen-sm-max){
                         font-size: 13px;
@@ -616,6 +619,15 @@ body{
     .btn-margin{
         &.btn-margin-top{
             margin-top: 20px;
+        }
+    }
+    .btn-default{
+        &:hover{
+            color: @80gray;
+
+            &.btn-primary {
+                color: @white;
+            }
         }
     }
     .btn-disabled{
@@ -764,8 +776,8 @@ body{
     }
     .mol-count,
     .site-visibility .fa{
-        background: @magenta;
-        color: @white;
+        background: #ff6666;
+        color: @black;
         border-radius: 10px;
         display: inline-block;
         font-size: 13px;
@@ -777,6 +789,7 @@ body{
         width: 20px;
         &.gray{
             background: @70gray;
+			color: @white;
         }
     }
     .skip-link{
@@ -905,6 +918,18 @@ body{
             margin-top: 4px;
             padding: 6px 12px;
             text-align: left;
+        }
+    }
+    .group-credits{
+        list-style-type: none;
+		margin: 0;
+		padding-left: 0;
+
+        li {
+            margin-bottom: .5em;
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
     .current-filters{
@@ -1116,6 +1141,7 @@ body form{
     }
     .select2-results__option--highlighted[aria-selected] {
         background: @aqua;
+        color: @80gray;
     }
 }
 /**home page**/
@@ -1734,6 +1760,24 @@ body form{
         }
     }
 }
+.portfolio-site-link {
+  font-size: 1.1em;
+  a {
+    display: block;
+  }
+
+  &:hover, &:focus{
+    > a{
+      background: @cyan;
+      color: @80gray;
+      text-decoration: none;
+
+      .cyan-circle{
+        color: @cyan;
+      }
+    }
+  }
+}
 .mobile-group-site-links {
   margin-top: 30px;
   .portfolio-site-link {
@@ -1876,10 +1920,30 @@ body form{
         ul.sidebar-sublinks{
             padding: 6% 5%;
             li{
-                margin-bottom: 10px;
-                &:last-child{
-                    margin-bottom: 0;
+              margin-bottom: 10px;
+              &.portfolio-site-link {
+                margin-bottom: 6px;
+              }
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+            &.portfolio-sublinks {
+              padding: 10px 0 18px;
+              a {
+                padding: 7px 5%;
+              }
+
+              .portfolio-dashboard-link {
+                margin-left: 5%;
+              }
+              .portfolio-dashboard-link a {
+                padding: 7px 0;
+
+                &:last-child {
+                  padding-left: 0;
                 }
+              }
             }
             &.group-event-activity{
                 li{
@@ -2191,7 +2255,7 @@ input#group-request-send {
         }
         .group-item{
             .group-item-wrapper{
-                height: 105px;
+                height: 115px;
                 &.no-btn{
                     height: 98px;
                 }
@@ -2611,6 +2675,9 @@ body.membership-requests {
                     float: none;
                 }
             }
+			.bpeo-upcoming-event-title {
+				padding-left: 0;
+			}
         }
         .eventorganiser-event-meta {
             h4 {
@@ -2692,6 +2759,10 @@ body.membership-requests {
             }
         }
     }
+}
+.sidebar-widget .bpeo-upcoming-event-title {
+	font-weight: bold;
+	padding-left: 0;
 }
 body{
     &.single-event{

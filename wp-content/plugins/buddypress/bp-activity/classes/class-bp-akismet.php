@@ -411,6 +411,19 @@ class BP_Akismet {
 
 			// Mark as spam.
 			bp_activity_mark_as_spam( $activity, 'by_akismet' );
+
+			if (
+				Akismet::allow_discard() &&
+				! empty( $activity_data['akismet_pro_tip'] ) &&
+				'discard' === $activity_data['akismet_pro_tip']
+			) {
+				// If this is so spammy it's not worth your time, let's just delete it.
+				if ( $activity->type === 'activity_comment' ) {
+					bp_activity_delete_comment( $activity->item_id, $activity->id );
+				} else {
+					bp_activity_delete( array( 'id' => $activity->id ) );
+				}
+			}
 		}
 
 		// Update activity meta after a spam check.
@@ -546,11 +559,11 @@ class BP_Akismet {
 		$response = Akismet::http_post( $query_string, $path );
 		remove_filter( 'akismet_ua', array( $this, 'buddypress_ua' ) );
 
-		// Get the response.
-		if ( ! empty( $response[1] ) && ! is_wp_error( $response[1] ) )
-			$activity_data['bp_as_result'] = $response[1];
-		else
-			$activity_data['bp_as_result'] = false;
+		// Save response data.
+		$activity_data['bp_as_result'] = $response[1];
+		if ( isset( $response[0]['x-akismet-pro-tip'] ) ) {
+			$activity_data['akismet_pro_tip'] = $response[0]['x-akismet-pro-tip'];
+		}
 
 		// Perform a daily tidy up.
 		if ( ! wp_next_scheduled( 'bp_activity_akismet_delete_old_metadata' ) )

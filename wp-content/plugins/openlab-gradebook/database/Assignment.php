@@ -1,14 +1,18 @@
 <?php
+
 /**
  * Assignment API
  */
-class gradebook_assignment_API {
+class gradebook_assignment_API
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('wp_ajax_assignment', array($this, 'assignment'));
     }
 
-    public function assignment() {
+    public function assignment()
+    {
         global $wpdb, $oplb_gradebook_api;
 
         $params = $oplb_gradebook_api->oplb_gradebook_get_params();
@@ -29,12 +33,12 @@ class gradebook_assignment_API {
         $wpdb->show_errors();
         
         //trim assignment_category to prevent downstream spacing issues
-        if(!empty($params['assign_category'])){
+        if (!empty($params['assign_category'])) {
             $params['assign_category'] = trim($params['assign_category']);
         }
-        
+
         switch ($params['method']) {
-            case 'DELETE' :
+            case 'DELETE':
 
                 $id = $params['id'];
 
@@ -62,12 +66,12 @@ class gradebook_assignment_API {
                 }
                 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
                 $return_data['distributed_weight'] = $weight_return['distributed_weight'];
 
                 echo json_encode($return_data);
                 break;
-            case 'PUT' :
+            case 'PUT':
 
                 $query = $wpdb->prepare("SELECT assign_weight FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $params['id'], $gbid);
                 $current_weight = $wpdb->get_var($query);
@@ -82,10 +86,10 @@ class gradebook_assignment_API {
                     'assign_visibility' => $params['assign_visibility'],
                     'assign_grade_type' => $params['assign_grade_type'],
                     'assign_weight' => $params['assign_weight'],
-                        ), array(
+                ), array(
                     'id' => $params['id'],
                     'gbid' => $gbid,
-                        ), array(
+                ), array(
                     '%s',
                     '%s',
                     '%s',
@@ -94,28 +98,24 @@ class gradebook_assignment_API {
                     '%s',
                     '%s',
                     '%f',
-                        ), array(
+                ), array(
                     '%d',
                     '%d',
-                        )
-                );
-                $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'assign_order' => $params['assign_order']
-                        ), array(
-                    'amid' => $params['id'],
-                    'gbid' => $gbid,
-                        ), array(
-                    '%d',
-                        ), array(
-                    '%d',
-                    '%d',
-                        )
-                );
+                ));
+
+                $is_null = 1;
+
+                if ($params['assign_grade_type'] === 'checkmark') {
+                    $is_null = 0;
+                }
+
+                $oplb_gradebook_api->oplb_gradebook_update_cells_by_assignment($params['id'], $gbid, $params['assign_order']);
+
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $params['id'], $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
 
                 $assignment['id'] = intval($assignment['id']);
                 $assignment['gbid'] = intval($assignment['gbid']);
@@ -135,16 +135,16 @@ class gradebook_assignment_API {
 
                 echo json_encode($assignment);
                 break;
-            case 'UPDATE' :
+            case 'UPDATE':
                 echo json_encode(array("update" => "updating"));
                 break;
-            case 'PATCH' :
+            case 'PATCH':
                 echo json_encode(array("patch" => "patching"));
                 break;
-            case 'GET' :
+            case 'GET':
                 echo json_encode(array("get" => "getting"));
                 break;
-            case 'POST' :
+            case 'POST':
                 $query = $wpdb->prepare("SELECT assign_order FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $params['gbid']);
                 $assignOrders = $wpdb->get_col($query);
                 if (!$assignOrders) {
@@ -153,22 +153,22 @@ class gradebook_assignment_API {
                 $assignOrder = max($assignOrders) + 1;
                 
                 //handle values that cannot be NULL
-                if(!$params['assign_weight']){
+                if (!$params['assign_weight']) {
                     $params['assign_weight'] = 0;
                 }
-                
-                if(!$params['assign_date']){
+
+                if (!$params['assign_date']) {
                     $params['assign_date'] = date('Y-m-d');
                 }
-                
-                if(!$params['assign_due']){
+
+                if (!$params['assign_due']) {
                     $params['assign_due'] = date('0000-00-00');
                 }
-                
-                if(!$params['assign_category']){
+
+                if (!$params['assign_category']) {
                     $params['assign_category'] = 'uncategorized';
                 }
-                
+
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
                     'assign_name' => $params['assign_name'],
                     'assign_date' => $params['assign_date'],
@@ -179,22 +179,28 @@ class gradebook_assignment_API {
                     'assign_weight' => $params['assign_weight'],
                     'gbid' => $params['gbid'],
                     'assign_order' => $assignOrder
-                        ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d')
-                );
-                
+                ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d'));
+
                 $assignID = $wpdb->insert_id;
-                
+
                 $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $params['gbid'], 'student');
                 $studentIDs = $wpdb->get_results($query, ARRAY_N);
+
+                $is_null = 1;
+
+                if ($params['assign_grade_type'] === 'checkmark') {
+                    $is_null = 0;
+                }
+
                 foreach ($studentIDs as $value) {
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
                         'gbid' => $params['gbid'],
                         'assign_order' => $assignOrder,
-                        'assign_points_earned' => 0
-                            ), array('%d', '%d', '%d', '%d', '%f')
-                    );
+                        'assign_points_earned' => 0,
+                        'is_null' => $is_null,
+                    ), array('%d', '%d', '%d', '%d', '%f', '%d'));
                 }
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d AND gbid = %d", $assignID, $gbid);
                 $assignment = $wpdb->get_row($query, ARRAY_A);
@@ -203,7 +209,7 @@ class gradebook_assignment_API {
                 $assignment['id'] = intval($assignment['id']);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid']);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid'], array());
                 $assignment['total_weight'] = $weight_return['total_weight'];
                 $assignment['distributed_weight'] = $weight_return['distributed_weight'];
 
@@ -212,7 +218,7 @@ class gradebook_assignment_API {
                 if (!empty($student_data)) {
                     $assignment['student_grade_update'] = $student_data;
                 }
-                
+
                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d AND gbid = %d", $assignID, $gbid);
                 $cells = $wpdb->get_results($query, ARRAY_A);
                 foreach ($cells as &$cell) {
@@ -222,6 +228,7 @@ class gradebook_assignment_API {
                     $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
+                    $cell['is_null'] = boolval(intval($cell['is_null']));
                 }
                 $data = array('assignment' => $assignment, 'cells' => $cells);
                 echo json_encode($data);

@@ -1,0 +1,44 @@
+{
+  "name": "TablePress",
+  "version": "1.9.0",
+  "description": "TablePress enables you to create and manage tables, without having to write HTML code, and it adds valuable functions for your visitors.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TobiasBg/TablePress"
+  },
+  "author": "Tobias Bäthge",
+  "license": "GPL-2.0-only",
+  "devDependencies": {
+    "autoprefixer": "~9.0.0",
+    "grunt": "~1.0.3",
+    "grunt-contrib-cssmin": "~2.2.1",
+    "grunt-contrib-uglify": "~3.3.0",
+    "grunt-contrib-csslint": "~2.0.0",
+    "grunt-contrib-jshint": "~1.1.0",
+    "grunt-contrib-watch": "~1.1.0",
+    "grunt-jsvalidate": "~0.2.2",
+    "grunt-postcss": "~0.9.0",
+    "grunt-jsonlint": "~1.1.0",
+    "matchdep": "~2.0.0"
+  },
+  "jshintConfig": {
+    "boss": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "es3": true,
+    "expr": true,
+    "immed": true,
+    "noarg": true,
+    "nonbsp": true,
+    "onevar": true,
+    "quotmark": "single",
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "globals": {
+      "jQuery": false
+    }
+  }
+}

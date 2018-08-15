@@ -3,7 +3,7 @@
 Plugin Name: OSM
 Plugin URI: http://wp-osm-plugin.HanBlog.net
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="http://wp-osm-plugin.HanBlog.net">OSM plugin page</a>.
-Version: 4.0.2
+Version: 4.1.1
 Author: MiKa
 Author URI: http://www.HanBlog.net
 Minimum WordPress Version Required: 3.0
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V4.0.2");
+define ("PLUGIN_VER", "V4.1.1");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -265,40 +265,57 @@ class Osm
 	// add it to the Settings page
   static function options_page_osm()
   {
-    if(isset($_POST['Options'])){
-      // 0 = no error;
-      // 1 = error occured
-      $Option_Error = 0;
-
-      // get the zoomlevel for the external link
-      // and inform the user if the level was out of range
-      // update_option('osm_custom_field',$_POST['osm_custom_field']);
-
-      if ($_POST['osm_zoom_level'] >= ZOOM_LEVEL_MIN && $_POST['osm_zoom_level'] <= ZOOM_LEVEL_MAX){
-        update_option('osm_zoom_level',$_POST['osm_zoom_level']);
-      }
-      else {
-        $Option_Error = 1;
-        Osm::traceText(DEBUG_ERROR, "e_zoomlevel_range");
-      }
-      // Let the user know whether all was fine or not
-      if ($Option_Error  == 0){
-        Osm::traceText(DEBUG_INFO, "i_options_updated");
-      }
-      else{
-        Osm::traceText(DEBUG_ERROR, "e_options_not_updated");
-      }
-    }
-    else{
-	  //add_option('osm_custom_field', 0);
-	  add_option('osm_zoom_level', 0);
-    }
+      
+    // 0 = no error;
+    // 1 = error occured
+    $Option_Error = 0;
 
     // name of the custom field to store Long and Lat
     // for the geodata of the post
     $osm_custom_field  = get_option('osm_custom_field','OSM_geo_data');
-    // zoomlevel for the link the OSM page
-    $osm_zoom_level    = get_option('osm_zoom_level','7');
+           
+    //default map values 
+    $osm_default_lat=get_option('osm_default_lat',OSM_default_lat);  
+    $osm_default_lon=get_option('osm_default_lon',OSM_default_lon);  
+    $osm_default_zoom=get_option('osm_default_zoom',OSM_default_zoom); 
+    // update default maps values
+    if (isset($_POST['osm_default_lat'])) {
+        $temp_lat=(float) $_POST['osm_default_lat'];
+        if ($temp_lat>LAT_MAX || $temp_lat<LAT_MIN) {
+          $Option_Error = 1;
+          Osm::traceText(DEBUG_ERROR, "e_default_lat_range");   
+        } else {
+          $osm_default_lat=$temp_lat;   
+          update_option('osm_default_lat',$temp_lat);  
+        }
+    } 
+    if (isset($_POST['osm_default_lon'])) {
+        $temp_lon=(float) $_POST['osm_default_lon'];
+        if ($temp_lon>LON_MAX || $temp_lon<LON_MIN) {
+          $Option_Error = 1;
+          Osm::traceText(DEBUG_ERROR, "e_default_lon_range");   
+        } else {
+          $osm_default_lon=$temp_lon;   
+          update_option('osm_default_lon',$temp_lon);  
+        }
+     } 
+    if (isset($_POST['osm_default_zoom'])) {
+        $temp_zoom=(int) $_POST['osm_default_zoom'];
+        if ($temp_zoom>19 || $temp_zoom<1) {
+          $Option_Error = 1;
+          Osm::traceText(DEBUG_ERROR, "e_default_zoom_range");   
+        } else {
+          $osm_default_zoom=$temp_zoom;
+          update_option('osm_default_zoom',$temp_zoom);  
+        }
+     } 
+     // Let the user know whether all was fine or not
+     if ($Option_Error  == 0){
+        Osm::traceText(DEBUG_INFO, "i_options_updated");
+     }
+     else {
+        Osm::traceText(DEBUG_ERROR, "e_options_not_updated");
+     }
 
     include('osm-options.php');
   }

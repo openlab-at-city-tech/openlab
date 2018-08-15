@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Optional sidebar widget that displays link to OpenLab Gradebook
+ * Optional sidebar widget that displays link to OpenLab GradeBook
  */
 
 class OPLB_Gradebook_Widget extends WP_Widget {
@@ -9,9 +9,9 @@ class OPLB_Gradebook_Widget extends WP_Widget {
     public function __construct() {
         
         parent::__construct(
-                'oplb_gradebook_widget', __('OpenLab Gradebook Widget', 'oplb_gradebook'), array(
+                'oplb_gradebook_widget', __('OpenLab GradeBook Widget', 'oplb_gradebook'), array(
             'classname' => 'oplb_gradebook_widget',
-            'description' => __('This widget will display a direct link to the OpenLab Gradebook interface. Will not display for logged out users.', 'oplb_gradebook')
+            'description' => __('This widget will display a direct link to the OpenLab GradeBook interface. Will not display for logged out users.', 'oplb_gradebook')
                 )
         );
 
@@ -32,9 +32,9 @@ class OPLB_Gradebook_Widget extends WP_Widget {
         extract($args);
 
         $title = apply_filters('widget_title', $instance['title']);
-        $title = !empty($title) ? esc_html($title) : 'Link to OpenLab Gradebook';
+        $title = !empty($title) ? esc_html($title) : 'Link to OpenLab GradeBook';
         $message = esc_html($instance['link_text']);
-        $message = !empty($message) ? esc_html($message) : 'OpenLab Gradebook';
+        $message = !empty($message) ? esc_html($message) : 'OpenLab GradeBook';
         $url = esc_url(admin_url('admin.php?page=oplb_gradebook#courses'));
 
         ob_start();
@@ -50,8 +50,8 @@ class OPLB_Gradebook_Widget extends WP_Widget {
             return false;
         }
         
-        $title = !empty($instance['title']) ? esc_attr($instance['title']) : 'Link to OpenLab Gradebook';
-        $message = !empty($instance['link_text']) ? esc_attr($instance['link_text']) : 'OpenLab Gradebook';
+        $title = !empty($instance['title']) ? esc_attr($instance['title']) : 'Link to OpenLab GradeBook';
+        $message = !empty($instance['link_text']) ? esc_attr($instance['link_text']) : 'OpenLab GradeBook';
 
         ob_start();
         include(plugin_dir_path(__FILE__) . 'parts/widgets/sidebar-widget-form.php');

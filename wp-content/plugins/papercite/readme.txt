@@ -2,8 +2,8 @@
 Contributors: bpiwowar
 Tags: formatting, bibtex, bibliography
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 0.5.15
+Tested up to: 4.9.1
+Stable tag: 0.5.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,10 @@ cite papers.
 
 == Description ==
 
-**To report bugs or request features, please go to https://github.com/bpiwowar/papercite**
+[![Build Status](https://travis-ci.org/bpiwowar/papercite.svg?branch=master)](https://travis-ci.org/bpiwowar/papercite)
+
+**To report bugs or request features, please go to https://github.com/bpiwowar/papercite**.
+**Documentation can be found on http://papercite.readthedocs.org/en/latest/**.
 
 papercite format bibtex entries as HTML so they can be inserted in
 WordPress pages and posts. The input data is a bibtex file (either
@@ -111,6 +114,19 @@ subfolders tpl (citation list rendering) and format (entry rendering).
 3. The bibfilter command
 
 == Changelog ==
+
+= 0.5.18 =
+
+ * Fixed ignored limit option (issue #128)
+ * More tests to cover potential future issues
+
+= 0.5.17 =
+
+ * Updated tests (docker & travis)
+ * PHP fixes
+ * Added support for -- and special latex commands (issue #111)
+ * Added modifiers for output (html, strip, protect, sanitize)
+ * SSL certificates can be ignored (issue #98)
 
 = 0.5.15 = 
 

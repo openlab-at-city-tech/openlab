@@ -1312,7 +1312,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 											$item_timestamp = strtotime( $item->get_date( 'j F Y | g:i a' ) );
 
 											$formatted_date = date_i18n( $date_format_string, $item_timestamp );
-											$output .= '<div class="rsstitle"><a target="feedwindow" href="' . $item->get_permalink() . '">' . $item->get_title() . '</a> - ' . $formatted_date . '</div>';
+											$output .= '<div class="rsstitle"><a target="feedwindow" href="' . $item->get_permalink() . '">' . $item->get_title() . '</a><span class="rsstimestamp"> - ' . $formatted_date . '</span></div>';
 
 											if ( $rssfeedinlinecontent ) {
 												$output .= '<div class="rsscontent">' . $item->get_description() . '</div>';

@@ -56,8 +56,9 @@ class GWField {
             
         add_action('gform_enqueue_scripts', array( $this, 'filter_enqueue_field_scripts'), 10, 2);
 
-        add_action('gform_field_standard_settings', array( $this, 'dynamic_setting_actions'), 10, 2);
-        add_action('gform_field_advanced_settings', array( $this, 'dynamic_setting_actions'), 10, 2);
+        add_action( 'gform_field_standard_settings',   array( $this, 'dynamic_setting_actions' ), 10, 2 );
+        add_action( 'gform_field_appearance_settings', array( $this, 'dynamic_setting_actions' ), 10, 2 );
+        add_action( 'gform_field_advanced_settings',   array( $this, 'dynamic_setting_actions' ), 10, 2 );
 
     }
     
@@ -350,7 +351,7 @@ class GWField {
         $action = current_filter() . '_' . $position;
         if( did_action( $action ) < 1 ) {
             do_action( current_filter() . '_' . $position, $form_id );
-            //echo $position . '<br />';
+            echo $position . '<br />';
         }
     }
 

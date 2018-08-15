@@ -37,6 +37,27 @@ function bpeo_create_activity_for_event( $event_id, $event = null, $update = nul
 		$type = 'bpeo_edit_event';
 	}
 
+	$content = '';
+	if ( 'bpeo_create_event' === $type ) {
+		$content_parts = array();
+
+		$content_parts[] = sprintf( __( 'Title: %s', 'bp-event-organiser' ), $event->post_title );
+
+		$date = eo_get_next_occurrence( eo_get_event_datetime_format( $event_id ), $event_id );
+		if ( $date ) {
+			$content_parts[] = sprintf( __( 'Date: %s', 'bp-event-organiser' ), esc_html( $date ) );
+		}
+
+		$venue_id = eo_get_venue( $event_id );
+		if ( $venue_id ) {
+			$venue = eo_get_venue_name( $venue_id );
+			$content_parts[] = sprintf( __( 'Location: %s', 'bp-event-organiser' ), esc_html( $venue ) );
+		}
+
+		$content = implode( "\n\r", $content_parts );
+	}
+
+
 	// Existing activity items for this event.
 	$activities = bpeo_get_activity_by_event_id( $event_id );
 
@@ -85,11 +106,12 @@ function bpeo_create_activity_for_event( $event_id, $event = null, $update = nul
 			break;
 	}
 
-	$hide_sitewide = 'public' !== $event->post_status;
+	$hide_sitewide = 'publish' !== $event->post_status;
 
 	$activity_args = array(
 		'component' => 'events',
 		'type' => $type,
+		'content' => $content,
 		'user_id' => $event->post_author, // @todo Event edited by non-author?
 		'primary_link' => get_permalink( $event ),
 		'secondary_item_id' => $event_id, // Leave 'item_id' blank for groups.

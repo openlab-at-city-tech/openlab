@@ -404,7 +404,7 @@ class BP_Members_Admin {
 			case 2:
 				$notice = array(
 					'class'   => 'error',
-					'message' => __( 'Please make sure you fill in all required fields in this profile field group before saving.', 'buddypress' )
+					'message' => __( 'Your changes have not been saved. Please fill in all required fields, and save your changes again.', 'buddypress' )
 				);
 				break;
 			case 3:
@@ -946,22 +946,46 @@ class BP_Members_Admin {
 		<?php endif; ?>
 
 		<div class="wrap" id="community-profile-page">
-			<h1><?php echo esc_html( $title ); ?>
+			<?php if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) : ?>
+
+				<h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 
 				<?php if ( empty( $this->is_self_profile ) ) : ?>
 
 					<?php if ( current_user_can( 'create_users' ) ) : ?>
 
-						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
+						<a href="user-new.php" class="page-title-action"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
 
 					<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
 
-						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
+						<a href="user-new.php" class="page-title-action"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
 
 					<?php endif; ?>
 
 				<?php endif; ?>
-			</h1>
+
+				<hr class="wp-header-end">
+
+			<?php else : ?>
+
+				<h1><?php echo esc_html( $title ); ?>
+
+					<?php if ( empty( $this->is_self_profile ) ) : ?>
+
+						<?php if ( current_user_can( 'create_users' ) ) : ?>
+
+							<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
+
+						<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
+
+							<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
+
+						<?php endif; ?>
+
+					<?php endif; ?>
+				</h1>
+
+			<?php endif; ?>
 
 			<?php if ( ! empty( $user ) ) :
 
@@ -1201,7 +1225,7 @@ class BP_Members_Admin {
 		check_admin_referer( 'bp-member-type-change-' . $user_id, 'bp-member-type-nonce' );
 
 		// Permission check.
-		if ( ! current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
+		if ( ! bp_current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
 			return;
 		}
 
@@ -1520,16 +1544,14 @@ class BP_Members_Admin {
 			);
 
 			// Add accessible hidden headings and text for the Pending Users screen.
-			if ( bp_get_major_wp_version() >= 4.4 ) {
-				get_current_screen()->set_screen_reader_content( array(
-					/* translators: accessibility text */
-					'heading_views'      => __( 'Filter users list', 'buddypress' ),
-					/* translators: accessibility text */
-					'heading_pagination' => __( 'Pending users list navigation', 'buddypress' ),
-					/* translators: accessibility text */
-					'heading_list'       => __( 'Pending users list', 'buddypress' ),
-				) );
-			}
+			get_current_screen()->set_screen_reader_content( array(
+				/* translators: accessibility text */
+				'heading_views'      => __( 'Filter users list', 'buddypress' ),
+				/* translators: accessibility text */
+				'heading_pagination' => __( 'Pending users list navigation', 'buddypress' ),
+				/* translators: accessibility text */
+				'heading_list'       => __( 'Pending users list', 'buddypress' ),
+			) );
 
 		} else {
 			if ( ! empty( $_REQUEST['signup_ids' ] ) ) {
@@ -1924,24 +1946,49 @@ class BP_Members_Admin {
 		?>
 
 		<div class="wrap">
-			<h1><?php _e( 'Users', 'buddypress' ); ?>
+			<?php if ( version_compare( $GLOBALS['wp_version'], '4.8', '>=' ) ) : ?>
+
+				<h1 class="wp-heading-inline"><?php _e( 'Users', 'buddypress' ); ?></h1>
 
 				<?php if ( current_user_can( 'create_users' ) ) : ?>
 
-					<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
+					<a href="user-new.php" class="page-title-action"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
 
 				<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
 
-					<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
+					<a href="user-new.php" class="page-title-action"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
 
 				<?php endif;
 
 				if ( $usersearch ) {
 					printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'buddypress' ) . '</span>', esc_html( $usersearch ) );
 				}
-
 				?>
-			</h1>
+
+				<hr class="wp-header-end">
+
+			<?php else : ?>
+
+				<h1><?php _e( 'Users', 'buddypress' ); ?>
+
+					<?php if ( current_user_can( 'create_users' ) ) : ?>
+
+						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
+
+					<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
+
+						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
+
+					<?php endif;
+
+					if ( $usersearch ) {
+						printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'buddypress' ) . '</span>', esc_html( $usersearch ) );
+					}
+
+					?>
+				</h1>
+
+			<?php endif; ?>
 
 			<?php // Display each signups on its own row. ?>
 			<?php $bp_members_signup_list_table->views(); ?>
@@ -2050,15 +2097,16 @@ class BP_Members_Admin {
 		// Prefetch registration field data.
 		$fdata = array();
 		if ( 'activate' === $action && bp_is_active( 'xprofile' ) ) {
-			$fields = bp_xprofile_get_groups( array(
-				'profile_group_id' => 1,
-				'exclude_fields' => 1,
+			$field_groups = bp_xprofile_get_groups( array(
+				'exclude_fields'    => 1,
 				'update_meta_cache' => false,
-				'fetch_fields' => true,
+				'fetch_fields'      => true,
 			) );
-			$fields = $fields[0]->fields;
-			foreach( $fields as $f ) {
-				$fdata[ $f->id ] = $f->name;
+
+			foreach( $field_groups as $fg ) {
+				foreach( $fg->fields as $f ) {
+					$fdata[ $f->id ] = $f->name;
+				}
 			}
 		}
 

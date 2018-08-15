@@ -1,3 +1,7 @@
 .sidebar{
     position: relative !important;
 }
+
+.dataTables_paginate a.paginate_button {
+	text-decoration: none;
+}

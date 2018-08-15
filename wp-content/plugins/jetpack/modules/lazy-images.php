@@ -2,7 +2,7 @@
 
 /**
  * Module Name: Lazy Images
- * Module Description: Improve performance by loading images just before they scroll into view
+ * Module Description: Lazy load images
  * Sort Order: 24
  * Recommendation Order: 14
  * First Introduced: 5.6.0
@@ -10,7 +10,7 @@
  * Auto Activate: No
  * Module Tags: Appearance, Recommended
  * Feature: Appearance
- * Additional Search Queries: mobile, theme, performance
+ * Additional Search Queries: mobile, theme, performance, image
  */
 
 /**
@@ -24,4 +24,16 @@
  */
 
 require_once( JETPACK__PLUGIN_DIR . 'modules/lazy-images/lazy-images.php' );
-Jetpack_Lazy_Images::instance();
+
+/*
+ * Initialize lazy images on the wp action so that conditional
+ * tags are safe to use.
+ *
+ * As an example, this is important if a theme wants to disable lazy images except
+ * on single posts, pages, or attachments by short-circuiting lazy images when
+ * is_singular() returns false.
+ *
+ * See: https://github.com/Automattic/jetpack/issues/8888
+ */
+
+add_action( 'wp', array( 'Jetpack_Lazy_Images', 'instance' ) );

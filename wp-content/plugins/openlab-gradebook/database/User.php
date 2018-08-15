@@ -1,12 +1,16 @@
 <?php
 
-class OPLB_USER {
+class OPLB_USER
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('wp_ajax_oplb_user', array($this, 'oplb_user'));
+        add_action('wp_ajax_oplb_student_grades', array($this, 'oplb_student_grades'));
     }
 
-    public function oplb_user() {
+    public function oplb_user()
+    {
         global $wpdb, $oplb_gradebook_api;
         $wpdb->show_errors();
 
@@ -26,7 +30,7 @@ class OPLB_USER {
         }
 
         switch ($params['method']) {
-            case 'DELETE' :
+            case 'DELETE':
                 parse_str($_SERVER['QUERY_STRING'], $params);
                 $x = $params['id'];
                 $y = $params['gbid'];
@@ -35,20 +39,20 @@ class OPLB_USER {
                 $results2 = $wpdb->delete("{$wpdb->prefix}oplb_gradebook_cells", array('uid' => $x, 'gbid' => $y));
 
                 break;
-            case 'PUT' :
+            case 'PUT':
                 echo json_encode(array("put" => "putting"));
                 die();
                 break;
-            case 'UPDATE' :
+            case 'UPDATE':
                 echo json_encode(array("update" => "updating"));
                 break;
-            case 'PATCH' :
+            case 'PATCH':
                 echo json_encode(array("patch" => "patching"));
                 break;
-            case 'GET' :
+            case 'GET':
                 echo json_encode(array("get" => "getting"));
                 break;
-            case 'POST' :
+            case 'POST':
                 $gbid = $params['gbid'];
 
                 if ($params['student_range_option'] === 'studentAll') {
@@ -75,6 +79,56 @@ class OPLB_USER {
                 }
         }
         die();
+    }
+
+    public function oplb_student_grades()
+    {
+        global $wpdb, $oplb_gradebook_api;
+        $wpdb->show_errors();
+
+        $params = $oplb_gradebook_api->oplb_gradebook_get_params();
+
+        $gbid = $params['gbid'];
+        $uid = $params['uid'];
+
+        //user check - only instructors allowed in
+        if ($oplb_gradebook_api->oplb_gradebook_get_user_role_by_gbid($gbid) !== 'instructor') {
+            echo json_encode(array("status" => "Not Allowed."));
+            die();
+        }
+
+        //nonce check
+        if (!wp_verify_nonce($params['nonce'], 'oplb_gradebook')) {
+            echo json_encode(array("status" => "Authentication error."));
+            die();
+        }
+
+        $target_column = 'mid_semester_grade';
+        if ($params['type'] === 'final') {
+            $target_column = 'final_grade';
+        }
+
+        $wpdb->update(
+            "{$wpdb->prefix}oplb_gradebook_users",
+            array(
+                $target_column => $params['grade'],
+            ),
+            array(
+                "uid" => $uid,
+                "gbid" => $gbid,
+            ),
+            array(
+                '%s',
+            ),
+            array(
+                '%d',
+                '%d',
+            )
+        );
+
+        wp_send_json('success!');
+
+        wp_die();
     }
 
 }
