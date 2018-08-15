@@ -7,14 +7,14 @@ class GWNotice {
     
     function __construct($message, $args = array()) {
         
-        extract(wp_parse_args($args, array(
+        $args = wp_parse_args( $args, array(
             'class' => 'updated',
             'wrap' => 'p'
-        )));
+        ) );
         
-        $this->class = $class;
+        $this->class   = $args['class'];
+	    $this->wrap    = $args['wrap'];
         $this->message = $message;
-        $this->wrap = $wrap;
         
     }
     

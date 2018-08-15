@@ -3,9 +3,7 @@ class Mappress_Map extends Mappress_Obj {
 	var $alignment,
 		$center,
 		$editable,
-		$embed,
 		$filter,
-		$geolocate,
 		$height,
 		$hideEmpty,
 		$initialOpenDirections,
@@ -15,7 +13,7 @@ class Mappress_Map extends Mappress_Obj {
 		$mapid,
 		$mapTypeId,
 		$metaKey,
-		$minZoom,
+		$mapOpts,
 		$name,
 		$poiList,
 		$postid,
@@ -31,9 +29,13 @@ class Mappress_Map extends Mappress_Obj {
 		return array('mapid', 'center', 'height', 'mapTypeId', 'metaKey', 'pois', 'title', 'width', 'zoom');
 	}
 
-	function __construct($atts=null) {
+	function to_json() {
+		// Use same keys as sleep
+		$result = array_intersect_key(get_object_vars($this), array_flip($this->__sleep()));
+		return $result;
+	}
 
-		// Update with defaults, then any passed atts
+	function __construct($atts=null) {
 		$this->update(Mappress::$options);
 		$this->update($atts);
 
@@ -42,22 +44,14 @@ class Mappress_Map extends Mappress_Obj {
 			if (is_array($poi))
 				$this->pois[$index] = new Mappress_Poi($poi);
 		}
-
-		// Set default size if no width/height specified
-		if (!$this->width || !$this->height) {
-			$i = (int) Mappress::$options->size;
-			if (isset(Mappress::$options->sizes[$i])) {
-				$size = Mappress::$options->sizes[$i];
-				$this->width = ($this->width) ? $this->width : $size['width'];
-				$this->height = ($this->height) ? $this->height : $size['height'];
-			}
-		}
 	}
 
 	static function register() {
 		global $wpdb;
 
 		// Ajax
+		add_action('deleted_post', array(__CLASS__, 'delete_post_map'));
+
 		add_action('wp_ajax_mapp_create', array(__CLASS__, 'ajax_create'));
 		add_action('wp_ajax_mapp_get', array(__CLASS__, 'ajax_get'));
 		add_action('wp_ajax_mapp_save', array(__CLASS__, 'ajax_save'));
@@ -96,12 +90,11 @@ class Mappress_Map extends Mappress_Obj {
 	static function media_button($editor_id) {
 		if ($editor_id == 'content') {
 			echo '<button type="button" class="button" id="mapp-pick-button">';
-			echo '<span class="wp-media-buttons-icon dashicons dashicons-location-alt"></span> ' . __('Insert Map', 'mappress-google-maps-for-wordpress') . '</button>';
+			echo '<span class="wp-media-buttons-icon dashicons dashicons-location"></span> ' . __('MapPress', 'mappress-google-maps-for-wordpress') . '</button>';
 		}
 	}
 
 	static function add_meta_boxes() {
-		// Add editing meta box to standard & custom post types
 		foreach(Mappress::$options->postTypes as $post_type)
 			add_meta_box('mappress', 'MapPress', array(__CLASS__, 'meta_box'), $post_type, 'normal', 'high');
 	}
@@ -114,13 +107,13 @@ class Mappress_Map extends Mappress_Obj {
 
 	static function find($args) {
 		global $wpdb;
-		$args = (object) wp_parse_args($args, array('type' => 'post', 'page' => 1, 'page_size' => 20, 'postid' => null, 'search' => null));
+		$args = (object) wp_parse_args($args, array('type' => 'post', 'page' => 1, 'page_size' => 20, 'postid' => null, 'title' => null));
 
 		$posts_table = $wpdb->prefix . 'mappress_posts';
 
 		$where = ($args->type == 'post') ? $wpdb->prepare("WHERE postid=%d", $args->postid) : $wpdb->prepare("WHERE postid<>%d", $args->postid);
 
-		if ($args->search)
+		if ($args->type == 'all' && $args->title)
 			$where .= $wpdb->prepare(" AND $wpdb->posts.post_title LIKE %s", '%' . $args->search . '%');
 
 		$limit = sprintf(" LIMIT %d, %d", ($args->page - 1) * $args->page_size, $args->page_size);
@@ -133,11 +126,11 @@ class Mappress_Map extends Mappress_Obj {
 		foreach($rows as $row) {
 			$map = self::get($row->mapid, 'raw');
 			$results[] = array(
-				'mapid' => $row->mapid,
+				'id' => $row->mapid,
 				'postid' => $row->ID,
 				'post_title' => $row->post_title,
 				'can_edit' => current_user_can('edit_post', $row->ID),
-				'mapdata' => $map
+				'mapdata' => $map->to_json()
 			);
 		}
 
@@ -354,28 +347,26 @@ class Mappress_Map extends Mappress_Obj {
 
 		$html = Mappress::get_template('map', array('map' => $this));
 		$script = "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };";
-
-		// WP 4.5: queue maps for XHTML compatibility
-		if (function_exists('wp_add_inline_script') && Mappress::footer() && (!defined('DOING_AJAX') || !DOING_AJAX)) {
-			wp_add_inline_script('mappress', "//<![CDATA[\r\n" . $script . "\r\n//]]>");
-		} else {
-			$html .= Mappress::script($script);
-		}
-
+		$html .= Mappress::script($script);
 		return $html;
 	}
 
 	function width() {
-		return ( stripos($this->width, 'px') || strpos($this->width, '%')) ? $this->width : $this->width. 'px';
+		$default = (object) Mappress::$options->sizes[Mappress::$options->size];
+		$width = ($this->width) ? $this->width : $default->width;
+		return ( stripos($width, 'px') || strpos($width, '%')) ? $width : $width. 'px';
 	}
 
 	function height() {
-		if (stristr($this->height, ':')) {
-			$parts = explode(':', $this->height);
+		$default = (object) Mappress::$options->sizes[Mappress::$options->size];
+		$height = ($this->height) ? $this->height : $default->height;
+
+		if (stristr($height, ':')) {
+			$parts = explode(':', $height);
 			if (count($parts) == 2 && $parts[0] > 0)
 				return round((100 * $parts[1] / $parts[0]), 2) . '%';
 		}
-		return ( stripos($this->height, 'px') || strpos($this->height, '%')) ? $this->height : $this->height. 'px';
+		return ( stripos($height, 'px') || strpos($height, '%')) ? $height : $height. 'px';
 	}
 
 	function check($part) {
@@ -388,7 +379,7 @@ class Mappress_Map extends Mappress_Obj {
 				return !$this->editable && $this->query && $this->filter;
 
 			case 'header' :
-				return $this->query && ($this->check('filters') || $this->check('search'));
+				return $this->query && ($this->poiList || $this->check('filters') || $this->check('search'));
 
 			case 'list-inline' :
 				return $this->poiList && $this->layout != 'left';
@@ -401,6 +392,10 @@ class Mappress_Map extends Mappress_Obj {
 
 			case 'show' :
 				return $this->hidden;
+
+			case 'view-toggles' :
+				return $this->layout == 'left';
+
 		}
 		return true;
 	}
@@ -420,7 +415,7 @@ class Mappress_Map extends Mappress_Obj {
 				break;
 
 			case 'filters-toggle' :
-				$html = "<div class='mapp-caret mapp-button mapp-filters-toggle' data-mapp-action='filters-toggle'>" . __('Filter', 'mappress-google-maps-for-wordpress') . "</div>";
+				$html = "<div class='mapp-caret mapp-header-button mapp-filters-toggle' data-mapp-action='filters-toggle'>" . __('Filter', 'mappress-google-maps-for-wordpress') . "</div>";
 				break;
 
 			case 'layout-class' :
@@ -435,11 +430,6 @@ class Mappress_Map extends Mappress_Obj {
 			case 'layout-style' :
 				$w = $this->width();
 				$html = "width: $w;";
-
-				if ($this->embed) {
-					$h = $this->height();
-					$html .= " height: $h;";
-				}
 				break;
 
 			case 'list-inline' :
@@ -452,13 +442,14 @@ class Mappress_Map extends Mappress_Obj {
 				$html = sprintf("<a href='#' data-mapp-action='show'>%s</a>", __('Show map', 'mappress-google-maps-for-wordpress'));
 				break;
 
+			case 'view-toggles' :
+				$html = sprintf("<div class='mapp-header-button' data-mapp-action='view-map'>%s</div>", __('Map', 'mappress-google-maps-for-wordpress'));
+				$html .= sprintf("<div class='mapp-header-button' data-mapp-action='view-list'>%s</div>", __('List', 'mappress-google-maps-for-wordpress'));
+				break;
+
 			case 'wrapper-style' :
-				if ($this->embed)
-					$html = '';
-				else {
 				$h = $this->height();
-					$html = (stristr($h, '%')) ? "padding-bottom: $h;" : "height: $h";
-				}
+				$html = (stristr($h, '%')) ? "padding-bottom: $h;" : "height: $h";
 				break;
 		}
 
@@ -475,15 +466,11 @@ class Mappress_Map extends Mappress_Obj {
 		foreach($this->pois as $poi)
 			$poi->map($this);
 
-		// Prepare the pois
-		foreach($this->pois as $poi)
-			$poi->prepare();
-
 		// Sort the pois
 		if (Mappress::$options->sort && !isset($this->query['orderby']))
 			$this->sort_pois();
 
-		// Set the HTML for each POI (comes *after* sort because links embed POI list position)
+		// Set html
 		foreach($this->pois as $poi)
 			$poi->set_html();
 

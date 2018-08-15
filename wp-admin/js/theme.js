@@ -1343,8 +1343,6 @@ themes.view.Search = wp.Backbone.View.extend({
 	},
 
 	search: function( event ) {
-		var options = {};
-
 		// Clear on escape.
 		if ( event.type === 'keyup' && event.which === 27 ) {
 			event.target.value = '';

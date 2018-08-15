@@ -442,7 +442,7 @@ function openlab_create_group_menu($grouptype) {
 
     switch ($current_step) {
         case 'group-details':
-            $step_name = 'Step One: Profile';
+            $step_name = 'Step One: Create Profile & Site';
             break;
         case 'group-settings':
             $step_name = 'Step Two: Privacy Settings';
@@ -455,15 +455,8 @@ function openlab_create_group_menu($grouptype) {
             break;
     }
 
-    if ( openlab_group_type_can_be_cloned( $grouptype ) ) {
-        $title = sprintf( 'Create/Clone a %s: ', ucfirst( $grouptype ) );
-    } else {
-        $title = 'Create a ' . ucfirst($grouptype) . ': ';
-    }
-
     $menu_mup = <<<HTML
             <div class="submenu create-group-submenu">
-                <div class="submenu-text pull-left bold"><h2>{$title}</h2></div>
                 <ul class="nav nav-inline">
                     <li class="submenu-item item-create-clone-a-course current-menu-item bold">{$step_name}</li>
                 </ul>
@@ -726,10 +719,10 @@ function openlab_filter_subnav_members($subnav_item) {
     //string replace menu name
     $new_item = str_replace("Members", "Membership", $subnav_item);
 
-    //switch slugs based on user role
-    if ($bp->is_item_admin || $bp->is_item_mod):
-        $new_item = str_replace("/members/", "/admin/manage-members", $new_item);
-    endif;
+    // Switch slugs based on user role.
+    if ( $bp->is_item_admin ) {
+        $new_item = str_replace( '/members/', '/admin/manage-members', $new_item );
+	}
 
     $uri = $bp->unfiltered_uri;
     $check_uri = array('groups', 'notifications');
@@ -978,7 +971,7 @@ function openlab_group_admin_tabs($group = false) {
     ?>
     <!--
     <?php if (openlab_is_portfolio()) : ?>
-        <?php if ($bp->is_item_admin || $bp->is_item_mod) { ?>
+        <?php if ( $bp->is_item_admin ) { ?>
             --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li><!--
         <?php } ?>
 
@@ -1001,7 +994,7 @@ function openlab_group_admin_tabs($group = false) {
 
     <?php else : ?>
 
-        <?php if ($bp->is_item_admin || $bp->is_item_mod) { ?>
+        <?php if ( $bp->is_item_admin ) { ?>
             --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress'); ?></a></li><!--
         <?php } ?>
 
@@ -1047,7 +1040,7 @@ function openlab_group_membership_tabs($group = false) {
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
     ?>
     <!--
-    <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
+    <?php if ( $bp->is_item_admin ) : ?>
         --><li<?php if ($current_tab == 'manage-members') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/manage-members"><?php _e('Membership', 'buddypress'); ?></a></li><!--
 
         <?php if ($group->status == 'private'): ?>
@@ -1061,7 +1054,7 @@ function openlab_group_membership_tabs($group = false) {
         --><li<?php if ($bp->current_action == 'invite-anyone') : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/invite-anyone"><?php _e('Invite New Members', 'buddypress'); ?></a></li><!--
     <?php endif; ?>
 
-    <?php if ($bp->is_item_admin || $bp->is_item_mod): ?>
+    <?php if ( $bp->is_item_admin ) : ?>
         --><li<?php if ('notifications' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/notifications"><?php _e('Email Members', 'buddypress'); ?></a></li><!--
     <?php endif; ?>
 

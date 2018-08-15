@@ -5,7 +5,7 @@
 	<head>
 
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" >
 
 		<?php if ( is_singular() ) wp_enqueue_script( "comment-reply" ); ?>
 
@@ -17,15 +17,17 @@
 
 		<div class="big-wrapper">
 
-			<div class="header-cover section bg-dark-light no-padding">
+			<div class="header-cover section bg-dark-light no-padding" role="banner">
 
 				<div class="header section">
 					<img class="banner-img" src="<?php echo get_stylesheet_directory_uri() . '/images/OLWW_BANNER.png'; ?>" alt="OpenLab WeBWorK logo" />
 				</div> <!-- /header -->
 
+				<h1 class="screen-reader-text">OpenLab WeBWorK</h1>
+
 			</div> <!-- /bg-dark -->
 
-			<div class="navigation section no-padding bg-dark">
+			<div class="navigation section no-padding bg-dark" role="navigation">
 
 				<div class="navigation-inner section-inner">
 
@@ -74,8 +76,6 @@
 								'title_li' => '',
 							) ) ?>
 						<?php endif; ?>
-
-						<div class="clear"></div>
 
 					 </ul>
 

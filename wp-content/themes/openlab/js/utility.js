@@ -30,6 +30,8 @@ OpenLab.utility = (function ($) {
             //doing this client-side for now
             OpenLab.utility.BPEOTweaks();
 
+            // Accessibility mods for Settings > Email Notifications
+            OpenLab.utility.EmailSettingsA11y();
         },
         detectZoom: function () {
 
@@ -490,6 +492,11 @@ OpenLab.utility = (function ($) {
 
             });
 
+        },
+        EmailSettingsA11y: function() {
+          $( '.notification-settings' ).find( 'th.icon' ).each( function() {
+            $(this).html( '<span class="bp-screen-reader-text">Icon column</span>' );
+          } );
         }
     }
 })(jQuery, OpenLab);

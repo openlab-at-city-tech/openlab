@@ -62,7 +62,9 @@ function openlab_activity_user_avatar() {
     $item_id = !empty($user_id) ? $user_id : $current_activity_item->user_id;
     $item_id = apply_filters('bp_get_activity_avatar_item_id', $item_id);
 
-    return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'user', 'type' => 'full', 'html' => false)) . '" alt="' . bp_get_displayed_user_fullname() . '"/>';
+    $alt = bp_core_get_user_displayname( $activities_template->activity->user_id );
+
+    return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'user', 'type' => 'full', 'html' => false)) . '" alt="' . esc_attr( $alt ) . '"/>';
 }
 
 function openlab_activity_group_avatar( $current_activity_item = null ) {

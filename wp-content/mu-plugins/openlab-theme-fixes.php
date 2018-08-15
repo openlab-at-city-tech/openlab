@@ -13,13 +13,16 @@ function openlab_load_theme_fixes() {
         case 'hemingway' :
         case 'herothemetrust' :
         case 'motion' :
+        case 'openlab-twentysixteen' :
         case 'p2' :
         case 'pilcrow' :
         case 'sliding-door' :
         case 'themorningafter' :
         case 'wu-wei' :
         case 'twentyseventeen' :
+        case 'twentysixteen':
         case 'twentyfifteen':
+        case 'twentythirteen':
         case 'twentytwelve':
         case 'twentyeleven':
         case 'twentyten':

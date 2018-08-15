@@ -204,6 +204,24 @@ function bp_messages_screen_conversation_mark_notifications() {
 add_action( 'thread_loop_start', 'bp_messages_screen_conversation_mark_notifications', 10 );
 
 /**
+ * Mark new message notification as read when the corresponding message is mark read.
+ *
+ * This callback covers mark-as-read bulk actions.
+ *
+ * @since 3.0.0
+ *
+ * @param int $thread_id ID of the thread being marked as read.
+ */
+function bp_messages_mark_notification_on_mark_thread( $thread_id ) {
+	$thread_messages = BP_Messages_Thread::get_messages( $thread_id );
+
+	foreach ( $thread_messages as $thread_message ) {
+		bp_notifications_mark_notifications_by_item_id( bp_loggedin_user_id(), $thread_message->id, buddypress()->messages->id, 'new_message' );
+	}
+}
+add_action( 'messages_thread_mark_as_read', 'bp_messages_mark_notification_on_mark_thread' );
+
+/**
  * When a message is deleted, delete corresponding notifications.
  *
  * @since 2.0.0
@@ -221,3 +239,58 @@ function bp_messages_message_delete_notifications( $thread_id, $message_ids ) {
 	}
 }
 add_action( 'bp_messages_thread_after_delete', 'bp_messages_message_delete_notifications', 10, 2 );
+
+/**
+ * Render the markup for the Messages section of Settings > Notifications.
+ *
+ * @since 1.0.0
+ */
+function messages_screen_notification_settings() {
+
+	if ( bp_action_variables() ) {
+		bp_do_404();
+		return;
+	}
+
+	if ( !$new_messages = bp_get_user_meta( bp_displayed_user_id(), 'notification_messages_new_message', true ) ) {
+		$new_messages = 'yes';
+	} ?>
+
+	<table class="notification-settings" id="messages-notification-settings">
+		<thead>
+			<tr>
+				<th class="icon"></th>
+				<th class="title"><?php _e( 'Messages', 'buddypress' ) ?></th>
+				<th class="yes"><?php _e( 'Yes', 'buddypress' ) ?></th>
+				<th class="no"><?php _e( 'No', 'buddypress' )?></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr id="messages-notification-settings-new-message">
+				<td></td>
+				<td><?php _e( 'A member sends you a new message', 'buddypress' ) ?></td>
+				<td class="yes"><input type="radio" name="notifications[notification_messages_new_message]" id="notification-messages-new-messages-yes" value="yes" <?php checked( $new_messages, 'yes', true ) ?>/><label for="notification-messages-new-messages-yes" class="bp-screen-reader-text"><?php
+					/* translators: accessibility text */
+					_e( 'Yes, send email', 'buddypress' );
+				?></label></td>
+				<td class="no"><input type="radio" name="notifications[notification_messages_new_message]" id="notification-messages-new-messages-no" value="no" <?php checked( $new_messages, 'no', true ) ?>/><label for="notification-messages-new-messages-no" class="bp-screen-reader-text"><?php
+					/* translators: accessibility text */
+					_e( 'No, do not send email', 'buddypress' );
+				?></label></td>
+			</tr>
+
+			<?php
+
+			/**
+			 * Fires inside the closing </tbody> tag for messages screen notification settings.
+			 *
+			 * @since 1.0.0
+			 */
+			do_action( 'messages_screen_notification_settings' ); ?>
+		</tbody>
+	</table>
+
+<?php
+}
+add_action( 'bp_notification_settings', 'messages_screen_notification_settings', 2 );

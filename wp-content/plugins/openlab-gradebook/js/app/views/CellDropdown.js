@@ -17,6 +17,12 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                     //letter grades borrowed from https://sps.cuny.edu/about/dean/policies/academic-and-student-policies/grading-policies-undergraduate
                     this.thisLetterGrades = new letterGrades([
                         {
+                            label: '--',
+                            value: '--',
+                            range_low: 0,
+                            range_high: 0
+                        },
+                        {
                             label: 'A+',
                             value: 100,
                             range_low: 100,
@@ -125,7 +131,7 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                 },
                 hideInput: function (value) {
                     var self = this;
-                    this.model.save({assign_points_earned: parseFloat(value)}, {wait: true, success: function (model, response) {
+                    this.model.save({assign_points_earned: value}, {wait: true, success: function (model, response) {
                             self.render();
                             Backbone.pubSub.trigger('updateAverageGrade', response );
                         }});

@@ -266,8 +266,8 @@ function bp_has_activities( $args = '' ) {
 		// Filtering
 		'user_id'           => $user_id,     // user_id to filter on.
 		'object'            => $object,      // Object to filter on e.g. groups, profile, status, friends.
-		'action'            => false,        // Action to filter on e.g. activity_update, new_forum_post, profile_updated.
-		'primary_id'        => $primary_id,  // Object ID to filter on e.g. a group_id or forum_id or blog_id etc.
+		'action'            => false,        // Action to filter on e.g. activity_update, profile_updated.
+		'primary_id'        => $primary_id,  // Object ID to filter on e.g. a group_id or blog_id etc.
 		'secondary_id'      => false,        // Secondary object ID to filter on e.g. a post_id.
 		'offset'            => false,        // Return only items >= this ID.
 		'since'             => false,        // Return only items recorded since this Y-m-d H:i:s date.
@@ -2136,10 +2136,12 @@ function bp_activity_comment_content() {
 		 * Filters the content of the current activity comment.
 		 *
 		 * @since 1.2.0
+		 * @since 3.0.0 Added $context parameter to disambiguate from bp_get_activity_comment_content().
 		 *
 		 * @param string $content The content of the current activity comment.
+		 * @param string $context This filter's context ("get").
 		 */
-		return apply_filters( 'bp_activity_comment_content', $content );
+		return apply_filters( 'bp_activity_comment_content', $content, 'get' );
 	}
 
 /**
@@ -2944,7 +2946,7 @@ function bp_activity_can_comment_reply( $comment = false ) {
 	 * @since 1.5.0
 	 *
 	 * @param bool   $can_comment Status on if activity reply can be commented on.
-	 * @param string $comment     Current comment being checked on.
+	 * @param object $comment     Current comment object being checked on.
 	 */
 	return (bool) apply_filters( 'bp_activity_can_comment_reply', $can_comment, $comment );
 }

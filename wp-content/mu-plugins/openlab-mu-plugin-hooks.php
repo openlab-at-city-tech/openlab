@@ -94,6 +94,7 @@ function openlab_oplb_gradebook_students_list($students, $blog_id){
     $member_arg = array(
         'group_id' => $group_id,
         'exclude_admins_mods' => true,
+        'per_page' => false,
     );
 
     if (bp_group_has_members($member_arg)) :

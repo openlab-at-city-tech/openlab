@@ -2,14 +2,6 @@
 /**
  * WordPress Customize Manager classes
  *
- * Bootstraps the Customize experience on the server-side.
- *
- * Sets up the theme-switching process if a theme other than the active one is
- * being previewed and customized.
- *
- * Serves as a factory for Customize Controls and Settings, and
- * instantiates default Customize Controls and Settings.
- *
  * @package WordPress
  * @subpackage Customize
  * @since 3.4.0

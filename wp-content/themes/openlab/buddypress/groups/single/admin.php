@@ -8,7 +8,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages  ?>
 
-<div class="row"><div class="col-md-24">
+<div class="row">
+    <div class="col-md-24">
         <div class="submenu">
 
             <?php if ($bp->action_variables[0] == 'membership-requests' || $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications'): ?>
@@ -27,7 +28,8 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php endif; ?>
 
         </div><!-- .item-list-tabs -->
-    </div></div>
+    </div>
+</div>
 
 <form action="<?php bp_group_admin_form_action() ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
 
@@ -84,6 +86,19 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php do_action('bp_before_group_settings_admin'); ?>
 
             <?php do_action('template_notices') ?>
+
+            <?php if ( current_user_can( 'grant_badges' ) && class_exists( '\OpenLab\Badges\Template' ) ) : ?>
+                <div id="panel-badges" class="panel panel-default">
+                    <div class="panel-heading">Badges</div>
+                    <div class="panel-body">
+                        <?php \OpenLab\Badges\Template::group_admin_markup(); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if ( openlab_group_type_can_be_cloned_by_others( $group_type ) ) : ?>
+                <?php openlab_group_sharing_settings_markup( bp_get_current_group_id() ); ?>
+            <?php endif; ?>
 
             <?php if (function_exists('bbpress') && !openlab_is_portfolio()) : ?>
                 <?php $forum_enabled = openlab_is_forum_enabled_for_group() ?>
@@ -435,7 +450,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
                                     <div class="col-md-15 col-xs-17">
                                         <h4>
-            <?php bp_group_request_user_link() ?>
+											<?php echo openlab_group_request_user_link() ?>
                                         </h4>
 
                                         <ul class="group-member-actions">

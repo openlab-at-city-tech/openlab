@@ -20,12 +20,14 @@ function openlab_hide_plugins( $plugins ) {
 		'cac-non-cuny-signup/loader.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'embed-google-map/embed_google_map.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
 		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
+		'pdf-embedder/pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
@@ -94,6 +96,23 @@ function openlab_hide_plugins( $plugins ) {
 		11561,
 		11574,
 		11831,
+		12250,
+		121,
+		10738,
+		8990,
+		6586,
+		9401,
+		9105,
+		9400,
+		8091,
+		8723,
+		6249,
+		10827,
+		12248,
+		9184,
+		7007,
+		10098,
+		8250,
 	);
 
 	$blog_specific_whitelist = array(
@@ -174,3 +193,12 @@ function openlab_pdfemb_filter_license_key( $opt ) {
 }
 add_filter( 'option_pdfemb', 'openlab_pdfemb_filter_license_key' );
 add_filter( 'default_option_pdfemb', 'openlab_pdfemb_filter_license_key' );
+
+/**
+ * Load stylesheet for TablePress.
+ */
+function openlab_tablepress_stylesheet( $atts ) {
+	wp_enqueue_style( 'openlab-tablepress', content_url( 'mu-plugins/css/tablepress.css' ) );
+	return $atts;
+}
+add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );

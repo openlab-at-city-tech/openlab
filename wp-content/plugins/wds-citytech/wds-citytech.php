@@ -12,6 +12,10 @@ include 'wds-register.php';
 include 'wds-docs.php';
 include 'includes/oembed.php';
 include 'includes/library-widget.php';
+include 'includes/clone.php';
+
+// Disable Try Gutenberg.
+remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -1920,55 +1924,6 @@ function openlab_set_default_group_subscription_on_creation( $group_id ) {
 add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
 
 /**
- * Load the bp-ass textdomain.
- *
- * We do this because `load_plugin_textdomain()` in `activitysub_textdomain()` doesn't support custom locations.
- */
-function openlab_load_bpass_textdomain() {
-	load_textdomain( 'bp-ass', WP_LANG_DIR . '/bp-ass-en_US.mo' );
-}
-add_action( 'init', 'openlab_load_bpass_textdomain', 11 );
-
-/**
- * Use entire text of comment or blog post when sending BPGES notifications.
- *
- * @param string $content Activity content.
- * @param object $activity Activity object.
- */
-function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $activity ) {
-	if ( 'groups' !== $activity->component ) {
-		return $content;
-	}
-
-	// @todo new-style blog comments?
-	if ( ! in_array( $activity->type, array( 'new_blog_post', 'new_blog_comment' ) ) ) {
-		return $content;
-	}
-
-	$group_id = $activity->item_id;
-	$blog_id = openlab_get_site_id_by_group_id( $group_id );
-
-	if ( ! $blog_id ) {
-		return $content;
-	}
-
-	switch_to_blog( $blog_id );
-
-	if ( 'new_blog_post' === $activity->type ) {
-		$post = get_post( $activity->secondary_item_id );
-		$content = $post->post_content;
-	} else if ( 'new_blog_comment' === $activity->type ) {
-		$comment = get_comment( $activity->secondary_item_id );
-		$content = $comment->comment_content;
-	}
-
-	restore_current_blog();
-
-	return $content;
-}
-add_action( 'bp_ass_activity_notification_content', 'openlab_use_full_text_for_blog_related_bpges_notifications', 10, 2 );
-
-/**
  * Brackets in password reset emails cause problems in some clients. Remove them
  */
 function openlab_strip_brackets_from_pw_reset_email( $message ) {
@@ -2575,3 +2530,39 @@ add_action( 'pre_get_posts', function( $query ) {
 		remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
 	}
 }, 0 );
+
+add_filter( 'mime_types', function( $types ) {
+	// AutoCAD - #2332.
+	$types['ctb|stb'] = 'application/octet-stream';
+	$types['dwg|dxf|acd|dwt'] = 'application/acad';
+	$types['vwx'] = 'application/vnd.vectorworks';
+
+
+	return $types;
+} );
+
+/** TablePress mods **********************************************************/
+
+/**
+ * Pagination should be disabled by default.
+ */
+add_filter( 'tablepress_table_template', function( $table ) {
+	$table['options']['datatables_paginate'] = false;
+	return $table;
+} );
+
+/**
+ * Don't let TablePress save CSS to a file.
+ */
+add_filter( 'tablepress_save_custom_css_to_file', '__return_false' );
+
+/**
+ * Don't let users uninstall TablePress.
+ */
+add_filter( 'map_meta_cap', function( $caps, $cap, $user_id ) {
+	if ( 'tablepress_delete_tables' !== $cap ) {
+		return $caps;
+	}
+
+	return array( 'do_not_allow' );
+}, 10, 4 );

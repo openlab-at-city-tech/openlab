@@ -1,9 +1,9 @@
 <?php
 
-namespace com\cminds\package\free\v1_0_8;
+namespace com\cminds\package\free\v1_0_10;
 
 if ( !defined( __NAMESPACE__ . '\PLATFORM_VERSION' ) ) {
-    define( __NAMESPACE__ . '\PLATFORM_VERSION', '1_0_8' );
+    define( __NAMESPACE__ . '\PLATFORM_VERSION', '1_0_10' );
 }
 if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 
@@ -47,10 +47,11 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             add_action( 'init', array( $this, 'cminds_get_actions' ) );
             add_action( 'init', array( $this, 'cminds_post_actions' ) );
 
-            add_shortcode( 'cminds_free_ads', array( $this, 'showAds' ) );
             add_shortcode( 'cminds_free_author', array( $this, 'showAuthor' ) );
             add_shortcode( 'cminds_free_registration', array( $this, 'showRegistration' ) );
             add_shortcode( 'cminds_free_guide', array( $this, 'showGuide' ) );
+            add_shortcode( 'cminds_upgrade_box', array( $this, 'showUpgrade' ) );
+            add_shortcode( 'cminds_free_activation', array( $this, 'showActivation' ) );
 
             add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
             add_filter( 'plugin_action_links_' . $this->getOption( 'plugin-basename' ), array( $this, 'add_plugin_action_links' ) );
@@ -107,6 +108,9 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                 // If user is paying or in trial and have the free version installed,
                 // assume that the deactivation is for the upgrade process.
                 add_action( 'wp_ajax_cm-submit-uninstall-reason', array( $this, 'submitUninstallReason' ) );
+                add_action( 'wp_ajax_cm-submit-registration-email', array( $this, 'submitRegistrationEmail' ) );
+                add_action( 'wp_ajax_cm-submit-deregistration', array( $this, 'submitDeregistration' ) );
+                add_action( 'wp_ajax_cm-submit-registration-skip', array( $this, 'submitRegistrationSkip' ) );
 
                 global $pagenow;
                 if ( 'plugins.php' === $pagenow ) {
@@ -144,9 +148,6 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
          * Displays a confirmation and feedback dialog box when the user clicks on the "Deactivate" link on the plugins
          * page.
          *
-         * @author Vova Feldman (@svovaf)
-         * @author Leo Fajardo (@leorw)
-         * @since  1.1.2
          */
         function showDeactivationFeedbackDialog() {
             $content = '';
@@ -173,6 +174,45 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             }
 
             return $reason;
+        }
+
+        /**
+         * Called after the user has submitted his reason for deactivating the plugin.
+         * @since  1.1.2
+         */
+        function submitRegistrationEmail() {
+            $atts = array();
+
+            if ( empty( $_POST[ 'email' ] ) ) {
+                exit;
+            }
+
+            $this->registerUser( $atts );
+        }
+
+        /**
+         * Called after the user has submitted his reason for deactivating the plugin.
+         * @since  1.1.2
+         */
+        function submitDeregistration() {
+            $atts = array();
+
+            $this->deregisterUser( $atts );
+        }
+
+        /**
+         * Called after the user has submitted his reason for deactivating the plugin.
+         * @since  1.1.2
+         */
+        function submitRegistrationSkip() {
+            if ( empty( $_POST ) ) {
+                exit;
+            }
+            $atts = array();
+            if ( !empty( $_POST[ 'id' ] ) ) {
+                $atts[ 'id' ] = $_POST[ 'id' ];
+            }
+            $this->skipRegistration( $atts );
         }
 
         /**
@@ -702,7 +742,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 
         public function displayPage() {
             global $plugin_page;
-            $content = '';
+            $content      = '';
             ?>
             <div class="wrap">
                 <style type="text/css">
@@ -727,7 +767,15 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                     <div id="icon-<?php echo $this->getOption( 'plugin-icon' ) ?>" class="icon32">
                         <br />
                     </div>
-                    <?php echo $this->getOption( 'plugin-name' ) ?>
+                    <?php echo $this->getOption( 'plugin-name' ) ?>&nbsp;
+                    <?php
+                    $pluginAbbrev = $this->getOption( 'plugin-abbrev' );
+                    if ( empty( $_GET[ 'page' ] ) || $_GET[ 'page' ] != $pluginAbbrev . '_pro' ) :
+                        ?>
+                        <a href="<?php echo esc_url( get_admin_url( '', 'admin.php?page=' . $pluginAbbrev . '_pro' ) ); ?>" class="button button-primary" title="Click to Buy PRO">Upgrade to Pro</a>
+                        <?php
+                    endif;
+                    ?>
                 </h2>
                 <?php
                 echo $this->showNav();
@@ -1175,10 +1223,9 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 
                     div.cminds_guide_wrapper {
                         display: inline-block;
-                        padding: 1em;
+                        padding: 0em 0em 1em 1em;
                         background: #FFF;
-                        border: solid 1px #E0E0E0;
-                        margin: 1em 1em 0 0;
+                        margin: 0em 0em 0 0;
                         vertical-align: top;
                     }
 
@@ -1190,7 +1237,6 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                         display: inline-block;
                         margin: 1em;
                         padding: 1em;
-                        border: 2px solid #333;
                     }
 
                     .cminds_guide_text{
@@ -1369,7 +1415,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                                                 <div class="guide_video_title"><?php echo $video[ 'title' ]; ?></div>
                                                 <div class="guide_video_content">
                                                     <iframe src="https://player.vimeo.com/video/<?php echo $video[ 'video_id' ]; ?>?title=0&byline=0&portrait=0" width="290" height="160" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                                                    <a href="https://player.vimeo.com/video/<?php echo $video[ 'video_id' ]; ?>?title=0&byline=0&portrait=0" target="_blank">Open in a new window</a>
+
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -1381,8 +1427,6 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="clear clearfix cmclearfix"></div>
-                        <a class="cminds-ads-hide-button" href="<?php echo add_query_arg( array( 'cminds_guide_hide' => 1 ), remove_query_arg( 'cminds_guide_show' ) ); ?>">Hide Installation Guide</a>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
                 <?php else : ?>
@@ -1395,9 +1439,502 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                 <?php
                 endif;
                 ?>
-                <p>
-                    <strong>User Guide:</strong> <a href="<?php echo $currentPlugin->getUserguideUrl(); ?>" target="_blank">Show documentation</a>
-                </p>
+
+                <?php
+                $content = ob_get_clean();
+                return $content;
+            endif;
+        }
+
+        public function showActivation( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $isRegistered = $currentPlugin->isRegistered();
+            $isSkipped    = $currentPlugin->isSkipped();
+            if ( !$isRegistered ) :
+                ?>
+                <script>
+                    jQuery( 'document' ).ready( function () {
+
+                <?php if ( !$isSkipped ): ?>
+                            jQuery( '#cminds_settings_container' ).hide();
+                <?php endif; ?>
+
+                        jQuery( '#cminds-activation-box' ).on( 'click', '#cminds-activate', function ( e ) {
+                            jQuery( '#cminds-activation-box' ).hide();
+                            jQuery( '#cminds_settings_container' ).show();
+
+                            var formElem = jQuery( '#cminds_register_form' );
+                            var formData = new FormData( formElem[0] );
+                            formData.append( 'action', 'cm-submit-registration-email' );
+
+                            jQuery.ajax( {
+                                type: "POST",
+                                url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                beforeSend: function () {
+                                },
+                                complete: function () {
+                                    // Do not show the dialog box, deactivate the plugin.
+                                }
+                            } );
+
+                            e.preventDefault();
+                            return false;
+                        } );
+
+                        jQuery( '#cminds-activation-box' ).on( 'click', '#cminds-skip', function ( e ) {
+                            jQuery( '#cminds-activation' ).hide();
+                            jQuery( '#cminds-activation-skipped' ).show();
+                            jQuery( '#cminds_settings_container' ).show();
+                            jQuery( '#cminds-activation-box' ).css( 'margin-bottom', 0 );
+
+                            jQuery.ajax( {
+                                type: "POST",
+                                url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+                                data: {
+                                    'action': 'cm-submit-registration-skip',
+                                    'id': '<?php echo esc_attr( $currentPlugin->config[ 'plugin-abbrev' ] ); ?>'
+                                },
+                                beforeSend: function () {
+                                },
+                                complete: function () {
+                                    // Do not show the dialog box, deactivate the plugin.
+                                }
+                            } );
+                            e.preventDefault();
+                            return false;
+                        } );
+
+                        jQuery( '#wpcontent' ).on( 'click', '#cminds-unskip', function ( e ) {
+                            jQuery( '#cminds_settings_container' ).hide();
+                            jQuery( '#cminds-activation' ).show();
+                            jQuery( '#cminds-activation-skipped' ).hide();
+                            e.preventDefault();
+                            return false;
+                        } );
+                    } );
+                </script>
+
+                <div style="height:20px;"></div><br />
+                <div id="cminds-activation-box" style="margin-bottom: <?php echo $isSkipped ? '0' : '1000px'; ?>">
+
+                    <div id="cminds-activation" style="display: <?php echo $isSkipped ? 'none' : 'block'; ?>">
+
+                        <form method="post" action="" id="cminds_register_form">
+                            <div style="border-radius: 13px 12px 12px 12px; -moz-border-radius: 13px 12px 12px 12px; -webkit-border-radius: 13px 12px 12px 12px; border: 2px solid #e8e8e8; border: 2px solid #e8e8e8; padding-left: 20px; padding-top: 10px; margin-bottom: 20px; background-color: #e2f1e2">
+                                <div class="cminds-content">
+                                    <p><H3>Hooray! Your plugin is activated and ready to go! </h3></p>
+                                    <div style="height:2px;"></div>
+                                    <p>Want to make your experience even more awesome?</p>
+                                    <p>Register your copy and be the first to know about <span style="color:darkorange;">new plugin features</span> and <span style="color:darkorange;">special deals</span>.</p>
+                                </div>
+
+                                <div class="cminds-permissions">
+                                    <div style="height:5px;"></div>
+                                    <p><strong>What information will be shared (Only once)?</strong></p>
+                                    <ul>
+                                        <li id="cminds-permission-profile" class="cminds-permission cminds-profile">
+                                            <div>
+                                                <i class="dashicons dashicons-admin-users"></i> <strong>Your Profile Details:</strong>
+                                                <?php
+                                                wp_nonce_field( 'cminds_register_free', 'cminds_nonce' );
+                                                echo $currentPlugin->getRegistrationFields();
+                                                ?>
+                                                Email address <input type="text" id="cminds-registration-email" name="email" value="<?php echo get_option( 'admin_email' ); ?>">
+                                            </div>
+                                        </li>
+                                        <li id="cminds-permission-site" class="cminds-permission cminds-site">
+
+                                            <div>
+                                                <i class="dashicons dashicons-admin-settings"></i> <strong>Your Site Details:</strong>
+                                                Site URL <input type="text" size="50" id="cminds-registration-URL" name="URL" value="<?php echo site_url(); ?>" disabled>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div style="height:5px;"></div>
+                                    <p><strong>What permissions are being granted?</strong></p>
+                                    <ul>
+                                        <li id="cminds-permission-notices" class="cminds-permission cminds-notices">
+
+                                            <div>
+                                                <i class="dashicons dashicons-testimonial"></i> <strong>Receive Notices:</strong>
+                                                Updates, announcements, and relevant marketing messages. NO SPAM! You can unsubscribe at any time.
+                                            </div>
+                                        </li>
+
+
+
+                                        <li id="cminds-data-removal" class="cminds-permission cminds-events">
+                                            <div>
+                                                <i class="dashicons dashicons-info"></i> <strong>Data Management: </strong>
+                                                CreativeMinds is GDPR-compliant. You can always remove your data from our database. Your information will never be shared.
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div style="height:10px;"></div>
+                                <div class="cminds-terms"><strong>Note:</strong> We take privacy and transparency very seriously. To learn more about what data we collect and how we use it visit our
+                                    <a href="https://www.cminds.com/privacy/" target="_blank" tabindex="1">Privacy Policy</a>
+                                    and
+                                    <a href="https://www.cminds.com/cm-pro-plugins-terms-and-conditions/" target="_blank" tabindex="1">Terms of Service</a>.
+                                </div>
+
+                                <div style="height:20px;"></div><br />
+                            </div>
+                        </form>
+
+                        <button class="button button-primary" tabindex="1" type="submit" style="background-color:green;" id="cminds-activate">Register your Copy</button>
+                        <button class="button" tabindex="1" type="submit" id="cminds-skip">Skip</button>
+                    </div>
+
+                    <!--Only visible after skipped-->
+                    <div id="cminds-activation-skipped" class="notice" style="display: <?php echo $isSkipped ? 'block' : 'none'; ?>">
+                        <p>
+                            You're just one step away: <a href="javascript:void(0)" id="cminds-unskip">Complete <?php echo esc_attr( $currentPlugin->getOption( 'plugin-name' ) ); ?> registration</a> and receive additional benefits
+                        </p>
+                    </div>
+                </div>
+                <?php
+            else:
+                ?>
+                <br/>
+                <br/>
+            <?php
+            endif;
+        }
+
+        public function time_to_decimal( $time ) {
+            $timeArr = explode( ':', $time );
+            $decTime = ($timeArr[ 0 ] * 60) + ($timeArr[ 1 ]);
+            if ( isset( $timeArr[ 2 ] ) ) {
+                $decTime += $timeArr[ 2 ] / 60;
+            }
+            return $decTime;
+        }
+
+        public function showUpgrade( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $optionName  = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-upgrade-hidden';
+            $upgradeHide = filter_input( INPUT_GET, 'cminds_upgrade_hide' );
+            if ( $upgradeHide ) {
+                update_option( $optionName, 1 );
+            }
+            $upgradeShow = filter_input( INPUT_GET, 'cminds_upgrade_show' );
+            if ( $upgradeShow ) {
+                update_option( $optionName, 0 );
+            }
+            $upgradeHidden = get_option( $optionName, 0 );
+            $isRegistered  = $currentPlugin->isRegistered();
+
+            $showUpgrade = $currentPlugin->getOption( 'plugin-show-upgrade', TRUE );
+            if ( $showUpgrade ) :
+                ob_start();
+                ?><style type="text/css">
+
+                    div.cminds_upgrade_wrapper {
+                        display: block;
+                        padding: 0em 0em 1em 1em;
+                        background: #FFF;
+                        margin: 0em 1em 0 0;
+                        vertical-align: top;
+                    }
+
+                    div.cminds_upgrade_wrapper * {
+                        vertical-align: top;
+                    }
+
+                    .cminds_upgrade{
+                        display: inline-block;
+                        margin: 1em;
+                        padding: 1em;
+                        width: 100%;
+                    }
+
+                    .cminds_upgrade_text{
+                        display: inline-block;
+                        margin: 1em;
+                    }
+
+                    .cminds_upgrade_text > span{
+                        text-align: left;
+                        display: block;
+                    }
+
+                    .clear, .clearfix{
+                        clear: both;
+                    }
+
+                    .cmclearfix{
+                        clear: both !important;
+                    }
+
+                    .cminds_upgrade .upgrade_header{
+                        font-size: 14pt;
+                        font-weight: bold;
+                    }
+
+                    .cminds_upgrade .upgrade_text{
+                        display: inline-block;
+                        max-width: 45%;
+                        margin-right: 40px;
+                    }
+
+                    .cminds_upgrade .upgrade_videos{
+                        display: inline-flex;
+                        max-width: 50%;
+                        min-width: 520px;
+                        overflow: hidden;
+                    }
+
+                    .cminds_upgrade .upgrade_videos .upgrade_videos_inner{
+                    }
+
+                    .cminds_upgrade .upgrade_videos > div{
+                        display: inline-block;
+                    }
+                    .cminds_upgrade .upgrade_videos > div.upgrade_videos_after{
+                        display: block;
+                        margin: 10px 0 0 0px;
+                    }
+                    .prev_video,
+                    .next_video {
+                        margin-top: 15px;
+                    }
+
+                    .upgrade_video_title {
+                        font-size: 13pt;
+                        font-weight: bold;
+                        margin: 0 0 10px 0px;
+                    }
+
+                    .cminds_link.blue {
+                        color: #fff;
+                        border-color: #33ace7;
+                        background: #66c1ed;
+                        -webkit-box-shadow: 0 1px 0 #ccc;
+                        box-shadow: 0 1px 0 #ccc;
+                        display: inline-block;
+                        text-decoration: none;
+                        line-height: 26px;
+                        height: 28px;
+                        padding: 0 10px 1px;
+                        cursor: pointer;
+                        border-width: 1px;
+                        border-style: solid;
+                        -webkit-border-radius: 3px;
+                        border-radius: 3px;
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                    }
+
+                    .cminds_upgrade .upgrade_videos .upgrade_video{
+                        display: none;
+                    }
+                    .cminds_upgrade .upgrade_videos .upgrade_video.active{
+                        display: inline-block;
+                    }
+
+                    .cminds_upgrade .upgrade_video_content > a{
+                        display: block;
+                    }
+                </style>
+                <?php
+                if ( !$upgradeHidden ) :
+                    ?>
+                    <script>
+                        jQuery( document ).ready( function () {
+
+                            jQuery.fn.visible = function () {
+                                return this.css( 'visibility', 'visible' );
+                            };
+
+                            jQuery.fn.invisible = function () {
+                                return this.css( 'visibility', 'hidden' );
+                            };
+
+                            jQuery.fn.visibilityToggle = function () {
+                                return this.css( 'visibility', function ( i, visibility ) {
+                                    return ( visibility === 'visible' ) ? 'hidden' : 'visible';
+                                } );
+                            };
+                            var cminds_video_prev_next_toggle = function () {
+                                var prevVisible = jQuery( '.upgrade_videos .upgrade_video.active' ).prev( '.upgrade_video' ).length;
+                                var nextVisible = jQuery( '.upgrade_videos .upgrade_video.active' ).next( '.upgrade_video' ).length;
+
+                                if ( prevVisible ) {
+                                    jQuery( '.upgrade_videos .prev_video' ).visible();
+                                } else {
+                                    jQuery( '.upgrade_videos .prev_video' ).invisible();
+                                }
+
+                                if ( nextVisible ) {
+                                    jQuery( '.upgrade_videos .next_video' ).visible();
+                                } else {
+                                    jQuery( '.upgrade_videos .next_video' ).invisible();
+                                }
+                            };
+
+                            cminds_video_prev_next_toggle();
+
+                            jQuery( '.upgrade_videos .prev_video' ).on( 'click', function () {
+                                var prevVideo = jQuery( '.upgrade_videos .upgrade_video.active' ).prev( '.upgrade_video' );
+                                if ( prevVideo.length )
+                                {
+                                    jQuery( '.upgrade_videos .upgrade_video.active' ).removeClass( 'active' );
+                                    prevVideo.addClass( 'active' );
+                                }
+                                cminds_video_prev_next_toggle();
+                            } );
+
+                            jQuery( '.upgrade_videos .next_video' ).on( 'click', function () {
+                                var nextVideo = jQuery( '.upgrade_videos .upgrade_video.active' ).next( '.upgrade_video' );
+                                if ( nextVideo.length )
+                                {
+                                    jQuery( '.upgrade_videos .upgrade_video.active' ).removeClass( 'active' );
+                                    nextVideo.addClass( 'active' );
+                                }
+                                cminds_video_prev_next_toggle();
+                            } );
+                        } );</script>
+                    <script type="text/javascript" src="https://f.vimeocdn.com/js/froogaloop2.min.js"></script>
+                    <script>
+                        jQuery( document ).ready( function ( ) {
+                            // Message displayed when link is playing
+                            var links = jQuery( '.cm-video-bookmark-link' );
+                            var playNotice = ' - <strong><i><spam style="color:darkgreen;">Now playing</span></i></strong>';
+                            // Function to hide all status messages
+                            hidePlayNoticeAll = function ( ) {
+                                jQuery( '.cm-video-bookmark-link .link_status' ).html( "" );
+                            }
+
+                            // Load Vimeo API for the embedded video
+                            var iframe_player = jQuery( '#player_1' )[0];
+                            var frogaloopPlayer = $f( iframe_player );
+                            // Option listeners for pause, finish, and playProgress
+                            //
+                            // Note: If you want to use this, you must define the functions or links wont work
+                            frogaloopPlayer.addEvent( 'ready', function ( ) {
+                                frogaloopPlayer.addEvent( 'pause', onPause );
+                                frogaloopPlayer.addEvent( 'finish', onFinish );
+                                frogaloopPlayer.addEvent( 'playProgress', onPlayProgress );
+                            } );
+
+                            // Functions for each listener event
+                            function onPause( id ) { // When the video is paused, do this.
+                                jQuery( ".main_status" ).html( 'Paused' );
+                            }
+
+                            function onFinish( id ) { // When the video is finished, do this.
+                                jQuery( ".main_status" ).html( 'Finished' );
+                            }
+
+                            function onPlayProgress( data, id ) { // While the video is playing, do this.
+                                jQuery( ".main_status" ).html( 'Playing - ' + data.seconds + 's played' ); // data.percent can also be used.
+                            }
+
+                            // Function to control what happens when each lesson link is clicked
+                            function setupLinks( ) {
+
+                                links.on( 'click', function ( ) {
+                                    var track = jQuery( this ).data( 'timestamp' ); //Timestamp stored as a data attribute
+
+                                    hidePlayNoticeAll( ); // Hide all status messages before displaying (to prevent them from sticking)
+                                    if ( true === jQuery( this ).data( 'active' ) ) {
+                                        frogaloopPlayer.api( 'pause' ); //Play the video
+                                        jQuery( this ).data( 'active', false );
+                                    } else {
+                                        frogaloopPlayer.api( 'play' ); //Play the video
+                                        frogaloopPlayer.api( 'seekTo', track ); //Seek to the number of seconds in the variable link_1_track
+                                        jQuery( this ).find( '.link_status' ).html( playNotice ); //Display status message (playNotice) within span with class link_1_status
+                                        jQuery( this ).data( 'active', true );
+                                    }
+                                } );
+                            }
+                            setupLinks( );
+                        } );</script>
+                    <div class="clear clearfix cmclearfix"></div>
+                    <div class="cminds_upgrade_wrapper">
+                        <div class="cminds_upgrade">
+
+                            <?php
+                            $upgradeText = $currentPlugin->getOption( 'plugin-upgrade-text' );
+                            if ( !empty( $upgradeText ) ) :
+                                ?>
+                                <div class="upgrade_text">
+                                    <div class="upgrade_header">
+                                        Why you Should Upgrade
+                                    </div>
+                                    <div style="display:block">
+                                        <p><?php echo $upgradeText; ?></p>
+                                        <div class="links">
+
+                                            <?php
+                                            $upgradel = $currentPlugin->getOption( 'plugin-upgrade-text-list' );
+                                            if ( !empty( $upgradel ) && is_array( $upgradel ) ) :
+                                                foreach ( $upgradel as $key => $listitem ) :
+                                                    $linknum = $key + 1;
+                                                    echo $listitem[ 'video_time' ];
+                                                    if ( 'More' !== $listitem[ 'video_time' ] ) :
+                                                        ?>
+                                                        - <a class="cm-video-bookmark-link link_<?php echo $linknum; ?>" data-timestamp="<?php echo $this->time_to_decimal( $listitem[ 'video_time' ] ); ?>" href="javascript:void(0);" target="_self"><?php echo $listitem[ 'title' ]; ?><span class="link_status"></span></a>
+                                                    <?php else: ?>
+                                                        - <span class="cm-video-bookmark bookmark_<?php echo $linknum; ?>" style="color:green;"><?php echo $listitem[ 'title' ]; ?></span>
+                                                    <?php endif; ?>
+                                                    <br/>
+                                                <?php endforeach; ?>
+                                            <?php endif ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php
+                            $videos = $currentPlugin->getOption( 'plugin-upgrade-videos' );
+                            if ( !empty( $videos ) && is_array( $videos ) ) :
+                                ?>
+                                <div class="upgrade_videos">
+                                    <div class="prev_video cminds_link blue" style="visibility: hidden">Prev</div>
+                                    <div class="upgrade_videos_inner">
+                                        <?php foreach ( $videos as $key => $video ) : ?>
+                                            <div class="upgrade_video <?php echo!$key ? 'active' : ''; ?>">
+                                                <div class="upgrade_video_title"><?php echo $video[ 'title' ]; ?></div>
+                                                <div class="upgrade_video_content">
+                                                    <iframe id="player_1" src="https://player.vimeo.com/video/<?php echo $video[ 'video_id' ]; ?>?title=0&byline=0&portrait=0&byline=0?api=1&player_id=player_1" width="463" height="255" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                                    <br /><br /><a href="<?php echo esc_url( get_admin_url( '', 'admin.php?page=' . $currentPlugin->getOption( 'plugin-abbrev' ) . '_pro' ) ); ?>" class="button button-primary" style="background-color:green; width:220px;" title="Click to Buy PRO">Show me Upgrade Options >></a>
+
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>                    </div>
+                    <?php
+                    echo $this->showAds( $atts );
+                    ?>
+                    <div class="clear clearfix cmclearfix"></div>
+                <?php else : ?>
+                    <div class="cminds_upgrade_wrapper">
+                        <div>
+                            <a class="cminds-upgrade-hide-button button" href="<?php echo add_query_arg( array( 'cminds_upgrade_show' => 1 ), remove_query_arg( 'cminds_upgrade_hide' ) ); ?>">Why you shoud have the Premium Edition>></a>
+                        </div>
+                    </div>
+                    <div class="clear clearfix cmclearfix"></div>
+                <?php
+                endif;
+                ?>
+
                 <?php
                 $content = ob_get_clean();
                 return $content;
@@ -1417,11 +1954,14 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
         }
 
         public function showAds( $atts = array() ) {
+            global $cmindsPluginPackage;
 
             $atts = shortcode_atts( array(
                 'flat' => false,
                 'id'   => null
             ), $atts );
+
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
 
             $optionName = 'cminds-' . $this->getOption( 'plugin-short-slug' ) . '-ads-hidden';
             $adsHide    = filter_input( INPUT_GET, 'cminds_ad_hide' );
@@ -1441,6 +1981,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             $ads                     = isset( $ads_arr[ 'ads' ] ) ? $ads_arr[ 'ads' ] : array();
             $days_since_last_refresh = $this->getDaysSinceLastRefresh( $ads_arr );
 
+            $isRegistered = $currentPlugin->isRegistered();
             /*
              * Don't display if there's no server connection
              */
@@ -1687,110 +2228,71 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                 }
             </style>
 
-            <?php if ( !$adsHidden ) : ?>
+            <?php if ( $isRegistered ) : ?>
 
                 <?php if ( !$atts[ 'flat' ] ) : ?>
 
                     <script>
-                        jQuery( document ).ready( function () {
+                        jQuery( document ).ready( function ( ) {
                             jQuery( '.cminds-ads-show-button' ).on( 'click', function ( e ) {
-                                e.preventDefault();
+                                e.preventDefault( );
                                 jQuery( '#cminds_offers_wrapper' ).toggleClass( 'hidden' );
                                 jQuery( '#cminds_links_wrapper' ).toggleClass( 'hidden' );
                             } );
-                        } );
-                    </script>
+                        } );</script>
 
-                    <div class="cminds_ads_wrapper">
-                        <div>
-                            <a class="cminds-ads-show-button cminds_link" style="background-color: green;color:white;" href="<?php echo add_query_arg( array( 'cminds_ad_show' => 1 ), remove_query_arg( 'cminds_ad_hide' ) ); ?>">Show Promotions</a>
+                    <h3>Special offers from CreativeMinds</h3>
+
+                    <?php if ( !empty( $ads ) ) : ?>
+                        <div class="cminds_ads_internal_wrapper">
+                            <?php foreach ( $ads as $index => $ad ) : ?>
+                                <div class="cminds_ad">
+                                    <?php
+                                    $dateUntil = date( 'jS F, Y', strtotime( $ad[ 'ad_valid_date' ] ) );
+                                    printf( 'Receive %s discount for <a target="_blank" href="%s">%s</a> with discount code <span class="ad_code">"%s"</span> valid until %s', $ad[ 'ad_discount' ], $ad[ 'ad_product_url' ], $ad[ 'ad_title' ], $ad[ 'ad_code' ], $dateUntil );
+                                    ?>
+                                    <span class="cminds_ad_link">
+                                        <a class="cminds_link blue" target="_blank" href="<?php echo $this->addAffiliateCode( $ad[ 'ad_url' ] ); ?>">Redeem Offer</a>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                    </div>
-
-                    <div class="cminds_ads_wrapper" id="cminds_links_wrapper">
-                        <div>
-                            <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all Plugins</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Bundle' ) ); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Add-On' ) ); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Service' ) ); ?>" class="cminds_link blue" target="_blank">View Services</a>
+                    <?php else: ?>
+                        <div class="cminds_no_ads">
+                            <span class="cminds_no_ads_text">
+                                Currently we have no special discounts.
+                            </span>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
-                    <div id="cminds_offers_wrapper" class="cminds_ads_wrapper hidden">
-                        <?php if ( !$this->getOption( 'plugin-is-pro' ) ) : ?>
+                    <div>
+                        <?php if ( $adsRefreshed ) :
+                            ?>
+                            <span class="ads_refreshed">
+                                Discounts have been refreshed.
+                            </span>
+                        <?php else : ?>
+                            You haven't refreshed the discounts for <?php echo $days_since_last_refresh . ' ' . _n( 'day', 'days', $days_since_last_refresh ); ?>. <a class="cminds-ads-refresh-button" href="<?php echo add_query_arg( array( 'cminds_ad_refresh' => 1 ) ); ?>"><strong>Refresh now!</strong></a>
                         <?php endif; ?>
-                        Here are some special offers from CreativeMinds:<br />
-                        <div class="cminds_links">
-                            <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all Plugins</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Bundle' ) ); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Add-On' ) ); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>
-                            <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Service' ) ); ?>" class="cminds_link blue" target="_blank">View Services</a>
-                        </div>
-
-                        <?php if ( !empty( $ads ) ) : ?>
-                            <div class="cminds_ads_internal_wrapper">
-                                <?php foreach ( $ads as $index => $ad ) : ?>
-                                    <div class="cminds_ad">
-                                        <?php
-                                        $dateUntil = date( 'jS F, Y', strtotime( $ad[ 'ad_valid_date' ] ) );
-                                        printf( 'Receive %s discount for: <a target="_blank" href="%s">%s</a>Use code: <span class="ad_code">"%s"</span> valid until %s', $ad[ 'ad_discount' ], $ad[ 'ad_product_url' ], $ad[ 'ad_title' ], $ad[ 'ad_code' ], $dateUntil );
-                                        ?>
-                                        <span class="cminds_ad_link">
-                                            <a class="cminds_link blue" target="_blank" href="<?php echo $this->addAffiliateCode( $ad[ 'ad_url' ] ); ?>">Redeem Offer</a>
-                                        </span>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php else: ?>
-                            <div class="cminds_no_ads">
-                                <span class="cminds_no_ads_text">
-                                    Currently we have no special offers.
-                                </span>
-                            </div>
-                        <?php endif; ?>
-
-                        <div>
-                            <?php if ( $adsRefreshed ) :
-                                ?>
-                                <span class="ads_refreshed">
-                                    Offers have been refreshed.
-                                </span>
-                            <?php else : ?>
-                                <a class="cminds-ads-refresh-button" href="<?php echo add_query_arg( array( 'cminds_ad_refresh' => 1 ) ); ?>">You haven't refreshed the ads for <?php echo $days_since_last_refresh . ' ' . _n( 'day', 'days', $days_since_last_refresh ); ?>. <strong>Refresh now!</strong></a>
-                            <?php endif; ?>
-                            &nbsp;&nbsp;|&nbsp;&nbsp;<a class="cminds-ads-hide-button" href="<?php echo add_query_arg( array( 'cminds_ad_hide' => 1 ), remove_query_arg( 'cminds_ad_show' ) ); ?>">Hide Promotions</a>
-                        </div>
-
                     </div>
                 <?php else: ?>
                     <ul class="cminds_ads_list_wrapper">
                         <?php foreach ( $ads as $index => $ad ) : ?>
                             <li class="cminds_ads_list_item">								<?php
                                 $dateUntil = date( 'Y-m-d', strtotime( $ad[ 'ad_valid_date' ] ) );
-                                printf( 'Receive %s discount for <a target="_blank" href="%s">%s</a>. Use code "%s" valid until %s', $ad[ 'ad_discount' ], $ad[ 'ad_product_url' ], $ad[ 'ad_title' ], $ad[ 'ad_code' ], $dateUntil );
+                                printf( 'Receive %s discount for <a target="_blank" href="%s">%s</a> with discount code "%s" valid until %s', $ad[ 'ad_discount' ], $ad[ 'ad_product_url' ], $ad[ 'ad_title' ], $ad[ 'ad_code' ], $dateUntil );
                                 ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
             <?php else: ?>
-                <div class="cminds_ads_wrapper">
-                    <div>
-                        <a class="cminds-ads-show-button cminds_link" href="<?php echo add_query_arg( array( 'cminds_ad_show' => 1 ), remove_query_arg( 'cminds_ad_hide' ) ); ?>">Show CM offers</a>
-                    </div>
-                </div>
-                <div class="cminds_ads_wrapper">
-                    <div>
-                        <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all Plugins</a>
-                        <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Bundle' ) ); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
-                        <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Add-On' ) ); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>
-                        <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Service' ) ); ?>" class="cminds_link blue" target="_blank">View Services</a>
-                    </div>
-                </div>
-            <?php
-            endif;
-            echo $this->showGuide( $atts );
-            ?>
+                <h3>Special Offers from CreativeMinds</h3>
+
+                <p>
+                    <a href="javascript:void(0)" id="cminds-unskip">Complete <?php echo esc_attr( $currentPlugin->getOption( 'plugin-name' ) ); ?> registration</a> and receive special offers
+                </p>
+            <?php endif; ?>
             <div class="clear clearfix cmclearfix"></div>
             <?php
             $content = ob_get_clean();
@@ -1818,11 +2320,176 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             return $output;
         }
 
+        public function isSkipped( $id = null ) {
+            global $cmindsPluginPackage;
+            $currentPlugin = !empty( $id ) ? $cmindsPluginPackage[ $id ] : $this;
+            $isSkipped     = get_option( 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registration-skipped' );
+            return $isSkipped;
+        }
+
         public function isRegistered( $id = null ) {
             global $cmindsPluginPackage;
             $currentPlugin = !empty( $id ) ? $cmindsPluginPackage[ $id ] : $this;
             $isRegistered  = get_option( 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registered' );
             return $isRegistered;
+        }
+
+        public function wasRegistered( $id = null ) {
+            global $cmindsPluginPackage;
+            $currentPlugin = !empty( $id ) ? $cmindsPluginPackage[ $id ] : $this;
+            $wasRegistered = get_option( 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-was-registered' );
+            return $wasRegistered;
+        }
+
+        public function setWasRegistered( $id = null ) {
+            global $cmindsPluginPackage;
+            $currentPlugin = !empty( $id ) ? $cmindsPluginPackage[ $id ] : $this;
+            $optionName    = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-was-registered';
+            $result        = update_option( $optionName, 1 );
+            return $result;
+        }
+
+        public function deregisterUser( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $optionName = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registered';
+            $post       = filter_input_array( INPUT_POST );
+            if ( !empty( $post ) && !empty( $post[ 'cminds_nonce' ] ) ) {
+
+                $nonceCheck = wp_verify_nonce( $post[ 'cminds_nonce' ], 'cminds_register_free' );
+                if ( $nonceCheck ) {
+
+                    if ( $post[ 'product_name' ] != $currentPlugin->getOption( 'plugin-name' ) ) {
+                        return;
+                    }
+
+                    unset( $post[ 'cminds_nonce' ] );
+                    $jsonData = wp_json_encode( array( $post ) );
+
+                    $args     = array(
+                        'body' => array(
+                            'jsonData' => $jsonData
+                        )
+                    );
+                    $href     = 'https://www.cminds.com/wp-admin/admin-ajax.php?action=remove_user&cminds_json_api=remove_user';
+                    $response = wp_remote_post( $href, $args );
+                    if ( !is_wp_error( $response ) ) {
+                        $result = json_decode( wp_remote_retrieve_body( $response ), true );
+                        if ( $result && 1 === $result[ 'result' ] ) {
+                            update_option( $optionName, 0 );
+                        }
+                    } else {
+                        $args[ 'sslverify' ] = false;
+                        $href                = 'http://www.cminds.com/wp-admin/admin-ajax.php?action=remove_user&cminds_json_api=remove_user';
+                        $response            = wp_remote_post( $href, $args );
+                        if ( !is_wp_error( $response ) ) {
+                            $result = json_decode( wp_remote_retrieve_body( $response ), true );
+                            if ( $result && 1 === $result[ 'result' ] ) {
+                                update_option( $optionName, 0 );
+                            }
+                        } else {
+                            $message = 'User has requested the deregistration: <br/><table>';
+                            foreach ( $post as $key => $value ) {
+                                if ( !in_array( $key, array( 'product_name', 'email', 'hostname' ) ) ) {
+                                    continue;
+                                }
+                                $message .= '<tr><td>' . $key . '</td><td>' . $value . '</td></tr>';
+                            }
+                            $message .= '</table>';
+
+                            add_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
+                            wp_mail( 'marketing@cminds.com', 'CM Free Product Registration Canceled', $message );
+                            remove_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
+                        }
+                    }
+                    update_option( $optionName, 0 );
+                }
+            }
+        }
+
+        public function skipRegistration( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $optionName = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registration-skipped';
+            update_option( $optionName, 1 );
+        }
+
+        public function unskipRegistration( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $optionName = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registration-skipped';
+            update_option( $optionName, 0 );
+        }
+
+        public function registerUser( $atts = array() ) {
+            global $cmindsPluginPackage;
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+
+            $optionName = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registered';
+            $post       = filter_input_array( INPUT_POST );
+            if ( !empty( $post ) && !empty( $post[ 'cminds_nonce' ] ) ) {
+
+                $nonceCheck = wp_verify_nonce( $post[ 'cminds_nonce' ], 'cminds_register_free' );
+                if ( $nonceCheck ) {
+
+                    if ( $post[ 'product_name' ] != $currentPlugin->getOption( 'plugin-name' ) ) {
+                        return;
+                    }
+
+                    unset( $post[ 'cminds_nonce' ] );
+                    $jsonData = wp_json_encode( array( $post ) );
+
+                    $args     = array(
+                        'body' => array(
+                            'jsonData' => $jsonData
+                        )
+                    );
+                    $href     = 'https://www.cminds.com/wp-admin/admin-ajax.php?action=add_user&cminds_json_api=add_user';
+                    $response = wp_remote_post( $href, $args );
+                    if ( !is_wp_error( $response ) ) {
+                        $result = json_decode( wp_remote_retrieve_body( $response ), true );
+                        if ( $result && 1 === $result[ 'result' ] ) {
+                            update_option( $optionName, 1 );
+                            $currentPlugin->setWasRegistered();
+                        }
+                    } else {
+                        $args[ 'sslverify' ] = false;
+                        $href                = 'http://www.cminds.com/wp-admin/admin-ajax.php?action=add_user&cminds_json_api=add_user';
+                        $response            = wp_remote_post( $href, $args );
+                        if ( !is_wp_error( $response ) ) {
+                            $result = json_decode( wp_remote_retrieve_body( $response ), true );
+                            if ( $result && 1 === $result[ 'result' ] ) {
+                                update_option( $optionName, 1 );
+                                $currentPlugin->setWasRegistered();
+                            }
+                        } else {
+                            $message = 'Registered fields: <br/><table>';
+                            foreach ( $post as $key => $value ) {
+                                if ( !in_array( $key, array( 'product_name', 'email', 'hostname' ) ) ) {
+                                    continue;
+                                }
+                                $message .= '<tr><td>' . $key . '</td><td>' . $value . '</td></tr>';
+                            }
+                            $message .= '</table>';
+
+                            add_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
+                            wp_mail( 'marketing@cminds.com', 'CM Free Product Registration', $message );
+                            remove_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
+                        }
+                    }
+                }
+            }
         }
 
         public function showRegistration( $atts = array() ) {
@@ -1842,56 +2509,10 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             }
             $registrationHidden = get_option( $optionName );
 
-            $optionName = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registered';
-            $post       = filter_input_array( INPUT_POST );
-            if ( !empty( $post ) && !empty( $post[ 'cminds_nonce' ] ) ) {
+            $this->registerUser( $atts );
 
-                $nonceCheck = wp_verify_nonce( $post[ 'cminds_nonce' ], 'cminds_register_free' );
-                if ( $nonceCheck ) {
-
-                    unset( $post[ 'cminds_nonce' ] );
-                    $jsonData = wp_json_encode( array( $post ) );
-
-                    $args     = array(
-                        'body' => array(
-                            'jsonData' => $jsonData
-                        )
-                    );
-                    $href     = 'https://www.cminds.com/wp-admin/admin-ajax.php?action=add_user&cminds_json_api=add_user';
-                    $response = wp_remote_post( $href, $args );
-                    if ( !is_wp_error( $response ) ) {
-                        $result = json_decode( wp_remote_retrieve_body( $response ), true );
-                        if ( $result && 1 === $result[ 'result' ] ) {
-                            update_option( $optionName, 1 );
-                        }
-                    } else {
-                        $args[ 'sslverify' ] = false;
-                        $href                = 'http://www.cminds.com/wp-admin/admin-ajax.php?action=add_user&cminds_json_api=add_user';
-                        $response            = wp_remote_post( $href, $args );
-                        if ( !is_wp_error( $response ) ) {
-                            $result = json_decode( wp_remote_retrieve_body( $response ), true );
-                            if ( $result && 1 === $result[ 'result' ] ) {
-                                update_option( $optionName, 1 );
-                            }
-                        } else {
-                            $message = 'Registered fields: <br/><table>';
-                            foreach ( $post as $key => $value ) {
-                                if ( !in_array( $key, array( 'product_name', 'email', 'hostname' ) ) ) {
-                                    continue;
-                                }
-                                $message .= '<tr><td>' . $key . '</td><td>' . $value . '</td></tr>';
-                            }
-                            $message .= '</table>';
-
-                            add_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
-                            wp_mail( 'marketing@cminds.com', 'CM Free Product Registration', $message );
-                            remove_filter( 'wp_mail_content_type', array( __CLASS__, 'cminds_set_content_type' ) );
-                        }
-                    }
-                }
-            }
-
-            $isRegistered = get_option( $optionName );
+            $optionName   = 'cminds-' . $currentPlugin->getOption( 'plugin-short-slug' ) . '-registered';
+            $isRegistered = $this->isRegistered();
 
             if ( $isRegistered ) :
                 return $this->showAds( $atts );
@@ -1904,7 +2525,6 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                         display: inline-block;
                         padding: 1em;
                         background: #FFF;
-                        border: solid 1px #E0E0E0;
                         margin: 1em 1em 0 0;
                         width: 1004px;
                     }
@@ -1917,7 +2537,6 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                         display: inline-block;
                         margin: 1em;
                         padding: 1em 58px;
-                        border: 2px solid #333;
                     }
 
                     .cminds_registration form{
@@ -2100,7 +2719,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                                             ?>
                                             <input class="button button-primary" style="background-color:green;" type="submit" value="Register Your Copy" />
                                             <div class="no-registration">
-                                                <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg( array( 'cminds_registration_hide' => 1 ), remove_query_arg( 'cminds_registration_show' ) ); ?>">I don't want to register</a>
+                                                <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg( array( 'cminds_registration_hide' => 1 ), remove_query_arg( 'cminds_registration_show' ) ); ?>">I don't want to register now</a>
                                             </div>
                                         </form>
                                     </td>
@@ -2110,7 +2729,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                                                 Once registered, you will receive updates and special offers.
                                             </span>
                                             <span class="row_2">
-                                                We will only send once, your administrator's e-mail and site URL to CreativeMinds server.<br /> No additional information will be ever collected or sent.
+                                                <p>We will only send once, your administrator's e-mail and site URL to CreativeMinds server.<br /> No additional information will be ever collected or sent.</p>
                                             </span>
                                     </td>
                                 </tr>
@@ -2120,10 +2739,9 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                     </div>
                 <?php else : ?>
                     <div class="cminds_registration_wrapper">
-                        <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg( array( 'cminds_registration_show' => 1 ), remove_query_arg( 'cminds_registration_hide' ) ); ?>">Show registration box</a>
-                    </div><div class="cminds_registration_wrapper">
                         <div>
-                            <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all Plugins</a>
+                            <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg( array( 'cminds_registration_show' => 1 ), remove_query_arg( 'cminds_registration_hide' ) ); ?>">Show registration box</a>
+                            <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all CreativeMidns Plugins</a>
                             <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Bundle' ) ); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
                             <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Add-On' ) ); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>
                             <a href="<?php echo $this->getStoreUrl( array( 'category' => 'Service' ) ); ?>" class="cminds_link blue" target="_blank">View Services</a>
@@ -2131,7 +2749,7 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                     </div>
                 <?php
                 endif;
-                echo $this->showGuide( $atts );
+                echo $this->showUpgrade( $atts );
                 ?>
                 <div class="clear clearfix cmclearfix"></div>
                 <?php
@@ -2149,8 +2767,9 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 
             global $self, $plugin_page, $typenow, $submenu;
 
-            $submenus = array();
-            $menuItem = $this->getOption( 'plugin-menu-item' );
+            $submenus     = array();
+            $menuItem     = $this->getOption( 'plugin-menu-item' );
+            $pluginAbbrev = $this->getOption( 'plugin-abbrev' );
 
             ob_start();
 
@@ -2177,6 +2796,13 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
 
                     $isExternal = ( $slug === $url ) ? TRUE : FALSE;
 
+                    /*
+                     * Don't show on the Upgrade page itself
+                     */
+                    if ( !empty( $_GET[ 'page' ] ) && $_GET[ 'page' ] == $pluginAbbrev . '_pro' && $slug == $pluginAbbrev . '_pro' ) {
+                        continue;
+                    }
+
                     $submenus[] = array(
                         'link'     => $url,
                         'title'    => $sub_item[ 0 ],
@@ -2188,12 +2814,14 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                 <div id="cmhandfsl_admin_nav">
                     <ul class="subsubsub">
                         <?php foreach ( $submenus as $menu ): ?>
+
                             <li><a href="<?php echo esc_attr( $menu[ 'link' ] ); ?>" <?php echo ( $menu[ 'current' ] ) ? 'class="current"' : ''; ?> <?php
                                 if ( $menu[ 'external' ] ) {
                                     echo 'target="_blank"';
                                 }
-                                ?>><?php echo esc_html( $menu[ 'title' ] ); ?></a></li>
-                            <?php endforeach; ?>
+                                ?>><?php echo esc_html( $menu[ 'title' ] ); ?>
+                                </a></li>
+                        <?php endforeach; ?>
                     </ul>
                     <br class="clear" />
                 </div>
@@ -2387,8 +3015,8 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                         <input type="hidden" name="cminds_action" value="download_sysinfo" />
                         <?php submit_button( 'Download system information file', 'primary', 'cminds-download-sysinfo', false ); ?>
                     </p>
-                    <textarea class="cminds_system_info_area" readonly="readonly" onclick="this.focus();
-                                        this.select()" id="system-info-textarea" name="cminds-sysinfo" title="<?php _e( 'To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac).', 'edd' ); ?>">
+                    <textarea class="cminds_system_info_area" readonly="readonly" onclick="this.focus( );
+                                        this.select( )" id="system-info-textarea" name="cminds-sysinfo" title="<?php _e( 'To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac).', 'edd' ); ?>">
                         <?php $this->cminds_system_info_content(); ?>
                     </textarea>
                 </form>

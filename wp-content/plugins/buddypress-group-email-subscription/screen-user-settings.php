@@ -61,8 +61,16 @@ function ass_group_subscription_notification_settings() {
 		<tr>
 			<td></td>
 			<td><?php _e( 'Receive notifications of your own posts?', 'bp-ass' ) ?></td>
-			<td class="yes"><input type="radio" name="notifications[ass_self_post_notification]" value="yes" <?php if ( ass_self_post_notification( bp_displayed_user_id() ) ) { ?>checked="checked" <?php } ?>/></td>
-			<td class="no"><input type="radio" name="notifications[ass_self_post_notification]" value="no" <?php if ( !ass_self_post_notification( bp_displayed_user_id() ) ) { ?>checked="checked" <?php } ?>/></td>
+
+			<td class="yes">
+				<input type="radio" name="notifications[ass_self_post_notification]" id="notification-ass-self-post-yes" value="yes" <?php if ( ass_self_post_notification( bp_displayed_user_id() ) ) { ?>checked="checked" <?php } ?>/>
+				<label class="bp-screen-reader-text" for="notification-ass-self-post-yes"><?php esc_html_e( 'No, do not send email', 'bp-ass' ); ?></label>
+			</td>
+
+			<td class="no">
+				<input type="radio" name="notifications[ass_self_post_notification]" id="notification-ass-self-post-no" value="no" <?php if ( !ass_self_post_notification( bp_displayed_user_id() ) ) { ?>checked="checked" <?php } ?>/>
+				<label class="bp-screen-reader-text" for="notification-ass-self-post-no"><?php esc_html_e( 'No, do not send email', 'bp-ass' ); ?></label>
+			</td>
 		</tr>
 
 		<?php do_action( 'ass_group_subscription_notification_settings' ); ?>

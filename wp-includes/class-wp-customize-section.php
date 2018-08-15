@@ -2,8 +2,6 @@
 /**
  * WordPress Customize Section classes
  *
- * A UI container for controls, managed by the WP_Customize_Manager.
- *
  * @package WordPress
  * @subpackage Customize
  * @since 3.4.0

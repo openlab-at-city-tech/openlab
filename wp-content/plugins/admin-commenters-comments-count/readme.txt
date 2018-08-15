@@ -5,8 +5,8 @@ Tags: commenters, comment count, comment author, comments, comment, admin, coffe
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
-Tested up to: 4.7
-Stable tag: 1.8
+Tested up to: 4.9
+Stable tag: 1.9
 
 Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
 
@@ -34,7 +34,7 @@ Specifically, the linked comment count appears next to commenters in:
 
 Commenters are identified by the email address they provided when commenting. If your site does not require that commenters submit their email address when commenting, this plugin will use the commenter's name as the identifier, though since this is a publicly viewable piece of data it's possible that multiple people could be posting under the same "name", so this method has the potential to be not as accurate.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [GitHub](https://github.com/coffe2code/admin-commenters-comments-count/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -81,6 +81,19 @@ Yes.
 
 
 == Changelog ==
+
+= 1.9 (2017-11-06) =
+* Bugfix: Explicitly set comment count font color to avoid style conflict with Akismet that resulted in gray text on dark gray background
+* Bugfix: Disable Akismet's version of the functionality since it is duplicative and interferes with author section layout
+* Change: Omit unnecessary `wp_register_style()` and instead provide all arguments to `wp_enqueue_style()`
+* Harden: Use 'esc_like()` on the pingback/trackback URL prior to use in queries
+* Bugfix: Use proper existing variable when searching for other pingbacks/trackbacks
+* Change: Omit unnecessary appending of '%' to author_url value in call to `get_comments_count()`
+* New: Add README.md
+* Change: Add GitHub link to readme
+* Change: Note compatibility through WP 4.9+
+* Change: Update copyright date (2018)
+* Change: Minor whitespace tweaks in unit test bootstrap
 
 = 1.8 (2017-03-04) =
 * Change: Adopt WP core style of showing pending comments in a red circle superscript to comments bubble icon
@@ -226,6 +239,9 @@ Yes.
 
 
 == Upgrade Notice ==
+
+= 1.9 =
+Recommended update: fixed compatibility conflicts with Akismet; fixed incorrect counts for pingbacks/trackbacks; verified compatibility through WP 4.9; updated copyright date (2018).
 
 = 1.8 =
 Recommended update: adopted WP comments bubble red circle superscript to display pending comments count, shown comments bubble in users listing, noted compatibility through WP 4.7+, dropped compatibility with WP older than 4.6, more

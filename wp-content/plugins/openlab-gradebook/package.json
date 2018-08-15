@@ -18,5 +18,8 @@
     "grunt-htmlclean": "^2.7.12",
     "jscrollpane": "^2.0.22"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.1.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
 }

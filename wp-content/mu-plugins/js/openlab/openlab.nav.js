@@ -70,7 +70,7 @@ OpenLab.nav = (function ($) {
         },
         hoverFixes: function () {
             //fixing hover issues on mobile
-            if (OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
+            if (OpenLab.nav.isBreakpoint('xxs') || OpenLab.nav.isBreakpoint('xs') || OpenLab.nav.isBreakpoint('sm')) {
                 $('.mobile-no-hover').bind('touchend', function () {
                     OpenLab.nav.fixHoverOnMobile($(this));
                 })
@@ -237,7 +237,6 @@ OpenLab.nav = (function ($) {
                 }
 
                 if (thisElem.hasClass('active')) {
-                    console.log('hiding menu via directToggleResizeHandler');
                     OpenLab.nav.hideNavMenu(thisElem, thisToggleTarget, false, true);
 
                 }
@@ -390,7 +389,7 @@ OpenLab.nav = (function ($) {
             targetElem.css({
                 'max-width': targetElem_w + 'px',
                 'overflow': 'visible',
-                'float': 'right  '
+                'float': 'none'
             });
 
             //on mobile remove the dropdown

@@ -3,12 +3,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="wrap">
-                    <h1><?php esc_html_e('Settings', 'openlab-gradebook')?></h1>
+                    <h1><span><?php esc_html_e('Settings', 'openlab-gradebook')?></span></h1>
                     <div class="content-wrapper">
 
                         <h2 class="h4"><?php esc_html_e('GradeBook Assignment Grade Types:', 'openlab-gradebook')?></h2>
                         <p><?php esc_html_e('Grade type can be set per assignment by selecting "Edit" from the dropdown menu.', 'openlab-gradebook')?></p>
-                        <p><?php esc_html_e('The grade ranges used in GradeBook are those used by CUNY City Tech, values shown below.', 'openlab-gradebook')?></p>
 
                         <div class="grades-table-wrapper">
                             <table id="gradesTable" class="table table-bordered table-striped">
@@ -16,7 +15,7 @@
                                 <th><?php esc_html_e('Assignment Grade Type Checkmark', 'openlab-gradebook')?></th>
                                 <th><?php esc_html_e('Assignment Grade Type Letter Grades', 'openlab-gradebook')?></th>
                                 <th><?php esc_html_e('Assignment Grade Type Numeric', 'openlab-gradebook')?></th>
-                                <th><?php esc_html_e('Gradebook Mid Value - used to compute an average from letter grades or checkmarks', 'openlab-gradebook')?></th>
+                                <th><?php esc_html_e('GradeBook Mid Value - used to compute an average from letter grades or checkmarks', 'openlab-gradebook')?></th>
                             </tr>
                             <tr>
                                 <td rowspan="12"><i class="oplb-grdbk-icon oplb-grdbk-icon-left oplb-grdbk-check-mark-2"></i><?php esc_html_e('checked box', 'openlab-gradebook')?></td>

@@ -3,7 +3,7 @@
 Plugin Name: TinyMCE Advanced
 Plugin URI: http://www.laptoptips.ca/projects/tinymce-advanced/
 Description: Enables advanced features and plugins in TinyMCE, the visual editor in WordPress.
-Version: 4.6.7
+Version: 4.7.11
 Author: Andrew Ozz
 Author URI: http://www.laptoptips.ca/
 License: GPL2
@@ -24,15 +24,15 @@ Domain Path: /langs
 	You should have received a copy of the GNU General Public License along
 	with TinyMCE Advanced. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
-	Copyright (c) 2007-2017 Andrew Ozz. All rights reserved.
+	Copyright (c) 2007-2018 Andrew Ozz. All rights reserved.
 */
 
 if ( ! class_exists('Tinymce_Advanced') ) :
 
 class Tinymce_Advanced {
 
-	private $required_version = '4.9-beta';
-	private $plugin_version = '4.6.7';
+	private $required_version = '4.9.6';
+	private $plugin_version = '4.7.11';
 
 	private $user_settings;
 	private $admin_settings;
@@ -296,7 +296,7 @@ class Tinymce_Advanced {
 			echo '<br>';
 
 			printf( __( 'Please upgrade your WordPress installation or download an <a href="%s">older version of the plugin</a>.', 'tinymce-advanced' ),
-				'https://wordpress.org/plugins/tinymce-advanced/advanced/'
+				'https://wordpress.org/plugins/tinymce-advanced/advanced/#download-previous-link'
 			);
 
 			?>

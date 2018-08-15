@@ -208,11 +208,12 @@ class CMTooltipGlossaryBackend
     {
         $content = '';
         $settingsTabsArrayBase = array(
+            '0'  => 'Upgrade',
             '1'  => 'General Settings',
             '2'  => 'Glossary Index Page',
             '3'  => 'Glossary Term',
             '4'  => 'Tooltip',
-            '99' => 'Server Information',
+            '99' => 'Installation Guide',
         );
 
         $settingsTabsArray = apply_filters('cmtt-settings-tabs-array', $settingsTabsArrayBase);
@@ -440,6 +441,22 @@ class CMTooltipGlossaryBackend
             $message .= '<a href="http://www.php.net/manual/en/mbstring.installation.php" target="_blank">(' . __('Installation instructions.') . ')</a>';
             cminds_show_message($message, true);
         }
+    }
+
+        /**
+     * Function should return the ID of the Glossary Index Page
+     * @since 2.7.4
+     * @return type
+     */
+    public static function cmtt_getGlossaryIndexPageId() {
+        $glossaryPageID = apply_filters( 'cmtt_get_glossary_index_page_id', get_option( 'cmtt_glossaryID' ) );
+        /*
+         * WPML integration
+         */
+        if ( function_exists( 'icl_object_id' ) && defined( 'ICL_LANGUAGE_CODE' ) ) {
+            $glossaryPageID = icl_object_id( $glossaryPageID, 'page', ICL_LANGUAGE_CODE );
+        }
+        return $glossaryPageID;
     }
 
     /**

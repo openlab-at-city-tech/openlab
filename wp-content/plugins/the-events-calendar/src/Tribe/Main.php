@@ -32,9 +32,9 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '4.6.14.1';
+		const VERSION             = '4.6.18';
 		const MIN_ADDON_VERSION   = '4.4';
-		const MIN_COMMON_VERSION  = '4.7.3';
+		const MIN_COMMON_VERSION  = '4.7.15';
 
 		const WP_PLUGIN_URL       = 'https://wordpress.org/extend/plugins/the-events-calendar/';
 
@@ -410,6 +410,10 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			tribe_singleton( 'events-aggregator.main', 'Tribe__Events__Aggregator', array( 'load', 'hook' ) );
 			tribe_singleton( 'events-aggregator.service', 'Tribe__Events__Aggregator__Service' );
 			tribe_singleton( 'events-aggregator.settings', 'Tribe__Events__Aggregator__Settings' );
+			tribe_singleton( 'events-aggregator.records', 'Tribe__Events__Aggregator__Records', array( 'hook' ) );
+			tribe_register_provider( 'Tribe__Events__Aggregator__REST__V1__Service_Provider' );
+			tribe_register_provider( 'Tribe__Events__Aggregator__CLI__Service_Provider' );
+			tribe_register_provider( 'Tribe__Events__Aggregator__Processes__Service_Provider' );
 
 			// Shortcodes
 			tribe_singleton( 'tec.shortcodes.event-details', 'Tribe__Events__Shortcode__Event_Details', array( 'hook' ) );
@@ -449,6 +453,10 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			// Gutenberg Extension
 			tribe_singleton( 'tec.gutenberg', 'Tribe__Events__Gutenberg', array( 'hook' ) );
 
+			// Admin Notices
+			tribe_singleton( 'tec.admin.notice.timezones', 'Tribe__Events__Admin__Notice__Timezones', array( 'hook' ) );
+			tribe_singleton( 'tec.admin.notice.marketing', 'Tribe__Events__Admin__Notice__Marketing', array( 'hook' ) );
+
 			/**
 			 * Allows other plugins and services to override/change the bound implementations.
 			 */
@@ -477,9 +485,6 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			// Tribe common resources
 			require_once $this->plugin_path . 'vendor/tribe-common-libraries/tribe-common-libraries.class.php';
-
-			// Load CSV importer
-			require_once $this->plugin_path . 'src/io/csv/ecp-events-importer.php';
 
 			// Load Template Tags
 			require_once $this->plugin_path . 'src/functions/template-tags/query.php';
@@ -721,6 +726,8 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			tribe( 'tec.iCal' );
 			tribe( 'tec.rest-v1.main' );
 			tribe( 'tec.gutenberg' );
+			tribe( 'tec.admin.notice.timezones' );
+			tribe( 'tec.admin.notice.marketing' );
 		}
 
 		/**
@@ -2924,24 +2931,13 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				/**
 				 * Used to Filter the default value for a Specific meta
 				 *
-				 * @deprecated 4.0.7
-				 * @var $default
-				 * @var $id
-				 * @var $meta
-				 * @var $single
-				 */
-				$value = apply_filters( 'filter_eventsDefault' . $filter, $default, $id, $meta, $single );
-
-				/**
-				 * Used to Filter the default value for a Specific meta
-				 *
 				 * @since 4.0.7
 				 * @var $value
 				 * @var $id
 				 * @var $meta
 				 * @var $single
 				 */
-				$value = apply_filters( 'tribe_get_meta_default_value_' . $filter, $value, $id, $meta, $single );
+				$value = apply_filters( "tribe_get_meta_default_value_{ $filter }", $default, $id, $meta, $single );
 			}
 			return $value;
 		}

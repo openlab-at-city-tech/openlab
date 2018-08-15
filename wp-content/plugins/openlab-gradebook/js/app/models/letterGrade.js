@@ -3,7 +3,7 @@ define(['backbone'], function (Backbone) {
         defaults: {
             label: 'A+',
             value: 100
-        }
+        },
     });
     return letterGrade;
 });

@@ -4,15 +4,33 @@
  * Reaches into the activity global and filters out items the user doesn't have access to
  *
  * Uses privacy settings from More Privacy Options
+ *
+ * @param boolean $has_activities True if there are activities, false otherwise
+ * @param object $activities The BP activities template object
+ * @param array $template_args The arguments used to init $activities_template
+ * @return boolean $has_activities True if there are activities, false otherwise
  */
-function bp_mpo_activity_filter( $a, $activities ) {
+function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) {
 	global $bp;
 
 	if ( is_super_admin() )
-		return $activities;
+		return $has_activities;
+
+	/**
+	 * List of activity types that this plugin filters.
+	 *
+	 * @param array $activity_types List of activity type identifiers.
+	 */
+	$activity_types = apply_filters( 'bp_mpo_activity_types', array(
+		'new_blog',
+		'new_blog_post',
+		'new_blog_comment',
+		'new_groupblog_post',
+		'new_groupblog_comment',
+	) );
 
 	foreach ( $activities->activities as $key => $activity ) {
-		if ( $activity->type == 'new_blog_post' || $activity->type == 'new_blog_comment' ) {
+		if ( in_array( $activity->type, $activity_types ) ) {
 
 			$current_user = $bp->loggedin_user->id;
 
@@ -96,9 +114,9 @@ function bp_mpo_activity_filter( $a, $activities ) {
 	$activities_new = array_values( $activities->activities );
 	$activities->activities = $activities_new;
 
-	return $activities;
+	return $activities->has_activities();
 }
-add_action( 'bp_has_activities', 'bp_mpo_activity_filter', 10, 2 );
+add_filter( 'bp_has_activities', 'bp_mpo_activity_filter', 10, 3 );
 
 
 // Filter the output of 'bp_get_activity_count' to account for the fact that there are fewer items. A total hack.

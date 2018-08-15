@@ -2,8 +2,6 @@
 /**
  * WordPress Customize Setting classes
  *
- * Handles saving and sanitizing of settings.
- *
  * @package WordPress
  * @subpackage Customize
  * @since 3.4.0

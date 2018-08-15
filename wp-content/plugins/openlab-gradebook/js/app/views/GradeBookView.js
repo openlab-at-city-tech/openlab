@@ -50,6 +50,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 events: {
                     'click button#add-student': 'addStudent',
                     'click button#download-csv': 'downloadCSV',
+                    'click button#download-csv-mobile': 'downloadCSV',
                     'click button#add-assignment': 'addAssignment',
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
@@ -67,7 +68,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     var totalWeight = self.getTotalWeight();
 
-                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.role, total_weight: totalWeight});
+                    var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.gradebook.role, total_weight: totalWeight, assign_length: self.gradebook.assignments.length});
                     $('#wpbody-content').append(self.$el.html(compiled));
                     $('#filter-assignments-select').val(this.filter_option);
                     switch (this.gradebook.sort_key) {
@@ -202,16 +203,28 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 calculateScrollBarPosition: function (event, isScrollable) {
 
                     var targetTable = $('#an-gradebook-container');
+                    var scrollContainerElem = targetTable.closest('.jspContainer');
                     if (targetTable.height() < 500) {
 
                         var targetTable_padding = 500 - targetTable.height();
-                        targetTable.closest('.jspContainer').css({
-                            'padding-bottom': targetTable.height() + targetTable_padding + 'px'
+
+                        scrollContainerElem.css({
+                            'padding-bottom': targetTable.height() + targetTable_padding + 'px',
                         });
-                        targetTable.closest('.jspContainer').find('.jspHorizontalBar').css({
+                        scrollContainerElem.find('.jspHorizontalBar').css({
                             'bottom': (targetTable_padding - 18) + 'px'
                         });
                     }
+
+                    var scrollContainerDims = {
+                        'height': scrollContainerElem.height()
+                    }
+
+                    console.log('scrollContainerDims', scrollContainerDims);
+
+                    scrollContainerElem.css({
+                        'height' : (scrollContainerDims.height + 29) + 'px'
+                    });
 
                 },
                 addAssignment: function (ev) {

@@ -530,7 +530,7 @@ function cuny_student_profile() {
                     <ul id="member-list" class="inline-element-list">
 
                         <?php foreach ($friend_ids as $friend_id) { ?>
-                            
+
                             <li class="inline-element">
                                 <a href="<?php echo bp_core_get_user_domain($friend_id) ?>">
                                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $friend_id, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_core_get_user_displayname($friend_id); ?>"/>
@@ -1001,3 +1001,8 @@ function openlab_trim_message_subject($subject) {
 }
 
 add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
+
+/**
+ * Ensure that @-mentions in message content are properly linked.
+ */
+add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );

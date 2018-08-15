@@ -280,8 +280,6 @@ function bp_version_updater() {
 	}
 }
 
-/** Upgrade Routines **********************************************************/
-
 /**
  * Perform database operations that must take place before the general schema upgrades.
  *

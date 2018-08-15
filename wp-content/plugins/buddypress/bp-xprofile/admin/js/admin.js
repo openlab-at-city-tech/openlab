@@ -249,7 +249,7 @@ jQuery( document ).ready( function() {
 		cursor: 'move',
 		opacity: 0.7,
 		items: 'fieldset',
-		tolerance: 'ponter',
+		tolerance: 'pointer',
 
 		update: function() {
 			jQuery.post( ajaxurl, {

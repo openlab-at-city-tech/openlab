@@ -59,6 +59,15 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 5.9.15.7 =
+* Added class around RSS inline feed items date to be able to hide it
+
+= 5.9.15.6 =
+* Fix dismissal of message introduced in previous update
+
+= 5.9.15.5 =
+* Added admin message for 6.0 release target date and latest beta
+
 = 5.9.15.4 =
 * Small change to link exporter to make it compatible with Link Library for those preferring to export and re-import links than upgrading links in place
 

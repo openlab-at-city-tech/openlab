@@ -56,11 +56,17 @@
 	filter:Alpha(Opacity=0); /* support: IE8 */
 }
 
+.ui-front {
+	z-index: 100;
+}
+
+
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-disabled {
 	cursor: default !important;
 }
+
 
 /* Icons
 ----------------------------------*/
@@ -140,10 +146,10 @@
 /* rtl:ignore */
 .ui-resizable-se {
 	cursor: se-resize;
-	width: 9px;
-	height: 9px;
-	right: -5px;
-	bottom: -5px;
+	width: 12px;
+	height: 12px;
+	right: 1px;
+	bottom: 1px;
 }
 /* rtl:ignore */
 .ui-resizable-sw {

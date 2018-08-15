@@ -1,0 +1,7 @@
+.comment-content .edit-comment-admin-links a {
+	box-shadow: none;
+}
+
+.dataTables_paginate a.paginate_button {
+	text-decoration: none;
+}

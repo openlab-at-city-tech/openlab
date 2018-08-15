@@ -42,5 +42,5 @@ function bp_group_documents_admin_cssjs() {
 	wp_enqueue_script( 'bp-group-documents-admin', plugins_url() . '/buddypress-group-documents/js/admin.js', array('jquery') );
 }
 add_action('admin_init','bp_group_documents_admin_cssjs');
-
+		
 ?>

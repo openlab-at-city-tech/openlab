@@ -26,9 +26,7 @@
 	'use strict';
 
 	var views = {},
-		instances = {},
-		media = wp.media,
-		viewOptions = ['encodedText'];
+		instances = {};
 
 	wp.mce = wp.mce || {};
 

@@ -337,6 +337,16 @@ function get_inline_data($post) {
 	if ( post_type_supports( $post->post_type, 'post-formats' ) )
 		echo '<div class="post_format">' . esc_html( get_post_format( $post->ID ) ) . '</div>';
 
+	/**
+	 * Fires after outputting the fields for the inline editor for posts and pages.
+	 *
+	 * @since 4.9.8
+	 *
+	 * @param WP_Post      $post             The current post object.
+	 * @param WP_Post_Type $post_type_object The current post's post type object.
+	 */
+	do_action( 'add_inline_data', $post, $post_type_object );
+
 	echo '</div>';
 }
 
@@ -1018,7 +1028,7 @@ function do_meta_boxes( $screen, $context, $object ) {
 
 	$hidden = get_hidden_meta_boxes( $screen );
 
-	printf('<div id="%s-sortables" class="meta-box-sortables">', htmlspecialchars($context));
+	printf( '<div id="%s-sortables" class="meta-box-sortables">', esc_attr( $context ) );
 
 	// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
 	if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) ) {
@@ -1765,6 +1775,10 @@ function _post_states($post) {
 		}
 	}
 
+	if ( intval( get_option( 'wp_page_for_privacy_policy' ) ) === $post->ID ) {
+		$post_states['page_for_privacy_policy'] = __( 'Privacy Policy Page' );
+	}
+
 	/**
 	 * Filters the default post display states used in the posts list table.
 	 *
@@ -2035,11 +2049,6 @@ function _wp_admin_html_begin() {
 	if ( $is_IE )
 		@header('X-UA-Compatible: IE=edge');
 
-/**
- * Fires inside the HTML tag in the admin header.
- *
- * @since 2.2.0
- */
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>

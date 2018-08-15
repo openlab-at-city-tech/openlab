@@ -60,6 +60,7 @@ class OPLB_USER_LIST {
                 //for now we're going to target 'author' users
                 $args = array(
                     'role__in' => array('author'),
+                    'number' => -1,
                 );
 
                 $users = get_users($args);
@@ -82,7 +83,7 @@ class OPLB_USER_LIST {
 
                     }
                 }
-                
+
                 $students_out = apply_filters('oplb_gradebook_students_list', $students_out, $blog_id);
                 
                 if ($method === 'retrieve') {

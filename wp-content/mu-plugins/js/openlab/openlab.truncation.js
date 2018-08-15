@@ -24,8 +24,6 @@ OpenLab.truncation = (function ($) {
 
         },
         truncateOnTheFly: function (onInit, loadDelay) {
-            
-            console.log('truncateOnTheFly go');
 
             if (onInit === undefined) {
                 var onInit = false;
@@ -107,8 +105,12 @@ OpenLab.truncation = (function ($) {
 
                     if (thisElem.data('basewidth') === 'calculate') {
 
+                        //thisElem.html('');
+
                         var sizerContainer_w = sizerContainer.width();
                         var sizerContainer_h = sizerContainer.height();
+
+                        //thisElem.html(originalCopy);
 
                         sizerContainer.css({
                             'white-space': 'nowrap'
@@ -259,10 +261,10 @@ OpenLab.truncation = (function ($) {
     });
 
     $(window).on('resize', function (e) {
-        
+
         clearTimeout(truncationResizeTimer);
         truncationResizeTimer = setTimeout(function () {
-            
+
             if ($('.truncate-on-the-fly').length) {
 
                 $('.trucate-obfuscate').css('opacity', 0);

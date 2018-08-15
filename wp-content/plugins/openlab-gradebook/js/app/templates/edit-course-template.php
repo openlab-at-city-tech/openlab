@@ -4,11 +4,11 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close<?php esc_html_e('', 'openlab-gradebook') ?>"><span aria-hidden="true">&times;</span></button>
             
             <% if (course) { %>
-                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Edit Gradebook', 'openlab-gradebook') ?></h4>
+                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Edit GradeBook', 'openlab-gradebook') ?></h4>
             <% } else if (initvals.goInit){ %>
-                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A Gradebook?', 'openlab-gradebook') ?></h4>
+                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A GradeBook?', 'openlab-gradebook') ?></h4>
             <% } else { %>
-                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A Gradebook', 'openlab-gradebook') ?></h4>
+                <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Create A GradeBook', 'openlab-gradebook') ?></h4>
             <% } %>
             
         </div>
@@ -16,7 +16,7 @@
             <form id="edit-course-form" class="form-horizontal"> 
                 <div class="form-group">     
                     <input type="hidden" name="gbid" value="<%= course ? course.get('id') : '' %>"/>        
-                    <label for="course_name" class="col-sm-3 control-label"><?php esc_html_e('Gradebook Name', 'openlab-gradebook') ?>:</label>
+                    <label for="course_name" class="col-sm-3 control-label"><?php esc_html_e('GradeBook Name', 'openlab-gradebook') ?>:</label>
                     <div class="col-sm-7">
                         <% if(initvals.name){ %>
                             <input type="text" id="course_name" class="form-control" name="name" value="<%= initvals.name %>"/>

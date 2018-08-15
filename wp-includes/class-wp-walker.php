@@ -32,7 +32,6 @@ class Walker {
 	 * Max number of pages walked by the paged walker
 	 *
 	 * @since 2.7.0
-	 * @access protected
 	 * @var int
 	 */
 	public $max_pages = 1;

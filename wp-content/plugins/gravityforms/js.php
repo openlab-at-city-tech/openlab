@@ -133,12 +133,12 @@ if ( ! class_exists( 'GFForms' ) ) {
 	}
 
 	function ShowSettings(element_id) {
-		jQuery(".field_selected .field_edit_icon, .field_selected .form_edit_icon").removeClass("edit_icon_collapsed").addClass("edit_icon_expanded").html('<i class="fa fa-caret-up fa-lg"></i>');
+		jQuery(".field_selected .field_edit_icon, .field_selected .form_edit_icon").removeClass("edit_icon_collapsed").addClass("edit_icon_expanded").html('<i class="fa fa-caret-up fa-lg"></i>').closest('li').attr('aria-expanded', 'true');
 		jQuery("#" + element_id).slideDown();
 	}
 
 	function HideSettings(element_id) {
-		jQuery(".field_edit_icon, .form_edit_icon").removeClass("edit_icon_expanded").addClass("edit_icon_collapsed").html('<i class="fa fa-caret-down fa-lg"></i>');
+		jQuery(".field_edit_icon, .form_edit_icon").removeClass("edit_icon_expanded").addClass("edit_icon_collapsed").html('<i class="fa fa-caret-down fa-lg"></i>').focus().closest('li').attr('aria-expanded', 'false');
 		jQuery("#" + element_id).hide();
 	}
 
@@ -458,6 +458,18 @@ if ( ! class_exists( 'GFForms' ) ) {
 			if (has_option && !has_product) {
 				error = <?php echo json_encode( esc_html__( "Your form currently has an option field without a product field.\nYou must add a product field to your form.", 'gravityforms' ) ); ?>;
 			}
+
+			/**
+			 * Allow the form editor validation error to be overridden.
+			 *
+			 * @since 2.2.5.11
+			 *
+			 * @param string error       The error message.
+			 * @param object form        The current form.
+			 * @param bool   has_product Indicates if the current form has a product field.
+			 * @param bool   has_option  Indicates if the current form has a option field.
+			 */
+			error = gform.applyFilters('gform_validation_error_form_editor', error, form, has_product, has_option);
 		}
 		if (error) {
 			jQuery("#please_wait_container").hide();
@@ -1051,9 +1063,14 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 		jQuery.post(ajaxurl, data,
 			function (data) {
-				jQuery('.field_selected').children().not('#field_settings').remove();
-				jQuery("#field_" + fieldId).prepend(data.fieldString);
-
+				field   = GetSelectedField();
+				fieldId = field.id;
+				if ( data.fieldId == fieldId ) {
+					jQuery('.field_selected').children().not('#field_settings').remove();
+					jQuery("#field_" + fieldId).prepend(data.fieldString);
+				} else {
+					jQuery("#field_" + data.fieldId).html(data.fieldString);
+				}
 				SetFieldLabel(field.label);
 				SetFieldSize(field.size);
 				SetFieldDefaultValue(field.defaultValue);
@@ -1107,7 +1124,17 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 			var checked = field.choices[i].isSelected ? "checked" : "";
 			var inputType = GetInputType(field);
-			var type = inputType == 'checkbox' ? 'checkbox' : 'radio';
+			var type = inputType === 'checkbox' ? 'checkbox' : 'radio';
+
+			/**
+			 * Allow the choice selected input type to be overridden.
+			 *
+			 * @since 2.2.5.11
+			 *
+			 * @param string type  The choice selected input type. Defaults to checkbox for checkbox type fields or radio for other field types.
+			 * @param object field The current field.
+			 */
+			type = gform.applyFilters('gform_field_choice_selected_type_form_editor', type, field);
 
 			var value = field.enableChoiceValue ? String(field.choices[i].value) : field.choices[i].text;
 			var price = field.choices[i].price ? currency.toMoney(field.choices[i].price) : "";

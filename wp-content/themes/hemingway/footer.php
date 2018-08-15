@@ -56,14 +56,12 @@
 	
 			<p class="credits-left">
 			
-				&copy; <?php echo date("Y") ?> <a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a>
+				&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo home_url(); ?>" title="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
 			
 			</p>
 			
 			<p class="credits-right">
-				
-				<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'hemingway'), 'http://www.andersnoren.se' ); ?></span> &mdash; <a title="<?php _e('To the top', 'hemingway'); ?>" class="tothetop"><?php _e('Up', 'hemingway' ); ?> &uarr;</a>
-				
+				<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'hemingway' ), 'http://www.andersnoren.se' ); ?></span> &mdash; <a title="<?php _e( 'To the top', 'hemingway' ); ?>" class="tothetop"><?php _e( 'Up', 'hemingway' ); ?> &uarr;</a>
 			</p>
 			
 			<div class="clear"></div>

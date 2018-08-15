@@ -53,7 +53,14 @@
 
                             <?php do_action('bbp_theme_before_reply_form_content'); ?>
 
-                            <?php bbp_the_content(array('context' => 'reply')); ?>
+                            <?php
+							bbp_the_content(
+								array(
+									'context'      => 'reply',
+									'editor_class' => 'bbp-the-content bp-suggestions',
+								)
+							);
+							?>
 
                             <?php do_action('bbp_theme_after_reply_form_content'); ?>
 

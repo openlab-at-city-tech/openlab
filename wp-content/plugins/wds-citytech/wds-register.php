@@ -11,10 +11,6 @@ function openlab_registration_avatars() {
 		$bp->avatar_admin = new stdClass();
 	}
 
-	if ( empty( $bp->avatar_admin ) ) {
-		$bp->avatar_admin = new stdClass;
-	}
-
 	$bp->avatar_admin->step = 'upload-image';
 
 	/* If user has uploaded a new avatar */
