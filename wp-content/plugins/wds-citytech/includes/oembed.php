@@ -87,7 +87,7 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
 			$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
 		}
 
-		wp_cache_set( 'screencast_embed_url_v2_' . $url );
+		wp_cache_set( 'screencast_embed_url_v2_' . $url, $embed_url );
 	} else {
 		$embed_url = $cached;
 	}
