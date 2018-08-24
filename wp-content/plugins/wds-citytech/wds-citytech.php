@@ -2566,3 +2566,11 @@ add_filter( 'map_meta_cap', function( $caps, $cap, $user_id ) {
 
 	return array( 'do_not_allow' );
 }, 10, 4 );
+
+/**
+ * DK PDF cache directory.
+ */
+add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
+	$upload_dir = wp_upload_dir();
+	return $upload_dir['basedir'] . '/dkpdf-tmp';
+} );
