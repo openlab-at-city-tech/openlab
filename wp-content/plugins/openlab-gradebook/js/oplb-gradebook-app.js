@@ -40,15 +40,16 @@ define("underscore", [], function() {
 
 window.oplbGlobals = window.oplbGlobals || {};
 window.oplbGlobals.total_weight = 0;
+window.oplbGlobals.saveStatusElem = {};
 
 var oldBackboneSync = Backbone.sync;
 
 // Override Backbone.Sync
 Backbone.sync = function(method, model, options) {
-    let status = jQuery('#savingStatus');
+    window.oplbGlobals.saveStatusElem = jQuery('#savingStatus');
 
-    if (status.length) {
-        status.removeClass('hidden');
+    if (window.oplbGlobals.saveStatusElem.length) {
+        window.oplbGlobals.saveStatusElem.removeClass('hidden');
     }
 
 	//globally add nonce
@@ -62,20 +63,20 @@ var currentSync = Backbone.sync;
 
 var loggingSync = function(method, model, options){
     var promise = currentSync(method, model, options);
-    let status = jQuery('#savingStatus');
+    window.oplbGlobals.saveStatusElem = jQuery('#savingStatus');
 
     console.log('promise in Backbone.sync', promise);
     
 	promise.done(function() {
         console.log('done ajax', this);
-        if (status.length) {
-            status.addClass('hidden');
+        if (window.oplbGlobals.saveStatusElem.length) {
+            window.oplbGlobals.saveStatusElem.addClass('hidden');
         }
 	});
 	promise.fail(function() {
         console.log('problem ajax', this);
-        if (status.length) {
-            status.addClass('hidden');
+        if (window.oplbGlobals.saveStatusElem.length) {
+            window.oplbGlobals.saveStatusElem.addClass('hidden');
         }
     });
     
