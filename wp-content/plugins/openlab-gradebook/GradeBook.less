@@ -406,6 +406,30 @@ span.twitter-typeahead {
             }
         }
     }
+    .btn-arrange{
+        position: relative;
+    }
+    #savingStatus {
+        font-weight: bold;
+        font-size: 18px;
+        color: #0073aa;
+        padding-right: 42px;
+        position: absolute;
+        left: -102px;
+        top: 6px;
+        &.saving{
+            display: block;
+        }
+        &:after {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            -webkit-animation: ellipsis steps(4, end) 1200ms infinite;
+            animation: ellipsis steps(4, end) 1200ms infinite;
+            content: "\2026";
+            width: 0px;
+        }
+    }
 }
 
 .tt-hint {
@@ -487,7 +511,7 @@ span.twitter-typeahead {
         .student-grades {
             display: none;
         }
-        .gradebook-student-column-average{
+        .gradebook-student-column-average {
             display: none;
         }
         #students-header-pinned th,
@@ -700,3 +724,15 @@ span.twitter-typeahead {
         transform: rotate(359deg);
     }
 }
+
+@keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }
+  
+  @-webkit-keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }
