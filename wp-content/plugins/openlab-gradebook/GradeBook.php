@@ -1,9 +1,9 @@
 <?php
 /*
   Plugin Name: OpenLab GradeBook
-  Plugin URI: https://github.com/livinglab/openlab
-  Description: A modification of AN GradeBook https://wordpress.org/plugins/an-gradebook/
-  Version: 0.0.3
+  Plugin URI: https://openlab.citytech.cuny.edu/
+  Description: Beta version. This basic gradebook allows faculty to confidentially record and share students grades via the WP Dashboard. Some features are still in development, slowness and minor display bugs may occur. A modification of AN GradeBook https://wordpress.org/plugins/an-gradebook/
+  Version: 0.1.0
   Author: Joe Unander
   Author URI: http://early-adopter.com/
   License: GPL
