@@ -982,7 +982,7 @@ class oplb_gradebook_api
             array_push($column_headers_assignment_names, $assignment['assign_name']);
         }
         $column_headers = array_merge(
-            array('firstname', 'lastname', 'username', 'current_average_grade', 'mid_semester_grade', 'final_grade'),
+            array('firstname', 'lastname', 'username', 'mid_semester_grade', 'final_grade'),
             $column_headers_assignment_names
         );
         $cells = array();
@@ -1002,7 +1002,6 @@ class oplb_gradebook_api
                 'firstname' => $studentData->first_name,
                 'lastname' => $studentData->last_name,
                 'username' => $studentData->user_login,
-                'current_grade_average' => $value->current_grade_average,
                 'mid_semester_grade' => $this->get_student_grade_label($value->mid_semester_grade),
                 'final_grade' => $this->get_student_grade_label($value->final_grade),
                 'id' => intval($studentData->ID),
