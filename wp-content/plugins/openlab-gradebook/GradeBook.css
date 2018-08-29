@@ -71,6 +71,9 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
 #loading-students-container {
   display: absolute;
 }
+#gradebookWrapper .weight-message {
+  display: none;
+}
 .modal-body {
   overflow: auto;
 }
