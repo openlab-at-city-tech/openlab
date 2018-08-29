@@ -21,7 +21,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.gradebook = options.gradebook;
                     this.listenTo(self.gradebook.students, 'add remove', self.render);
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
-                    this.listenTo(self.gradebook.assignments, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.assignments, 'add', self.handleAssignmentUpdates);
                     this.listenTo(self.gradebook.assignments, 'change', self.handleAssignmentChanges);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
@@ -294,11 +294,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 handleAssignmentUpdates: function (ev){
 
-                    console.log('handleAssignmentUpdates', ev);
+                    console.log('handleAssignmentUpdates', ev, ev._events)  ;
 
-                    if(ev.changed.length){
-                        this.render(true);
-                    }
+                    this.render(true);
                     
                 },
                 handleAssignmentChanges: function(ev){

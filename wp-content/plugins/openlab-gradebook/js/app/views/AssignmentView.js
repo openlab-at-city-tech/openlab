@@ -53,6 +53,7 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                     this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
 
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') + 1});
+                    console.log('x', x, this.model.get('assign_order') + 1);
                     x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
                     this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility: this.model.get('assign_visibility')});
                 },
