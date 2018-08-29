@@ -26,7 +26,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
-                    
+
                     this.render();
                     this.adjustCellWidths();
                     this.postLoadActions();
@@ -146,6 +146,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             clearTimeout(layoutTimeout);
                         }
                         layoutTimeout = setTimeout(this.layout, 10, this);
+                    }
+
+                    if(this.scrollSize === 0){
+                        console.log('sorting');
+                        this.scrollSize = 100;
+                        this.gradebook.sort_key = 'student';
+                        this.gradebook.students.sort_key = 'last_name';
+                        this.gradebook.students.sort_direction = 'desc';
+                        this.gradebook.students.sort();
+                        this.render();
                     }
 
                     return this;

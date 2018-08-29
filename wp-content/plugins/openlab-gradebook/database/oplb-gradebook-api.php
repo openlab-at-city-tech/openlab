@@ -1090,11 +1090,17 @@ class oplb_gradebook_api
 
         fputcsv($output, $weights);
         fputcsv($output, $column_headers);
-        foreach ($student_records as &$row) {
 
-            //don't want to output student internal GB id
+        $final_rows = array();
+
+        foreach ($student_records as $key => $row) {
             unset($row['id']);
+            $final_rows[$row['lastname'].$key] = $row;
+        }
 
+        ksort($final_rows);
+
+        foreach ($final_rows as $row) {
             fputcsv($output, $row);
         }
         fclose($output);
