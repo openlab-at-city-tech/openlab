@@ -415,8 +415,9 @@ span.twitter-typeahead {
         color: #0073aa;
         padding-right: 42px;
         position: absolute;
-        left: -102px;
+        right: 150px;
         top: 6px;
+        width: 118px;
         &.saving{
             display: block;
         }
@@ -487,6 +488,10 @@ span.twitter-typeahead {
     .table {
         margin-bottom: 0;
     }
+    #an-gradebook-container{
+        top: 15px;
+        position: relative;
+    }
     position: relative;
     .pinned {
         position: absolute;
@@ -534,7 +539,7 @@ span.twitter-typeahead {
             width: 15%;
             &.download-csv {
                 position: relative;
-                width: 19.685%;
+                width: 7.97448%;
                 padding: 0;
                 margin: 0;
                 text-align: center;
@@ -562,7 +567,11 @@ span.twitter-typeahead {
         .jspContainer {
             padding-top: 15px;
             .jspPane {
-                top: 15px !important;
+                top: 0 !important;
+                margin-left: 0 !important;
+            }
+            .jspVerticalBar{
+                display: none;
             }
         }
         .gradebook-student-column-average {

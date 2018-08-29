@@ -7,6 +7,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 initialize: function (options) {
                     var self = this;
                     var _request = 0;
+                    var currentScrollSize;
+                    var layoutTimeout;
+                    this.scrollSize = 0;
                     this.resizeTimer;
                     this.xhrs = [];
                     this._subviews = [];
@@ -18,14 +21,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.gradebook = options.gradebook;
                     this.listenTo(self.gradebook.students, 'add remove', self.render);
                     this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
-                    this.listenTo(self.gradebook.assignments, 'add remove change:assign_order change:assign_category', self.render);
-                    this.listenTo(self.gradebook.assignments, 'change:assign_grade_type', self.render);
-                    this.listenTo(self.gradebook.assignments, 'change:total_weight', self.render);
+                    this.listenTo(self.gradebook.assignments, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.assignments, 'change', self.handleAssignmentChanges);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
                     
                     this.render();
+                    this.adjustCellWidths();
+                    this.postLoadActions();
 
                     $(window).on('resize', function (e) {
 
@@ -55,7 +59,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
                 },
-                render: function () {
+                render: function (layout) {
+                    
+                    console.log('GradeBookView render');
+
+                    if(layout === undefined){
+                        layout = false;
+                    }
+
                     var self = this;
                     this.clearSubViews();
                     this.renderControl = 0;
@@ -127,10 +138,24 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             });
                             break;
                     }
-                    this.filterAssignments();
-                    this.adjustCellWidths();
-                    this.postLoadActions();
+
+                    this.filterAssignments();    
+                    
+                    if(layout === true){
+                        if(typeof layoutTimeout !== 'undefined'){
+                            clearTimeout(layoutTimeout);
+                        }
+                        layoutTimeout = setTimeout(this.layout, 10, this);
+                    }
+
                     return this;
+                },
+                layout: function(self){
+
+                    console.log('layout');
+                    self.adjustCellWidths();
+                    self.postLoadActions();
+
                 },
                 filterAssignments: function () {
                     var _x = $('#filter-assignments-select').val();
@@ -266,6 +291,20 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     });
                     this.gradebook.sort_key = 'cell';
                     this.render();
+                },
+                handleAssignmentUpdates: function (ev){
+
+                    console.log('handleAssignmentUpdates', ev);
+
+                    if(ev.changed.length){
+                        this.render(true);
+                    }
+                    
+                },
+                handleAssignmentChanges: function(ev){
+                    console.log('handleAssignmentChanges', ev);
+                    this.render(true);
+                
                 },
                 close: function () {
                     this.clearSubViews();

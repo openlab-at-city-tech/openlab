@@ -338,8 +338,9 @@ span.twitter-typeahead {
   color: #0073aa;
   padding-right: 42px;
   position: absolute;
-  left: -102px;
+  right: 150px;
   top: 6px;
+  width: 118px;
 }
 .action-buttons-wrapper #savingStatus.saving {
   display: block;
@@ -403,6 +404,10 @@ span.twitter-typeahead {
 .table-wrapper .table {
   margin-bottom: 0;
 }
+.table-wrapper #an-gradebook-container {
+  top: 15px;
+  position: relative;
+}
 .table-wrapper .pinned {
   position: absolute;
   display: block;
@@ -453,7 +458,7 @@ span.twitter-typeahead {
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive.download-csv,
 .table-wrapper .pinned #students-pinned td.student-tools.download-csv {
   position: relative;
-  width: 19.685%;
+  width: 7.97448%;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -483,7 +488,11 @@ span.twitter-typeahead {
   padding-top: 15px;
 }
 .table-wrapper .scrollable .jspContainer .jspPane {
-  top: 15px !important;
+  top: 0 !important;
+  margin-left: 0 !important;
+}
+.table-wrapper .scrollable .jspContainer .jspVerticalBar {
+  display: none;
 }
 .table-wrapper .scrollable .gradebook-student-column-average {
   display: none !important;

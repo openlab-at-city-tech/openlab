@@ -47,6 +47,18 @@ module.exports = function(grunt) {
 				],
 				dest: "js/lib/jscrollpane/jscrollpane.dist.js"
 			},
+			csselementqueries: {
+				filter: checkFilePath,
+				nonull: true,
+				options: {
+					separator: ";"
+				},
+				src: [
+					"node_modules/css-element-queries/src/ResizeSensor.js",
+					"node_modules/css-element-queries/src/ElementQueries.js"
+				],
+				dest: "js/lib/css-element-queries/css.element.queries.dist.js"
+			},
 			vendorcss: {
 				filter: checkFilePath,
 				nonull: true,
@@ -72,7 +84,8 @@ module.exports = function(grunt) {
 						chart: "lib/chart/Chart.min",
 						"bootstrap3-typeahead":
 							"lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
-						jscrollpane: "lib/jscrollpane/jscrollpane.dist"
+						jscrollpane: "lib/jscrollpane/jscrollpane.dist",
+						csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 					},
 					shim: {
 						bootstrap: {

@@ -11,7 +11,8 @@ oplbgb_require_config = {
 		bootstrap: "lib/bootstrap/js/bootstrap.min",
 		chart: "lib/chart/Chart.min",
 		"bootstrap3-typeahead": "lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
-		jscrollpane: "lib/jscrollpane/jscrollpane.dist"
+        jscrollpane: "lib/jscrollpane/jscrollpane.dist",
+        csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 	},
 	shim: {
 		bootstrap: {
@@ -40,16 +41,17 @@ define("underscore", [], function() {
 
 window.oplbGlobals = window.oplbGlobals || {};
 window.oplbGlobals.total_weight = 0;
-window.oplbGlobals.saveStatusElem = {};
 
 var oldBackboneSync = Backbone.sync;
+var savingStatus;
 
 // Override Backbone.Sync
 Backbone.sync = function(method, model, options) {
-    window.oplbGlobals.saveStatusElem = jQuery('#savingStatus');
+    
+    savingStatus = jQuery('#savingStatus');
 
-    if (window.oplbGlobals.saveStatusElem.length) {
-        window.oplbGlobals.saveStatusElem.removeClass('hidden');
+    if (savingStatus.length) {
+        savingStatus.removeClass('hidden');
     }
 
 	//globally add nonce
@@ -63,20 +65,18 @@ var currentSync = Backbone.sync;
 
 var loggingSync = function(method, model, options){
     var promise = currentSync(method, model, options);
-    window.oplbGlobals.saveStatusElem = jQuery('#savingStatus');
+    savingStatus = jQuery('#savingStatus');
 
-    console.log('promise in Backbone.sync', promise);
-    
 	promise.done(function() {
         console.log('done ajax', this);
-        if (window.oplbGlobals.saveStatusElem.length) {
-            window.oplbGlobals.saveStatusElem.addClass('hidden');
+        if (savingStatus.length) {
+            savingStatus.addClass('hidden');
         }
 	});
 	promise.fail(function() {
         console.log('problem ajax', this);
-        if (window.oplbGlobals.saveStatusElem.length) {
-            window.oplbGlobals.saveStatusElem.addClass('hidden');
+        if (savingStatus.length) {
+            savingStatus.addClass('hidden');
         }
     });
     
