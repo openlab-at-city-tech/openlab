@@ -105,6 +105,7 @@ add_filter(
 			'MAT1275-F18-Shaver'         => 'sshaver@citytech.cuny.edu',
 			'MAT1275-F18-Yeeda-12PM'     => 'vyeeda@citytech.cuny.edu',
 			'MAT1275-F18-Yeeda-9AM'      => 'vyeeda@citytech.cuny.edu',
+			'MAT1275-F18-Zeng'           => 'szeng@citytech.cuny.edu',
 			'MAT1375-F18-Frankel'        => 'rf26@nyu.edu',
 			'MAT1375-F18-Ghezzi'         => 'lghezzi@citytech.cuny.edu',
 			'MAT1375-F18-Kan'            => 'bkan@citytech.cuny.edu',
