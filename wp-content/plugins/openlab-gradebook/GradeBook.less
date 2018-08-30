@@ -421,7 +421,7 @@ span.twitter-typeahead {
         color: #0073aa;
         padding-right: 42px;
         position: absolute;
-        right: 150px;
+        right: 180px;
         top: 6px;
         width: 118px;
         &.saving{
@@ -435,6 +435,13 @@ span.twitter-typeahead {
             animation: ellipsis steps(4, end) 1200ms infinite;
             content: "\2026";
             width: 0px;
+        }
+        @media (max-width: 767px){
+            right: 21px;
+            top: -34px;
+        }
+        @media (max-width: 479px){
+            top: -42px;
         }
     }
 }
@@ -572,6 +579,7 @@ span.twitter-typeahead {
         overflow: visible !important;
         .jspContainer {
             padding-top: 15px;
+            height: 29px !important;
             .jspPane {
                 top: 0 !important;
                 margin-left: 0 !important;

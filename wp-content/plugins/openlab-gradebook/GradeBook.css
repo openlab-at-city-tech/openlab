@@ -341,7 +341,7 @@ span.twitter-typeahead {
   color: #0073aa;
   padding-right: 42px;
   position: absolute;
-  right: 150px;
+  right: 180px;
   top: 6px;
   width: 118px;
 }
@@ -356,6 +356,17 @@ span.twitter-typeahead {
   animation: ellipsis steps(4, end) 1200ms infinite;
   content: "\2026";
   width: 0px;
+}
+@media (max-width: 767px) {
+  .action-buttons-wrapper #savingStatus {
+    right: 21px;
+    top: -34px;
+  }
+}
+@media (max-width: 479px) {
+  .action-buttons-wrapper #savingStatus {
+    top: -42px;
+  }
 }
 .tt-hint {
   display: block;
@@ -489,6 +500,7 @@ span.twitter-typeahead {
 }
 .table-wrapper .scrollable .jspContainer {
   padding-top: 15px;
+  height: 29px !important;
 }
 .table-wrapper .scrollable .jspContainer .jspPane {
   top: 0 !important;

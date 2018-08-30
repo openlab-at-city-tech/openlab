@@ -8,7 +8,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var self = this;
                     var _request = 0;
                     var currentScrollSize;
-                    var layoutTimeout;
+                    this.studentHeader = '';
                     this.scrollSize = 0;
                     this.resizeTimer;
                     this.xhrs = [];
@@ -19,17 +19,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.course = options.course;
                     this.renderControl = 0;
                     this.gradebook = options.gradebook;
-                    this.listenTo(self.gradebook.students, 'add remove', self.render);
-                    this.listenTo(self.gradebook.cells, 'add remove change:assign_order', self.render);
-                    this.listenTo(self.gradebook.assignments, 'add', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.students, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.cells, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.assignments, 'add remove', self.handleAssignmentUpdates);
                     this.listenTo(self.gradebook.assignments, 'change', self.handleAssignmentChanges);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
+                    this.initRender();
                     this.render();
-                    this.adjustCellWidths();
-                    this.postLoadActions();
 
                     $(window).on('resize', function (e) {
 
@@ -59,18 +58,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
                 },
-                render: function (layout) {
-                    
-                    console.log('GradeBookView render');
+                initRender: function(){
 
-                    if(layout === undefined){
-                        layout = false;
-                    }
+                    console.log('Init Render');
 
+                    this.scrollSize = 0;
                     var self = this;
                     this.clearSubViews();
                     this.renderControl = 0;
-                    var course = this.course;
                     var _x = _.map(self.gradebook.assignments.models, function (model) {
                         return model.get('assign_category').trim();
                     });
@@ -81,9 +76,54 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     var compiled = template({course: self.course, assign_categories: _assign_categories, role: this.gradebook.role, total_weight: totalWeight, assign_length: self.gradebook.assignments.length});
                     $('#wpbody-content').append(self.$el.html(compiled));
+                    
+                    var studentHeaderTemplate = _.template($('#gradebook-interface-template-student-header').html());
+                    var compiledStudentHeader = studentHeaderTemplate({role: this.gradebook.role});
+                    self.$el.find('#students-header tr').append(compiledStudentHeader);
+                    this.studentHeader = compiledStudentHeader;
+
                     $('#filter-assignments-select').val(this.filter_option);
+
+                    new ResizeSensor(jQuery('#an-gradebook-container #students-header'), function(){
+                        console.log('table resize');
+                        self.handleTableResize();
+
+                    });
+
+                    return this;
+                },
+                handleTableResize: function(){
+
+                    this.adjustCellWidths();
+                    if (typeof this.scrollObj.data !== 'undefined') {
+                        var jsAPI = this.scrollObj.data('jsp');
+
+                        if (typeof jsAPI !== 'undefined') {
+
+                            currentScrollSize = $('#an-gradebook-container').width();
+
+                            console.log('container widths after resize', parseInt(this.scrollSize), parseInt(currentScrollSize));
+
+                                if(parseInt(this.scrollSize) !== parseInt(currentScrollSize)){
+                                    console.log('reinitialize', jsAPI.getContentPane());
+                                    this.scrollSize = currentScrollSize;
+                                }
+
+                        }
+                    }
+
+                },
+                render: function () {
+                    
+                    //console.log('GradeBookView render');
+
+                    var self = this;
+
                     switch (this.gradebook.sort_key) {
                         case 'cell':
+                            $('#students').html('');
+                            $('#students-pinned').html('');
+                            $('#students-header tr').html(this.studentHeader);
                             _.each(this.sort_column, function (cell) {
                                 var view = new StudentView({
                                     model: self.gradebook.students.get(cell.get('uid')), course: self.course, gradebook: self.gradebook, options: self.options
@@ -117,6 +157,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             });
                             break;
                         case 'student':
+                            $('#students').html('');
+                            $('#students-pinned').html('');
+                            $('#students-header tr').html(this.studentHeader);
                             _.each(this.gradebook.sort_column.models, function (student) {
                                 var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
                                 self._subviews.push(view);
@@ -139,33 +182,25 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             break;
                     }
 
-                    this.filterAssignments();    
-                    
-                    if(layout === true){
-                        if(typeof layoutTimeout !== 'undefined'){
-                            clearTimeout(layoutTimeout);
-                        }
-                        layoutTimeout = setTimeout(this.layout, 10, this);
-                    }
+                    this.filterAssignments();
 
                     if(this.scrollSize === 0){
                         console.log('sorting');
-                        this.scrollSize = 100;
+                        this.scrollSize = this.$el.find('#an-gradebook-container').width();
                         this.gradebook.sort_key = 'student';
                         this.gradebook.students.sort_key = 'last_name';
                         this.gradebook.students.sort_direction = 'desc';
                         this.gradebook.students.sort();
                         this.render();
+
+                        this.scrollObj = $('.table-wrapper .scrollable')
+                            .bind('jsp-initialised', this.calculateScrollBarPosition)
+                            .jScrollPane();
+
+                        $('[data-toggle="tooltip"]').tooltip();
                     }
 
                     return this;
-                },
-                layout: function(self){
-
-                    console.log('layout');
-                    self.adjustCellWidths();
-                    self.postLoadActions();
-
                 },
                 filterAssignments: function () {
                     var _x = $('#filter-assignments-select').val();
@@ -227,19 +262,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
 
                 },
-                postLoadActions: function () {
-
-                    $('[data-toggle="tooltip"]').tooltip();
-                    this.scrollObj = $('.table-wrapper .scrollable')
-                            .bind('jsp-initialised', this.calculateScrollBarPosition)
-                            .jScrollPane();
-
-                },
                 calculateScrollBarPosition: function (event, isScrollable) {
 
                     var targetTable = $('#an-gradebook-container');
                     var scrollContainerElem = targetTable.closest('.jspContainer');
+                    $('#an-gradebook-container').css('width', 'auto');
+
                     if (targetTable.height() < 500) {
+
+                        console.log('targetTable.height', targetTable.height());
 
                         var targetTable_padding = 500 - targetTable.height();
 
@@ -257,9 +288,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     console.log('scrollContainerDims', scrollContainerDims);
 
-                    scrollContainerElem.css({
-                        'height' : (scrollContainerDims.height + 29) + 'px'
-                    });
+                    // scrollContainerElem.css({
+                    //     'height' : (scrollContainerDims.height + 29) + 'px'
+                    // });
 
                 },
                 addAssignment: function (ev) {
@@ -304,14 +335,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 handleAssignmentUpdates: function (ev){
 
-                    console.log('handleAssignmentUpdates', ev, ev._events)  ;
+                    //console.log('handleAssignmentUpdates', ev, ev._events)  ;
 
-                    this.render(true);
+                    this.initRender();
+                    this.render();
                     
                 },
                 handleAssignmentChanges: function(ev){
-                    console.log('handleAssignmentChanges', ev);
-                    this.render(true);
+                    //console.log('handleAssignmentChanges', ev);
+                    this.render();
                 
                 },
                 close: function () {

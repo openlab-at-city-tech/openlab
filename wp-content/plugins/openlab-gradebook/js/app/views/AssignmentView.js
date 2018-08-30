@@ -144,7 +144,10 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                                         });
                                         for (i = _x; i < _y.get('assign_order'); i++) {
                                             var _z = self.gradebook.assignments.findWhere({assign_order: i + 1});
-                                            _z.save({assign_order: i});
+
+                                            if(typeof _z !== 'undefined'){
+                                                _z.save({assign_order: i});
+                                            }
                                         }
                                     }
 

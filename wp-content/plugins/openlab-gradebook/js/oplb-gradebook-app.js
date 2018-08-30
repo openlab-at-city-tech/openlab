@@ -68,13 +68,13 @@ var loggingSync = function(method, model, options){
     savingStatus = jQuery('#savingStatus');
 
 	promise.done(function() {
-        console.log('done ajax', this);
+        //console.log('done ajax', this);
         if (savingStatus.length) {
             savingStatus.addClass('hidden');
         }
 	});
 	promise.fail(function() {
-        console.log('problem ajax', this);
+        //console.log('problem ajax', this);
         if (savingStatus.length) {
             savingStatus.addClass('hidden');
         }
