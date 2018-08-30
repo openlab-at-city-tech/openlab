@@ -107,6 +107,19 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                 if(parseInt(this.scrollSize) !== parseInt(currentScrollSize)){
                                     console.log('reinitialize', jsAPI.getContentPane());
                                     this.scrollSize = currentScrollSize;
+                                } else {
+
+                                    var scrollContainerElem = $('#an-gradebook-container').closest('.jspContainer');
+
+                                    var scrollContainerDims = {
+                                        'height': scrollContainerElem.height()
+                                    }
+                
+                                    console.log('scrollContainerDims', scrollContainerDims);
+                
+                                    scrollContainerElem.css({
+                                        'max-height' : (scrollContainerDims.height + 29) + 'px'
+                                    }); 
                                 }
 
                         }
@@ -288,9 +301,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     console.log('scrollContainerDims', scrollContainerDims);
 
-                    // scrollContainerElem.css({
-                    //     'height' : (scrollContainerDims.height + 29) + 'px'
-                    // });
+                    scrollContainerElem.css({
+                        'height' : (scrollContainerDims.height + 29) + 'px'
+                    });
 
                 },
                 addAssignment: function (ev) {
