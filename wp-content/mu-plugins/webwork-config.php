@@ -82,6 +82,7 @@ add_filter(
 			'MAT1275-F18-Berglund'       => 'rberglund@citytech.cuny.edu',
 			'MAT1275-F18-Brenord'        => 'dbrenord@citytech.cuny.edu',
 			'MAT1275-F18-Calinescu'      => 'ccalinescu@citytech.cuny.edu',
+			'MAT1275-F18-DOrazio'        => 'ddorazio@citytech.cuny.edu',
 			'MAT1275-F18-Duvvuri-10AM'   => 'vduvvuri@citytech.cuny.edu',
 			'MAT1275-F18-Duvvuri-8AM'    => 'vduvvuri@citytech.cuny.edu',
 			'MAT1275-F18-Essien'         => 'sessien@citytech.cuny.edu',
