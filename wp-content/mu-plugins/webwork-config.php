@@ -78,6 +78,7 @@ add_filter(
 			'MAT1275EN-S18-Parker'       => 'kparker@citytech.cuny.edu',
 
 			'MAT1275-F18-Aqil'           => 'maqil@citytech.cuny.edu',
+			'MAT1275-F18-Barthelemy'     => 'nbarthelemy@citytech.cuny.edu',
 			'MAT1275-F18-Beck'           => 'mbeck@citytech.cuny.edu',
 			'MAT1275-F18-Berglund'       => 'rberglund@citytech.cuny.edu',
 			'MAT1275-F18-Brenord'        => 'dbrenord@citytech.cuny.edu',
