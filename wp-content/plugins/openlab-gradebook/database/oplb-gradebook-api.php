@@ -1088,7 +1088,8 @@ class oplb_gradebook_api
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, $weights);
+        //removing weights for now
+        //fputcsv($output, $weights);
         fputcsv($output, $column_headers);
 
         $final_rows = array();
