@@ -19,9 +19,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.course = options.course;
                     this.renderControl = 0;
                     this.gradebook = options.gradebook;
-                    this.listenTo(self.gradebook.students, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.students, 'add', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.students, 'remove', self.handleDelete);
                     this.listenTo(self.gradebook.cells, 'add remove', self.handleAssignmentUpdates);
-                    this.listenTo(self.gradebook.assignments, 'add remove', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.cells, 'remove', self.handleDelete);
+                    this.listenTo(self.gradebook.assignments, 'add', self.handleAssignmentUpdates);
+                    this.listenTo(self.gradebook.assignments, 'remove', self.handleDelete);
                     this.listenTo(self.gradebook.assignments, 'change', self.handleAssignmentChanges);
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
@@ -358,6 +361,11 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     //console.log('handleAssignmentChanges', ev);
                     this.render();
                 
+                },
+                handleDelete: function(ev){
+                    console.log('handleDelete');
+                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
+                    this.render();
                 },
                 close: function () {
                     this.clearSubViews();

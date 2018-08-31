@@ -429,7 +429,7 @@ span.twitter-typeahead {
   top: 15px;
   background: #fff;
   width: 36%;
-  border-right: 1px solid #ccc;
+  border-right: 2px solid #ccc;
   border-left: 1px solid #ccc;
   z-index: 200;
 }
