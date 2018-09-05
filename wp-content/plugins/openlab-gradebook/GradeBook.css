@@ -467,12 +467,13 @@ span.twitter-typeahead {
 .table-wrapper .pinned #students-pinned td.student-tools {
   overflow: visible;
   padding: 12px 8px;
-  width: 15%;
+  width: 16.5%;
+  min-width: 50px;
 }
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive.download-csv,
 .table-wrapper .pinned #students-pinned td.student-tools.download-csv {
   position: relative;
-  width: 7.97448%;
+  width: 16.5%;
   padding: 0;
   margin: 0;
   text-align: center;
