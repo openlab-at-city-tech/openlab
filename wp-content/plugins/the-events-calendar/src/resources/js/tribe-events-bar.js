@@ -28,10 +28,10 @@ var tribe_events_bar_action;
 		// @ifdef DEBUG
 		if ( dbug ) {
 			if ( !$().bootstrapDatepicker ) {
-				debug.warn( 'TEC Debug: vendor bootstrapDatepicker was not loaded before its dependant file tribe-events-bar.js' );
+				tec_debug.warn( 'TEC Debug: vendor bootstrapDatepicker was not loaded before its dependant file tribe-events-bar.js' );
 			}
 			if ( !$().placeholder ) {
-				debug.warn( 'TEC Debug: vendor placeholder was not loaded before its dependant file tribe-events-bar.js' );
+				tec_debug.warn( 'TEC Debug: vendor placeholder was not loaded before its dependant file tribe-events-bar.js' );
 			}
 		}
 		// @endif
@@ -107,7 +107,7 @@ var tribe_events_bar_action;
 				}
 
 				// @ifdef DEBUG
-				dbug && debug.info( 'TEC Debug: bootstrapDatepicker was just initialized in "tribe-events-bar.js" on:', $tribedate );
+				dbug && tec_debug.info( 'TEC Debug: bootstrapDatepicker was just initialized in "tribe-events-bar.js" on:', $tribedate );
 				// @endif
 
 				td.datepicker_opts = {
@@ -176,6 +176,9 @@ var tribe_events_bar_action;
 		var $currentli  = $tribebarviews.find( 'li[data-view=' + currentview + ']' );
 
 		$currentli.prependTo( $tribebarviews ).addClass( 'tribe-bar-active' );
+
+		// Disable the select
+		$tribebarselect.hide();
 
 		// toggle the views dropdown
 		$tribebar.on( 'click', '#tribe-bar-views', function( e ) {
@@ -294,22 +297,16 @@ var tribe_events_bar_action;
 
 			tribe_events_bar_action = 'change_view';
 
-			if ( ts.view === 'month' && $tribedate.length ) {
+			if ( 'month' === ts.view && $tribedate.length ) {
 				var dp_date = $tribedate.val();
 				var day     = tf.get_day();
 
-				if ( ts.datepicker_format !== '0' ) {
-					if ( day.length ) {
-						dp_date = tribeDateFormat( $tribedate.bootstrapDatepicker( 'getDate' ), 'tribeMonthQuery' );
-						$tribedate.val( dp_date + day );
-					}
-					else {
-						$tribedate.val( '' );
-					}
-
+				if ( '0' != ts.datepicker_format ) {
+					dp_date = tribeDateFormat( $tribedate.bootstrapDatepicker( 'getDate' ), 'tribeMonthQuery' );
+					$tribedate.val( dp_date + day );
 				}
 				else {
-					if ( dp_date.length === 7 ) {
+					if ( 7 === dp_date.length ) {
 						$tribedate.val( dp_date + day );
 					}
 				}
@@ -331,8 +328,8 @@ var tribe_events_bar_action;
 
 			$inputs.each( function() {
 				var $this = $( this );
-				if ( $this.val() && $this.val().length && !$this.hasClass( 'tribe-no-param' ) ) {
-					if ( ts.view !== 'month' && '0' !== ts.datepicker_format && $this.is( $tribedate ) ) {
+				if ( $this.val() && $this.val().length && ! $this.hasClass( 'tribe-no-param' ) ) {
+					if ( 'month' !== ts.view  && '0' !== ts.datepicker_format && $this.is( $tribedate ) ) {
 
 						ts.url_params[ $this.attr( 'name' ) ] = tribeDateFormat( $this.bootstrapDatepicker( 'getDate' ), 'tribeQuery' );
 
@@ -407,7 +404,7 @@ var tribe_events_bar_action;
 		} );
 
 		// @ifdef DEBUG
-		dbug && debug.info( 'TEC Debug: tribe-events-bar.js successfully loaded' );
+		dbug && tec_debug.info( 'TEC Debug: tribe-events-bar.js successfully loaded' );
 		// @endif
 	} );
 

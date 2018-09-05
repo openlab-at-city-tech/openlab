@@ -2,6 +2,26 @@
 
 == Changelog ==
 
+= [4.7.19]  2018-08-22 =
+* Fix - Add the following datepicker formats to the validation script: YYYY.MM.DD, MM.DD.YYYY, DD.MM.YYYY [102815]
+* Add - Added the `Tribe__Process__Queue::delete_all_queues` method [111856]
+* Tweak - updated some foundation code for the Tickets REST API [108021]
+* Tweak - Event Aggregator Add-On text due to the removal of Facebook Imports [111729]
+
+= [4.7.18] 2018-08-01 =
+* Fix - Add `target="_blank"` to repository links in the Help Page [107974]
+* Fix - Change 3rd parameter to be relative path to plugin language files instead of the mofile for load_plugin_textdomain(), thanks to jmortell [63144]
+* Tweak - Deprecate the usage of old asset loading methods [40267]
+
+= [4.7.17] 2018-07-10 =
+* Add - Method to sanitize a multidimensional array [106000]
+* Add - New is_not_null and is_null methods for Tribe__Validator__Base [109482]
+* Tweak - Added new filter `tribe_plugins_get_list` to give an opportunity to modify the list of tribe plugins [69581]
+
+= [4.7.16] 2018-06-20 =
+* Fix - Fixed a PHP warning related to the RSS feed in the Help page [108398]
+* Tweak - Add notices related to PHP minimum versions [107852]
+
 = [4.7.15] 2018-06-04 =
 * Add - Method to parse the Global ID string [104379]
 * Add - Load tribe-common script to prevent undefined function errors with tribe-dropdowns [107610]

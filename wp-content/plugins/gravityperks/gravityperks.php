@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Perks
  * Plugin URI: http://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.0.7
+ * Version: 2.0.11
  * Author: Gravity Wiz
  * Author URI: http://gravitywiz.com/
  * License: GPL2
@@ -11,7 +11,7 @@
  * Domain Path: /languages
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.0.7' );
+define( 'GRAVITY_PERKS_VERSION', '2.0.11' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -211,7 +211,11 @@ class GravityPerks {
 		    define( 'GW_DOMAIN', 'gravitywiz.com' );
 	    }
 
-	    define( 'GW_URL', 'http://' . GW_DOMAIN );
+	    if( ! defined( 'GW_PROTOCOL' ) ) {
+		    define( 'GW_PROTOCOL', 'https' );
+	    }
+
+	    define( 'GW_URL', GW_PROTOCOL . '://' . GW_DOMAIN );
 
 	    if( ! defined( 'GW_STORE_URL' ) ) {
 		    define( 'GW_STORE_URL', GW_URL . '/gravity-perks/' ); // @used storefront_api.php
@@ -343,7 +347,7 @@ class GravityPerks {
     private static function setup() {
 
         // force license to be revalidated
-        self::flush_license();
+        self::flush_license(true);
 
         update_option( 'gperks_version', self::$version );
 
@@ -722,7 +726,7 @@ class GravityPerks {
 		    return $actions;
 	    }
 
-	    if( self::has_valid_license() && !self::has_available_perks() && empty($api->download_link) ) {
+	    if( empty($api->download_link) && self::has_valid_license() && !self::has_available_perks() ) {
 		    $actions['upgrade_license'] = '<div class="notice notice-info gp-plugin-action-perk-limit">
 		        <p>
 		            You&lsquo;ve reached your perk registration limit. Upgrade your license to install more perks.
@@ -1073,11 +1077,16 @@ class GravityPerks {
         return false;
     }
 
-    public static function flush_license() {
-        delete_transient( 'gwp_has_valid_license' );
-        delete_transient( 'gwp_license_data' );
-        delete_transient( 'gperks_get_perks' );
-        delete_transient( 'gperks_get_dashboard_announcements' );
+    public static function flush_license( $hard = false ) {
+	    delete_transient( 'gwp_license_data' );
+
+	    if ( ! $hard ) {
+		    return;
+	    }
+
+	    delete_transient( 'gwp_has_valid_license' );
+	    delete_transient( 'gperks_get_perks' );
+	    delete_transient( 'gperks_get_dashboard_announcements' );
     }
 
     public static function get_license_key() {
@@ -1170,11 +1179,14 @@ class GravityPerks {
 			return $return;
 	    }
 
-		foreach( $submenu['gf_edit_forms'] as &$item ) {
-			if( $item[0] == __( 'Perks', 'gravityperks' ) ) {
-				$item[0] .= ' <span class="update-plugins count-1"><span class="plugin-count">1</span></span>';
-			}
-		}
+	    if( isset( $submenu['gf_edit_forms'] ) && is_array( $submenu['gf_edit_forms'] ) ) {
+		    foreach( $submenu['gf_edit_forms'] as &$item ) {
+			    if( $item[0] == __( 'Perks', 'gravityperks' ) ) {
+				    $item[0] .= ' <span class="update-plugins count-1"><span class="plugin-count">1</span></span>';
+			    }
+		    }
+	    }
+
 
 	    return $return;
     }
@@ -1926,7 +1938,8 @@ class GP_Late_Static_Binding {
 		$this->args = wp_parse_args( $args, array(
 			'form_id' => 0,
 			'message' => '',
-			'class' => ''
+			'class' => '',
+			'value' => ''
 		) );
 	}
 
@@ -1941,6 +1954,10 @@ class GP_Late_Static_Binding {
 	public function Perk_array_push( $array ) {
 		$array[] = $this->args['value'];
 		return $array;
+	}
+
+	public function Perk_value_pass_through( $return ) {
+		return $this->args['value'];
 	}
 
 }

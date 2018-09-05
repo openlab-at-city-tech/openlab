@@ -3,7 +3,7 @@
 Plugin Name: Category Order and Taxonomy Terms Order
 Plugin URI: http://www.nsp-code.com
 Description: Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
-Version: 1.5.3.2
+Version: 1.5.4
 Author: Nsp-Code
 Author URI: http://www.nsp-code.com
 Author Email: electronice_delphi@yahoo.com
@@ -40,7 +40,8 @@ Domain Path: /languages/
             
         }
 
-    include_once(TOPATH . '/include/functions.php');
+    include_once    (   TOPATH . '/include/functions.php'   );
+    include_once    (   TOPATH . '/include/addons.php'  );
         
     add_action( 'plugins_loaded', 'to_load_textdomain'); 
     function to_load_textdomain() 
@@ -122,7 +123,10 @@ Domain Path: /languages/
 
     function TO_applyorderfilter($orderby, $args)
         {
-	        $options = tto_get_settings();
+	        if ( apply_filters('to/get_terms_orderby/ignore', FALSE, $orderby, $args) )
+                return $orderby;
+            
+            $options = tto_get_settings();
             
             //if admin make sure use the admin setting
             if (is_admin())
@@ -147,6 +151,9 @@ Domain Path: /languages/
     add_filter('get_terms_orderby', 'TO_get_terms_orderby', 1, 2);
     function TO_get_terms_orderby($orderby, $args)
         {
+            if ( apply_filters('to/get_terms_orderby/ignore', FALSE, $orderby, $args) )
+                return $orderby;
+                
             if (isset($args['orderby']) && $args['orderby'] == "term_order" && $orderby != "term_order")
                 return "t.term_order";
                 
@@ -159,7 +166,7 @@ Domain Path: /languages/
             global $wpdb;
             
             if  ( ! wp_verify_nonce( $_POST['nonce'], 'update-taxonomy-order' ) )
-                die('wrong');
+                die();
              
             $data               = stripslashes($_POST['order']);
             $unserialised_data  = json_decode($data, TRUE);
