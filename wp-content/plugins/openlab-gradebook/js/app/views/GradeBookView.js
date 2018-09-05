@@ -25,6 +25,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.listenTo(self.gradebook.assignments, 'remove', _.debounce(_.bind(this.handleDelete, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
+                    this.listenTo(self.gradebook.assignments, 'change:assign_category', _.debounce(_.bind(this.initRender, this), 128));
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
