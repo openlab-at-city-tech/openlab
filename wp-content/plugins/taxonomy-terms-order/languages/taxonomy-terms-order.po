@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Category Order and Taxonomy Terms Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-22 19:40+0200\n"
-"PO-Revision-Date: 2018-02-22 19:40+0200\n"
+"POT-Creation-Date: 2018-06-07 21:24+0200\n"
+"PO-Revision-Date: 2018-06-07 21:24+0200\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: nsp-code <electronice_delphi@yahoo.com>\n"
 "Language: en\n"
@@ -15,40 +15,40 @@ msgstr ""
 "X-Generator: Poedit 1.5.5\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: taxonomy-terms-order.php:80
+#: taxonomy-terms-order.php:81
 msgid "Taxonomy Terms Order"
 msgstr ""
 
-#: taxonomy-terms-order.php:115 taxonomy-terms-order.php:117
-#: taxonomy-terms-order.php:119 include/interface.php:38
+#: taxonomy-terms-order.php:116 taxonomy-terms-order.php:118
+#: taxonomy-terms-order.php:120 include/interface.php:38
 msgid "Taxonomy Order"
 msgstr ""
 
-#: include/functions.php:88
+#: include/functions.php:80
 msgid ""
 "Did you find this plugin useful? Please support our work with a donation or "
 "write an article about this plugin in your blog with a link to our site"
 msgstr ""
 
-#: include/functions.php:89
+#: include/functions.php:81
 msgid "Did you know there is available an advanced version of this plug-in?"
 msgstr ""
 
-#: include/functions.php:89
+#: include/functions.php:81
 msgid "Read more"
 msgstr ""
 
-#: include/functions.php:90 include/functions.php:91
+#: include/functions.php:82 include/functions.php:83
 msgid "Check our"
 msgstr ""
 
-#: include/functions.php:90
+#: include/functions.php:82
 msgid ""
 "plugin which allow to custom sort categories and custom taxonomies terms per "
 "post basis"
 msgstr ""
 
-#: include/functions.php:91
+#: include/functions.php:83
 msgid "plugin which allow to custom sort all posts, pages, custom post types"
 msgstr ""
 
