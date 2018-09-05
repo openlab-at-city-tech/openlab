@@ -1,6 +1,24 @@
 
 # Changelog
 
+## 2.0.11
+
+	- Added GP_Late_Static_Binding::Perk_value_pass_through() method.
+
+## 2.0.10
+
+	- Added support to disable API SSL verification with “edd_sl_api_request_verify_ssl” filter
+
+## 2.0.9
+
+	- Fixed fatal error that could occur when Gravity Forms was not loaded.
+
+## 2.0.8
+
+	- Fixed notice that could occur when Gravity Forms was deactivated.
+	- Improved Perk installation experience by reducing the number of calls to GravityWiz.com
+	- Updated API to use HTTPS
+
 ## 2.0.7
 
 	- Fixed fatal error that occurred when fetching announcements when Gravity Forms was not loaded and announcements were not cached.
