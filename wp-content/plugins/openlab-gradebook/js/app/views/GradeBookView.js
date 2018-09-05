@@ -8,7 +8,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var self = this;
                     var _request = 0;
                     var currentScrollSize;
-                    this.studentHeader = '';
+                    this.studentHeader;
                     this.scrollSize = 0;
                     this.resizeTimer;
                     this.xhrs = [];
@@ -19,19 +19,16 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.course = options.course;
                     this.renderControl = 0;
                     this.gradebook = options.gradebook;
-                    this.listenTo(self.gradebook.students, 'add', self.handleAssignmentUpdates);
-                    this.listenTo(self.gradebook.students, 'remove', self.handleDelete);
-                    this.listenTo(self.gradebook.cells, 'add remove', self.handleAssignmentUpdates);
-                    this.listenTo(self.gradebook.cells, 'remove', self.handleDelete);
-                    this.listenTo(self.gradebook.assignments, 'add', self.handleAssignmentUpdates);
-                    this.listenTo(self.gradebook.assignments, 'remove', self.handleDelete);
-                    this.listenTo(self.gradebook.assignments, 'change', self.handleAssignmentChanges);
+                    this.listenTo(self.gradebook.students, 'add remove', _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.cells, 'add remove',  _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'add',  _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'remove', _.debounce(_.bind(this.handleDelete, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'change',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
                     this.initRender();
-                    this.render();
 
                     $(window).on('resize', function (e) {
 
@@ -63,8 +60,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 initRender: function(){
 
-                    console.log('Init Render');
-
                     this.scrollSize = 0;
                     var self = this;
                     this.clearSubViews();
@@ -87,11 +82,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     $('#filter-assignments-select').val(this.filter_option);
 
-                    new ResizeSensor(jQuery('#an-gradebook-container #students-header'), function(){
-                        console.log('table resize');
-                        self.handleTableResize();
-
-                    });
+                    this.render();
 
                     return this;
                 },
@@ -105,11 +96,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                             currentScrollSize = $('#an-gradebook-container').width();
 
-                            console.log('container widths after resize', parseInt(this.scrollSize), parseInt(currentScrollSize));
-
                                 if(parseInt(this.scrollSize) !== parseInt(currentScrollSize)){
-                                    console.log('reinitialize', jsAPI.getContentPane());
                                     this.scrollSize = currentScrollSize;
+                                    jsAPI.destroy();
+                                    this.scrollObj = $('.table-wrapper .scrollable')
+                                    .bind('jsp-initialised', this.calculateScrollBarPosition)
+                                    .jScrollPane();
                                 } else {
 
                                     var scrollContainerElem = $('#an-gradebook-container').closest('.jspContainer');
@@ -117,8 +109,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                                     var scrollContainerDims = {
                                         'height': scrollContainerElem.height()
                                     }
-                
-                                    console.log('scrollContainerDims', scrollContainerDims);
                 
                                     scrollContainerElem.css({
                                         'max-height' : (scrollContainerDims.height + 29) + 'px'
@@ -130,8 +120,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                 },
                 render: function () {
-                    
-                    //console.log('GradeBookView render');
 
                     var self = this;
 
@@ -176,6 +164,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             $('#students').html('');
                             $('#students-pinned').html('');
                             $('#students-header tr').html(this.studentHeader);
+
                             _.each(this.gradebook.sort_column.models, function (student) {
                                 var view = new StudentView({model: student, course: self.course, gradebook: self.gradebook, options: self.options});
                                 self._subviews.push(view);
@@ -201,7 +190,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.filterAssignments();
 
                     if(this.scrollSize === 0){
-                        console.log('sorting');
                         this.scrollSize = this.$el.find('#an-gradebook-container').width();
                         this.gradebook.sort_key = 'student';
                         this.gradebook.students.sort_key = 'last_name';
@@ -214,6 +202,10 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             .jScrollPane();
 
                         $('[data-toggle="tooltip"]').tooltip();
+
+                        new ResizeSensor(jQuery('#an-gradebook-container #students-header'), function(){
+                            self.handleTableResize();
+                        });
                     }
 
                     return this;
@@ -286,8 +278,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     if (targetTable.height() < 500) {
 
-                        console.log('targetTable.height', targetTable.height());
-
                         var targetTable_padding = 500 - targetTable.height();
 
                         scrollContainerElem.css({
@@ -301,8 +291,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var scrollContainerDims = {
                         'height': scrollContainerElem.height()
                     }
-
-                    console.log('scrollContainerDims', scrollContainerDims);
 
                     scrollContainerElem.css({
                         'height' : (scrollContainerDims.height + 29) + 'px'
@@ -349,23 +337,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.gradebook.sort_key = 'cell';
                     this.render();
                 },
-                handleAssignmentUpdates: function (ev){
-
-                    //console.log('handleAssignmentUpdates', ev, ev._events)  ;
-
-                    this.initRender();
-                    this.render();
-                    
-                },
-                handleAssignmentChanges: function(ev){
-                    //console.log('handleAssignmentChanges', ev);
-                    this.render();
-                
-                },
                 handleDelete: function(ev){
-                    console.log('handleDelete');
                     this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
-                    this.render();
                 },
                 close: function () {
                     this.clearSubViews();
