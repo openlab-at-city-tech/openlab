@@ -61,8 +61,6 @@ $cminds_plugin_config = array(
     'plugin-changelog-url'        => CMTT_RELEASE_NOTES,
     'plugin-licensing-aliases'    => array( CMTT_LICENSE_NAME ),
     'plugin-compare-table'        => '
-              <div class="suite-package" style="padding-left:10px;"><h2>The premium version of this plugin is included in CreativeMinds All plugins suite:</h2><a href="https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/" target="_blank"><img src="' . plugin_dir_url( __FILE__ ) . 'CMWPPluginssuite.png"></a></div>
-            <hr style="width:1000px; height:3px;">
             <div class="pricing-table" id="pricing-table"><h2 style="padding-left:10px;">Upgrade The Tooltip Glossary Plugin:</h2>
                 <ul>
                     <li class="heading" style="background-color:red;">Current Edition</li>
@@ -71,11 +69,16 @@ $cminds_plugin_config = array(
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>A-Z Glossary Index <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Show an A-B-C navigation bar in the glossary index page"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>500 glossary terms <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Support all letters defined in UTF8 encoding including non latin characters"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>UTF8 characters Support <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="Limited to 500 terms in the index page"></span></li>
+                    <hr>
+                    Other CreativeMinds Offerings
+                    <hr>
+                 <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="blank"><img src="' . plugin_dir_url( __FILE__ ). 'views/Hound2.png"  width="220"></a><br><br><br>
+                <a href="https://www.cminds.com/store/cm-wordpress-plugins-yearly-membership/" target="blank"><img src="' . plugin_dir_url( __FILE__ ). 'views/banner_yearly-membership_220px.png"  width="220"></a><br>
                  </ul>
 
                 <ul>
                     <li class="heading">Pro<a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=Wordpress&utm_medium=Glossary" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
-                    <li class="price">$39.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" target="_blank"> >>> </a></span> <br /></li>
+                    <li class="price">$29.00<br /> <span style="font-size:14px;">(For one Year / Site)<br />Additional pricing options available <a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" target="_blank"> >>> </a></span> <br /></li>
                     <li class="action"><a href="https://www.cminds.com/af/4806?utm_source=WordPress&utm_medium=Glossary&edd_action=add_to_cart&download_id=693&wp_referrer=https://www.cminds.com/checkout/&edd_options[price_id]=2" style="font-size:18px;" target="_blank">Upgrade Now</a></li>
                      <li style="text-align:left;"><span class="dashicons dashicons-plus-alt"></span><span style="background-color:lightyellow">&nbsp;All Free Version Features </span><span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="All free features are supported in the pro"></span></li>
                     <li style="text-align:left;"><span class="dashicons dashicons-yes"></span>Unlimited glossary terms <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:green" title="While free version is limited to 500 terms the pro has no restriction and glossary can have even 10,000 terms "></span></li>
@@ -94,7 +97,7 @@ $cminds_plugin_config = array(
                     <li class="support" style="background-color:lightgreen; text-align:left; font-size:14px;"><span class="dashicons dashicons-yes"></span> One year of expert support <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="You receive 365 days of WordPress expert support. We will answer questions you have and also support any issue related to the plugin. We will also provide on-site support."></span><br />
                          <span class="dashicons dashicons-yes"></span> Unlimited product updates <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="During the license period, you can update the plugin as many times as needed and receive any version release and security update"></span><br />
                         <span class="dashicons dashicons-yes"></span> Plugin can be used forever <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose not to renew the plugin license, you can still continue to use it as long as you want."></span><br />
-                        <span class="dashicons dashicons-yes"></span> Save 35% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
+                        <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
                  </ul>
 
               <ul>
@@ -118,7 +121,7 @@ $cminds_plugin_config = array(
                     <li class="support" style="background-color:lightgreen; text-align:left; font-size:14px;"><span class="dashicons dashicons-yes"></span> One year of expert support <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="You receive 365 days of WordPress expert support. We will answer questions you have and also support any issue related to the plugin. We will also provide on-site support."></span><br />
                          <span class="dashicons dashicons-yes"></span> Unlimited product updates <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="During the license period, you can update the plugin as many times as needed and receive any version release and security update"></span><br />
                         <span class="dashicons dashicons-yes"></span> Plugin can be used forever <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose not to renew the plugin license, you can still continue to use it as long as you want."></span><br />
-                        <span class="dashicons dashicons-yes"></span> Save 35% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
+                        <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
                </ul>
                             <ul>
                     <li class="heading">Ecommerce<a href="https://www.cminds.com/store/tooltipglossary/af/4806?utm_source=WordPress&utm_medium=Glossary" style="float:right;font-size:11px;color:white;" target="_blank">More</a></li>
@@ -138,7 +141,7 @@ $cminds_plugin_config = array(
                     <li class="support" style="background-color:lightgreen; text-align:left; font-size:14px;"><span class="dashicons dashicons-yes"></span> One year of expert support <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="You receive 365 days of WordPress expert support. We will answer questions you have and also support any issue related to the plugin. We will also provide on-site support."></span><br />
                          <span class="dashicons dashicons-yes"></span> Unlimited product updates <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="During the license period, you can update the plugin as many times as needed and receive any version release and security update"></span><br />
                         <span class="dashicons dashicons-yes"></span> Plugin can be used forever <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose not to renew the plugin license, you can still continue to use it as long as you want."></span><br />
-                        <span class="dashicons dashicons-yes"></span> Save 35% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
+                        <span class="dashicons dashicons-yes"></span> Save 40% once renewing license <span class="dashicons dashicons-admin-comments cminds-package-show-tooltip" style="color:grey" title="Once license expires, If you choose to renew the plugin license you can do this anytime you choose. The renewal cost will be 35% off the product cost."></span></li>
               </ul>
 
 

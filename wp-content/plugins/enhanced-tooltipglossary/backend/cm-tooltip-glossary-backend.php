@@ -208,12 +208,12 @@ class CMTooltipGlossaryBackend
     {
         $content = '';
         $settingsTabsArrayBase = array(
-            '0'  => 'Upgrade',
+            '0' => 'Installation Guide',
             '1'  => 'General Settings',
             '2'  => 'Glossary Index Page',
             '3'  => 'Glossary Term',
             '4'  => 'Tooltip',
-            '99' => 'Installation Guide',
+            '99'  => 'Upgrade',
         );
 
         $settingsTabsArray = apply_filters('cmtt-settings-tabs-array', $settingsTabsArrayBase);
