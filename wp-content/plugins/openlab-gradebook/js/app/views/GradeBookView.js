@@ -21,8 +21,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.gradebook = options.gradebook;
                     this.listenTo(self.gradebook.students, 'add remove', _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.cells, 'add remove',  _.debounce(_.bind(this.render, this), 128));
-                    this.listenTo(self.gradebook.assignments, 'add',  _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'add',  _.debounce(_.bind(this.initRender, this), 128));
                     this.listenTo(self.gradebook.assignments, 'remove', _.debounce(_.bind(this.handleDelete, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'remove',  _.debounce(_.bind(this.initRender, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
                     this.listenTo(self.gradebook.assignments, 'change:assign_category', _.debounce(_.bind(this.initRender, this), 128));
