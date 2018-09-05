@@ -442,6 +442,9 @@ span.twitter-typeahead {
 .table-wrapper .pinned table th {
   padding: 15px 8px;
 }
+.table-wrapper .pinned td.student {
+  height: 59px;
+}
 .table-wrapper .pinned .student-grades {
   display: none;
 }
@@ -518,6 +521,9 @@ span.twitter-typeahead {
     position: relative;
     width: 250%;
   }
+}
+.table-wrapper .scrollable td.student-grades {
+  height: 59px;
 }
 .table-wrapper .scrollable .student-grades {
   min-width: 68px;
