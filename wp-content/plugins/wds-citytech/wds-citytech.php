@@ -943,8 +943,6 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '</td></tr>';
 
-	$return .= '<tr><td class="school-inputs" colspan="2">';
-
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
 	$checked_array = array( 'schools' => array(), 'departments' => array() );
@@ -976,11 +974,24 @@ function wds_load_group_type( $group_type ) {
 		}
 	}
 
-	$onclick = 'onclick="wds_load_group_departments();"';
+	$do_sod_selector = 'course' !== $group_type && 'Student' !== $account_type;
 
-	$schools = openlab_get_school_list();
-	foreach ( $schools as $school_key => $school_label ) {
-		$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
+	$return .= '<tr><td class="school-inputs" colspan="2">';
+
+	if ( ! $do_sod_selector ) {
+		$onclick = 'onclick="wds_load_group_departments();"';
+
+		$schools = openlab_get_school_list();
+		foreach ( $schools as $school_key => $school_label ) {
+			$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
+		}
+	} else {
+		ob_start();
+		openlab_sod_selector();
+		$selector .= ob_get_contents();
+		ob_end_clean();
+
+		$return .= $selector;
 	}
 
 	$return .= '</td>';
@@ -1003,15 +1014,17 @@ function wds_load_group_type( $group_type ) {
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
-	$return .= '<tr class="department-title">';
+	if ( ! $do_sod_selector ) {
+		$return .= '<tr class="department-title">';
 
-	$return .= '<td colspan="2" class="block-title italics">Department(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-		$return .= ' <span class="required">(required)</span>';
+		$return .= '<td colspan="2" class="block-title italics">Department(s)';
+		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
+			$return .= ' <span class="required">(required)</span>';
+		}
+		$return .= '</td></tr>';
+		$return .= '<tr class="departments"><td id="departments_html" colspan="2" aria-live="polite"></td>';
+		$return .= '</tr>';
 	}
-	$return .= '</td></tr>';
-	$return .= '<tr class="departments"><td id="departments_html" colspan="2" aria-live="polite"></td>';
-	$return .= '</tr>';
 
 	$return .= '</table></div></div>';
 

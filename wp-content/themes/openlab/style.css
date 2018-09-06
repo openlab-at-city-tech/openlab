@@ -9230,6 +9230,9 @@ input#group-request-send {
 .sod-selector label {
   font-weight: normal;
 }
+.sod-selector .checkbox-list-container li {
+  float: none;
+}
 .school-inputs ul {
   list-style-type: none;
   padding-left: 0;
