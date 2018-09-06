@@ -1713,3 +1713,63 @@ add_action( 'bp_after_group_details_creation_step', function() {
         openlab_group_sharing_settings_markup( 0 );
     }
 }, 4 );
+
+/**
+ * Save the group S/O/D settings after save.
+ *
+ * @param BP_Groups_Group $group
+ */
+function openlab_group_sod_save( $group ) {
+    if ( empty( $_POST['openlab-sod-selector-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_sod_selector', 'openlab-sod-selector-nonce' );
+
+    $map = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_departments',
+    );
+
+    foreach ( $map as $post_key => $meta_key ) {
+        $existing = groups_get_groupmeta( $group->id, $meta_key, false );
+
+        $posted = array();
+        if ( isset( $_POST[ $post_key ] ) ) {
+            $posted = wp_unslash( $_POST[ $post_key ] );
+        }
+
+        $to_delete = array_diff( $existing, $posted );
+        $to_add    = array_diff( $posted, $existing );
+
+        foreach ( $to_delete as $to_delete_value ) {
+            groups_delete_groupmeta( $group->id, $meta_key, $to_delete_value );
+        }
+
+        foreach ( $to_add as $to_add_value ) {
+            groups_add_groupmeta( $group->id, $meta_key, $to_add_value );
+        }
+    }
+}
+add_action( 'groups_group_after_save', 'openlab_group_sod_save' );
+
+/**
+ * Gets S/O/D data for a group.
+ *
+ * @param int $group_id
+ */
+function openlab_get_group_sod_data( $group_id ) {
+    $values = array();
+    $map    = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_departments',
+    );
+
+    foreach ( $map as $type_key => $meta_key ) {
+        $values[ $type_key ] = groups_get_groupmeta( $group_id, $meta_key, false );
+    }
+
+    return $values;
+}

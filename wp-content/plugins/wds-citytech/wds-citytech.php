@@ -945,7 +945,12 @@ function wds_load_group_type( $group_type ) {
 
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
-	$checked_array = array( 'schools' => array(), 'departments' => array() );
+	$checked_array = array(
+		'schools'     => array(),
+		'departments' => array(),
+		'offices'     => array(),
+	);
+
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
 		$account_type = strtolower( bp_get_profile_field_data( array(
 			'field' => 'Account Type',
@@ -986,8 +991,11 @@ function wds_load_group_type( $group_type ) {
 			$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
 		}
 	} else {
+		// S/O/D selector pre-selected values are stored differently.
+		$sod_selected = openlab_get_group_sod_data( bp_get_current_group_id() );
+
 		ob_start();
-		openlab_sod_selector();
+		openlab_sod_selector( $sod_selected );
 		$selector .= ob_get_contents();
 		ob_end_clean();
 
@@ -2783,3 +2791,103 @@ add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
 	$upload_dir = wp_upload_dir();
 	return $upload_dir['basedir'] . '/dkpdf-tmp';
 } );
+
+/**
+ * School/Office/Department selector markup.
+ */
+function openlab_sod_selector( $_checked = array() ) {
+    $checked = array_merge( array(
+        'schools'     => array(),
+        'offices'     => array(),
+        'departments' => array(),
+    ), $_checked );
+
+    $schools = openlab_get_school_list();
+    $offices = openlab_get_office_list();
+
+    // Flatten and alphabetize.
+    $_departments = openlab_get_entity_departments();
+    $departments  = array();
+    foreach ( $_departments as $_entity_slug => $_depts ) {
+        foreach ( $_depts as $_dept_slug => $_dept_value ) {
+            $_dept_value['parent'] = $_entity_slug;
+            $departments[ $_dept_slug ] = $_dept_value;
+        }
+    }
+
+    uasort( $departments, function( $a, $b ) {
+        return strnatcasecmp( $a['label'], $b['label'] );
+    } );
+
+    wp_enqueue_script( 'openlab-academic-units' );
+
+    ?>
+
+    <div class="sod-selector">
+
+    <fieldset>
+        <legend>Schools:</legend>
+
+        <div class="school-inputs">
+            <ul>
+            <?php foreach ( $schools as $school_slug => $school_label ) : ?>
+                <li>
+                    <label>
+                        <input name="schools[]" class="academic-unit-checkbox" type="checkbox" value="<?php echo esc_attr( $school_slug ); ?>" <?php checked( in_array( $school_slug, $checked['schools'], true ) ); ?> /> <?php echo esc_html( $school_label ); ?>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Offices:</legend>
+
+        <div class="school-inputs">
+            <ul>
+            <?php foreach ( $offices as $office_slug => $office_label ) : ?>
+                <li>
+                    <label>
+                        <input class="academic-unit-checkbox" name="offices[]" type="checkbox" value="<?php echo esc_attr( $office_slug ); ?>" <?php checked( in_array( $office_slug, $checked['offices'], true ) ); ?> /> <?php echo esc_html( $office_label ); ?>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Departments (required):</legend>
+        <div class="checkbox-list-container department-list-container">
+            <div class="cboxol-units-of-type">
+                <ul>
+                <?php foreach ( $departments as $dept_slug => $dept ) : ?>
+                    <li class="academic-unit academic-unit-visible">
+                        <?php
+                        $parent_attr = $dept['parent'];
+                        $id_attr     = 'academic-unit-' . $dept_slug;
+                        ?>
+
+                        <input
+                            <?php checked( in_array( $dept_slug, $checked['departments'], true ) ); ?>
+                            class="academic-unit-checkbox"
+                            data-parent="<?php echo esc_attr( $parent_attr ); ?>"
+                            id="<?php echo esc_attr( $id_attr ); ?>"
+                            name="departments[]"
+                            type="checkbox"
+                            value="<?php echo esc_attr( $dept_slug ); ?>"
+                        /> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </fieldset>
+
+	<?php wp_nonce_field( 'openlab_sod_selector', 'openlab-sod-selector-nonce' ); ?>
+
+    </div>
+
+    <?php
+}
