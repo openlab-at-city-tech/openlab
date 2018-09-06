@@ -1096,7 +1096,7 @@ class oplb_gradebook_api
 
         foreach ($student_records as $key => $row) {
             unset($row['id']);
-            $final_rows[$row['lastname'].$key] = $row;
+            $final_rows[strtolower($row['lastname']).$key] = $row;
         }
 
         ksort($final_rows);
