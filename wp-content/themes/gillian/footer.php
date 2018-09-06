@@ -26,11 +26,18 @@
 			
 			<span class="sep"></span>
 			
+			<?php
+			if ( function_exists( 'the_privacy_policy_link' ) ) {
+				the_privacy_policy_link( '', '
+				<span class="sep"></span>' );
+			}
+			?>
+			
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'gillian' ) ); ?>"><?php printf( esc_html__( 'Powered by %s', 'gillian' ), 'WordPress' ); ?></a>
 			
 			<span class="sep"></span>
 			
-			<?php printf( esc_html__( 'Theme: %1$s', 'gillian' ), '<a href="http://alexaweidinger.com/gillian">Gillian</a>' ); ?>
+			<?php printf( esc_html__( 'Theme: %1$s', 'gillian' ), '<a href="http://wordpress.org/themes/gillian">Gillian</a>' ); ?>
 		</div><!-- .site-info -->
 		
 		<div class="back-to-top">

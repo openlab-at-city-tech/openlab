@@ -12,7 +12,6 @@ function wpcf7_add_form_tag_acceptance() {
 		'wpcf7_acceptance_form_tag_handler',
 		array(
 			'name-attr' => true,
-			'do-not-store' => true,
 		)
 	);
 }
@@ -249,8 +248,7 @@ function wpcf7_tag_generator_acceptance( $contact_form, $args = '' ) {
 	<td>
 		<fieldset>
 		<legend class="screen-reader-text"><?php echo esc_html( __( 'Options', 'contact-form-7' ) ); ?></legend>
-		<label><input type="checkbox" name="default:on" class="option" /> <?php echo esc_html( __( 'Make this checkbox checked by default', 'contact-form-7' ) ); ?></label><br />
-		<label><input type="checkbox" name="invert" class="option" /> <?php echo esc_html( __( 'Make this work inversely', 'contact-form-7' ) ); ?></label>
+		<label><input type="checkbox" name="optional" class="option" checked="checked" /> <?php echo esc_html( __( 'Make this checkbox optional', 'contact-form-7' ) ); ?></label>
 		</fieldset>
 	</td>
 	</tr>

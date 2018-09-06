@@ -3,8 +3,8 @@ Contributors: TobiasBg
 Donate link: https://tablepress.org/donate/
 Tags: table,data,html,csv,excel
 Requires at least: 4.9.1
-Tested up to: 4.9.1
-Stable tag: 1.9
+Tested up to: 4.9.8
+Stable tag: 1.9.1
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,12 @@ This plugin is Free Software, released and licensed under the GPL, version 2 (ht
 You may use it free of charge for any purpose.
 
 == Changelog ==
+
+= Version 1.9.1 =
+* Enhancement: Improve accessibility on several admin screens (thanks to Boone Gorges).
+* Enhancement: Update list of allowed CSS properties in "Custom CSS".
+* Updated external libraries (DataTables, SimpleXLSX, CSSTidy, Build tools).
+* Some internal changes for better stability, security, translations, and documentation.
 
 = Version 1.9 =
 * Full compatibility with WordPress 4.9
@@ -255,6 +261,9 @@ Release candidate in which all intended features are included and very stable.
 Initial version where most features are ready and pretty stable.
 
 == Upgrade Notice ==
+
+= 1.9.1 =
+This update is a stability, maintenance, and compatibility release. Updating is recommended.
 
 = 1.9 =
 This update includes several new features, enhancements, and bugfixes. Updating is recommended.

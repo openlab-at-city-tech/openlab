@@ -20,8 +20,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     this.gradebook = options.gradebook;
                                     this.course = options.course;
                                     this.student = this.model;
-                                    this.listenTo(this.model, 'change', this.render);
-                                    this.listenTo(this.gradebook, 'change:assignments', this.render);
 
                                     Backbone.pubSub.on('editSuccess', this.editSuccess, this);
 
@@ -145,12 +143,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                             type: 'display_value'
                                         },
                                         {
-                                            label: '* WN = administrative withdrawl, never attended',
+                                            label: '*WN = administrative withdrawl, never attended',
                                             value: 'wn_admin_display',
                                             type: 'display_item'
                                         },
                                         {
-                                            label: '* WN',
+                                            label: '*WN',
                                             value: 'wn_admin',
                                             type: 'display_value'
                                         },
@@ -165,6 +163,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                             type: 'display_value'
                                         }
                                     ]);
+
+                                    this.studentGradeLabels('mid');
+                                    this.studentGradeLabels('final');
+
+                                    this.listenTo(this.model, 'change', this.render);
+                                    this.listenTo(this.gradebook, 'change:assignments', this.render);
                                 },
                                 render: function (pinned, assignments) {
                                     //give pinned a default
@@ -211,7 +215,44 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                         });
                                     }
 
+                                    this.postLoadActions();
+
                                     return this.el;
+                                },
+                                studentGradeLabels: function(ev){
+
+                                    var toSearch = this.midGrades;
+                                    var studentVal = this.model.get('mid_semester_grade');
+                                    var title = '';
+
+                                    if(ev === 'final'){ 
+                                         toSearch = this.finalGrades;
+                                         studentVal = this.model.get('final_grade');
+                                    }
+
+                                    _.each(toSearch.models, function (grade) {
+                                        
+                                        if(grade.get('value') === studentVal + '_display' && title === ''){
+                                            title = grade.get('label');
+                                        } else if(grade.get('value') === studentVal && title === ''){
+                                            title = grade.get('label');
+                                        }
+
+                                    });
+
+                                    if(title === ''){
+                                        title = '--';
+                                    }
+
+                                    if(ev === 'final'){
+                                        this.student.set('tool_tip_final', title);
+                                    } else {
+                                        this.student.set('tool_tip_mid', title);
+                                    }
+
+                                },
+                                postLoadActions: function(){
+                                    $('[data-toggle="tooltip"]').tooltip();
                                 },
                                 clearSubViews: function () {
                                     var self = this;
@@ -277,6 +318,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                 },
                                 edit: function (ev) {
                                     this.$el.attr('contenteditable', 'false');
+                                    
+                                    console.log('savingStatus', this.$el.closest('#gradebookWrapper').find('#savingStatus'));
+                                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
 
                                     var targetSelector = '.grade-selector.' + ev;
 
@@ -295,10 +339,45 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
 
                                     var toedit = new User();
                                     toedit.updateStudentGrade(value, type, uid, gbid);
+
+                                    if(value && value !== undefined){
+                                        if(type === 'mid'){
+                                            this.student.attributes.mid_semester_grade = value;
+                                        } else {
+                                            this.student.attributes.final_grade = value;
+                                        }
+                                    }
+
+                                    this.handleTooltips(ev);
+                                    
+                                },
+                                handleTooltips: function(ev){
+                                  
+                                    var targetSelector = '.grade-selector.' + ev;
+                                    var value = this.$el.find(targetSelector).val();
+
+                                    var toSearch = this.midGrades;
+
+                                    if(ev === 'final'){ 
+                                         toSearch = this.finalGrades;
+                                    }
+
+                                    var title = '';
+                                    toSearch.each(function(grade){
+                                        if(grade.get('value') === value + '_display' && title === ''){
+                                            title = grade.get('label');
+                                        } else if(grade.get('value') === value && title === ''){
+                                            title = grade.get('label');
+                                        }
+
+                                    });
+
+                                    this.$el.find(targetSelector).closest('.student-grades').find('.fa-info-circle').attr('title', title)
+                                    .tooltip('fixTitle');
                                     
                                 },
                                 editSuccess: function(){
-                                    console.log('edit success');
+                                    this.$el.closest('#gradebookWrapper').find('#savingStatus').addClass('hidden');
                                     this.$el.find('.grade-selector').removeAttr('disabled');
                                 },
                                 editError: function(){

@@ -48,6 +48,7 @@ body {
     }
 }
 
+.openlab-gradebook_page_oplb_gradebook_settings,
 .toplevel_page_oplb_gradebook {
     #wpwrap {
         h1 {
@@ -91,6 +92,12 @@ body {
 
 #loading-students-container {
     display: absolute;
+}
+
+#gradebookWrapper{
+    .weight-message{
+        display: none;
+    }
 }
 
 .modal-body {
@@ -398,11 +405,43 @@ span.twitter-typeahead {
     @media (max-width: 479px) {
         flex-wrap: wrap;
         justify-content: flex-start;
-        .btn-arrange{
+        .btn-arrange {
             margin: 0 12px 12px 0;
-            &:last-child{
+            &:last-child {
                 width: 100%;
             }
+        }
+    }
+    .btn-arrange{
+        position: relative;
+    }
+    #savingStatus {
+        font-weight: bold;
+        font-size: 18px;
+        color: #0073aa;
+        padding-right: 42px;
+        position: absolute;
+        right: 180px;
+        top: 6px;
+        width: 118px;
+        &.saving{
+            display: block;
+        }
+        &:after {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            -webkit-animation: ellipsis steps(4, end) 1200ms infinite;
+            animation: ellipsis steps(4, end) 1200ms infinite;
+            content: "\2026";
+            width: 0px;
+        }
+        @media (max-width: 767px){
+            right: 21px;
+            top: -34px;
+        }
+        @media (max-width: 479px){
+            top: -42px;
         }
     }
 }
@@ -462,6 +501,10 @@ span.twitter-typeahead {
     .table {
         margin-bottom: 0;
     }
+    #an-gradebook-container{
+        top: 15px;
+        position: relative;
+    }
     position: relative;
     .pinned {
         position: absolute;
@@ -470,7 +513,7 @@ span.twitter-typeahead {
         top: 15px;
         background: #fff;
         width: 36%;
-        border-right: 1px solid #ccc;
+        border-right: 2px solid #ccc;
         border-left: 1px solid #ccc;
         z-index: 200;
         table {
@@ -483,7 +526,13 @@ span.twitter-typeahead {
                 padding: 15px 8px;
             }
         }
+        td.student{
+            height: 59px;
+        }
         .student-grades {
+            display: none;
+        }
+        .gradebook-student-column-average {
             display: none;
         }
         #students-header-pinned th,
@@ -503,14 +552,22 @@ span.twitter-typeahead {
         #students-pinned td.student-tools {
             overflow: visible;
             padding: 12px 8px;
-            width: 15%;
+            width: 16.5%;
+            min-width: 50px;
             &.download-csv {
-                width: 19.685%;
+                position: relative;
+                width: 16.5%;
                 padding: 0;
                 margin: 0;
                 text-align: center;
                 vertical-align: middle;
                 background: #0073aa;
+                .fa-info-circle {
+                    position: absolute;
+                    font-size: 17px;
+                    right: 4px;
+                    bottom: 7px;
+                }
                 button {
                     font-size: 22px;
                     padding: 0;
@@ -527,15 +584,41 @@ span.twitter-typeahead {
         .jspContainer {
             padding-top: 15px;
             .jspPane {
-                top: 15px !important;
+                top: 0 !important;
+                margin-left: 0 !important;
+            }
+            .jspVerticalBar{
+                display: none;
             }
         }
+        .gradebook-student-column-average {
+            display: none !important;
+            .tooltip {
+                .tooltip-inner {
+                    @media (max-width: 767px) {
+                        left: -107%;
+                        position: relative;
+                        width: 250%;
+                    }
+                }
+            }
+        }
+        td.student-grades{
+            height: 59px;
+        }
         .student-grades {
-            min-width: 65px;
+            min-width: 68px;
+            position: relative;
+            .fa-info-circle {
+                position: absolute;
+                font-size: 17px;
+                right: 3px;
+                bottom: 14px;
+            }
             span {
-                width: 48px;
-                max-width: 48px;
-                min-width: 48px;
+                width: 60px;
+                max-width: 60px;
+                min-width: 60px;
                 white-space: nowrap;
                 overflow: hidden;
                 display: inline-block;
@@ -545,12 +628,42 @@ span.twitter-typeahead {
                 .tooltip-inner {
                     left: 25%;
                     position: relative;
+                    min-width: 180px;
+                    @media (max-width: 767px) {
+                        left: -107%;
+                        position: relative;
+                        width: 250%;
+                    }
                 }
             }
             .grade-selector {
-                max-width: 48px;
+                padding: 2px;
+                min-width: 60px;
+                max-width: 60px;
+                width: 60px;
                 .display-value {
                     display: none;
+                }
+            }
+            &.mid-semester-grade,
+            &.final-grade {
+                .tooltip {
+                    margin-top: 0;
+                    .tooltip-arrow {
+                        left: 50%;
+                        margin-left: 7px;
+                        border-width: 0 5px 15px;
+                        z-index: 2;
+                        transform: rotate(-30deg);
+                        top: -7px;
+                    }
+                    .tooltip-inner {
+                        left: 60%;
+                        background: #efefef;
+                        color: #000;
+                        border: 1px solid #dddddd;
+                        width: 116px;
+                    }
                 }
             }
         }
@@ -568,6 +681,15 @@ span.twitter-typeahead {
         #students-header th.gradebook-student-column-interactive,
         #students td.student-tools {
             max-width: 50px;
+            button#download-csv-mobile {
+                background: #0073aa;
+                font-size: 22px;
+                padding: 0;
+                margin: 0 auto;
+                display: inline-block;
+                color: #fff;
+                width: 34px;
+            }
         }
         @media (max-width: 767px) {
             margin-left: 0;
@@ -594,10 +716,17 @@ span.twitter-typeahead {
             table {
                 table-layout: fixed;
                 width: 130px;
+                @media (max-width: 767px) {
+                    table-layout: auto;
+                    width: auto;
+                }
             }
             .student-grades {
-                width: 65px;
+                width: 68px;
                 padding: 15px 8px 10px;
+                @media (max-width: 767px) {
+                    padding: 19px 8px 3px;
+                }
             }
         }
     }
@@ -624,3 +753,15 @@ span.twitter-typeahead {
         transform: rotate(359deg);
     }
 }
+
+@keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }
+  
+  @-webkit-keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }

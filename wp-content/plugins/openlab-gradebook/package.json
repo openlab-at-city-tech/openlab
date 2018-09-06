@@ -16,9 +16,11 @@
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-requirejs": "^0.4.4",
     "grunt-htmlclean": "^2.7.12",
-    "jscrollpane": "^2.0.22"
+    "jscrollpane": "^2.2.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.1.0"
+    "@fortawesome/fontawesome-free": "^5.1.0",
+    "css-element-queries": "^1.0.2",
+    "grunt-contrib-watch": "^1.1.0"
   }
 }

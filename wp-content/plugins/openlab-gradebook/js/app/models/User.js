@@ -25,7 +25,6 @@ define(["backbone"], function(Backbone) {
 				ajaxurl + "?action=oplb_student_grades&nonce=" + oplbGradebook.nonce,
 				{ grade: grade, type: type, gbid: gbid, uid: uid },
 				function(data) {
-                    console.log('data', data);
 					Backbone.pubSub.trigger('editSuccess', data);
 				},
 				"json"

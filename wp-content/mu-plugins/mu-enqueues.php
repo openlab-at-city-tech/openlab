@@ -51,6 +51,8 @@ function openlab_mu_enqueue() {
     wp_register_script('google-plus-one', 'https://apis.google.com/js/plusone.js');
     wp_enqueue_script('google-plus-one');
 
+    $js_ver = '1.6.9.1';
+
     // adding smooth scroll
     if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
         wp_register_script('smoothscroll-js', plugins_url('js', __FILE__) . '/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array('jquery'), '', true);
@@ -61,11 +63,11 @@ function openlab_mu_enqueue() {
         wp_enqueue_script('hyphenator-js');
         wp_register_script('succinct-mod-js', plugins_url('js', __FILE__) . '/succint/jQuery.succinct.mod.js', array('jquery'));
         wp_enqueue_script('succinct-mod-js');
-        wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'), '1.6.8.6', true);
+        wp_register_script('openlab-search-js', plugins_url('js', __FILE__) . '/openlab/openlab.search.js', array('jquery'), $js_ver, true);
         wp_enqueue_script('openlab-search-js');
-        wp_register_script('openlab-truncation-js', plugins_url('js', __FILE__) . '/openlab/openlab.truncation.js', array('jquery'));
+        wp_register_script('openlab-truncation-js', plugins_url('js', __FILE__) . '/openlab/openlab.truncation.js', array('jquery'), $js_ver);
         wp_enqueue_script('openlab-truncation-js');
-        wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), '1.6.8.7', true);
+        wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), $js_ver, true);
         wp_enqueue_script('openlab-nav-js');
         wp_localize_script(
                 'openlab-nav-js', 'utilityVars', array(
@@ -73,10 +75,10 @@ function openlab_mu_enqueue() {
                 )
         );
 
-        wp_register_script('openlab-theme-fixes-js', plugins_url('js', __FILE__) . '/openlab/openlab.theme.fixes.js', array('jquery'), '', true);
+        wp_register_script('openlab-theme-fixes-js', plugins_url('js', __FILE__) . '/openlab/openlab.theme.fixes.js', array('jquery'), $js_ver, true);
         wp_enqueue_script('openlab-theme-fixes-js');
     } else {
-        wp_enqueue_script('openlab-smoothscroll', content_url('js/smoothscroll.js'), array('jquery'), '1.6.8.7');
+        wp_enqueue_script('openlab-smoothscroll', content_url('js/smoothscroll.js'), array('jquery'), $js_ver);
         wp_localize_script(
                 'openlab-smoothscroll', 'utilityVars', array(
             'loginForm' => openlab_get_loginform(),

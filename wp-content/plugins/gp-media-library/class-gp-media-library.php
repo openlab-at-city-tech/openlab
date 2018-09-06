@@ -188,11 +188,54 @@ class GP_Media_Library extends GWPerk {
 					return $tmp;
 				}
 
-				$id = media_handle_sideload( $file_array, 0 );
+				/**
+				 * Filter the data that will be used to upload and generate the new media file.
+				 *
+				 * @since 1.0.11
+				 *
+				 * @param array $media_data {
+				 *
+				 *     @var array  $file_array The details of the actual file to be uploaded.
+				 *     @var int    $post_id    The attachment ID to update or 0 to upload as a new attachment.
+				 *     @var string $desc       The description of the file.
+				 *     @var array  $post_data  An array of data used to populate the generated attachment post (i.e. post_title, post_content, post_excerpt).
+				 *
+				 * }
+				 * @param GF_Field $field The current field object for which the file is being uploaded.
+				 * @param array    $entry The current entry object.
+				 */
+				$media_data = gf_apply_filters( array( 'gpml_media_data', $field->formId, $field->id ), array(
+					'file_array' => $file_array,
+					'post_id' => 0,
+					'desc' => null,
+					'post_data' => array( 'post_meta' => array() )
+				), $field, $entry );
+
+				/**
+				 * If no post ID is specified, make sure WordPress doesn't automatically set whatever post is set globally
+				 * as the object to which the uploaded file is attached. This causes images to be uploaded to the
+				 * time-based directory of that post (i.e. /2011/01/file.jpg).
+				 */
+				if( empty( $media_data['post_id'] ) ) {
+					$_globals_post = $GLOBALS['post'];
+					unset( $GLOBALS['post'] );
+				}
+
+				$id = media_handle_sideload( $media_data['file_array'], $media_data['post_id'], $media_data['desc'], $media_data['post_data'] );
+
+				// Restore the WordPress post global if it was unset above.
+				if( isset( $_globals_post ) ) {
+					$GLOBALS['post'] = $_globals_post;
+				}
+
 				if ( is_wp_error( $id ) ) {
 					return $id;
 				}
 
+				$post_meta = rgars( $media_data, 'post_data/post_meta', array() );
+				foreach( $post_meta as $meta_key => $meta_value ) {
+					update_post_meta( $id, $meta_key, $meta_value );
+				}
 
                 if( ! $this->is_wcpa_submission() )  {
 	                // remove the original image
@@ -632,7 +675,7 @@ class GP_Media_Library extends GWPerk {
 	public function documentation() {
 		return array(
 			'type' => 'url',
-			'value' => 'http://gravitywiz.com/documentation/gp-media-preview-for-gravity-forms/'
+			'value' => 'https://gravitywiz.com/documentation/gravity-forms-media-library/'
 		);
 	}
 

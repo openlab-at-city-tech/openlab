@@ -46,10 +46,18 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 	foreach ( $source_ids as $source_id ) {
 		$source_group = groups_get_group( $source_id );
 
+		$course_code = groups_get_groupmeta( $source_id, 'wds_course_code' );
+		$group_type  = openlab_get_group_type_label(
+			array(
+				'group_id' => $group_id,
+				'case'     => 'upper',
+			)
+		);
+
 		$source_data = array(
 			'group_id'           => $source_id,
 			'group_url'          => bp_get_group_permalink( $source_group ),
-			'group_name'         => $source_group->name,
+			'group_name'         => $course_code ? $course_code : $group_type,
 			'group_creator_id'   => $source_group->creator_id,
 			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
 			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
@@ -145,9 +153,7 @@ add_action( 'bp_init', function() {
 		$show_shareable_content_widget = false;
 	} else {
 		$group_type = openlab_get_group_type( $group_id );
-
-		// Courses only for the moment.
-		if ( 'course' !== $group_type ) {
+		if ( ! openlab_group_type_can_be_cloned_by_others( $group_type ) ) {
 			$show_shareable_content_widget = false;
 		}
 	}
@@ -304,7 +310,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_shareable_content_widget',
-			'Shareable Content',
+			'Shared Cloning',
 			array(
 				'description' => ''
 			)
@@ -338,7 +344,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Shareable Content' . $args['after_title'];
+		echo $args['before_title'] . 'Shared Cloning' . $args['after_title'];
 		echo sprintf( '<p><a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a></p>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
 		echo $args['after_widget'];
 	}

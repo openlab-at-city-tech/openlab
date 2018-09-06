@@ -14,6 +14,9 @@ include 'includes/oembed.php';
 include 'includes/library-widget.php';
 include 'includes/clone.php';
 
+// Disable Try Gutenberg.
+remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
@@ -2759,3 +2762,11 @@ add_filter( 'map_meta_cap', function( $caps, $cap, $user_id ) {
 
 	return array( 'do_not_allow' );
 }, 10, 4 );
+
+/**
+ * DK PDF cache directory.
+ */
+add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
+	$upload_dir = wp_upload_dir();
+	return $upload_dir['basedir'] . '/dkpdf-tmp';
+} );

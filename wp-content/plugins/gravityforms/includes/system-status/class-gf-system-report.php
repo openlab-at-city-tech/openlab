@@ -261,6 +261,7 @@ class GF_System_Report {
 	 * @uses GFUpgrade::upgrade()
 	 */
 	private static function maybe_process_action() {
+		global $wpdb;
 
 		switch ( rgpost( 'gf_action' ) ) {
 
@@ -271,7 +272,7 @@ class GF_System_Report {
 
 				$previous_db_version = $versions['previous_db_version'];
 
-				if ( version_compare( $previous_db_version, '2.3-beta-1', '<' ) ) {
+				if ( version_compare( $previous_db_version, '2.3-beta-1', '<' ) && GFCommon::table_exists( $wpdb->prefix . 'rg_form' ) ) {
 
 					$status = get_option( 'gform_upgrade_status' );
 

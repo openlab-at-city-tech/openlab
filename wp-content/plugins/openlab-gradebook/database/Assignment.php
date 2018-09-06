@@ -66,7 +66,7 @@ class gradebook_assignment_API
                 }
                 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
                 $return_data['distributed_weight'] = $weight_return['distributed_weight'];
 
                 echo json_encode($return_data);
@@ -115,7 +115,7 @@ class gradebook_assignment_API
                 $assignment = $wpdb->get_row($query, ARRAY_A);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
 
                 $assignment['id'] = intval($assignment['id']);
                 $assignment['gbid'] = intval($assignment['gbid']);
@@ -209,7 +209,7 @@ class gradebook_assignment_API
                 $assignment['id'] = intval($assignment['id']);
 
                 //get the total weight
-                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid']);
+                $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($assignment['gbid'], array());
                 $assignment['total_weight'] = $weight_return['total_weight'];
                 $assignment['distributed_weight'] = $weight_return['distributed_weight'];
 

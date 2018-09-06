@@ -443,11 +443,20 @@ jQuery( document ).ready( function( $ ) {
 			changeMonth     : true,
 			changeYear      : true,
 			numberOfMonths  : get_datepicker_num_months(),
-			firstDay        : startofweek,
 			showButtonPanel : false,
 			beforeShow      : function( element, object ) {
 				object.input.datepicker( 'option', 'numberOfMonths', get_datepicker_num_months() );
 				object.input.data( 'prevDate', object.input.datepicker( 'getDate' ) );
+
+				// allow single datepicker fields to specify a min or max date
+				// using the `data-datapicker-(min|max)Date` attribute
+				if ( undefined !== object.input.data( 'datepicker-min-date' ) ) {
+					object.input.datepicker( 'option', 'minDate', object.input.data( 'datepicker-min-date' ) );
+				}
+
+				if ( undefined !== object.input.data( 'datepicker-max-date' ) ) {
+					object.input.datepicker( 'option', 'maxDate', object.input.data( 'datepicker-max-date' ) );
+				}
 
 				// Capture the datepicker div here; it's dynamically generated so best to grab here instead of elsewhere.
 				$dpDiv = $( object.dpDiv );

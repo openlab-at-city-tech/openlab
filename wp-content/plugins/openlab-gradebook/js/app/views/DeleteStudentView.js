@@ -52,6 +52,8 @@ define(['jquery', 'backbone', 'underscore'],
 
                             var cells = self.gradebook.cells;
 
+                            console.log('cells in deteletSave', cells);
+
                             _.each(cells.models, function (cell, index) {
 
                                 if (typeof cell === 'undefined') {

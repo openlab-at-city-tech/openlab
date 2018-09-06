@@ -40,6 +40,7 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-accessibility/wp-accessibility',
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
+		'wp-simile-timeline/timeline.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -96,6 +97,23 @@ function openlab_hide_plugins( $plugins ) {
 		11561,
 		11574,
 		11831,
+		12250,
+		121,
+		10738,
+		8990,
+		6586,
+		9401,
+		9105,
+		9400,
+		8091,
+		8723,
+		6249,
+		10827,
+		12248,
+		9184,
+		7007,
+		10098,
+		8250,
 	);
 
 	$blog_specific_whitelist = array(
