@@ -183,7 +183,7 @@ class oplb_gradebook_api
             $cells = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($cells as &$cell) {
-                $cells['gbid'] = intval($cells['gbid']);
+                $cell['gbid'] = intval($cell['gbid']);
             }
 
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
@@ -205,6 +205,7 @@ class oplb_gradebook_api
 
                 $student_id = array_merge($student_extras, $student_id);
             }
+
             usort($cells, $this->build_sorter('assign_order'));
             $cells_by_assignment = array();
             foreach ($cells as &$cell) {
