@@ -364,75 +364,6 @@ function wds_bp_profile_group_tabs() {
 	do_action( 'xprofile_profile_group_tabs' );
 }
 
-//Group Stuff
-function wds_groups_ajax() {
-	global $bp;
-
-	if ( ! bp_is_active( 'groups' ) ) {
-		return;
-	}
-
-	wp_print_scripts( array( 'sack' ) );
-	$sack = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
-	$loading = '<img src="' . get_bloginfo( 'template_directory' ) . '/_inc/images/ajax-loader.gif">';
-	?>
-
-	<script type="text/javascript">
-		//<![CDATA[
-		function wds_load_group_type(id) {
-			<?php echo $sack; ?>
-			var select_box = document.getElementById(id);
-			var selected_index = select_box.selectedIndex;
-			var selected_value = select_box.options[selected_index].value;
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar("action", "wds_load_group_type");
-			isack.setVar("group_type", selected_value);
-			isack.runAJAX();
-			return true;
-		}
-
-		function wds_load_group_departments(id) {
-			<?php
-			$group = bp_get_current_group_id();
-
-			//get group type
-			if ( ! empty( $_GET['type'] ) ) {
-				$group_type = $_GET['type'];
-			} else {
-				$group_type = 'club';
-			}
-
-
-			echo $sack;
-			?>
-			var schools = "0";
-			for ( school in OLGroupCreate.schools ) {
-				if ( ! OLGroupCreate.schools.hasOwnProperty( school ) ) {
-					continue;
-				}
-
-				var schoolElId = 'school_' + school;
-				if ( document.getElementById( schoolElId ).checked ) {
-					schools = schools + "," + document.getElementById( schoolElId ).value;
-				}
-			}
-			var group_type = jQuery('input[name="group_type"]').val();
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar("action", "wds_load_group_departments");
-			isack.setVar("schools", schools);
-			isack.setVar("group", "<?php echo $group; ?>");
-			isack.setVar("is_group_create", "<?php echo intval( bp_is_group_create() ) ?>");
-			isack.setVar("group_type", "<?php echo $group_type; ?>");
-			isack.runAJAX();
-			return true;
-		}
-	//]]>
-	</script>
-	<?php
-}
-add_action( 'wp_head', 'wds_groups_ajax' );
 
 function wds_load_group_departments() {
 	global $wpdb, $bp;
@@ -511,8 +442,6 @@ function wds_load_group_departments() {
 	$return = str_replace( "'", "\'", $return );
 	die( "document.getElementById( 'departments_html' ).innerHTML='$return'" );
 }
-add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' );
-add_action( 'wp_ajax_nopriv_wds_load_group_departments', 'wds_load_group_departments' );
 
 /**
  * Get a list of schools
@@ -894,9 +823,6 @@ function wds_new_group_type() {
 }
 add_action( 'init', 'wds_new_group_type' );
 
-add_action( 'wp_ajax_wds_load_group_type', 'wds_load_group_type' );
-add_action( 'wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type' );
-
 function wds_load_group_type( $group_type ) {
 	global $wpdb, $bp, $user_ID;
 
@@ -984,7 +910,7 @@ function wds_load_group_type( $group_type ) {
 	$return .= '<tr><td class="school-inputs" colspan="2">';
 
 	if ( ! $do_sod_selector ) {
-		$onclick = 'onclick="wds_load_group_departments();"';
+//		$onclick = 'onclick="wds_load_group_departments();"';
 
 		$schools = openlab_get_school_list();
 		foreach ( $schools as $school_key => $school_label ) {
@@ -1091,7 +1017,7 @@ function wds_load_group_type( $group_type ) {
 		$return .= '</table></div></div><!--.panel-->';
 	}
 
-	$return .= '<script>wds_load_group_departments();</script>';
+//	$return .= '<script>wds_load_group_departments();</script>';
 
 	if ( $echo ) {
 		return $return;

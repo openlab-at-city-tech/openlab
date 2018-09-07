@@ -160,18 +160,10 @@ function openlab_group_archive() {
 
     if (!empty($_GET['school'])) {
         $school = $_GET['school'];
-        /* if ( $school=="tech" ) {
-          $school="Technology & Design";
-          } elseif ( $school=="studies" ) {
-          $school="Professional Studies";
-          } elseif ( $school=="arts" ) {
-          $school="Arts & Sciences";
-          } */
     }
 
     if (!empty($_GET['department'])) {
-        $department = str_replace("-", " ", $_GET['department']);
-        $department = ucwords($department);
+        $department = wp_unslash( $_GET['department'] );
     }
 
     if (!empty($_GET['cat'])) {
@@ -196,17 +188,15 @@ function openlab_group_archive() {
 
     if (!empty($school) && 'school_all' != strtolower($school)) {
         $meta_query[] = array(
-            'key' => 'wds_group_school',
+            'key'   => 'openlab_school',
             'value' => $school,
-            'compare' => 'LIKE',
         );
     }
 
     if (!empty($department) && 'dept_all' != strtolower($department)) {
         $meta_query[] = array(
-            'key' => 'wds_departments',
+            'key'   => 'openlab_department',
             'value' => $department,
-            'compare' => 'LIKE',
         );
     }
 
@@ -1729,7 +1719,7 @@ function openlab_group_sod_save( $group ) {
     $map = array(
         'schools'     => 'openlab_school',
         'offices'     => 'openlab_office',
-        'departments' => 'openlab_departments',
+        'departments' => 'openlab_department',
     );
 
     foreach ( $map as $post_key => $meta_key ) {
@@ -1751,6 +1741,24 @@ function openlab_group_sod_save( $group ) {
             groups_add_groupmeta( $group->id, $meta_key, $to_add_value );
         }
     }
+
+    // Mirror department data to legacy group field, for purposes of search.
+    $department_labels = array();
+    $group_sod_data    = openlab_get_group_sod_data( $group->id );
+    foreach ( array( 'schools', 'offices' ) as $entity_type ) {
+        foreach ( $group_sod_data[ $entity_type ] as $entity ) {
+            $entity_depts = openlab_get_entity_departments( $entity );
+            foreach ( $group_sod_data['departments'] as $group_department ) {
+                if ( ! isset( $entity_depts[ $group_department ] ) ) {
+                    continue;
+                }
+                $department_labels[] = $entity_depts[ $group_department ]['label'];
+            }
+        }
+    }
+
+    sort( $department_labels );
+    groups_update_groupmeta( $group->id, 'wds_departments', implode( ',', $department_labels ) );
 }
 add_action( 'groups_group_after_save', 'openlab_group_sod_save' );
 
