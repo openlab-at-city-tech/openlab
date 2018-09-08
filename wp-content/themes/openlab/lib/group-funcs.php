@@ -1717,31 +1717,12 @@ function openlab_group_academic_unit_save( $group ) {
 
     check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
 
-    $map = array(
-        'schools'     => 'openlab_school',
-        'offices'     => 'openlab_office',
-        'departments' => 'openlab_department',
-    );
-
-    foreach ( $map as $post_key => $meta_key ) {
-        $existing = groups_get_groupmeta( $group->id, $meta_key, false );
-
-        $posted = array();
-        if ( isset( $_POST[ $post_key ] ) ) {
-            $posted = wp_unslash( $_POST[ $post_key ] );
-        }
-
-        $to_delete = array_diff( $existing, $posted );
-        $to_add    = array_diff( $posted, $existing );
-
-        foreach ( $to_delete as $to_delete_value ) {
-            groups_delete_groupmeta( $group->id, $meta_key, $to_delete_value );
-        }
-
-        foreach ( $to_add as $to_add_value ) {
-            groups_add_groupmeta( $group->id, $meta_key, $to_add_value );
-        }
+    $to_save = [];
+    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
+        $to_save[ $unit_type ] = $_POST[ $unit_type ] ?: array();
     }
+
+    openlab_set_group_academic_units( $group->id, $to_save );
 }
 add_action( 'groups_group_after_save', 'openlab_group_academic_unit_save' );
 
@@ -1750,7 +1731,7 @@ add_action( 'groups_group_after_save', 'openlab_group_academic_unit_save' );
  *
  * @param int $group_id
  */
-function openlab_get_group_academic_unit_data( $group_id ) {
+function openlab_get_group_academic_units( $group_id ) {
     $values = array();
     $map    = array(
         'schools'     => 'openlab_school',
@@ -1763,4 +1744,34 @@ function openlab_get_group_academic_unit_data( $group_id ) {
     }
 
     return $values;
+}
+
+/**
+ * Sets academic units for a group.
+ *
+ * @param int   $group_id
+ * @param array $units
+ */
+function openlab_set_group_academic_units( $group_id, $units ) {
+    $map = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $data_key => $meta_key ) {
+        $existing = groups_get_groupmeta( $group_id, $meta_key, false );
+        $to_save  = $units[ $data_key ] ?: array();
+
+        $to_delete = array_diff( $existing, $to_save );
+        $to_add    = array_diff( $to_save, $existing );
+
+        foreach ( $to_delete as $to_delete_value ) {
+            groups_delete_groupmeta( $group_id, $meta_key, $to_delete_value );
+        }
+
+        foreach ( $to_add as $to_add_value ) {
+            groups_add_groupmeta( $group_id, $meta_key, $to_add_value );
+        }
+    }
 }

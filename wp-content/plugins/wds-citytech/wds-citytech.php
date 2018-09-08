@@ -915,13 +915,13 @@ function wds_load_group_type( $group_type ) {
 	}
 
 	$selector_args['required'] = openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type );
-	$selector_args['checked']  = openlab_get_group_academic_unit_data( bp_get_current_group_id() );
+	$selector_args['checked']  = openlab_get_group_academic_units( bp_get_current_group_id() );
 
 	$return .= '<tr><td class="school-inputs" colspan="2">';
 
 	ob_start();
 	openlab_academic_unit_selector( $selector_args );
-	$selector .= ob_get_contents();
+	$selector = ob_get_contents();
 	ob_end_clean();
 
 	$return .= $selector;
@@ -2723,7 +2723,7 @@ function openlab_academic_unit_selector( $args = array() ) {
     ), $_checked );
 
 	$allowed_entities = [ 'school', 'office' ];
-	if ( is_array( $args['entities'] ) ) {
+	if ( isset( $args['entities'] ) && is_array( $args['entities'] ) ) {
 		$entities = array_intersect( $args['entities'], $allowed_entities );
 	} else {
 		$entities = $allowed_entities;

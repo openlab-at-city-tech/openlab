@@ -171,7 +171,7 @@ function openlab_process_status_messages($message, $type) {
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
 
 function openlab_generate_school_office_name( $group_id ) {
-    $group_academic_units = openlab_get_group_academic_unit_data( $group_id );
+    $group_academic_units = openlab_get_group_academic_units( $group_id );
 
     $entity_names = array();
 
@@ -205,7 +205,7 @@ function openlab_generate_school_office_name( $group_id ) {
 }
 
 function openlab_generate_department_name($group_id) {
-    $group_academic_units = openlab_get_group_academic_unit_data( $group_id );
+    $group_academic_units = openlab_get_group_academic_units( $group_id );
 
     $all_depts = openlab_get_entity_departments( $d_school );
 
