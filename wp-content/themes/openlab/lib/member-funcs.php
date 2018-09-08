@@ -139,25 +139,13 @@ function openlab_list_members($view) {
     }
 
     if ($user_school && !$include_noop) {
-        $department_field_id = xprofile_get_field_id_from_name('Department');
-        $major_field_id = xprofile_get_field_id_from_name('Major Program of Study');
-
-        $department_list = openlab_get_department_list($user_school);
-
-        // just in case
-        $department_list_sql = '';
-        foreach ($department_list as &$department_list_item) {
-            $department_list_item = $wpdb->prepare('%s', $department_list_item);
-        }
-        $department_list_sql = implode(',', $department_list);
-
-        $user_school_matches = $wpdb->get_col($wpdb->prepare(
-                        "SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id IN (%d, %d)
-			       AND
-			       value IN (" . $department_list_sql . ")", $department_field_id, $major_field_id
-        ));
+        $user_school_matches = $wpdb->get_col( $wpdb->prepare(
+            "SELECT user_id
+            FROM {$wpdb->usermeta}
+            WHERE meta_key IN ( 'openlab_school', 'openlab_office' ) AND
+            meta_value = %s",
+            $user_school
+        ) );
 
         if (empty($user_school_matches)) {
             $include_noop = true;
@@ -167,36 +155,13 @@ function openlab_list_members($view) {
     }
 
     if ($user_department && !$include_noop && 'dept_all' !== $user_department) {
-        $department_field_id = xprofile_get_field_id_from_name('Department');
-        $major_field_id = xprofile_get_field_id_from_name('Major Program of Study');
-
-        // Department comes through $_GET in the hyphenated form, but
-        // is stored in the database in the fulltext form. So we have
-        // to pull up a list of all departments and attempt a
-        // translation.
-        //
-		// Could this be any more of a mess?
-        $regex = esc_sql(str_replace('-', '[ \-]', $user_department));
-        $user_departments = $wpdb->get_col($wpdb->prepare(
-                        "SELECT name
-			 FROM {$bp->profile->table_name_fields}
-			 WHERE parent_id IN (%d, %d)
-			 AND name REGEXP '{$regex}'", $department_field_id, $major_field_id
-        ));
-
-        $user_departments_sql = '';
-        foreach ($user_departments as &$ud) {
-            $ud = $wpdb->prepare('%s', $ud);
-        }
-        $user_departments_sql = implode(',', $user_departments);
-
-        $user_department_matches = $wpdb->get_col($wpdb->prepare(
-                        "SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id IN (%d, %d)
-			       AND
-			       value IN ({$user_departments_sql})", $department_field_id, $major_field_id
-        ));
+        $user_department_matches = $wpdb->get_col( $wpdb->prepare(
+            "SELECT user_id
+            FROM {$wpdb->usermeta}
+            WHERE meta_key = 'openlab_department' AND
+            meta_value = %s",
+            $user_department
+        ) );
 
         if (empty($user_department_matches)) {
             $include_noop = true;

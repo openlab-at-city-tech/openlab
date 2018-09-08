@@ -86,7 +86,7 @@ function openlab_load_scripts() {
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
     }
 
-    if ( bp_is_members_directory() || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
+    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
         wp_enqueue_script( 'openlab-directory', $stylesheet_dir_uri . '/js/directory.js', array( 'jquery' ) );
         wp_localize_script(
             'openlab-directory',
