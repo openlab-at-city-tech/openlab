@@ -822,6 +822,11 @@ function cuny_member_profile_header() {
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
+                                                        } elseif ( 'Department' === bp_get_the_profile_field_name() ) {
+                                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                                                            $department = openlab_generate_department_name( $user_units );
+
+                                                            echo esc_html( $department );
                                                         } else {
                                                             $field_value = str_replace('<p>', '', bp_get_the_profile_field_value());
                                                             $field_value = str_replace('</p>', '', $field_value);
@@ -1006,3 +1011,80 @@ add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
  * Ensure that @-mentions in message content are properly linked.
  */
 add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
+
+/**
+ * Save the member S/O/D settings after save.
+ *
+ * @param BP_Groups_Group $group
+ *
+ * @todo registration
+ */
+function openlab_user_academic_unit_save( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
+
+    $to_save = [];
+    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
+        $to_save[ $unit_type ] = wp_unslash( $_POST[ $unit_type ] ) ?: array();
+    }
+
+    openlab_set_user_academic_units( $user_id, $to_save );
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save' );
+
+/**
+ * Gets academic units for a user.
+ *
+ * @param int $user_id
+ */
+function openlab_get_user_academic_units( $user_id ) {
+    $values = array();
+    $map    = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $type_key => $meta_key ) {
+        $units_of_type = get_user_meta( $user_id, $meta_key, false );
+        if ( ! $units_of_type ) {
+            $units_of_type = array();
+        }
+        $values[ $type_key ] = $units_of_type;
+    }
+
+    return $values;
+}
+
+/**
+ * Sets academic units for a user.
+ *
+ * @param int   $user_id
+ * @param array $units
+ */
+function openlab_set_user_academic_units( $group_id, $units ) {
+    $map = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $data_key => $meta_key ) {
+        $existing = get_user_meta( $group_id, $meta_key, false );
+        $to_save  = $units[ $data_key ] ?: array();
+
+        $to_delete = array_diff( $existing, $to_save );
+        $to_add    = array_diff( $to_save, $existing );
+
+        foreach ( $to_delete as $to_delete_value ) {
+            delete_user_meta( $group_id, $meta_key, $to_delete_value );
+        }
+
+        foreach ( $to_add as $to_add_value ) {
+            add_user_meta( $group_id, $meta_key, $to_add_value );
+        }
+    }
+}

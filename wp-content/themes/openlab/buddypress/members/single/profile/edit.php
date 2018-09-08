@@ -63,7 +63,13 @@ $field_ids = array(1);
                 <?php if ( 'Staff' === $account_type || 'Faculty' === $account_type ) : ?>
                     <div class="editfield field_name alt form-group">
                         <label for="ol-offices">School / Office / Department (required)</label>
-                        <?php openlab_academic_unit_selector(); ?>
+                        <?php
+                        $selector_args = [
+                            'required' => true,
+                            'checked'  => openlab_get_user_academic_units( $user_ID ),
+                        ];
+                        openlab_academic_unit_selector( $selector_args );
+                        ?>
                     </div>
                 <?php endif; ?>
 

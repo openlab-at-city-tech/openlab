@@ -170,12 +170,10 @@ function openlab_process_status_messages($message, $type) {
 
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
 
-function openlab_generate_school_office_name( $group_id ) {
-    $group_academic_units = openlab_get_group_academic_units( $group_id );
-
+function openlab_generate_school_office_name( $item_units ) {
     $entity_names = array();
 
-    if ( ! empty( $group_academic_units['schools'] ) ) {
+    if ( ! empty( $item_units['schools'] ) ) {
         $all_schools   = openlab_get_school_list();
         $entity_names += array_map(
             function( $school ) use ( $all_schools ) {
@@ -183,11 +181,11 @@ function openlab_generate_school_office_name( $group_id ) {
                     return $all_schools[ $school ];
                 }
             },
-            $group_academic_units['schools']
+            $item_units['schools']
         );
     }
 
-    if ( ! empty( $group_academic_units['offices'] ) ) {
+    if ( ! empty( $item_units['offices'] ) ) {
         $all_offices   = openlab_get_office_list();
         $entity_names += array_map(
             function( $office ) use ( $all_offices ) {
@@ -195,19 +193,19 @@ function openlab_generate_school_office_name( $group_id ) {
                     return $all_offices[ $office ];
                 }
             },
-            $group_academic_units['offices']
+            $item_units['offices']
         );
     }
 
-    natcasesort( array_filter( $entity_names ) );
+    $entity_names = array_filter( $entity_names );
+
+    natcasesort( $entity_names );
 
     return implode( ', ', $entity_names );
 }
 
-function openlab_generate_department_name($group_id) {
-    $group_academic_units = openlab_get_group_academic_units( $group_id );
-
-    $all_depts = openlab_get_entity_departments( $d_school );
+function openlab_generate_department_name( $item_units ) {
+    $all_depts = openlab_get_entity_departments();
 
     $dept_names = array_map(
         function( $department ) use ( $all_depts ) {
@@ -217,10 +215,12 @@ function openlab_generate_department_name($group_id) {
                 }
             }
         },
-        $group_academic_units['departments']
+        $item_units['departments']
     );
 
-    natcasesort( array_filter( $dept_names ) );
+    $dept_names = array_filter( $dept_names );
+
+    natcasesort( $dept_names );
 
     return implode( ', ', $dept_names );
 }

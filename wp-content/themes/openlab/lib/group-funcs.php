@@ -720,8 +720,9 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $wds_school      = openlab_generate_school_office_name( $group_id );
-                            $wds_departments = openlab_generate_department_name( $group_id );
+                            $group_units     = openlab_get_group_academic_units();
+                            $wds_school      = openlab_generate_school_office_name( $group_units );
+                            $wds_departments = openlab_generate_department_name( $group_units );
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
@@ -1740,7 +1741,11 @@ function openlab_get_group_academic_units( $group_id ) {
     );
 
     foreach ( $map as $type_key => $meta_key ) {
-        $values[ $type_key ] = groups_get_groupmeta( $group_id, $meta_key, false );
+        $units_of_type = groups_get_groupmeta( $group_id, $meta_key, false );
+        if ( ! $units_of_type ) {
+            $units_of_type = array();
+        }
+        $values[ $type_key ] = $units_of_type;
     }
 
     return $values;
