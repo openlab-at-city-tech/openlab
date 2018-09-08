@@ -63,7 +63,7 @@ $field_ids = array(1);
                 <?php if ( 'Staff' === $account_type || 'Faculty' === $account_type ) : ?>
                     <div class="editfield field_name alt form-group">
                         <label for="ol-offices">School / Office / Department (required)</label>
-                        <?php openlab_sod_selector(); ?>
+                        <?php openlab_academic_unit_selector(); ?>
                     </div>
                 <?php endif; ?>
 

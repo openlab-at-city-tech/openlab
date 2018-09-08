@@ -170,44 +170,57 @@ function openlab_process_status_messages($message, $type) {
 
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
 
-function openlab_generate_school_name($group_id) {
-    $schools_out = '';
-    $school_out = array();
+function openlab_generate_school_office_name( $group_id ) {
+    $group_academic_units = openlab_get_group_academic_unit_data( $group_id );
 
-    $schools = groups_get_groupmeta($group_id, 'wds_group_school');
-    $schools_ary = explode(',', $schools);
+    $entity_names = array();
 
-    if (!empty($schools_ary)) {
-
-        foreach ($schools_ary as $school) {
-            switch ($school) {
-                case "tech":
-                    $school_out[] = "Technology & Design";
-                    break;
-                case "studies":
-                    $school_out[] = "Professional Studies";
-                    break;
-                case "arts":
-                    $school_out[] = "Arts & Sciences";
-                    break;
-            }
-        }
-
-        $schools_out = implode(', ', $school_out);
+    if ( ! empty( $group_academic_units['schools'] ) ) {
+        $all_schools   = openlab_get_school_list();
+        $entity_names += array_map(
+            function( $school ) use ( $all_schools ) {
+                if ( isset( $all_schools[ $school ] ) ) {
+                    return $all_schools[ $school ];
+                }
+            },
+            $group_academic_units['schools']
+        );
     }
 
-    return $schools_out;
+    if ( ! empty( $group_academic_units['offices'] ) ) {
+        $all_offices   = openlab_get_office_list();
+        $entity_names += array_map(
+            function( $office ) use ( $all_offices ) {
+                if ( isset( $all_offices[ $office ] ) ) {
+                    return $all_offices[ $office ];
+                }
+            },
+            $group_academic_units['offices']
+        );
+    }
+
+    natcasesort( array_filter( $entity_names ) );
+
+    return implode( ', ', $entity_names );
 }
 
 function openlab_generate_department_name($group_id) {
-    $departments_out = '';
+    $group_academic_units = openlab_get_group_academic_unit_data( $group_id );
 
-    $departments = groups_get_groupmeta($group_id, 'wds_departments');
-    $departments_ary = explode(',', $departments);
+    $all_depts = openlab_get_entity_departments( $d_school );
 
-    if (!empty($departments_ary)) {
-        $departments_out = implode(', ', $departments_ary);
-    }
+    $dept_names = array_map(
+        function( $department ) use ( $all_depts ) {
+            foreach ( $all_depts as $entity_depts ) {
+                if ( isset( $entity_depts[ $department ] ) ) {
+                    return $entity_depts[ $department ]['label'];
+                }
+            }
+        },
+        $group_academic_units['departments']
+    );
 
-    return $departments_out;
+    natcasesort( array_filter( $dept_names ) );
+
+    return implode( ', ', $dept_names );
 }

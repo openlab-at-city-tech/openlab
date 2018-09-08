@@ -27,13 +27,11 @@
 		$selectedUnits.each( function( k, v	) {
 			selectedUnitSlugs.push( v.value );
 		} );
-        console.log(selectedUnitSlugs);
 
 		$academicUnits.removeClass( 'academic-unit-visible' ).addClass( 'academic-unit-hidden' );
 		$academicUnitCheckboxes.each( function( k, v ) {
 			// Items without parents or with unchecked parents should be shown.
 			var hasParent = v.dataset.hasOwnProperty( 'parent' ) && v.dataset.parent.length > 0;
-            console.log(v.dataset.parent);
 			if ( ! hasParent || -1 !== selectedUnitSlugs.indexOf( v.dataset.parent ) ) {
 				$( v ).closest( '.academic-unit' ).removeClass( 'academic-unit-hidden' ).addClass( 'academic-unit-visible' );
 			} else {

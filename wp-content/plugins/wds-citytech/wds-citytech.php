@@ -442,16 +442,17 @@ function wds_load_group_departments() {
 	$return = str_replace( "'", "\'", $return );
 	die( "document.getElementById( 'departments_html' ).innerHTML='$return'" );
 }
+add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' );
 
 /**
  * Get a list of schools
  */
 function openlab_get_school_list() {
 	return array(
-		'tech' => 'Technology & Design',
+		'tech'    => 'Technology & Design',
 		'studies' => 'Professional Studies',
-		'arts' => 'Arts & Sciences',
-		'other' => 'Other',
+		'arts'    => 'Arts & Sciences',
+		'other'   => 'Other',
 	);
 }
 
@@ -513,9 +514,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 function openlab_get_office_list() {
 	return array(
 		'academic-affairs' => 'Academic Affairs',
-		'student-affairs' => 'Student Affairs & Enrollment Management',
-		'administration' => 'Administration & Finance',
-		'president' => 'President\'s Office',
+		'student-affairs'  => 'Student Affairs & Enrollment Management',
+		'administration'   => 'Administration & Finance',
+		'president'        => 'President\'s Office',
 	);
 }
 
@@ -907,26 +908,23 @@ function wds_load_group_type( $group_type ) {
 
 	$do_sod_selector = 'course' !== $group_type && 'Student' !== $account_type;
 
+	$selector_args = [];
+	if ( ! $do_sod_selector ) {
+		$selector_args['entities'] = [ 'school' ];
+		$selector_args['legacy']   = true;
+	}
+
+	$selector_args['required'] = openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type );
+	$selector_args['checked']  = openlab_get_group_academic_unit_data( bp_get_current_group_id() );
+
 	$return .= '<tr><td class="school-inputs" colspan="2">';
 
-	if ( ! $do_sod_selector ) {
-//		$onclick = 'onclick="wds_load_group_departments();"';
+	ob_start();
+	openlab_academic_unit_selector( $selector_args );
+	$selector .= ob_get_contents();
+	ob_end_clean();
 
-		$schools = openlab_get_school_list();
-		foreach ( $schools as $school_key => $school_label ) {
-			$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
-		}
-	} else {
-		// S/O/D selector pre-selected values are stored differently.
-		$sod_selected = openlab_get_group_sod_data( bp_get_current_group_id() );
-
-		ob_start();
-		openlab_sod_selector( $sod_selected );
-		$selector .= ob_get_contents();
-		ob_end_clean();
-
-		$return .= $selector;
-	}
+	$return .= $selector;
 
 	$return .= '</td>';
 	$return .= '</tr>';
@@ -947,18 +945,6 @@ function wds_load_group_type( $group_type ) {
 
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
-
-	if ( ! $do_sod_selector ) {
-		$return .= '<tr class="department-title">';
-
-		$return .= '<td colspan="2" class="block-title italics">Department(s)';
-		if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-			$return .= ' <span class="required">(required)</span>';
-		}
-		$return .= '</td></tr>';
-		$return .= '<tr class="departments"><td id="departments_html" colspan="2" aria-live="polite"></td>';
-		$return .= '</tr>';
-	}
 
 	$return .= '</table></div></div>';
 
@@ -1017,7 +1003,7 @@ function wds_load_group_type( $group_type ) {
 		$return .= '</table></div></div><!--.panel-->';
 	}
 
-//	$return .= '<script>wds_load_group_departments();</script>';
+	$return .= '<script>wds_load_group_departments();</script>';
 
 	if ( $echo ) {
 		return $return;
@@ -1071,7 +1057,7 @@ function openlab_require_school_and_department_for_groups() {
 
 	if ( openlab_is_school_required_for_group_type( $group_type ) && (bp_is_action_variable( 'group-details', 1 ) || bp_is_action_variable( 'edit-details' )) ) {
 
-		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) || ! isset( $_POST['wds_group_school'] ) || ! isset( $_POST['wds_departments'] ) ) {
+		if ( empty( $_POST['schools'] ) || empty( $_POST['departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
 			bp_core_redirect( $redirect );
 		}
@@ -2720,13 +2706,31 @@ add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
 
 /**
  * School/Office/Department selector markup.
+ *
+ * @param array $args {
+ *   @type array $checked Multidimensional array of schools/offices/departments to be checked.
+ *   @type array $entities Top-level entities to be included.
+ *   @type bool  $legacy Whether to use the legacy interface.
+ *   @type bool  $required
+ * }
  */
-function openlab_sod_selector( $_checked = array() ) {
-    $checked = array_merge( array(
+function openlab_academic_unit_selector( $args = array() ) {
+	$_checked = $args['checked'] ?: array();
+    $checked  = array_merge( array(
         'schools'     => array(),
         'offices'     => array(),
         'departments' => array(),
     ), $_checked );
+
+	$allowed_entities = [ 'school', 'office' ];
+	if ( is_array( $args['entities'] ) ) {
+		$entities = array_intersect( $args['entities'], $allowed_entities );
+	} else {
+		$entities = $allowed_entities;
+	}
+
+	$legacy   = ! empty( $args['legacy'] );
+	$required = ! empty( $args['required'] );
 
     $schools = openlab_get_school_list();
     $offices = openlab_get_office_list();
@@ -2749,42 +2753,46 @@ function openlab_sod_selector( $_checked = array() ) {
 
     ?>
 
-    <div class="sod-selector">
+    <div class="academic-unit-selector <?php if ( $legacy ) : ?> academic-unit-selector-legacy<?php endif; ?>">
 
-    <fieldset>
-        <legend>Schools:</legend>
+	<?php if ( in_array( 'school', $entities, true ) ) : ?>
+		<fieldset class="school-selector">
+			<legend<?php if ( $legacy ) : ?> class="sr-only"<?php endif; ?>>Schools:</legend>
 
-        <div class="school-inputs">
-            <ul>
-            <?php foreach ( $schools as $school_slug => $school_label ) : ?>
-                <li>
-                    <label>
-                        <input name="schools[]" class="academic-unit-checkbox" type="checkbox" value="<?php echo esc_attr( $school_slug ); ?>" <?php checked( in_array( $school_slug, $checked['schools'], true ) ); ?> /> <?php echo esc_html( $school_label ); ?>
-                    </label>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        </div>
-    </fieldset>
+			<div class="school-inputs entity-inputs">
+				<ul>
+				<?php foreach ( $schools as $school_slug => $school_label ) : ?>
+					<li>
+						<label>
+							<input name="schools[]" class="academic-unit-checkbox" type="checkbox" value="<?php echo esc_attr( $school_slug ); ?>" <?php checked( in_array( $school_slug, $checked['schools'], true ) ); ?> /> <?php echo esc_html( $school_label ); ?>
+						</label>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
+		</fieldset>
+	<?php endif; ?>
 
-    <fieldset>
-        <legend>Offices:</legend>
+	<?php if ( in_array( 'office', $entities, true ) ) : ?>
+		<fieldset class="office-selector">
+			<legend>Offices:</legend>
 
-        <div class="school-inputs">
-            <ul>
-            <?php foreach ( $offices as $office_slug => $office_label ) : ?>
-                <li>
-                    <label>
-                        <input class="academic-unit-checkbox" name="offices[]" type="checkbox" value="<?php echo esc_attr( $office_slug ); ?>" <?php checked( in_array( $office_slug, $checked['offices'], true ) ); ?> /> <?php echo esc_html( $office_label ); ?>
-                    </label>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        </div>
-    </fieldset>
+			<div class="office-inputs entity-inputs">
+				<ul>
+				<?php foreach ( $offices as $office_slug => $office_label ) : ?>
+					<li>
+						<label>
+							<input class="academic-unit-checkbox" name="offices[]" type="checkbox" value="<?php echo esc_attr( $office_slug ); ?>" <?php checked( in_array( $office_slug, $checked['offices'], true ) ); ?> /> <?php echo esc_html( $office_label ); ?>
+						</label>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
+		</fieldset>
+	<?php endif; ?>
 
-    <fieldset>
-        <legend>Departments (required):</legend>
+    <fieldset class="department-selector">
+        <legend>Departments<?php if ( $required ) : ?> (required)<?php endif; ?>:</legend>
         <div class="checkbox-list-container department-list-container">
             <div class="cboxol-units-of-type">
                 <ul>
@@ -2811,7 +2819,7 @@ function openlab_sod_selector( $_checked = array() ) {
         </div>
     </fieldset>
 
-	<?php wp_nonce_field( 'openlab_sod_selector', 'openlab-sod-selector-nonce' ); ?>
+	<?php wp_nonce_field( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' ); ?>
 
     </div>
 

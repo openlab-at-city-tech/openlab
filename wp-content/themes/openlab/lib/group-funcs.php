@@ -656,7 +656,8 @@ function cuny_group_single() {
                         $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
                         $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-                        $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+
+                        $departments_string = openlab_generate_department_name( $group_id );
                         ?>
                         <div class="table-div">
                             <?php
@@ -679,7 +680,7 @@ function cuny_group_single() {
                             </div>
                             <div class="table-row row">
                                 <div class="bold col-sm-7">Department</div>
-                                <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                <div class="col-sm-17 row-content"><?php echo esc_html( $departments_string ); ?></div>
                             </div>
                             <div class="table-row row">
                                 <div class="bold col-sm-7">Course Code</div>
@@ -719,7 +720,7 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $wds_school      = openlab_generate_school_name( $group_id );
+                            $wds_school      = openlab_generate_school_office_name( $group_id );
                             $wds_departments = openlab_generate_department_name( $group_id );
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
@@ -727,7 +728,7 @@ function cuny_group_single() {
                             <?php if ($wds_school && !empty($wds_school)): ?>
 
                                 <div class="table-row row">
-                                    <div class="bold col-sm-7">School</div>
+                                    <div class="bold col-sm-7">School / Office</div>
                                     <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
                                 </div>
 
@@ -737,7 +738,7 @@ function cuny_group_single() {
 
                                 <div class="table-row row">
                                     <div class="bold col-sm-7">Department</div>
-                                    <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                    <div class="col-sm-17 row-content"><?php echo esc_html( $wds_departments ); ?></div>
                                 </div>
 
                             <?php endif; ?>
@@ -1709,12 +1710,12 @@ add_action( 'bp_after_group_details_creation_step', function() {
  *
  * @param BP_Groups_Group $group
  */
-function openlab_group_sod_save( $group ) {
-    if ( empty( $_POST['openlab-sod-selector-nonce'] ) ) {
+function openlab_group_academic_unit_save( $group ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
         return;
     }
 
-    check_admin_referer( 'openlab_sod_selector', 'openlab-sod-selector-nonce' );
+    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
 
     $map = array(
         'schools'     => 'openlab_school',
@@ -1741,38 +1742,20 @@ function openlab_group_sod_save( $group ) {
             groups_add_groupmeta( $group->id, $meta_key, $to_add_value );
         }
     }
-
-    // Mirror department data to legacy group field, for purposes of search.
-    $department_labels = array();
-    $group_sod_data    = openlab_get_group_sod_data( $group->id );
-    foreach ( array( 'schools', 'offices' ) as $entity_type ) {
-        foreach ( $group_sod_data[ $entity_type ] as $entity ) {
-            $entity_depts = openlab_get_entity_departments( $entity );
-            foreach ( $group_sod_data['departments'] as $group_department ) {
-                if ( ! isset( $entity_depts[ $group_department ] ) ) {
-                    continue;
-                }
-                $department_labels[] = $entity_depts[ $group_department ]['label'];
-            }
-        }
-    }
-
-    sort( $department_labels );
-    groups_update_groupmeta( $group->id, 'wds_departments', implode( ',', $department_labels ) );
 }
-add_action( 'groups_group_after_save', 'openlab_group_sod_save' );
+add_action( 'groups_group_after_save', 'openlab_group_academic_unit_save' );
 
 /**
  * Gets S/O/D data for a group.
  *
  * @param int $group_id
  */
-function openlab_get_group_sod_data( $group_id ) {
+function openlab_get_group_academic_unit_data( $group_id ) {
     $values = array();
     $map    = array(
         'schools'     => 'openlab_school',
         'offices'     => 'openlab_office',
-        'departments' => 'openlab_departments',
+        'departments' => 'openlab_department',
     );
 
     foreach ( $map as $type_key => $meta_key ) {
