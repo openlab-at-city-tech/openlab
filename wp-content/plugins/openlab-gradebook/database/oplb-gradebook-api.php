@@ -102,36 +102,36 @@ class oplb_gradebook_api
         $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $amid);
         $pie_chart_data = $wpdb->get_col($query);
 
-        function isA($n)
+        $isA = function($n)
         {
             return ($n >= 90 ? true : false);
-        }
+        };
 
-        function isB($n)
+        $isB = function($n)
         {
             return ($n >= 80 && $n < 90 ? true : false);
-        }
+        };
 
-        function isC($n)
+        $isC = function($n)
         {
             return ($n >= 70 && $n < 80 ? true : false);
-        }
+        };
 
-        function isD($n)
+        $isD = function($n)
         {
             return ($n >= 60 && $n < 70 ? true : false);
-        }
+        };
 
-        function isF($n)
+        $isF = function($n)
         {
             return ($n < 60 ? true : false);
-        }
+        };
 
-        $is_A = count(array_filter($pie_chart_data, 'isA'));
-        $is_B = count(array_filter($pie_chart_data, 'isB'));
-        $is_C = count(array_filter($pie_chart_data, 'isC'));
-        $is_D = count(array_filter($pie_chart_data, 'isD'));
-        $is_F = count(array_filter($pie_chart_data, 'isF'));
+        $is_A = count(array_filter($pie_chart_data, $isA));
+        $is_B = count(array_filter($pie_chart_data, $isB));
+        $is_C = count(array_filter($pie_chart_data, $isC));
+        $is_D = count(array_filter($pie_chart_data, $isD));
+        $is_F = count(array_filter($pie_chart_data, $isF));
 
         $pie_chart_data = array(
             'labels' => array('A', 'B', 'C', 'D', 'F'),
