@@ -100,7 +100,7 @@ $field_ids = array(1);
 
                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
                         <?php
-                        if ( 'Major Program of Study' === bp_get_the_profile_field_name() ) {
+                        if ( 'Major Program of Study' === bp_get_the_profile_field_name() || 'Department' === bp_get_the_profile_field_name() ) {
                             continue;
                         }
                         ?>
