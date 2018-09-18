@@ -9216,8 +9216,71 @@ input#group-request-send {
 .info-panel .table-div .table-row:first-child div {
   border-top: none;
 }
-.school-inputs > label {
+.academic-unit-selector {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+.academic-unit-selector fieldset {
+  margin-top: 1em;
+}
+.academic-unit-selector fieldset:first-child {
+  margin-top: 0;
+}
+.academic-unit-selector legend {
+  border-bottom: 0;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+.academic-unit-selector label {
+  font-weight: normal;
+}
+.academic-unit-selector .checkbox-list-container li {
+  float: none;
+}
+.academic-unit-selector .entity-inputs {
+  overflow: hidden;
+}
+.academic-unit-selector.academic-unit-selector-legacy {
+  border: none;
+  padding: 0;
+  margin-top: -1em;
+}
+.academic-unit-selector.academic-unit-selector-legacy .entity-inputs li label {
+  font-weight: bold;
+}
+.academic-unit-selector.academic-unit-selector-legacy .department-selector legend {
+  font-weight: normal;
+  font-style: italic;
+}
+.academic-unit-selector.academic-unit-selector-legacy fieldset {
+  margin: 0;
+}
+.entity-inputs ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+.entity-inputs li {
+  float: left;
+}
+.entity-inputs label {
   margin-right: 18px;
+}
+.entity-inputs input {
+  margin-top: -2px;
+  margin-right: 5px;
+}
+.academic-unit-hidden {
+  display: none;
+}
+.department-list-container ul {
+  margin-top: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+.department-list-container li {
+  margin-bottom: 0;
 }
 .group-subscription-status {
   background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;

@@ -377,75 +377,6 @@ function wds_bp_profile_group_tabs() {
 	do_action( 'xprofile_profile_group_tabs' );
 }
 
-//Group Stuff
-function wds_groups_ajax() {
-	global $bp;
-
-	if ( ! bp_is_active( 'groups' ) ) {
-		return;
-	}
-
-	wp_print_scripts( array( 'sack' ) );
-	$sack = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
-	$loading = '<img src="' . get_bloginfo( 'template_directory' ) . '/_inc/images/ajax-loader.gif">';
-	?>
-
-	<script type="text/javascript">
-		//<![CDATA[
-		function wds_load_group_type(id) {
-			<?php echo $sack; ?>
-			var select_box = document.getElementById(id);
-			var selected_index = select_box.selectedIndex;
-			var selected_value = select_box.options[selected_index].value;
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar("action", "wds_load_group_type");
-			isack.setVar("group_type", selected_value);
-			isack.runAJAX();
-			return true;
-		}
-
-		function wds_load_group_departments(id) {
-			<?php
-			$group = bp_get_current_group_id();
-
-			//get group type
-			if ( ! empty( $_GET['type'] ) ) {
-				$group_type = $_GET['type'];
-			} else {
-				$group_type = 'club';
-			}
-
-
-			echo $sack;
-			?>
-			var schools = "0";
-			for ( school in OLGroupCreate.schools ) {
-				if ( ! OLGroupCreate.schools.hasOwnProperty( school ) ) {
-					continue;
-				}
-
-				var schoolElId = 'school_' + school;
-				if ( document.getElementById( schoolElId ).checked ) {
-					schools = schools + "," + document.getElementById( schoolElId ).value;
-				}
-			}
-			var group_type = jQuery('input[name="group_type"]').val();
-			isack.execute = 1;
-			isack.method = 'POST';
-			isack.setVar("action", "wds_load_group_departments");
-			isack.setVar("schools", schools);
-			isack.setVar("group", "<?php echo $group; ?>");
-			isack.setVar("is_group_create", "<?php echo intval( bp_is_group_create() ) ?>");
-			isack.setVar("group_type", "<?php echo $group_type; ?>");
-			isack.runAJAX();
-			return true;
-		}
-	//]]>
-	</script>
-	<?php
-}
-add_action( 'wp_head', 'wds_groups_ajax' );
 
 function wds_load_group_departments() {
 	global $wpdb, $bp;
@@ -525,17 +456,16 @@ function wds_load_group_departments() {
 	die( "document.getElementById( 'departments_html' ).innerHTML='$return'" );
 }
 add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' );
-add_action( 'wp_ajax_nopriv_wds_load_group_departments', 'wds_load_group_departments' );
 
 /**
  * Get a list of schools
  */
 function openlab_get_school_list() {
 	return array(
-		'tech' => 'Technology & Design',
+		'tech'    => 'Technology & Design',
 		'studies' => 'Professional Studies',
-		'arts' => 'Arts & Sciences',
-		'other' => 'Other',
+		'arts'    => 'Arts & Sciences',
+		'other'   => 'Other',
 	);
 }
 
@@ -553,6 +483,62 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 		$school = array_search( $school, $schools );
 	}
 
+	// Lazy - I didn't feel like manually converting to key-value structure
+	$departments_sorted = array();
+	foreach ( $schools as $s_key => $s_label ) {
+		// Skip if we only want one school
+		if ( $school && $s_key != $school ) {
+			continue;
+		}
+
+		$departments_sorted[ $s_key ] = array();
+	}
+
+	if ( $school ) {
+		$d_schools = array( $school );
+	} else {
+		$d_schools = array_keys( $schools );
+	}
+
+	foreach ( $d_schools as $d_school ) {
+		$depts = openlab_get_entity_departments( $d_school );
+
+		foreach ( $depts as $dept_name => $dept ) {
+			if ( 'short' == $label_type ) {
+				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
+			} else {
+				$d_label = $dept['label'];
+			}
+
+			$departments_sorted[ $d_school ][ $dept_name ] = $d_label;
+		}
+	}
+
+	if ( $school ) {
+		$departments_sorted = $departments_sorted[ $school ];
+	}
+
+	return $departments_sorted;
+}
+
+/**
+ * Returns a list of Offices.
+ */
+function openlab_get_office_list() {
+	return array(
+		'academic-affairs' => 'Academic Affairs',
+		'student-affairs'  => 'Student Affairs & Enrollment Management',
+		'administration'   => 'Administration & Finance',
+		'president'        => 'President\'s Office',
+	);
+}
+
+/**
+ * Returns information about departments belonging to an entity (School or Office).
+ *
+ * @param string $entity Optional. Entity slug.
+ */
+function openlab_get_entity_departments( $entity = null ) {
 	$all_departments = array(
 		'tech' => array(
 			'architectural-technology' => array(
@@ -639,6 +625,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 			'humanities' => array(
 				'label' => 'Humanities',
 			),
+			'liberal-arts' => array(
+				'label' => 'Liberal Arts & Sciences',
+			),
 			'library' => array(
 				'label' => 'Library',
 			),
@@ -660,41 +649,193 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 				'label' => 'CLIP',
 			),
 		),
+		'academic-affairs' => array(
+			'adjunct-workload-management-office' => array(
+				'label' => 'Adjunct Workload Management Office',
+			),
+			'air' => array(
+				'label' => 'AIR',
+			),
+			'asap' => array(
+				'label' => 'ASAP',
+			),
+			'bmi' => array(
+				'label' => 'BMI',
+			),
+			'c-step' => array(
+				'label' => 'C-Step',
+			),
+			'college-learning-center' => array(
+				'label' => 'College Learning Center',
+			),
+			'city-poly' => array(
+				'label' => 'City Poly',
+			),
+			'college-now' => array(
+				'label' => 'College Now',
+			),
+			'continuing-education' => array(
+				'label' => 'Continuing Education',
+			),
+			'faculty-commons' => array(
+				'label' => 'Faculty Commons',
+			),
+			'first-year-programs' => array(
+				'label' => 'First Year Programs',
+			),
+			'honors-scholors' => array(
+				'label' => 'Honors Scholars',
+			),
+			'instructional-technology' => array(
+				'label' => 'Instructional Technology',
+			),
+			'library' => array(
+				'label' => 'Library',
+			),
+			'openlab' => array(
+				'label' => 'OpenLab',
+			),
+			'provost' => array(
+				'label' => 'Provost\'s Office',
+			),
+			'ptech' => array(
+				'label' => 'PTECH',
+			),
+			'arts-dean' => array(
+				'label' => 'School of Arts and Sciences, Dean’s Office',
+			),
+			'professional-dean' => array(
+				'label' => 'School of Professional Studies, Dean’s Office',
+			),
+			'tech-dean' => array(
+				'label' => 'School of Technology & Design, Dean’s Office',
+			),
+			'sponsored-programs' => array(
+				'label' => 'Sponsored Programs',
+			),
+			'undergraduate-research' => array(
+				'label' => 'Undergraduate Research & Emerging Scholars',
+			),
+		),
+		'student-affairs' => array(
+			'admissions' => array(
+				'label' => 'Admissions',
+			),
+			'athletics' => array(
+				'label' => 'Athletics & Recreation',
+			),
+			'center-for-student-accessibility' => array(
+				'label' => 'Center for Student Accessibility',
+			),
+			'childcare-services' => array(
+				'label' => 'Childcare Services',
+			),
+			'cope' => array(
+				'label' => 'COPE',
+			),
+			'counseling' => array(
+				'label' => 'Counseling',
+			),
+			'cuny-edge' => array(
+				'label' => 'CUNY Edge',
+			),
+			'cuny-service-corps' => array(
+				'label' => 'CUNY Service Corps',
+			),
+			'financial-aid' => array(
+				'label' => 'Financial Aid',
+			),
+			'new-student-center' => array(
+				'label' => 'New Student Center',
+			),
+			'registrar' => array(
+				'label' => 'Registrar',
+			),
+			'seek' => array(
+				'label' => 'SEEK',
+			),
+			'student-affairs-dept' => array(
+				'label' => 'Student Affairs',
+			),
+			'student-life' => array(
+				'label' => 'Student Life & Development',
+			),
+			'transfer-and-recruitment' => array(
+				'label' => 'Transfer & Recruitment Office',
+			),
+			'veterans-support-services' => array(
+				'label' => 'Veterans Support Services',
+			),
+			'wellness-center' => array(
+				'label' => 'Wellness Center',
+			),
+		),
+		'administration' => array(
+			'bookstore' => array(
+				'label' => 'Bookstore',
+			),
+			'buildings-and-grounds' => array(
+				'label' => 'Buildings & Grounds',
+			),
+			'business-office' => array(
+				'label' => 'Business Office',
+			),
+			'computer-information-services' => array(
+				'label' => 'Computer Information Services',
+			),
+			'health-and-safety' => array(
+				'label' => 'Health & Safety',
+			),
+			'human-resources' => array(
+				'label' => 'Human Resources',
+			),
+		),
+		'president' => array(
+			'alumni-relations' => array(
+				'label' => 'Alumni Relations',
+			),
+			'beoc' => array(
+				'label' => 'BEOC',
+			),
+			'city-tech-foundation' => array(
+				'label' => 'City Tech Foundation',
+			),
+			'communications' => array(
+				'label' => 'Communications',
+			),
+			'image-and-visual-communications' => array(
+				'label' => 'Image & Visual Communications',
+			),
+			'legal-and-title-ix' => array(
+				'label' => 'Legal and Title IX',
+			),
+			'office-of-faculty-staff-relations' => array(
+				'label' => 'Office of Faculty / Staff Relations',
+			),
+			'presidents-office' => array(
+				'label' => 'President\'s Office',
+			),
+			'professional-development-center' => array(
+				'label' => 'Professional Development Center',
+			),
+			'public-relations' => array(
+				'label' => 'Public Relations',
+			),
+			'public-safety' => array(
+				'label' => 'Public Safety',
+			),
+		),
 	);
 
-	// Lazy - I didn't feel like manually converting to key-value structure
-	$departments_sorted = array();
-	foreach ( $schools as $s_key => $s_label ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
-
-		$departments_sorted[ $s_key ] = array();
+	if ( ! $entity ) {
+		return $all_departments;
 	}
 
-	foreach ( $all_departments as $s_key => $depts ) {
-		// Skip if we only want one school
-		if ( $school && $s_key != $school ) {
-			continue;
-		}
-
-		foreach ( $depts as $dept_name => $dept ) {
-			if ( 'short' == $label_type ) {
-				$d_label = isset( $dept['short_label'] ) ? $dept['short_label'] : $dept['label'];
-			} else {
-				$d_label = $dept['label'];
-			}
-
-			$departments_sorted[ $s_key ][ $dept_name ] = $d_label;
-		}
+	if ( ! isset( $all_departments[ $entity ] ) ) {
+		return array();
 	}
 
-	if ( $school ) {
-		$departments_sorted = $departments_sorted[ $school ];
-	}
-
-	return $departments_sorted;
+	return $all_departments[ $entity ];
 }
 
 function wds_new_group_type() {
@@ -710,9 +851,6 @@ function wds_new_group_type() {
 	}
 }
 add_action( 'init', 'wds_new_group_type' );
-
-add_action( 'wp_ajax_wds_load_group_type', 'wds_load_group_type' );
-add_action( 'wp_ajax_nopriv_wds_load_group_type', 'wds_load_group_type' );
 
 function wds_load_group_type( $group_type ) {
 	global $wpdb, $bp, $user_ID;
@@ -760,11 +898,14 @@ function wds_load_group_type( $group_type ) {
 
 	$return .= '</td></tr>';
 
-	$return .= '<tr><td class="school-inputs" colspan="2">';
-
 	// If this is a Portfolio, we'll pre-check the school and department
 	// of the logged-in user
-	$checked_array = array( 'schools' => array(), 'departments' => array() );
+	$checked_array = array(
+		'schools'     => array(),
+		'departments' => array(),
+		'offices'     => array(),
+	);
+
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
 		$account_type = strtolower( bp_get_profile_field_data( array(
 			'field' => 'Account Type',
@@ -793,12 +934,25 @@ function wds_load_group_type( $group_type ) {
 		}
 	}
 
-	$onclick = 'onclick="wds_load_group_departments();"';
+	$do_sod_selector = 'course' !== $group_type && 'Student' !== $account_type;
 
-	$schools = openlab_get_school_list();
-	foreach ( $schools as $school_key => $school_label ) {
-		$return .= sprintf( '<label><input type="checkbox" id="school_%s" name="wds_group_school[]" value="%s" ' . $onclick . ' ' . checked( in_array( $school_key, $checked_array['schools'] ), true, false ) . '> %s</label>', esc_attr( $school_key ), esc_attr( $school_key ), esc_html( $school_label ) );
+	$selector_args = [];
+	if ( ! $do_sod_selector ) {
+		$selector_args['entities'] = [ 'school' ];
+		$selector_args['legacy']   = true;
 	}
+
+	$selector_args['required'] = openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type );
+	$selector_args['checked']  = openlab_get_group_academic_units( bp_get_current_group_id() );
+
+	$return .= '<tr><td class="school-inputs" colspan="2">';
+
+	ob_start();
+	openlab_academic_unit_selector( $selector_args );
+	$selector = ob_get_contents();
+	ob_end_clean();
+
+	$return .= $selector;
 
 	$return .= '</td>';
 	$return .= '</tr>';
@@ -819,16 +973,6 @@ function wds_load_group_type( $group_type ) {
 
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
-
-	$return .= '<tr class="department-title">';
-
-	$return .= '<td colspan="2" class="block-title italics">Department(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type ) ) {
-		$return .= ' <span class="required">(required)</span>';
-	}
-	$return .= '</td></tr>';
-	$return .= '<tr class="departments"><td id="departments_html" colspan="2" aria-live="polite"></td>';
-	$return .= '</tr>';
 
 	$return .= '</table></div></div>';
 
@@ -941,7 +1085,7 @@ function openlab_require_school_and_department_for_groups() {
 
 	if ( openlab_is_school_required_for_group_type( $group_type ) && (bp_is_action_variable( 'group-details', 1 ) || bp_is_action_variable( 'edit-details' )) ) {
 
-		if ( empty( $_POST['wds_group_school'] ) || empty( $_POST['wds_departments'] ) || ! isset( $_POST['wds_group_school'] ) || ! isset( $_POST['wds_departments'] ) ) {
+		if ( empty( $_POST['schools'] ) || empty( $_POST['departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
 			bp_core_redirect( $redirect );
 		}
@@ -2587,3 +2731,125 @@ add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
 	$upload_dir = wp_upload_dir();
 	return $upload_dir['basedir'] . '/dkpdf-tmp';
 } );
+
+/**
+ * School/Office/Department selector markup.
+ *
+ * @param array $args {
+ *   @type array $checked Multidimensional array of schools/offices/departments to be checked.
+ *   @type array $entities Top-level entities to be included.
+ *   @type bool  $legacy Whether to use the legacy interface.
+ *   @type bool  $required
+ * }
+ */
+function openlab_academic_unit_selector( $args = array() ) {
+	$_checked = $args['checked'] ?: array();
+    $checked  = array_merge( array(
+        'schools'     => array(),
+        'offices'     => array(),
+        'departments' => array(),
+    ), $_checked );
+
+	$allowed_entities = [ 'school', 'office' ];
+	if ( isset( $args['entities'] ) && is_array( $args['entities'] ) ) {
+		$entities = array_intersect( $args['entities'], $allowed_entities );
+	} else {
+		$entities = $allowed_entities;
+	}
+
+	$legacy   = ! empty( $args['legacy'] );
+	$required = ! empty( $args['required'] );
+
+    $schools = openlab_get_school_list();
+    $offices = openlab_get_office_list();
+
+    // Flatten and alphabetize.
+    $_departments = openlab_get_entity_departments();
+    $departments  = array();
+    foreach ( $_departments as $_entity_slug => $_depts ) {
+        foreach ( $_depts as $_dept_slug => $_dept_value ) {
+            $_dept_value['parent'] = $_entity_slug;
+            $departments[ $_dept_slug ] = $_dept_value;
+        }
+    }
+
+    uasort( $departments, function( $a, $b ) {
+        return strnatcasecmp( $a['label'], $b['label'] );
+    } );
+
+    wp_enqueue_script( 'openlab-academic-units' );
+
+    ?>
+
+    <div class="academic-unit-selector <?php if ( $legacy ) : ?> academic-unit-selector-legacy<?php endif; ?>">
+
+	<?php if ( in_array( 'school', $entities, true ) ) : ?>
+		<fieldset class="school-selector">
+			<legend<?php if ( $legacy ) : ?> class="sr-only"<?php endif; ?>>Schools:</legend>
+
+			<div class="school-inputs entity-inputs">
+				<ul>
+				<?php foreach ( $schools as $school_slug => $school_label ) : ?>
+					<li>
+						<label>
+							<input name="schools[]" class="academic-unit-checkbox" type="checkbox" value="<?php echo esc_attr( $school_slug ); ?>" <?php checked( in_array( $school_slug, $checked['schools'], true ) ); ?> /> <?php echo esc_html( $school_label ); ?>
+						</label>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
+		</fieldset>
+	<?php endif; ?>
+
+	<?php if ( in_array( 'office', $entities, true ) ) : ?>
+		<fieldset class="office-selector">
+			<legend>Offices:</legend>
+
+			<div class="office-inputs entity-inputs">
+				<ul>
+				<?php foreach ( $offices as $office_slug => $office_label ) : ?>
+					<li>
+						<label>
+							<input class="academic-unit-checkbox" name="offices[]" type="checkbox" value="<?php echo esc_attr( $office_slug ); ?>" <?php checked( in_array( $office_slug, $checked['offices'], true ) ); ?> /> <?php echo esc_html( $office_label ); ?>
+						</label>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
+		</fieldset>
+	<?php endif; ?>
+
+    <fieldset class="department-selector">
+        <legend>Departments<?php if ( $required ) : ?> (required)<?php endif; ?>:</legend>
+        <div class="checkbox-list-container department-list-container">
+            <div class="cboxol-units-of-type">
+                <ul>
+                <?php foreach ( $departments as $dept_slug => $dept ) : ?>
+                    <li class="academic-unit academic-unit-visible">
+                        <?php
+                        $parent_attr = $dept['parent'];
+                        $id_attr     = 'academic-unit-' . $dept_slug;
+                        ?>
+
+                        <input
+                            <?php checked( in_array( $dept_slug, $checked['departments'], true ) ); ?>
+                            class="academic-unit-checkbox"
+                            data-parent="<?php echo esc_attr( $parent_attr ); ?>"
+                            id="<?php echo esc_attr( $id_attr ); ?>"
+                            name="departments[]"
+                            type="checkbox"
+                            value="<?php echo esc_attr( $dept_slug ); ?>"
+                        /> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </fieldset>
+
+	<?php wp_nonce_field( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' ); ?>
+
+    </div>
+
+    <?php
+}

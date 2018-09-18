@@ -160,18 +160,10 @@ function openlab_group_archive() {
 
     if (!empty($_GET['school'])) {
         $school = $_GET['school'];
-        /* if ( $school=="tech" ) {
-          $school="Technology & Design";
-          } elseif ( $school=="studies" ) {
-          $school="Professional Studies";
-          } elseif ( $school=="arts" ) {
-          $school="Arts & Sciences";
-          } */
     }
 
     if (!empty($_GET['department'])) {
-        $department = str_replace("-", " ", $_GET['department']);
-        $department = ucwords($department);
+        $department = wp_unslash( $_GET['department'] );
     }
 
     if (!empty($_GET['cat'])) {
@@ -196,17 +188,15 @@ function openlab_group_archive() {
 
     if (!empty($school) && 'school_all' != strtolower($school)) {
         $meta_query[] = array(
-            'key' => 'wds_group_school',
+            'key'   => 'openlab_school',
             'value' => $school,
-            'compare' => 'LIKE',
         );
     }
 
     if (!empty($department) && 'dept_all' != strtolower($department)) {
         $meta_query[] = array(
-            'key' => 'wds_departments',
+            'key'   => 'openlab_department',
             'value' => $department,
-            'compare' => 'LIKE',
         );
     }
 
@@ -666,7 +656,8 @@ function cuny_group_single() {
                         $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
                         $wds_year = groups_get_groupmeta($group_id, 'wds_year');
-                        $wds_departments = groups_get_groupmeta($group_id, 'wds_departments');
+
+                        $departments_string = openlab_generate_department_name( $group_id );
                         ?>
                         <div class="table-div">
                             <?php
@@ -689,7 +680,7 @@ function cuny_group_single() {
                             </div>
                             <div class="table-row row">
                                 <div class="bold col-sm-7">Department</div>
-                                <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                <div class="col-sm-17 row-content"><?php echo esc_html( $departments_string ); ?></div>
                             </div>
                             <div class="table-row row">
                                 <div class="bold col-sm-7">Course Code</div>
@@ -729,15 +720,16 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $wds_school      = openlab_generate_school_name( $group_id );
-                            $wds_departments = openlab_generate_department_name( $group_id );
+                            $group_units     = openlab_get_group_academic_units();
+                            $wds_school      = openlab_generate_school_office_name( $group_units );
+                            $wds_departments = openlab_generate_department_name( $group_units );
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
                             <?php if ($wds_school && !empty($wds_school)): ?>
 
                                 <div class="table-row row">
-                                    <div class="bold col-sm-7">School</div>
+                                    <div class="bold col-sm-7">School / Office Location</div>
                                     <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
                                 </div>
 
@@ -747,7 +739,7 @@ function cuny_group_single() {
 
                                 <div class="table-row row">
                                     <div class="bold col-sm-7">Department</div>
-                                    <div class="col-sm-17 row-content"><?php echo $wds_departments; ?></div>
+                                    <div class="col-sm-17 row-content"><?php echo esc_html( $wds_departments ); ?></div>
                                 </div>
 
                             <?php endif; ?>
@@ -1713,3 +1705,78 @@ add_action( 'bp_after_group_details_creation_step', function() {
         openlab_group_sharing_settings_markup( 0 );
     }
 }, 4 );
+
+/**
+ * Save the group S/O/D settings after save.
+ *
+ * @param BP_Groups_Group $group
+ */
+function openlab_group_academic_unit_save( $group ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
+
+    $to_save = [];
+    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
+        $to_save[ $unit_type ] = $_POST[ $unit_type ] ?: array();
+    }
+
+    openlab_set_group_academic_units( $group->id, $to_save );
+}
+add_action( 'groups_group_after_save', 'openlab_group_academic_unit_save' );
+
+/**
+ * Gets S/O/D data for a group.
+ *
+ * @param int $group_id
+ */
+function openlab_get_group_academic_units( $group_id ) {
+    $values = array();
+    $map    = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $type_key => $meta_key ) {
+        $units_of_type = groups_get_groupmeta( $group_id, $meta_key, false );
+        if ( ! $units_of_type ) {
+            $units_of_type = array();
+        }
+        $values[ $type_key ] = $units_of_type;
+    }
+
+    return $values;
+}
+
+/**
+ * Sets academic units for a group.
+ *
+ * @param int   $group_id
+ * @param array $units
+ */
+function openlab_set_group_academic_units( $group_id, $units ) {
+    $map = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $data_key => $meta_key ) {
+        $existing = groups_get_groupmeta( $group_id, $meta_key, false );
+        $to_save  = $units[ $data_key ] ?: array();
+
+        $to_delete = array_diff( $existing, $to_save );
+        $to_add    = array_diff( $to_save, $existing );
+
+        foreach ( $to_delete as $to_delete_value ) {
+            groups_delete_groupmeta( $group_id, $meta_key, $to_delete_value );
+        }
+
+        foreach ( $to_add as $to_add_value ) {
+            groups_add_groupmeta( $group_id, $meta_key, $to_add_value );
+        }
+    }
+}

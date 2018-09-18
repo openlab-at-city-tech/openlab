@@ -60,9 +60,50 @@ $field_ids = array(1);
                     <?php $display_name_shown = true ?>
                 <?php } ?>
 
+                <?php if ( 'Staff' === $account_type || 'Faculty' === $account_type ) : ?>
+                    <div class="editfield field_name alt form-group">
+                        <label for="ol-offices">School / Office Location / Department (required)</label>
+                        <?php
+                        $selector_args = [
+                            'required' => true,
+                            'checked'  => openlab_get_user_academic_units( $user_ID ),
+                        ];
+                        openlab_academic_unit_selector( $selector_args );
+                        ?>
+                    </div>
+                <?php else : ?>
+                    <?php
+                    $depts   = [];
+                    $checked = openlab_get_user_academic_units( $user_ID );
+
+                    $schools = openlab_get_school_list();
+                    foreach ( $schools as $school => $_ ) {
+                        $depts += openlab_get_entity_departments( $school );
+                    }
+                    ?>
+                    <div class="editfield field_name alt">
+                        <label for="ol-offices">Major Program of Study (required)</label>
+                        <select name="departments-dropdown" class="form-control">
+                            <option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
+                            <option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
+                            <?php foreach ( $depts as $dept_value => $dept ) : ?>
+                                <option value="<?php echo esc_attr( $dept_value ); ?>" <?php selected( in_array( $dept_value, $checked['departments'], true ) ); ?>><?php echo esc_html( $dept['label'] ); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <?php wp_nonce_field( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce', false ); ?>
+                    </div>
+
+                <?php endif; ?>
+
                 <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
+                        <?php
+                        if ( 'Major Program of Study' === bp_get_the_profile_field_name() || 'Department' === bp_get_the_profile_field_name() ) {
+                            continue;
+                        }
+                        ?>
 
                         <?php /* Add to the array for the field-ids input */ ?>
                         <?php $field_ids[] = bp_get_the_profile_field_id() ?>

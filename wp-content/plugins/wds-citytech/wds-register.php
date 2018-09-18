@@ -169,6 +169,8 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 	$exclude_fields = array(
 		openlab_get_xprofile_field_id( 'First Name' ),
 		openlab_get_xprofile_field_id( 'Last Name' ),
+		openlab_get_xprofile_field_id( 'Major Program of Study' ),
+		openlab_get_xprofile_field_id( 'Department' ),
 	);
 
 	$has_profile_args = array(
@@ -179,6 +181,43 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
 	$return = '';
 	if ( function_exists( 'bp_has_profile' ) ) :
+		if ( 'Staff' === $account_type || 'Faculty' === $account_type ) :
+			?>
+			<div class="editfield field_name alt form-group">
+				<label for="ol-offices">School / Office Location / Department (required)</label>
+				<?php
+				$selector_args = [
+					'required' => true,
+				];
+				openlab_academic_unit_selector( $selector_args );
+				?>
+			</div>
+		<?php elseif ( 'Alumni' === $account_type || 'Student' === $account_type ) : ?>
+			<?php
+			$depts   = [];
+			$checked = openlab_get_user_academic_units( 0 );
+
+			$schools = openlab_get_school_list();
+			foreach ( $schools as $school => $_ ) {
+				$depts += openlab_get_entity_departments( $school );
+			}
+			?>
+			<div class="editfield field_name alt">
+				<label for="ol-offices">Major Program of Study (required)</label>
+				<select name="departments-dropdown" class="form-control">
+					<option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
+					<option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
+					<?php foreach ( $depts as $dept_value => $dept ) : ?>
+						<option value="<?php echo esc_attr( $dept_value ); ?>" <?php selected( in_array( $dept_value, $checked['departments'], true ) ); ?>><?php echo esc_html( $dept['label'] ); ?></option>
+					<?php endforeach; ?>
+				</select>
+
+				<?php wp_nonce_field( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce', false ); ?>
+			</div><?php
+		endif;
+
+		$return .= ob_get_clean();
+
 		if ( bp_has_profile( $has_profile_args ) ) :
 			while ( bp_profile_groups() ) :
 				bp_the_profile_group();
@@ -349,6 +388,7 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 				endwhile;
 endif;
 endif;
+
 		return $return;
 }
 
@@ -413,3 +453,37 @@ function openlab_unload_activation_key() {
 	buddypress()->current_action = '';
 }
 add_action( 'bp_init', 'openlab_unload_activation_key' );
+
+/**
+ * Saves academic unit data on registration.
+ */
+function openlab_save_academic_unit_data_at_registration( $usermeta ) {
+	$to_save = [];
+    if ( isset( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
+		check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
+		$to_save = openlab_get_academic_unit_data_from_post();
+
+    } elseif ( isset( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
+		check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
+		$to_save = openlab_get_legacy_academic_unit_data_from_post();
+	}
+
+	if ( $to_save ) {
+		$usermeta['academic_units'] = $to_save;
+	}
+
+	return $usermeta;
+}
+add_filter( 'bp_signup_usermeta', 'openlab_save_academic_unit_data_at_registration' );
+
+/**
+ * Processes academic unit data on account activation.
+ */
+function openlab_process_academic_unit_data_at_activation( $user_id, $key, $data ) {
+	if ( ! isset( $data['meta']['academic_units'] ) ) {
+		return;
+	}
+
+	openlab_set_user_academic_units( $user_id, $data['meta']['academic_units'] );
+}
+add_action( 'bp_core_activated_user', 'openlab_process_academic_unit_data_at_activation', 10, 3 );

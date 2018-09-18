@@ -2196,8 +2196,84 @@ input#group-request-send {
         }
     }
 }
-.school-inputs > label {
-    margin-right: 18px;
+.academic-unit-selector {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+
+    fieldset {
+        margin-top: 1em;
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    legend {
+        border-bottom: 0;
+        font-size: 1em;
+        font-weight: @bold;
+        margin-bottom: 0;
+    }
+    label {
+        font-weight: normal;
+    }
+    .checkbox-list-container li {
+        float: none;
+    }
+
+    .entity-inputs {
+        overflow: hidden;
+    }
+
+    // Legacy overrides.
+    &.academic-unit-selector-legacy {
+        border: none;
+        padding: 0;
+        margin-top: -1em;
+
+        .entity-inputs li label {
+            font-weight: bold;
+        }
+
+        .department-selector legend {
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        fieldset {
+            margin: 0;
+        }
+    }
+}
+.entity-inputs {
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    li {
+        float: left;
+    }
+    label {
+        margin-right: 18px;
+    }
+    input {
+        margin-top: -2px;
+        margin-right: 5px;
+    }
+}
+.academic-unit-hidden {
+    display: none;
+}
+.department-list-container {
+    ul {
+        margin-top: 0;
+        padding-left: 0;
+        list-style-type: none;
+    }
+
+    li {
+        margin-bottom: 0;
+    }
 }
 .group-subscription-status{
     background: url('images/email.png') no-repeat scroll left top rgba(0, 0, 0, 0) !important;
