@@ -647,88 +647,106 @@ function openlab_get_entity_departments( $entity = null ) {
 			),
 		),
 		'academic-affairs' => array(
-			'provost' => array(
-				'label' => 'Provost\'s Office',
-			),
-			'arts-dean' => array(
-				'label' => 'School of Arts and Sciences, Dean’s Office',
-			),
-			'tech-dean' => array(
-				'label' => 'School of Technology & Design, Dean’s Office',
-			),
-			'professional-dean' => array(
-				'label' => 'School of Professional Studies, Dean’s Office',
+			'adjunct-workload-management-office' => array(
+				'label' => 'Adjunct Workload Management Office',
 			),
 			'air' => array(
 				'label' => 'AIR',
 			),
-			'fyp' => array(
-				'label' => 'FYP',
-			),
-			'faculty-commons' => array(
-				'label' => 'Faculty Commons',
-			),
-			'office-of-sponsored-programs' => array(
-				'label' => 'Office of Sponsored Programs',
-			),
-			'adjunct-workload-management-office' => array(
-				'label' => 'Adjunct Workload Management Office',
-			),
-			'undergraduate-research' => array(
-				'label' => 'Undergraduate Research & Emerging Scholars',
-			),
-			'honors-scholors' => array(
-				'label' => 'Honors Scholars',
+			'asap' => array(
+				'label' => 'ASAP',
 			),
 			'bmi' => array(
 				'label' => 'BMI',
 			),
-			'asap' => array(
-				'label' => 'ASAP',
-			),
-			'college-now' => array(
-				'label' => 'College Now',
-			),
 			'c-step' => array(
 				'label' => 'C-Step',
-			),
-			'ptech' => array(
-				'label' => 'PTECH',
-			),
-			'city-poly' => array(
-				'label' => 'City Poly',
-			),
-			'beoc' => array(
-				'label' => 'BEOC',
-			),
-			'continuing-education' => array(
-				'label' => 'Continuing Education',
-			),
-			'instructional-technology' => array(
-				'label' => 'Instructional Technology',
 			),
 			'college-learning-center' => array(
 				'label' => 'College Learning Center',
 			),
+			'city-poly' => array(
+				'label' => 'City Poly',
+			),
+			'college-now' => array(
+				'label' => 'College Now',
+			),
+			'continuing-education' => array(
+				'label' => 'Continuing Education',
+			),
+			'faculty-commons' => array(
+				'label' => 'Faculty Commons',
+			),
+			'first-year-programs' => array(
+				'label' => 'First Year Programs',
+			),
+			'honors-scholors' => array(
+				'label' => 'Honors Scholars',
+			),
+			'instructional-technology' => array(
+				'label' => 'Instructional Technology',
+			),
 			'library' => array(
 				'label' => 'Library',
 			),
+			'openlab' => array(
+				'label' => 'OpenLab',
+			),
+			'provost' => array(
+				'label' => 'Provost\'s Office',
+			),
+			'ptech' => array(
+				'label' => 'PTECH',
+			),
+			'arts-dean' => array(
+				'label' => 'School of Arts and Sciences, Dean’s Office',
+			),
+			'professional-dean' => array(
+				'label' => 'School of Professional Studies, Dean’s Office',
+			),
+			'tech-dean' => array(
+				'label' => 'School of Technology & Design, Dean’s Office',
+			),
+			'sponsored-programs' => array(
+				'label' => 'Sponsored Programs',
+			),
+			'undergraduate-research' => array(
+				'label' => 'Undergraduate Research & Emerging Scholars',
+			),
 		),
 		'student-affairs' => array(
-			'registrar' => array(
-				'label' => 'Registrar',
-			),
 			'admissions' => array(
 				'label' => 'Admissions',
 			),
-			'transfer-and-recruitment' => array(
-				'label' => 'Transfer & Recruitment Office',
+			'athletics' => array(
+				'label' => 'Athletics & Recreation',
+			),
+			'center-for-student-accessibility' => array(
+				'label' => 'Center for Student Accessibility',
+			),
+			'childcare-services' => array(
+				'label' => 'Childcare Services',
+			),
+			'cope' => array(
+				'label' => 'COPE',
+			),
+			'counseling' => array(
+				'label' => 'Counseling',
+			),
+			'cuny-edge' => array(
+				'label' => 'CUNY Edge',
+			),
+			'cuny-service-corps' => array(
+				'label' => 'CUNY Service Corps',
+			),
+			'financial-aid' => array(
+				'label' => 'Financial Aid',
 			),
 			'new-student-center' => array(
 				'label' => 'New Student Center',
 			),
-			'financial-aid' => array(
-				'label' => 'Financial Aid',
+			'registrar' => array(
+				'label' => 'Registrar',
 			),
 			'seek' => array(
 				'label' => 'SEEK',
@@ -739,57 +757,42 @@ function openlab_get_entity_departments( $entity = null ) {
 			'student-life' => array(
 				'label' => 'Student Life & Development',
 			),
-			'cuny-edge' => array(
-				'label' => 'CUNY Edge',
+			'transfer-and-recruitment' => array(
+				'label' => 'Transfer & Recruitment Office',
 			),
-			'city-tech-childcare-services' => array(
-				'label' => 'City Tech Childcare Services',
+			'veterans-support-services' => array(
+				'label' => 'Veterans Support Services',
 			),
-			'counseling' => array(
-				'label' => 'Counseling',
-			),
-			'center-for-student-accessibility' => array(
-				'label' => 'Center for Student Accessibility',
-			),
-			'counseling' => array(
-				'label' => 'Counseling',
-			),
-			'office-of-veterans-support-services' => array(
-				'label' => 'Office of Veterans Support Services',
-			),
-			'cuny-service-corps' => array(
-				'label' => 'CUNY Service Corps',
+			'wellness-center' => array(
+				'label' => 'Wellness Center',
 			),
 		),
 		'administration' => array(
+			'bookstore' => array(
+				'label' => 'Bookstore',
+			),
 			'buildings-and-grounds' => array(
 				'label' => 'Buildings & Grounds',
 			),
 			'business-office' => array(
 				'label' => 'Business Office',
 			),
-			'office-of-human-resources' => array(
-				'label' => 'Office of Human Resources',
+			'computer-information-services' => array(
+				'label' => 'Computer Information Services',
 			),
 			'health-and-safety' => array(
 				'label' => 'Health & Safety',
 			),
-			'bookstore' => array(
-				'label' => 'Bookstore',
-			),
-			'office-of-computer-information-services' => array(
-				'label' => 'Office of Computer Information Services',
+			'human-resources' => array(
+				'label' => 'Human Resources',
 			),
 		),
 		'president' => array(
-			'public-relations' => array(
-				'label' => 'Public Relations',
+			'alumni-relations' => array(
+				'label' => 'Alumni Relations',
 			),
-			'public-safety' => array(
-				'label' => 'Public Safety',
-			),
-			'professional-development-center' => array(
-				'label' => 'Professional Development Center',
+			'beoc' => array(
+				'label' => 'BEOC',
 			),
 			'city-tech-foundation' => array(
 				'label' => 'City Tech Foundation',
@@ -797,17 +800,26 @@ function openlab_get_entity_departments( $entity = null ) {
 			'communications' => array(
 				'label' => 'Communications',
 			),
-			'legal-and-title-ix' => array(
-				'label' => 'Legal and Title IX',
-			),
 			'image-and-visual-communications' => array(
 				'label' => 'Image & Visual Communications',
+			),
+			'legal-and-title-ix' => array(
+				'label' => 'Legal and Title IX',
 			),
 			'office-of-faculty-staff-relations' => array(
 				'label' => 'Office of Faculty / Staff Relations',
 			),
-			'alumni-relations' => array(
-				'label' => 'Alumni Relations',
+			'presidents-office' => array(
+				'label' => 'President\'s Office',
+			),
+			'professional-development-center' => array(
+				'label' => 'Professional Development Center',
+			),
+			'public-relations' => array(
+				'label' => 'Public Relations',
+			),
+			'public-safety' => array(
+				'label' => 'Public Safety',
 			),
 		),
 	);
