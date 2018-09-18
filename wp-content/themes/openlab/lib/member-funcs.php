@@ -978,6 +978,20 @@ add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
 add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
 
 /**
+ * Pulls academic unit data from POST.
+ *
+ * Abstracted here for reuse in registration process.
+ */
+function openlab_get_academic_unit_data_from_post() {
+    $to_save = [];
+    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
+        $to_save[ $unit_type ] = wp_unslash( $_POST[ $unit_type ] ) ?: array();
+    }
+
+    return $to_save;
+}
+
+/**
  * Save the member S/O/D settings after save.
  *
  * @param int $user_id
@@ -991,10 +1005,7 @@ function openlab_user_academic_unit_save( $user_id ) {
 
     check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
 
-    $to_save = [];
-    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
-        $to_save[ $unit_type ] = wp_unslash( $_POST[ $unit_type ] ) ?: array();
-    }
+    $to_save = openlab_get_academic_unit_data_from_post();
 
     openlab_set_user_academic_units( $user_id, $to_save );
 }
@@ -1073,7 +1084,7 @@ function openlab_get_user_academic_units( $user_id ) {
  * @param int   $user_id
  * @param array $units
  */
-function openlab_set_user_academic_units( $group_id, $units ) {
+function openlab_set_user_academic_units( $user_id, $units ) {
     $map = array(
         'schools'     => 'openlab_school',
         'offices'     => 'openlab_office',
@@ -1081,18 +1092,18 @@ function openlab_set_user_academic_units( $group_id, $units ) {
     );
 
     foreach ( $map as $data_key => $meta_key ) {
-        $existing = get_user_meta( $group_id, $meta_key, false );
+        $existing = get_user_meta( $user_id, $meta_key, false );
         $to_save  = $units[ $data_key ] ?: array();
 
         $to_delete = array_diff( $existing, $to_save );
         $to_add    = array_diff( $to_save, $existing );
 
         foreach ( $to_delete as $to_delete_value ) {
-            delete_user_meta( $group_id, $meta_key, $to_delete_value );
+            delete_user_meta( $user_id, $meta_key, $to_delete_value );
         }
 
         foreach ( $to_add as $to_add_value ) {
-            add_user_meta( $group_id, $meta_key, $to_add_value );
+            add_user_meta( $user_id, $meta_key, $to_add_value );
         }
     }
 }
