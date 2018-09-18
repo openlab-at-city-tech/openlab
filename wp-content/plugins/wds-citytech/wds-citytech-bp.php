@@ -676,6 +676,12 @@ add_action(
 	function() {
 		remove_action( 'bp_after_email_footer', 'ass_bp_email_footer_html_unsubscribe_links' );
 		add_action( 'bp_after_email_footer', function() {
+			static $added = null;
+
+			if ( $added ) {
+				return;
+			}
+
 			$tokens = buddypress()->ges_tokens;
 
 			if ( isset( $tokens['subscription_type'] ) && ! empty( $tokens['group.id'] ) ) {
@@ -688,6 +694,8 @@ add_action(
 					'Group notification settings',
 					'Unsubscribe or change the frequency of email notifications.'
 				);
+
+				$added = true;
 
 				echo $footer_link;
 			}
