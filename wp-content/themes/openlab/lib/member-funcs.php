@@ -759,10 +759,44 @@ function cuny_member_profile_header() {
             </div><!-- #item-meta -->
 
             <div class="profile-fields">
-                <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
-                <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
-                    <div class="info-panel panel panel-default no-margin no-margin-top">
-                        <div class="profile-fields table-div">
+                <div class="info-panel panel panel-default no-margin no-margin-top">
+                    <div class="profile-fields table-div">
+
+                        <?php
+                        $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                        $department = openlab_generate_department_name( $user_units );
+                        $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+                        ?>
+
+                        <?php if ( $department ) : ?>
+                            <div class="table-row row">
+                                <div class="bold col-sm-7">
+                                    <?php echo esc_html( $dept_label ); ?>
+                                </div>
+
+                                <div class="col-sm-17">
+                                    <?php echo esc_html( $department ); ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php
+                        $exclude_fields = [
+                            openlab_get_xprofile_field_id( 'Name' ),
+                            openlab_get_xprofile_field_id( 'Account Type' ),
+                            openlab_get_xprofile_field_id( 'First Name' ),
+                            openlab_get_xprofile_field_id( 'Last Name' ),
+                            openlab_get_xprofile_field_id( 'Major Program of Study' ),
+                            openlab_get_xprofile_field_id( 'Department' ),
+                        ];
+
+                        $has_profile_args = [
+                            'exclude_fields' => $exclude_fields,
+                            'exclude_groups' => openlab_get_exclude_groups_for_account_type( $account_type ),
+                        ];
+                        ?>
+
+                        <?php if ( bp_has_profile( $has_profile_args ) ) : ?>
 
                             <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
@@ -810,10 +844,9 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
-
-                        </div>
+                        <?php endif; // bp_has_profile()     ?>
                     </div>
-                <?php endif; // bp_has_profile()     ?>
+                </div>
             </div>
 
         </div><!-- #item-header-content -->
