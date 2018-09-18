@@ -21,12 +21,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.gradebook = options.gradebook;
                     this.listenTo(self.gradebook.students, 'add remove', _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.cells, 'add remove',  _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.cells, 'change:assign_order',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.assignments, 'add',  _.debounce(_.bind(this.initRender, this), 128));
                     this.listenTo(self.gradebook.assignments, 'remove', _.debounce(_.bind(this.handleDelete, this), 128));
                     this.listenTo(self.gradebook.assignments, 'remove',  _.debounce(_.bind(this.initRender, this), 128));
-                    this.listenTo(self.gradebook.assignments, 'change',  _.debounce(_.bind(this.render, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'change:assign_grade_type change:assign_weight',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.assignments, 'change:sorted', self.sortByAssignment);
                     this.listenTo(self.gradebook.assignments, 'change:assign_category', _.debounce(_.bind(this.initRender, this), 128));
+                    this.listenTo(self.gradebook.assignments, 'change:assign_order', this.render);
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
@@ -121,9 +123,13 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     }
 
                 },
-                render: function () {
+                render: function (ev) {
 
                     var self = this;
+
+                    if(typeof ev !== 'undefined'){
+                        console.log('ev, self.gradebook', ev, self.gradebook);
+                    }
 
                     switch (this.gradebook.sort_key) {
                         case 'cell':
