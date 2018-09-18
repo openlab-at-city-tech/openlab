@@ -101,7 +101,6 @@ class GWAPI {
 		return ! empty( $perks ) ? $perks : false;
 	}
 
-
 	/**
 	 * Get Dashboard Announcements
 	 */
@@ -146,6 +145,11 @@ class GWAPI {
 	 * @param mixed $_transient_data
 	 */
 	public function pre_set_site_transient_update_plugins_filter( $_transient_data ) {
+
+		/* Reduce number of requests when installing plugin. */
+		if ( isset( $_GET['action'] ) && $_GET['action'] === 'install-plugin' ) {
+			return $_transient_data;
+		}
 
 		GravityPerks::log_debug( 'pre_set_site_transient_update_plugins_filter() start. Retrieves download package for individual perk auto-updates.' );
 
@@ -507,10 +511,11 @@ class GWAPI {
     }
 
     public static function get_request_args( $args = array() ) {
-        return wp_parse_args( $args, array(
-            'user-agent' => 'Gravity Perks ' . GWPerks::get_version(),
-            'timeout'    => 15
-        ) );
+	    return wp_parse_args( $args, array(
+		    'user-agent' => 'Gravity Perks ' . GWPerks::get_version(),
+		    'timeout'    => 15,
+		    'sslverify'  => (bool) apply_filters( 'edd_sl_api_request_verify_ssl', true ),
+	    ) );
     }
 
     public static function get_site_url() {

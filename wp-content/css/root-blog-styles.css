@@ -1454,6 +1454,10 @@ div.wpcf7 input[type="file"]:disabled {
 	cursor: default;
 }
 
+div.wpcf7 .wpcf7-submit:disabled {
+	cursor: not-allowed;
+}
+
 /*
 CSS for the gallery widget
 */

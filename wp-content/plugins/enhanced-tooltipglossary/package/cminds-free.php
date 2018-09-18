@@ -56,6 +56,8 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
             add_filter( 'plugin_action_links_' . $this->getOption( 'plugin-basename' ), array( $this, 'add_plugin_action_links' ) );
 
+           add_action( 'wp_dashboard_setup', array( $this, 'addDashboardWidget' ) );
+
             include_once "cminds-api.php";
 
             $this->licensingApi = new CmindsLicensingAPI( $this );
@@ -69,6 +71,55 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
             add_action( 'cminds-' . $licensePageKey . '-content-20', array( $this->licensingApi, 'update_page' ) );
             add_action( 'cminds-' . $licensePageKey . '-content-40', array( $this, 'displayManageProductsTab' ) );
             add_action( 'cminds-' . $licensePageKey . '-content-99', array( $this, 'displayServerInformationTab' ) );
+        }
+
+                public function addDashboardWidget() {
+            wp_add_dashboard_widget( 'cminds_package_dashboard_widget', __( 'CreativeMinds WordPress News', 'cminds-package' ), array( $this, 'showCMDashboardWidget' ) );
+
+        }
+
+      public function showCMDashboardWidget() {
+            $feeds = array(
+                array(
+                    'url'          => 'https://www.cminds.com/category/wordpress/feed/',
+                    'items'        => 6,
+                    'show_summary' => 0,
+                    'show_author'  => 0,
+                    'show_date'    => 1,
+                ),
+            );
+
+            wp_dashboard_primary_output( 'cminds_package_dashboard_widget', $feeds );
+            ?>
+            <br><hr>
+            <p>
+                <?php
+                printf(
+                '<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>', 'https://www.cminds.com/', __( 'cminds.com' ),
+                 __( '(opens in a new window)' )
+                );
+                ?>
+
+                |
+
+                <?php
+                printf(
+                '<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>', 'https://www.cminds.com/wordpress-plugins/', __( 'CM WordPress Plugins' ),
+                 __( '(opens in a new window)' )
+                );
+                ?>
+
+                |
+
+                <?php
+                printf(
+                '<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+                 esc_url( _x( 'https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/', '99+ WordPress Plugins Bundle' ) ), __( '99+ WordPress Plugins Bundle' ),
+                 __( '(opens in a new window)' )
+                );
+                ?>
+            </p>
+            <?php
         }
 
         public function redirectAfterInstall( $plugin, $network_activation = false ) {
@@ -2242,6 +2293,14 @@ if ( !class_exists( __NAMESPACE__ . '\CmindsFreePackage' ) ) {
                         } );</script>
 
                     <h3>Special offers from CreativeMinds</h3>
+
+                <div class="cminds_ads_wrapper_white">
+                    <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="_blank"><img src="<?php echo plugin_dir_url( __FILE__ ); ?>views/keywordhoundbanner.jpg"></a>
+                     <span style="margin-left:20px;">
+                        <a class="" href="https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/" target="_blank"><img src="<?php echo plugin_dir_url( __FILE__ ); ?>views/99suite.png"></a>
+                    </span>
+                </div>
+  
 
                     <?php if ( !empty( $ads ) ) : ?>
                         <div class="cminds_ads_internal_wrapper">

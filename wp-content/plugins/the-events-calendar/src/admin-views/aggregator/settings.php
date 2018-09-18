@@ -6,7 +6,6 @@
 $internal = array();
 $use_global_settings_phrase = __( 'Use global import settings', 'the-events-calendar' );
 $post_statuses = get_post_statuses( array() );
-$origin_post_statuses = array( '' => $use_global_settings_phrase ) + $post_statuses;
 $category_dropdown = wp_dropdown_categories( array(
 	'echo'       => false,
 	'hide_empty' => false,
@@ -17,9 +16,14 @@ preg_match_all( '!\<option.*value="([^"]+)"[^\>]*\>(.*)\</option\>!m', $category
 $categories = array(
 	'' => __( 'No default category', 'the-events-calendar' ),
 );
+$events_aggregator_is_active = tribe( 'events-aggregator.main' )->is_service_active();
+
+$origin_post_statuses = $events_aggregator_is_active
+	? array( '' => $use_global_settings_phrase ) + $post_statuses
+	: $post_statuses;
 
 $origin_categories = array(
-	'' => $use_global_settings_phrase,
+	'' => $events_aggregator_is_active ? $use_global_settings_phrase : esc_html__( 'None', 'the-events-calendar' ),
 );
 
 foreach ( $matches[1] as $key => $match ) {
@@ -28,7 +32,7 @@ foreach ( $matches[1] as $key => $match ) {
 }
 
 $yes_no_options = array(
-	'no' => __( 'No', 'the-events-calendar' ),
+	'no'  => __( 'No', 'the-events-calendar' ),
 	'yes' => __( 'Yes', 'the-events-calendar' ),
 );
 
@@ -46,14 +50,14 @@ $change_authority = array(
 		'priority' => 1.2,
 	),
 	'tribe_aggregator_default_update_authority' => array(
-		'type' => 'radio',
-		'label' => esc_html__( 'Event Update Authority', 'the-events-calendar' ),
+		'type'            => 'radio',
+		'label'           => esc_html__( 'Event Update Authority', 'the-events-calendar' ),
 		'validation_type' => 'options',
-		'default' => Tribe__Events__Aggregator__Settings::$default_update_authority,
-		'parent_option' => Tribe__Events__Main::OPTIONNAME,
-		'options' => array(
-			'overwrite' => __( 'Overwrite my event with any changes from the original source.', 'the-events-calendar' ),
-			'retain' => __( 'Do not re-import events. Changes made locally will be preserved.', 'the-events-calendar' ),
+		'default'         => Tribe__Events__Aggregator__Settings::$default_update_authority,
+		'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+		'options'         => array(
+			'overwrite'        => __( 'Overwrite my event with any changes from the original source.', 'the-events-calendar' ),
+			'retain'           => __( 'Do not re-import events. Changes made locally will be preserved.', 'the-events-calendar' ),
 			'preserve_changes' => __( 'Import events but preserve local changes to event fields.', 'the-events-calendar' ),
 		),
 		'priority' => 1.3,
@@ -67,27 +71,27 @@ $csv = array(
 		'priority' => 10.1,
 	),
 	'tribe_aggregator_default_csv_post_status' => array(
-		'type' => 'dropdown',
-		'label' => esc_html__( 'Default Status', 'the-events-calendar' ),
-		'tooltip' => esc_html__( 'The default post status for events imported via CSV', 'the-events-calendar' ),
-		'size' => 'medium',
+		'type'            => 'dropdown',
+		'label'           => esc_html__( 'Default Status', 'the-events-calendar' ),
+		'tooltip'         => esc_html__( 'The default post status for events imported via CSV', 'the-events-calendar' ),
+		'size'            => 'medium',
 		'validation_type' => 'options',
-		'default' => '',
-		'can_be_empty' => true,
-		'parent_option' => Tribe__Events__Main::OPTIONNAME,
-		'options' => $origin_post_statuses,
+		'default'         => $events_aggregator_is_active ? '' : 'publish',
+		'can_be_empty'    => true,
+		'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+		'options'         => $origin_post_statuses,
 		'priority' => 10.2,
 	),
 	'tribe_aggregator_default_csv_category' => array(
-		'type' => 'dropdown',
-		'label' => esc_html__( 'Default Event Category', 'the-events-calendar' ),
-		'tooltip' => esc_html__( 'The default event category for events imported via CSV', 'the-events-calendar' ),
-		'size' => 'medium',
+		'type'            => 'dropdown',
+		'label'           => esc_html__( 'Default Event Category', 'the-events-calendar' ),
+		'tooltip'         => esc_html__( 'The default event category for events imported via CSV', 'the-events-calendar' ),
+		'size'            => 'medium',
 		'validation_type' => 'options',
-		'default' => '',
-		'can_be_empty' => true,
-		'parent_option' => Tribe__Events__Main::OPTIONNAME,
-		'options' => $origin_categories,
+		'default'         => $events_aggregator_is_active ? '' : '',
+		'can_be_empty'    => true,
+		'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+		'options'         => $origin_categories,
 		'priority' => 10.3,
 	),
 );
@@ -109,7 +113,7 @@ $ea_disable = array(
 	),
 );
 
-$global = $ical = $ics = $facebook = $gcal = $meetup = $url = array();
+$global = $ical = $ics = $facebook = $gcal = $meetup = $url = $eb_fields = array();
 // if there's an Event Aggregator license key, add the Global settings, Facebook, iCal, and Meetup fields
 if ( Tribe__Events__Aggregator::is_service_active() ) {
 	$global = array(
@@ -502,6 +506,50 @@ if ( Tribe__Events__Aggregator::is_service_active() ) {
 			'priority' => 45.6,
 		),
 	);
+
+	$eb_fields = array(
+		'eventbrite-defaults' => array(
+			'type' => 'html',
+			'html' => '<h3 id="tribe-import-eventbrite-settings">' . esc_html__( 'Eventbrite Import Settings', 'the-events-calendar' ) . '</h3>',
+			'priority' => 17.1,
+		),
+		'tribe_aggregator_default_eventbrite_post_status' => array(
+			'type'            => 'dropdown',
+			'label'           => esc_html__( 'Default Status', 'the-events-calendar' ),
+			'tooltip'         => esc_html__( 'The default post status for events imported via Eventbrite', 'the-events-calendar' ),
+			'size'            => 'medium',
+			'validation_type' => 'options',
+			'default'         => '',
+			'can_be_empty'    => true,
+			'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+			'options'         => $origin_post_statuses,
+			'priority'        => 17.2,
+		),
+		'tribe_aggregator_default_eventbrite_category' => array(
+			'type'            => 'dropdown',
+			'label'           => esc_html__( 'Default Event Category', 'the-events-calendar' ),
+			'tooltip'         => esc_html__( 'The default event category for events imported via Eventbrite', 'the-events-calendar' ),
+			'size'            => 'medium',
+			'validation_type' => 'options',
+			'default'         => '',
+			'can_be_empty'    => true,
+			'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+			'options'         => $origin_categories,
+			'priority'        => 17.3,
+		),
+		'tribe_aggregator_default_eventbrite_show_map' => array(
+			'type'            => 'dropdown',
+			'label'           => esc_html__( 'Show Google Map', 'the-events-calendar' ),
+			'tooltip'         => esc_html__( 'Show Google Map by default on imported event and venues', 'the-events-calendar' ),
+			'size'            => 'medium',
+			'validation_type' => 'options',
+			'default'         => 'no',
+			'can_be_empty'    => true,
+			'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+			'options'         => $origin_show_map_options,
+			'priority'        => 17.4,
+		),
+	);
 }
 
 $internal = array_merge(
@@ -514,8 +562,22 @@ $internal = array_merge(
 	$gcal,
 	$meetup,
 	$url,
+	$eb_fields,
 	$ea_disable
 );
+
+/**
+ * If Eventbrite Tickets is enabled and Event Aggregator is disabled, display the correct import settings
+ */
+if ( class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) && ! tribe( 'events-aggregator.main' )->has_license_key() ) {
+	$internal = array_merge(
+		$change_authority,
+		$global,
+		$csv,
+		$eb_fields,
+		$ea_disable
+	);
+}
 
 /**
  * Filter the Aggregator Setting Fields
@@ -574,7 +636,29 @@ if ( tribe( 'events-aggregator.main' )->is_service_active() ) {
 			'name'     => __( 'Other URLs', 'the-events-calendar' ),
 			'priority' => 45,
 		),
+		'eventbrite-settings' => array(
+			'name'     => __( 'Eventbrite', 'the-events-calendar' ),
+			'priority' => 17,
+		),
 	);
+
+	/**
+	 * If Eventbrite Tickets is enabled and Event Aggregator is disabled, display the correct import links
+	 */
+	if ( class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) && ! tribe( 'events-aggregator.main' )->has_license_key() ) {
+		$ea_keys = array(
+			'ical-settings',
+			'ics-settings',
+			'facebook-settings',
+			'google-settings',
+			'meetup-settings',
+			'url-settings',
+		);
+
+		foreach ( $ea_keys as $key ) {
+			unset( $import_setting_links[ $key ] );
+		}
+	}
 
 	/**
 	 * Filter the Import Setting Links on the Import Tab

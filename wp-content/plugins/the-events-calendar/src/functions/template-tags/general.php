@@ -670,7 +670,15 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 			$classes[] = 'tribe-event-featured';
 		}
 
-		$classes = apply_filters( 'tribe_events_event_classes', $classes );
+		/**
+		 * Filters the event wrapper classes before they are returned
+		 *
+		 * @since 4.6.20 added the $event_id parameter
+		 *
+		 * @param array $classes  The classes that will be returned
+		 * @param int   $event_id Current event ID
+		 */
+		$classes = apply_filters( 'tribe_events_event_classes', $classes, $event_id );
 
 		if ( $echo ) {
 			echo implode( ' ', $classes );
@@ -712,6 +720,9 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		} else {
 			$attrs['data-title'] = wp_title( '|', false, 'right' );
 		}
+
+		$attrs['data-viewtitle'] = tribe_get_events_title( true );
+
 		switch ( $current_view ) {
 			case 'month.php' :
 				$attrs['data-view']    = 'month';
@@ -964,7 +975,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		 * @param bool $link
 		 */
 		if ( ! empty( $featured_image ) && apply_filters( 'tribe_event_featured_image_link', $link ) ) {
-			$featured_image = '<a href="' . esc_url( tribe_get_event_link( $post_id ) ) . '">' . $featured_image . '</a>';
+			$featured_image = '<a href="' . esc_url( tribe_get_event_link( $post_id ) ) . '" tabindex="-1">' . $featured_image . '</a>';
 		}
 
 		/**
@@ -1182,8 +1193,10 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 				}
 
 				$category_classes = tribe_events_event_classes( $event->ID, false );
+				$day              = tribe_events_get_current_month_day();
+				$event_id         = "{$event->ID}-{$day['date']}";
 
-				$json['eventId']         = $event->ID;
+				$json['eventId']         = $event_id;
 				$json['title']           = wp_kses_post( apply_filters( 'the_title', $event->post_title, $event->ID ) );
 				$json['permalink']       = tribe_get_event_link( $event->ID );
 				$json['imageSrc']        = $image_src;
@@ -1530,13 +1543,20 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 			$GLOBALS['post'] = $global_post;
 		}
 
+		// Setup post data to be able to use WP template tags
+		setup_postdata( $post );
+
 		/**
 		 * Filter the event excerpt used in various views.
 		 *
 		 * @param string  $excerpt
 		 * @param WP_Post $post
 		 */
-		return apply_filters( 'tribe_events_get_the_excerpt', wpautop( $excerpt ), $post );
+		$excerpt = apply_filters( 'tribe_events_get_the_excerpt', wpautop( $excerpt ), $post );
+
+		wp_reset_postdata();
+
+		return $excerpt;
 	}
 
 	/**

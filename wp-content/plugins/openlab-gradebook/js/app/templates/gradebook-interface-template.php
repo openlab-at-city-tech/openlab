@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div id="gradebookWrapper" class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="wrap">
@@ -29,6 +29,7 @@
                 <?php 
             } ?>
                 <div class="btn-arrange">
+                    <div id="savingStatus" class="btn-group hidden">saving</div>
                     <div class="btn-group">
                         <select name="filter_option" id="filter-assignments-select" class="form-control">
                             <option value="-1"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
@@ -72,22 +73,7 @@
                 <div class="scroll-control">
                     <div class="scrollable">
                         <table id="an-gradebook-container" class="table table-bordered table-striped">  
-                            <thead id="students-header" class="students-header">
-                                <tr>
-                                    <th class="gradebook-student-column-interactive student-tools adjust-widths visible-xs" data-targetwidth="50">
-                                    <% if (role === 'instructor') { %>
-                                        <button type="button" id="download-csv-mobile" class="btn btn-link"><i class="fa fa-download" aria-hidden="true"></i></button>
-                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php esc_html_e('Download CSV', 'openlab-gradebook') ?>"></i>
-                                    <% } %>
-                                    </th>
-                                    <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('First Name', 'openlab-gradebook') ?>'><?php esc_html_e('First Name', 'openlab-gradebook') ?></span></th>
-                                    <th class="gradebook-student-column-last_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Last Name', 'openlab-gradebook') ?>'><?php esc_html_e('Last Name', 'openlab-gradebook') ?></span></th>
-                                    <th class="gradebook-student-column-user_login visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Username', 'openlab-gradebook') ?>'><?php esc_html_e('Username', 'openlab-gradebook') ?></span></th>
-                                    <th class="gradebook-student-column-average visible-xs adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Current Average Grade', 'openlab-gradebook') ?>'><?php esc_html_e('Avg.', 'openlab-gradebook') ?></span></th>
-                                    <th class="gradebook-student-mid-semester-grade student-grades adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Mid-semester Grade', 'openlab-gradebook') ?>'><?php esc_html_e('Mid-semester Grade', 'openlab-gradebook') ?></span></th>
-                                    <th class="gradebook-student-final-grade student-grades adjust-widths" data-targetwidth="65"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('Final Grade', 'openlab-gradebook') ?>'><?php esc_html_e('Final Grade', 'openlab-gradebook') ?></span></th>
-                                </tr>
-                            </thead>		    	
+                            <thead id="students-header" class="students-header"><tr></tr></thead>		    	
                             <tbody id="students" class="students"></tbody>
                         </table>
                     </div>

@@ -40,6 +40,7 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-accessibility/wp-accessibility',
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
+		'wp-simile-timeline/timeline.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -84,47 +85,12 @@ function openlab_hide_plugins( $plugins ) {
 		}
 	}
 
-	//oplb gradebook whitelist on production - will last until plugin is ready to go fully live
-	$oplb_gradebook_prod_whitelist = array(
-		6834,
-		11488,
-		11653,
-		10965,
-		9809,
-		1807,
-		10803,
-		11561,
-		11574,
-		11831,
-		12250,
-		121,
-		10738,
-		8990,
-		6586,
-		9401,
-		9105,
-		9400,
-		8091,
-		8723,
-		6249,
-		10827,
-		12248,
-		9184,
-		7007,
-		10098,
-		8250,
-	);
-
 	$blog_specific_whitelist = array(
 		'h5p/h5p.php' => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
 		),
 	);
-
-	if(strpos(get_site_url(1), 'openlab.citytech') !== false){
-		$blog_specific_whitelist['openlab-gradebook/GradeBook.php'] = $oplb_gradebook_prod_whitelist;
-	}
 
 	foreach ( $blog_specific_whitelist as $plugin_file => $whitelisted_blogs ) {
 		if ( ! in_array( get_current_blog_id(), $whitelisted_blogs, true ) && ! is_plugin_active( $plugin_file ) ) {

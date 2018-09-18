@@ -86,7 +86,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
             <!-- Start Server information Module -->
             <div id="tabs-0">
                 <div class='block'>
-                    <?php echo do_shortcode( '[cminds_upgrade_box id="cmtt"]' ); ?>
+                     <?php echo do_shortcode( '[cminds_free_guide id="cmtt"]' ); ?>
                 </div>
             </div>
 
@@ -191,7 +191,19 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                     </table>
                     <div class="clear"></div>
                 </div>
-                <div class="block">
+               <div class="block">
+                    <h3>Page Builder Support</h3>
+                    <p>Support Advanced Custom fields (ACF) and Page Builders including Divi, Beaver Builder, WPBakery, Elementor and more.</p>
+                    <table>
+                        <tr valign="top">
+                            <th scope="row" valign="middle" align="left" >Page Builder Support:</th>
+                            <td><span style="color:red">Available only in Premium versions of the plugin </span>   
+                             </td>
+                            
+                        </tr>
+                            </table>
+                </div>
+               <div class="block">
                     <h3>Referrals</h3>
                     <p>Refer new users to any of the CM Plugins and you'll receive a minimum of <strong>15%</strong> of their purchase! For more information please visit CM Plugins <a href="http://www.cminds.com/referral-program/" target="new">Affiliate page</a></p>
                     <table>
@@ -212,6 +224,11 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                         </tr>
                     </table>
                 </div>
+
+
+ 
+
+
             </div>
             <div id="tabs-2">
                 <div class="block">
@@ -333,7 +350,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
             <!-- Start Server information Module -->
             <div id="tabs-99">
                 <div class='block'>
-                    <?php echo do_shortcode( '[cminds_free_guide id="cmtt"]' ); ?>
+                     <?php echo do_shortcode( '[cminds_upgrade_box id="cmtt"]' ); ?>
                 </div>
             </div>
         </div>

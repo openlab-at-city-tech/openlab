@@ -318,6 +318,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                 },
                                 edit: function (ev) {
                                     this.$el.attr('contenteditable', 'false');
+                                    
+                                    console.log('savingStatus', this.$el.closest('#gradebookWrapper').find('#savingStatus'));
+                                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
 
                                     var targetSelector = '.grade-selector.' + ev;
 
@@ -361,7 +364,6 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
 
                                     var title = '';
                                     toSearch.each(function(grade){
-                                        console.log('grade', grade);
                                         if(grade.get('value') === value + '_display' && title === ''){
                                             title = grade.get('label');
                                         } else if(grade.get('value') === value && title === ''){
@@ -375,7 +377,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                     
                                 },
                                 editSuccess: function(){
-                                    console.log('edit success');
+                                    this.$el.closest('#gradebookWrapper').find('#savingStatus').addClass('hidden');
                                     this.$el.find('.grade-selector').removeAttr('disabled');
                                 },
                                 editError: function(){

@@ -50,6 +50,10 @@ Gillian bundles the following third-party resources:
 
 == Changelog ==
 
+= 1.0.9 =
+
+* footer.php - Add link to privacy policy page in footer, when a privacy policy page has been set
+
 = 1.0.8 =
 
 * style.css - Fix padding issue with search bar in header across browsers

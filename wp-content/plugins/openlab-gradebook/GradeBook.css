@@ -71,6 +71,9 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
 #loading-students-container {
   display: absolute;
 }
+#gradebookWrapper .weight-message {
+  display: none;
+}
 .modal-body {
   overflow: auto;
 }
@@ -329,6 +332,42 @@ span.twitter-typeahead {
     width: 100%;
   }
 }
+.action-buttons-wrapper .btn-arrange {
+  position: relative;
+}
+.action-buttons-wrapper #savingStatus {
+  font-weight: bold;
+  font-size: 18px;
+  color: #0073aa;
+  padding-right: 42px;
+  position: absolute;
+  right: 180px;
+  top: 6px;
+  width: 118px;
+}
+.action-buttons-wrapper #savingStatus.saving {
+  display: block;
+}
+.action-buttons-wrapper #savingStatus:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 1200ms infinite;
+  animation: ellipsis steps(4, end) 1200ms infinite;
+  content: "\2026";
+  width: 0px;
+}
+@media (max-width: 767px) {
+  .action-buttons-wrapper #savingStatus {
+    right: 21px;
+    top: -34px;
+  }
+}
+@media (max-width: 479px) {
+  .action-buttons-wrapper #savingStatus {
+    top: -42px;
+  }
+}
 .tt-hint {
   display: block;
   width: 100%;
@@ -379,6 +418,10 @@ span.twitter-typeahead {
 .table-wrapper .table {
   margin-bottom: 0;
 }
+.table-wrapper #an-gradebook-container {
+  top: 15px;
+  position: relative;
+}
 .table-wrapper .pinned {
   position: absolute;
   display: block;
@@ -386,7 +429,7 @@ span.twitter-typeahead {
   top: 15px;
   background: #fff;
   width: 36%;
-  border-right: 1px solid #ccc;
+  border-right: 2px solid #ccc;
   border-left: 1px solid #ccc;
   z-index: 200;
 }
@@ -398,6 +441,9 @@ span.twitter-typeahead {
 }
 .table-wrapper .pinned table th {
   padding: 15px 8px;
+}
+.table-wrapper .pinned td.student {
+  height: 59px;
 }
 .table-wrapper .pinned .student-grades {
   display: none;
@@ -424,12 +470,13 @@ span.twitter-typeahead {
 .table-wrapper .pinned #students-pinned td.student-tools {
   overflow: visible;
   padding: 12px 8px;
-  width: 15%;
+  width: 16.5%;
+  min-width: 50px;
 }
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive.download-csv,
 .table-wrapper .pinned #students-pinned td.student-tools.download-csv {
   position: relative;
-  width: 19.685%;
+  width: 16.5%;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -459,7 +506,11 @@ span.twitter-typeahead {
   padding-top: 15px;
 }
 .table-wrapper .scrollable .jspContainer .jspPane {
-  top: 15px !important;
+  top: 0 !important;
+  margin-left: 0 !important;
+}
+.table-wrapper .scrollable .jspContainer .jspVerticalBar {
+  display: none;
 }
 .table-wrapper .scrollable .gradebook-student-column-average {
   display: none !important;
@@ -470,6 +521,9 @@ span.twitter-typeahead {
     position: relative;
     width: 250%;
   }
+}
+.table-wrapper .scrollable td.student-grades {
+  height: 59px;
 }
 .table-wrapper .scrollable .student-grades {
   min-width: 68px;
@@ -610,5 +664,15 @@ span.twitter-typeahead {
   100% {
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg);
+  }
+}
+@keyframes ellipsis {
+  to {
+    width: 1.25em;
+  }
+}
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;
   }
 }

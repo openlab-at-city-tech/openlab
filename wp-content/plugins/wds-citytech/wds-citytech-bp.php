@@ -670,3 +670,64 @@ add_filter(
 		return $settings;
 	}, 20, 2
 );
+
+add_action(
+	'bp_after_email_footer',
+	function() {
+		remove_action( 'bp_after_email_footer', 'ass_bp_email_footer_html_unsubscribe_links' );
+		add_action( 'bp_after_email_footer', function() {
+			static $added = null;
+
+			if ( $added ) {
+				return;
+			}
+
+			$tokens = buddypress()->ges_tokens;
+
+			if ( isset( $tokens['subscription_type'] ) && ! empty( $tokens['group.id'] ) ) {
+				$settings_url = bp_get_group_permalink( groups_get_group( $tokens['group.id'] ) ) . 'notifications/';
+
+				$link_format = '<a href="%1$s" title="%2$s" style="text-decoration: underline;">%3$s</a>';
+				$footer_link = sprintf(
+					$link_format,
+					esc_attr( $settings_url ),
+					'Group notification settings',
+					'Unsubscribe or change the frequency of email notifications.'
+				);
+
+				$added = true;
+
+				echo $footer_link;
+			}
+		} );
+	},
+	0
+);
+
+add_action(
+	'bp_send_email',
+	function( $email, $email_type, $to, $args ) {
+		if ( $to instanceof WP_User ) {
+			$user_id = $to->ID;
+		} elseif ( is_numeric( $to ) ) {
+			$user_id = $to;
+		} else {
+			$user = get_user_by( 'email', $to );
+			if ( $user ) {
+				$user_id = $user->ID;
+			}
+		}
+
+		if ( empty( $user_id ) ) {
+			return;
+		}
+
+		$new_tokens = $args['tokens'];
+		$new_tokens['unsubscribe'] = trailingslashit( bp_core_get_user_domain( $user_id ) ) . 'settings/notifications';
+		$email->set_tokens( $new_tokens );
+
+		return $args;
+	},
+	10,
+	4
+);

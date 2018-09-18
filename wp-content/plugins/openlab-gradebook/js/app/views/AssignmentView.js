@@ -40,12 +40,18 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 },
                 shiftAssignmentLeft: function (ev) {
                     ev.preventDefault();
+
+                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
+
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') - 1});
                     x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
                     this.assignment.save({assign_order: this.model.get('assign_order') - 1, assign_visibility: this.model.get('assign_visibility')});
                 },
                 shiftAssignmentRight: function (ev) {
                     ev.preventDefault();
+
+                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
+
                     var x = this.gradebook.assignments.findWhere({assign_order: this.model.get('assign_order') + 1});
                     x.save({assign_order: this.model.get('assign_order'), assign_visibility: x.get('assign_visibility')});
                     this.assignment.save({assign_order: this.model.get('assign_order') + 1, assign_visibility: this.model.get('assign_visibility')});
@@ -122,6 +128,9 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 },
                 deleteAssignment: function (ev) {
                     ev.preventDefault();
+
+                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
+
                     var self = this;
                     this.assignment.destroy({success:
                                 function (model, response) {
@@ -134,7 +143,10 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                                         });
                                         for (i = _x; i < _y.get('assign_order'); i++) {
                                             var _z = self.gradebook.assignments.findWhere({assign_order: i + 1});
-                                            _z.save({assign_order: i});
+
+                                            if(typeof _z !== 'undefined'){
+                                                _z.save({assign_order: i});
+                                            }
                                         }
                                     }
 

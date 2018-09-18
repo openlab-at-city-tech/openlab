@@ -40,10 +40,7 @@ class CMTooltipGlossaryShared {
          */
         if ( current_user_can( 'manage_options' ) ) {
             ?>
-            <div id="message" class="updated fade">
-                <p><strong>New !! Pro versions of CM Tooltip Glossary are <a href="<?php echo CMTT_URL; ?>"  target="_blank">available here</a></strong></p>
-            </div>
-            <?php
+             <?php
             delete_option( 'cmtt_afterActivation' );
         }
     }
