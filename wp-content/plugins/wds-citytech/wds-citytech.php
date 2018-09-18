@@ -625,6 +625,9 @@ function openlab_get_entity_departments( $entity = null ) {
 			'humanities' => array(
 				'label' => 'Humanities',
 			),
+			'liberal-arts' => array(
+				'label' => 'Liberal Arts & Sciences',
+			),
 			'library' => array(
 				'label' => 'Library',
 			),
