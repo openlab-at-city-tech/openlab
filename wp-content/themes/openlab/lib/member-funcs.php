@@ -787,7 +787,7 @@ function cuny_member_profile_header() {
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
-                                                        } elseif ( 'Department' === bp_get_the_profile_field_name() ) {
+                                                        } elseif ( 'Department' === bp_get_the_profile_field_name() || 'Major Program of Study' === bp_get_the_profile_field_name() ) {
                                                             $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
                                                             $department = openlab_generate_department_name( $user_units );
 
@@ -980,7 +980,7 @@ add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
 /**
  * Save the member S/O/D settings after save.
  *
- * @param BP_Groups_Group $group
+ * @param int $user_id
  *
  * @todo registration
  */
@@ -999,6 +999,49 @@ function openlab_user_academic_unit_save( $user_id ) {
     openlab_set_user_academic_units( $user_id, $to_save );
 }
 add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save' );
+
+/**
+ * Save the legacy Major dropdown for users on profile save.
+ *
+ * @param int $user_id
+ *
+ * @todo registration
+ */
+function openlab_user_academic_unit_save_legacy( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
+
+    $submitted_dept = null;
+    if ( ! empty( $_POST['departments-dropdown'] ) ) {
+        $submitted_dept = wp_unslash( $_POST['departments-dropdown'] );
+    }
+
+    // Identify the school.
+    $all_depts   = openlab_get_entity_departments();
+    $all_schools = openlab_get_school_list();
+    $user_school = null;
+    foreach ( $all_schools as $school => $_ ) {
+        if ( isset( $all_depts[ $school ][ $submitted_dept ] ) ) {
+            $user_school = $school;
+        }
+    }
+
+    $to_save = [
+        'schools'     => [],
+        'offices'     => [],
+        'departments' => [ $submitted_dept ],
+    ];
+
+    if ( $user_school ) {
+        $to_save['schools'][] = $user_school;
+    }
+
+    openlab_set_user_academic_units( $user_id, $to_save );
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save_legacy' );
 
 /**
  * Gets academic units for a user.
