@@ -465,6 +465,7 @@ function openlab_save_academic_unit_data_at_registration( $usermeta ) {
 
     } elseif ( isset( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
 		check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
+		$to_save = openlab_get_legacy_academic_unit_data_from_post();
 	}
 
 	if ( $to_save ) {

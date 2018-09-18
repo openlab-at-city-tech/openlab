@@ -1025,39 +1025,11 @@ function openlab_get_academic_unit_data_from_post() {
 }
 
 /**
- * Save the member S/O/D settings after save.
+ * Pulls legacy academic unit data from POST.
  *
- * @param int $user_id
- *
- * @todo registration
+ * Abstracted here for reuse in registration process.
  */
-function openlab_user_academic_unit_save( $user_id ) {
-    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
-        return;
-    }
-
-    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
-
-    $to_save = openlab_get_academic_unit_data_from_post();
-
-    openlab_set_user_academic_units( $user_id, $to_save );
-}
-add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save' );
-
-/**
- * Save the legacy Major dropdown for users on profile save.
- *
- * @param int $user_id
- *
- * @todo registration
- */
-function openlab_user_academic_unit_save_legacy( $user_id ) {
-    if ( empty( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
-        return;
-    }
-
-    check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
-
+function openlab_get_legacy_academic_unit_data_from_post() {
     $submitted_dept = null;
     if ( ! empty( $_POST['departments-dropdown'] ) ) {
         $submitted_dept = wp_unslash( $_POST['departments-dropdown'] );
@@ -1082,6 +1054,41 @@ function openlab_user_academic_unit_save_legacy( $user_id ) {
     if ( $user_school ) {
         $to_save['schools'][] = $user_school;
     }
+
+    return $to_save;
+}
+
+/**
+ * Save the member S/O/D settings after save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_academic_unit_save( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
+
+    $to_save = openlab_get_academic_unit_data_from_post();
+
+    openlab_set_user_academic_units( $user_id, $to_save );
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save' );
+
+/**
+ * Save the legacy Major dropdown for users on profile save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_academic_unit_save_legacy( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
+
+    $to_save = openlab_get_legacy_academic_unit_data_from_post();
 
     openlab_set_user_academic_units( $user_id, $to_save );
 }
