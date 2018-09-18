@@ -657,7 +657,8 @@ function cuny_group_single() {
                         $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
                         $wds_year = groups_get_groupmeta($group_id, 'wds_year');
 
-                        $departments_string = openlab_generate_department_name( $group_id );
+                        $group_units        = openlab_get_group_academic_units( $group_id );
+                        $departments_string = openlab_generate_department_name( $group_units );
                         ?>
                         <div class="table-div">
                             <?php
@@ -720,7 +721,7 @@ function cuny_group_single() {
                             </div>
 
                             <?php
-                            $group_units     = openlab_get_group_academic_units();
+                            $group_units     = openlab_get_group_academic_units( $group_id );
                             $wds_school      = openlab_generate_school_office_name( $group_units );
                             $wds_departments = openlab_generate_department_name( $group_units );
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
