@@ -1,9 +1,9 @@
 <?php
 /*
   Plugin Name: OpenLab GradeBook
-  Plugin URI: https://github.com/livinglab/openlab
-  Description: A modification of AN GradeBook https://wordpress.org/plugins/an-gradebook/
-  Version: 0.0.3
+  Plugin URI: https://openlab.citytech.cuny.edu/
+  Description: Beta version. This basic gradebook allows faculty to confidentially record and share students grades via the WP Dashboard. Some features are still in development, slowness and minor display bugs may occur. A modification of AN GradeBook https://wordpress.org/plugins/an-gradebook/
+  Version: 0.1.0
   Author: Joe Unander
   Author URI: http://early-adopter.com/
   License: GPL
@@ -118,16 +118,18 @@ function enqueue_oplb_gradebook_scripts($hook) {
             $oplb_gradebook_develop = true;
         }
 
-        $dep_ver = '0.0.0.9';
-        $app_ver = '0.0.8.2';
+        $dep_ver = '0.0.1.1';
+        $app_ver = '0.0.9.9';
 
         wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
         wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
         wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
         wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
+        wp_register_script('css-element-queries-js', $app_base . '/lib/css-element-queries/css.element.queries.dist.js', array('jquery'), $dep_ver, true);
         wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);
         wp_enqueue_style('OplbGradeBook_css');
         wp_enqueue_script('jscrollpane-js');
+        wp_enqueue_script('css-element-queries-js');
         wp_enqueue_script('requirejs');
 
         wp_localize_script('requirejs', 'oplbGradebook', array(

@@ -102,36 +102,36 @@ class oplb_gradebook_api
         $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $amid);
         $pie_chart_data = $wpdb->get_col($query);
 
-        function isA($n)
+        $isA = function($n)
         {
             return ($n >= 90 ? true : false);
-        }
+        };
 
-        function isB($n)
+        $isB = function($n)
         {
             return ($n >= 80 && $n < 90 ? true : false);
-        }
+        };
 
-        function isC($n)
+        $isC = function($n)
         {
             return ($n >= 70 && $n < 80 ? true : false);
-        }
+        };
 
-        function isD($n)
+        $isD = function($n)
         {
             return ($n >= 60 && $n < 70 ? true : false);
-        }
+        };
 
-        function isF($n)
+        $isF = function($n)
         {
             return ($n < 60 ? true : false);
-        }
+        };
 
-        $is_A = count(array_filter($pie_chart_data, 'isA'));
-        $is_B = count(array_filter($pie_chart_data, 'isB'));
-        $is_C = count(array_filter($pie_chart_data, 'isC'));
-        $is_D = count(array_filter($pie_chart_data, 'isD'));
-        $is_F = count(array_filter($pie_chart_data, 'isF'));
+        $is_A = count(array_filter($pie_chart_data, $isA));
+        $is_B = count(array_filter($pie_chart_data, $isB));
+        $is_C = count(array_filter($pie_chart_data, $isC));
+        $is_D = count(array_filter($pie_chart_data, $isD));
+        $is_F = count(array_filter($pie_chart_data, $isF));
 
         $pie_chart_data = array(
             'labels' => array('A', 'B', 'C', 'D', 'F'),
@@ -183,7 +183,7 @@ class oplb_gradebook_api
             $cells = $wpdb->get_results($query, ARRAY_A);
 
             foreach ($cells as &$cell) {
-                $cells['gbid'] = intval($cells['gbid']);
+                $cell['gbid'] = intval($cell['gbid']);
             }
 
             $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
@@ -205,6 +205,7 @@ class oplb_gradebook_api
 
                 $student_id = array_merge($student_extras, $student_id);
             }
+
             usort($cells, $this->build_sorter('assign_order'));
             $cells_by_assignment = array();
             foreach ($cells as &$cell) {
@@ -968,30 +969,42 @@ class oplb_gradebook_api
         }
         usort($assignments, $this->build_sorter('assign_order'));
 
+        $column_headers_assignment_names = array();
+        $assignment_id_tracker = array();
+        $assign_count = 0;
+
+        foreach ($assignments as &$assignment) {
+
+            if (isset($assignment_id_tracker[$assignment['id']])) {
+                continue;
+            }
+
+            $assign_count++;
+
+            array_push($column_headers_assignment_names, $assignment['assign_name']);
+            $assignment_id_tracker[$assignment['id']] = $assignment['id'];
+        }
+
         //setup weights - first three columns are blank to accommodate student info
-        $weights = array("", "", "", "weight");
+        $weights = array("", "", "", "", "weight");
+        $weight_tracker = 0;
         foreach ($assignments as $assignment) {
+
+            $weight_tracker++;
+
+            if ($weight_tracker > $assign_count) {
+                continue;
+            }
 
             $weight = $assignment['assign_weight'] . '%';
             array_push($weights, $weight);
         }
 
-        $column_headers_assignment_names = array();
-
-        foreach ($assignments as &$assignment) {
-            array_push($column_headers_assignment_names, $assignment['assign_name']);
-        }
         $column_headers = array_merge(
-            array('firstname', 'lastname', 'username', 'current_average_grade', 'mid_semester_grade', 'final_grade'),
+            array('firstname', 'lastname', 'username', 'mid_semester_grade', 'final_grade'),
             $column_headers_assignment_names
         );
         $cells = array();
-
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
-        $cells = $wpdb->get_results($query, ARRAY_A);
-        foreach ($cells as &$cell) {
-            $cell['gbid'] = intval($cell['gbid']);
-        }
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $gbid, 'student');
         $students = $wpdb->get_results($query);
@@ -1002,17 +1015,24 @@ class oplb_gradebook_api
                 'firstname' => $studentData->first_name,
                 'lastname' => $studentData->last_name,
                 'username' => $studentData->user_login,
-                'current_grade_average' => $value->current_grade_average,
                 'mid_semester_grade' => $this->get_student_grade_label($value->mid_semester_grade),
                 'final_grade' => $this->get_student_grade_label($value->final_grade),
                 'id' => intval($studentData->ID),
             );
+
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d AND uid = %d", $gbid, intval($studentData->ID));
+            $this_cells = $wpdb->get_results($query, ARRAY_A);
+
+            foreach ($this_cells as $this_cell) {
+                array_push($cells, $this_cell);
+            }
         }
 
         foreach ($cells as &$cell) {
             $cell['amid'] = intval($cell['amid']);
             $cell['uid'] = intval($cell['uid']);
             $cell['assign_order'] = intval($cell['assign_order']);
+            $cell['assign_ids'] = $assignment_id_tracker;
 
             //crunch grades by grade type
             $this_cell_grade_type = $grade_types_by_amID[$cell['amid']];
@@ -1020,7 +1040,11 @@ class oplb_gradebook_api
             switch ($this_cell_grade_type) {
                 case 'letter':
 
-                    $cell['assign_points_earned'] = $this->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
+                    if ($cell['is_null'] || $cell['is_null'] === 1) {
+                        $cell['assign_points_earned'] = '--';
+                    } else {
+                        $cell['assign_points_earned'] = $this->numeric_to_letter_grade_conversion(floatval($cell['assign_points_earned']));
+                    }
 
                     break;
                 case 'checkmark':
@@ -1034,21 +1058,30 @@ class oplb_gradebook_api
                     break;
                 default:
 
-                    $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
+                    if ($cell['is_null'] || $cell['is_null'] === 1) {
+                        $cell['assign_points_earned'] = '--';
+                    } else {
+                        $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
+                    }
+
             }
         }
+
         usort($cells, $this->build_sorter('assign_order'));
         $student_records = array();
         foreach ($students as &$row) {
             $records_for_student = array_filter($cells, function ($k) use ($row) {
-                return $k['uid'] == $row['id'];
+                $assignment_id_tracker = $k['assign_ids'];
+                return $k['uid'] == $row['id'] && isset($assignment_id_tracker[$k['amid']]);
             });
             $scores_for_student = array_map(function ($k) {
                 return $k['assign_points_earned'];
             }, $records_for_student);
+
             $student_record = array_merge($row, $scores_for_student);
             array_push($student_records, $student_record);
         }
+
         header('Content-Type: text/csv; charset=utf-8');
         $filename = str_replace(" ", "_", $course['name'] . '_' . $gbid);
         header('Content-Disposition: attachment; filename=' . $filename . '.csv');
@@ -1056,13 +1089,20 @@ class oplb_gradebook_api
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, $weights);
+        //removing weights for now
+        //fputcsv($output, $weights);
         fputcsv($output, $column_headers);
-        foreach ($student_records as &$row) {
 
-            //don't want to output student internal GB id
+        $final_rows = array();
+
+        foreach ($student_records as $key => $row) {
             unset($row['id']);
+            $final_rows[strtolower($row['lastname']).$key] = $row;
+        }
 
+        ksort($final_rows);
+
+        foreach ($final_rows as $row) {
             fputcsv($output, $row);
         }
         fclose($output);

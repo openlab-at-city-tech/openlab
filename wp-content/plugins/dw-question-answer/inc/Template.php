@@ -743,7 +743,7 @@ class DWQA_Template {
 		$this->filters = new stdClass();
 		add_filter( 'template_include', array( $this, 'question_content' ) );
 		//add_filter( 'term_link', array( $this, 'force_term_link_to_setting_page' ), 10, 3 );
-		add_filter( 'comments_open', array( $this, 'close_default_comment' ) );
+		add_filter( 'comments_open', array( $this, 'close_default_comment' ), 10, 2 );
 
 		//Template Include Hook
 		add_filter( 'single_template', array( $this, 'redirect_answer_to_question' ), 20 );
@@ -771,7 +771,7 @@ class DWQA_Template {
 	public function redirect_answer_to_question( $template ) {
 		global $post, $dwqa_options;
 		if ( is_singular( 'dwqa-answer' ) ) {
-			$question_id = get_post_meta( $post->ID, '_question', true );
+			$question_id = dwqa_get_post_parent_id( $answer_id );
 			if ( $question_id ) {
 				wp_safe_redirect( get_permalink( $question_id ) );
 				exit( 0 );
@@ -824,7 +824,7 @@ class DWQA_Template {
 
 			$content = ob_get_contents();
 
-			add_filter( 'comments_open', array( $this, 'close_default_comment' ) );
+			add_filter( 'comments_open', array( $this, 'close_default_comment' ), 10, 2 );
 
 			ob_end_clean();
 
@@ -970,9 +970,10 @@ class DWQA_Template {
 		return $value;
 	}
 
-	public function close_default_comment( $open ) {
+	public function close_default_comment( $open, $post_id ) {
 		global $dwqa_options;
-		if ( is_singular( 'dwqa-question' ) || is_singular( 'dwqa-answer' ) || ( $dwqa_options['pages']['archive-question'] && is_page( $dwqa_options['pages']['archive-question'] ) ) || ( $dwqa_options['pages']['submit-question'] && is_page( $dwqa_options['pages']['submit-question'] ) ) ) {
+
+		if ( get_post_type( $post_id ) == 'dwqa-question' || get_post_type( $post_id ) == 'dwqa-answer' || ( $dwqa_options['pages']['archive-question'] && $dwqa_options['pages']['archive-question'] == $post_id) || ( $dwqa_options['pages']['submit-question'] && $dwqa_options['pages']['submit-question'] == $post_id) ) {
 			return false;
 		}
 		return $open;
@@ -1118,7 +1119,7 @@ function dwqa_get_mail_template( $option, $name = '' ) {
 
 function dwqa_vote_best_answer_button() {
 	global $current_user;
-	$question_id = get_post_meta( get_the_ID(), '_question', true );
+	$question_id = dwqa_get_post_parent_id( get_the_ID() );
 	$question = get_post( $question_id );
 		$best_answer = dwqa_get_the_best_answer( $question_id );
 		$data = is_user_logged_in() && ( $current_user->ID == $question->post_author || current_user_can( 'edit_posts' ) ) ? 'data-answer="'.get_the_ID().'" data-nonce="'.wp_create_nonce( '_dwqa_vote_best_answer' ).'" data-ajax="true"' : 'data-ajax="false"';

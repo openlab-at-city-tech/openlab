@@ -59,7 +59,7 @@
             justify-content: space-between;
             >.ab-top-menu {
                 float: none;
-                @media (max-width: @screen-xs-max){
+                @media (max-width: @screen-xs-max) {
                     min-width: 76px;
                 }
             }
@@ -88,7 +88,7 @@
                         }
                     }
                 }
-                @media (max-width: @screen-xs-max){
+                @media (max-width: @screen-xs-max) {
                     position: static;
                 }
             }
@@ -1100,6 +1100,14 @@
             #wp-admin-bar-comments {
                 @media (max-width: @screen-xs-max) {
                     display: none;
+                }
+            }
+        }
+        &.logged-out {
+            #wpadminbar {
+                .ab-top-secondary {
+                    flex-basis: auto;
+                    max-width: none;
                 }
             }
         }

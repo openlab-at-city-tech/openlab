@@ -94,6 +94,12 @@ body {
     display: absolute;
 }
 
+#gradebookWrapper{
+    .weight-message{
+        display: none;
+    }
+}
+
 .modal-body {
     overflow: auto;
     .grade-type {
@@ -406,6 +412,38 @@ span.twitter-typeahead {
             }
         }
     }
+    .btn-arrange{
+        position: relative;
+    }
+    #savingStatus {
+        font-weight: bold;
+        font-size: 18px;
+        color: #0073aa;
+        padding-right: 42px;
+        position: absolute;
+        right: 180px;
+        top: 6px;
+        width: 118px;
+        &.saving{
+            display: block;
+        }
+        &:after {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            -webkit-animation: ellipsis steps(4, end) 1200ms infinite;
+            animation: ellipsis steps(4, end) 1200ms infinite;
+            content: "\2026";
+            width: 0px;
+        }
+        @media (max-width: 767px){
+            right: 21px;
+            top: -34px;
+        }
+        @media (max-width: 479px){
+            top: -42px;
+        }
+    }
 }
 
 .tt-hint {
@@ -463,6 +501,10 @@ span.twitter-typeahead {
     .table {
         margin-bottom: 0;
     }
+    #an-gradebook-container{
+        top: 15px;
+        position: relative;
+    }
     position: relative;
     .pinned {
         position: absolute;
@@ -471,7 +513,7 @@ span.twitter-typeahead {
         top: 15px;
         background: #fff;
         width: 36%;
-        border-right: 1px solid #ccc;
+        border-right: 2px solid #ccc;
         border-left: 1px solid #ccc;
         z-index: 200;
         table {
@@ -484,10 +526,13 @@ span.twitter-typeahead {
                 padding: 15px 8px;
             }
         }
+        td.student{
+            height: 59px;
+        }
         .student-grades {
             display: none;
         }
-        .gradebook-student-column-average{
+        .gradebook-student-column-average {
             display: none;
         }
         #students-header-pinned th,
@@ -507,10 +552,11 @@ span.twitter-typeahead {
         #students-pinned td.student-tools {
             overflow: visible;
             padding: 12px 8px;
-            width: 15%;
+            width: 16.5%;
+            min-width: 50px;
             &.download-csv {
                 position: relative;
-                width: 19.685%;
+                width: 16.5%;
                 padding: 0;
                 margin: 0;
                 text-align: center;
@@ -538,7 +584,11 @@ span.twitter-typeahead {
         .jspContainer {
             padding-top: 15px;
             .jspPane {
-                top: 15px !important;
+                top: 0 !important;
+                margin-left: 0 !important;
+            }
+            .jspVerticalBar{
+                display: none;
             }
         }
         .gradebook-student-column-average {
@@ -552,6 +602,9 @@ span.twitter-typeahead {
                     }
                 }
             }
+        }
+        td.student-grades{
+            height: 59px;
         }
         .student-grades {
             min-width: 68px;
@@ -700,3 +753,15 @@ span.twitter-typeahead {
         transform: rotate(359deg);
     }
 }
+
+@keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }
+  
+  @-webkit-keyframes ellipsis {
+    to {
+      width: 1.25em;    
+    }
+  }

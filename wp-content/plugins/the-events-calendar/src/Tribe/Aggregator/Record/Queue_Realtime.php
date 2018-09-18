@@ -119,22 +119,27 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		$this->ajax_operations->verify_or_exit( $_POST['check'], $this->get_ajax_nonce_action(), $this->get_unable_to_continue_processing_data() );
 
 		// Load the queue
+		/** @var \Tribe__Events__Aggregator__Record__Queue_Interface $queue */
 		$queue = $this->queue ? $this->queue : Tribe__Events__Aggregator__Record__Queue_Processor::build_queue( $this->record_id );
 
 		// We always need to setup the Current Queue
 		$this->queue_processor->set_current_queue( $queue );
 
-		// Only if it's not empty that we care about proccesing.
+		// Only if it's not empty that we care about processing.
 		if ( ! $queue->is_empty() ) {
 			$this->queue_processor->process_batch( $this->record_id );
 		}
 
-		/** @var \Tribe__Events__Aggregator__Record__Queue_Interface $current_queue */
+		/**
+		 * Include current queue to prevent progress bar from sticking on csv imports
+		 *
+		 * @var \Tribe__Events__Aggregator__Record__Queue_Interface $current_queue
+		 */
 		$current_queue = $this->queue_processor->current_queue;
 		$done          = $current_queue->is_empty();
 		$percentage    = $current_queue->progress_percentage();
 
-		$this->ajax_operations->exit_data( $this->get_progress_message_data( $current_queue, $percentage, $done ) );
+ 		$this->ajax_operations->exit_data( $this->get_progress_message_data( $current_queue, $percentage, $done ) );
 	}
 
 	/**
@@ -197,12 +202,15 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		$is_event_queue = $queue_type === Tribe__Events__Main::POSTTYPE;
 		$activity = $queue->activity();
 
-		$data = array(
+		$error = $queue->has_errors();
+
+		$data   = array(
 			'html'          => false,
 			'progress'      => $percentage,
 			'progress_text' => sprintf( __( '%d%% complete', 'the-events-calendar' ), $percentage ),
 			'continue'      => ! $done,
 			'complete'      => $done,
+			'error'        => $error,
 			'counts'        => array(
 				'total'      => $activity->count( $queue_type ),
 				'created'    => $activity->count( $queue_type, 'created' ),
@@ -216,8 +224,11 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 			),
 		);
 
-		if ( $done ) {
-			$messages = Tribe__Events__Aggregator__Tabs__New::instance()->get_result_messages( $queue );
+		$messages = Tribe__Events__Aggregator__Tabs__New::instance()->get_result_messages( $queue );
+
+		if ( $error ) {
+			$data['error_text'] = '<p>' . implode( ' ', $messages['error'] ) . '</p>';
+		} elseif ( $done ) {
 			$data['complete_text'] = '<p>' . implode( ' ', $messages['success'] ) . '</p>';
 		}
 

@@ -187,33 +187,46 @@ function cuny_add_group_menu_items( $items, $args ) {
 		return $items;
 	}
 
-	if ( ! bp_is_root_blog() ) {
-		// Only add the Home link if one is not already found
-		// See http://openlab.citytech.cuny.edu/redmine/isues/1031
-		$has_home = false;
-		foreach ( $items as $item ) {
-			if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
-				$has_home = true;
-				break;
-			}
-		}
-
-		if ( ! $has_home ) {
-			$post_args = new stdClass;
-			$home_link = new WP_Post( $post_args );
-			$home_link->title = 'Home';
-			$home_link->url = trailingslashit( site_url() );
-			$home_link->slug = 'home';
-			$home_link->ID = 'home';
-			$items = array_merge( array( $home_link ), $items );
-		}
-
-		$items = array_merge( cuny_group_menu_items(), $items );
+	if ( bp_is_root_blog() ) {
+		return $items;
 	}
+
+	// Only add the Home link if one is not already found
+	// See http://openlab.citytech.cuny.edu/redmine/isues/1031
+	$has_home = false;
+	foreach ( $items as $item ) {
+		if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
+			$has_home = true;
+			break;
+		}
+	}
+
+	if ( ! $has_home ) {
+		$post_args = new stdClass;
+		$home_link = new WP_Post( $post_args );
+		$home_link->title = 'Home';
+		$home_link->url = trailingslashit( site_url() );
+		$home_link->slug = 'home';
+		$home_link->ID = 'home';
+		$items = array_merge( array( $home_link ), $items );
+	}
+
+	$items = array_merge( cuny_group_menu_items(), $items );
 
 	return $items;
 }
 add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+
+/**
+ * Disable the filter above when we're in a sidebar.
+ */
+add_action( 'dynamic_sidebar_before', function() {
+	remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+
+	add_action( 'dynamic_sidebar_after', function() {
+		add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+	} );
+}, 0 );
 
 function cuny_group_menu_items() {
 	global $bp, $wpdb;

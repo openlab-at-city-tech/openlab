@@ -433,6 +433,34 @@
             </div>
         </div>
 
+               <div id="buy" class="buy postbox">
+            <h3> <span>Check our NEW Keyword Hound - Best WordPress SEO Tool Ever!</span></h3>
+            <div class="plugins">
+                <div class="list">
+                    <div class="plugins-table">
+                        <div class="plugins-img item">
+                            <a href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/' ); ?>" target="_blank">
+                                <img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>SEOHoundIcon.png">
+                            </a>
+                        </div>
+
+                        <div class="plugins-price item">
+                            <span>$79</span>
+                        </div>
+
+                        <div class="plugins-body item">
+                            <p><strong>NEW:</strong> Streamline keyword management and boost the SEO of your website with this one-of-a-kind WordPress SEO plugin!.</p>
+                        </div>
+
+                        <div class="plugins-action item">
+                            <a class="button-success" href="<?php echo $this->addAffiliateCode( 'https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/' ); ?>" target="_blank" >More Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div id="buy" class="buy postbox">
             <h3> <span>Buy CreativeMidns suite of all 99+ Premium WordPress Plugins</span></h3>
             <div class="plugins">

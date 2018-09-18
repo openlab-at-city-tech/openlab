@@ -1571,7 +1571,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.0.3' );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.0.4' );
 	}
 
 	function adminbar_special_body_class( $classes ) {
@@ -1662,8 +1662,9 @@ function openlab_wrap_adminbar_top() {
 	if ( get_current_blog_id() !== 1 || is_admin() ) :
 
 		$admin_class = ( is_admin() ? ' admin-area' : '' );
+		$logged_in = (is_user_logged_in() ? ' logged-in' : ' logged-out' );
 		?>
-		<div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
+		<div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?><?php echo $logged_in; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
 	<?php else : ?>
 		<div class="oplb-bs"><div class="oplb-bs">
 	<?php

@@ -718,7 +718,7 @@ class GWPerksPage {
 
 	        update_site_option( 'gwp_settings', $settings );
 
-	        GWPerks::flush_license();
+	        GWPerks::flush_license(true);
 
             if ( ! GWPerks::has_valid_license() ) {
             	if( GravityPerks::get_api_status() != '200' ) {
@@ -776,7 +776,7 @@ class GWPerksPage {
 
 		    update_site_option( 'gwp_settings', $settings );
 
-		    GWPerks::flush_license();
+		    GWPerks::flush_license(true);
 
 		    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice(__('License successfully deactivated.', 'gravityperks'), array('class' => 'inline notice notice-success gwp-message'));
 
@@ -784,7 +784,7 @@ class GWPerksPage {
 
 		    check_admin_referer( 'gwp_flush_license' );
 
-		    GWPerks::flush_license();
+		    GWPerks::flush_license(true);
 
 		    $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice(__('License successfully refreshed.', 'gravityperks'), array('class' => 'inline notice notice-success gwp-message'));
 
