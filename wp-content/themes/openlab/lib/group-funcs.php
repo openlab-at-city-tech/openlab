@@ -729,7 +729,7 @@ function cuny_group_single() {
                             <?php if ($wds_school && !empty($wds_school)): ?>
 
                                 <div class="table-row row">
-                                    <div class="bold col-sm-7">School / Office</div>
+                                    <div class="bold col-sm-7">School / Office Location</div>
                                     <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
                                 </div>
 

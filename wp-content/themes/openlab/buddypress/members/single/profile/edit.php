@@ -62,7 +62,7 @@ $field_ids = array(1);
 
                 <?php if ( 'Staff' === $account_type || 'Faculty' === $account_type ) : ?>
                     <div class="editfield field_name alt form-group">
-                        <label for="ol-offices">School / Office / Department (required)</label>
+                        <label for="ol-offices">School / Office Location / Department (required)</label>
                         <?php
                         $selector_args = [
                             'required' => true,
