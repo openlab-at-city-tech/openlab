@@ -79,6 +79,8 @@ add_filter(
 
 			'MAT1275-F18-Aqil'           => 'maqil@citytech.cuny.edu',
 			'MAT1275-F18-Barthelemy'     => 'nbarthelemy@citytech.cuny.edu',
+			'MAT1275-F18-Batyr-Fri'      => 'obatyr@citytech.cuny.edu',
+			'MAT1275-F18-Batyr-WF'       => 'obatyr@citytech.cuny.edu',
 			'MAT1275-F18-Beck'           => 'mbeck@citytech.cuny.edu',
 			'MAT1275-F18-Berglund'       => 'rberglund@citytech.cuny.edu',
 			'MAT1275-F18-Brenord'        => 'dbrenord@citytech.cuny.edu',
@@ -86,15 +88,19 @@ add_filter(
 			'MAT1275-F18-DOrazio'        => 'ddorazio@citytech.cuny.edu',
 			'MAT1275-F18-Duvvuri-10AM'   => 'vduvvuri@citytech.cuny.edu',
 			'MAT1275-F18-Duvvuri-8AM'    => 'vduvvuri@citytech.cuny.edu',
+			'MAT1275-F18-Edem'           => 'vedem@citytech.cuny.edu',
 			'MAT1275-F18-Essien'         => 'sessien@citytech.cuny.edu',
 			'MAT1275-F18-Frankel'        => 'rf26@nyu.edu',
 			'MAT1275-F18-Goorova'        => 'lgoorova@citytech.cuny.edu',
 			'MAT1275-F18-Grigorian'      => 'lgrigorian@citytech.cuny.edu',
+			'MAT1275-F18-Gumeni'         => 'fgumeni@citytech.cuny.edu',
 			'MAT1275-F18-Kan'            => 'bkan@citytech.cuny.edu',
 			'MAT1275-F18-Kiefer'         => 'gkiefer@citytech.cuny.edu',
 			'MAT1275-F18-Koca'           => 'ckoca@citytech.cuny.edu',
+			'MAT1375-F18-Kostadinov'     => 'bkostadinov@citytech.cuny.edu',
 			'MAT1275-F18-Kroll'          => 'jkroll@citytech.cuny.edu',
 			'MAT1275-F18-Kushnir'        => 'rkushnir@citytech.cuny.edu',
+			'MAT1275-F18-Lee'            => 'VILee@citytech.cuny.edu',
 			'MAT1275-F18-Lime'           => 'mlime@citytech.cuny.edu',
 			'MAT1275-F18-Mingla'         => 'lmingla@citytech.cuny.edu',
 			'MAT1275-F18-Mujica'         => 'pmujica@citytech.cuny.edu',
@@ -116,6 +122,7 @@ add_filter(
 			'MAT1375-F18-Poirier'        => 'kpoirier@citytech.cuny.edu',
 			'MAT1375-F18-Shaver'         => 'sshaver@citytech.cuny.edu',
 			'MAT1375-F18-Sirelson'       => 'vsirelson@citytech.cuny.edu',
+
 		);
 	}
 );
