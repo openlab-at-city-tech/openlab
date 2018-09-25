@@ -280,36 +280,7 @@ class Anthologize_Admin_Main {
 	 * @since 0.3
 	 */
 	function load_scripts() {
-		wp_enqueue_script( 'anthologize-js', plugins_url() . '/anthologize/js/project-organizer.js' );
-		wp_enqueue_script( 'jquery');
-		wp_enqueue_script( 'jquery-ui-core');
-		wp_enqueue_script( 'jquery-ui-sortable');
-		wp_enqueue_script( 'jquery-ui-draggable');
-		wp_enqueue_script( 'jquery-ui-datepicker', plugins_url() . '/anthologize/js/jquery-ui-datepicker.js');
-		wp_enqueue_script( 'jquery-cookie', plugins_url() . '/anthologize/js/jquery-cookie.js' );
-		wp_enqueue_script( 'blockUI-js', plugins_url() . '/anthologize/js/jquery.blockUI.js' );
-		wp_enqueue_script( 'anthologize_admin-js', plugins_url() . '/anthologize/js/anthologize_admin.js' );
-		wp_enqueue_script( 'anthologize-sortlist-js', plugins_url() . '/anthologize/js/anthologize-sortlist.js' );
-
-		wp_localize_script( 'anthologize-sortlist-js', 'anth_strings', array(
-			'append'           => __( 'Append', 'anthologize' ),
-			'cancel'           => __( 'Cancel', 'anthologize' ),
-			'commenter'        => __( 'Commenter', 'anthologize' ),
-			'comment_content'  => __( 'Comment Content', 'anthologize' ),
-			'comments'         => __( 'Comments', 'anthologize' ),
-			'comments_explain' => __( 'Check the comments from the original post that you would like to include in your project.', 'anthologize' ),
-			'done'             => __( 'Done', 'anthologize' ),
-			'edit'             => __( 'Edit', 'anthologize' ),
-			'less'             => __( 'less', 'anthologize' ),
-			'more'             => __( 'more', 'anthologize' ),
-			'no_comments'      => __( 'This post has no comments associated with it.', 'anthologize' ),
-			'preview'          => __( 'Preview', 'anthologize' ),
-			'posted'           => __( 'Posted', 'anthologize' ),
-			'remove'           => __( 'Remove', 'anthologize' ),
-			'save'             => __( 'Save', 'anthologize' ),
-			'select_all'       => __( 'Select all', 'anthologize' ),
-			'select_none'      => __( 'Select none', 'anthologize' ),
-		) );
+		wp_enqueue_script( 'anthologize_admin-js', plugins_url() . '/anthologize/js/anthologize_admin.js', array( 'jquery', 'blockUI-js' ) );
 	}
 
 	/**
@@ -500,7 +471,7 @@ class Anthologize_Admin_Main {
 
 
 
-		<div id="anthologize-logo"><img src="<?php echo esc_url( plugins_url() . '/anthologize/images/anthologize-logo.gif' ) ?>" /></div>
+		<div id="anthologize-logo"><img src="<?php echo esc_url( plugins_url() . '/anthologize/images/anthologize-logo.gif' ) ?>" alt="<?php esc_attr_e( 'Anthologize logo', 'anthologize' ); ?>" /></div>
 		<h2><?php _e( 'My Projects', 'anthologize' ) ?> <a href="admin.php?page=anthologize_new_project" class="button add-new-h2"><?php _e( 'Add New', 'anthologize' ) ?></a></h2>
 
 
@@ -537,7 +508,6 @@ class Anthologize_Admin_Main {
 
 			<thead>
 				<tr>
-					<th scope="col" class="check-column"></th>
 					<th scope="col"><?php _e( 'Project Title', 'anthologize' ) ?></th>
 					<th scope="col"><?php _e( 'Created By', 'anthologize' ) ?></th>
 					<th scope="col"><?php _e( 'Number of Parts', 'anthologize' ) ?></th>
@@ -552,9 +522,6 @@ class Anthologize_Admin_Main {
 
 					<tr>
 						<tr>
-
-            					<th scope="row" class="check-column">
-						</th>
 
 						<th scope="row"  class="post-title">
 							<a href="admin.php?page=anthologize&amp;action=edit&amp;project_id=<?php the_ID() ?>" class="row-title"><?php the_title(); ?></a>
@@ -762,10 +729,10 @@ class Anthologize_Admin_Main {
 		?>
 		<div class="my_meta_control">
 
-			<label><?php esc_html_e( 'Author Name', 'anthologize' ); ?> <span><?php esc_html_e( '(optional)', 'anthologize' ); ?></span></label>
+			<label for="author-name"><?php esc_html_e( 'Author Name', 'anthologize' ); ?> <span><?php esc_html_e( '(optional)', 'anthologize' ); ?></span></label>
 
 			<p>
-				<textarea class="tags-input" name="anthologize_meta[author_name]" rows="3"><?php echo esc_html( $author_name ) ?></textarea>
+				<textarea class="tags-input" id="author-name" name="anthologize_meta[author_name]" rows="3"><?php echo esc_textarea( $author_name ) ?></textarea>
 			</p>
 
 			<?php /* Display content for imported feed, if there is any */ ?>
@@ -802,8 +769,8 @@ class Anthologize_Admin_Main {
 					?>
 
 
-					<dt><?php echo $dt ?></dt>
-					<dd><?php echo $dd ?></dd>
+					<dt><?php echo esc_html( $dt ); ?></dt>
+					<dd><?php echo esc_html( $dd ); ?></dd>
 				<?php endforeach; ?>
 				</dl>
 
@@ -874,11 +841,11 @@ class Anthologize_Admin_Main {
 
 		?>
 
-		<h3><?php _e( 'Anthologize', 'anthologize' ); ?></h3>
+		<h3><?php esc_html_e( 'Anthologize', 'anthologize' ); ?></h3>
 
 		<table id="menu" class="form-table">
 			<tr valign="top">
-				<th scope="row"><?php _e( 'Allow individual site admins to determine which kinds of users can use Anthologize?', 'anthologize' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Allow individual site admins to determine which kinds of users can use Anthologize?', 'anthologize' ); ?></th>
 				<td>
 
 				<?php
@@ -890,16 +857,15 @@ class Anthologize_Admin_Main {
 				 * options in the installer.
 				 */
 				?>
-				<label><input type="checkbox" class="tags-input" name="anth_site_settings[forbid_per_blog_caps]" value="1" <?php if ( empty( $site_settings['forbid_per_blog_caps'] ) ) : ?>checked="checked"<?php endif ?>> <?php _e( 'When unchecked, access to Anthologize will be limited to the default role you select below.', 'anthologize' ) ?></label>
+				<label><input type="checkbox" class="tags-input" name="anth_site_settings[forbid_per_blog_caps]" value="1" <?php if ( empty( $site_settings['forbid_per_blog_caps'] ) ) : ?>checked="checked"<?php endif ?>> <?php esc_html_e( 'When unchecked, access to Anthologize will be limited to the default role you select below.', 'anthologize' ) ?></label>
 
 				</td>
 			</tr>
 
 			<tr valign="top">
-				<th scope="row"><?php _e( 'Default mimimum role for Anthologizers', 'anthologize' ); ?></th>
-				<td>
+				<th scope="row"><label for="minimum-cap"><?php esc_html_e( 'Default mimimum role for Anthologizers', 'anthologize' ); ?></label></th>
 
-				<label>
+				<td>
 					<select class="tags-input" name="anth_site_settings[minimum_cap]">
 						<option<?php selected( $minimum_cap, 'manage_network' ) ?> value="manage_network"><?php _e( 'Network Admin', 'anthologize' ) ?></option>
 
@@ -916,8 +882,6 @@ class Anthologize_Admin_Main {
 						<option<?php selected( $minimum_cap, 'read' ) ?> value="read"><?php _e( 'Subscriber', 'anthologize' ) ?></option>
 						*/ ?>
 					</select>
-				</label>
-
 				</td>
 			</tr>
 		</table>
