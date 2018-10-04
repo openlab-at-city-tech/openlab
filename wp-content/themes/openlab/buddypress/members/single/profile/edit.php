@@ -60,18 +60,7 @@ $field_ids = array(1);
                     <?php $display_name_shown = true ?>
                 <?php } ?>
 
-                <?php if ( 'Staff' === $account_type || 'Faculty' === $account_type ) : ?>
-                    <div class="editfield field_name alt form-group">
-                        <label for="ol-offices">School / Office Location / Department (required)</label>
-                        <?php
-                        $selector_args = [
-                            'required' => true,
-                            'checked'  => openlab_get_user_academic_units( $user_ID ),
-                        ];
-                        openlab_academic_unit_selector( $selector_args );
-                        ?>
-                    </div>
-                <?php else : ?>
+                <?php if ( 'Staff' !== $account_type && 'Faculty' !== $account_type ) : ?>
                     <?php
                     $depts   = [];
                     $checked = openlab_get_user_academic_units( $user_ID );
@@ -93,8 +82,10 @@ $field_ids = array(1);
 
                         <?php wp_nonce_field( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce', false ); ?>
                     </div>
-
                 <?php endif; ?>
+
+                <?php /* Oy. Vey. */ ?>
+                <?php $just_did_title = false; ?>
 
                 <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
@@ -102,6 +93,26 @@ $field_ids = array(1);
                         <?php
                         if ( 'Major Program of Study' === bp_get_the_profile_field_name() || 'Department' === bp_get_the_profile_field_name() ) {
                             continue;
+                        }
+                        ?>
+
+                        <?php if ( $just_did_title ) : ?>
+                            <div class="editfield field_name alt form-group">
+                                <label for="ol-offices">School / Office Location / Department (required)</label>
+                                <?php
+                                $selector_args = [
+                                    'required' => true,
+                                    'checked'  => openlab_get_user_academic_units( $user_ID ),
+                                ];
+                                openlab_academic_unit_selector( $selector_args );
+                                ?>
+                            </div>
+                            <?php $just_did_title = false; ?>
+                        <?php endif; ?>
+
+                        <?php
+                        if ( 'Title' === bp_get_the_profile_field_name() ) {
+                            $just_did_title = true;
                         }
                         ?>
 
