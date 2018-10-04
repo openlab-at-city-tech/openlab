@@ -462,9 +462,9 @@ add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' )
  */
 function openlab_get_school_list() {
 	return array(
-		'tech'    => 'Technology & Design',
-		'studies' => 'Professional Studies',
 		'arts'    => 'Arts & Sciences',
+		'studies' => 'Professional Studies',
+		'tech'    => 'Technology & Design',
 		'other'   => 'Other',
 	);
 }
@@ -527,9 +527,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 function openlab_get_office_list() {
 	return array(
 		'academic-affairs' => 'Academic Affairs',
-		'student-affairs'  => 'Student Affairs & Enrollment Management',
 		'administration'   => 'Administration & Finance',
 		'president'        => 'President\'s Office',
+		'student-affairs'  => 'Student Affairs & Enrollment Management',
 	);
 }
 
