@@ -770,11 +770,11 @@ function cuny_member_profile_header() {
 
                         <?php if ( $department ) : ?>
                             <div class="table-row row">
-                                <div class="bold col-sm-7">
+                                <div class="bold col-sm-7 profile-field-label">
                                     <?php echo esc_html( $dept_label ); ?>
                                 </div>
 
-                                <div class="col-sm-17">
+                                <div class="col-sm-17 profile-field-value">
                                     <?php echo esc_html( $department ); ?>
                                 </div>
                             </div>
@@ -813,11 +813,11 @@ function cuny_member_profile_header() {
                                                 ?>
 
                                                 <div class="table-row row">
-                                                    <div class="bold col-sm-7">
+                                                    <div class="bold col-sm-7 profile-field-label">
                                                         <?php bp_the_profile_field_name() ?>
                                                     </div>
 
-                                                    <div class="col-sm-17">
+                                                    <div class="col-sm-17 profile-field-value">
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();

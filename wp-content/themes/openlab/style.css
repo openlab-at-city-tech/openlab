@@ -9216,6 +9216,9 @@ input#group-request-send {
 .info-panel .table-div .table-row:first-child div {
   border-top: none;
 }
+.info-panel .table-div .table-row .profile-field-value {
+  border-top: none;
+}
 .academic-unit-selector {
   border: 2px solid #ddd;
   border-radius: 4px;
