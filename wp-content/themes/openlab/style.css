@@ -9238,6 +9238,16 @@ input#group-request-send {
 }
 .academic-unit-selector .checkbox-list-container li {
   float: none;
+  margin-bottom: .25em;
+  position: relative;
+}
+.academic-unit-selector .checkbox-list-container li input {
+  position: absolute;
+  left: 0;
+}
+.academic-unit-selector .checkbox-list-container li label {
+  display: block;
+  margin-left: 25px;
 }
 .academic-unit-selector .entity-inputs {
   overflow: hidden;
