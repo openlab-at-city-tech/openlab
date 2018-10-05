@@ -357,7 +357,7 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <div class="bp-widget">
                 <h4><?php _e("Members", "buddypress"); ?></h4>
 
-                <?php if (bp_group_has_members('per_page=15&exclude_banned=false')) : ?>
+                <?php if (bp_group_has_members('per_page=15&exclude_banned=0')) : ?>
 
         <?php if (bp_group_member_needs_pagination()) : ?>
 
