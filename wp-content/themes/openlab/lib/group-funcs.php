@@ -1168,6 +1168,10 @@ function openlab_get_directory_filter($filter_type, $label_type) {
                 $filter_array['options'][$school_key] = $school_label;
             }
 
+            foreach (openlab_get_office_list() as $office_key => $office_label) {
+                $filter_array['options'][$office_key] = $office_label;
+            }
+
             break;
 
         case 'department' :
@@ -1176,9 +1180,9 @@ function openlab_get_directory_filter($filter_type, $label_type) {
                 'dept_all' => 'All'
             );
 
-            foreach (openlab_get_department_list('', 'short') as $depts) {
-                foreach ($depts as $dept_key => $dept_label) {
-                    $filter_array['options'][$dept_key] = $dept_label;
+            foreach ( openlab_get_entity_departments() as $entity => $depts ) {
+                foreach ( $depts as $dept_key => $dept_labels ) {
+                    $filter_array['options'][ $dept_key ] = $dept_labels['short_label'] ?: $dept_labels['label'];
                 }
             }
 
