@@ -727,6 +727,7 @@ function cuny_group_single() {
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
                             ?>
 
+                            <?php /*
                             <?php if ($wds_school && !empty($wds_school)): ?>
 
                                 <div class="table-row row">
@@ -735,6 +736,7 @@ function cuny_group_single() {
                                 </div>
 
                             <?php endif; ?>
+                            */ ?>
 
                             <?php if ($wds_departments && !empty($wds_departments)): ?>
 
