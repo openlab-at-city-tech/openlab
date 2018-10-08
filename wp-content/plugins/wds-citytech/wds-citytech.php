@@ -1545,7 +1545,7 @@ class OpenLab_Change_User_Type {
 
 				<td>
 					<?php foreach ( $options as $option ) : ?>
-						<input type="radio" name="openlab_account_type" value="<?php echo $option->name ?>" <?php checked( $account_type, $option->name ) ?>> <?php echo $option->name ?><br />
+						<label><input type="radio" name="openlab_account_type" value="<?php echo $option->name ?>" <?php checked( $account_type, $option->name ) ?>> <?php echo $option->name ?><br /></label>
 						<?php endforeach ?>
 				</td>
 			</tr>
