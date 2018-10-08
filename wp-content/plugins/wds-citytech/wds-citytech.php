@@ -1081,11 +1081,9 @@ function openlab_require_school_and_department_for_groups() {
 		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
 	}
 
-	$account_type = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
-
 	if ( openlab_is_school_required_for_group_type( $group_type ) && (bp_is_action_variable( 'group-details', 1 ) || bp_is_action_variable( 'edit-details' )) ) {
 
-		if ( empty( $_POST['schools'] ) || empty( $_POST['departments'] ) ) {
+		if ( ( empty( $_POST['schools'] ) && empty( $_POST['offices'] ) ) || empty( $_POST['departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
 			bp_core_redirect( $redirect );
 		}
