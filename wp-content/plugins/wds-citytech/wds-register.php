@@ -184,7 +184,7 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 		if ( 'Staff' === $account_type || 'Faculty' === $account_type ) :
 			?>
 			<div class="editfield field_name alt form-group">
-				<label for="ol-offices">School / Office Location / Department (required)</label>
+				<label for="ol-offices">School / Office / Department (required)</label>
 				<?php
 				$selector_args = [
 					'required' => true,

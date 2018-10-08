@@ -725,18 +725,25 @@ function cuny_group_single() {
                             $wds_school      = openlab_generate_school_office_name( $group_units );
                             $wds_departments = openlab_generate_department_name( $group_units );
                             $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
+
+                            // Show 'School' field for Projects, Clubs, or staff Portfolios.
+                            $show_school = 'project' === $group_type || 'club' === $group_type;
+                            if ( 'portfolio' === $group_type ) {
+                                $user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
+                                $user_type = xprofile_get_field_data( 'Account Type', $user_id );
+
+                                $show_school = 'Staff' === $user_type;
+                            }
                             ?>
 
-                            <?php /*
-                            <?php if ($wds_school && !empty($wds_school)): ?>
+                            <?php if ( $show_school && $wds_school && ! empty( $wds_school ) ): ?>
 
                                 <div class="table-row row">
-                                    <div class="bold col-sm-7">School / Office Location</div>
+                                    <div class="bold col-sm-7">School / Office</div>
                                     <div class="col-sm-17 row-content"><?php echo $wds_school; ?></div>
                                 </div>
 
                             <?php endif; ?>
-                            */ ?>
 
                             <?php if ($wds_departments && !empty($wds_departments)): ?>
 
