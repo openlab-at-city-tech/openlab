@@ -35,14 +35,14 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $school_color = "active";
     }
 
-	$schools = openlab_get_school_list();
+    $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
 	switch ( $_GET['school'] ) {
 		case 'school_all':
 			$option_value_school = 'school_all';
 			break;
 
 		default :
-			if ( isset( $schools[ $_GET['school'] ] ) ) {
+			if ( isset( $schools_and_offices[ $_GET['school'] ] ) ) {
 				$option_value_school = $_GET['school'];
 			} else {
 				$option_value_school = '';
@@ -166,7 +166,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
                         <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
                             <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
                             <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
-                            <?php foreach ( $schools as $school_key => $school_label ) : ?>
+                            <?php foreach ( openlab_get_school_list() as $school_key => $school_label ) : ?>
                                 <option value='<?php echo esc_attr( $school_key ); ?>' <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $school_label ); ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -184,7 +184,7 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 
                             <optgroup label="All Offices">
                             <?php foreach ( openlab_get_office_list() as $office_key => $office_label ) : ?>
-                                <option value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $office_label ); ?></option>
+                                <option value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $office_key, $option_value_school ); ?>><?php echo esc_html( $office_label ); ?></option>
                             <?php endforeach; ?>
 
                             </optgroup>
