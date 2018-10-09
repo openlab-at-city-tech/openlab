@@ -1191,7 +1191,7 @@ function openlab_get_directory_filter($filter_type, $label_type) {
 
             foreach ( openlab_get_entity_departments() as $entity => $depts ) {
                 foreach ( $depts as $dept_key => $dept_labels ) {
-                    $filter_array['options'][ $dept_key ] = $dept_labels['short_label'] ?: $dept_labels['label'];
+                    $filter_array['options'][ $dept_key ] = $dept_labels['short_label'] ?? $dept_labels['label'];
                 }
             }
 
