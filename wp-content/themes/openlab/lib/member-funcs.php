@@ -62,8 +62,8 @@ function openlab_list_members($view) {
         $user_school = urldecode($_GET['school']);
 
         // Sanitize
-        $schools = openlab_get_school_list();
-        if (!isset($schools[$user_school])) {
+        $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
+        if ( ! isset( $schools_and_offices[ $user_school ] ) ) {
             $user_school = '';
         }
     }
