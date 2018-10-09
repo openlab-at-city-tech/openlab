@@ -171,11 +171,11 @@ function openlab_process_status_messages($message, $type) {
 add_filter('bp_core_render_message_content', 'openlab_process_status_messages', 10, 2);
 
 function openlab_generate_school_office_name( $item_units ) {
-    $entity_names = array();
+    $entity_names = $school_names = $office_names = array();
 
     if ( ! empty( $item_units['schools'] ) ) {
-        $all_schools   = openlab_get_school_list();
-        $entity_names += array_map(
+        $all_schools  = openlab_get_school_list();
+        $school_names = array_map(
             function( $school ) use ( $all_schools ) {
                 if ( isset( $all_schools[ $school ] ) ) {
                     return $all_schools[ $school ];
@@ -186,8 +186,8 @@ function openlab_generate_school_office_name( $item_units ) {
     }
 
     if ( ! empty( $item_units['offices'] ) ) {
-        $all_offices   = openlab_get_office_list();
-        $entity_names += array_map(
+        $all_offices  = openlab_get_office_list();
+        $office_names = array_map(
             function( $office ) use ( $all_offices ) {
                 if ( isset( $all_offices[ $office ] ) ) {
                     return $all_offices[ $office ];
@@ -197,7 +197,7 @@ function openlab_generate_school_office_name( $item_units ) {
         );
     }
 
-    $entity_names = array_filter( $entity_names );
+    $entity_names = array_filter( array_merge( $school_names, $office_names ) );
 
     natcasesort( $entity_names );
 
