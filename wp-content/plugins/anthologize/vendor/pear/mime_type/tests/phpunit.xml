@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit colors="true"
+         bootstrap="bootstrap.php"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTestSize="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         checkForUnintentionallyCoveredCode="true"
+>
+ <filter>
+  <whitelist>
+   <directory suffix=".php">../MIME/</directory>
+  </whitelist>
+ </filter>
+</phpunit>

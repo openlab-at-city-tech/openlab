@@ -1,0 +1,45 @@
+{
+    "authors": [
+        {
+            "email": "vincent.lascaux@centraliens.net",
+            "name": "Vincent Lascaux",
+            "role": "Lead"
+        },
+        {
+            "email": "charles.fmj@gmail.com",
+            "name": "Charles Brunet",
+            "role": "Lead"
+        },
+        {
+            "email": "pablo@pablo.com.mx",
+            "name": "Pablo Fischer",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "File": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/File_Archive",
+    "include-path": [
+        "./"
+    ],
+    "license": "LGPL",
+    "name": "pear/file_archive",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=File_Archive",
+        "source": "https://github.com/pear/File_Archive"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*",
+        "pear/mime_type": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "suggest": {
+        "pear/mail_mime": "Install optionally via your project's composer.json"
+    }
+}

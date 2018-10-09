@@ -32,6 +32,8 @@ modifications of TDPDF must comply with its license.
 if ( ! defined( 'ANTHOLOGIZE_VERSION' ) )
 	define( 'ANTHOLOGIZE_VERSION', '0.7.8' );
 
+require dirname( __FILE__ ) . '/vendor/autoload.php';
+
 if ( ! class_exists( 'Anthologize' ) ) :
 
 class Anthologize {
@@ -93,7 +95,8 @@ class Anthologize {
 		$this->setup_constants();
 		$this->includes();
 		$this->setup_hooks();
-		$this->register_assets();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 	}
 
 	/**
@@ -295,7 +298,7 @@ class Anthologize {
 	public function register_assets() {
 		wp_register_style( 'anthologize-admin', plugins_url() . '/anthologize/css/admin.css' );
 
-		$foo = wp_register_script( 'blockUI-js', plugins_url() . '/anthologize/js/jquery.blockUI.js' );
+		wp_register_script( 'blockUI-js', plugins_url() . '/anthologize/js/jquery.blockUI.js' );
 		wp_register_script( 'jquery-cookie', plugins_url() . '/anthologize/js/jquery-cookie.js' );
 
 		wp_register_script(
