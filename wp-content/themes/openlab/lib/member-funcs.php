@@ -763,24 +763,6 @@ function cuny_member_profile_header() {
                     <div class="profile-fields table-div">
 
                         <?php
-                        $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
-                        $department = openlab_generate_department_name( $user_units );
-                        $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
-                        ?>
-
-                        <?php if ( $department ) : ?>
-                            <div class="table-row row">
-                                <div class="bold col-sm-7 profile-field-label">
-                                    <?php echo esc_html( $dept_label ); ?>
-                                </div>
-
-                                <div class="col-sm-17 profile-field-value">
-                                    <?php echo esc_html( $department ); ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php
                         $exclude_fields = [
                             openlab_get_xprofile_field_id( 'Name' ),
                             openlab_get_xprofile_field_id( 'Account Type' ),
@@ -794,6 +776,10 @@ function cuny_member_profile_header() {
                             'exclude_fields' => $exclude_fields,
                             'exclude_groups' => openlab_get_exclude_groups_for_account_type( $account_type ),
                         ];
+
+                        // This field is shown first for Student, Alumni; after Title for others.
+                        $show_dept_field_next = in_array( $account_type, array( 'Student', 'Alumni' ) );
+
                         ?>
 
                         <?php if ( bp_has_profile( $has_profile_args ) ) : ?>
@@ -803,6 +789,25 @@ function cuny_member_profile_header() {
                                 <?php if (bp_profile_group_has_fields()) : ?>
 
                                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
+
+                                        <?php if ( $show_dept_field_next ) :
+                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                                            $department = openlab_generate_department_name( $user_units );
+                                            $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+                                            ?>
+
+                                            <?php if ( $department ) : ?>
+                                                <div class="table-row row">
+                                                    <div class="bold col-sm-7 profile-field-label">
+                                                        <?php echo esc_html( $dept_label ); ?>
+                                                    </div>
+
+                                                    <div class="col-sm-17 profile-field-value">
+                                                        <?php echo esc_html( $department ); ?>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
 
                                         <?php if (bp_field_has_data()) : ?>
                                             <?php
@@ -834,6 +839,8 @@ function cuny_member_profile_header() {
                                                         ?>
                                                     </div>
                                                 </div>
+
+                                                <?php $show_dept_field_next = 'Title' === bp_get_the_profile_field_name(); ?>
 
                                             <?php endif; ?>
 
