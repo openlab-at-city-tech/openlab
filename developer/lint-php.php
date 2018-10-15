@@ -40,7 +40,15 @@ function lint( $dir = 'C:\dev\\' )
 
 			$relativePath = getRelativePath( $objSplFileInfo->getRealPath() );
 
-			if ( in_array( $relativePath, $excluded_dirs, true ) ) {
+			$skipThisDir = false;
+			foreach ( $excluded_dirs as $excluded_dir ) {
+				if ( 0 === strpos( $relativePath, $excluded_dir ) ) {
+					$skipThisDir = true;
+					break;
+				}
+			}
+
+			if ( $skipThisDir ) {
 				continue;
 			}
 
