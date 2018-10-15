@@ -789,6 +789,10 @@ function cuny_member_profile_header() {
                             }
                         }
 
+                        $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                        $department = openlab_generate_department_name( $user_units );
+                        $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+
                         ?>
 
                         <?php if ( bp_has_profile( $has_profile_args ) ) : ?>
@@ -799,12 +803,7 @@ function cuny_member_profile_header() {
 
                                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
-                                        <?php if ( $show_dept_field_next ) :
-                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
-                                            $department = openlab_generate_department_name( $user_units );
-                                            $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
-                                            ?>
-
+                                        <?php if ( $show_dept_field_next ) : ?>
                                             <?php if ( $department ) : ?>
                                                 <div class="table-row row">
                                                     <div class="bold col-sm-7 profile-field-label">
@@ -860,6 +859,17 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
+                        <?php elseif ( $department ) : ?>
+                            <?php /* Special case: User has no other profile fields but has a Department */ ?>
+                            <div class="table-row row">
+                                <div class="bold col-sm-7 profile-field-label">
+                                    <?php echo esc_html( $dept_label ); ?>
+                                </div>
+
+                                <div class="col-sm-17 profile-field-value">
+                                    <?php echo esc_html( $department ); ?>
+                                </div>
+                            </div>
                         <?php endif; // bp_has_profile()     ?>
                     </div>
                 </div>
