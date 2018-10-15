@@ -3,7 +3,7 @@
 		Plugin Name: WP QuickLaTeX
 		Plugin URI: http://www.holoborodko.com/pavel/quicklatex/
 		Description: Access to complete LaTeX distribution. Publish formulae & graphics using native LaTeX syntax directly in the text. Inline formulas, displayed equations auto-numbering, labeling and referencing, AMS-LaTeX, <code>TikZ</code>, custom LaTeX preamble. No LaTeX installation required. Easily customizable using UI dialog. Actively developed and maintained. Visit <a href="http://www.holoborodko.com/pavel/quicklatex/">QuickLaTeX homepage</a> for more info.
-		Version: 3.8.4
+		Version: 3.8.5
 		Author: Pavel Holoborodko
 		Author URI: http://www.holoborodko.com/pavel/
 		Copyright: Pavel Holoborodko
@@ -16,7 +16,7 @@
 	Project homepage: http://www.holoborodko.com/pavel/quicklatex/
 	Contact e-mail:   pavel@holoborodko.com
 
- 	Copyright 2008-2015 Pavel Holoborodko
+ 	Copyright 2008-2018 Pavel Holoborodko
 	All rights reserved.
 
 	Contributors:
@@ -198,12 +198,14 @@
 		wp_register_style('wp-quicklatex-format', WP_QUICKLATEX_PLUGIN_DIR.'css/quicklatex-format.css');
 		wp_enqueue_style('wp-quicklatex-format');
 		
-		// Check do we have options in DB. Write defaults if not.
+		// Check if we have options in DB. Write defaults if not.
 		$g_options = get_option('quicklatex');
 		if($g_options == false)
 		{
 			// Write Default options to DB
 			update_option('quicklatex',$def_options);
+			$g_options = $def_options;
+			
 		}else{
 
 			// Add options to DB
@@ -1163,7 +1165,7 @@ QuickLaTeX is free under linkware license. Which means service can be used: (a) 
 						  'eqno'		=> null,    					// eq. number with aligment from global option
 						  'align'		=> null,	 					// horizontal align of displayed equation - valid only for displayed equations.
 						  'width'		=> null,   						// picture width - valid only for pictures (tikz).
-						  'eqlabel'		> null	    					// eq. label placed on the opposite side of eqno.
+						  'eqlabel'		=> null	    					// eq. label placed on the opposite side of eqno.
 						  );
 
 		// Rewrite default atts with parameters supplied by user

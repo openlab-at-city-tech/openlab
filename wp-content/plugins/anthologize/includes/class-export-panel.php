@@ -49,6 +49,8 @@ class Anthologize_Export_Panel {
 	}
 
 	function display() {
+		wp_enqueue_style( 'anthologize-admin' );
+
 		$project_id = $this->project_id;
 
 		if ( isset( $_POST['export-step'] ) )
@@ -88,70 +90,74 @@ class Anthologize_Export_Panel {
 		<div class="wrap anthologize">
 
 		<div id="blockUISpinner">
-			<img src="<?php echo plugins_url() ?>/anthologize/images/wait28.gif"</img>
+			<img src="<?php echo plugins_url() ?>/anthologize/images/wait28.gif" alt="<?php esc_html_e( 'Please wait...', 'anthologize' ); ?>" aria-hidden="true" />
 			<p id="ajaxErrorMsg"><?php _e('There has been an unexpected error. Please wait while we reload the content.', 'anthologize') ?></p>
 		</div>
 
-		<div id="anthologize-logo"><img src="<?php echo plugins_url() . '/anthologize/images/anthologize-logo.gif' ?>" /></div>
+		<div id="anthologize-logo"><img src="<?php echo esc_url( plugins_url() . '/anthologize/images/anthologize-logo.gif' ) ?>" alt="<?php esc_attr_e( 'Anthologize logo', 'anthologize' ); ?>" /></div>
 			<h2><?php _e( 'Export Project', 'anthologize' ) ?></h2>
 
 			<br />
 
-			<div id="export-form">
+			<div id="export-form" class="export-panel">
 
 			<?php if ( !isset( $_POST['export-step'] ) ) : ?>
 
 			<form action="" method="post">
 
-			<label for="project_id"><?php _e( 'Select a project...', 'anthologize' ) ?></label>
-			<select name="project_id" id="project-id-dropdown">
-			<?php foreach ( $this->projects as $proj_id => $project_name ) : ?>
-				<option value="<?php echo $proj_id ?>"
+			<div class="export-project-selector">
+				<label for="project-id-dropdown"><?php esc_html_e( 'Select a project:', 'anthologize' ) ?></label>
+				<select name="project_id" id="project-id-dropdown">
+				<?php foreach ( $this->projects as $proj_id => $project_name ) : ?>
+					<option value="<?php echo esc_attr( $proj_id ) ?>"
 
-				<?php if ( $proj_id == $project_id ) : ?>selected="selected"<?php endif; ?>
+					<?php if ( $proj_id == $project_id ) : ?>selected="selected"<?php endif; ?>
 
-				><?php echo $project_name ?></option>
-			<?php endforeach; ?>
-			</select>
+					><?php echo esc_html( $project_name ); ?></option>
+				<?php endforeach; ?>
+				</select>
+			</div>
 
 			<h3 id="copyright-information-header"><?php _e( 'Copyright Information', 'anthologize' ) ?></h3>
 
 			<table class="form-table">
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Year', 'anthologize' ) ?></th>
-					<td><input type="text" id="cyear" name="cyear" value="<?php echo $cdate ?>"/></td>
+					<th scope="row"><label for="cyear"><?php _e( 'Year', 'anthologize' ) ?></label></th>
+					<td><input type="text" id="cyear" name="cyear" value="<?php echo esc_attr( $cdate ); ?>"/></td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Copyright Holder', 'anthologize' ) ?></th>
-					<td><input type="text" id="cname" name="cname" value="<?php echo $cname ?>" /></td>
+					<th scope="row"><label for="cname"><?php _e( 'Copyright Holder', 'anthologize' ) ?></label></th>
+					<td><input type="text" id="cname" name="cname" value="<?php echo esc_attr( $cname ); ?>" /></td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Type', 'anthologize' ) ?></th>
+					<th scope="row" id="license-type"><?php _e( 'Type', 'anthologize' ) ?></th>
 					<td>
-						<input type="radio" id="ctype" name="ctype" value="c" <?php if ( $ctype == 'c' ) echo 'checked="checked"' ?>/> <?php _e( 'Copyright', 'anthologize' ) ?><br />
-						<input type="radio" id="ctype" name="ctype" value="cc" checked="checked" <?php if ( $ctype != 'c' ) echo 'checked="checked"' ?>/> <?php _e( 'Creative Commons', 'anthologize' ) ?>
-							<select id="cctype" name="cctype">
-								<option value=""><?php _e( 'Select One...', 'anthologize' ) ?></option>
-								<option value="by" <?php if ( $cctype == 'by' ) echo 'selected="selected"' ?>><?php _e( 'Attribution', 'anthologize' ) ?></option>
-								<option value="by-sa" <?php if ( $cctype == 'by-sa' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Share-Alike', 'anthologize' ) ?></option>
-								<option value="by-nd" <?php if ( $cctype == 'by-nd' ) echo 'selected="selected"' ?>><?php _e( 'Attribution No Derivatives', 'anthologize' ) ?></option>
-								<option value="by-nc" <?php if ( $cctype == 'by-nc' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial', 'anthologize' ) ?></option>
-								<option value="by-nc-sa" <?php if ( $cctype == 'by-nc-sa' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial Share Alike', 'anthologize' ) ?></option>
-								<option value="by-nc-nd" <?php if ( $cctype == 'by-nc-nd' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial No Derivatives', 'anthologize' ) ?></option>
-							</select>
+						<input role="group" aria-labelledby="license-type" type="radio" id="ctype-copyright" name="ctype" value="c" <?php if ( $ctype == 'c' ) echo 'checked="checked"' ?>/> <label for="ctype-copyright"><?php _e( 'Copyright', 'anthologize' ) ?></label><br />
+						<input role="group" aria-labelledby="license-type" type="radio" id="ctype-cc" name="ctype" value="cc" checked="checked" <?php if ( $ctype != 'c' ) echo 'checked="checked"' ?>/> <label for="ctype-cc"><?php _e( 'Creative Commons', 'anthologize' ) ?></label>
+
+						<label for="cctype" class="screen-reader-text"><?php esc_html_e( 'Select Creative Commons license type', 'anthologize' ); ?></label>
+						<select id="cctype" name="cctype">
+							<option value=""><?php _e( 'Select One...', 'anthologize' ) ?></option>
+							<option value="by" <?php if ( $cctype == 'by' ) echo 'selected="selected"' ?>><?php _e( 'Attribution', 'anthologize' ) ?></option>
+							<option value="by-sa" <?php if ( $cctype == 'by-sa' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Share-Alike', 'anthologize' ) ?></option>
+							<option value="by-nd" <?php if ( $cctype == 'by-nd' ) echo 'selected="selected"' ?>><?php _e( 'Attribution No Derivatives', 'anthologize' ) ?></option>
+							<option value="by-nc" <?php if ( $cctype == 'by-nc' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial', 'anthologize' ) ?></option>
+							<option value="by-nc-sa" <?php if ( $cctype == 'by-nc-sa' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial Share Alike', 'anthologize' ) ?></option>
+							<option value="by-nc-nd" <?php if ( $cctype == 'by-nc-nd' ) echo 'selected="selected"' ?>><?php _e( 'Attribution Non-Commercial No Derivatives', 'anthologize' ) ?></option>
+						</select>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Edition', 'anthologize' ) ?></th>
-					<td><input type="text" id="edition" name="edition" value="<?php echo $edition ?>" /></td>
+					<th scope="row"><label for="edition"><?php _e( 'Edition', 'anthologize' ) ?></label></th>
+					<td><input type="text" id="edition" name="edition" value="<?php echo esc_attr( $edition ); ?>" /></td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Add Author(s)', 'anthologize' ) ?></th>
-					<td><textarea id="authors" name="authors"><?php echo $authors ?></textarea></td>
+					<th scope="row"><label for="authors"><?php _e( 'Add Author(s)', 'anthologize' ) ?></label></th>
+					<td><textarea id="authors" name="authors"><?php echo esc_textarea( $authors ); ?></textarea></td>
 				</tr>
 			</table>
 
@@ -168,28 +174,51 @@ class Anthologize_Export_Panel {
 			<?php $project = get_post( $project_id ); ?>
 
 			<form action="" method="post">
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="post-title"><?php esc_html_e( 'Title', 'anthologize' ) ?></label>
+						</th>
 
-				<?php _e( 'Title', 'anthologize' ) ?> <input type="text" name="post-title" id="post-title" value="<?php echo $project->post_title ?>" size="100"/>
+						<td>
+							<input type="text" name="post-title" id="post-title" value="<?php echo esc_attr( $project->post_title ); ?>" />
+						</td>
+					</tr>
 
-				<div style="clear: both;"> </div><br />
+					<tr>
+						<th scope="row">
+							<label for="dedication"><?php esc_html_e( 'Dedication', 'anthologize' ) ?></label>
+						</th>
 
-				<div style="width: 400px; float: left;">
-					<p><strong><?php _e( 'Dedication', 'anthologize' ) ?></strong></p>
-					<textarea id="dedication" name="dedication" cols=35 rows=15><?php echo $dedication ?></textarea>
-				</div>
+						<td>
+							<textarea id="dedication" name="dedication" rows="5"><?php echo esc_textarea( $dedication ); ?></textarea>
+						</td>
+					</tr>
 
-				<div style="width: 400px; float: left;">
-					<p><strong><?php _e( 'Acknowledgements', 'anthologize' ) ?></strong></p>
-					<textarea id="acknowledgements" name="acknowledgements" cols=35 rows=15><?php echo $acknowledgements ?></textarea>
-				</div>
+					<tr>
+						<th scope="row">
+							<label for="acknowledgements"><?php esc_html_e( 'Acknowledgements', 'anthologize' ) ?></label>
+						</th>
 
-				<div style="clear: both;"></div>
+						<td>
+							<textarea id="acknowledgements" name="acknowledgements" rows="5"><?php echo esc_textarea( $acknowledgements ); ?></textarea>
+						</td>
+					</tr>
 
-				<div id="export-format">
-					<h4><?php _e( 'Export Format', 'anthologize' ) ?></h4>
+					<tr>
+						<th scope="row">
+							<?php esc_html_e( 'Export Format', 'anthologize' ); ?>
+						</th>
 
-					<?php $this->export_format_list() ?>
-				</div>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><?php esc_html_e( 'Export Format', 'anthologize' ) ?></legend>
+
+								<?php $this->export_format_list() ?>
+							</fieldset>
+						</td>
+					</tr>
+				</table>
 
 				<input type="hidden" name="export-step" value="2" />
 
@@ -201,24 +230,29 @@ class Anthologize_Export_Panel {
 
 			<?php elseif ( $_POST['export-step'] == 2 ) : ?>
 
-				<form action="admin.php?page=anthologize_export_project&project_id=<?php echo $project_id ?>&noheader=true" method="post">
+				<form action="admin.php?page=anthologize_export_project&project_id=<?php echo intval( $project_id ); ?>&noheader=true" method="post">
 
 				<h3><?php $this->export_format_options_title() ?></h3>
-				<div id="publishing-options">
+
+				<table class="form-table">
 
 					<?php $this->render_format_options() ?>
 
+					<tr>
+						<th scope="row">
+							<label for="do-shortcodes"><?php esc_html_e( 'Shortcodes', 'anthologize' ) ?></label>
+						</th>
 
-					<div class="export-options-box">
-						<div class="pub-options-title"><?php _e( 'Shortcodes', 'anthologize' ) ?></div>
-						<p><small><?php _e( 'WordPress shortcodes (such as [caption]) can sometimes cause problems with output formats. If shortcode content shows up incorrectly in your output, choose "Disable" to keep Anthologize from processing them.', 'anthologize' ) ?></small></p>
-						<select name="do-shortcodes">
-							<option value="1" checked="checked"><?php _e( 'Enable', 'anthologize' ) ?></option>
-							<option value="0"><?php _e( 'Disable', 'anthologize' ) ?></option>
-						</select>
-					</div>
+						<td>
+							<select name="do-shortcodes" id="do-shortcodes">
+								<option value="1" checked="checked"><?php esc_html_e( 'Enable', 'anthologize' ) ?></option>
+								<option value="0"><?php esc_html_e( 'Disable', 'anthologize' ) ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'WordPress shortcodes (such as [caption]) can sometimes cause problems with output formats. If shortcode content shows up incorrectly in your output, choose "Disable" to keep Anthologize from processing them.', 'anthologize' ) ?></p>
+						</td>
+					</tr>
 
-				</div>
+				</table>
 
 				<input type="hidden" name="export-step" value="3" />
 
@@ -252,7 +286,7 @@ class Anthologize_Export_Panel {
 
 		$title = sprintf( __( '%s Publishing Options', 'anthologize' ), $anthologize_formats[$format]['label'] );
 
-		echo $title;
+		echo esc_html( $title );
 	}
 
 	public static function save_session() {
@@ -272,19 +306,38 @@ class Anthologize_Export_Panel {
 
 	function export_format_list() {
 		global $anthologize_formats;
-	?>
-		<?php foreach( $anthologize_formats as $name => $fdata ) :
+
+		// Check the first one.
+		$checked = true;
+
+		foreach ( $anthologize_formats as $name => $fdata ) {
 			$option_id = 'option-format-' . $name;
+
+			$disabled = '';
+			$message  = '';
+
+			$is_available = call_user_func( $fdata['is_available_callback'] );
+			if ( ! $is_available ) {
+				// Non-admins should see nothing.
+				if ( ! current_user_can( 'install_plugins' ) ) {
+					continue;
+				}
+
+				// Admins see the option, but it's disabled.
+				$disabled = disabled( true, true, false );
+				$message  = $fdata['unavailable_notice'];
+			}
 
 			?>
 
-			<input type="radio" id="<?php echo esc_attr( $option_id ) ?>" name="filetype" value="<?php echo esc_attr( $name ) ?>" /> <label for="<?php echo esc_attr( $option_id ) ?>"><?php echo $fdata['label'] ?></label><br />
+			<input type="radio" id="<?php echo esc_attr( $option_id ) ?>" name="filetype" value="<?php echo esc_attr( $name ) ?>" <?php checked( $checked ); ?> <?php echo $disabled; ?> /> <label for="<?php echo esc_attr( $option_id ) ?>"><?php echo esc_html( $fdata['label'] ); ?> <?php if ( $message ) : ?><span class="disabled-format-message"><?php echo esc_html( $message ); ?></span><?php endif; ?></label><br />
 
-		<?php endforeach; ?>
+			<?php
 
-		<?php do_action( 'anthologize_export_format_list' ) ?>
+			$checked = false;
+		}
 
-	<?php
+		do_action( 'anthologize_export_format_list' );
 	}
 
 	function render_format_options() {
@@ -300,15 +353,20 @@ class Anthologize_Export_Panel {
 				if ( $oname == 'label' || $oname == 'loader-path' )
 					continue;
 
-				if ( !$odata )
+				if ( ! $odata || ! is_array( $odata ) ) {
 					continue;
+				}
 
 				$default = ( isset( $odata['default'] ) ) ? $odata['default'] : false;
 
-				$return .= '<div class="export-options-box">';
+				$return .= '<tr>';
 
-				$return .= '<div class="pub-options-title">' . $odata['label'] . '</div>';
+				$return .= '<th scope="row">';
+				$return .= sprintf( '<label for="%s">', esc_attr( $oname ) );
+				$return .= esc_html( $odata['label'] );
+				$return .= '</label></th>';
 
+				$return .= '<td>';
 				switch( $odata['type'] ) {
 					case 'checkbox':
 						$return .= $this->build_checkbox( $oname, $odata['label'] );
@@ -323,12 +381,13 @@ class Anthologize_Export_Panel {
 						$return .= $this->build_textbox( $oname, $odata['label'] );
 						break;
 				}
+				$return .= '</td>';
 
-				$return .= '</div>';
+				$return .= '</tr>';
 
 			}
 		} else {
-			$return = __( 'This appears to be an invalid export format. Please try again.', 'anthologize' );
+			$return = esc_html__( 'This appears to be an invalid export format. Please try again.', 'anthologize' );
 		}
 
 		echo $return;
@@ -336,7 +395,7 @@ class Anthologize_Export_Panel {
 
 	function build_checkbox( $name, $label ) {
 
-		$html = '<input name="' . $name . '" id="' . $name .'" type="checkbox">';
+		$html = '<input name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) .'" type="checkbox">';
 
 		return apply_filters( 'anthologize_build_checkbox', $html, $name, $label );
 	}
@@ -347,15 +406,15 @@ class Anthologize_Export_Panel {
 		// $options is associative array where keys are option values and values are the text displayed in the option field.
 		// $default is the default option
 
-		$html = '<select name="' . $name . '">';
+		$html = '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '">';
 
 		foreach( $options as $ovalue => $olabel ) {
-			$html .= '<option value="' . $ovalue . '"';
+			$html .= '<option value="' . esc_attr( $ovalue ) . '"';
 
 			if ( $default == $ovalue )
 				$html .= ' selected="selected"';
 
-			$html .= '>' . $olabel . '</option>';
+			$html .= '>' . esc_html( $olabel ) . '</option>';
 		}
 
 		$html .= '</select>';
@@ -365,7 +424,7 @@ class Anthologize_Export_Panel {
 
 	function build_textbox( $name, $label ) {
 
-		$html = '<input name="' . $name . '" id="' . $name . '" type="text">';
+		$html = '<input name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '" type="text">';
 
 		return apply_filters( 'anthologize_build_textbox', $html, $name, $label );
 	}

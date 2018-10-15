@@ -68,8 +68,6 @@
 
             var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
 
-            console.log('errorMsg', errorMsg.text());
-
             //in some cases errorMsg is further up the chain
             if (errorMsg.length === 0) {
                 errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
@@ -81,8 +79,6 @@
             jsElem.appendChild(alertText);
             jsElem.style.display = 'none';
             jsElem.style.display = 'inline';
-
-            console.log('jsElem', jsElem);
 
             if (errorMsg.attr('role') !== 'alert') {
                 errorMsg.attr('role', 'alert');
@@ -384,6 +380,7 @@
                             initValidation = false;
                             formValidation($wds_fields);
                             updateSubmitButtonStatus();
+                            openlab.academicUnits.init();
                         }
 
                     }

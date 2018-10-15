@@ -16,7 +16,7 @@ function lint( $dir = 'C:\dev\\' )
 		'/wp-content/uploads',
 		'/wp-content/plugins/buddypress/bp-forums/bbpress',
 		'/wp-content/plugins/wp-document-revisions/tests',
-		'/wp-content/plugins/anthologize/templates/epub/pear_ext', // Not loaded because we have zlib.
+		'/wp-content/plugins/anthologize/vendor/pear/pear/', // Not loaded because we have zlib.
 	];
 
 	$excluded_files = [

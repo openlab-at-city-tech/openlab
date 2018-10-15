@@ -62,8 +62,8 @@ function openlab_list_members($view) {
         $user_school = urldecode($_GET['school']);
 
         // Sanitize
-        $schools = openlab_get_school_list();
-        if (!isset($schools[$user_school])) {
+        $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
+        if ( ! isset( $schools_and_offices[ $user_school ] ) ) {
             $user_school = '';
         }
     }
@@ -139,25 +139,13 @@ function openlab_list_members($view) {
     }
 
     if ($user_school && !$include_noop) {
-        $department_field_id = xprofile_get_field_id_from_name('Department');
-        $major_field_id = xprofile_get_field_id_from_name('Major Program of Study');
-
-        $department_list = openlab_get_department_list($user_school);
-
-        // just in case
-        $department_list_sql = '';
-        foreach ($department_list as &$department_list_item) {
-            $department_list_item = $wpdb->prepare('%s', $department_list_item);
-        }
-        $department_list_sql = implode(',', $department_list);
-
-        $user_school_matches = $wpdb->get_col($wpdb->prepare(
-                        "SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id IN (%d, %d)
-			       AND
-			       value IN (" . $department_list_sql . ")", $department_field_id, $major_field_id
-        ));
+        $user_school_matches = $wpdb->get_col( $wpdb->prepare(
+            "SELECT user_id
+            FROM {$wpdb->usermeta}
+            WHERE meta_key IN ( 'openlab_school', 'openlab_office' ) AND
+            meta_value = %s",
+            $user_school
+        ) );
 
         if (empty($user_school_matches)) {
             $include_noop = true;
@@ -167,36 +155,13 @@ function openlab_list_members($view) {
     }
 
     if ($user_department && !$include_noop && 'dept_all' !== $user_department) {
-        $department_field_id = xprofile_get_field_id_from_name('Department');
-        $major_field_id = xprofile_get_field_id_from_name('Major Program of Study');
-
-        // Department comes through $_GET in the hyphenated form, but
-        // is stored in the database in the fulltext form. So we have
-        // to pull up a list of all departments and attempt a
-        // translation.
-        //
-		// Could this be any more of a mess?
-        $regex = esc_sql(str_replace('-', '[ \-]', $user_department));
-        $user_departments = $wpdb->get_col($wpdb->prepare(
-                        "SELECT name
-			 FROM {$bp->profile->table_name_fields}
-			 WHERE parent_id IN (%d, %d)
-			 AND name REGEXP '{$regex}'", $department_field_id, $major_field_id
-        ));
-
-        $user_departments_sql = '';
-        foreach ($user_departments as &$ud) {
-            $ud = $wpdb->prepare('%s', $ud);
-        }
-        $user_departments_sql = implode(',', $user_departments);
-
-        $user_department_matches = $wpdb->get_col($wpdb->prepare(
-                        "SELECT user_id
-			 FROM {$bp->profile->table_name_data}
-			 WHERE field_id IN (%d, %d)
-			       AND
-			       value IN ({$user_departments_sql})", $department_field_id, $major_field_id
-        ));
+        $user_department_matches = $wpdb->get_col( $wpdb->prepare(
+            "SELECT user_id
+            FROM {$wpdb->usermeta}
+            WHERE meta_key = 'openlab_department' AND
+            meta_value = %s",
+            $user_department
+        ) );
 
         if (empty($user_department_matches)) {
             $include_noop = true;
@@ -794,16 +759,63 @@ function cuny_member_profile_header() {
             </div><!-- #item-meta -->
 
             <div class="profile-fields">
-                <?php $exclude_groups = openlab_get_exclude_groups_for_account_type($account_type) ?>
-                <?php if (bp_has_profile(array('exclude_groups' => $exclude_groups))) : ?>
-                    <div class="info-panel panel panel-default no-margin no-margin-top">
-                        <div class="profile-fields table-div">
+                <div class="info-panel panel panel-default no-margin no-margin-top">
+                    <div class="profile-fields table-div">
+
+                        <?php
+                        $exclude_fields = [
+                            openlab_get_xprofile_field_id( 'Name' ),
+                            openlab_get_xprofile_field_id( 'Account Type' ),
+                            openlab_get_xprofile_field_id( 'First Name' ),
+                            openlab_get_xprofile_field_id( 'Last Name' ),
+                            openlab_get_xprofile_field_id( 'Major Program of Study' ),
+                            openlab_get_xprofile_field_id( 'Department' ),
+                        ];
+
+                        $has_profile_args = [
+                            'exclude_fields' => $exclude_fields,
+                            'exclude_groups' => openlab_get_exclude_groups_for_account_type( $account_type ),
+                        ];
+
+                        // This field is shown first for Student, Alumni; after Title for others.
+                        $show_dept_field_next = in_array( $account_type, array( 'Student', 'Alumni' ) );
+
+                        // Special case: faculty/staff doesn't have Title data.
+                        if ( ! $show_dept_field_next ) {
+                            $user_title = xprofile_get_field_data( 'Title', bp_displayed_user_id() );
+                            if ( ! $user_title ) {
+                                $show_dept_field_next = true;
+                            }
+                        }
+
+                        ?>
+
+                        <?php if ( bp_has_profile( $has_profile_args ) ) : ?>
 
                             <?php while (bp_profile_groups()) : bp_the_profile_group(); ?>
 
                                 <?php if (bp_profile_group_has_fields()) : ?>
 
                                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
+
+                                        <?php if ( $show_dept_field_next ) :
+                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                                            $department = openlab_generate_department_name( $user_units );
+                                            $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
+                                            ?>
+
+                                            <?php if ( $department ) : ?>
+                                                <div class="table-row row">
+                                                    <div class="bold col-sm-7 profile-field-label">
+                                                        <?php echo esc_html( $dept_label ); ?>
+                                                    </div>
+
+                                                    <div class="col-sm-17 profile-field-value">
+                                                        <?php echo esc_html( $department ); ?>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
 
                                         <?php if (bp_field_has_data()) : ?>
                                             <?php
@@ -814,14 +826,19 @@ function cuny_member_profile_header() {
                                                 ?>
 
                                                 <div class="table-row row">
-                                                    <div class="bold col-sm-7">
+                                                    <div class="bold col-sm-7 profile-field-label">
                                                         <?php bp_the_profile_field_name() ?>
                                                     </div>
 
-                                                    <div class="col-sm-17">
+                                                    <div class="col-sm-17 profile-field-value">
                                                         <?php
                                                         if (bp_get_the_profile_field_name() == 'Academic interests' || bp_get_the_profile_field_name() == 'Bio') {
                                                             echo bp_get_the_profile_field_value();
+                                                        } elseif ( 'Department' === bp_get_the_profile_field_name() || 'Major Program of Study' === bp_get_the_profile_field_name() ) {
+                                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                                                            $department = openlab_generate_department_name( $user_units );
+
+                                                            echo esc_html( $department );
                                                         } else {
                                                             $field_value = str_replace('<p>', '', bp_get_the_profile_field_value());
                                                             $field_value = str_replace('</p>', '', $field_value);
@@ -830,6 +847,8 @@ function cuny_member_profile_header() {
                                                         ?>
                                                     </div>
                                                 </div>
+
+                                                <?php $show_dept_field_next = 'Title' === bp_get_the_profile_field_name(); ?>
 
                                             <?php endif; ?>
 
@@ -840,10 +859,9 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
-
-                        </div>
+                        <?php endif; // bp_has_profile()     ?>
                     </div>
-                <?php endif; // bp_has_profile()     ?>
+                </div>
             </div>
 
         </div><!-- #item-header-content -->
@@ -1006,3 +1024,141 @@ add_filter('bp_get_message_thread_subject', 'openlab_trim_message_subject');
  * Ensure that @-mentions in message content are properly linked.
  */
 add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
+
+/**
+ * Pulls academic unit data from POST.
+ *
+ * Abstracted here for reuse in registration process.
+ */
+function openlab_get_academic_unit_data_from_post() {
+    $to_save = [];
+    foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
+        $to_save[ $unit_type ] = wp_unslash( $_POST[ $unit_type ] ) ?: array();
+    }
+
+    return $to_save;
+}
+
+/**
+ * Pulls legacy academic unit data from POST.
+ *
+ * Abstracted here for reuse in registration process.
+ */
+function openlab_get_legacy_academic_unit_data_from_post() {
+    $submitted_dept = null;
+    if ( ! empty( $_POST['departments-dropdown'] ) ) {
+        $submitted_dept = wp_unslash( $_POST['departments-dropdown'] );
+    }
+
+    // Identify the school.
+    $all_depts   = openlab_get_entity_departments();
+    $all_schools = openlab_get_school_list();
+    $user_school = null;
+    foreach ( $all_schools as $school => $_ ) {
+        if ( isset( $all_depts[ $school ][ $submitted_dept ] ) ) {
+            $user_school = $school;
+        }
+    }
+
+    $to_save = [
+        'schools'     => [],
+        'offices'     => [],
+        'departments' => [ $submitted_dept ],
+    ];
+
+    if ( $user_school ) {
+        $to_save['schools'][] = $user_school;
+    }
+
+    return $to_save;
+}
+
+/**
+ * Save the member S/O/D settings after save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_academic_unit_save( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' );
+
+    $to_save = openlab_get_academic_unit_data_from_post();
+
+    openlab_set_user_academic_units( $user_id, $to_save );
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save' );
+
+/**
+ * Save the legacy Major dropdown for users on profile save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_academic_unit_save_legacy( $user_id ) {
+    if ( empty( $_POST['openlab-academic-unit-selector-legacy-nonce'] ) ) {
+        return;
+    }
+
+    check_admin_referer( 'openlab_academic_unit_selector_legacy', 'openlab-academic-unit-selector-legacy-nonce' );
+
+    $to_save = openlab_get_legacy_academic_unit_data_from_post();
+
+    openlab_set_user_academic_units( $user_id, $to_save );
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_academic_unit_save_legacy' );
+
+/**
+ * Gets academic units for a user.
+ *
+ * @param int $user_id
+ */
+function openlab_get_user_academic_units( $user_id ) {
+    $values = array();
+    $map    = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $type_key => $meta_key ) {
+        $units_of_type = get_user_meta( $user_id, $meta_key, false );
+        if ( ! $units_of_type ) {
+            $units_of_type = array();
+        }
+        $values[ $type_key ] = $units_of_type;
+    }
+
+    return $values;
+}
+
+/**
+ * Sets academic units for a user.
+ *
+ * @param int   $user_id
+ * @param array $units
+ */
+function openlab_set_user_academic_units( $user_id, $units ) {
+    $map = array(
+        'schools'     => 'openlab_school',
+        'offices'     => 'openlab_office',
+        'departments' => 'openlab_department',
+    );
+
+    foreach ( $map as $data_key => $meta_key ) {
+        $existing = get_user_meta( $user_id, $meta_key, false );
+        $to_save  = $units[ $data_key ] ?: array();
+
+        $to_delete = array_diff( $existing, $to_save );
+        $to_add    = array_diff( $to_save, $existing );
+
+        foreach ( $to_delete as $to_delete_value ) {
+            delete_user_meta( $user_id, $meta_key, $to_delete_value );
+        }
+
+        foreach ( $to_add as $to_add_value ) {
+            add_user_meta( $user_id, $meta_key, $to_add_value );
+        }
+    }
+}

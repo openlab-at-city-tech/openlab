@@ -1,0 +1,14 @@
+.export-project-selector {
+	margin-bottom: 2em;
+}
+
+.export-panel .form-table input[type="text"],
+.export-panel .form-table textarea {
+	width: 80%;
+}
+
+.disabled-format-message {
+	font-size: .9em;
+	font-style: italic;
+	padding-left: 15px;
+}

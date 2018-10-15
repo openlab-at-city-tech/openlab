@@ -32,6 +32,8 @@ modifications of TDPDF must comply with its license.
 if ( ! defined( 'ANTHOLOGIZE_VERSION' ) )
 	define( 'ANTHOLOGIZE_VERSION', '0.7.8' );
 
+require dirname( __FILE__ ) . '/vendor/autoload.php';
+
 if ( ! class_exists( 'Anthologize' ) ) :
 
 class Anthologize {
@@ -93,6 +95,9 @@ class Anthologize {
 		$this->setup_constants();
 		$this->includes();
 		$this->setup_hooks();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 	}
 
 	/**
@@ -286,6 +291,51 @@ class Anthologize {
 		}
 	}
 
+	/**
+	 * Registers static assets with WordPress.
+	 *
+	 * @since 0.8.0
+	 */
+	public function register_assets() {
+		wp_register_style( 'anthologize-admin', plugins_url() . '/anthologize/css/admin.css' );
+
+		wp_register_script( 'blockUI-js', plugins_url() . '/anthologize/js/jquery.blockUI.js' );
+		wp_register_script( 'jquery-cookie', plugins_url() . '/anthologize/js/jquery-cookie.js' );
+
+		wp_register_script(
+			'anthologize-project-organizer',
+			plugins_url() . '/anthologize/js/project-organizer.js',
+			array(
+				'jquery-ui-sortable',
+				'jquery-ui-draggable',
+				'jquery-ui-datepicker',
+				'blockUI-js',
+				'jquery-cookie',
+			)
+		);
+
+		wp_register_script( 'anthologize-sortlist-js', plugins_url() . '/anthologize/js/anthologize-sortlist.js', array( 'anthologize-project-organizer' ) );
+
+		wp_localize_script( 'anthologize-sortlist-js', 'anth_strings', array(
+			'append'           => __( 'Append', 'anthologize' ),
+			'cancel'           => __( 'Cancel', 'anthologize' ),
+			'commenter'        => __( 'Commenter', 'anthologize' ),
+			'comment_content'  => __( 'Comment Content', 'anthologize' ),
+			'comments'         => __( 'Comments', 'anthologize' ),
+			'comments_explain' => __( 'Check the comments from the original post that you would like to include in your project.', 'anthologize' ),
+			'done'             => __( 'Done', 'anthologize' ),
+			'edit'             => __( 'Edit', 'anthologize' ),
+			'less'             => __( 'less', 'anthologize' ),
+			'more'             => __( 'more', 'anthologize' ),
+			'no_comments'      => __( 'This post has no comments associated with it.', 'anthologize' ),
+			'preview'          => __( 'Preview', 'anthologize' ),
+			'posted'           => __( 'Posted', 'anthologize' ),
+			'remove'           => __( 'Remove', 'anthologize' ),
+			'save'             => __( 'Save', 'anthologize' ),
+			'select_all'       => __( 'Select all', 'anthologize' ),
+			'select_none'      => __( 'Select none', 'anthologize' ),
+		) );
+	}
 }
 
 endif;

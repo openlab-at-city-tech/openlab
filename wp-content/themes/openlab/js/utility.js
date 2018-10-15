@@ -423,59 +423,6 @@ OpenLab.utility = (function ($) {
                     }
                 });
             }
-
-            OpenLab.utility.filterAjax();
-
-        },
-        filterAjax: function () {
-
-            //safety first
-            $('#schoolSelect select').off('select2:select');
-
-            //ajax functionality for courses archive
-            $('#schoolSelect select').on('select2:select', function () {
-
-                var school = $(this).val();
-                var nonce = $('#nonce-value').text();
-
-                //disable the dept dropdown
-                $('#dept-select').attr('disabled', 'disabled');
-                $('#dept-select').addClass('processing');
-                $('#dept-select').html('<option value=""></option>');
-
-                if (school == "" || school == "school_all") {
-                    var defaultOption = '<option value="dept_all" selected="selected">All Departments</option>';
-                    $('#dept-select').html(defaultOption);
-                    $('#dept-select').trigger('render');
-                    $('#select2-dept-select-container').text('All Departments');
-                    $('#select2-dept-select-container').attr('title', 'All Departments');
-                    return;
-                }
-
-                $.ajax({
-                    type: 'GET',
-                    url: ajaxurl,
-                    data:
-                            {
-                                action: 'openlab_ajax_return_course_list',
-                                school: school,
-                                nonce: nonce
-                            },
-                    success: function (data, textStatus, XMLHttpRequest)
-                    {
-                        console.log('school', school);
-                        $('#dept-select').removeAttr('disabled');
-                        $('#dept-select').removeClass('processing');
-                        $('#dept-select').html(data);
-                        $('#dept-select').trigger('render');
-                        $('#select2-dept-select-container').text('All Departments');
-                        $('#select2-dept-select-container').attr('title', 'All Departments');
-                    },
-                    error: function (MLHttpRequest, textStatus, errorThrown) {
-                        console.log(errorThrown);
-                    }
-                });
-            });
         },
         sliderTagManagerTracking: function () {
 
@@ -775,7 +722,7 @@ OpenLab.utility = (function ($) {
         });
     }
 
-    /*this is for the homepage group list, so that cells in each row all have the same height 
+    /*this is for the homepage group list, so that cells in each row all have the same height
      - there is a possiblity of doing this template-side, but requires extensive restructuring of the group list function*/
     function equal_row_height() {
         /*first we get the number of rows by finding the column with the greatest number of rows*/

@@ -1,22 +1,19 @@
-<?php if ( !empty( $messages ) ): ?>
+<?php if (!empty($messages)): ?>
     <div class="updated" style="clear:both"><p><?php echo $messages; ?></p></div>
 <?php endif; ?>
 
 <?php
-echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
+echo do_shortcode('[cminds_free_activation id="cmtt"]');
 ?>
 
 <div id="cminds_settings_container">
 
-    <?php // echo do_shortcode( '[cminds_free_registration]' );  ?>
-
     <div class="cminds_settings_description">
-        <?php
-//    include plugin_dir_path(__FILE__) . '/upgrade.phtml';
-        ?>
 
+        <div class="clear"></div>
+        
         <p>
-            <strong>Supported Shortcodes:</strong> <a href="javascript:void(0)" onclick="jQuery( this ).parent().next().slideToggle()">Show/Hide</a>
+            <strong>Supported Shortcodes:</strong> <a href="javascript:void(0)" onclick="jQuery(this).parent().next().slideToggle()">Show/Hide</a>
         </p>
 
         <ul style="display:none;list-style-type:disc;margin-left:20px;">
@@ -33,11 +30,11 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
 
         <p>
             <?php
-            $glossaryId = get_option( 'cmtt_glossaryID' );
-            if ( $glossaryId > 0 ) :
+            $glossaryId = get_option('cmtt_glossaryID');
+            if ($glossaryId > 0) :
 
-                $glossaryIndexPageEditLink = admin_url( 'post.php?post=' . $glossaryId . '&action=edit' );
-                $glossaryIndexPageLink     = get_page_link( $glossaryId );
+                $glossaryIndexPageEditLink = admin_url('post.php?post=' . $glossaryId . '&action=edit');
+                $glossaryIndexPageLink = get_page_link($glossaryId);
                 ?>
                 <strong>Link to the Glossary Index Page:</strong> <a href="<?php echo $glossaryIndexPageLink; ?>" target="_blank"><?php echo $glossaryIndexPageLink; ?></a> (<a title="Edit the Glossary Index Page" href="<?php echo $glossaryIndexPageEditLink; ?>">edit</a>)
                 <?php
@@ -45,19 +42,19 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
             ?>
         </p>
         <p>
-            <strong>Example of Glossary Term link:</strong> <?php echo trailingslashit( home_url( get_option( 'cmtt_glossaryPermalink' ) ) ) . 'sample-term' ?>
+            <strong>Example of Glossary Term link:</strong> <?php echo trailingslashit(home_url(get_option('cmtt_glossaryPermalink'))) . 'sample-term' ?>
         </p>
         <form method="post">
             <div>
                 <div class="cmtt_field_help_container">Warning! This option will completely erase all of the data stored by the CM Tooltip Glossary in the database: terms, options, synonyms etc. <br/> It will also remove the Glossary Index Page. <br/> It cannot be reverted.</div>
-                <input onclick="return confirm( 'All database items of CM Tooltip Glossary (terms, options etc.) will be erased. This cannot be reverted.' )" type="submit" name="cmtt_tooltipPluginCleanup" value="Cleanup database" class="button cmtt-cleanup-button"/>
+                <input onclick="return confirm('All database items of CM Tooltip Glossary (terms, options etc.) will be erased. This cannot be reverted.')" type="submit" name="cmtt_tooltipPluginCleanup" value="Cleanup database" class="button cmtt-cleanup-button"/>
                 <span style="display: inline-block;position: relative;"></span>
             </div>
         </form>
 
         <?php
 // check permalink settings
-        if ( get_option( 'permalink_structure' ) == '' ) {
+        if (get_option('permalink_structure') == '') {
             echo '<span style="color:red">Your WordPress Permalinks needs to be set to allow plugin to work correctly. Please Go to <a href="' . admin_url() . 'options-permalink.php" target="new">Settings->Permalinks</a> to set Permalinks to Post Name.</span><br><br>';
         }
         ?>
@@ -71,7 +68,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
     <div class="clear"></div>
 
     <form method="post">
-        <?php wp_nonce_field( 'cmtt-update-options' ); ?>
+        <?php wp_nonce_field('cmtt-update-options'); ?>
         <input type="hidden" name="action" value="update" />
 
         <div id="tabs" class="glossarySettingsTabs">
@@ -86,7 +83,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
             <!-- Start Server information Module -->
             <div id="tabs-0">
                 <div class='block'>
-                     <?php echo do_shortcode( '[cminds_free_guide id="cmtt"]' ); ?>
+                    <?php echo do_shortcode('[cminds_free_guide id="cmtt"]'); ?>
                 </div>
             </div>
 
@@ -97,14 +94,14 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                         <tr valign="top" class="whole-line">
                             <th scope="row">Glossary Index Page ID</th>
                             <td>
-                                <?php wp_dropdown_pages( array( 'name' => 'cmtt_glossaryID', 'selected' => (int) get_option( 'cmtt_glossaryID', -1 ), 'show_option_none' => '-None-', 'option_none_value' => '0' ) ) ?>
+                                <?php wp_dropdown_pages(array('name' => 'cmtt_glossaryID', 'selected' => (int) get_option('cmtt_glossaryID', -1), 'show_option_none' => '-None-', 'option_none_value' => '0')) ?>
                                 <br/><input type="checkbox" name="cmtt_glossaryID" value="-1" /> Generate page for Glossary Index
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select the page ID of the page you would like to use as the Glossary Index Page. If you select "-None-" terms will still be highlighted in relevant posts/pages but there won't be a central list of terms (Glossary Index Page). If you check the checkbox a new page would be generated automatically. WARNING! You have to manually remove old pages!</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Glossary Terms Permalink</th>
-                            <td><input type="text" name="cmtt_glossaryPermalink" value="<?php echo get_option( 'cmtt_glossaryPermalink' ); ?>" /></td>
+                            <td><input type="text" name="cmtt_glossaryPermalink" value="<?php echo get_option('cmtt_glossaryPermalink'); ?>" /></td>
                             <td colspan="2" class="cmtt_field_help_container">Enter the name you would like to use for the permalink to the Glossary Terms.
                                 By default this is "glossary", however you can update this if you wish.
                                 If you are using a parent please indicate this in path eg. "/path/glossary", otherwise just leave glossary or the name you have chosen.
@@ -116,7 +113,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Only show terms on single posts/pages (not Homepage, authors etc.)?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryOnlySingle" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryOnlySingle" <?php checked( true, get_option( 'cmtt_glossaryOnlySingle' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryOnlySingle" <?php checked(true, get_option('cmtt_glossaryOnlySingle')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish to only highlight glossary terms when viewing a single page/post.
                                 This can be used so terms aren't highlighted on your homepage, or author pages and other taxonomy related pages.</td>
@@ -126,7 +123,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Highlight terms on posts?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryOnPosts" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryOnPosts" <?php checked( true, get_option( 'cmtt_glossaryOnPosts' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryOnPosts" <?php checked(true, get_option('cmtt_glossaryOnPosts')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish for the glossary to highlight terms on posts.
                                 With this deselected, posts won't be searched for matching glossary terms.</td>
@@ -135,7 +132,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Highlight terms on pages?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryOnPages" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryOnPages" <?php checked( true, get_option( 'cmtt_glossaryOnPages' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryOnPages" <?php checked(true, get_option('cmtt_glossaryOnPages')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish for the glossary to highlight terms on pages.
                                 With this deselected, pages won't be searched for matching glossary terms.</td>
@@ -144,7 +141,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Highlight first term occurance only?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryFirstOnly" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryFirstOnly" <?php checked( true, get_option( 'cmtt_glossaryFirstOnly' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryFirstOnly" <?php checked(true, get_option('cmtt_glossaryFirstOnly')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to only highlight the first occurance of each term on a page/post.</td>
                         </tr>
@@ -152,7 +149,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Terms case-sensitive?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryCaseSensitive" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryCaseSensitive" <?php checked( true, get_option( 'cmtt_glossaryCaseSensitive' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryCaseSensitive" <?php checked(true, get_option('cmtt_glossaryCaseSensitive')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want glossary terms to be case-sensitive.</td>
                         </tr>
@@ -170,7 +167,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Only highlight on "main" WP query?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryOnMainQuery" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryOnMainQuery" <?php checked( 1, get_option( 'cmtt_glossaryOnMainQuery' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryOnMainQuery" <?php checked(1, get_option('cmtt_glossaryOnMainQuery')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">
                                 Select this option if you wish to only highlight glossary terms on main glossary query.
@@ -180,7 +177,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Run the function outputting the Glossary Index Page only once</th>
                             <td>
                                 <input type="hidden" name="cmtt_removeGlossaryCreateListFilter" value="0" />
-                                <input type="checkbox" name="cmtt_removeGlossaryCreateListFilter" <?php checked( 1, get_option( 'cmtt_removeGlossaryCreateListFilter' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_removeGlossaryCreateListFilter" <?php checked(1, get_option('cmtt_removeGlossaryCreateListFilter')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">
                                 Select this option if you wish to remove the filter responsible for outputting the Glossary Index. <br/>
@@ -191,19 +188,19 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                     </table>
                     <div class="clear"></div>
                 </div>
-               <div class="block">
+                <div class="block">
                     <h3>Page Builder Support</h3>
                     <p>Support Advanced Custom fields (ACF) and Page Builders including Divi, Beaver Builder, WPBakery, Elementor and more.</p>
                     <table>
                         <tr valign="top">
                             <th scope="row" valign="middle" align="left" >Page Builder Support:</th>
                             <td><span style="color:red">Available only in Premium versions of the plugin </span>   
-                             </td>
-                            
+                            </td>
+
                         </tr>
-                            </table>
+                    </table>
                 </div>
-               <div class="block">
+                <div class="block">
                     <h3>Referrals</h3>
                     <p>Refer new users to any of the CM Plugins and you'll receive a minimum of <strong>15%</strong> of their purchase! For more information please visit CM Plugins <a href="http://www.cminds.com/referral-program/" target="new">Affiliate page</a></p>
                     <table>
@@ -211,22 +208,37 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row" valign="middle" align="left" >Enable referrals:</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryReferral" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryReferral" <?php checked( 1, get_option( 'cmtt_glossaryReferral' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryReferral" <?php checked(1, get_option('cmtt_glossaryReferral')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Enable referrals link at the bottom of the question and the answer page<br><br></td>
                         </tr>
                         <tr valign="top">
-                            <th scope="row" valign="middle" align="left" ><?php _e( 'Affiliate Code', 'cm-tooltip-ecommerce' ); ?>:</th>
+                            <th scope="row" valign="middle" align="left" ><?php _e('Affiliate Code', 'cm-tooltip-ecommerce'); ?>:</th>
                             <td>
-                                <input type="text" name="cmtt_glossaryAffiliateCode" value="<?php echo get_option( 'cmtt_glossaryAffiliateCode' ); ?>" placeholder="<?php _e( 'Affiliate Code', 'cm-tooltip-ecommerce' ); ?>"/>
+                                <input type="text" name="cmtt_glossaryAffiliateCode" value="<?php echo get_option('cmtt_glossaryAffiliateCode'); ?>" placeholder="<?php _e('Affiliate Code', 'cm-tooltip-ecommerce'); ?>"/>
                             </td>
-                            <td colspan="2" class="cmtt_field_help_container"><?php _e( 'Please add your affiliate code in here.', 'cm-tooltip-ecommerce' ); ?></td>
+                            <td colspan="2" class="cmtt_field_help_container"><?php _e('Please add your affiliate code in here.', 'cm-tooltip-ecommerce'); ?></td>
                         </tr>
                     </table>
                 </div>
-
-
- 
+                <div class="block">
+                    <?php
+                    global $cmindsPluginPackage;
+                    $freePackage = $cmindsPluginPackage['cmtt'];
+                    ?>
+                    <h3>Author attribution</h3>
+                    <p>Please help us spread a word about our plugin by leaving a discreet powered by link.</p>
+                    <table>
+                        <tr valign="top">
+                            <th scope="row" valign="middle" align="left" >Enable PoweredBy link on your Glossary Index:</th>
+                            <td>
+                                <input type="hidden" name="<?php echo $freePackage->getPoweredByOption(); ?>" value="0"/>
+                                <input type="checkbox" name="<?php echo $freePackage->getPoweredByOption(); ?>" value="1" <?php checked(1, $freePackage->isPoweredByEnabled()); ?>/>
+                            </td>
+                            <td colspan="2" class="cmtt_field_help_container">Enable referrals link at the bottom of the question and the answer page<br><br></td>
+                        </tr>
+                    </table>
+                </div>
 
 
             </div>
@@ -238,7 +250,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Style glossary index page differently?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryDiffLinkClass" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryDiffLinkClass" <?php checked( true, get_option( 'cmtt_glossaryDiffLinkClass' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryDiffLinkClass" <?php checked(true, get_option('cmtt_glossaryDiffLinkClass')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish for the links in the glossary index page to be styled differently than the regular way glossary terms links are styled.  By selecting this option you will be able to use the class 'glossaryLinkMain' to style only the links on the glossary index page otherwise they will retain the class 'glossaryLink' and will be identical to the linked terms on all other pages.</td>
                         </tr>
@@ -246,13 +258,13 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Show glossary index page as tiles</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryListTiles" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryListTiles" <?php checked( true, get_option( 'cmtt_glossaryListTiles' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryListTiles" <?php checked(true, get_option('cmtt_glossaryListTiles')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish the glossary index page to be displayed as tiles. This is not recommended when you have long terms.</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Tile width</th>
-                            <td><input type="text" name="cmtt_glossarySmallTileWidth" value="<?php echo get_option( 'cmtt_glossarySmallTileWidth', '85px' ); ?>" /></td>
+                            <td><input type="text" name="cmtt_glossarySmallTileWidth" value="<?php echo get_option('cmtt_glossarySmallTileWidth', '85px'); ?>" /></td>
                             <td colspan="2" class="cmtt_field_help_container">
                                 Select the width of the single tile in the "Small tiles" view
                             </td>
@@ -268,7 +280,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Remove link to the glossary term page?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryTermLink" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryTermLink" <?php checked( true, get_option( 'cmtt_glossaryTermLink' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryTermLink" <?php checked(true, get_option('cmtt_glossaryTermLink')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you do not want to show links from posts or pages to the glossary term pages. This will only apply to Post / Pages and not to the glossary index page, for glossary index page please visit index page tab in settings. Keep in mind that the plugin use a <strong>&lt;span&gt;</strong> tag instead of a link tag and if you are using a custom CSS you should take this into account</td>
                         </tr>
@@ -276,7 +288,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Open glossary term page in a new windows/tab?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryInNewPage" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryInNewPage" <?php checked( true, get_option( 'cmtt_glossaryInNewPage' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryInNewPage" <?php checked(true, get_option('cmtt_glossaryInNewPage')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want glossary term page to open in a new window/tab.</td>
                         </tr>
@@ -284,7 +296,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Show HTML "title" attribute for glossary links</th>
                             <td>
                                 <input type="hidden" name="cmtt_showTitleAttribute" value="0" />
-                                <input type="checkbox" name="cmtt_showTitleAttribute" <?php checked( true, get_option( 'cmtt_showTitleAttribute' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_showTitleAttribute" <?php checked(true, get_option('cmtt_showTitleAttribute')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to use glossary name as HTML "title" for link</td>
                         </tr>
@@ -292,7 +304,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Show back link on the bottom</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossary_addBackLinkBottom" value="0" />
-                                <input type="checkbox" name="cmtt_glossary_addBackLinkBottom" <?php checked( true, get_option( 'cmtt_glossary_addBackLinkBottom' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossary_addBackLinkBottom" <?php checked(true, get_option('cmtt_glossary_addBackLinkBottom')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to show link back to glossary index from glossary term page</td>
                         </tr>
@@ -307,22 +319,22 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Show tooltip when the user hovers over the term?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryTooltip" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryTooltip" <?php checked( true, get_option( 'cmtt_glossaryTooltip' ) ); ?> value="1" /></td>
+                                <input type="checkbox" name="cmtt_glossaryTooltip" <?php checked(true, get_option('cmtt_glossaryTooltip')); ?> value="1" /></td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you wish for the definition to show in a tooltip when the user hovers over the term.  The tooltip can be styled differently using the tooltip.css and tooltip.js files in the plugin folder.</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Limit tooltip length?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryLimitTooltip" value="0" />
-                                <input type="text" name="cmtt_glossaryLimitTooltip" value="<?php echo get_option( 'cmtt_glossaryLimitTooltip' ); ?>"  />
+                                <input type="text" name="cmtt_glossaryLimitTooltip" value="<?php echo get_option('cmtt_glossaryLimitTooltip'); ?>"  />
                             </td>
-                            <td colspan="2" class="cmtt_field_help_container">Select this option if you want to show only a limited number of chars and add "(...)<?php echo get_option( 'cmtt_glossaryTermDetailsLink' ); ?>" at the end of the tooltip text. Minimum is 30 chars.</td>
+                            <td colspan="2" class="cmtt_field_help_container">Select this option if you want to show only a limited number of chars and add "(...)<?php echo get_option('cmtt_glossaryTermDetailsLink'); ?>" at the end of the tooltip text. Minimum is 30 chars.</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Clean tooltip text?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryFilterTooltip" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryFilterTooltip" <?php checked( true, get_option( 'cmtt_glossaryFilterTooltip' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryFilterTooltip" <?php checked(true, get_option('cmtt_glossaryFilterTooltip')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to remove extra spaces and special characters from tooltip text.</td>
                         </tr>
@@ -330,7 +342,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Use term excerpt for hover?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryExcerptHover" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryExcerptHover" <?php checked( true, get_option( 'cmtt_glossaryExcerptHover' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryExcerptHover" <?php checked(true, get_option('cmtt_glossaryExcerptHover')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to use the term excerpt (if it exists) as hover text.
                                 <br/>NOTE: You have to manually create the excerpts for term pages using the "Excerpt" field.
@@ -340,7 +352,7 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
                             <th scope="row">Avoid parsing protected tags?</th>
                             <td>
                                 <input type="hidden" name="cmtt_glossaryProtectedTags" value="0" />
-                                <input type="checkbox" name="cmtt_glossaryProtectedTags" <?php checked( true, get_option( 'cmtt_glossaryProtectedTags' ) ); ?> value="1" />
+                                <input type="checkbox" name="cmtt_glossaryProtectedTags" <?php checked(true, get_option('cmtt_glossaryProtectedTags')); ?> value="1" />
                             </td>
                             <td colspan="2" class="cmtt_field_help_container">Select this option if you want to avoid using the glossary for the following tags: Script, A, H1, H2, H3, PRE, Object.</td>
                         </tr>
@@ -350,12 +362,12 @@ echo do_shortcode( '[cminds_free_activation id="cmtt"]' );
             <!-- Start Server information Module -->
             <div id="tabs-99">
                 <div class='block'>
-                     <?php echo do_shortcode( '[cminds_upgrade_box id="cmtt"]' ); ?>
+                    <?php echo do_shortcode('[cminds_upgrade_box id="cmtt"]'); ?>
                 </div>
             </div>
         </div>
         <p class="submit" style="clear:left">
-            <input type="submit" class="button-primary" value="<?php _e( 'Save Changes' ) ?>" name="cmtt_glossarySave" />
+            <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" name="cmtt_glossarySave" />
         </p>
     </form>
 </div>

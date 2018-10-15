@@ -5,3 +5,10 @@
 .dataTables_paginate a.paginate_button {
 	text-decoration: none;
 }
+
+@media screen and (min-width: 44.375em) {
+	body.admin-bar:not(.custom-background-image):before,
+	body.admin-bar:not(.custom-background-image):after {
+		position: absolute;
+	}
+}

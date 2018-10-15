@@ -365,6 +365,8 @@ function openlab_groups_filter_clause($sql) {
 function openlab_registration_page() {
     do_action('bp_before_register_page');
 
+    wp_enqueue_script( 'openlab-academic-units' );
+
     $ajaxurl = bp_core_ajax_url();
 
 	$first_name_field_id = openlab_get_xprofile_field_id( 'First Name' );

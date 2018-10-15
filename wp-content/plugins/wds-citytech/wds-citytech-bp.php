@@ -551,6 +551,12 @@ function openlab_get_xprofile_field_id( $field_name ) {
 		// On the 'Student' field group.
 		case 'Phone':
 			return 194;
+
+		case 'Major Program of Study' :
+			return 4;
+
+		case 'Department' :
+			return 19;
 	}
 }
 
