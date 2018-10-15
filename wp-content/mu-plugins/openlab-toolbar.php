@@ -1236,6 +1236,11 @@ HTML;
 
 		$title = '<span class="fa fa-plus-circle hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Add New</span>';
 
+		$class = 'mobile-no-hover admin-bar-menu';
+		if ( bp_is_root_blog() ) {
+			$class .= ' hidden-xs';
+		}
+
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'new-content',
@@ -1243,7 +1248,7 @@ HTML;
 				'href'  => admin_url( current( array_keys( $actions ) ) ),
 				'meta'  => array(
 					'title'    => _x( 'Add New', 'admin bar menu group label' ),
-					'class'    => 'mobile-no-hover admin-bar-menu',
+					'class'    => $class,
 					'tabindex' => 0,
 				),
 			)
@@ -1282,6 +1287,13 @@ HTML;
 
 			$href = ( is_admin() ? get_site_url() : admin_url() );
 
+			$class = 'mobile-no-hover';
+			if ( ! bp_is_root_blog() ) {
+				$class .= ' visible-xs';
+			} else {
+				$class .= ' hidden-xs';
+			}
+
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'dashboard-link',
@@ -1289,7 +1301,7 @@ HTML;
 					'href'  => $href,
 					'meta'  => array(
 						'title' => _x( 'Dashboard', 'admin bar menu group label' ),
-						'class' => 'mobile-no-hover visible-xs',
+						'class' => $class,
 					),
 				)
 			);
@@ -1338,6 +1350,11 @@ HTML;
 		$awaiting_count = openlab_admin_bar_counts( number_format_i18n( $awaiting_mod ), ' sub-count' );
 		$awaiting_title = esc_attr( sprintf( _n( '%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod ), number_format_i18n( $awaiting_mod ) ) );
 
+		$class = 'mobile-no-hover';
+		if ( bp_is_root_blog() ) {
+			$class .= ' hidden-xs';
+		}
+
 		$icon = '<span class="fa fa-comment hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Comments</span>';
 		$wp_admin_bar->add_menu(
 			array(
@@ -1346,7 +1363,7 @@ HTML;
 				'href'  => admin_url( 'edit-comments.php' ),
 				'meta'  => array(
 					'title'    => $awaiting_title,
-					'class'    => 'mobile-no-hover',
+					'class'    => $class,
 					'tabindex' => 0,
 				),
 			)

@@ -135,7 +135,7 @@ function openlab_library_information() {
 	<div class="openlab-library-information">
 		<a class="bold" href="https://library.citytech.cuny.edu">Ursula C. Schwerin Library</a><br />
 		New York City College of Technology, C.U.N.Y<br />
-		300 Jay Street, Atrium - 4th Floor<br />
+		300 Jay Street, Library&nbsp;Building - 4th Floor<br />
 
 		<ul>
 			<li><a href="https://library.citytech.cuny.edu/help/ask/index.php">Ask Us</a></li>

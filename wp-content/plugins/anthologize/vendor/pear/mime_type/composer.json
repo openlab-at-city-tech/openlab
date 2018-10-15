@@ -1,0 +1,40 @@
+{
+    "name": "pear/mime_type",
+    "homepage": "http://pear.php.net/package/MIME_Type",
+    "description": "Detect the MIME Type of a file",
+    "license": "LGPL-2.1-or-later",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=MIME_Type",
+        "source": "https://github.com/pear/MIME_Type"
+    },
+    "authors": [
+        {
+            "email": "ieure@php.net",
+            "name": "Ian Eure",
+            "role": "Lead"
+        },
+        {
+            "email": "cweiske@php.net",
+            "name": "Christian Weiske",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "MIME": "./"
+        }
+    },
+    "include-path": [
+        "./"
+    ],
+    "type": "library",
+    "require": {
+        "pear/pear-core-minimal": "^1.9.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "suggest": {
+        "pear/system_command": "Install optionally via your project's composer.json"
+    }
+}

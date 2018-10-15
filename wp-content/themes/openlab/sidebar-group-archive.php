@@ -35,34 +35,27 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         $school_color = "active";
     }
 
-	$schools = openlab_get_school_list();
+    $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
 	switch ( $_GET['school'] ) {
 		case 'school_all':
-			$display_option_school = 'All';
 			$option_value_school = 'school_all';
 			break;
 
 		default :
-			if ( isset( $schools[ $_GET['school'] ] ) ) {
-				$display_option_school = $schools[ $_GET['school'] ];
+			if ( isset( $schools_and_offices[ $_GET['school'] ] ) ) {
 				$option_value_school = $_GET['school'];
 			} else {
-				$display_option_school = 'Select School';
 				$option_value_school = '';
 			}
 	}
 
 //processing the department value - now dynamic instead of a switch statement
     if (empty($_GET['department'])) {
-        $display_option_dept = "Select Department";
         $option_value_dept = "";
     } else if ($_GET['department'] == 'dept_all') {
-        $display_option_dept = "All";
         $option_value_dept = "dept_all";
     } else {
         $dept_color = "active";
-        $display_option_dept = ucwords(str_replace('-', ' ', $_GET['department']));
-        $display_option_dept = str_replace('And', '&', $display_option_dept);
         $option_value_dept = $_GET['department'];
     }
 
@@ -167,16 +160,37 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
         <p>Narrow down your search using the filters or search box below.</p>
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
             <div id="sidebarCustomSelect" class="custom-select-parent">
-                <div class="custom-select" id="schoolSelect">
-                    <label for="school-select" class="sr-only">Select School</label>
-                    <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
-                        <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
-                        <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
-			<?php foreach ( $schools as $school_key => $school_label ) : ?>
-				<option value='<?php echo esc_attr( $school_key ); ?>' <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $school_label ); ?></option>
-			<?php endforeach; ?>
-                    </select>
-                </div>
+                <?php if ( 'course' === $group_type ) : ?>
+                    <div class="custom-select" id="schoolSelect">
+                        <label for="school-select" class="sr-only">Select School</label>
+                        <select name="school" class="last-select <?php echo $school_color; ?>-text" id="school-select" tabindex="0">
+                            <option value="" <?php selected('', $option_value_school) ?>>Select School</option>
+                            <option value='school_all' <?php selected('school_all', $option_value_school) ?>>All Schools</option>
+                            <?php foreach ( openlab_get_school_list() as $school_key => $school_label ) : ?>
+                                <option value='<?php echo esc_attr( $school_key ); ?>' <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $school_label ); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php else : ?>
+                    <div class="custom-select" id="schoolOfficeSelect">
+                        <label for="school-select" class="sr-only">Select School/Office</label>
+                        <select name="school" class="last-select" id="school-select" tabindex="0">
+                            <option value="" <?php selected( '', $option_value_school ); ?>>Select School / Office</option>
+                            <optgroup label="All Schools">
+                            <?php foreach ( openlab_get_school_list() as $school_key => $school_label ) : ?>
+                                <option value="<?php echo esc_attr( $school_key ); ?>" <?php selected( $school_key, $option_value_school ); ?>><?php echo esc_html( $school_label ); ?></option>
+                            <?php endforeach; ?>
+                            </optgroup>
+
+                            <optgroup label="All Offices">
+                            <?php foreach ( openlab_get_office_list() as $office_key => $office_label ) : ?>
+                                <option value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $office_key, $option_value_school ); ?>><?php echo esc_html( $office_label ); ?></option>
+                            <?php endforeach; ?>
+
+                            </optgroup>
+                        </select>
+                    </div>
+                <?php endif; ?>
 
                 <div class="hidden" id="nonce-value"><?php echo wp_create_nonce("dept_select_nonce"); ?></div>
                 <div class="custom-select">

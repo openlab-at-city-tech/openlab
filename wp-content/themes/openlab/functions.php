@@ -69,6 +69,8 @@ function openlab_load_scripts() {
         wp_register_script('vendor-js', $stylesheet_dir_uri . '/js/dist/vendor.js', array('jquery'), '1.6.8', true);
         wp_enqueue_script('vendor-js');
 
+        wp_register_script( 'openlab-academic-units', $stylesheet_dir_uri . '/js/academic-units.js', array( 'jquery' ) );
+
         $utility_deps = array('jquery');
         if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
             $utility_deps[] = 'hyphenator-js';
@@ -82,6 +84,19 @@ function openlab_load_scripts() {
         ));
 
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
+    }
+
+    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
+        wp_enqueue_script( 'openlab-directory', $stylesheet_dir_uri . '/js/directory.js', array( 'jquery' ) );
+        wp_localize_script(
+            'openlab-directory',
+            'OLAcademicUnits',
+            array(
+                'departments'       => openlab_get_entity_departments(),
+                'currentSchool'     => isset( $_GET['school'] ) ? wp_unslash( $_GET['school'] ) : '',
+                'currentDepartment' => isset( $_GET['department'] ) ? wp_unslash( $_GET['department'] ) : '',
+            )
+        );
     }
 
     if (bp_is_register_page()) {

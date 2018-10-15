@@ -23,6 +23,8 @@ class Anthologize_Project_Organizer {
 	 * @todo Do this noscript logic and other $_REQUEST parsing earlier
 	 */
 	function display() {
+		wp_enqueue_script( 'anthologize-sortlist-js' );
+		wp_enqueue_script( 'anthologize-project-organizer' );
 
 		if ( isset( $_POST['new_item'] ) ) {
 			$this->add_item_to_part( $_POST['item_id'], $_POST['part_id'] );
@@ -53,13 +55,11 @@ class Anthologize_Project_Organizer {
 		<div class="wrap anthologize" id="project-<?php echo esc_attr( $_GET['project_id'] ) ?>">
 
 			<div id="blockUISpinner">
-				<img src="<?php echo plugins_url() ?>/anthologize/images/wait28.gif"</img>
+				<img src="<?php echo plugins_url() ?>/anthologize/images/wait28.gif" alt="<?php esc_html_e( 'Please wait...', 'anthologize' ); ?>" aria-hidden="true" />
 				<p id="ajaxErrorMsg"><?php _e('There has been an unexpected error. Please wait while we reload the content.', 'anthologize') ?></p>
 			</div>
 
-			<div id="anthologize-logo">
-				<img src="<?php echo esc_url( plugins_url() . '/anthologize/images/anthologize-logo.gif' ) ?>" />
-			</div>
+			<div id="anthologize-logo"><img src="<?php echo esc_url( plugins_url() . '/anthologize/images/anthologize-logo.gif' ) ?>" alt="<?php esc_attr_e( 'Anthologize logo', 'anthologize' ); ?>" /></div>
 
 			<h2>
 				<?php echo esc_html( $this->project_name ) ?>
@@ -172,7 +172,7 @@ class Anthologize_Project_Organizer {
 
 		?>
 
-		<span><?php _e( 'Filter by', 'anthologize' ) ?></span>
+		<label for="sortby-dropdown"><?php _e( 'Filter by', 'anthologize' ) ?></label>
 
 		<select name="sortby" id="sortby-dropdown">
 			<option value="" selected="selected"><?php _e( 'All posts', 'anthologize' ) ?></option>
@@ -221,6 +221,8 @@ class Anthologize_Project_Organizer {
 		}
 
 		?>
+
+		<label class="screen-reader-text" for="filter"><?php esc_html_e( 'Filter by specific term', 'anthologize' ); ?></label>
 
 		<select name="filter" id="filter">
 			<option value=""><?php echo esc_html( $nulltext ); ?></option>
@@ -460,23 +462,24 @@ class Anthologize_Project_Organizer {
 			'post_type' => array('post', 'page', 'anth_imported_item' ),
 			'posts_per_page' => -1,
 			'orderby' => 'post_title',
-			'order' => 'DESC'
+			'order' => 'DESC',
+			'post_status' => $this->source_item_post_statuses(),
 		);
 
 		$cfilter = isset( $_COOKIE['anth-filter'] ) ? $_COOKIE['anth-filter'] : false;
 
 		if ( $cfilter == 'date' ) {
-			$startdate = mysql_real_escape_string( $_COOKIE['anth-startdate'] );
-			$enddate   = mysql_real_escape_string( $_COOKIE['anth-enddate'] );
+			$startdate = wp_unslash( $_COOKIE['anth-startdate'] );
+			$enddate   = wp_unslash( $_COOKIE['anth-enddate'] );
 
 			$date_range_where = '';
 
 			if ( strlen( $startdate ) > 0 ) {
-				$date_range_where = " AND post_date >= '" . $startdate . "'";
+				$date_range_where .= $wpdb->prepare( " AND post_date >= %s", $startdate );
 			}
 
 			if ( strlen( $enddate ) > 0 ) {
-				$date_range_where .= " AND post_date <= '" . $enddate . "'";
+				$date_range_where .= $wpdb->prepare( " AND post_date <= %s,", $enddate );
 			}
 
 			$where_func   = '$where .= "' . $date_range_where . '"; return $where;';
@@ -851,6 +854,29 @@ class Anthologize_Project_Organizer {
 		$url = add_query_arg( $query_args, admin_url( 'admin.php' ) );
 
 		return $url;
+	}
+
+	/**
+	 * Gets the post statuses of source items to show in the project organizer.
+     *
+     * @package Anthologize
+     * @since 0.8.0
+	 *
+	 * @return array
+	 */
+	function source_item_post_statuses() {
+		/**
+		 * Status of posts to include in the project organizer.
+		 * Defaults to just published, pending, future and private.
+		 *
+		 * @since 0.8.0
+		 *
+		 * @param array $statuses statuses of posts/pages to include in the project organizer
+		 */
+		return apply_filters(
+			'anthologize_source_item_post_statuses',
+			array( 'publish', 'pending', 'future', 'private' )
+		);
 	}
 }
 
