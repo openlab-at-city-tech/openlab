@@ -782,7 +782,8 @@ function cuny_member_profile_header() {
 
                         // Special case: faculty/staff doesn't have Title data.
                         if ( ! $show_dept_field_next ) {
-                            $user_title = xprofile_get_field_data( 'Title', bp_displayed_user_id() );
+                            $title_field_id = 'Faculty' === $account_type ? 16 : 206;
+                            $user_title     = xprofile_get_field_data( $title_field_id, bp_displayed_user_id() );
                             if ( ! $user_title ) {
                                 $show_dept_field_next = true;
                             }
