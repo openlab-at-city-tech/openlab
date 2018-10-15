@@ -803,20 +803,6 @@ function cuny_member_profile_header() {
 
                                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
 
-                                        <?php if ( $show_dept_field_next ) : ?>
-                                            <?php if ( $department ) : ?>
-                                                <div class="table-row row">
-                                                    <div class="bold col-sm-7 profile-field-label">
-                                                        <?php echo esc_html( $dept_label ); ?>
-                                                    </div>
-
-                                                    <div class="col-sm-17 profile-field-value">
-                                                        <?php echo esc_html( $department ); ?>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-
                                         <?php if (bp_field_has_data()) : ?>
                                             <?php
                                             if (bp_get_the_profile_field_name() != "Name" &&
@@ -849,6 +835,20 @@ function cuny_member_profile_header() {
                                                 </div>
 
                                                 <?php $show_dept_field_next = 'Title' === bp_get_the_profile_field_name(); ?>
+
+                                                <?php if ( $show_dept_field_next ) : ?>
+                                                    <?php if ( $department ) : ?>
+                                                        <div class="table-row row">
+                                                            <div class="bold col-sm-7 profile-field-label">
+                                                                <?php echo esc_html( $dept_label ); ?>
+                                                            </div>
+
+                                                            <div class="col-sm-17 profile-field-value">
+                                                                <?php echo esc_html( $department ); ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
 
                                             <?php endif; ?>
 
