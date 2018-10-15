@@ -780,6 +780,14 @@ function cuny_member_profile_header() {
                         // This field is shown first for Student, Alumni; after Title for others.
                         $show_dept_field_next = in_array( $account_type, array( 'Student', 'Alumni' ) );
 
+						// Special case: faculty/staff doesn't have Title data.
+						if ( ! $show_dept_field_next ) {
+							$user_title = xprofile_get_field_data( 'Title', bp_displayed_user_id() );
+							if ( ! $user_title ) {
+								$show_dept_field_next = true;
+							}
+						}
+
                         ?>
 
                         <?php if ( bp_has_profile( $has_profile_args ) ) : ?>
