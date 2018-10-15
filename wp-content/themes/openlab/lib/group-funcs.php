@@ -187,8 +187,11 @@ function openlab_group_archive() {
     );
 
     if (!empty($school) && 'school_all' != strtolower($school)) {
+        $all_offices = openlab_get_office_list();
+
+        $school_meta_key = isset( $all_offices[ $school ] ) ? 'openlab_office' : 'openlab_school';
         $meta_query[] = array(
-            'key'   => 'openlab_school',
+            'key'   => $school_meta_key,
             'value' => $school,
         );
     }
