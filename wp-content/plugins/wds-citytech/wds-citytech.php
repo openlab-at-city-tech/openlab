@@ -2851,3 +2851,23 @@ function openlab_academic_unit_selector( $args = array() ) {
 
     <?php
 }
+
+/**
+ * Don't allow TGMPA to show admin notices.
+ *
+ * This is meant specifically for TinyMCE Comment Field. See #2452.
+ */
+if ( is_admin() ) {
+	add_filter(
+		'get_user_metadata',
+		function( $retval, $user_id, $meta_key ) {
+			if ( 'tgmpa_dismissed_notice_tgmpa' !== $meta_key ) {
+				return $retval;
+			}
+
+			return 1;
+		},
+		10,
+		3
+	);
+}
