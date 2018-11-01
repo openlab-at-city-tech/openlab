@@ -111,34 +111,6 @@ function wds_bp_complete_signup() {
 }
 add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
 
-
-//child theme privacy - if corresponding group is private or hidden restrict access to site
-/* add_action( 'init','wds_check_blog_privacy' );
-  function wds_check_blog_privacy() {
-  global $bp, $wpdb, $blog_id, $user_ID;
-  if ( $blog_id! = 1 ) {
-  $wds_bp_group_id = get_option( 'wds_bp_group_id' );
-  if ( $wds_bp_group_id ) {
-  $group = new BP_Groups_Group( $wds_bp_group_id );
-  $status = $group->status;
-  if ( $status! = "public" ) {
-  //check memeber
-  if ( !is_user_member_of_blog( $user_ID, $blog_id ) ) {
-  echo "<center><img src='http://openlab.citytech.cuny.edu/wp-content/mu-plugins/css/images/cuny-sw-logo.png'><h1>";
-  echo "This is a private website, ";
-  if ( $user_ID == 0 ) {
-  echo "please login to gain access.";
-  } else {
-  echo "you do not have access.";
-  }
-  echo "</h1></center>";
-  exit();
-  }
-  }
-  }
-  }
-  } */
-
 /**
  * On secondary sites, add our additional buttons to the site nav
  *
@@ -383,7 +355,6 @@ function wds_bp_profile_group_tabs() {
 
 	do_action( 'xprofile_profile_group_tabs' );
 }
-
 
 function wds_load_group_departments() {
 	global $wpdb, $bp;
@@ -1113,8 +1084,7 @@ function openlab_require_school_and_department_for_groups() {
 
 add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
-
-//Save Group Meta
+// Save Group Meta
 add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
 
 function wds_bp_group_meta_save( $group ) {
@@ -1301,7 +1271,7 @@ function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search
 	);
 }
 
-//Copy the group blog template
+// Copy the group blog template
 function ra_copy_blog_page( $group_id ) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
@@ -1489,8 +1459,8 @@ function ra_copy_blog_page( $group_id ) {
 	}
 }
 
-//this is a function for sanitizing the website name
-//source http://cubiq.org/the-perfect-php-clean-url-generator
+// this is a function for sanitizing the website name
+// source http://cubiq.org/the-perfect-php-clean-url-generator
 function friendly_url( $str, $replace = array(), $delimiter = '-' ) {
 	if ( ! empty( $replace ) ) {
 		$str = str_replace( (array) $replace, ' ', $str );
@@ -1762,7 +1732,6 @@ class buddypress_ajax_Translation_Mangler {
 	/*
 	 * Filter the translation string before it is displayed.
 	 */
-
 	static function filter_gettext( $translation, $text, $domain ) {
 		$translations = get_translations_for_domain( 'buddypress' );
 		switch ( $text ) {
@@ -1781,58 +1750,6 @@ function openlab_launch_ajax_translator() {
 }
 
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
-
-/**
- * When a user attempts to visit a blog, check to see if the user is a member of the
- * blog's associated group. If so, ensure that the member has access.
- *
- * This function should be deprecated when a more elegant solution is found.
- * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
- */
-function openlab_sync_blog_members_to_group() {
-	global $wpdb, $bp;
-
-	// No need to continue if the user is not logged in, if this is not an admin page, or if
-	// the current blog is not private
-	$blog_public = get_option( 'blog_public' );
-	if ( ! is_user_logged_in() || ! is_admin() || (int) $blog_public < 0 ) {
-		return;
-	}
-
-	$user_id  = get_current_user_id();
-	$userdata = get_userdata( $user_id );
-
-	// Is the user already a member of the blog?
-	if ( empty( $userdata->caps ) ) {
-
-		// Is this blog associated with a group?
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-
-		if ( $group_id ) {
-
-			// Is this user a member of the group?
-			if ( groups_is_user_member( $user_id, $group_id ) ) {
-
-				// Figure out the status
-				if ( groups_is_user_admin( $user_id, $group_id ) ) {
-					$status = 'administrator';
-				} elseif ( groups_is_user_mod( $user_id, $group_id ) ) {
-					$status = 'editor';
-				} else {
-					$status = 'author';
-				}
-
-				// Add the user to the blog
-				add_user_to_blog( get_current_blog_id(), $user_id, $status );
-
-				// Redirect to avoid errors
-				echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
-			}
-		}
-	}
-}
-
-//add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
 
 /**
  * Interfere in the comment posting process to allow for duplicates on the same post
@@ -2852,7 +2769,7 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	?>
 
-	<div class="academic-unit-selector 
+	<div class="academic-unit-selector
 	<?php
 	if ( $legacy ) :
 		?>
