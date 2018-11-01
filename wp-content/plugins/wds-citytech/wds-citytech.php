@@ -1279,7 +1279,8 @@ function ra_copy_blog_page( $group_id ) {
 	if ( ! empty( $blog['domain'] ) && $group_id ) {
 		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 		if ( ! defined( 'SUNRISE' ) || $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) != $wpdb->dmtable ) {
-			$join = $where = '';
+			$join  = '';
+			$where = '';
 		} else {
 			$join  = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
 			$where = 'AND d.domain IS NULL ';
@@ -1330,16 +1331,19 @@ function ra_copy_blog_page( $group_id ) {
 
 				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
 				  update_user_option( $user_id, 'primary_blog', $id, true ); */
-				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
-				wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
+				$content_mail = sprintf( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
+				wp_mail( get_site_option( 'admin_email' ), sprintf( '[%s] New Blog Created', $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
 				wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ) );
 				$msg = __( 'Site Created' );
 				// now copy
 				$blogtables = $wpdb->base_prefix . $src_id . '_';
 				$newtables  = $wpdb->base_prefix . $new_id . '_';
 				$query      = "SHOW TABLES LIKE '{$blogtables}%'";
-				//				var_dump( $query );
+
+				// phpcs:disable
 				$tables = $wpdb->get_results( $query, ARRAY_A );
+				// phpcs:enable
+
 				if ( $tables ) {
 					reset( $tables );
 					$create     = array();
@@ -1359,12 +1363,14 @@ function ra_copy_blog_page( $group_id ) {
 						$table = current( $tables[ $i ] );
 						if ( substr( $table, 0, $len ) == $blogtables ) {
 							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+								// phpcs:disable
 								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
 								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+								// phpcs:enable
 							}
 						}
 					}
-					//					var_dump( $create );
+
 					if ( $data ) {
 						switch_to_blog( $src_id );
 						$src_upload_dir = wp_upload_dir();
@@ -1375,12 +1381,17 @@ function ra_copy_blog_page( $group_id ) {
 						foreach ( $data as $k => $v ) {
 							$table = str_replace( $blogtables, $newtables, $k );
 							if ( in_array( $k, $wptables ) ) { // drop new blog table
-								$query = "DROP TABLE IF EXISTS {$table}";
-								$wpdb->query( $query );
+								// phpcs:disable
+								$wpdb->query( "DROP TABLE IF EXISTS $table" );
+								// phpcs:enable
 							}
 							$key   = (array) $create[ $k ];
 							$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
+
+							// phpcs:disable
 							$wpdb->query( $query );
+							// phpcs:enable
+
 							$is_post = ( $k == $blogtables . 'posts' );
 							if ( $v ) {
 								foreach ( $v as $row ) {
@@ -1416,7 +1427,11 @@ function ra_copy_blog_page( $group_id ) {
 							'upload_url_path',
 							"{$wpdb->base_prefix}{$src_id}_user_roles",
 						);
-						$options      = $wpdb->get_results( $option_query );
+
+						// phpcs:disable
+						$options = $wpdb->get_results( $option_query );
+						// phpcs:enable
+
 						//new blog stuff
 						if ( $options ) {
 							switch_to_blog( $new_id );
@@ -1576,7 +1591,9 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 		}
 
 		// Make sure it's the right faculty member
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = '%d' LIMIT 1", get_current_blog_id() ) );
+		// phpcs:disable
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d LIMIT 1", get_current_blog_id() ) );
+		// phpcs:enable
 
 		if ( ! empty( $group_id ) && ! groups_is_user_admin( get_current_user_id(), (int) $group_id ) ) {
 			return '';
@@ -1617,7 +1634,7 @@ add_action(
 );
 
 //Change "Group" to something else
-class buddypress_Translation_Mangler {
+class Buddypress_Translation_Mangler {
 	/*
 	 * Filter the translation string before it is displayed.
 	 *
@@ -1690,7 +1707,7 @@ class buddypress_Translation_Mangler {
 }
 
 function openlab_launch_translator() {
-	add_filter( 'gettext', array( 'buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
@@ -1711,7 +1728,9 @@ function openlab_gettext_with_context( $translations, $text, $context, $domain )
 	return $translations;
 }
 
+// phpcs:disable
 class bbPress_Translation_Mangler {
+// phpcs:enable
 
 	static function filter_gettext( $translation, $text, $domain ) {
 		if ( 'bbpress' != $domain ) {
@@ -1728,7 +1747,7 @@ class bbPress_Translation_Mangler {
 
 }
 
-class buddypress_ajax_Translation_Mangler {
+class Buddypress_Ajax_Translation_Mangler {
 	/*
 	 * Filter the translation string before it is displayed.
 	 */
@@ -1746,7 +1765,7 @@ class buddypress_ajax_Translation_Mangler {
 }
 
 function openlab_launch_ajax_translator() {
-	add_filter( 'gettext', array( 'buddypress_ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 }
 
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
@@ -1777,10 +1796,10 @@ function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
 
 	if ( is_user_logged_in() ) {
 
-		//remove the random content
-		$comment_content = $wpdb->get_var( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = '$comment_id' LIMIT 1" );
+		// Remove the random content.
+		$comment_content = $wpdb->get_var( $wpdb->prepare( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = %d LIMIT 1", $comment_id ) );
 		$comment_content = preg_replace( '/disabledupes\{.*\}disabledupes/', '', $comment_content );
-		$wpdb->query( "UPDATE $wpdb->comments SET comment_content = '" . $wpdb->escape( $comment_content ) . "' WHERE comment_ID = '$comment_id' LIMIT 1" );
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->comments SET comment_content = %s WHERE comment_ID = %d LIMIT 1", $comment_content, $comment_id ) );
 
 		clean_comment_cache( array( $comment_id ) );
 	}
@@ -1832,18 +1851,15 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
 		$case = 'single';
 	}
 
-	// Set a group id. The elseif statements allow for cascading logic; if the first is not
-	// found, fall to the second, etc.
+	// Set a group id.
 	$group_id = (int) $group_id;
-	if ( ! $group_id && $group_id = bp_get_current_group_id() ) {
-
-	} // current group
-	elseif ( ! $group_id && $group_id = bp_get_new_group_id() ) {
-
-	} // new group
-	elseif ( ! $group_id && $group_id = bp_get_group_id() ) {
-
-	}         // group in loop
+	if ( ! $group_id && bp_get_current_group_id() ) {
+		$group_id = bp_get_current_group_id();
+	} elseif ( ! $group_id && bp_get_new_group_id() ) {
+		$group_id = bp_get_new_group_id();
+	} elseif ( ! $group_id && bp_get_group_id() ) {
+		$group_id = bp_get_group_id();
+	}
 
 	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
@@ -1957,8 +1973,8 @@ function openlab_is_my_profile() {
 		return true;
 	}
 
-	//for the group creating pages
-	if ( $bp->current_action == 'create' ) {
+	// For the group creating pages.
+	if ( 'create' === $bp->current_action ) {
 		return true;
 	}
 
@@ -2356,7 +2372,10 @@ add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
  */
 function openlab_get_exclude_groups_for_account_type( $type ) {
 	global $wpdb, $bp;
+
+	// phpcs:disable
 	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
+	// phpcs:enable
 
 	// Reindex
 	$gs = array();
@@ -2478,7 +2497,7 @@ add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appe
  * @return string Updated value.
  */
 function openlab_bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
-	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
+	if ( 'template' !== $property_name || 'add-content' !== $transform ) {
 		return $value;
 	}
 
@@ -2488,7 +2507,9 @@ function openlab_bp_email_add_link_color_to_template( $value, $property_name, $t
 	// Find all links.
 	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
 	foreach ( $links as $link ) {
-		$new_link = $link = array_shift( $link );
+		$new_link = array_shift( $link );
+
+		$link = $new_link;
 
 		// Add/modify style property.
 		if ( strpos( $link, 'style="' ) !== false ) {
@@ -2767,21 +2788,22 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	wp_enqueue_script( 'openlab-academic-units' );
 
+	$selector_class = 'academic-unit-selector';
+	$legend_class   = '';
+	if ( $legacy ) {
+		$selector_class .= ' academic-unit-selector-legacy';
+		$legend_class   .= 'sr-only';
+	}
+
+	$required_gloss = $required ? '(required)' : '';
+
 	?>
 
-	<div class="academic-unit-selector
-	<?php
-	if ( $legacy ) :
-		?>
-		 academic-unit-selector-legacy<?php endif; ?>">
+	<div class="<?php echo esc_attr( $selector_class ); ?>">
 
 	<?php if ( in_array( 'school', $entities, true ) ) : ?>
 		<fieldset class="school-selector">
-			<legend
-			<?php
-			if ( $legacy ) :
-				?>
-				 class="sr-only"<?php endif; ?>>Schools:</legend>
+			<legend class="<?php echo esc_attr( $legend_class ); ?>">Schools:</legend>
 
 			<div class="school-inputs entity-inputs">
 				<ul>
@@ -2816,11 +2838,7 @@ function openlab_academic_unit_selector( $args = array() ) {
 	<?php endif; ?>
 
 	<fieldset class="department-selector">
-		<legend>Departments
-		<?php
-		if ( $required ) :
-			?>
-			 (required)<?php endif; ?>:</legend>
+		<legend>Departments <?php echo esc_html( $required_gloss ); ?></legend>
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
