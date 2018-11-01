@@ -17,3 +17,5 @@ define( 'WP_DEBUG', false );
 define( 'DOMAIN_CURRENT_SITE', 'openlabdev.org' );
 define( 'PATH_CURRENT_SITE', '/' );
 define( 'DO_SHARDB', false );
+
+define( 'OPENLAB_CACHE_ENGINE', '' );
