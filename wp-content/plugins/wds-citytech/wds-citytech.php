@@ -1,11 +1,11 @@
 <?php
 /*
-  Plugin Name: WDS CityTech
-  Plugin URI: http://citytech.webdevstudios.com
-  Description: Custom Functionality for CityTech BuddyPress Site.
-  Version: 1.0
-  Author: WebDevStudios
-  Author URI: http://webdevstudios.com
+Plugin Name: CityTech Networkwide Custom (wds-citytech)
+Plugin URI: https://openlab.citytech.cuny.edu/
+Description: Custom networkwide functionality for the City Tech OpenLab.
+Version: 1.0
+Author: City Tech OpenLab
+Author URI: https://openlab.citytech.cuny.edu
  */
 
 include 'wds-register.php';
@@ -133,7 +133,9 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 
+	// phpcs:disable
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	// phpcs:enable
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -212,7 +214,9 @@ function cuny_group_menu_items() {
 
 	$items = array();
 
+	// phpcs:disable
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	// phpcs:enable
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -331,7 +335,9 @@ add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );
 
 function wds_bp_profile_group_tabs() {
 	global $bp, $group_name;
-	if ( ! $groups = wp_cache_get( 'xprofile_groups_inc_empty', 'bp' ) ) {
+
+	$groups = wp_cache_group( 'xprofile_groups_inc_empty', 'bp' );
+	if ( false === $groups ) {
 		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
 		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
 	}
@@ -949,8 +955,12 @@ function wds_load_group_type( $group_type ) {
 	$return .= '</td>';
 	$return .= '</tr>';
 
-	// For the love of Pete, it's not that hard to cast variables
-	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
+	$wds_faculty      = '';
+	$wds_course_code  = '';
+	$wds_section_code = '';
+	$wds_semester     = '';
+	$wds_year         = '';
+	$wds_course_html  = '';
 
 	if ( bp_get_current_group_id() ) {
 		$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
@@ -991,22 +1001,10 @@ function wds_load_group_type( $group_type ) {
 		$return .= '<td><select class="form-control" id="wds_semester" name="wds_semester">';
 		$return .= '<option value="">--select one--';
 
-		$checked = $Spring = $Summer = $Fall = $Winter = '';
-
-		if ( $wds_semester == 'Spring' ) {
-			$Spring = 'selected';
-		} elseif ( $wds_semester == 'Summer' ) {
-			$Summer = 'selected';
-		} elseif ( $wds_semester == 'Fall' ) {
-			$Fall = 'selected';
-		} elseif ( $wds_semester == 'Winter' ) {
-			$Winter = 'selected';
-		}
-
-		$return .= '<option value="Spring" ' . $Spring . '>Spring';
-		$return .= '<option value="Summer" ' . $Summer . '>Summer';
-		$return .= '<option value="Fall" ' . $Fall . '>Fall';
-		$return .= '<option value="Winter" ' . $Winter . '>Winter';
+		$return .= '<option value="Spring" ' . selected( $wds_semester, 'Spring', false ) . '>Spring';
+		$return .= '<option value="Summer" ' . selected( $wds_semester, 'Summer', false ) . '>Summer';
+		$return .= '<option value="Fall" ' . selected( $wds_semester, 'Fall', false ) . '>Fall';
+		$return .= '<option value="Winter" ' . selected( $wds_semester, 'Winter', false ) . '>Winter';
 		$return .= '</select></td>';
 		$return .= '</tr>';
 
