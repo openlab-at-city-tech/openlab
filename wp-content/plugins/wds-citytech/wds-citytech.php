@@ -1405,7 +1405,6 @@ function ra_copy_blog_page( $group_id ) {
 						$skip_options = array(
 						'admin_email',
 						'blogname',
-						'blogdescription',
 						'cron',
 						'db_version',
 						'doing_cron',
