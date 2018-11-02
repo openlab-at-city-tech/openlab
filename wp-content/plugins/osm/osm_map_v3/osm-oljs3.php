@@ -32,6 +32,17 @@ class Osm_OLJS3
         source: new ol.source.OSM({ })
       });';
     }
+    if ($a_Type == "hot"){
+      $TileLayer .= '
+          var raster = new ol.layer.Tile({
+            source: new ol.source.OSM({
+               attributions: "Maps &copy; " +
+               "<a href=\"http://hot.openstreetmap.org/\">Humanitarian OpenStreetMap Team.</a>" + ol.source.OSM.ATTRIBUTION,
+               url: "https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+             })
+           });
+          ';
+    }
 
     else if ($a_Type == "stamen_toner"){
       $TileLayer .= '
@@ -91,7 +102,7 @@ class Osm_OLJS3
             source: new ol.source.OSM({
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
-              url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
+              url: "'.Osm_thunderforest_Cycle_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
@@ -100,38 +111,38 @@ class Osm_OLJS3
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-                attributions: "Maps &copy; " +
-                "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
-                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+              url: "'.Osm_thunderforest_Outdoor_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
     }
+
     else if ($a_Type == "landscape"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
-              url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
+              url: "'.Osm_thunderforest_Landscape_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
     }
-        else if ($a_Type == "spinal"){
+
+    else if ($a_Type == "spinal"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
-              attributions: [
-                attributions: "Maps &copy; " +
-                "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
-                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
+              attributions: "Maps &copy; " +
+              "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
+              url: "'.Osm_thunderforest_Spinal_Tiles.'?apikey='.$a_api_key.'"
              })
            });
           ';
     }
-            else if ($a_Type == "pioneer"){
+     else if ($a_Type == "pioneer"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
