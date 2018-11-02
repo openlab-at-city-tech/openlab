@@ -1625,3 +1625,32 @@ function openlab_catch_cloned_course_notice_dismissals() {
 	update_option( 'openlab-clone-notice-dismissed', 1 );
 }
 add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
+
+/** "Display Name" column on users.php ***************************************/
+
+add_filter(
+	'manage_users_columns',
+	function( $cols ) {
+		$new_cols = [];
+		foreach ( $cols as $col_slug => $col_name ) {
+			$new_cols[ $col_slug ] = $col_name;
+			if ( 'name' === $col_slug ) {
+				$new_cols['display_name'] = 'Display Name';
+			}
+		}
+		return $new_cols;
+	}
+);
+
+add_action(
+	'manage_users_custom_column',
+	function( $retval, $col, $user_id ) {
+		if ( 'display_name' !== $col ) {
+			return $retval;
+		}
+
+		return esc_html( bp_core_get_user_displayname( $user_id ) );
+	},
+	10,
+	3
+);
