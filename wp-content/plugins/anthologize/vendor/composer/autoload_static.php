@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit91502b2bb109da56e891580c08f17214
+class ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907
 {
     public static $prefixesPsr0 = array (
         'X' => 
@@ -83,7 +83,7 @@ class ComposerStaticInit91502b2bb109da56e891580c08f17214
         'FeedAggregator' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Pickle/pickle/packagefiles/http/docs/examples/Simple_Feed_Aggregator.php',
         'GetTest' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Package/package/packagefiles/DB_Table/tests/database/GetTest.php',
         'ModifyTest' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Package/package/packagefiles/DB_Table/tests/database/ModifyTest.php',
-        'Net_FTP' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Config/test_readFTPConfigFile/FTP.php.inc',
+        'Net_FTP' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Installer/ftp_test_files/FTP.php.inc',
         'OS_Guess' => __DIR__ . '/..' . '/pear/pear/OS/Guess.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
         'PEAR' => __DIR__ . '/..' . '/pear/pear/PEAR.php',
@@ -119,7 +119,7 @@ class ComposerStaticInit91502b2bb109da56e891580c08f17214
         'PEAR_Installer' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer.php',
         'PEAR_Installer_Role' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer/Role.php',
         'PEAR_Installer_Role_Cfg' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer/Role/Cfg.php',
-        'PEAR_Installer_Role_Common' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Installer_Role/roles/Common.php',
+        'PEAR_Installer_Role_Common' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer/Role/Common.php',
         'PEAR_Installer_Role_Data' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer/Role/Data.php',
         'PEAR_Installer_Role_Dataf' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Installer_Role/roles/Dataf.php',
         'PEAR_Installer_Role_Doc' => __DIR__ . '/..' . '/pear/pear/PEAR/Installer/Role/Doc.php',
@@ -207,7 +207,7 @@ class ComposerStaticInit91502b2bb109da56e891580c08f17214
         'XmlRpcClient' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Pickle/pickle/packagefiles/http/docs/examples/KISS_XMLRPC_Client.php',
         'example' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Package/package/packagefiles/DB_Table/tests/bogotest.php',
         'fake_log' => __DIR__ . '/..' . '/pear/pear/tests/download_test_classes.php.inc',
-        'gronk' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Packager/packagefiles/foo.php',
+        'gronk' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Package/package-validate/packagefiles/foo.php',
         'test_PEAR_Command_Channels' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Channels/setup.php.inc',
         'test_PEAR_Command_Install' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Install/setup.php.inc',
         'test_PEAR_Command_Mirror' => __DIR__ . '/..' . '/pear/pear/tests/PEAR_Command_Mirror/setup.php.inc',
@@ -234,8 +234,8 @@ class ComposerStaticInit91502b2bb109da56e891580c08f17214
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit91502b2bb109da56e891580c08f17214::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit91502b2bb109da56e891580c08f17214::$classMap;
+            $loader->prefixesPsr0 = ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907::$classMap;
 
         }, null, ClassLoader::class);
     }
