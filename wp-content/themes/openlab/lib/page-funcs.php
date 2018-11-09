@@ -140,14 +140,12 @@ function cuny_home_new_members() {
  */
 function cuny_whos_online() {
     global $wpdb, $bp;
-    $avatar_args = array(
-        'type' => 'full',
-        'width' => 45,
-        'height' => 45,
-        'class' => 'avatar',
-        'id' => false,
-        'alt' => __('Member avatar', 'buddypress')
-    );
+
+    $cached = get_transient( 'openlab_whos_online' );
+    if ( $cached ) {
+        echo $cached;
+        return;
+    }
 
     $rs = wp_cache_get('whos_online', 'openlab');
     if (!$rs) {
@@ -156,28 +154,22 @@ function cuny_whos_online() {
         wp_cache_set('whos_online', $rs, 'openlab', 5 * 60);
     }
 
-    //print_r($rs);
     $ids = "9999999";
     foreach ((array) $rs as $r) {
         $ids .= "," . intval($r);
     }
 
-    $x = 0;
-    if (bp_has_members('type=active&include=' . $ids)) :
-        $x += 1;
+    if ( bp_has_members( 'type=active&include=' . $ids ) ) :
+
+        ob_start();
         ?>
 
         <div class="avatar-block left-block-content clearfix">
-            <?php
-            while (bp_members()) : bp_the_member();
-                global $members_template;
-                $member = $members_template->member;
-                ?>
+            <?php while ( bp_members() ) : bp_the_member(); ?>
 
-                <?php ?>
                 <div class="cuny-member">
                     <div class="item-avatar">
-                        <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $member->ID, 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $member->fullname; ?>"/></a>
+                        <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php bp_member_name() ?>"/></a>
                     </div>
                     <div class="cuny-member-info">
                         <a href="<?php bp_member_permalink() ?>"><?php bp_member_name() ?></a><br />
@@ -193,6 +185,12 @@ function cuny_whos_online() {
         </div>
         <?php
     endif;
+
+    $html = ob_get_clean();
+
+    set_transient( 'openlab_whos_online', $html, 5 * 60 );
+
+    echo $html;
 }
 
 function openlab_stay_up_to_date() {
