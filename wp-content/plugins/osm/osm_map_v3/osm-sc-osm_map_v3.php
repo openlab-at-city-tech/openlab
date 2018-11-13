@@ -564,6 +564,7 @@
 
 			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', 'none');
 
+                  if (is_array($MarkerArray) || is_object($MarkerArray)) {
 			$NumOfMarker = count($MarkerArray);
 			$Counter = 0;
 
@@ -590,6 +591,10 @@
 
 
 			}// foreach(MarkerArray)
+                    } // is array
+                    else {
+                      // no markers found
+                    }
 		} //($postmarkers) != 'no'')
 		$output.= '
 		  var osm_controls = [

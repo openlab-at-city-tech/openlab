@@ -115,3 +115,22 @@ function openlab_mu_search_override() {
         }
     }
 }
+
+/**
+ * Custom Login Logo.
+ *
+ * @return void
+ */
+function openlab_login_logo() {
+	?>
+	<style type="text/css">
+	#login h1 a {
+		background-image: url(<?php echo plugins_url( 'css/images/openlab-logo.png', __FILE__ ); ?>);
+		background-size: 286px 94px;
+		height: 94px;
+		width: 286px;
+	}
+	</style>
+	<?php
+}
+add_action( 'login_enqueue_scripts', 'openlab_login_logo' );

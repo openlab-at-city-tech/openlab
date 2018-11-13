@@ -737,3 +737,6 @@ add_action(
 	10,
 	4
 );
+
+// Allow HTML in notices.
+remove_filter( 'ass_clean_content', 'strip_tags', 4 );

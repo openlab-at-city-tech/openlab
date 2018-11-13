@@ -782,11 +782,16 @@ function cuny_member_profile_header() {
 
                         // Special case: faculty/staff doesn't have Title data.
                         if ( ! $show_dept_field_next ) {
-                            $user_title = xprofile_get_field_data( 'Title', bp_displayed_user_id() );
+                            $title_field_id = 'Faculty' === $account_type ? 16 : 206;
+                            $user_title     = xprofile_get_field_data( $title_field_id, bp_displayed_user_id() );
                             if ( ! $user_title ) {
                                 $show_dept_field_next = true;
                             }
                         }
+
+                        $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
+                        $department = openlab_generate_department_name( $user_units );
+                        $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
 
                         ?>
 
@@ -797,25 +802,6 @@ function cuny_member_profile_header() {
                                 <?php if (bp_profile_group_has_fields()) : ?>
 
                                     <?php while (bp_profile_fields()) : bp_the_profile_field(); ?>
-
-                                        <?php if ( $show_dept_field_next ) :
-                                            $user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
-                                            $department = openlab_generate_department_name( $user_units );
-                                            $dept_label = in_array( $account_type, array( 'Student', 'Alumni' ), true ) ? 'Major Program of Study' : 'Department';
-                                            ?>
-
-                                            <?php if ( $department ) : ?>
-                                                <div class="table-row row">
-                                                    <div class="bold col-sm-7 profile-field-label">
-                                                        <?php echo esc_html( $dept_label ); ?>
-                                                    </div>
-
-                                                    <div class="col-sm-17 profile-field-value">
-                                                        <?php echo esc_html( $department ); ?>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
 
                                         <?php if (bp_field_has_data()) : ?>
                                             <?php
@@ -850,6 +836,20 @@ function cuny_member_profile_header() {
 
                                                 <?php $show_dept_field_next = 'Title' === bp_get_the_profile_field_name(); ?>
 
+                                                <?php if ( $show_dept_field_next ) : ?>
+                                                    <?php if ( $department ) : ?>
+                                                        <div class="table-row row">
+                                                            <div class="bold col-sm-7 profile-field-label">
+                                                                <?php echo esc_html( $dept_label ); ?>
+                                                            </div>
+
+                                                            <div class="col-sm-17 profile-field-value">
+                                                                <?php echo esc_html( $department ); ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
                                             <?php endif; ?>
 
                                         <?php endif; // bp_field_has_data()    ?>
@@ -859,6 +859,17 @@ function cuny_member_profile_header() {
                                 <?php endif; // bp_profile_group_has_fields()    ?>
 
                             <?php endwhile; // bp_profile_groups()     ?>
+                        <?php elseif ( $department ) : ?>
+                            <?php /* Special case: User has no other profile fields but has a Department */ ?>
+                            <div class="table-row row">
+                                <div class="bold col-sm-7 profile-field-label">
+                                    <?php echo esc_html( $dept_label ); ?>
+                                </div>
+
+                                <div class="col-sm-17 profile-field-value">
+                                    <?php echo esc_html( $department ); ?>
+                                </div>
+                            </div>
                         <?php endif; // bp_has_profile()     ?>
                     </div>
                 </div>

@@ -1,11 +1,11 @@
 <?php
 /*
-  Plugin Name: WDS CityTech
-  Plugin URI: http://citytech.webdevstudios.com
-  Description: Custom Functionality for CityTech BuddyPress Site.
-  Version: 1.0
-  Author: WebDevStudios
-  Author URI: http://webdevstudios.com
+Plugin Name: CityTech Networkwide Custom (wds-citytech)
+Plugin URI: https://openlab.citytech.cuny.edu/
+Description: Custom networkwide functionality for the City Tech OpenLab.
+Version: 1.0
+Author: City Tech OpenLab
+Author URI: https://openlab.citytech.cuny.edu
  */
 
 include 'wds-register.php';
@@ -59,9 +59,9 @@ function openlab_get_stylesheet_dir_uri() {
  * @return type
  */
 function openlab_new_mysteryman() {
-    return openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+	return openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
 }
-add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
+add_filter( 'bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7 );
 
 /**
  * Custom default avatar
@@ -69,18 +69,18 @@ add_filter('bp_core_mysteryman_src', 'openlab_new_mysteryman', 2, 7);
  * @param type $params
  * @return string
  */
-function openlab_default_get_group_avatar($url, $params) {
-    if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
-        $url = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
-    }
+function openlab_default_get_group_avatar( $url, $params ) {
+	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
+		$url = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
+	}
 
-    return $url;
+	return $url;
 }
 add_filter( 'bp_core_fetch_avatar_url', 'openlab_default_get_group_avatar', 10, 2 );
 
-function openlab_default_group_avatar_img($html) {
-    $default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
-    return str_replace( $default_avatar, openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg', $html );
+function openlab_default_group_avatar_img( $html ) {
+	$default_avatar = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
+	return str_replace( $default_avatar, openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg', $html );
 }
 add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
 
@@ -102,42 +102,14 @@ function wds_content_excerpt( $text, $text_length ) {
 function wds_bp_complete_signup() {
 	global $bp, $wpdb;
 
-	$last_user = $wpdb->get_results( 'SELECT * FROM wp_users ORDER BY ID DESC LIMIT 1', 'ARRAY_A' );
-	$user_id = $last_user[0]['ID'];
-	$first_name = xprofile_get_field_data( 'First Name', $user_id );
-	$last_name = xprofile_get_field_data( 'Last Name', $user_id );
+	$last_user         = $wpdb->get_results( 'SELECT * FROM wp_users ORDER BY ID DESC LIMIT 1', 'ARRAY_A' );
+	$user_id           = $last_user[0]['ID'];
+	$first_name        = xprofile_get_field_data( 'First Name', $user_id );
+	$last_name         = xprofile_get_field_data( 'Last Name', $user_id );
 	$update_user_first = update_user_meta( $user_id, 'first_name', $first_name );
-	$update_user_last = update_user_meta( $user_id, 'last_name', $last_name );
+	$update_user_last  = update_user_meta( $user_id, 'last_name', $last_name );
 }
 add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
-
-
-//child theme privacy - if corresponding group is private or hidden restrict access to site
-/* add_action( 'init','wds_check_blog_privacy' );
-  function wds_check_blog_privacy() {
-  global $bp, $wpdb, $blog_id, $user_ID;
-  if ( $blog_id! = 1 ) {
-  $wds_bp_group_id = get_option( 'wds_bp_group_id' );
-  if ( $wds_bp_group_id ) {
-  $group = new BP_Groups_Group( $wds_bp_group_id );
-  $status = $group->status;
-  if ( $status! = "public" ) {
-  //check memeber
-  if ( !is_user_member_of_blog( $user_ID, $blog_id ) ) {
-  echo "<center><img src='http://openlab.citytech.cuny.edu/wp-content/mu-plugins/css/images/cuny-sw-logo.png'><h1>";
-  echo "This is a private website, ";
-  if ( $user_ID == 0 ) {
-  echo "please login to gain access.";
-  } else {
-  echo "you do not have access.";
-  }
-  echo "</h1></center>";
-  exit();
-  }
-  }
-  }
-  }
-  } */
 
 /**
  * On secondary sites, add our additional buttons to the site nav
@@ -161,19 +133,21 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 
+	// phpcs:disable
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	// phpcs:enable
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu_a = explode( '<ul>', $menu );
-		$menu_a = array(
+		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
+		$menu_a     = explode( '<ul>', $menu );
+		$menu_a     = array(
 			$menu_a[0],
 			'<ul>',
 			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
 			$menu_a[1],
 		);
-		$menu = implode( '', $menu_a );
+		$menu       = implode( '', $menu_a );
 	}
 	return $menu;
 }
@@ -202,13 +176,13 @@ function cuny_add_group_menu_items( $items, $args ) {
 	}
 
 	if ( ! $has_home ) {
-		$post_args = new stdClass;
-		$home_link = new WP_Post( $post_args );
+		$post_args        = new stdClass;
+		$home_link        = new WP_Post( $post_args );
 		$home_link->title = 'Home';
-		$home_link->url = trailingslashit( site_url() );
-		$home_link->slug = 'home';
-		$home_link->ID = 'home';
-		$items = array_merge( array( $home_link ), $items );
+		$home_link->url   = trailingslashit( site_url() );
+		$home_link->slug  = 'home';
+		$home_link->ID    = 'home';
+		$items            = array_merge( array( $home_link ), $items );
 	}
 
 	$items = array_merge( cuny_group_menu_items(), $items );
@@ -220,31 +194,40 @@ add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
 /**
  * Disable the filter above when we're in a sidebar.
  */
-add_action( 'dynamic_sidebar_before', function() {
-	remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+add_action(
+	'dynamic_sidebar_before',
+	function() {
+		remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
 
-	add_action( 'dynamic_sidebar_after', function() {
-		add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-	} );
-}, 0 );
+		add_action(
+			'dynamic_sidebar_after',
+			function() {
+				add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
+			}
+		);
+	},
+	0
+);
 
 function cuny_group_menu_items() {
 	global $bp, $wpdb;
 
 	$items = array();
 
+	// phpcs:disable
 	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	// phpcs:enable
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group = new BP_Groups_Group( $wds_bp_group_id, true );
+		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$post_args = new stdClass;
-		$profile_item = new WP_Post( $post_args );
-		$profile_item->ID = 'group-profile-link';
+		$post_args           = new stdClass;
+		$profile_item        = new WP_Post( $post_args );
+		$profile_item->ID    = 'group-profile-link';
 		$profile_item->title = sprintf( '%s Profile', $group_type );
-		$profile_item->slug = 'group-profile-link';
-		$profile_item->url = bp_get_group_permalink( $group );
+		$profile_item->slug  = 'group-profile-link';
+		$profile_item->url   = bp_get_group_permalink( $group );
 
 		$items[] = $profile_item;
 	}
@@ -270,10 +253,10 @@ if ( ! defined( 'BP_AVATAR_FULL_HEIGHT' ) ) {
 function wds_default_theme() {
 	global $wpdb, $blog_id;
 	if ( $blog_id > 1 ) {
-		if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ) {
-                    define('BP_DISABLE_ADMIN_BAR', true);
-                }
-        $theme = get_option( 'template' );
+		if ( ! defined( 'BP_DISABLE_ADMIN_BAR' ) ) {
+					define( 'BP_DISABLE_ADMIN_BAR', true );
+		}
+		$theme = get_option( 'template' );
 		if ( 'bp-default' === $theme ) {
 			switch_theme( 'twentyten', 'twentyten' );
 			wp_redirect( home_url() );
@@ -294,7 +277,7 @@ function wds__bp_after_signup_profile_fields() {
 
 function wds_registration_ajax() {
 	wp_print_scripts( array( 'sack' ) );
-	$sack = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
+	$sack    = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
 	$loading = '<img src="' . get_bloginfo( 'template_directory' ) . '/_inc/images/ajax-loader.gif">';
 	?>
 	<?php
@@ -304,22 +287,22 @@ add_action( 'wp_head', 'wds_registration_ajax' );
 function wds_load_default_account_type() {
 	$return = '<script type="text/javascript">';
 
-	$account_type = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
-	$type = '';
+	$account_type   = isset( $_POST['field_7'] ) ? $_POST['field_7'] : '';
+	$type           = '';
 	$selected_index = '';
 
 	if ( 'Student' === $account_type ) {
-		$type = 'Student';
+		$type           = 'Student';
 		$selected_index = 1;
 	}
 
 	if ( 'Faculty' === $account_type ) {
-		$type = 'Faculty';
+		$type           = 'Faculty';
 		$selected_index = 2;
 	}
 
 	if ( 'Staff' === $account_type ) {
-		$type = 'Staff';
+		$type           = 'Staff';
 		$selected_index = 3;
 	}
 
@@ -336,14 +319,14 @@ function wds_load_account_type() {
 	$return = '';
 
 	$account_type = $_POST['account_type'];
-	$post_data = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
+	$post_data    = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
 
 	if ( $account_type ) {
 		$return .= '<div class="sr-only">' . $account_type . ' selected.</div>' . wds_get_register_fields( $account_type, $post_data );
 	} else {
 		$return = 'Please select an Account Type.';
 	}
-        //@to-do: determine why this is here, and if it can be deprecated
+		//@to-do: determine why this is here, and if it can be deprecated
 	//$return = str_replace( "'", "\'", $return );
 	die( $return );
 }
@@ -352,7 +335,9 @@ add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );
 
 function wds_bp_profile_group_tabs() {
 	global $bp, $group_name;
-	if ( ! $groups = wp_cache_get( 'xprofile_groups_inc_empty', 'bp' ) ) {
+
+	$groups = wp_cache_group( 'xprofile_groups_inc_empty', 'bp' );
+	if ( false === $groups ) {
 		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
 		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
 	}
@@ -377,17 +362,16 @@ function wds_bp_profile_group_tabs() {
 	do_action( 'xprofile_profile_group_tabs' );
 }
 
-
 function wds_load_group_departments() {
 	global $wpdb, $bp;
-	$group = $_POST['group'];
-	$schools = $_POST['schools'];
-	$group_type = $_POST['group_type'];
+	$group           = $_POST['group'];
+	$schools         = $_POST['schools'];
+	$group_type      = $_POST['group_type'];
 	$is_group_create = (bool) $_POST['is_group_create'];
-	$schools = str_replace( '0,', '', $schools );
-	$schools = explode( ',', $schools );
+	$schools         = str_replace( '0,', '', $schools );
+	$schools         = explode( ',', $schools );
 
-	$schools_list = '';
+	$schools_list     = '';
 	$schools_list_ary = array();
 
 	$schools_canonical = openlab_get_school_list();
@@ -404,16 +388,22 @@ function wds_load_group_departments() {
 	// We want to prefill the School and Dept fields, which means we have
 	// to prefetch the dept field and figure out School backward
 	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
-		$account_type = strtolower( bp_get_profile_field_data( array(
-			'field' => 'Account Type',
-			'user_id' => bp_loggedin_user_id(),
-		) ) );
-		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+		$account_type = strtolower(
+			bp_get_profile_field_data(
+				array(
+					'field'   => 'Account Type',
+					'user_id' => bp_loggedin_user_id(),
+				)
+			)
+		);
+		$dept_field   = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
-		$wds_departments = (array) bp_get_profile_field_data( array(
-			'field' => $dept_field,
-			'user_id' => bp_loggedin_user_id(),
-		) );
+		$wds_departments = (array) bp_get_profile_field_data(
+			array(
+				'field'   => $dept_field,
+				'user_id' => bp_loggedin_user_id(),
+			)
+		);
 
 		foreach ( $wds_departments as $d ) {
 			foreach ( $departments_canonical as $the_school => $the_depts ) {
@@ -433,10 +423,12 @@ function wds_load_group_departments() {
 	sort( $departments );
 
 	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
-		$wds_departments = (array) bp_get_profile_field_data( array(
-			'field' => $dept_field,
-			'user_id' => bp_loggedin_user_id(),
-		) );
+		$wds_departments = (array) bp_get_profile_field_data(
+			array(
+				'field'   => $dept_field,
+				'user_id' => bp_loggedin_user_id(),
+			)
+		);
 	} else {
 		$wds_departments = groups_get_groupmeta( $group, 'wds_departments' );
 		$wds_departments = explode( ',', $wds_departments );
@@ -452,7 +444,7 @@ function wds_load_group_departments() {
 	}
 
 	$return .= '</div>';
-	$return = str_replace( "'", "\'", $return );
+	$return  = str_replace( "'", "\'", $return );
 	die( "document.getElementById( 'departments_html' ).innerHTML='$return'" );
 }
 add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' );
@@ -540,111 +532,111 @@ function openlab_get_office_list() {
  */
 function openlab_get_entity_departments( $entity = null ) {
 	$all_departments = array(
-		'tech' => array(
-			'architectural-technology' => array(
+		'tech'             => array(
+			'architectural-technology'          => array(
 				'label' => 'Architectural Technology',
 			),
-			'communication-design' => array(
+			'communication-design'              => array(
 				'label' => 'Communication Design',
 			),
-			'computer-engineering-technology' => array(
+			'computer-engineering-technology'   => array(
 				'label' => 'Computer Engineering Technology',
 			),
-			'computer-systems-technology' => array(
+			'computer-systems-technology'       => array(
 				'label' => 'Computer Systems Technology',
 			),
 			'construction-management-and-civil-engineering-technology' => array(
-				'label' => 'Construction Management and Civil Engineering Technology',
+				'label'       => 'Construction Management and Civil Engineering Technology',
 				'short_label' => 'Construction & Civil Engineering Tech',
 			),
 			'electrical-and-telecommunications-engineering-technology' => array(
-				'label' => 'Electrical and Telecommunications Engineering Technology',
+				'label'       => 'Electrical and Telecommunications Engineering Technology',
 				'short_label' => 'Electrical & Telecom Engineering Tech',
 			),
-			'entertainment-technology' => array(
+			'entertainment-technology'          => array(
 				'label' => 'Entertainment Technology',
 			),
-			'environmental-control-technology' => array(
+			'environmental-control-technology'  => array(
 				'label' => 'Environmental Control Technology',
 			),
 			'mechanical-engineering-technology' => array(
 				'label' => 'Mechanical Engineering Technology',
 			),
 		),
-		'studies' => array(
-			'business' => array(
+		'studies'          => array(
+			'business'                                  => array(
 				'label' => 'Business',
 			),
-			'career-and-technology-teacher-education' => array(
+			'career-and-technology-teacher-education'   => array(
 				'label' => 'Career and Technology Teacher Education',
 			),
-			'dental-hygiene' => array(
+			'dental-hygiene'                            => array(
 				'label' => 'Dental Hygiene',
 			),
-			'health-services-administration' => array(
+			'health-services-administration'            => array(
 				'label' => 'Health Services Administration',
 			),
-			'hospitality-management' => array(
+			'hospitality-management'                    => array(
 				'label' => 'Hospitality Management',
 			),
-			'human-services' => array(
+			'human-services'                            => array(
 				'label' => 'Human Services',
 			),
-			'law-and-paralegal-studies' => array(
+			'law-and-paralegal-studies'                 => array(
 				'label' => 'Law and Paralegal Studies',
 			),
-			'nursing' => array(
+			'nursing'                                   => array(
 				'label' => 'Nursing',
 			),
 			'radiologic-technology-and-medical-imaging' => array(
 				'label' => 'Radiologic Technology and Medical Imaging',
 			),
-			'restorative-dentistry' => array(
+			'restorative-dentistry'                     => array(
 				'label' => 'Restorative Dentistry',
 			),
-			'vision-care-technology' => array(
+			'vision-care-technology'                    => array(
 				'label' => 'Vision Care Technology',
 			),
 		),
-		'arts' => array(
-			'african-american-studies' => array(
+		'arts'             => array(
+			'african-american-studies'           => array(
 				'label' => 'African American Studies',
 			),
-			'biological-sciences' => array(
+			'biological-sciences'                => array(
 				'label' => 'Biological Sciences',
 			),
-			'biomedical-informatics' => array(
+			'biomedical-informatics'             => array(
 				'label' => 'Biomedical Informatics',
 			),
-			'chemistry' => array(
+			'chemistry'                          => array(
 				'label' => 'Chemistry',
 			),
-			'english' => array(
+			'english'                            => array(
 				'label' => 'English',
 			),
-			'humanities' => array(
+			'humanities'                         => array(
 				'label' => 'Humanities',
 			),
-			'liberal-arts' => array(
+			'liberal-arts'                       => array(
 				'label' => 'Liberal Arts & Sciences',
 			),
-			'library' => array(
+			'library'                            => array(
 				'label' => 'Library',
 			),
-			'mathematics' => array(
+			'mathematics'                        => array(
 				'label' => 'Mathematics',
 			),
 			'professional-and-technical-writing' => array(
 				'label' => 'Professional and Technical Writing',
 			),
-			'physics' => array(
+			'physics'                            => array(
 				'label' => 'Physics',
 			),
-			'social-science' => array(
+			'social-science'                     => array(
 				'label' => 'Social Science',
 			),
 		),
-		'other' => array(
+		'other'            => array(
 			'clip' => array(
 				'label' => 'CLIP',
 			),
@@ -653,175 +645,175 @@ function openlab_get_entity_departments( $entity = null ) {
 			'adjunct-workload-management-office' => array(
 				'label' => 'Adjunct Workload Management Office',
 			),
-			'air' => array(
+			'air'                                => array(
 				'label' => 'AIR',
 			),
-			'asap' => array(
+			'asap'                               => array(
 				'label' => 'ASAP',
 			),
-			'bmi' => array(
+			'bmi'                                => array(
 				'label' => 'BMI',
 			),
-			'c-step' => array(
+			'c-step'                             => array(
 				'label' => 'C-Step',
 			),
-			'college-learning-center' => array(
+			'college-learning-center'            => array(
 				'label' => 'College Learning Center',
 			),
-			'city-poly' => array(
+			'city-poly'                          => array(
 				'label' => 'City Poly',
 			),
-			'college-now' => array(
+			'college-now'                        => array(
 				'label' => 'College Now',
 			),
-			'continuing-education' => array(
+			'continuing-education'               => array(
 				'label' => 'Continuing Education',
 			),
-			'faculty-commons' => array(
+			'faculty-commons'                    => array(
 				'label' => 'Faculty Commons',
 			),
-			'first-year-programs' => array(
+			'first-year-programs'                => array(
 				'label' => 'First Year Programs',
 			),
-			'honors-scholors' => array(
+			'honors-scholors'                    => array(
 				'label' => 'Honors Scholars',
 			),
-			'instructional-technology' => array(
+			'instructional-technology'           => array(
 				'label' => 'Instructional Technology',
 			),
-			'library' => array(
+			'library'                            => array(
 				'label' => 'Library',
 			),
-			'openlab' => array(
+			'openlab'                            => array(
 				'label' => 'OpenLab',
 			),
-			'provost' => array(
+			'provost'                            => array(
 				'label' => 'Provost\'s Office',
 			),
-			'ptech' => array(
+			'ptech'                              => array(
 				'label' => 'PTECH',
 			),
-			'arts-dean' => array(
+			'arts-dean'                          => array(
 				'label' => 'School of Arts and Sciences, Dean’s Office',
 			),
-			'professional-dean' => array(
+			'professional-dean'                  => array(
 				'label' => 'School of Professional Studies, Dean’s Office',
 			),
-			'tech-dean' => array(
+			'tech-dean'                          => array(
 				'label' => 'School of Technology & Design, Dean’s Office',
 			),
-			'sponsored-programs' => array(
+			'sponsored-programs'                 => array(
 				'label' => 'Sponsored Programs',
 			),
-			'undergraduate-research' => array(
+			'undergraduate-research'             => array(
 				'label' => 'Undergraduate Research & Emerging Scholars',
 			),
 		),
-		'student-affairs' => array(
-			'admissions' => array(
+		'student-affairs'  => array(
+			'admissions'                       => array(
 				'label' => 'Admissions',
 			),
-			'athletics' => array(
+			'athletics'                        => array(
 				'label' => 'Athletics & Recreation',
 			),
 			'center-for-student-accessibility' => array(
 				'label' => 'Center for Student Accessibility',
 			),
-			'childcare-services' => array(
+			'childcare-services'               => array(
 				'label' => 'Childcare Services',
 			),
-			'cope' => array(
+			'cope'                             => array(
 				'label' => 'COPE',
 			),
-			'counseling' => array(
+			'counseling'                       => array(
 				'label' => 'Counseling',
 			),
-			'cuny-edge' => array(
+			'cuny-edge'                        => array(
 				'label' => 'CUNY Edge',
 			),
-			'cuny-service-corps' => array(
+			'cuny-service-corps'               => array(
 				'label' => 'CUNY Service Corps',
 			),
-			'financial-aid' => array(
+			'financial-aid'                    => array(
 				'label' => 'Financial Aid',
 			),
-			'new-student-center' => array(
+			'new-student-center'               => array(
 				'label' => 'New Student Center',
 			),
-			'registrar' => array(
+			'registrar'                        => array(
 				'label' => 'Registrar',
 			),
-			'seek' => array(
+			'seek'                             => array(
 				'label' => 'SEEK',
 			),
-			'student-affairs-dept' => array(
+			'student-affairs-dept'             => array(
 				'label' => 'Student Affairs',
 			),
-			'student-life' => array(
+			'student-life'                     => array(
 				'label' => 'Student Life & Development',
 			),
-			'transfer-and-recruitment' => array(
+			'transfer-and-recruitment'         => array(
 				'label' => 'Transfer & Recruitment Office',
 			),
-			'veterans-support-services' => array(
+			'veterans-support-services'        => array(
 				'label' => 'Veterans Support Services',
 			),
-			'wellness-center' => array(
+			'wellness-center'                  => array(
 				'label' => 'Wellness Center',
 			),
 		),
-		'administration' => array(
-			'bookstore' => array(
+		'administration'   => array(
+			'bookstore'                     => array(
 				'label' => 'Bookstore',
 			),
-			'buildings-and-grounds' => array(
+			'buildings-and-grounds'         => array(
 				'label' => 'Buildings & Grounds',
 			),
-			'business-office' => array(
+			'business-office'               => array(
 				'label' => 'Business Office',
 			),
 			'computer-information-services' => array(
 				'label' => 'Computer Information Services',
 			),
-			'health-and-safety' => array(
+			'health-and-safety'             => array(
 				'label' => 'Health & Safety',
 			),
-			'human-resources' => array(
+			'human-resources'               => array(
 				'label' => 'Human Resources',
 			),
 		),
-		'president' => array(
-			'alumni-relations' => array(
+		'president'        => array(
+			'alumni-relations'                  => array(
 				'label' => 'Alumni Relations',
 			),
-			'beoc' => array(
+			'beoc'                              => array(
 				'label' => 'BEOC',
 			),
-			'city-tech-foundation' => array(
+			'city-tech-foundation'              => array(
 				'label' => 'City Tech Foundation',
 			),
-			'communications' => array(
+			'communications'                    => array(
 				'label' => 'Communications',
 			),
-			'image-and-visual-communications' => array(
+			'image-and-visual-communications'   => array(
 				'label' => 'Image & Visual Communications',
 			),
-			'legal-and-title-ix' => array(
+			'legal-and-title-ix'                => array(
 				'label' => 'Legal and Title IX',
 			),
 			'office-of-faculty-staff-relations' => array(
 				'label' => 'Office of Faculty / Staff Relations',
 			),
-			'presidents-office' => array(
+			'presidents-office'                 => array(
 				'label' => 'President\'s Office',
 			),
-			'professional-development-center' => array(
+			'professional-development-center'   => array(
 				'label' => 'Professional Development Center',
 			),
-			'public-relations' => array(
+			'public-relations'                  => array(
 				'label' => 'Public Relations',
 			),
-			'public-safety' => array(
+			'public-safety'                     => array(
 				'label' => 'Public Safety',
 			),
 		),
@@ -858,7 +850,7 @@ function wds_load_group_type( $group_type ) {
 	$return = '';
 
 	if ( $group_type ) {
-		$echo = true;
+		$echo   = true;
 		$return = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
 	} else {
 		$group_type = $_POST['group_type'];
@@ -882,16 +874,16 @@ function wds_load_group_type( $group_type ) {
 
 	// associated school/dept tooltip
 	switch ( $group_type ) {
-		case 'course' :
+		case 'course':
 			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
-		case 'portfolio' :
+		case 'portfolio':
 			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
 			break;
-		case 'project' :
+		case 'project':
 			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
 			break;
-		case 'club' :
+		case 'club':
 			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
 			break;
 	}
@@ -907,22 +899,28 @@ function wds_load_group_type( $group_type ) {
 	);
 
 	if ( 'portfolio' == $group_type && bp_is_group_create() ) {
-		$account_type = strtolower( bp_get_profile_field_data( array(
-			'field' => 'Account Type',
-			'user_id' => bp_loggedin_user_id(),
-		) ) );
-		$dept_field = 'student' == $account_type ? 'Major Program of Study' : 'Department';
+		$account_type = strtolower(
+			bp_get_profile_field_data(
+				array(
+					'field'   => 'Account Type',
+					'user_id' => bp_loggedin_user_id(),
+				)
+			)
+		);
+		$dept_field   = 'student' == $account_type ? 'Major Program of Study' : 'Department';
 
-		$user_department = bp_get_profile_field_data( array(
-			'field' => $dept_field,
-			'user_id' => bp_loggedin_user_id(),
-		) );
+		$user_department = bp_get_profile_field_data(
+			array(
+				'field'   => $dept_field,
+				'user_id' => bp_loggedin_user_id(),
+			)
+		);
 
 		if ( $user_department ) {
 			$all_departments = openlab_get_department_list();
 			foreach ( $all_departments as $school => $depts ) {
 				if ( in_array( $user_department, $depts ) ) {
-					$checked_array['schools'][] = $school;
+					$checked_array['schools'][]     = $school;
 					$checked_array['departments'][] = array_search( $user_department, $depts );
 					break;
 				}
@@ -957,22 +955,26 @@ function wds_load_group_type( $group_type ) {
 	$return .= '</td>';
 	$return .= '</tr>';
 
-	// For the love of Pete, it's not that hard to cast variables
-	$wds_faculty = $wds_course_code = $wds_section_code = $wds_semester = $wds_year = $wds_course_html = '';
+	$wds_faculty      = '';
+	$wds_course_code  = '';
+	$wds_section_code = '';
+	$wds_semester     = '';
+	$wds_year         = '';
+	$wds_course_html  = '';
 
 	if ( bp_get_current_group_id() ) {
-		$wds_faculty = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
-		$wds_course_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_code' );
+		$wds_faculty      = groups_get_groupmeta( bp_get_current_group_id(), 'wds_faculty' );
+		$wds_course_code  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_code' );
 		$wds_section_code = groups_get_groupmeta( bp_get_current_group_id(), 'wds_section_code' );
-		$wds_semester = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
-		$wds_year = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
-		$wds_course_html = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
+		$wds_semester     = groups_get_groupmeta( bp_get_current_group_id(), 'wds_semester' );
+		$wds_year         = groups_get_groupmeta( bp_get_current_group_id(), 'wds_year' );
+		$wds_course_html  = groups_get_groupmeta( bp_get_current_group_id(), 'wds_course_html' );
 	}
 
 	$last_name = xprofile_get_field_data( 'Last Name', $bp->loggedin_user->id );
 
 	$faculty_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
-	$return .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
+	$return      .= '<input type="hidden" name="wds_faculty" value="' . esc_attr( $faculty_name ) . '">';
 
 	$return .= '</table></div></div>';
 
@@ -999,22 +1001,10 @@ function wds_load_group_type( $group_type ) {
 		$return .= '<td><select class="form-control" id="wds_semester" name="wds_semester">';
 		$return .= '<option value="">--select one--';
 
-		$checked = $Spring = $Summer = $Fall = $Winter = '';
-
-		if ( $wds_semester == 'Spring' ) {
-			$Spring = 'selected';
-		} elseif ( $wds_semester == 'Summer' ) {
-			$Summer = 'selected';
-		} elseif ( $wds_semester == 'Fall' ) {
-			$Fall = 'selected';
-		} elseif ( $wds_semester == 'Winter' ) {
-			$Winter = 'selected';
-		}
-
-		$return .= '<option value="Spring" ' . $Spring . '>Spring';
-		$return .= '<option value="Summer" ' . $Summer . '>Summer';
-		$return .= '<option value="Fall" ' . $Fall . '>Fall';
-		$return .= '<option value="Winter" ' . $Winter . '>Winter';
+		$return .= '<option value="Spring" ' . selected( $wds_semester, 'Spring', false ) . '>Spring';
+		$return .= '<option value="Summer" ' . selected( $wds_semester, 'Summer', false ) . '>Summer';
+		$return .= '<option value="Fall" ' . selected( $wds_semester, 'Fall', false ) . '>Fall';
+		$return .= '<option value="Winter" ' . selected( $wds_semester, 'Winter', false ) . '>Winter';
 		$return .= '</select></td>';
 		$return .= '</tr>';
 
@@ -1075,13 +1065,13 @@ function openlab_require_school_and_department_for_groups() {
 
 	if ( bp_is_group_create() ) {
 		$group_type = isset( $_GET['type'] ) ? $_GET['type'] : '';
-		$redirect = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
+		$redirect   = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/';
 	} else {
 		$group_type = openlab_get_current_group_type();
-		$redirect = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
+		$redirect   = bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/';
 	}
 
-	if ( openlab_is_school_required_for_group_type( $group_type ) && (bp_is_action_variable( 'group-details', 1 ) || bp_is_action_variable( 'edit-details' )) ) {
+	if ( openlab_is_school_required_for_group_type( $group_type ) && ( bp_is_action_variable( 'group-details', 1 ) || bp_is_action_variable( 'edit-details' ) ) ) {
 
 		if ( ( empty( $_POST['schools'] ) && empty( $_POST['offices'] ) ) || empty( $_POST['departments'] ) ) {
 			bp_core_add_message( 'You must provide a school and department.', 'error' );
@@ -1092,8 +1082,7 @@ function openlab_require_school_and_department_for_groups() {
 
 add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
-
-//Save Group Meta
+// Save Group Meta
 add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
 
 function wds_bp_group_meta_save( $group ) {
@@ -1209,7 +1198,7 @@ function wds_bp_group_meta_save( $group ) {
 	// Site privacy
 	if ( isset( $_POST['blog_public'] ) ) {
 		$blog_public = (float) $_POST['blog_public'];
-		$site_id = openlab_get_site_id_by_group_id( $group->id );
+		$site_id     = openlab_get_site_id_by_group_id( $group->id );
 
 		if ( $site_id ) {
 			update_blog_option( $site_id, 'blog_public', $blog_public );
@@ -1235,47 +1224,7 @@ function wds_bp_group_meta_save( $group ) {
 	}
 }
 
-function wds_get_by_meta( $limit = null, $page = null, $user_id = false, $search_terms = false, $populate_extras = true, $meta_key = null, $meta_value = null ) {
-	global $wpdb, $bp;
-
-	if ( $limit && $page ) {
-		$pag_sql = $wpdb->prepare( ' LIMIT %d, %d', intval( ( $page - 1 ) * $limit ), intval( $limit ) );
-	} else { $pag_sql = '';
-	}
-
-	if ( ! is_user_logged_in() || ( ! is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) ) {
-		$hidden_sql = " AND g.status != 'hidden'";
-	} else { $hidden_sql = '';
-	}
-
-	if ( $search_terms ) {
-		$search_terms = like_escape( $wpdb->escape( $search_terms ) );
-		$search_sql = " AND ( g.name LIKE '%%{$search_terms}%%' OR g.description LIKE '%%{$search_terms}%%' )";
-	} else {
-		$search_sql = '';
-	}
-
-	if ( $user_id ) {
-		$user_id = $wpdb->escape( $user_id );
-		$paged_groups = $wpdb->get_results( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name_members} m, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = m.group_id AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0 ORDER BY g.name ASC {$pag_sql}" );
-		$total_groups = $wpdb->get_var( "SELECT COUNT( DISTINCT m.group_id ) FROM {$bp->groups->table_name_members} m LEFT JOIN {$bp->groups->table_name_groupmeta} gm ON m.group_id = gm.group_id INNER JOIN {$bp->groups->table_name} g ON m.group_id = g.id WHERE gm.meta_key = 'last_activity' {$hidden_sql} {$search_sql} AND m.user_id = {$user_id} AND m.is_confirmed = 1 AND m.is_banned = 0" );
-	} else {
-		$paged_groups = $wpdb->get_results( "SELECT g.*, gm1.meta_value as total_member_count, gm2.meta_value as last_activity FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql} ORDER BY g.name ASC {$pag_sql}" );
-		$total_groups = $wpdb->get_var( "SELECT COUNT( DISTINCT g.id ) FROM {$bp->groups->table_name_groupmeta} gm1, {$bp->groups->table_name_groupmeta} gm2, {$bp->groups->table_name_groupmeta} gm3, {$bp->groups->table_name} g WHERE gm3.meta_key='$meta_key' AND gm3.meta_value='$meta_value' AND g.id = gm1.group_id AND g.id = gm2.group_id AND g.id = gm3.group_id AND gm2.meta_key = 'last_activity' AND gm1.meta_key = 'total_member_count' {$hidden_sql} {$search_sql}" );
-	}
-	//echo $total_groups;
-	if ( ! empty( $populate_extras ) ) {
-		foreach ( (array) $paged_groups as $group ) {
-			$group_ids[] = $group->id;
-		}
-		$group_ids = $wpdb->escape( join( ',', (array) $group_ids ) );
-		$paged_groups = BP_Groups_Group::get_group_extras( $paged_groups, $group_ids, 'newest' );
-	}
-
-	return array( 'groups' => $paged_groups, 'total' => $total_groups );
-}
-
-//Copy the group blog template
+// Copy the group blog template
 function ra_copy_blog_page( $group_id ) {
 	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
@@ -1283,9 +1232,10 @@ function ra_copy_blog_page( $group_id ) {
 	if ( ! empty( $blog['domain'] ) && $group_id ) {
 		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 		if ( ! defined( 'SUNRISE' ) || $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) != $wpdb->dmtable ) {
-			$join = $where = '';
+			$join  = '';
+			$where = '';
 		} else {
-			$join = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
+			$join  = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
 			$where = 'AND d.domain IS NULL ';
 		}
 
@@ -1294,8 +1244,8 @@ function ra_copy_blog_page( $group_id ) {
 		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 		//$domain = str_replace( ".","", $domain );
 		$domain = friendly_url( $blog['domain'] );
-		$email = sanitize_email( $user_email );
-		$title = $_POST['group-name'];
+		$email  = sanitize_email( $user_email );
+		$title  = $_POST['group-name'];
 
 		if ( ! $src_id ) {
 			$msg = __( 'Select a source blog.' );
@@ -1306,17 +1256,17 @@ function ra_copy_blog_page( $group_id ) {
 		} else {
 			if ( constant( 'VHOST' ) == 'yes' ) {
 				$newdomain = $domain . '.' . $current_site->domain;
-				$path = $base;
+				$path      = $base;
 			} else {
 				$newdomain = $current_site->domain;
-				$path = $base . $domain . '/';
+				$path      = $base . $domain . '/';
 			}
 
 			$password = 'N/A';
-			$user_id = email_exists( $email );
+			$user_id  = email_exists( $email );
 			if ( ! $user_id ) {
 				$password = generate_random_password();
-				$user_id = wpmu_create_user( $domain, $password, $email );
+				$user_id  = wpmu_create_user( $domain, $password, $email );
 				if ( false == $user_id ) {
 					$msg = __( 'There was an error creating the user' );
 				} else {
@@ -1325,7 +1275,7 @@ function ra_copy_blog_page( $group_id ) {
 			}
 			$wpdb->hide_errors();
 			$new_id = wpmu_create_blog( $newdomain, $path, $title, $user_id, array( 'public' => 1 ), $current_site->id );
-			$id = $new_id;
+			$id     = $new_id;
 			$wpdb->show_errors();
 			if ( ! is_wp_error( $id ) ) { //if it dont already exists then move over everything
 				$current_user = get_userdata( bp_loggedin_user_id() );
@@ -1333,65 +1283,75 @@ function ra_copy_blog_page( $group_id ) {
 				openlab_set_group_site_id( $group_id, $new_id );
 
 				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
-                  update_user_option( $user_id, 'primary_blog', $id, true ); */
-				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
-				wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
+				  update_user_option( $user_id, 'primary_blog', $id, true ); */
+				$content_mail = sprintf( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
+				wp_mail( get_site_option( 'admin_email' ), sprintf( '[%s] New Blog Created', $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
 				wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ) );
 				$msg = __( 'Site Created' );
 				// now copy
 				$blogtables = $wpdb->base_prefix . $src_id . '_';
-				$newtables = $wpdb->base_prefix . $new_id . '_';
-				$query = "SHOW TABLES LIKE '{$blogtables}%'";
-				//				var_dump( $query );
+				$newtables  = $wpdb->base_prefix . $new_id . '_';
+				$query      = "SHOW TABLES LIKE '{$blogtables}%'";
+
+				// phpcs:disable
 				$tables = $wpdb->get_results( $query, ARRAY_A );
+				// phpcs:enable
+
 				if ( $tables ) {
 					reset( $tables );
-					$create = array();
-					$data = array();
-					$len = strlen( $blogtables );
+					$create     = array();
+					$data       = array();
+					$len        = strlen( $blogtables );
 					$create_col = 'Create Table';
 					// add std wp tables to this array
 					$wptables = array(
-					$blogtables . 'links',
-					$blogtables . 'postmeta',
-					$blogtables . 'posts',
+						$blogtables . 'links',
+						$blogtables . 'postmeta',
+						$blogtables . 'posts',
 						$blogtables . 'terms',
-					$blogtables . 'term_taxonomy',
-					$blogtables . 'term_relationships',
+						$blogtables . 'term_taxonomy',
+						$blogtables . 'term_relationships',
 					);
 					for ( $i = 0; $i < count( $tables ); $i++ ) {
 						$table = current( $tables[ $i ] );
 						if ( substr( $table, 0, $len ) == $blogtables ) {
 							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+								// phpcs:disable
 								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
-								$data[ $table ] = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+								// phpcs:enable
 							}
 						}
 					}
-					//					var_dump( $create );
+
 					if ( $data ) {
 						switch_to_blog( $src_id );
 						$src_upload_dir = wp_upload_dir();
-						$src_url = get_option( 'siteurl' );
-						$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
+						$src_url        = get_option( 'siteurl' );
+						$option_query   = "SELECT option_name, option_value FROM {$wpdb->options}";
 						restore_current_blog();
 						$new_url = get_blog_option( $new_id, 'siteurl' );
 						foreach ( $data as $k => $v ) {
 							$table = str_replace( $blogtables, $newtables, $k );
 							if ( in_array( $k, $wptables ) ) { // drop new blog table
-								$query = "DROP TABLE IF EXISTS {$table}";
-								$wpdb->query( $query );
+								// phpcs:disable
+								$wpdb->query( "DROP TABLE IF EXISTS $table" );
+								// phpcs:enable
 							}
-							$key = (array) $create[ $k ];
+							$key   = (array) $create[ $k ];
 							$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
+
+							// phpcs:disable
 							$wpdb->query( $query );
+							// phpcs:enable
+
 							$is_post = ( $k == $blogtables . 'posts' );
 							if ( $v ) {
 								foreach ( $v as $row ) {
 									if ( $is_post ) {
-										$row['guid'] = str_replace( $src_url, $new_url, $row['guid'] );
+										$row['guid']         = str_replace( $src_url, $new_url, $row['guid'] );
 										$row['post_content'] = str_replace( $src_url, $new_url, $row['post_content'] );
-										$row['post_author'] = $user_id;
+										$row['post_author']  = $user_id;
 									}
 									$wpdb->insert( $table, $row );
 								}
@@ -1403,25 +1363,28 @@ function ra_copy_blog_page( $group_id ) {
 
 						// update options
 						$skip_options = array(
-						'admin_email',
-						'blogname',
-						'blogdescription',
-						'cron',
-						'db_version',
-						'doing_cron',
+							'admin_email',
+							'blogname',
+							'cron',
+							'db_version',
+							'doing_cron',
 							'fileupload_url',
-						'home',
-						'new_admin_email',
-						'nonce_salt',
-						'random_seed',
-						'rewrite_rules',
-						'secret',
-						'siteurl',
-						'upload_path',
+							'home',
+							'new_admin_email',
+							'nonce_salt',
+							'random_seed',
+							'rewrite_rules',
+							'secret',
+							'siteurl',
+							'upload_path',
 							'upload_url_path',
-						"{$wpdb->base_prefix}{$src_id}_user_roles",
+							"{$wpdb->base_prefix}{$src_id}_user_roles",
 						);
+
+						// phpcs:disable
 						$options = $wpdb->get_results( $option_query );
+						// phpcs:enable
+
 						//new blog stuff
 						if ( $options ) {
 							switch_to_blog( $new_id );
@@ -1464,8 +1427,8 @@ function ra_copy_blog_page( $group_id ) {
 	}
 }
 
-//this is a function for sanitizing the website name
-//source http://cubiq.org/the-perfect-php-clean-url-generator
+// this is a function for sanitizing the website name
+// source http://cubiq.org/the-perfect-php-clean-url-generator
 function friendly_url( $str, $replace = array(), $delimiter = '-' ) {
 	if ( ! empty( $replace ) ) {
 		$str = str_replace( (array) $replace, ' ', $str );
@@ -1531,8 +1494,8 @@ class OpenLab_Change_User_Type {
 		$account_type = xprofile_get_field_data( 'Account Type', $user->ID );
 
 		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
-		$field = new BP_XProfile_Field( $field_id );
-		$options = $field->get_children();
+		$field    = new BP_XProfile_Field( $field_id );
+		$options  = $field->get_children();
 		?>
 
 		<h3>OpenLab Account Type</h3>
@@ -1545,7 +1508,7 @@ class OpenLab_Change_User_Type {
 
 				<td>
 					<?php foreach ( $options as $option ) : ?>
-						<label><input type="radio" name="openlab_account_type" value="<?php echo $option->name ?>" <?php checked( $account_type, $option->name ) ?>> <?php echo $option->name ?><br /></label>
+						<label><input type="radio" name="openlab_account_type" value="<?php echo $option->name; ?>" <?php checked( $account_type, $option->name ); ?>> <?php echo $option->name; ?><br /></label>
 						<?php endforeach ?>
 				</td>
 			</tr>
@@ -1581,7 +1544,9 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 		}
 
 		// Make sure it's the right faculty member
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = '%d' LIMIT 1", get_current_blog_id() ) );
+		// phpcs:disable
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d LIMIT 1", get_current_blog_id() ) );
+		// phpcs:enable
 
 		if ( ! empty( $group_id ) && ! groups_is_user_admin( get_current_user_id(), (int) $group_id ) ) {
 			return '';
@@ -1603,26 +1568,32 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 /**
  * No access redirects should happen from wp-login.php
  */
-add_filter( 'bp_no_access_mode', function() {
-	return 2;
-} );
+add_filter(
+	'bp_no_access_mode',
+	function() {
+		return 2;
+	}
+);
 
 /**
  * Don't auto-link items in profiles
  * Hooked to bp_screens so that it gets fired late enough
  */
-add_action( 'bp_screens', function() {
-	remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
-} );
+add_action(
+	'bp_screens',
+	function() {
+		remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
+	}
+);
 
 //Change "Group" to something else
-class buddypress_Translation_Mangler {
+class Buddypress_Translation_Mangler {
 	/*
-     * Filter the translation string before it is displayed.
-     *
-     * This function will choke if we try to load it when not viewing a group page or in a group loop
-     * So we bail in cases where neither of those things is present, by checking $groups_template
-     */
+	 * Filter the translation string before it is displayed.
+	 *
+	 * This function will choke if we try to load it when not viewing a group page or in a group loop
+	 * So we bail in cases where neither of those things is present, by checking $groups_template
+	 */
 
 	static function filter_gettext( $translation, $text, $domain ) {
 		global $bp, $groups_template;
@@ -1679,7 +1650,7 @@ class buddypress_Translation_Mangler {
 			case 'Create a Group':
 				return $translations->translate( 'Create a ' . $uc_grouptype );
 				break;
-			case 'Manage' :
+			case 'Manage':
 				return $translations->translate( 'Settings' );
 				break;
 		}
@@ -1689,7 +1660,7 @@ class buddypress_Translation_Mangler {
 }
 
 function openlab_launch_translator() {
-	add_filter( 'gettext', array( 'buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
@@ -1701,7 +1672,7 @@ function openlab_gettext_with_context( $translations, $text, $context, $domain )
 		return $translations;
 	}
 	switch ( $text ) {
-		case 'Manage' :
+		case 'Manage':
 			if ( 'My Group screen nav' === $context ) {
 				return 'Settings';
 			}
@@ -1710,7 +1681,9 @@ function openlab_gettext_with_context( $translations, $text, $context, $domain )
 	return $translations;
 }
 
+// phpcs:disable
 class bbPress_Translation_Mangler {
+// phpcs:enable
 
 	static function filter_gettext( $translation, $text, $domain ) {
 		if ( 'bbpress' != $domain ) {
@@ -1727,11 +1700,10 @@ class bbPress_Translation_Mangler {
 
 }
 
-class buddypress_ajax_Translation_Mangler {
+class Buddypress_Ajax_Translation_Mangler {
 	/*
-     * Filter the translation string before it is displayed.
-     */
-
+	 * Filter the translation string before it is displayed.
+	 */
 	static function filter_gettext( $translation, $text, $domain ) {
 		$translations = get_translations_for_domain( 'buddypress' );
 		switch ( $text ) {
@@ -1746,62 +1718,10 @@ class buddypress_ajax_Translation_Mangler {
 }
 
 function openlab_launch_ajax_translator() {
-	add_filter( 'gettext', array( 'buddypress_ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
 }
 
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
-
-/**
- * When a user attempts to visit a blog, check to see if the user is a member of the
- * blog's associated group. If so, ensure that the member has access.
- *
- * This function should be deprecated when a more elegant solution is found.
- * See http://openlab.citytech.cuny.edu/redmine/issues/317 for more discussion.
- */
-function openlab_sync_blog_members_to_group() {
-	global $wpdb, $bp;
-
-	// No need to continue if the user is not logged in, if this is not an admin page, or if
-	// the current blog is not private
-	$blog_public = get_option( 'blog_public' );
-	if ( ! is_user_logged_in() || ! is_admin() || (int) $blog_public < 0 ) {
-		return;
-	}
-
-	$user_id = get_current_user_id();
-	$userdata = get_userdata( $user_id );
-
-	// Is the user already a member of the blog?
-	if ( empty( $userdata->caps ) ) {
-
-		// Is this blog associated with a group?
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-
-		if ( $group_id ) {
-
-			// Is this user a member of the group?
-			if ( groups_is_user_member( $user_id, $group_id ) ) {
-
-				// Figure out the status
-				if ( groups_is_user_admin( $user_id, $group_id ) ) {
-					$status = 'administrator';
-				} elseif ( groups_is_user_mod( $user_id, $group_id ) ) {
-					$status = 'editor';
-				} else {
-					$status = 'author';
-				}
-
-				// Add the user to the blog
-				add_user_to_blog( get_current_blog_id(), $user_id, $status );
-
-				// Redirect to avoid errors
-				echo '<script type="text/javascript">window.location="' . $_SERVER['REQUEST_URI'] . '";</script>';
-			}
-		}
-	}
-}
-
-//add_action( 'init', 'openlab_sync_blog_members_to_group', 999 ); // make sure BP is loaded
 
 /**
  * Interfere in the comment posting process to allow for duplicates on the same post
@@ -1812,7 +1732,7 @@ function openlab_sync_blog_members_to_group() {
 function openlab_enable_duplicate_comments_preprocess_comment( $comment_data ) {
 	if ( is_user_logged_in() ) {
 		//add some random content to comment to keep dupe checker from finding it
-		$random = md5( time() );
+		$random                           = md5( time() );
 		$comment_data['comment_content'] .= 'disabledupes{' . $random . '}disabledupes';
 	}
 
@@ -1829,10 +1749,10 @@ function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
 
 	if ( is_user_logged_in() ) {
 
-		//remove the random content
-		$comment_content = $wpdb->get_var( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = '$comment_id' LIMIT 1" );
+		// Remove the random content.
+		$comment_content = $wpdb->get_var( $wpdb->prepare( "SELECT comment_content FROM $wpdb->comments WHERE comment_ID = %d LIMIT 1", $comment_id ) );
 		$comment_content = preg_replace( '/disabledupes\{.*\}disabledupes/', '', $comment_content );
-		$wpdb->query( "UPDATE $wpdb->comments SET comment_content = '" . $wpdb->escape( $comment_content ) . "' WHERE comment_ID = '$comment_id' LIMIT 1" );
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->comments SET comment_content = %s WHERE comment_ID = %d LIMIT 1", $comment_content, $comment_id ) );
 
 		clean_comment_cache( array( $comment_id ) );
 	}
@@ -1851,12 +1771,12 @@ function openlab_newuser_notify_siteadmin( $message ) {
 	preg_match( '|New User: ( .* )|', $message, $matches );
 
 	if ( ! empty( $matches ) ) {
-		$user = get_user_by( 'login', $matches[1] );
+		$user        = get_user_by( 'login', $matches[1] );
 		$profile_url = bp_core_get_user_domain( $user->ID );
 
 		if ( $profile_url ) {
 			$message_a = explode( 'Remote IP', $message );
-			$message = $message_a[0] . 'Profile URL: ' . $profile_url . "\n" . 'Remote IP' . $message_a[1];
+			$message   = $message_a[0] . 'Profile URL: ' . $profile_url . "\n" . 'Remote IP' . $message_a[1];
 		}
 	}
 
@@ -1884,18 +1804,15 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
 		$case = 'single';
 	}
 
-	// Set a group id. The elseif statements allow for cascading logic; if the first is not
-	// found, fall to the second, etc.
+	// Set a group id.
 	$group_id = (int) $group_id;
-	if ( ! $group_id && $group_id = bp_get_current_group_id() ) {
-
-	} // current group
-	elseif ( ! $group_id && $group_id = bp_get_new_group_id() ) {
-
-	} // new group
-	elseif ( ! $group_id && $group_id = bp_get_group_id() ) {
-
-	}         // group in loop
+	if ( ! $group_id && bp_get_current_group_id() ) {
+		$group_id = bp_get_current_group_id();
+	} elseif ( ! $group_id && bp_get_new_group_id() ) {
+		$group_id = bp_get_new_group_id();
+	} elseif ( ! $group_id && bp_get_group_id() ) {
+		$group_id = bp_get_group_id();
+	}
 
 	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
@@ -1904,24 +1821,24 @@ function openlab_group_type( $case = 'lower', $count = 'single', $group_id = 0 )
 	}
 
 	switch ( $case ) {
-		case 'lower' :
+		case 'lower':
 			$group_type = strtolower( $group_type );
 			break;
 
-		case 'title' :
+		case 'title':
 			$group_type = ucwords( $group_type );
 			break;
 
-		case 'upper' :
+		case 'upper':
 			$group_type = strtoupper( $group_type );
 			break;
 	}
 
 	switch ( $count ) {
-		case 'single' :
+		case 'single':
 			break;
 
-		case 'plural' :
+		case 'plural':
 			$group_type .= 's';
 			break;
 	}
@@ -2009,8 +1926,8 @@ function openlab_is_my_profile() {
 		return true;
 	}
 
-	//for the group creating pages
-	if ( $bp->current_action == 'create' ) {
+	// For the group creating pages.
+	if ( 'create' === $bp->current_action ) {
 		return true;
 	}
 
@@ -2023,8 +1940,8 @@ function openlab_is_my_profile() {
 function openlab_addl_settings_fields() {
 	global $bp;
 
-	$fname = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
-	$lname = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
+	$fname        = isset( $_POST['fname'] ) ? $_POST['fname'] : '';
+	$lname        = isset( $_POST['lname'] ) ? $_POST['lname'] : '';
 	$account_type = isset( $_POST['account_type'] ) ? $_POST['account_type'] : '';
 
 	// Don't let this continue if a password error was recorded
@@ -2043,9 +1960,9 @@ function openlab_addl_settings_fields() {
 
 	if ( ! empty( $account_type ) ) {
 		//saving account type for students or alumni
-		$types = array( 'Student', 'Alumni' );
+		$types        = array( 'Student', 'Alumni' );
 		$account_type = in_array( $_POST['account_type'], $types ) ? $_POST['account_type'] : 'Student';
-		$user_id = bp_displayed_user_id();
+		$user_id      = bp_displayed_user_id();
 		$current_type = openlab_get_displayed_user_account_type();
 
 		// Only students and alums can do this
@@ -2191,10 +2108,10 @@ add_action( 'wp', 'openlab_swap_private_blog_message' );
 function openlab_private_blog_message() {
 	global $ds_more_privacy_options;
 
-	$blog_id = get_current_blog_id();
-	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
+	$blog_id   = get_current_blog_id();
+	$group_id  = openlab_get_group_id_by_blog_id( $blog_id );
 	$group_url = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
-	$user_id = get_current_user_id();
+	$user_id   = get_current_user_id();
 
 	if ( is_user_member_of_blog( $user_id, $blog_id ) || is_super_admin() ) {
 		return;
@@ -2202,7 +2119,7 @@ function openlab_private_blog_message() {
 		openlab_ds_login_header();
 		?>
 		<form name="loginform" id="loginform" />
-		<p>To become a member of this site, please request membership on <a href="<?php echo esc_attr( $group_url ) ?>">the profile page</a>.</p>
+		<p>To become a member of this site, please request membership on <a href="<?php echo esc_attr( $group_url ); ?>">the profile page</a>.</p>
 		</form>
 		</div>
 		</body>
@@ -2248,13 +2165,14 @@ function openlab_ds_login_header() {
 					form { margin-left: 0px; }
 					#login { margin-top: 20px; }
 				</style>
-			<?php } elseif ( isset( $interim_login ) && $interim_login ) {
+				<?php
+			} elseif ( isset( $interim_login ) && $interim_login ) {
 				?>
 				<style type="text/css" media="all">
 					.login #login { margin: 20px auto; }
 				</style>
 				<?php
-}
+			}
 
 			do_action( 'login_head' );
 			?>
@@ -2275,9 +2193,11 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			'openlab_course_portfolios_widget', 'Portfolio List', array(
-			'description' => 'Display a list of the Portfolios belonging to the members of this course.',
-				)
+			'openlab_course_portfolios_widget',
+			'Portfolio List',
+			array(
+				'description' => 'Display a list of the Portfolios belonging to the members of this course.',
+			)
 		);
 	}
 
@@ -2286,8 +2206,8 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 
 		echo $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'];
 
-		$name_key = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
-		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$name_key   = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
+		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
 		if ( '1' === $instance['display_as_dropdown'] ) {
@@ -2329,37 +2249,40 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['title']               = strip_tags( $new_instance['title'] );
 		$instance['display_as_dropdown'] = ! empty( $new_instance['display_as_dropdown'] ) ? '1' : '';
-		$instance['sort_by'] = in_array( $new_instance['sort_by'], array( 'random', 'display_name', 'title' ) ) ? $new_instance['sort_by'] : 'display_name';
-		$instance['num_links'] = isset( $new_instance['num_links'] ) ? (int) $new_instance['num_links'] : '';
+		$instance['sort_by']             = in_array( $new_instance['sort_by'], array( 'random', 'display_name', 'title' ) ) ? $new_instance['sort_by'] : 'display_name';
+		$instance['num_links']           = isset( $new_instance['num_links'] ) ? (int) $new_instance['num_links'] : '';
 		return $instance;
 	}
 
 	public function form( $instance ) {
-		$settings = wp_parse_args($instance, array(
-			'title' => 'Member Portfolios',
-			'display_as_dropdown' => '0',
-			'sort_by' => 'title',
-			'num_links' => false,
-		));
+		$settings = wp_parse_args(
+			$instance,
+			array(
+				'title'               => 'Member Portfolios',
+				'display_as_dropdown' => '0',
+				'sort_by'             => 'title',
+				'num_links'           => false,
+			)
+		);
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ) ?>">Title:</label><br />
-			<input name="<?php echo $this->get_field_name( 'title' ) ?>" id="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $settings['title'] ) ?>" />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title:</label><br />
+			<input name="<?php echo $this->get_field_name( 'title' ); ?>" id="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $settings['title'] ); ?>" />
 					</p>
 
 					<p>
-			<input name="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" id="<?php echo $this->get_field_name( 'display_as_dropdown' ) ?>" value="1" <?php checked( $settings['display_as_dropdown'], '1' ) ?> type="checkbox" />
-			<label for="<?php echo $this->get_field_id( 'display_as_dropdown' ) ?>">Display as dropdown</label>
+			<input name="<?php echo $this->get_field_name( 'display_as_dropdown' ); ?>" id="<?php echo $this->get_field_name( 'display_as_dropdown' ); ?>" value="1" <?php checked( $settings['display_as_dropdown'], '1' ); ?> type="checkbox" />
+			<label for="<?php echo $this->get_field_id( 'display_as_dropdown' ); ?>">Display as dropdown</label>
 					</p>
 
 					<p>
-			<label for="<?php echo $this->get_field_id( 'sort_by' ) ?>">Sort by:</label><br />
-			<select name="<?php echo $this->get_field_name( 'sort_by' ) ?>" id="<?php echo $this->get_field_name( 'sort_by' ) ?>">
-				<option value="title" <?php selected( $settings['sort_by'], 'title' ) ?>>Portfolio title</option>
-				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ) ?>>Member name</option>
-				<option value="random" <?php selected( $settings['sort_by'], 'random' ) ?>>Random</option>
+			<label for="<?php echo $this->get_field_id( 'sort_by' ); ?>">Sort by:</label><br />
+			<select name="<?php echo $this->get_field_name( 'sort_by' ); ?>" id="<?php echo $this->get_field_name( 'sort_by' ); ?>">
+				<option value="title" <?php selected( $settings['sort_by'], 'title' ); ?>>Portfolio title</option>
+				<option value="display_name" <?php selected( $settings['sort_by'], 'display_name' ); ?>>Member name</option>
+				<option value="random" <?php selected( $settings['sort_by'], 'random' ); ?>>Random</option>
 			</select>
 					</p>
 
@@ -2402,7 +2325,10 @@ add_action( 'widgets_init', 'openlab_register_portfolios_widget' );
  */
 function openlab_get_exclude_groups_for_account_type( $type ) {
 	global $wpdb, $bp;
+
+	// phpcs:disable
 	$groups = $wpdb->get_results( "SELECT id, name FROM {$bp->profile->table_name_groups}" );
+	// phpcs:enable
 
 	// Reindex
 	$gs = array();
@@ -2505,9 +2431,9 @@ function openlab_email_from_name_filter() {
 add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
 
 function openlab_email_appearance_settings( $settings ) {
-	$settings['email_bg'] = '#fff';
-	$settings['header_bg'] = '#fff';
-	$settings['footer_bg'] = '#fff';
+	$settings['email_bg']        = '#fff';
+	$settings['header_bg']       = '#fff';
+	$settings['footer_bg']       = '#fff';
 	$settings['highlight_color'] = '#5cd8cd';
 	return $settings;
 }
@@ -2524,7 +2450,7 @@ add_filter( 'bp_after_email_appearance_settings_parse_args', 'openlab_email_appe
  * @return string Updated value.
  */
 function openlab_bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
-	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
+	if ( 'template' !== $property_name || 'add-content' !== $transform ) {
 		return $value;
 	}
 
@@ -2534,7 +2460,9 @@ function openlab_bp_email_add_link_color_to_template( $value, $property_name, $t
 	// Find all links.
 	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
 	foreach ( $links as $link ) {
-		$new_link = $link = array_shift( $link );
+		$new_link = array_shift( $link );
+
+		$link = $new_link;
 
 		// Add/modify style property.
 		if ( strpos( $link, 'style="' ) !== false ) {
@@ -2604,33 +2532,36 @@ add_filter( 'option_wpa_toolbar', '__return_empty_string' );
 /**
  * Hide WP Accessibility Toolbar settings.
  */
-add_action( 'admin_footer', function() {
-	global $pagenow;
+add_action(
+	'admin_footer',
+	function() {
+		global $pagenow;
 
-	if ( 'options-general.php' !== $pagenow ) {
-		return;
-	}
+		if ( 'options-general.php' !== $pagenow ) {
+			return;
+		}
 
-	if ( empty( $_GET['page'] ) || 'wp-accessibility/wp-accessibility.php' !== $_GET['page'] ) {
-		return;
-	}
+		if ( empty( $_GET['page'] ) || 'wp-accessibility/wp-accessibility.php' !== $_GET['page'] ) {
+			return;
+		}
 
-	?>
+		?>
 <script type="text/javascript">
 	jQuery( document ).ready( function() {
 		jQuery( '#wpa_toolbar' ).closest( '.postbox' ).hide();
 	} );
 </script>
-	<?php
+		<?php
 
-} );
+	}
+);
 
 function openlab_wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
 	if ( false === strpos( $html, 'alt-missing.png' ) ) {
 		return $html;
 	}
 
-	$url = set_url_scheme( home_url() );
+	$url  = set_url_scheme( home_url() );
 	$html = str_replace( 'src=\'' . trailingslashit( $url ) . 'wp-content/plugins/wp-accessibility/imgs/alt-missing.png\'', 'src=\'' . trailingslashit( $url ) . 'wp-content/mu-plugins/img/AltTextWarning.png\'', $html );
 	return $html;
 }
@@ -2651,60 +2582,79 @@ add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
 /**
  * Prevent wp-accessibility from adding its own Log Out link to the toolbar.
  */
-add_action( 'plugins_loaded', function() {
-	remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
-} );
+add_action(
+	'plugins_loaded',
+	function() {
+		remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
+	}
+);
 
 /**
  * Unregister wp-accessibility widget.
  */
-add_action( 'widgets_init', function() {
-	unregister_widget( 'wp_accessibility_toolbar' );
-}, 20 );
+add_action(
+	'widgets_init',
+	function() {
+		unregister_widget( 'wp_accessibility_toolbar' );
+	},
+	20
+);
 
 /**
  * Force bbPress roles to have the 'read' capability.
  *
  * Without 'read', users can't access my-sites.php.
  */
-add_filter( 'bbp_get_dynamic_roles', function( $roles ) {
-	foreach ( $roles as &$role ) {
-		$role['capabilities']['read'] = true;
-	}
+add_filter(
+	'bbp_get_dynamic_roles',
+	function( $roles ) {
+		foreach ( $roles as &$role ) {
+			$role['capabilities']['read'] = true;
+		}
 
-	return $roles;
-} );
+		return $roles;
+	}
+);
 
 /**
  * Don't let Ultimate Category Excluder operate on loops other than the main loop.
  *
  * Prevents conflicts with Category Sticky Post. See #2263.
  */
-add_action( 'pre_get_posts', function( $query ) {
-	if ( ! $query->is_main_query() ) {
-		remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+add_action(
+	'pre_get_posts',
+	function( $query ) {
+		if ( ! $query->is_main_query() ) {
+			remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+		}
+	},
+	0
+);
+
+add_filter(
+	'mime_types',
+	function( $types ) {
+		// AutoCAD - #2332.
+		$types['ctb|stb']         = 'application/octet-stream';
+		$types['dwg|dxf|acd|dwt'] = 'application/acad';
+		$types['vwx']             = 'application/vnd.vectorworks';
+
+		return $types;
 	}
-}, 0 );
-
-add_filter( 'mime_types', function( $types ) {
-	// AutoCAD - #2332.
-	$types['ctb|stb'] = 'application/octet-stream';
-	$types['dwg|dxf|acd|dwt'] = 'application/acad';
-	$types['vwx'] = 'application/vnd.vectorworks';
-
-
-	return $types;
-} );
+);
 
 /** TablePress mods **********************************************************/
 
 /**
  * Pagination should be disabled by default.
  */
-add_filter( 'tablepress_table_template', function( $table ) {
-	$table['options']['datatables_paginate'] = false;
-	return $table;
-} );
+add_filter(
+	'tablepress_table_template',
+	function( $table ) {
+		$table['options']['datatables_paginate'] = false;
+		return $table;
+	}
+);
 
 /**
  * Don't let TablePress save CSS to a file.
@@ -2714,21 +2664,29 @@ add_filter( 'tablepress_save_custom_css_to_file', '__return_false' );
 /**
  * Don't let users uninstall TablePress.
  */
-add_filter( 'map_meta_cap', function( $caps, $cap, $user_id ) {
-	if ( 'tablepress_delete_tables' !== $cap ) {
-		return $caps;
-	}
+add_filter(
+	'map_meta_cap',
+	function( $caps, $cap, $user_id ) {
+		if ( 'tablepress_delete_tables' !== $cap ) {
+			return $caps;
+		}
 
-	return array( 'do_not_allow' );
-}, 10, 4 );
+		return array( 'do_not_allow' );
+	},
+	10,
+	4
+);
 
 /**
  * DK PDF cache directory.
  */
-add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
-	$upload_dir = wp_upload_dir();
-	return $upload_dir['basedir'] . '/dkpdf-tmp';
-} );
+add_filter(
+	'dkpdf_mpdf_temp_dir',
+	function( $dir ) {
+		$upload_dir = wp_upload_dir();
+		return $upload_dir['basedir'] . '/dkpdf-tmp';
+	}
+);
 
 /**
  * School/Office/Department selector markup.
@@ -2742,11 +2700,14 @@ add_filter( 'dkpdf_mpdf_temp_dir', function( $dir ) {
  */
 function openlab_academic_unit_selector( $args = array() ) {
 	$_checked = $args['checked'] ?: array();
-    $checked  = array_merge( array(
-        'schools'     => array(),
-        'offices'     => array(),
-        'departments' => array(),
-    ), $_checked );
+	$checked  = array_merge(
+		array(
+			'schools'     => array(),
+			'offices'     => array(),
+			'departments' => array(),
+		),
+		$_checked
+	);
 
 	$allowed_entities = [ 'school', 'office' ];
 	if ( isset( $args['entities'] ) && is_array( $args['entities'] ) ) {
@@ -2758,32 +2719,44 @@ function openlab_academic_unit_selector( $args = array() ) {
 	$legacy   = ! empty( $args['legacy'] );
 	$required = ! empty( $args['required'] );
 
-    $schools = openlab_get_school_list();
-    $offices = openlab_get_office_list();
+	$schools = openlab_get_school_list();
+	$offices = openlab_get_office_list();
 
-    // Flatten and alphabetize.
-    $_departments = openlab_get_entity_departments();
-    $departments  = array();
-    foreach ( $_departments as $_entity_slug => $_depts ) {
-        foreach ( $_depts as $_dept_slug => $_dept_value ) {
-            $_dept_value['parent'] = $_entity_slug;
-            $departments[ $_dept_slug ] = $_dept_value;
-        }
-    }
+	// Flatten and alphabetize.
+	$_departments = openlab_get_entity_departments();
+	$departments  = array();
+	foreach ( $_departments as $_entity_slug => $_depts ) {
+		foreach ( $_depts as $_dept_slug => $_dept_value ) {
+			$_dept_value['parent']      = $_entity_slug;
+			$departments[ $_dept_slug ] = $_dept_value;
+		}
+	}
 
-    uasort( $departments, function( $a, $b ) {
-        return strnatcasecmp( $a['label'], $b['label'] );
-    } );
+	uasort(
+		$departments,
+		function( $a, $b ) {
+			return strnatcasecmp( $a['label'], $b['label'] );
+		}
+	);
 
-    wp_enqueue_script( 'openlab-academic-units' );
+	wp_enqueue_script( 'openlab-academic-units' );
 
-    ?>
+	$selector_class = 'academic-unit-selector';
+	$legend_class   = '';
+	if ( $legacy ) {
+		$selector_class .= ' academic-unit-selector-legacy';
+		$legend_class   .= 'sr-only';
+	}
 
-    <div class="academic-unit-selector <?php if ( $legacy ) : ?> academic-unit-selector-legacy<?php endif; ?>">
+	$required_gloss = $required ? '(required)' : '';
+
+	?>
+
+	<div class="<?php echo esc_attr( $selector_class ); ?>">
 
 	<?php if ( in_array( 'school', $entities, true ) ) : ?>
 		<fieldset class="school-selector">
-			<legend<?php if ( $legacy ) : ?> class="sr-only"<?php endif; ?>>Schools:</legend>
+			<legend class="<?php echo esc_attr( $legend_class ); ?>">Schools:</legend>
 
 			<div class="school-inputs entity-inputs">
 				<ul>
@@ -2817,37 +2790,57 @@ function openlab_academic_unit_selector( $args = array() ) {
 		</fieldset>
 	<?php endif; ?>
 
-    <fieldset class="department-selector">
-        <legend>Departments<?php if ( $required ) : ?> (required)<?php endif; ?>:</legend>
-        <div class="checkbox-list-container department-list-container">
-            <div class="cboxol-units-of-type">
-                <ul>
-                <?php foreach ( $departments as $dept_slug => $dept ) : ?>
-                    <li class="academic-unit academic-unit-visible">
-                        <?php
-                        $parent_attr = $dept['parent'];
-                        $id_attr     = 'academic-unit-' . $dept_slug;
-                        ?>
+	<fieldset class="department-selector">
+		<legend>Departments <?php echo esc_html( $required_gloss ); ?></legend>
+		<div class="checkbox-list-container department-list-container">
+			<div class="cboxol-units-of-type">
+				<ul>
+				<?php foreach ( $departments as $dept_slug => $dept ) : ?>
+					<li class="academic-unit academic-unit-visible">
+						<?php
+						$parent_attr = $dept['parent'];
+						$id_attr     = 'academic-unit-' . $dept_slug;
+						?>
 
-                        <input
-                            <?php checked( in_array( $dept_slug, $checked['departments'], true ) ); ?>
-                            class="academic-unit-checkbox"
-                            data-parent="<?php echo esc_attr( $parent_attr ); ?>"
-                            id="<?php echo esc_attr( $id_attr ); ?>"
-                            name="departments[]"
-                            type="checkbox"
-                            value="<?php echo esc_attr( $dept_slug ); ?>"
-                        /> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
-                    </li>
-                <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-    </fieldset>
+						<input
+							<?php checked( in_array( $dept_slug, $checked['departments'], true ) ); ?>
+							class="academic-unit-checkbox"
+							data-parent="<?php echo esc_attr( $parent_attr ); ?>"
+							id="<?php echo esc_attr( $id_attr ); ?>"
+							name="departments[]"
+							type="checkbox"
+							value="<?php echo esc_attr( $dept_slug ); ?>"
+						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
+		</div>
+	</fieldset>
 
 	<?php wp_nonce_field( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' ); ?>
 
-    </div>
+	</div>
 
-    <?php
+	<?php
+}
+
+/**
+ * Don't allow TGMPA to show admin notices.
+ *
+ * This is meant specifically for TinyMCE Comment Field. See #2452.
+ */
+if ( is_admin() ) {
+	add_filter(
+		'get_user_metadata',
+		function( $retval, $user_id, $meta_key ) {
+			if ( 'tgmpa_dismissed_notice_tgmpa' !== $meta_key ) {
+				return $retval;
+			}
+
+			return 1;
+		},
+		10,
+		3
+	);
 }
