@@ -251,7 +251,7 @@ var anthologize = {
 			'</div>';
 	*/
 
-	var buttons = 	'<div class="part-item-buttons">' +
+	var buttons = 	'<div class="part-item-buttons anth-buttons">' +
 				'<a href="post.php?post=' + new_item_id + '&amp;action=edit">' + anth_strings.edit + '</a> | ' +
 				'<a class="append" href="#append">' + anth_strings.append + '</a><span class="append-sep toggle-sep"> | </span>' +
 				'<a class="anth-preview anth-preview-item" href="admin.php?page=anthologize&anth_preview=1&post_type=anth_library_item&post_id=' + new_item_id + '" target="new">' + anth_strings.preview + '</a><span class="toggle-sep"> | </span>' +
@@ -596,6 +596,10 @@ jQuery(document).ready(function(){
 		});
 		anthologize.toggleCollapseCookie(part.attr('id'));
 	});
+
+	jQuery('#project-organizer-frame').on('click', '.accordion-toggle', function( e ) {
+		jQuery(e.target).closest('.has-accordion').toggleClass('accordion-closed');
+	} );
 
 	var cp = jQuery.cookie('collapsedparts');
 	if (cp){
