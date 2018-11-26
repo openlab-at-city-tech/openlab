@@ -234,7 +234,7 @@ jQuery(document).ready(function($){
 					$school_input = $(this);
 					if ( -1 < $.inArray( $school_input.val(), r.schools ) ) {
 						$school_input.attr('checked', true);
-						wds_load_group_departments();
+//						wds_load_group_departments();
 
 						// Departments are fetched via
 						// AJAX, so we do a lame delay
