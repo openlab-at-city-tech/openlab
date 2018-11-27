@@ -1,12 +1,12 @@
-<?php 
+<?php
 	global $options;
-	foreach ($options as $value) { 
-		if ( get_option( $value['id'] ) === FALSE && isset( $value['std'] ) ) { 
-			$$value['id'] = $value['std']; 
-		} else { 
-			$$value['id'] = get_option( $value['id'] ); 
-		} 
-	} 
+	foreach ($options as $value) {
+		if ( get_option( $value['id'] ) === FALSE && isset( $value['std'] ) ) {
+			${$value['id']} = $value['std'];
+		} else {
+			${$value['id']} = get_option( $value['id'] );
+		}
+	}
 ?>
 
 <div class="widget brownbox">
@@ -32,7 +32,7 @@
 		<?php echo the_excerpt() ?>
 		<p><strong><?php echo $post->post_title ?>,<br /><?php echo $line2 ?></strong></p>
 	<?php endforeach; ?>
-	
+
 	<div class="read_more"><a href="<?php echo esc_url(home_url('/')); ?>?cat=<?php echo $ahstheme_recid ?>">Read More</a></div>
-	
+
 </div>
