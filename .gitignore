@@ -58,3 +58,5 @@ wp-config.php
 #hiding vendor files
 wp-content/themes/*/node_modules/
 wp-content/themes/*/nbproject/
+
+/vendor/
