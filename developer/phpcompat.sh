@@ -14,6 +14,7 @@ ignores=(
   'wp-content/plugins/buddypress/cli/features'
   'wp-content/plugins/digressit'
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
+  'wp-content/plugins/download-monitor/src/DownloadHandler.php'
 #  'wp-content/plugins/easy-visualization-tools'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
 #  'wp-content/plugins/extended-categories-widget/2.8'
