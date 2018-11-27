@@ -5,7 +5,7 @@ dirs=("wp-content/plugins" "wp-content/themes" "wp-content/mu-plugins" "wp-conte
 passing=0
 
 ignores=(
-#  'wp-content/plugins/anthologize'
+  'wp-content/plugins/anthologize'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
 #  'wp-content/plugins/bdprss'
 #  'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
