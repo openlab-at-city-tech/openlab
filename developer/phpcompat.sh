@@ -6,6 +6,7 @@ passing=0
 
 ignores=(
   'wp-content/plugins/anthologize'
+  'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
 #  'wp-content/plugins/bdprss'
   'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
