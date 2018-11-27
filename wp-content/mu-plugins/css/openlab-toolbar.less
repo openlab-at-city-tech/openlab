@@ -805,6 +805,10 @@
     }
     /**footer - also a sitewide component**/
     &#openlab-footer {
+        @media print {
+            display: none;
+            visibility: hidden;
+        }
         position: absolute;
         bottom: 0;
         right: 0;
