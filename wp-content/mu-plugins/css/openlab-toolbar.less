@@ -805,10 +805,6 @@
     }
     /**footer - also a sitewide component**/
     &#openlab-footer {
-        @media print {
-            display: none;
-            visibility: hidden;
-        }
         position: absolute;
         bottom: 0;
         right: 0;
@@ -1196,4 +1192,14 @@ body {
         margin-top: 0;
         top: 10px;
     }
+}
+
+@media print {
+	body.single-item.groups,
+	body:not(.openlab-main) {
+        #openlab-footer {
+			display: none;
+			visibility: hidden;
+		}
+	}
 }
