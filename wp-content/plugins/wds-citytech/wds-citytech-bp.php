@@ -738,5 +738,20 @@ add_action(
 	4
 );
 
-// Allow HTML in notices.
+/**
+ * Allow most HTML in GES notices.
+ */
+function openlab_ass_clean_content( $content ) {
+	$blog_public = (int) get_option( 'blog_public' );
+
+	if ( $blog_public >= 0 ) {
+		return $content;
+	}
+
+	// Remove <img> tags from non-public sites.
+	$content = preg_replace( "/<img[^>]+\>/i", "", $content );
+
+	return $content;
+}
+add_filter( 'ass_clean_content', 'openlab_ass_clean_content', 4 );
 remove_filter( 'ass_clean_content', 'strip_tags', 4 );

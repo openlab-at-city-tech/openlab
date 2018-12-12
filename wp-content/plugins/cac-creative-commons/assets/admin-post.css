@@ -1,0 +1,20 @@
+#post-body  .cac-cc-metabox {
+	padding-left: 14px;
+}
+
+#post-body  .cac-cc-metabox::before {
+	content: "\f313";
+	left: -4px;
+	position: relative;
+	top: -2px;
+}
+
+.cac-cc-metabox a[rel="license"] {
+	vertical-align: middle;
+}
+
+@media screen and ( max-width: 782px ) {
+	.cac-cc-metabox	a[rel="license"] {
+		float: none;
+	}		
+}

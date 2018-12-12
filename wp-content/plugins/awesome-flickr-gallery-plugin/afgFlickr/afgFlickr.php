@@ -13,7 +13,7 @@
  *	 Please submit all problems or questions to the Help Forum on my Google Code project page:
  *		 http://code.google.com/p/phpflickr/issues/list
  *
- */ 
+ */
 if ( !class_exists('afgFlickr') ) {
     if (session_id() == "") {
         @session_start();
@@ -78,7 +78,7 @@ if ( !class_exists('afgFlickr') ) {
             // when you include this.  They'll usually work, you'll just want to test them.
             if ($type == 'db') {
                 if ( preg_match('|mysql://([^:]*):([^@]*)@([^/]*)/(.*)|', $connection, $matches) ) {
-                    //Array ( [0] => mysql://user:password@server/database [1] => user [2] => password [3] => server [4] => database ) 
+                    //Array ( [0] => mysql://user:password@server/database [1] => user [2] => password [3] => server [4] => database )
                     $db = mysql_connect($matches[3], $matches[1], $matches[2]);
                     mysql_select_db($matches[4], $db);
 
@@ -496,7 +496,7 @@ if ( !class_exists('afgFlickr') ) {
 
                 $rsp = explode("\n", $response);
                 foreach ($rsp as $line) {
-                    if (ereg('<err code="([0-9]+)" msg="(.*)"', $line, $match)) {
+                    if (preg_match('/<err code="([0-9]+)" msg="(.*)"/', $line, $match)) {
                         if ($this->die_on_error)
                             die("The Flickr API returned the following error: #{$match[1]} - {$match[2]}");
                         else {
@@ -505,7 +505,7 @@ if ( !class_exists('afgFlickr') ) {
                             $this->parsed_response = false;
                             return false;
                         }
-                    } elseif (ereg("<ticketid>(.*)</", $line, $match)) {
+                    } elseif (preg_match("#<ticketid>(.*)</#", $line, $match)) {
                         $this->error_code = false;
                         $this->error_msg = false;
                         return $match[1];

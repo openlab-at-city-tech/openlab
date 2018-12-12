@@ -3,7 +3,11 @@ php:
   - 7.2
   - nightly
 
-script: php developer/lint-php.php
+before_script:
+  - composer install
+
+script:
+  - ./developer/phpcompat.sh
 
 notifications:
   email:

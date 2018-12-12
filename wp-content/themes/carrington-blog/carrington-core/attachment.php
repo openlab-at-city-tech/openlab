@@ -12,7 +12,7 @@
 // **********************************************************************
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // **********************************************************************
 
 function cfct_get_adjacent_image_link($prev = true) {
@@ -20,9 +20,11 @@ function cfct_get_adjacent_image_link($prev = true) {
 	$post = get_post($post);
 	$attachments = array_values(get_children( array('post_parent' => $post->post_parent, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID') ));
 
-	foreach ( $attachments as $k => $attachment )
-		if ( $attachment->ID == $post->ID )
+	foreach ( $attachments as $k => $attachment ) {
+		if ( $attachment->ID == $post->ID ) {
 			break;
+		}
+	}
 
 	$k = $prev ? $k - 1 : $k + 1;
 
@@ -95,7 +97,7 @@ function cfct_post_gallery($unused, $attr) {
 		$item_src = wp_get_attachment_image_src($id, 'full', false);
 
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $size, false, false) : wp_get_attachment_link($id, $size, true, false);
-		
+
 // add full item src as rel
 		$link = str_replace('><img', ' class="thickbox" rel="'.$item_src[0].'"><img', $link);
 

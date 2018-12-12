@@ -1193,3 +1193,13 @@ body {
         top: 10px;
     }
 }
+
+@media print {
+	body.single-item.groups,
+	body:not(.openlab-main) {
+        #openlab-footer {
+			display: none;
+			visibility: hidden;
+		}
+	}
+}

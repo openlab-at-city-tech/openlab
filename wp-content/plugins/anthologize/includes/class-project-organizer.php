@@ -121,7 +121,7 @@ class Anthologize_Project_Organizer {
 						<div class="handlediv" title="<?php _e( 'Click to toggle', 'anthologize' ) ?>"><br></div>
 						<h3 class="hndle">
 							<span><?php _e( 'Parts', 'anthologize' ) ?></span>
-							<div class="part-item-buttons button" id="new-part">
+							<div class="part-item-buttons button anth-buttons" id="new-part">
 								<a href="post-new.php?post_type=anth_part&project_id=<?php echo esc_attr( $this->project_id ) ?>&new_part=1"><?php _e( 'New Part', 'anthologize' ) ?></a>
 							</div>
 						</h3>
@@ -322,7 +322,7 @@ class Anthologize_Project_Organizer {
 		// Author data
 		$user = get_userdata( $the_item->post_author );
 
-		if ( ! $author_name = get_post_meta( $item_id, 'author_name', true ) ) {
+		if ( ! $author_name = get_post_meta( $item_id, 'author_name', true ) && $user ) {
 			$author_name = $user->display_name;
 		}
 
@@ -402,18 +402,19 @@ class Anthologize_Project_Organizer {
 				?>
 
 				<li class="part" id="part-<?php echo esc_html( $part_id ) ?>">
-					<h3 class="part-header">
-						<noscript><a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_up=<?php echo esc_attr( $part_id ) ?>">&uarr;</a> <a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_down=<?php echo esc_attr( $part_id ) ?>">&darr;</a> </noscript>
-						<span class="part-title-header"><?php the_title() ?></span>
+					<div class="part-header">
+						<h3 class="part-title-header">
+							<noscript><a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_up=<?php echo esc_attr( $part_id ) ?>">&uarr;</a> <a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_down=<?php echo esc_attr( $part_id ) ?>">&darr;</a> </noscript>
+							<span class="part-title-header"><?php the_title() ?></span>
+						</h3>
 
-						<div class="part-buttons">
+						<div class="part-buttons anth-buttons">
 							<a href="post.php?post=<?php the_ID() ?>&action=edit&return_to_project=<?php echo esc_attr( $this->project_id ) ?>"><?php _e( 'Edit', 'anthologize' ) ?></a> |
 							<a target="_blank" href="<?php echo esc_url( $this->preview_url( get_the_ID(), 'anth_part' ) ) ?>" class=""><?php _e( 'Preview', 'anthologize' ) ?></a> |
 							<a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&remove=<?php the_ID() ?>" class="remove"><?php _e( 'Remove', 'anthologize' ) ?></a> |
 							<a href="#collapse" class="collapsepart"> - </a>
 						</div>
-
-					</h3>
+					</div>
 
 					<div class="part-items">
 						<ul>
@@ -516,7 +517,24 @@ class Anthologize_Project_Organizer {
 		?>
 			<ul id="sidebar-posts">
 				<?php while ( $big_posts->have_posts() ) : $big_posts->the_post(); ?>
-					<li class="item"><span class="fromNewId">new-<?php the_ID() ?></span><h3 class="part-item"><?php the_title() ?></h3></li>
+					<?php $item_metadata = self::get_item_metadata( get_the_ID() ); ?>
+
+					<li class="part-item item has-accordion accordion-closed">
+						<span class="fromNewId">new-<?php the_ID() ?></span>
+						<h3 class="part-item-title"><?php the_title() ?></h3>
+						<span class="accordion-toggle hide-if-no-js">
+							<span class="accordion-toggle-glyph"></span>
+							<span class="screen-reader-text"><?php esc_html_e( 'Show details', 'anthologize' ); ?></span>
+						</span>
+
+						<div class="item-details">
+							<ul>
+							<?php foreach ( $item_metadata as $im ) : ?>
+								<li><?php echo $im; ?></li>
+							<?php endforeach; ?>
+							</ul>
+						</div>
+					</li>
 				<?php endwhile; ?>
 			</ul>
 		<?php
@@ -551,6 +569,47 @@ class Anthologize_Project_Organizer {
 		if ( ! $counter ) {
 			echo '<option disabled="disabled">' . __( 'Sorry, no content to add', 'anthologize' ) . '</option>';
 		}
+	}
+
+	/**
+	 * Get source item metadata for a post.
+	 *
+	 * @since 0.8.0
+	 *
+	 * @param int $item_id ID of the item.
+	 * @return array
+	 */
+	public static function get_item_metadata( $item_id ) {
+		$item_post = get_post( $item_id );
+
+		$item_metadata = array(
+			'link'   => sprintf(
+				'<a href="%s">%s</a>',
+				esc_attr( get_permalink( $item_post ) ),
+				esc_html__( 'View post', 'anthologize' )
+			),
+		);
+
+		$item_author = get_userdata( $item_post->post_author );
+		$item_tags   = get_the_term_list( $item_id, 'post_tag', '', ', ' );
+		$item_cats   = get_the_term_list( $item_id, 'category', '', ', ' );
+
+		if ( $item_author ) {
+			$item_metadata['author'] = sprintf(
+				__( 'Author: %s', 'anthologize' ),
+				esc_html( sprintf( '%s (%s)', $item_author->display_name, $item_author->user_login ) )
+			);
+		}
+
+		if ( $item_tags ) {
+			$item_metadata['tags'] = sprintf( __( 'Tags: %s', 'anthologize' ), $item_tags );
+		}
+
+		if ( $item_cats ) {
+			$item_metadata['cats'] = sprintf( __( 'Categories: %s', 'anthologize' ), $item_cats );
+		}
+
+		return $item_metadata;
 	}
 
 	function get_part_items( $part_id ) {
@@ -800,7 +859,7 @@ class Anthologize_Project_Organizer {
 
 		?>
 
-		<li id="item-<?php the_ID() ?>" class="item">
+		<li id="item-<?php the_ID() ?>" class="part-item item">
 
 			<?php if ( $append_parent ) : ?>
 				<input type="checkbox" name="append_children[]" value="<?php the_ID() ?>" <?php if ( $append_parent == $post->ID ) echo 'checked="checked" disabled=disabled'; ?>/> <?php echo esc_html( $post->ID ) . " " . esc_html( $append_parent ) ?>
@@ -810,10 +869,10 @@ class Anthologize_Project_Organizer {
 				<a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_up=<?php the_ID() ?>">&uarr;</a> <a href="admin.php?page=anthologize&action=edit&project_id=<?php echo esc_attr( $this->project_id ) ?>&move_down=<?php the_ID() ?>">&darr;</a>
 			</noscript>
 
-			<h3 class="part-item">
+			<h3 class="part-item-title">
 				<span class="part-title"><?php the_title() ?></span>
 
-				<div class="part-item-buttons">
+				<div class="part-item-buttons anth-buttons">
 					<a href="post.php?post=<?php the_ID() ?>&action=edit&return_to_project=<?php echo esc_attr( $this->project_id ) ?>"><?php _e( 'Edit', 'anthologize' ) ?></a> |
 
 					<?php /* Comments are being pushed to a further release */ ?>
