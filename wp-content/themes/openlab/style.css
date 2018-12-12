@@ -7536,6 +7536,11 @@ input[type="submit"] {
 .sidebar-mobile-dropdown .navbar.navbar-default.navbar-location-footer .main-nav-wrapper {
   border-top: 1px solid #dddddd;
 }
+.checkbox.checkbox-float {
+  float: left;
+  margin-top: 0;
+  width: 200px;
+}
 .checkbox input[type="checkbox"] {
   margin-top: 1px;
 }
