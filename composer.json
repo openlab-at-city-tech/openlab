@@ -1,0 +1,10 @@
+{
+    "name": "livinglab/openlab",
+    "description": "City Tech OpenLab",
+    "type": "project",
+    "require-dev": {
+        "phpcompatibility/phpcompatibility-wp": "^2.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0"
+    },
+    "require": {}
+}

@@ -16,7 +16,7 @@ function ahs_getimg($id,$dimensions=array(150,150)) {
 /* get a custom-length excerpt. uses substrws() */
 function ahs_excerpt($text,$chars=240,$allowed_tags="<b><strong><br><br /><a>") {
 	$text = strip_tags($text,$allowed_tags);
-	if (ereg('<a',$text)) $text .= "</a>";
+	if (preg_match('#<a#',$text)) $text .= "</a>";
 	$text = substrws($text,$chars);
 	return $text;
 }

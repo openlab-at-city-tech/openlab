@@ -36,6 +36,7 @@ wp-content/plugins/custom-anti-spam/cas_*
 wp-content/plugins/cac-featured-content/cache/*
 !wp-content/plugins/cac-featured-content/cache/index.html
 wp-content/plugins/wp-post-to-pdf/tcpdf/cache
+wp-content/mu-plugins/bbg-mail-debug.php
 bb-config.php
 \.cac-major-update.json
 *config.rb
@@ -57,3 +58,5 @@ wp-config.php
 #hiding vendor files
 wp-content/themes/*/node_modules/
 wp-content/themes/*/nbproject/
+
+/vendor/

@@ -40,6 +40,33 @@ require_once( STYLESHEETPATH . '/lib/plugin-mods/files-funcs.php' );
  * Plugin: BuddyPress Docs
  * See also: openlab/buddypress/groups/single/docs for template overrides
  */
+
+/**
+ * Checks whether Docs is enabled for a group.
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_is_docs_enabled_for_group( $group_id = null ) {
+    if ( null === $group_id ) {
+        $group_id = bp_get_current_group_id();
+    }
+
+    // Default to true in case no value is found.
+    if ( ! $group_id ) {
+        return true;
+    }
+
+    $group_settings = bp_docs_get_group_settings( $group_id );
+
+    // Default to true in case no value is found.
+    if ( ! $group_settings || ! isset( $group_settings['group-enable'] ) ) {
+        return true;
+    }
+
+    return ! empty( $group_settings['group-enable'] );
+}
+
 /**
  * Plugin: BuddyPress Docs
  * Don't allow BuddyPress Docs to use its own theme compatibility layer
@@ -387,22 +414,36 @@ function openlab_bbp_force_site_public_to_1($public, $site_id) {
 add_filter('bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2);
 
 /**
- * Handle discussion forum toggling for groups.
+ * Handle feature toggling for groups.
  */
-function openlab_bbp_group_toggle($group_id) {
-    $enable_forum = !empty($_POST['openlab-edit-group-forum']);
-    $group = groups_get_group(array('group_id' => $group_id));
+function openlab_group_feature_toggle( $group_id ) {
+    // Discussion.
+    $enable_forum = ! empty( $_POST['openlab-edit-group-forum'] );
+    $group = groups_get_group( $group_id );
     $group->enable_forum = $enable_forum;
     $group->save();
 
-    if ($enable_forum) {
-        groups_delete_groupmeta($group_id, 'openlab_disable_forum');
+    if ( $enable_forum ) {
+        groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
     } else {
-        groups_update_groupmeta($group_id, 'openlab_disable_forum', '1');
+        groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+    }
+
+    // Docs.
+    $enable_docs   = ! empty( $_POST['openlab-edit-group-docs'] );
+    $docs_settings = bp_docs_get_group_settings( $group_id );
+    $docs_settings['group-enable'] = (int) $enable_docs;
+    groups_update_groupmeta( $group_id, 'bp-docs', $docs_settings );
+
+    // Files.
+    $enable_files = ! empty( $_POST['openlab-edit-group-files'] );
+    if ( $enable_files ) {
+        groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
+    } else {
+        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', 1 );
     }
 }
-
-add_action('groups_settings_updated', 'openlab_bbp_group_toggle');
+add_action( 'groups_settings_updated', 'openlab_group_feature_toggle' );
 
 /**
  * Failsafe method for determining whether forums should be enabled for a group.
