@@ -14,9 +14,6 @@ include 'includes/oembed.php';
 include 'includes/library-widget.php';
 include 'includes/clone.php';
 
-// Disable Try Gutenberg.
-remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
-
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
@@ -2844,3 +2841,19 @@ if ( is_admin() ) {
 		3
 	);
 }
+
+/**
+ * Set default editor settings.
+ *
+ * By default, the Classic editor should be the default editor,
+ * and users should be allowed to switch editors. Site admins can override.
+ */
+add_filter(
+	'classic_editor_network_default_settings',
+	function() {
+		return [
+			'editor'      => 'classic',
+			'allow-users' => true,
+		];
+	}
+);
