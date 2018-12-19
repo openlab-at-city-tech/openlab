@@ -11,7 +11,7 @@ class FDX_Widget_profile extends WP_Widget {
 		parent::__construct('fdxprofile',PLUGIN_NAME. ' - '.__('Profile Widget', 'wp-twitter'), $widget_options);
 	}
 
-	function widget($args) {
+	function widget( $args, $instance ) {
 	extract($args);
 	$wp_twitter_fdx_widget_title1 = get_option('wp_twitter_fdx_widget_title');
 	echo $before_widget;
@@ -20,7 +20,7 @@ class FDX_Widget_profile extends WP_Widget {
     echo $after_widget;
 	}
 
-    function form() {
+    function form( $instance ) {
     echo __('Please go to', 'wp-twitter').': <b><a href="'. admin_url('admin.php?page='.PLUGIN_P2).'">'. PLUGIN_NAME . ' | Widgets</a></b> '. __('for options.', 'wp-twitter');
 	}
 }//end
@@ -35,7 +35,7 @@ class FDX_Widget_search extends WP_Widget {
 		parent::__construct('fdxsearch', PLUGIN_NAME. ' - '.__('Search Widget', 'wp-twitter'), $widget_options);
 	}
 
-	function widget($args) {
+	function widget( $args, $instance ) {
 	extract($args);
 	$wp_twitter_fdx_widget_title1 = get_option('wp_twitter_fdx_search_widget_sidebar_title');
 	echo $before_widget;
@@ -44,7 +44,7 @@ class FDX_Widget_search extends WP_Widget {
     echo $after_widget;
 	}
 
-    function form() {
+    function form( $instance ) {
     echo __('Please go to', 'wp-twitter').': <b><a href="'. admin_url('admin.php?page='.PLUGIN_P2).'">'.PLUGIN_NAME . ' | Widgets</a></b> '. __('for options.', 'wp-twitter');
 	}
 }
