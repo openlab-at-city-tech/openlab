@@ -352,8 +352,8 @@ function bpeo_remove_duplicates_from_activity_stream( $activity, $r, $iterator =
 			$activity = bpeo_remove_duplicates_from_activity_stream( $activity, $r, $iterator + 1 );
 
 			// If we're left with more activity than we need, trim it down.
-			$new_count = is_countable( $activity['activities'] ) ? count( $activity['activities'] : 0;
-			if ( $new_count > $original_activity_count ) ) ) {
+			$new_count = is_countable( $activity['activities'] ) ? count( $activity['activities'] ) : 0;
+			if ( $new_count > $original_activity_count ) {
 				$activity['activities'] = array_slice( $activity['activities'], 0, $original_activity_count );
 			}
 
