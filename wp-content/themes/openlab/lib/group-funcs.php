@@ -1324,6 +1324,7 @@ function openlab_show_site_posts_and_comments() {
     $posts = array();
     $comments = array();
 
+    add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
             switch_to_blog($site_id);
@@ -1391,6 +1392,7 @@ function openlab_show_site_posts_and_comments() {
 
             break;
     }
+    remove_filter( 'to/get_terms_orderby/ignore', '__return_true' );
 
     // If we have either, show both
     if (!empty($posts) || !empty($comments)) {
