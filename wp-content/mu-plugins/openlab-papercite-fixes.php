@@ -17,7 +17,7 @@ function openlab_papercite_init() {
 	 * See #1430.
 	 */
 	class OpenLab_Papercite extends Papercite {
-	  function getCached($url, $timeout = 3600) {
+	  function getCached($url, $timeout = 3600, $sslverify = false) {
 	    // check if cached file exists
 	    $name = strtolower(preg_replace("@[/:]@","_",$url));
 
