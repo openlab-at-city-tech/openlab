@@ -297,8 +297,8 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
         case 'friends':
             $friends_menu = openlab_my_friends_submenu(false);
 
-            $menu = $friends_menu['menu'] ?: '';
-            $submenu_text = $friends_menu['submenu_text'] ?: '';
+            $menu = $friends_menu['menu'] ?? '';
+            $submenu_text = $friends_menu['submenu_text'] ?? '';
 
             $width = 'col-sm-24 has-menu-items is-mol-menu';
 
