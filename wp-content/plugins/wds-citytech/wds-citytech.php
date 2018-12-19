@@ -226,6 +226,7 @@ function cuny_group_menu_items() {
 		$profile_item->title = sprintf( '%s Profile', $group_type );
 		$profile_item->slug  = 'group-profile-link';
 		$profile_item->url   = bp_get_group_permalink( $group );
+		$profile_item->classes = [];
 
 		$items[] = $profile_item;
 	}
