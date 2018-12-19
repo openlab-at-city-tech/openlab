@@ -61,7 +61,7 @@ function openlab_bp_group_documents_display_content() {
 
         <?php //-----------------------------------------------------------------------LIST VIEW--  ?>
 
-        <?php if (is_array($template->document_list) && count($template->document_list >= 1)) { ?>
+        <?php if (is_array($template->document_list) && count($template->document_list) ) { ?>
 
             <?php if (get_option('bp_group_documents_use_categories')) { ?>
                 <div id="bp-group-documents-categories">
