@@ -67,7 +67,7 @@ class BP_Groups_Meta_Filter {
 		if ( !empty( $where_clauses ) ) {
 			$sql = "SELECT gmf1.group_id FROM " . implode( ' ', $join_clauses ) . " WHERE " . implode( ' AND ', $where_clauses );
 		} else {
-			$sql = $wpdb->get_results( "SELECT id FROM {$bp->groups->table_name} WHERE 1 = 0" );
+			$sql = "SELECT id FROM {$bp->groups->table_name} WHERE 1 = 0";
 		}
 
 		$this->group_ids = wp_parse_id_list( $wpdb->get_col( $sql ) );
