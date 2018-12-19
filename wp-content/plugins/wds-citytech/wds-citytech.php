@@ -2124,7 +2124,7 @@ function openlab_private_blog_message() {
 		<?php
 		exit();
 	} else {
-		if ( is_feed() ) {
+		if ( is_feed() && isset( $ds_more_privacy_options ) && method_exists( $ds_more_privacy_options, 'ds_feed_login' ) ) {
 			$ds_more_privacy_options->ds_feed_login();
 		} else {
 			nocache_headers();
