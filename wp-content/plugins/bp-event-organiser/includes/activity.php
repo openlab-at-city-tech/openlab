@@ -352,7 +352,7 @@ function bpeo_remove_duplicates_from_activity_stream( $activity, $r, $iterator =
 			$activity = bpeo_remove_duplicates_from_activity_stream( $activity, $r, $iterator + 1 );
 
 			// If we're left with more activity than we need, trim it down.
-			if ( count( $activity['activities'] > $original_activity_count ) ) {
+			if ( is_array( $activity['activities'] ) && ( count( $activity['activities'] > $original_activity_count ) ) ) {
 				$activity['activities'] = array_slice( $activity['activities'], 0, $original_activity_count );
 			}
 
