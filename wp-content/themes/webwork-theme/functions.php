@@ -41,4 +41,4 @@ function webwork_disable_emojis() {
 	add_filter( 'tiny_mce_plugins', 'disable_emojis_tinymce' );
 	add_filter( 'wp_resource_hints', 'disable_emojis_remove_dns_prefetch', 10, 2 );
 }
-add_action( 'init', 'disable_emojis' );
+add_action( 'init', 'webwork_disable_emojis' );
