@@ -13,74 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../admin/download.php:38
-msgid "Download Perk"
-msgstr ""
-
-#: ../admin/download.php:40
-msgid "Back to Installed Perks"
-msgstr ""
-
-#: ../admin/download.php:44
-msgid "Oops! There was a problem retrieving all available perks."
-msgstr ""
-
-#: ../admin/download.php:63
-msgid "Oops! Are you sure you have access to this page?"
-msgstr ""
-
-#: ../admin/download.php:122
-msgid "Title"
-msgstr ""
-
-#: ../admin/download.php:123
-msgid "Description"
-msgstr ""
-
-#: ../admin/download.php:205
-msgid "Version %s"
-msgstr ""
-
-#: ../admin/download.php:209
-msgid "By %s"
-msgstr ""
-
-#: ../admin/download.php:213, ../admin/download.php:213
-msgid "Visit perk site"
-msgstr ""
-
-#: ../admin/download.php:239
-msgid "Install this perk"
-msgstr ""
-
-#: ../admin/download.php:239
-msgid "Are you sure you want to install the %s perk?"
-msgstr ""
-
-#: ../admin/download.php:239
-msgid "Install"
-msgstr ""
-
-#: ../admin/download.php:241
-msgid "Already purchased a license? Click here to enter it."
-msgstr ""
-
-#: ../admin/download.php:241
-msgid "Enter License Key"
-msgstr ""
-
-#: ../admin/download.php:242
-msgid "Click here to purchase a license!"
-msgstr ""
-
-#: ../admin/download.php:242
-msgid "Purchase License"
-msgstr ""
-
-#: ../admin/download.php:245
-msgid "Installed"
-msgstr ""
-
 #: ../admin/manage_perks.php:163
 msgid "Active Perks"
 msgstr ""
@@ -233,7 +165,7 @@ msgstr ""
 msgid "License successfully refreshed."
 msgstr ""
 
-#: ../admin/manage_perks.php:835, ../gravityperks.php:203, ../gravityperks.php:713
+#: ../admin/manage_perks.php:835, ../gravityperks.php:203, ../gravityperks.php:715
 msgid "Manage Perks"
 msgstr ""
 
@@ -317,72 +249,52 @@ msgstr ""
 msgid "%1$sRegister%2$s your copy of Gravity Perks to receive access to automatic upgrades and support. Need a license key? %3$sPurchase one now.%2$s"
 msgstr ""
 
-#: ../gravityperks.php:710
+#: ../gravityperks.php:712
 msgid "Back to Manage Perks"
 msgstr ""
 
-#: ../gravityperks.php:717
+#: ../gravityperks.php:719
 msgid "Activate Perk"
 msgstr ""
 
-#: ../gravityperks.php:876
+#: ../gravityperks.php:878
 msgid "<strong>Gravity Perks</strong> must be network activated before a <strong>perk</strong> can be network activated."
 msgstr ""
 
-#: ../gravityperks.php:915
+#: ../gravityperks.php:917
 msgid "No, Return to Manage Perks page"
 msgstr ""
 
-#: ../gravityperks.php:1007
+#: ../gravityperks.php:1009
 msgid "Oops! Your site is having some trouble communicating with the our API."
 msgstr ""
 
-#: ../gravityperks.php:1008
+#: ../gravityperks.php:1010
 msgid "Let's get this fixed."
 msgstr ""
 
-#: ../gravityperks.php:1162, ../gravityperks.php:1184, ../gravityperks.php:1714, ../gravityperks.php:1718
+#: ../gravityperks.php:1182, ../gravityperks.php:1204, ../gravityperks.php:1638, ../gravityperks.php:1642
 msgid "Perks"
 msgstr ""
 
-#: ../gravityperks.php:1208, ../gravityperks.php:1208
+#: ../gravityperks.php:1228, ../gravityperks.php:1228
 msgid "Return to Perks Page"
 msgstr ""
 
-#: ../gravityperks.php:1395
+#: ../gravityperks.php:1423
 msgid "Welcome to Gravity Perks"
 msgstr ""
 
-#: ../gravityperks.php:1396
+#: ../gravityperks.php:1424
 msgid "Ready to get started? Click the <strong>Perks</strong> link (to the left) to take a quick tour."
 msgstr ""
 
-#: ../gravityperks.php:1481
+#: ../gravityperks.php:1509
 msgid "Does this page look strange? Your PHP version is out-of-date. <strong>Please upgrade.</strong>"
 msgstr ""
 
-#: ../gravityperks.php:1548
+#: ../gravityperks.php:1576
 msgid "Gravity Perks"
-msgstr ""
-
-#: ../gravityperks.php:1638
-msgid "There is a new version of %s available."
-msgstr ""
-
-#: ../gravityperks.php:1641
-msgid "%1$sView version %2$s details%3$s or %4$supdate automatically%3$s."
-msgstr ""
-
-#: ../gravityperks.php:1648
-msgid "%1$sView version %2$s details%3$s or %4$sregister your copy of Gravity Perks%3$s."
-msgstr ""
-
-#: ../gravityperks.php:1658
-msgid "Gravity Perks %s is required. <a href=\"%s\">Update Gravity Perks</a>."
-msgstr ""
-
-#: ../gravityperks.php:1661
-msgid "Gravity Forms %s is required. <a href=\"%s\">Update Gravity Forms</a>."
 msgstr ""
 
 #: ../model/perk.php:87

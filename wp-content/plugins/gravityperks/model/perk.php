@@ -320,7 +320,7 @@ class GP_Perk {
 			    continue;
 		    }
 
-		    $plugin_data = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_path );
+		    $plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $plugin_path );
 
 		    if ( version_compare( rgar( $plugin_data, 'Version' ), $version, '<' ) ) {
 			    $meets_requirements['errors'][] = sprintf( esc_html__( 'Current %1$s version (%2$s) does not meet minimum %1$s version requirement (%3$s).', 'gravityperks' ), $name, rgar( $plugin_data, 'Version' ), $version );

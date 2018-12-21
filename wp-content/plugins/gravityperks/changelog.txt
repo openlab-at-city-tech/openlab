@@ -1,6 +1,18 @@
 
 # Changelog
 
+## 2.1.1
+
+	- Fixed issue where Gravity Wiz API wouldn't have its cache cleared
+
+## 2.1
+
+	- Updated licensing and updates API for significant performance improvements.
+
+## 2.0.12
+
+	- Fixed issue with usage of WP_CONTENT_DIR; replaced with WP_PLUGIN_DIR
+
 ## 2.0.11
 
 	- Added GP_Late_Static_Binding::Perk_value_pass_through() method.
