@@ -5,7 +5,9 @@ defined( 'ABSPATH' ) or die();
 class Text_Hover_Test extends WP_UnitTestCase {
 
 	protected static $text_to_hover = array(
+		'WP Tavern'      => 'Site for WordPress-related news',
 		'WP'             => 'WordPress',
+		'WP COM'         => 'WordPress.com',
 		"coffee2code"    => 'Plugin developer',
 		'Matt Mullenweg' => 'Co-Founder of WordPress',
 		'blank'          => '',
@@ -15,15 +17,24 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		'水'             => 'water',
 		'<em>Test</em>'  => 'This is text associated with a replacement that includes HTML tags.',
 		'piñata'         => 'Full of candy',
+		'Kónståntîn český คำถาม 問題和答案 Поделитьс' => 'lots of special characters',
 	);
+
+	public static function setUpBeforeClass() {
+		c2c_TextHover::get_instance()->install();
+	}
 
 	public function setUp() {
 		parent::setUp();
+		c2c_TextHover::get_instance()->reset_options();
 		$this->set_option();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+
+		// Reset options
+		c2c_TextHover::get_instance()->reset_options();
 
 		remove_filter( 'c2c_text_hover',                array( $this, 'add_text_to_hover' ) );
 		remove_filter( 'c2c_text_hover_once',           '__return_true' );
@@ -88,7 +99,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	protected function text_hovers( $term = '' ) {
 		$text_to_hover = self::$text_to_hover;
 
-		if ( ! empty( $term ) ) {
+		if ( $term ) {
 			$text_to_hover = isset( $text_to_hover[ $term ] ) ? $text_to_hover[ $term ] : '';
 		}
 
@@ -113,16 +124,16 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	 */
 	protected function expected_text( $term, $display_term = '' ) {
 		$hover_text = $this->text_hovers( $term );
-		if ( empty( $hover_text ) ) {
+		if ( ! $hover_text ) {
 			$hover_text = $this->text_hovers( strtolower( $term ) );
 		}
-		if ( empty( $hover_text ) ){
+		if ( ! $hover_text ) {
 			return $term;
 		}
 		if ( $display_term ) {
 			$term = $display_term;
 		}
-		return "<acronym class='c2c-text-hover' title='" . esc_attr( $hover_text ) . "'>$term</acronym>";
+		return "<abbr class='c2c-text-hover' title='" . esc_attr( $hover_text ) . "'>$term</abbr>";
 	}
 
 	public function add_text_to_hover( $text_to_hover ) {
@@ -149,15 +160,15 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextHover_Plugin_044' ) );
+		$this->assertTrue( class_exists( 'c2c_TextHover_Plugin_048' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '044', c2c_TextHover::get_instance()->c2c_plugin_version() );
+		$this->assertEquals( '048', c2c_TextHover::get_instance()->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '3.7.1', c2c_TextHover::get_instance()->version() );
+		$this->assertEquals( '3.8', c2c_TextHover::get_instance()->version() );
 	}
 
 	public function test_instance_object_is_returned() {
@@ -186,7 +197,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	// this is explicitly tested.
 	public function test_hover_text_is_attribute_escaped() {
 		$this->assertEquals(
-			"<acronym class='c2c-text-hover' title='&lt;strong&gt;HTML&lt;/strong&gt;'>HTML</acronym>",
+			"<abbr class='c2c-text-hover' title='&lt;strong&gt;HTML&lt;/strong&gt;'>HTML</abbr>",
 			$this->text_hover( 'HTML' )
 		);
 	}
@@ -218,12 +229,17 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public function test_no_hover_text_in_attribute() {
-		$text  = '<a href="http://example.com" title="Learn the 水 character">link</a>';
-
-		$this->assertEquals(
-			$text,
-			$this->text_hover( $text )
+		$text = array(
+			'<a href="http://example.com" title="Learn the 水 character">link</a>',
+			'<a class="fusion-button button-flat button-round button-small button-green button-1" target="_self" href="https://example.com/coffee2code-login.php"><span class="fusion-button-icon-divider button-icon-divider-left"><i class="fa fa-unlock"></i></span><span class="fusion-button-text fusion-button-text-left">Login</span></a>'
 		);
+
+		foreach ( $text as $t ) {
+			$this->assertEquals(
+				$t,
+				$this->text_hover( $t )
+			);
+		}
 	}
 
 	/**
@@ -263,7 +279,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->set_option( array( 'text_to_hover' => array( '<strong>The Doctor</strong>' => 'The man from Gallifrey' ) ) );
 
 		$this->assertEquals(
-			"Have you met <acronym class='c2c-text-hover' title='The man from Gallifrey'><strong>The Doctor</strong></acronym>?",
+			"Have you met <abbr class='c2c-text-hover' title='The man from Gallifrey'><strong>The Doctor</strong></abbr>?",
 			$this->text_hover( 'Have you met <strong>The Doctor</strong>?' )
 		);
 	}
@@ -272,7 +288,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->set_option( array( 'text_to_hover' => array( 'I <3 dogs' => 'Mostly boxers and pit bulls' ) ) );
 
 		$this->assertEquals(
-			'<a href="#" title="I <3 dogs">Did you know <acronym class=\'c2c-text-hover\' title=\'Mostly boxers and pit bulls\'>I <3 dogs</acronym>?</a>',
+			'<a href="#" title="I <3 dogs">Did you know <abbr class=\'c2c-text-hover\' title=\'Mostly boxers and pit bulls\'>I <3 dogs</abbr>?</a>',
 			$this->text_hover( '<a href="#" title="I <3 dogs">Did you know I <3 dogs?</a>' )
 		);
 	}
@@ -307,10 +323,75 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->assertEquals( 'COFFEE2CODE', $this->text_hover( 'COFFEE2CODE' ) );
 	}
 
+	/*
+	 * With 'WP Tavern' followed by 'WP' as hover defines, the former should not
+	 * hand the latter's hover applied to it.
+	 */
+	public function test_does_not_hover_a_general_term_that_is_included_in_earlier_listed_term() {
+		$string = 'WP Tavern';
+
+		$this->assertEquals( $this->expected_text( $string ), $this->text_hover( $string ) );
+	}
+
+	/**
+	 * Ensure a more specific string matches with priority over a less specific
+	 * string, regardless of what order they were defined.
+	 *
+	 *  MAYBE! Not sure if this is desired. But the theory is if both
+	 * "WP" and "WP COM" are defined, then the text latter should get
+	 * hovered, even though the former was defined first.
+	 */
+	public function test_does_not_hover_a_more_general_term_when_general_is_first() {
+		$expected = $this->expected_text( 'WP COM' );
+
+		$this->assertEquals( "This $expected is true", $this->text_hover( 'This WP COM is true' ) );
+	}
+
+	public function tests_hovers_term_split_across_multiple_lines() {
+		$expected = array(
+			"Did you see " . $this->expected_text( 'Matt Mullenweg', "Matt\nMullenweg" ) . " at the party?"
+				=> $this->text_hover( "Did you see Matt\nMullenweg at the party?" ),
+			"Did you see " . $this->expected_text( 'Matt Mullenweg', 'Matt  Mullenweg' ) . " at the party?"
+				=> $this->text_hover( "Did you see Matt  Mullenweg at the party?" ),
+			"Did you see " . $this->expected_text( 'Kónståntîn český คำถาม 問題和答案 Поделитьс', "Kónståntîn\nčeský\tคำถาม\n\t問題和答案   Поделитьс" ) . " at the party?"
+				=> $this->text_hover( "Did you see Kónståntîn\nčeský\tคำถาม\n\t問題和答案   Поделитьс at the party?" ),
+		);
+
+		foreach ( $expected as $expect => $actual ) {
+			$this->assertEquals( $expect, $actual );
+		}
+	}
+
+
+	public function test_hovers_multibyte_text_once_via_setting() {
+		$linked = $this->expected_text( '漢字はユニコード' );
+
+		$this->set_option( array( 'replace_once' => true ) );
+
+		$expected = array(
+			"$linked cat 漢字はユニコード cat 漢字はユニコード"
+				=> $this->text_hover( '漢字はユニコード cat 漢字はユニコード cat 漢字はユニコード' ),
+			'dock ' . $linked . ' cart 漢字はユニコード'
+				=> $this->text_hover( 'dock 漢字はユニコード cart 漢字はユニコード' ),
+		);
+
+		foreach ( $expected as $expect => $actual ) {
+			$this->assertEquals( $expect, $actual );
+		}
+	}
+
 	public function test_hovers_once_via_setting() {
 		$expected = $this->expected_text( 'coffee2code' );
 		$this->test_hovers_single_term_multiple_times();
 		$this->set_option( array( 'replace_once' => true ) );
+
+		$this->assertEquals( "$expected coffee2code coffee2code", $this->text_hover( 'coffee2code coffee2code coffee2code' ) );
+	}
+
+	public function test_hovers_once_via_trueish_setting_value() {
+		$expected = $this->expected_text( 'coffee2code' );
+		$this->test_hovers_single_term_multiple_times();
+		$this->set_option( array( 'replace_once' => '1' ) );
 
 		$this->assertEquals( "$expected coffee2code coffee2code", $this->text_hover( 'coffee2code coffee2code coffee2code' ) );
 	}
@@ -351,7 +432,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 	public function test_hovers_term_added_via_filter() {
 		$this->assertEquals( 'bbPress', $this->text_hover( 'bbPress' ) );
-		$expected = "<acronym class='c2c-text-hover' title='Forum Software'>bbPress</acronym>";
+		$expected = "<abbr class='c2c-text-hover' title='Forum Software'>bbPress</abbr>";
 		add_filter( 'c2c_text_hover', array( $this, 'add_text_to_hover' ) );
 
 		$this->assertEquals( $expected, $this->text_hover( 'bbPress' ) );
@@ -412,15 +493,36 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->assertEquals( $this->expected_text( 'coffee2code' ), apply_filters( 'custom_filter', 'coffee2code' ) );
 	}
 
-	public function test_uninstall_deletes_option() {
-		$option = 'c2c_text_hover';
-		c2c_TextHover::get_instance()->get_options();
+	/*
+	 * Setting handling
+	 */
 
-		$this->assertNotFalse( get_option( $option ) );
+	/*
+	// This is normally the case, but the unit tests save the setting to db via
+	// setUp(), so until the unit tests are restructured somewhat, this test
+	// would fail.
+	public function test_does_not_immediately_store_default_settings_in_db() {
+		$option_name = c2c_TextHover::SETTING_NAME;
+		// Get the options just to see if they may get saved.
+		$options     = c2c_TextHover::get_instance()->get_options();
+
+		$this->assertFalse( get_option( $option_name ) );
+	}
+	*/
+
+	public function test_uninstall_deletes_option() {
+		$option_name = c2c_TextHover::SETTING_NAME;
+		$options     = c2c_TextHover::get_instance()->get_options();
+
+		// Explicitly set an option to ensure options get saved to the database.
+		$this->set_option( array( 'replace_once' => true ) );
+
+		$this->assertNotEmpty( $options );
+		$this->assertNotFalse( get_option( $option_name ) );
 
 		c2c_TextHover::uninstall();
 
-		$this->assertFalse( get_option( $option ) );
+		$this->assertFalse( get_option( $option_name ) );
 	}
 
 }
