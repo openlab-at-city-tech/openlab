@@ -15,8 +15,10 @@
 		<div class="big-wrapper">
 	
 			<div class="header-cover section bg-dark-light no-padding">
+
+				<?php $header_image_url = get_header_image() ? get_header_image() : get_template_directory_uri() . '/images/header.jpg'; ?>
 		
-				<div class="header section" style="background-image: url(<?php if (get_header_image() != '') : ?><?php header_image(); ?><?php else : ?><?php echo get_template_directory_uri() . '/images/header.jpg'; ?><?php endif; ?>);">
+				<div class="header section" style="background-image: url( <?php echo  $header_image_url; ?> );">
 							
 					<div class="header-inner section-inner">
 					
@@ -35,7 +37,7 @@
 							<div class="blog-info">
 							
 								<h2 class="blog-title">
-									<a href="<?php echo esc_url( home_url() ); ?>" title="<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>" rel="home"><?php echo esc_attr( get_bloginfo( 'title' ) ); ?></a>
+									<a href="<?php echo esc_url( home_url() ); ?>" rel="home"><?php echo esc_attr( get_bloginfo( 'title' ) ); ?></a>
 								</h2>
 								
 								<?php if ( get_bloginfo( 'description' ) ) { ?>
@@ -60,23 +62,21 @@
 				
 					<div class="toggle-container hidden">
 			
-						<div class="nav-toggle toggle">
+						<button type="button" class="nav-toggle toggle">
 								
 							<div class="bar"></div>
 							<div class="bar"></div>
 							<div class="bar"></div>
-							
-							<div class="clear"></div>
 						
-						</div>
+						</button>
 						
-						<div class="search-toggle toggle">
+						<button type="button" class="search-toggle toggle">
 								
 							<div class="metal"></div>
 							<div class="glass"></div>
 							<div class="handle"></div>
 						
-						</div>
+						</button>
 						
 						<div class="clear"></div>
 					

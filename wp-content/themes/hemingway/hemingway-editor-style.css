@@ -1,7 +1,5 @@
 /*---------------------------------------------------------------------------------
-
 	Editor styles for Hemingway
-
 ---------------------------------------------------------------------------------*/
 
 body#tinymce.wp-editor { 
@@ -12,24 +10,31 @@ body#tinymce.wp-editor {
 body#tinymce.wp-editor a { color: #1abc9c; }
 body#tinymce.wp-editor a:hover { color: #1abc9c; text-decoration: underline; }
 
-/* headlines */
+/* Titles */
 
-body#tinymce.wp-editor h1, body#tinymce.wp-editor h2, body#tinymce.wp-editor h3, body#tinymce.wp-editor h4, body#tinymce.wp-editor h5, body#tinymce.wp-editor h6 {
+body#tinymce.wp-editor h1,
+body#tinymce.wp-editor h2,
+body#tinymce.wp-editor h3,
+body#tinymce.wp-editor h4,
+body#tinymce.wp-editor h5,
+body#tinymce.wp-editor h6 {
 	color: #444;
 	line-height: 120%;
 }
 
-body#tinymce.wp-editor h1 { font-size: 2em; font-weight: 700; }
+body#tinymce.wp-editor h1,
+body#tinymce.wp-editor h2,
+body#tinymce.wp-editor h3 {
+	font-weight: 700;
+}
 
-body#tinymce.wp-editor h2 { font-size: 1.75em; font-weight: 700; }
-
-body#tinymce.wp-editor h3 { font-size: 1.5em; font-weight: 700; }
-
+body#tinymce.wp-editor h1 { font-size: 2em; }
+body#tinymce.wp-editor h2 { font-size: 1.75em; }
+body#tinymce.wp-editor h3 { font-size: 1.5em; }
 body#tinymce.wp-editor h4 { font-size: 1.25em; }
-
 body#tinymce.wp-editor h5 { font-size: 1.1em; }
 
-/* blockquote */
+/* Blockquote */
 
 body#tinymce.wp-editor blockquote {
 	padding: 1.1em;
@@ -61,7 +66,7 @@ body#tinymce.wp-editor blockquote cite {
 
 body#tinymce.wp-editor blockquote cite em { font-style: italic; font-weight: bold; }
 
-/* media */
+/* Post Media */
 
 body#tinymce.wp-editor .alignright { margin-left: 20px; }
 
@@ -81,7 +86,7 @@ body#tinymce.wp-editor .wp-caption-dd {
 	padding: 10px 0;
 }
 
-/* tables */
+/* Tables */
 
 body#tinymce.wp-editor table {
 	border-collapse: collapse;
@@ -122,5 +127,3 @@ body#tinymce.wp-editor th {
 }
 
 body#tinymce.wp-editor table tbody > tr:nth-child(odd) > td { background: #f9f9f9; }
-
-
