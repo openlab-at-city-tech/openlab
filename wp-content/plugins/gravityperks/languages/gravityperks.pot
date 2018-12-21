@@ -305,22 +305,22 @@ msgstr ""
 msgid "There is no class for this perk."
 msgstr ""
 
-#: ../model/perk.php:314
+#: ../model/perk.php:315
 msgid "Required WordPress plugin is missing: %s."
 msgstr ""
 
-#: ../model/perk.php:319
+#: ../model/perk.php:320
 msgid "Required WordPress plugin is missing: %1$s (%2$s)."
 msgstr ""
 
-#: ../model/perk.php:326
+#: ../model/perk.php:327
 msgid "Current %1$s version (%2$s) does not meet minimum %1$s version requirement (%3$s)."
 msgstr ""
 
-#: ../model/perk.php:387
+#: ../model/perk.php:388
 msgid "Uh-oh! <strong>%s</strong> needs your attention."
 msgstr ""
 
-#: ../model/perk.php:744
+#: ../model/perk.php:745
 msgid "There was an issue deleting this perk. The perk directory was not available."
 msgstr ""

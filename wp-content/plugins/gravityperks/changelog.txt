@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 2.1.2
+
+	- Fixed several fatal errors that occurred when running older versions of Gravity Forms.
+	- Fixed issue where unmet minimum requirements did not prevent GP_Plugin-based perks from initializing.
+	- Updated minimum required version of Gravity Forms to fix fatal errors where GFAddon::meets_minimum_requirements() did not exist.
+
 ## 2.1.1
 
 	- Fixed issue where Gravity Wiz API wouldn't have its cache cleared

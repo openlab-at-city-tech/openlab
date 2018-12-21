@@ -307,6 +307,7 @@ class GP_Perk {
 			    continue;
 		    }
 
+		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		    if ( ! is_plugin_active( $plugin_path ) ) {
 			    $meets_requirements['meets_requirements'] = false;
 
