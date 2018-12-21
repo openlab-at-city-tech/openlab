@@ -89,7 +89,7 @@ class Jetpack_Subscriptions {
 			add_action( 'template_redirect', array( $this, 'widget_submit' ) );
 
 		// Set up the comment subscription checkboxes
-		add_action( 'comment_form', array( $this, 'comment_subscribe_init' ) );
+		add_action( 'comment_form_after_fields', array( $this, 'comment_subscribe_init' ) );
 
 		// Catch comment posts and check for subscriptions.
 		add_action( 'comment_post', array( $this, 'comment_subscribe_submit' ), 50, 2 );
@@ -193,7 +193,7 @@ class Jetpack_Subscriptions {
 
 		$view_post_link_html = sprintf( ' <a href="%1$s">%2$s</a>',
 			esc_url( get_permalink( $post ) ),
-			__( 'View post' ) // intentinally omitted domain
+			__( 'View post', 'jetpack' )
 		);
 
 		$messages['post'][6] = sprintf(

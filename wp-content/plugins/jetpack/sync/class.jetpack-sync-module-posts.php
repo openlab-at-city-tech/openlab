@@ -23,10 +23,6 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		return false;
 	}
 
-	public function set_defaults() {
-		$this->import_end = false;
-	}
-
 	public function init_listeners( $callable ) {
 		$this->action_handler = $callable;
 
@@ -51,34 +47,8 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		add_action( 'jetpack_daily_akismet_meta_cleanup_after', array( $this, 'daily_akismet_meta_cleanup_after' ) );
 		add_action( 'jetpack_post_meta_batch_delete', $callable, 10, 2 );
 
-		add_action( 'export_wp', $callable );
-		add_action( 'jetpack_sync_import_end', $callable, 10, 2 );
-
-		// Movable type, RSS, Livejournal
-		add_action( 'import_done', array( $this, 'sync_import_done' ) );
-
-		// WordPress, Blogger, Livejournal, woo tax rate
-		add_action( 'import_end', array( $this, 'sync_import_end' ) );
 	}
 
-	public function sync_import_done( $importer ) {
-		// We already ran an send the import
-		if ( $this->import_end ) {
-			return;
-		}
-
-		$importer_name = $this->get_importer_name( $importer );
-
-		/**
-		 * Sync Event that tells that the import is finished
-		 *
-		 * @since 5.0.0
-		 *
-		 * $param string $importer
-		 */
-		do_action( 'jetpack_sync_import_end', $importer, $importer_name );
-		$this->import_end = true;
-	}
 
 	public function daily_akismet_meta_cleanup_before( $feedback_ids ) {
 		remove_action( 'deleted_post_meta', $this->action_handler );
@@ -89,56 +59,14 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		 *
 		 * @module sync
 		 *
-		 * $param array $feedback_ids feedback post IDs
-		 * $param string $meta_key to be deleted
+		 * @param array $feedback_ids feedback post IDs
+		 * @param string $meta_key to be deleted
 		 */
 		do_action( 'jetpack_post_meta_batch_delete', $feedback_ids, '_feedback_akismet_values');
 	}
 
 	public function daily_akismet_meta_cleanup_after( $feedback_ids ) {
 		add_action( 'deleted_post_meta', $this->action_handler );
-	}
-
-	public function sync_import_end() {
-		// We already ran an send the import
-		if ( $this->import_end ) {
-			return;
-		}
-
-		$this->import_end = true;
-		$importer         = 'unknown';
-		$backtrace        = wp_debug_backtrace_summary( null, 0, false );
-		if ( $this->is_importer( $backtrace, 'Blogger_Importer' ) ) {
-			$importer = 'blogger';
-		}
-
-		if ( 'unknown' === $importer && $this->is_importer( $backtrace, 'WC_Tax_Rate_Importer' ) ) {
-			$importer = 'woo-tax-rate';
-		}
-
-		if ( 'unknown' === $importer && $this->is_importer( $backtrace, 'WP_Import' ) ) {
-			$importer = 'wordpress';
-		}
-
-		$importer_name = $this->get_importer_name( $importer );
-
-		/** This filter is already documented in sync/class.jetpack-sync-module-posts.php */
-		do_action( 'jetpack_sync_import_end', $importer, $importer_name );
-	}
-
-	private function get_importer_name( $importer ) {
-		$importers = get_importers();
-		return isset( $importers[ $importer ] ) ? $importers[ $importer ][0] : 'Unknown Importer';
-	}
-
-	private function is_importer( $backtrace, $class_name ) {
-		foreach ( $backtrace as $trace ) {
-			if ( strpos( $trace, $class_name ) !== false ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public function init_full_sync_listeners( $callable ) {
@@ -352,6 +280,24 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		$this->previous_status[ $post->ID ] = $old_status;
 	}
 
+	/*
+	 * When publishing or updating a post, the Gutenberg editor sends two requests:
+	 * 1. sent to WP REST API endpoint `wp-json/wp/v2/posts/$id`
+	 * 2. sent to wp-admin/post.php `?post=$id&action=edit&classic-editor=1&meta_box=1`
+	 *
+	 * The 2nd request is to update post meta, which is not supported on WP REST API.
+	 * When syncing post data, we will include if this was a meta box update.
+	 */
+	public function is_gutenberg_meta_box_update() {
+		return (
+			isset( $_POST['action'], $_GET['classic-editor'], $_GET['meta_box'] ) &&
+			'editpost' === $_POST['action'] &&
+			'1' === $_GET['classic-editor'] &&
+			'1' === $_GET['meta_box'] &&
+			Jetpack_Gutenberg::is_gutenberg_available()
+		);
+	}
+
 	public function wp_insert_post( $post_ID, $post = null, $update = null ) {
 		if ( ! is_numeric( $post_ID ) || is_null( $post ) ) {
 			return;
@@ -373,7 +319,8 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		$state = array(
 			'is_auto_save' => (bool) Jetpack_Constants::get_constant( 'DOING_AUTOSAVE' ),
 			'previous_status' => $previous_status,
-			'just_published' => $just_published
+			'just_published' => $just_published,
+			'is_gutenberg_meta_box_update' => $this->is_gutenberg_meta_box_update(),
 		);
 		/**
 		 * Filter that is used to add to the post flags ( meta data ) when a post gets published
@@ -437,6 +384,33 @@ class Jetpack_Sync_Module_Posts extends Jetpack_Sync_Module {
 		 */
 		do_action( 'jetpack_published_post', $post_ID, $flags );
 		unset( $this->just_published[ $post_ID ] );
+
+		/**
+		 * Send additional sync action for Activity Log when post is a Customizer publish
+		 */
+		if ( 'customize_changeset' == $post->post_type ) {
+			$post_content = json_decode( $post->post_content, true );
+			foreach ( $post_content as $key => $value ) {
+				//Skip if it isn't a widget
+				if ( 'widget_' != substr( $key, 0, strlen( 'widget_' ) ) ) {
+					continue;
+				}
+				// Change key from "widget_archives[2]" to "archives-2"
+				$key = str_replace( 'widget_', '', $key );
+				$key = str_replace( '[', '-', $key );
+				$key = str_replace( ']', '', $key );
+
+				global $wp_registered_widgets;
+				if ( isset( $wp_registered_widgets[ $key ] ) ) {
+					$widget_data = array(
+						'name'    => $wp_registered_widgets[ $key ]['name'],
+						'id'      => $key,
+						'title'   => $value['value']['title'],
+					);
+					do_action( 'jetpack_widget_edited', $widget_data );
+				}
+			}
+		}
 	}
 
 	public function expand_post_ids( $args ) {
