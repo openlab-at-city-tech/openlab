@@ -54,14 +54,15 @@ require_once ( get_template_directory() . '/theme-options.php' );
 	
 	
 		// Change this to your theme text domain, used for internationalising strings
-	$theme_text_domain = 'slidingdoor';
+	$theme_text_domain = 'sliding-door';
 	
 /**
  * Include the TGM_Plugin_Activation class.
  */
 require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
 
-add_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
+add_action( 'tgmpa_register', 'sliding_door_register_required_plugins' );
+
 /**
  * Register the required plugins for this theme.
  *
@@ -74,7 +75,7 @@ add_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
  * This function is hooked into tgmpa_init, which is fired within the
  * TGM_Plugin_Activation class constructor.
  */
-function my_theme_register_required_plugins() {
+function sliding_door_register_required_plugins() {
 
 	/**
 	 * Array of plugin arrays. Required keys are name and slug.
@@ -103,7 +104,7 @@ function my_theme_register_required_plugins() {
 	 * Only uncomment the strings in the config array if you want to customize the strings.
 	 */
 	$config = array(
-		'id'           => 'tgmpa',                 // Unique ID for hashing notices for multiple instances of TGMPA.
+		'id'           => 'sliding-door',                 // Unique ID for hashing notices for multiple instances of TGMPA.
 		'default_path' => '',                      // Default absolute path to bundled plugins.
 		'menu'         => 'tgmpa-install-plugins', // Menu slug.
 		'parent_slug'  => 'themes.php',            // Parent menu slug.
@@ -255,14 +256,14 @@ function slidingdoor_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'slidingdoor', get_template_directory() . '/languages' );
+	load_theme_textdomain( 'sliding-door', get_template_directory() . '/languages' );
 
 
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
-		'primary' => __( 'Primary Navigation', 'slidingdoor' ),
-		'custom-sliding-menu' => __( 'Sliding Navigation', 'slidingdoor' ),
+		'primary' => __( 'Primary Navigation', 'sliding-door' ),
+		'custom-sliding-menu' => __( 'Sliding Navigation', 'sliding-door' ),
 	) );
 
 
@@ -405,7 +406,7 @@ add_filter( 'excerpt_length', 'slidingdoor_excerpt_length' );
  * @return string "Continue Reading" link
  */
 function slidingdoor_continue_reading_link() {
-	return ' <a href="'. get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'slidingdoor' ) . '</a>';
+	return ' <a href="'. get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'sliding-door' ) . '</a>';
 }
 
 /**
@@ -472,17 +473,17 @@ function slidingdoor_comment( $comment, $args, $depth ) {
 		<div id="comment-<?php comment_ID(); ?>">
 		<div class="comment-author vcard">
 			<?php echo get_avatar( $comment, 40 ); ?>
-			<?php printf( __( '%s <span class="says">says:</span>', 'slidingdoor' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
+			<?php printf( __( '%s <span class="says">says:</span>', 'sliding-door' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
 		</div><!-- .comment-author .vcard -->
 		<?php if ( $comment->comment_approved == '0' ) : ?>
-			<em><?php _e( 'Your comment is awaiting moderation.', 'slidingdoor' ); ?></em>
+			<em><?php _e( 'Your comment is awaiting moderation.', 'sliding-door' ); ?></em>
 			<br />
 		<?php endif; ?>
 
 		<div class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
 			<?php
 				/* translators: 1: date, 2: time */
-				printf( __( '%1$s at %2$s', 'slidingdoor' ), get_comment_date(),  get_comment_time() ); ?></a><?php edit_comment_link( __( '(Edit)', 'slidingdoor' ), ' ' );
+				printf( __( '%1$s at %2$s', 'sliding-door' ), get_comment_date(),  get_comment_time() ); ?></a><?php edit_comment_link( __( '(Edit)', 'sliding-door' ), ' ' );
 			?>
 		</div><!-- .comment-meta .commentmetadata -->
 
@@ -499,7 +500,7 @@ function slidingdoor_comment( $comment, $args, $depth ) {
 		case 'trackback' :
 	?>
 	<li class="post pingback">
-		<p><?php _e( 'Pingback:', 'slidingdoor' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __('(Edit)', 'slidingdoor'), ' ' ); ?></p>
+		<p><?php _e( 'Pingback:', 'sliding-door' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __('(Edit)', 'sliding-door'), ' ' ); ?></p>
 	<?php
 			break;
 	endswitch;
@@ -518,9 +519,9 @@ endif;
 function slidingdoor_widgets_init() {
 	// Area 1, located at the top of the sidebar.
 	register_sidebar( array(
-		'name' => __( 'Primary Widget Area', 'slidingdoor' ),
+		'name' => __( 'Primary Widget Area', 'sliding-door' ),
 		'id' => 'primary-widget-area',
-		'description' => __( 'The primary widget area', 'slidingdoor' ),
+		'description' => __( 'The primary widget area', 'sliding-door' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h3 class="widget-title">',
@@ -529,9 +530,9 @@ function slidingdoor_widgets_init() {
 
 	// Area 2, located below the Primary Widget Area in the sidebar. Empty by default.
 	register_sidebar( array(
-		'name' => __( 'Secondary Widget Area', 'slidingdoor' ),
+		'name' => __( 'Secondary Widget Area', 'sliding-door' ),
 		'id' => 'secondary-widget-area',
-		'description' => __( 'The secondary widget area', 'slidingdoor' ),
+		'description' => __( 'The secondary widget area', 'sliding-door' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h3 class="widget-title">',
@@ -563,7 +564,7 @@ add_action( 'widgets_init', 'slidingdoor_remove_recent_comments_style' );
 */
 if ( ! function_exists( 'slidingdoor_posted_on' ) ) :
 function slidingdoor_posted_on() {
-	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'slidingdoor' ),
+	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'sliding-door' ),
 		'meta-prep meta-prep-author',
 		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
 			get_permalink(),
@@ -572,7 +573,7 @@ function slidingdoor_posted_on() {
 		),
 		sprintf( '<span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
 			get_author_posts_url( get_the_author_meta( 'ID' ) ),
-			sprintf( esc_attr__( 'View all posts by %s', 'slidingdoor' ), get_the_author() ),
+			sprintf( esc_attr__( 'View all posts by %s', 'sliding-door' ), get_the_author() ),
 			get_the_author()
 		)
 	);
@@ -589,11 +590,11 @@ function slidingdoor_posted_in() {
 	// Retrieves tag list of current post, separated by commas.
 	$tag_list = get_the_tag_list( '', ', ' );
 	if ( $tag_list ) {
-		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'slidingdoor' );
+		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'sliding-door' );
 	} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
-		$posted_in = __( 'This entry was posted in %1$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'slidingdoor' );
+		$posted_in = __( 'This entry was posted in %1$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'sliding-door' );
 	} else {
-		$posted_in = __( 'Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'slidingdoor' );
+		$posted_in = __( 'Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'sliding-door' );
 	}
 	// Prints the string, replacing the placeholders.
 	printf(

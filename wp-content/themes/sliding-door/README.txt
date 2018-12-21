@@ -67,6 +67,7 @@ v1.6	made the background of the slider the same as the page background (imagemen
 3.2.2	replace TEMPLATEPATH with get_template_directory() as per wordpress check plugin	
 3.2.3	bigger screenshot and remove double textdomain as per themechecker plugin
 3.2.4   Better screenshot and allow for wider images
+3.3		Remove some depreciated tags. Update textdomain.
 
 **************************************************
 DESCRIPTION
