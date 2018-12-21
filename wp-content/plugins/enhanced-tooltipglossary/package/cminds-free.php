@@ -13,7 +13,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
 
         /**
          * LicensingAPI object
-         * @var CmindsLicensingAPIž
+         * @var CmindsLicensingAPI
          */
         public $licensingApi = null;
 
@@ -1557,7 +1557,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                                 url: '<?php echo admin_url('admin-ajax.php'); ?>',
                                 data: {
                                     'action': 'cm-submit-registration-skip',
-                                    'id': '<?php echo esc_attr($currentPlugin->config['plugin-abbrev']); ?>'
+                                    'id': '<?php echo esc_attr($currentPlugin->getOption('plugin-abbrev')); ?>'
                                 },
                                 beforeSend: function () {
                                 },
