@@ -73,6 +73,10 @@ function bp_core_screen_signup() {
 		if ( ( !empty( $_POST['signup_password'] ) && !empty( $_POST['signup_password_confirm'] ) ) && $_POST['signup_password'] != $_POST['signup_password_confirm'] )
 			$bp->signup->errors['signup_password'] = __( 'The passwords you entered do not match.', 'buddypress' );
 
+		if ( bp_signup_requires_privacy_policy_acceptance() && ! empty( $_POST['signup-privacy-policy-check'] ) && empty( $_POST['signup-privacy-policy-accept'] ) ) {
+			$bp->signup->errors['signup_privacy_policy'] = __( 'You must indicate that you have read and agreed to the Privacy Policy.', 'buddypress' );
+		}
+
 		$bp->signup->username = $_POST['signup_username'];
 		$bp->signup->email = $_POST['signup_email'];
 
@@ -89,8 +93,13 @@ function bp_core_screen_signup() {
 				foreach ( (array) $profile_field_ids as $field_id ) {
 					bp_xprofile_maybe_format_datebox_post_data( $field_id );
 
+					// Trim post fields.
 					if ( isset( $_POST[ 'field_' . $field_id ] ) ) {
-						$_POST[ 'field_' . $field_id ] = trim( $_POST[ 'field_' . $field_id ] );
+						if ( is_array( $_POST[ 'field_' . $field_id ] ) ) {
+							$_POST[ 'field_' . $field_id ] = array_map( 'trim', $_POST[ 'field_' . $field_id ] );
+						} else {
+							$_POST[ 'field_' . $field_id ] = trim( $_POST[ 'field_' . $field_id ] );
+						}
 					}
 
 					// Create errors for required fields without values.

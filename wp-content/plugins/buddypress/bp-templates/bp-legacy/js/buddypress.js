@@ -10,7 +10,11 @@ var bp_ajax_request = null;
 var newest_activities = '';
 var activity_last_recorded  = 0;
 
+var directoryPreferences = {};
+
 jq(document).ready( function() {
+	var activity_oldestpage = 1;
+
 	/**** Page Load Actions *******************************************************/
 
 	/* Activity filter and scope set */
@@ -257,12 +261,6 @@ jq(document).ready( function() {
 			return false;
 		}
 
-		/* Reset the page */
-		jq.cookie( 'bp-activity-oldestpage', 1, {
-			path: '/',
-			secure: ( 'https:' === window.location.protocol )
-		} );
-
 		/* Activity Stream Tabs */
 		scope  = target.attr('id').substr( 9, target.attr('id').length );
 		filter = jq('#activity-filter-select select').val();
@@ -438,14 +436,7 @@ jq(document).ready( function() {
 
 			jq('#buddypress li.load-more').addClass('loading');
 
-			if ( ! jq.cookie('bp-activity-oldestpage') ) {
-				jq.cookie('bp-activity-oldestpage', 1, {
-					path: '/',
-					secure: ( 'https:' === window.location.protocol )
-				} );
-			}
-
-			oldest_page = ( jq.cookie('bp-activity-oldestpage') * 1 ) + 1;
+			oldest_page = activity_oldestpage + 1;
 			just_posted = [];
 
 			jq('.activity-list li.just-posted').each( function(){
@@ -469,10 +460,7 @@ jq(document).ready( function() {
 			function(response)
 			{
 				jq('#buddypress li.load-more').removeClass('loading');
-				jq.cookie( 'bp-activity-oldestpage', oldest_page, {
-					path: '/',
-					secure: ( 'https:' === window.location.protocol )
-				} );
+				activity_oldestpage = oldest_page;
 				jq('#buddypress ul.activity-list').append(response.contents);
 
 				target.parent().hide();
@@ -862,7 +850,11 @@ jq(document).ready( function() {
 				template = 'groups/single/members';
 			}
 
-			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope') , 'div.' + object, search_terms, 1, jq.cookie('bp-' + object + '-extras'), null, template );
+			var scope  = bp_get_directory_preference( object, 'scope' );
+			var filter = bp_get_directory_preference( object, 'filter' );
+			var extras = bp_get_directory_preference( object, 'extras' );
+
+			bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, extras, null, template );
 
 			return false;
 		}
@@ -897,7 +889,9 @@ jq(document).ready( function() {
 			filter = jq('#' + object + '-order-select select').val();
 			search_terms = jq('#' + object + '_search').val();
 
-			bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, jq.cookie('bp-' + object + '-extras') );
+			var extras = bp_get_directory_preference( object, 'extras' );
+
+			bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, extras );
 
 			return false;
 		}
@@ -945,7 +939,9 @@ jq(document).ready( function() {
 			object = 'members';
 		}
 
-		bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, jq.cookie('bp-' + object + '-extras'), null, template );
+		var extras = bp_get_directory_preference( object, 'extras' );
+
+		bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, extras, null, template );
 
 		return false;
 	});
@@ -1033,7 +1029,11 @@ jq(document).ready( function() {
 				caller = null;
 			}
 
-			bp_filter_request( object, jq.cookie('bp-' + object + '-filter'), jq.cookie('bp-' + object + '-scope'), 'div.' + object, search_terms, page_number, jq.cookie('bp-' + object + '-extras'), caller, template );
+			var scope  = bp_get_directory_preference( object, 'scope' );
+			var filter = bp_get_directory_preference( object, 'filter' );
+			var extras = bp_get_directory_preference( object, 'extras' );
+
+			bp_filter_request( object, filter, scope, 'div.' + object, search_terms, page_number, extras, caller, template );
 
 			return false;
 		}
@@ -1401,13 +1401,17 @@ jq(document).ready( function() {
 		if ( target.attr('type') === 'submit' || target.attr('type') === 'button' ) {
 			object = 'messages';
 
+			var scope  = bp_get_directory_preference( object, 'scope' );
+			var filter = bp_get_directory_preference( object, 'filter' );
+			var extras = bp_get_directory_preference( object, 'extras' );
+
 			bp_filter_request(
 				object,
-				jq.cookie('bp-' + object + '-filter'),
-				jq.cookie('bp-' + object + '-scope'),
+				filter,
+				scope,
 				'div.' + object, jq('#messages_search').val(),
 				1,
-				jq.cookie('bp-' + object + '-extras')
+				extras
 			);
 
 			return false;
@@ -1737,33 +1741,96 @@ jq(document).ready( function() {
 	});
 });
 
+/**
+ * Gets the user's current preference for a directory option.
+ */
+function bp_get_directory_preference( directoryType, pref ) {
+	var defaultPrefs = {
+		filter: '',
+		scope: '',
+		extras: ''
+	};
+
+	if ( ! directoryPreferences.hasOwnProperty( directoryType ) ) {
+		var newPreferences = {};
+		for ( var prefName in defaultPrefs ) {
+			if ( defaultPrefs.hasOwnProperty( prefName ) ) {
+				newPreferences[ prefName ] = defaultPrefs[ prefName ];
+			}
+		}
+		directoryPreferences[ directoryType ] = newPreferences;
+	}
+
+	if ( BP_DTheme.store_filter_settings ) {
+		directoryPreferences[ directoryType ][ pref ] = jq.cookie( 'bp-' + directoryType + '-' + pref );
+	}
+
+	return directoryPreferences[ directoryType ][ pref ];
+}
+
+/**
+ * Sets the user's current preference for a directory option.
+ */
+function bp_set_directory_preference( directoryType, pref, value ) {
+	var defaultPrefs = {
+		filter: '',
+		scope: '',
+		extras: ''
+	};
+
+	if ( ! directoryPreferences.hasOwnProperty( directoryType ) ) {
+		var newPreferences = {};
+		for ( var prefName in defaultPrefs ) {
+			if ( defaultPrefs.hasOwnProperty( prefName ) ) {
+				newPreferences[ prefName ] = defaultPrefs[ prefName ];
+			}
+		}
+		directoryPreferences[ directoryType ] = newPreferences;
+	}
+
+	if ( BP_DTheme.store_filter_settings ) {
+		jq.cookie( 'bp-' + directoryType + '-' + pref, value, {
+			path: '/',
+			secure: ( 'https:' === window.location.protocol )
+		} );
+	}
+
+	directoryPreferences[ directoryType ][ pref ] = value;
+}
+
 /* Setup activity scope and filter based on the current cookie settings. */
 function bp_init_activity() {
-	if ( undefined !== jq.cookie('bp-activity-filter') && jq('#activity-filter-select').length ) {
-		jq('#activity-filter-select select option[value="' + jq.cookie('bp-activity-filter') + '"]').prop( 'selected', true );
+	var scope  = bp_get_directory_preference( 'activity', 'scope' );
+	var filter = bp_get_directory_preference( 'activity', 'filter' );
+
+	if ( undefined !== filter && jq('#activity-filter-select').length ) {
+		jq('#activity-filter-select select option[value="' + filter + '"]').prop( 'selected', true );
 	}
 
 	/* Activity Tab Set */
-	if ( undefined !== jq.cookie('bp-activity-scope') && jq('.activity-type-tabs').length ) {
+	if ( undefined !== scope && jq('.activity-type-tabs').length ) {
 		jq('.activity-type-tabs li').each( function() {
 			jq(this).removeClass('selected');
 		});
-		jq('#activity-' + jq.cookie('bp-activity-scope') + ', .item-list-tabs li.current').addClass('selected');
+		jq('#activity-' + scope + ', .item-list-tabs li.current').addClass('selected');
 	}
 }
 
 /* Setup object scope and filter based on the current cookie settings for the object. */
 function bp_init_objects(objects) {
 	jq(objects).each( function(i) {
-		if ( undefined !== jq.cookie('bp-' + objects[i] + '-filter') && jq('#' + objects[i] + '-order-select select').length ) {
-			jq('#' + objects[i] + '-order-select select option[value="' + jq.cookie('bp-' + objects[i] + '-filter') + '"]').prop( 'selected', true );
+		var scope  = bp_get_directory_preference( objects[i], 'scope' );
+		var filter = bp_get_directory_preference( objects[i], 'filter' );
+
+		if ( undefined !== filter && jq('#' + objects[i] + '-order-select select').length ) {
+			jq('#' + objects[i] + '-order-select select option[value="' + filter + '"]').prop( 'selected', true );
 		}
 
-		if ( undefined !== jq.cookie('bp-' + objects[i] + '-scope') && jq('div.' + objects[i]).length ) {
+		if ( undefined !== scope && jq('div.' + objects[i]).length ) {
 			jq('.item-list-tabs li').each( function() {
 				jq(this).removeClass('selected');
 			});
-			jq('#' + objects[i] + '-' + jq.cookie('bp-' + objects[i] + '-scope') + ', #object-nav li.current').addClass('selected');
+			jq('#' + objects[i] + '-' + scope + ', #object-nav li.current').addClass('selected');
 		}
 	});
 }
@@ -1778,19 +1845,10 @@ function bp_filter_request( object, filter, scope, target, search_terms, page, e
 		scope = 'all';
 	}
 
-	/* Save the settings we want to remain persistent to a cookie */
-	jq.cookie( 'bp-' + object + '-scope', scope, {
-		path: '/',
-		secure: ( 'https:' === window.location.protocol )
-	} );
-	jq.cookie( 'bp-' + object + '-filter', filter, {
-		path: '/',
-		secure: ( 'https:' === window.location.protocol )
-	} );
-	jq.cookie( 'bp-' + object + '-extras', extras, {
-		path: '/',
-		secure: ( 'https:' === window.location.protocol )
-	} );
+	/* Save the settings we want to remain persistent */
+	bp_set_directory_preference( object, 'scope', scope );
+	bp_set_directory_preference( object, 'filter', filter );
+	bp_set_directory_preference( object, 'extras', extras );
 
 	/* Set the correct selected nav and filter */
 	jq('.item-list-tabs li').each( function() {
@@ -1844,23 +1902,9 @@ function bp_filter_request( object, filter, scope, target, search_terms, page, e
 
 /* Activity Loop Requesting */
 function bp_activity_request(scope, filter) {
-	/* Save the type and filter to a session cookie */
-	if ( null !== scope ) {
-		jq.cookie( 'bp-activity-scope', scope, {
-			path: '/',
-			secure: ( 'https:' === window.location.protocol )
-		} );
-	}
-	if ( null !== filter ) {
-		jq.cookie( 'bp-activity-filter', filter, {
-			path: '/',
-			secure: ( 'https:' === window.location.protocol )
-		} );
-	}
-	jq.cookie( 'bp-activity-oldestpage', 1, {
-		path: '/',
-		secure: ( 'https:' === window.location.protocol )
-	} );
+	/* Save the type and filter */
+	bp_set_directory_preference( 'activity', 'scope', scope );
+	bp_set_directory_preference( 'activity', 'filter', filter );
 
 	/* Remove selected and loading classes from tabs */
 	jq('.item-list-tabs li').each( function() {
@@ -1878,9 +1922,17 @@ function bp_activity_request(scope, filter) {
 		bp_ajax_request.abort();
 	}
 
+	// Get directory preferences (called "cookie" for legacy reasons).
+	var cookies = {
+		'bp-activity-filter': bp_get_directory_preference( 'activity', 'filter' ),
+		'bp-activity-scope': bp_get_directory_preference( 'activity', 'scope' )
+	};
+
+	var cookie = encodeURIComponent( jq.param( cookies ) );
+
 	bp_ajax_request = jq.post( ajaxurl, {
 		action: 'activity_widget_filter',
-		'cookie': bp_get_cookies(),
+		'cookie': cookie,
 		'_wpnonce_activity_filter': jq('#_wpnonce_activity_filter').val(),
 		'scope': scope,
 		'filter': filter

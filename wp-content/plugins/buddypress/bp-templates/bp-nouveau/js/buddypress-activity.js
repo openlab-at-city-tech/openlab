@@ -1,6 +1,6 @@
 /* jshint browser: true */
 /* global bp, BP_Nouveau */
-/* @version 3.0.0 */
+/* @version 3.1.0 */
 window.bp = window.bp || {};
 
 ( function( exports, $ ) {
@@ -351,7 +351,7 @@ window.bp = window.bp || {};
 				} );
 
 				// If all parents are hidden, reveal at least one. It seems very risky to manipulate the DOM to keep exactly 5 comments!
-				if ( $( comment_parents ).children( '.bp-hidden' ).length === $( comment_parents ).children( 'li' ).length - 1 && $( comment_parents ).find( 'li.show-all' ) ) {
+				if ( $( comment_parents ).children( '.bp-hidden' ).length === $( comment_parents ).children( 'li' ).length - 1 && $( comment_parents ).find( 'li.show-all' ).length ) {
 					$( comment_parents ).children( 'li' ).removeClass( 'bp-hidden' ).toggle();
 				}
 			} );

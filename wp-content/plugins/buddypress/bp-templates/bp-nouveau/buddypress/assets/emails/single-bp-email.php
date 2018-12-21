@@ -7,7 +7,7 @@
  *  1.35  = default body_text_size multipler. Gives default heading of 20px.
  *
  * @since 2.5.0
- * @version 3.0.0
+ * @version 3.1.0
  *
  * @package BuddyPress
  * @subpackage Core
@@ -189,7 +189,7 @@ $settings = bp_email_get_appearance_settings();
 							<tr>
 								<td style="padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ); ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
 									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome"><?php bp_email_the_salutation( $settings ); ?></span>
-									<hr color="<?php echo esc_attr( $settings['email_bg'] ); ?>"><br>
+									<hr color="<?php echo esc_attr( $settings['email_bg'] ); ?>">
 									{{{content}}}
 								</td>
 							</tr>
@@ -217,7 +217,7 @@ $settings = bp_email_get_appearance_settings();
 
 						<span class="footer_text"><?php echo nl2br( stripslashes( $settings['footer_text'] ) ); ?></span>
 						<br><br>
-						<a href="{{{unsubscribe}}}" style="text-decoration: underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
+						<a href="{{{unsubscribe}}}" style="text-decoration: underline;"><?php echo esc_html_x( 'unsubscribe', 'email', 'buddypress' ); ?></a>
 
 						<?php
 						/**

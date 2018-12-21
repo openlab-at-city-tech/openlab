@@ -3,7 +3,7 @@
  * Members functions
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -355,7 +355,7 @@ function bp_nouveau_members_wp_bio_info() {
  * @return bool True if in the group's home sidebar. False otherwise.
  */
 function bp_nouveau_member_is_home_widgets() {
-	return true === bp_nouveau()->members->is_user_home_sidebar;
+	return ( true === bp_nouveau()->members->is_user_home_sidebar );
 }
 
 /**

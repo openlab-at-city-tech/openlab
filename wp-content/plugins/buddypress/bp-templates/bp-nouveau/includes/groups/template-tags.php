@@ -3,7 +3,7 @@
  * Groups Template tags
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.2.0
  */
 
 // Exit if accessed directly.
@@ -334,6 +334,17 @@ function bp_nouveau_group_manage_screen() {
 		bp_get_template_part( $template );
 
 		if ( ! empty( $core_screen['hook'] ) ) {
+
+			// Group's "Manage > Details" page.
+			if ( 'group_details_admin' === $core_screen['hook'] ) {
+				/**
+				 * Fires after the group description admin details.
+				 *
+				 * @since 1.0.0
+				 */
+				do_action( 'groups_custom_group_fields_editable' );
+			}
+
 			/**
 			 * Fires before the display of group delete admin.
 			 *
@@ -945,7 +956,7 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 
 			remove_filter( 'bp_get_group_join_button', 'bp_nouveau_groups_catch_button_args', 100, 1 );
 
-			if ( ! empty( bp_nouveau()->groups->button_args ) ) {
+			if ( isset( bp_nouveau()->groups->button_args ) && bp_nouveau()->groups->button_args ) {
 				$button_args = bp_nouveau()->groups->button_args;
 
 				// If we pass through parent classes merge those into the existing ones
@@ -1048,14 +1059,22 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 	}
 
 /**
- * Does the group has meta.
+ * Does the group has metas or a specific meta value.
  *
  * @since 3.0.0
+ * @since 3.2.0 Adds the $meta_key argument.
  *
- * @return bool True if the group has meta. False otherwise.
+ * @param  string $meta_key The key of the meta to check the value for.
+ * @return bool             True if the group has meta. False otherwise.
  */
-function bp_nouveau_group_has_meta() {
-	return (bool) bp_nouveau_get_group_meta();
+function bp_nouveau_group_has_meta( $meta_key = '' ) {
+	$group_meta = bp_nouveau_get_group_meta();
+
+	if ( ! $meta_key ) {
+		return (bool) $group_meta;
+	}
+
+	return ! empty( $group_meta[ $meta_key ] );
 }
 
 /**
@@ -1360,3 +1379,39 @@ function bp_nouveau_get_group_description_excerpt( $group = null, $length = null
 	 */
 	return apply_filters( 'bp_nouveau_get_group_description_excerpt', bp_create_excerpt( $group->description, $length ), $group );
 }
+
+/**
+ * Output "checked" attribute to determine if the group type should be checked.
+ *
+ * @since 3.2.0
+ *
+ * @param object $type Group type object. See bp_groups_get_group_type_object().
+ */
+function bp_nouveau_group_type_checked( $type = null ) {
+	if ( ! is_object( $type ) ) {
+		return;
+	}
+
+	// Group creation screen requires a different check.
+	if ( bp_is_group_create() ) {
+		checked( true, ! empty( $type->create_screen_checked ) );
+	} elseif ( bp_is_group() ) {
+		checked( bp_groups_has_group_type( bp_get_current_group_id(), $type->name ) );
+	}
+}
+
+/**
+ * Adds the "Notify group members of these changes" checkbox to the Manage > Details panel.
+ *
+ * See #7837 for background on why this technique is required.
+ *
+ * @since 4.0.0
+ */
+function bp_nouveau_add_notify_group_members_checkbox() {
+	printf( '<p class="bp-controls-wrap">
+		<label for="group-notify-members" class="bp-label-text">
+			<input type="checkbox" name="group-notify-members" id="group-notify-members" value="1" /> %s
+		</label>
+	</p>', esc_html__( 'Notify group members of these changes via email', 'buddypress' ) );
+}
+add_action( 'groups_custom_group_fields_editable', 'bp_nouveau_add_notify_group_members_checkbox', 20 );

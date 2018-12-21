@@ -100,7 +100,7 @@ body#bp-default #admin-bar-logo {
 	padding: 0;
 	float: right;
 	position: relative;
-	background: url(../images/admin-menu-arrow.gif) 88% 53% no-repeat;
+	background: url(../images/admin-menu-arrow.gif) 12% 53% no-repeat;
 	padding-left: 11px;
 }
 
@@ -226,8 +226,6 @@ body#bp-default #admin-bar-logo {
 	margin-right: 2px;
 	background: #fff;
 	color: #000;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
 

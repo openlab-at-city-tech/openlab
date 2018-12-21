@@ -498,6 +498,9 @@ class BP_Component {
 
 		// No sub nav items without a main nav item.
 		if ( !empty( $main_nav ) ) {
+			// Always set the component ID.
+			$main_nav['component_id'] = $this->id;
+
 			bp_core_new_nav_item( $main_nav, 'members' );
 
 			// Sub nav items are not required.
@@ -661,7 +664,7 @@ class BP_Component {
 		// Add to the BuddyPress global object.
 		if ( !empty( $tables ) && is_array( $tables ) ) {
 			foreach ( $tables as $global_name => $table_name ) {
-				$this->$global_name = $table_name;
+				$this->{$global_name} = $table_name;
 			}
 
 			// Keep a record of the metadata tables in the component.

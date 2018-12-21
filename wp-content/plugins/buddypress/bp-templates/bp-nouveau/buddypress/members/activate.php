@@ -2,7 +2,8 @@
 /**
  * BuddyPress - Members Activate
  *
- * @version 3.0.0
+ * @since 3.0.0
+ * @version 3.2.0
  */
 ?>
 
@@ -17,22 +18,30 @@
 		<?php if ( bp_account_was_activated() ) : ?>
 
 			<?php if ( isset( $_GET['e'] ) ) : ?>
-				<p><?php _e( 'Your account was activated successfully! Your account details have been sent to you in a separate email.', 'buddypress' ); ?></p>
+				<p><?php esc_html_e( 'Your account was activated successfully! Your account details have been sent to you in a separate email.', 'buddypress' ); ?></p>
 			<?php else : ?>
-				<p><?php printf( __( 'Your account was activated successfully! You can now <a href="%s">log in</a> with the username and password you provided when you signed up.', 'buddypress' ), wp_login_url( bp_get_root_domain() ) ); ?></p>
+				<p><?php esc_html_e( 'Your account was activated successfully! You can now log in with the username and password you provided when you signed up.', 'buddypress' ); ?></p>
 			<?php endif; ?>
+
+			<?php
+			printf(
+				'<p><a href="%1$s">%2$s</a></p>',
+				esc_url( wp_login_url( bp_get_root_domain() ) ),
+				esc_html__( 'Log In', 'buddypress' )
+			);
+			?>
 
 		<?php else : ?>
 
-			<p><?php _e( 'Please provide a valid activation key.', 'buddypress' ); ?></p>
+			<p><?php esc_html_e( 'Please provide a valid activation key.', 'buddypress' ); ?></p>
 
 			<form action="" method="post" class="standard-form" id="activation-form">
 
-				<label for="key"><?php _e( 'Activation Key:', 'buddypress' ); ?></label>
+				<label for="key"><?php esc_html_e( 'Activation Key:', 'buddypress' ); ?></label>
 				<input type="text" name="key" id="key" value="<?php echo esc_attr( bp_get_current_activation_key() ); ?>" />
 
 				<p class="submit">
-					<input type="submit" name="submit" value="<?php esc_attr_e( 'Activate', 'buddypress' ); ?>" />
+					<input type="submit" name="submit" value="<?php echo esc_attr_x( 'Activate', 'button', 'buddypress' ); ?>" />
 				</p>
 
 			</form>

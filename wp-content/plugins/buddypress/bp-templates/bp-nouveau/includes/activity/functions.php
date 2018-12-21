@@ -3,7 +3,7 @@
  * Activity functions
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -84,8 +84,12 @@ function bp_nouveau_activity_localize_scripts( $params = array() ) {
 			) ),
 			'avatar_width'  => $width,
 			'avatar_height' => $height,
-			'avatar_alt'    => sprintf( __( 'Profile photo of %s', 'buddypress' ), $user_displayname ),
-			'user_domain'   => bp_loggedin_user_domain()
+			'user_domain'   => bp_loggedin_user_domain(),
+			'avatar_alt'    => sprintf(
+				/* translators: %s = member name */
+				__( 'Profile photo of %s', 'buddypress' ),
+				$user_displayname
+			),
 		) );
 	}
 
@@ -159,6 +163,8 @@ function bp_nouveau_activity_localize_scripts( $params = array() ) {
 		'whatsnewPlaceholder' => sprintf( __( "What's new, %s?", 'buddypress' ), bp_get_user_firstname( $user_displayname ) ),
 		'whatsnewLabel'       => __( 'Post what\'s new', 'buddypress' ),
 		'whatsnewpostinLabel' => __( 'Post in', 'buddypress' ),
+		'postUpdateButton'    => __( 'Post Update', 'buddypress' ),
+		'cancelButton'        => __( 'Cancel', 'buddypress' ),
 	);
 
 	if ( bp_is_group() ) {
@@ -352,11 +358,14 @@ function bp_nouveau_activity_secondary_avatars( $action, $activity ) {
 	switch ( $activity->component ) {
 		case 'groups':
 		case 'friends':
+			$secondary_avatar = bp_get_activity_secondary_avatar( array( 'linked' => false ) );
+
 			// Only insert avatar if one exists.
-			if ( $secondary_avatar = bp_get_activity_secondary_avatar() ) {
-				$reverse_content = strrev( $action );
-				$position        = strpos( $reverse_content, 'a<' );
-				$action          = substr_replace( $action, $secondary_avatar, -$position - 2, 0 );
+			if ( $secondary_avatar ) {
+				$link_close  = '">';
+				$first_link  = strpos( $action, $link_close );
+				$second_link = strpos( $action, $link_close, $first_link + strlen( $link_close ) );
+				$action      = substr_replace( $action, $secondary_avatar, $second_link + 2, 0 );
 			}
 			break;
 	}
@@ -413,7 +422,7 @@ function bp_nouveau_activity_scope_newest_class( $classes = '' ) {
 				$new_mentions = bp_get_user_meta( $user_id, 'bp_new_mentions', true );
 
 				// The current activity is one of the new mentions
-				if ( is_array( $new_mentions ) && in_array( bp_get_activity_id(), $new_mentions ) ) {
+				if ( is_array( $new_mentions ) && in_array( bp_get_activity_id(), $new_mentions, true ) ) {
 					$my_classes[] = 'bp-my-mentions';
 				}
 			}

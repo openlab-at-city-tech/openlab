@@ -219,7 +219,7 @@ function bp_nouveau_blogs_loop_buttons( $args = array() ) {
 
 		remove_filter( 'bp_get_blogs_visit_blog_button', 'bp_nouveau_blogs_catch_button_args', 100, 1 );
 
-		if ( ! empty( bp_nouveau()->blogs->button_args ) ) {
+		if ( isset( bp_nouveau()->blogs->button_args ) && bp_nouveau()->blogs->button_args ) {
 			$button_args = bp_nouveau()->blogs->button_args ;
 
 			// If we pass through parent classes add them to $button array

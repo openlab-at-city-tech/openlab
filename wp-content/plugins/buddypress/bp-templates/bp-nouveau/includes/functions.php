@@ -3,7 +3,7 @@
  * Common functions
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -44,7 +44,11 @@ function bp_nouveau_ajax_querystring( $query_string, $object ) {
 	);
 
 	if ( ! empty( $_POST ) ) {
-		$post_query = wp_parse_args( $_POST, $post_query );
+		$post_query = bp_parse_args(
+			$_POST,
+			$post_query,
+			'nouveau_ajax_querystring'
+		);
 
 		// Make sure to transport the scope, filter etc.. in HeartBeat Requests
 		if ( ! empty( $post_query['data']['bp_heartbeat'] ) ) {
@@ -52,7 +56,11 @@ function bp_nouveau_ajax_querystring( $query_string, $object ) {
 
 			// Remove heartbeat specific vars
 			$post_query = array_diff_key(
-				wp_parse_args( $bp_heartbeat, $post_query ),
+				bp_parse_args(
+					$bp_heartbeat,
+					$post_query,
+					'nouveau_ajax_querystring_heartbeat'
+				),
 				array(
 					'data'      => false,
 					'interval'  => false,
@@ -242,12 +250,16 @@ function bp_nouveau_wrapper( $args = array() ) {
 		$generic_class = '';
 	}
 
-	$r = wp_parse_args( $args, array(
-		'container'         => 'div',
-		'container_id'      => '',
-		'container_classes' => array( $generic_class, $current_component_class   ),
-		'output'            => '',
-	) );
+	$r = bp_parse_args(
+		$args,
+		array(
+			'container'         => 'div',
+			'container_id'      => '',
+			'container_classes' => array( $generic_class, $current_component_class   ),
+			'output'            => '',
+		),
+		'nouveau_wrapper'
+	);
 
 	$valid_containers = array(
 		'div'  => true,
@@ -316,7 +328,7 @@ function bp_nouveau_register_sidebars() {
 	$sidebars = array();
 	if ( $default_user_front ) {
 		$sidebars[] = array(
-			'name'          => __( 'BuddyPress User\'s Home', 'buddypress' ),
+			'name'          => __( 'BuddyPress Member\'s Home', 'buddypress' ),
 			'id'            => 'sidebar-buddypress-members',
 			'description'   => __( 'Add widgets here to appear in the front page of each member of your community.', 'buddypress' ),
 			'before_widget' => '<div id="%1$s" class="widget %2$s">',
@@ -920,7 +932,7 @@ function bp_nouveau_get_user_feedback( $feedback_id = '' ) {
 	$feedback_messages = apply_filters( 'bp_nouveau_feedback_messages', array(
 		'registration-disabled' => array(
 			'type'    => 'info',
-			'message' => __( 'User registration is currently not allowed.', 'buddypress' ),
+			'message' => __( 'Member registration is currently not allowed.', 'buddypress' ),
 			'before'  => 'bp_before_registration_disabled',
 			'after'   => 'bp_after_registration_disabled'
 		),
@@ -1034,19 +1046,19 @@ function bp_nouveau_get_user_feedback( $feedback_id = '' ) {
 		),
 		'member-activity-loading' => array(
 			'type'    => 'loading',
-			'message' => __( 'Loading the user\'s updates. Please wait.', 'buddypress' ),
+			'message' => __( 'Loading the member\'s updates. Please wait.', 'buddypress' ),
 		),
 		'member-blogs-loading' => array(
 			'type'    => 'loading',
-			'message' => __( 'Loading the user\'s blogs. Please wait.', 'buddypress' ),
+			'message' => __( 'Loading the member\'s blogs. Please wait.', 'buddypress' ),
 		),
 		'member-friends-loading' => array(
 			'type'    => 'loading',
-			'message' => __( 'Loading the user\'s friends. Please wait.', 'buddypress' ),
+			'message' => __( 'Loading the member\'s friends. Please wait.', 'buddypress' ),
 		),
 		'member-groups-loading' => array(
 			'type'    => 'loading',
-			'message' => __( 'Loading the user\'s groups. Please wait.', 'buddypress' ),
+			'message' => __( 'Loading the member\'s groups. Please wait.', 'buddypress' ),
 		),
 		'member-notifications-loading' => array(
 			'type'    => 'loading',
@@ -1134,7 +1146,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 	$fields = apply_filters( 'bp_nouveau_get_signup_fields', array(
 		'account_details' => array(
 			'signup_username' => array(
-				'label'          => _x( 'Username%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Username', 'buddypress' ),
 				'required'       => true,
 				'value'          => 'bp_get_signup_username_value',
 				'attribute_type' => 'username',
@@ -1142,7 +1154,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 				'class'          => '',
 			),
 			'signup_email' => array(
-				'label'          => _x( 'Email Address%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Email Address', 'buddypress' ),
 				'required'       => true,
 				'value'          => 'bp_get_signup_email_value',
 				'attribute_type' => 'email',
@@ -1150,7 +1162,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 				'class'          => '',
 			),
 			'signup_password' => array(
-				'label'          => _x( 'Choose a Password%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Choose a Password', 'buddypress' ),
 				'required'       => true,
 				'value'          => '',
 				'attribute_type' => 'password',
@@ -1158,7 +1170,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 				'class'          => 'password-entry',
 			),
 			'signup_password_confirm' => array(
-				'label'          => _x( 'Confirm Password%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Confirm Password', 'buddypress' ),
 				'required'       => true,
 				'value'          => '',
 				'attribute_type' => 'password',
@@ -1168,7 +1180,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 		),
 		'blog_details' => array(
 			'signup_blog_url' => array(
-				'label'          => _x( 'Site URL%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Site URL', 'buddypress' ),
 				'required'       => true,
 				'value'          => 'bp_get_signup_blog_url_value',
 				'attribute_type' => 'slug',
@@ -1176,7 +1188,7 @@ function bp_nouveau_get_signup_fields( $section = '' ) {
 				'class'          => '',
 			),
 			'signup_blog_title' => array(
-				'label'          => _x( 'Site Title%s', 'signup field label', 'buddypress' ),
+				'label'          => __( 'Site Title', 'buddypress' ),
 				'required'       => true,
 				'value'          => 'bp_get_signup_blog_title_value',
 				'attribute_type' => 'title',
@@ -1319,6 +1331,16 @@ function bp_nouveau_get_submit_button( $action = '' ) {
 				'id'    => 'submit',
 				'value' => __( 'Save', 'buddypress' ),
 				'class' => 'auto',
+			),
+		),
+		'activity-new-comment' => array(
+			'after'     => 'bp_activity_entry_comments',
+			'nonce'     => 'new_activity_comment',
+			'nonce_key' => '_wpnonce_new_activity_comment',
+			'wrapper'   => false,
+			'attributes' => array(
+				'name'  => 'ac_form_submit',
+				'value' => _x( 'Post', 'button', 'buddypress' ),
 			),
 		),
 	) );

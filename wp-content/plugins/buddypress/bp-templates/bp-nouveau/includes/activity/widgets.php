@@ -3,7 +3,7 @@
  * BP Nouveau Activity widgets
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -32,7 +32,7 @@ class BP_Latest_Activities extends WP_Widget {
 		$widget_ops = apply_filters(
 			'bp_latest_activities', array(
 				'classname'                   => 'bp-latest-activities buddypress',
-				'description'                 => __( 'Display the latest updates of your community having the type(s) of your choice.', 'buddypress' ),
+				'description'                 => __( 'Display the latest updates of your community having the types of your choice.', 'buddypress' ),
 				'customize_selective_refresh' => true,
 			)
 		);
@@ -165,11 +165,15 @@ class BP_Latest_Activities extends WP_Widget {
 	 * @return string HTML output.
 	 */
 	public function form( $instance ) {
-		$instance = wp_parse_args( (array) $instance, array(
-			'title' => __( 'Latest updates', 'buddypress' ),
-			'max'   => 5,
-			'type'  => '',
-		) );
+		$instance = bp_parse_args(
+			(array) $instance,
+			array(
+				'title' => __( 'Latest updates', 'buddypress' ),
+				'max'   => 5,
+				'type'  => '',
+			),
+			'widget_latest_activities'
+		);
 
 		$title = esc_attr( $instance['title'] );
 		$max   = (int) $instance['max'];
@@ -185,14 +189,14 @@ class BP_Latest_Activities extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'max' ); ?>"><?php _e( 'Max amount to display:', 'buddypress' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'max' ); ?>"><?php _e( 'Maximum amount to display:', 'buddypress' ); ?></label>
 			<input type="number" class="widefat" id="<?php echo $this->get_field_id( 'max' ); ?>" name="<?php echo $this->get_field_name( 'max' ); ?>" value="<?php echo intval( $max ); ?>" step="1" min="1" max="20" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'type' ); ?>"><?php esc_html_e( 'Type:', 'buddypress' ); ?></label>
 			<select class="widefat" multiple="multiple" id="<?php echo $this->get_field_id( 'type' ); ?>" name="<?php echo $this->get_field_name( 'type' ); ?>[]">
 				<?php foreach ( bp_nouveau_get_activity_filters() as $key => $name ) : ?>
-					<option value="<?php echo esc_attr( $key ); ?>" <?php selected( in_array( $key, $type ) ); ?>><?php echo esc_html( $name ); ?></option>
+					<option value="<?php echo esc_attr( $key ); ?>" <?php selected( in_array( $key, $type, true ) ); ?>><?php echo esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
