@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: text, replace, shortcut, shortcuts, post, post content, coffee2code
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.1
-Tested up to: 4.5
-Stable tag: 3.7
+Requires at least: 4.7
+Tested up to: 4.9
+Stable tag: 3.8
 
 Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
 
@@ -49,15 +49,15 @@ Would have the effect of changing "His majesty" to "Hellos majesty".
 
 * However, a benefit of the replacement text not being saved to the database and instead evaluated when the data is being loaded into a web page is that if the replacement text is modified, all pages making use of the shortcut will henceforth use the updated replacement text.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [GitHub](https://github.com/coffe2code/text-replace/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
 
 1. Whether installing or updating, whether this plugin or any other, it is always advisable to back-up your data before starting
-1. Unzip `text-replace.zip` inside the `/wp-content/plugins/` directory (or install via the built-in WordPress plugin installer)
+1. Install via the built-in WordPress plugin installer. Or download and unzip `text-replace.zip` inside the plugins directory for your site (typically `wp-content/plugins/`)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
-1. (optional) Go to the `Settings` -> `Text Replace` admin options page and customize the options (notably to define the shortcuts and their replacements).
+1. Go to the `Settings` -> `Text Replace` admin options page and customize the options (notably to define the shortcuts and their replacements)
 
 
 == Frequently Asked Questions ==
@@ -108,11 +108,11 @@ Yes.
 1. A screenshot of the admin options page for the plugin, where you define the terms/phrases/shortcuts and their related replacement text
 
 
-== Filters ==
+== Hooks ==
 
 The plugin exposes five filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
 
-= c2c_text_replace_filters (filter) =
+**c2c_text_replace_filters (filter)**
 
 The 'c2c_text_replace_filters' hook allows you to customize what hooks get text replacement applied to them.
 
@@ -136,20 +136,7 @@ function more_text_replacements( $filters ) {
 add_filter( 'c2c_text_replace_filters', 'more_text_replacements' );
 `
 
-= c2c_text_replace_comments (filter) =
-
-The 'c2c_text_replace_comments' hook allows you to customize or override the setting indicating if text replacement should be enabled in comments.
-
-Arguments:
-
-* $state (bool): Either true or false indicating if text replacement is enabled for comments. This will be the value set via the plugin's settings page.
-
-Example:
-
-`// Prevent text replacement from ever being enabled.
-add_filter( 'c2c_text_replace_comments', '__return_false' );`
-
-= c2c_text_replace (filter) =
+**c2c_text_replace (filter)**
 
 The 'c2c_text_replace' hook allows you to customize or override the setting defining all of the text replacement shortcuts and their replacements.
 
@@ -178,7 +165,7 @@ function my_text_replacements( $replacements ) {
 add_filter( 'c2c_text_replace', 'my_text_replacements' );
 `
 
-= c2c_text_replace_comments (filter) =
+**c2c_text_replace_comments (filter)**
 
 The 'c2c_text_replace_comments' hook allows you to customize or override the setting indicating if text replacement should be enabled in comments.
 
@@ -191,7 +178,7 @@ Example:
 `// Prevent text replacements from ever being enabled in comments.
 add_filter( 'c2c_text_replace_comments', '__return_false' );`
 
-= c2c_text_replace_case_sensitive (filter) =
+**c2c_text_replace_case_sensitive (filter)**
 
 The 'c2c_text_replace_case_sensitive' hook allows you to customize or override the setting indicating if text replacement should be case sensitive.
 
@@ -204,7 +191,7 @@ Example:
 `// Prevent text replacement from ever being case sensitive.
 add_filter( 'c2c_text_replace_case_sensitive', '__return_false' );`
 
-= c2c_text_replace_once (filter) =
+**c2c_text_replace_once (filter)**
 
 The 'c2c_text_replace_once' hook allows you to customize or override the setting indicating if text replacement should be limited to once per term per piece of text being processed regardless of how many times the term appears.
 
@@ -219,6 +206,55 @@ add_filter( 'c2c_text_replace_once', '__return_true' );`
 
 
 == Changelog ==
+
+= 3.8 (2018-07-14) =
+Highlights:
+
+* This release adds a setting for links to open in a new window, adds support for linkable text spanning multiple lines in your post, adds a filter for customizing link attributes, improves performance, and makes numerous behind-the-scenes improvements and changes.
+
+Details:
+* New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
+* Fix: Honor setting to limit text replacements to just once a post for multibyte strings
+* New: Add support for finding text to replace that may span more than one line or whose internal spaces vary in number and type
+* Change: Update plugin framework to 048
+    * 048:
+    * When resetting options, delete the option rather than setting it with default values
+    * Prevent double "Settings reset" admin notice upon settings reset
+    * 047:
+    * Don't save default setting values to database on install
+    * Change "Cheatin', huh?" error messages to "Something went wrong.", consistent with WP core
+    * Note compatibility through WP 4.9+
+    * Drop compatibility with version of WP older than 4.7
+    * 046:
+    * Fix `reset_options()` to reference instance variable `$options`
+    * Note compatibility through WP 4.7+
+    * Update copyright date (2017)
+    * 045:
+    * Ensure `reset_options()` resets values saved in the database
+    * 044:
+    * Add `reset_caches()` to clear caches and memoized data. Use it in `reset_options()` and `verify_config()`
+    * Add `verify_options()` with logic extracted from `verify_config()` for initializing default option attributes
+    * Add `add_option()` to add a new option to the plugin's configuration
+    * Add filter 'sanitized_option_names' to allow modifying the list of whitelisted option names
+    * Change: Refactor `get_option_names()`
+* Change: Cast return values of hooks to expected data types
+* New: Add README.md
+* New: Add GitHub link to readme
+* Change: Store setting name in constant
+* Unit tests:
+    * Change: Improve test initialization
+    * Change: Improve tests for settings handling
+    * Change: Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
+    * Change: Enable more error output for unit tests
+    * New: Add more tests
+    * New: Add header comments to bootstrap
+* Change: Note compatibility through WP 4.9+
+* Change: Drop compatibility with version of WP older than 4.7.
+* Change: Rename readme.txt section from 'Filters' to 'Hooks'
+* Change: Modify formatting of hook name in readme to prevent being uppercased when shown in the Plugin Directory
+* Change: Update installation instruction to prefer built-in installer over .zip file
+* Change: Update URLs used in examples and docs to be HTTPS where appropriate
+* Change: Update copyright date (2018)
 
 = 3.7 (2016-05-01) =
 * Change: Update plugin framework to 043:
@@ -428,6 +464,9 @@ add_filter( 'c2c_text_replace_once', '__return_true' );`
 
 
 == Upgrade Notice ==
+
+= 3.8 =
+Recommended update: fixed to honor 'replace once' setting, including for multibyte strings; allow for whitespace in text to replace to represent any number of whitespace; updated plugin framework to v048; compatibility is now WP 4.7-4.9; added README.md; more.
 
 = 3.7 =
 Minor update: improved support for localization; updated plugin framework to 042; verified compatibility through WP 4.5; dropped compatibility with WP older than 4.1; updated copyright date (2016)

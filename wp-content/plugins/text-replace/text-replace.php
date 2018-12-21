@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Text Replace
- * Version:     3.7
+ * Version:     3.8
  * Plugin URI:  http://coffee2code.com/wp-plugins/text-replace/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -10,7 +10,7 @@
  * Text Domain: text-replace
  * Description: Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
  *
- * Compatible with WordPress 3.6+ through 4.5+.
+ * Compatible with WordPress 4.7+ through 4.9+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,18 +18,21 @@
  *
  * @package Text_Replace
  * @author  Scott Reilly
- * @version 3.7
+ * @version 3.8
  */
 
 /*
  * TODO:
  * = Facilitate multi-line replacement strings
- * - Shortcode and template tag (and widget?) to display listing of all supported text replacements (filterable)
- * - (3.8) As done in Linkify Text, make it so order is not as important so longer, more precise text matches first.
+ * - Shortcode and template tag (and widget?) to display listing of all
+ *   supported text replacements (filterable)
+ * - Prevent replacement text from getting replacements. "e.g. given
+ *   ['test this' => 'good test', 'test' => 'cat'], the text 'test this' should
+ *   become 'good test' and not 'good cat'
 */
 
 /*
-	Copyright (c) 2004-2016 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2004-2018 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -52,7 +55,15 @@ if ( ! class_exists( 'c2c_TextReplace' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
+final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
+
+	/**
+	 * Name of plugin's setting.
+	 *
+	 * @since 3.8
+	 * @var string
+	 */
+	const SETTING_NAME = 'c2c_text_replace';
 
 	/**
 	 * The one true instance.
@@ -78,7 +89,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.7', 'text-replace', 'c2c', __FILE__, array() );
+		parent::__construct( '3.8', 'text-replace', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -97,7 +108,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 	 * Handles uninstallation tasks, such as deleting plugin options.
 	 */
 	public static function uninstall() {
-		delete_option( 'c2c_text_replace' );
+		delete_option( self::SETTING_NAME );
 	}
 
 	/**
@@ -132,7 +143,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 				'datatype'         => 'hash',
 				'default'          => array(
 					":wp:"          => "<a href='https://wordpress.org'>WordPress</a>",
-					":codex:"       => "<a href='http://codex.wordpress.org'>WordPress Codex</a>",
+					":codex:"       => "<a href='https://codex.wordpress.org'>WordPress Codex</a>",
 					":coffee2code:" => "<a href='http://coffee2code.com' title='coffee2code'>coffee2code</a>"
 				),
 				'allow_html'       => true,
@@ -166,8 +177,8 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 	 * Override the plugin framework's register_filters() to actually register actions against filters.
 	 */
 	public function register_filters() {
-		$filters = apply_filters( 'c2c_text_replace_filters', array( 'the_content', 'the_excerpt', 'widget_text' ) );
-		foreach ( (array) $filters as $filter ) {
+		$filters = (array) apply_filters( 'c2c_text_replace_filters', array( 'the_content', 'the_excerpt', 'widget_text' ) );
+		foreach ( $filters as $filter ) {
 			add_filter( $filter, array( $this, 'text_replace' ), 2 );
 		}
 
@@ -189,8 +200,8 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 		echo '<div class="c2c-hr">&nbsp;</div>';
 		echo '<h3>' . __( 'Shortcuts and text replacements', 'text-replace' ) . '</h3>';
 		echo '<p>' . __( 'Define shortcuts and text replacement expansions here. The format should be like this:', 'text-replace' ) . '</p>';
-		echo "<blockquote><code>:wp: => &lt;a href='http://wordpress.org'>WordPress&lt;/a></code></blockquote>";
-		echo '<p>' . __( 'Where <code>:wp:</code> is the shortcut you intend to use in your posts and the <code>&lt;a href=\'http://wordpress.org\'>WordPress&lt;/a></code> would be what you want the shortcut to be replaced with when the post is shown on your site.', 'text-replace' ) . '</p>';
+		echo "<blockquote><code>:wp: => &lt;a href='https://wordpress.org'>WordPress&lt;/a></code></blockquote>";
+		echo '<p>' . __( 'Where <code>:wp:</code> is the shortcut you intend to use in your posts and the <code>&lt;a href=\'https://wordpress.org\'>WordPress&lt;/a></code> would be what you want the shortcut to be replaced with when the post is shown on your site.', 'text-replace' ) . '</p>';
 		echo '<p>' . __( 'Other considerations:', 'text-replace' ) . '</p>';
 		echo '<ul class="c2c-plugin-list"><li>';
 		echo __( 'List the more specific matches early, to avoid stomping on another of your shortcuts.  For example, if you have both <code>:p</code> and <code>:pout:</code> as shortcuts, put <code>:pout:</code> first; otherwise, the <code>:p</code> will match against all the <code>:pout:</code> in your text.', 'text-replace' );
@@ -222,7 +233,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 	public function text_replace_comment_text( $text ) {
 		$options = $this->get_options();
 
-		if ( apply_filters( 'c2c_text_replace_comments', $options['text_replace_comments'] ) ) {
+		if ( (bool) apply_filters( 'c2c_text_replace_comments', $options['text_replace_comments'] ) ) {
 			$text = $this->text_replace( $text );
 		}
 
@@ -237,21 +248,34 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 	 */
 	public function text_replace( $text ) {
 		$options         = $this->get_options();
-		$text_to_replace = apply_filters( 'c2c_text_replace',                $options['text_to_replace'] );
-		$case_sensitive  = apply_filters( 'c2c_text_replace_case_sensitive', $options['case_sensitive'] );
-		$limit           = apply_filters( 'c2c_text_replace_once',           $options['replace_once'] ) ? 1 : -1;
-		$preg_flags      = $case_sensitive ? 's' : 'si';
+		$text_to_replace = (array) apply_filters( 'c2c_text_replace',                $options['text_to_replace'] );
+		$case_sensitive  = (bool)  apply_filters( 'c2c_text_replace_case_sensitive', $options['case_sensitive'] );
+		$limit           = (bool)  apply_filters( 'c2c_text_replace_once',           $options['replace_once'] ) ? 1 : -1;
+		$preg_flags      = $case_sensitive ? 'ms' : 'msi';
 		$mb_regex_encoding = null;
 
 		$text = ' ' . $text . ' ';
 
+		$can_do_mb = function_exists( 'mb_regex_encoding' ) && function_exists( 'mb_ereg_replace' ) && function_exists( 'mb_strlen' );
+
 		// Store original mb_regex_encoding and then set it to UTF-8.
-		if ( function_exists( 'mb_regex_encoding' ) ) {
+		if ( $can_do_mb ) {
 			$mb_regex_encoding = mb_regex_encoding();
 			mb_regex_encoding( 'UTF-8' );
 		}
 
-		foreach ( (array) $text_to_replace as $old_text => $new_text ) {
+		if ( $text_to_replace ) {
+			// Sort array descending by key length. This way longer, more precise
+			// strings take precedence over shorter strings, preventing premature
+			// partial replacements.
+			// E.g. if "abc" and "abc def" are both defined for linking and in that
+			// order, the string "abc def ghi" would match on "abc def", the longer
+			// string rather than the shorter, less precise "abc".
+			$keys = array_map( $can_do_mb ? 'mb_strlen' : 'strlen', array_keys( $text_to_replace ) );
+			array_multisort( $keys, SORT_DESC, $text_to_replace );
+		}
+
+		foreach ( $text_to_replace as $old_text => $new_text ) {
 
 			// If the text to be replaced includes a '<' or '>', do direct string replacement.
 			if ( strpos( $old_text, '<' ) !== false || strpos( $old_text, '>' ) !== false ) {
@@ -281,13 +305,31 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_043 {
 					$old_text = str_replace( '&', '&(amp;|#038;)?', $old_text );
 				}
 
+				// Allow spaces in linkable text to represent any number of whitespace chars.
+				$old_text = preg_replace( '/\s+/', '\s+', $old_text );
+
 				$regex = "(?!<.*?){$old_text}(?![^<>]*?>)";
 
 				// If the text to be replaced has multibyte character(s), use
 				// mb_ereg_replace() if possible.
-				if ( function_exists( 'mb_ereg_replace' ) && function_exists( 'mb_strlen' ) && ( strlen( $old_text ) != mb_strlen( $old_text ) ) ) {
-					// NOTE: mb_ereg_replace() does not support limiting the number of replacements.
-					$text = mb_ereg_replace( $regex, $new_text, $text, $preg_flags );
+				if ( $can_do_mb && ( strlen( $old_text ) != mb_strlen( $old_text ) ) ) {
+					// NOTE: mb_ereg_replace() does not support limiting the number of
+					// replacements, hence the different handling if replacing once.
+					if ( 1 === $limit ) {
+						// Find first occurrence of the search string.
+						mb_ereg_search_init( $text, $old_text, $preg_flags );
+						$pos = mb_ereg_search_pos();
+
+						// Only do the replacement if the search string was found.
+						if ( false !== $pos ) {
+							$match = mb_ereg_search_getregs();
+							$text  = mb_substr( $text, 0, $pos[0] )
+								. $new_text
+								. mb_substr( $text, $pos[0] + mb_strlen( $match[0] ) );
+						}
+					} else {
+						$text = mb_ereg_replace( $regex, $new_text, $text, $preg_flags );
+					}
 				} else {
 					$text = preg_replace( "~{$regex}~{$preg_flags}", $new_text, $text, $limit );
 				}

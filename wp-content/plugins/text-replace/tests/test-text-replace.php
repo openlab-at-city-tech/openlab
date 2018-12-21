@@ -17,15 +17,30 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		':A&A:'          => 'Axis & Allies',
 		'は'             => 'Foo',
 		'@macnfoco'      => "Mac'N",
+		'Cocktail glacé' => 'http://www.domain.com/cocktail-glace.html',
+		'ユニコード漢字'   => 'http://php.net/manual/en/ref.mbstring.php',
+		'ユニコード漢字 は' => 'replacment text',
+		'Apple iPhone 6' => 'http://example.com/apple1',
+		'iPhone 6'       => 'http://example.com/aople2',
+		'test'           => 'http://example.com/txst1',
+		'test place'     => 'http://example.com/txst2',
 	);
+
+	public static function setUpBeforeClass() {
+		c2c_TextReplace::get_instance()->install();
+	}
 
 	public function setUp() {
 		parent::setUp();
+		c2c_TextReplace::get_instance()->reset_options();
 		$this->set_option();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+
+		// Reset options
+		c2c_TextReplace::get_instance()->reset_options();
 
 		remove_filter( 'c2c_text_replace',                array( $this, 'add_text_to_replace' ) );
 		remove_filter( 'c2c_text_replace_once',           '__return_true' );
@@ -120,15 +135,15 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextReplace_Plugin_043' ) );
+		$this->assertTrue( class_exists( 'c2c_TextReplace_Plugin_048' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '043', c2c_TextReplace::get_instance()->c2c_plugin_version() );
+		$this->assertEquals( '048', c2c_TextReplace::get_instance()->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '3.7', c2c_TextReplace::get_instance()->version() );
+		$this->assertEquals( '3.8', c2c_TextReplace::get_instance()->version() );
 	}
 
 	public function test_instance_object_is_returned() {
@@ -227,10 +242,78 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( ':COFFEE2CODE:', $this->text_replace( ':COFFEE2CODE:' ) );
 	}
 
+	/*
+	 * With 'Apple iPhone 6' followed by 'iPhone 6' as link defines, the string
+	 * 'Apple iPhone 6' should not have the 'iPhone 6' linkification applied to it.
+	 */
+	public function test_does_not_linkify_a_general_term_that_is_included_in_earlier_listed_term() {
+		$string = 'Apple iPhone 6';
+
+		$this->assertEquals( $this->expected_text( $string ), $this->text_replace( $string ) );
+	}
+
+	/**
+	 * Ensure a more specific string matches with priority over a less specific
+	 * string, regardless of what order they were defined.
+	 *
+	 *  MAYBE! Not sure if this is desired. But the theory is if both
+	 * "test" and "test place" are defined, then the text "test place" should get
+	 * linked, even though "test" was defined first.
+	 */
+	public function test_does_not_replace_a_more_general_term_when_general_is_first() {
+		$expected = $this->expected_text( 'test place' );
+
+		$this->assertEquals( "This $expected is true", $this->text_replace( 'This test place is true' ) );
+	}
+
+	public function tests_linkifies_term_split_across_multiple_lines() {
+		$expected = array(
+			"See my " . $this->expected_text( 'test place' ) . " site to read."
+				=> $this->text_replace( "See my test\nplace site to read." ),
+			"See my " . $this->expected_text( 'test place' ) . " site to read."
+				=> $this->text_replace( "See my test   place site to read." ),
+			"These are " . $this->expected_text( 'Cocktail glacé' ) . " to read"
+				=> $this->text_replace( "These are Cocktail\n\tglacé to read" ),
+			"This is interesting " . $this->expected_text( "ユニコード漢字 は" ) . " if I do say so"
+				=> $this->text_replace( "This is interesting ユニコード漢字\nは if I do say so" ),
+			"This is interesting " . $this->expected_text( "ユニコード漢字 は" ) . " if I do say so"
+				=> $this->text_replace( "This is interesting ユニコード漢字\t  は if I do say so" ),
+		);
+
+		foreach ( $expected as $expect => $actual ) {
+			$this->assertEquals( $expect, $actual );
+		}
+	}
+
+	public function test_linkifies_multibyte_text_once_via_setting() {
+		$linked = $this->expected_text( 'Cocktail glacé' );
+
+		$this->set_option( array( 'replace_once' => true ) );
+
+		$expected = array(
+			"$linked Cocktail glacé Cocktail glacé"
+				=> $this->text_replace( 'Cocktail glacé Cocktail glacé Cocktail glacé' ),
+			'dock ' . $this->expected_text( 'ユニコード漢字' ) . ' cart ユニコード漢字'
+				=> $this->text_replace( 'dock ユニコード漢字 cart ユニコード漢字' ),
+		);
+
+		foreach ( $expected as $expect => $actual ) {
+			$this->assertEquals( $expect, $actual );
+		}
+	}
+
 	public function test_replaces_once_via_setting() {
 		$expected = $this->expected_text( ':coffee2code:' );
 		$this->test_replaces_single_term_multiple_times();
 		$this->set_option( array( 'replace_once' => true ) );
+
+		$this->assertEquals( "$expected :coffee2code: :coffee2code:", $this->text_replace( ':coffee2code: :coffee2code: :coffee2code:' ) );
+	}
+
+	public function test_replaces_once_via_trueish_setting_value() {
+		$expected = $this->expected_text( ':coffee2code:' );
+		$this->test_replaces_single_term_multiple_times();
+		$this->set_option( array( 'replace_once' => '1' ) );
 
 		$this->assertEquals( "$expected :coffee2code: :coffee2code:", $this->text_replace( ':coffee2code: :coffee2code: :coffee2code:' ) );
 	}
@@ -351,14 +434,36 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( $this->expected_text( ':coffee2code:' ), apply_filters( 'custom_filter', ':coffee2code:' ) );
 	}
 
-	public function test_uninstall_deletes_option() {
-		$option = 'c2c_text_replace';
-		c2c_TextReplace::get_instance()->get_options();
+	/*
+	 * Setting handling
+	 */
 
-		$this->assertNotFalse( get_option( $option ) );
+	/*
+	// This is normally the case, but the unit tests save the setting to db via
+	// setUp(), so until the unit tests are restructured somewhat, this test
+	// would fail.
+	public function test_does_not_immediately_store_default_settings_in_db() {
+		$option_name = c2c_TextReplace::SETTING_NAME;
+		// Get the options just to see if they may get saved.
+		$options     = c2c_TextReplace::get_instance()->get_options();
+
+		$this->assertFalse( get_option( $option_name ) );
+	}
+	*/
+
+	public function test_uninstall_deletes_option() {
+		$option_name = c2c_TextReplace::SETTING_NAME;
+		$options     = c2c_TextReplace::get_instance()->get_options();
+
+		// Explicitly set an option to ensure options get saved to the database.
+		$this->set_option( array( 'replace_once' => true ) );
+
+		$this->assertNotEmpty( $options );
+		$this->assertNotFalse( get_option( $option_name ) );
 
 		c2c_TextReplace::uninstall();
 
-		$this->assertFalse( get_option( $option ) );
+		$this->assertFalse( get_option( $option_name ) );
 	}
+
 }
