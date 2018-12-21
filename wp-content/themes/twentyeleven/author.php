@@ -42,8 +42,7 @@ get_header(); ?>
 
 				<?php
 				// If a user has filled out their description, show a bio on their entries.
-				if ( get_the_author_meta( 'description' ) ) :
-				?>
+				if ( get_the_author_meta( 'description' ) ) : ?>
 				<div id="author-info">
 					<div id="author-avatar">
 						<?php
@@ -65,10 +64,7 @@ get_header(); ?>
 				<?php endif; ?>
 
 				<?php /* Start the Loop */ ?>
-				<?php
-				while ( have_posts() ) :
-					the_post();
-?>
+				<?php while ( have_posts() ) : the_post(); ?>
 
 					<?php
 						/*
