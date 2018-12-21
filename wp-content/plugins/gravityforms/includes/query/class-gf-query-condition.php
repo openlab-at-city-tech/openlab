@@ -346,6 +346,14 @@ class GF_Query_Condition {
 					}
 				}
 
+				if ( $this->left instanceof GF_Query_Column && $this->left->is_entry_column() && $this->left->source ) {
+					if ( $query->is_multisource() && $this->left->field_id != 'form_id' ) {
+						$alias = $query->_alias( null, $this->left->source );
+						$left = "(`$alias`.`form_id` = {$this->left->source} AND $left";
+						$right .= ')';
+					}
+				}
+
 				return "$left {$this->operator} $right";
 			}
 		}

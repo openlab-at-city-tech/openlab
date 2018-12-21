@@ -234,6 +234,16 @@ class GFEntryDetail {
 		$form     = self::get_current_form();
 		$form_id  = absint( $form['id'] );
 
+		/**
+		 * Fires before the entry detail page is shown or any processing is handled.
+		 *
+		 * @param array $form The form object for the entry.
+		 * @param array $lead The entry object.
+		 *
+		 * @since 2.3.3.9
+		 */
+		gf_do_action( array( 'gform_pre_entry_detail', $form['id'] ), $form, $lead );
+
 		$total_count = self::get_total_count();
 		$position    = rgget( 'pos' ) ? rgget( 'pos' ) : 0;
 		$prev_pos    = ! rgblank( $position ) && $position > 0 ? $position - 1 : false;
@@ -278,6 +288,26 @@ class GFEntryDetail {
 				$lead = RGFormsModel::get_lead( $lead['id'] );
 				$lead = GFFormsModel::set_entry_meta( $lead, $form );
 				self::set_current_entry( $lead );
+
+				// Check if there's consent field, and values updated.
+				if ( GFCommon::has_consent_field( $form ) ) {
+					$user_data           = get_userdata( $current_user->ID );
+					$consent_update_note = '';
+
+					foreach ( $form['fields'] as $field ) {
+						if ( $field['type'] === 'consent' && ( $lead[ $field['id'] . '.1' ] !== $original_entry[ $field['id'] . '.1' ] ) ) {
+							if ( ! empty( $consent_update_note ) ) {
+								$consent_update_note .= "\n";
+							}
+							$consent_update_note .= empty( $lead[ $field['id'] . '.1' ] ) ? sprintf( esc_html__( '%s: Unchecked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $original_entry[ $field['id'] . '.2' ] ) : sprintf( esc_html__( '%s: Checked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $lead[ $field['id'] . '.2' ] );
+
+						}
+					}
+
+					if ( ! empty( $consent_update_note ) ) {
+						RGFormsModel::add_note( $lead['id'], $current_user->ID, $user_data->display_name, $consent_update_note );
+					}
+				}
 
 				break;
 
@@ -711,11 +741,22 @@ class GFEntryDetail {
 								break;
 
 							default :
-								$value   = RGFormsModel::get_lead_field_value( $lead, $field );
-								$td_id   = 'field_' . $form_id . '_' . $field_id;
+								$value = RGFormsModel::get_lead_field_value( $lead, $field );
+								$td_id = 'field_' . $form_id . '_' . $field_id;
 								$td_id = esc_attr( $td_id );
-								$content = "<tr valign='top'><td class='detail-view' id='{$td_id}'><label class='detail-label'>" . esc_html( GFCommon::get_label( $field ) ) . '</label>' .
-								           GFCommon::get_field_input( $field, $value, $lead['id'], $form_id, $form ) . '</td></tr>';
+
+								if ( is_array( $field->fields ) ) {
+									// Ensure the top level repeater has the right nesting level so the label is not duplicated.
+									$field->nestingLevel = 0;
+									$field_label = '';
+								} else {
+									$field_label = "<label class='detail-label'>" . esc_html( GFCommon::get_label( $field ) ) . '</label>';
+								}
+
+								$content = "<tr valign='top'><td class='detail-view' id='{$td_id}'>" .
+								           $field_label .
+								           GFCommon::get_field_input( $field, $value, $lead['id'], $form_id, $form ) .
+								           '</td></tr>';
 
 								break;
 						}
@@ -777,7 +818,7 @@ class GFEntryDetail {
 				?>
 				<thead>
 				<tr>
-					<th id="notes">Notes</th>
+					<th id="notes"><?php esc_html_e( 'Notes', 'gravityforms' ) ?></th>
 				</tr>
 				</thead>
 				<?php
@@ -954,7 +995,13 @@ class GFEntryDetail {
 							continue;
 						}
 
-						$value         = RGFormsModel::get_lead_field_value( $lead, $field );
+						$value = RGFormsModel::get_lead_field_value( $lead, $field );
+
+						if ( is_array( $field->fields ) ) {
+							// Ensure the top level repeater has the right nesting level so the label is not duplicated.
+							$field->nestingLevel = 0;
+						}
+
 						$display_value = GFCommon::get_lead_field_display( $field, $value, $lead['currency'] );
 
 						/**
@@ -1051,7 +1098,9 @@ class GFEntryDetail {
 														<?php
 													}
 												}
-												$subtotal = floatval( $product['quantity'] ) * $price;
+												$quantity = GFCommon::to_number( $product['quantity'], $lead['currency'] );
+
+												$subtotal = $quantity * $price;
 												$total += $subtotal;
 												?>
 											</ul>
@@ -1154,7 +1203,7 @@ class GFEntryDetail {
 			<div id="minor-publishing">
 				<?php
 
-				$payment_status = apply_filters( 'gform_payment_status', $entry['payment_status'], $form, $entry );
+				$payment_status = apply_filters( 'gform_payment_status', GFCommon::get_entry_payment_status_text( $entry['payment_status'] ), $form, $entry );
 				if ( ! empty( $payment_status ) ) {
 					?>
 					<div id="gf_payment_status" class="gf_payment_detail">
@@ -1269,9 +1318,17 @@ class GFEntryDetail {
 				<?php esc_html_e( 'Entry Id', 'gravityforms' ); ?>: <?php echo absint( $entry['id'] ) ?><br /><br />
 				<?php esc_html_e( 'Submitted on', 'gravityforms' ); ?>: <?php echo esc_html( GFCommon::format_date( $entry['date_created'], false, 'Y/m/d' ) ) ?>
 				<br /><br />
-				<?php esc_html_e( 'User IP', 'gravityforms' ); ?>: <?php echo esc_html( $entry['ip'] ); ?>
-				<br /><br />
 				<?php
+				if ( ! empty( $entry['date_updated'] ) && $entry['date_updated'] != $entry['date_created'] ) {
+					esc_html_e( 'Updated', 'gravityforms' ); ?>: <?php echo esc_html( GFCommon::format_date( $entry['date_updated'], false, 'Y/m/d' ) );
+					echo '<br /><br />';
+				}
+
+				if ( ! empty( $entry['ip'] ) ) {
+					esc_html_e( 'User IP', 'gravityforms' ); ?>: <?php echo esc_html( $entry['ip'] );
+					echo '<br /><br />';
+				}
+
 				if ( ! empty( $entry['created_by'] ) && $usermeta = get_userdata( $entry['created_by'] ) ) {
 					?>
 					<?php esc_html_e( 'User', 'gravityforms' ); ?>:
@@ -1279,9 +1336,8 @@ class GFEntryDetail {
 					<br /><br />
 					<?php
 				}
-				?>
 
-				<?php esc_html_e( 'Embed Url', 'gravityforms' ); ?>:
+				esc_html_e( 'Embed Url', 'gravityforms' ); ?>:
 				<a href="<?php echo esc_url( $entry['source_url'] ) ?>" target="_blank" alt="<?php echo esc_attr( $entry['source_url'] ) ?>" title="<?php echo esc_attr( $entry['source_url'] ) ?>">.../<?php echo esc_html( GFCommon::truncate_url( $entry['source_url'] ) ) ?></a>
 				<br /><br />
 				<?php
