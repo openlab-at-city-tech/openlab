@@ -214,7 +214,7 @@ function openlab_group_archive() {
         );
     }
 
-    if (!empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype']) {
+    if ( !empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype'] && in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
         $meta_query[] = array(
             'key' => 'portfolio_user_type',
             'value' => ucwords($_GET['usertype']),
@@ -1271,6 +1271,10 @@ function openlab_current_directory_filters() {
         $filter_words = array();
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
+
+            if ( 'usertype' === $ftype && ! in_array( $fvalue, openlab_valid_user_types(), true ) ) {
+                continue;
+            }
 
             $word = isset($filter_data['options'][$fvalue]) ? $filter_data['options'][$fvalue] : ucwords($fvalue);
 
