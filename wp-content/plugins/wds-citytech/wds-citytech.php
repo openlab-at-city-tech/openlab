@@ -2864,3 +2864,17 @@ add_filter(
 		];
 	}
 );
+
+/**
+ * Enqueue custom JS for Search & Filter, when activated.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'SEARCHANDFILTER_VERSION_NUM' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-search-filter', set_url_scheme( WPMU_PLUGIN_URL . '/js/search-filter.js' ), array( 'jquery' ) );
+	}
+);
