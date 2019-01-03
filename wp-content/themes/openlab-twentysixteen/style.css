@@ -50,7 +50,7 @@ h6 {
 ul,
 ol {
 	margin: 0 0 1.75em 1.25em;
-	padding: 0 0 0 1em
+	padding: 0 0 0 2em
 }
 
 /**
@@ -60,6 +60,10 @@ ol {
 .site-title {
     font-size: 2rem;
     font-size: 32px;
+}
+
+.main-navigation ul.sub-menu {
+	padding-left: 0;
 }
 
 /**
