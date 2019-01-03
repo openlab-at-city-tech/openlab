@@ -46,20 +46,11 @@ h6 {
 /**
  * 4.0 - Elements
  */
- 
+
 ul,
 ol {
 	margin: 0 0 1.75em 1.25em;
 	padding: 0 0 0 1em
-}
-
-ul {
-	list-style: disc inside;
-}
-
-ol {
-	list-style: decimal inside;
-	margin-left: 1.5em;
 }
 
 /**
