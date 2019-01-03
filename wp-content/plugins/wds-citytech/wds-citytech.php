@@ -322,7 +322,7 @@ function wds_load_account_type() {
 
 	if ( $account_type ) {
 		$return .= wds_get_register_fields( $account_type, $post_data );
-		$return .= '<div class="sr-only">' . $account_type . ' selected.</div>';
+		$return .= "<div class='sr-only'>" . $account_type . ' selected.</div>';
 	} else {
 		$return = 'Please select an Account Type.';
 	}
