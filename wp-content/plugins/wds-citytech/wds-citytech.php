@@ -2792,6 +2792,7 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	<fieldset class="department-selector">
 		<legend>Departments <?php echo esc_html( $required_gloss ); ?></legend>
+		<div class="error-container" id="academic-unit-selector-error"></div>
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
@@ -2810,6 +2811,9 @@ function openlab_academic_unit_selector( $args = array() ) {
 							name="departments[]"
 							type="checkbox"
 							value="<?php echo esc_attr( $dept_slug ); ?>"
+							data-parsley-atleastonedept
+							data-parsley-errors-container="#academic-unit-selector-error"
+							data-parsley-validate-if-empty
 						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
 					</li>
 				<?php endforeach; ?>
