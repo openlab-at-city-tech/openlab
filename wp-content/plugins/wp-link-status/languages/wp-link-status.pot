@@ -1,0 +1,2821 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Link Status\n"
+"POT-Creation-Date: 2016-01-21 10:36+0100\n"
+"PO-Revision-Date: 2016-01-21 10:36+0100\n"
+"Last-Translator: Pau Iglesias <pauiglesias@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext;_n;__ngettext_noop;_n_noop;_x;_nx;"
+"_nx_noop;_ex;esc_attr__;esc_attr_e;esc_attr_x;esc_html__;esc_html_e;"
+"esc_html_x\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../admin-pro/scans.php:51
+#, php-format
+msgid "Processing <b>%s</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:59 ../admin-pro/scans.php:67
+msgid "Close"
+msgstr ""
+
+#: ../admin-pro/scans.php:76
+msgid "Update URL"
+msgstr ""
+
+#: ../admin-pro/scans.php:77 ../admin-pro/scans.php:88
+#: ../admin-pro/scans.php:99 ../admin-pro/scans.php:110
+#: ../admin-pro/scans.php:121 ../admin-pro/scans.php:132
+#: ../admin-pro/scans.php:143 ../admin-pro/scans.php:154
+#: ../admin-pro/scans.php:165 ../admin-pro/scans.php:176
+#: ../admin-pro/scans.php:187 ../admin-pro/scans.php:198
+#: ../admin-pro/scans.php:209 ../admin-pro/scans.php:220
+#: ../admin-pro/scans.php:231 ../views-pro/tools-url.php:21
+msgid "Cancel"
+msgstr ""
+
+#: ../admin-pro/scans.php:85
+msgid "Confirm <b>Unlink this URL</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:87 ../admin-pro/scans.php:98
+#: ../admin-pro/scans.php:282 ../views-pro/scans-results.php:42
+msgid "Unlink"
+msgstr ""
+
+#: ../admin-pro/scans.php:96
+msgid "Confirm <b>Unlink selected URLs</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:107
+msgid "Confirm <b>Ignore this link</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:109 ../admin-pro/scans.php:120
+#: ../admin-pro/scans.php:291 ../views-pro/scans-results.php:43
+msgid "Ignore"
+msgstr ""
+
+#: ../admin-pro/scans.php:118
+msgid "Confirm <b>Ignore selected results</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:129
+msgid "Confirm <b>Undo Ignore this link</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:131 ../admin-pro/scans.php:142
+#: ../admin-pro/scans.php:292 ../views-pro/scans-results.php:44
+msgid "Undo Ignore"
+msgstr ""
+
+#: ../admin-pro/scans.php:140
+msgid "Confirm <b>Undo Ignore selected results</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:151
+msgid "Confirm <b>Apply Redirection</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:153
+msgid "Set Redirection"
+msgstr ""
+
+#: ../admin-pro/scans.php:162
+msgid "Confirm <b>Bulk apply redirections</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:164
+msgid "Set Redirections"
+msgstr ""
+
+#: ../admin-pro/scans.php:173
+msgid "Confirm <b>Add nofollow</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:175 ../admin-pro/scans.php:186
+#: ../admin-pro/scans.php:286 ../views-pro/scans-results.php:48
+msgid "Add nofollow"
+msgstr ""
+
+#: ../admin-pro/scans.php:184
+msgid "Confirm <b>Bulk add nofollow</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:195
+msgid "Confirm <b>Remove nofollow</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:197 ../admin-pro/scans.php:208
+#: ../admin-pro/scans.php:287 ../views-pro/scans-results.php:49
+msgid "Remove nofollow"
+msgstr ""
+
+#: ../admin-pro/scans.php:206
+msgid "Confirm <b>Bulk remove nofollow</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:219
+msgid "Update anchor text"
+msgstr ""
+
+#: ../admin-pro/scans.php:228
+msgid "Confirm <b>Recheck URL status</b>"
+msgstr ""
+
+#: ../admin-pro/scans.php:230 ../admin-pro/scans.php:312
+#: ../views-pro/scans-results.php:46
+msgid "Recheck status"
+msgstr ""
+
+#: ../admin-pro/scans.php:237
+msgid "Link headers"
+msgstr ""
+
+#: ../admin-pro/scans.php:243
+msgid "Response headers"
+msgstr ""
+
+#: ../admin-pro/scans.php:245
+msgid "Request headers"
+msgstr ""
+
+#: ../admin-pro/scans.php:274 ../views-pro/scans-results.php:41
+msgid "Edit URL"
+msgstr ""
+
+#: ../admin-pro/scans.php:278 ../views-pro/scans-results.php:47
+#: ../views/scans-results.php:910
+msgid "Apply Redirection"
+msgstr ""
+
+#: ../admin-pro/scans.php:282 ../views-pro/tools-url.php:38
+msgid "Remove link but leave anchor text"
+msgstr ""
+
+#: ../admin-pro/scans.php:282
+msgid "Remove image from content"
+msgstr ""
+
+#: ../admin-pro/scans.php:282
+msgid "Remove"
+msgstr ""
+
+#: ../admin-pro/scans.php:295 ../admin/scans.php:387
+#: ../views/scans-results.php:844
+msgid "Visit"
+msgstr ""
+
+#: ../admin-pro/scans.php:315
+msgid "Show headers"
+msgstr ""
+
+#: ../admin-pro/scans.php:332
+msgid "Edit anchor text"
+msgstr ""
+
+#: ../admin-pro/tools-url.php:23 ../admin-pro/admin.php:57
+msgid "URL Tools"
+msgstr ""
+
+#: ../core/text.php:32
+msgid "Scans"
+msgstr ""
+
+#: ../core/text.php:36
+msgid "New scan"
+msgstr ""
+
+#: ../core/text.php:40
+msgid "Add new scan"
+msgstr ""
+
+#: ../core/text.php:44 ../views/scans.php:434
+msgid "Edit scan"
+msgstr ""
+
+#: ../core/text.php:48
+msgid "Delete scan"
+msgstr ""
+
+#: ../core/text.php:52
+msgid "Do you want to remove this scan?"
+msgstr ""
+
+#: ../core/text.php:56
+msgid "Crawler action"
+msgstr ""
+
+#: ../core/text.php:60
+msgid "Crawler results"
+msgstr ""
+
+#: ../core/text.php:64
+msgid "Settings"
+msgstr ""
+
+#: ../core/text.php:68
+#, php-format
+msgid ""
+"Sorry, maximum of <strong>%d running scans</strong> achieved and the scan "
+"has been enqueued, it will be launched as soon as possible."
+msgstr ""
+
+#: ../core/text.php:72
+#, php-format
+msgid ""
+"Sorry, scan not found. Please go to the <a href=\"%s\">scans list screen</a> "
+"and select another scan."
+msgstr ""
+
+#: ../core/text.php:76
+msgid ""
+"Sorry, <strong>invalid form data</strong>. Please, <a href=\"javascript:"
+"history.back();\">go back</a>, reload the last page and try again."
+msgstr ""
+
+#: ../core/text.php:80
+msgid ""
+"Sorry, <strong>invalid security data</strong>. Please, <a href=\"javascript:"
+"history.back();\">go back</a>, reload the last page and try again."
+msgstr ""
+
+#: ../core/text.php:84
+msgid "Server communication error"
+msgstr ""
+
+#: ../core/text.php:88
+msgid "Unknown error"
+msgstr ""
+
+#: ../core/scans.php:236
+#, php-format
+msgid "%s comments"
+msgstr ""
+
+#: ../core/scans.php:238
+#, php-format
+msgid "%s and %s comments"
+msgstr ""
+
+#: ../core/scans.php:244 ../core/types.php:102
+msgid "Blogroll"
+msgstr ""
+
+#: ../core/scans.php:362
+msgid ""
+"There is not any <strong>link type</strong> selected, you need to select one "
+"or more."
+msgstr ""
+
+#: ../core/scans.php:371
+msgid ""
+"Need to select any <strong>post status</strong> value for the selected post "
+"types."
+msgstr ""
+
+#: ../core/scans.php:377
+msgid ""
+"There is not any kind of <strong>post type</strong>, <strong>comments</"
+"strong> or <strong>blogroll</strong> selected."
+msgstr ""
+
+#: ../core/scans.php:383
+msgid ""
+"Missing selection of any <strong>links status</strong> level or status code."
+msgstr ""
+
+#: ../core/types-curl.php:41
+msgid "Ok"
+msgstr ""
+
+#: ../core/types-curl.php:41
+msgid "All fine. Proceed as usual."
+msgstr ""
+
+#: ../core/types-curl.php:42
+msgid "Unsupported protocol"
+msgstr ""
+
+#: ../core/types-curl.php:42
+msgid ""
+"The URL you passed to libcurl used a protocol that this libcurl does not "
+"support. The support might be a compile-time option that you didn't use, it "
+"can be a misspelled protocol string or just a protocol libcurl has no code "
+"for."
+msgstr ""
+
+#: ../core/types-curl.php:43
+msgid "Failed initialization"
+msgstr ""
+
+#: ../core/types-curl.php:43
+msgid ""
+"Very early initialization code failed. This is likely to be an internal "
+"error or problem, or a resource problem where something fundamental couldn't "
+"get done at init time."
+msgstr ""
+
+#: ../core/types-curl.php:44
+msgid "URL malformat"
+msgstr ""
+
+#: ../core/types-curl.php:44
+msgid "The URL was not properly formatted."
+msgstr ""
+
+#: ../core/types-curl.php:45
+msgid "Not built-in"
+msgstr ""
+
+#: ../core/types-curl.php:45
+msgid ""
+"A requested feature, protocol or option was not found built-in in this "
+"libcurl due to a build-time decision. This means that a feature or option "
+"was not enabled or explicitly disabled when libcurl was built and in order "
+"to get it to function you have to get a rebuilt libcurl."
+msgstr ""
+
+#: ../core/types-curl.php:46
+msgid "Couldn't resolve proxy"
+msgstr ""
+
+#: ../core/types-curl.php:46
+msgid "The given proxy host could not be resolved. "
+msgstr ""
+
+#: ../core/types-curl.php:47
+msgid "Couldn't resolve host"
+msgstr ""
+
+#: ../core/types-curl.php:47
+msgid "The given remote host was not resolved."
+msgstr ""
+
+#: ../core/types-curl.php:48
+msgid "Couldn't connect"
+msgstr ""
+
+#: ../core/types-curl.php:48
+msgid "Failed to connect() to host or proxy."
+msgstr ""
+
+#: ../core/types-curl.php:49
+msgid "FTP weird server reply"
+msgstr ""
+
+#: ../core/types-curl.php:49
+msgid ""
+"After connecting to a FTP server, libcurl expects to get a certain reply "
+"back. This error code implies that it got a strange or bad reply. The given "
+"remote server is probably not an OK FTP server."
+msgstr ""
+
+#: ../core/types-curl.php:50
+msgid "Remote access denied"
+msgstr ""
+
+#: ../core/types-curl.php:50
+msgid ""
+"We were denied access to the resource given in the URL. For FTP, this occurs "
+"while trying to change to the remote directory."
+msgstr ""
+
+#: ../core/types-curl.php:51
+msgid "FTP access failed"
+msgstr ""
+
+#: ../core/types-curl.php:51
+msgid ""
+"While waiting for the server to connect back when an active FTP session is "
+"used, an error code was sent over the control connection or similar."
+msgstr ""
+
+#: ../core/types-curl.php:52
+msgid "FTP weird pass reply"
+msgstr ""
+
+#: ../core/types-curl.php:52
+msgid ""
+"After having sent the FTP password to the server, libcurl expects a proper "
+"reply. This error code indicates that an unexpected code was returned."
+msgstr ""
+
+#: ../core/types-curl.php:53
+msgid "FTP accept timeout"
+msgstr ""
+
+#: ../core/types-curl.php:53
+msgid ""
+"During an active FTP session while waiting for the server to connect, the "
+"CURLOPT_ACCEPTTIMEOUT_MS (or the internal default) timeout expired."
+msgstr ""
+
+#: ../core/types-curl.php:54
+msgid "FTP weird pasv reply"
+msgstr ""
+
+#: ../core/types-curl.php:54
+msgid ""
+"libcurl failed to get a sensible result back from the server as a response "
+"to either a PASV or a EPSV command. The server is flawed."
+msgstr ""
+
+#: ../core/types-curl.php:55
+msgid "FTP weird 227 format"
+msgstr ""
+
+#: ../core/types-curl.php:55
+msgid ""
+"FTP servers return a 227-line as a response to a PASV command. If libcurl "
+"fails to parse that line, this return code is passed back."
+msgstr ""
+
+#: ../core/types-curl.php:56
+msgid "FTP can't get host"
+msgstr ""
+
+#: ../core/types-curl.php:56
+msgid "An internal failure to lookup the host used for the new connection."
+msgstr ""
+
+#: ../core/types-curl.php:57
+msgid "HTTP2 framing layer problem"
+msgstr ""
+
+#: ../core/types-curl.php:57
+msgid ""
+"A problem was detected in the HTTP2 framing layer. This is somewhat generic "
+"and can be one out of several problems, see the error buffer for details."
+msgstr ""
+
+#: ../core/types-curl.php:58
+msgid "FTP couldn't set type"
+msgstr ""
+
+#: ../core/types-curl.php:58
+msgid ""
+"Received an error when trying to set the transfer mode to binary or ASCII."
+msgstr ""
+
+#: ../core/types-curl.php:59
+msgid "Partial file"
+msgstr ""
+
+#: ../core/types-curl.php:59
+msgid ""
+"A file transfer was shorter or larger than expected. This happens when the "
+"server first reports an expected transfer size, and then delivers data that "
+"doesn't match the previously given size."
+msgstr ""
+
+#: ../core/types-curl.php:60
+msgid "FTP couldn't retrieve file"
+msgstr ""
+
+#: ../core/types-curl.php:60
+msgid ""
+"This was either a weird reply to a 'RETR' command or a zero byte transfer "
+"complete."
+msgstr ""
+
+#: ../core/types-curl.php:61
+msgid "Quote error"
+msgstr ""
+
+#: ../core/types-curl.php:61
+msgid ""
+"When sending custom 'QUOTE' commands to the remote server, one of the "
+"commands returned an error code that was 400 or higher (for FTP) or "
+"otherwise indicated unsuccessful completion of the command."
+msgstr ""
+
+#: ../core/types-curl.php:62
+msgid "HTTP returned error"
+msgstr ""
+
+#: ../core/types-curl.php:62
+msgid ""
+"This is returned if CURLOPT_FAILONERROR is set TRUE and the HTTP server "
+"returns an error code that is >= 400."
+msgstr ""
+
+#: ../core/types-curl.php:63
+msgid "Write error"
+msgstr ""
+
+#: ../core/types-curl.php:63
+msgid ""
+"An error occurred when writing received data to a local file, or an error "
+"was returned to libcurl from a write callback."
+msgstr ""
+
+#: ../core/types-curl.php:64
+msgid "Upload failed"
+msgstr ""
+
+#: ../core/types-curl.php:64
+msgid ""
+"Failed starting the upload. For FTP, the server typically denied the STOR "
+"command. The error buffer usually contains the server's explanation for this."
+msgstr ""
+
+#: ../core/types-curl.php:65
+msgid "Read error"
+msgstr ""
+
+#: ../core/types-curl.php:65
+msgid ""
+"There was a problem reading a local file or an error returned by the read "
+"callback."
+msgstr ""
+
+#: ../core/types-curl.php:66
+msgid "Out of memory"
+msgstr ""
+
+#: ../core/types-curl.php:66
+msgid ""
+"A memory allocation request failed. This is serious badness and things are "
+"severely screwed up if this ever occurs."
+msgstr ""
+
+#: ../core/types-curl.php:67
+msgid "Operation timedout"
+msgstr ""
+
+#: ../core/types-curl.php:67
+msgid "The specified time-out period was reached according to the conditions."
+msgstr ""
+
+#: ../core/types-curl.php:68
+msgid "FTP port failed"
+msgstr ""
+
+#: ../core/types-curl.php:68
+msgid ""
+"The FTP PORT command returned error. This mostly happens when you haven't "
+"specified a good enough address for libcurl to use. See CURLOPT_FTPPORT."
+msgstr ""
+
+#: ../core/types-curl.php:69
+msgid "FTP couldn't use REST"
+msgstr ""
+
+#: ../core/types-curl.php:69
+msgid ""
+"The FTP REST command returned error. This should never happen if the server "
+"is sane."
+msgstr ""
+
+#: ../core/types-curl.php:70
+msgid "Range error"
+msgstr ""
+
+#: ../core/types-curl.php:70
+msgid "The server does not support or accept range requests."
+msgstr ""
+
+#: ../core/types-curl.php:71
+msgid "HTTP post error"
+msgstr ""
+
+#: ../core/types-curl.php:71
+msgid "This is an odd error that mainly occurs due to internal confusion."
+msgstr ""
+
+#: ../core/types-curl.php:72
+msgid "SSL connect error"
+msgstr ""
+
+#: ../core/types-curl.php:72
+msgid ""
+"A problem occurred somewhere in the SSL/TLS handshake. You really want the "
+"error buffer and read the message there as it pinpoints the problem slightly "
+"more. Could be certificates (file formats, paths, permissions), passwords, "
+"and others."
+msgstr ""
+
+#: ../core/types-curl.php:73
+msgid "Bad download resume"
+msgstr ""
+
+#: ../core/types-curl.php:73
+msgid ""
+"The download could not be resumed because the specified offset was out of "
+"the file boundary."
+msgstr ""
+
+#: ../core/types-curl.php:74
+msgid "File couldn't read file"
+msgstr ""
+
+#: ../core/types-curl.php:74
+msgid ""
+"A file given with FILE:// couldn't be opened. Most likely because the file "
+"path doesn't identify an existing file. Did you check file permissions?"
+msgstr ""
+
+#: ../core/types-curl.php:75
+msgid "LDAP cannot bind"
+msgstr ""
+
+#: ../core/types-curl.php:75
+msgid "LDAP cannot bind. LDAP bind operation failed."
+msgstr ""
+
+#: ../core/types-curl.php:76
+msgid "LDAP search failed"
+msgstr ""
+
+#: ../core/types-curl.php:76
+msgid "LDAP search failed."
+msgstr ""
+
+#: ../core/types-curl.php:77
+msgid "Function not found"
+msgstr ""
+
+#: ../core/types-curl.php:77
+msgid "Function not found. A required zlib function was not found."
+msgstr ""
+
+#: ../core/types-curl.php:78
+msgid "Aborted by callback"
+msgstr ""
+
+#: ../core/types-curl.php:78
+msgid "Aborted by callback. A callback returned 'abort' to libcurl."
+msgstr ""
+
+#: ../core/types-curl.php:79
+msgid "Bad function argument"
+msgstr ""
+
+#: ../core/types-curl.php:79
+msgid "Internal error. A function was called with a bad parameter."
+msgstr ""
+
+#: ../core/types-curl.php:80
+msgid "Interface failed"
+msgstr ""
+
+#: ../core/types-curl.php:80
+msgid ""
+"Interface error. A specified outgoing interface could not be used. Set which "
+"interface to use for outgoing connections source IP address with "
+"CURLOPT_INTERFACE."
+msgstr ""
+
+#: ../core/types-curl.php:81
+msgid "Too many redirections"
+msgstr ""
+
+#: ../core/types-curl.php:81
+msgid ""
+"Too many redirects. When following redirects, libcurl hit the maximum "
+"amount. Set your limit with CURLOPT_MAXREDIRS."
+msgstr ""
+
+#: ../core/types-curl.php:82
+msgid "Unknown option"
+msgstr ""
+
+#: ../core/types-curl.php:82
+msgid ""
+"An option passed to libcurl is not recognized/known. Refer to the "
+"appropriate documentation. This is most likely a problem in the program that "
+"uses libcurl. The error buffer might contain more specific information about "
+"which exact option it concerns."
+msgstr ""
+
+#: ../core/types-curl.php:83
+msgid "Telnet option syntax"
+msgstr ""
+
+#: ../core/types-curl.php:83
+msgid "A telnet option string was Illegally formatted."
+msgstr ""
+
+#: ../core/types-curl.php:84
+msgid "Peer failed verification"
+msgstr ""
+
+#: ../core/types-curl.php:84
+msgid ""
+"The remote server's SSL certificate or SSH md5 fingerprint was deemed not OK."
+msgstr ""
+
+#: ../core/types-curl.php:85
+msgid "Got nothing"
+msgstr ""
+
+#: ../core/types-curl.php:85
+msgid ""
+"Nothing was returned from the server, and under the circumstances, getting "
+"nothing is considered an error."
+msgstr ""
+
+#: ../core/types-curl.php:86
+msgid "SSL engine not found"
+msgstr ""
+
+#: ../core/types-curl.php:86
+msgid "The specified crypto engine wasn't found."
+msgstr ""
+
+#: ../core/types-curl.php:87
+msgid "SSL engine set failed"
+msgstr ""
+
+#: ../core/types-curl.php:87
+msgid "Failed setting the selected SSL crypto engine as default!"
+msgstr ""
+
+#: ../core/types-curl.php:88
+msgid "Send error"
+msgstr ""
+
+#: ../core/types-curl.php:88
+msgid "Failed sending network data."
+msgstr ""
+
+#: ../core/types-curl.php:89
+msgid "Receive error"
+msgstr ""
+
+#: ../core/types-curl.php:89
+msgid "Failure with receiving network data."
+msgstr ""
+
+#: ../core/types-curl.php:90
+msgid "Certificate problem"
+msgstr ""
+
+#: ../core/types-curl.php:90
+msgid "Problem with the local client certificate. "
+msgstr ""
+
+#: ../core/types-curl.php:91
+msgid "SSL cipher"
+msgstr ""
+
+#: ../core/types-curl.php:91
+msgid "Couldn't use specified cipher."
+msgstr ""
+
+#: ../core/types-curl.php:92
+msgid "SSL CA certificate"
+msgstr ""
+
+#: ../core/types-curl.php:92
+msgid "Peer certificate cannot be authenticated with known CA certificates."
+msgstr ""
+
+#: ../core/types-curl.php:93
+msgid "Bad content encoding"
+msgstr ""
+
+#: ../core/types-curl.php:93
+msgid "Unrecognized transfer encoding."
+msgstr ""
+
+#: ../core/types-curl.php:94
+msgid "LDAP invalid URL"
+msgstr ""
+
+#: ../core/types-curl.php:94
+msgid "Invalid LDAP URL."
+msgstr ""
+
+#: ../core/types-curl.php:95
+msgid "File size exceeded"
+msgstr ""
+
+#: ../core/types-curl.php:95
+msgid "Maximum file size exceeded."
+msgstr ""
+
+#: ../core/types-curl.php:96
+msgid "Use SSL failed"
+msgstr ""
+
+#: ../core/types-curl.php:96
+msgid "Requested FTP SSL level failed. "
+msgstr ""
+
+#: ../core/types-curl.php:97
+msgid "Send fail rewind"
+msgstr ""
+
+#: ../core/types-curl.php:97
+msgid ""
+"When doing a send operation curl had to rewind the data to retransmit, but "
+"the rewinding operation failed."
+msgstr ""
+
+#: ../core/types-curl.php:98
+msgid "SSL initialization failed"
+msgstr ""
+
+#: ../core/types-curl.php:98
+msgid "Initiating the SSL Engine failed."
+msgstr ""
+
+#: ../core/types-curl.php:99
+msgid "Login denied"
+msgstr ""
+
+#: ../core/types-curl.php:99
+msgid "The remote server denied curl to login (Added in 7.13.1)"
+msgstr ""
+
+#: ../core/types-curl.php:100
+msgid "TFTP file not found"
+msgstr ""
+
+#: ../core/types-curl.php:100
+msgid "File not found on TFTP server."
+msgstr ""
+
+#: ../core/types-curl.php:101
+msgid "TFTP permission"
+msgstr ""
+
+#: ../core/types-curl.php:101
+msgid "Permission problem on TFTP server."
+msgstr ""
+
+#: ../core/types-curl.php:102
+msgid "Remote disk full"
+msgstr ""
+
+#: ../core/types-curl.php:102
+msgid "Out of disk space on the server."
+msgstr ""
+
+#: ../core/types-curl.php:103
+msgid "TFTP illegal"
+msgstr ""
+
+#: ../core/types-curl.php:103
+msgid "Illegal TFTP operation."
+msgstr ""
+
+#: ../core/types-curl.php:104
+msgid "FTP unknown ID"
+msgstr ""
+
+#: ../core/types-curl.php:104
+msgid "Unknown TFTP transfer ID."
+msgstr ""
+
+#: ../core/types-curl.php:105
+msgid "Remote file exists"
+msgstr ""
+
+#: ../core/types-curl.php:105
+msgid "File already exists and will not be overwritten."
+msgstr ""
+
+#: ../core/types-curl.php:106
+msgid "TFTP no such user"
+msgstr ""
+
+#: ../core/types-curl.php:106
+msgid ""
+"This error should never be returned by a properly functioning TFTP server."
+msgstr ""
+
+#: ../core/types-curl.php:107
+msgid "Conversion failed"
+msgstr ""
+
+#: ../core/types-curl.php:107
+msgid "Character conversion failed."
+msgstr ""
+
+#: ../core/types-curl.php:108
+msgid "Conversion callbacks"
+msgstr ""
+
+#: ../core/types-curl.php:108
+msgid "Caller must register conversion callbacks."
+msgstr ""
+
+#: ../core/types-curl.php:109
+msgid "SSL CA certificate bad file"
+msgstr ""
+
+#: ../core/types-curl.php:109
+msgid "Problem with reading the SSL CA cert (path? access rights?)"
+msgstr ""
+
+#: ../core/types-curl.php:110
+msgid "Remote file not found"
+msgstr ""
+
+#: ../core/types-curl.php:110
+msgid "The resource referenced in the URL does not exist."
+msgstr ""
+
+#: ../core/types-curl.php:111
+msgid "SSH error"
+msgstr ""
+
+#: ../core/types-curl.php:111
+msgid "An unspecified error occurred during the SSH session."
+msgstr ""
+
+#: ../core/types-curl.php:112
+msgid "SSL shutdown failed"
+msgstr ""
+
+#: ../core/types-curl.php:112
+msgid "Failed to shut down the SSL connection."
+msgstr ""
+
+#: ../core/types-curl.php:113
+msgid "Socket not ready"
+msgstr ""
+
+#: ../core/types-curl.php:113
+msgid ""
+"Socket is not ready for send/recv wait till it's ready and try again. This "
+"return code is only returned from curl_easy_recv and curl_easy_send (Added "
+"in 7.18.2)"
+msgstr ""
+
+#: ../core/types-curl.php:114
+msgid "SSL CRL bad file"
+msgstr ""
+
+#: ../core/types-curl.php:114
+msgid "Failed to load CRL file (Added in 7.19.0)"
+msgstr ""
+
+#: ../core/types-curl.php:115
+msgid "SSL issue error"
+msgstr ""
+
+#: ../core/types-curl.php:115
+msgid "Issuer check failed (Added in 7.19.0)"
+msgstr ""
+
+#: ../core/types-curl.php:116
+msgid "FTP PRET failed"
+msgstr ""
+
+#: ../core/types-curl.php:116
+msgid ""
+"The FTP server does not understand the PRET command at all or does not "
+"support the given argument. Be careful when using CURLOPT_CUSTOMREQUEST, a "
+"custom LIST command will be sent with PRET CMD before PASV as well. (Added "
+"in 7.20.0)"
+msgstr ""
+
+#: ../core/types-curl.php:117
+msgid "RTSP CSEQ error"
+msgstr ""
+
+#: ../core/types-curl.php:117
+msgid "Mismatch of RTSP CSeq numbers."
+msgstr ""
+
+#: ../core/types-curl.php:118
+msgid "RTSP session error"
+msgstr ""
+
+#: ../core/types-curl.php:118
+msgid "Mismatch of RTSP Session Identifiers."
+msgstr ""
+
+#: ../core/types-curl.php:119
+msgid "FTP bad file list"
+msgstr ""
+
+#: ../core/types-curl.php:119
+msgid "Unable to parse FTP file list (during FTP wildcard downloading)."
+msgstr ""
+
+#: ../core/types-curl.php:120
+msgid "Chunk failed"
+msgstr ""
+
+#: ../core/types-curl.php:120
+msgid "Chunk callback reported error."
+msgstr ""
+
+#: ../core/types-curl.php:121
+msgid "No connection available"
+msgstr ""
+
+#: ../core/types-curl.php:121
+msgid ""
+"(For internal use only, will never be returned by libcurl) No connection "
+"available, the session will be queued. (added in 7.30.0)"
+msgstr ""
+
+#: ../core/boot.php:14
+msgid ""
+"Detected another version of WP Link Status already active. Please deactivate "
+"it before and try again to activate this plugin."
+msgstr ""
+
+#: ../core/boot.php:20
+msgid "Sorry, this version of WP Link Status requires WordPress 3.3 or later."
+msgstr ""
+
+#: ../core/notify.php:91
+msgid "WP Link Status scan completed"
+msgstr ""
+
+#: ../core/notify.php:92
+#, php-format
+msgid ""
+"\n"
+"\n"
+"Your scan is completed, you can see the results here:\n"
+"\n"
+"%s\n"
+"%s\n"
+"\n"
+msgstr ""
+
+#: ../core/notify.php:99 ../views/scans.php:375
+msgid "(no name)"
+msgstr ""
+
+#: ../core/types.php:100
+msgid "Entries"
+msgstr ""
+
+#: ../core/types.php:101
+msgid "Comments"
+msgstr ""
+
+#: ../core/types.php:113
+msgid "Waiting"
+msgstr ""
+
+#: ../core/types.php:114
+msgid "Queued"
+msgstr ""
+
+#: ../core/types.php:115
+msgid "Running"
+msgstr ""
+
+#: ../core/types.php:116
+msgid "Stopped"
+msgstr ""
+
+#: ../core/types.php:117
+msgid "Completed"
+msgstr ""
+
+#: ../core/types.php:128
+msgid "All URLs"
+msgstr ""
+
+#: ../core/types.php:129
+msgid "Internal URLs"
+msgstr ""
+
+#: ../core/types.php:130
+msgid "External URLs"
+msgstr ""
+
+#: ../core/types.php:141
+msgid "Anytime content"
+msgstr ""
+
+#: ../core/types.php:142
+msgid "From yesterday"
+msgstr ""
+
+#: ../core/types.php:143
+msgid "Last 7 days"
+msgstr ""
+
+#: ../core/types.php:144
+msgid "Last 15 days"
+msgstr ""
+
+#: ../core/types.php:145
+msgid "One month"
+msgstr ""
+
+#: ../core/types.php:146
+msgid "Last 3 months"
+msgstr ""
+
+#: ../core/types.php:147
+msgid "Last 6 months"
+msgstr ""
+
+#: ../core/types.php:148
+msgid "One year"
+msgstr ""
+
+#: ../core/types.php:160
+msgid "Links"
+msgstr ""
+
+#: ../core/types.php:161
+msgid "Images"
+msgstr ""
+
+#: ../core/types.php:172
+msgid "Most recent content"
+msgstr ""
+
+#: ../core/types.php:173
+msgid "Oldest content first"
+msgstr ""
+
+#: ../core/types.php:196
+msgid "Approved"
+msgstr ""
+
+#: ../core/types.php:197
+msgid "Pending"
+msgstr ""
+
+#: ../core/types.php:223 ../core/types.php:295
+msgid "Contains"
+msgstr ""
+
+#: ../core/types.php:224 ../core/types.php:296
+msgid "Not contains"
+msgstr ""
+
+#: ../core/types.php:225
+msgid "Is equal to"
+msgstr ""
+
+#: ../core/types.php:226 ../core/types.php:298
+msgid "Not equal to"
+msgstr ""
+
+#: ../core/types.php:227 ../core/types.php:241
+msgid "Starts with"
+msgstr ""
+
+#: ../core/types.php:228 ../core/types.php:242
+msgid "Ends by"
+msgstr ""
+
+#: ../core/types.php:229 ../core/types.php:300
+msgid "Empty"
+msgstr ""
+
+#: ../core/types.php:240 ../core/types.php:254 ../core/types.php:268
+msgid "Matched string"
+msgstr ""
+
+#: ../core/types.php:243
+msgid "Full anchor"
+msgstr ""
+
+#: ../core/types.php:255 ../core/types.php:269
+msgid "URL prefix"
+msgstr ""
+
+#: ../core/types.php:256 ../core/types.php:270
+msgid "URL suffix"
+msgstr ""
+
+#: ../core/types.php:257 ../core/types.php:272
+msgid "Full URL"
+msgstr ""
+
+#: ../core/types.php:271
+msgid "URL fragment #"
+msgstr ""
+
+#: ../core/types.php:283
+msgid "Has"
+msgstr ""
+
+#: ../core/types.php:284
+msgid "Not have"
+msgstr ""
+
+#: ../core/types.php:297
+msgid "Equals"
+msgstr ""
+
+#: ../core/types.php:299
+msgid "Not empty"
+msgstr ""
+
+#: ../core/types.php:311
+msgid "Success"
+msgstr ""
+
+#: ../core/types.php:312
+msgid "Redirections"
+msgstr ""
+
+#: ../core/types.php:313
+msgid "Errors"
+msgstr ""
+
+#: ../core/types.php:314
+msgid "Server Error"
+msgstr ""
+
+#: ../core/types.php:326
+msgid "OK"
+msgstr ""
+
+#: ../core/types.php:327
+msgid "Created"
+msgstr ""
+
+#: ../core/types.php:328
+msgid "Accepted"
+msgstr ""
+
+#: ../core/types.php:329
+msgid "Non-Authoritative Information"
+msgstr ""
+
+#: ../core/types.php:330
+msgid "No Content"
+msgstr ""
+
+#: ../core/types.php:331
+msgid "Reset Content"
+msgstr ""
+
+#: ../core/types.php:332
+msgid "Partial Content"
+msgstr ""
+
+#: ../core/types.php:335
+msgid "Multiple Choices"
+msgstr ""
+
+#: ../core/types.php:336
+msgid "Moved Permanently"
+msgstr ""
+
+#: ../core/types.php:337
+msgid "Found"
+msgstr ""
+
+#: ../core/types.php:338
+msgid "See Other"
+msgstr ""
+
+#: ../core/types.php:339
+msgid "Not Modified"
+msgstr ""
+
+#: ../core/types.php:340
+msgid "Use Proxy"
+msgstr ""
+
+#: ../core/types.php:341
+msgid "Temporary Redirect"
+msgstr ""
+
+#: ../core/types.php:344
+msgid "Bad Request"
+msgstr ""
+
+#: ../core/types.php:345
+msgid "Unauthorized"
+msgstr ""
+
+#: ../core/types.php:346
+msgid "Payment Required"
+msgstr ""
+
+#: ../core/types.php:347
+msgid "Forbidden"
+msgstr ""
+
+#: ../core/types.php:348
+msgid "Not Found"
+msgstr ""
+
+#: ../core/types.php:349
+msgid "Method Not Allowed"
+msgstr ""
+
+#: ../core/types.php:350
+msgid "Not Acceptable"
+msgstr ""
+
+#: ../core/types.php:351
+msgid "Proxy Authentication Required"
+msgstr ""
+
+#: ../core/types.php:352
+msgid "Request Timeout"
+msgstr ""
+
+#: ../core/types.php:353
+msgid "Conflict"
+msgstr ""
+
+#: ../core/types.php:354
+msgid "Gone"
+msgstr ""
+
+#: ../core/types.php:355
+msgid "Length Required"
+msgstr ""
+
+#: ../core/types.php:356
+msgid "Precondition Failed"
+msgstr ""
+
+#: ../core/types.php:357
+msgid "Request Entity Too Large"
+msgstr ""
+
+#: ../core/types.php:358
+msgid "Request-URI Too Long"
+msgstr ""
+
+#: ../core/types.php:359
+msgid "Unsupported Media Type"
+msgstr ""
+
+#: ../core/types.php:360
+msgid "Requested Range Not Satisfiable"
+msgstr ""
+
+#: ../core/types.php:361
+msgid "Expectation Failed"
+msgstr ""
+
+#: ../core/types.php:364
+msgid "Internal Server Error"
+msgstr ""
+
+#: ../core/types.php:365
+msgid "Not Implemented"
+msgstr ""
+
+#: ../core/types.php:366
+msgid "Bad Gateway"
+msgstr ""
+
+#: ../core/types.php:367
+msgid "Service Unavailable"
+msgstr ""
+
+#: ../core/types.php:368
+msgid "Gateway Timeout"
+msgstr ""
+
+#: ../core/types.php:369
+msgid "HTTP Version Not Supported"
+msgstr ""
+
+#: ../core/types.php:396
+msgid "NoFollow"
+msgstr ""
+
+#: ../core/types.php:397
+msgid "DoFollow"
+msgstr ""
+
+#: ../core/types.php:421 ../views/scans-results.php:265
+msgid "Relative"
+msgstr ""
+
+#: ../core/types.php:422 ../views/scans-results.php:266
+msgid "Absolute"
+msgstr ""
+
+#: ../core/types.php:423 ../views/scans-results.php:267
+msgid "Spaced"
+msgstr ""
+
+#: ../core/types.php:424 ../views/scans.php:396 ../views/scans-results.php:268
+msgid "Malformed"
+msgstr ""
+
+#: ../core/types.php:435 ../views/scans-results.php:182
+msgid "Unlinked"
+msgstr ""
+
+#: ../core/types.php:436 ../views/scans-results.php:263
+#: ../views/scans-results.php:332
+msgid "Modified"
+msgstr ""
+
+#: ../core/types.php:437
+msgid "Unmodified"
+msgstr ""
+
+#: ../core/types.php:438
+msgid "Rechecked"
+msgstr ""
+
+#: ../core/types.php:449
+msgid "Only ignored results"
+msgstr ""
+
+#: ../core/types.php:450
+msgid "Ignored and not ignored"
+msgstr ""
+
+#: ../core/types.php:461
+msgid "Domain name ASC"
+msgstr ""
+
+#: ../core/types.php:462
+msgid "Domain name DESC"
+msgstr ""
+
+#: ../core/types.php:463
+msgid "Download time ASC"
+msgstr ""
+
+#: ../core/types.php:464
+msgid "Download time DESC"
+msgstr ""
+
+#: ../core/types.php:465
+msgid "Download size ASC"
+msgstr ""
+
+#: ../core/types.php:466
+msgid "Download size DESC"
+msgstr ""
+
+#: ../core/module.php:143
+msgid "Sorry, current user can`t perform this action"
+msgstr ""
+
+#: ../core/module.php:149
+msgid ""
+"Sorry, security verification error. Please reload this page and try again."
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "WordPress database will be updated, press Ok to continue"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Sorry, no links detected. Please enter some URLs."
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Processing"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Updating database"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Test mode, no database changes"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "No found entries"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Cancelling"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Cancelled"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21 ../views-pro/tools-url.php:59
+msgid "Finished"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Processed"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "of"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "links"
+msgstr ""
+
+#: ../views-pro/tools-url.php:21
+msgid "Back to the form"
+msgstr ""
+
+#: ../views-pro/tools-url.php:27
+msgid "Enter here the URLs, one per line:"
+msgstr ""
+
+#: ../views-pro/tools-url.php:34
+msgid "Select operation"
+msgstr ""
+
+#: ../views-pro/tools-url.php:36
+msgid "Add link rel=&quot;nofollow&quot;"
+msgstr ""
+
+#: ../views-pro/tools-url.php:37
+msgid "Remove &quot;nofollow&quot; from rel property"
+msgstr ""
+
+#: ../views-pro/tools-url.php:39
+msgid "Replace URL by its 301 redirection"
+msgstr ""
+
+#: ../views-pro/tools-url.php:40
+msgid "Remove &lt;object&gt; containing URL"
+msgstr ""
+
+#: ../views-pro/tools-url.php:43
+msgid "Test mode, no database updates"
+msgstr ""
+
+#: ../views-pro/tools-url.php:44
+msgid "Update changes in database"
+msgstr ""
+
+#: ../views-pro/tools-url.php:49
+msgid "Execute Test Process"
+msgstr ""
+
+#: ../views-pro/tools-url.php:51
+msgid "Execute Database Update"
+msgstr ""
+
+#: ../views-pro/tools-url.php:64 ../views-pro/tools-url.php:71
+msgid "Link"
+msgstr ""
+
+#: ../views-pro/tools-url.php:65 ../views-pro/tools-url.php:72
+#: ../views/scans-results.php:113 ../views/scans-edit.php:342
+#: ../views/scans-edit.php:343 ../views/scans-edit.php:352
+msgid "Anchor text"
+msgstr ""
+
+#: ../views-pro/tools-url.php:66 ../views-pro/tools-url.php:73
+msgid "Result"
+msgstr ""
+
+#: ../views-pro/scans-results.php:45
+msgid "Edit anchor"
+msgstr ""
+
+#: ../views-pro/scans-results.php:88
+msgid "Toggle to the advanced search panel"
+msgstr ""
+
+#: ../views-pro/scans-results.php:88
+msgid "Advanced Search"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk unlink URLs"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk ignore results"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk undo ignore results"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk anchor text edition"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk URL edition"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk URL recheck status"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk apply redirections"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk add nofollow"
+msgstr ""
+
+#: ../views-pro/scans-results.php:91
+msgid "Bulk remove nofollow"
+msgstr ""
+
+#: ../views-pro/scans-results.php:120
+msgid "Common filters"
+msgstr ""
+
+#: ../views-pro/scans-results.php:130
+msgid "Extended"
+msgstr ""
+
+#: ../views-pro/scans-results.php:158
+msgid "Filter Results"
+msgstr ""
+
+#: ../views-pro/scans-results.php:170
+msgid "Close advanced search panel"
+msgstr ""
+
+#: ../views-pro/scans-results.php:171
+msgid "Reset advanced search fields"
+msgstr ""
+
+#: ../views-pro/scans-results.php:171
+msgid "Reset advanced search fields?"
+msgstr ""
+
+#: ../views-pro/scans-results.php:199
+msgid "Not ignored results"
+msgstr ""
+
+#: ../views-pro/scans-results.php:229
+msgid "SEO links"
+msgstr ""
+
+#: ../views-pro/scans-results.php:244
+msgid "Protocol"
+msgstr ""
+
+#: ../views-pro/scans-results.php:259
+msgid "Special"
+msgstr ""
+
+#: ../views-pro/scans-results.php:274
+msgid "Action"
+msgstr ""
+
+#: ../views-pro/scans-results.php:291
+msgid "External and internal URLs"
+msgstr ""
+
+#: ../admin/scans.php:473
+msgid "The crawling process for this scan is already started."
+msgstr ""
+
+#: ../admin/scans.php:479
+msgid "The crawling process for this scan is already stopped."
+msgstr ""
+
+#: ../admin/scans.php:485
+msgid "This scan was ended and is not possible to start again."
+msgstr ""
+
+#: ../admin/scans.php:500
+msgid "Something went wrong and the unqueue process was failed."
+msgstr ""
+
+#: ../admin/scans.php:506
+msgid "The crawler for this scan is back to the wait mode."
+msgstr ""
+
+#: ../admin/scans.php:516
+msgid "Something went wront and the crawler stop was failed."
+msgstr ""
+
+#: ../admin/scans.php:522
+#, php-format
+msgid ""
+"The crawler for this scan is stopped. You can see its collected data in the "
+"<a href=\"%s\">crawler results page</a>."
+msgstr ""
+
+#: ../admin/scans.php:542
+#, php-format
+msgid ""
+"You need to complete some critical values before start the crawler, please "
+"<a href=\"%s\">edit this scan</a>."
+msgstr ""
+
+#: ../admin/scans.php:577
+msgid "Something went wront and the crawler start was failed."
+msgstr ""
+
+#: ../admin/scans.php:597
+#, php-format
+msgid ""
+"The crawler is running, you can see its data in the <a href=\"%s\">crawler "
+"results page</a>."
+msgstr ""
+
+#: ../admin/scans.php:668
+#, php-format
+msgid ""
+"Sorry, we need a confirmation action. Please click here to <a href=\"%s\" "
+"class=\"wplnst-scan-delete\" data-confirm=\"%s\">delete scan</a>"
+msgstr ""
+
+#: ../admin/scans.php:695
+msgid "The scans have been removed."
+msgstr ""
+
+#: ../admin/scans.php:713
+#, php-format
+msgid ""
+"Sorry, we need a confirmation action. Please click here to <a href=\"%s\" "
+"class=\"wplnst-scan-delete-isolated\" data-confirm-delete=\"%s\">delete "
+"scan</a>"
+msgstr ""
+
+#: ../admin/scans.php:722
+msgid "The scan has been removed."
+msgstr ""
+
+#: ../admin/scans.php:751
+msgid "Back to the scans list"
+msgstr ""
+
+#: ../admin/scans.php:794
+msgid "New scan added successfully."
+msgstr ""
+
+#: ../admin/scans.php:809
+msgid "Something went wrong trying to start the crawler for this new scan."
+msgstr ""
+
+#: ../admin/scans.php:815
+#, php-format
+msgid ""
+"The crawler for this new scan is running. You can see its data in the <a "
+"href=\"%s\">crawler results page</a>."
+msgstr ""
+
+#: ../admin/scans.php:823
+#, php-format
+msgid "From now on you can <a href=\"%s\">start the crawler</a>."
+msgstr ""
+
+#: ../admin/scans-submit.php:143
+msgid ""
+"Something went wrong adding the new scan. Please <a href=\"javascript:"
+"history.back();\">go back</a> and attempt again to submit form."
+msgstr ""
+
+#: ../admin/scans-submit.php:219
+msgid ""
+"Something went wrong updating the scan data. Please <a href=\"javascript:"
+"history.back();\">go back</a> and attempt again to save data."
+msgstr ""
+
+#: ../admin/scans-submit.php:225
+msgid "Scan updated successfully."
+msgstr ""
+
+#: ../admin/scans-submit.php:243
+msgid "Something went wrong trying to start the crawler."
+msgstr ""
+
+#: ../admin/scans-submit.php:259
+#, php-format
+msgid ""
+"The crawler fot this scan is running. You can see its data in the <a href="
+"\"%s\">crawler results page</a>."
+msgstr ""
+
+#: ../admin/scans-submit.php:267
+#, php-format
+msgid ""
+"The crawler for this scan is <strong>not started</strong>, you can <a href="
+"\"%s\">start the crawler</a> now."
+msgstr ""
+
+#: ../admin/settings.php:52
+msgid "Settings updated"
+msgstr ""
+
+#: ../admin/admin.php:256
+msgid "Scans per page"
+msgstr ""
+
+#: ../admin/admin.php:262
+msgid "Crawler results per page"
+msgstr ""
+
+#: ../admin/admin.php:341
+msgid ""
+"Not detected the required cURL module enabled. Please contact with your "
+"hosting provider in order to install cURL for PHP in this server."
+msgstr ""
+
+#: ../views/scans.php:105
+msgid "Scan info"
+msgstr ""
+
+#: ../views/scans.php:106
+msgid "Configuration"
+msgstr ""
+
+#: ../views/scans.php:121
+msgid "Some critical values of this scan are not completed"
+msgstr ""
+
+#: ../views/scans.php:134
+msgid "Waiting..."
+msgstr ""
+
+#: ../views/scans.php:144
+msgid "entries"
+msgstr ""
+
+#: ../views/scans.php:152
+msgid "comments"
+msgstr ""
+
+#: ../views/scans.php:159
+msgid "blogroll"
+msgstr ""
+
+#: ../views/scans.php:190
+#, php-format
+msgid "Today from %s"
+msgstr ""
+
+#: ../views/scans.php:196
+#, php-format
+msgid "Yesterday at %s"
+msgstr ""
+
+#: ../views/scans.php:202
+#, php-format
+msgid "%s at %s"
+msgstr ""
+
+#: ../views/scans.php:228 ../views/scans.php:244
+#, php-format
+msgid "to %s"
+msgstr ""
+
+#: ../views/scans.php:234
+#, php-format
+msgid "to today at %s"
+msgstr ""
+
+#: ../views/scans.php:250
+#, php-format
+msgid "to yesterday at %s"
+msgstr ""
+
+#: ../views/scans.php:257
+#, php-format
+msgid "until %s"
+msgstr ""
+
+#: ../views/scans.php:263
+#, php-format
+msgid "until %s at %s"
+msgstr ""
+
+#: ../views/scans.php:284
+#, php-format
+msgid "Running time %s"
+msgstr ""
+
+#: ../views/scans.php:306
+#, php-format
+msgid "<strong>%s</strong> results"
+msgstr ""
+
+#: ../views/scans.php:306
+msgid "No results"
+msgstr ""
+
+#: ../views/scans.php:312
+#, php-format
+msgid "<strong>%s</strong> unique URLs"
+msgstr ""
+
+#: ../views/scans.php:317
+#, php-format
+msgid "%s enqueued"
+msgstr ""
+
+#: ../views/scans.php:321
+#, php-format
+msgid "%s processing"
+msgstr ""
+
+#: ../views/scans.php:325
+#, php-format
+msgid "<strong>%s</strong> Request error"
+msgstr ""
+
+#: ../views/scans.php:352
+#, php-format
+msgid "Created today at %s"
+msgstr ""
+
+#: ../views/scans.php:358
+#, php-format
+msgid "Created yesterday at %s"
+msgstr ""
+
+#: ../views/scans.php:364
+#, php-format
+msgid "Created %s at %s"
+msgstr ""
+
+#: ../views/scans.php:380
+#, php-format
+msgid "Ready to <a href=\"%s\">start the crawler</a>"
+msgstr ""
+
+#: ../views/scans.php:396
+msgid "Scope"
+msgstr ""
+
+#: ../views/scans.php:396
+msgid "Order by"
+msgstr ""
+
+#: ../views/scans.php:396
+msgid "Check redirection status"
+msgstr ""
+
+#: ../views/scans.php:396
+msgid "Redirections not checked"
+msgstr ""
+
+#: ../views/scans.php:399 ../views/scans-edit.php:245
+#: ../views/scans-edit.php:252
+msgid "Post types"
+msgstr ""
+
+#: ../views/scans.php:399 ../views/scans-edit.php:266
+#: ../views/scans-edit.php:273
+msgid "Post status"
+msgstr ""
+
+#: ../views/scans.php:402
+msgid "Link status"
+msgstr ""
+
+#: ../views/scans.php:431
+msgid "Show results"
+msgstr ""
+
+#: ../views/scans.php:438
+msgid "Start crawler"
+msgstr ""
+
+#: ../views/scans.php:438
+msgid "Unqueue crawling"
+msgstr ""
+
+#: ../views/scans.php:438
+msgid "Stop crawler"
+msgstr ""
+
+#: ../views/scans.php:461 ../views/scans-results.php:840
+msgid "Delete"
+msgstr ""
+
+#: ../views/scans.php:498
+msgid "Do you want to remove these scans?"
+msgstr ""
+
+#: ../views/settings.php:29
+msgid "Crawling"
+msgstr ""
+
+#: ../views/settings.php:30
+msgid "Timing"
+msgstr ""
+
+#: ../views/settings.php:31 ../views/scans-edit.php:93
+msgid "Advanced"
+msgstr ""
+
+#: ../views/settings.php:40
+msgid "Number of crawler threads"
+msgstr ""
+
+#: ../views/settings.php:42
+msgid ""
+"One thread means an HTTP request to your site only used for crawling "
+"purposes."
+msgstr ""
+
+#: ../views/settings.php:45
+msgid "Max crawlers running"
+msgstr ""
+
+#: ../views/settings.php:47
+msgid ""
+"Number of crawlers allowed to run simultaneously, each one with its own "
+"threads."
+msgstr ""
+
+#: ../views/settings.php:50
+msgid "Max pack items"
+msgstr ""
+
+#: ../views/settings.php:52
+msgid ""
+"Total objects (posts, comments or blogroll) processed in one single thread."
+msgstr ""
+
+#: ../views/settings.php:55
+msgid "Max URL request attempts"
+msgstr ""
+
+#: ../views/settings.php:57
+msgid "Number of HTTP requests attempts before set an URL as wrong."
+msgstr ""
+
+#: ../views/settings.php:60
+msgid "Max redirections allowed"
+msgstr ""
+
+#: ../views/settings.php:62
+msgid "Total redirections steps allowed to follow from original URL."
+msgstr ""
+
+#: ../views/settings.php:65
+msgid "Max download size"
+msgstr ""
+
+#: ../views/settings.php:67
+msgid "KB"
+msgstr ""
+
+#: ../views/settings.php:67
+#, php-format
+msgid "(minimum value of %s KB and max value of %s KB)."
+msgstr ""
+
+#: ../views/settings.php:70
+msgid "Default User Agent"
+msgstr ""
+
+#: ../views/settings.php:81
+msgid "URL Connection timeout"
+msgstr ""
+
+#: ../views/settings.php:83 ../views/settings.php:88 ../views/settings.php:93
+#: ../views/settings.php:98 ../views/settings.php:103
+#: ../views/settings.php:108 ../views/settings.php:113
+#: ../views/settings.php:118 ../views/scans-edit.php:516
+#: ../views/scans-edit.php:520 ../views/scans-edit.php:535
+#: ../views/scans-edit.php:539
+msgid "seconds"
+msgstr ""
+
+#: ../views/settings.php:83
+msgid "Max time allowed to establish a connection with the URL host."
+msgstr ""
+
+#: ../views/settings.php:86
+msgid "URL Request timeout"
+msgstr ""
+
+#: ../views/settings.php:88
+msgid "Max time allowed to retrieve headers and body from one URL."
+msgstr ""
+
+#: ../views/settings.php:91
+msgid "URL Extra timeout check"
+msgstr ""
+
+#: ../views/settings.php:93 ../views/settings.php:98 ../views/settings.php:103
+#: ../views/settings.php:108 ../views/settings.php:113
+#: ../views/settings.php:118
+#, php-format
+msgid "(mininum value of %d seconds)"
+msgstr ""
+
+#: ../views/settings.php:93
+msgid "A little grace period to avoid timeouts conflicts."
+msgstr ""
+
+#: ../views/settings.php:96
+msgid "Check crawler alive each"
+msgstr ""
+
+#: ../views/settings.php:98
+msgid "Checks if a crawler is interrupted and if so restart it."
+msgstr ""
+
+#: ../views/settings.php:101
+msgid "Total objects check each"
+msgstr ""
+
+#: ../views/settings.php:103
+msgid "Total of objects (posts, comments or blogroll) to check links."
+msgstr ""
+
+#: ../views/settings.php:106
+msgid "Summary of status each"
+msgstr ""
+
+#: ../views/settings.php:108
+msgid "Calculate status code totals to display data in real time."
+msgstr ""
+
+#: ../views/settings.php:111
+msgid "Summary of URLs each"
+msgstr ""
+
+#: ../views/settings.php:113
+msgid "Current number of URLs processed or waiting to be checked."
+msgstr ""
+
+#: ../views/settings.php:116
+msgid "Summary of objects each"
+msgstr ""
+
+#: ../views/settings.php:118
+msgid "Summary of objects (posts, comments or blogroll) with processed URLs."
+msgstr ""
+
+#: ../views/settings.php:129
+msgid "Recursion limit"
+msgstr ""
+
+#: ../views/settings.php:130
+msgid "function calls"
+msgstr ""
+
+#: ../views/settings.php:133
+msgid "Data results pagination"
+msgstr ""
+
+#: ../views/settings.php:134
+msgid "Use <code>SQL_CALC_FOUND_ROWS</code> to calculate total rows"
+msgstr ""
+
+#: ../views/settings.php:141
+msgid "Save settings"
+msgstr ""
+
+#: ../views/scans-results.php:112
+msgid "Status"
+msgstr ""
+
+#: ../views/scans-results.php:114
+msgid "Content"
+msgstr ""
+
+#: ../views/scans-results.php:213 ../views/scans-results.php:236
+#: ../core-pro/results.php:1876 ../core-pro/results.php:1889
+msgid "Error code "
+msgstr ""
+
+#: ../views/scans-results.php:217 ../views/scans-results.php:240
+#, php-format
+msgid "error code %d"
+msgstr ""
+
+#: ../views/scans-results.php:270
+msgid "Protocol relative"
+msgstr ""
+
+#: ../views/scans-results.php:271
+msgid "Ignored"
+msgstr ""
+
+#: ../views/scans-results.php:300 ../views/scans-results.php:316
+#: ../views/scans-results.php:1023 ../views/scans-results.php:1114
+#: ../core-pro/tools-url.php:644
+msgid "Request error"
+msgstr ""
+
+#: ../views/scans-results.php:341
+msgid "Image"
+msgstr ""
+
+#: ../views/scans-results.php:380
+#, php-format
+msgid "Edit &#8220;%s&#8221;"
+msgstr ""
+
+#: ../views/scans-results.php:393
+#, php-format
+msgid "Entry %d not found"
+msgstr ""
+
+#: ../views/scans-results.php:442
+#, php-format
+msgid "Comment %d not found"
+msgstr ""
+
+#: ../views/scans-results.php:482
+#, php-format
+msgid "Bookmark %d not found"
+msgstr ""
+
+#: ../views/scans-results.php:692
+msgid "Edit this item"
+msgstr ""
+
+#: ../views/scans-results.php:692 ../views/scans-results.php:803
+#: ../views/scans-results.php:839
+msgid "Edit"
+msgstr ""
+
+#: ../views/scans-results.php:699
+msgid "Restore this item from the Trash"
+msgstr ""
+
+#: ../views/scans-results.php:699 ../views/scans-results.php:793
+msgid "Restore"
+msgstr ""
+
+#: ../views/scans-results.php:703
+msgid "Move this item to the Trash"
+msgstr ""
+
+#: ../views/scans-results.php:703 ../views/scans-results.php:799
+msgid "Trash"
+msgstr ""
+
+#: ../views/scans-results.php:707
+msgid "Delete this item permanently"
+msgstr ""
+
+#: ../views/scans-results.php:707 ../views/scans-results.php:797
+msgid "Delete Permanently"
+msgstr ""
+
+#: ../views/scans-results.php:722
+#, php-format
+msgid "Preview &#8220;%s&#8221;"
+msgstr ""
+
+#: ../views/scans-results.php:722
+msgid "Preview"
+msgstr ""
+
+#: ../views/scans-results.php:727
+#, php-format
+msgid "View &#8220;%s&#8221;"
+msgstr ""
+
+#: ../views/scans-results.php:727 ../views/scans-results.php:808
+msgid "View"
+msgstr ""
+
+#: ../views/scans-results.php:781
+msgid "Unapprove this comment"
+msgstr ""
+
+#: ../views/scans-results.php:781
+msgid "Unapprove"
+msgstr ""
+
+#: ../views/scans-results.php:783
+msgid "Approve this comment"
+msgstr ""
+
+#: ../views/scans-results.php:783
+msgid "Approve"
+msgstr ""
+
+#: ../views/scans-results.php:787
+msgid "Mark this comment as spam"
+msgstr ""
+
+#: ../views/scans-results.php:787
+msgid "Spam"
+msgstr ""
+
+#: ../views/scans-results.php:789
+msgid "Not Spam"
+msgstr ""
+
+#: ../views/scans-results.php:799
+msgid "Move this comment to the trash"
+msgstr ""
+
+#: ../views/scans-results.php:803
+msgid "Edit comment"
+msgstr ""
+
+#: ../views/scans-results.php:910
+msgid "Please, confirm you want to remove this entry pressing the Ok button"
+msgstr ""
+
+#: ../views/scans-results.php:910
+msgid "Please, confirm you want to remove this comment pressing the Ok button"
+msgstr ""
+
+#: ../views/scans-results.php:910
+msgid "Please, confirm you want to remove this bookmark pressing the Ok button"
+msgstr ""
+
+#: ../views/scans-results.php:910
+msgid "Please, select any result to proceed"
+msgstr ""
+
+#: ../views/scans-results.php:910
+msgid "error code"
+msgstr ""
+
+#: ../views/scans-results.php:1019
+msgid "All results"
+msgstr ""
+
+#: ../views/scans-results.php:1030
+msgid "(counters in progress)"
+msgstr ""
+
+#: ../views/scans-results.php:1053
+msgid "Filter"
+msgstr ""
+
+#: ../views/scans-results.php:1130
+msgid "All status codes"
+msgstr ""
+
+#: ../views/scans-results.php:1160
+msgid "All content"
+msgstr ""
+
+#: ../views/scans-results.php:1175
+msgid "All link types"
+msgstr ""
+
+#: ../views/scans-edit.php:57
+#, php-format
+msgid ""
+"The crawler for this scan is <strong>stopped</strong> but you can see the <a "
+"href=\"%s\">crawling results</a> collected data."
+msgstr ""
+
+#: ../views/scans-edit.php:57
+#, php-format
+msgid "Or you can <a href=\"%s\">start again the crawler</a>."
+msgstr ""
+
+#: ../views/scans-edit.php:63
+#, php-format
+msgid ""
+"The crawler for this scan is <strong>running</strong> and you can see its <a "
+"href=\"%s\">crawling results data</a>."
+msgstr ""
+
+#: ../views/scans-edit.php:63
+#, php-format
+msgid "If needed you can <a href=\"%s\">stop the crawler</a>."
+msgstr ""
+
+#: ../views/scans-edit.php:69
+#, php-format
+msgid ""
+"The crawler has ended and you can see all its <a href=\"%s\">crawling "
+"results</a>."
+msgstr ""
+
+#: ../views/scans-edit.php:88
+msgid "General"
+msgstr ""
+
+#: ../views/scans-edit.php:89
+msgid "Content options"
+msgstr ""
+
+#: ../views/scans-edit.php:90
+msgid "Content filters"
+msgstr ""
+
+#: ../views/scans-edit.php:91
+msgid "Links status"
+msgstr ""
+
+#: ../views/scans-edit.php:92
+msgid "Schedule"
+msgstr ""
+
+#: ../views/scans-edit.php:103
+msgid "Scan name"
+msgstr ""
+
+#: ../views/scans-edit.php:104
+msgid "optional"
+msgstr ""
+
+#: ../views/scans-edit.php:113 ../views/scans-edit.php:120
+msgid "Link types"
+msgstr ""
+
+#: ../views/scans-edit.php:134 ../views/scans-edit.php:141
+msgid "Destination type"
+msgstr ""
+
+#: ../views/scans-edit.php:153 ../views/scans-edit.php:160
+msgid "Time scope"
+msgstr ""
+
+#: ../views/scans-edit.php:170 ../views/scans-edit.php:177
+msgid "Crawl order"
+msgstr ""
+
+#: ../views/scans-edit.php:187 ../views/scans-edit.php:194
+msgid "Redirection status"
+msgstr ""
+
+#: ../views/scans-edit.php:188
+msgid "Check status of destination URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:195
+msgid "<strong>Yes</strong>, check status of destination URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:195
+msgid "No check status of destination URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:204 ../views/scans-edit.php:211
+msgid "Malformed URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:205
+msgid "Track malformed links"
+msgstr ""
+
+#: ../views/scans-edit.php:212
+msgid "<strong>Yes</strong>, track malformed links"
+msgstr ""
+
+#: ../views/scans-edit.php:212
+msgid "No tracking of malformed links"
+msgstr ""
+
+#: ../views/scans-edit.php:221
+msgid "Notifications"
+msgstr ""
+
+#: ../views/scans-edit.php:222
+msgid "Send an e-mail when the scan is completed:"
+msgstr ""
+
+#: ../views/scans-edit.php:223
+#, php-format
+msgid "Send to the current blog address <strong>%s</strong>"
+msgstr ""
+
+#: ../views/scans-edit.php:224
+msgid "Send to these e-mail addresses:"
+msgstr ""
+
+#: ../views/scans-edit.php:284 ../views/scans-edit.php:292
+msgid "Custom fields"
+msgstr ""
+
+#: ../views/scans-edit.php:286
+msgid "Custom field key"
+msgstr ""
+
+#: ../views/scans-edit.php:286 ../views/scans-edit.php:345
+#: ../views/scans-edit.php:368 ../views/scans-edit.php:387
+#: ../views/scans-edit.php:413
+msgid "Add"
+msgstr ""
+
+#: ../views/scans-edit.php:301 ../views/scans-edit.php:308
+msgid "Comment links"
+msgstr ""
+
+#: ../views/scans-edit.php:317 ../views/scans-edit.php:324
+msgid "Also check links in"
+msgstr ""
+
+#: ../views/scans-edit.php:318 ../views/scans-edit.php:325
+msgid "Blogroll links"
+msgstr ""
+
+#: ../views/scans-edit.php:341 ../views/scans-edit.php:351
+msgid "Anchor filters"
+msgstr ""
+
+#: ../views/scans-edit.php:344
+msgid "Anchor text filter"
+msgstr ""
+
+#: ../views/scans-edit.php:364 ../views/scans-edit.php:374
+msgid "Include URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:383 ../views/scans-edit.php:393
+msgid "Exclude URLs"
+msgstr ""
+
+#: ../views/scans-edit.php:406 ../views/scans-edit.php:419
+msgid "HTML attributes"
+msgstr ""
+
+#: ../views/scans-edit.php:410
+msgid "Attribute name"
+msgstr ""
+
+#: ../views/scans-edit.php:412
+msgid "Attribute value"
+msgstr ""
+
+#: ../views/scans-edit.php:429
+msgid "Accelerate crawling process integrating filters in main database query"
+msgstr ""
+
+#: ../views/scans-edit.php:437
+msgid "Yes"
+msgstr ""
+
+#: ../views/scans-edit.php:437
+msgid "No"
+msgstr ""
+
+#: ../views/scans-edit.php:453 ../views/scans-edit.php:460
+msgid "Track links by level"
+msgstr ""
+
+#: ../views/scans-edit.php:469 ../views/scans-edit.php:489
+msgid "Track links by code"
+msgstr ""
+
+#: ../views/scans-edit.php:511 ../views/scans-edit.php:530
+msgid "Number of threads"
+msgstr ""
+
+#: ../views/scans-edit.php:515 ../views/scans-edit.php:534
+msgid "Connection timeout"
+msgstr ""
+
+#: ../views/scans-edit.php:519 ../views/scans-edit.php:538
+msgid "Request timeout"
+msgstr ""
+
+#: ../views/scans-edit.php:526
+msgid "All these values are optional, leave them empty to use plugin defaults."
+msgstr ""
+
+#: ../views/scans-edit.php:531
+#, php-format
+msgid "(optional, default %d threads)"
+msgstr ""
+
+#: ../views/scans-edit.php:535 ../views/scans-edit.php:539
+#, php-format
+msgid "(optional, default %d seconds)"
+msgstr ""
+
+#: ../views/scans-edit.php:548
+msgid "Save scan changes"
+msgstr ""
+
+#: ../views/scans-edit.php:549
+msgid "Save and run crawler"
+msgstr ""
+
+#: ../views/scans-edit.php:550
+msgid "Delete this scan"
+msgstr ""
+
+#: ../core-pro/tools-url.php:60
+msgid "Empty URLs pack"
+msgstr ""
+
+#: ../core-pro/tools-url.php:67
+msgid "Error when process URLs pack"
+msgstr ""
+
+#: ../core-pro/tools-url.php:219
+msgid "Removed object element"
+msgstr ""
+
+#: ../core-pro/tools-url.php:245
+msgid "nofollow exists"
+msgstr ""
+
+#: ../core-pro/tools-url.php:260
+msgid "Changed to nofollow"
+msgstr ""
+
+#: ../core-pro/tools-url.php:272
+msgid "Set nofollow previously"
+msgstr ""
+
+#: ../core-pro/tools-url.php:282
+msgid "nofollow not exists"
+msgstr ""
+
+#: ../core-pro/tools-url.php:298
+msgid "Removed nofollow"
+msgstr ""
+
+#: ../core-pro/tools-url.php:310
+msgid "Removed nofollow previously"
+msgstr ""
+
+#: ../core-pro/tools-url.php:320
+msgid "Removed link"
+msgstr ""
+
+#: ../core-pro/tools-url.php:328
+msgid "Removed link before"
+msgstr ""
+
+#: ../core-pro/tools-url.php:341
+msgid "Something went wrong"
+msgstr ""
+
+#: ../core-pro/tools-url.php:379
+msgid "Changed redirection location"
+msgstr ""
+
+#: ../core-pro/tools-url.php:390
+msgid "Redirection changed previously"
+msgstr ""
+
+#: ../core-pro/tools-url.php:426
+msgid "Database Match"
+msgstr ""
+
+#: ../core-pro/tools-url.php:588
+msgid "Malformed URL"
+msgstr ""
+
+#: ../core-pro/tools-url.php:622
+msgid "Empty request response"
+msgstr ""
+
+#: ../core-pro/tools-url.php:630
+msgid "Empty response data"
+msgstr ""
+
+#: ../core-pro/tools-url.php:640
+msgid "Malformed response data"
+msgstr ""
+
+#: ../core-pro/tools-url.php:648
+msgid "Missing response data"
+msgstr ""
+
+#: ../core-pro/tools-url.php:661
+msgid "Redirect header but missing Location"
+msgstr ""
+
+#: ../core-pro/tools-url.php:671
+msgid "Redirect header and Location but bad URL"
+msgstr ""
+
+#: ../core-pro/tools-url.php:704
+msgid "No 301 redirect header"
+msgstr ""
+
+#: ../core-pro/results.php:116
+msgid "Missing or invalid action parameter"
+msgstr ""
+
+#: ../core-pro/results.php:127
+msgid "Missing or invalid result identifier parameter"
+msgstr ""
+
+#: ../core-pro/results.php:137 ../core-pro/results.php:150
+msgid "Resource not found in database"
+msgstr ""
+
+#: ../core-pro/results.php:158
+msgid "Unable to retrieve the resource associated scan"
+msgstr ""
+
+#: ../core-pro/results.php:321
+msgid "Headers information not found"
+msgstr ""
+
+#: ../core-pro/results.php:869 ../core-pro/results.php:1519
+msgid "Link already unlinked"
+msgstr ""
+
+#: ../core-pro/results.php:876
+msgid "Link type unknown"
+msgstr ""
+
+#: ../core-pro/results.php:883
+msgid "Input value missing"
+msgstr ""
+
+#: ../core-pro/results.php:890
+msgid "Operation not allowed"
+msgstr ""
+
+#: ../core-pro/results.php:897
+msgid "Object not found"
+msgstr ""
+
+#: ../core-pro/results.php:904
+msgid "Not valid URL"
+msgstr ""
+
+#: ../core-pro/results.php:917
+msgid "Cannot retrieve element content"
+msgstr ""
+
+#: ../core-pro/results.php:931
+msgid "Not valid context"
+msgstr ""
+
+#: ../core-pro/results.php:960
+msgid "Unable to parse the current link"
+msgstr ""
+
+#: ../core-pro/results.php:967
+msgid "Saved URL does not match the link URL"
+msgstr ""
+
+#: ../core-pro/results.php:974
+msgid "Saved anchor does not match the anchor link"
+msgstr ""
+
+#: ../core-pro/results.php:996 ../core-pro/results.php:1353
+#: ../core-pro/results.php:1420
+msgid "No anchor text changes detected."
+msgstr ""
+
+#: ../core-pro/results.php:1007 ../core-pro/results.php:1054
+#: ../core-pro/results.php:1095 ../core-pro/results.php:1167
+#: ../core-pro/results.php:1199
+msgid "Cannot update, stored content does not match."
+msgstr ""
+
+#: ../core-pro/results.php:1124
+msgid "Unable to parse the current image"
+msgstr ""
+
+#: ../core-pro/results.php:1131
+msgid "Saved URL does not match the image URL"
+msgstr ""
+
+#: ../core-pro/results.php:1160 ../core-pro/results.php:1284
+#: ../core-pro/results.php:1322 ../core-pro/results.php:1389
+msgid "No URL changes detected."
+msgstr ""
+
+#: ../core-pro/results.php:1174 ../core-pro/results.php:1294
+#: ../core-pro/results.php:1332 ../core-pro/results.php:1399
+msgid "Failed to check the new link."
+msgstr ""
+
+#: ../core-pro/results.php:1274
+msgid "Failed to retrieve post meta data."
+msgstr ""
+
+#: ../core-pro/results.php:1526 ../core-pro/results.php:1564
+msgid "Given URL missing."
+msgstr ""
+
+#: ../core-pro/results.php:1571
+msgid "No URL status info available."
+msgstr ""
+
+#: ../core-pro/results.php:1578
+msgid "No allowed redirections."
+msgstr ""
+
+#: ../core-pro/results.php:1585
+msgid "No redirection found."
+msgstr ""
+
+#: ../core-pro/results.php:1984
+msgid "Post not found"
+msgstr ""
+
+#: ../core-pro/results.php:1994
+msgid "Current user can`t edit this post"
+msgstr ""
+
+#: ../core-pro/results.php:2014
+msgid "Comment not found"
+msgstr ""
+
+#: ../core-pro/results.php:2024
+msgid "Current user can`t edit this comment"
+msgstr ""
+
+#: ../core-pro/results.php:2044
+msgid "Bookmark record not found"
+msgstr ""
+
+#: ../core-pro/results.php:2054
+msgid "Current user can`t edit this bookmark"
+msgstr ""
