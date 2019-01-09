@@ -1,6 +1,24 @@
 
 # Changelog
 
+## 2.1.2
+
+	- Fixed several fatal errors that occurred when running older versions of Gravity Forms.
+	- Fixed issue where unmet minimum requirements did not prevent GP_Plugin-based perks from initializing.
+	- Updated minimum required version of Gravity Forms to fix fatal errors where GFAddon::meets_minimum_requirements() did not exist.
+
+## 2.1.1
+
+	- Fixed issue where Gravity Wiz API wouldn't have its cache cleared
+
+## 2.1
+
+	- Updated licensing and updates API for significant performance improvements.
+
+## 2.0.12
+
+	- Fixed issue with usage of WP_CONTENT_DIR; replaced with WP_PLUGIN_DIR
+
 ## 2.0.11
 
 	- Added GP_Late_Static_Binding::Perk_value_pass_through() method.

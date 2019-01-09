@@ -6,7 +6,7 @@
  * dealing with user's private messages.
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 ?>
 <div class="subnav-filters filters user-subnav bp-messages-filters" id="subsubnav"></div>
@@ -19,6 +19,15 @@
 		<span class="bp-icon" aria-hidden="true"></span>
 		<p>{{{data.message}}}</p>
 	</div>
+</script>
+
+<?php
+/**
+ * This view is used to inject hooks buffer
+ */
+?>
+<script type="text/html" id="tmpl-bp-messages-hook">
+	{{{data.extraContent}}}
 </script>
 
 <script type="text/html" id="tmpl-bp-messages-form">
@@ -35,8 +44,8 @@
 	<?php bp_nouveau_messages_hook( 'after', 'compose_content' ); ?>
 
 	<div class="submit">
-		<input type="button" id="bp-messages-send" class="button bp-primary-action" value="<?php esc_attr_e( 'Send', 'buddypress' ); ?>"/>
-		<input type="button" id="bp-messages-reset" class="text-button small bp-secondary-action" value="<?php esc_attr_e( 'Reset', 'buddypress' ); ?>"/>
+		<input type="button" id="bp-messages-send" class="button bp-primary-action" value="<?php echo esc_attr_x( 'Send', 'button', 'buddypress' ); ?>"/>
+		<input type="button" id="bp-messages-reset" class="text-button small bp-secondary-action" value="<?php echo esc_attr_x( 'Reset', 'form reset button', 'buddypress' ); ?>"/>
 	</div>
 </script>
 
@@ -59,6 +68,7 @@
 			'textarea_rows' => 5,
 		)
 	);
+
 	// Remove the temporary filter on editor buttons
 	remove_filter( 'mce_buttons', 'bp_nouveau_messages_mce_buttons', 10, 1 );
 	?>
@@ -68,14 +78,14 @@
 	<# if ( 1 !== data.page ) { #>
 		<button id="bp-messages-prev-page"class="button messages-button">
 			<span class="dashicons dashicons-arrow-left"></span>
-			<span class="bp-screen-reader-text"><?php esc_html_e( 'Prev', 'buddypress' ); ?></span>
+			<span class="bp-screen-reader-text"><?php echo esc_html_x( 'Previous page', 'link', 'buddypress' ); ?></span>
 		</button>
 	<# } #>
 
 	<# if ( data.total_page !== data.page ) { #>
 		<button id="bp-messages-next-page"class="button messages-button">
 			<span class="dashicons dashicons-arrow-right"></span>
-			<span class="bp-screen-reader-text"><?php esc_html_e( 'Next', 'buddypress' ); ?></span>
+			<span class="bp-screen-reader-text"><?php echo esc_html_x( 'Next page', 'link', 'buddypress' ); ?></span>
 		</button>
 	<# } #>
 </script>
@@ -83,16 +93,7 @@
 <script type="text/html" id="tmpl-bp-messages-filters">
 	<li class="user-messages-search" role="search" data-bp-search="{{data.box}}">
 		<div class="bp-search messages-search">
-			<form action="" method="get" id="user_messages_search_form" class="bp-messages-search-form" data-bp-search="messages">
-				<label for="user_messages_search" class="bp-screen-reader-text">
-					<?php _e( 'Search Messages', 'buddypress' ); ?>
-				</label>
-				<input type="search" id="user_messages_search" placeholder="<?php esc_attr_e( 'Search', 'buddypress' ); ?>"/>
-				<button type="submit" id="user_messages_search_submit">
-					<span class="dashicons dashicons-search" aria-hidden="true"></span>
-					<span class="bp-screen-reader-text"><?php esc_html_e( 'Search', 'buddypress' ); ?></span>
-				</button>
-			</form>
+			<?php bp_nouveau_message_search_form(); ?>
 		</div>
 	</li>
 	<li class="user-messages-bulk-actions"></li>
@@ -113,9 +114,9 @@
 			</select>
 			<span class="select-arrow" aria-hidden="true"></span>
 		</div>
-		<button class="messages-button bulk-apply bp-tooltip" type="submit" data-bp-tooltip="<?php echo esc_attr( 'Apply', 'buddypress' ); ?>">
+		<button class="messages-button bulk-apply bp-tooltip" type="submit" data-bp-tooltip="<?php echo esc_attr_x( 'Apply', 'button', 'buddypress' ); ?>">
 			<span class="dashicons dashicons-yes" aria-hidden="true"></span>
-			<span class="bp-screen-reader-text"><?php esc_html_e( 'Apply', 'buddypress' ); ?></span>
+			<span class="bp-screen-reader-text"><?php echo esc_html_x( 'Apply', 'button', 'buddypress' ); ?></span>
 		</button>
 	</div>
 </script>
@@ -153,7 +154,7 @@
 	<div class="thread-content" data-thread-id="{{data.id}}">
 		<div class="thread-subject">
 			<span class="thread-count">({{data.count}})</span>
-			<a class="subject" href="#view/{{data.id}}">{{data.subject}}</a>
+			<a class="subject" href="../view/{{data.id}}/">{{data.subject}}</a>
 		</div>
 		<p class="excerpt">{{data.excerpt}}</p>
 	</div>
@@ -165,7 +166,7 @@
 <script type="text/html" id="tmpl-bp-messages-preview">
 	<# if ( undefined !== data.content ) { #>
 
-		<h2 class="message-title preview-thread-title"><?php esc_html_e( 'Active conversation:', 'buddypress' ); ?><span class="messages-title"> <# print( data.subject ); #></span></h2>
+		<h2 class="message-title preview-thread-title"><?php esc_html_e( 'Active conversation:', 'buddypress' ); ?><span class="messages-title">{{{data.subject}}}</span></h2>
 		<div class="preview-content">
 			<header class="preview-pane-header">
 
@@ -202,21 +203,35 @@
 
 					<# } #>
 
-					<a href="#view/{{data.id}}" class="message-action-view bp-tooltip bp-icons" data-bp-tooltip="<?php esc_attr_e( 'View full conversation and reply.', 'buddypress' ); ?>">
+					<a href="../view/{{data.id}}/" class="message-action-view bp-tooltip bp-icons" data-bp-action="view" data-bp-tooltip="<?php esc_attr_e( 'View full conversation and reply.', 'buddypress' ); ?>">
 						<span class="bp-screen-reader-text"><?php esc_html_e( 'View full conversation and reply.', 'buddypress' ); ?></span>
 					</a>
+
+					<# if ( data.threadOptions ) { #>
+						<span class="bp-messages-hook thread-options">
+							{{{data.threadOptions}}}
+						</span>
+					<# } #>
 				</div>
 			</header>
 
 			<div class='preview-message'>
-				<# print( data.content ) #>
+				{{{data.content}}}
 			</div>
+
+			<# if ( data.inboxListItem ) { #>
+				<table class="bp-messages-hook inbox-list-item">
+					<tbody>
+						<tr>{{{data.inboxListItem}}}</tr>
+					</tbody>
+				</table>
+			<# } #>
 		</div>
 	<# } #>
 </script>
 
 <script type="text/html" id="tmpl-bp-messages-single-header">
-	<h2 id="message-subject" class="message-title single-thread-title"><# print( data.subject ); #></h2>
+	<h2 id="message-subject" class="message-title single-thread-title">{{{data.subject}}}</h2>
 	<header class="single-message-thread-header">
 		<# if ( undefined !== data.recipients ) { #>
 			<dl class="thread-participants">
@@ -232,19 +247,18 @@
 		<# } #>
 
 		<div class="actions">
-
 			<button type="button" class="message-action-delete bp-tooltip bp-icons" data-bp-action="delete" data-bp-tooltip="<?php esc_attr_e( 'Delete conversation.', 'buddypress' ); ?>">
 				<span class="bp-screen-reader-text"><?php esc_html_e( 'Delete conversation.', 'buddypress' ); ?></span>
 			</button>
-
-			<?php bp_nouveau_messages_hook( 'after', 'thread_header_actions' ); ?>
 		</div>
 	</header>
 </script>
 
 <script type="text/html" id="tmpl-bp-messages-single-list">
 	<div class="message-metadata">
-		<?php bp_nouveau_messages_hook( 'before', 'meta' ); ?>
+		<# if ( data.beforeMeta ) { #>
+			<div class="bp-messages-hook before-message-meta">{{{data.beforeMeta}}}</div>
+		<# } #>
 
 		<a href="{{data.sender_link}}" class="user-link">
 			<img class="avatar" src="{{data.sender_avatar}}" alt="" />
@@ -267,15 +281,20 @@
 			<# } #>
 		</div>
 
-		<?php bp_nouveau_messages_hook( 'after', 'meta' ); ?>
-
+		<# if ( data.afterMeta ) { #>
+			<div class="bp-messages-hook after-message-meta">{{{data.afterMeta}}}</div>
+		<# } #>
 	</div>
 
-	<?php bp_nouveau_messages_hook( 'before', 'content' ); ?>
+	<# if ( data.beforeContent ) { #>
+		<div class="bp-messages-hook before-message-content">{{{data.beforeContent}}}</div>
+	<# } #>
 
-	<div class="message-content"><# print( data.content ) #></div>
+	<div class="message-content">{{{data.content}}}</div>
 
-	<?php bp_nouveau_messages_hook( 'after', 'content' ); ?>
+	<# if ( data.afterContent ) { #>
+		<div class="bp-messages-hook after-message-content">{{{data.afterContent}}}</div>
+	<# } #>
 
 </script>
 
@@ -296,15 +315,15 @@
 		<div class="message-box">
 			<div class="message-metadata">
 
-				<?php bp_nouveau_messages_hook( 'before', 'meta' ); ?>
+				<?php bp_nouveau_messages_hook( 'before', 'reply_meta' ); ?>
 
 				<div class="avatar-box">
 					<?php bp_loggedin_user_avatar( 'type=thumb&height=30&width=30' ); ?>
 
-					<strong><?php _e( 'Send a Reply', 'buddypress' ); ?></strong>
+					<strong><?php esc_html_e( 'Send a Reply', 'buddypress' ); ?></strong>
 				</div>
 
-				<?php bp_nouveau_messages_hook( 'after', 'meta' ); ?>
+				<?php bp_nouveau_messages_hook( 'after', 'reply_meta' ); ?>
 
 			</div><!-- .message-metadata -->
 
@@ -318,7 +337,7 @@
 				<?php bp_nouveau_messages_hook( 'after', 'reply_box' ); ?>
 
 				<div class="submit">
-					<input type="submit" name="send" value="<?php esc_attr_e( 'Send Reply', 'buddypress' ); ?>" id="send_reply_button"/>
+					<input type="submit" name="send" value="<?php echo esc_attr_x( 'Send Reply', 'button', 'buddypress' ); ?>" id="send_reply_button"/>
 				</div>
 
 			</div><!-- .message-content -->

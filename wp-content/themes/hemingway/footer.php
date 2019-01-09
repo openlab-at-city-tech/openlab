@@ -56,7 +56,7 @@
 	
 			<p class="credits-left">
 			
-				&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo home_url(); ?>" title="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
+				&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo home_url(); ?>"><?php bloginfo( 'name' ); ?></a>
 			
 			</p>
 			

@@ -291,7 +291,7 @@ class GWPerksPage {
 
         <div id="install" class="perks plugins tab-container" <?php echo $is_active ? '' : 'style="display:none;"'; ?> >
 
-            <?php if( empty( $available_perks ) && GravityPerks::get_api_status() != '200' ): ?>
+            <?php if( empty( $available_perks ) && GravityPerks::get_api_status() !== 200 ): ?>
 
 	            <div class="install-perks-api-message">
 	                <?php echo GravityPerks::get_api_error_message(); ?>
@@ -721,7 +721,7 @@ class GWPerksPage {
 	        GWPerks::flush_license(true);
 
             if ( ! GWPerks::has_valid_license() ) {
-            	if( GravityPerks::get_api_status() != '200' ) {
+            	if( GravityPerks::get_api_status() !== 200 ) {
 		            $GLOBALS['GWP_LICENSE_NOTICE'] = new GWNotice( GravityPerks::get_api_error_message(), array( 'class' => 'inline error gwp-message' ) );
 	            } else {
             	    $license_data = GravityPerks::get_license_data();

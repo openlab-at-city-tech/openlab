@@ -1,0 +1,693 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BuddyPress Group Email Subscription\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/buddypress-group-email-"
+"subscription\n"
+"POT-Creation-Date: 2012-05-18 13:04:15+00:00\n"
+"PO-Revision-Date: Tue Mar 08 2016 11:39:15 GMT+0100 (CET)\n"
+"Last-Translator: Kotaro <joachimhappel@gmail.com>\n"
+"Language-Team: Thorsten Wollenhoefer <thorsten.wollenhoefer@gmail.com>\n"
+"Language: German\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Poedit-Basepath: /Volumes/Macintosh HD/Users/deryk/Sites/bp/wp-"
+"content/plugins/buddypress-group-email-subscription/\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Loco-Target-Locale: de_DE"
+
+msgid " - sent from the group "
+msgstr "- gesendet von der Gruppe"
+
+msgid ""
+"%s\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"To view or reply to this topic, log in and go to:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+msgstr ""
+"%s\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"Um dieses Thema anzuzeigen oder darauf zu antworten, bitte einloggen auf:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+
+msgid ""
+"%s\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"To view or reply, log in and go to:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+msgstr ""
+"%s\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"Um es dir anzusehen oder darauf zu antworten:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+
+msgid ""
+"%s\n"
+"\n"
+"To view or reply, log in and go to:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+msgstr ""
+"%s\n"
+"\n"
+"Um es anzusehen oder darauf zu antworten, bitte einloggen und gehe zu:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+
+msgid "%s replied to the forum topic \"%s\" in the group \"%s\""
+msgstr "%s antwortete auf das Forumthema \"%s\" in der Gruppe \"%s\""
+
+msgid "%s started the forum topic \"%s\" in the group \"%s\""
+msgstr "%s startete das Forumthema \"%s\" in der Gruupe \"%s\""
+
+msgid "(%s items)"
+msgstr "(%s Objekte)"
+
+msgid "(%s replies)"
+msgstr "(%s Antworten)"
+
+msgid ""
+", therefore you won't receive replies to this topic. To get them, click the "
+"link to view this topic on the web then click the 'Follow this topic' button."
+msgstr ""
+", deswegen wirst du keine Antworten auf dieses Thema erhalten. Um sie zu "
+"erhalten, klicke auf den Link um dieses Thema anzuzeigen und dann klicke auf "
+"die <i>Follow this Topic</i> Schaltfläche."
+
+msgid "<a href=\"%1$s\">Continue to %2$s</a>"
+msgstr "<a href=\"%1$s\">Weiter zu %2$s</a>"
+
+msgid "<strong>Daily Digests</strong> should be sent at this time:"
+msgstr ""
+"<strong>Tägliche Übersichten</strong> sollen um diese Uhrzeit versendet "
+"werden:"
+
+msgid "<strong>Weekly Summaries</strong> should be sent on:"
+msgstr "<strong>Wöchentlich Zusammenfasssungen</strong> sollen gesendet werden am:"
+
+msgid "A member replies after you in a forum topic"
+msgstr "Ein Mitglied antwortet nach dir in einem Forum-Thema"
+
+msgid "A member replies in a forum topic you've started"
+msgstr "Ein Mitglied antwortet in einem Forum-Thema, das du eröffnet hast"
+
+msgid ""
+"Add a link in the emails and on the notifications settings page allowing "
+"users to unsubscribe from all their groups at once:"
+msgstr ""
+"Fügt einen Link den Emails und auf der Benachrichtigungs-Einstellungsseite "
+"hinzu, was es den Benutzern erlaubt, sich von allen Gruppen auf einmal "
+"abzumelden:"
+
+msgid "All Email"
+msgstr "Alle Aktivitäten"
+
+msgid ""
+"All Email (send emails about everything - recommended only for working "
+"groups)"
+msgstr ""
+"Alle Aktivitäten (sofortige E-Mails für alle Aktivitäten - gut für "
+"Arbeitsgruppen)"
+
+msgid "All user email status's changed successfully"
+msgstr "E-Mail Benachrichtigung für alle Mitglieder erfolgreich geändert."
+
+msgid "Allow group admins and mods to change members' email subscription settings: "
+msgstr ""
+"Erlaube Gruppenadmins und Moderatoren die Benachrichtigungseinstellungen der "
+"Mitglieder zu ändern:"
+
+msgid ""
+"Allow group admins to override subscription settings and send an email to "
+"everyone in their group: "
+msgstr ""
+"Erlaube Gruppenadmins die Abonnementeinstellungen zu überschreiben und E-"
+"Mails an jeden in der Gruppe zu versenden:"
+
+msgid "Change to:"
+msgstr "Ändern zu:"
+
+msgid "Change your email subscription options for this group"
+msgstr "Ändere deine E-Mail-Abonnement Optionen für diese Gruppe"
+
+msgid "DAILY DIGEST:"
+msgstr "TÄGLICHE ZUSAMMENFASSUNG:"
+
+msgid "Daily"
+msgstr "Täglich"
+
+msgid "Daily Digest"
+msgstr "Tägliche Übersicht"
+
+msgid "Daily Digest Email"
+msgstr "Tägliche Übersicht"
+
+msgid ""
+"Daily Digest Email (all daily activity bundles in one email - good for "
+"medium-size groups)"
+msgstr ""
+"Tägliche Übersicht (alle Aktivitäten des Tages in einer E-Mail - gut für "
+"mittelgroße Gruppen)"
+
+msgid "Digests & Summaries"
+msgstr "Übersichten & Zusammenfassungen"
+
+msgid "Disable these notifications for all my groups at once."
+msgstr "Um diese Benachrichtigungen für alle Gruppen auf einmal zu deaktivieren."
+
+msgid "Do you really want to unsubscribe from all groups notifications?"
+msgstr "Möchtest Du wirklich von allen Gruppenbenachrichtigungen abgemeldet werden?"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Email Content:"
+msgstr "E-Mail Inhalt"
+
+msgid "Email Options"
+msgstr "E-Mail Optionen"
+
+msgid "Email Subject:"
+msgstr "E-Mail Betreff:"
+
+msgid "Email Subscription Defaults"
+msgstr "E-Mail-Abonnement Standard:"
+
+msgid "Email Subscription Options"
+msgstr "E-Mail-Abonnement Optionen"
+
+msgid "Email status:"
+msgstr "E-Mail Status:"
+
+msgid "Email this notice to everyone in the group"
+msgstr "Schicke diese E-Mail an jeden in der Gruppe"
+
+msgid "Enable welcome email"
+msgstr "Aktiviere die Willkommens-Email"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid ""
+"Everyone in the group will receive the email -- regardless of their email "
+"settings -- so use with caution"
+msgstr ""
+"Jeder in der Gruppe wird die E-Mail empfangen -- unabhängig seiner "
+"Einstellungen --"
+
+msgid "Follow"
+msgstr "Verfolgen"
+
+msgid "Friday"
+msgstr "Freitag"
+
+msgid "Get a summary of new topics each week"
+msgstr "Erhalte jede Woche eine Zusammenfassung der neuen Themen"
+
+msgid "Get a summary of topics each"
+msgstr "Erhalte eine Zusammenfassung jede Woche am"
+
+msgid "Get all the day's activity bundled into a single email"
+msgstr "Erhalte die Aktivitäten eines Tages zusammengefasst in einer einzigen E-Mail"
+
+msgid "Get email updates"
+msgstr "Erhalte E-Mail Updates"
+
+msgid "Get the day's activity bundled into one email"
+msgstr "Erhalte die täglichen Aktivitäten in einer E-Mail zusammengefasst"
+
+msgid "Global Unsubscribe Link"
+msgstr "Globaler Abmelde-Link"
+
+msgid "Group Admin Abilities"
+msgstr "Gruppen Admin Fähigkeiten"
+
+msgid "Group Email Options"
+msgstr "Gruppen E-Mail Optionen"
+
+msgid "Group Email Subscription Settings"
+msgstr "Gruppen E-Mail Abonnement Einstellungen"
+
+msgid "Group Forum"
+msgstr "Gruppen Forum"
+
+msgid "Group Summary"
+msgstr "Zusammenfassung der Gruppen"
+
+msgid "Group: %s"
+msgstr "Gruppe: %s"
+
+msgid "Group: %s weekly summary"
+msgstr "Gruppe: %s wöchentliche Zusammenfassung"
+
+msgid "How do you want to read this group?"
+msgstr "Wie möchtest du diese Gruppe verfolgen?"
+
+msgid ""
+"How to follow a topic: to get email updates for a specific topic, click the "
+"topic title - then on the webpage click the <i>Follow this topic</i> button. "
+"(If you don't see the button you need to login first.)"
+msgstr ""
+"Ein Thema verfolgen: Um E-Mail-Updates für ein bestimmtes Thema zu bekommen, "
+"klicke auf den Titel des Themas - auf der Seite klicke dann auf die <i>Thema "
+"verfolgen</i> Schaltfläche. (Wenn du die Schaltfläche nicht siehst, musst du "
+"dich zuerst einloggen)"
+
+msgid "I will read this group on the web"
+msgstr "Ich werde diese Gruppe nur im Web verfolgen"
+
+msgid "If you enjoy using this plugin %s please rate it %s."
+msgstr "Wenn dir diese Plugin %s gefällt, bewerte es %s."
+
+msgid "Individual Group Email Settings"
+msgstr "Individuelle Gruppen-Email-Einstellungen"
+
+msgid "Make it so!"
+msgstr "Tu es!"
+
+msgid "Member must be registered for"
+msgstr "Mitglied muss registriert sein seit"
+
+msgid "Monday"
+msgstr "Montag"
+
+msgid "Mute"
+msgstr "Lautlos"
+
+msgid "My Groups"
+msgstr "Meine Gruppen"
+
+msgid "New Topics"
+msgstr "Neue Themen"
+
+msgid "New Topics Email"
+msgstr "Benachrichtigung bei neuen Themen"
+
+msgid ""
+"New Topics Email (new topics are sent as they arrive, but not replies - good "
+"for small groups)"
+msgstr ""
+"Neue Themen (Mitteilung über neue Themen, aber nicht über Antworten - gut "
+"für kleine Gruppen)"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "No Email"
+msgstr "Keine E-Mail"
+
+msgid ""
+"No Email (users will read this group on the web - good for any group - the "
+"default)"
+msgstr ""
+"Keine E-Mails (Mitglieder werden diese Gruppe im Web verfolgen - gut für "
+"alle Gruppen - Standard)"
+
+msgid "No, close"
+msgstr "Nein, schließen"
+
+msgid ""
+"Note: Normally, you receive email notifications for topics you start or "
+"comment on. This can be changed at"
+msgstr ""
+"Hinweise: Normalerweise erhältst du Benachrichtigungen für Forum-Themen, die "
+"du gestartet oder kommentiert hast. Das kannst du ändern unter"
+
+msgid "Once Weekly"
+msgstr "Einmal wöchentlich"
+
+msgid ""
+"Once you are logged in, click on the \"Mute this topic\" button to unsubscribe "
+"from the forum thread."
+msgstr ""
+"Sobald Du Dich eingeloggt hast, klicke auf den \"Thema abbestellen (Mute this "
+"topic)\" Button, um das Abonnement des Forum-Threads zu stornieren."
+
+msgid ""
+"Once you are logged in, uncheck \"A member replies after you in a forum "
+"topic\"."
+msgstr ""
+"Sobald Du Dich eingeloggt hast, deaktiviere \"Ein Mitglied antwortet nach "
+"Ihnen zu einem Forum-Thema\"."
+
+msgid ""
+"Once you are logged in, uncheck \"A member replies in a forum topic you've "
+"started\"."
+msgstr ""
+"Sobald Du Dich eingeloggt hast, deaktiviere \"Ein Mitglied antwortet in einem "
+"Forum-Thema, das Du eröffnet hast\"."
+
+msgid "Or set all your group's email options to No Email"
+msgstr "Oder markiere in Deinen Gruppen-Email-Optionen \"keine Email\" (No Email)"
+
+msgid "Or to disable notifications for *all* your groups, click: %s"
+msgstr ""
+"Oder um Benachrichtigungen für *alle Ihre Gruppen* zu deaktivieren, klicke: "
+"%s"
+
+msgid "Please make a donation to the team to support ongoing development."
+msgstr ""
+"Bitte gib eine Spende für das Team ab um eine fortwährende Entwicklung zu "
+"unterstützen."
+
+msgid ""
+"Please note: admin notices are sent to everyone in the group and cannot be "
+"disabled.\n"
+"If you feel this service is being misused please speak to the website "
+"administrator."
+msgstr ""
+"Bitte beachte: Administrator-Mitteilungen werden an jeden in der Gruppe "
+"gesendet und können nicht abgeschaltet werden. \n"
+"Wenn Du glaubst, dass diese Funktion missbraucht wird, dann wende Dich bitte "
+"an den Administrator der Website."
+
+msgid "Receive notifications of your own posts?"
+msgstr "Erhalte Benachrichtigungen zu deinen eigenen Posts?"
+
+msgid "Saturday"
+msgstr "Samstag"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+msgid "Send all group activity as it arrives"
+msgstr "Erhalte sofortige Benachrichtigung über sämtliche Aktivitäten"
+
+msgid "Send an email notice to everyone in the group"
+msgstr "Sende eine E-Mail an jeden in der Gruppe"
+
+msgid "Send an email when a new member join the group."
+msgstr "Sendet eine Email, wenn ein neues Mitglied der Gruppe beigetreten ist."
+
+msgid "Send new topics as they arrive (but don't send replies)"
+msgstr ""
+"Erhalte Benachrichtigungen beim Start eines neuen Themas (allerdings nicht "
+"bei Antworten darauf)"
+
+msgid "Send new topics as they arrive (but no replies)"
+msgstr ""
+"Schicke Benachrichtigungen beim Start eines neuen Themas (allerdings nicht "
+"bei Antworten darauf)"
+
+msgid "Settings saved."
+msgstr "Einstellungen gespeichert."
+
+msgid ""
+"Site Admin Only: update email subscription settings for ALL members to the "
+"default:"
+msgstr ""
+"Nur für Administrator: E-Mail Benachrichtigungen für ALLE Mitglieder der "
+"Gruppe auf Standard setzen."
+
+msgid "Spam Prevention"
+msgstr "Spam-Schutz"
+
+msgid "Sunday"
+msgstr "Sonntag"
+
+msgid "The email notice was sent not sent. Please enter email content."
+msgstr "Die Emailnachricht wurde nicht gesendet. Bitte gib für die Email Inhalt ein."
+
+msgid "The email notice was sent successfully."
+msgstr "Die E-Mail wurde erfolgreich gesendet."
+
+msgid ""
+"The server timezone is %s (%s); the current server time is %s (%s); and the "
+"day is %s."
+msgstr ""
+"Die Server Zeitzone ist %s (%s); die momentane Server-Zeit ist %s (%s); und "
+"der Tag ist %s."
+
+msgid "The welcome email option has been saved."
+msgstr "Die Willkommen-Email-Option wurde gespeichert."
+
+msgid "This conversation is muted. Click to follow it"
+msgstr "Diese Konversation ist auf lautlos gestellt. Klicke um sie zu verfolgen."
+
+msgid ""
+"This is a notice from the group '%s':\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"\n"
+"To view this group log in and follow the link below:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+msgstr ""
+"Die ist eine Nachricht von der Gruppe <i>%s</i>:\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"\n"
+"Um die Gruppe anzuzeigen, bitte einloggen unter:\n"
+"%s\n"
+"\n"
+"---------------------\n"
+
+msgid "This user's has been unsubscribed from all groups notifications."
+msgstr ""
+"Dieser Benutzer wurde von allen Abonnements zu Gruppenbenachrichtigungen "
+"abgemeldet."
+
+msgid "Thursday"
+msgstr "Donnerstag"
+
+msgid ""
+"To change the email notification settings for your groups, go to %s and "
+"click \"Change\" for each group."
+msgstr ""
+"Um die Einstellungen für die Email-Benachrichtigungen Ihrer Gruppen zu "
+"ändern, gehe zu <b>%s</b> und klicke \"ändern\" für jede Gruppe."
+
+msgid "To change your email setting for this group, please log in and go to: %s"
+msgstr ""
+"Um die Email-Einstellungen für diese Gruppe zu ändern, logge Dich bitte ein "
+"und gehe zu: %s"
+
+msgid "To disable all notifications for this group, click: %s"
+msgstr "Um diese Benachrichtigungen für diese Gruppe zu deaktivieren, klicke: %s"
+
+msgid "To disable emails from all your groups at once click: %s"
+msgstr "Um Emails zu deaktivieren (alle Gruppen auf einmal), klicke: %s"
+
+msgid "To disable these notifications for this group click "
+msgstr "Um diese Benachrichtigungen für diese Gruppe zu deaktivieren klicke"
+
+msgid ""
+"To disable these notifications per group please login and go to: %s where "
+"you can change your email settings for each group."
+msgstr ""
+"Um diese Benachrichtigungen abzuschalten, musst Du Dich einloggen und auf %s "
+"gehen, wo Du die Benachrichtigungseinstellungen für jede Gruppe ändern "
+"kannst."
+
+msgid "To disable these notifications please log in and go to: %s"
+msgstr "Um diese Benachrichtigungen abzustellen log dich bitte ein und geh zu: %s"
+
+msgid ""
+"To help protect against spam, you may wish to require a user to have been a "
+"member of the site for a certain amount of days before any group updates are "
+"emailed to the other group members. This is disabled by default."
+msgstr ""
+"Um vor Spam zu schützen, möchtest du vielleicht, dass Benutzer einen "
+"bestimmte Anzahl von Tagen bereits Mitglied sind, bevor irgendwelche ihrer "
+"Gruppeaktivitäten an die anderen Mitglieder verschickt werden. Dies ist "
+"standardmäßig deaktiviert."
+
+msgid "Tuesday"
+msgstr "Dienstag"
+
+msgid "Unsubscribe"
+msgstr "Abbestellen"
+
+msgid "Unsubscribe from all groups notifications"
+msgstr "Von allen Gruppenbenachrichtigungen abmelden"
+
+msgid "User email status changed successfully"
+msgstr "E-Mail Status erfolgreich geändert"
+
+msgid "View"
+msgstr "Anzeigen"
+
+msgid ""
+"View queued digest items</a></b> (in new window)<br>As admin, you can see "
+"what is currently in the email queue by adding ?sum=1 to your url. This will "
+"not fire the digest, it will just show you what is waiting to be sent."
+msgstr ""
+"Zeige angesammelte Übersichtsobjekte</a></b> (in einem neuen Fenster)<br>Als "
+"Admin kannst du sehen was momentan in der Warteliste steht indem du ?sum=1 "
+"der URL hinzufügst. Das wird die Übersicht nicht versenden, sondern dir nur "
+"zeigen was wartet um versendet zu werden."
+
+msgid "WEEKLY DIGEST:"
+msgstr "WÖCHENTLICHE ZUSAMMENFASSUNG:"
+
+msgid "Warning: this is not reversible so use with caution."
+msgstr "Warnung: Diese Funktion ist nicht reversibel."
+
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+msgid "Weekly Summary"
+msgstr "Wöchentliche Zusammenfassung"
+
+msgid "Weekly Summary Email"
+msgstr "Wöchentliche Zusammenfassung"
+
+msgid "Weekly Summary Email (the week's topics - good for large groups)"
+msgstr "Wöchentliche Zusammenfassung (die Themen der Woche - gut für große Gruppen)"
+
+msgid "Welcome Email"
+msgstr "Willkommens-Email"
+
+msgid ""
+"When new users join this group, their default email notification settings "
+"will be:"
+msgstr ""
+"Wenn neue Mitglieder dieser Gruppe beitreten, werden ihre Benachrichtigungs-"
+"Einstellungen standardmäßig sein:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yes, unsubscribe from all my groups"
+msgstr "Ja, Abonnements von all meinen Gruppen stornieren"
+
+msgid "You are currently receiving notifications to topics that you have replied in."
+msgstr ""
+"Du erhältst gegenwärtig Benachrichtigungen zu Themen, die Du beantwortet "
+"hast."
+
+msgid "You are currently receiving notifications to topics that you have started."
+msgstr "Du erhältst gegenwärtig Benachrichtigungen zu Themen, die Du begonnen hast."
+
+msgid "You are following this topic. Click to stop getting email updates"
+msgstr "Du verfolgst dieses Thema. Klicke um E-Mails über Updates zu stoppen."
+
+msgid ""
+"You are not following this topic. Click to follow it and get email updates "
+"for new posts"
+msgstr ""
+"Du verfolgst diese Thema nicht. Klicke um es zu verfolgen und bekomme E-Mail "
+"Updates bei neuen Einträgen."
+
+msgid "You can use the form below to send an email notice to all group members."
+msgstr ""
+"Du kannst das untenstehende Formular benutzen um eine E-Mail an alle "
+"Mitglieder der Gruppe zu senden."
+
+msgid "You have been unsubscribed from all groups notifications."
+msgstr "Du wurdest von allen Abonnements zu Gruppenbenachrichtigungen abgemeldet."
+
+msgid ""
+"You have received this message because you are subscribed to receive a "
+"digest of activity in some of your groups on %s."
+msgstr ""
+"Du erhältst diese Nachricht, weil du eine Zusammenfassung bestimmter "
+"Gruppenaktivitäten auf %s abonniert hast."
+
+msgid "You successfully joined the group. Your group email status is: "
+msgstr ""
+"Du hast dich erfolgreich der Gruppe angeschlossen. Deine Benachrichtigungs E-"
+"Mail Status ist:"
+
+msgid "Your daily digest of group activity"
+msgstr "Deine tägliche Zusammenfassung der Gruppenaktivität"
+
+msgid "Your email notifications are set to %s for this group."
+msgstr "Deine Email-Benachrichtigungen für diese Gruppe sind gesetzt auf %s."
+
+msgid "Your email setting for this group is: "
+msgstr "Deine E-Mail-Einstellungen für diese Gruppe sind: "
+
+msgid "Your email status is "
+msgstr "Dein E-Mail Status ist"
+
+msgid ""
+"Your unsubscription was successful. You will no longer receive email "
+"notifications from any of your groups."
+msgstr ""
+"Deine Abonnements wurden erfolgreich storniert, so dass Du nicht länger "
+"Email-Benachrichtigungen von allen Deinen Gruppen erhältst."
+
+msgid ""
+"Your unsubscription was successful. You will no longer receive email "
+"notifications from the group %s."
+msgstr ""
+"Dein Abonnement wurde erfolgreich storniert, so dass Du nicht länger Email-"
+"Benachrichtigungen von der Gruppe %s erhältst."
+
+msgid "Your weekly summary of group topics"
+msgstr "Deine wöchentliche Zusammenfassung der Gruppenthemen"
+
+msgid "at"
+msgstr "bei"
+
+msgid "at %s, %s"
+msgstr "auf %s, %s"
+
+msgid "change"
+msgstr "ändern"
+
+msgid "change "
+msgstr "ändern"
+
+msgid "close"
+msgstr "schließen"
+
+msgid "days"
+msgstr "Tagen"
+
+msgid "email notifications"
+msgstr "E-Mail Benachrichtigungen"
+
+msgid "email options"
+msgstr "E-Mail Optionen"
+
+msgid "in the group"
+msgstr "in der Gruppe"
+
+msgid "no"
+msgstr "Nein"
+
+msgid "this topic"
+msgstr "diese Thema"
+
+msgid "unsubscribe"
+msgstr "Abonnement löschen"
+
+msgid "yes"
+msgstr "Ja"

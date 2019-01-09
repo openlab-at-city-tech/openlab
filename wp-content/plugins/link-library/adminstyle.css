@@ -1,0 +1,23 @@
+.link_full_page_editor {
+	margin-bottom: 0 !important;
+}
+
+.post-type-link_library_links .wp-editor-tools {
+	padding-top: 0px !important;
+}
+
+#wp-content-editor-tools {
+	background-color: #fff;
+}
+
+.wp-list-table #link_library_rating {
+	width: 80px;
+}
+
+.wp-list-table #link_library_visits {
+	width: 60px;
+}
+
+#ll-usage table.widefat td {
+	padding: 2px 4px 2px 10px;
+}

@@ -6,6 +6,27 @@ use WP_CLI;
 /**
  * Manage BuddyPress Components.
  *
+ * ## EXAMPLES
+ *
+ *     # Activate a component.
+ *     $ wp bp component activate groups
+ *     Success: The Groups component has been activated.
+ *
+ *     # Deactive a component.
+ *     $ wp bp component deactivate groups
+ *     Success: The Groups component has been deactivated.
+ *
+ *     # List components.
+ *     $ wp bp component list --type=required
+ *     +--------+---------+--------+------------------------+--------------------------------------------+
+ *     | number | id      | status | title                  | description                                |
+ *     +--------+---------+--------+------------------------------------------+--------------------------+
+ *     | 1      | core    | Active | Núcleo do BuddyPress   | É o que torna <del>viajar no tempo</del> o |
+ *     |        |         |        |                        | BuddyPress possível!                       |
+ *     | 2      | members | Active | Membros da Comunidade  | Tudo em uma comunidade BuddyPress gira em  |
+ *     |        |         |        |                        | torno de seus membros.                     |
+ *     +--------+---------+--------+------------------------------------------+--------------------------+
+ *
  * @since 1.6.0
  */
 class Components extends BuddypressCommand {
@@ -16,7 +37,9 @@ class Components extends BuddypressCommand {
 	 * @var array
 	 */
 	protected $obj_fields = array(
+		'number',
 		'id',
+		'status',
 		'title',
 		'description',
 	);
@@ -36,6 +59,10 @@ class Components extends BuddypressCommand {
 	 */
 	public function activate( $args, $assoc_args ) {
 		$component = $args[0];
+
+		if ( ! $this->component_exists( $component ) ) {
+			WP_CLI::error( sprintf( '%s is not a valid component.', ucfirst( $component ) ) );
+		}
 
 		if ( bp_is_active( $component ) ) {
 			WP_CLI::error( sprintf( 'The %s component is already active.', ucfirst( $component ) ) );
@@ -77,6 +104,10 @@ class Components extends BuddypressCommand {
 	 */
 	public function deactivate( $args, $assoc_args ) {
 		$component = $args[0];
+
+		if ( ! $this->component_exists( $component ) ) {
+			WP_CLI::error( sprintf( '%s is not a valid component.', ucfirst( $component ) ) );
+		}
 
 		if ( ! bp_is_active( $component ) ) {
 			WP_CLI::error( sprintf( 'The %s component is not active.', ucfirst( $component ) ) );
@@ -153,16 +184,29 @@ class Components extends BuddypressCommand {
 			$status = 'all';
 		}
 
-		$components          = bp_core_get_components( $type );
-		$active_components   = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
-		$inactive_components = array_diff( array_keys( $components ), array_keys( $active_components ) );
-		$current_components  = array();
+		$components = bp_core_get_components( $type );
 
+		// Active components.
+		$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
+
+		// Core component is always active.
+		if ( 'optional' !== $type ) {
+			$active_components['core'] = $components['core'];
+		}
+
+		// Inactive components.
+		$inactive_components = array_diff( array_keys( $components ), array_keys( $active_components ) );
+
+		$current_components = array();
 		switch ( $status ) {
 			case 'all':
+				$index = 0;
 				foreach ( $components as $name => $labels ) {
+					$index++;
 					$current_components[] = array(
+						'number'      => $index,
 						'id'          => $name,
+						'status'      => $this->verify_component_status( $name ),
 						'title'       => $labels['title'],
 						'description' => $labels['description'],
 					);
@@ -170,21 +214,35 @@ class Components extends BuddypressCommand {
 				break;
 
 			case 'active':
-				foreach ( $active_components as $name => $labels ) {
+				$index = 0;
+				foreach ( array_keys( $active_components ) as $component ) {
+					$index++;
+
+					$info = $components[ $component ];
+
 					$current_components[] = array(
-						'id'          => $name,
-						'title'       => '',
-						'description' => '',
+						'number'      => $index,
+						'id'          => $component,
+						'status'      => 'Active',
+						'title'       => $info['title'],
+						'description' => $info['description'],
 					);
 				}
 				break;
 
 			case 'inactive':
-				foreach ( $inactive_components as $name => $labels ) {
+				$index = 0;
+				foreach ( $inactive_components as $component ) {
+					$index++;
+
+					$info = $components[ $component ];
+
 					$current_components[] = array(
-						'id'          => $labels,
-						'title'       => '',
-						'description' => '',
+						'number'      => $index,
+						'id'          => $component,
+						'status'      => 'Inactive',
+						'title'       => $info['title'],
+						'description' => $info['description'],
 					);
 				}
 				break;
@@ -200,6 +258,38 @@ class Components extends BuddypressCommand {
 		} else {
 			$formatter->display_items( $current_components );
 		}
+	}
+
+	/**
+	 * Does the component exist?
+	 *
+	 * @param  string $component Component.
+	 *
+	 * @return bool
+	 */
+	protected function component_exists( $component ) {
+		$keys = array_keys( bp_core_get_components() );
+
+		return in_array( $component, $keys, true );
+	}
+
+	/**
+	 * Verify Component Status.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $id Component id.
+	 *
+	 * @return string
+	 */
+	protected function verify_component_status( $id ) {
+		$active = 'Active';
+
+		if ( 'core' === $id ) {
+			return $active;
+		}
+
+		return ( bp_is_active( $id ) ) ? $active : 'Inactive';
 	}
 
 	/**

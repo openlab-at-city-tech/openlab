@@ -8,73 +8,73 @@ get_header(); ?>
 
 	<div class="content center">
 	
-		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+		<?php if ( have_posts() ) : 
 			
-			<div class="posts">
-		
-				<div class="post">
-				
-					<?php if ( has_post_thumbnail() ) : ?>
-						
-						<div class="featured-media">
-						
-							<a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>">
+			while ( have_posts() ) : the_post(); ?>
+			
+				<div class="posts">
+			
+					<div class="post">
+					
+						<?php if ( has_post_thumbnail() ) : ?>
 							
-								<?php the_post_thumbnail( 'post-image' ); ?>
+							<div class="featured-media">
+							
+								<a href="<?php the_permalink(); ?>" rel="bookmark">
 								
-								<?php if ( ! empty( get_post( get_post_thumbnail_id() )->post_excerpt ) ) : ?>
-												
-									<div class="media-caption-container">
+									<?php 
 									
-										<p class="media-caption"><?php echo get_post( get_post_thumbnail_id() )->post_excerpt; ?></p>
+									the_post_thumbnail( 'post-image' );
+
+									$image_caption = get_post( get_post_thumbnail_id() )->post_excerpt;
+									
+									if ( $image_caption ) : ?>
+													
+										<div class="media-caption-container">
 										
-									</div>
-									
-								<?php endif; ?>
-								
-							</a>
-									
-						</div><!-- .featured-media -->
-							
-					<?php endif; ?>
-														
-					<div class="post-header">
-												
-						<?php the_title( '<h1 class="post-title">', '</h1>' ); ?>
+											<p class="media-caption"><?php echo $image_caption; ?></p>
 											
-					</div><!-- .post-header -->
-																					
-					<div class="post-content">
-																		
-						<?php the_content(); ?>
-						
-						<?php if ( current_user_can( 'manage_options' ) ) : ?>
-																		
-							<p><?php edit_post_link( __( 'Edit', 'hemingway' ) ); ?></p>
-						
+										</div>
+										
+									<?php endif; ?>
+									
+								</a>
+										
+							</div><!-- .featured-media -->
+								
 						<?php endif; ?>
-						
-						<div class="clear"></div>
-																											
-					</div><!-- .post-content -->
-		
-				</div><!-- .post -->
-				
-				<?php if ( comments_open() ) : ?>
-				
+															
+						<div class="post-header">
+													
+							<?php the_title( '<h1 class="post-title">', '</h1>' ); ?>
+												
+						</div><!-- .post-header -->
+																						
+						<div class="post-content">
+																			
+							<?php the_content(); ?>
+							
+							<?php if ( current_user_can( 'manage_options' ) ) : ?>
+																			
+								<p><?php edit_post_link( __( 'Edit', 'hemingway' ) ); ?></p>
+							
+							<?php endif; ?>
+							
+							<div class="clear"></div>
+																												
+						</div><!-- .post-content -->
+			
+					</div><!-- .post -->
+					
 					<?php comments_template( '', true ); ?>
 				
-				<?php endif; ?>
+				</div><!-- .posts -->
 			
-			</div><!-- .posts -->
-		
-		<?php endwhile; 
+				<?php 
+			endwhile; 
 	
-		else: ?>
-
-			<p><?php _e( "We couldn't find any posts that matched your query. Please try again.", "hemingway" ); ?></p>
-	
-		<?php endif; ?>
+		endif; 
+		?>
 	
 	</div><!-- .content -->
 	

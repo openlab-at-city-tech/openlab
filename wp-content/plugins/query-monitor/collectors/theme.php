@@ -1,22 +1,13 @@
 <?php
-/*
-Copyright 2009-2016 John Blackbourn
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-*/
+/**
+ * Template and theme collector.
+ *
+ * @package query-monitor
+ */
 
 class QM_Collector_Theme extends QM_Collector {
 
-	public $id = 'theme';
+	public $id                  = 'response';
 	protected $got_theme_compat = false;
 
 	public function name() {
@@ -63,13 +54,14 @@ class QM_Collector_Theme extends QM_Collector {
 				break;
 			}
 
-			if ( function_exists( $conditional ) && call_user_func( $conditional ) ) {
+			$get_template = "get_{$template}_template";
+
+			if ( function_exists( $conditional ) && function_exists( $get_template ) && call_user_func( $conditional ) ) {
 				$filter = str_replace( '_', '', $template );
 				add_filter( "{$filter}_template_hierarchy", array( $this, 'filter_template_hierarchy' ), 999 );
-				call_user_func( "get_{$template}_template" );
+				call_user_func( $get_template );
 				remove_filter( "{$filter}_template_hierarchy", array( $this, 'filter_template_hierarchy' ), 999 );
 			}
-
 		}
 
 	}
@@ -111,13 +103,43 @@ class QM_Collector_Theme extends QM_Collector {
 
 	public function process() {
 
+		$stylesheet_directory = QM_Util::standard_dir( get_stylesheet_directory() );
+		$template_directory   = QM_Util::standard_dir( get_template_directory() );
+		$theme_directory      = QM_Util::standard_dir( get_theme_root() );
+
+		if ( isset( $this->data['template_hierarchy'] ) ) {
+			$this->data['template_hierarchy'] = array_unique( $this->data['template_hierarchy'] );
+		}
+
+		foreach ( get_included_files() as $file ) {
+			$file = QM_Util::standard_dir( $file );
+			$filename = str_replace( array(
+				$stylesheet_directory,
+				$template_directory,
+			), '', $file );
+			if ( $filename !== $file ) {
+				$slug          = trim( str_replace( '.php', '', $filename ), '/' );
+				$display       = trim( $filename, '/' );
+				$theme_display = trim( str_replace( $theme_directory, '', $file ), '/' );
+				$count         = did_action( "get_template_part_{$slug}" );
+				if ( $count ) {
+					$this->data['template_parts'][ $file ]       = $display;
+					$this->data['theme_template_parts'][ $file ] = $theme_display;
+					$this->data['count_template_parts'][ $file ] = $count;
+				} else {
+					$slug  = trim( preg_replace( '|\-[^\-]+$|', '', $slug ), '/' );
+					$count = did_action( "get_template_part_{$slug}" );
+					if ( $count ) {
+						$this->data['template_parts'][ $file ]       = $display;
+						$this->data['theme_template_parts'][ $file ] = $theme_display;
+						$this->data['count_template_parts'][ $file ] = $count;
+					}
+				}
+			}
+		}
+
 		if ( ! empty( $this->data['template_path'] ) ) {
-
-			$template_path        = QM_Util::standard_dir( $this->data['template_path'] );
-			$stylesheet_directory = QM_Util::standard_dir( get_stylesheet_directory() );
-			$template_directory   = QM_Util::standard_dir( get_template_directory() );
-			$theme_directory      = QM_Util::standard_dir( get_theme_root() );
-
+			$template_path       = QM_Util::standard_dir( $this->data['template_path'] );
 			$template_file       = str_replace( array( $stylesheet_directory, $template_directory, ABSPATH ), '', $template_path );
 			$template_file       = ltrim( $template_file, '/' );
 			$theme_template_file = str_replace( array( $theme_directory, ABSPATH ), '', $template_path );
@@ -126,34 +148,11 @@ class QM_Collector_Theme extends QM_Collector {
 			$this->data['template_path']       = $template_path;
 			$this->data['template_file']       = $template_file;
 			$this->data['theme_template_file'] = $theme_template_file;
-
-			foreach ( get_included_files() as $file ) {
-				$filename = str_replace( array(
-					$stylesheet_directory,
-					$template_directory,
-				), '', $file );
-				if ( $filename !== $file ) {
-					$slug          = trim( str_replace( '.php', '', $filename ), '/' );
-					$display       = trim( $filename, '/' );
-					$theme_display = trim( str_replace( $theme_directory, '', $file ), '/' );
-					if ( did_action( "get_template_part_{$slug}" ) ) {
-						$this->data['template_parts'][ $file ]       = $display;
-						$this->data['theme_template_parts'][ $file ] = $theme_display;
-					} else {
-						$slug = trim( preg_replace( '|\-[^\-]+$|', '', $slug ), '/' );
-						if ( did_action( "get_template_part_{$slug}" ) ) {
-							$this->data['template_parts'][ $file ]       = $display;
-							$this->data['theme_template_parts'][ $file ] = $theme_display;
-						}
-					}
-				}
-			}
-
 		}
 
 		$this->data['stylesheet']     = get_stylesheet();
 		$this->data['template']       = get_template();
-		$this->data['is_child_theme'] = ( $this->data['stylesheet'] != $this->data['template'] );
+		$this->data['is_child_theme'] = ( $this->data['stylesheet'] !== $this->data['template'] );
 
 		if ( isset( $this->data['body_class'] ) ) {
 			asort( $this->data['body_class'] );
@@ -164,10 +163,10 @@ class QM_Collector_Theme extends QM_Collector {
 }
 
 function register_qm_collector_theme( array $collectors, QueryMonitor $qm ) {
-	$collectors['theme'] = new QM_Collector_Theme;
+	$collectors['response'] = new QM_Collector_Theme();
 	return $collectors;
 }
 
-if ( !is_admin() ) {
+if ( ! is_admin() ) {
 	add_filter( 'qm/collectors', 'register_qm_collector_theme', 10, 2 );
 }

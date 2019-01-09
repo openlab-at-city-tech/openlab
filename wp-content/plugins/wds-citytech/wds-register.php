@@ -179,7 +179,7 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 	);
 
 	/* Use the profile field loop to render input fields for the 'base' profile field group */
-	$return = '';
+	$return = "";
 	if ( function_exists( 'bp_has_profile' ) ) :
 		if ( 'Staff' === $account_type || 'Faculty' === $account_type ) :
 			?>
@@ -202,9 +202,15 @@ function wds_get_register_fields( $account_type, $post_data = array()) {
 				$depts += openlab_get_entity_departments( $school );
 			}
 			?>
-			<div class="editfield field_name alt">
+			<div class="form-group editfield field_name alt">
+				<div class="error-container" id="academic-unit-selector-error"></div>
 				<label for="ol-offices">Major Program of Study (required)</label>
-				<select name="departments-dropdown" class="form-control">
+				<select
+				  name="departments-dropdown"
+				  class="form-control"
+				  data-parsley-required
+				  data-parsley-required-message="You must provide a Major Program of Study"
+				  data-parsley-errors-container="#academic-unit-selector-error">
 					<option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
 					<option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
 					<?php foreach ( $depts as $dept_value => $dept ) : ?>

@@ -2,11 +2,12 @@
 var __gf_timeout_handle;
 
 gform.addAction( 'gform_input_change', function( elem, formId, fieldId ) {
-	if( window.gf_form_conditional_logic ) {
-		var dependentFieldIds = rgars( gf_form_conditional_logic, [ formId, 'fields', gformExtractFieldId( fieldId ) ].join( '/' ) );
-		if( dependentFieldIds ) {
-			gf_apply_rules( formId, dependentFieldIds );
-		}
+	if( ! window.gf_form_conditional_logic ) {
+		return;
+	}
+	var dependentFieldIds = rgars( gf_form_conditional_logic, [ formId, 'fields', gformExtractFieldId( fieldId ) ].join( '/' ) );
+	if( dependentFieldIds ) {
+		gf_apply_rules( formId, dependentFieldIds );
 	}
 }, 10 );
 
@@ -302,7 +303,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 	 * designator class so these inputs are exempted below.
 	 */
 	if( ! $target.data( 'gf-disabled-assessed' ) ) {
-		$target.find( ':input:hidden:disabled' ).addClass( 'gf-default-disabled' );
+		$target.find( ':input:disabled' ).addClass( 'gf-default-disabled' );
 		$target.data( 'gf-disabled-assessed', true );
 	}
 
@@ -405,7 +406,7 @@ function gf_reset_to_default(targetId, defaultValue){
 			}
 
 			if(element.prop("tagName") == "SELECT" && val != '' )
-				val = parseInt(val);
+				val = parseInt(val, 10);
 
 
 			if(element.val() != val)
@@ -418,11 +419,20 @@ function gf_reset_to_default(targetId, defaultValue){
 		return;
 	}
 
-	//cascading down conditional logic to children to suppport nested conditions
+	//cascading down conditional logic to children to support nested conditions
 	//text fields and drop downs, filter out list field text fields name with "_shim"
 	var target = jQuery(targetId).find('select, input[type="text"]:not([id*="_shim"]), input[type="number"], textarea');
 
 	var target_index = 0;
+
+	// When a List field is hidden via conditional logic during a page submission, the markup will be reduced to a
+	// single row. Add enough rows/inputs to satisfy the default value.
+	if( defaultValue && target.parents( '.ginput_list' ).length > 0 && target.length < defaultValue.length ) {
+		while( target.length < defaultValue.length ) {
+			gformAddListItem( target.eq( 0 ), 0 );
+			target = jQuery(targetId).find( 'select, input[type="text"]:not([id*="_shim"]), input[type="number"], textarea' );
+		}
+	}
 
 	target.each(function(){
 		var val = "";

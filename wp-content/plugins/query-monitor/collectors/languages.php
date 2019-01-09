@@ -1,18 +1,9 @@
 <?php
-/*
-Copyright 2009-2016 John Blackbourn
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-*/
+/**
+ * Language and locale collector.
+ *
+ * @package query-monitor
+ */
 
 class QM_Collector_Languages extends QM_Collector {
 
@@ -32,6 +23,7 @@ class QM_Collector_Languages extends QM_Collector {
 
 	public function process() {
 		$this->data['locale'] = get_locale();
+		ksort( $this->data['languages'] );
 	}
 
 	/**
@@ -44,15 +36,21 @@ class QM_Collector_Languages extends QM_Collector {
 	 */
 	public function log_file_load( $override, $domain, $mofile ) {
 
-		$trace    = new QM_Backtrace;
+		if ( 'query-monitor' === $domain && self::hide_qm() ) {
+			return $override;
+		}
+
+		$trace    = new QM_Backtrace();
 		$filtered = $trace->get_filtered_trace();
 		$caller   = array();
 
 		foreach ( $filtered as $i => $item ) {
 
 			if ( in_array( $item['function'], array(
+				'load_muplugin_textdomain',
 				'load_plugin_textdomain',
 				'load_theme_textdomain',
+				'load_child_theme_textdomain',
 				'load_default_textdomain',
 			), true ) ) {
 				$caller = $item;
@@ -62,7 +60,6 @@ class QM_Collector_Languages extends QM_Collector {
 				}
 				break;
 			}
-
 		}
 
 		if ( empty( $caller ) ) {
@@ -78,11 +75,11 @@ class QM_Collector_Languages extends QM_Collector {
 			$caller['line'] = $filtered[0]['line'];
 		}
 
-		$this->data['languages'][] = array(
+		$this->data['languages'][ $domain ][] = array(
 			'caller' => $caller,
 			'domain' => $domain,
 			'mofile' => $mofile,
-			'found'  => file_exists( $mofile ) ? filesize( $mofile ): false,
+			'found'  => file_exists( $mofile ) ? filesize( $mofile ) : false,
 		);
 
 		return $override;
@@ -92,4 +89,4 @@ class QM_Collector_Languages extends QM_Collector {
 }
 
 # Load early to catch early errors
-QM_Collectors::add( new QM_Collector_Languages );
+QM_Collectors::add( new QM_Collector_Languages() );

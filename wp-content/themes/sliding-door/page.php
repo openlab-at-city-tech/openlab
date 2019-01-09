@@ -28,8 +28,8 @@ get_header(); ?>
 
 					<div class="entry-content">
 						<?php the_content(); ?>
-						<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'slidingdoor' ), 'after' => '</div>' ) ); ?>
-						<?php edit_post_link( __( 'Edit', 'slidingdoor' ), '<span class="edit-link">', '</span>' ); ?>
+						<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'sliding-door' ), 'after' => '</div>' ) ); ?>
+						<?php edit_post_link( __( 'Edit', 'sliding-door' ), '<span class="edit-link">', '</span>' ); ?>
 					</div><!-- .entry-content -->
 				</div><!-- #post-## -->
 

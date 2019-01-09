@@ -2,6 +2,8 @@
 
 .linktable a {text-decoration:none}
 
+.linktable td { vertical-align: top; }
+
 a.featured {
     font-weight: bold;
 }
@@ -203,5 +205,26 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
 	color: #ccc;
 }
 
+.level1 {
+	margin-left: 20px;
+}
 
+.level2 {
+	margin-left: 40px;
+}
 
+.level3 {
+	margin-left: 60px;
+}
+
+.level4 {
+	margin-left: 80px;
+}
+
+.level5 {
+	margin-left: 100px;
+}
+
+.level6 {
+	margin-left: 120px;
+}

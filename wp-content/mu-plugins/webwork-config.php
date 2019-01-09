@@ -150,3 +150,13 @@ function openlab_webwork_bump_group_on_activity( $post_id ) {
 }
 add_action( 'save_post_webwork_question', 'openlab_webwork_bump_group_on_activity' );
 add_action( 'save_post_webwork_response', 'openlab_webwork_bump_group_on_activity' );
+
+/**
+ * Login message.
+ */
+add_filter(
+	'webwork_login_redirect_message',
+	function( $message ) {
+		return 'You must log into the OpenLab in order to post a WeBWorK question.';
+	}
+);

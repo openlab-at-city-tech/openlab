@@ -3,7 +3,7 @@
  * BuddyPress - Groups Loop
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 bp_nouveau_before_loop(); ?>
@@ -44,7 +44,15 @@ bp_nouveau_before_loop(); ?>
 
 						<?php endif; ?>
 
-						<p class="last-activity item-meta"><?php printf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() ); ?></p>
+						<p class="last-activity item-meta">
+							<?php
+							printf(
+								/* translators: %s = last activity timestamp (e.g. "active 1 hour ago") */
+								__( 'active %s', 'buddypress' ),
+								bp_get_group_last_active()
+							);
+							?>
+						</p>
 
 					</div>
 

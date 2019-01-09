@@ -3,7 +3,7 @@
  * Customizer controls
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -55,14 +55,14 @@ class BP_Nouveau_Nav_Customize_Control extends WP_Customize_Control {
 			}
 
 			if ( $item_nav ) {
-				$guide = __( 'Drag each possible group nav items that are listed below into the order you prefer, in some groups some of these nav items might not be active.', 'buddypress' );
+				$guide = __( 'Drag each possible group navigation items that are listed below into the order you prefer, in some groups some of these navigation items might not be active.', 'buddypress' );
 			}
 
 		// It's a user!
 		} else {
 			$item_nav = bp_nouveau_member_customizer_nav();
 
-			$guide = __( 'Drag each possible user nav items that are listed below into the order you prefer.', 'buddypress' );
+			$guide = __( 'Drag each possible member navigation items that are listed below into the order you prefer.', 'buddypress' );
 		}
 		?>
 
@@ -80,7 +80,7 @@ class BP_Nouveau_Nav_Customize_Control extends WP_Customize_Control {
 				foreach ( $item_nav as $item ) :
 					$i += 1;
 				?>
-					<li class="<?php echo esc_attr( $class ); echo ( 1 === $i ) ? ' ui-sortable-disabled' : ''; ?>" data-bp-nav="<?php echo esc_attr( $item->slug ); ?>">
+					<li data-bp-nav="<?php echo esc_attr( $item->slug ); ?>">
 						<div class="menu-item-bar">
 							<div class="menu-item-handle ui-sortable-handle">
 								<span class="item-title" aria-hidden="true">

@@ -6,6 +6,8 @@ Description: Allows group members to receive email notifications for group activ
 Author: Deryk Wenaus, boonebgorges, r-a-y
 Revision Date: April 25, 2018
 Version: 3.8.2
+Text Domain: buddypress-group-email-subscription
+Domain Path: /languages
 */
 
 /**
@@ -23,6 +25,11 @@ define( 'GES_REVISION_DATE', '2018-04-25 14:00 UTC' );
  * @since 2.9.0
  */
 function ass_loader() {
+	if ( ! defined( 'BPGES_DEBUG_LOG_PATH' ) ) {
+		$dir = wp_upload_dir();
+		define( 'BPGES_DEBUG_LOG_PATH', trailingslashit( $dir['basedir'] ) . 'bpges-debug.log' );
+	}
+
 	// Only supported in BP 1.5+.
 	if ( version_compare( BP_VERSION, '1.3', '>' ) ) {
 		// Make sure the group and activity components are active.
@@ -32,7 +39,7 @@ function ass_loader() {
 
 	// Show admin notice for those on BP 1.2.x.
 	} else {
-		$older_version_notice = sprintf( __( "Hey! BP Group Email Subscription v3.7.0 requires BuddyPress 1.5 or higher.  If you are still using BuddyPress 1.2 and you don't plan on upgrading, use <a href='%s'>BP Group Email Subscription v3.6.2 instead</a>.", 'bp-ass' ), 'https://downloads.wordpress.org/plugin/buddypress-group-email-subscription.3.6.1.zip' );
+		$older_version_notice = sprintf( __( "Hey! BP Group Email Subscription v3.7.0 requires BuddyPress 1.5 or higher.  If you are still using BuddyPress 1.2 and you don't plan on upgrading, use <a href='%s'>BP Group Email Subscription v3.6.2 instead</a>.", 'buddypress-group-email-subscription' ), 'https://downloads.wordpress.org/plugin/buddypress-group-email-subscription.3.6.1.zip' );
 
 		add_action( 'admin_notices', function() use ( $older_version_notice ) {
 			echo '<div class="error"><p>' . $older_version_notice . '</p></div>';
@@ -47,7 +54,7 @@ add_action( 'bp_include', 'ass_loader' );
  * @since 2.5.3
  */
 function activitysub_textdomain() {
-	load_plugin_textdomain( 'bp-ass', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'buddypress-group-email-subscription', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'init', 'activitysub_textdomain' );
 
@@ -64,6 +71,7 @@ function activitysub_setup_defaults() {
 	ass_set_weekly_digest_time( '4' );
 
 	// Run updater on activation.
+	ass_loader();
 	require_once( dirname( __FILE__ ) . '/admin.php' );
 	require_once( dirname( __FILE__ ) . '/updater.php' );
 	new GES_Updater( true );

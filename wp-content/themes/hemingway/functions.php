@@ -30,7 +30,6 @@ if ( ! function_exists( 'hemingway_setup' ) ) {
 			'default-image' => get_template_directory_uri() . '/images/header.jpg',
 			'uploads'       => true,
 			'header-text'  	=> false
-			
 		);
 		add_theme_support( 'custom-header', $args );
 		
@@ -42,7 +41,7 @@ if ( ! function_exists( 'hemingway_setup' ) ) {
 		if ( ! isset( $content_width ) ) $content_width = 676;
 		
 		// Add nav menu
-		register_nav_menu( 'primary', 'Primary Menu' );
+		register_nav_menu( 'primary', __( 'Primary Menu', 'hemingway' ) );
 		
 		// Make the theme translation ready
 		load_theme_textdomain( 'hemingway', get_template_directory() . '/languages' );
@@ -62,7 +61,7 @@ if ( ! function_exists( 'hemingway_load_javascript_files' ) ) {
 
 	function hemingway_load_javascript_files() {
 		if ( ! is_admin() ) {
-			wp_enqueue_script( 'hemingway_global', get_template_directory_uri() . '/js/global.js', array( 'jquery' ), '', true );
+			wp_enqueue_script( 'hemingway_global', get_template_directory_uri() . '/js/global.js', array( 'jquery' ), wp_get_theme( 'hemingway' )->get( 'Version' ), true );
 			if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 		}
 	}
@@ -80,8 +79,34 @@ if ( ! function_exists( 'hemingway_load_style' ) ) {
 
 	function hemingway_load_style() {
 		if ( ! is_admin() ) {
-			wp_enqueue_style( 'hemingway_googleFonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400' );
-			wp_enqueue_style( 'hemingway_style', get_template_directory_uri() . '/style.css' );
+
+			$dependencies = array();
+
+			/**
+			 * Translators: If there are characters in your language that are not
+			 * supported by the theme fonts, translate this to 'off'. Do not translate
+			 * into your own language.
+			 */
+			$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hemingway' );
+
+			if ( 'off' !== $google_fonts ) {
+				$font_families = array();
+
+				$font_families[] = 'Lato:400,700,400italic,700italic|Raleway:700,400';
+
+				$query_args = array(
+					'family' => urlencode( implode( '|', $font_families ) )
+				);
+
+				$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
+
+				wp_register_style( 'hemingway_googleFonts', $fonts_url, array(), null );
+
+				$dependencies[] = 'hemingway_googleFonts';
+			}
+
+			wp_enqueue_style( 'hemingway_style', get_template_directory_uri() . '/style.css', $dependencies, wp_get_theme( 'hemingway' )->get( 'Version' ) );
+
 		}
 	}
 	add_action( 'wp_print_styles', 'hemingway_load_style' );
@@ -97,9 +122,21 @@ if ( ! function_exists( 'hemingway_load_style' ) ) {
 if ( ! function_exists( 'hemingway_add_editor_styles' ) ) {
 
 	function hemingway_add_editor_styles() {
+
 		add_editor_style( 'hemingway-editor-style.css' );
-		$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400';
-		add_editor_style( str_replace( ',', '%2C', $font_url ) );
+
+		/**
+		 * Translators: If there are characters in your language that are not
+		 * supported by the theme fonts, translate this to 'off'. Do not translate
+		 * into your own language.
+		 */
+		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hemingway' );
+
+		if ( 'off' !== $google_fonts ) {
+			$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400';
+			add_editor_style( str_replace( ',', '%2C', $font_url ) );
+		}
+
 	}
 	add_action( 'init', 'hemingway_add_editor_styles' );
 
@@ -254,7 +291,7 @@ if ( ! function_exists( 'hemingway_custom_more_link' ) ) {
 if ( ! function_exists( 'hemingway_admin_css' ) ) {
 
 	function hemingway_admin_css() { ?>
-	<style type="text/css">
+		<style type="text/css">
 			#postimagediv #set-post-thumbnail img {
 				max-width: 100%;
 				height: auto;
@@ -273,7 +310,9 @@ if ( ! function_exists( 'hemingway_admin_css' ) ) {
 
 
 if ( ! function_exists( 'hemingway_comment' ) ) {
+
 	function hemingway_comment( $comment, $args, $depth ) {
+
 		$GLOBALS['comment'] = $comment;
 		switch ( $comment->comment_type ) :
 			case 'pingback' :
@@ -337,7 +376,9 @@ if ( ! function_exists( 'hemingway_comment' ) ) {
 		<?php
 			break;
 		endswitch;
+		
 	}
+
 }
 
 
@@ -410,129 +451,245 @@ class Hemingway_Customize {
       $wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
    }
 
-   public static function header_output() {
-      ?>
-      
-	      <!--Customizer CSS--> 
-	      
-	      <style type="text/css">
-	           <?php self::generate_css('body::selection', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('body a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('body a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-title a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-menu a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-search #searchsubmit', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-search #searchsubmit', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-search #searchsubmit:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog-search #searchsubmit:hover', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('.featured-media .sticky-post', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-title a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-meta a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.blog .format-quote blockquote cite a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content a.more-link:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content input[type="submit"]:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content input[type="reset"]:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content input[type="button"]:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content fieldset legend', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content .searchform #searchsubmit', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content .searchform #searchsubmit', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content .searchform #searchsubmit:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.post-content .searchform #searchsubmit:hover', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-categories a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-categories a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-tags a:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.post-tags a:hover:after', 'border-right-color', 'accent_color'); ?>
-	           <?php self::generate_css('.post-nav a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.archive-nav a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.logged-in-as a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.logged-in-as a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.content #respond input[type="submit"]:hover', 'background-color', 'accent_color'); ?>
-	           <?php self::generate_css('.comment-meta-content cite a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.comment-meta-content p a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.comment-actions a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('#cancel-comment-reply-link', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('#cancel-comment-reply-link:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.comment-nav-below a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget-title a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget-title a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_text a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_text a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_rss a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_rss a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_archive a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_archive a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_meta a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_meta a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_recent_comments a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_recent_comments a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_pages a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_pages a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_links a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_links a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_recent_entries a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_recent_entries a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_categories a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_categories a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_search #searchsubmit', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_search #searchsubmit', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_search #searchsubmit:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.widget_search #searchsubmit:hover', 'border-color', 'accent_color'); ?>
-	           <?php self::generate_css('#wp-calendar a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('#wp-calendar a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('#wp-calendar tfoot a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.dribbble-shot:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.widgetmore a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.widgetmore a:hover', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('.flickr_badge_image a:hover img', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.footer .flickr_badge_image a:hover img', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.footer .dribbble-shot:hover img', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.sidebar .tagcloud a:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.footer .tagcloud a:hover', 'background', 'accent_color'); ?>
-	           <?php self::generate_css('.credits a:hover', 'color', 'accent_color'); ?>
-	           
-	           <?php self::generate_css('body#tinymce.wp-editor a', 'color', 'accent_color'); ?>
-	           <?php self::generate_css('body#tinymce.wp-editor a:hover', 'color', 'accent_color'); ?>
-	      </style> 
-	      
-	      <!--/Customizer CSS-->
-	      
-      <?php
-   }
-   
-   public static function live_preview() {
-      wp_enqueue_script( 
-           'hemingway-themecustomizer', // Give the script a unique ID
-           get_template_directory_uri() . '/js/theme-customizer.js', // Define the path to the JS file
-           array(  'jquery', 'customize-preview' ), // Define dependencies
-           '', // Define a version (optional) 
-           true // Specify whether to put in footer (leave this true)
-      );
-   }
+	public static function header_output() {
 
-   public static function generate_css( $selector, $style, $mod_name, $prefix='', $postfix='', $echo=true ) {
-      $return = '';
-      $mod = get_theme_mod($mod_name);
-      if ( ! empty( $mod ) ) {
-         $return = sprintf('%s { %s:%s; }',
-            $selector,
-            $style,
-            $prefix.$mod.$postfix
-         );
-         if ( $echo ) echo $return;
-      }
-      return $return;
-    }
+		echo '<style type="text/css">';
+		echo '<!--Customizer CSS-->';
+
+		self::generate_css( 'body::selection', 'background', 'accent_color' );
+		self::generate_css( 'body a', 'color', 'accent_color' );
+		self::generate_css( 'body a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.blog-title a:hover', 'color', 'accent_color' );
+		self::generate_css( '.blog-menu a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.featured-media .sticky-post', 'background-color', 'accent_color' );
+		self::generate_css( '.post-title a:hover', 'color', 'accent_color' );
+		self::generate_css( '.post-meta a:hover', 'color', 'accent_color' );
+		self::generate_css( '.post-content a', 'color', 'accent_color' );
+		self::generate_css( '.post-content a:hover', 'color', 'accent_color' );
+		self::generate_css( '.blog .format-quote blockquote cite a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.post-content a.more-link:hover', 'background-color', 'accent_color' );
+		self::generate_css( '.post-content input[type="submit"]:hover', 'background-color', 'accent_color' );
+		self::generate_css( '.post-content input[type="reset"]:hover', 'background-color', 'accent_color' );
+		self::generate_css( '.post-content input[type="button"]:hover', 'background-color', 'accent_color' );
+		self::generate_css( '.post-content fieldset legend', 'background-color', 'accent_color' );
+
+		// Gutenberg
+		self::generate_css( '.post-content a.wp-block-file__button', 'background-color', 'accent_color' );
+		self::generate_css( '.post-content .has-accent-color', 'color', 'accent_color' );
+		self::generate_css( '.post-content .has-accent-background-color', 'background-color', 'accent_color' );
+
+		self::generate_css( '.post-categories a', 'color', 'accent_color' );
+		self::generate_css( '.post-categories a:hover', 'color', 'accent_color' );
+		self::generate_css( '.post-tags a:hover', 'background', 'accent_color' );
+		self::generate_css( '.post-tags a:hover:after', 'border-right-color', 'accent_color' );
+		self::generate_css( '.post-nav a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.archive-nav a:hover', 'color', 'accent_color' );
+		self::generate_css( '.logged-in-as a', 'color', 'accent_color' );
+		self::generate_css( '.logged-in-as a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.content #respond input[type="submit"]:hover', 'background-color', 'accent_color' );
+		self::generate_css( '.comment-meta-content cite a:hover', 'color', 'accent_color' );
+		self::generate_css( '.comment-meta-content p a:hover', 'color', 'accent_color' );
+		self::generate_css( '.comment-actions a:hover', 'color', 'accent_color' );
+		self::generate_css( '#cancel-comment-reply-link', 'color', 'accent_color' );
+		self::generate_css( '#cancel-comment-reply-link:hover', 'color', 'accent_color' );
+		self::generate_css( '.comment-nav-below a:hover', 'color', 'accent_color' );
+
+		self::generate_css( '.widget-title a', 'color', 'accent_color' );
+		self::generate_css( '.widget-title a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_text a', 'color', 'accent_color' );
+		self::generate_css( '.widget_text a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_rss a', 'color', 'accent_color' );
+		self::generate_css( '.widget_rss a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_archive a', 'color', 'accent_color' );
+		self::generate_css( '.widget_archive a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_meta a', 'color', 'accent_color' );
+		self::generate_css( '.widget_meta a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_recent_comments a', 'color', 'accent_color' );
+		self::generate_css( '.widget_recent_comments a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_pages a', 'color', 'accent_color' );
+		self::generate_css( '.widget_pages a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_links a', 'color', 'accent_color' );
+		self::generate_css( '.widget_links a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_recent_entries a', 'color', 'accent_color' );
+		self::generate_css( '.widget_recent_entries a:hover', 'color', 'accent_color' );
+		self::generate_css( '.widget_categories a', 'color', 'accent_color' );
+		self::generate_css( '.widget_categories a:hover', 'color', 'accent_color' );
+		self::generate_css( '.searchform #searchsubmit', 'background', 'accent_color' );
+		self::generate_css( '.searchform #searchsubmit', 'border-color', 'accent_color' );
+		self::generate_css( '.searchform #searchsubmit:hover', 'background', 'accent_color' );
+		self::generate_css( '.searchform #searchsubmit:hover', 'border-color', 'accent_color' );
+		self::generate_css( '#wp-calendar a', 'color', 'accent_color' );
+		self::generate_css( '#wp-calendar a:hover', 'color', 'accent_color' );
+		self::generate_css( '#wp-calendar tfoot a:hover', 'color', 'accent_color' );
+		self::generate_css( '.dribbble-shot:hover', 'background', 'accent_color' );
+		self::generate_css( '.widgetmore a', 'color', 'accent_color' );
+		self::generate_css( '.widgetmore a:hover', 'color', 'accent_color' );
+		self::generate_css( '.flickr_badge_image a:hover img', 'background', 'accent_color' );
+
+		self::generate_css( '.footer .flickr_badge_image a:hover img', 'background', 'accent_color' );
+		self::generate_css( '.footer .dribbble-shot:hover img', 'background', 'accent_color' );
+		self::generate_css( '.sidebar .tagcloud a:hover', 'background', 'accent_color' );
+		self::generate_css( '.footer .tagcloud a:hover', 'background', 'accent_color' );
+		self::generate_css( '.credits a:hover', 'color', 'accent_color' );
+
+		self::generate_css( 'body#tinymce.wp-editor a', 'color', 'accent_color' );
+		self::generate_css( 'body#tinymce.wp-editor a:hover', 'color', 'accent_color' );
+
+		echo '</style>';
+		echo '<!-- /Customizer CSS -->';
+
+	}
+   
+	public static function live_preview() {
+		wp_enqueue_script( 'hemingway-themecustomizer', get_template_directory_uri() . '/js/theme-customizer.js', array( 'jquery', 'customize-preview' ), '', true );
+	}
+
+	public static function generate_css( $selector, $style, $mod_name, $prefix = '', $postfix = '', $echo = true ) {
+		$return = '';
+		$mod = get_theme_mod( $mod_name );
+		if ( ! empty( $mod ) ) { 
+			$return = sprintf('%s { %s:%s; }', $selector, $style, $prefix.$mod.$postfix );
+			if ( $echo ) echo $return;
+		}
+		return $return;
+	}
 }
 
 // Setup the Theme Customizer settings and controls...
 add_action( 'customize_register' , array( 'Hemingway_Customize' , 'register' ) );
 
 // Output custom CSS to live site
-add_action( 'wp_head' , array( 'Hemingway_Customize' , 'header_output' ) );
+add_action( 'wp_head' , array( 'Hemingway_Customize', 'header_output' ) );
 
 // Enqueue live preview javascript in Theme Customizer admin screen
 add_action( 'customize_preview_init' , array( 'Hemingway_Customize' , 'live_preview' ) );
+
+
+/*
+ *
+ * GUTENBERG FUNCTIONS
+ * 
+ */
+
+
+/* ---------------------------------------------------------------------------------------------
+   SPECIFY GUTENBERG SUPPORT
+   --------------------------------------------------------------------------------------------- */
+
+
+if ( ! function_exists( 'hemingway_add_gutenberg_features' ) ) {
+
+	function hemingway_add_gutenberg_features() {
+
+		/* Gutenberg Feature Opt-Ins --------------------------------------- */
+
+		add_theme_support( 'align-wide' );
+
+
+		/* Gutenberg Palette --------------------------------------- */
+
+		$accent_color = get_theme_mod( 'accent_color' ) ? get_theme_mod( 'accent_color' ) : '#1abc9c';
+
+		add_theme_support( 'editor-color-palette', array(
+			array(
+				'name' 	=> _x( 'Accent', 'Name of the accent color in the Gutenberg palette', 'hemingway' ),
+				'slug' 	=> 'accent',
+				'color' => $accent_color,
+			),
+			array(
+				'name' 	=> _x( 'Dark Gray', 'Name of the dark gray color in the Gutenberg palette', 'hemingway' ),
+				'slug' 	=> 'dark-gray',
+				'color' => '#444',
+			),
+			array(
+				'name' 	=> _x( 'Medium Gray', 'Name of the medium gray color in the Gutenberg palette', 'hemingway' ),
+				'slug' 	=> 'medium-gray',
+				'color' => '#666',
+			),
+			array(
+				'name' 	=> _x( 'Light Gray', 'Name of the light gray color in the Gutenberg palette', 'hemingway' ),
+				'slug' 	=> 'light-gray',
+				'color' => '#888',
+			),
+			array(
+				'name' 	=> _x( 'White', 'Name of the white color in the Gutenberg palette', 'hemingway' ),
+				'slug' 	=> 'white',
+				'color' => '#fff',
+			),
+		) );
+
+
+		/* Gutenberg Font Sizes --------------------------------------- */
+
+		add_theme_support( 'editor-font-sizes', array(
+			array(
+				'name' 		=> _x( 'Small', 'Name of the small font size in Gutenberg', 'hemingway' ),
+				'shortName' => _x( 'S', 'Short name of the small font size in the Gutenberg editor.', 'hemingway' ),
+				'size' 		=> 16,
+				'slug' 		=> 'small'
+			),
+			array(
+				'name' 		=> _x( 'Regular', 'Name of the regular font size in Gutenberg', 'hemingway' ),
+				'shortName' => _x( 'M', 'Short name of the regular font size in the Gutenberg editor.', 'hemingway' ),
+				'size' 		=> 19,
+				'slug' 		=> 'regular'
+			),
+			array(
+				'name' 		=> _x( 'Large', 'Name of the large font size in Gutenberg', 'hemingway' ),
+				'shortName' => _x( 'L', 'Short name of the large font size in the Gutenberg editor.', 'hemingway' ),
+				'size' 		=> 24,
+				'slug' 		=> 'large'
+			),
+			array(
+				'name' 		=> _x( 'Larger', 'Name of the larger font size in Gutenberg', 'hemingway' ),
+				'shortName' => _x( 'XL', 'Short name of the larger font size in the Gutenberg editor.', 'hemingway' ),
+				'size' 		=> 32,
+				'slug' 		=> 'larger'
+			)
+		) );
+		
+	}
+	add_action( 'after_setup_theme', 'hemingway_add_gutenberg_features' );
+
+}
+
+
+/* ---------------------------------------------------------------------------------------------
+   GUTENBERG EDITOR STYLES
+   --------------------------------------------------------------------------------------------- */
+
+
+if ( ! function_exists( 'hemingway_block_editor_styles' ) ) {
+
+	function hemingway_block_editor_styles() {
+
+		$dependencies = array();
+
+		/**
+		 * Translators: If there are characters in your language that are not
+		 * supported by the theme fonts, translate this to 'off'. Do not translate
+		 * into your own language.
+		 */
+		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'hemingway' );
+
+		if ( 'off' !== $google_fonts ) {
+
+			// Register Google Fonts
+			wp_register_style( 'hemingway-block-editor-styles-font', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:700,400', false, 1.0, 'all' );
+			$dependencies[] = 'hemingway-block-editor-styles-font';
+
+		}
+
+		// Enqueue the editor styles
+		wp_enqueue_style( 'hemingway-block-editor-styles', get_theme_file_uri( '/hemingway-gutenberg-editor-style.css' ), $dependencies, '1.0', 'all' );
+	}
+	add_action( 'enqueue_block_editor_assets', 'hemingway_block_editor_styles' );
+
+}
 
 ?>

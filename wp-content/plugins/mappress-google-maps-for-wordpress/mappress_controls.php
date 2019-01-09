@@ -12,7 +12,7 @@ class Mappress_Controls {
 
 		foreach($args as $key => $value) {
 			// Attributes with value
-			if (isset($value) && in_array($key, array('class', 'id', 'maxlength', 'multiple', 'onclick', 'rows', 'size', 'style', 'title', 'type')))
+			if (isset($value) && in_array($key, array('class', 'id', 'maxlength', 'multiple', 'onclick', 'placeholder', 'rows', 'size', 'style', 'title', 'type')))
 				$atts .= " $key='" . esc_attr($value) . "' ";
 
 			// Boolean attributes
@@ -101,6 +101,19 @@ class Mappress_Controls {
 			array_unshift($row, '<span class="mapp-handle dashicons dashicons-menu"></span>');
 		$row[] = "<span data-mapp-action='remove' class='mapp-close' title='" . __('Delete', 'mappress-google-maps-for-wordpress') . "'></span>";
 		return self::table_row($row);
+	}
+
+	static function help($text = '', $url = '') {
+		$icon = '<span class="dashicons dashicons-editor-help"></span>';
+		$html = '';
+		if ($url) {
+			if (substr($url, 0, 1) == '#')
+				$url = "http://mappresspro.com/mappress-documentation$url";
+			$html .= sprintf("<a class='mapp-help' href='%s' target='_blank'>%s</a>", $url, $icon);
+		}
+		if ($text)
+			$html .= "<div class='mapp-help'><i>$text</i></div>";
+		return $html;
 	}
 
 	static function input($name, $value, $args = '') {

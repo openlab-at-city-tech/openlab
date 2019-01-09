@@ -1,17 +1,17 @@
 === Event Organiser ===
 Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
-Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, widget, venues, maps, gigs, shows,
+Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, OpenStreetMap, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 4.9.0
-Stable tag: 3.6.0
+Tested up to: 4.9.8
+Stable tag: 3.7.4
 License: GPLv3
 
-Create and maintain events, including complex reoccurring patterns, venue management (with Google maps), calendars and customisable event lists
+Create and maintain events, including complex reoccurring patterns, venue management (with Google Maps or OpenStreetMap), calendars and customisable event lists
 
 == Description ==
 
-Event Organiser adds event management that integrates well with your WordPress site. By using WordPress' in-built 'custom post type', this plug-in allows you to create events that have the same functionality as posts, while adding further features that allow you to manage your events. This includes the possibility of repeating your event according to complex schedules and assign your events to venues. This can all be done through an intuitive user interface, which allows you to view your events in the familiar WordPress list or in a calendar page in the amin area.
+Event Organiser adds event management that integrates well with your WordPress site. By using WordPress' in-built 'custom post type', this plug-in allows you to create events that have the same functionality as posts, while adding further features that allow you to manage your events. This includes the possibility of repeating your event according to complex schedules and assign your events to venues. This can all be done through an intuitive user interface, which allows you to view your events in the familiar WordPress list or in a calendar page in the admin area.
 
 [**User Docs**](http://docs.wp-event-organiser.com/)
 | [**Function Reference**](http://codex.wp-event-organiser.com/)
@@ -34,10 +34,10 @@ A full list of available extensions can be found [here](http://wp-event-organise
 
 = For the user =
 
-* Create one-time events or reoccuring events.
-* Allows complex reoccuring patterns for events. You can create events that last an arbirtary time, and repeat over a specified period. Supports complex schedules such as *On the third Tuesday of every fourth month* or *Every month on the 16th*.
+* Create one-time events or recurring events.
+* Allows complex recurring patterns for events. You can create events that last an arbitrary time, and repeat over a specified period. Supports complex schedules such as *On the third Tuesday of every fourth month* or *Every month on the 16th*.
 * Ability to add or remove specific dates to an event
-* **Event functions** available which extend the post functions (e.g. `the_title()`,`get_the_author()`, `the_author()`) to ouput or return event data (the start date-time, the venue etc). For examples of their use see the [documentation](http://www.wp-event-organiser.com/documentation/function-reference/) or the included template files.
+* **Event functions** available which extend the post functions (e.g. `the_title()`,`get_the_author()`, `the_author()`) to output or return event data (the start date-time, the venue etc). For examples of their use see the [documentation](http://www.wp-event-organiser.com/documentation/function-reference/) or the included template files.
 * Create and maintain venues for your events, with **Google maps** support and a fully-featured content editor.
 * **Widgets**:
   * Calendar widget - displays a calendar (identical to the standard WordPress Calendar)
@@ -53,7 +53,7 @@ A full list of available extensions can be found [here](http://wp-event-organise
   * Subscribe to event feeds
 * **Relative date queries** (for example, query events that finished in the last 24 hours, or events starting in the coming week).
 * Assign events to categories and tags, and view events by category or tag.
-* Color-coded event categories.
+* Colour-coded event categories.
 * **Custom permissions** allow to specifiy which roles have the ability to create, edit and delete events or manage venues.
 * Venue pages, to view events by venue.
 * **Export/import** events to and from ICAL files.
@@ -222,19 +222,61 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 
 == Changelog ==
 
+= 3.7.4 - 26th August 2018 =
+* bugfix: Fix bug with venue map shortcode when used without attributes
+
+= 3.7.3 - 13th July 2018 =
+* bugfix: Fix Google Maps API key notice appearing when Open Street Maps is selected
+* bugfix: Corrected spelling error in venue arguments ("longtitude" corrected to "longitude")
+
+= 3.7.2 - 8th June 2018 =
+* bugfix: Fixed maps bug which affected users with Yoast's SEO Plugin installed
+* bugfix: Replaced data-vocabulary.org with schema.org
+* bugfix: Fixed higher-priority template being overridden by lower priority template in
+  `eo_locate_template()` when multiple template names are given. See [#434](https://github.com/stephenharris/Event-Organiser/issues/434)
+
+= 3.7.1 - 31st May 2018 =
+* bugfix: fixed admin calendar modal appearing behind overlay
+* bugfix: fixed venues with apostrophes not appearing in the venue search/autocomplete.
+
+= 3.7.0 - 25th May 2018 =
+* Added support for OpenStreetMap. New installations default to OpenStreetMap.
+
+= 3.6.5 3rd April 2018 =
+
+* bugfix: Only use date ordinal suffix (st,nd,rd,th) if the site's date format setting includes it
+
+= 3.6.4 26th March 2018
+
+* bugfix: Addressed issue where grouping occurrences might error depending on MySQL configuration. Fixes [#432](https://github.com/stephenharris/Event-Organiser/issues/432)
+
+= 3.6.3 6th March 2018
+
+* bugfix: Fixed bug with grouping occurrences, effecting some MySQL versions. Fixes [#430](https://github.com/stephenharris/Event-Organiser/issues/430)
+
+= 3.6.2 5th January 2018
+
+* bugfix: Fixed reference error in calendar shortcode introduced in 3.6.1
+
+= 3.6.1 4th January 2018
+
+* bugfix: Bug where static value is used for calendar breakpoint on initial load
+* bugfix: Ensure venue tooltip is moved to fit within viewport
+* bugfix: Bug where clicking on the venue tooltip could cause the map to overflow the container
+
 = 3.6.0 25th November 2017
 
 * added: Ability to specify multiple event authors (organiser) in the fullcalendar author/author_name attribute
   by using a comma seperate lised e.g: [eo_fullcalendar author="1,2"]
-* bugfix: The "organiser" full calendar filter only displays users included in the author/author_name attribute 
+* bugfix: The "organiser" full calendar filter only displays users included in the author/author_name attribute
   if supplied.
 * bugfix: Occurrences which have changed time still appear in the include/excludes datepicker
-* bugfix: iCal feed will display correct DSTART & DTEND values even when the initial occurrence is excluded from 
+* bugfix: iCal feed will display correct DSTART & DTEND values even when the initial occurrence is excluded from
   the query driving the feed.
 * changed: The admin calendar week/day views display 15-minute intervals. If dragging of occurrences is enabled
   this can be done in 5 minute intervals.
 
-= 3.5.1 14th November 2017 
+= 3.5.1 14th November 2017
 
 * Fix bug where multiple filters are used in fullcalendar shortcode, seperated by a comma
 
@@ -271,7 +313,7 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 
 = 3.2.0 23rd August 2017
 * Updated 'Tested up to' version (WordPress 4.8.1)
-* Update Czech, Indonesian, French, Japanese, Dutch, Portuguese, 
+* Update Czech, Indonesian, French, Japanese, Dutch, Portuguese,
   Norwegian, Slovenian and Swedish.
 * Default event page names are now filterable via `eventorganiser_event_properties`.
 * Remove X-WR-CALNAME from iCal feed for single event feeds. See [#413](https://github.com/stephenharris/Event-Organiser/issues/413).
@@ -599,7 +641,7 @@ Please see this [post](http://wp-event-organiser.com/blog/announcements/event-or
 * Fixes event updated failing on cron jobs. (Fixes conflict with wp-cron-control https://wordpress.org/support/topic/clashes-with-events-plug-in)
 
 = 2.9.0 - 16th September 2014 =
-* Allow latitdue/longtitude co-ordinates of venue to be edited.
+* Allow latitude/longitude co-ordinates of venue to be edited.
 * Update timepicker and prevent invalid date/time selection for event start/end dates.
 * Add filters for event taxonomy properties: `eventorganiser_register_taxonomy_{taxonomy}`
 * Filter response to fullCalendar: `eventorganiser_fullcalendar`
@@ -698,7 +740,7 @@ Please see this [post](http://wp-event-organiser.com/blog/announcements/event-or
 * When restricting a calendar by category(ies). Only those categories appear in the category drop-down, if this is added.
 * Added event tag to fullCalendar filters (`[eo_fullcalendar headerRight="tag"]`).
 * Included HTML description in iCal feed. ("alternative text representation" tag).
-* Included latitude/longtitude co-ordinates in iCal feed.
+* Included latitude/longitude co-ordinates in iCal feed.
 * Fix bugs with line wrapping in iCal feed.
 * Fixes bug where "am"/"pm" are translated in time input.
 * Fixes bug with `eo_date_interval()`.
@@ -745,7 +787,7 @@ Please see this [post](http://wp-event-organiser.com/blog/announcements/event-or
  - Support for 'COUNT' property
  - Improved error & warning feedback
  - Handle GEO tag
- - Import venue latitude/longtitude
+ - Import venue latitude/longitude
 * Themes can switch off plug-in template handling from functions.php with `add_theme_support( 'event-organiser' )`
 * Added support for `event_occurrence__not_in` in `eo_get_events()` and `WP_Query()`
 * Improved MP6 compatability

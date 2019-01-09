@@ -2,9 +2,9 @@
 Contributors: jackdewey
 Donate link: http://ylefebvre.ca/wordpress-plugins/link-library
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
-Requires at least: 3.0
-Tested up to: 4.9.1
-Stable tag: stable
+Requires at least: 4.4
+Tested up to: 5.0
+Stable tag: trunk
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -58,6 +58,315 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 6.1.23 =
+* New integration to BuddyPress. User submitted links can now appear in activity feed.
+
+= 6.1.22 =
+* Fix for combined results list not appearing anymore
+
+= 6.1.21 =
+* Complete fix for empty search results not displaying message indicated in admin
+
+= 6.1.20 =
+* Partial fix for empty search results not displaying message indicated in admin
+
+= 6.1.19 =
+* Added option to suppress noreferrer and noopener tags
+
+= 6.1.18 =
+* Fix to allow Link Library custom post type to be seen by other plugins that support CPTs
+
+= 6.1.17 =
+* Fix issue with search filters remaining in place after search has executed
+
+= 6.1.16 =
+* Fixed for displaying list of categories in drop-down list format with sub-categories
+
+= 6.1.15 =
+* Export all links function adds a new column for category slugs. This column had priority over category names. Also renamed Category column to Category Names.
+* Import links functionality now check for category with Category Slug name. If it does not exist, it uses the category name field to create the category
+
+= 6.1.14 =
+* Added submitter name, submitter e-mail and link visits to Export All Links functionality
+* Added ability to import these 3 new fields
+
+= 6.1.13 =
+* Add support for list of category slugs in shortcode parameters
+* Additional fix for empty sub-categories not appearing correctly in [link-library-cats] shortcode
+
+= 6.1.12 =
+* Fix for empty sub-categories not appearing correctly in [link-library-cats] shortcode
+
+= 6.1.11 =
+* Fix issue with pagination mode and combine all results without categories mode not working together
+
+= 6.1.10 =
+* Changed default order of items in target drop-down list in link editor
+* Added option in Global Options to choose which target option should appear first in link editor. Defaults to _blank.
+
+= 6.1.9 =
+* Fixed issue with category name not appearing when selecting 'After category name' or 'After top-level category name' as the category description position
+* Fixed issue with link count not displaying when category description configured to appear on left side of category name in [link-library-cats] shortcode
+
+= 6.1.8 =
+* Small fix for data validation of reciprocal link URL
+
+= 6.1.7 =
+* Fixed shortcode so that you can display a sub-category using the [link-library categorylistoverride="XX"] parameter
+
+= 6.1.6 =
+* Made 'Powered by Robothumb' link have _empty target to open in new tab / window
+* Added condition to refuse reciprocal links that are set to the posting site
+
+= 6.1.5 =
+* Additional fixes for Robothumb message
+* Fixed for image links not being closed properly when using external thumbnail generation service
+
+= 6.1.4 =
+* Fix so that Robothumb message only appears once if you use sub-categories
+
+= 6.1.3 =
+* Fix to exclude links from custom post types that can be imported back into Link Library in Import/Export section
+
+= 6.1.2 =
+* Fix for undefined index when using link-library-count shortcode
+* Adds new option to sort categories by slug
+
+= 6.1.1 =
+* Added rel tags noopener and noreferrer to links for security
+
+= 6.1 =
+* Stable release one month after 6.0 version. Update issues have trickled down, so I making this version 6.1.
+* Fixes for RSS Preview pop-up window
+* Fixed for intermittent before and after link fields in advanced library configuration
+* Added new field to be able to specify max number of links to display per category, instead of only in total
+
+= 6.0.48 =
+* Fix for single category GET category variable
+
+= 6.0.47 =
+* Added new option for Web Link display to only display Plain Web Address, without any hyperlink
+* Fix for [link-library-count] shortcode to properly display link count
+* Added code so that permalinks rewrite rules are automatically flushed when you save general settings
+* Fixed problem with quick edit of link URL
+
+= 6.0.46 =
+* Improvements to upgrade routine to account for users who were running older version of Link Library before upgrade
+* Search improvements. Brings back search in link descriptions, notes and large descriptions. Also searches through these fields when searching for links in admin
+* Fixes for text after double-quotes getting cut off in link description and note fields
+
+= 6.0.45 =
+* Fix to properly order links ordered by link visits
+
+= 6.0.44 =
+* Fixed word array appearing in new link admin e-mail for categories
+
+= 6.0.43 =
+* Fixed link moderation table, showing 'None assigned' messages outside of the table for links without tags
+* Fixed notification e-mail missing title
+* Fixed pages with cat variable in link not displaying links properly
+
+= 6.0.42 =
+* Sub-categories now display hierarchically in User link submission form
+* Increased timeout to 10 seconds for reciprocal and broken link checkers to avoid timeouts with some sites
+* Fix to pagination display when using sub-categories
+
+= 6.0.41 =
+* Fix to link checking tools to properly check status of box to delete links that return a 403 error
+
+= 6.0.40 =
+* Fixes for new reciprocal and broken link checkers
+
+= 6.0.39 =
+* Re-worked reciprocal and broken link checkers so they check links using ajax one by one. This way, the checker can never time out, even with large libraries
+
+= 6.0.38 =
+* Fixed user link submission when not allowing user to select category
+
+= 6.0.37 =
+* Fixed to new date diff code implementation
+
+= 6.0.36 =
+* Empty categories now properly appear again when displaying categories in drop-down list mode when showing empties
+* Replaced references to setTimestamp to be compatible with PHP 5.2
+
+= 6.0.35 =
+* Fix for "Generating cat link" debug message appearing in some configurations
+
+= 6.0.34 =
+* Adjustments for calculation of height of multi-select fields in user submission form
+
+= 6.0.33 =
+* Added option to display links that are scheduled for publication at a latter date, under links tab of library settings
+
+= 6.0.32 =
+* Fix for user submission form
+
+= 6.0.31 =
+* Add new section to user submission form to allow visitors to assign tags to the links they submit
+
+= 6.0.30 =
+* Add option to display categories as a multi-select list in user submission form
+
+= 6.0.29 =
+* Fix for PHP warning if categories are set to be displayed in list order and no included categories are specified
+
+= 6.0.28 =
+* Fix to category drop-down list so that it does not show excluded categories when showing one category at a time
+
+= 6.0.27 =
+* Fixes to tools such as duplicate checker and thumbnail generator so they no longer consider trashed links
+
+= 6.0.26 =
+* Added calls to wp_reset_post data. In some circumstances, not calling this caused some strange behaviour on some sites
+
+= 6.0.25 =
+* Added button in general option to delete all links in old format
+* Converted new lines from editor to line breaks in single item layout
+* Added [link-category] as tag for single item layout
+
+= 6.0.24 =
+* Fixed to RSS Feed generation to properly filter links based on category inclusion or exclusion
+
+= 6.0.23 =
+* Correction for extra UL tag displayed when Link Display Format is set to No surrounding tags
+
+= 6.0.22 =
+* Added new general option to be able to change Link Library post slug from default "links"
+
+= 6.0.21 =
+* Brought back the moderation link submission notification icon to the top-level Link Library menu
+
+= 6.0.20 =
+* Added new column in Link Library admin list to show updated date and display text when links have been recently updated
+* Added information about single item layout, along with list of fields that can be used in template
+* Introduced new widget. Users only need to select a display configuration
+
+= 6.0.19 =
+* Fix user-submitted links with user-submitted categories missing category
+
+= 6.0.18 =
+* Added tool in Global Options to export list of category ID mappings between version 5.9 and 6.0
+
+= 6.0.17 =
+* Updated Welcome message box for people updating to show FAQ
+
+= 6.0.16 =
+* Restored ability to specify max number of links to display
+
+= 6.0.15 =
+* Fix to prevent warning in some configurations of 6.0.14
+
+= 6.0.14 =
+* Fixes for link display format selector
+* Fixes for table layout when using combined results option
+* Removed references to My Link Order plugin since it is no longer supported
+
+= 6.0.13 =
+* Fixed Edit links not appearing for links since 6.0
+
+= 6.0.12 =
+* Improvements to update mechanism to avoid duplicate entries
+
+= 6.0.11 =
+* Fixed issue with user submitted links not having a category assigned to them
+
+= 6.0.10 =
+* Fixes to link ordering methods
+* Fixes to bring back featured links to be displayed at top of each category
+* Fix to bring back support for link category override selection list in user submission tab
+* Added extra column to category list to make it easier to find category IDs
+
+= 6.0.9 =
+* Fix for number of links per category when showing list of categories as a drop-down
+
+= 6.0.8 =
+* Removed automatic re-import mechanism
+
+= 6.0.7 =
+* Fine-tune automatic re-import process
+
+= 6.0.6 =
+* Automate re-import process so that sites that automatically updated to 6.0 don't need to manually re-import links
+
+= 6.0.5 =
+* Added line to disable link manager option for legacy installations
+* Additional fixes to update routine to avoid duplicate entries
+
+= 6.0.4 =
+* Additional fixed to update routine to avoid duplicate entries
+
+= 6.0.3 =
+* Fix for parse error on older versions of PHP
+* Small fix to update function
+
+= 6.0.2 =
+* Correct warning with sizeof function when combining search results
+* Fix for category exclusions in link submission form
+
+= 6.0.1 =
+* Re-written link importer to avoid duplicate entries
+* Fix for Large Description HTML tags not being displayed correctly
+
+= 6.0 =
+* Official release of Link Library 6.0
+
+= 6.0 Beta 12 =
+* Improvements in performance of initial link import to help with websites that have large quantity of links
+
+= 6.0 Beta 11 =
+* Fix in links importer to properly read in data exported by plugin
+
+= 6.0 Beta 10 =
+* Fix to display child categories when using shortcode category override options
+
+= 6.0 Beta 9 =
+* Added shortcode parameters to the Usage tab under Library Configuration
+* Modified All Links page filter to show all categories instead of only showing categories containing links. Also made category list hierarchical.
+* Fix to show child categories in Common tab of Library Configurations
+
+= 6.0 Beta 8 =
+* Updated bookmarket to work with new link custom post types (need to re-create bookmarklet from General Options to work)
+* Fixed problem selecting categories in Common tab of library configuration
+* Fix for shortcode category overrides not working (categorylistoverride, excludecategoryoverride)
+
+= 6.0 Beta 7 =
+* Resolved undefined variable warning linkeditoruser
+* Fix importer and exporter field order to accept imports from version 5.9 and be more flexible towards changes
+* Saving library configuration for library other than #1 now go back to the current library edited
+
+= 6.0 Beta 6 =
+* Added new option field under Web Link item in Advanced table to specify target
+* Fixed warning in user submission form
+* Updated Norsk translation
+* Fixed default value of single item template
+* Fixed PHP warnings if link fields are left empty
+
+= 6.0 Beta 5 =
+* Fixed issue with Robothumb link appearing after each category instead of only once after all links
+* Fixed issue with links being displayed as featured even if they had not been set as such
+* Fixed issue with front-end Edit links not sending administrators to the right place
+* Fixed issue with drag-and-drop of elements in advanced section sometimes creating duplicates
+* Fixed issue with category names not displaying if Link Library configured to display with headings instead of divs
+
+= 6.0 Beta 4 =
+* Corrected warnings when activating plugin on a site that had never had old version of Link Library
+* Added button under General Options to re-import links from 5.9.x to 6.0
+* Removed code in plugin initialization referring to inexistent table
+
+= 6.0 Beta 3 =
+* Incorporated changes from 5.9.15.3
+
+= 6.0 Beta 2 =
+* Fixed compatibility issue with versions of PHP older than 5.5
+
+= 6.0 Beta 1 =
+* Complete re-work of Link Library to use Custom Post Types instead of the WordPress legacy link tables
+
+= 5.9.15.8 =
+* Fixed link exported so that links with multiple categories do not become duplicates
+* Final version of Link Library 5.9, before 6.0 release
 
 = 5.9.15.7 =
 * Added class around RSS inline feed items date to be able to hide it

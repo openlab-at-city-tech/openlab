@@ -3,7 +3,7 @@
  * Functions of BuddyPress's "Nouveau" template pack.
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  *
  * @buddypress-template-pack {
  *   Template Pack ID:       nouveau
@@ -96,14 +96,14 @@ class BP_Nouveau extends BP_Theme_Compat {
 		} else {
 			add_action( 'admin_init', function() {
 				if ( defined( 'DOING_AJAX' ) && true === DOING_AJAX ) {
-					require $this->includes_dir . 'ajax.php';
+					require bp_nouveau()->includes_dir . 'ajax.php';
 				}
 			}, 0 );
 		}
 
 		add_action( 'bp_customize_register', function() {
 			if ( bp_is_root_blog() && current_user_can( 'customize' ) ) {
-				require $this->includes_dir . 'customizer.php';
+				require bp_nouveau()->includes_dir . 'customizer.php';
 			}
 		}, 0 );
 
@@ -266,11 +266,15 @@ class BP_Nouveau extends BP_Theme_Compat {
 					$file = $asset['uri'];
 				}
 
-				$data = wp_parse_args( $style, array(
-					'dependencies' => array(),
-					'version'      => $this->version,
-					'type'         => 'screen',
-				) );
+				$data = bp_parse_args(
+					$style,
+					array(
+						'dependencies' => array(),
+						'version'      => $this->version,
+						'type'         => 'screen',
+					),
+					'nouveau_enqueue_styles'
+				);
 
 				wp_enqueue_style( $handle, $file, $data['dependencies'], $data['version'], $data['type'] );
 
@@ -345,11 +349,15 @@ class BP_Nouveau extends BP_Theme_Compat {
 				$file = $asset['uri'];
 			}
 
-			$data = wp_parse_args( $script, array(
-				'dependencies' => array(),
-				'version'      => $this->version,
-				'footer'       => false,
-			) );
+			$data = bp_parse_args(
+				$script,
+				array(
+					'dependencies' => array(),
+					'version'      => $this->version,
+					'footer'       => false,
+				),
+				'nouveau_register_scripts'
+			);
 
 			wp_register_script( $handle, $file, $data['dependencies'], $data['version'], $data['footer'] );
 		}
@@ -409,18 +417,9 @@ class BP_Nouveau extends BP_Theme_Compat {
 	public function localize_scripts() {
 		$params = array(
 			'ajaxurl'             => bp_core_ajax_url(),
-			'accepted'            => __( 'Accepted', 'buddypress' ),
-			'close'               => __( 'Close', 'buddypress' ),
-			'comments'            => __( 'comments', 'buddypress' ),
-			'leave_group_confirm' => __( 'Are you sure you want to leave this group?', 'buddypress' ),
 			'confirm'             => __( 'Are you sure?', 'buddypress' ),
-			'my_favs'             => __( 'My Favorites', 'buddypress' ),
-			'rejected'            => __( 'Rejected', 'buddypress' ),
-			'show_all'            => __( 'Show all', 'buddypress' ),
-			'show_all_comments'   => __( 'Show all comments for this thread', 'buddypress' ),
 			'show_x_comments'     => __( 'Show all %d comments', 'buddypress' ),
 			'unsaved_changes'     => __( 'Your profile has unsaved changes. If you leave the page, the changes will be lost.', 'buddypress' ),
-			'view'                => __( 'View', 'buddypress' ),
 			'object_nav_parent'   => '#buddypress',
 		);
 
@@ -445,11 +444,12 @@ class BP_Nouveau extends BP_Theme_Compat {
 				continue;
 			}
 
-			if ( 'groups' === $object ) {
-				$supported_objects = array_merge( $supported_objects, array( 'group_members', 'group_requests' ) );
-			}
-
 			$object_nonces[ $object ] = wp_create_nonce( 'bp_nouveau_' . $object );
+		}
+
+		// Groups require some additional objects.
+		if ( bp_is_active( 'groups' ) ) {
+			$supported_objects = array_merge( $supported_objects, array( 'group_members', 'group_requests' ) );
 		}
 
 		// Add components & nonces
@@ -627,7 +627,11 @@ class BP_Nouveau extends BP_Theme_Compat {
 		if ( false === strpos( $uri['path'], 'customize.php' ) ) {
 			return $path;
 		} else {
-			$vars = wp_parse_args( $uri['query'], array() );
+			$vars = bp_parse_args(
+				$uri['query'],
+				array(),
+				'customizer_set_uri'
+			);
 
 			if ( ! empty( $vars['url'] ) ) {
 				$path = str_replace( get_site_url(), '', urldecode( $vars['url'] ) );

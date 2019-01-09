@@ -48,12 +48,11 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 			switch ( $privacy ) {
 				case '1':
-					continue;
 					break;
 
 				case '0':
 					if ( $current_user != 0 ) {
-						continue;
+						break;
 						}
 					else {
 						$remove_from_stream = true;
@@ -63,7 +62,7 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 				case '-1':
 					if ( $current_user != 0 )
-						continue;
+						break;
 					else {
 						$remove_from_stream = true;
 					}
@@ -75,7 +74,7 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 						$caps = get_user_meta( $current_user, $meta_key, true );
 
 						if ( !empty( $caps ) ) {
-							continue;
+							break;
 						} else {
 							$remove_from_stream = true;
 						}
@@ -91,7 +90,7 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 						$user = new WP_User( $current_user );
 
 						if ( in_array( 'administrator', $user->roles ) )
-							continue;
+							break;
 						else {
 							$remove_from_stream = true;
 						}

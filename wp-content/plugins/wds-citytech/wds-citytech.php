@@ -14,9 +14,6 @@ include 'includes/oembed.php';
 include 'includes/library-widget.php';
 include 'includes/clone.php';
 
-// Disable Try Gutenberg.
-remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
-
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
@@ -324,7 +321,8 @@ function wds_load_account_type() {
 	$post_data    = isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : array();
 
 	if ( $account_type ) {
-		$return .= '<div class="sr-only">' . $account_type . ' selected.</div>' . wds_get_register_fields( $account_type, $post_data );
+		$return .= wds_get_register_fields( $account_type, $post_data );
+		$return .= "<div class='sr-only'>" . $account_type . ' selected.</div>';
 	} else {
 		$return = 'Please select an Account Type.';
 	}
@@ -2794,6 +2792,7 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	<fieldset class="department-selector">
 		<legend>Departments <?php echo esc_html( $required_gloss ); ?></legend>
+		<div class="error-container" id="academic-unit-selector-error"></div>
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
@@ -2812,6 +2811,9 @@ function openlab_academic_unit_selector( $args = array() ) {
 							name="departments[]"
 							type="checkbox"
 							value="<?php echo esc_attr( $dept_slug ); ?>"
+							data-parsley-atleastonedept
+							data-parsley-errors-container="#academic-unit-selector-error"
+							data-parsley-validate-if-empty
 						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
 					</li>
 				<?php endforeach; ?>
@@ -2846,3 +2848,33 @@ if ( is_admin() ) {
 		3
 	);
 }
+
+/**
+ * Set default editor settings.
+ *
+ * By default, the Classic editor should be the default editor,
+ * and users should be allowed to switch editors. Site admins can override.
+ */
+add_filter(
+	'classic_editor_network_default_settings',
+	function() {
+		return [
+			'editor'      => 'classic',
+			'allow-users' => true,
+		];
+	}
+);
+
+/**
+ * Enqueue custom JS for Search & Filter, when activated.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'SEARCHANDFILTER_VERSION_NUM' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-search-filter', set_url_scheme( WPMU_PLUGIN_URL . '/js/search-filter.js' ), array( 'jquery' ) );
+	}
+);

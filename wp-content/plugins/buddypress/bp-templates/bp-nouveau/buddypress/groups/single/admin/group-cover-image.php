@@ -3,7 +3,7 @@
  * BP Nouveau Group's cover image template.
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 ?>
 
@@ -23,7 +23,7 @@
 
 <?php endif; ?>
 
-<p><?php _e( 'The Cover Image will be used to customize the header of your group.', 'buddypress' ); ?></p>
+<p><?php esc_html_e( 'The Cover Image will be used to customize the header of your group.', 'buddypress' ); ?></p>
 
 <?php
 bp_attachments_get_template_part( 'cover-images/index' );
