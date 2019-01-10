@@ -2643,6 +2643,31 @@ add_filter(
 	}
 );
 
+/**
+ * Strict mime-type fixes.
+ */
+function openlab_secondary_mime( $check, $filetype, $filename, $mimes ) {
+	if ( empty( $check['ext'] ) && empty( $check['type'] ) ) {
+		$secondary_mimes = [
+			[ 'tex' => 'text/x-tex' ],
+		];
+
+		foreach ( $secondary_mimes as $secondary_mime ) {
+			// Run another check, but only for our secondary mime and not on core mime types.
+			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+			$check = wp_check_filetype_and_ext( $file, $filename, $secondary_mime );
+			add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+
+			if ( ! empty( $check['ext'] ) || ! empty( $check['type'] ) ) {
+				return $check;
+			}
+		}
+	}
+
+	return $check;
+}
+add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+
 /** TablePress mods **********************************************************/
 
 /**
