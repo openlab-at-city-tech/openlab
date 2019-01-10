@@ -784,6 +784,8 @@ class Openlab_Clone_Course_Site {
 		$mods  = get_option( 'mods_' . $theme );
 
 		$preserve_option = array(
+			'bcn_options',
+			'bcn_version',
 			'siteurl',
 			'blogname',
 			'admin_email',

@@ -1364,6 +1364,8 @@ function ra_copy_blog_page( $group_id ) {
 						// update options
 						$skip_options = array(
 							'admin_email',
+							'bcn_options',
+							'bcn_version',
 							'blogname',
 							'cron',
 							'db_version',
