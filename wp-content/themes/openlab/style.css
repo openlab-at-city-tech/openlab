@@ -7333,6 +7333,10 @@ input[type="submit"] {
 .radio-inline label {
   font-weight: 700;
 }
+.radio.group-site label,
+.radio-inline.group-site label {
+  font-weight: normal;
+}
 .radio input[type="radio"],
 .radio-inline input[type="radio"] {
   margin-top: 2px;
@@ -8086,6 +8090,10 @@ body form .checkbox-list-container {
 }
 .groupblog-setup th {
   width: 25%;
+}
+#search-setting-note {
+  padding-left: 20px;
+  margin-top: -15px;
 }
 .ct-group-meta tr label input[type="checkbox"] {
   margin-top: -2px;
