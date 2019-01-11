@@ -208,10 +208,10 @@ function openlab_bp_group_documents_display_content() {
                                 <div id="document-detail-clear" class="clear"></div>
                                 <div class="document-info">
                                     <label><?php _e('Display Name:', 'bp-group-documents'); ?></label>
-                                    <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo $template->name ?>" />
+                                    <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
                                     <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
                                         <label><?php _e('Description:', 'bp-group-documents'); ?></label>
-                                        <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo $template->description; ?></textarea>
+                                        <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
                                     <?php } ?>
                                     <label></label>
                                 </div>
