@@ -755,3 +755,37 @@ function openlab_ass_clean_content( $content ) {
 }
 add_filter( 'ass_clean_content', 'openlab_ass_clean_content', 4 );
 remove_filter( 'ass_clean_content', 'strip_tags', 4 );
+
+/**
+ * Force most kinds of content to go to weekly digests.
+ */
+add_filter(
+	'bp_ges_add_to_digest_queue_for_user',
+	function( $add, $activity, $user_id, $subscription_type ) {
+		if ( 'sum' !== $subscription_type ) {
+			return $add;
+		}
+
+		if ( $add ) {
+			return $add;
+		}
+
+		$force = [
+			'added_group_document' => 1,
+			'bbp_reply_create' => 1, // topic creation already whitelisted
+			'bp_doc_comment' => 1,
+			'bp_doc_created' => 1,
+			'bp_doc_edited' => 1,
+			'edited_group_document' => 1,
+			'new_blog_post' => 1,
+		];
+
+		if ( isset( $force[ $activity->type ] ) ) {
+			$add = true;
+		}
+
+		return $add;
+	},
+	10,
+	4
+);
