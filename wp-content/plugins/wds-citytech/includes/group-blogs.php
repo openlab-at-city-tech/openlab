@@ -78,6 +78,9 @@ function openlab_set_group_site_id( $group_id, $site_id ) {
 	do_action( 'openlab_set_group_site_id', $group_id, $site_id );
 }
 
+// Ensure that old-style blog comment activity is enabled.
+add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+
 ////////////////////////
 /// MEMBERSHIP SYNC ////
 ////////////////////////
