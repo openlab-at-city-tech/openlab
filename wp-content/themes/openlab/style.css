@@ -7436,6 +7436,48 @@ input[type="submit"] {
 .panel-button-group .panel:last-of-type {
   margin-bottom: 20px;
 }
+.panel.member-roles ul.member-role-selectors {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+.panel.member-roles ul.member-role-selectors li {
+  margin-bottom: 2em;
+}
+.panel.member-roles .member-role-definition {
+  margin-bottom: 1em;
+}
+.panel.member-roles .member-role-definition .member-role-definition-label {
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.panel.member-roles .member-role-definition .member-role-definition-label:hover {
+  text-decoration: none;
+}
+.panel.member-roles .member-role-definition .member-role-definition-text {
+  display: none;
+  background: #f5f5f5;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+.panel.member-roles .member-role-definition .member-role-definition-text ul {
+  list-style-type: none;
+  margin-top: 0;
+  padding: 10px;
+}
+.panel.member-roles .member-role-definition .member-role-definition-text strong {
+  font-weight: 600;
+}
+.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-text {
+  display: block;
+}
+.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label {
+  text-decoration: none;
+}
+.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label:hover {
+  text-decoration: underline;
+}
 .submenu .submenu-text {
   margin-right: 8px;
 }

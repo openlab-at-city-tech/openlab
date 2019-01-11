@@ -445,7 +445,7 @@ function openlab_create_group_menu($grouptype) {
             $step_name = 'Step One: Create Profile & Site';
             break;
         case 'group-settings':
-            $step_name = 'Step Two: Privacy Settings';
+            $step_name = 'Step Two: Privacy & Member Role Settings';
             break;
         case 'group-avatar':
             $step_name = 'Step Three: Avatar';

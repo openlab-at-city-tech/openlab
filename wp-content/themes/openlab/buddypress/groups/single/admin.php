@@ -205,6 +205,12 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php openlab_group_privacy_settings($group_type); ?>
 
+            <?php openlab_group_member_role_settings( $group_type ); ?>
+
+            <?php do_action( 'bp_after_group_settings_admin' ); ?>
+            <p><input class="btn btn-primary" type="submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> &#xf138;" id="save" name="save" /></p>
+            <?php wp_nonce_field( 'groups_edit_group_settings' ); ?>
+
 			<?php do_action( 'openlab_after_group_privacy_settings' ); ?>
 
         <?php endif; ?>

@@ -1205,6 +1205,42 @@ function wds_bp_group_meta_save( $group ) {
 		}
 	}
 
+	// Member roles.
+	if ( openlab_get_site_id_by_group_id( $group->id ) ) {
+		$role_map = [
+			'admin'  => 'administrator',
+			'mod'    => 'editor',
+			'member' => 'author',
+		];
+
+		$site_roles = [ 'administrator', 'editor', 'author', 'contributor', 'subscriber' ];
+
+		foreach ( $role_map as $group_role => $site_role ) {
+			$role_key = 'member_role_' . $group_role;
+			if ( ! isset( $_POST[ $role_key ] ) ) {
+				continue;
+			}
+
+			$selected_site_role = $_POST[ $role_key ];
+			if ( ! in_array( $selected_site_role, $site_roles, true ) ) {
+				continue;
+			}
+
+			$role_map[ $group_role ] = $selected_site_role;
+		}
+
+		groups_update_groupmeta( $group->id, 'member_site_roles', $role_map );
+	}
+
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id     = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
+		}
+	}
+
 	// Portfolio list display
 	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
 		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
