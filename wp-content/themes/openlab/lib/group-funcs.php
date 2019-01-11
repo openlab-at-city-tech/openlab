@@ -76,7 +76,7 @@ function openlab_group_privacy_settings($group_type) {
             }
             ?>
             <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
+                <div class="col-sm-24">
                     <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
@@ -507,7 +507,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
                 <div class="col-sm-24">
                     <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label>
 
-                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered users of this ' . <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
+                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered users of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
                 </div>
             </div>
 
