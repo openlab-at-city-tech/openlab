@@ -108,7 +108,7 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
         <div class="panel panel-default">
-            <div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Site</div>
+            <div class="panel-heading semibold">Privacy Settings: <?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
                 <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Site.</p>
                 <?php openlab_site_privacy_settings_markup($site_id) ?>
