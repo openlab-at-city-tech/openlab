@@ -64,9 +64,9 @@ function openlab_group_privacy_settings($group_type) {
         <div class="radio group-profile panel-body">
 
             <?php if ($bp->current_action == 'create'): ?>
-                <p id="privacy-settings-tag-b"><?php _e('These settings affect how others view your ' . $group_type_name . ' Profile. You may change these settings later in the course Profile Settings.', 'buddypress'); ?></p>
+                <p id="privacy-settings-tag-b">These settings affect how others view your <?php echo esc_html( $group_type_name ); ?> Profile. You may change these settings later in the <?php echo esc_html( $group_type_name_uc ); ?> Profile Settings.</p>
             <?php else: ?>
-                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Profile.') ?></p>
+                <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Profile.</p>
             <?php endif; ?>
 
             <?php
@@ -81,24 +81,23 @@ function openlab_group_privacy_settings($group_type) {
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . 's directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Any OpenLab member may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />
-                        <?php _e('This is a private ' . $group_type_name_uc, 'buddypress') ?></label>
+                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile and related content and activity will only be visible to members of the group.', 'buddypress') ?></li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . ' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Only OpenLab members who request membership and are accepted may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
-                        <?php _e('This is a hidden ' . $group_type_name_uc, 'buddypress') ?></label>
+                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+
                     <ul>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile, related content and activity will only be visible only to members of the ' . $group_type_name_uc . '.', 'buddypress') ?></li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile will NOT be listed in the ' . $group_type_name_uc . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Only OpenLab members who are invited may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile will NOT be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, or OpenLab home page.</li>
+                        <li>Only OpenLab members who are invited may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
                 </div>
             </div>
@@ -109,9 +108,9 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
         <div class="panel panel-default">
-            <div class="panel-heading semibold"><?php _e($group_type_name_uc . ' Site') ?></div>
+            <div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
-                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
+                <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Site.</p>
                 <?php openlab_site_privacy_settings_markup($site_id) ?>
             </div>
         </div>
