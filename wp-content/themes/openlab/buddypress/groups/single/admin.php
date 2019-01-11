@@ -212,8 +212,6 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <p><input class="btn btn-primary" type="submit" value="<?php _e( 'Save Changes', 'buddypress' ) ?> &#xf138;" id="save" name="save" /></p>
             <?php wp_nonce_field( 'groups_edit_group_settings' ); ?>
 
-			<?php do_action( 'openlab_after_group_privacy_settings' ); ?>
-
         <?php endif; ?>
 
         <?php /* Group Avatar Settings */ ?>
