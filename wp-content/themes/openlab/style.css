@@ -7334,7 +7334,9 @@ input[type="submit"] {
   font-weight: 700;
 }
 .radio.group-site label,
-.radio-inline.group-site label {
+.radio-inline.group-site label,
+.radio.email-sub label,
+.radio-inline.email-sub label {
   font-weight: normal;
 }
 .radio input[type="radio"],
