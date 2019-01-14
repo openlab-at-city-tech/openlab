@@ -1021,8 +1021,6 @@ function wds_load_group_type( $group_type ) {
 		$return .= '</table></div></div><!--.panel-->';
 	}
 
-	$return .= '<script>wds_load_group_departments();</script>';
-
 	if ( $echo ) {
 		return $return;
 	} else {
