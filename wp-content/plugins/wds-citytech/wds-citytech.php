@@ -932,7 +932,7 @@ function wds_load_group_type( $group_type ) {
 		}
 	}
 
-	$do_sod_selector = 'course' !== $group_type && 'Student' !== $account_type;
+	$do_sod_selector = 'course' !== $group_type && 'student' !== $account_type;
 
 	$selector_args = [];
 	if ( ! $do_sod_selector ) {
