@@ -940,6 +940,11 @@ function wds_load_group_type( $group_type ) {
 		$selector_args['legacy']   = true;
 	}
 
+	// Special case: student/alumni portfolio creation doesn't see Office.
+	if ( bp_is_group_create() && 'portfolio' === $group_type && in_array( $account_type, [ 'student', 'alumni' ], true ) ) {
+		$selector_args['entities'] = [ 'school' ];
+	}
+
 	$selector_args['required'] = openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type );
 	$selector_args['checked']  = openlab_get_group_academic_units( bp_get_current_group_id() );
 
