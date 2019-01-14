@@ -941,7 +941,7 @@ function wds_load_group_type( $group_type ) {
 	}
 
 	// Special case: student/alumni portfolio creation doesn't see Office.
-	if ( bp_is_group_create() && 'portfolio' === $group_type && in_array( $account_type, [ 'student', 'alumni' ], true ) ) {
+	if ( 'portfolio' === $group_type && in_array( strtolower( $account_type ), [ 'student', 'alumni' ], true ) ) {
 		$selector_args['entities'] = [ 'school' ];
 	}
 
