@@ -230,24 +230,24 @@ jQuery(document).ready(function($){
 				$('#group-desc').val(r.description);
 
 				// Schools and Departments
-				$('input[name="wds_group_school[]"]').each(function(){
-					$school_input = $(this);
-					if ( -1 < $.inArray( $school_input.val(), r.schools ) ) {
-						$school_input.attr('checked', true);
-//						wds_load_group_departments();
+                if ( r.hasOwnProperty( 'schools' ) ) {
+                    $('input[name="schools[]"]').each(function(k,v){
+                        if ( -1 !== r.schools.indexOf( v.value ) ) {
+                            $( v ).prop( 'checked', true );
+                        }
+                    });
+                }
 
-						// Departments are fetched via
-						// AJAX, so we do a lame delay
-						var foo = setTimeout( function() {
-							$('input[name="wds_departments[]"]').each(function(){
-								$dept_input = $(this);
-								if ( -1 < $.inArray( $dept_input.val(), r.departments ) ) {
-									$dept_input.attr('checked', true);
-								}
-							});
-						}, 2000 );
-					}
-				});
+				// Schools and Departments
+                if ( r.hasOwnProperty( 'departments' ) ) {
+                    $('input[name="departments[]"]').each(function(k,v){
+                        if ( -1 !== r.departments.indexOf( v.value ) ) {
+                            $( v ).prop( 'checked', true );
+                        }
+                    });
+                }
+
+                window.openlab.academicUnits.validateAcademicTypeSelector();
 
 				// Categories
 				$('.bp-group-categories-list-container input').each(function(k,v){
