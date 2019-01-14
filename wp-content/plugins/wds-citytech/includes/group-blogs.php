@@ -803,10 +803,10 @@ function openlab_group_member_role_settings( $group_type ) {
             <div class="row">
                 <ul class="member-role-selectors">
                     <li>
-                        <label for="member_role_admin">Course administrators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
-                        <select class="form-control" name="member_role_admin">
+                        <label for="member_role_member">Course members have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+                        <select class="form-control" name="member_role_member">
                             <?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
-                                <option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['admin'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
+                                <option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['member'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </li>
@@ -821,10 +821,10 @@ function openlab_group_member_role_settings( $group_type ) {
                     </li>
 
                     <li>
-                        <label for="member_role_member">Course members have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
-                        <select class="form-control" name="member_role_member">
+                        <label for="member_role_admin">Course administrators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+                        <select class="form-control" name="member_role_admin">
                             <?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
-                                <option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['member'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
+                                <option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['admin'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </li>
