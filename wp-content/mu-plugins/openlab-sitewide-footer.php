@@ -170,7 +170,7 @@ function openlab_footer_markup($placeholder = NULL) {
     $site = bp_get_root_domain();
     $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-    $accessibility_link = get_option('footer_link_accessibility_help_post');
+    $accessibility_link = get_blog_option( 1, 'footer_link_accessibility_help_post' );
 
     ob_start();
     include(WPMU_PLUGIN_DIR . '/parts/persistent/footer.php');
