@@ -1,12 +1,31 @@
+sudo: required
 language: php
 php:
   - 7.2
   - nightly
 
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+before_install:
+  - export CHROME_BIN=chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - nvm install 6.9.5
+  - npm install -g yarn
+
+install:
+  - npm install
+
 before_script:
   - composer install
 
 script:
+  - ./node_modules/nightwatch/bin/nightwatch
   - ./developer/phpcompat.sh
 
 notifications:
