@@ -15,6 +15,7 @@
   },
   "description": "",
   "dependencies": {
+    "cypress": "^3.1.4",
     "grunt-contrib-less": "^1.4.0"
   }
 }
