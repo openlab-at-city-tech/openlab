@@ -1,4 +1,4 @@
-/* 
+/*
  Theme Name:   OpenLab Twenty Sixteen
  Description:  This is a child theme of Twenty Sixteen.  It is similar, with a few changes to list and heading styles, margins, and the black border around the site has been removed.  It also displays breadcrumb navigation with activation of the plugin Breadcrumb NavXT.
  Author:       Bree
@@ -28,7 +28,7 @@ body:not(.custom-background-image):before,
 }
 
 /* Widget */
-    
+
 .widget {
 	border-top: 2px solid #1a1a1a;
 }
@@ -53,6 +53,10 @@ ol {
 	padding: 0 0 0 2em
 }
 
+ul ul,
+ol ol {
+	padding-left: .5em;
+}
 /**
  * 11.1 - Header
  */
@@ -104,4 +108,4 @@ ol {
 	.site-header {
 		padding: 3.25em 4.5455% 2.25em;
 	}
-}	
+}

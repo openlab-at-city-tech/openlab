@@ -98,7 +98,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             <?php openlab_group_privacy_settings( $group_type ); ?>
 
-            <?php openlab_group_member_role_settings( $group_type ); ?>
+            <?php if ( 'portfolio' !== $group_type ) : ?>
+                <?php openlab_group_member_role_settings( $group_type ); ?>
+            <?php endif; ?>
 
             <?php if ( openlab_group_type_can_be_cloned_by_others( $group_type ) ) : ?>
                 <?php openlab_group_sharing_settings_markup( bp_get_current_group_id() ); ?>
