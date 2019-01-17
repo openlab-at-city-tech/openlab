@@ -290,6 +290,10 @@ input[type="submit"]{
     label{
         font-weight: @bold;
     }
+    &.group-site label,
+    &.email-sub label {
+        font-weight: normal;
+    }
     input[type="radio"]{
         margin-top: 2px;
     }
@@ -404,6 +408,62 @@ input[type="submit"]{
     .panel{
         &:last-of-type{
             margin-bottom: 20px;
+        }
+    }
+}
+.panel.member-roles {
+    ul.member-role-selectors {
+        list-style-type: none;
+        margin-left: 0;
+        padding-left: 0;
+
+        li {
+            margin-bottom: 2em;
+        }
+    }
+
+    .member-role-definition {
+        margin-bottom: 1em;
+
+        .member-role-definition-label {
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        .member-role-definition-text {
+            display: none;
+            background: @panel-default-heading-bg;
+            margin-left: 15px;
+            margin-top: 5px;
+
+            ul {
+                list-style-type: none;
+                margin-top: 0;
+                padding: 10px;
+            }
+
+            strong {
+                font-weight: 600;
+            }
+        }
+
+        &.show-definition-text {
+            .member-role-definition-text {
+                display: block;
+            }
+
+            .member-role-definition-label {
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }
@@ -1058,6 +1118,10 @@ body form{
     th{
         width: 25%;
     }
+}
+#search-setting-note{
+    padding-left: 20px;
+    margin-top: -15px;
 }
 .ct-group-meta{
     tr{

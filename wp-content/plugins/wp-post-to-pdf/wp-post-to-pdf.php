@@ -37,7 +37,7 @@ define('WPPT0PDF_URL', WP_PLUGIN_URL . '/wp-post-to-pdf');
 define('WPPT0PDF_BASENAME', plugin_basename(__FILE__));
 define('WPPT0PDF_CACHE_DIR', WP_CONTENT_DIR . '/uploads/wp-post-to-pdf-cache/' . $blog_id);
 
-if (!class_exists(wpptopdf)) {
+if (!class_exists('wpptopdf')) {
 
     class wpptopdf
     {

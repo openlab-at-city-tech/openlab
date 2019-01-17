@@ -55,6 +55,47 @@ function twentytwelve_setup() {
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
 
+	// Load regular editor styles into the new block-based editor.
+	add_theme_support( 'editor-styles' );
+
+	// Load default block styles.
+	add_theme_support( 'wp-block-styles' );
+
+	// Add support for responsive embeds.
+	add_theme_support( 'responsive-embeds' );
+
+	// Add support for custom color scheme.
+	add_theme_support(
+		'editor-color-palette',
+		array(
+			array(
+				'name'  => __( 'Blue', 'twentytwelve' ),
+				'slug'  => 'blue',
+				'color' => '#21759b',
+			),
+			array(
+				'name'  => __( 'Dark Gray', 'twentytwelve' ),
+				'slug'  => 'dark-gray',
+				'color' => '#444',
+			),
+			array(
+				'name'  => __( 'Medium Gray', 'twentytwelve' ),
+				'slug'  => 'medium-gray',
+				'color' => '#9f9f9f',
+			),
+			array(
+				'name'  => __( 'Light Gray', 'twentytwelve' ),
+				'slug'  => 'light-gray',
+				'color' => '#e6e6e6',
+			),
+			array(
+				'name'  => __( 'White', 'twentytwelve' ),
+				'slug'  => 'white',
+				'color' => '#fff',
+			),
+		)
+	);
+
 	// Adds RSS feed links to <head> for posts and comments.
 	add_theme_support( 'automatic-feed-links' );
 
@@ -69,7 +110,8 @@ function twentytwelve_setup() {
 	 * and here we also set up the default background color.
 	 */
 	add_theme_support(
-		'custom-background', array(
+		'custom-background',
+		array(
 			'default-color' => 'e6e6e6',
 		)
 	);
@@ -157,11 +199,27 @@ function twentytwelve_scripts_styles() {
 	// Loads our main stylesheet.
 	wp_enqueue_style( 'twentytwelve-style', get_stylesheet_uri() );
 
+	// Theme block stylesheet.
+	wp_enqueue_style( 'twentytwelve-block-style', get_template_directory_uri() . '/css/blocks.css', array( 'twentytwelve-style' ), '20181230' );
+
 	// Loads the Internet Explorer specific stylesheet.
 	wp_enqueue_style( 'twentytwelve-ie', get_template_directory_uri() . '/css/ie.css', array( 'twentytwelve-style' ), '20121010' );
 	$wp_styles->add_data( 'twentytwelve-ie', 'conditional', 'lt IE 9' );
 }
 add_action( 'wp_enqueue_scripts', 'twentytwelve_scripts_styles' );
+
+/**
+ * Enqueue styles for the block-based editor.
+ *
+ * @since Twenty Twelve 2.6
+ */
+function twentytwelve_block_editor_styles() {
+	// Block styles.
+	wp_enqueue_style( 'twentytwelve-block-editor-style', get_template_directory_uri() . '/css/editor-blocks.css', array(), '20181230' );
+	// Add custom fonts.
+	wp_enqueue_style( 'twentytwelve-fonts', twentytwelve_get_font_url(), array(), null );
+}
+add_action( 'enqueue_block_editor_assets', 'twentytwelve_block_editor_styles' );
 
 /**
  * Add preconnect for Google Fonts.
@@ -330,7 +388,7 @@ if ( ! function_exists( 'twentytwelve_content_nav' ) ) :
 				<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentytwelve' ) ); ?></div>
 				<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentytwelve' ) ); ?></div>
 			</nav><!-- .navigation -->
-		<?php
+			<?php
 	endif;
 	}
 endif;
@@ -352,15 +410,15 @@ if ( ! function_exists( 'twentytwelve_comment' ) ) :
 			case 'pingback':
 			case 'trackback':
 				// Display trackbacks differently than normal comments.
-		?>
+				?>
 		<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
 		<p><?php _e( 'Pingback:', 'twentytwelve' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'twentytwelve' ), '<span class="edit-link">', '</span>' ); ?></p>
-	<?php
+				<?php
 				break;
 			default:
 				// Proceed with normal comments.
 				global $post;
-		?>
+				?>
 		<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
 		<article id="comment-<?php comment_ID(); ?>" class="comment">
 			<header class="comment-meta comment-author vcard">
@@ -379,7 +437,7 @@ if ( ! function_exists( 'twentytwelve_comment' ) ) :
 						/* translators: 1: date, 2: time */
 						sprintf( __( '%1$s at %2$s', 'twentytwelve' ), get_comment_date(), get_comment_time() )
 					);
-					?>
+				?>
 				</header><!-- .comment-meta -->
 
 				<?php if ( '0' == $comment->comment_approved ) : ?>
@@ -395,7 +453,8 @@ if ( ! function_exists( 'twentytwelve_comment' ) ) :
 				<?php
 				comment_reply_link(
 					array_merge(
-						$args, array(
+						$args,
+						array(
 							'reply_text' => __( 'Reply', 'twentytwelve' ),
 							'after'      => ' <span>&darr;</span>',
 							'depth'      => $depth,
@@ -403,10 +462,10 @@ if ( ! function_exists( 'twentytwelve_comment' ) ) :
 						)
 					)
 				);
-?>
+				?>
 				</div><!-- .reply -->
 			</article><!-- #comment-## -->
-		<?php
+				<?php
 				break;
 		endswitch; // end comment_type check
 	}
@@ -551,14 +610,16 @@ function twentytwelve_customize_register( $wp_customize ) {
 
 	if ( isset( $wp_customize->selective_refresh ) ) {
 		$wp_customize->selective_refresh->add_partial(
-			'blogname', array(
+			'blogname',
+			array(
 				'selector'            => '.site-title > a',
 				'container_inclusive' => false,
 				'render_callback'     => 'twentytwelve_customize_partial_blogname',
 			)
 		);
 		$wp_customize->selective_refresh->add_partial(
-			'blogdescription', array(
+			'blogdescription',
+			array(
 				'selector'            => '.site-description',
 				'container_inclusive' => false,
 				'render_callback'     => 'twentytwelve_customize_partial_blogdescription',

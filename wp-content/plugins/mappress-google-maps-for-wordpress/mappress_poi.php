@@ -7,6 +7,7 @@ class Mappress_Poi extends Mappress_Obj {
 		$point = array('lat' => 0, 'lng' => 0),
 		$poly,
 		$postid,
+		$props = array(),
 		$kml,
 		$thumbnail,
 		$title = '',
@@ -20,15 +21,6 @@ class Mappress_Poi extends Mappress_Obj {
 
 	function __construct($atts = '') {
 		parent::__construct($atts);
-	}
-
-	// Work-around for PHP issues with circular references (serialize, print_r, json_encode, etc.)
-	function map($map = null) {
-		static $_map;
-		if ($map)
-			$_map = $map;
-		else
-			return $_map;
 	}
 
 	/**
@@ -67,45 +59,6 @@ class Mappress_Poi extends Mappress_Obj {
 			}
 		}
 	}
-
-	function set_html() {
-		global $post;
-		$html = Mappress::get_template('map-poi', array('poi' => $this));
-		$html = apply_filters('mappress_poi_html', $html, $this);
-		$this->html = $html;
-	}
-
-	function part($part) {
-		switch($part) {
-			case 'body' :
-				$html = $this->body;
-				break;
-
-			case 'directions' :
-				$html = (Mappress::$options->directions != 'none') ? sprintf("<a href='#' data-mapp-action='dir'>%s</a>", __('Directions', 'mappress-google-maps-for-wordpress')) : '';
-				break;
-
-			case 'icon' :
-				$html = (Mappress::$pro) ? sprintf("<img class='mapp-icon' src='%s' />", Mappress_Icons::get($this->iconid)) : '';
-				break;
-
-			case 'thumbnail' :
-				$html = ($this->thumbnail) ? sprintf("<a href='%s'>%s</a>", $this->url, $this->thumbnail) : '';
-				break;
-
-			case 'title' :
-				$html = $this->title;
-				break;
-
-			case 'title-link' :
-				$link = ($this->postid) ? sprintf("<a href='%s'>%s</a>", $this->url, esc_html($this->title)) : $this->title;
-				$html = $link;
-				break;
-
-		}
-		return (isset($html)) ? $html : "<!-- unknown poi part $part -->";
-	}
-
 
 	/**
 	* Fast excerpt for a poi

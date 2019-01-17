@@ -2548,14 +2548,15 @@ function bp_core_get_components( $type = 'all' ) {
  * @return mixed A URL or an array of dummy pages.
  */
 function bp_nav_menu_get_loggedin_pages() {
+	$bp = buddypress();
 
 	// Try to catch the cached version first.
-	if ( ! empty( buddypress()->wp_nav_menu_items->loggedin ) ) {
-		return buddypress()->wp_nav_menu_items->loggedin;
+	if ( ! empty( $bp->wp_nav_menu_items->loggedin ) ) {
+		return $bp->wp_nav_menu_items->loggedin;
 	}
 
 	// Pull up a list of items registered in BP's primary nav for the member.
-	$bp_menu_items = buddypress()->members->nav->get_primary();
+	$bp_menu_items = $bp->members->nav->get_primary();
 
 	// Some BP nav menu items will not be represented in bp_nav, because
 	// they are not real BP components. We add them manually here.
@@ -2590,11 +2591,11 @@ function bp_nav_menu_get_loggedin_pages() {
 		);
 	}
 
-	if ( empty( buddypress()->wp_nav_menu_items ) ) {
+	if ( empty( $bp->wp_nav_menu_items ) ) {
 		buddypress()->wp_nav_menu_items = new stdClass;
 	}
 
-	buddypress()->wp_nav_menu_items->loggedin = $page_args;
+	$bp->wp_nav_menu_items->loggedin = $page_args;
 
 	return $page_args;
 }
@@ -2614,10 +2615,11 @@ function bp_nav_menu_get_loggedin_pages() {
  * @return mixed A URL or an array of dummy pages.
  */
 function bp_nav_menu_get_loggedout_pages() {
+	$bp = buddypress();
 
 	// Try to catch the cached version first.
-	if ( ! empty( buddypress()->wp_nav_menu_items->loggedout ) ) {
-		return buddypress()->wp_nav_menu_items->loggedout;
+	if ( ! empty( $bp->wp_nav_menu_items->loggedout ) ) {
+		return $bp->wp_nav_menu_items->loggedout;
 	}
 
 	$bp_menu_items = array();
@@ -2664,11 +2666,11 @@ function bp_nav_menu_get_loggedout_pages() {
 		);
 	}
 
-	if ( empty( buddypress()->wp_nav_menu_items ) ) {
-		buddypress()->wp_nav_menu_items = new stdClass;
+	if ( empty( $bp->wp_nav_menu_items ) ) {
+		$bp->wp_nav_menu_items = new stdClass;
 	}
 
-	buddypress()->wp_nav_menu_items->loggedout = $page_args;
+	$bp->wp_nav_menu_items->loggedout = $page_args;
 
 	return $page_args;
 }
@@ -2766,6 +2768,40 @@ function bp_core_get_suggestions( $args ) {
 	 */
 	return apply_filters( 'bp_core_get_suggestions', $retval, $args );
 }
+
+/**
+ * AJAX endpoint for Suggestions API lookups.
+ *
+ * @since 2.1.0
+ * @since 4.0.0 Moved here to make sure this function is available
+ *              even if the Activity component is not active.
+ */
+function bp_ajax_get_suggestions() {
+	if ( ! bp_is_user_active() || empty( $_GET['term'] ) || empty( $_GET['type'] ) ) {
+		wp_send_json_error( 'missing_parameter' );
+		exit;
+	}
+
+	$args = array(
+		'term' => sanitize_text_field( $_GET['term'] ),
+		'type' => sanitize_text_field( $_GET['type'] ),
+	);
+
+	// Support per-Group suggestions.
+	if ( ! empty( $_GET['group-id'] ) ) {
+		$args['group_id'] = absint( $_GET['group-id'] );
+	}
+
+	$results = bp_core_get_suggestions( $args );
+
+	if ( is_wp_error( $results ) ) {
+		wp_send_json_error( $results->get_error_message() );
+		exit;
+	}
+
+	wp_send_json_success( $results );
+}
+add_action( 'wp_ajax_bp_get_suggestions', 'bp_ajax_get_suggestions' );
 
 /**
  * Set data from the BP root blog's upload directory.
@@ -3234,6 +3270,26 @@ function bp_send_email( $email_type, $to, $args = array() ) {
  * @return array
  */
 function bp_email_get_appearance_settings() {
+	/* translators: This is the copyright text for email footers. 1. Copyright year, 2. Site name */
+	$footer_text = array(
+		sprintf(
+			_x( '&copy; %1$s %2$s', 'email', 'buddypress' ),
+			date_i18n( 'Y' ),
+			bp_get_option( 'blogname' )
+		)
+	);
+
+	if ( version_compare( $GLOBALS['wp_version'], '4.9.6', '>=' ) ) {
+		$privacy_policy_url = get_privacy_policy_url();
+		if ( $privacy_policy_url ) {
+			$footer_text[] = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $privacy_policy_url ),
+				esc_html__( 'Privacy Policy', 'buddypress' )
+			);
+		}
+	}
+
 	$default_args = array(
 		'body_bg'           => '#FFFFFF',
 		'body_text_color'   => '#555555',
@@ -3248,12 +3304,7 @@ function bp_email_get_appearance_settings() {
 		'header_text_size'  => 30,
 		'direction'         => is_rtl() ? 'right' : 'left',
 
-		'footer_text' => sprintf(
-			/* translators: email disclaimer, e.g. "© 2016 Site Name". */
-			_x( '&copy; %s %s', 'email', 'buddypress' ),
-			date_i18n( 'Y' ),
-			bp_get_option( 'blogname' )
-		),
+		'footer_text' => implode( ' &middot; ', $footer_text ),
 	);
 
 	$options = bp_parse_args(
@@ -3385,12 +3436,9 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '[{{{site.name}}}] Activate your account', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link: <a href=\"{{{activate.url}}}\">{{{activate.url}}}</a>", 'buddypress' ),
+			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link and click on the <strong>Activate</strong> button:\n<a href=\"{{{activate.url}}}\">{{{activate.url}}}</a>\n\nIf the 'Activation Key' field is empty, copy and paste the following into the field - {{key}}", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_excerpt' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link: {{{activate.url}}}", 'buddypress' ),
-			'args'         => array(
-				'multisite' => true,
-			),
+			'post_excerpt' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link and click on the 'Activate' button: {{{activate.url}}}\n\nIf the 'Activation Key' field is empty, copy and paste the following into the field - {{key}}", 'buddypress' )
 		),
 		'core-user-registration-with-blog' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -3839,4 +3887,44 @@ function bp_get_allowedtags() {
 		'ol' => array(),
 		'li' => array(),
 	) );
+}
+
+/**
+ * Remove script and style tags from a string.
+ *
+ * @since 3.0.1
+ *
+ * @param  string $string The string to strip tags from.
+ * @return string         The stripped tags string.
+ */
+function bp_strip_script_and_style_tags( $string ) {
+	return preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
+}
+
+/**
+ * Checks whether the current installation is "large".
+ *
+ * By default, an installation counts as "large" if there are 10000 users or more.
+ * Filter 'bp_is_large_install' to adjust.
+ *
+ * @since 4.1.0
+ *
+ * @return bool
+ */
+function bp_is_large_install() {
+	// Use the Multisite function if available.
+	if ( function_exists( 'wp_is_large_network' ) ) {
+		$is_large = wp_is_large_network( 'users' );
+	} else {
+		$is_large = bp_core_get_total_member_count() > 10000;
+	}
+
+	/**
+	 * Filters whether the current installation is "large".
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param bool $is_large True if the network is "large".
+	 */
+	return (bool) apply_filters( 'bp_is_large_install', $is_large );
 }

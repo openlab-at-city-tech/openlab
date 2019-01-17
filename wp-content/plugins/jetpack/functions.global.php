@@ -17,6 +17,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Set the admin language, based on user language.
+ *
+ * @since 4.5.0
+ * @deprecated 6.6.0 Use Core function instead.
+ *
+ * @return string
+ */
+function jetpack_get_user_locale() {
+	_deprecated_function( __FUNCTION__, 'jetpack-6.6.0', 'get_user_locale' );
+	return get_user_locale();
+}
+
+/**
  * Determine if this site is an Atomic site or not looking first at the 'at_options' option.
  * As a fallback, check for presence of wpcomsh plugin to determine if a current site has undergone AT.
  *
@@ -98,7 +111,7 @@ function jetpack_get_migration_data( $option_name ) {
  */
 function jetpack_render_tos_blurb() {
 	printf(
-		__( 'By clicking the <strong>Set up Jetpack</strong> button, you agree to our fascinating <a href="%s" target="_blank">Terms of Service</a> and to <a href="%s" target="_blank">share details</a> with WordPress.com', 'jetpack' ),
+		__( 'By clicking the <strong>Set up Jetpack</strong> button, you agree to our <a href="%s" target="_blank">Terms of Service</a> and to <a href="%s" target="_blank">share details</a> with WordPress.com.', 'jetpack' ),
 		'https://wordpress.com/tos',
 		'https://jetpack.com/support/what-data-does-jetpack-sync'
 	);

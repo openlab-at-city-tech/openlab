@@ -1,5 +1,5 @@
 /* global bp, BP_Nouveau, _, Backbone */
-/* @version 3.0.0 */
+/* @version 3.1.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
@@ -535,7 +535,7 @@ window.bp = window.bp || {};
 				type  : 'reset',
 				id    : 'aw-whats-new-reset',
 				className : 'text-button small',
-				value : 'Cancel'
+				value : BP_Nouveau.activity.strings.cancelButton
 			} );
 
 			var submit = new bp.Views.ActivityInput( {
@@ -543,7 +543,7 @@ window.bp = window.bp || {};
 				id    : 'aw-whats-new-submit',
 				className : 'button',
 				name  : 'aw-whats-new-submit',
-				value : 'Post Update'
+				value : BP_Nouveau.activity.strings.postUpdateButton
 			} );
 
 			this.views.set( [ submit, reset ] );

@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.4
-Tested up to: 4.8
+Tested up to: 5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,56 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 1.71 (2018-12-15)
+-------------------------
+- Unified index.php, archive.php and search.php into index.php
+- Unified page.php and single.php into singular.php
+- Unified all post formats into content.php
+- Removed searchform.php from the theme
+- Unified and improved search styles
+- General styling improvements, old vendor prefix cleanup
+- Changed the toggles to button elements
+- Removed styling that removed outlines from links on focus
+- Compressed the default header
+- Set the version variable on enqueues for cache busting
+
+Version 1.70 (2018-12-07)
+-------------------------
+- Fixed Gutenberg style changes required due to changes in the block editor CSS and classes
+- Fixed the Classic Block TinyMCE buttons being set to the wrong font
+- Fixed a couple of front-end formatting issues in Gutenberg
+
+Version 1.69 (2018-11-30)
+-------------------------
+- Fixed Gutenberg editor styles font being overwritten
+
+Version 1.68 (2018-11-13)
+-------------------------
+- Fixed aligncenter issue in Gutenberg
+- Fixed alignment of the last item in WP Block Gallery
+- Updated theme description
+
+Version 1.67 (2018-09-08)
+-------------------------
+- Fixed four _x() translateable string without instructions
+
+Version 1.66 (2018-09-08)
+-------------------------
+- The Gutenberg [G] update!
+- [G] Added front-end Gutenberg style
+- [G] Added Gutenberg editor styles
+- [G] Added a Gutenberg color palette, with custom accent color support
+- [G] Added Gutenberg font sizes
+– Refined the custom CSS code for the accent color to be less messy
+– Made it possible to deactivate Google Fonts by a translateable string, same as the TwentyXXX implementation
+- Made the name of the "primary" menu theme location translateable
+- CSS formatting and other minor tweaks and fixes
+
+Version 1.65 (2018-06-01)
+-------------------------
+- Fixed the date output for the 30 most recent posts in template-archives.php
+- Fixed error in pre-PHP 5.5
 
 Version 1.64 (2018-05-24)
 -------------------------

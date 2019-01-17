@@ -103,6 +103,7 @@ class Jetpack_Sync_Defaults {
 		'jetpack_protect_key',
 		'jetpack_protect_global_whitelist',
 		'jetpack_sso_require_two_step',
+		'jetpack_sso_match_by_email',
 		'jetpack_relatedposts',
 		'verification_services_codes',
 		'users_can_register',
@@ -130,6 +131,13 @@ class Jetpack_Sync_Defaults {
 		'mailserver_pass', // Not syncing contents, only the option name
 		'mailserver_port',
 		'wp_page_for_privacy_policy',
+		'enable_header_ad',
+		'wordads_second_belowpost',
+		'wordads_display_front_page',
+		'wordads_display_post',
+		'wordads_display_page',
+		'wordads_display_archive',
+		'wordads_custom_adstxt',
 	);
 
 	public static function get_options_whitelist() {
@@ -140,7 +148,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 4.8
+		 * @since 4.8.0
 		 *
 		 * @param array The default list of options.
 		 */
@@ -159,7 +167,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 6.1
+		 * @since 6.1.0
 		 *
 		 * @param array The list of options synced without content.
 		 */
@@ -194,7 +202,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 4.8
+		 * @since 4.8.0
 		 *
 		 * @param array The default list of constants options.
 		 */
@@ -232,6 +240,7 @@ class Jetpack_Sync_Defaults {
 		'site_icon_url'                    => array( 'Jetpack_Sync_Functions', 'site_icon_url' ),
 		'roles'                            => array( 'Jetpack_Sync_Functions', 'roles' ),
 		'timezone'                         => array( 'Jetpack_Sync_Functions', 'get_timezone' ),
+		'available_jetpack_blocks'         => array( 'Jetpack_Gutenberg', 'get_block_availability' ),
 	);
 
 
@@ -273,7 +282,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 4.8
+		 * @since 4.8.0
 		 *
 		 * @param array The default list of callables.
 		 */
@@ -347,7 +356,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 4.8
+		 * @since 4.8.0
 		 *
 		 * @param array The default list of multisite callables.
 		 */
@@ -400,7 +409,7 @@ class Jetpack_Sync_Defaults {
 		 *
 		 * @module sync
 		 *
-		 * @since 4.8
+		 * @since 4.8.0
 		 *
 		 * @param array The default list of meta data keys.
 		 */

@@ -4,7 +4,7 @@ class GP_Media_Library extends GWPerk {
 
 	public $version = GP_MEDIA_LIBRARY_VERSION;
 	public $min_gravity_perks_version = '1.2.12';
-	public $min_gravity_forms_version = '1.9.18';
+	public $min_gravity_forms_version = '2.0.8';
 	public $min_wp_version = '4.4';
 	public $prefix = 'gpMediaLibrary';
 	public $post_type = 'gplp';
@@ -216,7 +216,7 @@ class GP_Media_Library extends GWPerk {
 				 * as the object to which the uploaded file is attached. This causes images to be uploaded to the
 				 * time-based directory of that post (i.e. /2011/01/file.jpg).
 				 */
-				if( empty( $media_data['post_id'] ) ) {
+				if( empty( $media_data['post_id'] ) && isset( $GLOBALS['post'] ) ) {
 					$_globals_post = $GLOBALS['post'];
 					unset( $GLOBALS['post'] );
 				}

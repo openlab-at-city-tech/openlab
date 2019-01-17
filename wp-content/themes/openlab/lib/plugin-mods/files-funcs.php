@@ -61,7 +61,7 @@ function openlab_bp_group_documents_display_content() {
 
         <?php //-----------------------------------------------------------------------LIST VIEW--  ?>
 
-        <?php if ($template->document_list && count($template->document_list >= 1)) { ?>
+        <?php if (is_array($template->document_list) && count($template->document_list) ) { ?>
 
             <?php if (get_option('bp_group_documents_use_categories')) { ?>
                 <div id="bp-group-documents-categories">
@@ -208,10 +208,10 @@ function openlab_bp_group_documents_display_content() {
                                 <div id="document-detail-clear" class="clear"></div>
                                 <div class="document-info">
                                     <label><?php _e('Display Name:', 'bp-group-documents'); ?></label>
-                                    <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo $template->name ?>" />
+                                    <input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
                                     <?php if (BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS) { ?>
                                         <label><?php _e('Description:', 'bp-group-documents'); ?></label>
-                                        <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo $template->description; ?></textarea>
+                                        <textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
                                     <?php } ?>
                                     <label></label>
                                 </div>
@@ -353,10 +353,17 @@ function openlab_group_documents_email_notification( $document ) {
 		}
 	}
 
+	$group_user_subscriptions = ass_get_subscriptions_for_group( bp_get_current_group_id() );
+
 	//now get all member emails, checking to make sure not to send any emails twice
 	$user_ids = BP_Groups_Member::get_group_member_ids( $bp->groups->current_group->id );
 	foreach ( (array)$user_ids as $user_id ) {
 		if ( 'no' == get_user_meta( $user_id, 'notification_group_documents_upload_member' ) ) continue;
+
+        // Don't send if the user gets digests for this group.
+        if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'sum', 'dig' ], true ) ) {
+            continue;
+        }
 
 		$ud = bp_core_get_core_userdata( $user_id );
 		if( !in_array( $ud->user_email, $emails ) ) {

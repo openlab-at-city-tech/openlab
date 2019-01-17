@@ -1,10 +1,10 @@
 === BuddyPress ===
 Contributors: johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw2113, dcavins, hnla, karmatosed, slaFFik, dimensionmedia, henrywright, netweb, offereins, espellcaste, modemlooper, danbp, Venutius, apeatling, shanebp
 Tags: user profiles, activity streams, messaging, friends, user groups, notifications, community, social networking
-Requires at least: 4.5
-Tested up to: 4.9.6
+Requires at least: 4.6
+Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.0.0
+Stable tag: 4.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,7 @@ Search WordPress.org for "BuddyPress" to find them all!
 
 If you're interested in contributing to BuddyPress, we'd love to have you. Head over to the [BuddyPress Documentation](https://codex.buddypress.org/participate-and-contribute/) site to find out how you can pitch in.
 
-BuddyPress is available in many languages thanks to the volunteer efforts of individuals all around the world. Check out our <a href="https://codex.buddypress.org/translations/">translations page</a> on the BuddyPress Documentation site for more details. If you are a polygot, please <a href="https://translate.wordpress.org/projects/wp-plugins/buddypress">consider helping translate BuddyPress</a> into your language.
+BuddyPress is available in many languages thanks to the volunteer efforts of individuals all around the world. Check out our <a href="https://codex.buddypress.org/translations/">translations page</a> on the BuddyPress Documentation site for more details. If you are a polyglot, please <a href="https://translate.wordpress.org/projects/wp-plugins/buddypress">consider helping translate BuddyPress</a> into your language.
 
 Growing the BuddyPress community means better software for everyone!
 
@@ -126,11 +126,17 @@ Try <a href="https://wordpress.org/plugins/bbpress/">bbPress</a>. It integrates 
 
 == Upgrade Notice ==
 
-= 3.0.0 =
-See: https://codex.buddypress.org/releases/version-3-0-0/
+= 4.1.0 =
+See: https://codex.buddypress.org/releases/version-4-1-0/
+
+= 4.0.0 =
+See: https://codex.buddypress.org/releases/version-4-0-0/
 
 == Changelog ==
 
-= 3.0.0 =
+= 4.1.0 =
+See: https://codex.buddypress.org/releases/version-4-1-0/
 
-See: https://codex.buddypress.org/releases/version-3-0-0/
+= 4.0.0 =
+See: https://codex.buddypress.org/releases/version-4-0-0/
+

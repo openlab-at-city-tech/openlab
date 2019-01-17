@@ -33,8 +33,37 @@ jQuery( document ).ready( function( $ ) {
 		containment: 'document'
 	});
 
+	$('.container-classic-block' ).sortable({
+		connectWith: '.container-classic-block',
+		items: '> li',
+		cursor: 'move',
+		stop: function( event, ui ) {
+			var toolbar_id;
+
+			if ( ui && ( toolbar_id = ui.item.parent().attr( 'id' ) ) ) {
+				ui.item.find( 'input.tadv-button' ).attr( 'name', toolbar_id + '[]' );
+			}
+		},
+		activate: function( event, ui ) {
+			$(this).parent().addClass( 'highlighted' );
+		},
+		deactivate: function( event, ui ) {
+			$(this).parent().removeClass( 'highlighted' );
+		},
+		revert: 300,
+		opacity: 0.7,
+		placeholder: 'tadv-placeholder',
+		forcePlaceholderSize: true,
+		containment: 'document'
+	});
+	
+
 	$( '#menubar' ).on( 'change', function() {
-		$( '#tadv-mce-menu' ).toggleClass( 'enabled', $(this).prop('checked') );
+		$( '.tadv-mce-menu.tadv-classic-editor' ).toggleClass( 'enabled', $(this).prop('checked') );
+	});
+
+	$( '#menubar_block' ).on( 'change', function() {
+		$( '.tadv-mce-menu.tadv-block-editor' ).toggleClass( 'enabled', $(this).prop('checked') );
 	});
 
 	$( '#tadvadmins' ).on( 'submit', function() {
@@ -85,7 +114,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 		});
 
-		$( '#tadv-mce-menu .tadv-translate' ).each( function( i, element ) {
+		$( '.tadv-mce-menu .tadv-translate' ).each( function( i, element ) {
 			var $element = $( element ),
 				text = $element.text();
 

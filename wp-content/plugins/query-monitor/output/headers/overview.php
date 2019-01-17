@@ -1,24 +1,15 @@
 <?php
-/*
-Copyright 2009-2016 John Blackbourn
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-*/
+/**
+ * General overview output for HTTP headers.
+ *
+ * @package query-monitor
+ */
 
 class QM_Output_Headers_Overview extends QM_Output_Headers {
 
 	public function get_output() {
 
-		$data = $this->collector->get_data();
+		$data    = $this->collector->get_data();
 		$headers = array();
 
 		$headers['time_taken'] = number_format_i18n( $data['time_taken'], 4 );
@@ -50,7 +41,8 @@ class QM_Output_Headers_Overview extends QM_Output_Headers {
 }
 
 function register_qm_output_headers_overview( array $output, QM_Collectors $collectors ) {
-	if ( $collector = QM_Collectors::get( 'overview' ) ) {
+	$collector = $collectors::get( 'overview' );
+	if ( $collector ) {
 		$output['overview'] = new QM_Output_Headers_Overview( $collector );
 	}
 	return $output;

@@ -138,7 +138,7 @@ function bp_get_directory_title( $component = '' ) {
 	$title = '';
 
 	// Use the string provided by the component.
-	if ( ! empty( buddypress()->{$component}->directory_title ) ) {
+	if ( isset( buddypress()->{$component}->directory_title ) && buddypress()->{$component}->directory_title ) {
 		$title = buddypress()->{$component}->directory_title;
 
 	// If none is found, concatenate.
@@ -192,15 +192,11 @@ function bp_get_options_avatar() {
 function bp_comment_author_avatar() {
 	global $comment;
 
-	if ( function_exists( 'bp_core_fetch_avatar' ) ) {
-		echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array(
-			'item_id' => $comment->user_id,
-			'type'    => 'thumb',
-			'alt'     => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $comment->user_id ) )
-		) ) );
-	} elseif ( function_exists( 'get_avatar' ) ) {
-		get_avatar();
-	}
+	echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array(
+		'item_id' => $comment->user_id,
+		'type'    => 'thumb',
+		'alt'     => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $comment->user_id ) )
+	) ) );
 }
 
 /**
@@ -211,15 +207,11 @@ function bp_comment_author_avatar() {
 function bp_post_author_avatar() {
 	global $post;
 
-	if ( function_exists( 'bp_core_fetch_avatar' ) ) {
-		echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array(
-			'item_id' => $post->post_author,
-			'type'    => 'thumb',
-			'alt'     => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $post->post_author ) )
-		) ) );
-	} elseif ( function_exists( 'get_avatar' ) ) {
-		get_avatar();
-	}
+	echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array(
+		'item_id' => $post->post_author,
+		'type'    => 'thumb',
+		'alt'     => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $post->post_author ) )
+	) ) );
 }
 
 /**
@@ -1157,7 +1149,9 @@ function bp_blog_signup_allowed() {
  *              otherwise false.
  */
 function bp_account_was_activated() {
-	$activation_complete = ! empty( buddypress()->activation_complete ) || ( bp_is_current_component( 'activate' ) && ! empty( $_GET['activated'] ) );
+	$bp = buddypress();
+
+	$activation_complete = ! empty( $bp->activation_complete ) || ( bp_is_current_component( 'activate' ) && ! empty( $_GET['activated'] ) );
 
 	return $activation_complete;
 }
@@ -2089,7 +2083,9 @@ function bp_is_active( $component = '', $feature = '' ) {
 				$component = 'profile';
 			}
 
-			if ( empty( buddypress()->$component->features ) || false === in_array( $feature, buddypress()->$component->features, true ) ) {
+			$component_features = isset( buddypress()->{$component}->features ) ? buddypress()->{$component}->features : array();
+
+			if ( empty( $component_features ) || false === in_array( $feature, $component_features, true ) ) {
 				$retval = false;
 			}
 
@@ -3245,7 +3241,7 @@ function bp_the_body_class() {
 				$bp_classes[] = 'my-activity';
 			}
 		} else {
-			if ( bp_get_current_member_type() ) {
+			if ( bp_get_current_member_type() || ( bp_is_groups_directory() && bp_get_current_group_directory_type() ) ) {
 				$bp_classes[] = 'type';
 			}
 		}

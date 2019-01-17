@@ -210,7 +210,7 @@ class Jetpack_Sync_Functions {
 		/**
 		 * Allows overriding of the home_url value that is synced back to WordPress.com.
 		 *
-		 * @since 5.2
+		 * @since 5.2.0
 		 *
 		 * @param string $home_url
 		 */
@@ -223,7 +223,7 @@ class Jetpack_Sync_Functions {
 		/**
 		 * Allows overriding of the site_url value that is synced back to WordPress.com.
 		 *
-		 * @since 5.2
+		 * @since 5.2.0
 		 *
 		 * @param string $site_url
 		 */
@@ -341,12 +341,12 @@ class Jetpack_Sync_Functions {
 		return $wp_version;
 	}
 
-	public static function site_icon_url() {
+	public static function site_icon_url( $size = 512 ) {
 		if ( ! function_exists( 'get_site_icon_url' ) || ! has_site_icon() ) {
 			return get_option( 'jetpack_site_icon_url' );
 		}
 
-		return get_site_icon_url();
+		return get_site_icon_url( $size );
 	}
 
 	public static function roles() {
@@ -382,6 +382,6 @@ class Jetpack_Sync_Functions {
 		);
 
 		/* translators: %s is UTC offset, e.g. "+1" */
-		return sprintf( __( 'UTC%s' ), $formatted_gmt_offset );
+		return sprintf( __( 'UTC%s', 'jetpack' ), $formatted_gmt_offset );
 	}
 }

@@ -342,7 +342,7 @@ class GFCommon {
 		 */
 		$use_rfc = apply_filters( 'gform_rfc_url_validation', true );
 
-		$is_valid = ( strpos( $url, 'http://' ) === 0 || strpos( $url, 'https://' ) === 0 );
+		$is_valid = preg_match( "/^(https?:\/\/)/i", $url );
 
 		if ( $use_rfc ) {
 			$is_valid = $is_valid && filter_var( $url, FILTER_VALIDATE_URL ) !== false;
@@ -1135,7 +1135,8 @@ class GFCommon {
 			$text           = str_replace( '{date_dmy}', $url_encode ? urlencode( $local_date_dmy ) : $local_date_dmy, $text );
 
 			// ip
-			$ip = isset( $entry['ip'] ) ? $entry['ip'] : GFFormsModel::get_ip();
+			$request_ip = rgars( $form, 'personalData/preventIP' ) ? '' : GFFormsModel::get_ip();
+			$ip = isset( $entry['ip'] ) ? $entry['ip'] : $request_ip;
 			if ( $esc_html ) {
 				$ip = esc_html( $ip );
 			}
@@ -1413,7 +1414,8 @@ class GFCommon {
 							}
 							$product_name .= implode( ', ', $options ) . ')';
 						}
-						$subtotal = floatval( $product['quantity'] ) * $price;
+						$quantity = self::to_number( $product['quantity'], $lead['currency'] );
+						$subtotal = $quantity * $price;
 						$total += $subtotal;
 
 						$field_data .= "{$product_name}: " . self::to_money( $subtotal, $lead['currency'] ) . "\n\n";
@@ -1507,7 +1509,8 @@ class GFCommon {
 								$field_data .= '<li style="padding:4px 0 4px 0">' . $option['option_label'] . '</li>';
 							}
 						}
-						$subtotal = floatval( $product['quantity'] ) * $price;
+						$quantity = self::to_number( $product['quantity'], $lead['currency'] );
+						$subtotal = $quantity * $price;
 						$total += $subtotal;
 
 						$field_data .= '</ul>
@@ -1764,12 +1767,12 @@ class GFCommon {
 		}
 
 		// Running through variable replacement
-		$to        = GFCommon::replace_variables( $email_to, $form, $lead, false, false, true, 'html', $data );
-		$subject   = GFCommon::replace_variables( rgar( $notification, 'subject' ), $form, $lead, false, false, true, 'text', $data );
-		$from      = GFCommon::replace_variables( rgar( $notification, 'from' ), $form, $lead, false, false, true, 'html', $data );
-		$from_name = GFCommon::replace_variables( rgar( $notification, 'fromName' ), $form, $lead, false, false, true, 'text', $data );
-		$bcc       = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, true, 'html', $data );
-		$replyTo   = GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, true, 'html', $data );
+		$to        = GFCommon::replace_variables( $email_to, $form, $lead, false, false, false, 'text', $data );
+		$subject   = GFCommon::replace_variables( rgar( $notification, 'subject' ), $form, $lead, false, false, false, 'text', $data );
+		$from      = GFCommon::replace_variables( rgar( $notification, 'from' ), $form, $lead, false, false, false, 'text', $data );
+		$from_name = GFCommon::replace_variables( rgar( $notification, 'fromName' ), $form, $lead, false, false, false, 'text', $data );
+		$bcc       = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, false, 'text', $data );
+		$replyTo   = GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, false, 'text', $data );
 
 		/**
 		 * Enable the CC header for the notification.
@@ -1781,9 +1784,9 @@ class GFCommon {
 		 * @param array $from         The current form object.
 		 */
 		$enable_cc = gf_apply_filters( array( 'gform_notification_enable_cc', $form['id'], $notification['id'] ), false, $notification, $form );
-		
+
 		// Set CC if enabled.
-		$cc = $enable_cc ? GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, true, 'html', $data ) : null;
+		$cc = $enable_cc ? GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, false, 'text', $data ) : null;
 
 		$message_format = rgempty( 'message_format', $notification ) ? 'html' : rgar( $notification, 'message_format' );
 
@@ -1802,6 +1805,41 @@ class GFCommon {
 		} else {
 			$attachments = array();
 		}
+
+		// Add attachment fields.
+		if ( rgar( $notification, 'enableAttachments', false ) ) {
+
+			// Get file upload fields and upload root.
+			$upload_fields = GFCommon::get_fields_by_type( $form, array( 'fileupload' ) );
+			$upload_root   = GFFormsModel::get_upload_root();
+
+			foreach ( $upload_fields as $upload_field ) {
+
+				// Get field value.
+				$attachment_urls = rgar( $lead, $upload_field->id );
+
+				// If field value is empty, skip.
+				if ( empty( $attachment_urls ) ) {
+					self::log_debug( __METHOD__ . '(): No file(s) to attach for field #' . $upload_field->id );
+					continue;
+				}
+
+				// Convert to array.
+				$attachment_urls = $upload_field->multipleFiles ? json_decode( stripslashes( $attachment_urls ), true ) : array( $attachment_urls );
+
+				self::log_debug( __METHOD__ . '(): Attaching file(s) for field #' . $upload_field->id . '. ' . print_r( $attachment_urls, true ) );
+
+				// Loop through attachment URLs; replace URL with path and add to attachments.
+				foreach ( $attachment_urls as $attachment_url ) {
+					$attachment_url = preg_replace( '|^(.*?)/gravity_forms/|', $upload_root, $attachment_url );
+					$attachments[]  = $attachment_url;
+				}
+
+			}
+
+		}
+
+		$attachments = array_unique( $attachments );
 
 		if ( $message_format === 'multipart' ) {
 
@@ -2298,8 +2336,42 @@ Content-Type: text/html;
 		return self::has_field_by_type( $form, 'list' );
 	}
 
+	/**
+	 * Whether the form contains a repeater field.
+	 *
+	 * @since 2.4
+	 *
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	public static function has_repeater_field( $form ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( $field instanceof GF_Field_Repeater ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static function has_credit_card_field( $form ) {
 		return self::has_field_by_type( $form, 'creditcard' );
+	}
+
+	/**
+	 * Whether the form has a consent field.
+	 *
+	 * @since 2.4
+	 *
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	public static function has_consent_field( $form ) {
+		return self::has_field_by_type( $form, 'consent' );
 	}
 
 	private static function has_field_by_type( $form, $type ) {
@@ -3217,9 +3289,9 @@ Content-Type: text/html;
 		$field_id = $is_admin || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
 		$form_id  = $is_admin && empty( $form_id ) ? rgget( 'id' ) : $form_id;
 
-		if ( rgget('view') == 'entry' ) {
+		if ( rgget('view') == 'entry' && ! empty( $lead_id ) ) {
 			$lead      = RGFormsModel::get_lead( $lead_id );
-			$post_id   = $lead['post_id'];
+			$post_id   = rgar( $lead, 'post_id' );
 			$post_link = '';
 			if ( is_numeric( $post_id ) && self::is_post_field( $field ) ) {
 				$post_link = "<div>You can <a href='post.php?action=edit&post=$post_id'>edit this post</a> from the post page.</div>";
@@ -3237,7 +3309,7 @@ Content-Type: text/html;
 		 * @param string $value   The field value.
 		 * @param int    $form_id The form ID.
 		 */
-		$field_input = gf_apply_filters( array( 'gform_field_input', $form['id'], $field->id ), '', $field, $value, $lead_id, $form_id );
+		$field_input = gf_apply_filters( array( 'gform_field_input', $form_id, $field->id ), '', $field, $value, $lead_id, $form_id );
 		if ( $field_input ) {
 			return $field_input;
 		}
@@ -3601,6 +3673,7 @@ Content-Type: text/html;
 										$option_info = self::get_option_info( $value, $option_field, $use_choice_text );
 										if ( ! empty( $option_info ) ) {
 											$products[ $id ]['options'][] = array(
+												'id'           => $option_field->id,
 												'field_label'  => rgobj( $option_field, 'label' ),
 												'option_name'  => rgar( $option_info, 'name' ),
 												'option_label' => $option_label . ': ' . rgar( $option_info, 'name' ),
@@ -3611,6 +3684,7 @@ Content-Type: text/html;
 								} elseif ( ! empty( $option_value ) ) {
 									$option_info                  = self::get_option_info( $option_value, $option_field, $use_choice_text );
 									$products[ $id ]['options'][] = array(
+										'id'           => $option_field->id,
 										'field_label'  => rgobj( $option_field, 'label' ),
 										'option_name'  => rgar( $option_info, 'name' ),
 										'option_label' => $option_label . ': ' . rgar( $option_info, 'name' ),
@@ -3693,7 +3767,8 @@ Content-Type: text/html;
 					$price += self::to_number( $option['price'] );
 				}
 			}
-			$subtotal = floatval( $product['quantity'] ) * $price;
+			$quantity = self::to_number( $product['quantity'], GFCommon::get_currency() );
+			$subtotal = $quantity * $price;
 			$total += $subtotal;
 
 		}
@@ -4801,34 +4876,9 @@ Content-Type: text/html;
 	// used by the gfFieldFilterUI() jQuery plugin
 	public static function get_field_filter_settings( $form ) {
 
-		$all_fields = $form['fields'];
-
-		// set up filters
-		$fields        = $all_fields;
 		$exclude_types = array( 'rank', 'page', 'html' );
 
-		$operators_by_input_type = array(
-			'default'     => array( 'is', 'isnot', '>', '<' ),
-			'name'        => array( 'is', 'isnot', '>', '<', 'contains' ),
-			'address'     => array( 'is', 'isnot', '>', '<', 'contains' ),
-			'text'        => array( 'is', 'isnot', '>', '<', 'contains' ),
-			'textarea'    => array( 'is', 'isnot', '>', '<', 'contains' ),
-			'checkbox'    => array( 'is' ),
-			'multiselect' => array( 'contains' ),
-			'number'      => array( 'is', 'isnot', '>', '<' ),
-			'select'      => array( 'is', 'isnot', '>', '<' ),
-			'likert'      => array( 'is', 'isnot' ),
-			'list'        => array( 'contains' )
-		);
-
-		for ( $i = 0; $i < count( $all_fields ); $i ++ ) {
-			$input_type = GFFormsmodel::get_input_type( $all_fields[ $i ] );
-			if ( in_array( $input_type, $exclude_types ) || $all_fields[ $i ]->displayOnly ) {
-				unset( $fields[ $i ] );
-			}
-		}
-		$fields = array_values( $fields );
-
+		// Initialize filters.
 		$field_filters = array(
 			array(
 				'key'             => '0',
@@ -4838,99 +4888,58 @@ Content-Type: text/html;
 			),
 		);
 
-		foreach ( $fields as $field ) {
+		/** @var GF_Field $field */
+		foreach ( $form['fields'] as $field ) {
+			$input_type = $field->get_input_type();
 
-			$input_type = GFFormsModel::get_input_type( $field );
-
-			$operators = isset( $operators_by_input_type[ $input_type ] ) ? $operators_by_input_type[ $input_type ] : $operators_by_input_type['default'];
-
-			if ( $field->type == 'product' && in_array( $input_type, array( 'radio', 'select' ) ) ) {
-				$operators = array( 'is' );
-			} elseif ( ! isset( $field->choices ) && ! in_array( 'contains', $operators ) ) {
-				$operators[] = 'contains';
+			if ( in_array( $input_type, $exclude_types ) || $field->displayOnly ) {
+				continue;
 			}
 
-			$field_filter = array();
-			$key          = $field->id;
-			if ( $input_type == 'likert' && $field->gsurveyLikertEnableMultipleRows ) {
-				// multi-row likert fields
-				$field_filter['key']   = $key;
-				$field_filter['group'] = true;
-				$field_filter['text']  = GFFormsModel::get_label( $field );
-				$sub_filters           = array();
-				$rows                  = $field->gsurveyLikertRows;
-				foreach ( $rows as $row ) {
-					$sub_filter                    = array();
-					$sub_filter['key']             = $key . '|' . rgar( $row, 'value' );
-					$sub_filter['text']            = rgar( $row, 'text' );
-					$sub_filter['type']            = 'field';
-					$sub_filter['preventMultiple'] = false;
-					$sub_filter['operators']       = $operators;
-					$sub_filter['values']          = $field->choices;
-					$sub_filters[]                 = $sub_filter;
-				}
-				$field_filter['filters'] = $sub_filters;
-			} elseif ( ( $input_type == 'name' && $field->nameFormat !== '' && $field->nameFormat !== 'simple' ) || $input_type == 'address' ) {
-				// standard two input name field
-				$field_filter['key']   = $key;
-				$field_filter['group'] = true;
-				$field_filter['text']  = GFFormsModel::get_label( $field );
-				$sub_filters           = array();
-				$inputs                = $field->inputs;
-				foreach ( $inputs as $input ) {
-					if ( rgar( $input, 'isHidden' ) ) {
-						continue;
-					}
+			if ( $field->type == 'post_category' ) {
+				$field = self::add_categories_as_choices( $field, '' );
+			}
 
-					$sub_filter                    = array();
-					$sub_filter['key']             = rgar( $input, 'id' );
-					$sub_filter['text']            = rgar( $input, 'customLabel', rgar( $input, 'label' ) );
-					$sub_filter['preventMultiple'] = false;
-					$sub_filter['operators']       = $operators;
-					$sub_filters[]                 = $sub_filter;
-				}
-				$field_filter['filters'] = $sub_filters;
-			} elseif ( $input_type == 'date' ) {
-				$field_filter['key']             = $key;
-				$field_filter['preventMultiple'] = false;
-				$field_filter['text']            = GFFormsModel::get_label( $field );
+			$filter_settings = $field->get_filter_settings();
+			if ( empty( $filter_settings ) ) {
+				continue;
+			}
 
-				$field_filter['operators'] = $operators;
+			// Start backwards compatibility. Adds missing settings. Required until the field add-ons implement the GF_Field helpers.
 
-				$field_filter['placeholder'] = esc_html__( 'yyyy-mm-dd', 'gravityforms' );
-				$field_filter['cssClass']    = 'datepicker ymd_dash';
-			} else {
-				$field_filter['key']             = $key;
-				$field_filter['preventMultiple'] = false;
-				$field_filter['text']            = GFFormsModel::get_label( $field );
+			if ( $input_type == 'likert' ) {
+				$operators = array( 'is', 'isnot' );
 
-				$field_filter['operators'] = $operators;
-
-				if ( $field->type == 'post_category' ) {
-					$field = self::add_categories_as_choices( $field, '' );
+				if ( ! $field->gsurveyLikertEnableMultipleRows ) {
+					$filter_settings['operators'] = $operators;
 				}
 
-				if ( isset( $field->choices ) ) {
-					$choices = $field->choices;
-					if ( $field->type == 'post_category' ) {
-						foreach ( $choices as &$choice ) {
-							$choice['value'] = $choice['text'] . ':' . $choice['value'];
-						}
+				if ( $field->gsurveyLikertEnableMultipleRows && ! isset( $filter_settings['group'] ) ) {
+					$sub_filters = array();
+					$rows        = $field->gsurveyLikertRows;
+
+					foreach ( $rows as $row ) {
+						$sub_filter                    = array();
+						$sub_filter['key']             = $filter_settings['key'] . '|' . rgar( $row, 'value' );
+						$sub_filter['text']            = rgar( $row, 'text' );
+						$sub_filter['type']            = 'field';
+						$sub_filter['preventMultiple'] = false;
+						$sub_filter['operators']       = $operators;
+						$sub_filter['values']          = $field->choices;
+						$sub_filters[]                 = $sub_filter;
 					}
 
-					if ( $field->enablePrice ) {
-						foreach ( $choices as &$choice ) {
-							$price = rgempty( 'price', $choice ) ? 0 : GFCommon::to_number( rgar( $choice, 'price' ) );
-							$choice['value'] .= '|' . $price;
-						}
-					}
-
-					$field_filter['values'] = $choices;
+					$filter_settings['filters'] = $sub_filters;
+					$filter_settings['group']   = true;
+					unset( $filter_settings['values'], $filter_settings['preventMultiple'], $filter_settings['operators'] );
 				}
 			}
-			$field_filters[] = $field_filter;
 
+			// End of backwards compatibility.
+
+			$field_filters[] = $filter_settings;
 		}
+
 		$form_id            = $form['id'];
 		$entry_meta_filters = self::get_entry_meta_filter_settings( $form_id );
 		$field_filters      = array_merge( $field_filters, $entry_meta_filters );
@@ -5005,51 +5014,18 @@ Content-Type: text/html;
 			),
 			'ip'             => array(
 				'text'      => esc_html__( 'IP Address', 'gravityforms' ),
-				'operators' => array( 'is', 'isnot', '>', '<', 'contains' )
+				'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
 			),
 			'source_url'     => array(
 				'text'      => esc_html__( 'Source URL', 'gravityforms' ),
-				'operators' => array( 'is', 'isnot', '>', '<', 'contains' )
+				'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
 			),
 			'payment_status' => array(
 				'text'      => esc_html__( 'Payment Status', 'gravityforms' ),
 				'operators' => array( 'is', 'isnot' ),
-				'values'    => array(
-					array(
-						'text'  => 'Paid',
-						'value' => 'Paid',
-					),
-					array(
-						'text'  => 'Processing',
-						'value' => 'Processing',
-					),
-					array(
-						'text'  => 'Failed',
-						'value' => 'Failed',
-					),
-					array(
-						'text'  => 'Active',
-						'value' => 'Active',
-					),
-					array(
-						'text'  => 'Cancelled',
-						'value' => 'Cancelled',
-					),
-					array(
-						'text'  => 'Pending',
-						'value' => 'Pending',
-					),
-					array(
-						'text'  => 'Refunded',
-						'value' => 'Refunded',
-					),
-					array(
-						'text'  => 'Voided',
-						'value' => 'Voided',
-					),
-				)
+				'values'    => self::get_entry_payment_statuses_as_choices(),
 			),
-			'payment_date'   => array(
+			'payment_date'    => array(
 				'text'        => esc_html__( 'Payment Date', 'gravityforms' ),
 				'operators'   => array( 'is', 'isnot', '>', '<' ),
 				'placeholder' => __( 'yyyy-mm-dd', 'gravityforms' ),
@@ -5057,18 +5033,86 @@ Content-Type: text/html;
 			),
 			'payment_amount' => array(
 				'text'      => esc_html__( 'Payment Amount', 'gravityforms' ),
-				'operators' => array( 'is', 'isnot', '>', '<', 'contains' )
+				'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
 			),
 			'transaction_id' => array(
 				'text'      => esc_html__( 'Transaction ID', 'gravityforms' ),
-				'operators' => array( 'is', 'isnot', '>', '<', 'contains' )
+				'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
 			),
 			'created_by'     => array(
 				'text'      => esc_html__( 'User', 'gravityforms' ),
 				'operators' => array( 'is', 'isnot' ),
 				'values'    => $account_choices,
-			)
+			),
 		);
+	}
+
+	/**
+	 * Returns an array of supported entry payment statuses.
+	 *
+	 * @since 2.4
+	 *
+	 * @return array
+	 */
+	public static function get_entry_payment_statuses() {
+		$payment_statuses = array(
+			'Authorized' => esc_html__( 'Authorized', 'gravityforms' ),
+			'Paid'       => esc_html__( 'Paid', 'gravityforms' ),
+			'Processing' => esc_html__( 'Processing', 'gravityforms' ),
+			'Failed'     => esc_html__( 'Failed', 'gravityforms' ),
+			'Active'     => esc_html__( 'Active', 'gravityforms' ),
+			'Cancelled'  => esc_html__( 'Cancelled', 'gravityforms' ),
+			'Pending'    => esc_html__( 'Pending', 'gravityforms' ),
+			'Refunded'   => esc_html__( 'Refunded', 'gravityforms' ),
+			'Voided'     => esc_html__( 'Voided', 'gravityforms' ),
+		);
+
+		/**
+		 * Allow custom payment statuses to be defined.
+		 *
+		 * @since 2.4
+		 *
+		 * @param array $payment_statuses An array of entry payment statuses with the entry value as the key (15 char max) to the text for display.
+		 */
+		$payment_statuses = apply_filters( 'gform_payment_statuses', $payment_statuses );
+
+		return $payment_statuses;
+	}
+
+	/**
+	 * Returns an array of supported entry payment statuses formatted for use as drop down choices.
+	 *
+	 * @since 2.4
+	 *
+	 * @return array
+	 */
+	public static function get_entry_payment_statuses_as_choices() {
+		$choices          = array();
+		$payment_statuses = self::get_entry_payment_statuses();
+
+		foreach ( $payment_statuses as $value => $text ) {
+			$choices[] = array(
+				'text'  => $text,
+				'value' => $value,
+			);
+		}
+
+		return $choices;
+	}
+
+	/**
+	 * Returns the display text for the specified entry payment status value.
+	 *
+	 * @since 2.4
+	 *
+	 * @param string $payment_status_value The entry payment status value.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_payment_status_text( $payment_status_value ) {
+		$payment_statuses = self::get_entry_payment_statuses();
+
+		return rgar( $payment_statuses, $payment_status_value, $payment_status_value );
 	}
 
 	public static function get_entry_meta_filter_settings( $form_id ) {

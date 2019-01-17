@@ -3,7 +3,7 @@
  * Messages functions
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 // Exit if accessed directly.
@@ -101,11 +101,11 @@ function bp_nouveau_messages_localize_scripts( $params = array() ) {
 		),
 		'loading'       => __( 'Loading messages. Please wait.', 'buddypress' ),
 		'doingAction'   => array(
-			'read'   => __( 'Marking message(s) as read. Please wait.', 'buddypress' ),
-			'unread' => __( 'Marking message(s) as unread. Please wait.', 'buddypress' ),
-			'delete' => __( 'Deleting message(s). Please wait.', 'buddypress' ),
-			'star'   => __( 'Starring message(s). Please wait.', 'buddypress' ),
-			'unstar' => __( 'Unstarring message(s). Please wait.', 'buddypress' ),
+			'read'   => __( 'Marking messages as read. Please wait.', 'buddypress' ),
+			'unread' => __( 'Marking messages as unread. Please wait.', 'buddypress' ),
+			'delete' => __( 'Deleting messages. Please wait.', 'buddypress' ),
+			'star'   => __( 'Starring messages. Please wait.', 'buddypress' ),
+			'unstar' => __( 'Unstarring messages. Please wait.', 'buddypress' ),
 		),
 		'bulk_actions'  => bp_nouveau_messages_get_bulk_actions(),
 		'howto'         => __( 'Click on the message title to preview it in the Active conversation box below.', 'buddypress' ),
@@ -114,6 +114,7 @@ function bp_nouveau_messages_localize_scripts( $params = array() ) {
 			'one'  => __( '(and 1 other)', 'buddypress' ),
 			'more' => __( '(and %d others)', 'buddypress' ),
 		),
+		'rootUrl' => parse_url( trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() ), PHP_URL_PATH ),
 	);
 
 	// Star private messages.
@@ -139,29 +140,6 @@ function bp_nouveau_messages_localize_scripts( $params = array() ) {
 /**
  * @since 3.0.0
  */
-function bp_nouveau_message_search_form() {
-	$query_arg   = bp_core_get_component_search_query_arg( 'messages' );
-	$placeholder = bp_get_search_default_text( 'messages' );
-
-	$search_form_html = '<form action="" method="get" id="search-messages-form">
-		<label for="messages_search"><input type="text" name="' . esc_attr( $query_arg ) . '" id="messages_search" placeholder="' . esc_attr( $placeholder ) . '" /></label>
-		<input type="submit" id="messages_search_submit" name="messages_search_submit" value="' . esc_attr_e( 'Search', 'buddypress' ) . '" />
-	</form>';
-
-	/**
-	 * Filters the private message component search form.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $search_form_html HTML markup for the message search form.
-	 */
-	echo apply_filters( 'bp_nouveau_message_search_form', $search_form_html );
-}
-add_filter( 'bp_message_search_form', 'bp_nouveau_message_search_form', 10, 1 );
-
-/**
- * @since 3.0.0
- */
 function bp_nouveau_messages_adjust_nav() {
 	$bp = buddypress();
 
@@ -178,15 +156,10 @@ function bp_nouveau_messages_adjust_nav() {
 
 		if ( 'notices' === $secondary_nav_item->slug ) {
 			bp_core_remove_subnav_item( bp_get_messages_slug(), $secondary_nav_item->slug, 'members' );
-		} else {
-			$params = array( 'link' => '#' . $secondary_nav_item->slug );
-
-			// Make sure Admins won't write a messages from the user's account.
-			if ( 'compose' === $secondary_nav_item->slug ) {
-				$params['user_has_access'] = bp_is_my_profile();
-			}
-
-			$bp->members->nav->edit_nav( $params, $secondary_nav_item->slug, bp_get_messages_slug() );
+		} elseif ( 'compose' === $secondary_nav_item->slug ) {
+			$bp->members->nav->edit_nav( array(
+				'user_has_access' => bp_is_my_profile()
+			), $secondary_nav_item->slug, bp_get_messages_slug() );
 		}
 	}
 }
@@ -204,12 +177,10 @@ function bp_nouveau_messages_adjust_admin_nav( $admin_nav ) {
 	foreach ( $admin_nav as $nav_iterator => $nav ) {
 		$nav_id = str_replace( 'my-account-messages-', '', $nav['id'] );
 
-		if ( 'my-account-messages' !== $nav_id ) {
-			if ( 'notices' === $nav_id ) {
-				$admin_nav[ $nav_iterator ]['href'] = esc_url( add_query_arg( array( 'page' => 'bp-notices' ), bp_get_admin_url( 'users.php' ) ) );
-			} else {
-				$admin_nav[ $nav_iterator ]['href'] = $user_messages_link . '#' . trim( $nav_id );
-			}
+		if ( 'notices' === $nav_id ) {
+			$admin_nav[ $nav_iterator ]['href'] = esc_url( add_query_arg( array(
+				'page' => 'bp-notices'
+			), bp_get_admin_url( 'users.php' ) ) );
 		}
 	}
 
@@ -260,7 +231,7 @@ function bp_nouveau_format_notice_notification_for_user( $array ) {
 	}
 
 	return array(
-		'text' => esc_html__( 'New sitewide notice', 'buddypress' ),
+		'text' => __( 'New sitewide notice', 'buddypress' ),
 		'link' => bp_loggedin_user_domain(),
 	);
 }
@@ -295,7 +266,7 @@ function bp_nouveau_push_sitewide_notices() {
 		$closed_notices = array();
 	}
 
-	if ( $notice->id && is_array( $closed_notices ) && ! in_array( $notice->id, $closed_notices ) ) {
+	if ( $notice->id && is_array( $closed_notices ) && ! in_array( $notice->id, $closed_notices, true ) ) {
 		// Inject the notice into the template_message if no other message has priority.
 		$bp = buddypress();
 
@@ -443,4 +414,36 @@ function bp_nouveau_messages_notification_filters() {
 			'position' => 115,
 		)
 	);
+}
+
+/**
+ * Fires Messages Legacy hooks to catch the content and add them
+ * as extra keys to the JSON Messages UI reply.
+ *
+ * @since 3.0.1
+ *
+ * @param array $hooks The list of hooks to fire.
+ * @return array       An associative containing the caught content.
+ */
+function bp_nouveau_messages_catch_hook_content( $hooks = array() ) {
+	$content = array();
+
+	ob_start();
+	foreach ( $hooks as $js_key => $hook ) {
+		if ( ! has_action( $hook ) ) {
+			continue;
+		}
+
+		// Fire the hook.
+		do_action( $hook );
+
+		// Catch the sanitized content.
+		$content[ $js_key ] = bp_strip_script_and_style_tags( ob_get_contents() );
+
+		// Clean the buffer.
+		ob_clean();
+	}
+	ob_end_clean();
+
+	return $content;
 }

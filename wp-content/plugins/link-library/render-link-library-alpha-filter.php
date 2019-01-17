@@ -5,7 +5,7 @@ require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
 function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $searchmode ) {
 
-	global $wpdb;
+	global $wpdb; // Kept with CPT update
 
 	$generaloptions = wp_parse_args( $generaloptions, ll_reset_gen_settings( 'return' ) );
 	extract( $generaloptions );
@@ -18,30 +18,30 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 	$linkcatquery .= 'distinct substring(t.name, 1, 1) as catletter ';
 	$linkcatquery .= 'FROM ' . $LLPluginClass->db_prefix() . 'terms t LEFT JOIN ' . $LLPluginClass->db_prefix(). 'term_taxonomy tt ON (t.term_id = tt.term_id)';
 	$linkcatquery .= ' LEFT JOIN ' . $LLPluginClass->db_prefix() . 'term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ';
-	$linkcatquery .= ' LEFT JOIN ' . $LLPluginClass->db_prefix() . 'links l on (tr.object_id = l.link_id';
-
-	if ( false == $showinvisible ) {
-		$linkcatquery .= ' AND l.link_visible != "N" ';
+	$linkcatquery .= ' LEFT JOIN ' . $LLPluginClass->db_prefix() . 'posts p on (tr.object_id = p.ID and p.post_status in ("publish"';
+	
+	if ( $showinvisible ) {
+		$linkcatquery .= ', "private"';
 	}
 
-	if ( !$showuserlinks ) {
-		$linkcatquery .= ' AND l.link_description not like \'%LinkLibrary:AwaitingModeration:RemoveTextToApprove%\' ';
+	if ( $showuserlinks ) {
+		$linkcatquery .= ', "pending"';
 	}
 
-	$linkcatquery .= ' ) ';
+	$linkcatquery .= ' )) ';
 
-	$linkcatquery .= 'WHERE tt.taxonomy = "link_category"';
+	$linkcatquery .= 'WHERE tt.taxonomy = "link_library_category"';
 
-	if ( !empty( $categorylist ) ) {
-		$linkcatquery .= ' AND t.term_id in ( ' . $categorylist . ' )';
+	if ( !empty( $categorylist_cpt ) ) {
+		$linkcatquery .= ' AND t.term_id in ( ' . $categorylist_cpt . ' )';
 	}
 
-	if ( !empty( $excludecategorylist ) ) {
-		$linkcatquery .= ' AND t.term_id not in ( ' . $excludecategorylist . ' )';
+	if ( !empty( $excludecategorylist_cpt ) ) {
+		$linkcatquery .= ' AND t.term_id not in ( ' . $excludecategorylist_cpt . ' )';
 	}
 
 	if ( $hide_if_empty ) {
-		$linkcatquery .= ' AND l.link_name != "" ';
+		$linkcatquery .= ' AND p.post_title != "" ';
 	}
 
 	$linkcatquery .= ' ORDER by catletter ASC';

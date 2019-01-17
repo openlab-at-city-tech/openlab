@@ -105,30 +105,30 @@ function cuny_site_wide_footer() {
  * A Fancy Debug option: PHP notices were interfering with markup, however
     completely hiding them risks missing important issues that need
     addressing.
-    
+
     To use this functionality, in env.php, add the following:
-    
+
     -----
-    
+
     define('FANCY_DEBUG', true);
     //delete log file
     $log = __DIR__ . "/wp-content/debug.log";
     unlink($log);
-    
+
     define('WP_DEBUG', true);
     define('WP_DEBUG_LOG', true);
     define('WP_DEBUG_DISPLAY', false);
-    
+
     -----
-    
+
     This functionality works like this:
-    
+
     1) First it clears any existing debug.log (to keep entries current to the
     page)
     2) Then it sets up WP_DEBUG to not display, but send errors to debug.log
     3) Finally, the code in openlab-sitewide-footer.php includes debug.log in the sitewide footer with some
     nice styling, so the errors are present, but not interefering with markup
-    
+
     Suggestions to improve this approach are welcome
  */
 function openlab_fancy_debug() {
@@ -170,7 +170,7 @@ function openlab_footer_markup($placeholder = NULL) {
     $site = bp_get_root_domain();
     $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-    $accessibility_link = get_option('footer_link_accessibility_help_post');
+    $accessibility_link = get_blog_option( 1, 'footer_link_accessibility_help_post' );
 
     ob_start();
     include(WPMU_PLUGIN_DIR . '/parts/persistent/footer.php');

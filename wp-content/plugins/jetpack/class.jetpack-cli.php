@@ -4,9 +4,11 @@ WP_CLI::add_command( 'jetpack', 'Jetpack_CLI' );
 
 /**
  * Control your local Jetpack installation.
+ *
+ * Minimum PHP requirement for WP-CLI is PHP 5.3, so ignore PHP 5.2 compatibility issues.
+ * @phpcs:disable PHPCompatibility.PHP.NewLanguageConstructs.t_ns_separatorFound
  */
 class Jetpack_CLI extends WP_CLI_Command {
-
 	// Aesthetics
 	public $green_open  = "\033[32m";
 	public $red_open    = "\033[31m";
@@ -29,8 +31,9 @@ class Jetpack_CLI extends WP_CLI_Command {
 	 *
 	 */
 	public function status( $args, $assoc_args ) {
+		require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-debugger.php' );
 
-		WP_CLI::line( sprintf( __( 'Checking status for %s', 'jetpack' ), esc_url( get_site_url() ) ) );
+		WP_CLI::line( sprintf( __( 'Checking status for %s', 'jetpack' ), esc_url( get_home_url() ) ) );
 
 		if ( ! Jetpack::is_active() ) {
 			WP_CLI::error( __( 'Jetpack is not currently connected to WordPress.com', 'jetpack' ) );
@@ -43,6 +46,20 @@ class Jetpack_CLI extends WP_CLI_Command {
 
 		$master_user_email = Jetpack::get_master_user_email();
 
+		$jetpack_self_test = Jetpack_Debugger::run_self_test(); // Performs the same tests as jetpack.com/support/debug/
+
+		if ( ! $jetpack_self_test || ! wp_remote_retrieve_response_code( $jetpack_self_test ) ) {
+			WP_CLI::error( __( 'Jetpack connection status unknown.', 'jetpack' ) );
+		} else if ( 200 == wp_remote_retrieve_response_code( $jetpack_self_test ) ) {
+			WP_CLI::success( __( 'Jetpack is currently connected to WordPress.com', 'jetpack' ) );
+		} else {
+			WP_CLI::error( __( 'Jetpack connection is broken.', 'jetpack' ) );
+		}
+
+		WP_CLI::line( sprintf( __( 'The Jetpack Version is %s', 'jetpack' ), JETPACK__VERSION ) );
+		WP_CLI::line( sprintf( __( 'The WordPress.com blog_id is %d', 'jetpack' ), Jetpack_Options::get_option( 'id' ) ) );
+		WP_CLI::line( sprintf( __( 'The WordPress.com account for the primary connection is %s', 'jetpack' ), $master_user_email ) );
+
 		/*
 		 * Are they asking for all data?
 		 *
@@ -50,11 +67,6 @@ class Jetpack_CLI extends WP_CLI_Command {
 		 */
 		$all_data = ( isset( $args[0] ) && 'full' == $args[0] ) ? 'full' : false;
 		if ( $all_data ) {
-			WP_CLI::success( __( 'Jetpack is currently connected to WordPress.com', 'jetpack' ) );
-			WP_CLI::line( sprintf( __( "The Jetpack Version is %s", 'jetpack' ), JETPACK__VERSION ) );
-			WP_CLI::line( sprintf( __( "The WordPress.com blog_id is %d", 'jetpack' ), Jetpack_Options::get_option( 'id' ) ) );
-			WP_CLI::line( sprintf( __( 'The WordPress.com account for the primary connection is %s', 'jetpack' ), $master_user_email ) );
-
 			// Heartbeat data
 			WP_CLI::line( "\n" . __( 'Additional data: ', 'jetpack' ) );
 
@@ -86,10 +98,6 @@ class Jetpack_CLI extends WP_CLI_Command {
 			}
 		} else {
 			// Just the basics
-			WP_CLI::success( __( 'Jetpack is currently connected to WordPress.com', 'jetpack' ) );
-			WP_CLI::line( sprintf( __( 'The Jetpack Version is %s', 'jetpack' ), JETPACK__VERSION ) );
-			WP_CLI::line( sprintf( __( 'The WordPress.com blog_id is %d', 'jetpack' ), Jetpack_Options::get_option( 'id' ) ) );
-			WP_CLI::line( sprintf( __( 'The WordPress.com account for the primary connection is %s', 'jetpack' ), $master_user_email ) );
 			WP_CLI::line( "\n" . _x( "View full status with 'wp jetpack status full'", '"wp jetpack status full" is a command - do not translate', 'jetpack' ) );
 		}
 	}
@@ -302,62 +310,84 @@ class Jetpack_CLI extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * list          : View all available modules, and their status.
-	 * activate all  : Activate all modules
-	 * deactivate all: Deactivate all modules
+	 * <list|activate|deactivate|toggle>
+	 * : The action to take.
+	 * ---
+	 * default: list
+	 * options:
+	 *  - list
+	 *  - activate
+	 *  - deactivate
+	 *  - toggle
+	 * ---
 	 *
-	 * activate   <module_slug> : Activate a module.
-	 * deactivate <module_slug> : Deactivate a module.
-	 * toggle     <module_slug> : Toggle a module on or off.
+	 * [<module_slug>]
+	 * : The slug of the module to perform an action on.
+	 *
+	 * [--format=<format>]
+	 * : Allows overriding the output of the command when listing modules.
+	 * ---
+	 * default: table
+	 * options:
+	 *  - table
+	 *  - json
+	 *  - csv
+	 *  - yaml
+	 *  - ids
+	 *  - count
+	 * ---
 	 *
 	 * ## EXAMPLES
 	 *
 	 * wp jetpack module list
+	 * wp jetpack module list --format=json
 	 * wp jetpack module activate stats
 	 * wp jetpack module deactivate stats
 	 * wp jetpack module toggle stats
-	 *
 	 * wp jetpack module activate all
 	 * wp jetpack module deactivate all
-	 *
-	 * @synopsis <list|activate|deactivate|toggle> [<module_name>]
 	 */
 	public function module( $args, $assoc_args ) {
 		$action = isset( $args[0] ) ? $args[0] : 'list';
-		if ( ! in_array( $action, array( 'list', 'activate', 'deactivate', 'toggle' ) ) ) {
-			/* translators: %s is a command like "prompt" */
-			WP_CLI::error( sprintf( __( '%s is not a valid command.', 'jetpack' ), $action ) );
-		}
-		if ( in_array( $action, array( 'activate', 'deactivate', 'toggle' ) ) ) {
-			if ( isset( $args[1] ) ) {
-				$module_slug = $args[1];
-				if ( 'all' !== $module_slug && ! Jetpack::is_module( $module_slug ) ) {
-					WP_CLI::error( sprintf( __( '%s is not a valid module.', 'jetpack' ), $module_slug ) );
-				}
-				if ( 'toggle' == $action ) {
-					$action = Jetpack::is_module_active( $module_slug ) ? 'deactivate' : 'activate';
-				}
-				// Bulk actions
-				if ( 'all' == $args[1] ) {
-					$action = ( 'deactivate' == $action ) ? 'deactivate_all' : 'activate_all';
-				}
-			} else {
-				WP_CLI::line( __( 'Please specify a valid module.', 'jetpack' ) );
-				$action = 'list';
+
+		if ( isset( $args[1] ) ) {
+			$module_slug = $args[1];
+			if ( 'all' !== $module_slug && ! Jetpack::is_module( $module_slug ) ) {
+				/* translators: %s is a module slug like "stats" */
+				WP_CLI::error( sprintf( __( '%s is not a valid module.', 'jetpack' ), $module_slug ) );
 			}
+			if ( 'toggle' === $action ) {
+				$action = Jetpack::is_module_active( $module_slug )
+					? 'deactivate'
+					: 'activate';
+			}
+			if ( 'all' === $args[1] ) {
+				$action = ( 'deactivate' === $action )
+					? 'deactivate_all'
+					: 'activate_all';
+			}
+		} elseif ( 'list' !== $action ) {
+			WP_CLI::line( __( 'Please specify a valid module.', 'jetpack' ) );
+			$action = 'list';
 		}
+
 		switch ( $action ) {
 			case 'list':
-				WP_CLI::line( __( 'Available Modules:', 'jetpack' ) );
-				$modules = Jetpack::get_available_modules();
+				$modules_list = array();
+				$modules      = Jetpack::get_available_modules();
 				sort( $modules );
-				foreach( $modules as $module_slug ) {
-					if ( 'vaultpress' == $module_slug ) {
+				foreach ( (array) $modules as $module_slug ) {
+					if ( 'vaultpress' === $module_slug ) {
 						continue;
 					}
-					$active = Jetpack::is_module_active( $module_slug ) ? __( 'Active', 'jetpack' ) : __( 'Inactive', 'jetpack' );
-					WP_CLI::line( "\t" . str_pad( $module_slug, 24 ) . $active );
+					$modules_list[] = array(
+						'slug'   => $module_slug,
+						'status' => Jetpack::is_module_active( $module_slug )
+							? __( 'Active', 'jetpack' )
+							: __( 'Inactive', 'jetpack' ),
+					);
 				}
+				WP_CLI\Utils\format_items( $assoc_args['format'], $modules_list, array( 'slug', 'status' ) );
 				break;
 			case 'activate':
 				$module = Jetpack::get_module( $module_slug );
@@ -862,7 +892,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 		$request = array(
 			'headers' => array(
 				'Authorization' => "Bearer " . $token->access_token,
-				'Host'          => defined( 'JETPACK__WPCOM_JSON_API_HOST_HEADER' ) ? JETPACK__WPCOM_JSON_API_HOST_HEADER : 'public-api.wordpress.com',
+				'Host'          => 'public-api.wordpress.com',
 			),
 			'timeout' => 60,
 			'method'  => 'POST',
@@ -1006,12 +1036,10 @@ class Jetpack_CLI extends WP_CLI_Command {
 			WP_CLI::error( __( 'A non-empty token argument must be passed.', 'jetpack' ) );
 		}
 
-		$token = sanitize_text_field( $named_args['token'] );
-
 		$is_master_user  = ! Jetpack::is_active();
 		$current_user_id = get_current_user_id();
 
-		Jetpack::update_user_token( $current_user_id, sprintf( '%s.%d', $token, $current_user_id ), $is_master_user );
+		Jetpack::update_user_token( $current_user_id, sprintf( '%s.%d', $named_args['token'], $current_user_id ), $is_master_user );
 
 		WP_CLI::log( wp_json_encode( $named_args ) );
 
@@ -1202,6 +1230,235 @@ class Jetpack_CLI extends WP_CLI_Command {
 		);
 	}
 
+	/**
+	 * Allows management of publicize connections.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <list|disconnect>
+	 * : The action to perform.
+	 * ---
+	 * options:
+	 *   - list
+	 *   - disconnect
+	 * ---
+	 *
+	 * [<identifier>]
+	 * : The connection ID or service to perform an action on.
+	 *
+	 * [--format=<format>]
+	 * : Allows overriding the output of the command when listing connections.
+	 * ---
+	 * default: table
+	 * options:
+	 *   - table
+	 *   - json
+	 *   - csv
+	 *   - yaml
+	 *   - ids
+	 *   - count
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     # List all publicize connections.
+	 *     $ wp jetpack publicize list
+	 *
+	 *     # List publicize connections for a given service.
+	 *     $ wp jetpack publicize list twitter
+	 *
+	 *     # List all publicize connections for a given user.
+	 *     $ wp --user=1 jetpack publicize list
+	 *
+	 *     # List all publicize connections for a given user and service.
+	 *     $ wp --user=1 jetpack publicize list twitter
+	 *
+	 *     # Display details for a given connection.
+	 *     $ wp jetpack publicize list 123456
+	 *
+	 *     # Diconnection a given connection.
+	 *     $ wp jetpack publicize disconnect 123456
+	 *
+	 *     # Disconnect all connections.
+	 *     $ wp jetpack publicize disconnect all
+	 *
+	 *     # Disconnect all connections for a given service.
+	 *     $ wp jetpack publicize disconnect twitter
+	 */
+	public function publicize( $args, $named_args ) {
+		if ( ! Jetpack::is_active() ) {
+			WP_CLI::error( __( 'Jetpack is not currently connected to WordPress.com', 'jetpack' ) );
+		}
+
+		if ( ! Jetpack::is_module_active( 'publicize' ) ) {
+			WP_CLI::error( __( 'The publicize module is not active.', 'jetpack' ) );
+		}
+
+		if ( Jetpack::is_development_mode() ) {
+			if (
+				! defined( 'JETPACK_DEV_DEBUG' ) &&
+				! has_filter( 'jetpack_development_mode' ) &&
+				false === strpos( site_url(), '.' )
+			) {
+				WP_CLI::error( __( "Jetpack is current in development mode because the site url does not contain a '.', which often occurs when dynamically setting the WP_SITEURL constant. While in development mode, the publicize module will not load.", 'jetpack' ) );
+			}
+
+			WP_CLI::error( __( 'Jetpack is currently in development mode, so the publicize module will not load.', 'jetpack' ) );
+		}
+
+		if ( ! class_exists( 'Publicize' ) ) {
+			WP_CLI::error( __( 'The publicize module is not loaded.', 'jetpack' ) );
+		}
+
+		$action        = $args[0];
+		$publicize     = new Publicize();
+		$identifier    = ! empty( $args[1] ) ? $args[1] : false;
+		$services      = array_keys( $publicize->get_services() );
+		$id_is_service = in_array( $identifier, $services, true );
+
+		switch ( $action ) {
+			case 'list':
+				$connections_to_return = array();
+
+				// For the CLI command, let's return all connections when a user isn't specified. This
+				// differs from the logic in the Publicize class.
+				$option_connections = is_user_logged_in()
+					? (array) $publicize->get_all_connections_for_user()
+					: (array) $publicize->get_all_connections();
+
+				foreach ( $option_connections as $service_name => $connections ) {
+					foreach ( (array) $connections as $id => $connection ) {
+						$connection['id']        = $id;
+						$connection['service']   = $service_name;
+						$connections_to_return[] = $connection;
+					}
+				}
+
+				if ( $id_is_service && ! empty( $identifier ) && ! empty( $connections_to_return ) ) {
+					$temp_connections      = $connections_to_return;
+					$connections_to_return = array();
+
+					foreach ( $temp_connections as $connection ) {
+						if ( $identifier === $connection['service'] ) {
+							$connections_to_return[] = $connection;
+						}
+					}
+				}
+
+				if ( $identifier && ! $id_is_service && ! empty( $connections_to_return ) ) {
+					$connections_to_return = wp_list_filter( $connections_to_return, array( 'id' => $identifier ) );
+				}
+
+				$expected_keys = array(
+					'id',
+					'service',
+					'user_id',
+					'provider',
+					'issued',
+					'expires',
+					'external_id',
+					'external_name',
+					'external_display',
+					'type',
+					'connection_data',
+				);
+
+				// Somehow, a test site ended up in a state where $connections_to_return looked like:
+				// array( array( array( 'id' => 0, 'service' => 0 ) ) ) // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+				// This caused the CLI command to error when running WP_CLI\Utils\format_items() below. So
+				// to minimize future issues, this nested loop will remove any connections that don't contain
+				// any keys that we expect.
+				foreach ( (array) $connections_to_return as $connection_key => $connection ) {
+					foreach ( $expected_keys as $expected_key ) {
+						if ( ! isset( $connection[ $expected_key ] ) ) {
+							unset( $connections_to_return[ $connection_key ] );
+							continue;
+						}
+					}
+				}
+
+				if ( empty( $connections_to_return ) ) {
+					return false;
+				}
+
+				WP_CLI\Utils\format_items( $named_args['format'], $connections_to_return, $expected_keys );
+				break; // list.
+			case 'disconnect':
+				if ( ! $identifier ) {
+					WP_CLI::error( __( 'A connection ID must be passed in order to disconnect.', 'jetpack' ) );
+				}
+
+				// If the connection ID is 'all' then delete all connections. If the connection ID
+				// matches a service, delete all connections for that service.
+				if ( 'all' === $identifier || $id_is_service ) {
+					if ( 'all' === $identifier ) {
+						WP_CLI::log( __( "You're about to delete all publicize connections.", 'jetpack' ) );
+					} else {
+						/* translators: %s is a lowercase string for a social network. */
+						WP_CLI::log( sprintf( __( "You're about to delete all publicize connections to %s.", 'jetpack' ), $identifier ) );
+					}
+
+					jetpack_cli_are_you_sure();
+
+					$connections = array();
+					$service     = $identifier;
+
+					$option_connections = is_user_logged_in()
+						? (array) $publicize->get_all_connections_for_user()
+						: (array) $publicize->get_all_connections();
+
+					if ( 'all' === $service ) {
+						foreach ( (array) $option_connections as $service_name => $service_connections ) {
+							foreach ( $service_connections as $id => $connection ) {
+								$connections[ $id ] = $connection;
+							}
+						}
+					} elseif ( ! empty( $option_connections[ $service ] ) ) {
+						$connections = $option_connections[ $service ];
+					}
+
+					if ( ! empty( $connections ) ) {
+						$count    = count( $connections );
+						$progress = \WP_CLI\Utils\make_progress_bar(
+							/* translators: %s is a lowercase string for a social network. */
+							sprintf( __( 'Disconnecting all connections to %s.', 'jetpack' ), $service ),
+							$count
+						);
+
+						foreach ( $connections as $id => $connection ) {
+							if ( false === $publicize->disconnect( false, $id ) ) {
+								WP_CLI::error( sprintf(
+									/* translators: %1$d is a numeric ID and %2$s is a lowercase string for a social network. */
+									__( 'Publicize connection %d could not be disconnected', 'jetpack' ),
+									$id
+								) );
+							}
+
+							$progress->tick();
+						}
+
+						$progress->finish();
+
+						if ( 'all' === $service ) {
+							WP_CLI::success( __( 'All publicize connections were successfully disconnected.', 'jetpack' ) );
+						} else {
+							/* translators: %s is a lowercase string for a social network. */
+							WP_CLI::success( __( 'All publicize connections to %s were successfully disconnected.', 'jetpack' ), $service );
+						}
+					}
+				} else {
+					if ( false !== $publicize->disconnect( false, $identifier ) ) {
+						/* translators: %d is a numeric ID. Example: 1234. */
+						WP_CLI::success( sprintf( __( 'Publicize connection %d has been disconnected.', 'jetpack' ), $identifier ) );
+					} else {
+						/* translators: %d is a numeric ID. Example: 1234. */
+						WP_CLI::error( sprintf( __( 'Publicize connection %d could not be disconnected.', 'jetpack' ), $identifier ) );
+					}
+				}
+				break; // disconnect.
+		}
+	}
+
 	private function get_api_host() {
 		$env_api_host = getenv( 'JETPACK_START_API_HOST', true );
 		return $env_api_host ? $env_api_host : JETPACK__WPCOM_JSON_API_HOST;
@@ -1240,10 +1497,9 @@ function jetpack_cli_are_you_sure( $flagged = false, $error_msg = false ) {
 	}
 
 	if ( ! $flagged ) {
-		$prompt_message = __( 'Are you sure? This cannot be undone. Type "yes" to continue:', '"yes" is a command.  Do not translate that.', 'jetpack' );
+		$prompt_message = _x( 'Are you sure? This cannot be undone. Type "yes" to continue:', '"yes" is a command - do not translate.', 'jetpack' );
 	} else {
-		/* translators: Don't translate the word yes here. */
-		$prompt_message = __( 'Are you sure? Modifying this option may disrupt your Jetpack connection.  Type "yes" to continue.', 'jetpack' );
+		$prompt_message = _x( 'Are you sure? Modifying this option may disrupt your Jetpack connection.  Type "yes" to continue.', '"yes" is a command - do not translate.', 'jetpack' );
 	}
 
 	WP_CLI::line( $prompt_message );

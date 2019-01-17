@@ -25,19 +25,25 @@ abstract class GP_Plugin extends GFAddOn {
 
 	public function __construct( $perk = null ) {
 
-		parent::__construct();
-
 		if( ! $this->perk ) {
 			$this->perk = $perk ? $perk : new GP_Perk( $this->_path, $this );
+		}
+
+		parent::__construct();
+
+	}
+
+	public function pre_init() {
+
+		parent::pre_init();
+
+		if ( ! $this->check_requirements() ) {
+			remove_action( 'init', array( $this, 'init' ) );
 		}
 
 	}
 
 	public function init() {
-
-		if ( !$this->check_requirements() ) {
-			return;
-		}
 
 		parent::init();
 
@@ -59,8 +65,14 @@ abstract class GP_Plugin extends GFAddOn {
 
 	public function meets_minimum_requirements() {
 
-		return array_merge_recursive( parent::meets_minimum_requirements(), $this->perk->check_gf_requirements_plugins_array() );
+		$min = is_callable( 'parent::meets_minimum_requirements' ) ? parent::meets_minimum_requirements() : array();
 
+		return array_merge_recursive( $min, $this->perk->check_gf_requirements_plugins_array() );
+
+	}
+
+	public function minimum_requirements() {
+		return array();
 	}
 
 	public function log( $message, $is_error = false ) {

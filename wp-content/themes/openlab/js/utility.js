@@ -20,6 +20,7 @@ OpenLab.utility = (function ($) {
             OpenLab.utility.sliderFocusHandler();
             OpenLab.utility.eventValidation();
             OpenLab.utility.refreshActivity();
+            OpenLab.utility.initMemberRoleDefinitions();
 
             //EO Calendar JS filtering
             if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -444,6 +445,15 @@ OpenLab.utility = (function ($) {
           $( '.notification-settings' ).find( 'th.icon' ).each( function() {
             $(this).html( '<span class="bp-screen-reader-text">Icon column</span>' );
           } );
+        },
+        initMemberRoleDefinitions: function() {
+            $( '.member-role-definition-label' ).on( 'click', function( e ) {
+                $clicked = $( e.target );
+                $def = $clicked.closest( '.member-role-definition' );
+
+                $clicked.find( 'i' ).toggleClass( 'fa-caret-square-o-right' ).toggleClass( 'fa-caret-square-o-down' );
+                $clicked.closest( '.member-role-definition' ).toggleClass( 'show-definition-text' );
+            } );
         }
     }
 })(jQuery, OpenLab);

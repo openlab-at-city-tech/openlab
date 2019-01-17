@@ -10,7 +10,7 @@ Please use and provide feedback!
 
 ## System Requirements
 
-* PHP >= 5.3
+* PHP >= 5.4
 * wp-cli >= 0.23.0
 * BuddyPress trunk (development version).
 
@@ -21,6 +21,19 @@ Please use and provide feedback!
 * Inside of a WP installation, type `wp bp`. You should see a list of available commands.
 
 ## Changelog
+
+### 1.8.0
+
+* `wp-cli-buddypress` requires PHP 5.4
+* `bp notification` commands introduced
+
+### 1.7.0
+
+* Updated `bp` and `bp xprofile` commands PHPDoc info
+* Fixed `component list` commands output
+* Check if the `component` exists first before using it
+* Fixed `component` Behat tests
+* Removed PHP 5.3 support from Travis
 
 ### 1.6.0
 

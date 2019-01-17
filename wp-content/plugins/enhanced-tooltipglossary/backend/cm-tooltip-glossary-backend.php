@@ -405,6 +405,8 @@ class CMTooltipGlossaryBackend
 
         CMTooltipGlossaryShared::cmtt_create_post_types();
 
+        do_action('cmtt_flush_rewrite_rules');
+
         // Clear the permalinks
         flush_rewrite_rules();
 

@@ -6,14 +6,6 @@
 
 /*
 	-----------------------------------------------------------------------------------
-	The !important modifier is used because some themes use high-priority selectors
-	on img tags that can interfere with Google map tiles.
-	-----------------------------------------------------------------------------------
-*/
-
-
-/*
-	-----------------------------------------------------------------------------------
 	Map layout - table containing map, directions, poi list
 	Font size and family can be removed to make map match your theme
 	-----------------------------------------------------------------------------------
@@ -46,42 +38,198 @@
 	display: none;
 }
 
-/* Canvas */
-.mapp-canvas {
+/*
+	-----------------------------------------------------------------------------------
+	Prevent theme conflicts with Google maps.  The !important modifier is used because some
+	themes use high-priority (very specific) selectors that interfere.
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-canvas-panel {
 	height: 100%;
 	margin: 0px;
 	overflow: hidden !important;
 	padding: 0px !important;
 	position: relative;			/* Need for initial dialog position */
+}
+
+.mapp-canvas {
+	height: 100%;
 	word-wrap: normal;			/* 2013 sets break-word, which interferes w/Google copyright in IE only */
 }
 
 .mapp-canvas img {
-	background-color: transparent !important;
 	box-shadow: none !important;		/* 2012 */
 	border-radius: 0px !important;		/* 2012 */
-	max-width: 99999px !important;  	/* Themes have max-width/max-height set, and some phones can't accept max-width: auto.  */
-	max-height: none !important;
-	margin: 0px !important;
-	padding: 0px !important;
 	visibility: inherit !important;
+}
+
+.mapp-layout.mapp-google .mapp-canvas img {
+	background-color: transparent;
+	margin: 0px;
+	max-height: none;
+	padding: 0px;
+}
+
+.leaflet-container .leaflet-control-attribution * {
+	font-size: 8px;
+}
+
+/* Prevent theme interference with leaflet */
+.leaflet-popup-close-button {
+	box-shadow: none !important;			/* 2016, 2017 */
+}
+
+
+@media only screen and (min--moz-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-device-pixel-ratio: 2) {
+	background-size: 640px 640px;
 }
 
 .mapp-dialog {
 	background-color: white;
 	color: black;
+	display: none;
 	min-height: 40px;
 	opacity: .95;
 	padding: 10px;
 	position: absolute;
 	text-align: center;
 	top: 0; left: 0; right: 0;
-	z-index: 1;
+	z-index: 1000;
 }
 
 
 .mapp-dialog .mapp-spinner {
 	display: inline-block;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	POI List (new)
+	Structure:
+		.mapp-list
+			.mapp-list-header
+			.mapp-items
+				.mapp-item (one for each POI)
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-list {
+	background-color: white;
+	overflow: auto;
+	position: relative;		/* Needed to scroll list for selection */
+	z-index: 1;
+}
+
+.mapp-list .mapp-list-header {
+	padding: 5px;
+	text-align: center;
+}
+
+.mapp-list .mapp-list-footer {
+	padding: 5px;
+	text-align: center;
+}
+
+.mapp-list .mapp-items {
+}
+
+.mapp-list .mapp-item {
+	border-bottom: 1px solid lightgray;
+	cursor: pointer;
+	overflow: hidden;
+	padding: 5px;
+}
+
+.mapp-list .mapp-item:hover, .mapp-list .mapp-item.mapp-selected {
+	background-color: #fafafa;
+}
+
+.mapp-list .mapp-item .mapp-title {
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.mapp-list .mapp-item .mapp-icon {
+	float: left;
+	margin-right: 5px;
+	max-width: 24px !important; 	/* 2012 tries to override */
+	max-height: 24px;
+}
+
+.mapp-list .mapp-item .mapp-actions {
+	visibility: hidden;
+}
+
+.mapp-list .mapp-item .mapp-actions a {
+	text-decoration: none;
+}
+
+.mobile .mapp-actions {
+	visibility: visible;
+}
+
+
+.mapp-list .mapp-item:hover .mapp-actions {
+	color: black;
+	visibility: visible;
+}
+
+.mapp-list .dashicons {
+	color: #82878c;
+}
+
+.mapp-list-footer {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.mapp-list .mapp-next, .mapp-list .mapp-prev {
+	background-color: #f7f7f7;
+	border: 1px solid #ccc;
+	color: gray;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 1;
+	margin: 0 10px 0 10px;
+	padding: 5px;
+	text-align: center;
+	user-select: none;
+}
+
+.mapp-list .mapp-next.mapp-active, .mapp-list .mapp-prev.mapp-active {
+	background-color: #e8e8e8;
+	color: black;
+}
+
+.mapp-list .mapp-msg {
+	text-align: center;
+}
+
+.mapp-list .spinner {
+	float: none;
+}
+
+/*
+	-----------------------------------------------------------------------------------
+	layouts
+	-----------------------------------------------------------------------------------
+*/
+
+.mapp-left .mapp-list {
+	border-right: 1px solid lightgray;
+	float: left;
+	height: 100%;
+	max-width: 45%;
+	width: 250px;
+}
+
+.mapp-inline .mapp-list {
+	border-top: 1px solid lightgray;
+	max-height: 300px;
 }
 
 /*
@@ -92,24 +240,33 @@
 .mapp-header {
 	background-color: #eee;
 	border-bottom: 1px solid lightgray;
-	height: 40px;
-	overflow: hidden;
+	display: table;
+	height: 36px;
+	width: 100%;
+}
+
+.mapp-header > div {
+	display: table-row;
+	width: 100%;
+}
+
+.mapp-header > div > div {
+	display: table-cell;
+	padding: 0;
 }
 
 .mapp-header-button {
-	border-left: 1px solid lightgray;
 	cursor: pointer;
-	float: right;
-	line-height: 40px;
-	margin-left: 5px;
+	height: 35px;
+	line-height: 35px;
 	min-width: 70px;
 	padding: 0 5px 0 5px;
 	text-align: center;
 	text-transform: uppercase;
 }
 
-.mapp-search-wrapper {
-	padding: 2px;
+.mapp-header input[type="text"] {
+	display: inline;
 }
 
 /*
@@ -117,28 +274,22 @@
 	Search
 	-----------------------------------------------------------------------------------
 */
-
 .mapp-search {
-	overflow: hidden;
 	position: relative;
-}
-
-.mapp-search input {
-	background: white !important;			/* 2016 */
-	border: 1px solid lightgray !important;
-	box-shadow: none !important;
-	color: black !important;
-	line-height: 22px;
-	margin: 0px !important;
-	padding: 5px 28px 5px 5px !important;
-	vertical-align: middle;
 	width: 100%;
 }
 
-
-/* Error messages, e.g. invalid address */
 .mapp-search input.mapp-error {
 	outline: 1px solid red !important;
+}
+
+.mapp-search input.mapp-places {
+	background-color: white !important;		/* Algolia uses 240,240,240 */
+	color: black !important;				/* Theme */
+}
+
+.mapp-search ::placeholder {
+	color: black !important;				/* Themes */
 }
 
 .mapp-search .mapp-geolocate {
@@ -151,11 +302,68 @@
 	width: 18px;
 }
 
+.mapp-search .algolia-autocomplete {
+	display: block !important;
+}
+
+/* Important is used to override themes */
+input.mapp-aa-input, input.mapp-aa-hint {
+	border: 1px solid #bbb ;
+	box-shadow: none ;
+	color: black ;
+	height: 34px ;
+	line-height: 34px ;
+	margin: 0 ;
+	padding: 5px 28px 5px 5px ;
+	vertical-align: middle ;
+	width: 100% ;
+}
+
+.mapp-autocomplete, .mapp-autocomplete * {
+	width: 100%;
+}
+
+.mapp-aa-dropdown-menu {
+	background-color: white;
+	border: 1px solid lightgray;
+	color: #8c8c8c;
+	cursor: pointer;
+	width: 100%;
+	z-index: 1001 !important;	/* Widget default is 100 which is too low */
+}
+
+.mapp-aa-suggestion {
+	border-top: 1px solid #e6e6e6;
+	overflow: hidden !important;
+	padding: 5px;
+	text-overflow: ellipsis;
+	white-space: nowrap !important;
+}
+
+.mapp-aa-suggestion span, .mapp-aa-suggestion p {
+	white-space: nowrap !important;
+}
+
+/* No results */
+.mapp-aa-dropdown-menu .list-group-item {
+	padding: 5px;
+}
+
+
+.mapp-aa-cursor {
+	background-color: #fafafa;
+}
+
 /*
 	-----------------------------------------------------------------------------------
 	Filters
 	-----------------------------------------------------------------------------------
 */
+
+.mapp-filters-toggle {
+	vertical-align: middle;	/* Required in firefox */
+}
+
 .mapp-filters {
 	background-color: white;
 	border-bottom: 1px solid lightgray;
@@ -211,6 +419,10 @@
 	-----------------------------------------------------------------------------------
 */
 
+.mapp-leaflet .mapp-iw {
+	max-width: 250px;
+}
+
 /* Important is used to override common theme / user agent styles that interfere */
 .mapp-iw * {
 	color: black;
@@ -262,150 +474,51 @@
 	-----------------------------------------------------------------------------------
 */
 
+.mapp-ib-wrapper {
+	display: none;
+	position: absolute;
+	z-index: 100;
+}
+
+/* In fullscreen Google sets map z-index very high */
+:fullscreen ~ .mapp-ib-wrapper { z-index: 10000000000; }
+:-webkit-full-screen ~ .mapp-ib-wrapper { z-index: 10000000000; }
+:-moz-full-screen ~ .mapp-ib-wrapper { z-index: 10000000000; }
+:-ms-fullscreen ~ .mapp-ib-wrapper { z-index: 10000000000; }
+
 .mapp-ib {
 	background-color: white;
-	box-shadow: 1px 1px 1px 1px #888;
+	border: 1px solid lightgray;
 	box-sizing: border-box;
-	display: none;
+	max-width: 450px;
 	outline: none;
 	overflow: auto;
 	padding: 5px 20px 5px 10px;
-	position: absolute;
-	z-index: 100;                   /* WP thickbox has z-index 102, this keeps editor's IB below it */
-}
-
-.mapp-ib .mapp-close {
-	position: absolute;
-	right: 0; top: 0;
 }
 
 /* Triangular tip */
 .mapp-ib-tip {
-	display: none;
-	position: absolute;
+	height: 10px;
+	z-index: 1;
+}
+
+.mapp-ib-tip:after {
 	border-top: 10px solid white;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: none;
-	margin-left: -10px;
-	margin-top: -2px;
-	padding: 0;
+	content: "";
 	width: 0;
 	height: 0;
 	/* ie6 height fix */
 	font-size: 0;
+	left: 50%;
 	line-height: 0;
-	z-index: 101;
+	margin-left: -10px;
+	margin-top: -1px;
+	position: absolute;
 }
 
-
-/*
-	-----------------------------------------------------------------------------------
-	POI List (new)
-	Structure:
-		.mapp-list
-			.mapp-items
-				.mapp-item (one for each POI)
-	-----------------------------------------------------------------------------------
-*/
-
-.mapp-list {
-	background-color: white;
-	position: relative;		/* Needed to scroll list for selection */
-	z-index: 1;
-}
-
-.mapp-list .mapp-items {
-	height: 100%;
-	overflow: auto;
-}
-
-.mapp-list .mapp-item {
-	border-bottom: 1px solid lightgray;
-	cursor: pointer;
-	overflow: hidden;
-	padding: 5px;
-}
-
-.mapp-list .mapp-item:hover, .mapp-list .mapp-item.mapp-selected {
-	background-color: #fafafa;
-}
-
-
-.mapp-list .mapp-item .mapp-title {
-	overflow: hidden;
-	vertical-align: middle;
-}
-
-.mapp-list .mapp-item .mapp-icon {
-	float: left;
-	margin-right: 5px;
-	max-width: 24px !important; 	/* 2012 tries to override */
-	max-height: 24px;
-}
-
-.mapp-list .mapp-item .mapp-actions {
-	visibility: hidden;
-}
-
-.mapp-list .mapp-item:hover .mapp-actions {
-	color: black;
-	visibility: visible;
-}
-
-.mapp-list .dashicons {
-	color: #82878c;
-}
-
-.mapp-list-footer {
-	margin-top: 10px;
-	text-align: center;
-}
-
-.mapp-list .mapp-next, .mapp-list .mapp-prev {
-	background-color: #f7f7f7;
-	border: 1px solid #ccc;
-	color: gray;
-	cursor: pointer;
-	display: inline-block;
-	line-height: 1;
-	margin: 0 10px 0 10px;
-	padding: 5px;
-	text-align: center;
-	user-select: none;
-}
-
-.mapp-list .mapp-next.mapp-active, .mapp-list .mapp-prev.mapp-active {
-	background-color: #e8e8e8;
-	color: black;
-}
-
-.mapp-list .mapp-msg {
-	text-align: center;
-}
-
-/*
-	-----------------------------------------------------------------------------------
-	layouts
-	-----------------------------------------------------------------------------------
-*/
-
-.mapp-left .mapp-list {
-	border-right: 1px solid lightgray;
-	float: left;
-	height: 100%;
-	max-width: 45%;
-	width: 250px;
-}
-
-.mapp-left.mapp-mini .mapp-list {
-	display: none !important;	/* Override editor */
-}
-
-.mapp-inline .mapp-list .mapp-items {
-	border-top: 1px solid lightgray;
-	max-height: 300px;
-}
 
 /*
 	-----------------------------------------------------------------------------------
@@ -415,6 +528,7 @@
 
 .mapp-view-filters .mapp-filters {
 	display: block;
+	z-index: 1001;
 }
 
 .mapp-view-menu .mapp-menu {
@@ -427,6 +541,22 @@
 
 .mapp-view-directions .mapp-list {
 	display: none;
+}
+
+
+/*
+	-----------------------------------------------------------------------------------
+	Mini view - on hold
+	-----------------------------------------------------------------------------------
+*/
+
+/*
+.mapp-has-filters .mapp-header, .mapp-has-search .mapp-header, .mapp-view-mini .mapp-header {
+	display: block;
+}
+
+.mapp-left.mapp-mini .mapp-list {
+	display: none !important;
 }
 
 .mapp-left [data-mapp-action="view-map"] { display: none; }
@@ -489,7 +619,7 @@
 	line-height: normal ;
 }
 
-.mapp-dir-a, .mapp-dir-b, .mapp-dir-arrows {
+.mapp-dir-arrows {
 	background: transparent url('../images/directions.png') no-repeat center center;
 	cursor: pointer;
 	display: inline-block;
@@ -499,17 +629,12 @@
 }
 
 .mapp-dir-arrows { width: 10px; height: 12px; background-position: -10px -489px; position: relative; top: 10px; left: 5px; }
-.mapp-dir-a { width: 24px; height: 24px; background-position: 0px -140px; }
-.mapp-dir-b { width: 24px; height: 24px; background-position: 0px -71px; }
 
 /*
 	-----------------------------------------------------------------------------------
 	Custom controls
 	-----------------------------------------------------------------------------------
 */
-.mapp-controls {
-	display: none;
-}
 
 .mapp-menu-toggle {
 	background: white url('../images/menu-2x.png') no-repeat center center;
@@ -518,10 +643,12 @@
 	color: #777;
 	cursor: pointer;
 	height: 29px;
-	margin: 10px 0 0 10px;
 	outline: none;
 	outline: none;		/* Prevent focus outline */
+	position: absolute;
+	top: 10px; left: 10px; bottom: 0; right: 0;
 	width: 32px;
+	z-index: 1000;
 }
 
 .mapp-menu {
@@ -533,9 +660,9 @@
 	overflow: auto;
 	padding: 5px 0 5px 0;
 	position: absolute;
-	top: 0 !important; left: 0 !important; bottom: 0 !important;
+	top: 0; left: 0; bottom: 0;
 	width: 150px;
-	z-index: 10000000 !important;
+	z-index: 1001;
 }
 
 .mapp-menu-item {
@@ -580,9 +707,9 @@
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-align-left { float: left !important; }
-.mapp-align-right { float: right !important; }
-.mapp-align-center { margin-left: auto !important; margin-right: auto !important; }
+.mapp-align-left { float: left; }
+.mapp-align-right { float: right; }
+.mapp-align-center { margin-left: auto; margin-right: auto; }
 .mapp-align-default {}
 
 .mapp-close {

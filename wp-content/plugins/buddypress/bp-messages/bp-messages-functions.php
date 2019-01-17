@@ -449,11 +449,14 @@ function messages_get_message_thread_id( $message_id = 0 ) {
  * @return bool True on successful delete, false on failure.
  */
 function bp_messages_delete_meta( $message_id, $meta_key = false, $meta_value = false, $delete_all = false ) {
+	global $wpdb;
+
 	// Legacy - if no meta_key is passed, delete all for the item.
 	if ( empty( $meta_key ) ) {
-		global $wpdb;
-
-		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$wpdb->messagemeta} WHERE message_id = %d", $message_id ) );
+		$table_name = buddypress()->messages->table_name_meta;
+		$sql        = "SELECT meta_key FROM {$table_name} WHERE message_id = %d";
+		$query      = $wpdb->prepare( $sql, $message_id );
+		$keys       = $wpdb->get_col( $query );
 
 		// With no meta_key, ignore $delete_all.
 		$delete_all = false;
@@ -581,6 +584,12 @@ function messages_notification_new_message( $raw_args = array() ) {
 
 	$sender_name = bp_core_get_user_displayname( $sender_id );
 
+	if ( isset( $message ) ) {
+		$message = wpautop( $message );
+	} else {
+		$message = '';
+	}
+
 	// Send an email to each recipient.
 	foreach ( $recipients as $recipient ) {
 		if ( $sender_id == $recipient->user_id || 'no' == bp_get_user_meta( $recipient->user_id, 'notification_messages_new_message', true ) ) {
@@ -624,3 +633,95 @@ function messages_notification_new_message( $raw_args = array() ) {
 	do_action( 'bp_messages_sent_notification_email', $recipients, '', '', $args );
 }
 add_action( 'messages_message_sent', 'messages_notification_new_message', 10 );
+
+/**
+ * Finds and exports personal data associated with an email address from the Messages tables.
+ *
+ * @since 4.0.0
+ *
+ * @param string $email_address  The user's email address.
+ * @param int    $page           Batch number.
+ * @return array An array of personal data.
+ */
+function bp_messages_personal_data_exporter( $email_address, $page ) {
+	$number = 10;
+
+	$email_address = trim( $email_address );
+
+	$data_to_export = array();
+
+	$user = get_user_by( 'email', $email_address );
+
+	if ( ! $user ) {
+		return array(
+			'data' => array(),
+			'done' => true,
+		);
+	}
+
+	$user_data_to_export = array();
+
+	$user_threads = BP_Messages_Thread::get_current_threads_for_user( array(
+		'user_id' => $user->ID,
+		'box'     => 'sentbox',
+		'type'    => null,
+		'limit'   => $number,
+		'page'    => $page,
+	) );
+
+	foreach ( $user_threads['threads'] as $thread ) {
+		$recipient_links = array();
+		foreach ( $thread->recipients as $recipient ) {
+			if ( $recipient->user_id === $user->ID ) {
+				continue;
+			}
+
+			$recipient_links[] = bp_core_get_userlink( $recipient->user_id );
+		}
+		$recipients = implode( ', ', $recipient_links );
+
+		$thread_link = bp_get_message_thread_view_link( $thread->thread_id, $user->ID );
+
+		foreach ( $thread->messages as $message_index => $message ) {
+			// Only include messages written by the user.
+			if ( $recipient->user_id !== $message->sender_id ) {
+				continue;
+			}
+
+			$message_data = array(
+				array(
+					'name'  => __( 'Message Subject', 'buddypress' ),
+					'value' => $message->subject,
+				),
+				array(
+					'name'  => __( 'Message Content', 'buddypress' ),
+					'value' => $message->message,
+				),
+				array(
+					'name'  => __( 'Date Sent', 'buddypress' ),
+					'value' => $message->date_sent,
+				),
+				array(
+					'name' => __( 'Recipients', 'buddypress' ),
+					'value' => $recipients,
+				),
+				array(
+					'name'  => __( 'Thread URL', 'buddypress' ),
+					'value' => $thread_link,
+				),
+			);
+
+			$data_to_export[] = array(
+				'group_id'    => 'bp_messages',
+				'group_label' => __( 'Private Messages', 'buddypress' ),
+				'item_id'     => "bp-messages-{$message->id}",
+				'data'        => $message_data,
+			);
+		}
+	}
+
+	return array(
+		'data' => $data_to_export,
+		'done' => true,
+	);
+}

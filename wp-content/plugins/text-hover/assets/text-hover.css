@@ -2,3 +2,16 @@
 	padding: 4px 6px;
 	font-size: 14px;
 }
+abbr.c2c-text-hover {
+	text-decoration: none;
+	border-bottom: 1px dotted #000;
+}
+.qtip {
+	font-family: Helvetica, Arial, sans-serif;
+	color: #fff;
+	background: rgba(0,0,0,.72);
+	box-shadow: 0 1px 1px rgba(0,0,0,.12);
+	border-radius: 3px;
+	border-color: #000;
+	line-height: 1.4em;
+}

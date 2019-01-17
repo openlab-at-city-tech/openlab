@@ -36,6 +36,15 @@
         }
     });
 
+    window.Parsley.addValidator('atleastonedept', {
+        validateMultiple: function (value) {
+            return value.length !== 0;
+        },
+        messages: {
+            en: 'You must select at least one Department.'
+        }
+    });
+
     function checkPasswordStrength(pw, blacklist) {
         var score = window.wp.passwordStrength.meter(pw, blacklist, '');
 
@@ -71,6 +80,10 @@
             //in some cases errorMsg is further up the chain
             if (errorMsg.length === 0) {
                 errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
+            }
+
+            if ( errorMsg.length === 0 ) {
+                errorMsg = $(this.$element.data('parsley-errors-container')).find('li:first');
             }
 
             var jsElem = errorMsg[0];
@@ -389,6 +402,7 @@
         }
 
         function formValidation(fieldParent) {
+            evaluateFormValidation();
 
             fieldParent.find('input').on('input blur', function (e) {
 

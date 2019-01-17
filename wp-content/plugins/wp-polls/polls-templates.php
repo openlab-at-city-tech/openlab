@@ -261,6 +261,15 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 				<?php _e('Display the poll archive URL', 'wp-polls'); ?>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<strong>%POLL_MULTIPLE_ANSWER_PERCENTAGE%</strong><br />
+				<?php _e('Display the poll\'s mutiple answer percentage. This is total votes divided by total voters.', 'wp-polls'); ?>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
 		<tr class="alternate">
 			<td colspan="2">
 				<?php _e('Note: <strong>%POLL_TOTALVOTES%</strong> and <strong>%POLL_TOTALVOTERS%</strong> will be different if your poll supports multiple answers. If your poll allows only single answer, both value will be the same.', 'wp-polls'); ?>
@@ -340,6 +349,7 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 				<p style="margin: 2px 0">- %POLL_ANSWER_TEXT%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_VOTES%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_PERCENTAGE%</p>
+				<p style="margin: 2px 0">- %POLL_MULTIPLE_ANSWER_PERCENTAGE%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_IMAGEWIDTH%</p><br />
 				<input type="button" name="RestoreDefault" value="<?php _e('Restore Default Template', 'wp-polls'); ?>" onclick="poll_default_templates('resultbody');" class="button" />
 			</td>
@@ -354,7 +364,8 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 				<p style="margin: 2px 0">- %POLL_ANSWER%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_TEXT%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_VOTES%</p>
-				-  %POLL_ANSWER_PERCENTAGE%</p>
+				<p style="margin: 2px 0">- %POLL_ANSWER_PERCENTAGE%</p>
+				<p style="margin: 2px 0">- %POLL_MULTIPLE_ANSWER_PERCENTAGE%</p>
 				<p style="margin: 2px 0">- %POLL_ANSWER_IMAGEWIDTH%</p><br />
 				<input type="button" name="RestoreDefault" value="<?php _e('Restore Default Template', 'wp-polls'); ?>" onclick="poll_default_templates('resultbody2');" class="button" />
 			</td>

@@ -3,12 +3,12 @@
  * BuddyPress - Members Profile Loop
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 ?>
 
-<h2 class="screen-heading view-profile-screen"><?php _e( 'View Profile', 'buddypress' ); ?></h2>
+<h2 class="screen-heading view-profile-screen"><?php esc_html_e( 'View Profile', 'buddypress' ); ?></h2>
 
 <?php bp_nouveau_xprofile_hook( 'before', 'loop_content' ); ?>
 

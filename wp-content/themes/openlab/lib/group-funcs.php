@@ -64,9 +64,9 @@ function openlab_group_privacy_settings($group_type) {
         <div class="radio group-profile panel-body">
 
             <?php if ($bp->current_action == 'create'): ?>
-                <p id="privacy-settings-tag-b"><?php _e('These settings affect how others view your ' . $group_type_name . ' Profile. You may change these settings later in the course Profile Settings.', 'buddypress'); ?></p>
+                <p id="privacy-settings-tag-b">These settings affect how others view your <?php echo esc_html( $group_type_name ); ?> Profile. You may change these settings later in the <?php echo esc_html( $group_type_name_uc ); ?> Profile Settings.</p>
             <?php else: ?>
-                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Profile.') ?></p>
+                <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Profile.</p>
             <?php endif; ?>
 
             <?php
@@ -76,29 +76,28 @@ function openlab_group_privacy_settings($group_type) {
             }
             ?>
             <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
+                <div class="col-sm-24">
                     <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . 's directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Any OpenLab member may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />
-                        <?php _e('This is a private ' . $group_type_name_uc, 'buddypress') ?></label>
+                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile and related content and activity will only be visible to members of the group.', 'buddypress') ?></li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' will be listed in the ' . $group_type_name_uc . ' directory, search results, and may be displayed on the OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Only OpenLab members who request membership and are accepted may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />
-                        <?php _e('This is a hidden ' . $group_type_name_uc, 'buddypress') ?></label>
+                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+
                     <ul>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile, related content and activity will only be visible only to members of the ' . $group_type_name_uc . '.', 'buddypress') ?></li>
-                        <li><?php _e('This ' . $group_type_name_uc . ' Profile will NOT be listed in the ' . $group_type_name_uc . ' directory, search results, or OpenLab home page.', 'buddypress') ?></li>
-                        <li><?php _e('Only OpenLab members who are invited may join this ' . $group_type_name_uc . '.', 'buddypress') ?></li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile will NOT be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, or OpenLab home page.</li>
+                        <li>Only OpenLab members who are invited may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
                 </div>
             </div>
@@ -109,18 +108,15 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
         <div class="panel panel-default">
-            <div class="panel-heading semibold"><?php _e($group_type_name_uc . ' Site') ?></div>
+            <div class="panel-heading semibold">Privacy Settings: <?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
-                <p class="privacy-settings-tag-c"><?php _e('These settings affect how others view your ' . $group_type_name_uc . ' Site.') ?></p>
+                <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Site.</p>
                 <?php openlab_site_privacy_settings_markup($site_id) ?>
             </div>
         </div>
     <?php endif ?>
 
     <?php if ($bp->current_action == 'admin'): ?>
-        <?php do_action('bp_after_group_settings_admin'); ?>
-        <p><input class="btn btn-primary" type="submit" value="<?php _e('Save Changes', 'buddypress') ?> &#xf138;" id="save" name="save" /></p>
-        <?php wp_nonce_field('groups_edit_group_settings'); ?>
     <?php elseif ($bp->current_action == 'create'): ?>
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
         <?php
@@ -214,7 +210,7 @@ function openlab_group_archive() {
         );
     }
 
-    if (!empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype']) {
+    if ( !empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype'] && in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
         $meta_query[] = array(
             'key' => 'portfolio_user_type',
             'value' => ucwords($_GET['usertype']),
@@ -494,31 +490,31 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
 
     <div class="radio group-site">
 
-        <h5><?php _e('Public', 'buddypress') ?></h5>
-        <p id="search-setting-note" class="italics note">Note: These options will NOT block access to your site. It is up to search engines to honor your request.</p>
+        <h5>Public</h5>
         <div class="row">
-            <div class="col-sm-23 col-sm-offset-1">
-                <p><label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked('1', $blog_public); ?> /><?php _e('Allow search engines to index this site. Your site will show up in web search results.'); ?></label></p>
+            <div class="col-sm-24">
+                <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />Allow search engines to index this site. Your site will show up in web search results.</label>
 
-                <p><label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked('0', $blog_public); ?> /><?php _e('Ask search engines not to index this site. Your site should not show up in web search results.'); ?></label></p>
+                <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />Ask search engines not to index this site. Your site should not show up in web search results.</label>
+                <p id="search-setting-note" class="italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
             </div>
         </div>
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
-            <h5><?php _e('Private', 'buddypress') ?></h5>
+            <h5>Private</h5>
             <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
-                    <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
+                <div class="col-sm-24">
+                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label>
 
-                    <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>><?php _e('I would like my site to be visible to registered users of this ' . ucfirst($group_type) . '.'); ?></label></p>
+                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered users of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
                 </div>
             </div>
 
-            <h5><?php _e('Hidden', 'buddypress') ?></h5>
+            <h5>Hidden</h5>
             <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
-                    <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>><?php _e('I would like my site to be visible only to site administrators.'); ?></label></p>
+                <div class="col-sm-24">
+                    <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', $blog_public ); ?>>I would like my site to be visible only to site administrators.</label>
                 </div>
             </div>
 
@@ -527,13 +523,13 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
             <?php /* Portfolios */ ?>
             <h5>Private</h5>
             <div class="row">
-                <div class="col-sm-23 col-sm-offset-1">
-                    <p><label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked('-1', $blog_public); ?>><?php _e('I would like my site to be visible only to registered users of City Tech OpenLab.', 'buddypress'); ?></label></p>
+                <div class="col-sm-24">
+                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label></p>
 
-                    <p><label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible only to registered users that I have granted access.</label></p>
+                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
                     <p class="description private-portfolio-gloss italics note">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
 
-                    <p><label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked('-3', $blog_public); ?>>I would like my site to be visible only to me.</label></p>
+                    <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', $blog_public ); ?>>I would like my site to be visible only to me.</label>
                 </div>
             </div>
 
@@ -1104,22 +1100,23 @@ function openlab_default_subscription_settings_form() {
         return;
     }
     ?>
-    <hr>
-    <h4 id="email-sub-defaults"><?php _e('Email Subscription Defaults', 'bp-ass'); ?></h4>
-    <p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
-    <div class="radio email-sub">
-        <label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings('no') ?> />
-            <?php _e('No Email ( users will read this group on the web - good for any group - the default )', 'bp-ass') ?></label>
-        <label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings('sum') ?> />
-            <?php _e('Weekly Summary Email ( the week\'s topics - good for large groups )', 'bp-ass') ?></label>
-        <label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings('dig') ?> />
-            <?php _e('Daily Digest Email ( all daily activity bundles in one email - good for medium-size groups )', 'bp-ass') ?></label>
-        <label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings('sub') ?> />
-            <?php _e('New Topics Email ( new topics are sent as they arrive, but not replies - good for small groups )', 'bp-ass') ?></label>
-        <label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings('supersub') ?> />
-            <?php _e('All Email ( send emails about everything - recommended only for working groups )', 'bp-ass') ?></label>
+    <div class="panel panel-default">
+        <div class="panel-heading">Email Subscription Defaults</div>
+
+        <div class="panel-body">
+            <p><?php _e('When new users join this group, their default email notification settings will be:', 'bp-ass'); ?></p>
+            <div class="radio email-sub">
+                <label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings('no') ?> />
+                    <?php _e('No Email ( users will read this group on the web - good for any group - the default )', 'bp-ass') ?></label>
+                <label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings('sum') ?> />
+                    <?php _e('Weekly Summary Email ( the week\'s topics - good for large groups )', 'bp-ass') ?></label>
+                <label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings('dig') ?> />
+                    <?php _e('Daily Digest Email ( all daily activity bundles in one email - good for medium-size groups )', 'bp-ass') ?></label>
+                <label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings('supersub') ?> />
+                    <?php _e('All Email ( send emails about everything - recommended only for working groups )', 'bp-ass') ?></label>
+            </div>
+        </div>
     </div>
-    <hr />
     <?php
 }
 
@@ -1272,6 +1269,10 @@ function openlab_current_directory_filters() {
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
 
+            if ( 'usertype' === $ftype && ! in_array( $fvalue, openlab_valid_user_types(), true ) ) {
+                continue;
+            }
+
             $word = isset($filter_data['options'][$fvalue]) ? $filter_data['options'][$fvalue] : ucwords($fvalue);
 
             //dump hyphens from semester values
@@ -1324,6 +1325,7 @@ function openlab_show_site_posts_and_comments() {
     $posts = array();
     $comments = array();
 
+    add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
             switch_to_blog($site_id);
@@ -1391,6 +1393,7 @@ function openlab_show_site_posts_and_comments() {
 
             break;
     }
+    remove_filter( 'to/get_terms_orderby/ignore', '__return_true' );
 
     // If we have either, show both
     if (!empty($posts) || !empty($comments)) {
@@ -1532,7 +1535,7 @@ function openlab_bp_group_site_pages( $mobile = false ) {
                     <li class="portfolio-site-link">
                         <?php echo '<a class="bold no-deco" href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '">Visit ' . ucwords(groups_get_groupmeta(bp_get_group_id(), "wds_group_type")) . ' Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>'; ?>
                     </li>
-                    <?php if ($group_site_settings['is_local'] && ($bp->is_item_admin || is_super_admin() || groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id()))) : ?>
+                    <?php if ( $group_site_settings['is_local'] && ( $bp->is_item_admin || is_super_admin() || ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) && current_user_can_for_blog( $group_site_settings['site_id'], 'edit_posts' ) ) ) ) : ?>
                         <li class="portfolio-dashboard-link">
                             <?php echo '<a class="line-height height-200 font-size font-13" href="' . esc_attr(trailingslashit($group_site_settings['site_url'])) . 'wp-admin/">Site Dashboard</a>'; ?>
                         </li>
@@ -1609,6 +1612,7 @@ function openlab_get_group_site_settings($group_id) {
     }
 
     $group_site_settings = array(
+        'site_id' => $site_id,
         'site_url' => $site_url,
         'is_local' => $is_local,
         'is_visible' => $is_visible,

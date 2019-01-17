@@ -27,6 +27,7 @@ class TMCECF_CommentController {
             $autoembed = $titan->getOption('autoembed');
 
             if ($autoembed) {
+            	/* @var $wp_embed WP_Embed */
                 global $wp_embed;
                 return $wp_embed->autoembed($text);
             }

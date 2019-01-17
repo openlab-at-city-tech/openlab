@@ -1,11 +1,18 @@
 (function($){
 	var currentFilterBy,
+	  currentOrderBy,
 		$dateFilterSection,
 		$filterType,
+		$orderByDropdown,
 		$termFilter,
 		$termFilterSection;
 
 	function showHideSubFilter() {
+		// Ensure null is converted to a string.
+		if ( null === currentFilterBy ) {
+			currentFilterBy = '';
+		}
+
 		switch ( currentFilterBy ) {
 			case 'date' :
 				$dateFilterSection.show();
@@ -36,7 +43,14 @@
 			filterby = 'cat';
 		}
 
-		var data = {action:'get_posts_by', filterby:currentFilterBy};
+		currentOrderBy = $orderByDropdown.val();
+		j.cookie( 'anth-orderby', currentOrderBy, { expires: cookieExpires } );
+
+		var data = {
+			action: 'get_posts_by',
+			filterby: currentFilterBy,
+			orderby: currentOrderBy
+		};
 
 		if (currentFilterBy == 'date'){
 			data['startdate'] = j("#startdate").val();
@@ -57,7 +71,8 @@
 			data: data,
 			success: function(response){
 				j('#sidebar-posts').empty();
-				j.each( response, function(post_id, post_data) {
+				j.each( response, function(post_index, post_data) {
+					var post_id = post_data.ID;
 					var h = '';
 					h += '<li class="part-item item has-accordion accordion-closed">';
 					h +=   '<span class="fromNewId">new-' + post_id + '</span>';
@@ -86,6 +101,7 @@
 		var j = jQuery;
 
 		$filterType = $('#sortby-dropdown');
+		$orderByDropdown = $('#orderby-dropdown');
 		$termFilter = $('#filter');
 
 		$dateFilterSection = $('#datefilter');
@@ -108,6 +124,12 @@
 					if (!j('input#parent_id').length) {
 									j('input[name="parent_id"]').first().attr('id', 'parent_id');
 					}
+
+		// Set orderby based on last visit
+		currentOrderBy = j.cookie( 'anth-orderby' );
+		if ( 'undefined' === currentOrderBy ) {
+			currentOrderBy = $orderByDropdown.val();
+		}
 
 		// Set filter based on last visit
 		currentFilterBy = j.cookie('anth-filter');
@@ -185,6 +207,10 @@
 				}
 			});
 		});
+
+		$orderByDropdown.change( function() {
+			do_filter();
+		} );
 
 		$termFilter.change( function() {
 			do_filter();

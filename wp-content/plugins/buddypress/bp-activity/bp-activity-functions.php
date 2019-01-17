@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @return bool True if activity directory page is found, otherwise false.
  */
 function bp_activity_has_directory() {
-	return (bool) !empty( buddypress()->pages->activity->id );
+	return isset( buddypress()->pages->activity->id ) && buddypress()->pages->activity->id;
 }
 
 /**
@@ -1919,10 +1919,12 @@ function bp_activity_add( $args = '' ) {
 	 * Fires at the end of the execution of adding a new activity item, before returning the new activity item ID.
 	 *
 	 * @since 1.1.0
+	 * @since 4.0.0 Added the `$activity_id` parameter.
 	 *
-	 * @param array $r Array of parsed arguments for the activity item being added.
+	 * @param array $r           Array of parsed arguments for the activity item being added.
+	 * @param int   $activity_id The id of the activity item being added.
 	 */
-	do_action( 'bp_activity_add', $r );
+	do_action( 'bp_activity_add', $r, $activity->id );
 
 	return $activity->id;
 }
@@ -3107,31 +3109,40 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
  * @return boolean True on success, false on failure.
  */
 function bp_activity_user_can_read( $activity, $user_id = 0 ) {
-	$retval = false;
+	$retval = true;
 
 	// Fallback.
 	if ( empty( $user_id ) ) {
 		$user_id = bp_loggedin_user_id();
 	}
 
-	// Admins and moderators can see everything.
-	if ( bp_current_user_can( 'bp_moderate' ) ) {
-		$retval = true;
-	}
-
-	// If activity author match user, allow access as well.
-	if ( $user_id === $activity->user_id ) {
-		$retval = true;
-	}
-
-	// If activity is from a group, do an extra cap check.
-	if ( ! $retval && bp_is_active( 'groups' ) && $activity->component === buddypress()->groups->id ) {
-
+	// If activity is from a group, do extra cap checks.
+	if ( bp_is_active( 'groups' ) && buddypress()->groups->id === $activity->component ) {
 		// Check to see if the user has access to the activity's parent group.
 		$group = groups_get_group( $activity->item_id );
 		if ( $group ) {
-			$retval = $group->user_has_access;
+			// For logged-in user, we can check against the 'user_has_access' prop.
+			if ( bp_loggedin_user_id() === $user_id ) {
+				$retval = $group->user_has_access;
+
+			// Manually check status.
+			} elseif ( 'private' === $group->status || 'hidden' === $group->status ) {
+				// Only group members that are not banned can view.
+				if ( ! groups_is_user_member( $user_id, $activity->item_id ) || groups_is_user_banned( $user_id, $activity->item_id ) ) {
+					$retval = false;
+				}
+			}
 		}
+	}
+
+	// Spammed items are not visible to the public.
+	if ( $activity->is_spam ) {
+		$retval = false;
+	}
+
+	// Site moderators can view anything.
+	if ( bp_current_user_can( 'bp_moderate' ) ) {
+		$retval = true;
 	}
 
 	/**
@@ -3908,38 +3919,6 @@ function bp_activity_do_heartbeat() {
 }
 
 /**
- * AJAX endpoint for Suggestions API lookups.
- *
- * @since 2.1.0
- */
-function bp_ajax_get_suggestions() {
-	if ( ! bp_is_user_active() || empty( $_GET['term'] ) || empty( $_GET['type'] ) ) {
-		wp_send_json_error( 'missing_parameter' );
-		exit;
-	}
-
-	$args = array(
-		'term' => sanitize_text_field( $_GET['term'] ),
-		'type' => sanitize_text_field( $_GET['type'] ),
-	);
-
-	// Support per-Group suggestions.
-	if ( ! empty( $_GET['group-id'] ) ) {
-		$args['group_id'] = absint( $_GET['group-id'] );
-	}
-
-	$results = bp_core_get_suggestions( $args );
-
-	if ( is_wp_error( $results ) ) {
-		wp_send_json_error( $results->get_error_message() );
-		exit;
-	}
-
-	wp_send_json_success( $results );
-}
-add_action( 'wp_ajax_bp_get_suggestions', 'bp_ajax_get_suggestions' );
-
-/**
  * Detect a change in post type status, and initiate an activity update if necessary.
  *
  * @since 2.2.0
@@ -4155,3 +4134,103 @@ function bp_activity_transition_post_type_comment_status( $new_status, $old_stat
 	remove_filter( 'bp_akismet_get_activity_types', $comment_akismet_history );
 }
 add_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10, 3 );
+
+/**
+ * Finds and exports personal data associated with an email address from the Activity tables.
+ *
+ * @since 4.0.0
+ *
+ * @param string $email_address  The user's email address.
+ * @param int    $page           Batch number.
+ * @return array An array of personal data.
+ */
+function bp_activity_personal_data_exporter( $email_address, $page ) {
+	$number = 50;
+
+	$email_address = trim( $email_address );
+
+	$data_to_export = array();
+
+	$user = get_user_by( 'email', $email_address );
+
+	if ( ! $user ) {
+		return array(
+			'data' => array(),
+			'done' => true,
+		);
+	}
+
+	$activities = bp_activity_get( array(
+		'display_comments' => 'stream',
+		'per_page'         => $number,
+		'page'             => $page,
+		'show_hidden'      => true,
+		'filter'           => array(
+			'user_id' => $user->ID,
+		),
+	) );
+
+	$user_data_to_export = array();
+	$activity_actions    = bp_activity_get_actions();
+
+	foreach ( $activities['activities'] as $activity ) {
+		if ( ! empty( $activity_actions->{$activity->component}->{$activity->type}['format_callback'] ) ) {
+			$description = call_user_func( $activity_actions->{$activity->component}->{$activity->type}['format_callback'], '', $activity );
+		} elseif ( ! empty( $activity->action ) ) {
+			$description = $activity->action;
+		} else {
+			$description = $activity->type;
+		}
+
+		$item_data = array(
+			array(
+				'name'  => __( 'Activity Date', 'buddypress' ),
+				'value' => $activity->date_recorded,
+			),
+			array(
+				'name'  => __( 'Activity Description', 'buddypress' ),
+				'value' => $description,
+			),
+			array(
+				'name'  => __( 'Activity URL', 'buddypress' ),
+				'value' => bp_activity_get_permalink( $activity->id, $activity ),
+			),
+		);
+
+		if ( ! empty( $activity->content ) ) {
+			$item_data[] = array(
+				'name'  => __( 'Activity Content', 'buddypress' ),
+				'value' => $activity->content,
+			);
+		}
+
+		/**
+		 * Filters the data associated with an activity item when assembled for a WP personal data export.
+		 *
+		 * Plugins that register activity types whose `action` string doesn't adequately
+		 * describe the activity item for the purposes of data export may filter the activity
+		 * item data here.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param array                $item_data Array of data describing the activity item.
+		 * @param BP_Activity_Activity $activity  Activity item.
+		 */
+		$item_data = apply_filters( 'bp_activity_personal_data_export_item_data', $item_data, $activity );
+
+		$data_to_export[] = array(
+			'group_id'    => 'bp_activity',
+			'group_label' => __( 'Activity', 'buddypress' ),
+			'item_id'     => "bp-activity-{$activity->id}",
+			'data'        => $item_data,
+		);
+	}
+
+	// Tell core if we have more items to process.
+	$done = count( $activities['activities'] ) < $number;
+
+	return array(
+		'data' => $data_to_export,
+		'done' => $done,
+	);
+}

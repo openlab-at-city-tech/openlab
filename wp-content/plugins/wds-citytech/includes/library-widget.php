@@ -4,7 +4,6 @@
  * Functionality related to the Library widgets on sites and course profiles.
  */
 
-add_action( 'openlab_before_group_privacy_settings', 'openlab_group_library_settings' );
 add_action( 'widgets_init', 'openlab_register_library_tools_widget' );
 
 /**

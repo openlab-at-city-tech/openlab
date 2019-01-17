@@ -936,6 +936,10 @@ final class GF_Entry_List_Table extends WP_List_Table {
 				$value = GFCommon::to_money( $value, $entry['currency'] );
 				break;
 
+			case 'payment_status' :
+				$value = GFCommon::get_entry_payment_status_text( $entry['payment_status'] );
+				break;
+
 			case 'created_by' :
 				if ( ! empty( $value ) ) {
 					$userdata = get_userdata( $value );

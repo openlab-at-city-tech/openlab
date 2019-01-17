@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * match with our needs.
  *
  * @since 2.3.0
- * @since 3.0.0 We now require WP >= 4.5, so this is always true.
+ * @since 3.0.0 This is always true.
  *
  * @return bool Always true.
  */
@@ -565,7 +565,7 @@ function bp_attachments_delete_file( $args = array() ) {
 	 * @since 2.5.1
 	 *
 	 * @param bool $value Whether or not to delete the BuddyPress attachment.
-`	 * @param array $args Array of arguments for the attachment deletion.
+	 * @param array $args Array of arguments for the attachment deletion.
 	 */
 	if ( ! apply_filters( 'bp_attachments_pre_delete_file', true, $args ) ) {
 		return true;
@@ -974,23 +974,25 @@ function bp_attachments_json_response( $success, $is_html4 = false, $data = null
  * @return bool
  */
 function bp_attachments_get_template_part( $slug ) {
-	$attachment_template_part = 'assets/_attachments/' . $slug;
+	$switched = false;
 
-	// Load the attachment template in WP Administration screens.
-	if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-		$attachment_admin_template_part = buddypress()->themes_dir . '/bp-legacy/buddypress/' . $attachment_template_part . '.php';
-
-		// Check whether the template part exists.
-		if ( ! file_exists( $attachment_admin_template_part ) ) {
-			return false;
+	/*
+	 * Use bp-legacy attachment template part for older bp-default themes or if in
+	 * admin area.
+	 */
+	if ( ! bp_use_theme_compat_with_current_theme() || ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) ) {
+		$current = bp_get_theme_compat_id();
+		if ( 'legacy' !== $current ) {
+			$switched = true;
+			bp_setup_theme_compat( 'legacy' );
 		}
+	}
 
-		// Load the template part.
-		require( $attachment_admin_template_part );
+	// Load the template part.
+	bp_get_template_part( 'assets/_attachments/' . $slug );
 
-	// Load the attachment template in WP_USE_THEMES env.
-	} else {
-		bp_get_template_part( $attachment_template_part );
+	if ( $switched ) {
+		bp_setup_theme_compat( $current );
 	}
 }
 

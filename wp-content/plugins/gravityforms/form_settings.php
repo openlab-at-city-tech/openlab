@@ -40,6 +40,9 @@ class GFFormSettings {
 			case 'notification':
 				self::notification_page();
 				break;
+			case 'personal-data':
+				self::personal_data_page();
+				break;
 			default:
                 /**
                  * Fires when the settings page view is determined
@@ -969,7 +972,7 @@ class GFFormSettings {
 
 		<div class="gform_panel gform_panel_form_settings" id="form_settings">
 
-			<h3><span><i class="fa fa-cogs"></i> <?php _e( 'Form Settings', 'gravityforms' ) ?></span></h3>
+			<h3><span><i class="fa fa-cogs"></i> <?php esc_html_e( 'Form Settings', 'gravityforms' ) ?></span></h3>
 
 			<form action="" method="post" id="gform_form_settings">
 
@@ -981,7 +984,7 @@ class GFFormSettings {
 							?>
 							<tr>
 								<td colspan="2">
-									<h4 class="gf_settings_subgroup_title"><?php _e( $key, 'gravityforms' ); ?></h4>
+									<h4 class="gf_settings_subgroup_title"><?php echo esc_html( $key ); ?></h4>
 								</td>
 							</tr>
 							<?php
@@ -1550,6 +1553,29 @@ class GFFormSettings {
 	}
 
 	/**
+	 * Renders the Personal Data page.
+	 *
+	 * @since  2.4
+	 */
+	public static function personal_data_page() {
+
+		self::page_header( __( 'Personal Data', 'gravityforms' ) );
+
+		require_once( 'includes/class-personal-data.php' );
+
+		$form_id = absint( rgget( 'id' ) );
+
+		if ( isset( $_POST['save_personal_data_settings'])) {
+			GF_Personal_Data::process_form_settings( $form_id );
+		}
+
+		GF_Personal_Data::form_settings( $form_id );
+
+		self::page_footer();
+
+	}
+
+	/**
 	 * Displays the form settings page header.
 	 *
 	 * @since  Unknown
@@ -1679,6 +1705,7 @@ class GFFormSettings {
 			'10' => array( 'name' => 'settings', 'label' => __( 'Form Settings', 'gravityforms' ) ),
 			'20' => array( 'name' => 'confirmation', 'label' => __( 'Confirmations', 'gravityforms' ), 'query' => array( 'cid' => null, 'duplicatedcid' => null ) ),
 			'30' => array( 'name' => 'notification', 'label' => __( 'Notifications', 'gravityforms' ), 'query' => array( 'nid' => null ) ),
+			'40' => array( 'name' => 'personal-data', 'label' => __( 'Personal Data', 'gravityforms' ), 'query' => array( 'nid' => null ) ),
 		);
 
 		/**
@@ -2239,7 +2266,7 @@ class GFConfirmationTable extends WP_List_Table {
 				'content' => __( 'Content', 'gravityforms' )
 			),
 			array(),
-			array(),
+			array( 'name' => array( 'name', false ) ),
 			'name',
 		);
 
@@ -2259,7 +2286,45 @@ class GFConfirmationTable extends WP_List_Table {
 	 * @return void
 	 */
 	function prepare_items() {
+
 		$this->items = $this->form['confirmations'];
+
+		switch ( rgget( 'orderby' ) ) {
+
+			case 'name':
+
+				// Sort confirmations alphabetically.
+				usort( $this->items, array( $this, 'sort_confirmations' ) );
+
+				// Reverse sort.
+				if ( 'desc' === rgget( 'order' ) ) {
+					$this->items = array_reverse( $this->items );
+				}
+
+				break;
+
+			default:
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Sort confirmations alphabetically.
+	 *
+	 * @since  2.4
+	 * @access public
+	 *
+	 * @param array $a First confirmation to compare.
+	 * @param array $b Second confirmation to compare.
+	 *
+	 * @return int
+	 */
+	function sort_confirmations( $a = array(), $b = array() ) {
+
+		return strcasecmp( $a['name'], $b['name'] );
+
 	}
 
 	/**

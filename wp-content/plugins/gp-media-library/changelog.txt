@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.0.14
+
+	- Updated minimum GF version to actual required version: 2.0.8
+	- Fixed notice that was generated on non-standard WP pages.
+
 ## 1.0.13
 
 	- Fixed issue where files were uploaded to the wrong directory due to get_post() returning a post even when no post ID was passed.
