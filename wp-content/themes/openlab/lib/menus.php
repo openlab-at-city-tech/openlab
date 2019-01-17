@@ -445,7 +445,7 @@ function openlab_create_group_menu($grouptype) {
             $step_name = 'Step One: Create Profile & Site';
             break;
         case 'group-settings':
-            $step_name = 'Step Two: Privacy Settings';
+            $step_name = 'Step Two: Privacy & Member Role Settings';
             break;
         case 'group-avatar':
             $step_name = 'Step Three: Avatar';
@@ -681,8 +681,15 @@ function openlab_filter_subnav_home($subnav_item) {
 
     if (!empty($group_site_settings['site_url']) && $group_site_settings['is_visible']) {
         $site_link = '<li id="site-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . '" id="site">' . $group_label . ' Site</a></li>';
-
-        if ($group_site_settings['is_local'] && ((openlab_is_portfolio() && openlab_is_my_portfolio()) || (!openlab_is_portfolio() && groups_is_user_member(bp_loggedin_user_id(), bp_get_current_group_id())) || $bp->is_item_admin || is_super_admin())) {
+        if (
+            $group_site_settings['is_local'] &&
+            (
+                (openlab_is_portfolio() && openlab_is_my_portfolio())
+                || ( !openlab_is_portfolio() && groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) && current_user_can_for_blog( $group_site_settings['site_id'], 'edit_posts' ) )
+                || $bp->is_item_admin
+                || is_super_admin()
+            )
+        ) {
 
             $site_link .= '<li id="site-admin-groups-li" class="visible-xs"><a href="' . trailingslashit(esc_attr($group_site_settings['site_url'])) . 'wp-admin/" id="site-admin">Site Dashboard</a></li>';
         }

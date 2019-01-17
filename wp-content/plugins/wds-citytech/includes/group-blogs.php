@@ -78,18 +78,15 @@ function openlab_set_group_site_id( $group_id, $site_id ) {
 	do_action( 'openlab_set_group_site_id', $group_id, $site_id );
 }
 
+// Ensure that old-style blog comment activity is enabled.
+add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+
 ////////////////////////
 /// MEMBERSHIP SYNC ////
 ////////////////////////
 
 function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role = null ) {
-	$blog_role = null;
-	$blog_id = openlab_get_site_id_by_group_id( $group_id );
-	if ( ! $blog_id ) {
-		return $blog_role;
-	}
-
-	$blog_public = get_blog_option( $blog_id, 'blog_public' );
+	$role_settings = openlab_get_group_member_role_settings( $group_id );
 
 	if ( null === $group_role ) {
 		if ( groups_is_user_admin( $user_id, $group_id ) ) {
@@ -100,6 +97,8 @@ function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role 
 			$group_role = 'member';
 		}
 	}
+
+	return isset( $role_settings[ $group_role ] ) ? $role_settings[ $group_role ] : 'author';
 
 	if ( '-3' == $blog_public ) {
 		if ( 'admin' === $group_role ) {
@@ -147,13 +146,14 @@ function openlab_add_user_to_groupblog_on_promotion( $group_id, $user_id, $statu
 add_action( 'groups_promote_member', 'openlab_add_user_to_groupblog_on_promotion', 10, 3 );
 
 /**
- * Modify group site membership on demotion.
+ * Modify group site membership on hooks that take group_id + user_id.
  */
 function openlab_add_user_to_groupblog_on_demotion( $group_id, $user_id ) {
 	$role = openlab_get_blog_role_for_group_role( $group_id, $user_id, 'member' );
 	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
 }
 add_action( 'groups_demote_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
+add_action( 'groups_unban_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
 
 /**
  * Join a user to a groupblog when joining the group
@@ -734,6 +734,152 @@ function wds_bp_group_meta() {
 
 add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta' );
 add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta' );
+
+/**
+ * Outputs the Member Role Settings panel.
+ */
+function openlab_group_member_role_settings( $group_type ) {
+    global $bp;
+
+    $site_id = openlab_get_site_id_by_group_id();
+    if ( ! $site_id ) {
+        return;
+    }
+
+    $group_type_name    = $group_type;
+    $group_type_name_uc = ucfirst( $group_type );
+
+    if ( 'portfolio' === $group_type ) {
+        $group_type_name = openlab_get_portfolio_label( array(
+            'group_id' => bp_get_current_group_id(),
+        ) );
+
+        $group_type_name_uc = openlab_get_portfolio_label( array(
+            'group_id' => bp_get_current_group_id(),
+            'case'     => 'upper',
+        ) );
+    }
+
+    $site_roles = array(
+        'administrator' => 'Administrator',
+        'editor'        => 'Editor',
+        'author'        => 'Author',
+        'contributor'   => 'Contributor',
+        'subscriber'    => 'Subscriber',
+    );
+
+    if ( bp_is_group_create() ) {
+        $new_group_id = bp_get_new_group_id();
+		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
+		if ( $clone_source_group_id ) {
+			$settings = openlab_get_group_member_role_settings( $clone_source_group_id );
+		} else {
+			$settings = array(
+				'admin'  => 'administrator',
+				'mod'    => 'editor',
+				'member' => 'author',
+			);
+		}
+    } else {
+		$settings = openlab_get_group_member_role_settings( bp_get_current_group_id() );
+	}
+
+    ?>
+    <div class="panel panel-default member-roles">
+        <div class="panel-heading semibold">Member Role Settings</div>
+
+        <div class="group-profile panel-body">
+            <p>These settings control the default member roles on your associated <?php echo $group_type_name_uc; ?> site when members join the <?php echo $group_type_name_uc; ?>. You may also adjust individual member roles in Membership settings and on the <?php echo $group_type_name_uc; ?> site Dashboard.</p>
+
+            <div class="row">
+				<div class="col-sm-24">
+					<ul class="member-role-selectors">
+						<li>
+							<label for="member_role_member"><?php echo $group_type_name_uc; ?> members have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<select class="form-control" name="member_role_member">
+								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
+									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['member'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</li>
+
+						<li>
+							<label for="member_role_admin"><?php echo $group_type_name_uc; ?> moderators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<select class="form-control" name="member_role_mod">
+								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
+									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['mod'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</li>
+
+						<li>
+							<label for="member_role_admin"><?php echo $group_type_name_uc; ?> administrators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<select class="form-control" name="member_role_admin">
+								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
+									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['admin'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="member-role-definition col-sm-24">
+					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo $group_type_name_uc; ?> Member Role Definitions</div>
+					<div class="member-role-definition-text">
+						<ul>
+							<li><strong>Administrator</strong>: Someone who can change course, project, or club settings (such as changing privacy settings); edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs. They can also change the avatar, manage membership, and delete the course, project, or club.</li>
+							<li><strong>Moderator</strong>: Someone who can edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs.</li>
+							<li><strong>Member</strong>: Someone who can post in discussion forums, edit docs (depending on settings determined by the admin), and upload files.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="member-role-definition col-sm-24">
+					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo $group_type_name_uc; ?> Site Member Role Definitions</div>
+					<div class="member-role-definition-text">
+						<ul>
+							<li><strong>Administrator</strong>: Someone who can control every aspect of a site, from managing content and comments, to choosing site themes to activating widgets and plugins.  In most cases, you should not make another site user an Administrator unless you want them to have equal control over your site content and functions.</li>
+							<li><strong>Editor</strong>: Someone who can write and publish posts, as well as manage the posts of other users.  Editors can also make changes to pages, but cannot change the theme, menu, widgets, plugins, or edit other user roles.</li>
+							<li><strong>Author</strong>: Someone who can publish and edit their own content, but cannot change or delete anything that anyone else has created on the site.  In most cases, if you are adding additional users to your site, making them site Authors is the best choice.</li>
+							<li><strong>Contributor</strong>: Someone who can write and edit their own posts, but can’t publish them.  They can save them as drafts for an Editor or Administrator to publish.</li>
+							<li><strong>Subscriber</strong>: Someone who can only log in and manage their profile, but they can’t post or change anything on the site.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+
+	<?php
+}
+
+/**
+ * Gets the member role settings for a group.
+ */
+function openlab_get_group_member_role_settings( $group_id ) {
+	$defaults = [
+		'admin'  => 'administrator',
+		'mod'    => 'editor',
+		'member' => 'author',
+	];
+
+	$raw_settings = groups_get_groupmeta( $group_id, 'member_site_roles' );
+
+	if ( ! $raw_settings ) {
+		$settings = $defaults;
+	} else {
+		$settings = [];
+		foreach ( $defaults as $group_role => $site_role ) {
+			$settings[ $group_role ] = isset( $raw_settings[ $group_role ] ) ? $raw_settings[ $group_role ] : $site_role;
+		}
+	}
+
+	return $settings;
+}
 
 /**
  * Server side group blog URL validation

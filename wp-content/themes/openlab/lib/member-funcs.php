@@ -39,7 +39,7 @@ function openlab_list_members($view) {
     $user_type = $sequence_type = $search_terms = $user_school = $user_dept = '';
     if (!empty($_GET['usertype']) && $_GET['usertype'] != 'user_type_all') {
         if ( in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
-            $user_type = wp_unslash( $user_type );
+            $user_type = wp_unslash( $_GET['usertype'] );
             $user_type = ucwords( $user_type );
         }
     } else {

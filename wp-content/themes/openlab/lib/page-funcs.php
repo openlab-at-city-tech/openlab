@@ -159,9 +159,10 @@ function cuny_whos_online() {
         $ids .= "," . intval($r);
     }
 
+    ob_start();
+
     if ( bp_has_members( 'type=active&include=' . $ids ) ) :
 
-        ob_start();
         ?>
 
         <div class="avatar-block left-block-content clearfix">

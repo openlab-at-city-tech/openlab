@@ -163,14 +163,9 @@ function openlab_group_clone_details( $group_id ) {
 		$retval['name']        = $group->name;
 		$retval['description'] = $group->description;
 
-		$schools = groups_get_groupmeta( $group_id, 'wds_group_school' );
-		if ( ! empty( $schools ) ) {
-			$retval['schools'] = explode( ',', $schools );
-		}
-
-		$departments = groups_get_groupmeta( $group_id, 'wds_departments' );
-		if ( ! empty( $departments ) ) {
-			$retval['departments'] = explode( ',', $departments );
+		$group_units = openlab_get_group_academic_units( $group_id );
+		foreach ( $group_units as $unit_type => $units ) {
+			$retval[ $unit_type ] = $units;
 		}
 
 		$retval['course_code']            = groups_get_groupmeta( $group_id, 'wds_course_code' );
@@ -784,6 +779,8 @@ class Openlab_Clone_Course_Site {
 		$mods  = get_option( 'mods_' . $theme );
 
 		$preserve_option = array(
+			'bcn_options',
+			'bcn_version',
 			'siteurl',
 			'blogname',
 			'admin_email',

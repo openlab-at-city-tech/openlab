@@ -194,6 +194,10 @@
 
                     <?php openlab_group_privacy_settings($group_type); ?>
 
+                    <?php if ( 'portfolio' !== $group_type ) : ?>
+                        <?php openlab_group_member_role_settings( $group_type ); ?>
+                    <?php endif; ?>
+
                 <?php endif; ?>
 
                 <?php /* Group creation step 3: Avatar Uploads */ ?>

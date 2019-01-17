@@ -932,12 +932,17 @@ function wds_load_group_type( $group_type ) {
 		}
 	}
 
-	$do_sod_selector = 'course' !== $group_type && 'Student' !== $account_type;
+	$do_sod_selector = 'course' !== $group_type && 'student' !== $account_type;
 
 	$selector_args = [];
 	if ( ! $do_sod_selector ) {
 		$selector_args['entities'] = [ 'school' ];
 		$selector_args['legacy']   = true;
+	}
+
+	// Special case: student/alumni portfolio creation doesn't see Office.
+	if ( 'portfolio' === $group_type && in_array( strtolower( $account_type ), [ 'student', 'alumni' ], true ) ) {
+		$selector_args['entities'] = [ 'school' ];
 	}
 
 	$selector_args['required'] = openlab_is_school_required_for_group_type( $group_type ) && 'staff' != strtolower( $account_type );
@@ -1020,8 +1025,6 @@ function wds_load_group_type( $group_type ) {
 
 		$return .= '</table></div></div><!--.panel-->';
 	}
-
-	$return .= '<script>wds_load_group_departments();</script>';
 
 	if ( $echo ) {
 		return $return;
@@ -1205,6 +1208,42 @@ function wds_bp_group_meta_save( $group ) {
 		}
 	}
 
+	// Member roles.
+	if ( openlab_get_site_id_by_group_id( $group->id ) ) {
+		$role_map = [
+			'admin'  => 'administrator',
+			'mod'    => 'editor',
+			'member' => 'author',
+		];
+
+		$site_roles = [ 'administrator', 'editor', 'author', 'contributor', 'subscriber' ];
+
+		foreach ( $role_map as $group_role => $site_role ) {
+			$role_key = 'member_role_' . $group_role;
+			if ( ! isset( $_POST[ $role_key ] ) ) {
+				continue;
+			}
+
+			$selected_site_role = $_POST[ $role_key ];
+			if ( ! in_array( $selected_site_role, $site_roles, true ) ) {
+				continue;
+			}
+
+			$role_map[ $group_role ] = $selected_site_role;
+		}
+
+		groups_update_groupmeta( $group->id, 'member_site_roles', $role_map );
+	}
+
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id     = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
+		}
+	}
+
 	// Portfolio list display
 	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
 		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
@@ -1364,6 +1403,8 @@ function ra_copy_blog_page( $group_id ) {
 						// update options
 						$skip_options = array(
 							'admin_email',
+							'bcn_options',
+							'bcn_version',
 							'blogname',
 							'cron',
 							'db_version',
@@ -2642,6 +2683,31 @@ add_filter(
 		return $types;
 	}
 );
+
+/**
+ * Strict mime-type fixes.
+ */
+function openlab_secondary_mime( $check, $filetype, $filename, $mimes ) {
+	if ( empty( $check['ext'] ) && empty( $check['type'] ) ) {
+		$secondary_mimes = [
+			[ 'tex' => 'text/x-tex' ],
+		];
+
+		foreach ( $secondary_mimes as $secondary_mime ) {
+			// Run another check, but only for our secondary mime and not on core mime types.
+			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+			$check = wp_check_filetype_and_ext( $file, $filename, $secondary_mime );
+			add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+
+			if ( ! empty( $check['ext'] ) || ! empty( $check['type'] ) ) {
+				return $check;
+			}
+		}
+	}
+
+	return $check;
+}
+add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
 
 /** TablePress mods **********************************************************/
 

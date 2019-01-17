@@ -91,10 +91,6 @@ class Anthologize_Project_Organizer {
 								<div class="customlinkdiv" id="customlinkdiv">
 
 									<p id="menu-item-name-wrap">
-										<?php $this->orderby_dropdown() ?>
-									</p>
-
-									<p id="menu-item-name-wrap">
 										<?php $this->sortby_dropdown() ?>
 									</p>
 
@@ -104,6 +100,10 @@ class Anthologize_Project_Organizer {
 
 									<p id="datefilter">
 										<?php $this->filter_date(); ?>
+									</p>
+
+									<p id="menu-item-name-wrap">
+										<?php $this->orderby_dropdown() ?>
 									</p>
 
 									<h3 class="part-header"><?php _e( 'Posts', 'anthologize' ) ?></h3>
