@@ -2944,3 +2944,18 @@ add_action(
 		wp_enqueue_script( 'openlab-search-filter', set_url_scheme( WPMU_PLUGIN_URL . '/js/search-filter.js' ), array( 'jquery' ) );
 	}
 );
+
+function openlab_sanitize_url_params( $url ) {
+	$request_params = parse_url( $url, PHP_URL_QUERY );
+	parse_str( $request_params, $params );
+	$param_keys = array_keys( $params );
+
+	if ( isset( $params['usertype'] ) && ! in_array( $params['usertype'], openlab_valid_user_types(), true ) ) {
+		unset( $params['usertype'] );
+	}
+
+	$url = remove_query_arg( $param_keys, $url );
+	$url = add_query_arg( $params, $url );
+
+	return $url;
+}
