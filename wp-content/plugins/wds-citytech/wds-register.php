@@ -521,4 +521,4 @@ function openlab_user_activated_send_group_invites( $user_id ) {
 
 	groups_send_invites( $inviter_id, $group_id );
 }
-// add_action( 'bp_core_activated_user', 'openlab_user_activated_send_group_invites', 11 );
+add_action( 'bp_core_activated_user', 'openlab_user_activated_send_group_invites', 11 );
