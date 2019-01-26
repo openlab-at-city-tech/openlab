@@ -493,3 +493,32 @@ function openlab_process_academic_unit_data_at_activation( $user_id, $key, $data
 	openlab_set_user_academic_units( $user_id, $data['meta']['academic_units'] );
 }
 add_action( 'bp_core_activated_user', 'openlab_process_academic_unit_data_at_activation', 10, 3 );
+
+/**
+ * Send "Office of the Provost" group invites to "Faculty" and "Staff" members.
+ *
+ * @param int $user_id
+ * @return void
+ */
+function openlab_user_activated_send_group_invites( $user_id ) {
+	$group_id      = 22629;
+	$account_types = [ 'Faculty', 'Staff' ];
+	$account_type  = bp_get_profile_field_data( 'field=Account Type&user_id=' . $user_id );
+
+	if ( ! in_array( $account_type, $account_types ) ) {
+		return;
+	}
+
+	// Set group admin as 'inviter'.
+	$admins     = groups_get_group_admins( $group_id );
+	$inviter_id = isset( $admins[0] ) ? $admins[0]->user_id : 0;
+
+	groups_invite_user( [
+		'user_id'    => $user_id,
+		'group_id'   => $group_id,
+		'inviter_id' => $inviter_id,
+	] );
+
+	groups_send_invites( $inviter_id, $group_id );
+}
+// add_action( 'bp_core_activated_user', 'openlab_user_activated_send_group_invites', 11 );
