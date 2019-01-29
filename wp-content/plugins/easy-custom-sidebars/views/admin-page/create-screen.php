@@ -10,7 +10,7 @@
  * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license     GPL-2.0+
  * @copyright   Copyright (c) 2015, Titanium Themes
- * @version     1.0.9
+ * @version     1.0.10
  * 
  */
 
@@ -22,7 +22,7 @@
  * rest of the query variables appended to it via AJAX.
  *
  * @since 1.0.1
- * @version 1.0.9
+ * @version 1.0.10
  * 
  */
 $edit_redirect_link = esc_url( 
@@ -42,7 +42,7 @@ $edit_redirect_link = esc_url(
  * sidebar.
  *
  * @since 1.0.1
- * @version 1.0.9
+ * @version 1.0.10
  * 
  */
 $delete_link = $this->admin_url;

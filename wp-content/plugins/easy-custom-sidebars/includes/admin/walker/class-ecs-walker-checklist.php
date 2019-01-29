@@ -11,7 +11,7 @@
  * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license     GPL-2.0+
  * @copyright   Copyright (c) 2015, Titanium Themes
- * @version     1.0.9
+ * @version     1.0.10
  * 
  * @uses Walker_Nav_Menu
  * 
@@ -35,7 +35,7 @@ if ( class_exists( 'Walker_Nav_Menu' ) ) {
 		 * @return [type]          [description]
 		 *
 		 * @since 1.0.1
-		 * @version 1.0.9
+		 * @version 1.0.10
 		 * 
 		 */
 		function start_lvl( &$output, $depth = 0, $args = array() ) {
@@ -52,7 +52,7 @@ if ( class_exists( 'Walker_Nav_Menu' ) ) {
 		 * @return [type]          [description]
 		 *
 		 * @since 1.0.1
-		 * @version 1.0.9
+		 * @version 1.0.10
 		 * 
 		 */
 		function end_lvl( &$output, $depth = 0, $args = array() ) {

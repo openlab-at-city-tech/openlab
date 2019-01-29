@@ -3,7 +3,7 @@
  * Plugin Name: Easy Custom Sidebars
  * Plugin URI: http://www.titaniumthemes.com/wordpress-sidebar-plugin
  * Description: A simple and easy way to add custom sidebars/widget areas to your WordPress theme.
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: Titanium Themes
  * Author URI: http://www.titaniumthemes.com
  * Text Domain: easy-custom-sidebars
@@ -23,7 +23,7 @@
  * @author      Sunny Johal - Titanium Themes <support@titaniumthemes.com>
  * @license     GPL-2.0+
  * @copyright   Copyright (c) 2015, Titanium Themes
- * @version     1.0.9
+ * @version     1.0.10
  * 
  */
 
@@ -41,7 +41,7 @@ if ( ! defined( 'WPINC' ) ) {
  * {@link http://codex.wordpress.org/Function_Reference/plugin_dir_path} 	plugin_dir_path()
  *
  * @since 1.0.1
- * @version 1.0.9
+ * @version 1.0.10
  * 
  */
 require_once( plugin_dir_path( __FILE__ ) . 'class-easy-custom-sidebars.php' );
@@ -66,7 +66,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'includes/admin/class-ecs-ajax.php' 
  * {@link http://codex.wordpress.org/Function_Reference/add_action} 	add_action()
  *
  * @since 1.0.1
- * @version 1.0.9
+ * @version 1.0.10
  * 
  */
 add_action( 'plugins_loaded', array( 'Easy_Custom_Sidebars', 'get_instance' ) );
@@ -95,7 +95,7 @@ if ( is_admin() ) {
  * {@link http://codex.wordpress.org/Function_Reference/register_deactivation_hook} 	register_deactivation_hook()
  * 
  * @since 1.0.1
- * @version 1.0.9
+ * @version 1.0.10
  * 
  */
 register_activation_hook( __FILE__, array( 'Easy_Custom_Sidebars', 'activate' ) );
