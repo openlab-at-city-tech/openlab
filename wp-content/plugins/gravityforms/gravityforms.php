@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.3
+Version: 2.4.5
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -11,7 +11,7 @@ Text Domain: gravityforms
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2009-2018 Rocketgenius, Inc.
+Copyright 2009-2019 Rocketgenius, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.3';
+	public static $version = '2.4.5';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -938,6 +938,12 @@ class GFForms {
 				'wp-plupload',
 				'gform_placeholder',
 				'gform_json',
+				'gform_gravityforms',
+				'gform_forms',
+				'gform_form_admin',
+				'jquery-ui-datepicker',
+				'gform_masked_input',
+				'sack',
 				'jquery-ui-autocomplete',
 				'wp-tinymce',
 				'wp-tinymce-root',

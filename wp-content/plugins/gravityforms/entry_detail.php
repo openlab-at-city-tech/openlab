@@ -109,9 +109,20 @@ class GFEntryDetail {
 		$form    = apply_filters( 'gform_admin_pre_render', $form );
 		$form    = apply_filters( 'gform_admin_pre_render_' . $form_id, $form );
 
-		self::$_form = $form;
+		self::set_current_form( $form );
 
 		return $form;
+	}
+
+	/**
+	 * Caches the current form.
+	 *
+	 * @since 2.4.4.1
+	 *
+	 * @param array $form The form to be cached.
+	 */
+	public static function set_current_form( $form ) {
+		self::$_form = $form;
 	}
 
 	public static function get_current_entry() {
@@ -265,15 +276,12 @@ class GFEntryDetail {
 		switch ( RGForms::post( 'action' ) ) {
 			case 'update' :
 				check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' );
-				//Loading files that have been uploaded to temp folder
-				$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
-				if ( ! is_array( $files ) ) {
-					$files = array();
-				}
 
 				$original_entry = $lead;
 
-				GFFormsModel::$uploaded_files[ $form_id ] = $files;
+				// Set files that have been uploaded to temp folder
+				GFFormsModel::set_uploaded_files( $form_id );
+
 				GFFormsModel::save_lead( $form, $lead );
 
 				/**
@@ -295,12 +303,18 @@ class GFEntryDetail {
 					$consent_update_note = '';
 
 					foreach ( $form['fields'] as $field ) {
-						if ( $field['type'] === 'consent' && ( $lead[ $field['id'] . '.1' ] !== $original_entry[ $field['id'] . '.1' ] ) ) {
-							if ( ! empty( $consent_update_note ) ) {
-								$consent_update_note .= "\n";
-							}
-							$consent_update_note .= empty( $lead[ $field['id'] . '.1' ] ) ? sprintf( esc_html__( '%s: Unchecked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $original_entry[ $field['id'] . '.2' ] ) : sprintf( esc_html__( '%s: Checked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $lead[ $field['id'] . '.2' ] );
+						if ( $field['type'] === 'consent' ) {
+							$field_obj             = GFFormsModel::get_field( $form, $field['id'] );
+							$revision_id           = GFFormsModel::get_latest_form_revisions_id( $form['id'] );
+							$current_description   = $field_obj->get_field_description_from_revision( $revision_id );
+							$submitted_description = $field_obj->get_field_description_from_revision( $original_entry[ $field['id'] . '.3' ] );
 
+							if ( $lead[ $field['id'] . '.1' ] !== $original_entry[ $field['id'] . '.1' ] || $field['checkboxLabel'] !== $original_entry[ $field['id'] . '.2' ] || $current_description !== $submitted_description ) {
+								if ( ! empty( $consent_update_note ) ) {
+									$consent_update_note .= "\n";
+								}
+								$consent_update_note .= empty( $lead[ $field['id'] . '.1' ] ) ? sprintf( esc_html__( '%s: Unchecked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), wp_strip_all_tags( $original_entry[ $field['id'] . '.2' ] ) ) : sprintf( esc_html__( '%s: Checked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), wp_strip_all_tags( $lead[ $field['id'] . '.2' ] ) );
+							}
 						}
 					}
 
@@ -364,7 +378,7 @@ class GFEntryDetail {
 				check_admin_referer( 'gforms_update_note', 'gforms_update_note' );
 				if ( $_POST['bulk_action'] == 'delete' ) {
 					if ( ! GFCommon::current_user_can_any( 'gravityforms_edit_entry_notes' ) ) {
-						die( esc_html__( "You don't have adequate permission to delete notes.", 'gravityforms' ) );
+						wp_die( esc_html__( "You don't have adequate permission to delete notes.", 'gravityforms' ) );
 					}
 					RGFormsModel::delete_notes( $_POST['note'] );
 				}
@@ -399,7 +413,7 @@ class GFEntryDetail {
 			case 'delete' :
 				check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' );
 				if ( ! GFCommon::current_user_can_any( 'gravityforms_delete_entries' ) ) {
-					die( esc_html__( "You don't have adequate permission to delete entries.", 'gravityforms' ) );
+					wp_die( esc_html__( "You don't have adequate permission to delete entries.", 'gravityforms' ) );
 				}
 				GFFormsModel::delete_entry( $lead['id'] );
 				$admin_url = admin_url( 'admin.php?page=gf_entries&view=entries&id=' . absint( $form['id'] ) . '&deleted=' . absint( $lead['id'] ) );
@@ -460,6 +474,13 @@ class GFEntryDetail {
 					jQuery('#preview_' + fieldId).hide();
 					jQuery('#upload_' + fieldId).show('slow');
 				}
+
+				var $input = jQuery( 'input[name="input_' + fieldId + '"]' ),
+					files  = jQuery.parseJSON( $input.val() );
+
+				delete files[ fileIndex ];
+				$input.val( jQuery.toJSON( files ) );
+
 			}
 
 			function ToggleShowEmptyFields() {
@@ -992,7 +1013,7 @@ class GFEntryDetail {
 						// Ignore product fields as they will be grouped together at the end of the grid.
 						if ( GFCommon::is_product_field( $field->type ) ) {
 							$has_product_fields = true;
-							continue;
+							break;
 						}
 
 						$value = RGFormsModel::get_lead_field_value( $lead, $field );
@@ -1154,7 +1175,7 @@ class GFEntryDetail {
 					 * @var array  $products        Current order summary object.
 					 * @var string $format          Format that should be used to display the summary ('html' or 'text').
 					 */
-                    $order_summary = gf_apply_filters( array( 'gform_order_summary', $form['id'] ), ob_get_clean(), $form, $lead, $products, 'html' );
+                    $order_summary = gf_apply_filters( array( 'gform_order_summary', $form['id'] ), trim( ob_get_clean() ), $form, $lead, $products, 'html' );
                     echo $order_summary;
 				}
 			}
@@ -1501,7 +1522,7 @@ class GFEntryDetail {
 	public static function maybe_display_empty_fields( $allow_display_empty_fields, $form, $lead = false ) {
 		$display_empty_fields = false;
 		if ( $allow_display_empty_fields ) {
-			$display_empty_fields = rgget( 'gf_display_empty_fields', $_COOKIE );
+			$display_empty_fields = (bool) rgget( 'gf_display_empty_fields', $_COOKIE );
 		}
 
 		if ( ! $lead ) {

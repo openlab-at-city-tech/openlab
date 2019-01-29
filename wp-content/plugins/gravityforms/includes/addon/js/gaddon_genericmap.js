@@ -125,7 +125,7 @@ var GFGenericMap = function( options ) {
 					
 					var key_select = $elem.find( 'select[name="_gaddon_setting_'+ self.options.keyFieldName +'"]' );
 					
-					if ( ! item.custom_key && key_select.length > 0 ) {
+					if ( ! item.custom_key && ( key_select.length > 0 && key_select.val() !== 'gf_custom' ) ) {
 						$elem.find( '.custom-key-container' ).hide();
 					} else {
 						$elem.find( '.key' ).hide();

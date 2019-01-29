@@ -6866,6 +6866,44 @@ class GFFormsModel {
 
 		return $rows;
 	}
+
+	/**
+	 * Sanitizes the names of the files that have been uploaded to the tmp directory and sent in
+	 * $_POST['gform_uploaded_files'] and caches them in GFFormsModel::$uploaded_files.
+	 *
+	 * @since 2.4.3.5
+	 *
+	 * @param $form_id
+	 *
+	 * @return array
+	 */
+	public static function set_uploaded_files( $form_id ) {
+		$files = GFCommon::json_decode( stripslashes( GFForms::post( 'gform_uploaded_files' ) ) );
+		if ( ! is_array( $files ) ) {
+			$files = array();
+		}
+
+		foreach ( $files as &$upload_field ) {
+			if ( is_array( $upload_field ) ) {
+				if ( isset( $upload_field[0] ) && is_array( $upload_field[0] ) ) {
+					foreach ( $upload_field as &$upload ) {
+						if ( isset( $upload['temp_filename'] ) ) {
+							$upload['temp_filename'] = sanitize_file_name( basename( $upload['temp_filename'] ) );
+						}
+						if ( isset( $upload['uploaded_filename'] ) ) {
+							$upload['uploaded_filename'] = sanitize_file_name( basename( $upload['uploaded_filename'] ) );
+						}
+					}
+				}
+			} else {
+				$upload_field = basename( $upload_field );
+			}
+		}
+
+		self::$uploaded_files[ $form_id ] = $files;
+
+		return $files;
+	}
 }
 
 class RGFormsModel extends GFFormsModel {

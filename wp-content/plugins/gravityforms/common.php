@@ -1265,7 +1265,8 @@ class GFCommon {
 
 			$field_value = '';
 
-			$field_label = $use_admin_label && ! empty( $field->adminLabel ) ? $field->adminLabel : ( $format == 'text' ? sanitize_text_field( GFCommon::get_label( $field, 0, false, $use_admin_label ) ) : esc_html( GFCommon::get_label( $field, 0, false, $use_admin_label ) ) );
+			$field->set_context_property( 'use_admin_label', $use_admin_label );
+			$field_label = $format == 'text' ? sanitize_text_field( self::get_label( $field ) ) : esc_html( self::get_label( $field ) );
 
 			switch ( $field->type ) {
 				case 'captcha' :
@@ -1274,7 +1275,7 @@ class GFCommon {
 				case 'section' :
 
 					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $lead ) ) {
-						continue;
+						break;
 					}
 
 					if ( ( ! GFCommon::is_section_empty( $field, $form, $lead ) || $display_empty ) && ! $field->is_administrative() ) {
@@ -1311,11 +1312,11 @@ class GFCommon {
 						// ignore product fields as they will be grouped together at the end of the grid
 						$display_product_summary = apply_filters( 'gform_display_product_summary', true, $field, $form, $lead );
 						if ( $display_product_summary ) {
-							continue;
+							break;
 						}
 					} else if ( GFFormsModel::is_field_hidden( $form, $field, array(), $lead ) ) {
 						// ignore fields hidden by conditional logic
-						continue;
+						break;
 					}
 
 					$field->set_modifiers( $options_array );
@@ -1343,7 +1344,7 @@ class GFCommon {
 					$field->set_modifiers( array() );
 
 					if ( $field_value === false ) {
-						continue;
+						break;
 					}
 
 					if ( ! rgblank( $field_value ) || strlen( $field_value ) > 0 || $display_empty ) {
@@ -3605,27 +3606,27 @@ Content-Type: text/html;
 						//ignore products that have been hidden by conditional logic
 						$is_hidden = RGFormsModel::is_field_hidden( $form, $field, array(), $lead );
 						if ( $is_hidden ) {
-							continue;
+							break;
 						}
 
 						//if single product, get values from the multiple inputs
 						if ( is_array( $lead_value ) ) {
 							$product_quantity = sizeof( $quantity_field ) == 0 && ! $field->disableQuantity ? rgget( $id . '.3', $lead_value ) : $quantity;
 							if ( empty( $product_quantity ) ) {
-								continue;
+								break;
 							}
 
 							if ( ! rgar( $products, $id ) ) {
 								$products[ $id ] = array();
 							}
 
-							$products[ $id ]['name']     = $use_admin_label && ! empty( $field->adminLabel ) ? $field->adminLabel : $lead_value[ $id . '.1' ];
+							$products[ $id ]['name']     = $use_admin_label && ! empty( $field->adminLabel ) ? $field->adminLabel : rgar( $lead_value, $id . '.1' );
 							$products[ $id ]['price']    = rgar( $lead_value, $id . '.2' );
 							$products[ $id ]['quantity'] = $product_quantity;
 						} elseif ( ! empty( $lead_value ) ) {
 
 							if ( empty( $quantity ) ) {
-								continue;
+								break;
 							}
 
 							if ( ! rgar( $products, $id ) ) {
