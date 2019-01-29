@@ -9801,7 +9801,7 @@ var date_rangeToNaturalLanguage = function rangeToNaturalLanguage() {
 	var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 	var separatorOptions = extends_default()({
-		time: Object(external_var_wp_i18n_root_wp_i18n_["__"])('at', 'events-gutenberg'),
+		time: Object(external_var_wp_i18n_root_wp_i18n_["__"])('at', 'tribe-common'),
 		date: ' - '
 	}, separators);
 	var from = date_toNaturalLanguage({ date: start, separator: separatorOptions.time });
@@ -59508,7 +59508,7 @@ var element_renderImage = function renderImage(disabled, image, onRemove) {
 			wp.element.createElement(
 				'span',
 				{ className: 'tribe-editor__image-upload__remove-button-text' },
-				Object(external_var_wp_i18n_root_wp_i18n_["__"])('remove', 'events-gutenberg')
+				Object(external_var_wp_i18n_root_wp_i18n_["__"])('remove', 'tribe-common')
 			)
 		)
 	);
@@ -60029,7 +60029,7 @@ var element_TimePicker = function TimePicker(_ref) {
 					disabled: disabled,
 					onClick: onAllDayClick
 				},
-				Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'events-gutenberg')
+				Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'tribe-common')
 			);
 		}
 
@@ -60131,7 +60131,7 @@ var element_TimePicker = function TimePicker(_ref) {
 							key: 'tribe-element-timepicker-items',
 							className: 'tribe-editor__timepicker__items'
 						},
-						showAllDay && renderItem({ text: Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'events-gutenberg'), value: 'all-day' }, onClose),
+						showAllDay && renderItem({ text: Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'tribe-common'), value: 'all-day' }, onClose),
 						getItems().map(function (item) {
 							return renderItem(item, onClose);
 						})

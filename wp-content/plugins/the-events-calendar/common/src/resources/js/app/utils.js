@@ -7349,7 +7349,7 @@ var date_rangeToNaturalLanguage = function rangeToNaturalLanguage() {
 	var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 	var separatorOptions = extends_default()({
-		time: Object(external_var_wp_i18n_root_wp_i18n_["__"])('at', 'events-gutenberg'),
+		time: Object(external_var_wp_i18n_root_wp_i18n_["__"])('at', 'tribe-common'),
 		date: ' - '
 	}, separators);
 	var from = date_toNaturalLanguage({ date: start, separator: separatorOptions.time });

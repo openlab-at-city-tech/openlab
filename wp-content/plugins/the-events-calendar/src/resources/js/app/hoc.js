@@ -1848,13 +1848,15 @@ var redux = __webpack_require__(12);
  */
 function isPlainObject(obj) {
   if (typeof obj !== 'object' || obj === null) return false;
-  var proto = obj;
+  var proto = Object.getPrototypeOf(obj);
+  if (proto === null) return true;
+  var baseProto = proto;
 
-  while (Object.getPrototypeOf(proto) !== null) {
-    proto = Object.getPrototypeOf(proto);
+  while (Object.getPrototypeOf(baseProto) !== null) {
+    baseProto = Object.getPrototypeOf(baseProto);
   }
 
-  return Object.getPrototypeOf(obj) === proto;
+  return proto === baseProto;
 }
 // CONCATENATED MODULE: ./node_modules/react-redux/es/utils/verifyPlainObject.js
 
@@ -3633,7 +3635,7 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
+	g = g || new Function("return this")();
 } catch (e) {
 	// This works if the window reference is available
 	if (typeof window === "object") g = window;
@@ -6776,7 +6778,6 @@ exports.f = __webpack_require__(45) ? gOPD : function getOwnPropertyDescriptor(O
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 var ReactIs = __webpack_require__(164);
-var React = __webpack_require__(3);
 var REACT_STATICS = {
     childContextTypes: true,
     contextType: true,
@@ -6784,6 +6785,7 @@ var REACT_STATICS = {
     defaultProps: true,
     displayName: true,
     getDefaultProps: true,
+    getDerivedStateFromError: true,
     getDerivedStateFromProps: true,
     mixins: true,
     propTypes: true,
