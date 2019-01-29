@@ -17,7 +17,7 @@
  * 4. Backbone
  *
  * @since 1.3.4
- * @version 1.4.3
+ * @version 1.4.4
  *
  * Note: this.renderContent(); is used to rerender the control
  *
@@ -34,7 +34,7 @@
  * template files.
  * 
  * @since 1.3.4
- * @version 1.4.3
+ * @version 1.4.4
  * 
  */
 ;( function( api, $, window, document, undefined ) { "use strict"
@@ -56,7 +56,7 @@
 	 * @return {object} matchingFonts - JSON object containing fonts with subset.
 	 * 
 	 * @since 1.3.4
-	 * @version 1.4.3
+	 * @version 1.4.4
 	 *
 	 */
 	window.egfGetFontsBySubset = function ( subset, fonts ) {
@@ -87,7 +87,7 @@
 	 *     increase performance in the customizer.
 	 * 
 	 * @since 1.3.4
-	 * @version 1.4.3
+	 * @version 1.4.4
 	 * 
 	 */
 	var standard     = {},
@@ -153,7 +153,7 @@
  * customizer js api.
  * 
  * @since 1.3.4
- * @version 1.4.3
+ * @version 1.4.4
  * 
  */
 ;( function( api, $, window, document, undefined ) { "use strict"
@@ -171,7 +171,7 @@
 	 * @augments wp.customize.Class
 	 *
 	 * @since 1.3.4
-	 * @version 1.4.3
+	 * @version 1.4.4
 	 * 
 	 */
 	api.EGFFontControl = api.Control.extend({});
@@ -184,7 +184,7 @@
 		 *     markup has been injected into the DOM.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		ready: function() {
@@ -268,7 +268,7 @@
 		 *     default values.
 		 *     
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		reset: function() {
@@ -287,7 +287,7 @@
 		 *     loaded for performance.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		initControls: function() {
@@ -313,7 +313,7 @@
 		 *     loaded for performance.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		initFontChangeListeners: function() {
@@ -346,7 +346,7 @@
 		 * @param  {object} propertyObj - Object with properties and values to change.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		changeProperty: function( propertyObj ) {
@@ -370,7 +370,7 @@
 		 *     is clicked.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		toggleProperties: function() {
@@ -383,7 +383,7 @@
 		 * @param  {object} e - Event object.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		selectTab: function(e) {
@@ -400,7 +400,7 @@
 		 * @param  {object} e - Event object.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		selectTabPane: function(e) {
@@ -422,7 +422,7 @@
 		 * @param  {object} e - Event object.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupFontSearch: function(e) {
@@ -440,7 +440,7 @@
 		 *     to improve usability.
 		 *     
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		focusFontFamilyInput: function() {
@@ -457,7 +457,7 @@
 		 * @param  {object} e - Event object.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setSubset: function(e) {
@@ -483,7 +483,7 @@
 		 *         - stylesheet_url
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setFontFamily: function() {
@@ -563,7 +563,7 @@
 		 *         - stylesheet_url
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setFontWeight: function() {
@@ -632,7 +632,7 @@
 		 *     json object is set.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setFontWeightField: function() {
@@ -662,7 +662,7 @@
 		 * @param  {object} e - Event object.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setTextDecoration: function(e) {
@@ -680,7 +680,7 @@
 		 * @param  {object} e - Event object.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setTextTransform: function(e) {
@@ -699,7 +699,7 @@
 		 * @param {object} e - Event object.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setFontColor: function(e) {
@@ -719,7 +719,7 @@
 		 * @param {object} e - Event object.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setBackgroundColor: function(e) {
@@ -740,7 +740,7 @@
 		 * @param  {number} width     Color picker width (default 250)
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		createColorControl: function( classname, property, width ) {
@@ -786,7 +786,7 @@
 		 * @param  {string} prefix    Property prefix.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		createSliderControl: function( classname, property, prefix ) {
@@ -889,7 +889,7 @@
 		 *     control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupFontSizeSlider: function() {
@@ -907,7 +907,7 @@
 		 *     font control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupLineHeightSlider: function() {
@@ -925,7 +925,7 @@
 		 *     font control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupLetterSpacingSlider: function() {
@@ -943,7 +943,7 @@
 		 *     control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupMarginSliders: function() {
@@ -967,7 +967,7 @@
 		 *     control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupPaddingSliders: function() {
@@ -990,7 +990,7 @@
 		 *     functionality in the positioning tab.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		togglePositioningAccordion: function() {
@@ -1005,7 +1005,7 @@
 		 *     control based on the users selection.
 		 *     
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setDisplay: function() {
@@ -1023,7 +1023,7 @@
 		 *     users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupBorderControls: function() {
@@ -1056,7 +1056,7 @@
 		 *     depending on the option selected.
 		 * 
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupBorderVisibility: function() {
@@ -1073,7 +1073,7 @@
 		 *     font control based on the users selection.
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		setupBorderRadiusSliders: function() {
@@ -1105,7 +1105,7 @@
 	 *     object.
 	 *
 	 * @since 1.3.4
-	 * @version 1.4.3
+	 * @version 1.4.4
 	 * 
 	 */
 	api.controlConstructor.egf_font = api.EGFFontControl;
