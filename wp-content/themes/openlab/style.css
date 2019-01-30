@@ -10058,6 +10058,15 @@ body.single-event #content .eo-event-venue-map {
     line-height: 198%;
   }
 }
+#profile-edit-form .error {
+  font-weight: 400;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 17px;
+  margin-top: 5px;
+  background: #f7e700;
+  border-color: #f7e700;
+}
 #member-header {
   margin-top: 41px;
 }

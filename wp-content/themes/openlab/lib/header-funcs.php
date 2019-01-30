@@ -73,7 +73,7 @@ function openlab_enqueue_frontend_scripts() {
     }
 
     if ( bp_is_user_profile_edit() ) {
-        wp_enqueue_script( 'openlab-validators' );
+        wp_enqueue_script( 'openlab-profile-edit', get_stylesheet_directory_uri() . '/js/profile-edit.js', [ 'jquery', 'parsley', 'openlab-validators' ] );
     }
 }
 add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts', 20 );

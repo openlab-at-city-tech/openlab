@@ -29,7 +29,7 @@ $field_ids = array(1);
 
 
 
-<form action="" method="post" id="profile-edit-form" class="standard-form form-panel" data-parsley-validate>
+<form action="" method="post" id="profile-edit-form" class="standard-form form-panel">
 
     <?php if (bp_has_profile($profile_args)) : ?>
 
