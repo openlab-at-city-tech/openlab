@@ -1,7 +1,7 @@
 <?php //header related functionality
 
 if (!defined( 'BP_DISABLE_ADMIN_BAR' ) ){
-    define('BP_DISABLE_ADMIN_BAR', true);
+	define('BP_DISABLE_ADMIN_BAR', true);
 }
 
 add_action( 'widgets_init', 'cuny_remove_default_widget_areas', 11 );
@@ -18,21 +18,21 @@ add_action( 'wp_print_styles', 'cuny_no_bp_default_styles', 100 );
 add_action('wp_print_styles', 'wds_cuny_ie_styles');
 function wds_cuny_ie_styles() {
   if ( is_admin() )
-    return;
-    ?>
+	return;
+	?>
 
-    <!--[if lte IE 7]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie7.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 8]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie8.css" type="text/css" media="screen" />
-    <![endif]-->
-    <!--[if IE 9]>
-      <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
-    <![endif]-->
+	<!--[if lte IE 7]>
+	  <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie7.css" type="text/css" media="screen" />
+	<![endif]-->
+	<!--[if IE 8]>
+	  <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie8.css" type="text/css" media="screen" />
+	<![endif]-->
+	<!--[if IE 9]>
+	  <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/css/ie9.css" type="text/css" media="screen" />
+	<![endif]-->
 
 
-    <?php }
+	<?php }
 
 function cuny_no_bp_default_styles() {
 	wp_dequeue_style( 'gconnect-bp' );
@@ -54,8 +54,8 @@ add_action( 'wp_enqueue_scripts', 'openlab_google_font');
  */
 function openlab_enqueue_frontend_scripts() {
 	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
-	     ( bp_is_group_create() && bp_is_action_variable( 'invite-anyone', 1 ) ) ||
-             ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
+		 ( bp_is_group_create() && bp_is_action_variable( 'invite-anyone', 1 ) ) ||
+			 ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
 		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
 		wp_localize_script( 'openlab-group-create', 'OLGroupCreate', array(
 			'groupTypeCanBeCloned' => isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ),
@@ -63,14 +63,17 @@ function openlab_enqueue_frontend_scripts() {
 		) );
 	}
 
-        if ( bp_is_register_page() ) {
-                wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery', 'parsley' ) );
+	if ( bp_is_register_page() ) {
+		wp_enqueue_script( 'openlab-registration', get_stylesheet_directory_uri() . '/js/register.js', array( 'jquery', 'parsley', 'openlab-validators' ) );
 
-                wp_localize_script('openlab-registration', 'OLReg', array(
-                    'post_data' => $_POST,
-                    'account_type_field' => xprofile_get_field_id_from_name('Account Type '),
-                ));
+		wp_localize_script('openlab-registration', 'OLReg', array(
+			'post_data' => $_POST,
+			'account_type_field' => xprofile_get_field_id_from_name('Account Type'),
+		));
     }
 
+    if ( bp_is_user_profile_edit() ) {
+        wp_enqueue_script( 'openlab-validators' );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts', 20 );

@@ -84,6 +84,7 @@ function openlab_load_scripts() {
         ));
 
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
+        wp_register_script( 'openlab-validators', $stylesheet_dir_uri . '/js/validators.js', array('parsley') );
     }
 
     if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
