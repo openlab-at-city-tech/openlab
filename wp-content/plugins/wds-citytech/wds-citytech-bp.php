@@ -409,9 +409,24 @@ function openlab_pre_save_comment_activity( $activity ) {
 add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
- * Auto-enable BuddyPress Docs for all group types
+ * Auto-enable BuddyPress Docs for all group types, except portfolios.
  */
-add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
+add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
+add_filter(
+	'groups_created_group',
+	function( $group_id ) {
+		if ( openlab_is_portfolio( $group_id ) ) {
+			return;
+		}
+
+		$settings = apply_filters( 'bp_docs_default_group_settings', array(
+			'group-enable'	=> 1,
+			'can-create' 	=> 'member'
+		) );
+
+		groups_update_groupmeta( $group_id, 'bp-docs', $settings );
+	}
+);
 
 /**
  * Bust the home page activity transients when new items are posted

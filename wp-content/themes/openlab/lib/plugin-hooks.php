@@ -59,9 +59,9 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 
     $group_settings = bp_docs_get_group_settings( $group_id );
 
-    // Default to true in case no value is found.
+    // Default to true in case no value is found, except for portfolios.
     if ( ! $group_settings || ! isset( $group_settings['group-enable'] ) ) {
-        return true;
+        return ! openlab_is_portfolio( $group_id );
     }
 
     return ! empty( $group_settings['group-enable'] );

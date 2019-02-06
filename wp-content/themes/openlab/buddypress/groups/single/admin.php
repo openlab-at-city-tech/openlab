@@ -106,30 +106,27 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
                 <?php openlab_group_sharing_settings_markup( bp_get_current_group_id() ); ?>
             <?php endif; ?>
 
-            <?php if ( ! openlab_is_portfolio() ) : ?>
-                <?php
-                $forum_enabled = openlab_is_forum_enabled_for_group();
-                $docs_enabled  = openlab_is_docs_enabled_for_group();
-                $files_enabled = openlab_is_files_enabled_for_group();
+            <?php
+            $forum_enabled = openlab_is_forum_enabled_for_group();
+            $docs_enabled  = openlab_is_docs_enabled_for_group();
+            $files_enabled = openlab_is_files_enabled_for_group();
 
-                ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Discussion, Docs, and Files Settings</div>
-                    <div class="panel-body">
-                        <p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and Files on your <?php echo $group_label_uc ?> profile.</p>
-                        <div class="checkbox checkbox-float">
-                            <label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
-                        </div>
-                        <div class="checkbox checkbox-float">
-                            <label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
-                        </div>
-                        <div class="checkbox checkbox-float">
-                            <label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable Files</label>
-                        </div>
+            ?>
+            <div class="panel panel-default">
+                <div class="panel-heading">Discussion, Docs, and Files Settings</div>
+                <div class="panel-body">
+                    <p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and Files on your <?php echo $group_label_uc ?> profile.</p>
+                    <div class="checkbox checkbox-float">
+                        <label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
+                    </div>
+                    <div class="checkbox checkbox-float">
+                        <label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
+                    </div>
+                    <div class="checkbox checkbox-float">
+                        <label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable Files</label>
                     </div>
                 </div>
-
-            <?php endif; ?>
+            </div>
 
             <?php if (function_exists('eo_get_event_fullcalendar') && !openlab_is_portfolio()) : ?>
                 <?php $event_create_access = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_bpeo_event_create_access'); ?>
