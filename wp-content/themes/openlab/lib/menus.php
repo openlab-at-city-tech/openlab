@@ -88,7 +88,7 @@ function openlab_modify_options_nav() {
                 ), 'admin', bp_get_current_group_slug());
 
         // Keep the following tabs as-is
-        $keepers = array('home', 'admin', 'members');
+        $keepers = array( 'home', 'admin', 'members', 'forum', 'docs', 'files' );
         $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
         foreach ($nav_items as $nav_item) {
             if (!in_array($nav_item->slug, $keepers)) {
@@ -764,8 +764,8 @@ add_filter('bp_get_options_nav_nav-docs', 'openlab_filter_subnav_docs');
 function openlab_filter_subnav_docs($subnav_item) {
     global $bp;
 
-    //no docs if we're on the portfolio page
-    if (openlab_is_portfolio()) {
+    // No Docs item if disabled.
+    if ( ! openlab_is_docs_enabled_for_group( bp_get_current_group_id() ) ) {
         return '';
     }
 
@@ -809,22 +809,21 @@ function openlab_filter_subnav_docs($subnav_item) {
  * Modify the Documents subnav item in group contexts.
  */
 function openlab_filter_subnav_nav_group_documents($subnav_item) {
-    //no files if we're on the portfolio page
-    if (openlab_is_portfolio()) {
+    if ( ! openlab_is_files_enabled_for_group( bp_get_current_group_id() ) ) {
         return '';
-    } else {
-        //update "current" class to "current-menu-item" to unify site identification of current menu page
-        $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-
-        // Add count. @todo Better caching.
-        $count = BP_Group_Documents::get_total(bp_get_current_group_id());
-        if ($count) {
-            $span = sprintf('<span class="mol-count pull-right count-%s gray">%s</span>', intval($count), esc_html(number_format_i18n($count)));
-            $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
-        }
-
-        return $subnav_item;
     }
+
+    //update "current" class to "current-menu-item" to unify site identification of current menu page
+    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
+
+    // Add count. @todo Better caching.
+    $count = BP_Group_Documents::get_total(bp_get_current_group_id());
+    if ($count) {
+        $span = sprintf('<span class="mol-count pull-right count-%s gray">%s</span>', intval($count), esc_html(number_format_i18n($count)));
+        $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
+    }
+
+    return $subnav_item;
 }
 
 add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');

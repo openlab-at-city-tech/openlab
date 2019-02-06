@@ -438,9 +438,9 @@ function openlab_group_feature_toggle( $group_id ) {
     // Files.
     $enable_files = ! empty( $_POST['openlab-edit-group-files'] );
     if ( $enable_files ) {
-        groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
+        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '0' );
     } else {
-        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', 1 );
+        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
     }
 }
 add_action( 'groups_settings_updated', 'openlab_group_feature_toggle' );
