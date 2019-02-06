@@ -171,7 +171,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <?php endif; ?>
 
             <?php /* Library Settings */ ?>
-            <?php openlab_group_library_settings(); ?>
+            <?php if ( ! openlab_is_portfolio() ) : ?>
+                <?php openlab_group_library_settings(); ?>
+            <?php endif; ?>
 
             <?php /* "Related Links List Settings" */ ?>
             <div class="panel panel-default">
