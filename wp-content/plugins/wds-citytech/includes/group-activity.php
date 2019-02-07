@@ -6,6 +6,11 @@
 namespace CityTech\Group_Activity;
 
 /**
+ * Remove BP core hooks.
+ */
+remove_action( 'bp_blogs_new_blog', 'bp_blogs_record_activity_on_site_creation', 10, 4 );
+
+/**
  * Return activity types we want to filter.
  *
  * @return array
@@ -85,3 +90,29 @@ function docs_activity_hide_sitewide( $hide_sitewide ) {
 	return $hide_sitewide;
 }
 add_filter( 'bp_docs_hide_sitewide', __NAMESPACE__ . '\\docs_activity_hide_sitewide' );
+
+/**
+ * Add an activity entry for a newly-created site with correct privacy.
+ *
+ * @param BP_Blogs_Blog $blog          Current blog being recorded. Passed by reference.
+ * @param bool          $is_private    Whether or not the current blog being recorded is private.
+ * @param bool          $is_recorded   Whether or not the current blog was recorded.
+ * @param bool          $no_activity   Whether to skip recording an activity item for this blog creation.
+ * @return void
+ */
+function record_site_creation_activity( $blog, $is_private, $is_recoreed, $no_activity ) {
+	if ( $no_activity && ! bp_blogs_is_blog_trackable( $blog->blog_id, $blog->user_id ) ) {
+		return;
+	}
+
+	$privacy = get_blog_option( $blog->blog_id, 'blog_public' );
+
+	bp_blogs_record_activity( [
+		'user_id'       => $blog->user_id,
+		'primary_link'  => apply_filters( 'bp_blogs_activity_created_blog_primary_link', bp_blogs_get_blogmeta( $blog->blog_id, 'url' ), $blog->blog_id ),
+		'type'          => 'new_blog',
+		'item_id'       => $blog->blog_id,
+		'hide_sitewide' => 0 > (int) $privacy,
+	] );
+}
+add_action( 'bp_blogs_new_blog', __NAMESPACE__ . '\\record_site_creation_activity', 10, 4 );
