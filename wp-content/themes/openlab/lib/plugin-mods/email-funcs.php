@@ -39,6 +39,8 @@ function openlab_ass_admin_notice_form() {
                     </div>
                 </div>
 
+                <?php wp_nonce_field( 'bpges_admin_notice', 'bpges-admin-notice-nonce' ); ?>
+
                 <input class="btn btn-primary" type="submit" name="ass_admin_notice_send" value="<?php _e('Email this notice to everyone in the group', 'bp-ass') ?>" />
             </div>
 
