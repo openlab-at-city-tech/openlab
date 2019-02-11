@@ -347,7 +347,7 @@ function openlab_group_blog_activity( $activity ) {
 
 	$public = get_blog_option( $blog_id, 'blog_public' );
 
-	if ( 0 > (int) $public || 'public' !== $group->status ) {
+	if ( 0 > (int) $public ) {
 		$activity->hide_sitewide = 1;
 	}
 

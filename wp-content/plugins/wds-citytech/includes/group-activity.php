@@ -43,19 +43,6 @@ function group_hide_sitewide( $group_id = 0 ) {
 }
 
 /**
- * Whether to hide activity based on blog privacy.
- *
- * @param int $group_id
- * @return bool
- */
-function blog_hide_sitewide( $group_id = 0 ) {
-	$blog_id = (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
-	$privacy = get_blog_option( $blog_id, 'blog_public' );
-
-	return 0 > (int) $privacy;
-}
-
-/**
  * Make sure 'hide_sitewide' flag is correctly set for private groups and blogs.
  *
  * @param bool|int $hide_sidewide
@@ -72,28 +59,13 @@ function groups_activity_hide_sidewide( $hide_sidewide, $activity ) {
 		return $hide_sidewide;
 	}
 
-	if ( group_hide_sitewide( $activity->item_id ) || blog_hide_sitewide( $activity->item_id ) ) {
+	if ( group_hide_sitewide( $activity->item_id ) ) {
 		$hide_sidewide = 1;
 	}
 
 	return $hide_sidewide;
 }
 add_filter( 'bp_activity_hide_sitewide_before_save', __NAMESPACE__ . '\\groups_activity_hide_sidewide', 100, 2 );
-
-/**
- * Filter the 'hide_sitewide' for BP docs to support blog privacy settings.
- *
- * @param bool|int $hide_sitewide
- * @return bool|int
- */
-function docs_activity_hide_sitewide( $hide_sitewide ) {
-	if ( blog_hide_sitewide() ) {
-		$hide_sitewide = 1;
-	}
-
-	return $hide_sitewide;
-}
-add_filter( 'bp_docs_hide_sitewide', __NAMESPACE__ . '\\docs_activity_hide_sitewide' );
 
 /**
  * Add an activity entry for a newly-created site with correct privacy.
