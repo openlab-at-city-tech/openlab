@@ -17,6 +17,8 @@ remove_action( 'bp_blogs_new_blog', 'bp_blogs_record_activity_on_site_creation',
  */
 function get_activity_types() {
 	return [
+		'bbp_topic_create',
+		'bbp_reply_create',
 		'added_group_document',
 		'deleted_group_document',
 		'edited_group_document',
@@ -35,7 +37,7 @@ function get_activity_types() {
  * @return bool
  */
 function group_hide_sitewide( $group_id = 0 ) {
-	$group = \groups_get_group( [ 'group_id' => $group_id ] );
+	$group = groups_get_group( [ 'group_id' => $group_id ] );
 
 	return 'public' !== $group->status;
 }
@@ -43,10 +45,12 @@ function group_hide_sitewide( $group_id = 0 ) {
 /**
  * Whether to hide activity based on blog privacy.
  *
+ * @param int $group_id
  * @return bool
  */
-function blog_hide_sitewide() {
-	$privacy = get_blog_option( get_current_blog_id(), 'blog_public' );
+function blog_hide_sitewide( $group_id = 0 ) {
+	$blog_id = (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	$privacy = get_blog_option( $blog_id, 'blog_public' );
 
 	return 0 > (int) $privacy;
 }
@@ -68,7 +72,7 @@ function groups_activity_hide_sidewide( $hide_sidewide, $activity ) {
 		return $hide_sidewide;
 	}
 
-	if ( group_hide_sitewide( $activity->item_id ) || blog_hide_sitewide() ) {
+	if ( group_hide_sitewide( $activity->item_id ) || blog_hide_sitewide( $activity->item_id ) ) {
 		$hide_sidewide = 1;
 	}
 
