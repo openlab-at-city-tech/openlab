@@ -81,7 +81,7 @@ function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $
 
 	if ( 'new_blog_post' === $activity->type ) {
 		$post = get_post( $activity->secondary_item_id );
-		$content = $post->post_content;
+		$content = empty( $post->post_password ) ? $post->post_content : 'This post is password protected.';
 	} else if ( 'new_blog_comment' === $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$content = $comment->comment_content;
