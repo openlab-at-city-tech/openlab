@@ -72,7 +72,14 @@ $field_ids = array(1);
                     ?>
                     <div class="editfield field_name alt">
                         <label for="ol-offices">Major Program of Study (required)</label>
-                        <select name="departments-dropdown" class="form-control">
+                        <div class="error-container" id="academic-unit-selector-error"></div>
+                        <select
+                            name="departments-dropdown"
+                            class="form-control"
+                            data-parsley-required
+                            data-parsley-errors-container=".error-container"
+                            data-parsley-error-message="You must select at least one Department."
+                        >
                             <option value="" <?php selected( empty( $checked['departments'] ) ); ?>>----</option>
                             <option value="undecided" <?php selected( in_array( 'undecided', $checked['departments'], true ) ); ?>>Undecided</option>
                             <?php foreach ( $depts as $dept_value => $dept ) : ?>
