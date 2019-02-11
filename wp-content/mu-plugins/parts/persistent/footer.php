@@ -28,11 +28,11 @@
                     <div class="col-sm-8 col-links semibold">
                         <h2 class="first-header">Support</h2>
                         <a class="no-deco roll-over-color" href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/credits/">Credits</a>
-                        <?php if ($accessibility_link && !empty($accessibility_link) && $accessibility_link !== 0): ?>
-                            <h2 class="second-header">Accessibility</h2>
-                            <p class="statement">Our goal is to make the OpenLab accessible for all users.</p>
-                            <p class="statement"><a class="deco roll-over-color" href="<?php echo get_permalink($accessibility_link) ?>">Learn more about accessibility on the OpenLab</a></p>
-                        <?php endif; ?>
+
+						<h2 class="second-header">Accessibility</h2>
+						<p class="statement">Our goal is to make the OpenLab accessible for all users.</p>
+						<p class="statement"><a class="deco roll-over-color" href="<?php echo esc_attr( $accessibility_link ) ?>">Learn more about accessibility on the OpenLab</a></p>
+
                     </div>
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
                     <div class="col-sm-3 col-copyright">
