@@ -59,9 +59,9 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 
     $group_settings = bp_docs_get_group_settings( $group_id );
 
-    // Default to true in case no value is found.
+    // Default to true in case no value is found, except for portfolios.
     if ( ! $group_settings || ! isset( $group_settings['group-enable'] ) ) {
-        return true;
+        return ! openlab_is_portfolio( $group_id );
     }
 
     return ! empty( $group_settings['group-enable'] );
@@ -438,9 +438,9 @@ function openlab_group_feature_toggle( $group_id ) {
     // Files.
     $enable_files = ! empty( $_POST['openlab-edit-group-files'] );
     if ( $enable_files ) {
-        groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
+        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '0' );
     } else {
-        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', 1 );
+        groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
     }
 }
 add_action( 'groups_settings_updated', 'openlab_group_feature_toggle' );

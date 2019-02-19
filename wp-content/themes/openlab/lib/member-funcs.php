@@ -1053,7 +1053,7 @@ add_filter( 'bp_get_the_thread_message_content', 'bp_activity_at_name_filter' );
 function openlab_get_academic_unit_data_from_post() {
     $to_save = [];
     foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
-        $to_save[ $unit_type ] = wp_unslash( $_POST[ $unit_type ] ) ?: array();
+        $to_save[ $unit_type ] = isset( $_POST[ $unit_type ] ) ? wp_unslash( $_POST[ $unit_type ] ) : [];
     }
 
     return $to_save;

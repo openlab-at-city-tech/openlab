@@ -160,10 +160,20 @@ class GF_Field_Consent extends GF_Field {
 		$label_class_attribute = 'class="gfield_consent_label"';
 		$required_div          = ( $this->labelPlacement === 'hidden_label' && ( $is_admin || $this->isRequired ) ) ? sprintf( "<span class='gfield_required'>%s</span>", $this->isRequired ? '*' : '' ) : '';
 
-		$checkbox_label = ! is_array( $value ) || empty( $value[ $id . '.2' ] ) ? $this->checkboxLabel : esc_attr( $value[ $id . '.2' ] );
-		$revision_id    = ! is_array( $value ) || empty( $value[ $id . '.3' ] ) ? GFFormsModel::get_latest_form_revisions_id( $form['id'] ) : esc_attr( $value[ $id . '.3' ] );
-		$value          = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) ? '0' : esc_attr( $value[ $id . '.1' ] );
-		$checked        = $is_form_editor ? '' : checked( '1', $value, false );
+		if ( $is_admin && ! GFCommon::is_entry_detail_edit() ) {
+			$checkbox_label = ! is_array( $value ) || empty( $value[ $id . '.2' ] ) ? $this->checkboxLabel : $value[ $id . '.2' ];
+			$revision_id    = ! is_array( $value ) || empty( $value[ $id . '.3' ] ) ? GFFormsModel::get_latest_form_revisions_id( $form['id'] ) : $value[ $id . '.3' ];
+			$value          = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) ? '0' : esc_attr( $value[ $id . '.1' ] );
+		} else {
+			$checkbox_label = $this->checkboxLabel;
+			$revision_id    = GFFormsModel::get_latest_form_revisions_id( $form['id'] );
+			// We compare if the description text from different revisions has been changed.
+			$current_description   = $this->get_field_description_from_revision( $revision_id );
+			$submitted_description = $this->get_field_description_from_revision( $value[ $id . '.3' ] );
+
+			$value = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) || ( $this->checkboxLabel !== $value[ $id . '.2' ] ) || ( $current_description !== $submitted_description ) ? '0' : esc_attr( $value[ $id . '.1' ] );
+		}
+		$checked = $is_form_editor ? '' : checked( '1', $value, false );
 
 		$tooltip     = '';
 		$description = $is_entry_detail ? $this->get_field_description_from_revision( $revision_id ) : $this->description;
@@ -173,8 +183,8 @@ class GF_Field_Consent extends GF_Field {
 		}
 
 		$input  = "<input name='input_{$id}.1' id='{$target_input_id}' type='{$html_input_type}' value='1' {$tabindex} {$required_attribute} {$invalid_attribute} {$disabled_text} {$checked} /> <label {$label_class_attribute} {$for_attribute} >{$checkbox_label}</label>{$required_div} {$tooltip}";
-		$input .= "<input type='hidden' name='input_{$id}.2' value='{$checkbox_label}' class='gform_hidden' />";
-		$input .= "<input type='hidden' name='input_{$id}.3' value='{$revision_id}' class='gform_hidden' />";
+		$input .= "<input type='hidden' name='input_{$id}.2' value='" . esc_attr( $checkbox_label ) . "' class='gform_hidden' />";
+		$input .= "<input type='hidden' name='input_{$id}.3' value='" . esc_attr( $revision_id ) . "' class='gform_hidden' />";
 
 		if ( $is_entry_detail ) {
 			$input .= $this->get_description( $this->get_field_description_from_revision( $revision_id ), '' );

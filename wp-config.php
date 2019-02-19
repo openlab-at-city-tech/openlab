@@ -23,9 +23,11 @@ if ( !defined( 'DB_NAME' ) ) {
 }
 
 // Version of the OpenLab. Used for asset versioning and cache busting.
-define( 'OL_VERSION', '1.7.28.1' );
+define( 'OL_VERSION', '1.7.29' );
 
-require __DIR__ . '/db-settings.php';
+if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
+	require __DIR__ . '/db-settings.php';
+}
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');

@@ -13,7 +13,7 @@
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
  * @copyright Copyright (c) 2016, Titanium Themes
- * @version   1.4.3
+ * @version   1.4.4
  * 
  */
 if ( ! class_exists( 'EGF_Ajax' ) ) :
@@ -43,7 +43,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		function __construct() {
@@ -63,7 +63,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public static function get_instance() {
@@ -82,7 +82,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_actions() {
@@ -100,7 +100,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_filters() {
@@ -114,7 +114,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * updates the Google API key.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function set_google_api_key() {
@@ -149,7 +149,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * comparison to check the users intent.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function force_font_control_styles() {
@@ -183,7 +183,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * client.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function create_control_instance() {
@@ -236,7 +236,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * client.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function update_control_instance() {
@@ -327,7 +327,7 @@ if ( ! class_exists( 'EGF_Ajax' ) ) :
 		 * it deletes all control instances from the database.
 		 *
 		 * @since 1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		function delete_all_control_instances() {

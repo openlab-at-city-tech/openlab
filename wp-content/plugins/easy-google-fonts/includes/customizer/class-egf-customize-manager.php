@@ -17,7 +17,7 @@
  * @license   GPL-2.0+
  * @link      http://wordpress.org/plugins/easy-google-fonts/
  * @copyright Copyright (c) 2016, Titanium Themes
- * @version   1.4.3
+ * @version   1.4.4
  * 
  */
 if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
@@ -57,7 +57,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * settings page and menu.
 		 *
 		 * @since 1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		function __construct() {
@@ -79,7 +79,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return    object    A single instance of this class.
 		 *
 		 * @since 1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public static function get_instance() {
@@ -98,7 +98,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * Add any custom actions in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_actions() {
@@ -117,7 +117,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * Add any custom filters in this function.
 		 * 
 		 * @since 1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_filters() {
@@ -131,7 +131,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * loaded yet.
 		 *
 		 * @since 1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function include_control_class() {
@@ -154,7 +154,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return [type]               [description]
 		 *
 		 * @since 1.3.4
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_font_control_type( $wp_customize ) {
@@ -172,7 +172,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array complete list of fonts
 		 *
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 */
 		public function customize_load_all_fonts() {
 			return EGF_Font_Utilities::get_all_fonts();
@@ -188,7 +188,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.2
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_controls_enqueue_scripts() {
@@ -241,7 +241,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_live_preview_scripts() {
@@ -276,7 +276,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return void
 		 *
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_preview_styles() {
@@ -312,7 +312,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array $controls 	Control properties which will be enqueues as a JSON object on the page
 		 *
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_live_preview_l10n() {
@@ -360,7 +360,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @return array $translations - String variables 
 		 *
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_control_l10n() {
@@ -390,7 +390,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * the font setting is being saved.
 		 * 
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_save_tt_font_theme_options() {
@@ -406,7 +406,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * saved.
 		 * 
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function customize_save_after() {
@@ -427,7 +427,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @param 	object	$wp_customize	Object that holds the customizer data
 		 * 
 		 * @since  1.3
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function register_controls( $wp_customize ) {
@@ -518,7 +518,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @param [type] $option_parameter [description]
 		 *
 		 * @since 1.4.0
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function add_setting( $wp_customize, $option_parameter ) {
@@ -558,7 +558,7 @@ if ( ! class_exists( 'EGF_Customize_Manager' ) ) :
 		 * @param integer $priority         [description]
 		 *
 		 * @since 1.4.0
-		 * @version 1.4.3
+		 * @version 1.4.4
 		 * 
 		 */
 		public function add_control( $wp_customize, $option_parameter, $priority = 10 ) {

@@ -15,6 +15,6 @@
   },
   "description": "",
   "dependencies": {
-    "grunt-contrib-less": "^1.4.0"
+    "grunt-contrib-less": "^2.0.0"
   }
 }

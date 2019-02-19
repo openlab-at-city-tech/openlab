@@ -496,7 +496,7 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
                 <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />Allow search engines to index this site. Your site will show up in web search results.</label>
 
                 <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />Ask search engines not to index this site. Your site should not show up in web search results.</label>
-                <p id="search-setting-note" class="italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
+                <p id="search-setting-note" class="privacy-settings-note italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
             </div>
         </div>
 
@@ -524,10 +524,10 @@ function openlab_site_privacy_settings_markup($site_id = 0) {
             <h5>Private</h5>
             <div class="row">
                 <div class="col-sm-24">
-                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label></p>
+                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label>
 
                     <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked( '-2', $blog_public ); ?>>I would like my site to be visible only to registered users that I have granted access.</label>
-                    <p class="description private-portfolio-gloss italics note">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
+                    <p id="private-portfolio-note" class="privacy-settings-note italics note">Note: If you would like non-City Tech users to view your private site, you will need to make your site public.</p>
 
                     <label for="blog-private-3"><input id="blog-private-3" type="radio" name="blog_public" value="-3" <?php checked( '-3', $blog_public ); ?>>I would like my site to be visible only to me.</label>
                 </div>

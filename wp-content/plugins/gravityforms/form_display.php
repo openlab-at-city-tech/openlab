@@ -69,13 +69,8 @@ class GFFormDisplay {
 
 		GFCommon::log_debug( "GFFormDisplay::process_form(): Source page number: {$source_page_number}. Target page number: {$target_page}." );
 
-		//Loading files that have been uploaded to temp folder
-		$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
-		if ( ! is_array( $files ) ) {
-			$files = array();
-		}
-
-		RGFormsModel::$uploaded_files[ $form_id ] = $files;
+		// Set files that have been uploaded to temp folder
+		$files = GFFormsModel::set_uploaded_files( $form_id );
 
 		$saving_for_later = rgpost( 'gform_save' ) ? true : false;
 
@@ -273,18 +268,19 @@ class GFFormDisplay {
 		/* Setup default review page parameters. */
 		$review_page = array(
 			'content'        => '',
+			'cssClass'       => '',
 			'is_enabled'     => false,
 			'nextButton'     => array(
-					'type'     => 'text',
-					'text'     => __( 'Review Form', 'gravityforms' ),
-					'imageUrl' => '',
-					'imageAlt' => '',
+				'type'     => 'text',
+				'text'     => __( 'Review Form', 'gravityforms' ),
+				'imageUrl' => '',
+				'imageAlt' => '',
 			),
 			'previousButton' => array(
-					'type'     => 'text',
-					'text'     => __( 'Previous', 'gravityforms' ),
-					'imageUrl' => '',
-					'imageAlt' => '',
+				'type'     => 'text',
+				'text'     => __( 'Previous', 'gravityforms' ),
+				'imageUrl' => '',
+				'imageAlt' => '',
 			),
 		);
 
@@ -1263,7 +1259,7 @@ class GFFormDisplay {
 				$button_input = "<input type='{$input_type}' id='{$button_input_id}' class='{$class}' value='" . esc_attr( $button_text ) . "' {$tabindex} {$onclick} />";
 			}
 		} else {
-			$imageUrl     = $button['imageUrl'];
+			$imageUrl = esc_url( $button['imageUrl'] );
 			$class .= ' gform_image_button';
 			$button_input = "<input type='image' src='{$imageUrl}' id='{$button_input_id}' class='{$class}' alt='{$alt}' {$tabindex} {$onclick} />";
 		}
@@ -3534,10 +3530,11 @@ class GFFormDisplay {
 		$page_number  = $page_number == 0 ? 2 : $page_number+1;
 
 		/* Create new Page field for review page. */
-		$review_page_break                 = new GF_Field_Page();
-		$review_page_break->id             = $new_field_id;
-		$review_page_break->pageNumber     = $page_number;
-		$review_page_break->nextButton     = rgar( $review_page, 'nextButton' );
+		$review_page_break             = new GF_Field_Page();
+		$review_page_break->id         = $new_field_id;
+		$review_page_break->pageNumber = $page_number;
+		$review_page_break->nextButton = rgar( $review_page, 'nextButton' );
+		$review_page_break->cssClass   = 'gform_review_page ' . rgar( $review_page, 'cssClass', '' );
 
 		/* Add review page break field to form. */
 		$form['fields'][] = $review_page_break;
