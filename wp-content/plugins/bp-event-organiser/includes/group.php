@@ -291,7 +291,7 @@ function bpeo_group_event_meta_cap( $caps, $cap, $user_id, $args ) {
 	// Some caps do not expect a specific event to be passed to the filter.
 	$primitive_caps = array( 'read_events', 'read_group_events', 'read_private_events', 'edit_events', 'edit_others_events', 'publish_events', 'delete_events', 'delete_others_events', 'manage_event_categories' );
 	if ( ! in_array( $cap, $primitive_caps ) ) {
-		$event = get_post( $args[0] );
+		$event = isset( $args[0] ) ? get_post( $args[0] ) : null;
 		if ( ! $event || 'event' !== $event->post_type ) {
 			return $caps;
 		}
