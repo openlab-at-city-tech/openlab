@@ -34,7 +34,6 @@ function openlab_load_theme_fixes() {
 			break;
 	}
 }
-
 add_action( 'wp_print_styles', 'openlab_load_theme_fixes', 9999 );
 
 /**
@@ -75,7 +74,6 @@ function openlab_reorder_theme_selections( $themes) {
 
 	return array_merge( $t1, $t2 );
 }
-
 add_filter( 'wp_prepare_themes_for_js', 'openlab_reorder_theme_selections' );
 
 /**
@@ -85,20 +83,20 @@ add_filter( 'wp_prepare_themes_for_js', 'openlab_reorder_theme_selections' );
  * the default menu.
  */
 function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages) {
-	if ('hemingway' !== get_template()) {
+	if ( 'hemingway' !== get_template() ) {
 		return $output;
 	}
 
 	$dbs    = debug_backtrace();
 	$gp_key = null;
-	foreach ($dbs as $key => $db) {
-		if ('wp_list_pages' === $db['function']) {
+	foreach ( $dbs as $key => $db ) {
+		if ( 'wp_list_pages' === $db['function'] ) {
 			$lp_key = $key;
 			break;
 		}
 	}
 
-	if (null === $lp_key) {
+	if ( null === $lp_key ) {
 		return $output;
 	}
 
@@ -124,7 +122,8 @@ function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages) {
 			'case'     => 'upper',
 		)
 	);
-	$group_link       = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
+
+	$group_link = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
 
 	$profile_link = sprintf(
 		'<li id="menu-item-group-profile-link" class="group-profile-link"><a href="%s">%s</a>',
@@ -136,14 +135,13 @@ function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages) {
 
 	return $output;
 }
-
 add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3 );
 
 /**
  * Hemingway: Add missing label element to comment form.
  */
-function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields) {
-	if ('hemingway' !== get_template()) {
+function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields ) {
+	if ( 'hemingway' !== get_template() ) {
 		return $fields;
 	}
 
@@ -151,25 +149,23 @@ function openlab_add_missing_label_element_to_comment_form_for_hemingway( $field
 
 	return $fields;
 }
-
 add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
 
 /**
  * Prevent Sliding Door from showing plugin installation notice.
  */
 function openlab_remove_sliding_door_plugin_installation_notice() {
-	if ('sliding-door' === get_template()) {
+	if ( 'sliding-door' === get_template() ) {
 		remove_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
 	}
 }
-
 add_action( 'after_setup_theme', 'openlab_remove_sliding_door_plugin_installation_notice', 100 );
 
 /**
  * Sliding Door requires the Page Links To plugin.
  */
 function openlab_activate_page_links_to_on_sliding_door() {
-	if ('sliding-door' !== get_template()) {
+	if ( 'sliding-door' !== get_template() ) {
 		return;
 	}
 
@@ -185,18 +181,16 @@ function openlab_activate_page_links_to_on_sliding_door() {
 		activate_plugin( 'page-links-to/page-links-to.php' );
 	}
 }
-
 add_action( 'after_setup_theme', 'openlab_activate_page_links_to_on_sliding_door', 50 );
 
 /**
  * Override Pilcrow's fallback page menu overrides.
  */
-function openlab_pilcrow_page_menu_args( $args) {
+function openlab_pilcrow_page_menu_args( $args ) {
 	remove_filter( 'wp_page_menu_args', 'pilcrow_page_menu_args' );
 	$args['depth'] = 0;
 	return $args;
 }
-
 add_filter( 'wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5 );
 
 /**
@@ -206,11 +200,11 @@ add_filter( 'wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5 );
  * @param type $show
  * @return string
  */
-function openlab_theme_fixes_filter_bloginfo( $output, $show) {
+function openlab_theme_fixes_filter_bloginfo( $output, $show ) {
 
 	$theme = wp_get_theme();
 
-	switch ($theme->get( 'TextDomain' )) {
+	switch ( $theme->get( 'TextDomain' ) ) {
 		case 'twentyeleven':
 		case 'twentytwelve':
 			/**
@@ -228,7 +222,6 @@ function openlab_theme_fixes_filter_bloginfo( $output, $show) {
 
 	return $output;
 }
-
 add_filter( 'bloginfo', 'openlab_theme_fixes_filter_bloginfo', 10, 2 );
 
 /**
@@ -243,14 +236,13 @@ function openlab_theme_fixes_init_actions() {
 	$dependencies = array( 'aec_frontend', 'afg_colorbox_js', 'gform_gravityforms' );
 	$plugins_url  = plugins_url( 'js', __FILE__ );
 
-	foreach ($dependencies as $dep) {
+	foreach ( $dependencies as $dep ) {
 
 		// we'll keep the handle the same so this fix doesn't register twice
 		wp_register_script( 'openlab-colorbox-fixes', "$plugins_url/targeted-theme-fixes/openlab.colorbox.fixes.js", array( $dep ), '0.0.0.1', true );
 		wp_enqueue_script( 'openlab-colorbox-fixes' );
 	}
 }
-
 add_action( 'wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000 );
 
 /**
@@ -296,7 +288,7 @@ function openlab_themes_filter_search_form( $form) {
 	$all_tags    = $dom->getElementsByTagName( '*' );
 	$target_tags = array( 'form', 'label', 'input' );
 
-	foreach ($all_tags as $key => $this_tag) {
+	foreach ( $all_tags as $key => $this_tag ) {
 
 		if ( ! in_array( $this_tag->tagName, $target_tags )) {
 			continue;
@@ -304,14 +296,14 @@ function openlab_themes_filter_search_form( $form) {
 
 		$legacy_id = $this_tag->getAttribute( 'id' );
 
-		if ($legacy_id) {
+		if ( $legacy_id ) {
 			$this_tag->setAttribute( 'id', $legacy_id . $current_form_num );
 			$this_tag->setAttribute( 'class', $legacy_id );
 		}
 
 		$legacy_for = $this_tag->getAttribute( 'for' );
 
-		if ($legacy_for) {
+		if ( $legacy_for ) {
 			$this_tag->setAttribute( 'for', $legacy_for . $current_form_num );
 		}
 	}
@@ -347,5 +339,4 @@ function openlab_themes_filter_search_form( $form) {
 
 	return $form;
 }
-
 add_filter( 'get_search_form', 'openlab_themes_filter_search_form' );
