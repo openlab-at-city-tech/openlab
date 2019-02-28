@@ -101,8 +101,8 @@ OpenLab.fixes = (function ($) {
 			thisHeader.replaceWith( replacement[0].outerHTML );
 		},
 		fixHemingwayEmptyButtons: function() {
-			$('.navigation-inner.section-inner .toggle-container .nav-toggle').append('<span class="sr-only">Toggle Navigation</span>');
-			$('.navigation-inner.section-inner .toggle-container .search-toggle').append('<span class="sr-only">Toggle Search</span>');
+			$( '.navigation-inner.section-inner .toggle-container .nav-toggle' ).append( '<span class="sr-only">Toggle Navigation</span>' );
+			$( '.navigation-inner.section-inner .toggle-container .search-toggle' ).append( '<span class="sr-only">Toggle Search</span>' );
 		}
 	}
 })( jQuery, OpenLab );
