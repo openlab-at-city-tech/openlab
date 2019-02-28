@@ -65,8 +65,8 @@ function openlab_reorder_theme_selections( $themes) {
 	uasort(
 		$t1,
 		function( $a, $b ) use ( $preferred_themes ) {
-			$apos = array_search( $a['id'], $preferred_themes );
-			$bpos = array_search( $b['id'], $preferred_themes );
+			$apos = array_search( $a['id'], $preferred_themes, true );
+			$bpos = array_search( $b['id'], $preferred_themes, true );
 
 			return ( $apos < $bpos ) ? -1 : 1;
 		}
@@ -270,7 +270,7 @@ function openlab_themes_filter_search_form( $form) {
 		'twentytwelve',
 	);
 
-	if ( ! in_array( $template, $relevant_themes )) {
+	if ( ! in_array( $template, $relevant_themes, true ) ) {
 		return $form;
 	}
 
@@ -289,7 +289,7 @@ function openlab_themes_filter_search_form( $form) {
 
 	foreach ( $all_tags as $key => $this_tag ) {
 
-		if ( ! in_array( $this_tag->tagName, $target_tags )) {
+		if ( ! in_array( $this_tag->tagName, $target_tags, true ) ) {
 			continue;
 		}
 
