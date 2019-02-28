@@ -69,7 +69,7 @@ function openlab_get_current_group_type( $case = 'lower' ) {
 		}
 
 		if ( empty( $bp->groups->current_group ) ) {
-			$bp->groups->current_group = new stdClass;
+			$bp->groups->current_group = new stdClass();
 		}
 		$bp->groups->current_group->group_type = $group_type;
 	}
@@ -105,7 +105,8 @@ function openlab_group_type_can_be_cloned_by_others( $group_type ) {
  */
 function openlab_get_group_type_label( $args = array() ) {
 	$r = wp_parse_args(
-		$args, array(
+		$args,
+		array(
 			'group_id' => openlab_fallback_group(),
 			'case'     => 'lower',
 		)

@@ -23,7 +23,7 @@ function openlab_group_search_breakup( $sql, $s ) {
 			$match_clauses = array();
 			foreach ( $search_terms as $search_term ) {
 				$search_term_clean = esc_sql( like_escape( $search_term ) );
-				$match_clauses[] = "( g.name LIKE '%%{$search_term_clean}%%' OR g.description LIKE '%%{$search_term_clean}%%' )";
+				$match_clauses[]   = "( g.name LIKE '%%{$search_term_clean}%%' OR g.description LIKE '%%{$search_term_clean}%%' )";
 			}
 
 			$search_clause = ' AND ( ' . implode( ' AND ', $match_clauses ) . ' )';
@@ -35,7 +35,7 @@ function openlab_group_search_breakup( $sql, $s ) {
 			// Though, on second thought, doesn't matter much since
 			// the array is not passed by reference
 			$s['search'] = $search_clause;
-			$sql = preg_replace( '/AND \( g.name LIKE \'%%[^%]+%%\' OR g.description LIKE \'%%[^%]+%%\' \)/', $search_clause, $sql );
+			$sql         = preg_replace( '/AND \( g.name LIKE \'%%[^%]+%%\' OR g.description LIKE \'%%[^%]+%%\' \)/', $search_clause, $sql );
 		}
 	}
 

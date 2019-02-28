@@ -20,7 +20,7 @@ function openlab_library_tools_are_enabled_for_group( $group_id ) {
 	// Courses default to 'yes'.
 	if ( ! $setting ) {
 		$group_type = openlab_get_group_type( $group_id );
-		$setting = 'course' === $group_type ? 'yes' : 'no';
+		$setting    = 'course' === $group_type ? 'yes' : 'no';
 	}
 
 	return 'yes' === $setting;
@@ -30,9 +30,11 @@ function openlab_library_tools_are_enabled_for_group( $group_id ) {
  * Renders the Library Settings section of the group admin.
  */
 function openlab_group_library_settings() {
-	$group_type_label = openlab_get_group_type_label( array(
-		'case' => 'upper',
-	) );
+	$group_type_label = openlab_get_group_type_label(
+		array(
+			'case' => 'upper',
+		)
+	);
 
 	$setting = openlab_library_tools_are_enabled_for_group( bp_get_current_group_id() );
 
@@ -159,10 +161,13 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 	}
 
 	public function parse_settings( $settings ) {
-		$merged = array_merge( array(
-			'find_library_materials' => true,
-			'library_information' => true,
-		), $settings );
+		$merged = array_merge(
+			array(
+				'find_library_materials' => true,
+				'library_information'    => true,
+			),
+			$settings
+		);
 
 		// boolval() available only on PHP 5.5+
 		foreach ( $merged as &$m ) {
@@ -253,7 +258,7 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 
 		$passed = array(
 			'find_library_materials' => ! empty( $new_instance['find_library_materials'] ),
-			'library_information' => ! empty( $new_instance['library_information'] ),
+			'library_information'    => ! empty( $new_instance['library_information'] ),
 		);
 
 		return $this->parse_settings( $passed );

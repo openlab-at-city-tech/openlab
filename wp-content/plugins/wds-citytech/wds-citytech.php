@@ -8,11 +8,11 @@ Author: City Tech OpenLab
 Author URI: https://openlab.citytech.cuny.edu
  */
 
-include 'wds-register.php';
-include 'wds-docs.php';
-include 'includes/oembed.php';
-include 'includes/library-widget.php';
-include 'includes/clone.php';
+require 'wds-register.php';
+require 'wds-docs.php';
+require 'includes/oembed.php';
+require 'includes/library-widget.php';
+require 'includes/clone.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -20,14 +20,14 @@ include 'includes/clone.php';
  * See http://openlab.citytech.cuny.edu/redmine/issues/31
  */
 function openlab_load_custom_bp_functions() {
-	require( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
-	require( dirname( __FILE__ ) . '/includes/email.php' );
-	require( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
-	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
-	require( dirname( __FILE__ ) . '/includes/group-types.php' );
-	require( dirname( __FILE__ ) . '/includes/portfolios.php' );
-	require( dirname( __FILE__ ) . '/includes/related-links.php' );
-	require( dirname( __FILE__ ) . '/includes/search.php' );
+	require dirname( __FILE__ ) . '/wds-citytech-bp.php';
+	require dirname( __FILE__ ) . '/includes/email.php';
+	require dirname( __FILE__ ) . '/includes/groupmeta-query.php';
+	require dirname( __FILE__ ) . '/includes/group-blogs.php';
+	require dirname( __FILE__ ) . '/includes/group-types.php';
+	require dirname( __FILE__ ) . '/includes/portfolios.php';
+	require dirname( __FILE__ ) . '/includes/related-links.php';
+	require dirname( __FILE__ ) . '/includes/search.php';
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
@@ -173,14 +173,14 @@ function cuny_add_group_menu_items( $items, $args ) {
 	}
 
 	if ( ! $has_home ) {
-		$post_args        = new stdClass;
-		$home_link        = new WP_Post( $post_args );
-		$home_link->title = 'Home';
-		$home_link->url   = trailingslashit( site_url() );
-		$home_link->slug  = 'home';
-		$home_link->ID    = 'home';
+		$post_args          = new stdClass();
+		$home_link          = new WP_Post( $post_args );
+		$home_link->title   = 'Home';
+		$home_link->url     = trailingslashit( site_url() );
+		$home_link->slug    = 'home';
+		$home_link->ID      = 'home';
 		$home_link->classes = [];
-		$items            = array_merge( array( $home_link ), $items );
+		$items              = array_merge( array( $home_link ), $items );
 	}
 
 	$items = array_merge( cuny_group_menu_items(), $items );
@@ -220,12 +220,12 @@ function cuny_group_menu_items() {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
 		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$post_args           = new stdClass;
-		$profile_item        = new WP_Post( $post_args );
-		$profile_item->ID    = 'group-profile-link';
-		$profile_item->title = sprintf( '%s Profile', $group_type );
-		$profile_item->slug  = 'group-profile-link';
-		$profile_item->url   = bp_get_group_permalink( $group );
+		$post_args             = new stdClass();
+		$profile_item          = new WP_Post( $post_args );
+		$profile_item->ID      = 'group-profile-link';
+		$profile_item->title   = sprintf( '%s Profile', $group_type );
+		$profile_item->slug    = 'group-profile-link';
+		$profile_item->url     = bp_get_group_permalink( $group );
 		$profile_item->classes = [];
 
 		$items[] = $profile_item;
@@ -1519,7 +1519,7 @@ class OpenLab_Change_User_Type {
 		}
 
 		if ( empty( $instance ) ) {
-			$instance = new OpenLab_Change_User_Type;
+			$instance = new OpenLab_Change_User_Type();
 		}
 	}
 
