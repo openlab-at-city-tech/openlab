@@ -9,7 +9,7 @@
 function openlab_load_theme_fixes() {
 	$t = get_stylesheet();
 
-	switch ($t) {
+	switch ( $t ) {
 		case 'carrington-blog':
 		case 'coraline':
 		case 'filtered':
