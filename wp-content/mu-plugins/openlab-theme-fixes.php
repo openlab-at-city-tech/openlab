@@ -1,4 +1,7 @@
 <?php
+/**
+ * Theme-specific fixes.
+ */
 
 /**
  * Loads theme fixes for OpenLab site themes
