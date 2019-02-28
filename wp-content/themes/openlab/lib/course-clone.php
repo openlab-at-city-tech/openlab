@@ -614,50 +614,6 @@ class Openlab_Clone_Course_Group {
 				)
 			);
 		}
-
-		return;
-
-		// bbPress 1
-
-		// rekey for better lookups
-		$source_forum_topics_keyed = array();
-		foreach ( $source_forum_topics as $sft ) {
-			if ( ! in_array( $sft->post_author, $source_group_admins ) ) {
-				continue;
-			}
-			$source_forum_topics_keyed[ $sft->ID ] = $sft;
-		}
-
-			// And their first posts
-		global $wpdb, $bp, $bbdb;
-		$source_forum_topic_ids = implode( ',', wp_list_pluck( $source_forum_topics, 'topic_id' ) );
-		$source_forum_posts     = $wpdb->get_results( "SELECT topic_id, post_text FROM {$bbdb->posts} WHERE topic_id IN ({$source_forum_topic_ids}) AND post_position = 1" );
-
-		foreach ( $source_forum_posts as $sfp ) {
-			if ( isset( $source_forum_topics_keyed[ $sfp->topic_id ] ) ) {
-				$source_forum_topics_keyed[ $sfp->topic_id ]->post_text = $sfp->post_text;
-			}
-		}
-
-		// Then post them
-		foreach ( $source_forum_topics_keyed as $sftk ) {
-			bp_forums_new_topic(
-				array(
-					'forum_id'               => $forum_id,
-					'topic_title'            => $sftk->topic_title,
-					'topic_slug'             => $sftk->topic_slug,
-					'topic_poster'           => $sftk->topic_poster,
-					'topic_poster_name'      => $sftk->topic_poster_name,
-					'topic_last_poster'      => $sftk->topic_last_poster,
-					'topic_last_poster_name' => $sftk->topic_last_poster_name,
-					'topic_start_time'       => $sftk->topic_start_time,
-					'topic_time'             => $sftk->topic_time,
-					'topic_text'             => $sftk->post_text,
-				)
-			);
-		}
-
-		// @todo - forum attachments
 	}
 
 	/**
