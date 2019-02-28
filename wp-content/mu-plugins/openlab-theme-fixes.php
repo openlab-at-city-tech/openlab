@@ -39,7 +39,7 @@ add_action( 'wp_print_styles', 'openlab_load_theme_fixes', 9999 );
 /**
  * Arrange themes so that preferred themes appear first in the list.
  */
-function openlab_reorder_theme_selections( $themes) {
+function openlab_reorder_theme_selections( $themes ) {
 	$preferred_themes = array(
 		'twentyfifteen',
 		'filtered',
@@ -53,8 +53,8 @@ function openlab_reorder_theme_selections( $themes) {
 
 	$t1 = $t2 = array();
 
-	foreach ($themes as $theme_name => $theme) {
-		if (in_array( $theme_name, $preferred_themes, true )) {
+	foreach ( $themes as $theme_name => $theme ) {
+		if ( in_array( $theme_name, $preferred_themes, true ) ) {
 			$t1[ $theme_name ] = $theme;
 		} else {
 			$t2[ $theme_name ] = $theme;
@@ -101,13 +101,13 @@ function openlab_fix_fallback_menu_for_hemingway( $output ) {
 	}
 
 	// It really doesn't get any worse than this.
-	if ( ! isset( $dbs[ $lp_key + 4 ] ) || 'get_header' !== $dbs[ $lp_key + 4 ]['function']) {
+	if ( ! isset( $dbs[ $lp_key + 4 ] ) || 'get_header' !== $dbs[ $lp_key + 4 ]['function'] ) {
 		return $output;
 	}
 
 	// Fake pages.
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	if ( ! $group_id) {
+	if ( ! $group_id ) {
 		return $output;
 	}
 
@@ -169,15 +169,15 @@ function openlab_activate_page_links_to_on_sliding_door() {
 		return;
 	}
 
-	if ( ! is_admin() || ! current_user_can( 'activate_plugins' )) {
+	if ( ! is_admin() || ! current_user_can( 'activate_plugins' ) ) {
 		return;
 	}
 
-	if ( ! function_exists( 'is_plugin_active' )) {
+	if ( ! function_exists( 'is_plugin_active' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
 
-	if ( ! is_plugin_active( 'page-links-to/page-links-to.php' )) {
+	if ( ! is_plugin_active( 'page-links-to/page-links-to.php' ) ) {
 		activate_plugin( 'page-links-to/page-links-to.php' );
 	}
 }
@@ -210,7 +210,7 @@ function openlab_theme_fixes_filter_bloginfo( $output ) {
 			 * Targets empty h2s
 			 * The empty header will be cleaned up client-side
 			 */
-			if ( ! $output || $output === '' || ctype_space( $output )) {
+			if ( ! $output || $output === '' || ctype_space( $output ) ) {
 
 				$output  = '<span class="empty-header">Just Another WordPress Site</span>';
 				$output .= '<script type="text/javascript">(function ($) { $(".empty-header").addClass("processing"); })(jQuery);</script>';
@@ -253,7 +253,7 @@ add_action( 'wp_enqueue_scripts', 'openlab_theme_fixes_init_actions', 1000 );
  * @param type $form
  * @return type
  */
-function openlab_themes_filter_search_form( $form) {
+function openlab_themes_filter_search_form( $form ) {
 
 	$template = get_template();
 
@@ -274,7 +274,7 @@ function openlab_themes_filter_search_form( $form) {
 		return $form;
 	}
 
-	if ( ! isset( $GLOBALS['twentyeleven_search_form_count'] )) {
+	if ( ! isset( $GLOBALS['twentyeleven_search_form_count'] ) ) {
 		$GLOBALS['twentyeleven_search_form_count'] = 1;
 	} else {
 		$GLOBALS['twentyeleven_search_form_count'] ++;
