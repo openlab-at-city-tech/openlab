@@ -29,7 +29,7 @@ function openlab_load_theme_fixes() {
 		case 'twentytwelve':
 		case 'twentyeleven':
 		case 'twentyten':
-			echo '<link rel="stylesheet" id="' . $t . '-fixes" type="text/css" media="screen" href="' . get_home_url() . '/wp-content/mu-plugins/theme-fixes/' . $t . '.css" />
+			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $t ) . '.css" />
 ';
 			break;
 	}
