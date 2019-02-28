@@ -30,7 +30,7 @@
 		suit our project like so.
 		-->
 
-		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
 	</rule>
 
 	<!-- Add in some extra rules from other standards. -->
