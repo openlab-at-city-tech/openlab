@@ -370,7 +370,7 @@ class Openlab_Clone_Course_Group {
 	protected function migrate_docs() {
 		$docs = array();
 
-		$bp_docs_query = new BP_Docs_Query;
+		$bp_docs_query = new BP_Docs_Query();
 
 		$group_type_term = term_exists( 'group', $bp_docs_query->associated_item_tax_name );
 
@@ -443,7 +443,7 @@ class Openlab_Clone_Course_Group {
 					update_post_meta( $new_doc_id, 'bp_docs_revision_count', 1 );
 
 					// Update activity stream
-					$temp_query             = new stdClass;
+					$temp_query             = new stdClass();
 					$temp_query->doc_id     = $new_doc_id;
 					$temp_query->is_new_doc = true;
 					$temp_query->item_type  = 'group';
@@ -608,7 +608,8 @@ class Openlab_Clone_Course_Group {
 					'post_content' => $sftk->post_content,
 					'post_title'   => $sftk->post_title,
 					'post_date'    => $sftk->post_date,
-				), array(
+				),
+				array(
 					'forum_id' => $forum_id,
 				)
 			);
