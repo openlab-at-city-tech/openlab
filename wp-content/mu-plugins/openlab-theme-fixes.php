@@ -82,7 +82,7 @@ add_filter( 'wp_prepare_themes_for_js', 'openlab_reorder_theme_selections' );
  * This theme uses wp_list_pages() rather than a normal WP function for building
  * the default menu.
  */
-function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages) {
+function openlab_fix_fallback_menu_for_hemingway( $output ) {
 	if ( 'hemingway' !== get_template() ) {
 		return $output;
 	}
@@ -135,7 +135,7 @@ function openlab_fix_fallback_menu_for_hemingway( $output, $r, $pages) {
 
 	return $output;
 }
-add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway', 10, 3 );
+add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway' );
 
 /**
  * Hemingway: Add missing label element to comment form.
@@ -197,10 +197,9 @@ add_filter( 'wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5 );
  * Filtering blog info to fix items in theme
  *
  * @param type $output
- * @param type $show
  * @return string
  */
-function openlab_theme_fixes_filter_bloginfo( $output, $show ) {
+function openlab_theme_fixes_filter_bloginfo( $output ) {
 
 	$theme = wp_get_theme();
 
