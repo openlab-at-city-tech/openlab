@@ -19,6 +19,7 @@ OpenLab.fixes = (function ($) {
 				OpenLab.fixes.fixMasthead();
 			}
 
+			OpenLab.fixes.fixHemingwayEmptyButtons();
 		},
 		onLoad: function () {
 
@@ -98,6 +99,10 @@ OpenLab.fixes = (function ($) {
 			replacement.addClass( headerClasses );
 
 			thisHeader.replaceWith( replacement[0].outerHTML );
+		},
+		fixHemingwayEmptyButtons: function() {
+			$('.navigation-inner.section-inner .toggle-container .nav-toggle').append('<span class="sr-only">Toggle Navigation</span>');
+			$('.navigation-inner.section-inner .toggle-container .search-toggle').append('<span class="sr-only">Toggle Search</span>');
 		}
 	}
 })( jQuery, OpenLab );
