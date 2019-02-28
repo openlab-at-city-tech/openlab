@@ -31,7 +31,6 @@
 		-->
 
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
-		<exclude name="WordPress.XSS.EscapeOutput"/>
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->
