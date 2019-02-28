@@ -99,9 +99,9 @@ function openlab_clone_create_form_catcher() {
 
 			foreach ( $a['activities'] as $activity ) {
 				$a_obj = new BP_Activity_Activity( $activity->id );
-				if ( $hide_sitewide != $a_obj->hide_sitewide ) {
-					 $a_obj->hide_sitewide = $hide_sitewide;
-					 $a_obj->save();
+				if ( $hide_sitewide !== $a_obj->hide_sitewide ) {
+					$a_obj->hide_sitewide = $hide_sitewide;
+					$a_obj->save();
 				}
 			}
 
