@@ -9646,6 +9646,12 @@ body.membership-requests .group-list {
   margin-bottom: 0;
   padding: 0;
 }
+#content #bbpress-forums .bbp-submit-wrapper {
+  float: none;
+}
+#content #bbpress-forums .notify-group-members-ui {
+  margin-bottom: 10px;
+}
 @media (max-width: 767px) {
   #content #bbpress-forums .forum-titles .bbp-topic-title,
   #content #bbpress-forums .bp_group .bbp-topic-title {

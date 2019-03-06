@@ -29,18 +29,18 @@
 
 			<form class="form form-panel" id="new-post" name="new-post" method="post" action="">
 
-                <?php do_action( 'bbp_theme_before_topic_form' ); ?>
+				<?php do_action( 'bbp_theme_before_topic_form' ); ?>
 
 				<div class="bbp-form panel panel-default">
 					<div class="panel-heading">
-                        <?php
-                        if ( bbp_is_topic_edit() ) {
-                            printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
-                        } else {
-                            bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
-                        }
-                        ?>
-                    </div>
+						<?php
+						if ( bbp_is_topic_edit() ) {
+							printf( __( 'Now Editing &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_topic_title() );
+						} else {
+							bbp_is_single_forum() ? printf( __( 'Create New Topic in &ldquo;%s&rdquo;', 'bbpress' ), bbp_get_forum_title() ) : _e( 'Create New Topic', 'bbpress' );
+						}
+						?>
+					</div>
 
 					<div class="panel-body">
 						<?php
@@ -66,13 +66,13 @@
 								<p><?php _e( 'Your account has the ability to post unrestricted HTML content.', 'bbpress' ); ?></p>
 							</div>
 
-                        <?php endif; ?>
+						<?php endif; ?>
 
 						<?php do_action( 'bbp_template_notices' ); ?>
 
 						<div>
 
-                            <?php bbp_get_template_part( 'form', 'anonymous' ); ?>
+							<?php bbp_get_template_part( 'form', 'anonymous' ); ?>
 
 							<?php do_action( 'bbp_theme_before_topic_form_title' ); ?>
 
@@ -81,7 +81,7 @@
 								<input type="text" id="bbp_topic_title" value="<?php bbp_form_topic_title(); ?>" tabindex="<?php bbp_tab_index(); ?>" size="40" name="bbp_topic_title" maxlength="<?php bbp_title_max_length(); ?>" />
 							</p>
 
-                            <?php do_action( 'bbp_theme_after_topic_form_title' ); ?>
+							<?php do_action( 'bbp_theme_after_topic_form_title' ); ?>
 
 							<?php do_action( 'bbp_theme_before_topic_form_content' ); ?>
 
@@ -103,7 +103,7 @@
 									<code><?php bbp_allowed_tags(); ?></code>
 								</p>
 
-                            <?php endif; ?>
+							<?php endif; ?>
 
 							<?php if ( bbp_allow_topic_tags() && current_user_can( 'assign_topic_tags' ) ) : ?>
 
@@ -159,15 +159,15 @@
 								<p>
 									<input name="bbp_topic_subscription" id="bbp_topic_subscription" type="checkbox" value="bbp_subscribe" <?php bbp_form_topic_subscribed(); ?> tabindex="<?php bbp_tab_index(); ?>" />
 
-                                    <?php if ( bbp_is_topic_edit() && ( bbp_get_topic_author_id() !== bbp_get_current_user_id() ) ) : ?>
+									<?php if ( bbp_is_topic_edit() && ( bbp_get_topic_author_id() !== bbp_get_current_user_id() ) ) : ?>
 
-                                            <label for="bbp_topic_subscription"><?php _e( 'Notify the author of follow-up replies via email', 'bbpress' ); ?></label>
+											<label for="bbp_topic_subscription"><?php _e( 'Notify the author of follow-up replies via email', 'bbpress' ); ?></label>
 
-                                    <?php else : ?>
+									<?php else : ?>
 
-                                            <label for="bbp_topic_subscription"><?php _e( 'Notify me of follow-up replies via email', 'bbpress' ); ?></label>
+											<label for="bbp_topic_subscription"><?php _e( 'Notify me of follow-up replies via email', 'bbpress' ); ?></label>
 
-                                    <?php endif; ?>
+									<?php endif; ?>
 								</p>
 
 								<?php do_action( 'bbp_theme_after_topic_form_subscriptions' ); ?>
@@ -198,19 +198,23 @@
 					</div>
 				</div>
 
-                <?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
+				<?php do_action( 'bbp_theme_before_topic_form_submit_wrapper' ); ?>
 
 				<div class="bbp-submit-wrapper">
 
-                    <?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
+					<?php do_action( 'bbp_theme_before_topic_form_submit_button' ); ?>
 
-					<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
+					<div class="notify-group-members-ui">
+						<?php openlab_notify_group_members_ui( true ); ?>
+					</div>
 
-                    <?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
+					<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_topic_submit" name="bbp_topic_submit" class="btn btn-primary submit"><?php esc_html_e( 'Submit', 'bbpress' ); ?></button>
+
+					<?php do_action( 'bbp_theme_after_topic_form_submit_button' ); ?>
 
 				</div>
 
-                <?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
+				<?php do_action( 'bbp_theme_after_topic_form_submit_wrapper' ); ?>
 
 				<?php bbp_topic_form_fields(); ?>
 
@@ -220,7 +224,7 @@
 
 		</div>
 
-    <?php elseif ( bbp_is_forum_closed() ) : ?>
+	<?php elseif ( bbp_is_forum_closed() ) : ?>
 
 		<div id="no-topic-<?php bbp_topic_id(); ?>" class="bbp-no-topic">
 			<div class="bbp-template-notice">
@@ -228,7 +232,7 @@
 			</div>
 		</div>
 
-    <?php else : ?>
+	<?php else : ?>
 
 		<div id="no-topic-<?php bbp_topic_id(); ?>" class="bbp-no-topic">
 			<div class="bbp-template-notice">
@@ -236,7 +240,7 @@
 			</div>
 		</div>
 
-    <?php endif; ?>
+	<?php endif; ?>
 
 	<?php if ( ! bbp_is_single_forum() ) : ?>
 

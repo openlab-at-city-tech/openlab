@@ -622,6 +622,24 @@ add_filter( 'bbp_get_forum_title', 'openlab_remove_bbpress_forum_title' );
 add_filter( 'bbp_get_topic_title', 'openlab_remove_bbpress_forum_title' );
 
 /**
+ * Email notification management.
+ */
+add_filter(
+	'bp_ass_send_activity_notification_for_user',
+	function( $send_it, $activity ) {
+		switch ( $activity->type ) {
+			case 'bbp_topic_create':
+				return openlab_notify_group_members_of_this_action();
+
+			default:
+				return $send_it;
+		}
+	},
+	10,
+	2
+);
+
+/**
  * Plugin: Social
  */
 
