@@ -79,13 +79,10 @@ add_filter( 'bp_docs_do_theme_compat', '__return_false' );
  * @param type $menu_template
  * @return string
  */
-function openlab_hide_docs_native_menu( $menu_template ) {
-
+function openlab_hide_docs_native_menu() {
 	$path = STYLESHEETPATH . '/buddypress/groups/single/docs/docs-header.php';
-
 	return $path;
 }
-
 add_filter( 'bp_docs_header_template', 'openlab_hide_docs_native_menu' );
 
 /**
@@ -97,18 +94,16 @@ add_filter( 'bp_docs_header_template', 'openlab_hide_docs_native_menu' );
  * @return type
  */
 function openlab_custom_docs_templates( $path, $template ) {
-
-	if ( $template->current_view == 'list' ) {
+	if ( 'list' === $template->current_view ) {
 		$path = bp_locate_template( 'groups/single/docs/docs-loop.php', false );
-	} elseif ( $template->current_view == 'create' || $template->current_view == 'edit' ) {
+	} elseif ( 'create' === $template->current_view || 'edit' === $template->current_view ) {
 		$path = bp_locate_template( 'groups/single/docs/edit-doc.php', false );
-	} elseif ( $template->current_view == 'single' ) {
+	} elseif ( 'single' === $template->current_view ) {
 		$path = bp_locate_template( 'groups/single/docs/single-doc.php', false );
 	}
 
 	return $path;
 }
-
 add_filter( 'bp_docs_template', 'openlab_custom_docs_templates', 10, 2 );
 
 /**
@@ -121,8 +116,8 @@ add_filter( 'bp_docs_template', 'openlab_custom_docs_templates', 10, 2 );
 function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 	global $bp;
 
-	if ( 'edit' == $action ) {
-		if ( is_super_admin() || bp_loggedin_user_id() == get_the_author_meta( 'ID' ) || $user_can ) {
+	if ( 'edit' === $action ) {
+		if ( is_super_admin() || (int) bp_loggedin_user_id() === (int) get_the_author_meta( 'ID' ) || $user_can ) {
 			$user_can                                 = true;
 			$bp->bp_docs->current_user_can[ $action ] = 'yes';
 		} else {
@@ -133,7 +128,6 @@ function openlab_allow_super_admins_to_edit_bp_docs( $user_can, $action ) {
 
 	return $user_can;
 }
-
 add_filter( 'bp_docs_current_user_can', 'openlab_allow_super_admins_to_edit_bp_docs', 10, 2 );
 
 /**
@@ -194,7 +188,7 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 	global $members_template, $groups_template;
 
 	// if group admins / mods cannot manage email subscription settings, stop now!
-	if ( get_option( 'ass-admin-can-edit-email' ) == 'no' ) {
+	if ( get_option( 'ass-admin-can-edit-email' ) === 'no' ) {
 		return;
 	}
 
@@ -220,10 +214,10 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 	echo '<h5>Email Status</h5>';
 
 	echo '<ul class="group-manage-members-bpges-status">';
-	echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . $user_id . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . $user_id . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
 
 	echo '</ul>';
 
@@ -273,8 +267,7 @@ add_action( 'bbp_before_group_forum_display', 'openlab_forum_tabs_output' );
  * @param type $post_content
  * @return type
  */
-function openlab_custom_bbp_content( $output, $args, $post_content ) {
-
+function openlab_custom_bbp_content( $output ) {
 	if ( strpos( $output, 'textarea' ) !== false ) {
 		$output = str_replace( 'wp-editor-area', 'form-control', $output );
 	}
@@ -282,7 +275,7 @@ function openlab_custom_bbp_content( $output, $args, $post_content ) {
 	return $output;
 }
 
-add_filter( 'bbp_get_the_content', 'openlab_custom_bbp_content', 10, 3 );
+add_filter( 'bbp_get_the_content', 'openlab_custom_bbp_content', 10 );
 
 /**
  * Plugin: BBPress
@@ -325,8 +318,7 @@ add_filter( 'bbp_get_forum_pagination_links', 'openlab_bbp_paginatin_custom_mark
  * @param type $topic_id
  * @return type
  */
-function openlab_style_bbp_subscribe_link( $html, $r, $user_id, $topic_id ) {
-
+function openlab_style_bbp_subscribe_link( $html ) {
 	if ( ! bbp_is_single_topic() ) {
 		$html = str_replace( 'class="subscription-toggle"', 'class="subscription-toggle btn btn-primary btn-margin btn-margin-top no-deco"', $html );
 	}
@@ -334,7 +326,7 @@ function openlab_style_bbp_subscribe_link( $html, $r, $user_id, $topic_id ) {
 	return $html;
 }
 
-add_filter( 'bbp_get_user_subscribe_link', 'openlab_style_bbp_subscribe_link', 10, 4 );
+add_filter( 'bbp_get_user_subscribe_link', 'openlab_style_bbp_subscribe_link', 10 );
 
 /**
  * More generous cap mapping for bbPress topic posting.
@@ -428,7 +420,7 @@ add_filter( 'posts_results', 'openlab_bbp_force_forums_to_public', 10, 2 );
  * Otherwise activity is not posted.
  */
 function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
-	if ( 1 == $site_id ) {
+	if ( 1 === (int) $site_id ) {
 		$public = 1;
 	}
 	return $public;
@@ -546,8 +538,8 @@ add_filter( 'bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2 );
  *
  * This can cause a costly tree rebuild. See bbPress #1799. See OL #1663,
  */
-function openlab_prevent_bbp_recounts( $args ) {
-	if ( bbp_get_group_forums_root_id() == $r['forum_id'] ) {
+function openlab_prevent_bbp_recounts() {
+	if ( (int) bbp_get_group_forums_root_id() === (int) $r['forum_id'] ) {
 		$r['forum_id'] = 0;
 	}
 
@@ -557,13 +549,13 @@ function openlab_prevent_bbp_recounts( $args ) {
 add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
 
 function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
-	$group_root        = bbp_get_group_forums_root_id();
-	$group_root_parent = get_post( $group_root )->post_parent;
-	if ( $group_root != $id && $group_root_parent != $id ) {
+	$group_root        = (int) bbp_get_group_forums_root_id();
+	$group_root_parent = (int) get_post( $group_root )->post_parent;
+	if ( $group_root !== $id && $group_root_parent !== $id ) {
 		return $id;
 	}
 
-	$db     = debug_backtrace();
+	$db     = debug_backtrace(); // phpcs:disable WordPress.PHP.DevelopmentFunctions
 	$caller = '';
 	foreach ( $db as $key => $step ) {
 		if ( ! empty( $step['function'] ) && 'bbp_get_forum_id' === $step['function'] ) {
@@ -571,7 +563,7 @@ function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id 
 		}
 	}
 
-	if ( 'bbp_update_forum_reply_count' == $caller ) {
+	if ( 'bbp_update_forum_reply_count' === $caller ) {
 		return 0;
 	}
 
@@ -606,7 +598,7 @@ function openlab_remove_bbpress_forum_title( $title ) {
 	$is_single_forum_template = false;
 	$is_forum_nav             = false;
 
-	foreach ( debug_backtrace() as $db ) {
+	foreach ( debug_backtrace() as $db ) { // phpcs:disable WordPress.PHP.DevelopmentFunctions
 		if ( ! empty( $db['class'] ) && 'BBP_Forums_Group_Extension' === $db['class'] && ! empty( $db['function'] ) && 'display_forums' === $db['function'] ) {
 			$is_display_forums = true;
 		}
@@ -659,7 +651,7 @@ function openlab_log_out_social_accounts() {
 
 		// Log out and redirect.
 		wp_clear_auth_cookie();
-		wp_redirect( '/' );
+		wp_safe_redirect( '/' );
 		die();
 	}
 }
@@ -671,12 +663,11 @@ add_action( 'init', 'openlab_log_out_social_accounts', 0 );
  */
 function openlab_refresh_term_cache_after_ordering_update() {
 
-	$taxonomy          = stripslashes( $_POST['taxonomy'] );
-	$data              = stripslashes( $_POST['order'] );
+	$taxonomy          = stripslashes( $_POST['taxonomy'] ); // phpcs:ignore WordPress.Security.NonceVerification
+	$data              = stripslashes( $_POST['order'] ); // phpcs:ignore WordPress.Security.NonceVerification
 	$unserialised_data = unserialize( $data );
 	if ( is_array( $unserialised_data ) ) {
 		foreach ( $unserialised_data as $key => $values ) {
-			//$key_parent = str_replace("item_", "", $key);
 			$items = explode( '&', $values );
 			unset( $item );
 			foreach ( $items as $item_key => $item_ ) {
