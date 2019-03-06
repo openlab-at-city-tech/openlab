@@ -424,11 +424,16 @@ add_action( 'bp_group_documents_add_success', 'openlab_group_documents_email_not
 add_filter(
 	'bp_ass_send_activity_notification_for_user',
 	function( $send_it, $activity ) {
+		// We send a custom one, above.
 		if ( 'added_group_document' === $activity->type ) {
 			return false;
 		}
 
 		if ( 'edited_group_document' === $activity->type && ! openlab_notify_group_members_of_this_action() ) {
+			return false;
+		}
+
+		if ( 'deleted_group_document' === $activity->type ) {
 			return false;
 		}
 
