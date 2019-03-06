@@ -163,6 +163,7 @@ add_filter(
 	function( $send_it, $activity ) {
         switch ( $activity->type ) {
             case 'bp_doc_created' :
+            case 'bp_doc_edited' :
                 return openlab_notify_group_members_of_this_action();
 
             default :
