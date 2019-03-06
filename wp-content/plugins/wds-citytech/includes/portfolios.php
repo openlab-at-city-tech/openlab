@@ -265,7 +265,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 				continue;
 			}
 
-						// If the portfolio_blog_id is empty, this may be an external portfolio.
+			// If the portfolio_blog_id is empty, this may be an external portfolio.
 			if ( empty( $portfolio_blog_id ) ) {
 				$portfolio_url = openlab_get_external_site_url_by_group_id( $portfolio_id );
 
@@ -281,14 +281,14 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 				$portfolio_title = get_blog_option( $portfolio_blog_id, 'blogname' );
 			}
 
-						$portfolio = array(
-							'user_id'           => $member->ID,
-							'user_display_name' => $member->display_name,
-							'user_type'         => xprofile_get_field_data( 'Account Type', $member->ID ),
-							'portfolio_id'      => $portfolio_id,
-							'portfolio_url'     => $portfolio_url,
-							'portfolio_title'   => $portfolio_title,
-						);
+			$portfolio = array(
+				'user_id'           => $member->ID,
+				'user_display_name' => $member->display_name,
+				'user_type'         => xprofile_get_field_data( 'Account Type', $member->ID ),
+				'portfolio_id'      => $portfolio_id,
+				'portfolio_url'     => $portfolio_url,
+				'portfolio_title'   => $portfolio_title,
+			);
 
 			$portfolios[] = $portfolio;
 		}
