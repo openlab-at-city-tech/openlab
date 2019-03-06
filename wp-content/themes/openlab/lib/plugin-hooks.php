@@ -156,6 +156,24 @@ function openlab_fix_avatar_delete($view) {
 add_filter('bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999);
 
 /**
+ * Email notification management.
+ */
+add_filter(
+	'bp_ass_send_activity_notification_for_user',
+	function( $send_it, $activity ) {
+        switch ( $activity->type ) {
+            case 'bp_doc_created' :
+                return openlab_notify_group_members_of_this_action();
+
+            default :
+                return $send_it;
+        }
+	},
+	10,
+	2
+);
+
+/**
  * BuddyPress Group Email Subscription
  * See also: openlab/buddypress/groups/single/notifications.php for template overrides
  */
