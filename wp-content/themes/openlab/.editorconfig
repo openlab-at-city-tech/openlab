@@ -6,3 +6,6 @@ indent_size = 4
 # Exceptions
 [lib/course-clone.php]
 indent_style = tab
+
+[lib/plugin-mods/files-funcs.php]
+indent_style = tab
