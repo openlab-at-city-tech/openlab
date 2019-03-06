@@ -21,16 +21,8 @@
 
 	<!-- Include the WordPress-Extra standard. -->
 	<rule ref="WordPress-Extra">
-		<!--
-		We may want a middle ground though. The best way to do this is add the
-		entire ruleset, then rule by rule, remove ones that don't suit a project.
-		We can do this by running `phpcs` with the '-s' flag, which allows us to
-		see the names of the sniffs reporting errors.
-		Once we know the sniff names, we can opt to exclude sniffs which don't
-		suit our project like so.
-		-->
-
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
+		<exclude name="WordPress.WP.I18n"/>
 	</rule>
 
 	<!-- Add in some extra rules from other standards. -->
@@ -38,53 +30,23 @@
 	<rule ref="Generic.Commenting.Todo"/>
 
 	<!-- Check for PHP cross-version compatibility. -->
-	<!--
-	To enable this, the PHPCompatibility standard needs
-	to be installed.
-	See the readme for installation instructions:
-	https://github.com/wimg/PHPCompatibility
-	-->
-	<!--
-	<config name="testVersion" value="5.2-99.0"/>
-	<rule ref="PHPCompatibility"/>
-	-->
-
-	<!--
-	To get the optimal benefits of using WPCS, we should add a couple of
-	custom properties.
-	Adjust the values of these properties to fit our needs.
-
-	For information on additional custom properties available, check out
-	the wiki:
-	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
-	-->
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<property name="text_domain" type="array" value="my-textdomain,library-textdomain"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-		<properties>
-			<property name="prefixes" type="array" value="my_prefix"/>
-		</properties>
-	</rule>
+	<config name="testVersion" value="7.2-"/>
 
 	<rule ref="WordPress.WP.DeprecatedClasses">
 		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
+			<property name="minimum_supported_version" value="5.1"/>
 		</properties>
 	</rule>
 
 	<rule ref="WordPress.WP.DeprecatedFunctions">
 		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
+			<property name="minimum_supported_version" value="5.1"/>
 		</properties>
 	</rule>
 
 	<rule ref="WordPress.WP.DeprecatedParameters">
 		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
+			<property name="minimum_supported_version" value="5.1"/>
 		</properties>
 	</rule>
 
