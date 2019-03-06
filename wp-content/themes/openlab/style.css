@@ -9463,6 +9463,12 @@ body.membership-requests .group-list {
   margin-bottom: 19px;
   margin-top: 3px;
 }
+#bp-group-documents .bp-group-documents-submit {
+  margin-top: 10px;
+}
+#bp-group-documents .notify-group-members-ui {
+  padding-top: 10px;
+}
 .docs-info-header #tags-toggle {
   padding: 6px 16px;
 }

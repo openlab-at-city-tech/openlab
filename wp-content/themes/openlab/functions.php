@@ -304,3 +304,23 @@ function openlab_redirect_from_member_profile() {
 }
 
 add_action('template_redirect', 'openlab_redirect_from_member_profile');
+
+/**
+ * Reusable markup for the "Notify subscribed..." UI.
+ *
+ * @param bool $checked Whether the checkbox should be checked.
+ */
+function openlab_notify_group_members_ui( $checked = false ) {
+    ?>
+<label><input type="checkbox" name="ol-notify-group-members" value="1" class="ol-notify-group-members" <?php checked( $checked ); ?> /> Notify subscribed members by email</label>
+    <?php
+}
+
+/**
+ * Reusable wrapper for checking whether the "Notify subscribed..." checkbox was checked.
+ *
+ * @return bool
+ */
+function openlab_notify_group_members_of_this_action() {
+    return ! empty( $_POST['ol-notify-group-members'] );
+}

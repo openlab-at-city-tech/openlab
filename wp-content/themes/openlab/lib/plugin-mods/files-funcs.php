@@ -223,7 +223,11 @@ function openlab_bp_group_documents_display_content() {
                             </div>
                         </div>
 
-                        <input type="submit" class="btn btn-primary btn-margin btn-margin-top" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
+                        <div class="notify-group-members-ui">
+                            <?php openlab_notify_group_members_ui( true ); ?>
+                        </div>
+
+                        <input type="submit" class="btn btn-primary btn-margin bp-group-documents-submit" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
 
                         <?php if (get_option('bp_group_documents_use_categories')) { ?>
                             <div class="bp-group-documents-category-wrapper">
@@ -318,6 +322,10 @@ function openlab_bp_group_documents_custom_pagination_links($template) {
  */
 function openlab_group_documents_email_notification( $document ) {
 	global $bp;
+
+    if ( ! openlab_notify_group_members_of_this_action() ) {
+        return;
+    }
 
 	$user_name = bp_core_get_userlink( bp_loggedin_user_id() );
 	$user_profile_link = bp_core_get_userlink( bp_loggedin_user_id(), false, true );
