@@ -224,7 +224,8 @@ function openlab_bp_group_documents_display_content() {
                         </div>
 
                         <div class="notify-group-members-ui">
-                            <?php openlab_notify_group_members_ui( true ); ?>
+                            <?php /* Default to checked for 'add' only, not 'edit' */ ?>
+                            <?php openlab_notify_group_members_ui( 'add' === $template->operation ); ?>
                         </div>
 
                         <input type="submit" class="btn btn-primary btn-margin bp-group-documents-submit" value="<?php _e('Submit', 'bp-group-documents'); ?>" />
@@ -398,5 +399,10 @@ add_filter( 'bp_ass_send_activity_notification_for_user', function( $send_it, $a
 	if ( 'added_group_document' === $activity->type ) {
 		return false;
 	}
+
+    if ( 'edited_group_document' === $activity->type && ! openlab_notify_group_members_of_this_action() ) {
+        return false;
+    }
+
 	return $send_it;
 }, 10, 2 );
