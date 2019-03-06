@@ -134,7 +134,7 @@ function openlab_bp_group_documents_display_content() {
 							echo '<div class="admin-links pull-right">';
 							if ( $document->current_user_can( 'edit' ) ) {
 								$edit_link = wp_nonce_url( $template->action_link . 'edit/' . $document->id, 'group-documents-edit-link' );
-								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_html_e( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
 							}
 							if ( $document->current_user_can( 'delete' ) ) {
 								$delete_link = wp_nonce_url( $template->action_link . 'delete/' . $document->id, 'group-documents-delete-link' );
