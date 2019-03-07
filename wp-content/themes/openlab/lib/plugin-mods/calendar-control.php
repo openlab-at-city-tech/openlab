@@ -445,3 +445,53 @@ function openlab_bpeo_extra_venue_meta( $venue_id ) {
 	}
 }
 add_action( 'eventorganiser_save_venue', 'openlab_bpeo_extra_venue_meta' );
+
+/**
+ * Render the "Notify subsribers" checkbox during event creation/editing.
+ */
+function openlab_bpeo_render_silent_checkbox( $post_type, $location, $post ) {
+	// Only do this on the front end.
+	if ( is_admin() ) {
+		return;
+	}
+
+	// Only do this for events.
+	if ( 'event' !== $post_type ) {
+		return;
+	}
+
+	// Only do this for 'side'.
+	if ( 'side' !== $location ) {
+		return;
+	}
+
+	?>
+	<p id="bpeo-silent-wrapper" style="display:none">
+		<?php openlab_notify_group_members_ui( bp_is_action_variable( 'new-event', 0 ) ); ?>
+	</p>
+	<?php
+}
+add_action( 'do_meta_boxes', 'openlab_bpeo_render_silent_checkbox', 10, 3 );
+remove_action( 'do_meta_boxes', 'bpeo_render_silent_checkbox', 10, 3 );
+
+/**
+ * Trick: Hook in before bpeo_send_bpges_notification_for_user() and fake $_POST.
+ */
+add_filter(
+	'bp_ass_send_activity_notification_for_user',
+	function( $send_it, $activity ) {
+		if ( 'groups' !== $activity->component || 0 !== strpos( $activity->type, 'bpeo_' ) ) {
+			return $send_it;
+		}
+
+		if ( openlab_notify_group_members_of_this_action() ) {
+			unset( $_POST['bpeo-silent'] );
+		} else {
+			$_POST['bpeo-silent'] = 1;
+		}
+
+		return $send_it;
+	},
+	5,
+	2
+);
