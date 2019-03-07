@@ -9652,6 +9652,10 @@ body.membership-requests .group-list {
 #content #bbpress-forums .notify-group-members-ui {
   margin-bottom: 10px;
 }
+#content #bbpress-forums .bbp-reply-form .bbp-submit-wrapper {
+  padding-bottom: 15px;
+  padding-left: 15px;
+}
 @media (max-width: 767px) {
   #content #bbpress-forums .forum-titles .bbp-topic-title,
   #content #bbpress-forums .bp_group .bbp-topic-title {

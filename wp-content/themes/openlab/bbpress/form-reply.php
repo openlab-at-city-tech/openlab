@@ -141,6 +141,12 @@
 
 						<?php bbp_cancel_reply_to_link(); ?>
 
+						<?php if ( ! bbp_is_reply_edit() ) : ?>
+							<div class="notify-group-members-ui">
+								<?php openlab_notify_group_members_ui( true ); ?>
+							</div>
+						<?php endif; ?>
+
 						<button type="submit" tabindex="<?php bbp_tab_index(); ?>" id="bbp_reply_submit" name="bbp_reply_submit" class="btn  btn-primary submit"><?php _e( 'Submit', 'bbpress' ); ?></button>
 
 						<?php do_action( 'bbp_theme_after_reply_form_submit_button' ); ?>

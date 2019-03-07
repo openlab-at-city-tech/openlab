@@ -629,6 +629,7 @@ add_filter(
 	function( $send_it, $activity ) {
 		switch ( $activity->type ) {
 			case 'bbp_topic_create':
+			case 'bbp_reply_create':
 				return openlab_notify_group_members_of_this_action();
 
 			default:
