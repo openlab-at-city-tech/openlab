@@ -2036,6 +2036,30 @@ function openlab_set_default_group_subscription_on_creation( $group_id ) {
 
 add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
 
+add_filter(
+	'ass_digest_format_item',
+	function( $item_message, $item, $action, $timestamp ) {
+		$time_posted = date( get_option( 'time_format' ), $timestamp );
+		$date_posted = date( get_option( 'date_format' ), $timestamp );
+
+		$timestamp_string = sprintf( __( 'at %s, %s', 'buddypress-group-email-subscription' ), $time_posted, $date_posted );
+
+		$timezone = new DateTimeZone( 'America/New_York' );
+		$datetime = new DateTime();
+		$datetime->setTimestamp( (int) $timestamp );
+		$datetime->setTimeZone( $timezone );
+
+		$new_time_posted = $datetime->format( get_option( 'time_format' ) );
+		$new_date_posted = $datetime->format( get_option( 'date_format' ) );
+
+		$new_timestamp_string = sprintf( __( 'at %s, %s', 'buddypress-group-email-subscription' ), $new_time_posted, $new_date_posted );
+
+		return str_replace( $timestamp_string, $new_timestamp_string, $item_message );
+	},
+	10,
+	4
+);
+
 /**
  * Brackets in password reset emails cause problems in some clients. Remove them
  */
