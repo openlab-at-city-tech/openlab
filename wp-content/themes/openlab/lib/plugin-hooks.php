@@ -152,21 +152,22 @@ add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
 /**
  * Email notification management.
  */
-add_filter(
-	'bp_ass_send_activity_notification_for_user',
-	function( $send_it, $activity ) {
-		switch ( $activity->type ) {
-			case 'bp_doc_created':
-			case 'bp_doc_edited':
-				return openlab_notify_group_members_of_this_action();
+function openlab_docs_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
+	if ( ! $send_it ) {
+		return $send_it;
+	}
 
-			default:
-				return $send_it;
-		}
-	},
-	10,
-	2
-);
+	switch ( $activity->type ) {
+		case 'bp_doc_created':
+		case 'bp_doc_edited':
+			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
+
+		default:
+			return $send_it;
+	}
+}
+add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
+add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
 
 /**
  * BuddyPress Group Email Subscription
@@ -624,21 +625,22 @@ add_filter( 'bbp_get_topic_title', 'openlab_remove_bbpress_forum_title' );
 /**
  * Email notification management.
  */
-add_filter(
-	'bp_ass_send_activity_notification_for_user',
-	function( $send_it, $activity ) {
-		switch ( $activity->type ) {
-			case 'bbp_topic_create':
-			case 'bbp_reply_create':
-				return openlab_notify_group_members_of_this_action();
+function openlab_bbp_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
+	if ( ! $send_it ) {
+		return $send_it;
+	}
 
-			default:
-				return $send_it;
-		}
-	},
-	10,
-	2
-);
+	switch ( $activity->type ) {
+		case 'bbp_topic_create':
+		case 'bbp_reply_create':
+			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
+
+		default:
+			return $send_it;
+	}
+}
+add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_bbp_activity_notification_control', 100, 4 );
+add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_bbp_activity_notification_control', 100, 4 );
 
 /**
  * Plugin: Social
