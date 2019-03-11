@@ -40,6 +40,23 @@ openlab.academicUnits = (function($){
                     $( v ).prop( 'checked', false );
                 }
             } );
+
+						// Items appearing under more than one parent should have dupes removed.
+						var uniqueSlugs = [];
+						au.academicUnitCheckboxes.map( function(item, index){
+							var $parentEl = $(index).closest('.academic-unit');
+							if ( ! $parentEl.hasClass( 'academic-unit-visible' ) ) {
+								return;
+							}
+
+							var theSlug = index.value;
+							if ( -1 === uniqueSlugs.indexOf( theSlug ) ) {
+								uniqueSlugs.push( theSlug );
+							} else {
+								$parentEl.addClass( 'academic-unit-hidden' );
+							}
+						});
+
         },
 
         /**

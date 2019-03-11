@@ -2793,8 +2793,16 @@ function openlab_academic_unit_selector( $args = array() ) {
 	$departments  = array();
 	foreach ( $_departments as $_entity_slug => $_depts ) {
 		foreach ( $_depts as $_dept_slug => $_dept_value ) {
-			$_dept_value['parent']      = $_entity_slug;
-			$departments[ $_dept_slug ] = $_dept_value;
+			$_dept_value['parent'] = $_entity_slug;
+			$_dept_value['slug']   = $_dept_slug;
+
+			/*
+			 * Indexes must be unique per parent+child combo, as items may appear under
+			 * more than one parent.
+			 */
+			$dept_index = $_entity_slug . '_' . $_dept_slug;
+
+			$departments[ $dept_index ] = $_dept_value;
 		}
 	}
 
@@ -2862,11 +2870,12 @@ function openlab_academic_unit_selector( $args = array() ) {
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
-				<?php foreach ( $departments as $dept_slug => $dept ) : ?>
+				<?php foreach ( $departments as $dept_index => $dept ) : ?>
+					<?php $dept_slug = $dept['slug']; ?>
 					<li class="academic-unit academic-unit-visible">
 						<?php
 						$parent_attr = $dept['parent'];
-						$id_attr     = 'academic-unit-' . $dept_slug;
+						$id_attr     = 'academic-unit-' . $dept_index;
 						?>
 
 						<input
