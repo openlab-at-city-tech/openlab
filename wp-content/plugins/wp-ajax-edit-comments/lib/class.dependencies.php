@@ -5,11 +5,21 @@ class AECDependencies {
 		//called from wp_print_scripts action
 		public static function add_post_scripts() {
 			global $aecomments;
-			if (is_single()) {
-				AECDependencies::add_scripts();
-			} elseif (is_page() && $aecomments->get_admin_option( 'show_pages' ) == 'true') {
-				AECDependencies::add_scripts();
-			} elseif ( is_admin() && $aecomments->get_user_option( 'admin_editing' ) == 'false' ) {
+			if (
+				is_single() ||
+				(
+					is_page() &&
+					$aecomments->get_admin_option( 'show_pages' ) == 'true'
+				) ||
+				(
+					is_admin() &&
+					$aecomments->get_user_option( 'admin_editing' ) == 'false'
+				) ||
+				(
+					$aecomments->get_admin_option( 'scripts_on_archive' ) == 'true' &&
+					is_post_type_archive($aecomments->get_admin_option( 'allowed_archives' ))
+				)
+			) {
 				AECDependencies::add_scripts();
 			}
 		} //end add_post_scripts
@@ -40,7 +50,14 @@ class AECDependencies {
 		public static function add_css(){
 			global $aecomments;
 			
-			if (is_single() || is_page() || is_admin()) {
+			if ( is_single() ||
+				is_page() ||
+				is_admin() ||
+				(
+					$aecomments->get_admin_option( 'scripts_on_archive' ) == 'true' &&
+					is_post_type_archive($aecomments->get_admin_option( 'allowed_archives' ))
+				)
+			) {
 				if (is_page() && $aecomments->get_admin_option( 'show_pages' ) != 'true') 
 					return;
 
@@ -162,8 +179,15 @@ if ( typeof( ajaxurl ) == 'undefined' ) { var ajaxurl = '<?php echo esc_js( admi
 			if ($aecomments->get_admin_option( 'compressed_scripts' ) == 'true') {
 				$min = ".min";
 			}
+
 			if ($skiptest == true) {
-				if (!is_page() && !is_single())
+				if (!is_page() && 
+					!is_single() &&
+					(
+						$aecomments->get_admin_option( 'scripts_on_archive' ) != 'true' ||
+						!is_post_type_archive($aecomments->get_admin_option( 'allowed_archives' ))
+					)
+				)
 					return;
 				if ('closed' == $post->comment_status && !is_user_logged_in()) 
 					return;
@@ -189,7 +213,13 @@ if ( typeof( ajaxurl ) == 'undefined' ) { var ajaxurl = '<?php echo esc_js( admi
 			global $aecomments, $post;
 			if (is_admin()) { return; }
 			
-			if (!is_page() && !is_single())
+			if (!is_page() && 
+				!is_single() &&
+				(
+					$aecomments->get_admin_option( 'scripts_on_archive' ) != 'true' ||
+					!is_post_type_archive($aecomments->get_admin_option( 'allowed_archives' ))
+				)
+			)
 					return;
 			if ('closed' == $post->comment_status && !is_user_logged_in()) 
 					return;

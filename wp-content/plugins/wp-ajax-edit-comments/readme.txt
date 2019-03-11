@@ -1,10 +1,10 @@
 === Mihdan: Ajax Edit Comments ===
-Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan
+Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan, jtbfocus
 Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin
 Requires at least: 3.1
-Tested up to: 4.9.4
+Tested up to: 5.1
 License: GPLv2 or later
-Stable tag: 6.0.3
+Stable tag: 6.0.4
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
@@ -50,6 +50,9 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 6.0.4 (20.02.2019) =
+* Added functionality to load scripts on post type archive pages
 
 = 6.0.3 =
 * Remove "LOOKING FOR A NEW CONTRIBUTOR"
