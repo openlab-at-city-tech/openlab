@@ -4,8 +4,8 @@ Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
 Requires PHP: 5.3
-Tested up to: 4.9
-Stable tag: 1.6.4
+Tested up to: 5.1
+Stable tag: 1.6.6
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -64,6 +64,18 @@ The plug-in is intended to help with deficiencies commonly found in themes and t
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
 * Conflict with NextGen gallery to explore
+
+= 1.6.6 =
+
+* Per request, remove font sizing declaration for skip links. Inherit from site.
+* Add default styles for visible skiplinks, rather than allowing to be unstyled.
+* Remove tabindex application on section element from toolbar JS. (Not sure why it was there anyway.)
+* Bug fix: automatic labeling injected double labels on fields with no ID and an implicit label.
+
+= 1.6.5 =
+
+* Bug fix: Widget output should not be styled.
+* Bug fix: Remove duplicated (current) when both current-menu-item and -page-item present (props loopRW)
 
 = 1.6.4 =
 
