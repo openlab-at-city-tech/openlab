@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Types class
+ * Types class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Types {
 
@@ -46,35 +46,38 @@ class WPLNST_Core_Types {
 	 * Post types allowed
 	 */
 	public static function get_post_types($output = 'keys-names') {
-		
+
 		// Current avoid post types
 		$avoid_post_types = apply_filters('wplnst_avoid_post_types', array_map('trim', explode(',', self::post_types_avoid)));
-		if (empty($avoid_post_types) || !is_array($avoid_post_types))
+		if (empty($avoid_post_types) || !is_array($avoid_post_types)) {
 			return false;
-		
+		}
+
 		// Compute allowed post types
 		$post_types = get_post_types(array(), 'objects');
 		$allowed_post_types = array_diff_key($post_types, array_fill_keys($avoid_post_types, true));
-		
+
 		// Return key-name values
 		if ('keys-names' == $output) {
 			$keys_names = array();
-			foreach ($allowed_post_types as $key => $post_type)
+			foreach ($allowed_post_types as $key => $post_type) {
 				$keys_names[$key] = $post_type->labels->name;
+			}
 			return $keys_names;
-			
+
 		// Return keys
 		} elseif ('keys' == $output) {
 			return array_keys($allowed_post_types);
-		
+
 		// Return names
 		} elseif ('names' == $output) {
 			$names = array();
-			foreach ($allowed_post_types as $key => $post_type)
+			foreach ($allowed_post_types as $key => $post_type) {
 				$names[] = $post_type->labels->name;
+			}
 			return $names;
 		}
-		
+
 		// Default
 		return $allowed_post_types;
 	}
@@ -207,8 +210,9 @@ class WPLNST_Core_Types {
 		$comment_types_values = array();
 		$eq = array('approved' 	=> '1', 'pending' => '0');
 		foreach ($comment_types as $comment_type) {
-			if (isset($eq[$comment_type]))
+			if (isset($eq[$comment_type])) {
 				$comment_types_values[] = $eq[$comment_type];
+			}
 		}
 		return $comment_types_values;
 	}
@@ -380,8 +384,9 @@ class WPLNST_Core_Types {
 		$raw = array();
 		$codes = self::get_status_codes();
 		foreach ($codes as $level => $status) {
-			foreach ($status as $code => $description)
+			foreach ($status as $code => $description) {
 				$raw[$code] = $description;
+			}
 		}
 		return $raw;
 	}
@@ -559,24 +564,26 @@ class WPLNST_Core_Types {
 	 * Resolve names, combined with levels and codes
 	 */
 	public static function get_links_status_names_combined($status_levels_values, $status_codes_values) {
-		
+
 		// Initialize
 		$names = array();
-		
+
 		// Resolve levels
 		$status_codes = self::get_status_codes();
 		$status_levels = self::get_status_levels();
 		foreach ($status_levels as $key => $level_name) {
-			if (in_array($key, $status_levels_values))
+			if (in_array($key, $status_levels_values)) {
 				$names[] = $key.'00s '.$level_name;
+			}
 			if (isset($status_codes[$key])) {
 				foreach ($status_codes[$key] as $code => $code_name) {
-					if (in_array($code, $status_codes_values))
+					if (in_array($code, $status_codes_values)) {
 						$names[] = $code.' '.$code_name;
+					}
 				}
 			}
 		}
-		
+
 		// Donde
 		return $names;
 	}
@@ -587,15 +594,17 @@ class WPLNST_Core_Types {
 	 * Resolve a name from key value
 	 */
 	public static function get_field_value_name($array, $value, $default = false) {
-		
+
 		// Check name value
-		if (isset($array[$value]))
+		if (isset($array[$value])) {
 			return $array[$value];
-		
+		}
+
 		// Check default value
-		if (false !== $default && isset($array[$default]))
+		if (false !== $default && isset($array[$default])) {
 			return $array[$default];
-		
+		}
+
 		// Nothing
 		return '';
 	}
@@ -606,29 +615,32 @@ class WPLNST_Core_Types {
 	 * Resolve an array of names from an array of key values
 	 */
 	public static function get_field_values_names($array, $values, $default = false) {
-		
+
 		// Initialize
 		$names = array();
-		
+
 		// Enum values
 		foreach ($values as $key) {
-			if (isset($array[$key]))
+			if (isset($array[$key])) {
 				$names[] = $array[$key];
+			}
 		}
-		
+
 		// Check default for empty names
 		if (empty($names) && false !== $default) {
 			if (!is_array($default)) {
-				if (isset($array[$default]))
+				if (isset($array[$default])) {
 					$names[] = $array[$default];
+				}
 			} else {
 				foreach ($default as $key) {
-					if (isset($array[$key]))
+					if (isset($array[$key])) {
 						$names[] = $array[$key];
+					}
 				}
 			}
 		}
-		
+
 		// Done
 		return $names;
 	}
@@ -653,21 +665,23 @@ class WPLNST_Core_Types {
 	 * Check submitted elist and rearrange indexes
 	 */
 	public static function check_post_elist($param, $default = array()) {
-		
+
 		// Decode value
 		$elist = isset($_POST[$param])? @json_decode(stripslashes($_POST[$param]), true) : false;
-		
+
 		// Check decoding
-		if (empty($elist) || !is_array($elist))
+		if (empty($elist) || !is_array($elist)) {
 			return $default;
-		
+		}
+
 		// Arrange index
 		$index = -1;
 		foreach ($elist as &$value) {
-			if (is_array($value))
+			if (is_array($value)) {
 				$value['index'] = ++$index;
+			}
 		}
-		
+
 		// Done
 		return @json_encode($elist);
 	}
@@ -715,34 +729,35 @@ class WPLNST_Core_Types {
 	 * Check a value in array
 	 */
 	public static function check_allowed_value($test, $allowed, $default = null) {
-		
+
 		// Is an array
 		if (is_array($allowed)) {
-			
+
 			// Initialize
 			$value = $default;
-			
+
 			// Source value as an array
 			if (is_array($test)) {
 				$value = array();
 				foreach ($test as $key => $name) {
 					$sel = ('on' == $name)? $key : $name;
-					if (in_array($sel, $allowed))
+					if (in_array($sel, $allowed)) {
 						$value[] = $sel;
+					}
 				}
-			
+
 			// Single value in allowed array
 			} elseif (in_array($test, $allowed)) {
 				$value = $test;
 			}
-			
+
 		// Result value
 		} else {
-			
+
 			// Comparison value
 			$value = ($test === $allowed);
 		}
-		
+
 		// Done
 		return $value;
 	}

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Alive class
+ * Alive class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Alive {
 
@@ -48,8 +48,9 @@ class WPLNST_Core_Alive {
 			if (!empty($_GET['wplnst_notify_email']) && 'on' == $_GET['wplnst_notify_email']) {
 
 				// And finally check notify nonce
-				if (!empty($_GET['wplnst_notify_nonce']) && self::verify_notify_nonce($_GET['wplnst_notify_nonce']))
+				if (!empty($_GET['wplnst_notify_nonce']) && self::verify_notify_nonce($_GET['wplnst_notify_nonce'])) {
 					add_action('plugins_loaded', array($source, 'notify'));
+				}
 
 			// Check cURL needed before
 			} elseif (wplnst_is_curl_enabled()) {
@@ -66,8 +67,14 @@ class WPLNST_Core_Alive {
 			 * based on admin-ajax mode and special URL arguments.
 			 */
 
+			// Debug point
+ 			wplnst_debug('wplnst_slug arg ok', 'alive');
+
 			// Check cURL loaded
 			if (wplnst_is_curl_enabled()) {
+
+				// Debug point
+				wplnst_debug('curl enabled', 'alive');
 
 				// Check scan integer and nonce argument
 				$scan_id = (int) $_GET['wplnst_crawler'];
@@ -76,20 +83,26 @@ class WPLNST_Core_Alive {
 					// Check possible thread
 					$thread_id = isset($_GET['wplnst_thread'])? $_GET['wplnst_thread'] : false;
 
+					// Debug point
+					wplnst_debug('Valid scan_id '.$scan_id, 'alive');
+
 					// Check scan and nonce
 					if (false === ($scan_row = self::verify_crawler($scan_id, $thread_id, $_GET['wplnst_nonce']))) {
 
-						// Debug
+						// Debug point
 						wplnst_debug('scan '.$scan_id.' - thread '.(empty($thread_id)? 'false' : $thread_id).' - verify crawler error', 'alive');
 
 					// Threads control
 					} elseif (false === ($thread_id = self::threading($scan_row, $thread_id))) {
 
-						// Debug
+						// Debug point
 						wplnst_debug('scan '.$scan_id.' - thread '.$thread_id.' - threading error', 'alive');
 
 					// Ok
 					} else {
+
+						// Debug point
+						wplnst_debug('scan '.$scan_id.' - thread '.$thread_id.' - instantiate crawler', 'alive');
 
 						// Run instance of crawler
 						$source::instantiate_crawler($scan_row, $thread_id);
@@ -97,7 +110,7 @@ class WPLNST_Core_Alive {
 				}
 			}
 
-			// Debug end
+			// Debug point
 			wplnst_debug((empty($scan_row)? '' : 'scan '.$scan_row->scan_id.' - ').'thread '.(empty($thread_id)? '' : $thread_id).' terminate', 'alive');
 
 			// End
@@ -152,18 +165,21 @@ class WPLNST_Core_Alive {
 		if (!$skip_check) {
 
 			// Avoid checks in plugins page
-			if (is_admin() && false !== stripos($_SERVER['REQUEST_URI'], '/plugins.php'))
+			if (is_admin() && false !== stripos($_SERVER['REQUEST_URI'], '/plugins.php')) {
 				return;
+			}
 
 			// Preliminary check to avoid constant database queries
 			$timestamp = (int) get_option('wplnst_crawler_timestamp');
-			if ($timestamp > 0 && time() - $timestamp <= wplnst_get_nsetting('crawler_alive'))
+			if ($timestamp > 0 && time() - $timestamp <= wplnst_get_nsetting('crawler_alive')) {
 				return;
+			}
 
 			// Reset timer, and exit if this is the first time
 			update_option('wplnst_crawler_timestamp', time());
-			if (empty($timestamp))
+			if (empty($timestamp)) {
 				return;
+			}
 		}
 
 		// Retrieve active scans
@@ -173,8 +189,9 @@ class WPLNST_Core_Alive {
 		// Check queued merge
 		if (count($scans) < $max_scans) {
 			$scans_queued = self::get_ready_scans('queued', 'enqueued_at ASC', $max_scans - count($scans));
-			if (!empty($scans_queued))
+			if (!empty($scans_queued)) {
 				$scans = array_merge($scans, $scans_queued);
+			}
 		}
 
 		// Globals
@@ -196,14 +213,16 @@ class WPLNST_Core_Alive {
 				// Count active threads
 				foreach ($threads as $thread_id => $thread) {
 					if ('on' == $thread['status']) {
-						if ((time() - (int) $thread['timestamp']) <= $total_timeout)
+						if ((time() - (int) $thread['timestamp']) <= $total_timeout) {
 							$active++;
+						}
 					}
 				}
 
 				// Check free limits
-				if ($active >= wplnst_get_nsetting('max_threads', $scan_info->max_threads))
+				if ($active >= wplnst_get_nsetting('max_threads', $scan_info->max_threads)) {
 					continue;
+				}
 			}
 
 			// Check and cast queued to play
@@ -229,7 +248,7 @@ class WPLNST_Core_Alive {
 				$wpdb->update($wpdb->prefix.'wplnst_scans', $update, array('scan_id' => $scan_info->scan_id));
 			}
 
-			// Debug output
+			// Debug point
 			wplnst_debug('scan '.$scan_info->scan_id.' launch from activity()', 'alive');
 
 			// New thread
@@ -257,9 +276,14 @@ class WPLNST_Core_Alive {
 		$threads = @json_decode($scan_row->threads, true);
 		$threads = (empty($threads) || !is_array($threads))? array() : $threads;
 
+		// Debug point
+		wplnst_debug('threading thread id '.$current_thread_id, 'alive');
+
 		// Check invalid thread id
-		if (!empty($current_thread_id) && !isset($threads[$current_thread_id]))
+		if (!empty($current_thread_id) && !isset($threads[$current_thread_id])) {
+			wplnst_debug('no registered thread', 'alive');
 			return false;
+		}
 
 		// Initialize
 		$active = 0;
@@ -267,6 +291,9 @@ class WPLNST_Core_Alive {
 
 		// Total timeout and minor correction
 		$total_timeout = wplnst_get_nsetting('connect_timeout', $scan_row->connect_timeout) + wplnst_get_nsetting('request_timeout', $scan_row->request_timeout) + wplnst_get_nsetting('extra_timeout');
+
+		// Sum the alive time plus 1 minute grace period
+		$total_timeout += 60 + (int) wplnst_get_nsetting('crawler_alive');
 
 		// Max crawler threads allowed
 		$max_threads = wplnst_get_nsetting('max_threads', $scan_row->max_threads);
@@ -283,6 +310,7 @@ class WPLNST_Core_Alive {
 
 				// Timestamp limit
 				if ((time() - (int) $thread['timestamp']) > $total_timeout) {
+					wplnst_debug('inactivated an active thread - timestamp: '.$thread['timestamp'].' - total: '.$total_timeout.' - time: '.time());
 					$threads[$thread_id]['status'] = 'off';
 
 				// Active
@@ -294,8 +322,10 @@ class WPLNST_Core_Alive {
 
 		// No current thread allowed
 		if ($active > $max_threads) {
-			if (!empty($current_thread_id))
+			wplnst_debug('max threads reached - active: '.$active.' - max threads: '.$max_threads);
+			if (!empty($current_thread_id)) {
 				$threads[$current_thread_id]['status'] = 'off';
+			}
 			$current_thread_id = false;
 
 		// Check new thread
@@ -306,15 +336,25 @@ class WPLNST_Core_Alive {
 		}
 
 		// Rebuild current thread
-		if (!empty($current_thread_id))
+		if (!empty($current_thread_id)) {
 			$threads[$current_thread_id] = array('status' => 'on', 'timestamp' => time());
+		}
+
+		// Sanitize threads
+		$threads_safe = [];
+		foreach ($threads as $thread_id => $thread) {
+			if (!empty($thread) && is_array($thread) && !empty($thread['status']) && 'on' == $thread['status']) {
+				$threads_safe[$thread_id] = $thread;
+			}
+		}
 
 		// Update threads data
-		$wpdb->update($wpdb->prefix.'wplnst_scans', array('threads' => @json_encode($threads)), array('scan_id' => $scan_row->scan_id));
+		$wpdb->update($wpdb->prefix.'wplnst_scans', array('threads' => @json_encode($threads_safe)), array('scan_id' => $scan_row->scan_id));
 
 		// Launch new thread
-		if (!empty($new_thread_id) && $active < $max_threads)
+		if (!empty($new_thread_id) && $active < $max_threads) {
 			self::run($scan_row->scan_id, $scan_row->hash);
+		}
 
 		// Done
 		return empty($current_thread_id)? $new_thread_id : $current_thread_id;
@@ -339,8 +379,9 @@ class WPLNST_Core_Alive {
 		$scans = $wpdb->get_results($wpdb->prepare('SELECT SQL_NO_CACHE scan_id, status, ready, hash, started_at, threads, max_threads, connect_timeout, request_timeout FROM '.$wpdb->prefix.'wplnst_scans WHERE ready = 1 AND status = %s ORDER BY '.esc_sql($order), $status));
 
 		// Check results
-		if (empty($scans) || !is_array($scans))
+		if (empty($scans) || !is_array($scans)) {
 			return array();
+		}
 
 		// Initialize
 		$index = 0;
@@ -388,16 +429,19 @@ class WPLNST_Core_Alive {
 
 		// Retrieve and check scan
 		$scan_row = $wpdb->get_row($wpdb->prepare('SELECT SQL_NO_CACHE scan_id, status, ready, hash, threads, max_threads, connect_timeout, request_timeout FROM '.$wpdb->prefix.'wplnst_scans WHERE scan_id = %d', $scan_id));
-		if (empty($scan_row) || !is_object($scan_row))
+		if (empty($scan_row) || !is_object($scan_row)) {
 			return false;
+		}
 
 		// Check scan status
-		if (empty($scan_row->status) || 'wait' == $scan_row->status || 'end' == $scan_row->status)
+		if (empty($scan_row->status) || 'wait' == $scan_row->status || 'end' == $scan_row->status) {
 			return false;
+		}
 
 		// Check scan ready
-		if (empty($scan_row->ready) || 1 != (int) $scan_row->ready)
+		if (empty($scan_row->ready) || 1 != (int) $scan_row->ready) {
 			return false;
+		}
 
 		// Check nonce and return scan
 		return self::verify_crawler_nonce($nonce, $scan_row->hash, $thread_id)? $scan_row : false;
@@ -454,14 +498,12 @@ class WPLNST_Core_Alive {
 		);
 
 		// Check thread arg
-		if (!empty($thread_id))
+		if (!empty($thread_id)) {
 			$args['wplnst_thread'] = $thread_id;
+		}
 
 		// Compose URL
-		$url = add_query_arg( $args, rtrim( admin_url('admin-ajax.php'), '/' ) );
-		$url = str_replace( 'http://', 'http://citytech:devsonly@', $url );
-
-		return $url;
+		return add_query_arg($args, rtrim(admin_url('admin-ajax.php'), '/'));
 	}
 
 

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Admin Extensions class
+ * Admin Extensions class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Admin
+ * @subpackage Admin
  */
 class WPLNST_Admin_Extensions {
 
@@ -14,10 +14,10 @@ class WPLNST_Admin_Extensions {
 	 * Constructor
 	 */
 	public function __construct(&$admin) {
-		
+
 		// Custom action view
 		add_action('wplnst_view_extensions', array(&$this, 'view_extensions'));
-		
+
 		// Show settings screen
 		$admin->screen_view(array(
 			'title' 	=> __('Extensions', 'wplnst'),
