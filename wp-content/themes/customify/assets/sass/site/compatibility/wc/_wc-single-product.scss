@@ -1,0 +1,337 @@
+/*
+# Product meta
+# Product tabs
+# Upsell + Related products section
+*/
+
+/**
+* Nav Product - next - prev button
+*/
+.product_title-wrapper {
+    position: relative;
+}
+.wc-product-nav {
+    position: absolute;
+    top: 0.5em; right: -5px;
+    > a {
+        margin: 0px 3px;
+        display: inline-block;
+        &:hover {
+            .nav-thumbnail {
+                z-index: 100;
+                left: 50%;
+                opacity: 1;
+            }
+        }
+    }
+    .nav-thumbnail {
+        position: absolute;
+        top: 100%;
+        left: -999999px;
+        width: 100px;
+        display: block;
+        transform: translateX( - 50% );
+        transition: opacity .25s ease-in-out;
+        z-index: -1;
+        opacity: 0;
+        img {
+            display: block;
+            margin-top: 10px;
+            box-shadow: 1px 1px 10px rgba(0,0,0,.06);
+        }
+    }
+}
+
+.nav-in-title {
+    .product_title {
+        margin-right: 70px;
+    }
+}
+
+
+/**
+Product Slider
+ */
+
+.flex-direction-nav {
+    list-style: none;
+    margin: 0px !important;
+    padding: 0px !important;
+    .flex-prev,
+    .flex-next {
+        position: absolute;
+        display: block;
+        top: 50%;
+        transform: translate(0, -50%);
+        padding: 0;
+        border: none;
+        outline: none;
+        z-index: 15;
+        opacity: 0;
+        transition: opacity 0.3s linear;
+    }
+    .flex-prev {
+        left: 15px;
+    }
+
+    .flex-next {
+        right: 15px;
+    }
+    .flex-disabled {
+        .nav-btn {
+            visibility: hidden;
+        }
+    }
+}
+.woocommerce-product-gallery:hover {
+    .flex-direction-nav {
+        .flex-prev,
+        .flex-next {
+            opacity: 1;
+        }
+    }
+}
+/**
+* Product meta
+ */
+.product_meta {
+    font-size: 0.875em;
+    color: $color_meta;
+    margin: 1.41575em 0px;
+    > span {
+        display: block;
+        padding: 6px 0px;
+        border-top: 1px dotted $color_border;
+    }
+}
+
+/**
+* Product tabs
+*/
+
+.woocommerce-tabs {
+    clear: both;
+    margin-bottom: 2em;
+    ul.tabs {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.41575em;
+        position: relative;
+        li {
+            position: relative;
+            a {
+                color: currentColor;
+            }
+        }
+    }
+    &.wc-tabs-horizontal {
+        ul.tabs {
+            border-bottom: 1px solid $color_border;
+            li {
+                border-bottom: 1px solid transparent;
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+                padding: 0;
+                margin: 0 1em -1px;
+                &:first-child {
+                    margin-left: 0px;
+                }
+                &:last-child {
+                    margin-right: 0px;
+                }
+                a {
+                    display: inline-block;
+                    padding: 0.5em 0px;
+                    font-size: 1.05em;
+                }
+                &.active {
+                    z-index: 2;
+                    border-bottom-color: $color_primary;
+                    a {
+                        color: $color_primary;
+                        text-shadow: inherit;
+                    }
+
+                }
+
+            }
+        }
+    } // wc-tabs-horizontal
+
+    &.wc-tabs-vertical {
+
+        .wc-tabs {
+            width: 26%;
+            margin-right: 4%;
+            margin-bottom: 2em;
+            float: left;
+            @include for_device( mobile ) {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 2em;
+            }
+            li {
+                border-bottom: 1px solid $color_border;
+                &:first-child {
+                    border-top: 1px solid $color_border;
+                }
+                &:after {
+                    content: '';
+                    width: .5em;
+                    height: .5em;
+                    display: block;
+                    position: absolute;
+                    top: 50%;
+                    right: .8em;
+                    left: auto;
+                    opacity: 0;
+                    transform: rotate(45deg) translateY( -50% );
+                    border-top: 1px solid #111111;
+                    border-right: 1px solid #111111;
+                    transition: all .3s ease;
+                }
+                a {
+                    display: block;
+                    padding: 0.72em 0px;
+                    color: currentColor;
+                }
+                &.active {
+                    &:after {
+                        opacity: 1;
+                    }
+                }
+
+            }
+        }
+        .wc-tabs-contents {
+            width: 70%;
+            float: right;
+            @include for_device( mobile ) {
+                width: 100%;
+            }
+        }
+    }
+
+    .wc-tabs-contents {
+        margin-bottom: 2em;
+        .woocommerce-Tabs-panel--description {
+            p:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+
+/**
+Section and Toggle
+ */
+.wc-tabs-sections, .wc-tabs-toggle {
+    .woocommerce-Reviews-title {
+        display: none;
+    }
+}
+
+.wc-tabs-sections {
+    .tab-section-heading {
+        font-size: 1.4em;
+        a {
+            color: currentColor;
+        }
+    }
+    .tab-section-content {
+        margin-top: 0px;
+        padding-top: 0px;
+        margin-bottom: 2em;
+    }
+}
+
+.wc-tabs-toggle {
+    .tab-section-heading {
+        border-bottom: 1px solid $color_border;
+        font-size: 1.1em;
+        font-weight: normal;
+        display: block;
+        padding: 0;
+        margin: 0px;
+        a {
+            color: currentColor;
+            display: block;
+            padding: 0.9em 0px;
+            position: relative;
+        }
+
+        a {
+            &:before, &:after {
+                content: "";
+                display: block;
+                background-color: $color_border;
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                opacity: 1;
+                transition: opacity 0.3s linear;
+            }
+
+            &:before{
+                width: 13px;
+                height: 2px;
+                top: 50%;
+                transform: translateY( - 50% );
+            }
+
+            &:after {
+                width: 2px;
+                height: 13px;
+                top: 50%;
+                right: 6px;
+                transform: translate( 1px, -50% );
+            }
+
+            &.active {
+                &:after{
+                    opacity: 0;
+                }
+            }
+
+        }
+    }
+
+    .tab-section.active {
+        .tab-section-heading {
+            a {
+                &:after {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+.tab-section-content {
+    padding-top: 1em;
+}
+
+
+
+/* Upsell + Related products section */
+.related.products, .upsells.products {
+    margin-bottom: 2em;
+    h2 {
+        font-size: 1.4em;
+        margin-bottom: 0px;
+    }
+}
+
+/**
+* WooCommerce related heading
+ */
+.woocommerce-Reviews-title,
+.cross-sells h2,
+.cart_totals h2,
+.wc-tab > h2
+{
+    font-size: 1.4em;
+    margin-bottom: 1em;
+}
+
+
