@@ -1,0 +1,20 @@
+.content {
+    padding: 0 20px 125px;
+}
+
+@media only screen and (min-width: 960px) {
+    .content {
+        display: flex;
+        padding: 46px 20px 125px;
+    }
+
+    .main-navigation {
+        flex-basis: 220px;
+    }
+
+    main {
+        flex-basis: 650px;
+    }
+}
+
+

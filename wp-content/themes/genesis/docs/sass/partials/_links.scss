@@ -1,0 +1,72 @@
+a {
+    color: $primary-color;
+}
+
+a:hover {
+    color: $base-font-color;
+    text-decoration: none;
+}
+
+/* External links */
+a[href^="http://"]:not(.button):after,
+a[href^="https://"]:not(.button):after,
+a[href^="//"]:not(.button):after {
+    content: "↗";
+    display: inline-block; // Clips text-decoration underline.
+    font-family: system-ui, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    padding-left: 2px;
+    text-decoration: none;
+}
+
+/* External link hovers */
+a[href^="http://"]:not(.button):hover,
+a[href^="https://"]:not(.button):hover,
+a[href^="//"]:not(.button):hover {
+    text-decoration-color: inherit;
+}
+
+// Links are appended to headings within content by the markdown-it-anchor
+// plugin. These help people link to specific sections, and are styled to
+// appear only on hover or focus.
+.direct-link {
+    text-decoration: none;
+}
+
+a[href].direct-link,
+a[href].direct-link:visited {
+    color: transparent
+}
+
+:focus>a[href].direct-link,
+:focus>a[href].direct-link:visited,
+:hover>a[href].direct-link,
+:hover>a[href].direct-link:visited,
+a[href].direct-link:focus,
+a[href].direct-link:focus:visited {
+    color: $light-gray;
+}
+
+.button {
+    background-color: $primary-color;
+    border: 0;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 5px 0 15px;
+    padding: 18px 24px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    white-space: normal;
+    width: auto;
+}
+
+.button:focus,
+.button:hover {
+    background-color: $primary-color-light;
+    color: #fff
+}
