@@ -400,8 +400,8 @@ function openlab_group_documents_email_notification( $document ) {
 			continue;
 		}
 
-		// Don't send if the user gets digests for this group.
-		if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'sum', 'dig' ], true ) ) {
+		// Don't send if the user gets doesn't get immediate emails for this group.
+		if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'no', 'sum', 'dig' ], true ) ) {
 			continue;
 		}
 
