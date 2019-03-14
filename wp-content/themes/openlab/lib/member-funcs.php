@@ -1147,7 +1147,7 @@ function openlab_get_user_academic_units( $user_id ) {
         if ( ! $units_of_type ) {
             $units_of_type = array();
         }
-        $values[ $type_key ] = $units_of_type;
+        $values[ $type_key ] = array_unique( $units_of_type );
     }
 
     return $values;
