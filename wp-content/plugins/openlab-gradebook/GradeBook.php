@@ -104,53 +104,47 @@ add_action('admin_menu', 'oplb_gradebook_admin_menu_custom', 100);
  * @param type $hook
  * @return type
  */
-function enqueue_oplb_gradebook_scripts($hook) {
+function enqueue_oplb_gradebook_scripts() {
 
     $app_base = plugins_url('js', __FILE__);
 
-    if ($hook == "toplevel_page_oplb_gradebook" || $hook == 'openlab-gradebook_page_oplb_gradebook_settings') {
+	wp_enqueue_script('jquery-ui-datepicker');
 
-        wp_enqueue_script('jquery-ui-datepicker');
-    
-        $oplb_gradebook_develop = false;
+	$oplb_gradebook_develop = false;
 
-        if (WP_DEBUG) {
-            $oplb_gradebook_develop = true;
-        }
+	if (WP_DEBUG) {
+		$oplb_gradebook_develop = true;
+	}
 
-        $dep_ver = '0.0.1.1';
-        $app_ver = '0.0.9.9';
+	$dep_ver = '0.0.1.1';
+	$app_ver = '0.0.9.9';
 
-        wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
-        wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
-        wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
-        wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
-        wp_register_script('css-element-queries-js', $app_base . '/lib/css-element-queries/css.element.queries.dist.js', array('jquery'), $dep_ver, true);
-        wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);
-        wp_enqueue_style('OplbGradeBook_css');
-        wp_enqueue_script('jscrollpane-js');
-        wp_enqueue_script('css-element-queries-js');
-        wp_enqueue_script('requirejs');
+	wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
+	wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
+	wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
+	wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
+	wp_register_script('css-element-queries-js', $app_base . '/lib/css-element-queries/css.element.queries.dist.js', array('jquery'), $dep_ver, true);
+	wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);
+	wp_enqueue_style('OplbGradeBook_css');
+	wp_enqueue_script('jscrollpane-js');
+	wp_enqueue_script('css-element-queries-js');
+	wp_enqueue_script('requirejs');
 
-        wp_localize_script('requirejs', 'oplbGradebook', array(
-            'ajaxURL' => admin_url('admin-ajax.php'),
-            'depLocations' => oplb_gradebook_get_dep_locations(),
-            'nonce' => wp_create_nonce('oplb_gradebook'),
-            'currentYear' => date('Y'),
-            'initName' => oplb_gradebook_gradebook_init_placeholder(),
-        ));
+	wp_localize_script('requirejs', 'oplbGradebook', array(
+		'ajaxURL' => admin_url('admin-ajax.php'),
+		'depLocations' => oplb_gradebook_get_dep_locations(),
+		'nonce' => wp_create_nonce('oplb_gradebook'),
+		'currentYear' => date('Y'),
+		'initName' => oplb_gradebook_gradebook_init_placeholder(),
+	));
 
-        wp_localize_script('requirejs', 'require', array(
-            'baseUrl' => $app_base,
-            'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver='.$app_ver : '/oplb-gradebook-app-min.js?ver='.$app_ver))
-        ));
-        
-    } else {
-        return;
-    }
+	wp_localize_script('requirejs', 'require', array(
+		'baseUrl' => $app_base,
+		'deps' => array($app_base . ($oplb_gradebook_develop ? '/oplb-gradebook-app.js?ver='.$app_ver : '/oplb-gradebook-app-min.js?ver='.$app_ver))
+	));
 }
-
-add_action('admin_enqueue_scripts', 'enqueue_oplb_gradebook_scripts', 9999);
+add_action( 'admin_print_footer_scripts-toplevel_page_oplb_gradebook', 'enqueue_oplb_gradebook_scripts', 1 );
+add_action( 'admin_print_footer_scripts-openlab-gradebook_page_oplb_gradebook_settings', 'enqueue_oplb_gradebook_scripts', 1 );
 
 /**
  * Legacy: callback for OpenLab GradeBook instantiation

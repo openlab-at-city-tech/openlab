@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Plugin class
+ * Plugin class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Plugin {
 
@@ -18,7 +18,7 @@ class WPLNST_Core_Plugin {
 	/**
 	 * Plugin
 	 */
-	const title = 		'WP Link Status';	
+	const title = 		'WP Link Status';
 	const slug = 		'wp-link-status';
 	const capability = 	'manage_options';
 

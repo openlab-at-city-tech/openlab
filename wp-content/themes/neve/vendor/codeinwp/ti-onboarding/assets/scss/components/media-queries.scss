@@ -1,0 +1,15 @@
+$laptop: '700px';
+$desktop: '1080px';
+
+@media (min-width: #{$laptop}) {
+  @include tabs--laptop();
+  @include layout--laptop();
+  @include modal--laptop();
+}
+
+
+@media (min-width: #{$desktop}) {
+  @include layout-onboarding--desktop();
+  @include layout--desktop();
+  @include migrate--desktop();
+}

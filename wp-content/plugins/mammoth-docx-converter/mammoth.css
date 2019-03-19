@@ -1,0 +1,56 @@
+#mammoth-docx-loading {
+    display: none;
+}
+
+.status-loading #mammoth-docx-loading {
+    display: block;
+}
+
+.mammoth-docx-preview {
+    display: none;
+}
+
+.status-loaded .mammoth-docx-preview {
+    display: block;
+}
+
+#mammoth-docx-inserting {
+    display: none;
+}
+
+.status-inserting #mammoth-docx-inserting {
+    display: block;
+}
+
+.mammoth-docx-error {
+    display: none;
+}
+
+.status-error .mammoth-docx-error {
+    display: block;
+}
+
+#mammoth-docx-visual-preview {
+    width: 90%;
+    height: 350px;
+}
+
+#mammoth-docx-raw-preview {
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+
+.mammoth-tabs .tabs-nav li {
+    display: inline-block;
+    margin: 0 1em 0 0;
+    padding: 0.2em 1em;
+    border-radius: 1em;
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+}
+
+.mammoth-tabs .tabs-nav li.selected {
+    background-color: #2C4766;
+}

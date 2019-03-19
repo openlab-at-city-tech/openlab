@@ -1119,7 +1119,7 @@ body form{
         width: 25%;
     }
 }
-#search-setting-note{
+.privacy-settings-note{
     padding-left: 20px;
     margin-top: -15px;
 }
@@ -2497,6 +2497,12 @@ body.membership-requests {
         margin-bottom: 19px;
         margin-top: 3px;
     }
+    .bp-group-documents-submit{
+        margin-top: 10px;
+    }
+    .notify-group-members-ui {
+        padding-top: 10px;
+    }
 }
 .docs-info-header{
     #tags-toggle{
@@ -2594,6 +2600,12 @@ body.membership-requests {
         border: @border-light-gray;
         border-radius: @border-radius-base;
         border-top-right-radius: 0;
+    }
+    .notify-group-members-ui {
+        padding-top: 30px;
+    }
+    #doc-submit-options {
+        margin-top: 10px;
     }
 }
 #doc-meta{
@@ -2704,6 +2716,18 @@ body.membership-requests {
             border: none;
             margin-bottom: 0;
             padding: 0;
+        }
+        .bbp-submit-wrapper {
+            float: none;
+        }
+        .notify-group-members-ui {
+            margin-bottom: 10px;
+        }
+        .bbp-reply-form {
+            .bbp-submit-wrapper {
+                padding-bottom: 15px;
+                padding-left: 15px;
+            }
         }
         @media (max-width: @screen-xs-max){
             .forum-titles,
@@ -2980,6 +3004,17 @@ body{
         font-size: 12px;
         height: 26px;
         line-height: 198%;
+    }
+}
+#profile-edit-form {
+    .error {
+        font-weight: @normal;
+        padding: 15px;
+        border-radius: @border-radius-base;
+        margin-bottom: 17px;
+        margin-top: 5px;
+        background: @yellow;
+        border-color: @yellow;
     }
 }
 #member-header{

@@ -271,6 +271,10 @@ if ($group_type == 'not-archive' && $post_obj->post_title == "People") {
 								<option <?php selected( $badge->get_id(), $badge_value ); ?> value="<?php echo esc_attr( $badge->get_id() ); ?>"><?php echo esc_html( $badge->get_name() ); ?></option>
 
 							<?php endforeach; ?>
+
+							<?php if ( 'course' === $group_type ) : ?>
+								<option value='cloneable' <?php selected( 'cloneable', $badge_value ); ?>>Cloneable Courses</option>
+							<?php endif; ?>
 						</select>
 					</div>
 				<?php endif; ?>

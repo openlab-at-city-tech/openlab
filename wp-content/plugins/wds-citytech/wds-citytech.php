@@ -8,11 +8,11 @@ Author: City Tech OpenLab
 Author URI: https://openlab.citytech.cuny.edu
  */
 
-include 'wds-register.php';
-include 'wds-docs.php';
-include 'includes/oembed.php';
-include 'includes/library-widget.php';
-include 'includes/clone.php';
+require 'wds-register.php';
+require 'wds-docs.php';
+require 'includes/oembed.php';
+require 'includes/library-widget.php';
+require 'includes/clone.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -20,14 +20,14 @@ include 'includes/clone.php';
  * See http://openlab.citytech.cuny.edu/redmine/issues/31
  */
 function openlab_load_custom_bp_functions() {
-	require( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
-	require( dirname( __FILE__ ) . '/includes/email.php' );
-	require( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
-	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
-	require( dirname( __FILE__ ) . '/includes/group-types.php' );
-	require( dirname( __FILE__ ) . '/includes/portfolios.php' );
-	require( dirname( __FILE__ ) . '/includes/related-links.php' );
-	require( dirname( __FILE__ ) . '/includes/search.php' );
+	require dirname( __FILE__ ) . '/wds-citytech-bp.php';
+	require dirname( __FILE__ ) . '/includes/email.php';
+	require dirname( __FILE__ ) . '/includes/groupmeta-query.php';
+	require dirname( __FILE__ ) . '/includes/group-blogs.php';
+	require dirname( __FILE__ ) . '/includes/group-types.php';
+	require dirname( __FILE__ ) . '/includes/portfolios.php';
+	require dirname( __FILE__ ) . '/includes/related-links.php';
+	require dirname( __FILE__ ) . '/includes/search.php';
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
@@ -173,14 +173,14 @@ function cuny_add_group_menu_items( $items, $args ) {
 	}
 
 	if ( ! $has_home ) {
-		$post_args        = new stdClass;
-		$home_link        = new WP_Post( $post_args );
-		$home_link->title = 'Home';
-		$home_link->url   = trailingslashit( site_url() );
-		$home_link->slug  = 'home';
-		$home_link->ID    = 'home';
+		$post_args          = new stdClass();
+		$home_link          = new WP_Post( $post_args );
+		$home_link->title   = 'Home';
+		$home_link->url     = trailingslashit( site_url() );
+		$home_link->slug    = 'home';
+		$home_link->ID      = 'home';
 		$home_link->classes = [];
-		$items            = array_merge( array( $home_link ), $items );
+		$items              = array_merge( array( $home_link ), $items );
 	}
 
 	$items = array_merge( cuny_group_menu_items(), $items );
@@ -220,12 +220,12 @@ function cuny_group_menu_items() {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
 		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
 
-		$post_args           = new stdClass;
-		$profile_item        = new WP_Post( $post_args );
-		$profile_item->ID    = 'group-profile-link';
-		$profile_item->title = sprintf( '%s Profile', $group_type );
-		$profile_item->slug  = 'group-profile-link';
-		$profile_item->url   = bp_get_group_permalink( $group );
+		$post_args             = new stdClass();
+		$profile_item          = new WP_Post( $post_args );
+		$profile_item->ID      = 'group-profile-link';
+		$profile_item->title   = sprintf( '%s Profile', $group_type );
+		$profile_item->slug    = 'group-profile-link';
+		$profile_item->url     = bp_get_group_permalink( $group );
 		$profile_item->classes = [];
 
 		$items[] = $profile_item;
@@ -1519,7 +1519,7 @@ class OpenLab_Change_User_Type {
 		}
 
 		if ( empty( $instance ) ) {
-			$instance = new OpenLab_Change_User_Type;
+			$instance = new OpenLab_Change_User_Type();
 		}
 	}
 
@@ -2035,6 +2035,30 @@ function openlab_set_default_group_subscription_on_creation( $group_id ) {
 }
 
 add_action( 'groups_created_group', 'openlab_set_default_group_subscription_on_creation' );
+
+add_filter(
+	'ass_digest_format_item',
+	function( $item_message, $item, $action, $timestamp ) {
+		$time_posted = date( get_option( 'time_format' ), $timestamp );
+		$date_posted = date( get_option( 'date_format' ), $timestamp );
+
+		$timestamp_string = sprintf( __( 'at %s, %s', 'buddypress-group-email-subscription' ), $time_posted, $date_posted );
+
+		$timezone = new DateTimeZone( 'America/New_York' );
+		$datetime = new DateTime();
+		$datetime->setTimestamp( (int) $timestamp );
+		$datetime->setTimeZone( $timezone );
+
+		$new_time_posted = $datetime->format( get_option( 'time_format' ) );
+		$new_date_posted = $datetime->format( get_option( 'date_format' ) );
+
+		$new_timestamp_string = sprintf( __( 'at %s, %s', 'buddypress-group-email-subscription' ), $new_time_posted, $new_date_posted );
+
+		return str_replace( $timestamp_string, $new_timestamp_string, $item_message );
+	},
+	10,
+	4
+);
 
 /**
  * Brackets in password reset emails cause problems in some clients. Remove them
@@ -2793,8 +2817,16 @@ function openlab_academic_unit_selector( $args = array() ) {
 	$departments  = array();
 	foreach ( $_departments as $_entity_slug => $_depts ) {
 		foreach ( $_depts as $_dept_slug => $_dept_value ) {
-			$_dept_value['parent']      = $_entity_slug;
-			$departments[ $_dept_slug ] = $_dept_value;
+			$_dept_value['parent'] = $_entity_slug;
+			$_dept_value['slug']   = $_dept_slug;
+
+			/*
+			 * Indexes must be unique per parent+child combo, as items may appear under
+			 * more than one parent.
+			 */
+			$dept_index = $_entity_slug . '_' . $_dept_slug;
+
+			$departments[ $dept_index ] = $_dept_value;
 		}
 	}
 
@@ -2862,11 +2894,12 @@ function openlab_academic_unit_selector( $args = array() ) {
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
-				<?php foreach ( $departments as $dept_slug => $dept ) : ?>
+				<?php foreach ( $departments as $dept_index => $dept ) : ?>
+					<?php $dept_slug = $dept['slug']; ?>
 					<li class="academic-unit academic-unit-visible">
 						<?php
 						$parent_attr = $dept['parent'];
-						$id_attr     = 'academic-unit-' . $dept_slug;
+						$id_attr     = 'academic-unit-' . $dept_index;
 						?>
 
 						<input
@@ -2944,3 +2977,18 @@ add_action(
 		wp_enqueue_script( 'openlab-search-filter', set_url_scheme( WPMU_PLUGIN_URL . '/js/search-filter.js' ), array( 'jquery' ) );
 	}
 );
+
+function openlab_sanitize_url_params( $url ) {
+	$request_params = parse_url( $url, PHP_URL_QUERY );
+	parse_str( $request_params, $params );
+	$param_keys = array_keys( $params );
+
+	if ( isset( $params['usertype'] ) && ! in_array( $params['usertype'], openlab_valid_user_types(), true ) ) {
+		unset( $params['usertype'] );
+	}
+
+	$url = remove_query_arg( $param_keys, $url );
+	$url = add_query_arg( $params, $url );
+
+	return $url;
+}

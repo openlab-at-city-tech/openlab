@@ -6,11 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'XML_Util' => array($vendorDir . '/pear/xml_util'),
-    'Structures' => array($vendorDir . '/pear/structures_graph'),
     'PEAR' => array($vendorDir . '/pear/pear_exception'),
     'MIME' => array($vendorDir . '/pear/mime_type'),
     'File' => array($vendorDir . '/pear/file_archive'),
-    'Console' => array($vendorDir . '/pear/console_getopt'),
-    'Archive_Tar' => array($vendorDir . '/pear/archive_tar'),
 );

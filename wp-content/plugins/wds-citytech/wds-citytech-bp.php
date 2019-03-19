@@ -409,9 +409,27 @@ function openlab_pre_save_comment_activity( $activity ) {
 add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
- * Auto-enable BuddyPress Docs for all group types
+ * Auto-enable BuddyPress Docs for all group types, except portfolios.
  */
-add_filter( 'bp_docs_force_enable_at_group_creation', '__return_true' );
+add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
+add_filter(
+	'groups_created_group',
+	function( $group_id ) {
+		if ( openlab_is_portfolio( $group_id ) ) {
+			return;
+		}
+
+		$settings = apply_filters(
+			'bp_docs_default_group_settings',
+			array(
+				'group-enable' => 1,
+				'can-create'   => 'member',
+			)
+		);
+
+		groups_update_groupmeta( $group_id, 'bp-docs', $settings );
+	}
+);
 
 /**
  * Bust the home page activity transients when new items are posted
@@ -552,10 +570,10 @@ function openlab_get_xprofile_field_id( $field_name ) {
 		case 'Phone':
 			return 194;
 
-		case 'Major Program of Study' :
+		case 'Major Program of Study':
 			return 4;
 
-		case 'Department' :
+		case 'Department':
 			return 19;
 	}
 }
@@ -577,7 +595,8 @@ add_filter( 'option_bp_group_documents_valid_file_formats', 'openlab_filter_bp_g
  * Force @-mentions scripts to load on appropriate pages.
  */
 add_filter(
-	'bp_activity_maybe_load_mentions_scripts', function( $load ) {
+	'bp_activity_maybe_load_mentions_scripts',
+	function( $load ) {
 		global $pagenow;
 
 		if ( ! is_user_logged_in() ) {
@@ -600,7 +619,8 @@ add_filter(
  * Add data-suggestions-group-id attribute to blog comment fields.
  */
 add_filter(
-	'comment_form_fields', function( $fields ) {
+	'comment_form_fields',
+	function( $fields ) {
 		if ( ! isset( $fields['comment'] ) ) {
 			return $fields;
 		}
@@ -628,7 +648,8 @@ add_filter(
  * Add data-suggestions-group-id attribute to post editor.
  */
 add_filter(
-	'the_editor', function( $editor ) {
+	'the_editor',
+	function( $editor ) {
 		if ( ! is_user_logged_in() ) {
 			return $editor;
 		}
@@ -657,7 +678,8 @@ add_filter(
  * Move data-suggestions-group-id to the TinyMCE instance so it's recognized by the Mentions script.
  */
 add_filter(
-	'tiny_mce_before_init', function( $settings, $editor_id ) {
+	'tiny_mce_before_init',
+	function( $settings, $editor_id ) {
 		if ( 'content' === $editor_id ) {
 			$settings['init_instance_callback'] = "function() {
 			window.bp.mentions.tinyMCEinit();
@@ -674,38 +696,43 @@ add_filter(
 		}
 
 		return $settings;
-	}, 20, 2
+	},
+	20,
+	2
 );
 
 add_action(
 	'bp_after_email_footer',
 	function() {
 		remove_action( 'bp_after_email_footer', 'ass_bp_email_footer_html_unsubscribe_links' );
-		add_action( 'bp_after_email_footer', function() {
-			static $added = null;
+		add_action(
+			'bp_after_email_footer',
+			function() {
+				static $added = null;
 
-			if ( $added ) {
-				return;
+				if ( $added ) {
+					return;
+				}
+
+				$tokens = buddypress()->ges_tokens;
+
+				if ( isset( $tokens['subscription_type'] ) && ! empty( $tokens['group.id'] ) ) {
+					$settings_url = bp_get_group_permalink( groups_get_group( $tokens['group.id'] ) ) . 'notifications/';
+
+					$link_format = '<a href="%1$s" title="%2$s" style="text-decoration: underline;">%3$s</a>';
+					$footer_link = sprintf(
+						$link_format,
+						esc_attr( $settings_url ),
+						'Group notification settings',
+						'Unsubscribe or change the frequency of email notifications.'
+					);
+
+					$added = true;
+
+					echo $footer_link;
+				}
 			}
-
-			$tokens = buddypress()->ges_tokens;
-
-			if ( isset( $tokens['subscription_type'] ) && ! empty( $tokens['group.id'] ) ) {
-				$settings_url = bp_get_group_permalink( groups_get_group( $tokens['group.id'] ) ) . 'notifications/';
-
-				$link_format = '<a href="%1$s" title="%2$s" style="text-decoration: underline;">%3$s</a>';
-				$footer_link = sprintf(
-					$link_format,
-					esc_attr( $settings_url ),
-					'Group notification settings',
-					'Unsubscribe or change the frequency of email notifications.'
-				);
-
-				$added = true;
-
-				echo $footer_link;
-			}
-		} );
+		);
 	},
 	0
 );
@@ -728,7 +755,7 @@ add_action(
 			return;
 		}
 
-		$new_tokens = $args['tokens'];
+		$new_tokens                = $args['tokens'];
 		$new_tokens['unsubscribe'] = trailingslashit( bp_core_get_user_domain( $user_id ) ) . 'settings/notifications';
 		$email->set_tokens( $new_tokens );
 
@@ -749,7 +776,7 @@ function openlab_ass_clean_content( $content ) {
 	}
 
 	// Remove <img> tags from non-public sites.
-	$content = preg_replace( "/<img[^>]+\>/i", "", $content );
+	$content = preg_replace( '/<img[^>]+\>/i', '', $content );
 
 	return $content;
 }

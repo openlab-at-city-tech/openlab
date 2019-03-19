@@ -4,6 +4,7 @@ if ( !is_a( $aecomments, 'WPrapAjaxEditComments' ) && !current_user_can( 'admini
 	die('');
 
 $options = $aecomments->get_all_admin_options(); //global settings
+$all_post_types = $aecomments->get_all_post_types(); //post types array
 
 //Update settings
 $updated = false;
@@ -47,6 +48,8 @@ if (isset($_POST['update'])) {
 	$options['affiliate_text'] = apply_filters('pre_comment_content',apply_filters('comment_save_pre', $_POST['affiliate_text']));
 	$options['affiliate_show'] = $_POST['affiliate_show'];
 	$options['scripts_in_footer'] = $_POST['scripts_in_footer'];
+	$options['scripts_on_archive'] = $_POST['scripts_on_archive'];
+	$options['allowed_archives'] = $_POST['allowed_archives'];
 	$options['compressed_scripts'] = $_POST['compressed_scripts'];
 	$options['after_deadline_posts'] = $_POST['after_deadline_posts'];
 	$options['after_deadline_popups'] = $_POST['after_deadline_popups'];
@@ -179,10 +182,26 @@ if ($updated && !$error) {
   	<th scope="row"><?php _e('Performance','ajaxEdit'); ?></th>
     <td>
     <p><strong><?php _e('Load Scripts in Footer? (Requires WordPress 2.8 or above and theme compatibility)', 'ajaxEdit') ?></strong></p>
-    <p><label for="scripts_in_footer_yes"><input type="radio" id="scripts_in_footer_yes" name="scripts_in_footer" value="true" <?php if ($options['scripts_in_footer'] == "true") { echo('checked="checked"'); }?> /> <?php _e('Yes', 'ajaxEdit') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="scripts_in_footer_no"><input type="radio" id="scripts_in_footer_no" name="scripts_in_footer" value="false" <?php if ($options['scripts_in_footer'] == "false") { echo('checked="checked"'); }?>/> <?php _e('No', 'ajaxEdit') ?></label></p>
+    <p><label for="scripts_in_footer_yes"><input type="radio" id="scripts_in_footer_yes" name="scripts_in_footer" value="true" <?php if ($options['scripts_in_footer'] == "true") { echo('checked="checked"'); }?> /> <?php _e('Yes', 'ajaxEdit') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="scripts_in_footer_no"><input type="radio" id="scripts_in_footer_no" name="scripts_in_footer" value="false" <?php if ($options['scripts_in_footer'] == "false") { echo('checked="checked"'); }?>/> <?php _e('No', 'ajaxEdit') ?></label>
+    </p>
     <p><strong><?php _e('Use Compressed JavaScript Files?', 'ajaxEdit') ?></strong></p>
     <p><label for="compressed_scripts_yes"><input type="radio" id="compressed_scripts_yes" name="compressed_scripts" value="true" <?php if ($options['compressed_scripts'] == "true") { echo('checked="checked"'); }?> /> <?php _e('Yes', 'ajaxEdit') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="compressed_scripts_no"><input type="radio" id="compressed_scripts_no" name="compressed_scripts" value="false" <?php if ($options['compressed_scripts'] == "false") { echo('checked="checked"'); }?>/> <?php _e('No', 'ajaxEdit') ?></label></p>     
     </td>
+  </tr>
+  <tr valign="top">
+  	<th scope="row"><?php _e('Archives','ajaxEdit'); ?></th>
+    <td>
+    <p><strong><?php _e('Load Scripts on archives?', 'ajaxEdit') ?></strong></p>
+    <p><?php _e('This option should only be used if you have commenting enabled in your theme for archive pages', 'ajaxEdit') ?></p>
+    <p><label for="scripts_on_archive_yes"><input type="radio" id="scripts_on_archive_yes" name="scripts_on_archive" value="true" <?php if ($options['scripts_on_archive'] == "true") { echo('checked="checked"'); }?> /> <?php _e('Yes', 'ajaxEdit') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label for="scripts_on_archive_no"><input type="radio" id="scripts_on_archive_no" name="scripts_on_archive" value="false" <?php if ($options['scripts_on_archive'] == "false") { echo('checked="checked"'); }?>/> <?php _e('No', 'ajaxEdit') ?></label>
+    </p>
+    <p><strong><?php _e('Select post type archives?', 'ajaxEdit') ?></strong></p>
+    <p><?php _e('This option will only take effect if "Load on archives?" is enabled. (Hold ctrl to select multiple)', 'ajaxEdit') ?></p>
+    <select name="allowed_archives[]" multiple="true">
+        <?php foreach ($all_post_types as $post_type) : ?>
+            <option value="<?php echo $post_type; ?>" <?php if (in_array($post_type, $options['allowed_archives'])) { echo('selected="selected"'); }?>><?php echo ucfirst($post_type); ?></option>
+        <?php endforeach; ?>
+    </select>
   </tr>
   <tr valign="top">
   	<th scope="row"><?php _e('Character Encoding','ajaxEdit') ?></th>

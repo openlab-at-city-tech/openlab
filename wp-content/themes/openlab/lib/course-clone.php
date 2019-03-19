@@ -99,9 +99,9 @@ function openlab_clone_create_form_catcher() {
 
 			foreach ( $a['activities'] as $activity ) {
 				$a_obj = new BP_Activity_Activity( $activity->id );
-				if ( $hide_sitewide != $a_obj->hide_sitewide ) {
-					 $a_obj->hide_sitewide = $hide_sitewide;
-					 $a_obj->save();
+				if ( $hide_sitewide !== $a_obj->hide_sitewide ) {
+					$a_obj->hide_sitewide = $hide_sitewide;
+					$a_obj->save();
 				}
 			}
 
@@ -208,7 +208,7 @@ function openlab_group_sharing_settings_markup( $group_id ) {
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
-		<div class="panel-heading semibold">Shared Cloning Settings</div>
+		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
 			<p>This setting enables other faculty to clone your course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
 
@@ -370,7 +370,7 @@ class Openlab_Clone_Course_Group {
 	protected function migrate_docs() {
 		$docs = array();
 
-		$bp_docs_query = new BP_Docs_Query;
+		$bp_docs_query = new BP_Docs_Query();
 
 		$group_type_term = term_exists( 'group', $bp_docs_query->associated_item_tax_name );
 
@@ -443,7 +443,7 @@ class Openlab_Clone_Course_Group {
 					update_post_meta( $new_doc_id, 'bp_docs_revision_count', 1 );
 
 					// Update activity stream
-					$temp_query             = new stdClass;
+					$temp_query             = new stdClass();
 					$temp_query->doc_id     = $new_doc_id;
 					$temp_query->is_new_doc = true;
 					$temp_query->item_type  = 'group';
@@ -608,55 +608,12 @@ class Openlab_Clone_Course_Group {
 					'post_content' => $sftk->post_content,
 					'post_title'   => $sftk->post_title,
 					'post_date'    => $sftk->post_date,
-				), array(
+				),
+				array(
 					'forum_id' => $forum_id,
 				)
 			);
 		}
-
-		return;
-
-		// bbPress 1
-
-		// rekey for better lookups
-		$source_forum_topics_keyed = array();
-		foreach ( $source_forum_topics as $sft ) {
-			if ( ! in_array( $sft->post_author, $source_group_admins ) ) {
-				continue;
-			}
-			$source_forum_topics_keyed[ $sft->ID ] = $sft;
-		}
-
-			// And their first posts
-		global $wpdb, $bp, $bbdb;
-		$source_forum_topic_ids = implode( ',', wp_list_pluck( $source_forum_topics, 'topic_id' ) );
-		$source_forum_posts     = $wpdb->get_results( "SELECT topic_id, post_text FROM {$bbdb->posts} WHERE topic_id IN ({$source_forum_topic_ids}) AND post_position = 1" );
-
-		foreach ( $source_forum_posts as $sfp ) {
-			if ( isset( $source_forum_topics_keyed[ $sfp->topic_id ] ) ) {
-				$source_forum_topics_keyed[ $sfp->topic_id ]->post_text = $sfp->post_text;
-			}
-		}
-
-		// Then post them
-		foreach ( $source_forum_topics_keyed as $sftk ) {
-			bp_forums_new_topic(
-				array(
-					'forum_id'               => $forum_id,
-					'topic_title'            => $sftk->topic_title,
-					'topic_slug'             => $sftk->topic_slug,
-					'topic_poster'           => $sftk->topic_poster,
-					'topic_poster_name'      => $sftk->topic_poster_name,
-					'topic_last_poster'      => $sftk->topic_last_poster,
-					'topic_last_poster_name' => $sftk->topic_last_poster_name,
-					'topic_start_time'       => $sftk->topic_start_time,
-					'topic_time'             => $sftk->topic_time,
-					'topic_text'             => $sftk->post_text,
-				)
-			);
-		}
-
-		// @todo - forum attachments
 	}
 
 	/**
@@ -790,6 +747,7 @@ class Openlab_Clone_Course_Site {
 			'db_version',
 			$wpdb->get_blog_prefix( $this->site_id ) . 'user_roles',
 			'fileupload_url',
+			'oplb_gradebook_db_version', // This will force reinstallation of tables.
 		);
 
 		// now write them all back

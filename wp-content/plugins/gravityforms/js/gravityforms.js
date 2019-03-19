@@ -1183,7 +1183,9 @@ var GFMergeTag = function() {
 
 		var fieldId = parseInt(inputId,10);
 		var field = jQuery('#field_' + formId + '_' + fieldId);
-		var input = field.find('input[name^="input_' + inputId + '"], select[name^="input_' + inputId + '"], textarea[name="input_' + inputId + '"]');
+
+		var inputSelector = fieldId == inputId ? 'input[name^="input_' + fieldId + '"]' : 'input[name="input_' + inputId + '"]';
+		var input = field.find( inputSelector + ', select[name^="input_' + inputId + '"], textarea[name="input_' + inputId + '"]');
 
 		// checking conditional logic
 		var isVisible = window['gf_check_field_rule'] ? gf_check_field_rule( formId, fieldId, true, '' ) == 'show' : true,
@@ -1545,8 +1547,9 @@ var GFCalc = function(formId, formulaFields){
 			else {
 				var is_product_radio =  jQuery('.gfield_price input[name=input_' + fieldId + ']').is('input[type=radio]');
                 var is_product_dropdown = jQuery('.gfield_price select[name=input_' + fieldId + ']').length > 0;
+                var is_option_checkbox = jQuery('.gfield_price input[name="input_' + inputId + '"]').is('input[type=checkbox]');
 
-                if( is_product_dropdown || is_product_radio ) {
+                if( is_product_dropdown || is_product_radio || is_option_checkbox ) {
 					modifier = 'price';
 				}
 			}

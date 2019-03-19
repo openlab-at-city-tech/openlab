@@ -3,7 +3,7 @@
 		Plugin Name: WP QuickLaTeX
 		Plugin URI: http://www.holoborodko.com/pavel/quicklatex/
 		Description: Access to complete LaTeX distribution. Publish formulae & graphics using native LaTeX syntax directly in the text. Inline formulas, displayed equations auto-numbering, labeling and referencing, AMS-LaTeX, <code>TikZ</code>, custom LaTeX preamble. No LaTeX installation required. Easily customizable using UI dialog. Actively developed and maintained. Visit <a href="http://www.holoborodko.com/pavel/quicklatex/">QuickLaTeX homepage</a> for more info.
-		Version: 3.8.5
+		Version: 3.8.6
 		Author: Pavel Holoborodko
 		Author URI: http://www.holoborodko.com/pavel/
 		Copyright: Pavel Holoborodko
@@ -1457,7 +1457,7 @@ QuickLaTeX is free under linkware license. Which means service can be used: (a) 
 					// Create new query to the QuickLaTeX.com to generate formula
 
 					// URL for POST request
-					if (QUICKLATEX_PRODUCTION)		$url = 'http://www.quicklatex.com/latex3.f';
+					if (QUICKLATEX_PRODUCTION)		$url = 'https://www.quicklatex.com/latex3.f';
 					else 					    	$url = 'http://quicklatex.lan/latex3.f';		
 
 					$body =       'formula=' .quicklatex_encode($formula_text);
@@ -1726,7 +1726,7 @@ QuickLaTeX is free under linkware license. Which means service can be used: (a) 
 				$usecache = is_quicklatex_cache_writable(WP_QUICKLATEX_CACHE_DIR);
 				$permalink = quicklatex_encode(get_option('siteurl').' '.get_permalink());
 				
-				if (QUICKLATEX_PRODUCTION)		$url = 'http://www.quicklatex.com/latex3s.f';
+				if (QUICKLATEX_PRODUCTION)		$url = 'https://www.quicklatex.com/latex3s.f';
 				else 					    	$url = 'http://localhost/latex3s.f';		
 
 				$body  = 'fpp='        .$ql_fpp;

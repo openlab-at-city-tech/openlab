@@ -13,12 +13,11 @@ function openlab_group_type_in_notification_subject( $subject ) {
 
 	if ( ! empty( $groups_template->group->id ) ) {
 		$group_id = $groups_template->group->id;
-	} else if ( !empty( $bp->groups->current_group->id ) ) {
+	} elseif ( ! empty( $bp->groups->current_group->id ) ) {
 		$group_id = $bp->groups->current_group->id;
 	} else {
 		return $subject;
 	}
-
 
 	if ( isset( $_COOKIE['wds_bp_group_type'] ) ) {
 		$grouptype = $_COOKIE['wds_bp_group_type'];
@@ -71,7 +70,7 @@ function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $
 	}
 
 	$group_id = $activity->item_id;
-	$blog_id = openlab_get_site_id_by_group_id( $group_id );
+	$blog_id  = openlab_get_site_id_by_group_id( $group_id );
 
 	if ( ! $blog_id ) {
 		return $content;
@@ -80,9 +79,9 @@ function openlab_use_full_text_for_blog_related_bpges_notifications( $content, $
 	switch_to_blog( $blog_id );
 
 	if ( 'new_blog_post' === $activity->type ) {
-		$post = get_post( $activity->secondary_item_id );
-		$content = $post->post_content;
-	} else if ( 'new_blog_comment' === $activity->type ) {
+		$post    = get_post( $activity->secondary_item_id );
+		$content = empty( $post->post_password ) ? $post->post_content : 'This post is password protected.';
+	} elseif ( 'new_blog_comment' === $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$content = $comment->comment_content;
 	}

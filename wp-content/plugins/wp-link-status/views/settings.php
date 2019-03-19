@@ -1,13 +1,13 @@
 <?php
 
 // Load views class
-require_once(dirname(__FILE__).'/views.php');
+require_once dirname(__FILE__).'/views.php';
 
 /**
- * WP Link Status Views Settings class
+ * Settings class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Views
+ * @subpackage Views
  */
 class WPLNST_Views_Settings extends WPLNST_Views {
 
@@ -17,24 +17,24 @@ class WPLNST_Views_Settings extends WPLNST_Views {
 	 * Show scan edit form
 	 */
 	public static function view($args) {
-		
+
 		// Vars
 		extract($args);
-		
+
 		?><form method="post" id="wplnst-form" action="<?php echo esc_url($action); ?>">
-			
+
 			<input type="hidden" name="settings_nonce" value="<?php echo esc_attr($nonce); ?>" />
-			
+
 			<h2 id="wplnst-tabs-nav" class="nav-tab-wrapper">
 				<a id="wplnst-crawling-tab" href="#top#wplnst-crawling" class="nav-tab"><?php _e('Crawling', 'wplnst'); ?></a>
 				<a id="wplnst-timing-tab" href="#top#wplnst-timing" class="nav-tab"><?php _e('Timing', 'wplnst'); ?></a>
 				<a id="wplnst-advanced-tab" href="#top#wplnst-advanced" class="nav-tab"><?php _e('Advanced', 'wplnst'); ?></a>
 			</h2>
-			
+
 			<div id="wplnst-tabs">
-				
+
 				<div id="wplnst-crawling" class="wplnst-tab wplnst-tab-default">
-					
+
 					<table class="form-table">
 						<tr>
 							<th><label for="tx-max-threads"><?php _e('Number of crawler threads', 'wplnst'); ?></label></th>
@@ -71,11 +71,11 @@ class WPLNST_Views_Settings extends WPLNST_Views {
 							<td colspan="3" class="wplnst-col-input"><input type="text" name="tx-user-agent" id="tx-user-agent" value="<?php echo esc_attr(wplnst_get_tsetting('user_agent')); ?>" maxlength="255" class="regular-text" style="width: 75%;" /></td>
 						</tr>
 					</table>
-					
+
 				</div>
-				
+
 				<div id="wplnst-timing" class="wplnst-tab">
-					
+
 					<table class="form-table">
 						<tr>
 							<th><label for="tx-connect-timeout"><?php _e('URL Connection timeout', 'wplnst'); ?></label></th>
@@ -118,12 +118,12 @@ class WPLNST_Views_Settings extends WPLNST_Views {
 							<td class="wplnst-col-info"><?php _e('seconds', 'wplnst'); ?> <?php printf(__('(mininum value of %d seconds)', 'wplnst'), wplnst_get_nsetting('summary_objects', 'min')); ?>. <?php _e('Summary of objects (posts, comments or blogroll) with processed URLs.', 'wplnst'); ?></td>
 						</tr>
 					</table>
-					
+
 				</div>
-				
-				
+
+
 				<div id="wplnst-advanced" class="wplnst-tab">
-					
+
 					<table class="form-table">
 						<tr>
 							<th><label for="tx-recursion-limit"><?php _e('Recursion limit', 'wplnst'); ?></label></th>
@@ -138,14 +138,14 @@ class WPLNST_Views_Settings extends WPLNST_Views {
 							<td colspan="2" class="wplnst-list"><input type="checkbox" <?php echo wplnst_get_bsetting('uninstall_data')? 'checked' : ''; ?> name="ck-uninstall-data" id="ck-uninstall-data" value="on" /><label for="ck-uninstall-data">&nbsp;<?php _e('Options and exclusive MySQL tables will be removed when uninstall this plugin.', 'wplnst'); ?></label></td>
 						</tr>
 					</table>
-					
+
 				</div>
-				
-				
+
+
 				<p><input type="submit" value="<?php _e('Save settings', 'wplnst'); ?>" class="button button-primary" /></p>
-			
+
 			</div>
-			
+
 		</form><?php
 	}
 

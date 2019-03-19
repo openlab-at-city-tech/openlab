@@ -4,7 +4,7 @@
  * Plugin URI: https://wordpress.org/plugins/wp-ajax-edit-comments/
  * Description: Ajax Edit Comments allows users to edit their comments for a period of time. Administrators have a lot more features, such as the ability to edit comments directly on a post or page.
  * Author: Mikhail Kobzarev
- * Version: 6.0.3
+ * Version: 6.0.4
  * Requires at least: 3.1
  * Author URI: https://www.kobzarev.com
  * Contributors:  Ronald Huereca, Ajay Dsouza, Josh Benham  and Glenn Ansley
@@ -35,7 +35,7 @@ if ( ! class_exists( 'WPrapAjaxEditComments' ) ) {
 		private $admin_options = array();
 		private $errors = '';
 		private $minutes = 5;
-		private $version = '6.0.1';
+		private $version = '6.0.4';
 		private $colorbox_params = array();
 		private $plugin_url = '';
 		private $plugin_dir = '';
@@ -162,6 +162,8 @@ if ( ! class_exists( 'WPrapAjaxEditComments' ) ) {
 					'affiliate_text' => '',
 					'affiliate_show' => 'false',
 					'scripts_in_footer' => 'false',
+					'scripts_on_archive' => 'false',
+					'allowed_archives' => array(),
 					'compressed_scripts' => 'true',
 					'drop_down' => array(),
 					'classic' => array(),
@@ -380,7 +382,6 @@ if ( ! class_exists( 'WPrapAjaxEditComments' ) ) {
 	
 			$this->skip = false;
 			//css
-			
 			add_action("wp_print_styles", array('AECDependencies',"load_frontend_css"));
 			add_action("wp_print_styles", array('AECDependencies',"add_css"));
 			add_action('admin_print_styles', array('AECDependencies',"add_css")); 
@@ -481,6 +482,34 @@ if ( ! class_exists( 'WPrapAjaxEditComments' ) ) {
 			}
 		} //end save_admin_options
 		
+		/**
+		 * Wrapper for AECUtility::get_post_types(). Gets public default post types.
+		 * @return array
+		 */
+		public function get_default_post_types() {
+			return AECUtility::get_post_types();
+		}
+
+		/**
+		 * Wrapper for AECUtility::get_post_types(). Gets public custom post types.
+		 * @return array
+		 */
+		public function get_custom_post_types() {
+			return AECUtility::get_post_types([
+				'public' => true,
+				'_builtin' => false
+			]);
+		}
+
+		/**
+		 * Wrapper for AECUtility::get_all_post_types(). Gets all public post types.
+		 * @return array
+		 */
+		public function get_all_post_types() {
+			$built_in = $this->get_default_post_types();
+			$custom = $this->get_custom_post_types();
+			return array_merge($built_in, $custom);
+		}
     } //end class
 }
 //instantiate the class

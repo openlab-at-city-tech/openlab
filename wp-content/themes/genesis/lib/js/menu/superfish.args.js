@@ -1,9 +1,16 @@
-jQuery(document).ready(function($) { 
-	
-	$('#nav ul.superfish, #subnav ul.superfish, #header ul.nav, #header ul.menu').superfish({ 
-		delay:       100,								// 0.1 second delay on mouseout 
-		animation:   {opacity:'show',height:'show'},	// fade-in and slide-down animation 
-		dropShadows: false								// disable drop shadows 
+/**
+ * Initialise Superfish with custom arguments.
+ *
+ * @package Genesis\JS
+ * @author StudioPress
+ * @license GPL-2.0-or-later
+ */
+
+jQuery(function ($) {
+	'use strict';
+	$( '.js-superfish' ).superfish({
+		'delay': 100,                                         // 0.1 second delay on mouseout.
+		'animation':   {'opacity': 'show', 'height': 'show'}, // Default os fade-in and slide-down animation.
+		'dropShadows': false                                  // Disable drop shadows.
 	});
-	
 });

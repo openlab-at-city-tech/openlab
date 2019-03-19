@@ -59,6 +59,19 @@ Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
 
+= 6.1.27 =
+* Fix for double-line display when showing links on single pages
+
+= 6.1.26 =
+* Added ability to have shortcodes in large descriptions
+* Added ability to have shortcodes in full-page content
+
+= 6.1.25 =
+* Reverted experimented thumbnail generation code
+
+= 6.1.24 =
+* Fix for conflicts with the Relevanssi in some installations
+
 = 6.1.23 =
 * New integration to BuddyPress. User submitted links can now appear in activity feed.
 

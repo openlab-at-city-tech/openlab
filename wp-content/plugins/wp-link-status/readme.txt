@@ -1,10 +1,11 @@
 === WP Broken Link Status Checker ===
 Contributors: seedplugins, pauiglesias
-Tags: broken links, broken, links, crawler, headers, http, nofollow, redirections, scan, status, checker, url
+Tested up to: 5.1
+Requires PHP: 5.6
 Requires at least: 3.4
-Tested up to: 4.7.1
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
+Tags: broken links, broken, links, crawler, headers, http, nofollow, redirections, scan, status, checker, url
 
 Link checker of all your content links and images, looking for broken links, check link redirections, warn of nofollow links, etc.
 
@@ -112,6 +113,19 @@ You can add the custom field name in the "Content options" tab of the scan, sele
 1. Crawler results page
 
 == Changelog ==
+
+= 1.0.5 =
+March 7th, 2019
+
+* Tested with PHP 7.0 and PHP 7.2
+* Tested with WP 5.x and Gutenberg
+* Coding style corrections
+* Fixed several soft bugs
+* Allow activation/deactivation/uninstall without admin area restriction
+* Prevent network-wide plugin activation for multisite installs
+* Remove threads with off status to avoid TEXT field overflow
+* More time to HTTP CURL spawn method to run
+* Improvements in debug and trace mode
 
 = 1.0.4 =
 September 11th, 2016

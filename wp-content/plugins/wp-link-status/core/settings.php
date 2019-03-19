@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Settings class
+ * Settings class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Settings {
 
@@ -14,25 +14,29 @@ class WPLNST_Core_Settings {
 	 * Return a numeric setting
 	 */
 	public static function get_nsetting($name, $value = 0) {
-		
+
 		// Load settings
 		static $settings;
-		if (!isset($settings))
+		if (!isset($settings)) {
 			$settings = self::get_default_nsettings();
-		
+		}
+
 		// Check available
-		if (!isset($settings[$name]))
+		if (!isset($settings[$name])) {
 			return false;
-		
+		}
+
 		// Check boundary
-		if ('min' === $value || 'max' === $value)
+		if ('min' === $value || 'max' === $value) {
 			return $settings[$name][$value];
-		
+		}
+
 		// Check input value
 		$value = (int) $value;
-		if (empty($value))
+		if (empty($value)) {
 			$value = (int) get_option('wplnst_'.$name);
-		
+		}
+
 		// Check return value
 		$setting = $settings[$name];
 		return (empty($value) || $value < $setting['min'] || $value > $setting['max'])? $setting['default'] : $value;
@@ -69,17 +73,19 @@ class WPLNST_Core_Settings {
 	 * Return a boolean setting
 	 */
 	public static function get_bsetting($name, $use_default_if_empty = true) {
-		
+
 		// Check stored value
 		$value = ''.get_option('wplnst_'.$name);
-		if ('' !== $value || !$use_default_if_empty)
+		if ('' !== $value || !$use_default_if_empty) {
 			return ('on' == $value);
-		
+		}
+
 		// Load settings
 		static $settings;
-		if (!isset($settings))
+		if (!isset($settings)) {
 			$settings = self::get_default_bsettings();
-		
+		}
+
 		// Return default setting or false
 		return isset($settings[$name])? ('on' == $settings[$name]) : false;
 	}
@@ -102,17 +108,19 @@ class WPLNST_Core_Settings {
 	 * Return a text setting
 	 */
 	public static function get_tsetting($name, $use_default_if_empty = true) {
-		
+
 		// Check stored value
 		$value = ''.get_option('wplnst_'.$name);
-		if ('' !== $value || !$use_default_if_empty)
+		if ('' !== $value || !$use_default_if_empty) {
 			return $value;
-		
+		}
+
 		// Load settings
 		static $settings;
-		if (!isset($settings))
+		if (!isset($settings)) {
 			$settings = self::get_default_tsettings();
-		
+		}
+
 		// Return default setting or false
 		return isset($settings[$name])? $settings[$name] : false;
 	}
@@ -134,7 +142,7 @@ class WPLNST_Core_Settings {
 	 * Remove all plugin options
 	 */
 	public static function delete_all_options() {
-		
+
 		// Collect numeric, text, and crawler options
 		$options = array_merge(
 			array_keys(self::get_default_nsettings()),
@@ -142,10 +150,11 @@ class WPLNST_Core_Settings {
 			array_keys(self::get_default_bsettings()),
 			self::get_crawler_options_names()
 		);
-		
+
 		// Remove all plugin settings
-		foreach ($options as $name)
+		foreach ($options as $name) {
 			delete_option('wplnst_'.$name);
+		}
 	}
 
 
@@ -155,8 +164,9 @@ class WPLNST_Core_Settings {
 	 */
 	public static function delete_crawler_options() {
 		$options = self::get_crawler_options_names();
-		foreach ($options as $name)
-			delete_option('wplnst_'.$name);		
+		foreach ($options as $name) {
+			delete_option('wplnst_'.$name);
+		}
 	}
 
 

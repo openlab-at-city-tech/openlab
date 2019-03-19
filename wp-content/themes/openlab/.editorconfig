@@ -1,8 +1,0 @@
-# Theme should use Joe's IDE settings
-[*]
-indent_style = space
-indent_size = 4
-
-# Exceptions
-[lib/course-clone.php]
-indent_style = tab

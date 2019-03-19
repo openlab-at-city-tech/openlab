@@ -1511,6 +1511,17 @@ HTML;
 		$signup->parent = 'top-secondary';
 		$login->parent  = 'top-secondary';
 
+		// Sanitize URL.
+		$login_url_parts = parse_url( $login->href, PHP_URL_QUERY );
+		parse_str( $login_url_parts, $login_url_params );
+		$param_keys = array_keys( $login_url_params );
+
+		if ( isset( $login_url_params['redirect_to'] ) ) {
+			$login_url_params['redirect_to'] = openlab_sanitize_url_params( $login_url_params['redirect_to'] );
+		}
+
+		$login->href = add_query_arg( $login_url_params, remove_query_arg( 'redirect_to', $login->href ) );
+
 		// Re-add
 		$wp_admin_bar->add_node( (array) $signup );
 		$wp_admin_bar->add_node( (array) $login );
@@ -1661,7 +1672,7 @@ add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 function openlab_get_loginform() {
 	$form_out = '';
 
-	$request_uri = $_SERVER['REQUEST_URI'];
+	$request_uri = openlab_sanitize_url_params( $_SERVER['REQUEST_URI'] );
 
 	ob_start();
 	include WPMU_PLUGIN_DIR . '/parts/persistent/loginform.php';

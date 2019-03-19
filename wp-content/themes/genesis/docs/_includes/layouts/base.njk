@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title }} | {{ metadata.title }}</title>
+        <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+    </head>
+    <body {% if bodyClass %} class="{{ bodyClass }}" {% endif %}>
+        <a href="#main">Skip to content</a>
+        <header>
+            <img src="{{ '/img/logo.svg' | url }}" alt="">
+            {%- if page.url == '/' %}
+                <h1>
+                    <a href="{{ '/' | url }}">{{ metadata.titleHTML | safe }}</a>
+                </h1>
+            {%- else %}
+                <p>
+                    <a href="{{ '/' | url }}">{{ metadata.titleHTML | safe }}</a>
+                </p>
+            {%- endif %}
+
+        </header>
+        <div class="content">
+            {% include "components/toc.njk" %}
+
+            <main id="main">
+                {%- if page.url == '/' %}
+                    <h2 class="page-heading">{{ title | widont }}</h2>
+                {%- else %}
+                    <h1 class="page-heading">{{ title | widont }}</h1>
+                {%- endif %}
+
+                {%- if minVersion %}
+                {% include "components/version.njk" %}
+                {%- endif %}
+
+                {{ content | safe }}
+            </main>
+        </div>
+
+        <footer></footer>
+
+        <script src="{{ '/js/main.js' | url }}"></script>
+
+        {%- if page.url != '/changelog/' %}
+        <!-- To change this content, edit {{ page.inputPath }} -->
+        {%- endif %}
+    </body>
+</html>

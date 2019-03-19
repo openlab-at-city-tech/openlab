@@ -1,0 +1,41 @@
+.notice {
+    background: #fdf8ba;
+    border-left: 5px $primary-color solid;
+    font-weight: bolder;
+    padding: 15px 25px;
+}
+
+.notice-big {
+    @extend .notice;
+    font-size: 21px;
+}
+
+.notice-small {
+    @extend .notice;
+    font-weight: normal;
+}
+
+.requires-wrap {
+    line-height: 2.8;
+    margin: 1.5em 0;
+}
+
+.requires {
+    background: #fdf8ba;
+    border-left: 5px $primary-color solid;
+    padding: 15px;
+    font-size: 16px;
+}
+
+.requires .icon-info {
+    margin-bottom: -5px;
+    margin-right: 5px;
+}
+
+
+@media only screen and (min-width: 960px) {
+    .requires-wrap {
+        line-height: 1.5;
+        margin-bottom: 2.25em;
+    }
+}
