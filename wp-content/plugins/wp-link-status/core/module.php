@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Module class
+ * Module class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 abstract class WPLNST_Core_Module {
 
@@ -55,8 +55,9 @@ abstract class WPLNST_Core_Module {
 	 * Avoided use of get_called_class for PHP < 5.3 compatibility
 	 */
 	protected static function get_instance($classname, $args = null) {
-		if (!isset(self::$instances[$classname]))
+		if (!isset(self::$instances[$classname])) {
 			self::$instances[$classname] = new $classname($args);
+		}
 		return self::$instances[$classname];
 	}
 
@@ -132,11 +133,12 @@ abstract class WPLNST_Core_Module {
 	 * Check and initialize ajax respose
 	 */
 	protected static function check_ajax_submit(&$response, $capability, $nonce = null) {
-		
+
 		// Check default output
-		if (!isset($response))
+		if (!isset($response)) {
 			$response = self::default_ajax_response($nonce);
-		
+		}
+
 		// Check user capabilities
 		if (!current_user_can($capability)) {
 			$response['status'] = 'error';
@@ -149,7 +151,7 @@ abstract class WPLNST_Core_Module {
 			$response['reason'] = __('Sorry, security verification error. Please reload this page and try again.', 'wplnst');
 			return false;
 		}
-		
+
 		// Submit Ok
 		return true;
 	}

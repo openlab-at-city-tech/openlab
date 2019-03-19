@@ -3,8 +3,8 @@ Contributors: TobiasBg
 Donate link: https://tablepress.org/donate/
 Tags: table,data,html,csv,excel
 Requires at least: 4.9.1
-Tested up to: 4.9.8
-Stable tag: 1.9.1
+Tested up to: 5.1
+Stable tag: 1.9.2
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Embed beautiful and feature-rich tables into your posts and pages, without havin
 
 == Description ==
 
-TablePress allows you to easily create and manage beautiful tables. You can embed the tables into posts, pages, or text widgets with a simple Shortcode. Table data can be edited in a speadsheet-like interface, so no coding is necessary. Tables can contain any type of data, even formulas that will be evaluated. An additional JavaScript library adds features like sorting, pagination, filtering, and more for site visitors. Tables can be imported and exported from/to Excel, CSV, HTML, and JSON files.
+TablePress allows you to easily create and manage beautiful tables. You can embed the tables into posts, pages, or text widgets with a simple Shortcode. Table data can be edited in a spreadsheet-like interface, so no coding is necessary. Tables can contain any type of data, even formulas that will be evaluated. An additional JavaScript library adds features like sorting, pagination, filtering, and more for site visitors. Tables can be imported and exported from/to Excel, CSV, HTML, and JSON files.
 
 = More information =
 Please visit the plugin website at https://tablepress.org/ for more information or a [demo](https://tablepress.org/demo/)).
@@ -98,6 +98,11 @@ This plugin is Free Software, released and licensed under the GPL, version 2 (ht
 You may use it free of charge for any purpose.
 
 == Changelog ==
+
+= Version 1.9.2 =
+* Compatibility with WordPress 5.1
+* Enhancement: Make the save process more robust against data corruption.
+* Minor internal changes on CSS and typos in the documentation.
 
 = Version 1.9.1 =
 * Enhancement: Improve accessibility on several admin screens (thanks to Boone Gorges).
@@ -261,6 +266,9 @@ Release candidate in which all intended features are included and very stable.
 Initial version where most features are ready and pretty stable.
 
 == Upgrade Notice ==
+
+= 1.9.2 =
+This update is a stability, maintenance, and compatibility release. Updating is recommended.
 
 = 1.9.1 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.

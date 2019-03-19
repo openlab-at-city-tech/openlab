@@ -52,20 +52,20 @@ class BP_Groups_Meta_Filter {
 
 		$join_clauses  = array();
 		$where_clauses = array();
-		$counter = 1;
-		$filter_count = count( $this->filters );
-		foreach( $this->filters as $key => $value ) {
+		$counter       = 1;
+		$filter_count  = count( $this->filters );
+		foreach ( $this->filters as $key => $value ) {
 			$table_shortname = 'gmf' . $counter;
 
-			$join_sql = $counter > 1 ? " LEFT JOIN {$bp->groups->table_name_groupmeta} {$table_shortname} ON gmf1.group_id = {$table_shortname}.group_id " : "{$bp->groups->table_name_groupmeta} {$table_shortname}";
-			$join_clauses[]  = $join_sql;
+			$join_sql       = $counter > 1 ? " LEFT JOIN {$bp->groups->table_name_groupmeta} {$table_shortname} ON gmf1.group_id = {$table_shortname}.group_id " : "{$bp->groups->table_name_groupmeta} {$table_shortname}";
+			$join_clauses[] = $join_sql;
 
 			$where_clauses[] = $wpdb->prepare( "{$table_shortname}.meta_key = %s AND {$table_shortname}.meta_value = %s", $key, $value );
 			$counter++;
 		}
 
-		if ( !empty( $where_clauses ) ) {
-			$sql = "SELECT gmf1.group_id FROM " . implode( ' ', $join_clauses ) . " WHERE " . implode( ' AND ', $where_clauses );
+		if ( ! empty( $where_clauses ) ) {
+			$sql = 'SELECT gmf1.group_id FROM ' . implode( ' ', $join_clauses ) . ' WHERE ' . implode( ' AND ', $where_clauses );
 		} else {
 			$sql = "SELECT id FROM {$bp->groups->table_name} WHERE 1 = 0";
 		}
@@ -82,7 +82,7 @@ class BP_Groups_Meta_Filter {
 
 		$sql_a = explode( 'WHERE', $sql );
 
-		if ( !empty( $group_ids ) ) {
+		if ( ! empty( $group_ids ) ) {
 			$new_sql = $sql_a[0] . 'WHERE g.id IN (' . implode( ',', $group_ids ) . ') AND ' . $sql_a[1];
 		} else {
 			$new_sql = $sql_a[0] . 'WHERE 1 = 0';
@@ -97,4 +97,4 @@ class BP_Groups_Meta_Filter {
 	}
 }
 
-?>
+

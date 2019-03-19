@@ -1,0 +1,17 @@
+.header-top {
+    padding: 0;
+    text-size-adjust: 100%;
+    line-height: 13px;
+    .customify-grid .item--html{
+        font-size: 15px;
+    }
+    .item--html {
+        line-height: 1.3;
+    }
+    .light-mode {
+        background: #f0f0f0;
+    }
+    .dark-mode {
+        background: $color_primary;
+    }
+}

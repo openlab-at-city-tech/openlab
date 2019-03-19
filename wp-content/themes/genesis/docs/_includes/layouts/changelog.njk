@@ -1,0 +1,8 @@
+---
+layout: layouts/base.njk
+---
+{{ content | safe }}
+
+{%- for version in collections.changelog %} {# The changelog collection is defined in `.eleventy.js`. #}
+	{{ version.templateContent | safe }}
+{%- endfor %}

@@ -124,6 +124,10 @@ if (!function_exists('wp_editor')) {
 
                     <div style="clear: both"> </div>
 
+                    <div class="notify-group-members-ui">
+                        <?php openlab_notify_group_members_ui( ! bp_docs_is_existing_doc() ); ?>
+                    </div>
+
                     <div id="doc-submit-options">
 
                         <?php wp_nonce_field('bp_docs_save') ?>

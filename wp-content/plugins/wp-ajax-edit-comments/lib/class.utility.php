@@ -124,5 +124,26 @@ class AECUtility {
 			} //end for
 			return $pass;
 		} //end random
+
+		/**
+		 * Wrapper for get_post_types with preset arguments to get all default post types
+		 * @param  array 	$args 		An array of key value arguments to match against the post types	
+		 * @param  string 	$output 	The type of output to return, either 'names' or 'objects'
+		 * @param  string 	$operator 	Operator (and/or) to use with multiple $args
+		 * @return array
+		 */
+		public static function get_post_types($args = [], $output = "names", $operator = 'and') {
+			$default_args = [
+				'public'   => true,
+				'_builtin' => true,
+			];
+
+			$args = array_merge($default_args, $args);
+
+			$output = 'names'; // names or objects, note names is the default
+			$operator = 'and'; // 'and' or 'or'
+
+			return get_post_types( $args, $output, $operator );
+		}
 } 
 ?>

@@ -4,7 +4,7 @@
  *
  * @package     WP Accessibility
  * @author      Joe Dolson
- * @copyright   2012-2018 Joe Dolson
+ * @copyright   2012-2019 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.6.4
+ * Version: 1.6.6
  */
 
 /*
-	Copyright 2012-2018  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2012-2019  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.6.4';
+	$wpa_version = '1.6.6';
 	if ( 'true' != get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_nav_menu', 'on' );
 		add_option( 'rta_from_page_lists', 'on' );
@@ -251,27 +251,36 @@ function wpa_css() {
 	if ( get_option( 'asl_enable' ) == 'on' ) {
 		$focus = get_option( 'asl_styles_focus' );
 		// these styles are derived from the WordPress skip link defaults.
-		$default_focus = 'background-color: #f1f1f1; box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6); clip: auto; color: #21759b; display: block; font-size: 14px; font-weight: bold; height: auto; line-height: normal; padding: 15px 23px 14px; position: absolute; left: 5px; top: 5px; text-decoration: none; text-transform: none; width: auto; z-index: 100000;';
+		$top = '7px';
+		if ( is_admin_bar_showing() ) {
+			$top = '37px';
+		}
+		$default_focus = 'background-color: #f1f1f1; box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6); clip: auto; color: #0073aa; display: block; font-weight: 600; height: auto; line-height: normal; padding: 15px 23px 14px; position: absolute; left: 6px; top: ' . $top . '; text-decoration: none; text-transform: none; width: auto; z-index: 100000;';
 		if ( ! $focus ) {
 			$focus = $default_focus;
 		} else {
 			$focus = $default_focus . $focus;
 		}
+		// Passive default styles derived from WordPress default focus styles.
+		$default_passive = 'background-color: #fff; box-shadow:  0 0 2px 2px rgba(0, 0, 0, 0.2); clip: auto; color: #333; display: block; font-weight: 600; height: auto; line-height: normal; padding: 15px 23px 14px; position: absolute; left: 6px; top: ' . $top . '; text-decoration: none; text-transform: none; width: auto; z-index: 100000;';
+
 		$passive = get_option( 'asl_styles_passive' );
 		$vis     = '';
 		$invis   = '';
 		// If links are visible, "hover" is a focus style, otherwise, it's a passive style.
 		if ( 'on' == get_option( 'asl_visible' ) ) {
-			$vis = '#skiplinks a:hover,';
+			$vis     = '#skiplinks a:hover,';
+			$passive = $default_passive . $passive;
 		} else {
-			$invis = '#skiplinks a:hover,';
+			$invis   = '#skiplinks a:hover,';
+			$passive = '';
 		}
 		$visibility = ( 'on' == get_option( 'asl_visible' ) ) ? 'wpa-visible' : 'wpa-hide';
 		$is_rtl     = ( is_rtl() ) ? '-rtl' : '-ltr';
 		$class      = '.' . $visibility . $is_rtl;
 		$styles    .= "
-		$class#skiplinks a, $invis $class#skiplinks a:visited { $passive }
-		$class#skiplinks a:active, $vis $class#skiplinks a:focus { $focus  }
+		$class#skiplinks a, $class$invis $class#skiplinks a:visited { $passive }
+		$class#skiplinks a:active, $class$vis $class#skiplinks a:focus { $focus  }
 		";
 	}
 	if ( 'on' == get_option( 'wpa_focus' ) ) {
@@ -619,7 +628,7 @@ $plugins_string
 		if ( ! $has_read_faq ) {
 			echo "<div class='message error'><p>" . __( 'Please read the FAQ and other Help documents before making a support request.', 'wp-accessibility' ) . '</p></div>';
 		} elseif ( ! $request ) {
-			echo "<div class='message error'><p>" . __( 'Please describe your problem. I\'m not psychic.', 'wp-accessibility' ) . '</p></div>';
+			echo "<div class='message error'><p>" . __( 'Please describe your problem.', 'wp-accessibility' ) . '</p></div>';
 		} else {
 			wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 			if ( 'Donor' == $has_donated ) {

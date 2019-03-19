@@ -1,0 +1,95 @@
+html {
+  font-size: 100%;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $default-font-family;
+  color: $body-color;
+  line-height: $line-height-base;
+  overflow-x: hidden;
+  direction: ltr;
+  background-color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $default-font-family;
+  line-height: $line-height-base;
+  margin-bottom: $headings-margin-bottom;
+  font-weight: $headings-font-weight;
+}
+
+p {
+  margin-bottom: $paragraph-margin-bottom;
+}
+
+a {
+  cursor: pointer;
+  color: $link_color;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    color: $link_hover_color;
+  }
+}
+
+.screen-reader-text {
+  display: none;
+}
+
+ins {
+  text-decoration: none;
+}
+
+body {
+  font-size: $html-font-size;
+}
+
+h1 {
+  font-size: $h1-mobile-font-size;
+}
+
+h2 {
+  font-size: $h2-mobile-font-size;
+}
+
+h3 {
+  font-size: $h3-mobile-font-size;
+}
+
+h4 {
+  font-size: $h4-mobile-font-size;
+}
+
+h5 {
+  font-size: $h5-mobile-font-size;
+}
+
+h6 {
+  font-size: $h6-mobile-font-size;
+}
+
+@mixin typography--tablet() {
+  h1 {
+    font-size: $h1-font-size;
+  }
+  h2 {
+    font-size: $h2-font-size;
+  }
+  h3 {
+    font-size: $h3-font-size;
+  }
+  h4 {
+    font-size: $h4-font-size;
+  }
+  h5 {
+    font-size: $h5-font-size;
+  }
+  h6 {
+    font-size: $h6-font-size;
+  }
+}

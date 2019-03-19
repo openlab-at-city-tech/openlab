@@ -1,0 +1,604 @@
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+p,
+blockquote,
+th,
+td,
+nav,
+a {
+    direction: rtl;
+    unicode-bidi: embed;
+    text-align: right;
+}
+
+.vh-center {
+    right: 50%;
+    left: auto;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.col-lg-2,
+.col-lg-4,
+.col-lg-10 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.typology-post:after,
+.section-title:after {
+    right: 50%;
+    margin-right: -25px;
+    left: auto;
+    margin-left: auto;
+}
+.entry-footer .typology-button{
+    margin-right: auto;
+}
+.entry-footer .typology-button:first-child {
+    margin-left: 1.5rem;
+    margin-right: auto;
+}
+.typology-button i {
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+.post-letter {
+    right: -9rem;
+    left: auto;
+}
+
+.layout-b .post-letter {
+    right: 50%;
+    left: auto;
+}
+.alignleft {
+    float: left;
+    margin-right: 5rem;
+}
+
+.alignright {
+    float: right;
+    margin-left: 5rem;
+}
+
+.typology-featured-image:after {
+    right: 0;
+    left: auto;
+}
+
+.meta-item .typology-count {
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+.gallery-item {
+    padding: 0 0 2px 2px;
+}
+
+.gallery .gallery-item a:after {
+    right: 50%;
+    margin-right: -31px;
+    left: auto;
+    margin-left: auto;
+}
+
+.gallery-columns-4 .gallery-item a:after,
+.gallery-columns-5 .gallery-item a:after,
+.gallery-columns-6 .gallery-item a:after,
+.gallery-columns-7 .gallery-item a:after {
+    margin-right: -20px;
+    margin-left: auto;
+}
+
+.gallery-columns-1 .owl-next {
+    left: 30px;
+    right: auto;
+}
+
+.gallery-columns-1 .owl-prev {
+    right: 30px;
+    left: auto;
+}
+
+.mfp-title {
+    right: 20px;
+    left: auto;
+}
+
+.gallery-icon .herald-popup {
+    float: right;
+}
+
+.gallery-columns-2 .gallery-item:nth-of-type(2n),
+.gallery-columns-3 .gallery-item:nth-of-type(3n),
+.gallery-columns-4 .gallery-item:nth-of-type(4n),
+.gallery-columns-5 .gallery-item:nth-of-type(5n),
+.gallery-columns-6 .gallery-item:nth-of-type(6n),
+.gallery-columns-7 .gallery-item:nth-of-type(7n),
+.gallery-columns-8 .gallery-item:nth-of-type(8n),
+.gallery-columns-9 .gallery-item:nth-of-type(9n) {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* Pagination */
+
+.typology-pagination .prev a:before,
+.typology-pagination .nav-links .prev:before {
+    margin-left: 7px;
+    margin-right: auto;
+}
+
+.typology-pagination .next a:after,
+.typology-pagination .nav-links .next:after {
+    margin-right: 7px;
+    margin-left: auto;
+}
+
+.typology-pagination .prev a,
+.typology-pagination .nav-links .prev {
+    right: 0;
+    left: auto;
+}
+
+.typology-pagination .next a,
+.typology-pagination .nav-links .next {
+    left: 0;
+    right: auto;
+}
+
+.typology-loader {
+    margin: 0 -16px 0 auto;
+    right: 50%;
+    left: auto;
+}
+
+.dot1,
+.dot2 {
+    right: 0;
+    left: auto;
+}
+
+.dot3 {
+    right: 1.5em;
+    left: auto;
+}
+
+.dot4 {
+    right: 3em;
+    left: auto;
+}
+.typology-pagination .navigation{
+    text-align: center;
+}
+
+.typology-cover-slider .owl-dots {
+    right: 0;
+    left: auto;
+    text-align: center;
+}
+
+.typology-post.typology-layout-b:before {
+    right: 5.9rem;
+    left: auto;
+}
+
+.typology-layout-b {
+    padding-right: 14rem;
+    padding-left: 0;
+}
+
+.typology-layout-b .post-date {
+    right: -180px;
+    left: auto;
+}
+
+.typology-layout-b .post-date:after {
+    right: 94px;
+    left: auto;
+}
+
+.typology-layout-c .entry-title,
+.typology-layout-c .entry-meta,
+.typology-cover .entry-title,
+.typology-cover .entry-meta,
+.typology-cover .entry-footer{
+    text-align: center;
+}
+
+
+.meta-item {
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+.meta-item:after {
+    left: -7px;
+    right: auto;
+}
+
+blockquote:before,
+q:before,
+blockquote:after,
+q:after {
+    right: 50%;
+    margin-right: -20px;
+    left: auto;
+    margin-left: auto;
+}
+
+.typology-layout-c .post-letter{
+    left: 50%;
+    right: auto;
+}
+
+
+.cover-item-container{
+    text-align: center;
+}
+
+table {
+    border-right: 1px solid;
+    border-left: none;
+}
+
+td,
+th {
+    border-left: 1px solid;
+    border-right: none;
+}
+
+
+
+
+.success,
+.error,
+#usp-success-message {
+    float: right;
+}
+
+span.wpcf7-not-valid-tip {
+    left: 12px;
+    right: auto;
+}
+
+.typology-header {
+    right: 0;
+    left: auto;
+}
+
+.slot-l {
+    right: 15px;
+    left: auto;
+}
+
+.slot-r {
+    left: 0;
+    right: auto;
+}
+
+.typology-header-wide .slot-r {
+    left: 15px;
+    right: auto;
+}
+
+
+.typology-site-description {
+    margin-right: 1rem;
+    padding-right: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    padding-left: 0;
+    margin-left: auto;
+    border-left: none;
+}
+
+.slot-l .typology-nav {
+    padding-right: 1.5rem;
+    padding-left: 0;
+}
+
+.typology-header .typology-nav .sub-menu {
+    right: 0;
+    text-align: right;
+    right: -9999px;
+    left: auto;
+}
+
+.typology-header .typology-nav .sub-menu li:hover .sub-menu {
+    right: 100%;
+    left: auto;
+}
+
+.typology-header .typology-nav li:hover > .sub-menu {
+    right: 0;
+    left: auto;
+}
+
+.typology-header .typology-nav li:hover > .sub-menu .sub-menu {
+    right: 100%;
+    left: auto;
+}
+
+.typology-header .typology-nav .sub-menu a {
+    padding: 8px 20px 0 15px;
+}
+
+.typology-header .typology-nav .sub-menu > li:first-child > a {
+    padding: 15px 20px 0 15px;
+}
+
+.typology-header .typology-nav .sub-menu > li:last-child > a {
+    padding: 8px 20px 15px 15px;
+}
+
+.typology-header .typology-nav .sub-menu > li.menu-item-has-children > a:after {
+    margin-right: 7px;
+    float: left;
+    margin-left: auto;
+}
+
+.typology-header .typology-nav .sub-menu > li:hover > a {
+    padding-right: 25px;
+    padding-left: 15px;
+}
+
+.typology-header .typology-nav .sub-menu li:only-of-type a {
+    padding: 15px 20px 15px 15px;
+}
+
+.typology-action-button .sub-menu {
+    left: 0;
+    right: auto;
+}
+
+.typology-action-button .sub-menu ul a:before {
+    right: -8px;
+    left: auto;
+}
+
+.typology-header .typology-nav li ul.typology-rev {
+    right: auto!important;
+    left: 0;
+}
+
+.typology-header .typology-nav li .sub-menu ul.typology-rev {
+    right: auto!important;
+    left: 100%;
+}
+
+.typology-responsive-menu .typology-nav li {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.typology-responsive-menu .typology-nav .sub-menu a {
+    padding-right: 10px;
+    padding-left: 0;
+}
+
+.typology-nav-widget-acordion {
+    left: -5px;
+    right: auto;
+}
+
+.typology-footer .col-lg-4 {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.typology-social-icons a {
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+.typology-social-icons a:last-child {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.typology-author-links a {
+    margin-left: 1.5rem;
+    margin-right: auto;
+}
+
+.typology-single-sticky {
+    right: 0;
+    left: auto;
+}
+
+.typology-prev-next-nav .typology-next-link a {
+    text-align: left;
+}
+
+.typology-sticky-l .typology-pn-ico {
+    margin-left: 2rem;
+    margin-right: auto;
+}
+
+.typology-sticky-r .typology-pn-ico {
+    margin-right: 2rem;
+    margin-left: auto;
+}
+
+.typology-sticky-author img {
+    margin-left: 1rem;
+    margin-right: auto;
+}
+
+.typology-sticky-comments i {
+    margin-left: 1rem;
+    margin-right: auto;
+}
+
+.entry-tags a {
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+.widget ul li {
+    padding-right: 2rem;
+    padding-left: 0;
+}
+
+.widget_nav_menu ul li:before,
+.widget_rss ul li:before,
+.widget_recent_entries ul li:before,
+.widget_recent_comments ul li:before,
+.widget_meta ul li:before,
+.widget_pages ul li:before,
+.widget_categories ul li:before,
+.widget_categories ul li:before,
+.widget_archive ul li:before,
+.typology-responsive-menu ul li:before {
+    right: 0;
+    left: auto;
+}
+
+.widget_calendar table tfoot tr #next {
+    text-align: left;
+}
+
+.widget_calendar table caption {
+    left: 0;
+    right: auto;
+}
+
+.widget_calendar #today:after {
+    right: 50%;
+    margin: -15px -15px 0 0;
+    left: auto;
+}
+.entry-tags a,
+.widget_tag_cloud a {
+    margin-left: 2px;
+    margin-right: auto;
+}
+.widget.mks_ads_widget .small li,
+.widget.mks_ads_widget ul.custom li,
+.widget.mks_adswidget_ul.small li,
+.widget.mks_adswidget_ul.custom li {
+    margin-left: 11px;
+    margin-right: auto;
+}
+
+.widget.mks_author_widget img {
+    margin: 5px 0 0 20px;
+}
+
+.mks_flickr_widget a:after {
+    right: 0;
+    left: auto;
+}
+
+.comment-form-author,
+.comment-form-email,
+.comment-form-url {
+    float: right;
+    padding: 0 0 0 15px;
+}
+
+.comment-list .avatar {
+    float: right;
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+.comment-content {
+    margin-right: 95px;
+    margin-left: auto;
+}
+
+.reply {
+    margin-right: 95px;
+    margin-left: auto;
+}
+
+.comment-list .children {
+    margin-right: 98px;
+    margin-left: auto;
+}
+
+#cancel-comment-reply-link:after {
+    left: -20px;
+    right: auto;
+}
+
+.comment-reply-title {
+    float: left;
+}
+
+.pingback .comment-content,
+.trackback .comment-content {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.bypostauthor .comment-author:before {
+    right: -9px;
+    left: auto;
+}
+
+.typology-cover-overlay:after {
+    right: 0;
+    left: auto;
+}
+.typology-header .typology-nav .sub-menu>li.menu-item-has-children>a:after {
+    content: "\f104";
+}
+.typology-pagination .nav-links .next:before, .typology-pagination .next a:before {
+    font-family: "FontAwesome";
+    content: "\f104";
+    margin-right: 7px;
+}
+.typology-pagination .nav-links .prev:after, .typology-pagination .prev a:after {
+    content: "\f105";
+    font-family: "FontAwesome";
+    margin-left: 7px;
+}
+.typology-pagination .nav-links .prev:before, .typology-pagination .prev a:before, 
+.typology-pagination .nav-links .next:after, .typology-pagination .next a:after {
+    display: none;
+}
+.typology-pagination .nav-links,
+.typology-sidebar-close{
+    text-align: center;
+}
+.typology-sidebar{
+    left: 0;
+    right: auto;
+    -webkit-transform: translate3D(-437px,0,0);
+    -ms-transform: translate3D(-437px,0,0);
+    transform: translate3D(-437px,0,0);
+}
+.typology-flex-center,
+.typology-prev-next-nav a{
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;    
+}
+
+@media (max-width: 800px){
+.typology-post.typology-layout-b {
+    padding-right: 0;
+}
+}

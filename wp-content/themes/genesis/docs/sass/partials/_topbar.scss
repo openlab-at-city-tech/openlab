@@ -1,0 +1,36 @@
+header {
+    background: $primary-color;
+    color: #fff;
+    display: flex;
+    min-height: 70px;
+    padding: 0 20px;
+}
+
+header h1,
+header p {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 70px;
+    margin-top: 0;
+}
+
+header a {
+    color: #fff;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+header a span {
+    font-weight: 500;
+}
+
+header img {
+    height: 40px;
+    width: 48px;
+    margin: 15px 15px 15px 0;
+}
