@@ -6,6 +6,7 @@
 namespace OpenLab\ImageAttribution\Content;
 
 use function OpenLab\ImageAttribution\Helpers\get_the_image_attribution;
+use function OpenLab\ImageAttribution\Helpers\get_the_attached_image_ids;
 
 /**
  * Append attributions for images used in content.
@@ -18,14 +19,21 @@ function attached_media_attributions( $content ) {
 		return $content;
 	}
 
-	$html   = '<div class="wp-image-attributions">';
-	$images = get_attached_media( 'image' );
+	$images = get_the_attached_image_ids( get_queried_object_id(), $content );
 
-	foreach ( $images as $image ) {
-		$html .= '<span class="wp-caption-text">' . get_the_image_attribution( $image->ID ) . '</span>';
+	if ( empty( $images ) ) {
+		return $content;
 	}
-	$html .= '</div>';
 
-	return $content .= $html;
+	$html   = '<div class="wp-image-attributions">';
+
+	foreach ( $images as $image_id ) {
+		$html .= '<span class="wp-caption-text">' . get_the_image_attribution( $image_id ) . '</span>';
+	}
+
+	$html    .= '</div>';
+	$content .= $html;
+
+	return $content;
 }
 add_filter( 'the_content', __NAMESPACE__ . '\\attached_media_attributions', 100 );

@@ -10,6 +10,7 @@
  * Version:         1.0.0
  */
 
-require_once dirname( __FILE__ ) . '/src/helpers.php';
-require_once dirname( __FILE__ ) . '/src/admin.php';
-require_once dirname( __FILE__ ) . '/src/content.php';
+require_once __DIR__ . '/src/helpers.php';
+require_once __DIR__ . '/src/cache.php';
+require_once __DIR__ . '/src/admin.php';
+require_once __DIR__ . '/src/content.php';

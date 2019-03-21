@@ -140,3 +140,39 @@ function get_the_image_attribution( $post_id ) {
 
 	return implode( ' ', $parts );
 }
+
+/**
+ * Parse post content and extract used image IDs.
+ *
+ * Based on wp_make_content_images_responsive().
+ *
+ * @param int    $post_id
+ * @param string $content
+ * @return array $ids
+ */
+function get_the_attached_image_ids( $post_id, $content ) {
+	$cached = get_post_meta( $post_id, '_wp_attached_media_cache', true );
+
+	if ( $cached ) {
+		return $cached;
+	}
+
+	if ( ! preg_match_all( '/<img [^>]+>/', $content, $matches ) ) {
+		return $content;
+	}
+
+	$ids = [];
+	foreach ( $matches['0'] as $image ) {
+		// Extract attachment ID from class name.
+		if ( preg_match( '/wp-image-([0-9]+)/i', $image, $class_id ) ) {
+			$ids[] = (int) $class_id[1];
+		}
+	}
+
+	$ids = array_unique( array_filter( $ids ) );
+
+	// Cache results.
+	update_post_meta( $post_id, '_wp_attached_media_cache', $ids );
+
+	return $ids;
+}
