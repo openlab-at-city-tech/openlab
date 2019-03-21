@@ -1,0 +1,15 @@
+/* Overrides for the prism a11y light code highlighting theme. */
+:not(pre)>code[class*="language-"],
+pre[class*="language-"] {
+    background: #f7f7f7; /* Make darker to make code snippets stand out. */
+    font-size: 15px;
+    margin-top: 1.5em;
+}
+
+
+@media only screen and (min-width: 960px) {
+    :not(pre)>code[class*="language-"],
+    pre[class*="language-"] {
+        max-width: 720px;
+    }
+}

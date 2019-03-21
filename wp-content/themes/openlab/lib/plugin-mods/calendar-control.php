@@ -477,21 +477,22 @@ remove_action( 'do_meta_boxes', 'bpeo_render_silent_checkbox', 10, 3 );
 /**
  * Trick: Hook in before bpeo_send_bpges_notification_for_user() and fake $_POST.
  */
-add_filter(
-	'bp_ass_send_activity_notification_for_user',
-	function( $send_it, $activity ) {
-		if ( 'groups' !== $activity->component || 0 !== strpos( $activity->type, 'bpeo_' ) ) {
-			return $send_it;
-		}
-
-		if ( openlab_notify_group_members_of_this_action() ) {
-			unset( $_POST['bpeo-silent'] );
-		} else {
-			$_POST['bpeo-silent'] = 1;
-		}
-
+function openlab_bpeo_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
+	if ( 'groups' !== $activity->component || 0 !== strpos( $activity->type, 'bpeo_' ) ) {
 		return $send_it;
-	},
-	5,
-	2
-);
+	}
+
+	if ( ! $send_it ) {
+		return $send_it;
+	}
+
+	if ( openlab_notify_group_members_of_this_action() && 'no' !== $sub ) {
+		unset( $_POST['bpeo-silent'] );
+	} else {
+		$_POST['bpeo-silent'] = 1;
+	}
+
+	return openlab_notify_group_members_of_this_action();
+}
+add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_bpeo_activity_notification_control', 5, 4 );
+add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_bpeo_activity_notification_control', 5, 4 );

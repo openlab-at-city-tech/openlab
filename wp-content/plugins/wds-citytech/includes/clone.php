@@ -152,32 +152,6 @@ add_action(
 				}
 			}
 		}
-
-		// Shareable Content widget.
-		$show_shareable_content_widget = true;
-		if ( ! openlab_group_can_be_cloned( $group_id ) ) {
-			$show_shareable_content_widget = false;
-		} else {
-			$group_type = openlab_get_group_type( $group_id );
-			if ( ! openlab_group_type_can_be_cloned_by_others( $group_type ) ) {
-				$show_shareable_content_widget = false;
-			}
-		}
-
-		if ( $show_shareable_content_widget ) {
-			$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-			if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
-				$show_shareable_content_widget = false;
-			}
-		}
-
-		if ( ! $show_shareable_content_widget ) {
-			foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
-				if ( 0 === strpos( $widget_id, 'openlab_shareable_content' ) ) {
-					unset( $GLOBALS['wp_registered_widgets'][ $widget_id ] );
-				}
-			}
-		}
 	},
 	1000
 );
@@ -321,7 +295,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_shareable_content_widget',
-			'Shared Cloning',
+			'Sharing',
 			array(
 				'description' => '',
 			)
@@ -355,8 +329,22 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Shared Cloning' . $args['after_title'];
-		echo sprintf( '<p><a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a></p>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
+		echo $args['before_title'] . 'Sharing' . $args['after_title'];
+
+		$can_clone = false;
+		if ( is_user_logged_in() ) {
+			$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+			$can_clone = 'faculty' === strtolower( $user_type );
+		}
+
+		echo '<p>';
+		if ( $can_clone ) {
+			echo sprintf( '<a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
+		} else {
+			echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' );
+		}
+		echo '</p>';
+
 		echo $args['after_widget'];
 	}
 

@@ -1,7 +1,7 @@
 /*
 * $ lightboxed 1.0
 * By Pau Iglesias on seedplugins.com
-* 
+*
 * Based on lightbox_me 2.4 by Buck Wilson
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,15 +28,16 @@
 	$(document).on('keyup', observeKeyPress);
 
 	function observeKeyPress(e) {
-		if (fronts.length && (e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)))
+		if (fronts.length && (e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0))) {
 			fronts[fronts.length - 1].trigger('escPress');
+		}
 	}
 
 
 
 
 	$.fn.wplnst_lightboxed = function(options) {
-		
+
 		return this.each(function() {
 
 
@@ -47,21 +48,21 @@
 
 
 			function init() {
-				
+
 				fronts.push($self);
 				$('body').append($self.hide());
-				
+
 				zIndex = (false === zIndex)? settings.zIndex : zIndex + 1;
-				
+
 				if (settings.showOverlay) {
-					
+
 					$overlay = $('<div class="' + settings.classPrefix + '_overlay"/>');
-					
+
 					$('body').append($overlay);
-					
+
 					setOverlayHeight();
 					$(window).resize(setOverlayHeight);
-					
+
 					$overlay.css({
 						position	: 'absolute',
 						width		: '100%',
@@ -72,9 +73,9 @@
 						zIndex		: zIndex,
 						display		: 'none',
 					});
-					
+
 					$overlay.css(settings.overlayCSS);
-					
+
 					$overlay.fadeIn(settings.overlaySpeed, function() {
 						setSelfPosition();
 						$self[settings.appearEffect](settings.lightboxSpeed, function() {
@@ -88,24 +89,26 @@
 							}
 						});
 					});
-					
+
 				} else {
-					
+
 					setSelfPosition();
 					$self[settings.appearEffect](settings.lightboxSpeed, function() {
 						$self.show();
 						raiseOnLoad();
-						if (settings.closeClickOutside)
+						if (settings.closeClickOutside) {
 							$(document).on('click', onClickOutside);
+						}
 					});
 				}
-				
-				if (settings.parentLightbox)
+
+				if (settings.parentLightbox) {
 					settings.parentLightbox.fadeOut(200);
-				
+				}
+
 				$(window).resize(setSelfPosition).scroll(setSelfPosition);
 				$(document).on('click', settings.closeSelector, onCloseSelector);
-				
+
 				$self.on('close', closeLightbox);
 				$self.on('escPress', onEscPress);
 				$self.on('reposition', setSelfPosition);
@@ -114,35 +117,37 @@
 
 
 			function closeLightbox() {
-				
+
 				fronts.pop();
-				
+
 				if (settings.showOverlay) {
 					$overlay.remove();
 					$(window).unbind('resize', setOverlayHeight);
 				} else if (settings.closeClickOutside) {
 					$(document).off('click', onClickOutside);
 				}
-				
-				if (settings.parentLightbox)
+
+				if (settings.parentLightbox) {
 					settings.parentLightbox.fadeIn(200);
-				
-				if (settings.preventScroll)
+				}
+
+				if (settings.preventScroll) {
 					$('body').css('overflow', '');
-				
+				}
+
 				$(document).off('click', settings.closeSelector, onCloseSelector);
-				
+
 				$self.off('close', closeLightbox);
 				$self.off('escPress', onEscPress);
 				$self.off('reposition', setSelfPosition);
-				
+
 				$(window).unbind('resize', setSelfPosition);
 				$(window).unbind('scroll', setSelfPosition);
-				
+
 				$self[settings.disappearEffect](settings.lightboxSpeed, function() {
 					raiseOnClose();
 				});
-				
+
 				//$self.hide();
 			}
 
@@ -155,25 +160,25 @@
 
 
 			function setSelfPosition() {
-				
+
 				$self.css({
 					left 		: '50%',
-					marginLeft	: ($self.outerWidth() / 2) * -1, 
+					marginLeft	: ($self.outerWidth() / 2) * -1,
 					zIndex		: zIndex + 1
 				});
-				
+
 				if (($self.height() + 80 >= $(window).height()) && ($self.css('position') != 'absolute')) {
-					
+
 					var topOffset = $(document).scrollTop() + 40;
-					
+
 					$self.css({
 						position  : 'absolute',
 						top 	  : topOffset + 'px',
 						marginTop : 0
 					});
-					
+
 				} else if ($self.height() + 80 < $(window).height()) {
-					
+
 					settings.centered? $self.css({
 						position  : 'fixed',
 						top		  : '50%',
@@ -181,17 +186,19 @@
 					}) : $self.css({
 						position  : 'fixed'
 					}).css(settings.modalCSS);
-					
-					if (settings.preventScroll)
+
+					if (settings.preventScroll) {
 						$('body').css('overflow', 'hidden');
+					}
 				}
 			}
 
 
 
 			function onEscPress() {
-				if (settings.closeEsc)
+				if (settings.closeEsc) {
 					closeLightbox();
+				}
 			}
 
 
@@ -241,7 +248,7 @@
 
 
 	$.fn.wplnst_lightboxed.defaults = {
-		
+
 		// Animation
 		appearEffect		: 'fadeIn',
 		appearEase			: '',
@@ -249,17 +256,17 @@
 		disappearEase		: '',
 		lightboxSpeed		: 200,
 		overlaySpeed		: 250,
-		
+
 		// Close
 		closeSelector		: '.wplnst_lightboxed_close',
 		closeClickOutside	: true,
 		closeEsc			: true,
-		
+
 		// Behavior
 		showOverlay			: true,
 		parentLightbox		: false,
 		preventScroll		: true,
-		
+
 		// Style
 		centered			: false,
 		classPrefix			: 'wplnst_lbx',

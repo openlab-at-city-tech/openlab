@@ -208,7 +208,7 @@ function openlab_group_sharing_settings_markup( $group_id ) {
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
-		<div class="panel-heading semibold">Shared Cloning Settings</div>
+		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
 			<p>This setting enables other faculty to clone your course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
 

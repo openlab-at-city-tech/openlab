@@ -1,0 +1,22 @@
+.screen-reader-text {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+[href="#main"] {
+    position: absolute;
+    top: -100px;
+    right: 0.5em;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+[href="#main"]:focus {
+    top: 0.5em;
+}

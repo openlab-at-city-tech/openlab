@@ -4,10 +4,10 @@
 require_once(dirname(__FILE__).'/module.php');
 
 /**
- * WP Link Status Core Crawler class
+ * Crawler class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
@@ -94,22 +94,26 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Check scan argument
 		$scan_id = empty($args['scan_id'])? 0 : (int) $args['scan_id'];
-		if (empty($scan_id))
+		if (empty($scan_id)) {
 			return;
+		}
 
 		// Check thread argument
 		$this->thread_id = empty($args['thread_id'])? 0 : (int) $args['thread_id'];
-		if (empty($this->thread_id))
+		if (empty($this->thread_id)) {
 			return;
+		}
 
 		// Crawler URL argument
 		$this->crawler_url = empty($args['crawler_url'])? false : $args['crawler_url'];
-		if (empty($this->crawler_url))
+		if (empty($this->crawler_url)) {
 			return;
+		}
 
 		// Check scan record
-		if (false === ($this->scan = $this->get_scan_by_id($scan_id)))
+		if (false === ($this->scan = $this->get_scan_by_id($scan_id))) {
 			return;
+		}
 
 		// Debug point
 		$this->debug('__construct');
@@ -121,12 +125,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		$this->set_timeouts();
 
 		// Incoming POST request data
-		if (!empty($_POST['url_id']))
+		if (!empty($_POST['url_id'])) {
 			$this->request();
+		}
 
 		// Check waiting links before next content data
-		if (!$this->inspect())
+		if (!$this->inspect()) {
 			$this->content();
+		}
 	}
 
 
@@ -161,20 +167,24 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Check URL id
 		$url_id = (int) $_POST['url_id'];
-		if (empty($url_id))
+		if (empty($url_id)) {
 			return;
+		}
 
 		// Check URL record
-		if (false === ($url = $this->scans->get_scan_url(array('id' => $url_id, 'no_cache' => true))))
+		if (false === ($url = $this->scans->get_scan_url(array('id' => $url_id, 'no_cache' => true)))) {
 			return;
+		}
 
 		// Check URL status record
-		if (false === ($rows = $this->scans->get_scan_url_status(array('url_id' => $url_id, 'scan_id' => $this->scan->id, 'no_cache' => true))))
+		if (false === ($rows = $this->scans->get_scan_url_status(array('url_id' => $url_id, 'scan_id' => $this->scan->id, 'no_cache' => true)))) {
 			return;
+		}
 
 		// Check URL status phase
-		if (1 != count($rows) || in_array($rows[0]->phase, array('end', 'discard', 'failed')))
+		if (1 != count($rows) || in_array($rows[0]->phase, array('end', 'discard', 'failed'))) {
 			return;
+		}
 
 		// Check redirection mode
 		$redirection = (!empty($_GET['wplnst_redirection']) && '1' == $_GET['wplnst_redirection']);
@@ -188,8 +198,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Check redirection steps
 		$redirect_steps = @json_decode($rows[0]->redirect_steps, true);
-		if (empty($redirect_steps) || !is_array($redirect_steps))
+		if (empty($redirect_steps) || !is_array($redirect_steps)) {
 			$redirect_steps = array();
+		}
 
 		// Normal mode
 		if (!$this->scan->redir_status || !$redirection) {
@@ -348,8 +359,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 				// Check Crawler URL in redirection mode
 				$crawler_url = $this->crawler_url;
-				if (isset($url->redirection))
+				if (isset($url->redirection)) {
 					$crawler_url = add_query_arg('wplnst_redirection', '1', $crawler_url);
+				}
 
 				// Prepare POST fields
 				$postfields = array(
@@ -360,7 +372,6 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 					'request_timeout' 	=> $this->request_timeout,
 					'max_download'		=> wplnst_get_nsetting('max_download') * 1024,
 					'back_url' 			=> $crawler_url,
-					'debug'				=> wplnst_is_debug()? '1' : '0',
 					'user_agent'		=> wplnst_get_tsetting('user_agent'),
 					'nonce' 			=> WPLNST_Core_Nonce::create_nonce($url->hash),
 				);
@@ -369,7 +380,7 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				wplnst_require('core', 'curl');
 
 				$http_url = plugins_url( 'core/requests/http.php', WPLNST_FILE );
-				$http_url = str_replace( 'http://', 'http://citytech:devsonly@', $url );
+				$http_url = str_replace( 'http://', 'http://citytech:devsonly@', $http_url );
 
 				// Spawn crawler call
 				WPLNST_Core_CURL::spawn(array(
@@ -400,23 +411,27 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			$this->scans->set_scan_summary_urls_phases($this->scan->id, true);
 
 			// Update posts matched
-			if ($this->scan->check_posts)
+			if ($this->scan->check_posts) {
 				$this->scans->set_scan_summary_objects_match($this->scan->id, 'posts', true);
+			}
 
 			// Update posts matched
-			if ($this->scan->check_comments)
+			if ($this->scan->check_comments) {
 				$this->scans->set_scan_summary_objects_match($this->scan->id, 'comments', true);
+			}
 
 			// Update blogroll matched
-			if ($this->scan->check_blogroll)
+			if ($this->scan->check_blogroll) {
 				$this->scans->set_scan_summary_objects_match($this->scan->id, 'blogroll', true);
+			}
 
 			// Remove discarded URLS
 			$this->scans->remove_scan_discard_urls($this->scan->id);
 
 			// Update real total posts
-			if ($this->scan->check_posts)
+			if ($this->scan->check_posts) {
 				$this->scans->update_scan_trace($this->scan->id, array('total_posts' => $this->scans->get_scan_objects_count($this->scan->id, 'posts')));
+			}
 
 			// Remove registered objects
 			$this->scans->remove_scan_objects($this->scan->id);
@@ -446,12 +461,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function inspect_wait() {
 
 		// Retrieve next wait
-		if (false !== ($url = $this->scans->get_scan_url_waiting($this->scan->id)))
+		if (false !== ($url = $this->scans->get_scan_url_waiting($this->scan->id))) {
 			return $url;
+		}
 
 		// Check playing rows
-		if (false === ($rows = $this->scans->get_scan_url_status(array('scan_id' => $this->scan->id, 'phase' => 'play', 'no_cache' => true, 'order' => 'started_at ASC'))))
+		if (false === ($rows = $this->scans->get_scan_url_status(array('scan_id' => $this->scan->id, 'phase' => 'play', 'no_cache' => true, 'order' => 'started_at ASC')))) {
 			return false;
+		}
 
 		// Max requests allowed
 		$max_requests = wplnst_get_nsetting('max_requests');
@@ -501,8 +518,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function set_post_args() {
 
 		// Check previous
-		if (isset($this->post_args))
+		if (isset($this->post_args)) {
 			return;
+		}
 
 		// Initialize arguments
 		$this->post_args = array();
@@ -529,8 +547,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function set_comment_args() {
 
 		// Check previous
-		if (isset($this->comment_args))
+		if (isset($this->comment_args)) {
 			return;
+		}
 
 		// Initialize
 		$this->comment_args = array();
@@ -557,8 +576,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function set_blogroll_args() {
 
 		// Check previous
-		if (isset($this->blogroll_args))
+		if (isset($this->blogroll_args)) {
 			return;
+		}
 
 		// Initialize arguments
 		$this->blogroll_args = array();
@@ -598,8 +618,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		// Check comments
 		if ($this->scan->check_comments && empty($trace['populated_comments'])) {
 			$process_comments = true;
-			if (empty($trace['total_comments_check']) || !$process_posts)
+			if (empty($trace['total_comments_check']) || !$process_posts) {
 				$this->content_total('comments');
+			}
 		}
 
 		// Check blogroll
@@ -617,8 +638,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				$process_blogroll = true;
 
 				// Check first update
-				if (empty($trace['total_blogroll_check']) || (!$process_posts && !$process_comments))
+				if (empty($trace['total_blogroll_check']) || (!$process_posts && !$process_comments)) {
 					$this->content_total('blogroll');
+				}
 			}
 		}
 
@@ -630,23 +652,27 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		/* Processing objects */
 
 		// Process posts
-		if ($process_posts && !$this->content_posts())
+		if ($process_posts && !$this->content_posts()) {
 			return;
+		}
 
 		// Process comments
-		if ($process_comments && !$this->content_comments())
+		if ($process_comments && !$this->content_comments()) {
 			return;
+		}
 
 		// Process blogroll
-		if ($process_blogroll && !$this->content_blogroll())
+		if ($process_blogroll && !$this->content_blogroll()) {
 			return;
+		}
 
 
 		/* External work or run again */
 
 		// More data or restart
-		if (!$this->inspect())
+		if (!$this->inspect()) {
 			$this->restart();
+		}
 	}
 
 
@@ -660,16 +686,19 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		$the_end = true;
 
 		// Check posts
-		if ($this->scan->check_posts)
+		if ($this->scan->check_posts) {
 			$the_end = (false !== $this->scans->get_scan_trace($this->scan->id, 'populated_posts'));
+		}
 
 		// Check comments
-		if ($the_end && $this->scan->check_comments)
+		if ($the_end && $this->scan->check_comments) {
 			$the_end = (false !== $this->scans->get_scan_trace($this->scan->id, 'populated_comments'));
+		}
 
 		// Check blogroll
-		if ($the_end && $this->scan->check_blogroll)
+		if ($the_end && $this->scan->check_blogroll) {
 			$the_end = (false !== $this->scans->get_scan_trace($this->scan->id, 'populated_blogroll'));
+		}
 
 		// Done
 		return $the_end;
@@ -683,12 +712,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function get_time_scope_arg($field) {
 
 		// First basic check
-		if (empty($this->scan->time_scope) || 'anytime' == $this->scan->time_scope)
+		if (empty($this->scan->time_scope) || 'anytime' == $this->scan->time_scope) {
 			return '';
+		}
 
 		// Check real value
-		if (!in_array($this->scan->time_scope, array_keys(WPLNST_Core_Types::get_time_scopes())))
+		if (!in_array($this->scan->time_scope, array_keys(WPLNST_Core_Types::get_time_scopes()))) {
 			return '';
+		}
 
 		// Yesterday
 		if ('yesterday' == $this->scan->time_scope) {
@@ -733,13 +764,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Content matches
 		$matches = $this->filter_for_queries();
-		if (empty($matches))
+		if (empty($matches)) {
 			return '';
+		}
 
 		// Prepare likes
 		$likes = array();
-		foreach ($matches as $match)
+		foreach ($matches as $match) {
 			$likes[] = $field.' LIKE "%'.addcslashes($match, '_%\\').'%"';
+		}
 
 		// Likes fragment
 		return $op.((1 == count($likes))? $likes[0] : '('.implode(' OR ', $likes).')');
@@ -927,8 +960,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		if (false !== ($post = $this->content_posts_next())) {
 
 			// Register object
-			if (!$this->scans->register_scan_object($this->scan->id, $post->ID, 'posts', $post->post_date_gmt))
+			if (!$this->scans->register_scan_object($this->scan->id, $post->ID, 'posts', $post->post_date_gmt)) {
 				return $this->content_posts();
+			}
 
 			// Update last date gmt
 			$this->scans->update_scan_trace($this->scan->id, array('last_post_date_gmt' => $post->post_date_gmt));
@@ -951,15 +985,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				// Process links
 				if (in_array('links', $this->scan->link_types)) {
 					$links = $this->extract_links($post->post_content, $parent_url, $post->ID, 'posts', $post->post_type, 'post_content', $post->post_date_gmt);
-					if (!empty($links))
+					if (!empty($links)) {
 						$links_added = $this->save($links, $post->ID);
+					}
 				}
 
 				// Process images
 				if (in_array('images', $this->scan->link_types)) {
 					$images = $this->extract_images($post->post_content, $parent_url, $post->ID, 'posts', $post->post_type, 'post_content', $post->post_date_gmt);
-					if (!empty($images))
+					if (!empty($images)) {
 						$images_added = $this->save($images, $post->ID);
+					}
 				}
 			}
 
@@ -974,8 +1010,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 					foreach ($this->scan->custom_fields as $field) {
 
 						// Check field
-						if (empty($field['type']) || !isset($field['name']))
+						if (empty($field['type']) || !isset($field['name'])) {
 							continue;
+						}
 
 						// Check existing name
 						$name = $field['name'];
@@ -990,8 +1027,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 									// Sanitize
 									$value = trim($value);
-									if (empty($value))
+									if (empty($value)) {
 										continue;
+									}
 
 									// Direct URL
 									if ('url' == $field['type']) {
@@ -1021,15 +1059,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 										// Process links
 										if (in_array('links', $this->scan->link_types)) {
 											$links = $this->extract_links($value, $parent_url, $post->ID, 'posts', $post->post_type, 'custom_field_html_'.$meta_id.'_'.$name, $post->post_date_gmt);
-											if (!empty($links))
+											if (!empty($links)) {
 												$custom_fields_links_added = $this->save($links, $post->ID);
+											}
 										}
 
 										// Process images
 										if (in_array('images', $this->scan->link_types)) {
 											$images = $this->extract_images($value, $parent_url, $post->ID, 'posts', $post->post_type, 'custom_field_html_'.$meta_id.'_'.$name, $post->post_date_gmt);
-											if (!empty($images))
+											if (!empty($images)) {
 												$custom_fields_images_added = $this->save($images, $post->ID);
+											}
 										}
 									}
 								}
@@ -1050,12 +1090,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 				// Totals of content for each URL status added
 				$added = array_unique(array_merge($links_added, $images_added, $custom_fields_links_added, $custom_fields_images_added));
-				foreach ($added as $url_id)
+				foreach ($added as $url_id) {
 					$this->scans->set_scan_url_status_total_content($url_id, $this->scan->id);
+				}
 
 				// Check inspect data
-				if ($this->inspect())
+				if ($this->inspect()) {
 					return false;
+				}
 			}
 
 		// Empty
@@ -1065,8 +1107,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			$this->scans->update_scan_trace($this->scan->id, array('populated_posts' => true));
 
 			// Check inspect data
-			if ($this->inspect())
+			if ($this->inspect()) {
 				return false;
+			}
 
 		// Check data to inspect
 		} elseif ($this->inspect()) {
@@ -1093,13 +1136,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		$where = '1 = 1';
 
 		// Check exceptions
-		if (!empty($exceptions))
+		if (!empty($exceptions)) {
 			$where .= ' AND ID NOT IN ('.implode(',', array_map('intval', $exceptions)).')';
+		}
 
 		// Check last date condition
 		$last_date_gmt = $this->scans->get_scan_trace($this->scan->id, 'last_post_date_gmt');
-		if (!empty($last_date_gmt))
+		if (!empty($last_date_gmt)) {
 			$where .= ' AND post_date_gmt '.(('asc' == $this->scan->crawl_order)? '>=' : '<=').' "'.esc_sql($last_date_gmt).'"';
+		}
 
 		// Set arguments
 		$this->set_post_args();
@@ -1118,8 +1163,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 				// Check more identifiers with same date
 				$existing_ids = $this->scans->get_scan_objects_ids_by_date($this->scan->id, 'posts', $last_date_gmt);
-				if (!empty($existing_ids) && is_array($existing_ids))
+				if (!empty($existing_ids) && is_array($existing_ids)) {
 					$ids = array_unique(array_merge($ids, $existing_ids));
+				}
 			}
 
 			// Add exceptions
@@ -1159,8 +1205,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		if (false !== ($comment = $this->content_comments_next())) {
 
 			// Register object
-			if (!$this->scans->register_scan_object($this->scan->id, $comment->comment_ID, 'comments', $comment->comment_date_gmt))
+			if (!$this->scans->register_scan_object($this->scan->id, $comment->comment_ID, 'comments', $comment->comment_date_gmt)) {
 				return $this->content_comments();
+			}
 
 			// Update last date gmt
 			$this->scans->update_scan_trace($this->scan->id, array('last_comment_date_gmt' => $comment->comment_date_gmt));
@@ -1182,15 +1229,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				// Process links
 				if (in_array('links', $this->scan->link_types)) {
 					$links = $this->extract_links($comment->comment_content, $parent_url, $comment->comment_ID, 'comments', "", 'comment_content', $comment->comment_date_gmt);
-					if (!empty($links))
+					if (!empty($links)) {
 						$links_added = $this->save($links, $comment->comment_post_ID);
+					}
 				}
 
 				// Process images
 				if (in_array('images', $this->scan->link_types)) {
 					$images = $this->extract_images($comment->comment_content, $parent_url, $comment->comment_ID, 'comments', "", 'comment_content', $comment->comment_date_gmt);
-					if (!empty($images))
+					if (!empty($images)) {
 						$images_added = $this->save($images, $comment->comment_post_ID);
+					}
 				}
 			}
 
@@ -1232,12 +1281,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 				// Totals of content for each URL status added
 				$added = array_unique(array_merge($links_added, $images_added, $authors_added));
-				foreach ($added as $url_id)
+				foreach ($added as $url_id) {
 					$this->scans->set_scan_url_status_total_content($url_id, $this->scan->id);
+				}
 
 				// Check inspect data
-				if ($this->inspect())
+				if ($this->inspect()) {
 					return false;
+				}
 			}
 
 		// Empty
@@ -1247,8 +1298,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			$this->scans->update_scan_trace($this->scan->id, array('populated_comments' => true));
 
 			// Check inspect data
-			if ($this->inspect())
+			if ($this->inspect()) {
 				return false;
+			}
 
 		// Check data to inspect
 		} elseif ($this->inspect()) {
@@ -1275,13 +1327,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		$where = '1 = 1';
 
 		// Check exceptions
-		if (!empty($exceptions))
+		if (!empty($exceptions)) {
 			$where .= ' AND comment_ID NOT IN ('.implode(',', array_map('intval', $exceptions)).')';
+		}
 
 		// Check last date condition
 		$last_date_gmt = $this->scans->get_scan_trace($this->scan->id, 'last_comment_date_gmt');
-		if (!empty($last_date_gmt))
+		if (!empty($last_date_gmt)) {
 			$where .= ' AND comment_date_gmt '.(('asc' == $this->scan->crawl_order)? '>=' : '<=').' "'.esc_sql($last_date_gmt).'"';
+		}
 
 		// Set arguments
 		$this->set_comment_args();
@@ -1300,8 +1354,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 				// Check more identifiers with same date
 				$existing_ids = $this->scans->get_scan_objects_ids_by_date($this->scan->id, 'comments', $last_date_gmt);
-				if (!empty($existing_ids) && is_array($existing_ids))
+				if (!empty($existing_ids) && is_array($existing_ids)) {
 					$ids = array_unique(array_merge($ids, $existing_ids));
+				}
 			}
 
 			// Add exceptions
@@ -1341,8 +1396,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		if (false !== ($blogroll_link = $this->content_blogroll_next())) {
 
 			// Register object
-			if (!$this->scans->register_scan_object($this->scan->id, $blogroll_link->link_id, 'blogroll'))
+			if (!$this->scans->register_scan_object($this->scan->id, $blogroll_link->link_id, 'blogroll')) {
 				return $this->content_blogroll();
+			}
 
 			// Update last blogroll id
 			$this->scans->update_scan_trace($this->scan->id, array('last_blogroll_id' => $blogroll_link->link_id));
@@ -1381,12 +1437,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 						$this->scans->set_scan_summary_objects_match($this->scan->id, 'blogroll');
 
 						// Totals of content for each URL status added
-						foreach ($blogroll_added as $url_id)
+						foreach ($blogroll_added as $url_id) {
 							$this->scans->set_scan_url_status_total_content($url_id, $this->scan->id);
+						}
 
 						// Check inspect data
-						if ($this->inspect())
+						if ($this->inspect()) {
 							return false;
+						}
 					}
 				}
 			}
@@ -1398,8 +1456,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			$this->scans->update_scan_trace($this->scan->id, array('populated_blogroll' => true));
 
 			// Check inspect data
-			if ($this->inspect())
+			if ($this->inspect()) {
 				return false;
+			}
 
 		// Check data to inspect
 		} elseif ($this->inspect()) {
@@ -1426,13 +1485,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		$where = '1 = 1';
 
 		// Check exceptions
-		if (!empty($exceptions))
+		if (!empty($exceptions)) {
 			$where .= ' AND link_id NOT IN ('.implode(',', array_map('intval', $exceptions)).')';
+		}
 
 		// Check last identifier condition
 		$last_id = (int) $this->scans->get_scan_trace($this->scan->id, 'last_blogroll_id');
-		if (!empty($last_id))
+		if (!empty($last_id)) {
 			$where .= ' AND link_id '.(('asc' == $this->scan->crawl_order)? '>' : '<').' '.$last_id;
+		}
 
 		// Set arguments
 		$this->set_blogroll_args();
@@ -1467,30 +1528,35 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			foreach ($matches as $match) {
 
 				// Skip page anchor
-				if ('#' == mb_substr($match[2], 0, 1))
+				if ('#' == mb_substr($match[2], 0, 1)) {
 					continue;
+				}
 
 				// Check anchor
 				$anchor = $match[3];
-				if (!$this->filter_anchor_text($anchor))
+				if (!$this->filter_anchor_text($anchor)) {
 					continue;
+				}
 
 				// Check URL
 				$urlinfo = $this->urlo->parse($match[2], $parent_url);
-				if (!$this->filter_include_urls($urlinfo['url']) || !$this->filter_exclude_urls($urlinfo['url']))
+				if (!$this->filter_include_urls($urlinfo['url']) || !$this->filter_exclude_urls($urlinfo['url'])) {
 					continue;
+				}
 
 				// Check attributes
 				$attributes = $this->urlo->extract_attributes($match[1]);
-				if (!$this->filter_html_attributes('a', $attributes))
+				if (!$this->filter_html_attributes('a', $attributes)) {
 					continue;
+				}
 
 				// Check nofollow
 				$nofollow = false;
 				if (!empty($attributes['rel'])) {
 					$values = explode(' ', strtolower(str_replace("\n", ' ', str_replace("\r", ' ', $attributes['rel']))));
-					if (in_array('nofollow', $values))
+					if (in_array('nofollow', $values)) {
 						$nofollow = true;
+					}
 				}
 
 				// Add item
@@ -1530,18 +1596,21 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			foreach ($matches as $match) {
 
 				// Skip page anchor
-				if ('#' == mb_substr($match[1], 0, 1))
+				if ('#' == mb_substr($match[1], 0, 1)) {
 					continue;
+				}
 
 				// Check URL
 				$urlinfo = $this->urlo->parse($match[1], $parent_url);
-				if (!$this->filter_include_urls($urlinfo['url']) || !$this->filter_exclude_urls($urlinfo['url']))
+				if (!$this->filter_include_urls($urlinfo['url']) || !$this->filter_exclude_urls($urlinfo['url'])) {
 					continue;
+				}
 
 				// Check attributes
 				$attributes = $this->urlo->extract_attributes($match[0]);
-				if (!$this->filter_html_attributes('img', $attributes))
+				if (!$this->filter_html_attributes('img', $attributes)) {
 					continue;
+				}
 
 				// Add item
 				$images[] = array_merge($urlinfo, array(
@@ -1574,8 +1643,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function filter_anchor_text($anchor) {
 
 		// Check filters
-		if (empty($this->scan->anchor_filters))
+		if (empty($this->scan->anchor_filters)) {
 			return true;
+		}
 
 		// Initialize
 		$passed = array();
@@ -1587,15 +1657,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		foreach ($this->scan->anchor_filters as $filter) {
 
 			// Check filter
-			if (empty($filter['type']) || !isset($filter['value']))
+			if (empty($filter['type']) || !isset($filter['value'])) {
 				continue;
+			}
 
 			// Check if contains a value
 			if ('contains' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['contains']) && true === $passed['contains'])
+				if (isset($passed['contains']) && true === $passed['contains']) {
 					continue;
+				}
 
 				// Check tag in filter
 				$is_filter_tag = (false !== strpos($filter['value'], '<') || false !== strpos($filter['value'], '>'));
@@ -1607,8 +1679,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('not-contains' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['contains']) && false === $passed['contains'])
+				if (isset($passed['contains']) && false === $passed['contains']) {
 					continue;
+				}
 
 				// Check tag in filter
 				$is_filter_tag = (false !== strpos($filter['value'], '<') || false !== strpos($filter['value'], '>'));
@@ -1620,8 +1693,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('equal-to' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['equal-to']) && true === $passed['equal-to'])
+				if (isset($passed['equal-to']) && true === $passed['equal-to']) {
 					continue;
+				}
 
 				// Test
 				$passed['equal-to'] = ($anchor == $filter['value']);
@@ -1630,8 +1704,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('not-equal-to' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['not-equal-to']) && false === $passed['not-equal-to'])
+				if (isset($passed['not-equal-to']) && false === $passed['not-equal-to']) {
 					continue;
+				}
 
 				// Test
 				$passed['not-equal-to'] = ($anchor != $filter['value']);
@@ -1640,8 +1715,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('begins-with' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['begins-with']) && true === $passed['begins-with'])
+				if (isset($passed['begins-with']) && true === $passed['begins-with']) {
 					continue;
+				}
 
 				// Test
 				$passed['begins-with'] = (0 === stripos($anchor, $filter['value']));
@@ -1650,8 +1726,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('ends-by' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['ends-by']) && true === $passed['ends-by'])
+				if (isset($passed['ends-by']) && true === $passed['ends-by']) {
 					continue;
+				}
 
 				// Test
 				$passed['ends-by'] = (($temp = strlen($anchor) - strlen($filter['value'])) >= 0 && stripos($anchor, $filter['value'], $temp) !== false);
@@ -1660,8 +1737,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('empty' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['empty']))
+				if (isset($passed['empty'])) {
 					continue;
+				}
 
 				// Test
 				$passed['empty'] = ($anchor === '');
@@ -1671,8 +1749,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		// Check filters
 		$checks = array('contains', 'not-contains', 'equal-to', 'not-equal', 'begins-with', 'ends-by', 'empty');
 		foreach ($checks as $check) {
-			if (isset($passed[$check]) && false === $passed[$check])
+			if (isset($passed[$check]) && false === $passed[$check]) {
 				return false;
+			}
 		}
 
 		// Done
@@ -1687,8 +1766,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function filter_include_urls($url) {
 
 		// Check filters
-		if (empty($this->scan->include_urls))
+		if (empty($this->scan->include_urls)) {
 			return true;
+		}
 
 		// Initialize
 		$passed = array();
@@ -1697,15 +1777,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		foreach ($this->scan->include_urls as $filter) {
 
 			// Check filter
-			if (empty($filter['type']) || !isset($filter['value']))
+			if (empty($filter['type']) || !isset($filter['value'])) {
 				continue;
+			}
 
 			// Check if match all value
 			if ('full-url' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['full-url']) && true === $passed['full-url'])
+				if (isset($passed['full-url']) && true === $passed['full-url']) {
 					continue;
+				}
 
 				// Test
 				$passed['full-url'] = ($url == $filter['value']);
@@ -1714,8 +1796,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('matched-string' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['matched-string']) && true === $passed['matched-string'])
+				if (isset($passed['matched-string']) && true === $passed['matched-string']) {
 					continue;
+				}
 
 				// Test
 				$passed['matched-string'] = (false !== stripos($url, $filter['value']));
@@ -1724,8 +1807,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('url-prefix' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['url-prefix']) && true === $passed['url-prefix'])
+				if (isset($passed['url-prefix']) && true === $passed['url-prefix']) {
 					continue;
+				}
 
 				// Test
 				$passed['url-prefix'] = (0 === stripos($url, $filter['value']));
@@ -1734,8 +1818,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('url-suffix' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['url-suffix']) && true === $passed['url-suffix'])
+				if (isset($passed['url-suffix']) && true === $passed['url-suffix']) {
 					continue;
+				}
 
 				// Test
 				$passed['url-suffix'] = (($temp = strlen($url) - strlen($filter['value'])) >= 0 && stripos($url, $filter['value'], $temp) !== false);
@@ -1745,8 +1830,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		// Check filters
 		$checks = array('full-url', 'matched-string', 'url-prefix', 'url-suffix');
 		foreach ($checks as $check) {
-			if (isset($passed[$check]) && false === $passed[$check])
+			if (isset($passed[$check]) && false === $passed[$check]) {
 				return false;
+			}
 		}
 
 		// Done
@@ -1761,8 +1847,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function filter_exclude_urls($url) {
 
 		// Check filters
-		if (empty($this->scan->exclude_urls))
+		if (empty($this->scan->exclude_urls)) {
 			return true;
+		}
 
 		// Initialize
 		$passed = array();
@@ -1771,15 +1858,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		foreach ($this->scan->exclude_urls as $filter) {
 
 			// Check filter
-			if (empty($filter['type']) || !isset($filter['value']))
+			if (empty($filter['type']) || !isset($filter['value'])) {
 				continue;
+			}
 
 			// Check if match all value
 			if ('full-url' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['full-url']) && false === $passed['full-url'])
+				if (isset($passed['full-url']) && false === $passed['full-url']) {
 					continue;
+				}
 
 				// Test
 				$passed['full-url'] = ($url != $filter['value']);
@@ -1788,8 +1877,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('matched-string' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['matched-string']) && false === $passed['matched-string'])
+				if (isset($passed['matched-string']) && false === $passed['matched-string']) {
 					continue;
+				}
 
 				// Test
 				$passed['matched-string'] = (false === stripos($url, $filter['value']));
@@ -1798,8 +1888,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('url-prefix' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['url-prefix']) && false === $passed['url-prefix'])
+				if (isset($passed['url-prefix']) && false === $passed['url-prefix']) {
 					continue;
+				}
 
 				// Test
 				$passed['url-prefix'] = (0 !== stripos($url, $filter['value']));
@@ -1808,8 +1899,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('url-suffix' == $filter['type']) {
 
 				// Continue if passed
-				if (isset($passed['url-suffix']) && false === $passed['url-suffix'])
+				if (isset($passed['url-suffix']) && false === $passed['url-suffix']) {
 					continue;
+				}
 
 				// Test
 				$passed['url-suffix'] = (($temp = strlen($url) - strlen($filter['value'])) >= 0 && stripos($url, $filter['value'], $temp) === false);
@@ -1819,8 +1911,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		// Check filters
 		$checks = array('full-url', 'matched-string', 'url-prefix', 'url-suffix');
 		foreach ($checks as $check) {
-			if (isset($passed[$check]) && false === $passed[$check])
+			if (isset($passed[$check]) && false === $passed[$check]) {
 				return false;
+			}
 		}
 
 		// Done
@@ -1835,8 +1928,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	private function filter_html_attributes($element, $attributes) {
 
 		// Check filters
-		if (empty($this->scan->html_attributes))
+		if (empty($this->scan->html_attributes)) {
 			return true;
+		}
 
 		// Initialize
 		$passed = array();
@@ -1848,15 +1942,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		foreach ($this->scan->html_attributes as $filter) {
 
 			// Check filter
-			if (empty($filter['element']) || $element != $filter['element'] || !isset($filter['att']) || empty($filter['having']))
+			if (empty($filter['element']) || $element != $filter['element'] || !isset($filter['att']) || empty($filter['having'])) {
 				continue;
+			}
 
 			// Check if not have an attribute
 			if ('not-have' == $filter['having']) {
 
 				// Continue if not passed
-				if (isset($passed['not-have']) && false === $passed['not-have'])
+				if (isset($passed['not-have']) && false === $passed['not-have']) {
 					continue;
+				}
 
 				// Test
 				$passed['not-have'] = !in_array($filter['att'], $att_names);
@@ -1865,8 +1961,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('contains' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['contains']) && true === $passed['contains'])
+				if (isset($passed['contains']) && true === $passed['contains']) {
 					continue;
+				}
 
 				// Need a filter value
 				if (!isset($filter['value']) || '' === ''.trim($filter['value'])) {
@@ -1887,8 +1984,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('not-contains' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['not-contains']) && true === $passed['not-contains'])
+				if (isset($passed['not-contains']) && true === $passed['not-contains']) {
 					continue;
+				}
 
 				// Need a filter value
 				if (!isset($filter['value']) || '' === ''.trim($filter['value'])) {
@@ -1909,8 +2007,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('equal' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['equal']) && true === $passed['equal'])
+				if (isset($passed['equal']) && true === $passed['equal']) {
 					continue;
+				}
 
 				// Test
 				$passed['equal'] = in_array($filter['att'], $att_names)? ($attributes[$filter['att']] == (isset($filter['value'])? $filter['value'] : '')) : false;
@@ -1919,8 +2018,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('not-equal' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['not-equal']) && false === $passed['not-equal'])
+				if (isset($passed['not-equal']) && false === $passed['not-equal']) {
 					continue;
+				}
 
 				// Test
 				$passed['not-equal'] = in_array($filter['att'], $att_names)? ($attributes[$filter['att']] != (isset($filter['value'])? $filter['value'] : '')) : false;
@@ -1929,8 +2029,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('not-empty' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['not-empty']) && false === $passed['not-empty'])
+				if (isset($passed['not-empty']) && false === $passed['not-empty']) {
 					continue;
+				}
 
 				// Test
 				$passed['not-empty'] = in_array($filter['att'], $att_names)? ($attributes[$filter['att']] !== '') : false;
@@ -1939,8 +2040,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			} elseif ('empty' == $filter['op']) {
 
 				// Continue if passed
-				if (isset($passed['empty']) && false === $passed['empty'])
+				if (isset($passed['empty']) && false === $passed['empty']) {
 					continue;
+				}
 
 				// Test
 				$passed['empty'] = in_array($filter['att'], $att_names)? ($attributes[$filter['att']] === '') : false;
@@ -1950,8 +2052,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		// Check filters
 		$checks = array('not-have', 'contains', 'not-contains', 'equal', 'not-equal', 'not-empty', 'empty');
 		foreach ($checks as $check) {
-			if (isset($passed[$check]) && false === $passed[$check])
+			if (isset($passed[$check]) && false === $passed[$check]) {
 				return false;
+			}
 		}
 
 		// Done
@@ -1970,13 +2073,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Check cache
 		static $matches;
-		if (isset($matches))
+		if (isset($matches)) {
 			return $matches;
+		}
 		$matches = array();
 
 		// Check configuration
-		if (!$this->scan->filtered_query)
+		if (!$this->scan->filtered_query) {
 			return $matches;
+		}
 
 
 		/* Anchor filters */
@@ -1988,8 +2093,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			foreach ($this->scan->anchor_filters as $filter) {
 
 				// Check filter
-				if (empty($filter['type']) || !isset($filter['value']) || '' === ''.trim($filter['value']))
+				if (empty($filter['type']) || !isset($filter['value']) || '' === ''.trim($filter['value'])) {
 					continue;
+				}
 
 				// Match filters
 				if (in_array($filter['type'], array('contains', 'equal-to', 'begins-with', 'ends-by'))) {
@@ -2010,8 +2116,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			foreach ($this->scan->include_urls as $filter) {
 
 				// Check filter
-				if (empty($filter['type']) || !isset($filter['value']) || '' === ''.trim($filter['value']))
+				if (empty($filter['type']) || !isset($filter['value']) || '' === ''.trim($filter['value'])) {
 					continue;
+				}
 
 				// Match filters
 				if (in_array($filter['type'], array('full-url', 'matched-string', 'url-prefix', 'url-suffix'))) {
@@ -2032,16 +2139,19 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			foreach ($this->scan->html_attributes as $filter) {
 
 				// Check filter value
-				if (!isset($filter['value']) || '' === ''.trim($filter['value']))
+				if (!isset($filter['value']) || '' === ''.trim($filter['value'])) {
 					continue;
+				}
 
 				// Check having and attribute part
-				if (empty($filter['having']) || 'have' != $filter['having'] || empty($filter['att']) || '' == 'att'.trim($filter['att']))
+				if (empty($filter['having']) || 'have' != $filter['having'] || empty($filter['att']) || '' == 'att'.trim($filter['att'])) {
 					continue;
+				}
 
 				// Check operation
-				if (empty($filter['op']) || !in_array($filter['op'], array('contains', 'equal')))
+				if (empty($filter['op']) || !in_array($filter['op'], array('contains', 'equal'))) {
 					continue;
+				}
 
 				// Add string
 				$matches[] = $filter['value'];
@@ -2072,13 +2182,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		foreach ($links as $link) {
 
 			// Avoid empty URLs
-			if ('' === ''.trim($link['url']))
+			if ('' === ''.trim($link['url'])) {
 				continue;
+			}
 
 			// Malformed links tracking
 			if ($link['malformed']) {
-				if (!$this->scan->malformed)
+				if (!$this->scan->malformed) {
 					continue;
+				}
 			}
 
 			// Search by main URL
@@ -2091,15 +2203,17 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 			}
 
 			// Check destination type
-			if (isset($link['scope']) && in_array($this->scan->destination_type, array('internal', 'external')) && $link['scope'] != $this->scan->destination_type)
+			if (isset($link['scope']) && in_array($this->scan->destination_type, array('internal', 'external')) && $link['scope'] != $this->scan->destination_type) {
 				continue;
+			}
 
 			// Save URL location
 			$this->scans->add_scan_url_location($url_id, $this->scan->id, $link);
 
 			// Check our tiny cache
-			if (in_array($url_id, $statuses))
+			if (in_array($url_id, $statuses)) {
 				continue;
+			}
 
 			// Check if exists a previous status identifier
 			if (false !== $this->scans->get_scan_url_status(array('url_id' => $url_id, 'scan_id' => $this->scan->id))) {
@@ -2134,13 +2248,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 	public function parent_permalink($parent) {
 
 		// Check array
-		if (!is_array($parent) || !isset($parent['post_id']))
+		if (!is_array($parent) || !isset($parent['post_id'])) {
 			return false;
+		}
 
 		// Check identifier
 		$post_id = (int) $parent['post_id'];
-		if (empty($post_id))
+		if (empty($post_id)) {
 			return false;
+		}
 
 		// Return permalink
 		return $this->get_permalink($post_id);
@@ -2157,12 +2273,14 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Permalinks cache
 		static $permalinks;
-		if (!isset($permalinks))
+		if (!isset($permalinks)) {
 			$permalinks = array();
+		}
 
 		// Check cache
-		if (isset($permalinks[$post_id]))
+		if (isset($permalinks[$post_id])) {
 			return $permalinks[$post_id];
+		}
 
 		// Initialize
 		$permalinks[$post_id] = false;
@@ -2185,13 +2303,15 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 		));
 
 		// Check response
-		if ($response['error'])
+		if ($response['error']) {
 			return false;
+		}
 
 		// Check response
 		$data = trim($response['data']);
-		if (empty($data))
+		if (empty($data)) {
 			return false;
+		}
 
 		// Enum response links
 		$data = explode("\n", $data);
@@ -2205,16 +2325,18 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				$line = explode(' ', $line);
 				if (count($line) > 1) {
 					$status_code = trim($line[1]);
-					if ('30' != mb_substr($status_code, 0, 2))
+					if ('30' != mb_substr($status_code, 0, 2)) {
 						return false;
+					}
 				}
 
 			// Check Location
 			} elseif (isset($status_code) && 0 === stripos($line, 'location:')) {
 				$location = trim(mb_substr($line, 9));
 				$parts = @parse_url($location);
-				if (!empty($parts['scheme']) && !empty($parts['host']))
+				if (!empty($parts['scheme']) && !empty($parts['host'])) {
 					$permalinks[$post_id] = $location;
+				}
 			}
 		}
 

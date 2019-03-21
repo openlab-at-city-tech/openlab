@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Scheme class
+ * Scheme class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Scheme {
 
@@ -30,16 +30,17 @@ class WPLNST_Core_Scheme {
 	 * Remove all plugin tables
 	 */
 	public static function drop_tables() {
-		
+
 		// Globals
 		global $wpdb;
-		
+
 		// Plugin tables
 		$tables = self::get_tables();
-		
+
 		// Remove each one
-		foreach ($tables as $name)
+		foreach ($tables as $name) {
 			$wpdb->query('DROP TABLE '.$wpdb->prefix.'wplnst_'.esc_sql($name));
+		}
 	}
 
 
@@ -48,23 +49,24 @@ class WPLNST_Core_Scheme {
 	 * Check plugin custom tables
 	 */
 	public static function check_tables() {
-		
+
 		// Globals
 		global $wpdb;
-		
+
 		// Initialize
 		$create = array();
-		
+
 		// Plugin tables
 		$tables = self::get_tables();
-		
+
 		// Check each table
 		foreach ($tables as $name) {
 			$result = $wpdb->get_var('SHOW TABLES LIKE "'.$wpdb->prefix.'wplnst_'.esc_sql($name).'"');
-			if (empty($result))
+			if (empty($result)) {
 				$create[] = $name;
+			}
 		}
-		
+
 		// Done
 		return empty($create)? false : $create;
 	}
@@ -75,13 +77,13 @@ class WPLNST_Core_Scheme {
 	 * Create custom plugin tables
 	 */
 	public static function create_tables($tables = array()) {
-		
+
 		// Globals
 		global $wpdb;
-		
+
 		// Compose charset
 		$charset = (empty($wpdb->charset)? '' : ' DEFAULT CHARACTER SET '.$wpdb->charset).(empty($wpdb->collate)? '' : ' COLLATE '.$wpdb->collate);
-		
+
 		// URLs table
 		if (in_array('urls', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_urls` (
@@ -114,7 +116,7 @@ class WPLNST_Core_Scheme {
 				KEY `last_request_at` 	(`last_request_at`)
 			)'.$charset);
 		}
-		
+
 		// URLs and locations relationship table
 		if (in_array('urls_locations', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_urls_locations` (
@@ -164,7 +166,7 @@ class WPLNST_Core_Scheme {
 				KEY `attributed`		(`attributed`)
 			)'.$charset);
 		}
-		
+
 		// URLs locations and attributes relationship table
 		if (in_array('urls_locations_att', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_urls_locations_att` (
@@ -180,7 +182,7 @@ class WPLNST_Core_Scheme {
 				KEY `value`				(`value`)
 			)'.$charset);
 		}
-		
+
 		// URLs status and scans relationship table
 		if (in_array('urls_status', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_urls_status` (
@@ -227,7 +229,7 @@ class WPLNST_Core_Scheme {
 				KEY `rechecked`			(`rechecked`)
 			)'.$charset);
 		}
-		
+
 		// Scans table
 		if (in_array('scans', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_scans` (
@@ -260,7 +262,7 @@ class WPLNST_Core_Scheme {
 				KEY `config`			(`config`(255))
 			)'.$charset);
 		}
-		
+
 		// Scans objects
 		if (in_array('scans_objects', $tables)) {
 			$wpdb->query('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'wplnst_scans_objects` (

@@ -1,0 +1,108 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Education Pro\n"
+"POT-Creation-Date: 2016-05-01 11:03-0400\n"
+"PO-Revision-Date: 2016-05-01 11:03-0400\n"
+"Last-Translator: StudioPress <translations@studiopress.com>\n"
+"Language-Team: StudioPress <translations@studiopress.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: style.css\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: functions.php:12
+msgid "Education Pro Theme"
+msgstr ""
+
+#: functions.php:51
+msgid "Education Pro Blue"
+msgstr ""
+
+#: functions.php:52
+msgid "Education Pro Green"
+msgstr ""
+
+#: functions.php:53
+msgid "Education Pro Red"
+msgstr ""
+
+#: functions.php:54
+msgid "Education Pro Purple"
+msgstr ""
+
+#: functions.php:64
+msgid "Before Header Menu"
+msgstr ""
+
+#: functions.php:64
+msgid "Footer Menu"
+msgstr ""
+
+#: functions.php:119
+msgid "Home - Featured"
+msgstr ""
+
+#: functions.php:120
+msgid "This is the featured section of the Home page."
+msgstr ""
+
+#: functions.php:124
+msgid "Home - Top"
+msgstr ""
+
+#: functions.php:125
+msgid "This is the top section of the Home page."
+msgstr ""
+
+#: functions.php:129
+msgid "Home - Middle"
+msgstr ""
+
+#: functions.php:130
+msgid "This is the middle section of the Home page."
+msgstr ""
+
+#: functions.php:134
+msgid "Home - Bottom"
+msgstr ""
+
+#: functions.php:135
+msgid "This is the bottom section of the Home page."
+msgstr ""
+
+#: lib/theme-defaults.php:46 lib/theme-defaults.php:73
+msgid "Continue Reading"
+msgstr ""
+
+#. Theme Name of the plugin/theme
+msgid "Education Pro"
+msgstr ""
+
+#. Theme URI of the plugin/theme
+msgid "http://my.studiopress.com/themes/education/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Your institution has a great deal of information to convey in a short period "
+"of time. Text, audio, video, curricula, and more... Help students, faculty, "
+"and press find what they need fast, without the homework."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "StudioPress"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.studiopress.com/"
+msgstr ""

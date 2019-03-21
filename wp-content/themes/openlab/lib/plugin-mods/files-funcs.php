@@ -400,8 +400,8 @@ function openlab_group_documents_email_notification( $document ) {
 			continue;
 		}
 
-		// Don't send if the user gets digests for this group.
-		if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'sum', 'dig' ], true ) ) {
+		// Don't send if the user gets doesn't get immediate emails for this group.
+		if ( isset( $group_user_subscriptions[ $user_id ] ) && in_array( $group_user_subscriptions[ $user_id ], [ 'no', 'sum', 'dig' ], true ) ) {
 			continue;
 		}
 
@@ -419,26 +419,29 @@ remove_action( 'bp_group_documents_add_success', 'bp_group_documents_email_notif
 add_action( 'bp_group_documents_add_success', 'openlab_group_documents_email_notification', 10 );
 
 /**
- * Don't send an email notification for new file uploads.
+ * Customization for Group Documents activity notifications.
  */
-add_filter(
-	'bp_ass_send_activity_notification_for_user',
-	function( $send_it, $activity ) {
-		// We send a custom one, above.
-		if ( 'added_group_document' === $activity->type ) {
-			return false;
-		}
-
-		if ( 'edited_group_document' === $activity->type && ! openlab_notify_group_members_of_this_action() ) {
-			return false;
-		}
-
-		if ( 'deleted_group_document' === $activity->type ) {
-			return false;
-		}
-
+function openlab_group_documents_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
+	if ( ! $send_it ) {
 		return $send_it;
-	},
-	10,
-	2
-);
+	}
+
+	switch ( $activity->type ) {
+		case 'added_group_document' :
+		case 'deleted_group_document' :
+			if ( 'bp_ges_add_to_digest_queue_for_user' === current_action() ) {
+				return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
+			} else {
+				// We roll our own.
+				return false;
+			}
+
+		case 'edited_group_document' :
+			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
+
+		default :
+			return $send_it;
+	}
+}
+add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
+add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
