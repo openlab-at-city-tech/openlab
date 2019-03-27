@@ -379,12 +379,9 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 				// Load cURL wrapper library
 				wplnst_require('core', 'curl');
 
-				$http_url = plugins_url( 'core/requests/http.php', WPLNST_FILE );
-				$http_url = str_replace( 'http://', 'http://citytech:devsonly@', $http_url );
-
 				// Spawn crawler call
 				WPLNST_Core_CURL::spawn(array(
-					'CURLOPT_URL' 				=> $http_url,
+					'CURLOPT_URL' 				=> plugins_url('core/requests/http.php', WPLNST_FILE),
 					'CURLOPT_USERAGENT' 		=> wplnst_get_tsetting('user_agent'),
 					'CURLOPT_POST'				=> true,
 					'CURLOPT_POSTFIELDS' 		=> http_build_query($postfields, null, '&'),
