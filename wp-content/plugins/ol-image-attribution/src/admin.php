@@ -7,7 +7,6 @@ namespace OpenLab\ImageAttribution\Admin;
 
 use function OpenLab\ImageAttribution\Helpers\get_licenses;
 use function OpenLab\ImageAttribution\Helpers\get_licenses_select;
-use function OpenLab\ImageAttribution\Helpers\get_the_image_attribution;
 
 /**
  * Adds attribution fields to image editor.
@@ -24,7 +23,6 @@ function attachment_fields( array $fields, \WP_Post $post ) {
 
 	$author     = get_post_meta( $post->ID, '_wp_attachment_author', true );
 	$author_uri = get_post_meta( $post->ID, '_wp_attachment_author_uri', true );
-	$as_caption = get_post_meta( $post->ID, '_wp_attachment_as_caption', true );
 
 	$fields['author'] = [
 		'label' => __( 'Author' ),
@@ -42,16 +40,6 @@ function attachment_fields( array $fields, \WP_Post $post ) {
 		'html'  => get_licenses_select( $post ),
 	];
 
-	$fields['as-caption'] = [
-		'label' => __( 'Display as caption' ),
-		'input' => 'html',
-		'html'  => sprintf(
-			'<input type="checkbox" name="attachments[%1$d][as-caption]" id="attachments[%1$d][as-caption]" %2$s/>',
-			$post->ID,
-			checked( (bool) $as_caption, true, false )
-		),
-	];
-
 	return $fields;
 }
 add_filter( 'attachment_fields_to_edit', __NAMESPACE__ . '\\attachment_fields', 10, 2 );
@@ -66,11 +54,9 @@ add_filter( 'attachment_fields_to_edit', __NAMESPACE__ . '\\attachment_fields', 
 function attachment_save_fields( array $post, array $attachment ) {
 	$author     = isset( $attachment['author'] ) ? sanitize_text_field( $attachment['author'] ) : '';
 	$author_uri = isset( $attachment['author-uri']) ? esc_url_raw( $attachment['author-uri'] ) : '';
-	$as_caption = isset( $attachment['as-caption' ] ) ? true : false;
 
 	update_post_meta( $post['ID'], '_wp_attachment_author', $author );
 	update_post_meta( $post['ID'], '_wp_attachment_author_uri', $author_uri );
-	update_post_meta( $post['ID'], '_wp_attachment_as_caption', $as_caption );
 
 	$licenses = get_licenses();
 	if ( isset( $licenses[ $attachment['license'] ] ) ) {
@@ -117,21 +103,3 @@ function render_attribution_column( $column_name, $post_id ) {
 	}
 }
 add_action( 'manage_media_custom_column', __NAMESPACE__ . '\\render_attribution_column', 10, 2 );
-
-/**
- * Replace caption text with image attribution.
- *
- * @param string $caption
- * @param int $id
- * @return string $caption
- */
-function image_add_attribution_text( $caption, $id ) {
-	$as_caption = get_post_meta( $id, '_wp_attachment_as_caption', true );
-
-	if ( $as_caption ) {
-		$caption = get_the_image_attribution( $id );
-	}
-
-	return $caption;
-}
-add_filter( 'image_add_caption_text', __NAMESPACE__ . '\\image_add_attribution_text', 10, 2 );

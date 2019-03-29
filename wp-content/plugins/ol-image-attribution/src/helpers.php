@@ -142,37 +142,58 @@ function get_the_image_attribution( $post_id ) {
 }
 
 /**
- * Parse post content and extract used image IDs.
+ * Array of post types supporting image attributions.
  *
- * Based on wp_make_content_images_responsive().
- *
- * @param int    $post_id
- * @param string $content
- * @return array $ids
+ * @return array $post_types
  */
-function get_the_attached_image_ids( $post_id, $content ) {
-	$cached = get_post_meta( $post_id, '_wp_attached_media_cache', true );
+function get_supported_post_types() {
+	$post_types = [ 'post', 'page' ];
 
-	if ( $cached ) {
-		return $cached;
-	}
+	return apply_filters( 'ol_image_attribution_supported_post_types', $post_types );
+}
 
+/**
+ * Parse post content and extract used images.
+ *
+ * @param string $content
+ * @return array $image
+ */
+function get_the_attached_images( $content ) {
 	if ( ! preg_match_all( '/<img [^>]+>/', $content, $matches ) ) {
-		return $content;
+		return [];
 	}
 
-	$ids = [];
+	$images = [];
 	foreach ( $matches['0'] as $image ) {
-		// Extract attachment ID from class name.
 		if ( preg_match( '/wp-image-([0-9]+)/i', $image, $class_id ) ) {
-			$ids[] = (int) $class_id[1];
+			$id = (int) $class_id[1];
+
+			$images[ $id ] = $image;
 		}
 	}
 
-	$ids = array_unique( array_filter( $ids ) );
+	return $images;
+}
 
-	// Cache results.
-	update_post_meta( $post_id, '_wp_attached_media_cache', $ids );
+/**
+ * Adds cite refs to images.
+ *
+ * @param array $images
+ * @param string $content
+ * @return string
+ */
+function add_image_cites_nums( $images, $content ) {
+	$cited = [];
+	$num   = 1;
 
-	return $ids;
+	foreach ( $images as $id => $image ) {
+		$cited[] = sprintf(
+			'%1$s<sup class="cite-ref"><a href="#cite-%2$d">%3$d</a></sup>',
+			$image,
+			$id,
+			$num++
+		);
+	}
+
+	return str_replace( $images, $cited, $content );
 }
