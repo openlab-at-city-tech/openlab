@@ -15,11 +15,11 @@ function openlab_openprocessing_shortcode( $atts ) {
 		$v = isset( $atts[ $key ] ) ? (int) $atts[ $key ] : 0;
 		if ( ! $v ) {
 			switch ( $key ) {
-				case 'id' :
+				case 'id':
 					$errors[] = 'You must provide the numeric id of the openprocessing.org sketch. In a URL like "http://openprocessing.org/sketch/12345", the id is <strong>12345</strong>';
 					break;
 
-				default :
+				default:
 					$errors[] = sprintf( 'You didn&#8217;t provide the following necessary attribute: <strong>%s</strong>', $key );
 					break;
 			}
@@ -28,8 +28,8 @@ function openlab_openprocessing_shortcode( $atts ) {
 
 	if ( empty( $errors ) ) {
 		$height = (int) $atts['height'];
-		$width = (int) $atts['width'];
-		$html = sprintf(
+		$width  = (int) $atts['width'];
+		$html   = sprintf(
 			'<iframe width="%s" height="%s" scrolling="no" frameborder="0" src="http://www.openprocessing.org/sketch/%s/embed/?width=%s&height=%s&border=true"></iframe>',
 			$width + 28, // iframe needs padding
 			$height + 50,
@@ -94,8 +94,8 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
 
 	// Get height/width from URL params, if available.
 	$height = 450;
-	$width = 800;
-	$query = parse_url( $url, PHP_URL_QUERY );
+	$width  = 800;
+	$query  = parse_url( $url, PHP_URL_QUERY );
 	if ( $query ) {
 		parse_str( $query, $parts );
 
@@ -119,7 +119,7 @@ function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
  */
 function openlab_pinterest_embed_handler( $matches, $attr, $url ) {
 	// Pinterest's JS handles making the embed
-    $script_src = '//assets.pinterest.com/js/pinit.js';
+	$script_src = '//assets.pinterest.com/js/pinit.js';
 	wp_enqueue_script( 'pinterest-embed', $script_src, array(), false, true );
 
 	$path = parse_url( $url, PHP_URL_PATH );

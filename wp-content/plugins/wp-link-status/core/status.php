@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Status class
+ * Status class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Status {
 
@@ -96,8 +96,9 @@ class WPLNST_Core_Status {
 	 * Constructor
 	 */
 	public function __construct($data = null) {
-		if (!empty($data) && is_array($data))
+		if (!empty($data) && is_array($data)) {
 			$this->process_data($data);
+		}
 	}
 
 
@@ -111,36 +112,42 @@ class WPLNST_Core_Status {
 	 * Process request data
 	 */
 	public function process_data($data) {
-		
+
 		// Copy var
 		$this->data = $data;
-		
+
 		// Process headers
-		if (!empty($data['headers']))
+		if (!empty($data['headers'])) {
 			$this->extract_headers($data['headers']);
-			
+		}
+
 		// Process request headers
-		if (!empty($data['headers_request']))
+		if (!empty($data['headers_request'])) {
 			$this->extract_headers_request($data['headers_request']);
-		
+		}
+
 		// Check cURL error
-		if (!empty($data['curl_errno']))
+		if (!empty($data['curl_errno'])) {
 			$this->curl_errno = (int) $data['curl_errno'];
-		
+		}
+
 		// Timestamp and DateTime
 		if (!empty($data['timestamp'])) {
 			$this->timestamp = (int) $data['timestamp'];
-			if (!empty($this->timestamp) && false !== ($datetime = @gmdate('Y-m-d H:i:s', $this->timestamp)))
+			if (!empty($this->timestamp) && false !== ($datetime = @gmdate('Y-m-d H:i:s', $this->timestamp))) {
 				$this->request_at = $datetime;
+			}
 		}
-		
+
 		// Total time
-		if (!empty($data['total_time']))
+		if (!empty($data['total_time'])) {
 			$this->total_time = (float) $data['total_time'];
-		
+		}
+
 		// Total bytes
-		if (!empty($data['total_bytes']))
+		if (!empty($data['total_bytes'])) {
 			$this->total_bytes = (int) $data['total_bytes'];
+		}
 	}
 
 
@@ -149,16 +156,17 @@ class WPLNST_Core_Status {
 	 * Parse and extract headers data
 	 */
 	private function extract_headers($headers) {
-		
+
 		// Parse headers
 		$headers_raw = explode("\n", str_replace("\n\r", "\n", $headers));
 		foreach ($headers_raw as $header) {
-			
+
 			// Clean line
 			$header = trim($header);
-			if (empty($header))
+			if (empty($header)) {
 				continue;
-			
+			}
+
 			// Check redirection in status code
 			if (!isset($status_code) && 0 === stripos($header, 'HTTP/')) {
 				$line = trim(preg_replace('/\s+/', ' ', $header));
@@ -167,16 +175,17 @@ class WPLNST_Core_Status {
 					$status_code = (int) mb_substr(trim($line[1]), 0, 3);
 					$this->headers['status'] = $header;
 				}
-			
+
 			// Parse other headers
 			} elseif (false !== ($pos = strpos($header, ':')) && $pos > 0) {
 				$name = trim(mb_substr($header, 0, $pos));
 				$this->headers[$name] = trim(mb_substr($header, $pos + 1));
-				if ('location' == strtolower($name))
+				if ('location' == strtolower($name)) {
 					$this->redirect_url = $this->headers[$name];
+				}
 			}
 		}
-		
+
 		// Check status
 		if (isset($status_code)) {
 			$this->code = $status_code;
@@ -190,15 +199,15 @@ class WPLNST_Core_Status {
 	 * Parse and extract request headers data
 	 */
 	private function extract_headers_request($headers) {
-		
+
 		// Parse headers
 		$headers_raw = explode("\n", str_replace("\n\r", "\n", $headers));
 		foreach ($headers_raw as $header) {
-			
+
 			// Check GET method
 			if (0 === strpos($header, 'GET ')) {
 				$this->headers_request['GET'] = mb_substr($header, 4);
-			
+
 			// Check property
 			} elseif ((false !== ($pos = strpos($header, ':')) && $pos > 0)) {
 				$name = trim(mb_substr($header, 0, $pos));

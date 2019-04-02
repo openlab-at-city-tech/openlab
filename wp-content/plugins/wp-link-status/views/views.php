@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Views class
+ * Views class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Views
+ * @subpackage Views
  */
 abstract class WPLNST_Views {
 
@@ -14,11 +14,21 @@ abstract class WPLNST_Views {
 	 * Compose select option values
 	 */
 	public static function options($options, $values, $display = true, $space = false) {
+
+		// Init
 		$inner = '';
-		foreach ($options as $key => $name)
+
+		// Compose options
+		foreach ($options as $key => $name) {
 			$inner .= '<option'.(self::selected($key, $values, false)? ' selected' : '').' value="'.esc_attr($key).'">'.esc_html($name).'</option>';
-		if ($display)
+		}
+
+		// Check display
+		if ($display) {
 			echo $inner;
+		}
+
+		// Done
 		return $inner;
 	}
 
@@ -29,8 +39,9 @@ abstract class WPLNST_Views {
 	 */
 	public static function checked($current, $values, $display = true) {
 		$checked = self::is_value($current, $values);
-		if ($checked && $display)
+		if ($checked && $display) {
 			echo 'checked';
+		}
 		return $checked;
 	}
 
@@ -41,8 +52,9 @@ abstract class WPLNST_Views {
 	 */
 	public static function selected($current, $values, $display = true, $space = false) {
 		$selected = self::is_value($current, $values);
-		if ($selected && $display)
+		if ($selected && $display) {
 			echo ($space? ' ' : '').'selected';
+		}
 		return $selected;
 	}
 
@@ -52,8 +64,9 @@ abstract class WPLNST_Views {
 	 * Check if value match an array of values
 	 */
 	public static function is_value($current, $values) {
-		if (empty($values) && false !== $values)
+		if (empty($values) && false !== $values) {
 			return false;
+		}
 		return is_array($values)? in_array($current, $values) : ($current == $values);
 	}
 
@@ -66,8 +79,9 @@ abstract class WPLNST_Views {
 		$json_new = array();
 		foreach ($json as $json_item) {
 			$json_item_new = array();
-			foreach ($json_item as $key => $value)
+			foreach ($json_item as $key => $value) {
 				$json_item_new[esc_attr($key)] = esc_attr($value);
+			}
 			$json_new[] = $json_item_new;
 		}
 		return str_replace('&quot;', '%quot%', @json_encode($json_new));

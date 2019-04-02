@@ -109,70 +109,52 @@ function openlab_group_can_be_cloned( $group_id ) {
 /**
  * Initialize widgets.
  */
-add_action( 'widgets_init', function() {
-	register_widget( 'OpenLab_Clone_Credits_Widget' );
-	register_widget( 'OpenLab_Shareable_Content_Widget' );
-}, 20 );
+add_action(
+	'widgets_init',
+	function() {
+		register_widget( 'OpenLab_Clone_Credits_Widget' );
+		register_widget( 'OpenLab_Shareable_Content_Widget' );
+	},
+	20
+);
 
 /**
  * Load after BP and the rest of the application to selectively unregister or modify widgets.
  */
-add_action( 'bp_init', function() {
-	if ( bp_is_root_blog() ) {
-		return;
-	}
+add_action(
+	'bp_init',
+	function() {
+		if ( bp_is_root_blog() ) {
+			return;
+		}
 
-	// Credits widget.
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	$history  = openlab_get_group_clone_history( $group_id );
+		// Credits widget.
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$history  = openlab_get_group_clone_history( $group_id );
 
-	if ( ! $history ) {
-		foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
-			if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
-				unset( $GLOBALS['wp_registered_widgets'][ $widget_id ] );
+		if ( ! $history ) {
+			foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
+				if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
+					unset( $GLOBALS['wp_registered_widgets'][ $widget_id ] );
+				}
+			}
+		} else {
+			$group_type_label = openlab_get_group_type_label(
+				array(
+					'group_id' => $group_id,
+					'case'     => 'upper',
+				)
+			);
+
+			foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
+				if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
+					$GLOBALS['wp_registered_widgets'][ $widget_id ]['description'] = 'Credits for your ' . $group_type_label . '.';
+				}
 			}
 		}
-	} else {
-		$group_type_label = openlab_get_group_type_label(
-			array(
-				'group_id' => $group_id,
-				'case'     => 'upper',
-			)
-		);
-
-		foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
-			if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
-				$GLOBALS['wp_registered_widgets'][ $widget_id ]['description'] = 'Credits for your ' . $group_type_label . '.';
-			}
-		}
-	}
-
-	// Shareable Content widget.
-	$show_shareable_content_widget = true;
-	if ( ! openlab_group_can_be_cloned( $group_id ) ) {
-		$show_shareable_content_widget = false;
-	} else {
-		$group_type = openlab_get_group_type( $group_id );
-		if ( ! openlab_group_type_can_be_cloned_by_others( $group_type ) ) {
-			$show_shareable_content_widget = false;
-		}
-	}
-
-	if ( $show_shareable_content_widget ) {
-		$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-		if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
-			$show_shareable_content_widget = false;
-		}
-	}
-
-	if ( ! $show_shareable_content_widget ) {
-		foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
-			if ( 0 === strpos( $widget_id, 'openlab_shareable_content' ) ) {
-				unset( $GLOBALS['wp_registered_widgets'][ $widget_id ] );
-			}
-		}
-	}
-}, 1000 );
+	},
+	1000
+);
 
 /**
  * Add a widget to the "main" sidebar.
@@ -183,23 +165,23 @@ add_action( 'bp_init', function() {
  */
 function openlab_add_widget_to_main_sidebar( $widget ) {
 	switch ( get_template() ) {
-		case 'twentyten' :
+		case 'twentyten':
 			$sidebar = 'primary-widget-area';
-		break;
+			break;
 
-		case 'twentyfifteen' :
-		case 'twentyfourteen' :
-		case 'twentyeleven' :
-		case 'twentyseventeen' :
-		case 'twentysixteen' :
-		case 'twentythirteen' :
-		case 'twentytwelve' :
+		case 'twentyfifteen':
+		case 'twentyfourteen':
+		case 'twentyeleven':
+		case 'twentyseventeen':
+		case 'twentysixteen':
+		case 'twentythirteen':
+		case 'twentytwelve':
 			$sidebar = 'sidebar-1';
-		break;
+			break;
 
-		default :
+		default:
 			$sidebar = reset( array_keys( $GLOBALS['wp_registered_sidebars'] ) );
-		break;
+			break;
 	}
 
 	// No doubles.
@@ -239,7 +221,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 			'openlab_clone_credits_widget',
 			'Credits',
 			array(
-				'description' => ''
+				'description' => '',
 			)
 		);
 	}
@@ -255,15 +237,18 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 		$group    = groups_get_group( $group_id );
 		$history  = openlab_get_group_clone_history_data( $group_id, $group->creator_id );
 
-		$credits_groups = array_map( function( $clone_group ) {
-			return sprintf(
-				'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
-				esc_attr( $clone_group['group_url'] ),
-				esc_html( $clone_group['group_name'] ),
-				esc_attr( $clone_group['group_creator_url'] ),
-				esc_html( $clone_group['group_creator_name'] )
-			);
-		}, $history );
+		$credits_groups = array_map(
+			function( $clone_group ) {
+					return sprintf(
+						'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
+						esc_attr( $clone_group['group_url'] ),
+						esc_html( $clone_group['group_name'] ),
+						esc_attr( $clone_group['group_creator_url'] ),
+						esc_html( $clone_group['group_creator_name'] )
+					);
+			},
+			$history
+		);
 
 		echo $args['before_widget'];
 
@@ -310,9 +295,9 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_shareable_content_widget',
-			'Shared Cloning',
+			'Sharing',
 			array(
-				'description' => ''
+				'description' => '',
 			)
 		);
 	}
@@ -344,8 +329,22 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Shared Cloning' . $args['after_title'];
-		echo sprintf( '<p><a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a></p>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
+		echo $args['before_title'] . 'Sharing' . $args['after_title'];
+
+		$can_clone = false;
+		if ( is_user_logged_in() ) {
+			$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+			$can_clone = 'faculty' === strtolower( $user_type );
+		}
+
+		echo '<p>';
+		if ( $can_clone ) {
+			echo sprintf( '<a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
+		} else {
+			echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' );
+		}
+		echo '</p>';
+
 		echo $args['after_widget'];
 	}
 

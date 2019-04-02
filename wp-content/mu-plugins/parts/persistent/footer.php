@@ -13,7 +13,7 @@
                         <div class="col-logos">
                             <h2><span>The OpenLab at City Tech:</span><span>A place to learn, work, and share</span></h2>
                             <div class="logos-wrapper clearfix">
-                                <p class="statement semibold"><span class="semibold">The OpenLab</span> is an open-source, digital platform designed to support teaching and learning at New York City College of Technology (NYCCT), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
+                                <p class="statement semibold"><span class="semibold">The OpenLab</span> is an open-source, digital platform designed to support teaching and learning at City Tech (New York City College of Technology), and to promote student and faculty engagement in the intellectual and social life of the college community.</p>
                                 <a class="pull-left citytech-logo" href="http://www.citytech.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/ctnyc_seal.png" alt="New York City College of Technology" border="0" /></a>
                                 <a class="pull-left cuny-logo " href="http://www.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="City University of New York" border="0" /></a>
                             </div>
@@ -28,11 +28,11 @@
                     <div class="col-sm-8 col-links semibold">
                         <h2 class="first-header">Support</h2>
                         <a class="no-deco roll-over-color" href="<?php echo $site; ?>/blog/help/openlab-help/">Help</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/contact-us/">Contact Us</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/terms-of-service/">Terms of Use</a> <span class="horiz-divider">|</span> <a class="no-deco roll-over-color" href="<?php echo $site; ?>/about/credits/">Credits</a>
-                        <?php if ($accessibility_link && !empty($accessibility_link) && $accessibility_link !== 0): ?>
-                            <h2 class="second-header">Accessibility</h2>
-                            <p class="statement">Our goal is to make the OpenLab accessible for all users.</p>
-                            <p class="statement"><a class="deco roll-over-color" href="<?php echo get_permalink($accessibility_link) ?>">Learn more about accessibility on the OpenLab</a></p>
-                        <?php endif; ?>
+
+						<h2 class="second-header">Accessibility</h2>
+						<p class="statement">Our goal is to make the OpenLab accessible for all users.</p>
+						<p class="statement"><a class="deco roll-over-color" href="<?php echo esc_attr( $accessibility_link ) ?>">Learn more about accessibility on the OpenLab</a></p>
+
                     </div>
                     <div class="horiz-bar-wrapper"><div class="horiz-bar"></div></div>
                     <div class="col-sm-3 col-copyright">

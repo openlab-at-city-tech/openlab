@@ -1,0 +1,25 @@
+.ti-sites-lib__preview {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 100000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+
+  iframe {
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    border: none;
+    flex: 1;
+  }
+
+  .preview-sidebar__container {
+    display: flex;
+    padding: 15px 50px;
+    align-items: center;
+  }
+}

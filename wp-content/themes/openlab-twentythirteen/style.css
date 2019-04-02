@@ -1,0 +1,23 @@
+/* 
+ Theme Name:   OpenLab Twenty Thirteen
+ Description:  This is a child theme of Twenty Thirteen.  It is identical to Twenty Thirteen except that it  displays breadcrumb navigation with the automatic activation of the plugin Breadcrumb NavXT.
+ Author:       Bree
+ Template:     twentythirteen
+ Version:      1.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+
+--------------------------------------------*/
+
+/* Breadcrumbs plugin */
+
+.breadcrumbs {
+	display: block;
+	margin: 0 auto;
+	max-width: 604px;
+	padding-top: 40px;
+	width: 100%;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 85%;
+	border-bottom: 1px solid #f7f5e7;
+}

@@ -1,0 +1,71 @@
+.main-navigation {
+    width: 100vw;
+    margin-left: -20px;
+}
+
+.main-navigation > ul {
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+.main-navigation ul > li ul {
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.main-navigation ul:first-of-type {
+    margin-top: 0;
+}
+
+.main-navigation li {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.8;
+    list-style-type: none;
+}
+
+.main-navigation li > ul li {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.main-navigation li a {
+    color: $base-font-color;
+    text-decoration: none;
+}
+
+.main-navigation li a:hover,
+.main-navigation li.nav-active > a {
+    color: $primary-color;
+}
+
+#menu-button {
+    background:#f1f1f1;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 18px;
+    text-align: left;
+    width: 100%;
+}
+
+#menu-icon {
+    height: 12px;
+    margin-right: 5px;
+    width: auto;
+}
+
+@media only screen and (min-width: 960px) {
+    .main-navigation li > ul li {
+        padding-left: 17.66px;
+    }
+
+    .main-navigation li > ul li.nav-active > a:before {
+        content: "► ";
+        line-height: 0.2;
+        font-size: 14px;
+    }
+
+    .main-navigation li > ul li.nav-active {
+        padding-left: 0;
+    }
+}

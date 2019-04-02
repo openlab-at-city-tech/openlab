@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WP Link Status Core Types CURL class
+ * Types CURL class
  *
  * @package WP Link Status
- * @subpackage WP Link Status Core
+ * @subpackage Core
  */
 class WPLNST_Core_Types_CURL {
 
@@ -22,11 +22,12 @@ class WPLNST_Core_Types_CURL {
 
 	/**
 	 * Retrieve all error codes
-	 */	
+	 */
 	public static function get_codes() {
 		static $codes;
-		if (!isset($codes))
+		if (!isset($codes)) {
 			$codes = self::get_codes_array();
+		}
 		return $codes;
 	}
 

@@ -304,3 +304,49 @@ function openlab_redirect_from_member_profile() {
 }
 
 add_action('template_redirect', 'openlab_redirect_from_member_profile');
+
+/**
+ * Reusable markup for the "Notify subscribed..." UI.
+ *
+ * @param bool $checked Whether the checkbox should be checked.
+ */
+function openlab_notify_group_members_ui( $checked = false ) {
+    ?>
+<label><input type="checkbox" name="ol-notify-group-members" value="1" class="ol-notify-group-members" <?php checked( $checked ); ?> /> Notify subscribed members by email</label>
+    <?php
+}
+
+/**
+ * Reusable wrapper for checking whether the "Notify subscribed..." checkbox was checked.
+ *
+ * @return bool
+ */
+function openlab_notify_group_members_of_this_action() {
+    return ! empty( $_POST['ol-notify-group-members'] );
+}
+
+/**
+ * Add support for 'Cloneable Courses' filter in group directories.
+ */
+add_filter(
+	'bp_before_has_groups_parse_args',
+	function( $args ) {
+		if ( ! isset( $_GET['group_badge'] ) || 'cloneable' !== $_GET['group_badge'] ) {
+			return $args;
+		}
+
+		remove_filter( 'bp_before_has_groups_parse_args', array( 'OpenLab\Badges\Template', 'filter_group_args' ) );
+
+
+		$mq   = $args['meta_query'] ?: [];
+		$mq[] = [
+			'key'   => 'enable_sharing',
+			'value' => '1',
+		];
+
+		$args['meta_query'] = $mq;
+		return $args;
+	},
+	5
+
+);

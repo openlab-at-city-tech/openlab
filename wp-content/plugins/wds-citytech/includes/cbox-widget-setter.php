@@ -5,11 +5,14 @@
  */
 class CBox_Widget_Setter {
 	public static function set_widget( $args ) {
-		$r = wp_parse_args( $args, array(
-			'id_base' => '',
-			'sidebar_id' => '',
-			'settings' => array(),
-		) );
+		$r = wp_parse_args(
+			$args,
+			array(
+				'id_base'    => '',
+				'sidebar_id' => '',
+				'settings'   => array(),
+			)
+		);
 
 		$id_base    = $r['id_base'];
 		$sidebar_id = $r['sidebar_id'];
@@ -20,9 +23,9 @@ class CBox_Widget_Setter {
 			$widget_options['_multiwidget'] = 1;
 		}
 		unset( $option_keys['_multiwidget'] );
-		$option_keys = array_keys( $option_keys );
-		$last_key = array_pop( $option_keys );
-		$option_index = $last_key + 1;
+		$option_keys                     = array_keys( $option_keys );
+		$last_key                        = array_pop( $option_keys );
+		$option_index                    = $last_key + 1;
 		$widget_options[ $option_index ] = self::sanitize_widget_options( $id_base, $settings, array() );
 		update_option( 'widget_' . $id_base, $widget_options );
 
@@ -59,7 +62,7 @@ class CBox_Widget_Setter {
 		}
 
 		// Multi-widgets can only be detected by looking at their settings
-		$option_name  = 'widget_' . $id_base;
+		$option_name = 'widget_' . $id_base;
 
 		// Don't let it get pulled from the cache
 		wp_cache_delete( $option_name, 'options' );
@@ -89,21 +92,21 @@ class CBox_Widget_Setter {
 			$all_settings = array( $multi_number => $settings );
 		}
 
-
 		$widget_id = $id_base . '-' . $multi_number;
 		$sidebar[] = $widget_id;
 
 		$all_settings = array_filter( $all_settings );
 
 		// Because of the way WP_Widget::update_callback() works, gotta fake the $_POST
-		$_POST['widget-' . $id_base] = $all_settings;
+		$_POST[ 'widget-' . $id_base ] = $all_settings;
 
 		global $wp_registered_widget_updates, $wp_registered_widget_controls;
 		foreach ( (array) $wp_registered_widget_updates as $name => $control ) {
 
 			if ( $name == $id_base ) {
-				if ( !is_callable( $control['callback'] ) )
+				if ( ! is_callable( $control['callback'] ) ) {
 					continue;
+				}
 
 				if ( isset( $control['callback'][0] ) && ( $control['callback'][0] instanceof WP_Widget ) ) {
 					$control['callback'][0]->updated = false;
@@ -145,9 +148,9 @@ class CBox_Widget_Setter {
 			$sidebars['wp_inactive_widgets'] = array_unique( array_merge( $sidebars['wp_inactive_widgets'], $sidebars[ $sidebar_id ] ) );
 		}
 
-		$sidebars[ $sidebar_id ] = array();
+		$sidebars[ $sidebar_id ]             = array();
 		$_wp_sidebars_widgets[ $sidebar_id ] = array();
-		$sidebars_widgets[ $sidebar_id ] = array();
+		$sidebars_widgets[ $sidebar_id ]     = array();
 		wp_set_sidebars_widgets( $sidebars );
 	}
 
@@ -218,7 +221,7 @@ class CBox_Widget_Setter {
 	 */
 	protected static function move_sidebar_widget( $widget_id, $current_sidebar_id, $new_sidebar_id, $current_index, $new_index ) {
 
-		$all_widgets = self::wp_get_sidebars_widgets();
+		$all_widgets     = self::wp_get_sidebars_widgets();
 		$needs_placement = true;
 		// Existing widget
 		if ( $current_sidebar_id && ! is_null( $current_index ) ) {
@@ -242,10 +245,10 @@ class CBox_Widget_Setter {
 		}
 
 		if ( $needs_placement ) {
-			$widgets = ! empty( $all_widgets[ $new_sidebar_id ] ) ? $all_widgets[ $new_sidebar_id ] : array();
-			$before = array_slice( $widgets, 0, $new_index, true );
-			$after = array_slice( $widgets, $new_index, count( $widgets ), true );
-			$widgets = array_merge( $before, array( $widget_id ), $after );
+			$widgets                        = ! empty( $all_widgets[ $new_sidebar_id ] ) ? $all_widgets[ $new_sidebar_id ] : array();
+			$before                         = array_slice( $widgets, 0, $new_index, true );
+			$after                          = array_slice( $widgets, $new_index, count( $widgets ), true );
+			$widgets                        = array_merge( $before, array( $widget_id ), $after );
 			$all_widgets[ $new_sidebar_id ] = array_values( $widgets );
 		}
 

@@ -170,11 +170,13 @@ add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 
  * Sync group membership to a site at the moment that the site is linked to the group.
  */
 function openlab_sync_group_site_membership( $group_id, $site_id ) {
-	$group_members = groups_get_group_members( array(
-		'group_id' => $group_id,
-		'exclude_admins_mods' => false,
-		'exclude' => array( get_current_user_id() ),
-	) );
+	$group_members = groups_get_group_members(
+		array(
+			'group_id'            => $group_id,
+			'exclude_admins_mods' => false,
+			'exclude'             => array( get_current_user_id() ),
+		)
+	);
 
 	foreach ( $group_members['members'] as $group_member ) {
 		openlab_add_user_to_groupblog( $group_id, $group_member->user_id );
@@ -283,11 +285,11 @@ function openlab_group_blog_activity( $activity ) {
 
 	if ( 'new_blog_post' == $activity->type ) {
 		$post_id = $activity->secondary_item_id;
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 	} elseif ( 'new_blog_comment' == $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$post_id = $comment->comment_post_ID;
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 	}
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
@@ -299,21 +301,25 @@ function openlab_group_blog_activity( $activity ) {
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	// Verify if we already have the modified activity for this blog post
-	$id = bp_activity_get_activity_id( array(
-		'user_id' => $activity->user_id,
-		'type' => $activity->type,
-		'item_id' => $group_id,
-		'secondary_item_id' => $activity->secondary_item_id,
-	) );
+	$id = bp_activity_get_activity_id(
+		array(
+			'user_id'           => $activity->user_id,
+			'type'              => $activity->type,
+			'item_id'           => $group_id,
+			'secondary_item_id' => $activity->secondary_item_id,
+		)
+	);
 
 	// if we don't have, verify if we have an original activity
 	if ( ! $id ) {
-		$id = bp_activity_get_activity_id( array(
-			'user_id' => $activity->user_id,
-			'type' => $activity->type,
-			'item_id' => $activity->item_id,
-			'secondary_item_id' => $activity->secondary_item_id,
-		) );
+		$id = bp_activity_get_activity_id(
+			array(
+				'user_id'           => $activity->user_id,
+				'type'              => $activity->type,
+				'item_id'           => $activity->item_id,
+				'secondary_item_id' => $activity->secondary_item_id,
+			)
+		);
 	}
 
 	// If we found an activity for this blog post, then overwrite it to
@@ -328,7 +334,10 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ),
+			bp_core_get_userlink( $activity->user_id ),
+			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
+			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
 		$userlink = '';
@@ -338,11 +347,14 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ),
+			$userlink,
+			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
+			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	}
 
-	$activity->item_id = (int) $group_id;
+	$activity->item_id   = (int) $group_id;
 	$activity->component = 'groups';
 
 	$public = get_blog_option( $blog_id, 'blog_public' );
@@ -395,12 +407,14 @@ function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 
 
 	if ( $group_id ) {
 		// Delete activity stream item
-		bp_blogs_delete_activity( array(
-			'item_id' => $group_id,
-			'secondary_item_id' => $post_id,
-			'component' => 'groups',
-			'type' => 'new_blog_comment',
-		) );
+		bp_blogs_delete_activity(
+			array(
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post_id,
+				'component'         => 'groups',
+				'type'              => 'new_blog_comment',
+			)
+		);
 	}
 }
 add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
@@ -423,18 +437,20 @@ function openlab_group_blog_remove_comment_activity( $comment_id ) {
 	}
 
 	$comment_id = (int) $comment_id;
-	$blog_id = (int) $wpdb->blogid;
+	$blog_id    = (int) $wpdb->blogid;
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
 	if ( $group_id ) {
 		// Delete activity stream item
-		bp_blogs_delete_activity( array(
-			'item_id' => $group_id,
-			'secondary_item_id' => $post_id,
-			'component' => 'groups',
-			'type' => 'new_blog_comment',
-		) );
+		bp_blogs_delete_activity(
+			array(
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post_id,
+				'component'         => 'groups',
+				'type'              => 'new_blog_comment',
+			)
+		);
 	}
 }
 add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
@@ -498,7 +514,7 @@ function wds_bp_group_meta() {
 		$type = isset( $_COOKIE['wds_bp_group_type'] ) ? $_COOKIE['wds_bp_group_type'] : '';
 	}
 
-	$group_school = groups_get_groupmeta( $the_group_id, 'wds_group_school' );
+	$group_school       = groups_get_groupmeta( $the_group_id, 'wds_group_school' );
 	$group_project_type = groups_get_groupmeta( $the_group_id, 'wds_group_project_type' );
 
 	if ( 'portfolio' == $group_type ) {
@@ -516,7 +532,8 @@ function wds_bp_group_meta() {
 			?>
 			<input type="hidden" name="group_type" value="<?php echo $group_type; ?>" />
 			<?php
-		} ?>
+		}
+		?>
 
 		<?php do_action( 'openlab_group_creation_extra_meta' ); ?>
 
@@ -533,16 +550,16 @@ function wds_bp_group_meta() {
 						$maybe_site_id = openlab_get_site_id_by_group_id( $the_group_id );
 
 						if ( $maybe_site_id ) {
-							$group_site_name = get_blog_option( $maybe_site_id, 'blogname' );
-							$group_site_text = '<strong>' . $group_site_name . '</strong>';
+							$group_site_name    = get_blog_option( $maybe_site_id, 'blogname' );
+							$group_site_text    = '<strong>' . $group_site_name . '</strong>';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
 						} else {
-							$group_site_text = '';
+							$group_site_text    = '';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
 						}
 						?>
-						<p>This <?php echo openlab_get_group_type_label() ?> is currently associated with the site <?php echo $group_site_text ?></p>
-						<ul id="change-group-site"><li><?php echo $group_site_url_out ?> <a class="button underline confirm" href="<?php echo wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ?>" id="change-group-site-toggle">Unlink</a></li></ul>
+						<p>This <?php echo openlab_get_group_type_label(); ?> is currently associated with the site <?php echo $group_site_text; ?></p>
+						<ul id="change-group-site"><li><?php echo $group_site_url_out; ?> <a class="button underline confirm" href="<?php echo wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
 					</div>
 
@@ -575,22 +592,26 @@ function wds_bp_group_meta() {
 					<input type="hidden" name="action" value="copy_blog" />
 					<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
 
-					<div class="form-table groupblog-setup"<?php if ( ! empty( $group_site_url ) ) : ?> style="display: none;"<?php endif ?>>
+					<div class="form-table groupblog-setup"
+					<?php
+					if ( ! empty( $group_site_url ) ) :
+						?>
+						 style="display: none;"<?php endif ?>>
 						<?php if ( 'portfolio' !== $group_type ) : ?>
-							<?php $show_website = 'none' ?>
+							<?php $show_website = 'none'; ?>
 							<div class="form-field form-required">
 								<div scope='row' class="site-details-query">
 									<label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> Set up a site?</label>
 								</div>
 							</div>
 						<?php else : ?>
-							<?php $show_website = 'auto' ?>
+							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
 						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website; ?>"><div>
 				<?php
 				switch ( $group_type ) :
-					case 'course' :
+					case 'course':
 						?>
 						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
@@ -604,13 +625,13 @@ function wds_bp_group_meta() {
 						<?php
 						break;
 
-					case 'project' :
+					case 'project':
 						?>
 						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
 
 						<?php
 						break;
-					case 'club' :
+					case 'club':
 						?>
 						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
 
@@ -621,24 +642,24 @@ function wds_bp_group_meta() {
 
 						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ) ) : ?>
 							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo $show_website; ?>">
-                                <div id="noo_clone_options">
-                                    <div class="row">
-                                        <div class="radio disabled-opt col-sm-6">
-                                            <label>
-                                                <input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-                                                Name your cloned site:</label>
-                                        </div>
-                                        <div class="col-sm-5 site-label">
-                                            <?php global $current_site ?>
-                                            <?php echo $current_site->domain . $current_site->path ?>
-                                        </div>
-                                        <div class="col-sm-13">
-                                            <input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ) ?>" value="" />
-                                        </div>
-                                        <input name="blog-id-to-clone" value="" type="hidden" />
-                                    </div>
-                                    <p id="cloned-site-url"></p>
-                                </div>
+								<div id="noo_clone_options">
+									<div class="row">
+										<div class="radio disabled-opt col-sm-6">
+											<label>
+												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
+												Name your cloned site:</label>
+										</div>
+										<div class="col-sm-5 site-label">
+											<?php global $current_site; ?>
+											<?php echo $current_site->domain . $current_site->path; ?>
+										</div>
+										<div class="col-sm-13">
+											<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ); ?>" value="" />
+										</div>
+										<input name="blog-id-to-clone" value="" type="hidden" />
+									</div>
+									<p id="cloned-site-url"></p>
+								</div>
 
 							</div>
 						<?php endif ?>
@@ -646,22 +667,22 @@ function wds_bp_group_meta() {
 						<div id="wds-website" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 
 							<div id="noo_new_options">
-                                <div id="noo_new_options-div" class="row">
-                                    <div class="radio col-sm-6">
-                                        <label>
-                                            <input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
-                                            Create a new site:</label>
-                                    </div>
+								<div id="noo_new_options-div" class="row">
+									<div class="radio col-sm-6">
+										<label>
+											<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
+											Create a new site:</label>
+									</div>
 					<div class="col-sm-5 site-label">
 						<?php
 						$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 						echo $current_site->domain . $current_site->path
 						?>
 					</div>
-                                        <div class="col-sm-13">
-						<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ) ?>" value="<?php echo $suggested_path ?>" />
+										<div class="col-sm-13">
+						<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ); ?>" value="<?php echo $suggested_path; ?>" />
 					</div>
-                                </div>
+								</div>
 
 							</div>
 						</div>
@@ -674,7 +695,7 @@ function wds_bp_group_meta() {
 
 						foreach ( $user_blogs as $ubid => $ub ) {
 							if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
-                                unset( $user_blogs[$ubid] );
+								unset( $user_blogs[ $ubid ] );
 							}
 						}
 						$user_blogs = array_values( $user_blogs );
@@ -683,43 +704,43 @@ function wds_bp_group_meta() {
 						<?php if ( ! empty( $user_blogs ) ) : ?>
 							<div id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 
-                                <div id="noo_old_options">
-                                    <div class="row">
-                                        <div class="radio col-sm-6">
-                                            <label>
-                                                <input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-                                                Use an existing site:</label>
-                                        </div>
-                                        <div class="col-sm-18">
-                                            <label class="sr-only" for="groupblog-blogid">Choose a site</label>
-                                            <select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
-                                                <option value="0">- Choose a site -</option>
-                                                <?php foreach ( (array) $user_blogs as $user_blog) : ?>
-                                                    <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-                                                <?php endforeach ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+								<div id="noo_old_options">
+									<div class="row">
+										<div class="radio col-sm-6">
+											<label>
+												<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
+												Use an existing site:</label>
+										</div>
+										<div class="col-sm-18">
+											<label class="sr-only" for="groupblog-blogid">Choose a site</label>
+											<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
+												<option value="0">- Choose a site -</option>
+												<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
+													<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+												<?php endforeach ?>
+											</select>
+										</div>
+									</div>
+								</div>
 							</div>
 						<?php endif ?>
 
 						<div id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website; ?>">
 
 							<div id="noo_external_options">
-                                <div class="form-group row">
-                                    <div class="radio col-sm-6">
-                                        <label>
-                                            <input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
-                                            Use an external site:
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-18">
-                                        <label class="sr-only" for="external-site-url">Input external site URL</label>
-                                        <input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
-                                        <a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
-                                    </div>
-                                </div>
+								<div class="form-group row">
+									<div class="radio col-sm-6">
+										<label>
+											<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
+											Use an external site:
+										</label>
+									</div>
+									<div class="col-sm-18">
+										<label class="sr-only" for="external-site-url">Input external site URL</label>
+										<input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
+										<a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div id="check-note-wrapper" style="display:<?php echo $show_website; ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
@@ -739,37 +760,41 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta' );
  * Outputs the Member Role Settings panel.
  */
 function openlab_group_member_role_settings( $group_type ) {
-    global $bp;
+	global $bp;
 
-    $site_id = openlab_get_site_id_by_group_id();
-    if ( ! $site_id ) {
-        return;
-    }
+	$site_id = openlab_get_site_id_by_group_id();
+	if ( ! $site_id ) {
+		return;
+	}
 
-    $group_type_name    = $group_type;
-    $group_type_name_uc = ucfirst( $group_type );
+	$group_type_name    = $group_type;
+	$group_type_name_uc = ucfirst( $group_type );
 
-    if ( 'portfolio' === $group_type ) {
-        $group_type_name = openlab_get_portfolio_label( array(
-            'group_id' => bp_get_current_group_id(),
-        ) );
+	if ( 'portfolio' === $group_type ) {
+		$group_type_name = openlab_get_portfolio_label(
+			array(
+				'group_id' => bp_get_current_group_id(),
+			)
+		);
 
-        $group_type_name_uc = openlab_get_portfolio_label( array(
-            'group_id' => bp_get_current_group_id(),
-            'case'     => 'upper',
-        ) );
-    }
+		$group_type_name_uc = openlab_get_portfolio_label(
+			array(
+				'group_id' => bp_get_current_group_id(),
+				'case'     => 'upper',
+			)
+		);
+	}
 
-    $site_roles = array(
-        'administrator' => 'Administrator',
-        'editor'        => 'Editor',
-        'author'        => 'Author',
-        'contributor'   => 'Contributor',
-        'subscriber'    => 'Subscriber',
-    );
+	$site_roles = array(
+		'administrator' => 'Administrator',
+		'editor'        => 'Editor',
+		'author'        => 'Author',
+		'contributor'   => 'Contributor',
+		'subscriber'    => 'Subscriber',
+	);
 
-    if ( bp_is_group_create() ) {
-        $new_group_id = bp_get_new_group_id();
+	if ( bp_is_group_create() ) {
+		$new_group_id          = bp_get_new_group_id();
 		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
 		if ( $clone_source_group_id ) {
 			$settings = openlab_get_group_member_role_settings( $clone_source_group_id );
@@ -780,18 +805,18 @@ function openlab_group_member_role_settings( $group_type ) {
 				'member' => 'author',
 			);
 		}
-    } else {
+	} else {
 		$settings = openlab_get_group_member_role_settings( bp_get_current_group_id() );
 	}
 
-    ?>
-    <div class="panel panel-default member-roles">
-        <div class="panel-heading semibold">Member Role Settings</div>
+	?>
+	<div class="panel panel-default member-roles">
+		<div class="panel-heading semibold">Member Role Settings</div>
 
-        <div class="group-profile panel-body">
-            <p>These settings control the default member roles on your associated <?php echo $group_type_name_uc; ?> site when members join the <?php echo $group_type_name_uc; ?>. You may also adjust individual member roles in Membership settings and on the <?php echo $group_type_name_uc; ?> site Dashboard.</p>
+		<div class="group-profile panel-body">
+			<p>These settings control the default member roles on your associated <?php echo $group_type_name_uc; ?> site when members join the <?php echo $group_type_name_uc; ?>. You may also adjust individual member roles in Membership settings and on the <?php echo $group_type_name_uc; ?> site Dashboard.</p>
 
-            <div class="row">
+			<div class="row">
 				<div class="col-sm-24">
 					<ul class="member-role-selectors">
 						<li>
@@ -851,8 +876,8 @@ function openlab_group_member_role_settings( $group_type ) {
 					</div>
 				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 
 	<?php
 }
@@ -891,12 +916,12 @@ function openlab_validate_groupblog_url() {
 	global $current_blog;
 
 	/**
-     * This is terrifying.
-     * We check for a groupblog in the following cases:
-     * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
-     * b1 ) the 'Set up a site?' checkbox has been checked, OR
-     * b2 ) the group type is Portfolio, which requires a blog
-     */
+	 * This is terrifying.
+	 * We check for a groupblog in the following cases:
+	 * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
+	 * b1 ) the 'Set up a site?' checkbox has been checked, OR
+	 * b2 ) the group type is Portfolio, which requires a blog
+	 */
 	if (
 			isset( $_POST['new_or_old'] ) &&
 			( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
@@ -930,13 +955,13 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
 function openlab_validate_groupblog_selection() {
 	if ( isset( $_POST['new_or_old'] ) ) {
 		switch ( $_POST['new_or_old'] ) {
-			case 'old' :
+			case 'old':
 				if ( empty( $_POST['groupblog-blogid'] ) ) {
 					$error_message = 'You must select an existing site from the dropdown menu.';
 				}
 				break;
 
-			case 'external' :
+			case 'external':
 				if ( empty( $_POST['external-site-url'] ) || ! openlab_validate_url( $_POST['external-site-url'] ) || 'http://' == trim( $_POST['external-site-url'] ) ) {
 					$error_message = 'You must provide a valid external site URL.';
 				}
@@ -987,47 +1012,49 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	// return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
 	//  get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false )
 	// Set up the necessary variables for the rest of the function, out of $params
-	$type = $params['type'];
-	$limit = $params['per_page'];
-	$page = $params['page'];
-	$user_id = $params['user_id'];
+	$type         = $params['type'];
+	$limit        = $params['per_page'];
+	$page         = $params['page'];
+	$user_id      = $params['user_id'];
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
 	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
 
 	if ( ! empty( $exclude_blogs ) ) {
-		$exclude_sql = " AND b.blog_id NOT IN ( " . implode( ',', $exclude_blogs ) . " ) ";
+		$exclude_sql = ' AND b.blog_id NOT IN ( ' . implode( ',', $exclude_blogs ) . ' ) ';
 	} else {
 		$exclude_sql = '';
 	}
 
-	if ( ! is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
-		$hidden_sql = "AND wb.public = 1";
-	else
+	if ( ! is_user_logged_in() || ( ! is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) ) {
+		$hidden_sql = 'AND wb.public = 1';
+	} else {
 		$hidden_sql = '';
+	}
 
-	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit ), intval( $limit ) ) : '';
+	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( ' LIMIT %d, %d', intval( ( $page - 1 ) * $limit ), intval( $limit ) ) : '';
 
-	$user_sql = ! empty( $user_id ) ? $wpdb->prepare( " AND b.user_id = %d", $user_id ) : '';
+	$user_sql = ! empty( $user_id ) ? $wpdb->prepare( ' AND b.user_id = %d', $user_id ) : '';
 
 	switch ( $type ) {
-		case 'active': default:
-			$order_sql = "ORDER BY bm.meta_value DESC";
+		case 'active':
+		default:
+			$order_sql = 'ORDER BY bm.meta_value DESC';
 			break;
 		case 'alphabetical':
-			$order_sql = "ORDER BY bm2.meta_value ASC";
+			$order_sql = 'ORDER BY bm2.meta_value ASC';
 			break;
 		case 'newest':
-			$order_sql = "ORDER BY wb.registered DESC";
+			$order_sql = 'ORDER BY wb.registered DESC';
 			break;
 		case 'random':
-			$order_sql = "ORDER BY RAND()";
+			$order_sql = 'ORDER BY RAND()';
 			break;
 	}
 
 	if ( ! empty( $search_terms ) ) {
-		$filter = like_escape( $wpdb->escape( $search_terms ) );
+		$filter      = like_escape( $wpdb->escape( $search_terms ) );
 		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
 		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
 	} else {
@@ -1036,14 +1063,17 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	}
 
 	$blog_ids = array();
-	foreach ( (array) $paged_blogs as $blog) {
+	foreach ( (array) $paged_blogs as $blog ) {
 		$blog_ids[] = $blog->blog_id;
 	}
 
-	$blog_ids = $wpdb->escape( join( ',', (array) $blog_ids));
+	$blog_ids    = $wpdb->escape( join( ',', (array) $blog_ids ) );
 	$paged_blogs = BP_Blogs_Blog::get_blog_extras( $paged_blogs, $blog_ids, $type );
 
-	return array( 'blogs' => $paged_blogs, 'total' => $total_blogs );
+	return array(
+		'blogs' => $paged_blogs,
+		'total' => $total_blogs,
+	);
 }
 
 add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10, 2 );
@@ -1060,15 +1090,15 @@ function wds_site_can_be_viewed() {
 		return true;
 	}
 
-	$blog_public = false;
-	$group_id = bp_get_group_id();
+	$blog_public          = false;
+	$group_id             = bp_get_group_id();
 	$wds_bp_group_site_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 
-	if ( $wds_bp_group_site_id != "" ) {
+	if ( $wds_bp_group_site_id != '' ) {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
 
 		switch ( $blog_private ) {
-			case '-3' :
+			case '-3':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
 					if ( isset( $user_capabalities['administrator'] ) ) {
@@ -1077,22 +1107,22 @@ function wds_site_can_be_viewed() {
 				}
 				break;
 
-			case '-2' :
+			case '-2':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
-					if ( $user_capabilities != "" ) {
+					if ( $user_capabilities != '' ) {
 						$blog_public = true;
 					}
 				}
 				break;
 
-			case '-1' :
+			case '-1':
 				if ( is_user_logged_in() ) {
 					$blog_public = true;
 				}
 				break;
 
-			default :
+			default:
 				$blog_public = true;
 				break;
 		}
@@ -1124,8 +1154,8 @@ function openlab_feed_url_markup() {
 
 	<p>RSS feeds are used to pull new post and comment activity from your external site into your activity stream.</p>
 
-	<?php $posts_feed_url = groups_get_groupmeta( $group_id, 'external_site_posts_feed' ) ?>
-	<?php $comments_feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' ) ?>
+	<?php $posts_feed_url = groups_get_groupmeta( $group_id, 'external_site_posts_feed' ); ?>
+	<?php $comments_feed_url = groups_get_groupmeta( $group_id, 'external_site_comments_feed' ); ?>
 
 	<?php if ( $posts_feed_url || $comments_feed_url ) : ?>
 		<p>We located the following RSS feed URLs for your external site. Correct errors or provide missing feed addresses in the fields below.</p>
@@ -1133,9 +1163,9 @@ function openlab_feed_url_markup() {
 		<p>We weren't able to auto-locate your RSS feeds. If your site has RSS feeds, enter their addresses below.</p>
 	<?php endif ?>
 
-	<p><label for="external-site-posts-feed">Posts:</label> <input id="external-site-posts-feed" name="external-site-posts-feed" value="<?php echo esc_attr( $posts_feed_url ) ?>" /></p>
+	<p><label for="external-site-posts-feed">Posts:</label> <input id="external-site-posts-feed" name="external-site-posts-feed" value="<?php echo esc_attr( $posts_feed_url ); ?>" /></p>
 
-	<p><label for="external-site-comments-feed">Comments:</label> <input id="external-site-comments-feed" name="external-site-comments-feed" value="<?php echo esc_attr( $comments_feed_url ) ?>" /></p>
+	<p><label for="external-site-comments-feed">Comments:</label> <input id="external-site-comments-feed" name="external-site-comments-feed" value="<?php echo esc_attr( $comments_feed_url ); ?>" /></p>
 
 	<br />
 	<hr>
@@ -1149,7 +1179,7 @@ function openlab_feed_url_markup() {
  * Wrapper function to get the URL of an external site, if it exists
  */
 function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -1164,7 +1194,7 @@ function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -1192,7 +1222,7 @@ function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -1230,10 +1260,10 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 	foreach ( $feed_posts->get_items( 0, $num_items ) as $key => $feed_item ) {
 		$items[] = array(
 			'permalink' => $feed_item->get_link(),
-			'title' => $feed_item->get_title(),
-			'content' => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
-			'author' => $feed_item->get_author(),
-			'date' => $feed_item->get_date()
+			'title'     => $feed_item->get_title(),
+			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
+			'author'    => $feed_item->get_author(),
+			'date'      => $feed_item->get_date(),
 		);
 	}
 
@@ -1244,7 +1274,7 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
  * Convert RSS items to activity items
  */
 function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts' ) {
-	$type = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
+	$type  = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
 	$group = groups_get_current_group();
 
 	$hide_sitewide = false;
@@ -1254,41 +1284,48 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 
 	$group_id = ! empty( $group ) ? $group->id : '';
 
-	foreach ( (array) $items as $item) {
+	foreach ( (array) $items as $item ) {
 		// Make sure we don't have duplicates
 		// We check based on the item's permalink
 		if ( ! openlab_external_activity_item_exists( $item['permalink'], $group_id, $type ) ) {
 			$action = '';
 
-			$group = groups_get_current_group();
-			$group_name = $group->name;
+			$group           = groups_get_current_group();
+			$group_name      = $group->name;
 			$group_permalink = bp_get_group_permalink( $group );
-			$group_type = openlab_group_type( 'lower', 'single', $group->id );
+			$group_type      = openlab_group_type( 'lower', 'single', $group->id );
 
 			if ( 'posts' == $item_type ) {
-				$action = sprintf( 'A new post %s was published in the ' . $group_type . ' %s', '<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>', '<a href="' . $group_permalink . '">' . $group_name . '</a>'
+				$action = sprintf(
+					'A new post %s was published in the ' . $group_type . ' %s',
+					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
+					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
 				);
-			} else if ( 'comments' == $item_type ) {
-				$action = sprintf( 'A new comment was posted on the post %s in the ' . $group_type . ' %s', '<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>', '<a href="' . $group_permalink . '">' . $group_name . '</a>'
+			} elseif ( 'comments' == $item_type ) {
+				$action = sprintf(
+					'A new comment was posted on the post %s in the ' . $group_type . ' %s',
+					'<a href="' . esc_attr( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>',
+					'<a href="' . $group_permalink . '">' . $group_name . '</a>'
 				);
 			}
 
 			$item_date = strtotime( $item['date'] );
-			$now = time();
+			$now       = time();
 			if ( $item_date > $now ) {
 				$item_date = $now;
 			}
 			$recorded_time = date( 'Y-m-d H:i:s', $item_date );
 
 			$args = array(
-				'action' => $action,
-				'content' => $item['content'],
-				'component' => 'groups',
-				'type' => $type, 'primary_link' => $item['permalink'],
-				'user_id' => 0, // todo
-				'item_id' => bp_get_current_group_id(), // improve?
+				'action'        => $action,
+				'content'       => $item['content'],
+				'component'     => 'groups',
+				'type'          => $type,
+				'primary_link'  => $item['permalink'],
+				'user_id'       => 0, // todo
+				'item_id'       => bp_get_current_group_id(), // improve?
 				'recorded_time' => $recorded_time,
-				'hide_sitewide' => $hide_sitewide
+				'hide_sitewide' => $hide_sitewide,
 			);
 
 			remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
@@ -1310,7 +1347,7 @@ function openlab_external_activity_item_exists( $permalink, $group_id, $type ) {
 
 	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id );
 
-	return ( bool ) $wpdb->get_var( $sql );
+	return (bool) $wpdb->get_var( $sql );
 }
 
 /**
@@ -1335,14 +1372,14 @@ function openlab_find_feed_urls( $url ) {
 	// Supported formats
 	$formats = array(
 		'wordpress' => array(
-			'posts' => '{{URL}}feed',
+			'posts'    => '{{URL}}feed',
 			'comments' => '{{URL}}/comments/feed',
 		),
-		'blogger' => array(
-			'posts' => '{{URL}}feeds/posts/default?alt=rss',
+		'blogger'   => array(
+			'posts'    => '{{URL}}feeds/posts/default?alt=rss',
 			'comments' => '{{URL}}feeds/comments/default?alt=rss',
 		),
-		'drupal' => array(
+		'drupal'    => array(
 			'posts' => '{{URL}}posts/feed',
 		),
 	);
@@ -1353,9 +1390,12 @@ function openlab_find_feed_urls( $url ) {
 		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
 
 		// Do a HEAD check first to avoid loops when self-querying.
-		$maybe_feed_head = wp_remote_head( $maybe_feed_url, array(
-			'redirection' => 2,
-		) );
+		$maybe_feed_head = wp_remote_head(
+			$maybe_feed_url,
+			array(
+				'redirection' => 2,
+			)
+		);
 
 		if ( 200 != wp_remote_retrieve_response_code( $maybe_feed_head ) ) {
 			continue;
@@ -1371,12 +1411,12 @@ function openlab_find_feed_urls( $url ) {
 			}
 
 			$feed_urls['posts'] = $maybe_feed_url;
-			$feed_urls['type'] = $ftype;
+			$feed_urls['type']  = $ftype;
 
 			// Test the comment feed
 			if ( isset( $f['comments'] ) ) {
 				$maybe_comments_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['comments'] );
-				$maybe_comments_feed = wp_remote_get( $maybe_comments_feed_url );
+				$maybe_comments_feed     = wp_remote_get( $maybe_comments_feed_url );
 
 				if ( 200 == $maybe_comments_feed['response']['code'] ) {
 					$feed_urls['comments'] = $maybe_comments_feed_url;
@@ -1394,7 +1434,7 @@ function openlab_find_feed_urls( $url ) {
  * AJAX handler for feed detection
  */
 function openlab_detect_feeds_handler() {
-	$url = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
+	$url   = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
 	$feeds = openlab_find_feed_urls( $url );
 
 	die( json_encode( $feeds ) );
@@ -1410,7 +1450,7 @@ function openlab_catch_refresh_feed_requests() {
 		return;
 	}
 
-	if ( ! isset( $_GET['refresh_feed'] ) || !in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
+	if ( ! isset( $_GET['refresh_feed'] ) || ! in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
 		return;
 	}
 
@@ -1434,32 +1474,32 @@ add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
  */
 function openlab_get_groupblog_template( $user_id, $group_type ) {
 	switch ( $group_type ) {
-		case 'portfolio' :
+		case 'portfolio':
 			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
 
 			switch ( $account_type ) {
-				case 'faculty' :
+				case 'faculty':
 					$template = 'template-portfolio';
 					break;
-				case 'staff' :
+				case 'staff':
 					$template = 'template-portfolio-staff';
 					break;
-				case 'student' :
+				case 'student':
 					$template = 'template-eportfolio';
 					break;
-				case 'alumni' :
+				case 'alumni':
 					$template = 'template-eportfolio-alumni';
 					break;
 			}
 			break;
 
-		default :
+		default:
 			$template = 'template-' . strtolower( $group_type );
 			break;
 	}
 	return $template;
-//	$tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
-//	return $tp->get_portfolio_template_for_user();
+	//  $tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
+	//  return $tp->get_portfolio_template_for_user();
 }
 
 /**
@@ -1467,8 +1507,8 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
  */
 class OpenLab_GroupBlog_Template_Picker {
 
-	protected $user_id = 0;
-	protected $template = null;
+	protected $user_id    = 0;
+	protected $template   = null;
 	protected $group_type = 'group';
 
 	public function __construct( $user_id = 0 ) {
@@ -1501,7 +1541,7 @@ class OpenLab_GroupBlog_Template_Picker {
 
 	public function get_user_type() {
 		if ( ! $this->account_type ) {
-			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
+			$account_type       = strtolower( xprofile_get_field_data( 'Account Type', $this->user_id ) );
 			$this->account_type = $account_type;
 		}
 
@@ -1514,7 +1554,7 @@ class OpenLab_GroupBlog_Template_Picker {
 
 	public function get_student_department() {
 		if ( ! isset( $this->student_department ) ) {
-			$dept_field = 'student' == $this->get_user_type() ? 'Major Program of Study' : 'Department';
+			$dept_field               = 'student' == $this->get_user_type() ? 'Major Program of Study' : 'Department';
 			$this->student_department = xprofile_get_field_data( $dept_field, $this->user_id );
 		}
 
@@ -1526,7 +1566,7 @@ class OpenLab_GroupBlog_Template_Picker {
 	}
 
 	public function get_template_from_group_type() {
-		return "template-" . strtolower( $this->group_type );
+		return 'template-' . strtolower( $this->group_type );
 	}
 
 	public function get_portfolio_template_for_user() {
@@ -1534,13 +1574,13 @@ class OpenLab_GroupBlog_Template_Picker {
 
 		$template = '';
 		switch ( $user_type ) {
-			case 'faculty' :
+			case 'faculty':
 				$template = 'template-portfolio';
 				break;
-			case 'staff' :
+			case 'staff':
 				$template = 'template-portfolio-staff';
 				break;
-			case 'student' :
+			case 'student':
 				$template = $this->get_portfolio_template_for_student();
 				break;
 		}
@@ -1551,8 +1591,8 @@ class OpenLab_GroupBlog_Template_Picker {
 	public function get_portfolio_template_for_student() {
 		$department = $this->get_student_department();
 
-		if ( isset( $this->department_templates[$department] ) ) {
-			$template = $this->department_templates[$department];
+		if ( isset( $this->department_templates[ $department ] ) ) {
+			$template = $this->department_templates[ $department ];
 		} else {
 			$template = 'template-eportfolio';
 		}
@@ -1600,7 +1640,7 @@ function openlab_olgc_notice() {
 
 	// Groan
 	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce = wp_create_nonce( 'olgc_notice_dismiss' );
+	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
 	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
@@ -1674,12 +1714,18 @@ function openlab_olgc_notify_instructor( $comment_id, $comment ) {
 
 	$subject = sprintf( 'New private comment on %s', get_option( 'blogname' ) );
 
-	$post = get_post( $comment->comment_post_ID );
-	$message = sprintf( 'There is a new private comment on your site %s.
+	$post    = get_post( $comment->comment_post_ID );
+	$message = sprintf(
+		'There is a new private comment on your site %s.
 
 Post name: %s
 Comment author: %s
-Comment URL: %s', get_option( 'blogname' ), $post->post_title, bp_core_get_user_displayname( $comment_author_user->ID ), get_comment_link( $comment ) );
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$post->post_title,
+		bp_core_get_user_displayname( $comment_author_user->ID ),
+		get_comment_link( $comment )
+	);
 
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
@@ -1714,7 +1760,6 @@ function openlab_cloned_course_notice() {
 		return;
 	}
 
-
 	// Allow dismissal.
 	if ( get_option( 'openlab-clone-notice-dismissed' ) ) {
 		return;
@@ -1728,7 +1773,7 @@ function openlab_cloned_course_notice() {
 
 	// Groan
 	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce = wp_create_nonce( 'ol_clone_dismiss' );
+	$nonce       = wp_create_nonce( 'ol_clone_dismiss' );
 	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
