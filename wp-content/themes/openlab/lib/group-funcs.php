@@ -705,6 +705,13 @@ function cuny_group_single() {
                                     </div>
                                 </div>
                             <?php endif; ?>
+
+							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+								<div class="table-row row">
+                                    <div class="col-xs-24 status-message italics">This course may be cloned by logged-in faculty.</div>
+
+								</div>
+							<?php endif; ?>
                         </div>
 
                     </div>
