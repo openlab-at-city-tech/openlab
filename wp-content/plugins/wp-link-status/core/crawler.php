@@ -1934,6 +1934,7 @@ class WPLNST_Core_Crawler extends WPLNST_Core_Module {
 
 		// Isolate attributes
 		$att_names = array_keys($attributes);
+		$att_values = array_values($attributes);
 
 		// Enum filters
 		foreach ($this->scan->html_attributes as $filter) {

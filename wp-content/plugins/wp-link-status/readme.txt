@@ -3,7 +3,7 @@ Contributors: seedplugins, pauiglesias
 Tested up to: 5.1
 Requires PHP: 5.6
 Requires at least: 3.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 Tags: broken links, broken, links, crawler, headers, http, nofollow, redirections, scan, status, checker, url
 
@@ -53,11 +53,11 @@ The crawler results page shows all links checked according to the scan configura
 >
 > **Pro version** provides extended search filters and the possibility to edit the post content links directly from the search results without using the WP editor, including bulk actions mode for most operations:
 >
-> http://seedplugins.com/wp-link-status/
+> https://seedplugins.com/wp-link-status/
 >
 > You can read a detailed **user guide documentation** from the plugin page that describes also the Pro version features:
 >
-> http://seedplugins.com/wp-link-status/user-guide-wpls/
+> https://seedplugins.com/wp-link-status/user-guide-wpls/
 
 == Installation ==
 
@@ -113,6 +113,14 @@ You can add the custom field name in the "Content options" tab of the scan, sele
 1. Crawler results page
 
 == Changelog ==
+
+= 1.0.6 =
+March 16th, 2019
+
+* Show a message in activation if any other WP Link Status version is active
+* Changed the way a constant is checked to avoid old PHP versions issues
+* Fixed bug filtering elements attributes on extracting content data
+* More info about debug behavior in the constants.php file
 
 = 1.0.5 =
 March 7th, 2019

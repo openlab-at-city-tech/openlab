@@ -502,7 +502,8 @@ class WPLNST_Core_Alive {
 			$args['wplnst_thread'] = $thread_id;
 		}
 
-		return add_query_arg( $args, rtrim( admin_url('admin-ajax.php'), '/' ) );
+		// Compose URL
+		return add_query_arg($args, rtrim(admin_url('admin-ajax.php'), '/'));
 	}
 
 
