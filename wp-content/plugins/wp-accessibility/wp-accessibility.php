@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.6.6
+ * Version: 1.6.7
  */
 
 /*
@@ -68,7 +68,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.6.6';
+	$wpa_version = '1.6.7';
 	if ( 'true' != get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_nav_menu', 'on' );
 		add_option( 'rta_from_page_lists', 'on' );
@@ -267,20 +267,21 @@ function wpa_css() {
 		$passive = get_option( 'asl_styles_passive' );
 		$vis     = '';
 		$invis   = '';
-		// If links are visible, "hover" is a focus style, otherwise, it's a passive style.
-		if ( 'on' == get_option( 'asl_visible' ) ) {
-			$vis     = '#skiplinks a:hover,';
-			$passive = $default_passive . $passive;
-		} else {
-			$invis   = '#skiplinks a:hover,';
-			$passive = '';
-		}
+
 		$visibility = ( 'on' == get_option( 'asl_visible' ) ) ? 'wpa-visible' : 'wpa-hide';
 		$is_rtl     = ( is_rtl() ) ? '-rtl' : '-ltr';
 		$class      = '.' . $visibility . $is_rtl;
-		$styles    .= "
-		$class#skiplinks a, $class$invis $class#skiplinks a:visited { $passive }
-		$class#skiplinks a:active, $class$vis $class#skiplinks a:focus { $focus  }
+		// If links are visible, "hover" is a focus style, otherwise, it's a passive style.
+		if ( 'on' == get_option( 'asl_visible' ) ) {
+			$vis     = $class . '#skiplinks a:hover,';
+			$passive = $default_passive . $passive;
+		} else {
+			$invis   = $class . '#skiplinks a:hover,';
+			$passive = '';
+		}
+		$styles .= "
+		$class#skiplinks a, $invis $class#skiplinks a:visited { $passive }
+		$class#skiplinks a:active, $vis $class#skiplinks a:focus { $focus  }
 		";
 	}
 	if ( 'on' == get_option( 'wpa_focus' ) ) {
