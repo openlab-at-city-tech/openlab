@@ -1,0 +1,1 @@
+<?php get_template_part( 'template-parts/front-page/wa-layout-' . johannes_get( 'wa_layout' ) ); ?>

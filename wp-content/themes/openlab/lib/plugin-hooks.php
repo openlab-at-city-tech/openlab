@@ -150,6 +150,30 @@ function openlab_fix_avatar_delete( $view ) {
 add_filter( 'bp_docs_get_current_view', 'openlab_fix_avatar_delete', 9999 );
 
 /**
+ * Inject "Notify members" interface before Docs comment submit button.
+ */
+add_filter(
+	'comment_form_submit_button',
+	function( $button ) {
+		if ( ! bp_docs_is_existing_doc() ) {
+			return $button;
+		}
+
+		ob_start();
+		?>
+		<div class="notify-group-members-ui">
+			<?php openlab_notify_group_members_ui( true ); ?>
+		</div>
+		<?php
+		$ui = ob_get_contents();
+		ob_end_clean();
+
+		return $ui . $button;
+	},
+	100
+);
+
+/**
  * Email notification management.
  */
 function openlab_docs_activity_notification_control( $send_it, $activity, $user_id, $sub ) {
@@ -160,6 +184,7 @@ function openlab_docs_activity_notification_control( $send_it, $activity, $user_
 	switch ( $activity->type ) {
 		case 'bp_doc_created':
 		case 'bp_doc_edited':
+		case 'bp_doc_comment':
 			return openlab_notify_group_members_of_this_action() && 'no' !== $sub;
 
 		default:

@@ -423,7 +423,7 @@ function cuny_groups_pagination_count($group_name) {
     $to_num = bp_core_number_format(( $start_num + ( $groups_template->pag_num - 1 ) > $groups_template->total_group_count ) ? $groups_template->total_group_count : $start_num + ( $groups_template->pag_num - 1 ));
     $total = bp_core_number_format($groups_template->total_group_count);
 
-    echo sprintf(__('%1$s to %2$s (of %3$s ' . $group_name . ')', 'buddypress'), $from_num, $to_num, $total);
+    echo sprintf(__('%1$s to %2$s (of %3$s)', 'buddypress'), $from_num, $to_num, $total);
 }
 
 /**
@@ -705,6 +705,13 @@ function cuny_group_single() {
                                     </div>
                                 </div>
                             <?php endif; ?>
+
+							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+								<div class="table-row row">
+                                    <div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.</div>
+
+								</div>
+							<?php endif; ?>
                         </div>
 
                     </div>

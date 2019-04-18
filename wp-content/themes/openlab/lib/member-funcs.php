@@ -315,7 +315,7 @@ function cuny_members_pagination_count($member_name) {
     $to_num = bp_core_number_format(( $start_num + ( $members_template->pag_num - 1 ) > $members_template->total_member_count ) ? $members_template->total_member_count : $start_num + ( $members_template->pag_num - 1 ) );
     $total = bp_core_number_format($members_template->total_member_count);
 
-    $pag = sprintf(__('%1$s to %2$s (of %3$s members)', 'buddypress'), $from_num, $to_num, $total);
+    $pag = sprintf(__('%1$s to %2$s (of %3$s)', 'buddypress'), $from_num, $to_num, $total);
     echo $pag;
 }
 

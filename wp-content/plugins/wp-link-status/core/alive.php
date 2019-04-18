@@ -503,10 +503,7 @@ class WPLNST_Core_Alive {
 		}
 
 		// Compose URL
-		$url = add_query_arg( $args, rtrim( admin_url('admin-ajax.php'), '/' ) );
-		$url = str_replace( 'http://', 'http://citytech:devsonly@', $url );
-
-		return $url;
+		return add_query_arg($args, rtrim(admin_url('admin-ajax.php'), '/'));
 	}
 
 

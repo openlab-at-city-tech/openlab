@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)).'/constants.php';
  * Check debug flag
  */
 function wplnst_is_debug() {
-	return (defined('WPLNST_DEBUG') && !empty(WPLNST_DEBUG));
+	return defined('WPLNST_DEBUG') && WPLNST_DEBUG;
 }
 
 

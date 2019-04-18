@@ -7,6 +7,87 @@
  */
 
 "use strict"; // prevent global namespace pollution
+(function(elmPrototype, docPrototype) {
+	var scopeRegex = /:scope\b/gi;
+
+	function patchElement(method) {
+		var native = elmPrototype[method];
+
+		elmPrototype[method] = function(selector) {
+			var element = this;
+			var id = element.id || "qsid" + new Date().getTime();
+			var needsId = !element.id;
+			var hasScope = scopeRegex.test(selector);
+
+			try {
+				if (hasScope) {
+					if (needsId) {
+						element.id = id;
+					}
+
+					selector = selector.replace(scopeRegex, "#" + id);
+				}
+
+				return native.call(this, selector);
+			} finally {
+				if (needsId) {
+					element.id = null;
+				}
+			}
+		};
+	}
+
+	function patchDocument(method) {
+		var native = docPrototype[method];
+		docPrototype[method] = function(selector) {
+			// In context of document, :scope is the same
+			// as :root so can just be stripped
+			// https://www.w3.org/TR/selectors4/#scope-pseudo
+			return native.call(this, selector.replace(scopeRegex, ""));
+		};
+	}
+
+	try {
+		document.querySelector(":scope");
+	} catch (err) {
+		patchElement("querySelector");
+		patchElement("querySelectorAll");
+		patchDocument("querySelector");
+		patchDocument("querySelectorAll");
+	}
+})(Element.prototype, Document.prototype);
+
+(function(arr) {
+	arr.forEach(function(item) {
+		if (item.hasOwnProperty("append")) {
+			return;
+		}
+		Object.defineProperty(item, "append", {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value: function append() {
+				var argArr = Array.prototype.slice.call(arguments),
+					docFrag = document.createDocumentFragment();
+
+				argArr.forEach(function(argItem) {
+					var isNode = argItem instanceof Node;
+					docFrag.appendChild(
+						isNode
+							? argItem
+							: document.createTextNode(String(argItem))
+					);
+				});
+
+				this.appendChild(docFrag);
+			}
+		});
+	});
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+(function () {
+    if ( typeof NodeList.prototype.forEach === "function" ) return false;
+    NodeList.prototype.forEach = Array.prototype.forEach;
+})();
 
 /**
  * matches() pollyfil
@@ -38,12 +119,10 @@ if (!Element.prototype.closest) {
 	};
 }
 
-
 /**
  * Main Customify Scripts
  */
 (function() {
-
 	var Customify = function() {
 		this.options = {
 			menuToggleDuration: 300
@@ -275,12 +354,11 @@ if (!Element.prototype.closest) {
 		var menuChildren = document.querySelectorAll(
 			"#header-menu-sidebar .nav-menu-mobile .menu-item-has-children"
 		);
-	
+
 		if (menuChildren.length) {
-		
 			for (var i = 0; i < menuChildren.length; i++) {
 				var child = menuChildren[i];
-		
+
 				if (!child.classList.contains("toggle--added")) {
 					child.classList.add("toggle--added");
 
@@ -296,7 +374,7 @@ if (!Element.prototype.closest) {
 
 					fistLink.parentNode.insertBefore(toggleButton, fistLink);
 					var submenu = child.querySelector(":scope > .sub-menu");
-					if( '1' !== Customify_JS.sidebar_menu_no_duplicator ){
+					if ("1" !== Customify_JS.sidebar_menu_no_duplicator) {
 						submenu.prepend(d);
 					}
 					var firstSubmenu = child.querySelectorAll(
@@ -307,7 +385,7 @@ if (!Element.prototype.closest) {
 							this.slideUp(firstSubmenu[j], 0);
 						}
 					}
-					if( '1' !== Customify_JS.sidebar_menu_no_duplicator ){
+					if ("1" !== Customify_JS.sidebar_menu_no_duplicator) {
 						var dWrapper = document.createElement("li");
 						d.parentNode.prepend(dWrapper);
 						dWrapper.appendChild(d);
@@ -619,11 +697,21 @@ if (!Element.prototype.closest) {
 			var buttonOffset = button.getBoundingClientRect();
 			this.removeClass(container, "search-right search-left");
 			if (buttonOffset.left > w / 2) {
-				this.removeClass(container, "search-right");
-				this.addClass(container, "search-left");
+				if (Customify_JS.is_rtl) {
+					this.removeClass(container, "search-left");
+					this.addClass(container, "search-right");
+				} else {
+					this.removeClass(container, "search-right");
+					this.addClass(container, "search-left");
+				}
 			} else {
-				this.removeClass(container, "search-left");
-				this.addClass(container, "search-right");
+				if (Customify_JS.is_rtl) {
+					this.removeClass(container, "search-right");
+					this.addClass(container, "search-left");
+				} else {
+					this.removeClass(container, "search-left");
+					this.addClass(container, "search-right");
+				}
 			}
 		}
 	};
@@ -634,38 +722,25 @@ if (!Element.prototype.closest) {
 	Customify.prototype.initSearchForm = function() {
 		var searchItems = document.querySelectorAll(".header-search_icon-item");
 		var that = this;
-
-		searchItems.forEach( function( container ){
-			//let container = searchItems[i];
-			that.removeClass(container, "active");
-			var icon = container.querySelector(".search-icon");
-
-			/**
-			 * Add event handle when click to icon.
-			 */
-			that.addEvent(
-				icon,
-				"click",
-				function(e) {
+		searchItems.forEach(function(container) {
+			if ( ! container.classList.contains( 'js-added' ) ) {
+				that.addClass(container, "js-added");
+				that.removeClass(container, "active");
+				var icon = container.querySelector(".search-icon");
+	
+				var iconSearchClick = function(e) {
 					e.preventDefault();
-					this.toggleClass( container, "active");
 					var inputField = container.querySelector(".search-field");
-				
 					if (!container.classList.contains("active")) {
+						container.classList.add("active");
 						inputField.blur();
 					} else {
+						this.removeClass(container, "active");
 						inputField.focus();
 					}
-				}.bind(that)
-			);
-
-			/**
-			 * When click outside search form.
-			 */
-			that.addEvent(
-				document,
-				"click",
-				function(e) {
+				};
+	
+				var clickOutSideSearchIcon = function(e) {
 					// if the target of the click isn't the container nor a descendant of the container
 					if (
 						!(container === e.target) &&
@@ -673,12 +748,26 @@ if (!Element.prototype.closest) {
 					) {
 						that.removeClass(container, "active");
 					}
-				}.bind(that)
-			);
-
-
-		} );
-		
+				};
+	
+				icon.removeEventListener("click", iconSearchClick);
+				//document.removeEventListener("click", clickOutSideSearchIcon);
+				/**
+				 * Add event handle when click to icon.
+				 */
+				that.addEvent(icon, "click", iconSearchClick.bind(that));
+	
+				/**
+				 * When click outside search form.
+				 */
+				that.addEvent(
+					document,
+					"click",
+					clickOutSideSearchIcon.bind(that)
+				);
+			}
+			
+		});
 
 		that.searchFormAutoAlign();
 	};
@@ -720,9 +809,7 @@ if (!Element.prototype.closest) {
 	/**
 	 * Reponsive video style.
 	 */
-	Customify.prototype.responsiveVideos = function() {
-		
-	};
+	Customify.prototype.responsiveVideos = function() {};
 
 	/**
 	 * Inittial
@@ -771,8 +858,24 @@ if (!Element.prototype.closest) {
 		document.addEventListener(
 			"selective-refresh-content-rendered",
 			function(e) {
-				if (e.detail === "customify_customize_render_header") {
+				console.log("e.detail", e.detail);
+
+				if ("customify_customize_render_header" === e.detail) {
+					var oldMenu =  document.querySelector( 'body > .header-menu-sidebar' );
+					oldMenu.remove();
+					this.initMobieSearchForm();
+					this.initMobileSubMenu();
+					this.insertMenuOverlayClass();
+					this.setupMobileItemAnimations();
+					this.initMenuSidebar();
 					this.initSearchForm();
+					console.log( 'header_change' );
+				}
+
+				if ("Customify_Builder_Item_Search_Icon__render" === e.detail) {
+					this.initMobieSearchForm();
+					this.initSearchForm();
+					this.setupMobileItemAnimations();
 				}
 			}.bind(this)
 		);
@@ -795,7 +898,7 @@ if (!Element.prototype.closest) {
 	 * Fix viewport units on Mobile.
 	 */
 	(function() {
-		if ( window.Customify.isMobile() ) {
+		if (window.Customify.isMobile()) {
 			/**
 			 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
 			 */
@@ -803,20 +906,18 @@ if (!Element.prototype.closest) {
 			var vh = window.innerHeight * 0.01;
 			var vw = window.innerWidth * 0.01;
 			// Then we set the value in the --vh, --vw custom property to the root of the document
-			document.documentElement.style.setProperty("--vh", vh+'px');
-			document.documentElement.style.setProperty("--vw", vw+'px');
+			document.documentElement.style.setProperty("--vh", vh + "px");
+			document.documentElement.style.setProperty("--vw", vw + "px");
 
 			window.addEventListener("resize", function() {
 				var vh = window.innerHeight * 0.01;
 				var vw = window.innerWidth * 0.01;
-				document.documentElement.style.setProperty("--vh", vh+'px');
-				document.documentElement.style.setProperty("--vw", vw+'px');
+				document.documentElement.style.setProperty("--vh", vh + "px");
+				document.documentElement.style.setProperty("--vw", vw + "px");
 			});
 		}
 	})();
-	
 })();
-
 
 /**
  *

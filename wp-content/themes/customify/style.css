@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify	
 Author URI: https://wpcustomify.com/about	
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com	
-Version: 0.2.8	
+Version: 0.2.9	
 License: GNU General Public License v2 or later	
 License URI: http://www.gnu.org/licenses/gpl-2.0.html	
 Text Domain: customify	
@@ -3426,21 +3426,24 @@ article.comment .comment-post-author {
 .dark-mode .cart-item-link:hover {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .header-search_box-item .search-field {
+.dark-mode .header-search_box-item .search-form-fields {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.79);
 }
-.dark-mode .header-search_box-item .search-field::-webkit-input-placeholder {
+.dark-mode .header-search_box-item .search-form-fields .search-field {
   color: rgba(255, 255, 255, 0.79);
 }
-.dark-mode .header-search_box-item .search-field:-ms-input-placeholder {
+.dark-mode .header-search_box-item .search-form-fields .search-field::-webkit-input-placeholder {
   color: rgba(255, 255, 255, 0.79);
 }
-.dark-mode .header-search_box-item .search-field::-ms-input-placeholder {
+.dark-mode .header-search_box-item .search-form-fields .search-field:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.79);
 }
-.dark-mode .header-search_box-item .search-field::placeholder {
+.dark-mode .header-search_box-item .search-form-fields .search-field::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.79);
+}
+.dark-mode .header-search_box-item .search-form-fields .search-field::placeholder {
   color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .header-search_box-item .search-submit {
@@ -3800,12 +3803,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 @media screen and (max-width: 1024px) {
   .builder-item.builder-item--group .item--inner {
-    margin-right: 1.0em;
+    margin-right: 1em;
   }
 }
 @media screen and (max-width: 568px) {
   .builder-item.builder-item--group .item--inner {
-    margin-right: .4em;
+    margin-right: 0.4em;
   }
 }
 .builder-item.builder-item--group .item--inner:last-child {
@@ -3820,7 +3823,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   .header--row .customify-grid {
     margin: 0 -0.5em;
   }
-  .header--row .customify-grid [class~="customify-col-"], .header--row .customify-grid [class*="customify-col-"], .header--row .customify-grid [class*="customify-col_"] {
+  .header--row .customify-grid [class~="customify-col-"],
+  .header--row .customify-grid [class*="customify-col-"],
+  .header--row .customify-grid [class*="customify-col_"] {
     padding-left: 0.5em;
     padding-right: 0.5em;
   }
@@ -3875,7 +3880,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
   line-height: 1.6;
-  background: #FFF;
+  background: #fff;
 }
 .page-breadcrumb .page-breadcrumb-inner {
   width: 100%;
@@ -3913,14 +3918,17 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   margin-right: 10px;
 }
 
-.page-titlebar .customize-partial-edit-shortcut button, .page-cover .customize-partial-edit-shortcut button {
+.page-titlebar .customize-partial-edit-shortcut button,
+.page-cover .customize-partial-edit-shortcut button {
   left: 0px;
 }
-.page-titlebar .page-breadcrumb-inner, .page-cover .page-breadcrumb-inner {
+.page-titlebar .page-breadcrumb-inner,
+.page-cover .page-breadcrumb-inner {
   padding-left: 0;
   padding-right: 0;
 }
-.page-titlebar .page-breadcrumb, .page-cover .page-breadcrumb {
+.page-titlebar .page-breadcrumb,
+.page-cover .page-breadcrumb {
   border-bottom: none;
   padding-bottom: 0px;
   background: transparent;
@@ -3986,7 +3994,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .page-cover .page-breadcrumb-list {
   color: rgba(255, 255, 255, 0.8);
 }
-.page-cover .page-breadcrumb-list a, .page-cover .page-breadcrumb-list li:after {
+.page-cover .page-breadcrumb-list a,
+.page-cover .page-breadcrumb-list li:after {
   color: inherit;
 }
 .page-cover .page-breadcrumb-list a:hover {
@@ -4001,18 +4010,21 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   margin-bottom: 1.2em;
 }
 
-.page-cover-title, .page-cover-tagline {
+.page-cover-title,
+.page-cover-tagline {
   display: inline-block;
   position: relative;
   color: rgba(255, 255, 255, 0.99);
   z-index: 5;
 }
-.page-cover-title p:last-child, .page-cover-tagline p:last-child {
+.page-cover-title p:last-child,
+.page-cover-tagline p:last-child {
   margin-bottom: 0px;
 }
 
 /* Customizer Shortcut */
-#masthead .customize-partial-edit-shortcut, #header-menu-sidebar .customize-partial-edit-shortcut {
+#masthead .customize-partial-edit-shortcut,
+#header-menu-sidebar .customize-partial-edit-shortcut {
   display: none;
 }
 
@@ -4021,6 +4033,96 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 #masthead > .customize-partial-edit-shortcut button {
   left: 0px;
+}
+
+/* Layout Builder V2 */
+.row-v2 {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.row-v2 .item--inner {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.row-v2 .col-v2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.row-v2 .col-v2.col-v2-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.row-v2 .col-v2.col-v2-left {
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+          justify-content: flex-start;
+  margin-right: auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+          flex: 1 1 0;
+}
+.row-v2 .col-v2.col-v2-right {
+  margin-left: auto;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+          flex: 1 1 0;
+}
+.row-v2.no-left.no-right .col-v2.col-v2-center {
+  -webkit-flex-basis: 100%;
+          flex-basis: 100%;
+}
+.row-v2.no-center .col-v2.col-v2-left {
+  -webkit-box-flex: 1;
+  -webkit-flex: auto;
+          flex: auto;
+}
+.row-v2.no-center .col-v2.col-v2-right {
+  -webkit-box-flex: 1;
+  -webkit-flex: auto;
+          flex: auto;
+}
+
+.col-v2-right .item--inner {
+  margin-left: 1em;
+}
+.col-v2-right .item--inner:first-child {
+  margin-left: 0px;
+}
+
+#masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {
+  display: none;
+}
+#masthead > .customize-partial-edit-shortcut button {
+  left: 0px;
+}
+
+.col-v2-left .item--inner {
+  margin-right: 1em;
+}
+.col-v2-left .item--inner:last-child {
+  margin-right: 0px;
 }
 
 /* Button */
@@ -4565,11 +4667,20 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   -webkit-flex-basis: 100%;
           flex-basis: 100%;
 }
+.header-search-form .search-form-fields {
+  border: 1px solid;
+  border-color: rgba(127, 127, 127, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  border-radius: 2px;
+}
 .header-search-form .search-field {
   display: block;
   width: 100%;
   border-radius: 2px;
   height: 2.4em;
+}
+.header-search-form .search-field:focus {
+  background-color: transparent;
 }
 .header-search-form button.search-submit {
   overflow: hidden;
@@ -4592,6 +4703,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 .header-search-form input[type="submit"] {
   min-height: auto;
+}
+
+.header-search_box-item .header-search-form .search-field {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 .header-search-modal {
@@ -4629,10 +4746,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   z-index: 27;
 }
 
-.site-header .header--row .header-search_box-item .search-form-fields {
-  border-style: inherit;
-}
-
 .woo_bootster_search .header-search_box-item .header-search-form {
   margin-bottom: 0px;
   width: 100%;
@@ -4657,6 +4770,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   display: -webkit-flex;
   display: flex;
   border-style: none;
+  border: none;
+  box-shadow: none;
 }
 .woo_bootster_search .header-search_box-item .header-search-form .search-field {
   border-color: transparent;
@@ -5833,6 +5948,10 @@ body.menu_sidebar_dropdown:before {
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
           transform: translateY(0);
+}
+
+.mobile-item--search_box .search-form-fields {
+  width: 100%;
 }
 
 .cb-row--mobile {

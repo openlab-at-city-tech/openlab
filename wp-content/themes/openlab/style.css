@@ -9532,6 +9532,9 @@ body.membership-requests .group-list {
     width: 100%;
   }
 }
+body.docs .notify-group-members-ui {
+  margin-bottom: 10px;
+}
 .doc-content.edit-doc {
   border: none;
   padding: 0;
