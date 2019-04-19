@@ -1,0 +1,27 @@
+{
+  "name": "genesis-responsive-slider",
+  "description": "Development files for the Genesis Responsive Slider plugin.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/copyblogger/genesis-responsive-slider"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-checktextdomain": "*",
+    "grunt-contrib-imagemin": "*",
+    "grunt-wp-i18n": "*",
+    "load-grunt-tasks": "*"
+  },
+  "plugin": {
+    "name": "Genesis Responsive Slider",
+    "uri": "https://github.com/copyblogger/genesis-responsive-slider",
+    "description": "A responsive featured slider for the Genesis Framework.",
+    "author": "StudioPress",
+    "authoruri": "http://www.studiopress.com/",
+    "version": "0.9.6",
+    "license": "GPL-2.0+",
+    "licenseuri": "http://www.gnu.org/licenses/gpl-2.0.html",
+    "textdomain": "genesis-simple-share"
+  }
+}
