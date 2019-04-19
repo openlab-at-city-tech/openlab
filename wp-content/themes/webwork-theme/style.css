@@ -12,6 +12,14 @@ Version:        0.1.0
 	-webkit-font-smoothing: antialiased;
 }
 
+::moz-selection {
+	background: #b4c5e0 !important;
+}
+
+::selection {
+	background: #b4c5e0 !important;
+}
+
 a, body.ol-webwork a {
 	color: #0044af;
 }
