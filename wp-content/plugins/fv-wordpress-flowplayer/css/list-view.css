@@ -1,0 +1,23 @@
+#id { width: 6em }
+#player_name { width: 20em }
+#date_created { width: 8em }
+#embeds { width: 20% }
+#shortcode-copy { width: 3em }
+
+.fv_player_splash_list_preview { height: 72px; margin: 0 5px 2px 0; display: inline; float: left; position: relative; cursor: pointer}
+.fv_player_splash_list_preview img { height: 72px; width: auto }
+.fv_player_splash_list_preview span {display: none; color: #fff; position: absolute; top: 0; left: 0; margin-top: 20%; right: 0; text-align: center; text-shadow: 0 0 5px black; }
+.fv_player_splash_list_preview:hover span {display: block; }
+.fv_player_splash_list_preview.fv_player_list_preview_no_splash { width: 128px; background-color: #000; display: inline-block }
+.fv_player_splash_list_preview.fv_player_list_preview_no_splash:before { content: "\0025B6"; display: block; font-size: 3em; margin-top: 20%; text-align: center }
+.fv_player_splash_list_preview.fv_player_list_preview_no_splash span {display: block}
+
+.fv-player-remove, .fv-player-remove:hover, .fv-player-remove-confirm, .fv-player-remove-confirm:hover {color: #ff0000}
+
+td.column-shortcode { padding-right: 0 }
+.column-shortcode { width: 10em }
+.column-shortcode input { width: 100% }
+
+.shortcode-copy a.button {
+  padding: 0 5px 1px;
+}

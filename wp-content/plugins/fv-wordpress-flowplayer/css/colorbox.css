@@ -1,0 +1,40 @@
+#fv-wordpress-flowplayer-popup { background: white; }
+
+/*
+ColorBox Core Style
+The following rules are the styles that are consistant between themes.
+Avoid changing this area to maintain compatability with future versions of ColorBox.
+*/
+#fv_player_box, #fv_player_boxOverlay, #fv_player_boxWrapper, #fv_player_box.fv-flowplayer-shortcode-editor, #fv_player_boxOverlay.fv-flowplayer-shortcode-editor, #fv_player_boxWrapper.fv-flowplayer-shortcode-editor{position:absolute; top:0; left:0; z-index:100001; overflow:hidden;}
+#fv_player_boxOverlay, #fv_player_boxOverlay.fv-flowplayer-shortcode-editor{position:fixed; width:100%; height:100%; z-index: 100000}
+#fv_player_boxMiddleLeft, #fv_player_boxBottomLeft{clear:left;}
+#fv_player_boxContent{position:relative; overflow:hidden;}
+#fv_player_boxLoadedContent{overflow:auto;}
+#fv_player_boxLoadedContent iframe{display:block; width:100%; height:100%; border:0; background-color: white;}
+.fv-flowplayer-shortcode-editor #fv_player_boxTitle{margin:5px; text-align: left; bottom: auto;}
+.fv-flowplayer-shortcode-editor #fv_player_boxClose{top:8px;right:8px;}
+#fv_player_boxLoadingOverlay, #fv_player_boxLoadingGraphic{position:absolute; top:0; left:0; width:100%;}
+#fv_player_boxPrevious, #fv_player_boxNext, #fv_player_boxClose, #fv_player_boxSlideshow{cursor:pointer;}
+
+/*
+ColorBox example user style
+The following rules are ordered and tabbed in a way that represents the
+order/nesting of the generated HTML, so that the structure easier to understand.
+*/
+#fv_player_boxOverlay{background:#111;}
+
+#colorBox{}
+    #fv_player_boxContent{background:#fff; padding: 5px;background:url(loading.gif) 50% 50% no-repeat #fff; }
+        #fv_player_boxLoadedContent{margin-top:35px;}
+        #fv_player_boxTitle{position:absolute; top:0px; left:0; padding: 8px 0 8px 18.5%; width:100%; color:#9D1A28; font-size: 14px;}
+        #fv_player_boxCurrent{position:absolute; bottom:0px; left:100px; color:#999;}
+        #fv_player_boxSlideshow{position:absolute; bottom:0px; right:42px; color:#444;}
+        #fv_player_boxPrevious{position:absolute; bottom:0px; left:0; color:#444;}
+        #fv_player_boxNext{position:absolute; bottom:0px; left:63px; color:#444;}
+        /*#fv_player_boxLoadingOverlay{ text-align: center; background:url(loading.gif) 5px 5px no-repeat #fff;}*/
+        #fv_player_boxClose{position:absolute; top:2px; right:2px; display:block; color:#444; height: 16px; width: 16px; overflow: hidden; text-indent: 25px; background: url("img/uploader-icons.png") -98px 0 no-repeat transparent; border: 0; }
+        #fv_player_boxClose:hover { background-position: -98px 0; }
+        
+/* Add video button */.wp-media-buttons .fv-wordpress-flowplayer-button span, .fv-player-gutenberg .fv-wordpress-flowplayer-button span {min-width:28px;min-height: 26px;display:inline-block;background:url('../images/icon.png') no-repeat center center;vertical-align:top;}
+@media only screen and (max-width: 782px) {.wp-media-buttons .fv-wordpress-flowplayer-button span{min-width:24px;display:inline-block;min-height:18px;background-size:24px auto;} }
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {.wp-media-buttons .fv-wordpress-flowplayer-button span{background:url('../images/icon@x2.png') no-repeat center center;min-width:32px;background-size:25px auto;} }
