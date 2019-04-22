@@ -359,22 +359,22 @@ function openlab_group_blog_activity( $activity ) {
 
 	$public = get_blog_option( $blog_id, 'blog_public' );
 
-	if ( 0 > (float) $public ) {
+	if ( 0 > (int) $public ) {
 		$activity->hide_sitewide = 1;
-	} else {
-		$activity->hide_sitewide = 0;
 	}
 
 	// Mark the group as having been active
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
 	// prevent infinite loops, but let this function run on later activities ( for unit tests )
+	// @see https://buddypress.trac.wordpress.org/ticket/3980
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	add_action( 'bp_activity_after_save', create_function( '', 'add_action( "bp_activity_before_save", "openlab_group_blog_activity" );' ) );
+	add_action( 'bp_activity_after_save', function() {
+		add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+	});
 
 	return $activity;
 }
-
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
 /**
