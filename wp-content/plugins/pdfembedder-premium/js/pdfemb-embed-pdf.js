@@ -62,10 +62,12 @@ jQuery(document).ready(function ($) {
                       },
                       function(e) {
 						  var msgnode = document.createTextNode(e.message);
-						  if (e.name == 'UnexpectedResponseException' && e.status == 0) {
+						  if (e.name == 'UnknownErrorException' && e.message == 'Failed to fetch') {
+                              // "Failed to fetch" - probably cross-domain issue
 							  msgnode = $('<span></span>').append(
-								  document.createTextNode(pdfemb_trans.objectL10n.domainerror+' '))
-								  .append($('<a href="https://wp-pdf.com/troubleshooting/#unexpected" target="_blank">'+pdfemb_trans.objectL10n.clickhereinfo+'</a>'));
+								  document.createTextNode(e.message+' '+pdfemb_trans.objectL10n.domainerror+' '))
+								  .append($('<a href="https://wp-pdf.com/kb/error-url-to-the-pdf-file-must-be-on-exactly-the-same-domain-as-the-current-web-page/" target="_blank">'
+                                      +pdfemb_trans.objectL10n.clickhereinfo+'</a>'));
 						  }
                           divContainer.empty().append($('<div></div>', {'class': 'pdfemb-errormsg'}).append(msgnode));
                       }
