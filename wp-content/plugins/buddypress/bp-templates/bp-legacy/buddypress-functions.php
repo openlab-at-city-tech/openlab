@@ -1056,8 +1056,14 @@ function bp_legacy_theme_new_activity_comment() {
 		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . esc_html( $feedback ) . '</p></div>' );
 	}
 
+	$activity_id   = (int) $_POST['form_id'];
+	$activity_item = new BP_Activity_Activity( $activity_id );
+	if ( ! bp_activity_user_can_read( $activity_item ) ) {
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . esc_html( $feedback ) . '</p></div>' );
+	}
+
 	$comment_id = bp_activity_new_comment( array(
-		'activity_id' => $_POST['form_id'],
+		'activity_id' => $activity_id,
 		'content'     => $_POST['content'],
 		'parent_id'   => $_POST['comment_id'],
 		'error_type'  => 'wp_error'
@@ -1239,6 +1245,12 @@ function bp_legacy_theme_mark_activity_favorite() {
 	// Either the 'mark' or 'unmark' nonce is accepted, for backward compatibility.
 	$nonce = wp_unslash( $_POST['nonce'] );
 	if ( ! wp_verify_nonce( $nonce, 'mark_favorite' ) && ! wp_verify_nonce( $nonce, 'unmark_favorite' ) ) {
+		return;
+	}
+
+	$activity_id   = (int) $_POST['id'];
+	$activity_item = new BP_Activity_Activity( $activity_id );
+	if ( ! bp_activity_user_can_read( $activity_item, bp_loggedin_user_id() ) ) {
 		return;
 	}
 
@@ -1636,14 +1648,22 @@ function bp_legacy_theme_ajax_messages_send_reply() {
 
 	check_ajax_referer( 'messages_send_message' );
 
-	$result = messages_new_message( array( 'thread_id' => (int) $_REQUEST['thread_id'], 'content' => $_REQUEST['content'] ) );
+	$thread_id = (int) $_POST['thread_id'];
+
+	// Cannot respond to a thread you're not already a recipient on.
+	if ( ! bp_current_user_can( 'bp_moderate' ) && ( ! messages_is_valid_thread( $thread_id ) || ! messages_check_thread_access( $thread_id ) ) ) {
+		echo "-1<div id='message' class='error'><p>" . __( 'There was a problem sending that reply. Please try again.', 'buddypress' ) . '</p></div>';
+		die;
+	}
+
+	$result = messages_new_message( array( 'thread_id' => $thread_id, 'content' => $_REQUEST['content'] ) );
 
 	if ( !empty( $result ) ) {
 
 		// Pretend we're in the message loop.
 		global $thread_template;
 
-		bp_thread_has_messages( array( 'thread_id' => (int) $_REQUEST['thread_id'] ) );
+		bp_thread_has_messages( array( 'thread_id' => $thread_id ) );
 
 		// Set the current message to the 2nd last.
 		$thread_template->message = end( $thread_template->thread->messages );
