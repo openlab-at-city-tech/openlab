@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.9
+ * Version:     1.9.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
  * Text Domain: admin-commenters-comments-count
  * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 4.9+.
+ * Compatible with WordPress 4.6 through 5.1+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.9
+ * @version 1.9.1
  */
 
 /*
@@ -35,7 +35,7 @@
  */
 
 /*
-	Copyright (c) 2009-2018 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2009-2019 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -106,20 +106,13 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.9';
+		return '1.9.1';
 	}
 
 	/**
 	 * Initializer
 	 */
 	public static function init() {
-		add_action( 'plugins_loaded', array( __CLASS__, 'do_init' ) );
-	}
-
-	/**
-	 * Performs initialization
-	 */
-	public static function do_init() {
 		// Set translatable and filterable strings
 		self::$field_title = __( 'Comments', 'admin-commenters-comments-count' );
 
@@ -419,6 +412,6 @@ class c2c_AdminCommentersCommentsCount {
 	}
 } // end c2c_AdminCommentersCommentsCount
 
-c2c_AdminCommentersCommentsCount::init();
+add_action( 'plugins_loaded', array( 'c2c_AdminCommentersCommentsCount', 'init' ) );
 
 endif; // end if !class_exists()

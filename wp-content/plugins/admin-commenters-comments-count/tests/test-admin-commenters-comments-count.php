@@ -116,7 +116,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 	//
 
 	public function test_plugin_version() {
-		$this->assertEquals( '1.9', c2c_AdminCommentersCommentsCount::version() );
+		$this->assertEquals( '1.9.1', c2c_AdminCommentersCommentsCount::version() );
 	}
 
 	public function test_class_is_available() {
@@ -124,15 +124,15 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugins_loaded_action_triggers_do_init() {
-		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_AdminCommentersCommentsCount', 'do_init' ) ) );
+		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_AdminCommentersCommentsCount', 'init' ) ) );
 	}
 
 	public function test_get_comment_author_link_filter_is_registered() {
-		$this->assertNotFalse( has_filter( 'get_comment_author_link', array( 'c2c_AdminCommentersCommentsCount', 'get_comment_author_link' ) ) );
+		$this->assertEquals( 10, has_filter( 'get_comment_author_link', array( 'c2c_AdminCommentersCommentsCount', 'get_comment_author_link' ) ) );
 	}
 
 	public function test_comment_author_filter_is_registered() {
-		$this->assertNotFalse( has_filter( 'comment_author', array( 'c2c_AdminCommentersCommentsCount', 'comment_author' ) ) );
+		$this->assertEquals( 10, has_filter( 'comment_author', array( 'c2c_AdminCommentersCommentsCount', 'comment_author' ) ) );
 	}
 
 	public function test_get_comment_author_link_unaffected_on_frontend() {
