@@ -8025,18 +8025,21 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs#openlab-footer .row h2,
-.oplb-bs#openlab-footer .ol-toolbar-row h2 {
+.oplb-bs#openlab-footer .ol-toolbar-row h2,
+.oplb-bs#openlab-footer .ol-footer-row h2 {
   color: #333;
   margin: 0 auto 22px;
 }
 @media (max-width: 767px) {
   .oplb-bs#openlab-footer .row h2,
-  .oplb-bs#openlab-footer .ol-toolbar-row h2 {
+  .oplb-bs#openlab-footer .ol-toolbar-row h2,
+  .oplb-bs#openlab-footer .ol-footer-row h2 {
     margin: 0 auto 8px;
   }
 }
 .oplb-bs#openlab-footer .row h3,
-.oplb-bs#openlab-footer .ol-toolbar-row h3 {
+.oplb-bs#openlab-footer .ol-toolbar-row h3,
+.oplb-bs#openlab-footer .ol-footer-row h3 {
   font-size: 13px;
   text-decoration: underline;
 }

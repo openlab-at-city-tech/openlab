@@ -8,7 +8,7 @@
     <div class="oplb-bs">
         <div class="footer-wrapper">
             <div class="container-fluid footer-desktop">
-                <div class="row row-footer">
+                <div class="ol-footer-row row-footer">
                     <div class="col-sm-12">
                         <div class="col-logos">
                             <h2><span>The OpenLab at City Tech:</span><span>A place to learn, work, and share</span></h2>
@@ -18,7 +18,7 @@
                                 <a class="pull-left cuny-logo " href="http://www.cuny.edu/" target="_blank"><img class="img-responsive" src="<?php echo bp_root_domain(); ?>/wp-content/mu-plugins/css/images/cuny_logo.png" alt="City University of New York" border="0" /></a>
                             </div>
                         </div>
-                        <div class="row row-copyright hidden-xs hidden-sm">
+                        <div class="ol-footer-row row-copyright hidden-xs hidden-sm">
                             <div class="col-sm-24">
                                 <p><span><a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> <span class="horiz-divider">|</span> <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
                             </div>
@@ -46,7 +46,7 @@
                         <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"><img src="<?php echo bp_root_domain() ?>/wp-content/mu-plugins/css/images/by-nc-sa.png" alt="Creative Commons" /></a>
                     </div>
                 </div>
-                <div class="row row-copyright hidden-md hidden-lg">
+                <div class="ol-footer-row row-copyright hidden-md hidden-lg">
                     <div class="col-sm-24">
                         <p><span>&copy; <a class="no-deco roll-over-color" href="http://www.citytech.cuny.edu/" target="_blank">New York City College of Technology</a></span> <span class="horiz-divider">|</span> <span><a class="no-deco roll-over-color" href="http://www.cuny.edu" target="_blank">City University of New York</a></span></p>
                     </div>
