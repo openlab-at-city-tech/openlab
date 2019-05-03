@@ -210,3 +210,14 @@ add_filter(
 		return 'You must log into the OpenLab in order to post a WeBWorK question.';
 	}
 );
+
+/**
+ * Intro text.
+ */
+add_filter(
+	'webwork_intro_text',
+	function( $text ) {
+		$about_url = home_url( 'about' );
+		return sprintf( 'You are viewing <a href="%s">WeBWorK on the OpenLab</a>. Here, you can ask questions and discuss WeBWorK homework problems, and also see what other students have been asking.', $about_url );
+	}
+);
