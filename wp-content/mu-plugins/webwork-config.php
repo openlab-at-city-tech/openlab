@@ -221,3 +221,14 @@ add_filter(
 		return sprintf( 'You are viewing <a href="%s">WeBWorK on the OpenLab</a>. Here, you can ask questions and discuss WeBWorK homework problems, and also see what other students have been asking.', $about_url );
 	}
 );
+
+/**
+ * Sidebar intro text.
+ */
+add_filter(
+	'webwork_sidebar_intro_text',
+	function( $text ) {
+		$help_url = home_url( 'help/explore-existing-questions-and-replies/#Filters' );
+		return sprintf( 'Use the <a href="%s">filters</a> below to navigate the questions that have been posted. You can select questions by course, section, or a specific WeBWorK problem set.', $help_url );
+	}
+);
