@@ -34,6 +34,22 @@ function openlab_get_site_id_by_group_id( $group_id = 0 ) {
 }
 
 /**
+ * Utility function for fetching site type based on group type.
+ *
+ * @param int $site_id
+ * @return string
+ */
+function openlab_get_site_type( $site_id ) {
+	$group_id = openlab_get_group_id_by_blog_id( $site_id );
+
+	if ( ! $group_id ) {
+		return '';
+	}
+
+	return openlab_get_group_type( $group_id );
+}
+
+/**
  * Use this function to get the URL of a group's site. It'll work whether the site is internal
  * or external
  *

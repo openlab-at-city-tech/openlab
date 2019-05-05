@@ -662,3 +662,187 @@ function openlab_remove_email_settings_from_portfolios() {
 }
 add_action( 'bp_group_header_meta', 'openlab_remove_email_settings_from_portfolios', 1 );
 
+/**
+ * Register "Portfolio" post meta.
+ *
+ * @return void
+ */
+function openlab_portfolio_register_meta() {
+	register_meta( 'post', 'portfolio_post_id', [
+		'type' => 'integer',
+		'single' => true,
+		'sanitize_callback' => 'absint',
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'comment', 'portfolio_post_id', [
+		'type' => 'integer',
+		'single' => true,
+		'sanitize_callback' => 'absint',
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'post', 'source_id', [
+		'type' => 'integer',
+		'single' => true,
+		'sanitize_callback' => 'absint',
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'post', 'source_type', [
+		'type' => 'string',
+		'single' => true,
+		'sanitize_callback' => function( $value ) {
+			if ( in_array( $value, [ 'post', 'page', 'comment' ], true ) ) {
+				return $value;
+			}
+
+			return 'posts';
+		},
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'post', 'source_site_id', [
+		'type' => 'integer',
+		'single' => true,
+		'sanitize_callback' => 'absint',
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'post', 'source_date', [
+		'type' => 'string',
+		'single' => true,
+		'sanitize_callback' => 'sanitize_text_field',
+		'show_in_rest' => true,
+	] );
+
+	register_meta( 'post', 'portfolio_annotation', [
+		'type' => 'string',
+		'single' => true,
+		'sanitize_callback' => 'sanitize_textarea_field',
+		'show_in_rest' => true,
+	] );
+}
+add_action( 'init', 'openlab_portfolio_register_meta', 20 );
+
+/**
+ * Enqueue "Add to Portfolio" assets.
+ *
+ * @return void
+ */
+function openlab_add_to_portfolio_init() {
+	$user = wp_get_current_user();
+
+	wp_register_script(
+		'a11y-dialog',
+		WDS_CITYTECH_URL . '/assets/js/a11y-dialog.min.js',
+		[],
+		'5.2.0'
+	);
+
+	if ( ! $user->exists() ) {
+		return;
+	}
+
+	// Bail, if user doesn't have portfolio.
+	$portfolio_group_id = openlab_get_user_portfolio_id( $user->ID );
+	$portfolio_site_id  = openlab_get_site_id_by_group_id( $portfolio_group_id );
+
+	if ( empty( $portfolio_site_id ) ) {
+		return;
+	}
+
+	// Bail, if we don't support site type. Supported: 'course' and 'project'.
+	$type = openlab_get_site_type( get_current_blog_id() );
+
+	if ( ! in_array( $type, [ 'course', 'project' ] ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'add-to-portfolio-styles',
+		WDS_CITYTECH_URL . 'assets/css/add-to-portfolio.css',
+		[],
+		'1.0.0'
+	);
+
+	wp_enqueue_script(
+		'add-to-portfolio',
+		WDS_CITYTECH_URL . '/assets/js/add-to-portfolio.js',
+		[ 'a11y-dialog', 'wp-util' ],
+		'1.0.0',
+		true
+	);
+
+	$settings = [
+		'root'          => esc_url_raw( get_rest_url() ),
+		'portfolioRoot' => esc_url_raw( get_rest_url( $portfolio_site_id ) ),
+		'nonce'         => wp_create_nonce( 'wp_rest' ),
+	];
+
+	wp_localize_script( 'add-to-portfolio', 'portfolioSettings', $settings );
+
+	// Render required markup.
+	add_filter( 'the_content', 'openlab_add_post_to_portfolio', 200 );
+	add_filter( 'comment_text', 'openlab_add_comment_to_portfolio', 200 );
+	add_action( 'wp_footer', 'openlab_add_to_portfolio_dialog' );
+}
+add_action( 'wp_enqueue_scripts', 'openlab_add_to_portfolio_init' );
+
+/**
+ * Render "Add to Portfolio" button for posts/pages.
+ *
+ * @param string $content
+ * @return string $content
+ */
+function openlab_add_post_to_portfolio( $content ) {
+	if ( ! in_the_loop() ) {
+		return $content;
+	}
+
+	$post = get_post();
+	if ( ! in_array( $post->post_type, [ 'post', 'page'] ) ) {
+		return $content;
+	}
+
+	if ( get_current_user_id() !== (int) $post->post_author ) {
+		return $content;
+	}
+
+	ob_start();
+	include WDS_CITYTECH_DIR . '/views/button-post.php';
+	$button = ob_get_clean();
+
+	$content .= $button;
+
+	return $content;
+}
+
+/**
+ * Render "Add to Portfolio" button for comments.
+ *
+ * @param string $text
+ * @return string $text
+ */
+function openlab_add_comment_to_portfolio( $text ) {
+	$comment = get_comment();
+
+	if ( get_current_user_id() !== (int) $comment->user_id ) {
+		return $text;
+	}
+
+	ob_start();
+	include WDS_CITYTECH_DIR . '/views/button-comment.php';
+	$button = ob_get_clean();
+
+	$text .= $button;
+
+	return $text;
+}
+
+/**
+ * Render "Add to Portfolio" dialog markup.
+ */
+function openlab_add_to_portfolio_dialog() {
+	require_once WDS_CITYTECH_DIR . '/views/dialog.php';
+};

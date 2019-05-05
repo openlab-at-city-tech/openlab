@@ -8,6 +8,9 @@ Author: City Tech OpenLab
 Author URI: https://openlab.citytech.cuny.edu
  */
 
+define( 'WDS_CITYTECH_DIR', dirname( __FILE__ ) );
+define( 'WDS_CITYTECH_URL', plugin_dir_url( __FILE__ ) );
+
 require 'wds-register.php';
 require 'wds-docs.php';
 require 'includes/oembed.php';
