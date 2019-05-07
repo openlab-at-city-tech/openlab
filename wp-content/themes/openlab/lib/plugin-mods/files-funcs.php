@@ -59,6 +59,7 @@ function openlab_bp_group_documents_display_content() {
 	$template = new BP_Group_Documents_Template();
 
 	$folders = $template->get_group_categories( false );
+	$folders = bp_sort_by_key( $folders, 'name' );
 
 	$current_category      = false;
 	$current_category_data = get_term_by( 'id', $template->category, 'group-documents-category' );
@@ -171,7 +172,7 @@ function openlab_bp_group_documents_display_content() {
 			<label><?php _e( 'View folder:', 'bp-group-documents' ); ?></label>
 			<div class="group-file-folder-nav">
 				<ul>
-					<?php foreach ( $template->group_categories as $category ) { ?>
+					<?php foreach ( $folders as $category ) { ?>
 						<?php $is_current_category = ( $category->name === $current_category ); ?>
 						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?> <?php /* (<?php echo $category->count ?>) */ ?></a></li>
 					<?php } ?>
@@ -249,7 +250,7 @@ function openlab_bp_group_documents_display_content() {
 										<legend>Folders</legend>
 										<div class="checkbox-list-container group-file-folders-container">
 											<ul>
-											<?php foreach( $template->get_group_categories(false) as $category ) { ?>
+											<?php foreach( $folders as $category ) { ?>
 												<li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
 											<?php } ?>
 											</ul>
