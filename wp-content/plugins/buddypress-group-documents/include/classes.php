@@ -509,11 +509,11 @@ class BP_Group_Documents {
 	}
 
 
-	public static function get_list_by_group( $group_id, $category=0, $sort=0, $order=0, $start=0, $items=0 ){
+	public static function get_list_by_group( $group_id, $category=null, $sort=0, $order=0, $start=0, $items=0 ){
 		global $wpdb, $bp;
 
 		// if these parameters aren't passed, grab the entire list
-		if( !$category && !$sort ) {
+		if( null === $category && !$sort ) {
 
 			$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ORDER BY name ASC", $group_id), ARRAY_A );
 
@@ -530,6 +530,8 @@ class BP_Group_Documents {
 		if( !empty( $category_ids ) ) {
 			$in_clause = '(' . implode(',',$category_ids) . ') ';
 			$sql .= "AND id IN " . $in_clause;
+		} else {
+			return array();
 		}
 		$sql .= "ORDER BY $sort $order LIMIT %d, %d";
 
