@@ -51,7 +51,7 @@ class BP_Group_Documents_Template {
 		$this->do_sorting_logic();
 
 		$this->do_paging_logic();
-		
+
 		$this->document_list = BP_Group_Documents::get_list_by_group( $bp->groups->current_group->id, $this->category, $this->sql_sort, $this->sql_order, $this->start_record, $this->items_per_page );
 	}
 
@@ -67,7 +67,7 @@ class BP_Group_Documents_Template {
 
 		return $parent_info['term_id'];
 	}
-	
+
 	/**
 	 * do_post_logic()
 	 *
@@ -114,7 +114,7 @@ class BP_Group_Documents_Template {
 			} //end switch
 		} //end if operation
 	}
-	
+
 	private function update_categories($document) {
 		global $bp;
 
@@ -198,7 +198,7 @@ class BP_Group_Documents_Template {
 		$this->group_categories = self::get_group_categories($this->parent_id);
 
 	}
-	
+
 	public static function get_group_categories($not_empty = true) {
 		global $bp;
 
@@ -207,7 +207,7 @@ class BP_Group_Documents_Template {
 			return get_terms( 'group-documents-category', array('parent'=>$parent_id ) );
 		} else {
 			return get_terms( 'group-documents-category', array('parent'=>$parent_id,'hide_empty'=>false ) );
-		} 
+		}
 	}
 
 
@@ -246,7 +246,7 @@ class BP_Group_Documents_Template {
 				$this->sql_sort = 'created_ts';
 				$this->sql_order = 'DESC';
 			break;
-				
+
 		}
 	}
 
@@ -287,7 +287,7 @@ class BP_Group_Documents_Template {
 			if( $i == $this->page ) {
 				echo "<span class='page-numbers current'>$i</span>";
 			}else {
-				echo "<a class='page-numbers' href='{$this->action_link}?page=$i'>$i</a>";	
+				echo "<a class='page-numbers' href='{$this->action_link}?page=$i'>$i</a>";
 			}
 		}
 		if( $this->page != $this->total_pages ) {
