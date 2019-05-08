@@ -232,3 +232,13 @@ add_filter(
 		return sprintf( 'Use the <a href="%s">filters</a> below to navigate the questions that have been posted. You can select questions by course, section, or a specific WeBWorK problem set.', $help_url );
 	}
 );
+
+/**
+ * Incomplete question text.
+ */
+add_filter(
+	'webwork_incomplete_question_text',
+	function() {
+		return sprintf( 'This question does not contain enough detail for a useful response to be provided. Please review the <a href="%s">Ask Questions</a> page for guidance on how to phrase your question so that we may help you.', home_url( 'help/ask-questions' ) );
+	}
+);
