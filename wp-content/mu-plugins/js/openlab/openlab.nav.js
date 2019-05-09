@@ -33,6 +33,7 @@ OpenLab.nav = (function ($) {
 
             OpenLab.nav.hyphenateInit();
 
+						OpenLab.nav.adminToolbarPosition();
         },
         loginformInit: function () {
 
@@ -405,6 +406,30 @@ OpenLab.nav = (function ($) {
         isBreakpoint: function (alias) {
             return $('.device-' + alias).is(':visible');
         },
+				adminToolbarPosition: function() {
+					if ( ! $('body').hasClass( 'block-editor-page' ) ) {
+						return;
+					}
+
+					setTimeout(
+						function() {
+							var bump = 40;
+
+							var $editPostSidebar = $('.edit-post-sidebar');
+							if ( $editPostSidebar.length > 0 ) {
+								editPostSidebarOffset = $editPostSidebar.offset();
+								$editPostSidebar.css('top',(editPostSidebarOffset.top + bump) + 'px');
+							}
+
+							var $editPostHeader = $('.edit-post-header');
+							if ( $editPostHeader.length > 0 ) {
+								editPostHeaderOffset = $editPostHeader.offset();
+								$editPostHeader.css('top',(editPostHeaderOffset.top + bump) + 'px');
+							}
+						},
+						1000
+					);
+				}
     }
 })(jQuery, OpenLab);
 
