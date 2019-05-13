@@ -7982,6 +7982,9 @@ button.oplb-bs .close {
   position: relative;
   visibility: hidden;
 }
+.oplb-bs#openlab-footer .ol-footer-col {
+  padding: 0;
+}
 .oplb-bs#openlab-footer .container-fluid {
   max-width: 1155px;
 }
