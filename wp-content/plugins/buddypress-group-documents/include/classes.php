@@ -513,7 +513,7 @@ class BP_Group_Documents {
 		global $wpdb, $bp;
 
 		// if these parameters aren't passed, grab the entire list
-		if( null === $category && !$sort ) {
+		if( null === $category ) {
 
 			$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ORDER BY name ASC", $group_id), ARRAY_A );
 
