@@ -810,7 +810,7 @@ function openlab_add_post_to_portfolio( $content ) {
 	}
 
 	ob_start();
-	include WDS_CITYTECH_DIR . '/views/button-post.php';
+	include WDS_CITYTECH_DIR . '/views/portfolio/button-post.php';
 	$button = ob_get_clean();
 
 	$content .= $button;
@@ -832,7 +832,7 @@ function openlab_add_comment_to_portfolio( $text ) {
 	}
 
 	ob_start();
-	include WDS_CITYTECH_DIR . '/views/button-comment.php';
+	include WDS_CITYTECH_DIR . '/views/portfolio/button-comment.php';
 	$button = ob_get_clean();
 
 	$text .= $button;
@@ -844,5 +844,196 @@ function openlab_add_comment_to_portfolio( $text ) {
  * Render "Add to Portfolio" dialog markup.
  */
 function openlab_add_to_portfolio_dialog() {
-	require_once WDS_CITYTECH_DIR . '/views/dialog.php';
+	require_once WDS_CITYTECH_DIR . '/views/portfolio/dialog.php';
 };
+
+/**
+ * Register "Added to Portfolio" content front-end hooks.
+ *
+ * @return void
+ */
+function openlab_added_to_portfolio_template() {
+	$type = openlab_get_site_type( get_current_blog_id() );
+
+	if ( 'portfolio' !== $type ) {
+		return;
+	}
+
+	add_filter( 'the_content', 'openlab_portfolio_entry_source_note' );
+	add_action( 'wp_footer', 'openlab_portfolio_entry_source_styles' );
+}
+add_action( 'template_redirect', 'openlab_added_to_portfolio_template' );
+
+/**
+ * Register metaboxes for "Portfolio" post/pages.
+ *
+ * @param string $post_type
+ * @param WP_Post $post
+ * @return void
+ */
+function openlab_add_portfolio_metaboxes( $post_type, $post ) {
+	$type = openlab_get_site_type( get_current_blog_id() );
+
+	if ( 'portfolio' !== $type ) {
+		return;
+	}
+
+	// Check if the entry was added from other site.
+	$source_id = get_post_meta( (int) $post->ID, 'source_id', true );
+	if ( empty( $source_id ) ) {
+		return;
+	}
+
+	add_meta_box(
+		'ol-portfolio-citation',
+		'Citation',
+		'openlab_portfolio_render_citation_meta',
+		[ 'post', 'page' ],
+		'normal'
+	);
+
+	add_meta_box(
+		'ol-portfolio-annotation',
+		'Annotation',
+		'openlab_portfolio_render_annotation_meta',
+		[ 'post', 'page' ],
+		'normal'
+	);
+}
+add_action( 'add_meta_boxes', 'openlab_add_portfolio_metaboxes', 10, 2 );
+
+/**
+ * Generate "Portfolio" citation data.
+ *
+ * @param WP_Post $post
+ * @return array $data
+ */
+function openlab_portfolio_get_citation_data( $post ) {
+	$source_id = get_post_meta( $post->ID, 'source_id', true );
+	$site_id   = get_post_meta( $post->ID, 'source_site_id', true );
+	$date      = get_post_meta( $post->ID, 'source_date', true );
+	$type      = get_post_meta( $post->ID, 'source_type', true );
+
+	$data = [
+		'source_id' => $source_id,
+		'date'      => mysql2date( 'F j, Y', $date ),
+	];
+
+	// @todo cache this.
+	switch_to_blog( $site_id );
+	$data['site_name'] = get_option( 'blogname' );
+	$data['url']       = ( 'comment' === $type ) ? get_comment_link( $source_id ) : get_permalink( $source_id );
+	restore_current_blog();
+
+	return $data;
+}
+
+/**
+ * Render "Citation" and "Annotation" notes before the content.
+ *
+ * @param string $content
+ * @return string $output
+ */
+function openlab_portfolio_entry_source_note( $content ) {
+	$_post = get_post();
+	$data  = openlab_portfolio_get_citation_data( $_post );
+
+	// Check if the entry was added from other site.
+	if ( empty( $data['source_id'] ) ) {
+		return $content;
+	}
+
+	$data['annotation'] = get_post_meta( $_post->ID, 'portfolio_annotation', true );
+
+	extract( [ 'data' => $data ], EXTR_SKIP );
+	ob_start();
+
+	include WDS_CITYTECH_DIR . '/views/portfolio/entry-source.php';
+
+	$output = ob_get_clean();
+	$output .= $content;
+
+	return $output;
+}
+
+/**
+ * Render "Portfolio" entry citation.
+ *
+ * @param WP_Post $post
+ * @return void
+ */
+function openlab_portfolio_render_citation_meta( $post ) {
+	$data = openlab_portfolio_get_citation_data( $post );
+
+	extract( [ 'data' => $data ], EXTR_SKIP );
+	ob_start();
+
+	include WDS_CITYTECH_DIR . '/views/portfolio/citation.php';
+
+	echo ob_get_clean();
+}
+
+/**
+ * Render "Portfolio" entry annotation.
+ *
+ * @param WP_Post $post
+ * @return void
+ */
+function openlab_portfolio_render_annotation_meta( $post ) {
+	$annotation = get_post_meta( $post->ID, 'portfolio_annotation', true );
+	?>
+	<textarea id="annotation" class="large-text" name="portfolio_annotation" rows="5"><?php echo esc_textarea( $annotation ); ?></textarea>
+	<?php
+	wp_nonce_field( 'portfolio_annotation', 'portfolio_annotation_nonce' );
+}
+
+/**
+ * Save "Portfolio" entry annotation.
+ *
+ * @param int $post_id
+ * @return void
+ */
+function openlab_portfolio_save_annotation_meta( $post_id ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return $post_id;
+	}
+
+	if ( ! isset( $_POST['portfolio_annotation_nonce'] ) ) {
+		return $post_id;
+	}
+
+	if ( ! wp_verify_nonce( $_POST['portfolio_annotation_nonce'], 'portfolio_annotation' ) ) {
+		return $post_id;
+	}
+
+	$annotation = $_POST['portfolio_annotation'] ?? '';
+
+	// Value is sanitized via register_meta().
+	update_post_meta( $post_id, 'portfolio_annotation', $annotation );
+}
+add_action( 'save_post', 'openlab_portfolio_save_annotation_meta' );
+
+/**
+ * Default styles for "Portfolio" entry source.
+ *
+ * @return void
+ */
+function openlab_portfolio_entry_source_styles() {
+	?>
+	<style type="text/css">
+		.entry-source-note {
+			color: #444;
+			background-color: #f0f0f0;
+			margin-bottom: 24px;
+			padding: 24px;
+		}
+		.entry-source-note a,
+		.entry-source-note a:visited {
+			color: #444;
+		}
+		.entry-source-note .entry__annotation {
+			margin-top: 24px;
+		}
+	</style>
+	<?php
+}
