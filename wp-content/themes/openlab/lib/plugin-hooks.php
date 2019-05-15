@@ -69,9 +69,9 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 
 /**
  * Plugin: BuddyPress Docs
- * Don't allow BuddyPress Docs to use its own theme compatibility layer
+ *
+ * Disable attachments.
  */
-//add_filter( 'bp_docs_do_theme_compat', '__return_false' );
 
 /**
  * Plugin: BuddyPress Docs

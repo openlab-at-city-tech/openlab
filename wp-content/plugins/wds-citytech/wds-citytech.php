@@ -3016,3 +3016,5 @@ function openlab_sanitize_url_params( $url ) {
 
 	return $url;
 }
+
+add_filter( 'bp_docs_enable_attachments', '__return_false' );
