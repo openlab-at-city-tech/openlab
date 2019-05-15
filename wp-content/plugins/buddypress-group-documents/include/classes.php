@@ -11,7 +11,7 @@ class BP_Group_Documents {
 	public $description; //text
 	public $featured; //bool
 	public $download_count; //int
-	
+
 	/**
 	 * __construct()
 	 *
@@ -20,7 +20,7 @@ class BP_Group_Documents {
 	 */
 	public function __construct( $id = null, $params = false ) {
 		global $wpdb, $bp;
-		
+
 		if ( $id && ctype_digit( $id ) ) {
 			$this->id = $id;
 			if( $params ) {
@@ -30,7 +30,7 @@ class BP_Group_Documents {
 			}
 		}
 	}
-	
+
 	/**
 	 * populate()
 	 *
@@ -39,22 +39,22 @@ class BP_Group_Documents {
 	 */
 	private function populate() {
 		global $wpdb, $bp, $creds;
-		
+
 		if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE id = %d", $this->id ) ) ) {
 			foreach( $this as $field => $value ) {
 				$this->$field = $row->$field;
 			}
 		}
 	}
-	
+
 	/**
 	 * populate_passed()
 	 *
-	 * This method will populate the object with the passed parameters, 
+	 * This method will populate the object with the passed parameters,
 	 * saving a call to the database
 	 */
 	private function populate_passed($params) {
-		
+
 		//if checkbox in unchecked, nothing will be present
 		//turn absense of "true" into a "false"
 		if( !isset( $params['featured'] ) )
@@ -62,7 +62,7 @@ class BP_Group_Documents {
 
 		foreach( $this as $key => $value ) {
 			if( isset( $params[$key] ) )
-				$this->$key = $params[$key];	
+				$this->$key = $params[$key];
 		}
 	}
 
@@ -75,17 +75,17 @@ class BP_Group_Documents {
 	 */
 	 public function populate_by_file( $file ) {
 		global $bp, $wpdb;
-		
+
 		if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE file LIKE '%s'", $file ) ) ) {
 			foreach( $this as $field => $value ) {
 				$this->$field = $row->$field;
 			}
 			return true;
-		} 
+		}
 		return false;
 	}
 
-	
+
 	/**
 	 * save()
 	 *
@@ -94,13 +94,13 @@ class BP_Group_Documents {
 	 */
 	public function save($check_file_upload = true) {
 		global $wpdb, $bp;
-		
+
 		do_action( 'bp_group_documents_data_before_save', $this );
 
 		if ( $this->id ) {
 			// Update
-			$result = $wpdb->query( $wpdb->prepare( 
-					"UPDATE {$bp->group_documents->table_name} SET 
+			$result = $wpdb->query( $wpdb->prepare(
+					"UPDATE {$bp->group_documents->table_name} SET
 						modified_ts = %d,
 						name = %s,
 						description = %s,
@@ -110,7 +110,7 @@ class BP_Group_Documents {
 						$this->name,
 						$this->description,
 						$this->featured,
-						$this->id 
+						$this->id
 					) );
 		} else {
 			// Save
@@ -120,19 +120,19 @@ class BP_Group_Documents {
 				}
 			}
 
-			$result = $wpdb->query( $wpdb->prepare( 
-				"INSERT INTO {$bp->group_documents->table_name} ( 
+			$result = $wpdb->query( $wpdb->prepare(
+				"INSERT INTO {$bp->group_documents->table_name} (
 					user_id,
-					group_id, 
+					group_id,
 					created_ts,
 					modified_ts,
 					file,
 					name,
 					description,
 					featured
-				) VALUES ( 
+				) VALUES (
 					%d, %d, %d, %d, %s, %s, %s, %d
-				)", 
+				)",
 					$this->user_id,
 					$this->group_id,
 					time(),
@@ -143,16 +143,16 @@ class BP_Group_Documents {
 					$this->featured
 				) );
 		}
-				
+
 		if ( !$result )
 			return false;
-		
+
 		if ( !$this->id ) {
 			$this->id = $wpdb->insert_id;
-		}	
-		
-		do_action( 'bp_group_documents_data_after_save', $this ); 
-		
+		}
+
+		do_action( 'bp_group_documents_data_after_save', $this );
+
 		return $result;
 	}
 
@@ -171,10 +171,10 @@ class BP_Group_Documents {
 	 * delete()
 	 *
 	 * This method will delete the corresponding row for an object from the database.
-	 */	
+	 */
 	public function delete() {
 		global $wpdb, $bp;
-		
+
 		if( $this->current_user_can('delete') ) {
 			do_action('bp_group_documents_data_before_delete', $this);
 			if( $this->file && file_exists( $this->get_path(1) ) )
@@ -194,7 +194,7 @@ class BP_Group_Documents {
 		}
 		//check that file has an allowed extension
 		if( !bp_group_documents_check_ext( $_FILES['bp_group_documents_file']['name'] ) ) {
-			bp_core_add_message( __('The type of document submitted is not allowed','bp-group-documents'),'error' );	
+			bp_core_add_message( __('The type of document submitted is not allowed','bp-group-documents'),'error' );
 			return false;
 		}
 
@@ -243,7 +243,7 @@ class BP_Group_Documents {
 
 	/*
 	 * current_user_can()
-	 * 
+	 *
 	 * When passed an action, it returns true if the user has the privilages
 	 * to perfrom that action and false if they do not
 	 */
@@ -263,7 +263,7 @@ class BP_Group_Documents {
 						switch( groups_get_groupmeta( $bp->groups->current_group->id, 'group_documents_upload_permission')) {
 							case 'mods_only':
 								if( bp_group_is_mod($bp->groups->current_group) )
-									return true;	
+									return true;
 							break;
 							case 'members':
 							default:
@@ -274,7 +274,7 @@ class BP_Group_Documents {
 					break;
 					case 'mods_only':
 						if( bp_group_is_mod($bp->groups->current_group) )
-							return true;	
+							return true;
 					break;
 					case 'members':
 					default:
@@ -303,7 +303,7 @@ class BP_Group_Documents {
 	 * url()
 	 *
 	 * returns the full url of the document
-	 * if $legacy_check is true (default) the function 
+	 * if $legacy_check is true (default) the function
 	 * will check past locations if the file is not found
 	 */
 	public function url($legacy_check = 1) {
@@ -355,7 +355,7 @@ class BP_Group_Documents {
 	 *
 	 * If $create_folders is true, it will recursively create the path
 	 * to the new file (used for assignment).
-	 */ 
+	 */
 	public function path($legacy_check=0, $create_folders=0){
 	 echo $this->get_path($legacy_check, $create_folders);
 	}
@@ -376,7 +376,7 @@ class BP_Group_Documents {
 
 		/***
 		 * if we're getting the existing file to display, it may not be there
-		 * if file is not there, check in legacy locations 
+		 * if file is not there, check in legacy locations
 		 */
 		if ( $legacy_check && !file_exists( $document_path ) ) {
 
@@ -391,7 +391,7 @@ class BP_Group_Documents {
 
 		return apply_filters( 'bp_group_documents_file_path', $document_path, $this->group_id, $this->file );
 	}
-	
+
 	/*
 	 * icon()
 	 *
@@ -405,7 +405,7 @@ class BP_Group_Documents {
 	}
 		public function get_icon() {
 
-			$icons = array ( 
+			$icons = array (
 							'adp' => 'page_white_database.png',
 							'as' => 'page_white_actionscript.png',
 							'avi' => 'film.png',
@@ -464,10 +464,10 @@ class BP_Group_Documents {
 							'zip' => 'page_white_zip.png',
 							);
 
-			
+
 			$extension = substr($this->file,(strrpos($this->file, ".")+1));
 			$extension =  strtolower($extension);
-			
+
 			if( !isset( $icons[$extension] ) )
 				return false;
 
@@ -497,9 +497,9 @@ class BP_Group_Documents {
 		if( $category ) {
 			//grab all object id's in the passed category
 			$category_ids = get_objects_in_term($category,'group-documents-category');
-			
+
 			if( !empty( $category_ids ) ) {
-				$in_clause = '(' . 
+				$in_clause = '(' .
 				$sql .= "AND id IN (" . implode(',',$category_ids) . ') ';
 			}
 		}
@@ -509,11 +509,11 @@ class BP_Group_Documents {
 	}
 
 
-	public static function get_list_by_group( $group_id, $category=0, $sort=0, $order=0, $start=0, $items=0 ){
+	public static function get_list_by_group( $group_id, $category=null, $sort=0, $order=0, $start=0, $items=0 ){
 		global $wpdb, $bp;
 
 		// if these parameters aren't passed, grab the entire list
-		if( !$category && !$sort ) {
+		if( null === $category ) {
 
 			$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ORDER BY name ASC", $group_id), ARRAY_A );
 
@@ -521,15 +521,17 @@ class BP_Group_Documents {
 		}
 
 		//convert from 1-based paging to 0-based SQL limit
-		--$start;	
+		--$start;
 
 		//grab all object id's in the passed category
 		$category_ids = get_objects_in_term($category,'group-documents-category');
-		
+
 		$sql = "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ";
 		if( !empty( $category_ids ) ) {
 			$in_clause = '(' . implode(',',$category_ids) . ') ';
 			$sql .= "AND id IN " . $in_clause;
+		} else {
+			return array();
 		}
 		$sql .= "ORDER BY $sort $order LIMIT %d, %d";
 

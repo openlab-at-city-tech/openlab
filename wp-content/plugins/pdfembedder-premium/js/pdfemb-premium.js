@@ -562,6 +562,116 @@ jQuery(document).ready(function($) {
         return SimpleLinkService;
     })();
 
+    // Text Layer
+
+    var pdfembTextLayerBuilder = (function TextLayerBuilderClosure() {
+        /**
+         * @param {TextLayerBuilderOptions} options
+         * @constructs TextLayerBuilder
+         */
+        function TextLayerBuilder(options) {
+            this.pageDiv = options.pageDiv;
+            this.pdfPage = options.pdfPage;
+            this.linkService = options.linkService;
+            this.div = null;
+        }
+        TextLayerBuilder.prototype =
+            /** @lends TextLayerBuilder.prototype */ {
+
+            /**
+             * @param {PageViewport} viewport
+             */
+            setupText:
+                function TextLayerBuilder_setupText(viewport) {
+
+                    var pdfPage = this.pdfPage;
+                    var self = this;
+                    var pageDiv = this.pageDiv;
+
+                    var gettext_parameters = {
+                        //intent: 'display'
+                    };
+
+                    pdfPage.getTextContent(gettext_parameters).then(function (textContent) {
+                        viewport = viewport.clone({ dontFlip: false });
+
+                        parameters = {
+                            viewport: viewport,
+                            textContent: textContent,
+                            page: pdfPage,
+                            enhanceTextSelection: true
+                        };
+
+                        // Create a text layer div and render the text layer
+                        if (textContent.length === 0) {
+                            return;
+                        }
+
+                        var tls = self.pageDiv.getElementsByClassName('pdfembTextLayer');
+
+                        if (tls.length > 0) {
+                            self.div = tls[0];
+                            while (self.div.firstChild) { self.div.removeChild(self.div.firstChild); }
+                        }
+                        else {
+                            self.div = document.createElement('div');
+                            self.div.className = 'textLayer pdfembTextLayer';
+                            self.pageDiv.appendChild(self.div);
+                        }
+
+                        parameters.container = self.div;
+
+                        var tsk = PDFJS.renderTextLayer(parameters);
+
+                        /*tsk.promise.then(function() {
+                           tsk.expandTextDivs(true);
+                        });*/
+
+                        if (typeof mozL10n !== 'undefined') {
+                            mozL10n.translate(self.div);
+                        }
+
+                        // Get canvas
+                       /* var canvas = self.pageDiv.getElementsByTagName("canvas")[0];
+
+                        self.div.style.left = canvas.style.left;
+                        self.div.style.top = canvas.style.top;
+*/
+
+                    });
+                },
+
+            hide: function () {
+                if (!this.div) {
+                    return;
+                }
+                this.div.setAttribute('hidden', 'true');
+            }
+        };
+        return TextLayerBuilder;
+    })();
+
+    /**
+     * @constructor
+     * @implements IPDFTextLayerFactory
+     */
+    PDFEMB_NS.pdfembPremiumTextLayerFactory = function() {}
+    PDFEMB_NS.pdfembPremiumTextLayerFactory.prototype = {
+        /**
+         * @param {HTMLDivElement} pageDiv
+         * @param {PDFPage} pdfPage
+         * @returns {TextLayerBuilder}
+         */
+        createTextLayerBuilder: function (pageDiv, pdfPage) {
+            return new pdfembTextLayerBuilder({
+                pageDiv: pageDiv,
+                pdfPage: pdfPage,
+                linkService: new pdfembSimpleLinkService(pageDiv)
+            });
+        }
+    };
+
+
 
 // optimised CSS custom property getter/setter
     PDFEMB_NS.pdfembCustomStyle = (function CustomStyleClosure() {

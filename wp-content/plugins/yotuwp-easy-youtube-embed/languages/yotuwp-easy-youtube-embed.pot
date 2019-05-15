@@ -1,0 +1,718 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/fields.php:198
+msgid " Settings"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/fields.php:253
+msgid "%s"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:616
+msgid "10x Audience Engagement"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "API"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Auto Next Video"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Auto play"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Both Side"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Both Side No Text"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Branding logo"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Button Background Color"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Button Background Color Hover"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Button Color Hover"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Button Style"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Button Text Color"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:683
+msgid "By Keyword"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Cache"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Center No Text"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Change preferred language for captions. The option value is an ISO 639-1 two-letter language code or a fully specified locale. You can get your language code from %s"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Change video thumnail ratio to remove top and bottom bar."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:671
+msgid "Channel"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:751
+#: yotuwp-easy-youtube-embed/inc/views.php:778
+msgid "Check out document here"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Choose whether to show annotations or not"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:768
+msgid "Click on the input the select shortcode text then paste into your place you want to display gallery."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Columns"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Controls"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Default"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Display list of videos on Modal popup player."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Display video description on listing."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Display video title on listing."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Display your brand logo from displaying in the control bar. This option will remove YouTube logo as well."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:751
+msgid "Do you need help?"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:633
+msgid "Document"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Enable closed captions for video. ."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Enable information like the video title and uploader before the video starts playing."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Enable play next video in list automatically after previous one end."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Enable?"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:729
+msgid "Enter your keyword into text box below to listing all videos with that keyword."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:711
+msgid "Enter your video URL into text box below. Each video filled into each line. Then press Verify button to checking data."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:720
+msgid "Enter your videos URL into text box below. Each video filled into each line. Then press Verify button to checking data."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Follow %s to get your own YouTube API key"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:649
+msgid "For futher question and suggestion, please open theard on"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Force Closed Captions"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "General"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/yotuwp.php:1
+msgid "General Settings"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Grid"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "In the case of a single video player, enable this for the player to play the initial video again and again."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:763
+msgid "Insert Shortcode"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Large"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Layout for display videos."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Layout for video player."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "List"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/templates/pagination.php:1
+msgid "Load more"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Loop"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Mix"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Modal Thumbnails"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:630
+msgid "More details"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:680
+msgid "Multi Videos"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/fields.php:225
+#: yotuwp-easy-youtube-embed/templates/pagination.php:1
+msgid "Next"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "No"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:652
+msgid "Or send us message from "
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Pager Layout"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Pagination type"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Pagination?"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Player"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Player Language"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Player Mode"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Player width"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Playing Description"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Playing Title"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:668
+msgid "Playlist/List"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:695
+msgid "Please enter channel URL for getting info. Then press Verify button to checking data."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:688
+msgid "Please enter playlist/list URL for getting info. Then press Verify button to checking data."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:702
+msgid "Please enter username you want to get videos. Then press Verify button to checking data."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:776
+msgid "Please enter your Youtube API key from <a href=\"%s#api\">setting page</a> to use this feature."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Popup"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Preferred captions language"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/fields.php:224
+#: yotuwp-easy-youtube-embed/templates/pagination.php:1
+msgid "Prev"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:635
+msgid "Read more"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:638
+msgid "Read this article"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Related Videos"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Scrolling Offset"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/yotuwp.php:1
+msgid "Shortcode Generator"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Show annotations"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Show description playing video at bottom of player. Default disabled."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Show info"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Show title playing video on top of player. Default disabled."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:677
+msgid "Single Video"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:665
+msgid "Step #1: Select type videos you want to inserts"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:740
+msgid "Step #2: Layout Settings"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:767
+msgid "Step #3: Copy your shortcode"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/fields.php:228
+msgid "Style %s"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Style for a video on list"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Styling"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:647
+msgid "Support"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/yotuwp.php:1
+msgid "Template not found : "
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:900
+msgid "Thank you for activation YotuWP! Set your API key to start using. <a href=\"https://www.yotuwp.com/document/?utm_source=clientsite&amp;utm_medium=docs&amp;utm_campaign=doc\" target=\"_blank\">Read more</a>"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The background color of button on hover."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The button background color."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The cache to reduce time for loading videos. Give best experience to your readers."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The color of text button on hover."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The color of text on button."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The default width of player. Set 0 to use full container width player. Default : 600(px)"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The distance betwen top browser with player when play a video. Set 0 for auto center player in screen. Default : 100(px)"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The language in interface of player. Default is English. The option value is an ISO 639-1 two-letter language code or a fully specified locale. You can get your language code from %s"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The layout for pager. Select one of them to use."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The limit number videos per page."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The number columns of videos on Grid and Mix layout mode."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The pagination for reaching more videos on list."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The styling for all buttons. Select one of them to using."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The time your cache removed after created to ensure your videos are fresh."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "The type display and loading of pagination. Pager display next/preve button and current page. Load more displays one button on bottom. Default: pager"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:1037
+msgid "This feature helps you generate YotuWP shortcode to adding to any page builder, product description or widget."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "This parameter indicates whether the player should show related videos when playback of the initial video ends."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "This parameter indicates whether the video player controls are displayed"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "This parameter specifies whether the initial video will automatically start to play when the player loads."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Timeout"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:742
+msgid "Use default options"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:674
+msgid "Username"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:734
+msgid "Verify"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:911
+#: yotuwp-easy-youtube-embed/inc/views.php:1033
+msgid "Version"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Video Thumbnail"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Video Thumbnail Ratio"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Videos Description?"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Videos Layout Template"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Videos Title?"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Videos per page"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:649
+msgid "WordPress.org forum"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Yabnb - Grid Only"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Yes"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Yooglus - Grid Only"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/yotuwp.php:1
+msgid "Yotu - Embed Youtube"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/yotuwp.php:1
+msgid "YotuWP"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:635
+msgid "YotuWP Document"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:913
+msgid "YotuWP Settings"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:1036
+msgid "YotuWP Shortcode Generate"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:781
+msgid "YotuWP warning: API Key was removed, please contact to your admin about this issues."
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:781
+msgid "YotuWP: An issue happend when getting the videos, please check your connection and refresh page again ."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:778
+msgid "You can follow guide to get API Key and setup it."
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:638
+msgid "You do not know how to get YouTube API key"
+msgstr ""
+
+#. Text in function
+#: yotuwp-easy-youtube-embed/inc/views.php:1
+msgid "Youtube API Key"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/inc/views.php:652
+msgid "contact form"
+msgstr ""
+
+#. Text in echo
+#: yotuwp-easy-youtube-embed/templates/pagination.php:17
+msgid "of"
+msgstr ""

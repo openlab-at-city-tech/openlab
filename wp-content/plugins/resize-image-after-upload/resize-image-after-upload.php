@@ -4,7 +4,7 @@ Plugin Name: Resize Image After Upload
 Plugin URI: https://wordpress.org/plugins/resize-image-after-upload/
 Description: Automatically resize uploaded images to within specified maximum width and height. Also has option to force recompression of JPEGs. Configuration options found under <a href="options-general.php?page=resize-after-upload">Settings > Resize Image Upload</a>
 Author: ShortPixel
-Version: 1.8.5
+Version: 1.8.6
 Author URI: https://shortpixel.com
 
 Copyright (C) 2017 ShortPixel
@@ -24,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-$PLUGIN_VERSION = '1.8.5';
+$PLUGIN_VERSION = '1.8.6';
 $DEBUG_LOGGER = false;
 
 
@@ -119,6 +119,11 @@ function jr_uploadresize_options_page(){
 function jr_uploadresize_options(){
 
   if(isset($_POST['jr_options_update'])) {
+
+      if(!(current_user_can('manage_options') &&
+          wp_verify_nonce($_POST['_wpnonce'], 'jr-options-update'))) {
+          wp_die("Not authorized");
+      }
 
     $resizing_enabled = ($_POST['yesno'] == 'yes' ? 'yes' : 'no');
     $force_jpeg_recompression   = ($_POST['recompress_yesno'] == 'yes' ? 'yes' : 'no');
@@ -380,7 +385,8 @@ function jr_uploadresize_options(){
 
 		<p class="submit" style="margin-top:10px;border-top:1px solid #eee;padding-top:20px;">
 		  <input type="hidden" id="convert-bmp" name="convertbmp" value="no" />
-		  <input type="hidden" name="action" value="update" />
+          <input type="hidden" name="action" value="update" />
+          <?php wp_nonce_field('jr-options-update'); ?>
 		  <input id="submit" name="jr_options_update" class="button button-primary" type="submit" value="Update Options">
 		</p>
 	</form>

@@ -1,0 +1,195 @@
+/*
+ * FV Player Lightbox
+ */
+
+/*
+    Colorbox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #fv_player_pro_boxOverlay, #fv_player_pro_boxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#fv_player_pro_boxWrapper {max-width:none;background:#fff;}
+#fv_player_pro_boxOverlay{position:fixed; width:100%; height:100%;}
+#fv_player_pro_boxMiddleLeft, #fv_player_pro_boxBottomLeft{clear:left;}
+#fv_player_pro_boxContent{position:relative;}
+#fv_player_pro_boxLoadedContent{overflow:auto; -webkit-overflow-scrolling: touch;}
+#fv_player_pro_boxTitle{margin:0;}
+#fv_player_pro_boxLoadingOverlay, #fv_player_pro_boxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#fv_player_pro_boxPrevious, #fv_player_pro_boxNext, #fv_player_pro_boxClose, #fv_player_pro_boxSlideshow{cursor:pointer;}
+.fv_player_pro_boxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
+.fv_player_pro_boxIframe{width:100%; height:100%; display:block; border:0;}
+#colorbox, #fv_player_pro_boxContent, #fv_player_pro_boxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
+
+/* 
+    User Style:
+    Change the following styles to modify the appearance of Colorbox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#fv_player_pro_boxOverlay{background:#000;}
+#colorbox{outline:0;}
+    #fv_player_pro_boxTopLeft{width:14px; height:14px; background:url(img/controls.png) no-repeat 0 0;}
+    #fv_player_pro_boxTopCenter{height:14px;}
+    #fv_player_pro_boxTopRight{width:14px; height:14px; background:url(img/controls.png) no-repeat -36px 0;}
+    #fv_player_pro_boxBottomLeft{width:14px; height:43px; background:url(img/controls.png) no-repeat 0 -32px;}
+    #fv_player_pro_boxBottomCenter{height:43px;}
+    #fv_player_pro_boxBottomRight{width:14px; height:43px; background:url(img/controls.png) no-repeat -36px -32px;}
+    #fv_player_pro_boxMiddleLeft{width:14px; background:url(img/controls.png) repeat-y -175px 0;}
+    #fv_player_pro_boxMiddleRight{width:14px; background:url(img/controls.png) repeat-y -211px 0;}
+    #fv_player_pro_boxContent{background:#fff; overflow:visible;}
+        .fv_player_pro_boxIframe{background:#fff;}
+        #fv_player_pro_boxError{padding:50px; border:1px solid #ccc;}
+        #fv_player_pro_boxLoadedContent{margin-bottom:5px;}
+        
+        #fv_player_pro_boxLoadingGraphic{background:url(img/loading.gif) no-repeat center center;}
+        #fv_player_pro_boxTitle{position:absolute; bottom:-25px; left:0; text-align:center; width:100%; font-weight:bold; color:#7C7C7C;}
+        #fv_player_pro_boxCurrent{position:absolute; bottom:-25px; left:58px; font-weight:bold; color:#7C7C7C;}
+
+        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+        #fv_player_pro_boxPrevious, #fv_player_pro_boxNext, #fv_player_pro_boxSlideshow, #fv_player_pro_boxClose {border:0; padding:0; margin:0; overflow:visible;  position:absolute; bottom:-29px; background:url(img/controls.png) no-repeat 0px 0px; width:23px; height:23px; text-indent:-9999px;box-shadow:none;-webkit-box-shadow:none;-webkit-appearance:none;}
+        
+        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+        #fv_player_pro_boxPrevious:active, #fv_player_pro_boxNext:active, #fv_player_pro_boxSlideshow:active, #fv_player_pro_boxClose:active {outline:0;}
+
+        #fv_player_pro_boxPrevious{left:0px; background-position: -51px -25px;}
+        #fv_player_pro_boxPrevious:hover{background-position:-51px 0px;}
+        #fv_player_pro_boxNext{left:27px; background-position:-75px -25px;}
+        #fv_player_pro_boxNext:hover{background-position:-75px 0px;}
+        #fv_player_pro_boxClose{right:0; background-position:-100px -25px;}
+        #fv_player_pro_boxClose:hover{background-position:-100px 0px;}
+
+        .fv_player_pro_boxSlideshow_on #fv_player_pro_boxSlideshow{background-position:-125px 0px; right:27px;}
+        .fv_player_pro_boxSlideshow_on #fv_player_pro_boxSlideshow:hover{background-position:-150px 0px;}
+        .fv_player_pro_boxSlideshow_off #fv_player_pro_boxSlideshow{background-position:-150px -25px; right:27px;}
+        .fv_player_pro_boxSlideshow_off #fv_player_pro_boxSlideshow:hover{background-position:-125px 0px;}
+        
+/* Lightbox Styling */
+
+
+#fv_player_pro_boxMiddleLeft,
+#fv_player_pro_boxMiddleRight,
+#fv_player_pro_boxTopLeft,
+#fv_player_pro_boxTopCenter,
+#fv_player_pro_boxTopRight,
+#fv_player_pro_boxBottomLeft,
+#fv_player_pro_boxBottomRight,
+#fv_player_pro_boxBottomCenter {
+	background: #fff;	
+}
+
+#fv_player_pro_boxSlideshow, 
+#fv_player_pro_boxClose {
+	background-image: url("img/controls.png");
+	background-repeat: no-repeat;
+}
+
+#fv_player_pro_boxClose {
+	background-image: url("img/closelabel.png");
+	background-position: center center;
+	width: 66px;
+}
+
+#fv_player_pro_boxClose:hover {
+	background-position: center center;
+}
+
+#fv_player_pro_boxClose:active {
+	top: auto;
+}
+
+#fv_player_pro_boxMiddleLeft,
+#fv_player_pro_boxMiddleRight,
+#fv_player_pro_boxTopLeft,
+#fv_player_pro_boxTopRight,
+#fv_player_pro_boxBottomLeft,
+#fv_player_pro_boxBottomRight {
+	width: 10px;	
+}
+
+#fv_player_pro_boxTopCenter,
+#fv_player_pro_boxTopLeft,
+#fv_player_pro_boxTopRight {
+	height: 10px;	
+}
+
+#fv_player_pro_boxBottomLeft,
+#fv_player_pro_boxBottomRight,
+#fv_player_pro_boxBottomCenter {
+	height: 38px;	
+}
+
+#fv_player_pro_boxTitle,
+#fv_player_pro_boxCurrent {
+	font-weight: normal;	
+}
+
+#fv_player_pro_boxLoadedContent {
+	position: relative;
+	display: inline-block;
+	z-index: 99998;
+}
+
+#fv_player_pro_boxCurrent {
+	left: 0;
+}
+
+#fv_player_pro_boxPrevious,
+#fv_player_pro_boxNext {
+	background: none;
+	width: 15%;
+	height: auto;
+	top: 30px;
+  bottom: 80px;
+	display: block;
+	z-index: 99999;
+}
+
+#fv_player_pro_boxPrevious {
+	left: 0;
+	background: url("img/prevlabel.gif") no-repeat -999em center;
+}
+
+#fv_player_pro_boxNext {
+	right: -1px;
+	left: 85%;
+	background: url("img/nextlabel.gif") no-repeat 999em center;
+}
+
+#fv_player_pro_boxPrevious:hover {
+	background-position: -4px center;
+}
+
+#fv_player_pro_boxNext:hover {
+	background-position: right center;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 2dppx){
+	#fv_player_pro_colorbox #fv_player_pro_boxClose {
+		background-image: url("img/closelabel-x2.png");
+		background-size: 100%;
+	}
+}
+
+/* No chrome option */
+.no-chrome #fv_player_pro_boxWrapper,
+.no-chrome #fv_player_pro_boxMiddleLeft, 
+.no-chrome #fv_player_pro_boxMiddleRight, 
+.no-chrome #fv_player_pro_boxTopLeft, 
+.no-chrome #fv_player_pro_boxTopCenter, 
+.no-chrome #fv_player_pro_boxTopRight, 
+.no-chrome #fv_player_pro_boxBottomLeft, 
+.no-chrome #fv_player_pro_boxBottomRight, 
+.no-chrome #fv_player_pro_boxBottomCenter {
+    background: transparent;
+}
+.no-chrome #fv_player_pro_boxContent {
+    background: #fff;
+}
+.no-chrome .flowplayer.lightbox-starter,
+.no-chrome .flowplayer.lightboxed {
+    background-color: transparent;
+}
+.no-chrome #fv_player_pro_boxClose,
+.no-chrome #fv_player_pro_boxBottomLeft,
+.no-chrome #fv_player_pro_boxBottomCenter,
+.no-chrome #fv_player_pro_boxBottomRight {
+    display: none;
+}

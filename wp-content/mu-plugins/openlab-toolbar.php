@@ -713,7 +713,7 @@ HTML;
 				bp_the_member();
 
 				// avatar
-				$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_member_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+				$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_member_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 					array(
 						'item_id' => bp_get_member_user_id(),
 						'object'  => 'member',
@@ -745,7 +745,7 @@ HTML;
 				array(
 					'parent' => 'invites',
 					'id'     => 'friend-requests-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new friendship requests.</p></div></div>',
+					'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>No new friendship requests.</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-no-items nav-content-item',
 					),
@@ -783,7 +783,7 @@ HTML;
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $group->id,
 							'object'  => 'group',
@@ -818,7 +818,7 @@ HTML;
 				array(
 					'parent' => 'invites',
 					'id'     => 'group-invites-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new invitations.</p></div></div>',
+					'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>No new invitations.</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-no-items nav-content-item',
 					),
@@ -862,7 +862,7 @@ HTML;
 
 				if ( $messages_counter < 5 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $messages_template->thread->last_sender_id,
 							'object'  => 'member',
@@ -904,7 +904,7 @@ HTML;
 				array(
 					'parent' => 'messages',
 					'id'     => 'messages-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new messages.</p></div></div>',
+					'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>No new messages.</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-content-item nav-no-items',
 					),
@@ -953,7 +953,7 @@ HTML;
 				bp_the_activity();
 
 				// avatar
-				$title = '<div class="row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_activity_user_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+				$title = '<div class="ol-toolbar-row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_activity_user_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 					array(
 						'item_id' => bp_get_activity_user_id(),
 						'object'  => 'member',
@@ -1452,7 +1452,7 @@ HTML;
 		}
 
 		// Avatar.
-		$user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+		$user_info = '<div class="ol-toolbar-row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 			array(
 				'item_id' => $user_id,
 				'object'  => 'member',

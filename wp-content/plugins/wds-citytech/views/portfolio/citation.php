@@ -1,0 +1,1 @@
+<div class="entry__citation">This <a href="<?php echo esc_url( $data['url'] ); ?>">entry</a> was originaly posted in "<?php echo esc_html( $data['site_name'] ); ?>" on <?php echo esc_html( $data['date'] ); ?></div>

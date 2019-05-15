@@ -193,6 +193,10 @@ add_filter( 'eventorganiser_options', 'openlab_eventorganiser_custom_options' );
  * Adds a title above the description box when editing an event
  */
 function openlab_eventorganiser_custom_content_after_title() {
+	if ( ! function_exists( 'bpeo_is_action' ) ) {
+		return;
+	}
+
 	if ( bpeo_is_action( 'new' ) || bpeo_is_action( 'edit' ) ) {
 		echo '<h3 class="outside-title"><span class="font-size font-18">Event Description</span></h3>';
 	}

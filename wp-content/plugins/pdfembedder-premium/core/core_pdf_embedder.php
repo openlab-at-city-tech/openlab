@@ -1,35 +1,35 @@
 <?php
 
 class core_pdf_embedder {
-
+	
 	protected function useminified() {
 		return !defined( 'SCRIPT_DEBUG' ) || !SCRIPT_DEBUG;
 	}
-
+	
 	protected function __construct() {
 		$this->add_actions();
 		register_activation_hook($this->my_plugin_basename(), array( $this, 'pdfemb_activation_hook' ) );
 	}
-
+	
 	// May be overridden in basic or premium
 	public function pdfemb_activation_hook($network_wide) {
 	}
-
+	
 	public function pdfemb_wp_enqueue_scripts() {
 	}
-
+	
 	protected $inserted_scripts = false;
 	protected function insert_scripts() {
 		if (!$this->inserted_scripts) {
 			$this->inserted_scripts = true;
 			wp_enqueue_script( 'pdfemb_embed_pdf_js' );
-
+			
 			wp_enqueue_script( 'pdfemb_pdf_js' );
-
+			
 			wp_enqueue_style( 'pdfemb_embed_pdf_css', $this->my_plugin_url().'css/pdfemb-embed-pdf.css', array(), $this->PLUGIN_VERSION );
 		}
 	}
-
+	
 	protected function get_translation_array() {
 		return Array('worker_src' => $this->my_plugin_url().'js/pdfjs/pdf.worker'.($this->useminified() ? '.min' : '').'.js',
 		             'cmap_url' => $this->my_plugin_url().'js/pdfjs/cmaps/',
@@ -50,25 +50,25 @@ class core_pdf_embedder {
                 'viewinfullscreen' => esc_html__("View in Full Screen", 'pdf-embedder')
             ));
 	}
-
+	
 	protected function get_extra_js_name() {
 		return '';
 	}
-
-
+		
+	
 	// SHORTCODES
-
+	
 	// Take over PDF type in media gallery
 	public function pdfemb_upload_mimes($existing_mimes = array()) {
 		$existing_mimes['pdf'] = 'application/pdf';
 		return $existing_mimes;
 	}
-
+	
 	public function pdfemb_post_mime_types($post_mime_types) {
 		$post_mime_types['application/pdf'] = array( __( 'PDFs' , 'pdf-embedder'), __( 'Manage PDFs' , 'pdf-embedder'), _n_noop( 'PDF <span class="count">(%s)</span>', 'PDFs <span class="count">(%s)</span>' , 'pdf-embedder') );
 		return $post_mime_types;
 	}
-
+	
 	// Embed PDF shortcode instead of link
 	public function pdfemb_media_send_to_editor($html, $id, $attachment) {
 		$pdf_url = '';
@@ -103,7 +103,7 @@ class core_pdf_embedder {
 			return $html;
 		}
 	}
-
+	
 	protected function modify_pdfurl($url) {
 		return set_url_scheme($url);
 	}
@@ -115,16 +115,16 @@ class core_pdf_embedder {
 			return '<b>PDF Embedder requires a url attribute</b>';
 		}
 		$url = $atts['url'];
-
+		
 		$this->insert_scripts();
 
         // Get defaults
 
         $options = $this->get_option_pdfemb();
-
+		
 		$width = isset($atts['width']) ? $atts['width'] : $options['pdfemb_width'];
 		$height = isset($atts['height']) ? $atts['height'] : $options['pdfemb_height'];
-
+		
 		$extra_style = "";
 		if (is_numeric($width)) {
 			$extra_style .= "width: ".$width."px; ";
@@ -139,12 +139,12 @@ class core_pdf_embedder {
 		elseif ($height!='max' && $height!='auto') {
 			$height = 'max';
 		}
-
+		
 		$toolbar = isset($atts['toolbar']) && in_array($atts['toolbar'], array('top', 'bottom', 'both', 'none')) ? $atts['toolbar'] : $options['pdfemb_toolbar'];
         if (!in_array($toolbar, array('top', 'bottom', 'both', 'none'))) {
             $toolbar = 'bottom';
         }
-
+		
 		$toolbar_fixed = isset($atts['toolbarfixed']) ? $atts['toolbarfixed'] : $options['pdfemb_toolbarfixed'];
         if (!in_array($toolbar_fixed, array('on', 'off'))) {
             $toolbar_fixed = 'off';
@@ -157,11 +157,11 @@ class core_pdf_embedder {
 
 		$returnhtml = '<a href="'.$esc_pdfurl.'" class="pdfemb-viewer" style="'.esc_attr($extra_style).'" '
 						.'data-width="'.esc_attr($width).'" data-height="'.esc_attr($height).'" ';
-
+		
 		$returnhtml .= $this->extra_shortcode_attrs($atts, $content);
-
+						
 		$returnhtml .= ' data-toolbar="'.$toolbar.'" data-toolbar-fixed="'.$toolbar_fixed.'">'.esc_html( $title ).'<br/></a>';
-
+		
 		if (!is_null($content)) {
 			$returnhtml .= do_shortcode($content);
 		}
@@ -174,18 +174,18 @@ class core_pdf_embedder {
 		}
 		return $url;
 	}
-
+	
 	protected function extra_shortcode_attrs($atts, $content=null) {
 		return '';
 	}
-
+	
 	// ADMIN OPTIONS
 	// *************
-
+	
 	protected function get_options_menuname() {
 		return 'pdfemb_list_options';
 	}
-
+	
 	protected function get_options_pagename() {
 		return 'pdfemb_options';
 	}
@@ -200,13 +200,13 @@ class core_pdf_embedder {
 		}
         return is_plugin_active_for_network($this->my_plugin_basename());
     }
-
+	
 	protected function get_settings_url() {
 		return $this->is_multisite_and_network_activated()
 		? network_admin_url( 'settings.php?page='.$this->get_options_menuname() )
 		: admin_url( 'options-general.php?page='.$this->get_options_menuname() );
 	}
-
+	
 	public function pdfemb_admin_menu() {
 		if ($this->is_multisite_and_network_activated()) {
 			add_submenu_page( 'settings.php', __('PDF Embedder settings', 'pdf-embedder'), __('PDF Embedder', 'pdf-embedder'),
@@ -219,21 +219,21 @@ class core_pdf_embedder {
 			array($this, 'pdfemb_options_do_page'));
 		}
 	}
-
+	
 	public function pdfemb_options_do_page() {
 
         wp_enqueue_script( 'pdfemb_admin_js', $this->my_plugin_url().'js/admin/pdfemb-admin.js', array('jquery') );
         wp_enqueue_style( 'pdfemb_admin_css', $this->my_plugin_url().'css/pdfemb-admin.css', array(), $this->PLUGIN_VERSION  );
 
         $submit_page = $this->is_multisite_and_network_activated() ? 'edit.php?action='.$this->get_options_menuname() : 'options.php';
-
+	
 		if ($this->is_multisite_and_network_activated()) {
 			$this->pdfemb_options_do_network_errors();
 		}
 		?>
-
+			  
 		<div>
-
+		
     		<h2><?php esc_html_e('PDF Embedder setup', 'pdf-embedder'); ?></h2>
 
             <p><?php esc_html_e('To use the plugin, just embed PDFs in the same way as you would normally embed images in your posts/pages - but try with a PDF file instead.', 'pdf-embedder'); ?></p>
@@ -271,20 +271,20 @@ class core_pdf_embedder {
         $this->draw_extra_sections();
 
         settings_fields($this->get_options_pagename());
-
+		
 		?>
 
                     <p class="submit">
                         <input type="submit" value="<?php esc_html_e('Save Changes', 'pdf-embedder'); ?>" class="button button-primary" id="submit" name="submit">
                     </p>
-
+				
                 </form>
             </div>
 
             <?php $this->options_do_sidebar(); ?>
 
         </div>
-
+		
 		</div>  <?php
 	}
 
@@ -422,7 +422,7 @@ class core_pdf_embedder {
         $newinput['pdfemb_version'] = $this->PLUGIN_VERSION;
 		return $newinput;
 	}
-
+	
 	protected function get_error_string($fielderror) {
         $local_error_strings = Array(
             'pdfemb_width|widtherror' => __('Width must be "max" or an integer (number of pixels)', 'pdf-embedder'),
@@ -437,12 +437,12 @@ class core_pdf_embedder {
 
 	public function pdfemb_save_network_options() {
 		check_admin_referer( $this->get_options_pagename().'-options' );
-
+	
 		if (isset($_POST[$this->get_options_name()]) && is_array($_POST[$this->get_options_name()])) {
 			$inoptions = $_POST[$this->get_options_name()];
-
+			
 			$outoptions = $this->pdfemb_options_validate($inoptions);
-
+			
 			$error_code = Array();
 			$error_setting = Array();
 			foreach (get_settings_errors() as $e) {
@@ -472,7 +472,7 @@ class core_pdf_embedder {
 			exit;
 		}
 	}
-
+	
 	protected function pdfemb_options_do_network_errors() {
 		if (isset($_REQUEST['updated']) && $_REQUEST['updated']) {
 			?>
@@ -483,7 +483,7 @@ class core_pdf_embedder {
 					</div>
 				<?php
 			}
-
+	
 			if (isset($_REQUEST['error_setting']) && is_array($_REQUEST['error_setting'])
 				&& isset($_REQUEST['error_code']) && is_array($_REQUEST['error_code'])) {
 				$error_code = $_REQUEST['error_code'];
@@ -501,7 +501,7 @@ class core_pdf_embedder {
 			}
 		}
 	}
-
+	
 	// OPTIONS
 
     protected function get_options_name() {
@@ -517,7 +517,7 @@ class core_pdf_embedder {
             'pdfemb_version' => $this->PLUGIN_VERSION
         );
 	}
-
+	
 	protected $pdfemb_options = null;
 	protected function get_option_pdfemb() {
 		if ($this->pdfemb_options != null) {
@@ -530,14 +530,14 @@ class core_pdf_embedder {
 		else {
 			$option = get_option( $this->get_options_name(), Array() );
         }
-
+	
 		$default_options = $this->get_default_options();
 		foreach ($default_options as $k => $v) {
 			if (!isset($option[$k])) {
 				$option[$k] = $v;
 			}
 		}
-
+	
 		$this->pdfemb_options = $option;
 		return $this->pdfemb_options;
 	}
@@ -553,11 +553,11 @@ class core_pdf_embedder {
 	}
 
 	// ADMIN
-
+	
 	public function pdfemb_admin_init() {
 		// Add PDF as a supported upload type to Media Gallery
 		add_filter( 'upload_mimes', array($this, 'pdfemb_upload_mimes') );
-
+		
 		// Filter for PDFs in Media Gallery
 		add_filter( 'post_mime_types', array($this, 'pdfemb_post_mime_types') );
 
@@ -569,6 +569,8 @@ class core_pdf_embedder {
 		add_filter( 'attachment_fields_to_edit', array($this, 'pdfemb_attachment_fields_to_edit'), 10, 2 );
 
 		wp_enqueue_style( 'pdfemb_admin_other_css', $this->my_plugin_url().'css/pdfemb-admin-other.css', array(), $this->PLUGIN_VERSION  );
+
+		add_action( 'enqueue_block_editor_assets', array($this, 'gutenberg_enqueue_block_editor_assets') );
 	}
 
 	// Override in Basic and Commercial
@@ -578,6 +580,16 @@ class core_pdf_embedder {
 
 	// Override in Premium
 	public function pdfemb_init() {
+		add_shortcode( 'pdf-embedder', array($this, 'pdfemb_shortcode_display_pdf') );
+
+		// Gutenberg block
+		if (function_exists('register_block_type')) {
+			register_block_type( 'pdfemb/pdf-embedder-viewer', array(
+				'render_callback' => array($this, 'pdfemb_shortcode_display_pdf')
+			) );
+		}
+
+		add_action( 'enqueue_block_assets', array($this, 'gutenberg_enqueue_block_assets') );
 	}
 
     public function pdfemb_plugin_action_links( $links, $file ) {
@@ -604,15 +616,14 @@ class core_pdf_embedder {
 		add_action( 'plugins_loaded', array($this, 'pdfemb_plugins_loaded') );
 
 		add_action( 'init', array($this, 'pdfemb_init') );
-
+		
 		add_action( 'wp_enqueue_scripts', array($this, 'pdfemb_wp_enqueue_scripts'), 5, 0 );
-		add_shortcode( 'pdf-embedder', Array($this, 'pdfemb_shortcode_display_pdf') );
 
 		if (is_admin()) {
 			add_action( 'admin_init', array($this, 'pdfemb_admin_init'), 5, 0 );
-
+			
 			add_action($this->is_multisite_and_network_activated() ? 'network_admin_menu' : 'admin_menu', array($this, 'pdfemb_admin_menu'));
-
+			
 			if ($this->is_multisite_and_network_activated()) {
 				add_action('network_admin_edit_'.$this->get_options_menuname(), array($this, 'pdfemb_save_network_options'));
 			}
@@ -621,6 +632,32 @@ class core_pdf_embedder {
 		}
 	}
 
+	// Gutenberg enqueues
+
+	function gutenberg_enqueue_block_editor_assets() {
+		wp_enqueue_script(
+			'pdfemb-gutenberg-block-js', // Unique handle.
+			$this->my_plugin_url(). 'js/pdfemb-blocks.js',
+			array( 'wp-blocks', 'wp-i18n', 'wp-element' ), // Dependencies, defined above.
+			$this->PLUGIN_VERSION
+		);
+
+		wp_enqueue_style(
+			'pdfemb-gutenberg-block-css', // Handle.
+			$this->my_plugin_url(). 'css/pdfemb-blocks.css', // editor.css: This file styles the block within the Gutenberg editor.
+			array( 'wp-edit-blocks' ), // Dependencies, defined above.
+			$this->PLUGIN_VERSION
+		);
+	}
+
+	function gutenberg_enqueue_block_assets() {
+		wp_enqueue_style(
+			'pdfemb-gutenberg-block-backend-js', // Handle.
+			$this->my_plugin_url(). 'css/pdfemb-blocks.css', // style.css: This file styles the block on the frontend.
+			array( 'wp-blocks' ), // Dependencies, defined above.
+			$this->PLUGIN_VERSION
+		);
+	}
 }
 
 
