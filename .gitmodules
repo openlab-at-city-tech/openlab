@@ -1,3 +1,6 @@
 [submodule "wp-content/plugins/webwork"]
 	path = wp-content/plugins/webwork
 	url = git://github.com/livinglab/webwork-for-wordpress
+[submodule "wp-content/plugins/buddypress-docs-in-group"]
+	path = wp-content/plugins/buddypress-docs-in-group
+	url = https://github.com/boonebgorges/buddypress-docs-in-group
