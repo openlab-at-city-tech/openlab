@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
 
     PDFEMB_NS.PIXEL_RATIO = PIXEL_RATIO;
 
-    var CANVAS_MAX_PIXELS = 16777000;
+    var CANVAS_MAX_PIXELS = 16777000; // 16777216 is max on iPhone Safari
 
 
     createHiDPICanvas = function (w, h, ratio) {
@@ -117,6 +117,20 @@ jQuery(document).ready(function($) {
             }
         }
         self.annotationLayerFactories = Array();
+
+        // Text Layer
+
+        if (typeof(PDFEMB_NS.pdfembPremiumTextLayerFactory) != 'undefined') {
+            self.textLayerFactory = new PDFEMB_NS.pdfembPremiumTextLayerFactory();
+        }
+        else {
+            self.textLayerFactory = {
+                createTextLayerBuilder: function (pageDiv, pdfPage) {
+                    return null;
+                }
+            }
+        }
+        self.textLayerFactories = Array();
 
         // React to page jump event
 
@@ -777,6 +791,23 @@ jQuery(document).ready(function($) {
                 }
 
                 // End annotations layer
+
+
+                // Do Text Layer
+
+                var textLayer = null;
+                if (typeof self.textLayerFactories[pageNum] == 'undefined') {
+                    textLayer = self.textLayerFactory.createTextLayerBuilder(innerdiv[0], page);
+                    self.textLayerFactories[pageNum] = textLayer;
+                }
+                else {
+                    textLayer = self.textLayerFactories[pageNum];
+                }
+
+                if (textLayer != null) {
+                    textLayer.setupText(viewport);
+                }
+                // End Text Layer
 
 
                 innerdiv.data('invalidation-round', myInvalidationRound);

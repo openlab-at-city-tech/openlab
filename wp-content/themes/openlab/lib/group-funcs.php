@@ -604,7 +604,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
-    $clone_history  = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+	// Remove items that have been deleted, or have incomplete values.
+    $clone_history = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+	$clone_history = array_filter(
+		$clone_history,
+		function( $item ) {
+			return ! empty( $item['group_creator_id'] );
+		}
+	);
+
 	$credits_groups = array_map( function( $clone_group ) {
 		return sprintf(
 			'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
@@ -1221,6 +1229,34 @@ function openlab_get_directory_filter($filter_type, $label_type) {
                 $filter_array['options'][$sem['option_value']] = $sem['option_label'];
             }
             break;
+
+		case 'group_badge' :
+			$filter_array['label']   = 'Type';
+			$filter_array['options'] = array();
+
+			if ( class_exists( '\OpenLab\Badges\Badge' ) ) {
+				$badges = OpenLab\Badges\Badge::get();
+				foreach ( $badges as $badge ) {
+					switch ( $badge->get_name() ) {
+						case 'First Year Learning Community' :
+							$badge_name = 'FYLC';
+						break;
+
+						case 'Open Educational Resource' :
+							$badge_name = 'OER';
+						break;
+
+						default :
+							$badge_name = $badge->get_name();
+						break;
+					}
+
+					$filter_array['options'][ (string) $badge->get_id() ] = $badge_name;
+				}
+
+				$filter_array['options']['cloneable'] = 'Cloneable';
+			}
+			break;
     }
 
     return $filter_array;
@@ -1244,8 +1280,7 @@ function openlab_current_directory_filters() {
             break;
 
         case 'course' :
-
-            $filters = array('school', 'department', 'semester');
+            $filters = array('school', 'department', 'semester', 'group_badge');
             break;
 
         case 'club' :

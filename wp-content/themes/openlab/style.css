@@ -9298,19 +9298,6 @@ input#group-request-send {
 .academic-unit-selector label {
   font-weight: normal;
 }
-.academic-unit-selector .checkbox-list-container li {
-  float: none;
-  margin-bottom: .25em;
-  position: relative;
-}
-.academic-unit-selector .checkbox-list-container li input {
-  position: absolute;
-  left: 0;
-}
-.academic-unit-selector .checkbox-list-container li label {
-  display: block;
-  margin-left: 25px;
-}
 .academic-unit-selector .entity-inputs {
   overflow: hidden;
 }
@@ -9455,6 +9442,18 @@ body.membership-requests .group-list {
 .plugins #item-body {
   margin-top: 35px;
 }
+#bp-group-documents.has-folders #bp-group-documents-list {
+  float: left;
+  width: calc(100% - 200px);
+}
+#bp-group-documents.has-folders .bp-group-documents-folder-links {
+  display: block;
+  width: 180px;
+  float: right;
+}
+#bp-group-documents .bp-group-documents-folder-links {
+  display: none;
+}
 #bp-group-documents .bp-template-notice.error,
 #bp-group-documents .bp-template-notice.updated {
   margin-bottom: 17px;
@@ -9468,6 +9467,32 @@ body.membership-requests .group-list {
 }
 #bp-group-documents .notify-group-members-ui {
   padding-top: 10px;
+}
+#bp-group-documents .group-file-folders legend {
+  border-bottom: 0;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+#bp-group-documents .group-file-folders .checkbox-list-container ul {
+  list-style-type: none;
+  margin-top: 0;
+  padding-left: 0;
+}
+#bp-group-documents .group-file-folders .checkbox-list-container label {
+  font-weight: normal;
+}
+#bp-group-documents .group-file-folder-nav {
+  height: 120px;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
+  overflow: auto;
+  padding: 6px 12px;
+}
+#bp-group-documents .group-file-folder-nav ul {
+  list-style-type: none;
+  margin-top: 0;
+  padding-left: 0;
 }
 .docs-info-header #tags-toggle {
   padding: 6px 16px;

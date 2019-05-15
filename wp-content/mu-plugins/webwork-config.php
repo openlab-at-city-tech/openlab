@@ -210,3 +210,35 @@ add_filter(
 		return 'You must log into the OpenLab in order to post a WeBWorK question.';
 	}
 );
+
+/**
+ * Intro text.
+ */
+add_filter(
+	'webwork_intro_text',
+	function( $text ) {
+		$about_url = home_url( 'about' );
+		return sprintf( 'You are viewing <a href="%s">WeBWorK on the OpenLab</a>. Here, you can ask questions and discuss WeBWorK homework problems, and also see what other students have been asking.', $about_url );
+	}
+);
+
+/**
+ * Sidebar intro text.
+ */
+add_filter(
+	'webwork_sidebar_intro_text',
+	function( $text ) {
+		$help_url = home_url( 'help/explore-existing-questions-and-replies/#Filters' );
+		return sprintf( 'Use the <a href="%s">filters</a> below to navigate the questions that have been posted. You can select questions by course, section, or a specific WeBWorK problem set.', $help_url );
+	}
+);
+
+/**
+ * Incomplete question text.
+ */
+add_filter(
+	'webwork_incomplete_question_text',
+	function() {
+		return sprintf( 'This question does not contain enough detail for a useful response to be provided. Please review the <a href="%s">Ask Questions</a> page for guidance on how to phrase your question so that we may help you.', home_url( 'help/ask-questions' ) );
+	}
+);

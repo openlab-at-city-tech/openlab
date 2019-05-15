@@ -1,0 +1,8 @@
+<phpunit bootstrap="bootstrap.php">
+    <testsuites>
+        <testsuite name="FVPlayer">
+            <directory suffix="Test.php">frontend</directory>
+            <directory suffix="Test.php">backend</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -113,7 +113,7 @@ var pdfembGrabToPan = (function GrabToPanClosure() {
             // Use matchesSelector to check whether the clicked element
             // is (a child of) an input element / link
             return node[matchesSelector](
-                'a[href], a[href] *, input, textarea, button, button *, select, option'
+                'a[href], a[href] *, input, textarea, button, button *, select, option, .pdfembTextLayer > div'
             );
         },
 

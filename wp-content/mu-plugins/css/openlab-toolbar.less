@@ -256,6 +256,7 @@
                         padding-bottom: 16px;
                         margin-top: 16px;
                         border-bottom: 1px solid #e5e5e5;
+                        overflow: hidden;
                         .ab-item {
                             width: 90%;
                             margin: 0 auto;
@@ -813,6 +814,9 @@
             position: relative;
             visibility: hidden;
         }
+		.ol-footer-col {
+			padding: 0;
+		}
         .container-fluid {
             max-width: 1155px;
         }
@@ -837,8 +841,12 @@
         }
         p,
         a,
-        h2 {
+        h1,
+        h2,
+		h3 {
+			letter-spacing: inherit;
             text-shadow: none !important;
+			text-transform: none;
         }
         .footer-wrapper {
             color: #333333;
@@ -853,7 +861,7 @@
                 width: 95%;
             }
         }
-        .row {
+        .row, .ol-toolbar-row, .ol-footer-row {
             h2 {
                 color: #333;
                 margin: 0 auto 22px;
@@ -950,6 +958,7 @@
             padding-right: 0;
             ul {
                 font-style: italic;
+				margin-left: 0;
                 padding-left: 0;
                 list-style-type: none;
                 font-size: 13px;

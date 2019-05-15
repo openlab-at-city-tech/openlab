@@ -37,3 +37,20 @@ function openlab_activate_breadcrumb_navxt_on_openlab_twentysixteen() {
 	}
 }
 add_action( 'after_setup_theme', 'openlab_activate_breadcrumb_navxt_on_openlab_twentysixteen', 50 );
+
+/**
+ * Ensure that breadcrumbs settings are filled.
+ */
+add_filter(
+	'default_option_bcn_options',
+	function( $option ) {
+		$option = array();
+		$option['bpaged_display'] = true;
+		$option['Hhome_template'] = '<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to title." href="%link%" class="%type%"><span property="name">Home</span></a><meta property="position" content="%position%"></span>';
+		$option['Hhome_template_no_anchor'] = '<span property="itemListElement" typeof="ListItem"><span property="name">Home</span><meta property="position" content="%position%"></span>';
+		$option['bblog_display'] = false;
+		$option['bmainsite_display'] = false;
+
+		return $option;
+	}
+);
