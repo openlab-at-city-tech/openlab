@@ -723,7 +723,7 @@ function openlab_portfolio_register_meta() {
 		'show_in_rest' => true,
 	] );
 }
-add_action( 'init', 'openlab_portfolio_register_meta', 20 );
+//add_action( 'init', 'openlab_portfolio_register_meta', 20 );
 
 /**
  * Enqueue "Add to Portfolio" assets.
@@ -787,7 +787,7 @@ function openlab_add_to_portfolio_init() {
 	add_filter( 'comment_text', 'openlab_add_comment_to_portfolio', 200 );
 	add_action( 'wp_footer', 'openlab_add_to_portfolio_dialog' );
 }
-add_action( 'wp_enqueue_scripts', 'openlab_add_to_portfolio_init' );
+//add_action( 'wp_enqueue_scripts', 'openlab_add_to_portfolio_init' );
 
 /**
  * Render "Add to Portfolio" button for posts/pages.
@@ -862,7 +862,7 @@ function openlab_added_to_portfolio_template() {
 	add_filter( 'the_content', 'openlab_portfolio_entry_source_note' );
 	add_action( 'wp_footer', 'openlab_portfolio_entry_source_styles' );
 }
-add_action( 'template_redirect', 'openlab_added_to_portfolio_template' );
+//add_action( 'template_redirect', 'openlab_added_to_portfolio_template' );
 
 /**
  * Register metaboxes for "Portfolio" post/pages.
@@ -900,7 +900,7 @@ function openlab_add_portfolio_metaboxes( $post_type, $post ) {
 		'normal'
 	);
 }
-add_action( 'add_meta_boxes', 'openlab_add_portfolio_metaboxes', 10, 2 );
+//add_action( 'add_meta_boxes', 'openlab_add_portfolio_metaboxes', 10, 2 );
 
 /**
  * Generate "Portfolio" citation data.
