@@ -13,7 +13,14 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		return 0;
 	}
 
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
+	if ( false === $group_id ) {
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+		if ( null === $group_id ) {
+			$group_id = 0;
+		}
+		wp_cache_set( $blog_id, $group_id, 'site_group_ids' );
+	}
 
 	return (int) $group_id;
 }
@@ -32,6 +39,17 @@ function openlab_get_site_id_by_group_id( $group_id = 0 ) {
 
 	return (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
 }
+
+/**
+ * Busts cache when group site ID is changed.
+ *
+ * @param int $group_id
+ * @param int $site_id
+ */
+function openlab_bust_site_group_id_cache( $group_id, $site_id ) {
+	wp_cache_delete( $site_id, 'site_group_ids' );
+}
+add_action( 'openlab_set_group_site_id', 'openlab_bust_site_group_id_cache', 10, 2 );
 
 /**
  * Utility function for fetching site type based on group type.
@@ -226,7 +244,7 @@ function openlab_force_blog_role_sync() {
 	}
 
 	// Is this blog associated with a group?
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $group_id ) {
 
