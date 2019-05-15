@@ -64,7 +64,7 @@ class BP_Docs_History {
 		// current post
 		$this->revision_id = !empty( $_GET['revision'] ) ? (int)$_GET['revision'] : false;
 		if ( !$this->revision_id ) {
-			$this->revision_id = get_the_ID();
+			$this->revision_id = bp_docs_get_current_doc()->ID;
 		}
 	}
 
