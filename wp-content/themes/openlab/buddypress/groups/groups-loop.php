@@ -11,8 +11,10 @@ global $bp;
 
 $filters = array();
 if ( bp_is_user_groups() ) {
-	if ( isset( $_GET['type'] ) ) {
+	if ( isset( $_GET['type'] ) && in_array( $_GET['type'], openlab_group_types(), true ) ) {
 		$filters['wds_group_type'] = $_GET['type'];
+	} else {
+		$filters['wds_group_type'] = 'course';
 	}
 
 	// Set up the bp_has_groups() args: per_page, page, search_terms
