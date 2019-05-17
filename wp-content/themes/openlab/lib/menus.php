@@ -605,8 +605,12 @@ function openlab_submenu_gen($items, $timestamp = false) {
             //special case for my-<groups> pages
             if (isset($_GET['type'])) {
                 $type = $_GET['type'];
-                $type_title = 'My ' . ucfirst(str_replace('-', ' ', $type)) . 's';
-                if ($title == $type_title) {
+				$type_title = '';
+				if ( in_array( $type, openlab_group_types(), 1 ) ) {
+					$type_title = esc_html( 'My ' . ucfirst( str_replace( '-', ' ', $type ) ) . 's' );
+				}
+
+                if ( $title == $type_title ) {
                     $item_classes .= " current-menu-item";
                 }
             }
