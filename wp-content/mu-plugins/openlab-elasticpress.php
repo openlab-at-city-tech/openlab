@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * todo:
+ * - Add to mappings: school, department, semester (already in meta?)
+ * - Add the above to the sync mechanism
+
+/**
  * Group type should reflect what's stored in meta.
  */
 add_filter(
