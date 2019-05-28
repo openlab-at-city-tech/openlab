@@ -114,9 +114,9 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
 
             ?>
             <div class="panel panel-default">
-                <div class="panel-heading">Discussion, Docs, and Files Settings</div>
+                <div class="panel-heading">Discussion, Docs, Files, and Calendar Settings</div>
                 <div class="panel-body">
-                    <p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, and Files on your <?php echo $group_label_uc ?> profile.</p>
+                    <p id="discussion-settings-tag">These settings enable or disable Discussions, Docs, Files, and Calendar on your <?php echo $group_label_uc ?> profile.</p>
                     <div class="checkbox checkbox-float">
                         <label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
                     </div>
