@@ -15,7 +15,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this._subviews = [];
                     this.scrollObj = {};
                     this.options = options;
-                    this.filter_option = "-1";
+                    this.filter_option = "default";
                     this.course = options.course;
                     this.renderControl = 0;
                     this.gradebook = options.gradebook;
@@ -224,12 +224,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         new ResizeSensor(jQuery('#an-gradebook-container #students-header'), function(){
                             self.handleTableResize();
                         });
+
                     }
 
                     return this;
                 },
                 filterAssignments: function () {
                     var _x = $('#filter-assignments-select').val();
+                    console.log('default option', _x);
                     this.filter_option = _x;
                     var _toHide = this.gradebook.assignments.filter(
                             function (assign) {
@@ -242,7 +244,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             }
                     );
 
-                    if (_x === "-1") {
+                    if (_x === "default") {
                         this.gradebook.assignments.each(function (assign) {
                             assign.set({visibility: true});
                         });

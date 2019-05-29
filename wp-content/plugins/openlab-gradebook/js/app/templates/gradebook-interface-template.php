@@ -33,7 +33,7 @@
                     <div id="savingStatus" class="btn-group hidden">saving</div>
                     <div class="btn-group">
                         <select name="filter_option" id="filter-assignments-select" class="form-control">
-                            <option value="-1"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
+                            <option value="default"><?php esc_html_e('Show all', 'openlab-gradebook') ?></option>	
                             <% 
                             if( assign_categories){
                             for (var i in assign_categories){
