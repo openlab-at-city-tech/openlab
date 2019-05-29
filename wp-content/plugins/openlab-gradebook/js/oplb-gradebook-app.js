@@ -13,6 +13,7 @@ oplbgb_require_config = {
 		"bootstrap3-typeahead": "lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
 		jscrollpane: "lib/jscrollpane/jscrollpane.dist",
 		bootstrapfileinput: "lib/bootstrap-fileinput/bootstrap-fileinput.dist",
+		waypoints: "lib/bootstrap-fileinput/bootstrap-fileinput.dist.js",
         csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 	},
 	shim: {

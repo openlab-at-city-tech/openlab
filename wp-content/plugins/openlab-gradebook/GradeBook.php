@@ -127,11 +127,13 @@ function enqueue_oplb_gradebook_scripts() {
 	wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
     wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
     wp_register_script('bootstrap-fileinput-js', $app_base . '/lib/waypoints/noframework.waypoints.min.js', array('jquery'), $dep_ver, true);
+    wp_register_script('waypoints-js', $app_base . '/lib/bootstrap-fileinput/bootstrap-fileinput.dist.js', array('jquery'), $dep_ver, true);
 	wp_register_script('css-element-queries-js', $app_base . '/lib/css-element-queries/css.element.queries.dist.js', array('jquery'), $dep_ver, true);
 	wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);
 	wp_enqueue_style('OplbGradeBook_css');
     wp_enqueue_script('jscrollpane-js');
     wp_enqueue_script('bootstrap-fileinput-js');
+    wp_enqueue_script('waypoints-js');
 	wp_enqueue_script('css-element-queries-js');
 	wp_enqueue_script('requirejs');
 

@@ -23,5 +23,6 @@
     "bootstrap-fileinput": "^5.0.2",
     "css-element-queries": "^1.0.2",
     "grunt-contrib-watch": "^1.1.0",
+    "waypoints": "^4.0.1"
   }
 }

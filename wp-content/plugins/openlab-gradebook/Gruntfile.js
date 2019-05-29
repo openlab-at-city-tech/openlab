@@ -60,6 +60,17 @@ module.exports = function(grunt) {
 				],
 				dest: "js/lib/bootstrap-fileinput/bootstrap-fileinput.dist.js"
 			},
+			waypoints: {
+				filter: checkFilePath,
+				nonull: true,
+				options: {
+					separator: ";"
+				},
+				src: [
+					"node_modules/waypoints/lib/noframework.waypoints.min.js"
+				],
+				dest: "js/lib/waypoints/noframework.waypoints.min.js"
+			},
 			csselementqueries: {
 				filter: checkFilePath,
 				nonull: true,
@@ -100,6 +111,7 @@ module.exports = function(grunt) {
 							"lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
 						jscrollpane: "lib/jscrollpane/jscrollpane.dist",
 						bootstrapfileinput: "lib/bootstrap-fileinput/bootstrap-fileinput.dist",
+						waypoints: "lib/waypoints/noframework.waypoints.min.js",
 						csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 					},
 					shim: {
