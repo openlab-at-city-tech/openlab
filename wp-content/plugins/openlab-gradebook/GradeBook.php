@@ -116,8 +116,8 @@ function enqueue_oplb_gradebook_scripts() {
 		$oplb_gradebook_develop = true;
 	}
 
-	$dep_ver = '0.0.1.1';
-	$app_ver = '0.0.9.9';
+	$dep_ver = '0.0.1.2';
+	$app_ver = '0.1.0.0';
 
 	wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
 	wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
