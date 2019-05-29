@@ -543,7 +543,7 @@ span.twitter-typeahead {
   height: 59px;
 }
 .table-wrapper .scrollable .student-grades {
-  min-width: 68px;
+  min-width: 180px;
   position: relative;
 }
 .table-wrapper .scrollable .student-grades .fa-info-circle {
@@ -553,9 +553,9 @@ span.twitter-typeahead {
   bottom: 14px;
 }
 .table-wrapper .scrollable .student-grades span {
-  width: 60px;
-  max-width: 60px;
-  min-width: 60px;
+  width: 160px;
+  max-width: 160px;
+  min-width: 160px;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
