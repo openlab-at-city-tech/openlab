@@ -31,7 +31,7 @@ class gradebook_assignment_API
         }
 
         $wpdb->show_errors();
-        
+
         //trim assignment_category to prevent downstream spacing issues
         if (!empty($params['assign_category'])) {
             $params['assign_category'] = trim($params['assign_category']);
@@ -46,14 +46,14 @@ class gradebook_assignment_API
                     "{$wpdb->prefix}oplb_gradebook_cells",
                     array(
                         'amid' => $id,
-                        'gbid' => $gbid
+                        'gbid' => $gbid,
                     )
                 );
                 $wpdb->delete(
                     "{$wpdb->prefix}oplb_gradebook_assignments",
                     array(
                         'id' => $id,
-                        'gbid' => $gbid
+                        'gbid' => $gbid,
                     )
                 );
 
@@ -64,7 +64,7 @@ class gradebook_assignment_API
                 if (!empty($student_data)) {
                     $return_data['student_grade_update'] = $student_data;
                 }
-                
+
                 //get the total weight
                 $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
                 $return_data['distributed_weight'] = $weight_return['distributed_weight'];
@@ -151,7 +151,7 @@ class gradebook_assignment_API
                     $assignOrders = array(0);
                 }
                 $assignOrder = max($assignOrders) + 1;
-                
+
                 //handle values that cannot be NULL
                 if (!$params['assign_weight']) {
                     $params['assign_weight'] = 0;
@@ -178,7 +178,7 @@ class gradebook_assignment_API
                     'assign_grade_type' => $params['assign_grade_type'],
                     'assign_weight' => $params['assign_weight'],
                     'gbid' => $params['gbid'],
-                    'assign_order' => $assignOrder
+                    'assign_order' => $assignOrder,
                 ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d'));
 
                 $assignID = $wpdb->insert_id;
@@ -238,5 +238,3 @@ class gradebook_assignment_API
     }
 
 }
-
-?>

@@ -109,6 +109,7 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
                     this.$el.attr('data-id', this.model.get('amid'));
 
                     var _assignment = this.gradebook.assignments.findWhere({id: this.model.get('amid')});
+
                     if (_assignment) {
                         this.$el.toggleClass('hidden', !_assignment.get('visibility'));
                     }

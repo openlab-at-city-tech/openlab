@@ -20,7 +20,7 @@ class oplb_gradebook_api
     public function get_line_chart($uid, $gbid)
     {
         global $wpdb;
-        //need to check that user has access to this gradebook.		
+        //need to check that user has access to this gradebook.
         if (!is_user_logged_in()) {
             echo json_encode(array("status" => "Not Allowed."));
             die();
@@ -28,7 +28,7 @@ class oplb_gradebook_api
 
         //@todo: find out what this does
         //$query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND gbid = %d", $uid, $gbid);
-        //$cells = $wpdb->get_results($query, ARRAY_A);	
+        //$cells = $wpdb->get_results($query, ARRAY_A);
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $gbid);
         $class_cells = $wpdb->get_results($query, ARRAY_A);
@@ -76,7 +76,7 @@ class oplb_gradebook_api
                     'borderColor' => "rgba(220,220,220,1)",
                     'pointColor' => "rgba(220,220,220,1)",
                     'pointBackgroundColor' => "rgba(220,220,220,1)",
-                    'data' => $cells_points
+                    'data' => $cells_points,
                 ),
                 array(
                     'label' => "Class Average",
@@ -84,10 +84,10 @@ class oplb_gradebook_api
                     'borderColor' => "rgba(151,187,205,1)",
                     'pointColor' => "rgba(151,187,205,1)",
                     'pointBackgroundColor' => "rgba(151,187,205,1)",
-                    'data' => $assignment_averages
-                )
+                    'data' => $assignment_averages,
+                ),
             ),
-            'labels' => $assignments_names
+            'labels' => $assignments_names,
         );
     }
 
@@ -102,28 +102,23 @@ class oplb_gradebook_api
         $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE amid = %d", $amid);
         $pie_chart_data = $wpdb->get_col($query);
 
-        $isA = function($n)
-        {
+        $isA = function ($n) {
             return ($n >= 90 ? true : false);
         };
 
-        $isB = function($n)
-        {
+        $isB = function ($n) {
             return ($n >= 80 && $n < 90 ? true : false);
         };
 
-        $isC = function($n)
-        {
+        $isC = function ($n) {
             return ($n >= 70 && $n < 80 ? true : false);
         };
 
-        $isD = function($n)
-        {
+        $isD = function ($n) {
             return ($n >= 60 && $n < 70 ? true : false);
         };
 
-        $isF = function($n)
-        {
+        $isF = function ($n) {
             return ($n < 60 ? true : false);
         };
 
@@ -141,8 +136,8 @@ class oplb_gradebook_api
                     'data' => array($is_A, $is_B, $is_C, $is_D, $is_F),
                     'backgroundColor' => array('#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'),
                     'hoverBackgroundColor' => array('#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774'),
-                )
-            )
+                ),
+            ),
         );
 
         return $pie_chart_data;
@@ -290,7 +285,7 @@ class oplb_gradebook_api
                 "cells" => $cells,
                 "students" => array($student),
                 "role" => "student",
-                "test" => $assignments2
+                "test" => $assignments2,
             );
         }
     }
@@ -476,7 +471,7 @@ class oplb_gradebook_api
             $this->oplb_gradebook_update_current_grade_average($average_out, $gbid, $uid);
         }
 
-        return number_format((float)$average_out, 2, '.', '');
+        return number_format((float) $average_out, 2, '.', '');
     }
 
     /**
@@ -508,7 +503,7 @@ class oplb_gradebook_api
 
             $total_weight = $total_weight + $weight['assign_weight'];
 
-            $weights_by_assignment[$weight['id']] = number_format((float)$weight['assign_weight'], 2, '.', '');
+            $weights_by_assignment[$weight['id']] = number_format((float) $weight['assign_weight'], 2, '.', '');
 
             //let's work out any assignments that don't have a weight
             if (floatval($weights_by_assignment[$weight['id']]) === 0.00) {
@@ -521,7 +516,7 @@ class oplb_gradebook_api
         //if no weights are assigned (i.e. all weights are set to 0), distribute weights equally
         if (intval($total_weight) === 0) {
             $total_weight = 100;
-            
+
             //avoid division by zero
             if ($total_assignments === 0) {
                 $total_assignments = 1;
@@ -547,7 +542,6 @@ class oplb_gradebook_api
                 }
             }
         }
-
 
         return array(
             'weights_by_assignment' => $weights_by_assignment,
@@ -590,7 +584,7 @@ class oplb_gradebook_api
         $normalization_pct = 100 / $weights_return['total_weight'];
 
         if (empty($assignments)) {
-            return number_format((float)$average_out, 2, '.', '');
+            return number_format((float) $average_out, 2, '.', '');
         }
 
         foreach ($assignments as $assignment) {
@@ -613,7 +607,7 @@ class oplb_gradebook_api
             $average_out = $average_out + $grade_adj;
         }
 
-        return number_format((float)$average_out, 2, '.', '');
+        return number_format((float) $average_out, 2, '.', '');
     }
 
     /**
@@ -642,7 +636,7 @@ class oplb_gradebook_api
 
                 $student_data[$key] = array(
                     'uid' => intval($student->uid),
-                    'current_grade_average' => number_format((float)$calc_grade_average, 2, '.', ''),
+                    'current_grade_average' => number_format((float) $calc_grade_average, 2, '.', ''),
                 );
             }
         }
@@ -662,7 +656,7 @@ class oplb_gradebook_api
         global $wpdb;
 
         $wpdb->update("{$wpdb->prefix}oplb_gradebook_users", array(
-            'current_grade_average' => $calc_grade_average
+            'current_grade_average' => $calc_grade_average,
         ), array(
             'gbid' => $gbid,
             'uid' => $uid,
@@ -779,7 +773,7 @@ class oplb_gradebook_api
                         'amid' => $assignment['id'],
                         'uid' => $user->ID,
                         'assign_order' => $assignment['assign_order'],
-                        'is_null' => $is_null
+                        'is_null' => $is_null,
                     ),
                     array(
                         '%d',
@@ -816,12 +810,12 @@ class oplb_gradebook_api
                     'first_name' => $user_meta['first_name'],
                     'last_name' => $user_meta['last_name'],
                     'user_login' => $user->user_login,
-                    'current_grade_average' => number_format((float)0.00, 2, '.', ''),
+                    'current_grade_average' => number_format((float) 0.00, 2, '.', ''),
                     'gbid' => intval($gbid),
                     'id' => $user->ID,
-                    'role' => $role[0]['role']
+                    'role' => $role[0]['role'],
                 ),
-                'cells' => $cells
+                'cells' => $cells,
             );
 
             if ($return) {
@@ -878,7 +872,7 @@ class oplb_gradebook_api
         $first_name_retrieve = get_user_meta($user->ID, 'first_name', true);
         $last_name_retrieve = get_user_meta($user->ID, 'last_name', true);
         $nickname = get_user_meta($user->ID, 'nickname', true);
-        
+
         //this won't always work, but it's worth a shot
         if (!empty($nickname)) {
 
@@ -1097,7 +1091,7 @@ class oplb_gradebook_api
 
         foreach ($student_records as $key => $row) {
             unset($row['id']);
-            $final_rows[strtolower($row['lastname']).$key] = $row;
+            $final_rows[strtolower($row['lastname']) . $key] = $row;
         }
 
         ksort($final_rows);
@@ -1117,80 +1111,80 @@ class oplb_gradebook_api
                 label => 'A+',
                 value => 100,
                 range_low => 100,
-                range_high => 101
+                range_high => 101,
             ),
             array(
                 label => 'A',
                 value => 96,
                 range_low => 93,
-                range_high => 100
+                range_high => 100,
             ),
             array(
                 label => 'A-',
                 value => 91.5,
                 range_low => 90,
-                range_high => 93
+                range_high => 93,
             ),
             array(
                 label => 'B+',
                 value => 88.5,
                 range_low => 87,
-                range_high => 90
+                range_high => 90,
             ),
             array(
                 label => 'B',
                 value => 85,
                 range_low => 83,
-                range_high => 87
+                range_high => 87,
             ),
             array(
                 label => 'B-',
                 value => 81.5,
                 range_low => 80,
-                range_high => 83
+                range_high => 83,
             ),
             array(
                 label => 'C+',
                 value => 78.5,
                 range_low => 77,
-                range_high => 80
+                range_high => 80,
             ),
             array(
                 label => 'C',
                 value => 75,
                 range_low => 73,
-                range_high => 77
+                range_high => 77,
             ),
             array(
                 label => 'C-',
                 value => 71.5,
                 range_low => 70,
-                range_high => 73
+                range_high => 73,
             ),
             array(
                 label => 'D+',
                 value => 68.5,
                 range_low => 67,
-                range_high => 70
+                range_high => 70,
             ),
             array(
                 label => 'D',
                 value => 65,
                 range_low => 63,
-                range_high => 67
+                range_high => 67,
             ),
             array(
                 label => 'D-',
                 value => 61.5,
                 range_low => 60,
-                range_high => 63
+                range_high => 63,
             ),
             array(
                 label => 'F',
                 value => 50,
                 range_low => 1,
-                range_high => 60
-            )
+                range_high => 60,
+            ),
         );
 
         return $letter_grades;
@@ -1233,7 +1227,7 @@ class oplb_gradebook_api
                 ),
                 array(
                     '%d',
-                    '%d'
+                    '%d',
                 ),
                 array(
                     '%d',
@@ -1276,5 +1270,3 @@ class oplb_gradebook_api
     }
 
 }
-
-?>
