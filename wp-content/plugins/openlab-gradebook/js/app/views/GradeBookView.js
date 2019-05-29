@@ -304,6 +304,34 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         'height' : (scrollContainerDims.height + 29) + 'px'
                     });
 
+                    var paneLocation = $('#an-gradebook-container').offset();
+                    scrollContainerElem.find('.jspHorizontalBar').css({
+                        'position':'fixed',
+                        'left' : paneLocation.left + 'px'
+                    });
+
+                    var waypoint = new Waypoint({
+                        element: document.getElementById('an-gradebook-container'),
+                        handler: function(direction) {
+
+                            var target = scrollContainerElem.find('.jspHorizontalBar');
+
+                            if(direction === 'up'){
+                                target.css({
+                                    'position':'fixed',
+                                    'left' : paneLocation.left + 'px'
+                                });
+                            } else {
+                                target.css({
+                                    'position':'absolute',
+                                    'left' : 0
+                                });
+                            }
+
+                        },
+                        offset: 'bottom-in-view'
+                      });
+
                 },
                 addAssignment: function (ev) {
                     var view = new EditAssignmentView({course: this.course, gradebook: this.gradebook});
