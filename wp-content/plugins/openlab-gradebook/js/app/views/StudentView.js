@@ -3,6 +3,7 @@ define([
 	"backbone",
 	"underscore",
 	"views/StatisticsView",
+	"views/CommentView",
 	"views/EditStudentView",
 	"views/DeleteStudentView",
 	"views/CellView",
@@ -15,6 +16,7 @@ define([
 	Backbone,
 	_,
 	StatisticsView,
+	CommentView,
 	EditStudentView,
 	DeleteStudentView,
 	CellView,
@@ -254,7 +256,23 @@ define([
 							}
 
 							self._subviews.push(view);
-							self.$el.append(view.render());
+
+							var finalRender = view.render();
+
+							if (
+								self.gradebook.role === "instructor" ||
+								(self.gradebook.role === "student" && cell.get('comments'))
+							) {
+								var comment = new CommentView({
+									model: cell,
+									gradebook: self.gradebook
+								});
+								$(finalRender)
+									.find(".cell-wrapper")
+									.append(comment.render());
+							}
+
+							self.$el.append(finalRender);
 						}
 					});
 				}

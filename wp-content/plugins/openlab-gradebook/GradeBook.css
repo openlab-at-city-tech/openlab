@@ -109,6 +109,9 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
     text-align: center;
   }
 }
+.modal-body #edit-comment-form {
+  padding: 20px 30px;
+}
 .upload-modal .modal-dialong {
   width: 96%;
   max-width: 880px;
@@ -434,6 +437,20 @@ span.twitter-typeahead {
 }
 .table-wrapper .table {
   margin-bottom: 0;
+}
+.table-wrapper .table .cell-wrapper {
+  display: flex;
+}
+.table-wrapper .table .cell-wrapper .grade-numeric,
+.table-wrapper .table .cell-wrapper .checkbox {
+  flex: 1 0 60%;
+}
+.table-wrapper .table .cell-wrapper .grade-selector {
+  flex: 1 0 0;
+  margin-right: 31%;
+}
+.table-wrapper .table .cell-wrapper .comment-icon {
+  flex: 1 0 40%;
 }
 .table-wrapper #an-gradebook-container {
   top: 15px;

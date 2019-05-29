@@ -37,6 +37,7 @@ $oplb_user = new OPLB_USER();
 $oplb_user_list = new OPLB_USER_LIST();
 $oplb_statistics = new OPLB_STATISTICS();
 $oplb_upload_csv = new gradebook_upload_csv_API();
+$oplb_gradebook_database = new OPLB_DATABASE();
 
 /**
  * Legacy: setup OpenLab GradeBook admin

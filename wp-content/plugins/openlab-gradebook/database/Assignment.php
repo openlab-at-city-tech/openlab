@@ -229,6 +229,7 @@ class gradebook_assignment_API
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
                     $cell['is_null'] = boolval(intval($cell['is_null']));
+                    $cell['comments'] = !empty($cell['comments']) ? sanitize_text_field($cell['comments']) : false;
                 }
                 $data = array('assignment' => $assignment, 'cells' => $cells);
                 echo json_encode($data);

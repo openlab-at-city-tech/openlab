@@ -43,33 +43,37 @@ class gradebook_cell_API
                     $is_null = 0;
                 }
 
+                $values = array(
+                    'assign_order' => $params['assign_order'],
+                    'assign_points_earned' => $params['assign_points_earned'],
+                    'is_null' => $is_null,
+                );
+                $formats = array(
+                    '%d',
+                    '%f',
+                    '%d',
+                );
 
-				$wpdb->update(
-					"{$wpdb->prefix}oplb_gradebook_cells",
-					array(
-						'assign_order' => $params['assign_order'],
-						'assign_points_earned' => $params['assign_points_earned'],
-						'is_null' => $is_null,
-					),
-					array(
-						'uid' => $params['uid'],
-						'amid' => $params['amid'],
-						'gbid' => $gbid
-					),
-					array(
-						'%d',
-						'%f',
-						'%d'
-					),
-					array(
-						'%d',
-						'%d',
-						'%d'
-					)
-				);
+                if (!empty($params['comments'])) {
+                    $values['comments'] = $params['comments'];
+                    array_push($formats, '%s');
+                }
 
-				$query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
-				$assign_points_earned = $wpdb->get_row($query, ARRAY_A);
+                $wpdb->update(
+                    "{$wpdb->prefix}oplb_gradebook_cells",
+                    $values,
+                    array(
+                        'uid' => $params['uid'],
+                        'amid' => $params['amid'],
+                        'gbid' => $gbid,
+                    ),
+                    $formats,
+                    array(
+                        '%d',
+                        '%d',
+                        '%d',
+                    )
+                );
 
                 $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
                 $assign_points_earned = $wpdb->get_row($query, ARRAY_A);

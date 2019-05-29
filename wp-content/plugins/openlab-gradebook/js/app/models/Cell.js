@@ -9,7 +9,8 @@ define(['backbone'], function (Backbone) {
             selected: false,
             hover: false,
             visibility: true,
-            display: false
+            display: false,
+            comments: null,
         },
         url: function () {
             if (this.get('id')) {
