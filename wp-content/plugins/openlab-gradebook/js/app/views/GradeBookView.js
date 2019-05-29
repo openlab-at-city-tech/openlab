@@ -47,8 +47,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                         clearTimeout(this.resizeTimer);
                         this.resizeTimer = setTimeout(function () {
-
-                            self.adjustCellWidths();
+                            
+                            self.handleTableResize(true);
 
                         }, 250);
 
@@ -94,13 +94,21 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     self.$el.find('#students-header tr').append(compiledStudentHeader);
                     this.studentHeader = compiledStudentHeader;
 
+                    if(this.filter_option === undefined){
+                        this.filter_option = 'default';
+                    }
+
                     $('#filter-assignments-select').val(this.filter_option);
 
                     this.render();
 
                     return this;
                 },
-                handleTableResize: function(){
+                handleTableResize: function(widthChange){
+
+                    if(widthChange === undefined){
+                        widthChange = false;
+                    }
 
                     this.adjustCellWidths();
                     if (typeof this.scrollObj.data !== 'undefined') {
@@ -108,9 +116,9 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                         if (typeof jsAPI !== 'undefined') {
 
-                            currentScrollSize = $('#an-gradebook-container').width();
+                                currentScrollSize = $('#an-gradebook-container').width();
 
-                                if(parseInt(this.scrollSize) !== parseInt(currentScrollSize)){
+                                if(parseInt(this.scrollSize) !== parseInt(currentScrollSize) || widthChange){
                                     this.scrollSize = currentScrollSize;
                                     jsAPI.destroy();
                                     this.scrollObj = $('.table-wrapper .scrollable')
@@ -215,6 +223,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         this.gradebook.students.sort();
                         this.render();
 
+                        //table scroll
                         this.scrollObj = $('.table-wrapper .scrollable')
                             .bind('jsp-initialised', this.calculateScrollBarPosition)
                             .jScrollPane();
