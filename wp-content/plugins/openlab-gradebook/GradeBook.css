@@ -106,6 +106,13 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
     text-align: center;
   }
 }
+.modal-body #edit-comment-form {
+  padding: 20px 30px;
+}
+.upload-modal .modal-dialong {
+  width: 96%;
+  max-width: 880px;
+}
 h5 {
   font-weight: 600;
 }
@@ -526,7 +533,7 @@ span.twitter-typeahead {
   height: 59px;
 }
 .table-wrapper .scrollable .student-grades {
-  min-width: 180px;
+  min-width: 68px;
   position: relative;
 }
 .table-wrapper .scrollable .student-grades .fa-info-circle {
@@ -536,9 +543,9 @@ span.twitter-typeahead {
   bottom: 14px;
 }
 .table-wrapper .scrollable .student-grades span {
-  width: 160px;
-  max-width: 160px;
-  min-width: 160px;
+  width: 60px;
+  max-width: 60px;
+  min-width: 60px;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;

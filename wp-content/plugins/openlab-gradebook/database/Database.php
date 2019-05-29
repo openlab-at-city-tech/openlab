@@ -6,7 +6,7 @@
 class OPLB_DATABASE
 {
 
-    const oplb_gradebook_db_version = 1.84;
+    const oplb_gradebook_db_version = 1.85;
 
     public function __construct()
     {
@@ -85,6 +85,13 @@ class OPLB_DATABASE
                 $wpdb->query($sql);
             }
             update_option("oplb_gradebook_db_version", 1.84);
+        }
+
+        if (get_option('oplb_gradebook_db_version') < 1.85) {
+            //comments for cells
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+            $wpdb->query($sql);
+            update_option("oplb_gradebook_db_version", 1.85);
         }
 
     }

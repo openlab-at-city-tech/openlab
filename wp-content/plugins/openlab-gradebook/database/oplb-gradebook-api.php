@@ -319,6 +319,7 @@ class oplb_gradebook_api
             'assign_name' => FILTER_SANITIZE_STRING,
             'assign_visibility' => FILTER_SANITIZE_STRING,
             'assign_weight' => FILTER_SANITIZE_STRING,
+            'comments' => FILTER_SANITIZE_STRING,
             'publish' => FILTER_VALIDATE_BOOLEAN,
             'selected' => FILTER_VALIDATE_BOOLEAN,
             'sorted' => FILTER_SANITIZE_STRING,

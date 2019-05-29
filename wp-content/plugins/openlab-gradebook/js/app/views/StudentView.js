@@ -1,25 +1,50 @@
-define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditStudentView', 'views/DeleteStudentView', 'views/CellView', 'views/CellDropdown', 'views/CellCheckmark', 'models/letterGrades', 'models/User'],
-        function ($, Backbone, _, StatisticsView, EditStudentView, DeleteStudentView, CellView, CellDropdown, CellCheckmark, letterGrades, User) {
-            var StudentView = Backbone.View.extend(
-                    /** @lends StudentView.prototype */
-                            {
-                                tagName: 'tr',
-                                events: {
-                                    'click a.delete-student': 'deleteStudent',
-                                    'click a.student-statistics': 'studentStatistics',
-                                    'click .dashicons-menu': 'toggleStudentMenu',
-                                    'click li.student-submenu-delete': 'deleteStudent',
-                                    'click li.student-submenu-stats': 'studentStatistics',
-                                    'change select.grade-selector.mid': 'editMid',
-                                    'change select.grade-selector.final': 'editFinal'
-                                },
-                                /** @constructs */
-                                initialize: function (options) {
-                                    var self = this;
-                                    this._subviews = [];
-                                    this.gradebook = options.gradebook;
-                                    this.course = options.course;
-                                    this.student = this.model;
+define([
+	"jquery",
+	"backbone",
+	"underscore",
+	"views/StatisticsView",
+	"views/CommentView",
+	"views/EditStudentView",
+	"views/DeleteStudentView",
+	"views/CellView",
+	"views/CellDropdown",
+	"views/CellCheckmark",
+	"models/letterGrades",
+	"models/User"
+], function(
+	$,
+	Backbone,
+	_,
+	StatisticsView,
+	CommentView,
+	EditStudentView,
+	DeleteStudentView,
+	CellView,
+	CellDropdown,
+	CellCheckmark,
+	letterGrades,
+	User
+) {
+	var StudentView = Backbone.View.extend(
+		/** @lends StudentView.prototype */
+		{
+			tagName: "tr",
+			events: {
+				"click a.delete-student": "deleteStudent",
+				"click a.student-statistics": "studentStatistics",
+				"click .dashicons-menu": "toggleStudentMenu",
+				"click li.student-submenu-delete": "deleteStudent",
+				"click li.student-submenu-stats": "studentStatistics",
+				"change select.grade-selector.mid": "editMid",
+				"change select.grade-selector.final": "editFinal"
+			},
+			/** @constructs */
+			initialize: function(options) {
+				var self = this;
+				this._subviews = [];
+				this.gradebook = options.gradebook;
+				this.course = options.course;
+				this.student = this.model;
 
                                     Backbone.pubSub.on('editSuccess', this.editSuccess, this);
 
@@ -209,11 +234,27 @@ define(['jquery', 'backbone', 'underscore', 'views/StatisticsView', 'views/EditS
                                                     var view = new CellView({course: self.course, gradebook: self.gradebook, model: cell, options: self.options});
                                                 }
 
-                                                self._subviews.push(view);
-                                                self.$el.append(view.render());
-                                            }
-                                        });
-                                    }
+							self._subviews.push(view);
+
+							var finalRender = view.render();
+
+							if (
+								self.gradebook.role === "instructor" ||
+								(self.gradebook.role === "student" && cell.get('comments'))
+							) {
+								var comment = new CommentView({
+									model: cell,
+									gradebook: self.gradebook
+								});
+								$(finalRender)
+									.find(".cell-wrapper")
+									.append(comment.render());
+							}
+
+							self.$el.append(finalRender);
+						}
+					});
+				}
 
                                     this.postLoadActions();
 
