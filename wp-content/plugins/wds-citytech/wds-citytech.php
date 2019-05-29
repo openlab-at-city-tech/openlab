@@ -8,6 +8,9 @@ Author: City Tech OpenLab
 Author URI: https://openlab.citytech.cuny.edu
  */
 
+define( 'WDS_CITYTECH_DIR', dirname( __FILE__ ) );
+define( 'WDS_CITYTECH_URL', plugin_dir_url( __FILE__ ) );
+
 require 'wds-register.php';
 require 'wds-docs.php';
 require 'includes/oembed.php';
@@ -131,9 +134,7 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 
-	// phpcs:disable
-	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-	// phpcs:enable
+	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -213,9 +214,7 @@ function cuny_group_menu_items() {
 
 	$items = array();
 
-	// phpcs:disable
-	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-	// phpcs:enable
+	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -1586,9 +1585,7 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 		}
 
 		// Make sure it's the right faculty member
-		// phpcs:disable
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d LIMIT 1", get_current_blog_id() ) );
-		// phpcs:enable
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 		if ( ! empty( $group_id ) && ! groups_is_user_admin( get_current_user_id(), (int) $group_id ) ) {
 			return '';

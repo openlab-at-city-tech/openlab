@@ -58,7 +58,16 @@ function openlab_bp_group_documents_display_content() {
 	//instanciating the template will do the heavy lifting with all the superglobal variables
 	$template = new BP_Group_Documents_Template();
 
+	/*
 	$folders = $template->get_group_categories( false );
+	$folders = bp_sort_by_key( $folders, 'name' );
+
+	$non_empty_folders = array_filter(
+		$folders,
+		function( $folder ) {
+			return $folder->count > 0;
+		}
+	);
 
 	$current_category      = false;
 	$current_category_data = get_term_by( 'id', $template->category, 'group-documents-category' );
@@ -69,7 +78,9 @@ function openlab_bp_group_documents_display_content() {
 
 	?>
 
-	<div id="bp-group-documents" class="<?php if ( ! empty( $folders ) ) : ?>has-folders<?php endif; ?>">
+	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?>">
+	*/ ?>
+	<div id="bp-group-documents">
 
 		<?php do_action( 'template_notices' ); // (error/success feedback) ?>
 
@@ -171,9 +182,9 @@ function openlab_bp_group_documents_display_content() {
 			<label><?php _e( 'View folder:', 'bp-group-documents' ); ?></label>
 			<div class="group-file-folder-nav">
 				<ul>
-					<?php foreach ( $template->group_categories as $category ) { ?>
+					<?php foreach ( $non_empty_folders as $category ) { ?>
 						<?php $is_current_category = ( $category->name === $current_category ); ?>
-						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?> <?php /* (<?php echo $category->count ?>) */ ?></a></li>
+						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?></a></li>
 					<?php } ?>
 
 					<hr>
@@ -245,11 +256,13 @@ function openlab_bp_group_documents_display_content() {
 										<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
 									<?php } ?>
 
+									<?php /*
 									<fieldset class="group-file-folders">
 										<legend>Folders</legend>
 										<div class="checkbox-list-container group-file-folders-container">
+											<input type="hidden" name="bp_group_documents_categories[]" value="0" />
 											<ul>
-											<?php foreach( $template->get_group_categories(false) as $category ) { ?>
+											<?php foreach( $folders as $category ) { ?>
 												<li><input type="checkbox" name="bp_group_documents_categories[]" value="<?php echo esc_attr( $category->term_id ); ?>" id="group-folder-<?php echo esc_attr( $category->term_id ); ?>" <?php if( $template->doc_in_category($category->term_id)) echo 'checked="checked"'; ?> /> <label class="passive" for="group-folder-<?php echo esc_attr( $category->term_id ); ?>"><?php echo $category->name; ?></label></li>
 											<?php } ?>
 											</ul>
@@ -258,6 +271,7 @@ function openlab_bp_group_documents_display_content() {
 										<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
 									</fieldset>
 									<label></label>
+									*/ ?>
 								</div>
 							</div>
 						</div>

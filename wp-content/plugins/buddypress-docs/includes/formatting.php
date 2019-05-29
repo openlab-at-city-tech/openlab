@@ -11,7 +11,6 @@
 /**
  * Reduces the length of excerpts on the BP Docs doc list
  *
- * @package BuddyPress Docs
  * @since 1.0-beta
  *
  * @uses apply_filters() Plugins can filter bp_docs_excerpt_length to change the default
@@ -20,17 +19,21 @@
  */
 function bp_docs_excerpt_length( $length ) {
 	if ( bp_docs_is_bp_docs_page() ) {
-		$length = apply_filters( 'bp_docs_excerpt_length', 20 );
+		$length = bp_docs_get_excerpt_length();
 	}
-	
+
 	return $length;
 }
 add_filter( 'excerpt_length', 'bp_docs_excerpt_length' );
 
+function bp_docs_get_excerpt_length() {
+	$length = (int) get_option( 'bp-docs-excerpt-length', 20 );
+	return apply_filters( 'bp_docs_excerpt_length', $length );
+}
+
 /**
  * Adds spaces after the commas in the tag edit textarea. Annoying that WP doesn't do this.
  *
- * @package BuddyPress Docs
  * @since 1.0-beta
  *
  * @param string $tags The string of tags
@@ -41,9 +44,7 @@ function bp_docs_tags_comma_space( $tags ) {
 		$tags = explode( ',', $tags );
 		$tags = implode( ', ', $tags );
 	}
-	
+
 	return $tags;
 }
 add_filter( 'terms_to_edit', 'bp_docs_tags_comma_space' );
-
-?>

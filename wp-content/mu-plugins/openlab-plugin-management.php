@@ -41,6 +41,12 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
 		'wp-simile-timeline/timeline.php',
+
+		// See #2541.
+		'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+		'fv-wordpress-flowplayer/flowplayer.php',
+		'yotuwp-easy-youtube-embed/yotuwp.php',
+		'kirki/kirki.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -115,12 +121,9 @@ function openlab_mu_group_type_plugin_handling($plugins) {
     //first we convert the blog id to a group id
     $blog_id = get_current_blog_id();
 
-    $query = $wpdb->prepare("SELECT group_id FROM {$wpdb->groupmeta} WHERE meta_key = %s AND meta_value = %d", 'wds_bp_group_site_id', $blog_id);
-    $results = $wpdb->get_results($query);
+	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
-    if ($results && !empty($results)) {
-
-        $group_id = intval($results[0]->group_id);
+    if ( $group_id ) {
 
         //then we get the group type and apply any necessary conditions
         $group_type = groups_get_groupmeta($group_id, 'wds_group_type');

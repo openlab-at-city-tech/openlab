@@ -814,6 +814,9 @@
             position: relative;
             visibility: hidden;
         }
+		.ol-footer-col {
+			padding: 0;
+		}
         .container-fluid {
             max-width: 1155px;
         }
@@ -838,8 +841,12 @@
         }
         p,
         a,
-        h2 {
+        h1,
+        h2,
+		h3 {
+			letter-spacing: inherit;
             text-shadow: none !important;
+			text-transform: none;
         }
         .footer-wrapper {
             color: #333333;
@@ -951,6 +958,7 @@
             padding-right: 0;
             ul {
                 font-style: italic;
+				margin-left: 0;
                 padding-left: 0;
                 list-style-type: none;
                 font-size: 13px;

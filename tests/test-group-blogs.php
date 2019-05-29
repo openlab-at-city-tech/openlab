@@ -22,7 +22,7 @@ class OpenLab_Test_Group_Blogs extends BP_UnitTestCase {
 		$this->assertTrue( function_exists( 'bp_blogs_record_post' ) );
 		$group = $this->factory->group->create();
 		$blog_id = $this->factory->blog->create();
-		groups_update_groupmeta( $group->id, 'wds_bp_group_site_id', $blog_id );
+		openlab_set_group_site_id( $group_id, $blog_id );
 
 		switch_to_blog( $blog_id );
 		update_option( 'blog_public', '1' );

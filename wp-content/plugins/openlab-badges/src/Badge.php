@@ -4,11 +4,12 @@ namespace OpenLab\Badges;
 
 class Badge implements Grantable {
 	private $data = array(
-		'id'    => null,
-		'name'  => null,
-		'slug'  => null,
-		'image' => null,
-		'link'  => null,
+		'id'         => null,
+		'name'       => null,
+		'short_name' => null,
+		'slug'       => null,
+		'image'      => null,
+		'link'       => null,
 	);
 
 	public function __construct( $badge_id = null ) {
@@ -26,6 +27,12 @@ class Badge implements Grantable {
 		$this->set_id( $term->term_id );
 		$this->set_name( $term->name );
 		$this->set_slug( $term->slug );
+
+		$short_name = get_term_meta( $term->term_id, 'short_name', true );
+		if ( ! $short_name ) {
+			$short_name = $term->name;
+		}
+		$this->set_short_name( $short_name );
 
 		$image = get_term_meta( $term->term_id, 'image', true );
 		if ( $image ) {
@@ -58,6 +65,7 @@ class Badge implements Grantable {
 			) );
 		}
 
+		update_term_meta( $term_id, 'short_name', $this->get_short_name() );
 		update_term_meta( $term_id, 'image', $this->get_image() );
 		update_term_meta( $term_id, 'link', $this->get_link() );
 	}
@@ -72,6 +80,10 @@ class Badge implements Grantable {
 
 	public function set_name( $name ) {
 		$this->data['name'] = $name;
+	}
+
+	public function set_short_name( $short_name ) {
+		$this->data['short_name'] = $short_name;
 	}
 
 	public function set_slug( $slug ) {
@@ -92,6 +104,10 @@ class Badge implements Grantable {
 
 	public function get_name() {
 		return $this->data['name'];
+	}
+
+	public function get_short_name() {
+		return $this->data['short_name'];
 	}
 
 	public function get_slug() {
@@ -140,8 +156,9 @@ class Badge implements Grantable {
 	}
 
 	public function edit_html() {
-		$slug = $this->get_slug();
-		$name = $this->get_name();
+		$slug       = $this->get_slug();
+		$name       = $this->get_name();
+		$short_name = $this->get_short_name();
 
 		$id = $this->get_id();
 		if ( ! $id ) {
@@ -153,6 +170,11 @@ class Badge implements Grantable {
 		<label>
 			<span class="badge-field-label"><?php echo esc_html( 'Name', 'openlab-badges' ); ?></span>
 			<input name="badges[<?php echo esc_attr( $id ); ?>][name]" id="badge-<?php echo esc_attr( $slug ); ?>-name" value="<?php echo esc_attr( $name ); ?>" />
+		</label>
+
+		<label>
+			<span class="badge-field-label"><?php echo esc_html( 'Short Name', 'openlab-badges' ); ?></span>
+			<input name="badges[<?php echo esc_attr( $id ); ?>][short_name]" id="badge-<?php echo esc_attr( $slug ); ?>-short-name" value="<?php echo esc_attr( $short_name ); ?>" />
 		</label>
 
 		<label>
