@@ -136,6 +136,7 @@ class Admin {
 		foreach ( $saved_badges as $saved_badge_id => $saved_badge ) {
 			$badge = new Badge( $saved_badge_id );
 			$badge->set_name( $saved_badge['name'] );
+			$badge->set_short_name( $saved_badge['short_name'] );
 			$badge->set_image( $saved_badge['image'] );
 			$badge->set_link( $saved_badge['link'] );
 			$badge->save();

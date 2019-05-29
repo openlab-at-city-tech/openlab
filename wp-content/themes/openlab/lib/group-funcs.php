@@ -1240,21 +1240,7 @@ function openlab_get_directory_filter($filter_type, $label_type) {
 			if ( class_exists( '\OpenLab\Badges\Badge' ) ) {
 				$badges = OpenLab\Badges\Badge::get();
 				foreach ( $badges as $badge ) {
-					switch ( $badge->get_name() ) {
-						case 'First Year Learning Community' :
-							$badge_name = 'FYLC';
-						break;
-
-						case 'Open Educational Resource' :
-							$badge_name = 'OER';
-						break;
-
-						default :
-							$badge_name = $badge->get_name();
-						break;
-					}
-
-					$filter_array['options'][ (string) $badge->get_id() ] = $badge_name;
+					$filter_array['options'][ (string) $badge->get_id() ] = $badge->get_short_name();
 				}
 
 				$filter_array['options']['cloneable'] = 'Cloneable';
