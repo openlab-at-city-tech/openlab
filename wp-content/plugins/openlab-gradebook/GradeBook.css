@@ -106,6 +106,10 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
     text-align: center;
   }
 }
+.upload-modal .modal-dialong {
+  width: 96%;
+  max-width: 880px;
+}
 h5 {
   font-weight: 600;
 }
@@ -174,6 +178,16 @@ h5 {
 }
 body {
   background-color: #f1f1f1;
+}
+body.admin_page_oplb-gradebook-upload-csv .oplb-bs.navbar-location-oplb-bs,
+body.admin_page_oplb-gradebook-upload-csv #wpadminbar,
+body.admin_page_oplb-gradebook-upload-csv #adminmenumain,
+body.admin_page_oplb-gradebook-upload-csv #wpfooter,
+body.admin_page_oplb-gradebook-upload-csv #local-env-flag {
+  display: none !important;
+}
+body.admin_page_oplb-gradebook-upload-csv #wpcontent {
+  padding-top: 21px !important;
 }
 body .overline {
   text-decoration: overline;

@@ -101,40 +101,17 @@ body {
 }
 
 .modal-body {
-    overflow: auto;
-    .grade-type {
-        margin-bottom: 30px;
-    }
-    #edit-student-form {
-        .student-add-wrapper {
-            #addSingleStudent {
-                overflow-y: hidden;
-                max-height: 28px;
-                transition-property: all;
-                transition-duration: 0.5s;
-                transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-                @media (max-width: 767px) {
-                    max-height: 54px;
-                }
-            }
-            &.add-all {
-                #addSingleStudent {
-                    margin-bottom: 0;
-                    max-height: 0;
-                }
-            }
-        }
-        p {
-            width: 96%;
-            margin: 0 auto 10px;
-            max-width: 384px;
-        }
-        @media (max-width: 767px) {
-            .radio {
-                text-align: center;
-            }
-        }
-    }
+	overflow: auto;
+	.grade-type {
+		margin-bottom: 30px;
+	}
+}
+
+.upload-modal {
+	.modal-dialong {
+		width: 96%;
+		max-width: 880px;
+	}
 }
 
 h5 {
@@ -220,21 +197,33 @@ h5 {
 }
 
 body {
-    background-color: #f1f1f1;
-    .overline {
-        text-decoration: overline;
-    }
-    @media (max-width: 767px) {
-        .radio input[type="radio"] {
-            position: relative;
-        }
-    }
-    .dashicons {
-        &.dashicons-spinning {
-            -webkit-animation: spin 1000ms infinite linear;
-            animation: spin 1000ms infinite linear;
-        }
-    }
+	background-color: #f1f1f1;
+	&.admin_page_oplb-gradebook-upload-csv {
+		.oplb-bs.navbar-location-oplb-bs,
+		#wpadminbar,
+		#adminmenumain,
+		#wpfooter,
+		#local-env-flag {
+			display: none !important;
+		}
+		#wpcontent {
+			padding-top: 21px !important;
+		}
+	}
+	.overline {
+		text-decoration: overline;
+	}
+	@media (max-width: 767px) {
+		.radio input[type="radio"] {
+			position: relative;
+		}
+	}
+	.dashicons {
+		&.dashicons-spinning {
+			-webkit-animation: spin 1000ms infinite linear;
+			animation: spin 1000ms infinite linear;
+		}
+	}
 }
 
 .student-tools,

@@ -47,6 +47,19 @@ module.exports = function(grunt) {
 				],
 				dest: "js/lib/jscrollpane/jscrollpane.dist.js"
 			},
+			bootstrapfileinput: {
+				filter: checkFilePath,
+				nonull: true,
+				options: {
+					separator: ";"
+				},
+				src: [
+					"node_modules/bootstrap-fileinput/js/fileinput.min.js",
+					"node_modules/bootstrap-fileinput/themes/fa/theme.min.js",
+					"node_modules/bootstrap-fileinput/js/locales/LANG.js"
+				],
+				dest: "js/lib/bootstrap-fileinput/bootstrap-fileinput.dist.js"
+			},
 			csselementqueries: {
 				filter: checkFilePath,
 				nonull: true,
@@ -67,7 +80,8 @@ module.exports = function(grunt) {
 				},
 				src: [
 					"node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
-					"node_modules/jscrollpane/style/jquery.jscrollpane.css"
+					"node_modules/jscrollpane/style/jquery.jscrollpane.css",
+					"node_modules/bootstrap-fileinput/css/fileinput.min.css"
 				],
 				dest: "css/vendor.css"
 			}
@@ -85,6 +99,7 @@ module.exports = function(grunt) {
 						"bootstrap3-typeahead":
 							"lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
 						jscrollpane: "lib/jscrollpane/jscrollpane.dist",
+						bootstrapfileinput: "lib/bootstrap-fileinput/bootstrap-fileinput.dist",
 						csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 					},
 					shim: {

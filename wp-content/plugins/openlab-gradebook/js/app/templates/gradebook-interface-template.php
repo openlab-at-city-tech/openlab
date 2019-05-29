@@ -19,6 +19,7 @@
                     <div class="btn-arrange">
                         <div class="btn-group">    		
                             <button type="button" id="add-student" class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook') ?></button>
+                            <button type="button" id="upload-csv" class="btn btn-default">Upload CSV</button>
                         </div>
                     </div>
                     <div class="btn-arrange">

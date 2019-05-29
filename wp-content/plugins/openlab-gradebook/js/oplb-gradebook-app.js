@@ -11,7 +11,8 @@ oplbgb_require_config = {
 		bootstrap: "lib/bootstrap/js/bootstrap.min",
 		chart: "lib/chart/Chart.min",
 		"bootstrap3-typeahead": "lib/bootstrap3-typeahead/bootstrap3-typeahead.min",
-        jscrollpane: "lib/jscrollpane/jscrollpane.dist",
+		jscrollpane: "lib/jscrollpane/jscrollpane.dist",
+		bootstrapfileinput: "lib/bootstrap-fileinput/bootstrap-fileinput.dist",
         csselementqueries: "lib/css-element-queries/css.element.queries.dist"
 	},
 	shim: {

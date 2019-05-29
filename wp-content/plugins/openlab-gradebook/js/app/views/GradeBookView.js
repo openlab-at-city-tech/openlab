@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/Course'],
-        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, Course) {
+define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/AssignmentView', 'views/EditStudentView', 'views/EditAssignmentView', 'models/uploadFrame', 'views/uploadModal','models/Course'],
+        function ($, Backbone, _, StudentView, AssignmentView, EditStudentView, EditAssignmentView, uploadFrame, uploadModal, Course) {
 
             Backbone.pubSub = _.extend({}, Backbone.Events);
 
@@ -32,6 +32,15 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     Backbone.pubSub.on('updateAverageGrade', this.updateAverageGrade, this);
 
+                    console.log('wp object', wp);
+                    this.queue = wp.Uploader.queue;
+                    //safety first
+                    this.queue.off('remove change:uploading', this.mediaUpdate, this);
+
+                    //add listener for uploaded CSV
+                    this.queue.on('remove change:uploading', this.mediaUpdate, this);
+                    this.render();
+
                     this.initRender();
 
                     $(window).on('resize', function (e) {
@@ -56,6 +65,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                 },
                 events: {
                     'click button#add-student': 'addStudent',
+                    'click button#upload-csv': 'uploadCSV',
                     'click button#download-csv': 'downloadCSV',
                     'click button#download-csv-mobile': 'downloadCSV',
                     'click button#add-assignment': 'addAssignment',
@@ -312,10 +322,48 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var view = new EditStudentView({course: this.course, gradebook: this.gradebook});
                     $('body').append(view.render());
                 },
+                uploadCSV: function (e) {
+                    var self = this;
+                    e.preventDefault();
+
+                    if (typeof _wpPluploadSettings !== 'undefined') {
+                        _wpPluploadSettings.defaults.multipart_params.gbid = this.course.get('id');
+                    }
+
+                    var view = new uploadModal({course: this.course, gradebook: this.gradebook});
+                    $('body').append(view.render());
+
+                    //this.buildFrame().open();
+                },
                 downloadCSV: function (e) {
                     e.preventDefault();
 
                     this.course.export2csv();
+
+                },
+                buildFrame: function () {
+
+                    if (this._frame)
+                        return this._frame;
+
+                    wp.media.view.settings.post.id = oplbGradebook.storagePage.ID;
+
+                    this._frame = new uploadFrame({
+                        title: 'Upload CSV',
+                        button: {
+                            text: 'Select CSV'
+                        },
+                        multiple: false,
+                        library: {
+                            order: 'ASC',
+                            orderby: 'title',
+                            type: 'text/csv',
+                            search: null,
+                            uploadedTo: null
+                        }
+                    });
+
+                    return this._frame;
 
                 },
                 checkStudentSortDirection: function () {
@@ -354,6 +402,17 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                         xhr.abort()
                     });
                     this.remove();
+                },
+                mediaUpdate: function (data) {
+
+                    if (this.renderControl === 0) {
+                        this.renderControl = 1;
+                        var checkFile = $('.upload-csv-modal:visible').find('.upload-details .upload-index').text();
+                        if (parseInt(checkFile) === 1) {
+                            Backbone.history.loadUrl();
+                        }
+                    }
+
                 },
                 getTotalWeight: function () {
                     var self = this;
