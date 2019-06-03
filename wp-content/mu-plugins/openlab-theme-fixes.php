@@ -12,6 +12,7 @@ function openlab_load_theme_fixes() {
 	switch ( $t ) {
 		case 'carrington-blog':
 		case 'coraline':
+		case 'education-pro':
 		case 'filtered':
 		case 'hemingway':
 		case 'herothemetrust':
