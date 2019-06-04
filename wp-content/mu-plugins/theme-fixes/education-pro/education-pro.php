@@ -50,7 +50,6 @@ add_action(
 			'priority' => 120,
 		) );
 
-//		$wp_customize->remove_section( 'background_image' );
 		$wp_customize->add_section( 'background_image', array(
 			'title'          => __( 'Background Image' ),
 			'theme_supports' => 'custom-background',

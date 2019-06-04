@@ -143,7 +143,7 @@ function my_page_menu_filter( $menu ) {
 		$menu_a     = array(
 			$menu_a[0],
 			'<ul>',
-			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+			'<li id="group-profile-link" class="menu-item"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
 			$menu_a[1],
 		);
 		$menu       = implode( '', $menu_a );
@@ -226,7 +226,7 @@ function cuny_group_menu_items() {
 		$profile_item->title   = sprintf( '%s Profile', $group_type );
 		$profile_item->slug    = 'group-profile-link';
 		$profile_item->url     = bp_get_group_permalink( $group );
-		$profile_item->classes = [];
+		$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
 
 		$items[] = $profile_item;
 	}
