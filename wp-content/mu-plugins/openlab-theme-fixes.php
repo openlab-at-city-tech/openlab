@@ -35,7 +35,7 @@ function openlab_load_theme_fixes() {
 		break;
 	}
 }
-add_action( 'wp_print_styles', 'openlab_load_theme_fixes', 9999 );
+add_action( 'wp_head', 'openlab_load_theme_fixes', 9999 );
 
 /**
  * Loads PHP-based theme mods for OpenLab site themes.
