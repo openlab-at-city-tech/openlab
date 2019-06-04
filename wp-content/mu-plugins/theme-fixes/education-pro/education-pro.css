@@ -182,6 +182,10 @@ div.entry-content a, .breadcrumb a {
 }
 
 
+.header-widget-area {
+	max-width: calc(100% - 500px);
+}
+
 .header-widget-area .genesis-nav-menu .sub-menu {
 	border-left: 3px solid #e44a3d;
 }
@@ -190,7 +194,21 @@ div.entry-content a, .breadcrumb a {
 	border-left: none;
 }
 
+@media only screen and (max-width: 1023px) {
+	div.title-area {
+		width: 100%;
+	}
+
+	.site-header .header-widget-area {
+		max-width: 100%;
+		text-align: center;
+		width: 100%;
+	}
+}
+
 /* Couldn't figure out menu hovers, so see mockups or let me know which selectors to adjust. :) */
+
+/** COLOR SCHEMES ********************************************************/
 
 .education-pro-blue .footer-widgets .wrap a:hover,
 .education-pro-blue .footer-widgets a.button,
