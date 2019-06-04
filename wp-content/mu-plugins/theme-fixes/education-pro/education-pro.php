@@ -59,3 +59,11 @@ add_action(
 		$wp_customize->remove_section( 'custom_css' );
 	}
 );
+
+//* Add support for additional color style options
+remove_theme_support( 'genesis-style-selector' );
+add_theme_support( 'genesis-style-selector', array(
+	'education-pro-blue'   => 'Blue',
+	'education-pro-green'  => 'Green',
+	'education-pro-red'    => 'Red',
+) );

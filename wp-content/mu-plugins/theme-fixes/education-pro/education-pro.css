@@ -182,9 +182,108 @@ div.entry-content a, .breadcrumb a {
 }
 
 
+.header-widget-area .genesis-nav-menu .sub-menu {
+	border-left: 3px solid #e44a3d;
+}
+
+.header-widget-area .genesis-nav-menu .sub-menu .sub-menu {
+	border-left: none;
+}
+
 /* Couldn't figure out menu hovers, so see mockups or let me know which selectors to adjust. :) */
 
+.education-pro-blue .footer-widgets .wrap a:hover,
+.education-pro-blue .footer-widgets a.button,
+.education-pro-blue .slide-excerpt h2 a,
+.education-pro-blue .home-middle .entry-title a,
+.education-pro-blue .home-top .widget_text,
+.education-pro-blue .site-footer .wrap a:hover,
+.education-pro-blue .site-footer a.button,
+.education-pro-blue .entry-content a,
+.education-pro-blue a {
+	color: #aa2418;
+}
 
+.education-pro-blue a:hover {
+	color: #444;
+}
 
+.education-pro-blue .archive-description,
+.education-pro-blue .author-box,
+.education-pro-blue .button:hover,
+.education-pro-blue .content .entry-header .entry-meta .entry-time,
+.education-pro-blue .footer-widgets .wrap .button:hover,
+.education-pro-blue .footer-widgets button:hover,
+.education-pro-blue .footer-widgets input:hover[type="button"],
+.education-pro-blue .footer-widgets input:hover[type="reset"],
+.education-pro-blue .footer-widgets input:hover[type="submit"],
+.education-pro-blue .home-bottom .widget .button:hover,
+.education-pro-blue .home-bottom button:hover,
+.education-pro-blue .home-bottom input:hover[type="button"],
+.education-pro-blue .home-bottom input:hover[type="reset"],
+.education-pro-blue .home-bottom input:hover[type="submit"],
+.education-pro-blue .home-featured #genesis-responsive-slider .more-link:hover,
+.education-pro-blue .title-area,
+.education-pro-blue .title-area a,
+.education-pro-blue button:hover,
+.education-pro-blue input:hover[type="button"],
+.education-pro-blue input:hover[type="reset"],
+.education-pro-blue input:hover[type="submit"] {
+	background-color: #bad0de;
+	color: #113f58;
+}
 
------
+.education-pro-blue .button,
+.education-pro-blue .home-bottom,
+.education-pro-blue .widget-area .widget.enews-widget,
+.education-pro-blue button,
+.education-pro-blue input[type="button"],
+.education-pro-blue input[type="reset"],
+.education-pro-blue input[type="submit"] {
+	background-color: #a8b2b9;
+}
+
+/* Nav above title */
+.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu a,
+.education-pro-blue .nav-primary .genesis-nav-menu li a:hover,
+.education-pro-blue .nav-primary .genesis-nav-menu li.current-menu-item > a {
+	background-color: #113f58;
+	color: #fff;
+}
+
+/* Nav beside title */
+.education-pro-blue .genesis-nav-menu li a:hover,
+.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
+.education-pro-blue .genesis-nav-menu .sub-menu li a:hover,
+.education-pro-blue .genesis-nav-menu .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
+
+.education-pro-blue .genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #113f58;
+}
+
+.education-pro-blue .header-widget-area .genesis-nav-menu .sub-menu,
+.education-pro-blue .after-entry .widget,
+.education-pro-blue .home-top .wrap,
+.education-pro-blue .sidebar .widget,
+.education-pro-blue .site-header {
+	border-color: #2192da;
+}
+
+.education-pro-blue .enews-widget .enews input:hover[type="submit"],
+.education-pro-blue .footer-widgets,
+.education-pro-blue .home-middle,
+.education-pro-blue .nav-primary,
+.education-pro-blue .site-footer {
+	background-color: #185a7d;
+}
+
+.education-pro-blue .site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
+}
+
