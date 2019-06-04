@@ -154,9 +154,11 @@ add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
 function cuny_add_group_menu_items( $items, $args ) {
-	// The Sliding Door theme shouldn't get any added items
-	// See http://openlab.citytech.cuny.edu/redmine/issues/772
-	if ( 'custom-sliding-menu' == $args->theme_location ) {
+	/**
+	 * Allows individual themes to opt out.
+	 */
+	$allow = apply_filters( 'openlab_add_dynamic_nav_items', true, $args );
+	if ( ! $allow ) {
 		return $items;
 	}
 

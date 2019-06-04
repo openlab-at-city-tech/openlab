@@ -31,3 +31,22 @@ function openlab_activate_page_links_to_on_sliding_door() {
 	}
 }
 add_action( 'after_setup_theme', 'openlab_activate_page_links_to_on_sliding_door', 50 );
+
+
+/**
+ * Don't add dynamic nav items in the 'custom-sliding-menu' location.
+ *
+ * See http://openlab.citytech.cuny.edu/redmine/issues/772
+ */
+add_filter(
+	'openlab_add_dynamic_nav_items',
+	function( $retval, $args ) {
+		if ( 'custom-sliding-menu' === $args->theme_location ) {
+			$retval = false;
+		}
+
+		return $retval;
+	},
+	10,
+	2
+);
