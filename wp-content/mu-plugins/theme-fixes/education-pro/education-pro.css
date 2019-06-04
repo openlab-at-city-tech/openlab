@@ -196,6 +196,7 @@ div.entry-content a, .breadcrumb a {
 
 @media only screen and (max-width: 1023px) {
 	div.title-area {
+		float: none;
 		width: 100%;
 	}
 
@@ -203,6 +204,12 @@ div.entry-content a, .breadcrumb a {
 		max-width: 100%;
 		text-align: center;
 		width: 100%;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	div.title-area {
+		max-width: 100%;
 	}
 }
 
