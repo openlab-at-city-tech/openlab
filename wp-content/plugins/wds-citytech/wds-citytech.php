@@ -183,7 +183,7 @@ function cuny_add_group_menu_items( $items, $args ) {
 		$home_link->url     = trailingslashit( site_url() );
 		$home_link->slug    = 'home';
 		$home_link->ID      = 'home';
-		$home_link->classes = [];
+		$home_link->classes = [ 'menu-item', 'menu-item-home' ];
 		$items              = array_merge( array( $home_link ), $items );
 	}
 
