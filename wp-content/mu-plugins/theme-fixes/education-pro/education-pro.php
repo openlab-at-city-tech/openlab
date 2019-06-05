@@ -57,6 +57,10 @@ add_action(
 		) );
 
 		$wp_customize->remove_section( 'custom_css' );
+
+		// 'Theme Settings' subsections.
+		$wp_customize->remove_section( 'genesis_adsense' );
+		$wp_customize->remove_section( 'genesis_scripts' );
 	}
 );
 
