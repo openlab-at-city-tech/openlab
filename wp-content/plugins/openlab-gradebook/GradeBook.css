@@ -476,6 +476,12 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input:before {
   opacity: 1;
 }
+#gradebookWrapper .table-wrapper .table .checkbox input {
+  opacity: 1;
+}
+#gradebookWrapper .table-wrapper .table .checkbox input:before {
+  opacity: 1;
+}
 #gradebookWrapper .table-wrapper #an-gradebook-container {
   top: 15px;
   position: relative;
