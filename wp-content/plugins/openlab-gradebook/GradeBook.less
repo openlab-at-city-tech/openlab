@@ -591,7 +591,7 @@ span.twitter-typeahead {
 			table-layout: fixed;
 			width: 100%;
 			th {
-				padding: 15px 8px;
+				padding: 15px 20px 15px 8px;
 			}
 		}
 		td.student {
@@ -611,9 +611,49 @@ span.twitter-typeahead {
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
-			span {
+			.tooltip-wrapper {
 				max-width: 100%;
 				white-space: nowrap;
+			}
+		}
+		#students-header-pinned th {
+			position: relative;
+			.arrow-placement {
+				position: absolute;
+				right: 3px;
+				top: 0;
+				bottom: 0;
+				display: flex;
+				align-items: center;
+				.arrow-wrapper {
+					span {
+						display: block;
+						color: #a9a9a9;
+					}
+					.glyphicon-triangle-bottom {
+						margin-top: -5px;
+					}
+				}
+			}
+			.sort-down {
+				.arrow-wrapper {
+					span {
+						color: #000;
+					}
+					.glyphicon-triangle-top {
+						visibility: hidden;
+					}
+				}
+			}
+			.sort-up {
+				.arrow-wrapper {
+					span {
+						color: #000;
+					}
+					.glyphicon-triangle-bottom {
+						visibility: hidden;
+					}
+				}
 			}
 		}
 		#students-header-pinned th.gradebook-student-column-interactive,

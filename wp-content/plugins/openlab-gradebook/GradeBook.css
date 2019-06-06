@@ -500,7 +500,7 @@ span.twitter-typeahead {
   width: 100%;
 }
 .table-wrapper .pinned table th {
-  padding: 15px 8px;
+  padding: 15px 20px 15px 8px;
 }
 .table-wrapper .pinned td.student {
   height: 59px;
@@ -521,10 +521,40 @@ span.twitter-typeahead {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.table-wrapper .pinned #students-header-pinned th span,
-.table-wrapper .pinned #students-pinned td span {
+.table-wrapper .pinned #students-header-pinned th .tooltip-wrapper,
+.table-wrapper .pinned #students-pinned td .tooltip-wrapper {
   max-width: 100%;
   white-space: nowrap;
+}
+.table-wrapper .pinned #students-header-pinned th {
+  position: relative;
+}
+.table-wrapper .pinned #students-header-pinned th .arrow-placement {
+  position: absolute;
+  right: 3px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+.table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper span {
+  display: block;
+  color: #a9a9a9;
+}
+.table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
+  margin-top: -5px;
+}
+.table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper span {
+  color: #000;
+}
+.table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper .glyphicon-triangle-top {
+  visibility: hidden;
+}
+.table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper span {
+  color: #000;
+}
+.table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
+  visibility: hidden;
 }
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
 .table-wrapper .pinned #students-pinned td.student-tools {

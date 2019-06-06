@@ -71,6 +71,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     'click button#add-assignment': 'addAssignment',
                     'click button#filter-assignments': 'filterAssignments',
                     'click [class^=gradebook-student-column-]': 'sortGradebookBy',
+                    'click [class^=gradebook-student-column-] span': 'sortGradebookBy',
                 },
                 initRender: function(){
 
@@ -413,7 +414,27 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     }
                 },
                 sortGradebookBy: function (ev) {
-                    var column = ev.target.className.replace('gradebook-student-column-', '');
+                    ev.stopPropagation();
+
+                    if(ev.target.className.indexOf('gradebook-student-column-') !== -1){
+                        var column = ev.target.className.replace('gradebook-student-column-', '');
+                        var sortTarget = $(ev.target).find('.header-wrapper');
+                    } else {
+                        var column = $(ev.target).closest('th').attr('class');
+                        column = column.replace('gradebook-student-column-', '');
+                        var sortTarget = $(ev.target).closest('.header-wrapper');
+                    }
+
+                    var currentSort = sortTarget.attr('class');
+                    var direction = 'sort-up';
+
+                    if(currentSort.indexOf('sort-up') !== -1){
+                        direction = 'sort-down';
+                    }
+
+                    $('#students-header-pinned th .header-wrapper').removeClass('sort-up sort-down');
+                    sortTarget.addClass(direction);
+
                     this.gradebook.sort_key = 'student';
                     this.gradebook.students.sort_key = column;
                     this.checkStudentSortDirection();
