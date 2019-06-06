@@ -154,6 +154,23 @@ div.title-area {
 
 }
 
+.header-image .site-description, .header-image .site-title {
+	position: relative;
+	text-indent: inherit;
+}
+
+.header-image .site-description {
+	position: absolute;
+	bottom: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+body.custom-header .site-title a {
+	opacity: .7;
+}
 
 .site-header {
     border-top: 3px solid #e44a3c;
