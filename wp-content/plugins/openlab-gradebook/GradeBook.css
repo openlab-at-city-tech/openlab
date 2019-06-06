@@ -539,6 +539,9 @@ span.twitter-typeahead {
 .table-wrapper .scrollable .jspContainer .jspVerticalBar {
   display: none;
 }
+.table-wrapper .scrollable .jspContainer .jspHorizontalBar {
+  background: transparent;
+}
 .table-wrapper .scrollable .gradebook-student-column-average {
   display: none !important;
 }
