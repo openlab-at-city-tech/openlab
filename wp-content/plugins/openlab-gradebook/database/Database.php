@@ -15,7 +15,6 @@ class OPLB_DATABASE
 
     public function oplb_gradebook_upgrade_db()
     {
-        global $wpdb;
 
         if (!get_option('oplb_gradebook_db_version')) {
             $this->database_init();
