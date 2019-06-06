@@ -10,7 +10,8 @@ define([
 		id: "upload-modal",
 		className: "modal fade",
 		events: {
-			"shown.bs.modal": "renderUploader"
+			"shown.bs.modal": "renderUploader",
+			'hidden.bs.modal': 'editCancel',
 		},
 		initialize: function(options) {
 			$("body").append(this.render().el);
@@ -33,7 +34,12 @@ define([
 			}).on('fileuploaded', function(e, params) {
 				console.log('file uploaded', e, params);
 			});
-		}
+		},
+		editCancel: function () {
+			this.$el.data('modal', null);
+			this.remove();
+			return false;
+		},
 	});
 
 	return uploadModal;
