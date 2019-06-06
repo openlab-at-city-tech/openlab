@@ -118,3 +118,11 @@ add_filter(
 	10,
 	2
 );
+
+register_default_headers( [
+	'circles' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
+		'description'   => 'Circles',
+	],
+] );
