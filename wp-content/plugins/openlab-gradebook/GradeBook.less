@@ -514,6 +514,28 @@ span.twitter-typeahead {
 .table-wrapper {
 	.table {
 		margin-bottom: 0;
+		.cell-wrapper {
+			display: flex;
+			.grade-numeric,
+			.checkbox {
+				flex: 1 0 60%;
+			}
+			.grade-selector {
+				flex: 1 0 0;
+				margin-right: 31%;
+			}
+			.comment-icon {
+				flex: 1 0 40%;
+			}
+			.checkbox {
+				input {
+					opacity: 1;
+					&:before {
+						opacity: 1;
+					}
+				}
+			}
+		}
 	}
 	#an-gradebook-container {
 		top: 15px;
@@ -621,7 +643,7 @@ span.twitter-typeahead {
 			height: 59px;
 		}
 		.student-grades {
-			min-width: 68px;
+			min-width: 180px;
 			position: relative;
 			.fa-info-circle {
 				position: absolute;
@@ -630,9 +652,9 @@ span.twitter-typeahead {
 				bottom: 14px;
 			}
 			span {
-				width: 60px;
-				max-width: 60px;
-				min-width: 60px;
+				width: 160px;
+				max-width: 160px;
+				min-width: 160px;
 				white-space: nowrap;
 				overflow: hidden;
 				display: inline-block;
