@@ -21,8 +21,6 @@ if (count($z)) {
                         class="btn btn-default"><?php esc_html_e('Add Student', 'openlab-gradebook')?></button>
                     <button type="button" id="add-assignment"
                         class="btn btn-default"><?php esc_html_e('Add Assignment', 'openlab-gradebook')?></button>
-                    <button type="button" id="upload-csv"
-                        class="btn btn-default"><?php esc_html_e('Upload CSV', 'openlab-gradebook')?></button>
                     <button type="button" id="download-csv"
                         class="btn btn-default"><?php esc_html_e('Download CSV', 'openlab-gradebook')?></button>
                     <div id="savingStatus" class="btn-group hidden">saving</div>
