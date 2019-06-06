@@ -341,6 +341,32 @@ span.twitter-typeahead {
 }
 .action-buttons-wrapper .btn-arrange {
   position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.action-buttons-wrapper .btn-arrange .btn {
+  margin-right: 2.5%;
+  margin-bottom: 5px;
+}
+.action-buttons-wrapper .btn-arrange select {
+  margin-bottom: 5px;
+}
+.action-buttons-wrapper .btn-arrange .cat-filter {
+  display: flex;
+  align-items: center;
+}
+.action-buttons-wrapper .btn-arrange .cat-filter .btn {
+  margin-right: 0;
+  margin-left: 5%;
+}
+@media (min-width: 768px) {
+  .action-buttons-wrapper .btn-arrange .cat-filter {
+    justify-content: flex-end;
+    margin-left: auto;
+  }
 }
 .action-buttons-wrapper #savingStatus {
   font-weight: bold;

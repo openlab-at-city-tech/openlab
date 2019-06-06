@@ -1,9 +1,4 @@
-<th class="gradebook-student-column-interactive student-tools adjust-widths visible-xs" data-targetwidth="50">
-    <% if (role === 'instructor') { %>
-        <button type="button" id="download-csv-mobile" class="btn btn-link"><i class="fa fa-download" aria-hidden="true"></i></button>
-        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php esc_html_e('Download CSV', 'openlab-gradebook') ?>"></i>
-        <% } %>
-</th>
+<th class="gradebook-student-column-interactive student-tools adjust-widths visible-xs" data-targetwidth="50"></th>
 <th class="gradebook-student-column-first_name visible-xs"><span data-toggle="tooltip" data-placement="top" title='<?php esc_html_e('
         First Name ', 'openlab-gradebook ') ?>'>
         <?php esc_html_e('First Name', 'openlab-gradebook') ?></span></th>
