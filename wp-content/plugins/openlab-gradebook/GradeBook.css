@@ -478,6 +478,12 @@ span.twitter-typeahead {
 .table-wrapper .table .cell-wrapper .comment-icon {
   flex: 1 0 40%;
 }
+.table-wrapper .table .cell-wrapper .checkbox input {
+  opacity: 1;
+}
+.table-wrapper .table .cell-wrapper .checkbox input:before {
+  opacity: 1;
+}
 .table-wrapper #an-gradebook-container {
   top: 15px;
   position: relative;
@@ -601,6 +607,9 @@ span.twitter-typeahead {
 }
 .table-wrapper .scrollable .jspContainer .jspVerticalBar {
   display: none;
+}
+.table-wrapper .scrollable .jspContainer .jspHorizontalBar {
+  background: transparent;
 }
 .table-wrapper .scrollable .gradebook-student-column-average {
   display: none !important;
