@@ -81,23 +81,19 @@ class gradebook_upload_csv_API
         $parse_result = $this->parseCSV($file['file']);
         $process_result = $this->checkData($parse_result, $gbid);
 
-        if ($process_result['errors'] > 0) {
+        if ($process_result['errors'] === 'global') {
+
+            array_push($process_result['headers'], "**Error:{$process_result['message']['error']}**");
+            $process_result['file'] = $file;
+
+            $this->handleErrors($process_result, $gbid);
+
+        } else if ($process_result['errors'] > 0) {
 
             array_push($process_result['headers'], 'Errors');
             $process_result['file'] = $file;
 
-            $error_log = get_option('openlab_gradebook_csv_error_log', array());
-
-            $error_log[$gbid] = $process_result;
-            update_option('openlab_gradebook_csv_error_log', $error_log);
-
-            $csv_link = admin_url("admin.php?page=oplb_gradebook&gradebook_download_csv={$gbid}#gradebook/{$gbid}");
-            $outbound = "Download a CSV record of errors <a href='$csv_link'>here</a>";
-            $message = array(
-                'response' => 'oplb-gradebook-error',
-                'error' => $outbound,
-            );
-            wp_send_json($message);
+            $this->handleErrors($process_result, $gbid);
 
         }
 
@@ -163,25 +159,29 @@ class gradebook_upload_csv_API
 
     private function checkData($process_result, $gbid)
     {
-        global $wpdb;
         $errors = 0;
 
         //if the headers are not present in this CSV, we are abadoning ship
         if (empty($process_result['headers'])) {
-            $message = array(
+            $process_result['message'] = array(
                 'response' => 'oplb-gradebook-error',
                 'error' => 'This CSV file does not have the necessary headers.',
             );
-            return $message;
+
+            $process_result['errors'] = 'global';
+
+            return $process_result;
         }
 
         //if data is not present in this CSV, we are abadoning ship
         if (empty($process_result['data'])) {
-            $message = array(
+            $process_result['message'] = array(
                 'response' => 'oplb-gradebook-error',
                 'error' => 'This CSV file does not contain any data.',
             );
-            return $message;
+            $process_result['errors'] = 'global';
+
+            return $process_result;
         }
 
         foreach ($process_result['data'] as &$student) {
@@ -683,19 +683,45 @@ class gradebook_upload_csv_API
         return $possible_letter_grades;
     }
 
+    private function handleErrors($process_result, $gbid)
+    {
+        $error_log = get_option('openlab_gradebook_csv_error_log', array());
+
+        $error_log[$gbid] = $process_result;
+        update_option('openlab_gradebook_csv_error_log', $error_log);
+
+        $csv_link = admin_url("admin.php?page=oplb_gradebook&gradebook_download_csv={$gbid}#gradebook/{$gbid}");
+        $outbound = "Download a CSV record of errors <a href='$csv_link'>here</a>";
+        $message = array(
+            'response' => 'oplb-gradebook-error',
+            'error' => $outbound,
+        );
+        wp_send_json($message);
+    }
+
     private function buildCSV($data_out)
     {
 
-        if (count($data_out) == 0) {
+        if (empty($data_out)) {
             return null;
         }
+
         ob_start();
         $df = fopen("php://output", 'w');
-        fputcsv($df, array_keys(reset($data_out)));
-        foreach ($data_out as $row) {
-            fputcsv($df, $row);
+
+        if (empty($data_out['data']) && !empty($data_out['headers'])) {
+
+            fputcsv($df, $data_out['headers']);
+            fclose($df);
+
+        } else {
+            fputcsv($df, array_keys(reset($data_out['data'])));
+            foreach ($data_out['data'] as $row) {
+                fputcsv($df, $row);
+            }
+            fclose($df);
         }
-        fclose($df);
+
         return ob_get_clean();
 
     }
@@ -715,6 +741,7 @@ class gradebook_upload_csv_API
         // disposition / encoding on response body
         header("Content-Disposition: attachment;filename={$filename}");
         header("Content-Transfer-Encoding: binary");
+
         echo $this->buildCSV($data_out);
         die();
     }
@@ -730,10 +757,10 @@ class gradebook_upload_csv_API
 
         $error_log = get_option('openlab_gradebook_csv_error_log');
         $this_data = $error_log[$download_gbid];
-        $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
-        $data_out = $this_data['data'];
 
-        $this->outputCSV($data_out, $filename);
+        $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
+
+        $this->outputCSV($this_data, $filename);
 
     }
 
