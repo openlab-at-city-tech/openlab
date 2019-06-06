@@ -142,7 +142,7 @@ body {
 			}
 		}
 	}
-	#edit-comment-form{
+	#edit-comment-form {
 		padding: 20px 30px;
 	}
 }
@@ -443,6 +443,30 @@ span.twitter-typeahead {
 	}
 	.btn-arrange {
 		position: relative;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		flex-wrap: wrap;
+		.btn {
+			margin-right: 2.5%;
+			margin-bottom: 5px;
+		}
+		select {
+			margin-bottom: 5px;
+		}
+		.cat-filter {
+			display: flex;
+			align-items: center;
+			.btn {
+				margin-right: 0;
+				margin-left: 5%;
+			}
+			@media (min-width: 768px) {
+				justify-content: flex-end;
+				margin-left: auto;
+			}
+		}
 	}
 	#savingStatus {
 		font-weight: bold;
