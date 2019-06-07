@@ -1,0 +1,16 @@
+.site-footer,
+.nav-primary,
+.sidebar-primary,
+.site-header {
+	display: none !important;
+	visibility: hidden;
+}
+
+.content {
+	width: 100%;
+}
+
+.site-inner {
+	max-width: none;
+	padding-top: 0;
+}

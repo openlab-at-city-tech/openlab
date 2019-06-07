@@ -126,3 +126,13 @@ register_default_headers( [
 		'description'   => 'Circles',
 	],
 ] );
+
+add_action(
+	'wp_head',
+	function() {
+		$print_css_url = content_url( 'mu-plugins/theme-fixes/education-pro/print.css' );
+		?>
+<link rel="stylesheet" href="<?php echo esc_attr( $print_css_url ); ?>" type="text/css" media="print" />
+		<?php
+	}
+);

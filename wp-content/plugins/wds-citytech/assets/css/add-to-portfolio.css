@@ -179,3 +179,8 @@ dialog::backdrop {
 .portfolio-actions {
 	margin-right: 10px;
 }
+@media print {
+	.portfolio-actions {
+		display: none;
+	}
+}
