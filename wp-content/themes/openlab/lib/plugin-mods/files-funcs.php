@@ -58,7 +58,6 @@ function openlab_bp_group_documents_display_content() {
 	//instanciating the template will do the heavy lifting with all the superglobal variables
 	$template = new BP_Group_Documents_Template();
 
-	/*
 	$folders = $template->get_group_categories( false );
 	$folders = bp_sort_by_key( $folders, 'name' );
 
@@ -79,8 +78,6 @@ function openlab_bp_group_documents_display_content() {
 	?>
 
 	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?>">
-	*/ ?>
-	<div id="bp-group-documents">
 
 		<?php do_action( 'template_notices' ); // (error/success feedback) ?>
 
@@ -184,7 +181,7 @@ function openlab_bp_group_documents_display_content() {
 				<ul>
 					<?php foreach ( $non_empty_folders as $category ) { ?>
 						<?php $is_current_category = ( $category->name === $current_category ); ?>
-						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?></a></li>
+						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?> <?php /* (<?php echo $category->count ?>) */ ?></a></li>
 					<?php } ?>
 
 					<hr>
@@ -256,7 +253,6 @@ function openlab_bp_group_documents_display_content() {
 										<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
 									<?php } ?>
 
-									<?php /*
 									<fieldset class="group-file-folders">
 										<legend>Folders</legend>
 										<div class="checkbox-list-container group-file-folders-container">
@@ -271,7 +267,6 @@ function openlab_bp_group_documents_display_content() {
 										<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
 									</fieldset>
 									<label></label>
-									*/ ?>
 								</div>
 							</div>
 						</div>
