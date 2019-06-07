@@ -94,6 +94,10 @@ add_filter(
 			return $content;
 		}
 
+		if ( is_buddypress() ) {
+			return $content;
+		}
+
 		if ( ! show_for_post( get_queried_object_id() ) ) {
 			return;
 		}
