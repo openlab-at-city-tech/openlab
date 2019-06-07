@@ -33,7 +33,7 @@ function metabox( $post ) {
 
 	?>
 	<label for="print-this-page-toggle">
-		<input type="checkbox" id="print-this-page-toggle" value="1" name="print-this-page-toggle" <?php checked( $show ); ?>> Show 'Print This Page' toggle?
+		<input type="checkbox" id="print-this-page-toggle" value="1" name="print-this-page-toggle" <?php checked( $show ); ?>> Show 'Print This Page' link on this post?
 	</label>
 	<?php wp_nonce_field( 'print_this_page_toggle', 'print-this-page-toggle-nonce', false ); ?>
 	<?php
