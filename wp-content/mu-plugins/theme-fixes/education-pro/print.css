@@ -1,9 +1,57 @@
 .site-footer,
 .nav-primary,
-.sidebar-primary,
-.site-header {
+.site-header .widget-area,
+.sidebar-primary {
 	display: none !important;
 	visibility: hidden;
+}
+
+body {
+	color: #000;
+}
+
+a {
+    border-bottom: 1px solid #007acc !important;
+	color: #007acc !important;
+}
+
+.site-header {
+	border: none;
+	box-shadow: none;
+	min-height: none;
+}
+
+.title-area {
+	box-shadow: none;
+	margin: 0;
+	position: relative;
+	text-align: left;
+	width: 100%;
+}
+
+.title-area a {
+	border-bottom: none !important;
+}
+
+.wrap {
+	max-width: none;
+}
+
+.header-image .site-title,
+.header-image .site-description {
+	text-indent: 0;
+}
+
+.header-image .site-title a {
+	background: none !important;
+	color: #000 !important;
+	float: none;
+	min-height: none;
+}
+
+.site-description {
+	color: #000 !important;
+	text-align: left;
 }
 
 .content {
@@ -13,4 +61,8 @@
 .site-inner {
 	max-width: none;
 	padding-top: 0;
+}
+
+.entry {
+	padding: 0;
 }
