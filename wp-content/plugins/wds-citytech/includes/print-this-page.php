@@ -79,7 +79,7 @@ function show_for_post( $post_id ) {
 add_filter(
 	'the_content',
 	function( $content ) {
-		if ( ! is_single() ) {
+		if ( ! is_single() && ! is_singular() ) {
 			return $content;
 		}
 
