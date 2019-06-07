@@ -10,7 +10,7 @@ body.no-js .ol-print-this-page {
 	}
 }
 
-.ol-print-this-page a {
+#ol-print-this-page a {
 	box-shadow: none;
 	color: rgb(51,51,51) !important;
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
@@ -18,7 +18,7 @@ body.no-js .ol-print-this-page {
 	text-decoration: none;
 }
 
-.ol-print-this-page a:hover {
+#ol-print-this-page a:hover {
 	box-shadow: 0 1px 0 0 currentColor;
 	color: #000;
 }
