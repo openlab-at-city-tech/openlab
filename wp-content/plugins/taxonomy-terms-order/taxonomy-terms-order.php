@@ -3,7 +3,7 @@
 Plugin Name: Category Order and Taxonomy Terms Order
 Plugin URI: http://www.nsp-code.com
 Description: Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
-Version: 1.5.5
+Version: 1.5.6
 Author: Nsp-Code
 Author URI: http://www.nsp-code.com
 Author Email: electronice_delphi@yahoo.com
@@ -121,10 +121,12 @@ Domain Path: /languages/
                 }
         }
 
-    function TO_apply_order_filter($orderby, $args)
+        
+    add_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+    function TO_apply_order_filter( $clauses, $taxonomies, $args)
         {
-	        if ( apply_filters('to/get_terms_orderby/ignore', FALSE, $orderby, $args) )
-                return $orderby;
+	        if ( apply_filters('to/get_terms_orderby/ignore', FALSE, $clauses['orderby'], $args) )
+                return $clauses;
             
             $options = tto_get_settings();
             
@@ -134,25 +136,24 @@ Domain Path: /languages/
                     
                     //return if use orderby columns
                     if (isset($_GET['orderby']) && $_GET['orderby'] !=  'term_order')
-                        return $orderby;
+                        return $clauses;
                     
                     if ($options['adminsort'] == "1")
-                        return 't.term_order';
+                        $clauses['orderby'] =   'ORDER BY t.term_order';
                         
-                    return $orderby;    
+                    return $clauses;    
                 }
             
             //if autosort, then force the menu_order
             if ($options['autosort'] == 1   &&  (!isset($args['ignore_term_order']) ||  (isset($args['ignore_term_order'])  &&  $args['ignore_term_order']  !== TRUE) ))
                 {
-                    return 't.term_order';
+                    $clauses['orderby'] =   'ORDER BY t.term_order';
                 }
                 
-            return $orderby; 
+            return $clauses; 
         }
 
-    add_filter('get_terms_orderby', 'TO_apply_order_filter', 10, 2);
-
+    
     add_filter('get_terms_orderby', 'TO_get_terms_orderby', 1, 2);
     function TO_get_terms_orderby($orderby, $args)
         {
@@ -198,6 +199,6 @@ Domain Path: /languages/
                 
             die();
         }
-
+        
 
 ?>
