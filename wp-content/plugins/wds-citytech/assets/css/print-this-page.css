@@ -3,6 +3,13 @@ body.no-js .ol-print-this-page {
 	visibility: hidden;
 }
 
+@media print {
+	.ol-print-this-page {
+		display: none;
+		visibility: hidden;
+	}
+}
+
 .ol-print-this-page a {
 	box-shadow: none;
 	color: rgb(51,51,51);
