@@ -7,12 +7,19 @@ namespace OpenLab\PrintThisPage;
  */
 
 /**
+ * Returns the post types where the feature is enabled.
+ */
+function post_types() {
+	return [ 'post', 'page' ];
+}
+
+/**
  * Adds the 'Print This Page' toggle metabox.
  */
 add_action(
 	'add_meta_boxes',
 	function() {
-		$screens = [ 'post', 'page' ];
+		$screens = post_types();
 		foreach ( $screens as $screen ) {
 			add_meta_box(
 				'openlab_print_this_page',
@@ -88,6 +95,11 @@ add_filter(
 		}
 
 		if ( ! show_for_post( get_queried_object_id() ) ) {
+			return;
+		}
+
+		$queried_object = get_queried_object();
+		if ( ! isset( $queried_object->post_type ) || ! in_array( $queried_object->post_type, post_types(), true ) ) {
 			return;
 		}
 
