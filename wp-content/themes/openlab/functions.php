@@ -71,7 +71,7 @@ function openlab_load_scripts() {
 
         wp_register_script( 'openlab-academic-units', $stylesheet_dir_uri . '/js/academic-units.js', array( 'jquery' ) );
 
-        $utility_deps = array('jquery');
+        $utility_deps = array('jquery', 'jquery-cookie');
         if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
             $utility_deps[] = 'hyphenator-js';
         } else {

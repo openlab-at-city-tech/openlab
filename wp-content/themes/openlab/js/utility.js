@@ -591,6 +591,12 @@ OpenLab.utility = (function ($) {
             $('#groups-notification-settings-request').after(public_group_not);
         }
 
+				// Remove the category and order cookies when clicking the Files link in the group nav.
+				$('#group-documents-groups-li > a').click(function(){
+					$.removeCookie( 'bp-group-documents-category' );
+					$.removeCookie( 'bp-group-documents-order' );
+				});
+
     });//end document.ready
 
     $(window).on('resize', function (e) {
