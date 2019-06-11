@@ -26,37 +26,5 @@
 <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("last_name") %>'><%= student.get("last_name") %></span></td>
 <td class="student<%= mobile_styles %>"><span data-toggle="tooltip" data-placement="top" title='<%= student.get("user_login") %>'><%= student.get("user_login") %></span></td>
 <td class="gradebook-student-column-average student<%= mobile_styles %>"><span id="average<%= student.get('id') %>" data-toggle="tooltip" data-placement="top" title='<%= student.get("current_grade_average") %>'><%= student.get("current_grade_average") %></span></td>
-<td class="student student-grades mid-semester-grade">
-<span>
-<% if(role === 'instructor') { %>
-    <select class="grade-selector mid" data-type="mid" data-uid="<%= student.get('id') %>">
-        <% midGrades.each(function(grade) { %>
-            <option <% if(grade.get('type') === 'display_value') { print('class="display-value"') } %> value="<%= grade.get('value') %>" <% if(student.get('mid_semester_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>
-        <% }); %>
-    </select>
-<% } else { %>
-    <span class="grade-numeric" style="cursor: default;">
-        <% midGrades.each(function(grade) { %>
-            <% if(student.get('mid_semester_grade') === grade.get('value')) { %><%= grade.get('label') %><% } %>
-        <% }); %>
-    </span>
-<% } %>
-</span>
-</td>
-<td class="student student-grades final-grade">
-<span>
-<% if(role === 'instructor') { %>
-    <select class="grade-selector final" data-type="final" data-uid="<%= student.get('id') %>" <%= role === 'instructor' ? '' : 'disabled="disabled"' %>>
-            <% finalGrades.each(function(grade) { %>
-                <option <% if(grade.get('type') === 'display_value') { print('class="display-value"') } %> value="<%= grade.get('value') %>" <% if(student.get('final_grade') === grade.get('value')) { %>selected<% } %> ><%= grade.get('label') %></option>
-            <% }); %>
-    </select>
-<% } else { %>
-    <span class="grade-numeric" style="cursor: default;">
-        <% finalGrades.each(function(grade) { %>
-            <% if(student.get('final_grade') === grade.get('value')) { %><%= grade.get('label') %><% } %>
-        <% }); %>
-    </span>
-<% } %>
-</span>
-</td>
+<td class="student student-grades mid-semester-grade"></td>
+<td class="student student-grades final-grade"></td>

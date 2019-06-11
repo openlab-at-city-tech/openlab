@@ -3,12 +3,12 @@ define([
 	"backbone",
 	"underscore",
 	"views/StatisticsView",
-	"views/CommentView",
 	"views/EditStudentView",
 	"views/DeleteStudentView",
 	"views/CellView",
 	"views/CellDropdown",
 	"views/CellCheckmark",
+	"views/CellMidFinal",
 	"models/letterGrades",
 	"models/User"
 ], function(
@@ -16,12 +16,12 @@ define([
 	Backbone,
 	_,
 	StatisticsView,
-	CommentView,
 	EditStudentView,
 	DeleteStudentView,
 	CellView,
 	CellDropdown,
 	CellCheckmark,
+	CellMidFinalView,
 	letterGrades,
 	User
 ) {
@@ -34,9 +34,7 @@ define([
 				"click a.student-statistics": "studentStatistics",
 				"click .dashicons-menu": "toggleStudentMenu",
 				"click li.student-submenu-delete": "deleteStudent",
-				"click li.student-submenu-stats": "studentStatistics",
-				"change select.grade-selector.mid": "editMid",
-				"change select.grade-selector.final": "editFinal"
+				"click li.student-submenu-stats": "studentStatistics"
 			},
 			/** @constructs */
 			initialize: function(options) {
@@ -45,8 +43,6 @@ define([
 				this.gradebook = options.gradebook;
 				this.course = options.course;
 				this.student = this.model;
-
-				Backbone.pubSub.on("editSuccess", this.editSuccess, this);
 
 				this.midGrades = new letterGrades([
 					{
@@ -189,13 +185,11 @@ define([
 					}
 				]);
 
-				this.studentGradeLabels("mid");
-				this.studentGradeLabels("final");
-
 				this.listenTo(this.model, "change", this.render);
 				this.listenTo(this.gradebook, "change:assignments", this.render);
 			},
 			render: function(pinned, assignments) {
+				
 				//give pinned a default
 				if (typeof pinned === "undefined") {
 					pinned = "none";
@@ -216,7 +210,40 @@ define([
 					midGrades: this.midGrades,
 					finalGrades: this.finalGrades
 				});
-				this.$el.html(compiled);
+
+				if(!this.$el.find('.student-tools').length){
+					this.$el.html(compiled);					
+				}
+
+				var midGrades = new CellMidFinalView({
+					model: this.model,
+					course: this.course,
+					gradebook: self.gradebook,
+					role: this.gradebook.role,
+					grades: this.midGrades,
+					type: "mid_semester"
+				});
+
+				if(!this.$el.find(".student-grades.mid-semester-grade .cell-wrapper").length){
+					this.$el
+					.find(".student-grades.mid-semester-grade")
+					.append(midGrades.render());
+				}
+
+				var finalGrades = new CellMidFinalView({
+					model: this.model,
+					course: this.course,
+					gradebook: self.gradebook,
+					role: this.gradebook.role,
+					grades: this.finalGrades,
+					type: "final"
+				});
+
+				if(!this.$el.find(".student-grades.final-grade .cell-wrapper").length){
+				this.$el
+					.find(".student-grades.final-grade")
+					.append(finalGrades.render());
+				}
 
 				if (pinned === "pinned" || pinned === "none") {
 					var gbid = parseInt(self.course.get("id")); //anq: why is this not already an integer??
@@ -256,23 +283,7 @@ define([
 							}
 
 							self._subviews.push(view);
-
-							var finalRender = view.render();
-
-							if (
-								self.gradebook.role === "instructor" ||
-								(self.gradebook.role === "student" && cell.get('comments'))
-							) {
-								var comment = new CommentView({
-									model: cell,
-									gradebook: self.gradebook
-								});
-								$(finalRender)
-									.find(".cell-wrapper")
-									.append(comment.render());
-							}
-
-							self.$el.append(finalRender);
+							self.$el.append(view.render());
 						}
 					});
 				}
@@ -280,34 +291,6 @@ define([
 				this.postLoadActions();
 
 				return this.el;
-			},
-			studentGradeLabels: function(ev) {
-				var toSearch = this.midGrades;
-				var studentVal = this.model.get("mid_semester_grade");
-				var title = "";
-
-				if (ev === "final") {
-					toSearch = this.finalGrades;
-					studentVal = this.model.get("final_grade");
-				}
-
-				_.each(toSearch.models, function(grade) {
-					if (grade.get("value") === studentVal + "_display" && title === "") {
-						title = grade.get("label");
-					} else if (grade.get("value") === studentVal && title === "") {
-						title = grade.get("label");
-					}
-				});
-
-				if (title === "") {
-					title = "--";
-				}
-
-				if (ev === "final") {
-					this.student.set("tool_tip_final", title);
-				} else {
-					this.student.set("tool_tip_mid", title);
-				}
 			},
 			postLoadActions: function() {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -376,89 +359,6 @@ define([
 				this.clearSubViews();
 				this.remove();
 			},
-			editMid: function() {
-				this.edit("mid");
-			},
-			editFinal: function() {
-				this.edit("final");
-			},
-			edit: function(ev) {
-				this.$el.attr("contenteditable", "false");
-
-				console.log(
-					"savingStatus",
-					this.$el.closest("#gradebookWrapper").find("#savingStatus")
-				);
-				this.$el
-					.closest("#gradebookWrapper")
-					.find("#savingStatus")
-					.removeClass("hidden");
-
-				var targetSelector = ".grade-selector." + ev;
-
-				this.$el.find(targetSelector).attr("disabled", "disabled");
-
-				var value = this.$el.find(targetSelector).val();
-
-				if (value.indexOf("_display") !== -1) {
-					value = value.replace(/_display/, "");
-					this.$el.find(targetSelector).val(value);
-				}
-
-				var type = this.$el.find(targetSelector).data("type");
-				var uid = this.$el.find(targetSelector).data("uid");
-				var gbid = parseInt(this.course.get("id"));
-
-				var toedit = new User();
-				toedit.updateStudentGrade(value, type, uid, gbid);
-
-				if (value && value !== undefined) {
-					if (type === "mid") {
-						this.student.attributes.mid_semester_grade = value;
-					} else {
-						this.student.attributes.final_grade = value;
-					}
-				}
-
-				this.handleTooltips(ev);
-			},
-			handleTooltips: function(ev) {
-				var targetSelector = ".grade-selector." + ev;
-				var value = this.$el.find(targetSelector).val();
-
-				var toSearch = this.midGrades;
-
-				if (ev === "final") {
-					toSearch = this.finalGrades;
-				}
-
-				var title = "";
-				toSearch.each(function(grade) {
-					if (grade.get("value") === value + "_display" && title === "") {
-						title = grade.get("label");
-					} else if (grade.get("value") === value && title === "") {
-						title = grade.get("label");
-					}
-				});
-
-				this.$el
-					.find(targetSelector)
-					.closest(".student-grades")
-					.find(".fa-info-circle")
-					.attr("title", title)
-					.tooltip("fixTitle");
-			},
-			editSuccess: function() {
-				this.$el
-					.closest("#gradebookWrapper")
-					.find("#savingStatus")
-					.addClass("hidden");
-				this.$el.find(".grade-selector").removeAttr("disabled");
-			},
-			editError: function() {
-				console.log("edit error");
-				this.$el.find(".grade-selector").removeAttr("disabled");
-			}
 		}
 	);
 	return StudentView;

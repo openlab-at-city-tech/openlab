@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
-        function ($, Backbone, _, letterGrades) {
+define(['jquery', 'backbone', 'underscore', 'models/letterGrades', "views/CommentView"],
+        function ($, Backbone, _, letterGrades, CommentView) {
 
             var CellCheckmark = Backbone.View.extend({
                 tagName: 'td',
@@ -27,6 +27,24 @@ define(['jquery', 'backbone', 'underscore', 'models/letterGrades'],
 
                     var compiled = template({cell: this.model, assignment: _assignment, role: this.gradebook.role});
                     this.$el.html(compiled);
+
+                    if (
+                        self.gradebook.role === "instructor" ||
+                        (self.gradebook.role === "student" && this.model.get('comments'))
+                    ) {
+                        var comment = new CommentView({
+                            model: this.model,
+                            gradebook: self.gradebook,
+                            name: _assignment.get('assign_name'),
+                            username: this.model.get('username'),
+                            type: 'cell'
+                        });
+                        
+                        this.$el
+                            .find(".cell-wrapper")
+                            .append(comment.render());
+                    }
+
                     return this.el;
                 },
                 shiftCell: function (ev) {

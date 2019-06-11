@@ -39,7 +39,7 @@ class gradebook_cell_API
 			case 'POST':
                 $is_null = 1;
 
-                if (is_numeric($params['assign_points_earned'])) {
+                if (is_numeric($params['assign_points_earned']) && empty($params['comment_edit'])) {
                     $is_null = 0;
                 }
 
@@ -56,6 +56,9 @@ class gradebook_cell_API
 
                 if (!empty($params['comments'])) {
                     $values['comments'] = $params['comments'];
+                    array_push($formats, '%s');
+                } else {
+                    $values['comments'] = null;
                     array_push($formats, '%s');
                 }
 
@@ -75,7 +78,7 @@ class gradebook_cell_API
                     )
                 );
 
-                $query = $wpdb->prepare("SELECT assign_points_earned FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
+                $query = $wpdb->prepare("SELECT assign_points_earned, comments FROM {$wpdb->prefix}oplb_gradebook_cells WHERE uid = %d AND amid = %d AND gbid = %d", $params['uid'], $params['amid'], $gbid);
                 $assign_points_earned = $wpdb->get_row($query, ARRAY_A);
 
                 $current_grade_average = $oplb_gradebook_api->oplb_gradebook_get_current_grade_average($params['uid'], $gbid);
@@ -85,6 +88,7 @@ class gradebook_cell_API
                     'assign_points_earned' => floatval($assign_points_earned['assign_points_earned']),
                     'uid' => intval($params['uid']),
                     'is_null' => $is_null,
+                    'comments' => $assign_points_earned['comments']
                 );
 
                 echo json_encode($data_back);

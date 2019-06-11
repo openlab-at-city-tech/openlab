@@ -181,19 +181,24 @@ class oplb_gradebook_api
                 $cell['gbid'] = intval($cell['gbid']);
             }
 
-            $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
+            $query = $wpdb->prepare("SELECT uid, mid_semester_grade, final_grade, mid_semester_comments, final_comments FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
 
             $students = $wpdb->get_results($query, ARRAY_A);
+            $usernames = array();
 
             foreach ($students as &$student_id) {
                 $student = get_userdata($student_id['uid']);
                 $current_grade_average = $this->oplb_gradebook_get_current_grade_average($student_id['uid'], $gbid);
+
+                $usernames[intval($student->ID)] = $student->user_login;
 
                 $student_extras = array(
                     'first_name' => $student->first_name,
                     'last_name' => $student->last_name,
                     'user_login' => $student->user_login,
                     'current_grade_average' => $current_grade_average,
+                    'mid_semester_comments' => $student->mid_semester_comments,
+                    'final_comments' => $student->final_comments,
                     'id' => intval($student->ID),
                     'gbid' => intval($gbid),
                 );
@@ -206,6 +211,7 @@ class oplb_gradebook_api
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
+                $cell['username'] = !empty($usernames[intval($cell['uid'])]) ? $usernames[intval($cell['uid'])] : '';
                 $cell['assign_order'] = intval($cell['assign_order']);
                 $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                 $cell['gbid'] = intval($cell['gbid']);
@@ -258,7 +264,7 @@ class oplb_gradebook_api
             $student = get_userdata($current_user->ID);
             $current_grade_average = $this->oplb_gradebook_get_current_grade_average($current_user->ID, $gbid);
 
-            $query = $wpdb->prepare("SELECT mid_semester_grade, final_grade FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $current_user->ID);
+            $query = $wpdb->prepare("SELECT mid_semester_grade, final_grade, mid_semester_comments, final_comments FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND uid = %d", $gbid, $current_user->ID);
             $grades = $wpdb->get_results($query);
 
             $student = array(
@@ -270,11 +276,15 @@ class oplb_gradebook_api
                 'gbid' => intval($gbid),
                 'mid_semester_grade' => $grades[0]->mid_semester_grade,
                 'final_grade' => $grades[0]->final_grade,
+                'mid_semester_comments' => $grades[0]->mid_semester_comments,
+                'final_comments' => $grades[0]->final_comments,
             );
             usort($cells, $this->build_sorter('assign_order'));
+
             foreach ($cells as &$cell) {
                 $cell['amid'] = intval($cell['amid']);
                 $cell['uid'] = intval($cell['uid']);
+                $cell['username'] = $student['user_login'];
                 $cell['assign_order'] = intval($cell['assign_order']);
                 $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                 $cell['gbid'] = intval($cell['gbid']);
@@ -315,6 +325,7 @@ class oplb_gradebook_api
             'assign_visibility' => FILTER_SANITIZE_STRING,
             'assign_weight' => FILTER_SANITIZE_STRING,
             'comments' => FILTER_SANITIZE_STRING,
+            'comment_edit' => FILTER_VALIDATE_BOOLEAN,
             'publish' => FILTER_VALIDATE_BOOLEAN,
             'selected' => FILTER_VALIDATE_BOOLEAN,
             'sorted' => FILTER_SANITIZE_STRING,
