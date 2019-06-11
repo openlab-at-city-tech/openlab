@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore'],
-        function ($, Backbone, _) {
+define(['jquery', 'backbone', 'underscore', "views/CommentView"],
+        function ($, Backbone, _, CommentView) {
             var CellView = Backbone.View.extend({
                 tagName: 'td',
                 className: 'cell',
@@ -26,7 +26,25 @@ define(['jquery', 'backbone', 'underscore'],
                     var template = _.template($('#edit-cell-template').html());
                     var compiled = template({cell: this.model, gradebook: this.gradebook});
                     this.$el.html(compiled);
-                    return this.el;
+
+                    if (
+                        self.gradebook.role === "instructor" ||
+                        (self.gradebook.role === "student" && this.model.get('comments'))
+                    ) {
+                        var comment = new CommentView({
+                            model: this.model,
+                            gradebook: self.gradebook,
+                            name: _assignment.get('assign_name'),
+                            username: this.model.get('username'),
+                            type: 'cell'
+                        });
+
+                        this.$el
+                            .find(".cell-wrapper")
+                            .append(comment.render());
+                    }
+
+                    return this.$el;
                 },
                 shiftCell: function (ev) {
                     this.remove();

@@ -465,6 +465,9 @@ span.twitter-typeahead {
 .table-wrapper .table .cell-wrapper .comment-icon {
   flex: 1 0 40%;
 }
+.table-wrapper .table .cell-wrapper .comment-icon.inactive button {
+  color: #a9a9a9;
+}
 .table-wrapper .table .cell-wrapper .checkbox input {
   opacity: 1;
 }
@@ -506,7 +509,6 @@ span.twitter-typeahead {
 }
 .table-wrapper .pinned #students-header-pinned th,
 .table-wrapper .pinned #students-pinned td {
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 .table-wrapper .pinned #students-header-pinned th .column-frame,
@@ -518,6 +520,9 @@ span.twitter-typeahead {
 .table-wrapper .pinned #students-pinned td span {
   max-width: 100%;
   white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
 .table-wrapper .pinned #students-pinned td.student-tools {
@@ -568,6 +573,14 @@ span.twitter-typeahead {
 .table-wrapper .scrollable .jspContainer .jspHorizontalBar {
   background: transparent;
 }
+.table-wrapper .scrollable .jspContainer .jspHorizontalBar .jspTrack:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-right: 16px solid #dde;
+  right: -16px;
+}
 .table-wrapper .scrollable .gradebook-student-column-average {
   display: none !important;
 }
@@ -591,7 +604,7 @@ span.twitter-typeahead {
   right: 3px;
   bottom: 14px;
 }
-.table-wrapper .scrollable .student-grades span {
+.table-wrapper .scrollable .student-grades > span {
   width: 160px;
   max-width: 160px;
   min-width: 160px;

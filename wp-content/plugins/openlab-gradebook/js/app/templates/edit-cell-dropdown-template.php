@@ -6,4 +6,13 @@
             <%= grade.get('label') %></option>
         <% }); %>
     </select>
+    <% } else { %>
+    <span class="grade-numeric" style="cursor: default;">
+        <% if(cell.get('assign_points_earned') === 0) { %>--<% } %>
+        <% grades.each(function(grade) { %>
+        <% if(cell.get('assign_points_earned') >= grade.get('range_low') && cell.get('assign_points_earned') < grade.get('range_high')) { %>
+        <%= grade.get('label') %> <% } %>
+        <% }); %>
+    </span>
+    <% } %>
 </div>

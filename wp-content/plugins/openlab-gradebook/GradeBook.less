@@ -550,6 +550,11 @@ span.twitter-typeahead {
 			}
 			.comment-icon {
 				flex: 1 0 40%;
+				&.inactive {
+					button {
+						color: #a9a9a9;
+					}
+				}
 			}
 			.checkbox {
 				input {
@@ -597,7 +602,6 @@ span.twitter-typeahead {
 		}
 		#students-header-pinned th,
 		#students-pinned td {
-			overflow: hidden;
 			text-overflow: ellipsis;
 			.column-frame {
 				overflow: hidden;
@@ -606,6 +610,9 @@ span.twitter-typeahead {
 			span {
 				max-width: 100%;
 				white-space: nowrap;
+				display: block;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 		}
 		#students-header-pinned th.gradebook-student-column-interactive,
@@ -652,6 +659,16 @@ span.twitter-typeahead {
 			}
 			.jspHorizontalBar {
 				background: transparent;
+				.jspTrack {
+					&:after {
+						content: "";
+						position: absolute;
+						top: 0;
+						bottom: 0;
+						border-right: 16px solid #dde;
+						right: -16px;
+					}
+				}
 			}
 		}
 		.gradebook-student-column-average {
@@ -678,7 +695,7 @@ span.twitter-typeahead {
 				right: 3px;
 				bottom: 14px;
 			}
-			span {
+			> span {
 				width: 160px;
 				max-width: 160px;
 				min-width: 160px;

@@ -2,6 +2,7 @@ define(['backbone'], function (Backbone) {
     var Cell = Backbone.Model.extend({
         defaults: {
             uid: null,
+            username: null,
             gbid: null,
             assign_order: null,
             amid: null,
@@ -11,6 +12,7 @@ define(['backbone'], function (Backbone) {
             visibility: true,
             display: false,
             comments: null,
+            commentsUpdate: false,
         },
         url: function () {
             if (this.get('id')) {

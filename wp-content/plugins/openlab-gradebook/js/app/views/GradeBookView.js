@@ -19,6 +19,8 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     this.course = options.course;
                     this.renderControl = 0;
                     this.gradebook = options.gradebook;
+                    console.log('this.course', this.course);
+                    console.log('this.gradebook', this.gradebook);
                     this.listenTo(self.gradebook.students, 'add remove', _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.cells, 'add remove',  _.debounce(_.bind(this.render, this), 128));
                     this.listenTo(self.gradebook.cells, 'change:assign_order',  _.debounce(_.bind(this.render, this), 128));
@@ -293,6 +295,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
 
                     var targetTable = $('#an-gradebook-container');
                     var scrollContainerElem = targetTable.closest('.jspContainer');
+                    var adjustment = 16;
                     $('#an-gradebook-container').css('width', 'auto');
 
                     if (targetTable.height() < 500) {
@@ -318,7 +321,7 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     var paneLocation = $('#an-gradebook-container').offset();
                     scrollContainerElem.find('.jspHorizontalBar').css({
                         'position':'fixed',
-                        'left' : paneLocation.left + 'px'
+                        'left' : paneLocation.left - adjustment + 'px'
                     });
 
                     var waypoint = new Waypoint({
@@ -330,12 +333,12 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                             if(direction === 'up'){
                                 target.css({
                                     'position':'fixed',
-                                    'left' : paneLocation.left + 'px'
+                                    'left' : paneLocation.left - adjustment + 'px'
                                 });
                             } else {
                                 target.css({
                                     'position':'absolute',
-                                    'left' : 0
+                                    'left' : 0 - adjustment + 'px'
                                 });
                             }
 

@@ -192,7 +192,13 @@ class gradebook_assignment_API
                     $is_null = 0;
                 }
 
+                $usernames = array();
+
                 foreach ($studentIDs as $value) {
+
+                    $student = get_userdata($value[0]);
+                    $usernames[intval($student->ID)] = $student->user_login;
+
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
@@ -224,6 +230,7 @@ class gradebook_assignment_API
                 foreach ($cells as &$cell) {
                     $cell['amid'] = intval($cell['amid']);
                     $cell['uid'] = intval($cell['uid']);
+                    $cell['username'] = !empty($usernames[intval($cell['uid'])]) ? $usernames[intval($cell['uid'])] : '';
                     $cell['assign_order'] = intval($cell['assign_order']);
                     $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                     $cell['gbid'] = intval($cell['gbid']);
