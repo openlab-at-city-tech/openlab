@@ -7756,6 +7756,9 @@ body .padded-img img {
     width: 100%;
   }
 }
+body .calendar-settings-toggle {
+  margin-bottom: 20px;
+}
 body .pointer {
   cursor: pointer;
 }
