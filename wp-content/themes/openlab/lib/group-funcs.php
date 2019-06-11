@@ -875,81 +875,86 @@ function openlab_group_profile_activity_list() {
                 }
                 ?>
 
-                <?php if ($group_type != "portfolio"): ?>
+                <?php if ( $group_type != "portfolio" ): ?>
                     <div class="row group-activity-overview">
-                        <div class="col-sm-12">
-                            <div class="recent-discussions">
-                                <div class="recent-posts">
-                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
-                                    <?php
-                                    $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
+						<?php if ( openlab_is_forum_enabled_for_group( $group->id ) ) : ?>
+							<div class="col-sm-12">
+								<div class="recent-discussions">
+									<div class="recent-posts">
+										<h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/forum/">Recent Discussions<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
+										<?php
+										$forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
-                                    // Get the first forum ID
-                                    if (!empty($forum_ids)) {
-                                        $forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
-                                    }
-                                    ?>
+										// Get the first forum ID
+										if (!empty($forum_ids)) {
+											$forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
+										}
+										?>
 
-                                    <?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
-                                        <?php while (bbp_topics()) : bbp_the_topic(); ?>
+										<?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
+											<?php while (bbp_topics()) : bbp_the_topic(); ?>
 
 
-                                            <div class="panel panel-default">
-                                                <div class="panel-body">
+												<div class="panel panel-default">
+													<div class="panel-body">
 
-                                                    <?php
-                                                    $topic_id = bbp_get_topic_id();
-                                                    $last_reply_id = bbp_get_topic_last_reply_id($topic_id);
+														<?php
+														$topic_id = bbp_get_topic_id();
+														$last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
-                                                    // Oh, bbPress.
-                                                    $last_reply = get_post($last_reply_id);
-                                                    if (!empty($last_reply->post_content)) {
-                                                        $last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
-                                                    }
-                                                    ?>
+														// Oh, bbPress.
+														$last_reply = get_post($last_reply_id);
+														if (!empty($last_reply->post_content)) {
+															$last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
+														}
+														?>
 
-                                                    <?php echo openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
+														<?php echo openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
 
-                                                </div></div>                                            <?php endwhile; ?>
-                                    <?php else: ?>
-                                        <div class="panel panel-default"><div class="panel-body">
-                                                <p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
-                                            </div></div>
-                                    <?php endif; ?>
-                                </div><!-- .recent-post -->
-                            </div>
-                        </div>
+													</div></div>                                            <?php endwhile; ?>
+										<?php else: ?>
+											<div class="panel panel-default"><div class="panel-body">
+													<p><?php _e('Sorry, there were no discussion topics found.', 'buddypress') ?></p>
+												</div></div>
+										<?php endif; ?>
+									</div><!-- .recent-post -->
+								</div>
+							</div>
+						<?php endif; // Recent Discussions ?>
+
                         <?php $first_class = ""; ?>
-                        <div class="col-sm-12">
-                            <div id="recent-docs">
-                                <div class="recent-posts">
-                                    <h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
-                                    <?php
-                                    $docs_arg = Array("posts_per_page" => "3",
-                                        "post_type" => "bp_doc",
-                                        "tax_query" =>
-                                        Array(Array("taxonomy" => "bp_docs_associated_item",
-                                                "field" => "slug",
-                                                "terms" => $group_slug)));
-                                    $query = new WP_Query($docs_arg);
-                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
-                                    //				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
-                                    global $post;
-                                    if ($query->have_posts()) {
-                                        while ($query->have_posts()) : $query->the_post();
-                                            ?>
-                                            <div class="panel panel-default"><div class="panel-body">
-                                                    <?php echo openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
-                                                </div></div>
-                                            <?php
-                                        endwhile;
-                                    } else {
-                                        echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
+						<?php if ( openlab_is_docs_enabled_for_group( $group->id ) ) : ?>
+							<div class="col-sm-12">
+								<div id="recent-docs">
+									<div class="recent-posts">
+										<h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
+										<?php
+										$docs_arg = Array("posts_per_page" => "3",
+											"post_type" => "bp_doc",
+											"tax_query" =>
+											Array(Array("taxonomy" => "bp_docs_associated_item",
+													"field" => "slug",
+													"terms" => $group_slug)));
+										$query = new WP_Query($docs_arg);
+										//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_slug" );
+										//				$query = new WP_Query( "posts_per_page=3&post_type=bp_doc&category_name=$group_id" );
+										global $post;
+										if ($query->have_posts()) {
+											while ($query->have_posts()) : $query->the_post();
+												?>
+												<div class="panel panel-default"><div class="panel-body">
+														<?php echo openlab_get_group_activity_content(get_the_title(), wds_content_excerpt(strip_tags($post->post_content), 250), site_url() . '/groups/' . $group_slug . '/docs/' . $post->post_name); ?>
+													</div></div>
+												<?php
+											endwhile;
+										} else {
+											echo '<div class="panel panel-default"><div class="panel-body"><p>No Recent Docs</p></div></div>';
+										}
+										?>
+									</div>
+								</div>
+							</div>
+						<?php endif; // Recent Docs ?>
                     </div>
                     <div id="members-list" class="info-group">
 
