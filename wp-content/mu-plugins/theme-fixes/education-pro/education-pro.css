@@ -216,6 +216,35 @@ div.entry-content a, .breadcrumb a {
 	}
 }
 
+body.stacked-nav-header div.title-area {
+	box-shadow: none;
+}
+body.stacked-nav-header.header-image div.title-area {
+	margin-bottom: 0;
+	padding-bottom: 6px;
+}
+body.stacked-nav-header div.header-widget-area {
+	background: #fff;
+}
+body.stacked-nav-header .site-header .wrap {
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+}
+
+body.stacked-nav-header .site-header .header-widget-area {
+    max-width: 100%;
+    text-align: center;
+    width: 100%;
+}
+body.stacked-nav-header.header-image div.title-area {
+	float: none;
+	text-align: center;
+	width: 100%;
+}
+body.stacked-nav-header.header-image .site-title a {
+	background-position: center top !important;
+	background-size: contain !important;
+}
+
 .genesis-nav-menu .sub-menu .current-menu-item > a:hover, .genesis-nav-menu li a:hover, .genesis-nav-menu li.current-menu-item > a {
     background-color: #e3f2fa;
     color: #000;
