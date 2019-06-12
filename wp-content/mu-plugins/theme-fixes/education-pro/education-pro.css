@@ -192,6 +192,12 @@ div.entry-content a, .breadcrumb a {
     text-decoration: none;
 }
 
+/* No icon for Course Profile link */
+#menu-item-group-profile-link {
+	background: inherit;
+	padding-right: inherit;
+	margin-right: inherit;
+}
 
 .genesis-nav-menu .sub-menu .current-menu-item > a:hover, .genesis-nav-menu li a:hover, .genesis-nav-menu li.current-menu-item > a {
     background-color: #e3f2fa;
