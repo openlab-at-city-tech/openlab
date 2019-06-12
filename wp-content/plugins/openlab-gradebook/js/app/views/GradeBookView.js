@@ -231,8 +231,14 @@ define(['jquery', 'backbone', 'underscore', 'views/StudentView', 'views/Assignme
                     return this;
                 },
                 filterAssignments: function () {
+
+                    var self = this;
+                    if(self.gradebook.role !== 'instructor'){
+                        return false;
+                    }
+                    
                     var _x = $('#filter-assignments-select').val();
-                    console.log('default option', _x);
+
                     this.filter_option = _x;
                     var _toHide = this.gradebook.assignments.filter(
                             function (assign) {
