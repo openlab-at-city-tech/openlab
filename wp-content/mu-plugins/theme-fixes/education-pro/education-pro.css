@@ -199,6 +199,13 @@ div.entry-content a, .breadcrumb a {
 	margin-right: inherit;
 }
 
+.menu-item-has-children > a:after {
+	content: "\f431";
+	position: absolute;
+	right: 0.625em;
+	top: 0.8125em;
+}
+
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
 	div.title-area {
