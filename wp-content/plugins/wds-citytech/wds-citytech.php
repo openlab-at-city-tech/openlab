@@ -16,6 +16,7 @@ require 'wds-docs.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
 require 'includes/clone.php';
+require 'includes/print-this-page.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades

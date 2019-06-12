@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * Load custom scripts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		wp_enqueue_script( 'openlab-education-pro', content_url( 'mu-plugins/theme-fixes/education-pro/education-pro.js', array( 'jquery' ) ) );
+	}
+);
+
+/**
  * Disable auto-update support for the theme.
  *
  * We manage the theme independently. This also prevents 'Updates' section from appearing
@@ -117,4 +127,22 @@ add_filter(
 	},
 	10,
 	2
+);
+
+register_default_headers( [
+	'circles' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
+		'description'   => 'Circles',
+	],
+] );
+
+add_action(
+	'wp_head',
+	function() {
+		$print_css_url = content_url( 'mu-plugins/theme-fixes/education-pro/print.css' );
+		?>
+<link rel="stylesheet" href="<?php echo esc_attr( $print_css_url ); ?>" type="text/css" media="print" />
+		<?php
+	}
 );

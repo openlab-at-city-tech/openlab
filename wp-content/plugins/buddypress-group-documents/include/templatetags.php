@@ -3,7 +3,7 @@
 class BP_Group_Documents_Template {
 
 	//category filtering
-	public $category = null;
+	public $category;
 	public $parent_id;
 
 	//Sorting
@@ -192,7 +192,7 @@ class BP_Group_Documents_Template {
 
 		//show all categories
 		} else {
-			$this->category = null;
+			$this->category = false;
 		}
 
 		$this->group_categories = self::get_group_categories($this->parent_id);

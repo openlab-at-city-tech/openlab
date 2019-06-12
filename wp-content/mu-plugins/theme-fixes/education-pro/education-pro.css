@@ -154,6 +154,23 @@ div.title-area {
 
 }
 
+.header-image .site-description, .header-image .site-title {
+	position: relative;
+	text-indent: inherit;
+}
+
+.header-image .site-description {
+	position: absolute;
+	bottom: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+body.custom-header .site-title a {
+	opacity: .7;
+}
 
 .site-header {
     border-top: 3px solid #e44a3c;
@@ -175,12 +192,78 @@ div.entry-content a, .breadcrumb a {
     text-decoration: none;
 }
 
+/* No icon for Course Profile link */
+#menu-item-group-profile-link {
+	background: inherit;
+	padding-right: inherit;
+	margin-right: inherit;
+}
+
+.menu-item-has-children > a:after {
+	content: "\f431";
+	position: absolute;
+	right: 0.625em;
+	top: 0.8125em;
+}
+
+/* Adjustments for header + nav at medium widths */
+@media screen and (min-width: 769px) and (max-width: 1023px) {
+	div.title-area {
+		box-shadow: none;
+	}
+	.header-image div.title-area {
+		margin-bottom: 0;
+		padding-bottom: 6px;
+	}
+	div.header-widget-area {
+		background: #fff;
+	}
+	.site-header .wrap {
+		box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	}
+}
+
+body.stacked-nav-header div.title-area {
+	box-shadow: none;
+}
+body.stacked-nav-header.header-image div.title-area {
+	margin-bottom: 0;
+	padding-bottom: 6px;
+}
+body.stacked-nav-header div.header-widget-area {
+	background: #fff;
+}
+body.stacked-nav-header .site-header .wrap {
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+}
+
+body.stacked-nav-header .site-header .header-widget-area {
+    max-width: 100%;
+    text-align: center;
+    width: 100%;
+}
+body.stacked-nav-header.header-image div.title-area {
+	float: none;
+	text-align: center;
+	width: 100%;
+}
+body.stacked-nav-header.header-image .site-title a {
+	background-position: center top !important;
+	background-size: contain !important;
+}
 
 .genesis-nav-menu .sub-menu .current-menu-item > a:hover, .genesis-nav-menu li a:hover, .genesis-nav-menu li.current-menu-item > a {
     background-color: #e3f2fa;
     color: #000;
 }
 
+.genesis-nav-menu li a:hover,
+.genesis-nav-menu li.current-menu-item > a,
+.genesis-nav-menu .sub-menu li a:hover,
+.genesis-nav-menu .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
 
 .header-widget-area {
 	max-width: calc(100% - 500px);
@@ -188,6 +271,19 @@ div.entry-content a, .breadcrumb a {
 
 .header-widget-area .genesis-nav-menu .sub-menu {
 	border-left: 3px solid #e44a3d;
+}
+
+.header-widget-area .genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #444;
+}
+
+.genesis-nav-menu li a:hover,
+.genesis-nav-menu li.current-menu-item > a,
+.genesis-nav-menu li .sub-menu li a:hover,
+.genesis-nav-menu li .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
 }
 
 .header-widget-area .genesis-nav-menu .sub-menu .sub-menu {

@@ -475,6 +475,11 @@ OpenLab.nav = (function ($) {
 				return;
 			}
 
+			var mql = window.matchMedia( "screen and (max-width: 781px)" );
+			if ( mql.matches ) {
+				return;
+			}
+
 			setTimeout(
 				function() {
 					var bump = 40;
