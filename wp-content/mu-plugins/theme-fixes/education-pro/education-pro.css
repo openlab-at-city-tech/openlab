@@ -45,7 +45,6 @@ blockquote {
 blockquote:before {
     color: #e3f2fa;
     content: none;
-    font-family: sans-serif;
     font-size: 5em;
     line-height: .5em;
     margin-left: -20px;
@@ -199,11 +198,36 @@ div.entry-content a, .breadcrumb a {
 	margin-right: inherit;
 }
 
+.menu-item-has-children {
+	position: relative;
+}
+
 .menu-item-has-children > a:after {
-	content: "\f431";
+	content: "\203a";
+	font-size: 28px;
 	position: absolute;
 	right: 0.625em;
-	top: 0.8125em;
+	top: 0.155em;
+}
+
+.menu-primary > .menu-item-has-children > a {
+	padding-right: 32px;
+}
+
+.menu-primary > .menu-item-has-children > a:after {
+	top: .3em;
+}
+
+.genesis-nav-menu .menu-item-has-children.menu-item:hover {
+	position: relative;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a {
+	padding-right: 32px;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+	top: .85em;
 }
 
 /* Adjustments for header + nav at medium widths */
