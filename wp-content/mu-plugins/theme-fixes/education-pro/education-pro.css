@@ -251,6 +251,7 @@ div.entry-content a, .breadcrumb a {
 	}
 }
 
+/* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
 body.stacked-nav-header div.title-area {
 	box-shadow: none;
 }
@@ -297,11 +298,12 @@ body.stacked-nav-header.header-image .site-title a {
 	max-width: calc(100% - 500px);
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu {
+.genesis-nav-menu .sub-menu {
 	border-left: 3px solid #e44a3d;
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu a {
+.site-header .genesis-nav-menu .sub-menu a,
+.genesis-nav-menu .sub-menu a {
 	background-color: #fff;
 	color: #444;
 }
