@@ -160,7 +160,7 @@ function openlab_bp_group_documents_display_content() {
 
 						<?php
 						if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
-							echo '<br /><span class="group-documents-description">' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
+							echo '<br /><span class="group-documents-description"><em>Description:</em> ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
 						}
 
 						echo '</li>';

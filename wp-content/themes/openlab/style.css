@@ -9474,6 +9474,9 @@ body.membership-requests .group-list {
   padding-left: 1em;
   padding-bottom: 1em;
 }
+#bp-group-documents .group-documents-title {
+  font-weight: 600;
+}
 #bp-group-documents #bp-group-documents-upload-new {
   display: none;
 }
