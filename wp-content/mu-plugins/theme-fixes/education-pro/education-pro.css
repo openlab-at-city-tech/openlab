@@ -167,10 +167,6 @@ div.title-area {
 	right: 0;
 }
 
-body.custom-header .site-title a {
-	opacity: .7;
-}
-
 .site-header {
     border-top: 3px solid #e44a3c;
 }
@@ -178,6 +174,10 @@ body.custom-header .site-title a {
 
 .sidebar a {
     color: #aa2418;
+}
+
+.sidebar a:hover {
+	color: #444;
 }
 
 div.entry-content a, .breadcrumb a {
