@@ -19,6 +19,10 @@ jQuery(document).ready( function($) {
 		return false;
 	});
 
+	if ( $('#bp-group-documents').hasClass( 'is-edit-mode' ) ) {
+		$('.submenu .group-count').hide();
+	}
+
 	//prefill the new category field
 	$('input.bp-group-documents-new-category').val('New Category...').css('color','#999').focus(function(){
 		$(this).val('').css('color','inherit');
