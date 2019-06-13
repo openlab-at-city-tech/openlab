@@ -172,7 +172,13 @@ function openlab_bp_group_documents_display_content() {
 
 		<?php } else { ?>
 			<div id="message" class="info">
-				<p class="bold"><?php esc_html_e( 'There have been no documents uploaded for this group', 'bp-group-documents' ); ?></p>
+				<p class="bold">
+					<?php if ( $current_category ) : ?>
+						There are no files in this folder.
+					<?php else : ?>
+						There have been no files uploaded to this group.
+					<?php endif; ?>
+				</p>
 			</div>
 
 		<?php } ?>
