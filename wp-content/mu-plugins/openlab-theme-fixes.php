@@ -50,6 +50,7 @@ add_action(
 			case 'hemingway':
 			case 'pilcrow':
 			case 'sliding-door':
+			case 'twentynineteen':
 				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
 			break;
 		}
