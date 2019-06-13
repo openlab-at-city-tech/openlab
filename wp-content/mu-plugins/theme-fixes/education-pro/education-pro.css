@@ -24,6 +24,10 @@ p.site-title {
     font-size: 30px;
 }
 
+.site-header .site-title a:hover {
+	color: #ffd5d1;
+}
+
 .site-inner {
     clear: both;
     padding-top: 40px;
@@ -430,5 +434,9 @@ body.stacked-nav-header.header-image .site-title a {
 .education-pro-blue .site-footer .wrap a:hover {
 	color: inherit;
 	text-decoration: underline;
+}
+
+.education-pro-blue .site-header .site-title a:hover {
+	color: #185a7d;
 }
 
