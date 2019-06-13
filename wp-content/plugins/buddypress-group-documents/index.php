@@ -292,7 +292,7 @@ function bp_group_documents_display_header() {
 	_e( 'Group Documents', 'bp-group-documents' );
 }
 function bp_group_documents_display_title() {
-	_e( 'Document List', 'bp-group-documents' );
+	echo 'Files';
 }
 
 /****************************************************************************
@@ -342,7 +342,7 @@ function bp_group_documents_display_content() {
 
 
 		<?php if( '1.1' != substr(BP_VERSION,0,3) ) { ?>
-		<h3><?php _e('Document List','bp-group-documents'); ?></h3>
+		<h3>Files</h3>
 		<?php } ?>
 
 
