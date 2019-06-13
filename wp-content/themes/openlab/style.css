@@ -9467,6 +9467,9 @@ body.membership-requests .group-list {
 #bp-group-documents .bp-group-documents-folder-links {
   display: none;
 }
+#bp-group-documents .group-documents-orderby {
+  width: 50%;
+}
 #bp-group-documents #bp-group-documents-upload-new {
   display: none;
 }

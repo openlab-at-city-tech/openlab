@@ -90,7 +90,7 @@ function openlab_bp_group_documents_display_content() {
 					<div class="col-sm-12">
 						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
 							<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
-							<select name="order" class="form-control">
+							<select name="order" class="form-control group-documents-orderby">
 								<option value="newest"
 								<?php
 								if ( 'newest' === $template->order ) {
