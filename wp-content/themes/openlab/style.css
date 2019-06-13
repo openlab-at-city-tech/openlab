@@ -9454,7 +9454,20 @@ body.membership-requests .group-list {
   width: 180px;
   float: right;
 }
+#bp-group-documents.is-edit-mode #bp-group-documents-sorting,
+#bp-group-documents.is-edit-mode #bp-group-documents-list,
+#bp-group-documents.is-edit-mode .bp-group-documents-folder-links,
+#bp-group-documents.is-edit-mode #bp-group-documents-upload-button,
+#bp-group-documents.is-edit-mode .submenu-row .group-count {
+  display: none;
+}
+#bp-group-documents.is-edit-mode #bp-group-documents-upload-new {
+  display: block;
+}
 #bp-group-documents .bp-group-documents-folder-links {
+  display: none;
+}
+#bp-group-documents #bp-group-documents-upload-new {
   display: none;
 }
 #bp-group-documents #bp-group-documents-upload-new .form-panel .panel {

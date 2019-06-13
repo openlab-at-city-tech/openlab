@@ -2488,10 +2488,26 @@ body.membership-requests {
 		}
 	}
 
+	&.is-edit-mode {
+		#bp-group-documents-sorting,
+		#bp-group-documents-list,
+		.bp-group-documents-folder-links,
+		#bp-group-documents-upload-button,
+		.submenu-row .group-count {
+			display: none;
+		}
+
+		#bp-group-documents-upload-new {
+			display: block;
+		}
+	}
+
 	.bp-group-documents-folder-links {
 		display: none;
 	}
     #bp-group-documents-upload-new {
+		display: none;
+
 		.form-panel .panel {
 			margin-top: 0;
 		}
