@@ -75,9 +75,11 @@ function openlab_bp_group_documents_display_content() {
 		$current_category = $current_category_data->name;
 	}
 
+	$is_edit_mode = bp_is_action_variable( 'edit', 0 );
+
 	?>
 
-	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?>">
+	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?><?php if ( $is_edit_mode ) : ?> is-edit-mode<?php endif; ?>">
 
 		<?php do_action( 'template_notices' ); // (error/success feedback) ?>
 
