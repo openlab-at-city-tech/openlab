@@ -9477,6 +9477,9 @@ body.membership-requests .group-list {
 #bp-group-documents .group-documents-title {
   font-weight: 600;
 }
+#bp-group-documents .show-all-files {
+  margin-top: .5em;
+}
 #bp-group-documents #bp-group-documents-upload-new {
   display: none;
 }
@@ -9512,16 +9515,24 @@ body.membership-requests .group-list {
   font-weight: normal;
 }
 #bp-group-documents .group-file-folder-nav {
-  height: 120px;
+  height: 300px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
   overflow: auto;
   padding: 6px 12px;
 }
+#bp-group-documents .group-file-folder-nav hr {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
 #bp-group-documents .group-file-folder-nav ul {
   list-style-type: none;
   margin-top: 0;
   padding-left: 0;
+}
+#bp-group-documents .group-file-folder-nav .current-category a {
+  font-weight: bold;
+  text-decoration: none;
 }
 .docs-info-header #tags-toggle {
   padding: 6px 16px;

@@ -179,14 +179,14 @@ function openlab_bp_group_documents_display_content() {
 			<label><?php _e( 'View folder:', 'bp-group-documents' ); ?></label>
 			<div class="group-file-folder-nav">
 				<ul>
+
+					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><a href="<?php echo add_query_arg( 'category', 0, $template->action_link ) ?>">Show All Files</a></li>
+					<hr>
+
 					<?php foreach ( $non_empty_folders as $category ) { ?>
 						<?php $is_current_category = ( $category->name === $current_category ); ?>
 						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?> <?php /* (<?php echo $category->count ?>) */ ?></a></li>
 					<?php } ?>
-
-					<hr>
-
-					<li<?php if ( !$current_category ) : ?> class="current-category"<?php endif ?>><a href="<?php echo add_query_arg( 'category', 0, $template->action_link ) ?>">Show All Files</a></li>
 				</ul>
 			</div>
 		</div><!-- .bp-group-documents-folder-links -->
