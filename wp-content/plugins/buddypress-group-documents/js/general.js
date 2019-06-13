@@ -16,8 +16,12 @@ jQuery(document).ready( function($) {
 	$('#bp-group-documents-upload-new').hide();
 	$('#bp-group-documents-upload-button').show();
 	$('#bp-group-documents-upload-button').click(function(){
-		$('#bp-group-documents-upload-button').slideUp();
-		$('#bp-group-documents-upload-new').slideDown();
+		$('#bp-group-documents-sorting').hide();
+		$('#bp-group-documents-list').hide();
+		$('.bp-group-documents-folder-links').hide();
+		$('#bp-group-documents-upload-button').hide();
+		$('#bp-group-documents-upload-new').show();
+		$('.submenu-row .group-count').hide();
 		return false;
 	});
 

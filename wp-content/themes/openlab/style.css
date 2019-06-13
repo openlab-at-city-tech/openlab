@@ -9457,6 +9457,9 @@ body.membership-requests .group-list {
 #bp-group-documents .bp-group-documents-folder-links {
   display: none;
 }
+#bp-group-documents #bp-group-documents-upload-new .form-panel .panel {
+  margin-top: 0;
+}
 #bp-group-documents .bp-template-notice.error,
 #bp-group-documents .bp-template-notice.updated {
   margin-bottom: 17px;
