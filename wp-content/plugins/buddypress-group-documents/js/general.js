@@ -23,10 +23,10 @@ jQuery(document).ready( function($) {
 	$('input.bp-group-documents-new-category').val('New Category...').css('color','#999').focus(function(){
 		$(this).val('').css('color','inherit');
 	});
-		
+
 	//check for presence of a file before submitting form
 	$('form#bp-group-documents-form').submit(function(){
-		
+
 		//check for pre-filled values, and remove before sumitting
 		if( $('input.bp-group-documents-new-category').val() == 'New Category...' ) {
 			$('input.bp-group-documents-new-category').val('');
@@ -38,11 +38,11 @@ jQuery(document).ready( function($) {
 			alert('You must select a file to upload!');
 			return false;
 		}
-	});	
+	});
 
 	//validate group admin form before submitting
 	$('form#group-settings-form').submit(function() {
-		
+
 		//check for pre-filled values, and remove before sumitting
 		if( $('input.bp-group-documents-new-category').val() == 'New Category...' ) {
 			$('input.bp-group-documents-new-category').val('');
