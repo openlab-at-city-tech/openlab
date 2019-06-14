@@ -329,7 +329,6 @@ class oplb_gradebook_api
             'assign_name' => FILTER_SANITIZE_STRING,
             'assign_visibility' => FILTER_SANITIZE_STRING,
             'assign_weight' => FILTER_SANITIZE_STRING,
-            'comments' => FILTER_SANITIZE_STRING,
             'comment_edit' => FILTER_VALIDATE_BOOLEAN,
             'publish' => FILTER_VALIDATE_BOOLEAN,
             'selected' => FILTER_VALIDATE_BOOLEAN,
@@ -367,6 +366,13 @@ class oplb_gradebook_api
                 $incoming_params = filter_var_array($_POST, $args);
                 $params = $this->oplb_gradebook_merge_arrays_on_null($params, $incoming_params);
             }
+        }
+
+        //doing comments differently
+        if(!empty($_POST['comments'])){
+
+            $params['comments'] = nl2br(sanitize_textarea_field(stripslashes($_POST['comments'])));
+
         }
 
         $params['method'] = $method;
