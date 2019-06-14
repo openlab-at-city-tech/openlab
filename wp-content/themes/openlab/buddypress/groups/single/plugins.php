@@ -28,7 +28,6 @@ global $bp, $wp_query;
                                 <li class="current-menu-item"><a href=""><?php _e('Files', 'bp-group-documents'); ?></a></li>
                             </ul>
                         </div>
-                        <div class="group-count col-sm-7 pull-right"><?php echo openlab_get_files_count(); ?></div>
                     </div>
 
                 <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
