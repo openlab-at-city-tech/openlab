@@ -100,7 +100,7 @@ function openlab_bp_group_documents_display_content() {
 
 			<div id="bp-group-documents-sorting">
 				<div class="row">
-					<div class="col-sm-12">
+					<div class="col-sm-8">
 						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
 							<label for="group-documents-orderby">
 								<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
@@ -129,7 +129,14 @@ function openlab_bp_group_documents_display_content() {
 							<input type="submit" class="bp-group-documents-go button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
 						</form>
 					</div>
+
+					<div class="pull-right upload-new-file">
+						<?php if ( 'add' === $template->operation ) { ?>
+							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+						<?php } ?>
+					</div>
 				</div>
+
 			</div>
 
 			<div class="bp-group-documents-list-container">
@@ -217,7 +224,7 @@ function openlab_bp_group_documents_display_content() {
 			<label>Folders:</label>
 			<div class="group-file-folder-nav">
 				<ul>
-					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><a href="<?php echo remove_query_arg( 'category', $template->action_link ) ?>">Show All Files</a></li>
+					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $current_category ? 'fa-folder-o' : 'fa-folder-open-o'; ?>"></i> <a href="<?php echo remove_query_arg( 'category', $template->action_link ) ?>">All Files</a></li>
 					<hr>
 
 					<?php foreach ( $non_empty_folders as $category ) { ?>
@@ -316,12 +323,6 @@ function openlab_bp_group_documents_display_content() {
 
 					</form>
 
-				</div>
-
-				<div>
-					<?php if ( 'add' === $template->operation ) { ?>
-						<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
-					<?php } ?>
 				</div>
 
 			<?php } ?>
