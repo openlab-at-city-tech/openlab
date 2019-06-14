@@ -27,8 +27,9 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'openlab-gradebook')?></button>
-
-            <button type="button" id="edit-comment" class="btn btn-primary"><span class="hidden dashicons dashicons-image-rotate dashicons-spinning"></span><span class="button-text"><?php esc_html_e('Save', 'openlab-gradebook')?></span></button>
+            <% if (gradebook.role === 'instructor') { %>
+                <button type="button" id="edit-comment" class="btn btn-primary"><span class="hidden dashicons dashicons-image-rotate dashicons-spinning"></span><span class="button-text"><?php esc_html_e('Save', 'openlab-gradebook')?></span></button>
+            <% } %> 
 
         </div>
     </div>
