@@ -102,8 +102,11 @@ function openlab_bp_group_documents_display_content() {
 				<div class="row">
 					<div class="col-sm-12">
 						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
-							<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
-							<select name="order" class="form-control group-documents-orderby">
+							<label for="group-documents-orderby">
+								<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
+							</label>
+
+							<select name="order" id="group-documents-orderby" class="form-control group-documents-orderby">
 								<option value="newest"
 								<?php
 								if ( 'newest' === $template->order ) {
@@ -267,24 +270,24 @@ function openlab_bp_group_documents_display_content() {
 								<?php if ( 'add' === $template->operation ) { ?>
 
 									<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo esc_attr( return_bytes( ini_get( 'post_max_size' ) ) ); ?>" />
-									<label><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
+									<label for="bp-group-documents-file"><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
 									<div class="form-control type-file-wrapper">
-										<input type="file" name="bp_group_documents_file" class="bp-group-documents-file" />
+										<input type="file" id="bp-group-documents-file" name="bp_group_documents_file" class="bp-group-documents-file" />
 									</div>
 								<?php } ?>
 
 								<?php if ( BP_GROUP_DOCUMENTS_FEATURED ) { ?>
 									<div class="checkbox">
-										<label class="bp-group-documents-featured-label"><input type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
+										<label for="bp-group-documents-featured-label"><input id="bp-group-documents-featured" type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
 									</div>
 								<?php } ?>
 
 								<div id="document-detail-clear" class="clear"></div>
 								<div class="document-info">
-									<label><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
+									<label for="bp-group-documents-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
 									<input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
 									<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
-										<label><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
+										<label for="bp-group-documents-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
 										<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
 									<?php } ?>
 
@@ -301,7 +304,6 @@ function openlab_bp_group_documents_display_content() {
 										<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
 										<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
 									</fieldset>
-									<label></label>
 								</div>
 							</div>
 						</div>

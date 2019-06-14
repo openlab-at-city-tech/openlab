@@ -400,7 +400,7 @@ class BP_Group_Documents {
 	 */
 	public function icon() {
 		if( $icon_url =  $this->get_icon() ) {
-		echo '<a class="group-documents-icon" id="group-document-icon-' . $this->id . '" href="' . $this->get_url() . '" target="_blank"><img class="bp-group-documents-icon" src="' . $icon_url . '" alt="" /></a>';
+		echo '<a role="presentation" class="group-documents-icon" id="group-document-icon-' . $this->id . '" href="' . $this->get_url() . '" target="_blank"><img class="bp-group-documents-icon" src="' . $icon_url . '" alt="" /><span class="sr-only">View document</span></a>';
 		}
 	}
 		public function get_icon() {
