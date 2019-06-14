@@ -24,6 +24,10 @@ p.site-title {
     font-size: 30px;
 }
 
+.site-header .site-title a:hover {
+	color: #ffd5d1;
+}
+
 .site-inner {
     clear: both;
     padding-top: 40px;
@@ -45,7 +49,6 @@ blockquote {
 blockquote:before {
     color: #e3f2fa;
     content: none;
-    font-family: sans-serif;
     font-size: 5em;
     line-height: .5em;
     margin-left: -20px;
@@ -168,10 +171,6 @@ div.title-area {
 	right: 0;
 }
 
-body.custom-header .site-title a {
-	opacity: .7;
-}
-
 .site-header {
     border-top: 3px solid #e44a3c;
 }
@@ -179,6 +178,10 @@ body.custom-header .site-title a {
 
 .sidebar a {
     color: #aa2418;
+}
+
+.sidebar a:hover {
+	color: #444;
 }
 
 div.entry-content a, .breadcrumb a {
@@ -199,11 +202,36 @@ div.entry-content a, .breadcrumb a {
 	margin-right: inherit;
 }
 
+.menu-item-has-children {
+	position: relative;
+}
+
 .menu-item-has-children > a:after {
-	content: "\f431";
+	content: "\203a";
+	font-size: 28px;
 	position: absolute;
 	right: 0.625em;
-	top: 0.8125em;
+	top: 0.155em;
+}
+
+.menu-primary > .menu-item-has-children > a {
+	padding-right: 32px;
+}
+
+.menu-primary > .menu-item-has-children > a:after {
+	top: .3em;
+}
+
+.genesis-nav-menu .menu-item-has-children.menu-item:hover {
+	position: relative;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a {
+	padding-right: 32px;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+	top: .85em;
 }
 
 /* Adjustments for header + nav at medium widths */
@@ -223,6 +251,7 @@ div.entry-content a, .breadcrumb a {
 	}
 }
 
+/* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
 body.stacked-nav-header div.title-area {
 	box-shadow: none;
 }
@@ -269,11 +298,12 @@ body.stacked-nav-header.header-image .site-title a {
 	max-width: calc(100% - 500px);
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu {
+.genesis-nav-menu .sub-menu {
 	border-left: 3px solid #e44a3d;
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu a {
+.site-header .genesis-nav-menu .sub-menu a,
+.genesis-nav-menu .sub-menu a {
 	background-color: #fff;
 	color: #444;
 }
@@ -406,5 +436,9 @@ body.stacked-nav-header.header-image .site-title a {
 .education-pro-blue .site-footer .wrap a:hover {
 	color: inherit;
 	text-decoration: underline;
+}
+
+.education-pro-blue .site-header .site-title a:hover {
+	color: #185a7d;
 }
 

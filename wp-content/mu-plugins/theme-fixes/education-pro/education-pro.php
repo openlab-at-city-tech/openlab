@@ -146,3 +146,77 @@ add_action(
 		<?php
 	}
 );
+
+remove_action( 'wp_head', 'genesis_custom_header_style' );
+add_action( 'wp_head', 'openlab_custom_header_style' );
+/**
+ * Custom header callback.
+ *
+ * It outputs special CSS to the document head, modifying the look of the header based on user input.
+ *
+ * @since 1.6.0
+ *
+ * @return void Return early if `custom-header` not supported, user specified own callback, or no options set.
+ */
+function openlab_custom_header_style() {
+
+	// Do nothing if custom header not supported.
+	if ( ! current_theme_supports( 'custom-header' ) ) {
+		return;
+	}
+
+	// Do nothing if user specifies their own callback.
+	if ( get_theme_support( 'custom-header', 'wp-head-callback' ) ) {
+		return;
+	}
+
+	$output = '';
+
+	$header_image = get_header_image();
+	$text_color   = get_header_textcolor();
+
+	// If no options set, don't waste the output. Do nothing.
+	if ( empty( $header_image ) && ! display_header_text() && get_theme_support( 'custom-header', 'default-text-color' ) === $text_color ) {
+		return;
+	}
+
+	$header_selector = get_theme_support( 'custom-header', 'header-selector' );
+	$title_selector  = genesis_html5() ? '.custom-header .site-title' : '.custom-header #title';
+	$desc_selector   = genesis_html5() ? '.custom-header .site-description' : '.custom-header #description';
+
+	// Header selector fallback.
+	if ( ! $header_selector ) {
+		$header_selector = genesis_html5() ? '.custom-header .site-header' : '.custom-header #header';
+	}
+
+	$gradient = 'rgba(170,36,24,0.7)';
+	$scheme   = genesis_get_option( 'style_selection' );
+	switch ( $scheme ) {
+		case 'education-pro-blue' :
+			$gradient = 'rgba(186,208,222,0.7)';
+		break;
+
+		case 'education-pro-red' :
+			$gradient = 'rgba(219,47,31,0.7)';
+		break;
+
+		case 'education-pro-green' :
+			$gradient = 'rgba(209,222,186,0.7)';
+		break;
+	}
+
+	// Header image CSS, if exists.
+	if ( $header_image ) {
+		$output .= sprintf( '%s { background: linear-gradient( %s, %s ), url(%s) no-repeat !important; }', $header_selector, $gradient, $gradient, esc_url( $header_image ) );
+	}
+
+	// Header text color CSS, if showing text.
+	if ( display_header_text() && get_theme_support( 'custom-header', 'default-text-color' ) !== $text_color ) {
+		$output .= sprintf( '%2$s a, %2$s a:hover, %3$s { color: #%1$s !important; }', esc_html( $text_color ), esc_html( $title_selector ), esc_html( $desc_selector ) );
+	}
+
+	if ( $output ) {
+		printf( '<style type="text/css">%s</style>' . "\n", $output );
+	}
+
+}

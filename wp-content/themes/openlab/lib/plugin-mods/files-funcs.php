@@ -75,9 +75,22 @@ function openlab_bp_group_documents_display_content() {
 		$current_category = $current_category_data->name;
 	}
 
+	$is_edit_mode = bp_is_action_variable( 'edit', 0 );
+
+	$classes = [];
+	if ( $non_empty_folders ) {
+		$classes[] = 'has-folders';
+	}
+	if ( $is_edit_mode ) {
+		$classes[] = 'is-edit-mode';
+	}
+	if ( $current_category ) {
+		$classes[] = 'is-folder';
+	}
+
 	?>
 
-	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?>">
+	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 
 		<?php do_action( 'template_notices' ); // (error/success feedback) ?>
 
@@ -87,10 +100,13 @@ function openlab_bp_group_documents_display_content() {
 
 			<div id="bp-group-documents-sorting">
 				<div class="row">
-					<div class="col-sm-12">
+					<div class="col-sm-8">
 						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
-							<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
-							<select name="order" class="form-control">
+							<label for="group-documents-orderby">
+								<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
+							</label>
+
+							<select name="order" id="group-documents-orderby" class="form-control group-documents-orderby">
 								<option value="newest"
 								<?php
 								if ( 'newest' === $template->order ) {
@@ -110,83 +126,111 @@ function openlab_bp_group_documents_display_content() {
 								?>
 								><?php esc_html_e( 'Most Popular', 'bp-group-documents' ); ?></option>
 							</select>
-							<input type="submit" class="button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
+							<input type="submit" class="bp-group-documents-go button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
 						</form>
 					</div>
+
+					<div class="pull-right upload-new-file">
+						<?php if ( 'add' === $template->operation ) { ?>
+							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+						<?php } ?>
+					</div>
 				</div>
+
 			</div>
 
-			<ul id="bp-group-documents-list" class="item-list group-list inline-element-list">
-				<?php
-				//loop through each document and display content along with admin options
-				$count = 0;
-				foreach ( $template->document_list as $document_params ) {
-					$document = new BP_Group_Documents( $document_params['id'], $document_params );
-					$count++;
-					$alt_class = ( $count % 2 ) ? 'alt' : '';
-					?>
-
-					<li class="list-group-item <?php echo esc_attr( $alt_class ); ?>">
-						<?php
-						// show edit and delete options if user is privileged
-						echo '<div class="admin-links pull-right">';
-						if ( $document->current_user_can( 'edit' ) ) {
-							$edit_link = wp_nonce_url( $template->action_link . 'edit/' . $document->id, 'group-documents-edit-link' );
-							echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
-						}
-						if ( $document->current_user_can( 'delete' ) ) {
-							$delete_link = wp_nonce_url( $template->action_link . 'delete/' . $document->id, 'group-documents-delete-link' );
-							echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-delete'>" . esc_html__( 'Delete', 'bp-group-documents' ) . '</a>';
-						}
-
-						echo '</div>';
-						?>
-
-						<?php
-						if ( get_option( 'bp_group_documents_display_icons' ) ) {
-							$document->icon();}
-						?>
-
-						<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
-
+			<div class="bp-group-documents-list-container">
+				<?php if ( $current_category ) : ?>
+					<div class="bp-group-documents-list-folder-header">
+						<i class="fa fa-folder-open-o"></i> Folder: <?php echo esc_html( $current_category ); ?>
+						<div class="admin-links pull-right">
 							<?php
-							if ( get_option( 'bp_group_documents_display_file_size' ) ) {
-								echo ' <span class="group-documents-filesize">(' . esc_html( get_file_size( $document ) ) . ')</span>';
+							if ( bp_is_item_admin() ) {
+								$delete_link = wp_nonce_url( $template->action_link . 'delete-folder/' . $current_category_data->term_id, 'group-documents-delete-folder-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-folder-delete'>Delete</a>";
 							}
 							?>
-							</a> &nbsp;
+						</div>
+					</div>
+				<?php endif; ?>
 
-						<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+				<ul id="bp-group-documents-list" class="bp-group-documents-list item-list group-list inline-element-list">
+					<?php
+					//loop through each document and display content along with admin options
+					$count = 0;
+					foreach ( $template->document_list as $document_params ) {
+						$document = new BP_Group_Documents( $document_params['id'], $document_params );
+						$count++;
+						$alt_class = ( $count % 2 ) ? 'alt' : '';
+						?>
 
-						<?php
-						if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
-							echo '<br /><span class="group-documents-description">' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
-						}
+						<li class="list-group-item <?php echo esc_attr( $alt_class ); ?>">
+							<?php
+							// show edit and delete options if user is privileged
+							echo '<div class="admin-links pull-right">';
+							if ( $document->current_user_can( 'edit' ) ) {
+								$edit_link = wp_nonce_url( $template->action_link . 'edit/' . $document->id, 'group-documents-edit-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
+							}
+							if ( $document->current_user_can( 'delete' ) ) {
+								$delete_link = wp_nonce_url( $template->action_link . 'delete/' . $document->id, 'group-documents-delete-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-delete'>" . esc_html__( 'Delete', 'bp-group-documents' ) . '</a>';
+							}
 
-						echo '</li>';
-				}
-				?>
-			</ul>
+							echo '</div>';
+							?>
+
+							<?php
+							if ( get_option( 'bp_group_documents_display_icons' ) ) {
+								$document->icon();}
+							?>
+
+							<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
+
+								<?php
+								if ( get_option( 'bp_group_documents_display_file_size' ) ) {
+									echo ' <span class="group-documents-filesize">(' . esc_html( get_file_size( $document ) ) . ')</span>';
+								}
+								?>
+								</a> &nbsp;
+
+							<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+
+							<?php
+							if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
+								echo '<br /><span class="group-documents-description"><em>Description:</em> ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
+							}
+
+							echo '</li>';
+					}
+					?>
+				</ul>
+			</div>
 
 		<?php } else { ?>
 			<div id="message" class="info">
-				<p class="bold"><?php esc_html_e( 'There have been no documents uploaded for this group', 'bp-group-documents' ); ?></p>
+				<p class="bold">
+					<?php if ( $current_category ) : ?>
+						There are no files in this folder.
+					<?php else : ?>
+						There have been no files uploaded to this group.
+					<?php endif; ?>
+				</p>
 			</div>
 
 		<?php } ?>
 
 		<div class="bp-group-documents-folder-links">
-			<label><?php _e( 'View folder:', 'bp-group-documents' ); ?></label>
+			<label>Folders:</label>
 			<div class="group-file-folder-nav">
 				<ul>
+					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $current_category ? 'fa-folder-o' : 'fa-folder-open-o'; ?>"></i> <a href="<?php echo remove_query_arg( 'category', $template->action_link ) ?>">All Files</a></li>
+					<hr>
+
 					<?php foreach ( $non_empty_folders as $category ) { ?>
 						<?php $is_current_category = ( $category->name === $current_category ); ?>
 						<li class="folder<?php if ( $is_current_category ) : ?> current-category<?php endif ?>"><i class="fa <?php echo $is_current_category ? 'fa-folder-open-o' : 'fa-folder-o'; ?>"></i> <a href="<?php echo esc_attr( add_query_arg( 'category', $category->term_id, $template->action_link ) ); ?>"><?php echo esc_html( $category->name ); ?> <?php /* (<?php echo $category->count ?>) */ ?></a></li>
 					<?php } ?>
-
-					<hr>
-
-					<li<?php if ( !$current_category ) : ?> class="current-category"<?php endif ?>><a href="<?php echo add_query_arg( 'category', 0, $template->action_link ) ?>">Show All Files</a></li>
 				</ul>
 			</div>
 		</div><!-- .bp-group-documents-folder-links -->
@@ -232,24 +276,24 @@ function openlab_bp_group_documents_display_content() {
 								<?php if ( 'add' === $template->operation ) { ?>
 
 									<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo esc_attr( return_bytes( ini_get( 'post_max_size' ) ) ); ?>" />
-									<label><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
+									<label for="bp-group-documents-file"><?php esc_html_e( 'Choose File:', 'bp-group-documents' ); ?></label>
 									<div class="form-control type-file-wrapper">
-										<input type="file" name="bp_group_documents_file" class="bp-group-documents-file" />
+										<input type="file" id="bp-group-documents-file" name="bp_group_documents_file" class="bp-group-documents-file" />
 									</div>
 								<?php } ?>
 
 								<?php if ( BP_GROUP_DOCUMENTS_FEATURED ) { ?>
 									<div class="checkbox">
-										<label class="bp-group-documents-featured-label"><input type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
+										<label for="bp-group-documents-featured-label"><input id="bp-group-documents-featured" type="checkbox" name="bp_group_documents_featured" class="bp-group-documents-featured" value="1" <?php checked( $template->featured ); ?> /> <?php esc_html_e( 'Featured Document', 'bp-group-documents' ); ?></label>
 									</div>
 								<?php } ?>
 
 								<div id="document-detail-clear" class="clear"></div>
 								<div class="document-info">
-									<label><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
+									<label for="bp-group-documents-name"><?php esc_html_e( 'Display Name:', 'bp-group-documents' ); ?></label>
 									<input type="text" name="bp_group_documents_name" id="bp-group-documents-name" class="form-control" value="<?php echo esc_attr( stripslashes( $template->name ) ); ?>" />
 									<?php if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS ) { ?>
-										<label><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
+										<label for="bp-group-documents-description"><?php esc_html_e( 'Description:', 'bp-group-documents' ); ?></label>
 										<textarea name="bp_group_documents_description" id="bp-group-documents-description" class="form-control"><?php echo esc_html( stripslashes( $template->description ) ); ?></textarea>
 									<?php } ?>
 
@@ -266,7 +310,6 @@ function openlab_bp_group_documents_display_content() {
 										<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
 										<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
 									</fieldset>
-									<label></label>
 								</div>
 							</div>
 						</div>
@@ -282,17 +325,43 @@ function openlab_bp_group_documents_display_content() {
 
 				</div>
 
-				<div>
-					<?php if ( 'add' === $template->operation ) { ?>
-						<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
-					<?php } ?>
-				</div>
-
 			<?php } ?>
 
 	</div><!--end #group-documents-->
 	<?php
 }
+
+/**
+ * Catch folder delete request.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( ! bp_is_group() || ! bp_is_current_action( 'files' ) ) {
+			return;
+		}
+
+		if ( ! bp_is_action_variable( 'delete-folder' ) ) {
+			return;
+		}
+
+		$folder_id = (int) bp_action_variable( 1 );
+		if ( ! $folder_id ) {
+			return;
+		}
+
+		check_admin_referer( 'group-documents-delete-folder-link' );
+
+		if ( ! bp_is_item_admin() ) {
+			return;
+		}
+
+		wp_delete_term( $folder_id, 'group-documents-category' );
+
+		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'files/' );
+		die;
+	}
+);
 
 /**
  * Custom file pagination

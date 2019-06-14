@@ -185,11 +185,11 @@ class BP_Group_Documents_Template {
 		//1st priority, category in url
 		if( isset( $_GET['category'] ) ) {
 			$this->category = $_GET['category'];
-
+/*
 		//category wasn't in url, check cookies
 		} elseif ( isset( $_COOKIE['bp-group-documents-category'])) {
 			$this->category = $_COOKIE['bp-group-documents-category'];
-
+*/
 		//show all categories
 		} else {
 			$this->category = false;

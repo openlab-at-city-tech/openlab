@@ -29,6 +29,7 @@ function openlab_load_theme_fixes() {
 		case 'twentythirteen':
 		case 'twentytwelve':
 		case 'twentyeleven':
+		case 'twentynineteen':
 		case 'twentyten':
 			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $t ) . '/' . esc_attr( $t ) . '.css" />
 ';
@@ -50,6 +51,7 @@ add_action(
 			case 'hemingway':
 			case 'pilcrow':
 			case 'sliding-door':
+			case 'twentynineteen':
 				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
 			break;
 		}

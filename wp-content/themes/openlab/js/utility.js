@@ -591,11 +591,13 @@ OpenLab.utility = (function ($) {
             $('#groups-notification-settings-request').after(public_group_not);
         }
 
-				// Remove the category and order cookies when clicking the Files link in the group nav.
-				$('#group-documents-groups-li > a').click(function(){
-					$.removeCookie( 'bp-group-documents-category' );
-					$.removeCookie( 'bp-group-documents-order' );
+				$('#bp-group-documents-folder-delete').click(function(e){
+					if ( confirm('Are you sure you wish to permanently delete this folder? The files associated with this folder will not be deleted.') ) {
+						return true;
+					}
+					return false;
 				});
+
 
     });//end document.ready
 
