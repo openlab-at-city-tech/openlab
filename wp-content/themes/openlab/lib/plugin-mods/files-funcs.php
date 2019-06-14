@@ -100,7 +100,7 @@ function openlab_bp_group_documents_display_content() {
 
 			<div id="bp-group-documents-sorting">
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-sm-8 sorting-column">
 						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
 							<label for="group-documents-orderby">
 								<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
