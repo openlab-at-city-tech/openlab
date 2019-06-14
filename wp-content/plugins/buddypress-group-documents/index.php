@@ -245,7 +245,7 @@ function bp_group_documents_set_cookies() {
 		setcookie('bp-group-documents-category',$_GET['category'],time()+60*60*24);
 	}
 }
-add_action('plugins_loaded','bp_group_documents_set_cookies');
+//add_action('plugins_loaded','bp_group_documents_set_cookies');
 
 
 /**

@@ -9445,7 +9445,7 @@ body.membership-requests .group-list {
 .plugins #item-body {
   margin-top: 35px;
 }
-#bp-group-documents.has-folders #bp-group-documents-list {
+#bp-group-documents.has-folders .bp-group-documents-list-container {
   float: left;
   width: calc(100% - 200px);
 }
@@ -9455,7 +9455,7 @@ body.membership-requests .group-list {
   float: right;
 }
 #bp-group-documents.is-edit-mode #bp-group-documents-sorting,
-#bp-group-documents.is-edit-mode #bp-group-documents-list,
+#bp-group-documents.is-edit-mode .bp-group-documents-list-container,
 #bp-group-documents.is-edit-mode .bp-group-documents-folder-links,
 #bp-group-documents.is-edit-mode #bp-group-documents-upload-button,
 #bp-group-documents.is-edit-mode .submenu-row .group-count {
@@ -9463,6 +9463,21 @@ body.membership-requests .group-list {
 }
 #bp-group-documents.is-edit-mode #bp-group-documents-upload-new {
   display: block;
+}
+#bp-group-documents .bp-group-documents-list-folder-header {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom: none;
+  color: #333333;
+  display: block;
+  padding: 15px;
+  font-weight: bold;
+}
+#bp-group-documents.is-folder .bp-group-documents-list.item-list .list-group-item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 #bp-group-documents .bp-group-documents-folder-links {
   display: none;

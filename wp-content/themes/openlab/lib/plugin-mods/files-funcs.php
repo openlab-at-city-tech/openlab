@@ -77,9 +77,20 @@ function openlab_bp_group_documents_display_content() {
 
 	$is_edit_mode = bp_is_action_variable( 'edit', 0 );
 
+	$classes = [];
+	if ( $non_empty_folders ) {
+		$classes[] = 'has-folders';
+	}
+	if ( $is_edit_mode ) {
+		$classes[] = 'is-edit-mode';
+	}
+	if ( $current_category ) {
+		$classes[] = 'is-folder';
+	}
+
 	?>
 
-	<div id="bp-group-documents" class="<?php if ( ! empty( $non_empty_folders ) ) : ?>has-folders<?php endif; ?><?php if ( $is_edit_mode ) : ?> is-edit-mode<?php endif; ?>">
+	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 
 		<?php do_action( 'template_notices' ); // (error/success feedback) ?>
 
@@ -112,63 +123,79 @@ function openlab_bp_group_documents_display_content() {
 								?>
 								><?php esc_html_e( 'Most Popular', 'bp-group-documents' ); ?></option>
 							</select>
-							<input type="submit" class="button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
+							<input type="submit" class="bp-group-documents-go button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
 						</form>
 					</div>
 				</div>
 			</div>
 
-			<ul id="bp-group-documents-list" class="item-list group-list inline-element-list">
-				<?php
-				//loop through each document and display content along with admin options
-				$count = 0;
-				foreach ( $template->document_list as $document_params ) {
-					$document = new BP_Group_Documents( $document_params['id'], $document_params );
-					$count++;
-					$alt_class = ( $count % 2 ) ? 'alt' : '';
-					?>
-
-					<li class="list-group-item <?php echo esc_attr( $alt_class ); ?>">
-						<?php
-						// show edit and delete options if user is privileged
-						echo '<div class="admin-links pull-right">';
-						if ( $document->current_user_can( 'edit' ) ) {
-							$edit_link = wp_nonce_url( $template->action_link . 'edit/' . $document->id, 'group-documents-edit-link' );
-							echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
-						}
-						if ( $document->current_user_can( 'delete' ) ) {
-							$delete_link = wp_nonce_url( $template->action_link . 'delete/' . $document->id, 'group-documents-delete-link' );
-							echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-delete'>" . esc_html__( 'Delete', 'bp-group-documents' ) . '</a>';
-						}
-
-						echo '</div>';
-						?>
-
-						<?php
-						if ( get_option( 'bp_group_documents_display_icons' ) ) {
-							$document->icon();}
-						?>
-
-						<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
-
+			<div class="bp-group-documents-list-container">
+				<?php if ( $current_category ) : ?>
+					<div class="bp-group-documents-list-folder-header">
+						<i class="fa fa-folder-open-o"></i> Folder: <?php echo esc_html( $current_category ); ?>
+						<div class="admin-links pull-right">
 							<?php
-							if ( get_option( 'bp_group_documents_display_file_size' ) ) {
-								echo ' <span class="group-documents-filesize">(' . esc_html( get_file_size( $document ) ) . ')</span>';
+							if ( bp_is_item_admin() ) {
+								$delete_link = wp_nonce_url( $template->action_link . 'delete-folder/' . $current_category_data->term_id, 'group-documents-delete-folder-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-folder-delete'>Delete</a>";
 							}
 							?>
-							</a> &nbsp;
+						</div>
+					</div>
+				<?php endif; ?>
 
-						<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+				<ul id="bp-group-documents-list" class="bp-group-documents-list item-list group-list inline-element-list">
+					<?php
+					//loop through each document and display content along with admin options
+					$count = 0;
+					foreach ( $template->document_list as $document_params ) {
+						$document = new BP_Group_Documents( $document_params['id'], $document_params );
+						$count++;
+						$alt_class = ( $count % 2 ) ? 'alt' : '';
+						?>
 
-						<?php
-						if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
-							echo '<br /><span class="group-documents-description"><em>Description:</em> ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
-						}
+						<li class="list-group-item <?php echo esc_attr( $alt_class ); ?>">
+							<?php
+							// show edit and delete options if user is privileged
+							echo '<div class="admin-links pull-right">';
+							if ( $document->current_user_can( 'edit' ) ) {
+								$edit_link = wp_nonce_url( $template->action_link . 'edit/' . $document->id, 'group-documents-edit-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $edit_link ) . "'>" . esc_html__( 'Edit', 'bp-group-documents' ) . '</a> ';
+							}
+							if ( $document->current_user_can( 'delete' ) ) {
+								$delete_link = wp_nonce_url( $template->action_link . 'delete/' . $document->id, 'group-documents-delete-link' );
+								echo "<a class='btn btn-primary btn-xs link-btn no-margin no-margin-top' href='" . esc_attr( $delete_link ) . "' id='bp-group-documents-delete'>" . esc_html__( 'Delete', 'bp-group-documents' ) . '</a>';
+							}
 
-						echo '</li>';
-				}
-				?>
-			</ul>
+							echo '</div>';
+							?>
+
+							<?php
+							if ( get_option( 'bp_group_documents_display_icons' ) ) {
+								$document->icon();}
+							?>
+
+							<a class="group-documents-title" id="group-document-link-<?php echo esc_attr( $document->id ); ?>" href="<?php $document->url(); ?>" target="_blank"><?php echo esc_html( stripslashes( $document->name ) ); ?>
+
+								<?php
+								if ( get_option( 'bp_group_documents_display_file_size' ) ) {
+									echo ' <span class="group-documents-filesize">(' . esc_html( get_file_size( $document ) ) . ')</span>';
+								}
+								?>
+								</a> &nbsp;
+
+							<span class="group-documents-meta"><?php printf( esc_html__( 'Uploaded by %1$s on %2$s', 'bp-group-documents' ), bp_core_get_userlink( $document->user_id ), esc_html( date( get_option( 'date_format' ), $document->created_ts ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+
+							<?php
+							if ( BP_GROUP_DOCUMENTS_SHOW_DESCRIPTIONS && $document->description ) {
+								echo '<br /><span class="group-documents-description"><em>Description:</em> ' . esc_html( nl2br( stripslashes( $document->description ) ) ) . '</span>';
+							}
+
+							echo '</li>';
+					}
+					?>
+				</ul>
+			</div>
 
 		<?php } else { ?>
 			<div id="message" class="info">
@@ -188,7 +215,7 @@ function openlab_bp_group_documents_display_content() {
 			<div class="group-file-folder-nav">
 				<ul>
 
-					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><a href="<?php echo add_query_arg( 'category', 0, $template->action_link ) ?>">Show All Files</a></li>
+					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><a href="<?php echo remove_query_arg( 'category', $template->action_link ) ?>">Show All Files</a></li>
 					<hr>
 
 					<?php foreach ( $non_empty_folders as $category ) { ?>
@@ -301,6 +328,38 @@ function openlab_bp_group_documents_display_content() {
 	</div><!--end #group-documents-->
 	<?php
 }
+
+/**
+ * Catch folder delete request.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( ! bp_is_group() || ! bp_is_current_action( 'files' ) ) {
+			return;
+		}
+
+		if ( ! bp_is_action_variable( 'delete-folder' ) ) {
+			return;
+		}
+
+		$folder_id = (int) bp_action_variable( 1 );
+		if ( ! $folder_id ) {
+			return;
+		}
+
+		check_admin_referer( 'group-documents-delete-folder-link' );
+
+		if ( ! bp_is_item_admin() ) {
+			return;
+		}
+
+		wp_delete_term( $folder_id, 'group-documents-category' );
+
+		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'files/' );
+		die;
+	}
+);
 
 /**
  * Custom file pagination
