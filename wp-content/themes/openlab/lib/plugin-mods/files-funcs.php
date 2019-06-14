@@ -214,10 +214,9 @@ function openlab_bp_group_documents_display_content() {
 		<?php } ?>
 
 		<div class="bp-group-documents-folder-links">
-			<label><?php _e( 'View folder:', 'bp-group-documents' ); ?></label>
+			<label>Folders:</label>
 			<div class="group-file-folder-nav">
 				<ul>
-
 					<li class="show-all-files<?php if ( ! $current_category ) : ?> current-category<?php endif ?>"><a href="<?php echo remove_query_arg( 'category', $template->action_link ) ?>">Show All Files</a></li>
 					<hr>
 
