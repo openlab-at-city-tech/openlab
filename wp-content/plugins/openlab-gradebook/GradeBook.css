@@ -475,6 +475,7 @@ span.twitter-typeahead {
   flex: 1 0 29%;
   margin-right: 31%;
   height: 28px;
+  min-width: 48px;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon {
   flex: 1 0 40%;
