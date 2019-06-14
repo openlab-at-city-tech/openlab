@@ -118,12 +118,14 @@ class OPLB_USER
             '%s',
         );
 
-        if (!empty($params['comments'])) {
-            $values[$target_comments] = $params['comments'];
-            array_push($formats, '%s');
-        } else {
-            $values[$target_comments] = null;
-            array_push($formats, '%s');
+        if (!empty($params['comment_edit'])) {
+            if (!empty($params['comments'])) {
+                $values[$target_comments] = $params['comments'];
+                array_push($formats, '%s');
+            } else {
+                $values[$target_comments] = null;
+                array_push($formats, '%s');
+            }
         }
 
         $wpdb->update(
