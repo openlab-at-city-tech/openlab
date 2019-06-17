@@ -239,10 +239,6 @@ define([
 		edit: function(ev) {
 			this.$el.attr("contenteditable", "false");
 
-			console.log(
-				"savingStatus",
-				this.$el.closest("#gradebookWrapper").find("#savingStatus")
-			);
 			this.$el
 				.closest("#gradebookWrapper")
 				.find("#savingStatus")
@@ -310,7 +306,6 @@ define([
 			this.$el.find(".grade-selector").removeAttr("disabled");
 		},
 		editError: function() {
-			console.log("edit error");
 			this.$el.find(".grade-selector").removeAttr("disabled");
         },
         studentGradeLabels: function(ev) {

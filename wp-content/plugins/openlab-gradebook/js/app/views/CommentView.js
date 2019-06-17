@@ -28,7 +28,6 @@ define([
 			var statusClass = this.model.get("comments") ? "active" : "inactive";
 
 			if (this.type === "mid_semester") {
-				console.log('this in render mid_semester comment', this);
 				statusClass = this.model.get("mid_semester_comments")
 					? "active"
 					: "inactive";

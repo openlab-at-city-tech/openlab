@@ -27,7 +27,6 @@ define([
 			return self.el;
 		},
 		renderUploader: function() {
-            console.log('renderUploader', oplbGradebook, oplbGradebook.ajaxURL + '?action=oplb_gradebook_upload_csv&nonce=' + oplbGradebook.nonce);
 			$("#upload-csv-input").fileinput({
 				uploadUrl: oplbGradebook.ajaxURL + '/?action=oplb_gradebook_upload_csv&nonce=' + oplbGradebook.nonce + '&gbid=' + this.course.get('id'),
 				maxFileCount: 1
