@@ -11,7 +11,8 @@ define([
 		className: "modal fade",
 		events: {
 			"hidden.bs.modal": "editCancel",
-			"click #edit-comment": "editSave"
+			"click #edit-comment": "editSave",
+			"click #clear-comment" : "clearComment"
 		},
 		initialize: function(options) {
 			this.model = options.model;
@@ -120,6 +121,11 @@ define([
 						self.trigger("editError");
 					});
 			}
+		},
+		clearComment: function(){
+
+			this.$el.find('textarea').val('');
+
 		},
 		updateModel: function() {
 			var comments = $("#comment").val();
