@@ -36,7 +36,7 @@ class gradebook_cell_API
                 echo json_encode(array('delete' => 'deleting'));
                 break;
             case 'PUT':
-			case 'POST':
+            case 'POST':
                 $is_null = 1;
 
                 if (is_numeric($params['assign_points_earned']) && empty($params['comment_edit'])) {
@@ -54,12 +54,14 @@ class gradebook_cell_API
                     '%d',
                 );
 
-                if (!empty($params['comments'])) {
-                    $values['comments'] = $params['comments'];
-                    array_push($formats, '%s');
-                } else {
-                    $values['comments'] = null;
-                    array_push($formats, '%s');
+                if (!empty($params['comment_edit'])) {
+                    if (!empty($params['comments'])) {
+                        $values['comments'] = $params['comments'];
+                        array_push($formats, '%s');
+                    } else {
+                        $values['comments'] = null;
+                        array_push($formats, '%s');
+                    }
                 }
 
                 $wpdb->update(
@@ -88,7 +90,7 @@ class gradebook_cell_API
                     'assign_points_earned' => floatval($assign_points_earned['assign_points_earned']),
                     'uid' => intval($params['uid']),
                     'is_null' => $is_null,
-                    'comments' => $assign_points_earned['comments']
+                    'comments' => $assign_points_earned['comments'],
                 );
 
                 echo json_encode($data_back);
