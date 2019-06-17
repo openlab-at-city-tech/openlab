@@ -20,8 +20,6 @@ define([
 			this.type = options.type;
 			this.name = options.name;
 			this.username = options.username;
-			console.log("this.model in comment modal", this.model);
-			console.log("this.type in comment modal", this.type);
 			this.gbid = parseInt(this.gradebook.get("gbid"));
 		},
 		render: function() {
@@ -66,7 +64,6 @@ define([
 			}
 
 			cell.comments = comments;
-			console.log("cell before save", cell);
 
 			if (this.type === "cell") {
 				$.ajax({
@@ -138,7 +135,6 @@ define([
 				this.model.set({ comments: comments, commentsUpdate: false });
 			}
 			
-			console.log("this model", this.model);
 		}
 	});
 
