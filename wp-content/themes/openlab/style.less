@@ -2497,6 +2497,31 @@ body.membership-requests {
 		padding-right: 8px;
 	}
 
+    @media (max-width: @screen-xs-max){
+		& #bp-group-documents-sorting {
+			.sorting-column {
+				display: inline-block;
+				width: auto;
+			}
+		}
+		& .bp-group-documents-list-container {
+			float: none !important;
+			width: 100% !important;
+		}
+
+		& #bp-group-documents-sorting {
+			width: 100% !important;
+		}
+
+
+		& .bp-group-documents-folder-links {
+			display: block;
+			margin-top: 2em;
+			width: 100% !important;
+			float: none !important;
+		}
+	}
+
 	&.is-edit-mode {
 		#bp-group-documents-sorting,
 		.bp-group-documents-list-container,
@@ -2534,7 +2559,7 @@ body.membership-requests {
 		display: none;
 	}
 	.group-documents-orderby {
-		width: 50%;
+		width: auto;
 	}
 	.admin-links {
 		padding-left: 1em;
