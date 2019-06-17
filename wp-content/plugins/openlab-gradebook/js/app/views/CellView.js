@@ -1,9 +1,13 @@
 define(['jquery', 'backbone', 'underscore', "views/CommentView"],
         function ($, Backbone, _, CommentView) {
+
+            var legacy = [];
+
             var CellView = Backbone.View.extend({
                 tagName: 'td',
                 className: 'cell',
                 events: {
+                    "focus .grade-numeric": "maybeClear",
                     "blur .grade-numeric": "edit",
                     "keypress .grade-numeric": "updateOnEnter"
                 },
@@ -69,8 +73,29 @@ define(['jquery', 'backbone', 'underscore', "views/CommentView"],
                         this.$el.find('.grade-numeric').attr('contenteditable', 'true');
                     }
                 },
+                maybeClear: function(){
+
+                    var current = this.$el.find('.grade-numeric').html().trim();
+                    var id = this.$el.find('.grade-numeric').data('id');
+                    legacy[id] = current;
+                    if(current === '--'){
+                        this.$el.find('.grade-numeric').html('');
+                        legacy[id] = '';
+                    }
+
+                },
                 edit: function () {
-                    this.hideInput(this.$el.find('.grade-numeric').html().trim());
+
+                    var current = this.$el.find('.grade-numeric').html().trim();
+                    var id = this.$el.find('.grade-numeric').data('id');
+                    var thisLegacy = legacy[id];
+
+                    if(thisLegacy !== undefined && thisLegacy !== current){
+                        this.hideInput(current);
+                    } else if (thisLegacy === ''){
+                        this.$el.find('.grade-numeric').html('--');
+                    }
+
                 },
                 hoverCell: function (ev) {
                     if (this.model.get('amid') === ev.get('id')) {
