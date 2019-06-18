@@ -483,13 +483,6 @@ OpenLab.nav = (function ($) {
 			setTimeout(
 				function() {
 					var bump = 40;
-
-					var $editPostSidebar = $( '.edit-post-sidebar' );
-					if ( $editPostSidebar.length > 0 ) {
-						editPostSidebarOffset = $editPostSidebar.offset();
-						$editPostSidebar.css( 'top',(editPostSidebarOffset.top + bump) + 'px' );
-					}
-
 					var $editPostHeader = $( '.edit-post-header' );
 					if ( $editPostHeader.length > 0 ) {
 						editPostHeaderOffset = $editPostHeader.offset();
