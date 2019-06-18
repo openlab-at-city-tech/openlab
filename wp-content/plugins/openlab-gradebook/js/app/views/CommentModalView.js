@@ -51,11 +51,21 @@ define([
 		editSave: function(ev) {
 			ev.preventDefault();
 			var self = this;
-			var thisElem = this.$el;
+			var thisElem = $(ev.srcElement);
+			var parent = thisElem.closest('.btn');
+			var savingText = "Saving";
+			var saveText = "Save";
 
-			thisElem.find(".dashicons-image-rotate").removeClass("hidden");
-			thisElem.find("#edit-comment .button-text").text("Saving...");
-			thisElem.find("#edit-comment").attr("disabled", "disabled");
+			console.log('parent.attr', parent.attr('id'));
+
+			if(parent.attr('id') === 'clear-comment'){
+				savingText = "Clearing";
+				saveText = "Clear";
+			}
+
+			parent.find(".dashicons-image-rotate").removeClass("hidden");
+			thisElem.text(savingText + "...");
+			parent.attr("disabled", "disabled");
 			var comments = $("#comment").val();
 			var cell = this.model.attributes;
 
@@ -79,9 +89,9 @@ define([
 					dataType: "json"
 				})
 					.done(function(data, textStatus, jqXHR) {
-						thisElem.find(".dashicons-image-rotate").addClass("hidden");
-						thisElem.find("#edit-comment .button-text").text("Save");
-						thisElem.find("#edit-comment").removeAttr("disabled", "disabled");
+						parent.find(".dashicons-image-rotate").addClass("hidden");
+						thisElem.text(saveText);
+						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 					})
 					.fail(function(jqXHR, textStatus, errorThrown) {
@@ -108,9 +118,9 @@ define([
 					dataType: "json"
 				})
 					.done(function(data, textStatus, jqXHR) {
-						thisElem.find(".dashicons-image-rotate").addClass("hidden");
-						thisElem.find("#edit-comment .button-text").text("Save");
-						thisElem.find("#edit-comment").removeAttr("disabled", "disabled");
+						parent.find(".dashicons-image-rotate").addClass("hidden");
+						thisElem.text(saveText);
+						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 						Backbone.pubSub.trigger("editSuccess", data);
 					})
@@ -119,9 +129,10 @@ define([
 					});
 			}
 		},
-		clearComment: function(){
+		clearComment: function(ev){
 
 			this.$el.find('textarea').val('');
+			this.editSave(ev);
 
 		},
 		updateModel: function() {
