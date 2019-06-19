@@ -61,5 +61,5 @@
         title='<?php esc_html_e(' Mid-semester Grade ', 'openlab-gradebook ')?>'>
         <?php esc_html_e('Mid-semester Grade', 'openlab-gradebook')?></span></th>
 <th class="gradebook-student-final-grade student-grades adjust-widths" data-targetwidth="65"><span data-toggle="tooltip"
-        data-placement="top" title='<?php esc_html_e(' Final Grade ', 'openlab-gradebook ') ?>'>
-        <?php esc_html_e('Final Grade', 'openlab-gradebook') ?></span></th>
+        data-placement="top" title='<?php esc_html_e(' Final Grade ', 'openlab-gradebook ')?>'>
+        <?php esc_html_e('Final Grade', 'openlab-gradebook')?></span></th>

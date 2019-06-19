@@ -759,6 +759,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools {
   max-width: 50px;
+  min-width: 50px;
 }
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive button#download-csv-mobile,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools button#download-csv-mobile {
