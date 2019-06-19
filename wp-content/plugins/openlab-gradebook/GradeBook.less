@@ -581,6 +581,56 @@ span.twitter-typeahead {
 			position: relative;
 		}
 		position: relative;
+		#students-header-pinned th,
+		#students-header th {
+			position: relative;
+			&.pointer {
+				cursor: pointer;
+			}
+			.arrow-placement {
+				position: absolute;
+				right: 3px;
+				top: 0;
+				bottom: 0;
+				display: flex;
+				align-items: center;
+				.arrow-wrapper {
+					span {
+						display: block;
+						color: #a9a9a9;
+						font-size: 11px;
+					}
+					.glyphicon-triangle-bottom {
+						margin-top: -5px;
+					}
+				}
+			}
+			.sort-down {
+				.arrow-wrapper {
+					span {
+						color: #000;
+					}
+					.glyphicon-triangle-top {
+						visibility: hidden;
+					}
+				}
+			}
+			.sort-up {
+				.arrow-wrapper {
+					span {
+						color: #000;
+					}
+					.glyphicon-triangle-bottom {
+						visibility: hidden;
+					}
+				}
+			}
+		}
+		#students-header th {
+			.arrow-placement {
+				top: 9px;
+			}
+		}
 		.pinned {
 			position: absolute;
 			display: block;
