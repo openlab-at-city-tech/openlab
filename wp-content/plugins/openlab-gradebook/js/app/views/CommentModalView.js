@@ -64,7 +64,7 @@ define([
 			}
 
 			parent.find(".dashicons-image-rotate").removeClass("hidden");
-			thisElem.text(savingText + "...");
+			parent.find('.button-text').text(savingText + "...");
 			parent.attr("disabled", "disabled");
 			var comments = $("#comment").val();
 			var cell = this.model.attributes;
@@ -90,7 +90,7 @@ define([
 				})
 					.done(function(data, textStatus, jqXHR) {
 						parent.find(".dashicons-image-rotate").addClass("hidden");
-						thisElem.text(saveText);
+						parent.find('.button-text').text(saveText);
 						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 					})
@@ -119,7 +119,7 @@ define([
 				})
 					.done(function(data, textStatus, jqXHR) {
 						parent.find(".dashicons-image-rotate").addClass("hidden");
-						thisElem.text(saveText);
+						parent.find('.button-text').text(saveText);
 						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 						Backbone.pubSub.trigger("editSuccess", data);
