@@ -55,7 +55,7 @@ if (count($z)) {
                             <tr>
                                 <th class="gradebook-student-column-interactive student-tools download-csv adjust-widths"
                                     data-targetwidth="50"></th>
-                                <th class="gradebook-student-column-first_name">
+                                <th class="gradebook-student-column-first_name pointer">
                                     <span class="header-wrapper">
                                         <span class="tooltip-wrapper" data-toggle="tooltip"
                                             data-placement="top"
@@ -71,7 +71,7 @@ if (count($z)) {
                                             <% } %>
                                     </span>
                                 </th>
-                                <th class="gradebook-student-column-last_name">
+                                <th class="gradebook-student-column-last_name pointer">
                                     <span class="header-wrapper sort-up">
                                         <span class="tooltip-wrapper" data-toggle="tooltip"
                                         data-placement="top"
@@ -87,7 +87,7 @@ if (count($z)) {
                                         <% } %>
                                     </span>
                                 </th>
-                                <th class="gradebook-student-column-user_login">
+                                <th class="gradebook-student-column-user_login pointer">
                                     <span class="header-wrapper">    
                                         <span class="tooltip-wrapper" data-toggle="tooltip"
                                         data-placement="top"
@@ -103,7 +103,7 @@ if (count($z)) {
                                         <% } %>
                                     </span>
                                 </th>
-                                <th class="gradebook-student-column-average adjust-widths" data-targetwidth="65">
+                                <th class="gradebook-student-column-average adjust-widths pointer" data-targetwidth="65">
                                     <span class="header-wrapper">
                                         <span class="tooltip-wrapper"
                                         data-toggle="tooltip" data-placement="top" data-target="average"

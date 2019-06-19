@@ -496,6 +496,10 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper #students-header th {
   position: relative;
 }
+#gradebookWrapper .table-wrapper #students-header-pinned th.pointer,
+#gradebookWrapper .table-wrapper #students-header th.pointer {
+  cursor: pointer;
+}
 #gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement,
 #gradebookWrapper .table-wrapper #students-header th .arrow-placement {
   position: absolute;
@@ -509,6 +513,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper span {
   display: block;
   color: #a9a9a9;
+  font-size: 11px;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom,
 #gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
@@ -529,6 +534,9 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom,
 #gradebookWrapper .table-wrapper #students-header th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
   visibility: hidden;
+}
+#gradebookWrapper .table-wrapper #students-header th .arrow-placement {
+  top: 9px;
 }
 #gradebookWrapper .table-wrapper .pinned {
   position: absolute;

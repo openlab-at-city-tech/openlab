@@ -1,6 +1,6 @@
 <th class="gradebook-student-column-interactive student-tools download-csv adjust-widths visible-xs"
     data-targetwidth="50"></th>
-<th class="gradebook-student-column-first_name visible-xs">
+<th class="gradebook-student-column-first_name visible-xs pointer">
     <span class="header-wrapper">
         <span class="tooltip-wrapper mobile" data-toggle="tooltip" data-placement="top" data-target="first_name"
             title='<?php esc_html_e('First Name', 'openlab-gradebook')?>'><?php esc_html_e('First Name', 'openlab-gradebook')?></span>
@@ -14,7 +14,7 @@
         <% } %>
     </span>
 </th>
-<th class="gradebook-student-column-last_name visible-xs">
+<th class="gradebook-student-column-last_name visible-xs pointer">
     <span class="header-wrapper sort-up">
         <span class="tooltip-wrapper mobile" data-toggle="tooltip" data-placement="top" data-target="last_name"
             title='<?php esc_html_e('Last Name', 'openlab-gradebook')?>'><?php esc_html_e('Last Name', 'openlab-gradebook')?></span>
@@ -28,7 +28,7 @@
         <% } %>
     </span>
 </th>
-<th class="gradebook-student-column-user_login visible-xs">
+<th class="gradebook-student-column-user_login visible-xs pointer">
     <span class="header-wrapper">
         <span class="tooltip-wrapper mobile" data-toggle="tooltip" data-placement="top" data-target="user_login"
             title='<?php esc_html_e('Username', 'openlab-gradebook')?>'><?php esc_html_e('Username', 'openlab-gradebook')?></span>
@@ -42,7 +42,7 @@
         <% } %>
     </span>
 </th>
-<th class="gradebook-student-column-average adjust-widths visible-xs" data-targetwidth="65">
+<th class="gradebook-student-column-average adjust-widths visible-xs pointer" data-targetwidth="65">
     <span class="header-wrapper">
         <span class="tooltip-wrapper mobile" data-toggle="tooltip" data-placement="top" data-target="average"
             title='<?php esc_html_e('Current Average Grade', 'openlab-gradebook')?>'><?php esc_html_e('Avg.', 'openlab-gradebook')?></span>

@@ -591,6 +591,9 @@ span.twitter-typeahead {
 		#students-header-pinned th,
 		#students-header th {
 			position: relative;
+			&.pointer {
+				cursor: pointer;
+			}
 			.arrow-placement {
 				position: absolute;
 				right: 3px;
@@ -602,6 +605,7 @@ span.twitter-typeahead {
 					span {
 						display: block;
 						color: #a9a9a9;
+						font-size: 11px;
 					}
 					.glyphicon-triangle-bottom {
 						margin-top: -5px;
@@ -627,6 +631,11 @@ span.twitter-typeahead {
 						visibility: hidden;
 					}
 				}
+			}
+		}
+		#students-header th {
+			.arrow-placement {
+				top: 9px;
 			}
 		}
 		.pinned {
