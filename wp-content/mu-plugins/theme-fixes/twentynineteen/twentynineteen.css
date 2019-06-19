@@ -4,3 +4,9 @@
 	display: none;
 	visibility: hidden;
 }
+
+#openlab-footer,
+#wpadminbar,
+#openlab-footer p {
+	-moz-osx-font-smoothing: auto;
+}
