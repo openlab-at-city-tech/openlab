@@ -53,7 +53,7 @@ function register_oplb_gradebook_menu_page() {
     $add_submenu_page_settings = in_array($roles[0], array_keys(get_option('oplb_gradebook_settings')));
     
     if ($add_submenu_page_settings) {
-        add_submenu_page('oplb_gradebook', 'Settings', 'Settings', 'administrator', 'oplb_gradebook_settings', 'init_oplb_gradebook_settings');
+        add_submenu_page('oplb_gradebook', 'About', 'About', 'administrator', 'oplb_gradebook_settings', 'init_oplb_gradebook_settings');
     }
 }
 
