@@ -99,12 +99,12 @@ add_filter(
 		}
 
 		if ( ! show_for_post( get_queried_object_id() ) ) {
-			return;
+			return $content;
 		}
 
 		$queried_object = get_queried_object();
 		if ( ! isset( $queried_object->post_type ) || ! in_array( $queried_object->post_type, post_types(), true ) ) {
-			return;
+			return $content;
 		}
 
 		wp_enqueue_style(
