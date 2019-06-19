@@ -748,6 +748,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .scrollable th,
 #gradebookWrapper .table-wrapper .scrollable td {
   min-width: 180px;
+  max-width: 200px;
 }
 #gradebookWrapper .table-wrapper .scrollable td {
   padding-bottom: 17px;
