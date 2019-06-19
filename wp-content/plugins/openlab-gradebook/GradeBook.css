@@ -756,6 +756,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .scrollable td .grade-numeric {
   display: block;
   margin: 0 0 8px;
+  min-height: 22px;
 }
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools {
