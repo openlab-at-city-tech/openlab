@@ -114,10 +114,10 @@ function enqueue_oplb_gradebook_scripts() {
 
 	if (WP_DEBUG) {
 		$oplb_gradebook_develop = true;
-	}
-
+    }
+    
 	$dep_ver = '0.0.1.1';
-    $app_ver = filemtime(plugin_dir_path(__FILE__).'oplb-gradebook-app-min.js');
+    $app_ver = filemtime(plugin_dir_path(__FILE__).'js/oplb-gradebook-app-min.js');
     $style_ver = filemtime(plugin_dir_path(__File__).'GradeBook.css');
 
 	wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
