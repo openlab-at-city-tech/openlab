@@ -588,51 +588,8 @@ span.twitter-typeahead {
 			position: relative;
 		}
 		position: relative;
-		.pinned {
-			position: absolute;
-			display: block;
-			left: 0;
-			top: 15px;
-			background: #fff;
-			width: 36%;
-			border-right: 2px solid #ccc;
-			border-left: 1px solid #ccc;
-			z-index: 200;
-			table {
-				border-right: none;
-				border-left: none;
-				width: 100%;
-				table-layout: fixed;
-				width: 100%;
-				th {
-					padding: 15px 8px;
-				}
-			}
-			td.student {
-				height: 59px;
-			}
-			.student-grades {
-				display: none;
-			}
-			.gradebook-student-column-average {
-				display: none;
-			}
-			#students-header-pinned th,
-			#students-pinned td {
-				text-overflow: ellipsis;
-				.column-frame {
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-				.tooltip-wrapper {
-				max-width: 100%;
-				white-space: nowrap;
-				display: block;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			}
-			#students-header-pinned th {
+		#students-header-pinned th,
+		#students-header th {
 			position: relative;
 			.arrow-placement {
 				position: absolute;
@@ -672,14 +629,58 @@ span.twitter-typeahead {
 				}
 			}
 		}
-		#students-pinned td {
-			> span {
-				max-width: 100%;
-				text-overflow: ellipsis;
-				display: block;
-				overflow: hidden;
+		.pinned {
+			position: absolute;
+			display: block;
+			left: 0;
+			top: 15px;
+			background: #fff;
+			width: 36%;
+			border-right: 2px solid #ccc;
+			border-left: 1px solid #ccc;
+			z-index: 200;
+			table {
+				border-right: none;
+				border-left: none;
+				width: 100%;
+				table-layout: fixed;
+				width: 100%;
+				th {
+					padding: 15px 8px;
+				}
 			}
-		}
+			td.student {
+				height: 59px;
+			}
+			.student-grades {
+				display: none;
+			}
+			.gradebook-student-column-average {
+				display: none;
+			}
+			#students-header-pinned th,
+			#students-pinned td {
+				text-overflow: ellipsis;
+				.column-frame {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				.tooltip-wrapper {
+					max-width: 100%;
+					white-space: nowrap;
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+			#students-pinned td {
+				> span {
+					max-width: 100%;
+					text-overflow: ellipsis;
+					display: block;
+					overflow: hidden;
+				}
+			}
 			#students-header-pinned th.gradebook-student-column-interactive,
 			#students-pinned td.student-tools {
 				overflow: visible;
@@ -826,6 +827,7 @@ span.twitter-typeahead {
 			#students-header th.gradebook-student-column-interactive,
 			#students td.student-tools {
 				max-width: 50px;
+				min-width: 50px;
 				button#download-csv-mobile {
 					background: #0073aa;
 					font-size: 22px;

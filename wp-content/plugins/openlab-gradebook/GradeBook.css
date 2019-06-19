@@ -492,6 +492,44 @@ span.twitter-typeahead {
   top: 15px;
   position: relative;
 }
+#gradebookWrapper .table-wrapper #students-header-pinned th,
+#gradebookWrapper .table-wrapper #students-header th {
+  position: relative;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement,
+#gradebookWrapper .table-wrapper #students-header th .arrow-placement {
+  position: absolute;
+  right: 3px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement .arrow-wrapper span,
+#gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper span {
+  display: block;
+  color: #a9a9a9;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom,
+#gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
+  margin-top: -5px;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .sort-down .arrow-wrapper span,
+#gradebookWrapper .table-wrapper #students-header th .sort-down .arrow-wrapper span {
+  color: #000;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .sort-down .arrow-wrapper .glyphicon-triangle-top,
+#gradebookWrapper .table-wrapper #students-header th .sort-down .arrow-wrapper .glyphicon-triangle-top {
+  visibility: hidden;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .sort-up .arrow-wrapper span,
+#gradebookWrapper .table-wrapper #students-header th .sort-up .arrow-wrapper span {
+  color: #000;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom,
+#gradebookWrapper .table-wrapper #students-header th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
+  visibility: hidden;
+}
 #gradebookWrapper .table-wrapper .pinned {
   position: absolute;
   display: block;
@@ -537,36 +575,6 @@ span.twitter-typeahead {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th {
-  position: relative;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .arrow-placement {
-  position: absolute;
-  right: 3px;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper span {
-  display: block;
-  color: #a9a9a9;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
-  margin-top: -5px;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper span {
-  color: #000;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper .glyphicon-triangle-top {
-  visibility: hidden;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper span {
-  color: #000;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
-  visibility: hidden;
 }
 #gradebookWrapper .table-wrapper .pinned #students-pinned td > span {
   max-width: 100%;
@@ -719,6 +727,7 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools {
   max-width: 50px;
+  min-width: 50px;
 }
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive button#download-csv-mobile,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools button#download-csv-mobile {
