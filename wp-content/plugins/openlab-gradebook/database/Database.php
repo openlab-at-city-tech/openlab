@@ -6,7 +6,7 @@
 class OPLB_DATABASE
 {
 
-    const oplb_gradebook_db_version = 1.86;
+    const oplb_gradebook_db_version = 1.88;
 
     public function __construct()
     {
@@ -18,6 +18,7 @@ class OPLB_DATABASE
 
         if (!get_option('oplb_gradebook_db_version')) {
             $this->database_init();
+            $this->database_alter();
         }
 
         if (self::oplb_gradebook_db_version > get_option('oplb_gradebook_db_version')) {
@@ -86,22 +87,43 @@ class OPLB_DATABASE
             update_option("oplb_gradebook_db_version", 1.84);
         }
 
-        if (get_option('oplb_gradebook_db_version') < 1.85) {
+        if (get_option('oplb_gradebook_db_version') < 1.87) {
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_cells LIKE %s", 'comments');
+            $check_comments = $wpdb->get_results($query);
+
             //comments for cells
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
-            $wpdb->query($sql);
-            update_option("oplb_gradebook_db_version", 1.85);
+            if (empty($check_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
+
+            update_option("oplb_gradebook_db_version", 1.87);
         }
 
-        if (get_option('oplb_gradebook_db_version') < 1.86) {
+        if (get_option('oplb_gradebook_db_version') < 1.88) {
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_users LIKE %s", 'mid_semester_comments');
+            $check_mid_semester_comments = $wpdb->get_results($query);
+
             //comments for cells
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
-            $wpdb->query($sql);
+            if (empty($check_mid_semester_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
 
-            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD final_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
-            $wpdb->query($sql);
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_users LIKE %s", 'final_comments');
+            $check_final_comments = $wpdb->get_results($query);
 
-            update_option("oplb_gradebook_db_version", 1.86);
+            if (empty($check_final_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD final_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
+
+            update_option("oplb_gradebook_db_version", 1.88);
         }
 
     }
@@ -213,9 +235,9 @@ class OPLB_DATABASE
             'editor' => false,
             'contributor' => false,
             'author' => false,
-            'subscriber' => false
+            'subscriber' => false,
         ));
-        update_option("oplb_gradebook_db_version", self::oplb_gradebook_db_version);
+        update_option("oplb_gradebook_db_version", 1.84);
     }
 
 }
