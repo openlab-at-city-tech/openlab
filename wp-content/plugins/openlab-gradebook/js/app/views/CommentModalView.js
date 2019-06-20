@@ -12,7 +12,7 @@ define([
 		events: {
 			"hidden.bs.modal": "editCancel",
 			"click #edit-comment": "editSave",
-			"click #clear-comment" : "clearComment"
+			"click #clear-comment": "clearComment"
 		},
 		initialize: function(options) {
 			this.model = options.model;
@@ -27,9 +27,9 @@ define([
 			var template = _.template($("#comment-modal-template").html());
 			this.comment = self.model.get("comments");
 
-			if(this.type === 'mid_semester'){
+			if (this.type === "mid_semester") {
 				this.comment = self.model.get("mid_semester_comments");
-			} else if (this.type === "final"){
+			} else if (this.type === "final") {
 				this.comment = self.model.get("final_comments");
 			}
 
@@ -52,22 +52,24 @@ define([
 			ev.preventDefault();
 			var self = this;
 			var thisElem = $(ev.srcElement);
-			var parent = thisElem.closest('.btn');
+			var parent = thisElem.closest(".btn");
 			var savingText = "Saving";
 			var saveText = "Save";
 
-			console.log('parent.attr', parent.attr('id'));
+			console.log("parent.attr", parent.attr("id"));
 
-			if(parent.attr('id') === 'clear-comment'){
+			if (parent.attr("id") === "clear-comment") {
 				savingText = "Clearing";
 				saveText = "Clear";
 			}
 
 			parent.find(".dashicons-image-rotate").removeClass("hidden");
-			parent.find('.button-text').text(savingText + "...");
+			parent.find(".button-text").text(savingText + "...");
 			parent.attr("disabled", "disabled");
 			var comments = $("#comment").val();
 			var cell = this.model.attributes;
+
+			console.log("cell", cell);
 
 			if (this.comments !== comments) {
 				cell.commentsUpdate = true;
@@ -90,7 +92,7 @@ define([
 				})
 					.done(function(data, textStatus, jqXHR) {
 						parent.find(".dashicons-image-rotate").addClass("hidden");
-						parent.find('.button-text').text(saveText);
+						parent.find(".button-text").text(saveText);
 						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 					})
@@ -116,12 +118,18 @@ define([
 						"&nonce=" +
 						oplbGradebook.nonce,
 					method: "POST",
-					data: { grade: grade, type: this.type, gbid: this.gbid, uid: uid, comments: comments},
+					data: {
+						grade: grade,
+						type: this.type,
+						gbid: this.gbid,
+						uid: uid,
+						comments: comments
+					},
 					dataType: "json"
 				})
 					.done(function(data, textStatus, jqXHR) {
 						parent.find(".dashicons-image-rotate").addClass("hidden");
-						parent.find('.button-text').text(saveText);
+						parent.find(".button-text").text(saveText);
 						parent.removeAttr("disabled", "disabled");
 						self.updateModel();
 						Backbone.pubSub.trigger("editSuccess", data);
@@ -131,23 +139,28 @@ define([
 					});
 			}
 		},
-		clearComment: function(ev){
-
-			this.$el.find('textarea').val('');
+		clearComment: function(ev) {
+			this.$el.find("textarea").val("");
 			this.editSave(ev);
-
 		},
 		updateModel: function() {
 			var comments = $("#comment").val();
 
-			if (this.type === 'mid_semester') {
-				this.model.set({ comments: comments, mid_semester_comments: comments, commentsUpdate: false });
-			} else if (this.type === 'final'){
-				this.model.set({ comments: comments, final_comments: comments, commentsUpdate: false });
+			if (this.type === "mid_semester") {
+				this.model.set({
+					comments: comments,
+					mid_semester_comments: comments,
+					commentsUpdate: false
+				});
+			} else if (this.type === "final") {
+				this.model.set({
+					comments: comments,
+					final_comments: comments,
+					commentsUpdate: false
+				});
 			} else {
 				this.model.set({ comments: comments, commentsUpdate: false });
 			}
-			
 		}
 	});
 

@@ -143,7 +143,7 @@ class OPLB_DATABASE
 			semester TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 			year int(11) NOT NULL,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
 
@@ -160,7 +160,7 @@ class OPLB_DATABASE
             mid_semester_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "--",
             final_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "--",
 			PRIMARY KEY  (id)  )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
         //The column headings that should be in the oplb_assignments table are stored in $table_columns
@@ -185,19 +185,19 @@ class OPLB_DATABASE
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			gbid int(11) NOT NULL,
-			assign_order int(11) NOT NULL,		
+			assign_order int(11) NOT NULL,
 			assign_name mediumtext NOT NULL,
-			assign_category mediumtext NOT NULL,			
+			assign_category mediumtext NOT NULL,
 			assign_visibility VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "Students",
 			assign_date DATE NOT NULL DEFAULT "0000-00-00",
 			assign_due DATE NOT NULL DEFAULT "0000-00-00",
                         assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric",
                         assign_weight decimal(7,2) NOT NULL DEFAULT 1.00,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         } else {
-            //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table		
+            //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table
             //anfixme: this needs to move to the database_alter
             $query = $wpdb->prepare("SELECT column_name FROM information_schema.columns
 				WHERE table_name = %s ORDER BY ordinal_position", $db_name2);
@@ -227,7 +227,7 @@ class OPLB_DATABASE
             assign_points_earned decimal(7,2) NOT NULL,
             is_null tinyint unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
         update_option("oplb_gradebook_settings", array(
