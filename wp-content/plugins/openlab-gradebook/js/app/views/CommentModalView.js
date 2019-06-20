@@ -104,8 +104,10 @@ define([
 					grade = this.model.get("final_grade");
 				}
 
-				var uid = parseInt(this.model.get("uid"));
-				var comments = this.model.get('comments');
+				console.log("this.cell.id", cell.id);
+				var uid = parseInt(cell.id);
+				console.log("uid", uid);
+				var comments = this.model.get("comments");
 
 				$.ajax({
 					url:
