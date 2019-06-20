@@ -9,18 +9,19 @@
   "author": "Joe Unander",
   "license": "ISC",
   "devDependencies": {
-    "chart.js": "^2.6.0",
-    "grunt": "^0.4.5",
+    "chart.js": "^2.8.0",
+    "grunt": "^1.0.4",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-htmlclean": "^2.7.12",
-    "jscrollpane": "^2.2.0"
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-htmlclean": "^2.7.18",
+    "jscrollpane": "^2.2.1"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.1.0",
-    "css-element-queries": "^1.0.2",
+    "@fortawesome/fontawesome-free": "^5.9.0",
+    "bootstrap-fileinput": "^5.0.3",
+    "css-element-queries": "^1.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "waypoints": "^4.0.1"
   }
