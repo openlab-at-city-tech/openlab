@@ -354,6 +354,7 @@ span.twitter-typeahead {
 .action-buttons-wrapper .btn-arrange select {
   margin-bottom: 5px;
   height: 34px;
+  width: 108px;
 }
 .action-buttons-wrapper .btn-arrange .cat-filter {
   display: flex;
