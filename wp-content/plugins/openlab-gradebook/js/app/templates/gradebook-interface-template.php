@@ -47,7 +47,7 @@ if (count($z)) {
             </div>
             <div
                 class="table-wrapper <% if(assign_length === 0) { print('no-assignments') } else { print('assignments') } %>">
-                <div class="pinned hidden-xs">
+                <div class="pinned hidden-xs hidden-sm">
                     <table id="an-gradebook-container-pinned" class="table table-bordered table-striped">
                         <thead id="students-header-pinned" class="students-header">
                             <tr>

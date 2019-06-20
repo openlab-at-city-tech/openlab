@@ -198,7 +198,7 @@ define([
 				var mobile_styles = "";
 
 				if (pinned === "pinned") {
-					mobile_styles = " visible-xs";
+					mobile_styles = " visible-xs visible-sm";
 				}
 
 				var self = this;
