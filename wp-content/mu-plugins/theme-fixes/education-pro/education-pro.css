@@ -246,6 +246,9 @@ div.entry-content a, .breadcrumb a {
 
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
+	.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+		top: .7em;
+	}
 	div.title-area {
 		box-shadow: none;
 	}
