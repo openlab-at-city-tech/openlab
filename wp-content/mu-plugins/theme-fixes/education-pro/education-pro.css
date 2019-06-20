@@ -111,7 +111,7 @@ h1.entry-title {
 
 
 h4.widget-title.widgettitle {
-    color: #444444;
+    color: #444444 !important; /* Don't let color schemes override */
 }
 
 cite {
@@ -207,11 +207,21 @@ div.entry-content a, .breadcrumb a {
 }
 
 .menu-item-has-children > a:after {
-	content: "\203a";
-	font-size: 28px;
+	font-family: "fontawesome";
+	content: "\f107"; /* angle-down */
+	font-size: 20px;
 	position: absolute;
 	right: 0.625em;
-	top: 0.155em;
+	top: 1.55em;
+}
+
+.sidebar .menu-item-has-children > a:after {
+	content: '' !important;
+}
+
+.sub-menu .menu-item-has-children > a:after {
+	content: "\f105"; /* angle-right */
+	top: .55em;
 }
 
 .menu-primary > .menu-item-has-children > a {
@@ -219,7 +229,7 @@ div.entry-content a, .breadcrumb a {
 }
 
 .menu-primary > .menu-item-has-children > a:after {
-	top: .3em;
+	top: .625em;
 }
 
 .genesis-nav-menu .menu-item-has-children.menu-item:hover {
@@ -231,11 +241,14 @@ div.entry-content a, .breadcrumb a {
 }
 
 .header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
-	top: .85em;
+	top: 1.4em;
 }
 
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
+	.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+		top: .7em;
+	}
 	div.title-area {
 		box-shadow: none;
 	}

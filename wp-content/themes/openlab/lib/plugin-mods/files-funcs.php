@@ -136,7 +136,6 @@ function openlab_bp_group_documents_display_content() {
 						<?php } ?>
 					</div>
 				</div>
-
 			</div>
 
 			<div class="bp-group-documents-list-container">
@@ -215,6 +214,12 @@ function openlab_bp_group_documents_display_content() {
 					<?php else : ?>
 						There have been no files uploaded to this group.
 					<?php endif; ?>
+
+					<div class="upload-new-file">
+						<?php if ( 'add' === $template->operation ) { ?>
+							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+						<?php } ?>
+					</div>
 				</p>
 			</div>
 
