@@ -111,7 +111,7 @@ h1.entry-title {
 
 
 h4.widget-title.widgettitle {
-    color: #444444;
+    color: #444444 !important; /* Don't let color schemes override */
 }
 
 cite {
