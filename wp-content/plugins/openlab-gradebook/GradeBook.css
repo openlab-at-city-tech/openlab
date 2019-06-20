@@ -506,8 +506,8 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement .arrow-wrapper span,
 #gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper span {
   display: block;
-  color: #a9a9a9;
-  font-size: 11px;
+  color: #000;
+  padding: 0.2rem;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom,
 #gradebookWrapper .table-wrapper #students-header th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
@@ -515,7 +515,7 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .sort-down .arrow-wrapper span,
 #gradebookWrapper .table-wrapper #students-header th .sort-down .arrow-wrapper span {
-  color: #000;
+  color: #0073aa;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .sort-down .arrow-wrapper .glyphicon-triangle-top,
 #gradebookWrapper .table-wrapper #students-header th .sort-down .arrow-wrapper .glyphicon-triangle-top {
@@ -523,7 +523,7 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .sort-up .arrow-wrapper span,
 #gradebookWrapper .table-wrapper #students-header th .sort-up .arrow-wrapper span {
-  color: #000;
+  color: #0073aa;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom,
 #gradebookWrapper .table-wrapper #students-header th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
@@ -577,6 +577,7 @@ span.twitter-typeahead {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 15px;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th {
   position: relative;
@@ -591,19 +592,20 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper span {
   display: block;
-  color: #a9a9a9;
+  color: #000;
+  padding: 0.2rem;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .arrow-placement .arrow-wrapper .glyphicon-triangle-bottom {
   margin-top: -5px;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper span {
-  color: #000;
+  color: #0073aa;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-down .arrow-wrapper .glyphicon-triangle-top {
   visibility: hidden;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper span {
-  color: #000;
+  color: #0073aa	;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
   visibility: hidden;
