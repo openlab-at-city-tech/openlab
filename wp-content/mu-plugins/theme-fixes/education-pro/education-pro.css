@@ -212,30 +212,32 @@ div.entry-content a, .breadcrumb a {
 	position: relative;
 }
 
-.menu-item-has-children > a:after {
-	font-family: "fontawesome";
-	content: "\f107"; /* angle-down */
-	font-size: 15px;
-	position: absolute;
-	right: 0.625em;
-	top: 1.55em;
-}
+@media screen and (min-width: 769px) {
+	.menu-item-has-children > a:after {
+		font-family: "fontawesome";
+		content: "\f107"; /* angle-down */
+		font-size: 15px;
+		position: absolute;
+		right: 0.625em;
+		top: 1.55em;
+	}
 
-.sidebar .menu-item-has-children > a:after {
-	content: '' !important;
-}
+	.sidebar .menu-item-has-children > a:after {
+		content: '' !important;
+	}
 
-.sub-menu .menu-item-has-children > a:after {
-	content: "\f105"; /* angle-right */
-	top: 1em;
-}
+	.sub-menu .menu-item-has-children > a:after {
+		content: "\f105"; /* angle-right */
+		top: 1em;
+	}
 
-.menu-primary > .menu-item-has-children > a {
-	padding-right: 32px;
-}
+	.menu-primary > .menu-item-has-children > a {
+		padding-right: 32px;
+	}
 
-.menu-primary > .menu-item-has-children > a:after {
-	top: 1em;
+	.menu-primary > .menu-item-has-children > a:after {
+		top: 1em;
+	}
 }
 
 .nav-primary .genesis-nav-menu {
