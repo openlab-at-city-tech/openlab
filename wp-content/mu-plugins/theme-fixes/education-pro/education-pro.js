@@ -7,11 +7,13 @@
 			return;
 		}
 
+		/*
 		if ( $mainNav.height() <= 80 ) {
 			$('body').removeClass( 'stacked-nav-header' );
 		} else {
 			$('body').addClass( 'stacked-nav-header' );
 		}
+		*/
 	}
 
 	$(document).ready(function(){
