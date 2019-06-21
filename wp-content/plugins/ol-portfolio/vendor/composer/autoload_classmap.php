@@ -6,4 +6,19 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'OpenLab\\Portfolio\\Contracts\\Registerable' => $baseDir . '/src/Contracts/Registerable.php',
+    'OpenLab\\Portfolio\\Export\\Exporter' => $baseDir . '/src/Export/Exporter.php',
+    'OpenLab\\Portfolio\\Export\\Service' => $baseDir . '/src/Export/Service.php',
+    'OpenLab\\Portfolio\\Export\\WXP' => $baseDir . '/src/Export/WXP.php',
+    'OpenLab\\Portfolio\\Import\\ArchiveUpload' => $baseDir . '/src/Import/ArchiveUpload.php',
+    'OpenLab\\Portfolio\\Import\\Decompressor' => $baseDir . '/src/Import/Decompressor.php',
+    'OpenLab\\Portfolio\\Import\\Importer' => $baseDir . '/src/Import/Importer.php',
+    'OpenLab\\Portfolio\\Import\\Service' => $baseDir . '/src/Import/Service.php',
+    'OpenLab\\Portfolio\\ImporterData' => $baseDir . '/src/Import/ImporterData.php',
+    'OpenLab\\Portfolio\\Iterator\\UploadsIterator' => $baseDir . '/src/Iterator/UploadsIterator.php',
+    'OpenLab\\Portfolio\\Logger\\ErrorLogLogger' => $baseDir . '/src/Logger/ErrorLogLogger.php',
+    'OpenLab\\Portfolio\\Logger\\Logger' => $baseDir . '/src/Logger/Logger.php',
+    'OpenLab\\Portfolio\\Logger\\ServerSentEventsLogger' => $baseDir . '/src/Logger/ServerSentEventsLogger.php',
+    'OpenLab\\Portfolio\\Portfolio' => $baseDir . '/src/Portfolio.php',
+    'OpenLab\\Portfolio\\Share\\Service' => $baseDir . '/src/Share/Service.php',
 );
