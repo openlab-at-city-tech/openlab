@@ -5,10 +5,10 @@
 div.title-area {
     float: left;
     position: relative;
-    width: 500px;
+    width: 100%;
 /*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
 	box-shadow: none;
-	max-width: 1140px;
+	min-height: 130px;
 }
 
 .site-header .widget-area {
@@ -168,13 +168,22 @@ div.title-area {
 	text-indent: inherit;
 }
 
+.header-image .title-area {
+	box-shadow: 0px 3px 7px 0px #80808091;
+}
+
+.header-image .site-title a {
+	min-height: 130px;
+	padding-top: 20px;
+}
+
 .header-image .site-description {
 	position: absolute;
-	bottom: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
 	right: 0;
+	top: 60px;
 }
 
 .site-header {
