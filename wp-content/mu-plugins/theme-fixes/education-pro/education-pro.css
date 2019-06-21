@@ -6,7 +6,9 @@ div.title-area {
     float: left;
     position: relative;
     width: 500px;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+/*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
+	box-shadow: none;
+	max-width: 1140px;
 }
 
 .site-header .widget-area {
@@ -18,6 +20,10 @@ div.title-area {
 .site-header {
     background-color: #fff;
     height: 80px;
+}
+
+.site-header .wrap {
+	max-width: none;
 }
 
 p.site-title {
@@ -232,6 +238,10 @@ div.entry-content a, .breadcrumb a {
 	top: 1em;
 }
 
+.nav-primary .genesis-nav-menu {
+	text-align: center;
+}
+
 .genesis-nav-menu .menu-item-has-children.menu-item:hover {
 	position: relative;
 }
@@ -246,50 +256,34 @@ div.entry-content a, .breadcrumb a {
 
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
-	.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
-		top: .7em;
-	}
-	div.title-area {
-		box-shadow: none;
-	}
 	.header-image div.title-area {
 		margin-bottom: 0;
-		padding-bottom: 6px;
 	}
 	div.header-widget-area {
 		background: #fff;
 	}
-	.site-header .wrap {
-		box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
-	}
 }
 
 /* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
-body.stacked-nav-header div.title-area {
-	box-shadow: none;
-}
-body.stacked-nav-header.header-image div.title-area {
+body div.title-area {
 	margin-bottom: 0;
 	padding-bottom: 6px;
 }
-body.stacked-nav-header div.header-widget-area {
+body div.header-widget-area {
 	background: #fff;
 }
-body.stacked-nav-header .site-header .wrap {
-	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
-}
 
-body.stacked-nav-header .site-header .header-widget-area {
+body .site-header .header-widget-area {
     max-width: 100%;
     text-align: center;
     width: 100%;
 }
-body.stacked-nav-header.header-image div.title-area {
+body div.title-area {
 	float: none;
 	text-align: center;
 	width: 100%;
 }
-body.stacked-nav-header.header-image .site-title a {
+body .site-title a {
 	background-position: center top !important;
 	background-size: contain !important;
 }
@@ -343,6 +337,10 @@ body.stacked-nav-header.header-image .site-title a {
 		max-width: 100%;
 		text-align: center;
 		width: 100%;
+	}
+
+	.site-header .genesis-nav-menu a {
+		padding: 32px 32px 32px 16px;
 	}
 }
 
