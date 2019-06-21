@@ -209,7 +209,7 @@ div.entry-content a, .breadcrumb a {
 .menu-item-has-children > a:after {
 	font-family: "fontawesome";
 	content: "\f107"; /* angle-down */
-	font-size: 20px;
+	font-size: 15px;
 	position: absolute;
 	right: 0.625em;
 	top: 1.55em;
@@ -221,7 +221,7 @@ div.entry-content a, .breadcrumb a {
 
 .sub-menu .menu-item-has-children > a:after {
 	content: "\f105"; /* angle-right */
-	top: .55em;
+	top: 1em;
 }
 
 .menu-primary > .menu-item-has-children > a {
@@ -229,7 +229,7 @@ div.entry-content a, .breadcrumb a {
 }
 
 .menu-primary > .menu-item-has-children > a:after {
-	top: .625em;
+	top: 1em;
 }
 
 .genesis-nav-menu .menu-item-has-children.menu-item:hover {
@@ -241,7 +241,7 @@ div.entry-content a, .breadcrumb a {
 }
 
 .header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
-	top: 1.4em;
+	top: 2em;
 }
 
 /* Adjustments for header + nav at medium widths */
