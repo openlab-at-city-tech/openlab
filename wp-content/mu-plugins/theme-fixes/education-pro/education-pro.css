@@ -221,7 +221,7 @@ div.entry-content a, .breadcrumb a {
 	position: relative;
 }
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 1023px) {
 	.menu-item-has-children > a:after {
 		font-family: "fontawesome";
 		content: "\f107"; /* angle-down */
@@ -352,6 +352,118 @@ body .site-title a {
 
 	.site-header .genesis-nav-menu a {
 		padding: 32px 32px 32px 16px;
+	}
+}
+
+/* Hamburger initialize at 1023px */
+@media only screen and (max-width: 1023px) {
+	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
+	.genesis-nav-menu.responsive-menu {
+		display: none;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item,
+	.responsive-menu-icon {
+		display: block;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item:hover {
+		position: static;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .current-menu-item > a:hover,
+	.genesis-nav-menu.responsive-menu li a,
+	.genesis-nav-menu.responsive-menu li a:hover,
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		background: none;
+		color: #444;
+		display: block;
+		line-height: 1;
+		padding: 12px 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children {
+		cursor: pointer;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children > a {
+		margin-right: 60px;
+	}
+
+	.genesis-nav-menu.responsive-menu > .menu-item-has-children:before {
+		content: "\f347";
+		float: right;
+		font: normal 16px/1 'dashicons';
+		height: 16px;
+		padding: 11px 0;
+		right: 0;
+		text-align: right;
+		z-index: 9999;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-open.menu-item-has-children:before {
+		content: "\f343";
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu {
+		left: auto;
+		opacity: 1;
+		position: relative;
+		-moz-transition:    opacity .4s ease-in-out;
+		-ms-transition:     opacity .4s ease-in-out;
+		-o-transition:      opacity .4s ease-in-out;
+		-webkit-transition: opacity .4s ease-in-out;
+		transition:         opacity .4s ease-in-out;
+		width: 100%;
+		z-index: 99;
+
+		padding-left: 20px;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .sub-menu {
+		padding-left: 20px;
+		margin: 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu li a,
+	.genesis-nav-menu.responsive-menu .sub-menu li a:hover {
+		background: none;
+		border: none;
+		box-shadow: none;
+		color: #444;
+		padding: 12px 0;
+		position: relative;
+		width: 100%;
+	}
+
+	.genesis-nav-menu.responsive-menu {
+		padding-bottom: 16px;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a {
+		background: none;
+		color: #fff;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		background: none;
+		color: #e7e7e7;
+	}
+
+	.education-pro-home .slide-excerpt {
+		display: none;
+	}
+
+	.home-top .wrap {
+		margin-left: 5%;
+		margin-right: 5%;
+		padding: 40px;
+	}
+
+	body .site-header .header-widget-area {
+		max-width: 740px;
+		margin: 0 auto;
+		float: none;
 	}
 }
 
