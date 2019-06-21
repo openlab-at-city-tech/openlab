@@ -1,6 +1,6 @@
  <div class="dialog" id="add-to-protfolio-dialog" aria-hidden="true">
 	<div class="dialog__overlay" tabindex="-1" data-a11y-dialog-hide"></div>
-	<dialog class="dialog__content" aria-labelledby="dialog-title" aria-describedby="dialog-description" role="dialog">
+	<dialog class="dialog__content" aria-labelledby="dialog-title" role="dialog">
 		<div class="dialog__header">
 			<h1 id="dialog-title">Add to Portfolio</h1>
 			<button data-a11y-dialog-hide class="dialog__close" aria-label="Close this dialog window">×</button>
