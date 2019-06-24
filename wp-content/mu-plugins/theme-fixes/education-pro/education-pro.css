@@ -5,8 +5,10 @@
 div.title-area {
     float: left;
     position: relative;
-    width: 500px;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    width: 100%;
+/*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
+	box-shadow: none;
+	min-height: 130px;
 }
 
 .site-header .widget-area {
@@ -18,6 +20,10 @@ div.title-area {
 .site-header {
     background-color: #fff;
     height: 80px;
+}
+
+.site-header .wrap {
+	max-width: none;
 }
 
 p.site-title {
@@ -162,13 +168,22 @@ div.title-area {
 	text-indent: inherit;
 }
 
+.header-image .title-area {
+	box-shadow: 0px 3px 7px 0px #80808091;
+}
+
+.header-image .site-title a {
+	min-height: 130px;
+	padding-top: 20px;
+}
+
 .header-image .site-description {
 	position: absolute;
-	bottom: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
 	right: 0;
+	top: 60px;
 }
 
 .site-header {
@@ -206,30 +221,36 @@ div.entry-content a, .breadcrumb a {
 	position: relative;
 }
 
-.menu-item-has-children > a:after {
-	font-family: "fontawesome";
-	content: "\f107"; /* angle-down */
-	font-size: 20px;
-	position: absolute;
-	right: 0.625em;
-	top: 1.55em;
+@media screen and (min-width: 1023px) {
+	.menu-item-has-children > a:after {
+		font-family: "fontawesome";
+		content: "\f107"; /* angle-down */
+		font-size: 15px;
+		position: absolute;
+		right: 0.625em;
+		top: 1.55em;
+	}
+
+	.sidebar .menu-item-has-children > a:after {
+		content: '' !important;
+	}
+
+	.sub-menu .menu-item-has-children > a:after {
+		content: "\f105"; /* angle-right */
+		top: 1em;
+	}
+
+	.menu-primary > .menu-item-has-children > a {
+		padding-right: 32px;
+	}
+
+	.menu-primary > .menu-item-has-children > a:after {
+		top: 1em;
+	}
 }
 
-.sidebar .menu-item-has-children > a:after {
-	content: '' !important;
-}
-
-.sub-menu .menu-item-has-children > a:after {
-	content: "\f105"; /* angle-right */
-	top: .55em;
-}
-
-.menu-primary > .menu-item-has-children > a {
-	padding-right: 32px;
-}
-
-.menu-primary > .menu-item-has-children > a:after {
-	top: .625em;
+.nav-primary .genesis-nav-menu {
+	text-align: center;
 }
 
 .genesis-nav-menu .menu-item-has-children.menu-item:hover {
@@ -241,55 +262,39 @@ div.entry-content a, .breadcrumb a {
 }
 
 .header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
-	top: 1.4em;
+	top: 2em;
 }
 
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
-	.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
-		top: .7em;
-	}
-	div.title-area {
-		box-shadow: none;
-	}
 	.header-image div.title-area {
 		margin-bottom: 0;
-		padding-bottom: 6px;
 	}
 	div.header-widget-area {
 		background: #fff;
 	}
-	.site-header .wrap {
-		box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
-	}
 }
 
 /* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
-body.stacked-nav-header div.title-area {
-	box-shadow: none;
-}
-body.stacked-nav-header.header-image div.title-area {
+body div.title-area {
 	margin-bottom: 0;
 	padding-bottom: 6px;
 }
-body.stacked-nav-header div.header-widget-area {
+body div.header-widget-area {
 	background: #fff;
 }
-body.stacked-nav-header .site-header .wrap {
-	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
-}
 
-body.stacked-nav-header .site-header .header-widget-area {
+body .site-header .header-widget-area {
     max-width: 100%;
     text-align: center;
     width: 100%;
 }
-body.stacked-nav-header.header-image div.title-area {
+body div.title-area {
 	float: none;
 	text-align: center;
 	width: 100%;
 }
-body.stacked-nav-header.header-image .site-title a {
+body .site-title a {
 	background-position: center top !important;
 	background-size: contain !important;
 }
@@ -343,6 +348,122 @@ body.stacked-nav-header.header-image .site-title a {
 		max-width: 100%;
 		text-align: center;
 		width: 100%;
+	}
+
+	.site-header .genesis-nav-menu a {
+		padding: 32px 32px 32px 16px;
+	}
+}
+
+/* Hamburger initialize at 1023px */
+@media only screen and (max-width: 1023px) {
+	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
+	.genesis-nav-menu.responsive-menu {
+		display: none;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item,
+	.responsive-menu-icon {
+		display: block;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item:hover {
+		position: static;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .current-menu-item > a:hover,
+	.genesis-nav-menu.responsive-menu li a,
+	.genesis-nav-menu.responsive-menu li a:hover,
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		background: none;
+		color: #444;
+		display: block;
+		line-height: 1;
+		padding: 12px 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children {
+		cursor: pointer;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children > a {
+		margin-right: 60px;
+	}
+
+	.genesis-nav-menu.responsive-menu > .menu-item-has-children:before {
+		content: "\f347";
+		float: right;
+		font: normal 16px/1 'dashicons';
+		height: 16px;
+		padding: 11px 0;
+		right: 0;
+		text-align: right;
+		z-index: 9999;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-open.menu-item-has-children:before {
+		content: "\f343";
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu {
+		left: auto;
+		opacity: 1;
+		position: relative;
+		-moz-transition:    opacity .4s ease-in-out;
+		-ms-transition:     opacity .4s ease-in-out;
+		-o-transition:      opacity .4s ease-in-out;
+		-webkit-transition: opacity .4s ease-in-out;
+		transition:         opacity .4s ease-in-out;
+		width: 100%;
+		z-index: 99;
+
+		padding-left: 20px;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .sub-menu {
+		padding-left: 20px;
+		margin: 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu li a,
+	.genesis-nav-menu.responsive-menu .sub-menu li a:hover {
+		background: none;
+		border: none;
+		box-shadow: none;
+		color: #444;
+		padding: 12px 0;
+		position: relative;
+		width: 100%;
+	}
+
+	.genesis-nav-menu.responsive-menu {
+		padding-bottom: 16px;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a {
+		background: none;
+		color: #fff;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		background: none;
+		color: #e7e7e7;
+	}
+
+	.education-pro-home .slide-excerpt {
+		display: none;
+	}
+
+	.home-top .wrap {
+		margin-left: 5%;
+		margin-right: 5%;
+		padding: 40px;
+	}
+
+	body .site-header .header-widget-area {
+		max-width: 740px;
+		margin: 0 auto;
+		float: none;
 	}
 }
 
