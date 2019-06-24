@@ -815,7 +815,7 @@ span.twitter-typeahead {
   }
 }
 #gradebookWrapper .table-wrapper.no-assignments .scrollable .student-grades {
-  width: 68px;
+  width: 180px;
   padding: 15px 8px 10px;
 }
 @media (max-width: 991px) {
