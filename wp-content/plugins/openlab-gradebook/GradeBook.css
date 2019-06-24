@@ -700,6 +700,7 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .scrollable .student-grades {
   min-width: 180px;
+  width: 180px;
   position: relative;
 }
 #gradebookWrapper .table-wrapper .scrollable .student-grades .fa-info-circle {
