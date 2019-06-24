@@ -5,6 +5,7 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                 className: 'modal fade',
                 events: {
                     'hidden.bs.modal': 'editCancel',
+                    'shown.bs.modal': 'focusInput',
                     'keyup': 'keyPressHandler',
                     'click #edit-assignment-save': 'submitForm',
                     'submit #edit-assignment-form': 'editSave'
@@ -98,6 +99,9 @@ define(['jquery', 'backbone', 'underscore', 'models/Assignment', 'views/StudentV
                         Backbone.pubSub.trigger('updateAverageGrade', update);
                     });
 
+                },
+                focusInput: function() {
+                    this.$el.find("#assign_name").focus();
                 }
             });
             return EditAssignmentView;

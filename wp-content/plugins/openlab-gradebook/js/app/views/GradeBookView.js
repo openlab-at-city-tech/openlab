@@ -430,12 +430,28 @@ define([
 			});
 		},
 		addAssignment: function(ev) {
+
+			var checkElem = $("body").find("#modalDialogEditAssignment");
+
+			//prevent double modals
+			if(checkElem.length){
+				return false;
+			}
+
 			var view = new EditAssignmentView({
 				course: this.course,
 				gradebook: this.gradebook
 			});
 		},
 		addStudent: function(ev) {
+
+			var checkElem = $("body").find("#modalDialogEditStudent");
+
+			//prevent double modals
+			if(checkElem.length){
+				return false;
+			}
+
 			var view = new EditStudentView({
 				course: this.course,
 				gradebook: this.gradebook
