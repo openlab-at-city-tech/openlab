@@ -18,7 +18,7 @@
                         </ul>
                     </label>
                     <% if (gradebook.role === 'instructor') { %>
-                        <textarea class="form-control" id="comment" name="comment" rows="3"><% if (comments) { %><%= comments %><% } %></textarea>
+                        <textarea class="form-control" id="comment" name="comment" autofocus rows="3"><% if (comments) { %><%= comments %><% } %></textarea>
                     <% } else  {%>
                         <p><% if (comments) { %><%= comments %><% } %></p>
                     <% } %>        
