@@ -12,21 +12,30 @@ function cuny_local_env_flag() {
         ?>
 
         <style type="text/css">
-            #local-env-flag {
-                position: fixed;
-                left: 0;
-                top: 35px;
-                width: 150px;
-                padding: 10px 15px;
-                text-align: center;
-                background: #600;
-                color: #fff;
-                font-size: 1em;
-                line-height: 1.8em;
-                border: 2px solid #666;
-                z-index: 99998;
-                opacity: 0.7;
-            }
+			@media screen {
+				#local-env-flag {
+					position: fixed;
+					left: 0;
+					top: 35px;
+					width: 150px;
+					padding: 10px 15px;
+					text-align: center;
+					background: #600;
+					color: #fff;
+					font-size: 1em;
+					line-height: 1.8em;
+					border: 2px solid #666;
+					z-index: 99998;
+					opacity: 0.7;
+				}
+			}
+
+			@media print {
+				#local-env-flag {
+					display: none;
+					visibility: hidden;
+				}
+			}
         </style>
 
         <div id="local-env-flag">

@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="wrap">
-                    <h1><span><?php esc_html_e('Settings', 'openlab-gradebook')?></span></h1>
+                    <h1><span><?php esc_html_e('About', 'openlab-gradebook')?></span></h1>
                     <div class="content-wrapper">
 
                         <h2 class="h4"><?php esc_html_e('GradeBook Assignment Grade Types:', 'openlab-gradebook')?></h2>
