@@ -34,6 +34,14 @@ body.toplevel_page_oplb_gradebook #adminmenu .menu-top.toplevel_page_oplb_gradeb
   color: #fff;
   font-weight: 600;
 }
+body.toplevel_page_oplb_gradebook .btn.btn-opaque {
+  background: #d0d0d0;
+  color: #000;
+  border-color: #b9b9b9;
+}
+body.toplevel_page_oplb_gradebook .btn.btn-opaque:hover {
+  background: #e6e6e6;
+}
 .openlab-gradebook_page_oplb_gradebook_settings #wpwrap h1,
 .toplevel_page_oplb_gradebook #wpwrap h1 {
   font-size: 23px;
@@ -470,7 +478,7 @@ span.twitter-typeahead {
   flex: 1 0 40%;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon.inactive button {
-  color: #a9a9a9;
+  color: #8F8F8F;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input {
   opacity: 1;
