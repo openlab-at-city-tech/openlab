@@ -12,6 +12,7 @@ function openlab_load_theme_fixes() {
 	switch ( $t ) {
 		case 'carrington-blog':
 		case 'coraline':
+		case 'education-pro':
 		case 'filtered':
 		case 'hemingway':
 		case 'herothemetrust':
@@ -28,13 +29,34 @@ function openlab_load_theme_fixes() {
 		case 'twentythirteen':
 		case 'twentytwelve':
 		case 'twentyeleven':
+		case 'twentynineteen':
 		case 'twentyten':
-			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $t ) . '.css" />
+			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $t ) . '/' . esc_attr( $t ) . '.css" />
 ';
-			break;
+		break;
 	}
 }
-add_action( 'wp_print_styles', 'openlab_load_theme_fixes', 9999 );
+add_action( 'wp_head', 'openlab_load_theme_fixes', 9999 );
+
+/**
+ * Loads PHP-based theme mods for OpenLab site themes.
+ */
+add_action(
+	'after_setup_theme',
+	function() {
+		$t = get_stylesheet();
+
+		switch ( $t ) {
+			case 'education-pro' :
+			case 'hemingway':
+			case 'pilcrow':
+			case 'sliding-door':
+			case 'twentynineteen':
+				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
+			break;
+		}
+	}
+);
 
 /**
  * Arrange themes so that preferred themes appear first in the list.
@@ -75,123 +97,6 @@ function openlab_reorder_theme_selections( $themes ) {
 	return array_merge( $t1, $t2 );
 }
 add_filter( 'wp_prepare_themes_for_js', 'openlab_reorder_theme_selections' );
-
-/**
- * Hemingway: When there's no nav menu, ensure that Course Profile and Home links appear.
- *
- * This theme uses wp_list_pages() rather than a normal WP function for building
- * the default menu.
- */
-function openlab_fix_fallback_menu_for_hemingway( $output ) {
-	if ( 'hemingway' !== get_template() ) {
-		return $output;
-	}
-
-	$dbs    = debug_backtrace();
-	$gp_key = null;
-	foreach ( $dbs as $key => $db ) {
-		if ( 'wp_list_pages' === $db['function'] ) {
-			$lp_key = $key;
-			break;
-		}
-	}
-
-	if ( null === $lp_key ) {
-		return $output;
-	}
-
-	// It really doesn't get any worse than this.
-	if ( ! isset( $dbs[ $lp_key + 4 ] ) || 'get_header' !== $dbs[ $lp_key + 4 ]['function'] ) {
-		return $output;
-	}
-
-	// Fake pages.
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	if ( ! $group_id ) {
-		return $output;
-	}
-
-	$home_link = sprintf(
-		'<li><a title="Site Home" href="%s">Home</a></li>',
-		esc_url( trailingslashit( get_option( 'home' ) ) )
-	);
-
-	$group_type_label = openlab_get_group_type_label(
-		array(
-			'group_id' => $group_id,
-			'case'     => 'upper',
-		)
-	);
-
-	$group_link = bp_get_group_permalink( groups_get_group( array( 'group_id' => $group_id ) ) );
-
-	$profile_link = sprintf(
-		'<li id="menu-item-group-profile-link" class="group-profile-link"><a href="%s">%s</a>',
-		esc_url( $group_link ),
-		sprintf( '%s Profile', $group_type_label )
-	);
-
-	$output = $profile_link . "\n" . $home_link . "\n" . $output;
-
-	return $output;
-}
-add_filter( 'wp_list_pages', 'openlab_fix_fallback_menu_for_hemingway' );
-
-/**
- * Hemingway: Add missing label element to comment form.
- */
-function openlab_add_missing_label_element_to_comment_form_for_hemingway( $fields ) {
-	if ( 'hemingway' !== get_template() ) {
-		return $fields;
-	}
-
-	$fields['comment'] .= '<label for="comment" class="sr-only">Comment Text</label>';
-
-	return $fields;
-}
-add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
-
-/**
- * Prevent Sliding Door from showing plugin installation notice.
- */
-function openlab_remove_sliding_door_plugin_installation_notice() {
-	if ( 'sliding-door' === get_template() ) {
-		remove_action( 'tgmpa_register', 'my_theme_register_required_plugins' );
-	}
-}
-add_action( 'after_setup_theme', 'openlab_remove_sliding_door_plugin_installation_notice', 100 );
-
-/**
- * Sliding Door requires the Page Links To plugin.
- */
-function openlab_activate_page_links_to_on_sliding_door() {
-	if ( 'sliding-door' !== get_template() ) {
-		return;
-	}
-
-	if ( ! is_admin() || ! current_user_can( 'activate_plugins' ) ) {
-		return;
-	}
-
-	if ( ! function_exists( 'is_plugin_active' ) ) {
-		require_once ABSPATH . 'wp-admin/includes/plugin.php';
-	}
-
-	if ( ! is_plugin_active( 'page-links-to/page-links-to.php' ) ) {
-		activate_plugin( 'page-links-to/page-links-to.php' );
-	}
-}
-add_action( 'after_setup_theme', 'openlab_activate_page_links_to_on_sliding_door', 50 );
-
-/**
- * Override Pilcrow's fallback page menu overrides.
- */
-function openlab_pilcrow_page_menu_args( $args ) {
-	remove_filter( 'wp_page_menu_args', 'pilcrow_page_menu_args' );
-	$args['depth'] = 0;
-	return $args;
-}
-add_filter( 'wp_page_menu_args', 'openlab_pilcrow_page_menu_args', 5 );
 
 /**
  * Filtering blog info to fix items in theme

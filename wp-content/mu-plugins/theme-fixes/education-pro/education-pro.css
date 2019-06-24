@@ -1,0 +1,578 @@
+/* Style adjustments - all color schemes */
+
+/* 1. Header */
+
+div.title-area {
+    float: left;
+    position: relative;
+    width: 100%;
+/*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
+	box-shadow: none;
+	min-height: 130px;
+}
+
+.site-header .widget-area {
+    float: right;
+    text-align: right;
+    width: 640px;
+}
+
+.site-header {
+    background-color: #fff;
+    height: 80px;
+}
+
+.site-header .wrap {
+	max-width: none;
+}
+
+p.site-title {
+    font-size: 30px;
+}
+
+.site-header .site-title a:hover {
+	color: #ffd5d1;
+}
+
+.site-inner {
+    clear: both;
+    padding-top: 40px;
+}
+
+/* 2. Elements */
+
+h1 {
+    font-size: 36px;
+}
+
+blockquote {
+    background-color: #fff;
+    border-left: 10px solid #f5f5f5;
+    padding: 40px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+blockquote:before {
+    color: #e3f2fa;
+    content: none;
+    font-size: 5em;
+    line-height: .5em;
+    margin-left: -20px;
+}
+
+blockquote p {
+    font-style: regular;
+}
+
+/* 2a. Trying to affect only the content area headings. Sidebar and others should not be affected */
+
+div.entry-content h2 {
+    font-weight: 300;
+    line-height: 1.2;
+    text-align: left;
+    width: 100%;
+    background-image: linear-gradient(to right, rgba(245,245,245,1), rgba(255,0,0,0) );
+    padding: .2em .2em .2em .4em;
+    border-left: 3px solid #595959;
+    margin-bottom: .8em;
+}
+
+div.entry-content h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .8em;
+}
+
+
+.content h2 + div h2 {
+    background-image: none;
+    padding: .2em 0 .2em 0;
+    border-left: 0px;
+    margin-bottom: 1em;
+}
+
+.content h2 ~ h3 {
+    margin-top: 1em;
+}
+
+section.widget.widget_text h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 10px 0;
+}
+
+
+fieldset {
+    margin-bottom: 1em;
+}
+
+
+button, input[type="button"], input[type="reset"], input[type="submit"], .button, div.wp-block-file__button a {
+    background-color: #595959;
+    color: #fff;
+}
+
+h1.entry-title {
+    font-size:  36px;
+    margin-bottom: .8em;
+}
+
+
+h4.widget-title.widgettitle {
+    color: #444444 !important; /* Don't let color schemes override */
+}
+
+cite {
+    font-size: .8em;
+}
+
+/* 3. TOC Plugin style. Can we replace the text/link with a fontawesome list icon?
+See mockup: https://www.dropbox.com/s/5jl5er5lf4jyn3y/TOCstyle.png?dl=0 OR see below and compare with mockups */
+
+div#toc_container.no_bullets {
+    background:  #f9f9f9;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 0;
+    margin-bottom: 2em;
+    width: 50%;
+    text-align: left;
+}
+
+div#toc_container.no_bullets.contracted {
+    background:  #f9f9f9;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 0;
+    margin-bottom: 2em;
+    width: auto;
+}
+
+#toc_container p.toc_title {
+    font-weight: 700;
+    padding: .5em;
+    text-align: left;
+}
+
+
+
+
+/* Color adjustments for Default color scheme */
+
+div.title-area {
+    color: #ffffff;
+    background-color: #aa2418;
+
+}
+
+.header-image .site-description, .header-image .site-title {
+	position: relative;
+	text-indent: inherit;
+}
+
+.header-image .title-area {
+	box-shadow: 0px 3px 7px 0px #80808091;
+}
+
+.header-image .site-title a {
+	min-height: 130px;
+	padding-top: 20px;
+}
+
+.header-image .site-description {
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	top: 60px;
+}
+
+.site-header {
+    border-top: 3px solid #e44a3c;
+}
+
+
+.sidebar a {
+    color: #aa2418;
+}
+
+.sidebar a:hover {
+	color: #444;
+}
+
+div.entry-content a, .breadcrumb a {
+    color: #aa2418;
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.entry-content a:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+/* No icon for Course Profile link */
+#menu-item-group-profile-link {
+	background: inherit;
+	padding-right: inherit;
+	margin-right: inherit;
+}
+
+.menu-item-has-children {
+	position: relative;
+}
+
+@media screen and (min-width: 1023px) {
+	.menu-item-has-children > a:after {
+		font-family: "fontawesome";
+		content: "\f107"; /* angle-down */
+		font-size: 15px;
+		position: absolute;
+		right: 0.625em;
+		top: 1.55em;
+	}
+
+	.sidebar .menu-item-has-children > a:after {
+		content: '' !important;
+	}
+
+	.sub-menu .menu-item-has-children > a:after {
+		content: "\f105"; /* angle-right */
+		top: 1em;
+	}
+
+	.menu-primary > .menu-item-has-children > a {
+		padding-right: 32px;
+	}
+
+	.menu-primary > .menu-item-has-children > a:after {
+		top: 1em;
+	}
+}
+
+.nav-primary .genesis-nav-menu {
+	text-align: center;
+}
+
+.genesis-nav-menu .menu-item-has-children.menu-item:hover {
+	position: relative;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a {
+	padding-right: 32px;
+}
+
+.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+	top: 2em;
+}
+
+/* Adjustments for header + nav at medium widths */
+@media screen and (min-width: 769px) and (max-width: 1023px) {
+	.header-image div.title-area {
+		margin-bottom: 0;
+	}
+	div.header-widget-area {
+		background: #fff;
+	}
+}
+
+/* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
+body div.title-area {
+	margin-bottom: 0;
+	padding-bottom: 6px;
+}
+body div.header-widget-area {
+	background: #fff;
+}
+
+body .site-header .header-widget-area {
+    max-width: 100%;
+    text-align: center;
+    width: 100%;
+}
+body div.title-area {
+	float: none;
+	text-align: center;
+	width: 100%;
+}
+body .site-title a {
+	background-position: center top !important;
+	background-size: contain !important;
+}
+
+.genesis-nav-menu .sub-menu .current-menu-item > a:hover, .genesis-nav-menu li a:hover, .genesis-nav-menu li.current-menu-item > a {
+    background-color: #e3f2fa;
+    color: #000;
+}
+
+.genesis-nav-menu li a:hover,
+.genesis-nav-menu li.current-menu-item > a,
+.genesis-nav-menu .sub-menu li a:hover,
+.genesis-nav-menu .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
+
+.header-widget-area {
+	max-width: calc(100% - 500px);
+}
+
+.genesis-nav-menu .sub-menu {
+	border-left: 3px solid #e44a3d;
+}
+
+.site-header .genesis-nav-menu .sub-menu a,
+.genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #444;
+}
+
+.genesis-nav-menu li a:hover,
+.genesis-nav-menu li.current-menu-item > a,
+.genesis-nav-menu li .sub-menu li a:hover,
+.genesis-nav-menu li .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
+
+.header-widget-area .genesis-nav-menu .sub-menu .sub-menu {
+	border-left: none;
+}
+
+@media only screen and (max-width: 1023px) {
+	div.title-area {
+		float: none;
+		width: 100%;
+	}
+
+	.site-header .header-widget-area {
+		max-width: 100%;
+		text-align: center;
+		width: 100%;
+	}
+
+	.site-header .genesis-nav-menu a {
+		padding: 32px 32px 32px 16px;
+	}
+}
+
+/* Hamburger initialize at 1023px */
+@media only screen and (max-width: 1023px) {
+	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
+	.genesis-nav-menu.responsive-menu {
+		display: none;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item,
+	.responsive-menu-icon {
+		display: block;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item:hover {
+		position: static;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .current-menu-item > a:hover,
+	.genesis-nav-menu.responsive-menu li a,
+	.genesis-nav-menu.responsive-menu li a:hover,
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		background: none;
+		color: #444;
+		display: block;
+		line-height: 1;
+		padding: 12px 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children {
+		cursor: pointer;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-item-has-children > a {
+		margin-right: 60px;
+	}
+
+	.genesis-nav-menu.responsive-menu > .menu-item-has-children:before {
+		content: "\f347";
+		float: right;
+		font: normal 16px/1 'dashicons';
+		height: 16px;
+		padding: 11px 0;
+		right: 0;
+		text-align: right;
+		z-index: 9999;
+	}
+
+	.genesis-nav-menu.responsive-menu .menu-open.menu-item-has-children:before {
+		content: "\f343";
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu {
+		left: auto;
+		opacity: 1;
+		position: relative;
+		-moz-transition:    opacity .4s ease-in-out;
+		-ms-transition:     opacity .4s ease-in-out;
+		-o-transition:      opacity .4s ease-in-out;
+		-webkit-transition: opacity .4s ease-in-out;
+		transition:         opacity .4s ease-in-out;
+		width: 100%;
+		z-index: 99;
+
+		padding-left: 20px;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu .sub-menu {
+		padding-left: 20px;
+		margin: 0;
+	}
+
+	.genesis-nav-menu.responsive-menu .sub-menu li a,
+	.genesis-nav-menu.responsive-menu .sub-menu li a:hover {
+		background: none;
+		border: none;
+		box-shadow: none;
+		color: #444;
+		padding: 12px 0;
+		position: relative;
+		width: 100%;
+	}
+
+	.genesis-nav-menu.responsive-menu {
+		padding-bottom: 16px;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a {
+		background: none;
+		color: #fff;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		background: none;
+		color: #e7e7e7;
+	}
+
+	.education-pro-home .slide-excerpt {
+		display: none;
+	}
+
+	.home-top .wrap {
+		margin-left: 5%;
+		margin-right: 5%;
+		padding: 40px;
+	}
+
+	body .site-header .header-widget-area {
+		max-width: 740px;
+		margin: 0 auto;
+		float: none;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	div.title-area {
+		max-width: 100%;
+	}
+}
+
+/* Couldn't figure out menu hovers, so see mockups or let me know which selectors to adjust. :) */
+
+/** COLOR SCHEMES ********************************************************/
+
+.education-pro-blue .footer-widgets .wrap a:hover,
+.education-pro-blue .footer-widgets a.button,
+.education-pro-blue .slide-excerpt h2 a,
+.education-pro-blue .home-middle .entry-title a,
+.education-pro-blue .home-top .widget_text,
+.education-pro-blue .site-footer .wrap a:hover,
+.education-pro-blue .site-footer a.button,
+.education-pro-blue .entry-content a,
+.education-pro-blue a {
+	color: #185a7d;
+}
+
+.education-pro-blue a:hover {
+	color: #444;
+}
+
+.education-pro-blue .archive-description,
+.education-pro-blue .author-box,
+.education-pro-blue .button:hover,
+.education-pro-blue .content .entry-header .entry-meta .entry-time,
+.education-pro-blue .footer-widgets .wrap .button:hover,
+.education-pro-blue .footer-widgets button:hover,
+.education-pro-blue .footer-widgets input:hover[type="button"],
+.education-pro-blue .footer-widgets input:hover[type="reset"],
+.education-pro-blue .footer-widgets input:hover[type="submit"],
+.education-pro-blue .home-bottom .widget .button:hover,
+.education-pro-blue .home-bottom button:hover,
+.education-pro-blue .home-bottom input:hover[type="button"],
+.education-pro-blue .home-bottom input:hover[type="reset"],
+.education-pro-blue .home-bottom input:hover[type="submit"],
+.education-pro-blue .home-featured #genesis-responsive-slider .more-link:hover,
+.education-pro-blue .title-area,
+.education-pro-blue .title-area a,
+.education-pro-blue button:hover,
+.education-pro-blue input:hover[type="button"],
+.education-pro-blue input:hover[type="reset"],
+.education-pro-blue input:hover[type="submit"] {
+	background-color: #bad0de;
+	color: #113f58;
+}
+
+.education-pro-blue .button,
+.education-pro-blue .home-bottom,
+.education-pro-blue .widget-area .widget.enews-widget,
+.education-pro-blue button,
+.education-pro-blue input[type="button"],
+.education-pro-blue input[type="reset"],
+.education-pro-blue input[type="submit"] {
+	background-color: #a8b2b9;
+}
+
+/* Nav above title */
+.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu a,
+.education-pro-blue .nav-primary .genesis-nav-menu li a:hover,
+.education-pro-blue .nav-primary .genesis-nav-menu li.current-menu-item > a {
+	background-color: #113f58;
+	color: #fff;
+}
+
+/* Nav beside title */
+.education-pro-blue .genesis-nav-menu li a:hover,
+.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
+.education-pro-blue .genesis-nav-menu .sub-menu li a:hover,
+.education-pro-blue .genesis-nav-menu .sub-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
+
+.education-pro-blue .genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #113f58;
+}
+
+.education-pro-blue .header-widget-area .genesis-nav-menu .sub-menu,
+.education-pro-blue .after-entry .widget,
+.education-pro-blue .home-top .wrap,
+.education-pro-blue .sidebar .widget,
+.education-pro-blue .site-header {
+	border-color: #2192da;
+}
+
+.education-pro-blue .enews-widget .enews input:hover[type="submit"],
+.education-pro-blue .footer-widgets,
+.education-pro-blue .home-middle,
+.education-pro-blue .nav-primary,
+.education-pro-blue .site-footer {
+	background-color: #185a7d;
+}
+
+.education-pro-blue .site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.education-pro-blue .site-header .site-title a:hover {
+	color: #185a7d;
+}
+

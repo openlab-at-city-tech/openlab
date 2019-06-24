@@ -37,7 +37,7 @@
 	// Lazy fix for the fact that this theme uses wp_list_pages() instead
 	// of the proper menu functions
 	global $wpdb, $bp;
-	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst(groups_get_groupmeta($wds_bp_group_id, 'wds_group_type' ));
 		$group = new BP_Groups_Group( $wds_bp_group_id, true );

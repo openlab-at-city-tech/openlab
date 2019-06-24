@@ -1,0 +1,12 @@
+#openlab-footer h1:before,
+#openlab-footer h2:before {
+	content: "";
+	display: none;
+	visibility: hidden;
+}
+
+#openlab-footer,
+#wpadminbar,
+#openlab-footer p {
+	-moz-osx-font-smoothing: auto;
+}

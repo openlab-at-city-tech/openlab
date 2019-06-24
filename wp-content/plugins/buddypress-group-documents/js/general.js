@@ -13,22 +13,24 @@ jQuery(document).ready( function($) {
 	});
 
 	//Hide the upload form by default, expand as needed
-	$('#bp-group-documents-upload-new').hide();
 	$('#bp-group-documents-upload-button').show();
 	$('#bp-group-documents-upload-button').click(function(){
-		$('#bp-group-documents-upload-button').slideUp();
-		$('#bp-group-documents-upload-new').slideDown();
+		$('#bp-group-documents').addClass('is-edit-mode');
 		return false;
 	});
+
+	if ( $('#bp-group-documents').hasClass( 'is-edit-mode' ) ) {
+		$('.submenu .group-count').hide();
+	}
 
 	//prefill the new category field
 	$('input.bp-group-documents-new-category').val('New Category...').css('color','#999').focus(function(){
 		$(this).val('').css('color','inherit');
 	});
-		
+
 	//check for presence of a file before submitting form
 	$('form#bp-group-documents-form').submit(function(){
-		
+
 		//check for pre-filled values, and remove before sumitting
 		if( $('input.bp-group-documents-new-category').val() == 'New Category...' ) {
 			$('input.bp-group-documents-new-category').val('');
@@ -40,11 +42,11 @@ jQuery(document).ready( function($) {
 			alert('You must select a file to upload!');
 			return false;
 		}
-	});	
+	});
 
 	//validate group admin form before submitting
 	$('form#group-settings-form').submit(function() {
-		
+
 		//check for pre-filled values, and remove before sumitting
 		if( $('input.bp-group-documents-new-category').val() == 'New Category...' ) {
 			$('input.bp-group-documents-new-category').val('');

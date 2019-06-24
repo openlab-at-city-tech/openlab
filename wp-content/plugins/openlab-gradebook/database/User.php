@@ -104,22 +104,38 @@ class OPLB_USER
         }
 
         $target_column = 'mid_semester_grade';
+        $target_comments = 'mid_semester_comments';
         if ($params['type'] === 'final') {
             $target_column = 'final_grade';
+            $target_comments = 'final_comments';
+        }
+
+        $values = array(
+            $target_column => $params['grade'],
+        );
+
+        $formats = array(
+            '%s',
+        );
+
+        if (!empty($params['comment_edit'])) {
+            if (!empty($params['comments'])) {
+                $values[$target_comments] = $params['comments'];
+                array_push($formats, '%s');
+            } else {
+                $values[$target_comments] = null;
+                array_push($formats, '%s');
+            }
         }
 
         $wpdb->update(
             "{$wpdb->prefix}oplb_gradebook_users",
-            array(
-                $target_column => $params['grade'],
-            ),
+            $values,
             array(
                 "uid" => $uid,
                 "gbid" => $gbid,
             ),
-            array(
-                '%s',
-            ),
+            $formats,
             array(
                 '%d',
                 '%d',
@@ -132,5 +148,3 @@ class OPLB_USER
     }
 
 }
-
-?>

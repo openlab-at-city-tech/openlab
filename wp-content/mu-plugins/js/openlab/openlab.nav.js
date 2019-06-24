@@ -475,16 +475,14 @@ OpenLab.nav = (function ($) {
 				return;
 			}
 
+			var mql = window.matchMedia( "screen and (max-width: 781px)" );
+			if ( mql.matches ) {
+				return;
+			}
+
 			setTimeout(
 				function() {
 					var bump = 40;
-
-					var $editPostSidebar = $( '.edit-post-sidebar' );
-					if ( $editPostSidebar.length > 0 ) {
-						editPostSidebarOffset = $editPostSidebar.offset();
-						$editPostSidebar.css( 'top',(editPostSidebarOffset.top + bump) + 'px' );
-					}
-
 					var $editPostHeader = $( '.edit-post-header' );
 					if ( $editPostHeader.length > 0 ) {
 						editPostHeaderOffset = $editPostHeader.offset();

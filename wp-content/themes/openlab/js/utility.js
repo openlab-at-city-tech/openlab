@@ -591,6 +591,14 @@ OpenLab.utility = (function ($) {
             $('#groups-notification-settings-request').after(public_group_not);
         }
 
+				$('#bp-group-documents-folder-delete').click(function(e){
+					if ( confirm('Are you sure you wish to permanently delete this folder? The files associated with this folder will not be deleted.') ) {
+						return true;
+					}
+					return false;
+				});
+
+
     });//end document.ready
 
     $(window).on('resize', function (e) {

@@ -53,7 +53,7 @@ function register_oplb_gradebook_menu_page() {
     $add_submenu_page_settings = in_array($roles[0], array_keys(get_option('oplb_gradebook_settings')));
     
     if ($add_submenu_page_settings) {
-        add_submenu_page('oplb_gradebook', 'Settings', 'Settings', 'administrator', 'oplb_gradebook_settings', 'init_oplb_gradebook_settings');
+        add_submenu_page('oplb_gradebook', 'About', 'About', 'administrator', 'oplb_gradebook_settings', 'init_oplb_gradebook_settings');
     }
 }
 
@@ -114,19 +114,24 @@ function enqueue_oplb_gradebook_scripts() {
 
 	if (WP_DEBUG) {
 		$oplb_gradebook_develop = true;
-	}
-
+    }
+    
 	$dep_ver = '0.0.1.1';
-	$app_ver = '0.0.9.9';
+    $app_ver = filemtime(plugin_dir_path(__FILE__).'js/oplb-gradebook-app-min.js');
+    $style_ver = filemtime(plugin_dir_path(__File__).'GradeBook.css');
 
 	wp_register_style('jquery_ui_css', $app_base . '/lib/jquery-ui/jquery-ui.css', array(), $dep_ver, false);
-	wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $app_ver, false);
+	wp_register_style('OplbGradeBook_css', plugins_url('GradeBook.css', __File__), array('bootstrap_css', 'jquery_ui_css'), $style_ver, false);
 	wp_register_style('bootstrap_css', $app_base . '/lib/bootstrap/css/bootstrap.css', array(), $dep_ver, false);
-	wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
+    wp_register_script('jscrollpane-js', $app_base . '/lib/jscrollpane/jscrollpane.dist.js', array('jquery'), $dep_ver, true);
+    wp_register_script('bootstrap-fileinput-js', $app_base . '/lib/waypoints/noframework.waypoints.min.js', array('jquery'), $dep_ver, true);
+    wp_register_script('waypoints-js', $app_base . '/lib/bootstrap-fileinput/bootstrap-fileinput.dist.js', array('jquery'), $dep_ver, true);
 	wp_register_script('css-element-queries-js', $app_base . '/lib/css-element-queries/css.element.queries.dist.js', array('jquery'), $dep_ver, true);
 	wp_register_script('requirejs', $app_base . '/require.js', array('jquery', 'media-views'), $app_ver, true);
 	wp_enqueue_style('OplbGradeBook_css');
-	wp_enqueue_script('jscrollpane-js');
+    wp_enqueue_script('jscrollpane-js');
+    wp_enqueue_script('bootstrap-fileinput-js');
+    wp_enqueue_script('waypoints-js');
 	wp_enqueue_script('css-element-queries-js');
 	wp_enqueue_script('requirejs');
 

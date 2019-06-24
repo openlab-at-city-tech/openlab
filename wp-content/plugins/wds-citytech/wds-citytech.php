@@ -16,6 +16,7 @@ require 'wds-docs.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
 require 'includes/clone.php';
+require 'includes/print-this-page.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -134,9 +135,7 @@ function my_page_menu_filter( $menu ) {
 	// @todo: This will probably get extended to all sites
 	$menu = str_replace( 'Site Home', 'Home', $menu );
 
-	// phpcs:disable
-	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-	// phpcs:enable
+	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -145,7 +144,7 @@ function my_page_menu_filter( $menu ) {
 		$menu_a     = array(
 			$menu_a[0],
 			'<ul>',
-			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+			'<li id="group-profile-link" class="menu-item"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
 			$menu_a[1],
 		);
 		$menu       = implode( '', $menu_a );
@@ -156,9 +155,11 @@ add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
 function cuny_add_group_menu_items( $items, $args ) {
-	// The Sliding Door theme shouldn't get any added items
-	// See http://openlab.citytech.cuny.edu/redmine/issues/772
-	if ( 'custom-sliding-menu' == $args->theme_location ) {
+	/**
+	 * Allows individual themes to opt out.
+	 */
+	$allow = apply_filters( 'openlab_add_dynamic_nav_items', true, $args );
+	if ( ! $allow ) {
 		return $items;
 	}
 
@@ -183,7 +184,7 @@ function cuny_add_group_menu_items( $items, $args ) {
 		$home_link->url     = trailingslashit( site_url() );
 		$home_link->slug    = 'home';
 		$home_link->ID      = 'home';
-		$home_link->classes = [];
+		$home_link->classes = [ 'menu-item', 'menu-item-home' ];
 		$items              = array_merge( array( $home_link ), $items );
 	}
 
@@ -216,9 +217,7 @@ function cuny_group_menu_items() {
 
 	$items = array();
 
-	// phpcs:disable
-	$wds_bp_group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
-	// phpcs:enable
+	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
 		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
@@ -230,7 +229,7 @@ function cuny_group_menu_items() {
 		$profile_item->title   = sprintf( '%s Profile', $group_type );
 		$profile_item->slug    = 'group-profile-link';
 		$profile_item->url     = bp_get_group_permalink( $group );
-		$profile_item->classes = [];
+		$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
 
 		$items[] = $profile_item;
 	}
@@ -1589,9 +1588,7 @@ function openlab_hide_fn_ln( $check, $object, $meta_key, $single ) {
 		}
 
 		// Make sure it's the right faculty member
-		// phpcs:disable
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d LIMIT 1", get_current_blog_id() ) );
-		// phpcs:enable
+		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 		if ( ! empty( $group_id ) && ! groups_is_user_admin( get_current_user_id(), (int) $group_id ) ) {
 			return '';
