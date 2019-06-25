@@ -173,8 +173,6 @@ class Service implements Registerable {
 
 		$this->id = (int) $args['import_id'];
 
-		update_post_meta( $this->id, '_wxr_import_settings', true );
-
 		$this->enqueue_assets();
 
 		require ROOT_DIR . '/views/import/import.php';
@@ -196,9 +194,6 @@ class Service implements Registerable {
 		}
 
 		$this->id = $id;
-
-		// @todo remove in future.
-		update_post_meta( $this->id, '_wxr_import_settings', true );
 
 		return true;
 	}
@@ -226,8 +221,8 @@ class Service implements Registerable {
 		header( 'Content-Type: text/event-stream' );
 
 		$this->id = wp_unslash( (int) $_REQUEST['id'] );
-		$settings = get_post_meta( $this->id, '_wxr_import_settings', true );
-		if ( empty( $settings ) ) {
+
+		if ( ! isset( $this->id ) ) {
 			// Tell the browser to stop reconnecting.
 			status_header( 204 );
 			exit;
@@ -254,11 +249,9 @@ class Service implements Registerable {
 		$importer = $this->get_importer( $extract_path );
 		$status   = $importer->import( $extract_path . '/wordpress.xml' );
 
-		// Remove the settings to stop future reconnects.
-		delete_post_meta( $this->id, '_wxr_import_settings' );
-
-		// Remove import files.
+		// Clean up.
 		$decompressor->cleanup();
+		unset( $this->id );
 
 		// Let the browser know we're done.
 		$complete = [
