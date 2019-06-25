@@ -6,6 +6,7 @@
 namespace OpenLab\Portfolio\Import;
 
 use const OpenLab\Portfolio\ROOT_DIR;
+use const OpenLab\Portfolio\ROOT_FILE;
 use WP_Error;
 use OpenLab\Portfolio\Contracts\Registerable;
 use OpenLab\Portfolio\Logger\ServerSentEventsLogger;
@@ -86,6 +87,29 @@ class Service implements Registerable {
 	}
 
 	/**
+	 * Enqueue import assets.
+	 *
+	 * @return void
+	 */
+	protected function enqueue_assets() {
+		$args = [
+			'action' => 'ol-portfolio-import',
+			'id'     => $this->id,
+		];
+
+		$script_data = [
+			'url' => add_query_arg( urlencode_deep( $args ), admin_url( 'admin-ajax.php' ) ),
+			'strings' => [
+				'complete' => 'Import complete!',
+			],
+		];
+
+		$url = plugins_url( 'assets/js/import.js', ROOT_FILE );
+		wp_enqueue_script( 'ol-portfolio-import', $url, [ 'jquery' ], '20190606', true );
+		wp_localize_script( 'ol-portfolio-import', 'ImportData', $script_data );
+	}
+
+	/**
 	 * Render the import page.
 	 *
 	 * @return void
@@ -150,6 +174,8 @@ class Service implements Registerable {
 		$this->id = (int) $args['import_id'];
 
 		update_post_meta( $this->id, '_wxr_import_settings', true );
+
+		$this->enqueue_assets();
 
 		require ROOT_DIR . '/views/import/import.php';
 	}
@@ -220,7 +246,6 @@ class Service implements Registerable {
 		$decompressor = new Decompressor( $this->id );
 		$extract_path = $decompressor->extract();
 
-		// @todo emit error message.
 		if ( is_wp_error( $extract_path ) ) {
 			status_header( 204 );
 			exit;
@@ -238,7 +263,7 @@ class Service implements Registerable {
 		// Let the browser know we're done.
 		$complete = [
 			'action' => 'complete',
-			'error' => false,
+			'error'  => false,
 		];
 
 		if ( is_wp_error( $status ) ) {

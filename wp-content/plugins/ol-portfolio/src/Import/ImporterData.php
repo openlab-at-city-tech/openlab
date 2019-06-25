@@ -8,7 +8,7 @@ class ImporterData {
 
 	public $title;
 
-	public $users = array();
+	public $users = [];
 	public $post_count = 0;
 	public $media_count = 0;
 	public $comment_count = 0;
