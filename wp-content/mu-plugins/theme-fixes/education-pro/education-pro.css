@@ -106,8 +106,13 @@ fieldset {
 
 
 button, input[type="button"], input[type="reset"], input[type="submit"], .button, div.wp-block-file__button a {
-    background-color: #595959;
-    color: #fff;
+    background-color: #e3f2fa;
+    color: #444;
+}
+
+button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .button:hover, div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #e3f2fa;
 }
 
 h1.entry-title {
@@ -522,14 +527,14 @@ body .site-title a {
 	color: #113f58;
 }
 
-.education-pro-blue .button,
-.education-pro-blue .home-bottom,
-.education-pro-blue .widget-area .widget.enews-widget,
-.education-pro-blue button,
-.education-pro-blue input[type="button"],
-.education-pro-blue input[type="reset"],
-.education-pro-blue input[type="submit"] {
-	background-color: #a8b2b9;
+.education-pro-blue button:hover,
+.education-pro-blue input[type="button"]:hover,
+.education-pro-blue input[type="reset"]:hover,
+.education-pro-blue input[type="submit"]:hover,
+.education-pro-blue .button:hover,
+.education-pro-blue div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #e3f2fa;
 }
 
 /* Nav above title */
