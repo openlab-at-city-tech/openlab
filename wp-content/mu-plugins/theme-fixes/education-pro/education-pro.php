@@ -96,6 +96,20 @@ add_action(
 	}
 );
 
+add_filter(
+	'genesis_get_layouts',
+	function( $layouts ) {
+		$keys = [ 'content-sidebar', 'sidebar-content', 'full-width-content' ];
+		return array_filter(
+			$layouts,
+			function( $k ) use ( $keys ) {
+				return in_array( $k, $keys, true );
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+	}
+);
+
 remove_theme_support( 'genesis-footer-widgets' );
 $deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
