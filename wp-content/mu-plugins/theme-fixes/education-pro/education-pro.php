@@ -27,6 +27,13 @@ add_theme_support( 'custom-header', array(
 	'header-text'     => false,
 ) );
 
+add_action(
+	'customize_controls_enqueue_scripts',
+	function() {
+		wp_enqueue_script( 'openlab-education-pro-customize', content_url( 'mu-plugins/theme-fixes/education-pro/customize.js', array( 'jquery' ) ) );
+	}
+);
+
 /**
  * Remove unused Settings metaboxes.
  */
