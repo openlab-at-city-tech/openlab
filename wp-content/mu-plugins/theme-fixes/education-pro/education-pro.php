@@ -240,3 +240,15 @@ function openlab_custom_header_style() {
 	}
 
 }
+
+/**
+ * Remove Copyright text in footer.
+ */
+add_filter(
+	'genesis_footer_creds_text',
+	function( $text ) {
+		$regex = '/\[footer_copyright[^\]]+\] &#x000B7;/';
+		return preg_replace( $regex, '', $text );
+	}
+);
+

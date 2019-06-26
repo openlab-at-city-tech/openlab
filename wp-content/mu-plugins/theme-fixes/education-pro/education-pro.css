@@ -199,6 +199,10 @@ div.title-area {
 	color: #444;
 }
 
+.site-footer {
+	padding: 10px 0;
+}
+
 div.entry-content a, .breadcrumb a {
     color: #aa2418;
     text-decoration: underline;
