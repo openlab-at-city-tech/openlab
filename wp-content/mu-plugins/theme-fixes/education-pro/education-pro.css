@@ -407,6 +407,11 @@ body .site-title a {
 		padding: 12px 0;
 	}
 
+	.header-widget-area .genesis-nav-menu.responsive-menu li,
+	.header-widget-area .genesis-nav-menu.responsive-menu li a {
+		background-color: rgba(255,255,255,1);
+	}
+
 	.genesis-nav-menu.responsive-menu .menu-item-has-children {
 		cursor: pointer;
 	}
