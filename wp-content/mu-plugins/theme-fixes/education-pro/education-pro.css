@@ -71,7 +71,7 @@ div.entry-content h2 {
     line-height: 1.2;
     text-align: left;
     width: 100%;
-    background-image: linear-gradient(to right, rgba(245,245,245,1), rgba(255,0,0,0) );
+    background-image: linear-gradient(to right, rgba(245, 245, 245, 1), rgba(245, 245, 245, 0));
     padding: .2em .2em .2em .4em;
     border-left: 3px solid #595959;
     margin-bottom: .8em;
