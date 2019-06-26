@@ -224,6 +224,17 @@ div.entry-content a, .breadcrumb a {
 	color: #444;
 }
 
+.entry-footer .entry-meta a {
+    color: #aa2418;
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.entry-footer .entry-meta a:hover {
+    color: #000;
+    text-decoration: none !important;
+}
+
 /* No icon for Course Profile link */
 #menu-item-group-profile-link {
 	background: inherit;
@@ -499,10 +510,12 @@ body .site-title a {
 .education-pro-blue .site-footer .wrap a:hover,
 .education-pro-blue .site-footer a.button,
 .education-pro-blue .entry-content a,
+.education-pro-blue .entry-footer .entry-meta a,
 .education-pro-blue a {
 	color: #185a7d;
 }
 
+.education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
 	color: #444;
 }
