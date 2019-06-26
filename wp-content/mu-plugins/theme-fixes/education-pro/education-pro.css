@@ -359,6 +359,10 @@ body .site-title a {
 	color: #3b3b3b;
 }
 
+.header-widget-area .genesis-nav-menu {
+	border-bottom: 3px solid #eee;
+}
+
 .header-widget-area .genesis-nav-menu .sub-menu .sub-menu {
 	border-left: none;
 }
