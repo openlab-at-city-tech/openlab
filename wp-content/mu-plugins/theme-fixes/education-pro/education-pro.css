@@ -210,13 +210,13 @@ div.title-area {
 
 div.entry-content a, .breadcrumb a {
     color: #aa2418;
-    text-decoration: underline;
-    text-underline-position: under;
+	border-bottom: 1px solid #aa2418;
+	padding-bottom: 1px;
 }
 
 .entry-content a:hover {
     color: #000;
-    text-decoration: none;
+	border-bottom: none;
 }
 
 .content .entry-header .entry-meta .entry-time {
@@ -226,13 +226,13 @@ div.entry-content a, .breadcrumb a {
 
 .entry-footer .entry-meta a {
     color: #aa2418;
-    text-decoration: underline;
-    text-underline-position: under;
+	border-bottom: 1px solid #aa2418;
+	padding-bottom: 1px;
 }
 
 .entry-footer .entry-meta a:hover {
     color: #000;
-    text-decoration: none !important;
+	border-bottom: none;
 }
 
 /* No icon for Course Profile link */
