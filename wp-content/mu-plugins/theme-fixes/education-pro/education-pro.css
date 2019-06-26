@@ -219,6 +219,11 @@ div.entry-content a, .breadcrumb a {
     text-decoration: none;
 }
 
+.content .entry-header .entry-meta .entry-time {
+	background-color: #e3f2fa;
+	color: #444;
+}
+
 /* No icon for Course Profile link */
 #menu-item-group-profile-link {
 	background: inherit;
@@ -505,7 +510,6 @@ body .site-title a {
 .education-pro-blue .archive-description,
 .education-pro-blue .author-box,
 .education-pro-blue .button:hover,
-.education-pro-blue .content .entry-header .entry-meta .entry-time,
 .education-pro-blue .footer-widgets .wrap .button:hover,
 .education-pro-blue .footer-widgets button:hover,
 .education-pro-blue .footer-widgets input:hover[type="button"],
@@ -525,6 +529,11 @@ body .site-title a {
 .education-pro-blue input:hover[type="submit"] {
 	background-color: #bad0de;
 	color: #113f58;
+}
+
+.education-pro-blue .content .entry-header .entry-meta .entry-time {
+	background-color: #e3f2fa;
+	color: #444;
 }
 
 .education-pro-blue button:hover,
