@@ -512,6 +512,7 @@ body .site-title a {
 .education-pro-blue .entry-content a,
 .education-pro-blue .entry-footer .entry-meta a,
 .education-pro-blue a {
+	border-color: #185a7d;
 	color: #185a7d;
 }
 
