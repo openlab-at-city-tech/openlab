@@ -10,6 +10,10 @@
 	font-style: normal;
 }
 
+#debugLog {
+	display: none;
+}
+
 [data-icon]:before {
 	font-family: "openlab-gradebook" !important;
 	content: attr(data-icon);
@@ -244,6 +248,18 @@ h5 {
 
 body {
 	background-color: #f1f1f1;
+	&.admin_page_oplb-gradebook-upload-csv {
+		.oplb-bs.navbar-location-oplb-bs,
+		#wpadminbar,
+		#adminmenumain,
+		#wpfooter,
+		#local-env-flag {
+			display: none !important;
+		}
+		#wpcontent {
+			padding-top: 21px !important;
+		}
+	}
 	.overline {
 		text-decoration: overline;
 	}

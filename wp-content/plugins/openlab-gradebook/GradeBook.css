@@ -6,6 +6,9 @@
   font-weight: normal;
   font-style: normal;
 }
+#debugLog {
+  display: none;
+}
 [data-icon]:before {
   font-family: "openlab-gradebook" !important;
   content: attr(data-icon);
@@ -189,6 +192,16 @@ h5 {
 }
 body {
   background-color: #f1f1f1;
+}
+body.admin_page_oplb-gradebook-upload-csv .oplb-bs.navbar-location-oplb-bs,
+body.admin_page_oplb-gradebook-upload-csv #wpadminbar,
+body.admin_page_oplb-gradebook-upload-csv #adminmenumain,
+body.admin_page_oplb-gradebook-upload-csv #wpfooter,
+body.admin_page_oplb-gradebook-upload-csv #local-env-flag {
+  display: none !important;
+}
+body.admin_page_oplb-gradebook-upload-csv #wpcontent {
+  padding-top: 21px !important;
 }
 body .overline {
   text-decoration: overline;
