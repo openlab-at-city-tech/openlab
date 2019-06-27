@@ -14,7 +14,6 @@ return array(
     'OpenLab\\Portfolio\\Import\\Decompressor' => $baseDir . '/src/Import/Decompressor.php',
     'OpenLab\\Portfolio\\Import\\Importer' => $baseDir . '/src/Import/Importer.php',
     'OpenLab\\Portfolio\\Import\\Service' => $baseDir . '/src/Import/Service.php',
-    'OpenLab\\Portfolio\\ImporterData' => $baseDir . '/src/Import/ImporterData.php',
     'OpenLab\\Portfolio\\Iterator\\UploadsIterator' => $baseDir . '/src/Iterator/UploadsIterator.php',
     'OpenLab\\Portfolio\\Logger\\ErrorLogLogger' => $baseDir . '/src/Logger/ErrorLogLogger.php',
     'OpenLab\\Portfolio\\Logger\\Logger' => $baseDir . '/src/Logger/Logger.php',

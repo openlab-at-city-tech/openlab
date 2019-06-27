@@ -33,7 +33,6 @@ class ComposerStaticInit90f43fa9dd54e820f67ac7497e2e9576
         'OpenLab\\Portfolio\\Import\\Decompressor' => __DIR__ . '/../..' . '/src/Import/Decompressor.php',
         'OpenLab\\Portfolio\\Import\\Importer' => __DIR__ . '/../..' . '/src/Import/Importer.php',
         'OpenLab\\Portfolio\\Import\\Service' => __DIR__ . '/../..' . '/src/Import/Service.php',
-        'OpenLab\\Portfolio\\ImporterData' => __DIR__ . '/../..' . '/src/Import/ImporterData.php',
         'OpenLab\\Portfolio\\Iterator\\UploadsIterator' => __DIR__ . '/../..' . '/src/Iterator/UploadsIterator.php',
         'OpenLab\\Portfolio\\Logger\\ErrorLogLogger' => __DIR__ . '/../..' . '/src/Logger/ErrorLogLogger.php',
         'OpenLab\\Portfolio\\Logger\\Logger' => __DIR__ . '/../..' . '/src/Logger/Logger.php',
