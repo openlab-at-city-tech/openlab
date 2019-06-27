@@ -56,6 +56,7 @@ class Importer {
 	protected $categories = array();
 	protected $tags = array();
 	protected $base_url = '';
+	protected $site_id = 0;
 
 	// TODO: REMOVE THESE
 	protected $processed_terms = array();
@@ -356,6 +357,7 @@ class Importer {
 
 		// Reset other variables
 		$this->base_url = '';
+		$this->site_id  = 0;
 
 		// Start parsing!
 		while ( $reader->read() ) {
@@ -381,8 +383,18 @@ class Importer {
 					$reader->next();
 					break;
 
+				case 'wp:site_id':
+					$this->site_id = $reader->readString();
+
+					// Handled everything in this node, move on to the next
+					$reader->next();
+					break;
+
 				case 'wp:base_blog_url':
 					$this->base_url = $reader->readString();
+
+					// Check if path needs update for legacy file-serving.
+					$this->path = $this->normalize_path( $this->path );
 
 					// Handled everything in this node, move on to the next
 					$reader->next();
@@ -2283,5 +2295,22 @@ class Importer {
 	protected function mark_term_exists( $data, $term_id ) {
 		$exists_key = sha1( $data['taxonomy'] . ':' . $data['slug'] );
 		$this->exists['term'][ $exists_key ] = $term_id;
+	}
+
+	/**
+	 * Normalize uploads file path for legacy MS.
+	 *
+	 * @param string $path Extracted archvie path.
+	 * @return string $path
+	 */
+	protected function normalize_path( $path ) {
+		$upload_blogs_dir = '/wp-content/blogs.dir/';
+
+		// Check for legacy file-serving paths.
+		if ( is_dir( $path . $upload_blogs_dir ) ) {
+			$path = $path . $upload_blogs_dir . $this->site_id;
+		}
+
+		return $path;
 	}
 }

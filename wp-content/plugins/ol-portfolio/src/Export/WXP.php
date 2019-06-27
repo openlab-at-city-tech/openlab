@@ -89,6 +89,7 @@ class WXP {
 		$header .= "\t<pubDate>" . date( 'D, d M Y H:i:s +0000' ) ."</pubDate>\n";
 		$header .= "\t<language>" . get_bloginfo_rss( 'language' ) ."</language>\n";
 		$header .= "\t<wp:wxr_version>" . $wxr_version ."</wp:wxr_version>\n";
+		$header .= "\t<wp:site_id>" . get_current_blog_id() ."</wp:site_id>\n";
 		$header .= "\t<wp:base_blog_url>" . get_bloginfo_rss( 'url' ) ."</wp:base_blog_url>\n";
 
 		if ( ! file_put_contents( $this->filename, $header, FILE_APPEND ) ) {
