@@ -166,11 +166,6 @@ add_filter(
 );
 
 register_default_headers( [
-	'circles' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
-		'description'   => 'Circles',
-	],
 	'wide-test' => [
 		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
 		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),

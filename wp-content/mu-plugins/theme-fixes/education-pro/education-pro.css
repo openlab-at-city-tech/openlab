@@ -12,6 +12,7 @@ div.title-area {
 	transform: translateY(-50%);
     width: 100%;
 	box-shadow: none;
+	background-color: inherit;
 }
 
 .site-header .widget-area {
@@ -24,6 +25,10 @@ div.title-area {
     background-color: #fff;
 }
 
+.site-title {
+	margin-bottom: 12px;
+}
+
 .site-header .wrap {
 	max-width: none;
 }
@@ -32,7 +37,7 @@ p.site-title {
     font-size: 30px;
 }
 
-.site-header .site-title a:hover {
+a.title-area-link:hover div.title-area .site-title {
 	color: #ffd5d1;
 }
 
@@ -171,7 +176,6 @@ div#toc_container.no_bullets.contracted {
 
 div.title-area {
     color: #ffffff;
-    background-color: #aa2418;
 }
 
 .header-image .site-description, .header-image .site-title {
@@ -179,25 +183,25 @@ div.title-area {
 	text-indent: inherit;
 }
 
-.header-image a.title-area {
-}
-
 .title-area-link {
+	/*
 	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 	-moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	*/
+    background-color: #aa2418;
 	position: relative;
 	z-index: 2;
-}
-
-.header-image a.title-area-link {
 	background-position: center top !important;
 	background-size: cover !important;
 	box-shadow: 0px 3px 7px 0px #80808091;
 	display: block;
-	padding-top: 20px;
 	min-height: 130px;
 	width: 100%;
+}
+
+.header-image a.title-area-link {
+	padding-top: 20px;
 }
 
 body.header-image .title-area {
@@ -563,14 +567,21 @@ body .site-title a {
 .education-pro-blue .home-bottom input:hover[type="reset"],
 .education-pro-blue .home-bottom input:hover[type="submit"],
 .education-pro-blue .home-featured #genesis-responsive-slider .more-link:hover,
-.education-pro-blue .title-area,
-.education-pro-blue .title-area a,
 .education-pro-blue button:hover,
+.education-pro-blue .title-area,
 .education-pro-blue input:hover[type="button"],
 .education-pro-blue input:hover[type="reset"],
 .education-pro-blue input:hover[type="submit"] {
 	background-color: #bad0de;
 	color: #113f58;
+}
+
+.education-pro-blue .title-area-link {
+	background-color: #bad0de;
+}
+
+.education-pro-blue a.title-area-link:hover div.title-area .site-title {
+	color: #185a7d;
 }
 
 .education-pro-blue .content .entry-header .entry-meta .entry-time {
