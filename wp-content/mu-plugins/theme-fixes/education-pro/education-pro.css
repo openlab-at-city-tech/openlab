@@ -2,11 +2,15 @@
 
 /* 1. Header */
 
+.title-area-link {
+	position: relative;
+}
+
 div.title-area {
-    float: left;
-    position: relative;
+    position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
     width: 100%;
-/*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
 	box-shadow: none;
 }
 
@@ -35,6 +39,11 @@ p.site-title {
 .site-inner {
     clear: both;
     padding-top: 40px;
+}
+
+.widget-area.home-top,
+.widget-area.home-middle {
+	display: none;
 }
 
 /* 2. Elements */
@@ -163,7 +172,6 @@ div#toc_container.no_bullets.contracted {
 div.title-area {
     color: #ffffff;
     background-color: #aa2418;
-
 }
 
 .header-image .site-description, .header-image .site-title {
@@ -174,13 +182,21 @@ div.title-area {
 .header-image a.title-area {
 }
 
+.title-area-link {
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	position: relative;
+	z-index: 2;
+}
+
 .header-image a.title-area-link {
 	background-position: center top !important;
 	background-size: contain !important;
 	box-shadow: 0px 3px 7px 0px #80808091;
 	display: block;
 	padding-top: 20px;
-	min-height: 100px;
+	min-height: 130px;
 	width: 100%;
 }
 

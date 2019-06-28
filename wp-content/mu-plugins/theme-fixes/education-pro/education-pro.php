@@ -21,8 +21,8 @@ remove_theme_support( 'genesis-auto-updates' );
 //* Add support for custom header
 remove_theme_support( 'custom-header' );
 add_theme_support( 'custom-header', array(
-	'width'           => 300,
-	'height'          => 100,
+	'width'           => 2000,
+	'height'          => 130,
 	'header-selector' => 'a.title-area-link',
 	'header-text'     => false,
 ) );
