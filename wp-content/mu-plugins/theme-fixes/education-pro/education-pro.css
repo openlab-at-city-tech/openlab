@@ -599,22 +599,12 @@ body .site-title a {
     color: #e3f2fa;
 }
 
-/* Nav above title */
-.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu a,
-.education-pro-blue .nav-primary .genesis-nav-menu li a:hover,
-.education-pro-blue .nav-primary .genesis-nav-menu li.current-menu-item > a {
+.education-pro-blue .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-blue .genesis-nav-menu .sub-menu a,
+.education-pro-blue .genesis-nav-menu li a:hover,
+.education-pro-blue .genesis-nav-menu li.current-menu-item > a {
 	background-color: #113f58;
 	color: #fff;
-}
-
-/* Nav beside title */
-.education-pro-blue .genesis-nav-menu li a:hover,
-.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
-.education-pro-blue .genesis-nav-menu .sub-menu li a:hover,
-.education-pro-blue .genesis-nav-menu .sub-menu li.current-menu-item > a {
-	background-color: #e3f2fb;
-	color: #3b3b3b;
 }
 
 .education-pro-blue .genesis-nav-menu .sub-menu a {
@@ -622,7 +612,7 @@ body .site-title a {
 	color: #113f58;
 }
 
-.education-pro-blue .header-widget-area .genesis-nav-menu .sub-menu,
+.education-pro-blue .genesis-nav-menu .sub-menu,
 .education-pro-blue .after-entry .widget,
 .education-pro-blue .home-top .wrap,
 .education-pro-blue .sidebar .widget,
