@@ -171,6 +171,11 @@ register_default_headers( [
 		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
 		'description'   => 'Circles',
 	],
+	'wide-test' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
+		'description'   => 'Wide Test',
+	],
 ] );
 
 add_action(
