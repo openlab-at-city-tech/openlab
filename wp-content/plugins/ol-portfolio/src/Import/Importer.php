@@ -122,7 +122,7 @@ class Importer {
 		) );
 	}
 
-	public function set_logger( Logger $logger ) {
+	public function set_logger( $logger ) {
 		$this->logger = $logger;
 	}
 

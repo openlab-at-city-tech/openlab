@@ -53,18 +53,13 @@ class Exporter {
 	/**
 	 * Start export process.
 	 *
-	 * @return void
+	 * @return \WP_Error|string
 	 */
 	public function run() {
 		$dest = $this->create_dest();
 
 		if ( is_wp_error( $dest ) ) {
 			return $dest;
-		}
-
-		$manifest = $this->create_manifest();
-		if ( is_wp_error( $manifest ) ) {
-			return $manifest;
 		}
 
 		$export = $this->create_wxp();
@@ -93,7 +88,7 @@ class Exporter {
 	/**
 	 * Prepare backups files. Image uploads, etc.
 	 *
-	 * @return WP_Error|void
+	 * @return \WP_Error|void
 	 */
 	protected function prepare_files( $folder ) {
 		$folder = trailingslashit( $folder );
@@ -134,7 +129,7 @@ class Exporter {
 	/**
 	 * Create export WXP.
 	 *
-	 * @return WP_Error|bool
+	 * @return \WP_Error|bool
 	 */
 	protected function create_wxp() {
 		$wxp = new WXP( $this->exports_dir . 'wordpress.xml' );
@@ -150,35 +145,9 @@ class Exporter {
 	}
 
 	/**
-	 * Create exported portfolio site manifest.
-	 *
-	 * @return WP_Error|bool
-	 */
-	protected function create_manifest() {
-		$manifest = [];
-
-		$manifest['site']['url']         = home_url();
-		$manifest['site']['name']        = get_bloginfo( 'name' );
-		$manifest['site']['description'] = get_option( 'blogdescription' );
-		$manifest['site']['admin_email'] = get_option( 'admin_email' );
-		$manifest['site']['charset']     = get_bloginfo( 'charset' );
-		$manifest['site']['name']        = get_bloginfo( 'name' );
-		$manifest['site']['uploads']     = $this->uploads_dir;
-
-		if ( ! file_put_contents( $this->exports_dir . 'manifest.json', json_encode( $manifest ) ) ) {
-			return new WP_Error(
-				'ol.exporter.create.manifest',
-				'Unable to create manifest.json file.'
-			);
-		}
-
-		return true;
-	}
-
-	/**
 	 * Save export files into archive.
 	 *
-	 * @return void
+	 * @return \WP_Error|string
 	 */
 	protected function archive() {
 		if ( ! class_exists( 'ZipArchive' ) ) {
@@ -203,7 +172,6 @@ class Exporter {
 			);
 		}
 
-		$zip->addFile( $this->exports_dir . 'manifest.json', 'manifest.json' );
 		$zip->addFile( $this->exports_dir . 'wordpress.xml', 'wordpress.xml' );
 
 		foreach ( $this->files as $file ) {
@@ -212,8 +180,7 @@ class Exporter {
 
 		$zip->close();
 
-		// Remove Manifest and export files.
-		unlink( $this->exports_dir . 'manifest.json' );
+		// Remove export file.
 		unlink( $this->exports_dir . 'wordpress.xml' );
 
 		return $archive_pathname;
