@@ -607,6 +607,12 @@ body .site-title a {
 	color: #fff;
 }
 
+.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
+.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a {
+	background-color: #e3f2fb;
+	color: #3b3b3b;
+}
+
 .education-pro-blue .genesis-nav-menu .sub-menu a {
 	background-color: #fff;
 	color: #113f58;
