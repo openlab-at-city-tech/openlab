@@ -27,6 +27,17 @@ add_theme_support( 'custom-header', array(
 	'header-text'     => false,
 ) );
 
+// There's literally no other way to do this.
+add_action(
+	'customize_controls_enqueue_scripts',
+	function() {
+		global $_wp_theme_features;
+		$_wp_theme_features['custom-header'][0]['width'] = 2000;
+		$_wp_theme_features['custom-header'][0]['height'] = 130;
+	},
+	0
+);
+
 add_action(
 	'customize_controls_enqueue_scripts',
 	function() {
