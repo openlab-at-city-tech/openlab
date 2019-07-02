@@ -539,12 +539,10 @@ body .site-title a {
 /** COLOR SCHEMES ********************************************************/
 
 .education-pro-blue .footer-widgets .wrap a:hover,
-.education-pro-blue .footer-widgets a.button,
 .education-pro-blue .slide-excerpt h2 a,
 .education-pro-blue .home-middle .entry-title a,
 .education-pro-blue .home-top .widget_text,
 .education-pro-blue .site-footer .wrap a:hover,
-.education-pro-blue .site-footer a.button,
 .education-pro-blue .entry-content a,
 .education-pro-blue .entry-footer .entry-meta a,
 .education-pro-blue a.breadcrumb-link,
@@ -556,6 +554,22 @@ body .site-title a {
 .education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
 	color: #444;
+}
+
+.education-pro-blue button,
+.education-pro-blue a.button,
+.education-pro-blue .footer-widgets a.button,
+.education-pro-blue .site-footer a.button {
+	background-color: #e3f2fa;
+	color: #444;
+}
+
+.education-pro-blue button:hover,
+.education-pro-blue a.button:hover,
+.education-pro-blue .footer-widgets a.button:hover,
+.education-pro-blue .site-footer a.button:hover {
+	background-color: #444;
+	color: #e3f2fa;
 }
 
 .education-pro-blue .archive-description,
