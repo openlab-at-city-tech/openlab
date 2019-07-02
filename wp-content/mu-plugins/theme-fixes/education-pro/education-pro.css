@@ -236,13 +236,17 @@ body.header-image .title-area {
 	padding: 10px 0;
 }
 
-div.entry-content a, .breadcrumb a {
+div.entry-content a,
+.breadcrumb a,
+a.breadcrumb-link {
     color: #aa2418;
 	border-bottom: 1px solid #aa2418;
 	padding-bottom: 1px;
 }
 
-.entry-content a:hover {
+.entry-content a:hover,
+.breadcrumb a:hover,
+a.breadcrumb-link:hover {
     color: #000;
 	border-bottom: none;
 }
