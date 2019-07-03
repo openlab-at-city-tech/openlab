@@ -2,13 +2,17 @@
 
 /* 1. Header */
 
+.title-area-link {
+	position: relative;
+}
+
 div.title-area {
-    float: left;
-    position: relative;
+    position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
     width: 100%;
-/*    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5); */
 	box-shadow: none;
-	min-height: 130px;
+	background-color: inherit;
 }
 
 .site-header .widget-area {
@@ -19,7 +23,10 @@ div.title-area {
 
 .site-header {
     background-color: #fff;
-    height: 80px;
+}
+
+.site-title {
+	margin-bottom: 12px;
 }
 
 .site-header .wrap {
@@ -30,13 +37,18 @@ p.site-title {
     font-size: 30px;
 }
 
-.site-header .site-title a:hover {
+a.title-area-link:hover div.title-area .site-title {
 	color: #ffd5d1;
 }
 
 .site-inner {
     clear: both;
     padding-top: 40px;
+}
+
+.widget-area.home-top,
+.widget-area.home-middle {
+	display: none;
 }
 
 /* 2. Elements */
@@ -71,7 +83,7 @@ div.entry-content h2 {
     line-height: 1.2;
     text-align: left;
     width: 100%;
-    background-image: linear-gradient(to right, rgba(245,245,245,1), rgba(255,0,0,0) );
+    background-image: linear-gradient(to right, rgba(245, 245, 245, 1), rgba(245, 245, 245, 0));
     padding: .2em .2em .2em .4em;
     border-left: 3px solid #595959;
     margin-bottom: .8em;
@@ -106,8 +118,13 @@ fieldset {
 
 
 button, input[type="button"], input[type="reset"], input[type="submit"], .button, div.wp-block-file__button a {
-    background-color: #595959;
-    color: #fff;
+    background-color: #e3f2fa;
+    color: #444;
+}
+
+button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .button:hover, div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #e3f2fa;
 }
 
 h1.entry-title {
@@ -159,8 +176,6 @@ div#toc_container.no_bullets.contracted {
 
 div.title-area {
     color: #ffffff;
-    background-color: #aa2418;
-
 }
 
 .header-image .site-description, .header-image .site-title {
@@ -168,15 +183,32 @@ div.title-area {
 	text-indent: inherit;
 }
 
-.header-image .title-area {
+.title-area-link {
+	/*
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	*/
+    background-color: #aa2418;
+	position: relative;
+	z-index: 2;
+	background-position: center top !important;
+	background-size: cover !important;
 	box-shadow: 0px 3px 7px 0px #80808091;
+	display: block;
+	min-height: 130px;
+	width: 100%;
 }
 
-.header-image .site-title a {
-	min-height: 130px;
+.header-image a.title-area-link {
 	padding-top: 20px;
 }
 
+body.header-image .title-area {
+	background: transparent !important;
+}
+
+/*
 .header-image .site-description {
 	position: absolute;
 	margin-left: auto;
@@ -185,6 +217,7 @@ div.title-area {
 	right: 0;
 	top: 60px;
 }
+*/
 
 .site-header {
     border-top: 3px solid #e44a3c;
@@ -199,15 +232,39 @@ div.title-area {
 	color: #444;
 }
 
-div.entry-content a, .breadcrumb a {
-    color: #aa2418;
-    text-decoration: underline;
-    text-underline-position: under;
+.site-footer {
+	padding: 10px 0;
 }
 
-.entry-content a:hover {
+div.entry-content a,
+.breadcrumb a,
+a.breadcrumb-link {
+    color: #aa2418;
+	border-bottom: 1px solid #aa2418;
+	padding-bottom: 1px;
+}
+
+.entry-content a:hover,
+.breadcrumb a:hover,
+a.breadcrumb-link:hover {
     color: #000;
-    text-decoration: none;
+	border-bottom: none;
+}
+
+.content .entry-header .entry-meta .entry-time {
+	background-color: #e3f2fa;
+	color: #444;
+}
+
+.entry-footer .entry-meta a {
+    color: #aa2418;
+	border-bottom: 1px solid #aa2418;
+	padding-bottom: 1px;
+}
+
+.entry-footer .entry-meta a:hover {
+    color: #000;
+	border-bottom: none;
 }
 
 /* No icon for Course Profile link */
@@ -278,7 +335,6 @@ div.entry-content a, .breadcrumb a {
 /* .stacked-nav-header duplicates education-pro media queries so that we can forced stack menus with JS */
 body div.title-area {
 	margin-bottom: 0;
-	padding-bottom: 6px;
 }
 body div.header-widget-area {
 	background: #fff;
@@ -382,6 +438,11 @@ body .site-title a {
 		padding: 12px 0;
 	}
 
+	.header-widget-area .genesis-nav-menu.responsive-menu li,
+	.header-widget-area .genesis-nav-menu.responsive-menu li a {
+		background-color: rgba(255,255,255,1);
+	}
+
 	.genesis-nav-menu.responsive-menu .menu-item-has-children {
 		cursor: pointer;
 	}
@@ -478,25 +539,42 @@ body .site-title a {
 /** COLOR SCHEMES ********************************************************/
 
 .education-pro-blue .footer-widgets .wrap a:hover,
-.education-pro-blue .footer-widgets a.button,
 .education-pro-blue .slide-excerpt h2 a,
 .education-pro-blue .home-middle .entry-title a,
 .education-pro-blue .home-top .widget_text,
 .education-pro-blue .site-footer .wrap a:hover,
-.education-pro-blue .site-footer a.button,
 .education-pro-blue .entry-content a,
+.education-pro-blue .entry-footer .entry-meta a,
+.education-pro-blue a.breadcrumb-link,
 .education-pro-blue a {
+	border-color: #185a7d;
 	color: #185a7d;
 }
 
+.education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
 	color: #444;
+}
+
+.education-pro-blue button,
+.education-pro-blue a.button,
+.education-pro-blue .footer-widgets a.button,
+.education-pro-blue .site-footer a.button {
+	background-color: #e3f2fa;
+	color: #444;
+}
+
+.education-pro-blue button:hover,
+.education-pro-blue a.button:hover,
+.education-pro-blue .footer-widgets a.button:hover,
+.education-pro-blue .site-footer a.button:hover {
+	background-color: #444;
+	color: #e3f2fa;
 }
 
 .education-pro-blue .archive-description,
 .education-pro-blue .author-box,
 .education-pro-blue .button:hover,
-.education-pro-blue .content .entry-header .entry-meta .entry-time,
 .education-pro-blue .footer-widgets .wrap .button:hover,
 .education-pro-blue .footer-widgets button:hover,
 .education-pro-blue .footer-widgets input:hover[type="button"],
@@ -508,9 +586,8 @@ body .site-title a {
 .education-pro-blue .home-bottom input:hover[type="reset"],
 .education-pro-blue .home-bottom input:hover[type="submit"],
 .education-pro-blue .home-featured #genesis-responsive-slider .more-link:hover,
-.education-pro-blue .title-area,
-.education-pro-blue .title-area a,
 .education-pro-blue button:hover,
+.education-pro-blue .title-area,
 .education-pro-blue input:hover[type="button"],
 .education-pro-blue input:hover[type="reset"],
 .education-pro-blue input:hover[type="submit"] {
@@ -518,30 +595,39 @@ body .site-title a {
 	color: #113f58;
 }
 
-.education-pro-blue .button,
-.education-pro-blue .home-bottom,
-.education-pro-blue .widget-area .widget.enews-widget,
-.education-pro-blue button,
-.education-pro-blue input[type="button"],
-.education-pro-blue input[type="reset"],
-.education-pro-blue input[type="submit"] {
-	background-color: #a8b2b9;
+.education-pro-blue .title-area-link {
+	background-color: #bad0de;
 }
 
-/* Nav above title */
-.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-blue .nav-primary .genesis-nav-menu .sub-menu a,
-.education-pro-blue .nav-primary .genesis-nav-menu li a:hover,
-.education-pro-blue .nav-primary .genesis-nav-menu li.current-menu-item > a {
+.education-pro-blue a.title-area-link:hover div.title-area .site-title {
+	color: #185a7d;
+}
+
+.education-pro-blue .content .entry-header .entry-meta .entry-time {
+	background-color: #e3f2fa;
+	color: #444;
+}
+
+.education-pro-blue button:hover,
+.education-pro-blue input[type="button"]:hover,
+.education-pro-blue input[type="reset"]:hover,
+.education-pro-blue input[type="submit"]:hover,
+.education-pro-blue .button:hover,
+.education-pro-blue div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #e3f2fa;
+}
+
+.education-pro-blue .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-blue .genesis-nav-menu .sub-menu a,
+.education-pro-blue .genesis-nav-menu li a:hover,
+.education-pro-blue .genesis-nav-menu li.current-menu-item > a {
 	background-color: #113f58;
 	color: #fff;
 }
 
-/* Nav beside title */
-.education-pro-blue .genesis-nav-menu li a:hover,
-.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
-.education-pro-blue .genesis-nav-menu .sub-menu li a:hover,
-.education-pro-blue .genesis-nav-menu .sub-menu li.current-menu-item > a {
+.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
+.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a {
 	background-color: #e3f2fb;
 	color: #3b3b3b;
 }
@@ -551,7 +637,7 @@ body .site-title a {
 	color: #113f58;
 }
 
-.education-pro-blue .header-widget-area .genesis-nav-menu .sub-menu,
+.education-pro-blue .genesis-nav-menu .sub-menu,
 .education-pro-blue .after-entry .widget,
 .education-pro-blue .home-top .wrap,
 .education-pro-blue .sidebar .widget,

@@ -18,6 +18,33 @@ add_action(
  */
 remove_theme_support( 'genesis-auto-updates' );
 
+//* Add support for custom header
+remove_theme_support( 'custom-header' );
+add_theme_support( 'custom-header', array(
+	'width'           => 2000,
+	'height'          => 130,
+	'header-selector' => 'a.title-area-link',
+	'header-text'     => false,
+) );
+
+// There's literally no other way to do this.
+add_action(
+	'customize_controls_enqueue_scripts',
+	function() {
+		global $_wp_theme_features;
+		$_wp_theme_features['custom-header'][0]['width'] = 2000;
+		$_wp_theme_features['custom-header'][0]['height'] = 130;
+	},
+	0
+);
+
+add_action(
+	'customize_controls_enqueue_scripts',
+	function() {
+		wp_enqueue_script( 'openlab-education-pro-customize', content_url( 'mu-plugins/theme-fixes/education-pro/customize.js', array( 'jquery' ) ) );
+	}
+);
+
 /**
  * Remove unused Settings metaboxes.
  */
@@ -96,6 +123,26 @@ add_action(
 	}
 );
 
+add_filter(
+	'genesis_get_layouts',
+	function( $layouts ) {
+		$keys = [ 'content-sidebar', 'sidebar-content', 'full-width-content' ];
+		return array_filter(
+			$layouts,
+			function( $k ) use ( $keys ) {
+				return in_array( $k, $keys, true );
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+	}
+);
+
+remove_theme_support( 'genesis-footer-widgets' );
+$deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
+foreach ( $deregister_sidebars as $deregister_sidebar ) {
+	unregister_sidebar( $deregister_sidebar );
+}
+
 /**
  * Modify Genesis default nav areas.
  *
@@ -130,10 +177,10 @@ add_filter(
 );
 
 register_default_headers( [
-	'circles' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/1circles.png' ),
-		'description'   => 'Circles',
+	'wide-test' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
+		'description'   => 'Wide Test',
 	],
 ] );
 
@@ -220,3 +267,128 @@ function openlab_custom_header_style() {
 	}
 
 }
+
+/**
+ * Remove Copyright text in footer.
+ */
+add_filter(
+	'genesis_footer_creds_text',
+	function( $text ) {
+		$regex = '/\[footer_copyright[^\]]+\] &#x000B7;/';
+		return preg_replace( $regex, '', $text );
+	}
+);
+
+
+remove_action( 'genesis_header', 'genesis_do_header' );
+add_action( 'genesis_header', 'openlab_genesis_do_header' );
+function openlab_genesis_do_header() {
+	global $wp_registered_sidebars;
+
+	genesis_markup( array(
+		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div %s>',
+		'context' => 'title-area',
+	) );
+
+		/**
+		 * Fires inside the title area, before the site description hook.
+		 *
+		 * @since 2.6.0
+		 */
+		do_action( 'genesis_site_title' );
+
+		/**
+		 * Fires inside the title area, after the site title hook.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'genesis_site_description' );
+
+	genesis_markup( array(
+		'close'   => '</div></a>',
+		'context' => 'title-area',
+	) );
+
+	if ( has_action( 'genesis_header_right' ) || ( isset( $wp_registered_sidebars['header-right'] ) && is_active_sidebar( 'header-right' ) ) ) {
+
+		genesis_markup( array(
+			'open'    => '<div %s>',
+			'context' => 'header-widget-area',
+		) );
+
+			/**
+			 * Fires inside the header widget area wrapping markup, before the Header Right widget area.
+			 *
+			 * @since 1.5.0
+			 */
+			do_action( 'genesis_header_right' );
+			add_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
+			add_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
+			dynamic_sidebar( 'header-right' );
+			remove_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
+			remove_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
+
+		genesis_markup( array(
+			'close'   => '</div>',
+			'context' => 'header-widget-area',
+		) );
+
+	}
+
+}
+
+remove_action( 'genesis_site_title', 'genesis_seo_site_title' );
+add_action( 'genesis_site_title', 'openlab_genesis_seo_site_title' );
+/**
+ * Echo the site title into the header.
+ *
+ * Depending on the SEO option set by the user, this will either be wrapped in an `h1` or `p` element.
+ *
+ * Applies the `genesis_seo_title` filter before echoing.
+ *
+ * @since 1.1.0
+ */
+function openlab_genesis_seo_site_title() {
+
+	// Set what goes inside the wrapping tags.
+	$inside = sprintf( '%s', get_bloginfo( 'name' ) );
+
+	// Determine which wrapping tags to use.
+	$wrap = genesis_is_root_page() && 'title' === genesis_get_seo_option( 'home_h1_on' ) ? 'h1' : 'p';
+
+	// A little fallback, in case an SEO plugin is active.
+	$wrap = genesis_is_root_page() && ! genesis_get_seo_option( 'home_h1_on' ) ? 'h1' : $wrap;
+
+	// Wrap homepage site title in p tags if static front page.
+	$wrap = is_front_page() && ! is_home() ? 'p' : $wrap;
+
+	// And finally, $wrap in h1 if HTML5 & semantic headings enabled.
+	$wrap = genesis_html5() && genesis_get_seo_option( 'semantic_headings' ) ? 'h1' : $wrap;
+
+	/**
+	 * Site title wrapping element
+	 *
+	 * The wrapping element for the site title.
+	 *
+	 * @since 2.2.3
+	 *
+	 * @param string $wrap The wrapping element (h1, h2, p, etc.).
+	 */
+	$wrap = apply_filters( 'genesis_site_title_wrap', $wrap );
+
+	// Build the title.
+	$title = genesis_markup( array(
+		'open'    => sprintf( "<{$wrap} %s>", genesis_attr( 'site-title' ) ),
+		'close'   => "</{$wrap}>",
+		'content' => $inside,
+		'context' => 'site-title',
+		'echo'    => false,
+		'params'  => array(
+			'wrap' => $wrap,
+		),
+	) );
+
+	echo apply_filters( 'genesis_seo_title', $title, $inside, $wrap ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+}
+
