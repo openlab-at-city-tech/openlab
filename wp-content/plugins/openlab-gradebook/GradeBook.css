@@ -203,6 +203,9 @@ body.admin_page_oplb-gradebook-upload-csv #local-env-flag {
 body.admin_page_oplb-gradebook-upload-csv #wpcontent {
   padding-top: 21px !important;
 }
+body .bold {
+  font-weight: bold;
+}
 body .overline {
   text-decoration: overline;
 }
@@ -491,7 +494,7 @@ span.twitter-typeahead {
   flex: 1 0 40%;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon.inactive button {
-  color: #8F8F8F;
+  color: #8f8f8f;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input {
   opacity: 1;
@@ -777,6 +780,8 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .scrollable td {
   min-width: 180px;
   max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 #gradebookWrapper .table-wrapper .scrollable td {
   padding-bottom: 17px;
