@@ -110,8 +110,6 @@ function enqueue_oplb_gradebook_scripts() {
 
     $app_base = plugins_url('js', __FILE__);
 
-    //for media functions (to upload CSV files)
-    wp_enqueue_media();
     wp_enqueue_script('jquery-ui-datepicker');
 
 	$oplb_gradebook_develop = false;
@@ -175,11 +173,6 @@ function init_oplb_gradebook() {
     }
     
 }
-
-add_action('admin_footer', function(){
-    require_once( ABSPATH . 'wp-includes/media-template.php' );
-    wp_print_media_templates();
-});
 
 /**
  * Legacy: callback for OpenLab GradeBook settings instantiation

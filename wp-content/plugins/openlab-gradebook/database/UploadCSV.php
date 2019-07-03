@@ -230,7 +230,7 @@ class gradebook_upload_csv_API
         foreach ($headers as $index => $header) {
 
             //start setting up assignments, so we have them if this CSV is formatted correctly
-            if ($index > 2) {
+            if ($index > 4) {
                 $assignments[$assignmentdex] = $header;
                 $assignmentdex++;
                 continue;
@@ -285,7 +285,7 @@ class gradebook_upload_csv_API
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
             $existing_assignment = $wpdb->get_results($query);
 
-            if ($existing_assignment && !empty($existing_assignment)) {
+            if (!empty($existing_assignment)) {
                 $to_update = array();
                 $to_update_type = array();
 
@@ -331,71 +331,8 @@ class gradebook_upload_csv_API
             }
 
             //if the assignment doesn't exist, insert it
-            $query = $wpdb->prepare("SELECT assign_order FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
-            $assignOrders = $wpdb->get_col($query);
+            //$this->insertAssignment($weights, $thisdex, $assignment, $gbid);
 
-            if (!$assignOrders) {
-                $assignOrders = array(0);
-            }
-            $assignOrder = max($assignOrders) + 1;
-
-            $assign_weight = 0;
-
-            if (isset($weights[$thisdex])) {
-
-                $assign_weight = floatval($weights[$thisdex]);
-            }
-
-            $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
-                'assign_name' => sanitize_text_field($assignment),
-                'assign_date' => date('Y-m-d'),
-                'assign_due' => date('Y-m-d', strtotime("+1 week")),
-                'assign_category' => '',
-                'assign_visibility' => 'Student',
-                'assign_grade_type' => 'numeric',
-                'gbid' => $gbid,
-                'assign_order' => $assignOrder,
-                'assign_weight' => $assign_weight,
-            ), array(
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
-                '%d',
-                '%f',
-            )
-            );
-
-            //also need to insert rows for any existing students - we'll address students off the CSV in a minute (existing or otherwise)
-            $assignID = $wpdb->insert_id;
-
-            //store assignment info for later use
-            $assignments_stored[$thisdex]['name'] = $assignment;
-            $assignments_stored[$thisdex]['amid'] = $assignID;
-            $assignments_stored[$thisdex]['assign_order'] = $assignOrder;
-            $assignments_stored[$thisdex]['assign_weight'] = $assign_weight;
-
-            $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
-            $studentIDs = $wpdb->get_results($query, ARRAY_N);
-
-            foreach ($studentIDs as $value) {
-                $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'amid' => $assignID,
-                    'uid' => $value[0],
-                    'gbid' => $gbid,
-                    'assign_order' => $assignOrder,
-                    'assign_points_earned' => 0,
-                ), array(
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%f',
-                )
-                );
-            }
         }
 
         //finally, let's check for individual users on the CSV
@@ -413,6 +350,77 @@ class gradebook_upload_csv_API
         }
 
         return 'success';
+    }
+
+    private function insertAssignment($weights, $thisdex, $assignment, $gbid)
+    {
+        global $wpdb;
+
+        $query = $wpdb->prepare("SELECT assign_order FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
+        $assignOrders = $wpdb->get_col($query);
+
+        if (!$assignOrders) {
+            $assignOrders = array(0);
+        }
+        $assignOrder = max($assignOrders) + 1;
+
+        $assign_weight = 0;
+
+        if (isset($weights[$thisdex])) {
+
+            $assign_weight = floatval($weights[$thisdex]);
+        }
+
+        $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
+            'assign_name' => sanitize_text_field($assignment),
+            'assign_date' => date('Y-m-d'),
+            'assign_due' => date('Y-m-d', strtotime("+1 week")),
+            'assign_category' => '',
+            'assign_visibility' => 'Student',
+            'assign_grade_type' => 'numeric',
+            'gbid' => $gbid,
+            'assign_order' => $assignOrder,
+            'assign_weight' => $assign_weight,
+        ), array(
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%d',
+            '%f',
+        )
+        );
+
+        //also need to insert rows for any existing students - we'll address students off the CSV in a minute (existing or otherwise)
+        $assignID = $wpdb->insert_id;
+
+        //store assignment info for later use
+        $assignments_stored[$thisdex]['name'] = $assignment;
+        $assignments_stored[$thisdex]['amid'] = $assignID;
+        $assignments_stored[$thisdex]['assign_order'] = $assignOrder;
+        $assignments_stored[$thisdex]['assign_weight'] = $assign_weight;
+
+        $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
+        $studentIDs = $wpdb->get_results($query, ARRAY_N);
+
+        foreach ($studentIDs as $value) {
+            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                'amid' => $assignID,
+                'uid' => $value[0],
+                'gbid' => $gbid,
+                'assign_order' => $assignOrder,
+                'assign_points_earned' => 0,
+            ), array(
+                '%d',
+                '%d',
+                '%d',
+                '%d',
+                '%f',
+            )
+            );
+        }
     }
 
     private function checkStudent($student, $gbid)
@@ -489,92 +497,29 @@ class gradebook_upload_csv_API
             foreach ($assignments as $assignment) {
 
                 $this_grade = $this->processGrade($grades[$assignment['name']]);
+                $is_null = ($this_grade === '--' || empty($this_grade)) ? 1 : 0;
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
                     'assign_points_earned' => $this_grade,
+                    'is_null' => $is_null,
                 ), array(
                     'amid' => $assignment['amid'],
                     'uid' => $student_id,
                 ), array(
                     '%f',
+                    '%d',
                 ), array(
                     '%d',
                     '%d',
                 )
                 );
+
             }
         } else {
 
-            //add student to course
-            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
-                'uid' => $student_id,
-                'gbid' => $gbid,
-                'role' => 'student'), array(
-                '%d',
-                '%d',
-                '%s',
-            )
-            );
-            //we need to get a list of all assignments, in case there are legacy assignments not on this spreadsheet
-            $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}oplb_gradebook_assignments");
-            $current_assignments = $wpdb->get_results($query, ARRAY_A);
+            //currently not adding students
+            //$this->addStudentToCourse($student_id, $gbid, $assignments, $grades);
 
-            foreach ($assignments as $assigndex => $assignment) {
-
-                $this_grade = $this->processGrade($grades[$assignment['name']]);
-
-                foreach ($current_assignments as $currentdex => $current_assignment) {
-
-                    if ($current_assignment['id'] === $assignment['amid']) {
-                        unset($current_assignments[$currentdex]);
-                    }
-                }
-
-                $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'amid' => $assignment['amid'],
-                    'uid' => $student_id,
-                    'gbid' => $gbid,
-                    'assign_order' => $assignment['assign_order'],
-                    'assign_points_earned' => $this_grade,
-                ), array(
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%f',
-                )
-                );
-            }
-
-            if (!empty($current_assignments)) {
-
-                foreach ($current_assignments as $remaining_assignment) {
-
-                    $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $remaining_assignment['id']);
-                    $this_assignment_get = $wpdb->get_results($query, ARRAY_A);
-
-                    if (!$this_assignment_get || empty($this_assignment_get)) {
-                        continue;
-                    }
-
-                    $this_assignment = $this_assignment_get[0];
-
-                    $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                        'amid' => $this_assignment['id'],
-                        'uid' => $student_id,
-                        'gbid' => $gbid,
-                        'assign_order' => $this_assignment['assign_order'],
-                        'assign_points_earned' => 0,
-                    ), array(
-                        '%d',
-                        '%d',
-                        '%d',
-                        '%d',
-                        '%f',
-                    )
-                    );
-                }
-            }
         }
 
         return $result;
@@ -639,6 +584,83 @@ class gradebook_upload_csv_API
         return $grade_out;
     }
 
+    private function addStudentToCourse($student_id, $gbid, $assignments, $grades)
+    {
+        global $wpdb;
+
+        //add student to course
+        $wpdb->insert("{$wpdb->prefix}oplb_gradebook_users", array(
+            'uid' => $student_id,
+            'gbid' => $gbid,
+            'role' => 'student'), array(
+            '%d',
+            '%d',
+            '%s',
+        )
+        );
+        //we need to get a list of all assignments, in case there are legacy assignments not on this spreadsheet
+        $query = "SELECT id FROM {$wpdb->prefix}oplb_gradebook_assignments";
+        $current_assignments = $wpdb->get_results($query, ARRAY_A);
+
+        foreach ($assignments as $assigndex => $assignment) {
+
+            $this_grade = $this->processGrade($grades[$assignment['name']]);
+
+            foreach ($current_assignments as $currentdex => $current_assignment) {
+
+                if ($current_assignment['id'] === $assignment['amid']) {
+                    unset($current_assignments[$currentdex]);
+                }
+            }
+
+            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                'amid' => $assignment['amid'],
+                'uid' => $student_id,
+                'gbid' => $gbid,
+                'assign_order' => $assignment['assign_order'],
+                'assign_points_earned' => $this_grade,
+            ), array(
+                '%d',
+                '%d',
+                '%d',
+                '%d',
+                '%f',
+            )
+            );
+        }
+
+        if (!empty($current_assignments)) {
+
+            foreach ($current_assignments as $remaining_assignment) {
+
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE id = %d", $remaining_assignment['id']);
+                $this_assignment_get = $wpdb->get_results($query, ARRAY_A);
+
+                if (!$this_assignment_get || empty($this_assignment_get)) {
+                    continue;
+                }
+
+                $this_assignment = $this_assignment_get[0];
+
+                $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                    'amid' => $this_assignment['id'],
+                    'uid' => $student_id,
+                    'gbid' => $gbid,
+                    'assign_order' => $this_assignment['assign_order'],
+                    'assign_points_earned' => 0,
+                ), array(
+                    '%d',
+                    '%d',
+                    '%d',
+                    '%d',
+                    '%f',
+                )
+                );
+            }
+        }
+
+    }
+
     /**
      * Return count of regex matches for common type of upload attack eval(base64($malicious_payload))
      * @param  string $str [description]
@@ -691,7 +713,11 @@ class gradebook_upload_csv_API
         update_option('openlab_gradebook_csv_error_log', $error_log);
 
         $csv_link = admin_url("admin.php?page=oplb_gradebook&gradebook_download_csv={$gbid}#gradebook/{$gbid}");
-        $outbound = "Download a CSV record of errors <a href='$csv_link'>here</a>";
+
+        ob_start();
+        include plugin_dir_path(__DIR__) . 'components/parts/partials/upload-csv-error.php';
+        $outbound = ob_get_clean();
+
         $message = array(
             'response' => 'oplb-gradebook-error',
             'error' => $outbound,
