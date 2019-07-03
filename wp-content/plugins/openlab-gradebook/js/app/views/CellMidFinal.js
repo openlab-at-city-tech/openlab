@@ -174,8 +174,6 @@ define([
 				$("#edit-cell-dropdown-mid-final-template").html()
             );
 
-            console.log('student going into mid grades', this.model);
-            
 			var compiled = template({
 				student: this.model,
 				grades: this.grades,

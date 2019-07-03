@@ -6,6 +6,7 @@ define([
 	"views/AssignmentView",
 	"views/EditStudentView",
 	"views/EditAssignmentView",
+	"views/uploadModal",
 	"models/Course"
 ], function(
 	$,
@@ -15,6 +16,7 @@ define([
 	AssignmentView,
 	EditStudentView,
 	EditAssignmentView,
+	uploadModal,
 	Course
 ) {
 	Backbone.pubSub = _.extend({}, Backbone.Events);
@@ -88,6 +90,8 @@ define([
 
 			Backbone.pubSub.on("updateAverageGrade", this.updateAverageGrade, this);
 
+			this.render();
+
 			this.initRender();
 
 			$(window).on("resize", function(e) {
@@ -108,6 +112,7 @@ define([
 		},
 		events: {
 			"click button#add-student": "addStudent",
+			"click button#upload-modal": "uploadModal",
 			"click button#download-csv": "downloadCSV",
 			"click button#download-csv-mobile": "downloadCSV",
 			"click button#add-assignment": "addAssignment",
@@ -462,6 +467,21 @@ define([
 			e.preventDefault();
 
 			this.course.export2csv();
+		},
+		uploadModal: function(e){
+
+			var checkElem = $("body").find("#modalDialogUpload");
+
+			//prevent double modals
+			if(checkElem.length){
+				return false;
+			}
+
+			var view = new uploadModal({
+				course: this.course,
+			});
+
+			$("body").append(view.render());
 		},
 		checkStudentSortDirection: function() {
 			if (this.gradebook.students.sort_direction === "asc") {

@@ -4,14 +4,16 @@ define([
 	"underscore",
 	"models/User",
 	"models/UserList",
+	"views/uploadCSV",
 	"bootstrap3-typeahead"
-], function($, Backbone, _, User, UserList, typeahead) {
+], function($, Backbone, _, User, UserList, uploadCSV, typeahead) {
 	var uploadModal = Backbone.View.extend({
 		id: "upload-modal",
 		className: "modal fade",
 		events: {
-			"shown.bs.modal": "renderUploader",
-			'hidden.bs.modal': 'editCancel',
+			"hidden.bs.modal": "editCancel",
+			"click button#modal-download-csv": "downloadCSV",
+			"click button#modal-upload-csv": "uploadCSV"
 		},
 		initialize: function(options) {
 			$("body").append(this.render().el);
@@ -26,19 +28,26 @@ define([
 			this.$el.modal("show");
 			return self.el;
 		},
-		renderUploader: function() {
-			$("#upload-csv-input").fileinput({
-				uploadUrl: oplbGradebook.ajaxURL + '/?action=oplb_gradebook_upload_csv&nonce=' + oplbGradebook.nonce + '&gbid=' + this.course.get('id'),
-				maxFileCount: 1
-			}).on('fileuploaded', function(e, params) {
-				console.log('file uploaded', e, params);
-			});
+		downloadCSV: function(e) {
+			e.preventDefault();
+
+			this.course.export2csv();
 		},
-		editCancel: function () {
-			this.$el.data('modal', null);
+		uploadCSV: function(e) {
+			e.preventDefault();
+
+			var view = new uploadCSV({
+				course: this.course,
+				gradebook: this.gradebook
+			});
+			
+			$("body").append(view.render());
+		},
+		editCancel: function() {
+			this.$el.data("modal", null);
 			this.remove();
 			return false;
-		},
+		}
 	});
 
 	return uploadModal;
