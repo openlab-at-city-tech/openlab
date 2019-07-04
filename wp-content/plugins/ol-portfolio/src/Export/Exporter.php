@@ -111,17 +111,12 @@ class Exporter {
 			$iterator = UploadsIterator::create( $folder );
 
 			foreach ( $iterator as $file ) {
-				// Ignore thumbnails.
-				if ( preg_match( "/\-[0-9]{1,4}x[0-9]{1,4}.+\.(jpg|png|gif)$/i", $file->getFilename() ) ) {
-					continue;
-				}
-
 				$this->files[] = $file->getPathname();
 			}
 		} catch ( UnexpectedValueException $e ) {
 			return new WP_Error(
 				'ol.exporter.prepare.files',
-				sprintf( 'Could not open path: %', $e->$e->getMessage() )
+				sprintf( 'Could not open path: %', $e->getMessage() )
 			);
 		}
 	}

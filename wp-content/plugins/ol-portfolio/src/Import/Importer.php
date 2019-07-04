@@ -77,7 +77,7 @@ class Importer {
 	/**
 	 * Logger instance.
 	 *
-	 * @var \Logger
+	 * @var Logger
 	 */
 	protected $logger;
 
@@ -940,6 +940,11 @@ class Importer {
 		// e.g. location is 2003/05/image.jpg but the attachment post_date is 2010/09, see media_handle_upload()
 		$post['upload_date'] = $post['post_date'];
 		foreach ( $meta as $meta_item ) {
+			if ( $meta_item['key'] === '_wp_attachment_metadata' ) {
+				$post['metadata'] = maybe_unserialize( $meta_item['value'] );
+				continue;
+			}
+
 			if ( $meta_item['key'] !== '_wp_attached_file' ) {
 				continue;
 			}
@@ -947,7 +952,6 @@ class Importer {
 			if ( preg_match( '%^[0-9]{4}/[0-9]{2}%', $meta_item['value'], $matches ) ) {
 				$post['upload_date'] = $matches[0];
 			}
-			break;
 		}
 
 		// if the URL is absolute, but does not contain address, then upload it assuming base_site_url
@@ -955,7 +959,7 @@ class Importer {
 			$remote_url = rtrim( $this->base_url, '/' ) . $remote_url;
 		}
 
-		$upload = $this->fetch_local_file( $remote_url, $post );
+		$upload = $this->copy_local_file( $remote_url, $post );
 		if ( is_wp_error( $upload ) ) {
 			return $upload;
 		}
@@ -979,8 +983,14 @@ class Importer {
 			return $post_id;
 		}
 
-		$attachment_metadata = wp_generate_attachment_metadata( $post_id, $upload['file'] );
-		wp_update_attachment_metadata( $post_id, $attachment_metadata );
+		// Generate metadata for PDFs. This creates PDF thubmnails.
+		if ( $info['type'] === 'application/pdf' ) {
+			$post['metadata'] = wp_generate_attachment_metadata( $post_id, $upload['file'] );
+		}
+
+		if ( ! empty( $post['metadata'] ) ) {
+			wp_update_attachment_metadata( $post_id, $post['metadata'] );
+		}
 
 		// Map this image URL later if we need to
 		$this->url_remap[ $remote_url ] = $upload['url'];
@@ -991,17 +1001,16 @@ class Importer {
 			$this->url_remap[ $insecure_url ] = $upload['url'];
 		}
 
-		if ( $this->options['aggressive_url_search'] ) {
-			// remap resized image URLs, works by stripping the extension and remapping the URL stub.
-			/*if ( preg_match( '!^image/!', $info['type'] ) ) {
-				$parts = pathinfo( $remote_url );
-				$name = basename( $parts['basename'], ".{$parts['extension']}" ); // PATHINFO_FILENAME in PHP 5.2
+		// Add additional image sizes for remapping.
+		if ( preg_match( '!^image/!', $info['type'] ) && ! empty( $post['metadata']['sizes'] ) ) {
+			$name = basename( $upload['url'] );
 
-				$parts_new = pathinfo( $upload['url'] );
-				$name_new = basename( $parts_new['basename'], ".{$parts_new['extension']}" );
+			foreach ( $post['metadata']['sizes'] as $size => $data ) {
+				$local  = str_replace( $name, $data['file'], $upload['url'] );
+				$remote = str_replace( $name, $data['file'], $remote_url );
 
-				$this->url_remap[$parts['dirname'] . '/' . $name] = $parts_new['dirname'] . '/' . $name_new;
-			}*/
+				$this->url_remap[ $remote ] = $local;
+			}
 		}
 
 		return $post_id;
@@ -1699,7 +1708,7 @@ class Importer {
 	 * @param array $post Attachment details
 	 * @return array|WP_Error Local file location details on success, WP_Error otherwise
 	 */
-	protected function fetch_local_file( $url, $post ) {
+	protected function copy_local_file( $url, $post ) {
 		// extract the file name and extension from the url
 		$name = basename( $url );
 
@@ -1713,12 +1722,22 @@ class Importer {
 		}
 
 		$filesize = filesize( $upload['file'] );
-
 		$max_size = (int) $this->max_attachment_size();
+
 		if ( ! empty( $max_size ) && $filesize > $max_size ) {
 			unlink( $upload['file'] );
 			$message = sprintf( 'Local file is too large, limit is %s', size_format( $max_size ) );
 			return new WP_Error( 'import_file_error', $message );
+		}
+
+		// Copy thumbnails.
+		if ( ! empty( $post['metadata']['sizes'] ) ) {
+			foreach ( $post['metadata']['sizes'] as $size => $data ) {
+				$path = str_replace( $name, $data['file'], $filename );
+				$bits = file_get_contents( $path );
+
+				wp_upload_bits( $data['file'], 0, $bits, $post['upload_date'] );
+			}
 		}
 
 		return $upload;
