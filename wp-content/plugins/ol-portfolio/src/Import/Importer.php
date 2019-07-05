@@ -1734,8 +1734,14 @@ class Importer {
 		if ( ! empty( $post['metadata']['sizes'] ) ) {
 			foreach ( $post['metadata']['sizes'] as $size => $data ) {
 				$path = str_replace( $name, $data['file'], $filename );
-				$bits = file_get_contents( $path );
+				$file = str_replace( $name, $data['file'], $upload['file'] );
 
+				// Image size with different names might have same size.
+				if ( file_exists( $file ) ) {
+					continue;
+				}
+
+				$bits = file_get_contents( $path );
 				wp_upload_bits( $data['file'], 0, $bits, $post['upload_date'] );
 			}
 		}
