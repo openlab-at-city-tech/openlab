@@ -75,8 +75,9 @@
 		event.preventDefault();
 
 		// Get data from modal.
-		var title = $( app.modal.container ).find( '#title' ).val();
-		var type = $( app.modal.container ).find( 'input[name="type"]:checked' ).val();
+		var title      = $( app.modal.container ).find( '#title' ).val();
+		var type       = $( app.modal.container ).find( 'input[name="type"]:checked' ).val();
+		var citation   = $( app.modal.container ).find( '#citation' ).html();
 		var annotation = $( app.modal.container ).find( '#annotation' ).val();
 
 		var data = {
@@ -86,10 +87,7 @@
 			status: 'draft',
 			type: type,
 			meta: {
-				'source_id': app.entry.id,
-				'source_date': app.entry.date,
-				'source_type': app.entry.type,
-				'source_site_id': app.entry.site_id,
+				'portfolio_citation': citation,
 				'portfolio_annotation': annotation,
 			},
 		};

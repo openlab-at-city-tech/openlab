@@ -14,6 +14,13 @@ class Service implements Registerable {
 	const ID = 'share';
 
 	/**
+	 * Current user's Portfolio ID.
+	 *
+	 * @var int
+	 */
+	protected $portfolio_id = 0;
+
+	/**
 	 * Register portfolio share service.
 	 *
 	 * @return void
@@ -21,9 +28,7 @@ class Service implements Registerable {
 	public function register() {
 		add_action( 'init', [ $this, 'register_meta' ] );
 
-		// @todo Change to 'template_redirect'
-		add_action( 'wp_enqueue_scripts', [ $this, 'init' ] );
-		add_action( 'template_redirect',  [ $this, 'source_init' ] );
+		add_action( 'template_redirect', [ $this, 'init' ] );
 		add_action( 'add_meta_boxes', [ $this, 'meta_boxes' ], 10, 2 );
 		add_action( 'save_post', [ $this, 'save_meta' ] );
 	}
@@ -35,67 +40,60 @@ class Service implements Registerable {
 	 */
 	public function register_meta() {
 		register_meta( 'post', 'portfolio_post_id', [
-			'type' => 'integer',
-			'single' => true,
+			'type'              => 'integer',
+			'single'            => true,
 			'sanitize_callback' => 'absint',
-			'show_in_rest' => true,
+			'show_in_rest'      => true,
 		] );
 
 		register_meta( 'comment', 'portfolio_post_id', [
-			'type' => 'integer',
-			'single' => true,
+			'type'              => 'integer',
+			'single'            => true,
 			'sanitize_callback' => 'absint',
-			'show_in_rest' => true,
+			'show_in_rest'      => true,
 		] );
 
-		register_meta( 'post', 'source_id', [
-			'type' => 'integer',
-			'single' => true,
-			'sanitize_callback' => 'absint',
-			'show_in_rest' => true,
-		] );
-
-		register_meta( 'post', 'source_type', [
-			'type' => 'string',
-			'single' => true,
-			'sanitize_callback' => function( $value ) {
-				if ( in_array( $value, [ 'post', 'page', 'comment' ], true ) ) {
-					return $value;
-				}
-
-				return 'posts';
-			},
-			'show_in_rest' => true,
-		] );
-
-		register_meta( 'post', 'source_site_id', [
-			'type' => 'integer',
-			'single' => true,
-			'sanitize_callback' => 'absint',
-			'show_in_rest' => true,
-		] );
-
-		register_meta( 'post', 'source_date', [
-			'type' => 'string',
-			'single' => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'show_in_rest' => true,
+		register_meta( 'post', 'portfolio_citation', [
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'wp_kses_post',
+			'show_in_rest'      => true,
 		] );
 
 		register_meta( 'post', 'portfolio_annotation', [
-			'type' => 'string',
-			'single' => true,
+			'type'              => 'string',
+			'single'            => true,
 			'sanitize_callback' => 'sanitize_textarea_field',
-			'show_in_rest' => true,
+			'show_in_rest'      => true,
 		] );
 	}
 
 	/**
-	 * Initialize "Add to Portfolio" feature.
+	 * Initialize the feature.
 	 *
 	 * @return void
 	 */
 	public function init() {
+		$type = openlab_get_site_type( get_current_blog_id() );
+
+		switch ( $type ) {
+			case 'course':
+			case 'project':
+					$this->source_init();
+					break;
+
+			case 'portfolio':
+					$this->portfolio_init();
+					break;
+		}
+	}
+
+	/**
+	 * Handles "Course" and "Project" type sites.
+	 *
+	 * @return void
+	 */
+	public function source_init() {
 		$user = wp_get_current_user();
 
 		wp_register_script(
@@ -111,19 +109,35 @@ class Service implements Registerable {
 
 		// Bail, if user doesn't have portfolio.
 		$portfolio_group_id = openlab_get_user_portfolio_id( $user->ID );
-		$portfolio_site_id  = openlab_get_site_id_by_group_id( $portfolio_group_id );
+		$this->portfolio_id = openlab_get_site_id_by_group_id( $portfolio_group_id );
 
-		if ( empty( $portfolio_site_id ) ) {
+		if ( empty( $this->portfolio_id ) ) {
 			return;
 		}
 
-		// Bail, if we don't support site type. Supported: 'course' and 'project'.
-		$type = openlab_get_site_type( get_current_blog_id() );
+		// Render required markup.
+		add_filter( 'the_content', [ $this, 'post_button' ], 200 );
+		add_filter( 'comment_text', [ $this, 'comment_button' ], 200 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_action( 'wp_footer', [ $this, 'dialog_template' ] );
+	}
 
-		if ( ! in_array( $type, [ 'course', 'project' ] ) ) {
-			return;
-		}
+	/**
+	 * Handles "Portfolio" type sites.
+	 *
+	 * @return void
+	 */
+	public function portfolio_init() {
+		add_filter( 'the_content', [ $this, 'entry_source_note' ] );
+		add_action( 'wp_footer', [ $this, 'entry_source_styles' ] );
+	}
 
+	/**
+	 * Enqueue assets.
+	 *
+	 * @return void
+	 */
+	public function enqueue_assets() {
 		wp_enqueue_style(
 			'add-to-portfolio-styles',
 			plugins_url( 'assets/css/share.css', ROOT_FILE ),
@@ -141,32 +155,11 @@ class Service implements Registerable {
 
 		$settings = [
 			'root'          => esc_url_raw( get_rest_url() ),
-			'portfolioRoot' => esc_url_raw( get_rest_url( $portfolio_site_id ) ),
+			'portfolioRoot' => esc_url_raw( get_rest_url( $this->portfolio_id ) ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
 		];
 
 		wp_localize_script( 'add-to-portfolio', 'portfolioSettings', $settings );
-
-		// Render required markup.
-		add_filter( 'the_content', [ $this, 'post_button' ], 200 );
-		add_filter( 'comment_text', [ $this, 'comment_button' ], 200 );
-		add_action( 'wp_footer', [ $this, 'dialog_template' ] );
-	}
-
-	/**
-	 * Register "Added to Portfolio" content front-end hooks.
-	 *
-	 * @return void
-	 */
-	public function source_init() {
-		$type = openlab_get_site_type( get_current_blog_id() );
-
-		if ( 'portfolio' !== $type ) {
-			return;
-		}
-
-		add_filter( 'the_content', [ $this, 'entry_source_note' ] );
-		add_action( 'wp_footer', [ $this, 'entry_source_styles' ] );
 	}
 
 	/**
@@ -189,10 +182,22 @@ class Service implements Registerable {
 			return $content;
 		}
 
-		ob_start();
-		include ROOT_DIR . '/views/share/button/post.php';
-		$button = ob_get_clean();
+		$endpoits = [ 'post' => 'posts', 'page' => 'pages' ];
+		$entry = [
+			'id'        => (int) $post->ID,
+			'url'       => get_the_permalink( $post->ID ),
+			'type'      => isset( $endpoits[ $post->post_type ] ) ? $endpoits[ $post->post_type ] : 'posts',
+			'date'      => get_the_date( '', $post ),
+			'site_id'   => get_current_blog_id(),
+			'site_name' => get_option( 'blogname' ),
+			'added'     => get_post_meta( $post->ID, 'portfolio_post_id', true ),
+		];
 
+		ob_start();
+		extract( [ 'data' => $entry ], EXTR_SKIP );
+		include ROOT_DIR . '/views/share/button/post.php';
+
+		$button = ob_get_clean();
 		$content .= $button;
 
 		return $content;
@@ -211,10 +216,21 @@ class Service implements Registerable {
 			return $text;
 		}
 
-		ob_start();
-		include ROOT_DIR . '/views/share/button/comment.php';
-		$button = ob_get_clean();
+		$entry = [
+			'id'        => (int) $comment->comment_ID,
+			'url'       => get_comment_link( $comment ),
+			'type'      => 'comments',
+			'date'      => get_comment_date( '', $comment ),
+			'site_id'   => get_current_blog_id(),
+			'site_name' => get_option( 'blogname' ),
+			'added'     => get_comment_meta( $comment->comment_ID, 'portfolio_post_id', true ),
+		];
 
+		ob_start();
+		extract( [ 'data' => $entry ], EXTR_SKIP );
+		include ROOT_DIR . '/views/share/button/comment.php';
+
+		$button = ob_get_clean();
 		$text .= $button;
 
 		return $text;
@@ -234,19 +250,19 @@ class Service implements Registerable {
 	 * @return string $output
 	 */
 	public function entry_source_note( $content ) {
-		$_post = get_post();
-		$data  = $this->get_citation_data( $_post );
+		$post = get_post();
+		$data = [
+			'citation'   => get_post_meta( $post->ID, 'portfolio_citation', true ),
+			'annotation' => get_post_meta( $post->ID, 'portfolio_annotation', true ),
+		];
 
 		// Check if the entry was added from other site.
-		if ( empty( $data['source_id'] ) ) {
+		if ( empty( $data['citation'] ) ) {
 			return $content;
 		}
 
-		$data['annotation'] = get_post_meta( $_post->ID, 'portfolio_annotation', true );
-
-		extract( [ 'data' => $data ], EXTR_SKIP );
 		ob_start();
-
+		extract( [ 'data' => $data ], EXTR_SKIP );
 		include ROOT_DIR . '/views/share/entry-source.php';
 
 		$output = ob_get_clean();
@@ -295,8 +311,8 @@ class Service implements Registerable {
 		}
 
 		// Check if the entry was added from other site.
-		$source_id = get_post_meta( (int) $post->ID, 'source_id', true );
-		if ( empty( $source_id ) ) {
+		$citation = get_post_meta( (int) $post->ID, 'portfolio_citation', true );
+		if ( empty( $citation ) ) {
 			return;
 		}
 
@@ -349,11 +365,10 @@ class Service implements Registerable {
 	 * @return void
 	 */
 	public function render_citation_meta( $post ) {
-		$data = $this->get_citation_data( $post );
+		$citation = get_post_meta( $post->ID, 'portfolio_citation', true );
 
-		extract( [ 'data' => $data ], EXTR_SKIP );
-
-		include ROOT_DIR . '/views/share/citation.php';
+		extract( [ 'data' => $citation ], EXTR_SKIP );
+		include ROOT_DIR . '/views/share/meta/citation.php';
 	}
 
 	/**
@@ -364,35 +379,8 @@ class Service implements Registerable {
 	 */
 	public function render_annotation_meta( $post ) {
 		$annotation = get_post_meta( $post->ID, 'portfolio_annotation', true );
-		?>
-		<textarea id="annotation" class="large-text" name="portfolio_annotation" rows="5"><?php echo esc_textarea( $annotation ); ?></textarea>
-		<?php
-		wp_nonce_field( 'portfolio_annotation', 'portfolio_annotation_nonce' );
-	}
 
-	/**
-	 * Generate "Portfolio" citation data.
-	 *
-	 * @param WP_Post $post
-	 * @return array $data
-	 */
-	protected function get_citation_data( $post ) {
-		$source_id = get_post_meta( $post->ID, 'source_id', true );
-		$site_id   = get_post_meta( $post->ID, 'source_site_id', true );
-		$date      = get_post_meta( $post->ID, 'source_date', true );
-		$type      = get_post_meta( $post->ID, 'source_type', true );
-
-		$data = [
-			'source_id' => $source_id,
-			'date'      => mysql2date( 'F j, Y', $date ),
-		];
-
-		// @todo cache this.
-		switch_to_blog( $site_id );
-		$data['site_name'] = get_option( 'blogname' );
-		$data['url']       = ( 'comment' === $type ) ? get_comment_link( $source_id ) : get_permalink( $source_id );
-		restore_current_blog();
-
-		return $data;
+		extract( [ 'data' => $annotation ], EXTR_SKIP );
+		include ROOT_DIR . '/views/share/meta/annotation.php';
 	}
 }
