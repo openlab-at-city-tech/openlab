@@ -13,21 +13,8 @@ class gradebook_upload_csv_API
     /**
      * Handle uploading of the CSV
      */
-    public function upload_csv($files, $name)
+    public function upload_csv()
     {
-
-        //[action] => oplb_gradebook_upload_csv
-        //[nonce] => b093dbdf25
-        //[fileId] => 1050_Best_Course_Ever_2.csv
-        //[initialPreview] => []
-        //[initialPreviewConfig] => []
-        //[initialPreviewThumbTags] => []
-        //echo '<pre>'.print_r($_FILES['upload-csv'], true).'</pre>';
-        //[name] => Best_Course_Ever_2.csv
-        //[type] => application/vnd.ms-excel
-        //[tmp_name] => C:\xampp\tmp\phpB984.tmp
-        //[error] => 0
-        //[size] => 1050
 
         $nonce = filter_var($_REQUEST['nonce']);
 
@@ -851,48 +838,6 @@ class gradebook_upload_csv_API
     }
 
 }
-
-/**
- * Hook into wp_handle_upload to run our specific CSV uploads
- * 1) Check to make sure file is a CSV
- * @todo Check to make sure uploader is a faculty member
- * @param type $file
- * @return type
- */
-function oplb_gradebook_wp_handle_upload_prefilter($file_info)
-{
-    global $oplb_upload_csv;
-
-    $storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
-
-    if (isset($_REQUEST['post_id']) && intval($_REQUEST['post_id']) === intval($storage_page->ID)) {
-
-        if ($file_info['type'] !== 'text/csv') {
-            $file_info['error'] = 'This file does not appear to be a CSV.';
-            return $file_info;
-        }
-
-        if (!isset($_REQUEST['name']) || !isset($_REQUEST['gbid'])) {
-            $file_info['error']-'There was a problem with the upload; please try again.';
-        }
-
-        $name = 'temp.csv';
-
-        $name = sanitize_file_name($_REQUEST['name']);
-        $file_info['gbid'] = intval(sanitize_text_field($_REQUEST['gbid']));
-
-        $result = $oplb_upload_csv->upload_csv($file_info, $name);
-
-        if ($result['response'] === 'oplb-gradebook-error') {
-            $file_info['error'] = $result['content'];
-            return $file_info;
-        }
-    }
-
-    return $file_info;
-}
-
-add_filter('wp_handle_upload', 'oplb_gradebook_wp_handle_upload_prefilter');
 
 /**
  * Use wp_prepare_attachment_for_js to clean up CSV and send cleaned confirmation data back to the upload modal
