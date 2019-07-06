@@ -781,10 +781,10 @@ span.twitter-typeahead {
   min-width: 180px;
   max-width: 200px;
   text-overflow: ellipsis;
-  overflow: hidden;
 }
 #gradebookWrapper .table-wrapper .scrollable td {
   padding-bottom: 17px;
+  overflow: hidden;
 }
 #gradebookWrapper .table-wrapper .scrollable td .grade-numeric {
   display: block;

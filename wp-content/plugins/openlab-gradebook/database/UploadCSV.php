@@ -199,20 +199,15 @@ class gradebook_upload_csv_API
 
         $process_result['errors'] = $errors;
 
+        $process_result = $this->checkHeaderFormatting($process_result);
+
         return $process_result;
     }
 
-    /**
-     *
-     * @global type $wpdb
-     * @param type $process_result
-     * @param type $gbid
-     * @return string
-     */
-    private function processData($process_result, $gbid)
+    public function checkHeaderFormatting($process_result)
     {
         global $wpdb;
-        $assignments_stored = array();
+        $errors = 0;
 
         $headers = $process_result['headers'];
         $check_array = array(
@@ -230,7 +225,7 @@ class gradebook_upload_csv_API
         foreach ($headers as $index => $header) {
 
             //start setting up assignments, so we have them if this CSV is formatted correctly
-            if ($index > 4) {
+            if ($index > $this->getAssignmentIndexStart()) {
                 $assignments[$assignmentdex] = $header;
                 $assignmentdex++;
                 continue;
@@ -243,21 +238,73 @@ class gradebook_upload_csv_API
 
         if (!$formatted_correctly) {
 
-            $message = array(
+            $process_result['message'] = array(
                 'response' => 'oplb-gradebook-error',
                 'error' => 'This CSV file is not formatted correctly.',
             );
-            return $message;
+            $process_result['errors'] = 'global';
+
+            return $process_result;
         }
 
         //we'll first setup the assignments, in case this is a blank document
         if (empty($assignments)) {
-            $message = array(
+
+            $process_result['message'] = array(
                 'response' => 'oplb-gradebook-error',
                 'error' => 'This CSV file does not have any assignments listed.',
             );
-            return $message;
+            $process_result['errors'] = 'global';
+
+            return $process_result;
         }
+
+        $process_result['assignments'] = $assignments;
+
+        $missing_assignments = array();
+
+        foreach ($assignments as $thisdex => $assignment) {
+
+            //check for existing assignments first
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
+            $existing_assignment = $wpdb->get_results($query);
+
+            if (empty($existing_assignment)) {
+                $missing_assignments[$thisdex + 1] = $assignment;
+            }
+        }
+
+        if (!empty($missing_assignments)) {
+
+            $index_hold = $this->getAssignmentIndexStart();
+
+            foreach ($missing_assignments as $missdex => $missing) {
+
+                $process_result['headers'][$missdex + $index_hold] = "**Not in Gradebook**" . $process_result['headers'][$missdex + $index_hold];
+                $errors++;
+            }
+
+        }
+
+        $process_result['errors'] = $errors;
+
+        return $process_result;
+    }
+
+    /**
+     *
+     * @global type $wpdb
+     * @param type $process_result
+     * @param type $gbid
+     * @return string
+     */
+    private function processData($process_result, $gbid)
+    {
+        global $wpdb;
+        $assignments_stored = array();
+
+        $headers = $process_result['headers'];
+        $assignments = $process_result['assignments'];
 
         $weights = array();
         $weight_normalize = 1;
@@ -741,7 +788,14 @@ class gradebook_upload_csv_API
             fclose($df);
 
         } else {
-            fputcsv($df, array_keys(reset($data_out['data'])));
+
+            $header_row = array();
+            foreach ($data_out['headers'] as $header) {
+                array_push($header_row, $header);
+            }
+
+            fputcsv($df, $header_row);
+
             foreach ($data_out['data'] as $row) {
                 fputcsv($df, $row);
             }
@@ -782,12 +836,18 @@ class gradebook_upload_csv_API
         }
 
         $error_log = get_option('openlab_gradebook_csv_error_log');
+
         $this_data = $error_log[$download_gbid];
 
         $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
 
         $this->outputCSV($this_data, $filename);
 
+    }
+
+    private function getAssignmentIndexStart()
+    {
+        return 4;
     }
 
 }
