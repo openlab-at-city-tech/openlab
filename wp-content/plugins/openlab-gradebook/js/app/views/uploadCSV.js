@@ -31,7 +31,7 @@ define([
 				.fileinput({
 					uploadUrl:
 						oplbGradebook.ajaxURL +
-						"/?action=oplb_gradebook_upload_csv&nonce=" +
+						"?action=oplb_gradebook_upload_csv&nonce=" +
 						oplbGradebook.nonce +
 						"&gbid=" +
 						this.course.get("id"),
