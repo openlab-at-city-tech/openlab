@@ -15,7 +15,6 @@ class gradebook_upload_csv_API
      */
     public function upload_csv()
     {
-
         $nonce = filter_var($_REQUEST['nonce']);
 
         if (!wp_verify_nonce($nonce, 'oplb_gradebook')) {
