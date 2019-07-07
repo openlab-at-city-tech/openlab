@@ -186,6 +186,7 @@ class gradebook_upload_csv_API
         $process_result['errors'] = $errors;
 
         $process_result = $this->checkHeaderFormatting($process_result);
+        $process_result = $this->checkGradeFormatting($process_result);
 
         return $process_result;
     }
@@ -257,6 +258,11 @@ class gradebook_upload_csv_API
 
             if (empty($existing_assignment)) {
                 $missing_assignments[$thisdex + 1] = $assignment;
+            } else {
+                $process_result['assignments'][$thisdex] = array(
+                    'name' => $assignment,
+                    'type' => $existing_assignment[0]->assign_grade_type,
+                );
             }
         }
 
@@ -277,6 +283,177 @@ class gradebook_upload_csv_API
         return $process_result;
     }
 
+    private function checkGradeFormatting($process_result)
+    {
+        global $oplb_gradebook_api;
+        $errors = $process_result['errors'];
+
+        //check midsemester and final grades first
+        foreach ($process_result['data'] as &$student) {
+
+            $midsemester = $this->checkMidSemesterGrades($student['mid_semester_grade']);
+
+            if ($midsemester['result'] !== 'okay') {
+                $student['mid_semester_grade'] = $midsemester['result'];
+                $errors++;
+            } else {
+                $student['mid_semester_grade_value'] = $midsemester['value'];
+            }
+
+            $final = $this->checkFinalGrades($student['final_grade']);
+
+            if ($final['result'] !== 'okay') {
+                $student['final_grade'] = $final['result'];
+                $errors++;
+            } else {
+                $student['final_grade_value'] = $final['value'];
+            }
+
+            //check the student grades
+            $assignments = $process_result['assignments'];
+
+            foreach ($assignments as $thisdex => $assignment) {
+
+                $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type'], true);
+
+                if(is_array($this_grade) && !empty($this_grade['result']) && $this_grade['result'] === 'error'){
+                    $errors++;
+                    $student[$assignment['name']] = $this_grade['value'];
+                } else {
+                    $student[$assignment['name']] = $this_grade;
+                }
+
+            }
+
+        }
+
+        $process_result['errors'] = $errors;
+
+        return $process_result;
+    }
+
+    private function checkMidSemesterGrades($grade)
+    {
+        global $oplb_gradebook_api;
+        $outbound = array(
+            'result' => 'okay',
+            'value' => $grade,
+        );
+
+        if (empty($grade) || $grade === '--') {
+            return $outbound;
+        }
+
+        if (is_numeric($grade)) {
+            $result = $grade . "**numeric values not accepted for mid-semester grades**";
+
+            $outbound = array(
+                'result' => $result,
+                'value' => $grade,
+            );
+
+            return $outbound;
+        }
+
+        $mid_grades = $oplb_gradebook_api->getMidSemesterGrades();
+
+        foreach ($mid_grades as $mid_grade) {
+
+            if (trim(strtolower($grade)) === strtolower($mid_grade['label'])) {
+                $outbound = array(
+                    'result' => 'okay',
+                    'value' => $mid_grade['value'],
+                );
+
+                return $outbound;
+            }
+
+        }
+
+        $result = $grade . "**this value is not valid for mid-semester grades**";
+
+        $outbound = array(
+            'result' => $result,
+            'value' => $grade,
+        );
+
+        return $outbound;
+    }
+
+    private function checkFinalGrades($grade)
+    {
+        global $oplb_gradebook_api;
+        $outbound = array(
+            'result' => 'okay',
+            'value' => $grade,
+        );
+
+        if (empty($grade) || $grade === '--') {
+            return $outbound;
+        }
+
+        if (is_numeric($grade)) {
+
+            $final_grades = $oplb_gradebook_api->getFinalNumericGrades();
+
+            foreach ($final_grades as $final_grade) {
+
+                if (intval($grade) < $final_grade['range_high'] && intval($grade) >= $final_grade['range_low']) {
+                    $outbound = array(
+                        'result' => 'okay',
+                        'value' => $final_grade['value'],
+                    );
+
+                    return $outbound;
+                }
+
+            }
+
+        } else {
+
+            $final_numeric_grades = $oplb_gradebook_api->getFinalNumericGrades();
+
+            foreach ($final_numeric_grades as $final_grade) {
+
+                if (trim(strtolower($grade)) === strtolower($final_grade['label'])) {
+
+                    $outbound = array(
+                        'result' => 'okay',
+                        'value' => $final_grade['value'],
+                    );
+
+                    return $outbound;
+                }
+
+            }
+
+            $final_letter_grades = $oplb_gradebook_api->getFinalLetterGrades();
+
+            foreach ($final_letter_grades as $final_grade) {
+
+                if (trim(strtolower($grade)) === strtolower($final_grade['label'])) {
+
+                    $outbound = array(
+                        'result' => 'okay',
+                        'value' => $final_grade['value'],
+                    );
+
+                    return $outbound;
+                }
+
+            }
+
+        }
+
+        $result = $grade . "**this value is not valid for final grades**";
+        $outbound = array(
+            'result' => $result,
+            'value' => $grade,
+        );
+
+        return $outbound;
+    }
+
     /**
      *
      * @global type $wpdb
@@ -289,7 +466,6 @@ class gradebook_upload_csv_API
         global $wpdb;
         $assignments_stored = array();
 
-        $headers = $process_result['headers'];
         $assignments = $process_result['assignments'];
 
         $weights = array();
@@ -303,19 +479,10 @@ class gradebook_upload_csv_API
 
         foreach ($assignments as $thisdex => $assignment) {
 
-            //if there is student data, we'll try and determine the assignment's type
-            //if not, we'll default to numeric (the standard default)
-            $type = 'numeric';
-            $default_type = false;
-            if (!isset($process_result['data']) || empty($process_result['data'])) {
-                $default_type = true;
-            } else {
-                //use the first row of student data to determine the type
-                $type = $this->checkAssignmentType($assignment, $process_result['data']);
-            }
+            $type = $assignment['type'];
 
             //check for existing assignments first
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment['name']);
             $existing_assignment = $wpdb->get_results($query);
 
             if (!empty($existing_assignment)) {
@@ -323,7 +490,7 @@ class gradebook_upload_csv_API
                 $to_update_type = array();
 
                 //update info that needs to be updated store assignment info for later use
-                $assignments_stored[$thisdex]['name'] = $assignment;
+                $assignments_stored[$thisdex]['name'] = $assignment['name'];
                 $assignments_stored[$thisdex]['amid'] = $existing_assignment[0]->id;
                 $assignments_stored[$thisdex]['assign_order'] = $existing_assignment[0]->assign_order;
 
@@ -458,7 +625,7 @@ class gradebook_upload_csv_API
 
     private function checkStudent($student, $gbid)
     {
-        global $wpdb, $oplb_gradebook_api;
+        global $oplb_gradebook_api, $wpdb;
         $student_id = $student['student_id'];
 
         //first look up user by either first/last name or user login
@@ -519,7 +686,6 @@ class gradebook_upload_csv_API
         global $wpdb, $oplb_gradebook_api;
         $result = 'success';
         $student_id = $student['student_id'];
-        $grades = array_slice($student, 3);
 
         //check to see if student is already included in the course
         //if they are, we'll update their assignment cells accordingly
@@ -527,9 +693,44 @@ class gradebook_upload_csv_API
 
         if ($student_exists && !empty($student_exists)) {
 
+            //update mid_semester grades
+            $midsemester = $student['mid_semester_grade_value'];
+
+            if (!empty($midsemester)) {
+                $wpdb->update("{$wpdb->prefix}oplb_gradebook_users", array(
+                    'mid_semester_grade' => $midsemester,
+                ), array(
+                    'gbid' => $gbid,
+                    'uid' => $student_id,
+                ), array(
+                    '%s',
+                ), array(
+                    '%d',
+                    '%d',
+                )
+                );
+            }
+
+            $final = $student['final_grade_value'];
+
+            if (!empty($final)) {
+                $wpdb->update("{$wpdb->prefix}oplb_gradebook_users", array(
+                    'final_grade' => $final,
+                ), array(
+                    'gbid' => $gbid,
+                    'uid' => $student_id,
+                ), array(
+                    '%s',
+                ), array(
+                    '%d',
+                    '%d',
+                )
+                );
+            }
+
             foreach ($assignments as $assignment) {
 
-                $this_grade = $this->processGrade($grades[$assignment['name']]);
+                $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type']);
                 $is_null = ($this_grade === '--' || empty($this_grade)) ? 1 : 0;
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
@@ -558,17 +759,57 @@ class gradebook_upload_csv_API
         return $result;
     }
 
-    public function processGrade($grade)
+    public function processGrade($grade, $type, $verify = false)
     {
+        global $oplb_gradebook_api;
+        $is_verified = false;
 
-        $possible_letter_grades = $this->getPossibleLetterGrades();
+        if ($type === 'letter') {
 
-        if (in_array(strtolower(trim($grade)), $possible_letter_grades)) {
-            $grade = $this->changeLetterGradeToNumeric($grade);
-        } else if (strtolower(trim($grade)) === 'x') {
-            $grade = 100;
-        } else if (!$this->isStringNotEmpty(trim($grade))) {
-            $grade = 0;
+            $possible_letter_grades = $this->getPossibleLetterGrades();
+
+            if (in_array(strtolower(trim($grade)), $possible_letter_grades)) {
+                $grade = $this->changeLetterGradeToNumeric($grade);
+                $is_verified = true;
+            } else if (is_numeric($grade)) {
+
+                $letter_grades = $oplb_gradebook_api->getLetterGrades();
+
+                foreach ($letter_grades as $letter_grade) {
+
+                    if (intval($grade) < $letter_grade['range_high'] && intval($grade) >= $letter_grade['range_low']) {
+                        $grade = $letter_grade['value'];
+                        $is_verified = true;
+                    }
+                }
+
+            }
+
+        } else if ($type === 'numeric') {
+
+            if(is_numeric($grade)){
+                $is_verified = true;
+            }
+
+        } else if ($type === 'checkmark') {
+
+            if (strtolower(trim($grade)) === 'x') {
+                $grade = 100;
+                $is_verified = true;
+            } else if (empty(trim($grade))) {
+                $grade = 0;
+                $is_verified = true;
+            }
+
+        }
+
+        if ($verify && !$is_verified) {
+
+            $grade = array(
+                'result' => 'error',
+                'value' => $grade . "**this value is not valid for grades**",
+            );
+
         }
 
         return $grade;
@@ -637,7 +878,7 @@ class gradebook_upload_csv_API
 
         foreach ($assignments as $assigndex => $assignment) {
 
-            $this_grade = $this->processGrade($grades[$assignment['name']]);
+            $this_grade = $this->processGrade($grades[$assignment['name']], $assignment['type']);
 
             foreach ($current_assignments as $currentdex => $current_assignment) {
 
@@ -730,10 +971,16 @@ class gradebook_upload_csv_API
         return $return_value;
     }
 
-    private function getPossibleLetterGrades()
+    private function getPossibleLetterGrades($type = "")
     {
 
-        $possible_letter_grades = array('a+', 'a', 'a-', 'b+', 'b', 'b-', 'c+', 'c', 'c-', 'd+', 'd', 'd-', 'f', 'inc');
+        $possible_letter_grades = array('a+', 'a', 'a-', 'b+', 'b', 'b-', 'c+', 'c', 'c-', 'd+', 'd', 'd-', 'f');
+
+        if ($type === 'mid_semester') {
+            $possible_letter_grades = array('bl', 'u', 'sa', 'p');
+        } else if ($type === 'final') {
+            $possible_letter_grades = array('a', 'a-', 'b+', 'b', 'b-', 'c+', 'c', 'c-', 'd', 'f', 'wf', 'wn', '*wn', 'wu');
+        }
 
         return $possible_letter_grades;
     }
@@ -815,6 +1062,10 @@ class gradebook_upload_csv_API
     public function download_csv()
     {
 
+        if (empty($_REQUEST['gradebook_download_csv'])) {
+            return true;
+        }
+
         $download_gbid = filter_var($_REQUEST['gradebook_download_csv'], FILTER_SANITIZE_NUMBER_INT);
 
         if (empty($download_gbid)) {
@@ -824,6 +1075,19 @@ class gradebook_upload_csv_API
         $error_log = get_option('openlab_gradebook_csv_error_log');
 
         $this_data = $error_log[$download_gbid];
+
+        //a little cleanup
+        foreach ($this_data['data'] as &$student) {
+
+            if (!empty($student['mid_semester_grade_value'])) {
+                unset($student['mid_semester_grade_value']);
+            }
+
+            if (!empty($student['final_grade_value'])) {
+                unset($student['final_grade_value']);
+            }
+
+        }
 
         $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
 

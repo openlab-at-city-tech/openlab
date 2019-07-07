@@ -1137,80 +1137,189 @@ class oplb_gradebook_api
                 label => 'A+',
                 value => 100,
                 range_low => 100,
-                range_high => 101
+                range_high => 101,
             ),
             array(
                 label => 'A',
                 value => 96,
                 range_low => 93,
-                range_high => 100
+                range_high => 100,
             ),
             array(
                 label => 'A-',
                 value => 91.5,
                 range_low => 90,
-                range_high => 93
+                range_high => 93,
             ),
             array(
                 label => 'B+',
                 value => 88.5,
                 range_low => 87,
-                range_high => 90
+                range_high => 90,
             ),
             array(
                 label => 'B',
                 value => 85,
                 range_low => 83,
-                range_high => 87
+                range_high => 87,
             ),
             array(
                 label => 'B-',
                 value => 81.5,
                 range_low => 80,
-                range_high => 83
+                range_high => 83,
             ),
             array(
                 label => 'C+',
                 value => 78.5,
                 range_low => 77,
-                range_high => 80
+                range_high => 80,
             ),
             array(
                 label => 'C',
                 value => 75,
                 range_low => 73,
-                range_high => 77
+                range_high => 77,
             ),
             array(
                 label => 'C-',
                 value => 71.5,
                 range_low => 70,
-                range_high => 73
+                range_high => 73,
             ),
             array(
                 label => 'D+',
                 value => 68.5,
                 range_low => 67,
-                range_high => 70
+                range_high => 70,
             ),
             array(
                 label => 'D',
                 value => 65,
                 range_low => 63,
-                range_high => 67
+                range_high => 67,
             ),
             array(
                 label => 'D-',
                 value => 61.5,
                 range_low => 60,
-                range_high => 63
+                range_high => 63,
             ),
             array(
                 label => 'F',
                 value => 50,
                 range_low => 1,
-                range_high => 60
-            )
+                range_high => 60,
+            ),
+        );
+
+        return $letter_grades;
+    }
+
+    public function getMidSemesterGrades()
+    {
+        $letter_grades = array(
+            array(
+                label => 'P',
+                value => 'passing',
+            ),
+            array(
+                label => 'BL',
+                value => 'borderline',
+            ),
+            array(
+                label => 'U',
+                value => 'unsatisfactory',
+            ),
+            array(
+                label => 'SA',
+                value => 'stopped_attending',
+            ),
+        );
+
+        return $letter_grades;
+    }
+
+    public function getFinalNumericGrades()
+    {
+        $letter_grades = array(
+            array(
+                label => 'A',
+                value => 'a',
+                range_low => 93,
+                range_high => 101,
+            ),
+            array(
+                label => 'A-',
+                value => 'a_minus',
+                range_low => 90,
+                range_high => 93,
+            ),
+            array(
+                label => 'B+',
+                value => 'b_plus',
+                range_low => 87,
+                range_high => 90,
+            ),
+            array(
+                label => 'B',
+                value => 'b',
+                range_low => 83,
+                range_high => 87,
+            ),
+            array(
+                label => 'B-',
+                value => 'b_minus',
+                range_low => 80,
+                range_high => 83,
+            ),
+            array(
+                label => 'C+',
+                value => 'c_plus',
+                range_low => 77,
+                range_high => 80,
+            ),
+            array(
+                label => 'C',
+                value => 'c',
+                range_low => 70,
+                range_high => 77,
+            ),
+            array(
+                label => 'D',
+                value => 'd',
+                range_low => 60,
+                range_high => 70,
+            ),
+            array(
+                label => 'F',
+                value => 'f',
+                range_low => 1,
+                range_high => 60,
+            ),
+        );
+
+        return $letter_grades;
+    }
+
+    public function getFinalLetterGrades(){
+        $letter_grades = array(
+            array(
+                label => 'WF',
+                value => 'wf',
+            ),
+            array(
+                label => 'Wn',
+                value => 'wn',
+            ),
+            array(
+                label => '*Wn',
+                value => 'wn_admin',
+            ),
+            array(
+                label => 'Wu',
+                value => 'wu',
+            ),
         );
 
         return $letter_grades;
