@@ -193,14 +193,14 @@ class gradebook_upload_csv_API
         $process_result['errors'] = $errors;
 
         //if errors, immediately report back
-        if($process_result['errors'] > 0){
+        if ($process_result['errors'] > 0) {
             return $process_result;
         }
 
         $process_result = $this->checkHeaderFormatting($process_result);
 
         //if errors, immediately report back
-        if($process_result['errors'] > 0){
+        if ($process_result['errors'] > 0) {
             return $process_result;
         }
 
