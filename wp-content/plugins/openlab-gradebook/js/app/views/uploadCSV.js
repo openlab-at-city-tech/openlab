@@ -41,23 +41,19 @@ define([
 						this.course.get("id"),
 					maxFileCount: 1,
 					hideThumbnailContent: true,
-					msgUploadThreshold: 'Adding to Gradebook...'
+					msgUploadThreshold: "Adding to Gradebook..."
 				})
 				.on("fileuploaded", function(e, params) {
-					console.log(
-						"file uploaded, self",
-						params.response.content,
-						self.gradebook
+					console.log("file uploaded", params.response);
+					$(".file-preview-status.text-center.text-success").html(
+						params.response.message
 					);
 					newGradebook = params.response.content;
 					self.updateGradebook();
 				})
 				.on("fileuploaderror", function(e, params) {
-					console.log(
-						"e, params on fileuploaderror",
-						e, params
-					);
-					$('.kv-fileinput-error').html(params.response.error);
+					console.log("e, params on fileuploaderror", e, params);
+					$(".kv-fileinput-error").html(params.response.error);
 				});
 		},
 		editCancel: function() {
@@ -67,7 +63,7 @@ define([
 		},
 		updateGradebook: function() {
 			console.log("self.newGradebook in updateGradebook", newGradebook);
-			Backbone.pubSub.trigger('newGradebookCSV', newGradebook);
+			Backbone.pubSub.trigger("newGradebookCSV", newGradebook);
 		}
 	});
 
