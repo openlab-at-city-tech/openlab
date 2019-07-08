@@ -17,10 +17,17 @@ define([
 		},
 		initialize: function(options) {
 			$("body").append(this.render().el);
+			this.model = options.model;
 			this.course = options.course;
+			this.gradebook = options.gradebook;
 			return this;
 		},
-		render: function() {
+		render: function(newGradebook) {
+			console.log("newGradebook", newGradebook);
+			if (newGradebook !== undefined) {
+				this.model = newGradebook;
+			}
+
 			var self = this;
 			var template = _.template($("#upload-modal").html());
 			var compiled = template({});
@@ -40,14 +47,14 @@ define([
 				course: this.course,
 				gradebook: this.gradebook
 			});
-			
+
 			$("body").append(view.render());
 		},
 		editCancel: function() {
 			this.$el.data("modal", null);
 			this.remove();
 			return false;
-		}
+		},
 	});
 
 	return uploadModal;

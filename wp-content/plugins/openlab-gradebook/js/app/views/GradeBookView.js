@@ -89,6 +89,7 @@ define([
 			);
 
 			Backbone.pubSub.on("updateAverageGrade", this.updateAverageGrade, this);
+			Backbone.pubSub.on("newGradebookCSV", this.render, this);
 
 			this.render();
 
@@ -203,6 +204,14 @@ define([
 
 			if (typeof ev !== "undefined") {
 				console.log("ev, self.gradebook", ev, self.gradebook);
+
+				if (typeof ev.cells !== "undefined") {
+					this.gradebook.cells.set(ev.cells);
+				}
+
+				if (typeof ev.students !== "undefined") {
+					this.gradebook.students.set(ev.students);
+				}
 			}
 
 			switch (this.gradebook.sort_key) {
@@ -468,17 +477,18 @@ define([
 
 			this.course.export2csv();
 		},
-		uploadModal: function(e){
-
+		uploadModal: function(e) {
 			var checkElem = $("body").find("#modalDialogUpload");
 
 			//prevent double modals
-			if(checkElem.length){
+			if (checkElem.length) {
 				return false;
 			}
 
 			var view = new uploadModal({
 				course: this.course,
+				gradebook: this.gradebook,
+				model: this.model
 			});
 
 			$("body").append(view.render());

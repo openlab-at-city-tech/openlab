@@ -15,6 +15,7 @@ class gradebook_upload_csv_API
      */
     public function upload_csv()
     {
+        global $oplb_gradebook_api;
         $nonce = filter_var($_REQUEST['nonce']);
 
         if (!wp_verify_nonce($nonce, 'oplb_gradebook')) {
@@ -31,9 +32,10 @@ class gradebook_upload_csv_API
         );
 
         $allowed_types = array('text/csv');
+
         $message = array(
             'response' => 'oplb-gradebook-success',
-            'content' => 'CSV successfully uploaded to OpenLab Gradebook.',
+            'content' => '',
         );
 
         if (empty($file['name'])) {
@@ -84,6 +86,8 @@ class gradebook_upload_csv_API
         }
 
         $process_result = $this->processData($process_result, $gbid);
+
+        $message['content'] = $oplb_gradebook_api->oplb_get_gradebook($gbid, null, null);
 
         wp_send_json($message);
     }
@@ -549,7 +553,7 @@ class gradebook_upload_csv_API
             $this->processStudent($student, $gbid, $assignments_stored);
         }
 
-        return 'success';
+        return $process_result;
     }
 
     private function insertAssignment($weights, $thisdex, $assignment, $gbid)
