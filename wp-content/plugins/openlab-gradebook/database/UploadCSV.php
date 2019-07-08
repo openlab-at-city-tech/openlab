@@ -189,7 +189,18 @@ class gradebook_upload_csv_API
 
         $process_result['errors'] = $errors;
 
+        //if errors, immediately report back
+        if($process_result['errors'] > 0){
+            return $process_result;
+        }
+
         $process_result = $this->checkHeaderFormatting($process_result);
+
+        //if errors, immediately report back
+        if($process_result['errors'] > 0){
+            return $process_result;
+        }
+
         $process_result = $this->checkGradeFormatting($process_result);
 
         return $process_result;
@@ -320,7 +331,7 @@ class gradebook_upload_csv_API
 
                 $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type'], true);
 
-                if(is_array($this_grade) && !empty($this_grade['result']) && $this_grade['result'] === 'error'){
+                if (is_array($this_grade) && !empty($this_grade['result']) && $this_grade['result'] === 'error') {
                     $errors++;
                     $student[$assignment['name']] = $this_grade['value'];
                 } else {
