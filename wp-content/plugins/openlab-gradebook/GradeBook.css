@@ -844,6 +844,12 @@ span.twitter-typeahead {
 #upload-csv .file-drop-zone-title {
   padding: 42px 10px;
 }
+#upload-csv .progress {
+  height: 19px;
+}
+#upload-csv .progress .progress-bar {
+  height: 19px;
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
