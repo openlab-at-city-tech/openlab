@@ -779,11 +779,21 @@ class gradebook_upload_csv_API
         global $oplb_gradebook_api;
         $is_verified = false;
 
-        if ($type === 'letter') {
+        //handle values marked for null
+        if (trim($grade === '--')) {
+            $grade = trim($grade);
+            $is_verified = true;
+        } else if ($type === 'letter') {
 
             $possible_letter_grades = $this->getPossibleLetterGrades();
 
-            if (in_array(strtolower(trim($grade)), $possible_letter_grades)) {
+            if (empty($grade)) {
+
+                //empty letter grades filp to null
+                $grade = '--';
+                $is_verified = true;
+
+            } else if (in_array(strtolower(trim($grade)), $possible_letter_grades)) {
                 $grade = $this->changeLetterGradeToNumeric($grade);
                 $is_verified = true;
             } else if (is_numeric($grade)) {
@@ -802,7 +812,13 @@ class gradebook_upload_csv_API
 
         } else if ($type === 'numeric') {
 
-            if(is_numeric($grade)){
+            if (empty($grade)) {
+
+                //empty numeric grades filp to null
+                $grade = '--';
+                $is_verified = true;
+
+            } else if (is_numeric($grade)) {
                 $is_verified = true;
             }
 
@@ -812,6 +828,8 @@ class gradebook_upload_csv_API
                 $grade = 100;
                 $is_verified = true;
             } else if (empty(trim($grade))) {
+
+                //empty checkmark grades flip to no checkmark
                 $grade = 0;
                 $is_verified = true;
             }
