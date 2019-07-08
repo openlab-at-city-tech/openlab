@@ -444,11 +444,10 @@ define([
 			});
 		},
 		addAssignment: function(ev) {
-
 			var checkElem = $("body").find("#modalDialogEditAssignment");
 
 			//prevent double modals
-			if(checkElem.length){
+			if (checkElem.length) {
 				return false;
 			}
 
@@ -458,11 +457,10 @@ define([
 			});
 		},
 		addStudent: function(ev) {
-
 			var checkElem = $("body").find("#modalDialogEditStudent");
 
 			//prevent double modals
-			if(checkElem.length){
+			if (checkElem.length) {
 				return false;
 			}
 
