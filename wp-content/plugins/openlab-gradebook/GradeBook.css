@@ -841,6 +841,15 @@ span.twitter-typeahead {
     padding: 19px 8px 3px;
   }
 }
+#upload-modal #modal-download-csv:hover {
+  background: #286090;
+  border-color: #2e6da4;
+  color: #fff;
+  text-decoration: underline;
+}
+#upload-modal #modal-upload-csv:hover {
+  text-decoration: underline;
+}
 #upload-csv .file-drop-zone-title {
   padding: 42px 10px;
 }
