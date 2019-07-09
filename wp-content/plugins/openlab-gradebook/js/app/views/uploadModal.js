@@ -16,10 +16,12 @@ define([
 			"click button#modal-upload-csv": "uploadCSV"
 		},
 		initialize: function(options) {
-			$("body").append(this.render().el);
 			this.model = options.model;
 			this.course = options.course;
 			this.gradebook = options.gradebook;
+
+			Backbone.pubSub.on("closeUploadCSV", this.removeSecondary, this);
+
 			return this;
 		},
 		render: function(newGradebook) {
@@ -33,15 +35,30 @@ define([
 			var compiled = template({});
 			self.$el.html(compiled);
 			this.$el.modal("show");
+			console.log("this.$el in uploadModal", this.$el);
 			return self.el;
 		},
 		downloadCSV: function(e) {
 			e.preventDefault();
 
+			$(".download-buttons")
+				.addClass("success")
+				.find("#modal-download-csv")
+				.text("Download Again");
+
 			this.course.export2csv();
 		},
 		uploadCSV: function(e) {
 			e.preventDefault();
+			var self = this;
+
+			setTimeout(
+				function() {
+					self.$el.addClass("secondary-modal");
+				},
+				10,
+				self
+			);
 
 			var view = new uploadCSV({
 				course: this.course,
@@ -50,11 +67,26 @@ define([
 
 			$("body").append(view.render());
 		},
+		removeSecondary: function(){
+			var self = this;
+			$('body').addClass('modal-open');
+			console.log('removeSecondary');
+
+			setTimeout(
+				function() {
+					self.$el.removeClass("secondary-modal");
+				},
+				10,
+				self
+			);
+		},
 		editCancel: function() {
+			console.log("editCancel");
+
 			this.$el.data("modal", null);
 			this.remove();
 			return false;
-		},
+		}
 	});
 
 	return uploadModal;

@@ -59,6 +59,7 @@ define([
 		editCancel: function() {
 			this.$el.data("modal", null);
 			this.remove();
+			Backbone.pubSub.trigger("closeUploadCSV", newGradebook);
 			return false;
 		},
 		updateGradebook: function() {

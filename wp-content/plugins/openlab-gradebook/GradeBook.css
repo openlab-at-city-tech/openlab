@@ -841,6 +841,9 @@ span.twitter-typeahead {
     padding: 19px 8px 3px;
   }
 }
+#upload-modal.secondary-modal {
+  z-index: 1039;
+}
 #upload-modal #modal-download-csv:hover {
   background: #286090;
   border-color: #2e6da4;
@@ -849,6 +852,32 @@ span.twitter-typeahead {
 }
 #upload-modal #modal-upload-csv:hover {
   text-decoration: underline;
+}
+#upload-modal #modal-download-csv-success {
+  display: none;
+  cursor: default;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  background: #5cb85c;
+  margin-bottom: 0;
+  color: #fff;
+  vertical-align: middle;
+}
+#upload-modal #modal-download-csv-success .fa-stack {
+  font-size: 10px;
+  width: 20px;
+  margin-right: 6px;
+}
+#upload-modal #modal-download-csv-success .fa-stack .fa-check {
+  color: #5cb85c;
+}
+#upload-modal .download-buttons.success #modal-download-csv-success {
+  display: inline-flex;
 }
 #upload-csv .file-drop-zone-title {
   padding: 42px 10px;
