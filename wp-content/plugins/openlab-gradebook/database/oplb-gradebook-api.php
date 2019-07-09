@@ -1120,7 +1120,7 @@ class oplb_gradebook_api
             fputcsv($output, $row);
         }
         fclose($output);
-        die();
+        die();  
     }
 
     public function getLetterGrades()

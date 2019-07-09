@@ -16,7 +16,6 @@ define([
 			"hidden.bs.modal": "editCancel"
 		},
 		initialize: function(options) {
-			$("body").append(this.render().el);
 			this.course = options.course;
 			this.gradebook = options.gradebook;
 			return this;
