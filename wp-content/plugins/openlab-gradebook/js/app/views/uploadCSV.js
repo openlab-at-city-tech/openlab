@@ -7,6 +7,7 @@ define([
 	"bootstrap3-typeahead"
 ], function($, Backbone, _, User, UserList, typeahead) {
 	var newGradebook = {};
+	var error = "";
 	var uploadModal = Backbone.View.extend({
 		id: "upload-csv",
 		className: "modal fade",
@@ -43,17 +44,24 @@ define([
 					hideThumbnailContent: true,
 					msgUploadThreshold: "Adding to Gradebook..."
 				})
+				.on("fileselect", function(e, numfiles, label) {
+					error = "";
+				})
 				.on("fileuploaded", function(e, params) {
-					console.log("file uploaded", params.response);
 					$(".file-preview-status.text-center.text-success").html(
 						params.response.message
 					);
 					newGradebook = params.response.content;
 					self.updateGradebook();
 				})
+				.on("filecleared", function(e) {
+					if (error !== "") {
+						self.$el.find(".file-input .kv-fileinput-error").after(error);
+					}
+				})
 				.on("fileuploaderror", function(e, params) {
-					console.log("e, params on fileuploaderror", e, params);
-					$(".kv-fileinput-error").html(params.response.error);
+					error = params.response.error;
+					$("#upload-csv-input").fileinput("clear");
 				});
 		},
 		editCancel: function() {
