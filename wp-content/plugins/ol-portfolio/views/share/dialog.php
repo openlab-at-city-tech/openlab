@@ -34,7 +34,7 @@
 		</div>
 		<div class="form-group">
 			<label for="citation">Citation</label>
-			<div id="citation">This <a href="{{ data.url }}">entry</a> was originaly posted in "{{ data.site_name }}" on {{ data.date }}</textarea>
+			<div id="citation">This <a href="{{ data.url }}">entry</a> was originaly posted in "{{ data.site_name }}" on {{ data.date }}</div>
 		</div>
 		<div class="form-group">
 			<label for="annotation">Annotation</label>
