@@ -246,6 +246,9 @@ class Service implements Registerable {
 			exit;
 		}
 
+		// Skip processing author data.
+		add_filter( 'wxr_importer.pre_process.user', '__return_null' );
+
 		$importer = $this->get_importer( $extract_path );
 		$status   = $importer->import( $extract_path . '/wordpress.xml' );
 

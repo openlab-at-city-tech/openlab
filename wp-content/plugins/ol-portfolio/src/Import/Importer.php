@@ -653,7 +653,6 @@ class Importer {
 
 		$original_id = isset( $data['post_id'] )     ? (int) $data['post_id']     : 0;
 		$parent_id   = isset( $data['post_parent'] ) ? (int) $data['post_parent'] : 0;
-		$author_id   = isset( $data['post_author'] ) ? (int) $data['post_author'] : 0;
 
 		// Have we already processed this?
 		if ( isset( $this->mapping['post'][ $original_id ] ) ) {
@@ -714,9 +713,6 @@ class Importer {
 		} elseif ( isset( $this->mapping['user_slug'][ $author ] ) ) {
 			$data['post_author'] = $this->mapping['user_slug'][ $author ];
 		} else {
-			$meta[] = array( 'key' => '_wxr_import_user_slug', 'value' => $author );
-			$requires_remapping = true;
-
 			$data['post_author'] = (int) get_current_user_id();
 		}
 
