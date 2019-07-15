@@ -1,0 +1,73 @@
+// *-------------------------------------------------------------------------------------
+// * Collapse and expand
+// *-------------------------------------------------------------------------------------
+
+// Control the visibility of the collapse/expand sub list
+.ftwp-collapse>.ftwp-sub {
+	&,
+	* {
+		height: 0;
+		visibility: hidden;
+		padding: 0;
+		margin: 0;
+	}
+}
+
+.ftwp-expand>.ftwp-sub {
+//	display: block;
+}
+
+&-icon {
+	.ftwp-anchor {
+		padding-left: 2 * $list_anchor_hpadding + $list_font_size; 
+	}
+}
+
+
+// Display collapse/expand icon
+.ftwp-has-sub {
+	position: relative;
+}
+
+
+.ftwp-icon {
+	&-collapse,
+	&-expand {
+		position: absolute;
+		left: 0;
+		top: 0;
+		padding: $list_anchor_vpadding $list_anchor_hpadding;
+//		width: $list_font_size;
+		box-sizing: content-box; 
+		opacity: .5;
+		@include transition((transform $durationFast, opacity $durationMedium));
+		z-index: 20;
+
+		&:hover,
+		&:focus {
+			font-family: "ftwp-icon";	// Override the reset style.
+			@include transform(scale(1.3)); 
+			opacity: 0.9;
+//			color: $list_hover_color;
+		}
+		
+		&:hover { 
+			cursor: default;
+		}
+		
+		&:focus {
+			outline: 2px solid rgba( $list_color, .5 );
+		}
+	}
+}
+	
+// Set the icon left of the nested position
+@for $n from 1 through 4 {
+	$selectors: selectorDuplicateNest('.ftwp-has-sub', $n + 1);
+	#{$selectors}>.ftwp-icon {
+		&-collapse,
+		&-expand {
+			left: $n * $list_nested_offset;
+		}
+	}
+}

@@ -1,0 +1,10 @@
+// Duplicate the selector and nest them
+@function selectorDuplicateNest($selector, $n) {
+	$result: '';
+	
+	@for $i from 1 through $n {
+		$result: $result + $selector + ' ';
+	}
+	
+	@return $result;
+}

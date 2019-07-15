@@ -1,0 +1,128 @@
+#fixedtoc-metabox-inner {
+	margin-top: 12px;
+	border: 1px solid #e5e5e5;
+}
+
+#fixedtoc-metabox-inner .ftoc-section-title {
+	font-weight: 700;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+#fixedtoc-metabox-inner .ftoc-section-title:hover,
+#fixedtoc-metabox .ftoc-field-control:hover {
+	cursor: pointer;
+}
+
+#fixedtoc-metabox-inner .ftoc-section-title.ui-state-active,
+#fixedtoc-metabox-inner .ftoc-section-title:focus {
+	outline: none;
+	color: white;
+	background: #008ec2;
+}
+
+#fixedtoc-metabox-inner .ftoc-section-title.ui-state-active .ftoc-section-control,
+#fixedtoc-metabox-inner .ftoc-section-title:focus .ftoc-section-control {
+	color: white;
+}
+
+#fixedtoc-metabox .ui-accordion-header-icon {
+	margin-right: 5px;
+}
+
+#fixedtoc-metabox .ftoc-field-control {
+	outline: none;
+	border: none;
+	margin-right: 5px;
+	background: #008ec2;
+	color: white;
+	padding: 5px;
+	vertical-align: middle;
+	border-radius: 50%;
+}
+
+#fixedtoc-metabox-inner .form-table {
+	border-bottom: 1px solid #e5e5e5;
+	display: none;
+}
+
+#fixedtoc-metabox-inner .form-table th {
+	font-weight: 400;
+	width: 300px;
+	padding: 20px 10px;
+}
+
+#fixedtoc-metabox-inner .form-table select {
+	max-width: 80%;
+}
+
+#fixedtoc-metabox-inner .form-table:last-child,
+#fixedtoc-metabox-inner .ftoc-section-title:last-of-type {
+	border-bottom: none;
+}
+
+#fixedtoc-metabox-inner .ftoc-disabled * {
+	color: rgba(51,51,51,.5);
+}
+
+#fixedtoc-metabox-inner .ftoc-disabled .ftoc-field-control {
+	background: rgba(51,51,51,.5);
+}
+
+#fixedtoc-metabox-inner .ftoc-disabled .ftoc-field-control:hover {
+	background: #008ec2;
+}
+
+h2#ftoc-onoff-title {
+	padding: 0;
+	margin: 12px 0;
+}
+
+
+/**
+ * Switch button
+ */
+#fixedtoc-metabox .ftoc-switch {
+	position: relative;
+	display: inline;
+}
+
+#fixedtoc-metabox .ftoc-switch input {
+	position: absolute;
+	visibility: hidden;
+	z-index: -1;
+	left: -9999px;
+}
+
+#fixedtoc-metabox .ftoc-switch label {
+	display: block;
+	width: 50px;
+	height: 25px;
+	border: 2px solid rgba( 0, 0, 0, .1 );
+	padding: 1px;
+	transition: border-color .3s;
+	position: relative;
+	border-radius: 25px;
+}
+
+#fixedtoc-metabox .ftoc-switch input:checked + label {
+	border-color: #008ec2;
+}
+
+#fixedtoc-metabox .ftoc-switch label::before {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	background: rgba( 0, 0, 0, .1 );
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	transition-property: background, margin-left;
+	transition-duration: .3s;
+	border-radius: 50%;
+}
+
+#fixedtoc-metabox .ftoc-switch input:checked + label::before {
+	background: #008ec2;
+	margin-left: 25px;
+}

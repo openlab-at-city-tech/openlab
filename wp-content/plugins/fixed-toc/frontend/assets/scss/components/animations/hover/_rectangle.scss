@@ -1,0 +1,36 @@
+// *-------------------------------------------------------------------------------------
+// * Rectangle Out And In
+// *-------------------------------------------------------------------------------------
+
+@mixin rectangleOut {
+	.ftwp-text::before {
+		@include transform(scale(0));
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {			
+			.ftwp-text::before {
+				@include transform(scale(1));
+			}		
+		}
+	}	
+}
+
+
+@mixin rectangleIn {
+	.ftwp-text::before {
+		background: rgba($list_bgcolor, $opacity);
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			background: rgba($list_active_bgcolor, $opacity);
+			
+			.ftwp-text::before {
+				@include transform(scale(0));
+			}		
+		}
+	}	
+}

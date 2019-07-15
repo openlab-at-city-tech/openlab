@@ -1,0 +1,97 @@
+// Group style with vendor prefix
+@mixin prefix($property, $value, $webkit: true, $ms: false, $moz: false, $o: false) {
+	@if $webkit == true {
+		-webkit-#{$property}: $value;
+	}
+	
+	@if $ms == true {
+		-ms-#{$property}: $value;
+	}	
+	
+	@if $moz == true {
+		-moz-#{$property}: $value;
+	}
+	
+	@if $o == true {
+		-o-#{$property}: $value;
+	}
+	
+	#{$property}: $value;
+}
+
+
+// Define @keyframes with prefix
+
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name} {
+		@content;
+	}
+	
+	@keyframes #{$name} {
+		@content;
+	}
+}
+
+// Transform with prefix
+@mixin transform($value) {
+	@include prefix(transform, $value, true, true);
+}
+
+
+// Transform-origin with prefix
+@mixin transformOrigin($value) {
+	@include prefix(transform-origin, $value, true, true);
+}
+
+
+// Transform3D with prefix
+@mixin transform3D($value) {
+	@include prefix(transform, $value, true);
+}
+
+
+// Perspective with prefix
+@mixin perspective($value) {
+	@include prefix(perspective, $value, true);
+}
+
+
+// Transition with prefix
+@mixin transition($value) {
+	@include prefix(transition, $value, true);
+}
+
+
+// Transition duration with prefix
+@mixin transitionDuration($value) {
+	@include prefix(transition-duration, $value, true);
+}
+
+// Transition property with prefix
+@mixin transitionProperty($value) {
+	@include prefix(transition-property, $value, true);
+}
+
+
+// Transition duration with prefix
+@mixin transitionTimingFunction($value) {
+	@include prefix(transition-timing-function, $value, true);
+}
+
+
+// Animation with prefix
+@mixin animation($value) {
+	@include prefix(animation, $value, true);
+}
+
+
+// Animation with prefix
+@mixin animationTimingFunction($value) {
+	@include prefix(animation-timing-function, $value, true);
+}
+
+
+// Filter
+@mixin filter($value) {
+	@include prefix(filter, $value, true);
+}

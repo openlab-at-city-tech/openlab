@@ -1,0 +1,31 @@
+// *-------------------------------------------------------------------------------------
+// * Nested List
+// *-------------------------------------------------------------------------------------
+
+#ftwp-list.ftwp-list-nest {	
+	&.ftwp-liststyle-none .ftwp-anchor::before {
+		content: '.';
+		visibility: hidden;
+		margin-right: 0;
+	}
+	
+	// Set the nested list margin-left
+	@for $n from 1 through 5 {
+		$selectors: selectorDuplicateNest('.ftwp-sub', $n);
+		#{$selectors} .ftwp-anchor::before {
+			margin-left: $n * $list_nested_offset;
+		}
+	}
+	
+	// Chain the list number
+	&.ftwp-liststyle-decimal {
+		ul, 
+		ol {
+			counter-reset: List;
+		}
+	}
+	
+	&.ftwp-colexp {
+		@import 'collapse_expand';  
+	}
+}

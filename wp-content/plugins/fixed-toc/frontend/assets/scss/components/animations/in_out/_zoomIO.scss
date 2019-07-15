@@ -1,0 +1,96 @@
+// *-------------------------------------------------------------------------------------
+// * Zoom In/Out
+// *-------------------------------------------------------------------------------------
+
+@include keyframes( ftwpZoomIn ) {
+	0% {
+		@include transform( scale(0) );
+		visibility: hidden;
+		opacity: 0;
+	}
+	
+	20% {
+		opacity: 0;
+	}
+	
+	30% {
+		opacity: 1;
+	}
+	
+	100% {
+		@include transform( scale(1) );
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+@include keyframes( ftwpZoomOut ) {
+	0% {
+		@include transform( scale(1) );
+		visibility: visible;
+		opacity: 1;
+	}
+	
+	50% {
+		opacity: 1;
+	}
+	
+	80% {
+		opacity: .3;
+	}
+	
+	100% {
+		@include transform( scale(0) );
+		visibility: hidden;
+		opacity: 0;
+	}
+}
+
+@include keyframes( ftwpHide ) {
+	from {
+		visibility: visible;
+	}
+	
+	to {
+		visibility: hidden;
+	}
+}
+
+@include keyframes( ftwpShow ) {
+	0%, 99% {
+		visibility: hidden;
+	}
+	
+	100% {
+		visibility: visible;
+	}
+}
+
+@mixin zoomIO {
+	&-in.ftwp-minimize #ftwp-trigger,
+	&-in.ftwp-maximize #ftwp-contents {
+		@include animation( ftwpZoomIn $durationSlow ease-out forwards );
+	}
+	
+	&-inOut.ftwp-maximize  {
+		#ftwp-trigger {
+			visibility: visible;
+			@include animation( ftwpHide $durationFast forwards );
+		}
+		
+		#ftwp-contents {
+			@include animation( ftwpZoomIn $durationMedium ease-out forwards );
+		}
+	}	
+	
+	&-inOut.ftwp-minimize  {
+		#ftwp-trigger {
+			visibility: hidden;
+			@include animation( ftwpShow $durationMedium forwards );
+		}
+		
+		#ftwp-contents {
+			@include animation( ftwpZoomOut $durationMedium + $durationFast ease-in forwards );
+		}
+	}
+}
