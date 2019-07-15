@@ -991,7 +991,7 @@ class oplb_gradebook_api
 
             $assign_count++;
 
-            array_push($column_headers_assignment_names, $assignment['assign_name']);
+            array_push($column_headers_assignment_names, mb_convert_encoding($assignment['assign_name'], 'UTF-16LE', 'UTF-8'));
             array_push($assignment_types, $assignment['assign_grade_type']);
             $assignment_id_tracker[$assignment['id']] = $assignment['id'];
         }
@@ -1028,9 +1028,9 @@ class oplb_gradebook_api
         foreach ($students as &$value) {
             $studentData = get_userdata($value->uid);
             $value = array(
-                'firstname' => $studentData->first_name,
-                'lastname' => $studentData->last_name,
-                'username' => $studentData->user_login,
+                'firstname' => mb_convert_encoding($studentData->first_name, 'UTF-16LE', 'UTF-8'),
+                'lastname' => mb_convert_encoding($studentData->last_name, 'UTF-16LE', 'UTF-8'),
+                'username' => mb_convert_encoding($studentData->user_login, 'UTF-16LE', 'UTF-8'),
                 'mid_semester_grade' => $this->get_student_grade_label($value->mid_semester_grade),
                 'final_grade' => $this->get_student_grade_label($value->final_grade),
                 'id' => intval($studentData->ID),
@@ -1102,7 +1102,8 @@ class oplb_gradebook_api
         //final sort by lastname before heading out
         $student_records = $this->sort_array_by($student_records, 'lastname');
 
-        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-type: application/csv');
+        header('Content-Transfer-Encoding: UTF-8');
         $filename = str_replace(" ", "_", $course['name'] . '_' . $gbid);
         header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 
@@ -1132,7 +1133,7 @@ class oplb_gradebook_api
 
     public function sort_array_by($array, $key)
     {
-        usort($array, function($a, $b) use($key){
+        usort($array, function ($a, $b) use ($key) {
             return strcmp($a[$key], $b[$key]);
         });
         return $array;

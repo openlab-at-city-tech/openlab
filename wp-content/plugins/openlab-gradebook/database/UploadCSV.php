@@ -1131,7 +1131,7 @@ class gradebook_upload_csv_API
 
             $header_row = array();
             foreach ($data_out['headers'] as $header) {
-                array_push($header_row, $header);
+                array_push($header_row, mb_convert_encoding($header, 'UTF-16LE', 'UTF-8'));
             }
 
             fputcsv($df, $header_row);
@@ -1171,7 +1171,7 @@ class gradebook_upload_csv_API
 
         // disposition / encoding on response body
         header("Content-Disposition: attachment;filename={$filename}");
-        header("Content-Transfer-Encoding: binary");
+        header("Content-Transfer-Encoding: UTF-8");
 
         echo $this->buildCSV($data_out);
         die();
@@ -1209,6 +1209,11 @@ class gradebook_upload_csv_API
             if (!empty($student['student_id'])) {
                 unset($student['student_id']);
             }
+
+            //handle encoding
+            $student['firstname'] = mb_convert_encoding($student['firstname'], 'UTF-16LE', 'UTF-8');
+            $student['lastname'] = mb_convert_encoding($student['lastname'], 'UTF-16LE', 'UTF-8');
+            $student['username'] = mb_convert_encoding($student['username'], 'UTF-16LE', 'UTF-8');
 
             $assigndex = $this->getAssignmentIndexStart();
             $studentdex = 0;
