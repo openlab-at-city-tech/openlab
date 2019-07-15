@@ -648,12 +648,15 @@ class gradebook_upload_csv_API
 
         $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
         $studentIDs = $wpdb->get_results($query, ARRAY_N);
+        $remaining_students = $studentIDs;
 
-        foreach ($studentIDs as $value) {
+        foreach ($studentIDs as $key => $value) {
 
             foreach ($students as $student) {
 
                 if (intval($student['student_id']) === intval($value[0])) {
+
+                    unset($remaining_students[$key]);
 
                     $this_grade = $this->processGrade($student[$assignment['name']]['value'], $assignment['type']);
 
@@ -674,6 +677,24 @@ class gradebook_upload_csv_API
                 }
 
             }
+        }
+
+        //handle studentst that are in Gradebook but not in the CSV
+        foreach ($remaining_students as $remaining) {
+            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                'amid' => $assignID,
+                'uid' => $remaining[0],
+                'gbid' => $gbid,
+                'assign_order' => $assignOrder,
+                'assign_points_earned' => 0,
+            ), array(
+                '%d',
+                '%d',
+                '%d',
+                '%d',
+                '%f',
+            )
+            );
         }
     }
 
