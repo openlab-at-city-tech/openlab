@@ -78,9 +78,7 @@ class gradebook_upload_csv_API
 
         } else if ($process_result['errors'] > 0) {
 
-            array_push($process_result['headers'], 'Errors');
             $process_result['file'] = $file;
-
             $this->handleErrors($process_result, $gbid);
 
         }
@@ -182,7 +180,7 @@ class gradebook_upload_csv_API
             $is_student = $this->checkStudent($student, $gbid);
 
             if (!$is_student) {
-                $student['error'] = 'Student not registered for class';
+                $student['username'] = "**This student is not added to the Gradebook** {$student['username']}";
                 $errors++;
             } else {
                 $student['student_id'] = $is_student;
