@@ -565,6 +565,7 @@ body .site-title a {
 
 .education-pro-blue button,
 .education-pro-blue a.button,
+.education-pro-blue input[type="submit"],
 .education-pro-blue .footer-widgets a.button,
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
