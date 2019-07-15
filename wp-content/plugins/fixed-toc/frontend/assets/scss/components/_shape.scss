@@ -1,0 +1,54 @@
+// *-------------------------------------------------------------------------------------
+// * Rounded or circle the trigger button
+// *-------------------------------------------------------------------------------------
+
+// Round
+&.ftwp-wrap .ftwp-shape-round {
+	&,
+	&:hover,
+	&:focus,
+	&:active {
+		border-radius: $trigger_round_radius;
+	}
+}
+
+@each $borderName, $borderWidth in 
+	(thin, $border_thin)
+	(medium, $border_medium)
+	(bold, $border_bold) {
+		&.ftwp-border-#{$borderName} .ftwp-shape-round {
+			#ftwp-header {
+				border-top-left-radius: $trigger_round_radius - $borderWidth;
+				border-top-right-radius: $trigger_round_radius - $borderWidth;
+			}
+			
+			#ftwp-list {
+				border-bottom-left-radius: $trigger_round_radius - $borderWidth;
+				border-bottom-right-radius: $trigger_round_radius - $borderWidth;		
+			}
+		}
+}
+
+// Circle
+&.ftwp-wrap .ftwp-shape-circle {
+	&,
+	&:hover,
+	&:focus,
+	&:active {
+		border-radius: 50%;
+	}	
+	
+	.ftwp-trigger-icon  {
+		font-size: .9 * $trigger_font_size;
+	}
+	
+@each $borderName, $borderWidth in 
+	(thin, $border_thin)
+	(medium, $border_medium)
+	(bold, $border_bold) {
+		&.ftwp-border-#{$borderName} .ftwp-trigger-icon {
+			font-size: .9 * $trigger_font_size - $borderWidth; 
+		}
+	}
+	
+}

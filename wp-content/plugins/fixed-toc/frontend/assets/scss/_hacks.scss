@@ -1,0 +1,19 @@
+// *-------------------------------------------------------------------------------------
+// * Hacks
+// *-------------------------------------------------------------------------------------
+
+// IE9
+&.ftwp-ie9 {
+	&.ftwp-minimize #ftwp-trigger,
+	&.ftwp-maximize #ftwp-contents {
+		visibility: visible !important;
+	}
+	
+	&.ftwp-maximize #ftwp-trigger {
+		visibility: hidden !important;
+	}
+	
+	#ftwp-trigger:hover {
+		filter: none !important;
+	}
+}

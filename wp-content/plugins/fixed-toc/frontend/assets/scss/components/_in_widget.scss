@@ -1,0 +1,94 @@
+// *-------------------------------------------------------------------------------------
+// * Style only apply to widget.
+// *-------------------------------------------------------------------------------------
+@at-root .ftwp-widget {
+	#ftwp-container {
+		width: 100%;
+		height: auto;
+		
+		#ftwp-trigger {
+			position: absolute;
+			top: -9999px;
+			z-index: -10;
+			visibility: hidden;
+		}	
+		
+		&.ftwp-wrap #ftwp-contents {
+			width: 100%;
+			height: auto;
+		}
+		
+		
+	}
+	
+	&-fixed {
+		
+//		@include keyframes( fadeInFixedWidget ) {
+//			from {
+//				opacity: 0;
+//			}
+//			
+//			to {
+//				opacity: 1;
+//			}
+//		}
+		
+		#ftwp-contents {
+			position: fixed;
+			z-index: 999;
+//			opacity: 0;
+//			@include animation( fadeInFixedWidget $durationMedium ease-out forwards ); 
+		}	
+	}
+	
+	&-invalid {
+		display: none;
+	}
+	
+}
+
+
+
+
+
+//@at-root .widget-ftoc {
+//	#ftwp-trigger {
+//		display: none !important;
+//	}
+//	
+//	#ftwp-container {
+//		#ftwp-contents {
+//			border: none;
+//		}
+//		
+//		#ftwp-header {
+//			padding: $header_vpadding 0;
+//		}
+//
+//		#ftwp-list {
+//			.ftwp-anchor {
+//				padding: $list_anchor_vpadding 0;
+//			}
+//			
+//			&.ftwp-list-nest {		
+//				&.ftwp-colexp {
+//					.ftwp-icon {
+//						&-collapse,
+//						&-expand {
+//							padding-left: 0;
+//						}
+//					}
+//					
+//					.ftwp-anchor {
+//						padding-left: $list_anchor_hpadding + $list_font_size;
+//					}
+//				}
+//			}					
+//		}
+//	}
+//	
+//	&-fixed {
+//		position: fixed;
+//	}
+//	
+//}

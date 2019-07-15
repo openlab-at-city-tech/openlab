@@ -1,0 +1,18 @@
+// *-------------------------------------------------------------------------------------
+// * For the before content of some effects.
+// *-------------------------------------------------------------------------------------
+
+@mixin hoverEffectBasic() {
+	.ftwp-text::before {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba($list_active_bgcolor, $opacity);
+		@include transition( $durationMedium ease-out );
+		@include transitionProperty( (transform, bottom, left, right, background) );
+	}
+}

@@ -1,0 +1,28 @@
+// *-------------------------------------------------------------------------------------
+// * Slide in.
+// *-------------------------------------------------------------------------------------
+
+@mixin flipIO {
+	#ftwp-trigger,
+	#ftwp-contents {
+		visibility: hidden;
+		opacity: 0;
+		@include transform( ( perspective(800px) rotateY(90deg) ) );
+		@include transition( $durationFast ease-in );
+		@include transitionProperty( (transform, opacity, visibility) );
+	}
+	
+	#ftwp-contents {
+		@include transform( ( perspective(6000px) rotateY(90deg) ) );
+	}
+	
+	&-in {
+		&.ftwp-minimize #ftwp-trigger,
+		&.ftwp-maximize #ftwp-contents {
+			opacity: 1;
+			visibility: visible;
+			@include transform( rotateY( 0deg) );
+			@include transition( $durationSlow $durationFast ease-out );
+		}
+	}
+}

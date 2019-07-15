@@ -1,0 +1,55 @@
+&,
+button,
+button:hover,
+button:active,
+button:focus,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+li,
+li::before,
+li::after,
+a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus,
+nav,
+header,
+div,
+span {
+	margin: 0;
+	padding: 0;
+	line-height: inherit;
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	box-shadow: none;
+	text-shadow: none;
+	text-decoration: none;
+	text-align: inherit;
+	border: none;
+	outline: none;
+	box-sizing: border-box;
+	border-radius: 0;
+	clear: none;
+}
+
+li {
+	list-style: none;
+	&::before,
+	&::after {
+		display: none;
+	}
+}
+
+header::before,
+nav::before {
+	display: none; 
+}

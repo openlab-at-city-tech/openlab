@@ -1,0 +1,43 @@
+// *-------------------------------------------------------------------------------------
+// * Bounce To Right, Left, Top and Bottom
+// *-------------------------------------------------------------------------------------
+@mixin bounceToRight {
+	.ftwp-anchor {
+		@include transitionDuration($durationSlow);
+		
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				@include transform(scaleX(1)); 
+				@include transitionTimingFunction(cubic-bezier(.52,1.64,.37,.66));
+			}		
+		}
+	}
+	
+	.ftwp-text::before {
+		@include transform(scaleX(0));
+		@include transformOrigin(left center);		
+		@include transitionDuration($durationSlow);
+	}
+}
+
+
+@mixin bounceToLeft {
+	.ftwp-anchor {
+		@include transitionDuration($durationSlow);
+		
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				@include transform(scaleX(1));
+				@include transitionTimingFunction(cubic-bezier(.52,1.64,.37,.66));
+			}		
+		}
+	}
+	
+	.ftwp-text::before {
+		@include transform(scaleX(0));
+		@include transformOrigin(right center);		
+		@include transitionDuration($durationSlow);
+	}
+}

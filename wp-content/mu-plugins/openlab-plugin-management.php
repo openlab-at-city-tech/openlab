@@ -78,6 +78,8 @@ function openlab_hide_plugins( $plugins ) {
 			'genesis-connect-for-buddypress/genesis-connect.php',
 			'invite-anyone/invite-anyone.php',
 			'more-privacy-options/ds_wp3_private_blog.php',
+			'ol-portfolio/ol-portfolio.php',
+			'openlab-badges/openlab-badges.php',
 			'openlab-grade-comments/openlab-grade-comments.php',
 			'u-buddypress-forum-attachment/u-bp-forum-attachment.php',
 			'wds-buddypress-docs/loader.php',

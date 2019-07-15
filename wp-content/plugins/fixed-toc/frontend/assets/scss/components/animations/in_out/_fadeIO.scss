@@ -1,0 +1,50 @@
+// *-------------------------------------------------------------------------------------
+// * Fade in.
+// *-------------------------------------------------------------------------------------
+@include keyframes( ftwpFadeIn ) {
+	from {
+		opacity: 0;
+		visibility: hidden;
+	}
+	
+	to {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+@include keyframes( ftwpFadeOut ) {
+	from {
+		opacity: 1;
+		visibility: visible;
+	}
+	
+	to {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+
+@mixin fadeIO {
+	&-in.ftwp-minimize #ftwp-trigger,
+	&-in.ftwp-maximize #ftwp-contents {
+		visibility: hidden;
+		@include animation( ftwpFadeIn $durationSlow ease-out forwards );
+	}
+	
+	@each $state, $inTarget, $outTarget in 
+		( minimize, trigger, contents ),
+		( maximize, contents, trigger ) {
+		&-inOut.ftwp-#{$state} {
+			#ftwp-#{$inTarget} {
+				visibility: hidden;
+				@include animation( ftwpFadeIn $durationMedium $durationFast ease-out forwards );
+			}
+
+			#ftwp-#{$outTarget} {
+				visibility: visible;
+				@include animation( ftwpFadeOut $durationFast ease-in forwards );
+			}	
+		}		
+	}
+}

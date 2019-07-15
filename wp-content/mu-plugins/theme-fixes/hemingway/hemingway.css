@@ -100,8 +100,8 @@ body .post-categories {
 body .post-nav h5 {
 	color: #595959;
 }
-body .pingbacklist .comment-edit-link { 
-	color: #595959; 
+body .pingbacklist .comment-edit-link {
+	color: #595959;
 }
 body .bypostauthor .comment-meta-content cite .post-author {
 	color: #595959;
@@ -118,12 +118,12 @@ body .widget-content ul li .post-date {
 body #wp-calendar tfoot a {
 	color: #595959;
 }
-body .post-meta .date-sep { 
-	color: #595959; 
+body .post-meta .date-sep {
+	color: #595959;
 }
 body .credits,
-body .credits a { 
-	color: #fff; 
+body .credits a {
+	color: #fff;
 }
 body .blog-description:before {
 	background: #fff;
@@ -136,4 +136,6 @@ body .blog-menu a {
 }
 body .blog-menu li:hover > a {
 	color: #1abc9c;
+}
+@media print {
 }

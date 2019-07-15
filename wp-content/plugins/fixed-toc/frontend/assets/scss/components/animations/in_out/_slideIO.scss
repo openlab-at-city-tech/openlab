@@ -1,0 +1,33 @@
+// *-------------------------------------------------------------------------------------
+// * Slide in.
+// *-------------------------------------------------------------------------------------
+
+@mixin slideIO {
+	#ftwp-trigger,
+	#ftwp-contents {
+		visibility: hidden;
+		opacity: 0;
+		@include transform( translateX( -1000px ) );
+		@include transition( $durationFast ease-in );
+		@include transitionProperty( (transform, opacity, visibility) );
+	}
+	
+	&.ftwp-top-right,
+	&.ftwp-middle-right,
+	&.ftwp-bottom-right {
+		#ftwp-trigger,
+		#ftwp-contents {
+			@include transform( translateX( 1000px ) );
+		}
+	}
+	
+	&-in {
+		&.ftwp-minimize #ftwp-trigger,
+		&.ftwp-maximize #ftwp-contents {
+			opacity: 1;
+			visibility: visible;
+			@include transform( translateX( 0px ) );
+			@include transition( $durationMedium $durationFast ease-out );
+		}
+	}
+}

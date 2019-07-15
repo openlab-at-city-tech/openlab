@@ -1,0 +1,27 @@
+{
+    "sass.enabled": false,
+    "path": {
+        "scss/ftoc.scss": {
+            "sass.enabled": true,
+            "sass.options": {
+                "outputDir": "../css/",
+                "sourceComments": false,
+                "outputStyle": "nested"
+            },
+            "mikaeljorhult.bracketsPHPLintTools.php-available": true,
+            "linting.collapsed": true,
+            "extensions.sort": "downloadCount",
+            "brackets-minifier.on-save": false
+        }
+    },
+    "brackets-minifier.on-save-project": false,
+    "brackets-minifier.js-project-minify": false,
+    "brackets-minifier.css-project-minify": false,
+    "brackets-minifier.js-custom-path": "",
+    "brackets-minifier.css-custom-path": "",
+    "brackets-minifier.project-exclude": "",
+    "brackets-minifier.concat-js-filename": "",
+    "brackets-minifier.concat-css-filename": "",
+    "brackets-minifier.uglifyjs-options": "{}",
+    "brackets-minifier.cleancss-options": "{}"
+}
