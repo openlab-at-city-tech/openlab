@@ -964,16 +964,11 @@ class oplb_gradebook_api
             die();
         }
 
-        //grab the letters in case we need them
-        $letter_grades = $this->getLetterGrades();
-
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);
         $course = $wpdb->get_row($query, ARRAY_A);
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE gbid = %d", $gbid);
         $assignments = $wpdb->get_results($query, ARRAY_A);
-
-        $grade_types_by_aid = array();
 
         foreach ($assignments as &$assignment) {
             $assignment['id'] = intval($assignment['id']);
@@ -1089,6 +1084,7 @@ class oplb_gradebook_api
         }
 
         usort($cells, $this->build_sorter('assign_order'));
+
         $student_records = array();
         foreach ($students as &$row) {
             $records_for_student = array_filter($cells, function ($k) use ($row) {
@@ -1102,6 +1098,9 @@ class oplb_gradebook_api
             $student_record = array_merge($row, $scores_for_student);
             array_push($student_records, $student_record);
         }
+
+        //final sort by lastname before heading out
+        $student_records = $this->sort_array_by($student_records, 'lastname');
 
         header('Content-Type: text/csv; charset=utf-8');
         $filename = str_replace(" ", "_", $course['name'] . '_' . $gbid);
@@ -1129,6 +1128,14 @@ class oplb_gradebook_api
         }
         fclose($output);
         die();
+    }
+
+    public function sort_array_by($array, $key)
+    {
+        usort($array, function($a, $b) use($key){
+            return strcmp($a[$key], $b[$key]);
+        });
+        return $array;
     }
 
     public function getLetterGrades()

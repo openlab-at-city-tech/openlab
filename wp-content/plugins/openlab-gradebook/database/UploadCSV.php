@@ -1158,6 +1158,7 @@ class gradebook_upload_csv_API
 
     public function download_csv()
     {
+        global $oplb_gradebook_api;
 
         if (empty($_REQUEST['gradebook_download_csv'])) {
             return true;
@@ -1209,6 +1210,8 @@ class gradebook_upload_csv_API
             }
 
         }
+
+        $this_data['data'] = $oplb_gradebook_api->sort_array_by($this_data['data'], 'lastname');
 
         $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
 
