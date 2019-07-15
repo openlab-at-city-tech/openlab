@@ -44,7 +44,9 @@ define([
 					msgUploadThreshold: "Adding to Gradebook..."
 				})
 				.on("fileselect", function(e, numfiles, label) {
+					console.log('fileselect');
 					error = "";
+					self.$el.find("#upload-csv-error-message").remove();
 				})
 				.on("fileuploaded", function(e, params) {
 					$(".file-preview-status.text-center.text-success").html(

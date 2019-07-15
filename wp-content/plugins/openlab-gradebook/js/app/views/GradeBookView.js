@@ -89,7 +89,7 @@ define([
 			);
 
 			Backbone.pubSub.on("updateAverageGrade", this.updateAverageGrade, this);
-			Backbone.pubSub.on("newGradebookCSV", this.render, this);
+			Backbone.pubSub.on("newGradebookCSV", this.initRender, this);
 
 			this.render();
 
@@ -121,11 +121,29 @@ define([
 			"click [class^=gradebook-student-column-]": "sortGradebookBy",
 			"click [class^=gradebook-student-column-] span": "sortGradebookBy"
 		},
-		initRender: function() {
+		initRender: function(ev) {
 			this.scrollSize = 0;
 			var self = this;
 			this.clearSubViews();
 			this.renderControl = 0;
+
+			console.log('ev on initRender', ev);
+			if (typeof ev !== "undefined") {
+				console.log("ev, self.gradebook", ev, self.gradebook);
+
+				if (typeof ev.cells !== "undefined") {
+					this.gradebook.cells.set(ev.cells);
+				}
+
+				if (typeof ev.students !== "undefined") {
+					this.gradebook.students.set(ev.students);
+				}
+
+				if (typeof ev.assignments !== "undefined") {
+					this.gradebook.assignments.set(ev.assignments);
+				}
+			}
+
 			var _x = _.map(self.gradebook.assignments.models, function(model) {
 				return model.get("assign_category").trim();
 			});
@@ -199,20 +217,8 @@ define([
 				}
 			}
 		},
-		render: function(ev) {
+		render: function() {
 			var self = this;
-
-			if (typeof ev !== "undefined") {
-				console.log("ev, self.gradebook", ev, self.gradebook);
-
-				if (typeof ev.cells !== "undefined") {
-					this.gradebook.cells.set(ev.cells);
-				}
-
-				if (typeof ev.students !== "undefined") {
-					this.gradebook.students.set(ev.students);
-				}
-			}
 
 			switch (this.gradebook.sort_key) {
 				case "cell":

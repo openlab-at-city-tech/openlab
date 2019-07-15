@@ -984,6 +984,7 @@ class oplb_gradebook_api
         usort($assignments, $this->build_sorter('assign_order'));
 
         $column_headers_assignment_names = array();
+        $assignment_types = array();
         $assignment_id_tracker = array();
         $assign_count = 0;
 
@@ -996,6 +997,7 @@ class oplb_gradebook_api
             $assign_count++;
 
             array_push($column_headers_assignment_names, $assignment['assign_name']);
+            array_push($assignment_types, $assignment['assign_grade_type']);
             $assignment_id_tracker[$assignment['id']] = $assignment['id'];
         }
 
@@ -1018,6 +1020,11 @@ class oplb_gradebook_api
             array('firstname', 'lastname', 'username', 'mid_semester_grade', 'final_grade'),
             $column_headers_assignment_names
         );
+
+        $type_headers = array_merge(
+            array('Assignment Types: ', '', '', '', ''), $assignment_types
+        );
+
         $cells = array();
 
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = %s", $gbid, 'student');
@@ -1106,6 +1113,7 @@ class oplb_gradebook_api
         //removing weights for now
         //fputcsv($output, $weights);
         fputcsv($output, $column_headers);
+        fputcsv($output, $type_headers);
 
         $final_rows = array();
 
@@ -1120,7 +1128,7 @@ class oplb_gradebook_api
             fputcsv($output, $row);
         }
         fclose($output);
-        die();  
+        die();
     }
 
     public function getLetterGrades()
@@ -1296,7 +1304,8 @@ class oplb_gradebook_api
         return $letter_grades;
     }
 
-    public function getFinalLetterGrades(){
+    public function getFinalLetterGrades()
+    {
         $letter_grades = array(
             array(
                 label => 'WF',

@@ -67,6 +67,7 @@ class gradebook_upload_csv_API
         }
 
         $parse_result = $this->parseCSV($file['file']);
+
         $process_result = $this->checkData($parse_result, $gbid);
 
         if ($process_result['errors'] === 'global') {
@@ -107,6 +108,11 @@ class gradebook_upload_csv_API
         // Create a variable to hold the header information
         $header = array();
 
+        //Create a variable to hold the type information
+        $type = array();
+
+        $header_rows_filled = false;
+
         // If the file can be opened as readable, bind a named resource
         if (($handle = fopen($file, 'r')) !== false) {
             // Loop through each row
@@ -115,28 +121,43 @@ class gradebook_upload_csv_API
                 $row = array_map("utf8_encode", $row);
 
                 // If the header has been stored
-                if ($header) {
+                if ($header_rows_filled) {
                     // Create an associative array with the data
                     $arrData['data'][] = array_combine($header, $row);
                 }
                 // Else the header has not been stored
                 else {
 
-                    $has_weights = array();
-                    if (!empty($row)) {
-                        foreach ($row as $row_item) {
-                            if (strtolower(trim($row_item)) === 'weight') {
-                                $has_weights = true;
+                    if (empty($header)) {
+
+                        $has_weights = array();
+                        if (!empty($row)) {
+                            foreach ($row as $row_item) {
+                                if (strtolower(trim($row_item)) === 'weight') {
+                                    $has_weights = true;
+                                }
                             }
                         }
-                    }
 
-                    if ($has_weights) {
-                        $arrData['weights'] = $row;
+                        if ($has_weights) {
+                            $arrData['weights'] = $row;
+                        } else {
+                            // Store the current row as the header
+                            $header = $row;
+                            $arrData['headers'] = $header;
+                        }
+
                     } else {
-                        // Store the current row as the header
-                        $header = $row;
-                        $arrData['headers'] = $header;
+
+                        $possibly_types = $row;
+
+                        if (strpos($possibly_types[0], 'Assignment Types') !== false) {
+                            $arrData['types'] = $row;
+                        } else {
+                            $arrData['data'][] = array_combine($header, $row);
+                        }
+
+                        $header_rows_filled = true;
                     }
                 }
             }
@@ -250,21 +271,27 @@ class gradebook_upload_csv_API
             return $process_result;
         }
 
-        //we'll first setup the assignments, in case this is a blank document
-        if (empty($assignments)) {
+        if (!empty($process_result['types'])) {
 
-            $process_result['message'] = array(
-                'response' => 'oplb-gradebook-error',
-                'error' => 'This CSV file does not have any assignments listed.',
-            );
-            $process_result['errors'] = 'global';
+            $typedex = $this->getAssignmentIndexStart() + 1;
+            $valid_types = array('numeric', 'letter', 'checkmark');
 
-            return $process_result;
+            foreach ($process_result['types'] as $index => &$type) {
+
+                if ($index < $typedex) {
+                    continue;
+                }
+
+                if (!in_array(strtolower(trim($type)), $valid_types)) {
+                    $type = "**This is not a valid assignment type**" . $type;
+                    $errors++;
+                }
+
+            }
+
         }
 
         $process_result['assignments'] = $assignments;
-
-        $missing_assignments = array();
 
         foreach ($assignments as $thisdex => $assignment) {
 
@@ -272,26 +299,35 @@ class gradebook_upload_csv_API
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
             $existing_assignment = $wpdb->get_results($query);
 
-            if (empty($existing_assignment)) {
-                $missing_assignments[$thisdex + 1] = $assignment;
-            } else {
+            if (!empty($existing_assignment)) {
                 $process_result['assignments'][$thisdex] = array(
+                    'status' => 'existing',
                     'name' => $assignment,
                     'type' => $existing_assignment[0]->assign_grade_type,
+                    'id' => $existing_assignment[0]->id,
+                    'assign_order' => $existing_assignment[0]->assign_order,
+                    'assign_weight' => $existing_assignment[0]->id,
+                    'assign_visibility' => $existing_assignment[0]->assign_visibility,
                 );
+            } else {
+
+                $assigndex = $this->getAssignmentIndexStart() + 1;
+
+                $stored_type = '';
+
+                if (!empty($process_result['types']) && !empty($process_result['types'][$assigndex + $thisdex])) {
+                    $stored_type = $process_result['types'][$assigndex + $thisdex];
+                }
+
+                $this_type = !empty($stored_type) ? $stored_type : $this->checkAssignmentType($assignment, $process_result['data']);
+
+                $process_result['assignments'][$thisdex] = array(
+                    'status' => 'new',
+                    'name' => $assignment,
+                    'type' => $this_type,
+                );
+
             }
-        }
-
-        if (!empty($missing_assignments)) {
-
-            $index_hold = $this->getAssignmentIndexStart();
-
-            foreach ($missing_assignments as $missdex => $missing) {
-
-                $process_result['headers'][$missdex + $index_hold] = "**Not in Gradebook**" . $process_result['headers'][$missdex + $index_hold];
-                $errors++;
-            }
-
         }
 
         $process_result['errors'] = $errors;
@@ -332,13 +368,11 @@ class gradebook_upload_csv_API
 
                 $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type'], true);
 
-                if (is_array($this_grade) && !empty($this_grade['result']) && $this_grade['result'] === 'error') {
+                if (is_array($this_grade) && !empty($this_grade['type']) && $this_grade['type'] === 'error') {
                     $errors++;
-                    $student[$assignment['name']] = $this_grade['value'];
-                } else {
-                    $student[$assignment['name']] = $this_grade;
                 }
 
+                $student[$assignment['name']] = $this_grade;
             }
 
         }
@@ -496,21 +530,19 @@ class gradebook_upload_csv_API
         foreach ($assignments as $thisdex => $assignment) {
 
             $type = $assignment['type'];
+            $status = $assignment['status'];
 
-            //check for existing assignments first
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment['name']);
-            $existing_assignment = $wpdb->get_results($query);
+            if ($status !== 'new') {
 
-            if (!empty($existing_assignment)) {
                 $to_update = array();
                 $to_update_type = array();
 
                 //update info that needs to be updated store assignment info for later use
                 $assignments_stored[$thisdex]['name'] = $assignment['name'];
-                $assignments_stored[$thisdex]['amid'] = $existing_assignment[0]->id;
-                $assignments_stored[$thisdex]['assign_order'] = $existing_assignment[0]->assign_order;
+                $assignments_stored[$thisdex]['amid'] = $assignment['id'];
+                $assignments_stored[$thisdex]['assign_order'] = $assignment['assign_order'];
 
-                $assignments_stored[$thisdex]['assign_weight'] = $existing_assignment[0]->assign_weight;
+                $assignments_stored[$thisdex]['assign_weight'] = $assignment['assign_weight'];
                 //for weights, we will update the weight as present on the spreadsheet
                 if ($this->isStringNotEmpty(trim($weights[$thisdex]))) {
                     $to_update['assign_weight'] = floatval($weights[$thisdex]);
@@ -518,17 +550,17 @@ class gradebook_upload_csv_API
                     $assignments_stored[$thisdex]['assign_weight'] = floatval($weights[$thisdex]);
                 }
 
-                $assignments_stored[$thisdex]['assign_grade_type'] = $existing_assignment[0]->assign_grade_type;
+                $assignments_stored[$thisdex]['assign_grade_type'] = $assignment['assign_grade_type'];
                 //for grade type - if the type is already set in the database, we won't do anyting
                 //if it's empty, we'll use the type determined from the data in the CSV
-                if (!$this->isStringNotEmpty($existing_assignment[0]->assign_grade_type)) {
+                if (!$this->isStringNotEmpty($assignment['assign_grade_type'])) {
                     $to_update['assign_grade_type'] = $type;
                     array_push($to_update_type, '%s');
                     $assignments_stored[$thisdex]['assign_grade_type'] = $type;
                 }
 
                 //if the visiblity is empty, default to 'Student'
-                if (!$this->isStringNotEmpty($existing_assignment[0]->assign_visibility)) {
+                if (!$this->isStringNotEmpty($assignment['assign_visibility'])) {
                     $to_update['assign_visibility'] = 'Student';
                     array_push($to_update_type, '%s');
                 }
@@ -536,7 +568,7 @@ class gradebook_upload_csv_API
                 if (!empty($to_update)) {
 
                     $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", $to_update, array(
-                        'id' => $existing_assignment[0]->id,
+                        'id' => $assignment['id'],
                     ), $to_update_type, array(
                         '%d',
                     )
@@ -544,10 +576,12 @@ class gradebook_upload_csv_API
                 }
 
                 continue;
-            }
+            } else {
 
-            //if the assignment doesn't exist, insert it
-            //$this->insertAssignment($weights, $thisdex, $assignment, $gbid);
+                //if the assignment doesn't exist, insert it
+                $this->insertAssignment($weights, $thisdex, $assignment, $gbid, $process_result['data']);
+
+            }
 
         }
 
@@ -568,7 +602,7 @@ class gradebook_upload_csv_API
         return $process_result;
     }
 
-    private function insertAssignment($weights, $thisdex, $assignment, $gbid)
+    private function insertAssignment($weights, $thisdex, $assignment, $gbid, $students)
     {
         global $wpdb;
 
@@ -588,12 +622,12 @@ class gradebook_upload_csv_API
         }
 
         $result = $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
-            'assign_name' => sanitize_text_field($assignment),
+            'assign_name' => sanitize_text_field($assignment['name']),
             'assign_date' => date('Y-m-d'),
             'assign_due' => date('Y-m-d', strtotime("+1 week")),
             'assign_category' => '',
             'assign_visibility' => 'Student',
-            'assign_grade_type' => 'numeric',
+            'assign_grade_type' => $assignment['type'],
             'gbid' => $gbid,
             'assign_order' => $assignOrder,
             'assign_weight' => $assign_weight,
@@ -612,30 +646,34 @@ class gradebook_upload_csv_API
         //also need to insert rows for any existing students - we'll address students off the CSV in a minute (existing or otherwise)
         $assignID = $wpdb->insert_id;
 
-        //store assignment info for later use
-        $assignments_stored[$thisdex]['name'] = $assignment;
-        $assignments_stored[$thisdex]['amid'] = $assignID;
-        $assignments_stored[$thisdex]['assign_order'] = $assignOrder;
-        $assignments_stored[$thisdex]['assign_weight'] = $assign_weight;
-
         $query = $wpdb->prepare("SELECT uid FROM {$wpdb->prefix}oplb_gradebook_users WHERE gbid = %d AND role = '%s'", $gbid, 'student');
         $studentIDs = $wpdb->get_results($query, ARRAY_N);
 
         foreach ($studentIDs as $value) {
-            $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
-                'amid' => $assignID,
-                'uid' => $value[0],
-                'gbid' => $gbid,
-                'assign_order' => $assignOrder,
-                'assign_points_earned' => 0,
-            ), array(
-                '%d',
-                '%d',
-                '%d',
-                '%d',
-                '%f',
-            )
-            );
+
+            foreach ($students as $student) {
+
+                if (intval($student['student_id']) === intval($value[0])) {
+
+                    $this_grade = $this->processGrade($student[$assignment['name']]['value'], $assignment['type']);
+
+                    $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
+                        'amid' => $assignID,
+                        'uid' => $value[0],
+                        'gbid' => $gbid,
+                        'assign_order' => $assignOrder,
+                        'assign_points_earned' => $this_grade['value'],
+                    ), array(
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%f',
+                    )
+                    );
+                }
+
+            }
         }
     }
 
@@ -750,7 +788,7 @@ class gradebook_upload_csv_API
                 $is_null = ($this_grade === '--' || empty($this_grade)) ? 1 : 0;
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_cells", array(
-                    'assign_points_earned' => $this_grade,
+                    'assign_points_earned' => $this_grade['value'],
                     'is_null' => $is_null,
                 ), array(
                     'amid' => $assignment['amid'],
@@ -779,6 +817,11 @@ class gradebook_upload_csv_API
     {
         global $oplb_gradebook_api;
         $is_verified = false;
+
+        //handle incoming array values
+        if (is_array($grade)) {
+            $grade = $grade['value'];
+        }
 
         //handle values marked for null
         if (trim($grade === '--')) {
@@ -833,6 +876,10 @@ class gradebook_upload_csv_API
                 //empty checkmark grades flip to no checkmark
                 $grade = 0;
                 $is_verified = true;
+            } else if (is_numeric(trim($grade))) {
+
+                $is_verified = true;
+
             }
 
         }
@@ -840,10 +887,15 @@ class gradebook_upload_csv_API
         if ($verify && !$is_verified) {
 
             $grade = array(
-                'result' => 'error',
-                'value' => $grade . "**this value is not valid for grades**",
+                'type' => 'error',
+                'value' => $grade . "**this value is not valid for {$type}-type grades**",
             );
 
+        } else {
+            $grade = array(
+                'type' => $type,
+                'value' => $grade,
+            );
         }
 
         return $grade;
@@ -926,7 +978,7 @@ class gradebook_upload_csv_API
                 'uid' => $student_id,
                 'gbid' => $gbid,
                 'assign_order' => $assignment['assign_order'],
-                'assign_points_earned' => $this_grade,
+                'assign_points_earned' => $this_grade['value'],
             ), array(
                 '%d',
                 '%d',
@@ -1063,6 +1115,17 @@ class gradebook_upload_csv_API
 
             fputcsv($df, $header_row);
 
+            if (!empty($data_out['types'])) {
+                $types_row = array();
+
+                foreach ($data_out['types'] as $type) {
+                    array_push($types_row, $type);
+                }
+
+                fputcsv($df, $types_row);
+
+            }
+
             foreach ($data_out['data'] as $row) {
                 fputcsv($df, $row);
             }
@@ -1121,12 +1184,64 @@ class gradebook_upload_csv_API
                 unset($student['final_grade_value']);
             }
 
+            if (!empty($student['student_id'])) {
+                unset($student['student_id']);
+            }
+
+            $assigndex = $this->getAssignmentIndexStart();
+            $studentdex = 0;
+
+            foreach ($student as &$item) {
+
+                if ($studentdex <= $assigndex) {
+                    $studentdex++;
+                    continue;
+                }
+
+                //only convert values that are not errors
+                if ($item['type'] !== 'error') {
+                    $item = $this->convertCSVValues($item['value'], $item['type']);
+                } else {
+                    $item = $item['value'];
+                }
+
+                $studentdex++;
+            }
+
         }
 
         $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
 
         $this->outputCSV($this_data, $filename);
 
+    }
+
+    private function convertCSVValues($value, $type)
+    {
+        global $oplb_gradebook_api;
+
+        switch ($type) {
+            case 'letter':
+
+                if (is_numeric($value)) {
+                    $value = $oplb_gradebook_api->numeric_to_letter_grade_conversion($value);
+                }
+
+                break;
+            case 'checkmark':
+
+                if (is_numeric($value)) {
+                    if (floatval($value) >= 60) {
+                        $value = 'x';
+                    } else {
+                        $value = '';
+                    }
+                }
+
+                break;
+        }
+
+        return $value;
     }
 
     private function getAssignmentIndexStart()
