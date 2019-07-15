@@ -1220,11 +1220,13 @@ class gradebook_upload_csv_API
                     continue;
                 }
 
-                //only convert values that are not errors
-                if ($item['type'] !== 'error') {
-                    $item = $this->convertCSVValues($item['value'], $item['type']);
-                } else {
-                    $item = $item['value'];
+                if (is_array($item)) {
+                    //only convert values that are not errors
+                    if ($item['type'] !== 'error') {
+                        $item = $this->convertCSVValues($item['value'], $item['type']);
+                    } else {
+                        $item = $item['value'];
+                    }
                 }
 
                 $studentdex++;
