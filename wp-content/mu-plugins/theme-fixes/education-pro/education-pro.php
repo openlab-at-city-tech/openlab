@@ -392,3 +392,14 @@ function openlab_genesis_seo_site_title() {
 
 }
 
+/**
+ * Prevent resizing from resize-image-after-upload.
+ */
+add_filter(
+	'wp_handle_upload',
+	function( $image_data ) {
+		remove_action( 'wp_handle_upload', 'jr_uploadresize_resize' );
+		return $image_data;
+	},
+	0
+);
