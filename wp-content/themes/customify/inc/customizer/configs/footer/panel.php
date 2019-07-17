@@ -141,7 +141,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'css_format' => 'background-color: {{value}}',
 			),
 		);
-
+		$config = apply_filters( 'customify/builder/' . $this->id . '/rows/section_configs', $config, $section, $section_name );
 		return $config;
 	}
 }

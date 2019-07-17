@@ -1,10 +1,10 @@
 /*!	
 Theme Name: Customify	
-Theme URI: https://wpcustomify.com	
+Theme URI: https://pressmaximum.com/customify	
 Author: WPCustomify	
-Author URI: https://wpcustomify.com/about	
-Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com	
-Version: 0.2.9	
+Author URI: https://pressmaximum.com	
+Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify	
+Version: 0.3.3	
 License: GNU General Public License v2 or later	
 License URI: http://www.gnu.org/licenses/gpl-2.0.html	
 Text Domain: customify	
@@ -3512,6 +3512,10 @@ article.comment .comment-post-author {
   margin-left: auto;
 }
 
+.entry-content .alignleft {
+  margin-left: 1.41575em;
+}
+
 .main-layout-content .entry-content > .alignwide {
   max-width: 100vw;
   max-width: calc(var(--vw, 1vw) * 100);
@@ -3608,7 +3612,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .entry-content ol ol,
 .entry-content ul ol,
 .entry-content ol ul {
-  margin: 0 auto;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-right: 2.5em;
 }
 
 .entry-content ul ul li,
@@ -3780,6 +3786,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 /* Header Builder Common */
 .site-header {
   position: relative;
+  z-index: 10;
 }
 .site-header .customify-container {
   display: -webkit-box;
@@ -4060,6 +4067,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 .row-v2 .col-v2 {
   display: -webkit-box;
@@ -4070,6 +4079,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   -webkit-box-pack: center;
   -webkit-justify-content: center;
           justify-content: center;
+  margin-right: 1em;
+  margin-left: 1em;
 }
 .row-v2 .col-v2.col-v2-left {
   -webkit-box-pack: start;
@@ -4104,25 +4115,11 @@ ul.wp-block-latest-posts.is-grid.alignwide {
           flex: auto;
 }
 
-.col-v2-right .item--inner {
-  margin-right: 1em;
-}
-.col-v2-right .item--inner:first-child {
-  margin-right: 0px;
-}
-
 #masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {
   display: none;
 }
 #masthead > .customize-partial-edit-shortcut button {
   right: 0px;
-}
-
-.col-v2-left .item--inner {
-  margin-left: 1em;
-}
-.col-v2-left .item--inner:last-child {
-  margin-left: 0px;
 }
 
 /* Button */
@@ -5959,6 +5956,11 @@ body.menu_sidebar_dropdown:before {
 }
 .cb-row--mobile [class~="customify-col"], .cb-row--mobile [class*="customify-col-"], .cb-row--mobile [class*="customify-col_"] {
   padding: 0 0.5em 0;
+}
+
+.header-v2 .cb-row--mobile {
+  padding-right: 1em;
+  padding-left: 1em;
 }
 
 /*--------------------------------------------------------------

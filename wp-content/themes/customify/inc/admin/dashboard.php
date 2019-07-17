@@ -56,9 +56,28 @@ class Customify_Dashboard {
 				<div class="customify-notice-content">
 					<div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ); ?></div>
 					<p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ), esc_url( admin_url( 'themes.php?page=customify' ) ) ); ?></p>
+					<?php if ( is_child_theme() ) { ?>
+						<?php $child_theme = wp_get_theme(); ?>
+						<?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify' ), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__( 'Customify', 'customify' ). '</strong>' ); // phpcs:ignore ?>
+						<?php
+						$copy_link_args = array(
+							'page' => 'customify',
+							'action' => 'show_copy_settings',
+						);
+						$copy_link = add_query_arg( $copy_link_args, admin_url( 'themes.php' ) );
+						?>
+						<?php printf( '%s <a href="%s" class="go-to-setting">%s</a>', esc_html__( 'Now you can copy setting data from parent theme to this child theme', 'customify' ), esc_url( $copy_link ), esc_html__( 'Copy Settings', 'customify' ) ); ?>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
+			<?php
+		}
+		if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) {
+			?>
+			<div class="notice notice-success is-dismissible">
+				<p><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your theme settings were copied.', 'customify' ); ?></strong></p>
+			</div>
 			<?php
 		}
 	}
@@ -94,6 +113,9 @@ class Customify_Dashboard {
 
 	function setup() {
 		$theme        = wp_get_theme();
+		if ( is_child_theme() ) {
+			$theme = $theme->parent();
+		}
 		$this->config = array(
 			'name'       => $theme->get( 'Name' ),
 			'theme_uri'  => $theme->get( 'ThemeURI' ),
@@ -127,7 +149,7 @@ class Customify_Dashboard {
 		<div class="cd-header">
 			<div class="cd-row">
 				<div class="cd-header-inner">
-					<a href="https://wpcustomify.com" target="_blank" class="cd-branding">
+					<a href="https://pressmaximum.com" target="_blank" class="cd-branding">
 						<img src="<?php echo esc_url( get_template_directory_uri() ) . '/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
 					</a>
 					<span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
@@ -180,37 +202,41 @@ class Customify_Dashboard {
 	}
 
 	function copy_theme_settings() {
-		if ( is_child_theme() ) {
+		if ( is_child_theme() && isset( $_GET['action'] ) && 'show_copy_settings' == $_GET['action'] ) {
 			$child_theme = wp_get_theme();
 			$current_action_link = admin_url( 'themes.php?page=customify' );
 			?>
-			<div class="cd-box">
-				<div class="cd-box-top"><?php _e( 'Copy Settings', 'customify' ); ?></div>
+			<div class="cd-box copy-theme-settings">
+				<div class="cd-box-top">
+					<?php _e( 'Copy Settings', 'customify' ); ?>
+					<button type="button" class="notice-dismiss js-dismiss-notice" data-base_url="<?php echo esc_url( admin_url( 'themes.php?page=customify' ) ); ?>"></button>
+				</div>
 				<div class="cd-box-content">
 					<form method="post" action="<?php echo esc_attr( $current_action_link ); ?>" class="demo-import-boxed copy-settings-form">
 						<p>
 							<strong> <?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of Customify', 'customify' ), $child_theme->Name ); // phpcs:ignore ?></strong>
 						</p>
 						<p><?php printf( esc_html__( "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'customify' ) ); ?></p>
-						<p>
-							<?php
-							$select = '<select name="copy_from">';
-								$select .= '<option value="">' . esc_html__( 'From Theme', 'customify' ) . '</option>';
-								$select .= '<option value="customify">Customify</option>';
-								$select .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
-							$select .= '</select>';
-							$select_2 = '<select name="copy_to">';
-								$select_2 .= '<option value="">' . esc_html__( 'To Theme', 'customify' ) . '</option>';
-								$select_2 .= '<option value="customify">Customify</option>';
-								$select_2 .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
-							$select_2 .= '</select>';
-							echo sprintf( '%1$s %2$s %3$s', $select, esc_html__( 'to', 'customify' ), $select_2 );
-							?>
-							<input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
-						</p>
-						<?php if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) { ?>
-							<p style="padding: 6px 20px 6px 5px;background-color: #ecf7ed;border-left: 4px solid #47B45D;"><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your settings were copied.', 'customify' ); ?></strong></p>
-						<?php } ?>
+						<div class="form-fields">
+							<div class="select-theme-fields">
+								<?php
+								$select = '<select name="copy_from">';
+									$select .= '<option value="">' . esc_html__( 'From Theme', 'customify' ) . '</option>';
+									$select .= '<option value="customify">Customify</option>';
+									$select .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+								$select .= '</select>';
+								$select_2 = '<select name="copy_to">';
+									$select_2 .= '<option value="">' . esc_html__( 'To Theme', 'customify' ) . '</option>';
+									$select_2 .= '<option value="customify">Customify</option>';
+									$select_2 .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+								$select_2 .= '</select>';
+								echo sprintf( '%1$s <span>%2$s</span> %3$s', $select, esc_html__( 'To', 'customify' ), $select_2 );
+								?>
+							</div>
+							<div class="submit-field">
+								<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -538,47 +564,47 @@ class Customify_Dashboard {
 			array(
 				'name' => __( 'Header Transparent', 'customify' ),
 				'desc' => __( 'Make your website stand out with transparent header modules.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-transparent/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/header-transparent/',
 			),
 			array(
 				'name' => __( 'Header Sticky', 'customify' ),
 				'desc' => __( 'Let your header accessible when users scroll up or down in unique style.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/header-sticky/',
 			),
 			array(
 				'name' => __( 'Header and Footer Builder Booster', 'customify' ),
 				'desc' => __( 'Get more header and footer builder items, plus advanced styling options.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/advanced-header-footer-builder/',
 			),
 			array(
 				'name' => __( 'Scroll To Top', 'customify' ),
 				'desc' => __( 'Get a better user experience with a scroll to top button with beautiful animation.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/scroll-to-top/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/scroll-to-top/',
 			),
 			array(
 				'name' => __( 'Blog Pro', 'customify' ),
 				'desc' => __( 'Take advantage of the Blog Pro module to show off your posts in any layouts.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/blog-pro/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/blog-pro/',
 			),
 			array(
 				'name' => __( 'Advanced Styling', 'customify' ),
 				'desc' => __( 'Control the layout and typography setting for page header title, page header cover and more.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/advanced-styling/',
 			),
 			array(
 				'name' => __( 'Portfolio', 'customify' ),
 				'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/portfolio/',
 			),
 			array(
 				'name' => __( 'Multiple Headers', 'customify' ),
 				'desc' => __( 'Create unique header for each page, post, archive or WooCommerce pages.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/multiple-headers/',
 			),
 			array(
 				'name' => __( 'Mega Menu', 'customify' ),
 				'desc' => __( 'Create mega menu for your sites that need more space for navigation.', 'customify' ),
-				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/mega-menu/',
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/mega-menu/',
 			),
 			array(
 				'name' => __( 'Multilingual Integration', 'customify' ),
@@ -644,7 +670,7 @@ class Customify_Dashboard {
 		?>
 		<div class="cd-box">
 			<div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?>
-				<a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Upgrade Now &rarr;', 'customify' ); ?></a></div>
+				<a class="cd-upgrade" target="_blank" href="https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Upgrade Now &rarr;', 'customify' ); ?></a></div>
 			<div class="cd-box-content cd-modules">
 				<?php foreach ( $modules as $m ) { ?>
 				<div class="cd-module-item <?php echo isset( $m['sub'] ) && $m['sub'] ? 'cd-sub-module' : ''; ?>">
