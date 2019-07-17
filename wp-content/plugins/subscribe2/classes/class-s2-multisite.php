@@ -2,9 +2,9 @@
 class S2_Multisite {
 	/* === WP Multisite specific functions === */
 	/**
-	Handles subscriptions and unsubscriptions for different blogs on WPMU installs
-	*/
-	function wpmu_subscribe() {
+	 * Handles subscriptions and unsubscriptions for different blogs on WPMU installs
+	 */
+	public function wpmu_subscribe() {
 		global $mysubscribe2;
 		// subscribe to new blog
 		if ( ! empty( $_GET['s2mu_subscribe'] ) ) {
@@ -31,7 +31,7 @@ class S2_Multisite {
 
 				$cats_string = '';
 				foreach ( $all_cats as $cat ) {
-					('' === $cats_string) ? $cats_string = "$cat->term_id" : $cats_string .= ",$cat->term_id";
+					( '' === $cats_string ) ? $cats_string = "$cat->term_id" : $cats_string .= ",$cat->term_id";
 					update_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_cat' ) . $cat->term_id, $cat->term_id );
 				}
 				if ( empty( $cats_string ) ) {
@@ -73,22 +73,22 @@ class S2_Multisite {
 				switch_to_blog( key( $user_blogs ) );
 			} else {
 				// no longer a member of a blog
-				wp_redirect( get_option( 'siteurl' ) ); // redirect to front page
+				wp_safe_redirect( get_option( 'siteurl' ) ); // redirect to front page
 				exit( 0 );
 			}
 		}
 
 		// redirect to profile page
 		$url = get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2';
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit( 0 );
-	} // end wpmu_subscribe()
+	}
 
 	/**
-	Obtain a list of current WordPress multiuser blogs
-	Note this may affect performance but there is no alternative
-	*/
-	function get_mu_blog_list() {
+	 * Obtain a list of current WordPress multiuser blogs
+	 * Note this may affect performance but there is no alternative
+	 */
+	public function get_mu_blog_list() {
 		global $wpdb;
 		$blogs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid ), ARRAY_A );
 
@@ -102,27 +102,31 @@ class S2_Multisite {
 		}
 
 		return apply_filters( 's2_mu_blog_list', $blog_list );
-	} // end get_mu_blog_list()
+	}
 
 	/**
-	Register user details when new user is added to a multisite blog
-	*/
-	function wpmu_add_user( $user_ID = 0 ) {
+	 * Register user details when new user is added to a multisite blog
+	 */
+	public function wpmu_add_user( $user_ID = 0 ) {
 		global $mysubscribe2;
-		if ( 0 === $user_ID ) { return; }
+		if ( 0 === $user_ID ) {
+			return;
+		}
 		if ( 'yes' === $mysubscribe2->subscribe2_options['autosub'] ) {
 			$mysubscribe2->register( $user_ID, true );
 		} else {
 			$mysubscribe2->register( $user_ID, false );
 		}
-	} // end wpmu_add_user()
+	}
 
 	/**
-	Delete user details when a user is removed from a multisite blog
-	*/
-	function wpmu_remove_user( $user_ID ) {
+	 * Delete user details when a user is removed from a multisite blog
+	 */
+	public function wpmu_remove_user( $user_ID ) {
 		global $mysubscribe2;
-		if ( 0 === $user_ID ) { return; }
+		if ( 0 === $user_ID ) {
+			return;
+		}
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_format' ) );
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_autosub' ) );
 		$cats = get_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), true );
@@ -133,12 +137,12 @@ class S2_Multisite {
 			}
 		}
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ) );
-	} // end wpmu_remove_user()
+	}
 
 	/**
-	Rename WPMU widgets on upgrade without requiring user to re-enable
-	*/
-	function namechange_subscribe2_widget() {
+	 * Rename WPMU widgets on upgrade without requiring user to re-enable
+	 */
+	public function namechange_subscribe2_widget() {
 		global $wpdb;
 		$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
 
@@ -146,14 +150,18 @@ class S2_Multisite {
 			switch_to_blog( $blog );
 
 			$sidebars = get_option( 'sidebars_widgets' );
-			if ( empty( $sidebars ) || ! is_array( $sidebars ) ) { return; }
+			if ( empty( $sidebars ) || ! is_array( $sidebars ) ) {
+				return;
+			}
 			$changed = false;
 			foreach ( $sidebars as $s => $sidebar ) {
-				if ( empty( $sidebar ) || ! is_array( $sidebar ) ) { break; }
+				if ( empty( $sidebar ) || ! is_array( $sidebar ) ) {
+					break;
+				}
 				foreach ( $sidebar as $w => $widget ) {
 					if ( 'subscribe2widget' === $widget ) {
 						$sidebars[ $s ][ $w ] = 'subscribe2';
-						$changed = true;
+						$changed              = true;
 					}
 				}
 			}
@@ -162,6 +170,5 @@ class S2_Multisite {
 			}
 			restore_current_blog();
 		}
-	} // end namechange_subscribe2_widget()
+	}
 }
-?>
