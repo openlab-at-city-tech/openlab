@@ -22,6 +22,7 @@ export default new Vuex.Store({
     importModalState: false,
     importing: false,
     previewData: {},
+    currentPreviewSlug: '',
     aboutUrl: themeisleSitesLibApi.aboutUrl,
     strings: themeisleSitesLibApi.i18ln,
     homeUrl: themeisleSitesLibApi.homeUrl,
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     frontPageId: -1,
     migration: 'inactive',
     onboard: themeisleSitesLibApi.onboarding,
+    readyImport: themeisleSitesLibApi.readyImport,
     contentImported: themeisleSitesLibApi.contentImported,
     importOptions: {
       content: true,

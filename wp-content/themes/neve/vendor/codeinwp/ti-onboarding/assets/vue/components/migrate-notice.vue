@@ -58,14 +58,13 @@
       dismissMigration: function () {
         this.dismissed = true
         this.$store.dispatch('dismissMigration', {
-          req: 'Dismiss Migration',
           theme_mod: this.migrationData.theme_mod
         })
       },
       openModal: function () {
         this.setupImportData()
         this.$store.state.importOptions.isMigration = true
-        this.$store.commit('populatePreview', this.migrationData)
+        this.$store.commit('populatePreview', {siteData: this.migrationData})
         this.$store.commit('showImportModal', true)
       },
       setupImportData: function () {

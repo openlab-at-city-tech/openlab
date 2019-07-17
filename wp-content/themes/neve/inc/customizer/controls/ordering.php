@@ -45,11 +45,22 @@ class Ordering extends \WP_Customize_Control {
 
 	/**
 	 * Get disabled components
-	 * Add them at the and of all components in the customizer
+	 * Add them at the end of all components in the customizer
 	 */
 	private function setup_components() {
-		$val     = json_decode( $this->value(), true );
-		$enabled = array_combine( $val, $val );
+		$val = $this->value();
+		if ( ! is_string( $val ) ) {
+			$val = '[]';
+		}
+		$val = json_decode( $val, true );
+
+		if ( ! is_array( $val ) ) {
+			$val = array();
+		}
+
+		$enabled       = array_combine( $val, $val );
+		$default_setup = $this->components;
+
 
 		array_walk(
 			$enabled,
@@ -64,63 +75,56 @@ class Ordering extends \WP_Customize_Control {
 		$disabled = array_diff_assoc( $this->components, $enabled );
 
 		$this->components = array_merge( $enabled, $disabled );
-
+		$this->components = array_intersect( $default_setup, $this->components );
 	}
 
 	/**
 	 * Render content of control.
 	 */
 	public function render_content() {
-		echo $this->render_control_label();
-		echo $this->render_sortable_list();
-		echo $this->render_collector_input();
-	}
-
-	/**
-	 * Render sortable list.
-	 */
-	private function render_sortable_list() {
-		$markup = '<ul class="ti-order-sortable">';
-		foreach ( $this->components as $component => $name ) {
-			$markup .= '<li class="ui-state-default order-component' . esc_attr( $this->get_component_status_class( $component ) ) . '" data-id="' . esc_attr( $component ) . '">';
-			$markup .= '<span class="toggle-display"></span>';
-			$markup .= '<p>' . esc_html( $name ) . '</p>';
-			$markup .= '<span class="dashicons dashicons-menu drag"></span>';
-			$markup .= '</li>';
-		}
-		$markup .= '</ul>';
-
-		return $markup;
-	}
-
-	/**
-	 * Render the collector input.
-	 *
-	 * @return string
-	 */
-	private function render_collector_input() {
-		return '<input type="hidden" class="ti-order-collector"' . $this->get_link() . '>';
+		$this->render_control_label();
+		$this->render_sortable_list();
+		$this->render_collector_input();
 	}
 
 	/**
 	 * Render title and description.
 	 *
-	 * @return string
+	 * @return void
 	 */
 	private function render_control_label() {
 		if ( empty( $this->label ) && empty( $this->description ) ) {
-			return '';
+			return;
 		}
-		$markup = '<label>';
+		echo '<label>';
 		if ( ! empty( $this->label ) ) {
-			$markup .= '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
+			echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
 		}
 		if ( ! empty( $this->description ) ) {
-			$markup .= '<span class="description customize-control-description">' . wp_kses_post( $this->description ) . '</span>';
+			echo '<span class="description customize-control-description">' . wp_kses_post( $this->description ) . '</span>';
 		}
-		$markup .= '</label>';
+		echo '</label>';
+	}
 
-		return $markup;
+	/**
+	 * Render sortable list.
+	 *
+	 * @return void
+	 */
+	private function render_sortable_list() {
+		if ( empty( $this->components ) ) {
+			return;
+		}
+
+		echo '<ul class="ti-order-sortable">';
+		foreach ( $this->components as $component => $name ) {
+			echo '<li class="ui-state-default order-component' . esc_attr( $this->get_component_status_class( $component ) ) . '" data-id="' . esc_attr( $component ) . '">';
+			echo '<span class="toggle-display"></span>';
+			echo '<p>' . esc_html( $name ) . '</p>';
+			echo '<span class="dashicons dashicons-menu drag"></span>';
+			echo '</li>';
+		}
+		echo '</ul>';
 	}
 
 	/**
@@ -137,6 +141,10 @@ class Ordering extends \WP_Customize_Control {
 		}
 		$value = json_decode( $value, true );
 
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
+
 		if ( ! in_array( $component, $value ) ) {
 			return '';
 		}
@@ -144,4 +152,12 @@ class Ordering extends \WP_Customize_Control {
 		return ' enabled';
 	}
 
+	/**
+	 * Render the collector input.
+	 *
+	 * @return void
+	 */
+	private function render_collector_input() {
+		echo '<input type="hidden" class="ti-order-collector"' . wp_kses_post( $this->get_link() ) . '>';
+	}
 }

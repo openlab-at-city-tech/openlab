@@ -6,6 +6,9 @@
  * @package ti-about-page
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
 if ( ! class_exists( 'Ti_About_Page' ) ) {
 	require_once 'class-ti-about-page.php';
 }
@@ -22,5 +25,5 @@ if ( ! defined( 'TI_ABOUT_PAGE_URL' ) ) {
 	define( 'TI_ABOUT_PAGE_URL', get_template_directory_uri() . '/vendor/codeinwp/ti-about-page/' );
 }
 if ( ! defined( 'TI_ABOUT_PAGE_VERSION' ) ) {
-	define( 'TI_ABOUT_PAGE_VERSION', '1.0.2' );
+	define( 'TI_ABOUT_PAGE_VERSION', '1.0.4' );
 }

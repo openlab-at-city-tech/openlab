@@ -50,7 +50,6 @@ class Template_Parts extends Base_View {
 		} else {
 			$class .= ' nv-non-grid-article';
 		}
-
 		return $class;
 	}
 
@@ -98,7 +97,7 @@ class Template_Parts extends Base_View {
 				case 'excerpt':
 					$markup .= $this->get_excerpt();
 					break;
-				case 'default':
+				default:
 					break;
 			}
 		}

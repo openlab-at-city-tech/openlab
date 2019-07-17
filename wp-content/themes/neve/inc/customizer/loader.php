@@ -56,13 +56,14 @@ class Loader {
 				'Customizer\Options\Layout_Container',
 				'Customizer\Options\Layout_Blog',
 				'Customizer\Options\Layout_Single_Post',
+				'Customizer\Options\Layout_Single_Product',
 				'Customizer\Options\Layout_Sidebar',
 				'Customizer\Options\Top_Bar',
 				'Customizer\Options\Typography',
 				'Customizer\Options\Colors_Background',
-				'Customizer\Options\Layout_Footer',
-				'Customizer\Options\Layout_Navigation',
+				'Customizer\Options\Buttons',
 				'Customizer\Options\Rtl',
+				'Customizer\Options\Upsells',
 			)
 		);
 	}

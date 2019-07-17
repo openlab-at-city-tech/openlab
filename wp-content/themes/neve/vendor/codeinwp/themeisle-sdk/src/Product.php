@@ -200,6 +200,7 @@ class Product {
 	public function get_key() {
 		return $this->key;
 	}
+
 	/**
 	 * Check if the product is either theme or plugin.
 	 *
@@ -342,6 +343,11 @@ class Product {
 	 * @return string The store url.
 	 */
 	public function get_store_url() {
+
+		if ( strpos( $this->store_url, '/themeisle.com' ) !== false ) {
+			return 'https://store.themeisle.com';
+		}
+
 		return $this->store_url;
 	}
 
@@ -362,6 +368,7 @@ class Product {
 	public function get_file() {
 		return $this->file;
 	}
+
 	/**
 	 * Returns the pro slug, if available.
 	 *
@@ -378,6 +385,19 @@ class Product {
 	 */
 	public function get_install_time() {
 		return $this->install;
+	}
+
+	/**
+	 * Returns the URL of the product base file.
+	 *
+	 * @param string $path The path to the file.
+	 *
+	 * @return string The URL of the product base file.
+	 */
+	public function get_base_url( $path = '/' ) {
+		if ( $this->type ) {
+			return plugins_url( $path, $this->basefile );
+		}
 	}
 
 }

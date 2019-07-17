@@ -26,7 +26,6 @@ class Main extends Base_Customizer {
 		$this->register_types();
 		$this->add_main_panels();
 		$this->change_controls();
-		$this->generic_partials();
 	}
 
 	/**
@@ -41,6 +40,7 @@ class Main extends Base_Customizer {
 		$this->register_type( 'Neve\Customizer\Controls\Multi_Select', 'control' );
 		$this->register_type( 'Neve\Customizer\Controls\Reactive_Control', 'control' );
 		$this->register_type( 'Neve\Customizer\Controls\Checkbox', 'control' );
+		$this->register_type( 'Neve\Customizer\Controls\Upsell_Control', 'control' );
 	}
 
 	/**
@@ -51,10 +51,6 @@ class Main extends Base_Customizer {
 			'neve_layout'     => array(
 				'priority' => 25,
 				'title'    => __( 'Layout', 'neve' ),
-			),
-			'neve_header'     => array(
-				'priority' => 30,
-				'title'    => __( 'Header', 'neve' ),
 			),
 			'neve_typography' => array(
 				'priority' => 35,
@@ -75,64 +71,4 @@ class Main extends Base_Customizer {
 		}
 	}
 
-	/**
-	 * Change controls.
-	 *
-	 * @return void
-	 */
-	public function change_controls() {
-		// Move `Site Identity` section to `Header` panel.
-		$this->change_customizer_object( 'section', 'title_tagline', 'panel', 'neve_header' );
-
-		// Change the transport for blogdescription, blogname and custom_logo.
-		$this->change_customizer_object( 'setting', 'blogdescription', 'transport', $this->selective_refresh );
-		$this->change_customizer_object( 'setting', 'blogname', 'transport', $this->selective_refresh );
-		$this->change_customizer_object( 'setting', 'custom_logo', 'transport', $this->selective_refresh );
-	}
-
-	/**
-	 * Add generic partials.
-	 */
-	private function generic_partials() {
-		// Blog description.
-		$this->add_partial(
-			new Partial(
-				'neve_description_partial',
-				array(
-					'selector'        => '.brand > small',
-					'settings'        => array( 'blogdescription' ),
-					'render_callback' => array( $this, 'blog_description_callback' ),
-				)
-			)
-		);
-
-		// Site logo.
-		$this->add_partial(
-			new Partial(
-				'neve_site_logo_partial',
-				array(
-					'selector'        => '.site-logo > a',
-					'settings'        => array( 'custom_logo', 'blogname' ),
-					'render_callback' => array( $this, 'logo_callback' ),
-				)
-			)
-		);
-
-	}
-
-	/**
-	 * Blog description callback function
-	 */
-	public function blog_description_callback() {
-		bloginfo( 'description' );
-	}
-
-	/**
-	 * Logo callback
-	 */
-	public function logo_callback() {
-		$header = new Header();
-
-		return $header->get_logo();
-	}
 }

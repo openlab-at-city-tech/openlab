@@ -59,7 +59,7 @@ class Themeisle_OB_Widgets_Importer {
 	 *
 	 * @param array $data Widgets data.
 	 */
-	private function actually_import( $data ) {
+	public function actually_import( $data ) {
 		global $wp_registered_sidebars;
 		if ( empty( $data ) || ! is_array( $data ) ) {
 			return new WP_Error( 'ti__ob_widget_err_1' );
@@ -190,7 +190,6 @@ class Themeisle_OB_Widgets_Importer {
 			}
 		}
 	}
-
 
 	/**
 	 * Available widgets

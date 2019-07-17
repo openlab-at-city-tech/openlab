@@ -18,6 +18,84 @@ use Neve\Views\Layouts\Layout_Sidebar;
 class Woocommerce {
 
 	/**
+	 * Primary button selectors.
+	 *
+	 * @var array
+	 */
+	private $primary_buttons_selectors = array(
+		'default' => '
+			,.woocommerce a.button,
+			.woocommerce .button:not(.nv-sidebar-toggle),
+			.woocommerce a.button.alt,
+			.woocommerce a.button.button-primary,
+			.woocommerce a.button.checkout-button,
+			.woocommerce button.button:disabled,
+			.woocommerce button.button:disabled[disabled],
+			.woocommerce a.button.add_to_cart,
+			.woocommerce a.product_type_grouped,
+			.woocommerce a.product_type_external,
+			.woocommerce a.product_type_variable,
+			.woocommerce button.button.alt.single_add_to_cart_button.disabled,
+			.woocommerce button.button.alt.single_add_to_cart_button,
+			.woocommerce .actions > button[type=submit],
+			.woocommerce .checkout.wc-forward,
+			.woocommerce button#place_order,
+			.woocommerce .return-to-shop > .button,
+			ul[id^="nv-primary-navigation"] .nv-nav-cart a.button.checkout.wc-forward',
+		'hover'   => '
+			,.woocommerce a.button:hover,
+			.woocommerce .button:not(.nv-sidebar-toggle):hover,
+			.woocommerce a.button.alt:hover,
+			.woocommerce a.button.button-primary:hover,
+			.woocommerce a.button.checkout-button:hover,
+			.woocommerce button.button:disabled:hover,
+			.woocommerce button.button:disabled[disabled]:hover,
+			.woocommerce a.button.add_to_cart:hover,
+			.woocommerce a.product_type_grouped:hover,
+			.woocommerce a.product_type_external:hover,
+			.woocommerce a.product_type_variable:hover,
+			.woocommerce button.button.alt.single_add_to_cart_button.disabled:hover,
+			.woocommerce button.button.alt.single_add_to_cart_button:hover,
+			.woocommerce .actions > button[type=submit]:hover,
+			.woocommerce .checkout.wc-forward:hover,
+			.woocommerce button#place_order:hover,
+			.woocommerce .return-to-shop > .button:hover,
+			ul[id^="nv-primary-navigation"] .nv-nav-cart a.button.checkout.wc-forward:hover',
+	);
+
+	/**
+	 * Secondary buttons selectors.
+	 *
+	 * @var array
+	 */
+	private $secondary_buttons_selectors = array(
+		'default'          => '
+			,.woocommerce-cart table.cart td.actions .coupon > .input-text + .button,
+			.woocommerce-checkout #neve-checkout-coupon .woocommerce-form-coupon .form-row-last button,
+			.woocommerce button.button,
+			.woocommerce a.added_to_cart, 
+			.woocommerce .checkout_coupon button.button, 
+			.woocommerce #review_form #respond input#submit,
+			.woocommerce .price_slider_amount button.button:not(.nv-sidebar-toggle),
+			.woocommerce .button.button-secondary.more-details',
+		'hover'            => '
+			,#comments input[type=submit]:hover,
+			.woocommerce-cart table.cart td.actions .coupon > .input-text + .button:hover,
+			.woocommerce-checkout #neve-checkout-coupon .woocommerce-form-coupon .form-row-last button:hover,
+			.woocommerce button.button:hover, 
+			.woocommerce a.added_to_cart:hover, 
+			.woocommerce .checkout_coupon button.button:hover, 
+			.woocommerce #review_form #respond input#submit:hover,
+			.woocommerce .price_slider_amount button.button:hover,
+			.woocommerce .button.button-secondary.more-details:hover',
+		'no-padding'       => '
+			,.woocommerce ul[id^="nv-primary-navigation"] .woocommerce-mini-cart__buttons.buttons a.button.wc-forward:not(.checkout), 
+			.woocommerce .woocommerce-mini-cart__buttons.buttons a.button.wc-forward:not(.checkout)',
+		'no-padding-hover' => '
+			,.woocommerce ul[id^="nv-primary-navigation"] .woocommerce-mini-cart__buttons.buttons a.button.wc-forward:not(.checkout):hover, 
+			.woocommerce .woocommerce-mini-cart__buttons.buttons a.button.wc-forward:not(.checkout):hover',
+	);
+	/**
 	 * Sidebar manager.
 	 *
 	 * @var \Neve\Views\Layouts\Layout_Sidebar
@@ -67,6 +145,9 @@ class Woocommerce {
 		add_filter( 'woocommerce_is_sold_individually', array( $this, 'remove_quantity' ), 10, 2 );
 
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+
+		add_filter( 'woocommerce_product_description_heading', '__return_false' );
+		add_filter( 'woocommerce_product_additional_information_heading', '__return_false' );
 
 		$this->edit_woocommerce_header();
 		$this->move_checkout_coupon();
@@ -142,6 +223,7 @@ class Woocommerce {
 		remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 		remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 		remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+		add_action( 'nv_woo_header_bits', 'woocommerce_catalog_ordering', 30 );
 		add_filter( 'woocommerce_show_page_title', '__return_false' );
 		add_action( 'neve_before_shop_loop_content', array( $this, 'add_header_bits' ), 0 );
 
@@ -169,7 +251,7 @@ class Woocommerce {
 
 		echo '<div class="nv-woo-filters">';
 		$this->sidebar_toggle();
-		woocommerce_catalog_ordering();
+		do_action( 'nv_woo_header_bits' );
 		echo '</div>';
 	}
 
@@ -198,7 +280,8 @@ class Woocommerce {
 	 * Wrap main content start.
 	 */
 	public function wrap_main_content_start() {
-		echo '<div class="nv-index-posts nv-shop col">';
+		$before_shop_classes = apply_filters( 'neve_before_shop_classes', 'nv-index-posts nv-shop col' );
+		echo '<div class="' . esc_attr( $before_shop_classes ) . '">';
 		do_action( 'neve_before_shop_loop_content' );
 	}
 
@@ -235,7 +318,7 @@ class Woocommerce {
 
 		$button_text  = apply_filters( 'neve_filter_woo_sidebar_open_button_text', __( 'Filter', 'neve' ) . '»' );
 		$button_attrs = apply_filters( 'neve_woocommerce_sidebar_filter_btn_data_attrs', '' );
-		echo '<a class="nv-sidebar-toggle" ' . esc_attr( $button_attrs ) . '>' . esc_html( $button_text ) . '</a>';
+		echo '<a class="nv-sidebar-toggle" ' . wp_kses_post( $button_attrs ) . '>' . esc_html( $button_text ) . '</a>';
 	}
 
 	/**
@@ -243,8 +326,24 @@ class Woocommerce {
 	 */
 	private function add_inline_selectors() {
 		add_filter( 'neve_link_color_filter', array( $this, 'add_link_color' ) );
-		add_filter( 'neve_link_hover_color_filter', array( $this, 'add_link_hover_color' ) );
+		add_filter( 'neve_link_hover_color_filter', array( $this, 'add_link_color' ) );
 		add_filter( 'neve_button_color_filter', array( $this, 'add_button_color' ) );
+		add_filter( 'neve_button_hover_color_filter', array( $this, 'add_button_hover_color' ) );
+		add_filter( 'neve_button_text_color_filter', array( $this, 'add_button_text_color' ) );
+		add_filter( 'neve_button_hover_text_color_filter', array( $this, 'add_button_hover_text_color' ) );
+		add_filter( 'neve_button_border_radius_selectors_filter', array( $this, 'add_button_border_radius' ) );
+		add_filter( 'neve_button_padding_selectors', array( $this, 'add_button_padding_selectors' ), 10, 2 );
+
+		add_filter( 'neve_secondary_button_color_filter', array( $this, 'add_secondary_button_color' ) );
+		add_filter( 'neve_secondary_button_hover_color_filter', array( $this, 'add_secondary_button_hover_color' ) );
+		add_filter(
+			'neve_secondary_button_border_radius_selectors_filter',
+			array(
+				$this,
+				'add_secondary_button_border_radius',
+			)
+		);
+
 		add_filter( 'neve_menu_items_color_filter', array( $this, 'add_menu_items_color' ) );
 		add_filter( 'neve_menu_items_hover_color_filter', array( $this, 'add_menu_items_hover_color' ) );
 		add_filter( 'neve_body_font_family_selectors', array( $this, 'add_font_families' ) );
@@ -297,31 +396,146 @@ class Woocommerce {
 	 * @return array
 	 */
 	public function add_button_color( $color_setup ) {
-		$color_setup['background']['selectors'] .=
-			',.woocommerce a.button.alt,
-.woocommerce a.button.alt:hover,
-.woocommerce a.button.checkout-button,
-.woocommerce a.button.checkout-button:hover,
-.woocommerce button.button:disabled,
-.woocommerce button.button:disabled:hover,
-.woocommerce button.button:disabled[disabled],
-.woocommerce button.button:disabled[disabled]:hover,
-.woocommerce button.button.alt.single_add_to_cart_button.disabled,
-.woocommerce button.button.alt.single_add_to_cart_button.disabled:hover,
-.woocommerce button.button.alt.single_add_to_cart_button,
-.woocommerce button.button.alt.single_add_to_cart_button:hover,
-.woocommerce .actions > button[type=submit],
-.woocommerce .actions > button[type=submit]:hover,
-.woocommerce .checkout.wc-forward,
-.woocommerce .checkout.wc-forward:hover,
-.woocommerce button#place_order,
-.woocommerce button#place_order:hover,
-.woocommerce .return-to-shop > .button,
-.woocommerce .return-to-shop > .button:hover,
-#nv-primary-navigation .nv-nav-cart a.button.checkout.wc-forward,
-#nv-primary-navigation .nv-nav-cart a.button.checkout.wc-forward:hover';
+		$color_setup['background']['selectors'] .= $this->primary_buttons_selectors['default'];
 
 		return $color_setup;
+	}
+
+	/**
+	 * Add button hover color.
+	 *
+	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return array
+	 */
+	public function add_button_hover_color( $color_setup ) {
+		$color_setup['background']['selectors'] .= $this->primary_buttons_selectors['hover'];
+
+		return $color_setup;
+	}
+
+	/**
+	 * Add secondary button color.
+	 *
+	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return array
+	 */
+	public function add_secondary_button_color( $color_setup ) {
+		$color_setup['color']['selectors']        .= $this->secondary_buttons_selectors['no-padding'];
+		$color_setup['color']['selectors']        .= $this->secondary_buttons_selectors['default'];
+		$color_setup['border-color']['selectors'] .= $this->secondary_buttons_selectors['no-padding'];
+		$color_setup['border-color']['selectors'] .= $this->secondary_buttons_selectors['default'];
+
+		return $color_setup;
+	}
+
+	/**
+	 * Add secondary button hover color.
+	 *
+	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return array
+	 */
+	public function add_secondary_button_hover_color( $color_setup ) {
+		$color_setup['color']['selectors']        .= $this->secondary_buttons_selectors['hover'];
+		$color_setup['color']['selectors']        .= $this->secondary_buttons_selectors['no-padding-hover'];
+		$color_setup['border-color']['selectors'] .= $this->secondary_buttons_selectors['hover'];
+		$color_setup['border-color']['selectors'] .= $this->secondary_buttons_selectors['no-padding-hover'];
+
+		return $color_setup;
+	}
+
+	/**
+	 * Add button text color.
+	 *
+	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return array
+	 */
+	public function add_button_text_color( $color_setup ) {
+		$color_setup['color']['selectors'] .= $this->primary_buttons_selectors['default'];
+
+		return $color_setup;
+	}
+
+	/**
+	 * Add button hover text color.
+	 *
+	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return array
+	 */
+	public function add_button_hover_text_color( $color_setup ) {
+		$color_setup['color']['selectors'] .= $this->primary_buttons_selectors['hover'];
+
+		return $color_setup;
+	}
+
+	/**
+	 * Add button border radius.
+	 *
+	 * @param string $selectors the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return string
+	 */
+	public function add_button_border_radius( $selectors ) {
+		$selectors .= $this->primary_buttons_selectors['default'];
+
+		return $selectors;
+	}
+
+	/**
+	 * Add secondary button border radius.
+	 *
+	 * @param string $selectors the color setup from Neve\Views\Inline\Colors.
+	 *
+	 * @return string
+	 */
+	public function add_secondary_button_border_radius( $selectors ) {
+		$selectors .= $this->secondary_buttons_selectors['default'];
+		$selectors .= $this->secondary_buttons_selectors['no-padding'];
+		$selectors .= ',.woocommerce a.nv-quick-view-product.top';
+
+		return $selectors;
+	}
+
+	/**
+	 * Add buttons paddings.
+	 *
+	 * @param string $selectors css selectors.
+	 * @param string $theme_mod theme mod key.
+	 *
+	 * @return string
+	 */
+	public function add_button_padding_selectors( $selectors, $theme_mod ) {
+		if ( $theme_mod === 'neve_button_padding' ) {
+			$selectors .= '
+			,.woocommerce a.button,
+			.woocommerce .button,
+			.woocommerce a.button.alt,
+			.woocommerce a.button.button-primary,
+			.woocommerce a.button.checkout-button,
+			.woocommerce button.button:disabled,
+			.woocommerce button.button:disabled[disabled],
+			.woocommerce a.button.add_to_cart,
+			.woocommerce a.product_type_grouped,
+			.woocommerce a.product_type_external,
+			.woocommerce a.product_type_variable,
+			.woocommerce button.button.alt.single_add_to_cart_button.disabled,
+			.woocommerce button.button.alt.single_add_to_cart_button,
+			.woocommerce .actions > button[type=submit],
+			.woocommerce .checkout.wc-forward,
+			.woocommerce button#place_order,
+			.woocommerce .return-to-shop > .button';
+		}
+
+		if ( $theme_mod === 'neve_secondary_button_padding' ) {
+			$selectors .= $this->secondary_buttons_selectors['default'];
+			$selectors .= ',.woocommerce a.nv-quick-view-product.top';
+		}
+
+		return $selectors;
 	}
 
 	/**
@@ -332,19 +546,6 @@ class Woocommerce {
 	 * @return array
 	 */
 	public function add_link_color( $color_setup ) {
-		$color_setup['color']['selectors'] .= '';
-
-		return $color_setup;
-	}
-
-	/**
-	 * Add link hover colors.
-	 *
-	 * @param array $color_setup the color setup from Neve\Views\Inline\Colors.
-	 *
-	 * @return array
-	 */
-	public function add_link_hover_color( $color_setup ) {
 		$color_setup['color']['selectors'] .= '';
 
 		return $color_setup;
@@ -385,8 +586,6 @@ class Woocommerce {
 			if ( $theme_mod !== 'right' && $theme_mod !== 'left' ) {
 				return false;
 			}
-
-			return true;
 		}
 
 		return true;
@@ -430,8 +629,9 @@ class Woocommerce {
 	 * @return mixed
 	 */
 	public function cart_link_fragment( $fragments ) {
-		$fragments['.cart-icon-wrapper'] = '<a href="' . esc_url( wc_get_cart_url() ) . '" class="cart-icon-wrapper"><span class="nv-icon nv-cart"></span>';
+		$fragments['.cart-icon-wrapper'] = '<a href="' . esc_url( wc_get_cart_url() ) . '" class="cart-icon-wrapper">';
 
+		$fragments['.cart-icon-wrapper'] .= neve_cart_icon();
 		$fragments['.cart-icon-wrapper'] .= '<span class="screen-reader-text">' . __( 'Cart', 'neve' ) . '</span>';
 		$fragments['.cart-icon-wrapper'] .= '<span class="cart-count">' . WC()->cart->get_cart_contents_count() . '</span>';
 		$fragments['.cart-icon-wrapper'] .= '</a>';

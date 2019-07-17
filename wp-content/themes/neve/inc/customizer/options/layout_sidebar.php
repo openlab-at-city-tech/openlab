@@ -173,10 +173,10 @@ class Layout_Sidebar extends Base_Customizer {
 						'label'            => $label,
 						'section'          => 'neve_sidebar',
 						'priority'         => $priority,
-						'class'            => 'advanced-sidebar-accordion',
+						'class'            => esc_attr( 'advanced-sidebar-accordion-' . $control_id ),
 						'accordion'        => true,
 						'controls_to_wrap' => 2,
-						'expanded'         => $priority === 40 ? true : false,
+						'expanded'         => ( $priority === 40 ), // true or false
 						'active_callback'  => array( $this, 'advanced_options_active_callback' ),
 					),
 					'Neve\Customizer\Controls\Heading'

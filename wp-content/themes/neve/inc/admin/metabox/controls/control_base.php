@@ -47,15 +47,16 @@ abstract class Control_Base {
 	 *
 	 * @param string $id       control id.
 	 * @param array  $settings control settings.
-	 * @param int    $priority control priority.
 	 */
-	public function __construct( $id, $settings, $priority = 10 ) {
+	public function __construct( $id, $settings ) {
 		if ( empty( $this->type ) ) {
 			return;
 		}
 		$this->id       = $id;
 		$this->settings = $settings;
-		$this->priority = $priority;
+		if ( isset( $settings['priority'] ) ) {
+			$this->priority = $settings['priority'];
+		}
 	}
 
 	/**
@@ -72,6 +73,29 @@ abstract class Control_Base {
 		$this->render_label();
 		$this->render_content( $post_id );
 		wp_nonce_field( 'neve_meta_box_nonce', 'neve_meta_box_process' );
+	}
+
+	/**
+	 * Determine if a control should be visible or not.
+	 *
+	 * @return bool
+	 */
+	private function should_render() {
+		if ( ! array_key_exists( 'active_callback', $this->settings ) ) {
+			return true;
+		}
+
+		if ( empty( $this->settings['active_callback'] ) ) {
+			return true;
+		}
+
+		$object = $this->settings['active_callback'][0];
+		$method = $this->settings['active_callback'][1];
+		if ( method_exists( $object, $method ) ) {
+			return $object->$method();
+		}
+
+		return true;
 	}
 
 	/**
@@ -103,52 +127,17 @@ abstract class Control_Base {
 	abstract public function render_content( $post_id );
 
 	/**
-	 * Determine if a control should be visible or not.
-	 *
-	 * @return bool
-	 */
-	private function should_render() {
-		if ( ! array_key_exists( 'active_callback', $this->settings ) ) {
-			return true;
-		}
-
-		if ( empty( $this->settings['active_callback'] ) ) {
-			return true;
-		}
-
-		$object = $this->settings['active_callback'][0];
-		$method = $this->settings['active_callback'][1];
-		if ( method_exists( $object, $method ) ) {
-			return $object->$method();
-		}
-
-		return true;
-	}
-
-	/**
-	 * Get the value.
-	 *
-	 * @return mixed
-	 */
-	protected final function get_value( $post_id ) {
-		$values = get_post_meta( $post_id );
-
-		return isset( $values[ $this->id ] ) ? esc_attr( $values[ $this->id ][0] ) : $this->settings['default'];
-	}
-
-	/**
 	 * Save control data.
 	 *
 	 * @param string $post_id Post id.
 	 *
 	 * @return void
 	 */
-	public final function save( $post_id ) {
+	final public function save( $post_id ) {
 		if ( ! isset( $_POST['neve_meta_box_process'] ) ) {
 			return;
 		}
-
-		if ( ! wp_verify_nonce( $_POST['neve_meta_box_process'], 'neve_meta_box_nonce' ) ) {
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['neve_meta_box_process'] ), 'neve_meta_box_nonce' ) ) {
 			return;
 		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -158,7 +147,7 @@ abstract class Control_Base {
 			return;
 		}
 		if ( isset( $_POST[ $this->id ] ) ) {
-			$value = wp_unslash( $_POST[ $this->id ] );
+			$value = wp_unslash( $_POST[ $this->id ] ); // WPCS: sanitization ok.
 
 			if ( $value === $this->settings['default'] ) {
 				delete_post_meta( $post_id, $this->id );
@@ -209,5 +198,16 @@ abstract class Control_Base {
 			default:
 				break;
 		}
+	}
+
+	/**
+	 * Get the value.
+	 *
+	 * @return mixed
+	 */
+	final protected function get_value( $post_id ) {
+		$values = get_post_meta( $post_id );
+
+		return isset( $values[ $this->id ] ) ? esc_attr( $values[ $this->id ][0] ) : $this->settings['default'];
 	}
 }

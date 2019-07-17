@@ -418,8 +418,31 @@ class Themeisle_OB_Zelle_Importer {
 
 		$default_feature = $data[2]['elements'][0];
 
-		$new_widgets = array();
-
+		switch ( $count_features ) {
+			case 1:
+			case 3:
+				$column_size = 33;
+				break;
+			case 2:
+				$column_size = 25;
+				break;
+			default:
+				$column_size = round( 100 / $count_features );
+		};
+		$empty_feature = array(
+			'id'       => \Elementor\Utils::generate_random_string(),
+			'settings' => array(
+				'_column_size' => $column_size,
+				'_inline_size' => $column_size,
+			),
+			'elements' => array(),
+			'isInner'  => true,
+			'elType'   => 'column',
+		);
+		$new_widgets   = array();
+		if ( $count_features < 3 ) {
+			$new_widgets[] = $empty_feature;
+		}
 		foreach ( $old_values as $index_key => $widget_data ) {
 			$this_feature = $default_feature;
 
@@ -446,11 +469,14 @@ class Themeisle_OB_Zelle_Importer {
 			$this_feature['elements'][3]['settings']['editor'] = '<p style="text-align:center">' . $widget_data['text'] . '</p>';
 			// recalculate box sizes
 			$this_feature['settings']['_column_size'] = 25;
-			$this_feature['settings']['_inline_size'] = round( 100 / $count_features );
+			$this_feature['settings']['_inline_size'] = $column_size;
 
 			$this_feature['id'] = \Elementor\Utils::generate_random_string();
 
 			$new_widgets[] = $this_feature;
+		}
+		if ( $count_features < 3 ) {
+			$new_widgets[] = $empty_feature;
 		}
 
 		$data[2]['elements'] = $new_widgets;

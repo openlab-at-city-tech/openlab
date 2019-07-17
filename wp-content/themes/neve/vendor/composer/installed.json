@@ -1,20 +1,60 @@
 [
     {
+        "name": "codeinwp/themeisle-sdk",
+        "version": "3.0.9",
+        "version_normalized": "3.0.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Codeinwp/themeisle-sdk.git",
+            "reference": "259e2afb33bd523f9807e04ace921f8690350a31"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/259e2afb33bd523f9807e04ace921f8690350a31",
+            "reference": "259e2afb33bd523f9807e04ace921f8690350a31",
+            "shasum": ""
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+            "squizlabs/php_codesniffer": "^3.1",
+            "wp-coding-standards/wpcs": "^1.0.0"
+        },
+        "time": "2019-06-26T14:38:00+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "ThemeIsle team",
+                "email": "friends@themeisle.com",
+                "homepage": "https://themeisle.com"
+            }
+        ],
+        "description": "ThemeIsle SDK.",
+        "homepage": "https://github.com/Codeinwp/themeisle-sdk",
+        "keywords": [
+            "wordpress"
+        ]
+    },
+    {
         "name": "codeinwp/ti-about-page",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/Codeinwp/ti-about-page.git",
-            "reference": "bb26d3b08fd2f8a16fa255b9e927b51b0cef2ef4"
+            "reference": "88df9985cbe78429c993caa69b5d0c5d47ecbdbc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Codeinwp/ti-about-page/zipball/bb26d3b08fd2f8a16fa255b9e927b51b0cef2ef4",
-            "reference": "bb26d3b08fd2f8a16fa255b9e927b51b0cef2ef4",
+            "url": "https://api.github.com/repos/Codeinwp/ti-about-page/zipball/88df9985cbe78429c993caa69b5d0c5d47ecbdbc",
+            "reference": "88df9985cbe78429c993caa69b5d0c5d47ecbdbc",
             "shasum": ""
         },
-        "time": "2019-02-11 15:03:25",
+        "time": "2019-07-08T09:08:27+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -37,58 +77,18 @@
         "homepage": "https://github.com/Codeinwp/ti-about-page"
     },
     {
-        "name": "codeinwp/themeisle-sdk",
-        "version": "3.0.4",
-        "version_normalized": "3.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Codeinwp/themeisle-sdk.git",
-            "reference": "cf03ee5b93c6ca66f0c1a4916309f1270fe12319"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Codeinwp/themeisle-sdk/zipball/cf03ee5b93c6ca66f0c1a4916309f1270fe12319",
-            "reference": "cf03ee5b93c6ca66f0c1a4916309f1270fe12319",
-            "shasum": ""
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
-            "squizlabs/php_codesniffer": "^3.1",
-            "wp-coding-standards/wpcs": "^1.0.0"
-        },
-        "time": "2019-01-28 12:17:14",
-        "type": "library",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "ThemeIsle team",
-                "email": "friends@themeisle.com",
-                "homepage": "https://themeisle.com"
-            }
-        ],
-        "description": "ThemeIsle SDK.",
-        "homepage": "https://github.com/Codeinwp/themeisle-sdk",
-        "keywords": [
-            "wordpress"
-        ]
-    },
-    {
         "name": "codeinwp/ti-onboarding",
-        "version": "1.2.1",
-        "version_normalized": "1.2.1.0",
+        "version": "1.6.1",
+        "version_normalized": "1.6.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Codeinwp/ti-onboarding.git",
-            "reference": "72cfc647dd8ecbb6120853d40a1e17776ea8729e"
+            "reference": "2398f693882bf2188bb0584033d09dfbe8d37406"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Codeinwp/ti-onboarding/zipball/72cfc647dd8ecbb6120853d40a1e17776ea8729e",
-            "reference": "72cfc647dd8ecbb6120853d40a1e17776ea8729e",
+            "url": "https://api.github.com/repos/Codeinwp/ti-onboarding/zipball/2398f693882bf2188bb0584033d09dfbe8d37406",
+            "reference": "2398f693882bf2188bb0584033d09dfbe8d37406",
             "shasum": ""
         },
         "require-dev": {
@@ -96,7 +96,7 @@
             "squizlabs/php_codesniffer": "^3.1",
             "wp-coding-standards/wpcs": "^1.0.0"
         },
-        "time": "2019-03-07 13:43:09",
+        "time": "2019-07-15T11:48:52+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

@@ -8,7 +8,6 @@
  * On:      21/06/2018
  *
  * @package    themeisle-onboarding
- * @soundtrack Accordion - Madvillain, Madlib & MF DOOM
  */
 
 /**

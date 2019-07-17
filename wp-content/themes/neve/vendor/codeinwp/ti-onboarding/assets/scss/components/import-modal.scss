@@ -27,7 +27,7 @@
       right: 0;
       z-index: 0;
       background-size: cover;
-      background-position: center;
+      background-position: center 30%;
       filter: blur(4px);
       &:after {
         background-color: rgba(0,0,0,0.7);
@@ -78,12 +78,15 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    button {
+    a {
       margin-bottom: 0;
 
       &:last-of-type {
         margin-left: 10px;
       }
+    }
+    button:last-of-type {
+      margin-left: 10px;
     }
   }
   .disclaimers {

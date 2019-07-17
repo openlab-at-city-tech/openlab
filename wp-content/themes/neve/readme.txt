@@ -1,9 +1,10 @@
 === Neve ===
 Contributors: themeisle
-Tags: blog, custom-logo, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready
+Tags: blog, custom-logo, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar
 Requires at least: 4.0
-Tested up to: 5.0
+Tested up to: 5.2.2
 Stable tag: 1.0.23
+Requires PHP: 5.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +17,170 @@ Neve is a super fast, easily customizable, multi-purpose theme. It’s perfect f
 Neve WordPress theme, Copyright 2018 Themeisle
 Neve is distributed under the terms of the GNU GPLv2 or later
 
-== Changelog ==
+== Changelog == 
+= 2.3.20 - 2019-07-15  = 
+
+* Updated composer
+* Fixed z-index issue with the About page
+
+
+= 2.3.19 - 2019-07-15  = 
+
+* Release
+
+
+= 2.3.18 - 2019-07-15  = 
+
+* Multiple speed optimizations: minified scripts, improved enqueued scripts logic, proper size for the gravatar images
+* Removed author gravatar image by default and created a new option for it
+* Updates for current Starter Sites library
+* New Brizy Starter Sites library
+
+
+= 2.3.17 - 2019-07-08  = 
+
+* Fixed theme check warning
+
+
+= 2.3.16 - 2019-07-08  = 
+
+* Fixed divider layout in the custom Mega Menu integration
+* Fixed onboarding popup for child themes
+* Fixed lists styling in the comments area
+* Fixed warnings from order control
+
+
+= 2.3.15 - 2019-06-28  = 
+
+* Fixed primary menu on mobile devices not closing for anchor links
+* Fixed menu items description layout in the primary menu
+* Auto-focus in the search input
+
+
+= 2.3.14 - 2019-06-25  = 
+
+* Fixed compatibility issues with the Max Mega Menu plugin
+* Fixed compatibility with Neve's custom Mega Menu integration
+* Fixed extra padding for the gallery block
+* Fixed author bio's image size and alignment
+* Fixed accessibility and RTL issues with the header builder
+* Fixed lists styling in the comments area
+* Compatibility for Neve Pro's Typekit module
+
+
+= 2.3.12 - 2019-06-17  = 
+
+* Added missing strings in the translation file wpml-config.xml file
+* Updated the min PHP version in the readme file
+* Upsells for Neve Pro
+
+
+= 2.3.11 - 2019-06-12  = 
+
+* Redone the layout for the About page
+* Added fallbacks for JS features in AMP mode
+* Added compatibility between the LifterLMS plugin and the buttons options
+* Improved the WooCommerce My Account page layout on mobile devices
+
+
+= 2.3.10 - 2019-06-04  = 
+
+* New color, padding and border radius options for Primary and Secondary Buttons
+* Fixed issue with duplicated posts on the blog page
+* Fixed onboarding sites options throwing warnings after the last menu item migration
+* Updated the screenshot
+
+
+= 2.3.9 - 2019-05-27  = 
+
+* Fixed issues with redirects to Otter and WPForms dashboards in the onboarding process
+
+
+= 2.3.8 - 2019-05-27  = 
+
+* Redone the Last item in menu control to accommodate more items
+* Accessibility fixes
+* Improved footer widgets logic to better accommodate the footer builder
+* Exclusive Products section layout improvements
+* WooCommerce buttons enhancements
+* New hooks added
+
+
+= 2.3.7 - 2019-05-07  = 
+
+* New Margin and Padding controls for each header builder component
+* Reorganized layout for the header/footer builder using tabs
+* Option for the mobile menu to slide from the left side or dropdown toggle
+* Basic compatibility with LifterLMS plugin
+* New Exclusive Products section on single product pages
+* Added animations to the main Gutenberg starter site
+* Updates for the Doctors, Restaurant, Vet Center starter sites
+* Updates for the latest version of Otter Blocks
+
+
+= 2.3.6 - 2019-04-22  = 
+
+* Fixed primary menu in AMP mode
+* Notice for Otter Blocks for WordPress 5 users
+* Fixed vertical alignment in IE
+* Remove title appearing in the navigation cart in the latest update of WooCommerce
+* Updated the component alignment control in the header/footer builder
+
+
+= 2.3.5 - 2019-04-15  = 
+
+* Fixed header HTML component stripping HTML code
+* Fixed Jetpack's comment form layout issue
+* Fixed dropdown menu not working in Microsoft Edge
+* Fixed main content shifted to the right in IE11
+* Fixed migration from Zelle
+* Fixed audio block not displaying in Chrome
+* Fixed compatibility with Elementor Pro Theme Locations API
+* Added new wp_body_open() function for WP 5.2
+* Replaced neve icons with SVGs for a better loading time
+* New Shop starter site
+
+
+= 2.3.4 - 2019-04-05  = 
+
+* Removed unused strings
+
+
+= 2.3.3 - 2019-04-05  = 
+
+* Fixed AMP issues with the header footer builder
+* Smaller header spacing on mobile devices
+* Fixed toggle button layout on WooCommerce pages
+
+
+= 2.3.2 - 2019-04-05  = 
+
+* Header footer builder fixed sanitization
+
+
+= 2.3.1 - 2019-04-05  = 
+
+* Fixed missing sanitization functions
+* Fixed Gutenberg integration with the typography options
+
+
+= 2.3.0 - 2019-04-04  = 
+
+* NEW Header/Footer builder
+* Compatibility with the Header, Footer & Blocks for Elementor plugin
+* New option to allow disabling of the custom Gutenberg integration
+* Updated the tag list with the newly added tags
+
+
+= 2.2.0 - 2019-03-18  = 
+
+* New Original starter site created in the new Gutenberg editor for WordPress 5 users
+* Improved onboarding page layout
+* Compatibility with the Neve Hooks plugin
+* WPML compatibility
+* Update Contact us with the correct link
+
+ 
 = 2.1.0 - 2019-03-07  = 
 
 * Two newly added Elementor Starter Sites
@@ -254,94 +418,67 @@ Neve is distributed under the terms of the GNU GPLv2 or later
 == Resources ==
 * Neve Icons based on Font Awesome Icons licensed under CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/).
 
-Images used in the screenshot and in the demos:
 All  images are licensed under CC0.
 
-* Neve Main: testimonial-1.jpg, CC0, https://mystock.themeisle.com/photo/girl-in-the-forest/
-* Neve Main: team-4-1.jpg, CC0, https://mystock.themeisle.com/photo/girl/
-* Neve Main: team-3-1.jpg, CC0, https://mystock.themeisle.com/photo/thinking-time/
-* Neve Main: team-2-1.jpg, CC0, https://mystock.themeisle.com/photo/winter-hat/
-* Neve Main: team-1.jpg, CC0, https://mystock.themeisle.com/photo/sun-hat/
-* Neve Main: 3-3.jpg (also used in screenshot), CC0, https://pixabay.com/en/metro-subway-train-station-1209556/
-* Neve Main: blog3.jpg, CC0, https://mystock.themeisle.com/photo/river-bridge/
-* Neve Main: 11.jpg, CC0, https://mystock.themeisle.com/photo/yoga-2/
-* Neve Main: 9.jpg, CC0, https://mystock.themeisle.com/photo/alley-3/
-* Neve Main: 8.jpg, CC0, https://mystock.themeisle.com/photo/new-york-city-scape/
-* Neve Main: 6.jpg, CC0, https://mystock.themeisle.com/photo/devices/
-* Neve Main: 5.jpg, CC0, https://mystock.themeisle.com/photo/high-seats/
-* Neve Main: 4.jpg, CC0, https://mystock.themeisle.com/photo/ipad/
-* Neve Main: 1.jpg (also used in screenshot), CC0, https://mystock.themeisle.com/photo/path/
-* Neve Main: work-4.jpg, CC0 https://mystock.themeisle.com/photo/stockholm-street/
-* Neve Main: video-bg.jpg, CC0, https://mystock.themeisle.com/photo/cloudy-sunset/
-* Neve Main: winter-forest.jpg, CC0, https://mystock.themeisle.com/photo/winter-forest/
-* Neve Main: neve-onboarding-placeholder (used as placeholder), CC0, https://mystock.themeisle.com/photo/wood/
-* Neve Vet Center: neve-vet-center-big-title1.jpg, CC0, https://mystock.themeisle.com/photo/squirrel-2/
-* Neve Vet Center: neve-vet-center-testify.jpg, CC0, https://mystock.themeisle.com/photo/beagle-puppy/
-* Neve Vet Center: neve-vet-center-testify-cat.jpg, CC0, https://mystock.themeisle.com/photo/cat-2/
-* Neve Energy: neve-energy-bg-title.jpg (also used in screenshot), CC0, https://mystock.themeisle.com/photo/citylights/
-* Neve Energy: neve-energy-testimony.jpg, CC0, https://mystock.themeisle.com/photo/train-station/
-* Neve Energy: neve-energy-sustainability.jpg, CC0, https://mystock.themeisle.com/photo/windmill/
-* Neve Lawyers: men-employees-suit-work-greeting-1979261.jpg (also used in screenshot), CC0, https://pixabay.com/en/men-employees-suit-work-greeting-1979261/
-* Neve Lawyers: lady-justice-2388500.jpg, CC0, https://pixabay.com/en/lady-justice-legal-law-justice-2388500/
-* Neve Lawyers: business-woman-2697954.jpg, CC0, https://pixabay.com/en/business-woman-professional-suit-2697954/
-* Neve Lawyers: business-woman-2756210.jpg, CC0, https://pixabay.com/en/business-woman-woman-secretary-2756210/
-* Neve Lawyers: women-2748752.jpg, CC0, https://pixabay.com/en/women-business-attractive-dynamic-2748752/
-* Neve Lawyers: justice-2060093.jpg, CC0, https://pixabay.com/en/justice-statue-lady-justice-2060093/
-* Neve Lawyers: writer-1421099.jpg, CC0, https://pixabay.com/en/writer-typewriter-author-blogging-1421099/
-* Neve Lawyers: library-869061.jpg, CC0, https://pixabay.com/en/library-books-education-literature-869061/
-* Neve Lawyers: chicago-1870010.jpg, CC0, https://pixabay.com/en/chicago-city-night-usa-1870010/
-* Neve Lawyers: office-2820890.jpg, CC0, https://pixabay.com/en/office-attorney-reading-read-laws-2820890/
-* Neve Lawyers: men-2608581.jpg, CC0, https://pixabay.com/en/men-women-people-group-walk-busy-2608581/
-* Neve Lawyers: police-850055.jpg, CC0, https://pixabay.com/en/police-crime-scene-blue-light-850054/
-* Neve Doctors: medical-3447369 (also used in screenshot), CC0,  https://pixabay.com/en/medical-care-health-healthcare-3447369/
-* Neve Doctors: nurse-2019420, CC0, https://pixabay.com/en/nurse-medicine-doctor-hospital-2019420/
-* Neve Doctors: dr-2157993, CC0, https://pixabay.com/en/dr-doctor-women-professional-2157993/
-* Neve Doctors: dentist-1191671, CC0, https://pixabay.com/en/dentist-doctor-1191671/
-* Neve Doctors: architecture-931283, CC0, https://pixabay.com/en/architecture-buildings-hospital-931283/
-* Neve Doctors: pills-3673645, CC0, https://pixabay.com/en/pills-medicine-medical-health-drug-3673645/
-* Neve Doctors: bach-flowers-1472825, CC0, https://pixabay.com/en/bach-flowers-bach-remedies-1472825/
-* Neve Doctors: feng-shui-1927590, CC0, https://pixabay.com/en/feng-shui-zen-stones-texture-1927590/
-* Neve Doctors: sunburn-2117350, CC0, https://pixabay.com/en/sunburn-skin-red-flushed-2117350/
-* Neve Doctors: teeth-1652976, CC0, https://pixabay.com/en/teeth-dentist-dental-mouth-tooth-1652976/
-* Neve Doctors: adult-1868750, CC0, https://pixabay.com/en/adult-bald-beard-corporate-1868750/
-* Neve Restaurant: restaurant-237060 (also used in screenshot), CC0, https://pixabay.com/en/restaurant-dinner-tables-yowani-237060/
-* Neve Restaurant: restaurant-691397, CC0, https://pixabay.com/en/restaurant-food-lunch-dinner-691397/
-* Neve Restaurant: breakfast-801827, CC0, https://pixabay.com/en/breakfast-buffet-food-restaurant-801827/
-* Neve Restaurant: cuisine-2248567, CC0, https://pixabay.com/en/cuisine-food-italian-antipasti-2248567/
-* Neve Restaurant: buffet-315691, CC0, https://pixabay.com/en/buffet-indian-food-spices-lunch-315691/
-* Neve Restaurant: restaurant-2602736, CC0, https://pixabay.com/en/restaurant-people-men-women-eating-2602736/
-* Neve Restaurant: restaurant-358238, CC0, https://pixabay.com/en/restaurant-glasses-drink-lichtspiel-358238/
-* Neve Restaurant: adult-2242162, CC0, https://pixabay.com/en/adult-beautiful-bride-card-2242162/
-* Neve Restaurant: restaurant-449952, CC0, https://pixabay.com/en/restaurant-wine-glasses-served-449952/
-* Neve Restaurant: food-263882, CC0, https://pixabay.com/en/food-soup-spinach-soup-bread-263881/
-* Neve Restaurant: tomatoes-1822185, CC0, https://pixabay.com/en/tomatoes-soup-vegetables-healthy-1822185/
-* Neve Restaurant: eat-2122072, CC0, https://pixabay.com/en/eat-onion-food-healthy-vegetables-2122072/
-* Neve Restaurant: cobb-salad-2736125, CC0, https://pixabay.com/en/cobb-salad-chicken-cobb-meal-2736125/
-* Neve Restaurant: waldorf-salad-3212344, CC0, https://pixabay.com/en/waldorf-salad-celery-apple-3212344/
-* Neve Restaurant: tomatoes-1603611, CC0, https://pixabay.com/en/tomatoes-tomato-quiche-red-yellow-1603611/
-* Neve Restaurant: chicken-3763827, CC0, https://pixabay.com/en/chicken-barbecue-grill-stuff-eat-3763827/
-* Neve Restaurant: spare-ribs-2225208, CC0, https://pixabay.com/en/spare-ribs-grill-bbq-sauce-2225208/
-* Neve Restaurant: fried-chicken-250863, CC0, https://pixabay.com/en/fried-chicken-chicken-fried-crunchy-250863/
-* Neve Restaurant: tuna-2418460, CC0, https://pixabay.com/en/tuna-grilled-bbq-food-healthy-2418460/
-* Neve Restaurant: grilled-3334579, CC0, https://pixabay.com/en/grilled-meat-grill-grilling-peace-3334579/
-* Neve Restaurant: thick-pig-roast-filet-izod-black-pepper-2336138, CC0, https://pixabay.com/en/thick-pig-roast-filet-izod-black-pepper%2C-2336138/
-* Neve Restaurant: cake-1850011, CC0, https://pixabay.com/en/cake-chocolate-chocolate-cake-1850011/
-* Neve Restaurant: cake-2459954, CC0, https://pixabay.com/en/cake-strawberries-2459954/
-* Neve Restaurant: sweet-1392724, CC0, https://pixabay.com/en/sweet-treat-hand-made-sweets-1392724/
-* Neve Restaurant: dessert-1373821, CC0, https://pixabay.com/en/dessert-cooking-sweet-dishes-sweets-1373821/
-* Neve Restaurant: tiramisu-2897900, CC0, https://pixabay.com/en/tiramisu-dessert-tiramisu-2897900/
-* Neve Restaurant: cream-puff-1694337, CC0, https://pixabay.com/en/cream-puff-pastries-bake-1694337/
-* Neve Restaurant: dinner-table-444434, CC0, https://pixabay.com/en/dinner-table-restaurant-dining-444434/
-* Neve Charity: children-63175, CC0, https://pixabay.com/en/children-afghanistan-afghani-girl-63175/
-* Neve Charity: africa-2179608, CC0, https://pixabay.com/en/africa-child-children-people-young-2179608/
-* Neve Charity: potion-1860939, CC0, https://pixabay.com/en/potion-poverty-misery-sadness-sdf-1860939/
-* Neve Charity: children-734891, CC0, https://pixabay.com/en/children-burundi-bottle-water-734891/
-* Neve Charity: trouser-pockets-1439412, CC0, https://pixabay.com/en/trouser-pockets-empty-jeans-1439412/
-* Neve Gutenberg: street-at-night, CC0, https://mystock.themeisle.com/photo/street-at-night/
-* Neve Scholar: neve-scholar-big-title (used only in screenshot), https://www.pexels.com/photo/men-s-wearing-black-suit-jacket-and-pants-937481/
-* Neve Scholar: neve-scholar-placeholder (used as placeholder), CC0, https://mystock.themeisle.com/photo/arid-earth/
-* Neve Freelancer: neve-freelancere-hero-image (also used in screenshot), CC0, https://mystock.themeisle.com/photo/photographer-3/
-* Neve Freelancer: neve-freelancer-testimonial, CC0, https://mystock.themeisle.com/photo/girl/
-* Neve Freelancer: neve-freelancer-testimonial-bg, CC0, https://mystock.themeisle.com/photo/code-in-wp/
-* Neve Freelancer: neve-freelancer-faq, CC0, https://mystock.themeisle.com/photo/programming-laptop-2/
-* Neve Freelancer: neve-freelancer-about1, CC0, https://mystock.themeisle.com/photo/path-to-the-village/
+Screenshot resources:
+
+* http://mystock.themeisle.com/photo/statue-2/
+* https://mystock.themeisle.com/photo/path/
+
+Starter Sites screenshots resources:
+
+- Original
+* http://mystock.themeisle.com/photo/statue-2/
+* https://mystock.themeisle.com/photo/path/
+
+- Restaurant
+* https://stocksnap.io/photo/3IRQDGCL7J
+* https://stocksnap.io/photo/ZPMWWMHBDE
+* https://stocksnap.io/photo/2HEQC6X2DF
+
+- Charity
+* https://stocksnap.io/photo/AEENLCARXY
+
+- Vet Center
+* https://mystock.themeisle.com/photo/street-dog-sitting-on-a-beach/
+* https://mystock.themeisle.com/photo/dog-4/
+
+- Doctors
+* https://stocksnap.io/photo/GSBJXWRSDV
+
+- Energy Panels
+* https://mystock.themeisle.com/photo/citylights/
+
+- Lawyers
+* https://stocksnap.io/photo/GVUWVKUHZE
+
+- Freelancer
+* https://mystock.themeisle.com/photo/photographer-3/
+
+- Shop
+* https://stocksnap.io/photo/SS2GVMJTWH
+* https://stocksnap.io/photo/KQECHSBAOC
+* https://stocksnap.io/photo/1CXI0CSPE5
+* https://stocksnap.io/photo/JBCWCLO4JI
+* https://stocksnap.io/photo/AEENLCARXY
+
+- Travel Agency
+* https://mystock.themeisle.com/photo/amsterdam/
+
+- Coffee Shop
+* https://stocksnap.io/photo/HOHJK6B7TD
+* https://stocksnap.io/photo/DTKOOFPC06
+
+- Constructions
+* https://stocksnap.io/photo/T78VYSKHFS
+* https://stocksnap.io/photo/ZWTCO4R3G6
+* https://stocksnap.io/photo/6EAB6C3900
+* https://stocksnap.io/photo/BZ4FJO6KZE
+
+- Showcase
+* http://mystock.themeisle.com/photo/thinking-time/
+* http://mystock.themeisle.com/photo/photographer-2/
+
+- Business Consulting
+* https://mystock.themeisle.com/photo/new-york-cityscape/
+

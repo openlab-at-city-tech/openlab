@@ -1,9 +1,12 @@
 <template>
 	<div :class="{ 'is__onboarding' : this.$store.state.onboard === 'yes' && ! previewOpen } ">
-		<div :class="! isLoading ? 'library-wrapper' : '' ">
+		<div class="library-wrapper">
 			<loader v-if="isLoading" :loading-message="strings.loading"></loader>
 			<error-well v-else-if="errorMessage && !modalOpen"></error-well>
 			<template v-else>
+				<button v-if="this.$store.state.onboard === 'yes'" @click="cancelOnboarding" class="close-modal">
+					<span>×</span>
+				</button>
 				<template v-if="this.$store.state.onboard === 'yes'">
 					<div class="header" v-if="themeStrings.onboard_header ||themeStrings.onboard_description">
 						<h1 v-if="themeStrings.onboard_header">{{themeStrings.onboard_header}}</h1>

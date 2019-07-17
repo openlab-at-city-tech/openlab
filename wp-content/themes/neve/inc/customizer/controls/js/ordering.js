@@ -3,7 +3,7 @@
  *
  * @package Neve\Customizer\Controls
  */
-(function ( $ ) {
+( function ( $ ) {
 	'use strict';
 	wp.neveOrderControl = {
 		init: function () {
@@ -12,7 +12,7 @@
 		},
 		setupSorting: function () {
 			var self = this;
-			$( '.ti-order-sortable' ).each( function () {
+			$( '.ti-order-sortable' ).each( function () {                                  
 				$( this ).sortable( {
 					revert: true,
 					axis: 'y',
@@ -46,4 +46,4 @@
 			wp.neveOrderControl.init();
 		}
 	);
-})( jQuery );
+} )( jQuery );

@@ -22,12 +22,62 @@ class Pagination extends Base_View {
 	 * @return void
 	 */
 	public function init() {
+		add_action( 'rest_api_init', array( $this, 'register_endpoints' ) );
 		add_filter( 'neve_filter_main_script_localization', array( $this, 'filter_localization' ) );
 		add_action( 'neve_do_pagination', array( $this, 'render_pagination' ) );
 		add_action( 'neve_post_navigation', array( $this, 'render_post_navigation' ) );
+	}
 
-		add_action( 'wp_ajax_infinite_scroll', array( $this, 'infinite_scroll' ) );
-		add_action( 'wp_ajax_nopriv_infinite_scroll', array( $this, 'infinite_scroll' ) );
+	/**
+	 * Register Rest API endpoint for posts retrieval.
+	 */
+	public function register_endpoints() {
+		register_rest_route(
+			'nv/v1/posts',
+			'/page/(?P<page_number>\d+)/',
+			array(
+				'methods'  => \WP_REST_Server::CREATABLE,
+				'callback' => array( $this, 'get_posts' ),
+			)
+		);
+	}
+
+	/**
+	 * Get paginated posts.
+	 *
+	 * @param \WP_REST_Request $request the rest request.
+	 *
+	 * @return \WP_REST_Response
+	 */
+	public function get_posts( \WP_REST_Request $request ) {
+		if ( empty( $request['page_number'] ) ) {
+			return new \WP_REST_Response( '' );
+		}
+
+		$query_args = $request->get_body();
+		$args       = json_decode( $query_args, true );
+
+		$args['posts_per_page']      = get_option( 'posts_per_page' );
+		$args['post_type']           = 'post';
+		$args['paged']               = $request['page_number'];
+		$args['ignore_sticky_posts'] = 1;
+		$args['post_status']         = 'publish';
+
+		$output = '';
+
+		$query = new \WP_Query( $args );
+		if ( $query->have_posts() ) {
+			ob_start();
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				get_template_part( 'template-parts/content' );
+			}
+			wp_reset_postdata();
+			$output = ob_get_contents();
+			ob_end_clean();
+		}
+
+		return new \WP_REST_Response( $output );
 	}
 
 	/**
@@ -46,6 +96,8 @@ class Pagination extends Base_View {
 
 		$data['infiniteScroll']         = 'enabled';
 		$data['infiniteScrollMaxPages'] = $max_pages;
+		$data['infiniteScrollEndpoint'] = rest_url( 'nv/v1/posts/page/' );
+		$data['infiniteScrollQuery']    = json_encode( $wp_query->query );
 
 		return $data;
 	}
@@ -63,6 +115,9 @@ class Pagination extends Base_View {
 		}
 
 		if ( ! $this->has_infinite_scroll() ) {
+			if ( is_paged() ) {
+				do_action( 'neve_before_pagination' );
+			}
 			echo wp_kses_post(
 				paginate_links(
 					array(
@@ -73,7 +128,7 @@ class Pagination extends Base_View {
 
 			return;
 		}
-		echo wp_kses_post( '<span class="nv-loader" style="display: none;"></span><span class="infinite-scroll-trigger"></span>' );
+		echo wp_kses_post( '<div class="load-more-posts"><span class="nv-loader" style="display: none;"></span><span class="infinite-scroll-trigger"></span></div>' );
 	}
 
 	/**
@@ -115,57 +170,14 @@ class Pagination extends Base_View {
 	}
 
 	/**
-	 * Infinite scroll ajax callback function.
-	 */
-	public function infinite_scroll() {
-		$nonce = $_POST['nonce'];
-		if ( ! wp_verify_nonce( $nonce, 'neve-theme-nonce' ) ) {
-			return;
-		}
-
-		$page           = $_POST['page'];
-		$counter        = $_POST['counter'];
-		$posts_per_page = get_option( 'posts_per_page' );
-
-		$args = array(
-			'posts_per_page'      => $posts_per_page,
-			'post_type'           => 'post',
-			'paged'               => $page,
-			'ignore_sticky_posts' => 1,
-			'post_status'         => 'publish',
-		);
-
-		$query = new \WP_Query( $args );
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$counter ++;
-				$this->render_post_template_part();
-			}
-			wp_reset_postdata();
-		}
-		wp_die();
-	}
-
-	/**
-	 * Render the post.
-	 */
-	private function render_post_template_part() {
-		$post_layout    = get_theme_mod( 'neve_blog_archive_layout', 'grid' );
-		$layout_mapping = array(
-			'default'     => '',
-			'grid'        => 'grid',
-			'alternative' => 'alternative',
-		);
-		get_template_part( 'template-parts/content', $layout_mapping[ $post_layout ] );
-	}
-
-	/**
 	 * Has infinite scroll.
 	 *
 	 * @return string
 	 */
 	private function has_infinite_scroll() {
+		if ( neve_is_amp() ) {
+			return false;
+		}
 		if ( is_search() ) {
 			return false;
 		}

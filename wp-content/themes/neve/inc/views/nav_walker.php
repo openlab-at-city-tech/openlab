@@ -22,6 +22,7 @@ class Nav_Walker extends \Walker_Nav_Menu {
 	 */
 	public function __construct() {
 		add_filter( 'nav_menu_item_title', array( $this, 'add_caret' ), 10, 4 );
+		add_filter( 'nav_menu_item_args', array( $this, 'tweak_mm_heading' ), 10, 3 );
 	}
 
 	/**
@@ -35,7 +36,11 @@ class Nav_Walker extends \Walker_Nav_Menu {
 	 * @return string
 	 */
 	public function add_caret( $title, $item, $args, $depth ) {
-		if ( $args->menu_id !== 'nv-primary-navigation' ) {
+		if ( strpos( $title, 'class="caret"' ) ) {
+			return $title;
+		}
+
+		if ( strpos( $args->menu_id, 'nv-primary-navigation' ) === false ) {
 			return $title;
 		}
 
@@ -46,7 +51,7 @@ class Nav_Walker extends \Walker_Nav_Menu {
 		if ( in_array( 'menu-item-has-children', $item->classes ) ) {
 			$title = '<span class="menu-item-title-wrap">' . $title . '</span>';
 
-			$title .= '<div class="caret-wrap ' . $item->menu_order . '">';
+			$title .= '<div class="caret-wrap ' . $item->menu_order . '" tabindex="0">';
 			$title .= '<span class="caret"></span>';
 			$title .= '</div>';
 		}
@@ -67,15 +72,18 @@ class Nav_Walker extends \Walker_Nav_Menu {
 	 * @param int      $id     id.
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
-
 		if ( ! is_object( $args ) ) {
 			return;
 		}
 
-		if ( isset( $item->title ) && ( strcasecmp( $item->title, 'divider' ) == 0 ) && $depth >= 1 ) {
-			$indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+		if ( isset( $item->title ) && $item->title === 'divider' ) {
+			$output .= '<li role="presentation" class="neve-mm-divider">';
 
-			$output .= $indent . '<li role="presentation" class="neve-mm-divider">';
+			return;
+		}
+
+		if ( isset( $item->classes ) && in_array( 'neve-mm-col', $item->classes ) ) {
+			$output .= '<li class="neve-mm-col">';
 
 			return;
 		}
@@ -87,16 +95,97 @@ class Nav_Walker extends \Walker_Nav_Menu {
 	}
 
 	/**
+	 * Ends the element output, if needed.
+	 *
+	 * @param string   $output the end el string.
+	 * @param \WP_Post $item   item.
+	 * @param int      $depth  item depth.
+	 * @param array    $args   item args.
+	 */
+	public function end_el( &$output, $item, $depth = 0, $args = array() ) {
+		if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+			$t = '';
+			$n = '';
+		} else {
+			$t = "\t";
+			$n = "\n";
+		}
+		if ( $depth >= 1 ) {
+			if ( isset( $item->description ) && ! empty( $item->description ) ) {
+				$output .= '<span class="neve-mm-description">' . esc_html( $item->description ) . '</span>';
+			}
+		}
+		$output .= "</li>{$n}";
+	}
+
+
+	/**
+	 * Tweak the mega menu heading markup.
+	 *
+	 * @param array    $args  the menu item args.
+	 * @param \WP_Post $item  the menu item.
+	 * @param int      $depth the depth of the menu item.
+	 *
+	 * @return mixed
+	 */
+	public function tweak_mm_heading( $args, $item, $depth ) {
+		if ( ! isset( $item->classes ) ) {
+			return $args;
+		}
+
+		if ( in_array( 'neve-mm-heading', $item->classes ) ) {
+			add_filter(
+				'nav_menu_css_class',
+				function ( $classes, $nav_item, $args, $depth ) use ( $item ) {
+					if ( $nav_item !== $item ) {
+						return $classes;
+					}
+
+					return array( 'neve-mm-heading' );
+				},
+				10,
+				4
+			);
+
+			if ( $item->url === '#' ) {
+				add_filter(
+					'walker_nav_menu_start_el',
+					function ( $item_output, $nav_item, $depth, $args ) use ( $item ) {
+						if ( $nav_item !== $item ) {
+							return $item_output;
+						}
+
+						$item_output = '';
+
+						$item_output .= $args->before;
+						$item_output .= '<span>';
+						$item_output .= $args->link_before . $nav_item->title . $args->link_after;
+						$item_output .= '</span>';
+						$item_output .= $args->after;
+
+						return $item_output;
+					},
+					10,
+					4
+				);
+			}
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Display all pages when there is no menu assigned to the primary location
 	 */
 	public static function fallback() {
 		$fallback_args = array(
-			'depth'     => - 1,
-			'menu_id'   => 'nv-primary-navigation',
-			'container' => 'ul',
-			'before'    => '',
-			'echo'      => false,
-			'after'     => '',
+			'depth'      => - 1,
+			'menu_id'    => 'nv-primary-navigation',
+			'menu_class' => 'primary-menu-ul',
+			'container'  => 'ul',
+			'before'     => '',
+			'echo'       => false,
+			'after'      => '',
 		);
 
 		return wp_page_menu( $fallback_args );

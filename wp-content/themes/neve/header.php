@@ -8,7 +8,7 @@
  * @since   1.0.0
  */
 
-
+$header_classes = apply_filters( 'nv_header_classes', 'header' );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 
@@ -22,22 +22,21 @@
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> <?php echo wp_kses( apply_filters( 'neve_body_data_attrs', '' ), array( '[class]' => true ) ); ?>>
+<?php wp_body_open(); ?>
 <div class="wrapper">
-	<header class="header" role="banner">
-		<a class="neve-skip-link show-on-focus" href="#content"
-				tabindex="0"><?php echo __( 'Skip to content', 'neve' ); ?></a>
+	<header class="<?php echo esc_attr( $header_classes ); ?>" role="banner">
+		<a class="neve-skip-link show-on-focus" href="#content" tabindex="0">
+			<?php echo __( 'Skip to content', 'neve' ); // WPCS: XSS ok. ?>
+		</a>
 		<?php
 		neve_before_header_trigger();
-
 		if ( apply_filters( 'neve_filter_toggle_content_parts', true, 'header' ) === true ) {
-			do_action( 'neve_do_top_bar' );
 			do_action( 'neve_do_header' );
 		}
 		neve_after_header_trigger();
 		?>
 	</header>
-
 	<?php do_action( 'neve_before_primary' ); ?>
 
 	<main id="content" class="neve-main" role="main">

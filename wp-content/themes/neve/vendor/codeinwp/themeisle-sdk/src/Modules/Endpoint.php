@@ -273,7 +273,7 @@ class Endpoint extends Abstract_Module {
 
 		// fetch the calculated hashes.
 		if ( ! $wp_filesystem->is_readable( $path . '/' . self::HASH_FILE ) ) {
-			return new WP_Error( 'themeisle_sdk_hash_not_found', sprintf( '%s not found', self::HASH_FILE ) );
+			return new \WP_Error( 'themeisle_sdk_hash_not_found', sprintf( '%s not found', self::HASH_FILE ) );
 		}
 
 		$hashes = json_decode( $wp_filesystem->get_contents( $path . '/' . self::HASH_FILE ), true );

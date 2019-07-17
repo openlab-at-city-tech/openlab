@@ -52,7 +52,7 @@
   text-align: center;
   vertical-align: middle;
   border: 1px solid transparent;
-  border-radius: .25rem;
+  border-radius: 3px;
   text-transform: uppercase;
   cursor: pointer;
   line-height: $line-height-base;
@@ -87,6 +87,9 @@
 }
 
 @mixin cart-widget() {
+  .widget_shopping_cart {
+    color: #404248;
+  }
   .widget_shopping_cart > .widget_shopping_cart_content > ul.woocommerce-mini-cart.cart_list.product_list_widget {
     max-height: 290px;
     overflow-y: scroll;
@@ -103,6 +106,7 @@
     padding-bottom: $spacing-xs;
     margin: 0 auto $spacing-xs;
     text-align: center;
+
   }
   .woocommerce-mini-cart__buttons {
     margin-bottom: $spacing-xs;

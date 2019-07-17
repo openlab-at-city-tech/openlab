@@ -60,22 +60,42 @@ class Front_End {
 		add_theme_support( 'editor-color-palette', $this->get_gutenberg_color_palette() );
 		add_theme_support( 'fl-theme-builder-headers' );
 		add_theme_support( 'fl-theme-builder-footers' );
+		add_theme_support( 'header-footer-elementor' );
+		add_theme_support( 'lifterlms-sidebars' );
+		add_theme_support( 'lifterlms' );
 
 		add_filter( 'themeisle_gutenberg_templates', array( $this, 'add_gutenberg_templates' ) );
 
 		$this->add_amp_support();
 
-		register_nav_menus(
+		$nav_menus_to_register = apply_filters(
+			'neve_register_nav_menus',
 			array(
 				'primary' => esc_html__( 'Primary Menu', 'neve' ),
 				'footer'  => esc_html__( 'Footer Menu', 'neve' ),
-				'top-bar' => esc_html__( 'Top Bar Menu', 'neve' ),
+				'top-bar' => esc_html__( 'Secondary Menu', 'neve' ),
 			)
 		);
+		register_nav_menus( $nav_menus_to_register );
 
 		add_image_size( 'neve-blog', 930, 620, true );
-
+		add_filter( 'wp_nav_menu_args', array( $this, 'nav_walker' ), 1001 );
 		$this->add_woo_support();
+	}
+
+	/**
+	 * Tweak menu walker to support selective refresh.
+	 *
+	 * @param array $args List of arguments for navigation.
+	 *
+	 * @return mixed
+	 */
+	public function nav_walker( $args ) {
+		if ( isset( $args['walker'] ) && is_string( $args['walker'] ) && class_exists( $args['walker'] ) ) {
+			$args['walker'] = new $args['walker']();
+		}
+
+		return $args;
 	}
 
 	/**
@@ -84,22 +104,39 @@ class Front_End {
 	 * @return array
 	 */
 	private function get_ti_demo_content_support_data() {
-		$theme_options = wp_get_theme();
-		$theme_name    = apply_filters( 'ti_wl_theme_name', $theme_options->__get( 'Name' ) );
-
+		$theme_options           = wp_get_theme();
+		$theme_name              = apply_filters( 'ti_wl_theme_name', $theme_options->__get( 'Name' ) );
+		$onboarding_folder_url   = get_template_directory_uri();
 		$this->onboarding_config = array(
 			'editors'     => array(
 				'elementor',
+				'brizy',
 			),
 			'local'       => array(
 				'elementor' => array(
 					'neve-main'          => array(
-						'url'   => 'https://demo.themeisle.com/neve-onboarding/',
+						'url'   => 'https://demo.themeisle.com/neve/',
 						'title' => 'Original',
 					),
+					'neve-restaurant'    => array(
+						'url'              => 'https://demo.themeisle.com/neve-restaurant/',
+						'title'            => 'Restaurant',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587624/restaurant',
+					),
+					'neve-charity'       => array(
+						'url'              => 'https://demo.themeisle.com/neve-charity/',
+						'title'            => 'Charity',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587605/charity',
+					),
 					'neve-vet-center'    => array(
-						'url'   => 'https://demo.themeisle.com/neve-vet-center/',
-						'title' => 'Vet Center',
+						'url'              => 'https://demo.themeisle.com/neve-vet-center/',
+						'title'            => 'Vet Center',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587611/vet-center',
+					),
+					'neve-doctors'       => array(
+						'url'              => 'https://demo.themeisle.com/neve-doctors/',
+						'title'            => 'Doctors',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587593/doctor',
 					),
 					'neve-energy-panels' => array(
 						'url'   => 'https://demo.themeisle.com/neve-energy-panels/',
@@ -109,63 +146,97 @@ class Front_End {
 						'url'   => 'https://demo.themeisle.com/neve-lawyers/',
 						'title' => 'Lawyers',
 					),
-					'neve-restaurant'    => array(
-						'url'   => 'https://demo.themeisle.com/neve-restaurant/',
-						'title' => 'Restaurant',
-					),
 					'neve-freelancer'    => array(
 						'url'   => 'https://demo.themeisle.com/neve-freelancer/',
 						'title' => 'Freelancer',
+					),
+					'neve-shop'          => array(
+						'url'   => 'https://demo.themeisle.com/neve-shop/',
+						'title' => 'Shop',
 					),
 					'neve-zelle'         => array(
 						'url'   => 'https://demo.themeisle.com/neve-zelle/',
 						'title' => 'Travel Agency',
 					),
-					'neve-charity'       => array(
-						'url'   => 'https://demo.themeisle.com/neve-charity/',
-						'title' => 'Charity',
+				),
+				'brizy'     => array(
+					'neve-brizy-main'       => array(
+						'url'        => 'https://demo.themeisle.com/neve-onboarding-brizy/',
+						'title'      => 'Original',
+						'screenshot' => $onboarding_folder_url . '/onboarding/neve-main/screenshot.jpg',
 					),
-					'neve-doctors'       => array(
-						'url'   => 'https://demo.themeisle.com/neve-doctors/',
-						'title' => 'Doctors',
+					'neve-brizy-restaurant' => array(
+						'url'              => 'https://demo.themeisle.com/neve-restaurant-brizy/',
+						'title'            => 'Restaurant',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587624/restaurant',
+						'screenshot'       => $onboarding_folder_url . '/onboarding/neve-restaurant/screenshot.jpg',
+					),
+					'neve-brizy-charity'    => array(
+						'url'              => 'https://demo.themeisle.com/neve-charity-brizy/',
+						'title'            => 'Charity',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587605/charity',
+						'screenshot'       => $onboarding_folder_url . '/onboarding/neve-charity/screenshot.jpg',
+					),
+					'neve-brizy-vet-center' => array(
+						'url'              => 'https://demo.themeisle.com/neve-vet-center-brizy/',
+						'title'            => 'Vet Center',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587611/vet-center',
+						'screenshot'       => $onboarding_folder_url . '/onboarding/neve-vet-center/screenshot.jpg',
+					),
+					'neve-brizy-doctors'    => array(
+						'url'              => 'https://demo.themeisle.com/neve-doctors-brizy/',
+						'title'            => 'Doctors',
+						'unsplash_gallery' => 'https://unsplash.com/collections/4587593/doctor',
+						'screenshot'       => $onboarding_folder_url . '/onboarding/neve-doctors/screenshot.jpg',
+					),
+					'neve-brizy-shop'       => array(
+						'url'        => 'https://demo.themeisle.com/neve-shop-brizy/',
+						'title'      => 'Shop',
+						'screenshot' => $onboarding_folder_url . '/onboarding/neve-shop/screenshot.jpg',
+					),
+					'neve-brizy-zelle'      => array(
+						'url'        => 'https://demo.themeisle.com/neve-zelle-brizy/',
+						'title'      => 'Travel Agency',
+						'screenshot' => $onboarding_folder_url . '/onboarding/neve-zelle/screenshot.jpg',
 					),
 				),
 			),
-
-			/*
-			Upsells for PRO version
-
-			'upsell'  => array(
+			'upsell'      => array(
 				'elementor' => array(
-					'neve-showcase'    => array(
+					'neve-cafe'          => array(
+						'url'        => 'https://demo.themeisle.com/neve-cafe/',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-caffe-new-ss.jpg',
+						'title'      => 'Coffee Shop',
+					),
+					'neve-constructions' => array(
+						'url'        => 'https://demo.themeisle.com/neve-constructions/',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-construction-new-screenshot.jpg',
+						'title'      => 'Constructions Company',
+					),
+					'neve-showcase'      => array(
 						'url'        => 'https://demo.themeisle.com/neve-showcase/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/neve_showcase.jpg',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-showcase-demo-screenshot-big.png',
 						'title'      => 'Showcase',
 					),
-					'neve-consultants' => array(
+					'neve-consultants'   => array(
 						'url'        => 'https://demo.themeisle.com/neve-consultants/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/neve_consultants.jpg',
-						'title'      => 'Consultants',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-consulting-demo-screenshot-big.png',
+						'title'      => 'Business Consulting',
 					),
-					'neve-cafe'        => array(
-						'url'        => 'https://demo.themeisle.com/neve-cafe/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/neve_cafe.jpg',
-						'title'      => 'Cafe',
+				),
+				'brizy'     => array(
+					'neve-brizy-cafe'    => array(
+						'url'        => 'https://demo.themeisle.com/neve-cafe-brizy/',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-caffe-new-ss.jpg',
+						'title'      => 'Coffee Shop',
 					),
-					'neve-agency'      => array(
-						'url'        => 'https://demo.themeisle.com/neve-agency/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/neve_agency.jpg',
-						'title'      => 'Agency',
-					),
-					'neve-scholar'     => array(
-						'url'        => 'https://demo.themeisle.com/neve-scholar/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/neve_scholar.jpg',
-						'title'      => 'Scholar',
+					'neve-constructions' => array(
+						'url'        => 'https://demo.themeisle.com/neve-constructions-brizy/',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/06/neve-construction-new-screenshot.jpg',
+						'title'      => 'Constructions Company',
 					),
 				),
 			),
-			*/
-
 			'can_migrate' => array(
 				'zerif-pro'  => array(
 					'theme_name'        => 'Zelle Pro',
@@ -197,7 +268,7 @@ class Front_End {
 
 		);
 
-		/* $this->add_gutenberg_starter_sites(); */
+		$this->add_gutenberg_starter_sites();
 
 		return apply_filters( 'neve_filter_onboarding_data', $this->onboarding_config );
 	}
@@ -215,8 +286,9 @@ class Front_End {
 		$this->onboarding_config['editors'][]          = 'gutenberg';
 		$this->onboarding_config['local']['gutenberg'] = array(
 			'neve-main-gutenberg' => array(
-				'url'   => 'https://demo.themeisle.com/neve-onboarding-gutenberg',
-				'title' => 'Original',
+				'url'        => 'https://demo.themeisle.com/neve-onboarding-gutenberg',
+				'title'      => 'Original',
+				'screenshot' => get_template_directory_uri() . '/onboarding/neve-main/screenshot.jpg',
 			),
 		);
 
@@ -513,7 +585,10 @@ class Front_End {
 	 */
 	private function add_styles() {
 		if ( class_exists( 'WooCommerce' ) ) {
-			wp_enqueue_style( 'neve-woocommerce', NEVE_ASSETS_URL . 'css/woocommerce' . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
+			wp_register_style( 'neve-woocommerce', NEVE_ASSETS_URL . 'css/woocommerce' . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
+			wp_style_add_data( 'neve-woocommerce', 'rtl', 'replace' );
+			wp_style_add_data( 'neve-woocommerce', 'suffix', '.min' );
+			wp_enqueue_style( 'neve-woocommerce' );
 		}
 
 		wp_register_style( 'neve-style', get_template_directory_uri() . '/style' . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
@@ -530,7 +605,7 @@ class Front_End {
 			return;
 		}
 
-		wp_register_script( 'neve-script', NEVE_ASSETS_URL . 'js/script' . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.js', apply_filters( 'neve_filter_main_script_dependencies', array( 'jquery' ) ), NEVE_VERSION, false );
+		wp_register_script( 'neve-script', NEVE_ASSETS_URL . 'js/frontend.js', apply_filters( 'neve_filter_main_script_dependencies', array() ), NEVE_VERSION, true );
 		wp_localize_script(
 			'neve-script',
 			'NeveProperties',
@@ -538,7 +613,7 @@ class Front_End {
 				'neve_filter_main_script_localization',
 				array(
 					'ajaxurl' => esc_url( admin_url( 'admin-ajax.php' ) ),
-					'nonce'   => wp_create_nonce( 'neve-theme-nonce' ),
+					'nonce'   => wp_create_nonce( 'wp_rest' ),
 				)
 			)
 		);
@@ -570,9 +645,7 @@ class Front_End {
 			)
 		);
 
-		$footer_columns  = is_customize_preview() ? '4' : get_theme_mod( 'neve_footer_widget_columns', '3' );
-		$footer_sidebars = array_slice( $footer_sidebars, 0, $footer_columns );
-		$sidebars        = array_merge( $sidebars, $footer_sidebars );
+		$sidebars = array_merge( $sidebars, $footer_sidebars );
 
 		foreach ( $sidebars as $sidebar_id => $sidebar_name ) {
 			$sidebar_settings = array(

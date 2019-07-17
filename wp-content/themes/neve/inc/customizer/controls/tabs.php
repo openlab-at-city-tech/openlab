@@ -44,18 +44,6 @@ class Tabs extends \WP_Customize_Control {
 	 */
 	public $controls;
 
-
-	/**
-	 * Tabs constructor.
-	 *
-	 * @param \WP_Customize_Manager $manager wp_customize manager.
-	 * @param string                $id      control id.
-	 * @param array                 $args    public parameters for control.
-	 */
-	public function __construct( $manager, $id, $args = array() ) {
-		parent::__construct( $manager, $id, $args );
-	}
-
 	/**
 	 * Add custom JSON parameters to use in the JS template.
 	 *
@@ -96,7 +84,7 @@ class Tabs extends \WP_Customize_Control {
 				#>
 			<div class="neve-customizer-tab <# if( i === 1 ){#> active <#}#>" data-tab="{{tab}}">
 				<label class="{{allControlsInTabs}}">
-					<i class="fa fa-{{data.tabs[tab]['icon']}}"></i>
+					<i class="dashicons dashicons-{{data.tabs[tab]['icon']}}"></i>
 					{{data.tabs[tab]['label']}}
 				</label>
 			</div>

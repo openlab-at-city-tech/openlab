@@ -13,7 +13,8 @@
 						<strong><i class="dashicons dashicons-info"></i>{{strings.note}}:</strong>
 						<ol>
 							<li>{{strings.backup_disclaimer}}</li>
-							<li>{{strings.placeholders_disclaimer}}</li>
+							<li>{{strings.placeholders_disclaimer_new}}</li>
+							<li v-if="this.siteData.unsplash_gallery"><a :href="this.siteData.unsplash_gallery" target="_blank">{{strings.unsplash_gallery_link}}</a></li>
 						</ol>
 					</div>
 
@@ -87,8 +88,8 @@
 					<button class="button button-link" v-if="this.$store.state.onboard !== 'yes'"
 							v-on:click="resetImport">{{strings.back}}
 					</button>
-					<button class="button button-secondary" v-on:click="redirectToHome">{{strings.go_to_site}}</button>
-					<button class="button button-primary" v-on:click="editTemplate">{{strings.edit_template}}</button>
+					<a :href="this.homeUrl" class="button button-secondary">{{strings.go_to_site}}</a>
+					<a :href="editTemplateLink()" class="button button-primary">{{strings.edit_template}}</a>
 				</template>
 			</div>
 		</div>
@@ -113,9 +114,9 @@
       }
     },
     computed: {
-	  defaultTemplate: function () {
-		  return this.$store.state.sitesData
-	  },
+      defaultTemplate: function () {
+        return this.$store.state.sitesData
+      },
       allPlugins () {
         return {
           recommended: this.siteData.recommended_plugins,
@@ -173,13 +174,11 @@
           return false
         }
         this.$store.commit('showImportModal', false)
-        this.resetImport()
       },
       runMigration: function () {
         this.$store.state.importOptions.isMigration = true
         this.$store.state.migration = 'isRunning'
         this.$store.dispatch('importSite', {
-          req: 'Migrate Site',
           template: this.siteData.template,
           template_name: this.siteData.template_name
         })
@@ -190,7 +189,6 @@
           return false
         }
         this.$store.dispatch('importSite', {
-          req: 'Import Site',
           plugins: this.siteData.recommended_plugins,
           content: {
             'content_file': this.siteData.content_file,
@@ -199,7 +197,8 @@
           },
           themeMods: {
             'theme_mods': this.siteData.theme_mods,
-            'source_url': this.siteData.demo_url
+            'source_url': this.siteData.demo_url,
+            'wp_options': this.siteData.wp_options
           },
           widgets: this.siteData.widgets,
           source: this.siteData.source
@@ -211,21 +210,25 @@
       resetImport: function () {
         this.$store.commit('resetStates')
       },
-      editTemplate: function () {
-        var editor = this.getEditor()
-        var pageId = this.getPageId()
-	    let customizerRedirect = this.siteData.edit_content_redirect;
-        var url = this.homeUrl
+      editTemplateLink: function () {
+        let editor = this.getEditor(),
+            pageId = this.getPageId(),
+            customizerRedirect = this.siteData.edit_content_redirect,
+            url = this.homeUrl
+
         if (editor === 'elementor' || this.isMigration) {
           url = this.homeUrl + '/wp-admin/post.php?post=' + pageId + '&action=elementor'
         }
         if (editor === 'gutenberg') {
           url = this.homeUrl + '/wp-admin/post.php?post=' + pageId + '&action=edit'
         }
-        if ( customizerRedirect === 'customizer' ) {
-		  url = this.homeUrl + '/wp-admin/customize.php'
+        if( editor === 'brizy' ) {
+			url = this.homeUrl + '/?brizy-edit'
 		}
-        window.location.replace(url)
+        if (customizerRedirect === 'customizer') {
+          url = this.homeUrl + '/wp-admin/customize.php'
+        }
+        return url
       }
     },
     beforeMount () {

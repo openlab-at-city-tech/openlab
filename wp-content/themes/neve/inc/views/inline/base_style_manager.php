@@ -190,7 +190,7 @@ abstract class Base_Style_Manager extends Base_View {
 	 * @return bool
 	 */
 	private function is_css_inline_diff() {
-		require_once( ABSPATH . '/wp-admin/includes/file.php' );
+		require_once ABSPATH . '/wp-admin/includes/file.php';
 
 		global $wp_filesystem;
 
@@ -227,7 +227,7 @@ abstract class Base_Style_Manager extends Base_View {
 			wp_mkdir_p( $this->style_path );
 		}
 
-		require_once( ABSPATH . '/wp-admin/includes/file.php' );
+		require_once ABSPATH . '/wp-admin/includes/file.php';
 		global $wp_filesystem;
 		WP_Filesystem();
 		$wp_filesystem->put_contents( $this->style_path . $this->css_file_name, $style, 0644 );
@@ -243,7 +243,9 @@ abstract class Base_Style_Manager extends Base_View {
 			return;
 		}
 		remove_theme_mod( $this->style_version_theme_mod_key );
-		unlink( $this->style_path . $this->css_file_name );
+		if ( is_writable( $this->style_path . $this->css_file_name ) ) {
+			unlink( $this->style_path . $this->css_file_name );
+		}
 	}
 
 	/**
@@ -293,9 +295,8 @@ abstract class Base_Style_Manager extends Base_View {
 	 */
 	public function get_style() {
 		$style = $this->style . $this->tablet_style . $this->desktop_style;
-		$style = preg_replace( '!\s+!', ' ', $style );
-
-		return $style;
+		$style = apply_filters( 'neve_style_output_' . $this->style_handle, $style );
+		return preg_replace( '!\s+!', ' ', $style );
 	}
 
 	/**

@@ -7,6 +7,8 @@
 
 namespace Neve\Views;
 
+use HFG\Core\Components\Nav;
+
 /**
  * Class Header
  *
@@ -17,51 +19,78 @@ class Header extends Base_View {
 	 * Add hooks for the front end.
 	 */
 	public function init() {
-		add_action( 'neve_do_header', array( $this, 'render_navigation' ) );
 		add_filter( 'wp_nav_menu_items', array( $this, 'add_last_menu_item' ), 10, 2 );
 		add_filter( 'wp_page_menu', array( $this, 'add_fallback_last_menu_items' ), 10, 2 );
-
 	}
 
 	/**
-	 * Render navigation
-	 */
-	public function render_navigation() {
-
-		$args = array(
-			'home_url'                  => home_url( '/' ),
-			'logo'                      => $this->get_logo(),
-			'navbar_class'              => $this->get_navbar_class(),
-			'primary_menu'              => $this->get_primary_menu(),
-			'responsive_last_menu_item' => $this->get_responsive_last_menu_item(),
-		);
-		$this->get_view( 'navbar', $args );
-	}
-
-	/**
-	 * Get the markup for last menu item on mobile.
+	 * Add the last menu item.
+	 *
+	 * @param string $items the nav menu markup.
+	 * @param object $args  menu properties.
 	 *
 	 * @return string
 	 */
-	private function get_responsive_last_menu_item() {
+	public function add_last_menu_item( $items, $args ) {
+		if ( $args->theme_location !== 'primary' ) {
+			return $items;
+		}
 
-		$additional_item = $this->get_last_menu_item_setting();
+		if ( strpos( $args->menu_class, 'max-mega-menu' ) ) {
+			return $items;
+		}
 
-		if ( $additional_item === 'none' ) {
-			return '';
+		$items = $this->get_last_menu_items_markup( $items );
+
+		return $items;
+	}
+
+	/**
+	 * Get the last menu items.
+	 *
+	 * @param string $items the menu markup.
+	 *
+	 * @return string
+	 */
+	private function get_last_menu_items_markup( $items = '' ) {
+		$additional_items = $this->get_last_menu_item_setting();
+		$additional_items = json_decode( $additional_items, true );
+		if ( empty( $additional_items ) ) {
+			return $items;
 		}
-		if ( 'search' === $additional_item ) {
-			return $this->get_nav_menu_search( true );
+		foreach ( $additional_items as $item ) {
+			if ( $item === 'search' ) {
+				$items .= $this->get_nav_menu_search();
+			} elseif ( $item === 'cart' ) {
+				$items .= $this->get_nav_menu_cart();
+			} else {
+				$items .= apply_filters( 'neve_last_menu_item_' . $item, '' );
+			}
 		}
-		if ( 'cart' === $additional_item ) {
-			return $this->get_nav_menu_cart( true );
+
+		return apply_filters( 'neve_last_menu_item', $items );
+	}
+
+	/**
+	 * Get the last menu item theme mod value.
+	 *
+	 * @return string
+	 */
+	private function get_last_menu_item_setting() {
+		$default = array(
+			'search',
+		);
+		if ( class_exists( 'WooCommerce' ) ) {
+			array_push( $default, 'cart' );
 		}
-		if ( 'search-cart' === $additional_item ) {
-			return $this->get_nav_menu_search( true ) . $this->get_nav_menu_cart( true );
+
+		$current_component = 'default';
+		if ( isset( Nav::$current_component ) ) {
+			$current_component = Nav::$current_component;
 		}
-		if ( 'cart-search' === $additional_item ) {
-			return $this->get_nav_menu_cart( true ) . $this->get_nav_menu_search( true );
-		}
+		$last_menu_setting_slug = apply_filters( 'neve_last_menu_setting_slug_' . $current_component, 'neve_last_menu_item' );
+
+		return get_theme_mod( $last_menu_setting_slug, json_encode( $default ) );
 	}
 
 	/**
@@ -72,6 +101,7 @@ class Header extends Base_View {
 	 * @return string
 	 */
 	private function get_nav_menu_search( $responsive = false ) {
+		// TODO when HFG is live we should drop this at all as we have a section for icon, or offer a way of disabling it.
 		$tag   = 'li';
 		$class = 'menu-item-nav-search';
 		if ( $responsive === true ) {
@@ -82,7 +112,7 @@ class Header extends Base_View {
 		$search = '';
 
 		$search .= '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '" tabindex="0" aria-label="search">';
-		$search .= '<a><span class="nv-icon nv-search"></span></a>';
+		$search .= '<a>' . neve_search_icon() . '</a>';
 		$search .= '<div class="nv-nav-search">';
 		if ( $responsive === true ) {
 			$search .= '<div class="container close-container">';
@@ -118,7 +148,7 @@ class Header extends Base_View {
 		$cart = '';
 
 		$cart .= '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '"><a href="' . esc_url( wc_get_cart_url() ) . '" class="cart-icon-wrapper">';
-		$cart .= '<span class="nv-icon nv-cart"></span>';
+		$cart .= neve_cart_icon();
 		$cart .= '<span class="screen-reader-text">' . __( 'Cart', 'neve' ) . '</span>';
 		$cart .= '<span class="cart-count">' . WC()->cart->get_cart_contents_count() . '</span>';
 		$cart .= '</a>';
@@ -132,7 +162,18 @@ class Header extends Base_View {
 		if ( $responsive === false ) {
 			ob_start();
 			echo '<div class="nv-nav-cart">';
-			the_widget( 'WC_Widget_Cart', 'title=' );
+			do_action( 'neve_before_cart_popup' );
+			the_widget(
+				'WC_Widget_Cart',
+				array(
+					'title' => ' ',
+				),
+				array(
+					'before_title' => '',
+					'after_title'  => '',
+				)
+			);
+			do_action( 'neve_after_cart_popup' );
 			echo '</div>';
 			$cart_widget = ob_get_contents();
 			ob_end_clean();
@@ -141,24 +182,6 @@ class Header extends Base_View {
 		$cart .= '</' . esc_attr( $tag ) . '>';
 
 		return $cart;
-	}
-
-	/**
-	 * Add the last menu item.
-	 *
-	 * @param string $items the nav menu markup.
-	 * @param object $args  menu properties.
-	 *
-	 * @return string
-	 */
-	public function add_last_menu_item( $items, $args ) {
-		if ( $args->theme_location !== 'primary' ) {
-			return $items;
-		}
-
-		$items = $this->get_last_menu_items_markup( $items );
-
-		return $items;
 	}
 
 	/**
@@ -179,109 +202,5 @@ class Header extends Base_View {
 		$menu = str_replace( '</ul>', $items . '</ul>', $menu );
 
 		return $menu;
-	}
-
-	/**
-	 * Get the navbar class.
-	 *
-	 * @return string
-	 */
-	private function get_navbar_class() {
-		return 'nav-' . $this->get_navbar_layout();
-	}
-
-	/**
-	 * Get the navbar layout.
-	 *
-	 * @return string
-	 */
-	private function get_navbar_layout() {
-		return get_theme_mod( 'neve_navigation_layout', 'left' );
-	}
-
-	/**
-	 * Render primary menu markup.
-	 */
-	private function get_primary_menu() {
-		$menu = '<div role="navigation" aria-label="' . esc_html( __( 'Primary Menu', 'neve' ) ) . '">';
-
-		$menu .= wp_nav_menu(
-			array(
-				'theme_location' => 'primary',
-				'menu_id'        => 'nv-primary-navigation',
-				'container'      => 'ul',
-				'walker'         => new Nav_Walker(),
-				'fallback_cb'    => '\Neve\Views\Nav_Walker::fallback',
-				'echo'           => false,
-			)
-		);
-
-		$menu .= '</div>';
-
-		return $menu;
-	}
-
-	/**
-	 * Display your custom logo if present.
-	 */
-	public function get_logo() {
-		if ( get_theme_mod( 'custom_logo' ) ) {
-			$logo          = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' );
-			$alt_attribute = get_post_meta( get_theme_mod( 'custom_logo' ), '_wp_attachment_image_alt', true );
-			if ( empty( $alt_attribute ) ) {
-				$alt_attribute = get_bloginfo( 'name' );
-			}
-			$logo = '<img src="' . esc_url( $logo[0] ) . '" alt="' . esc_attr( $alt_attribute ) . '">';
-
-			return $logo;
-		}
-		$tag = 'p';
-		if ( get_option( 'show_on_front' ) === 'posts' && is_home() ) {
-			$tag = 'h1';
-		}
-
-		$logo  = '<' . $tag . '>' . esc_html( get_bloginfo( 'name' ) ) . '</' . $tag . '>';
-		$logo .= '<small>' . esc_html( get_bloginfo( 'description' ) ) . '</small>';
-
-		return $logo;
-	}
-
-	/**
-	 * Get the last menu item theme mod value.
-	 *
-	 * @return string
-	 */
-	private function get_last_menu_item_setting() {
-		$default = 'search';
-		if ( class_exists( 'WooCommerce' ) ) {
-			$default = 'search-cart';
-		}
-
-		return get_theme_mod( 'neve_last_menu_item', $default );
-	}
-
-	/**
-	 * Get the last menu items.
-	 *
-	 * @param string $items the menu markup.
-	 *
-	 * @return string
-	 */
-	private function get_last_menu_items_markup( $items = '' ) {
-		$additional_item = $this->get_last_menu_item_setting();
-
-		if ( $additional_item === 'none' ) {
-			return $items;
-		}
-
-		if ( 'search' === $additional_item || 'search-cart' === $additional_item ) {
-			$items .= $this->get_nav_menu_search();
-		}
-
-		if ( 'cart' === $additional_item || 'search-cart' === $additional_item ) {
-			$items .= $this->get_nav_menu_cart();
-		}
-
-		return $items;
 	}
 }

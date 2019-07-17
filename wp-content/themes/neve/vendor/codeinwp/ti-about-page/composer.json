@@ -1,7 +1,7 @@
 {
   "name": "codeinwp/ti-about-page",
   "description": "The theme about page for themeisle themes.",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "type": "library",
   "license": "GPL-3.0-or-later",
   "minimum-stability": "dev",

@@ -152,7 +152,7 @@ class Logger extends Abstract_Module {
 		$environment['theme']['name']   = $theme->get( 'Name' );
 		$environment['theme']['author'] = $theme->get( 'Author' );
 		$environment['plugins']         = get_option( 'active_plugins' );
-
+		global $wp_version;
 		wp_remote_post(
 			self::TRACKING_ENDPOINT,
 			array(
@@ -166,6 +166,7 @@ class Logger extends Abstract_Module {
 					'site'        => get_site_url(),
 					'slug'        => $this->product->get_slug(),
 					'version'     => $this->product->get_version(),
+					'wp_version'  => $wp_version,
 					'data'        => apply_filters( $this->product->get_key() . '_logger_data', array() ),
 					'environment' => $environment,
 					'license'     => apply_filters( $this->product->get_key() . '_license_status', '' ),

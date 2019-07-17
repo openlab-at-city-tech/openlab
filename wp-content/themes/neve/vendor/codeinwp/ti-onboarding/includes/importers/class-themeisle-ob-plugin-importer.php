@@ -22,6 +22,17 @@ class Themeisle_OB_Plugin_Importer {
 	public $log = '';
 
 	/**
+	 * Logger Instance.
+	 *
+	 * @var Themeisle_OB_WP_Import_Logger
+	 */
+	private $logger;
+
+	public function __construct() {
+		$this->logger = Themeisle_OB_WP_Import_Logger::get_instance();
+	}
+
+	/**
 	 * Install Plugins.
 	 *
 	 * @param WP_REST_Request $request contains the plugins that should be installed.
@@ -30,6 +41,8 @@ class Themeisle_OB_Plugin_Importer {
 	 */
 	public function install_plugins( WP_REST_Request $request ) {
 		if ( ! current_user_can( 'install_plugins' ) ) {
+			$this->logger->log( 'Current user cannot install plugins' );
+
 			return new WP_REST_Response(
 				array(
 					'success' => false,
@@ -45,7 +58,7 @@ class Themeisle_OB_Plugin_Importer {
 		$plugins = $plugins['data'];
 
 		foreach ( $plugins as $slug => $state ) {
-			if ( $state === false ) {
+			if ( $state === 'false' ) {
 				unset( $plugins[ $slug ] );
 			}
 		}
@@ -59,17 +72,7 @@ class Themeisle_OB_Plugin_Importer {
 			);
 		}
 
-		$active_plugins = get_option( 'active_plugins' );
-
-		foreach ( $plugins as $plugin_slug => $nicename ) {
-			if ( in_array( $plugin_slug, $active_plugins ) ) {
-				continue;
-			}
-			$this->install_single_plugin( $plugin_slug );
-			$this->activate_single_plugin( $plugin_slug );
-		}
-
-		do_action( 'themeisle_ob_after_plugins_install' );
+		$this->run_plugins_install( $plugins );
 
 		return new WP_REST_Response(
 			array(
@@ -77,6 +80,31 @@ class Themeisle_OB_Plugin_Importer {
 				'log'     => $this->log,
 			)
 		);
+	}
+
+	/**
+	 * Install and activate plugins.
+	 *
+	 * @param array $plugins_array plugins formated slug => true.
+	 */
+	public function run_plugins_install( $plugins_array ) {
+		$active_plugins = get_option( 'active_plugins' );
+
+		foreach ( $plugins_array as $plugin_slug => $true ) {
+			if ( in_array( $plugin_slug, $active_plugins ) ) {
+				continue;
+			}
+			$this->logger->log( "Installing {$plugin_slug}.", 'progress' );
+			$this->install_single_plugin( $plugin_slug );
+			$this->logger->log( "Activating {$plugin_slug}.", 'progress' );
+			$this->activate_single_plugin( $plugin_slug );
+		}
+
+		$this->logger->log( 'Installed and activated plugins.', 'success' );
+
+		do_action( 'themeisle_ob_after_plugins_install' );
+
+		update_option( 'themeisle_ob_plugins_installed', 'yes' );
 	}
 
 	/**

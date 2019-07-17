@@ -8,7 +8,6 @@
 
 namespace Neve\Views\Partials;
 
-
 use Neve\Views\Base_View;
 
 /**
@@ -38,7 +37,7 @@ class Excerpt extends Base_View {
 	/**
 	 * Get the post excerpt.
 	 *
-	 * @param string $context NOT YET USED. Might come in handly at some later point.
+	 * @param string $context NOT YET USED. Might come in handily at some later point.
 	 *
 	 * @return string
 	 */

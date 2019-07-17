@@ -1,20 +1,5 @@
 <template>
 	<tabs>
-		<!-- Uncomment the following lines if you want to enable the tab with all the templates -->
-		<!--<tab name="all">
-			<div class="template-search-wrapper">
-				<input type="text" v-model="search" v-bind:placeholder="strings.search + '...'" class="template-search">
-			</div>
-			<div class="templates-wrapper">
-				<template v-for="(data, index) in sites">
-					<template v-for="(editor_sites, site_editor) in data">
-						<div v-for="site in filterTemplates(editor_sites)">
-							<SiteItem :site-data="site"></SiteItem>
-						</div>
-					</template>
-				</template>
-			</div>
-		</tab>-->
 		<template v-for="editor in editors">
 			<tab v-bind:name="editor">
 				<!-- To enable search in tab, uncomment the following lines -->
@@ -29,8 +14,8 @@
 				<div class="templates-wrapper">
 					<template v-for="(data, index) in sites">
 						<template v-for="(editor_sites, site_editor) in data">
-							<div v-if="site_editor===editor" v-for="site in filterTemplates(editor_sites)">
-								<SiteItem :site-data="site"></SiteItem>
+							<div v-if="site_editor===editor" v-for="(site, slug) in filterTemplates(editor_sites)">
+								<SiteItem :site-data="site" :site-slug="slug"></SiteItem>
 							</div>
 						</template>
 					</template>

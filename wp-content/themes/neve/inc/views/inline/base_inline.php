@@ -46,7 +46,7 @@ abstract class Base_Inline {
 	 * @param string $selectors   css selectors.
 	 * @param string $media_query media query.
 	 */
-	protected final function add_style( $styles, $selectors, $media_query = 'mobile' ) {
+	final protected function add_style( $styles, $selectors, $media_query = 'mobile' ) {
 		if ( ! in_array( $media_query, array( 'mobile', 'tablet', 'desktop' ) ) ) {
 			return;
 		}
@@ -59,7 +59,7 @@ abstract class Base_Inline {
 
 		foreach ( $styles as $style ) {
 			/* Allow 0 values through, but don't allow empty style or undefined. */
-			if ( ! isset( $style['value'] ) || ( empty( $style['value'] ) && ( $style['value'] !== 0 ) ) ) {
+			if ( ! isset( $style['value'] ) || ( empty( $style['value'] ) && ( $style['value'] !== 0 && $style['value'] !== '0' ) ) ) {
 				continue;
 			}
 			$use_style = true;
@@ -70,7 +70,7 @@ abstract class Base_Inline {
 		}
 
 		$css = $selectors . '{';
-		foreach ( $styles as $id => $style ) {
+		foreach ( $styles as $style ) {
 			if ( isset( $style['suffix'] ) && is_array( $style['suffix'] ) ) {
 				$style['suffix'] = $style['suffix'][ $media_query ];
 			}
@@ -93,7 +93,6 @@ abstract class Base_Inline {
 			foreach ( $settings as $index => $setting ) {
 				$settings[ $index ]['value'] = $setting['value'][ $media_query ];
 			}
-
 			$this->add_style( $settings, $selectors, $media_query );
 		}
 	}
@@ -143,10 +142,14 @@ abstract class Base_Inline {
 	 * @return string
 	 */
 	private function add_styles( $style ) {
-		if ( ! isset( $style['css_prop'] ) || ! isset( $style['value'] ) ) {
+		if ( ! isset( $style['css_prop'] ) || ! isset( $style['value'] ) || ( empty( $style['value'] ) && $style['value'] !== 0 && $style['value'] !== '0' ) ) {
 			return '';
 		}
 		$suffix = isset( $style['suffix'] ) ? $style['suffix'] : '';
+
+		if ( in_array( $style['css_prop'], array( 'font-family', 'content' ) ) ) {
+			return esc_attr( $style['css_prop'] ) . ':' . '"' . esc_attr( $style['value'] ) . '"' . esc_attr( $suffix ) . ';';
+		}
 
 		return esc_attr( $style['css_prop'] ) . ':' . esc_attr( $style['value'] ) . esc_attr( $suffix ) . ';';
 	}
@@ -158,7 +161,7 @@ abstract class Base_Inline {
 	 *
 	 * @return string
 	 */
-	public final function get_style( $context ) {
+	final public function get_style( $context ) {
 		$allowed_contexts = array( 'mobile', 'desktop', 'tablet' );
 		if ( ! in_array( $context, $allowed_contexts ) ) {
 			return '';

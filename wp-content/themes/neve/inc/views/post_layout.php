@@ -46,7 +46,10 @@ class Post_Layout extends Base_View {
 		);
 
 		$content_order = get_theme_mod( 'neve_layout_single_post_elements_order', json_encode( $default_order ) );
-		$content_order = json_decode( $content_order );
+		if ( ! is_string( $content_order ) ) {
+			$content_order = json_encode( $default_order );
+		}
+		$content_order = json_decode( $content_order, true );
 
 		if ( apply_filters( 'neve_filter_toggle_content_parts', true, 'title' ) !== true ) {
 			unset( $content_order[ array_search( 'title-meta', $content_order ) ] );
@@ -106,8 +109,13 @@ class Post_Layout extends Base_View {
 				case 'related-posts':
 					do_action( 'neve_do_related_posts' );
 					break;
+				case 'sharing-icons':
+					do_action( 'neve_do_sharing' );
+					break;
 				case 'comments':
 					comments_template();
+					break;
+				default:
 					break;
 			}
 		}

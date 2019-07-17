@@ -47,10 +47,12 @@ class Core_Loader {
 				'Views\Typography',
 				'Views\Top_Bar',
 				'Views\Header',
-				'Views\Footer',
 				'Views\Template_Parts',
 				'Views\Page_Header',
 				'Views\Post_Layout',
+				'Views\Page_Layout',
+				'Views\Product_Layout',
+				'Views\Content_None',
 
 				'Views\Layouts\Layout_Container',
 				'Views\Layouts\Layout_Sidebar',
@@ -66,11 +68,14 @@ class Core_Loader {
 				'Views\Inline\Front_End_Style_Manager',
 				'Views\Inline\Gutenberg_Style_Manager',
 
+				'Compatibility\Generic',
 				'Compatibility\Gutenberg',
 				'Compatibility\WooCommerce',
 				'Compatibility\Elementor',
+				'Compatibility\Header_Footer_Elementor',
 				'Compatibility\Amp',
 				'Compatibility\Beaver',
+				'Compatibility\Lifter',
 
 				'Admin\Metabox\Manager',
 			)
