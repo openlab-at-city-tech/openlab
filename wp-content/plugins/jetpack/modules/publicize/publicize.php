@@ -40,7 +40,7 @@ abstract class Publicize_Base {
 	 * All users with this cap can un-globalize all other global connections, and globalize any of their own
 	 * Globalized connections cannot be unselected by users without this capability when publishing
 	 */
-	public $GLOBAL_CAP = 'edit_others_posts';
+	public $GLOBAL_CAP = 'publish_posts';
 
 	/**
 	* Sets up the basics of Publicize
@@ -119,7 +119,7 @@ abstract class Publicize_Base {
 
 		add_action( 'init', array( $this, 'add_post_type_support' ) );
 		add_action( 'init', array( $this, 'register_post_meta' ), 20 );
-		add_action( 'init', array( $this, 'register_gutenberg_extension' ), 30 );
+		add_action( 'jetpack_register_gutenberg_extensions', array( $this, 'register_gutenberg_extension' ) );
 	}
 
 /*
@@ -139,6 +139,10 @@ abstract class Publicize_Base {
 	 * @return array
 	 */
 	abstract function get_services( $filter = 'all', $_blog_id = false, $_user_id = false );
+
+	function can_connect_service( $service_name ) {
+		return true;
+	}
 
 	/**
 	 * Does the given user have a connection to the service on the given blog?
@@ -203,9 +207,6 @@ abstract class Publicize_Base {
 		switch ( $service_name ) {
 			case 'linkedin':
 				return 'LinkedIn';
-				break;
-			case 'google_plus':
-				return  'Google+';
 				break;
 			case 'twitter':
 			case 'facebook':
@@ -331,10 +332,6 @@ abstract class Publicize_Base {
 			 return 'http://' . $cmeta['connection_data']['meta']['tumblr_base_hostname'];
 		} elseif ( 'twitter' == $service_name ) {
 			return 'https://twitter.com/' . substr( $cmeta['external_display'], 1 ); // Has a leading '@'
-		} elseif ( 'google_plus' == $service_name && isset( $cmeta['connection_data']['meta']['google_plus_page'] ) ) {
-			return 'https://plus.google.com/' . $cmeta['connection_data']['meta']['google_plus_page'];
-		} elseif ( 'google_plus' == $service_name ) {
-			return 'https://plus.google.com/' . $cmeta['external_id'];
 		} else if ( 'linkedin' == $service_name ) {
 			if ( !isset( $cmeta['connection_data']['meta']['profile_url'] ) ) {
 				return false;
@@ -430,6 +427,19 @@ abstract class Publicize_Base {
 	}
 
 	/**
+	 * LinkedIn needs to be reauthenticated to use v2 of their API.
+	 * If it's using LinkedIn old API, it's an 'invalid' connection
+	 *
+	 * @param object|array The Connection object (WordPress.com) or array (Jetpack)
+	 * @return bool
+	 */
+	function is_invalid_linkedin_connection( $connection ) {
+		// LinkedIn API v1 included the profile link in the connection data.
+		$connection_meta = $this->get_connection_meta( $connection );
+		return isset( $connection_meta['connection_data']['meta']['profile_url'] );
+	}
+
+	/**
 	 * Whether the Connection currently being connected
 	 *
 	 * @param object|array The Connection object (WordPress.com) or array (Jetpack)
@@ -498,8 +508,15 @@ abstract class Publicize_Base {
 					if ( ! $this->is_valid_facebook_connection( $connection ) ) {
 						$connection_test_passed = false;
 						$user_can_refresh = false;
-						$connection_test_message = __( 'Facebook no longer supports Publicize connections to Facebook Profiles, but you can still connect Facebook Pages. Please select a Facebook Page to publish updates to.' );
+						$connection_test_message = __( 'Please select a Facebook Page to publish updates.', 'jetpack' );
 					}
+				}
+
+				// LinkedIn needs reauthentication to be compatible with v2 of their API
+				if ( 'linkedin' === $service_name && $this->is_invalid_linkedin_connection( $connection ) ) {
+					$connection_test_passed = 'must_reauth';
+					$user_can_refresh = false;
+					$connection_test_message = esc_html__( 'Your LinkedIn connection needs to be reauthenticated to continue working – head to Sharing to take care of it.', 'jetpack' );
 				}
 
 				$unique_id = null;
@@ -780,9 +797,15 @@ abstract class Publicize_Base {
 	 * Register the Publicize Gutenberg extension
 	 */
 	function register_gutenberg_extension() {
-		// TODO: Not really a block. The underlying logic doesn't care, so we should rename to
-		// `jetpack_register_gutenberg_extension()` (to account for both Gutenblocks and Gutenplugins).
-		jetpack_register_block( 'publicize' );
+		// TODO: The `gutenberg/available-extensions` endpoint currently doesn't accept a post ID,
+		// so we cannot pass one to `$this->current_user_can_access_publicize_data()`.
+
+		if ( $this->current_user_can_access_publicize_data() ) {
+			Jetpack_Gutenberg::set_extension_available( 'jetpack/publicize' );
+		} else {
+			Jetpack_Gutenberg::set_extension_unavailable( 'jetpack/publicize', 'unauthorized' );
+
+		}
 	}
 
 	/**
@@ -1030,6 +1053,12 @@ abstract class Publicize_Base {
 		if ( ! $this->post_type_is_publicizeable( $post_type ) ) {
 			return $messages;
 		}
+
+		// Bail early if the post is private.
+		if ( 'publish' !== $post->post_status ) {
+			return $messages;
+		}
+
 		$view_post_link_html = '';
 		$viewable = is_post_type_viewable( $post_type_object );
 		if ( $viewable ) {
@@ -1205,7 +1234,7 @@ abstract class Publicize_Base {
 }
 
 function publicize_calypso_url() {
-	$calypso_sharing_url = 'https://wordpress.com/sharing/';
+	$calypso_sharing_url = 'https://wordpress.com/marketing/connections/';
 	if ( class_exists( 'Jetpack' ) && method_exists( 'Jetpack', 'build_raw_urls' ) ) {
 		$site_suffix = Jetpack::build_raw_urls( home_url() );
 	} elseif ( class_exists( 'WPCOM_Masterbar' ) && method_exists( 'WPCOM_Masterbar', 'get_calypso_site_slug' ) ) {

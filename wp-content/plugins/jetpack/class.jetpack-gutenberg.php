@@ -1,27 +1,72 @@
-<?php
+<?php //phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
- * Handles server-side registration and use of all blocks available in Jetpack for the block editor, aka Gutenberg.
- * Works in tandem with client-side block registration via `_inc/blocks/block-manifest.json`
+ * Handles server-side registration and use of all blocks and plugins available in Jetpack for the block editor, aka Gutenberg.
+ * Works in tandem with client-side block registration via `index.json`
  *
  * @package Jetpack
  */
 
+use Automattic\Jetpack\Constants;
+
 /**
- * Helper function to register a Jetpack Gutenberg block
+ * Wrapper function to safely register a gutenberg block type
  *
- * @param string $type Slug of the block. Will be prefixed with jetpack/.
- * @param array  $args Arguments that are passed into the register_block_type.
- * @param array  $avalibility Arguments that tells us what kind of avalibility the block has
+ * @param string $slug Slug of the block.
+ * @param array  $args Arguments that are passed into register_block_type.
  *
  * @see register_block_type
  *
  * @since 6.7.0
  *
+ * @return WP_Block_Type|false The registered block type on success, or false on failure.
+ */
+function jetpack_register_block( $slug, $args = array() ) {
+	if ( 0 !== strpos( $slug, 'jetpack/' ) && ! strpos( $slug, '/' ) ) {
+		_doing_it_wrong( 'jetpack_register_block', 'Prefix the block with jetpack/ ', '7.1.0' );
+		$slug = 'jetpack/' . $slug;
+	}
+
+	// Checking whether block is registered to ensure it isn't registered twice.
+	if ( Jetpack_Gutenberg::is_registered( $slug ) ) {
+		return false;
+	}
+
+	return register_block_type( $slug, $args );
+}
+
+/**
+ * Helper function to register a Jetpack Gutenberg plugin
+ *
+ * @deprecated 7.1.0 Use Jetpack_Gutenberg::set_extension_available() instead
+ *
+ * @param string $slug Slug of the plugin.
+ *
+ * @since 6.9.0
+ *
  * @return void
  */
-function jetpack_register_block( $type, $args = array(), $availability = array( 'available' => true ) ) {
-	$type = sanitize_title_with_dashes( $type );
-	Jetpack_Gutenberg::add_block( $type, $args, $availability );
+function jetpack_register_plugin( $slug ) {
+	_deprecated_function( __FUNCTION__, '7.1', 'Jetpack_Gutenberg::set_extension_available' );
+
+	Jetpack_Gutenberg::register_plugin( $slug );
+}
+
+/**
+ * Set the reason why an extension (block or plugin) is unavailable
+ *
+ * @deprecated 7.1.0 Use Jetpack_Gutenberg::set_extension_unavailable() instead
+ *
+ * @param string $slug Slug of the block.
+ * @param string $reason A string representation of why the extension is unavailable.
+ *
+ * @since 7.0.0
+ *
+ * @return void
+ */
+function jetpack_set_extension_unavailability_reason( $slug, $reason ) {
+	_deprecated_function( __FUNCTION__, '7.1', 'Jetpack_Gutenberg::set_extension_unavailable' );
+
+	Jetpack_Gutenberg::set_extension_unavailability_reason( $slug, $reason );
 }
 
 /**
@@ -30,139 +75,321 @@ function jetpack_register_block( $type, $args = array(), $availability = array( 
 class Jetpack_Gutenberg {
 
 	/**
-	 * Array of blocks we will be registering.
+	 * Only these extensions can be registered. Used to control availability of beta blocks.
 	 *
-	 * @var array $blocks Array of blocks we will be registering.
+	 * @var array Extensions whitelist
 	 */
-	private static $jetpack_blocks = array();
-	private static $blocks_index = array();
+	private static $extensions = array();
+
 	/**
-	 * Add a block to the list of blocks to be registered.
+	 * Keeps track of the reasons why a given extension is unavailable.
 	 *
-	 * @param string $type Slug of the block.
-	 * @param array  $args Arguments that are passed into the register_block_type.
+	 * @var array Extensions availability information
 	 */
-	public static function add_block( $type, $args, $availability ) {
-		self::$jetpack_blocks[ $type ] = array( 'args' => $args, 'availability' => $availability );
+	private static $availability = array();
+
+	/**
+	 * Prepend the 'jetpack/' prefix to a block name
+	 *
+	 * @param string $block_name The block name.
+	 *
+	 * @return string The prefixed block name.
+	 */
+	private static function prepend_block_prefix( $block_name ) {
+		return 'jetpack/' . $block_name;
 	}
 
 	/**
-	 * Register all Jetpack blocks available.
+	 * Remove the 'jetpack/' or jetpack-' prefix from an extension name
 	 *
-	 * @return void|WP_Block_Type|false The registered block type on success, or false on failure.
+	 * @param string $extension_name The extension name.
+	 *
+	 * @return string The unprefixed extension name.
 	 */
-	public static function load_blocks() {
-		if ( ! self::is_gutenberg_available() ) {
-			return;
+	private static function remove_extension_prefix( $extension_name ) {
+		if ( wp_startswith( $extension_name, 'jetpack/' ) || wp_startswith( $extension_name, 'jetpack-' ) ) {
+			return substr( $extension_name, strlen( 'jetpack/' ) );
 		}
+		return $extension_name;
+	}
 
-		if ( ! self::should_load_blocks() ) {
+	/**
+	 * Whether two arrays share at least one item
+	 *
+	 * @param array $a An array.
+	 * @param array $b Another array.
+	 *
+	 * @return boolean True if $a and $b share at least one item
+	 */
+	protected static function share_items( $a, $b ) {
+		return count( array_intersect( $a, $b ) ) > 0;
+	}
+
+	/**
+	 * Register a block
+	 *
+	 * @deprecated 7.1.0 Use jetpack_register_block() instead
+	 *
+	 * @param string $slug Slug of the block.
+	 * @param array  $args Arguments that are passed into register_block_type().
+	 */
+	public static function register_block( $slug, $args ) {
+		_deprecated_function( __METHOD__, '7.1', 'jetpack_register_block' );
+
+		jetpack_register_block( 'jetpack/' . $slug, $args );
+	}
+
+	/**
+	 * Register a plugin
+	 *
+	 * @deprecated 7.1.0 Use Jetpack_Gutenberg::set_extension_available() instead
+	 *
+	 * @param string $slug Slug of the plugin.
+	 */
+	public static function register_plugin( $slug ) {
+		_deprecated_function( __METHOD__, '7.1', 'Jetpack_Gutenberg::set_extension_available' );
+
+		self::set_extension_available( $slug );
+	}
+
+	/**
+	 * Register a block
+	 *
+	 * @deprecated 7.0.0 Use jetpack_register_block() instead
+	 *
+	 * @param string $slug Slug of the block.
+	 * @param array  $args Arguments that are passed into the register_block_type.
+	 * @param array  $availability array containing if a block is available and the reason when it is not.
+	 */
+	public static function register( $slug, $args, $availability ) {
+		_deprecated_function( __METHOD__, '7.0', 'jetpack_register_block' );
+
+		if ( isset( $availability['available'] ) && ! $availability['available'] ) {
+			self::set_extension_unavailability_reason( $slug, $availability['unavailable_reason'] );
+		} else {
+			self::register_block( $slug, $args );
+		}
+	}
+
+	/**
+	 * Set a (non-block) extension as available
+	 *
+	 * @param string $slug Slug of the extension.
+	 */
+	public static function set_extension_available( $slug ) {
+		self::$availability[ self::remove_extension_prefix( $slug ) ] = true;
+	}
+
+	/**
+	 * Set the reason why an extension (block or plugin) is unavailable
+	 *
+	 * @param string $slug Slug of the extension.
+	 * @param string $reason A string representation of why the extension is unavailable.
+	 */
+	public static function set_extension_unavailable( $slug, $reason ) {
+		self::$availability[ self::remove_extension_prefix( $slug ) ] = $reason;
+	}
+
+	/**
+	 * Set the reason why an extension (block or plugin) is unavailable
+	 *
+	 * @deprecated 7.1.0 Use set_extension_unavailable() instead
+	 *
+	 * @param string $slug Slug of the extension.
+	 * @param string $reason A string representation of why the extension is unavailable.
+	 */
+	public static function set_extension_unavailability_reason( $slug, $reason ) {
+		_deprecated_function( __METHOD__, '7.1', 'Jetpack_Gutenberg::set_extension_unavailable' );
+
+		self::set_extension_unavailable( $slug, $reason );
+	}
+
+	/**
+	 * Set up a whitelist of allowed block editor extensions
+	 *
+	 * @return void
+	 */
+	public static function init() {
+		if ( ! self::should_load() ) {
 			return;
 		}
 
 		/**
-		 * Filter the list of blocks that are available through jetpack.
+		 * Alternative to `JETPACK_BETA_BLOCKS`, set to `true` to load Beta Blocks.
 		 *
-		 * This filter is populated by Jetpack_Gutenberg::jetpack_set_available_blocks
+		 * @since 6.9.0
+		 *
+		 * @param boolean
+		 */
+		if ( apply_filters( 'jetpack_load_beta_blocks', false ) ) {
+			Constants::set_constant( 'JETPACK_BETA_BLOCKS', true );
+		}
+
+		/**
+		 * Filter the whitelist of block editor extensions that are available through Jetpack.
+		 *
+		 * @since 7.0.0
+		 *
+		 * @param array
+		 */
+		self::$extensions = apply_filters( 'jetpack_set_available_extensions', self::get_available_extensions() );
+
+		/**
+		 * Filter the whitelist of block editor plugins that are available through Jetpack.
+		 *
+		 * @deprecated 7.0.0 Use jetpack_set_available_extensions instead
 		 *
 		 * @since 6.8.0
 		 *
 		 * @param array
 		 */
-		self::$blocks_index = apply_filters( 'jetpack_set_available_blocks', array() );
+		self::$extensions = apply_filters( 'jetpack_set_available_blocks', self::$extensions );
 
-		foreach ( self::$jetpack_blocks as $type => $args ) {
-			if ( 'publicize' === $type ) {
-				// publicize is not actually a block, it's a gutenberg plugin.
-				// We will handle it's registration on the client-side.
-				continue;
-			}
-			if ( isset( $args['availability']['available'] ) && $args['availability']['available'] && in_array( $type, self::$blocks_index ) ) {
-				register_block_type( 'jetpack/' . $type, $args['args'] );
-			}
-		}
+		/**
+		 * Filter the whitelist of block editor plugins that are available through Jetpack.
+		 *
+		 * @deprecated 7.0.0 Use jetpack_set_available_extensions instead
+		 *
+		 * @since 6.9.0
+		 *
+		 * @param array
+		 */
+		self::$extensions = apply_filters( 'jetpack_set_available_plugins', self::$extensions );
 	}
 
 	/**
-	 * Checks for a given .json file in the `_inc/blocks` folder.
+	 * Resets the class to its original state
 	 *
-	 * @param $preset The name of the .json file to look for.
+	 * Used in unit tests
+	 *
+	 * @return void
+	 */
+	public static function reset() {
+		self::$extensions   = array();
+		self::$availability = array();
+	}
+
+	/**
+	 * Return the Gutenberg extensions (blocks and plugins) directory
+	 *
+	 * @return string The Gutenberg extensions directory
+	 */
+	public static function get_blocks_directory() {
+		/**
+		 * Filter to select Gutenberg blocks directory
+		 *
+		 * @since 6.9.0
+		 *
+		 * @param string default: '_inc/blocks/'
+		 */
+		return apply_filters( 'jetpack_blocks_directory', '_inc/blocks/' );
+	}
+
+	/**
+	 * Checks for a given .json file in the blocks folder.
+	 *
+	 * @param string $preset The name of the .json file to look for.
 	 *
 	 * @return bool True if the file is found.
 	 */
 	public static function preset_exists( $preset ) {
-		return file_exists( JETPACK__PLUGIN_DIR . '/_inc/blocks/' . $preset . '.json' );
+		return file_exists( JETPACK__PLUGIN_DIR . self::get_blocks_directory() . $preset . '.json' );
 	}
 
 	/**
-	 * Decodes JSON loaded from a preset file in `_inc/blocks`
+	 * Decodes JSON loaded from a preset file in the blocks folder
 	 *
-	 * @param $preset The name of the .json file to load.
+	 * @param string $preset The name of the .json file to load.
 	 *
 	 * @return mixed Returns an object if the file is present, or false if a valid .json file is not present.
 	 */
 	public static function get_preset( $preset ) {
-		return json_decode( file_get_contents(  JETPACK__PLUGIN_DIR . '/_inc/blocks/' . $preset . '.json' ) );
+		return json_decode(
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			file_get_contents( JETPACK__PLUGIN_DIR . self::get_blocks_directory() . $preset . '.json' )
+		);
 	}
 
 	/**
-	 * Filters the results of `apply_filter( 'jetpack_set_available_blocks', array() )`
-	 * using the merged contents of `_inc/blocks/blocks-manifest.json` ( $preset_blocks )
-	 * and self::$jetpack_blocks ( $internal_blocks )
-	 *
-	 * @param $blocks The default list.
+	 * Returns a whitelist of Jetpack Gutenberg extensions (blocks and plugins), based on index.json
 	 *
 	 * @return array A list of blocks: eg [ 'publicize', 'markdown' ]
 	 */
-	public static function jetpack_set_available_blocks( $blocks ) {
-		$preset_blocks_manifest =  self::preset_exists( 'block-manifest' ) ? self::get_preset( 'block-manifest' ) : (object) array( 'blocks' => $blocks );
-		$preset_blocks = isset( $preset_blocks_manifest->blocks ) ? (array) $preset_blocks_manifest->blocks : array() ;
-		$internal_blocks = array_keys( self::$jetpack_blocks );
+	public static function get_jetpack_gutenberg_extensions_whitelist() {
+		$preset_extensions_manifest = self::preset_exists( 'index' ) ? self::get_preset( 'index' ) : (object) array();
 
-		if ( Jetpack_Constants::is_true( 'JETPACK_BETA_BLOCKS' ) ) {
-			$beta_blocks = isset( $preset_blocks_manifest->betaBlocks ) ? (array) $preset_blocks_manifest->betaBlocks : array();
-			return array_unique( array_merge( $preset_blocks, $beta_blocks, $internal_blocks ) );
+		$preset_extensions = isset( $preset_extensions_manifest->production ) ? (array) $preset_extensions_manifest->production : array();
+
+		if ( Constants::is_true( 'JETPACK_BETA_BLOCKS' ) ) {
+			$beta_extensions = isset( $preset_extensions_manifest->beta ) ? (array) $preset_extensions_manifest->beta : array();
+			return array_unique( array_merge( $preset_extensions, $beta_extensions ) );
 		}
 
-		return array_unique( array_merge( $preset_blocks, $internal_blocks ) );
+		return $preset_extensions;
 	}
 
 	/**
-	 * @return array A list of block-availability information, eg: [ "publicize" => ["available" => true ], "markdown" => [ "available" => false, "unavailable_reason" => 'missing_module' ] ]
+	 * Returns a diff from a combined list of whitelisted extensions and extensions determined to be excluded
+	 *
+	 * @param  array $whitelisted_extensions An array of whitelisted extensions.
+	 *
+	 * @return array A list of blocks: eg array( 'publicize', 'markdown' )
 	 */
-	public static function get_block_availability() {
+	public static function get_available_extensions( $whitelisted_extensions = null ) {
+		$exclusions             = get_option( 'jetpack_excluded_extensions', array() );
+		$whitelisted_extensions = is_null( $whitelisted_extensions ) ? self::get_jetpack_gutenberg_extensions_whitelist() : $whitelisted_extensions;
 
-		if ( ! self::should_load_blocks() ) {
-			return array();
-		}
+		return array_diff( $whitelisted_extensions, $exclusions );
+	}
 
-		$blocks_availability = array(); // default
+	/**
+	 * Get availability of each block / plugin.
+	 *
+	 * @return array A list of block and plugins and their availablity status
+	 */
+	public static function get_availability() {
+		/**
+		 * Fires before Gutenberg extensions availability is computed.
+		 *
+		 * In the function call you supply, use `jetpack_register_block()` to set a block as available.
+		 * Alternatively, use `Jetpack_Gutenberg::set_extension_available()` (for a non-block plugin), and
+		 * `Jetpack_Gutenberg::set_extension_unavailable()` (if the block or plugin should not be registered
+		 * but marked as unavailable).
+		 *
+		 * @since 7.0.0
+		 */
+		do_action( 'jetpack_register_gutenberg_extensions' );
 
-		foreach ( self::$jetpack_blocks as $type => $args ) {
-			if ( ! in_array( $type,  self::$blocks_index ) ) {
-				// Jetpack shouldn't expose blocks that are not in the manifest.
-				continue;
-			}
-			$availability = $args['availability'];
-			$available = array(
-				'available' => ( isset( $availability['available'] ) ? (bool) $availability['available'] : true ),
+		$available_extensions = array();
+
+		foreach ( self::$extensions as $extension ) {
+			$is_available = self::is_registered( 'jetpack/' . $extension ) ||
+			( isset( self::$availability[ $extension ] ) && true === self::$availability[ $extension ] );
+
+			$available_extensions[ $extension ] = array(
+				'available' => $is_available,
 			);
-			$unavailability_reason = array();
-			if ( ! $available['available'] ) {
-				$unavailability_reason = array(
-					'unavailable_reason' => ( isset( $availability['unavailable_reason'] ) ? $availability['unavailable_reason'] : 'unknown' )
-				);
-			}
-			$blocks_availability[ $type ] = array_merge( $available, $unavailability_reason );
-		}
 
-		foreach ( self::$blocks_index as $block ) {
-			if ( ! isset( $blocks_availability[ $block ] ) ) {
-				$blocks_availability[ $block ] = array( 'available' => false, 'unavailable_reason' => 'missing_module' );
+			if ( ! $is_available ) {
+				$reason = isset( self::$availability[ $extension ] ) ? self::$availability[ $extension ] : 'missing_module';
+				$available_extensions[ $extension ]['unavailable_reason'] = $reason;
 			}
 		}
 
-		return $blocks_availability;
+		return $available_extensions;
+	}
+
+	/**
+	 * Check if an extension/block is already registered
+	 *
+	 * @since 7.2
+	 *
+	 * @param string $slug Name of extension/block to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_registered( $slug ) {
+		return WP_Block_Type_Registry::get_instance()->is_registered( $slug );
 	}
 
 	/**
@@ -173,20 +400,20 @@ class Jetpack_Gutenberg {
 	 * @return bool
 	 */
 	public static function is_gutenberg_available() {
-		return function_exists( 'register_block_type' );
+		return true;
 	}
 
 	/**
-	 * Check whether conditions indicate Gutenberg blocks should be loaded
+	 * Check whether conditions indicate Gutenberg Extensions (blocks and plugins) should be loaded
 	 *
-	 * Loading blocks is enabled by default and may be disabled via filter:
+	 * Loading blocks and plugins is enabled by default and may be disabled via filter:
 	 *   add_filter( 'jetpack_gutenberg', '__return_false' );
 	 *
-	 * @since 6.7.0
+	 * @since 6.9.0
 	 *
 	 * @return bool
 	 */
-	public static function should_load_blocks() {
+	public static function should_load() {
 		if ( ! Jetpack::is_active() && ! Jetpack::is_development_mode() ) {
 			return false;
 		}
@@ -204,8 +431,9 @@ class Jetpack_Gutenberg {
 	/**
 	 * Only enqueue block assets when needed.
 	 *
-	 * @param string $type slug of the block.
-	 * @param array $script_dependencies An array of view-side Javascript dependencies to be enqueued.
+	 * @param string $type Slug of the block.
+	 * @param array  $script_dependencies Script dependencies. Will be merged with automatically
+	 *                                    detected script dependencies from the webpack build.
 	 *
 	 * @return void
 	 */
@@ -216,17 +444,63 @@ class Jetpack_Gutenberg {
 		}
 
 		$type = sanitize_title_with_dashes( $type );
+		self::load_styles_as_required( $type );
+		self::load_scripts_as_required( $type, $script_dependencies );
+	}
+
+	/**
+	 * Only enqueue block sytles when needed.
+	 *
+	 * @param string $type Slug of the block.
+	 *
+	 * @since 7.2.0
+	 *
+	 * @return void
+	 */
+	public static function load_styles_as_required( $type ) {
+		if ( is_admin() ) {
+			// A block's view assets will not be required in wp-admin.
+			return;
+		}
+
 		// Enqueue styles.
-		$style_relative_path = '_inc/blocks/' . $type . '/view' . ( is_rtl() ? '.rtl' : '' ) . '.css';
+		$style_relative_path = self::get_blocks_directory() . $type . '/view' . ( is_rtl() ? '.rtl' : '' ) . '.css';
 		if ( self::block_has_asset( $style_relative_path ) ) {
 			$style_version = self::get_asset_version( $style_relative_path );
 			$view_style    = plugins_url( $style_relative_path, JETPACK__PLUGIN_FILE );
 			wp_enqueue_style( 'jetpack-block-' . $type, $view_style, array(), $style_version );
 		}
 
+	}
+
+	/**
+	 * Only enqueue block scripts when needed.
+	 *
+	 * @param string $type Slug of the block.
+	 * @param array  $dependencies Script dependencies. Will be merged with automatically
+	 *                             detected script dependencies from the webpack build.
+	 *
+	 * @since 7.2.0
+	 *
+	 * @return void
+	 */
+	public static function load_scripts_as_required( $type, $dependencies = array() ) {
+		if ( is_admin() ) {
+			// A block's view assets will not be required in wp-admin.
+			return;
+		}
+
 		// Enqueue script.
-		$script_relative_path = '_inc/blocks/' . $type . '/view.js';
-		if ( self::block_has_asset( $script_relative_path ) ) {
+		$script_relative_path = self::get_blocks_directory() . $type . '/view.js';
+		$script_deps_path     = JETPACK__PLUGIN_DIR . self::get_blocks_directory() . $type . '/view.deps.json';
+
+		$script_dependencies = file_exists( $script_deps_path )
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			? json_decode( file_get_contents( $script_deps_path ) )
+			: array();
+		$script_dependencies = array_merge( $script_dependencies, $dependencies, array( 'wp-polyfill' ) );
+
+		if ( ( ! class_exists( 'Jetpack_AMP_Support' ) || ! Jetpack_AMP_Support::is_amp_request() ) && self::block_has_asset( $script_relative_path ) ) {
 			$script_version = self::get_asset_version( $script_relative_path );
 			$view_script    = plugins_url( $script_relative_path, JETPACK__PLUGIN_FILE );
 			wp_enqueue_script( 'jetpack-block-' . $type, $view_script, $script_dependencies, $script_version, false );
@@ -235,7 +509,7 @@ class Jetpack_Gutenberg {
 		wp_localize_script(
 			'jetpack-block-' . $type,
 			'Jetpack_Block_Assets_Base_Url',
-			plugins_url( '_inc/blocks/', JETPACK__PLUGIN_FILE )
+			plugins_url( self::get_blocks_directory(), JETPACK__PLUGIN_FILE )
 		);
 	}
 
@@ -271,41 +545,40 @@ class Jetpack_Gutenberg {
 	 * @return void
 	 */
 	public static function enqueue_block_editor_assets() {
-		if ( ! self::should_load_blocks() ) {
+		if ( ! self::should_load() ) {
 			return;
 		}
 
-		$rtl = is_rtl() ? '.rtl' : '';
-		$beta = Jetpack_Constants::is_true('JETPACK_BETA_BLOCKS' ) ? '-beta' : '';
+		$rtl        = is_rtl() ? '.rtl' : '';
+		$beta       = Constants::is_true( 'JETPACK_BETA_BLOCKS' ) ? '-beta' : '';
+		$blocks_dir = self::get_blocks_directory();
 
-		$editor_script = plugins_url( "_inc/blocks/editor{$beta}.js", JETPACK__PLUGIN_FILE );
-		$editor_style  = plugins_url( "_inc/blocks/editor{$beta}{$rtl}.css", JETPACK__PLUGIN_FILE );
+		$editor_script = plugins_url( "{$blocks_dir}editor{$beta}.js", JETPACK__PLUGIN_FILE );
+		$editor_style  = plugins_url( "{$blocks_dir}editor{$beta}{$rtl}.css", JETPACK__PLUGIN_FILE );
 
-		$version       = Jetpack::is_development_version() && file_exists( JETPACK__PLUGIN_DIR . '_inc/blocks/editor.js' )
-			? filemtime( JETPACK__PLUGIN_DIR . '_inc/blocks/editor.js' )
+		$editor_deps_path = JETPACK__PLUGIN_DIR . $blocks_dir . "editor{$beta}.deps.json";
+		$editor_deps      = file_exists( $editor_deps_path )
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			? json_decode( file_get_contents( $editor_deps_path ) )
+			: array();
+		$editor_deps[] = 'wp-polyfill';
+
+		$version = Jetpack::is_development_version() && file_exists( JETPACK__PLUGIN_DIR . $blocks_dir . 'editor.js' )
+			? filemtime( JETPACK__PLUGIN_DIR . $blocks_dir . 'editor.js' )
 			: JETPACK__VERSION;
+
+		if ( method_exists( 'Jetpack', 'build_raw_urls' ) ) {
+			$site_fragment = Jetpack::build_raw_urls( home_url() );
+		} elseif ( class_exists( 'WPCOM_Masterbar' ) && method_exists( 'WPCOM_Masterbar', 'get_calypso_site_slug' ) ) {
+			$site_fragment = WPCOM_Masterbar::get_calypso_site_slug( get_current_blog_id() );
+		} else {
+			$site_fragment = '';
+		}
 
 		wp_enqueue_script(
 			'jetpack-blocks-editor',
 			$editor_script,
-			array(
-				'lodash',
-				'wp-api-fetch',
-				'wp-blocks',
-				'wp-components',
-				'wp-compose',
-				'wp-data',
-				'wp-date',
-				'wp-edit-post',
-				'wp-editor',
-				'wp-element',
-				'wp-hooks',
-				'wp-i18n',
-				'wp-keycodes',
-				'wp-plugins',
-				'wp-token-list',
-				'wp-url',
-			),
+			$editor_deps,
 			$version,
 			false
 		);
@@ -313,24 +586,64 @@ class Jetpack_Gutenberg {
 		wp_localize_script(
 			'jetpack-blocks-editor',
 			'Jetpack_Block_Assets_Base_Url',
-			plugins_url( '_inc/blocks/', JETPACK__PLUGIN_FILE )
+			plugins_url( $blocks_dir . '/', JETPACK__PLUGIN_FILE )
 		);
 
 		wp_localize_script(
 			'jetpack-blocks-editor',
 			'Jetpack_Editor_Initial_State',
 			array(
-				'available_blocks' => self::get_block_availability(),
-				'jetpack' => array( 'is_active' => Jetpack::is_active() ),
+				'available_blocks' => self::get_availability(),
+				'jetpack'          => array( 'is_active' => Jetpack::is_active() ),
+				'siteFragment'     => $site_fragment,
 			)
 		);
 
-		Jetpack::setup_wp_i18n_locale_data();
+		wp_set_script_translations( 'jetpack-blocks-editor', 'jetpack', plugins_url( 'languages/json', JETPACK__PLUGIN_FILE ) );
+
+		// Adding a filter late to allow every other filter to process the path, including the CDN.
+		add_filter( 'pre_load_script_translations', array( __CLASS__, 'filter_pre_load_script_translations' ), 1000, 3 );
 
 		wp_enqueue_style( 'jetpack-blocks-editor', $editor_style, array(), $version );
+	}
 
-		// The social-logos styles are used for Publicize service icons
-		// TODO: Remove when we ship the icons with the Gutenberg blocks build
-		wp_enqueue_style( 'social-logos' );
+	/**
+	 * A workaround for setting i18n data for WordPress client-side i18n mechanism.
+	 * We are not yet using dotorg language packs for the editor file, so this short-circuits
+	 * the translation loading and feeds our JSON data directly into the translation getter.
+	 *
+	 * @param NULL   $null     not used.
+	 * @param String $file     the file path that is being loaded, ignored.
+	 * @param String $handle   the script handle.
+	 * @return NULL|String the translation data only if we're working with our handle.
+	 */
+	public static function filter_pre_load_script_translations( $null, $file, $handle ) {
+		if ( 'jetpack-blocks-editor' !== $handle ) {
+			return null;
+		}
+
+		return Jetpack::get_i18n_data_json();
+	}
+
+	/**
+	 * Some blocks do not depend on a specific module,
+	 * and can consequently be loaded outside of the usual modules.
+	 * We will look for such modules in the extensions/ directory.
+	 *
+	 * @since 7.1.0
+	 */
+	public static function load_independent_blocks() {
+		if ( self::should_load() ) {
+			/**
+			 * Look for files that match our list of available Jetpack Gutenberg extensions (blocks and plugins).
+			 * If available, load them.
+			 */
+			foreach ( self::$extensions as $extension ) {
+				$extension_file_glob = glob( JETPACK__PLUGIN_DIR . 'extensions/*/' . $extension . '/' . $extension . '.php' );
+				if ( ! empty( $extension_file_glob ) ) {
+					include_once $extension_file_glob[0];
+				}
+			}
+		}
 	}
 }
