@@ -62,6 +62,15 @@ class Osm_OLJS3
         });
       ';
       }
+    else if ($a_Type == "stamen_terrain"){
+      $TileLayer .= '
+      var raster = new ol.layer.Tile({
+        source: new ol.source.Stamen({
+            layer: "terrain"
+          })
+        });
+      ';
+  }
       else if ($a_Type == "stamen_terrain-labels"){
         $TileLayer .= '
         var raster = new ol.layer.Tile({
