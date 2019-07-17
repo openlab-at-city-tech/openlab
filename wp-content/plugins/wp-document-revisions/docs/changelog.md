@@ -1,5 +1,25 @@
 ## Changelog
 
+### 3.2.1
+
+* Fix for $wp_query->query_vars being null (#136) @benbalter
+* Media Library URL’s change after plugin update (#139) @NeilWJames
+* New Crowdin translations (#137) @benbalter
+* New Crowdin translations (#138) @benbalter
+
+### 3.2.0
+
+* Enable filter by workflow_state on Admin screen (#121) @NeilWJames
+* missing translate on metabox titles (#122) @geminorum
+* Addresses #124 (is_feed has doing_it_wrong error) (#125) @NeilWJames
+* New Crowdin translations (#120) @benbalter
+* Allow HTTP headers to be filtered in serve_file() (#123) @jeremyfelt
+* Small fixes in Admin function (#126) @NeilWJames
+* Support Featured Images (#131) @NeilWJames
+* Error if directory option not present (#132) @NeilWJames
+* Create Edit link on document shortcode (#133) @NeilWJames
+* Bump version to V3.2 and Tested WP 4.9.8 (#134) @NeilWJames
+
 ### 3.1.2
 
 Fix for 404 error when serving documents from non-standard upload directory.
