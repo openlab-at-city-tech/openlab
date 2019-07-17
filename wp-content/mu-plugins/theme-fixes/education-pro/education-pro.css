@@ -238,6 +238,7 @@ body.header-image .title-area {
 
 div.entry-content a,
 .breadcrumb a,
+#ol-print-this-page a,
 a.breadcrumb-link {
     color: #aa2418;
 	border-bottom: 1px solid #aa2418;
@@ -246,9 +247,14 @@ a.breadcrumb-link {
 
 .entry-content a:hover,
 .breadcrumb a:hover,
+#ol-print-this-page a:hover,
 a.breadcrumb-link:hover {
     color: #000;
 	border-bottom: none;
+}
+
+#ol-print-this-page a:hover {
+	box-shadow: none !important;
 }
 
 .content .entry-header .entry-meta .entry-time {
@@ -545,6 +551,7 @@ body .site-title a {
 .education-pro-blue .site-footer .wrap a:hover,
 .education-pro-blue .entry-content a,
 .education-pro-blue .entry-footer .entry-meta a,
+.education-pro-blue #ol-print-this-page a,
 .education-pro-blue a.breadcrumb-link,
 .education-pro-blue a {
 	border-color: #185a7d;
@@ -558,6 +565,7 @@ body .site-title a {
 
 .education-pro-blue button,
 .education-pro-blue a.button,
+.education-pro-blue input[type="submit"],
 .education-pro-blue .footer-widgets a.button,
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
