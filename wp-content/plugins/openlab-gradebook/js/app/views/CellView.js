@@ -86,7 +86,9 @@ define(['jquery', 'backbone', 'underscore', "views/CommentView"],
                 },
                 edit: function () {
 
-                    var current = this.$el.find('.grade-numeric').html().trim();
+                    var current = this.$el.find('.grade-numeric').html();
+                    current = current.replace(/(<([^>]+)>)/ig,"");
+                    current = current.trim();
                     var id = this.$el.find('.grade-numeric').data('id');
                     var thisLegacy = legacy[id];
 
