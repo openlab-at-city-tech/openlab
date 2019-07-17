@@ -31,6 +31,7 @@ jQuery(document).ready(function($) {
 		// Grab our selected trigger type and achievement selector
 		var trigger_type = $(this).val();
 		var achievement_selector = $(this).siblings('.select-achievement-type');
+        var num_of_days 			= $(this).siblings('.badgeos-num-of-days');
 
 		// If we're working with achievements, show the achievement selecter (otherwise, hide it)
 		if ( 'any-achievement' == trigger_type || 'all-achievements' == trigger_type || 'specific-achievement' == trigger_type ) {
@@ -39,10 +40,17 @@ jQuery(document).ready(function($) {
 			achievement_selector.hide();
 		}
 
-		// Trigger a change for our achievement type post selector to determine if it should show
+        if ( 'badgeos_wp_not_login' == trigger_type ) {
+            num_of_days.show();
+        } else {
+            num_of_days.hide();
+        }
+
+        // Trigger a change for our achievement type post selector to determine if it should show
 		achievement_selector.change();
 
 	});
+
 	// Trigger a change for our trigger type post selector to determine if it should show
 	$( '.select-trigger-type' ).change();
 
@@ -56,7 +64,10 @@ jQuery(document).ready(function($) {
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
 		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
 
-		// If we've selected a *specific* achievement type, show our post selector
+        achievement_selector.siblings('select.select-achievement-post').hide();
+        achievement_selector.siblings('input.select-achievement-post').hide();
+
+        // If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
 		if ( '' !== achievement_type && 'specific-achievement' == trigger_type ) {
 			$.post(
@@ -144,6 +155,7 @@ function badgeos_update_steps(e) {
 			"required_count"   : step.find( '.required-count' ).val(),
 			"trigger_type"     : trigger_type,
 			"achievement_type" : step.find( '.select-achievement-type' ).val(),
+            "num_of_days" 	   : step.find( '.badgeos-num-of-days' ).val(),
 			"achievement_post" : 'badgeos_specific_new_comment' === trigger_type ? step.find( 'input.select-achievement-post' ).val() : step.find( 'select.select-achievement-post' ).val(),
 			"title"            : step.find( '.step-title .title' ).val()
 		};
