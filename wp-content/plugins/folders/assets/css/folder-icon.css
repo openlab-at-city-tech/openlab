@@ -1,0 +1,81 @@
+@font-face {
+  font-family: 'folder-icon';
+  src:  url('../fonts/folder-icon.eot?44ce3u');
+  src:  url('../fonts/folder-icon.eot?44ce3u#iefix') format('embedded-opentype'),
+  url('../fonts/folder-icon.ttf?44ce3u') format('truetype'),
+  url('../fonts/folder-icon.woff?44ce3u') format('woff'),
+  url('../fonts/folder-icon.svg?44ce3u#folder-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="folder-icon-"], [class*=" folder-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'folder-icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.folder-icon-expand_more:before {
+  content: "\e90f";
+}
+.folder-icon-edit:before {
+  content: "\e910";
+}
+.folder-icon-expand_less:before {
+  content: "\e911";
+}
+.folder-icon-folder_special:before {
+  content: "\e900";
+}
+.folder-icon-insert_drive_file:before {
+  content: "\e901";
+}
+.folder-icon-border_color .path1:before {
+  content: "\e902";
+}
+.folder-icon-border_color .path2:before {
+  content: "\e903";
+  margin-left: -1em;
+}
+.folder-icon-file_copy:before {
+  content: "\e904";
+}
+.folder-icon-all_inbox:before {
+  content: "\e905";
+}
+.folder-icon-delete:before {
+  content: "\e906";
+}
+.folder-icon-star_rate:before {
+  content: "\e907";
+}
+.folder-icon-arrow_drop_down:before {
+  content: "\e908";
+}
+.folder-icon-arrow_right:before {
+  content: "\e909";
+}
+.folder-icon-more_vert:before {
+  content: "\e90a";
+}
+.folder-icon-folder_shared:before {
+  content: "\e90b";
+}
+.folder-icon-folder_open:before {
+  content: "\e90c";
+}
+.folder-icon-folder:before {
+  content: "\e90d";
+}
+.folder-icon-create_new_folder:before {
+  content: "\e90e";
+}

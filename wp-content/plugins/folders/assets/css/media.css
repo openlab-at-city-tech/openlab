@@ -1,0 +1,20 @@
+.media-modal-content .attachments-browser .media-toolbar-secondary {
+    max-width: 66%;
+    width: 66%;
+}
+.media-modal-content .media-frame select.attachment-filters {
+    width: auto;
+    max-width: 150px;
+}
+#media-attachment-taxonomy-filter {
+    border: solid 1px #FF5983;
+    color: #FF5983;
+    font-weight: bold;
+}
+#media-attachment-taxonomy-filter option {
+    color: #000000;
+}
+#media-attachment-taxonomy-filter option:first-child {
+    color: #FF5983;
+    font-weight: bold;
+}
