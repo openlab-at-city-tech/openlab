@@ -1022,19 +1022,23 @@
 
 /*		List
 ---------------------------------------------------------------*/
+.su-list {
+  margin-bottom: 1.5em;
+}
+
 .su-list ul {
-  list-style: none !important;
-  margin: 0 0 1.5em !important;
+  margin: 0 !important;
   padding: 0 !important;
+  list-style: none !important;
 }
 
 .su-list ul li {
   position: relative;
-  list-style-type: none !important;
   display: block !important;
-  line-height: 1.3em;
   margin: 0 !important;
   padding: 4px 0 4px 2em !important;
+  list-style-type: none !important;
+  line-height: 1.3em;
 }
 
 .su-list ul li > img {
@@ -1048,7 +1052,7 @@
   border: none;
 }
 
-.su-list ul li i {
+.su-list ul li > i {
   position: absolute;
   left: 0;
   top: 4px;
@@ -1240,39 +1244,44 @@
 }
 
 .su-table table {
-  width: 100% !important;
+  min-width: 100% !important;
   margin: 0 !important;
   border-collapse: collapse !important;
   font-size: 1em !important;
   border: 1px solid #ccc !important;
 }
 
-.su-table.su-table-responsive {
-  overflow-x: auto;
-}
-
-.su-table.su-table-responsive table {
-  width: auto !important;
-}
-
-.su-table th {
+.su-table table th {
   text-align: center !important;
   padding: 1em !important;
   font-size: 1em !important;
-  font-weight: normal !important;
+  font-weight: bold !important;
   color: #333 !important;
   border: 1px solid #ccc !important;
   background: #f0f0f0 !important;
 }
 
-.su-table td {
+.su-table table td {
   padding: .5em 1em !important;
   border: 1px solid #ccc !important;
   background: #fff !important;
 }
 
-.su-table .su-even td {
-  background: #f7f7f7 !important;
+.su-table-responsive {
+  overflow-x: auto;
+}
+
+.su-table-responsive table th,
+.su-table-responsive table td {
+  word-break: initial !important;
+}
+
+.su-table-alternate table tr:nth-child(even) td {
+  background-color: #f7f7f7 !important;
+}
+
+.su-table-fixed table {
+  table-layout: fixed !important;
 }
 
 /*		QR code

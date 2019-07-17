@@ -32,6 +32,7 @@ require_once $this->plugin_path . 'includes/shortcodes/dailymotion.php';
 require_once $this->plugin_path . 'includes/shortcodes/audio.php';
 require_once $this->plugin_path . 'includes/shortcodes/video.php';
 require_once $this->plugin_path . 'includes/shortcodes/table.php';
+require_once $this->plugin_path . 'includes/shortcodes/csv-table.php';
 require_once $this->plugin_path . 'includes/shortcodes/permalink.php';
 require_once $this->plugin_path . 'includes/shortcodes/members.php';
 require_once $this->plugin_path . 'includes/shortcodes/guests.php';
