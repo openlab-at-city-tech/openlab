@@ -150,22 +150,16 @@ class GF_Field_Address extends GF_Field {
 		// Labels.
 		$address_street_sub_label  = rgar( $address_street_field_input, 'customLabel' ) != '' ? $address_street_field_input['customLabel'] : esc_html__( 'Street Address', 'gravityforms' );
 		$address_street_sub_label  = gf_apply_filters( array( 'gform_address_street', $form_id, $this->id ), $address_street_sub_label, $form_id );
-		$address_street_sub_label  = esc_html( $address_street_sub_label );
 		$address_street2_sub_label = rgar( $address_street2_field_input, 'customLabel' ) != '' ? $address_street2_field_input['customLabel'] : esc_html__( 'Address Line 2', 'gravityforms' );
 		$address_street2_sub_label = gf_apply_filters( array( 'gform_address_street2', $form_id, $this->id ), $address_street2_sub_label, $form_id );
-		$address_street2_sub_label = esc_html( $address_street2_sub_label );
 		$address_zip_sub_label     = rgar( $address_zip_field_input, 'customLabel' ) != '' ? $address_zip_field_input['customLabel'] : $zip_label;
 		$address_zip_sub_label     = gf_apply_filters( array( 'gform_address_zip', $form_id, $this->id ), $address_zip_sub_label, $form_id );
-		$address_zip_sub_label     = esc_html( $address_zip_sub_label );
 		$address_city_sub_label    = rgar( $address_city_field_input, 'customLabel' ) != '' ? $address_city_field_input['customLabel'] : esc_html__( 'City', 'gravityforms' );
 		$address_city_sub_label    = gf_apply_filters( array( 'gform_address_city', $form_id, $this->id ), $address_city_sub_label, $form_id );
-		$address_city_sub_label    = esc_html( $address_city_sub_label );
 		$address_state_sub_label   = rgar( $address_state_field_input, 'customLabel' ) != '' ? $address_state_field_input['customLabel'] : $state_label;
 		$address_state_sub_label   = gf_apply_filters( array( 'gform_address_state', $form_id, $this->id ), $address_state_sub_label, $form_id );
-		$address_state_sub_label   = esc_html( $address_state_sub_label );
 		$address_country_sub_label = rgar( $address_country_field_input, 'customLabel' ) != '' ? $address_country_field_input['customLabel'] : esc_html__( 'Country', 'gravityforms' );
 		$address_country_sub_label = gf_apply_filters( array( 'gform_address_country', $form_id, $this->id ), $address_country_sub_label, $form_id );
-		$address_country_sub_label = esc_html( $address_country_sub_label );
 
 		// Address field.
 		$street_address = '';
@@ -268,11 +262,11 @@ class GF_Field_Address extends GF_Field {
 				if ( $is_sub_label_above ) {
 					$city = "<span class='ginput_{$city_location}{$class_suffix} address_city' id='{$field_id}_3_container' {$style}>
                                     <label for='{$field_id}_3' id='{$field_id}_3_label' {$sub_label_class_attribute}>{$address_city_sub_label}</label>
-                                    <input type='text' name='input_{$id}.3' id='{$field_id}_3' value='{$city_value}' {$tabindex} {$disabled_text} {$city_placeholder_attribute}/>
+                                    <input type='text' name='input_{$id}.3' id='{$field_id}_3' value='{$city_value}' {$tabindex} {$disabled_text} {$city_placeholder_attribute} {$required_attribute}/>
                                  </span>";
 				} else {
 					$city = "<span class='ginput_{$city_location}{$class_suffix} address_city' id='{$field_id}_3_container' {$style}>
-                                    <input type='text' name='input_{$id}.3' id='{$field_id}_3' value='{$city_value}' {$tabindex} {$disabled_text} {$city_placeholder_attribute}/>
+                                    <input type='text' name='input_{$id}.3' id='{$field_id}_3' value='{$city_value}' {$tabindex} {$disabled_text} {$city_placeholder_attribute} {$required_attribute}/>
                                     <label for='{$field_id}_3' id='{$field_id}_3_label' {$sub_label_class_attribute}>{$address_city_sub_label}</label>
                                  </span>";
 				}
@@ -1182,7 +1176,7 @@ class GF_Field_Address extends GF_Field {
 			__( 'British Columbia', 'gravityforms' ),
 			__( 'Manitoba', 'gravityforms' ),
 			__( 'New Brunswick', 'gravityforms' ),
-			__( 'Newfoundland & Labrador', 'gravityforms' ),
+			__( 'Newfoundland and Labrador', 'gravityforms' ),
 			__( 'Northwest Territories', 'gravityforms' ),
 			__( 'Nova Scotia', 'gravityforms' ),
 			__( 'Nunavut', 'gravityforms' ),
