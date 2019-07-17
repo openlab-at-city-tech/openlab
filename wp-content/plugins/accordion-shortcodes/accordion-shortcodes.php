@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Accordion Shortcodes
  * Description: Shortcodes for creating responsive accordion drop-downs.
- * Version: 2.3.3
+ * Version: 2.4.2
  * Author: Phil Buchanan
  * Author URI: http://philbuchanan.com
  */
@@ -17,7 +17,7 @@ class Accordion_Shortcodes {
 	/**
 	 * Current plugin version number
 	 */
-	private $plugin_version = '2.3.3';
+	private $plugin_version = '2.4.2';
 
 
 
@@ -68,6 +68,13 @@ class Accordion_Shortcodes {
 	 * Holds the accordion item content container HTML tag
 	 */
 	private $content_tag = 'div';
+
+
+
+	/**
+	 * Whether to include a `<button>` tag wrapper on each title
+	 */
+	private $use_buttons = false;
 
 
 
@@ -168,10 +175,14 @@ class Accordion_Shortcodes {
 	 */
 	private function check_html_tag($tag) {
 		$tag = preg_replace('/\s/', '', $tag);
-		$tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div');
+		$tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'button');
 
-		if (in_array($tag, $tags)) return $tag;
-		else return $this->title_tag;
+		if (in_array($tag, $tags)) {
+			return $tag;
+		}
+		else {
+			return $this->title_tag;
+		}
 	}
 
 
@@ -232,8 +243,9 @@ class Accordion_Shortcodes {
 			'openall'      => false,
 			'clicktoclose' => false,
 			'scroll'       => false,
+			'usebuttons'   => false,
 			'semantics'    => '',
-			'class'        => ''
+			'class'        => '',
 		), $atts, 'accordion'));
 
 		// Set global HTML tag names
@@ -252,6 +264,10 @@ class Accordion_Shortcodes {
 			$this->content_tag = 'div';
 		}
 
+		if ($usebuttons && $this->is_boolean($usebuttons)) {
+			$this->use_buttons = true;
+		}
+
 		// Set settings object (for use in JavaScript)
 		$script_data = array(
 			'id'           => "accordion-$this->group_count",
@@ -259,13 +275,14 @@ class Accordion_Shortcodes {
 			'openFirst'    => $this->is_boolean($openfirst),
 			'openAll'      => $this->is_boolean($openall),
 			'clickToClose' => $this->is_boolean($clicktoclose),
-			'scroll'       => $this->check_scroll_value($scroll)
+			'scroll'       => $this->check_scroll_value($scroll),
+			'usebuttons'   => $this->is_boolean($usebuttons),
 		);
 
 		// Add this shortcodes settings instance to the global script data array
 		$this->script_data[] = $script_data;
 
-		return sprintf('<%2$s id="%3$s" class="accordion no-js%4$s" role="tablist" aria-multiselectable="true">%1$s</%2$s>',
+		return sprintf('<%2$s id="%3$s" class="accordion no-js%4$s">%1$s</%2$s>',
 			do_shortcode($content),
 			$this->wrapper_tag,
 			"accordion-$this->group_count",
@@ -292,23 +309,27 @@ class Accordion_Shortcodes {
 
 		$ids = $this->get_accordion_id($id);
 
-		$accordion_title = sprintf('<%1$s id="%3$s" class="accordion-title%5$s" role="tab" aria-controls="%4$s" aria-selected="false" aria-expanded="false" tabindex="0" %6$s>%2$s</%1$s>',
-			$tag ? $this->check_html_tag($tag) : $this->title_tag,
-			$title ? $title : '<span style="color:red;">' . __('Please enter a title attribute', 'accordion_shortcodes') . '</span>',
-			$ids['title'],
-			$ids['content'],
-			$class ? " $class" : '',
-			$state ? ' data-initialstate="' . $state . '"' : ''
-		);
+		$html_tag = $tag ? $this->check_html_tag($tag) : $this->title_tag;
 
-		$accordion_content = sprintf('<%1$s id="%3$s" class="accordion-content" role="tabpanel" aria-labelledby="%4$s" aria-hidden="true">%2$s</%1$s>',
-			$this->content_tag,
-			do_shortcode($content),
-			$ids['content'],
-			$ids['title']
-		);
+		ob_start(); ?>
 
-		return $accordion_title . $accordion_content;
+		<?php if ($this->use_buttons) { ?>
+			<<?php echo $html_tag; ?> class="accordion-title<?php echo $class ? " $class" : ''; ?>">
+				<button id="<?php echo $ids['title']; ?>" class="js-accordion-controller" aria-controls="<?php echo $ids['content']; ?>" aria-expanded="false" <?php echo $state ? ' data-initialstate="' . esc_attr($state) . '"' : ''; ?>>
+					<?php echo $title ? $title : '<span style="color:red;">' . __('Please enter a title attribute', 'accordion_shortcodes') . '</span>'; ?>
+				</button>
+			</<?php echo $html_tag; ?>>
+		<?php } else { ?>
+			<<?php echo $html_tag; ?> role="button" id="<?php echo $ids['title']; ?>" class="accordion-title<?php echo !$this->use_buttons ? ' js-accordion-controller' : ''; echo $class ? " $class" : ''; ?>" aria-controls="<?php echo $ids['content']; ?>" aria-expanded="false" tabindex="0"<?php echo $state ? ' data-initialstate="' . esc_attr($state) . '"' : ''; ?>>
+				<?php echo $title ? $title : '<span style="color:red;">' . __('Please enter a title attribute', 'accordion_shortcodes') . '</span>'; ?>
+			</<?php echo $html_tag; ?>>
+		<?php } ?>
+
+		<<?php echo $this->content_tag; ?> id="<?php echo $ids['content']; ?>" class="accordion-content" aria-hidden="true">
+			<?php echo do_shortcode($content); ?>
+		</<?php echo $this->content_tag; ?>>
+
+		<?php return ob_get_clean();
 	}
 
 
