@@ -9,7 +9,8 @@
 				<option value='post'><?php _e('This post', 'mappress-google-maps-for-wordpress');?></option>
 				<option value='all'><?php _e('All posts', 'mappress-google-maps-for-wordpress');?></option>
 			</select>
-			<input type='text' size="15" class='mapp-media-search' placeholder='<?php _e('Search post title', 'mappress-google-maps-for-wordpress');?>'>
+			<input type='text' size="15" class='mapp-media-search' placeholder='<?php _e('Filter by title', 'mappress-google-maps-for-wordpress');?>'>
+			<span class='spinner'></span>
 		</div>
 		<div class='mapp-list mapp-media-list'></div>
 	</div>
@@ -49,14 +50,14 @@
 			<input data-mapp-media='cancel' class='button' type='button' value='<?php esc_attr_e('Cancel', 'mappress-google-maps-for-wordpress'); ?>' />
 			<input data-mapp-media='insert' class='button' type='button' value='<?php esc_attr_e('Insert into post', 'mappress-google-maps-for-wordpress'); ?>' />
 		</div>
-		<?php require Mappress::$basedir . "/forms/map_editor.php"; ?>
+		<?php require Mappress::$basedir . "/forms/editor.php"; ?>
 	</div>
 </div>
 
 <script type='text/template' id='mapp-tmpl-media-list'>
 	<div class='mapp-items'>
-		<# _.forEach(list.items, function(item, i) { #>
-			<div class='mapp-item' data-mapp-media='edit' data-mapp-mapid='{{ item.mapid }}'>
+		<# _.forEach(items, function(item, i) { #>
+			<div class='mapp-item' data-mapp-media-list='edit' data-mapp-mapid='{{ item.mapid }}'>
 
 				<# if (type == 'all') { #>
 					<# if (item.post_title) { #>{{ item.post_title }}<# } else { #><?php _e('Untitled', 'mappress-google-maps-for-wordpress');?><# } #>
@@ -66,21 +67,18 @@
 				<# if (item.map_title) { #>{{ item.map_title }}<# } else { #><?php _e('Untitled', 'mappress-google-maps-for-wordpress');?><# } #>
 
 				<div class='mapp-actions'>
-					<a href='#' data-mapp-media='edit'><?php _e('Edit', 'mappress-google-maps-for-wordpress');?></a> |&nbsp;
-					<a href='#' data-mapp-media='insert'><?php _e('Insert into post', 'mappress-google-maps-for-wordpress');?></a> |&nbsp;
-					<a href='#' data-mapp-media='remove'><?php _e('Delete', 'mappress-google-maps-for-wordpress');?></a>
+					<a href='#' data-mapp-media-list='edit'><?php _e('Edit', 'mappress-google-maps-for-wordpress');?></a> |&nbsp;
+					<a href='#' data-mapp-media-list='insert'><?php _e('Insert into post', 'mappress-google-maps-for-wordpress');?></a> |&nbsp;
+					<a href='#' data-mapp-media-list='remove'><?php _e('Delete', 'mappress-google-maps-for-wordpress');?></a>
 				</div>
 			</div>
 		<# }); #>
 	</div>
 	<div class='mapp-list-footer'>
-		<# if (list.items.length == 0) { #>
+		<# if (items.length == 0) { #>
 			<?php _e('No maps found', 'mappress-google-maps-for-wordpress');?>
 		<# } #>
-		<# if (list.page < list.pages) { #>
-				<input type='button' class='button' data-mapp-media='more' value='<?php _e('Load More', 'mappress-google-maps-for-wordpress');?>'>
-				<span class='spinner'></span>
-		<# } #>
+		{{{more}}}
 	</div>
 </div>
 </script>
