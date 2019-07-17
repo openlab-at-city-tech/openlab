@@ -4,8 +4,30 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit453516e196e1be4c43fa495b9bb9d572
+class ComposerStaticInitfeec375d710f3b5853d28965580ba4c0
 {
+    public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Tribe\\' => 6,
+        ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Tribe\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Tribe',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+    );
+
     public static $prefixesPsr0 = array (
         'x' => 
         array (
@@ -24,15 +46,29 @@ class ComposerStaticInit453516e196e1be4c43fa495b9bb9d572
     );
 
     public static $classMap = array (
-        'WP_Async_Request' => __DIR__ . '/..' . '/a5hleyrich/wp-background-processing/classes/wp-async-request.php',
-        'WP_Background_Process' => __DIR__ . '/..' . '/a5hleyrich/wp-background-processing/classes/wp-background-process.php',
+        'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
+        'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
+        'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
+        'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
+        'Tribe\\PUE\\Update_Prevention' => __DIR__ . '/../..' . '/src/Tribe/PUE/Update_Prevention.php',
+        'Tribe\\Service_Providers\\PUE' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/PUE.php',
+        'Tribe\\Traits\\Cache_User' => __DIR__ . '/../..' . '/src/Tribe/Traits/Cache_User.php',
+        'tad_DI52_Container' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/Container.php',
+        'tad_DI52_ContainerInterface' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/ContainerInterface.php',
+        'tad_DI52_ProtectedValue' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/ProtectedValue.php',
+        'tad_DI52_ServiceProvider' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/ServiceProvider.php',
+        'tad_DI52_ServiceProviderInterface' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/ServiceProviderInterface.php',
+        'xrstf\\Composer52\\AutoloadGenerator' => __DIR__ . '/..' . '/xrstf/composer-php52/lib/xrstf/Composer52/AutoloadGenerator.php',
+        'xrstf\\Composer52\\Generator' => __DIR__ . '/..' . '/xrstf/composer-php52/lib/xrstf/Composer52/Generator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit453516e196e1be4c43fa495b9bb9d572::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit453516e196e1be4c43fa495b9bb9d572::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$classMap;
 
         }, null, ClassLoader::class);
     }

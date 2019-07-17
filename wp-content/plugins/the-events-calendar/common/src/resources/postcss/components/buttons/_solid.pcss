@@ -1,0 +1,55 @@
+.tribe-common {
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Button: Solid
+	 *
+	 * Example:
+	 * <button class="tribe-common-c-btn">...</button>
+	 * <a href="#" class="tribe-common-c-btn">...</a>
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+	.tribe-common-c-btn {
+		@mixin button-solid;
+
+		background-color: var(--color-accent-primary);
+		padding: 11px 22px 11px;
+		width: 100%;
+
+		@media (--viewport-medium) {
+			width: auto;
+		}
+
+		&:focus,
+		&:hover {
+			background-color: var(--color-accent-primary-hover);
+		}
+
+		&:active {
+			background-color: var(--color-accent-primary-active);
+		}
+
+		&:disabled {
+			background-color: var(--color-accent-primary-background);
+		}
+	}
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Button: Solid Secondary
+	 *
+	 * Example:
+	 * <button class="tribe-common-c-btn tribe-common-c-btn--secondary">...</button>
+	 * <a href="#" class="tribe-common-c-btn tribe-common-c-btn--secondary">...</a>
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+	.tribe-common-c-btn--secondary {
+		padding: 12px 19px 13px;
+		width: auto;
+
+		&:after {
+			content: none;
+		}
+	}
+}
