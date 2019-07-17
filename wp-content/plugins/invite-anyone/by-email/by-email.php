@@ -994,6 +994,57 @@ function invite_anyone_process_footer( $email ) {
 	return stripslashes( $footer );
 }
 
+/**
+ * Get the invitation acceptance URL for a given email address.
+ *
+ * @since 1.4.0
+ *
+ * @param string $email Email address.
+ * @return string
+ */
+function invite_anyone_get_accept_url( $email ) {
+	$accept_link  = add_query_arg( array(
+		'iaaction' => 'accept-invitation',
+		'email'    => $email,
+	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+
+	/**
+	 * Filters the invitation acceptance URL for a given email address.
+	 *
+	 * @since 0.3.3
+	 * @since 1.4.0 Introduced `$email` parameter.
+	 *
+	 * @param string $accept_link Accept URL.
+	 * @param string $email       Email address.
+	 */
+	return apply_filters( 'invite_anyone_accept_url', $accept_link, $email );
+}
+
+/**
+ * Get the opt-out URL for a given email address.
+ *
+ * @since 1.4.0
+ *
+ * @param string $email Email address.
+ * @return string
+ */
+function invite_anyone_get_opt_out_url( $email ) {
+	$opt_out_link = add_query_arg( array(
+		'iaaction' => 'opt-out',
+		'email'    => $email,
+	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+
+	/**
+	 * Filters the opt-out acceptance URL for a given email address.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $opt_out_link Opt-out URL.
+	 * @param string $email        Email address.
+	 */
+	return apply_filters( 'invite_anyone_opt_out_url', $opt_out_link, $email );
+}
+
 function invite_anyone_wildcard_replace( $text, $email = false ) {
 	global $bp;
 
@@ -1003,16 +1054,8 @@ function invite_anyone_wildcard_replace( $text, $email = false ) {
 
 	$email = urlencode( $email );
 
-	$accept_link  = add_query_arg( array(
-		'iaaction' => 'accept-invitation',
-		'email'    => $email,
-	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
-	$accept_link  = apply_filters( 'invite_anyone_accept_url', $accept_link );
-
-	$opt_out_link = add_query_arg( array(
-		'iaaction' => 'opt-out',
-		'email'    => $email,
-	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+	$accept_link  = invite_anyone_get_accept_url( $email );
+	$opt_out_link = invite_anyone_get_opt_out_url( $email );
 
 	$text = str_replace( '%%INVITERNAME%%', $inviter_name, $text );
 	$text = str_replace( '%%INVITERURL%%', $inviter_url, $text );
@@ -1257,15 +1300,23 @@ function invite_anyone_process_invitations( $data ) {
 		$groups = ! empty( $data['invite_anyone_groups'] ) ? $data['invite_anyone_groups'] : array();
 		$is_error = 0;
 
-		foreach( $emails as $email ) {
+		$do_bp_email = true === function_exists( 'bp_send_email' ) && true === ! apply_filters( 'bp_email_use_wp_mail', false );
+
+		foreach ( $emails as $email ) {
 			$subject = stripslashes( strip_tags( $data['invite_anyone_custom_subject'] ) );
 
-			$message = stripslashes( strip_tags( $data['invite_anyone_custom_message'] ) );
+			if ( $do_bp_email ) {
+				$custom_message = stripslashes( $data['invite_anyone_custom_message'] );
+				$accept_url     = invite_anyone_get_accept_url( $email );
+				$opt_out_url    = invite_anyone_get_opt_out_url( $email );
+			} else {
+				$custom_message = stripslashes( strip_tags( $data['invite_anyone_custom_message'] ) );
+			}
 
 			$footer = invite_anyone_process_footer( $email );
 			$footer = invite_anyone_wildcard_replace( $footer, $email );
 
-			$message .= '
+			$message = $custom_message . '
 
 ================
 ';
@@ -1293,7 +1344,7 @@ function invite_anyone_process_invitations( $data ) {
 			$subject = apply_filters( 'invite_anyone_invitation_subject', $subject, $data, $email );
 
 			/**
-			 * Filters the contents of an outgoing email.
+			 * Filters the contents of an outgoing plaintext email.
 			 *
 			 * @since 1.3.20 Added the $email and $data parameters.
 			 *
@@ -1303,7 +1354,29 @@ function invite_anyone_process_invitations( $data ) {
 			 */
 			$message = apply_filters( 'invite_anyone_invitation_message', $message, $data, $email );
 
-			wp_mail( $to, $subject, $message );
+			// BP 2.5+
+			if ( $do_bp_email ) {
+				$bp_email_args = array(
+					'tokens' => array(
+						'ia.subject'           => $subject,
+						'ia.content'           => $custom_message,
+						'ia.content_plaintext' => $message,
+						'ia.accept_url'        => $accept_url,
+						'ia.opt_out_url'       => $opt_out_url,
+						'recipient.name'       => $to,
+					),
+					'subject' => $subject,
+					'content' => $message,
+				);
+
+				add_filter( 'bp_email_get_salutation', 'invite_anyone_replace_bp_email_salutation', 10, 2 );
+				bp_send_email( 'invite-anyone-invitation', $to, $bp_email_args );
+
+				remove_filter( 'bp_email_get_salutation', 'invite_anyone_replace_bp_email_salutation', 10, 2 );
+
+			} else {
+				wp_mail( $to, $subject, $message );
+			}
 
 			/* todo: isolate which email(s) cause problems, and send back to user */
 		/*	if ( !invite_anyone_send_invitation( $bp->loggedin_user->id, $email, $message, $groups ) )
@@ -1339,6 +1412,30 @@ function invite_anyone_process_invitations( $data ) {
 	}
 
 	return true;
+}
+
+/**
+ * Replaces the customized salutation in outgoing invitation emails.
+ *
+ * There's no first name, so we just say 'Hello' instead.
+ *
+ * @since 1.4.0
+ *
+ * @param string $salutation
+ * @param array  $settings
+ * @return string
+ */
+function invite_anyone_replace_bp_email_salutation( $salutation, $settings ) {
+	/**
+	 * Filters the IA email salutation.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param string $ia_salutation Salutation from IA.
+	 * @param string $salutation    Salutation from BP.
+	 * @param array  $settings      Email settings.
+	 */
+	return apply_filters( 'invite_anyone_replace_bp_email_salutation', _x( 'Hello,', 'Invite Anyone email salutation', 'invite-anyone' ), $salutation, $settings );
 }
 
 function invite_anyone_send_invitation( $inviter_id, $email, $message, $groups ) {
@@ -1440,7 +1537,7 @@ function invite_anyone_bypass_registration_lock() {
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 	} else {
-		add_filter( 'option_users_can_register', create_function( false, 'return true;' ) );
+		add_filter( 'option_users_can_register', '__return_true' );
 	}
 }
 add_action( 'wp', 'invite_anyone_bypass_registration_lock', 1 );
@@ -1546,3 +1643,160 @@ function invite_anyone_already_accepted_redirect( $redirect ) {
 }
 add_filter( 'bp_loggedin_register_page_redirect_to', 'invite_anyone_already_accepted_redirect' );
 
+/** BP emails ****************************************************************/
+
+/**
+ * Install Invite Anyone emails during email installation routine for BuddyPress.
+ *
+ * @since 1.4.0
+ *
+ * @param bool $post_exists_check Should we check to see if our email post types exist before installing?
+ *                                Default: false.
+ */
+function invite_anyone_install_emails( $post_exists_check = false ) {
+	// No need to check if our post types exist.
+	if ( ! $post_exists_check ) {
+		invite_anyone_set_email_type( 'invite-anyone-invitation', false );
+
+	// Only create email post types if they do not exist.
+	} else {
+		switch_to_blog( bp_get_root_blog_id() );
+
+		$mail_types = array( 'invite-anyone-invitation' );
+
+		// Try to fetch email posts with our taxonomy.
+		$emails = get_posts( array(
+			'fields'           => 'ids',
+			'post_status'      => 'publish',
+			'post_type'        => bp_get_email_post_type(),
+			'posts_per_page'   => 1,
+			'suppress_filters' => false,
+			'tax_query' => array(
+				'relation' => 'OR',
+				array(
+					'taxonomy' => bp_get_email_tax_type(),
+					'field'    => 'slug',
+					'terms'    => $mail_types,
+				),
+			),
+		) );
+
+		// See if our taxonomies are attached to our email posts.
+		$found = array();
+		foreach ( $emails as $post_id ) {
+			$tax   = wp_get_object_terms( $post_id, bp_get_email_tax_type(), array( 'fields' => 'slugs' ) );
+			$found = array_merge( $found, (array) $tax );
+		}
+
+		restore_current_blog();
+
+		// Find out if we need to create any posts.
+		$to_create = array_diff( $mail_types, $found );
+		if ( empty( $to_create ) ) {
+			return;
+		}
+
+		// Create posts with our email types.
+		foreach ( $to_create as $email_type ) {
+			invite_anyone_set_email_type( $email_type, false );
+		}
+	}
+}
+add_action( 'bp_core_install_emails', 'ass_install_emails' );
+
+/**
+ * Sets the email situation type for use in Invite Anyone.
+ *
+ * Only applicable for BuddyPress 2.5+.
+ *
+ * @since 1.4.0
+ *
+ * @param string $email_type The email type to fetch.
+ * @param bool   $term_check Check if our email term exists before creating our specific email
+ *                           situation. Default: true.
+ */
+function invite_anyone_set_email_type( $email_type, $term_check = true ) {
+	$switched = false;
+
+	if ( false === bp_is_root_blog() ) {
+		$switched = true;
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	if ( true === $term_check ) {
+		$term = term_exists( $email_type, bp_get_email_tax_type() );
+	} else {
+		$term = 0;
+	}
+
+	// Term already exists so don't do anything.
+	if ( true === $term_check && $term !== 0 && $term !== null ) {
+		if ( true === $switched ) {
+			restore_current_blog();
+		}
+
+		return;
+
+	// Create our email situation.
+	} else {
+		// Set up default email content depending on the email type.
+		switch ( $email_type ) {
+			// Site invitations.
+			case 'invite-anyone-invitation' :
+				/* translators: do not remove {} brackets or translate its contents. */
+				$post_title = __( '[{{{site.name}}}] {{{ia.subject}}}', 'invite-anyone' );
+
+				/* translators: do not remove {} brackets or translate its contents. */
+				$html_content = __( "{{{ia.content}}}<br /><hr><a href=\"{{{ia.accept_url}}}\">Accept or reject this invitation</a> &middot; <a href=\"{{{ia.opt_out_url}}}\">Opt out of future invitations</a>", 'invite-anyone' );
+
+				/* translators: do not remove {} brackets or translate its contents. */
+				$plaintext_content = __( "{{{ia.content_plaintext}}}", 'invite-anyone' );
+
+				$situation_desc = __( 'A user is invited to join the site by email. Used by the Invite Anyone plugin.', 'invite-anyone' );
+
+				break;
+		}
+
+		// Sanity check!
+		if ( false === isset( $post_title ) ) {
+			if ( true === $switched ) {
+				restore_current_blog();
+			}
+
+			return;
+		}
+
+		$id = $email_type;
+
+		$defaults = array(
+			'post_status' => 'publish',
+			'post_type'   => bp_get_email_post_type(),
+		);
+
+		$email = array(
+			'post_title'   => $post_title,
+			'post_content' => $html_content,
+			'post_excerpt' => $plaintext_content,
+		);
+
+		// Email post content.
+		$post_id = wp_insert_post( bp_parse_args( $email, $defaults, 'install_email_' . $id ) );
+
+		// Save the situation.
+		if ( ! is_wp_error( $post_id ) ) {
+			$tt_ids = wp_set_object_terms( $post_id, $id, bp_get_email_tax_type() );
+
+			// Situation description.
+			if ( ! is_wp_error( $tt_ids ) ) {
+				$term = get_term_by( 'term_taxonomy_id', (int) $tt_ids[0], bp_get_email_tax_type() );
+				wp_update_term( (int) $term->term_id, bp_get_email_tax_type(), array(
+					'description' => $situation_desc,
+				) );
+			}
+		}
+	}
+
+	if ( true === $switched ) {
+		restore_current_blog();
+	}
+}

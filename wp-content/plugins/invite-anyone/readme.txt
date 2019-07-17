@@ -2,9 +2,9 @@
 Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
-Requires at least: WP 3.2, BuddyPress 1.8
-Tested up to: WP 4.9, BuddyPress 3.0
-Stable tag: 1.3.20
+Requires at least: 3.2
+Tested up to: 5.1
+Stable tag: 1.4.0
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -50,6 +50,11 @@ Additional details about the plugin can be found in the following languages:
 * Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a>
 
 == Changelog ==
+
+= 1.4.0 =
+* Use BP's pretty email formatting system for outgoing email notifications.
+* Fix bug that caused admin panel to be added to Network Admin in some incorrect situations.
+* Improved PHP 7.2+ compatibility.
 
 = 1.3.20 =
 * Add parameters to filters on outgoing email parts.
