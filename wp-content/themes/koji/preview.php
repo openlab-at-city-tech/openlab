@@ -2,12 +2,12 @@
 
 	<div class="preview-wrapper">
 
-		<?php if ( has_post_thumbnail() || koji_get_fallback_image_url() ) : ?>
+		<?php if ( ( has_post_thumbnail() && ! post_password_required() ) || koji_get_fallback_image_url() ) : ?>
 
 			<a href="<?php the_permalink(); ?>" class="preview-image">
 
 				<?php
-				if ( has_post_thumbnail() ) {
+				if ( has_post_thumbnail() && ! post_password_required() ) {
 					$image_size = koji_get_preview_image_size();
 					the_post_thumbnail( $image_size );
 				} else {

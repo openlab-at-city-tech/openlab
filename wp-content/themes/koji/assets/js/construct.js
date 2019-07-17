@@ -334,7 +334,6 @@ koji.mobileMenu = {
 
 			// Unlock the scroll if we pass the breakpoint for hiding the mobile menu
 			if ( $( window ).width() >= 1000 && $( '.nav-toggle' ).hasClass( 'active' ) ) {
-				console.log( 'trigger resize' );
 				$( '.nav-toggle' ).trigger( 'click' );
 			}
 		} );

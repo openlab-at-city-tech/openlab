@@ -12,8 +12,11 @@
 
 .editor-rich-text__tinymce {
 	color: #232D37;
-	font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
 	-webkit-font-smoothing: antialiased;
+}
+
+.editor-styles-wrapper > * {
+	font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .editor-rich-text__tinymce * {

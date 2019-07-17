@@ -1,10 +1,17 @@
-<div class="comments" id="comments">
+<?php
 
-	<?php
+if ( post_password_required() ) {
+	return;
+}
 
-	$comments_number = absint( get_comments_number() );
+$comments_number = absint( get_comments_number() );
+
+if ( $comments_number ) : 
+
 	// Translators: %s = the number of comments
 	$comments_title = sprintf( _nx( '%s Comment', '%s Comments', $comments_number, 'Translators: %s = the number of comments', 'koji' ), $comments_number ); ?>
+
+	<div class="comments" id="comments">
 
 	<div class="comments-header">
 
@@ -45,17 +52,19 @@
 
 	<?php endif; ?>
 
-</div><!-- comments -->
+	</div><!-- comments -->
+
+<?php endif; ?>
 
 <?php if ( comments_open() || pings_open() ) :
 
 	comment_form( 'comment_notes_before=&comment_notes_after=' );
 
-elseif ( $comments ) : ?>
+else : ?>
 
 	<div class="comment-respond" id="respond">
 
-		<p class="closed"><?php _e( 'Comments closed', 'koji' ); ?></p>
+		<p class="closed"><?php _e( 'Comments are closed.', 'koji' ); ?></p>
 
 	</div><!-- #respond -->
 
