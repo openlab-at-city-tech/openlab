@@ -48,6 +48,7 @@ $preload_paths = array(
 	sprintf( '/wp/v2/types/%s?context=edit', $post_type ),
 	sprintf( '/wp/v2/users/me?post_type=%s&context=edit', $post_type ),
 	array( '/wp/v2/media', 'OPTIONS' ),
+	array( '/wp/v2/blocks', 'OPTIONS' ),
 );
 
 /**
@@ -95,7 +96,7 @@ wp_add_inline_script(
  * but should be included in its save payload.
  */
 $initial_edits = null;
-$is_new_post = false;
+$is_new_post   = false;
 if ( 'auto-draft' === $post->post_status ) {
 	$is_new_post = true;
 	// Override "(Auto Draft)" new post default title with empty string, or filtered value.
@@ -116,10 +117,10 @@ wp_add_inline_script(
 $meta_box_url = admin_url( 'post.php' );
 $meta_box_url = add_query_arg(
 	array(
-		'post'            => $post->ID,
-		'action'          => 'edit',
-		'meta-box-loader' => true,
-		'_wpnonce'        => wp_create_nonce( 'meta-box-loader' ),
+		'post'                  => $post->ID,
+		'action'                => 'edit',
+		'meta-box-loader'       => true,
+		'meta-box-loader-nonce' => wp_create_nonce( 'meta-box-loader' ),
 	),
 	$meta_box_url
 );
@@ -273,7 +274,7 @@ $editor_settings = array(
 	'titlePlaceholder'       => apply_filters( 'enter_title_here', __( 'Add title' ), $post ),
 	'bodyPlaceholder'        => $body_placeholder,
 	'isRTL'                  => is_rtl(),
-	'autosaveInterval'       => 10,
+	'autosaveInterval'       => AUTOSAVE_INTERVAL,
 	'maxUploadFileSize'      => $max_upload_size,
 	'allowedMimeTypes'       => get_allowed_mime_types(),
 	'styles'                 => $styles,
@@ -306,7 +307,7 @@ if ( false !== $color_palette ) {
 	$editor_settings['colors'] = $color_palette;
 }
 
-if ( ! empty( $font_sizes ) ) {
+if ( false !== $font_sizes ) {
 	$editor_settings['fontSizes'] = $font_sizes;
 }
 
@@ -408,7 +409,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 					$message = sprintf(
-						/* translators: %s: https://wordpress.org/plugins/classic-editor/ */
+						/* translators: %s: Classic Editor plugin URL */
 						__( 'The block editor requires JavaScript. Please enable JavaScript in your browser settings, or try the <a href="%s">Classic Editor plugin</a>.' ),
 						__( 'https://wordpress.org/plugins/classic-editor/' )
 					);
