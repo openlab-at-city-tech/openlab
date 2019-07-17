@@ -1,6 +1,6 @@
 # Hestia Pro #
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
-**Tags:** blog, custom-logo, portfolio, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready  
+**Tags:** blog, custom-logo, portfolio, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, editor-style, footer-widgets, left-sidebar, right-sidebar, wide-blocks  
 **Requires at least:** 4.0  
 **Tested up to:** 5.0  
 **Stable tag:** 2.0.7  
@@ -17,6 +17,58 @@ Hestia WordPress theme, Copyright 2018 Themeisle
 Hestia is distributed under the terms of the GNU GPLv2 or later
 
 ## Changelog ##
+### 2.4.5 - 2019-05-27  ###
+
+* Fixed editor visual integration with the latest update of WordPress
+* Fixed duplicated comments area when using Elementor Pro templates
+
+
+### 2.4.4 - 2019-04-22  ###
+
+* Removed weird scroll on the blog page
+
+
+### 2.4.3 - 2019-04-22  ###
+
+* New logging mechanism to the onboarding module
+* Improved the whole routine for the content import in the onboarding module
+* Added new wp_body_open() function for WP 5.2
+* Fixed logo disappearing on scroll on the distraction-free checkout mode
+* Made blog text color darker when using the full content articles option
+* Fixed portfolio featured image not visible in Firefox in the lightbox
+* Fixed overlapping content on the blog page
+* Fixed incorrect title attribute for the primary menu
+* Fixed Shop page layout on the third header layout
+* Remove title appearing in the navigation cart in the latest update of WooCommerce
+
+
+### 2.4.2 - 2019-04-02  ###
+
+* Updated the Starter Sites library
+
+
+### 2.4.1 - 2019-03-29  ###
+
+* Compatibility with the Header, Footer & Blocks for Elementor plugin
+* New Agency Travel Demo Starter Site
+* Fixed issue with the color picker needing two clicks
+* Updated the Contact and Facebook community links
+* Updated tags list with the new tags
+* Fixed importing issues with the Starter Sites
+* Fixed White Label error appearing lower PHP versions
+* Fixed issue with contact form shortcode not being translation ready
+* Updated Starter Sites library images
+
+
+### 2.4.0 - 2019-03-21  ###
+
+* [Hestia Pro] New White Label module
+* Fixed issue with Big Title buttons shadow color
+* Fixed issue with Portfolio pop-up not opening in Microsoft Edge
+* Fixed issue with Blog options taking control over the custom post types archives pages
+* Fixed issue with invalid CSS inline style
+
+
 ### 2.3.0 - 2019-03-01  ###
 
 * Fixed products categories layout on the Shop pane and Homepage
@@ -1008,10 +1060,12 @@ Hestia is distributed under the terms of the GNU GPLv2 or later
 * Hestia Default: tropical-beach, CC0, https://mystock.themeisle.com/photo/tropical-beach/
 * Hestia Default: 31529251932_1a1d928c17_o, CC0, https://mystock.themeisle.com/photo/new-york-cityscape/
 * Hestia Default: pool, CC0, https://mystock.themeisle.com/photo/pool/
-* Hestia Default: old-casino-2, CC0, https://mystock.themeisle.com/photo/old-casino-2/
-* Hestia Default: old-town-landscape, CC0, https://mystock.themeisle.com/photo/old-town-landscape/
-* Hestia Default: traffic-sign, CC0, https://mystock.themeisle.com/photo/traffic-sign/
-* Hestia Default: palm-fruits, CC0, https://mystock.themeisle.com/photo/palm-fruits/
+* Hestia WooCommerce: flower1.jpg, CC0, https://mystock.themeisle.com/photo/sunflower/
+* Hestia WooCommerce: flower2.jpg, CC0, https://mystock.themeisle.com/photo/flower/
+* Hestia WooCommerce: flower3.jpg, CC0, https://mystock.themeisle.com/photo/blooming-bougainvillea-flowers/
+* Hestia WooCommerce: flower4.jpg, CC0, https://mystock.themeisle.com/photo/flower-buds/
+* Hestia WooCommerce: flower5.jpg, CC0, https://mystock.themeisle.com/photo/rock-flowers/
+* Hestia WooCommerce: flower6.jpg, CC0, https://mystock.themeisle.com/photo/mountain-flowers/
 * Hestia WooCommerce: lavender-1506506, CC0, https://pixabay.com/en/lavender-flower-pots-beer-tent-set-1506506/
 * Hestia WooCommerce: plant-763965_1920, CC0, https://pixabay.com/en/plant-green-sheet-nature-plants-763965/
 * Hestia WooCommerce: cactus-close-up-plant-6936, CC0, https://www.pexels.com/photo/cactus-on-white-pot-with-stones-in-high-angle-photography-6936/
@@ -1101,3 +1155,13 @@ Hestia is distributed under the terms of the GNU GPLv2 or later
 * Hestia Energy Panels: metal snowflake, CC0, https://mystock.themeisle.com/photo/metal-snowflake/
 * Hestia Energy Panels: window, CC0, https://mystock.themeisle.com/photo/window/
 * Hestia Energy Panels: red umbrellas, CC0, https://mystock.themeisle.com/photo/red-umbrellas/
+* Hestia Coffee Shop: hestia-coffee-shop1.jpg, CC0, https://mystock.themeisle.com/photo/strawberries-and-oranges-for-sale-in-baskets/
+* Hestia Coffee Shop: hestia-coffee-shop2.jpg, CC0, https://mystock.themeisle.com/photo/vices/
+* Hestia Coffee Shop: hestia-coffee-shop3.jpg, CC0, https://mystock.themeisle.com/photo/orange-tree/
+* Hestia Coffee Shop: hestia-coffee-shop4.jpg, CC0, https://mystock.themeisle.com/photo/candy/
+* Hestia Coffee Shop: hestia-coffee-shop5.jpg, CC0, https://mystock.themeisle.com/photo/wedding-table/
+* Hestia Coffee Shop: hestia-coffee-shop6.jpg, CC0, https://mystock.themeisle.com/photo/sweet-cake-christmas-tree/
+* Hestia Travel: hestia-travel1.jpg, CC0, https://mystock.themeisle.com/photo/swimming-pool-in-hotel-resort/
+* Hestia Travel: hestia-travel2.jpg, CCO, https://mystock.themeisle.com/photo/subway-train-arriving-in-station/
+* Hestia Travel: hestia-travel3.jpg, CCO, https://mystock.themeisle.com/photo/hill-houses/
+* Hestia Travel: hestia-travel4.jpg, CCO, https://mystock.themeisle.com/photo/airplane/

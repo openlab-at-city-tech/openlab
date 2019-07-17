@@ -21,7 +21,7 @@ class Hestia_Additional_Views extends Hestia_Abstract_Main {
 
 		add_action( 'hestia_blog_related_posts', array( $this, 'related_posts' ) );
 
-		add_action( 'hestia_do_header', array( $this, 'hidden_sidebars' ) );
+		add_action( 'hestia_before_header_hook', array( $this, 'hidden_sidebars' ) );
 	}
 
 	/**

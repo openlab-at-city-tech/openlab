@@ -6,6 +6,10 @@
     box-sizing: border-box;
     text-align: center;
     width: 33.3%;
+    height: auto;
+    background: none;
+    border: none;
+    box-shadow: none;
 }
 
 .ui-buttonset label img{

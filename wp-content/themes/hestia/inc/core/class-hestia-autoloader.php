@@ -98,6 +98,7 @@ class Hestia_Autoloader {
 			'Hestia_Contact_Controls'                     => HESTIA_PHP_INCLUDE . 'customizer/front-page',
 			'Hestia_Subscribe_Controls'                   => HESTIA_PHP_INCLUDE . 'customizer/front-page',
 			'Hestia_Gutenberg'                            => HESTIA_PHP_INCLUDE . 'compatibility',
+			'Hestia_Header_Footer_Elementor'              => HESTIA_PHP_INCLUDE . 'compatibility/page-builder',
 			'Hestia_Page_Builder_Helper'                  => HESTIA_PHP_INCLUDE . 'compatibility/page-builder',
 			'Hestia_Elementor_Compatibility'              => HESTIA_PHP_INCLUDE . 'compatibility/page-builder',
 			'Hestia_Beaver_Builder_Compatibility'         => HESTIA_PHP_INCLUDE . 'compatibility/page-builder',
@@ -154,6 +155,7 @@ class Hestia_Autoloader {
 			'Hestia_General_Controls_Addon'               => HESTIA_PHP_INCLUDE . 'addons/customizer/general',
 			'Hestia_Header_Controls_Addon'                => HESTIA_PHP_INCLUDE . 'addons/customizer/general',
 			'Hestia_Typography_Controls_Addon'            => HESTIA_PHP_INCLUDE . 'addons/customizer/general',
+			'Hestia_White_Label_Controls_Addon'           => HESTIA_PHP_INCLUDE . 'addons/customizer/general',
 			'Hestia_Customizer_Notices_Addon'             => HESTIA_PHP_INCLUDE . 'addons/customizer',
 			'Hestia_Defaults_Models'                      => HESTIA_PHP_INCLUDE . 'addons/models',
 

@@ -1,6 +1,11 @@
 <template>
 	<div class="site-box" :class="siteData.pricing">
 		<div class="preview-image" :class="{ 'demo-pro' : siteData.in_pro }">
+			<div class="preview-action" @click="showPreview()">
+				<span class="previewButton">
+				{{this.$store.state.strings.preview_btn}}
+				</span>
+			</div>
 			<img :src="siteData.screenshot" :alt="siteData.title">
 		</div>
 		<div class="footer">
@@ -34,24 +39,31 @@
         default: {},
         type: Object,
         required: true
-      }
+      },
+      siteSlug: {
+        default: '',
+		type: String,
+		required: true
+	  }
     },
     methods: {
       setupImportData: function () {
         let recommended = this.siteData.recommended_plugins ? this.siteData.recommended_plugins : {}
         let mandatory = this.siteData.mandatory_plugins ? this.siteData.mandatory_plugins : {}
-        let plugins = getInstallablePlugins(mandatory, recommended)
+        let defaultOff = this.siteData.default_off_recommended_plugins ? this.siteData.default_off_recommended_plugins : []
+        let plugins = getInstallablePlugins(mandatory, recommended, defaultOff)
         this.$store.commit('updatePlugins', plugins)
       },
       importSite: function () {
         this.setupImportData()
-        this.$store.commit('populatePreview', this.siteData)
+        this.$store.commit('populatePreview', { siteData: this.siteData } )
         this.$store.commit('showImportModal', true)
       },
       showPreview: function () {
+        document.body.classList.add( 'ti-ob--preview-open' )
         this.setupImportData()
         this.$store.commit('showPreview', true)
-        this.$store.commit('populatePreview', this.siteData)
+        this.$store.commit('populatePreview', { siteData : this.siteData, currentItem: this.siteSlug})
       }
     }
   }

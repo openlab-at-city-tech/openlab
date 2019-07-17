@@ -223,9 +223,9 @@ class Hestia_Gutenberg extends Hestia_Abstract_Main {
 		);
 
 		$values_to_set = array(
-			'desktop' => $base_values['desktop'] + $value['desktop'],
-			'tablet'  => $base_values['tablet'] + $value['tablet'],
-			'mobile'  => $base_values['mobile'] + $value['mobile'],
+			'desktop' => intval( $base_values['desktop'] ) + intval( $value['desktop'] ),
+			'tablet'  => intval( $base_values['tablet'] ) + intval( $value['tablet'] ),
+			'mobile'  => intval( $base_values['mobile'] ) + intval( $value['mobile'] ),
 		);
 
 		foreach ( $values_to_set as $query => $value ) {

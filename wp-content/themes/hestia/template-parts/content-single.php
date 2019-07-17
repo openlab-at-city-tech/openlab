@@ -20,31 +20,33 @@ $wrap_class     = apply_filters( 'hestia_filter_single_post_content_classes', 'c
 		}
 		?>
 		<div class="<?php echo esc_attr( $wrap_class ); ?>" data-layout="<?php echo esc_attr( $sidebar_layout ); ?>">
-			<div class="single-post-wrap entry-content">
-				<?php
-				if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'single' ) ) {
-					do_action( 'hestia_before_single_post_article' );
 
-					do_action( 'hestia_before_single_post_content' );
-
-					the_content();
-
-					hestia_wp_link_pages(
-						array(
-							'before'      => '<div class="text-center"> <ul class="nav pagination pagination-primary">',
-							'after'       => '</ul> </div>',
-							'link_before' => '<li>',
-							'link_after'  => '</li>',
-						)
-					);
-
-					?>
-					<?php
-				}
-				?>
-			</div>
 			<?php
-			do_action( 'hestia_after_single_post_article' );
+
+			if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'single' ) ) {
+
+				echo '<div class="single-post-wrap entry-content">';
+
+				do_action( 'hestia_before_single_post_article' );
+
+				do_action( 'hestia_before_single_post_content' );
+
+				the_content();
+
+				hestia_wp_link_pages(
+					array(
+						'before'      => '<div class="text-center"> <ul class="nav pagination pagination-primary">',
+						'after'       => '</ul> </div>',
+						'link_before' => '<li>',
+						'link_after'  => '</li>',
+					)
+				);
+
+				echo '</div>';
+
+				do_action( 'hestia_after_single_post_article' );
+			}
+
 			echo '</div>';
 			if ( ( $sidebar_layout === 'sidebar-right' ) && ! is_singular( 'elementor_library' ) ) {
 				get_sidebar();

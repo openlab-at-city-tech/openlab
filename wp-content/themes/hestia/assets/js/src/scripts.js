@@ -459,6 +459,9 @@
 		 * Parallax on blog/archive/page header image
 		 */
 		'parallaxHeader': function () {
+			if ( $( '.header-footer-elementor' ).length > 0 ) {
+				return;
+			}
 			if ( $( '.elementor-location-header' ).length > 0 ) {
 				return;
 			}

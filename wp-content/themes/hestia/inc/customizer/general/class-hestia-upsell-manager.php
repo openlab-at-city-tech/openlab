@@ -118,7 +118,7 @@ class Hestia_Upsell_Manager extends Hestia_Register_Customizer_Controls {
 			/* translators: %s Required action */
 			array_push( $notification_settings['options'], sprintf( esc_html__( 'Hestia front-page is not multi-language compatible, for this feature %s.', 'hestia' ), sprintf( '<a href="%1$s" target="_blank" class="button button-primary" style="margin-top: 20px; margin-bottom: -20px;">%2$s</a>', esc_url( apply_filters( 'hestia_upgrade_link_from_child_theme_filter', 'https://docs.themeisle.com/article/753-hestia-doc?utm_medium=customizer&utm_source=button&utm_campaign=multilanguage#translatehestia' ) ), esc_html__( 'Get the PRO version!', 'hestia' ) ) ) );
 		} else {
-			$notification_settings['button_url']  = esc_url( apply_filters( 'hestia_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/hestia-pro/upgrade?utm_medium=customizer&utm_source=button&utm_campaign=frontpagesection ' ) );
+			$notification_settings['button_url']  = esc_url( apply_filters( 'hestia_upgrade_link_from_child_theme_filter', 'https://themeisle.com/themes/hestia-pro/upgrade?utm_medium=customizer&utm_source=button&utm_campaign=frontpagesection' ) );
 			$notification_settings['button_text'] = esc_html__( 'Get the PRO version!', 'hestia' );
 		}
 

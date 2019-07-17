@@ -33,13 +33,40 @@ class Themeisle_OB_Importer_Alterator {
 	);
 
 	/**
-	 * Themeisle_OB_Importer_Alterator constructor.
+	 * Data passed from the async request for individual site item.
+	 *
+	 * @var array
 	 */
-	public function __construct() {
+	private $site_json_data;
+
+	/**
+	 * Themeisle_OB_Importer_Alterator constructor.
+	 *
+	 * @param array $site_json_data the sites data passed from content import.
+	 */
+	public function __construct( $site_json_data ) {
+		$this->site_json_data = $site_json_data;
 		$this->count_posts_by_post_type();
-		add_filter( 'wxr_importer.pre_process.post', array( $this, 'skip_posts' ), 10, 4 );
-		add_filter( 'wxr_importer.pre_process.term', array( $this, 'skip_terms' ), 10, 2 );
+		add_filter( 'wp_import_posts', array( $this, 'skip_shop_pages' ), 10 );
+		add_filter( 'wp_import_posts', array( $this, 'skip_posts' ), 10 );
+		add_filter( 'wp_import_terms', array( $this, 'skip_terms' ), 10 );
 		add_filter( 'wp_insert_post_data', array( $this, 'encode_post_content' ), 10, 2 );
+		add_filter( 'wp_import_nav_menu_item_args', array( $this, 'change_nav_menu_item_link' ), 10, 2 );
+		add_filter( 'intermediate_image_sizes_advanced', '__return_null' );
+	}
+
+	/**
+	 * Change nav menu items link if needed.
+	 *
+	 * @param array $args menu item args.
+	 * @param string $import_source_url the source url.
+	 *
+	 * @return array
+	 */
+	public function change_nav_menu_item_link( $args, $import_source_url ) {
+		$args['menu-item-url'] = str_replace( $import_source_url, get_home_url(), $args['menu-item-url'] );
+
+		return $args;
 	}
 
 	/**
@@ -66,36 +93,78 @@ class Themeisle_OB_Importer_Alterator {
 	 *
 	 * @return array
 	 */
-	public function skip_posts( $data, $meta, $comments, $terms ) {
-		if ( ! array_key_exists( $data['post_type'], $this->post_map ) ) {
-			return $data;
-		}
-		if ( $this->post_map[ $data['post_type'] ] <= 2 ) {
-			return $data;
+	public function skip_posts( $posts ) {
+		return array_filter(
+			$posts,
+			function ( $post_data ) {
+				if ( ! array_key_exists( $post_data['post_type'], $this->post_map ) ) {
+					return true;
+				}
+				if ( $this->post_map[ $post_data['post_type'] ] <= 2 ) {
+					return true;
+				}
+
+				return false;
+			}
+		);
+	}
+
+	/**
+	 * Skip shop pages if no WooCommerce.
+	 *
+	 * @param array $posts posts data.
+	 *
+	 * @return array
+	 */
+	public function skip_shop_pages( $posts ) {
+		if ( ! isset( $this->site_json_data['shopPages'] ) || $this->site_json_data['shopPages'] === null ) {
+			return $posts;
 		}
 
-		return array();
+		if ( class_exists( 'WooCommerce' ) ) {
+			return $posts;
+		}
+
+		return array_filter(
+			$posts,
+			function ( $post_data ) {
+				if ( $post_data['post_type'] === 'product' ) {
+					return false;
+				}
+				if (
+					$post_data['post_type'] === 'page' &&
+					in_array( $post_data['post_name'], $this->site_json_data['shopPages'] )
+				) {
+					return false;
+				}
+
+				return true;
+			}
+		);
 	}
 
 	/**
 	 * Skips terms for post types that were skipped.
 	 *
-	 * @param array $data term data.
-	 * @param array $meta meta.s
+	 * @param array $terms terms data.
 	 *
 	 * @return array
 	 */
-	public function skip_terms( $data, $meta ) {
+	public function skip_terms( $terms ) {
 		foreach ( $this->filtered_post_types as $post_type ) {
 			if ( ! $this->post_map[ $post_type ] <= 2 ) {
 				continue;
 			}
-			if ( $this->is_taxonomy_assigned_to_post_type( $post_type, $data['taxonomy'] ) ) {
-				return array();
-			}
+
+			$terms = array_filter(
+				$terms,
+				function ( $term ) use ( $post_type ) {
+					return $this->is_taxonomy_assigned_to_post_type( $post_type, $term['term_taxonomy'] );
+				}
+			);
 		}
 
-		return $data;
+		return $terms;
 	}
 
 	/**

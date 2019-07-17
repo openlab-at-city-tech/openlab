@@ -5,6 +5,7 @@ $desktop: '1080px';
   @include tabs--laptop();
   @include layout--laptop();
   @include modal--laptop();
+  @include preview--laptop();
 }
 
 

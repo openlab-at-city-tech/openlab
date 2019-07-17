@@ -6,7 +6,7 @@
  * @since   Hestia 1.0
  */
 
-define( 'HESTIA_VERSION', '2.3.0' );
+define( 'HESTIA_VERSION', '2.4.5' );
 define( 'HESTIA_VENDOR_VERSION', '1.0.2' );
 define( 'HESTIA_PHP_INCLUDE', trailingslashit( get_template_directory() ) . 'inc/' );
 define( 'HESTIA_CORE_DIR', HESTIA_PHP_INCLUDE . 'core/' );
@@ -70,11 +70,20 @@ function hestia_run() {
 
 	new Hestia_Core();
 
-	$vendor_file = trailingslashit( get_template_directory() ) . 'vendor/autoload.php';
+	$vendor_file = trailingslashit( get_template_directory() ) . 'vendor/composer/autoload_files.php';
 	if ( is_readable( $vendor_file ) ) {
-		require_once $vendor_file;
+		$files = require_once $vendor_file;
+		foreach ( $files as $file ) {
+			if ( is_readable( $file ) ) {
+				include_once $file;
+			}
+		}
 	}
 	add_filter( 'themeisle_sdk_products', 'hestia_load_sdk' );
+
+	if ( class_exists( 'Ti_White_Label' ) ) {
+		Ti_White_Label::instance( get_template_directory() . '/style.css' );
+	}
 }
 
 /**

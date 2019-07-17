@@ -15,7 +15,8 @@ const showImportModal = (state, data) => {
   state.importModalState = data
 }
 const populatePreview = (state, data) => {
-  state.previewData = data
+  state.previewData = data.siteData
+  state.currentPreviewSlug = data.currentItem ? data.currentItem : ''
 }
 const updateSteps = (state, data) => {
   state.currentStep = data

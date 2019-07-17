@@ -14,6 +14,8 @@
  * @package themeisle-onboarding
  */
 class Themeisle_OB_Elementor_Meta_Handler {
+	use Themeisle_OB_Image_Src_Handler;
+
 	/**
 	 * Elementor meta key.
 	 *
@@ -34,18 +36,6 @@ class Themeisle_OB_Elementor_Meta_Handler {
 	 * @var null
 	 */
 	private $import_url = null;
-
-	/**
-	 * A list of allowed mimes.
-	 *
-	 * @var array
-	 */
-	protected $extensions = array(
-		'jpg|jpeg|jpe' => 'image/jpeg',
-		'png'          => 'image/png',
-		'webp'         => 'image/webp',
-		'svg'          => 'image/svg+xml',
-	);
 
 	/**
 	 * Themeisle_OB_Elementor_Meta_Handler constructor.
@@ -78,7 +68,7 @@ class Themeisle_OB_Elementor_Meta_Handler {
 			return $val;
 		}
 
-		$this->replace_image_urls();
+		$this->value = $this->replace_image_urls( $this->value );
 		$this->replace_link_urls();
 
 		return $this->value;
@@ -113,71 +103,5 @@ class Themeisle_OB_Elementor_Meta_Handler {
 		);
 
 		$this->value = json_encode( $decoded_meta );
-	}
-
-
-	/**
-	 * Replace demo urls in meta with site urls.
-	 */
-	private function replace_image_urls() {
-		// Get all slashed and un-slashed urls.
-		$old_urls = $this->get_urls_to_replace();
-		// Create an associative array.
-		$urls = array_combine( $old_urls, $old_urls );
-		// Unslash values of associative array.
-		$urls = array_map( 'wp_unslash', $urls );
-		// Remap host and directory path.
-		$urls = array_map( array( $this, 'remap_host' ), $urls );
-		// Replace image urls in meta.
-		$this->value = str_replace( array_keys( $urls ), array_values( $urls ), $this->value );
-	}
-
-	/**
-	 * Get url replace array.
-	 *
-	 * @return array
-	 */
-	private function get_urls_to_replace() {
-		$regex = '/(?:http(?:s?):)(?:[\/\\\\\\\\|.|\w|\s|-])*\.(?:' . implode( '|', array_keys( $this->extensions ) ) . ')/m';
-		preg_match_all( $regex, $this->value, $urls );
-
-		$urls = array_map(
-			function ( $value ) {
-					return rtrim( html_entity_decode( $value ), '\\' );
-			},
-			$urls[0]
-		);
-
-		$urls = array_unique( $urls );
-
-		return array_values( $urls );
-	}
-
-	/**
-	 * Remap URLs host.
-	 *
-	 * @param $url
-	 *
-	 * @return string
-	 */
-	private function remap_host( $url ) {
-		$old_url   = $url;
-		$url_parts = parse_url( $url );
-
-		if ( ! isset( $url_parts['host'] ) ) {
-			return $url;
-		}
-		if ( $url_parts['host'] !== 'demo.themeisle.com' ) {
-			return $url;
-		}
-		$url_parts['path'] = preg_split( '/\//', $url_parts['path'] );
-		$url_parts['path'] = array_slice( $url_parts['path'], - 3 );
-
-		$uploads_dir = wp_get_upload_dir();
-		$uploads_url = $uploads_dir['baseurl'];
-
-		$new_url = esc_url( $uploads_url . '/' . join( '/', $url_parts['path'] ) );
-
-		return str_replace( $old_url, $new_url, $url );
 	}
 }

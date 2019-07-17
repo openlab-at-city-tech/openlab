@@ -106,4 +106,13 @@ function hestia_after_footer_trigger() {
 	do_action( 'hestia_after_footer_hook' );
 }
 
+if ( ! function_exists( 'wp_body_open' ) ) {
+	/**
+	 * Body open hook.
+	 */
+	function wp_body_open() {
+		do_action( 'wp_body_open' );
+	}
+}
+
 require_once( 'hooks-front-page.php' );

@@ -3,10 +3,10 @@
 	background-image: url(../images/logo.png);
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-size: 70%;
+	background-size: 80%;
 	padding: 0;
 	width: 100px;
-	height: 100px;
+	height: 70px;
 }
 
 .ti-about-header-text {
@@ -203,7 +203,7 @@
 .badge-action-count {
 	display: inline-block;
 	z-index: 26;
-	margin: 5px 0 0 5px;
+	margin-left: 5px;
 	padding: 0 6px;
 	border-radius: 10px;
 	color: #fff;
@@ -443,25 +443,26 @@
 
 .about-footer-col{
 	background: #fff;
-	margin: 0;
 	border: 1px solid #ccc;
 	flex-grow: 1;
 	flex-basis: 0;
-	margin-bottom: 20px;
+	margin: 0 0 20px;
+	flex-direction: column;
+	justify-content: flex-start!important;
 }
 
 .about-footer-col h4{
-	max-width:100%;
-	width: 100%;
 	border-bottom: 1px solid #eeeeee;
 	padding: 8px 12px;
-	display: inline-table;
-	margin: 0 0 1.33em;
+	margin: 0;
 }
 
 .about-footer-col .inside{
 	padding: 0 12px 12px;
-	width: 100%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	justify-self: inherit;
 }
 
 .about-footer-col .inside a{

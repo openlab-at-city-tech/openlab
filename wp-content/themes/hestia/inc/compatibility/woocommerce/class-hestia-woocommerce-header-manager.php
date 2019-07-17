@@ -36,6 +36,7 @@ class Hestia_Woocommerce_Header_Manager extends Hestia_Abstract_Main {
 		}
 
 		if ( 'classic-blog' === $layout ) {
+			add_filter( 'hestia_boxed_layout', '__return_empty_string' );
 			return false;
 		}
 

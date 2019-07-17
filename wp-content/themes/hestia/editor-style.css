@@ -882,6 +882,10 @@ h2.hestia-title {
   color: #999999;
 }
 
+.card-description.entry-content {
+  color: #3C4858;
+}
+
 .subscribe-line-image .subscribe-description {
   color: #efefef;
 }

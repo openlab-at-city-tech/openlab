@@ -65,12 +65,11 @@
 		 */
 		manipulateDom: function () {
 			var editor = $( '.editor-styles-wrapper' );
-			var blockList = $( '.editor-styles-wrapper  > .editor-writing-flow > div > div > .editor-block-list__layout' );
+			var blockList = $( '.editor-styles-wrapper .editor-block-list__layout' );
 			var classes = 'hestia-gtb ' + ' header-' + hestiaGtb.headerLayout + ' sidebar-' + hestiaGtb.sidebarLayout;
 
 			// Add classes.
 			$( editor ).addClass( classes );
-
 			$( blockList ).prev().addClass( 'hestia-featured-background title-container' );
 
 			$( '.editor-styles-wrapper > .editor-writing-flow > div:first-child > div' ).wrap( '<div class="hestia-writing-flow-inside"></div>' );

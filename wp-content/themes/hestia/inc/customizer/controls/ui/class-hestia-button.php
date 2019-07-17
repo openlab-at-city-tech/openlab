@@ -54,6 +54,13 @@ class Hestia_Button extends WP_Customize_Control {
 	public $link = '';
 
 	/**
+	 * Control description.
+	 *
+	 * @var string
+	 */
+	public $description = '';
+
+	/**
 	 * Hestia_Button constructor.
 	 *
 	 * @param WP_Customize_Manager $manager Customizer manager.
@@ -73,6 +80,9 @@ class Hestia_Button extends WP_Customize_Control {
 	public function render_content() {
 		if ( ! empty( $this->label ) ) {
 			echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
+		}
+		if ( ! empty( $this->description ) ) {
+			echo '<span class="customize-control-description">' . esc_html( $this->description ) . '</span>';
 		}
 		if ( ! empty( $this->button_text ) ) {
 

@@ -27,3 +27,7 @@ if ( TI_ONBOARDING_DISABLED === true ) {
 if ( ! class_exists( 'Themeisle_Onboarding' ) ) {
 	require_once dirname( __FILE__ ) . '/class-themeisle-onboarding.php';
 }
+
+if ( ! class_exists( 'Themeisle_OB_WP_Import_Logger' ) ) {
+	require_once dirname( __FILE__ ) . '/includes/importers/helpers/class-themeisle-ob-import-logger.php';
+}

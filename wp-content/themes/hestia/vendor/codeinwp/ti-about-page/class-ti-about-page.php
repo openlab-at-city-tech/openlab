@@ -87,7 +87,7 @@ class Ti_About_Page {
 	 * Based on visibility flag the plugin should be shown/hidden in recommended_plugins tab
 	 */
 	public function set_recommended_plugins_visibility() {
-		$recommended_plugins = get_option('ti_about_recommended_plugins');
+		$recommended_plugins = get_theme_mod('ti_about_recommended_plugins');
 		if( !empty($recommended_plugins) ){
 			return;
 		}
@@ -96,7 +96,7 @@ class Ti_About_Page {
 		foreach ( $required_plugins as $slug => $req_plugin ) {
 			$required_plugins_visbility[ $slug ] = 'visible';
 		}
-		update_option( 'ti_about_recommended_plugins', $required_plugins_visbility );
+		set_theme_mod( 'ti_about_recommended_plugins', $required_plugins_visbility );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Ti_About_Page {
 
 		$nb_of_actions       = 0;
 		$actions_left        = 0;
-		$recommended_plugins = get_option( 'ti_about_recommended_plugins' );
+		$recommended_plugins = get_theme_mod( 'ti_about_recommended_plugins' );
 
 		if ( ! empty( $recommended_plugins ) ) {
 			foreach ( $recommended_plugins as $slug => $visibility ) {
@@ -196,7 +196,7 @@ class Ti_About_Page {
 			return;
 		}
 
-		wp_enqueue_style( 'ti-about-style', TI_ABOUT_PAGE_URL . '/css/style.css', array(), TI_ABOUT_PAGE_VERSION );
+		wp_enqueue_style( 'ti-about-style', TI_ABOUT_PAGE_URL . 'css/style.css', array(), TI_ABOUT_PAGE_VERSION );
 
 		wp_register_script(
 			'ti-about-scripts',
@@ -233,12 +233,12 @@ class Ti_About_Page {
 		if ( ! wp_verify_nonce( $nonce, 'ti-about-nonce' ) ) {
 			return;
 		}
-		$recommended_plugins = get_option( 'ti_about_recommended_plugins' );
+		$recommended_plugins = get_theme_mod( 'ti_about_recommended_plugins' );
 
 		$plugin_to_update                         = $_POST['slug'];
 		$recommended_plugins[ $plugin_to_update ] = 'hidden';
 
-		update_option( 'ti_about_recommended_plugins', $recommended_plugins );
+		set_theme_mod( 'ti_about_recommended_plugins', $recommended_plugins );
 
 		$required_actions_left = array( 'required_actions' => $this->get_recommended_actions_left() );
 		wp_send_json( $required_actions_left );

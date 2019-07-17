@@ -233,7 +233,7 @@ class Hestia_Public {
 	}
 
 	/**
-	 * Maybe enqueue Parallax Script
+	 * Maybe enqueue Parallax Script.
 	 */
 	private function maybe_enqueue_parallax() {
 		if ( ! Hestia_First_Front_Page_Section::should_display_parallax() ) {
@@ -435,6 +435,7 @@ class Hestia_Public {
 		add_theme_support( 'starter-content', $this->get_starter_content() );
 		add_theme_support( 'themeisle-demo-import', $this->get_ti_demo_content_support_data() );
 		add_theme_support( 'align-wide' );
+		add_theme_support( 'header-footer-elementor' );
 
 		/**
 		 * Add support for wide alignments.
@@ -502,67 +503,6 @@ class Hestia_Public {
 	}
 
 	/**
-	 * Add new Gutenberg templates on Otter plugin.
-	 *
-	 * @return array
-	 */
-	function add_gutenberg_templates( $templates_list ) {
-		$current_theme = wp_get_theme()->Name;
-
-		$templates = array(
-			array(
-				'title'          => '',
-				'type'           => 'block',
-				'author'         => $current_theme,
-				'keywords'       => array( 'big title', 'header' ),
-				'categories'     => array( 'header' ),
-				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/big-title/template.json',
-				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/big-title/screenshot.png',
-			),
-			array(
-				'title'          => '',
-				'type'           => 'block',
-				'author'         => $current_theme,
-				'keywords'       => array( 'features', 'services', 'icons' ),
-				'categories'     => array( 'content' ),
-				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/features/template.json',
-				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/features/screenshot.png',
-			),
-			array(
-				'title'          => '',
-				'type'           => 'block',
-				'author'         => $current_theme,
-				'keywords'       => array( 'about', 'description' ),
-				'categories'     => array( 'content' ),
-				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/about/template.json',
-				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/about/screenshot.png',
-			),
-			array(
-				'title'          => '',
-				'type'           => 'block',
-				'author'         => $current_theme,
-				'keywords'       => array( 'testimonial', 'clients', 'customer' ),
-				'categories'     => array( 'content' ),
-				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/clients/template.json',
-				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/clients/screenshot.png',
-			),
-			array(
-				'title'          => '',
-				'type'           => 'block',
-				'author'         => $current_theme,
-				'keywords'       => array( 'team', 'people' ),
-				'categories'     => array( 'content' ),
-				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/team/template.json',
-				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/team/screenshot.png',
-			),
-		);
-
-		$list = array_merge( $templates, $templates_list );
-
-		return $list;
-	}
-
-	/**
 	 * Get the starter content.
 	 *
 	 * @return array starter content.
@@ -615,7 +555,8 @@ class Hestia_Public {
 	 * @return array
 	 */
 	private function get_ti_demo_content_support_data() {
-		$theme_name = wp_get_theme()->Name;
+
+		$theme_name = apply_filters( 'ti_wl_theme_name', wp_get_theme()->Name );
 
 		$onboarding_sites = array(
 			'editors'     => array(
@@ -640,28 +581,32 @@ class Hestia_Public {
 						'url'   => 'https://demo.themeisle.com/hestia-vet-center',
 						'title' => 'Vet Center Demo',
 					),
+					'hestia-zelle'         => array(
+						'url'   => 'https://demo.themeisle.com/hestia-zelle',
+						'title' => 'Agency Travel Demo',
+					),
 				),
 			),
 			'upsell'      => array(
 				'elementor' => array(
 					'hestia-lawyers'     => array(
 						'url'        => 'https://demo.themeisle.com/hestia-lawyers/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2018/08/hestia-lawyers-demo-screenshot.png',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/hestia-lawyers-demo-screenshot-big.png',
 						'title'      => 'Lawyers Demo',
 					),
 					'hestia-travel'      => array(
 						'url'        => 'https://demo.themeisle.com/hestia-travel/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2018/08/hestia-travel-demo-screenshot.png',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/hestia-travel-demo-screenshot-big.png',
 						'title'      => 'Travel Agency Demo',
 					),
 					'hestia-coffee-shop' => array(
 						'url'        => 'https://demo.themeisle.com/hestia-coffee-shop/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2018/08/hestia-coffee-shop-demo-screenshot.png',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/hestia-coffee-shop-demo-screenshot-big.png',
 						'title'      => 'Coffee Shop Demo',
 					),
 					'hestia-gym'         => array(
 						'url'        => 'https://demo.themeisle.com/hestia-gym/',
-						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2018/08/hestia-gym-demo-screenshot.png',
+						'screenshot' => 'https://demo.themeisle.com/hestia-pro-demo-content/wp-content/uploads/sites/105/2019/03/hestia-gym-demo-screenshot-big.png',
 						'title'      => 'Gym Demo',
 					),
 				),
@@ -762,6 +707,68 @@ class Hestia_Public {
 		if ( function_exists( 'hestia_features_register_strings' ) ) {
 			add_action( 'after_setup_theme', 'hestia_features_register_strings', 11 );
 		}
+	}
+
+	/**
+	 * Add new Gutenberg templates on Otter plugin.
+	 *
+	 * @return array
+	 */
+	function add_gutenberg_templates( $templates_list ) {
+
+		$current_theme = apply_filters( 'ti_wl_theme_name', wp_get_theme()->Name );
+
+		$templates = array(
+			array(
+				'title'          => '',
+				'type'           => 'block',
+				'author'         => $current_theme,
+				'keywords'       => array( 'big title', 'header' ),
+				'categories'     => array( 'header' ),
+				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/big-title/template.json',
+				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/big-title/screenshot.png',
+			),
+			array(
+				'title'          => '',
+				'type'           => 'block',
+				'author'         => $current_theme,
+				'keywords'       => array( 'features', 'services', 'icons' ),
+				'categories'     => array( 'content' ),
+				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/features/template.json',
+				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/features/screenshot.png',
+			),
+			array(
+				'title'          => '',
+				'type'           => 'block',
+				'author'         => $current_theme,
+				'keywords'       => array( 'about', 'description' ),
+				'categories'     => array( 'content' ),
+				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/about/template.json',
+				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/about/screenshot.png',
+			),
+			array(
+				'title'          => '',
+				'type'           => 'block',
+				'author'         => $current_theme,
+				'keywords'       => array( 'testimonial', 'clients', 'customer' ),
+				'categories'     => array( 'content' ),
+				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/clients/template.json',
+				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/clients/screenshot.png',
+			),
+			array(
+				'title'          => '',
+				'type'           => 'block',
+				'author'         => $current_theme,
+				'keywords'       => array( 'team', 'people' ),
+				'categories'     => array( 'content' ),
+				'template_url'   => get_template_directory_uri() . '/gutenberg/blocks/team/template.json',
+				'screenshot_url' => get_template_directory_uri() . '/gutenberg/blocks/team/screenshot.png',
+			),
+		);
+
+		$list = array_merge( $templates, $templates_list );
+
+		return $list;
 	}
 
 	/**

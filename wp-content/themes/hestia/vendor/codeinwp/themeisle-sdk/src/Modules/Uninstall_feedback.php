@@ -127,6 +127,12 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * Loads the additional resources
 	 */
 	function load_resources() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || ! in_array( $screen->id, array( 'theme-install', 'plugins' ) ) ) {
+			return;
+		}
+
 		add_thickbox();
 
 		$id = $this->product->get_key() . '_deactivate';

@@ -1,3 +1,94 @@
+## [1.4.1](https://github.com/Codeinwp/ti-onboarding/compare/v1.4.0...v1.4.1) (2019-05-24)
+
+
+### Bug Fixes
+
+* add option for plugins import ([793b063](https://github.com/Codeinwp/ti-onboarding/commit/793b063))
+* disable otter redirect [Codeinwp/neve[#539](https://github.com/Codeinwp/ti-onboarding/issues/539)] ([8898bd0](https://github.com/Codeinwp/ti-onboarding/commit/8898bd0))
+
+# [1.4.0](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.6...v1.4.0) (2019-05-07)
+
+
+### Bug Fixes
+
+* [#329](https://github.com/Codeinwp/ti-onboarding/issues/329) zelle import ([e2b978d](https://github.com/Codeinwp/ti-onboarding/commit/e2b978d))
+* [#329](https://github.com/Codeinwp/ti-onboarding/issues/329) zelle import ([a482b77](https://github.com/Codeinwp/ti-onboarding/commit/a482b77))
+* phpcbf ([dfc04ee](https://github.com/Codeinwp/ti-onboarding/commit/dfc04ee))
+
+
+### Features
+
+* allow wp options importing ([56369ef](https://github.com/Codeinwp/ti-onboarding/commit/56369ef))
+
+## [1.3.6](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.5...v1.3.6) (2019-04-22)
+
+
+### Bug Fixes
+
+* theme check issues ([cf7bfa3](https://github.com/Codeinwp/ti-onboarding/commit/cf7bfa3))
+* theme check issues ([3d5a425](https://github.com/Codeinwp/ti-onboarding/commit/3d5a425))
+
+## [1.3.5](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.4...v1.3.5) (2019-04-19)
+
+
+### Bug Fixes
+
+* require statements ([a498731](https://github.com/Codeinwp/ti-onboarding/commit/a498731))
+
+## [1.3.4](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.3...v1.3.4) (2019-04-11)
+
+
+### Bug Fixes
+
+* zelle import ([22a1799](https://github.com/Codeinwp/ti-onboarding/commit/22a1799))
+* zelle import ([65f8aa9](https://github.com/Codeinwp/ti-onboarding/commit/65f8aa9))
+
+## [1.3.3](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.2...v1.3.3) (2019-04-09)
+
+
+### Bug Fixes
+
+* disable image sizes generation on import [[#47](https://github.com/Codeinwp/ti-onboarding/issues/47)] ([e75a42d](https://github.com/Codeinwp/ti-onboarding/commit/e75a42d))
+* orphaned button [[#46](https://github.com/Codeinwp/ti-onboarding/issues/46)] ([222cd2f](https://github.com/Codeinwp/ti-onboarding/commit/222cd2f))
+
+## [1.3.2](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.1...v1.3.2) (2019-04-05)
+
+
+### Performance Improvements
+
+* bump requests timeout ([7bf12b6](https://github.com/Codeinwp/ti-onboarding/commit/7bf12b6))
+* remove  param from requests ([ee3b5df](https://github.com/Codeinwp/ti-onboarding/commit/ee3b5df))
+
+## [1.3.1](https://github.com/Codeinwp/ti-onboarding/compare/v1.3.0...v1.3.1) (2019-04-01)
+
+
+### Bug Fixes
+
+* theme mod image urls import issue ([d9296ff](https://github.com/Codeinwp/ti-onboarding/commit/d9296ff))
+
+# [1.3.0](https://github.com/Codeinwp/ti-onboarding/compare/v1.2.1...v1.3.0) (2019-03-18)
+
+
+### Bug Fixes
+
+* don't import menu items if post/page isn't imported [[#38](https://github.com/Codeinwp/ti-onboarding/issues/38)] ([f57c347](https://github.com/Codeinwp/ti-onboarding/commit/f57c347))
+* items layout when not all rows are full [[#31](https://github.com/Codeinwp/ti-onboarding/issues/31)] ([149563f](https://github.com/Codeinwp/ti-onboarding/commit/149563f))
+* plugins installing even when they shouldn't ([f44f21f](https://github.com/Codeinwp/ti-onboarding/commit/f44f21f))
+
+
+### Features
+
+* allow default off plugiins, exclude shop pages when no woocommerce ([e21e1a5](https://github.com/Codeinwp/ti-onboarding/commit/e21e1a5))
+* better ui/ux for sites library [[#37](https://github.com/Codeinwp/ti-onboarding/issues/37), [#36](https://github.com/Codeinwp/ti-onboarding/issues/36)] ([72632e4](https://github.com/Codeinwp/ti-onboarding/commit/72632e4))
+
+## [1.2.1](https://github.com/Codeinwp/ti-onboarding/compare/v1.2.0...v1.2.1) (2019-03-07)
+
+
+### Bug Fixes
+
+* allow import if last front page was trashed ([17d921a](https://github.com/Codeinwp/ti-onboarding/commit/17d921a))
+* allow jpg screenshots ([8f2edf7](https://github.com/Codeinwp/ti-onboarding/commit/8f2edf7))
+
 # [1.2.0](https://github.com/Codeinwp/ti-onboarding/compare/v1.1.1...v1.2.0) (2019-03-01)
 
 

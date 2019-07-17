@@ -5,13 +5,13 @@ Theme URI:      https://themeisle.com/themes/hestia/
 Author:         ThemeIsle
 Author URI:     https://themeisle.com
 Description:    Hestia is a modern WordPress theme for professionals. It fits creative business, small businesses (restaurants, wedding planners, sport/medical shops), startups, corporate businesses, online agencies and firms, portfolios, ecommerce (WooCommerce), and freelancers. It has a multipurpose one-page design, widgetized footer, blog/news page and a clean look, is compatible with: Flat Parallax Slider, Photo Gallery, Travel Map and Elementor Page Builder . The theme is responsive, WPML, Retina ready, SEO friendly, and uses Material Kit for design.
-Version:        2.3.0
+Version:        2.4.5
 License:        GNU General Public License v2 or later
 License URI:    http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:    hestia
 WordPress Available:  yes
 Requires License:    no
-Tags: blog, custom-logo, portfolio, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready
+Tags: blog, custom-logo, portfolio, e-commerce, rtl-language-support, post-formats, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, editor-style, footer-widgets, left-sidebar, right-sidebar, wide-blocks
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
@@ -1050,6 +1050,10 @@ h2.hestia-title {
 
 .description, .card-description, .footer-big {
   color: #999999;
+}
+
+.card-description.entry-content {
+  color: #3C4858;
 }
 
 .subscribe-line-image .subscribe-description {
@@ -4433,7 +4437,7 @@ body.product-card-style-plain .hestia-shop {
 .hestia-work .col-md-6 .card-background .content {
   padding-top: 20%;
 }
-.hestia-work .card-background:hover a {
+.hestia-work .card-background:hover a:hover {
   opacity: 1;
 }
 .hestia-work .card-background:hover .content {
@@ -4465,6 +4469,7 @@ body.product-card-style-plain .hestia-shop {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  z-index: 1;
 }
 
 .hestia-portfolio-modal {

@@ -242,6 +242,10 @@ class Hestia_Blog_Post_Layout {
 	private function get_theme_excerpt( $type ) {
 		global $post;
 
+		if ( is_post_type_archive() ) {
+			return get_the_excerpt();
+		}
+
 		$content = $this->get_post_content();
 
 		/**

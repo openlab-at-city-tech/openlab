@@ -93,6 +93,7 @@ class Hestia_Core {
 				'elementor-compatibility',
 				'beaver-builder-compatibility',
 				'wpbakery-compatibility',
+				'header-footer-elementor',
 				'admin-notices-manager',
 				'child',
 				'child-customizer',

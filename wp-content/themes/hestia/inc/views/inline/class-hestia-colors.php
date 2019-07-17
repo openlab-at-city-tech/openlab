@@ -147,15 +147,15 @@ class Hestia_Colors extends Hestia_Abstract_Main {
 		.everest-forms button[type=submit].everest-forms-submit-button:hover,
  		.everest-forms button[type=submit].everest-forms-submit-button:focus,
  		.everest-forms button[type=submit].everest-forms-submit-button:active {
-			-webkit-box-shadow: 0 14px 26px -12px' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
+			-webkit-box-shadow: 0 14px 26px -12px ' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
 		    box-shadow: 0 14px 26px -12px ' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
 			color: #fff;
 		}
 		
 		.form-group.is-focused .form-control {
-		background-image: -webkit-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),-webkit-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
-			background-image: -webkit-linear-gradient(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . '),-webkit-linear-gradient(#d2d2d2,#d2d2d2);
-			background-image: linear-gradient(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . '),linear-gradient(#d2d2d2,#d2d2d2);
+			background-image: -webkit-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),-webkit-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
+			background-image: -webkit-linear-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),-webkit-linear-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
+			background-image: linear-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),linear-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
 		}
 		
 		.navbar:not(.navbar-transparent) li:not(.btn):hover > a,
@@ -210,8 +210,8 @@ class Hestia_Colors extends Hestia_Abstract_Main {
 		.woocommerce div.product form.cart .variations select:focus,
 		.woocommerce .woocommerce-ordering select:focus {
 			background-image: -webkit-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),-webkit-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
-			background-image: -webkit-linear-gradient(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . '),-webkit-linear-gradient(#d2d2d2,#d2d2d2);
-			background-image: linear-gradient(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . '),linear-gradient(#d2d2d2,#d2d2d2);
+			background-image: -webkit-linear-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),-webkit-linear-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
+			background-image: linear-gradient(linear,left top, left bottom,from(' . esc_html( $color_accent ) . '),to(' . esc_html( $color_accent ) . ')),linear-gradient(linear,left top, left bottom,from(#d2d2d2),to(#d2d2d2));
 		}
 
 		.woocommerce div.product .woocommerce-tabs ul.tabs.wc-tabs li.active a {
@@ -337,7 +337,7 @@ class Hestia_Colors extends Hestia_Abstract_Main {
 		.woocommerce-button:hover,
 		.woocommerce-Button:hover,
 		div.woocommerce table.my_account_orders .button:hover {
-			-webkit-box-shadow: 0 14px 26px -12px' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
+			-webkit-box-shadow: 0 14px 26px -12px ' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
 		    box-shadow: 0 14px 26px -12px ' . hestia_hex_rgba( $color_accent, '0.42' ) . ',0 4px 23px 0 rgba(0,0,0,0.12),0 8px 10px -5px ' . hestia_hex_rgba( $color_accent, '0.2' ) . ';
 			color: #fff;
 		}

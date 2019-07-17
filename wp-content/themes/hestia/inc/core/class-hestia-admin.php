@@ -22,6 +22,10 @@ class Hestia_Admin {
 	 * Add the about page.
 	 */
 	public function do_about_page() {
+		$theme_args       = wp_get_theme();
+		$this->theme_name = apply_filters( 'ti_wl_theme_name', $theme_args->__get( 'Name' ) );
+		$this->theme_slug = $theme_args->__get( 'stylesheet' );
+
 		/*
 		 * About page instance
 		 */
@@ -31,6 +35,26 @@ class Hestia_Admin {
 				'notice_class'    => 'ti-welcome-notice updated',
 				'dismiss_option'  => 'hestia_notice_dismissed',
 				'render_callback' => array( $this, 'welcome_notice_content' ),
+			),
+			'footer_messages'     => array(
+				'type'     => 'custom',
+				'messages' => array(
+					array(
+						// translators: %s - theme name
+						'heading'   => sprintf( __( '%s Community', 'hestia' ), $this->theme_name ),
+						// translators: %s - theme name
+						'text'      => sprintf( __( 'Join the community of %s users. Get connected, share opinions, ask questions and help each other!', 'hestia' ), $this->theme_name ),
+						'link_text' => __( 'Join our Facebook Group', 'hestia' ),
+						'link'      => apply_filters( 'ti_wl_agency_url', 'https://www.facebook.com/groups/2024469201114053/' ),
+					),
+					array(
+						'heading'   => __( 'Leave us a review', 'hestia' ),
+						// translators: %s - theme name
+						'text'      => sprintf( __( 'Are you are enjoying %s? We would love to hear your feedback.', 'hestia' ), $this->theme_name ),
+						'link_text' => __( 'Submit a review', 'hestia' ),
+						'link'      => apply_filters( 'ti_wl_agency_url', 'https://wordpress.org/support/theme/hestia/reviews/#new-post' ),
+					),
+				),
 			),
 			'getting_started'     => array(
 				'type'    => 'columns-3',
@@ -105,7 +129,7 @@ class Hestia_Admin {
 						'text'   => esc_html__( 'We want to make sure you have the best experience using Hestia, and that is why we have gathered all the necessary information here for you. We hope you will enjoy using Hestia as much as we enjoy creating great products.', 'hestia' ),
 						'button' => array(
 							'label'     => esc_html__( 'Contact Support', 'hestia' ),
-							'link'      => esc_url( 'https://themeisle.com/contact/' ),
+							'link'      => apply_filters( 'hestia_contact_support_link', 'https://wordpress.org/support/theme/hestia/' ),
 							'is_button' => true,
 							'blank'     => true,
 						),
@@ -481,7 +505,7 @@ class Hestia_Admin {
 	 */
 	public function welcome_notice_content() {
 		$theme_args      = wp_get_theme();
-		$name            = $theme_args->__get( 'Name' );
+		$name            = apply_filters( 'ti_wl_theme_name', $theme_args->__get( 'Name' ) );
 		$slug            = $theme_args->__get( 'stylesheet' );
 		$notice_template = '
 			<div class="ti-notice-wrapper">

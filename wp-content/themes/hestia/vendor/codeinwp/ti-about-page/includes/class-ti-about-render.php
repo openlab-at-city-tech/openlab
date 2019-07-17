@@ -76,9 +76,9 @@ class TI_About_Render {
 							class="version-container"><?php echo esc_html( $this->theme['version'] ); ?></span></h1>
 			</div>
 			<?php
-			$white_label_options  = get_option( 'ti_white_label_inputs' );
-			$white_label_options  = json_decode( $white_label_options, true );
-			if( empty( $white_label_options['theme_name'] ) ) { ?>
+			$white_label_options = get_option( 'ti_white_label_inputs' );
+			$white_label_options = json_decode( $white_label_options, true );
+			if ( empty( $white_label_options['theme_name'] ) ) { ?>
 				<a href="https://themeisle.com/" class="wp-badge epsilon-welcome-logo"></a>
 				<?php
 			} ?>
@@ -93,7 +93,7 @@ class TI_About_Render {
 
 		echo '<ul class="nav-tab-wrapper wp-clearfix">';
 		foreach ( $this->tabs as $slug => $tab_data ) {
-			if( ! array_key_exists( 'type', $tab_data ) ){
+			if ( ! array_key_exists( 'type', $tab_data ) ) {
 				continue;
 			}
 			if ( $tab_data['type'] === 'recommended_actions' && $this->about_page->get_recommended_actions_left() === 0 ) {
@@ -124,8 +124,9 @@ class TI_About_Render {
 	 * Render tab content
 	 */
 	private function render_tabs_content() {
+//		var_dump( $this->tabs );
 		foreach ( $this->tabs as $slug => $tab_data ) {
-			if( ! array_key_exists( 'type', $tab_data ) ){
+			if ( ! array_key_exists( 'type', $tab_data ) ) {
 				continue;
 			}
 			if ( $slug === 'recommended_actions' && $this->about_page->get_recommended_actions_left() === 0 ) {
@@ -173,7 +174,7 @@ class TI_About_Render {
 			return;
 		}
 
-		$recommended_plugins_visbility = get_option( 'ti_about_recommended_plugins' );
+		$recommended_plugins_visbility = get_theme_mod( 'ti_about_recommended_plugins' );
 
 		foreach ( $plugins_list as $slug => $plugin ) {
 			if ( $recommended_plugins_visbility[ $slug ] === 'hidden' || Ti_About_Plugin_Helper::instance()->check_plugin_state( $slug ) === 'deactivate' ) {
@@ -283,7 +284,9 @@ class TI_About_Render {
 					echo '<h2>' . str_replace( '#', '', $release['title'] ) . ' </h2 > ';
 				}
 				if ( ! empty( $release['changes'] ) ) {
-					echo implode( '<br/>', $release['changes'] );
+					foreach ( $release['changes'] as $change ) {
+						echo esc_html( $change ) . '<br/>';
+					}
 				}
 			}
 			echo '</div>';

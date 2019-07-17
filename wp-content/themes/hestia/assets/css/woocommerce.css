@@ -1560,10 +1560,14 @@ div[id^=woocommerce_layered_nav_filters].widget li a:before {
 --------------------------------------------------------------*/
 /* Kepp the navbar with the logo when Distraction free option is enabled */
 @media (min-width: 769px) {
-  .woocommerce-checkout .navbar:not(.full-screen-menu).navbar-scroll-point.hestia_center .navbar-header {
+  .woocommerce-checkout .navbar:not(.full-screen-menu).navbar-scroll-point.hestia_center .navbar-header .title-logo-wrapper {
     display: block !important;
   }
 }
+.hestia-checkout-no-distraction .title-logo-wrapper {
+  pointer-events: none;
+}
+
 .woocommerce .col2-set,
 .woocommerce-page .col2-set,
 .woocommerce-checkout .col2-set {

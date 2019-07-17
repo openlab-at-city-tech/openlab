@@ -1,3 +1,18 @@
+## [3.0.6](https://github.com/Codeinwp/themeisle-sdk/compare/v3.0.5...v3.0.6) (2019-05-21)
+
+
+### Bug Fixes
+
+* build php version for deployment stage ([a785699](https://github.com/Codeinwp/themeisle-sdk/commit/a785699))
+* uninstall feedback should load only on the proper pages ([259e78f](https://github.com/Codeinwp/themeisle-sdk/commit/259e78f))
+
+## [3.0.5](https://github.com/Codeinwp/themeisle-sdk/compare/v3.0.4...v3.0.5) (2019-03-07)
+
+
+### Bug Fixes
+
+* dashboard widget issues and recommended module inconsistency fix [#50](https://github.com/Codeinwp/themeisle-sdk/issues/50), [#49](https://github.com/Codeinwp/themeisle-sdk/issues/49), [#47](https://github.com/Codeinwp/themeisle-sdk/issues/47) ([757eb02](https://github.com/Codeinwp/themeisle-sdk/commit/757eb02))
+
 ## [3.0.4](https://github.com/Codeinwp/themeisle-sdk/compare/v3.0.3...v3.0.4) (2019-01-28)
 
 
