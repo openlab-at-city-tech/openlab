@@ -5,6 +5,8 @@
  * @package query-monitor
  */
 
+define( 'QM_ERROR_FATALS', E_ERROR | E_PARSE | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR );
+
 class QM_Collector_PHP_Errors extends QM_Collector {
 
 	public $id               = 'php_errors';
@@ -12,7 +14,6 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 	private $error_reporting = null;
 	private $display_errors  = null;
 	private static $unexpected_error;
-	private static $wordpress_couldnt;
 
 	public function name() {
 		return __( 'PHP Errors', 'query-monitor' );
@@ -24,7 +25,7 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 		}
 
 		parent::__construct();
-		set_error_handler( array( $this, 'error_handler' ) );
+		set_error_handler( array( $this, 'error_handler' ), ( E_ALL ^ QM_ERROR_FATALS ) );
 		register_shutdown_function( array( $this, 'shutdown_handler' ) );
 
 		$this->error_reporting = error_reporting();
@@ -89,18 +90,18 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 		if ( ! isset( self::$unexpected_error ) ) {
 			// These strings are from core. They're passed through `__()` as variables so they get translated at runtime
 			// but do not get seen by GlotPress when it populates its database of translatable strings for QM.
-			$unexpected_error        = 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/">support forums</a>.';
-			$wordpress_couldnt       = '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)';
-			self::$unexpected_error  = call_user_func( '__', $unexpected_error );
-			self::$wordpress_couldnt = call_user_func( '__', $wordpress_couldnt );
+			$unexpected_error = 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.';
+			$wordpress_forums = 'https://wordpress.org/support/forums/';
+
+			self::$unexpected_error = sprintf(
+				call_user_func( '__', $unexpected_error ),
+				call_user_func( '__', $wordpress_forums )
+			);
 		}
 
 		// Intentionally skip reporting these core warnings. They're a distraction when developing offline.
 		// The failed HTTP request will still appear in QM's output so it's not a big problem hiding these warnings.
-		if ( self::$unexpected_error === $message ) {
-			return false;
-		}
-		if ( self::$unexpected_error . ' ' . self::$wordpress_couldnt === $message ) {
+		if ( false !== strpos( $message, self::$unexpected_error ) ) {
 			return false;
 		}
 
@@ -126,12 +127,12 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 		}
 
 		/**
-		 * Filters the PHP error handler return value. This can be used to control whether or not additional error
-		 * handlers are called after Query Monitor's.
+		 * Filters the PHP error handler return value. This can be used to control whether or not the default error
+		 * handler is called after Query Monitor's.
 		 *
 		 * @since 2.7.0
 		 *
-		 * @param bool $return_value Error handler return value. Default true.
+		 * @param bool $return_value Error handler return value. Default false.
 		 */
 		return apply_filters( 'qm/collect/php_errors_return_value', false );
 
@@ -145,43 +146,27 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 			return;
 		}
 
-		if ( empty( $e ) || ! ( $e['type'] & ( E_ERROR | E_PARSE | E_COMPILE_ERROR | E_COMPILE_WARNING | E_USER_ERROR | E_RECOVERABLE_ERROR ) ) ) {
+		if ( empty( $e ) || ! ( $e['type'] & QM_ERROR_FATALS ) ) {
 			return;
 		}
 
 		if ( $e['type'] & E_RECOVERABLE_ERROR ) {
 			$error = 'Catchable fatal error';
-		} elseif ( $e['type'] & E_COMPILE_WARNING ) {
-			$error = 'Warning';
 		} else {
 			$error = 'Fatal error';
 		}
 
-		if ( function_exists( 'xdebug_print_function_stack' ) ) {
-
-			xdebug_print_function_stack( sprintf( '%1$s: %2$s in %3$s on line %4$d. Output triggered ',
-				$error,
-				$e['message'],
-				$e['file'],
-				$e['line']
-			) );
-
-		} else {
-
-			printf( // WPCS: XSS ok.
-				'<br /><b>%1$s</b>: %2$s in <b>%3$s</b> on line <b>%4$d</b><br />',
-				htmlentities( $error ),
-				htmlentities( $e['message'] ),
-				htmlentities( $e['file'] ),
-				intval( $e['line'] )
-			);
-
-		}
+		printf( // WPCS: XSS ok.
+			'<br><b>%1$s</b>: %2$s in <b>%3$s</b> on line <b>%4$d</b><br>',
+			htmlentities( $error ),
+			nl2br( htmlentities( $e['message'] ), false ),
+			htmlentities( $e['file'] ),
+			intval( $e['line'] )
+		);
 
 	}
 
-	public function tear_down() {
-		parent::tear_down();
+	public function post_process() {
 		ini_set( 'display_errors', $this->display_errors );
 		restore_error_handler();
 	}
@@ -322,11 +307,12 @@ class QM_Collector_PHP_Errors extends QM_Collector {
 	}
 
 	/**
-	 * Checks if the file path is within the specified plugin. This is
-	 * used to scope an error's file path to a plugin.
+	 * Checks if the component is of the given type and has the given context. This is
+	 * used to scope an error to a plugin or theme.
 	 *
-	 * @param string $plugin_name The name of the plugin
-	 * @param string $file_path The full path to the file
+	 * @param object $component         The component.
+	 * @param string $component_type    The component type for comparison.
+	 * @param string $component_context The component context for comparison.
 	 * @return bool
 	 */
 	public function is_affected_component( $component, $component_type, $component_context ) {
