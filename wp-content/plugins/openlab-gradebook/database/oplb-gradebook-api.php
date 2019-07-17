@@ -1104,7 +1104,7 @@ class oplb_gradebook_api
 
         header('Content-type: application/csv');
         header('Content-Transfer-Encoding: UTF-8');
-        $filename = str_replace(" ", "_", $course['name'] . '_' . $gbid);
+        $filename = str_replace(" ", "_", get_bloginfo('name')."_".$course['name']);
         header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 
         // create a file pointer connected to the output stream
