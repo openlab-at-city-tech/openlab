@@ -117,7 +117,12 @@ fieldset {
 }
 
 
-button, input[type="button"], input[type="reset"], input[type="submit"], .button, div.wp-block-file__button a {
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.button,
+div.wp-block-file__button a {
     background-color: #e3f2fa;
     color: #444;
 }
@@ -566,6 +571,7 @@ body .site-title a {
 .education-pro-blue button,
 .education-pro-blue a.button,
 .education-pro-blue input[type="submit"],
+.education-pro-blue a.wp-block-file__button,
 .education-pro-blue .footer-widgets a.button,
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
