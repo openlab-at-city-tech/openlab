@@ -399,6 +399,21 @@ function olgc_prevent_edit_comment_for_olgc_comments( $caps, $cap, $user_id, $ar
 add_filter( 'map_meta_cap', 'olgc_prevent_edit_comment_for_olgc_comments', 10, 4 );
 
 /**
+ * Allows empty comments when a grade is attached.
+ *
+ * Works only in WP 5.0+.
+ */
+function olgc_allow_empty_comment( $allow, $commentdata ) {
+	// Only instructors can do this.
+	if ( ! olgc_is_instructor() ) {
+		return $allow;
+	}
+
+	return ! empty( $_POST['olgc-grade'] );
+}
+add_filter( 'allow_empty_comment', 'olgc_allow_empty_comment', 10, 2 );
+
+/**
  * Prevent private comments from appearing in BuddyPress activity streams.
  *
  * For now, we are going with the sledgehammer of deleting the comment altogether. In the
