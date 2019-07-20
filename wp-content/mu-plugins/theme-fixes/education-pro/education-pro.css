@@ -250,6 +250,11 @@ a.breadcrumb-link {
 	padding-bottom: 1px;
 }
 
+div.entry-content .wp-block-image a {
+	border-bottom: 0;
+	padding-bottom;
+}
+
 .entry-content a:hover,
 .breadcrumb a:hover,
 #ol-print-this-page a:hover,
@@ -580,6 +585,7 @@ body .site-title a {
 
 .education-pro-blue button:hover,
 .education-pro-blue a.button:hover,
+.education-pro-blue a.wp-block-file__button:hover,
 .education-pro-blue .footer-widgets a.button:hover,
 .education-pro-blue .site-footer a.button:hover {
 	background-color: #444;
