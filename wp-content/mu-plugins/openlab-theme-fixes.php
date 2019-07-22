@@ -16,6 +16,7 @@ function openlab_load_theme_fixes() {
 		case 'filtered':
 		case 'hemingway':
 		case 'herothemetrust':
+		case 'koji':
 		case 'motion':
 		case 'openlab-twentysixteen':
 		case 'p2':
@@ -49,6 +50,7 @@ add_action(
 		switch ( $t ) {
 			case 'education-pro' :
 			case 'hemingway':
+			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'twentynineteen':
