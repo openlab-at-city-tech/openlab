@@ -1,0 +1,348 @@
+#jutranslation {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+}
+
+#jutranslation a {
+    text-decoration: none;
+}
+
+/* START WordPress only
+-----------------------------------------------*/
+
+div#jutranslation.wordpress div.control-group table#jutranslations-languages.table.table-striped {
+    width: 80%;
+    text-align: left;
+}
+
+div#jutranslation.wordpress div.control-group table#jutranslations-languages tbody tr td {
+    padding: 0 10px;
+}
+
+div#jutranslation.wordpress div.control-group.edition table {
+    width: 90%;
+}
+
+@media only screen and (min-width: 1920px) {
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(1) {
+        width: 35%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(2) {
+        width: 22%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(3) {
+        width: 22%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(4) {
+        width: 22%;
+    }
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_reference,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_reference,
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_language,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_language,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_filter_override,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_override {
+        min-width: 310px;
+    }
+}
+
+@media only screen and (min-width: 1480px) and (max-width: 1920px) {
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(1) {
+        width: 25%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(2) {
+        width: 22%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(3) {
+        width: 22%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(4) {
+        width: 22%;
+    }
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_reference,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_reference,
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_language,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_language,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_filter_override,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_override {
+        min-width: 250px;
+    }
+}
+
+@media only screen and (min-width: 1230px) and (max-width: 1480px) {
+    div#jutranslation.wordpress div.control-group.edition table {
+        width: 100%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(1) {
+        width: 35%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(2) {
+        width: auto;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(3) {
+        width: auto;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(4) {
+        width: auto;
+    }
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_reference,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_reference,
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_language,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_language,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_filter_override,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_override {
+        min-width: 200px;
+    }
+}
+
+@media only screen and (min-width: 740px) and (max-width: 1230px) {
+    div#jutranslation.wordpress div.control-group.edition table {
+        width: 100%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(1) {
+        width: 35%;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(2) {
+        width: auto;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(3) {
+        width: auto;
+    }
+    #jutranslation.wordpress > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(4) {
+        width: auto;
+    }
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_reference,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_reference,
+    div#jutranslation.wordpress tr.do_table_filters td input.do_table_filter_language,
+    div#jutranslation.wordpress tr.do_table_line td input.do_table_language,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_filter_override,
+    div#jutranslation.wordpress div.control-group.edition td input.do_table_override {
+        min-width: 120px;
+    }
+}
+
+
+/* END WordPress only
+-----------------------------------------------*/
+
+#jutranslations-languages div.original_content a.jutranslation-override,
+#jutranslations-languages div.original_content span a {
+    height: auto;
+    width: auto;
+    border: none;
+    text-shadow: none;
+    box-shadow: none;
+    background-color: #1d6cb0;
+    background: #1d6cb0;
+    border-radius: 2px;
+    padding: 2px 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 35px;
+    margin-right: 5px;
+    transition: all 0.2s ease-in;
+}
+
+#jutranslations-languages div.original_content a.jutranslation-override:hover,
+#jutranslations-languages div.original_content a.jutranslation-override:active,
+#jutranslations-languages div.original_content a.jutranslation-override:focus,
+#jutranslations-languages div.original_content span a:hover,
+#jutranslations-languages div.original_content span a:active,
+#jutranslations-languages div.original_content span a:focus {
+    box-shadow: 1px 1px 12px #ccc;
+    text-decoration: none;
+}
+
+#jutranslations-languages div.original_content a.jutranslation-edition {
+    height: auto;
+    width: auto;
+    border: none;
+    text-shadow: none;
+    box-shadow: none;
+    background-color: #F9A541;
+    background: #F9A541;
+    border-radius: 2px;
+    padding: 2px 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 35px;
+    margin-right: 5px;
+    transition: all 0.2s ease-in;
+}
+
+#jutranslations-languages div.original_content a.jutranslation-edition:hover,
+#jutranslations-languages div.original_content a.jutranslation-edition:active,
+#jutranslations-languages div.original_content a.jutranslation-edition:focus {
+    box-shadow: 1px 1px 12px #ccc;
+    text-decoration: none;
+}
+
+#jutranslations-languages div.original_content a.jutranslation-share {
+    height: auto;
+    width: auto;
+    border: none;
+    text-shadow: none;
+    box-shadow: none;
+    background-color: #7AC143;
+    background: #7AC143;
+    border-radius: 2px;
+    padding: 2px 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 35px;
+    margin-right: 5px;
+    transition: all 0.2s ease-in;
+}
+
+#jutranslations-languages div.original_content a.jutranslation-share:hover,
+#jutranslations-languages div.original_content a.jutranslation-share:active,
+#jutranslations-languages div.original_content a.jutranslation-share:focus {
+    box-shadow: 1px 1px 12px #ccc;
+    text-decoration: none;
+}
+
+#jutranslations-languages thead tr th {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+#jutranslations-languages tbody tr td.current_version,
+#jutranslations-languages tbody tr td div.original_content {
+    font-weight: normal;
+}
+
+#jutranslations-languages tbody tr td {
+    font-weight: bold;
+}
+
+div#jutranslation.wordpress div.control-group p,
+#jutranslation div.control-group div.controls p {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-left: 8px;
+}
+
+#jutranslations-languages tbody tr td {
+    vertical-align: middle;
+}
+
+#jutranslation .do_table_reference_copy,
+#jutranslation .do_table_language_copy,
+#jutranslation .do_table_override_copy {
+    font-size: 15px;
+    padding: 2px 2px 2px 5px;
+    vertical-align: middle;
+}
+
+#jutranslation > div.tab-description.alert.alert-info {
+    display: none;
+}
+
+#jutranslation .do_table_buttons {}
+
+.jutranslation-share.just-added {
+    transition: all 1s ease-in;
+    color: #2167da;
+    font-weight: bold;
+}
+
+#jutranslation tr.do_table_heading td {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+#jutranslation tr.do_table_filters {
+    height: 80px;
+}
+
+#jutranslation div.control-group.edition input {
+    border: 1px solid #ccc;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 5px;
+    margin: 3px 0;
+}
+
+#jutranslation tr.do_table_filters > td:nth-child(1) {
+    vertical-align: middle;
+}
+
+#jutranslation tr.do_table_filters td input.do_table_filter_empty_reference,
+#jutranslation tr.do_table_filters td input.do_table_filter_empty_language,
+#jutranslation tr.do_table_filters td input.do_table_filter_empty_override {
+    margin: 0;
+}
+
+#jutranslation div.control-group.edition-message {
+    background-color: #2DAEF0;
+    padding: 15px;
+    color: #fff;
+    font-size: 15px;
+}
+
+#jutranslation #jutranslation_show_edition,
+#jutranslation #jutranslation_cancel_edition {
+    margin: 10px 5px;
+}
+
+@media only screen and (min-width: 1680px) {
+    #jutranslation > div.control-group.edition > table > tbody > tr.do_table_heading > td:nth-child(1) {
+        min-width: 400px;
+    }
+}
+
+#jutranslation div.control-group.edition table tbody tr td textarea {
+    box-shadow: 1px 1px 12px #ccc;
+    border: 1px solid #888;
+    border-radius: 0;
+    transition: all 0.2s ease-in;
+}
+
+body > form > div:nth-child(3) > textarea {
+    border: 1px solid #ccc;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 5px;
+    transition: all 0.2s ease-in;
+}
+
+#jutranslation div.control-group.edition tr td a i {
+    color: #444;
+}
+
+.wordpress .table-striped tbody > tr:nth-child(odd) > td,
+.wordpress .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #f9f9f9;
+}
+
+.wordpress .dashicons-arrow-right-alt2 {
+    font-size: 15px;
+    vertical-align: sub;
+}
+
+a.disabled {
+    background-color: #c3c2c2 !important;
+    color: #333 !important;
+    cursor: default;
+    position: relative;
+}
+
+#jutranslation_toast {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    padding: 14px 15px;
+    background-color: #323232;
+    color: #FFFFFF;
+    font-size: 14px;
+    border-radius: 2px;
+    z-index: 1000;
+}

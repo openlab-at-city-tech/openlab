@@ -1,0 +1,264 @@
+/*
+    Colorbox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+.cboxElement {
+    cursor: pointer;
+}
+
+#colorbox.advgb_lightbox,
+#cboxOverlay.advgb_lightbox,
+#colorbox.advgb_lightbox #cboxWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999999;
+    overflow: visible;
+}
+
+#cboxOverlay.advgb_lightbox {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+#colorbox.advgb_lightbox #cboxMiddleLeft,
+#colorbox.advgb_lightbox #cboxBottomLeft {
+    clear: left;
+}
+
+#colorbox.advgb_lightbox #cboxContent {
+    position: relative;
+}
+
+#colorbox.advgb_lightbox #cboxLoadedContent {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#colorbox.advgb_lightbox #cboxTitle {
+    margin: 0;
+}
+
+#colorbox.advgb_lightbox #cboxLoadingOverlay,
+#colorbox.advgb_lightbox #cboxLoadingGraphic {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#colorbox.advgb_lightbox #cboxPrevious,
+#colorbox.advgb_lightbox #cboxNext,
+#colorbox.advgb_lightbox #cboxClose,
+#colorbox.advgb_lightbox #cboxSlideshow {
+    cursor: pointer;
+    outline: none;
+}
+
+#colorbox.advgb_lightbox .cboxPhoto {
+    float: left;
+    margin: auto;
+    border: 0;
+    display: block;
+    max-width: none;
+    -ms-interpolation-mode: bicubic;
+}
+
+#colorbox.advgb_lightbox .cboxIframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+}
+
+#colorbox.advgb_lightbox,
+#colorbox.advgb_lightbox #cboxContent,
+#colorbox.advgb_lightbox #cboxLoadedContent {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}
+
+/*
+    User Style:
+    Change the following styles to modify the appearance of Colorbox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay.advgb_lightbox {
+    background: #000;
+}
+
+#colorbox.advgb_lightbox {
+    outline: 0;
+}
+
+#colorbox.advgb_lightbox #cboxContent {
+    margin-top: 0;
+    overflow: visible;
+    background: #fff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#colorbox.advgb_lightbox .cboxIframe {
+    background: #fff;
+}
+
+#colorbox.advgb_lightbox #cboxError {
+    padding: 50px;
+    border: 1px solid #ccc;
+}
+
+#colorbox.advgb_lightbox #cboxLoadedContent {
+    margin: 0;
+    border: 8px solid #FFF;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #fff;
+    padding: 1px;
+}
+
+#colorbox.advgb_lightbox #cboxLoadingGraphic {
+    background: url(../images/loading.gif) no-repeat center center;
+}
+
+#colorbox.advgb_lightbox #cboxLoadingOverlay {
+    background: #fff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#colorbox.advgb_lightbox #cboxTitle {
+    position: absolute;
+    bottom: -42px;
+    top: auto;
+    left: auto;
+    border: none;
+    font-size: 18px;
+    color: #cdcdcd;
+    text-align: left;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90%;
+}
+
+#colorbox.advgb_lightbox #cboxCurrent {
+    position: absolute;
+    top: -22px;
+    text-indent: -9999px;
+    bottom: auto;
+    right: auto;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+}
+
+/* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+#colorbox.advgb_lightbox #cboxPrevious,
+#colorbox.advgb_lightbox #cboxNext,
+#colorbox.advgb_lightbox #cboxSlideshow,
+#colorbox.advgb_lightbox #cboxClose {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+#colorbox.advgb_lightbox #cboxCurrent,
+#colorbox.advgb_lightbox #cboxPrevious,
+#colorbox.advgb_lightbox #cboxNext,
+#colorbox.advgb_lightbox #cboxSlideshow {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+/* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+#colorbox.advgb_lightbox #cboxPrevious:active,
+#colorbox.advgb_lightbox #cboxNext:active,
+#colorbox.advgb_lightbox #cboxSlideshow:active,
+#colorbox.advgb_lightbox #cboxClose:active {
+    outline: 0;
+}
+
+#colorbox.advgb_lightbox #cboxPrevious {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    bottom: auto;
+    right: auto;
+    background: url(../images/prev.png) no-repeat center left;
+    width: 100px;
+    height: 100%;
+    text-indent: -9999px;
+    opacity: 0.2;
+}
+
+#colorbox.advgb_lightbox #cboxPrevious:hover {
+    opacity: 1;
+}
+
+#colorbox.advgb_lightbox #cboxNext {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    bottom: auto;
+    left: auto;
+    background: url(../images/next.png) no-repeat center right;
+    width: 100px;
+    height: 100%;
+    text-indent: -9999px;
+    opacity: 0.2;
+}
+
+#colorbox.advgb_lightbox #cboxNext:hover {
+    opacity: 1;
+}
+
+#colorbox.advgb_lightbox #cboxClose {
+    position: absolute;
+    bottom: -40px;
+    right: 0;
+    top: auto;
+    left: auto;
+    display: block;
+    background: url(../images/close.png) no-repeat top center;
+    width: 27px;
+    height: 27px;
+    text-indent: -9999px;
+}
+
+.cboxSlideshow_on #cboxPrevious,
+.cboxSlideshow_off #cboxPrevious {
+    right: 66px;
+}
+
+.cboxSlideshow_on #cboxSlideshow {
+    background-position: -75px -25px;
+    right: 44px;
+}
+
+.cboxSlideshow_on #cboxSlideshow:hover {
+    background-position: -100px -25px;
+}
+
+.cboxSlideshow_off #cboxSlideshow {
+    background-position: -100px 0px;
+    right: 44px;
+}
+
+.cboxSlideshow_off #cboxSlideshow:hover {
+    background-position: -75px -25px;
+}
