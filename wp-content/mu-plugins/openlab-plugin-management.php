@@ -41,12 +41,6 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
 		'wp-simile-timeline/timeline.php',
-
-		// See #2541.
-		'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
-		'fv-wordpress-flowplayer/flowplayer.php',
-		'yotuwp-easy-youtube-embed/yotuwp.php',
-		'kirki/kirki.php',
 	);
 
 	if ( ! is_super_admin() ) {
