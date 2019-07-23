@@ -367,7 +367,7 @@ class gradebook_upload_csv_API
             foreach ($assignments as $thisdex => $assignment) {
 
                 $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type'], true);
-
+                
                 if (is_array($this_grade) && !empty($this_grade['type']) && $this_grade['type'] === 'error') {
                     $errors++;
                 }
@@ -851,6 +851,10 @@ class gradebook_upload_csv_API
         if (is_array($grade)) {
             $grade = $grade['value'];
         }
+
+        //cleanup
+        $grade = preg_replace('/[[:cntrl:]]/', '', $grade);
+        $type = trim($type);
 
         //handle values marked for null
         if (trim($grade === '--')) {
