@@ -2,6 +2,467 @@
 
 **This is a list detailing changes for all the past Jetpack releases. For more information about the current release, see [the readme](https://github.com/Automattic/jetpack/blob/master/readme.txt).**
 
+= 7.4.1 =
+
+* Release date: June 17, 2019
+* Release post: https://wp.me/p1moTy-kvz
+
+**Bug fix**
+
+* Contact Form Block: avoid errors when trying to edit a form block, when using the Gutenberg plugin.
+
+= 7.4 =
+
+* Release date: June 4, 2019
+* Release post: https://wp.me/p1moTy-jgZ
+
+**Enhancements**
+
+* About Page: remove submenu and add link to page in the footer of Jetpack's dashboard.
+* Admin Page: remove Themes card on Plans tab.
+* Admin Page: consolidate the look of the different discussion settings.
+* Admin Page: add Security Checklist information.
+* Business Hours Block: improve the display of Business Hours.
+* Business Hours Block: Simplify hours format.
+* Comment Form: use HTTP 4xx status codes for comment errors.
+* Contact Form Block: improve styles for better display on mobile devices.
+* General: introduce a new Jetpack Logo package, to make it easier to share and re-use.
+* Multisite: Use modern `wp_initialize_site` hook when automatically connecting new sites.
+* Recurring Payments Block: automatically add button to the post content once you create it.
+* Recurring Payments Block: improve the display of the renewal frequency in button list.
+* Recurring Payments Block: require a paid plan to use the button.
+* Recurring Payments Block: improve the look of the payment modal on mobile devices.
+* Search: add new option for cross-site search permissions.
+* Sharing: update default sharing settings to include buttons.
+* Sitemaps: rename the `jetpack_sitemap_generate` and `jetpack_news_sitemap_generate` filters to the more accurate `jetpack_sitemap_include_in_robotstxt` and `jetpack_news_sitemap_include_in_robotstxt`.
+* Slideshow Block: depending on viewport, display prev/next arrows.
+* Slideshow Block: remove outline when focussing on the block.
+* Sync: offer posts, comments, and comment meta checksums when providing sync status.
+* Tiled Galleries: add `srcset` in the editor for an improved editing experience.
+* WordPress.com Block Editor: allow managing reusable blocks in the WordPress.com interface.
+* WordPress.com Toolbar: display hamburger icon in toolbar when in the block editor.
+* WordPress.com Toolbar: display a link to exit recovery mode when it is active on the site.
+
+**Improved compatibility**
+
+* Display Posts Widget: remove overly opinionated CSS.
+* General: Jetpack now requires PHP 5.3.2, and will display a notice if your site uses an older version of PHP.
+* General: display a notice and log an error if your version of WordPress is not supported by Jetpack.
+* General: Update `Jetpack::get_content_width()` to ensure that only numeric values are used.
+* GIF Block: improve compatibility with the AMP plugin.
+* Shortcodes: bring more of our shortcodes to meet current WordPress Coding Standards to help us maintain these features in the future.
+* Site Health: improve Jetpack errors' messaging in WordPress' new Site Health tools.
+
+**Bug fixes**
+
+* Admin Page: make sure the Jetpack Dashboard is displayed properly in IE11.
+* Admin Page: do not show Plugin Autoupdates card on admin searches.
+* Carousel: avoid scrolling back to the top of the page when you close the Carousel view.
+* Connect Flow: sanitize from parameter when building connection URL.
+* Mobile Themes: fix "View Full Site" and "View Mobile Site" links when WordPress lives in a subdirectory.
+* Recurring Payments Block: avoid invalid subscription amounts.
+* Recurring Payments Block: allow line breaks in the payment button.
+* Related Posts: do not add markup to attachment pages by default.
+* SEO Tools: support taxonomy archive pages in page titles.
+* Sharing: make sure the Whatsapp button works well in all browsers, including Firefox on desktop.
+* Shortcodes: update embed type detection for Medium Collections.
+* Social Icons SVG: switch to the presentation role for better accessibility.
+* Subscriptions: display checkboxes above the comment submit button.
+* Sync: add new WP Cli commands to help in monitoring and updating sync settings.
+* Tracks: limit the length of the strings saved for feature searches.
+* Unit Tests: add support for testing using VVV 3.0.
+* Verification Tools: make sure the feature can be disabled by override.
+* WooCommerce Analytics: remove duplicate self-executing anonymous function.
+* WordPress.com Interface: make sure navigation menu items match the one available in the WordPress.com interface.
+* WordPress.com Toolbar: restore the previous layout.
+* WordPress.com Toolbar: ensure you are properly logged out of your WordPress.com account when you sign out of your site using the toolbar.
+* WP Cli: ensure that WP Cli commands added by Jetpack include translator comments when necessary, to help with translations.
+
+= 7.3.1 =
+* Release date: May 14, 2019
+* Release post: https://wp.me/p1moTy-jgO
+
+**Bug fixes**
+
+* Admin Experience: Correct underline location under a dollar sign.
+* Deprecated Hooks: Do not offer a replacement for jetpack_json_manage_api_enabled since there isn't an equal replacement.
+* Debugger: Clarify labels in the Site Health Info section.
+* Likes and Sharing: Remove duplicate control in the block editor for Likes/Sharing. We added a native block editor plugin, but left the old fallback.
+* WordPress.com Editor: Redirect to a login page when logging out from the block editor on WordPress.com.
+* WordPress.com Toolbar: Add menu icon for smaller screen widths to restore wp-admin navigation menu.
+
+= 7.3 =
+
+* Release date: May 07, 2019
+* Release post: https://wp.me/p1moTy-ipR
+
+**Major Enhancements**
+* We streamlined the default features of Jetpack to make the "out of the box" experience better.
+* WordPress 5.2 will add a new Site Health section to your dashboard. Jetpack already integrates with it, letting you know that your Jetpack features are working!
+
+**Enhancements**
+
+* Admin Experience: Improve our "just in time messages" and "Recommended Features" for new sites setting up Jetpack for the first time.
+* Admin Experience: Add an "About Jetpack" page to let folks know more about Automattic, the company behind WordPress.com and Jetpack.
+* Admin Experience: Add a link to the full list of Jetpack features in the footer of Jetpack dashboard pages.
+* Backups: Add SSH CLI command for hosting integration support.
+* Block Editor: Compose posts with the Block Editor posts via WordPress.com for their Jetpack sites!
+* Block Editor: Transform core images to Tiled Galleries or Slideshow blocks and back!
+* Block Editor: Provide an option to disable particular extensions.
+* Contact Form: Add a "grunion_after_message_sent" hook for after a form submission is e-mailed. Thanks Tim Nolte for contributing to Jetpack!
+* Contact Form: Do not prefill for administrators on their own sites.
+* Grammar and Spelling: Remove from Jetpack. We've chekced the spelling alot over the years, but now time to retire.
+* Membership Block: Add a new block behind the JETPACK_BETA_BLOCKS constant. Stay tuned!
+* Photon: Remove jQuery dependency for photon.js. Same Image CDN awesomeness with less overhead.
+* Portfolios: Remove the "Portfolio Items" description that would display on some themes.
+* Sharing: Add a "sharing_ajax_action" to to allow other plugins and scripts to render sharing buttons. Thanks Darren Cooney!
+* Social Icons: Add Stack Overflow support. Welcome to the Jetpack contributor ranks Muhammad Osama Arshad!
+* Sync: Report details on what is queued up to sync on the status endpoint.
+* Sync: Improve importer detection so we can better handle cases of imported content.
+* Sync: Add an option to disable sync for an entire network.
+* Sync: Adds new WP-CLI Jetpack Sync commands: settings, enable, disable, reset.
+* Testimonials: Sort by menu order to give site owners more flexibility for display. Thanks Felipe Elia!
+* Tiled Galleries: Add improved layout for when images are in the process of uploading.
+* Tiled Galleries: Add responsive imaging (srcset) support to the Tiled Gallery block.
+* WordAds: Add location id (e.g. under the post) to the ad calls.
+* WordPress.com API: Add behind the scene improvements to support the WordPress.com site management experience.
+* WordPress.com API: Add the public property to the Post Types endpoint response.
+* WordPress.com Menu Bar: Redesign to direct navigation items to WordPress.com instead of duplicating experiences.
+
+**Improved compatibility**
+
+* Blocks: Use the Editor's "BlockIcon" for native placeholder icons instead of custom CSS.
+* Blocks: Drop i18n wrapper, use @wordpress/i18n directly. This means it will be easier and faster to provide translated bits of text.
+* Blocks: Move block development to the Jetpack repo. You shouldn't see any changes, but this helps us make Jetpack Blocks better faster.
+* Block Editor: Improve the experience of using the Block Editor via the WordPress.com dashboard.
+* Browser Compatibility: Remove legacy code for Internet Explorer 10.
+* Coding Standards: Update our code to match the latest WordPress coding standards in various places.
+* Likes and Sharing: Add Likes and Sharing settings as a Block Editor extension.
+* Related Posts: Improve the internationalization of the "in X category" text.
+* Simple Payments: Easily convert old shortcode-style Simple Payment buttons to a block.
+
+**Bug fixes**
+
+* Admin Dashboard: Improve headings when searching for Jetpack features.
+* Admin Dashboard: Remove legacy views no longer used in Jetpack.
+* Blocks: Fix some design oddities in Form and Contact Info blocks.
+* Carousel: Allow any title to be displayed. We used to try to be smart about default file names, but that caused some problems.
+* Development Mode: Display fewer sections of the Admin Dashboard. Some simply don't apply in Development Mode.
+* Google Plus: Remove from Social Icons and Sharing since the service has retired.
+* Internationalization: Translate various sections missed, such as "just in time messages" and block search keywords.
+* Manage: Remove Manage as an independent module. These features have been fully integrated for a few versions now.
+* Multisite: Restore ability to connect subsites via the Network Admin.
+* Open Graph Tags: Prevent a PHP notice on some author pages.
+* Sharing: Improve accessibility of sharing buttons by increasing contrast ratio. Props https://titan.as
+* Sharing: Fix the alignment of the official buttons for LinkedIn and Pinterest.
+* Shortcodes: Retire the Google Video, Jetpack Subscribe, and Digg shortcodes.
+* Slideshow: Fix a JavaScript error that occurs when block is first added.
+* Slideshow: Add slideshow images to Open Graph tags when using the Slideshow block.
+* Social Icons: Remove Google+, uses the generic Google now.
+* Subscriptions: Correct conflicts that were possible with the checkboxes after a comment submission form.
+* Theme Tools: Ensure Featured Content tag is retained on a post after saving. Thanks Anis Ladram, you're a Jetpack contributor now!
+* Uninstalling Jetpack: Prevent notice about JETPACK__PLUGIN_DIR already being defined when programmatically uninstalling Jetpack. (But why would you uninstall?)
+* Widgets: Remove the Cookies & Consents Banner (not just hide it) after consenting. Thanks Tony Tettinger!
+
+
+= 7.2.1 =
+* Release date: April 04, 2019
+* Release post: https://wp.me/p1moTy-h7o
+
+* Feature Hints: display suggestions only for features available under the site's current plan.
+* Feature Hints: improve visual display to make more distinct from search results.
+* Feature Hints: disable hints once administrators have dismissed three hints.
+* Slideshow Block: resolve an issue that broke navigating between images.
+
+= 7.2 =
+
+* Release date: April 02, 2019
+* Release post: https://wp.me/p1moTy-foe
+
+**Major Enhancements**
+
+* Adds a Repeat Visitor block that controls block visibility based on how often a visitor has viewed the page.
+* New option to disable Ads blocks for visitors on mobile devices.
+
+
+**Enhancements**
+
+* Admin Dashboard: improve text and design to make your administration experience all the better.
+* Jumpstart: streamline what features are suggested to be activated when setting up Jetpack for the first time.
+* Password Checker: adds a password checker class that will help Jetpack let you know if you're using a weak password. More about this coming in a future release!
+* Plans: refactor how Jetpack Plans are coded within Jetpack to improve performance and help prevent any future bugs.
+* Post Images: provide the image itself when requesting an attachment's post image.
+* REST API: Enable Likes and Sharing meta field for all post types.
+* Related Posts: improve HTML markup for related posts, with emphasis on accessibility.
+* Search: add an easy way to see the raw Jetpack Search query results in the search page's source code.
+* Shortcodes: allow links in Quiz shortcode explanations.
+* Widgets: improve the text for the Blog Stats widget when stats data can not be retrieved from WordPress.com.
+
+**Improved compatibility**
+
+* General: require WordPress 5.0! To celebrate, we cleaned out some compatibility code that supported older versions. We know how to party.
+* General: update various parts of Jetpack to fully align with WordPress coding standards to make developing Jetpack easier!
+* Connection: notify site owners when a plugin or theme is double-encoding URL redirects.
+* Shortcodes: update the Ustream shortcode to use the HTML5 player for a better experience on all browsers.
+* Shortcodes: add AMP support for Crowdsignal polls and shortcodes.
+* Sitemaps: add thumbnails to video sitemaps to improve compatibility with Google Search Console. Props Adam Heckler!
+* Sync: improve performance when using the VIP Legacy Redirect plugin.
+* Twenty Nineteen Compatibility: prevent sharing buttons overlapping with the Like button. Props Torres!
+* VideoPress: update right-to-left language CSS to remove extra styles only used on browsers no longer supported.
+* Widgets: improve rendering of Contact Info widget map when using the AMP plugin.
+
+**Bug fixes**
+
+* Admin Dashboard: fix an error that you'd see in the console when changing your Carousel settings.
+* Blocks: fix an issue where sometimes we would attempt to register a particular block twice. I'm looking at you, Related Posts.
+* Blocks: display all Business Hours details, even if they're the default set.
+* Blocks: fix an error that occurred when loading some translations in the Block Editor.
+* Blocks: resolve a conflict between the Ads block and infinite scroll that would cause new posts to sometimes not load.
+* General: ensure the proper Jetpack plan is reflected throughout Jetpack and the administrative dashboard.
+* Plugin Search: display Akismet and VaultPress plugin cards when WordPress.org suggests them.
+* Publicize: remove unused assets, like images and JavaScript that aren't needed anymore.
+* Related Posts: restore use of the jetpack_relatedposts_filter_options filter.
+* Security: Improvements to the Likes feature and the Slideshow block.
+* Sharing: update WhatsApp to be more consistent with the other sharing buttons.
+* Shortcodes: remove Lytro service, which closed in March.
+* Stats: properly handle an error from the REST API that sometimes caused issues with the Stats Dashboard.
+* Widgets: display all characters in an address from Contact Info correctly when sometimes we encoded those that we'd expect in an URL.
+* Widgets: improve the performance of the Contact Info widget by eliminating unused JavaScript.
+
+= 7.1.1 =
+
+* Release date: March 06, 2019
+* Release post: https://wp.me/p1moTy-foJ
+
+**Bug fixes**
+
+* General: avoid conflicting with other plugins when suggesting Jetpack features on the Plugins screen.
+* Publicize: avoid errors when the feature is not active on a site.
+* Widgets: improve performance of the Top Posts and the Blog Stats widgets on high-traffic sites.
+* Subscriptions: fix an issue that prevented displaying subscribers count in the subscription forms.
+* Tiled Galleries / Slideshows: ensure they can be displayed properly in Internet Explorer 11.
+
+= 7.1 =
+
+* Release date: March 05, 2019
+* Release post: https://wp.me/p1moTy-e9x
+
+**Major Enhancements**
+
+* Block Editor: this release introduces 6 new blocks:
+	- the Ads block allows you to insert different ads from [our WordAds program](https://jetpack.com/support/ads/) within your posts and pages.
+	- the Mailchimp block allows your readers to easily subscribe to your Mailchimp newsletter.
+	- the Video block supports VideoPress videos if you've purchased our Premium or Professional plan.
+	- the Slideshow block allows you to insert beautiful slideshows in your posts and pages.
+	- The Business Hours blocks is useful for companies who want to display their business's Opening Hours on their site.
+	- The Contact Info block is useful for any business who may want to display useful information on a post or page.
+
+**Enhancements**
+
+* Admin Page: move Carousel settings from Performance to Writing section.
+* Ads: include search results pages under the `Archive` toggle.
+* Block Editor: improve block registration structure for better management of block availability.
+* General: remove IE8 support fallbacks.
+* General: add feature suggestions to the plugin search screen.
+* Image CDN: add new mode that disables the creation of resized images, thus saving disk space.
+* Instagram: update embed to support Instagram TV URLs.
+* Post Images detection: add support for alt text.
+* Plans: clarify upgrade prompts in the Jetpack dashboard's Plans page.
+* Publicize: remove the Google+ interface as the Social Network is now deprecated.
+* Related Posts: update block to allow for up to 6 related posts.
+* Social Menus & Icons: add Discord Support.
+* Support: add additional tests to check when Jetpack isn't working as expected and ensures all current debugging platforms use the same testing list.
+* Simple Payments: add generic currency fallback symbol.
+* Sync: further performance improvements in PHP 7+ environments.
+* Woocommerce Analytics: include product type with analytics data.
+
+**Improved compatibility**
+
+* General: replace all .dev TLD references by .test as the .dev TLD will soon become available for registration.
+* PHP 7.3: introduce automated testing for PHP 7.3.
+* Site Accelerator: ensure compatibility with the AMP plugin.
+* Twenty Nineteen: fix Top Posts and Pages Widget image list margins.
+* WordPress 5.1 Compatibility: update usage of `wp_schedule_single_event` to match changes in WordPress.
+
+**Bug fixes**
+
+* Copy Post: ensure the feature can be used when using non-standard post formats.
+* Infinite Scroll: fix vertical spacing for new posts loaded with Infinite Scroll.
+* Internationalization: fix minor problem affecting translations in the block editor.
+* Mobile Theme: fix PHP notices when trying to display gallery images.
+* Mobile Theme: fix redirection issues when clicking on the "Desktop version" links.
+* Photon: add paypalobjects.com to the list of banned domains, as this domain already relies on a CDN.
+* Publicize / Subscriptions: do not show message at the top of the editor when creating a private post.
+* Spelling / Grammar: fix error when spellchecking the contents of a Classic block in the block editor.
+* Top Posts: allow fetching posts from a long timeframe when using the `jetpack_top_posts_days` filter.
+* Related Posts: avoid display a dulplicated set of related posts when using the Related Posts block.
+* REST API: fix a bug causing Likes settings on a post to sometimes be flipped.
+* Security: fix an XSS vulnerability in the "My Community" widget.
+* Security: avoid bypassing Protect's Math Fallback challenge.
+* Site Stats: do not show the Jetpack logo in the Stats dashboard widget title in the Screen Options tab.
+* Theme Tools: support alternative Pinterest domain extensions in the Social Menus tool.
+* Widgets: support alternative Pinterest domain extensions in the Social Icons Widget.
+* Widgets: update the Cookies & Consents Banner to be fully accessible on mobile devices.
+
+= 7.0.1 =
+
+* Release date: February 14, 2019
+* Release post: https://wp.me/p1moTy-eFX
+
+**Improved compatibility**
+
+* Publicize: update LinkedIn connections to use newer API, anticipating changes with LinkedIn's API v1 on March 1st.
+* Publicize: display a message inviting site owners to reconnect their site to their LinkedIn profile.
+* Publicize: remove section in Settings > Sharing in the dashboard.
+
+**Bug fixes**
+
+* Tiled Galleries: avoid errors when converting a tiled gallery into a block.
+* Security: ensure json_encode()d data safely output to the page.
+* Shortlinks: do not show Jetpack Sidebar in the block editor if Shortlinks are not available.
+* Sync: avoid errors in WordPress' code editor, for sites using PHP 7 with `fastcgi_finish_request` enabled.
+
+= 7.0 =
+
+* Release date: February 05, 2019
+* Release post: https://wp.me/p1moTy-dqO
+
+**Major Enhancements**
+
+* Block Editor: introduce a new Gif block to help you quickly search and add Gif images to your posts.
+* Copy Post: this new feature allows you to quickly create a new draft based on a post that's already published.
+
+**Enhancements**
+
+* Block Editor: update the way we check for available blocks and extensions.
+* Connection flow: display a notice upon connection when the site is suspended.
+* Contact Form: add more options to customize the look of the submit button.
+* Likes / Publicize: in the Jetpack Dashboard, add explanation to clarify the role of the features.
+* REST API: add likes and sharing settings to the REST API Post response.
+* Sharing: deprecate the Google+ sharing Button.
+* Sharing: deprecate the Google+ embed shortcode.
+* Shortcodes: rely on WordPress Core to handle SlideShare slideshow embeds.
+* Shortcodes: cache the output of the Twitter shortcode.
+* Subscriptions: remove obsolete polyfill JavaScript from the Subscriptions form.
+* Subscriptions: allow more customization of the subscription form's submit button.
+* Sync: improvements to the synchronization of plugin and theme updates.
+* Sync: improve performance for sites using PHP 7, with `fastcgi_finish_request` enabled.
+* Sync: synchronize plugin and theme fatal errors reported by WordPress 5.1.
+* Widgets: deprecate the Google+ widgets.
+* WordPress.com: allow the display of plugin action links in the WordPress.com plugins' interface.
+
+**Improved compatibility**
+
+* Lazy Images: fix a compatibility issue with themes that overwrite classes on html.
+* Contact Form: ensure contact form submissions with long words do not break the site layout, regardless of the theme.
+* Publicize: remove the option to connect your site to a Google+ account, in anticipation of the service's shutdown.
+
+**Bug fixes**
+
+* Admin Page: avoid PHP notices when looking at non-Jetpack admin pages.
+* Carousel: fix display issue when viewing images with long captions.
+* Carousel: avoid errors when fetching comments in the Carousel modal.
+* CSS: fix the behavior of the CSS concatenation filter.
+* Multisite: fix the display of the main connection banner.
+* Protect: ensure the Math fallback is displayed when necessary.
+* Publicize: avoid Fatal Errors on sites using Development Mode.
+* Responsive videos: do not apply for videos that benefit from WordPress' own Responsive Embeds solution.
+* Shortcodes: only load Mailchimp CSS when needed.
+* Subscriptions: display subscription options below the comment form, even when you are logged in to your WordPress account.
+* WordPress.com REST API: add new endpoint to allow the creation of a WooCommerce connection via the API.
+
+= 6.9 =
+
+* Release date: January 10, 2019
+* Release post: https://wp.me/p1moTy-cEZ
+
+**Major Enhancements**
+
+* Block Editor: this release introduces new blocks: a Subcription form block, a Tiled Gallery block, and a Related Posts block.
+
+**Enhancements**
+
+* Admin Page: several changes to improve navigation and connection flows for new and existing Jetpack site owners.
+* Admin Page: make the Jetpack dashboard wider on large screens for a better experience.
+* Affiliate tools: offer options for affiliate partners to manage affiliation links on their site.
+* Carousel: add support for the new Tiled Gallery block.
+* Contact Form: use the comment blacklist to filter contact form submissions.
+* Dashboard notices: automatically dismiss notices once a feature has been activated.
+* Dashboard notices: fix styling to work better with the Hello Dolly plugin.
+* Internationalization: add new locales, ensure existing ones are up to date.
+* REST API: new endpoint to expose Gutenberg block and plugin availabilty.
+* Search: add hook to get_filters() to allow the use of custom filters.
+* Shortcodes: add new Mailchimp shortcode to insert Mailchimp subscription forms anywhere in your posts and pages.
+* SSO: offer message introducing the feature to new users.
+* Stats: improve the design of the Stats dashboard widget.
+* Widgets: add filter to set DoNotTrack in Twitter Timeline widget.
+* WordPress.com REST API: add new option to set sites to private.
+
+**Improved compatibility**
+
+* AMP: ensure that all Jetpack features are compatible with the latest version of the AMP plugin. Solves issues previously encountered with sharing buttons and stats.
+* Images: ensure that images inserted with new block editor can be used in Open Graph Meta tags, Related Posts, and Publicized posts.
+* PHP 7.3: avoid PHP warnings so the plugin can be fully compatible with the latest version of PHP.
+* Sharing: do not add Jetpack's Twitter Meta Tags when the WP To Twitter plugin is active.
+* Twenty Nineteen: additional style adjustments to make sure all Jetpack widgets look good with the theme.
+* WooCommerce: do not include product reviews in comment counts in the WordPress.com REST API.
+
+**Bug fixes**
+
+* Admin Page: update feature limits mentioned when disconnecting Jetpack from WordPress.com
+* Block Editor: fix loading of translations in the editor when Jetpack's Site Accelerator feature is active.
+* Carousel: ensure that Carousel works well with the Gallery block in the new block editor.
+* Carousel: do not open modal when clicking on a link in a caption
+* Publicize: improve synchronization of sharing settings with WordPress.com.
+* Publicize: only display Gutenberg Publicize UI to users with the correct permissions.
+* Responsive videos: don't load if theme supports core responsive embeds.
+* Search: fix fatal error when the Search Widget is enabled while the site is in Development Mode.
+* Sharing: update Tumblr official sharing button.
+* Shortcodes: update YouTube shortcode to support more video link formats.
+* Shortlinks: add the option to view shortlinks in the block editor.
+* Simple Payments: only register block when all needed data is available.
+* Widgets: only load Social Icons widget scripts and styles when necessary.
+* WooCommerce Analytics: avoid Fatal Errors in some specific site setups.
+* WooCommerce Analytics: improve performance by avoiding unnecessary calls to the feature when it is not needed.
+
+= 6.8.1 =
+
+* Release date: December 6, 2018
+* Release post: https://wp.me/p1moTy-d3t
+
+**Bug fixes**
+
+* Contact Form: security changes to improve the display of success messages after submitting a form.
+* Publicize: avoid Fatal errors when trying to create or edit posts from a Custom Post Type that supports Publicize.
+* Sync: improve synchronization of WooCommerce events.
+* WordPress.com REST API: handle WooCommerce Product reviews for a better display in apps that use the API.
+
+= 6.8 =
+
+* Release date: November 27, 2018
+* Release post: https://wp.me/p1moTy-cee
+
+**Major Enhancements**
+
+* This release introduces the first wave of Jetpack blocks built for the new block editor, available in WordPress 5.0.
+
+**Enhancements**
+
+* General: improve ability to create and troubleshoot Jetpack connections.
+* REST API: new endpoint for testing the Jetpack connection.
+
+**Improved compatibility**
+
+* Akismet: improve caching of all queries for Akismet status.
+* Spellcheck / Grammar: we've made sure the Jetpack feature did not create any error when using the block editor.
+* Twenty Nineteen: ensure compatibility with Jetpack's widgets.
+
+**Bug fixes**
+
+* Asset CDN: do not try to serve assets from non-public versions.
+* Carousel: handle galleries created via the Gallery block in the new block editor.
+* Photon: make sure our image CDN is fully compatible with the block editor.
+
 = 6.7 =
 
 * Release date: November 6, 2018
@@ -254,7 +715,7 @@ On the 1st of August, 2018 Facebook sunsets its API allowing to post updates to 
 * Comments: Implemented Core WordPress' Comment Cookie Consent Checkbox in Jetpack Comments.
 * General: We solved an issue that arised when using the Front End Editor feature plugin. A fatal error wass thrown due to us assuming the `enter_title_here` filter would only run within wp-admin.
 * General: Fixed a compatibility problem between WordPress TinyMCE and Jetpack Markdown when visiting the WordPress Dashboard.
-* Lazy Images: Fixed behaviour for when JavaScript is disabled.
+* Lazy Images: Fixed behavior for when JavaScript is disabled.
 * Markdown: We fixed the naming of the class used for code blocks that specify a language.
 * Simple Payments: Fixed an error when the user had published Simple Payment Products but their Professional Subscription had expired.
 * Sitemap: We fixed the format of the date shown for videos on the video sitemap.
@@ -319,7 +780,7 @@ On the 1st of August, 2018 Facebook sunsets its API allowing to post updates to 
 
 **Bug fixes**
 
-* Ads: We updated Ads behaviour to not show unless the visitor is on the main query within the loop.
+* Ads: We updated Ads behavior to not show unless the visitor is on the main query within the loop.
 * General: We fixed a bug that resulted in an alert box showing for sites set to languages deriving from main ones.
 * Lazy Images: Fixed a bug where images would disappear when scrolling.
 * Sharing: make sure JS files can be loaded on development sites.
@@ -489,7 +950,7 @@ On the 1st of August, 2018 Facebook sunsets its API allowing to post updates to 
 * JSON API: Updated the modules endpoint Jetpack's JSON API to reply with a new property `override` that indicates if a module was either enabled or disabled by a filter.
 * Lazy Images: Updated the library used as IntersectionObserver for Lazy Images. We now use the W3C IntersectionObserver polyfill.
 * Lazy Images: Jetpack now allows the lazy images module to skip images with the skip-lazy css class or any given class of your choice by using the jetpack_lazy_images_blacklisted_classes filter.
-* Masterbar: Updated the sign out button behaviour of the Masterbar to not sign you out of WordPress.com when you sign out of your site for regular Jetpack sites.
+* Masterbar: Updated the sign out button behavior of the Masterbar to not sign you out of WordPress.com when you sign out of your site for regular Jetpack sites.
 * REST API: Updated the modules endpoint in Jetpack's REST API to be aware of modules that have been filtered through option_jetpack_active_modules allowing for better compatibility with custom Jetpack installation where the administrator decides to filter out specific Jetpack modules.
 * Sync: Added the jetpack_sync_action_before_enqueue action that's done when anything gets enqueued before being synchronized to WordPress.com servers.
 

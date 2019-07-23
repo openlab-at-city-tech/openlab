@@ -40,6 +40,7 @@ class Jetpack_Simple_Payments {
 
 	private function register_init_hooks() {
 		add_action( 'init', array( $this, 'init_hook_action' ) );
+		add_action( 'jetpack_register_gutenberg_extensions', array( $this, 'register_gutenberg_block' ) );
 		add_action( 'rest_api_init', array( $this, 'register_meta_fields_in_rest_api' ) );
 	}
 
@@ -57,11 +58,13 @@ class Jetpack_Simple_Payments {
 		$this->setup_cpts();
 
 		add_filter( 'the_content', array( $this, 'remove_auto_paragraph_from_product_description' ), 0 );
+	}
 
+	function register_gutenberg_block() {
 		if ( $this->is_enabled_jetpack_simple_payments() ) {
-			jetpack_register_block( 'simple-payments' );
+			jetpack_register_block( 'jetpack/simple-payments' );
 		} else {
-			jetpack_register_block( 'simple-payments', array(), array( 'available' => false, 'unavailable_reason' => 'missing_plan' ) );
+			Jetpack_Gutenberg::set_extension_unavailable( 'jetpack/simple-payments', 'missing_plan' );
 		}
 	}
 
@@ -105,7 +108,7 @@ class Jetpack_Simple_Payments {
 		}
 
 		// For all Jetpack sites
-		return Jetpack::is_active() && Jetpack::active_plan_supports( 'simple-payments');
+		return Jetpack::is_active() && Jetpack_Plan::supports( 'simple-payments');
 	}
 
 	function parse_shortcode( $attrs, $content = false ) {
@@ -138,7 +141,7 @@ class Jetpack_Simple_Payments {
 
 		$data['id'] = $attrs['id'];
 
-		if( ! wp_style_is( 'jetpack-simple-payments', 'enqueue' ) ) {
+		if( ! wp_style_is( 'jetpack-simple-payments', 'enqueued' ) ) {
 			wp_enqueue_style( 'jetpack-simple-payments' );
 		}
 
@@ -285,7 +288,13 @@ class Jetpack_Simple_Payments {
 			);
 		}
 
-		return "$price $currency";
+		// Fall back to unspecified currency symbol like `¤1,234.05`.
+		// @link https://en.wikipedia.org/wiki/Currency_sign_(typography).
+		if ( ! $currency ) {
+			return '¤' . number_format_i18n( $price, 2 );
+		}
+
+		return number_format_i18n( $price, 2 ) . ' ' . $currency;
 	}
 
 	/**

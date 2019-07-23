@@ -141,8 +141,6 @@ class GWPerksPage {
                 <?php endif; ?>
             </h2>
 
-            <?php self::handle_message_code(); ?>
-
             <div id="manage" class="perks plugins tab-container" <?php echo $is_install ? 'style="display:none;"' : ''; ?> >
 
                 <?php
@@ -1006,12 +1004,18 @@ class GWPerksPage {
 
     public static function load_perk_settings() {
 
+    	if( ! current_user_can( 'manage_options' ) ) {
+    		die( __( 'You don\'t have permission to access this page.' ) );
+	    }
+
         $perk = GWPerk::get_perk(gwget('slug'));
         $perk->load_perk_data();
 
         if(isset($_POST['gwp_save_settings'])) {
 
-            $settings = $setting_keys = array();
+        	check_admin_referer( 'gp_save_settings', 'security' );
+
+            $setting_keys = array();
 
             if(method_exists($perk, 'register_settings')) {
                 $setting_keys = $perk->register_settings($perk);
@@ -1063,6 +1067,7 @@ class GWPerksPage {
 				        <?php echo $perk->get_settings(); ?>
 			        </div>
 			        <div class="content-footer">
+						<?php wp_nonce_field( 'gp_save_settings', 'security' ); ?>
 				        <input type="submit" id="gwp_save_settings" name="gwp_save_settings" class="button button-primary" value="<?php _e('Save Settings', 'gravityperks'); ?>" />
 			        </div>
 		        </form>
@@ -1079,131 +1084,25 @@ class GWPerksPage {
         exit;
     }
 
+	public static function get_submitted_settings($perk, $setting_keys, $flush_values = false) {
 
+		$settings = array();
 
-    // REVIEW ALL CODE BELOW //
+		foreach($setting_keys as $setting_key => $setting_children) {
 
+			if(!is_array($setting_children)) {
+				$setting_key = $setting_children;
+				$key = $perk->get_id() . "_{$setting_key}";
+				$settings[$key] = $flush_values ? false : gwpost($key);
+			} else {
+				$key = $perk->get_id() . "_{$setting_key}";
+				$settings[$key] = $flush_values ? false : gwpost($key);
+				$settings = array_merge($settings, self::get_submitted_settings($perk, $setting_children, !$settings[$key]));
+			}
 
+		}
 
-
-
-
-    public static function load_perk_info() {
-
-        // TODO: update perk info page to be a bit fancier, using default Perk plugin info for now
-        GWPerks::display_change_log();
-        exit;
-
-    }
-
-    public static function process_actions() {
-
-        $action = gwget('action');
-        $slug = gwget('slug');
-
-        if(!$action)
-            return;
-
-        if($action && $slug && !wp_verify_nonce(gwget('_wpnonce'), $slug)) {
-            die(__('Oops! Doesn\'t look like you have permission to do this.', 'gravityperks'));
-        }
-
-        if(!in_array($action, array('activate', 'deactivate', 'delete'))) {
-            die(__('What exactly are you trying to do?', 'gravityperks'));
-        }
-
-        $perks = GWPerks::get_installed_perks();
-
-        foreach($perks as $perk) {
-            if($perk->slug == $slug)
-                break;
-        }
-
-        switch($action) {
-
-        case 'activate':
-            //$perk->activate();
-            $message = 1;
-            break;
-
-        case 'deactivate':
-            $perk->deactivate();
-            $message = 2;
-            break;
-
-        case 'delete':
-            $message = $perk->delete() ? 5 : 6;
-        }
-
-        wp_redirect(admin_url("admin.php?page=gwp_perks&message=$message"));
-    }
-
-    public static function handle_message_code() {
-
-        $message_code = gwget('message');
-
-        if(!$message_code)
-            return;
-
-        $message = gwar(GWPerks::$message_codes, $message_code);
-
-        echo "<div id=\"message\" class=\"updated below-h2\"><p>$message</p></div>";
-
-    }
-
-    public static function get_submitted_settings($perk, $setting_keys, $flush_values = false) {
-
-        $settings = array();
-
-        foreach($setting_keys as $setting_key => $setting_children) {
-
-            if(!is_array($setting_children)) {
-                $setting_key = $setting_children;
-                $key = $perk->get_id() . "_{$setting_key}";
-                $settings[$key] = $flush_values ? false : gwpost($key);
-            } else {
-                $key = $perk->get_id() . "_{$setting_key}";
-                $settings[$key] = $flush_values ? false : gwpost($key);
-                $settings = array_merge($settings, self::get_submitted_settings($perk, $setting_children, !$settings[$key]));
-            }
-
-        }
-
-        return $settings;
-    }
-
-}
-
-class GWExecTime {
-
-    public $start_time;
-    public $end_time;
-
-    function __construct() {
-        $this->start();
-    }
-
-    function start() {
-        $time = microtime(true);
-        $this->start_time = $time;
-    }
-
-    function report($content = '', $echo = true ) {
-        $time_since = $this->time_since_start();
-
-        $output = $content ? "($content) " : '';
-        $output .= 'Execution time: ' . $time_since . ' seconds...<br />';
-
-        if($echo)
-            echo $output;
-
-        return $output;
-    }
-
-    function time_since_start() {
-        $time = microtime(true);
-        $this->end_time = $time;
-        return round($this->end_time - $this->start_time, 4, PHP_ROUND_HALF_UP);
-    }
+		return $settings;
+	}
 
 }

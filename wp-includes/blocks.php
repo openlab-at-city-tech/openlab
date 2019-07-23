@@ -125,10 +125,9 @@ function get_dynamic_block_names() {
  * @return string The parsed and filtered content.
  */
 function excerpt_remove_blocks( $content ) {
-	$allowed_blocks = array(
+	$allowed_inner_blocks = array(
 		// Classic blocks have their blockName set to null.
 		null,
-		'core/columns',
 		'core/freeform',
 		'core/heading',
 		'core/html',
@@ -141,6 +140,9 @@ function excerpt_remove_blocks( $content ) {
 		'core/table',
 		'core/verse',
 	);
+
+	$allowed_blocks = array_merge( $allowed_inner_blocks, array( 'core/columns' ) );
+
 	/**
 	 * Filters the list of blocks that can contribute to the excerpt.
 	 *
@@ -152,14 +154,57 @@ function excerpt_remove_blocks( $content ) {
 	 * @param array $allowed_blocks The list of allowed blocks.
 	 */
 	$allowed_blocks = apply_filters( 'excerpt_allowed_blocks', $allowed_blocks );
-	$blocks = parse_blocks( $content );
-	$output = '';
-	 foreach ( $blocks as $block ) {
+	$blocks         = parse_blocks( $content );
+	$output         = '';
+
+	foreach ( $blocks as $block ) {
 		if ( in_array( $block['blockName'], $allowed_blocks, true ) ) {
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				if ( 'core/columns' === $block['blockName'] ) {
+					$output .= _excerpt_render_inner_columns_blocks( $block, $allowed_inner_blocks );
+					continue;
+				}
+
+				// Skip the block if it has disallowed or nested inner blocks.
+				foreach ( $block['innerBlocks'] as $inner_block ) {
+					if (
+						! in_array( $inner_block['blockName'], $allowed_inner_blocks, true ) ||
+						! empty( $inner_block['innerBlocks'] )
+					) {
+						continue 2;
+					}
+				}
+			}
+
 			$output .= render_block( $block );
 		}
 	}
-	 return $output;
+
+	return $output;
+}
+
+/**
+ * Render inner blocks from the `core/columns` block for generating an excerpt.
+ *
+ * @since 5.2.0
+ * @access private
+ *
+ * @param array $columns        The parsed columns block.
+ * @param array $allowed_blocks The list of allowed inner blocks.
+ * @return string The rendered inner blocks.
+ */
+function _excerpt_render_inner_columns_blocks( $columns, $allowed_blocks ) {
+	$output = '';
+
+	foreach ( $columns['innerBlocks'] as $column ) {
+		foreach ( $column['innerBlocks'] as $inner_block ) {
+			if ( in_array( $inner_block['blockName'], $allowed_blocks, true ) && empty( $inner_block['innerBlocks'] ) ) {
+				$output .= render_block( $inner_block );
+			}
+		}
+	}
+
+	return $output;
 }
 
 /**
@@ -174,6 +219,31 @@ function excerpt_remove_blocks( $content ) {
  */
 function render_block( $block ) {
 	global $post;
+
+	/**
+	 * Allows render_block() to be shortcircuited, by returning a non-null value.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param string $pre_render The pre-rendered content. Default null.
+	 * @param array  $block      The block being rendered.
+	 */
+	$pre_render = apply_filters( 'pre_render_block', null, $block );
+	if ( ! is_null( $pre_render ) ) {
+		return $pre_render;
+	}
+
+	$source_block = $block;
+
+	/**
+	 * Filters the block being rendered in render_block(), before it's processed.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param array $block        The block being rendered.
+	 * @param array $source_block An un-modified copy of $block, as it appeared in the source content.
+	 */
+	$block = apply_filters( 'render_block_data', $block, $source_block );
 
 	$block_type    = WP_Block_Type_Registry::get_instance()->get_registered( $block['blockName'] );
 	$is_dynamic    = $block['blockName'] && null !== $block_type && $block_type->is_dynamic();
@@ -237,13 +307,6 @@ function parse_blocks( $content ) {
  * @return string Updated post content.
  */
 function do_blocks( $content ) {
-	// If there are blocks in this content, we shouldn't run wpautop() on it later.
-	$priority = has_filter( 'the_content', 'wpautop' );
-	if ( false !== $priority && doing_filter( 'the_content' ) && has_blocks( $content ) ) {
-		remove_filter( 'the_content', 'wpautop', $priority );
-		add_filter( 'the_content', '_restore_wpautop_hook', $priority + 1 );
-	}
-
 	$blocks = parse_blocks( $content );
 	$output = '';
 
@@ -251,11 +314,18 @@ function do_blocks( $content ) {
 		$output .= render_block( $block );
 	}
 
+	// If there are blocks in this content, we shouldn't run wpautop() on it later.
+	$priority = has_filter( 'the_content', 'wpautop' );
+	if ( false !== $priority && doing_filter( 'the_content' ) && has_blocks( $content ) ) {
+		remove_filter( 'the_content', 'wpautop', $priority );
+		add_filter( 'the_content', '_restore_wpautop_hook', $priority + 1 );
+	}
+
 	return $output;
 }
 
 /**
- * If do_blocks() needs to remove wp_autop() from the `the_content` filter, this re-adds it afterwards,
+ * If do_blocks() needs to remove wpautop() from the `the_content` filter, this re-adds it afterwards,
  * for subsequent `the_content` usage.
  *
  * @access private
@@ -266,7 +336,6 @@ function do_blocks( $content ) {
  * @return string The unmodified content.
  */
 function _restore_wpautop_hook( $content ) {
-	global $wp_filter;
 	$current_priority = has_filter( 'the_content', '_restore_wpautop_hook' );
 
 	add_filter( 'the_content', 'wpautop', $current_priority - 1 );

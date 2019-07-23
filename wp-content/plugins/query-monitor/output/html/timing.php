@@ -125,7 +125,7 @@ class QM_Output_Html_Timing extends QM_Output_Html {
 				}
 
 				printf(
-					'<td colspan="2">%s</td>',
+					'<td colspan="2"><span class="dashicons dashicons-warning" aria-hidden="true"></span>%s</td>',
 					esc_html( $row['message'] )
 				);
 
@@ -154,7 +154,8 @@ class QM_Output_Html_Timing extends QM_Output_Html {
 			}
 			/* translators: %s: Number of function timing results that are available */
 			$label = _n( 'Timings (%s)', 'Timings (%s)', $count, 'query-monitor' );
-			$menu[] = $this->menu( array(
+
+			$menu[ $this->collector->id() ] = $this->menu( array(
 				'title' => esc_html( sprintf(
 					$label,
 					number_format_i18n( $count )
@@ -168,7 +169,7 @@ class QM_Output_Html_Timing extends QM_Output_Html {
 }
 
 function register_qm_output_html_timing( array $output, QM_Collectors $collectors ) {
-	$collector = $collectors::get( 'timing' );
+	$collector = QM_Collectors::get( 'timing' );
 	if ( $collector ) {
 		$output['timing'] = new QM_Output_Html_Timing( $collector );
 	}

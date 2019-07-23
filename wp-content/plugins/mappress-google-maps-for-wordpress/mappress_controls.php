@@ -116,11 +116,27 @@ class Mappress_Controls {
 		return $html;
 	}
 
+	static function icon_picker($name = '', $value = '', $args = '') {
+		$atts = self::parse_atts($name, $args);
+		$name = esc_attr($name);
+		$iconid = esc_attr($value);
+		$icon = Mappress_Icons::get($value);
+		$html = "<img class='mapp-icon' data-mapp-iconpicker data-mapp-iconid='$iconid' tabindex='0' src='$icon'><input type='hidden' name='$name' value='$iconid' $atts />";
+		return $html;
+	}
+
 	static function input($name, $value, $args = '') {
 		$args = (object) wp_parse_args($args, array('label' => '', 'type' => 'text'));
 		$atts = self::parse_atts($name, $args);
 		$value = esc_attr($value);
 		return "<label><input $atts value='$value' /> {$args->label}</label>";
+	}
+
+	static function radio($name, $key, $label, $args = '') {
+		$atts = self::parse_atts($name, $args);
+		$key = esc_attr($key);
+		$html = "<label><input type='radio' value='$key' $atts />$label</label> ";
+		return $html;
 	}
 
 	static function radios($name, $data, $selected = null, $args = '') {
@@ -159,15 +175,6 @@ class Mappress_Controls {
 			$html .= "<option value='$value' title='$label' $select>$label</option>\r\n";
 		}
 		$html .= "</select>\r\n";
-		return $html;
-	}
-
-	static function icon_picker($name = '', $value = '', $args = '') {
-		$atts = self::parse_atts($name, $args);
-		$name = esc_attr($name);
-		$iconid = esc_attr($value);
-		$icon = Mappress_Icons::get($value);
-		$html = "<img class='mapp-icon' data-mapp-iconpicker data-mapp-iconid='$iconid' tabindex='0' src='$icon'><input type='hidden' name='$name' value='$iconid' $atts />";
 		return $html;
 	}
 

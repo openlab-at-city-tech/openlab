@@ -64,6 +64,10 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 		echo '<section>';
 		echo '<h3>' . esc_html__( 'Template Parts', 'query-monitor' ) . '</h3>';
 
+		if ( $data['has_template_part_action'] ) {
+			echo '<h4>' . esc_html__( 'Loaded', 'query-monitor' ) . '</h4>';
+		}
+
 		if ( ! empty( $data['template_parts'] ) ) {
 
 			if ( $data['is_child_theme'] ) {
@@ -100,11 +104,30 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 			echo '<p><em>' . esc_html__( 'None', 'query-monitor' ) . '</em></p>';
 		}
 
+		if ( $data['has_template_part_action'] ) {
+			echo '<h4>' . esc_html__( 'Not Loaded', 'query-monitor' ) . '</h4>';
+
+			if ( ! empty( $data['unsuccessful_template_parts'] ) ) {
+				echo '<ul>';
+
+				foreach ( $data['unsuccessful_template_parts'] as $requested ) {
+					echo '<li>';
+					$text = implode( ', ', array_filter( array( $requested['slug'], $requested['name'] ) ) );
+					echo self::output_filename( $text, $requested['caller']['file'], $requested['caller']['line'], true ); // WPCS: XSS ok.
+					echo '</li>';
+				}
+
+				echo '</ul>';
+			} elseif ( $data['has_template_part_action'] ) {
+				echo '<p><em>' . esc_html__( 'None', 'query-monitor' ) . '</em></p>';
+			}
+		}
+
 		echo '</section>';
 
 		if ( ! empty( $data['timber_files'] ) ) {
 			echo '<section>';
-			echo '<h3>' . esc_html__( 'Timber Files', 'query-monitor' ) . '</h3>';
+			echo '<h3>' . esc_html__( 'Twig Template Files', 'query-monitor' ) . '</h3>';
 			echo '<ul class="qm-ltr">';
 
 			foreach ( $data['timber_files'] as $filename ) {
@@ -142,7 +165,7 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 			$name = __( 'Unknown', 'query-monitor' );
 		}
 
-		$menu['theme'] = $this->menu( array(
+		$menu[ $this->collector->id() ] = $this->menu( array(
 			'title' => esc_html( sprintf(
 				/* translators: %s: Template file name */
 				__( 'Template: %s', 'query-monitor' ),
@@ -155,8 +178,8 @@ class QM_Output_Html_Theme extends QM_Output_Html {
 	}
 
 	public function panel_menu( array $menu ) {
-		if ( isset( $menu['theme'] ) ) {
-			$menu['theme']['title'] = __( 'Template', 'query-monitor' );
+		if ( isset( $menu[ $this->collector->id() ] ) ) {
+			$menu[ $this->collector->id() ]['title'] = __( 'Template', 'query-monitor' );
 		}
 
 		return $menu;
@@ -168,7 +191,7 @@ function register_qm_output_html_theme( array $output, QM_Collectors $collectors
 	if ( is_admin() ) {
 		return $output;
 	}
-	$collector = $collectors::get( 'response' );
+	$collector = QM_Collectors::get( 'response' );
 	if ( $collector ) {
 		$output['response'] = new QM_Output_Html_Theme( $collector );
 	}

@@ -98,6 +98,90 @@ li.active a:hover {
 }
 
 
+/* --- new metabox marker select --- */
+
+		.osm-marker-tab-container{
+			width: 95%;
+                        
+			margin: 0 auto;
+		}
+
+		ul.osm-marker-tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.osm-marker-tabs li{
+			background: none;
+			color: #222;
+			display: inline-block;
+			padding: 2px 5px;
+			cursor: pointer;
+		}
+
+		ul.osm-marker-tabs li.current{
+			background: #fdfdfd;
+			color: #222;
+			border: 1px solid #D8D8D8;
+			border-bottom: none;
+		}
+
+		.marker-tab-content{
+			margin: -7px 0px 0px 0px;
+                        padding:15px;
+                        border-radius:3px;
+			display: none;
+			background: #fdfdfd;
+			border: 1px solid #D8D8D8;
+                        height: 300px;
+		}
+
+		.marker-tab-content.current{
+			display: inherit;
+		}
+
+/* --- new metabox geotag marker select --- */
+
+		.osm-geo-marker-tab-container{
+			width: 95%;
+                        
+			margin: 0 auto;
+		}
+
+		ul.osm-geo-marker-tabs{
+			margin: 0px;
+			padding: 0px;
+			list-style: none;
+		}
+		ul.osm-geo-marker-tabs li{
+			background: none;
+			color: #222;
+			display: inline-block;
+			padding: 2px 5px;
+			cursor: pointer;
+		}
+
+		ul.osm-geo-marker-tabs li.current{
+			background: #fdfdfd;
+			color: #222;
+			border: 1px solid #D8D8D8;
+			border-bottom: none;
+		}
+
+		.geo-marker-tab-content{
+			margin: -7px 0px 0px 0px;
+                        padding:15px;
+                        border-radius:3px;
+			display: none;
+			background: #fdfdfd;
+			border: 1px solid #D8D8D8;
+                        height: 300px;
+		}
+
+		.geo-marker-tab-content.current{
+			display: inherit;
+		}
+
 
 
 
@@ -130,8 +214,8 @@ li.active a:hover {
 
 		.tab-content{
 			margin: -7px 0px 0px 0px;
-            padding:15px;
-            border-radius:3px;
+                        padding:15px;
+                        border-radius:3px;
 			display: none;
 			background: #fdfdfd;
 			border: 1px solid #D8D8D8;

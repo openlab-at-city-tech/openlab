@@ -3,9 +3,9 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 6.1.27
+Version: 6.3
 Author: Yannick Lefebvre
-Author URI: http://ylefebvre.ca/
+Author URI: http://ylefebvre.home.blog/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
@@ -242,6 +242,7 @@ class link_library_plugin {
 		add_shortcode( 'addlinkcustommsg-link-library', array( $this, 'link_library_addlink_func' ) );
 		add_shortcode( 'link-library-count', array( $this, 'link_library_count_func' ) );
 		add_shortcode( 'link-library-filters', array( $this, 'link_library_filters' ) );
+		add_shortcode( 'link-library-tagcloud', array( $this, 'link_library_tagcloud' ) );
 
         // Function to determine if Link Library is used on a page before printing headers
         // the_posts gets triggered before wp_head
@@ -371,7 +372,7 @@ class link_library_plugin {
             'link_library_links',
             array(
                 'labels' => array(
-                    'name' => 'Categories',
+                    'name' => 'Link Library Categories',
                     'add_new_item' => 'Add New Link Library Category',
                     'new_item_name' => 'New Link Library Category'
                 ),
@@ -1150,6 +1151,12 @@ class link_library_plugin {
         }
 	}
 
+	function link_library_tagcloud( $atts = '' ) {
+		$link_library_terms = get_terms( array( 'taxonomy' => 'link_library_category' ) );
+		$output = wp_generate_tag_cloud( $link_library_terms );
+		return $output;
+	}
+
 	function conditionally_add_scripts_and_styles( $posts ) {
 		if ( empty( $posts ) ) {
             return $posts;
@@ -1349,6 +1356,9 @@ class link_library_plugin {
 				$link_price = number_format( floatval( get_post_meta( get_the_ID(), 'link_price', true ) ), 2 );
 				$link_price_currency = $this->ll_get_string_between( $content, '[currency]', '[/currency]' );
 				$link_price_currency_or_free = $this->ll_get_string_between( $content, '[currency_or_free]', '[/currency_or_free]' );
+				$link_email = esc_html( get_post_meta( get_the_ID(), 'link_email', true ) );
+				$link_phone_number = esc_html( get_post_meta( get_the_ID(), 'link_telephone', true ) );
+
 				$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
 				$link_terms_list = '';
 				$link_terms_array = array();
@@ -1367,6 +1377,8 @@ class link_library_plugin {
 				$content = str_replace( '[link_description]', $link_description, $content );
 				$content = str_replace( '[link_large_description]', $link_large_description, $content );
 				$content = str_replace( '[link_image]', $link_image, $content );
+				$content = str_replace( '[link_email]', $link_email, $content );
+				$content = str_replace( '[link_telephone]', $link_telephone, $content );
 
 				$content = str_replace( '[link_price]', $link_price, $content );
 				$content = $this->ll_replace_all_between( '[currency]', '[/currency]', $content, $link_price_currency );

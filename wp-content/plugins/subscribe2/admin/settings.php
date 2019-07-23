@@ -12,15 +12,18 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	}
 
 	if ( isset( $_POST['reset'] ) ) {
-		$this->reset();
+		require_once S2PATH . 'classes/class-s2-upgrade.php';
+		global $s2_upgrade;
+		$s2_upgrade = new S2_Upgrade();
+		$s2_upgrade->reset();
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Options reset!', 'subscribe2' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['preview'] ) ) {
 		global $user_email, $post;
 		$this->preview_email = true;
 		if ( 'never' === $this->subscribe2_options['email_freq'] ) {
-			$posts = get_posts( 'numberposts=1' );
-			$post = $posts[0];
-			$this->publish( $post, $user_email );
+			$preview_posts = get_posts( 'numberposts=1' );
+			$preview_post  = $preview_posts[0];
+			$this->publish( $preview_post, $user_email );
 		} else {
 			do_action( 's2_digest_preview', $user_email );
 		}
@@ -35,28 +38,25 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		}
 	} elseif ( isset( $_POST['submit'] ) ) {
 		foreach ( $_POST as $key => $value ) {
-			if ( in_array( $key, array( 'bcclimit', 's2page', 'entries' ) ) ) {
+			if ( in_array( $key, array( 'bcclimit', 's2page' ), true ) ) {
 				// numerical inputs fixed for old option names
-				if ( 'entries' === $key && is_numeric( $_POST[ $key ] ) && $_POST[ $key ] > 0 ) {
-					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
-				} elseif ( 'entries' !== $key && is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
+				if ( is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
 					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
 				}
-			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ) ) ) {
+			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ), true ) ) {
 				// check box entries
-				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $newvalue = '1' : $newvalue = '0';
-				$this->subscribe2_options[ $key ] = $newvalue;
-			} elseif ( 'appearance_users_tab' === $key ) {
+				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
+			} elseif ( 'appearance_tab' === $key ) {
 				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default' );
 				foreach ( $options as $option ) {
 					if ( ! isset( $_POST[ $option ] ) ) {
-						$this->subscribe2_options[ $option ] = '';
+						$this->subscribe2_options[ $option ] = '0';
 					}
 				}
-			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email', 's2_license_key' ) ) && ! empty( $_POST[ $key ] ) ) {
+			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email' ), true ) && ! empty( $_POST[ $key ] ) ) {
 				// email subject and body templates
 				$this->subscribe2_options[ $key ] = trim( $_POST[ $key ] );
-			} elseif ( in_array( $key, array( 'compulsory', 'exclude', 'format' ) ) ) {
+			} elseif ( in_array( $key, array( 'compulsory', 'exclude', 'format' ), true ) ) {
 				sort( $_POST[ $key ] );
 				$newvalue = implode( ',', $_POST[ $key ] );
 
@@ -78,24 +78,24 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				}
 			} elseif ( 'email_freq' === $key ) {
 				// send per-post or digest emails
-				$email_freq = $_POST['email_freq'];
-				$scheduled_time = wp_next_scheduled( 's2_digest_cron' );
+				$email_freq       = $_POST['email_freq'];
+				$scheduled_time   = wp_next_scheduled( 's2_digest_cron' );
 				$timestamp_offset = get_option( 'gmt_offset' ) * 60 * 60;
-				$crondate = ( isset( $_POST['crondate'] ) ) ? $_POST['crondate'] : 0;
-				$crontime = ( isset( $_POST['crondate'] ) ) ? $_POST['crontime'] : 0;
+				$crondate         = ( isset( $_POST['crondate'] ) ) ? $_POST['crondate'] : 0;
+				$crontime         = ( isset( $_POST['crondate'] ) ) ? $_POST['crontime'] : 0;
 				if ( $email_freq !== $this->subscribe2_options['email_freq'] || date_i18n( get_option( 'date_format' ), $scheduled_time + $timestamp_offset ) !== $crondate || date( 'G', $scheduled_time + $timestamp_offset ) !== $crontime ) {
 					$this->subscribe2_options['email_freq'] = $email_freq;
 					wp_clear_scheduled_hook( 's2_digest_cron' );
-					$scheds = (array) wp_get_schedules();
+					$scheds   = (array) wp_get_schedules();
 					$interval = ( isset( $scheds[ $email_freq ]['interval'] ) ) ? (int) $scheds[ $email_freq ]['interval'] : 0;
 					if ( 0 === $interval ) {
 						// if we are on per-post emails remove last_cron entry
 						unset( $this->subscribe2_options['last_s2cron'] );
 					} else {
 						// if we are using digest schedule the event and prime last_cron as now
-						$time = time() + $interval;
-						$srttimestamp = strtotime( $crondate ) + ($crontime * 60 * 60);
-						if ( false === $srttimestamp  || 0 === $srttimestamp ) {
+						$time         = time() + $interval;
+						$srttimestamp = strtotime( $crondate ) + ( $crontime * 60 * 60 );
+						if ( false === $srttimestamp || 0 === $srttimestamp ) {
 							$srttimestamp = time();
 						}
 						$timestamp = $srttimestamp - $timestamp_offset;
@@ -123,10 +123,16 @@ if ( isset( $_POST['s2_admin'] ) ) {
 }
 
 // send error message if no WordPress page exists
-$sql = "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' LIMIT 1";
-$id = $wpdb->get_var( $sql );
-if ( empty( $id ) ) {
+$page_id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
+if ( empty( $page_id ) ) {
 	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . __( 'You must create a WordPress page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
+}
+
+// display error message for GDPR
+if ( defined( 'S2GDPR' ) && true === S2GDPR ) {
+	if ( 'yes' === $this->subscribe2_options['autosub'] || 'yes' === $this->subscribe2_options['wpregdef'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['comment_def'] ) {
+		echo '<div id="gdpr_message" class="error"><p class="s2_error"><strong>' . __( 'Your Settings may breach GDPR', 'subscribe2' ) . '</strong></p></div>';
+	}
 }
 
 if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
@@ -151,11 +157,12 @@ if ( false !== $disallowed ) {
 if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 	$sender = get_bloginfo( 'admin_email' );
 } else {
-	$userdata = $this->get_userdata( $this->subscribe2_options['sender'] );
-	$sender = $userdata->user_email;
+	$user   = $this->get_userdata( $this->subscribe2_options['sender'] );
+	$sender = $user->user_email;
 }
 list( $user, $domain ) = explode( '@', $sender, 2 );
 if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
+	// Translators: Warning message
 	echo '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2' ), $sender, $_SERVER['SERVER_NAME'] ) . '</strong></p></div>';
 }
 
@@ -165,16 +172,16 @@ $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'email';
 // show our form
 echo '<div class="wrap">';
 echo '<h1>' . __( 'Settings', 'subscribe2' ) . '</h1>' . "\r\n";
-$tabs = array(
-	'email' => __( 'Email Settings', 'subscribe2' ),
-	'templates' => __( 'Templates', 'subscribe2' ),
+$s2tabs = array(
+	'email'      => __( 'Email Settings', 'subscribe2' ),
+	'templates'  => __( 'Templates', 'subscribe2' ),
 	'registered' => __( 'Registered Users', 'subscribe2' ),
 	'appearance' => __( 'Appearance', 'subscribe2' ),
-	'misc' => __( 'Miscellaneous', 'subscribe2' ),
-	);
+	'misc'       => __( 'Miscellaneous', 'subscribe2' ),
+);
 echo '<h2 class="nav-tab-wrapper">';
-foreach ( $tabs as $tab_key => $tab_caption ) {
-	$active = ($current_tab === $tab_key) ? 'nav-tab-active' : '';
+foreach ( $s2tabs as $tab_key => $tab_caption ) {
+	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
 	echo '<a class="nav-tab ' . $active . '" href="?page=s2_settings&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
 }
 echo '</h2>';
@@ -185,7 +192,6 @@ wp_nonce_field( 'subscribe2-options_subscribers' . S2VERSION );
 
 echo '<input type="hidden" name="s2_admin" value="options" />' . "\r\n";
 echo '<input type="hidden" id="jsbcclimit" value="' . $this->subscribe2_options['bcclimit'] . '" />';
-echo '<input type="hidden" id="jsentries" value="' . $this->subscribe2_options['entries'] . '" />';
 
 switch ( $current_tab ) {
 	case 'email':
@@ -194,11 +200,11 @@ switch ( $current_tab ) {
 		echo '<p>' . "\r\n";
 		echo __( 'Restrict the number of <strong>recipients per email</strong> to (0 for unlimited)', 'subscribe2' ) . ': ';
 		echo '<span id="s2bcclimit_1"><span id="s2bcclimit" style="background-color: #FFFBCC">' . $this->subscribe2_options['bcclimit'] . '</span> ';
-		echo '<a href="#" onclick="s2_show(\'bcclimit\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
+		echo '<a href="#" onclick="s2Show(\'bcclimit\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
 		echo '<span id="s2bcclimit_2">' . "\r\n";
 		echo '<input type="text" name="bcclimit" value="' . $this->subscribe2_options['bcclimit'] . '" size="3" />' . "\r\n";
-		echo '<a href="#" onclick="s2_update(\'bcclimit\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-		echo '<a href="#" onclick="s2_revert(\'bcclimit\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\n";
+		echo '<a href="#" onclick="s2Update(\'bcclimit\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
+		echo '<a href="#" onclick="s2Revert(\'bcclimit\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\n";
 
 		echo '<br /><br />' . __( 'Send Admins notifications for new', 'subscribe2' ) . ': ';
 		echo '<label><input type="radio" name="admin_email" value="subs"' . checked( $this->subscribe2_options['admin_email'], 'subs', false ) . ' />' . "\r\n";
@@ -225,8 +231,8 @@ switch ( $current_tab ) {
 		if ( ! empty( $s2_post_types ) ) {
 			$types = '';
 			echo __( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2' ) . ': <strong>';
-			foreach ( $s2_post_types as $type ) {
-				('' === $types) ? $types = ucwords( $type ) : $types .= ', ' . ucwords( $type );
+			foreach ( $s2_post_types as $s2_post_type ) {
+				( '' === $types ) ? $types = ucwords( $s2_post_type ) : $types .= ', ' . ucwords( $s2_post_type );
 			}
 			echo $types . '</strong><br /><br />' . "\r\n";
 		}
@@ -240,11 +246,13 @@ switch ( $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="private" value="no"' . checked( $this->subscribe2_options['private'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
-		echo __( 'Include Sticky Posts at the top of all Digest Notifications', 'subscribe2' ) . ': ';
-		echo '<label><input type="radio" name="stickies" value="yes"' . checked( $this->subscribe2_options['stickies'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="stickies" value="no"' . checked( $this->subscribe2_options['stickies'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
+			echo __( 'Include Sticky Posts at the top of all Digest Notifications', 'subscribe2' ) . ': ';
+			echo '<label><input type="radio" name="stickies" value="yes"' . checked( $this->subscribe2_options['stickies'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="stickies" value="no"' . checked( $this->subscribe2_options['stickies'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		}
 		echo __( 'Send Email From', 'subscribe2' ) . ': ';
 		echo '<label>' . "\r\n";
 		$this->admin_dropdown( true );
@@ -263,7 +271,7 @@ switch ( $current_tab ) {
 		echo '<br />' . __( 'eg. utm_source=subscribe2&amp;utm_medium=email&amp;utm_campaign=postnotify&amp;utm_id={ID}&amp;utm_title={TITLE}', 'subscribe2' ) . "\r\n";
 		echo '</p>' . "\r\n";
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'templates':
 		// email templates
@@ -275,12 +283,12 @@ switch ( $current_tab ) {
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="notification_subject" value="' . stripslashes( $this->subscribe2_options['notification_subject'] ) . '" size="45" />';
 		echo '<br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="mailtext">' . stripslashes( $this->subscribe2_options['mailtext'] ) . '</textarea>' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="mailtext" style="width:95%;">' . stripslashes( $this->subscribe2_options['mailtext'] ) . '</textarea>' . "\r\n";
 		echo '</td><td style="vertical-align: top;" rowspan="3">';
 		echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . __( 'Send Email Preview', 'subscribe2' ) . '" /></p>' . "\r\n";
 		echo '<h3>' . __( 'Message substitutions', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<dl>';
-		echo '<dt><b><em style="color: red">' . __( 'IF THE FOLLOWING KEYWORDS ARE ALSO IN YOUR POST THEY WILL BE SUBSTITUTED' ,'subscribe2' ) . '</em></b></dt><dd></dd>' . "\r\n";
+		echo '<dt><b><em style="color: red">' . __( 'IF THE FOLLOWING KEYWORDS ARE ALSO IN YOUR POST THEY WILL BE SUBSTITUTED', 'subscribe2' ) . '</em></b></dt><dd></dd>' . "\r\n";
 		echo '<dt><b>{BLOGNAME}</b></dt><dd>' . get_option( 'blogname' ) . '</dd>' . "\r\n";
 		echo '<dt><b>{BLOGLINK}</b></dt><dd>' . get_option( 'home' ) . '</dd>' . "\r\n";
 		echo '<dt><b>{TITLE}</b></dt><dd>' . __( "the post's title<br />(<i>for per-post emails only</i>)", 'subscribe2' ) . '</dd>' . "\r\n";
@@ -307,20 +315,20 @@ switch ( $current_tab ) {
 		echo __( 'Subscribe / Unsubscribe confirmation email', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="confirm_subject" value="' . stripslashes( $this->subscribe2_options['confirm_subject'] ) . '" size="45" /><br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="confirm_email">' . stripslashes( $this->subscribe2_options['confirm_email'] ) . '</textarea>' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="confirm_email" style="width:95%;">' . stripslashes( $this->subscribe2_options['confirm_email'] ) . '</textarea>' . "\r\n";
 		echo '</td></tr><tr><td style="vertical-align: top; height: 350px; min-height: 350px;">';
 		echo __( 'Reminder email to Unconfirmed Subscribers', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="remind_subject" value="' . stripslashes( $this->subscribe2_options['remind_subject'] ) . '" size="45" /><br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="remind_email">' . stripslashes( $this->subscribe2_options['remind_email'] ) . '</textarea><br /><br />' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="remind_email" style="width:95%;">' . stripslashes( $this->subscribe2_options['remind_email'] ) . '</textarea><br /><br />' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'registered':
 		// Access function to allow display for form elements
-		require_once( S2PATH . 'classes/class-s2-forms.php' );
-		$s2_forms = new s2_forms;
+		require_once S2PATH . 'classes/class-s2-forms.php';
+		$s2_forms = new s2_forms();
 
 		// compulsory categories
 		echo '<div class="s2_admin" id="s2_compulsory_categories">' . "\r\n";
@@ -361,8 +369,10 @@ switch ( $current_tab ) {
 		echo '<h3>' . __( 'Auto-Subscribe', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
 		echo __( 'Subscribe new users registering with your blog', 'subscribe2' ) . ':<br />' . "\r\n";
-		echo '<label><input type="radio" name="autosub" value="yes"' . checked( $this->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
-		echo __( 'Automatically', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub'] ) || ( false === S2GDPR ) ) ) {
+			echo '<label><input type="radio" name="autosub" value="yes"' . checked( $this->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
+			echo __( 'Automatically', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+		}
 		echo '<label><input type="radio" name="autosub" value="wpreg"' . checked( $this->subscribe2_options['autosub'], 'wpreg', false ) . ' /> ';
 		echo __( 'Display option on Registration Form', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="autosub" value="no"' . checked( $this->subscribe2_options['autosub'], 'no', false ) . ' /> ';
@@ -372,11 +382,13 @@ switch ( $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="newreg_override" value="no"' . checked( $this->subscribe2_options['newreg_override'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
-		echo __( 'Registration Form option is checked by default', 'subscribe2' ) . ':<br />' . "\r\n";
-		echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="wpregdef" value="no"' . checked( $this->subscribe2_options['wpregdef'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['wpregdef'] ) || ( false === S2GDPR ) ) ) {
+			echo __( 'Registration Form option is checked by default', 'subscribe2' ) . ':<br />' . "\r\n";
+			echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="wpregdef" value="no"' . checked( $this->subscribe2_options['wpregdef'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		}
 		echo __( 'Auto-subscribe users to receive email as', 'subscribe2' ) . ': <br />' . "\r\n";
 		echo '<label><input type="radio" name="autoformat" value="html"' . checked( $this->subscribe2_options['autoformat'], 'html', false ) . ' /> ';
 		echo __( 'HTML - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
@@ -393,11 +405,13 @@ switch ( $current_tab ) {
 		echo __( 'No', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="show_autosub" value="exclude"' . checked( $this->subscribe2_options['show_autosub'], 'exclude', false ) . ' /> ';
 		echo __( 'New categories are immediately excluded', 'subscribe2' ) . '</label><br /><br />';
-		echo __( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
-		echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( $this->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autosub_def" value="no"' . checked( $this->subscribe2_options['autosub_def'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub_def'] ) || ( false === S2GDPR ) ) ) {
+			echo __( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
+			echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( $this->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="autosub_def" value="no"' . checked( $this->subscribe2_options['autosub_def'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
+		}
 		// Hide these options if using Jetpack Comments
 		if ( ! class_exists( 'Jetpack_Comments' ) ) {
 			echo __( 'Display checkbox to allow subscriptions from the comment form', 'subscribe2' ) . ': <br />' . "\r\n";
@@ -407,11 +421,13 @@ switch ( $current_tab ) {
 			echo __( 'After the Comment Submit button', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 			echo '<label><input type="radio" name="comment_subs" value="no"' . checked( $this->subscribe2_options['comment_subs'], 'no', false ) . ' /> ';
 			echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
-			echo __( 'Comment form checkbox is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
-			echo '<label><input type="radio" name="comment_def" value="yes"' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
-			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="comment_def" value="no"' . checked( $this->subscribe2_options['comment_def'], 'no', false ) . ' /> ';
-			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+			if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['comment_def'] ) || ( false === S2GDPR ) ) ) {
+				echo __( 'Comment form checkbox is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
+				echo '<label><input type="radio" name="comment_def" value="yes"' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
+				echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+				echo '<label><input type="radio" name="comment_def" value="no"' . checked( $this->subscribe2_options['comment_def'], 'no', false ) . ' /> ';
+				echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+			}
 		}
 		echo __( 'Show one-click subscription on profile page', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo '<label><input type="radio" name="one_click_profile" value="yes"' . checked( $this->subscribe2_options['one_click_profile'], 'yes', false ) . ' /> ';
@@ -419,12 +435,12 @@ switch ( $current_tab ) {
 		echo '<label><input type="radio" name="one_click_profile" value="no"' . checked( $this->subscribe2_options['one_click_profile'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</p></div>' . "\r\n";
-	break;
+		break;
 
 	case 'appearance':
 		// Appearance options
 		echo '<div class="s2_admin" id="s2_appearance_settings">' . "\r\n";
-		echo '<input type="hidden" name="appearance_users_tab" value="options" />' . "\r\n";
+		echo '<input type="hidden" name="appearance_tab" value="options" />' . "\r\n";
 		echo '<p>' . "\r\n";
 
 		// WordPress page ID where subscribe2 token is used
@@ -433,15 +449,6 @@ switch ( $current_tab ) {
 		echo '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
 		$this->pages_dropdown( $this->subscribe2_options['s2page'] );
 		echo '</select>' . "\r\n";
-
-		// Number of subscribers per page
-		echo '<br /><br />' . __( 'Set the number of Subscribers displayed per page', 'subscribe2' ) . ': ';
-		echo '<span id="s2entries_1"><span id="s2entries" style="background-color: #FFFBCC">' . $this->subscribe2_options['entries'] . '</span> ';
-		echo '<a href="#" onclick="s2_show(\'entries\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
-		echo '<span id="s2entries_2">' . "\r\n";
-		echo '<input type="text" name="entries" value="' . $this->subscribe2_options['entries'] . '" size="3" />' . "\r\n";
-		echo '<a href="#" onclick="s2_update(\'entries\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-		echo '<a href="#" onclick="s2_revert(\'entries\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
 
 		// show link to WordPress page in meta
 		echo '<br /><br /><label><input type="checkbox" name="show_meta" value="1"' . checked( $this->subscribe2_options['show_meta'], '1', false ) . ' /> ';
@@ -466,25 +473,30 @@ switch ( $current_tab ) {
 		// s2_meta checked by default
 		echo '<label><input type="checkbox" name="s2meta_default" value="1"' . checked( $this->subscribe2_options['s2meta_default'], '1', false ) . ' /> ';
 		echo __( 'Disable email notifications is checked by default on authoring pages?', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+
+		// Subscription form for Registered Users on Frontend
+		echo '<label><input type="checkbox" name="js_ip_updater" value="1"' . checked( $this->subscribe2_options['js_ip_updater'], '1', false ) . ' /> ';
+		echo __( 'Use javascript to update IP address in Subscribe2 HTML form data? (useful if caching is enabled)', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</p>';
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'misc':
 		//barred domains
 		echo '<div class="s2_admin" id="s2_barred_domains">' . "\r\n";
 		echo '<h3>' . __( 'Barred Domains', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
-		echo __( 'Enter domains to bar from public subscriptions (wildcards allowed): <br /> (Use a new line for each entry and omit the "@" symbol, for example *.email.com or yahoo.*)', 'subscribe2' );
+		echo __( 'Enter domains to bar for public subscriptions, wildcards (*) and exceptions (!) are allowed', 'subscribe2' ) . '<br />' . "\r\n";
+		echo __( 'Use a new line for each entry and omit the "@" symbol, for example !email.com, hotmail.com, yahoo.*', 'subscribe2' );
 		echo "\r\n" . '<br /><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( $this->subscribe2_options['barred'] ) . '</textarea>';
 		echo '</p>';
 		echo '<h3>' . __( 'Links', 'subscribe2' ) . '</h3>' . "\r\n";
-		echo '<a href="http://wordpress.org/extend/plugins/subscribe2/">' . __( 'Plugin Site', 'subscribe2' ) . '</a><br />';
+		echo '<a href="http://wordpress.org/plugins/subscribe2/">' . __( 'Plugin Site', 'subscribe2' ) . '</a><br />';
 		echo '<a href="http://wordpress.org/support/plugin/subscribe2">' . __( 'Plugin Forum', 'subscribe2' ) . '</a><br />';
 		echo '<a href="http://subscribe2.wordpress.com/">' . __( 'Plugin Blog', 'subscribe2' ) . '</a><br />';
 		echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904">' . __( 'Make a donation via PayPal', 'subscribe2' ) . '</a>';
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 }
 // submit
@@ -500,7 +512,6 @@ if ( 'misc' === $current_tab ) {
 }
 echo '</form></div>' . "\r\n";
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;
-?>

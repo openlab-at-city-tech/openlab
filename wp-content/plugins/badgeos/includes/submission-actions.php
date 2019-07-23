@@ -28,7 +28,7 @@ function badgeos_save_nomination_data() {
 	// Publish the nomination
 	return badgeos_create_nomination(
 		absint( $_POST['achievement_id'] ),
-		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
+		sprintf( '%1$s: %2$s', ucwords( get_post_type( absint( $_POST['achievement_id'] ) ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
 		wp_kses_post( $_POST['badgeos_nomination_content'], $allowedposttags ),
 		absint( $_POST['badgeos_nomination_user_id'] ),
 		absint( absint( $_POST['user_id'] ) )
@@ -109,8 +109,11 @@ function badgeos_hide_quick_edit( $actions = array() ) {
 		unset( $actions['view'] );
 
 		// Rewrtie edit text
-		$actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
-	}
+        if( isset( $actions['edit'] ) && !empty( $actions['edit'] ) ) {
+            $actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
+        }
+
+    }
 
 	return $actions;
 
@@ -333,7 +336,7 @@ function badgeos_save_submission_data() {
 	// Publish the submission
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
-		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
+		sprintf( '%1$s: %2$s', ucwords( get_post_type( absint( $_POST['achievement_id'] ) ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
         wp_kses_post( $_POST['badgeos_submission_content'], $allowedposttags ),
 		absint( $_POST['user_id'] ),
         $action

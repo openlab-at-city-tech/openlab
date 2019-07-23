@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.0
+Tested up to: 5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -74,6 +74,20 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 1.46 (2019-07-16)
+-------------------------
+- Fixed the "Comments are disabled." not being shown for posts in some cases
+
+Version 1.45 (2019-07-16)
+-------------------------
+- Don't output the comment header if there are no comments to display
+- Added "Theme URI" to the readme
+- Don't output comments if the post is password protected
+- Don't output the post thumbnail if the post is password protected
+- Updated "Tested up to" to 5.2
+- Added theme tags for wide-blocks and block-styles
+- Fixed Noto Serif being displayed in the block editor styles
 
 Version 1.44 (2019-06-08)
 -------------------------

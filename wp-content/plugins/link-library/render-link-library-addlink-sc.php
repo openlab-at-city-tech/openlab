@@ -34,13 +34,13 @@ function addlink_render_category_list( $categories, $select_name, $depth, $order
 			$output .= '>';
 
 			if ( 'nodefaultcat' == $libraryoptions['addlinkdefaultcat'] && 'show' == $libraryoptions['showaddlinkcat'] ) {
-				$output .= '<option value="">' . __( 'Select a category', 'link-category' ) . '</option>';
+				$output .= '<option value="">' . $libraryoptions['userlinkcatselectionlabel'] . '</option>';
 			}
 
 		}
 
 		foreach ( $categories as $category ) {
-			$output .= '<option value="' . $category->term_id . ' ';
+			$output .= '<option value="' . $category->term_id . '" ';
 
 			if ( isset( $_GET['addlinkcat'] ) && in_array( $category->term_id, $_GET['addlinkcat'] ) ) {
 				$output .= "selected";
@@ -48,7 +48,7 @@ function addlink_render_category_list( $categories, $select_name, $depth, $order
 				$output .= "selected";
 			}
 
-			$output .= '">' . str_repeat( '&nbsp;', 4 * $depth ) . $category->name . '</option>';
+			$output .= '>' . str_repeat( '&nbsp;', 4 * $depth ) . $category->name . '</option>';
 			$child_categories = get_terms( 'link_library_category', array( 'orderby' => 'name', 'parent' => $category->term_id, 'order' => $order, 'hide_empty' => false ) );
 
 			if ( !empty( $child_categories ) ) {
@@ -86,91 +86,92 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
     extract( $generaloptions );
 
     $libraryoptions = wp_parse_args( $libraryoptions, ll_reset_options( 1, 'list', 'return' ) );
+
+	if ( $libraryoptions['showaddlinkrss'] === false ) {
+		$libraryoptions['showaddlinkrss'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinkrss'] === true ) {
+		$libraryoptions['showaddlinkrss'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinkdesc'] === false ) {
+		$libraryoptions['showaddlinkdesc'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinkdesc'] === true ) {
+		$libraryoptions['showaddlinkdesc'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinkcat'] === false ) {
+		$libraryoptions['showaddlinkcat'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinkcat'] === true ) {
+		$libraryoptions['showaddlinkcat'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinknotes'] === false ) {
+		$libraryoptions['showaddlinknotes'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinknotes'] === true ) {
+		$libraryoptions['showaddlinknotes'] = 'show';
+	}
+
+	if ( $libraryoptions['addlinkcustomcat'] === false ) {
+		$libraryoptions['addlinkcustomcat'] = 'hide';
+	} elseif ( $libraryoptions['addlinkcustomcat'] === true ) {
+		$libraryoptions['addlinkcustomcat'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinkreciprocal'] === false ) {
+		$libraryoptions['showaddlinkreciprocal'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinkreciprocal'] === true ) {
+		$libraryoptions['showaddlinkreciprocal'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinksecondurl'] === false ) {
+		$libraryoptions['showaddlinksecondurl'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinksecondurl'] === true ) {
+		$libraryoptions['showaddlinksecondurl'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinktelephone'] === false ) {
+		$libraryoptions['showaddlinktelephone'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinktelephone'] === true ) {
+		$libraryoptions['showaddlinktelephone'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinkemail'] === false ) {
+		$libraryoptions['showaddlinkemail'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinkemail'] === true ) {
+		$libraryoptions['showaddlinkemail'] = 'show';
+	}
+
+	if ( $libraryoptions['showlinksubmittername'] === false ) {
+		$libraryoptions['showlinksubmittername'] = 'hide';
+	} elseif ( $libraryoptions['showlinksubmittername'] === true ) {
+		$libraryoptions['showlinksubmittername'] = 'show';
+	}
+
+	if ( $libraryoptions['showaddlinksubmitteremail'] === false ) {
+		$libraryoptions['showaddlinksubmitteremail'] = 'hide';
+	} elseif ( $libraryoptions['showaddlinksubmitteremail'] === true ) {
+		$libraryoptions['showaddlinksubmitteremail'] = 'show';
+	}
+
+	if ( $libraryoptions['showlinksubmittercomment'] === false ) {
+		$libraryoptions['showlinksubmittercomment'] = 'hide';
+	} elseif ( $libraryoptions['showlinksubmittercomment'] === true ) {
+		$libraryoptions['showlinksubmittercomment'] = 'show';
+	}
+
+	if ( $libraryoptions['showcustomcaptcha'] === false ) {
+		$libraryoptions['showcustomcaptcha'] = 'hide';
+	} elseif ( $libraryoptions['showcustomcaptcha'] === true ) {
+		$libraryoptions['showcustomcaptcha'] = 'show';
+	}
+
+	if ( $libraryoptions['showuserlargedescription'] === false ) {
+		$libraryoptions['showuserlargedescription'] = 'hide';
+	} elseif ( $libraryoptions['showuserlargedescription'] === true ) {
+		$libraryoptions['showuserlargedescription'] = 'show';
+	}
+
     extract( $libraryoptions );
-
-    if ( $libraryoptions['showaddlinkrss'] === false ) {
-        $libraryoptions['showaddlinkrss'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinkrss'] === true ) {
-        $libraryoptions['showaddlinkrss'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinkdesc'] === false ) {
-        $libraryoptions['showaddlinkdesc'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinkdesc'] === true ) {
-        $libraryoptions['showaddlinkdesc'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinkcat'] === false ) {
-        $libraryoptions['showaddlinkcat'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinkcat'] === true ) {
-        $libraryoptions['showaddlinkcat'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinknotes'] === false ) {
-        $libraryoptions['showaddlinknotes'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinknotes'] === true ) {
-        $libraryoptions['showaddlinknotes'] = 'show';
-    }
-
-    if ( $libraryoptions['addlinkcustomcat'] === false ) {
-        $libraryoptions['addlinkcustomcat'] = 'hide';
-    } elseif ( $libraryoptions['addlinkcustomcat'] === true ) {
-        $libraryoptions['addlinkcustomcat'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinkreciprocal'] === false ) {
-        $libraryoptions['showaddlinkreciprocal'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinkreciprocal'] === true ) {
-        $libraryoptions['showaddlinkreciprocal'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinksecondurl'] === false ) {
-        $libraryoptions['showaddlinksecondurl'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinksecondurl'] === true ) {
-        $libraryoptions['showaddlinksecondurl'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinktelephone'] === false ) {
-        $libraryoptions['showaddlinktelephone'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinktelephone'] === true ) {
-        $libraryoptions['showaddlinktelephone'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinkemail'] === false ) {
-        $libraryoptions['showaddlinkemail'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinkemail'] === true ) {
-        $libraryoptions['showaddlinkemail'] = 'show';
-    }
-
-    if ( $libraryoptions['showlinksubmittername'] === false ) {
-        $libraryoptions['showlinksubmittername'] = 'hide';
-    } elseif ( $libraryoptions['showlinksubmittername'] === true ) {
-        $libraryoptions['showlinksubmittername'] = 'show';
-    }
-
-    if ( $libraryoptions['showaddlinksubmitteremail'] === false ) {
-        $libraryoptions['showaddlinksubmitteremail'] = 'hide';
-    } elseif ( $libraryoptions['showaddlinksubmitteremail'] === true ) {
-        $libraryoptions['showaddlinksubmitteremail'] = 'show';
-    }
-
-    if ( $libraryoptions['showlinksubmittercomment'] === false ) {
-        $libraryoptions['showlinksubmittercomment'] = 'hide';
-    } elseif ( $libraryoptions['showlinksubmittercomment'] === true ) {
-        $libraryoptions['showlinksubmittercomment'] = 'show';
-    }
-
-    if ( $libraryoptions['showcustomcaptcha'] === false ) {
-        $libraryoptions['showcustomcaptcha'] = 'hide';
-    } elseif ( $libraryoptions['showcustomcaptcha'] === true ) {
-        $libraryoptions['showcustomcaptcha'] = 'show';
-    }
-
-    if ( $libraryoptions['showuserlargedescription'] === false ) {
-        $libraryoptions['showuserlargedescription'] = 'hide';
-    } elseif ( $libraryoptions['showuserlargedescription'] === true ) {
-        $libraryoptions['showuserlargedescription'] = 'show';
-    }
 
     /* This case will only happen if the user entered bad data in the admin page or if someone is trying to inject bad data in SQL query */
     if ( !empty( $categorylist ) ) {
@@ -243,12 +244,15 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 	            $output .= '<div class="llmessage">' . __('Link rejected. There is already a site with this reciprocal link.', 'link-library') . '</div>';
             } elseif ( 24 == $_GET['addlinkmessage'] ) {
 	            $output .= '<div class="llmessage">' . __('Link rejected. Invalid reciprocal link.', 'link-library') . '</div>';
+            } elseif ( 25 == $_GET['addlinkmessage'] ) {
+	            $output .= '<div class="llmessage">' . $libraryoptions['linkimagelabel'] . __(' is a required field', 'link-library') . '</div>';
             }
         }
     }
 
     if ( ( 'link-library-addlink' == $code || 'addlink-link-library' == $code ) && ( ( $addlinkreqlogin && current_user_can( 'read' ) ) || !$addlinkreqlogin ) ) {
-        $output .= '<form method="post" id="lladdlink" action="">';
+        $output .= '<form enctype="multipart/form-data" method="post" id="lladdlink" action="">';
+        $output .= '<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />';
 
         $output .= wp_nonce_field( 'LL_ADDLINK_FORM', '_wpnonce', true, false );
         $output .= '<input type="hidden" name="thankyouurl" value="' . $linksubmissionthankyouurl . '" />';
@@ -290,7 +294,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
         if ( !$addlinknoaddress ) {
             $output .= 'data-validation="required url length" data-validation-length="max255" data-validation-error-msg-required="' . __( 'Required field, URL', 'link-library' ) . '" ';
         }
-        $output .= 'type="text" name="link_url" id="link_url" value="' . ( isset( $_GET['addlinkurl'] ) ? esc_html( stripslashes( $_GET['addlinkurl'] ), '1') : 'http://' ) . "\" /></td></tr>\n";
+        $output .= 'type="text" name="link_url" id="link_url" value="' . ( isset( $_GET['addlinkurl'] ) ? esc_html( stripslashes( $_GET['addlinkurl'] ), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 
         if ( 'show' == $showaddlinkrss || 'required' == $showaddlinkrss) {
             if ( empty( $linkrsslabel ) ) {
@@ -508,6 +512,17 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 
             $output .= "</td></tr>\n";
         }
+
+	    if ( 'show' == $showaddlinkimage || 'required' == $showaddlinkimage ) {
+		    if ( empty( $linkimagelabel ) ) {
+			    $linkimagelabel = __( 'Link Image (jpg, jpeg, png)', 'link-library' );
+		    }
+
+		    $output .= '<tr><th>' . $linkimagelabel . '</th><td>';
+		    $output .= '<input type="file" name="linkimage" id="linkimage">';
+
+		    $output .= "</td></tr>\n";
+	    }
 
         if ( 'show' == $showaddlinkreciprocal || 'required' == $showaddlinkreciprocal) {
             if ( empty( $linkreciprocallabel ) ) {

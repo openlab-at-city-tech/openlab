@@ -30,8 +30,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 function s2_uninstall() {
 	global $wpdb;
-	// get name of subscribe2 table
-	$public = $wpdb->prefix . 'subscribe2';
 	// delete entry from wp_options table
 	delete_option( 'subscribe2_options' );
 	// delete legacy entry from wp-options table
@@ -49,6 +47,5 @@ function s2_uninstall() {
 	$wpdb->query( "DELETE from $wpdb->postmeta WHERE meta_key = 's2mail'" );
 
 	// drop the subscribe2 table
-	$wpdb->query( "DROP TABLE IF EXISTS $public" );
-} // end s2_uninstall()
-?>
+	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}subscribe2" );
+}

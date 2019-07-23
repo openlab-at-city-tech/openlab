@@ -78,31 +78,37 @@ class QM_Collector_Logger extends QM_Collector {
 
 		if ( is_wp_error( $message ) ) {
 			$message = sprintf(
-				'%s (%s)',
+				'WP_Error: %s (%s)',
 				$message->get_error_message(),
 				$message->get_error_code()
 			);
 		}
 
 		if ( $message instanceof Exception ) {
-			$message = $message->getMessage();
+			$message = get_class( $message ) . ': ' . $message->getMessage();
+		}
+
+		if ( ! QM_Util::is_stringy( $message ) ) {
+			$message = QM_Util::json_format( $message );
 		}
 
 		$this->data['logs'][] = array(
-			'message' => $this->interpolate( $message, $context ),
+			'message' => self::interpolate( $message, $context ),
 			'context' => $context,
 			'trace'   => $trace,
 			'level'   => $level,
 		);
 	}
 
-	protected function interpolate( $message, array $context = array() ) {
+	protected static function interpolate( $message, array $context = array() ) {
 		// build a replacement array with braces around the context keys
 		$replace = array();
 
 		foreach ( $context as $key => $val ) {
 			// check that the value can be casted to string
-			if ( is_scalar( $val ) || ( is_object( $val ) && method_exists( $val, '__toString' ) ) ) {
+			if ( is_bool( $val ) ) {
+				$replace[ "{{$key}}" ] = ( $val ? 'true' : 'false' );
+			} elseif ( is_scalar( $val ) || QM_Util::is_stringy( $val ) ) {
 				$replace[ "{{$key}}" ] = $val;
 			}
 		}

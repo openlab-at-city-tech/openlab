@@ -133,13 +133,13 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
             $link_categories_query_args['exclude'] = explode( ',', $excludecategorylist_cpt );
         }
 
-        if ( ( !empty( $categorysluglist ) || isset( $_GET['cat'] ) ) && empty( $singlelinkid ) && $level == 0 ) {
+        /* if ( ( !empty( $categorysluglist ) || isset( $_GET['cat'] ) ) && empty( $singlelinkid ) && $level == 0 ) {
         	if ( !empty( $categorysluglist ) ) {
 		        $link_categories_query_args['slug'] = explode( ',', $categorysluglist );
 	        } elseif ( isset( $_GET['cat'] ) ) {
 		        $link_categories_query_args['slug'] = $_GET['cat'];
 	        }
-        }
+        } */
 
         if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) && $level == 0 ) {
             $link_categories_query_args['slug'] = $categoryname;
@@ -213,6 +213,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 			            $output .= "onchange='showcategory()' ";
 		            }
 		            $output .= "name='catdropdown' class='catdropdown'>";
+
+		            if ( $dropdownselectionprompt && !empty( $dropdownselectionprompttext ) ) {
+		            	$output .= '<option value="">' . $dropdownselectionprompttext . '</option>';
+		            }
 	            }
             } else {
 	            if ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {

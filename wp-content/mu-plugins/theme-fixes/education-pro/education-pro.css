@@ -117,7 +117,12 @@ fieldset {
 }
 
 
-button, input[type="button"], input[type="reset"], input[type="submit"], .button, div.wp-block-file__button a {
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.button,
+div.wp-block-file__button a {
     background-color: #e3f2fa;
     color: #444;
 }
@@ -243,6 +248,11 @@ a.breadcrumb-link {
     color: #aa2418;
 	border-bottom: 1px solid #aa2418;
 	padding-bottom: 1px;
+}
+
+div.entry-content .wp-block-image a {
+	border-bottom: 0;
+	padding-bottom;
 }
 
 .entry-content a:hover,
@@ -566,6 +576,7 @@ body .site-title a {
 .education-pro-blue button,
 .education-pro-blue a.button,
 .education-pro-blue input[type="submit"],
+.education-pro-blue a.wp-block-file__button,
 .education-pro-blue .footer-widgets a.button,
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
@@ -574,6 +585,7 @@ body .site-title a {
 
 .education-pro-blue button:hover,
 .education-pro-blue a.button:hover,
+.education-pro-blue a.wp-block-file__button:hover,
 .education-pro-blue .footer-widgets a.button:hover,
 .education-pro-blue .site-footer a.button:hover {
 	background-color: #444;

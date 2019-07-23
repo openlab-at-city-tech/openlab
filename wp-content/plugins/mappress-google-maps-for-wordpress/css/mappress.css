@@ -80,6 +80,10 @@
 	box-shadow: none !important;			/* 2016, 2017 */
 }
 
+a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+	text-decoration: none !important;
+}
+
 
 @media only screen and (min--moz-device-pixel-ratio: 2),
 only screen and (-o-min-device-pixel-ratio: 2/1),
@@ -437,11 +441,12 @@ input.mapp-aa-input, input.mapp-aa-hint {
 	font-weight: bold;
 }
 
-.mapp-iw .mapp-thumb {
+/* Thumbnails */
+.mapp-body .wp-post-image {
 	padding-right: 10px !important;     /* important is used here because otherwise .mapp-canvas img setting will take priority */
 	vertical-align: top;
 	float: left;
-	width: 32px ;
+	width: 32px;
 	height: 32px;
 }
 

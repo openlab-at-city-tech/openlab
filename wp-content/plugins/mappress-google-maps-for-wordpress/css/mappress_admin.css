@@ -212,6 +212,12 @@ input.mapp-media-title {
 	margin-top: 10px;
 }
 
+/* Hidden submit buttons to use as form default */
+.mapp-settings-hidden-toolbar {
+	height: 0;
+	overflow: hidden;
+}
+
 /* Simulate postboxes */
 .mapp-settings-screen h2 {
 	background-color: white;

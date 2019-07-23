@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 1.4.11
+* Version: 2.4
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -33,13 +33,17 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '1.4.11';
+	public static $version = '2.4';
 
 	function __construct() {
 		// Define plugin constants
 		$this->basename       = plugin_basename( __FILE__ );
 		$this->directory_path = plugin_dir_path( __FILE__ );
 		$this->directory_url  = plugin_dir_url( __FILE__ );
+
+        $this->start_time	  = strtotime(" -1 second ");
+
+        $this->award_ids  = array();
 
 		// Load translations
 		load_plugin_textdomain( 'badgeos', false, 'badgeos/languages' );
@@ -91,6 +95,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/credly.php' );
 		require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
+        require_once( $this->directory_path . 'includes/posts-functions.php' );
 	}
 
 	/**
@@ -137,7 +142,9 @@ class BadgeOS {
 
 		// Don't load on frontend.
 		if ( !is_admin() ) { return; }
-		require_once( $this->directory_path . 'includes/cmb/load.php' );
+        require_once( $this->directory_path . 'includes/cmb2/init.php' );
+        require_once( $this->directory_path . 'includes/cmb2-custom-multiple-selectbox.php' );
+        require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
 	}
 
 	/**
@@ -252,10 +259,21 @@ class BadgeOS {
 	function plugin_menu() {
 
 		// Set minimum role setting for menus
-		$minimum_role = badgeos_get_manager_capability();
+        $caps = array( 'manage_options', 'delete_others_posts', 'publish_posts' );
+        $minimum_role 				= badgeos_get_manager_capability();
+        $minimum_submission_role 	= badgeos_get_submission_manager_capability();
 
-		// Create main menu
-		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
+        $admin_role_num = array_search ( $minimum_role, $caps );
+        $submission_role_num = array_search ( $minimum_submission_role, $caps );
+        $main_item_role = $minimum_role;
+        if( $submission_role_num > $admin_role_num ) {
+            $main_item_role = $minimum_submission_role;
+        }
+        $main_item_role = trim( $main_item_role );
+
+
+        // Create main menu
+        add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
@@ -336,6 +354,15 @@ $GLOBALS['badgeos'] = new BadgeOS();
  */
 function badgeos_get_directory_path() {
 	return $GLOBALS['badgeos']->directory_path;
+}
+
+/**
+ * Get our current start time
+ *
+ * @return timestamp
+ */
+function badgeos_get_start_time() {
+    return $GLOBALS['badgeos']->start_time;
 }
 
 /**

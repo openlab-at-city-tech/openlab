@@ -1,6 +1,6 @@
 <article <?php post_class( 'single-container bg-color-white' ); ?> id="post-<?php the_ID(); ?>">
 
-	<?php if ( has_post_thumbnail() ) : ?>
+	<?php if ( has_post_thumbnail() && ! post_password_required() ) : ?>
 
 		<div class="featured-media">
 
@@ -83,7 +83,7 @@
 		endif;
 
 		// If comments are open, or there are at least one comment
-		if ( comments_open() || get_comments_number() ) : ?>
+		if ( ( get_post_type() == 'post' || comments_open() || get_comments_number() ) && ! post_password_required() ) : ?>
 
 			<div class="comments-wrapper">
 

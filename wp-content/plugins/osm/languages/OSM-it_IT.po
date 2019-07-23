@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-21 22:26+0100\n"
-"PO-Revision-Date: 2015-02-21 22:30+0100\n"
+"PO-Revision-Date: 2019-02-20 09:21+0100\n"
 "Last-Translator: MiKa <Michael.Kang@Suedkorea.at>\n"
 "Language-Team: Italian <LL@li.org>\n"
-"Language: Italian\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: osm-error-msg.php:11
 msgid "gcStats plugin is not activated!"
@@ -130,16 +130,16 @@ msgstr "File GPX"
 
 #: osm-file-select.php:3 osm-marker-select.php:3 osm-marker-select.php:9
 #: osm-marker-select.php:20 osm-metabox.php:140 osm-options.php:35
-#: osm-options.php:41 osm-options.php:52 osm-options.php:110
-#: osm-widget.php:102 osm-widget.php:114
+#: osm-options.php:41 osm-options.php:52 osm-options.php:110 osm-widget.php:102
+#: osm-widget.php:114
 msgid "red"
 msgstr "rosso"
 
 #: osm-file-select.php:4 osm-marker-select.php:2 osm-marker-select.php:10
 #: osm-marker-select.php:16 osm-marker-select.php:22 osm-marker-select.php:42
 #: osm-marker-select.php:46 osm-metabox.php:139 osm-options.php:34
-#: osm-options.php:42 osm-options.php:48 osm-options.php:54
-#: osm-options.php:111 osm-widget.php:101 osm-widget.php:113
+#: osm-options.php:42 osm-options.php:48 osm-options.php:54 osm-options.php:111
+#: osm-widget.php:101 osm-widget.php:113
 msgid "green"
 msgstr "verde"
 
@@ -161,10 +161,10 @@ msgstr "blu"
 #: osm-marker-select.php:29 osm-marker-select.php:30 osm-marker-select.php:31
 #: osm-marker-select.php:32 osm-marker-select.php:41 osm-marker-select.php:43
 #: osm-marker-select.php:44 osm-marker-select.php:45 osm-marker-select.php:49
-#: osm-metabox.php:142 osm-options.php:38 osm-options.php:39
-#: osm-options.php:40 osm-options.php:44 osm-options.php:60 osm-options.php:61
-#: osm-options.php:62 osm-options.php:63 osm-options.php:64 osm-options.php:73
-#: osm-options.php:113 osm-widget.php:104 osm-widget.php:117
+#: osm-metabox.php:142 osm-options.php:38 osm-options.php:39 osm-options.php:40
+#: osm-options.php:44 osm-options.php:60 osm-options.php:61 osm-options.php:62
+#: osm-options.php:63 osm-options.php:64 osm-options.php:73 osm-options.php:113
+#: osm-widget.php:104 osm-widget.php:117
 msgid "black"
 msgstr "nero"
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace com\cminds\package\free\v1_0_12;
+namespace com\cminds\package\free\v1_0_13;
 
 if ( !class_exists( __NAMESPACE__ . '\CmindsLicensingAPI' ) ) {
 

@@ -265,6 +265,17 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['showscheduledlinks']              = false;
 	$options['maxlinkspercat']                  = '';
 	$options['suppressnoreferrer']              = false;
+	$options['linkaddrdefvalue']                = 'https://';
+	$options['userlinkcatselectionlabel']       = __( 'Select a category', 'link-library' );
+	$options['dropdownselectionprompt']         = false;
+	$options['dropdownselectionprompttext']     = __( 'Select a category', 'link-library' );
+	$options['showcatname']                     = false;
+	$options['beforecatname']                   = '';
+	$options['aftercatname']                    = '';
+	$options['onelinkperdomain']                = '';
+	$options['showupdatedtooltip']              = false;
+	$options['linkimagelabel']                  = __( 'Link Image (jpg, jpeg, png)', 'link-library' ) ;
+	$options['showaddlinkimage']                = 'hide';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -320,6 +331,7 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['bp_log_activity']              = false;
 	$genoptions['bp_link_page_url']             = '';
 	$genoptions['bp_link_settings']             = '';
+	$genoptions['defaultprotocoladmin']         = 'http';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );
@@ -329,4 +341,279 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	}
 
 	return $genoptions;
+}
+
+function ll_modify_layout( $settings, $newlayout ) {
+	$settingsname = 'LinkLibraryPP' . $settings;
+	$options      = get_option( $settingsname );
+
+	if ( 1 == $newlayout || 2 == $newlayout) {
+		// Layout 1: Simple Unordered List
+		// Layout 2: Unordered list with link descriptions
+		$options['displayastable']    = 'false';
+		$options['showcolumnheaders'] = false;
+		$options['columnheaderoverride'] = '';
+		$options['linkaddfrequency']     = 0;
+
+		$options['beforefirstlink']   = '';
+		$options['afterlastlink']     = '';
+
+		$options['beforeitem']        = '<li>';
+		$options['afteritem']         = '</li>';
+
+		$options['showname']          = true;
+		$options['beforelink']        = '';
+		$options['afterlink']         = '';
+
+		if ( 1 == $newlayout ) {
+			$options['showdescription']   = false;
+		} else {
+			$options['showdescription']   = true;
+		}
+
+		$options['beforedesc']        = '';
+		$options['afterdesc']         = '';
+
+		$options['shownotes']         = false;
+		$options['beforenote']        = '';
+		$options['afternote']         = '';
+
+		$options['show_images']         = false;
+		$options['beforeimage']       = '';
+		$options['afterimage']        = '';
+
+		$options['showdate']          = false;
+		$options['beforedate']        = '';
+		$options['afterdate']         = '';
+
+		$options['showlargedescription']    = false;
+		$options['beforelargedescription']  = '';
+		$options['afterlargedescription']   = '';
+
+		$options['displayweblink']    = 'false';
+		$options['beforeweblink']     = '';
+		$options['afterweblink']      = '';
+
+		$options['showtelephone']     = 'false';
+		$options['beforetelephone']   = '';
+		$options['aftertelephone']    = '';
+
+		$options['showemail']         = 'false';
+		$options['beforeemail']       = '';
+		$options['afteremail']        = '';
+
+		$options['showlinkhits']      = false;
+		$options['beforelinkhits']    = '';
+		$options['afterlinkhits']     = '';
+
+		$options['showrating']        = false;
+		$options['beforelinkrating']  = '';
+		$options['afterlinkrating']   = '';
+
+		$options['showsubmittername']   = false;
+		$options['beforesubmittername'] = '';
+		$options['aftersubmittername']  = '';
+
+		$options['showcatdesc']      = false;
+		$options['beforecatdesc']    = '';
+		$options['aftercatdesc']     = '';
+
+		$options['showlinktags']      = false;
+		$options['beforelinktags']    = '';
+		$options['afterlinktags']     = '';
+
+		$options['showlinkprice']      = false;
+		$options['beforelinkprice']    = '';
+		$options['afterlinkprice']     = '';
+
+		$options['showcatname']      = false;
+		$options['beforecatname']    = '';
+		$options['aftercatname']     = '';
+
+		$options['beforerss']         = '';
+		$options['afterrss']          = '';
+
+		$options['addbeforelink']   = '';
+		$options['addafterlink']    = '';
+	} elseif ( 3 == $newlayout ) {
+
+		$options['displayastable']    = 'true';
+		$options['showcolumnheaders'] = true;
+		$options['columnheaderoverride'] = 'Link,Description';
+		$options['linkaddfrequency']     = 0;
+
+		$options['beforefirstlink']   = '';
+		$options['afterlastlink']     = '';
+
+		$options['beforeitem']        = '<tr>';
+		$options['afteritem']         = '</tr>';
+
+		$options['showname']          = true;
+		$options['beforelink']        = '<td>';
+		$options['afterlink']         = '</td>';
+
+		$options['showdescription']   = true;
+
+		$options['beforedesc']        = '<td>';
+		$options['afterdesc']         = '</td>';
+
+		$options['shownotes']         = false;
+		$options['beforenote']        = '<td>';
+		$options['afternote']         = '</td>';
+
+		$options['show_images']         = false;
+		$options['beforeimage']       = '<td>';
+		$options['afterimage']        = '</td>';
+
+		$options['showdate']          = false;
+		$options['beforedate']        = '<td>';
+		$options['afterdate']         = '</td>';
+
+		$options['showlargedescription']    = false;
+		$options['beforelargedescription']  = '<td>';
+		$options['afterlargedescription']   = '</td>';
+
+		$options['displayweblink']    = 'false';
+		$options['beforeweblink']     = '<td>';
+		$options['afterweblink']      = '</td>';
+
+		$options['showtelephone']     = 'false';
+		$options['beforetelephone']   = '<td>';
+		$options['aftertelephone']    = '</td>';
+
+		$options['showemail']         = 'false';
+		$options['beforeemail']       = '<td>';
+		$options['afteremail']        = '</td>';
+
+		$options['showlinkhits']      = false;
+		$options['beforelinkhits']    = '<td>';
+		$options['afterlinkhits']     = '</td>';
+
+		$options['showrating']        = false;
+		$options['beforelinkrating']  = '<td>';
+		$options['afterlinkrating']   = '</td>';
+
+		$options['showsubmittername']   = false;
+		$options['beforesubmittername'] = '<td>';
+		$options['aftersubmittername']  = '</td>';
+
+		$options['showcatdesc']      = false;
+		$options['beforecatdesc']    = '<td>';
+		$options['aftercatdesc']     = '</td>';
+
+		$options['showlinktags']      = false;
+		$options['beforelinktags']    = '<td>';
+		$options['afterlinktags']     = '</td>';
+
+		$options['showlinkprice']      = false;
+		$options['beforelinkprice']    = '<td>';
+		$options['afterlinkprice']     = '</td>';
+
+		$options['showcatname']      = false;
+		$options['beforecatname']    = '<td>';
+		$options['aftercatname']     = '</td>';
+
+		$options['beforerss']         = '<td>';
+		$options['afterrss']          = '</td>';
+
+		$options['addbeforelink']   = '';
+		$options['addafterlink']    = '';
+	} elseif ( 4 == $newlayout || 5 == $newlayout ) {
+
+		$options['displayastable']    = 'true';
+		$options['showcolumnheaders'] = false;
+		$options['columnheaderoverride'] = 'Link,Description';
+		$options['linkaddfrequency']     = 2;
+
+		$options['beforefirstlink']   = '';
+		$options['afterlastlink']     = '';
+
+		$options['beforeitem']        = '';
+		$options['afteritem']         = '';
+
+		$options['showname']          = true;
+
+		if ( 4 == $newlayout ) {
+			$options['beforelink'] = '';
+		} elseif ( 5 == $newlayout ) {
+			$options['beforelink'] = '<td>';
+		}
+		$options['afterlink']         = '<br />';
+
+		$options['showdescription']   = true;
+		$options['beforedesc']        = '';
+		$options['afterdesc']         = '<br />';
+
+		$options['shownotes']         = false;
+		$options['beforenote']        = '';
+		$options['afternote']         = '<br />';
+
+		$options['show_images']         = true;
+
+		if ( 4 == $newlayout ) {
+			$options['beforeimage']       = "<td style='width:50%'>";
+			$options['afterimage']        = '<br />';
+		} elseif ( 5 == $newlayout ) {
+			$options['beforeimage']       = "<td style='width:100px'>";
+			$options['afterimage']        = '</td>';
+		}
+
+		$options['showdate']          = false;
+		$options['beforedate']        = '';
+		$options['afterdate']         = '<br />';
+
+		$options['showlargedescription']    = false;
+		$options['beforelargedescription']  = '';
+		$options['afterlargedescription']   = '<br />';
+
+		$options['displayweblink']    = 'false';
+		$options['beforeweblink']     = '';
+		$options['afterweblink']      = '<br />';
+
+		$options['showtelephone']     = 'false';
+		$options['beforetelephone']   = '';
+		$options['aftertelephone']    = '<br />';
+
+		$options['showemail']         = 'false';
+		$options['beforeemail']       = '';
+		$options['afteremail']        = '<br />';
+
+		$options['showlinkhits']      = false;
+		$options['beforelinkhits']    = '';
+		$options['afterlinkhits']     = '<br />';
+
+		$options['showrating']        = false;
+		$options['beforelinkrating']  = '';
+		$options['afterlinkrating']   = '<br />';
+
+		$options['showsubmittername']   = false;
+		$options['beforesubmittername'] = '';
+		$options['aftersubmittername']  = '<br />';
+
+		$options['showcatdesc']      = false;
+		$options['beforecatdesc']    = '';
+		$options['aftercatdesc']     = '<br />';
+
+		$options['showlinktags']      = false;
+		$options['beforelinktags']    = '';
+		$options['afterlinktags']     = '<br />';
+
+		$options['showlinkprice']      = false;
+		$options['beforelinkprice']    = '';
+		$options['afterlinkprice']     = '<br />';
+
+		$options['showcatname']      = false;
+		$options['beforecatname']    = '';
+		$options['aftercatname']     = '<br />';
+
+		$options['beforerss']         = '';
+		$options['afterrss']          = '<br />';
+
+		$options['addbeforelink']   = '<tr>';
+		$options['addafterlink']    = '</tr>';
+	}
+
+	update_option( $settingsname, $options );
+
+	return $options;
 }

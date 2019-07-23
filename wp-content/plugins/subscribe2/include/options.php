@@ -25,7 +25,7 @@ if ( ! isset( $mysubscribe2->subscribe2_options['show_autosub'] ) ) {
 } // option to display auto-subscription option to registered users
 
 if ( ! isset( $mysubscribe2->subscribe2_options['autosub_def'] ) ) {
-	$mysubscribe2->subscribe2_options['autosub_def'] = 'yes';
+	$mysubscribe2->subscribe2_options['autosub_def'] = 'no';
 } // option for user default auto-subscription to new categories
 
 if ( ! isset( $mysubscribe2->subscribe2_options['comment_subs'] ) ) {
@@ -128,10 +128,6 @@ if ( ! isset( $mysubscribe2->subscribe2_options['s2meta_default'] ) ) {
 	$mysubscribe2->subscribe2_options['s2meta_default'] = '0';
 } // option for Subscribe2 over ride postmeta to be checked by default
 
-if ( ! isset( $mysubscribe2->subscribe2_options['entries'] ) ) {
-	$mysubscribe2->subscribe2_options['entries'] = 25;
-} // option for the number of subscribers displayed on each page
-
 if ( ! isset( $mysubscribe2->subscribe2_options['barred'] ) ) {
 	$mysubscribe2->subscribe2_options['barred'] = '';
 } // option containing domains barred from public registration
@@ -165,10 +161,9 @@ if ( ! isset( $mysubscribe2->subscribe2_options['remind_subject'] ) ) {
 } // Default reminder email subject
 
 if ( ! isset( $mysubscribe2->subscribe2_options['ajax'] ) ) {
-	$mysubscribe2->subscribe2_options['ajax'] = '0';
+	$mysubscribe2->subscribe2_options['ajax'] = '';
 } // Default frontend form setting
 
 if ( ! isset( $mysubscribe2->subscribe2_options['js_ip_updater'] ) ) {
-	$mysubscribe2->subscribe2_options['js_ip_updater'] = '0';
+	$mysubscribe2->subscribe2_options['js_ip_updater'] = '';
 } // Default setting for using javascript to update form ip address
-?>

@@ -32,10 +32,15 @@ Try excluding this plugin's Javascript from any performance optimizations your s
 
 == Screenshots ==
 
-1. Example code display of some PHP inside some HTML.
-2. A part of the Settings page which controls the defaults.
+1. Example display of some PHP code.
+2. An example use of the editor block.
 
 == ChangeLog ==
+
+= Version 3.5.0 =
+
+* Block: Add a bunch of display settings.
+* Block: Switch to server-side rendering so that the same code that renders the shortcode will render the block.
 
 = Version 3.4.2 =
 

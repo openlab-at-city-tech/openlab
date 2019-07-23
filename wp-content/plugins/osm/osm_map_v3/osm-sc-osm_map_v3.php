@@ -21,7 +21,7 @@
     'height'     => '300',
     'map_center' => OSM_default_lat.','.OSM_default_lon,
     'zoom'       => '4',
-	'map_api_key' => 'NoKey',
+    'map_api_key' => 'NoKey',
     'file_list'  => 'NoFile',
     'file_color_list'  => 'NoColor',
     'type'       => 'osm',
@@ -38,6 +38,7 @@
     'wms_attr_name' => 'wms_attr_name',
     'wms_attr_url' => 'wms_attr_url',
     'tagged_type' => 'no',
+    'tagged_filter_type' => 'category',
     'tagged_filter' => 'osm_all',
     'tagged_param' => 'no',
     'tagged_color' => 'blue',
@@ -80,6 +81,7 @@
 				$wms_attr_url,
 				$tagged_type,
 				$tagged_filter,
+                                $tagged_filter_type,
 				$mwz,$post_markers,
 				$display_marker_name,
 				$tagged_param,
@@ -105,8 +107,9 @@
     $height_str = $sc_args->getMapHeight_str();
     $type =  $sc_args->getMapType();
     $postmarkers = $sc_args->getPostMarkers();
-	$api_key = $sc_args->getMapAPIkey();
+    $api_key = $sc_args->getMapAPIkey();
 
+    static $OL3_LIBS_LOADED = 0;
 
 
     if ($debug_trc == "true"){
@@ -146,7 +149,7 @@
 			}
 
 			$MapCounter += 1;
-			$MapName = 'map_ol3js_' . $MapCounter;
+                        $MapName = 'map_ol3js_' . $MapCounter;
 
 			// $setup_map_name is a class name - to control several maps at once map_name need not to be unique on one page
 			$output = '
@@ -158,8 +161,9 @@
 				</div>
 			';
 
-			if(!defined('OL3_LIBS_LOADED')) {
-			  define ('OL3_LIBS_LOADED', 1);
+
+if( $OL3_LIBS_LOADED == 0) {
+			  $OL3_LIBS_LOADED = 1;
 			  $output .= '
 				<link rel="stylesheet" href="' . Osm_OL_3_CSS . '" type="text/css">
 				<link rel="stylesheet" href="' . Osm_OL_3_Ext_CSS . '" type="text/css">
@@ -200,8 +204,6 @@
 			}
 
 
-
-
 			/** if title are set - my code will run - otherwise not
 			if ($file_title != 'no') {*/
 			if (($file_select_box != 'no') && ($file_title != 'no')){
@@ -236,8 +238,10 @@
 				/** if setup_map_name is set, set setup_map_name otherwise map */
 				if ($setup_map_name != 'undefined') {
 					 $map_link_name  = $setup_map_name;
+                                         echo "ERROR";
 				} else {
 					$map_link_name  = $MapName;
+
 				}
 
 				$output .= '
@@ -276,6 +280,7 @@
 
 
 			/** vectorM is global */
+
 			$output .= 'vectorM[\''. $MapName .'\'] = [];';
 
 			$ov_map = "ov_map";
@@ -376,7 +381,7 @@
 		  if ((($tagged_type == "post") || ($tagged_type == "page") || ($tagged_type == "any")) && ($tagged_param == "cluster")){
 			$tagged_icon = new cOsm_icon($default_icon->getIconName());
 
-			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', 'none');
+			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
 
 			$NumOfMarker = count($MarkerArray);
 			$Counter = 0;
@@ -466,7 +471,7 @@
 		if ((($tagged_type == "post") || ($tagged_type == "page") || ($tagged_type == "any")) && ($tagged_param != "cluster")){
 			$tagged_icon = new cOsm_icon($default_icon->getIconName());
 
-			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', 'none');
+			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
 
 			$NumOfMarker = count($MarkerArray);
 			$Counter = 0;
@@ -562,7 +567,7 @@
 		// add post markers
 		if (strtolower($postmarkers) != 'no'){
 
-			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', 'none');
+			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
 
                   if (is_array($MarkerArray) || is_object($MarkerArray)) {
 			$NumOfMarker = count($MarkerArray);
@@ -603,7 +608,7 @@
 			  undefinedHTML: "outside",
 			  projection: "EPSG:4326",
 			  coordinateFormat: function(coordinate) {
-				 return ol.coordinate.format(coordinate, "{y}, {x}", 4);
+				 return ol.coordinate.format(coordinate, "{y}, {x}", 5);
 			  }
 			}),
 			new ol.control.OverviewMap({

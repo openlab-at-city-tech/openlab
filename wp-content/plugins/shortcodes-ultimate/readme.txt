@@ -5,7 +5,7 @@ Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider, video, map, visual, responsive, shortcodes, youtube, vimeo, audio, mp3, tabs, jquery, box, accordion, toggle, pullquote, list, image, gallery, navigation, permalink, feed, rss, members, membership, guests, carousel, icons, rtl, multilingual
 Requires at least: 3.5
 Requires PHP: 5.2.4
-Tested up to: 5.0
+Tested up to: 5.2
 Stable tag: trunk
 
 A comprehensive collection of visual components for your site
@@ -149,6 +149,22 @@ For help with premium add-ons, please [open new support ticket](https://getshort
 
 
 == Changelog ==
+
+= 5.3.0 =
+
+**What's new**
+
+- New shortcode `[su_csv_table]` for displaying CSV tables
+- New option `indent` for the `[su_list]` shortcode, which allows adjusting of list indentation
+
+**Fixes**
+
+- Fixed inaccessible fields in media modal (while inserting Gallery/Slider/Carousel shortcodes)
+- Fixed close icon class name in the presets menu
+- Fixed issue with unwanted content inside single shortcodes
+- Fixed warning when non-numeric value is used for the button size attribute
+- Min-width for responsive tables is set to 100%
+
 
 = 5.2.0 =
 

@@ -139,3 +139,48 @@ function su_html_dropdown( $args ) {
 		'<select' . $args['id'] . $args['name'] . $args['class'] . $args['multiple'] . $args['size'] . $args['disabled'] . $args['style'] . '>' . $options . '</select>';
 
 }
+
+/**
+ * Create a HTML table from a CSV string.
+ *
+ * @since 5.3.0
+ * @param  string $csv       CSV input.
+ * @param  string $delimiter Column delimiter.
+ * @return string            HTML output.
+ */
+function su_csv_to_html( $csv, $delimiter = ',', $header = false ) {
+
+	if ( ! is_string( $csv ) ) {
+		return '';
+	}
+
+	if ( ! function_exists( 'str_getcsv' ) ) {
+		return $csv;
+	}
+
+	$html = '';
+	$rows = explode( PHP_EOL, $csv );
+
+	foreach ( $rows as $row ) {
+
+		$html .= '<tr>';
+
+		foreach ( str_getcsv( $row, $delimiter ) as $cell ) {
+
+			$cell = trim( $cell );
+
+			$html .= $header
+				? '<th>' . $cell . '</th>'
+				: '<td>' . $cell . '</td>';
+
+		}
+
+		$html .= '</tr>';
+
+		$header = false;
+
+	}
+
+	return '<table>' . $html . '</table>';
+
+}

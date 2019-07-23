@@ -1,8 +1,18 @@
-/*
-  OSM OpenLayers for OpenStreetMap wordpress plugin
-  plugin: http://wp-osm-plugin.HanBlog.net
-  blog:   http://www.HanBlog.net
-  author: MiKa
+/*  (c) Copyright 2019  MiKa (http://wp-osm-plugin.HanBlog.Net)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // This namespace covers the eventhandler in the metabox to
@@ -11,36 +21,43 @@ var MetaboxEventhandler = {
 
   MarkerSC: function osm_addMarkerMapEvent(a_mapname) {
     a_mapname.on('click', function(evt) {
-	  var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-	  var lon = lonlat[0].toFixed(4);
+      var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
+      var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
-	  var zoom = a_mapname.getView().getZoom();
+      var zoom = a_mapname.getView().getZoom();
+      var Controls = "";
 
 	  MarkerId = "";
       BorderField  = "";
       MapTypeField = "";
-      Controls = "";
-      if (document.post.osm_marker_map_type.value != "Mapnik"){
-        MapTypeField = " type=\"" + document.post.osm_marker_map_type.value + "\"";
+
+      
+      if ($('#osm_marker_map_type').val() != "Mapnik"){
+        MapTypeField = " type=\"" + $('#osm_marker_map_type').val() + "\"";
       }
 
-      if (document.post.osm_marker_id.value != "no"){
-        MarkerId = " post_markers=\"" + document.post.osm_marker_id.value + "\"";
-      }
-      if (document.post.osm_marker_border.value != "none"){
-        BorderField = " map_border=\"thin solid "  + document.post.osm_marker_border.value+ "\"";
+      if ($('#osm_marker_id').val() != "no"){
+        MarkerId = " post_markers=\"" + $('#osm_marker_id').val() + "\"";
       }
 
-      if (document.post.fullscreen.checked){
+      if ($('#osm_marker_border').val() != "none"){
+        BorderField = " map_border=\"thin solid "  + $('#osm_marker_border').val()+ "\"";
+      }
+
+
+      if($('#fullscreen').prop('checked') == true) {
         Controls = "fullscreen,";
       }
 
-      if (document.post.scaleline.checked){
+      if($('#scaleline').prop('checked') == true) {
         Controls = Controls + "scaleline,";
       }
-      if (document.post.mouseposition.checked){
+
+      if($('#mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
+
+
       if (Controls != ""){
         Controls = Controls.substr(0, Controls.length-1);
         ControlField = " control=\"" + Controls + "\"";
@@ -48,19 +65,21 @@ var MetaboxEventhandler = {
       else {
         ControlField ="";
       }
+
       GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + BorderField + MarkerId + MapTypeField + ControlField +"]";
 
-      div = document.getElementById("ShortCode_Div");
-      div.innerHTML = GenTxt;
+      //div = document.getElementById("ShortCode_Div");
+      //div.innerHTML = GenTxt;
+      $('#ShortCode_Div').html(GenTxt);
     });
   },
 
 	FileSC: function osm_addFilesMapEvent(a_mapname) {
 	  a_mapname.on('click', function(evt) {
-	  var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-	  var lon = lonlat[0].toFixed(4);
+      var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
+      var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
-	  var zoom = a_mapname.getView().getZoom();
+      var zoom = a_mapname.getView().getZoom();
 
       var FileList_ColorField  = "";
       var FileList_TypeField   = "";
@@ -76,25 +95,29 @@ var MetaboxEventhandler = {
 	    fileTitles = [];
 	    fileColors = [];
 
-	  if (document.post.osm_file_list_map_type.value != "Mapnik"){
-        FileList_MapTypeField = " type=\"" + document.post.osm_file_list_map_type.value + "\"";
+
+      if ($('#osm_file_list_map_type').val() != "Mapnik"){
+        FileList_MapTypeField = " type=\"" + $('#osm_file_list_map_type').val() + "\"";
       }
 
-      if (document.post.osm_file_border.value != "none"){
-        BorderField = " map_border=\"thin solid "  + document.post.osm_file_border.value+ "\"";
+      if ($('#osm_file_border').val() != "none"){
+        BorderField = " map_border=\"thin solid "  + $('#osm_file_border').val()+ "\"";
       }
 
-      if (document.post.file_fullscreen.checked){
+
+      if($('#file_fullscreen').prop('checked') == true) {
         Controls = "fullscreen,";
       }
 
-      if (document.post.file_scaleline.checked){
+      if($('#file_scaleline').prop('checked') == true) {
         Controls = Controls + "scaleline,";
       }
-      if (document.post.file_mouseposition.checked){
+
+      if($('#file_mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
-			if (document.post.show_selection_box.checked){
+
+      if($('#show_selection_box').prop('checked') == true) {
         FileList_SelectBoxField = " file_select_box=\"one\"";
       }
       if (Controls != ""){
@@ -136,42 +159,60 @@ var MetaboxEventhandler = {
 
 	  GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + FileList_TitleField + FileList_SelectBoxField +"]";
 
-      div = document.getElementById("ShortCode_Div");
-      div.innerHTML = GenTxt;
+          $('#ShortCode_Div').html(GenTxt);
+
 	});
     },
 
-	TaggedPostsSC: function osm_addTaggedPostsMapEvent(a_mapname) {
-	  a_mapname.on('click', function(evt) {
-	  var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-	  var lon = lonlat[0].toFixed(4);
+    TaggedPostsSC: function osm_addTaggedPostsMapEvent(a_mapname) {
+      a_mapname.on('click', function(evt) {
+        var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
+	var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
-	  var zoom = a_mapname.getView().getZoom();
+       var zoom = a_mapname.getView().getZoom();
 
-      MarkerField = "";
-      ThemeField  = "";
-      MapTypeField = "";
-      Linefield = "";
-      PostTypeField ="";
+      var MarkerField = "";
+      var ThemeField  = "";
+      var MapTypeField = "";
+      var Linefield = "";
+      var PostTypeField ="";
       var CatFilterField = "";
       var MapBorderField = "";
       var MarkerStyleField = "";
       var StyleColorField = "";
+      var TagTypeField = "";
 
-      var dropdown = document.getElementById("cat");
+      //var dropdown = document.getElementById("cat");
+      var dropdown = $('#cat').val();
 
-      var MarkerName    = document.post.tagged_marker_icon.value;
+      var MarkerName    = $('#tagged_marker_icon:checked').val();
 
-      if (document.post.category_parent.value != "-1"){
-        CatFilterField = " tagged_filter=\"" + document.post.category_parent.value + "\"";
+      var TagFilter = $('#tag_filter').val();
+      var CategoryFilter = $('#category_parent').val();
+      
+      var ErrorFlag = 0;
+
+
+
+      if ((CategoryFilter != "-1") && (TagFilter != "")){
+        CatFilterField = "";
+        TagFilter ="";
+        ErrorFlag = 1;
+      } 
+      else if (CategoryFilter != "-1"){
+        CatFilterField = " tagged_filter=\"" + CategoryFilter + "\"";
+      }
+      else if (TagFilter != ""){
+        CatFilterField = " tagged_filter=\"" + TagFilter + "\"";
+        TagTypeField = " tagged_filter_type=\"post_tag\"";
       }
 
-      if (document.post.osm_geotag_map_type.value != "Mapnik"){
-        MapTypeField = " type=\"" + document.post.osm_geotag_map_type.value + "\"";
+      if ($('#osm_geotag_map_type').val() != "Mapnik"){
+        MapTypeField = " type=\"" + $('#osm_geotag_map_type').val() + "\"";
       }
 
-      PostTypeField = " tagged_type=\""+document.post.osm_geotag_posttype.value+"\"";
-      if (document.post.tagged_marker_icon.value != "none"){
+      PostTypeField = " tagged_type=\""+$('#osm_geotag_posttype').val()+"\"";
+      if ($('#osm_geotag_posttype').val() != "none"){
         MarkerField = " marker_name=\"" + MarkerName + "\"";
       }
 
@@ -192,32 +233,71 @@ var MetaboxEventhandler = {
         StyleColorField = " tagged_color=\"blue\"";
       }
 
-
-	  if (document.post.tagged_marker_style.value != "standard"){
-        MarkerStyleField = " tagged_param=\""  + document.post.tagged_marker_style.value+ "\"";
+      if ($('#tagged_marker_style:checked').val() != "standard"){
+        MarkerStyleField = " tagged_param=\""  + $('#tagged_marker_style:checked').val()+ "\"";
       }
 
-      GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + PostTypeField + MarkerField + MapTypeField + CatFilterField + MapBorderField + MarkerStyleField + StyleColorField + "]";
+      if (ErrorFlag > 0){
+        GenTxt = "[Error]: You must not set category filter and tag filter at the same time! <br> Set Category filter to None or delete tag tilter."
+      }
+      else {
+        GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + PostTypeField + MarkerField + MapTypeField + CatFilterField + MapBorderField + MarkerStyleField + StyleColorField + TagTypeField+"]";
+      }
 
-      div = document.getElementById("ShortCode_Div");
-      div.innerHTML = GenTxt;
+      $('#ShortCode_Div').html(GenTxt);
 	});
   },
 
   AddMarker: function osm_AddMarker(a_mapname, a_post_id) {
-	  a_mapname.on('click', function(evt) {
-	  var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
-	    var lon = lonlat[0].toFixed(4);
+      a_mapname.on('click', function(evt) {
+      var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
+      var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
+      var zoom = a_mapname.getView().getZoom();
+      var Controls = "";
+
+      MarkerId = "";
+      BorderField  = "";
+      MapTypeField = "";
+
+           
+      if ($('#osm_add_marker_map_type').val() != "Mapnik"){
+        MapTypeField = $('#osm_add_marker_map_type').val();
+      }
+
+
+      if ($('#osm_add_marker_border').val() != "none"){
+        BorderField = $('#osm_add_marker_border').val();
+      }
+
+      if($('#osm_add_marker_fullscreen').prop('checked') == true) {
+        Controls = "fullscreen,";
+      }
+
+      if($('#osm_add_marker_scaleline').prop('checked') == true) {
+        Controls = Controls + "scaleline,";
+      }
+
+      if($('#osm_add_marker_mouseposition').prop('checked') == true) {
+        Controls = Controls + "mouseposition,";
+      }
+
+      if (Controls != ""){
+        Controls = Controls.substr(0, Controls.length-1);
+        ControlField = Controls;
+      }
+      else {
+        ControlField ="";
+      }
+
 
       MarkerNameField = "";
       MarkerTextField = "";
 
-      MarkerId = document.post.osm_add_marker_id.value;
-      /** MarkerIcon = document.post.osm_add_marker_icon.value;**/
-      MarkerName = document.post.osm_add_marker_name.value;
-      MarkerIcon = document.post.marker_icon.value;
-      MarkerTextField = document.post.osm_add_marker_text.value;
+      MarkerId = 1;
+      MarkerName = $('#osm_add_marker_name').val();
+      MarkerIcon = $('#marker_icon:checked').val();
+      MarkerTextField = $('#osm_add_marker_text').val();
       MarkerTextField = MarkerTextField.replace(/(\r\n|\n|\r)/gm, "");
       MarkerTextField = MarkerTextField.replace(/(\')/gm, "&apos;");
 
@@ -229,12 +309,17 @@ var MetaboxEventhandler = {
       osm_ajax_object.MarkerIcon = MarkerIcon;
       osm_ajax_object.post_id = a_post_id;
 
+      osm_ajax_object.map_zoom = zoom;
+      osm_ajax_object.map_type = MapTypeField;
+      osm_ajax_object.map_border = BorderField;
+      osm_ajax_object.map_controls = ControlField;
+
+
       GenTxt = "<br> Marker_Id: "+ MarkerId + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+lat+","+lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save] to store marker!</b>";
 
-      div = document.getElementById("Marker_Div");
-      div.innerHTML = GenTxt;
-      div02 = document.getElementById("ShortCode_Div");
-      div02.innerHTML = "";
+
+      $('#Marker_Div').html(GenTxt);
+      $('#ShortCode_Div').html("");
 
       /** if there is already a marker, delete the layer with it **/
       var layers = a_mapname.getLayers().getArray();
@@ -250,16 +335,18 @@ var MetaboxEventhandler = {
     a_mapname.on('click', function(evt) {
 	var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
 	var lon = lonlat[0].toFixed(4);
-    var lat = lonlat[1].toFixed(4);
+        var lat = lonlat[1].toFixed(4);
 	var zoom = a_mapname.getView().getZoom();
 
     MarkerField = "";
 
-    var MarkerName = document.post.geotag_marker_icon.value;
 
-    if (document.post.geotag_marker_icon.value != "none"){
+    var MarkerName = $('#geotag_marker_icon:checked').val();
+
+    if ($('#geotag_marker_icon:checked').val() != "none"){
       MarkerField = " marker=\""+lat+","+lon+"\" marker_name=\"" + MarkerName + "\"";
     }
+
 
     osm_ajax_object.lat = lat;
     osm_ajax_object.lon = lon;
@@ -271,10 +358,9 @@ var MetaboxEventhandler = {
     else {
       GenTxt = "Location: "+lat+","+lon + "<br><b>3. Press [Save] to store!</b>";
     }
-    div = document.getElementById("Geotag_Div");
-    div.innerHTML = GenTxt;
-    div02 = document.getElementById("ShortCode_Div");
-    div02.innerHTML = "";
+ 
+    $('#Geotag_Div').html(GenTxt);
+    $('#ShortCode_Div').html("");
 
     /** if there is already a marker, delete the layer with it **/
     var layers = a_mapname.getLayers().getArray();
