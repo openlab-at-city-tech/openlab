@@ -660,18 +660,26 @@ class gradebook_upload_csv_API
 
                     $this_grade = $this->processGrade($student[$assignment['name']]['value'], $assignment['type']);
 
+                    $is_null = 0;
+
+                    if ($this_grade['value'] === '--') {
+                        $is_null = 1;
+                    }
+
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
                         'gbid' => $gbid,
                         'assign_order' => $assignOrder,
                         'assign_points_earned' => $this_grade['value'],
+                        'is_null' => $is_null,
                     ), array(
                         '%d',
                         '%d',
                         '%d',
                         '%d',
                         '%f',
+                        '%d',
                     )
                     );
                 }
