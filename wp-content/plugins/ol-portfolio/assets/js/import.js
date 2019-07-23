@@ -1,15 +1,22 @@
 (function ($) {
 	var evtSource = new EventSource( ImportData.url );
 
+	var updateImportStatus = function(data) {
+		var message = $('#import-status-message').find('strong');
+
+		if ( ! data.error ) {
+			message.text( ImportData.strings.complete );
+		} else {
+			message.html( ImportData.strings.error );
+		}
+	};
+
 	evtSource.onmessage = function ( message ) {
 		var data = JSON.parse( message.data );
 		switch ( data.action ) {
 			case 'complete':
 				evtSource.close();
-				var import_status_msg = jQuery('#import-status-message');
-				import_status_msg.find('p').text( ImportData.strings.complete );
-				import_status_msg.removeClass('notice-info');
-				import_status_msg.addClass('notice-success');
+				updateImportStatus(data);
 				break;
 		}
 	};

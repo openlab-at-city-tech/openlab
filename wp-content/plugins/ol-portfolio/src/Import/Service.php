@@ -100,12 +100,13 @@ class Service implements Registerable {
 		$script_data = [
 			'url' => add_query_arg( urlencode_deep( $args ), admin_url( 'admin-ajax.php' ) ),
 			'strings' => [
-				'complete' => 'Import complete!',
+				'complete' => 'Step 3: Import Complete. Check out your site!',
+				'error'    => 'Import unsuccessful. <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">Contact the OpenLab team</a> for support.',
 			],
 		];
 
 		$url = plugins_url( 'assets/js/import.js', ROOT_FILE );
-		wp_enqueue_script( 'ol-portfolio-import', $url, [ 'jquery' ], '20190606', true );
+		wp_enqueue_script( 'ol-portfolio-import', $url, [ 'jquery' ], '20190723', true );
 		wp_localize_script( 'ol-portfolio-import', 'ImportData', $script_data );
 	}
 
@@ -128,6 +129,15 @@ class Service implements Registerable {
 				$this->render_import_step();
 				break;
 		}
+	}
+
+	/**
+	 * Render import header.
+	 *
+	 * @return void
+	 */
+	public function render_header() {
+		require ROOT_DIR . '/views/import/header.php';
 	}
 
 	/**
@@ -242,7 +252,10 @@ class Service implements Registerable {
 		$extract_path = $decompressor->extract();
 
 		if ( is_wp_error( $extract_path ) ) {
-			status_header( 204 );
+			$this->emit_sse_message( [
+				'action' => 'complete',
+				'error'  => $extract_path->get_error_message(),
+			] );
 			exit;
 		}
 

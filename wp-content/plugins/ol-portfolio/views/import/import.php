@@ -1,6 +1,10 @@
 <div class="wrap nosubsub">
-	<h1>Import Progress</h1>
-	<div id="import-status-message" class="notice notice-info"><p>Now importing.</p></div>
+	<?php $this->render_header(); ?>
+
+	<p><del>Step 1: Choose and upload your Portfolio Archive file (.zip).</del></p>
+	<p><del>Step 2: Import the Portfolio Archive</del></p>
+	<p id="import-status-message"><strong>Step 3: Now importing.</strong></p>
+
 	<table id="import-log" class="widefat">
 		<thead>
 			<tr>
