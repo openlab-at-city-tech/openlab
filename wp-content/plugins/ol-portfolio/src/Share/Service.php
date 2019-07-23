@@ -129,7 +129,7 @@ class Service implements Registerable {
 	 */
 	public function portfolio_init() {
 		add_filter( 'the_content', [ $this, 'entry_source_note' ] );
-		add_action( 'wp_footer', [ $this, 'entry_source_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'entry_source_styles' ] );
 	}
 
 	/**
@@ -276,24 +276,13 @@ class Service implements Registerable {
 	 *
 	 * @return void
 	 */
-	public function entry_source_styles( ) {
-		?>
-		<style type="text/css">
-			.entry-source-note {
-				color: #444;
-				background-color: #f0f0f0;
-				margin-bottom: 24px;
-				padding: 24px;
-			}
-			.entry-source-note a,
-			.entry-source-note a:visited {
-				color: #444;
-			}
-			.entry-source-note .entry__annotation {
-				margin-top: 24px;
-			}
-		</style>
-		<?php
+	public function entry_source_styles() {
+		wp_enqueue_style(
+			'entry-source-styles',
+			plugins_url( 'assets/css/portfolio.css', ROOT_FILE ),
+			[],
+			'20190723'
+		);
 	}
 
 	/**
