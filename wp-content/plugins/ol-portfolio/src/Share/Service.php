@@ -142,14 +142,14 @@ class Service implements Registerable {
 			'add-to-portfolio-styles',
 			plugins_url( 'assets/css/share.css', ROOT_FILE ),
 			[],
-			'1.0.0'
+			'20190723'
 		);
 
 		wp_enqueue_script(
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'1.0.0',
+			'20190621',
 			true
 		);
 
