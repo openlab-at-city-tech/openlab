@@ -295,6 +295,8 @@ class gradebook_upload_csv_API
 
         foreach ($assignments as $thisdex => $assignment) {
 
+            $assignment = trim($assignment);
+
             //check for existing assignments first
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
             $existing_assignment = $wpdb->get_results($query);
