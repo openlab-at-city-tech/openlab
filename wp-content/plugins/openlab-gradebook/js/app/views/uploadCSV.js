@@ -53,6 +53,7 @@ define([
 						params.response.message
 					);
 					newGradebook = params.response.content;
+					$("#upload-csv-input").fileinput("clear");
 					self.updateGradebook();
 				})
 				.on("filecleared", function(e) {

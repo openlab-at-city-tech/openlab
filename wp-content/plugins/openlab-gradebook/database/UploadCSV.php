@@ -88,7 +88,7 @@ class gradebook_upload_csv_API
 
         $message = array(
             'content' => $oplb_gradebook_api->oplb_get_gradebook($gbid, null, null),
-            'message' => __('<p>Your CSV file has been uploaded to Gradebook. Close this window and confirm that the values are correct.</p>', 'openlab-gradebook'),
+            'message' => __('<p></p><div id="upload-csv-success-message" class="bs-callout bs-callout-success text-left"><p class="bold">Your CSV file has been uploaded to Gradebook!</p><p>Close this window and confirm that the values are correct.</p><span id="modal-download-csv-success"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x"></i></span>Success!</span></div>', 'openlab-gradebook'),
         );
 
         wp_send_json($message);
@@ -294,6 +294,8 @@ class gradebook_upload_csv_API
         $process_result['assignments'] = $assignments;
 
         foreach ($assignments as $thisdex => $assignment) {
+
+            $assignment = trim($assignment);
 
             //check for existing assignments first
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
@@ -660,18 +662,26 @@ class gradebook_upload_csv_API
 
                     $this_grade = $this->processGrade($student[$assignment['name']]['value'], $assignment['type']);
 
+                    $is_null = 0;
+
+                    if ($this_grade['value'] === '--') {
+                        $is_null = 1;
+                    }
+
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
                         'gbid' => $gbid,
                         'assign_order' => $assignOrder,
                         'assign_points_earned' => $this_grade['value'],
+                        'is_null' => $is_null,
                     ), array(
                         '%d',
                         '%d',
                         '%d',
                         '%d',
                         '%f',
+                        '%d',
                     )
                     );
                 }
@@ -843,6 +853,10 @@ class gradebook_upload_csv_API
         if (is_array($grade)) {
             $grade = $grade['value'];
         }
+
+        //cleanup
+        $grade = preg_replace('/[[:cntrl:]]/', '', $grade);
+        $type = trim($type);
 
         //handle values marked for null
         if (trim($grade === '--')) {
