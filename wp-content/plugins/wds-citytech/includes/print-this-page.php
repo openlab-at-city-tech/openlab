@@ -66,7 +66,7 @@ add_action(
 		if ( $disable ) {
 			update_post_meta( $post_id, 'print_this_page_disable', '1' );
 		} else {
-			delete_post_meta( $post_id, 'print_this_page_disable' );
+			update_post_meta( $post_id, 'print_this_page_disable', '0' );
 		}
 	}
 );
@@ -79,6 +79,12 @@ add_action(
  */
 function show_for_post( $post_id ) {
 	$disable = get_post_meta( $post_id, 'print_this_page_disable', true );
+
+	if ( '' === $disable ) {
+		$option  = get_option( 'openlab-print-this-page', 'off' );
+		$disable = 'on' === $option ? '0' : '1';
+	}
+
 	return '1' !== $disable;
 }
 
@@ -127,4 +133,42 @@ add_filter(
 		return $content;
 	},
 	300
+);
+
+/**
+ * Adds settings field to Settings > Reading.
+ */
+add_action(
+	'admin_init',
+	function() {
+		register_setting(
+			'reading',
+			'openlab-print-this-page',
+			[
+				'sanitize_callback' => function( $setting ) {
+					return 'on' === $setting ? 'on' : 'off';
+				}
+			]
+		);
+
+		add_settings_field(
+			'openlab-print-this-page',
+			'Print This Page',
+			function() {
+				$option = get_option( 'openlab-print-this-page', 'off' );
+				?>
+				<label>
+					Enable 'Print This Page' button by default on all posts and pages?
+					<select name="openlab-print-this-page">
+						<option value="on" <?php selected( 'on', $option ); ?>>Enabled</option>
+						<option value="off" <?php selected( 'off', $option ); ?>>Disabled</option>
+					</select>
+				</label>
+
+				<p class="description">You may override the default setting on individual posts and pages.</p>
+				<?php
+			},
+			'reading'
+		);
+	}
 );
