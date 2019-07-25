@@ -330,11 +330,11 @@ a.breadcrumb-link:hover {
 	position: relative;
 }
 
-.header-widget-area .genesis-nav-menu > .menu-item-has-children > a {
+.header-widget-area .genesis-nav-menu .menu-item-has-children > a {
 	padding-right: 32px;
 }
 
-.header-widget-area .genesis-nav-menu > .menu-item-has-children > a:after {
+.header-widget-area .genesis-nav-menu .menu-item-has-children > a:after {
 	top: 2em;
 }
 
@@ -467,7 +467,7 @@ body .site-title a {
 		margin-right: 60px;
 	}
 
-	.genesis-nav-menu.responsive-menu > .menu-item-has-children:before {
+	.genesis-nav-menu.responsive-menu .menu-item-has-children:before {
 		content: "\f347";
 		float: right;
 		font: normal 16px/1 'dashicons';
@@ -510,7 +510,7 @@ body .site-title a {
 		color: #444;
 		padding: 12px 0;
 		position: relative;
-		width: 100%;
+		width: auto;
 	}
 
 	.genesis-nav-menu.responsive-menu {
