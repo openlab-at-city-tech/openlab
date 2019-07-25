@@ -191,12 +191,12 @@ $group_label_uc = openlab_get_group_type_label('case=upper');
             <div class="panel panel-default">
                 <div class="panel-heading">Related Links List Settings</div>
                 <div class="panel-body">
-                    <p>These settings enable or disable the related groups list display on your <?php echo $group_label_uc; ?> profile.</p>
+                    <p>These settings enable or disable the related links list display on your <?php echo $group_label_uc; ?> profile.</p>
                     <?php $related_links_list_enable = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_related_links_list_enable'); ?>
     <?php $related_links_list_heading = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_related_links_list_heading'); ?>
     <?php $related_links_list = openlab_get_group_related_links(bp_get_current_group_id(), 'edit'); ?>
                     <div class="checkbox">
-                        <label><input type="checkbox" name="related-links-list-enable" id="related-links-list-enable" value="1" <?php checked($related_links_list_enable) ?> /> Enable related groups list</label>
+                        <label><input type="checkbox" name="related-links-list-enable" id="related-links-list-enable" value="1" <?php checked($related_links_list_enable) ?> /> Enable related links list</label>
                     </div>
                     <label for="related-links-list-heading">List Heading</label>
                     <input name="related-links-list-heading" id="related-links-list-heading" class="form-control" type="text" value="<?php echo esc_attr($related_links_list_heading) ?>" />
