@@ -17,6 +17,7 @@ function openlab_load_theme_fixes() {
 		case 'hemingway':
 		case 'herothemetrust':
 		case 'koji':
+		case 'lingonberry' :
 		case 'motion':
 		case 'openlab-twentysixteen':
 		case 'p2':
@@ -71,6 +72,7 @@ add_action(
 		switch ( $t ) {
 			// All of the below require only jQuery.
 			case 'education-pro' :
+			case 'lingonberry' :
 				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $t . '/' . $t . '.js', array( 'jquery' ) ) );
 			break;
 		}
