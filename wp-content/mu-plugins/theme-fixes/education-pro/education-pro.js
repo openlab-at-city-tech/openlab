@@ -3,7 +3,7 @@
 		setTimeout(
 			function() {
 				var $subMenuToggles = $('.responsive-menu > .menu-item .menu-item');
-				$subMenuToggles.addClass( 'menu-open' );
+				$subMenuToggles.find(".sub-menu:first").hide();
 				$subMenuToggles.click(function(event){
 					if (event.target !== this) {
 						return;
