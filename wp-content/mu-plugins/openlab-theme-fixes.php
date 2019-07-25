@@ -4,7 +4,7 @@
  */
 
 /**
- * Loads theme fixes for OpenLab site themes
+ * Loads CSS theme fixes for OpenLab site themes.
  */
 function openlab_load_theme_fixes() {
 	$t = get_stylesheet();
@@ -55,6 +55,23 @@ add_action(
 			case 'sliding-door':
 			case 'twentynineteen':
 				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
+			break;
+		}
+	}
+);
+
+/**
+ * Loads JS-based theme mods for OpenLab site themes.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		$t = get_stylesheet();
+
+		switch ( $t ) {
+			// All of the below require only jQuery.
+			case 'education-pro' :
+				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $t . '/' . $t . '.js', array( 'jquery' ) ) );
 			break;
 		}
 	}

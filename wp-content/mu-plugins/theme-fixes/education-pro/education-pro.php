@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Load custom scripts.
- */
-add_action(
-	'wp_enqueue_scripts',
-	function() {
-		wp_enqueue_script( 'openlab-education-pro', content_url( 'mu-plugins/theme-fixes/education-pro/education-pro.js', array( 'jquery' ) ) );
-	}
-);
-
-/**
  * Disable auto-update support for the theme.
  *
  * We manage the theme independently. This also prevents 'Updates' section from appearing
