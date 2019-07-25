@@ -11,14 +11,20 @@ body.no-js .ol-print-this-page {
 }
 
 #ol-print-this-page a {
+	border-bottom: none;
 	box-shadow: none;
 	color: rgb(51,51,51) !important;
-	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	display: block;
 	font-size: .9rem;
 	text-decoration: none;
+	width: fit-content;
+	margin: 2em 0;
+	padding: .7rem;
+	background-color: #f1f1f1;
 }
 
 #ol-print-this-page a:hover {
-	box-shadow: 0 1px 0 0 currentColor;
-	color: #000;
+	border-bottom: none;
+	text-decoration:none;
+	background-color: #e4e4e4;
 }
