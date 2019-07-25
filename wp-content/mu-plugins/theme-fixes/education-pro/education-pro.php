@@ -47,6 +47,10 @@ add_action(
 	height: 60px;
 	overflow: hidden;
 }
+.customize-control-header .default button.random {
+	height: inherit;
+	overflow: auto;
+}
 #customize-controls .customize-control-header .default button img {
 	height: 60px;
 	max-width: initial;
