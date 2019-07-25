@@ -43,7 +43,7 @@ function metabox( $post ) {
 		<input type="checkbox" id="print-this-page-toggle" value="1" name="print-this-page-toggle" <?php checked( $show ); ?>> <?php printf( "Add a 'Print this Page' link to this %s allowing site users to easily print its contents.", esc_html( $post->post_type ) ); ?>
 	</label>
 
-	<p class="description">To change defaults for the entire site, go to Reading Settings." And link to Settings > Reading</p>
+	<p class="description">To change defaults for the entire site, go to <a href="<?php echo esc_attr( admin_url( 'options-reading.php' ) ); ?>">Reading Settings.</a></p>
 	<?php wp_nonce_field( 'print_this_page_toggle', 'print-this-page-toggle-nonce', false ); ?>
 	<?php
 }
