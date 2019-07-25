@@ -371,12 +371,16 @@ body .site-title a {
 	background-size: contain !important;
 }
 
-.genesis-nav-menu .sub-menu .current-menu-item > a:hover, .genesis-nav-menu li a:hover, .genesis-nav-menu li.current-menu-item > a {
+.genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.genesis-nav-menu li.current-menu-item > a {
     background-color: #e3f2fa;
     color: #000;
 }
 
-.genesis-nav-menu li a:hover,
+.genesis-nav-menu li a:hover {
+	text-decoration: underline;
+}
+
 .genesis-nav-menu li.current-menu-item > a,
 .genesis-nav-menu .sub-menu li a:hover,
 .genesis-nav-menu .sub-menu li.current-menu-item > a {
@@ -640,13 +644,11 @@ body .site-title a {
 
 .education-pro-blue .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
 .education-pro-blue .genesis-nav-menu .sub-menu a,
-.education-pro-blue .genesis-nav-menu li a:hover,
 .education-pro-blue .genesis-nav-menu li.current-menu-item > a {
 	background-color: #113f58;
 	color: #fff;
 }
 
-.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
 .education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a {
 	background-color: #e3f2fb;
 	color: #3b3b3b;
