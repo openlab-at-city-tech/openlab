@@ -1,15 +1,22 @@
 (function($){
 	$(document).ready(function(){
-		$(".responsive-menu > .menu-item .menu-item").addClass( 'menu-open' ).click(function(event){
-			if (event.target !== this) {
-				return;
-			};
+		setTimeout(
+			function() {
+				var $subMenuToggles = $('.responsive-menu > .menu-item .menu-item');
+				$subMenuToggles.addClass( 'menu-open' );
+				$subMenuToggles.click(function(event){
+					if (event.target !== this) {
+						return;
+					};
 
-			event.preventDefault();
+					event.preventDefault();
 
-			$(this).find(".sub-menu:first").slideToggle(function() {
-				$(this).parent().toggleClass("menu-open");
-			});
-		});
+					$(this).find(".sub-menu:first").slideToggle(function() {
+						$(this).parent().toggleClass("menu-open");
+					});
+				});
+			},
+			1000
+		);
 	});
 }(jQuery))
