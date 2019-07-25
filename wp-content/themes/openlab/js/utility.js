@@ -489,8 +489,9 @@ OpenLab.utility = (function ($) {
         // + button on Related Links List Settings
         $add_new_related_link = $('#add-new-related-link');
         $add_new_related_link.css('display', 'inline-block');
-        $add_new_related_link.on('click', function () {
-            create_new_related_link_field();
+        $add_new_related_link.on('click', function (e) {
+					e.preventDefault();
+					create_new_related_link_field();
         });
 
         var contact_us_topic = document.getElementById('contact-us-topic');
@@ -735,8 +736,9 @@ OpenLab.utility = (function ($) {
 
         // Reindex new Add button and bind click event
         $add_new_related_link = $('#add-new-related-link');
-        $add_new_related_link.on('click', function () {
-            create_new_related_link_field();
+        $add_new_related_link.on('click', function (e) {
+					e.preventDefault();
+					create_new_related_link_field();
         });
     }
 
