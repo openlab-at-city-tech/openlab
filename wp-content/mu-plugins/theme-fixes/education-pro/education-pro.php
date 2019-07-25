@@ -18,29 +18,30 @@ add_theme_support( 'custom-header', array(
 ) );
 
 // There's literally no other way to do this.
-add_action(
-	'customize_controls_enqueue_scripts',
-	function() {
-		global $_wp_theme_features;
-		$_wp_theme_features['custom-header'][0]['width'] = 2000;
-		$_wp_theme_features['custom-header'][0]['height'] = 130;
-	},
-	0
-);
+$header_dimensions_callback = function() {
+	global $_wp_theme_features;
+	$_wp_theme_features['custom-header'][0]['width'] = 2000;
+	$_wp_theme_features['custom-header'][0]['height'] = 130;
+};
+add_action( 'customize_controls_enqueue_scripts', $header_dimensions_callback, 0 );
+add_action( 'wp_ajax_custom-header-crop', $header_dimensions_callback, 0 );
 
 add_action(
 	'customize_controls_print_styles',
 	function() {
 		?>
 <style type="text/css">
+.customize-control-header .uploaded button,
 .customize-control-header .default button {
 	height: 60px;
 	overflow: hidden;
 }
+.customize-control-header .uploaded button.random,
 .customize-control-header .default button.random {
 	height: inherit;
 	overflow: auto;
 }
+#customize-controls .customize-control-header .uploaded button img,
 #customize-controls .customize-control-header .default button img {
 	height: 60px;
 	max-width: initial;
