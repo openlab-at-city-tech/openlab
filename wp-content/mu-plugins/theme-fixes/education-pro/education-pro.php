@@ -39,6 +39,24 @@ add_action(
 );
 
 add_action(
+	'customize_controls_print_styles',
+	function() {
+		?>
+<style type="text/css">
+.customize-control-header .default button {
+	height: 60px;
+	overflow: hidden;
+}
+#customize-controls .customize-control-header .default button img {
+	height: 60px;
+	max-width: initial;
+}
+</style>
+		<?php
+	}
+);
+
+add_action(
 	'customize_controls_enqueue_scripts',
 	function() {
 		wp_enqueue_script( 'openlab-education-pro-customize', content_url( 'mu-plugins/theme-fixes/education-pro/customize.js', array( 'jquery' ) ) );
@@ -177,10 +195,55 @@ add_filter(
 );
 
 register_default_headers( [
-	'wide-test' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
-		'description'   => 'Wide Test',
+	'foil' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+		'description'   => 'Foil',
+	],
+	'leaves' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+		'description'   => 'Leaves',
+	],
+	'numbers' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+		'description'   => 'Numbers',
+	],
+	'candy' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+		'description'   => 'Candy',
+	],
+	'firewood' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+		'description'   => 'Firewood',
+	],
+	'circles' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+		'description'   => 'Circles',
+	],
+	'fabric' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+		'description'   => 'Fabric',
+	],
+	'water' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+		'description'   => 'Water',
+	],
+	'stonefloor' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+		'description'   => 'Stone Floor',
+	],
+	'riverrocks' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+		'description'   => 'River Rocks',
 	],
 ] );
 
