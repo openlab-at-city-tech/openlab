@@ -157,12 +157,10 @@ add_action(
 			function() {
 				$option = get_option( 'openlab-print-this-page', 'off' );
 				?>
-				<label>
-					Enable 'Print This Page' button by default on all posts and pages?
-					<select name="openlab-print-this-page">
-						<option value="on" <?php selected( 'on', $option ); ?>>Enabled</option>
-						<option value="off" <?php selected( 'off', $option ); ?>>Disabled</option>
-					</select>
+				<fieldset>
+					<legend class="screen-reader-text">"Print This Page" default setting</legend>
+					<input type="radio" value="on" id="print-this-page-on" name="openlab-print-this-page" <?php checked( 'on', $option ); ?> /> <label for="print-this-page-on">Enable 'Print This Page' button by default on all posts and pages.<br /></label><br />
+					<input type="radio" value="off" id="print-this-page-off" name="openlab-print-this-page" <?php checked( 'off', $option ); ?> /> <label for="print-this-page-off">Disable 'Print This Page' button by default on all posts and pages.</label>
 				</label>
 
 				<p class="description">You may override the default setting on individual posts and pages.</p>
