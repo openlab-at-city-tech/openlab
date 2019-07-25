@@ -74,7 +74,11 @@ function openlab_activity_group_avatar( $current_activity_item = null ) {
 		$current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
 	}
 
-	$item_id = $current_activity_item->item_id;
+	if ( 'new_blog' === $current_activity_item->type ) {
+		$item_id = openlab_get_group_id_by_blog_id( $current_activity_item->item_id );
+	} else {
+		$item_id = $current_activity_item->item_id;
+	}
 
 	$group = groups_get_group(array('group_id' => $item_id));
 
