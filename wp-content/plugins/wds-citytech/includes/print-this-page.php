@@ -43,7 +43,7 @@ function metabox( $post ) {
 		<input type="checkbox" id="print-this-page-toggle" value="1" name="print-this-page-toggle" <?php checked( $show ); ?>> <?php printf( "Add a 'Print this Page' link to this %s allowing site users to easily print its contents.", esc_html( $post->post_type ) ); ?>
 	</label>
 
-	<p class="description">To change defaults for the entire site, go to <a href="<?php echo esc_attr( admin_url( 'options-reading.php' ) ); ?>">Reading Settings.</a></p>
+	<p class="description">To change settings for the entire site, go to <a href="<?php echo esc_attr( admin_url( 'options-reading.php' ) ); ?>">Reading Settings.</a></p>
 	<?php wp_nonce_field( 'print_this_page_toggle', 'print-this-page-toggle-nonce', false ); ?>
 	<?php
 }
@@ -159,8 +159,8 @@ add_action(
 				?>
 				<fieldset>
 					<legend class="screen-reader-text">"Print This Page" default setting</legend>
-					<input type="radio" value="on" id="print-this-page-on" name="openlab-print-this-page" <?php checked( 'on', $option ); ?> /> <label for="print-this-page-on">Enable 'Print This Page' button by default on all posts and pages.<br /></label><br />
-					<input type="radio" value="off" id="print-this-page-off" name="openlab-print-this-page" <?php checked( 'off', $option ); ?> /> <label for="print-this-page-off">Disable 'Print This Page' button by default on all posts and pages.</label>
+					<input type="radio" value="on" id="print-this-page-on" name="openlab-print-this-page" <?php checked( 'on', $option ); ?> /> <label for="print-this-page-on">Enable 'Print This Page' button on all posts and pages.<br /></label><br />
+					<input type="radio" value="off" id="print-this-page-off" name="openlab-print-this-page" <?php checked( 'off', $option ); ?> /> <label for="print-this-page-off">Disable 'Print This Page' button on all posts and pages.</label>
 				</label>
 
 				<p class="description">You may override the default setting on individual posts and pages.</p>
