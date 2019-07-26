@@ -95,6 +95,11 @@ function show_for_post( $post_id ) {
 add_filter(
 	'the_content',
 	function( $content ) {
+		// Handled in a different way on the main site.
+		if ( bp_is_root_blog() ) {
+			return $content;
+		}
+
 		if ( ! is_single() && ! is_singular() ) {
 			return $content;
 		}
