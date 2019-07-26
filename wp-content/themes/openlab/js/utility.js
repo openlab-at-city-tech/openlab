@@ -506,6 +506,7 @@ OpenLab.utility = (function ($) {
 (function ($) {
 	var related_links_count,
 			$add_new_related_link,
+			$relatedLinks,
 			$cloned_related_link_fields;
 
 	$( document ).ready(
@@ -534,12 +535,25 @@ OpenLab.utility = (function ($) {
 
 			// + button on Related Links List Settings
 			$add_new_related_link = $( '#add-new-related-link' );
-			$add_new_related_link.css( 'display', 'inline-block' );
 			$add_new_related_link.on(
 				'click',
-				function (e) {
-					e.preventDefault();
+				function () {
 					create_new_related_link_field();
+				}
+			);
+
+			$relatedLinks = $('.related-links-edit-items');
+			$relatedLinks.on(
+				'click',
+				'.related-link-remove',
+				function(e) {
+					// If this is the only item, just clear the boxes. Otherwise, remove row.
+					var $thisLink = $(e.target).closest('.related-links-edit-items > li');
+					if ( $thisLink.siblings( 'li' ).length === 0 ) {
+						$thisLink.find( 'input' ).val( '' );
+					} else {
+						$thisLink.remove();
+					}
 				}
 			);
 
@@ -806,7 +820,7 @@ OpenLab.utility = (function ($) {
 	);
 
 	function create_new_related_link_field() {
-		$cloned_related_link_fields = $add_new_related_link.closest( 'li' ).clone();
+		$cloned_related_link_fields = $relatedLinks.find('li:first-child').clone();
 
 		// Get count of existing link fields for the iterator
 		related_links_count = $( '.related-links-edit-items li' ).length + 1;
@@ -825,25 +839,12 @@ OpenLab.utility = (function ($) {
 			}
 		);
 
-		// Remove current button from the DOM, as the cloned fields contain the new one
-		$add_new_related_link.remove();
-
 		// Add new fields to the DOM
 		$( '.related-links-edit-items' ).append( $cloned_related_link_fields );
 
 		// Remove values
 		$( '#related-links-' + related_links_count + '-name' ).val( '' );
 		$( '#related-links-' + related_links_count + '-url' ).val( '' );
-
-		// Reindex new Add button and bind click event
-		$add_new_related_link = $( '#add-new-related-link' );
-		$add_new_related_link.on(
-			'click',
-			function (e) {
-					e.preventDefault();
-					create_new_related_link_field();
-			}
-		);
 	}
 
 	/*this is for the homepage group list, so that cells in each row all have the same height

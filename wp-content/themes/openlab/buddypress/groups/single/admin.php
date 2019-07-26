@@ -209,15 +209,17 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 								</div>
 								<div class="form-group col-sm-15">
 									<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control" value="<?php echo esc_attr( $rl['url'] ); ?>" />
-									<?php /* Last item - show the plus button */ ?>
-									<?php if ( $rli === count( $related_links_list ) ) : ?>
-										<a href="#" id="add-new-related-link">+</a>
-									<?php endif ?>
+
+									<div class="related-link-actions">
+										<button type="button" class="related-link-remove related-link-action"><span class="screen-reader-text">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+									</div>
 								</div>
 							</li>
 							<?php $rli++; ?>
 						<?php endforeach; ?>
 					</ul>
+
+					<button type="button" class="related-link-add related-link-action" id="add-new-related-link"><span class="screen-reader-text">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
 				</div>
 			</div>
 
