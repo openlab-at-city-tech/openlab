@@ -323,6 +323,11 @@ input[type="submit"]{
             display: inline-block;
         }
     }
+	&.related-links-url {
+        @media(max-width: @screen-xs-max){
+			display: inline-block;
+		}
+	}
 }
 .parsley-errors-list.filled {
     margin: 0;
@@ -471,6 +476,9 @@ input[type="submit"]{
 	display: inline-block;
 	margin-top: -15px;
 	vertical-align: middle;
+	@media(max-width: @screen-xs-max){
+		margin-top: 0;
+	}
 }
 button.related-link-action {
 	background: none;

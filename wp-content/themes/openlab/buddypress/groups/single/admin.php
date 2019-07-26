@@ -208,7 +208,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 									<label for="related-links-<?php echo $rli; ?>-name">Name</label> <input name="related-links[<?php echo $rli; ?>][name]" id="related-links-<?php echo $rli; ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ); ?>" />
 								</div>
 								<div class="form-group col-sm-15">
-									<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control" value="<?php echo esc_attr( $rl['url'] ); ?>" />
+									<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control related-links-url" value="<?php echo esc_attr( $rl['url'] ); ?>" />
 
 									<div class="related-link-actions">
 										<button type="button" class="related-link-remove related-link-action"><span class="screen-reader-text">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
