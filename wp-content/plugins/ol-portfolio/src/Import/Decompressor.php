@@ -2,6 +2,7 @@
 
 namespace OpenLab\Portfolio\Import;
 
+use WP_Error;
 use ZipArchive;
 
 class Decompressor {

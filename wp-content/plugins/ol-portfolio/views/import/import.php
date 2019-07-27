@@ -1,4 +1,4 @@
-<div class="wrap nosubsub">
+<div class="wrap nosubsub import-page">
 	<?php $this->render_header(); ?>
 
 	<p><del>Step 1: Choose and upload your Portfolio Archive file (.zip).</del></p>
