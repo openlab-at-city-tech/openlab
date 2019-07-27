@@ -18,6 +18,7 @@ body.no-js .ol-print-this-page {
 	font-size: .9rem;
 	text-decoration: none;
 	width: fit-content;
+	width: max-content;
 	margin: 2em 0;
 	padding: .7rem;
 	background-color: #f1f1f1;
