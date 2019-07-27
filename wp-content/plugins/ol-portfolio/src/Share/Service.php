@@ -77,6 +77,7 @@ class Service implements Registerable {
 		$type = openlab_get_site_type( get_current_blog_id() );
 
 		switch ( $type ) {
+			case 'club':
 			case 'course':
 			case 'project':
 					$this->source_init();
