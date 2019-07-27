@@ -24,6 +24,9 @@ if (isset($exclude_groups)) {
 
 $display_name_shown = isset($pgroup) && 1 == $pgroup;
 $field_ids = array(1);
+
+$portfolio_id      = openlab_get_user_portfolio_id( $user_ID );
+$portfolio_sharing = get_user_meta( $user_ID, 'enable_portfolio_sharing', true );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
@@ -126,7 +129,7 @@ $field_ids = array(1);
                         <?php /* Add to the array for the field-ids input */ ?>
                         <?php $field_ids[] = bp_get_the_profile_field_id() ?>
 
-                        <div<?php bp_field_css_class('editfield') ?>>
+                        <div <?php bp_field_css_class('editfield') ?>>
 
                             <?php if ( 'textbox' == bp_get_the_profile_field_type() || 'url' == bp_get_the_profile_field_type() ) : ?>
 								<?php
@@ -234,8 +237,21 @@ $field_ids = array(1);
                 <?php endwhile; ?>
 
             </div><!--panel-body-->
-        </div>
+		</div>
 
+		<?php if ( ! empty( $portfolio_id ) ) : ?>
+			<div class="panel panel-default">
+				<div class="panel-heading">My Portfolio</div>
+				<div class="panel-body">
+					<div class="editfield">
+						<label for="portfolio-sharing">
+							<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
+							Enable "Add to My Portfolio" to save your work to your Portfolio.
+						</label>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
 
         <?php do_action('bp_after_profile_field_content') ?>
 
