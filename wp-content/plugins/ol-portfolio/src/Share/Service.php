@@ -281,7 +281,15 @@ class Service implements Registerable {
 			'entry-source-styles',
 			plugins_url( 'assets/css/portfolio.css', ROOT_FILE ),
 			[],
-			'20190723'
+			'20190727'
+		);
+
+		wp_enqueue_script(
+			'show-more',
+			plugins_url( 'assets/js/show-more.js', ROOT_FILE ),
+			[ 'jquery' ],
+			'20190727',
+			true
 		);
 	}
 
