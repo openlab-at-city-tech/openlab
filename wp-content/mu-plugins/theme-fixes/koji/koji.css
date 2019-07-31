@@ -6,6 +6,10 @@ body.adminbar-special #site-wrapper {
 	padding-top: 70px;
 }
 
+#site-header {
+	position: absolute;
+}
+
 .entry-content h1 { font-size: 2.8rem; }
 .entry-content h2 { font-size: 2.6rem; }
 .entry-content h3 { font-size: 2.3rem; }
