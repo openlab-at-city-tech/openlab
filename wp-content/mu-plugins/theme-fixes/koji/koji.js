@@ -53,9 +53,14 @@
 	}
 
   var adjustSidebar = function() {
-		var footerHeight = $footer.height();
+		mq = window.matchMedia('(max-width: 1000px)');
+		if ( mq.matches ) {
+			$sidebar.css('bottom', 'auto');
+		} else {
+			var footerHeight = $footer.height();
 
-		// Ensure the footer appears below the sidebar.
-		$sidebar.css('bottom', footerHeight);
+			// Ensure the footer appears below the sidebar.
+			$sidebar.css('bottom', footerHeight);
+		}
 	}
 }(jQuery));

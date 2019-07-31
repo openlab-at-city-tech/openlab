@@ -1,13 +1,35 @@
-body.adminbar-special {
-	padding-top: 0;
+html.html-locked.showing-admin-bar.js {
+	padding-top: 0 !important;
 }
 
-body.adminbar-special #site-wrapper {
-	padding-top: 70px;
+@media (min-width: 1000px ) {
+	#site-header {
+		position: absolute;
+	}
+
+	body.adminbar-special {
+		padding-top: 0;
+	}
+
+	body.adminbar-special #site-wrapper {
+		padding-top: 70px;
+	}
+
+	.site-description {
+		margin-bottom: 10rem;
+	}
 }
 
-#site-header {
-	position: absolute;
+@media (max-width: 782px) {
+	.admin-bar .mobile-menu-wrapper {
+		top: 90px;
+	}
+}
+
+#site-header:after {
+	content: '';
+	clear: both;
+	display: table;
 }
 
 .entry-content h1 { font-size: 2.8rem; }
@@ -24,7 +46,7 @@ body.adminbar-special #site-wrapper {
 	display: block; padding: 3rem 3rem 0 3rem; width: 100%;
 }
 .site-description {
-    margin: 1.7rem 0 10rem 0;
+    margin: 1.7rem 0 0 0;
 	font-size: 1.5rem;
 }
 h3.comment-reply­title {
