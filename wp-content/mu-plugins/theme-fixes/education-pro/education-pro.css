@@ -310,7 +310,7 @@ a.breadcrumb-link:hover {
 
 	.sub-menu .menu-item-has-children > a:after {
 		content: "\f105"; /* angle-right */
-		top: 1em;
+		top: 14px;
 	}
 
 	.menu-primary > .menu-item-has-children > a {
