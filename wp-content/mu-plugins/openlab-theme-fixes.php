@@ -51,6 +51,7 @@ add_action(
 		switch ( $t ) {
 			case 'education-pro' :
 			case 'hemingway':
+			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'twentynineteen':
