@@ -650,6 +650,7 @@ body .site-title a {
     color: #e3f2fa;
 }
 
+.education-pro-blue .genesis-nav-menu li a:hover,
 .education-pro-blue .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
 .education-pro-blue .genesis-nav-menu .sub-menu a,
 .education-pro-blue .genesis-nav-menu li.current-menu-item > a {
