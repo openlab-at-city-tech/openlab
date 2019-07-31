@@ -3,7 +3,12 @@
 		setTimeout(
 			function() {
 				var $subMenuToggles = $('.responsive-menu > .menu-item .menu-item');
-				$subMenuToggles.find(".sub-menu:first").hide();
+
+				var mq = window.matchMedia( "(max-width: 1023px)" );
+				if ( mq.matches ) {
+					$subMenuToggles.find(".sub-menu:first").hide();
+				}
+
 				$subMenuToggles.click(function(event){
 					if (event.target !== this) {
 						return;
