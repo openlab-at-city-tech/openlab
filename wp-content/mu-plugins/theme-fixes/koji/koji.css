@@ -73,3 +73,6 @@ button.menu-toggle:before {
 	content: '\f105';
 }
 
+#ol-print-this-page a {
+	font-size: .9em !important;
+}
