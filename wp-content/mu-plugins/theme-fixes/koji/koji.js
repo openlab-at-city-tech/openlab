@@ -36,6 +36,9 @@
 		});
 		adjustSidebar();
 
+		// a11y adjustments.
+		$('.search-form > label > img[aria-hidden="true"], .search-untoggle-inner > img[aria-hidden="true"]').attr('role', 'presentation').attr('alt','');
+
 	});
 
 	var toggleMenu = function( $menuItem ) {
