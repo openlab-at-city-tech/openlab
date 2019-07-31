@@ -377,10 +377,6 @@ body .site-title a {
     color: #000;
 }
 
-.genesis-nav-menu li a:hover {
-	text-decoration: underline;
-}
-
 .genesis-nav-menu li.current-menu-item > a,
 .genesis-nav-menu .sub-menu li a:hover,
 .genesis-nav-menu .sub-menu li.current-menu-item > a {
