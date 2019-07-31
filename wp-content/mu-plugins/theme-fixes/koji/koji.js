@@ -1,5 +1,9 @@
 (function($){
+	var $sidebar, $footer;
 	$(document).ready(function(){
+		$sidebar = $('#site-header');
+		$footer = $('#openlab-footer');
+
 		var $menusWithChildren = $('.menu-item-has-children');
 		var counter = 0;
 		$menusWithChildren.each(function(){
@@ -24,6 +28,14 @@
 			var $el = $(e.target);
 			toggleMenu($el);
 		});
+
+		var resizeTimer;
+		$(window).on('resize', function(){
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(adjustSidebar, 250);
+		});
+		adjustSidebar();
+
 	});
 
 	var toggleMenu = function( $menuItem ) {
@@ -35,5 +47,12 @@
 			$menuItem.addClass( 'menu-collapsed' );
 			$menuItem.find( '.sub-menu' ).attr( 'aria-hidden', 'true' ).attr( 'aria-expanded', 'false' );
 		}
+	}
+
+  var adjustSidebar = function() {
+		var footerHeight = $footer.height();
+
+		// Ensure the footer appears below the sidebar.
+		$sidebar.css('bottom', footerHeight);
 	}
 }(jQuery));
