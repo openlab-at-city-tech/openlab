@@ -501,6 +501,14 @@ body .site-title a {
 		padding-left: 20px;
 	}
 
+	.genesis-nav-menu li.current-menu-item > a {
+		font-weight: 700;
+	}
+
+	.genesis-nav-menu.responsive-menu li a:hover {
+		text-decoration: underline;
+	}
+
 	.genesis-nav-menu.responsive-menu .sub-menu .sub-menu {
 		padding-left: 20px;
 		margin: 0;
