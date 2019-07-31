@@ -106,3 +106,7 @@ button.menu-toggle:before {
 .wpcf7-form-control-wrap textarea {
 	margin-top: .5rem;
 }
+
+#openlab-footer {
+	display: none !important;
+}
