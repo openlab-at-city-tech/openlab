@@ -80,3 +80,7 @@ button.menu-toggle:before {
 #ol-print-this-page a {
 	font-size: .9em !important;
 }
+
+.wpcf7-form-control-wrap textarea {
+	margin-top: .5rem;
+}
