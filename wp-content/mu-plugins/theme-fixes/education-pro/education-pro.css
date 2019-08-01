@@ -709,3 +709,10 @@ body .site-title a {
 	color: #185a7d;
 }
 
+@media only screen and (max-width: 1023px) {
+	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
+	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+		background: none;
+		color: inherit;
+	}
+}
