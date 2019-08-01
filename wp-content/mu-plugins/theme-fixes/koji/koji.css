@@ -2,9 +2,19 @@ html.html-locked.showing-admin-bar.js {
 	padding-top: 0 !important;
 }
 
+@media (min-width: 600px) {
+	.site-title {
+		width: calc(100% - 12rem);
+	}
+}
+
 @media (min-width: 1000px ) {
 	#site-header {
 		position: absolute;
+	}
+
+	.site-title {
+		width: auto;
 	}
 
 	body.adminbar-special {
@@ -20,6 +30,12 @@ html.html-locked.showing-admin-bar.js {
 	}
 }
 
+@media (max-width: 999px) {
+	.admin-bar .mobile-menu-wrapper {
+		top: 50px;
+	}
+}
+
 @media (max-width: 782px) {
 	.admin-bar .mobile-menu-wrapper {
 		top: 90px;
@@ -30,6 +46,10 @@ html.html-locked.showing-admin-bar.js {
 	content: '';
 	clear: both;
 	display: table;
+}
+
+#mobile-menu.site-nav {
+	margin-top: 6rem;
 }
 
 .entry-content h1 { font-size: 2.8rem; }
@@ -46,7 +66,7 @@ html.html-locked.showing-admin-bar.js {
 	display: block; padding: 3rem 3rem 0 3rem; width: 100%;
 }
 .site-description {
-    margin: 1.7rem 0 0 0;
+    margin: 1.7rem 0 1.7rem 0;
 	font-size: 1.5rem;
 }
 h3.comment-reply­title {

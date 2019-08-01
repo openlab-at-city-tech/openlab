@@ -30,11 +30,14 @@
 		});
 
 		var resizeTimer;
-		$(window).on('resize', function(){
+		$(window).on('load resize orientationchange', function(){
 			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(adjustSidebar, 250);
+			resizeTimer = setTimeout(
+				function() {
+					adjustSidebar();
+				},
+			250);
 		});
-		adjustSidebar();
 
 		// a11y adjustments.
 		$('img[aria-hidden="true"]').attr('role', 'presentation').attr('alt','');
