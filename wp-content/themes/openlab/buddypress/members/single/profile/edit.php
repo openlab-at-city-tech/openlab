@@ -246,8 +246,9 @@ $portfolio_sharing = get_user_meta( $user_ID, 'enable_portfolio_sharing', true )
 					<div class="editfield">
 						<label for="portfolio-sharing">
 							<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
-							Enable "Add to My Portfolio" to save your work to your Portfolio.
+							Enable "Add to My Portfolio"
 						</label>
+						<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
 					</div>
 				</div>
 			</div>
