@@ -138,16 +138,18 @@ function my_page_menu_filter( $menu ) {
 	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
-		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu_a     = explode( '<ul>', $menu );
-		$menu_a     = array(
-			$menu_a[0],
-			'<ul>',
-			'<li id="group-profile-link" class="menu-item"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
-			$menu_a[1],
-		);
-		$menu       = implode( '', $menu_a );
+		$group = groups_get_group( $wds_bp_group_id );
+		if ( $group->is_visible ) {
+			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
+			$menu_a     = explode( '<ul>', $menu );
+			$menu_a     = array(
+				$menu_a[0],
+				'<ul>',
+				'<li id="group-profile-link" class="menu-item"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+				$menu_a[1],
+			);
+			$menu       = implode( '', $menu_a );
+		}
 	}
 	return $menu;
 }
@@ -220,18 +222,20 @@ function cuny_group_menu_items() {
 	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
-		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
+		$group = groups_get_group( $wds_bp_group_id );
+		if ( $group->is_visible ) {
+			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
 
-		$post_args             = new stdClass();
-		$profile_item          = new WP_Post( $post_args );
-		$profile_item->ID      = 'group-profile-link';
-		$profile_item->title   = sprintf( '%s Profile', $group_type );
-		$profile_item->slug    = 'group-profile-link';
-		$profile_item->url     = bp_get_group_permalink( $group );
-		$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
+			$post_args             = new stdClass();
+			$profile_item          = new WP_Post( $post_args );
+			$profile_item->ID      = 'group-profile-link';
+			$profile_item->title   = sprintf( '%s Profile', $group_type );
+			$profile_item->slug    = 'group-profile-link';
+			$profile_item->url     = bp_get_group_permalink( $group );
+			$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
 
-		$items[] = $profile_item;
+			$items[] = $profile_item;
+		}
 	}
 
 	return $items;
