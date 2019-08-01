@@ -125,6 +125,7 @@ function openlab_whats_happening_activity_items() {
 			'date_query' => array(
 				'before' => $now->format( 'Y-m-d H:i:s' ),
 			),
+			'show_hidden' => false,
 		);
 
 		$a = bp_activity_get( $activity_args );
