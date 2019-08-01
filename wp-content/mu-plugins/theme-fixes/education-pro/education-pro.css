@@ -667,16 +667,12 @@ body .site-title a {
 	color: #fff;
 }
 
+.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
+.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
 .education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 .education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #e3f2fb;
 	color: #3b3b3b;
-}
-
-.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
-.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
-	background-color: inherit;
-	color: inherit;
 }
 
 .education-pro-blue .genesis-nav-menu .sub-menu a {
@@ -710,6 +706,12 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
+	.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
+	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
+		background-color: inherit;
+		color: inherit;
+	}
+
 	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 		background: none;
