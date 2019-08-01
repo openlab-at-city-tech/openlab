@@ -462,6 +462,10 @@ function invite_anyone_remove_group_creation_invites( $a ) {
 function invite_anyone_remove_invite_subnav() {
 	global $bp;
 
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
 	if ( invite_anyone_group_invite_access_test() == 'friends' )
 		return;
 
