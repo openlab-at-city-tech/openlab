@@ -149,7 +149,7 @@ class Service implements Registerable {
 			'add-to-portfolio-styles',
 			plugins_url( 'assets/css/share.css', ROOT_FILE ),
 			[],
-			'20190723'
+			'20190801'
 		);
 
 		wp_enqueue_script(

@@ -186,7 +186,7 @@ dialog::backdrop {
 	margin-bottom: 10px;
 }
 .portfolio-actions button:disabled {
-	color: #444;
+	pointer-events: none;
 }
 @media print {
 	.portfolio-actions {
