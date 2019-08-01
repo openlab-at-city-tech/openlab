@@ -1,0 +1,12 @@
+.site-nav li {
+	display: block;
+	font-size: 1rem;
+}
+
+.page-header {
+	margin: 0 auto 0 auto;
+}
+
+.site-nav ul + ul a {
+	color:#5C5C5C;
+}

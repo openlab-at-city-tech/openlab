@@ -14,6 +14,7 @@ function openlab_load_theme_fixes() {
 		case 'coraline':
 		case 'education-pro':
 		case 'filtered':
+		case 'hamilton':
 		case 'hemingway':
 		case 'herothemetrust':
 		case 'koji':
