@@ -1,3 +1,12 @@
+body.lock-screen .site-header {
+	padding-bottom: 0;
+}
+
+body.lock-screen .nav-toggle {
+	bottom: 0;
+	top: auto;
+}
+
 .site-nav li {
 	display: block;
 	font-size: 1rem;
@@ -19,5 +28,9 @@
 @media (max-width: 620px) {
 	.site-nav {
 		padding-top: 220px;
+	}
+
+	.site-nav ul:first-child li {
+		font-size: inherit;
 	}
 }
