@@ -11,6 +11,13 @@
 	color:#5C5C5C;
 }
 
+.oplb-bs button,
 #wpadminbar button {
 	min-width: initial;
+}
+
+@media (max-width: 620px) {
+	.site-nav {
+		padding-top: 220px;
+	}
 }
