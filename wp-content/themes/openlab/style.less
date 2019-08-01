@@ -2747,6 +2747,17 @@ body.docs{
 		margin-bottom: 10px;
 	}
 }
+#doc-settings {
+	legend {
+		border-bottom: none;
+		font-size: inherit;
+		font-weight: bold;
+	}
+	label {
+		display: block;
+		font-weight: normal;
+	}
+}
 .doc-content{
     &.edit-doc{
         border: none;
@@ -2759,12 +2770,14 @@ body.docs{
     }
     .tmce-active{
         .switch-tmce{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .html-active{
         .switch-html{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .wp-editor-container{
@@ -2781,12 +2794,26 @@ body.docs{
 }
 #doc-meta{
     .toggle-switch{
+        background-color: @panel-default-heading-bg;
+        border-color: @panel-default-border;
         padding: 6px 16px;
+		&:hover {
+			background-color: @panel-default-text;
+
+			a {
+				color: @panel-default-heading-bg;
+			}
+		}
         .plus-or-minus{
             font-size: 1.1em;
         }
+		a {
+			color: @panel-default-text;
+			font-weight: @semibold;
+		}
     }
     .toggle-content{
+        border-color: @panel-default-border;
         padding-top: 12px;
         width: 100%;
     }
@@ -2805,6 +2832,9 @@ body.docs{
             }
         }
     }
+}
+a.delete-doc-button {
+	color: #a20000 !important;
 }
 /**forum (bbpress) styles**/
 .forum{

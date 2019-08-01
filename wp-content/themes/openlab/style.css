@@ -9858,6 +9858,15 @@ body.membership-requests .group-list {
 body.docs .notify-group-members-ui {
   margin-bottom: 10px;
 }
+#doc-settings legend {
+  border-bottom: none;
+  font-size: inherit;
+  font-weight: bold;
+}
+#doc-settings label {
+  display: block;
+  font-weight: normal;
+}
 .doc-content.edit-doc {
   border: none;
   padding: 0;
@@ -9868,10 +9877,12 @@ body.docs .notify-group-members-ui {
   border-radius: 4px 4px 0 0;
 }
 .doc-content .tmce-active .switch-tmce {
-  color: #49cabe;
+  color: #333333;
+  font-weight: 600;
 }
 .doc-content .html-active .switch-html {
-  color: #49cabe;
+  color: #333333;
+  font-weight: 600;
 }
 .doc-content .wp-editor-container {
   border: 1px solid #dddddd;
@@ -9885,12 +9896,25 @@ body.docs .notify-group-members-ui {
   margin-top: 10px;
 }
 #doc-meta .toggle-switch {
+  background-color: #f5f5f5;
+  border-color: #ddd;
   padding: 6px 16px;
+}
+#doc-meta .toggle-switch:hover {
+  background-color: #333333;
+}
+#doc-meta .toggle-switch:hover a {
+  color: #f5f5f5;
 }
 #doc-meta .toggle-switch .plus-or-minus {
   font-size: 1.1em;
 }
+#doc-meta .toggle-switch a {
+  color: #333333;
+  font-weight: 600;
+}
 #doc-meta .toggle-content {
+  border-color: #ddd;
   padding-top: 12px;
   width: 100%;
 }
@@ -9902,6 +9926,9 @@ body.docs .notify-group-members-ui {
 }
 #doc-meta #toggle-table-settings tr:first-child td {
   padding-top: 0;
+}
+a.delete-doc-button {
+  color: #a20000 !important;
 }
 /**forum (bbpress) styles**/
 .forum #item-body {
