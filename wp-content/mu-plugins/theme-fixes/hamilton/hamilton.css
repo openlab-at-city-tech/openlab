@@ -3,26 +3,63 @@
 	padding: 0;
 }
 
-.site-nav li {
-	display: block;
-	font-size: 1rem;
+.site-header .site-title {
+	max-width: calc(100% - 65px);
 }
 
 .page-header {
 	margin: 0 auto 0 auto;
 }
 
+.site-nav .menus {
+	padding-bottom: 10px; /* Prevents scroll bar */
+}
+
 .site-nav ul + ul a {
-	color:#5C5C5C;
+	color: #5C5C5C;
+}
+
+.site-nav li {
+	display: block;
+	font-size: 1rem;
+	position: relative;
 }
 
 .oplb-bs button,
+.site-nav button,
 #wpadminbar button {
 	min-width: initial;
 }
 
-.site-header .site-title {
-	max-width: calc(100% - 65px);
+button.menu-toggle:hover {
+	background: #000;
+}
+
+button.menu-toggle:hover:before {
+	color: #F6F7F8;
+}
+
+button.menu-toggle {
+	background: none;
+	position: absolute;
+	padding: 3px 12px;
+	right: 0;
+	top: -3px;
+}
+
+button.menu-toggle:before {
+	color: #000;
+	content: '\f107';
+	font-family: fontawesome;
+	text-decoration: none;
+}
+
+.menu-collapsed button.menu-toggle:before {
+	content: '\f105';
+}
+
+.menu-item-has-children.menu-collapsed > .sub-menu {
+	display: none;
 }
 
 @media (max-width: 620px) {
