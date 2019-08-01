@@ -1,10 +1,6 @@
-body.lock-screen .site-header {
-	padding-bottom: 0;
-}
-
-body.lock-screen .nav-toggle {
-	bottom: 0;
-	top: auto;
+.site-header {
+	margin-top: 100px;
+	padding: 0;
 }
 
 .site-nav li {
@@ -25,7 +21,15 @@ body.lock-screen .nav-toggle {
 	min-width: initial;
 }
 
+.site-header .site-title {
+	max-width: calc(100% - 65px);
+}
+
 @media (max-width: 620px) {
+	.site-header {
+		margin-top: 50px;
+	}
+
 	.site-nav {
 		padding-top: 220px;
 	}

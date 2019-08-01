@@ -73,6 +73,7 @@ add_action(
 		switch ( $t ) {
 			// All of the below require only jQuery.
 			case 'education-pro' :
+			case 'hamilton':
 			case 'koji' :
 			case 'lingonberry' :
 				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $t . '/' . $t . '.js', array( 'jquery' ) ) );
