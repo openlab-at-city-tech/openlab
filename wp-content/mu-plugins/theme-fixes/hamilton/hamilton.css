@@ -10,3 +10,7 @@
 .site-nav ul + ul a {
 	color:#5C5C5C;
 }
+
+#wpadminbar button {
+	min-width: initial;
+}
