@@ -53,7 +53,7 @@ do
   for subdir in ${subdirs[*]}
   do
     echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2- $ignore $subdir)
+    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2 $ignore $subdir)
     if [ $? -eq 1 ]
     then
       echo "$results"
