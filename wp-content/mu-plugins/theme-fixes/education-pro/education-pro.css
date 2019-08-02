@@ -573,6 +573,7 @@ body .site-title a {
 
 /** COLOR SCHEMES ********************************************************/
 
+/* Blue */
 .education-pro-blue .footer-widgets .wrap a:hover,
 .education-pro-blue .slide-excerpt h2 a,
 .education-pro-blue .home-middle .entry-title a,
@@ -717,6 +718,7 @@ body .site-title a {
 	}
 }
 
+/* Green */
 .education-pro-green .footer-widgets .wrap a:hover,
 .education-pro-green .slide-excerpt h2 a,
 .education-pro-green .home-middle .entry-title a,
@@ -778,6 +780,7 @@ body .site-title a {
 	color: #d1deba;
 }
 
+.education-pro-green .title-area,
 .education-pro-green a.title-area-link {
 	background-color: #d1deba;
 }
@@ -791,8 +794,8 @@ body .site-title a {
 }
 
 .education-pro-green .content .entry-header .entry-meta .entry-time {
-	background-color: #444;
-	color: #d1deba;
+	background-color: #d1deba;
+	color: #444;
 }
 
 .education-pro-green button:hover,
@@ -862,6 +865,158 @@ body .site-title a {
 
 	.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+		background: none;
+		color: inherit;
+	}
+}
+
+/* Red */
+.education-pro-red .footer-widgets .wrap a:hover,
+.education-pro-red .slide-excerpt h2 a,
+.education-pro-red .home-middle .entry-title a,
+.education-pro-red .home-top .widget_text,
+.education-pro-red .site-footer .wrap a:hover,
+.education-pro-red .entry-content a,
+.education-pro-red .entry-footer .entry-meta a,
+.education-pro-red #ol-print-this-page a,
+.education-pro-red .archive-pagination a,
+.education-pro-red a.breadcrumb-link,
+.education-pro-red a {
+	border-color: #aa2418;
+	color: #aa2418;
+}
+
+.education-pro-red .entry-footer .entry-meta a:hover,
+.education-pro-red a:hover {
+	color: #444;
+}
+
+.education-pro-red button,
+.education-pro-red a.button,
+.education-pro-red input[type="submit"],
+.education-pro-red a.wp-block-file__button,
+.education-pro-red .footer-widgets a.button,
+.education-pro-red .site-footer a.button {
+	background-color: #ffd5d1;
+	color: #444;
+}
+
+.education-pro-red button:hover,
+.education-pro-red a.button:hover,
+.education-pro-red a.wp-block-file__button:hover,
+.education-pro-red .footer-widgets a.button:hover,
+.education-pro-red .site-footer a.button:hover {
+	background-color: #444;
+	color: #ffd5d1;
+}
+
+.education-pro-red .archive-description,
+.education-pro-red .author-box,
+.education-pro-red .button:hover,
+.education-pro-red .footer-widgets .wrap .button:hover,
+.education-pro-red .footer-widgets button:hover,
+.education-pro-red .footer-widgets input:hover[type="button"],
+.education-pro-red .footer-widgets input:hover[type="reset"],
+.education-pro-red .footer-widgets input:hover[type="submit"],
+.education-pro-red .home-bottom .widget .button:hover,
+.education-pro-red .home-bottom button:hover,
+.education-pro-red .home-bottom input:hover[type="button"],
+.education-pro-red .home-bottom input:hover[type="reset"],
+.education-pro-red .home-bottom input:hover[type="submit"],
+.education-pro-red .home-featured #genesis-responsive-slider .more-link:hover,
+.education-pro-red button:hover,
+.education-pro-red input:hover[type="button"],
+.education-pro-red input:hover[type="reset"],
+.education-pro-red input:hover[type="submit"] {
+	background-color: #444;
+	color: #ffd5d1;
+}
+
+.education-pro-red .title-area,
+.education-pro-red a.title-area-link {
+	background-color: #db2f1f;
+}
+
+.education-pro-red .title-area {
+	color: #fff;
+}
+
+.education-pro-red a.title-area-link:hover div.title-area .site-title {
+	color: #ffd5d1;
+}
+
+.education-pro-red .content .entry-header .entry-meta .entry-time {
+	background-color: #ffd5d1;
+	color: #444;
+}
+
+.education-pro-red button:hover,
+.education-pro-red input[type="button"]:hover,
+.education-pro-red input[type="reset"]:hover,
+.education-pro-red input[type="submit"]:hover,
+.education-pro-red .button:hover,
+.education-pro-red div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #ffd5d1;
+}
+
+.education-pro-red .genesis-nav-menu li a:hover,
+.education-pro-red .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-red .genesis-nav-menu .sub-menu a,
+.education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
+.education-pro-red .genesis-nav-menu li.current-menu-item > a {
+	background-color: #62231d;
+	color: #fff;
+}
+
+.education-pro-red .header-widget-area .genesis-nav-menu li a:hover,
+.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
+.education-pro-red .header-widget-area .genesis-nav-menu li.current-menu-item > a,
+.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+	background-color: #ffd5d1;
+	color: #3b3b3b;
+}
+
+.education-pro-red .genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #444;
+}
+
+.education-pro-red .genesis-nav-menu .sub-menu,
+.education-pro-red .after-entry .widget,
+.education-pro-red .home-top .wrap,
+.education-pro-red .sidebar .widget,
+.education-pro-red .site-header {
+	border-color: #e44a3d;
+}
+
+.education-pro-red .enews-widget .enews input:hover[type="submit"],
+.education-pro-red .footer-widgets,
+.education-pro-red .home-middle,
+.education-pro-red .nav-primary,
+.education-pro-red .site-footer {
+	background-color: #812e26;
+}
+
+.education-pro-red .site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.education-pro-red .archive-pagination .active a,
+.education-pro-red .archive-pagination li a:hover {
+	color: #444;
+}
+
+@media only screen and (max-width: 1023px) {
+	.education-pro-red .header-widget-area .genesis-nav-menu li a:hover,
+	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
+		background-color: inherit;
+		color: inherit;
+	}
+
+	.education-pro-red .header-widget-area .genesis-nav-menu li.current-menu-item > a,
+	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 		background: none;
 		color: inherit;
 	}
