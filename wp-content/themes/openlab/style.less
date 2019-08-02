@@ -2700,6 +2700,9 @@ body.membership-requests {
         display: none;
     }
 }
+body div#bp-docs-pagination-count {
+	color: @70gray;
+}
 .doc-tabs{
     ul{
         padding: 0;
@@ -2722,6 +2725,14 @@ body.membership-requests {
                 width: auto;
             }
         }
+		.row-actions {
+			a {
+				color: @80gray;
+				&.delete {
+					color: #a20000;
+				}
+			}
+		}
     }
     @media (max-width: @screen-xs-max){
         table,

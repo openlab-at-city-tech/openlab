@@ -9821,6 +9821,9 @@ body.membership-requests .group-list {
     display: none;
   }
 }
+body div#bp-docs-pagination-count {
+  color: #444444;
+}
 .doc-tabs ul {
   padding: 0;
   margin: 0;
@@ -9840,6 +9843,12 @@ body.membership-requests .group-list {
 }
 .doctable-panel .doctable td.tags-cell {
   width: auto;
+}
+.doctable-panel .doctable .row-actions a {
+  color: #333333;
+}
+.doctable-panel .doctable .row-actions a.delete {
+  color: #a20000;
 }
 @media (max-width: 767px) {
   .doctable-panel table,
