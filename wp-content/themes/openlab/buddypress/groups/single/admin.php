@@ -237,6 +237,8 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 									Enable "Add to My Portfolio"
 								</label>
 							</div>
+
+							<?php wp_nonce_field( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce', false ); ?>
 						</div>
 					</div>
 				</div>

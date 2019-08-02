@@ -1849,11 +1849,11 @@ function openlab_set_group_academic_units( $group_id, $units ) {
  * @return void
  */
 function openlab_group_add_to_portfolio_save( $group ) {
-	if ( empty( $_POST['_wpnonce'] ) ) {
+	if ( empty( $_POST['add-to-portfolio-toggle-nonce'] ) ) {
 		return;
 	}
 
-	check_admin_referer( 'groups_edit_group_settings' );
+	check_admin_referer( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce' );
 
 	if ( ! empty( $_POST['portfolio-sharing'] ) ) {
 		groups_add_groupmeta( $group->id, 'enable_portfolio_sharing', 'yes' );
