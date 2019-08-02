@@ -15,6 +15,7 @@ ignores=(
   'wp-content/plugins/digressit'
   'wp-content/plugins/dk-pdf/vendor/paragonie/random_compat'
   'wp-content/plugins/download-monitor/src/DownloadHandler.php'
+  'wp-content/plugins/download-monitor/src/Polyfill/DateTimeImmutable'
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
 #  'wp-content/plugins/easy-visualization-tools'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
