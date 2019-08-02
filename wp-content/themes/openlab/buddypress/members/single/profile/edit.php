@@ -24,9 +24,6 @@ if (isset($exclude_groups)) {
 
 $display_name_shown = isset($pgroup) && 1 == $pgroup;
 $field_ids = array(1);
-
-$portfolio_id      = openlab_get_user_portfolio_id( $user_ID );
-$portfolio_sharing = get_user_meta( $user_ID, 'enable_portfolio_sharing', true );
 ?>
 <?php echo openlab_submenu_markup(); ?>
 
@@ -238,21 +235,6 @@ $portfolio_sharing = get_user_meta( $user_ID, 'enable_portfolio_sharing', true )
 
             </div><!--panel-body-->
 		</div>
-
-		<?php if ( ! empty( $portfolio_id ) ) : ?>
-			<div class="panel panel-default">
-				<div class="panel-heading">My Portfolio</div>
-				<div class="panel-body">
-					<div class="editfield">
-						<label for="portfolio-sharing">
-							<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
-							Enable "Add to My Portfolio"
-						</label>
-						<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
 
         <?php do_action('bp_after_profile_field_content') ?>
 

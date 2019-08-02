@@ -1,9 +1,10 @@
 <?php
 global $bp;
 
-$group_type = groups_get_groupmeta( $bp->groups->current_group->id, 'wds_group_type' );
+$group_type = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_type' );
 
 $group_label_uc = openlab_get_group_type_label( 'case=upper' );
+$portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_portfolio_sharing' );
 ?>
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages ?>
@@ -222,6 +223,24 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 					<button type="button" class="related-link-add related-link-action" id="add-new-related-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
 				</div>
 			</div>
+
+			<?php if ( openlab_is_portfolio() ) : ?>
+				<div class="panel panel-default">
+					<div class="panel-heading">Add to My Portfolio</div>
+					<div class="panel-body">
+						<div class="editfield">
+							<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
+
+							<div class="checkbox">
+								<label for="portfolio-sharing">
+									<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
+									Enable "Add to My Portfolio"
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
 
 			<?php do_action( 'bp_after_group_settings_admin' ); ?>
 			<p><input class="btn btn-primary" type="submit" value="<?php _e( 'Save Changes', 'buddypress' ); ?> &#xf138;" id="save" name="save" /></p>

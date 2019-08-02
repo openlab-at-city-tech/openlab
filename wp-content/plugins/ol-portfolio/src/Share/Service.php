@@ -108,16 +108,16 @@ class Service implements Registerable {
 			return;
 		}
 
-		$enabled = get_user_meta( $user->ID, 'enable_portfolio_sharing', true );
+		$group_id = openlab_get_user_portfolio_id( $user->ID );
+		$enabled  = groups_get_groupmeta( $group_id, 'enable_portfolio_sharing' );
 
 		if ( ! $enabled ) {
 			return;
 		}
 
-		// Bail, if user doesn't have portfolio.
-		$portfolio_group_id = openlab_get_user_portfolio_id( $user->ID );
-		$this->portfolio_id = openlab_get_site_id_by_group_id( $portfolio_group_id );
+		$this->portfolio_id = openlab_get_site_id_by_group_id( $group_id );
 
+		// Bail, if user doesn't have portfolio.
 		if ( empty( $this->portfolio_id ) ) {
 			return;
 		}

@@ -1182,24 +1182,3 @@ function openlab_set_user_academic_units( $user_id, $units ) {
         }
     }
 }
-
-/**
- * Save "Add to Portfolio" user settings.
- *
- * @param int $user_id
- * @return void
- */
-function openlab_user_add_to_portfolio_save( $user_id ) {
-	if ( empty( $_POST['_wpnonce'] ) ) {
-		return;
-	}
-
-	check_admin_referer( 'bp_xprofile_edit' );
-
-	if ( ! empty( $_POST['portfolio-sharing'] ) ) {
-		add_user_meta( $user_id, 'enable_portfolio_sharing', 'yes' );
-	} else {
-		delete_user_meta( $user_id, 'enable_portfolio_sharing' );
-	}
-}
-add_action( 'xprofile_updated_profile', 'openlab_user_add_to_portfolio_save' );
