@@ -571,8 +571,6 @@ body .site-title a {
 	}
 }
 
-/* Couldn't figure out menu hovers, so see mockups or let me know which selectors to adjust. :) */
-
 /** COLOR SCHEMES ********************************************************/
 
 .education-pro-blue .footer-widgets .wrap a:hover,
@@ -714,6 +712,156 @@ body .site-title a {
 
 	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+		background: none;
+		color: inherit;
+	}
+}
+
+.education-pro-green .footer-widgets .wrap a:hover,
+.education-pro-green .slide-excerpt h2 a,
+.education-pro-green .home-middle .entry-title a,
+.education-pro-green .home-top .widget_text,
+.education-pro-green .site-footer .wrap a:hover,
+.education-pro-green .entry-content a,
+.education-pro-green .entry-footer .entry-meta a,
+.education-pro-green #ol-print-this-page a,
+.education-pro-green .archive-pagination a,
+.education-pro-green a.breadcrumb-link,
+.education-pro-green a {
+	border-color: #3e6120;
+	color: #3e6120;
+}
+
+.education-pro-green .entry-footer .entry-meta a:hover,
+.education-pro-green a:hover {
+	color: #444;
+}
+
+.education-pro-green button,
+.education-pro-green a.button,
+.education-pro-green input[type="submit"],
+.education-pro-green a.wp-block-file__button,
+.education-pro-green .footer-widgets a.button,
+.education-pro-green .site-footer a.button {
+	background-color: #d1deba;
+	color: #444;
+}
+
+.education-pro-green button:hover,
+.education-pro-green a.button:hover,
+.education-pro-green a.wp-block-file__button:hover,
+.education-pro-green .footer-widgets a.button:hover,
+.education-pro-green .site-footer a.button:hover {
+	background-color: #444;
+	color: #d1deba;
+}
+
+.education-pro-green .archive-description,
+.education-pro-green .author-box,
+.education-pro-green .button:hover,
+.education-pro-green .footer-widgets .wrap .button:hover,
+.education-pro-green .footer-widgets button:hover,
+.education-pro-green .footer-widgets input:hover[type="button"],
+.education-pro-green .footer-widgets input:hover[type="reset"],
+.education-pro-green .footer-widgets input:hover[type="submit"],
+.education-pro-green .home-bottom .widget .button:hover,
+.education-pro-green .home-bottom button:hover,
+.education-pro-green .home-bottom input:hover[type="button"],
+.education-pro-green .home-bottom input:hover[type="reset"],
+.education-pro-green .home-bottom input:hover[type="submit"],
+.education-pro-green .home-featured #genesis-responsive-slider .more-link:hover,
+.education-pro-green button:hover,
+.education-pro-green input:hover[type="button"],
+.education-pro-green input:hover[type="reset"],
+.education-pro-green input:hover[type="submit"] {
+	background-color: #444;
+	color: #d1deba;
+}
+
+.education-pro-green a.title-area-link {
+	background-color: #d1deba;
+}
+
+.education-pro-green .title-area {
+	color: #234326;
+}
+
+.education-pro-green a.title-area-link:hover div.title-area .site-title {
+	color: #336136;
+}
+
+.education-pro-green .content .entry-header .entry-meta .entry-time {
+	background-color: #444;
+	color: #d1deba;
+}
+
+.education-pro-green button:hover,
+.education-pro-green input[type="button"]:hover,
+.education-pro-green input[type="reset"]:hover,
+.education-pro-green input[type="submit"]:hover,
+.education-pro-green .button:hover,
+.education-pro-green div.wp-block-file__button a:hover {
+    background-color: #444;
+    color: #d1deba;
+}
+
+.education-pro-green .genesis-nav-menu li a:hover,
+.education-pro-green .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
+.education-pro-green .genesis-nav-menu .sub-menu a,
+.education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
+.education-pro-green .genesis-nav-menu li.current-menu-item > a {
+	background-color: #234326;
+	color: #fff;
+}
+
+.education-pro-green .header-widget-area .genesis-nav-menu li a:hover,
+.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
+.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
+.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+	background-color: #d1deba;
+	color: #3b3b3b;
+}
+
+.education-pro-green .genesis-nav-menu .sub-menu a {
+	background-color: #fff;
+	color: #234326;
+}
+
+.education-pro-green .genesis-nav-menu .sub-menu,
+.education-pro-green .after-entry .widget,
+.education-pro-green .home-top .wrap,
+.education-pro-green .sidebar .widget,
+.education-pro-green .site-header {
+	border-color: #5ebd67;
+}
+
+.education-pro-green .enews-widget .enews input:hover[type="submit"],
+.education-pro-green .footer-widgets,
+.education-pro-green .home-middle,
+.education-pro-green .nav-primary,
+.education-pro-green .site-footer {
+	background-color: #336136;
+}
+
+.education-pro-green .site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.education-pro-green .archive-pagination .active a,
+.education-pro-green .archive-pagination li a:hover {
+	color: #444;
+}
+
+@media only screen and (max-width: 1023px) {
+	.education-pro-green .header-widget-area .genesis-nav-menu li a:hover,
+	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
+		background-color: inherit;
+		color: inherit;
+	}
+
+	.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
+	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 		background: none;
 		color: inherit;
 	}
