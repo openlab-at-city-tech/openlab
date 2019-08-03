@@ -15,6 +15,9 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default"
                 data-dismiss="modal"><?php esc_html_e('Close', 'openlab-gradebook')?></button>
+            <button id="uploadExternal" tabindex="500" title="Upload selected files"
+                class="btn btn-primary fileinput-upload fileinput-upload-button"><i
+                    class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Upload</span></button>
         </div>
     </div>
 </div>

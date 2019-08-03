@@ -13,7 +13,8 @@ define([
 		className: "modal fade",
 		events: {
 			"shown.bs.modal": "renderUploader",
-			"hidden.bs.modal": "editCancel"
+			"hidden.bs.modal": "editCancel",
+			"click #uploadExternal": "uploadFile"
 		},
 		initialize: function(options) {
 			this.course = options.course;
@@ -41,12 +42,37 @@ define([
 						this.course.get("id"),
 					maxFileCount: 1,
 					hideThumbnailContent: true,
-					msgUploadThreshold: "Adding to Gradebook..."
+					showClose: false,
+					msgUploadThreshold: "Adding to Gradebook...",
+					layoutTemplates: {
+						main1:
+							"{preview}\n" +
+							'<div class="kv-upload-progress kv-hidden"></div><div class="clearfix"></div>\n' +
+							'<div class="input-group {class}">\n' +
+							"  {caption}\n" +
+							'<div class="input-group-btn input-group-append">\n' +
+							"      {remove}\n" +
+							"      {cancel}\n" +
+							"      {pause}\n" +
+							"      {browse}\n" +
+							"    </div>\n" +
+							"</div>",
+						actions:
+							'<div class="file-actions">\n' +
+							'    <div class="file-footer-buttons">\n' +
+							"        {zoom} {other}" +
+							"    </div>\n" +
+							"</div>\n" +
+							"{drag}\n" +
+							'<div class="clearfix"></div>',
+						indicator: ""
+					}
 				})
 				.on("fileselect", function(e, numfiles, label) {
-					console.log('fileselect');
+					console.log("fileselect");
 					error = "";
 					self.$el.find("#upload-csv-error-message").remove();
+					$('#upload-csv .modal-content').addClass('upload-active');
 				})
 				.on("fileuploaded", function(e, params) {
 					$(".file-preview-status.text-center.text-success").html(
@@ -57,6 +83,8 @@ define([
 					self.updateGradebook();
 				})
 				.on("filecleared", function(e) {
+					console.log("filecleared");
+					$('#upload-csv .modal-content').removeClass('upload-active');
 					if (error !== "") {
 						self.$el.find(".file-input .kv-fileinput-error").after(error);
 					}
@@ -75,6 +103,10 @@ define([
 		updateGradebook: function() {
 			console.log("self.newGradebook in updateGradebook", newGradebook);
 			Backbone.pubSub.trigger("newGradebookCSV", newGradebook);
+		},
+		uploadFile: function() {
+			console.log('go uploadFile');
+			$("#upload-csv-input").fileinput("upload");
 		}
 	});
 
