@@ -119,6 +119,8 @@ class gradebook_upload_csv_API
             while (($row = fgetcsv($handle)) !== false) {
 
                 $row = array_map("utf8_encode", $row);
+                //also add a trim to prevent accidental spacing errors
+                $row = array_map("trim", $row);
 
                 // If the header has been stored
                 if ($header_rows_filled) {
@@ -298,13 +300,13 @@ class gradebook_upload_csv_API
             $assignment = trim($assignment);
 
             //check for existing assignments first
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE assign_name LIKE '%s'", $assignment);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE TRIM(assign_name) LIKE '%s'", $assignment);
             $existing_assignment = $wpdb->get_results($query);
 
             if (!empty($existing_assignment)) {
                 $process_result['assignments'][$thisdex] = array(
                     'status' => 'existing',
-                    'name' => $assignment,
+                    'name' => trim($assignment),
                     'type' => $existing_assignment[0]->assign_grade_type,
                     'id' => $existing_assignment[0]->id,
                     'assign_order' => $existing_assignment[0]->assign_order,
@@ -325,7 +327,7 @@ class gradebook_upload_csv_API
 
                 $process_result['assignments'][$thisdex] = array(
                     'status' => 'new',
-                    'name' => $assignment,
+                    'name' => trim($assignment),
                     'type' => $this_type,
                 );
 
