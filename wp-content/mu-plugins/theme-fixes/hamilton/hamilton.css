@@ -61,7 +61,7 @@ ul:not(.alt-nav) button.menu-toggle {
 
 ul:not(.alt-nav) button.menu-toggle:before {
 	color: #000;
-	content: '\f107';
+	content: '\f106';
 	text-decoration: none;
 	font-family: fontawesome;
 	font-size: 1.2em;
@@ -73,7 +73,7 @@ ul:not(.alt-nav) button.menu-toggle:before {
 }
 
 ul:not(.alt-nav) .menu-collapsed button.menu-toggle:before {
-	content: '\f106';
+	content: '\f107';
 }
 
 ul:not(.alt-nav) .menu-item-has-children.menu-collapsed > .sub-menu {
