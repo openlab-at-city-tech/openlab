@@ -940,7 +940,7 @@ class Openlab_Clone_Course_Site {
 
 		// Make destination directory
 		if ( ! is_dir( $dest ) ) {
-			mkdir( $dest );
+			wp_mkdir_p( $dest );
 		}
 
 		// Loop through the folder

@@ -459,77 +459,85 @@ class BP_Docs_Groups_Integration {
 
 			<?php /* EDITING */ ?>
 			<tr>
-				<td class="desc-column">
-					<label for="settings[edit]"><?php _e( 'Who can edit this doc?', 'bp-docs' ) ?></label>
-				</td>
+				<fieldset>
+					<td class="desc-column">
+						<legend><?php _e( 'Who can edit this doc?', 'bp-docs' ) ?></legend>
+					</td>
 
-				<td class="content-column">
-					<input name="settings[edit]" type="radio" value="group-members" <?php checked( $edit, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?><br />
+					<td class="content-column">
+						<label><input name="settings[edit]" type="radio" value="group-members" <?php checked( $edit, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?></label>
 
-					<input name="settings[edit]" type="radio" value="creator" <?php checked( $edit, 'creator' ) ?>/> <?php echo esc_html( $creator_text ) ?><br />
+						<label><input name="settings[edit]" type="radio" value="creator" <?php checked( $edit, 'creator' ) ?>/> <?php echo esc_html( $creator_text ) ?></label>
 
-					<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
-						<input name="settings[edit]" type="radio" value="admins-mods" <?php checked( $edit, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?><br />
-					<?php endif ?>
-				</td>
+						<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
+							<label><input name="settings[edit]" type="radio" value="admins-mods" <?php checked( $edit, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?></label>
+						<?php endif ?>
+					</td>
+				</fieldset>
 			</tr>
 
 			<?php /* POSTING COMMENTS */ ?>
 			<tr>
-				<td class="desc-column">
-					<label for="settings[post_comments]"><?php _e( 'Who can <em>post</em> comments on this doc?', 'bp-docs' ) ?></label>
-				</td>
+				<fieldset>
+					<td class="desc-column">
+						<legend><?php _e( 'Who can <em>post</em> comments on this doc?', 'bp-docs' ) ?></legend>
+					</td>
 
-				<td class="content-column">
-					<input name="settings[post_comments]" type="radio" value="group-members" <?php checked( $post_comments, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?><br />
+					<td class="content-column">
+						<label><input name="settings[post_comments]" type="radio" value="group-members" <?php checked( $post_comments, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?></label>
 
-					<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
-						<input name="settings[post_comments]" type="radio" value="admins-mods" <?php checked( $post_comments, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?><br />
-					<?php endif ?>
+						<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
+							<label><input name="settings[post_comments]" type="radio" value="admins-mods" <?php checked( $post_comments, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?></label>
+						<?php endif ?>
 
-					<input name="settings[post_comments]" type="radio" value="no-one" <?php checked( $post_comments, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?><br />
-				</td>
+						<label><input name="settings[post_comments]" type="radio" value="no-one" <?php checked( $post_comments, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?></label>
+					</td>
+				</fieldset>
 			</tr>
 
 			<?php /* READING COMMENTS */ ?>
 			<tr>
-				<td class="desc-column">
-					<label for="settings[read_comments]"><?php _e( 'Who can <em>read</em> comments on this doc?', 'bp-docs' ) ?></label>
-				</td>
+				<fieldset>
+					<td class="desc-column">
+						<legend><?php _e( 'Who can <em>read</em> comments on this doc?', 'bp-docs' ) ?></legend>
+					</td>
 
-				<td class="content-column">
-					<?php if ( bp_docs_current_group_is_public() ) : ?>
-						<input name="settings[read_comments]" type="radio" value="anyone" <?php checked( $read_comments, 'anyone' ) ?>/> <?php _e( 'Anyone', 'bp-docs' ) ?><br />
-					<?php endif ?>
+					<td class="content-column">
+						<?php if ( bp_docs_current_group_is_public() ) : ?>
+							<label><input name="settings[read_comments]" type="radio" value="anyone" <?php checked( $read_comments, 'anyone' ) ?>/> <?php _e( 'Anyone', 'bp-docs' ) ?></label>>
+						<?php endif ?>
 
-					<input name="settings[read_comments]" type="radio" value="group-members" <?php checked( $read_comments, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?><br />
+						<label><input name="settings[read_comments]" type="radio" value="group-members" <?php checked( $read_comments, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?></label>>
 
-					<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
-						<input name="settings[read_comments]" type="radio" value="admins-mods" <?php checked( $read_comments, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?><br />
-					<?php endif ?>
+						<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
+							<label><input name="settings[read_comments]" type="radio" value="admins-mods" <?php checked( $read_comments, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?></label>
+						<?php endif ?>
 
-					<input name="settings[read_comments]" type="radio" value="no-one" <?php checked( $read_comments, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?><br />
-				</td>
+						<label><input name="settings[read_comments]" type="radio" value="no-one" <?php checked( $read_comments, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?></label>
+					</td>
+				</fieldset>
 			</tr>
 
 			<?php /* VIEWING HISTORY */ ?>
 			<tr>
-				<td class="desc-column">
-					<label for="settings[view_history]"><?php _e( 'Who can view this doc\'s history?', 'bp-docs' ) ?></label>
-				</td>
+				<fieldset>
+					<td class="desc-column">
+						<legend><?php _e( 'Who can view this doc\'s history?', 'bp-docs' ) ?></legend>
+					</td>
 
-				<td class="content-column">
+					<td class="content-column">
 
-					<input name="settings[view_history]" type="radio" value="anyone" <?php checked( $view_history, 'anyone' ) ?>/> <?php _e( 'Anyone', 'bp-docs' ) ?><br />
+						<label><input name="settings[view_history]" type="radio" value="anyone" <?php checked( $view_history, 'anyone' ) ?>/> <?php _e( 'Anyone', 'bp-docs' ) ?></label>
 
-					<input name="settings[view_history]" type="radio" value="group-members" <?php checked( $view_history, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?><br />
+						<label><input name="settings[view_history]" type="radio" value="group-members" <?php checked( $view_history, 'group-members' ) ?>/> <?php _e( 'All members of the group', 'bp-docs' ) ?></label>
 
-					<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
-						<input name="settings[view_history]" type="radio" value="admins-mods" <?php checked( $view_history, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?><br />
-					<?php endif ?>
+						<?php if ( bp_group_is_admin() || bp_group_is_mod() ) : ?>
+							<label><input name="settings[view_history]" type="radio" value="admins-mods" <?php checked( $view_history, 'admins-mods' ) ?>/> <?php _e( 'Only admins and mods of this group', 'bp-docs' ) ?></label>
+						<?php endif ?>
 
-					<input name="settings[view_history]" type="radio" value="no-one" <?php checked( $view_history, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?><br />
-				</td>
+						<label><input name="settings[view_history]" type="radio" value="no-one" <?php checked( $view_history, 'no-one' ) ?>/> <?php _e( 'No one', 'bp-docs' ) ?></label>
+					</td>
+				</fieldset>
 			</tr>
 
 			<?php

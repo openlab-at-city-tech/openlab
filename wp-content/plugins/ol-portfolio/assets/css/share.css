@@ -181,7 +181,12 @@ dialog::backdrop {
 	margin-top: 4px;
 }
 .portfolio-actions {
-	margin-right: 10px;
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.portfolio-actions button:disabled {
+	pointer-events: none;
 }
 @media print {
 	.portfolio-actions {

@@ -1841,3 +1841,24 @@ function openlab_set_group_academic_units( $group_id, $units ) {
         }
     }
 }
+
+/**
+ * Save "Add to Portfolio" group settings.
+ *
+ * @param int $group
+ * @return void
+ */
+function openlab_group_add_to_portfolio_save( $group ) {
+	if ( empty( $_POST['add-to-portfolio-toggle-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce' );
+
+	if ( ! empty( $_POST['portfolio-sharing'] ) ) {
+		groups_add_groupmeta( $group->id, 'enable_portfolio_sharing', 'yes' );
+	} else {
+		groups_delete_groupmeta( $group->id, 'enable_portfolio_sharing' );
+	}
+}
+add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );

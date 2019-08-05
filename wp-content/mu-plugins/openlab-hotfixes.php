@@ -32,3 +32,15 @@ function openlab_hypothesis_hotfix() {
 }
 add_action( 'wp', 'openlab_hypothesis_hotfix', 20 );
 
+/**
+ * Load scripts for Fixed TOC fixes.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! class_exists( 'Fixedtoc_Frontend_Control' ) ) {
+			return;
+		}
+		wp_enqueue_script( 'openlab-fixed-toc', home_url( 'wp-content/mu-plugins/js/fixed-toc.js' ), array('jquery'), OL_VERSION, true );
+	}
+);

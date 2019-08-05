@@ -45,6 +45,7 @@ add_action(
 		}
 
 		bp_core_remove_subnav_item( groups_get_current_group()->slug, 'events', 'groups' );
+		bp_core_remove_subnav_item( groups_get_current_group()->slug, 'events-mobile', 'groups' );
 	},
 	9
 );

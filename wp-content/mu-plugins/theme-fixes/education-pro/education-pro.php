@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Load custom scripts.
- */
-add_action(
-	'wp_enqueue_scripts',
-	function() {
-		wp_enqueue_script( 'openlab-education-pro', content_url( 'mu-plugins/theme-fixes/education-pro/education-pro.js', array( 'jquery' ) ) );
-	}
-);
-
-/**
  * Disable auto-update support for the theme.
  *
  * We manage the theme independently. This also prevents 'Updates' section from appearing
@@ -28,14 +18,37 @@ add_theme_support( 'custom-header', array(
 ) );
 
 // There's literally no other way to do this.
+$header_dimensions_callback = function() {
+	global $_wp_theme_features;
+	$_wp_theme_features['custom-header'][0]['width'] = 2000;
+	$_wp_theme_features['custom-header'][0]['height'] = 130;
+};
+add_action( 'customize_controls_enqueue_scripts', $header_dimensions_callback, 0 );
+add_action( 'wp_ajax_custom-header-crop', $header_dimensions_callback, 0 );
+
 add_action(
-	'customize_controls_enqueue_scripts',
+	'customize_controls_print_styles',
 	function() {
-		global $_wp_theme_features;
-		$_wp_theme_features['custom-header'][0]['width'] = 2000;
-		$_wp_theme_features['custom-header'][0]['height'] = 130;
-	},
-	0
+		?>
+<style type="text/css">
+.customize-control-header .uploaded button,
+.customize-control-header .default button {
+	height: 60px;
+	overflow: hidden;
+}
+.customize-control-header .uploaded button.random,
+.customize-control-header .default button.random {
+	height: inherit;
+	overflow: auto;
+}
+#customize-controls .customize-control-header .uploaded button img,
+#customize-controls .customize-control-header .default button img {
+	height: 60px;
+	max-width: initial;
+}
+</style>
+		<?php
+	}
 );
 
 add_action(
@@ -177,10 +190,55 @@ add_filter(
 );
 
 register_default_headers( [
-	'wide-test' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/2test.png' ),
-		'description'   => 'Wide Test',
+	'foil' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+		'description'   => 'Foil',
+	],
+	'leaves' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+		'description'   => 'Leaves',
+	],
+	'numbers' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+		'description'   => 'Numbers',
+	],
+	'candy' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+		'description'   => 'Candy',
+	],
+	'firewood' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+		'description'   => 'Firewood',
+	],
+	'circles' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+		'description'   => 'Circles',
+	],
+	'fabric' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+		'description'   => 'Fabric',
+	],
+	'water' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+		'description'   => 'Water',
+	],
+	'stonefloor' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+		'description'   => 'Stone Floor',
+	],
+	'riverrocks' => [
+		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+		'description'   => 'River Rocks',
 	],
 ] );
 

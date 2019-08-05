@@ -15,6 +15,7 @@ ignores=(
   'wp-content/plugins/digressit'
   'wp-content/plugins/dk-pdf/vendor/paragonie/random_compat'
   'wp-content/plugins/download-monitor/src/DownloadHandler.php'
+  'wp-content/plugins/download-monitor/src/Polyfill/DateTimeImmutable'
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
 #  'wp-content/plugins/easy-visualization-tools'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
@@ -52,7 +53,7 @@ do
   for subdir in ${subdirs[*]}
   do
     echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2- $ignore $subdir)
+    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2 $ignore $subdir)
     if [ $? -eq 1 ]
     then
       echo "$results"

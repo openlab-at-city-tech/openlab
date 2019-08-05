@@ -7560,6 +7560,11 @@ input[type="submit"] {
 .form-control.type-file-wrapper input {
   display: inline-block;
 }
+@media (max-width: 767px) {
+  .form-control.related-links-url {
+    display: inline-block;
+  }
+}
 .parsley-errors-list.filled {
   margin: 0;
   padding: 0;
@@ -7670,6 +7675,28 @@ input[type="submit"] {
 }
 .panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label:hover {
   text-decoration: underline;
+}
+.related-link-actions {
+  display: inline-block;
+  margin-top: -15px;
+  vertical-align: middle;
+}
+@media (max-width: 767px) {
+  .related-link-actions {
+    margin-top: 0;
+  }
+}
+button.related-link-action {
+  background: none;
+  border: none;
+  font-size: 20px;
+  height: 32px;
+}
+button.related-link-action.related-link-add {
+  padding: 0;
+}
+button.related-link-action.related-link-add .fa {
+  margin-left: 0;
 }
 .submenu .submenu-text {
   margin-right: 8px;
@@ -9794,6 +9821,9 @@ body.membership-requests .group-list {
     display: none;
   }
 }
+body div#bp-docs-pagination-count {
+  color: #444444;
+}
 .doc-tabs ul {
   padding: 0;
   margin: 0;
@@ -9814,6 +9844,12 @@ body.membership-requests .group-list {
 .doctable-panel .doctable td.tags-cell {
   width: auto;
 }
+.doctable-panel .doctable .row-actions a {
+  color: #333333;
+}
+.doctable-panel .doctable .row-actions a.delete {
+  color: #a20000;
+}
 @media (max-width: 767px) {
   .doctable-panel table,
   .doctable-panel thead,
@@ -9831,6 +9867,15 @@ body.membership-requests .group-list {
 body.docs .notify-group-members-ui {
   margin-bottom: 10px;
 }
+#doc-settings legend {
+  border-bottom: none;
+  font-size: inherit;
+  font-weight: bold;
+}
+#doc-settings label {
+  display: block;
+  font-weight: normal;
+}
 .doc-content.edit-doc {
   border: none;
   padding: 0;
@@ -9841,10 +9886,12 @@ body.docs .notify-group-members-ui {
   border-radius: 4px 4px 0 0;
 }
 .doc-content .tmce-active .switch-tmce {
-  color: #49cabe;
+  color: #333333;
+  font-weight: 600;
 }
 .doc-content .html-active .switch-html {
-  color: #49cabe;
+  color: #333333;
+  font-weight: 600;
 }
 .doc-content .wp-editor-container {
   border: 1px solid #dddddd;
@@ -9858,12 +9905,25 @@ body.docs .notify-group-members-ui {
   margin-top: 10px;
 }
 #doc-meta .toggle-switch {
+  background-color: #f5f5f5;
+  border-color: #ddd;
   padding: 6px 16px;
+}
+#doc-meta .toggle-switch:hover {
+  background-color: #333333;
+}
+#doc-meta .toggle-switch:hover a {
+  color: #f5f5f5;
 }
 #doc-meta .toggle-switch .plus-or-minus {
   font-size: 1.1em;
 }
+#doc-meta .toggle-switch a {
+  color: #333333;
+  font-weight: 600;
+}
 #doc-meta .toggle-content {
+  border-color: #ddd;
   padding-top: 12px;
   width: 100%;
 }
@@ -9875,6 +9935,9 @@ body.docs .notify-group-members-ui {
 }
 #doc-meta #toggle-table-settings tr:first-child td {
   padding-top: 0;
+}
+a.delete-doc-button {
+  color: #a20000 !important;
 }
 /**forum (bbpress) styles**/
 .forum #item-body {

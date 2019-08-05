@@ -77,6 +77,7 @@ class Service implements Registerable {
 		$type = openlab_get_site_type( get_current_blog_id() );
 
 		switch ( $type ) {
+			case 'club':
 			case 'course':
 			case 'project':
 					$this->source_init();
@@ -107,10 +108,16 @@ class Service implements Registerable {
 			return;
 		}
 
-		// Bail, if user doesn't have portfolio.
-		$portfolio_group_id = openlab_get_user_portfolio_id( $user->ID );
-		$this->portfolio_id = openlab_get_site_id_by_group_id( $portfolio_group_id );
+		$group_id = openlab_get_user_portfolio_id( $user->ID );
+		$enabled  = groups_get_groupmeta( $group_id, 'enable_portfolio_sharing' );
 
+		if ( ! $enabled ) {
+			return;
+		}
+
+		$this->portfolio_id = openlab_get_site_id_by_group_id( $group_id );
+
+		// Bail, if user doesn't have portfolio.
 		if ( empty( $this->portfolio_id ) ) {
 			return;
 		}
@@ -129,7 +136,7 @@ class Service implements Registerable {
 	 */
 	public function portfolio_init() {
 		add_filter( 'the_content', [ $this, 'entry_source_note' ] );
-		add_action( 'wp_footer', [ $this, 'entry_source_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'entry_source_styles' ] );
 	}
 
 	/**
@@ -142,14 +149,14 @@ class Service implements Registerable {
 			'add-to-portfolio-styles',
 			plugins_url( 'assets/css/share.css', ROOT_FILE ),
 			[],
-			'1.0.0'
+			'20190801'
 		);
 
 		wp_enqueue_script(
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'1.0.0',
+			'20190621',
 			true
 		);
 
@@ -276,24 +283,21 @@ class Service implements Registerable {
 	 *
 	 * @return void
 	 */
-	public function entry_source_styles( ) {
-		?>
-		<style type="text/css">
-			.entry-source-note {
-				color: #444;
-				background-color: #f0f0f0;
-				margin-bottom: 24px;
-				padding: 24px;
-			}
-			.entry-source-note a,
-			.entry-source-note a:visited {
-				color: #444;
-			}
-			.entry-source-note .entry__annotation {
-				margin-top: 24px;
-			}
-		</style>
-		<?php
+	public function entry_source_styles() {
+		wp_enqueue_style(
+			'entry-source-styles',
+			plugins_url( 'assets/css/portfolio.css', ROOT_FILE ),
+			[],
+			'20190727'
+		);
+
+		wp_enqueue_script(
+			'show-more',
+			plugins_url( 'assets/js/show-more.js', ROOT_FILE ),
+			[ 'jquery' ],
+			'20190727',
+			true
+		);
 	}
 
 	/**

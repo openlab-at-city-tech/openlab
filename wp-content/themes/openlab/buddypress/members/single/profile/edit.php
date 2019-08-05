@@ -126,7 +126,7 @@ $field_ids = array(1);
                         <?php /* Add to the array for the field-ids input */ ?>
                         <?php $field_ids[] = bp_get_the_profile_field_id() ?>
 
-                        <div<?php bp_field_css_class('editfield') ?>>
+                        <div <?php bp_field_css_class('editfield') ?>>
 
                             <?php if ( 'textbox' == bp_get_the_profile_field_type() || 'url' == bp_get_the_profile_field_type() ) : ?>
 								<?php
@@ -234,8 +234,7 @@ $field_ids = array(1);
                 <?php endwhile; ?>
 
             </div><!--panel-body-->
-        </div>
-
+		</div>
 
         <?php do_action('bp_after_profile_field_content') ?>
 

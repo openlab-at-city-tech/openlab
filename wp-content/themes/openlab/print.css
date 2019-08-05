@@ -1,3 +1,9 @@
 #content {
         position: relative !important;
 }
+
+body.openlab-about-page #sidebar,
+body.openlab-about-page #breadcrumb-container,
+body.openlab-about-page #openlab-footer {
+	display: none;
+}

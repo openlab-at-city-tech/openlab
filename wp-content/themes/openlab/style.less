@@ -323,6 +323,11 @@ input[type="submit"]{
             display: inline-block;
         }
     }
+	&.related-links-url {
+        @media(max-width: @screen-xs-max){
+			display: inline-block;
+		}
+	}
 }
 .parsley-errors-list.filled {
     margin: 0;
@@ -466,6 +471,26 @@ input[type="submit"]{
             }
         }
     }
+}
+.related-link-actions {
+	display: inline-block;
+	margin-top: -15px;
+	vertical-align: middle;
+	@media(max-width: @screen-xs-max){
+		margin-top: 0;
+	}
+}
+button.related-link-action {
+	background: none;
+	border: none;
+	font-size: 20px;
+	height: 32px;
+}
+button.related-link-action.related-link-add {
+	padding: 0;
+	.fa {
+		margin-left: 0;
+	}
 }
 .submenu{
     .submenu-text{
@@ -2675,6 +2700,9 @@ body.membership-requests {
         display: none;
     }
 }
+body div#bp-docs-pagination-count {
+	color: @70gray;
+}
 .doc-tabs{
     ul{
         padding: 0;
@@ -2697,6 +2725,14 @@ body.membership-requests {
                 width: auto;
             }
         }
+		.row-actions {
+			a {
+				color: @80gray;
+				&.delete {
+					color: #a20000;
+				}
+			}
+		}
     }
     @media (max-width: @screen-xs-max){
         table,
@@ -2722,6 +2758,17 @@ body.docs{
 		margin-bottom: 10px;
 	}
 }
+#doc-settings {
+	legend {
+		border-bottom: none;
+		font-size: inherit;
+		font-weight: bold;
+	}
+	label {
+		display: block;
+		font-weight: normal;
+	}
+}
 .doc-content{
     &.edit-doc{
         border: none;
@@ -2734,12 +2781,14 @@ body.docs{
     }
     .tmce-active{
         .switch-tmce{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .html-active{
         .switch-html{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .wp-editor-container{
@@ -2756,12 +2805,26 @@ body.docs{
 }
 #doc-meta{
     .toggle-switch{
+        background-color: @panel-default-heading-bg;
+        border-color: @panel-default-border;
         padding: 6px 16px;
+		&:hover {
+			background-color: @panel-default-text;
+
+			a {
+				color: @panel-default-heading-bg;
+			}
+		}
         .plus-or-minus{
             font-size: 1.1em;
         }
+		a {
+			color: @panel-default-text;
+			font-weight: @semibold;
+		}
     }
     .toggle-content{
+        border-color: @panel-default-border;
         padding-top: 12px;
         width: 100%;
     }
@@ -2780,6 +2843,9 @@ body.docs{
             }
         }
     }
+}
+a.delete-doc-button {
+	color: #a20000 !important;
 }
 /**forum (bbpress) styles**/
 .forum{

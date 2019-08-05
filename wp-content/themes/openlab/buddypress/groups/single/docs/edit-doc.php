@@ -31,7 +31,7 @@ if (!function_exists('wp_editor')) {
                 </div>
                 <div class="doc-content-wrapper">
                     <div id="doc-content-title">
-                        <label for="doc[title]"><?php _e('Title', 'bp-docs') ?></label>
+                        <label for="doc-title"><?php _e('Title', 'bp-docs') ?></label>
                         <input type="text" id="doc-title" name="doc[title]" class="form-control" value="<?php bp_docs_edit_doc_title() ?>" />
                     </div>
 
@@ -43,7 +43,7 @@ if (!function_exists('wp_editor')) {
                     <?php endif ?>
 
                     <div id="doc-content-textarea">
-                        <label id="content-label" for="doc[content]"><?php _e('Content', 'bp-docs') ?></label>
+                        <label id="content-label" for="doc_content"><?php _e('Content', 'bp-docs') ?></label>
                         <div id="editor-toolbar">
                             <?php /* No media support for now
                               <div id="media-toolbar">
@@ -72,7 +72,7 @@ if (!function_exists('wp_editor')) {
                                     <table class="toggle-table" id="toggle-table-tags">
                                         <tr>
                                             <td class="desc-column">
-                                                <label for="bp_docs_tag"><?php _e('Tags are words or phrases that help to describe and organize your Docs.', 'bp-docs') ?></label>
+                                                <label for="tax-input-bp_docs_tag"><?php _e('Tags are words or phrases that help to describe and organize your Docs.', 'bp-docs') ?></label>
                                                 <span class="description"><?php _e('Separate tags with commas (for example: <em>orchestra, snare drum, piccolo, Brahms</em>)', 'bp-docs') ?></span>
                                             </td>
 

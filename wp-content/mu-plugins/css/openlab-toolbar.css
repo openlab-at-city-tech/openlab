@@ -8195,9 +8195,10 @@ button.oplb-bs .close {
     margin: 0;
   }
 }
-.oplb-bs #go-to-top {
-  background: rgba(73, 202, 190, 0.42);
+.oplb-bs a#go-to-top {
+  background: rgba(128, 128, 128, 0.5);
   bottom: 5%;
+  color: #000;
   display: none;
   font-size: 13px;
   font-style: italic;

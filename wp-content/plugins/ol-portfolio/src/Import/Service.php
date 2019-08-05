@@ -91,10 +91,21 @@ class Service implements Registerable {
 	 *
 	 * @return void
 	 */
-	protected function enqueue_assets() {
+	protected function enqueue_assets( $step = 0 ) {
+		wp_enqueue_style(
+			'ol-portfolio-import-styles',
+			plugins_url( 'assets/css/import.css', ROOT_FILE ),
+			[],
+			'20190727'
+		);
+
+		if ( $step !== static::STEP_IMPORT ) {
+			return;
+		}
+
 		$args = [
 			'action' => 'ol-portfolio-import',
-			'id'     => $this->id,
+			'id'     => (int) $_POST['import_id'],
 		];
 
 		$script_data = [
@@ -116,7 +127,9 @@ class Service implements Registerable {
 	 * @return void
 	 */
 	public function render() {
-		$step = empty( $_GET['step'] ) ? static::STEP_UPLOAD : $_GET['step'];
+		$step = empty( $_GET['step'] ) ? static::STEP_UPLOAD : (int) $_GET['step'];
+
+		$this->enqueue_assets( $step );
 
 		switch ( $step ) {
 			case static::STEP_UPLOAD:
@@ -180,10 +193,6 @@ class Service implements Registerable {
 		}
 
 		check_admin_referer( sprintf( 'portfolio.import:%d', (int) $args['import_id'] ) );
-
-		$this->id = (int) $args['import_id'];
-
-		$this->enqueue_assets();
 
 		require ROOT_DIR . '/views/import/import.php';
 	}
