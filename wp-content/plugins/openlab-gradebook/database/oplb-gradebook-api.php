@@ -991,7 +991,7 @@ class oplb_gradebook_api
 
             $assign_count++;
 
-            array_push($column_headers_assignment_names, mb_convert_encoding($assignment['assign_name'], 'UTF-16LE', 'UTF-8'));
+            array_push($column_headers_assignment_names, $assignment['assign_name']);
             array_push($assignment_types, $assignment['assign_grade_type']);
             $assignment_id_tracker[$assignment['id']] = $assignment['id'];
         }
@@ -1028,9 +1028,9 @@ class oplb_gradebook_api
         foreach ($students as &$value) {
             $studentData = get_userdata($value->uid);
             $value = array(
-                'firstname' => mb_convert_encoding($studentData->first_name, 'UTF-16LE', 'UTF-8'),
-                'lastname' => mb_convert_encoding($studentData->last_name, 'UTF-16LE', 'UTF-8'),
-                'username' => mb_convert_encoding($studentData->user_login, 'UTF-16LE', 'UTF-8'),
+                'firstname' => $studentData->first_name,
+                'lastname' => $studentData->last_name,
+                'username' => $studentData->user_login,
                 'mid_semester_grade' => $this->get_student_grade_label($value->mid_semester_grade),
                 'final_grade' => $this->get_student_grade_label($value->final_grade),
                 'id' => intval($studentData->ID),
@@ -1102,13 +1102,19 @@ class oplb_gradebook_api
         //final sort by lastname before heading out
         $student_records = $this->sort_array_by($student_records, 'lastname');
 
+        $column_headers = $this->special_char_handling($column_headers, ENT_QUOTES);
+        $type_headers = $this->special_char_handling($type_headers, ENT_QUOTES);
+
         header('Content-type: application/csv');
         header('Content-Transfer-Encoding: UTF-8');
-        $filename = str_replace(" ", "_", get_bloginfo('name')."_".$course['name']);
+        $filename = str_replace(" ", "_", get_bloginfo('name') . "_" . $course['name']);
         header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
+
+        //for special char encoding
+        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
         //removing weights for now
         //fputcsv($output, $weights);
@@ -1125,6 +1131,7 @@ class oplb_gradebook_api
         ksort($final_rows);
 
         foreach ($final_rows as $row) {
+            $row = $this->special_char_handling($row, ENT_QUOTES);
             fputcsv($output, $row);
         }
         fclose($output);
@@ -1137,6 +1144,26 @@ class oplb_gradebook_api
             return strcmp($a[$key], $b[$key]);
         });
         return $array;
+    }
+
+    public function special_char_handling(array $items, $format)
+    {
+        return array_map(function ($item) use ($format) {
+            return htmlspecialchars_decode($item, $format);
+        }, $items);
+    }
+
+    public function special_char_handling_incoming(array $items)
+    {
+        return array_map(function ($item) {
+
+            //on the way out, we add some header info to the first column,
+            //but this needs to removed on the way in
+            if(strpos($item, 'firstname') !== false){
+                $item = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $item);
+            }
+            return htmlspecialchars($item);
+        }, $items);
     }
 
     public function getLetterGrades()

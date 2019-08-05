@@ -101,7 +101,7 @@ class gradebook_upload_csv_API
      */
     public function parseCSV($file)
     {
-
+        global $oplb_gradebook_api;
         // Create an array to hold the data
         $arrData = array();
 
@@ -118,9 +118,9 @@ class gradebook_upload_csv_API
             // Loop through each row
             while (($row = fgetcsv($handle)) !== false) {
 
-                $row = array_map("utf8_encode", $row);
                 //also add a trim to prevent accidental spacing errors
                 $row = array_map("trim", $row);
+                $row = $oplb_gradebook_api->special_char_handling_incoming($row);
 
                 // If the header has been stored
                 if ($header_rows_filled) {
@@ -1113,6 +1113,7 @@ class gradebook_upload_csv_API
         $error_log = get_option('openlab_gradebook_csv_error_log', array());
 
         $error_log[$gbid] = $process_result;
+
         update_option('openlab_gradebook_csv_error_log', $error_log);
 
         $csv_link = admin_url("admin.php?page=oplb_gradebook&gradebook_download_csv={$gbid}#gradebook/{$gbid}");
@@ -1253,6 +1254,9 @@ class gradebook_upload_csv_API
         $this_data['data'] = $oplb_gradebook_api->sort_array_by($this_data['data'], 'lastname');
 
         $filename = str_replace(".csv", "", $this_data['file']['name']) . "_errors.csv";
+
+        $this_data['headers'] = $oplb_gradebook_api->special_char_handling($this_data['headers'], ENT_QUOTES);
+        $this_data['types'] = $oplb_gradebook_api->special_char_handling($this_data['types'], ENT_QUOTES);
 
         $this->outputCSV($this_data, $filename);
 
