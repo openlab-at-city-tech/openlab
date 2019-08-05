@@ -239,13 +239,6 @@ body {
 	}
 }
 
-.upload-modal {
-	.modal-dialong {
-		width: 96%;
-		max-width: 880px;
-	}
-}
-
 h5 {
 	font-weight: 600;
 }
@@ -1048,6 +1041,22 @@ span.twitter-typeahead {
 #upload-modal {
 	&.secondary-modal {
 		z-index: 1039;
+	}
+	.modal-body {
+		p {
+			margin: 10px 10px 20px;
+			font-size: 14px;
+		}
+		ol {
+			margin: 0 10px 10px 25px;
+		}
+		li {
+			margin-bottom: 10px;
+		}
+		.download-buttons {
+			display: block;
+			margin-top: 10px;
+		}
 	}
 	#modal-download-csv {
 		&:hover {

@@ -201,10 +201,6 @@ body #modal-download-csv-success .fa-stack .fa-check {
 .modal-body #edit-comment-form {
   padding: 20px 30px;
 }
-.upload-modal .modal-dialong {
-  width: 96%;
-  max-width: 880px;
-}
 h5 {
   font-weight: 600;
 }
@@ -925,6 +921,20 @@ span.twitter-typeahead {
 }
 #upload-modal.secondary-modal {
   z-index: 1039;
+}
+#upload-modal .modal-body p {
+  margin: 10px 10px 20px;
+  font-size: 14px;
+}
+#upload-modal .modal-body ol {
+  margin: 0 10px 10px 25px;
+}
+#upload-modal .modal-body li {
+  margin-bottom: 10px;
+}
+#upload-modal .modal-body .download-buttons {
+  display: block;
+  margin-top: 10px;
 }
 #upload-modal #modal-download-csv:hover {
   background: #286090;
