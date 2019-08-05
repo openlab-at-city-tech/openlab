@@ -38,13 +38,9 @@
 		resizeTimer = setTimeout(
 			function() {
 				var headerBottom = $header.position().top + $header.outerHeight(true);
-				var newPadding = headerBottom + 40;
 
-				// On mobile, adjust for fixed space above header.
-				mq = window.matchMedia('(max-width: 768px)');
-				if ( mq.matches ) {
-					newPadding -= 60;
-				}
+				// Allow space for Ol nav and expanded WP toolbar
+				var newPadding = headerBottom - 100;
 
 				$siteNav.css('padding-top', newPadding + 'px');
 			},

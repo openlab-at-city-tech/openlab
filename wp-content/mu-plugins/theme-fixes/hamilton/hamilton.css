@@ -1,3 +1,7 @@
+#openlab-footer {
+	display: none !important;
+}
+
 .site-header {
 	margin-bottom: 100px;
 	margin-top: 100px;
@@ -26,6 +30,10 @@
 	position: relative;
 }
 
+.site-nav.active {
+	margin-top: 100px;
+}
+
 .oplb-bs button,
 .site-nav button,
 #wpadminbar button {
@@ -33,7 +41,7 @@
 }
 
 .alt-nav button.menu-toggle {
-	display: none;
+	display: none !important;
 }
 
 ul:not(.alt-nav) button.menu-toggle:hover {
