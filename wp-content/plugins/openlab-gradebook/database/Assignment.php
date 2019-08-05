@@ -78,7 +78,7 @@ class gradebook_assignment_API
                 $incoming_weight = $params['assign_weight'];
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", array(
-                    'assign_name' => $params['assign_name'],
+                    'assign_name' => trim($params['assign_name']),
                     'assign_date' => $params['assign_date'],
                     'assign_due' => $params['assign_due'],
                     'assign_order' => $params['assign_order'],
@@ -170,7 +170,7 @@ class gradebook_assignment_API
                 }
 
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
-                    'assign_name' => $params['assign_name'],
+                    'assign_name' => trim($params['assign_name']),
                     'assign_date' => $params['assign_date'],
                     'assign_due' => $params['assign_due'],
                     'assign_category' => $params['assign_category'],
