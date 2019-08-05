@@ -366,7 +366,7 @@ class gradebook_upload_csv_API
             //check the student grades
             $assignments = $process_result['assignments'];
 
-            foreach ($assignments as $thisdex => $assignment) {
+            foreach ($assignments as $thisdex => &$assignment) {
 
                 $this_grade = $this->processGrade($student[$assignment['name']], $assignment['type'], true);
 
@@ -1133,8 +1133,10 @@ class gradebook_upload_csv_API
             return null;
         }
 
-        ob_start();
         $df = fopen("php://output", 'w');
+
+        //for special char encoding
+        fputs($df, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
         if (empty($data_out['data']) && !empty($data_out['headers'])) {
 
@@ -1145,7 +1147,7 @@ class gradebook_upload_csv_API
 
             $header_row = array();
             foreach ($data_out['headers'] as $header) {
-                array_push($header_row, mb_convert_encoding($header, 'UTF-16LE', 'UTF-8'));
+                array_push($header_row, $header);
             }
 
             fputcsv($df, $header_row);
@@ -1167,8 +1169,6 @@ class gradebook_upload_csv_API
             fclose($df);
         }
 
-        return ob_get_clean();
-
     }
 
     private function outputCSV($data_out, $filename)
@@ -1187,7 +1187,7 @@ class gradebook_upload_csv_API
         header("Content-Disposition: attachment;filename={$filename}");
         header("Content-Transfer-Encoding: UTF-8");
 
-        echo $this->buildCSV($data_out);
+        $this->buildCSV($data_out);
         die();
     }
 
@@ -1223,11 +1223,6 @@ class gradebook_upload_csv_API
             if (!empty($student['student_id'])) {
                 unset($student['student_id']);
             }
-
-            //handle encoding
-            $student['firstname'] = mb_convert_encoding($student['firstname'], 'UTF-16LE', 'UTF-8');
-            $student['lastname'] = mb_convert_encoding($student['lastname'], 'UTF-16LE', 'UTF-8');
-            $student['username'] = mb_convert_encoding($student['username'], 'UTF-16LE', 'UTF-8');
 
             $assigndex = $this->getAssignmentIndexStart();
             $studentdex = 0;
