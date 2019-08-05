@@ -957,15 +957,15 @@ span.twitter-typeahead {
   display: block;
   max-width: 120px;
 }
-#upload-csv .kv-fileinput-caption.icon-visible .btn-primary {
-  background: #6b6b6b;
-  border-color: #636363;
-}
 #upload-csv #uploadExternal {
   display: none;
 }
 #upload-csv .modal-content.upload-active #uploadExternal {
   display: inline-block;
+}
+#upload-csv .modal-content.upload-active .input-group-btn .btn-primary {
+  background: #6b6b6b;
+  border-color: #636363;
 }
 @-webkit-keyframes spin {
   0% {
