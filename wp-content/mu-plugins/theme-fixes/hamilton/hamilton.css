@@ -32,15 +32,19 @@
 	min-width: initial;
 }
 
-button.menu-toggle:hover {
+.alt-nav button.menu-toggle {
+	display: none;
+}
+
+ul:not(.alt-nav) button.menu-toggle:hover {
 	background: #000;
 }
 
-button.menu-toggle:hover:before {
+ul:not(.alt-nav) button.menu-toggle:hover:before {
 	color: #F6F7F8;
 }
 
-button.menu-toggle {
+ul:not(.alt-nav) button.menu-toggle {
 	background: none;
 	position: absolute;
 	padding: 3px 12px;
@@ -48,18 +52,18 @@ button.menu-toggle {
 	top: -3px;
 }
 
-button.menu-toggle:before {
+ul:not(.alt-nav) button.menu-toggle:before {
 	color: #000;
 	content: '\f107';
 	font-family: fontawesome;
 	text-decoration: none;
 }
 
-.menu-collapsed button.menu-toggle:before {
+ul:not(.alt-nav) .menu-collapsed button.menu-toggle:before {
 	content: '\f105';
 }
 
-.menu-item-has-children.menu-collapsed > .sub-menu {
+ul:not(.alt-nav) .menu-item-has-children.menu-collapsed > .sub-menu {
 	display: none;
 }
 
