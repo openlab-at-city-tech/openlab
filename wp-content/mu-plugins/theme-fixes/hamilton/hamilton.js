@@ -17,7 +17,7 @@
 			var toggleId = 'menu-toggle-' + counter;
 
 			$theMenu.find('.sub-menu').attr( 'id', subMenuId ).attr('aria-labelledby', toggleId);
-			$theMenu.append('<button class="menu-toggle" id="' + toggleId + '" aria-controls="' + subMenuId + ' aria-expanded="false""><span class="screen-reader-text">Toggle Submenu</span></button>');
+			$theMenu.children('.sub-menu').before('<button class="menu-toggle" id="' + toggleId + '" aria-controls="' + subMenuId + ' aria-expanded="false""><span class="screen-reader-text">Toggle Submenu</span></button>');
 			$theMenu.find('.menu-toggle').click(function(){
 				toggleMenu($theMenu);
 			});
