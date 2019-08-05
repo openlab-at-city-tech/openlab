@@ -39,6 +39,13 @@
 			function() {
 				var headerBottom = $header.position().top + $header.outerHeight(true);
 				var newPadding = headerBottom + 40;
+
+				// On mobile, adjust for fixed space above header.
+				mq = window.matchMedia('(max-width: 768px)');
+				if ( mq.matches ) {
+					newPadding -= 60;
+				}
+
 				$siteNav.css('padding-top', newPadding + 'px');
 			},
 		250);
