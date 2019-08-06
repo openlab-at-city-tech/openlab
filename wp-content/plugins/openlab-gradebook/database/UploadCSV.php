@@ -88,7 +88,7 @@ class gradebook_upload_csv_API
 
         $message = array(
             'content' => $oplb_gradebook_api->oplb_get_gradebook($gbid, null, null),
-            'message' => __('<p></p><div id="upload-csv-success-message" class="bs-callout bs-callout-success text-left"><p class="bold">Your CSV file has been uploaded to Gradebook!</p><p>Close this window and confirm that the values are correct.</p><span id="modal-download-csv-success"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x"></i></span>Success!</span></div>', 'openlab-gradebook'),
+            'message' => __('<p></p><div id="upload-csv-success-message" class="bs-callout bs-callout-success text-left"><p class="bold">Your CSV file has been uploaded to Gradebook!</p><p class="bold">Close this window and confirm that the values are correct.</p><span id="modal-download-csv-success"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x"></i></span>Success!</span></div>', 'openlab-gradebook'),
         );
 
         wp_send_json($message);

@@ -977,6 +977,15 @@ span.twitter-typeahead {
   background: #6b6b6b;
   border-color: #636363;
 }
+#upload-csv .modal-content.upload-successful .file-preview {
+  display: none;
+}
+#upload-csv .modal-content.upload-successful .input-group.file-caption-main {
+  display: none;
+}
+#upload-csv .modal-content.upload-successful #uploadExternal {
+  display: none;
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);

@@ -75,11 +75,12 @@ define([
 					$('#upload-csv .modal-content').addClass('upload-active');
 				})
 				.on("fileuploaded", function(e, params) {
-					$(".file-preview-status.text-center.text-success").html(
+					$(".file-input").html(
 						params.response.message
 					);
 					newGradebook = params.response.content;
 					$("#upload-csv-input").fileinput("clear");
+					$('#upload-csv .modal-content').addClass('upload-successful');
 					self.updateGradebook();
 				})
 				.on("filecleared", function(e) {
