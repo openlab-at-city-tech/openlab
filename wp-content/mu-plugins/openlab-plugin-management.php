@@ -8,6 +8,10 @@
 function openlab_hide_plugins( $plugins ) {
 	$network_admin_only = array();
 
+	if ( defined( 'WP_CLI' ) ) {
+		return $plugins;
+	}
+
 	$super_admin_only = array(
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
