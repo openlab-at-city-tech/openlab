@@ -140,6 +140,9 @@ body #modal-download-csv-success .fa-stack .fa-check {
   color: #0073aa;
   font-weight: bold;
 }
+.openlab-gradebook_page_oplb_gradebook_settings p {
+  margin: 0 0 15px;
+}
 .oplb-grdbk-check-mark-2:before {
   content: "\61";
 }
