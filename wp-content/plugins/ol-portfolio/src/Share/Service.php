@@ -27,6 +27,7 @@ class Service implements Registerable {
 	 */
 	public function register() {
 		add_action( 'init', [ $this, 'register_meta' ] );
+		add_action( 'rest_api_init', [ $this, 'register_route' ], 20 );
 
 		add_action( 'template_redirect', [ $this, 'init' ] );
 		add_action( 'add_meta_boxes', [ $this, 'meta_boxes' ], 10, 2 );
@@ -66,6 +67,15 @@ class Service implements Registerable {
 			'sanitize_callback' => 'sanitize_textarea_field',
 			'show_in_rest'      => true,
 		] );
+	}
+
+	/**
+	 * Register custom routes.
+	 *
+	 * @return void
+	 */
+	public function register_route() {
+		( new RestController() )->register_routes();
 	}
 
 	/**
@@ -156,7 +166,7 @@ class Service implements Registerable {
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'20190621',
+			'20190806',
 			true
 		);
 
