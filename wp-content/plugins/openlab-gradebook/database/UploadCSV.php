@@ -284,7 +284,9 @@ class gradebook_upload_csv_API
                     continue;
                 }
 
-                if (!in_array(strtolower(trim($type)), $valid_types)) {
+                if (empty(trim($type))) {
+                    $type = "numeric";
+                } else if (!in_array(strtolower(trim($type)), $valid_types)) {
                     $type = "**This is not a valid assignment type**" . $type;
                     $errors++;
                 }
